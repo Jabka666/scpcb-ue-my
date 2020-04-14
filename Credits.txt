@@ -1,0 +1,232 @@
+﻿
+*Programmers
+
+		Joonas Rikkonen ("Regalis")
+		CommanderMark
+		Jesse Ludtke ("MonocleBios")
+		Juan Pablo Arce ("Juanjpro")
+		Luggs123
+		Ryan Stillings ("Risingstar64")
+		Sam Lynch ("InnocentSam")
+		Shaun Gaylard ("ENDSHN")
+
+
+*3D Modellers
+
+		Joonas Rikkonen ("Regalis")
+		Apocryphos
+		Atomicsneak
+		Brandon Smith
+		EternalError
+		GamerEntitlement
+		Hakkla
+		Ivan Mikhailov ("Redbull.Ivan")
+		James Bear ("Moonsaber")
+		Kenneth Crooker
+		Lionel Ruskin ("Cridone")
+		Micro
+		Night
+		Prosth
+		TheKMan
+		Reilly Grindle ("Mirocaine")
+		SaitoFox
+		Sam Lynch ("InnocentSam")
+		Shaun Gaylard ("ENDSHN")
+		Tom Malinowski
+		Vladislav Borisevich ("Vane Brain")
+
+
+*Sound Effects and Music
+
+		Joonas Rikkonen ("Regalis")
+		Caleb Yu ("Omniary")
+		Class401
+		FireFox
+		gmodfan11
+		Kevin MacLeod
+		phlip45
+		revo794
+		Shaun Gaylard ("ENDSHN")
+		Slagar
+		Tim Morrison
+		Vladislav Borisevich ("Vane Brain")
+		Walach
+
+
+*Voice Actors
+
+		Aaron Mckee ("TheVolgun")
+		Brendan Sussman ("DukeLovesYou")
+		CDWinters
+		Graham Ruruku ("Stealthy Zoroark")
+		Hunter
+		ItsDuke
+		Joshofsouls
+		Moonstiee
+		SolidBaker
+		Tallfellow
+
+
+*Graphics and Sprites
+
+		Joonas Rikkonen ("Regalis")
+		Anon4743
+		Balzac
+		Brokami
+		Caleb Yu ("Omniary")
+		KyoteeWilliams
+		Orgil Pount ("Destructoid")
+		Pavel Lvovich Gorfunkel ("-Mark-")
+		Shadowscale48
+		Shaun Gaylard ("ENDSHN")
+		Vladislav Borisevich ("Vane Brain")
+
+
+*Writers
+
+		Joonas Rikkonen ("Regalis")
+		Caleb Yu ("Omniary")
+		Dr. Gears
+		Irontaco
+		Steelpoint
+		Vladislav Borisevich ("Vane Brain")
+
+
+*Testers
+
+		Christian Rieß
+		Emil215p
+		Flipsy
+		Inclination
+		LordDeathv11
+		Onemario1234
+		RadReed
+		TheHappyJammer
+		Zadrakos
+
+
+*Others
+
+		Agent G
+		Gage Allen ("Lotims")
+		Haversine
+		Max Taylor
+		Meow :3
+		Nikita Sidorov ("Jabka")
+		Turtle Sandwich/Catnipbuddy
+		/v/ and everyone in the SCP-CB forum
+
+
+*The game is based on the works of the SCP Foundation community.
+
+
+		The SCP-CB logo and SCP logo are based on the logo created
+by "far2"
+
+		SCP-008 is based on "SCP-008 - Zombie Plague"
+by "Lee Byron"
+
+		SCP-012 is based on "SCP-012 - A Bad Composition",
+author unknown
+
+		SCP-035 is based on "SCP-035 - Possessive Mask",
+by "Kain Pathos Crow"
+
+		SCP-049 is based on "SCP-049 - Plague Doctor",
+by "Gabriel Jade"
+
+		SCP-066 is based on "SCP-066 - Eric's Toy",
+by "Scantron"
+
+		SCP-079 is based on "SCP-079 - Old AI",
+author unknown
+
+		SCP-096 is based on "SCP-096 - The 'Shy Guy'"
+by "Dr Dan"
+
+		SCP-106 is based on "SCP-106 - The Old Man"
+by "Dr Gears"
+
+		SCP-148 is based on "SCP-148 - The "Telekill" Alloy",
+by "Lt Masipag"
+
+		SCP-173 is based on "SCP-173 - The Sculpture",
+by "Moto42"
+
+		SCP-205 is based on "SCP-205 - Shadow Lamps",
+by "Sorts"
+
+		SCP-294 is based on "SCP-294 - The Coffee Machine",
+by "far2"
+
+		SCP-372 is based on "SCP-372 - Peripheral Jumper"
+by "Sylocat"
+
+		SCP-420-J is based on "SCP-420-J - The Best ____ in the World" 
+by "Quikngruvn"
+
+		SCP-427 is based on "SCP-427 - Lovecraftian Locket"
+by "Dr Ouros"
+
+		SCP-500 is based on "SCP-500 - Panacea"
+by "far2"
+
+		SCP-513-1 is based on "SCP-513 - A Cowbell"
+by "beefwit"
+
+		SCP-714 is based on "SCP-714 - The Jaded Ring"
+by "Arcalane"
+
+		SCP-682 is based on "SCP-682 - Hard-to-Destroy Reptile"
+by "Dr. Gears"
+
+		SCP-789-J is based on "SCP-789-J - the butt ghost!!"
+by "Salman Corbette"
+
+		SCP-860 is based on "SCP-860 - Blue Key"
+by "Enma Ai"
+
+		SCP-895 is based on "SCP-895 - Camera Disruption"
+by "Aelanna"
+
+		SCP-914 is based on "SCP-914 - The Clockworks"
+by "Dr. Gears"
+
+		SCP-939 is based on "SCP-939 - With Many Voices"
+by "Adam Smascher"
+
+		SCP-966 is based on "SCP-966 - Sleep Killer"
+by "Enma Ai"
+
+		SCP-970 is based on "SCP-970 - The Recursive Room"
+by "Freudian"	
+
+		SCP-1025 is based on "SCP-1025 - Encyclopedia of Diseases"
+by "Lasergoose"
+
+		SCP-1048 is based on "SCP-1048 - Builder Bear"
+by "Researcher Dios"
+
+		SCP-1123 is based on "SCP-1123 - Atrocity Skull"
+by "sandrewswann"
+
+		SCP-1162 is based on "SCP-1162 - A Hole in the Wall"
+by "Dedaluminus"
+
+		SCP-1499 is based on "SCP-1499 - The Gas Mask"
+by "Trasknari"
+
+		The Anomalous Ducks are based on "Log of Anomalous Ducks"
+by "Skara Brae"
+
+/
+	A big thank you to everyone who's supported the project during these years
+	- it would have	never gotten to where it is now without your help.
+	
+	SCP-CB has been a big collaborative effort with dozens (maybe even hundreds?)
+	of people creating material and giving ideas and feedback for the game, and
+	I'm sure I've forgotten to mention some of you here. If you've contributed
+	something to the game and would like your name to be added here, drop
+	me a message on the Undertow Games forum or contact@undertowgames.com!
+	
+	- Joonas Rikkonen ("Regalis")
