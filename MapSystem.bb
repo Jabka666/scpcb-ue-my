@@ -5127,42 +5127,6 @@ Function FillRoom(r.Rooms)
 				EndIf
 			EndIf
 			;[End Block]
-		Case "room3gw"
-	        ;[Block]
-			d = CreateDoor(r\zone, r\x - 728.0 * RoomScale, 0.0, r\z - 458.0 * RoomScale, 0, r, False, False, 3)
-			d\AutoClose = False	: d\open = False  : d\locked = False
-			
-			d = CreateDoor(r\zone, r\x - 223.0 * RoomScale, 0.0, r\z - 736.0 * RoomScale, -90, r, False, False, 3)
-			d\AutoClose = False	: d\open = False  : d\locked = False
-			
-			r\RoomDoors[0] = CreateDoor(r\zone, r\x - 459.0 * RoomScale, 0.0, r\z + 339.0 * RoomScale, 90, r, False, False)
-			PositionEntity(r\RoomDoors[0]\buttons[0], r\x + 580.822 * RoomScale, EntityY(r\RoomDoors[0]\buttons[0],True), r\z - 606.679 * RoomScale, True)	
-            PositionEntity(r\RoomDoors[0]\buttons[1], r\x + 580.822 * RoomScale, EntityY(r\RoomDoors[0]\buttons[1],True), r\z - 606.679 * RoomScale, True)
-			r\RoomDoors[0]\dir = 0 : r\RoomDoors[0]\AutoClose = False	: r\RoomDoors[0]\open = True  : r\RoomDoors[0]\locked = True	
-			r\RoomDoors[0]\MTFClose = False
-			
-			r\RoomDoors[1] = CreateDoor(r\zone, r\x + 385.0 * RoomScale, 0.0, r\z + 339.0 * RoomScale, 270, r, False, False)
-			PositionEntity(r\RoomDoors[1]\buttons[0], r\x + 580.822 * RoomScale, EntityY(r\RoomDoors[1]\buttons[0],True), r\z - 606.679 * RoomScale, True)	
-            PositionEntity(r\RoomDoors[1]\buttons[1], r\x + 580.822 * RoomScale, EntityY(r\RoomDoors[1]\buttons[1],True), r\z - 606.679 * RoomScale, True)
-			r\RoomDoors[1]\dir = 0 : r\RoomDoors[1]\AutoClose = False	: r\RoomDoors[1]\open = True  : r\RoomDoors[1]\locked = True
-			r\RoomDoors[1]\MTFClose = False
-			FreeEntity r\RoomDoors[1]\obj2 : r\RoomDoors[1]\obj2 = 0
-			
-			r\Objects[0] = CreatePivot()
-			PositionEntity r\Objects[0],r\x-48.0*RoomScale,128.0*RoomScale,r\z+320.0*RoomScale
-			EntityParent r\Objects[0],r\obj
-			
-			For r2.Rooms = Each Rooms
-				If r2<>r Then
-					If r2\RoomTemplate\Name = "room3gw" Then
-						r\Objects[3] = CopyEntity(r2\Objects[3],r\obj) ;don't load the mesh again
-						Exit
-					EndIf
-				EndIf
-			Next
-			If r\Objects[3]=0 Then r\Objects[3] = LoadMesh_Strict("GFX\map\room3gw_pipes.b3d",r\obj)
-			EntityPickMode r\Objects[3],2
-	        ;[End Block]
 		Case "room1162"
 			;[Block]
 			d = CreateDoor(r\zone, r\x + 248.0*RoomScale, 0.0, r\z - 736.0*RoomScale, 90, r, False, False, 2)
@@ -8740,12 +8704,7 @@ End Function
 
 
 
-
 ;~IDEal Editor Parameters:
-;~F#2#A#35#102#111#118#11F#126#13F#147#14F#2F4#304#315#33D#34B#35B#360#36B#413
-;~F#51E#53F#563#57F#58A#5C6#5D6#5FF#63B#643#658#6A7#6B1#136A#13EC#13F8#143D#1448#1459#145E
-;~F#146D#1484#1505#150E#15D0#15ED#15F4#15FA#1608#162B#1650#1683#17CA#1803#1818#190C#19E1#19E6#19F6#1CA3
-;~F#1CC2#1CC9#1D2A#1DA6#1DD1#1DF2#1E05#1E1C#1E2F#1E36#1E6A#1E75#1E9D#1EFA#1F06#1F11#1F17#1F21#1F27#1F3D
-;~F#1F51#1F6F
+;~F#2#A#35#102#111#118#11F#126#13F#147#14F#1419#143A
 ;~B#1230
 ;~C#Blitz3D

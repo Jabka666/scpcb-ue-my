@@ -2582,15 +2582,13 @@ Function InitEvents()
 	CreateEvent("room4tunnels", "room4tunnels", 0)
 	
 	CreateEvent("room2gw_b", "room2gw_b", Rand(0, 1))
-	CreateEvent("room_gw", "room2gw", 0, 1.0)
+	CreateEvent("room2gw", "room2gw", 0, 1.0)
 	
 	CreateEvent("dimension1499", "dimension1499", 0)
 	
 	CreateEvent("room1162", "room1162", 0)
 	
 	CreateEvent("room2scps2", "room2scps2", 0)
-	
-	CreateEvent("room_gw", "room3gw", 0, 1.0)
 	
 	CreateEvent("room2sl", "room2sl", 0)
 	
@@ -11891,5 +11889,5 @@ Function RotateEntity90DegreeAngles(entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#110E#1350#1AF6
+;~B#110C#134E#1AF4
 ;~C#Blitz3D
