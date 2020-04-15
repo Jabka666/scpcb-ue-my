@@ -2231,24 +2231,6 @@ Function DrawMapCreatorTooltip(x%,y%,width%,height%,mapname$)
 	
 End Function
 
-Function ChangeMenu_TestIMG(change$)
-	
-	If Menu_TestIMG <> 0 Then FreeImage Menu_TestIMG
-	AmbientLightRoomTex% = CreateTexture(2,2,257)
-	TextureBlend AmbientLightRoomTex,5
-	SetBuffer(TextureBuffer(AmbientLightRoomTex))
-	ClsColor 0,0,0
-	Cls
-	SetBuffer BackBuffer()
-	Menu_TestIMG = Create3DIcon(200,200,"GFX\map\room3z3_opt.rmesh",0,-0.75,1,0,0,0,menuroomscale#,menuroomscale#,menuroomscale#,True)
-	ScaleImage Menu_TestIMG,MenuScale,MenuScale
-	MaskImage Menu_TestIMG,255,0,255
-	FreeTexture AmbientLightRoomTex : AmbientLightRoomTex = 0
-	
-	CurrMenu_TestIMG = change$
-	
-End Function
-
 Global OnSliderID% = 0
 
 Function Slider3(x%,y%,width%,value%,ID%,val1$,val2$,val3$)
