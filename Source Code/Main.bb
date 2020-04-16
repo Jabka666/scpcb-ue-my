@@ -1,4 +1,5 @@
 Local InitErrorStr$ = ""
+
 If FileSize("fmod.dll") = 0 Then InitErrorStr = InitErrorStr + "fmod.dll" + Chr(13) + Chr(10)
 If FileSize("dplayx.dll") = 0 Then InitErrorStr = InitErrorStr + "dplayx.dll" + Chr(13) + Chr(10)
 If FileSize("BlitzMovie.dll") = 0 Then InitErrorStr = InitErrorStr + "BlitzMovie.dll" + Chr(13) + Chr(10)
@@ -18,7 +19,9 @@ Global OptionFile$ = "options.ini"
 Include "Source Code\DevilParticleSystem.bb"
 
 Global ErrorFile$ = "error_log_"
+
 Local ErrorFileInd% = 0
+
 While FileType(ErrorFile + Str(ErrorFileInd) + ".txt") <> 0
 	ErrorFileInd = ErrorFileInd + 1
 Wend
@@ -120,11 +123,12 @@ If LauncherEnabled Then
 	EndIf
 Else
 	For i% = 1 To TotalGFXModes
-		Local samefound% = False
+		Local SameFound% = False
+		
 		For  n% = 0 To TotalGFXModes - 1
-			If GfxModeWidths(n) = GfxModeWidth(i) And GfxModeHeights(n) = GfxModeHeight(i) Then samefound = True : Exit
+			If GfxModeWidths(n) = GfxModeWidth(i) And GfxModeHeights(n) = GfxModeHeight(i) Then SameFound = True : Exit
 		Next
-		If samefound = False Then
+		If SameFound = False Then
 			If GraphicWidth = GfxModeWidth(i) And GraphicHeight = GfxModeHeight(i) Then SelectedGFXMode = GFXModes
 			GfxModeWidths(GFXModes) = GfxModeWidth(i)
 			GfxModeHeights(GFXModes) = GfxModeHeight(i)
@@ -166,6 +170,7 @@ Global MenuScale# = (GraphicHeight / 1024.0)
 SetBuffer(BackBuffer())
 
 Global CurTime%, PrevTime%, LoopDelay%, FPSfactor#, FPSfactor2#, PrevFPSFactor#
+
 Local CheckFPS%, ElapsedLoops%, FPS%, ElapsedTime#
 
 Global Framelimit% = GetINIInt(OptionFile, "options", "framelimit")
@@ -337,25 +342,26 @@ Global ConsoleReissue.ConsoleMsg = Null
 Global ConsoleR% = 255, ConsoleG% = 255, ConsoleB% = 255
 
 Type ConsoleMsg
-	Field txt$
-	Field isCommand%
-	Field r%,g%,b%
+	Field Txt$
+	Field IsCommand%
+	Field R%, G%, B%
 End Type
 
-Function CreateConsoleMsg(txt$, r% = -1, g% = -1, b% = -1, isCommand% = False)
+Function CreateConsoleMsg(Txt$, R% = -1, G% = -1, B% = -1, IsCommand% = False)
 	Local c.ConsoleMsg = New ConsoleMsg
+	
 	Insert c Before First ConsoleMsg
 	
-	c\txt = txt
-	c\isCommand = isCommand
+	c\TXT = Txt
+	c\IsCommand = IsCommand
 	
-	c\r = r
-	c\g = g
-	c\b = b
+	c\R = R
+	c\G = G
+	c\B = B
 	
-	If (c\r < 0) Then c\r = ConsoleR
-	If (c\g < 0) Then c\g = ConsoleG
-	If (c\b < 0) Then c\b = ConsoleB
+	If (c\R < 0) Then c\R = ConsoleR
+	If (c\G < 0) Then c\G = ConsoleG
+	If (c\B < 0) Then c\B = ConsoleB
 End Function
 
 Function UpdateConsole()
@@ -374,19 +380,20 @@ Function UpdateConsole()
 		ConsoleR = 255 : ConsoleG = 255 : ConsoleB = 255
 		
 		Local x% = 0, y% = GraphicHeight - 300 * MenuScale, width% = GraphicWidth, height% = 300 * MenuScale - 30 * MenuScale
-		Local StrTemp$, temp%,  i%
+		Local StrTemp$, Temp%,  i%
 		Local ev.Events, r.Rooms, it.Items
 		
 		DrawFrame x, y, width, height + 30 * MenuScale
 		
-		Local consoleHeight% = 0
-		Local scrollbarHeight% = 0
+		Local ConsoleHeight% = 0
+		Local ScrollBarHeight% = 0
+		
 		For cm.ConsoleMsg = Each ConsoleMsg
-			consoleHeight = consoleHeight + 15 * MenuScale
+			ConsoleHeight = ConsoleHeight + 15 * MenuScale
 		Next
-		scrollbarHeight = (Float(height) / Float(consoleHeight)) * height
-		If scrollbarHeight > height Then scrollbarHeight = height
-		If consoleHeight < height Then consoleHeight = height
+		ScrollBarHeight = (Float(height) / Float(ConsoleHeight)) * height
+		If ScrollBarHeight > height Then ScrollBarHeight = height
+		If ConsoleHeight < height Then ConsoleHeight = height
 		
 		Color(50, 50, 50)
 		inBar% = MouseOn(x + width - 26 * MenuScale, y, 26 * MenuScale, height)
@@ -394,15 +401,15 @@ Function UpdateConsole()
 		Rect(x + width - 26 * MenuScale, y, 26 * MenuScale, height, True)
 		
 		Color(120, 120, 120)
-		inBox% = MouseOn(x + width - 23 * MenuScale, y + height - scrollbarHeight + (ConsoleScroll * scrollbarHeight / height), 20 * MenuScale, scrollbarHeight)
+		inBox% = MouseOn(x + width - 23 * MenuScale, y + height - ScrollBarHeight + (ConsoleScroll * ScrollBarHeight / height), 20 * MenuScale, ScrollBarHeight)
 		If inBox Then Color(200, 200, 200)
 		If ConsoleScrollDragging Then Color(255, 255, 255)
-		Rect(x + width - 23 * MenuScale, y + height - scrollbarHeight + (ConsoleScroll * scrollbarHeight / height), 20 * MenuScale, scrollbarHeight, True)
+		Rect(x + width - 23 * MenuScale, y + height - ScrollBarHeight + (ConsoleScroll * ScrollBarHeight / height), 20 * MenuScale, ScrollBarHeight, True)
 		
 		If Not MouseDown(1) Then
 			ConsoleScrollDragging = False
 		ElseIf ConsoleScrollDragging Then
-			ConsoleScroll = ConsoleScroll + ((ScaledMouseY() - ConsoleMouseMem) * height / scrollbarHeight)
+			ConsoleScroll = ConsoleScroll + ((ScaledMouseY() - ConsoleMouseMem) * height / ScrollBarHeight)
 			ConsoleMouseMem = ScaledMouseY()
 		EndIf
 		
@@ -412,7 +419,7 @@ Function UpdateConsole()
 					ConsoleScrollDragging = True
 					ConsoleMouseMem = ScaledMouseY()
 				ElseIf inBar Then
-					ConsoleScroll = ConsoleScroll + ((ScaledMouseY() - (y + height)) * consoleHeight / height + (height / 2))
+					ConsoleScroll = ConsoleScroll + ((ScaledMouseY() - (y + height)) * ConsoleHeight / height + (height / 2))
 					ConsoleScroll = ConsoleScroll / 2
 				EndIf
 			EndIf
@@ -425,14 +432,15 @@ Function UpdateConsole()
 			ConsoleScroll = ConsoleScroll + 15 * MenuScale
 		EndIf
 		
-		Local reissuePos%
+		Local ReissuePos%
+		
 		If KeyHit(200) Then
-			reissuePos% = 0
+			ReissuePos% = 0
 			If (ConsoleReissue = Null) Then
 				ConsoleReissue = First ConsoleMsg
 				
 				While (ConsoleReissue <> Null)
-					If (ConsoleReissue\isCommand) Then
+					If (ConsoleReissue\IsCommand) Then
 						Exit
 					EndIf
 					reissuePos = reissuePos - 15 * MenuScale
@@ -454,7 +462,7 @@ Function UpdateConsole()
 						reissuePos = 0
 					EndIf
 					
-					If (ConsoleReissue\isCommand) Then
+					If (ConsoleReissue\IsCommand) Then
 						Exit
 					EndIf
 					reissuePos = reissuePos - 15 * MenuScale
@@ -463,62 +471,64 @@ Function UpdateConsole()
 			EndIf
 			
 			If ConsoleReissue <> Null Then
-				ConsoleInput = ConsoleReissue\txt
-				ConsoleScroll = reissuePos + (height / 2)
+				ConsoleInput = ConsoleReissue\TXT
+				ConsoleScroll = ReissuePos + (height / 2)
 			EndIf
 		EndIf
 		
 		If KeyHit(208) Then
-			reissuePos% = -consoleHeight + 15 * MenuScale
+			ReissuePos% = -ConsoleHeight + 15 * MenuScale
 			If (ConsoleReissue = Null) Then
 				ConsoleReissue = Last ConsoleMsg
 				
 				While (ConsoleReissue <> Null)
-					If (ConsoleReissue\isCommand) Then
+					If (ConsoleReissue\IsCommand) Then
 						Exit
 					EndIf
-					reissuePos = reissuePos + 15 * MenuScale
+					ReissuePos = ReissuePos + 15 * MenuScale
 					ConsoleReissue = Before ConsoleReissue
 				Wend
 			Else
 				cm.ConsoleMsg = Last ConsoleMsg
 				While cm <> Null
 					If cm = ConsoleReissue Then Exit
-					reissuePos = reissuePos + 15 * MenuScale
+					ReissuePos = ReissuePos + 15 * MenuScale
 					cm = Before cm
 				Wend
 				ConsoleReissue = Before ConsoleReissue
-				reissuePos = reissuePos + 15 * MenuScale
+				ReissuePos = ReissuePos + 15 * MenuScale
 				
 				While True
 					If (ConsoleReissue = Null) Then
 						ConsoleReissue = Last ConsoleMsg
-						reissuePos = -consoleHeight + 15 * MenuScale
+						ReissuePos = -ConsoleHeight + 15 * MenuScale
 					EndIf
 					
-					If (ConsoleReissue\isCommand) Then
+					If (ConsoleReissue\IsCommand) Then
 						Exit
 					EndIf
-					reissuePos = reissuePos + 15 * MenuScale
+					ReissuePos = ReissuePos + 15 * MenuScale
 					ConsoleReissue = Before ConsoleReissue
 				Wend
 			EndIf
 			
 			If ConsoleReissue <> Null Then
-				ConsoleInput = ConsoleReissue\txt
-				ConsoleScroll = reissuePos + (height / 2)
+				ConsoleInput = ConsoleReissue\TXT
+				ConsoleScroll = ReissuePos + (height / 2)
 			EndIf
 		EndIf
 		
-		If ConsoleScroll < -consoleHeight + height Then ConsoleScroll = -consoleHeight + height
+		If ConsoleScroll < -ConsoleHeight + height Then ConsoleScroll = -ConsoleHeight + height
 		If ConsoleScroll > 0 Then ConsoleScroll = 0
 		
 		Color(255, 255, 255)
 		
 		SelectedInputBox = 2
-		Local oldConsoleInput$ = ConsoleInput
+		
+		Local OldConsoleInput$ = ConsoleInput
+		
 		ConsoleInput = InputBox(x, y + height, width, 30 * MenuScale, ConsoleInput, 2)
-		If oldConsoleInput <> ConsoleInput Then
+		If OldConsoleInput <> ConsoleInput Then
 			ConsoleReissue = Null
 		EndIf
 		ConsoleInput = Left(ConsoleInput, 100)
@@ -765,7 +775,7 @@ Function UpdateConsole()
 					
 					CreateConsoleMsg("Room: " + PlayerRoom\RoomTemplate\Name)
 					For ev.Events = Each Events
-						If ev\Room = PlayerRoom Then
+						If ev\room = PlayerRoom Then
 							CreateConsoleMsg("Room event: " + ev\EventName)	
 							CreateConsoleMsg("-    state: " + ev\EventState)
 							CreateConsoleMsg("-    state2: " + ev\EventState2)	
@@ -774,7 +784,7 @@ Function UpdateConsole()
 						EndIf
 					Next
 					
-					CreateConsoleMsg("Room coordinates: " + Floor(EntityX(PlayerRoom\obj) / 8.0 + 0.5) + ", " + Floor(EntityZ(PlayerRoom\obj) / 8.0 + 0.5))
+					CreateConsoleMsg("Room coordinates: " + Floor(EntityX(PlayerRoom\OBJ) / 8.0 + 0.5) + ", " + Floor(EntityZ(PlayerRoom\OBJ) / 8.0 + 0.5))
 					CreateConsoleMsg("Stamina: " + Stamina)
 					CreateConsoleMsg("Death timer: "+KillTimer)					
 					CreateConsoleMsg("Blinktimer: " + BlinkTimer)
@@ -867,7 +877,7 @@ Function UpdateConsole()
 				Case "spawnitem"
 					;[Block]
 					StrTemp$ = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
-					temp = False 
+					Temp = False 
 					For itt.Itemtemplates = Each ItemTemplates
 						If (Lower(itt\name) = StrTemp) Then
 							temp = True
@@ -975,14 +985,16 @@ Function UpdateConsole()
 					;[Block]
 					HalloweenTex = Not HalloweenTex
 					If HalloweenTex Then
-						Local tex = LoadTexture_Strict("GFX\npcs\173h.pt", 1)
-						EntityTexture(Curr173\obj, tex, 0, 0)
-						FreeTexture(tex)
+						Local Tex = LoadTexture_Strict("GFX\npcs\173h.pt", 1)
+						
+						EntityTexture(Curr173\obj, Tex, 0, 0)
+						FreeTexture(Tex)
 						CreateConsoleMsg("173 JACK-O-LANTERN ON")
 					Else
-						Local tex2 = LoadTexture_Strict("GFX\npcs\173texture.jpg", 1)
-						EntityTexture(Curr173\obj, tex2, 0, 0)
-						FreeTexture(tex2)
+						Local Tex2 = LoadTexture_Strict("GFX\npcs\173texture.jpg", 1)
+						
+						EntityTexture(Curr173\obj, Tex2, 0, 0)
+						FreeTexture(Tex2)
 						CreateConsoleMsg("173 JACK-O-LANTERN OFF")
 					EndIf
 					;[End Block]
@@ -1126,12 +1138,12 @@ Function UpdateConsole()
 					
 					For e.Events = Each Events
 						If e\EventName = "alarm" Then 
-							If e\Room\NPC[0] <> Null Then RemoveNPC(e\Room\NPC[0])
-							If e\Room\NPC[1] <> Null Then RemoveNPC(e\Room\NPC[1])
-							If e\Room\NPC[2] <> Null Then RemoveNPC(e\Room\NPC[2])
+							If e\room\NPC[0] <> Null Then RemoveNPC(e\room\NPC[0])
+							If e\room\NPC[1] <> Null Then RemoveNPC(e\room\NPC[1])
+							If e\room\NPC[2] <> Null Then RemoveNPC(e\room\NPC[2])
 							
-							FreeEntity(e\Room\Objects[0]) : e\Room\Objects[0] = 0
-							FreeEntity(e\Room\Objects[1]) : e\Room\Objects[1] = 0
+							FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
+							FreeEntity(e\room\Objects[1]) : e\room\Objects[1] = 0
 							PositionEntity(Curr173\Collider, 0, 0, 0)
 							ResetEntity(Curr173\Collider)
 							ShowEntity(Curr173\obj)
@@ -1214,7 +1226,7 @@ Function UpdateConsole()
 							For e.Events = Each Events
 								If e\EventName = "gateaentrance" Then
 									e\EventState3 = 1
-									e\Room\RoomDoors[1]\open = True
+									e\room\RoomDoors[1]\open = True
 									Exit
 								EndIf
 							Next
@@ -1225,7 +1237,7 @@ Function UpdateConsole()
 							For e.Events = Each Events
 								If e\EventName = "exit1" Then
 									e\EventState3 = 1
-									e\Room\RoomDoors[4]\open = True
+									e\room\RoomDoors[4]\open = True
 									Exit
 								EndIf
 							Next	
@@ -1236,10 +1248,10 @@ Function UpdateConsole()
 							For e.Events = Each Events
 								If e\EventName = "gateaentrance" Then
 									e\EventState3 = 1
-									e\Room\RoomDoors[1]\open = True
+									e\room\RoomDoors[1]\open = True
 								ElseIf e\EventName = "exit1" Then
 									e\EventState3 = 1
-									e\Room\RoomDoors[4]\open = True
+									e\room\RoomDoors[4]\open = True
 								EndIf
 							Next
 							CreateConsoleMsg("Gate A and B are now unlocked.")	
@@ -1365,7 +1377,9 @@ Function UpdateConsole()
 					StrTemp$ = Piece$(args$, 1, " ")
 					StrTemp2$ = Piece$(args$, 2, " ")
 					StrTemp3$ = Piece$(args$, 3, " ")
+					
 					Local pl_room_found% = False
+					
 					If StrTemp = "" Or StrTemp2 = "" Or StrTemp3 = ""
 						CreateConsoleMsg("Too few parameters. This command requires 3.", 255, 150, 0)
 					Else
@@ -1452,23 +1466,23 @@ Function UpdateConsole()
 		End If
 		
 		Local TempY% = y + height - 25 * MenuScale - ConsoleScroll
-		Local count% = 0
+		Local Count% = 0
 		
 		For cm.ConsoleMsg = Each ConsoleMsg
-			count = count + 1
-			If count > 1000 Then
-				Delete cm
+			Count = Count + 1
+			If Count > 1000 Then
+				Delete(cm)
 			Else
 				If TempY >= y And TempY < y + height - 20 * MenuScale Then
 					If cm = ConsoleReissue Then
-						Color(cm\r / 4, cm\g / 4, cm\b / 4)
+						Color(cm\R / 4, cm\G / 4, cm\B / 4)
 						Rect(x, TempY - 2 * MenuScale, width - 30 * MenuScale, 24 * MenuScale, True)
 					EndIf
-					Color(cm\r, cm\g, cm\b)
-					If cm\isCommand Then
-						AAText(x + 20 * MenuScale, TempY, "> " + cm\txt)
+					Color(cm\R, cm\G, cm\B)
+					If cm\IsCommand Then
+						AAText(x + 20 * MenuScale, TempY, "> " + cm\TXT)
 					Else
-						AAText(x + 20 * MenuScale, TempY, cm\txt)
+						AAText(x + 20 * MenuScale, TempY, cm\TXT)
 					EndIf
 				EndIf
 				TempY = TempY - 15 * MenuScale
@@ -1795,7 +1809,7 @@ Type Doors
 	Field Dir%
 	Field Timer%, TimerState#
 	Field KeyCard%
-	Field Room.Rooms
+	Field room.Rooms
 	Field DisableWaypoint%
 	Field Dist#
 	Field SoundCHN%
@@ -1814,14 +1828,15 @@ End Type
 Dim BigDoorOBJ%(2), HeavyDoorObj%(2)
 Dim OBJTunnel%(7)
 
-Function CreateDoor.Doors(lvl, x#, y#, z#, angle#, room.Rooms, dopen% = False,  big% = False, keycard% = False, code$ = "", useCollisionMesh% = False)
-	Local d.Doors, parent, i%
-	If room <> Null Then parent = room\obj
+Function CreateDoor.Doors(LVL, x#, y#, z#, Angle#, room.Rooms, dopen% = False,  Big% = False, Keycard% = False, Code$ = "", UseCollisionMesh% = False)
+	Local d.Doors, Parent, i%
+	
+	If room <> Null Then Parent = room\OBJ
 	
 	Local d2.Doors
 	
 	d.Doors = New Doors
-	If big = 1 Then
+	If Big = 1 Then
 		d\OBJ = CopyEntity(BigDoorOBJ(0))
 		ScaleEntity(d\OBJ, 55 * RoomScale, 55 * RoomScale, 55 * RoomScale)
 		d\OBJ2 = CopyEntity(BigDoorOBJ(1))
@@ -1831,14 +1846,14 @@ Function CreateDoor.Doors(lvl, x#, y#, z#, angle#, room.Rooms, dopen% = False,  
 		ScaleEntity(d\FrameOBJ, RoomScale, RoomScale, RoomScale)
 		EntityType(d\FrameOBJ, HIT_MAP)
 		EntityAlpha(d\FrameOBJ, 0.0)
-	ElseIf big = 2 Then
+	ElseIf Big = 2 Then
 		d\OBJ = CopyEntity(HeavyDoorObj(0))
 		ScaleEntity(d\OBJ, RoomScale, RoomScale, RoomScale)
 		d\OBJ2 = CopyEntity(HeavyDoorObj(1))
 		ScaleEntity(d\OBJ2, RoomScale, RoomScale, RoomScale)
 		
 		d\FrameOBJ = CopyEntity(DoorFrameOBJ)
-	ElseIf big = 3 Then
+	ElseIf Big = 3 Then
 		For d2 = Each Doors
 			If d2 <> d And d2\Dir = 3 Then
 				d\OBJ = CopyEntity(d2\OBJ)
@@ -1873,20 +1888,20 @@ Function CreateDoor.Doors(lvl, x#, y#, z#, angle#, room.Rooms, dopen% = False,  
 	d\ID = DoorTempID
 	DoorTempID = DoorTempID + 1
 	
-	d\KeyCard = keycard
-	d\Code = code
+	d\KeyCard = Keycard
+	d\Code = Code
 	
-	d\Level = lvl
+	d\Level = LVL
 	d\LevelDest = 66
 	
 	For i% = 0 To 1
-		If code <> "" Then 
+		If Code <> "" Then 
 			d\Buttons[i] = CopyEntity(ButtonCodeOBJ)
 			EntityFX(d\Buttons[i], 1)
 		Else
-			If keycard > 0 Then
+			If Keycard > 0 Then
 				d\Buttons[i] = CopyEntity(ButtonKeyOBJ)
-			ElseIf keycard < 0
+			ElseIf Keycard < 0
 				d\Buttons[i] = CopyEntity(ButtonScannerOBJ)	
 			Else
 				d\Buttons[i] = CopyEntity(ButtonOBJ)
@@ -1895,7 +1910,7 @@ Function CreateDoor.Doors(lvl, x#, y#, z#, angle#, room.Rooms, dopen% = False,  
 		ScaleEntity(d\Buttons[i], 0.03, 0.03, 0.03)
 	Next
 	
-	If big = 1 Then
+	If Big = 1 Then
 		PositionEntity(d\Buttons[0], x - 432.0 * RoomScale, y + 0.7, z + 192.0 * RoomScale)
 		PositionEntity(d\Buttons[1], x + 432.0 * RoomScale, y + 0.7, z - 192.0 * RoomScale)
 		RotateEntity(d\Buttons[0], 0, 90, 0)
@@ -1912,23 +1927,23 @@ Function CreateDoor.Doors(lvl, x#, y#, z#, angle#, room.Rooms, dopen% = False,  
 	
 	PositionEntity(d\OBJ, x, y, z)
 	
-	RotateEntity(d\OBJ, 0, angle, 0)
-	RotateEntity(d\FrameOBJ, 0, angle, 0)
+	RotateEntity(d\OBJ, 0, Angle, 0)
+	RotateEntity(d\FrameOBJ, 0, Angle, 0)
 	
 	If d\OBJ2 <> 0 Then
 		PositionEntity(d\OBJ2, x, y, z)
-		If big = 1 Then
-			RotateEntity(d\OBJ2, 0, angle, 0)
+		If Big = 1 Then
+			RotateEntity(d\OBJ2, 0, Angle, 0)
 		Else
-			RotateEntity(d\OBJ2, 0, angle + 180, 0)
+			RotateEntity(d\OBJ2, 0, Angle + 180, 0)
 		EndIf
-		EntityParent(d\OBJ2, parent)
+		EntityParent(d\OBJ2, Parent)
 	EndIf
 	
-	EntityParent(d\FrameOBJ, parent)
-	EntityParent(d\OBJ, parent)
+	EntityParent(d\FrameOBJ, Parent)
+	EntityParent(d\OBJ, Parent)
 	
-	d\Angle = angle
+	d\Angle = Angle
 	d\Open = dopen		
 	
 	EntityPickMode(d\OBJ, 2)
@@ -1938,13 +1953,13 @@ Function CreateDoor.Doors(lvl, x#, y#, z#, angle#, room.Rooms, dopen% = False,  
 	
 	EntityPickMode(d\FrameOBJ, 2)
 	
-	If d\Open And big = False And Rand(8) = 1 Then d\AutoClose = True
-	d\Dir = big
-	d\Room = room
+	If d\Open And Big = False And Rand(8) = 1 Then d\AutoClose = True
+	d\Dir = Big
+	d\room = room
 	
 	d\MTFClose = True
 	
-	If useCollisionMesh Then
+	If UseCollisionMesh Then
 		For d2.Doors = Each Doors
 			If d2 <> d Then
 				If d2\DoorHitOBJ <> 0 Then
@@ -1967,32 +1982,28 @@ Function CreateDoor.Doors(lvl, x#, y#, z#, angle#, room.Rooms, dopen% = False,  
 			HideEntity(d\DoorHitOBJ)
 		EndIf
 	EndIf
-	
-	Return d
+	Return(d)
 End Function
 
-Function CreateButton(x#, y#, z#, pitch#, yaw#, roll# = 0)
-	Local obj = CopyEntity(ButtonOBJ)	
+Function CreateButton(x#, y#, z#, Pitch#, Yaw#, Roll# = 0)
+	Local OBJ = CopyEntity(ButtonOBJ)	
 	
-	ScaleEntity(obj, 0.03, 0.03, 0.03)
-	
-	PositionEntity(obj, x, y, z)
-	RotateEntity(obj, pitch, yaw, roll)
-	
-	EntityPickMode(obj, 2)	
-	
-	Return obj
+	ScaleEntity(OBJ, 0.03, 0.03, 0.03)
+	PositionEntity(OBJ, x, y, z)
+	RotateEntity(OBJ, Pitch, Yaw, Roll)
+	EntityPickMode(OBJ, 2)
+	Return(OBJ)
 End Function
 
 Function UpdateDoors()
-	Local i%, d.Doors, x#, z#, dist#
+	Local i%, d.Doors, x#, z#, Dist#
 	
 	If UpdateDoorsTimer =< 0 Then
 		For d.Doors = Each Doors
-			Local xdist# = Abs(EntityX(Collider) - EntityX(d\OBJ, True))
-			Local zdist# = Abs(EntityZ(Collider) - EntityZ(d\OBJ, True))
+			Local xDist# = Abs(EntityX(Collider) - EntityX(d\OBJ, True))
+			Local zDist# = Abs(EntityZ(Collider) - EntityZ(d\OBJ, True))
 			
-			d\Dist = xdist + zdist
+			d\Dist = xDist + zDist
 			
 			If d\Dist > HideDistance * 2 Then
 				If d\OBJ <> 0 Then HideEntity(d\OBJ)
@@ -2009,7 +2020,7 @@ Function UpdateDoors()
 			EndIf
 			
 			If PlayerRoom\RoomTemplate\Name$ = "room2sl"
-				If ValidRoom2slCamRoom(d\Room)
+				If ValidRoom2slCamRoom(d\room)
 					If d\OBJ <> 0 Then ShowEntity(d\OBJ)
 					If d\FrameOBJ <> 0 Then ShowEntity(d\FrameOBJ)
 					If d\OBJ2 <> 0 Then ShowEntity(d\OBJ2)
@@ -2034,21 +2045,22 @@ Function UpdateDoors()
 					If d\Buttons[i] <> 0 Then
 						If Abs(EntityX(Collider) - EntityX(d\Buttons[i], True)) < 1.0 Then 
 							If Abs(EntityZ(Collider) - EntityZ(d\Buttons[i], True)) < 1.0 Then 
-								dist# = Distance(EntityX(Collider, True), EntityZ(Collider, True), EntityX(d\Buttons[i], True), EntityZ(d\Buttons[i], True))
-								If dist < 0.7 Then
-									Local temp% = CreatePivot()
-									PositionEntity(temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
-									PointEntity(temp, d\Buttons[i])
+								Dist# = Distance(EntityX(Collider, True), EntityZ(Collider, True), EntityX(d\Buttons[i], True), EntityZ(d\Buttons[i], True))
+								If Dist < 0.7 Then
+									Local Temp% = CreatePivot()
 									
-									If EntityPick(temp, 0.6) = d\Buttons[i] Then
+									PositionEntity(Temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
+									PointEntity(Temp, d\Buttons[i])
+									
+									If EntityPick(Temp, 0.6) = d\Buttons[i] Then
 										If ClosestButton = 0 Then
 											ClosestButton = d\Buttons[i]
 											ClosestDoor = d
 										Else
-											If dist < EntityDistance(Collider, ClosestButton) Then ClosestButton = d\Buttons[i] : ClosestDoor = d
+											If Dist < EntityDistance(Collider, ClosestButton) Then ClosestButton = d\Buttons[i] : ClosestDoor = d
 										End If							
 									End If
-									FreeEntity(temp)
+									FreeEntity(Temp)
 								EndIf							
 							EndIf
 						EndIf
@@ -2087,9 +2099,11 @@ Function UpdateDoors()
 					If d\TimerState > 0 Then
 						d\TimerState = Max(0, d\TimerState - FPSfactor)
 						If d\TimerState + FPSfactor > 110 And d\TimerState =< 110 Then d\SoundCHN = PlaySound2(CautionSFX, Camera, d\OBJ)
-						Local sound%
-						If d\Dir = 1 Then sound% = Rand(0, 1) Else sound% = Rand(0, 2)
-						If d\TimerState = 0 Then d\Open = (Not d\Open) : d\SoundCHN = PlaySound2(CloseDoorSFX(d\Dir, sound%), Camera, d\OBJ)
+						
+						Local Sound%
+						
+						If d\Dir = 1 Then Sound% = Rand(0, 1) Else Sound% = Rand(0, 2)
+						If d\TimerState = 0 Then d\Open = (Not d\Open) : d\SoundCHN = PlaySound2(CloseDoorSFX(d\Dir, Sound%), Camera, d\OBJ)
 					EndIf
 					If d\AutoClose And RemoteDoorOn = True Then
 						If EntityDistance(Camera, d\OBJ) < 2.1 Then
@@ -2112,11 +2126,13 @@ Function UpdateDoors()
 							If d\OpenState < 15 And d\OpenState + FPSfactor >= 15
 								If ParticleAmount = 2
 									For i = 0 To Rand(75, 99)
-										Local pvt% = CreatePivot()
-										PositionEntity(pvt, EntityX(d\FrameOBJ, True) + Rnd(-0.2, 0.2), EntityY(d\FrameOBJ, True) + Rnd(0.0, 1.2), EntityZ(d\FrameOBJ, True) + Rnd(-0.2, 0.2))
-										RotateEntity(pvt, 0, Rnd(360), 0)
+										Local Pvt% = CreatePivot()
 										
-										Local p.Particles = CreateParticle(EntityX(pvt), EntityY(pvt), EntityZ(pvt), 2, 0.002, 0, 300)
+										PositionEntity(Pvt, EntityX(d\FrameOBJ, True) + Rnd(-0.2, 0.2), EntityY(d\FrameOBJ, True) + Rnd(0.0, 1.2), EntityZ(d\FrameOBJ, True) + Rnd(-0.2, 0.2))
+										RotateEntity(Pvt, 0, Rnd(360), 0)
+										
+										Local p.Particles = CreateParticle(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 2, 0.002, 0, 300)
+										
 										p\speed = 0.005
 										RotateEntity(p\pvt, Rnd(-20, 20), Rnd(360), 0)
 										
@@ -2128,7 +2144,7 @@ Function UpdateDoors()
 										
 										EntityOrder(p\obj, -1)
 										
-										FreeEntity(pvt)
+										FreeEntity(Pvt)
 									Next
 								EndIf
 							EndIf
@@ -2191,11 +2207,12 @@ Function UpdateDoors()
 	Next
 End Function
 
-Function UseDoor(d.Doors, showmsg% = True, playsfx% = True)
-	Local temp% = 0
+Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
+	Local Temp% = 0
+	
 	If d\KeyCard > 0 Then
 		If SelectedItem = Null Then
-			If showmsg = True Then
+			If ShowMsg = True Then
 				If (Instr(Msg, "The keycard") = 0 And Instr(Msg, "A keycard with") = 0) Or (MsgTimer < 70 * 3) Then
 					Msg = "A keycard is required to operate this door."
 					MsgTimer = 70 * 7
@@ -2205,32 +2222,32 @@ Function UseDoor(d.Doors, showmsg% = True, playsfx% = True)
 		Else
 			Select SelectedItem\itemtemplate\tempname
 				Case "key1"
-					temp = 1
+					Temp = 1
 				Case "key2"
-					temp = 2
+					Temp = 2
 				Case "key3"
-					temp = 3
+					Temp = 3
 				Case "key4"
-					temp = 4
+					Temp = 4
 				Case "key5"
-					temp = 5
+					Temp = 5
 				Case "key6"
-					temp = 6
+					Temp = 6
 				Default 
-					temp = -1
+					Temp = -1
 			End Select
 			
-			If temp = -1 Then 
-				If showmsg = True Then
+			If Temp = -1 Then 
+				If ShowMsg = True Then
 					If (Instr(Msg, "The keycard") = 0 And Instr(Msg, "A keycard with") = 0) Or (MsgTimer < 70 * 3) Then
 						Msg = "A keycard is required to operate this door."
 						MsgTimer = 70 * 7
 					EndIf
 				EndIf
 				Return				
-			ElseIf temp >= d\KeyCard 
+			ElseIf Temp >= d\KeyCard 
 				SelectedItem = Null
-				If showmsg = True Then
+				If ShowMsg = True Then
 					If d\Locked Then
 						PlaySound_Strict(KeyCardSFX2)
 						Msg = "The keycard was inserted into the slot but nothing happened."
@@ -2244,7 +2261,7 @@ Function UseDoor(d.Doors, showmsg% = True, playsfx% = True)
 				EndIf
 			Else
 				SelectedItem = Null
-				If showmsg = True Then 
+				If ShowMsg = True Then 
 					PlaySound_Strict(KeyCardSFX2)					
 					If d\Locked Then
 						Msg = "The keycard was inserted into the slot but nothing happened."
@@ -2259,17 +2276,17 @@ Function UseDoor(d.Doors, showmsg% = True, playsfx% = True)
 	ElseIf d\KeyCard < 0
 		; ~ I can't find any way to produce short circuited boolean expressions so work around this by using a temporary variable - risingstar64
 		If SelectedItem <> Null Then
-			temp = (SelectedItem\itemtemplate\tempname = "hand" And d\KeyCard = -1) Or (SelectedItem\itemtemplate\tempname = "hand2" And d\KeyCard = -2)
+			Temp = (SelectedItem\itemtemplate\tempname = "hand" And d\KeyCard = -1) Or (SelectedItem\itemtemplate\tempname = "hand2" And d\KeyCard = -2)
 		EndIf
 		SelectedItem = Null
-		If temp <> 0 Then
+		If Temp <> 0 Then
 			PlaySound_Strict(ScannerSFX1)
 			If (Instr(Msg, "You placed your") = 0) Or (MsgTimer < 70 * 3) Then
 				Msg = "You place the palm of the hand onto the scanner. The scanner reads: " + Chr(34) + "DNA verified. Access granted." + Chr(34)
 			EndIf
 			MsgTimer = 70 * 10
 		Else
-			If showmsg = True Then 
+			If ShowMsg = True Then 
 				PlaySound_Strict(ScannerSFX2)
 				Msg = "You placed your palm onto the scanner. The scanner reads: " + Chr(34) + "DNA does not match known sample. Access denied." + Chr(34)
 				MsgTimer = 70 * 10
@@ -2278,7 +2295,7 @@ Function UseDoor(d.Doors, showmsg% = True, playsfx% = True)
 		EndIf
 	Else
 		If d\Locked Then
-			If showmsg = True Then 
+			If ShowMsg = True Then 
 				If Not (d\IsElevatorDoor > 0) Then
 					PlaySound_Strict(ButtonSFX2)
 					If PlayerRoom\RoomTemplate\Name <> "room2elevator" Then
@@ -2328,16 +2345,17 @@ Function UseDoor(d.Doors, showmsg% = True, playsfx% = True)
 	d\Open = (Not d\Open)
 	If d\LinkedDoor <> Null Then d\LinkedDoor\Open = (Not d\LinkedDoor\Open)
 	
-	Local sound = 0
-	If d\Dir = 1 Then sound = Rand(0, 1) Else sound = Rand(0, 2)
+	Local Sound = 0
 	
-	If playsfx = True Then
+	If d\Dir = 1 Then Sound = Rand(0, 1) Else Sound = Rand(0, 2)
+	
+	If PlaySFX = True Then
 		If d\Open Then
 			If d\LinkedDoor <> Null Then d\LinkedDoor\TimerState = d\LinkedDoor\Timer
 			d\TimerState = d\Timer
-			d\SoundCHN = PlaySound2(OpenDoorSFX(d\Dir, sound), Camera, d\OBJ)
+			d\SoundCHN = PlaySound2(OpenDoorSFX(d\Dir, Sound), Camera, d\OBJ)
 		Else
-			d\SoundCHN = PlaySound2(CloseDoorSFX(d\Dir, sound), Camera, d\OBJ)
+			d\SoundCHN = PlaySound2(CloseDoorSFX(d\Dir, Sound), Camera, d\OBJ)
 		EndIf
 		UpdateSoundOrigin(d\SoundCHN, Camera, d\OBJ)
 	Else
@@ -2359,7 +2377,7 @@ Function RemoveDoor(d.Doors)
 	If d\Buttons[0] <> 0 Then FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 	If d\Buttons[1] <> 0 Then FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 	
-	Delete d
+	Delete(d)
 End Function
 
 DrawLoading(40, True)
@@ -2372,13 +2390,13 @@ Include "Source Code\NPCs.bb"
 
 Type Events
 	Field EventName$
-	Field Room.Rooms
+	Field room.Rooms
 	Field EventState#, EventState2#, EventState3#
 	Field SoundCHN%, SoundCHN2%
 	Field Sound, Sound2
 	Field SoundCHN_IsStream%, SoundCHN2_IsStream%
 	Field EventStr$
-	Field img%
+	Field Img%
 End Type 
 
 Function CreateEvent.Events(eventname$, roomname$, id%, prob# = 0.0)
@@ -2392,43 +2410,42 @@ Function CreateEvent.Events(eventname$, roomname$, id%, prob# = 0.0)
 	; ~ 1.0 means that the event is assigned to every room
 	; ~ The Id-variable is ignored if prob <> 0.0
 	
-	Local i% = 0, temp%, e.Events, e2.Events, r.Rooms
+	Local i% = 0, Temp%, e.Events, e2.Events, r.Rooms
 	
 	If prob = 0.0 Then
 		For r.Rooms = Each Rooms
 			If (roomname = "" Or roomname = r\RoomTemplate\Name) Then
-				temp = False
+				Temp = False
 				For e2.Events = Each Events
-					If e2\Room = r Then temp = True : Exit
+					If e2\room = r Then Temp = True : Exit
 				Next
 				
 				i = i + 1
-				If i >= id And temp = False Then
+				If i >= id And Temp = False Then
 					e.Events = New Events
 					e\EventName = eventname					
-					e\Room = r
-					Return e
+					e\room = r
+					Return(e)
 				End If
 			EndIf
 		Next
 	Else
 		For r.Rooms = Each Rooms
 			If (roomname = "" Or roomname = r\RoomTemplate\Name) Then
-				temp = False
+				Temp = False
 				For e2.Events = Each Events
-					If e2\Room = r Then temp = True : Exit
+					If e2\room = r Then Temp = True : Exit
 				Next
 				
-				If Rnd(0.0, 1.0) < prob And temp = False Then
+				If Rnd(0.0, 1.0) < prob And Temp = False Then
 					e.Events = New Events
 					e\EventName = eventname					
-					e\Room = r
+					e\room = r
 				End If
 			EndIf
 		Next		
 	EndIf
-	
-	Return Null
+	Return(Null)
 End Function
 
 Function InitEvents()
@@ -2622,8 +2639,9 @@ Include "Source Code\UpdateEvents.bb"
 Function RemoveEvent(e.Events)
 	If e\Sound <> 0 Then FreeSound_Strict(e\Sound)
 	If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2)
-	If e\img <> 0 Then FreeImage(e\img)
-	Delete e
+	If e\Img <> 0 Then FreeImage(e\Img)
+	
+	Delete(e)
 End Function
 
 Collisions HIT_PLAYER, HIT_MAP, 2, 2
@@ -2635,10 +2653,10 @@ Collisions HIT_178, HIT_178, 1, 3
 Collisions HIT_DEAD, HIT_MAP, 2, 2
 
 Function MilliSecs2()
-	Local retVal% = MilliSecs()
+	Local RetVal% = MilliSecs()
 	
-	If retVal < 0 Then retVal = retVal + 2147483648
-	Return retVal
+	If RetVal < 0 Then RetVal = RetVal + 2147483648
+	Return(RetVal)
 End Function
 
 DrawLoading(90, True)
@@ -2743,6 +2761,7 @@ Repeat
 	If Framelimit > 0 Then
 	    ; ~ Framelimit
 		Local WaitingTime% = (1000.0 / Framelimit) - (MilliSecs2() - LoopDelay)
+		
 		Delay WaitingTime%
 		
 		LoopDelay = MilliSecs2()
@@ -2764,9 +2783,10 @@ Repeat
 			LastMouseHit1 = MilliSecs2()
 		EndIf
 		
-		Local prevmousedown1 = MouseDown1
+		Local PrevMouseDown1 = MouseDown1
+		
 		MouseDown1 = MouseDown(1)
-		If prevmousedown1 = True And MouseDown1 = False Then MouseUp1 = True Else MouseUp1 = False
+		If PrevMouseDown1 = True And MouseDown1 = False Then MouseUp1 = True Else MouseUp1 = False
 		
 		MouseHit2 = MouseHit(2)
 		
@@ -2850,6 +2870,7 @@ Repeat
 			
 			If Rand(50000) = 3 Then
 				Local RN$ = PlayerRoom\RoomTemplate\Name$
+				
 				If RN$ <> "room860" And RN$ <> "room1123" And RN$ <> "173" And RN$ <> "dimension1499" Then
 					If FPSfactor > 0 Then LightBlink = Rnd(1.0, 2.0)
 					PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(1, 7) + ".ogg"))
@@ -2938,12 +2959,13 @@ Repeat
 		
 		UpdateBlur(BlurVolume)
 		
-		Local darkA# = 0.0
+		Local DarkA# = 0.0
+		
 		If (Not MenuOpen)  Then
 			If Sanity < 0 Then
 				If RestoreSanity Then Sanity = Min(Sanity + FPSfactor, 0.0)
 				If Sanity < (-200) Then 
-					darkA = Max(Min((-Sanity - 200) / 700.0, 0.6), darkA)
+					DarkA = Max(Min((-Sanity - 200) / 700.0, 0.6), DarkA)
 					If KillTimer >= 0 Then 
 						HeartBeatVolume = Min(Abs(Sanity + 200) / 500.0, 1.0)
 						HeartBeatRate = Max(70 + Abs(Sanity + 200) / 6.0, HeartBeatRate)
@@ -3006,7 +3028,7 @@ Repeat
 			
 			If Using294 Then darkA = 1.0
 			
-			If (Not WearingNightVision) Then darkA = Max((1.0 - SecondaryLightOn) * 0.9, darkA)
+			If (Not WearingNightVision) Then DarkA = Max((1.0 - SecondaryLightOn) * 0.9, DarkA)
 			
 			If KillTimer < 0 Then
 				InvOpen = False
@@ -3019,7 +3041,7 @@ Repeat
 					MenuOpen = True 
 					If SelectedEnding <> "" Then EndingTimer = Min(KillTimer, -0.1)
 				EndIf
-				darkA = Max(darkA, Min(Abs(KillTimer / 400.0), 1.0))
+				DarkA = Max(DarkA, Min(Abs(KillTimer / 400.0), 1.0))
 			EndIf
 			
 			If FallTimer < 0 Then
@@ -3036,15 +3058,15 @@ Repeat
 				SelectedMonitor = Null
 				BlurTimer = Abs(FallTimer * 10)
 				FallTimer = FallTimer - FPSfactor
-				darkA = Max(darkA, Min(Abs(FallTimer / 400.0), 1.0))				
+				DarkA = Max(DarkA, Min(Abs(FallTimer / 400.0), 1.0))				
 			EndIf
 			
 			If SelectedItem <> Null Then
-				If SelectedItem\itemtemplate\tempname = "navigator" Or SelectedItem\itemtemplate\tempname = "nav" Then darkA = Max(darkA, 0.5)
+				If SelectedItem\itemtemplate\tempname = "navigator" Or SelectedItem\itemtemplate\tempname = "nav" Then DarkA = Max(DarkA, 0.5)
 			End If
-			If SelectedScreen <> Null Then darkA = Max(darkA, 0.5)
+			If SelectedScreen <> Null Then DarkA = Max(DarkA, 0.5)
 			
-			EntityAlpha(Dark, darkA)	
+			EntityAlpha(Dark, DarkA)	
 		EndIf
 		
 		If LightFlash > 0 Then
@@ -3061,6 +3083,7 @@ Repeat
 			If (Not UnableToMove) And (Not IsZombie) And (Not Using294) Then
 				Local W$ = ""
 				Local V# = 0
+				
 				If SelectedItem <> Null
 					W$ = SelectedItem\itemtemplate\tempname
 					V# = SelectedItem\state
@@ -3171,11 +3194,12 @@ Repeat
 		EndIf
 		
 		If MsgTimer > 0 Then
-			Local temp% = False
+			Local Temp% = False
+			
 			If (Not InvOpen%)
 				If SelectedItem <> Null
 					If SelectedItem\itemtemplate\tempname = "paper" Or SelectedItem\itemtemplate\tempname = "oldpaper"
-						temp% = True
+						Temp% = True
 					EndIf
 				EndIf
 			EndIf
@@ -3272,7 +3296,6 @@ Function QuickLoadEvents()
 	EndIf
 	
 	Local e.Events = QuickLoad_CurrEvent
-	
 	Local r.Rooms, sc.SecurityCams, sc2.SecurityCams, scale#, pvt%, n.NPCs, tex%, i%, x#, z#
 	
 	; ~ Might be a good idea to use QuickLoadPercent to determine the "steps" of the loading process 
@@ -3290,23 +3313,24 @@ Function QuickLoadEvents()
 						e\EventStr = Int(e\EventStr) + 1
 					EndIf
 				ElseIf e\EventStr = "load2"
-					Local skip = False
-					If e\Room\NPC[0] = Null Then
+					Local Skip = False
+					
+					If e\room\NPC[0] = Null Then
 						For n.NPCs = Each NPCs
 							If n\NPCtype = NPCtype049
-								skip = True
+								Skip = True
 								Exit
 							EndIf
 						Next
 						
-						If (Not skip)
-							e\Room\NPC[0] = CreateNPC(NPCtype049, EntityX(e\Room\Objects[7], True), EntityY(e\Room\Objects[7], True) + 5, EntityZ(e\Room\Objects[7], True))
-							e\Room\NPC[0]\HideFromNVG = True
-							PositionEntity(e\Room\NPC[0]\Collider, EntityX(e\Room\Objects[7], True), EntityY(e\Room\Objects[7], True) + 5, EntityZ(e\Room\Objects[7], True))
-							ResetEntity(e\Room\NPC[0]\Collider)
-							RotateEntity(e\Room\NPC[0]\Collider, 0, e\Room\angle + 180, 0)
-							e\Room\NPC[0]\State = 0
-							e\Room\NPC[0]\PrevState = 2
+						If (Not Skip)
+							e\room\NPC[0] = CreateNPC(NPCtype049, EntityX(e\room\Objects[7], True), EntityY(e\room\Objects[7], True) + 5, EntityZ(e\room\Objects[7], True))
+							e\room\NPC[0]\HideFromNVG = True
+							PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[7], True), EntityY(e\room\Objects[7], True) + 5, EntityZ(e\room\Objects[7], True))
+							ResetEntity(e\room\NPC[0]\Collider)
+							RotateEntity(e\room\NPC[0]\Collider, 0, e\room\angle + 180, 0)
+							e\room\NPC[0]\State = 0
+							e\room\NPC[0]\PrevState = 2
 						EndIf
 					EndIf
 					QuickLoadPercent = 80
@@ -3324,36 +3348,36 @@ Function QuickLoadEvents()
 			If e\EventState = 0
 				If e\EventStr = "load0"
 					QuickLoadPercent = 10
-					If e\Room\NPC[0] = Null Then
-						e\Room\NPC[0] = CreateNPC(NPCtypeD, EntityX(e\Room\Objects[0], True), EntityY(e\Room\Objects[0], True), EntityZ(e\Room\Objects[0], True))
+					If e\room\NPC[0] = Null Then
+						e\room\NPC[0] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
 					EndIf
 					
-					ChangeNPCTextureID(e\Room\NPC[0], 4)
+					ChangeNPCTextureID(e\room\NPC[0], 4)
 					e\EventStr = "load1"
 				ElseIf e\EventStr = "load1"
 					QuickLoadPercent = 20
-					e\Room\NPC[0]\Sound = LoadSound_Strict("SFX\Room\Storeroom\Escape1.ogg")
+					e\room\NPC[0]\Sound = LoadSound_Strict("SFX\Room\Storeroom\Escape1.ogg")
 					e\EventStr = "load2"
 				ElseIf e\EventStr = "load2"
 					QuickLoadPercent = 35
-					e\Room\NPC[0]\SoundCHN = PlaySound2(e\Room\NPC[0]\Sound, Camera, e\Room\NPC[0]\Collider, 12)
+					e\room\NPC[0]\SoundCHN = PlaySound2(e\room\NPC[0]\Sound, Camera, e\room\NPC[0]\Collider, 12)
 					e\EventStr = "load3"
 				ElseIf e\EventStr = "load3"
 					QuickLoadPercent = 55
-					If e\Room\NPC[1] = Null Then
-						e\Room\NPC[1] = CreateNPC(NPCtypeD, EntityX(e\Room\Objects[1], True), EntityY(e\Room\Objects[1], True), EntityZ(e\Room\Objects[1], True))
+					If e\room\NPC[1] = Null Then
+						e\room\NPC[1] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
 					EndIf
 					
-					ChangeNPCTextureID(e\Room\NPC[1], 2)
+					ChangeNPCTextureID(e\room\NPC[1], 2)
 					e\EventStr = "load4"
 				ElseIf e\EventStr = "load4"
 					QuickLoadPercent = 80
-					e\Room\NPC[1]\Sound = LoadSound_Strict("SFX\Room\Storeroom\Escape2.ogg")
+					e\room\NPC[1]\Sound = LoadSound_Strict("SFX\Room\Storeroom\Escape2.ogg")
 					e\EventStr = "load5"
 				ElseIf e\EventStr = "load5"
 					QuickLoadPercent = 100
-					PointEntity(e\Room\NPC[0]\Collider), e\Room\NPC[1]\Collider
-					PointEntity(e\Room\NPC[1]\Collider), e\Room\NPC[0]\Collider
+					PointEntity(e\room\NPC[0]\Collider), e\room\NPC[1]\Collider
+					PointEntity(e\room\NPC[1]\Collider), e\room\NPC[0]\Collider
 					
 					e\EventState = 1
 				EndIf
@@ -3361,14 +3385,14 @@ Function QuickLoadEvents()
 			;[End Block]
 		Case "room3storage"
 			;[Block]
-			If e\Room\NPC[0] = Null Then
-				e\Room\NPC[0] = CreateNPC(NPCtype939, 0, 0, 0)
+			If e\room\NPC[0] = Null Then
+				e\room\NPC[0] = CreateNPC(NPCtype939, 0, 0, 0)
 				QuickLoadPercent = 20
-			ElseIf e\Room\NPC[1] = Null Then
-				e\Room\NPC[1] = CreateNPC(NPCtype939, 0, 0, 0)
+			ElseIf e\room\NPC[1] = Null Then
+				e\room\NPC[1] = CreateNPC(NPCtype939, 0, 0, 0)
 				QuickLoadPercent = 50
-			ElseIf e\Room\NPC[2] = Null Then
-				e\Room\NPC[2] = CreateNPC(NPCtype939, 0, 0, 0)
+			ElseIf e\room\NPC[2] = Null Then
+				e\room\NPC[2] = CreateNPC(NPCtype939, 0, 0, 0)
 				QuickLoadPercent = 100
 			Else
 				If QuickLoadPercent > -1 Then QuickLoadPercent = 100
@@ -3378,36 +3402,36 @@ Function QuickLoadEvents()
 			;[Block]
 			If e\EventState = 0 Then
 				If e\EventStr = "load0"
-					n.NPCs = CreateNPC(NPCtypeZombie, EntityX(e\Room\Objects[4], True), EntityY(e\Room\Objects[4], True), EntityZ(e\Room\Objects[4], True))
-					PointEntity(n\Collider, e\Room\obj)
+					n.NPCs = CreateNPC(NPCtypeZombie, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True))
+					PointEntity(n\Collider, e\room\OBJ)
 					TurnEntity(n\Collider, 0, 190, 0)
 					QuickLoadPercent = 20
 					e\EventStr = "load1"
 				ElseIf e\EventStr = "load1"
-					n.NPCs = CreateNPC(NPCtypeZombie, EntityX(e\Room\Objects[5], True), EntityY(e\Room\Objects[5], True), EntityZ(e\Room\Objects[5], True))
-					PointEntity(n\Collider, e\Room\obj)
+					n.NPCs = CreateNPC(NPCtypeZombie, EntityX(e\room\Objects[5], True), EntityY(e\room\Objects[5], True), EntityZ(e\room\Objects[5], True))
+					PointEntity(n\Collider, e\room\OBJ)
 					TurnEntity(n\Collider, 0, 20, 0)
 					QuickLoadPercent = 60
 					e\EventStr = "load2"
 				ElseIf e\EventStr = "load2"
 					For n.NPCs = Each NPCs
 						If n\NPCtype = NPCtype049
-							e\Room\NPC[0] = n
-							e\Room\NPC[0]\State = 2
-							e\Room\NPC[0]\Idle = 1
-							e\Room\NPC[0]\HideFromNVG = True
-							PositionEntity(e\Room\NPC[0]\Collider, EntityX(e\Room\Objects[4], True), EntityY(e\Room\Objects[4], True) + 3, EntityZ(e\Room\Objects[4], True))
-							ResetEntity(e\Room\NPC[0]\Collider)
+							e\room\NPC[0] = n
+							e\room\NPC[0]\State = 2
+							e\room\NPC[0]\Idle = 1
+							e\room\NPC[0]\HideFromNVG = True
+							PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True) + 3, EntityZ(e\room\Objects[4], True))
+							ResetEntity(e\room\NPC[0]\Collider)
 							Exit
 						EndIf
 					Next
-					If e\Room\NPC[0] = Null
-						n.NPCs = CreateNPC(NPCtype049, EntityX(e\Room\Objects[4], True), EntityY(e\Room\Objects[4], True) + 3, EntityZ(e\Room\Objects[4], True))
-						PointEntity(n\Collider, e\Room\obj)
+					If e\room\NPC[0] = Null
+						n.NPCs = CreateNPC(NPCtype049, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True) + 3, EntityZ(e\room\Objects[4], True))
+						PointEntity(n\Collider, e\room\OBJ)
 						n\State = 2
 						n\Idle = 1
 						n\HideFromNVG = True
-						e\Room\NPC[0] = n
+						e\room\NPC[0] = n
 					EndIf
 					QuickLoadPercent = 100
 					e\EventState = 1
@@ -3416,21 +3440,21 @@ Function QuickLoadEvents()
 			;[End Block]
 		Case "room205"
 			;[Block]
-			If e\EventState = 0 Or e\Room\Objects[0] = 0 Then
+			If e\EventState = 0 Or e\room\Objects[0] = 0 Then
 				If e\EventStr = "load0"
-					e\Room\Objects[3] = LoadAnimMesh_Strict("GFX\npcs\205_demon1.b3d")
+					e\room\Objects[3] = LoadAnimMesh_Strict("GFX\npcs\205_demon1.b3d")
 					QuickLoadPercent = 10
 					e\EventStr = "load1"
 				ElseIf e\EventStr = "load1"
-					e\Room\Objects[4] = LoadAnimMesh_Strict("GFX\npcs\205_demon2.b3d")
+					e\room\Objects[4] = LoadAnimMesh_Strict("GFX\npcs\205_demon2.b3d")
 					QuickLoadPercent = 20
 					e\EventStr = "load2"
 				ElseIf e\EventStr = "load2"
-					e\Room\Objects[5] = LoadAnimMesh_Strict("GFX\npcs\205_demon3.b3d")
+					e\room\Objects[5] = LoadAnimMesh_Strict("GFX\npcs\205_demon3.b3d")
 					QuickLoadPercent = 30
 					e\EventStr = "load3"
 				ElseIf e\EventStr = "load3"
-					e\Room\Objects[6] = LoadAnimMesh_Strict("GFX\npcs\205_woman.b3d")
+					e\room\Objects[6] = LoadAnimMesh_Strict("GFX\npcs\205_woman.b3d")
 					QuickLoadPercent = 40
 					e\EventStr = "load4"
 				ElseIf e\EventStr = "load4"
@@ -3438,16 +3462,16 @@ Function QuickLoadEvents()
 					e\EventStr = "load5"
 				ElseIf e\EventStr = "load5"
 					For i = 3 To 6
-						PositionEntity(e\Room\Objects[i], EntityX(e\Room\Objects[0], True), EntityY(e\Room\Objects[0], True), EntityZ(e\Room\Objects[0], True), True)
-						RotateEntity(e\Room\Objects[i], -90, EntityYaw(e\Room\Objects[0], True), 0, True)
-						ScaleEntity(e\Room\Objects[i], 0.05, 0.05, 0.05, True)
+						PositionEntity(e\room\Objects[i], EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), True)
+						RotateEntity(e\room\Objects[i], -90, EntityYaw(e\room\Objects[0], True), 0, True)
+						ScaleEntity(e\room\Objects[i], 0.05, 0.05, 0.05, True)
 					Next
 					QuickLoadPercent = 70
 					e\EventStr = "load6"
 				ElseIf e\EventStr = "load6"
-					HideEntity(e\Room\Objects[3])
-					HideEntity(e\Room\Objects[4])
-					HideEntity(e\Room\Objects[5])
+					HideEntity(e\room\Objects[3])
+					HideEntity(e\room\Objects[4])
+					HideEntity(e\room\Objects[5])
 					QuickLoadPercent = 100
 					e\EventStr = "loaddone"
 				EndIf
@@ -3473,7 +3497,7 @@ Function QuickLoadEvents()
 				e\EventStr = "load2"
 			ElseIf e\EventStr = "load2"
 				QuickLoadPercent = 100
-				If e\Room\NPC[0] = Null Then e\Room\NPC[0] = CreateNPC(NPCtype860, 0, 0, 0)
+				If e\room\NPC[0] = Null Then e\room\NPC[0] = CreateNPC(NPCtype860, 0, 0, 0)
 				e\EventStr = "loaddone"
 			EndIf
 			;[End Block]
@@ -3483,11 +3507,11 @@ Function QuickLoadEvents()
 				e\EventState2 = e\EventState2 + FPSfactor
 				If e\EventState2 > 30 Then
 					If e\EventStr = ""
-						CreateNPC(NPCtype966, EntityX(e\Room\Objects[0], True), EntityY(e\Room\Objects[0], True), EntityZ(e\Room\Objects[0], True))
+						CreateNPC(NPCtype966, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
 						QuickLoadPercent = 50
 						e\EventStr = "load0"
 					ElseIf e\EventStr = "load0"
-						CreateNPC(NPCtype966, EntityX(e\Room\Objects[2], True), EntityY(e\Room\Objects[2], True), EntityZ(e\Room\Objects[2], True))
+						CreateNPC(NPCtype966, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True))
 						QuickLoadPercent = 100
 						e\EventState = 2
 					EndIf
@@ -3501,8 +3525,8 @@ Function QuickLoadEvents()
 			If e\EventState = 0.0
 				If e\EventStr = "load0"
 					QuickLoadPercent = 10
-					e\Room\Objects[0] = LoadMesh_Strict("GFX\map\dimension1499\1499plane.b3d")
-					HideEntity(e\Room\Objects[0])
+					e\room\Objects[0] = LoadMesh_Strict("GFX\map\dimension1499\1499plane.b3d")
+					HideEntity(e\room\Objects[0])
 					e\EventStr = "load1"
 				ElseIf e\EventStr = "load1"
 					QuickLoadPercent = 30
@@ -3511,23 +3535,25 @@ Function QuickLoadEvents()
 				Else
 					If Int(e\EventStr) < 16
 						QuickLoadPercent = QuickLoadPercent + 2
-						e\Room\Objects[Int(e\EventStr)] = LoadMesh_Strict("GFX\map\dimension1499\1499object" + (Int(e\EventStr)) + ".b3d")
-						HideEntity(e\Room\Objects[Int(e\EventStr)])
+						e\room\Objects[Int(e\EventStr)] = LoadMesh_Strict("GFX\map\dimension1499\1499object" + (Int(e\EventStr)) + ".b3d")
+						HideEntity(e\room\Objects[Int(e\EventStr)])
 						e\EventStr = Int(e\EventStr) + 1
 					ElseIf Int(e\EventStr) = 16
 						QuickLoadPercent = 90
-						CreateChunkParts(e\Room)
+						CreateChunkParts(e\room)
 						e\EventStr = 17
 					ElseIf Int(e\EventStr) = 17
 						QuickLoadPercent = 100
-						x# = EntityX(e\Room\obj)
-						z# = EntityZ(e\Room\obj)
+						x# = EntityX(e\room\OBJ)
+						z# = EntityZ(e\room\OBJ)
+						
 						Local ch.Chunk
+						
 						For i = -2 To 0 Step 2
-							ch = CreateChunk(-1, x# * (i * 2.5), EntityY(e\Room\obj), z#, True)
+							ch = CreateChunk(-1, x# * (i * 2.5), EntityY(e\room\OBJ), z#, True)
 						Next
 						For i = -2 To 0 Step 2
-							ch = CreateChunk(-1, x# * (i * 2.5), EntityY(e\Room\obj), z# - 40, True)
+							ch = CreateChunk(-1, x# * (i * 2.5), EntityY(e\room\OBJ), z# - 40, True)
 						Next
 						e\EventState = 2.0
 						e\EventStr = 18
@@ -3577,7 +3603,8 @@ Function DrawEnding()
 	GiveAchievement(Achv055)
 	If (Not UsedConsole) Then GiveAchievement(AchvConsole)
 	If SelectedDifficulty\name = "Keter" Then GiveAchievement(AchvKeter)
-	Local x, y, width, height, temp
+	
+	Local x, y, Width, Height, Temp
 	Local itt.ItemTemplates, r.Rooms
 	
 	Select Lower(SelectedEnding)
@@ -3633,56 +3660,60 @@ Function DrawEnding()
 			
 			If EndingTimer < -1000 And EndingTimer > -2000
 				
-				width = ImageWidth(PauseMenuIMG)
-				height = ImageHeight(PauseMenuIMG)
-				x = GraphicWidth / 2 - width / 2
-				y = GraphicHeight / 2 - height / 2
+				Width = ImageWidth(PauseMenuIMG)
+				Height = ImageHeight(PauseMenuIMG)
+				x = GraphicWidth / 2 - Width / 2
+				y = GraphicHeight / 2 - Height / 2
 				
 				DrawImage(PauseMenuIMG, x, y)
 				
 				Color(255, 255, 255)
 				AASetFont(Font2)
-				AAText(x + width / 2 + 40 * MenuScale, y + 20 * MenuScale, "THE END", True)
+				AAText(x + Width / 2 + 40 * MenuScale, y + 20 * MenuScale, "THE END", True)
 				AASetFont(Font1)
 				
 				If AchievementsMenu = 0 Then 
 					x = x + 132 * MenuScale
 					y = y + 122 * MenuScale
 					
-					Local roomamount = 0, roomsfound = 0
+					Local RoomAmount = 0, RoomsFound = 0
+					
 					For r.Rooms = Each Rooms
-						roomamount = roomamount + 1
-						roomsfound = roomsfound + r\found
+						RoomAmount = RoomAmount + 1
+						RoomsFound = RoomsFound + r\found
 					Next
 					
-					Local docamount = 0, docsfound = 0
+					Local DocAmount = 0, DocsFound = 0
+					
 					For itt.ItemTemplates = Each ItemTemplates
 						If itt\tempname = "paper" Then
-							docamount = docamount + 1
-							docsfound = docsfound + itt\found
+							DocAmount = DocAmount + 1
+							DocsFound = DocsFound + itt\found
 						EndIf
 					Next
 					
-					Local scpsEncountered = 1
+					Local SCPsEncountered = 1
+					
 					For i = 0 To 24
-						scpsEncountered = scpsEncountered + Achievements(i)
+						SCPsEncountered = SCPsEncountered + Achievements(i)
 					Next
 					
-					Local achievementsUnlocked = 0
+					Local AchievementsUnlocked = 0
+					
 					For i = 0 To MAXACHIEVEMENTS - 1
-						achievementsUnlocked = achievementsUnlocked + Achievements(i)
+						AchievementsUnlocked = AchievementsUnlocked + Achievements(i)
 					Next
 					
-					AAText(x, y, "SCPs encountered: " + scpsEncountered)
-					AAText(x, y + 20 * MenuScale, "Achievements unlocked: " + achievementsUnlocked + "/" + (MAXACHIEVEMENTS))
-					AAText(x, y + 40 * MenuScale, "Rooms found: " + roomsfound + "/" + roomamount)
-					AAText(x, y + 60 * MenuScale, "Documents discovered: " + docsfound + "/" + docamount)
+					AAText(x, y, "SCPs encountered: " + SCPsEncountered)
+					AAText(x, y + 20 * MenuScale, "Achievements unlocked: " + AchievementsUnlocked + "/" + (MAXACHIEVEMENTS))
+					AAText(x, y + 40 * MenuScale, "Rooms found: " + RoomsFound + "/" + RoomAmount)
+					AAText(x, y + 60 * MenuScale, "Documents discovered: " + DocsFound + "/" + DocAmount)
 					AAText(x, y + 80 * MenuScale, "Items refined in SCP-914: " + RefinedItems)
 					
-					x = GraphicWidth / 2 - width / 2
-					y = GraphicHeight / 2 - height / 2
-					x = x + width / 2
-					y = y + height - 100 * MenuScale
+					x = GraphicWidth / 2 - Width / 2
+					y = GraphicHeight / 2 - Height / 2
+					x = x + Width / 2
+					y = y + Height - 100 * MenuScale
 					
 					If DrawButton(x - 145 * MenuScale, y - 200 * MenuScale, 390 * MenuScale, 60 * MenuScale, "ACHIEVEMENTS", True) Then
 						AchievementsMenu = 1
@@ -3721,9 +3752,9 @@ Function DrawEnding()
 End Function
 
 Type CreditsLine
-	Field txt$
-	Field id%
-	Field stay%
+	Field Txt$
+	Field ID%
+	Field Stay%
 End Type
 
 Global CreditsTimer# = 0.0
@@ -3731,7 +3762,7 @@ Global CreditsScreen%
 
 Function InitCredits()
 	Local cl.CreditsLine
-	Local file% = OpenFile("Credits.txt")
+	Local File% = OpenFile("Credits.txt")
 	Local l$
 	
 	CreditsFont% = LoadFont_Strict("GFX\font\cour\Courier New.ttf", Int(21 * (GraphicHeight / 1024.0)), 0, 0, 0)
@@ -3742,10 +3773,10 @@ Function InitCredits()
 	EndIf
 	
 	Repeat
-		l = ReadLine(file)
+		l = ReadLine(File)
 		cl = New CreditsLine
 		cl\txt = l
-	Until Eof(file)
+	Until Eof(File)
 	
 	Delete First CreditsLine
 	CreditsTimer = 0
@@ -3755,7 +3786,7 @@ Function DrawCredits()
     Local credits_Y# = (EndingTimer + 2000) / 2 + (GraphicHeight + 10)
     Local cl.CreditsLine
     Local ID%
-    Local endlinesamount%
+    Local EndLinesAmount%
 	Local LastCreditLine.CreditsLine
 	
     Cls
@@ -3814,9 +3845,9 @@ Function DrawCredits()
 			If cl\stay
 				SetFont(CreditsFont)
 				If Left(cl\txt, 1) = "/"
-					Text(GraphicWidth / 2, (GraphicHeight / 2) + (endlinesamount / 2) + (24 * cl\id * MenuScale), Right(cl\txt, Len(cl\txt) - 1), True)
+					Text(GraphicWidth / 2, (GraphicHeight / 2) + (EndLinesAmount / 2) + (24 * cl\id * MenuScale), Right(cl\txt, Len(cl\txt) - 1), True)
 				Else
-					Text(GraphicWidth / 2, (GraphicHeight / 2) + (24 * (cl\id - LastCreditLine\id) * MenuScale) - ((endlinesamount / 2) * 24 * MenuScale), cl\txt, True)
+					Text(GraphicWidth / 2, (GraphicHeight / 2) + (24 * (cl\id - LastCreditLine\id) * MenuScale) - ((EndLinesAmount / 2) * 24 * MenuScale), cl\txt, True)
 				EndIf
 			EndIf
 		Next
@@ -3845,7 +3876,8 @@ End Function
 
 Function MovePlayer()
 	CatchErrors("Uncaught (MovePlayer)")
-	Local Sprint# = 1.0, Speed# = 0.018, i%, angle#
+	
+	Local Sprint# = 1.0, Speed# = 0.018, i%, Angle#
 	
 	If SuperMan Then
 		Speed = Speed * 3
@@ -3884,12 +3916,12 @@ Function MovePlayer()
 		If StaminaEffect <> 1.0 Then StaminaEffect = 1.0
 	EndIf
 	
-	Local temp#
+	Local Temp#
 	
 	If PlayerRoom\RoomTemplate\Name <> "pocketdimension" Then 
 		If KeyDown(KEY_SPRINT) Then
 			If Stamina < 5 Then
-				temp = 0
+				Temp = 0
 				If WearingGasMask > 0 Or Wearing1499 > 0 Then temp = 1
 				If ChannelPlaying(BreathCHN) = False Then BreathCHN = PlaySound_Strict(BreathSFX((temp), 0))
 			ElseIf Stamina < 50
@@ -3901,8 +3933,8 @@ Function MovePlayer()
 				Else
 					If ChannelPlaying(BreathCHN) = False Then
 						temp = 0
-						If WearingGasMask > 0 Or Wearing1499 > 0 Then temp = 1
-						BreathCHN = PlaySound_Strict(BreathSFX((temp), Rand(1, 3)))
+						If WearingGasMask > 0 Or Wearing1499 > 0 Then Temp = 1
+						BreathCHN = PlaySound_Strict(BreathSFX((Temp), Rand(1, 3)))
 						ChannelVolume(BreathCHN, Min((70.0 - Stamina) / 70.0, 1.0) * SFXVolume)		
 					EndIf
 				EndIf
@@ -3954,37 +3986,39 @@ Function MovePlayer()
 				EndIf
 			EndIf
 			
-			temp# = (Shake Mod 360)
-			Local tempCHN%
+			Temp# = (Shake Mod 360)
+			
+			Local TempCHN%
+			
 			If (Not UnableToMove%) Then Shake# = (Shake + FPSfactor * Min(Sprint, 1.5) * 7) Mod 720
-			If temp < 180 And (Shake Mod 360) >= 180 And KillTimer >= 0 Then
+			If Temp < 180 And (Shake Mod 360) >= 180 And KillTimer >= 0 Then
 				If CurrStepSFX = 0 Then
-					temp = GetStepSound(Collider)
+					Temp = GetStepSound(Collider)
 					
 					If Sprint = 1.0 Then
 						PlayerSoundVolume = Max(4.0, PlayerSoundVolume)
-						tempCHN% = PlaySound_Strict(StepSFX(temp, 0, Rand(0, 7)))
-						ChannelVolume(tempCHN, (1.0 - (Crouch * 0.6)) * SFXVolume#)
+						TempCHN% = PlaySound_Strict(StepSFX(Temp, 0, Rand(0, 7)))
+						ChannelVolume(TempCHN, (1.0 - (Crouch * 0.6)) * SFXVolume#)
 					Else
 						PlayerSoundVolume = Max(2.5 - (Crouch * 0.6), PlayerSoundVolume)
-						tempCHN% = PlaySound_Strict(StepSFX(temp, 1, Rand(0, 7)))
-						ChannelVolume(tempCHN, (1.0 - (Crouch * 0.6)) * SFXVolume#)
+						TempCHN% = PlaySound_Strict(StepSFX(Temp, 1, Rand(0, 7)))
+						ChannelVolume(TempCHN, (1.0 - (Crouch * 0.6)) * SFXVolume#)
 					End If
 				ElseIf CurrStepSFX = 1
-					tempCHN% = PlaySound_Strict(Step2SFX(Rand(0, 2)))
-					ChannelVolume(tempCHN, (1.0 - (Crouch * 0.4)) * SFXVolume#)
+					TempCHN% = PlaySound_Strict(Step2SFX(Rand(0, 2)))
+					ChannelVolume(TempCHN, (1.0 - (Crouch * 0.4)) * SFXVolume#)
 				ElseIf CurrStepSFX = 2
-					tempCHN% = PlaySound_Strict(Step2SFX(Rand(3, 5)))
-					ChannelVolume(tempCHN, (1.0 - (Crouch * 0.4)) * SFXVolume#)
+					TempCHN% = PlaySound_Strict(Step2SFX(Rand(3, 5)))
+					ChannelVolume(TempCHN, (1.0 - (Crouch * 0.4)) * SFXVolume#)
 				ElseIf CurrStepSFX = 3
 					If Sprint = 1.0 Then
 						PlayerSoundVolume = Max(4.0, PlayerSoundVolume)
-						tempCHN% = PlaySound_Strict(StepSFX(0, 0, Rand(0, 7)))
-						ChannelVolume(tempCHN, (1.0 - (Crouch * 0.6)) * SFXVolume#)
+						TempCHN% = PlaySound_Strict(StepSFX(0, 0, Rand(0, 7)))
+						ChannelVolume(TempCHN, (1.0 - (Crouch * 0.6)) * SFXVolume#)
 					Else
 						PlayerSoundVolume = Max(2.5 - (Crouch * 0.6), PlayerSoundVolume)
-						tempCHN% = PlaySound_Strict(StepSFX(0, 1, Rand(0, 7)))
-						ChannelVolume(tempCHN, (1.0 - (Crouch * 0.6)) * SFXVolume#)
+						TempCHN% = PlaySound_Strict(StepSFX(0, 1, Rand(0, 7)))
+						ChannelVolume(TempCHN, (1.0 - (Crouch * 0.6)) * SFXVolume#)
 					End If
 				EndIf
 			EndIf	
@@ -3999,7 +4033,7 @@ Function MovePlayer()
 	
 	If KeyHit(KEY_CROUCH) And Playable Then Crouch = (Not Crouch)
 	
-	Local temp2# = (Speed * Sprint) / (1.0 + CrouchState)
+	Local Temp2# = (Speed * Sprint) / (1.0 + CrouchState)
 	
 	If NoClip Then 
 		Shake = 0
@@ -4009,56 +4043,57 @@ Function MovePlayer()
 		
 		RotateEntity(Collider, WrapAngle(EntityPitch(Camera)), WrapAngle(EntityYaw(Camera)), 0)
 		
-		temp2 = temp2 * NoClipSpeed
+		Temp2 = Temp2 * NoClipSpeed
 		
-		If KeyDown(KEY_DOWN) Then MoveEntity(Collider, 0, 0, -temp2 * FPSfactor)
-		If KeyDown(KEY_UP) Then MoveEntity(Collider, 0, 0, temp2 * FPSfactor)
+		If KeyDown(KEY_DOWN) Then MoveEntity(Collider, 0, 0, -Temp2 * FPSfactor)
+		If KeyDown(KEY_UP) Then MoveEntity(Collider, 0, 0, Temp2 * FPSfactor)
 		
-		If KeyDown(KEY_LEFT) Then MoveEntity(Collider, -temp2 * FPSfactor, 0, 0)
-		If KeyDown(KEY_RIGHT) Then MoveEntity(Collider, temp2 * FPSfactor, 0, 0)
+		If KeyDown(KEY_LEFT) Then MoveEntity(Collider, -Temp2 * FPSfactor, 0, 0)
+		If KeyDown(KEY_RIGHT) Then MoveEntity(Collider, Temp2 * FPSfactor, 0, 0)
 		
 		ResetEntity(Collider)
 	Else
-		temp2# = temp2 / Max((Injuries + 3.0) / 3.0, 1.0)
+		Temp2# = Temp2 / Max((Injuries + 3.0) / 3.0, 1.0)
 		If Injuries > 0.5 Then 
-			temp2 = temp2 * Min((Sin(Shake / 2) + 1.2), 1.0)
+			Temp2 = Temp2 * Min((Sin(Shake / 2) + 1.2), 1.0)
 		EndIf
 		
-		temp = False
+		Temp = False
 		If (Not IsZombie%)
 			If KeyDown(KEY_DOWN) And Playable Then
-				temp = True 
-				angle = 180
-				If KeyDown(KEY_LEFT) Then angle = 135 
-				If KeyDown(KEY_RIGHT) Then angle = -135 
+				Temp = True 
+				Angle = 180
+				If KeyDown(KEY_LEFT) Then Angle = 135 
+				If KeyDown(KEY_RIGHT) Then Angle = -135 
 			ElseIf (KeyDown(KEY_UP) And Playable) Then
-				temp = True
-				angle = 0
-				If KeyDown(KEY_LEFT) Then angle = 45 
-				If KeyDown(KEY_RIGHT) Then angle = -45 
+				Temp = True
+				Angle = 0
+				If KeyDown(KEY_LEFT) Then Angle = 45 
+				If KeyDown(KEY_RIGHT) Then Angle = -45 
 			ElseIf ForceMove > 0 Then
-				temp = True
-				angle = ForceAngle
+				Temp = True
+				Angle = ForceAngle
 			Else If Playable Then
-				If KeyDown(KEY_LEFT) Then angle = 90 : temp = True
-				If KeyDown(KEY_RIGHT) Then angle = -90 : temp = True 
+				If KeyDown(KEY_LEFT) Then Angle = 90 : Temp = True
+				If KeyDown(KEY_RIGHT) Then Angle = -90 : Temp = True 
 			EndIf
 		Else
-			temp = True
-			angle = ForceAngle
+			Temp = True
+			Angle = ForceAngle
 		EndIf
 		
-		angle = WrapAngle(EntityYaw(Collider, True) + angle + 90.0)
+		Angle = WrapAngle(EntityYaw(Collider, True) + Angle + 90.0)
 		
-		If temp Then 
-			CurrSpeed = CurveValue(temp2, CurrSpeed, 20.0)
+		If Temp Then 
+			CurrSpeed = CurveValue(Temp2, CurrSpeed, 20.0)
 		Else
 			CurrSpeed = Max(CurveValue(0.0, CurrSpeed - 0.1, 1.0), 0.0)
 		EndIf
 		
-		If (Not UnableToMove%) Then TranslateEntity(Collider, Cos(angle) * CurrSpeed * FPSfactor, 0, Sin(angle) * CurrSpeed * FPSfactor, True)
+		If (Not UnableToMove%) Then TranslateEntity(Collider, Cos(Angle) * CurrSpeed * FPSfactor, 0, Sin(Angle) * CurrSpeed * FPSfactor, True)
 		
 		Local CollidedFloor% = False
+		
 		For i = 1 To CountCollisions(Collider)
 			If CollisionY(Collider, i) < EntityY(Collider) - 0.25 Then CollidedFloor = True
 		Next
@@ -4078,9 +4113,10 @@ Function MovePlayer()
 			EndIf
 			DropSpeed# = 0
 		Else
-			If PlayerFallingPickDistance# <> 0.0
-				Local pick = LinePick(EntityX(Collider), EntityY(Collider), EntityZ(Collider), 0, -PlayerFallingPickDistance, 0)
-				If pick
+			If PlayerFallingPickDistance# <> 0.0 Then
+				Local Pick = LinePick(EntityX(Collider), EntityY(Collider), EntityZ(Collider), 0, -PlayerFallingPickDistance, 0)
+				
+				If Pick
 					DropSpeed# = Min(Max(DropSpeed - 0.006 * FPSfactor, -2.0), 0.0)
 				Else
 					DropSpeed# = 0
@@ -4119,9 +4155,9 @@ Function MovePlayer()
 			EntityPick(pvt, 0.3)
 			de.decals = CreateDecal(Rand(15, 16), PickedX(), PickedY() + 0.005, PickedZ(), 90, Rand(360), 0)
 			de\size = Rnd(0.03, 0.08) * Min(Injuries, 3.0) : EntityAlpha(de\obj, 1.0) : ScaleSprite de\obj, de\size, de\size
-			tempCHN% = PlaySound_Strict(DripSFX(Rand(0, 2)))
-			ChannelVolume(tempCHN, Rnd(0.0, 0.8) * SFXVolume)
-			ChannelPitch(tempCHN, Rand(20000, 30000))
+			TempCHN% = PlaySound_Strict(DripSFX(Rand(0, 2)))
+			ChannelVolume(TempCHN, Rnd(0.0, 0.8) * SFXVolume)
+			ChannelPitch(TempCHN, Rand(20000, 30000))
 			
 			FreeEntity(pvt)
 		EndIf
@@ -4155,8 +4191,8 @@ Function MovePlayer()
 	
 	If HeartBeatVolume > 0 Then
 		If HeartBeatTimer =< 0 Then
-			tempCHN = PlaySound_Strict(HeartBeatSFX)
-			ChannelVolume(tempCHN, HeartBeatVolume*SFXVolume#)
+			TempCHN = PlaySound_Strict(HeartBeatSFX)
+			ChannelVolume(TempCHN, HeartBeatVolume*SFXVolume#)
 			
 			HeartBeatTimer = 70.0 * (60.0 / Max(HeartBeatRate, 1.0))
 		Else
@@ -4190,13 +4226,13 @@ Function MouseLook()
 			MsgTimer = 300				
 		EndIf
 		
-		Local up# = (Sin(Shake) / (20.0 + CrouchState * 20.0)) * 0.6	
-		Local roll# = Max(Min(Sin(Shake / 2) * 2.5 * Min(Injuries + 0.25, 3.0), 8.0), -8.0)
+		Local Up# = (Sin(Shake) / (20.0 + CrouchState * 20.0)) * 0.6	
+		Local Roll# = Max(Min(Sin(Shake / 2) * 2.5 * Min(Injuries + 0.25, 3.0), 8.0), -8.0)
 		
 		PositionEntity(Camera, EntityX(Collider), EntityY(Collider), EntityZ(Collider))
-		RotateEntity(Camera, 0, EntityYaw(Collider), roll * 0.5)
+		RotateEntity(Camera, 0, EntityYaw(Collider), Roll * 0.5)
 		
-		MoveEntity(Camera, side, up + 0.6 + CrouchState * (-0.3), 0)
+		MoveEntity(Camera, side, Up + 0.6 + CrouchState * (-0.3), 0)
 		
 		; ~ Update the smoothing que to smooth the movement of the mouse.
 		mouse_x_speed_1# = CurveValue(MouseXSpeed() * (MouseSens + 0.6) , mouse_x_speed_1, (6.0 / (MouseSens + 1.0)) * MouseSmooth) 
@@ -4215,20 +4251,20 @@ Function MouseLook()
 		EndIf
 		If Int(mouse_y_speed_1) = Int(Nan1) Then mouse_y_speed_1 = 0
 		
-		Local the_yaw# = ((mouse_x_speed_1#)) * mouselook_x_inc# / (1.0 + WearingVest)
-		Local the_pitch# = ((mouse_y_speed_1#)) * mouselook_y_inc# / (1.0 + WearingVest)
+		Local The_Yaw# = ((mouse_x_speed_1#)) * mouselook_x_inc# / (1.0 + WearingVest)
+		Local The_Pitch# = ((mouse_y_speed_1#)) * mouselook_y_inc# / (1.0 + WearingVest)
 		
-		TurnEntity(Collider, 0.0, -the_yaw#, 0.0) ; ~ Turn the user on the Y (yaw) axis.
-		user_camera_pitch# = user_camera_pitch# + the_pitch#
-		; ~ Limit the user's camera to within 180 degrees of pitch rotation. ;EntityPitch() - returns useless values so we need to use a variable to keep track of the camera pitch.
+		TurnEntity(Collider, 0.0, -The_Yaw#, 0.0) ; ~ Turn the user on the Y (yaw) axis.
+		user_camera_pitch# = user_camera_pitch# + The_Pitch#
+		; ~ Limit the user's camera to within 180 degrees of pitch rotation. ;EntityPitch() - Returns useless values so we need to use a variable to keep track of the camera pitch.
 		If user_camera_pitch# > 70.0 Then user_camera_pitch# = 70.0
 		If user_camera_pitch# < - 70.0 Then user_camera_pitch# = -70.0
 		
-		RotateEntity(Camera, WrapAngle(user_camera_pitch + Rnd(-CameraShake, CameraShake)), WrapAngle(EntityYaw(Collider) + Rnd(-CameraShake, CameraShake)), roll) ; ~ Pitch the user's camera up and down.
+		RotateEntity(Camera, WrapAngle(user_camera_pitch + Rnd(-CameraShake, CameraShake)), WrapAngle(EntityYaw(Collider) + Rnd(-CameraShake, CameraShake)), Roll) ; ~ Pitch the user's camera up and down.
 		
 		If PlayerRoom\RoomTemplate\Name = "pocketdimension" Then
 			If EntityY(Collider) < 2000.0 * RoomScale Or EntityY(Collider) > 2608.0 * RoomScale Then
-				RotateEntity(Camera, WrapAngle(EntityPitch(Camera)), WrapAngle(EntityYaw(Camera)), roll + WrapAngle(Sin(MilliSecs2() / 150.0) * 30.0)) ; ~ Pitch the user's camera up and down.
+				RotateEntity(Camera, WrapAngle(EntityPitch(Camera)), WrapAngle(EntityYaw(Camera)), Roll + WrapAngle(Sin(MilliSecs2() / 150.0) * 30.0)) ; ~ Pitch the user's camera up and down.
 			EndIf
 		EndIf
 	Else
@@ -4236,6 +4272,7 @@ Function MouseLook()
 		PositionEntity(Camera, EntityX(Head), EntityY(Head), EntityZ(Head))
 		
 		Local CollidedFloor% = False
+		
 		For i = 1 To CountCollisions(Head)
 			If CollisionY(Head, i) < EntityY(Head) - 0.01 Then CollidedFloor = True
 		Next
@@ -4267,16 +4304,18 @@ Function MouseLook()
 	
 	If ParticleAmount = 2
 		If Rand(35) = 1 Then
-			Local pvt% = CreatePivot()
-			PositionEntity(pvt, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True))
-			RotateEntity(pvt, 0, Rnd(360), 0)
+			Local Pvt% = CreatePivot()
+			
+			PositionEntity(Pvt, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True))
+			RotateEntity(Pvt, 0, Rnd(360), 0)
 			If Rand(2) = 1 Then
-				MoveEntity(pvt, 0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
+				MoveEntity(Pvt, 0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
 			Else
-				MoveEntity(pvt, 0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
+				MoveEntity(Pvt, 0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
 			End If
 			
-			Local p.Particles = CreateParticle(EntityX(pvt), EntityY(pvt), EntityZ(pvt), 2, 0.002, 0, 300)
+			Local p.Particles = CreateParticle(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 2, 0.002, 0, 300)
+			
 			p\speed = 0.001
 			RotateEntity(p\pvt, Rnd(-20, 20), Rnd(360), 0)
 			
@@ -4402,10 +4441,9 @@ End Function
 Function DrawGUI()
 	CatchErrors("Uncaught (DrawGUI)")
 	
-	Local temp%, x%, y%, z%, i%, yawvalue#, pitchvalue#
+	Local Temp%, x%, y%, z%, i%, YawValue#, PitchValue#
 	Local x2#, y2#, z2#
-	Local n%, xtemp, ytemp, strtemp$
-	
+	Local n%, xTemp, yTemp, StrTemp$
 	Local e.Events, it.Items
 	
 	If MenuOpen Or ConsoleOpen Or SelectedDoor <> Null Or InvOpen Or OtherOpen <> Null Or EndingTimer < 0 Then
@@ -4471,9 +4509,9 @@ Function DrawGUI()
 		If pitchvalue > 90 And pitchvalue =< 180 Then pitchvalue = 90
 		If pitchvalue > 180 And pitchvalue < 270 Then pitchvalue = 270
 		
-		FreeEntity(temp)
+		FreeEntity(Temp)
 		
-		DrawImage(HandIcon, GraphicWidth / 2 + Sin(yawvalue) * (GraphicWidth / 3) - 32, GraphicHeight / 2 - Sin(pitchvalue) * (GraphicHeight / 3) - 32)
+		DrawImage(HandIcon, GraphicWidth / 2 + Sin(YawValue) * (GraphicWidth / 3) - 32, GraphicHeight / 2 - Sin(PitchValue) * (GraphicHeight / 3) - 32)
 		
 		If MouseUp1 Then
 			MouseUp1 = False
@@ -4489,14 +4527,14 @@ Function DrawGUI()
 	EndIf
 	
 	If ClosestItem <> Null Then
-		yawvalue# = -DeltaYaw(Camera, ClosestItem\collider)
-		If yawvalue > 90 And yawvalue =< 180 Then yawvalue = 90
-		If yawvalue > 180 And yawvalue < 270 Then yawvalue = 270
-		pitchvalue# = -DeltaPitch(Camera, ClosestItem\collider)
-		If pitchvalue > 90 And pitchvalue =< 180 Then pitchvalue = 90
-		If pitchvalue > 180 And pitchvalue < 270 Then pitchvalue = 270
+		YawValue# = -DeltaYaw(Camera, ClosestItem\collider)
+		If YawValue > 90 And YawValue =< 180 Then YawValue = 90
+		If YawValue > 180 And YawValue < 270 Then YawValue = 270
+		PitchValue# = -DeltaPitch(Camera, ClosestItem\collider)
+		If PitchValue > 90 And PitchValue =< 180 Then PitchValue = 90
+		If PitchValue > 180 And PitchValue < 270 Then PitchValue = 270
 		
-		DrawImage(HandIcon2, GraphicWidth / 2 + Sin(yawvalue) * (GraphicWidth / 3) - 32, GraphicHeight / 2 - Sin(pitchvalue) * (GraphicHeight / 3) - 32)
+		DrawImage(HandIcon2, GraphicWidth / 2 + Sin(YawValue) * (GraphicWidth / 3) - 32, GraphicHeight / 2 - Sin(PitchValue) * (GraphicHeight / 3) - 32)
 	EndIf
 	
 	If DrawHandIcon Then DrawImage(HandIcon, GraphicWidth / 2 - 32, GraphicHeight / 2 - 32)
@@ -4525,7 +4563,7 @@ Function DrawGUI()
 	If Using294 Then Use294()
 	
 	If HUDenabled Then 
-		Local width% = 204, height% = 20
+		Local Width% = 204, Height% = 20
 		
 		x% = 80
 		y% = GraphicHeight - 95
@@ -4657,11 +4695,11 @@ Function DrawGUI()
 	EndIf
 	
 	Local PrevInvOpen% = InvOpen, MouseSlot% = 66
-	Local shouldDrawHUD% = True
+	Local ShouldDrawHUD% = True
 	
 	If SelectedDoor <> Null Then
 		SelectedItem = Null
-		If shouldDrawHUD Then
+		If ShouldDrawHUD Then
 			pvt = CreatePivot()
 			PositionEntity(pvt, EntityX(ClosestButton, True), EntityY(ClosestButton, True), EntityZ(ClosestButton, True))
 			RotateEntity(pvt, 0, EntityYaw(ClosestButton, True) - 180, 0)
@@ -4742,7 +4780,7 @@ Function DrawGUI()
 							If Len(KeypadInput) > 4 Then KeypadInput = Left(KeypadInput, 4)
 						EndIf
 					Else
-						temp = False
+						Temp = False
 					EndIf
 				Next
 			Next
@@ -4821,10 +4859,11 @@ Function DrawGUI()
 		
 		InvOpen = False
 		SelectedDoor = Null
-		Local tempX% = 0
 		
-		width = 70
-		height = 70
+		Local TempX% = 0
+		
+		Width = 70
+		Height = 70
 		Spacing% = 35
 		
 		x = GraphicWidth / 2 - (width * MaxItemAmount / 2 + Spacing * (MaxItemAmount / 2 - 1)) / 2
@@ -4883,12 +4922,12 @@ Function DrawGUI()
 				
 			EndIf					
 			
-			x = x + width + Spacing
-			tempX = tempX + 1
-			If tempX = 5 Then 
-				tempX = 0
-				y = y + height * 2 
-				x = GraphicWidth / 2 - (width * MaxItemAmount /2 + Spacing * (MaxItemAmount / 2 - 1)) / 2
+			x = x + Width + Spacing
+			TempX = TempX + 1
+			If TempX = 5 Then 
+				TempX = 0
+				y = y + Height * 2 
+				x = GraphicWidth / 2 - (Width * MaxItemAmount /2 + Spacing * (MaxItemAmount / 2 - 1)) / 2
 			EndIf
 		Next
 		
@@ -4918,9 +4957,10 @@ Function DrawGUI()
 					If OtherOpen\itemtemplate\tempname = "wallet" Then
 						If (Not IsEmpty) Then
 							For z% = 0 To OtherSize - 1
-								If OtherOpen\SecondInv[z] <> Null
-									Local name$ = OtherOpen\SecondInv[z]\itemtemplate\tempname
-									If name$ <> "25ct" And name$ <> "coin" And name$ <> "key" And name$ <> "scp860" And name$ <> "scp714" Then
+								If OtherOpen\SecondInv[z] <> Null Then
+									Local Name$ = OtherOpen\SecondInv[z]\itemtemplate\tempname
+									
+									If Name$ <> "25ct" And Name$ <> "coin" And Name$ <> "key" And Name$ <> "scp860" And Name$ <> "scp714" Then
 										IsEmpty = False
 										Exit
 									EndIf
@@ -5021,44 +5061,44 @@ Function DrawGUI()
 					Case "gasmask3"
 						If WearingGasMask = 3 Then Rect(x - 3, y - 3, width + 6, height + 6)
 					Case "hazmatsuit"
-						If WearingHazmat = 1 Then Rect(x - 3, y - 3, width + 6, height + 6)
+						If WearingHazmat = 1 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
 					Case "hazmatsuit2"
-						If WearingHazmat = 2 Then Rect(x - 3, y - 3, width + 6, height + 6)
+						If WearingHazmat = 2 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
 					Case "hazmatsuit3"
-						If WearingHazmat = 3 Then Rect(x - 3, y - 3, width + 6, height + 6)	
+						If WearingHazmat = 3 Then Rect(x - 3, y - 3, Width + 6, Height + 6)	
 					Case "vest"
-						If WearingVest = 1 Then Rect(x - 3, y - 3, width + 6, height + 6)
+						If WearingVest = 1 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
 					Case "finevest"
-						If WearingVest = 2 Then Rect(x - 3, y - 3, width + 6, height + 6)
+						If WearingVest = 2 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
 					Case "scp714"
-						If Wearing714 = 1 Then Rect(x - 3, y - 3, width + 6, height + 6)
+						If Wearing714 = 1 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
 					Case "nvgoggles"
-						If WearingNightVision = 1 Then Rect(x - 3, y - 3, width + 6, height + 6)
+						If WearingNightVision = 1 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
 					Case "supernv"
-						If WearingNightVision = 2 Then Rect(x - 3, y - 3, width + 6, height + 6)
+						If WearingNightVision = 2 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
 					Case "scp1499"
-						If Wearing1499 = 1 Then Rect(x - 3, y - 3, width + 6, height + 6)
+						If Wearing1499 = 1 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
 					Case "super1499"
-						If Wearing1499 = 2 Then Rect(x - 3, y - 3, width + 6, height + 6)
+						If Wearing1499 = 2 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
 					Case "finenvgoggles"
-						If WearingNightVision = 3 Then Rect(x - 3, y - 3, width + 6, height + 6)
+						If WearingNightVision = 3 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
 					Case "scp427"
-						If I_427\Using = 1 Then Rect(x - 3, y - 3, width + 6, height + 6)
+						If I_427\Using = 1 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
 				End Select
 			EndIf
 			
 			If IsMouseOn Then
 				MouseSlot = n
 				Color(255, 0, 0)
-				Rect(x - 1, y - 1, width + 2, height + 2)
+				Rect(x - 1, y - 1, Width + 2, Height + 2)
 			EndIf
 			
 			Color(255, 255, 255)
-			DrawFrame(x, y, width, height, (x Mod 64), (x Mod 64))
+			DrawFrame(x, y, Width, Height, (x Mod 64), (x Mod 64))
 			
 			If Inventory(n) <> Null Then
 				If (SelectedItem <> Inventory(n) Or IsMouseOn) Then 
-					DrawImage(Inventory(n)\invimg, x + width / 2 - 32, y + height / 2 - 32)
+					DrawImage(Inventory(n)\invimg, x + Width / 2 - 32, y + Height / 2 - 32)
 				EndIf
 			EndIf
 			
@@ -5101,8 +5141,8 @@ Function DrawGUI()
 			
 			x = x + width + Spacing
 			If n = 4 Then 
-				y = y + height * 2 
-				x = GraphicWidth / 2 - (width * MaxItemAmount / 2 + Spacing * (MaxItemAmount / 2 - 1)) / 2
+				y = y + Height * 2 
+				x = GraphicWidth / 2 - (Width * MaxItemAmount / 2 + Spacing * (MaxItemAmount / 2 - 1)) / 2
 			EndIf
 		Next
 		
@@ -5274,9 +5314,9 @@ Function DrawGUI()
 										;[End Block]
 									Case "Night Vision Goggles"
 										;[Block]
-										Local nvname$ = Inventory(MouseSlot)\itemtemplate\tempname
+										Local NVName$ = Inventory(MouseSlot)\itemtemplate\tempname
 										
-										If nvname$ = "nvgoggles" Or nvname$ = "supernv" Then
+										If NVName$ = "nvgoggles" Or NVName$ = "supernv" Then
 											If SelectedItem\itemtemplate\sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\itemtemplate\sound))	
 											RemoveItem (SelectedItem)
 											SelectedItem = Null
@@ -5528,9 +5568,9 @@ Function DrawGUI()
 								;[Block]
 								BlinkTimer = -10
 								
-								Local roomname$ = PlayerRoom\RoomTemplate\Name
+								Local RoomName$ = PlayerRoom\RoomTemplate\Name
 								
-								If roomname = "dimension1499" Or roomname = "gatea" Or (roomname="exit1" And EntityY(Collider) > 1040.0 * RoomScale)
+								If RoomName = "dimension1499" Or RoomName = "gatea" Or (RoomName="exit1" And EntityY(Collider) > 1040.0 * RoomScale)
 									Injuries = 2.5
 									Msg = "You started bleeding heavily."
 									MsgTimer = 70 * 7
@@ -5569,12 +5609,12 @@ Function DrawGUI()
 							
 							DrawImage(SelectedItem\itemtemplate\invimg, GraphicWidth / 2 - ImageWidth(SelectedItem\itemtemplate\invimg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\itemtemplate\invimg) / 2)
 							
-							width% = 300
-							height% = 20
-							x% = GraphicWidth / 2 - width / 2
+							Width% = 300
+							Height% = 20
+							x% = GraphicWidth / 2 - Width / 2
 							y% = GraphicHeight / 2 + 80
-							Rect(x, y, width + 4, height, False)
-							For  i% = 1 To Int((width - 2) * (SelectedItem\state / 100.0) / 10)
+							Rect(x, y, Width + 4, Height, False)
+							For  i% = 1 To Int((Width - 2) * (SelectedItem\state / 100.0) / 10)
 								DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
 							Next
 							SelectedItem\state = Min(SelectedItem\state + (FPSfactor / 5.0), 100)			
@@ -5706,9 +5746,9 @@ Function DrawGUI()
 								SetBuffer(ImageBuffer(SelectedItem\itemtemplate\img))
 								Color(37, 45, 137)
 								AASetFont(Font5)
-								temp = ((Int(AccessCode) * 3) Mod 10000)
-								If temp < 1000 Then temp = temp + 1000
-								AAText(383 * MenuScale, 734 * MenuScale, temp, True, True)
+								Temp = ((Int(AccessCode) * 3) Mod 10000)
+								If Temp < 1000 Then Temp = Temp + 1000
+								AAText(383 * MenuScale, 734 * MenuScale, Temp, True, True)
 								Color(255, 255, 255)
 								SetBuffer(BackBuffer())
 								;[End Block]
@@ -5763,38 +5803,38 @@ Function DrawGUI()
 						; ~ The state of refined items is more than 1.0 (fine setting increases it by 1, very fine doubles it)
 						x2 = (SelectedItem\state + 1.0)
 						
-						Local iniStr$ = "Data\SCP-294.ini"
-						Local loc% = GetINISectionLocation(iniStr, SelectedItem\name)
+						Local INIStr$ = "Data\SCP-294.ini"
+						Local Loc% = GetINISectionLocation(INIStr, SelectedItem\name)
 						
-						strtemp = GetINIString2(iniStr, loc, "message")
-						If strtemp <> "" Then Msg = strtemp : MsgTimer = 70 * 6
+						StrTemp = GetINIString2(INIStr, Loc, "message")
+						If StrTemp <> "" Then Msg = StrTemp : MsgTimer = 70 * 6
 						
-						If GetINIInt2(iniStr, loc, "lethal") Or GetINIInt2(iniStr, loc, "deathtimer") Then 
-							DeathMSG = GetINIString2(iniStr, loc, "deathmessage")
-							If GetINIInt2(iniStr, loc, "lethal") Then Kill()
+						If GetINIInt2(INIStr, Loc, "lethal") Or GetINIInt2(INIStr, Loc, "deathtimer") Then 
+							DeathMSG = GetINIString2(INIStr, Loc, "deathmessage")
+							If GetINIInt2(INIStr, Loc, "lethal") Then Kill()
 						EndIf
-						BlurTimer = GetINIInt2(iniStr, loc, "blur") * 70
-						If VomitTimer = 0 Then VomitTimer = GetINIInt2(iniStr, loc, "vomit")
-						CameraShakeTimer = GetINIString2(iniStr, loc, "camerashake")
-						Injuries = Max(Injuries + GetINIInt2(iniStr, loc, "damage"), 0)
-						Bloodloss = Max(Bloodloss + GetINIInt2(iniStr, loc, "blood loss"), 0)
-						strtemp =  GetINIString2(iniStr, loc, "sound")
-						If strtemp <> "" Then
-							PlaySound_Strict(LoadTempSound(strtemp))
+						BlurTimer = GetINIInt2(INIStr, Loc, "blur") * 70
+						If VomitTimer = 0 Then VomitTimer = GetINIInt2(INIStr, Loc, "vomit")
+						CameraShakeTimer = GetINIString2(INIStr, Loc, "camerashake")
+						Injuries = Max(Injuries + GetINIInt2(INIStr, Loc, "damage"), 0)
+						Bloodloss = Max(Bloodloss + GetINIInt2(INIStr, Loc, "blood loss"), 0)
+						StrTemp =  GetINIString2(INIStr, Loc, "sound")
+						If StrTemp <> "" Then
+							PlaySound_Strict(LoadTempSound(StrTemp))
 						EndIf
-						If GetINIInt2(iniStr, loc, "stomachache") Then SCP1025state[3] = 1
+						If GetINIInt2(INIStr, Loc, "stomachache") Then SCP1025state[3] = 1
 						
-						DeathTimer = GetINIInt2(iniStr, loc, "deathtimer") * 70
+						DeathTimer = GetINIInt2(INIStr, Loc, "deathtimer") * 70
 						
-						BlinkEffect = Float(GetINIString2(iniStr, loc, "blink effect", 1.0)) * x2
-						BlinkEffectTimer = Float(GetINIString2(iniStr, loc, "blink effect timer", 1.0)) * x2
+						BlinkEffect = Float(GetINIString2(INIStr, Loc, "blink effect", 1.0)) * x2
+						BlinkEffectTimer = Float(GetINIString2(INIStr, Loc, "blink effect timer", 1.0)) * x2
 						
-						StaminaEffect = Float(GetINIString2(iniStr, loc, "stamina effect", 1.0)) * x2
-						StaminaEffectTimer = Float(GetINIString2(iniStr, loc, "stamina effect timer", 1.0)) * x2
+						StaminaEffect = Float(GetINIString2(INIStr, Loc, "stamina effect", 1.0)) * x2
+						StaminaEffectTimer = Float(GetINIString2(INIStr, Loc, "stamina effect timer", 1.0)) * x2
 						
-						strtemp = GetINIString2(iniStr, loc, "refusemessage")
-						If strtemp <> "" Then
-							Msg = strtemp 
+						StrTemp = GetINIString2(INIStr, Loc, "refusemessage")
+						If StrTemp <> "" Then
+							Msg = StrTemp 
 							MsgTimer = 70 * 6		
 						Else
 							it.Items = CreateItem("Empty Cup", "emptycup", 0, 0, 0)
@@ -5877,7 +5917,7 @@ Function DrawGUI()
 						RadioState(0) = -1
 					EndIf
 					
-					strtemp$ = ""
+					StrTemp$ = ""
 					
 					x = GraphicWidth - ImageWidth(SelectedItem\itemtemplate\img)
 					y = GraphicHeight - ImageHeight(SelectedItem\itemtemplate\img)
@@ -5893,13 +5933,13 @@ Function DrawGUI()
 								Case 0
 									;[Block]
 									ResumeChannel(RadioCHN(0))
-									strtemp = "        USER TRACK PLAYER - "
+									StrTemp = "        USER TRACK PLAYER - "
 									If (Not EnableUserTracks)
 										If ChannelPlaying(RadioCHN(0)) = False Then RadioCHN(0) = PlaySound_Strict(RadioStatic)
-										strtemp = strtemp + "NOT ENABLED     "
+										StrTemp = StrTemp + "NOT ENABLED     "
 									ElseIf UserTrackMusicAmount < 1
 										If ChannelPlaying(RadioCHN(0)) = False Then RadioCHN(0) = PlaySound_Strict(RadioStatic)
-										strtemp = strtemp + "NO TRACKS FOUND     "
+										StrTemp = StrTemp + "NO TRACKS FOUND     "
 									Else
 										If ChannelPlaying(RadioCHN(0)) = False Then
 											If (Not UserTrackFlag%)
@@ -5945,7 +5985,7 @@ Function DrawGUI()
 								Case 1
 									;[Block]
 									ResumeChannel(RadioCHN(1))
-									strtemp = "        WARNING - CONTAINMENT BREACH          "
+									StrTemp = "        WARNING - CONTAINMENT BREACH          "
 									If ChannelPlaying(RadioCHN(1)) = False Then
 										
 										If RadioState(1) >= 5 Then
@@ -5960,7 +6000,7 @@ Function DrawGUI()
 								Case 2
 									;[Block]
 									ResumeChannel(RadioCHN(2))
-									strtemp = "        SCP Foundation On-Site Radio          "
+									StrTemp = "        SCP Foundation On-Site Radio          "
 									If ChannelPlaying(RadioCHN(2)) = False Then
 										RadioState(2) = RadioState(2) + 1
 										If RadioState(2) = 17 Then RadioState(2) = 1
@@ -5974,7 +6014,7 @@ Function DrawGUI()
 								Case 3
 									;[Block]
 									ResumeChannel(RadioCHN(3))
-									strtemp = "             EMERGENCY CHANNEL - RESERVED FOR COMMUNICATION IN THE EVENT OF A CONTAINMENT BREACH         "
+									StrTemp = "             EMERGENCY CHANNEL - RESERVED FOR COMMUNICATION IN THE EVENT OF A CONTAINMENT BREACH         "
 									If ChannelPlaying(RadioCHN(3)) = False Then RadioCHN(3) = PlaySound_Strict(RadioStatic)
 									
 									If MTFtimer > 0 Then 
@@ -6164,11 +6204,11 @@ Function DrawGUI()
 								ResumeChannel(RadioCHN(0))
 								If ChannelPlaying(RadioCHN(0)) = False Then RadioCHN(0) = PlaySound_Strict(RadioStatic)
 								RadioState(6) = RadioState(6) + FPSfactor
-								temp = Mid(Str(AccessCode), RadioState(8) + 1, 1)
+								Temp = Mid(Str(AccessCode), RadioState(8) + 1, 1)
 								If RadioState(6) - FPSfactor =< RadioState(7) * 50 And RadioState(6) > RadioState(7) * 50 Then
 									PlaySound_Strict(RadioBuzz)
 									RadioState(7) = RadioState(7) + 1
-									If RadioState(7) >= temp Then
+									If RadioState(7) >= Temp Then
 										RadioState(7) = 0
 										RadioState(6) = -100
 										RadioState(8) = RadioState(8) + 1
@@ -6176,9 +6216,9 @@ Function DrawGUI()
 									EndIf
 								EndIf
 								
-								strtemp = ""
+								StrTemp = ""
 								For i = 0 To Rand(5, 30)
-									strtemp = strtemp + Chr(Rand(1, 100))
+									StrTemp = StrTemp + Chr(Rand(1, 100))
 								Next
 								
 								AASetFont(Font4)
@@ -6199,9 +6239,9 @@ Function DrawGUI()
 							EndIf
 							
 							AASetFont(Font3)
-							If strtemp <> "" Then
-								strtemp = Right(Left(strtemp, (Int(MilliSecs2() / 300) Mod Len(strtemp))), 10)
-								AAText(x + 32, y + 33, strtemp)
+							If StrTemp <> "" Then
+								StrTemp = Right(Left(StrTemp, (Int(MilliSecs2() / 300) Mod Len(StrTemp))), 10)
+								AAText(x + 32, y + 33, StrTemp)
 							EndIf
 							AASetFont(Font1)
 						EndIf
@@ -6286,12 +6326,12 @@ Function DrawGUI()
 						
 						DrawImage(SelectedItem\itemtemplate\invimg, GraphicWidth / 2 - ImageWidth(SelectedItem\itemtemplate\invimg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\itemtemplate\invimg) / 2)
 						
-						width% = 300
-						height% = 20
-						x% = GraphicWidth / 2 - width / 2
+						Width% = 300
+						Height% = 20
+						x% = GraphicWidth / 2 - Width / 2
 						y% = GraphicHeight / 2 + 80
-						Rect(x, y, width + 4, height, False)
-						For  i% = 1 To Int((width - 2) * (SelectedItem\state / 100.0) / 10)
+						Rect(x, y, Width + 4, Height, False)
+						For  i% = 1 To Int((Width - 2) * (SelectedItem\state / 100.0) / 10)
 							DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
 						Next
 						SelectedItem\state = Min(SelectedItem\state + (FPSfactor / 4.0), 100)
@@ -6327,12 +6367,12 @@ Function DrawGUI()
 					
 					DrawImage(SelectedItem\itemtemplate\invimg, GraphicWidth / 2 - ImageWidth(SelectedItem\itemtemplate\invimg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\itemtemplate\invimg) / 2)
 					
-					width% = 300
-					height% = 20
-					x% = GraphicWidth / 2 - width / 2
+					Width% = 300
+					Height% = 20
+					x% = GraphicWidth / 2 - Width / 2
 					y% = GraphicHeight / 2 + 80
-					Rect(x, y, width + 4, height, False)
-					For  i% = 1 To Int((width - 2) * (SelectedItem\state / 100.0) / 10)
+					Rect(x, y, Width + 4, Height, False)
+					For  i% = 1 To Int((Width - 2) * (SelectedItem\state / 100.0) / 10)
 						DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
 					Next
 					SelectedItem\state = Min(SelectedItem\state + (FPSfactor / (2.0 + (0.5 * (SelectedItem\itemtemplate\tempname = "finevest")))), 100)
@@ -6398,16 +6438,17 @@ Function DrawGUI()
 					
 					x = GraphicWidth - ImageWidth(SelectedItem\itemtemplate\img) * 0.5 + 20
 					y = GraphicHeight - ImageHeight(SelectedItem\itemtemplate\img) * 0.4 - 85
-					width = 287
-					height = 256
+					Width = 287
+					Height = 256
 					
-					Local PlayerX, PlayerZ
+					Local PlayerX%, PlayerZ%
 					
 					DrawImage(SelectedItem\itemtemplate\img, x - ImageWidth(SelectedItem\itemtemplate\img) / 2, y - ImageHeight(SelectedItem\itemtemplate\img) / 2 + 85)
 					
 					AASetFont(Font3)
 					
 					Local NavWorks% = True
+					
 					If PlayerRoom\RoomTemplate\Name$ = "pocketdimension" Or PlayerRoom\RoomTemplate\Name$ = "dimension1499" Then
 						NavWorks% = False
 					ElseIf PlayerRoom\RoomTemplate\Name$ = "room860" Then
@@ -6424,8 +6465,8 @@ Function DrawGUI()
 					If (Not NavWorks) Then
 						If (MilliSecs2() Mod 1000) > 300 Then
 							Color(200, 0, 0)
-							AAText(x, y + height / 2 - 80, "ERROR 06", True)
-							AAText(x, y + height / 2 - 60, "LOCATION UNKNOWN", True)						
+							AAText(x, y + Height / 2 - 80, "ERROR 06", True)
+							AAText(x, y + Height / 2 - 60, "LOCATION UNKNOWN", True)						
 						EndIf
 					Else
 						If SelectedItem\state > 0 And (Rnd(CoffinDistance + 15.0) > 1.0 Or PlayerRoom\RoomTemplate\Name <> "coffin") Then
@@ -6433,8 +6474,10 @@ Function DrawGUI()
 							PlayerZ% = Floor((EntityZ(PlayerRoom\obj) + 8) / 8.0 + 0.5)
 							
 							SetBuffer(ImageBuffer(NavBG))
+							
 							Local xx = x - ImageWidth(SelectedItem\itemtemplate\img) / 2
 							Local yy = y - ImageHeight(SelectedItem\itemtemplate\img) / 2 + 85
+							
 							DrawImage(SelectedItem\itemtemplate\img, xx, yy)
 							
 							x = x - 12 + (((EntityX(Collider) - 4.0) + 8.0) Mod 8.0) * 3
@@ -6443,35 +6486,35 @@ Function DrawGUI()
 								For z2 = Max(0, PlayerZ - 6) To Min(MapHeight, PlayerZ + 6)
 									If CoffinDistance > 16.0 Or Rnd(16.0) < CoffinDistance Then 
 										If MapTemp(x2, z2) > 0 And (MapFound(x2, z2) > 0 Or SelectedItem\itemtemplate\name = "S-NAV 310 Navigator" Or SelectedItem\itemtemplate\name = "S-NAV Navigator Ultimate") Then
-											Local drawx% = x + (PlayerX - 1 - x2) * 24 , drawy% = y - (PlayerZ - 1 - z2) * 24
+											Local Drawx% = x + (PlayerX - 1 - x2) * 24 , drawy% = y - (PlayerZ - 1 - z2) * 24
 											
 											If x2 + 1 =< MapWidth Then
 												If MapTemp(x2 + 1, z2) = False
-													DrawImage(NavImages(3), drawx - 12, drawy - 12)
+													DrawImage(NavImages(3), Drawx - 12, drawy - 12)
 												EndIf
 											Else
-												DrawImage(NavImages(3), drawx - 12, drawy - 12)
+												DrawImage(NavImages(3), Drawx - 12, drawy - 12)
 											EndIf
 											If x2 - 1 >= 0 Then
 												If MapTemp(x2 - 1, z2) = False
-													DrawImage(NavImages(1), drawx - 12, drawy - 12)
+													DrawImage(NavImages(1), Drawx - 12, drawy - 12)
 												EndIf
 											Else
-												DrawImage(NavImages(1), drawx - 12, drawy - 12)
+												DrawImage(NavImages(1), Drawx - 12, drawy - 12)
 											EndIf
 											If z2 - 1 >= 0 Then
 												If MapTemp(x2, z2 - 1) = False
-													DrawImage(NavImages(0), drawx - 12, drawy - 12)
+													DrawImage(NavImages(0), Drawx - 12, drawy - 12)
 												EndIf
 											Else
-												DrawImage(NavImages(0), drawx - 12, drawy - 12)
+												DrawImage(NavImages(0), Drawx - 12, drawy - 12)
 											EndIf
 											If z2 + 1 =< MapHeight Then
 												If MapTemp(x2, z2 + 1) = False
-													DrawImage(NavImages(2), drawx - 12, drawy - 12)
+													DrawImage(NavImages(2), Drawx - 12, drawy - 12)
 												EndIf
 											Else
-												DrawImage(NavImages(2), drawx - 12, drawy - 12)
+												DrawImage(NavImages(2), Drawx - 12, drawy - 12)
 											EndIf
 										EndIf
 									EndIf
@@ -6495,13 +6538,13 @@ Function DrawGUI()
 							EndIf
 							If (MilliSecs2() Mod 1000) > 300 Then
 								If SelectedItem\itemtemplate\name <> "S-NAV 310 Navigator" And SelectedItem\itemtemplate\name <> "S-NAV Navigator Ultimate" Then
-									AAText(x - width / 2 + 10, y - height / 2 + 10, "MAP DATABASE OFFLINE")
+									AAText(x - Width / 2 + 10, y - Height / 2 + 10, "MAP DATABASE OFFLINE")
 								EndIf
 								
-								yawvalue = EntityYaw(Collider) - 90
-								x1 = x + Cos(yawvalue) * 6 : y1 = y - Sin(yawvalue) * 6
-								x2 = x + Cos(yawvalue - 140) * 5 : y2 = y - Sin(yawvalue - 140) * 5				
-								x3 = x + Cos(yawvalue + 140) * 5 : y3 = y - Sin(yawvalue + 140) * 5
+								YawValue = EntityYaw(Collider) - 90
+								x1 = x + Cos(YawValue) * 6 : y1 = y - Sin(YawValue) * 6
+								x2 = x + Cos(YawValue - 140) * 5 : y2 = y - Sin(YawValue - 140) * 5				
+								x3 = x + Cos(YawValue + 140) * 5 : y3 = y - Sin(YawValue + 140) * 5
 								
 								Line(x1, y1, x2, y2)
 								Line(x1, y1, x3, y3)
@@ -6509,44 +6552,45 @@ Function DrawGUI()
 							EndIf
 							
 							Local SCPs_found% = 0
+							
 							If SelectedItem\itemtemplate\name = "S-NAV Navigator Ultimate" And (MilliSecs2() Mod 600) < 400 Then
 								If Curr173 <> Null Then
-									Local dist# = EntityDistance(Camera, Curr173\obj)
+									Local Dist# = EntityDistance(Camera, Curr173\obj)
 									
-									dist = Ceil(dist / 8.0) * 8.0
-									If dist < 8.0 * 4 Then
+									Dist = Ceil(Dist / 8.0) * 8.0
+									If Dist < 8.0 * 4 Then
 										Color(100, 0, 0)
-										Oval(x - dist * 3, y - 7 - dist * 3, dist * 3 * 2, dist * 3 * 2, False)
-										AAText(x - width / 2 + 10, y - height / 2 + 30, "SCP-173")
+										Oval(x - Dist * 3, y - 7 - Dist * 3, Dist * 3 * 2, Dist * 3 * 2, False)
+										AAText(x - Width / 2 + 10, y - Height / 2 + 30, "SCP-173")
 										SCPs_found% = SCPs_found% + 1
 									EndIf
 								EndIf
 								If Curr106 <> Null Then
-									dist# = EntityDistance(Camera, Curr106\obj)
-									If dist < 8.0 * 4 Then
+									Dist# = EntityDistance(Camera, Curr106\obj)
+									If Dist < 8.0 * 4 Then
 										Color(100, 0, 0)
-										Oval(x - dist * 1.5, y - 7 - dist * 1.5, dist * 3, dist * 3, False)
-										AAText(x - width / 2 + 10, y - height / 2 + 30 + (20 * SCPs_found), "SCP-106")
+										Oval(x - Dist * 1.5, y - 7 - Dist * 1.5, Dist * 3, Dist * 3, False)
+										AAText(x - Width / 2 + 10, y - Height / 2 + 30 + (20 * SCPs_found), "SCP-106")
 										SCPs_found% = SCPs_found% + 1
 									EndIf
 								EndIf
 								If Curr096 <> Null Then 
-									dist# = EntityDistance(Camera, Curr096\obj)
-									If dist < 8.0 * 4 Then
+									Dist# = EntityDistance(Camera, Curr096\obj)
+									If Dist < 8.0 * 4 Then
 										Color(100, 0, 0)
-										Oval(x - dist * 1.5, y - 7 - dist * 1.5, dist * 3, dist * 3, False)
-										AAText(x - width / 2 + 10, y - height / 2 + 30 + (20 * SCPs_found), "SCP-096")
+										Oval(x - Dist * 1.5, y - 7 - Dist * 1.5, Dist * 3, Dist * 3, False)
+										AAText(x - Width / 2 + 10, y - Height / 2 + 30 + (20 * SCPs_found), "SCP-096")
 										SCPs_found% = SCPs_found% + 1
 									EndIf
 								EndIf
 								For np.NPCs = Each NPCs
 									If np\NPCtype = NPCtype049
-										dist# = EntityDistance(Camera, np\obj)
-										If dist < 8.0 * 4 Then
+										Dist# = EntityDistance(Camera, np\obj)
+										If Dist < 8.0 * 4 Then
 											If (Not np\HideFromNVG) Then
 												Color(100, 0, 0)
-												Oval(x - dist * 1.5, y - 7 - dist * 1.5, dist * 3, dist * 3, False)
-												AAText(x - width / 2 + 10, y - height / 2 + 30 + (20 * SCPs_found), "SCP-049")
+												Oval(x - Dist * 1.5, y - 7 - Dist * 1.5, Dist * 3, Dist * 3, False)
+												AAText(x - Width / 2 + 10, y - Height / 2 + 30 + (20 * SCPs_found), "SCP-049")
 												SCPs_found% = SCPs_found% + 1
 											EndIf
 										EndIf
@@ -6555,10 +6599,10 @@ Function DrawGUI()
 								Next
 								If PlayerRoom\RoomTemplate\Name = "coffin" Then
 									If CoffinDistance < 8.0 Then
-										dist = Rnd(4.0, 8.0)
+										Dist = Rnd(4.0, 8.0)
 										Color(100, 0, 0)
-										Oval(x - dist * 1.5, y - 7 - dist * 1.5, dist * 3, dist * 3, False)
-										AAText(x - width / 2 + 10, y - height / 2 + 30 + (20 * SCPs_found), "SCP-895")
+										Oval(x - Dist * 1.5, y - 7 - Dist * 1.5, Dist * 3, Dist * 3, False)
+										AAText(x - Width / 2 + 10, y - Height / 2 + 30 + (20 * SCPs_found), "SCP-895")
 									EndIf
 								EndIf
 							End If
@@ -6566,12 +6610,12 @@ Function DrawGUI()
 							Color(30, 30, 30)
 							If SelectedItem\itemtemplate\name = "S-NAV Navigator" Then Color(100, 0, 0)
 							If SelectedItem\state =< 100 Then
-								xtemp = x - width / 2 + 196
-								ytemp = y - height / 2 + 10
-								Rect(xtemp,ytemp, 80, 20, False)
+								xTemp = x - Width / 2 + 196
+								yTemp = y - Height / 2 + 10
+								Rect(xTemp,yTemp, 80, 20, False)
 								
 								For i = 1 To Ceil(SelectedItem\state / 10.0)
-									DrawImage(NavImages(4), xtemp + i * 8 - 6, ytemp + 4)
+									DrawImage(NavImages(4), xTemp + i * 8 - 6, yTemp + 4)
 								Next
 								AASetFont(Font3)
 							EndIf
@@ -6591,12 +6635,12 @@ Function DrawGUI()
 					
 					DrawImage(SelectedItem\itemtemplate\invimg, GraphicWidth / 2 - ImageWidth(SelectedItem\itemtemplate\invimg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\itemtemplate\invimg) / 2)
 					
-					width% = 300
-					height% = 20
-					x% = GraphicWidth / 2 - width / 2
+					Width% = 300
+					Height% = 20
+					x% = GraphicWidth / 2 - Width / 2
 					y% = GraphicHeight / 2 + 80
-					Rect(x, y, width+4, height, False)
-					For  i% = 1 To Int((width - 2) * (SelectedItem\state / 100.0) / 10)
+					Rect(x, y, Width+4, Height, False)
+					For  i% = 1 To Int((Width - 2) * (SelectedItem\state / 100.0) / 10)
 						DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
 					Next
 					SelectedItem\state = Min(SelectedItem\state + (FPSfactor), 100)
@@ -6648,7 +6692,7 @@ Function DrawGUI()
 									EndIf
 									For e.Events = Each Events
 										If e\EventName = "dimension1499" Then
-											If EntityDistance(e\Room\obj, Collider) > 8300.0 * RoomScale Then
+											If EntityDistance(e\room\OBJ, Collider) > 8300.0 * RoomScale Then
 												If e\EventState2 < 5 Then
 													e\EventState2 = e\EventState2 + 1
 												EndIf
@@ -6865,7 +6909,8 @@ End Function
 Function DrawMenu()
 	CatchErrors("Uncaught (DrawMenu)")
 	
-	Local x%, y%, width%, height%
+	Local x%, y%, Width%, Height%
+	
 	If api_GetFocus() = 0 Then ; ~ Game is out of focus then pause the game
 		If (Not Using294) Then
 			MenuOpen = True
@@ -6896,10 +6941,10 @@ Function DrawMenu()
 		
 		InvOpen = False
 		
-		width = ImageWidth(PauseMenuIMG)
-		height = ImageHeight(PauseMenuIMG)
-		x = GraphicWidth / 2 - width / 2
-		y = GraphicHeight / 2 - height / 2
+		Width = ImageWidth(PauseMenuIMG)
+		Height = ImageHeight(PauseMenuIMG)
+		x = GraphicWidth / 2 - Width / 2
+		y = GraphicHeight / 2 - Height / 2
 		
 		DrawImage(PauseMenuIMG, x, y)
 		
@@ -6935,9 +6980,9 @@ Function DrawMenu()
 		End If		
 		
 		Local AchvXIMG% = (x + (22 * MenuScale))
-		Local scale# = GraphicHeight / 768.0
-		Local SeparationConst% = 76 * scale
-		Local imgsize% = 64
+		Local Scale# = GraphicHeight / 768.0
+		Local SeparationConst% = 76 * Scale
+		Local ImgSize% = 64
 		
 		If AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMSG =< 0
 			AASetFont(Font1)
@@ -6972,7 +7017,7 @@ Function DrawMenu()
 			If DrawButton(x + 215 * MenuScale, y, 100 * MenuScale, 30 * MenuScale, "CONTROLS", False) Then OptionsMenu = 3
 			If DrawButton(x + 325 * MenuScale, y, 100 * MenuScale, 30 * MenuScale, "ADVANCED", False) Then OptionsMenu = 4
 			
-			Local tx# = (GraphicWidth / 2) + (width / 2)
+			Local tx# = (GraphicWidth / 2) + (Width / 2)
 			Local ty# = y
 			Local tw# = 400 * MenuScale
 			Local th# = 150 * MenuScale
@@ -7328,7 +7373,7 @@ Function DrawMenu()
 								FreeTexture(font\texture)
 								FreeImage(font\backup)
 							EndIf
-							Delete font
+							Delete(font)
 						Next
 						If (Not AATextEnable) Then
 							FreeEntity(AATextCam)
@@ -7349,6 +7394,7 @@ Function DrawMenu()
 			End Select
 		ElseIf AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMSG > 0 And KillTimer >= 0
 			Local QuitButton% = 60 
+			
 			If SelectedDifficulty\saveType = SAVEONQUIT Or SelectedDifficulty\saveType = SAVEANYWHERE Then
 				Local RN$ = PlayerRoom\RoomTemplate\Name$
 				Local AbleToSave% = True
@@ -7415,7 +7461,7 @@ Function DrawMenu()
 				
 				For i = 0 To 11
 					If i + ((AchievementsMenu - 1) * 12) < MAXACHIEVEMENTS Then
-						If MouseOn(AchvXIMG + ((i Mod 4) * SeparationConst), y + ((i /4 ) * 120 * MenuScale), 64 * scale, 64 * scale) Then
+						If MouseOn(AchvXIMG + ((i Mod 4) * SeparationConst), y + ((i /4 ) * 120 * MenuScale), 64 * Scale, 64 * Scale) Then
 							AchievementTooltip(i + ((AchievementsMenu - 1) * 12))
 							Exit
 						EndIf
@@ -7573,10 +7619,10 @@ End Function
 Function MouseOn%(x%, y%, width%, height%)
 	If ScaledMouseX() > x And ScaledMouseX() < x + width Then
 		If ScaledMouseY() > y And ScaledMouseY() < y + height Then
-			Return True
+			Return(True)
 		End If
 	End If
-	Return False
+	Return(False)
 End Function
 
 Include "Source Code\LoadAllSounds.bb"
@@ -7878,12 +7924,14 @@ Function LoadEntities()
 	
 	UserTrackMusicAmount% = 0
 	If EnableUserTracks Then
-		Local dirPath$ = "SFX\Radio\UserTracks\"
-		If FileType(dirPath) <> 2 Then
-			CreateDir(dirPath)
+		Local DirPath$ = "SFX\Radio\UserTracks\"
+		
+		If FileType(DirPath) <> 2 Then
+			CreateDir(DirPath)
 		EndIf
 		
 		Local Dir% = ReadDir("SFX\Radio\UserTracks\")
+		
 		Repeat
 			file$ = NextFile(Dir)
 			If file$ = "" Then Exit
@@ -8153,13 +8201,15 @@ Function InitNewGame()
 	Next
 	
 	Local rt.RoomTemplates
+	
 	For rt.RoomTemplates = Each RoomTemplates
 		FreeEntity(rt\obj)
 	Next	
 	
 	Local tw.TempWayPoints
+	
 	For tw.TempWayPoints = Each TempWayPoints
-		Delete tw
+		Delete(tw)
 	Next
 	
 	TurnEntity(Collider, 0, Rand(160, 200), 0)
@@ -8258,32 +8308,34 @@ Function InitLoadGame()
 			If e\EventState = 2
 				;[Block]
 				DrawLoading(91)
-				e\Room\Objects[0] = CreatePlane()
+				e\room\Objects[0] = CreatePlane()
 				
-				Local planetex% = LoadTexture_Strict("GFX\map\dimension1499\grit3.jpg")
+				Local PlaneTex% = LoadTexture_Strict("GFX\map\dimension1499\grit3.jpg")
 				
-				EntityTexture(e\Room\Objects[0], planetex%)
-				FreeTexture(planetex%)
-				PositionEntity(e\Room\Objects[0], 0, EntityY(e\Room\obj), 0)
-				EntityType(e\Room\Objects[0], HIT_MAP)
+				EntityTexture(e\room\Objects[0], PlaneTex%)
+				FreeTexture(PlaneTex%)
+				PositionEntity(e\room\Objects[0], 0, EntityY(e\room\OBJ), 0)
+				EntityType(e\room\Objects[0], HIT_MAP)
 				DrawLoading(92)
 				NTF_1499Sky = sky_CreateSky("GFX\map\sky\1499sky")
 				DrawLoading(93)
 				For i = 1 To 15
-					e\Room\Objects[i] = LoadMesh_Strict("GFX\map\dimension1499\1499object" + i + ".b3d")
-					HideEntity(e\Room\Objects[i])
+					e\room\Objects[i] = LoadMesh_Strict("GFX\map\dimension1499\1499object" + i + ".b3d")
+					HideEntity(e\room\Objects[i])
 				Next
 				DrawLoading(96)
-				CreateChunkParts(e\Room)
+				CreateChunkParts(e\room)
 				DrawLoading(97)
-				x# = EntityX(e\Room\obj)
-				z# = EntityZ(e\Room\obj)
+				x# = EntityX(e\room\OBJ)
+				z# = EntityZ(e\room\OBJ)
+				
 				Local ch.Chunk
+				
 				For i = -2 To 2 Step 2
-					ch = CreateChunk(-1, x# * (i * 2.5), EntityY(e\Room\obj), z#)
+					ch = CreateChunk(-1, x# * (i * 2.5), EntityY(e\room\OBJ), z#)
 				Next
 				DrawLoading(98)
-				UpdateChunks(e\Room, 15, False)
+				UpdateChunks(e\room, 15, False)
 				Exit
 				;[End Block]
 			EndIf
@@ -8300,14 +8352,15 @@ Function InitLoadGame()
 	ResetInput()
 End Function
 
-Function NullGame(playbuttonsfx%=True)
+Function NullGame(PlayButtonSFX% = True)
 	CatchErrors("Uncaught (NullGame)")
-	Local i%, x%, y%, lvl
+	
+	Local i%, x%, y%, Lvl
 	Local itt.ItemTemplates, s.Screens, lt.LightTemplates, d.Doors, m.Materials
 	Local wp.WayPoints, twp.TempWayPoints, r.Rooms, it.Items
 	
 	KillSounds()
-	If playbuttonsfx Then PlaySound_Strict(ButtonSFX)
+	If PlayButtonSFX Then PlaySound_Strict(ButtonSFX)
 	
 	FreeParticles()
 	
@@ -8334,7 +8387,7 @@ Function NullGame(playbuttonsfx%=True)
 	
 	HideDistance# = 15.0
 	
-	For lvl = 0 To 0
+	For Lvl = 0 To 0
 		For x = 0 To MapWidth + 1
 			For y = 0 To MapHeight + 1
 				MapTemp(x, y) = 0
@@ -8408,7 +8461,7 @@ Function NullGame(playbuttonsfx%=True)
 	
 	For s.Screens = Each Screens
 		If s\img <> 0 Then FreeImage(s\img) : s\img = 0
-		Delete s
+		Delete(s)
 	Next
 	
 	For i = 0 To MAXACHIEVEMENTS - 1
@@ -8457,51 +8510,53 @@ Function NullGame(playbuttonsfx%=True)
 	ClosestButton = 0
 	
 	For d.Doors = Each Doors
-		Delete d
+		Delete(d)
 	Next
 	
 	For lt.LightTemplates = Each LightTemplates
-		Delete lt
+		Delete(lt)
 	Next 
 	
 	For m.Materials = Each Materials
-		Delete m
+		Delete(m)
 	Next
 	
 	For wp.WayPoints = Each WayPoints
-		Delete wp
+		Delete(wp)
 	Next
 	
 	For twp.TempWayPoints = Each TempWayPoints
-		Delete twp
+		Delete(twp)
 	Next	
 	
 	For r.Rooms = Each Rooms
-		Delete r
+		Delete(r)
 	Next
 	
 	For itt.ItemTemplates = Each ItemTemplates
-		Delete itt
+		Delete(itt)
 	Next 
 	
 	For it.Items = Each Items
-		Delete it
+		Delete(it)
 	Next
 	
 	For pr.Props = Each Props
-		Delete pr
+		Delete(pr)
 	Next
 	
 	For de.decals = Each Decals
-		Delete de
+		Delete(de)
 	Next
 	
 	For n.NPCs = Each NPCs
-		Delete n
+		Delete(n)
 	Next
+	
 	Curr173 = Null
 	Curr106 = Null
 	Curr096 = Null
+	
 	For i = 0 To 6
 		MTFrooms[i] = Null
 	Next
@@ -8509,22 +8564,24 @@ Function NullGame(playbuttonsfx%=True)
 	ForestNPCTex = 0
 	
 	Local e.Events
+	
 	For e.Events = Each Events
 		If e\Sound <> 0 Then FreeSound_Strict(e\Sound)
 		If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2)
-		Delete e
+		
+		Delete(e)
 	Next
 	
 	For sc.securitycams = Each SecurityCams
-		Delete sc
+		Delete(sc)
 	Next
 	
 	For em.emitters = Each Emitters
-		Delete em
+		Delete(em)
 	Next	
 	
 	For p.particles = Each Particles
-		Delete p
+		Delete(p)
 	Next
 	
 	For rt.RoomTemplates = Each RoomTemplates
@@ -8578,31 +8635,32 @@ End Function
 
 Include "Source Code\Save.bb"
 
-Function PlaySound2%(SoundHandle%, cam%, entity%, range# = 10, volume# = 1.0)
-	range# = Max(range, 1.0)
+Function PlaySound2%(SoundHandle%, Cam%, Entity%, Range# = 10, Volume# = 1.0)
+	Range# = Max(Range, 1.0)
+	
 	Local SoundCHN% = 0
 	
-	If volume > 0 Then 
-		Local dist# = EntityDistance(cam, entity) / range#
-		If 1 - dist# > 0 And 1 - dist# < 1 Then
-			Local panvalue# = Sin(-DeltaYaw(cam, entity))
+	If Volume > 0 Then 
+		Local Dist# = EntityDistance(Cam, Entity) / Range#
+		
+		If 1 - Dist# > 0 And 1 - Dist# < 1 Then
+			Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 			
 			SoundCHN% = PlaySound_Strict(SoundHandle)
 			
-			ChannelVolume(SoundCHN, volume# * (1 - dist#) * SFXVolume#)
-			ChannelPan(SoundCHN, panvalue)			
+			ChannelVolume(SoundCHN, Volume# * (1 - Dist#) * SFXVolume#)
+			ChannelPan(SoundCHN, PanValue)			
 		EndIf
 	EndIf
-	
-	Return SoundCHN
+	Return(SoundCHN)
 End Function
 
-Function LoopSound2%(SoundHandle%, CHN%, cam%, entity%, range# = 10, volume# = 1.0)
-	range# = Max(range, 1.0)
+Function LoopSound2%(SoundHandle%, CHN%, Cam%, Entity%, Range# = 10, Volume# = 1.0)
+	Range# = Max(Range, 1.0)
 	
-	If volume > 0 Then
-		Local dist# = EntityDistance(cam, entity) / range#
-		Local panvalue# = Sin(-DeltaYaw(cam, entity))
+	If Volume > 0 Then
+		Local Dist# = EntityDistance(Cam, Entity) / Range#
+		Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 		
 		If CHN = 0 Then
 			CHN% = PlaySound_Strict(SoundHandle)
@@ -8610,36 +8668,33 @@ Function LoopSound2%(SoundHandle%, CHN%, cam%, entity%, range# = 10, volume# = 1
 			If (Not ChannelPlaying(CHN)) Then CHN% = PlaySound_Strict(SoundHandle)
 		EndIf
 		
-		ChannelVolume(CHN, volume# * (1 - dist#) * SFXVolume#)
-		ChannelPan(CHN, panvalue)
+		ChannelVolume(CHN, Volume# * (1 - Dist#) * SFXVolume#)
+		ChannelPan(CHN, PanValue)
 	Else
 		If CHN <> 0 Then
 			ChannelVolume (CHN, 0)
 		EndIf 
 	EndIf
-	
-	Return CHN
+	Return(CHN)
 End Function
 
-Function LoadTempSound(file$)
+Function LoadTempSound(File$)
 	If TempSounds[TempSoundIndex] <> 0 Then FreeSound_Strict(TempSounds[TempSoundIndex])
-	TempSound = LoadSound_Strict(file)
+	TempSound = LoadSound_Strict(File)
 	TempSounds[TempSoundIndex] = TempSound
-	
 	TempSoundIndex = (TempSoundIndex + 1) Mod 10
-	
-	Return TempSound
+	Return(TempSound)
 End Function
 
-Function LoadEventSound(e.Events, file$, num% = 0)
-	If num = 0 Then
+Function LoadEventSound(e.Events, File$, NUM% = 0)
+	If NUM = 0 Then
 		If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
-		e\Sound = LoadSound_Strict(file)
-		Return e\Sound
-	Else If num = 1 Then
+		e\Sound = LoadSound_Strict(File)
+		Return(e\Sound)
+	Else If NUM = 1 Then
 		If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
-		e\Sound2 = LoadSound_Strict(file)
-		Return e\Sound2
+		e\Sound2 = LoadSound_Strict(File)
+		Return(e\Sound2)
 	EndIf
 End Function
 
@@ -8808,7 +8863,7 @@ Function ResumeSounds()
 End Function
 
 Function KillSounds()
-	Local i%, e.Events, n.NPCs,d.Doors, dem.DevilEmitters, snd.Sound
+	Local i%, e.Events, n.NPCs, d.Doors, dem.DevilEmitters, snd.Sound
 	
 	For i = 0 To 9
 		If TempSounds[i] <> 0 Then FreeSound_Strict(TempSounds[i]) : TempSounds[i] = 0
@@ -8893,52 +8948,52 @@ Function KillSounds()
 	Next
 End Function
 
-Function GetStepSound(entity%)
-    Local picker%, brush%, texture%, name$
+Function GetStepSound(Entity%)
+    Local Picker%, Brush%, Texture%, Name$
     Local mat.Materials
     
-    picker = LinePick(EntityX(entity), EntityY(entity), EntityZ(entity), 0, -1, 0)
-    If picker <> 0 Then
-        If GetEntityType(picker) <> HIT_MAP Then Return 0
-        brush = GetSurfaceBrush(GetSurface(picker, CountSurfaces(picker)))
-        If brush <> 0 Then
-            texture = GetBrushTexture(brush, 3)
-            If texture <> 0 Then
-                name = StripPath(TextureName(texture))
-                If (name <> "") Then FreeTexture(texture)
+    Picker = LinePick(EntityX(Entity), EntityY(Entity), EntityZ(Entity), 0, -1, 0)
+    If Picker <> 0 Then
+        If GetEntityType(Picker) <> HIT_MAP Then Return(0)
+        Brush = GetSurfaceBrush(GetSurface(Picker, CountSurfaces(Picker)))
+        If Brush <> 0 Then
+            Texture = GetBrushTexture(Brush, 3)
+            If Texture <> 0 Then
+                Name = StripPath(TextureName(Texture))
+                If (Name <> "") Then FreeTexture(Texture)
 				For mat.Materials = Each Materials
-					If mat\name = name Then
+					If mat\name = Name Then
 						If mat\StepSound > 0 Then
-							FreeBrush(brush)
-							Return mat\StepSound - 1
+							FreeBrush(Brush)
+							Return(mat\StepSound - 1)
 						EndIf
 						Exit
 					EndIf
 				Next                
 			EndIf
-			texture = GetBrushTexture(brush, 2)
-			If texture <> 0 Then
-				name = StripPath(TextureName(texture))
-				If (name <> "") Then FreeTexture(texture)
+			Texture = GetBrushTexture(Brush, 2)
+			If Texture <> 0 Then
+				Name = StripPath(TextureName(Texture))
+				If (Name <> "") Then FreeTexture(Texture)
 				For mat.Materials = Each Materials
-					If mat\name = name Then
+					If mat\name = Name Then
 						If mat\StepSound > 0 Then
-							FreeBrush(brush)
-							Return mat\StepSound - 1
+							FreeBrush(Brush)
+							Return(mat\StepSound - 1)
 						EndIf
 						Exit
 					EndIf
 				Next                
 			EndIf
-			texture = GetBrushTexture(brush, 1)
-			If texture <> 0 Then
-				name = StripPath(TextureName(texture))
-				If (name <> "") Then FreeTexture(texture)
-				FreeBrush(brush)
+			Texture = GetBrushTexture(Brush, 1)
+			If Texture <> 0 Then
+				Name = StripPath(TextureName(Texture))
+				If (Name <> "") Then FreeTexture(Texture)
+				FreeBrush(Brush)
 				For mat.Materials = Each Materials
-					If mat\name = name Then
+					If mat\name = Name Then
 						If mat\StepSound > 0 Then
-							Return mat\StepSound - 1
+							Return(mat\StepSound - 1)
 						EndIf
 						Exit
 					EndIf
@@ -8946,21 +9001,20 @@ Function GetStepSound(entity%)
 			EndIf
 		EndIf
 	EndIf
-    
-    Return 0
+	Return(0)
 End Function
 
-Function UpdateSoundOrigin2(CHN%, cam%, entity%, range# = 10, volume# = 1.0)
-	range# = Max(range, 1.0)
+Function UpdateSoundOrigin2(CHN%, Cam%, Entity%, Range# = 10, Volume# = 1.0)
+	Range# = Max(Range, 1.0)
 	
-	If volume>0 Then
+	If Volume > 0 Then
+		Local Dist# = EntityDistance(Cam, Entity) / Range#
 		
-		Local dist# = EntityDistance(cam, entity) / range#
-		If 1 - dist# > 0 And 1 - dist# < 1 Then
-			Local panvalue# = Sin(-DeltaYaw(cam, entity))
+		If 1 - Dist# > 0 And 1 - Dist# < 1 Then
+			Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 			
-			ChannelVolume(CHN, volume# * (1 - dist#))
-			ChannelPan(CHN, panvalue)
+			ChannelVolume(CHN, Volume# * (1 - Dist#))
+			ChannelPan(CHN, PanValue)
 		EndIf
 	Else
 		If CHN <> 0 Then
@@ -8969,17 +9023,16 @@ Function UpdateSoundOrigin2(CHN%, cam%, entity%, range# = 10, volume# = 1.0)
 	EndIf
 End Function
 
-Function UpdateSoundOrigin(CHN%, cam%, entity%, range# = 10, volume# = 1.0)
-	range# = Max(range, 1.0)
+Function UpdateSoundOrigin(CHN%, Cam%, Entity%, Range# = 10, Volume# = 1.0)
+	Range# = Max(Range, 1.0)
 	
-	If volume > 0 Then
+	If Volume > 0 Then
+		Local Dist# = EntityDistance(Cam, Entity) / Range#
 		
-		Local dist# = EntityDistance(cam, entity) / range#
-		If 1 - dist# > 0 And 1 - dist# < 1 Then
+		If 1 - Dist# > 0 And 1 - Dist# < 1 Then
+			Local panvalue# = Sin(-DeltaYaw(Cam, Entity))
 			
-			Local panvalue# = Sin(-DeltaYaw(cam, entity))
-			
-			ChannelVolume(CHN, volume# * (1 - dist#) * SFXVolume#)
+			ChannelVolume(CHN, Volume# * (1 - Dist#) * SFXVolume#)
 			ChannelPan(CHN, panvalue)
 		EndIf
 	Else
@@ -8989,39 +9042,35 @@ Function UpdateSoundOrigin(CHN%, cam%, entity%, range# = 10, volume# = 1.0)
 	EndIf
 End Function
 
-Function f2s$(n#, count%)
-	Return Left(n, Len(Int(n)) + count + 1)
-End Function
-
-Function AnimateNPC(n.NPCs, start#, quit#, speed#, loop% = True)
-	Local newTime#
+Function AnimateNPC(n.NPCs, Start#, Quit#, Speed#, Loop% = True)
+	Local NewTime#
 	
-	If speed > 0.0 Then 
-		newTime = Max(Min(n\Frame + speed * FPSfactor, quit), start)
+	If Speed > 0.0 Then 
+		NewTime = Max(Min(n\Frame + Speed * FPSfactor, Quit), Start)
 		
-		If loop And newTime >= quit Then
-			newTime = start
+		If Loop And NewTime >= Quit Then
+			NewTime = Start
 		EndIf
 	Else
-		If start < quit Then
-			temp% = start
-			start = quit
-			quit = temp
+		If Start < Quit Then
+			temp% = Start
+			Start = Quit
+			Quit = temp
 		EndIf
 		
-		If loop Then
-			newTime = n\Frame + speed * FPSfactor
+		If Loop Then
+			NewTime = n\Frame + Speed * FPSfactor
 			
-			If newTime < quit Then 
-				newTime = start
-			Else If newTime > start 
-				newTime = quit
+			If NewTime < Quit Then 
+				NewTime = Start
+			Else If NewTime > Start 
+				NewTime = Quit
 			EndIf
 		Else
-			newTime = Max(Min(n\Frame + speed * FPSfactor, start), quit)
+			NewTime = Max(Min(n\Frame + Speed * FPSfactor, Start), Quit)
 		EndIf
 	EndIf
-	SetNPCFrame(n, newTime)
+	SetNPCFrame(n, NewTime)
 End Function
 
 Function SetNPCFrame(n.NPCs, frame#)
@@ -9032,42 +9081,44 @@ Function SetNPCFrame(n.NPCs, frame#)
 	n\Frame = frame
 End Function
 
-Function Animate2#(entity%, curr#, start%, quit%, speed#, loop% = True)
-	Local newTime#
+Function Animate2#(Entity%, Curr#, Start%, Quit%, Speed#, Loop% = True)
+	Local NewTime#
 	
-	If speed > 0.0 Then 
-		newTime = Max(Min(curr + speed * FPSfactor, quit), start)
+	If Speed > 0.0 Then 
+		NewTime = Max(Min(Curr + Speed * FPSfactor, Quit), Start)
 		
-		If loop Then
-			If newTime >= quit Then 
-				newTime = start
+		If Loop Then
+			If NewTime >= Quit Then 
+				NewTime = Start
 			EndIf
 		EndIf
 	Else
-		If start < quit Then
-			temp% = start
-			start = quit
-			quit = temp
+		If Start < Quit Then
+			temp% = Start
+			Start = Quit
+			Quit = temp
 		EndIf
 		
-		If loop Then
-			newTime = curr + speed * FPSfactor
+		If Loop Then
+			NewTime = Curr + Speed * FPSfactor
 			
-			If newTime < quit Then newTime = start
-			If newTime > start Then newTime = quit
+			If NewTime < Quit Then NewTime = Start
+			If NewTime > Start Then NewTime = Quit
 		Else
-			newTime = Max(Min(curr + speed * FPSfactor, start), quit)
+			NewTime = Max(Min(Curr + Speed * FPSfactor, Start), Quit)
 		EndIf
 	EndIf
 	
-	SetAnimTime(entity, newTime)
-	Return newTime
+	SetAnimTime(Entity, NewTime)
+	
+	Return(NewTime)
 End Function 
 
 Function Use914(item.Items, setting$, x#, y#, z#)
 	RefinedItems = RefinedItems + 1
 	
 	Local it2.Items
+	
 	Select item\itemtemplate\name
 		Case "Gas Mask", "Heavy Gas Mask"
 			;[Block]
@@ -9820,15 +9871,15 @@ Function Use914(item.Items, setting$, x#, y#, z#)
 					;[End Block]
 				Case "fine"
 					;[Block]
-					Local no427Spawn% = False
+					Local NO427Spawn% = False
 					
 					For it3.Items = Each Items
 						If it3\itemtemplate\tempname = "scp427" Then
-							no427Spawn = True
+							NO427Spawn = True
 							Exit
 						EndIf
 					Next
-					If (Not no427Spawn) Then
+					If (Not NO427Spawn) Then
 						it2 = CreateItem("SCP-427", "scp427", x, y, z)
 					Else
 						it2 = CreateItem("Upgraded pill", "scp500death", x, y, z)
@@ -9936,7 +9987,7 @@ Function Use914(item.Items, setting$, x#, y#, z#)
 End Function
 
 Function Use294()
-	Local x#, y#, xtemp%, ytemp%, strtemp$, temp%
+	Local x#, y#, xTemp%, yTemp%, StrTemp$, Temp%
 	
 	ShowPointer()
 	
@@ -9945,156 +9996,156 @@ Function Use294()
 	DrawImage(Panel294, x, y)
 	If Fullscreen Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	
-	temp = True
-	If PlayerRoom\SoundCHN <> 0 Then temp = False
+	Temp = True
+	If PlayerRoom\SoundCHN <> 0 Then Temp = False
 	
 	AAText(x + 907, y + 185, Input294, True, True)
 	
-	If temp Then
+	If Temp Then
 		If MouseHit1 Then
-			xtemp = Floor((ScaledMouseX() - x - 228) / 35.5)
-			ytemp = Floor((ScaledMouseY() - y - 342) / 36.5)
+			xTemp = Floor((ScaledMouseX() - x - 228) / 35.5)
+			yTemp = Floor((ScaledMouseY() - y - 342) / 36.5)
 			
-			If ytemp >= 0 And ytemp < 5 Then
-				If xtemp >= 0 And xtemp < 10 Then PlaySound_Strict(ButtonSFX)
+			If yTemp >= 0 And yTemp < 5 Then
+				If xTemp >= 0 And xTemp < 10 Then PlaySound_Strict(ButtonSFX)
 			EndIf
 			
-			strtemp = ""
+			StrTemp = ""
 			
-			temp = False
+			Temp = False
 			
-			Select ytemp
+			Select yTemp
 				Case 0
 					;[Block]
-					strtemp = (xtemp + 1) Mod 10
+					StrTemp = (xTemp + 1) Mod 10
 					;[End Block]
 				Case 1
 					;[Block]
-					Select xtemp
+					Select xTemp
 						Case 0
 							;[Block]
-							strtemp = "Q"
+							StrTemp = "Q"
 							;[End Block]
 						Case 1
 							;[Block]
-							strtemp = "W"
+							StrTemp = "W"
 							;[End Block]
 						Case 2
 							;[Block]
-							strtemp = "E"
+							StrTemp = "E"
 							;[End Block]
 						Case 3
 							;[Block]
-							strtemp = "R"
+							StrTemp = "R"
 							;[End Block]
 						Case 4
 							;[Block]
-							strtemp = "T"
+							StrTemp = "T"
 							;[End Block]
 						Case 5
 							;[Block]
-							strtemp = "Y"
+							StrTemp = "Y"
 							;[End Block]
 						Case 6
 							;[Block]
-							strtemp = "U"
+							StrTemp = "U"
 							;[End Block]
 						Case 7
 							;[Block]
-							strtemp = "I"
+							StrTemp = "I"
 							;[End Block]
 						Case 8
 							;[Block]
-							strtemp = "O"
+							StrTemp = "O"
 							;[End Block]
 						Case 9
 							;[Block]
-							strtemp = "P"
+							StrTemp = "P"
 							;[End Block]
 					End Select
 					;[End Block]
 				Case 2
 					;[Block]
-					Select xtemp
+					Select xTemp
 						Case 0
 							;[Block]
-							strtemp = "A"
+							StrTemp = "A"
 							;[End Block]
 						Case 1
 							;[Block]
-							strtemp = "S"
+							StrTemp = "S"
 							;[End Block]
 						Case 2
 							;[Block]
-							strtemp = "D"
+							StrTemp = "D"
 							;[End Block]
 						Case 3
 							;[Block]
-							strtemp = "F"
+							StrTemp = "F"
 							;[End Block]
 						Case 4
 							;[Block]
-							strtemp = "G"
+							StrTemp = "G"
 							;[End Block]
 						Case 5
 							;[Block]
-							strtemp = "H"
+							StrTemp = "H"
 							;[End Block]
 						Case 6
 							;[Block]
-							strtemp = "J"
+							StrTemp = "J"
 							;[End Block]
 						Case 7
 							;[Block]
-							strtemp = "K"
+							StrTemp = "K"
 							;[End Block]
 						Case 8
 							;[Block]
-							strtemp = "L"
+							StrTemp = "L"
 							;[End Block]
 						Case 9 ; ~ Dispense
 							;[Block]
-							temp = True
+							Temp = True
 							;[End Block]
 					End Select
 				Case 3
 					;[Block]
-					Select xtemp
+					Select xTemp
 						Case 0
 							;[Block]
-							strtemp = "Z"
+							StrTemp = "Z"
 							;[End Block]
 						Case 1
 							;[Block]
-							strtemp = "X"
+							StrTemp = "X"
 							;[End Block]
 						Case 2
 							;[Block]
-							strtemp = "C"
+							StrTemp = "C"
 							;[End Block]
 						Case 3
 							;[Block]
-							strtemp = "V"
+							StrTemp = "V"
 							;[End Block]
 						Case 4
 							;[Block]
-							strtemp = "B"
+							StrTemp = "B"
 							;[End Block]
 						Case 5
 							;[Block]
-							strtemp = "N"
+							StrTemp = "N"
 							;[End Block]
 						Case 6
 							;[Block]
-							strtemp = "M"
+							StrTemp = "M"
 							;[End Block]
 						Case 7
 							;[Block]
-							strtemp = "-"
+							StrTemp = "-"
 							;[End Block]
 						Case 8
 							;[Block]
-							strtemp = " "
+							StrTemp = " "
 							;[End Block]
 						Case 9
 							;[Block]
@@ -10103,15 +10154,15 @@ Function Use294()
 					End Select
 				Case 4
 					;[Block]
-					strtemp = " "
+					StrTemp = " "
 					;[End Block]
 			End Select
 			
-			Input294 = Input294 + strtemp
+			Input294 = Input294 + StrTemp
 			
 			Input294 = Left(Input294, Min(Len(Input294), 15))
 			
-			If temp And Input294 <> "" Then ; ~ Dispense
+			If Temp And Input294 <> "" Then ; ~ Dispense
 				Input294 = Trim(Lower(Input294))
 				If Left(Input294, Min(7, Len(Input294))) = "cup of " Then
 					Input294 = Right(Input294, Len(Input294) - 7)
@@ -10120,32 +10171,32 @@ Function Use294()
 				EndIf
 				
 				If Input294 <> ""
-					Local loc% = GetINISectionLocation("Data\SCP-294.ini", Input294)
+					Local Loc% = GetINISectionLocation("Data\SCP-294.ini", Input294)
 				EndIf
 				
-				If loc > 0 Then
-					strtemp$ = GetINIString2("Data\SCP-294.ini", loc, "dispensesound")
-					If strtemp = "" Then
+				If Loc > 0 Then
+					StrTemp$ = GetINIString2("Data\SCP-294.ini", Loc, "dispensesound")
+					If StrTemp = "" Then
 						PlayerRoom\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Dispense1.ogg"))
 					Else
-						PlayerRoom\SoundCHN = PlaySound_Strict(LoadTempSound(strtemp))
+						PlayerRoom\SoundCHN = PlaySound_Strict(LoadTempSound(StrTemp))
 					EndIf
 					
-					If GetINIInt2("Data\SCP-294.ini", loc, "explosion") = True Then 
+					If GetINIInt2("Data\SCP-294.ini", Loc, "explosion") = True Then 
 						ExplosionTimer = 135
-						DeathMSG = GetINIString2("Data\SCP-294.ini", loc, "deathmessage")
+						DeathMSG = GetINIString2("Data\SCP-294.ini", Loc, "deathmessage")
 					EndIf
 					
-					strtemp$ = GetINIString2("Data\SCP-294.ini", loc, "color")
+					StrTemp$ = GetINIString2("Data\SCP-294.ini", Loc, "color")
 					
-					sep1 = Instr(strtemp, ",", 1)
-					sep2 = Instr(strtemp, ",", sep1 + 1)
-					r% = Trim(Left(strtemp, sep1 - 1))
-					g% = Trim(Mid(strtemp, sep1 + 1, sep2 - sep1 - 1))
-					b% = Trim(Right(strtemp, Len(strtemp) - sep2))
+					sep1 = Instr(StrTemp, ",", 1)
+					sep2 = Instr(StrTemp, ",", sep1 + 1)
+					r% = Trim(Left(StrTemp, sep1 - 1))
+					g% = Trim(Mid(StrTemp, sep1 + 1, sep2 - sep1 - 1))
+					b% = Trim(Right(StrTemp, Len(StrTemp) - sep2))
 					
-					alpha# = Float(GetINIString2("Data\SCP-294.ini", loc, "alpha", 1.0))
-					glow = GetINIInt2("Data\SCP-294.ini", loc, "glow")
+					alpha# = Float(GetINIString2("Data\SCP-294.ini", Loc, "alpha", 1.0))
+					glow = GetINIInt2("Data\SCP-294.ini", Loc, "glow")
 					If glow Then alpha = -alpha
 					
 					it.items = CreateItem("Cup", "cup", EntityX(PlayerRoom\Objects[1], True), EntityY(PlayerRoom\Objects[1], True), EntityZ(PlayerRoom\Objects[1], True), r, g, b, alpha)
@@ -10173,9 +10224,11 @@ Function Use294()
 				HidePointer()
 				Using294 = False
 				MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mouse_x_speed_1# = 0.0 : mouse_y_speed_1# = 0.0
+				
 				Local e.Events
+				
 				For e.Events = Each Events
-					If e\Room = PlayerRoom
+					If e\room = PlayerRoom
 						e\EventState2 = 0
 						Exit
 					EndIf
@@ -10188,8 +10241,8 @@ Function Use294()
 End Function
 
 Function Use427()
-	Local i%, pvt%, de.Decals, tempCHN%
-	Local prevI427Timer# = I_427\Timer
+	Local i%, pvt%, de.Decals, TempCHN%
+	Local PrevI427Timer# = I_427\Timer
 	
 	If I_427\Timer < 70 * 360
 		If I_427\Using = True Then
@@ -10222,10 +10275,10 @@ Function Use427()
 					I_427\SoundCHN[1] = PlaySound_Strict(I_427\Sound[1])
 				EndIf
 			EndIf
-			If prevI427Timer < 70 * 60 And I_427\Timer >= 70 * 60 Then
+			If PrevI427Timer < 70 * 60 And I_427\Timer >= 70 * 60 Then
 				Msg = "You feel refreshed and energetic."
 				MsgTimer = 70 * 5
-			ElseIf prevI427Timer < 70 * 180 And I_427\Timer >= 70 * 180 Then
+			ElseIf PrevI427Timer < 70 * 180 And I_427\Timer >= 70 * 180 Then
 				Msg = "You feel gentle muscle spasms all over your body."
 				MsgTimer = 70 * 5
 			EndIf
@@ -10237,10 +10290,10 @@ Function Use427()
 			Next
 		EndIf
 	Else
-		If prevI427Timer - FPSfactor < 70 * 360 And I_427\Timer >= 70 * 360 Then
+		If PrevI427Timer - FPSfactor < 70 * 360 And I_427\Timer >= 70 * 360 Then
 			Msg = "Your muscles are swelling. You feel more powerful than ever."
 			MsgTimer = 70 * 5
-		ElseIf prevI427Timer - FPSfactor < 70 * 390 And I_427\Timer >= 70 * 390 Then
+		ElseIf PrevI427Timer - FPSfactor < 70 * 390 And I_427\Timer >= 70 * 390 Then
 			Msg = "You can't feel your legs. But you don't need legs anymore."
 			MsgTimer = 70 * 5
 		EndIf
@@ -10261,9 +10314,9 @@ Function Use427()
 			EntityPick(pvt, 0.3)
 			de.Decals = CreateDecal(20, PickedX(), PickedY() + 0.005, PickedZ(), 90, Rand(360), 0)
 			de\Size = Rnd(0.03, 0.08) * 2.0 : EntityAlpha(de\OBJ, 1.0) : ScaleSprite de\OBJ, de\Size, de\Size
-			tempCHN% = PlaySound_Strict(DripSFX(Rand(0, 2)))
-			ChannelVolume(tempCHN, Rnd(0.0, 0.8) * SFXVolume)
-			ChannelPitch(tempCHN, Rand(20000, 30000))
+			TempCHN% = PlaySound_Strict(DripSFX(Rand(0, 2)))
+			ChannelVolume(TempCHN, Rnd(0.0, 0.8) * SFXVolume)
+			ChannelPitch(TempCHN, Rand(20000, 30000))
 			FreeEntity(pvt)
 			BlurTimer = 800
 		EndIf
@@ -10280,12 +10333,13 @@ Function UpdateMTF%()
 	If PlayerRoom\RoomTemplate\Name = "gateaentrance" Then Return
 	
 	Local r.Rooms, n.NPCs
-	Local dist#, i%
+	Local Dist#, i%
 	
 	If MTFtimer = 0 Then
 		If Rand(30) = 1 And PlayerRoom\RoomTemplate\Name$ <> "dimension1499" Then
 			
 			Local entrance.Rooms = Null
+			
 			For r.Rooms = Each Rooms
 				If Lower(r\RoomTemplate\Name) = "gateaentrance" Then entrance = r : Exit
 			Next
@@ -10359,28 +10413,28 @@ Function UpdateMTF%()
 End Function
 
 Function UpdateInfect()
-	Local temp#, i%, r.Rooms
-	Local teleportForInfect% = True
+	Local Temp#, i%, r.Rooms
+	Local TeleportForInfect% = True
 	
 	If PlayerRoom\RoomTemplate\Name = "room860"
 		For e.Events = Each Events
 			If e\EventName = "room860"
 				If e\EventState = 1.0
-					teleportForInfect = False
+					TeleportForInfect = False
 				EndIf
 				Exit
 			EndIf
 		Next
 	ElseIf PlayerRoom\RoomTemplate\Name = "dimension1499" Or PlayerRoom\RoomTemplate\Name = "pocketdimension" Or PlayerRoom\RoomTemplate\Name = "gatea"
-		teleportForInfect = False
+		TeleportForInfect = False
 	ElseIf PlayerRoom\RoomTemplate\Name = "exit1" And EntityY(Collider) > 1040.0 * RoomScale
-		teleportForInfect = False
+		TeleportForInfect = False
 	EndIf
 	
 	If Infect > 0 Then
 		ShowEntity(InfectOverlay)
 		If Infect < 93.0 Then
-			temp = Infect
+			Temp = Infect
 			If (Not I_427\Using And I_427\Timer < 70 * 360) Then
 				Infect = Min(Infect + FPSfactor * 0.002, 100)
 			EndIf
@@ -10393,29 +10447,29 @@ Function UpdateInfect()
 			EntityAlpha(InfectOverlay, Min(((Infect * 0.2) ^ 2) / 1000.0, 0.5) * (Sin(MilliSecs2() / 8.0) + 2.0))
 			
 			For i = 0 To 6
-				If Infect > i * 15 + 10 And temp =< i * 15 + 10 Then
+				If Infect > i * 15 + 10 And Temp =< i * 15 + 10 Then
 					PlaySound_Strict(LoadTempSound("SFX\SCP\008\Voices" + i + ".ogg"))
 				EndIf
 			Next
 			
-			If Infect > 20 And temp =< 20.0 Then
+			If Infect > 20 And Temp =< 20.0 Then
 				Msg = "You feel kinda feverish."
 				MsgTimer = 70 * 6
-			ElseIf Infect > 40 And temp =< 40.0
+			ElseIf Infect > 40 And Temp =< 40.0
 				Msg = "You feel nauseated."
 				MsgTimer = 70 * 6
-			ElseIf Infect > 60 And temp =< 60.0
+			ElseIf Infect > 60 And Temp =< 60.0
 				Msg = "The nausea's getting worse."
 				MsgTimer = 70 * 6
-			ElseIf Infect > 80 And temp =< 80.0
+			ElseIf Infect > 80 And Temp =< 80.0
 				Msg = "You feel very faint."
 				MsgTimer = 70 * 6
 			ElseIf Infect >= 91.5
 				BlinkTimer = Max(Min(-10 * (Infect - 91.5), BlinkTimer), -10)
 				IsZombie = True
 				UnableToMove = True
-				If Infect >= 92.7 And temp < 92.7 Then
-					If teleportForInfect
+				If Infect >= 92.7 And Temp < 92.7 Then
+					If TeleportForInfect
 						For r.Rooms = Each Rooms
 							If r\RoomTemplate\Name = "008" Then
 								PositionEntity(Collider, EntityX(r\Objects[7], True), EntityY(r\Objects[7], True), EntityZ(r\Objects[7], True), True)
@@ -10436,10 +10490,10 @@ Function UpdateInfect()
 				EndIf
 			EndIf
 		Else
-			temp = Infect
+			Temp = Infect
 			Infect = Min(Infect + FPSfactor * 0.004, 100)
 			
-			If teleportForInfect
+			If TeleportForInfect
 				If Infect < 94.7 Then
 					EntityAlpha(InfectOverlay, 0.5 * (Sin(MilliSecs2() / 8.0) + 2.0))
 					BlurTimer = 900
@@ -10462,7 +10516,7 @@ Function UpdateInfect()
 					UnableToMove = True
 					PointEntity(Camera, PlayerRoom\NPC[0]\Collider)
 					
-					If temp < 94.7 Then 
+					If Temp < 94.7 Then 
 						PlayerRoom\NPC[0]\Sound = LoadSound_Strict("SFX\SCP\008\KillScientist2.ogg")
 						PlayerRoom\NPC[0]\SoundCHN = PlaySound_Strict(PlayerRoom\NPC[0]\Sound)
 						
@@ -10527,156 +10581,14 @@ Function UpdateInfect()
 	EndIf
 End Function
 
-Function GenerateSeedNumber(seed$)
- 	Local temp% = 0
- 	Local shift% = 0
- 	For i = 1 To Len(seed)
- 		temp = temp Xor (Asc(Mid(seed, i, 1)) Shl shift)
- 		shift = (shift + 1) Mod 24
-	Next
- 	Return temp
-End Function
-
-Function Distance#(x1#, y1#, x2#, y2#)
-	Local x# = x2 - x1, y# = y2 - y1
-	
-	Return Sqr(x * x + y * y)
-End Function
-
-Function CurveValue#(number#, old#, smooth#)
-	If FPSfactor = 0 Then Return old
-	
-	If number < old Then
-		Return Max(old + (number - old) * (1.0 / smooth * FPSfactor), number)
-	Else
-		Return Min(old + (number - old) * (1.0 / smooth * FPSfactor), number)
-	EndIf
-End Function
-
-Function CurveAngle#(val#, old#, smooth#)
-	If FPSfactor = 0 Then Return old
-	
-	Local diff# = WrapAngle(val) - WrapAngle(old)
-	If diff > 180 Then diff = diff - 360
-	If diff < - 180 Then diff = diff + 360
-	Return WrapAngle(old + diff * (1.0 / smooth * FPSfactor))
-End Function
-
-Function WrapAngle#(angle#)
-	If angle = INFINITY Then Return 0.0
-	While angle < 0
-		angle = angle + 360
-	Wend 
-	While angle >= 360
-		angle = angle - 360
-	Wend
-	Return angle
-End Function
-
-Function GetAngle#(x1#, y1#, x2#, y2#)
-	Return ATan2( y2 - y1, x2 - x1 )
-End Function
-
-Function CircleToLineSegIsect% (cx#, cy#, r#, l1x#, l1y#, l2x#, l2y#)
-	If Distance(cx, cy, l1x, l1y) =< r Then
-		Return True
-	EndIf
-	
-	If Distance(cx, cy, l2x, l2y) =< r Then
-		Return True
-	EndIf	
-	
-	Local SegVecX# = l2x - l1x
-	Local SegVecY# = l2y - l1y
-	
-	Local PntVec1X# = cx - l1x
-	Local PntVec1Y# = cy - l1y
-	
-	Local PntVec2X# = cx - l2x
-	Local PntVec2Y# = cy - l2y
-	
-	Local dp1# = SegVecX * PntVec1X + SegVecY * PntVec1Y
-	Local dp2# = -SegVecX * PntVec2X - SegVecY * PntVec2Y
-	
-	If (dp1 > 0 And dp2 > 0) Or (dp1 < 0 And dp2 < 0) Then
-		Return False
-	EndIf
-	
-	Local a# = (l2y - l1y) / (l2x - l1x)
-	Local b# = -1
-	Local c# = -(l2y - l1y) / (l2x - l1x) * l1x + l1y
-	Local d# = Abs(a * cx + b * cy + c) / Sqr(a * a + b * b)
-	
-	If d > r Then Return False
-	Return True
-End Function
-
-Function Min#(a#, b#)
-	If a < b Then
-		Return a
-	Else
-		Return b
-	EndIf
-End Function
-
-Function Max#(a#, b#)
-	If a > b Then
-		Return a
-	Else
-		Return b
-	EndIf
-End Function
-
-Function point_direction#(x1#, z1#, x2#, z2#)
-	Local dx#, dz#
-	
-	dx = x1 - x2
-	dz = z1 - z2
-	Return ATan2(dz, dx)
-End Function
-
-Function point_distance#(x1#, z1#, x2#, z2#)
-	Local dx#, dy#
-	
-	dx = x1 - x2
-	dy = z1 - z2
-	Return Sqr((dx * dx) + (dy * dy))
-End Function
-
-Function angleDist#(a0#, a1#)
-	Local b# = a0 - a1
-	Local bb#
-	
-	If b < -180.0 Then
-		bb = b + 360.0
-	Else If b > 180.0 Then
-		bb = b - 360.0
-	Else
-		bb = b
-	EndIf
-	Return bb
-End Function
-
-Function Inverse#(number#)
-	Return Float(1.0 - number#)
-End Function
-
-Function Rnd_Array#(numb1#, numb2#, Array1#, Array2#)
-	Local whatarray% = Rand(1, 2)
-	
-	If whatarray% = 1
-		Return Rnd(Array1#, numb1#)
-	Else
-		Return Rnd(numb2#, Array2#)
-	EndIf
-End Function
+Include "Source Code\Math.bb"
 
 Type Decals
 	Field OBJ%
 	Field SizeChange#, Size#, MaxSize#
 	Field AlphaChange#, Alpha#
 	Field BlendMode%
-	Field Fx%
+	Field FX%
 	Field ID%
 	Field Timer#
 	Field LifeTime#
@@ -10709,9 +10621,9 @@ Function CreateDecal.Decals(id%, x#, y#, z#, pitch#, yaw#, roll#)
 	
 	d\ID = id
 	
-	If DecalTextures(id) = 0 Or d\OBJ = 0 Then Return Null
+	If DecalTextures(id) = 0 Or d\OBJ = 0 Then Return(Null)
 	
-	Return d
+	Return(d)
 End Function
 
 Function UpdateDecals()
@@ -10726,9 +10638,9 @@ Function UpdateDecals()
 				Case 0
 					;[Block]
 					If d\Timer =< 0 Then
-						Local angle# = Rand(360)
-						Local temp# = Rnd(d\Size)
-						Local d2.Decals = CreateDecal(1, EntityX(d\OBJ) + Cos(angle) * temp, EntityY(d\OBJ) - 0.0005, EntityZ(d\OBJ) + Sin(angle) * temp, EntityPitch(d\OBJ), Rnd(360), EntityRoll(d\OBJ))
+						Local Angle# = Rand(360)
+						Local Temp# = Rnd(d\Size)
+						Local d2.Decals = CreateDecal(1, EntityX(d\OBJ) + Cos(Angle) * Temp, EntityY(d\OBJ) - 0.0005, EntityZ(d\OBJ) + Sin(Angle) * Temp, EntityPitch(d\OBJ), Rnd(360), EntityRoll(d\OBJ))
 						
 						d2\Size = Rnd(0.1, 0.5) : ScaleSprite(d2\OBJ, d2\Size, d2\Size)
 						PlaySound2(DecaySFX(Rand(1, 3)), Camera, d2\OBJ, 10.0, Rnd(0.1, 0.5))
@@ -10753,175 +10665,179 @@ Function UpdateDecals()
 		
 		If d\Size =< 0 Or d\Alpha =< 0 Or d\LifeTime = 5.0  Then
 			FreeEntity(d\OBJ)
-			Delete d
+			
+			Delete(d)
 		End If
 	Next
 End Function
 
 Type INIFile
-	Field name$
-	Field bank%
-	Field bankOffset% = 0
-	Field size%
+	Field Name$
+	Field Bank%
+	Field BankOffset% = 0
+	Field Size%
 End Type
 
 Function ReadINILine$(file.INIFile)
-	Local rdbyte%
-	Local firstbyte% = True
-	Local offset% = file\bankOffset
-	Local bank% = file\bank
-	Local retStr$ = ""
+	Local RdByte%
+	Local FirstByte% = True
+	Local Offset% = file\BankOffset
+	Local Bank% = file\Bank
+	Local RetStr$ = ""
 	
-	rdbyte = PeekByte(bank, offset)
-	While ((firstbyte) Or ((rdbyte <> 13) And (rdbyte <> 10))) And (offset < file\size)
-		rdbyte = PeekByte(bank, offset)
-		If ((rdbyte <> 13) And (rdbyte <> 10)) Then
-			firstbyte = False
-			retStr = retStr + Chr(rdbyte)
+	RdByte = PeekByte(Bank, Offset)
+	While ((FirstByte) Or ((RdByte <> 13) And (RdByte <> 10))) And (Offset < file\Size)
+		RdByte = PeekByte(Bank, Offset)
+		If ((RdByte <> 13) And (RdByte <> 10)) Then
+			FirstByte = False
+			RetStr = RetStr + Chr(RdByte)
 		EndIf
-		offset = offset + 1
+		Offset = Offset + 1
 	Wend
-	file\bankOffset = offset
-	Return retStr
+	file\BankOffset = Offset
+	
+	Return(RetStr)
 End Function
 
-Function UpdateINIFile$(filename$)
+Function UpdateINIFile$(FileName$)
 	Local file.INIFile = Null
+	
 	For k.INIFile = Each INIFile
-		If k\name = Lower(filename) Then
+		If k\name = Lower(FileName) Then
 			file = k
 		EndIf
 	Next
 	
 	If file = Null Then Return
-	If file\bank <> 0 Then FreeBank file\bank
+	If file\Bank <> 0 Then FreeBank(file\Bank)
 	
-	Local f% = ReadFile(file\name)
-	Local fleSize% = 1
+	Local f% = ReadFile(file\Name)
+	Local FleSize% = 1
 	
-	While fleSize < FileSize(file\name)
-		fleSize = fleSize * 2
+	While FleSize < FileSize(file\Name)
+		FleSize = FleSize * 2
 	Wend
-	file\bank = CreateBank(fleSize)
-	file\size = 0
+	file\Bank = CreateBank(FleSize)
+	file\Size = 0
 	While Not Eof(f)
-		PokeByte(file\bank, file\size, ReadByte(f))
-		file\size = file\size + 1
+		PokeByte(file\Bank, file\Size, ReadByte(f))
+		file\Size = file\Size + 1
 	Wend
 	CloseFile(f)
 End Function
 
-Function GetINIString$(file$, section$, parameter$, defaultvalue$ = "")
+Function GetINIString$(File$, Section$, Parameter$, DefaultValue$ = "")
 	Local TemporaryString$ = ""
 	Local lfile.INIFile = Null
 	
 	For k.INIFile = Each INIFile
-		If k\name = Lower(file) Then
+		If k\name = Lower(File) Then
 			lfile = k
 		EndIf
 	Next
 	
 	If lfile = Null Then
 		lfile = New INIFile
-		lfile\name = Lower(file)
-		lfile\bank = 0
-		UpdateINIFile(lfile\name)
+		lfile\Name = Lower(File)
+		lfile\Bank = 0
+		UpdateINIFile(lfile\Name)
 	EndIf
 	
-	lfile\bankOffset = 0
+	lfile\BankOffset = 0
 	
-	section = Lower(section)
+	Section = Lower(Section)
 	
-	While lfile\bankOffset < lfile\size
-		Local strtemp$ = ReadINILine(lfile)
-		If Left(strtemp, 1) = "[" Then
-			strtemp$ = Lower(strtemp)
-			If Mid(strtemp, 2, Len(strtemp) - 2) = section Then
+	While lfile\BankOffset < lfile\Size
+		Local StrTemp$ = ReadINILine(lfile)
+		
+		If Left(StrTemp, 1) = "[" Then
+			StrTemp$ = Lower(StrTemp)
+			If Mid(StrTemp, 2, Len(StrTemp) - 2) = Section Then
 				Repeat
 					TemporaryString = ReadINILine(lfile)
-					If Lower(Trim(Left(TemporaryString, Max(Instr(TemporaryString, "=") - 1, 0)))) = Lower(parameter) Then
-						Return Trim(Right(TemporaryString, Len(TemporaryString) - Instr(TemporaryString, "=")))
+					If Lower(Trim(Left(TemporaryString, Max(Instr(TemporaryString, "=") - 1, 0)))) = Lower(Parameter) Then
+						Return(Trim(Right(TemporaryString, Len(TemporaryString) - Instr(TemporaryString, "="))))
 					EndIf
-				Until (Left(TemporaryString, 1) = "[") Or (lfile\bankOffset>=lfile\size)
-				Return defaultvalue
+				Until (Left(TemporaryString, 1) = "[") Or (lfile\BankOffset >= lfile\Size)
+				Return(DefaultValue)
 			EndIf
 		EndIf
 	Wend
-	
-	Return defaultvalue
+	Return(DefaultValue)
 End Function
 
-Function GetINIInt%(file$, section$, parameter$, defaultvalue% = 0)
-	Local txt$ = GetINIString(file$, section$, parameter$, defaultvalue)
+Function GetINIInt%(File$, Section$, Parameter$, DefaultValue% = 0)
+	Local Txt$ = GetINIString(File$, Section$, Parameter$, DefaultValue)
 	
-	If Lower(txt) = "true" Then
-		Return 1
-	ElseIf Lower(txt) = "false"
-		Return 0
+	If Lower(Txt) = "true" Then
+		Return(1)
+	ElseIf Lower(Txt) = "false"
+		Return(0)
 	Else
-		Return Int(txt)
+		Return(Int(Txt))
 	EndIf
 End Function
 
-Function GetINIFloat#(file$, section$, parameter$, defaultvalue# = 0.0)
-	Return Float(GetINIString(file$, section$, parameter$, defaultvalue))
+Function GetINIFloat#(File$, Section$, Parameter$, DefaultValue# = 0.0)
+	Return(Float(GetINIString(File$, Section$, Parameter$, DefaultValue)))
 End Function
 
-Function GetINIString2$(file$, start%, parameter$, defaultvalue$ = "")
+Function GetINIString2$(File$, Start%, Parameter$, DefaultValue$ = "")
 	Local TemporaryString$ = ""
-	Local f% = ReadFile(file)
+	Local f% = ReadFile(File)
 	Local n% = 0
 	
 	While Not Eof(f)
-		Local strtemp$ = ReadLine(f)
+		Local StrTemp$ = ReadLine(f)
 		
 		n = n + 1
-		If n = start Then 
+		If n = Start Then 
 			Repeat
 				TemporaryString = ReadLine(f)
-				If Lower(Trim(Left(TemporaryString, Max(Instr(TemporaryString, "=") - 1, 0)))) = Lower(parameter) Then
+				If Lower(Trim(Left(TemporaryString, Max(Instr(TemporaryString, "=") - 1, 0)))) = Lower(Parameter) Then
 					CloseFile(f)
-					Return Trim(Right(TemporaryString, Len(TemporaryString) - Instr(TemporaryString, "=")))
+					Return(Trim(Right(TemporaryString, Len(TemporaryString) - Instr(TemporaryString, "="))))
 				EndIf
 			Until Left(TemporaryString, 1) = "[" Or Eof(f)
 			CloseFile(f)
-			Return defaultvalue
+			Return(DefaultValue)
 		EndIf
 	Wend
 	CloseFile(f)	
-	
-	Return defaultvalue
+	Return(DefaultValue)
 End Function
 
-Function GetINIInt2%(file$, start%, parameter$, defaultvalue$ = "")
-	Local txt$ = GetINIString2(file$, start%, parameter$, defaultvalue$)
-	If Lower(txt) = "true" Then
-		Return 1
-	ElseIf Lower(txt) = "false"
-		Return 0
+Function GetINIInt2%(File$, Start%, Parameter$, DefaultValue$ = "")
+	Local Txt$ = GetINIString2(File$, Start%, Parameter$, DefaultValue$)
+	
+	If Lower(Txt) = "True" Then
+		Return(1)
+	ElseIf Lower(Txt) = "False"
+		Return(0)
 	Else
-		Return Int(txt)
+		Return(Int(Txt))
 	EndIf
 End Function
 
-Function GetINISectionLocation%(file$, section$)
+Function GetINISectionLocation%(File$, Section$)
 	Local Temp%
-	Local f% = ReadFile(file)
+	Local f% = ReadFile(File)
 	
-	section = Lower(section)
+	Section = Lower(Section)
 	
 	Local n% = 0
+	
 	While Not Eof(f)
-		Local strtemp$ = ReadLine(f)
+		Local StrTemp$ = ReadLine(f)
 		
 		n = n + 1
-		If Left(strtemp, 1) = "[" Then
-			strtemp$ = Lower(strtemp)
-			Temp = Instr(strtemp, section)
+		If Left(StrTemp, 1) = "[" Then
+			StrTemp$ = Lower(StrTemp)
+			Temp = Instr(StrTemp, Section)
 			If Temp > 0 Then
-				If Mid(strtemp, Temp - 1, 1) = "[" Or Mid(strtemp, Temp - 1, 1) = "|" Then
+				If Mid(StrTemp, Temp - 1, 1) = "[" Or Mid(StrTemp, Temp - 1, 1) = "|" Then
 					CloseFile(f)
-					Return n
+					Return(n)
 				EndIf
 			EndIf
 		EndIf
@@ -10930,27 +10846,25 @@ Function GetINISectionLocation%(file$, section$)
 	CloseFile(f)
 End Function
 
-Function PutINIValue%(file$, INI_sSection$, INI_sKey$, INI_sValue$)
-	
+Function PutINIValue%(File$, INI_sSection$, INI_sKey$, INI_sValue$)
 	; ~ Returns: True (Success) Or False (Failed)
 	INI_sSection = "[" + Trim$(INI_sSection) + "]"
+	
 	Local INI_sUpperSection$ = Upper$(INI_sSection)
 	
 	INI_sKey = Trim$(INI_sKey)
 	INI_sValue = Trim$(INI_sValue)
 	
-	Local INI_sFilename$ = file$
-	
+	Local INI_sFilename$ = File$
 	; ~ Retrieve the INI data (if it exists)
 	Local INI_sContents$ = INI_FileToString(INI_sFilename)
-	
 	; ~ (Re)Create the INI file updating / adding the SECTION, KEY and VALUE
 	Local INI_bWrittenKey% = False
 	Local INI_bSectionFound% = False
 	Local INI_sCurrentSection$ = ""
-	
 	Local INI_lFileHandle% = WriteFile(INI_sFilename)
-	If INI_lFileHandle = 0 Then Return False ; ~ Create file failed!
+	
+	If INI_lFileHandle = 0 Then Return(False) ; ~ Create file failed!
 	
 	Local INI_lOldPos% = 1
 	Local INI_lPos% = Instr(INI_sContents, Chr$(0))
@@ -10972,6 +10886,7 @@ Function PutINIValue%(file$, INI_sSection$, INI_sKey$, INI_sValue$)
 				Else
 					; ~ KEY = VALUE				
 					Local lEqualsPos% = Instr(INI_sTemp, "=")
+					
 					If (lEqualsPos <> 0) Then
 						If (INI_sCurrentSection = INI_sUpperSection) And (Upper$(Trim$(Left$(INI_sTemp, (lEqualsPos - 1)))) = Upper$(INI_sKey)) Then
 							If (INI_sValue <> "") Then INI_CreateKey INI_lFileHandle, INI_sKey, INI_sValue
@@ -10990,13 +10905,11 @@ Function PutINIValue%(file$, INI_sSection$, INI_sKey$, INI_sValue$)
 	
 	; ~ KEY wasn't found in the INI file - Append a new SECTION If required and create our KEY = VALUE line
 	If (INI_bWrittenKey = False) Then
-		If (INI_bSectionFound = False) Then INI_CreateSection INI_lFileHandle, INI_sSection
+		If (INI_bSectionFound = False) Then INI_CreateSection(INI_lFileHandle, INI_sSection)
 		INI_CreateKey(INI_lFileHandle, INI_sKey, INI_sValue)
 	End If
-	
 	CloseFile(INI_lFileHandle)
-	
-	Return True ; ~ Success
+	Return(True) ; ~ Success
 End Function
 
 Function INI_FileToString$(INI_sFilename$)
@@ -11009,18 +10922,18 @@ Function INI_FileToString$(INI_sFilename$)
 		Wend
 		CloseFile(INI_lFileHandle)
 	End If
-	Return INI_sString
+	Return(INI_sString)
 End Function
 
 Function INI_CreateSection$(INI_lFileHandle%, INI_sNewSection$)
 	If FilePos(INI_lFileHandle) <> 0 Then WriteLine INI_lFileHandle, "" ; ~ Blank Line between sections
 	WriteLine(INI_lFileHandle, INI_sNewSection)
-	Return INI_sNewSection
+	Return(INI_sNewSection)
 End Function
 
 Function INI_CreateKey%(INI_lFileHandle%, INI_sKey$, INI_sValue$)
 	WriteLine(INI_lFileHandle, INI_sKey + " = " + INI_sValue)
-	Return True
+	Return(True)
 End Function
 
 Function SaveOptionsINI()
@@ -11063,68 +10976,72 @@ End Function
 
 ; ~ Create a collision box For a mesh entity taking into account entity scale
 ; (~ Won't work in non-uniform scaled space)
-Function MakeCollBox(mesh%)
-	Local sx# = EntityScaleX(mesh, 1)
-	Local sy# = Max(EntityScaleY(mesh, 1), 0.001)
-	Local sz# = EntityScaleZ(mesh, 1)
+Function MakeCollBox(Mesh%)
+	Local sx# = EntityScaleX(Mesh, 1)
+	Local sy# = Max(EntityScaleY(Mesh, 1), 0.001)
+	Local sz# = EntityScaleZ(Mesh, 1)
 	
-	GetMeshExtents(mesh)
-	EntityBox(mesh, Mesh_MinX * sx, Mesh_MinY * sy, Mesh_MinZ * sz, Mesh_MagX * sx, Mesh_MagY * sy, Mesh_MagZ * sz)
+	GetMeshExtents(Mesh)
+	EntityBox(Mesh, Mesh_MinX * sx, Mesh_MinY * sy, Mesh_MinZ * sz, Mesh_MagX * sx, Mesh_MagY * sy, Mesh_MagZ * sz)
 End Function
 
 ; ~ Find mesh extents
 Function GetMeshExtents(Mesh%)
-	Local s%, surf%, surfs%, v%, verts%, x#, y#, z#
-	Local minx# = INFINITY
-	Local miny# = INFINITY
-	Local minz# = INFINITY
-	Local maxx# = -INFINITY
-	Local maxy# = -INFINITY
-	Local maxz# = -INFINITY
+	Local s%, Surf%, Surfs%, v%, Verts%, x#, y#, z#
+	Local MinX# = INFINITY
+	Local MinY# = INFINITY
+	Local MinZ# = INFINITY
+	Local MaxX# = -INFINITY
+	Local MaxY# = -INFINITY
+	Local MaxZ# = -INFINITY
 	
-	surfs = CountSurfaces(Mesh)
+	Surfs = CountSurfaces(Mesh)
 	
-	For s = 1 To surfs
-		surf = GetSurface(Mesh, s)
-		verts = CountVertices(surf)
-		For v = 0 To verts - 1
-			x = VertexX(surf, v)
-			y = VertexY(surf, v)
-			z = VertexZ(surf, v)
+	For s = 1 To Surfs
+		Surf = GetSurface(Mesh, s)
+		Verts = CountVertices(Surf)
+		For v = 0 To Verts - 1
+			x = VertexX(Surf, v)
+			y = VertexY(Surf, v)
+			z = VertexZ(Surf, v)
 			
-			If (x < minx) Then minx = x
-			If (x > maxx) Then maxx = x
-			If (y < miny) Then miny = y
-			If (y > maxy) Then maxy = y
-			If (z < minz) Then minz = z
-			If (z > maxz) Then maxz = z
+			If (x < MinX) Then MinX = x
+			If (x > MaxX) Then MaxX = x
+			If (y < MinY) Then MinY = y
+			If (y > MaxY) Then MaxY = y
+			If (z < MinZ) Then MinZ = z
+			If (z > MaxZ) Then MaxZ = z
 		Next
 	Next
 	
-	Mesh_MinX = minx
-	Mesh_MinY = miny
-	Mesh_MinZ = minz
-	Mesh_MaxX = maxx
-	Mesh_MaxY = maxy
-	Mesh_MaxZ = maxz
-	Mesh_MagX = maxx - minx
-	Mesh_MagY = maxy - miny
-	Mesh_MagZ = maxz - minz
+	Mesh_MinX = MinX
+	Mesh_MinY = MinY
+	Mesh_MinZ = MinZ
+	Mesh_MaxX = MaxX
+	Mesh_MaxY = MaxY
+	Mesh_MaxZ = MaxZ
+	Mesh_MagX = MaxX - MinX
+	Mesh_MagY = MaxY - MinY
+	Mesh_MagZ = MaxZ - MinZ
 End Function
 
-Function EntityScaleX#(entity%, globl% = False)
-	If globl Then TFormVector 1, 0, 0, entity, 0 Else TFormVector 1, 0, 0, entity, GetParent(entity)
-	Return Sqr(TFormedX() * TFormedX() + TFormedY() * TFormedY() + TFormedZ() * TFormedZ())
+Function EntityScaleX#(Entity%, Globl% = False)
+	If Globl Then 
+		TFormVector(1, 0, 0, Entity, 0) 
+	Else 
+		TFormVector(1, 0, 0, Entity, GetParent(Entity))
+	EndIf
+	Return(Sqr(TFormedX() * TFormedX() + TFormedY() * TFormedY() + TFormedZ() * TFormedZ()))
 End Function 
 
-Function EntityScaleY#(entity%, globl% = False)
-	If globl Then TFormVector 0, 1, 0, entity, 0 Else TFormVector 0, 1, 0, entity, GetParent(entity)
-	Return Sqr(TFormedX() * TFormedX() + TFormedY() * TFormedY() + TFormedZ() * TFormedZ())
+Function EntityScaleY#(Entity%, Globl% = False)
+	If Globl Then TFormVector 0, 1, 0, Entity, 0 Else TFormVector 0, 1, 0, Entity, GetParent(Entity)
+	Return(Sqr(TFormedX() * TFormedX() + TFormedY() * TFormedY() + TFormedZ() * TFormedZ()))
 End Function 
 
-Function EntityScaleZ#(entity%, globl% = False)
-	If globl Then TFormVector 0, 0, 1, entity, 0 Else TFormVector 0, 0, 1, entity, GetParent(entity)
-	Return Sqr(TFormedX() * TFormedX() + TFormedY() * TFormedY() + TFormedZ() * TFormedZ())
+Function EntityScaleZ#(Entity%, Globl% = False)
+	If Globl Then TFormVector 0, 0, 1, Entity, 0 Else TFormVector 0, 0, 1, Entity, GetParent(Entity)
+	Return(Sqr(TFormedX() * TFormedX() + TFormedY() * TFormedY() + TFormedZ() * TFormedZ()))
 End Function 
 
 Function Graphics3DExt%(width%, height%, depth% = 32, mode% = 2)
@@ -11133,20 +11050,19 @@ Function Graphics3DExt%(width%, height%, depth% = 32, mode% = 2)
 	AntiAlias(GetINIInt(OptionFile, "options", "antialias"))
 End Function
 
-Function ResizeImage2(image%, width%, height%)
-    img% = CreateImage(width, height)
+Function ResizeImage2(Image%, Width%, Height%)
+    IMG% = CreateImage(Width, Height)
 	
-	oldWidth% = ImageWidth(image)
-	oldHeight% = ImageHeight(image)
-	CopyRect(0, 0, oldWidth, oldHeight, 1024 - oldWidth / 2, 1024 - oldHeight / 2, ImageBuffer(image), TextureBuffer(fresize_texture))
+	oldWidth% = ImageWidth(Image)
+	oldHeight% = ImageHeight(Image)
+	CopyRect(0, 0, oldWidth, oldHeight, 1024 - oldWidth / 2, 1024 - oldHeight / 2, ImageBuffer(Image), TextureBuffer(fresize_texture))
 	SetBuffer(BackBuffer())
-	ScaleRender(0, 0, 2048.0 / Float(RealGraphicWidth) * Float(width) / Float(oldWidth), 2048.0 / Float(RealGraphicWidth) * Float(height) / Float(oldHeight))
+	ScaleRender(0, 0, 2048.0 / Float(RealGraphicWidth) * Float(Width) / Float(oldWidth), 2048.0 / Float(RealGraphicWidth) * Float(Height) / Float(oldHeight))
 	; ~ Might want to replace Float(GraphicWidth) with Max(GraphicWidth, GraphicHeight) if portrait sizes cause issues
 	; ~ Everyone uses landscape so it's probably a non-issue
-	CopyRect(RealGraphicWidth / 2 - width / 2, RealGraphicHeight / 2 - height / 2, width, height, 0, 0, BackBuffer(), ImageBuffer(img))
-	
-    FreeImage(image)
-    Return img
+	CopyRect(RealGraphicWidth / 2 - Width / 2, RealGraphicHeight / 2 - Height / 2, Width, Height, 0, 0, BackBuffer(), ImageBuffer(img))
+	FreeImage(Image)
+	Return(IMG)
 End Function
 
 Function RenderWorld2()
@@ -11168,28 +11084,28 @@ Function RenderWorld2()
 	
 	CameraViewport(Camera, 0, 0, GraphicWidth, GraphicHeight)
 	
-	Local hasBattery% = 2
-	Local power% = 0
+	Local HasBattery% = 2
+	Local Power% = 0
 	
 	If (WearingNightVision = 1) Or (WearingNightVision = 2)
 		For i% = 0 To MaxItemAmount - 1
 			If (Inventory(i) <> Null) Then
 				If (WearingNightVision = 1 And Inventory(i)\itemtemplate\tempname = "nvgoggles") Or (WearingNightVision = 2 And Inventory(i)\itemtemplate\tempname = "supernv") Then
 					Inventory(i)\state = Inventory(i)\state - (FPSfactor * (0.02 * WearingNightVision))
-					power% = Int(Inventory(i)\state)
+					Power% = Int(Inventory(i)\state)
 					If Inventory(i)\state =< 0.0 Then ; ~ This NVG can't be used
-						hasBattery = 0
+						HasBattery = 0
 						Msg = "The batteries in these night vision goggles died."
 						BlinkTimer = -1.0
 						MsgTimer = 350
 						Exit
 					ElseIf Inventory(i)\state =< 100.0 Then
-						hasBattery = 1
+						HasBattery = 1
 					EndIf
 				EndIf
 			EndIf
 		Next
-		If (hasBattery) Then
+		If (HasBattery) Then
 			RenderWorld()
 		EndIf
 	Else
@@ -11198,13 +11114,13 @@ Function RenderWorld2()
 	
 	CurrTrisAmount = TrisRendered()
 
-	If hasBattery = 0 And WearingNightVision <> 3
+	If HasBattery = 0 And WearingNightVision <> 3
 		IsNVGBlinking% = True
 		ShowEntity(NVBlink%)
 	EndIf
 	
 	If BlinkTimer < - 16 Or BlinkTimer > - 6
-		If WearingNightVision = 2 And hasBattery <> 0 Then ; ~ Show a HUD
+		If WearingNightVision = 2 And HasBattery <> 0 Then ; ~ Show a HUD
 			NVTimer = NVTimer - FPSfactor
 			If NVTimer =< 0.0 Then
 				For np.NPCs = Each NPCs
@@ -11223,14 +11139,14 @@ Function RenderWorld2()
 			
 			AASetFont(Font3)
 			
-			Local plusY% = 0
+			Local PlusY% = 0
 			
-			If hasBattery = 1 Then plusY% = 40
+			If HasBattery = 1 Then PlusY% = 40
 			
-			AAText(GraphicWidth / 2, (20 + plusY) * MenuScale, "REFRESHING DATA IN", True, False)
+			AAText(GraphicWidth / 2, (20 + PlusY) * MenuScale, "REFRESHING DATA IN", True, False)
 			
-			AAText(GraphicWidth / 2, (60 + plusY) * MenuScale, Max(f2s(NVTimer / 60.0, 1), 0.0), True, False)
-			AAText(GraphicWidth / 2, (100 + plusY) * MenuScale, "SECONDS", True, False)
+			AAText(GraphicWidth / 2, (60 + PlusY) * MenuScale, Max(f2s(NVTimer / 60.0, 1), 0.0), True, False)
+			AAText(GraphicWidth / 2, (100 + PlusY) * MenuScale, "SECONDS", True, False)
 			
 			temp% = CreatePivot() : temp2% = CreatePivot()
 			PositionEntity(temp, EntityX(Collider), EntityY(Collider), EntityZ(Collider))
@@ -11276,19 +11192,19 @@ Function RenderWorld2()
 				Rect(45, GraphicHeight * 0.5 - (k * 20), 54, 10, True)
 			Next
 			Color(0, 0, 255)
-			For l = 0 To Floor((power% + 50) * 0.01)
+			For l = 0 To Floor((Power% + 50) * 0.01)
 				Rect(45, GraphicHeight * 0.5 - (l * 20), 54, 10, True)
 			Next
 			DrawImage(NVGImages, 40, GraphicHeight * 0.5 + 30, 1)
 			
 			Color(255, 255, 255)
-		ElseIf WearingNightVision = 1 And hasBattery <> 0
+		ElseIf WearingNightVision = 1 And HasBattery <> 0
 			Color(0, 55, 0)
 			For k = 0 To 10
 				Rect(45, GraphicHeight * 0.5 - (k * 20), 54, 10, True)
 			Next
 			Color(0, 255, 0)
-			For l = 0 To Floor((power% + 50) * 0.01)
+			For l = 0 To Floor((Power% + 50) * 0.01)
 				Rect(45, GraphicHeight * 0.5 - (l * 20), 54, 10, True)
 			Next
 			DrawImage(NVGImages, 40, GraphicHeight * 0.5 + 30, 0)
@@ -11302,7 +11218,7 @@ Function RenderWorld2()
 	CameraProjMode(ark_blur_cam, 0)
 	
 	If BlinkTimer < - 16 Or BlinkTimer > - 6
-		If (WearingNightVision = 1 Or WearingNightVision = 2) And (hasBattery = 1) And ((MilliSecs2() Mod 800) < 400) Then
+		If (WearingNightVision = 1 Or WearingNightVision = 2) And (HasBattery = 1) And ((MilliSecs2() Mod 800) < 400) Then
 			Color(255, 0, 0)
 			AASetFont(Font3)
 			
@@ -11328,30 +11244,32 @@ End Function
 
 Function InitFastResize()
     ; ~ Create Camera
-	Local cam% = CreateCamera()
-	CameraProjMode(cam, 2)
-	CameraZoom(cam, 0.1)
-	CameraClsMode(cam, 0, 0)
-	CameraRange(cam, 0.1, 1.5)
-	MoveEntity(cam, 0, 0, -10000)
+	Local Cam% = CreateCamera()
 	
-	fresize_cam = cam
+	CameraProjMode(Cam, 2)
+	CameraZoom(Cam, 0.1)
+	CameraClsMode(Cam, 0, 0)
+	CameraRange(Cam, 0.1, 1.5)
+	MoveEntity(Cam, 0, 0, -10000)
+	
+	fresize_cam = Cam
 	
     ; ~ Create sprite
-	Local spr% = CreateMesh(cam)
-	Local sf% = CreateSurface(spr)
-	AddVertex(sf, -1, 1, 0, 0, 0)
-	AddVertex(sf, 1, 1, 0, 1, 0)
-	AddVertex(sf, -1, -1, 0, 0, 1)
-	AddVertex(sf, 1, -1, 0, 1, 1)
-	AddTriangle(sf, 0, 1, 2)
-	AddTriangle(sf, 3, 2, 1)
-	EntityFX(spr, 17)
-	ScaleEntity(spr, 2048.0 / Float(RealGraphicWidth), 2048.0 / Float(RealGraphicHeight), 1)
-	PositionEntity(spr, 0, 0, 1.0001)
-	EntityOrder(spr, -100001)
-	EntityBlend(spr, 1)
-	fresize_image = spr
+	Local SPR% = CreateMesh(Cam)
+	Local SF% = CreateSurface(SPR)
+	
+	AddVertex(SF, -1, 1, 0, 0, 0)
+	AddVertex(SF, 1, 1, 0, 1, 0)
+	AddVertex(SF, -1, -1, 0, 0, 1)
+	AddVertex(SF, 1, -1, 0, 1, 1)
+	AddTriangle(SF, 0, 1, 2)
+	AddTriangle(SF, 3, 2, 1)
+	EntityFX(SPR, 17)
+	ScaleEntity(SPR, 2048.0 / Float(RealGraphicWidth), 2048.0 / Float(RealGraphicHeight), 1)
+	PositionEntity(SPR, 0, 0, 1.0001)
+	EntityOrder(SPR, -100001)
+	EntityBlend(SPR, 1)
+	fresize_image = SPR
 	
     ; ~ Create texture
 	fresize_texture = CreateTexture(2048, 2048, 1 + 256)
@@ -11361,8 +11279,8 @@ Function InitFastResize()
 	ClsColor(0, 0, 0)
 	Cls
 	SetBuffer(BackBuffer())
-	EntityTexture(spr, fresize_texture, 0, 0)
-	EntityTexture(spr, fresize_texture2, 0, 1)
+	EntityTexture(SPR, fresize_texture, 0, 0)
+	EntityTexture(SPR, fresize_texture2, 0, 1)
 	
 	HideEntity(fresize_cam)
 End Function
@@ -11432,16 +11350,15 @@ Function CheckForPlayerInFacility()
 	; ~ 2: NPC is in tunnels (maintenance tunnels / 049 tunnels / 939 storage room, etc...)
 	
 	If EntityY(Collider) > 100.0
-		Return False
+		Return(False)
 	EndIf
 	If EntityY(Collider) < -10.0
-		Return 2
+		Return(2)
 	EndIf
 	If EntityY(Collider) > 7.0 And EntityY(Collider) =< 100.0
-		Return 2
+		Return(2)
 	EndIf
-	
-	Return True
+	Return(True)
 End Function
 
 Function IsItemGoodFor1162(itt.ItemTemplates)
@@ -11449,34 +11366,48 @@ Function IsItemGoodFor1162(itt.ItemTemplates)
 	
 	Select itt\tempname
 		Case "key1", "key2", "key3"
-			Return True
+			;[Block]
+			Return(True)
+			;[End Block]
 		Case "misc", "420", "cigarette"
-			Return True
+			;[Block]
+			Return(True)
+			;[End Block]
 		Case "vest", "finevest","gasmask"
-			Return True
+			;[Block]
+			Return(True)
+			;[End Block]
 		Case "radio", "18vradio"
-			Return True
+			;[Block]
+			Return(True)
+			;[End Block]
 		Case "clipboard", "eyedrops", "nvgoggles"
-			Return True
+			;[Block]
+			Return(True)
+			;[End Block]
 		Case "drawing"
+			;[Block]
 			If itt\img <> 0 Then FreeImage(itt\img)	
 			itt\img = LoadImage_Strict("GFX\items\1048\1048_" + Rand(1, 20) + ".jpg") ; ~ Gives a random drawing.
-			Return True
+			Return(True)
+			;[End Block]
 		Default
+			;[Block]
 			If itt\tempname <> "paper" Then
-				Return False
+				Return(False)
 			Else If Instr(itt\name, "Leaflet")
-				Return False
+				Return(False)
 			Else
 				; ~ If the item is a paper, only allow spawning it if the name contains the word "note" or "log"
 				; ~ (Because those are items created recently, which D-9341 has most likely never seen)
-				Return ((Not Instr(itt\name, "Note")) And (Not Instr(itt\name, "Log")))
+				Return(((Not Instr(itt\name, "Note")) And (Not Instr(itt\name, "Log"))))
 			EndIf
+			;[End Block]
 	End Select
 End Function
 
 Function ControlSoundVolume()
-	Local snd.Sound, i
+	Local snd.Sound, i%
 	
 	For snd.Sound = Each Sound
 		For i = 0 To 31
@@ -11502,10 +11433,10 @@ End Function
 
 Function CheckTriggers$()
 	Local i%, sx#, sy#, sz#
-	Local inside% = -1
+	Local Inside% = -1
 	
 	If PlayerRoom\TriggerboxAmount = 0
-		Return ""
+		Return("")
 	Else
 		For i = 0 To PlayerRoom\TriggerboxAmount - 1
 			EntityAlpha(PlayerRoom\Triggerbox[i], 1.0)
@@ -11523,70 +11454,70 @@ Function CheckTriggers$()
 			If EntityX(Collider) > ((sx# * Mesh_MinX) + PlayerRoom\x) And EntityX(Collider) < ((sx# * Mesh_MaxX) + PlayerRoom\x)
 				If EntityY(Collider) > ((sy# * Mesh_MinY) + PlayerRoom\y) And EntityY(Collider) < ((sy# * Mesh_MaxY) + PlayerRoom\y)
 					If EntityZ(Collider) > ((sz# * Mesh_MinZ) + PlayerRoom\z) And EntityZ(Collider) < ((sz# * Mesh_MaxZ) + PlayerRoom\z)
-						inside% = i% 
+						Inside% = i% 
 						Exit
 					EndIf
 				EndIf
 			EndIf
 		Next
-		
-		If inside% > -1 Then Return PlayerRoom\TriggerboxName[inside%]
+		If Inside% > -1 Then Return(PlayerRoom\TriggerboxName[Inside%])
 	EndIf
 End Function
 
 Function ScaledMouseX%()
-	Return Float(MouseX() - (RealGraphicWidth * 0.5 * (1.0 - AspectRatioRatio))) * Float(GraphicWidth) / Float(RealGraphicWidth*AspectRatioRatio)
+	Return(Float(MouseX() - (RealGraphicWidth * 0.5 * (1.0 - AspectRatioRatio))) * Float(GraphicWidth) / Float(RealGraphicWidth*AspectRatioRatio))
 End Function
 
 Function ScaledMouseY%()
-	Return Float(MouseY()) * Float(GraphicHeight) / Float(RealGraphicHeight)
+	Return(Float(MouseY()) * Float(GraphicHeight) / Float(RealGraphicHeight))
 End Function
 
-Function CatchErrors(location$)
-	Local errStr$ = ErrorLog()
-	Local errF%
+Function CatchErrors(Location$)
+	Local ErrStr$ = ErrorLog()
+	Local ErrF%
 	
-	If Len(errStr) > 0 Then
+	If Len(ErrStr) > 0 Then
 		If FileType(ErrorFile) = 0 Then
-			errF = WriteFile(ErrorFile)
-			WriteLine(errF, "An error occured in SCP - Containment Breach!")
-			WriteLine(errF, "Version: " + VersionNumber)
-			WriteLine(errF, "Save compatible version: " + CompatibleNumber)
-			WriteLine(errF, "Date and time: " + CurrentDate() + " at " + CurrentTime())
-			WriteLine(errF, "Total video memory (MB): " + TotalVidMem() / 1024 / 1024)
-			WriteLine(errF, "Available video memory (MB): " + AvailVidMem() / 1024 / 1024)
+			ErrF = WriteFile(ErrorFile)
+			WriteLine(ErrF, "An error occured in SCP - Containment Breach!")
+			WriteLine(ErrF, "Version: " + VersionNumber)
+			WriteLine(ErrF, "Save compatible version: " + CompatibleNumber)
+			WriteLine(ErrF, "Date and time: " + CurrentDate() + " at " + CurrentTime())
+			WriteLine(ErrF, "Total video memory (MB): " + TotalVidMem() / 1024 / 1024)
+			WriteLine(ErrF, "Available video memory (MB): " + AvailVidMem() / 1024 / 1024)
 			GlobalMemoryStatus(m.MEMORYSTATUS)
-			WriteLine(errF, "Global memory status: " + (m\dwAvailPhys% / 1024 / 1024) + " MB/" + (m\dwTotalPhys% / 1024 / 1024) + " MB (" + (m\dwAvailPhys% / 1024) + " KB/" + (m\dwTotalPhys% / 1024) + " KB)")
-			WriteLine(errF, "Triangles rendered: " + CurrTrisAmount)
-			WriteLine(errF, "Active textures: " + ActiveTextures())
-			WriteLine(errF, "")
-			WriteLine(errF, "Error(s):")
+			WriteLine(ErrF, "Global memory status: " + (m\dwAvailPhys% / 1024 / 1024) + " MB/" + (m\dwTotalPhys% / 1024 / 1024) + " MB (" + (m\dwAvailPhys% / 1024) + " KB/" + (m\dwTotalPhys% / 1024) + " KB)")
+			WriteLine(ErrF, "Triangles rendered: " + CurrTrisAmount)
+			WriteLine(ErrF, "Active textures: " + ActiveTextures())
+			WriteLine(ErrF, "")
+			WriteLine(ErrF, "Error(s):")
 		Else
-			Local canwriteError% = True
+			Local CanWriteError% = True
 			
-			errF = OpenFile(ErrorFile)
-			While (Not Eof(errF))
-				Local l$ = ReadLine(errF)
-				If Left(l, Len(location)) = location
-					canwriteError = False
+			ErrF = OpenFile(ErrorFile)
+			While (Not Eof(ErrF))
+				Local l$ = ReadLine(ErrF)
+				
+				If Left(l, Len(Location)) = Location
+					CanWriteError = False
 					Exit
 				EndIf
 			Wend
-			If canwriteError
-				SeekFile(errF, FileSize(ErrorFile))
+			If CanWriteError
+				SeekFile(ErrF, FileSize(ErrorFile))
 			EndIf
 		EndIf
-		If canwriteError
-			WriteLine(errF, location + " ***************")
-			While Len(errStr) > 0
-				WriteLine(errF, errStr)
-				errStr = ErrorLog()
+		If CanWriteError
+			WriteLine(ErrF, Location + " ***************")
+			While Len(ErrStr) > 0
+				WriteLine(ErrF, ErrStr)
+				ErrStr = ErrorLog()
 			Wend
 		EndIf
 		Msg = "Blitz3D Error! Details in " + Chr(34) + ErrorFile + Chr(34)
 		MsgTimer = 20 * 70
 		
-		CloseFile(errF)
+		CloseFile(ErrF)
 	EndIf
 End Function
 
@@ -11647,19 +11578,19 @@ Function UpdateStreamSounds()
 End Function
 
 Function TeleportEntity(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = False, PickRange# = 2.0, Dir% = 0)
-	Local pvt, pick
+	Local Pvt, Pick
 	; ~ Dir = 0 - towards the floor (default)
 	; ~ Dir = 1 - towrads the ceiling (mostly for PD decal after leaving dimension)
 	
-	pvt = CreatePivot()
-	PositionEntity(pvt, x, y + 0.05, z, IsGlobal)
+	Pvt = CreatePivot()
+	PositionEntity(Pvt, x, y + 0.05, z, IsGlobal)
 	If Dir% = 0
-		RotateEntity(pvt, 90, 0, 0)
+		RotateEntity(Pvt, 90, 0, 0)
 	Else
-		RotateEntity(pvt, -90, 0, 0)
+		RotateEntity(Pvt, -90, 0, 0)
 	EndIf
-	pick = EntityPick(pvt, PickRange)
-	If pick <> 0
+	Pick = EntityPick(Pvt, PickRange)
+	If Pick <> 0
 		If Dir% = 0
 			PositionEntity(Entity, x, PickedY() + CustomRadius# + 0.02, z, IsGlobal)
 		Else
@@ -11668,7 +11599,7 @@ Function TeleportEntity(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = Fa
 	Else
 		PositionEntity(Entity, x, y, z, IsGlobal)
 	EndIf
-	FreeEntity(pvt)
+	FreeEntity(Pvt)
 	ResetEntity(Entity)
 End Function
 
@@ -11676,9 +11607,12 @@ Function PlayStartupVideos()
 	If GetINIInt("options.ini", "options", "play startup video") = 0 Then Return
 	
 	Local Cam = CreateCamera() 
+	
 	CameraClsMode(Cam, 0, 1)
+	
 	Local Quad = CreateQuad()
 	Local Texture = CreateTexture(2048, 2048, 256 Or 16 Or 32)
+	
 	EntityTexture(Quad, Texture)
 	EntityFX(Quad, 1)
 	CameraRange(Cam, 0.01, 100)
@@ -11694,46 +11628,47 @@ Function PlayStartupVideos()
 		ScaledGraphicHeight% = Float(RealGraphicWidth) / (16.0 / 9.0)
 	EndIf
 	
-	Local moviefile$ = "GFX\menu\startup_Undertow"
-	BlitzMovie_Open(moviefile$+".avi") ; ~ Get movie size
+	Local MovieFile$ = "GFX\menu\startup_Undertow"
 	
-	Local moview = BlitzMovie_GetWidth()
-	Local movieh = BlitzMovie_GetHeight()
+	BlitzMovie_Open(MovieFile$ + ".avi") ; ~ Get movie size
+	
+	Local MovieW = BlitzMovie_GetWidth()
+	Local MovieH = BlitzMovie_GetHeight()
 	
 	BlitzMovie_Close()
 	
-	Local image = CreateImage(moview, movieh)
-	Local SplashScreenVideo = BlitzMovie_OpenDecodeToImage(moviefile$ + ".avi", image, False)
+	Local Image = CreateImage(MovieW, MovieH)
+	Local SplashScreenVideo = BlitzMovie_OpenDecodeToImage(MovieFile$ + ".avi", Image, False)
 	
 	SplashScreenVideo = BlitzMovie_Play()
 	
-	Local SplashScreenAudio = StreamSound_Strict(moviefile$ + ".ogg", SFXVolume, 0)
+	Local SplashScreenAudio = StreamSound_Strict(MovieFile$ + ".ogg", SFXVolume, 0)
 	
 	Repeat
 		Cls
-		ProjectImage(image, RealGraphicWidth, ScaledGraphicHeight, Quad, Texture)
+		ProjectImage(Image, RealGraphicWidth, ScaledGraphicHeight, Quad, Texture)
 		Flip
 	Until (GetKey() Or (Not IsStreamPlaying_Strict(SplashScreenAudio)))
 	StopStream_Strict(SplashScreenAudio)
 	BlitzMovie_Stop()
 	BlitzMovie_Close()
-	FreeImage(image)
+	FreeImage(Image)
 	
 	Cls
 	Flip
 	
-	moviefile$ = "GFX\menu\startup_TSS"
-	BlitzMovie_Open(moviefile$ + ".avi") ; ~ Get movie size
-	moview = BlitzMovie_GetWidth()
-	movieh = BlitzMovie_GetHeight()
+	MovieFile$ = "GFX\menu\startup_TSS"
+	BlitzMovie_Open(MovieFile$ + ".avi") ; ~ Get movie size
+	MovieW = BlitzMovie_GetWidth()
+	MovieH = BlitzMovie_GetHeight()
 	BlitzMovie_Close()
-	image = CreateImage(moview, movieh)
-	SplashScreenVideo = BlitzMovie_OpenDecodeToImage(moviefile$ + ".avi", image, False)
+	Image = CreateImage(MovieW, MovieH)
+	SplashScreenVideo = BlitzMovie_OpenDecodeToImage(MovieFile$ + ".avi", Image, False)
 	SplashScreenVideo = BlitzMovie_Play()
-	SplashScreenAudio = StreamSound_Strict(moviefile$ + ".ogg", SFXVolume, 0)
+	SplashScreenAudio = StreamSound_Strict(MovieFile$ + ".ogg", SFXVolume, 0)
 	Repeat
 		Cls
-		ProjectImage(image, RealGraphicWidth, ScaledGraphicHeight, Quad, Texture)
+		ProjectImage(Image, RealGraphicWidth, ScaledGraphicHeight, Quad, Texture)
 		Flip
 	Until(GetKey() Or (Not IsStreamPlaying_Strict(SplashScreenAudio)))
 	StopStream_Strict(SplashScreenAudio)
@@ -11743,33 +11678,34 @@ Function PlayStartupVideos()
 	FreeTexture(Texture)
 	FreeEntity(Quad)
 	FreeEntity(Cam)
-	FreeImage(image)
+	FreeImage(Image)
 	
 	Cls
 	Flip
 End Function
 
-Function ProjectImage(img, w#, h#, Quad%, Texture%)
-	Local img_w# = ImageWidth(img)
-	Local img_h# = ImageHeight(img)
+Function ProjectImage(Img, Width#, Height#, Quad%, Texture%)
+	Local Img_w# = ImageWidth(Img)
+	Local Img_h# = ImageHeight(Img)
 	
-	If img_w > 2048 Then img_w = 2048
-	If img_h > 2048 Then img_h = 2048
-	If img_w < 1 Then img_w = 1
-	If img_h < 1 Then img_h = 1
+	If Img_w > 2048 Then Img_w = 2048
+	If Img_h > 2048 Then Img_h = 2048
+	If Img_w < 1 Then Img_w = 1
+	If Img_h < 1 Then Img_h = 1
 	
-	If w > 2048 Then w = 2048
-	If h > 2048 Then h = 2048
-	If w < 1 Then w = 1
-	If h < 1 Then h = 1
+	If Width > 2048 Then Width = 2048
+	If Height > 2048 Then Height = 2048
+	If Width < 1 Then Width = 1
+	If Height < 1 Then Height = 1
 	
-	Local w_rel# = w# / img_w#
-	Local h_rel# = h# / img_h#
-	Local g_rel# = 2048.0 / Float(RealGraphicWidth)
-	Local dst_x = 1024 - (img_w / 2.0)
-	Local dst_y = 1024 - (img_h / 2.0)
-	CopyRect(0, 0, img_w, img_h, dst_x, dst_y, ImageBuffer(img), TextureBuffer(Texture))
-	ScaleEntity(Quad, w_rel * g_rel, h_rel * g_rel, 0.0001)
+	Local Width_Rel# = Width# / Img_w#
+	Local Height_Rel# = Height# / Img_h#
+	Local Graphic_Rel# = 2048.0 / Float(RealGraphicWidth)
+	Local DstX = 1024 - (Img_w / 2.0)
+	Local DstY = 1024 - (Img_h / 2.0)
+	
+	CopyRect(0, 0, Img_w, Img_h, DstX, DstY, ImageBuffer(Img), TextureBuffer(Texture))
+	ScaleEntity(Quad, Width_Rel * Graphic_Rel, Height_Rel * Graphic_Rel, 0.0001)
 	RenderWorld()
 End Function
 
@@ -11783,23 +11719,22 @@ Function CreateQuad()
 	AddTriangle(surf, v0, v1, v2)
 	AddTriangle(surf, v0, v2, v3)
 	UpdateNormals(mesh)
-	Return mesh
+	Return(mesh)
 End Function
 
-Function CanUseItem(canUseWithHazmat%, canUseWithGasMask%, canUseWithEyewear%)
-	If (canUseWithHazmat = False And WearingHazmat) Then
+Function CanUseItem(CanUseWithHazmat%, CanUseWithGasMask%, CanUseWithEyewear%)
+	If (CanUseWithHazmat = False And WearingHazmat) Then
 		Msg = "You can't use that item while wearing a hazmat suit."
 		MsgTimer = 70 * 5
-		Return False
-	Else If (canUseWithGasMask = False And (WearingGasMask Or Wearing1499))
+		Return(False)
+	Else If (CanUseWithGasMask = False And (WearingGasMask Or Wearing1499))
 		Msg = "You can't use that item while wearing a gas mask."
 		MsgTimer = 70 * 5
-		Return False
-	Else If (canUseWithEyewear = False And (WearingNightVision))
+		Return(False)
+	Else If (CanUseWithEyewear = False And (WearingNightVision))
 		Msg = "You can't use that item while wearing headgear."
 	EndIf
-	
-	Return True
+	Return(True)
 End Function
 
 Function ResetInput()
@@ -11816,22 +11751,22 @@ Function ResetInput()
 	Input_ResetTime# = 10.0
 End Function
 
-Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, elevatorobj%)
-	Local prevEventState# = EventState#
+Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
+	Local PrevEventState# = EventState#
 	
 	If EventState < 0 Then
 		EventState = 0
-		prevEventState = 0
+		PrevEventState = 0
 	EndIf
 	
 	If d\OpenState = 0 And d\Open = False Then
-		If Abs(EntityX(Collider) - EntityX(elevatorobj%, True)) =< 280.0 * RoomScale + (0.015 * FPSfactor) Then
-			If Abs(EntityZ(Collider) - EntityZ(elevatorobj%, True)) =< 280.0 * RoomScale + (0.015 * FPSfactor) Then
-				If Abs(EntityY(Collider) - EntityY(elevatorobj%, True)) =< 280.0 * RoomScale + (0.015 * FPSfactor) Then
+		If Abs(EntityX(Collider) - EntityX(ElevatorOBJ%, True)) =< 280.0 * RoomScale + (0.015 * FPSfactor) Then
+			If Abs(EntityZ(Collider) - EntityZ(ElevatorOBJ%, True)) =< 280.0 * RoomScale + (0.015 * FPSfactor) Then
+				If Abs(EntityY(Collider) - EntityY(ElevatorOBJ%, True)) =< 280.0 * RoomScale + (0.015 * FPSfactor) Then
 					d\Locked = True
 					If EventState = 0 Then
 						TeleportEntity(Curr096\Collider, EntityX(d\FrameOBJ), EntityY(d\FrameOBJ) + 1.0, EntityZ(d\FrameOBJ), Curr096\CollRadius)
-						PointEntity(Curr096\Collider, elevatorobj)
+						PointEntity(Curr096\Collider, ElevatorOBJ)
 						RotateEntity(Curr096\Collider, 0, EntityYaw(Curr096\Collider), 0)
 						MoveEntity(Curr096\Collider, 0, 0, -0.5)
 						ResetEntity(Curr096\Collider)
@@ -11846,7 +11781,7 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, elevatorobj%)
 	EndIf
 	
 	If EventState > 0 Then
-		If prevEventState = 0 Then
+		If PrevEventState = 0 Then
 			e\SoundCHN = PlaySound_Strict(e\Sound)
 		EndIf
 		
@@ -11871,23 +11806,23 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, elevatorobj%)
 		EndIf
 		EventState = EventState + FPSfactor * 1.4
 	EndIf
-	
-	Return EventState
+	Return(EventState)
 End Function
 
-Function RotateEntity90DegreeAngles(entity%)
-	Local angle = WrapAngle(entity)
+Function RotateEntity90DegreeAngles(Entity%)
+	Local Angle = WrapAngle(Entity)
 	
-	If angle < 45.0 Then
-		Return 0
-	ElseIf angle >= 45.0 And angle < 135 Then
-		Return 90
-	ElseIf angle >= 135 And angle < 225 Then
-		Return 180
+	If Angle < 45.0 Then
+		Return(0)
+	ElseIf Angle >= 45.0 And Angle < 135 Then
+		Return(90)
+	ElseIf Angle >= 135 And Angle < 225 Then
+		Return(180)
 	Else
-		Return 270
+		Return(270)
 	EndIf
 End Function
+
 ;~IDEal Editor Parameters:
-;~B#110C#134E#1AF4
+;~B#1133#1376#1B21
 ;~C#Blitz3D

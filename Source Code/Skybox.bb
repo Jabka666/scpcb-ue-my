@@ -1,17 +1,18 @@
 
 Function sky_CreateSky(FileName$, Parent% = 0)
-	Local sky%
+	Local Sky%
 
 	Restore sky_SkyboxData
-	sky = CreateMesh(Parent)
+	Sky = CreateMesh(Parent)
 	For face = 1 To 6
 		Read direction$
 		
-		Local fname$ = FileName$ + direction$ + ".jpg"
+		Local FName$ = FileName$ + direction$ + ".jpg"
 		
-		If FileType(fname$) = 1
-			Local b = LoadBrush_Strict(fname$, %110001)
-			s = CreateSurface(sky, b)
+		If FileType(FName$) = 1 Then
+			Local b = LoadBrush_Strict(FName$, %110001)
+			
+			s = CreateSurface(Sky, b)
 			For vert = 1 To 4
 				Read x, y, z, u, v
 				AddVertex(s, x, y, z, u, v)
@@ -21,11 +22,10 @@ Function sky_CreateSky(FileName$, Parent% = 0)
 			FreeBrush(b)
 		EndIf
 	Next
-	FlipMesh(sky)
-	EntityFX(sky, 1 + 8)
-	EntityOrder(sky, 1000)
-	
-	Return sky
+	FlipMesh(Sky)
+	EntityFX(Sky, 1 + 8)
+	EntityOrder(Sky, 1000)
+	Return(Sky)
 End Function
 
 Function UpdateSky()
@@ -67,5 +67,6 @@ Data -1, -1, -1, 1, 0
 Data +1, -1, -1, 1, 1
 Data +1, -1, +1, 0, 1
 Data -1, -1, +1, 0, 0
+
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D

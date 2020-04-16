@@ -11,13 +11,13 @@
 ; ~ Likely to cause more crashes than 'clean' CB, as this prevents anyone from loading any assets that don't exist, regardless if they are ever used
 ; ~ Added zero checks since blitz load functions return zero sometimes even if the filetype exists
 
-Function LoadImage_Strict(file$)
-	If FileType(file$) <> 1 Then RuntimeError("Image " + Chr(34) + file$ + Chr(34) + " missing. ")
-	tmp = LoadImage(file$)
-	Return tmp
+Function LoadImage_Strict(File$)
+	If FileType(File$) <> 1 Then RuntimeError("Image " + Chr(34) + File$ + Chr(34) + " missing. ")
+	tmp = LoadImage(File$)
+	Return(tmp)
 	; ~ Attempt to load the image again
-	If tmp = 0 Then tmp2 = LoadImage(file)
-	Return tmp2
+	If tmp = 0 Then tmp2 = LoadImage(File)
+	Return(tmp2)
 End Function
 
 Type Sound
@@ -31,19 +31,19 @@ Function AutoReleaseSounds()
 	Local snd.Sound
 	
 	For snd.Sound = Each Sound
-		Local tryRelease% = True
+		Local TryRelease% = True
 		
 		For i = 0 To 31
 			If snd\Channels[i] <> 0 Then
 				If ChannelPlaying(snd\Channels[i]) = True Then
-					tryRelease = False
+					TryRelease = False
 					snd\ReleaseTime = MilliSecs2() + 5000
 					Exit
 				EndIf
 			EndIf
 		Next
 		
-		If tryRelease Then
+		If TryRelease Then
 			If snd\ReleaseTime < MilliSecs2() Then
 				If snd\InternalHandle <> 0 Then
 					FreeSound(snd\InternalHandle)
@@ -54,8 +54,8 @@ Function AutoReleaseSounds()
 	Next
 End Function
 
-Function PlaySound_Strict%(sndHandle%)
-	Local snd.Sound = Object.Sound(sndHandle)
+Function PlaySound_Strict%(SNDHandle%)
+	Local snd.Sound = Object.Sound(SNDHandle)
 	If snd <> Null Then
 		Local shouldPlay% = True
 		For i = 0 To 31
@@ -111,12 +111,11 @@ Function PlaySound_Strict%(sndHandle%)
 				EndIf
 				ChannelVolume(snd\Channels[i], SFXVolume#)
 				snd\ReleaseTime = MilliSecs2() + 5000 ; ~ Release after 5 seconds
-				Return snd\Channels[i]
+				Return(snd\Channels[i])
 			EndIf
 		Next
 	EndIf
-	
-	Return 0
+	Return(0)
 End Function
 
 Function LoadSound_Strict(File$)
@@ -129,8 +128,7 @@ Function LoadSound_Strict(File$)
 			snd\InternalHandle = LoadSound(snd\Name)
 		EndIf
 	EndIf
-	
-	Return Handle(snd)
+	Return(Handle(snd))
 End Function
 
 Function FreeSound_Strict(SNDHandle%)
@@ -138,10 +136,10 @@ Function FreeSound_Strict(SNDHandle%)
 	
 	If snd <> Null Then
 		If snd\InternalHandle <> 0 Then
-			FreeSound snd\InternalHandle
+			FreeSound(snd\InternalHandle)
 			snd\InternalHandle = 0
 		EndIf
-		Delete snd
+		Delete(snd)
 	EndIf
 End Function
 
@@ -156,34 +154,34 @@ Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode = Mode)
 		If ConsoleOpening
 			ConsoleOpen = True
 		EndIf
-		Return 0
+		Return(0)
 	EndIf
 	
 	Local st.Stream = New Stream
-	st\sfx = FSOUND_Stream_Open(File$, CustomMode, 0)
+	st\SFX = FSOUND_Stream_Open(File$, CustomMode, 0)
 	
-	If st\sfx = 0
+	If st\SFX = 0
 		CreateConsoleMsg("Failed to stream Sound (returned 0): " + Chr(34) + File$ + Chr(34))
 		If ConsoleOpening
 			ConsoleOpen = True
 		EndIf
-		Return 0
+		Return(0)
 	EndIf
 	
-	st\chn = FSOUND_Stream_Play(FreeChannel,st\sfx)
+	st\CHN = FSOUND_Stream_Play(FreeChannel, st\SFX)
 	
-	If st\chn = -1
+	If st\CHN = -1
 		CreateConsoleMsg("Failed to stream Sound (returned -1): " + Chr(34) + File$ + Chr(34))
 		If ConsoleOpening
 			ConsoleOpen = True
 		EndIf
-		Return -1
+		Return(-1)
 	EndIf
 	
-	FSOUND_SetVolume(st\chn, Volume * 255)
-	FSOUND_SetPaused(st\chn, False)
+	FSOUND_SetVolume(st\CHN, Volume * 255)
+	FSOUND_SetPaused(st\CHN, False)
 	
-	Return Handle(st)
+	Return(Handle(st))
 End Function
 
 Function StopStream_Strict(StreamHandle%)
@@ -193,16 +191,16 @@ Function StopStream_Strict(StreamHandle%)
 		CreateConsoleMsg("Failed to stop stream Sound: Unknown Stream")
 		Return
 	EndIf
-	If st\chn = 0 Or st\chn = -1
-		CreateConsoleMsg("Failed to stop stream Sound: Return value " + st\chn)
+	If st\CHN = 0 Or st\CHN = -1
+		CreateConsoleMsg("Failed to stop stream Sound: Return value " + st\CHN)
 		Return
 	EndIf
 	
-	FSOUND_StopSound(st\chn)
-	FSOUND_Stream_Stop(st\sfx)
-	FSOUND_Stream_Close(st\sfx)
+	FSOUND_StopSound(st\CHN)
+	FSOUND_Stream_Stop(st\SFX)
+	FSOUND_Stream_Close(st\SFX)
 	
-	Delete st
+	Delete(st)
 End Function
 
 Function SetStreamVolume_Strict(StreamHandle%, Volume#)
@@ -212,13 +210,13 @@ Function SetStreamVolume_Strict(StreamHandle%, Volume#)
 		CreateConsoleMsg("Failed to set stream Sound volume: Unknown Stream")
 		Return
 	EndIf
-	If st\chn = 0 Or st\chn = -1
-		CreateConsoleMsg("Failed to set stream Sound volume: Return value " + st\chn)
+	If st\CHN = 0 Or st\CHN = -1
+		CreateConsoleMsg("Failed to set stream Sound volume: Return value " + st\CHN)
 		Return
 	EndIf
 	
-	FSOUND_SetVolume(st\chn, Volume * 255.0)
-	FSOUND_SetPaused(st\chn, False)
+	FSOUND_SetVolume(st\CHN, Volume * 255.0)
+	FSOUND_SetPaused(st\CHN, False)
 End Function
 
 Function SetStreamPaused_Strict(StreamHandle%, Paused%)
@@ -228,12 +226,11 @@ Function SetStreamPaused_Strict(StreamHandle%, Paused%)
 		CreateConsoleMsg("Failed to pause/unpause stream Sound: Unknown Stream")
 		Return
 	EndIf
-	If st\chn = 0 Or st\chn = -1
-		CreateConsoleMsg("Failed to pause/unpause stream Sound: Return value " + st\chn)
+	If st\CHN = 0 Or st\CHN = -1
+		CreateConsoleMsg("Failed to pause/unpause stream Sound: Return value " + st\CHN)
 		Return
 	EndIf
-	
-	FSOUND_SetPaused(st\chn, Paused)
+	FSOUND_SetPaused(st\CHN, Paused)
 End Function
 
 Function IsStreamPlaying_Strict(StreamHandle%)
@@ -243,12 +240,11 @@ Function IsStreamPlaying_Strict(StreamHandle%)
 		CreateConsoleMsg("Failed to find stream Sound: Unknown Stream")
 		Return
 	EndIf
-	If st\chn = 0 Or st\chn = -1
-		CreateConsoleMsg("Failed to find stream Sound: Return value " + st\chn)
+	If st\CHN = 0 Or st\CHN = -1
+		CreateConsoleMsg("Failed to find stream Sound: Return value " + st\CHN)
 		Return
 	EndIf
-	
-	Return FSOUND_IsPlaying(st\chn)
+	Return(FSOUND_IsPlaying(st\CHN))
 End Function
 
 Function SetStreamPan_Strict(StreamHandle%, Pan#)
@@ -258,8 +254,8 @@ Function SetStreamPan_Strict(StreamHandle%, Pan#)
 		CreateConsoleMsg("Failed to find stream Sound: Unknown Stream")
 		Return
 	EndIf
-	If st\chn = 0 Or st\chn = -1
-		CreateConsoleMsg("Failed to find stream Sound: Return value " + st\chn)
+	If st\CHN = 0 Or st\CHN = -1
+		CreateConsoleMsg("Failed to find stream Sound: Return value " + st\CHN)
 		Return
 	EndIf
 	
@@ -267,10 +263,10 @@ Function SetStreamPan_Strict(StreamHandle%, Pan#)
 	; ~ 0 = Middle = 127.5 (127)
 	; ~ 1 = Right = 255
 	
-	Local fmod_pan% = 0
+	Local FMod_Pan% = 0
 	
-	fmod_pan% = Int((255.0 / 2.0) + ((255.0 / 2.0) * Pan#))
-	FSOUND_SetPan(st\chn, fmod_pan%)
+	FMod_Pan% = Int((255.0 / 2.0) + ((255.0 / 2.0) * Pan#))
+	FSOUND_SetPan(st\CHN, FMod_Pan%)
 End Function
 
 Function UpdateStreamSoundOrigin(StreamHandle%, Cam%, Entity%, Range# = 10, Volume# = 1.0)
@@ -280,7 +276,6 @@ Function UpdateStreamSoundOrigin(StreamHandle%, Cam%, Entity%, Range# = 10, Volu
 		Local dist# = EntityDistance(Cam, Entity) / Range#
 		
 		If 1 - dist# > 0 And 1 - dist# < 1 Then
-			
 			Local panvalue# = Sin(-DeltaYaw(Cam, Entity))
 			
 			SetStreamVolume_Strict(StreamHandle, Volume# * (1 - dist#) * SFXVolume#)
@@ -299,14 +294,14 @@ Function LoadMesh_Strict(File$, Parent% = 0)
 	If FileType(File$) <> 1 Then RuntimeError("3D Mesh " + File$ + " not found.")
 	tmp = LoadMesh(File$, Parent%)
 	If tmp = 0 Then RuntimeError("Failed to load 3D Mesh: " + File$)
-	Return tmp  
+	Return(tmp) 
 End Function   
 
 Function LoadAnimMesh_Strict(File$, Parent% = 0)
 	If FileType(File$) <> 1 Then RuntimeError("3D Animated Mesh " + File$ + " not found.")
 	tmp = LoadAnimMesh(File$, Parent%)
 	If tmp = 0 Then RuntimeError("Failed to load 3D Animated Mesh: " + File$)
-	Return tmp
+	Return(tmp)
 End Function   
 
 ; ~ Don't use in LoadRMesh, as Reg does this manually there. If you wanna fuck around with the logic in that function, be my guest 
@@ -314,21 +309,22 @@ Function LoadTexture_Strict(File$, Flags% = 1)
 	If FileType(File$) <> 1 Then RuntimeError("Texture " + File$ + " not found.")
 	tmp = LoadTexture(File$, Flags% + (256 * (EnableVRam = True)))
 	If tmp = 0 Then RuntimeError("Failed to load Texture: " + File$)
-	Return tmp 
+	Return(tmp)
 End Function   
 
 Function LoadBrush_Strict(File$, Flags%, u# = 1.0, v# = 1.0)
 	If FileType(File$) <> 1 Then RuntimeError("Brush Texture " + File$ + "not found.")
 	tmp = LoadBrush(File$, Flags%, u#, v#)
 	If tmp = 0 Then RuntimeError("Failed to load Brush: " + File$)
-	Return tmp 
+	Return(tmp)
 End Function 
 
 Function LoadFont_Strict(File$ = "Tahoma", Height% = 13, Bold% = 0, Italic% = 0, UnderLine% = 0)
 	If FileType(File$) <> 1 Then RuntimeError("Font " + File$ + " not found.")
 	tmp = LoadFont(File$, Height%, Bold%, Italic%, UnderLine%)  
 	If tmp = 0 Then RuntimeError("Failed to load Font: " + File$)
-	Return tmp
+	Return(tmp)
 End Function
+
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D

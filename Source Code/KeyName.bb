@@ -67,5 +67,6 @@ KeyName(200) = "Up"
 KeyName(203) = "Left"
 KeyName(205) = "Right"
 KeyName(208) = "Down"
+
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D
