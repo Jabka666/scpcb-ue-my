@@ -10,7 +10,7 @@ EndIf
 
 Include "Source Code\FMod.bb"
 Include "Source Code\StrictLoads.bb"
-Include "Source Code\fullscreen_window_fix.bb"
+Include "Source Code\Fullscreen_Window_Fix.bb"
 Include "Source Code\KeyName.bb"
 
 Global OptionFile$ = "options.ini"
