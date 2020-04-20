@@ -13,11 +13,11 @@
 
 Function LoadImage_Strict(File$)
 	If FileType(File$) <> 1 Then RuntimeError("Image " + Chr(34) + File$ + Chr(34) + " missing. ")
-	tmp = LoadImage(File$)
-	Return(tmp)
+	Tmp = LoadImage(File$)
+	Return(Tmp)
 	; ~ Attempt to load the image again
-	If tmp = 0 Then tmp2 = LoadImage(File)
-	Return(tmp2)
+	If Tmp = 0 Then Tmp2 = LoadImage(File)
+	Return(Tmp2)
 End Function
 
 Type Sound
@@ -292,38 +292,38 @@ End Function
 
 Function LoadMesh_Strict(File$, Parent% = 0)
 	If FileType(File$) <> 1 Then RuntimeError("3D Mesh " + File$ + " not found.")
-	tmp = LoadMesh(File$, Parent%)
-	If tmp = 0 Then RuntimeError("Failed to load 3D Mesh: " + File$)
-	Return(tmp) 
+	Tmp = LoadMesh(File$, Parent%)
+	If Tmp = 0 Then RuntimeError("Failed to load 3D Mesh: " + File$)
+	Return(Tmp) 
 End Function   
 
 Function LoadAnimMesh_Strict(File$, Parent% = 0)
 	If FileType(File$) <> 1 Then RuntimeError("3D Animated Mesh " + File$ + " not found.")
-	tmp = LoadAnimMesh(File$, Parent%)
-	If tmp = 0 Then RuntimeError("Failed to load 3D Animated Mesh: " + File$)
-	Return(tmp)
+	Tmp = LoadAnimMesh(File$, Parent%)
+	If Tmp = 0 Then RuntimeError("Failed to load 3D Animated Mesh: " + File$)
+	Return(Tmp)
 End Function   
 
 ; ~ Don't use in LoadRMesh, as Reg does this manually there. If you wanna fuck around with the logic in that function, be my guest 
 Function LoadTexture_Strict(File$, Flags% = 1)
 	If FileType(File$) <> 1 Then RuntimeError("Texture " + File$ + " not found.")
-	tmp = LoadTexture(File$, Flags% + (256 * (EnableVRam = True)))
-	If tmp = 0 Then RuntimeError("Failed to load Texture: " + File$)
-	Return(tmp)
+	Tmp = LoadTexture(File$, Flags% + (256 * (EnableVRam = True)))
+	If Tmp = 0 Then RuntimeError("Failed to load Texture: " + File$)
+	Return(Tmp)
 End Function   
 
 Function LoadBrush_Strict(File$, Flags%, u# = 1.0, v# = 1.0)
 	If FileType(File$) <> 1 Then RuntimeError("Brush Texture " + File$ + "not found.")
-	tmp = LoadBrush(File$, Flags%, u#, v#)
-	If tmp = 0 Then RuntimeError("Failed to load Brush: " + File$)
-	Return(tmp)
+	Tmp = LoadBrush(File$, Flags%, u#, v#)
+	If Tmp = 0 Then RuntimeError("Failed to load Brush: " + File$)
+	Return(Tmp)
 End Function 
 
 Function LoadFont_Strict(File$ = "Tahoma", Height% = 13, Bold% = 0, Italic% = 0, UnderLine% = 0)
 	If FileType(File$) <> 1 Then RuntimeError("Font " + File$ + " not found.")
-	tmp = LoadFont(File$, Height%, Bold%, Italic%, UnderLine%)  
-	If tmp = 0 Then RuntimeError("Failed to load Font: " + File$)
-	Return(tmp)
+	Tmp = LoadFont(File$, Height%, Bold%, Italic%, UnderLine%)  
+	If Tmp = 0 Then RuntimeError("Failed to load Font: " + File$)
+	Return(Tmp)
 End Function
 
 ;~IDEal Editor Parameters:

@@ -139,23 +139,23 @@ Function SetTemplateAnimTexture(Template%, Path$, Mode%, Blend%, Width%, Height%
 End Function
 
 Function SetTemplateOffset(Template%, Min_ox#, Max_ox#, Min_oy#, Max_oy#, Min_oz#, Max_oz#)
-tmp.Template = Object.Template(Template)
-tmp\Min_ox# = Min_ox#
-tmp\Max_ox# = Max_ox#
-tmp\Min_oy# = Min_oy#
-tmp\Max_oy# = Max_oy#
-tmp\Min_oz# = Min_oz#
-tmp\Max_oz# = Max_oz#
+	tmp.Template = Object.Template(Template)
+	tmp\Min_ox# = Min_ox#
+	tmp\Max_ox# = Max_ox#
+	tmp\Min_oy# = Min_oy#
+	tmp\Max_oy# = Max_oy#
+	tmp\Min_oz# = Min_oz#
+	tmp\Max_oz# = Max_oz#
 End Function
 
 Function SetTemplateVelocity(Template%, Min_xv#, Max_xv#, Min_yv#, Max_yv#, Min_zv#, Max_zv#)
-tmp.Template = Object.Template(Template)
-tmp\Min_xv# = Min_xv#
-tmp\Max_xv# = Max_xv#
-tmp\Min_yv# = Min_yv#
-tmp\Max_yv# = Max_yv#
-tmp\Min_zv# = Min_zv#
-tmp\Max_zv# = Max_zv#
+	tmp.Template = Object.Template(Template)
+	tmp\Min_xv# = Min_xv#
+	tmp\Max_xv# = Max_xv#
+	tmp\Min_yv# = Min_yv#
+	tmp\Max_yv# = Max_yv#
+	tmp\Min_zv# = Min_zv#
+	tmp\Max_zv# = Max_zv#
 End Function
 
 Function SetTemplateRotation(Template%, Rot_Vel1#, Rot_Vel2#)
@@ -246,7 +246,7 @@ Function SetEmitter(Owner%, Template%, Fixed% = False)
 		e\Owner = Owner
 	EndIf
 	e\Ent = CreateMesh()
-	NameEntity(e\Ent,"Emitter3")
+	NameEntity(e\Ent, "Emitter3")
 	e\Surf = CreateSurface(e\ent)
 	e\tmp = Object.Template(Template)
 	e\Max_Time = e\tmp\Emitter_Max_Time
@@ -316,7 +316,7 @@ Function UpdateParticles_Devil()
 					If (e\tmp\Max_Particles > -1 And Cnt_Particles < e\tmp\Max_Particles) Or e\tmp\Max_Particles = -1 Then
 						p.Particle = New Particle
 						p\Emitter = e
-						p\Max_Time = Rand(e\tmp\Min_time, e\tmp\Max_Time)
+						p\Max_Time = Rand(e\tmp\Min_Time, e\tmp\Max_Time)
 						p\x# = EntityX(e\Owner, True) + Rnd(e\tmp\Min_ox#, e\tmp\Max_ox#)
 						p\y# = EntityY(e\Owner, True) + Rnd(e\tmp\Min_oy#, e\tmp\Max_oy#)
 						p\z# = EntityZ(e\Owner, True) + Rnd(e\tmp\Min_oz#, e\tmp\Max_oz#)
