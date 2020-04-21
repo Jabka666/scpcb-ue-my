@@ -154,5 +154,10 @@ Function f2s$(n#, Count%)
 	Return(Left(n, Len(Int(n)) + Count + 1))
 End Function
 
+Function Chance%(Chanc%)
+	; ~ Perform a chance given a probability
+	Return(Rand(0, 100) =< Chanc)
+End Function
+
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D
