@@ -9,6 +9,8 @@
 ; = Contact with us: https://discord.gg/n7KdW4u
 ;----------------------------------------------------------------------------------------------------------------------------------------------------
 
+Include "Source Code\Constants.bb"
+
 Include "Source Code\Main_System.bb"
 
 ;~IDEal Editor Parameters:

@@ -193,7 +193,6 @@ Global CurrFrameLimit# = (Framelimit - 19.0) / 100.0
 
 Global ScreenGamma# = GetINIFloat(OptionFile, "options", "screengamma")
 
-Const HIT_MAP% = 1, HIT_PLAYER% = 2, HIT_ITEM% = 3, HIT_APACHE% = 4, HIT_178% = 5, HIT_DEAD% = 6
 SeedRnd(MilliSecs())
 
 Global GameSaved%
@@ -255,8 +254,6 @@ Global KEY_SAVE = GetINIInt(OptionFile, "binds", "Save key")
 Global KEY_CONSOLE = GetINIInt(OptionFile, "binds", "Console key")
 
 Global MouseSmooth# = GetINIFloat(OptionFile, "options", "mouse smoothing", 1.0)
-
-Const INFINITY# = (999.0) ^ (99999.0), NAN# = (-1.0) ^ (0.5)
 
 Global Mesh_MinX#, Mesh_MinY#, Mesh_MinZ#
 Global Mesh_MaxX#, Mesh_MaxY#, Mesh_MaxZ#
@@ -1827,7 +1824,6 @@ Global LightConeModel%
 
 Global ParticleEffect%[10]
 
-Const MaxDTextures = 8
 Global DTextures%[MaxDTextures]
 
 Global NPC049OBJ%, NPC0492OBJ%
@@ -7113,6 +7109,7 @@ Function DrawMenu()
 	CatchErrors("Uncaught (DrawMenu)")
 	
 	Local x%, y%, Width%, Height%
+	Local i%
 	
 	If api_GetFocus() = 0 Then ; ~ Game is out of focus then pause the game
 		If (Not Using294) Then
@@ -12130,5 +12127,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#11C5#1406#1BEC
+;~B#11C1#1402#1BE9
 ;~C#Blitz3D

@@ -1,11 +1,4 @@
-;[Block]
 Global Curr173.NPCs, Curr106.NPCs, Curr096.NPCs, Curr5131.NPCs
-Const NPCtype173% = 1, NPCtypeOldMan% = 2, NPCtypeGuard% = 3, NPCtypeD% = 4
-Const NPCtype372% = 6, NPCtypeApache% = 7, NPCtypeMTF% = 8, NPCtype096 = 9
-Const NPCtype049% = 10, NPCtypeZombie% = 11, NPCtype5131% = 12, NPCtypeTentacle% = 13
-Const NPCtype860% = 14, NPCtype939% = 15, NPCtype066% = 16, NPCtypePdPlane% = 17
-Const NPCtype966% = 18, NPCtype1048a = 19, NPCtype1499% = 20, NPCtype008% = 21, NPCtypeClerk% = 22
-;[End Block]
 
 Type NPCs
 	Field obj%, obj2%, obj3%, obj4%, Collider%
@@ -527,16 +520,6 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			EntityType n\Collider,HIT_PLAYER
 			
 			n\Speed = (GetINIFloat("DATA\NPCs.ini", "SCP-966", "speed") / 100.0)
-			;[End Block]
-		Case NPCtype1048a
-			;[Block]
-			n\NVName = "SCP-1048-A"
-			n\obj =	LoadAnimMesh_Strict("GFX\npcs\scp-1048a.b3d")
-			ScaleEntity n\obj, 0.05,0.05,0.05
-			SetAnimTime(n\obj, 2)
-			
-			n\Sound = LoadSound_Strict("SFX\SCP\1048A\Shriek.ogg")
-			n\Sound2 = LoadSound_Strict("SFX\SCP\1048A\Growth.ogg")
 			;[End Block]
 		Case NPCtype1499
 			;[Block]
@@ -4393,15 +4376,6 @@ Function UpdateNPCs()
 				EndIf
 				
 				;[End Block]
-			Case NPCtype1048a
-				;[Block]
-				Select n\State	
-						
-					Case 1
-						n\PathStatus = FindPath(n, n\EnemyX,n\EnemyY+0.1,n\EnemyZ)
-						;649, 677
-				End Select
-				;[End block]
 			Case NPCtype1499
 				;[Block]
 				;n\State: Current State of the NPC
@@ -5270,12 +5244,8 @@ Function UpdateMTFUnit(n.NPCs)
                 realType = "939"
 			Case NPCtype066
                 realType = "066"
-			Case NPCtypePdPlane
-                realType = "PDPlane"
 			Case NPCtype966
                 realType = "966"
-			Case NPCtype1048a
-                realType = "1048-A"
 			Case NPCtype1499
 				realType = "1499-1"
 		End Select
@@ -7381,6 +7351,5 @@ End Function
 
 
 ;~IDEal Editor Parameters:
-;~F#0
-;~B#197#12A9#1343#13DC#1590#169B#185C#18B8
+;~B#190#128F#1329#13C2#1572#167D#183E#189A
 ;~C#Blitz3D

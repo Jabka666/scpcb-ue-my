@@ -1,6 +1,5 @@
 Global BurntNote%
 
-Const MaxItemAmount% = 10
 Global ItemAmount%
 Dim Inventory.Items(MaxItemAmount + 1)
 Global InvSelect%, SelectedItem.Items
@@ -883,5 +882,5 @@ End Function
 
 
 ;~IDEal Editor Parameters:
-;~F#B#1E
+;~F#A#1D
 ;~C#Blitz3D

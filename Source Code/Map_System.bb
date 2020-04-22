@@ -647,15 +647,6 @@ Function KeyValue$(Entity, Key$, DefaultValue$ = "")
 	Forever 
 End Function
 
-Const GridSize% = 10
-Const Deviation_Chance% = 40 ; ~ Out of 100
-Const Branch_Chance% = 65
-Const Branch_Max_Life% = 4
-Const Branch_Die_Chance% = 18
-Const Max_Deviation_Distance% = 3
-Const Return_Chance% = 27
-Const Center = 5
-
 Include "Source Code\Drawportals.bb"
 
 Type Forest
@@ -1354,11 +1345,6 @@ Function UpdateForest(fr.Forest, Ent%)
 	CatchErrors("UpdateForest")
 End Function
 
-Const MaxRoomLights% = 32
-Const MaxRoomEmitters% = 8
-Const MaxRoomObjects% = 30
-Const ROOM1% = 1, ROOM2% = 2, ROOM2C% = 3, ROOM3% = 4, ROOM4% = 5
-
 Global RoomTempID%
 
 Type RoomTemplates
@@ -1492,8 +1478,6 @@ LoadRoomTemplates("Data\rooms.ini")
 
 Global RoomScale# = 8.0 / 2048.0
 
-Const ZONEAMOUNT = 3
-
 Global MapWidth% = GetINIInt("options.ini", "options", "map size"), MapHeight% = GetINIInt("options.ini", "options", "map size")
 
 Dim MapTemp%(MapWidth + 1, MapHeight + 1)
@@ -1555,8 +1539,6 @@ Type Rooms
 	Field MinX#, MinY#, MinZ#
 	Field MaxX#, MaxY#, MaxZ#
 End Type 
-
-Const GridSZ% = 19 ; ~ Same size as the main map itself (better for the map creator)
 
 Type Grids
 	Field Grid%[GridSZ * GridSZ]
@@ -8417,5 +8399,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1196
+;~B#1184
 ;~C#Blitz3D
