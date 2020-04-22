@@ -20,8 +20,6 @@ Dim AchievementStrings$(MAXACHIEVEMENTS)
 Dim AchievementDescs$(MAXACHIEVEMENTS)
 Dim AchvIMG%(MAXACHIEVEMENTS)
 
-Local i%
-
 For i = 0 To MAXACHIEVEMENTS - 1
 	Local Loc2% = GetINISectionLocation("Data\achievementstrings.ini", "s" + Str(i))
 	
