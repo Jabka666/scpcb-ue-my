@@ -3333,6 +3333,7 @@ Repeat
 		DrawQuickLoading()
 		
 		UpdateAchievementMsg()
+		RenderAchievementMsg()
 	End If
 	
 	If BorderlessWindowed Then
@@ -12129,5 +12130,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#11C4#1405#1BEB
+;~B#11C5#1406#1BEC
 ;~C#Blitz3D
