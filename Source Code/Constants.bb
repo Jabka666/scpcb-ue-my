@@ -98,7 +98,7 @@ Const HARD% = 2
 Const MAXACHIEVEMENTS% = 37
 
 Const Achv008% = 0, Achv012% = 1, Achv035% = 2, Achv049% = 3, Achv055% = 4,  Achv079% = 5, Achv096% = 6, Achv106% = 7
-Const Achv148% = 8, Achv205% = 9, Achv294% = 10, Achv372% = 11, Achv420% = 12, Achv427% = 13, Achv500% = 14, Achv513% = 15
+Const Achv148% = 8, Achv205% = 9, Achv294% = 10, Achv372% = 11, Achv420J% = 12, Achv427% = 13, Achv500% = 14, Achv513% = 15
 Const Achv714% = 16, Achv789% = 17, Achv860% = 18, Achv895% = 19, Achv914% = 20, Achv939% = 21, Achv966% = 22, Achv970% = 23
 Const Achv1025% = 24, Achv1048% = 25, Achv1123% = 26, Achv1162% = 27, Achv1499% = 28
 

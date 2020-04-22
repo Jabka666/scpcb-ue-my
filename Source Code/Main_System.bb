@@ -6485,7 +6485,7 @@ Function DrawGUI()
 							Msg = Chr(34) + "MAN DATS SUM GOOD ASS SHIT" + Chr(34)
 							Injuries = Max(Injuries - 0.5, 0.0)
 							BlurTimer = 500.0
-							GiveAchievement(Achv420)
+							GiveAchievement(Achv420J)
 							PlaySound_Strict(LoadTempSound("SFX\Music\420J.ogg"))
 						EndIf
 						MsgTimer = 70.0 * 5.0
