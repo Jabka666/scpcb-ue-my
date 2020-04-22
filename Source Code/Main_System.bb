@@ -1635,6 +1635,7 @@ Music(22) = "914"
 Music(23) = "Ending"
 Music(24) = "Credits"
 Music(25) = "SaveMeFrom"
+Music(26) = "Room106"
 
 Global MusicVolume# = GetINIFloat(OptionFile, "audio", "music volume")
 
@@ -12127,5 +12128,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#11C1#1402#1BE9
+;~B#11C2#1403#1BEA
 ;~C#Blitz3D

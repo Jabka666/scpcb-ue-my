@@ -5893,9 +5893,7 @@ Function UpdateEvents()
 				
 				If PlayerRoom = e\room And e\room\NPC[0]<>Null Then
 					
-					;ShowEntity e\room\NPC[0]\obj
-					
-					ShouldPlay = 66
+					ShouldPlay = 26
 					
 					e\room\NPC[0]\State=6
 					If e\room\NPC[0]\Idle = 0 Then
@@ -10038,5 +10036,5 @@ End Function
 
 ;~IDEal Editor Parameters:
 ;~F#A10
-;~B#10D3#1D51
+;~B#10D3#1D4F
 ;~C#Blitz3D
