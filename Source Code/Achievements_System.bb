@@ -18,6 +18,7 @@ For i = 0 To MAXACHIEVEMENTS - 1
 	
 	AchvIMG(i) = LoadImage_Strict("GFX\menu\Achievements\" + Image + ".jpg")
 	AchvIMG(i) = ResizeImage2(AchvIMG(i), ImageWidth(AchvIMG(i)) * GraphicHeight / 768.0, ImageHeight(AchvIMG(i)) * GraphicHeight / 768.0)
+	BufferDirty(ImageBuffer(AchvIMG(i)))
 Next
 
 Global AchvLocked% = LoadImage_Strict("GFX\menu\Achievements\achvlocked.jpg")

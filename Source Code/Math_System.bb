@@ -27,7 +27,7 @@ Function CurveValue#(Number#, Old#, Smooth#)
 End Function
 
 Function CurveAngle#(Val#, Old#, Smooth#)
-	If FPSfactor = 0 Then Return(Old)
+	If FPSfactor = 0.0 Then Return(Old)
 	
 	Local Diff# = WrapAngle(Val) - WrapAngle(Old)
 	

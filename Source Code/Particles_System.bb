@@ -14,7 +14,7 @@ Type Particles
 	Field lifetime#
 End Type 
 	
-Function CreateParticle.Particles(x#, y#, z#, image%, size#, gravity# = 1.0, lifetime% = 200)
+Function CreateParticle.Particles(x#, y#, z#, image%, size#, gravity# = 1.0, lifetime# = 200)
 	Local p.Particles = New Particles
 	p\lifetime = lifetime
 	
@@ -283,7 +283,6 @@ End Function
 
 
 
-
 ;~IDEal Editor Parameters:
-;~F#4#10#2E#4A#54#66#A0#C5#D0#E0#112
+;~F#4#10#2E#4A#54#66#C5#D0
 ;~C#Blitz3D

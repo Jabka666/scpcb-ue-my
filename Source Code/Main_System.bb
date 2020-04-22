@@ -4319,12 +4319,11 @@ Function MouseLook()
 	CurrCameraZoom = Max(CurrCameraZoom - FPSfactor, 0.0)
 	
 	If KillTimer >= 0.0 And FallTimer >= 0.0 Then
-		HeadDropSpeed = 0
+		HeadDropSpeed = 0.0
 		
 		; ~ Fixing the black screen bug with some bubblegum code 
 		Local Zero# = 0.0
 		Local Nan1# = 0.0 / Zero
-		
 		If Int(EntityX(Collider)) = Int(Nan1) Then
 			PositionEntity(Collider, EntityX(Camera, True), EntityY(Camera, True) - 0.5, EntityZ(Camera, True), True)
 		EndIf
@@ -4357,11 +4356,11 @@ Function MouseLook()
 		Local The_Yaw# = Mouse_X_Speed_1 * Mouselook_X_Inc / (1.0 + WearingVest)
 		Local The_Pitch# = Mouse_Y_Speed_1 * Mouselook_Y_Inc / (1.0 + WearingVest)
 		
-		TurnEntity(Collider, 0.0, -The_Yaw, 0.0) ; ~ Turn the user on the Y (Yaw) axis.
-		User_Camera_Pitch = User_Camera_Pitch + The_Pitch
-		; ~ Limit the user's camera To within 180 degrees of pitch rotation. EntityPitch() returns useless values so we need to use a variable to keep track of the camera pitch.
+		TurnEntity(Collider, 0.0, -The_Yaw, 0.0) ; ~ Turn the user on the Y (yaw) axis.
+		User_Camera_Pitch = User_Camera_Pitch# + The_Pitch
+		; ~ Limit the user's camera to within 180 degrees of pitch rotation. Returns useless values so we need to use a variable to keep track of the camera pitch.
 		If User_Camera_Pitch > 70.0 Then User_Camera_Pitch = 70.0
-		If User_Camera_Pitch < - 70.0 Then User_Camera_Pitch = -70.0
+		If User_Camera_Pitch < -70.0 Then User_Camera_Pitch = -70.0
 		
 		RotateEntity(Camera, WrapAngle(User_Camera_Pitch + Rnd(-CameraShake, CameraShake)), WrapAngle(EntityYaw(Collider) + Rnd(-CameraShake, CameraShake)), Roll) ; ~ Pitch the user's camera up and down.
 		
@@ -4372,7 +4371,7 @@ Function MouseLook()
 		EndIf
 	Else
 		HideEntity(Collider)
-		PositionEntity Camera, EntityX(Head), EntityY(Head), EntityZ(Head)
+		PositionEntity(Camera, EntityX(Head), EntityY(Head), EntityZ(Head))
 		
 		Local CollidedFloor% = False
 		
@@ -4392,6 +4391,7 @@ Function MouseLook()
 				RotateEntity(Head, CurveAngle(90.0, EntityPitch(Head), 20.0), EntityYaw(Head), EntityRoll(Head))
 				RotateEntity(Camera, CurveAngle(EntityPitch(Head) + 40.0, EntityPitch(Camera), 40.0), EntityYaw(Camera), EntityRoll(Camera))
 			EndIf
+			
 			HeadDropSpeed = HeadDropSpeed - 0.002 * FPSfactor
 		EndIf
 		
@@ -4414,7 +4414,7 @@ Function MouseLook()
 				MoveEntity(Pvt, 0.0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
 			End If
 			
-			Local p.Particles = CreateParticle(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 2, 0.002, 0.0, 300)
+			Local p.Particles = CreateParticle(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 2, 0.002, 0.0, 300.0)
 			
 			p\Speed = 0.001 : p\SizeChange = -0.00001
 			RotateEntity(p\Pvt, Rnd(-20.0, 20.0), Rnd(360.0), 0.0)
@@ -4427,8 +4427,8 @@ Function MouseLook()
 		MoveMouse(Viewport_Center_X, Viewport_Center_Y)
 	EndIf
 	
-	If WearingGasMask Or WearingHazmat Or Wearing1499 Then
-		If Wearing714 = False Then
+	If WearingGasMask > 0 Or Wearing1499 > 0 Or WearingHazmat > 0 Then
+		If Wearing714 = 0 Then
 			If WearingGasMask = 2 Or Wearing1499 = 2 Or WearingHazmat = 2 Then
 				Stamina = Min(100.0, Stamina + (100.0 - Stamina) * 0.01 * FPSfactor)
 			EndIf
@@ -4441,7 +4441,7 @@ Function MouseLook()
 		HideEntity(GasMaskOverlay)
 	End If
 	
-	If (Not WearingNightVision = 0) Then
+	If WearingNightVision > 0 Then
 		ShowEntity(NVOverlay)
 		If WearingNightVision = 2 Then
 			EntityColor(NVOverlay, 0, 100, 255)
@@ -4497,9 +4497,8 @@ Function MouseLook()
 					Stamina = Stamina - FPSfactor * 0.1
 					;[End Block]
 				Case 3 ; ~ Appendicitis
-					;[Block]
 					; ~ 0.035 / sec = 2.1 / min
-					If (Not I_427\Using And I_427\Timer < 70 * 360.0) Then
+					If I_427\Using = 0 And I_427\Timer < 70 * 360.0 Then
 						SCP1025state[i] = SCP1025state[i] + FPSfactor * 0.0005
 					EndIf
 					If SCP1025state[i] > 20.0 Then
@@ -4524,11 +4523,12 @@ Function MouseLook()
 					;[End Block]
 				Case 5 ; ~ Cardiac arrest
 					;[Block]
-					If (Not I_427\Using And I_427\Timer < 70 * 360.0) Then
+					If I_427\Using = 0 And I_427\Timer < 70 * 360.0 Then
 						SCP1025state[i] = SCP1025state[i] + FPSfactor * 0.35
 					EndIf
+					
 					; ~ 35 / sec
-					If SCP1025state[i] > 110 Then
+					If SCP1025state[i] > 110.0 Then
 						HeartBeatRate = 0.0
 						BlurTimer = Max(BlurTimer, 500.0)
 						If SCP1025state[i] > 140.0 Then 
@@ -12128,5 +12128,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#11C2#1403#1BEA
+;~B#10D8#1403#1BEA
 ;~C#Blitz3D
