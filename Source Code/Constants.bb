@@ -1,3 +1,11 @@
+; ~ [OPTIONS]
+
+Const OptionFile$ = "options.ini"
+
+; ~ [VERSION]
+
+Const VersionNumber$ = "1.3.11"
+
 ; ~ [NPCs]
 
 Const NPCtype008% = 1, NPCtype049% = 2, NPCtype066% = 3, NPCtype096% = 4, NPCtype173% = 5
@@ -31,7 +39,7 @@ Const ROOM4% = 5
 
 Const ZONEAMOUNT% = 3
 
-Const GridSZ% = 19 ; ~ Same size as the main map itself (better for the map creator)
+Const GridSZ% = 19 ; ~ Same size as the main map itself (better for the map creator). What means "sz? - Jabka
 
 ; ~ [COLLISIONS]
 
@@ -49,7 +57,7 @@ Const NAN# = (-1.0) ^ (0.5)
 
 ; ~ [TEXTURES]
 
-Const MaxDTextures% = 8
+Const MaxDTextures% = 10
 
 ; ~ [ITEMS]
 

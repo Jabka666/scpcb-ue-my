@@ -12,8 +12,8 @@
 ; ~ Added zero checks since blitz load functions return zero sometimes even if the filetype exists
 
 Function LoadImage_Strict(File$)
-	If FileType(File$) <> 1 Then RuntimeError("Image " + Chr(34) + File$ + Chr(34) + " missing. ")
-	Tmp = LoadImage(File$)
+	If FileType(File) <> 1 Then RuntimeError("Image " + Chr(34) + File + Chr(34) + " missing. ")
+	Tmp = LoadImage(File)
 	Return(Tmp)
 	; ~ Attempt to load the image again
 	If Tmp = 0 Then Tmp2 = LoadImage(File)
@@ -32,6 +32,7 @@ Function AutoReleaseSounds()
 	
 	For snd.Sound = Each Sound
 		Local TryRelease% = True
+		Local i%
 		
 		For i = 0 To 31
 			If snd\Channels[i] <> 0 Then
@@ -56,8 +57,11 @@ End Function
 
 Function PlaySound_Strict%(SNDHandle%)
 	Local snd.Sound = Object.Sound(SNDHandle)
+	
 	If snd <> Null Then
-		Local shouldPlay% = True
+		Local ShouldPlay% = True
+		Local i%
+		
 		For i = 0 To 31
 			If snd\Channels[i] <> 0 Then
 				If ChannelPlaying(snd\Channels[i]) = False Then
@@ -148,9 +152,9 @@ Type Stream
 	Field CHN%
 End Type
 
-Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode = Mode)
-	If FileType(File$) <> 1
-		CreateConsoleMsg("Sound " + Chr(34) + File$ + Chr(34) + " not found.")
+Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode% = Mode)
+	If FileType(File) <> 1
+		CreateConsoleMsg("Sound " + Chr(34) + File + Chr(34) + " not found.")
 		If ConsoleOpening
 			ConsoleOpen = True
 		EndIf
@@ -158,10 +162,11 @@ Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode = Mode)
 	EndIf
 	
 	Local st.Stream = New Stream
-	st\SFX = FSOUND_Stream_Open(File$, CustomMode, 0)
+	
+	st\SFX = FSOUND_Stream_Open(File, CustomMode, 0)
 	
 	If st\SFX = 0
-		CreateConsoleMsg("Failed to stream Sound (returned 0): " + Chr(34) + File$ + Chr(34))
+		CreateConsoleMsg("Failed to stream Sound (returned 0): " + Chr(34) + File + Chr(34))
 		If ConsoleOpening
 			ConsoleOpen = True
 		EndIf
@@ -171,7 +176,7 @@ Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode = Mode)
 	st\CHN = FSOUND_Stream_Play(FreeChannel, st\SFX)
 	
 	If st\CHN = -1
-		CreateConsoleMsg("Failed to stream Sound (returned -1): " + Chr(34) + File$ + Chr(34))
+		CreateConsoleMsg("Failed to stream Sound (returned -1): " + Chr(34) + File + Chr(34))
 		If ConsoleOpening
 			ConsoleOpen = True
 		EndIf
@@ -223,11 +228,11 @@ Function SetStreamPaused_Strict(StreamHandle%, Paused%)
 	Local st.Stream = Object.Stream(StreamHandle)
 	
 	If st = Null
-		CreateConsoleMsg("Failed to pause/unpause stream Sound: Unknown Stream")
+		CreateConsoleMsg("Failed to pause / unpause stream Sound: Unknown Stream")
 		Return
 	EndIf
 	If st\CHN = 0 Or st\CHN = -1
-		CreateConsoleMsg("Failed to pause/unpause stream Sound: Return value " + st\CHN)
+		CreateConsoleMsg("Failed to pause / unpause stream Sound: Return value " + st\CHN)
 		Return
 	EndIf
 	FSOUND_SetPaused(st\CHN, Paused)
@@ -265,21 +270,21 @@ Function SetStreamPan_Strict(StreamHandle%, Pan#)
 	
 	Local FMod_Pan% = 0
 	
-	FMod_Pan% = Int((255.0 / 2.0) + ((255.0 / 2.0) * Pan#))
-	FSOUND_SetPan(st\CHN, FMod_Pan%)
+	FMod_Pan = Int((255.0 / 2.0) + ((255.0 / 2.0) * Pan#))
+	FSOUND_SetPan(st\CHN, FMod_Pan)
 End Function
 
-Function UpdateStreamSoundOrigin(StreamHandle%, Cam%, Entity%, Range# = 10, Volume# = 1.0)
-	Range# = Max(Range, 1.0)
+Function UpdateStreamSoundOrigin(StreamHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0)
+	Range = Max(Range, 1.0)
 	
 	If Volume > 0 Then
-		Local dist# = EntityDistance(Cam, Entity) / Range#
+		Local Dist# = EntityDistance(Cam, Entity) / Range
 		
-		If 1 - dist# > 0 And 1 - dist# < 1 Then
-			Local panvalue# = Sin(-DeltaYaw(Cam, Entity))
+		If 1.0 - Dist > 0.0 And 1.0 - Dist# < 1.0 Then
+			Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 			
-			SetStreamVolume_Strict(StreamHandle, Volume# * (1 - dist#) * SFXVolume#)
-			SetStreamPan_Strict(StreamHandle, panvalue)
+			SetStreamVolume_Strict(StreamHandle, Volume# * (1 - Dist#) * SFXVolume#)
+			SetStreamPan_Strict(StreamHandle, PanValue)
 		Else
 			SetStreamVolume_Strict(StreamHandle, 0.0)
 		EndIf
@@ -291,38 +296,38 @@ Function UpdateStreamSoundOrigin(StreamHandle%, Cam%, Entity%, Range# = 10, Volu
 End Function
 
 Function LoadMesh_Strict(File$, Parent% = 0)
-	If FileType(File$) <> 1 Then RuntimeError("3D Mesh " + File$ + " not found.")
-	Tmp = LoadMesh(File$, Parent%)
-	If Tmp = 0 Then RuntimeError("Failed to load 3D Mesh: " + File$)
+	If FileType(File) <> 1 Then RuntimeError("3D Mesh " + File + " not found.")
+	Tmp = LoadMesh(File, Parent)
+	If Tmp = 0 Then RuntimeError("Failed to load 3D Mesh: " + File)
 	Return(Tmp) 
 End Function   
 
 Function LoadAnimMesh_Strict(File$, Parent% = 0)
-	If FileType(File$) <> 1 Then RuntimeError("3D Animated Mesh " + File$ + " not found.")
-	Tmp = LoadAnimMesh(File$, Parent%)
-	If Tmp = 0 Then RuntimeError("Failed to load 3D Animated Mesh: " + File$)
+	If FileType(File) <> 1 Then RuntimeError("3D Animated Mesh " + File + " not found.")
+	Tmp = LoadAnimMesh(File, Parent)
+	If Tmp = 0 Then RuntimeError("Failed to load 3D Animated Mesh: " + File)
 	Return(Tmp)
 End Function   
 
 ; ~ Don't use in LoadRMesh, as Reg does this manually there. If you wanna fuck around with the logic in that function, be my guest 
 Function LoadTexture_Strict(File$, Flags% = 1)
-	If FileType(File$) <> 1 Then RuntimeError("Texture " + File$ + " not found.")
-	Tmp = LoadTexture(File$, Flags% + (256 * (EnableVRam = True)))
-	If Tmp = 0 Then RuntimeError("Failed to load Texture: " + File$)
+	If FileType(File) <> 1 Then RuntimeError("Texture " + File + " not found.")
+	Tmp = LoadTexture(File, Flags + (256 * (EnableVRam = True)))
+	If Tmp = 0 Then RuntimeError("Failed to load Texture: " + File)
 	Return(Tmp)
 End Function   
 
 Function LoadBrush_Strict(File$, Flags%, u# = 1.0, v# = 1.0)
-	If FileType(File$) <> 1 Then RuntimeError("Brush Texture " + File$ + "not found.")
-	Tmp = LoadBrush(File$, Flags%, u#, v#)
-	If Tmp = 0 Then RuntimeError("Failed to load Brush: " + File$)
+	If FileType(File) <> 1 Then RuntimeError("Brush Texture " + File + "not found.")
+	Tmp = LoadBrush(File, Flags, u, v)
+	If Tmp = 0 Then RuntimeError("Failed to load Brush: " + File)
 	Return(Tmp)
 End Function 
 
 Function LoadFont_Strict(File$ = "Tahoma", Height% = 13, Bold% = 0, Italic% = 0, UnderLine% = 0)
-	If FileType(File$) <> 1 Then RuntimeError("Font " + File$ + " not found.")
-	Tmp = LoadFont(File$, Height%, Bold%, Italic%, UnderLine%)  
-	If Tmp = 0 Then RuntimeError("Failed to load Font: " + File$)
+	If FileType(File) <> 1 Then RuntimeError("Font " + File + " not found.")
+	Tmp = LoadFont(File, Height, Bold, Italic, UnderLine)  
+	If Tmp = 0 Then RuntimeError("Failed to load Font: " + File)
 	Return(Tmp)
 End Function
 

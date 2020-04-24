@@ -258,7 +258,7 @@ Function InitItemTemplates()
 	it = CreateItemTemplate("SCP-427", "scp427", "GFX\items\427.b3d", "GFX\items\INVscp427.jpg", "", 0.001, 3)
 	
 	it = CreateItemTemplate("SCP-500-01", "scp500", "GFX\items\pill.b3d", "GFX\items\INVpill.jpg", "", 0.0001, 2)
-	EntityColor(it\OBJ, 255, 0, 0)
+	EntityColor(it\OBJ, 255.0, 0.0, 0.0)
 	
 	it = CreateItemTemplate("SCP-513", "scp513", "GFX\items\513.x", "GFX\items\INV513.jpg", "", 0.1, 2)
 	
@@ -283,7 +283,7 @@ Function InitItemTemplates()
 	it = CreateItemTemplate("Some SCP-420-J", "420", "GFX\items\420.x", "GFX\items\INV420.jpg", "", 0.0005, 2)
 	
 	it = CreateItemTemplate("Upgraded pill", "scp500death", "GFX\items\pill.b3d", "GFX\items\INVpill.jpg", "", 0.0001, 2)
-	EntityColor(it\OBJ, 255, 0, 0)
+	EntityColor(it\OBJ, 255.0, 0.0, 0.0)
 	
 	;[MISC ITEMS]
 	
@@ -332,7 +332,7 @@ Function InitItemTemplates()
 	it = CreateItemTemplate("Night Vision Goggles", "supernv", "GFX\items\NVG.b3d", "GFX\items\INVsupernightvision.jpg", "", 0.02, 2)
 	
 	it = CreateItemTemplate("Pill", "pill", "GFX\items\pill.b3d", "GFX\items\INVpillwhite.jpg", "", 0.0001, 2)
-	EntityColor(it\OBJ, 255, 255, 255)
+	EntityColor(it\OBJ, 255.0, 255.0, 255.0)
 	
 	it = CreateItemTemplate("Radio Transceiver", "radio", "GFX\items\radio.x", "GFX\items\INVradio.jpg", "GFX\items\radioHUD.png", 1.0, 1)
 	
@@ -393,7 +393,7 @@ Type Items
 	Field Collider%, Model%
 	Field itemtemplate.ItemTemplates
 	Field DropSpeed#
-	Field R%, G%, B%, a#
+	Field R%, G%, B%, A#
 	Field Level%
 	Field SoundCHN%
 	Field Dist#, DistTimer#
@@ -407,7 +407,7 @@ Type Items
 	Field InvSlots%
 End Type 
 
-Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, a# = 1.0, InvSlots% = 0)
+Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, A# = 1.0, InvSlots% = 0)
 	CatchErrors("Uncaught (CreateItem)")
 	
 	Local i.Items = New Items
@@ -445,7 +445,7 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 		i\R = R
 		i\G = G
 		i\B = B
-		i\a = a
+		i\A = A
 		
 		Local Liquid% = CopyEntity(LiquidOBJ)
 		
@@ -454,11 +454,11 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 		EntityParent(Liquid, i\Model)
 		EntityColor(Liquid, R, G, B)
 		
-		If a < 0 Then 
+		If A < 0 Then 
 			EntityFX(Liquid, 1)
-			EntityAlpha(Liquid, Abs(a))
+			EntityAlpha(Liquid, Abs(A))
 		Else
-			EntityAlpha(Liquid, Abs(a))
+			EntityAlpha(Liquid, Abs(A))
 		EndIf
 		EntityShininess(Liquid, 1.0)
 	EndIf
@@ -926,7 +926,7 @@ Function Update294()
 		
 		If VomitTimer > -5.0 Then
 			If (MilliSecs2() Mod 400) < 50 Then CameraShake = 4.0 
-			Mouse_x_Speed_1 = 0.0
+			Mouse_X_Speed_1 = 0.0
 			Playable = False
 		Else
 			Playable = True

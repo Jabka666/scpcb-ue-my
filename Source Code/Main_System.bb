@@ -14,8 +14,6 @@ Include "Source Code\StrictLoads.bb"
 Include "Source Code\Fullscreen_Window_Fix.bb"
 Include "Source Code\KeyName.bb"
 
-Global OptionFile$ = "options.ini"
-
 Include "Source Code\DevilParticleSystem.bb"
 
 Global ErrorFile$ = "error_log_"
@@ -29,9 +27,6 @@ ErrorFile = ErrorFile + Str(ErrorFileInd) + ".txt"
 
 Global Font1%, Font2%, Font3%, Font4%, Font5%
 Global ConsoleFont%
-
-Global VersionNumber$ = "1.3.11"
-Global CompatibleNumber$ = "1.3.11" ; ~ Only change this if the version given isn't working with the current build version - ENDSHN
 
 Global MenuWhite%, MenuBlack%
 Global ButtonSFX%
@@ -60,8 +55,8 @@ Global Fresize_Cam%
 
 Global ShowFPS = GetINIInt(OptionFile, "options", "show FPS")
 
-Global WireframeState
-Global HalloweenTex
+Global WireframeState%
+Global HalloweenTex%
 
 Global TotalGFXModes% = CountGfxModes3D(), GFXModes%
 Dim GfxModeWidths%(TotalGFXModes), GfxModeHeights%(TotalGFXModes)
@@ -272,7 +267,7 @@ Global Stamina#, StaminaEffect# = 1.0, StaminaEffectTimer#
 
 Global CameraShakeTimer#, Vomit%, VomitTimer#, Regurgitate%
 
-Global SCP1025state#[6]
+Global SCP1025State#[6]
 
 Global HeartBeatRate#, HeartBeatTimer#, HeartBeatVolume#
 
@@ -298,7 +293,18 @@ Global GrabbedEntity%
 Global InvertMouse% = GetINIInt(OptionFile, "options", "invert mouse y")
 Global MouseHit1%, MouseDown1%, MouseHit2%, DoubleClick%, LastMouseHit1%, MouseUp1%
 
-Global GodMode%, NoClip%, NoClipSpeed# = 2.0
+Global NoClipSpeed# = 2.0
+
+Type Cheats
+	Field GodMode%
+	Field NoBlink%
+	Field NoTarget%
+	Field NoClip%
+	Field InfiniteStamina%
+	Field Cheats%
+End Type
+
+Global chs.Cheats = New Cheats
 
 Global CoffinDistance# = 100.0
 
@@ -326,7 +332,7 @@ Dim DrawArrowIcon%(4)
 
 Include "Source Code\Difficulty.bb"
 
-Global MTFtimer#, MTFrooms.Rooms[10], MTFroomState%[10]
+Global MTFTimer#, MTFRooms.Rooms[10], MTFRoomState%[10]
 
 Dim RadioState#(10)
 Dim RadioState3%(10)
@@ -339,7 +345,6 @@ Global PlayTime%
 Global ConsoleFlush%
 Global ConsoleFlushSnd% = 0, ConsoleMusFlush% = 0, ConsoleMusPlay% = 0
 
-Global InfiniteStamina% = False
 Global NVBlink%
 Global IsNVGBlinking% = False
 
@@ -566,14 +571,16 @@ Function UpdateConsole()
 							;[Block]
 							CreateConsoleMsg("LIST OF COMMANDS - PAGE 1 / 3")
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("- asd")
 							CreateConsoleMsg("- status")
 							CreateConsoleMsg("- camerapick")
 							CreateConsoleMsg("- ending")
-							CreateConsoleMsg("- noclipspeed")
+							CreateConsoleMsg("- notarget")
+							CreateConsoleMsg("- godmode")
 							CreateConsoleMsg("- noclip")
-							CreateConsoleMsg("- injure [value]")
-							CreateConsoleMsg("- infect [value]")
+							CreateConsoleMsg("- noclipspeed")
+							CreateConsoleMsg("- infinitestamina")
+							CreateConsoleMsg("- noblink")
+							CreateConsoleMsg("- cheats")
 							CreateConsoleMsg("- heal")
 							CreateConsoleMsg("- teleport [room name]")
 							CreateConsoleMsg("- spawnitem [item name]")
@@ -600,31 +607,26 @@ Function UpdateConsole()
 							CreateConsoleMsg("- halloween")
 							CreateConsoleMsg("- sanic")
 							CreateConsoleMsg("- scp-420-j")
-							CreateConsoleMsg("- godmode")
 							CreateConsoleMsg("- revive")
-							CreateConsoleMsg("- noclip")
-							CreateConsoleMsg("- showfps")
 							CreateConsoleMsg("- 096state")
 							CreateConsoleMsg("- debughud")
-							CreateConsoleMsg("- camerafog [near] [far]")
-							CreateConsoleMsg("- gamma [value]")
-							CreateConsoleMsg("- infinitestamina")
 							CreateConsoleMsg("******************************")
+							CreateConsoleMsg("Use " + Chr(34) + "help 3 / 3" + Chr(34) + " to find more commands.")
 							CreateConsoleMsg("Use " + Chr(34) + "help [command name]" + Chr(34) + " to get more information about a command.")
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "3"
 							;[Block]
-							CreateConsoleMsg("- playmusic [clip + .wav / .ogg]")
-							CreateConsoleMsg("- notarget")
-							CreateConsoleMsg("- unlockexits")
-							;[End Block]
-						Case "asd"
-							;[Block]
-							CreateConsoleMsg("HELP - asd")
+							CreateConsoleMsg("LIST OF COMMANDS - PAGE 3 / 3")
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Actives godmode, noclip, wireframe and")
-							CreateConsoleMsg("sets fog distance to 20 near, 30 far")
+							CreateConsoleMsg("- playmusic [clip + .wav / .ogg]")
+							CreateConsoleMsg("- unlockexits")
+							CreateConsoleMsg("- camerafog [near] [far]")
+							CreateConsoleMsg("- gamma [value]")
+							CreateConsoleMsg("- injure [value]")
+							CreateConsoleMsg("- infect [value]")
+							CreateConsoleMsg("******************************")
+							CreateConsoleMsg("Use " + Chr(34) + "help [command name]" + Chr(34) + " to get more information about a command.")
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "camerafog"
@@ -651,22 +653,54 @@ Function UpdateConsole()
 							;[Block]
 							CreateConsoleMsg("HELP - noclip")
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Toggles noclip, unless a valid parameter")
+							CreateConsoleMsg("Toggles NoClip, unless a valid parameter")
 							CreateConsoleMsg("is specified (on / off).")
 							CreateConsoleMsg("Allows the camera to move in any direction while")
-							CreateConsoleMsg("bypassing collision.")
+							CreateConsoleMsg("by passing collision.")
+							CreateConsoleMsg("******************************")
+							;[End Block]
+						Case "noblink", "nb"
+							;[Block]
+							CreateConsoleMsg("HELP - noblonk")
+							CreateConsoleMsg("******************************")
+							CreateConsoleMsg("Toggles NoBlink, unless a valid parameter")
+							CreateConsoleMsg("is specified (on / off).")
+							CreateConsoleMsg("Removes player's blinking.")
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "godmode", "god"
 							;[Block]
 							CreateConsoleMsg("HELP - godmode")
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Toggles godmode, unless a valid parameter")
+							CreateConsoleMsg("Toggles GodMode, unless a valid parameter")
 							CreateConsoleMsg("is specified (on / off).")
 							CreateConsoleMsg("Prevents player death under normal circumstances.")
 							CreateConsoleMsg("******************************")
 							;[End Block]
-						Case "wireframe"
+						Case "infinitestamina", "is"
+							;[Block]
+							CreateConsoleMsg("HELP - infinitestamina")
+							CreateConsoleMsg("******************************")
+							CreateConsoleMsg("Toggles InfiniteStamina, unless a valid parameter")
+							CreateConsoleMsg("is specified (on / off).")
+							CreateConsoleMsg("Increases player's stamina to infinite value.")
+							CreateConsoleMsg("******************************")
+						Case "notarget", "nt"
+							;[Block]
+							CreateConsoleMsg("HELP - notarget")
+							CreateConsoleMsg("******************************")
+							CreateConsoleMsg("Toggles NoTarget, unless a valid parameter")
+							CreateConsoleMsg("is specified (on / off).")
+							CreateConsoleMsg("Makes player to be invisible for NPCs.")
+							CreateConsoleMsg("******************************")
+							;[End Block]
+						Case "cheats" 
+							CreateConsoleMsg("HELP - cheats")
+							CreateConsoleMsg("******************************")
+							CreateConsoleMsg("Actives GodMode, NoClip, NoTarget, InfiniteStamina and NoBlink")
+							CreateConsoleMsg("is specified (on / off).")
+							CreateConsoleMsg("******************************")
+						Case "wireframe", "wf"
 							;[Block]
 							CreateConsoleMsg("HELP - wireframe")
 							CreateConsoleMsg("******************************")
@@ -703,8 +737,6 @@ Function UpdateConsole()
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("Resets the player's death timer after the dying")
 							CreateConsoleMsg("animation triggers.")
-							CreateConsoleMsg("Does not affect injury, blood loss")
-							CreateConsoleMsg("or 008 infection values.")
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "teleport"
@@ -738,9 +770,9 @@ Function UpdateConsole()
 							CreateConsoleMsg("Prints player, camera, and room information.")
 							CreateConsoleMsg("******************************")
 							;[End Block]
-						Case "weed", "scp-420-j", "420"
+						Case "weed", "scp-420-j", "420j", "scp420-j", "scp-420j"
 							;[Block]
-							CreateConsoleMsg("HELP - 420")
+							CreateConsoleMsg("HELP - weed")
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("Generates dank memes.")
 							CreateConsoleMsg("******************************")
@@ -758,15 +790,6 @@ Function UpdateConsole()
 							CreateConsoleMsg("There is no help available for that command.", 255, 150, 0)
 							;[End Block]
 					End Select
-					;[End Block]
-				Case "asd"
-					;[Block]
-					WireFrame(1)
-					WireframeState = 1
-					GodMode = 1
-					NoClip = 1
-					CameraFogNear = 15.0
-					CameraFogFar = 20.0
 					;[End Block]
 				Case "status"
 					;[Block]
@@ -862,7 +885,7 @@ Function UpdateConsole()
 					Stamina = 100.0
 					
 					For i = 0 To 5
-						SCP1025state[i] = 0
+						SCP1025State[i] = 0
 					Next
 					;[End Block]
 				Case "teleport"
@@ -908,7 +931,7 @@ Function UpdateConsole()
 					
 					If Temp = False Then CreateConsoleMsg("Item not found.", 255, 150, 0)
 					;[End Block]
-				Case "wireframe"
+				Case "wireframe", "wf"
 					;[Block]
 					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 					
@@ -933,7 +956,7 @@ Function UpdateConsole()
 						CreateConsoleMsg("WIREFRAME OFF")	
 					EndIf
 					
-					WireFrame WireframeState
+					WireFrame(WireframeState)
 					;[End Block]
 				Case "173speed"
 					;[Block]
@@ -1044,18 +1067,18 @@ Function UpdateConsole()
 					Select StrTemp
 						Case "on", "1", "true"
 							;[Block]
-							GodMode = True		
+							chs\GodMode = True		
 							;[End Block]
 						Case "off", "0", "false"
 							;[Block]
-							GodMode = False
+							chs\GodMode = False
 							;[End Block]
 						Default
 							;[Block]
-							GodMode = Not GodMode
+							chs\GodMode = Not chs\GodMode
 							;[End Block]
 					End Select	
-					If GodMode Then
+					If chs\GodMode Then
 						CreateConsoleMsg("GODMODE ON")
 					Else
 						CreateConsoleMsg("GODMODE OFF")	
@@ -1078,8 +1101,20 @@ Function UpdateConsole()
 					FallTimer = 0.0
 					MenuOpen = False
 					
-					GodMode = 0.0
-					NoClip = 0.0
+					chs\InfiniteStamina = False
+					chs\NoClip = False
+					chs\NoBlink = False
+					chs\NoTarget = False
+					chs\Cheats = False
+					
+					; ~ If death by SCP-173, enable GodMode, prevent instant death again - Salvage
+					If Curr173\Idle Then
+						CreateConsoleMsg("Death by SCP-173 causes GodMode to be enabled!")
+						chs\GodMode = True
+						Curr173\Idle = False
+					Else
+						chs\GodMode = False
+					EndIf
 					
 					ShowEntity(Collider)
 					
@@ -1093,26 +1128,28 @@ Function UpdateConsole()
 					Select StrTemp
 						Case "on", "1", "true"
 							;[Block]
-							NoClip = True
+							chs\NoClip = True
 							Playable = True
+							UnableToMove = False
 							;[End Block]
 						Case "off", "0", "false"
 							;[Block]
-							NoClip = False	
+							chs\NoClip = False	
 							RotateEntity(Collider, 0.0, EntityYaw(Collider), 0.0)
 							;[End Block]
 						Default
 							;[Block]
-							NoClip = Not NoClip
-							If NoClip = False Then		
+							chs\NoClip = Not chs\NoClip
+							If chs\NoClip = False Then		
 								RotateEntity(Collider, 0.0, EntityYaw(Collider), 0.0)
 							Else
 								Playable = True
+								UnableToMove = False
 							EndIf
 							;[End Block]
 					End Select
 					
-					If NoClip Then
+					If chs\NoClip Then
 						CreateConsoleMsg("NOCLIP ON")
 					Else
 						CreateConsoleMsg("NOCLIP OFF")
@@ -1120,10 +1157,64 @@ Function UpdateConsole()
 					
 					DropSpeed = 0.0
 					;[End Block]
-				Case "showfps"
+				Case "noblink", "nb"
 					;[Block]
-					ShowFPS = Not ShowFPS
-					CreateConsoleMsg("ShowFPS: " + Str(ShowFPS))
+					StrTemp$ = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+					
+					Select StrTemp
+						Case "on", "1", "true"
+							;[Block]
+							chs\NoBlink = True		
+							;[End Block]
+						Case "off", "0", "false"
+							;[Block]
+							chs\NoBlink = False
+							;[End Block]
+						Default
+							;[Block]
+							chs\NoBlink = Not chs\NoBlink
+							;[End Block]
+					End Select	
+					If chs\NoBlink Then
+						CreateConsoleMsg("NOBLINK ON")
+					Else
+						CreateConsoleMsg("NOBLINK OFF")	
+					EndIf
+					;[End Block]
+				Case "cheats" 
+					;[Block]
+					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+					
+					Select StrTemp
+						Case "on", "1", "true"
+							;[Block]
+							chs\Cheats = True	
+							;[End Block]
+						Case "off", "0", "false"
+							;[Block]
+	                        chs\Cheats = False
+							;[End Block]
+						Default
+							;[Block]
+							chs\Cheats = Not chs\Cheats
+							;[End Block]
+					End Select	
+					
+					If chs\Cheats = True Then
+                        chs\GodMode = True
+                        chs\NoTarget = True
+                        chs\NoClip = True
+                        chs\InfiniteStamina = True
+                        chs\NoBlink = True
+						CreateConsoleMsg("CHEATS ON")
+					Else
+					    chs\GodMode = False
+                        chs\NoTarget = False
+                        chs\NoClip = False
+                        chs\InfiniteStamina = False
+                        chs\NoBlink = False
+						CreateConsoleMsg("CHEATS OFF")	
+					EndIf
 					;[End Block]
 				Case "096state"
 					;[Block]
@@ -1227,32 +1318,23 @@ Function UpdateConsole()
 					Select StrTemp
 						Case "on", "1", "true"
 							;[Block]
-							InfiniteStamina = True
+							chs\InfiniteStamina = True
 							;[End Block]
 						Case "off", "0", "false"
 							;[Block]
-							InfiniteStamina = False
+							chs\InfiniteStamina = False
 							;[End Block]
 						Default
 							;[Block]
-							InfiniteStamina = Not InfiniteStamina
+							chs\InfiniteStamina = Not chs\InfiniteStamina
 							;[End Block]
 					End Select
 					
-					If InfiniteStamina
+					If chs\InfiniteStamina
 						CreateConsoleMsg("INFINITE STAMINA ON")
 					Else
 						CreateConsoleMsg("INFINITE STAMINA OFF")	
 					EndIf
-					;[End Block]
-				Case "asd2"
-					;[Block]
-					GodMode = 1
-					InfiniteStamina = 1
-					Curr173\Idle = 3
-					Curr106\Idle = True
-					Curr106\State = 200000.0
-					Contained106 = True
 					;[End Block]
 				Case "toggle_warhead_lever"
 					;[Block]
@@ -1387,19 +1469,19 @@ Function UpdateConsole()
 					Select StrTemp
 						Case "on", "1", "true"
 							;[Block]
-							NoTarget = True	
+							chs\NoTarget = True	
 							;[End Block]
 						Case "off", "0", "false"
 							;[Block]
-							NoTarget = False
+							chs\NoTarget = False
 							;[End Block]
 						Default
 							;[Block]
-							NoTarget = Not NoTarget
+							chs\NoTarget = Not chs\NoTarget
 							;[End Block]
 					End Select
 					
-					If NoTarget = False Then
+					If chs\NoTarget = False Then
 						CreateConsoleMsg("NOTARGET OFF")
 					Else
 						CreateConsoleMsg("NOTARGET ON")	
@@ -1559,11 +1641,15 @@ End Function
 ConsoleR = 0 : ConsoleG = 255 : ConsoleB = 255
 CreateConsoleMsg("Console commands: ")
 CreateConsoleMsg("  - teleport [room name]")
-CreateConsoleMsg("  - godmode [on/off]")
-CreateConsoleMsg("  - noclip [on/off]")
+CreateConsoleMsg("  - godmode [on / off]")
+CreateConsoleMsg("  - noclip [on / off]")
+CreateConsoleMsg("  - cheats [on / off]")
+CreateConsoleMsg("  - infinitestamina[on / off]")
+CreateConsoleMsg("  - noblink [on / off]")
+CreateConsoleMsg("  - notarget [on / off]")
 CreateConsoleMsg("  - noclipspeed [x] (default = 2.0)")
-CreateConsoleMsg("  - wireframe [on/off]")
-CreateConsoleMsg("  - debughud [on/off]")
+CreateConsoleMsg("  - wireframe [on / off]")
+CreateConsoleMsg("  - debughud [on / off]")
 CreateConsoleMsg("  - camerafog [near] [far]")
 CreateConsoleMsg(" ")
 CreateConsoleMsg("  - status")
@@ -1572,10 +1658,10 @@ CreateConsoleMsg(" ")
 CreateConsoleMsg("  - spawnitem [item name]")
 CreateConsoleMsg(" ")
 CreateConsoleMsg("  - 173speed [x] (default = 35)")
-CreateConsoleMsg("  - disable173/enable173")
-CreateConsoleMsg("  - disable106/enable106")
-CreateConsoleMsg("  - 173state/106state/096state")
-CreateConsoleMsg("  - spawn [npc type]")
+CreateConsoleMsg("  - disable173 / enable173")
+CreateConsoleMsg("  - disable106 / enable106")
+CreateConsoleMsg("  - 173state / 106state / 096state")
+CreateConsoleMsg("  - spawn [NPC type]")
 
 Global DebugHUD%
 
@@ -1583,20 +1669,20 @@ Global BlurVolume#, BlurTimer#
 
 Global LightBlink#, LightFlash#
 
-Global BumpEnabled% = GetINIInt("options.ini", "options", "bump mapping enabled")
-Global HUDenabled% = GetINIInt("options.ini", "options", "HUD enabled")
+Global BumpEnabled% = GetINIInt(OptionFile, "options", "bump mapping enabled")
+Global HUDenabled% = GetINIInt(OptionFile, "options", "HUD enabled")
 
 Global Camera%, CameraShake#, CurrCameraZoom#
 
-Global Brightness% = GetINIFloat("options.ini", "options", "brightness")
-Global CameraFogNear# = GetINIFloat("options.ini", "options", "camera fog near")
-Global CameraFogFar# = GetINIFloat("options.ini", "options", "camera fog far")
+Global Brightness% = GetINIFloat(OptionFile, "options", "brightness")
+Global CameraFogNear# = GetINIFloat(OptionFile, "options", "camera fog near")
+Global CameraFogFar# = GetINIFloat(OptionFile, "options", "camera fog far")
 
 Global StoredCameraFogFar# = CameraFogFar
 
-Global MouseSens# = GetINIFloat("options.ini", "options", "mouse sensitivity")
+Global MouseSens# = GetINIFloat(OptionFile, "options", "mouse sensitivity")
 
-Global EnableVRam% = GetINIInt("options.ini", "options", "enable vram")
+Global EnableVRam% = GetINIInt(OptionFile, "options", "enable vram")
 
 Include "Source Code\Dreamfilter.bb"
 
@@ -1639,7 +1725,7 @@ Music(26) = "Room106"
 
 Global MusicVolume# = GetINIFloat(OptionFile, "audio", "music volume")
 
-Global CurrMusicStream, MusicCHN
+Global MusicCHN%
 MusicCHN = StreamSound_Strict("SFX\Music\" + Music(2) + ".ogg", MusicVolume, Mode)
 
 Global CurrMusicVolume# = 1.0, NowPlaying% = 2, ShouldPlay% = 11
@@ -1648,6 +1734,7 @@ Global CurrMusic% = 1
 DrawLoading(10, True)
 
 Dim OpenDoorSFX%(3, 3), CloseDoorSFX%(3, 3)
+Dim BigDoorErrorSFX%(3)
 
 Global KeyCardSFX1% 
 Global KeyCardSFX2% 
@@ -1672,6 +1759,7 @@ Global BullethitSFX%
 Global TeslaIdleSFX% 
 Global TeslaActivateSFX% 
 Global TeslaPowerUpSFX% 
+Global TeslaShockSFX%
 
 Global MagnetUpSFX%, MagnetDownSFX%
 Global FemurBreakerSFX%
@@ -1694,7 +1782,7 @@ Dim DripSFX%(4)
 Global LeverSFX%, LightSFX% 
 Global ButtGhostSFX% 
 
-Dim RadioSFX(5, 10) 
+Dim RadioSFX%(5, 10) 
 
 Global RadioSquelch% 
 Global RadioStatic% 
@@ -1730,7 +1818,7 @@ Dim HorrorSFX%(20)
 
 DrawLoading(25, True)
 
-Dim IntroSFX%(20)
+Dim IntroSFX%(12)
 
 Dim AlarmSFX%(5)
 
@@ -1740,7 +1828,7 @@ Global HeartBeatSFX%
 
 Global VomitSFX%
 
-Dim BreathSFX(2, 5)
+Dim BreathSFX%(2, 5)
 Global BreathCHN%
 
 Dim NeckSnapSFX%(3)
@@ -1771,7 +1859,6 @@ Global MonitorTimer# = 0.0, MonitorTimer2# = 0.0, UpdateCheckpoint1%, UpdateChec
 ; ~ True: The Player got detected by a camera
 Global PlayerDetected%
 Global PrevInjuries#, PrevBloodloss#
-Global NoTarget% = False
 
 Global NVGImages% = LoadAnimImage("GFX\battery.png", 64, 64, 0, 2)
 MaskImage(NVGImages, 255, 0, 255)
@@ -1807,8 +1894,8 @@ Global DeafTimer# = 0.0
 Global IsZombie% = False
 
 Global room2gw_BrokenDoor% = False
-Global room2gw_X# = 0.0
-Global room2gw_Z# = 0.0
+Global room2gw_x# = 0.0
+Global room2gw_z# = 0.0
 
 Global ParticleAmount% = GetINIInt(OptionFile, "options", "particle amount")
 
@@ -1860,7 +1947,7 @@ Global DoorTempID%
 
 Type Doors
 	Field OBJ%, OBJ2%, FrameOBJ%, Buttons%[2]
-	Field Locked%, Open%, Angle%, OpenState#, FastOpen%
+	Field Locked%, Locked079%, Open%, Angle%, OpenState#, FastOpen%
 	Field Dir%
 	Field Timer%, TimerState#
 	Field KeyCard%
@@ -1883,7 +1970,7 @@ End Type
 Dim BigDoorOBJ%(2), HeavyDoorOBJ%(2)
 Dim OBJTunnel%(7)
 
-Function CreateDoor.Doors(LVL, x#, y#, z#, Angle#, room.Rooms, dOpen% = False,  Big% = False, Keycard% = False, Code$ = "", UseCollisionMesh% = False)
+Function CreateDoor.Doors(LVL, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, Big% = False, Keycard% = False, Code$ = "", UseCollisionMesh% = False)
 	Local d.Doors, Parent%, i%
 	
 	If room <> Null Then Parent = room\OBJ
@@ -1945,7 +2032,6 @@ Function CreateDoor.Doors(LVL, x#, y#, z#, Angle#, room.Rooms, dOpen% = False,  
 	
 	d\KeyCard = Keycard
 	d\Code = Code
-	
 	d\Level = LVL
 	d\LevelDest = 66
 	
@@ -2157,8 +2243,11 @@ Function UpdateDoors()
 						
 						Local Sound%
 						
-						If d\Dir = 1 Then Sound = Rand(0, 1) Else Sound = Rand(0, 2)
-						If d\TimerState = 0.0 Then d\Open = (Not d\Open) : d\SoundCHN = PlaySound2(CloseDoorSFX(d\Dir, Sound), Camera, d\OBJ)
+						Sound = Rand(0, 2)
+						If d\TimerState = 0.0 Then 
+							d\Open = (Not d\Open)
+							d\SoundCHN = PlaySound2(CloseDoorSFX(d\Dir, Sound), Camera, d\OBJ)
+						EndIf
 					EndIf
 					If d\AutoClose And RemoteDoorOn = True Then
 						If EntityDistance(Camera, d\OBJ) < 2.1 Then
@@ -2187,7 +2276,7 @@ Function UpdateDoors()
 										Local Pvt% = CreatePivot()
 										
 										PositionEntity(Pvt, EntityX(d\FrameOBJ, True) + Rnd(-0.2, 0.2), EntityY(d\FrameOBJ, True) + Rnd(0.0, 1.2), EntityZ(d\FrameOBJ, True) + Rnd(-0.2, 0.2))
-										RotateEntity(Pvt, 0, Rnd(360.0), 0.0)
+										RotateEntity(Pvt, 0.0, Rnd(360.0), 0.0)
 										
 										Local p.Particles = CreateParticle(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 2, 0.002, 0.0, 300)
 										
@@ -2236,7 +2325,7 @@ Function UpdateDoors()
 					EndIf
 					
 					If d\DoorHitOBJ <> 0 Then
-						ShowEntity d\DoorHitOBJ
+						ShowEntity(d\DoorHitOBJ)
 					EndIf
 				Else
 					d\FastOpen = 0
@@ -2253,6 +2342,13 @@ Function UpdateDoors()
 			EndIf
 		EndIf
 		UpdateSoundOrigin(d\SoundCHN, Camera, d\FrameOBJ)
+		
+		If d\Dir = 1 And d\Locked079 Then
+			If d\OpenState > 48.0 Then
+				d\Open = False
+				d\OpenState = Min(d\OpenState, 48.0)
+			EndIf	
+		EndIf
 		
 		If d\DoorHitOBJ <> 0 Then
 			If DebugHUD Then
@@ -2426,13 +2522,17 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 	
 	Local Sound% = 0
 	
-	If d\Dir = 1 Then Sound = Rand(0, 1) Else Sound = Rand(0, 2)
+	Sound = Rand(0, 2)
 	
 	If PlaySFX = True Then
 		If d\Open Then
 			If d\LinkedDoor <> Null Then d\LinkedDoor\TimerState = d\LinkedDoor\Timer
 			d\TimerState = d\Timer
-			d\SoundCHN = PlaySound2(OpenDoorSFX(d\Dir, Sound), Camera, d\OBJ)
+			If d\Locked079 Then
+				d\SoundCHN = PlaySound2(BigDoorErrorSFX(Sound), Camera, d\OBJ)
+			Else
+				d\SoundCHN = PlaySound2(OpenDoorSFX(d\Dir, Sound), Camera, d\OBJ)
+			EndIf
 		Else
 			d\SoundCHN = PlaySound2(CloseDoorSFX(d\Dir, Sound), Camera, d\OBJ)
 		EndIf
@@ -2467,267 +2567,7 @@ DrawLoading(80, True)
 
 Include "Source Code\NPCs_System.bb"
 
-Type Events
-	Field EventName$
-	Field room.Rooms
-	Field EventState#, EventState2#, EventState3#
-	Field SoundCHN%, SoundCHN2%
-	Field Sound, Sound2
-	Field SoundCHN_IsStream%, SoundCHN2_IsStream%
-	Field EventStr$
-	Field Img%
-End Type 
-
-Function CreateEvent.Events(Eventname$, RoomName$, ID%, Prob# = 0.0)
-	; ~ RoomName = the name of the room(s) you want the event to be assigned to
-	
-	; ~ The ID-variable determines which of the rooms the event is assigned to,
-	; ~ 0 will assign it to the first generated room, 1 to the second, etc.
-	
-	; ~ The prob-variable can be used to randomly assign events into some rooms
-	; ~ 0.5 means that there's a 50% chance that event is assigned to the rooms
-	; ~ 1.0 means that the event is assigned to every room
-	; ~ The Id-variable is ignored if prob <> 0.0
-	
-	Local i% = 0, Temp%, e.Events, e2.Events, r.Rooms
-	
-	If Prob = 0.0 Then
-		For r.Rooms = Each Rooms
-			If (RoomName = "" Or RoomName = r\RoomTemplate\Name) Then
-				Temp = False
-				For e2.Events = Each Events
-					If e2\room = r Then Temp = True : Exit
-				Next
-				
-				i = i + 1
-				If i >= ID And Temp = False Then
-					e.Events = New Events
-					e\EventName = Eventname					
-					e\room = r
-					Return(e)
-				End If
-			EndIf
-		Next
-	Else
-		For r.Rooms = Each Rooms
-			If (RoomName = "" Or RoomName = r\RoomTemplate\Name) Then
-				Temp = False
-				For e2.Events = Each Events
-					If e2\room = r Then Temp = True : Exit
-				Next
-				
-				If Rnd(0.0, 1.0) < Prob And Temp = False Then
-					e.Events = New Events
-					e\EventName = Eventname					
-					e\room = r
-				End If
-			EndIf
-		Next		
-	EndIf
-	Return(Null)
-End Function
-
-Function InitEvents()
-	Local e.Events
-	
-	CreateEvent("173", "173", 0)
-	CreateEvent("alarm", "start", 0)
-	
-	CreateEvent("pocketdimension", "pocketdimension", 0)	
-	
-	; ~ There's a 7% chance that SCP-106 appears in the rooms named "tunnel"
-	CreateEvent("tunnel106", "tunnel", 0, 0.07 + (0.1 * SelectedDifficulty\aggressiveNPCs))
-	
-	; ~ The chance for SCP-173 appearing in the first lockroom is about 66%
-	; ~ There's a 30% chance that it appears in the later lockrooms
-	If Rand(3) < 3 Then CreateEvent("lockroom173", "lockroom", 0)
-	CreateEvent("lockroom173", "lockroom", 0, 0.3 + (0.5 * SelectedDifficulty\aggressiveNPCs))
-	
-	CreateEvent("room2trick", "room2", 0, 0.15)	
-	
-	CreateEvent("1048a", "room2", 0, 1.0)	
-	
-	CreateEvent("room2storage", "room2storage", 0)	
-	
-	; ~ SCP-096 spawns in the first (and last) "lockroom2"
-	CreateEvent("lockroom096", "lockroom2", 0)
-	
-	CreateEvent("endroom106", "endroom", Rand(0, 1))
-	
-	CreateEvent("room2poffices2", "room2poffices2", 0)
-	
-	CreateEvent("room2fan", "room2_2", 0, 1.0)
-	
-	CreateEvent("room2elevator2", "room2elevator", 0)
-	CreateEvent("room2elevator", "room2elevator", Rand(1, 2))
-	
-	CreateEvent("room3storage", "room3storage", 0, 0.0)
-	
-	CreateEvent("tunnel2smoke", "tunnel2", 0, 0.2)
-	CreateEvent("tunnel2", "tunnel2", Rand(0, 2), 0.0)
-	CreateEvent("tunnel2", "tunnel2", 0, (0.2 * SelectedDifficulty\aggressiveNPCs))
-	
-	; ~ SCP-173 appears in half of the "room2doors"-rooms
-	CreateEvent("room2doors173", "room2doors", 0, 0.5 + (0.4 * SelectedDifficulty\aggressiveNPCs))
-	
-	; ~ The anomalous duck in "room2offices2"-rooms
-	CreateEvent("room2offices2", "room2offices2", 0, 0.7)
-	
-	CreateEvent("room2closets", "room2closets", 0)	
-	
-	CreateEvent("room2cafeteria", "room2cafeteria", 0)	
-	
-	CreateEvent("room3pitduck", "room3pit", 0)
-	CreateEvent("room3pit1048", "room3pit", 1)
-	
-	; ~ The event that causes the door to open by itself in "room2offices3"
-	CreateEvent("room2offices3", "room2offices3", 0, 1.0)	
-	
-	CreateEvent("room2servers", "room2servers", 0)	
-	
-	CreateEvent("room3servers", "room3servers", 0)	
-	CreateEvent("room3servers", "room3servers2", 0)
-	
-	; ~ The dead guard
-	CreateEvent("room3tunnel", "room3tunnel", 0, 0.08)
-	
-	CreateEvent("room4", "room4", 0)
-	
-	If Rand(5) < 5 Then 
-		Select Rand(3)
-			Case 1
-				;[Block]
-				CreateEvent("682roar", "tunnel", Rand(0, 2), 0.0)
-				;[End Block]
-			Case 2
-				;[Block]
-				CreateEvent("682roar", "room3pit", Rand(0, 2), 0.0)	
-				;[End Block]
-			Case 3
-				;[Block]
-				CreateEvent("682roar", "room2z3", 0, 0.0)
-				;[End Block]
-		End Select 
-	EndIf 
-	
-	CreateEvent("testroom173", "room2testroom2", 0, 1.0)	
-	
-	CreateEvent("room2tesla", "room2tesla", 0, 0.9)
-	
-	CreateEvent("room2nuke", "room2nuke", 0, 0)
-	
-	If Rand(5) < 5 Then 
-		CreateEvent("coffin106", "coffin", 0, 0)
-	Else
-		CreateEvent("coffin", "coffin", 0, 0)
-	EndIf 
-	
-	CreateEvent("checkpoint", "checkpoint1", 0, 1.0)
-	CreateEvent("checkpoint", "checkpoint2", 0, 1.0)
-	
-	CreateEvent("room3door", "room3", 0, 0.1)
-	CreateEvent("room3door", "room3tunnel", 0, 0.1)	
-	
-	If Rand(2) = 1 Then
-		CreateEvent("106victim", "room3", Rand(1, 2))
-		CreateEvent("106sinkhole", "room3_2", Rand(2, 3))
-	Else
-		CreateEvent("106victim", "room3_2", Rand(1, 2))
-		CreateEvent("106sinkhole", "room3", Rand(2, 3))
-	EndIf
-	CreateEvent("106sinkhole", "room4", Rand(1, 2))
-	
-	CreateEvent("room079", "room079", 0, 0.0)	
-	
-	CreateEvent("room049", "room049", 0, 0.0)
-	
-	CreateEvent("room012", "room012", 0, 0.0)
-	
-	CreateEvent("room035", "room035", 0, 0.0)
-	
-	CreateEvent("008", "008", 0, 0.0)
-	
-	CreateEvent("room106", "room106", 0, 0.0)	
-	
-	CreateEvent("pj", "roompj", 0, 0.0)
-	
-	CreateEvent("914", "914", 0, 0.0)
-	
-	CreateEvent("buttghost", "room2toilets", 0, 0.0)
-	CreateEvent("toiletguard", "room2toilets", 1, 0.0)
-	
-	CreateEvent("room2pipes106", "room2pipes", Rand(0, 3)) 
-	
-	CreateEvent("room2pit", "room2pit", 0, 0.4 + (0.4 * SelectedDifficulty\aggressiveNPCs))
-	
-	CreateEvent("testroom", "testroom", 0)
-	
-	CreateEvent("room2tunnel", "room2tunnel", 0)
-	
-	CreateEvent("room2ccont", "room2ccont", 0)
-	
-	CreateEvent("gateaentrance", "gateaentrance", 0)
-	CreateEvent("gatea", "gatea", 0)	
-	CreateEvent("exit1", "exit1", 0)
-	
-	CreateEvent("room205", "room205", 0)
-	
-	CreateEvent("room860","room860", 0)
-	
-	CreateEvent("room966","room966", 0)
-	
-	CreateEvent("room1123", "room1123", 0, 0.0)
-	
-	CreateEvent("room2tesla", "room2tesla_lcz", 0, 0.9)
-	CreateEvent("room2tesla", "room2tesla_hcz", 0, 0.9)
-	
-	CreateEvent("room4tunnels", "room4tunnels", 0)
-	
-	CreateEvent("room2gw_b", "room2gw_b", Rand(0, 1))
-	CreateEvent("room2gw", "room2gw", 0, 1.0)
-	
-	CreateEvent("dimension1499", "dimension1499", 0)
-	
-	CreateEvent("room1162", "room1162", 0)
-	
-	CreateEvent("room2scps2", "room2scps2", 0)
-	
-	CreateEvent("room2sl", "room2sl", 0)
-	
-	CreateEvent("medibay", "medibay", 0)
-	
-	CreateEvent("room2shaft", "room2shaft", 0)
-	
-	CreateEvent("room1lifts", "room1lifts", 0)
-	
-	CreateEvent("096spawn", "room4pit", 0, 0.6 + (0.2 * SelectedDifficulty\aggressiveNPCs))
-	CreateEvent("096spawn", "room3pit", 0, 0.6 + (0.2 * SelectedDifficulty\aggressiveNPCs))
-	CreateEvent("096spawn", "room2pipes", 0, 0.4 + (0.2 * SelectedDifficulty\aggressiveNPCs))
-	CreateEvent("096spawn", "room2pit", 0, 0.5 + (0.2 * SelectedDifficulty\aggressiveNPCs))
-	CreateEvent("096spawn", "room3tunnel", 0, 0.6 + (0.2 * SelectedDifficulty\aggressiveNPCs))
-	CreateEvent("096spawn", "room4tunnels", 0, 0.7 + (0.2 * SelectedDifficulty\aggressiveNPCs))
-	CreateEvent("096spawn", "tunnel", 0, 0.6 + (0.2 * SelectedDifficulty\aggressiveNPCs))
-	CreateEvent("096spawn", "tunnel2", 0, 0.4 + (0.2 * SelectedDifficulty\aggressiveNPCs))
-	CreateEvent("096spawn", "room3z2", 0, 0.7 + (0.2 * SelectedDifficulty\aggressiveNPCs))
-	
-	CreateEvent("room2pit", "room2_4", 0, 0.4 + (0.4 * SelectedDifficulty\aggressiveNPCs))
-	
-	CreateEvent("room2offices035", "room2offices", 0)
-	
-	CreateEvent("room2pit106", "room2pit", 0, 0.07 + (0.1 * SelectedDifficulty\aggressiveNPCs))
-	
-	CreateEvent("room1archive", "room1archive", 0, 1.0)
-End Function
-
 Include "Source Code\Events_System.bb"
-
-Function RemoveEvent(e.Events)
-	If e\Sound <> 0 Then FreeSound_Strict(e\Sound)
-	If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2)
-	If e\Img <> 0 Then FreeImage(e\Img)
-	
-	Delete(e)
-End Function
 
 Collisions(HIT_PLAYER, HIT_MAP, 2, 2)
 Collisions(HIT_PLAYER, HIT_PLAYER, 1, 3)
@@ -2736,13 +2576,6 @@ Collisions(HIT_APACHE, HIT_APACHE, 1, 2)
 Collisions(HIT_178, HIT_MAP, 2, 2)
 Collisions(HIT_178, HIT_178, 1, 3)
 Collisions(HIT_DEAD, HIT_MAP, 2, 2)
-
-Function MilliSecs2()
-	Local RetVal% = MilliSecs()
-	
-	If RetVal < 0 Then RetVal = RetVal + 2147483648
-	Return(RetVal)
-End Function
 
 DrawLoading(90, True)
 
@@ -3035,7 +2868,8 @@ Repeat
 			EndIf
 		EndIf
 		
-		If InfiniteStamina Then Stamina = Min(100.0, Stamina + (100.0 - Stamina) * 0.01 * FPSfactor)
+		If chs\InfiniteStamina Then Stamina = Min(100.0, Stamina + (100.0 - Stamina) * 0.01 * FPSfactor)
+		If chs\NoBlink Then BlinkTimer = Min(BLINKFREQ, BlinkTimer + (BLINKFREQ + BlinkTimer) * 0.01 * FPSfactor)
 		
 		If FPSfactor = 0.0
 			UpdateWorld(0)
@@ -3388,287 +3222,8 @@ Repeat
 	EndIf
 Forever
 
-Function QuickLoadEvents()
-	CatchErrors("Uncaught (QuickLoadEvents)")
-	
-	If QuickLoad_CurrEvent = Null Then
-		QuickLoadPercent = -1
-		Return
-	EndIf
-	
-	Local e.Events = QuickLoad_CurrEvent
-	Local r.Rooms, sc.SecurityCams, sc2.SecurityCams, Scale#, Pvt%, n.NPCs, Tex%, i%, x#, z#
-	
-	; ~ Might be a good idea to use QuickLoadPercent to determine the "steps" of the loading process 
-	; ~ Instead of magic values in e\eventState and e\eventStr
-
-	Select e\EventName
-		Case "room2sl"
-			;[Block]
-			If e\EventState = 0 And e\EventStr <> ""
-				If e\EventStr <> "" And Left(e\EventStr, 4) <> "load"
-					QuickLoadPercent = QuickLoadPercent + 5
-					If Int(e\EventStr) > 9
-						e\EventStr = "load2"
-					Else
-						e\EventStr = Int(e\EventStr) + 1
-					EndIf
-				ElseIf e\EventStr = "load2"
-					Local Skip% = False
-					
-					If e\room\NPC[0] = Null Then
-						For n.NPCs = Each NPCs
-							If n\NPCtype = NPCtype049
-								Skip = True
-								Exit
-							EndIf
-						Next
-						
-						If (Not Skip)
-							e\room\NPC[0] = CreateNPC(NPCtype049, EntityX(e\room\Objects[7], True), EntityY(e\room\Objects[7], True) + 5, EntityZ(e\room\Objects[7], True))
-							e\room\NPC[0]\HideFromNVG = True
-							PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[7], True), EntityY(e\room\Objects[7], True) + 5, EntityZ(e\room\Objects[7], True))
-							ResetEntity(e\room\NPC[0]\Collider)
-							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 180.0, 0.0)
-							e\room\NPC[0]\State = 0
-							e\room\NPC[0]\PrevState = 2
-						EndIf
-					EndIf
-					QuickLoadPercent = 80
-					e\EventStr = "load3"
-				ElseIf e\EventStr = "load3"
-					e\EventState = 1.0
-					If e\EventState2 = 0.0 Then e\EventState2 = (-70.0) * 5.0
-					
-					QuickLoadPercent = 100
-				EndIf
-			EndIf
-			;[End Block]
-		Case "room2closets"
-			;[Block]
-			If e\EventState = 0
-				If e\EventStr = "load0"
-					QuickLoadPercent = 10
-					If e\room\NPC[0] = Null Then
-						e\room\NPC[0] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
-					EndIf
-					
-					ChangeNPCTextureID(e\room\NPC[0], 4)
-					e\EventStr = "load1"
-				ElseIf e\EventStr = "load1"
-					QuickLoadPercent = 20
-					e\room\NPC[0]\Sound = LoadSound_Strict("SFX\Room\Storeroom\Escape1.ogg")
-					e\EventStr = "load2"
-				ElseIf e\EventStr = "load2"
-					QuickLoadPercent = 35
-					e\room\NPC[0]\SoundCHN = PlaySound2(e\room\NPC[0]\Sound, Camera, e\room\NPC[0]\Collider, 12)
-					e\EventStr = "load3"
-				ElseIf e\EventStr = "load3"
-					QuickLoadPercent = 55
-					If e\room\NPC[1] = Null Then
-						e\room\NPC[1] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
-					EndIf
-					
-					ChangeNPCTextureID(e\room\NPC[1], 2)
-					e\EventStr = "load4"
-				ElseIf e\EventStr = "load4"
-					QuickLoadPercent = 80
-					e\room\NPC[1]\Sound = LoadSound_Strict("SFX\Room\Storeroom\Escape2.ogg")
-					e\EventStr = "load5"
-				ElseIf e\EventStr = "load5"
-					QuickLoadPercent = 100
-					PointEntity(e\room\NPC[0]\Collider), e\room\NPC[1]\Collider
-					PointEntity(e\room\NPC[1]\Collider), e\room\NPC[0]\Collider
-					
-					e\EventState = 1.0
-				EndIf
-			EndIf
-			;[End Block]
-		Case "room3storage"
-			;[Block]
-			If e\room\NPC[0] = Null Then
-				e\room\NPC[0] = CreateNPC(NPCtype939, 0, 0, 0)
-				QuickLoadPercent = 20
-			ElseIf e\room\NPC[1] = Null Then
-				e\room\NPC[1] = CreateNPC(NPCtype939, 0, 0, 0)
-				QuickLoadPercent = 50
-			ElseIf e\room\NPC[2] = Null Then
-				e\room\NPC[2] = CreateNPC(NPCtype939, 0, 0, 0)
-				QuickLoadPercent = 100
-			Else
-				If QuickLoadPercent > -1 Then QuickLoadPercent = 100
-			EndIf
-			;[End Block]
-		Case "room049"
-			;[Block]
-			If e\EventState = 0 Then
-				If e\EventStr = "load0"
-					n.NPCs = CreateNPC(NPCtypeZombie, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True))
-					PointEntity(n\Collider, e\room\OBJ)
-					TurnEntity(n\Collider, 0.0, 190.0, 0.0)
-					QuickLoadPercent = 20
-					e\EventStr = "load1"
-				ElseIf e\EventStr = "load1"
-					n.NPCs = CreateNPC(NPCtypeZombie, EntityX(e\room\Objects[5], True), EntityY(e\room\Objects[5], True), EntityZ(e\room\Objects[5], True))
-					PointEntity(n\Collider, e\room\OBJ)
-					TurnEntity(n\Collider, 0.0, 20.0, 0.0)
-					QuickLoadPercent = 60
-					e\EventStr = "load2"
-				ElseIf e\EventStr = "load2"
-					For n.NPCs = Each NPCs
-						If n\NPCtype = NPCtype049
-							e\room\NPC[0] = n
-							e\room\NPC[0]\State = 2
-							e\room\NPC[0]\Idle = 1
-							e\room\NPC[0]\HideFromNVG = True
-							PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True) + 3, EntityZ(e\room\Objects[4], True))
-							ResetEntity(e\room\NPC[0]\Collider)
-							Exit
-						EndIf
-					Next
-					If e\room\NPC[0] = Null
-						n.NPCs = CreateNPC(NPCtype049, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True) + 3, EntityZ(e\room\Objects[4], True))
-						PointEntity(n\Collider, e\room\OBJ)
-						n\State = 2
-						n\Idle = 1
-						n\HideFromNVG = True
-						e\room\NPC[0] = n
-					EndIf
-					QuickLoadPercent = 100
-					e\EventState = 1.0
-				EndIf
-			EndIf
-			;[End Block]
-		Case "room205"
-			;[Block]
-			If e\EventState = 0 Or e\EventStr <> "loaddone" Then
-				If e\EventStr = "load0"
-					e\room\Objects[3] = LoadAnimMesh_Strict("GFX\npcs\205_demon1.b3d")
-					QuickLoadPercent = 10
-					e\EventStr = "load1"
-				ElseIf e\EventStr = "load1"
-					e\room\Objects[4] = LoadAnimMesh_Strict("GFX\npcs\205_demon2.b3d")
-					QuickLoadPercent = 20
-					e\EventStr = "load2"
-				ElseIf e\EventStr = "load2"
-					e\room\Objects[5] = LoadAnimMesh_Strict("GFX\npcs\205_demon3.b3d")
-					QuickLoadPercent = 30
-					e\EventStr = "load3"
-				ElseIf e\EventStr = "load3"
-					e\room\Objects[6] = LoadAnimMesh_Strict("GFX\npcs\205_woman.b3d")
-					QuickLoadPercent = 40
-					e\EventStr = "load4"
-				ElseIf e\EventStr = "load4"
-					QuickLoadPercent = 50
-					e\EventStr = "load5"
-				ElseIf e\EventStr = "load5"
-					For i = 3 To 6
-						PositionEntity(e\room\Objects[i], EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), True)
-						RotateEntity(e\room\Objects[i], -90.0, EntityYaw(e\room\Objects[0], True), 0.0, True)
-						ScaleEntity(e\room\Objects[i], 0.05, 0.05, 0.05, True)
-					Next
-					QuickLoadPercent = 70
-					e\EventStr = "load6"
-				ElseIf e\EventStr = "load6"
-					HideEntity(e\room\Objects[3])
-					HideEntity(e\room\Objects[4])
-					HideEntity(e\room\Objects[5])
-					QuickLoadPercent = 100
-					e\EventStr = "loaddone"
-				EndIf
-			EndIf
-			;[End Block]
-		Case "room860"
-			;[Block]
-			If e\EventStr = "load0"
-				QuickLoadPercent = 15
-				ForestNPC = CreateSprite()
-				ScaleSprite(ForestNPC, 0.75 * (140.0 / 410.0), 0.75)
-				SpriteViewMode(ForestNPC, 4)
-				EntityFX(ForestNPC, 1 + 8)
-				ForestNPCTex = LoadAnimTexture("GFX\npcs\AgentIJ.AIJ", 1 + 2, 140, 410, 0, 4)
-				ForestNPCData[0] = 0.0
-				EntityTexture(ForestNPC, ForestNPCTex, ForestNPCData[0])
-				ForestNPCData[1] = 0.0
-				ForestNPCData[2] = 0.0
-				HideEntity(ForestNPC)
-				e\EventStr = "load1"
-			ElseIf e\EventStr = "load1"
-				QuickLoadPercent = 40
-				e\EventStr = "load2"
-			ElseIf e\EventStr = "load2"
-				QuickLoadPercent = 100
-				If e\room\NPC[0] = Null Then e\room\NPC[0] = CreateNPC(NPCtype860, 0, 0, 0)
-				e\EventStr = "loaddone"
-			EndIf
-			;[End Block]
-		Case "room966"
-			;[Block]
-			If e\EventState = 1
-				e\EventState2 = e\EventState2 + FPSfactor
-				If e\EventState2 > 30.0 Then
-					If e\EventStr = ""
-						CreateNPC(NPCtype966, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
-						QuickLoadPercent = 50
-						e\EventStr = "load0"
-					ElseIf e\EventStr = "load0"
-						CreateNPC(NPCtype966, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True))
-						QuickLoadPercent = 100
-						e\EventState = 2.0
-					EndIf
-				Else
-					QuickLoadPercent = Int(e\EventState2)
-				EndIf
-			EndIf
-			;[End Block]
-		Case "dimension1499"
-			;[Block]
-			If e\EventState = 0.0
-				If e\EventStr = "load0"
-					QuickLoadPercent = 10
-					e\room\Objects[0] = LoadMesh_Strict("GFX\map\dimension1499\1499plane.b3d")
-					HideEntity(e\room\Objects[0])
-					e\EventStr = "load1"
-				ElseIf e\EventStr = "load1"
-					QuickLoadPercent = 30
-					NTF_1499Sky = sky_CreateSky("GFX\map\sky\1499sky")
-					e\EventStr = 1
-				Else
-					If Int(e\EventStr) < 16
-						QuickLoadPercent = QuickLoadPercent + 2
-						e\room\Objects[Int(e\EventStr)] = LoadMesh_Strict("GFX\map\dimension1499\1499object" + (Int(e\EventStr)) + ".b3d")
-						HideEntity(e\room\Objects[Int(e\EventStr)])
-						e\EventStr = Int(e\EventStr) + 1
-					ElseIf Int(e\EventStr) = 16
-						QuickLoadPercent = 90
-						CreateChunkParts(e\room)
-						e\EventStr = 17
-					ElseIf Int(e\EventStr) = 17
-						QuickLoadPercent = 100
-						x = EntityX(e\room\OBJ)
-						z = EntityZ(e\room\OBJ)
-						
-						Local ch.Chunk
-						
-						For i = -2 To 0 Step 2
-							ch = CreateChunk(-1, x * (i * 2.5), EntityY(e\room\OBJ), z, True)
-						Next
-						For i = -2 To 0 Step 2
-							ch = CreateChunk(-1, x * (i * 2.5), EntityY(e\room\OBJ), z - 40.0, True)
-						Next
-						e\EventState = 2.0
-						e\EventStr = 18
-					EndIf
-				EndIf
-			EndIf
-			;[End Block]
-	End Select
-	
-	CatchErrors("QuickLoadEvents " + e\EventName)
-End Function
-
 Function Kill()
-	If GodMode Then Return
+	If chs\GodMode Then Return
 	
 	If BreathCHN <> 0 Then
 		If ChannelPlaying(BreathCHN) = True Then StopChannel(BreathCHN)
@@ -4066,7 +3621,7 @@ Function MovePlayer()
 		CrouchState = CurveValue(Crouch, CrouchState, 10.0)
 	EndIf
 	
-	If (Not NoClip) Then 
+	If (Not chs\NoClip) Then 
 		If ((KeyDown(KEY_DOWN) Or KeyDown(KEY_UP)) Or (KeyDown(KEY_RIGHT) Or KeyDown(KEY_LEFT)) And Playable) Or ForceMove > 0 Then
 			If Crouch = 0 And (KeyDown(KEY_SPRINT)) And Stamina > 0.0 And (Not IsZombie) Then
 				Sprint = 2.5
@@ -4139,7 +3694,7 @@ Function MovePlayer()
 	
 	Local Temp2# = (Speed * Sprint) / (1.0 + CrouchState)
 	
-	If NoClip Then 
+	If chs\NoClip Then 
 		Shake = 0.0
 		CurrSpeed = 0
 		CrouchState = 0.0
@@ -4356,7 +3911,7 @@ Function MouseLook()
 		Local The_Yaw# = Mouse_X_Speed_1 * Mouselook_X_Inc / (1.0 + WearingVest)
 		Local The_Pitch# = Mouse_Y_Speed_1 * Mouselook_Y_Inc / (1.0 + WearingVest)
 		
-		TurnEntity(Collider, 0.0, -The_Yaw, 0.0) ; ~ Turn the user on the Y (yaw) axis.
+		TurnEntity(Collider, 0.0, -The_Yaw, 0.0) ; ~ Turn the user on the Y (Yaw) axis.
 		User_Camera_Pitch = User_Camera_Pitch# + The_Pitch
 		; ~ Limit the user's camera to within 180 degrees of pitch rotation. Returns useless values so we need to use a variable to keep track of the camera pitch.
 		If User_Camera_Pitch > 70.0 Then User_Camera_Pitch = 70.0
@@ -4461,7 +4016,7 @@ Function MouseLook()
 	EndIf
 	
 	For i = 0 To 5
-		If SCP1025state[i] > 0.0 Then
+		If SCP1025State[i] > 0.0 Then
 			Select i
 				Case 0 ; ~ Common cold
 					;[Block]
@@ -4696,7 +4251,7 @@ Function DrawGUI()
 			Color(200, 0, 0)
 			Rect(x - 50 - 3, y - 3, 30 + 6, 30 + 6)
 		Else
-		    If BlinkEffect < 1.0 Then
+		    If BlinkEffect < 1.0 Or chs\NoBlink Then
 		        Color(0, 200, 0)
 			    Rect(x - 50 - 3, y - 3, 30 + 6, 30 + 6)
             EndIf
@@ -4722,7 +4277,7 @@ Function DrawGUI()
 			Color(200, 0, 0)
 			Rect(x - 50 - 3, y - 3, 30 + 6, 30 + 6)
 		Else
-		    If InfiniteStamina = True Or StaminaEffect < 1.0 Or WearingGasMask = 2 Or Wearing1499 = 2
+		    If chs\InfiniteStamina = True Or StaminaEffect < 1.0 Or WearingGasMask = 2 Or Wearing1499 = 2
                 Color(0, 200, 0)
 			    Rect(x - 50 - 3, y - 3, 30 + 6, 30 + 6)
             EndIf 
@@ -6208,7 +5763,7 @@ Function DrawGUI()
 									StrTemp = "             EMERGENCY CHANNEL - RESERVED FOR COMMUNICATION IN THE EVENT OF A CONTAINMENT BREACH         "
 									If ChannelPlaying(RadioCHN(3)) = False Then RadioCHN(3) = PlaySound_Strict(RadioStatic)
 									
-									If MTFtimer > 0 Then 
+									If MTFTimer > 0 Then 
 										RadioState(3) = RadioState(3) + Max(Rand(-10, 1), 0)
 										Select RadioState(3)
 											Case 40
@@ -7856,9 +7411,9 @@ Function LoadEntities()
 	Panel294 = LoadImage_Strict("GFX\294panel.jpg")
 	MaskImage(Panel294, 255, 0, 255)
 	
-	Brightness = GetINIFloat("options.ini", "options", "brightness")
-	CameraFogNear = GetINIFloat("options.ini", "options", "camera fog near")
-	CameraFogFar = GetINIFloat("options.ini", "options", "camera fog far")
+	Brightness = GetINIFloat(OptionFile, "options", "brightness")
+	CameraFogNear = GetINIFloat(OptionFile, "options", "camera fog near")
+	CameraFogFar = GetINIFloat(OptionFile, "options", "Camera Fog far")
 	StoredCameraFogFar = CameraFogFar
 	
 	AmbientLightRoomTex = CreateTexture(2, 2, 257)
@@ -8179,17 +7734,17 @@ Function LoadEntities()
 	EntityTexture(DTextures[2], Tex)
 	FreeTexture(Tex)
 	
-	; ~ scientist 1
+	; ~ Scientist 1
 	Tex = LoadTexture_Strict("GFX\npcs\scientist.jpg")
 	EntityTexture(DTextures[3], Tex)
 	FreeTexture(Tex)
 	
-	; ~ scientist 2
+	; ~ Scientist 2
 	Tex = LoadTexture_Strict("GFX\npcs\scientist2.jpg")
 	EntityTexture(DTextures[4], Tex)
 	FreeTexture(Tex)
 	
-	; ~ janitor
+	; ~ Janitor
 	Tex = LoadTexture_Strict("GFX\npcs\janitor.jpg")
 	EntityTexture(DTextures[5], Tex)
 	FreeTexture(Tex)
@@ -8207,6 +7762,16 @@ Function LoadEntities()
 	; ~ 035 victim
 	Tex = LoadTexture_Strict("GFX\npcs\035victim.jpg")
 	EntityTexture(DTextures[8], Tex)
+	FreeTexture(Tex)
+	
+	; ~ D-9341
+	Tex = LoadTexture_Strict("GFX\npcs\classd3.jpg")
+	EntityTexture(DTextures[9], Tex)
+	FreeTexture(Tex)
+	
+	; ~ Body
+	Tex = LoadTexture_Strict("GFX\npcs\body2.jpg")
+	EntityTexture(DTextures[10], Tex)
 	FreeTexture(Tex)
 	
 	LoadMaterials("Data\materials.ini")
@@ -8586,6 +8151,13 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	DeathMsg = ""
 	
+	chs\GodMode = False
+	chs\NoTarget = False
+	chs\InfiniteStamina = False
+	chs\NoBlink = False
+	chs\NoClip = False
+	chs\Cheats = False
+	
 	SelectedMap = ""
 	
 	UsedConsole = False
@@ -8610,39 +8182,37 @@ Function NullGame(PlayButtonSFX% = True)
 		itt\Found = False
 	Next
 	
-	DropSpeed = 0
-	Shake = 0
-	CurrSpeed = 0
+	DropSpeed = 0.0
+	Shake = 0.0
+	CurrSpeed = 0.0
 	
-	DeathTimer = 0
+	DeathTimer = 0.0
 	
-	HeartBeatVolume = 0
+	HeartBeatVolume = 0.0
 	
 	StaminaEffect = 1.0
-	StaminaEffectTimer = 0
+	StaminaEffectTimer = 0.0
 	BlinkEffect = 1.0
-	BlinkEffectTimer = 0
+	BlinkEffectTimer = 0.0
 	
-	Bloodloss = 0
-	Injuries = 0
-	Infect = 0
+	Bloodloss = 0.0
+	Injuries = 0.0
+	Infect = 0.0
 	
 	For i = 0 To 5
-		SCP1025state[i] = 0
+		SCP1025State[i] = 0.0
 	Next
 	
 	SelectedEnding = ""
-	EndingTimer = 0
-	ExplosionTimer = 0
+	EndingTimer = 0.0
+	ExplosionTimer = 0.0
 	
-	CameraShake = 0
-	Shake = 0
-	LightFlash = 0
+	CameraShake = 0.0
+	Shake = 0.0
+	LightFlash = 0.0
 	
-	GodMode = 0
-	NoClip = 0
 	WireframeState = 0
-	WireFrame(0)
+	WireFrame(False)
 	WearingGasMask = 0
 	WearingHazmat = 0
 	WearingVest = 0
@@ -8658,15 +8228,15 @@ Function NullGame(PlayButtonSFX% = True)
 	ForceAngle = 0.0	
 	Playable = True
 	
-	CoffinDistance = 100
+	CoffinDistance = 100.0
 	
 	Contained106 = False
 	If Curr173 <> Null Then Curr173\Idle = False
 	
-	MTFtimer = 0
+	MTFTimer = 0
 	For i = 0 To 9
-		MTFrooms[i] = Null
-		MTFroomState[i] = 0
+		MTFRooms[i] = Null
+		MTFRoomState[i] = 0
 	Next
 	
 	For s.Screens = Each Screens
@@ -8687,13 +8257,13 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	ShouldPlay = 0
 	
-	KillTimer = 0
-	FallTimer = 0
-	Stamina = 100
-	BlurTimer = 0
+	KillTimer = 0.0
+	FallTimer = 0.0
+	Stamina = 100.0
+	BlurTimer = 0.0
 	SuperMan = False
-	SuperManTimer = 0
-	Sanity = 0
+	SuperManTimer = 0.0
+	Sanity = 0.0
 	RestoreSanity = True
 	Crouch = False
 	CrouchState = 0.0
@@ -8705,10 +8275,8 @@ Function NullGame(PlayButtonSFX% = True)
 	RemoteDoorOn = True
 	SoundTransmission = False
 	
-	InfiniteStamina = False
-	
 	Msg = ""
-	MsgTimer = 0
+	MsgTimer = 0.0
 	
 	SelectedItem = Null
 	
@@ -8768,7 +8336,7 @@ Function NullGame(PlayButtonSFX% = True)
 	Curr096 = Null
 	
 	For i = 0 To 6
-		MTFrooms[i] = Null
+		MTFRooms[i] = Null
 	Next
 	ForestNPC = 0
 	ForestNPCTex = 0
@@ -8813,8 +8381,6 @@ Function NullGame(PlayButtonSFX% = True)
 	DeleteChunks()
 	
 	DeleteDevilEmitters()
-	
-	NoTarget = False
 	
 	OptionsMenu = -1
 	QuitMsg = -1
@@ -11535,7 +11101,7 @@ End Function
 
 Function ScaleRender(x#, y#, hScale# = 1.0, vScale# = 1.0)
 	If Camera <> 0 Then HideEntity(Camera)
-	WireFrame(0)
+	WireFrame(False)
 	ShowEntity(Fresize_Image)
 	ScaleEntity(Fresize_Image, hScale, vScale, 1.0)
 	PositionEntity(Fresize_Image, x, y, 1.0001)
@@ -11785,8 +11351,8 @@ Function CatchErrors(Location$)
 		If FileType(ErrorFile) = 0 Then
 			ErrF = WriteFile(ErrorFile)
 			WriteLine(ErrF, "An error occured in SCP - Containment Breach!")
-			WriteLine(ErrF, "Version: " + VersionNumber)
-			WriteLine(ErrF, "Save compatible version: " + CompatibleNumber)
+			WriteLine(ErrF, "Mod Version: " + ModVersionNumber)
+			WriteLine(ErrF, "Game Version: " + GameVersionNumber)
 			WriteLine(ErrF, "Date and time: " + CurrentDate() + " at " + CurrentTime())
 			WriteLine(ErrF, "Total video memory (MB): " + TotalVidMem() / 1024 / 1024)
 			WriteLine(ErrF, "Available video memory (MB): " + AvailVidMem() / 1024 / 1024)
@@ -11909,7 +11475,7 @@ Function TeleportEntity(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = Fa
 End Function
 
 Function PlayStartupVideos()
-	If GetINIInt("options.ini", "options", "play startup video") = 0 Then Return
+	If GetINIInt(OptionFile, "options", "play startup video") = 0 Then Return
 	
 	Local Cam% = CreateCamera() 
 	
@@ -12128,5 +11694,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#10D8#1403#1BEA
+;~B#F1B#1246#1A2D
 ;~C#Blitz3D

@@ -707,7 +707,7 @@ Function UpdateNPCs()
 								EndIf
 							EndIf
 							
-							If NoTarget Then move = True
+							If chs\NoTarget Then move = True
 							
 							;player is looking at it -> doesn't move
 							If move=False Then
@@ -800,7 +800,7 @@ Function UpdateNPCs()
 										Next
 									EndIf
 									
-									If NoTarget
+									If chs\NoTarget
 										temp = False
 										n\EnemyX = 0
 										n\EnemyY = 0
@@ -810,7 +810,7 @@ Function UpdateNPCs()
 									;player is not looking and is visible from 173's position -> attack
 									If temp Then 				
 										If dist < 0.65 Then
-											If KillTimer >= 0 And (Not GodMode) Then
+											If KillTimer >= 0 And (Not chs\GodMode) Then
 												
 												Select PlayerRoom\RoomTemplate\Name
 													Case "lockroom", "room2closets", "coffin"
@@ -825,7 +825,7 @@ Function UpdateNPCs()
 														DeathMSG = "Subject D-9341. Cause of death: Fatal cervical fracture. Assumed to be attacked by SCP-173."
 												End Select
 												
-												If (Not GodMode) Then n\Idle = True
+												If (Not chs\GodMode) Then n\Idle = True
 												PlaySound_Strict(NeckSnapSFX(Rand(0,2)))
 												If Rand(2) = 1 Then 
 													TurnEntity(Camera, 0, Rand(80,100), 0)
@@ -1001,7 +1001,7 @@ Function UpdateNPCs()
 									Visible% = EntityVisible(n\Collider, Collider)
 								EndIf
 								
-								If NoTarget Then Visible = False
+								If chs\NoTarget Then Visible = False
 								
 								If Visible Then
 									If PlayerRoom\RoomTemplate\Name <> "gatea" Then n\PathTimer = 0
@@ -1104,7 +1104,7 @@ Function UpdateNPCs()
 										
 									EndIf
 									
-								ElseIf PlayerRoom\RoomTemplate\Name <> "gatea" And (Not NoTarget) ;dist < 0.8
+								ElseIf PlayerRoom\RoomTemplate\Name <> "gatea" And (Not chs\NoTarget) ;dist < 0.8
 									
 									If dist > 0.5 Then 
 										n\CurrSpeed = CurveValue(n\Speed * 2.5,n\CurrSpeed,10.0)
@@ -1119,7 +1119,7 @@ Function UpdateNPCs()
 										PointEntity n\obj, Collider
 										RotateEntity n\Collider, 0, CurveAngle(EntityYaw(n\obj), EntityYaw(n\Collider), 10.0), 0										
 										
-										If Ceil(n\Frame) = 110 And (Not GodMode) Then
+										If Ceil(n\Frame) = 110 And (Not chs\GodMode) Then
 											PlaySound_Strict(DamageSFX(1))
 											PlaySound_Strict(HorrorSFX(5))											
 											If PlayerRoom\RoomTemplate\Name = "pocketdimension" Then
@@ -1266,7 +1266,7 @@ Function UpdateNPCs()
 							
 							angle = WrapAngle(DeltaYaw(n\Collider, Collider));-EntityYaw(n\Collider,True))
 							
-							If (Not NoTarget)
+							If (Not chs\NoTarget)
 								If angle<90 Or angle>270 Then
 									CameraProject Camera,EntityX(n\Collider), EntityY(n\Collider)+0.25, EntityZ(n\Collider)
 									
@@ -1328,7 +1328,7 @@ Function UpdateNPCs()
 							EndIf
 						EndIf
 						
-						If NoTarget And n\Target = Null Then n\State = 5
+						If chs\NoTarget And n\Target = Null Then n\State = 5
 						
 						If KillTimer =>0 Then
 							
@@ -1359,7 +1359,7 @@ Function UpdateNPCs()
 										n\CurrSpeed = 0
 										
 										If n\Target=Null Then
-											If (Not GodMode) Then 
+											If (Not chs\GodMode) Then 
 												PlaySound_Strict DamageSFX(4)
 												
 												pvt = CreatePivot()
@@ -1607,7 +1607,7 @@ Function UpdateNPCs()
 							EndIf
 							
 							angle = WrapAngle(DeltaYaw(n\Collider, Camera));-EntityYaw(n\Collider))
-							If (Not NoTarget)
+							If (Not chs\NoTarget)
 								If angle<55 Or angle>360-55 Then
 									CameraProject Camera,EntityX(n\Collider), EntityY(Collider)+5.8*0.2-0.25, EntityZ(n\Collider)
 									
@@ -1759,7 +1759,7 @@ Function UpdateNPCs()
 											CurrCameraZoom = 20.0
 											BlurTimer = 500.0
 											
-											If (Not GodMode) Then
+											If (Not chs\GodMode) Then
 												If PlayerRoom\RoomTemplate\Name$ = "room049"
 													DeathMSG = "Three (3) active instances of SCP-049-2 discovered in the tunnel outside SCP-049's containment chamber. Terminated by Nine-Tailed Fox."
 													For e.events = Each Events
@@ -2179,7 +2179,7 @@ Function UpdateNPCs()
 									n\State3=n\State3-FPSfactor
 								EndIf
 								
-								If n\State2 > 0 And (Not NoTarget) Then ;player is visible -> attack
+								If n\State2 > 0 And (Not chs\NoTarget) Then ;player is visible -> attack
 									n\SoundChn = LoopSound2(n\Sound, n\SoundChn, Camera, n\Collider, 6.0, 0.6)
 									
 									n\PathStatus = 0
@@ -2254,7 +2254,7 @@ Function UpdateNPCs()
 								;[End Block]
 							Case 3
 								;[Block]
-								If NoTarget Then n\State = 2
+								If chs\NoTarget Then n\State = 2
 								If n\Frame < 66 Then
 									AnimateNPC(n, 2, 65, 0.7, False)
 									
@@ -3048,7 +3048,7 @@ Function UpdateNPCs()
 						TurnEntity(n\obj2,0,20.0*FPSfactor,0)
 						TurnEntity(n\obj3,20.0*FPSfactor,0,0)
 						
-						If n\State=1 And (Not NoTarget) Then
+						If n\State=1 And (Not chs\NoTarget) Then
 							If Abs(EntityX(Collider)-EntityX(n\Collider))< 30.0 Then
 								If Abs(EntityZ(Collider)-EntityZ(n\Collider))<30.0 Then
 									If Abs(EntityY(Collider)-EntityY(n\Collider))<20.0 Then
@@ -3071,7 +3071,7 @@ Function UpdateNPCs()
 							PositionEntity target, n\EnemyX, n\EnemyY, n\EnemyZ, True
 						EndIf
 						
-						If NoTarget And n\State = 2 Then n\State = 1
+						If chs\NoTarget And n\State = 2 Then n\State = 1
 						
 						TurnEntity(n\obj2,0,20.0*FPSfactor,0)
 						TurnEntity(n\obj3,20.0*FPSfactor,0,0)
@@ -3726,7 +3726,7 @@ Function UpdateNPCs()
 								n\LastSeen = 10*7
 							EndIf
 							
-							If n\LastSeen > 0 And (Not NoTarget) Then
+							If n\LastSeen > 0 And (Not chs\NoTarget) Then
 								prevFrame = n\Frame
 								
 								If (n\Frame=>18.0 And n\Frame<68.0) Then
@@ -3758,7 +3758,7 @@ Function UpdateNPCs()
 										DeathMSG=Chr(34)+"All four (4) escaped SCP-939 specimens have been captured and recontained successfully. "
 										DeathMSG=DeathMSG+"Three (3) of them made quite a mess at Storage Area 6. A cleaning team has been dispatched."+Chr(34)
 										Kill()
-										If (Not GodMode) Then n\State = 5
+										If (Not chs\GodMode) Then n\State = 5
 									EndIf								
 								Else
 									If n\LastSeen = 10*7 Then 
@@ -3807,7 +3807,7 @@ Function UpdateNPCs()
 							
 					End Select
 					
-					If n\State < 3 And (Not NoTarget) And (Not n\IgnorePlayer) Then
+					If n\State < 3 And (Not chs\NoTarget) And (Not n\IgnorePlayer) Then
 						dist = EntityDistance(n\Collider, Collider)
 						
 						If dist < 4.0 Then dist = dist - EntityVisible(Collider, n\Collider)
@@ -4587,7 +4587,7 @@ Function UpdateNPCs()
 									EndIf
 								EndIf
 								
-								If (n\ID Mod 2 = 0) And (Not NoTarget) Then
+								If (n\ID Mod 2 = 0) And (Not chs\NoTarget) Then
 									dist = EntityDistance(n\Collider,Collider)
 									If dist < 10.0 Then
 										If EntityVisible(n\Collider,Collider) Then
@@ -4619,7 +4619,7 @@ Function UpdateNPCs()
 								EndIf
 							ElseIf n\PrevState=1 Then
 								dist = EntityDistance(n\Collider,Collider)
-								If (Not NoTarget) Then
+								If (Not chs\NoTarget) Then
 									If dist < 4.0 Then
 										If EntityVisible(n\Collider,Collider) Then
 											If n\Sound <> 0 Then FreeSound_Strict n\Sound : n\Sound = 0
@@ -4636,7 +4636,7 @@ Function UpdateNPCs()
 							;[End Block]
 						Case 1 ;attacking the player
 							;[Block]
-							If NoTarget Then n\State = 0
+							If chs\NoTarget Then n\State = 0
 							
 							If PlayerRoom\RoomTemplate\Name = "dimension1499" And n\PrevState=0 Then
 								ShouldPlay = 19
@@ -5159,7 +5159,7 @@ Function MeNPCSeesPlayer%(me.NPCs,disablesoundoncrouch%=False)
 		;3: Player is detected by a camera (only for MTF Units!)
 		;4: Player is detected through glass
 	
-	If NoTarget Then Return False
+	If chs\NoTarget Then Return False
 	
 	If (Not PlayerDetected) Or me\NPCtype <> NPCtypeMTF
 		If me\BlinkTimer<=0.0 Then Return False
@@ -5506,7 +5506,7 @@ Function UpdateMTFUnit(n.NPCs)
                 
 				Local temp = MeNPCSeesPlayer(n)
 				
-				If NoTarget Then temp = False
+				If chs\NoTarget Then temp = False
 				
                 If temp>False Then
 					If n\LastSeen > 0 And n\LastSeen < 70*15 Then
@@ -6754,7 +6754,7 @@ Function UpdateMTFUnit(n.NPCs)
 			EndIf
 		EndIf
 		
-		If NoTarget And n\State = 1 Then n\State = 0
+		If chs\NoTarget And n\State = 1 Then n\State = 0
 		
 		If n\State <> 3 And n\State <> 5 And n\State <> 6 And n\State <> 7
 			If n\MTFLeader<>Null Then
@@ -6801,133 +6801,128 @@ Function Shoot(x#, y#, z#, hitProb# = 1.0, particles% = True, instaKill% = False
 	
 	LightVolume = TempLightVolume*1.2
 	
-	If (Not GodMode) Then 
+	
+	If instaKill Then Kill() : PlaySound_Strict BullethitSFX : Return
+	
+	If Rnd(1.0) =< hitProb Then
+		TurnEntity Camera, Rnd(-3,3), Rnd(-3,3), 0
 		
-		If instaKill Then Kill() : PlaySound_Strict BullethitSFX : Return
-		
-		If Rnd(1.0) =< hitProb Then
-			TurnEntity Camera, Rnd(-3,3), Rnd(-3,3), 0
-			
-			Local ShotMessageUpdate$
-			If WearingVest>0 Then
-				If WearingVest = 1 Then
-					Select Rand(8)
-						Case 1,2,3,4,5
-							BlurTimer = 500
-							Stamina = 0
-							ShotMessageUpdate = "A bullet penetrated your vest, making you gasp."
-							Injuries = Injuries + Rnd(0.1,0.5)
-						Case 6
-							BlurTimer = 500
-							ShotMessageUpdate = "A bullet hit your left leg."
-							Injuries = Injuries + Rnd(0.8,1.2)
-						Case 7
-							BlurTimer = 500
-							ShotMessageUpdate = "A bullet hit your right leg."
-							Injuries = Injuries + Rnd(0.8,1.2)
-						Case 8
-							BlurTimer = 500
-							Stamina = 0
-							ShotMessageUpdate = "A bullet struck your neck, making you gasp."
-							Injuries = Injuries + Rnd(1.2,1.6)
-					End Select	
-				Else
-					If Rand(10)=1 Then
+		Local ShotMessageUpdate$
+		If WearingVest>0 Then
+			If WearingVest = 1 Then
+				Select Rand(8)
+					Case 1,2,3,4,5
 						BlurTimer = 500
-						Stamina = Stamina - 1
-						ShotMessageUpdate = "A bullet hit your chest. The vest absorbed some of the damage."
-						Injuries = Injuries + Rnd(0.8,1.1)
-					Else
-						ShotMessageUpdate = "A bullet hit your chest. The vest absorbed most of the damage."
+						Stamina = 0
+						ShotMessageUpdate = "A bullet penetrated your vest, making you gasp."
 						Injuries = Injuries + Rnd(0.1,0.5)
-					EndIf
-				EndIf
-				
-				If Injuries >= 5
-					If Rand(3) = 1 Then Kill()
-				EndIf
-			Else
-				Select Rand(6)
-					Case 1
-						Kill()
-					Case 2
+					Case 6
 						BlurTimer = 500
 						ShotMessageUpdate = "A bullet hit your left leg."
 						Injuries = Injuries + Rnd(0.8,1.2)
-					Case 3
+					Case 7
 						BlurTimer = 500
 						ShotMessageUpdate = "A bullet hit your right leg."
 						Injuries = Injuries + Rnd(0.8,1.2)
-					Case 4
+					Case 8
 						BlurTimer = 500
-						ShotMessageUpdate = "A bullet hit your right shoulder."
-						Injuries = Injuries + Rnd(0.8,1.2)	
-					Case 5
-						BlurTimer = 500
-						ShotMessageUpdate = "A bullet hit your left shoulder."
-						Injuries = Injuries + Rnd(0.8,1.2)	
-					Case 6
-						BlurTimer = 500
-						ShotMessageUpdate = "A bullet hit your right shoulder."
-						Injuries = Injuries + Rnd(2.5,4.0)
-				End Select
+						Stamina = 0
+						ShotMessageUpdate = "A bullet struck your neck, making you gasp."
+						Injuries = Injuries + Rnd(1.2,1.6)
+				End Select	
+			Else
+				If Rand(10)=1 Then
+					BlurTimer = 500
+					Stamina = Stamina - 1
+					ShotMessageUpdate = "A bullet hit your chest. The vest absorbed some of the damage."
+					Injuries = Injuries + Rnd(0.8,1.1)
+				Else
+					ShotMessageUpdate = "A bullet hit your chest. The vest absorbed most of the damage."
+					Injuries = Injuries + Rnd(0.1,0.5)
+				EndIf
 			EndIf
 			
-			;Only updates the message if it's been more than two seconds.
-			If (MsgTimer < 64*4) Then
-				Msg = ShotMessageUpdate
-				MsgTimer = 70*6
+			If Injuries >= 5
+				If Rand(3) = 1 Then Kill()
 			EndIf
-
-			Injuries = Min(Injuries, 4.0)
-			
-			;Kill()
-			PlaySound_Strict BullethitSFX
-		ElseIf particles And ParticleAmount>0
-			pvt = CreatePivot()
-			PositionEntity pvt, EntityX(Collider),(EntityY(Collider)+EntityY(Camera))/2,EntityZ(Collider)
-			PointEntity pvt, p\obj
-			TurnEntity pvt, 0, 180, 0
-			
-			EntityPick(pvt, 2.5)
-			
-			If PickedEntity() <> 0 Then 
-				PlaySound2(Gunshot3SFX, Camera, pvt, 0.4, Rnd(0.8,1.0))
-				
-				If particles Then 
-					;dust/smoke particles
-					p.particles = CreateParticle(PickedX(),PickedY(),PickedZ(), 0, 0.03, 0, 80)
-					p\speed = 0.001
-					p\SizeChange = 0.003
-					p\A = 0.8
-					p\Achange = -0.01
-					RotateEntity p\pvt, EntityPitch(pvt)-180, EntityYaw(pvt),0
-					
-					For i = 0 To Rand(2,3)
-						p.particles = CreateParticle(PickedX(),PickedY(),PickedZ(), 0, 0.006, 0.003, 80)
-						p\speed = 0.02
-						p\A = 0.8
-						p\Achange = -0.01
-						RotateEntity p\pvt, EntityPitch(pvt)+Rnd(170,190), EntityYaw(pvt)+Rnd(-10,10),0	
-					Next
-					
-					;bullet hole decal
-					Local de.Decals = CreateDecal(Rand(13,14), PickedX(),PickedY(),PickedZ(), 0,0,0)
-					AlignToVector de\obj,-PickedNX(),-PickedNY(),-PickedNZ(),3
-					MoveEntity de\obj, 0,0,-0.001
-					EntityFX de\obj, 1
-					de\lifetime = 70*20
-					EntityBlend de\obj, 2
-					de\Size = Rnd(0.028,0.034)
-					ScaleSprite de\obj, de\Size, de\Size
-				EndIf				
-			EndIf
-			FreeEntity pvt
-			
+		Else
+			Select Rand(6)
+				Case 1
+					Kill()
+				Case 2
+					BlurTimer = 500
+					ShotMessageUpdate = "A bullet hit your left leg."
+					Injuries = Injuries + Rnd(0.8,1.2)
+				Case 3
+					BlurTimer = 500
+					ShotMessageUpdate = "A bullet hit your right leg."
+					Injuries = Injuries + Rnd(0.8,1.2)
+				Case 4
+					BlurTimer = 500
+					ShotMessageUpdate = "A bullet hit your right shoulder."
+					Injuries = Injuries + Rnd(0.8,1.2)	
+				Case 5
+					BlurTimer = 500
+					ShotMessageUpdate = "A bullet hit your left shoulder."
+					Injuries = Injuries + Rnd(0.8,1.2)	
+				Case 6
+					BlurTimer = 500
+					ShotMessageUpdate = "A bullet hit your right shoulder."
+					Injuries = Injuries + Rnd(2.5,4.0)
+			End Select
 		EndIf
 		
+		;Only updates the message if it's been more than two seconds.
+		If (MsgTimer < 64*4) Then
+			Msg = ShotMessageUpdate
+			MsgTimer = 70*6
+		EndIf
+
+		Injuries = Min(Injuries, 4.0)
+		
+		;Kill()
+		PlaySound_Strict BullethitSFX
+	ElseIf particles And ParticleAmount>0
+		pvt = CreatePivot()
+		PositionEntity pvt, EntityX(Collider),(EntityY(Collider)+EntityY(Camera))/2,EntityZ(Collider)
+		PointEntity pvt, p\obj
+		TurnEntity pvt, 0, 180, 0
+		
+		EntityPick(pvt, 2.5)
+		
+		If PickedEntity() <> 0 Then 
+			PlaySound2(Gunshot3SFX, Camera, pvt, 0.4, Rnd(0.8,1.0))
+			
+			If particles Then 
+				;dust/smoke particles
+				p.particles = CreateParticle(PickedX(),PickedY(),PickedZ(), 0, 0.03, 0, 80)
+				p\speed = 0.001
+				p\SizeChange = 0.003
+				p\A = 0.8
+				p\Achange = -0.01
+				RotateEntity p\pvt, EntityPitch(pvt)-180, EntityYaw(pvt),0
+				
+				For i = 0 To Rand(2,3)
+					p.particles = CreateParticle(PickedX(),PickedY(),PickedZ(), 0, 0.006, 0.003, 80)
+					p\speed = 0.02
+					p\A = 0.8
+					p\Achange = -0.01
+					RotateEntity p\pvt, EntityPitch(pvt)+Rnd(170,190), EntityYaw(pvt)+Rnd(-10,10),0	
+				Next
+				
+				;bullet hole decal
+				Local de.Decals = CreateDecal(Rand(13,14), PickedX(),PickedY(),PickedZ(), 0,0,0)
+				AlignToVector de\obj,-PickedNX(),-PickedNY(),-PickedNZ(),3
+				MoveEntity de\obj, 0,0,-0.001
+				EntityFX de\obj, 1
+				de\lifetime = 70*20
+				EntityBlend de\obj, 2
+				de\Size = Rnd(0.028,0.034)
+				ScaleSprite de\obj, de\Size, de\Size
+			EndIf				
+		EndIf
+		FreeEntity pvt
 	EndIf
-	
 End Function
 
 Function PlayMTFSound(sound%, n.NPCs)
