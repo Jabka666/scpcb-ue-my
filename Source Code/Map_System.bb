@@ -6210,7 +6210,7 @@ Function UpdateSecurityCams()
 					PositionEntity(sc\CameraOBJ, EntityX(sc\OBJ, True), EntityY(sc\OBJ, True) - 0.083, EntityZ(sc\OBJ, True))
 					RotateEntity(sc\CameraOBJ, EntityPitch(sc\CameraOBJ), EntityYaw(sc\OBJ), 0.0)
 				Else
-					If sc\Turn > 0 Then
+					If sc\Turn > 0.0 Then
 						If sc\Dir = 0 Then
 							sc\CurrAngle = sc\CurrAngle + 0.2 * FPSfactor
 							If sc\CurrAngle > sc\Turn * 1.3 Then sc\Dir = 1
@@ -6220,6 +6220,7 @@ Function UpdateSecurityCams()
 						End If
 					End If
 					RotateEntity(sc\OBJ, 0.0, sc\room\Angle + sc\Angle + Max(Min(sc\CurrAngle, sc\Turn), -sc\Turn), 0.0)
+					
 					PositionEntity(sc\CameraOBJ, EntityX(sc\OBJ, True), EntityY(sc\OBJ, True) - 0.083, EntityZ(sc\OBJ, True))
 					RotateEntity(sc\CameraOBJ, EntityPitch(sc\CameraOBJ), EntityYaw(sc\OBJ), 0.0)
 					
