@@ -4,8 +4,7 @@ Const OptionFile$ = "options.ini"
 
 ; ~ [VERSION]
 
-Const ModVersionNumber$ = "5.6"
-Const GameVersionNumber$ = "1.3.11"
+Const VersionNumber$ = "5.6"
 
 ; ~ [NPCs]
 
