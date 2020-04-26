@@ -4063,12 +4063,12 @@ Function FillRoom(r.Rooms)
 			sc\Angle = 45 + 180
 			sc\Turn = 45
 			sc\CoffinEffect = True
-			TurnEntity(sc\CameraObj, 120.0, 0.0, 0.0)
+			TurnEntity(sc\CameraOBJ, 120.0, 0.0, 0.0)
 			EntityParent(sc\OBJ, r\OBJ)
 			CoffinCam = sc
-			PositionEntity(sc\ScrObj, r\x - 800.0 * RoomScale, r\y + 288.0 * RoomScale, r\z - 340.0 * RoomScale)
-			EntityParent(sc\ScrObj, r\OBJ)
-			TurnEntity(sc\ScrObj, 0.0, 180.0, 0.0)
+			PositionEntity(sc\ScrOBJ, r\x - 800.0 * RoomScale, r\y + 288.0 * RoomScale, r\z - 340.0 * RoomScale)
+			EntityParent(sc\ScrOBJ, r\OBJ)
+			TurnEntity(sc\ScrOBJ, 0.0, 180.0, 0.0)
 			
 			it = CreateItem("Document SCP-895", "paper", r\x - 688.0 * RoomScale, r\y + 133.0 * RoomScale, r\z - 304.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -6203,8 +6203,8 @@ Function UpdateSecurityCams()
 					
 					RotateEntity(sc\OBJ, 0.0, CurveAngle(EntityYaw(sc\CameraOBJ), EntityYaw(sc\OBJ), 75.0), 0.0)
 					
-					If Temp < 40.0 Then Temp = 40
-					If Temp > 70.0 Then Temp = 70
+					If Temp < 40.0 Then Temp = 40.0
+					If Temp > 70.0 Then Temp = 70.0
 					RotateEntity(sc\CameraOBJ, CurveAngle(Temp, EntityPitch(sc\CameraOBJ), 75.0), EntityYaw(sc\OBJ), 0.0)
 					
 					PositionEntity(sc\CameraOBJ, EntityX(sc\OBJ, True), EntityY(sc\OBJ, True) - 0.083, EntityZ(sc\OBJ, True))
@@ -6213,14 +6213,13 @@ Function UpdateSecurityCams()
 					If sc\Turn > 0 Then
 						If sc\Dir = 0 Then
 							sc\CurrAngle = sc\CurrAngle + 0.2 * FPSfactor
-							If sc\CurrAngle > (sc\Turn) * 1.3 Then sc\Dir = 1
+							If sc\CurrAngle > sc\Turn * 1.3 Then sc\Dir = 1
 						Else
 							sc\CurrAngle = sc\CurrAngle - 0.2 * FPSfactor
 							If sc\CurrAngle < (-sc\Turn) * 1.3 Then sc\Dir = 0
 						End If
 					End If
 					RotateEntity(sc\OBJ, 0.0, sc\room\Angle + sc\Angle + Max(Min(sc\CurrAngle, sc\Turn), -sc\Turn), 0.0)
-					
 					PositionEntity(sc\CameraOBJ, EntityX(sc\OBJ, True), EntityY(sc\OBJ, True) - 0.083, EntityZ(sc\OBJ, True))
 					RotateEntity(sc\CameraOBJ, EntityPitch(sc\CameraOBJ), EntityYaw(sc\OBJ), 0.0)
 					
@@ -6245,10 +6244,10 @@ Function UpdateSecurityCams()
 			If Close = True Then
 				If sc\Screen Then
 					sc\State = sc\State + FPSfactor
-					If BlinkTimer > - 5 And EntityInView(sc\ScrOBJ, Camera) Then
+					If BlinkTimer > -5.0 And EntityInView(sc\ScrOBJ, Camera) Then
 						If EntityVisible(Camera, sc\ScrOBJ) Then
 							If (sc\CoffinEffect = 1 Or sc\CoffinEffect = 3) And Wearing714 = 0 And WearingHazmat < 3 And WearingGasMask < 3 Then
-								If BlinkTimer > - 5
+								If BlinkTimer > -5.0
 									Sanity = Sanity - FPSfactor
 									RestoreSanity = False
 								EndIf
@@ -6256,28 +6255,28 @@ Function UpdateSecurityCams()
 						EndIf
 					EndIf
 					
-					If Sanity < (-1000) Then 
+					If Sanity < (-1000.0) Then 
 						DeathMSG = Chr(34) + "What we know is that he died of cardiac arrest. My guess is that it was caused by SCP-895, although it has never been observed affecting video equipment from this far before. "
 						DeathMSG = DeathMSG + "Further testing is needed to determine whether SCP-895's " + Chr(34) + "Red Zone" + Chr(34) + " is increasing." + Chr(34)
 						
-						If VomitTimer < -10 Then
+						If VomitTimer < -10.0 Then
 							Kill()
 						EndIf
 					EndIf
 					
-					If VomitTimer < 0 And Sanity < -800 Then
+					If VomitTimer < 0.0 And Sanity < -800.0 Then
 						RestoreSanity = False
-						Sanity = -1010
+						Sanity = -1010.0
 					EndIf
 					
-					If BlinkTimer > - 5 And EntityInView(sc\ScrOBJ, Camera) And EntityVisible(Camera, sc\ScrOBJ) Then
+					If BlinkTimer > -5.0 And EntityInView(sc\ScrOBJ, Camera) And EntityVisible(Camera, sc\ScrOBJ) Then
 						sc\InSight = True
 					Else
 						sc\InSight = False
 					EndIf
 					
 					If (sc\State >= sc\RenderInterval)
-						If BlinkTimer > - 5 And EntityInView(sc\ScrOBJ, Camera)Then
+						If BlinkTimer > -5.0 And EntityInView(sc\ScrOBJ, Camera)Then
 							If EntityVisible(Camera, sc\ScrOBJ) Then
 								If CoffinCam = Null Or Rand(5) = 5 Or sc\CoffinEffect <> 3 Then
 									HideEntity(Camera)
@@ -6311,7 +6310,7 @@ Function UpdateSecurityCams()
 								EndIf
 							EndIf
 						EndIf
-						sc\State = 0
+						sc\State = 0.0
 					EndIf
 					
 					If (sc\CoffinEffect = 1 Or sc\CoffinEffect = 3) And Wearing714 = 0 And WearingHazmat < 3 And WearingGasMask < 3 Then

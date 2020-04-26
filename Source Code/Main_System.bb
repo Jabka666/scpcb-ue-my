@@ -194,7 +194,7 @@ Global GameSaved%
 
 Global CanSave% = True
 
-AppTitle "SCP - Containment Breach Ultimate Edition v" + ModVersionNumber
+AppTitle "SCP - Containment Breach Ultimate Edition v" + VersionNumber
 
 PlayStartupVideos()
 
