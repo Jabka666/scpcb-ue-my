@@ -636,7 +636,7 @@ Function UpdateMainMenu()
 					;Local prevGamma# = ScreenGamma
 					ScreenGamma = (SlideBar(x + 310*MenuScale, y+6*MenuScale, 150*MenuScale, ScreenGamma*50.0)/50.0)
 					Color 255,255,255
-					AAText(x + 20 * MenuScale, y, "Screen gamma")
+					AAText(x + 20 * MenuScale, y, "Screen gamma:")
 					If MouseOn(x+310*MenuScale,y+6*MenuScale,150*MenuScale+14,20) And OnSliderID=0
 						DrawOptionsTooltip(tx,ty,tw,th,"gamma",ScreenGamma)
 					EndIf
@@ -1100,7 +1100,8 @@ Function UpdateMainMenu()
 	
 	Color 255,255,255
 	AASetFont ConsoleFont
-	AAText 20,GraphicHeight-30,"v"+VersionNumber
+	AAText(20, GraphicHeight - 50, "v" + ModVersionNumber)
+	AAText(20, GraphicHeight - 30, "Running on SCP:CB v" + GameVersionNumber)
 	
 	;DrawTiledImageRect(MenuBack, 985 * MenuScale, 860 * MenuScale, 200 * MenuScale, 20 * MenuScale, 1200 * MenuScale, 866 * MenuScale, 300, 20 * MenuScale)
 	
@@ -1151,7 +1152,7 @@ Function UpdateLauncher()
 	
 	BlinkMeterIMG% = LoadImage_Strict("GFX\blinkmeter.jpg")
 	
-	AppTitle "SCP - Containment Breach Launcher"
+	AppTitle "SCP - Containment Breach Ultimate Edition Launcher"
 	
 	Repeat
 		

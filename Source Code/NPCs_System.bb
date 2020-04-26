@@ -202,7 +202,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			
 			n\obj = CopyEntity(ClassDObj)
 			
-			temp# = 0.5 / MeshWidth(n\obj)
+			temp# = 0.52 / MeshWidth(n\obj)
 			ScaleEntity n\obj, temp, temp, temp
 			
 			n\Speed = 2.0 / 100

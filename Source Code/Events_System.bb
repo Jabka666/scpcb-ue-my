@@ -246,8 +246,6 @@ Function InitEvents()
 	CreateEvent("room2offices035", "room2offices", 0)
 	
 	CreateEvent("room2pit106", "room2pit", 0, 0.07 + (0.1 * SelectedDifficulty\aggressiveNPCs))
-	
-	CreateEvent("room1archive", "room1archive", 0, 1.0)
 End Function
 
 Function QuickLoadEvents()
@@ -6008,7 +6006,7 @@ Function UpdateEvents()
 								e\EventState = Min(e\EventState+FPSfactor,70)
 							EndIf
 							
-							If temp And x Then
+							If Temp And x Then
 								e\room\RoomDoors[1]\locked = False
 								e\room\RoomDoors[3]\locked = False
 								e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1],e\room\Objects[0],e\room\Objects[1], e)
@@ -7719,23 +7717,23 @@ Function UpdateEvents()
 						If Angle < 22.5 Then
 							Angle = 0
 							setting = "1:1"
-						ElseIf angle < 67.5
-							angle = 40
+						ElseIf Angle < 67.5
+							Angle = 40
 							setting = "coarse"
-						ElseIf angle < 180
-							angle = 90
+						ElseIf Angle < 180
+							Angle = 90
 							setting = "rough"
-						ElseIf angle > 337.5
-							angle = 359 - 360
+						ElseIf Angle > 337.5
+							Angle = 359 - 360
 							setting = "1:1"
-						ElseIf angle > 292.5
-							angle = 320 - 360
+						ElseIf Angle > 292.5
+							Angle = 320 - 360
 							setting = "fine"
 						Else
-							angle = 270 - 360
+							Angle = 270 - 360
 							setting = "very fine"
 						End If
-						RotateEntity(e\room\Objects[1], 0, 0, CurveValue(angle, EntityRoll(e\room\Objects[1]), 20))
+						RotateEntity(e\room\Objects[1], 0, 0, CurveValue(Angle, EntityRoll(e\room\Objects[1]), 20))
 					EndIf
 					
 					For i% = 0 To 1
@@ -8225,10 +8223,10 @@ Function UpdateEvents()
 							RemoveItem(Inventory(e\EventState2))
 						Else
 							Injuries = Injuries + 5.0
-							pvt = CreatePivot()
-							PositionEntity pvt, EntityX(Collider),EntityY(Collider)-0.05,EntityZ(Collider)
-							TurnEntity pvt, 90, 0, 0
-							EntityPick(pvt,0.3)
+							Pvt = CreatePivot()
+							PositionEntity Pvt, EntityX(Collider),EntityY(Collider)-0.05,EntityZ(Collider)
+							TurnEntity Pvt, 90, 0, 0
+							EntityPick(Pvt,0.3)
 							de.decals = CreateDecal(3, PickedX(), PickedY()+0.005, PickedZ(), 90, Rand(360), 0)
 							de\size = 0.75 : ScaleSprite de\obj, de\size, de\size
 							FreeEntity Pvt
@@ -8463,7 +8461,7 @@ Function UpdateEvents()
 								e\room\RoomDoors[0]\locked = True
 								e\room\RoomDoors[1]\locked = True
 								If e\room\NPC[0]\Reload = 0
-									PlaySound_Strict LoadTempSound("SFX\Door\DoorOpen079.ogg")
+									;PlaySound_Strict LoadTempSound("SFX\Door\DoorOpen079.ogg")
 									
 									e\room\NPC[0]\Reload = 1
 								EndIf
@@ -8947,14 +8945,6 @@ Function UpdateEvents()
 							EndIf
 						EndIf
 					EndIf
-				EndIf
-				;[End Block]
-			Case "room1archive"
-				;[Block]
-				If e\EventState = 0
-					e\EventState = Rand(1,3)
-				Else
-					e\room\RoomDoors[0]\KeyCard = e\EventState
 				EndIf
 				;[End Block]
 			Case "room2shaft"
@@ -10426,5 +10416,5 @@ Function RemoveEvent(e.Events)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#127E#1EEE
+;~B#127C#1EEC
 ;~C#Blitz3D

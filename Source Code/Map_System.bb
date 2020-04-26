@@ -1885,11 +1885,11 @@ Function FillRoom(r.Rooms)
 			EndIf
 			
 			it = CreateItem("Document SCP-860-1", "paper", r\x + 672.0 * RoomScale, r\y + 176.0 * RoomScale, r\z + 335.0 * RoomScale)
-			RotateEntity(it\Collider, 0.0, r\Angle + 10.0, 0.0)
+			RotateEntity(it\Collider, 0.0, r\Angle + 10, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it = CreateItem("Document SCP-860", "paper", r\x + 1152.0 * RoomScale, r\y + 176.0 * RoomScale, r\z - 384.0 * RoomScale)
-			RotateEntity(it\Collider, 0.0, r\Angle + 170.0, 0.0)
+			RotateEntity(it\Collider, 0.0, r\Angle + 170, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case "lockroom"
@@ -2088,9 +2088,9 @@ Function FillRoom(r.Rooms)
 			r\RoomDoors[1] = CreateDoor(r\Zone, r\x, r\y, r\z - 360.0 * RoomScale, 0.0, r, False, True, 5)
 			r\RoomDoors[1]\AutoClose = False : r\RoomDoors[1]\Open = False
 			PositionEntity(r\RoomDoors[1]\Buttons[1], r\x + 422.0 * RoomScale, EntityY(r\RoomDoors[0]\Buttons[1], True), r\z - 576.0 * RoomScale, True)
-			RotateEntity(r\RoomDoors[1]\Buttons[1], 0.0, r\Angle - 90.0, 0.0, True)
+			RotateEntity(r\RoomDoors[1]\Buttons[1], 0.0, r\Angle - 90, 0.0, True)
 			PositionEntity(r\RoomDoors[1]\Buttons[0], r\x - 522.0 * RoomScale, EntityY(r\RoomDoors[1]\Buttons[0], True), EntityZ(r\RoomDoors[1]\Buttons[0], True), True)
-			RotateEntity(r\RoomDoors[1]\Buttons[0], 0.0, r\Angle - 225.0, 0.0, True)
+			RotateEntity(r\RoomDoors[1]\Buttons[0], 0.0, r\Angle - 225, 0.0, True)
 			
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x + 1048.0 * RoomScale, r\y, r\z + 512.0 * RoomScale)
@@ -2119,9 +2119,9 @@ Function FillRoom(r.Rooms)
 			r\RoomDoors[4] = CreateDoor(r\Zone, r\x, 0, r\z - 320.0 * RoomScale, 0.0, r, False, True, 5, "", True)
 			r\RoomDoors[4]\AutoClose = False : r\RoomDoors[4]\Open = False : r\RoomDoors[4]\Locked079 = True
 			PositionEntity(r\RoomDoors[4]\Buttons[1], r\x + 358.0 * RoomScale, EntityY(r\RoomDoors[4]\Buttons[1], True), r\z - 528.0 * RoomScale, True)
-			RotateEntity(r\RoomDoors[4]\Buttons[1], 0.0, r\Angle - 90.0, 0.0, True)
+			RotateEntity(r\RoomDoors[4]\Buttons[1], 0.0, r\Angle - 90, 0.0, True)
 			PositionEntity(r\RoomDoors[4]\Buttons[0], EntityX(r\RoomDoors[4]\Buttons[0], True), EntityY(r\RoomDoors[4]\Buttons[0], True), r\z - 198.0 * RoomScale, True)
-			RotateEntity(r\RoomDoors[4]\Buttons[0], 0.0, r\Angle - 180.0, 0.0, True)
+			RotateEntity(r\RoomDoors[4]\Buttons[0], 0.0, r\Angle - 180, 0.0, True)
 			
 			r\RoomDoors[5] = CreateDoor(r\Zone, r\x + 3248.0 * RoomScale, r\y + 9856.0 * RoomScale, r\z + 6400.0 * RoomScale, 0.0, r, False, False, False, "GEAR")
 			r\RoomDoors[5]\AutoClose = False : r\RoomDoors[5]\Open = False		
@@ -2443,7 +2443,7 @@ Function FillRoom(r.Rooms)
 			Next
 			
 			it = CreateItem("Document SCP-939", "paper", r\x + 352.0 * RoomScale, r\y + 176.0 * RoomScale, r\z + 256.0 * RoomScale)
-			RotateEntity(it\Collider, 0.0, r\Angle + 4.0, 0.0)
+			RotateEntity(it\Collider, 0.0, r\Angle + 4, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it = CreateItem("9V Battery", "bat", r\x + 352.0 * RoomScale, r\y + 112.0 * RoomScale, r\z + 448.0 * RoomScale)
@@ -2462,10 +2462,10 @@ Function FillRoom(r.Rooms)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) + 0.061, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) - 0.061, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			
-			it = CreateItem("Some SCP-420-J", "420", r\x + 1776.0 * RoomScale, r\y + 400.0 * RoomScale, r\z + 427.0 * RoomScale)
+			it = CreateItem("Some SCP-420-J", "scp420j", r\x + 1776.0 * RoomScale, r\y + 400.0 * RoomScale, r\z + 427.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it = CreateItem("Some SCP-420-J", "420", r\x + 1808.0 * RoomScale, r\y + 400.0 * RoomScale, r\z + 435.0 * RoomScale)
+			it = CreateItem("Some SCP-420-J", "scp420j", r\x + 1808.0 * RoomScale, r\y + 400.0 * RoomScale, r\z + 435.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it = CreateItem("Level 5 Key Card", "key5", r\x + 2232.0 * RoomScale, r\y + 392.0 * RoomScale, r\z + 387.0 * RoomScale)
@@ -3977,7 +3977,7 @@ Function FillRoom(r.Rooms)
 			it = CreateItem("SCP-1025", "scp1025", r\x + 552.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 758.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it = CreateItem("SCP-860", "scp860", r\x + 568.0 * RoomScale, r\y + 178.0 * RoomScale, r\z + 760.0 * RoomScale)
+			it = CreateItem("SCP-860", "scp860", r\x + 568.0 * RoomScale, r\y + 178.0 * RoomScale, r\z + 750.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it = CreateItem("Document SCP-714", "paper", r\x - 728.0 * RoomScale, r\y + 288.0 * RoomScale, r\z - 360.0 * RoomScale)
@@ -4511,7 +4511,7 @@ Function FillRoom(r.Rooms)
 							Case (Chance < 40) ; ~ 40% chance for a document
 								;[Block]
 								TempStr = "Document SCP-"
-								Select Rand(20)
+								Select Rand(19)
 									Case 1
 										;[Block]
 										TempStr = TempStr + "008"
@@ -4542,53 +4542,49 @@ Function FillRoom(r.Rooms)
 										;[End Block]
 									Case 8
 										;[Block]
-										TempStr = TempStr + "372" ; ~ TEST FOR THE ACCESS CODE! - Jabka
+										TempStr = TempStr + "513"
 										;[End Block]
 									Case 9
 										;[Block]
-										TempStr = TempStr + "513"
+										TempStr = TempStr + "682"
 										;[End Block]
 									Case 10
 										;[Block]
-										TempStr = TempStr + "682"
+										TempStr = TempStr + "714"
 										;[End Block]
 									Case 11
 										;[Block]
-										TempStr = TempStr + "714"
+										TempStr = TempStr + "860"
 										;[End Block]
 									Case 12
 										;[Block]
-										TempStr = TempStr + "860"
+										TempStr = TempStr + "860-1"
 										;[End Block]
 									Case 13
 										;[Block]
-										TempStr = TempStr + "860-1"
+										TempStr = TempStr + "895"
 										;[End Block]
 									Case 14
 										;[Block]
-										TempStr = TempStr + "895"
+										TempStr = TempStr + "939"
 										;[End Block]
 									Case 15
 										;[Block]
-										TempStr = TempStr + "939"
+										TempStr = TempStr + "966"
 										;[End Block]
 									Case 16
 										;[Block]
-										TempStr = TempStr + "966"
+										TempStr = TempStr + "970"
 										;[End Block]
 									Case 17
 										;[Block]
-										TempStr = TempStr + "970"
+										TempStr = TempStr + "1048"
 										;[End Block]
 									Case 18
 										;[Block]
-										TempStr = TempStr + "1048"
-										;[End Block]
-									Case 19
-										;[Block]
 										TempStr = TempStr + "1162"
 										;[End Block]
-									Case 20
+									Case 19
 										;[Block]
 										TempStr = TempStr + "1499"
 										;[End Block]
@@ -4742,7 +4738,7 @@ Function FillRoom(r.Rooms)
 			it = CreateItem("Document SCP-1123", "paper", r\x + 511.0 * RoomScale, r\y + 125.0 * RoomScale, r\z - 936.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it = CreateItem("SCP-1123", "1123", r\x + 832.0 * RoomScale, r\y + 166.0 * RoomScale, r\z + 784.0 * RoomScale)
+			it = CreateItem("SCP-1123", "scp1123", r\x + 832.0 * RoomScale, r\y + 166.0 * RoomScale, r\z + 784.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -4933,7 +4929,7 @@ Function FillRoom(r.Rooms)
 			
 			it = CreateItem("Night Vision Goggles", "nvgoggles", r\x + 56.0154 * RoomScale, r\y - 648.0 * RoomScale, r\z + 749.638 * RoomScale)
 			it\State = 200.0
-			RotateEntity(it\Collider, 0.0, r\Angle + Rand(245.0), 0.0)
+			RotateEntity(it\Collider, 0.0, r\Angle + Rand(245), 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case "room2gw", "room2gw_b"
@@ -6475,7 +6471,7 @@ Function UpdateLever(OBJ%, Locked% = False)
 					If GrabbedEntity <> 0 Then
 						If GrabbedEntity = OBJ Then
 							DrawHandIcon = True 
-							RotateEntity(GrabbedEntity, Max(Min(EntityPitch(OBJ) + Max(Min(Mouse_y_Speed_1 * 8.0, 30.0), -30.0), 80.0), -80.0), EntityYaw(OBJ), 0.0)
+							RotateEntity(GrabbedEntity, Max(Min(EntityPitch(OBJ) + Max(Min(Mouse_Y_Speed_1 * 8.0, 30.0), -30.0), 80.0), -80.0), EntityYaw(OBJ), 0.0)
 							
 							DrawArrowIcon(0) = True
 							DrawArrowIcon(2) = True
@@ -6581,8 +6577,8 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 	If door1\Open = False And door2\Open = False Then
 		door1\Locked = True
 		door2\Locked = True
-		If door1\OpenState = 0 And door2\openstate = 0 Then
-			If State < 0 Then
+		If door1\OpenState = 0.0 And door2\openstate = 0.0 Then
+			If State < 0.0 Then
 				State = State - FPSfactor
 				If Abs(EntityX(Collider) - EntityX(room1, True)) < 280.0 * RoomScale + (0.015 * FPSfactor) Then
 					If Abs(EntityZ(Collider) - EntityZ(room1, True)) < 280.0 * RoomScale + (0.015 * FPSfactor) Then	
@@ -6600,10 +6596,10 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 					EndIf
 				EndIf
 				
-				If State < -500 Then
+				If State < -500.0 Then
 					door1\Locked = True
 					door2\Locked = False
-					State = 0
+					State = 0.0
 					
 					If Inside Then
 						If (Not IgnoreRotation) Then
@@ -6620,8 +6616,8 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 						EndIf
 						
 						TeleportEntity(Collider, EntityX(room2, True) + x, (0.1 * FPSfactor) + EntityY(room2, True) + (EntityY(Collider) - EntityY(room1, True)), EntityZ(room2, True) + z, 0.3, True)
-						UpdateDoorsTimer = 0
-						DropSpeed = 0
+						UpdateDoorsTimer = 0.0
+						DropSpeed = 0.0
 						UpdateDoors()
 						UpdateRooms()
 						
@@ -6699,10 +6695,10 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 					EndIf
 				EndIf	
 				
-				If State > 500 Then 
+				If State > 500.0 Then 
 					door1\Locked = False
 					door2\Locked = True				
-					State = 0
+					State = 0.0
 					
 					If Inside Then	
 						If (Not IgnoreRotation) Then
@@ -6717,8 +6713,8 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 							z = Max(Min((EntityZ(Collider) - EntityZ(room2, True)), 280 * RoomScale - 0.22), (-280) * RoomScale + 0.22)
 						EndIf
 						TeleportEntity(Collider, EntityX(room1, True) + x, (0.1 * FPSfactor) + EntityY(room1, True) + (EntityY(Collider) - EntityY(room2, True)), EntityZ(room1, True) + z, 0.3, True)
-						UpdateDoorsTimer = 0
-						DropSpeed = 0
+						UpdateDoorsTimer = 0.0
+						DropSpeed = 0.0
 						UpdateDoors()
 						UpdateRooms()
 						
@@ -6743,7 +6739,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 									EndIf
 									TeleportEntity(n\Collider, EntityX(room1, True) + x, (0.1 * FPSfactor) + EntityY(room1, True) + (EntityY(n\Collider) - EntityY(room2, True)), EntityZ(room1, True) + z, n\CollRadius, True)
 									If n = Curr173
-										Curr173\IdleTimer = 10
+										Curr173\IdleTimer = 10.0
 									EndIf
 								EndIf
 							EndIf
@@ -7278,15 +7274,15 @@ Function CreateMap()
 								If MapRoom(ROOM2, MapRoomID(ROOM2)) <> "" Then MapName(x, y) = MapRoom(ROOM2, MapRoomID(ROOM2))	
 							EndIf
 							r = CreateRoom(Zone, ROOM2, x * 8.0, 0.0, y * 8.0, MapName(x, y))
-							If Rand(2) = 1 Then r\Angle = 90.0 Else r\Angle = 270.0
+							If Rand(2) = 1 Then r\Angle = 90 Else r\Angle = 270
 							TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 							MapRoomID(ROOM2) = MapRoomID(ROOM2) + 1
 						ElseIf MapTemp(x, y - 1) > 0 And MapTemp(x, y + 1) > 0
 							If MapRoomID(ROOM2) < MaxRooms And MapName(x, y) = ""  Then
 								If MapRoom(ROOM2, MapRoomID(ROOM2)) <> "" Then MapName(x, y) = MapRoom(ROOM2, MapRoomID(ROOM2))	
 							EndIf
-							r = CreateRoom(Zone, ROOM2, x * 8, 0, y * 8, MapName(x, y))
-							If Rand(2) = 1 Then r\Angle = 180.0 Else r\Angle = 0.0
+							r = CreateRoom(Zone, ROOM2, x * 8.0, 0.0, y * 8.0, MapName(x, y))
+							If Rand(2) = 1 Then r\Angle = 180 Else r\Angle = 0
 							TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 							MapRoomID(ROOM2) = MapRoomID(ROOM2) + 1
 						Else
@@ -7296,7 +7292,7 @@ Function CreateMap()
 							
 							If MapTemp(x - 1, y) > 0 And MapTemp(x, y + 1) > 0 Then
 								r = CreateRoom(Zone, ROOM2C, x * 8.0, 0.0, y * 8.0, MapName(x, y))
-								r\Angle = 180.0
+								r\Angle = 180
 								TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 							ElseIf MapTemp(x + 1, y) > 0 And MapTemp(x, y + 1) > 0
 								r = CreateRoom(Zone, ROOM2C, x * 8.0, 0.0, y * 8.0, MapName(x, y))
@@ -7305,7 +7301,7 @@ Function CreateMap()
 							ElseIf MapTemp(x - 1, y) > 0 And MapTemp(x, y - 1) > 0
 								r = CreateRoom(Zone, ROOM2C, x * 8.0, 0.0, y * 8.0, MapName(x, y))
 								TurnEntity(r\OBJ, 0.0, 270.0, 0.0)
-								r\Angle = 270.0
+								r\Angle = 270
 							Else
 								r = CreateRoom(Zone, ROOM2C, x * 8.0, 0.0, y * 8.0, MapName(x, y))
 							EndIf
@@ -7321,13 +7317,13 @@ Function CreateMap()
 						r = CreateRoom(Zone, ROOM3, x * 8.0, 0.0, y * 8.0, MapName(x, y))
 						If (Not MapTemp(x, y - 1)) Then
 							TurnEntity(r\OBJ, 0.0, 180.0, 0.0)
-							r\Angle = 180.0
+							r\Angle = 180
 						ElseIf (Not MapTemp(x - 1, y))
 							TurnEntity(r\OBJ, 0.0, 90.0, 0.0)
-							r\Angle = 90.0
+							r\Angle = 90
 						ElseIf (Not MapTemp(x + 1, y))
 							TurnEntity(r\OBJ, 0.0, -90.0, 0.0)
-							r\Angle = 270.0
+							r\Angle = 270
 						End If
 						MapRoomID(ROOM3) = MapRoomID(ROOM3) + 1
 						;[End Block]
@@ -7439,25 +7435,25 @@ Function CreateMap()
 						Select r\RoomTemplate\Shape
 							Case ROOM1
 								;[Block]
-								If r\Angle = 90.0
+								If r\Angle = 90
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM2
 								;[Block]
-								If r\Angle = 90.0 Or r\Angle = 270.0
+								If r\Angle = 90 Or r\Angle = 270
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM2C
 								;[Block]
-								If r\Angle = 0.0 Or r\Angle = 90.0
+								If r\Angle = 0 Or r\Angle = 90
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM3
 								;[Block]
-								If r\Angle = 0.0 Or r\Angle = 180.0 Or r\Angle = 90.0
+								If r\Angle = 0 Or r\Angle = 180 Or r\Angle = 90
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
@@ -7470,7 +7466,7 @@ Function CreateMap()
 						If ShouldSpawnDoor
 							If (x + 1) < (MapWidth + 1)
 								If MapTemp(x + 1, y) > 0 Then
-									d.Doors = CreateDoor(r\Zone, Float(x) * Spacing + Spacing / 2.0, 0, Float(y) * Spacing, 90.0, r, Max(Rand(-3, 1), 0.0), Temp)
+									d.Doors = CreateDoor(r\Zone, Float(x) * Spacing + Spacing / 2.0, 0, Float(y) * Spacing, 90.0, r, Max(Rand(-3, 1), 0), Temp)
 									r\AdjDoor[0] = d
 								EndIf
 							EndIf
@@ -7480,25 +7476,25 @@ Function CreateMap()
 						Select r\RoomTemplate\Shape
 							Case ROOM1
 								;[Block]
-								If r\Angle = 180.0
+								If r\Angle = 180
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM2
 								;[Block]
-								If r\Angle = 0.0 Or r\Angle = 180.0
+								If r\Angle = 0 Or r\Angle = 180
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM2C
 								;[Block]
-								If r\Angle = 180.0 Or r\Angle = 90.0
+								If r\Angle = 180 Or r\Angle = 90
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM3
 								;[Block]
-								If r\Angle = 180.0 Or r\Angle = 90.0 Or r\Angle = 270.0
+								If r\Angle = 180 Or r\Angle = 90 Or r\Angle = 270
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
@@ -7510,7 +7506,7 @@ Function CreateMap()
 						If ShouldSpawnDoor
 							If (y + 1) < (MapHeight + 1)
 								If MapTemp(x, y + 1) > 0 Then
-									d.Doors = CreateDoor(r\Zone, Float(x) * Spacing, 0, Float(y) * Spacing + Spacing / 2.0, 0.0, r, Max(Rand(-3, 1), 0.0), Temp)
+									d.Doors = CreateDoor(r\Zone, Float(x) * Spacing, 0.0, Float(y) * Spacing + Spacing / 2.0, 0.0, r, Max(Rand(-3, 1), 0), Temp)
 									r\AdjDoor[3] = d
 								EndIf
 							EndIf
@@ -7864,13 +7860,13 @@ Function UpdateCheckpointMonitors(Number%)
 				Name$ = StripPath(TextureName(t1))
 				If Lower(Name) <> "monitortexture.jpg"
 					If Number = 0
-						If MonitorTimer# < 50
+						If MonitorTimer < 50
 							BrushTexture(b, MonitorTexture2, 0, 0)
 						Else
 							BrushTexture(b, MonitorTexture4, 0, 0)
 						EndIf
 					Else
-						If MonitorTimer2# < 50
+						If MonitorTimer2 < 50
 							BrushTexture(b, MonitorTexture2, 0, 0)
 						Else
 							BrushTexture(b, MonitorTexture3, 0, 0)
@@ -7892,11 +7888,11 @@ Function TurnCheckpointMonitorsOff(Number%)
 	If Number = 0
 		Entity = Monitor2
 		UpdateCheckpoint1 = False
-		MonitorTimer# = 0.0
+		MonitorTimer = 0.0
 	Else
 		Entity = Monitor3
 		UpdateCheckpoint2 = False
-		MonitorTimer2# = 0.0
+		MonitorTimer2 = 0.0
 	EndIf
 	
 	For i = 2 To CountSurfaces(Entity)
@@ -7920,16 +7916,16 @@ End Function
 Function TimeCheckpointMonitors()
 	If UpdateCheckpoint1
 		If MonitorTimer < 100.0
-			MonitorTimer# = Min(MonitorTimer# + FPSfactor, 100.0)
+			MonitorTimer = Min(MonitorTimer + FPSfactor, 100.0)
 		Else
-			MonitorTimer# = 0.0
+			MonitorTimer = 0.0
 		EndIf
 	EndIf
 	If UpdateCheckpoint2
 		If MonitorTimer2 < 100.0
-			MonitorTimer2# = Min(MonitorTimer2# + FPSfactor, 100.0)
+			MonitorTimer2 = Min(MonitorTimer2 + FPSfactor, 100.0)
 		Else
-			MonitorTimer2# = 0.0
+			MonitorTimer2 = 0.0
 		EndIf
 	EndIf
 End Function
@@ -8311,7 +8307,7 @@ Function PreventRoomOverlap(r.Rooms)
 	
 	If r\RoomTemplate\Shape = ROOM2 Then
 		; ~ Room is a ROOM2, let's check if turning it 180 degrees fixes the overlapping issue
-		r\Angle = r\Angle + 180.0
+		r\Angle = r\Angle + 180
 		RotateEntity(r\OBJ, 0.0, r\Angle, 0.0)
 		CalculateRoomExtents(r)
 		
@@ -8320,7 +8316,7 @@ Function PreventRoomOverlap(r.Rooms)
 				If CheckRoomOverlap(r, r2) Then
 					; ~ If didn't work then rotate the room back and move to the next step
 					IsIntersecting = True
-					r\Angle = r\Angle - 180.0
+					r\Angle = r\Angle - 180
 					RotateEntity(r\OBJ, 0.0, r\Angle, 0.0)
 					CalculateRoomExtents(r)
 					Exit

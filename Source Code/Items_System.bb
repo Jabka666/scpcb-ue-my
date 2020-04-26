@@ -89,290 +89,226 @@ Function CreateItemTemplate.ItemTemplates(Name$, TempName$, OBJPath$, InvImgPath
 	it\Name = Name
 	
 	it\Sound = SoundID
-
+	
 	HideEntity(it\OBJ)
 	
 	Return(it)
 End Function
 
 Function InitItemTemplates()
-	Local it.ItemTemplates, it2.ItemTemplates
-	
-	; ~ [KEYCARDS, KEYS, CARDS, COINS]
-	
-	it = CreateItemTemplate("Coin", "coin", "GFX\items\key.b3d", "GFX\items\INVcoin.jpg", "", 0.0005, 3, "GFX\items\coin.png", "", 0, 1 + 2 + 8)
-	
-	it = CreateItemTemplate("Key Card Omni", "key6", "GFX\items\keycard.x", "GFX\items\INVkeyomni.jpg", "", 0.0004, 1, "GFX\items\keycardomni.jpg")
-	
-	it = CreateItemTemplate("Level 1 Key Card", "key1", "GFX\items\keycard.x", "GFX\items\INVkey1.jpg", "", 0.0004, 1, "GFX\items\keycard1.jpg")
-	
-	it = CreateItemTemplate("Level 2 Key Card", "key2", "GFX\items\keycard.x", "GFX\items\INVkey2.jpg", "", 0.0004, 1, "GFX\items\keycard2.jpg")
-	
-	it = CreateItemTemplate("Level 3 Key Card", "key3", "GFX\items\keycard.x", "GFX\items\INVkey3.jpg", "", 0.0004, 1, "GFX\items\keycard3.jpg")
-	
-	it = CreateItemTemplate("Level 4 Key Card", "key4", "GFX\items\keycard.x", "GFX\items\INVkey4.jpg", "", 0.0004, 1, "GFX\items\keycard4.jpg")
-	
-	it = CreateItemTemplate("Level 5 Key Card", "key5", "GFX\items\keycard.x", "GFX\items\INVkey5.jpg", "", 0.0004, 1, "GFX\items\keycard5.jpg")
-	
-	it = CreateItemTemplate("Lost Key", "key", "GFX\items\key.b3d", "GFX\items\INV1162_1.jpg", "", 0.001, 3, "GFX\items\key2.png", "", 0, 1 + 2 + 8)
-	
-	it = CreateItemTemplate("Mastercard", "misc", "GFX\items\keycard.x", "GFX\items\INVmastercard.jpg", "", 0.0004, 1, "GFX\items\mastercard.jpg")
-	
-	it = CreateItemTemplate("Playing Card", "misc", "GFX\items\keycard.x", "GFX\items\INVcard.jpg", "", 0.0004, 1, "GFX\items\card.jpg")
-	
-	it = CreateItemTemplate("Quarter", "25ct", "GFX\items\key.b3d", "GFX\items\INVcoin.jpg", "", 0.0005, 3, "GFX\items\coin.png", "", 0, 1 + 2 + 8)
+	Local it.ItemTemplates,it2.ItemTemplates
 	
 	; ~ [DOCUMENTS]
 	
-	it = CreateItemTemplate("Document SCP-008", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc008.jpg", 0.003, 0)
+	CreateItemTemplate("Document SCP-008", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc008.jpg", 0.003, 0)
+	CreateItemTemplate("Document SCP-012", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc012.jpg", 0.003, 0)
+	CreateItemTemplate("Document SCP-035", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc035.jpg", 0.003, 0)
+	CreateItemTemplate("Document SCP-049", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc049.jpg", 0.003, 0)
+	CreateItemTemplate("Document SCP-079", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc079.jpg", 0.003, 0)
+	CreateItemTemplate("Document SCP-096", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc096.jpg", 0.003, 0)
+	CreateItemTemplate("Document SCP-106", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc106.jpg", 0.003, 0)
+	CreateItemTemplate("Document SCP-173", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc173.jpg", 0.003, 0)
+	CreateItemTemplate("Document SCP-372", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc372.jpg", 0.003, 0)
+	CreateItemTemplate("Document SCP-427", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc427.jpg", 0.003, 0)
+	CreateItemTemplate("Document SCP-500", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc500.png", 0.003, 0)
+	CreateItemTemplate("Document SCP-513", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc513.jpg", 0.003, 0)
+	CreateItemTemplate("Document SCP-682", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc682.jpg", 0.003, 0)
+	CreateItemTemplate("Document SCP-714", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc714.jpg", 0.003, 0)
+	CreateItemTemplate("Document SCP-860", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc_860.png", 0.003, 0)
+	CreateItemTemplate("Document SCP-860-1", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc8601.jpg", 0.003, 0)
+	CreateItemTemplate("Document SCP-895", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc_895.png", 0.003, 0)
+	CreateItemTemplate("Document SCP-939", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc939.jpg", 0.003, 0)
+	CreateItemTemplate("Document SCP-966", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc966.jpg", 0.003, 0)
+	CreateItemTemplate("Document SCP-970", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc970.jpg", 0.003, 0)
+	CreateItemTemplate("Document SCP-1048", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc1048.jpg", 0.003, 0)
+	CreateItemTemplate("Document SCP-1123", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc1123.jpg", 0.003, 0)
+	CreateItemTemplate("Document SCP-1162", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc1162.jpg", 0.003, 0)
+	CreateItemTemplate("Document SCP-1499", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc1499.png", 0.003, 0)
 	
-	it = CreateItemTemplate("Document SCP-012", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc012.jpg", 0.003, 0)
+	CreateItemTemplate("Incident Report SCP-1048-A", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc1048a.jpg", 0.003, 0)
 	
-	it = CreateItemTemplate("Document SCP-035", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc035.jpg", 0.003, 0)
+	CreateItemTemplate("SCP-035 Addendum", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc035ad.jpg", 0.003, 0)
 	
-	it = CreateItemTemplate("SCP-035 Addendum", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc035ad.jpg", 0.003, 0)
-	
-	it = CreateItemTemplate("Document SCP-049", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc049.jpg", 0.003, 0)
-	
-	it = CreateItemTemplate("Document SCP-079", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc079.jpg", 0.003, 0)
-	
-	it = CreateItemTemplate("SCP-093 Recovered Materials", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc093rm.jpg", 0.003, 0)
-	
-	it = CreateItemTemplate("Document SCP-096", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc096.jpg", 0.003, 0)
-	
-	it = CreateItemTemplate("Document SCP-106", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc106.jpg", 0.003, 0)
-	
-	it = CreateItemTemplate("Document SCP-173", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc173.jpg", 0.003, 0)
-	
-	it = CreateItemTemplate("Document SCP-372", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc372.jpg", 0.003, 0)
-	
-	it = CreateItemTemplate("Document SCP-427", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc427.jpg", 0.003, 0)
-	
-	it = CreateItemTemplate("Document SCP-500", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc500.png", 0.003, 0)
-	
-	it = CreateItemTemplate("Document SCP-513", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc513.jpg", 0.003, 0)
-	
-	it = CreateItemTemplate("Document SCP-714", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc714.jpg", 0.003, 0)
-	
-	it = CreateItemTemplate("Document SCP-682", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc682.jpg", 0.003, 0)
-	
-	it = CreateItemTemplate("Document SCP-860", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc860.jpg", 0.003, 0)
-	
-	it = CreateItemTemplate("Document SCP-860-1", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc8601.jpg", 0.003, 0)
-	
-	it = CreateItemTemplate("Document SCP-895", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc895.jpg", 0.003, 0)
-	
-	it = CreateItemTemplate("Document SCP-939", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc939.jpg", 0.003, 0)
-	
-	it = CreateItemTemplate("Document SCP-966", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc966.jpg", 0.003, 0)
-	
-	it = CreateItemTemplate("Document SCP-970", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc970.jpg", 0.003, 0)
-	
-	it = CreateItemTemplate("Document SCP-1048", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc1048.jpg", 0.003, 0)
-	
-	it = CreateItemTemplate("Incident Report SCP-1048-A", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc1048a.jpg", 0.003, 0)
-	
-	it = CreateItemTemplate("Document SCP-1123", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc1123.jpg", 0.003, 0)
-	
-	it = CreateItemTemplate("Document SCP-1162", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc1162.jpg", 0.003, 0)
-	
-	it = CreateItemTemplate("Document SCP-1499", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc1499.png", 0.003, 0)
+	CreateItemTemplate("SCP-093 Recovered Materials", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc093rm.jpg", 0.003, 0)
 	
 	; ~ [NOTES, MISC DOCUMENTS, BADGES, TICKET, ORIGAMI]
 	
-	it = CreateItemTemplate("Addendum: 5/14 Test Log", "paper", "GFX\items\paper.x", "GFX\items\INVnote.jpg", "GFX\items\docRAND2.jpg", 0.003, 0, "GFX\items\notetexture.jpg")
+	CreateItemTemplate("Addendum: 5/14 Test Log", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\docRAND2.jpg", 0.003, 0)
 	
-	it = CreateItemTemplate("Blood-stained Note", "paper", "GFX\items\paper.x", "GFX\items\INVnote.jpg", "GFX\items\docL3.jpg", 0.0025, 0, "GFX\items\notetexture.jpg")
+	CreateItemTemplate("Class D Orientation Leaflet", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\docORI.jpg", 0.003, 0)
+	
+	CreateItemTemplate("Disciplinary Hearing DH-S-4137-17092", "oldpaper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\dh.s", 0.003, 0)
+	
+	CreateItemTemplate("Document", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\docRAND3.jpg", 0.003, 0)
+	
+	CreateItemTemplate("Drawing", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc1048.jpg", 0.003, 0)
+	
+	CreateItemTemplate("Incident Report SCP-106-0204", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\docIR106.jpg", 0.003, 0)
+	
+	CreateItemTemplate("Mobile Task Forces", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\docMTF.jpg", 0.003, 0)
+	
+	CreateItemTemplate("Note from Daniel", "paper", "GFX\items\note.x", "GFX\items\INVnote2.jpg", "GFX\items\docdan.jpg", 0.0025, 0)
+	
+	CreateItemTemplate("Nuclear Device Document", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\docNDP.jpg", 0.003, 0)
+	
+	CreateItemTemplate("Object Classes", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\docOBJC.jpg", 0.003, 0)
+	
+	CreateItemTemplate("Recall Protocol RP-106-N", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\docRP.jpg", 0.0025, 0)
+	
+	CreateItemTemplate("Research Sector-02 Scheme", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\docmap.jpg", 0.003, 0)
+	
+	CreateItemTemplate("Security Clearance Levels", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\docSC.jpg", 0.003, 0)
+	
+	CreateItemTemplate("Sticky Note", "paper", "GFX\items\note.x", "GFX\items\INVnote2.jpg", "GFX\items\note682.jpg", 0.0025, 0)
+	
+	CreateItemTemplate("The Modular Site Project", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\docMSP.jpg", 0.003, 0)
+	
+	CreateItemTemplate("Blood-stained Note", "paper", "GFX\items\paper.x", "GFX\items\INVnote.jpg", "GFX\items\docL3.jpg", 0.0025, 0, "GFX\items\notetexture.jpg")
 	
 	it = CreateItemTemplate("Burnt Note", "paper", "GFX\items\paper.x", "GFX\items\INVbn.jpg", "GFX\items\bn.it", 0.003, 0, "GFX\items\BurntNoteTexture.jpg")
 	it\Img = BurntNote
 	
-	it = CreateItemTemplate("Class D Orientation Leaflet", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\docORI.jpg", 0.003, 0)
+	CreateItemTemplate("Dr. Allok's Note", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc106_2.jpg", 0.006, 0, "GFX\items\notetexture.jpg")
 	
-	it = CreateItemTemplate("Disciplinary Hearing DH-S-4137-17092", "oldpaper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\dh.s", 0.003, 0)
+	CreateItemTemplate("Dr. L's Note", "paper", "GFX\items\paper.x", "GFX\items\INVnote.jpg", "GFX\items\docL1.jpg", 0.0025, 0, "GFX\items\notetexture.jpg")
+	CreateItemTemplate("Dr L's Note", "paper", "GFX\items\paper.x", "GFX\items\INVnote.jpg", "GFX\items\docL2.jpg", 0.0025, 0, "GFX\items\notetexture.jpg")
 	
-	it = CreateItemTemplate("Document", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\docRAND3.jpg", 0.003, 0)
+	CreateItemTemplate("Dr. L's Burnt Note", "paper", "GFX\items\paper.x", "GFX\items\INVbn.jpg", "GFX\items\docL4.jpg", 0.0025, 0, "GFX\items\BurntNoteTexture.jpg")
+	CreateItemTemplate("Dr L's Burnt Note", "paper", "GFX\items\paper.x", "GFX\items\INVbn.jpg", "GFX\items\docL5.jpg", 0.0025, 0, "GFX\items\BurntNoteTexture.jpg")
 	
-	it = CreateItemTemplate("Drawing", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc1048.jpg", 0.003, 0)
+	CreateItemTemplate("Emily Ross' Badge", "badge", "GFX\items\badge.x", "GFX\items\INVbadge.jpg", "GFX\items\badge1.jpg", 0.0001, 1, "GFX\items\badge1_tex.jpg")
 	
-	it = CreateItemTemplate("Dr. Allok's Note", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc106_2.jpg", 0.0025, 0)
+	CreateItemTemplate("Journal Page", "paper", "GFX\items\paper.x", "GFX\items\INVnote.jpg", "GFX\items\docGonzales.jpg", 0.0025, 0, "GFX\items\notetexture.jpg")
 	
-	it = CreateItemTemplate("Dr. L's Note", "paper", "GFX\items\paper.x", "GFX\items\INVnote.jpg", "GFX\items\docL1.jpg", 0.0025, 0, "GFX\items\notetexture.jpg")
+	CreateItemTemplate("Leaflet", "paper", "GFX\items\paper.x", "GFX\items\INVnote.jpg", "GFX\items\leaflet.jpg", 0.003, 0, "GFX\items\notetexture.jpg")
 	
-	it = CreateItemTemplate("Dr L's Note", "paper", "GFX\items\paper.x", "GFX\items\INVnote.jpg", "GFX\items\docL2.jpg", 0.0025, 0, "GFX\items\notetexture.jpg")
+	CreateItemTemplate("Log #1", "paper", "GFX\items\paper.x", "GFX\items\INVnote.jpg", "GFX\items\f4.jpg", 0.002, 0, "GFX\items\notetexture.jpg")
+	CreateItemTemplate("Log #2", "paper", "GFX\items\paper.x", "GFX\items\INVnote.jpg", "GFX\items\f5.jpg", 0.002, 0, "GFX\items\notetexture.jpg")
+	CreateItemTemplate("Log #3", "paper", "GFX\items\paper.x", "GFX\items\INVnote.jpg", "GFX\items\f6.jpg", 0.002, 0, "GFX\items\notetexture.jpg")
 	
-	it = CreateItemTemplate("Dr. L's Burnt Note", "paper", "GFX\items\paper.x", "GFX\items\INVbn.jpg", "GFX\items\docL4.jpg", 0.0025, 0, "GFX\items\BurntNoteTexture.jpg")
+	CreateItemTemplate("Movie Ticket", "ticket", "GFX\items\ticket.b3d", "GFX\items\INVticket.jpg", "GFX\items\ticket_HUD.png", 0.002, 0, "GFX\items\ticket.png", "", 0, 1 + 2 + 8)
 	
-	it = CreateItemTemplate("Dr L's Burnt Note", "paper", "GFX\items\paper.x", "GFX\items\INVbn.jpg", "GFX\items\docL5.jpg", 0.0025, 0, "GFX\items\BurntNoteTexture.jpg")
+	CreateItemTemplate("Mysterious Note", "paper", "GFX\items\paper.x", "GFX\items\INVnote.jpg", "GFX\items\sn.it", 0.003, 0, "GFX\items\notetexture.jpg")
 	
-	it = CreateItemTemplate("Emily Ross' Badge", "badge", "GFX\items\badge.x", "GFX\items\INVbadge.jpg", "GFX\items\badge1.jpg", 0.0001, 1, "GFX\items\badge1_tex.jpg")
+	CreateItemTemplate("Notification", "paper", "GFX\items\paper.x", "GFX\items\INVnote.jpg", "GFX\items\docRAND1.jpg", 0.003, 0, "GFX\items\notetexture.jpg")
 	
-	it = CreateItemTemplate("Incident Report SCP-106-0204", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\docIR106.jpg", 0.003, 0)
+	CreateItemTemplate("Old Badge", "badge", "GFX\items\badge.x", "GFX\items\INVoldbadge.jpg", "GFX\items\badge2.png", 0.0001, 1, "GFX\items\badge2_tex.png", "", 0, 1 + 2 + 8)
 	
-	it = CreateItemTemplate("Journal Page", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\docGonzales.jpg", 0.0025, 0)
+	CreateItemTemplate("Origami", "misc", "GFX\items\origami.b3d", "GFX\items\INVorigami.jpg", "", 0.003, 0)
 	
-	it = CreateItemTemplate("Leaflet", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\leaflet.jpg", 0.003, 0, "GFX\items\notetexture.jpg")
+	CreateItemTemplate("Scorched Note", "paper", "GFX\items\paper.x", "GFX\items\INVbn.jpg", "GFX\items\docL6.jpg", 0.0025, 0, "GFX\items\BurntNoteTexture.jpg")
 	
-	it = CreateItemTemplate("Log #1", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\f4.jpg", 0.004, 0, "GFX\items\f4.jpg")
+	CreateItemTemplate("Strange Note", "paper", "GFX\items\paper.x", "GFX\items\INVnote.jpg", "GFX\items\docStrange.jpg", 0.0025, 0, "GFX\items\notetexture.jpg")
 	
-	it = CreateItemTemplate("Log #2", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\f5.jpg", 0.004, 0, "GFX\items\f4.jpg")
+	; ~ [SCPs]
 	
-	it = CreateItemTemplate("Log #3", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\f6.jpg", 0.004, 0, "GFX\items\f4.jpg")
-	
-	it = CreateItemTemplate("Mobile Task Forces", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\docMTF.jpg", 0.003, 0)
-	
-	it = CreateItemTemplate("Movie Ticket", "ticket", "GFX\items\key.b3d", "GFX\items\INVticket.jpg", "GFX\items\ticket.png", 0.002, 0, "GFX\items\tickettexture.png", "", 0, 1 + 2 + 8)
-	
-	it = CreateItemTemplate("Mysterious Note", "paper", "GFX\items\paper.x", "GFX\items\INVnote.jpg", "GFX\items\sn.it", 0.003, 0, "GFX\items\notetexture.jpg")
-	
-	it = CreateItemTemplate("Note from Daniel", "paper", "GFX\items\note.x", "GFX\items\INVnote2.jpg", "GFX\items\docdan.jpg", 0.0025, 0)
-	
-	it = CreateItemTemplate("Notification", "paper", "GFX\items\paper.x", "GFX\items\INVnote.jpg", "GFX\items\docRAND1.jpg", 0.003, 0, "GFX\items\notetexture.jpg")
-	
-	it = CreateItemTemplate("Nuclear Device Document", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\docNDP.jpg", 0.003, 0)
-	
-	it = CreateItemTemplate("Object Classes", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\docOBJC.jpg", 0.003, 0)
-	
-	it = CreateItemTemplate("Old Badge", "badge", "GFX\items\badge.x", "GFX\items\INVoldbadge.jpg", "GFX\items\badge2.png", 0.0001, 1, "GFX\items\badge2_tex.png", "", 0, 1 + 2 + 8)
-	
-	it = CreateItemTemplate("Origami", "misc", "GFX\items\origami.b3d", "GFX\items\INVorigami.jpg", "", 0.003, 0)
-	
-	it = CreateItemTemplate("Recall Protocol RP-106-N", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\docRP.jpg", 0.0025, 0)
-	
-	it = CreateItemTemplate("Research Sector-02 Scheme", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\docmap.jpg", 0.003, 0)
-	
-	it = CreateItemTemplate("Scorched Note", "paper", "GFX\items\paper.x", "GFX\items\INVbn.jpg", "GFX\items\docL6.jpg", 0.0025, 0, "GFX\items\BurntNoteTexture.jpg")
-	
-	it = CreateItemTemplate("Security Clearance Levels", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\docSC.jpg", 0.003, 0)
-	
-	it = CreateItemTemplate("Sticky Note", "paper", "GFX\items\note.x", "GFX\items\INVnote2.jpg", "GFX\items\note682.jpg", 0.0025, 0)
-	
-	it = CreateItemTemplate("Strange Note", "paper", "GFX\items\paper.x", "GFX\items\INVnote.jpg", "GFX\items\docStrange.jpg", 0.0025, 0, "GFX\items\notetexture.jpg")
-	
-	it = CreateItemTemplate("The Modular Site Project", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\docMSP.jpg", 0.003, 0)
-	
-	;[SCPs]
-	
-	it = CreateItemTemplate("SCP-148 Ingot", "scp148ingot", "GFX\items\scp148.x", "GFX\items\INVscp148.jpg", "", RoomScale, 2)
-	
-	it = CreateItemTemplate("SCP-427", "scp427", "GFX\items\427.b3d", "GFX\items\INVscp427.jpg", "", 0.001, 3)
+	CreateItemTemplate("SCP-148 Ingot", "scp148ingot", "GFX\items\scp148.x", "GFX\items\INVscp148.jpg", "", RoomScale, 2)
+	CreateItemTemplate("SCP-427", "scp427", "GFX\items\427.b3d", "GFX\items\INVscp427.jpg", "", 0.001, 3)
 	
 	it = CreateItemTemplate("SCP-500-01", "scp500", "GFX\items\pill.b3d", "GFX\items\INVpill.jpg", "", 0.0001, 2)
 	EntityColor(it\OBJ, 255.0, 0.0, 0.0)
 	
-	it = CreateItemTemplate("SCP-513", "scp513", "GFX\items\513.x", "GFX\items\INV513.jpg", "", 0.1, 2)
+	CreateItemTemplate("SCP-513", "scp513", "GFX\items\513.x", "GFX\items\INV513.jpg", "", 0.1, 2)
+	CreateItemTemplate("SCP-714", "scp714", "GFX\items\scp714.b3d", "GFX\items\INV714.jpg", "", 0.3, 3)
+	CreateItemTemplate("SCP-860", "scp860", "GFX\items\scp_860.b3d", "GFX\items\INV_scp_860.png", "", 0.0028, 3)
+	CreateItemTemplate("SCP-1025", "scp1025", "GFX\items\scp1025.b3d", "GFX\items\INV1025.jpg", "", 0.1, 0)
+	CreateItemTemplate("SCP-1123", "scp1123", "GFX\items\HGIB_Skull1.b3d", "GFX\items\INV1123.jpg", "", 0.015, 2)
+	CreateItemTemplate("SCP-1499","scp1499","GFX\items\SCP-1499.b3d","GFX\items\INVscp1499.jpg", "", 0.022, 2)
+	CreateItemTemplate("SCP-1499","super1499","GFX\items\SCP-1499.b3d","GFX\items\INVscp1499.jpg", "", 0.022, 2)
 	
-	it = CreateItemTemplate("SCP-714", "scp714", "GFX\items\scp714.b3d", "GFX\items\INV714.jpg", "", 0.3, 3)
+	CreateItemTemplate("Joint", "joint", "GFX\items\420.x", "GFX\items\INV420.jpg", "", 0.0004, 2)
 	
-	it = CreateItemTemplate("SCP-860", "scp860", "GFX\items\key.b3d", "GFX\items\INVkey.jpg", "", 0.001, 3)
+	CreateItemTemplate("Metal Panel", "scp148", "GFX\items\metalpanel.x", "GFX\items\INVmetalpanel.jpg", "", RoomScale, 2)
 	
-	it = CreateItemTemplate("SCP-1025", "scp1025", "GFX\items\scp1025.b3d", "GFX\items\INV1025.jpg", "", 0.1, 0)
+	CreateItemTemplate("Smelly Joint", "scp420s", "GFX\items\420.x", "GFX\items\INV420.jpg", "", 0.0004, 2)
 	
-	it = CreateItemTemplate("SCP-1123", "1123", "GFX\items\HGIB_Skull1.b3d", "GFX\items\INV1123.jpg", "", 0.015, 2)
-	
-	it = CreateItemTemplate("SCP-1499","scp1499","GFX\items\SCP-1499.b3d","GFX\items\INVscp1499.jpg", "", 0.023, 2)
-	
-	it = CreateItemTemplate("SCP-1499","super1499","GFX\items\SCP-1499.b3d","GFX\items\INVscp1499.jpg", "", 0.023, 2)
-	
-	it = CreateItemTemplate("Joint", "420s", "GFX\items\420.x", "GFX\items\INV420.jpg", "", 0.0004, 2)
-	
-	it = CreateItemTemplate("Metal Panel", "scp148", "GFX\items\metalpanel.x", "GFX\items\INVmetalpanel.jpg", "", RoomScale, 2)
-	
-	it = CreateItemTemplate("Smelly Joint", "420s", "GFX\items\420.x", "GFX\items\INV420.jpg", "", 0.0004, 2)
-	
-	it = CreateItemTemplate("Some SCP-420-J", "420", "GFX\items\420.x", "GFX\items\INV420.jpg", "", 0.0005, 2)
+	CreateItemTemplate("Some SCP-420-J", "scp420j", "GFX\items\420.x", "GFX\items\INV420.jpg", "", 0.0005, 2)
 	
 	it = CreateItemTemplate("Upgraded pill", "scp500death", "GFX\items\pill.b3d", "GFX\items\INVpill.jpg", "", 0.0001, 2)
 	EntityColor(it\OBJ, 255.0, 0.0, 0.0)
 	
-	;[MISC ITEMS]
+	; ~ [MISC ITEMS]
 	
-	it = CreateItemTemplate("Ballistic Vest", "vest", "GFX\items\vest.x", "GFX\items\INVvest.jpg", "", 0.02, 2, "GFX\items\Vest.png")
+	CreateItemTemplate("Ballistic Vest", "vest", "GFX\items\vest.x", "GFX\items\INVvest.jpg", "", 0.02, 2)
+	CreateItemTemplate("Bulky Ballistic Vest", "veryfinevest", "GFX\items\vest.x", "GFX\items\INVvest.jpg", "", 0.025, 2)
+	CreateItemTemplate("Heavy Ballistic Vest", "finevest", "GFX\items\vest.x", "GFX\items\INVvest.jpg", "", 0.022, 2)
 	
-	it = CreateItemTemplate("Black Severed Hand", "hand2", "GFX\items\severedhand.b3d", "GFX\items\INVhand2.jpg", "", 0.02, 2, "GFX\items\shand2.png")
+	CreateItemTemplate("Cigarette", "cigarette", "GFX\items\420.x", "GFX\items\INV420.jpg", "", 0.0004, 2)
 	
-	it = CreateItemTemplate("Blue First Aid Kit", "firstaid2", "GFX\items\firstaid.x", "GFX\items\INVfirstaid2.jpg", "", 0.03, 1, "GFX\items\firstaidkit2.jpg")
+	CreateItemTemplate("Cup", "cup", "GFX\items\cup.x", "GFX\items\INVcup.jpg", "", 0.04, 2)
 	
-	it = CreateItemTemplate("Bulky Ballistic Vest", "veryfinevest", "GFX\items\vest.x", "GFX\items\INVvest.jpg", "", 0.025, 2, "GFX\items\Vest.png")
+	CreateItemTemplate("Clipboard", "clipboard", "GFX\items\clipboard.b3d", "GFX\items\INVclipboard.jpg", "", 0.003, 1, "", "GFX\items\INVclipboard2.jpg", 1)
 	
-	it = CreateItemTemplate("Cigarette", "cigarette", "GFX\items\420.x", "GFX\items\INV420.jpg", "", 0.0004, 2)
+	CreateItemTemplate("Electronical components", "misc", "GFX\items\electronics.x", "GFX\items\INVelectronics.jpg", "", 0.0011, 1)
 	
-	it = CreateItemTemplate("Cup", "cup", "GFX\items\cup.x", "GFX\items\INVcup.jpg", "", 0.04, 2)
+	CreateItemTemplate("Empty Cup", "emptycup", "GFX\items\cup.x", "GFX\items\INVcup.jpg", "", 0.04, 2)
 	
-	it = CreateItemTemplate("Clipboard", "clipboard", "GFX\items\clipboard.b3d", "GFX\items\INVclipboard.jpg", "", 0.003, 1, "", "GFX\items\INVclipboard2.jpg", 1)
+	CreateItemTemplate("ReVision Eyedrops", "eyedrops","GFX\items\eyedrops.b3d", "GFX\items\INVeyedrops.jpg", "", 0.0012, 1, "GFX\items\eyedrops.jpg")
+	CreateItemTemplate("Eyedrops", "fineeyedrops", "GFX\items\eyedrops.b3d", "GFX\items\INVeyedrops.jpg", "", 0.0012, 1, "GFX\items\eyedrops.jpg")
+	CreateItemTemplate("Eyedrops", "supereyedrops", "GFX\items\eyedrops.b3d", "GFX\items\INVeyedrops.jpg", "", 0.0012, 1, "GFX\items\eyedrops.jpg")
+	CreateItemTemplate("RedVision Eyedrops", "eyedrops", "GFX\items\eyedrops.b3d", "GFX\items\INVeyedropsred.jpg", "", 0.0012, 1, "GFX\items\eyedropsred.jpg")
 	
-	it = CreateItemTemplate("Electronical components", "misc", "GFX\items\electronics.x", "GFX\items\INVelectronics.jpg", "", 0.0011, 1)
+	CreateItemTemplate("First Aid Kit", "firstaid", "GFX\items\firstaid.x", "GFX\items\INVfirstaid.jpg", "", 0.05, 1)
+	CreateItemTemplate("Small First Aid Kit", "finefirstaid", "GFX\items\firstaid.x", "GFX\items\INVfirstaid.jpg", "", 0.03, 1)
+	CreateItemTemplate("Blue First Aid Kit", "firstaid2", "GFX\items\firstaid.x", "GFX\items\INVfirstaid2.jpg", "", 0.03, 1, "GFX\items\firstaidkit2.jpg")
+	CreateItemTemplate("Strange Bottle", "veryfinefirstaid", "GFX\items\eyedrops.b3d", "GFX\items\INVbottle.jpg", "", 0.002, 1, "GFX\items\bottle.jpg")	
 	
-	it = CreateItemTemplate("Empty Cup", "emptycup", "GFX\items\cup.x", "GFX\items\INVcup.jpg", "", 0.04, 2)
+	CreateItemTemplate("Gas Mask", "gasmask", "GFX\items\gasmask.b3d", "GFX\items\INVgasmask.jpg", "", 0.019, 2)
+	CreateItemTemplate("Gas Mask", "supergasmask", "GFX\items\gasmask.b3d", "GFX\items\INVgasmask.jpg", "", 0.02, 2)
+	CreateItemTemplate("Heavy Gas Mask", "gasmask3", "GFX\items\gasmask.b3d", "GFX\items\INVgasmask.jpg", "", 0.02, 2)
 	
-	it = CreateItemTemplate("Eyedrops", "fineeyedrops", "GFX\items\eyedrops.b3d", "GFX\items\INVeyedrops.jpg", "", 0.0012, 1, "GFX\items\eyedrops.jpg")
+	CreateItemTemplate("Hazmat Suit", "hazmatsuit", "GFX\items\hazmat.b3d", "GFX\items\INVhazmat.jpg", "", 0.013, 2)
+	CreateItemTemplate("Hazmat Suit", "hazmatsuit2", "GFX\items\hazmat.b3d", "GFX\items\INVhazmat.jpg", "", 0.013, 2)
+	CreateItemTemplate("Heavy Hazmat Suit", "hazmatsuit3", "GFX\items\hazmat.b3d", "GFX\items\INVhazmat.jpg", "", 0.013, 2)
 	
-	it = CreateItemTemplate("Eyedrops", "supereyedrops", "GFX\items\eyedrops.b3d", "GFX\items\INVeyedrops.jpg", "", 0.0012, 1, "GFX\items\eyedrops.jpg")
-	
-	it = CreateItemTemplate("First Aid Kit", "firstaid", "GFX\items\firstaid.x", "GFX\items\INVfirstaid.jpg", "", 0.05, 1)
-	
-	it = CreateItemTemplate("Gas Mask", "gasmask", "GFX\items\gasmask.b3d", "GFX\items\INVgasmask.jpg", "", 0.02, 2)
-	
-	it = CreateItemTemplate("Gas Mask", "supergasmask", "GFX\items\gasmask.b3d", "GFX\items\INVgasmask.jpg", "", 0.021, 2)
-	
-	it = CreateItemTemplate("Hazmat Suit", "hazmatsuit", "GFX\items\hazmat.b3d", "GFX\items\INVhazmat.jpg", "", 0.013, 2)
-	
-	it = CreateItemTemplate("Hazmat Suit", "hazmatsuit2", "GFX\items\hazmat.b3d", "GFX\items\INVhazmat.jpg", "", 0.013, 2)
-	
-	it = CreateItemTemplate("Heavy Ballistic Vest", "finevest", "GFX\items\vest.x", "GFX\items\INVvest.jpg", "", 0.022, 2, "GFX\items\Vest.png")
-	
-	it = CreateItemTemplate("Heavy Gas Mask", "gasmask3", "GFX\items\gasmask.b3d", "GFX\items\INVgasmask.jpg", "", 0.021, 2)
-	
-	it = CreateItemTemplate("Heavy Hazmat Suit", "hazmatsuit3", "GFX\items\hazmat.b3d", "GFX\items\INVhazmat.jpg", "", 0.013, 2)
-	
-	it = CreateItemTemplate("Night Vision Goggles", "nvgoggles", "GFX\items\NVG.b3d", "GFX\items\INVnightvision.jpg", "", 0.02, 2)
-	
-	it = CreateItemTemplate("Night Vision Goggles", "finenvgoggles", "GFX\items\NVG.b3d", "GFX\items\INVveryfinenightvision.jpg", "", 0.02, 2)
-	
-	it = CreateItemTemplate("Night Vision Goggles", "supernv", "GFX\items\NVG.b3d", "GFX\items\INVsupernightvision.jpg", "", 0.02, 2)
+	CreateItemTemplate("Night Vision Goggles", "nvgoggles", "GFX\items\NVG.b3d", "GFX\items\INVnightvision.jpg", "", 0.02, 2)
+	CreateItemTemplate("Night Vision Goggles", "finenvgoggles", "GFX\items\NVG.b3d", "GFX\items\INVveryfinenightvision.jpg", "", 0.02, 2)
+	CreateItemTemplate("Night Vision Goggles", "supernv", "GFX\items\NVG.b3d", "GFX\items\INVsupernightvision.jpg", "", 0.02, 2)
 	
 	it = CreateItemTemplate("Pill", "pill", "GFX\items\pill.b3d", "GFX\items\INVpillwhite.jpg", "", 0.0001, 2)
 	EntityColor(it\OBJ, 255.0, 255.0, 255.0)
 	
-	it = CreateItemTemplate("Radio Transceiver", "radio", "GFX\items\radio.x", "GFX\items\INVradio.jpg", "GFX\items\radioHUD.png", 1.0, 1)
+	CreateItemTemplate("Radio Transceiver", "radio", "GFX\items\radio.x", "GFX\items\INVradio.jpg", "GFX\items\radioHUD.png", 1.0, 1)
+	CreateItemTemplate("Radio Transceiver", "fineradio", "GFX\items\radio.x", "GFX\items\INVradio.jpg", "GFX\items\radioHUD.png", 1.0, 1)
+	CreateItemTemplate("Radio Transceiver", "veryfineradio", "GFX\items\radio.x", "GFX\items\INVradio.jpg", "GFX\items\radioHUD.png", 1.0, 1)
+	CreateItemTemplate("Radio Transceiver", "18vradio", "GFX\items\radio.x", "GFX\items\INVradio.jpg", "GFX\items\radioHUD.png", 1.02, 1)
 	
-	it = CreateItemTemplate("Radio Transceiver", "fineradio", "GFX\items\radio.x", "GFX\items\INVradio.jpg", "GFX\items\radioHUD.png", 1.0, 1)
+	CreateItemTemplate("Severed Hand", "hand", "GFX\items\severedhand.b3d", "GFX\items\INVhand.jpg", "", 0.025, 2)
+	CreateItemTemplate("Black Severed Hand", "hand2", "GFX\items\severedhand.b3d", "GFX\items\INVhand2.jpg", "", 0.025, 2, "GFX\items\shand2.png")
 	
-	it = CreateItemTemplate("Radio Transceiver", "veryfineradio", "GFX\items\radio.x", "GFX\items\INVradio.jpg", "GFX\items\radioHUD.png", 1.0, 1)
+	CreateItemTemplate("S-NAV Navigator", "nav", "GFX\items\navigator.x", "GFX\items\INVnavigator.jpg", "GFX\items\navigator.png", 0.0008, 1)
+	CreateItemTemplate("S-NAV Navigator Ultimate", "nav", "GFX\items\navigator.x", "GFX\items\INVnavigator.jpg", "GFX\items\navigator.png", 0.0008, 1)
+	CreateItemTemplate("S-NAV 300 Navigator", "nav", "GFX\items\navigator.x", "GFX\items\INVnavigator.jpg", "GFX\items\navigator.png", 0.0008, 1)
+	CreateItemTemplate("S-NAV 310 Navigator", "nav", "GFX\items\navigator.x", "GFX\items\INVnavigator.jpg", "GFX\items\navigator.png", 0.0008, 1)
 	
-	it = CreateItemTemplate("Radio Transceiver", "18vradio", "GFX\items\radio.x", "GFX\items\INVradio.jpg", "GFX\items\radioHUD.png", 1.02, 1)
+	CreateItemTemplate("9V Battery", "bat", "GFX\items\Battery\Battery.x", "GFX\items\Battery\INVbattery9v.jpg", "", 0.008, 1)
+	CreateItemTemplate("18V Battery", "18vbat", "GFX\items\Battery\Battery.x", "GFX\items\Battery\INVbattery18v.jpg", "", 0.01, 1, "GFX\items\Battery\Battery 18V.jpg")
+	CreateItemTemplate("Strange Battery", "killbat", "GFX\items\Battery\Battery.x", "GFX\items\Battery\INVbattery22900.jpg", "", 0.01, 1, "GFX\items\Battery\Strange Battery.jpg")
 	
-	it = CreateItemTemplate("ReVision Eyedrops", "eyedrops","GFX\items\eyedrops.b3d", "GFX\items\INVeyedrops.jpg", "", 0.0012, 1, "GFX\items\eyedrops.jpg")
+	CreateItemTemplate("Syringe", "syringe", "GFX\items\Syringe\syringe.b3d", "GFX\items\Syringe\inv.png", "", 0.005, 2)
+	CreateItemTemplate("Syringe", "finesyringe", "GFX\items\Syringe\syringe.b3d", "GFX\items\Syringe\inv.png", "", 0.005, 2)
+	CreateItemTemplate("Syringe", "veryfinesyringe", "GFX\items\Syringe\syringe.b3d", "GFX\items\Syringe\inv.png", "", 0.005, 2)
 	
-	it = CreateItemTemplate("RedVision Eyedrops", "eyedrops", "GFX\items\eyedrops.b3d", "GFX\items\INVeyedropsred.jpg", "", 0.0012, 1, "GFX\items\eyedropsred.jpg")
+	CreateItemTemplate("Wallet", "wallet", "GFX\items\wallet.b3d", "GFX\items\INVwallet.jpg", "", 0.0005, 2, "", "", 1)
 	
-	it = CreateItemTemplate("Severed Hand", "hand", "GFX\items\severedhand.b3d", "GFX\items\INVhand.jpg", "", 0.02, 2)
+	; ~ [KEYCARDS, KEYS, CARDS, COINS]
 	
-	it = CreateItemTemplate("Small First Aid Kit", "finefirstaid", "GFX\items\firstaid.x", "GFX\items\INVfirstaid.jpg", "", 0.03, 1)
+	CreateItemTemplate("Coin", "coin", "GFX\items\coin.b3d", "GFX\items\INVcoin.jpg", "", 0.0005, 3)
 	
-	it = CreateItemTemplate("S-NAV Navigator", "nav", "GFX\items\navigator.x", "GFX\items\INVnavigator.jpg", "GFX\items\navigator.png", 0.0008, 1)
+	CreateItemTemplate("Key Card Omni", "key6", "GFX\items\keycard.x", "GFX\items\INVkeyomni.jpg", "", 0.00035, 1, "GFX\items\keycardomni.jpg")
+	CreateItemTemplate("Level 1 Key Card", "key1", "GFX\items\keycard.x", "GFX\items\INVkey1.jpg", "", 0.00035, 1, "GFX\items\keycard1.jpg")
+	CreateItemTemplate("Level 2 Key Card", "key2", "GFX\items\keycard.x", "GFX\items\INVkey2.jpg", "", 0.00035, 1, "GFX\items\keycard2.jpg")
+	CreateItemTemplate("Level 3 Key Card", "key3", "GFX\items\keycard.x", "GFX\items\INVkey3.jpg", "", 0.00035, 1, "GFX\items\keycard3.jpg")
+	CreateItemTemplate("Level 4 Key Card", "key4", "GFX\items\keycard.x", "GFX\items\INVkey4.jpg", "", 0.00035, 1, "GFX\items\keycard4.jpg")
+	CreateItemTemplate("Level 5 Key Card", "key5", "GFX\items\keycard.x", "GFX\items\INVkey5.jpg", "", 0.00035, 1, "GFX\items\keycard5.jpg")
 	
-	it = CreateItemTemplate("S-NAV Navigator Ultimate", "nav", "GFX\items\navigator.x", "GFX\items\INVnavigator.jpg", "GFX\items\navigator.png", 0.0008, 1)
+	CreateItemTemplate("Lost Key", "key", "GFX\items\key.b3d", "GFX\items\INV1162_1.jpg", "", 0.0028, 3)
 	
-	it = CreateItemTemplate("S-NAV 300 Navigator", "nav", "GFX\items\navigator.x", "GFX\items\INVnavigator.jpg", "GFX\items\navigator.png", 0.0008, 1)
+	CreateItemTemplate("Mastercard", "misc", "GFX\items\keycard.x", "GFX\items\INVmastercard.jpg", "", 0.00035, 1, "GFX\items\mastercard.jpg")
 	
-	it = CreateItemTemplate("S-NAV 310 Navigator", "nav", "GFX\items\navigator.x", "GFX\items\INVnavigator.jpg", "GFX\items\navigator.png", 0.0008, 1)
+	CreateItemTemplate("Playing Card", "misc", "GFX\items\keycard.x", "GFX\items\INVcard.jpg", "", 0.00035, 1, "GFX\items\card.jpg")
 	
-	it = CreateItemTemplate("Strange Battery", "killbat", "GFX\items\Battery\Battery.x", "GFX\items\Battery\INVbattery22900.jpg", "", 0.01, 1, "GFX\items\Battery\Strange Battery.jpg")
-	
-	it = CreateItemTemplate("Strange Bottle", "veryfinefirstaid", "GFX\items\eyedrops.b3d", "GFX\items\INVbottle.jpg", "", 0.002, 1, "GFX\items\bottle.jpg")	
-	
-	it = CreateItemTemplate("Syringe", "syringe", "GFX\items\Syringe\syringe.b3d", "GFX\items\Syringe\inv.png", "", 0.005, 2)
-	
-	it = CreateItemTemplate("Syringe", "finesyringe", "GFX\items\Syringe\syringe.b3d", "GFX\items\Syringe\inv.png", "", 0.005, 2)
-	
-	it = CreateItemTemplate("Syringe", "veryfinesyringe", "GFX\items\Syringe\syringe.b3d", "GFX\items\Syringe\inv.png", "", 0.005, 2)
-	
-	it = CreateItemTemplate("Wallet","wallet", "GFX\items\wallet.b3d", "GFX\items\INVwallet.jpg", "", 0.0005, 2, "", "", 1)
-	
-	it = CreateItemTemplate("9V Battery", "bat", "GFX\items\Battery\Battery.x", "GFX\items\Battery\INVbattery9v.jpg", "", 0.008, 1)
-	
-	it = CreateItemTemplate("18V Battery", "18vbat", "GFX\items\Battery\Battery.x", "GFX\items\Battery\INVbattery18v.jpg", "", 0.01, 1, "GFX\items\Battery\Battery 18V.jpg")
+	CreateItemTemplate("Quarter", "25ct", "GFX\items\coin.b3d", "GFX\items\INVcoin.jpg", "", 0.0005, 3)
 	
 	For it = Each ItemTemplates
 		If (it\Tex <> 0) Then
@@ -454,7 +390,7 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 		EntityParent(Liquid, i\Model)
 		EntityColor(Liquid, R, G, B)
 		
-		If A < 0 Then 
+		If A < 0.0 Then 
 			EntityFX(Liquid, 1)
 			EntityAlpha(Liquid, Abs(A))
 		Else
@@ -479,6 +415,7 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 	LastItemID = i\ID
 	
 	CatchErrors("CreateItem")
+	
 	Return(i)
 End Function
 
@@ -498,17 +435,9 @@ Function RemoveItem(i.Items)
 	Next
 	If SelectedItem = i Then
 		Select SelectedItem\itemtemplate\TempName 
-			Case "nvgoggles"
+			Case "nvgoggles", "supernv"
 				;[Block]
-				If WearingNightVision = 1 Then CameraFogFar = StoredCameraFogFar : WearingNightVision = 0
-				;[End Block]
-			Case "supernv"
-				;[Block]
-				If WearingNightVision = 2 Then CameraFogFar = StoredCameraFogFar : WearingNightVision = 0
-				;[End Block]
-			Case "finenvgoggles"
-				;[Block]
-				If WearingNightVision = 3 Then CameraFogFar = StoredCameraFogFar : WearingNightVision = 0
+				WearingNightVision = 0
 				;[End Block]
 			Case "gasmask", "supergasmask", "gasmask2", "gasmask3"
 				;[Block]
@@ -520,7 +449,7 @@ Function RemoveItem(i.Items)
 				;[End Block]
 			Case "hazmatsuit", "hazmatsuit2", "hazmatsuit3"
 				;[Block]
-				WearingHazmat = 0	
+				WearingHazmat = 0
 				;[End Block]
 			Case "scp714"
 				;[Block]
@@ -553,7 +482,7 @@ Function UpdateItems()
 	Local xTemp#, yTemp#, zTemp#
 	Local Temp%, np.NPCs
 	Local Pick%
-	Local HideDist = HideDistance * 0.5
+	Local HideDist# = HideDistance * 0.5
 	Local DeletedItem% = False
 	
 	ClosestItem = Null
@@ -563,16 +492,17 @@ Function UpdateItems()
 		If (Not i\Picked) Then
 			If i\DistTimer < MilliSecs2() Then
 				i\Dist = EntityDistance(Camera, i\Collider)
-				i\DistTimer = MilliSecs2() + 700.0
+				i\DistTimer = MilliSecs2() + 700
 				If i\Dist < HideDist Then ShowEntity(i\Collider)
 			EndIf
 			
 			If i\Dist < HideDist Then
 				ShowEntity(i\Collider)
+				
 				If i\Dist < 1.2 Then
 					If ClosestItem = Null Then
 						If EntityInView(i\Model, Camera) Then
-							If EntityVisible(i\Collider,Camera) Then
+							If EntityVisible(i\Collider, Camera) Then
 								ClosestItem = i
 							EndIf
 						EndIf
@@ -594,7 +524,7 @@ Function UpdateItems()
 						Pick = LinePick(EntityX(i\Collider), EntityY(i\Collider), EntityZ(i\Collider), 0.0, -10.0, 0.0)
 						If Pick
 							i\DropSpeed = i\DropSpeed - 0.0004 * FPSfactor
-							TranslateEntity i\Collider, i\xSpeed * FPSfactor, i\DropSpeed * FPSfactor, i\zSpeed * FPSfactor
+							TranslateEntity(i\Collider, i\xSpeed * FPSfactor, i\DropSpeed * FPSfactor, i\zSpeed * FPSfactor)
 							If i\WontColl Then ResetEntity(i\Collider)
 						Else
 							i\DropSpeed = 0.0
@@ -602,18 +532,18 @@ Function UpdateItems()
 							i\zSpeed = 0.0
 						EndIf
 					Else
-						i\DropSpeed = 0
+						i\DropSpeed = 0.0
 						i\xSpeed = 0.0
 						i\zSpeed = 0.0
 					EndIf
 				EndIf
 				
-				If i\Dist < HideDist * 0.2 Then
+ 				If i\Dist < HideDist * 0.2 Then
 					For i2.Items = Each Items
 						If i <> i2 And (Not i2\Picked) And i2\Dist < HideDist * 0.2 Then
-							xTemp# = (EntityX(i2\Collider, True) - EntityX(i\Collider, True))
-							yTemp# = (EntityY(i2\Collider, True) - EntityY(i\Collider, True))
-							zTemp# = (EntityZ(i2\Collider, True) - EntityZ(i\Collider, True))
+							xTemp# = EntityX(i2\Collider, True) - EntityX(i\Collider, True)
+							yTemp# = EntityY(i2\Collider, True) - EntityY(i\Collider, True)
+							zTemp# = EntityZ(i2\Collider, True) - EntityZ(i\Collider, True)
 							
 							ed# = (xTemp * xTemp + zTemp * zTemp)
 							If ed < 0.07 And Abs(yTemp) < 0.25 Then
@@ -633,6 +563,10 @@ Function UpdateItems()
 							EndIf
 						EndIf
 					Next
+				EndIf
+				If EntityY(i\Collider) < -35.0 Then 
+					RemoveItem(i)
+					DeletedItem = True
 				EndIf
 			Else
 				HideEntity(i\Collider)
@@ -655,7 +589,7 @@ Function UpdateItems()
 End Function
 
 Function PickItem(item.Items)
-	Local n% = 0, z%
+	Local n% = 0
 	Local CanPickItem = True
 	Local FullINV% = True
 	
@@ -673,11 +607,14 @@ Function PickItem(item.Items)
 	EndIf
 	
 	CatchErrors("Uncaught (PickItem)")
+	
+	Local z%
+	
 	If (Not FullINV) Then
-		For n% = 0 To MaxItemAmount - 1
+		For n = 0 To MaxItemAmount - 1
 			If Inventory(n) = Null Then
 				Select item\itemtemplate\TempName
-					Case "1123"
+					Case "scp1123"
 						;[Block]
 						If Wearing714 = 0 And WearingGasMask < 3 And WearingHazmat < 3 Then
 							If PlayerRoom\RoomTemplate\Name <> "room1123" Then
@@ -690,6 +627,7 @@ Function PickItem(item.Items)
 								DeathMSG = DeathMSG + "exactly SCP-1123 was removed from its containment chamber is still unknown."
 								Kill()
 							EndIf
+							
 							For e.Events = Each Events
 								If e\EventName = "room1123" Then 
 									If e\EventState = 0.0 Then
@@ -708,7 +646,7 @@ Function PickItem(item.Items)
 						;[Block]
 						ShowEntity(Light)
 						LightFlash = 1.0
-						PlaySound_Strict(IntroSFX(11))
+						PlaySound_Strict(IntroSFX(Rand(8, 10)))
 						DeathMSG = "Subject D-9341 found dead inside SCP-914's output booth next to what appears to be an ordinary nine-volt battery. The subject is covered in severe "
 						DeathMSG = DeathMSG + "electrical burns, and assumed to be killed via an electrical shock caused by the battery. The battery has been stored for further study."
 						Kill()
@@ -796,6 +734,7 @@ Function PickItem(item.Items)
 						Else
 							SelectedItem = item
 						EndIf
+						;[End Block]
 				End Select
 				
 				If item\itemtemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(item\itemtemplate\Sound))
@@ -819,8 +758,6 @@ Function PickItem(item.Items)
 End Function
 
 Function DropItem(item.Items, PlayDropSound% = True)
-	Local z%
-	
 	If WearingHazmat > 0 Then
 		Msg = "You cannot drop any items while wearing a hazmat suit."
 		MsgTimer = 70 * 5.0
@@ -828,6 +765,8 @@ Function DropItem(item.Items, PlayDropSound% = True)
 	EndIf
 	
 	CatchErrors("Uncaught (DropItem)")
+	
+	Local z%
 	
 	If PlayDropSound Then
 		If item\itemtemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(item\itemtemplate\Sound))
@@ -839,8 +778,8 @@ Function DropItem(item.Items, PlayDropSound% = True)
 	PositionEntity(item\Collider, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 	RotateEntity(item\Collider, EntityPitch(Camera), EntityYaw(Camera) + Rnd(-20.0, 20.0), 0.0)
 	MoveEntity(item\Collider, 0.0, -0.1, 0.1)
-	RotateEntity(item\Collider, 0.0, EntityYaw(Camera) + Rnd(-110, 110), 0.0)
-	ResetEntity(item\Collider)
+	RotateEntity(item\Collider, 0.0, EntityYaw(Camera) + Rnd(-110.0, 110.0), 0.0)
+	ResetEntity (item\Collider)
 	
 	item\Picked = False
 	For z = 0 To MaxItemAmount - 1
@@ -888,9 +827,11 @@ Function DropItem(item.Items, PlayDropSound% = True)
 	CatchErrors("DropItem")
 End Function
 
-; ~ Update any ailments inflicted by SCP-294 drinks.
+; ~ Update any ailments inflicted by SCP-294 drinks
 Function Update294()
 	CatchErrors("Uncaught (Update294)")
+	
+	Local Pvt%
 	
 	If CameraShakeTimer > 0.0 Then
 		CameraShakeTimer = CameraShakeTimer - (FPSfactor / 70.0)
@@ -909,7 +850,7 @@ Function Update294()
 		
 		; ~ Regurgitate when timer is below 10 seconds.
 		If VomitTimer < 10.0 And Rnd(0.0, 500.0 * VomitTimer) < 2.0 Then
-			If (Not ChannelPlaying(VomitCHN)) And (Not Regurgitate) Then
+			If ChannelPlaying(VomitCHN) = False And (Not Regurgitate) Then
 				VomitCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Retch" + Rand(1, 2) + ".ogg"))
 				Regurgitate = MilliSecs2() + 50
 			EndIf
@@ -920,7 +861,6 @@ Function Update294()
 		Else
 			Regurgitate = 0
 		EndIf
-		
 	ElseIf VomitTimer < 0.0 Then ; ~ Vomit
 		VomitTimer = VomitTimer - (FPSfactor / 70.0)
 		
@@ -949,7 +889,7 @@ Function Update294()
 			de.Decals = CreateDecal(5, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, 180.0, 0.0)
 			de\Size = 0.001 : de\SizeChange = 0.001 : de\MaxSize = 0.6
 			EntityAlpha(de\OBJ, 1.0)
-			EntityColor(de\OBJ, 0.0, Rnd(200, 255), 0.0)
+			EntityColor(de\OBJ, 0.0, Rnd(200.0, 255.0), 0.0)
 			ScaleSprite(de\OBJ, de\Size, de\Size)
 			FreeEntity(Pvt)
 			Vomit = True
