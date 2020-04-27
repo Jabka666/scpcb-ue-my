@@ -848,6 +848,16 @@ Function UpdateConsole()
 					Next
 					
 					If I_427\Timer >= 70 * 360.0 Then I_427\Timer = 0.0
+					
+					For e.Events = Each Events
+						If e\EventName = "1048a" Then 
+							If PlayerRoom = e\room Then BlinkTimer = -10.0
+							If e\room\Objects[0] <> 0 Then
+								FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
+							EndIf
+							RemoveEvent(e)
+						EndIf
+					Next
 					;[End Block]
 				Case "teleport"
 					;[Block]
@@ -3746,7 +3756,7 @@ Function MovePlayer()
 		EndIf
 	EndIf
 	
-	UpdateInfect()
+	Update008()
 	
 	If Bloodloss > 0.0 Then
 		If Rnd(200.0) < Min(Injuries, 4.0) Then
@@ -5211,6 +5221,20 @@ Function DrawGUI()
 							BlinkEffectTimer = 0.0
 						EndIf
 						
+						For e.Events = Each Events
+							If e\EventName = "1048a" Then 
+								If e\EventState2 > 0.0 Then
+									If PlayerRoom = e\room Then BlinkTimer = -10.0
+									If e\room\Objects[0] <> 0 Then
+										FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
+									EndIf
+									Msg = "You swallowed the pill. Ear-like organs are falling from your body."
+									MsgTimer = 70 * 7.0
+									RemoveEvent(e)
+								EndIf
+							EndIf
+						Next
+						
 						RemoveItem(SelectedItem)
 						SelectedItem = Null
 					EndIf	
@@ -5384,6 +5408,10 @@ Function DrawGUI()
 						BlinkEffect = 0.6
 						BlinkEffectTimer = Rnd(20.0, 30.0)
 						BlurTimer = 200.0
+						
+						Msg = "You used the eyedrops. Your eyes feel moisturized."
+				        MsgTimer = 70 * 5.0
+						
 						RemoveItem(SelectedItem)
 					EndIf
 					;[End Block]
@@ -5394,6 +5422,10 @@ Function DrawGUI()
 						BlinkEffectTimer = Rnd(30.0, 40.0)
 						Bloodloss = Max(Bloodloss - 1.0, 0.0)
 						BlurTimer = 200.0
+						
+						Msg = "You used the eyedrops. Your eyes feel very moisturized."
+					    MsgTimer = 70 * 5.0
+						
 						RemoveItem(SelectedItem)
 					EndIf
 					;[End Block]
@@ -5404,6 +5436,10 @@ Function DrawGUI()
 						BlinkEffectTimer = 60.0
 						EyeStuck = 10000.0
 						BlurTimer = 1000.0
+						
+						Msg = "You used the eyedrops. Your eyes feel very moisturized."
+					    MsgTimer = 70 * 5.0
+						
 						RemoveItem(SelectedItem)
 					EndIf
 					;[End Block]
@@ -7659,53 +7695,68 @@ Function LoadEntities()
 	Next
 	
 	; ~ Gonzales
-	Tex = LoadTexture_Strict("GFX\npcs\gonzales.jpg")
+	Tex = LoadTexture_Strict("GFX\npcs\Gonzales.png")
 	EntityTexture(DTextures[1], Tex)
 	FreeTexture(Tex)
 	
-	; ~ SCP-970 corpse
-	Tex = LoadTexture_Strict("GFX\npcs\corpse.jpg")
+	; ~ SCP-970's corpse
+	Tex = LoadTexture_Strict("GFX\npcs\scp_970_corpse.png")
 	EntityTexture(DTextures[2], Tex)
 	FreeTexture(Tex)
 	
-	; ~ Scientist 1
-	Tex = LoadTexture_Strict("GFX\npcs\scientist.jpg")
+	; ~ Scientist
+	Tex = LoadTexture_Strict("GFX\npcs\scientist.png")
 	EntityTexture(DTextures[3], Tex)
 	FreeTexture(Tex)
 	
-	; ~ Scientist 2
-	Tex = LoadTexture_Strict("GFX\npcs\scientist2.jpg")
+	; ~ Franklin
+	Tex = LoadTexture_Strict("GFX\npcs\Franklin.png")
 	EntityTexture(DTextures[4], Tex)
 	FreeTexture(Tex)
 	
-	; ~ Janitor
-	Tex = LoadTexture_Strict("GFX\npcs\janitor.jpg")
+	; ~ Janitor # 1
+	Tex = LoadTexture_Strict("GFX\npcs\janitor.png")
 	EntityTexture(DTextures[5], Tex)
 	FreeTexture(Tex)
 	
-	; ~ 106 Victim
-	Tex = LoadTexture_Strict("GFX\npcs\106victim.jpg")
+	; ~ Maynard
+	Tex = LoadTexture_Strict("GFX\npcs\Maynard.png")
 	EntityTexture(DTextures[6], Tex)
 	FreeTexture(Tex)
 	
-	; ~ 2nd ClassD
-	Tex = LoadTexture_Strict("GFX\npcs\classd2.jpg")
+	; ~ Afro-American Class-D
+	Tex = LoadTexture_Strict("GFX\npcs\class_d(2).png")
 	EntityTexture(DTextures[7], Tex)
 	FreeTexture(Tex)
 	
 	; ~ 035 victim
-	Tex = LoadTexture_Strict("GFX\npcs\035victim.jpg")
+	Tex = LoadTexture_Strict("GFX\npcs\scp_035_victim.png")
 	EntityTexture(DTextures[8], Tex)
 	FreeTexture(Tex)
 	
 	; ~ D-9341
-	Tex = LoadTexture_Strict("GFX\npcs\classd3.jpg")
+	Tex = LoadTexture_Strict("GFX\npcs\D_9341.png")
 	EntityTexture(DTextures[9], Tex)
 	FreeTexture(Tex)
 	
-	; ~ Body
-	Tex = LoadTexture_Strict("GFX\npcs\body2.jpg")
+	; ~ Body # 1
+	Tex = LoadTexture_Strict("GFX\npcs\body.png")
 	EntityTexture(DTextures[10], Tex)
+	FreeTexture(Tex)
+	
+	; ~ Body # 2
+	Tex = LoadTexture_Strict("GFX\npcs\body(2).png")
+	EntityTexture(DTextures[11], Tex)
+	FreeTexture(Tex)
+	
+	; ~ Janitor # 2
+	Tex = LoadTexture_Strict("GFX\npcs\janitor(2).png")
+	EntityTexture(DTextures[12], Tex)
+	FreeTexture(Tex)
+	
+	; ~ SCP-008-1's victim
+	Tex = LoadTexture_Strict("GFX\npcs\scp_008_1_victim.png")
+	EntityTexture(DTextures[13], Tex)
 	FreeTexture(Tex)
 	
 	LoadMaterials("Data\materials.ini")
@@ -8147,7 +8198,7 @@ Function NullGame(PlayButtonSFX% = True)
 	LightFlash = 0.0
 	
 	WireframeState = 0
-	WireFrame(False)
+	WireFrame(0)
 	WearingGasMask = 0
 	WearingHazmat = 0
 	WearingVest = 0
@@ -10045,6 +10096,13 @@ Function Use427()
 	If I_427\Timer < 70 * 360.0
 		If I_427\Using = True Then
 			I_427\Timer = I_427\Timer + FPSfactor
+			For e.Events = Each Events
+				If e\EventName = "1048a" Then
+					If e\EventState2 > 0.0 Then
+						e\EventState2 = Max(e\EventState2 - 0.5 * FPSfactor, 0.0)
+					EndIf
+				EndIf
+			Next
 			If Injuries > 0.0 Then
 				Injuries = Max(Injuries - 0.0005 * FPSfactor, 0.0)
 			EndIf
@@ -10212,7 +10270,7 @@ Function UpdateMTF%()
 	EndIf
 End Function
 
-Function UpdateInfect()
+Function Update008()
 	Local Temp#, i%, r.Rooms
 	Local TeleportForInfect% = True
 	
@@ -10277,9 +10335,7 @@ Function UpdateInfect()
 								r\NPC[0] = CreateNPC(NPCtypeD, EntityX(r\Objects[6], True),EntityY(r\Objects[6], True) + 0.2, EntityZ(r\Objects[6], True))
 								r\NPC[0]\Sound = LoadSound_Strict("SFX\SCP\008\KillScientist1.ogg")
 								r\NPC[0]\SoundCHN = PlaySound_Strict(r\NPC[0]\Sound)
-								Tex = LoadTexture_Strict("GFX\npcs\scientist2.jpg")
-								EntityTexture(r\NPC[0]\OBJ, Tex)
-								FreeTexture(Tex)
+								ChangeNPCTextureID(e\room\NPC[0], 12)
 								r\NPC[0]\State = 6.0
 								PlayerRoom = r
 								UnableToMove = False
@@ -10737,7 +10793,7 @@ End Function
 
 Function ScaleRender(x#, y#, hScale# = 1.0, vScale# = 1.0)
 	If Camera <> 0 Then HideEntity(Camera)
-	WireFrame(False)
+	WireFrame(0)
 	ShowEntity(Fresize_Image)
 	ScaleEntity(Fresize_Image, hScale, vScale, 1.0)
 	PositionEntity(Fresize_Image, x, y, 1.0001)
@@ -11329,5 +11385,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#EE1#120C#19ED
+;~B#EEB#1216#1A11
 ;~C#Blitz3D

@@ -1339,13 +1339,13 @@ Function LoadGameQuick(File$)
 	FallTimer = 0.0
 	MenuOpen = False
 	
-	chs\GodMode = False
-	chs\NoClip = False
-	chs\NoBlink = False
-	chs\InfiniteStamina = False
-	chs\NoTarget = False
-	chs\Cheats = False
-	WireFrame(False)
+	chs\GodMode = 0
+	chs\NoClip = 0
+	chs\NoBlink = 0
+	chs\InfiniteStamina = 0
+	chs\NoTarget = 0
+	chs\Cheats = 0
+	WireFrame(0)
 	
 	PlayTime = ReadInt(f)
 	
@@ -1809,7 +1809,7 @@ Function LoadGameQuick(File$)
 		If e\EventName = "alarm"
 			; ~ A hacky fix for the case that the intro objects aren't loaded when they should
 			; ~ Altough I'm too lazy to add those objects there because at the time where you can save, those objects are already in the ground anyway - ENDSHN
-			If e\room\Objects[0] = 0
+			If e\room\Objects[0] = 0 Then
 				e\room\Objects[0] = CreatePivot()
 				e\room\Objects[1] = CreatePivot()
 			EndIf
