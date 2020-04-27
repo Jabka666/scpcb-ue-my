@@ -3,7 +3,6 @@ Dim Achievements%(MAXACHIEVEMENTS)
 Global UsedConsole%
 
 Global AchievementsMenu%
-Global AchvMsgEnabled% = GetINIInt("options.ini", "options", "achievement popup enabled")
 Dim AchievementStrings$(MAXACHIEVEMENTS)
 Dim AchievementDescs$(MAXACHIEVEMENTS)
 Dim AchvIMG%(MAXACHIEVEMENTS)

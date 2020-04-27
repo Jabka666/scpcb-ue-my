@@ -13,6 +13,7 @@ Include "Source Code\FMod.bb"
 Include "Source Code\StrictLoads.bb"
 Include "Source Code\Fullscreen_Window_Fix.bb"
 Include "Source Code\KeyName.bb"
+Include "Source Code\INI_System.bb"
 
 Include "Source Code\DevilParticleSystem.bb"
 
@@ -31,29 +32,18 @@ Global ConsoleFont%
 Global MenuWhite%, MenuBlack%
 Global ButtonSFX%
 
-Global EnableSFXRelease% = GetINIInt(OptionFile, "audio", "sfx release")
 Global EnableSFXRelease_Prev% = EnableSFXRelease
-
-Global CanOpenConsole% = GetINIInt(OptionFile, "console", "enabled")
 
 Dim ArrowIMG(4)
 
-Global LauncherWidth% = Min(GetINIInt(OptionFile, "launcher", "launcher width"), 1024)
-Global LauncherHeight% = Min(GetINIInt(OptionFile, "launcher", "launcher height"), 768)
-Global LauncherEnabled% = GetINIInt(OptionFile, "launcher", "launcher enabled")
+Global Depth% = 0
+
 Global LauncherIMG%
 
-Global GraphicWidth% = GetINIInt(OptionFile, "options", "width")
-Global GraphicHeight% = GetINIInt(OptionFile, "options", "height")
-Global Depth% = 0, FullScreen% = GetINIInt(OptionFile, "options", "fullscreen")
-
 Global SelectedGFXMode%
-Global SelectedGFXDriver% = Max(GetINIInt(OptionFile, "options", "gfx driver"), 1)
 
 Global Fresize_Image%, Fresize_Texture%, Fresize_Texture2%
 Global Fresize_Cam%
-
-Global ShowFPS% = GetINIInt(OptionFile, "options", "show FPS")
 
 Global WireframeState%
 Global HalloweenTex%
@@ -61,13 +51,9 @@ Global HalloweenTex%
 Global TotalGFXModes% = CountGfxModes3D(), GFXModes%
 Dim GfxModeWidths%(TotalGFXModes), GfxModeHeights%(TotalGFXModes)
 
-Global BorderlessWindowed% = GetINIInt(OptionFile, "options", "borderless windowed")
 Global RealGraphicWidth%, RealGraphicHeight%
 Global AspectRatioRatio#
 
-Global EnableRoomLights% = GetINIInt(OptionFile, "options", "room lights enabled")
-
-Global TextureDetails% = GetINIInt(OptionFile, "options", "texture details")
 Global TextureFloat#
 Select TextureDetails
 	Case 0
@@ -91,11 +77,6 @@ Select TextureDetails
 		TextureFloat = -0.8
 		;[End Block]
 End Select
-
-Global ConsoleOpening% = GetINIInt(OptionFile, "console", "auto opening")
-Global SFXVolume# = GetINIFloat(OptionFile, "audio", "sound volume")
-
-Global Bit16Mode% = GetINIInt(OptionFile, "options", "16bit")
 
 Include "Source Code\AAText.bb"
 
@@ -179,14 +160,7 @@ Global CurTime%, PrevTime%, LoopDelay%, FPSfactor#, FPSfactor2#, PrevFPSFactor#
 
 Local CheckFPS%, ElapsedLoops%, FPS%, ElapsedTime#
 
-Global Framelimit% = GetINIInt(OptionFile, "options", "framelimit")
-Global Vsync% = GetINIInt(OptionFile, "options", "vsync")
-
-Global Opt_AntiAlias = GetINIInt(OptionFile, "options", "antialias")
-
-Global CurrFrameLimit# = (Framelimit - 19.0) / 100.0
-
-Global ScreenGamma# = GetINIFloat(OptionFile, "options", "screengamma")
+Global CurrFrameLimit# = (FrameLimit - 19.0) / 100.0
 
 SeedRnd(MilliSecs())
 
@@ -236,20 +210,6 @@ Global Mouse_Left_Limit% = 250, Mouse_Right_Limit% = GraphicsWidth () - 250
 Global Mouse_Top_Limit% = 150, Mouse_Bottom_Limit% = GraphicsHeight () - 150 ; ~ As above.
 Global Mouse_X_Speed_1#, Mouse_Y_Speed_1#
 
-Global KEY_RIGHT = GetINIInt(OptionFile, "binds", "Right key")
-Global KEY_LEFT = GetINIInt(OptionFile, "binds", "Left key")
-Global KEY_UP = GetINIInt(OptionFile, "binds", "Up key")
-Global KEY_DOWN = GetINIInt(OptionFile, "binds", "Down key")
-
-Global KEY_BLINK = GetINIInt(OptionFile, "binds", "Blink key")
-Global KEY_SPRINT = GetINIInt(OptionFile, "binds", "Sprint key")
-Global KEY_INV = GetINIInt(OptionFile, "binds", "Inventory key")
-Global KEY_CROUCH = GetINIInt(OptionFile, "binds", "Crouch key")
-Global KEY_SAVE = GetINIInt(OptionFile, "binds", "Save key")
-Global KEY_CONSOLE = GetINIInt(OptionFile, "binds", "Console key")
-
-Global MouseSmooth# = GetINIFloat(OptionFile, "options", "mouse smoothing", 1.0)
-
 Global Mesh_MinX#, Mesh_MinY#, Mesh_MinZ#
 Global Mesh_MaxX#, Mesh_MaxY#, Mesh_MaxZ#
 Global Mesh_MagX#, Mesh_MagY#, Mesh_MagZ#
@@ -290,7 +250,6 @@ Global PlayerZone%, PlayerRoom.Rooms
 
 Global GrabbedEntity%
 
-Global InvertMouse% = GetINIInt(OptionFile, "options", "invert mouse y")
 Global MouseHit1%, MouseDown1%, MouseHit2%, DoubleClick%, LastMouseHit1%, MouseUp1%
 
 Global NoClipSpeed# = 2.0
@@ -1671,20 +1630,9 @@ Global BlurVolume#, BlurTimer#
 
 Global LightBlink#, LightFlash#
 
-Global BumpEnabled% = GetINIInt(OptionFile, "options", "bump mapping enabled")
-Global HUDenabled% = GetINIInt(OptionFile, "options", "HUD enabled")
-
 Global Camera%, CameraShake#, CurrCameraZoom#
 
-Global Brightness% = GetINIFloat(OptionFile, "options", "brightness")
-Global CameraFogNear# = GetINIFloat(OptionFile, "options", "camera fog near")
-Global CameraFogFar# = GetINIFloat(OptionFile, "options", "camera fog far")
-
 Global StoredCameraFogFar# = CameraFogFar
-
-Global MouseSens# = GetINIFloat(OptionFile, "options", "mouse sensitivity")
-
-Global EnableVRam% = GetINIInt(OptionFile, "options", "enable vram")
 
 Include "Source Code\Dreamfilter.bb"
 
@@ -1724,8 +1672,6 @@ Music(23) = "Ending"
 Music(24) = "Credits"
 Music(25) = "SaveMeFrom"
 Music(26) = "Room106"
-
-Global MusicVolume# = GetINIFloat(OptionFile, "audio", "music volume")
 
 Global MusicCHN%
 MusicCHN = StreamSound_Strict("SFX\Music\" + Music(2) + ".ogg", MusicVolume, Mode)
@@ -1868,8 +1814,6 @@ MaskImage(NVGImages, 255, 0, 255)
 Global Wearing1499% = False
 Global AmbientLightRoomTex%, AmbientLightRoomVal%
 
-Global EnableUserTracks% = GetINIInt(OptionFile, "audio", "enable user tracks")
-Global UserTrackMode% = GetINIInt(OptionFile, "audio", "user track setting")
 Global UserTrackCheck% = 0, UserTrackCheck2% = 0
 Global UserTrackMusicAmount% = 0, CurrUserTrack%, UserTrackFlag% = False
 Dim UserTrackName$(256)
@@ -1899,8 +1843,6 @@ Global room2gw_BrokenDoor% = False
 Global room2gw_x# = 0.0
 Global room2gw_z# = 0.0
 
-Global ParticleAmount% = GetINIInt(OptionFile, "options", "particle amount")
-
 Dim NavImages(5)
 For i = 0 To 3
 	NavImages(i) = LoadImage_Strict("GFX\navigator\roomborder" + i + ".png")
@@ -1909,8 +1851,6 @@ Next
 NavImages(4) = LoadImage_Strict("GFX\navigator\batterymeter.png")
 
 Global NavBG = CreateImage(GraphicWidth, GraphicHeight)
-
-Global LightConeModel%
 
 Global ParticleEffect%[10]
 
@@ -2679,9 +2619,9 @@ Repeat
 	
 	If MenuOpen Or InvOpen Or OtherOpen <> Null Or ConsoleOpen Or SelectedDoor <> Null Or SelectedScreen <> Null Or Using294 Then FPSfactor = 0.0
 	
-	If Framelimit > 0 Then
-	    ; ~ Framelimit
-		Local WaitingTime% = (1000.0 / Framelimit) - (MilliSecs2() - LoopDelay)
+	If FrameLimit > 0 Then
+	    ; ~ Frame Limit
+		Local WaitingTime% = (1000.0 / FrameLimit) - (MilliSecs2() - LoopDelay)
 		
 		Delay(WaitingTime)
 		
@@ -2820,7 +2760,7 @@ Repeat
 				CameraClsColor(Camera, 0, 0, 0)
 			EndIf
 			
-			AmbientLight Brightness, Brightness, Brightness	
+			AmbientLight(Brightness, Brightness, Brightness)
 			PlayerSoundVolume = CurveValue(0.0, PlayerSoundVolume, 5.0)
 			
 			CanSave = True
@@ -2980,7 +2920,7 @@ Repeat
 				DarkA = Max(DarkA, Min(Abs(KillTimer / 400.0), 1.0))
 			EndIf
 			
-			If FallTimer < 0 Then
+			If FallTimer < 0.0 Then
 				If SelectedItem <> Null Then
 					If Instr(SelectedItem\ItemTemplate\TempName, "hazmatsuit") Or Instr(SelectedItem\ItemTemplate\TempName, "vest") Then
 						If WearingHazmat = 0 And WearingVest = 0 Then
@@ -3217,7 +3157,7 @@ Repeat
 	
 	CatchErrors("Main loop / uncaught")
 	
-	If Vsync = 0 Then
+	If VSync = 0 Then
 		Flip(0)
 	Else 
 		Flip(1)
@@ -3894,7 +3834,7 @@ Function MouseLook()
 		MoveEntity(Camera, Side, Up + 0.6 + CrouchState * -0.3, 0.0)
 		
 		; ~ Update the smoothing que to smooth the movement of the mouse.
-		Mouse_X_Speed_1 = CurveValue(MouseXSpeed() * (MouseSens + 0.6) , Mouse_X_Speed_1, (6.0 / (MouseSens + 1.0)) * MouseSmooth) 
+		Mouse_X_Speed_1 = CurveValue(MouseXSpeed() * (MouseSensitivity + 0.6) , Mouse_X_Speed_1, (6.0 / (MouseSensitivity + 1.0)) * MouseSmoothing) 
 		If Int(Mouse_X_Speed_1) = Int(Nan1) Then Mouse_X_Speed_1 = 0.0
 		If PrevFPSFactor > 0.0 Then
             If Abs(FPSfactor / PrevFPSFactor - 1.0) > 1.0 Then
@@ -3904,9 +3844,9 @@ Function MouseLook()
             EndIf
         EndIf
 		If InvertMouse Then
-			Mouse_Y_Speed_1 = CurveValue(-MouseYSpeed() * (MouseSens + 0.6), Mouse_Y_Speed_1, (6.0 / (MouseSens + 1.0)) * MouseSmooth) 
+			Mouse_Y_Speed_1 = CurveValue(-MouseYSpeed() * (MouseSensitivity + 0.6), Mouse_Y_Speed_1, (6.0 / (MouseSensitivity + 1.0)) * MouseSmoothing) 
 		Else
-			Mouse_Y_Speed_1 = CurveValue(MouseYSpeed () * (MouseSens + 0.6), Mouse_Y_Speed_1, (6.0 / (MouseSens + 1.0)) * MouseSmooth) 
+			Mouse_Y_Speed_1 = CurveValue(MouseYSpeed () * (MouseSensitivity + 0.6), Mouse_Y_Speed_1, (6.0 / (MouseSensitivity + 1.0)) * MouseSmoothing) 
 		EndIf
 		If Int(Mouse_Y_Speed_1) = Int(Nan1) Then Mouse_Y_Speed_1 = 0.0
 		
@@ -4517,7 +4457,7 @@ Function DrawGUI()
 		SelectedMonitor = Null
 		If SelectedItem <> Null Then
 			If Instr(SelectedItem\ItemTemplate\TempName, "vest") Or Instr(SelectedItem\ItemTemplate\TempName, "hazmatsuit") Then
-				If (Not WearingVest) And (Not WearingHazmat) Then
+				If WearingVest = 0 And WearingHazmat = 0 Then
 					DropItem(SelectedItem)
 				EndIf
 				SelectedItem = Null
@@ -6793,7 +6733,7 @@ Function DrawMenu()
 					
 					Color(255, 255, 255)
 					AAText(x, y, "VSync:")
-					Vsync = DrawTick(x + 270 * MenuScale, y + MenuScale, Vsync)
+					VSync = DrawTick(x + 270 * MenuScale, y + MenuScale, VSync)
 					If MouseOn(x + 270 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
 						DrawOptionsTooltip(tX, tY, tW, tH, "vsync")
 					EndIf
@@ -6869,7 +6809,7 @@ Function DrawMenu()
 					y = y + 50 * MenuScale
 					Color(100, 100, 100)
 					AAText(x, y, "Save textures in the VRAM:")	
-					EnableVRam = DrawTick(x + 270 * MenuScale, y + MenuScale, EnableVRam, True)
+					SaveTexturesInVRAM = DrawTick(x + 270 * MenuScale, y + MenuScale, SaveTexturesInVRAM, True)
 					If MouseOn(x + 270 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
 						DrawOptionsTooltip(tX, tY, tW, tH, "vram")
 					EndIf
@@ -6935,11 +6875,11 @@ Function DrawMenu()
 					AASetFont(Font1)
 					y = y + 50 * MenuScale
 					
-					MouseSens = (SlideBar(x + 270 * MenuScale, y - 4 * MenuScale, 100 * MenuScale, (MouseSens + 0.5) * 100.0) / 100.0) - 0.5
+					MouseSensitivity = (SlideBar(x + 270 * MenuScale, y - 4 * MenuScale, 100 * MenuScale, (MouseSensitivity + 0.5) * 100.0) / 100.0) - 0.5
 					Color(255, 255, 255)
 					AAText(x, y, "Mouse sensitivity:")
 					If MouseOn(x + 270 * MenuScale, y - 4 * MenuScale, 100 * MenuScale + 14, 20)
-						DrawOptionsTooltip(tX, tY, tW, tH, "mousesensitivity", MouseSens)
+						DrawOptionsTooltip(tX, tY, tW, tH, "mousesensitivity", MouseSensitivity)
 					EndIf
 					
 					y = y + 30 * MenuScale
@@ -6953,11 +6893,11 @@ Function DrawMenu()
 					
 					y = y + 40 * MenuScale
 					
-					MouseSmooth = (SlideBar(x + 270 * MenuScale, y - 4 * MenuScale, 100 * MenuScale, (MouseSmooth) * 50.0) / 50.0)
+					MouseSmoothing = (SlideBar(x + 270 * MenuScale, y - 4 * MenuScale, 100 * MenuScale, (MouseSmoothing) * 50.0) / 50.0)
 					Color(255, 255, 255)
 					AAText(x, y, "Mouse smoothing:")
 					If MouseOn(x + 270 * MenuScale, y - 4 * MenuScale, 100 * MenuScale + 14, 20)
-						DrawOptionsTooltip(tX, tY, tW, tH, "mousesmoothing", MouseSmooth)
+						DrawOptionsTooltip(tX, tY, tW, tH, "mousesmoothing", MouseSmoothing)
 					EndIf
 					
 					Color(255, 255, 255)
@@ -7099,18 +7039,18 @@ Function DrawMenu()
 					If DrawTick(x + 270 * MenuScale, y, CurrFrameLimit > 0.0) Then
 						CurrFrameLimit = (SlideBar(x + 150 * MenuScale, y + 30 * MenuScale, 100 * MenuScale, CurrFrameLimit# * 99.0) / 99.0)
 						CurrFrameLimit = Max(CurrFrameLimit, 0.01)
-						Framelimit = 19 + (CurrFrameLimit * 100.0)
+						FrameLimit = 19 + (CurrFrameLimit * 100.0)
 						Color(255, 255, 0)
-						AAText(x + 5 * MenuScale, y + 25 * MenuScale, Framelimit + " FPS")
+						AAText(x + 5 * MenuScale, y + 25 * MenuScale, FrameLimit + " FPS")
 					Else
 						CurrFrameLimit = 0.0
-						Framelimit = 0
+						FrameLimit = 0
 					EndIf
 					If MouseOn(x + 270 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
-						DrawOptionsTooltip(tX, tY, tW, tH, "framelimit", Framelimit)
+						DrawOptionsTooltip(tX, tY, tW, tH, "framelimit", FrameLimit)
 					EndIf
 					If MouseOn(x + 150 * MenuScale, y + 30 * MenuScale, 100 * MenuScale + 14, 20)
-						DrawOptionsTooltip(tX, tY, tW, tH, "framelimit", Framelimit)
+						DrawOptionsTooltip(tX, tY, tW, tH, "framelimit", FrameLimit)
 					EndIf
 					
 					y = y + 80 * MenuScale
@@ -7407,9 +7347,9 @@ Function LoadEntities()
 	Panel294 = LoadImage_Strict("GFX\294panel.jpg")
 	MaskImage(Panel294, 255, 0, 255)
 	
-	Brightness = GetINIFloat(OptionFile, "options", "brightness")
-	CameraFogNear = GetINIFloat(OptionFile, "options", "camera fog near")
-	CameraFogFar = GetINIFloat(OptionFile, "options", "Camera Fog far")
+	Brightness = GetINIFloat(OptionFile, "Global", "Brightness")
+	CameraFogNear = GetINIFloat(OptionFile, "Global", "Camera Fog Near")
+	CameraFogFar = GetINIFloat(OptionFile, "Global", "Camera Fog Far")
 	StoredCameraFogFar = CameraFogFar
 	
 	AmbientLightRoomTex = CreateTexture(2, 2, 257)
@@ -7427,7 +7367,7 @@ Function LoadEntities()
 	CameraRange(Camera, 0.05, CameraFogFar)
 	CameraFogMode(Camera, 1)
 	CameraFogRange(Camera, CameraFogNear, CameraFogFar)
-	CameraFogColor(Camera, FogR, FogG, FogB)
+	CameraFogColor(Camera, 0.0, 0.0, 0.0)
 	AmbientLight(Brightness, Brightness, Brightness)
 	
 	ScreenTexs[0] = CreateTexture(512, 512, 1 + 256)
@@ -7639,8 +7579,6 @@ Function LoadEntities()
 	ClsColor(0, 0, 0)
 	Cls
 	SetBuffer(BackBuffer())
-	LightConeModel = LoadMesh_Strict("GFX\lightcone.b3d")
-	HideEntity(LightConeModel)
 	
 	For i = 2 To CountSurfaces(Monitor2)
 		SF = GetSurface(Monitor2, i)
@@ -10533,309 +10471,6 @@ Function UpdateDecals()
 	Next
 End Function
 
-Type INIFile
-	Field Name$
-	Field Bank%
-	Field BankOffset% = 0
-	Field Size%
-End Type
-
-Function ReadINILine$(file.INIFile)
-	Local RdByte%
-	Local FirstByte% = True
-	Local Offset% = file\BankOffset
-	Local Bank% = file\Bank
-	Local RetStr$ = ""
-	
-	RdByte = PeekByte(Bank, Offset)
-	While ((FirstByte) Or ((RdByte <> 13) And (RdByte <> 10))) And (Offset < file\Size)
-		RdByte = PeekByte(Bank, Offset)
-		If ((RdByte <> 13) And (RdByte <> 10)) Then
-			FirstByte = False
-			RetStr = RetStr + Chr(RdByte)
-		EndIf
-		Offset = Offset + 1
-	Wend
-	file\BankOffset = Offset
-	
-	Return(RetStr)
-End Function
-
-Function UpdateINIFile$(FileName$)
-	Local file.INIFile = Null
-	
-	For k.INIFile = Each INIFile
-		If k\Name = Lower(FileName) Then
-			file = k
-		EndIf
-	Next
-	
-	If file = Null Then Return
-	If file\Bank <> 0 Then FreeBank(file\Bank)
-	
-	Local f% = ReadFile(file\Name)
-	Local FleSize% = 1
-	
-	While FleSize < FileSize(file\Name)
-		FleSize = FleSize * 2
-	Wend
-	file\Bank = CreateBank(FleSize)
-	file\Size = 0
-	While Not Eof(f)
-		PokeByte(file\Bank, file\Size, ReadByte(f))
-		file\Size = file\Size + 1
-	Wend
-	CloseFile(f)
-End Function
-
-Function GetINIString$(File$, Section$, Parameter$, DefaultValue$ = "")
-	Local TemporaryString$ = ""
-	Local lfile.INIFile = Null
-	
-	For k.INIFile = Each INIFile
-		If k\Name = Lower(File) Then
-			lfile = k
-		EndIf
-	Next
-	
-	If lfile = Null Then
-		lfile = New INIFile
-		lfile\Name = Lower(File)
-		lfile\Bank = 0
-		UpdateINIFile(lfile\Name)
-	EndIf
-	
-	lfile\BankOffset = 0
-	
-	Section = Lower(Section)
-	
-	While lfile\BankOffset < lfile\Size
-		Local StrTemp$ = ReadINILine(lfile)
-		
-		If Left(StrTemp, 1) = "[" Then
-			StrTemp = Lower(StrTemp)
-			If Mid(StrTemp, 2, Len(StrTemp) - 2) = Section Then
-				Repeat
-					TemporaryString = ReadINILine(lfile)
-					If Lower(Trim(Left(TemporaryString, Max(Instr(TemporaryString, "=") - 1, 0)))) = Lower(Parameter) Then
-						Return(Trim(Right(TemporaryString, Len(TemporaryString) - Instr(TemporaryString, "="))))
-					EndIf
-				Until (Left(TemporaryString, 1) = "[") Or (lfile\BankOffset >= lfile\Size)
-				Return(DefaultValue)
-			EndIf
-		EndIf
-	Wend
-	Return(DefaultValue)
-End Function
-
-Function GetINIInt%(File$, Section$, Parameter$, DefaultValue% = 0)
-	Local Txt$ = GetINIString(File, Section, Parameter, DefaultValue)
-	
-	If Lower(Txt) = "true" Then
-		Return(1)
-	ElseIf Lower(Txt) = "false"
-		Return(0)
-	Else
-		Return(Int(Txt))
-	EndIf
-End Function
-
-Function GetINIFloat#(File$, Section$, Parameter$, DefaultValue# = 0.0)
-	Return(Float(GetINIString(File, Section, Parameter, DefaultValue)))
-End Function
-
-Function GetINIString2$(File$, Start%, Parameter$, DefaultValue$ = "")
-	Local TemporaryString$ = ""
-	Local f% = ReadFile(File)
-	Local n% = 0
-	
-	While Not Eof(f)
-		Local StrTemp$ = ReadLine(f)
-		
-		n = n + 1
-		If n = Start Then 
-			Repeat
-				TemporaryString = ReadLine(f)
-				If Lower(Trim(Left(TemporaryString, Max(Instr(TemporaryString, "=") - 1, 0)))) = Lower(Parameter) Then
-					CloseFile(f)
-					Return(Trim(Right(TemporaryString, Len(TemporaryString) - Instr(TemporaryString, "="))))
-				EndIf
-			Until Left(TemporaryString, 1) = "[" Or Eof(f)
-			CloseFile(f)
-			Return(DefaultValue)
-		EndIf
-	Wend
-	CloseFile(f)	
-	Return(DefaultValue)
-End Function
-
-Function GetINIInt2%(File$, Start%, Parameter$, DefaultValue$ = "")
-	Local Txt$ = GetINIString2(File, Start, Parameter, DefaultValue)
-	
-	If Lower(Txt) = "True" Then
-		Return(1)
-	ElseIf Lower(Txt) = "False"
-		Return(0)
-	Else
-		Return(Int(Txt))
-	EndIf
-End Function
-
-Function GetINISectionLocation%(File$, Section$)
-	Local Temp%
-	Local f% = ReadFile(File)
-	
-	Section = Lower(Section)
-	
-	Local n% = 0
-	
-	While Not Eof(f)
-		Local StrTemp$ = ReadLine(f)
-		
-		n = n + 1
-		If Left(StrTemp, 1) = "[" Then
-			StrTemp = Lower(StrTemp)
-			Temp = Instr(StrTemp, Section)
-			If Temp > 0 Then
-				If Mid(StrTemp, Temp - 1, 1) = "[" Or Mid(StrTemp, Temp - 1, 1) = "|" Then
-					CloseFile(f)
-					Return(n)
-				EndIf
-			EndIf
-		EndIf
-	Wend
-	
-	CloseFile(f)
-End Function
-
-Function PutINIValue%(File$, INI_sSection$, INI_sKey$, INI_sValue$)
-	; ~ Returns: True (Success) Or False (Failed)
-	INI_sSection = "[" + Trim(INI_sSection) + "]"
-	
-	Local INI_sUpperSection$ = Upper(INI_sSection)
-	
-	INI_sKey = Trim$(INI_sKey)
-	INI_sValue = Trim$(INI_sValue)
-	
-	Local INI_sFilename$ = File
-	; ~ Retrieve the INI data (if it exists)
-	Local INI_sContents$ = INI_FileToString(INI_sFilename)
-	; ~ (Re)Create the INI file updating / adding the SECTION, KEY and VALUE
-	Local INI_bWrittenKey% = False
-	Local INI_bSectionFound% = False
-	Local INI_sCurrentSection$ = ""
-	Local INI_lFileHandle% = WriteFile(INI_sFilename)
-	
-	If INI_lFileHandle = 0 Then Return(False) ; ~ Create file failed!
-	
-	Local INI_lOldPos% = 1
-	Local INI_lPos% = Instr(INI_sContents, Chr(0))
-	
-	While (INI_lPos <> 0)
-		Local INI_sTemp$ = Mid(INI_sContents, INI_lOldPos, (INI_lPos - INI_lOldPos))
-		
-		If (INI_sTemp <> "") Then
-			If Left(INI_sTemp, 1) = "[" And Right(INI_sTemp, 1) = "]" Then
-				; ~ Process SECTION
-				If (INI_sCurrentSection = INI_sUpperSection) And (INI_bWrittenKey = False) Then
-					INI_bWrittenKey = INI_CreateKey(INI_lFileHandle, INI_sKey, INI_sValue)
-				End If
-				INI_sCurrentSection = Upper(INI_CreateSection(INI_lFileHandle, INI_sTemp))
-				If (INI_sCurrentSection = INI_sUpperSection) Then INI_bSectionFound = True
-			Else
-				If Left(INI_sTemp, 1) = ":" Then
-					WriteLine(INI_lFileHandle, INI_sTemp)
-				Else
-					; ~ KEY = VALUE				
-					Local lEqualsPos% = Instr(INI_sTemp, "=")
-					
-					If (lEqualsPos <> 0) Then
-						If (INI_sCurrentSection = INI_sUpperSection) And (Upper(Trim$(Left$(INI_sTemp, (lEqualsPos - 1)))) = Upper(INI_sKey)) Then
-							If (INI_sValue <> "") Then INI_CreateKey INI_lFileHandle, INI_sKey, INI_sValue
-							INI_bWrittenKey = True
-						Else
-							WriteLine(INI_lFileHandle, INI_sTemp)
-						End If
-					End If
-				EndIf
-			End If	
-		End If
-		; ~ Move through the INI file...
-		INI_lOldPos = INI_lPos + 1
-		INI_lPos = Instr(INI_sContents, Chr(0), INI_lOldPos)
-	Wend
-	
-	; ~ KEY wasn't found in the INI file - Append a new SECTION If required and create our KEY = VALUE line
-	If (INI_bWrittenKey = False) Then
-		If (INI_bSectionFound = False) Then INI_CreateSection(INI_lFileHandle, INI_sSection)
-		INI_CreateKey(INI_lFileHandle, INI_sKey, INI_sValue)
-	End If
-	CloseFile(INI_lFileHandle)
-	Return(True) ; ~ Success
-End Function
-
-Function INI_FileToString$(INI_sFilename$)
-	Local INI_sString$ = ""
-	Local INI_lFileHandle% = ReadFile(INI_sFilename)
-	
-	If INI_lFileHandle <> 0 Then
-		While Not(Eof(INI_lFileHandle))
-			INI_sString = INI_sString + ReadLine(INI_lFileHandle) + Chr(0)
-		Wend
-		CloseFile(INI_lFileHandle)
-	End If
-	Return(INI_sString)
-End Function
-
-Function INI_CreateSection$(INI_lFileHandle%, INI_sNewSection$)
-	If FilePos(INI_lFileHandle) <> 0 Then WriteLine INI_lFileHandle, "" ; ~ Blank Line between sections
-	WriteLine(INI_lFileHandle, INI_sNewSection)
-	Return(INI_sNewSection)
-End Function
-
-Function INI_CreateKey%(INI_lFileHandle%, INI_sKey$, INI_sValue$)
-	WriteLine(INI_lFileHandle, INI_sKey + " = " + INI_sValue)
-	Return(True)
-End Function
-
-Function SaveOptionsINI()
-	PutINIValue(OptionFile, "options", "mouse sensitivity", MouseSens)
-	PutINIValue(OptionFile, "options", "invert mouse y", InvertMouse)
-	PutINIValue(OptionFile, "options", "bump mapping enabled", BumpEnabled)			
-	PutINIValue(OptionFile, "options", "HUD enabled", HUDenabled)
-	PutINIValue(OptionFile, "options", "screengamma", ScreenGamma)
-	PutINIValue(OptionFile, "options", "antialias", Opt_AntiAlias)
-	PutINIValue(OptionFile, "options", "vsync", Vsync)
-	PutINIValue(OptionFile, "options", "show FPS", ShowFPS)
-	PutINIValue(OptionFile, "options", "framelimit", Framelimit)
-	PutINIValue(OptionFile, "options", "achievement popup enabled", AchvMSGenabled%)
-	PutINIValue(OptionFile, "options", "room lights enabled", EnableRoomLights)
-	PutINIValue(OptionFile, "options", "texture details", TextureDetails)
-	PutINIValue(OptionFile, "console", "enabled", CanOpenConsole)
-	PutINIValue(OptionFile, "console", "auto opening", ConsoleOpening)
-	PutINIValue(OptionFile, "options", "antialiased text", AATextEnable)
-	PutINIValue(OptionFile, "options", "particle amount", ParticleAmount)
-	PutINIValue(OptionFile, "options", "enable vram", EnableVRam)
-	PutINIValue(OptionFile, "options", "mouse smoothing", MouseSmooth)
-	
-	PutINIValue(OptionFile, "audio", "music volume", MusicVolume)
-	PutINIValue(OptionFile, "audio", "sound volume", PrevSFXVolume)
-	PutINIValue(OptionFile, "audio", "sfx release", EnableSFXRelease)
-	PutINIValue(OptionFile, "audio", "enable user tracks", EnableUserTracks)
-	PutINIValue(OptionFile, "audio", "user track setting", UserTrackMode)
-	
-	PutINIValue(OptionFile, "binds", "Right key", KEY_RIGHT)
-	PutINIValue(OptionFile, "binds", "Left key", KEY_LEFT)
-	PutINIValue(OptionFile, "binds", "Up key", KEY_UP)
-	PutINIValue(OptionFile, "binds", "Down key", KEY_DOWN)
-	PutINIValue(OptionFile, "binds", "Blink key", KEY_BLINK)
-	PutINIValue(OptionFile, "binds", "Sprint key", KEY_SPRINT)
-	PutINIValue(OptionFile, "binds", "Inventory key", KEY_INV)
-	PutINIValue(OptionFile, "binds", "Crouch key", KEY_CROUCH)
-	PutINIValue(OptionFile, "binds", "Save key", KEY_SAVE)
-	PutINIValue(OptionFile, "binds", "Console key", KEY_CONSOLE)
-End Function
-
 ; ~ Create a collision box For a mesh entity taking into account entity scale
 ; (~ Won't work in non-uniform scaled space)
 Function MakeCollBox(Mesh%)
@@ -10917,7 +10552,7 @@ End Function
 Function Graphics3DExt%(Width%, Height%, Depth% = 32, Mode% = 2)
 	Graphics3D(Width, Height, Depth, Mode)
 	InitFastResize()
-	AntiAlias(GetINIInt(OptionFile, "options", "antialias"))
+	AntiAlias(Opt_AntiAlias)
 End Function
 
 Function ResizeImage2(Image%, Width%, Height%)
@@ -11475,7 +11110,7 @@ Function TeleportEntity(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = Fa
 End Function
 
 Function PlayStartupVideos()
-	If GetINIInt(OptionFile, "options", "play startup video") = 0 Then Return
+	If PlayStartup = 0 Then Return
 	
 	Local Cam% = CreateCamera() 
 	
@@ -11694,5 +11329,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#F1D#1248#1A29
+;~B#EE1#120C#19ED
 ;~C#Blitz3D

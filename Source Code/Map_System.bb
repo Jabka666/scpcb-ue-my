@@ -1360,7 +1360,7 @@ Type RoomTemplates
 	Field TempTriggerboxAmount
 	Field TempTriggerbox[128]
 	Field TempTriggerboxName$[128]
-	Field UseLightCones%
+	Field UseLightSpark%
 	Field DisableOverlapCheck% = True
 	Field MinX#, MinY#, MinZ#
 	Field MaxX#, MaxY#, MaxZ#
@@ -1399,16 +1399,25 @@ Function LoadRoomTemplates(File$)
 			
 			Select StrTemp
 				Case "room1", "1"
+					;[Block]
 					rt\Shape = ROOM1
+					;[End Block]
 				Case "room2", "2"
+					;[Block]
 					rt\Shape = ROOM2
+					;[End Block]
 				Case "room2c", "2c"
+					;[Block]
 					rt\Shape = ROOM2C
+					;[End Block]
 				Case "room3", "3"
+					;[Block]
 					rt\Shape = ROOM3
+					;[End Block]
 				Case "room4", "4"
+					;[Block]
 					rt\Shape = ROOM4
-				Default
+					;[End Block]
 			End Select
 			
 			For i = 0 To 4
@@ -1418,7 +1427,7 @@ Function LoadRoomTemplates(File$)
 			rt\Commonness = Max(Min(GetINIInt(File, TemporaryString, "commonness"), 100), 0)
 			rt\Large = GetINIInt(File, TemporaryString, "large")
 			rt\DisableDecals = GetINIInt(File, TemporaryString, "disabledecals")
-			rt\UseLightCones = GetINIInt(File, TemporaryString, "usevolumelighting")
+			rt\UseLightSpark = GetINIInt(File, TemporaryString, "uselightspark")
 			rt\DisableOverlapCheck = GetINIInt(File, TemporaryString, "disableoverlapcheck")
 		EndIf
 	Wend
@@ -1478,8 +1487,6 @@ LoadRoomTemplates("Data\rooms.ini")
 
 Global RoomScale# = 8.0 / 2048.0
 
-Global MapWidth% = GetINIInt(OptionFile, "options", "map size"), MapHeight% = GetINIInt(OptionFile, "options", "map size")
-
 Dim MapTemp%(MapWidth + 1, MapHeight + 1)
 Dim MapFound%(MapWidth + 1, MapHeight + 1)
 
@@ -1533,9 +1540,8 @@ Type Rooms
 	Field TriggerboxName$[128]
 	Field MaxWayPointY#
 	Field LightR#[MaxRoomLights], LightG#[MaxRoomLights], LightB#[MaxRoomLights]
-	Field LightCone%[MaxRoomLights]
-	Field LightConeSpark%[MaxRoomLights]
-	Field LightConeSparkTimer#[MaxRoomLights]
+	Field LightSpark%[MaxRoomLights]
+	Field LightSparkTimer#[MaxRoomLights]
 	Field MinX#, MinY#, MinZ#
 	Field MaxX#, MaxY#, MaxZ#
 End Type 
@@ -1773,8 +1779,8 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 				PositionEntity(r\OBJ, x, y, z)
 				FillRoom(r)
 				
-				If r\RoomTemplate\UseLightCones
-					AddLightCones(r)
+				If r\RoomTemplate\UseLightSpark
+					UpdateLightSpark(r)
 				EndIf
 				
 				CalculateRoomExtents(r)
@@ -1786,6 +1792,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 	Local Temp% = 0
 	
 	For rt.RoomTemplates = Each RoomTemplates
+		Local i%
 		
 		For i = 0 To 4
 			If rt\Zone[i] = Zone Then 
@@ -1814,8 +1821,8 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 					PositionEntity(r\OBJ, x, y, z)
 					FillRoom(r)
 					
-					If r\RoomTemplate\UseLightCones
-						AddLightCones(r)
+					If r\RoomTemplate\UseLightSpark
+						UpdateLightSpark(r)
 					EndIf
 					
 					CalculateRoomExtents(r)
@@ -2291,6 +2298,7 @@ Function FillRoom(r.Rooms)
 			
 			If MapTemp(Floor(r\x / 8.0), Floor(r\z / 8.0) - 1) = 0 Then
 				d = CreateDoor(r\Zone, r\x, r\y, r\z  - 4.0, 0.0, r, False, False, False, "GEAR")
+				FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			EndIf
 			;[End Block]
 		Case "checkpoint2"
@@ -2328,6 +2336,7 @@ Function FillRoom(r.Rooms)
 			
 			If MapTemp(Floor(r\x / 8.0), Floor(r\z / 8.0) - 1) = 0 Then
 				d = CreateDoor(r\Zone, r\x, r\y, r\z  - 4.0, 0.0, r, False, False, False, "GEAR")
+				FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			EndIf
 			;[End Block]
 		Case "room2pit"
@@ -4504,8 +4513,8 @@ Function FillRoom(r.Rooms)
 						TempStr$ = "9V Battery" : TempStr2$ = "bat"
 						Chance% = Rand(-10, 100)
 						Select True
-								;[Block]
 							Case (Chance < 0)
+								;[Block]
 								Exit
 								;[End Block]
 							Case (Chance < 40) ; ~ 40% chance for a document
@@ -5378,7 +5387,6 @@ Function FillRoom(r.Rooms)
 			Newlt = AddLight(r, r\x + lt\x, r\y + lt\y, r\z + lt\z, lt\lType, lt\Range, lt\r, lt\g, lt\b)
 			If Newlt <> 0 Then 
 				If lt\ltype = 3 Then
-					LightConeAngles(Newlt, lt\InnerConeAngle, lt\OuterConeAngle)
 					RotateEntity(Newlt, lt\Pitch, lt\Yaw, 0.0)
 				EndIf
 			EndIf
@@ -6342,11 +6350,11 @@ Function UpdateSecurityCams()
 										End If
 										If sc\CoffinEffect = 3 And Rand(200) = 1 Then sc\CoffinEffect = 2 : sc\PlayerState = Rand(10000, 20000)
 									End If	
-									BlurTimer = 1000
-									If VomitTimer = 0 Then
-										VomitTimer = 1
+									BlurTimer = 1000.0
+									If VomitTimer = 0.0 Then
+										VomitTimer = 1.0
 									EndIf
-								ElseIf Sanity < -500
+								ElseIf Sanity < -500.0
 									If Rand(7) = 1 Then EntityTexture(sc\ScrOverlay, MonitorTexture)
 									If Rand(50) = 1 Then
 										EntityTexture(sc\ScrOverlay, GorePics(Rand(0, 5)))
@@ -7698,8 +7706,8 @@ Function UpdateRoomLights(Cam%)
 								EndIf
 							EndIf
 							
-							If EntityDistance(Cam, r\LightSprites2[i]) < 8.5 Or r\RoomTemplate\UseLightCones Then
-								If EntityVisible(Cam, r\LightSpritesPivot[i]) Or r\RoomTemplate\UseLightCones Then
+							If EntityDistance(Cam, r\LightSprites2[i]) < 8.5 Then
+								If EntityVisible(Cam, r\LightSpritesPivot[i]) Then
 									If r\LightSpriteHidden[i] Then
 										ShowEntity(r\LightSprites2[i])
 										r\LightSpriteHidden[i] = False
@@ -7731,7 +7739,8 @@ Function UpdateRoomLights(Cam%)
 										EndIf
 									EndIf
 									
-									If r\RoomTemplate\UseLightCones Then
+									;;;;;;;;;;;;;;
+									If r\RoomTemplate\UseLightSpark Then
 										If EntityDistance(Cam, r\LightSprites2[i]) >= 8.5 Or (Not EntityVisible(Cam, r\LightSpritesPivot[i])) Then
 											HideEntity(r\LightSprites2[i])
 											r\LightSpriteHidden[i] = True
@@ -7747,36 +7756,36 @@ Function UpdateRoomLights(Cam%)
 								If (Not r\LightSpriteHidden[i]) Then
 									HideEntity(r\LightSprites2[i])
 									r\LightSpriteHidden[i] = True
-									If r\LightCone[i] <> 0 Then HideEntity(r\LightCone[i])
-									If r\LightConeSpark[i] <> 0 Then HideEntity(r\LightConeSpark[i])
-								EndIf
-							EndIf
-							
-							If r\LightCone[i] <> 0 Then ShowEntity(r\LightCone[i])
-							
-							If r\LightConeSpark[i] <> 0 Then
-								If r\LightConeSparkTimer[i] > 0 And r\LightConeSparkTimer[i] < 10
-									ShowEntity(r\LightConeSpark[i])
-									r\LightConeSparkTimer[i] = r\LightConeSparkTimer[i] + FPSfactor
-								Else
-									HideEntity(r\LightConeSpark[i])
-									r\LightConeSparkTimer[i] = 0
-								EndIf
-							EndIf
-							
-							If r\LightCone[i] <> 0 Then
-								ScaleEntity(r\LightCone[i], 0.005 + Max(((-0.4 + Random) * 0.025), 0.0), 0.005 + Max(((-0.4 + Random) * 0.025), 0.0), 0.005 + Max(((-0.4 + Random) * 0.025), 0.0))
-								If r\LightFlicker[i] > 4 Then
-									If Rand(400) = 1 Then
-										SetEmitter(r\LightSpritesPivot[i], ParticleEffect[0])
-										PlaySound2(IntroSFX(Rand(8, 10)), Cam, r\LightSpritesPivot[i])
-										ShowEntity(r\LightConeSpark[i])
-										r\LightConeSparkTimer[i] = FPSfactor
+									If r\RoomTemplate\UseLightSpark Then
+										If r\LightSpark[i] <> 0 Then HideEntity(r\LightSpark[i])
 									EndIf
 								EndIf
 							EndIf
-						Else
-							If (EntityDistance(Cam, r\LightSprites2[i]) < 8.5 Or r\RoomTemplate\UseLightCones) Then
+							
+							If r\RoomTemplate\UseLightSpark Then
+								If r\LightSpark[i] <> 0 Then
+									If r\LightSparkTimer[i] > 0.0 And r\LightSparkTimer[i] < 10.0
+										ShowEntity(r\LightSpark[i])
+										r\LightSparkTimer[i] = r\LightSparkTimer[i] + FPSfactor
+									Else
+										HideEntity(r\LightSpark[i])
+										r\LightSparkTimer[i] = 0.0
+									EndIf
+								EndIf
+							EndIf
+							
+							If r\RoomTemplate\UseLightSpark Then
+								If r\LightFlicker[i] > 4.0 Then
+									If Rand(400) = 1 Then
+										SetEmitter(r\LightSpritesPivot[i], ParticleEffect[0])
+										PlaySound2(IntroSFX(Rand(8, 10)), Cam, r\LightSpritesPivot[i])
+										ShowEntity(r\LightSpark[i])
+										r\LightSparkTimer[i] = FPSfactor
+									EndIf
+								EndIf
+							EndIf
+							Else
+								If EntityDistance(Cam, r\LightSprites2[i]) < 8.5 Then
 								If PlayerRoom\RoomTemplate\Name = "173" Then
 									Random = Rnd(0.38, 0.42)
 								Else
@@ -7794,17 +7803,15 @@ Function UpdateRoomLights(Cam%)
 								EndIf
 							EndIf
 							
-							If r\LightCone[i] <> 0 Then
-								ScaleEntity(r\LightCone[i], 0.005 + Max(((-0.4 + Random) * 0.025), 0.0), 0.005 + Max(((-0.4 + Random) * 0.025), 0.0), 0.005 + Max(((-0.4 + Random) * 0.025), 0.0))
-							EndIf
-							
-							If r\LightConeSpark[i] <> 0 Then
-								If r\LightConeSparkTimer[i] > 0 And r\LightConeSparkTimer[i] < 10 Then
-									ShowEntity(r\LightConeSpark[i])
-									r\LightConeSparkTimer[i] = r\LightConeSparkTimer[i] + FPSfactor
-								Else
-									HideEntity(r\LightConeSpark[i])
-									r\LightConeSparkTimer[i] = 0
+							If r\RoomTemplate\UseLightSpark Then
+								If r\LightSpark[i] <> 0 Then
+									If r\LightSparkTimer[i] > 0.0 And r\LightSparkTimer[i] < 10.0 Then
+										ShowEntity(r\LightSpark[i])
+										r\LightSparkTimer[i] = r\LightSparkTimer[i] + FPSfactor
+									Else
+										HideEntity(r\LightSpark[i])
+										r\LightSparkTimer[i] = 0.0
+									EndIf
 								EndIf
 							EndIf
 						EndIf
@@ -7827,8 +7834,9 @@ Function UpdateRoomLights(Cam%)
 							HideEntity(r\LightSprites2[i])
 							r\LightSpriteHidden[i] = True
 						EndIf
-						If r\LightCone[i] <> 0 Then HideEntity(r\LightCone[i])
-						If r\LightConeSpark[i] <> 0 Then HideEntity(r\LightConeSpark[i])
+						If r\RoomTemplate\UseLightSpark Then
+							If r\LightSpark[i] <> 0 Then HideEntity(r\LightSpark[i])
+						EndIf
 					Else
 						; ~ This will make the lightsprites not glitch through the wall when they are rendered by the cameras
 						EntityOrder(r\LightSprites2[i], 0)
@@ -8195,30 +8203,22 @@ Type Dummy1499
 	Field OBJ%
 End Type
 
-Function AddLightCones(room.Rooms)
+Function UpdateLightSpark(room.Rooms)
 	Local i%
 	
 	For i = 0 To MaxRoomLights - 1
-		If room\Lights[i] <> 0
-			room\LightCone[i] = CopyEntity(LightConeModel)
-			ScaleEntity(room\LightCone[i], 0.01, 0.01, 0.01)
-			EntityColor(room\LightCone[i], room\LightR[i], room\LightG[i], room\LightB[i])
-			EntityAlpha(room\LightCone[i], 0.15)
-			EntityBlend(room\LightCone[i], 3)
-			PositionEntity(room\LightCone[i], EntityX(room\LightSpritesPivot[i], True), EntityY(room\LightSpritesPivot[i], True), EntityZ(room\LightSpritesPivot[i], True), True)
-			EntityParent(room\LightCone[i], room\LightSpritesPivot[i])
-			
-			If room\LightFlicker[i] > 4
-				room\LightConeSpark[i] = CreateSprite()
-				ScaleSprite(room\LightConeSpark[i], 1.0, 1.0)
-				EntityTexture(room\LightConeSpark[i], ParticleTextures(8))
-				SpriteViewMode(room\LightConeSpark[i], 2)
-				EntityFX(room\LightConeSpark[i], 1)
-				RotateEntity(room\LightConeSpark[i], -90.0, 0.0, 0.0)
-				EntityBlend(room\LightConeSpark[i], 3)
-				EntityAlpha(room\LightConeSpark[i], 1.0)
-				PositionEntity(room\LightConeSpark[i], EntityX(room\LightSpritesPivot[i], True), EntityY(room\LightSpritesPivot[i], True) + 0.05, EntityZ(room\LightSpritesPivot[i], True), True)
-				EntityParent(room\LightConeSpark[i], room\LightSpritesPivot[i])
+		If room\Lights[i] <> 0 Then
+			If room\LightFlicker[i] > 4.0
+				room\LightSpark[i] = CreateSprite()
+				ScaleSprite(room\LightSpark[i], 1.0, 1.0)
+				EntityTexture(room\LightSpark[i], ParticleTextures(8))
+				SpriteViewMode(room\LightSpark[i], 2)
+				EntityFX(room\LightSpark[i], 1)
+				RotateEntity(room\LightSpark[i], -90.0, 0.0, 0.0)
+				EntityBlend(room\LightSpark[i], 3)
+				EntityAlpha(room\LightSpark[i], 1.0)
+				PositionEntity(room\LightSpark[i], EntityX(room\LightSpritesPivot[i], True), EntityY(room\LightSpritesPivot[i], True) + 0.05, EntityZ(room\LightSpritesPivot[i], True), True)
+				EntityParent(room\LightSpark[i], room\LightSpritesPivot[i])
 			EndIf
 		EndIf
 	Next
@@ -8413,5 +8413,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1196
+;~B#119F
 ;~C#Blitz3D

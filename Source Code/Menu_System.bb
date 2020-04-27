@@ -27,9 +27,6 @@ Global MenuStr$, MenuStrX%, MenuStrY%
 
 Global MainMenuTab%
 
-
-Global IntroEnabled% = GetINIInt(OptionFile, "options", "intro enabled")
-
 Global SelectedInputBox%
 
 Global SavePath$ = "Saves\"
@@ -234,7 +231,7 @@ Function UpdateMainMenu()
 		If DrawButton(x + width + 20 * MenuScale, y, 580 * MenuScale - width - 20 * MenuScale, height, "BACK", False) Then 
 			Select MainMenuTab
 				Case 1
-					PutINIValue(OptionFile, "options", "intro enabled", IntroEnabled%)
+					PutINIValue(OptionFile, "Global", "Enable Intro", IntroEnabled)
 					MainMenuTab = 0
 				Case 2
 					CurrLoadGamePage = 0
@@ -402,7 +399,7 @@ Function UpdateMainMenu()
 					FlushKeys()
 					FlushMouse()
 					
-					PutINIValue(OptionFile, "options", "intro enabled", IntroEnabled%)
+					PutINIValue(OptionFile, "Global", "Enable Intro", IntroEnabled)
 					
 				EndIf
 				
@@ -607,7 +604,7 @@ Function UpdateMainMenu()
 					
 					Color 255,255,255
 					AAText(x + 20 * MenuScale, y, "VSync:")
-					Vsync% = DrawTick(x + 310 * MenuScale, y + MenuScale, Vsync%)
+					VSync = DrawTick(x + 310 * MenuScale, y + MenuScale, VSync)
 					If MouseOn(x+310*MenuScale,y+MenuScale,20*MenuScale,20*MenuScale) And OnSliderID=0
 						DrawOptionsTooltip(tx,ty,tw,th,"vsync")
 					EndIf
@@ -676,7 +673,7 @@ Function UpdateMainMenu()
 					
 					Color 255,255,255
 					AAText(x + 20 * MenuScale, y, "Save textures in the VRAM:")
-					EnableVRam = DrawTick(x + 310 * MenuScale, y + MenuScale, EnableVRam)
+					SaveTexturesInVRAM = DrawTick(x + 310 * MenuScale, y + MenuScale, SaveTexturesInVRAM)
 					If MouseOn(x+310*MenuScale,y+MenuScale,20*MenuScale,20*MenuScale) And OnSliderID=0
 						DrawOptionsTooltip(tx,ty,tw,th,"vram")
 					EndIf
@@ -809,11 +806,11 @@ Function UpdateMainMenu()
 					
 					y = y + 20*MenuScale
 					
-					MouseSens = (SlideBar(x + 310*MenuScale, y-4*MenuScale, 150*MenuScale, (MouseSens+0.5)*100.0)/100.0)-0.5
+					MouseSensitivity = (SlideBar(x + 310*MenuScale, y-4*MenuScale, 150*MenuScale, (MouseSensitivity+0.5)*100.0)/100.0)-0.5
 					Color(255, 255, 255)
 					AAText(x + 20 * MenuScale, y, "Mouse sensitivity:")
 					If MouseOn(x+310*MenuScale,y-4*MenuScale,150*MenuScale+14,20)
-						DrawOptionsTooltip(tx,ty,tw,th,"mousesensitivity",MouseSens)
+						DrawOptionsTooltip(tx,ty,tw,th,"mousesensitivity",MouseSensitivity)
 					EndIf
 					
 					y = y + 40*MenuScale
@@ -827,11 +824,11 @@ Function UpdateMainMenu()
 					
 					y = y + 40*MenuScale
 					
-					MouseSmooth = (SlideBar(x + 310*MenuScale, y-4*MenuScale, 150*MenuScale, (MouseSmooth)*50.0)/50.0)
+					MouseSmoothing = (SlideBar(x + 310*MenuScale, y-4*MenuScale, 150*MenuScale, (MouseSmoothing)*50.0)/50.0)
 					Color(255, 255, 255)
 					AAText(x + 20 * MenuScale, y, "Mouse smoothing:")
 					If MouseOn(x+310*MenuScale,y-4*MenuScale,150*MenuScale+14,20)
-						DrawOptionsTooltip(tx,ty,tw,th,"mousesmoothing",MouseSmooth)
+						DrawOptionsTooltip(tx,ty,tw,th,"mousesmoothing",MouseSmoothing)
 					EndIf
 					
 					Color(255, 255, 255)
@@ -956,18 +953,18 @@ Function UpdateMainMenu()
 						;Framelimit% = CurrFrameLimit#*100.0
 						CurrFrameLimit# = (SlideBar(x + 150*MenuScale, y+30*MenuScale, 100*MenuScale, CurrFrameLimit#*99.0)/99.0)
 						CurrFrameLimit# = Max(CurrFrameLimit, 0.01)
-						Framelimit% = 19+(CurrFrameLimit*100.0)
+						FrameLimit% = 19+(CurrFrameLimit*100.0)
 						Color 255,255,0
-						AAText(x + 25 * MenuScale, y + 25 * MenuScale, Framelimit%+" FPS")
+						AAText(x + 25 * MenuScale, y + 25 * MenuScale, FrameLimit%+" FPS")
 					Else
 						CurrFrameLimit# = 0.0
-						Framelimit = 0
+						FrameLimit = 0
 					EndIf
 					If MouseOn(x+310*MenuScale,y+MenuScale,20*MenuScale,20*MenuScale)
-						DrawOptionsTooltip(tx,ty,tw,th,"framelimit",Framelimit)
+						DrawOptionsTooltip(tx,ty,tw,th,"framelimit",FrameLimit)
 					EndIf
 					If MouseOn(x+150*MenuScale,y+30*MenuScale,100*MenuScale+14,20)
-						DrawOptionsTooltip(tx,ty,tw,th,"framelimit",Framelimit)
+						DrawOptionsTooltip(tx,ty,tw,th,"framelimit",FrameLimit)
 					EndIf
 					
 					y = y + 80*MenuScale
@@ -1272,29 +1269,29 @@ Function UpdateLauncher()
 		Flip
 	Forever
 	
-	PutINIValue(OptionFile, "options", "width", GfxModeWidths(SelectedGFXMode))
-	PutINIValue(OptionFile, "options", "height", GfxModeHeights(SelectedGFXMode))
+	PutINIValue(OptionFile, "Global", "Width", GfxModeWidths(SelectedGFXMode))
+	PutINIValue(OptionFile, "Global", "Height", GfxModeHeights(SelectedGFXMode))
 	If Fullscreen Then
-		PutINIValue(OptionFile, "options", "fullscreen", "true")
+		PutINIValue(OptionFile, "Global", "Fullscreen", "True")
 	Else
-		PutINIValue(OptionFile, "options", "fullscreen", "false")
+		PutINIValue(OptionFile, "Global", "Fullscreen", "False")
 	EndIf
 	If LauncherEnabled Then
-		PutINIValue(OptionFile, "launcher", "launcher enabled", "true")
+		PutINIValue(OptionFile, "Launcher", "Launcher Enabled", "True")
 	Else
-		PutINIValue(OptionFile, "launcher", "launcher enabled", "false")
+		PutINIValue(OptionFile, "Launcher", "Launcher Enabled", "False")
 	EndIf
 	If BorderlessWindowed Then
-		PutINIValue(OptionFile, "options", "borderless windowed", "true")
+		PutINIValue(OptionFile, "Global", "Borderless Windowed", "True")
 	Else
-		PutINIValue(OptionFile, "options", "borderless windowed", "false")
+		PutINIValue(OptionFile, "Global", "Borderless Windowed", "False")
 	EndIf
 	If Bit16Mode Then
-		PutINIValue(OptionFile, "options", "16bit", "true")
+		PutINIValue(OptionFile, "Global", "16Bit", "True")
 	Else
-		PutINIValue(OptionFile, "options", "16bit", "false")
+		PutINIValue(OptionFile, "Global", "16Bit", "False")
 	EndIf
-	PutINIValue(OptionFile, "options", "gfx driver", SelectedGFXDriver)
+	PutINIValue(OptionFile, "Global", "GFX Driver", SelectedGFXDriver)
 	
 End Function
 

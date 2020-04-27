@@ -2,6 +2,8 @@ Dim KeyName$(211)
 
 KeyName(1) = "Esc"
 
+Local i%
+
 For i = 2 To 10
 	KeyName(i) = i - 1
 Next
