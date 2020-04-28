@@ -265,188 +265,189 @@ End Function
 
 ; ~ [GRAPHICS]
 
-Global ParticleAmount% = GetINIInt(OptionFile, "Graphics", "Particle Amount")
+Global ParticleAmount% = GetINIInt(OptionFile, "graphics", "particle amount")
 
-Global Opt_AntiAlias% = GetINIInt(OptionFile, "Graphics", "Antialias")
+Global Opt_AntiAlias% = GetINIInt(OptionFile, "graphics", "antialias")
 
-Global BumpEnabled% = GetINIInt(OptionFile, "Graphics", "Enable Bump Mapping")
+Global BumpEnabled% = GetINIInt(OptionFile, "graphics", "enable bump mapping")
 
-Global SaveTexturesInVRAM% = GetINIInt(OptionFile, "Graphics", "Save Textures In VRAM")
+Global SaveTexturesInVRAM% = GetINIInt(OptionFile, "graphics", "save in vram")
 
-Global EnableRoomLights% = GetINIInt(OptionFile, "Graphics", "Enable Room Lights")
+Global EnableRoomLights% = GetINIInt(OptionFile, "graphics", "enable room lights")
 
-Global VSync% = GetINIInt(OptionFile, "Graphics", "VSync")
+Global VSync% = GetINIInt(OptionFile, "graphics", "vsync")
 
-Global ScreenGamma# = GetINIFloat(OptionFile, "Graphics", "Screen Gamma")
+Global ScreenGamma# = GetINIFloat(OptionFile, "graphics", "screen gamma")
 
-Global TextureDetails% = GetINIInt(OptionFile, "Graphics", "Texture Details")
+Global TextureDetails% = GetINIInt(OptionFile, "graphics", "texture details")
 
 ; ~ [AUDIO]
 
-Global MusicVolume# = GetINIFloat(OptionFile, "Audio", "Music Volume")
+Global MusicVolume# = GetINIFloat(OptionFile, "audio", "music volume")
 
-Global EnableUserTracks% = GetINIInt(OptionFile, "Audio", "Enable User Tracks")
+Global EnableUserTracks% = GetINIInt(OptionFile, "audio", "enable user tracks")
 
-Global UserTrackMode% = GetINIInt(OptionFile, "Audio", "User Track Setting")
+Global UserTrackMode% = GetINIInt(OptionFile, "audio", "user track setting")
 
-Global SFXVolume# = GetINIFloat(OptionFile, "Audio", "Sound Volume")
+Global SFXVolume# = GetINIFloat(OptionFile, "audio", "Sound volume")
 
-Global EnableSFXRelease% = GetINIInt(OptionFile, "Audio", "SFX Release")
+Global EnableSFXRelease% = GetINIInt(OptionFile, "audio", "sfx release")
 
 ; ~ [ADVANCED]
 
-Global AATextEnable% = GetINIInt(OptionFile, "Advanced", "Antialiased Text")
+Global AATextEnable% = GetINIInt(OptionFile, "advanced", "antialiased text")
 
-Global AchvMsgEnabled% = GetINIInt(OptionFile, "Advanced", "Enable Achievement Popup")
+Global AchvMsgEnabled% = GetINIInt(OptionFile, "advanced", "enable achievement popup")
 
-Global CanOpenConsole% = GetINIInt(OptionFile, "Advanced", "Console Enabled")
+Global CanOpenConsole% = GetINIInt(OptionFile, "advanced", "console enabled")
 
-Global HUDenabled% = GetINIInt(OptionFile, "Advanced", "HUD Enabled")
+Global HUDenabled% = GetINIInt(OptionFile, "advanced", "hid enabled")
 
-Global ShowFPS% = GetINIInt(OptionFile, "Advanced", "Show FPS")
+Global ShowFPS% = GetINIInt(OptionFile, "advanced", "show fps")
 
-Global ConsoleOpening% = GetINIInt(OptionFile, "Advanced", "Console Auto Opening")
+Global ConsoleOpening% = GetINIInt(OptionFile, "advanced", "console auto opening")
 
-Global FrameLimit% = GetINIInt(OptionFile, "Advanced", "Framelimit")
+Global FrameLimit% = GetINIInt(OptionFile, "advanced", "framelimit")
 
 ; ~ [CONTROLS]
 
-Global KEY_RIGHT% = GetINIInt(OptionFile, "Controls", "Right Key")
+Global KEY_RIGHT% = GetINIInt(OptionFile, "controls", "right key")
 
-Global KEY_LEFT% = GetINIInt(OptionFile, "Controls", "Left Key")
+Global KEY_LEFT% = GetINIInt(OptionFile, "controls", "left key")
 
-Global KEY_UP% = GetINIInt(OptionFile, "Controls", "Up Key")
+Global KEY_UP% = GetINIInt(OptionFile, "controls", "up key")
 
-Global KEY_DOWN% = GetINIInt(OptionFile, "Controls", "Down Key")
+Global KEY_DOWN% = GetINIInt(OptionFile, "controls", "down key")
 
-Global KEY_BLINK% = GetINIInt(OptionFile, "Controls", "Blink Key")
+Global KEY_BLINK% = GetINIInt(OptionFile, "controls", "blink key")
 
-Global KEY_SPRINT% = GetINIInt(OptionFile, "Controls", "Sprint Key")
+Global KEY_SPRINT% = GetINIInt(OptionFile, "controls", "sprint key")
 
-Global KEY_INV% = GetINIInt(OptionFile, "Controls", "Inventory Key")
+Global KEY_INV% = GetINIInt(OptionFile, "controls", "inventory key")
 
-Global KEY_CROUCH% = GetINIInt(OptionFile, "Controls", "Crouch Key")
+Global KEY_CROUCH% = GetINIInt(OptionFile, "controls", "crouch key")
 
-Global KEY_SAVE% = GetINIInt(OptionFile, "Controls", "Save Key")
+Global KEY_SAVE% = GetINIInt(OptionFile, "controls", "save key")
 
-Global KEY_CONSOLE% = GetINIInt(OptionFile, "Controls", "Console Key")
+Global KEY_CONSOLE% = GetINIInt(OptionFile, "controls", "console key")
 
-Global MouseSmoothing# = GetINIFloat(OptionFile, "Controls", "Mouse Smoothing", 1.0)
+Global MouseSmoothing# = GetINIFloat(OptionFile, "controls", "mouse smoothing", 1.0)
 
-Global InvertMouse% = GetINIInt(OptionFile, "Controls", "Invert Mouse By Y")
+Global InvertMouse% = GetINIInt(OptionFile, "controls", "invert mouse y")
 
-Global MouseSensitivity# = GetINIFloat(OptionFile, "Controls", "Mouse Sensitivity")
+Global MouseSensitivity# = GetINIFloat(OptionFile, "controls", "mouse sensitivity")
 
 ; ~ [LAUNCHER]
 
-Global LauncherWidth% = Min(GetINIInt(OptionFile, "Launcher", "Launcher Width"), 1024)
+Global LauncherWidth% = Min(GetINIInt(OptionFile, "launcher", "launcher width"), 1024)
 
-Global LauncherHeight% = Min(GetINIInt(OptionFile, "Launcher", "Launcher Height"), 768)
+Global LauncherHeight% = Min(GetINIInt(OptionFile, "launcher", "launcher height"), 768)
 
-Global LauncherEnabled% = GetINIInt(OptionFile, "Launcher", "Launcher Enabled")
+Global LauncherEnabled% = GetINIInt(OptionFile, "launcher", "launcher enabled")
 
 ; ~ [GLOBAL]
 
-Global GraphicWidth% = GetINIInt(OptionFile, "Global", "Width")
+Global GraphicWidth% = GetINIInt(OptionFile, "global", "width")
 
-Global GraphicHeight% = GetINIInt(OptionFile, "Global", "Height")
+Global GraphicHeight% = GetINIInt(OptionFile, "global", "height")
 
-Global FullScreen% = GetINIInt(OptionFile, "Global", "Fullscreen")
+Global FullScreen% = GetINIInt(OptionFile, "global", "fullscreen")
 
-Global SelectedGFXDriver% = Max(GetINIInt(OptionFile, "Global", "GFX Driver"), 1)
+Global SelectedGFXDriver% = Max(GetINIInt(OptionFile, "global", "gfx driver"), 1)
 
-Global BorderlessWindowed% = GetINIInt(OptionFile, "Global", "Borderless Windowed")
+Global BorderlessWindowed% = GetINIInt(OptionFile, "global", "borderless windowed")
 
-Global Bit16Mode% = GetINIInt(OptionFile, "Global", "16Bit")
+Global Bit16Mode% = GetINIInt(OptionFile, "global", "16bit")
 
-Global Brightness% = GetINIFloat(OptionFile, "Global", "Brightness")
+Global Brightness% = GetINIFloat(OptionFile, "global", "brightness")
 
-Global CameraFogNear# = GetINIFloat(OptionFile, "Global", "Camera Fog Near")
+Global CameraFogNear# = GetINIFloat(OptionFile, "global", "camera fog near")
 
-Global CameraFogFar# = GetINIFloat(OptionFile, "Global", "Camera Fog Far")
+Global CameraFogFar# = GetINIFloat(OptionFile, "global", "camera fog far")
 
-Global PlayStartup% = GetINIInt(OptionFile, "Global", "Play Startup Video")
+Global PlayStartup% = GetINIInt(OptionFile, "global", "play startup video")
 
-Global MapWidth% = GetINIInt(OptionFile, "Global", "Map Size")
+Global MapWidth% = GetINIInt(OptionFile, "global", "map size")
 
-Global MapHeight% = GetINIInt(OptionFile, "Global", "Map Size")
+Global MapHeight% = GetINIInt(OptionFile, "global", "map size")
 
-Global IntroEnabled% = GetINIInt(OptionFile, "Global", "Enable Intro")
+Global IntroEnabled% = GetINIInt(OptionFile, "global", "enable intro")
 
 Function SaveOptionsINI()
 	; ~ [GRAPHICS]
 	
-	PutINIValue(OptionFile, "Graphics", "Enable Bump Mapping", BumpEnabled)
+	PutINIValue(OptionFile, "graphics", "enable bump mapping", BumpEnabled)
 	
-	PutINIValue(OptionFile, "Graphics", "Screen Gamma", ScreenGamma)
+	PutINIValue(OptionFile, "graphics", "screen Gamma", ScreenGamma)
 	
-	PutINIValue(OptionFile, "Graphics", "Antialias", Opt_AntiAlias)
+	PutINIValue(OptionFile, "graphics", "antialias", Opt_AntiAlias)
 	
-	PutINIValue(OptionFile, "Graphics", "VSync", VSync)
+	PutINIValue(OptionFile, "graphics", "vsync", VSync)
 	
-	PutINIValue(OptionFile, "Graphics", "Particle Amount", ParticleAmount)
+	PutINIValue(OptionFile, "graphics", "particle amount", ParticleAmount)
 	
-	PutINIValue(OptionFile, "Graphics", "Save Textures In VRAM", SaveTexturesInVRAM)
+	PutINIValue(OptionFile, "graphics", "save in vram", SaveTexturesInVRAM)
 	
-	PutINIValue(OptionFile, "Graphics", "Enable Room Lights", EnableRoomLights)
+	PutINIValue(OptionFile, "graphics", "enable room lights", EnableRoomLights)
 	
-	PutINIValue(OptionFile, "Graphics", "Texture Details", TextureDetails)
+	PutINIValue(OptionFile, "graphics", "texture details", TextureDetails)
 	
 	; ~ [ADVANCED]
 	
-	PutINIValue(OptionFile, "Advanced", "HUD Enabled", HUDenabled)
+	PutINIValue(OptionFile, "advanced", "hud enabled", HUDenabled)
 	
-	PutINIValue(OptionFile, "Advanced", "Show FPS", ShowFPS)
+	PutINIValue(OptionFile, "advanced", "show fps", ShowFPS)
 	
-	PutINIValue(OptionFile, "Advanced", "Framelimit", FrameLimit)
+	PutINIValue(OptionFile, "advanced", "framelimit", FrameLimit)
 	
-	PutINIValue(OptionFile, "Advanced", "Enable Achievement Popup", AchvMsgEnabled)
+	PutINIValue(OptionFile, "advanced", "enable achievement popup", AchvMsgEnabled)
 	
-	PutINIValue(OptionFile, "Advanced", "Console Enabled", CanOpenConsole)
+	PutINIValue(OptionFile, "advanced", "console enabled", CanOpenConsole)
 	
-	PutINIValue(OptionFile, "Advanced", "Console Auto Opening", ConsoleOpening)
+	PutINIValue(OptionFile, "advanced", "console auto opening", ConsoleOpening)
 	
-	PutINIValue(OptionFile, "Advanced", "Antialiased Text", AATextEnable)
+	PutINIValue(OptionFile, "advanced", "antialiased text", AATextEnable)
 	
 	; ~ [CONTROLS]
 	
-	PutINIValue(OptionFile, "Controls", "Mouse Sensitivity", MouseSensitivity)
+	PutINIValue(OptionFile, "controls", "mouse sensitivity", MouseSensitivity)
 	
-	PutINIValue(OptionFile, "Controls", "Invert Mouse By Y", InvertMouse)
+	PutINIValue(OptionFile, "controls", "invert mouse y", InvertMouse)
 	
-	PutINIValue(OptionFile, "Controls", "Mouse Smoothing", MouseSmoothing)
+	PutINIValue(OptionFile, "controls", "mouse smoothing", MouseSmoothing)
 	
-	PutINIValue(OptionFile, "Controls", "Right Key", KEY_RIGHT)
+	PutINIValue(OptionFile, "controls", "right key", KEY_RIGHT)
 	
-	PutINIValue(OptionFile, "Controls", "Left Key", KEY_LEFT)
+	PutINIValue(OptionFile, "controls", "left key", KEY_LEFT)
 	
-	PutINIValue(OptionFile, "Controls", "Up Key", KEY_UP)
+	PutINIValue(OptionFile, "controls", "up key", KEY_UP)
 	
-	PutINIValue(OptionFile, "Controls", "Down Key", KEY_DOWN)
+	PutINIValue(OptionFile, "controls", "down key", KEY_DOWN)
 	
-	PutINIValue(OptionFile, "Controls", "Blink Key", KEY_BLINK)
+	PutINIValue(OptionFile, "controls", "blink key", KEY_BLINK)
 	
-	PutINIValue(OptionFile, "Controls", "Sprint Key", KEY_SPRINT)
+	PutINIValue(OptionFile, "controls", "sprint key", KEY_SPRINT)
 	
-	PutINIValue(OptionFile, "Controls", "Inventory Key", KEY_INV)
+	PutINIValue(OptionFile, "controls", "inventory key", KEY_INV)
 	
-	PutINIValue(OptionFile, "Controls", "Crouch Key", KEY_CROUCH)
+	PutINIValue(OptionFile, "controls", "crouch key", KEY_CROUCH)
 	
-	PutINIValue(OptionFile, "Controls", "Save Key", KEY_SAVE)
+	PutINIValue(OptionFile, "controls", "save key", KEY_SAVE)
 	
-	PutINIValue(OptionFile, "Controls", "Console Key", KEY_CONSOLE)
+	PutINIValue(OptionFile, "controls", "console key", KEY_CONSOLE)
 	
 	; ~ [AUDIO]
 	
-	PutINIValue(OptionFile, "Audio", "Music Volume", MusicVolume)
+	PutINIValue(OptionFile, "audio", "music volume", MusicVolume)
 	
-	PutINIValue(OptionFile, "Audio", "Sound Volume", PrevSFXVolume)
+	PutINIValue(OptionFile, "audio", "sound volume", PrevSFXVolume)
 	
-	PutINIValue(OptionFile, "Audio", "SFX Release", EnableSFXRelease)
+	PutINIValue(OptionFile, "audio", "sfx release", EnableSFXRelease)
 	
-	PutINIValue(OptionFile, "Audio", "Enable User Tracks", EnableUserTracks)
+	PutINIValue(OptionFile, "audio", "enable user tracks", EnableUserTracks)
 	
-	PutINIValue(OptionFile, "Audio", "User Track Setting", UserTrackMode)
+	PutINIValue(OptionFile, "audio", "user track setting", UserTrackMode)
 End Function
+
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D

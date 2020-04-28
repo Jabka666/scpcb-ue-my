@@ -7383,9 +7383,9 @@ Function LoadEntities()
 	Panel294 = LoadImage_Strict("GFX\294panel.jpg")
 	MaskImage(Panel294, 255, 0, 255)
 	
-	Brightness = GetINIFloat(OptionFile, "Global", "Brightness")
-	CameraFogNear = GetINIFloat(OptionFile, "Global", "Camera Fog Near")
-	CameraFogFar = GetINIFloat(OptionFile, "Global", "Camera Fog Far")
+	Brightness = GetINIFloat(OptionFile, "global", "brightness")
+	CameraFogNear = GetINIFloat(OptionFile, "global", "camera fog near")
+	CameraFogFar = GetINIFloat(OptionFile, "global", "camera fog far")
 	StoredCameraFogFar = CameraFogFar
 	
 	AmbientLightRoomTex = CreateTexture(2, 2, 257)

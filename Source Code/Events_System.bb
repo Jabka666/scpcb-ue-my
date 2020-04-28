@@ -2449,11 +2449,14 @@ Function UpdateEvents()
 			Case "pocketdimension"
 				;[Block]
 				; ~ [EventState]: a timer for scaling the tunnels in the starting room
+				
 				; ~ [EventState2]:
+				
 				; ~ 0 if the player is in the starting room
 				; ~ 1 if in the room with the throne, moving pillars, plane etc
 				; ~ 12-15 if player is in the room with the tall pillars 
 				; ~ (goes down from 15 to 12 and SCP-106 teleports from pillar to another, pillars being room\Objects[12 to 15])
+				
 				; ~ [EventState3]:
 				; ~ 1 when appearing in the tunnel that looks like the tunnels in HCZ
 				; ~ 2 after opening the door in the tunnel
@@ -2539,7 +2542,7 @@ Function UpdateEvents()
 						TranslateEntity(e\room\Objects[10], Sin(e\EventState * 1.6) * 4.0, 0.0, Cos(e\EventState * 0.8) * 5.0, True)
 						RotateEntity(e\room\Objects[10], 0.0, e\EventState * 2.0, 0.0)
 						
-						If e\EventState3 = 1.0 Or e\EventState3 = 2 Then ;the "trick room"
+						If e\EventState3 = 1.0 Or e\EventState3 = 2.0 Then ;the "trick room"
 							If e\EventState3 = 1.0 And (e\room\RoomDoors[0]\OpenState > 150.0 Or e\room\RoomDoors[1]\OpenState > 150.0) Then
 								PlaySound_Strict(LoadTempSound("SFX\Horror\Horror16.ogg"))
 								BlurTimer = 800.0
@@ -2639,7 +2642,6 @@ Function UpdateEvents()
 									CameraFogColor(Camera, 0.0, 0.0, 0.0)
 									CameraClsColor(Camera, 0.0, 0.0, 0.0)
 								EndIf
-								
 							Else
 								e\EventState3 = 0.0
 								
@@ -3200,26 +3202,39 @@ Function UpdateEvents()
 						e\EventState = 1.0
 					EndIf
 				Else
-					If e\EventState = 1.0 Then
-						If e\room\Dist < 5.0 Or Rand(700) = 1 Then 
-							e\EventState = 2.0
-							
-							e\room\NPC[0]\State = 5.0
-							e\room\NPC[0]\EnemyX = EntityX(e\room\Objects[1], True)
-							e\room\NPC[0]\EnemyY = EntityY(e\room\Objects[1], True)
-							e\room\NPC[0]\EnemyZ = EntityZ(e\room\Objects[1], True)
+					If e\room\NPC[0] <> Null Then
+						If EntityDistance(e\room\NPC[0]\Collider, Collider) < 1.0 And (Not chs\NoTarget) Then
+							e\room\NPC[0]\State = 1.0
+							e\room\NPC[0]\State3 = 1.0
+						Else
+							If e\EventState = 1.0 Then
+								If e\room\Dist < 5.0 Or Rand(700) = 1 Then 
+									e\room\NPC[0]\State = 5.0
+									e\room\NPC[0]\EnemyX = EntityX(e\room\Objects[1], True)
+									e\room\NPC[0]\EnemyY = EntityY(e\room\Objects[1], True)
+									e\room\NPC[0]\EnemyZ = EntityZ(e\room\Objects[1], True)
+									
+									e\EventState = 0.0
+								EndIf
+							ElseIf e\EventState = 2.0
+								If EntityDistance(e\room\NPC[0]\Collider, e\room\Objects[1]) < 1.0 Then
+									e\room\RoomDoors[0]\Locked = False
+									UseDoor(e\room\RoomDoors[0]) 
+									e\room\RoomDoors[0]\Locked = True
+									
+									PlaySound_Strict(LoadTempSound("SFX\Room\Room2ElevatorDeath.ogg"))
+									
+									If e\room\RoomDoors[0]\Open = False Then 
+										RemoveNPC(e\room\NPC[0])
+										e\room\NPC[0] = Null
+									EndIf
+									e\EventState = 2.05
+								EndIf
+							EndIf
 						EndIf
-					ElseIf e\EventState = 2.0
-						If EntityDistance(e\room\NPC[0]\Collider, e\room\Objects[1]) < 2.0 Then
-							e\room\RoomDoors[0]\Locked = False
-							UseDoor(e\room\RoomDoors[0]) 
-							e\room\RoomDoors[0]\Locked = True
-							
-							PlaySound_Strict(LoadTempSound("SFX\Room\Room2ElevatorDeath.ogg"))
-							
-							e\EventState = 2.05
-						EndIf
-					ElseIf e\EventState < 70 * 13.0
+					EndIf
+					
+					If e\EventState >= 2.05 And e\EventState < 70 * 13.0 Then
 						e\EventState = e\EventState + FPSfactor
 						If e\EventState > 70 * 6.7 And e\EventState < 70 * 7.4 Then
 							CameraShake = 7.4 - (e\EventState / 70.0)
@@ -3228,13 +3243,10 @@ Function UpdateEvents()
 						ElseIf e\EventState > 70 * 12.6
 							CameraShake = 0.0
 							If e\EventState - FPSfactor < 70 * 12.6 And e\room\NPC[0] <> Null Then
-								RemoveNPC(e\room\NPC[0])
-								e\room\NPC[0] = Null
-								
 								de.Decals = CreateDecal(3, EntityX(e\room\Objects[0], True), 0.0005, EntityZ(e\room\Objects[0], True), 90.0, Rnd(360.0), 0.0)
 								
 								de.Decals = CreateDecal(17, EntityX(e\room\Objects[0], True), 0.002, EntityZ(e\room\Objects[0], True), 90.0, Rnd(360.0), 0.0)
-								de\size = 0.5
+								de\Size = 0.5
 								
 								de.Decals = CreateDecal(3, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True), 0.0, e\room\Angle + 270.0, 0.0)
 								de\Size = 0.9
@@ -3255,7 +3267,7 @@ Function UpdateEvents()
 					de.Decals = CreateDecal(3, EntityX(e\room\Objects[0], True), 0.0005, EntityZ(e\room\Objects[0], True), 90.0, Rnd(360.0), 0.0)
 					
 					e\room\NPC[0] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[0], True), 0.5, EntityZ(e\room\Objects[0], True))
-					ChangeNPCTextureID(e\room\NPC[0], 0.0)
+					ChangeNPCTextureID(e\room\NPC[0], 0)
 					
 					RotateEntity(e\room\NPC[0]\Collider, 0.0, EntityYaw(e\room\OBJ) - 80.0, 0.0, True)	
 					
@@ -7779,7 +7791,7 @@ Function UpdateEvents()
 			Case "1048a"
 				;[Block]
 				If PlayerRoom = e\room Then 
-					If chs\Notarget Then e\EventState = 1.0
+					If chs\NoTarget Then e\EventState = 1.0
 				EndIf
 				
 				If e\room\Objects[0] = 0 Then
@@ -10364,5 +10376,5 @@ Function RemoveEvent(e.Events)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#126D#1EC5
+;~B#1279#1ED1
 ;~C#Blitz3D
