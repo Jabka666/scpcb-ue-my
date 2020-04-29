@@ -25,6 +25,9 @@ v5.6
 - Now SCP-1033-RU takes random damage.
 - Now SCP-500-01, SCP-427 and command "heal" heal from SCP-1048-A's effects. ;FORGOT TO ADD MESSAGE
 - Now SCP-966, SCP-1048-A, guards (Intro scene and Gate B) and SCP-860-2 don't react on the player, if he used a command "notarget".
+~~~~~~~~~~
+; GUARD AT GATE B SIDE NEED FIXES
+- Now guard in "room2elevator" event can kill the player, if he too close.
 
 - Changed SCP-650, SCP-409, SCP-079 and SCP-457's label.
 - Changed SCP-895's model -> Changed SCP-895's loading screen, document and label.
@@ -62,6 +65,8 @@ v5.6
 - Nerfed SCP-1499, hazmat suit and gas mask.
 
 - Optimized items.
+~~~~~~~~
+- Optimized startup videos.
 
 Bug Fixes:
 

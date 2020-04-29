@@ -540,14 +540,14 @@ Function UpdateConsole()
 							CreateConsoleMsg("- infinitestamina")
 							CreateConsoleMsg("- noblink")
 							CreateConsoleMsg("- cheats")
+							CreateConsoleMsg("- revive")
 							CreateConsoleMsg("- heal")
-							CreateConsoleMsg("- teleport [room name]")
-							CreateConsoleMsg("- spawnitem [item name]")
 							CreateConsoleMsg("- wireframe")
 							CreateConsoleMsg("- 173speed")
 							CreateConsoleMsg("- 106speed")
 							CreateConsoleMsg("- 173state")
 							CreateConsoleMsg("- 106state")
+							CreateConsoleMsg("- 096state")
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("Use " + Chr(34) + "help 2 / 3" + Chr(34) + " to find more commands.")
 							CreateConsoleMsg("Use " + Chr(34) + "help [command name]" + Chr(34) + " to get more information about a command.")
@@ -557,18 +557,26 @@ Function UpdateConsole()
 							;[Block]
 							CreateConsoleMsg("LIST OF COMMANDS - PAGE 2 / 3")
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("- spawn [npc type] [state]")
 							CreateConsoleMsg("- reset096")
+							CreateConsoleMsg("- reset372")
 							CreateConsoleMsg("- disable173")
 							CreateConsoleMsg("- enable173")
 							CreateConsoleMsg("- disable106")
 							CreateConsoleMsg("- enable106")
+							CreateConsoleMsg("- disable049")
+							CreateConsoleMsg("- enable049")
+							CreateConsoleMsg("- disable966")
+							CreateConsoleMsg("- enable966")
 							CreateConsoleMsg("- halloween")
 							CreateConsoleMsg("- sanic")
-							CreateConsoleMsg("- scp-420-j")
-							CreateConsoleMsg("- revive")
-							CreateConsoleMsg("- 096state")
+							CreateConsoleMsg("- weed")
+							CreateConsoleMsg("- money")
 							CreateConsoleMsg("- debughud")
+							CreateConsoleMsg("- enablecontrol") 
+							CreateConsoleMsg("- disablecontrol") 
+							CreateConsoleMsg("- unlockcheckpoints") 
+							CreateConsoleMsg("- unlockexits")
+							CreateConsoleMsg("- disablenuke")
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("Use " + Chr(34) + "help 3 / 3" + Chr(34) + " to find more commands.")
 							CreateConsoleMsg("Use " + Chr(34) + "help [command name]" + Chr(34) + " to get more information about a command.")
@@ -579,11 +587,13 @@ Function UpdateConsole()
 							CreateConsoleMsg("LIST OF COMMANDS - PAGE 3 / 3")
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("- playmusic [clip + .wav / .ogg]")
-							CreateConsoleMsg("- unlockexits")
 							CreateConsoleMsg("- camerafog [near] [far]")
+							CreateConsoleMsg("- spawn [npc type] [state]")
 							CreateConsoleMsg("- gamma [value]")
 							CreateConsoleMsg("- injure [value]")
 							CreateConsoleMsg("- infect [value]")
+							CreateConsoleMsg("- teleport [room name]")
+							CreateConsoleMsg("- spawnitem [item name]")
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("Use " + Chr(34) + "help [command name]" + Chr(34) + " to get more information about a command.")
 							CreateConsoleMsg("******************************")
@@ -688,6 +698,97 @@ Function UpdateConsole()
 							CreateConsoleMsg("008zombie / 049 / 049-2 / 066 / 096 / 106 / 173 / 860")
 							CreateConsoleMsg("/ 178-1 / 372 / 513-1 / 966 / 1499-1 / class-d / 939")
 							CreateConsoleMsg("/ guard / mtf / apache / tentacle")
+							CreateConsoleMsg("******************************")
+							;[End Block]
+						Case "reset372" 
+							;[Block]
+						    CreateConsoleMsg("HELP - reset372")
+							CreateConsoleMsg("******************************")
+							CreateConsoleMsg("Returns SCP-372 to inactive state.")
+							CreateConsoleMsg("******************************")
+							;[End Block]
+						Case "disable106"
+							;[Block]
+						   	CreateConsoleMsg("HELP - disable106")
+							CreateConsoleMsg("******************************")
+							CreateConsoleMsg("Removes SCP-106 from the map.")
+							CreateConsoleMsg("******************************")
+							;[End Block]
+						Case "enable106"
+							;[Block]
+						   	CreateConsoleMsg("HELP - enable106")
+							CreateConsoleMsg("******************************")
+							CreateConsoleMsg("Returns SCP-106 to the map.")
+							CreateConsoleMsg("******************************")
+							;[End Block]
+						Case "disable173"
+							;[Block]
+						   	CreateConsoleMsg("HELP - disable173")
+							CreateConsoleMsg("******************************")
+							CreateConsoleMsg("Removes SCP-173 from the map.")
+							CreateConsoleMsg("******************************")	
+							;[End Block]
+						Case "enable173"
+							;[Block]
+						   	CreateConsoleMsg("HELP - enable173")
+							CreateConsoleMsg("******************************")
+							CreateConsoleMsg("Returns SCP-173 to the map.")
+							CreateConsoleMsg("******************************")
+							;[End Block]
+						Case "reset096" 
+							;[Block]
+						    CreateConsoleMsg("HELP - reset096")
+							CreateConsoleMsg("******************************")
+							CreateConsoleMsg("Returns SCP-096 to idle state.")
+							CreateConsoleMsg("******************************")
+							;[End Block]
+						Case "enablecontrol" 
+							;[Block]
+							CreateConsoleMsg("HELP - enablecontrol")
+							CreateConsoleMsg("******************************")
+							CreateConsoleMsg("Turns on the Remote Door Control lever.")
+							CreateConsoleMsg("******************************")
+							;[End Block]
+						Case "disablecontrol" 
+							;[Block]
+							CreateConsoleMsg("HELP - disablecontrol")
+							CreateConsoleMsg("******************************")
+							CreateConsoleMsg("Turns off the Remote Door Control lever.")
+							CreateConsoleMsg("******************************")
+							;[End Block]
+						Case "unlockcheckpoints" 
+							;[Block]
+							CreateConsoleMsg("HELP - unlockcheckpoints")
+							CreateConsoleMsg("******************************")
+							CreateConsoleMsg("Unlocks all checkpoints.")
+							CreateConsoleMsg("******************************")	
+							;[End Block]
+						Case "disable049"
+							;[Block]
+						   	CreateConsoleMsg("HELP - disable049")
+							CreateConsoleMsg("******************************")
+							CreateConsoleMsg("Removes SCP-049 from the map.")
+							CreateConsoleMsg("******************************")
+							;[End Block]
+						Case "enable049"
+							;[Block]
+						   	CreateConsoleMsg("HELP - enable049")
+							CreateConsoleMsg("******************************")
+							CreateConsoleMsg("Returns SCP-049 to the map.")
+							CreateConsoleMsg("******************************")
+							;[End Block]
+						Case "disable966"
+							;[Block]
+						   	CreateConsoleMsg("HELP - disable966")
+							CreateConsoleMsg("******************************")
+							CreateConsoleMsg("Removes SCP-966 from the map.")
+							CreateConsoleMsg("******************************")	
+							;[End Block]
+						Case "enable966"
+							;[Block]
+						   	CreateConsoleMsg("HELP - enable966")
+							CreateConsoleMsg("******************************")
+							CreateConsoleMsg("Returns SCP-966 to the map.")
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "revive", "undead", "resurrect"
@@ -968,9 +1069,19 @@ Function UpdateConsole()
 						EndIf
 					Next
 					;[End Block]
+				Case "reset372" 
+					;[Block]				
+					For n.NPCs = Each NPCs
+						If n\NPCtype = NPCtype372 Then
+							RemoveNPC(n)
+							CreateEvent("room372", "room372", 0, 0.0)   
+							Exit
+						EndIf
+				    Next
+					;[End Block]
 				Case "disable173"
 					;[Block]
-					Curr173\Idle = 3 ; ~ This phenominal comment is brought to you by PolyFox. His absolute wisdom in this fatigue of knowledge brought about a new era of 173 state checks.
+					Curr173\Idle = 3 ; ~ This phenominal comment is brought to you by PolyFox. His absolute wisdom in this fatigue of knowledge brought about a new era of SCP-173 state checks.
 					HideEntity(Curr173\OBJ)
 					HideEntity(Curr173\Collider)
 					;[End Block]
@@ -992,6 +1103,46 @@ Function UpdateConsole()
 					Contained106 = False
 					ShowEntity(Curr106\Collider)
 					ShowEntity(Curr106\OBJ)
+					;[End Block]
+				Case "disable966"
+				    ;[Block]
+			        For n.NPCs = Each NPCs
+			            If n\NPCtype = NPCtype966
+			                n\State = -1.0
+			                HideEntity(n\Collider)
+                            HideEntity(n\OBJ)
+			            EndIf
+			        Next
+			        ;[End Block]
+			    Case "enable966"
+			        ;[Block]
+			        For n.NPCs = Each NPCs
+			            If n\NPCtype = NPCtype966
+			                n\State = 0
+			                ShowEntity(n\Collider)
+			                If WearinNightVision > 0 Then ShowEntity(n\OBJ)
+			            EndIf
+			        Next
+					;[End Block]
+				Case "disable049" 
+			        ;[Block]
+			        For n.NPCs = Each NPCs
+			            If n\NPCtype = NPCtype049
+			                n\State = 0.0
+			                HideEntity(n\Collider)
+			                HideEntity(n\OBJ)
+			            EndIf
+			        Next
+			        ;[End Block]
+			    Case "enable049"
+			        ;[Block]
+			        For n.NPCs = Each NPCs
+			            If n\NPCtype = NPCtype049
+			                n\State = 1.0
+			                ShowEntity(n\Collider)
+			                ShowEntity(n\OBJ)
+			            EndIf
+			        Next
 					;[End Block]
 				Case "halloween"
 					;[Block]
@@ -1307,14 +1458,62 @@ Function UpdateConsole()
 						CreateConsoleMsg("INFINITE STAMINA OFF")	
 					EndIf
 					;[End Block]
-				Case "toggle_warhead_lever"
+				Case "money", "rich"
 					;[Block]
-					For e.Events = Each Events
-						If e\EventName = "room2nuke" Then
-							e\EventState = (Not e\EventState)
-							Exit
+					For i = 1 To 20
+					    If Rand(2) = 1 Then
+						    it.Items = CreateItem("Quarter", "25ct", EntityX(Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(Camera, True), EntityZ(Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
+					    Else
+					        it.Items = CreateItem("Coin", "coin", EntityX(Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(Camera, True), EntityZ(Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
+					    EndIf
+					    EntityType (it\Collider, HIT_ITEM)
+					Next
+					;[End Block]
+				Case "disablecontrol"
+				    ;[Block]
+				    RemoteDoorOn = False
+				    CreateConsoleMsg("Remote door control disabled.", 255, 255, 255)
+				    ;[End Block]
+				Case "enablecontrol"
+				    ;[Block]
+				    RemoteDoorOn = True
+				    CreateConsoleMsg("Remote door control enabled.", 255, 255, 255)
+				    ;[End Block]
+			    Case "unlockcheckpoints"
+			        ;[Block]
+			        For e2.Events = Each Events
+				        If e2\EventName = "room2sl"
+							e2\EventState3 = 0
+							UpdateLever(e2\room\Levers[0])
+							RotateEntity e2\room\Levers[0], 0, EntityYaw(e2\room\Levers[0]), 0
+							TurnCheckpointMonitorsOff(0)
 						EndIf
 					Next
+					
+					For e2.Events = Each Events
+				        If e2\EventName = "room008"
+							e2\EventState = 2
+							UpdateLever(e2\room\Levers[0])
+							RotateEntity e2\room\Levers[0], 0, EntityYaw(e2\room\Levers[0]), 30
+							TurnCheckpointMonitorsOff(1)
+							Exit
+						EndIf
+				    Next
+					
+				    CreateConsoleMsg("Checkpoints unlocked.", 255, 255, 255)								
+					;[End Block]
+				Case "disablenuke"
+					;[Block]
+					For e2.Events = Each Events
+				        If e2\EventName = "room2nuke"
+							e2\EventState = 0.0
+							UpdateLever(e2\room\Objects[1])
+							UpdateLever(e2\room\Objects[3])
+							RotateEntity(e2\room\Objects[1], 0.0, EntityYaw(e2\room\Objects[1]), 30.0)
+							RotateEntity(e2\room\Objects[3], 0.0, EntityYaw(e2\room\Objects[3]), 30.0)
+							Exit
+						EndIf
+				    Next
 					;[End Block]
 				Case "unlockexits"
 					;[Block]
@@ -11324,5 +11523,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#EEB#1216#1A11
+;~B#FB2#12DD#1AD8
 ;~C#Blitz3D
