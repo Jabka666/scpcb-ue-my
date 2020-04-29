@@ -10335,7 +10335,7 @@ Function Update008()
 								r\NPC[0] = CreateNPC(NPCtypeD, EntityX(r\Objects[6], True),EntityY(r\Objects[6], True) + 0.2, EntityZ(r\Objects[6], True))
 								r\NPC[0]\Sound = LoadSound_Strict("SFX\SCP\008\KillScientist1.ogg")
 								r\NPC[0]\SoundCHN = PlaySound_Strict(r\NPC[0]\Sound)
-								ChangeNPCTextureID(e\room\NPC[0], 12)
+								ChangeNPCTextureID(r\NPC[0], 12)
 								r\NPC[0]\State = 6.0
 								PlayerRoom = r
 								UnableToMove = False
@@ -11168,6 +11168,8 @@ End Function
 Function PlayStartupVideos()
 	If PlayStartup = 0 Then Return
 	
+	Font1 = LoadFont_Strict("GFX\font\cour\Courier New.ttf", Int(18 * (GraphicHeight / 1024.0)), 0, 0, 0)
+	
 	Local Cam% = CreateCamera() 
 	
 	CameraClsMode(Cam, 0, 1)
@@ -11190,63 +11192,61 @@ Function PlayStartupVideos()
 		ScaledGraphicHeight = Float(RealGraphicWidth) / (16.0 / 9.0)
 	EndIf
 	
-	Local MovieFile$ = "GFX\menu\startup_Undertow"
+	Local MovieFile$, i%
 	
-	BlitzMovie_Open(MovieFile + ".avi") ; ~ Get movie size
-	
-	Local MovieW% = BlitzMovie_GetWidth()
-	Local MovieH% = BlitzMovie_GetHeight()
-	
-	BlitzMovie_Close()
-	
-	Local Image% = CreateImage(MovieW, MovieH)
-	Local SplashScreenVideo% = BlitzMovie_OpenDecodeToImage(MovieFile + ".avi", Image, False)
-	
-	SplashScreenVideo = BlitzMovie_Play()
-	
-	Local SplashScreenAudio% = StreamSound_Strict(MovieFile + ".ogg", SFXVolume, 0)
-	
-	Repeat
+	For i = 0 To 2
+		Select i
+			Case 0
+				;[Block]
+				MovieFile = "GFX\menu\startup_Undertow"
+				;[End Block]
+			Case 1
+				;[Block]
+				MovieFile = "GFX\menu\startup_TSS"
+				;[End Block]
+			Case 2
+				;[Block]
+				MovieFile = "GFX\menu\startup_UET"
+				;[End Block]
+		End Select
+		BlitzMovie_Open(MovieFile + ".avi") ; ~ Get movie size
+		
+		Local MovieW% = BlitzMovie_GetWidth()
+		Local MovieH% = BlitzMovie_GetHeight()
+		
+		BlitzMovie_Close()
+		
+		Local Image% = CreateImage(MovieW, MovieH)
+		Local SplashScreenVideo% = BlitzMovie_OpenDecodeToImage(MovieFile + ".avi", Image, False)
+		
+		SplashScreenVideo = BlitzMovie_Play()
+		
+		Local SplashScreenAudio% = StreamSound_Strict(MovieFile + ".ogg", SFXVolume, 0)
+		
+		Repeat
+			Cls
+			ProjectImage(Image, RealGraphicWidth, ScaledGraphicHeight, Quad, Texture)
+			Color(255, 255, 255)
+			SetFont(Font1)
+	        Text(GraphicWidth / 2, GraphicHeight - 50, "PRESS ANY KEY TO SKIP VIDEO", True, True)
+			Flip
+		Until (GetKey() Or (Not IsStreamPlaying_Strict(SplashScreenAudio)))
+		StopStream_Strict(SplashScreenAudio)
+		BlitzMovie_Stop()
+		BlitzMovie_Close()
+		FreeImage(Image)
+		
 		Cls
-		ProjectImage(Image, RealGraphicWidth, ScaledGraphicHeight, Quad, Texture)
 		Flip
-	Until (GetKey() Or (Not IsStreamPlaying_Strict(SplashScreenAudio)))
-	StopStream_Strict(SplashScreenAudio)
-	BlitzMovie_Stop()
-	BlitzMovie_Close()
-	FreeImage(Image)
-	
-	Cls
-	Flip
-	
-	MovieFile = "GFX\menu\startup_TSS"
-	BlitzMovie_Open(MovieFile + ".avi") ; ~ Get movie size
-	MovieW = BlitzMovie_GetWidth()
-	MovieH = BlitzMovie_GetHeight()
-	BlitzMovie_Close()
-	Image = CreateImage(MovieW, MovieH)
-	SplashScreenVideo = BlitzMovie_OpenDecodeToImage(MovieFile + ".avi", Image, False)
-	SplashScreenVideo = BlitzMovie_Play()
-	SplashScreenAudio = StreamSound_Strict(MovieFile + ".ogg", SFXVolume, 0)
-	Repeat
-		Cls
-		ProjectImage(Image, RealGraphicWidth, ScaledGraphicHeight, Quad, Texture)
-		Flip
-	Until(GetKey() Or (Not IsStreamPlaying_Strict(SplashScreenAudio)))
-	StopStream_Strict(SplashScreenAudio)
-	BlitzMovie_Stop()
-	BlitzMovie_Close()
+	Next
 	
 	FreeTexture(Texture)
 	FreeEntity(Quad)
 	FreeEntity(Cam)
-	FreeImage(Image)
-	
-	Cls
-	Flip
+	FreeFont(Font1)
 End Function
 
-Function ProjectImage(Img, Width#, Height#, Quad%, Texture%)
+Function ProjectImage(Img%, Width#, Height#, Quad%, Texture%)
 	Local Img_W# = ImageWidth(Img)
 	Local Img_H# = ImageHeight(Img)
 	
@@ -11263,10 +11263,10 @@ Function ProjectImage(Img, Width#, Height#, Quad%, Texture%)
 	Local Width_Rel# = Width / Img_W
 	Local Height_Rel# = Height / Img_H
 	Local Graphic_Rel# = 2048.0 / Float(RealGraphicWidth)
-	Local DstX# = 1024.0 - (Img_W / 2.0)
-	Local DstY# = 1024.0 - (Img_H / 2.0)
+	Local Dst_X# = 1024.0 - (Img_W / 2.0)
+	Local Dst_Y# = 1024.0 - (Img_H / 2.0)
 	
-	CopyRect(0, 0, Img_W, Img_H, DstX, DstY, ImageBuffer(Img), TextureBuffer(Texture))
+	CopyRect(0, 0, Img_W, Img_H, Dst_X, Dst_Y, ImageBuffer(Img), TextureBuffer(Texture))
 	ScaleEntity(Quad, Width_Rel * Graphic_Rel, Height_Rel * Graphic_Rel, 0.0001)
 	RenderWorld()
 End Function

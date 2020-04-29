@@ -57,7 +57,7 @@ Const NAN# = (-1.0) ^ (0.5)
 
 ; ~ [TEXTURES]
 
-Const MaxDTextures% = 14
+Const MaxDTextures% = 13
 
 ; ~ [ITEMS]
 

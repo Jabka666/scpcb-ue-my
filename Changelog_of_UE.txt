@@ -87,6 +87,7 @@ Bug Fixes:
 - Fixed item's positions in room2closets, room1archive and room2storage. ;NOT DONE
 - Fixed small lamps in room2pit.
 - Fixed missing pipes in SCP-035's containment chamber. ;NOT DONE
+- Fixed font for startup videos.
 
 - Again fixed some buttons' positions.
 

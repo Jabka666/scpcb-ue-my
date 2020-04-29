@@ -1887,9 +1887,11 @@ Function UpdateEvents()
 					EndIf
 				Else
 					If KillTimer < 0.0 Then
-						If e\room\NPC[3]\State = 1.0 Then 
-							LoadEventSound(e,"SFX\Room\Intro\Guard\Ulgrin\EscortTerminated.ogg")
-							PlaySound_Strict(e\Sound)
+						If e\room\NPC[3] <> Null Then
+							If e\room\NPC[3]\State = 1.0 Then 
+								LoadEventSound(e, "SFX\Room\Intro\Guard\Ulgrin\EscortTerminated.ogg")
+								PlaySound_Strict(e\Sound)
+							EndIf
 						EndIf
 					EndIf
 					
@@ -1904,9 +1906,6 @@ Function UpdateEvents()
 				If PlayerRoom = e\room Then
 					If e\EventState >= 10.0 Then
 						CameraRange(Camera, 0.05, 15.0)
-						If e\room\NPC[7] <> Null Then
-							RemoveNPC(e\room\NPC[7])
-						EndIf
 					Else															
 						CameraRange(Camera, 0.05, 40.0)
 					EndIf	
@@ -3321,6 +3320,7 @@ Function UpdateEvents()
 						n.NPCs = CreateNPC(NPCtypeD, EntityX(e\room\Objects[6], True), 0.55, EntityZ(e\room\Objects[6], True))
 						RotateEntity(n\Collider, 0.0, e\room\Angle + 90.0, 0.0)
 						n\State = 3.0 : n\IsDead = True
+						ChangeNPCTextureID(n, 9)
 						SetNPCFrame(n, 40.0)
 						e\EventState3 = 1.0
 					EndIf
@@ -5500,7 +5500,6 @@ Function UpdateEvents()
 					If e\EventState = 0 Then
 						If EntityDistance(Collider, e\room\Objects[3])<2 Then
 							n.NPCs = CreateNPC(NPCtypeD, EntityX(e\room\Objects[4],True),0.5,EntityZ(e\room\Objects[4],True))
-							
 							n\texture = "GFX\NPCs\scp_035_victim.png"
 							n\Model = "GFX\NPCs\035.b3d"
 							HideEntity n\obj
@@ -8887,7 +8886,6 @@ Function UpdateEvents()
 							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 180.0, 0.0)
 							MoveEntity(e\room\NPC[0]\Collider, 0.0, 0.0, -0.5)
 							e\room\NPC[0]\State = 3.0
-							e\room\NPC[0]\Texture = "GFX\npcs\scp_035_victim.png"
 							ChangeNPCTextureID(e\room\NPC[0], 7)
 							SetNPCFrame(e\room\NPC[0], 19.0)
 						EndIf
@@ -10376,5 +10374,5 @@ Function RemoveEvent(e.Events)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1279#1ED1
+;~B#1279#1ED0
 ;~C#Blitz3D

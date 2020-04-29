@@ -301,7 +301,7 @@ Global AchvMsgEnabled% = GetINIInt(OptionFile, "advanced", "enable achievement p
 
 Global CanOpenConsole% = GetINIInt(OptionFile, "advanced", "console enabled")
 
-Global HUDenabled% = GetINIInt(OptionFile, "advanced", "hid enabled")
+Global HUDenabled% = GetINIInt(OptionFile, "advanced", "hud enabled")
 
 Global ShowFPS% = GetINIInt(OptionFile, "advanced", "show fps")
 
