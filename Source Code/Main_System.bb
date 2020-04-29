@@ -11170,19 +11170,6 @@ Function PlayStartupVideos()
 	
 	Font1 = LoadFont_Strict("GFX\font\cour\Courier New.ttf", Int(18 * (GraphicHeight / 1024.0)), 0, 0, 0)
 	
-	Local Cam% = CreateCamera() 
-	
-	CameraClsMode(Cam, 0, 1)
-	
-	Local Quad% = CreateQuad()
-	Local Texture% = CreateTexture(2048, 2048, 256 Or 16 Or 32)
-	
-	EntityTexture(Quad, Texture)
-	EntityFX(Quad, 1)
-	CameraRange(Cam, 0.01, 100)
-	TranslateEntity(Cam, 1.0 / 2048.0, -1.0 / 2048.0, -1.0)
-	EntityParent(Quad, Cam, 1)
-	
 	Local ScaledGraphicHeight%
 	Local Ratio# = Float(RealGraphicWidth) / Float(RealGraphicHeight)
 	
@@ -11209,15 +11196,10 @@ Function PlayStartupVideos()
 				MovieFile = "GFX\menu\startup_UET"
 				;[End Block]
 		End Select
-		BlitzMovie_Open(MovieFile + ".avi") ; ~ Get movie size
+		BlitzMovie_OpenD3D(MovieFile + ".avi", SystemProperty("Direct3DDevice7"), SystemProperty("DirectDraw7")) ; ~ Get movie size
 		
 		Local MovieW% = BlitzMovie_GetWidth()
 		Local MovieH% = BlitzMovie_GetHeight()
-		
-		BlitzMovie_Close()
-		
-		Local Image% = CreateImage(MovieW, MovieH)
-		Local SplashScreenVideo% = BlitzMovie_OpenDecodeToImage(MovieFile + ".avi", Image, False)
 		
 		SplashScreenVideo = BlitzMovie_Play()
 		
@@ -11225,63 +11207,20 @@ Function PlayStartupVideos()
 		
 		Repeat
 			Cls
-			ProjectImage(Image, RealGraphicWidth, ScaledGraphicHeight, Quad, Texture)
+			BlitzMovie_DrawD3D(0, (RealGraphicHeight / 2 - ScaledGraphicHeight / 2), RealGraphicWidth, ScaledGraphicHeight)
 			Color(255, 255, 255)
 			SetFont(Font1)
-	        Text(GraphicWidth / 2, GraphicHeight - 50, "PRESS ANY KEY TO SKIP VIDEO", True, True)
+	        Text(GraphicWidth / 2, GraphicHeight - 50, "PRESS ANY KEY TO SKIP", True, True)
 			Flip
 		Until (GetKey() Or (Not IsStreamPlaying_Strict(SplashScreenAudio)))
 		StopStream_Strict(SplashScreenAudio)
 		BlitzMovie_Stop()
 		BlitzMovie_Close()
-		FreeImage(Image)
 		
 		Cls
 		Flip
 	Next
-	
-	FreeTexture(Texture)
-	FreeEntity(Quad)
-	FreeEntity(Cam)
 	FreeFont(Font1)
-End Function
-
-Function ProjectImage(Img%, Width#, Height#, Quad%, Texture%)
-	Local Img_W# = ImageWidth(Img)
-	Local Img_H# = ImageHeight(Img)
-	
-	If Img_W > 2048.0 Then Img_W = 2048.0
-	If Img_H > 2048.0 Then Img_H = 2048.0
-	If Img_W < 1.0 Then Img_W = 1.0
-	If Img_H < 1.0 Then Img_H = 1.0
-	
-	If Width > 2048.0 Then Width = 2048.0
-	If Height > 2048.0 Then Height = 2048.0
-	If Width < 1.0 Then Width = 1.0
-	If Height < 1.0 Then Height = 1.0
-	
-	Local Width_Rel# = Width / Img_W
-	Local Height_Rel# = Height / Img_H
-	Local Graphic_Rel# = 2048.0 / Float(RealGraphicWidth)
-	Local Dst_X# = 1024.0 - (Img_W / 2.0)
-	Local Dst_Y# = 1024.0 - (Img_H / 2.0)
-	
-	CopyRect(0, 0, Img_W, Img_H, Dst_X, Dst_Y, ImageBuffer(Img), TextureBuffer(Texture))
-	ScaleEntity(Quad, Width_Rel * Graphic_Rel, Height_Rel * Graphic_Rel, 0.0001)
-	RenderWorld()
-End Function
-
-Function CreateQuad()
-	Mesh = CreateMesh()
-	Surf = CreateSurface(Mesh)
-	v0 = AddVertex(Surf, -1.0, 1.0, 0.0, 0.0, 0.0)
-	v1 = AddVertex(Surf, 1.0, 1.0, 0.0, 1.0, 0.0)
-	v2 = AddVertex(Surf, 1.0, -1.0, 0.0, 1.0, 1.0)
-	v3 = AddVertex(Surf, -1.0, -1.0, 0.0, 0.0, 1.0)
-	AddTriangle(Surf, v0, v1, v2)
-	AddTriangle(Surf, v0, v2, v3)
-	UpdateNormals(Mesh)
-	Return(Mesh)
 End Function
 
 Function CanUseItem(CanUseWithHazmat%, CanUseWithGasMask%, CanUseWithEyewear%)
