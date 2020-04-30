@@ -93,6 +93,7 @@ Bug Fixes:
 - Fixed small lamps in room2pit.
 - Fixed missing pipes in SCP-035's containment chamber. ;NOT DONE
 - Fixed font for startup videos.
+- Fixed SCP-106's glowing eyes.
 
 - Again fixed some buttons' positions.
 

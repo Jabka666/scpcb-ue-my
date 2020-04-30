@@ -1201,7 +1201,7 @@ Function UpdateNPCs()
 						
 						RotateEntity n\obj, 0, EntityYaw(n\Collider), 0
 						
-						PositionEntity(n\obj2, EntityX(n\obj), EntityY(n\obj) , EntityZ(n\obj))
+						PositionEntity(n\obj2, EntityX(n\obj), EntityY(n\obj), EntityZ(n\obj))
 						RotateEntity(n\obj2, 0, EntityYaw(n\Collider) - 180, 0)
 						MoveEntity(n\obj2, 0, 8.6 * 0.11, -1.5 * 0.11)
 						
@@ -1211,8 +1211,10 @@ Function UpdateNPCs()
 							If dist < CameraFogFar*LightVolume*0.6 Then
 								HideEntity n\obj2
 							Else
-								ShowEntity n\obj2
-								EntityAlpha (n\obj2, Min(dist-CameraFogFar*LightVolume*0.6,1.0))
+								If n\State =< -10 Then
+									ShowEntity n\obj2
+									EntityAlpha (n\obj2, Min(dist-CameraFogFar*LightVolume*0.6,1.0))
+								EndIf
 							EndIf
 						EndIf						
 					Else
@@ -7346,5 +7348,5 @@ End Function
 
 
 ;~IDEal Editor Parameters:
-;~B#190#128F#1329#13C2#1572#167D#183E#189A
+;~B#190#1291#132B#13C4#1574#167F#1840#189C
 ;~C#Blitz3D
