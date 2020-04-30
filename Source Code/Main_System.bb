@@ -3384,7 +3384,7 @@ Function Kill()
 		KillAnim = Rand(0, 1)
 		PlaySound_Strict(DamageSFX(0))
 		If SelectedDifficulty\permaDeath Then
-			DeleteFile(CurrentDir() + SavePath + CurrSave + "\save.txt") 
+			DeleteFile(CurrentDir() + SavePath + CurrSave + "\Save.txt") 
 			DeleteDir(SavePath + CurrSave) 
 			LoadSaveGames()
 		End If
@@ -3945,7 +3945,7 @@ Function MovePlayer()
 	If Injuries > 1.0 Then
 		Temp2 = Bloodloss
 		BlurTimer = Max(Max(Sin(MilliSecs2() / 100.0) * Bloodloss * 30.0, Bloodloss * 2.0 * (2.0 - CrouchState)), BlurTimer)
-		If (Not I_427\Using And I_427\Timer < 70.0 * 360.0) Then
+		If I_427\Using = 0 And I_427\Timer < 70.0 * 360.0 Then
 			Bloodloss = Min(Bloodloss + (Min(Injuries, 3.5) / 300.0) * FPSfactor, 100.0)
 		EndIf
 		
@@ -6709,11 +6709,11 @@ Function DrawGUI()
 					;[Block]
 					If I_427\Using = 1 Then
 						Msg = "You closed the locket."
-						I_427\Using = False
+						I_427\Using = 0
 					Else
 						GiveAchievement(Achv427)
 						Msg = "You opened the locket."
-						I_427\Using = True
+						I_427\Using = 1
 					EndIf
 					MsgTimer = 70.0 * 5.0
 					SelectedItem = Null
@@ -9191,6 +9191,39 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					ResetEntity(item\Collider)
 					;[End Block]
 			End Select
+		Case "Wallet"
+			;[Block]
+			Select Setting
+				Case "rough", "coarse"
+					;[Block]
+					d.Decals = CreateDecal(7, x, 8 * RoomScale + 0.005, z, 90.0, Rand(360.0), 0.0)
+					d\Size = 0.12
+					ScaleSprite(d\obj, d\Size, d\Size)
+					
+					For i = 0 To 19
+						If item\SecondInv[i] <> Null Then RemoveItem(item\SecondInv[i])
+						item\SecondInv[i] = Null
+					Next
+					RemoveItem(item)
+					;[End Block]
+				Case "1:1"
+					;[Block]
+					PositionEntity(item\Collider, x, y, z)
+					ResetEntity(item\Collider)
+					;[End Block]
+				Case "fine"
+					;[Block]
+					item\InvSlots = Max(item\State2, 15.0)
+					PositionEntity(item\Collider, x, y, z)
+					ResetEntity(item\Collider)
+					;[End Block]
+				Case "very fine"
+					;[Block]
+					item\InvSlots = Max(item\State2, 20.0)
+					PositionEntity(item\Collider, x, y, z)
+					ResetEntity(item\Collider)
+					;[End Block]
+			End Select
 			;[End Block]
 		Case "Night Vision Goggles"
 			;[Block]
@@ -10293,7 +10326,7 @@ Function Use427()
 	Local PrevI427Timer# = I_427\Timer
 	
 	If I_427\Timer < 70 * 360.0
-		If I_427\Using = True Then
+		If I_427\Using = 1 Then
 			I_427\Timer = I_427\Timer + FPSfactor
 			For e.Events = Each Events
 				If e\EventName = "1048a" Then
@@ -10492,7 +10525,7 @@ Function Update008()
 		ShowEntity(InfectOverlay)
 		If Infect < 93.0 Then
 			Temp = Infect
-			If (Not I_427\Using And I_427\Timer < 70 * 360.0) Then
+			If I_427\Using = 0 And I_427\Timer < 70 * 360.0 Then
 				Infect = Min(Infect + FPSfactor * 0.002, 100.0)
 			EndIf
 			

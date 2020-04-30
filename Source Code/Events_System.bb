@@ -7409,63 +7409,66 @@ Function UpdateEvents()
 				;[Block]
 				If (Not Contained106) Then
 					If PlayerRoom = e\room Then
-						If e\EventState = 0 Then
-							de.Decals = CreateDecal(0, EntityX(e\room\obj), 799.0*RoomScale, EntityZ(e\room\obj), -90, Rand(360), 0)
-							de\Size = 0.05 : de\SizeChange = 0.0015 : EntityAlpha(de\obj, 0.8) : UpdateDecals()			
-							PlaySound2(DecaySFX(3), Camera, de\obj, 15.0)
-							e\EventState=1
+						If e\EventState = 0.0 Then
+							de.Decals = CreateDecal(0, EntityX(e\room\OBJ), 799.0 * RoomScale, EntityZ(e\room\OBJ), -90.0, Rnd(360.0), 0.0)
+							de\Size = 0.05 : de\SizeChange = 0.0015 : UpdateDecals()
+							EntityAlpha(de\OBJ, 0.8)
+							PlaySound_Strict(DecaySFX(3))
+							e\EventState = 1.0
 						EndIf
 					EndIf
 					
-					If e\EventState > 0 Then 
-						If e\room\NPC[0]=Null Then
-							e\EventState=e\EventState+FPSfactor
+					If e\EventState > 0.0 Then 
+						If e\room\NPC[0] = Null Then
+							e\EventState = e\EventState + FPSfactor
 						EndIf
-						If e\EventState>200 Then
-							If e\room\NPC[0]=Null Then
-								e\room\NPC[0]=CreateNPC(NPCtypeD, EntityX(e\room\obj), 900.0*RoomScale, EntityZ(e\room\obj))
-								RotateEntity e\room\NPC[0]\Collider, 0, Rnd(360), 0, True
-								ChangeNPCTextureID(e\room\NPC[0],5)
-								e\room\NPC[0]\State=6
+						If e\EventState > 200.0 Then
+							If e\room\NPC[0] = Null Then
+								e\room\NPC[0] = CreateNPC(NPCtypeD, EntityX(e\room\OBJ), 900.0 * RoomScale, EntityZ(e\room\OBJ))
+								RotateEntity(e\room\NPC[0]\Collider, 0.0, Rnd(360.0), 0.0, True)
+								ChangeNPCTextureID(e\room\NPC[0], 5)
+								e\room\NPC[0]\State = 6.0
 								
-								PlaySound_Strict HorrorSFX(0)
-								PlaySound2(DecaySFX(2), Camera, e\room\NPC[0]\Collider, 15.0)
+								PlaySound_Strict(HorrorSFX(0))
+								PlaySound_Strict(DecaySFX(2))
+							EndIf
+							
+							If ChannelPlaying(e\SoundCHN) = True Then
+								UpdateSoundOrigin(e\SoundCHN, Camera, e\room\OBJ)
 							EndIf
 							
 							e\room\NPC[0]\FallingPickDistance = 0.0
-							EntityType e\room\NPC[0]\Collider,HIT_PLAYER
-							If EntityY(e\room\NPC[0]\Collider)>0.35 Then
-								AnimateNPC(e\room\NPC[0], 1, 10, 0.12, False)
-								Dist# = EntityDistance(Collider,e\room\NPC[0]\Collider)
-								If Dist<0.8 Then ;get the player out of the way
-									fdir# = point_direction(EntityX(Collider,True),EntityZ(Collider,True),EntityX(e\room\NPC[0]\Collider,True),EntityZ(e\room\NPC[0]\Collider,True))
-									TranslateEntity Collider,Cos(-fdir+90)*(Dist-0.8)*(Dist-0.8),0,Sin(-fdir+90)*(Dist-0.8)*(Dist-0.8)
+							EntityType(e\room\NPC[0]\Collider, HIT_PLAYER)
+							If EntityY(e\room\NPC[0]\Collider) > 0.35 Then
+								AnimateNPC(e\room\NPC[0], 1.0, 10.0, 0.12, False)
+								Dist# = EntityDistance(Collider, e\room\NPC[0]\Collider)
+								If Dist < 0.8 Then ; ~ Get the player out of the way
+									fdir# = point_direction(EntityX(Collider, True), EntityZ(Collider, True), EntityX(e\room\NPC[0]\Collider, True), EntityZ(e\room\NPC[0]\Collider, True))
+									TranslateEntity(Collider, Cos(-fdir + 90.0) * (Dist - 0.8) * (Dist - 0.8), 0.0, Sin(-fdir + 90.0) * (Dist - 0.8) * (Dist - 0.8))
 								EndIf
-								
-								If EntityY(e\room\NPC[0]\Collider)>0.6 Then EntityType e\room\NPC[0]\Collider,0
+								If EntityY(e\room\NPC[0]\Collider) > 0.6 Then EntityType(e\room\NPC[0]\Collider, 0)
 							Else
-								e\EventState=e\EventState+FPSfactor
-								AnimateNPC(e\room\NPC[0], 11, 19, 0.25, False)
-								If e\Sound=0 Then 
-									;e\Sound = LoadSound("SFX\General\BodyFall.ogg")
-									LoadEventSound(e,"SFX\General\BodyFall.ogg")
-									PlaySound_Strict e\Sound
+								e\EventState = e\EventState + FPSfactor
+								AnimateNPC(e\room\NPC[0], 11.0, 19.0, 0.25, False)
+								If e\Sound = 0 Then 
+									LoadEventSound(e, "SFX\General\BodyFall.ogg")
+									PlaySound2(e\Sound, Camera, e\room\NPC[0]\Collider)
 									
-									de.Decals = CreateDecal(0, EntityX(e\room\obj), 0.001, EntityZ(e\room\obj), 90, Rand(360), 0)
-									de\Size = 0.4 : EntityAlpha(de\obj, 0.8) : UpdateDecals()			
+									de.Decals = CreateDecal(0, EntityX(e\room\OBJ), 0.001, EntityZ(e\room\OBJ), 90.0, Rand(360.0), 0.0)
+									de\Size = 0.4 : UpdateDecals()	
+									EntityAlpha(de\OBJ, 0.8)
 								EndIf
 								
-								If e\EventState>400 Then
-									If e\Sound<>0 Then FreeSound_Strict e\Sound : e\Sound=0
+								If e\EventState > 400.0 Then
+									If e\Sound <> 0 Then 
+										FreeSound_Strict(e\Sound) : e\Sound = 0
+									EndIf
 									RemoveEvent(e)
 								EndIf								
 							EndIf
-							
 						EndIf
 					EndIf
-					
 				EndIf
-				
 				;[End Block]
 			Case "106sinkhole"
 				;[Block]
@@ -9742,23 +9745,15 @@ Function UpdateEndings()
 						
 						For i = 7 To 8
 							e\room\NPC[i] = CreateNPC(NPCtypeMTF, EntityX(e\room\Objects[i], True) + 0.8, EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True) + 0.8)
-							If EntityDistance(e\room\NPC[i]\Collider, Curr106\Collider) > 7.0 Then
-								e\room\NPC[i]\State = 5.0
-								e\room\NPC[i]\PrevState = 1.0
-							Else
-								e\room\NPC[i]\State = 7.0
-							EndIf
+							e\room\NPC[i]\State = 5.0
+							e\room\NPC[i]\PrevState = 1.0
 							PointEntity(e\room\NPC[i]\Collider, e\room\Objects[3])
 						Next	
 						
 						For i = 5 To 6
 							e\room\NPC[i] = CreateNPC(NPCtypeMTF, EntityX(e\room\Objects[i + 2], True), EntityY(e\room\Objects[i + 2], True), EntityZ(e\room\Objects[i + 2], True))
-							If EntityDistance(e\room\NPC[i]\Collider, Curr106\Collider) > 15.0 Then
-								e\room\NPC[i]\State = 5.0
-								e\room\NPC[i]\PrevState = 1.0
-							Else
-								e\room\NPC[i]\State = 7.0
-							EndIf
+							e\room\NPC[i]\State = 5.0
+							e\room\NPC[i]\PrevState = 1.0	
 							PointEntity(e\room\NPC[i]\Collider, e\room\Objects[3])
 						Next		
 						
@@ -10219,5 +10214,5 @@ Function RemoveEvent(e.Events)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1279#1E9F
+;~B#1279#1EA2
 ;~C#Blitz3D

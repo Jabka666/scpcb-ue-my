@@ -114,6 +114,8 @@ Bug Fixes:
 - Small fixes for SCP-939.
 - Small fixes for command "noblink".
 - Small fixes for room2servers and room096's sounds.
+~~~~~~~~~~
+- Small fixes for room2testroom2 event.
 
 - Again small fixes for the vehicle's motor sound.
 
