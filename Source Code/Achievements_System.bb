@@ -15,12 +15,12 @@ For i = 0 To MAXACHIEVEMENTS - 1
 	
 	Local Image$ = GetINIString2("Data\Achievements.ini", Loc2, "AchvImage") 
 	
-	AchvIMG(i) = LoadImage_Strict("GFX\menu\Achievements\" + Image + ".jpg")
+	AchvIMG(i) = LoadImage_Strict("GFX\menu\Achievements\" + Image + ".png")
 	AchvIMG(i) = ResizeImage2(AchvIMG(i), ImageWidth(AchvIMG(i)) * GraphicHeight / 768.0, ImageHeight(AchvIMG(i)) * GraphicHeight / 768.0)
 	BufferDirty(ImageBuffer(AchvIMG(i)))
 Next
 
-Global AchvLocked% = LoadImage_Strict("GFX\menu\Achievements\achvlocked.jpg")
+Global AchvLocked% = LoadImage_Strict("GFX\menu\Achievements\AchvLocked.png")
 
 AchvLocked = ResizeImage2(AchvLocked, ImageWidth(AchvLocked) * GraphicHeight / 768.0, ImageHeight(AchvLocked) * GraphicHeight / 768.0)
 BufferDirty(ImageBuffer(AchvLocked))
