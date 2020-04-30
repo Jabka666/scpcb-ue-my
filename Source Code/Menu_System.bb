@@ -1340,16 +1340,16 @@ Function InitLoadingScreens(file$)
 			ls\ID = LoadingScreenAmount
 			
 			ls\title = TemporaryString
-			ls\imgpath = GetINIString(file, TemporaryString, "image path")
+			ls\imgpath = GetINIString(file, TemporaryString, "ImgPath")
 			
 			For i = 0 To 4
-				ls\txt[i] = GetINIString(file, TemporaryString, "text"+(i+1))
+				ls\txt[i] = GetINIString(file, TemporaryString, "Desc"+(i+1))
 				If ls\txt[i]<> "" Then ls\txtamount=ls\txtamount+1
 			Next
 			
-			ls\disablebackground = GetINIInt(file, TemporaryString, "disablebackground")
+			ls\disablebackground = GetINIInt(file, TemporaryString, "DisableBackground")
 			
-			Select Lower(GetINIString(file, TemporaryString, "align x"))
+			Select Lower(GetINIString(file, TemporaryString, "Align X"))
 				Case "left"
 					ls\alignx = -1
 				Case "middle", "center"
@@ -1358,7 +1358,7 @@ Function InitLoadingScreens(file$)
 					ls\alignx = 1
 			End Select 
 			
-			Select Lower(GetINIString(file, TemporaryString, "align y"))
+			Select Lower(GetINIString(file, TemporaryString, "Align Y"))
 				Case "top", "up"
 					ls\aligny = -1
 				Case "middle", "center"
@@ -1383,7 +1383,7 @@ Function DrawLoading(percent%, shortloading=False)
 		temp = Rand(1,LoadingScreenAmount)
 		For ls.loadingscreens = Each LoadingScreens
 			If ls\id = temp Then
-				If ls\img=0 Then ls\img = LoadImage_Strict("Loadingscreens\"+ls\imgpath)
+				If ls\img=0 Then ls\img = LoadImage_Strict("LoadingScreens\"+ls\imgpath)
 				SelectedLoadingScreen = ls 
 				Exit
 			EndIf

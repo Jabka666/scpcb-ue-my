@@ -175,8 +175,8 @@ PlayStartupVideos()
 Global CursorIMG% = LoadImage_Strict("GFX\cursor.png")
 
 Global SelectedLoadingScreen.LoadingScreens, LoadingScreenAmount%, LoadingScreenText%
-Global LoadingBack% = LoadImage_Strict("Loadingscreens\loadingback.jpg")
-InitLoadingScreens("Loadingscreens\loadingscreens.ini")
+Global LoadingBack% = LoadImage_Strict("LoadingScreens\loading_back.png")
+InitLoadingScreens("LoadingScreens\LoadingScreens.ini")
 
 InitAAFont()
 ; ~ For some reason, Blitz3D doesn't load fonts that have filenames that
