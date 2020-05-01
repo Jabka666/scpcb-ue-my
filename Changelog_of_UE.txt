@@ -48,6 +48,7 @@ v5.6
 - Removed light cones.
 - Removed unnecessary variables and functions in the code.
 - Removed unnecessary room1archive event.
+- Removed NPCs bumps.
 
 - Renamed lockroom to room2Clockroom.
 - Renamed lockroom2 to room2Clockroom3.
@@ -94,6 +95,7 @@ Bug Fixes:
 - Fixed missing pipes in SCP-035's containment chamber. ;NOT DONE
 - Fixed font for startup videos.
 - Fixed SCP-106's glowing eyes.
+- Fixed lockdown monitor in room4info.
 
 - Again fixed some buttons' positions.
 

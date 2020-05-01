@@ -4255,7 +4255,7 @@ End Function
 Function DrawGUI()
 	CatchErrors("Uncaught (DrawGUI)")
 	
-	Local Temp%, x#, y#, z#, i%, YawValue#, PitchValue#
+	Local Temp%, x%, y%, z%, i%, YawValue#, PitchValue#
 	Local x2#, y2#, z2#
 	Local n%, xTemp, yTemp, StrTemp$
 	Local e.Events, it.Items
@@ -4791,7 +4791,7 @@ Function DrawGUI()
 					PositionEntity(SelectedItem\Collider, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 					RotateEntity(SelectedItem\Collider, EntityPitch(Camera), EntityYaw(Camera), 0.0)
 					MoveEntity(SelectedItem\Collider, 0.0, -0.1, 0.1)
-					RotateEntity(SelectedItem\Collider, 0.0, Rand(360), 0.0)
+					RotateEntity(SelectedItem\Collider, 0.0, Rnd(360.0), 0.0)
 					ResetEntity(SelectedItem\Collider)
 					SelectedItem\DropSpeed = 0.0
 					SelectedItem\Picked = False
@@ -4806,7 +4806,7 @@ Function DrawGUI()
 								If OtherOpen\SecondInv[z] <> Null Then
 									Local Name$ = OtherOpen\SecondInv[z]\ItemTemplate\TempName
 									
-									If Name <> "25ct" And Name <> "coin" And Name <> "key" And Name <> "scp860" Then
+									If Name <> "25ct" And Name <> "coin" And Name <> "key" And Name <> "scp860" And Name <> "scp500" And Name <> "scp500death" Then
 										IsEmpty = False
 										Exit
 									EndIf
@@ -5052,6 +5052,17 @@ Function DrawGUI()
 								InvOpen = False
 							EndIf
 							;[End Block]
+						Case "gasmask", "gasmask3", "supergasmask"
+                            ;[Block]
+							If WearingGasMask > 0 Then
+								Msg = "Double click on this item to take it off."
+								MsgTimer = 70 * 5.0
+							Else
+								DropItem(SelectedItem)
+								SelectedItem = Null
+								InvOpen = False
+							EndIf
+						    ;[End Block] 
 						Default
 							;[Block]
 							DropItem(SelectedItem)
@@ -5070,7 +5081,7 @@ Function DrawGUI()
 						SelectedItem = Null
 					ElseIf Inventory(MouseSlot) <> SelectedItem
 						Select SelectedItem\ItemTemplate\TempName
-							Case "paper", "key1", "key2", "key3", "key4", "key5", "key6", "misc", "oldpaper", "badge", "ticket", "25ct", "coin", "key", "scp860"
+							Case "paper", "key1", "key2", "key3", "key4", "key5", "key6", "misc", "oldpaper", "badge", "ticket", "25ct", "coin", "key", "scp860", "scp500", "scp500death"
 								;[Block]
 								If Inventory(MouseSlot)\ItemTemplate\TempName = "clipboard" Then
 									; ~ Add an item to clipboard
@@ -5078,7 +5089,7 @@ Function DrawGUI()
 									Local b$ = SelectedItem\ItemTemplate\TempName
 									Local b2$ = SelectedItem\ItemTemplate\Name
 									
-									If (b <> "misc" And b <> "25ct" And b <> "coin" And b <> "key" And b <> "scp860") Or (b2 = "Playing Card" Or b2 = "Mastercard") Then
+									If (b <> "misc" And b <> "25ct" And b <> "coin" And b <> "key" And b <> "scp860" And b <> "scp500" And b <> "scp500death") Or (b2 = "Playing Card" Or b2 = "Mastercard") Then
 										For c% = 0 To Inventory(MouseSlot)\InvSlots - 1
 											If (Inventory(MouseSlot)\SecondInv[c] = Null)
 												If SelectedItem <> Null Then
@@ -5125,7 +5136,7 @@ Function DrawGUI()
 												If SelectedItem <> Null Then
 													Inventory(MouseSlot)\SecondInv[c] = SelectedItem
 													Inventory(MouseSlot)\State = 1.0
-													If b <> "25ct" And b <> "coin" And b <> "key" And b <> "scp860"
+													If b <> "25ct" And b <> "coin" And b <> "key" And b <> "scp860" And b <> "scp500" And b <> "scp500death"
 														SetAnimTime(Inventory(MouseSlot)\Model, 3.0)
 													EndIf
 													Inventory(MouseSlot)\InvImg = Inventory(MouseSlot)\ItemTemplate\InvImg
@@ -5283,72 +5294,84 @@ Function DrawGUI()
 			Select SelectedItem\ItemTemplate\TempName
 				Case "nvgoggles"
 					;[Block]
-					If Wearing1499 = 0 And WearingHazmat = 0 Then
+					If WearingGasMask > 0
+				        Msg= "You need to take off the gas mask in order to put on the goggles."
+				        MsgTimer = 70 * 5.0
+				        SelectedItem = Null
+						Return
+					ElseIf Wearing1499 > 0
+                        Msg= "You need to take off SCP-1499 in order to put on the goggles."
+						MsgTimer = 70 * 5.0
+						SelectedItem = Null
+						Return
+					Else			
 						If WearingNightVision = 1 Then
 							Msg = "You removed the goggles."
 							CameraFogFar = StoredCameraFogFar
 						Else
 							Msg = "You put on the goggles."
-							WearingGasMask = 0
 							WearingNightVision = 0
 							StoredCameraFogFar = CameraFogFar
 							CameraFogFar = 30.0
 						EndIf
-						
 						WearingNightVision = (Not WearingNightVision)
-					ElseIf Wearing1499 > 0 Then
-						Msg = "You need to take off SCP-1499 in order to put on the goggles."
-					Else
-						Msg = "You need to take off the hazmat suit in order to put on the goggles."
+						MsgTimer = 70 * 5.0
+						SelectedItem = Null
 					EndIf
-					SelectedItem = Null
-					MsgTimer = 70 * 5.0
 					;[End Block]
 				Case "supernv"
 					;[Block]
-					If Wearing1499 = 0 And WearingHazmat = 0 Then
+					If WearingGasMask > 0
+				        Msg = "You need to take off the gas mask in order to put on the goggles."
+				        MsgTimer = 70 * 5.0
+				        SelectedItem = Null
+						Return
+					ElseIf Wearing1499 > 0
+                        Msg = "You need to take off SCP-1499 in order to put on the goggles."
+						MsgTimer = 70 * 5.0
+						SelectedItem = Null
+						Return
+					Else			
 						If WearingNightVision = 2 Then
 							Msg = "You removed the goggles."
 							CameraFogFar = StoredCameraFogFar
 						Else
 							Msg = "You put on the goggles."
-							WearingGasMask = 0
 							WearingNightVision = 0
 							StoredCameraFogFar = CameraFogFar
 							CameraFogFar = 30.0
 						EndIf
-						
 						WearingNightVision = (Not WearingNightVision) * 2
-					ElseIf Wearing1499 > 0 Then
-						Msg = "You need to take off SCP-1499 in order to put on the goggles."
-					Else
-						Msg = "You need to take off the hazmat suit in order to put on the goggles."
+						MsgTimer = 70 * 5.0
+						SelectedItem = Null
 					EndIf
-					SelectedItem = Null
-					MsgTimer = 70 * 5.0
 					;[End Block]
 				Case "finenvgoggles"
 					;[Block]
-					If Wearing1499 = 0 And WearingHazmat = 0 Then
+					If WearingGasMask > 0
+				        Msg = "You need to take off the gas mask in order to put on the goggles."
+				        MsgTimer = 70 * 5.0
+				        SelectedItem = Null
+						Return
+					ElseIf Wearing1499 > 0
+                        Msg = "You need to take off SCP-1499 in order to put on the goggles."
+						MsgTimer = 70 * 5.0
+						SelectedItem = Null
+						Return
+					Else			
 						If WearingNightVision = 3 Then
 							Msg = "You removed the goggles."
 							CameraFogFar = StoredCameraFogFar
 						Else
 							Msg = "You put on the goggles."
-							WearingGasMask = 0
 							WearingNightVision = 0
 							StoredCameraFogFar = CameraFogFar
-							CameraFogFar = 30
+							CameraFogFar = 30.0
 						EndIf
-						
 						WearingNightVision = (Not WearingNightVision) * 3
-					ElseIf Wearing1499 > 0 Then
-						Msg = "You need to take off SCP-1499 in order to put on the goggles."
-					Else
-						Msg = "You need to take off the hazmat suit in order to put on the goggles."
+						MsgTimer = 70 * 5.0
+						SelectedItem = Null
 					EndIf
-					SelectedItem = Null
-					MsgTimer = 70 * 5.0
 					;[End Block]
 				Case "scp1123"
 					;[Block]
@@ -6328,33 +6351,55 @@ Function DrawGUI()
 					;[End Block]
 				Case "gasmask", "supergasmask", "gasmask3"
 					;[Block]
-					If Wearing1499 = 0 And WearingHazmat = 0 Then
-						If WearingGasMask Then
-							Msg = "You removed the gas mask."
-						Else
-							If SelectedItem\ItemTemplate\TempName = "supergasmask"
-								Msg = "You put on the gas mask and you can breathe easier."
-							Else
-								Msg = "You put on the gas mask."
-							EndIf
-							If WearingNightVision Then CameraFogFar = StoredCameraFogFar
-							WearingNightVision = 0
-							WearingGasMask = 0
-						EndIf
-						If SelectedItem\ItemTemplate\TempName = "gasmask3" Then
-							If WearingGasMask = 0 Then WearingGasMask = 3 Else WearingGasMask = 0
-						ElseIf SelectedItem\ItemTemplate\TempName = "supergasmask"
-							If WearingGasMask = 0 Then WearingGasMask = 2 Else WearingGasMask = 0
-						Else
-							WearingGasMask = (Not WearingGasMask)
-						EndIf
-					ElseIf Wearing1499 > 0 Then
-						Msg = "You need to take off SCP-1499 in order to put on the gas mask."
-					Else
-						Msg = "You need to take off the hazmat suit in order to put on the gas mask."
+					If Wearing1499 > 0
+					    Msg = "You need to take off SCP-1499 in order to put on a gas mask."	
+					    MsgTimer = 70 * 5.0
+					    SelectedItem = Null
+					    Return
+					ElseIf WearingNightVision > 0
+					    Msg = "You need to take off the goggles in order to put on a gas mask."
+                        MsgTimer = 70 * 5.0
+                        SelectedItem = Null
+					    Return
+					Else		
+					    CurrSpeed = CurveValue(0.0, CurrSpeed, 5.0)
+						
+						DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						
+						Width = 300
+					    Height = 20
+					    x = GraphicWidth / 2 - Width / 2
+					    y = GraphicHeight / 2 + 80
+					    Rect(x, y, Width + 4, Height, False)
+						For  i% = 1 To Int((Width - 2) * (SelectedItem\state / 100.0) / 10)
+							DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
+						Next
+						SelectedItem\State = Min(SelectedItem\State + (FPSfactor) / 1.6, 100.0)
+						
+					    If SelectedItem\State = 100.0 Then
+                            If WearingGasMask > 0 Then
+                                WearingGasMask = False
+                                Msg = "You removed the gas mask."
+                                If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))
+                            Else
+						        If SelectedItem\ItemTemplate\TempName = "supergasmask"
+							        Msg = "You put on the gas mask and you can breathe easier."
+							        WearingGasMask = 2
+								Else
+									If SelectedItem\Itemtemplate\TempName = "gasmask3"
+										WearingGasMask = 3
+									Else
+										WearingGasMask = 1
+									EndIf
+									Msg = "You put on the gas mask."
+						        EndIf
+					            If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))
+                            EndIf
+						    SelectedItem\State = 0.0
+						    MsgTimer = 70 * 5.0
+						    SelectedItem = Null
+					    EndIf
 					EndIf
-					SelectedItem = Null
-					MsgTimer = 70.0 * 5.0
 					;[End Block]
 				Case "navigator", "nav"
 					;[Block]
@@ -6552,88 +6597,93 @@ Function DrawGUI()
 					;[End Block]
 				Case "scp1499", "super1499"
 					;[Block]
-					If WearingHazmat > 0
-						Msg = "You are not able to wear SCP-1499 and a hazmat suit at the same time."
-						MsgTimer = 70 * 5
+					If WearingNightVision > 0
+						Msg = "You need to take off the goggles in order to put on SCP-1499."
+						MsgTimer = 70 * 5.0
 						SelectedItem = Null
 						Return
-					EndIf
-					
-					CurrSpeed = CurveValue(0.0, CurrSpeed, 5.0)
-					
-					DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
-					
-					Width = 300.0
-					Height = 20.0
-					x = GraphicWidth / 2 - Width / 2
-					y = GraphicHeight / 2.0 + 80.0
-					Rect(x, y, Width + 4, Height, False)
-					For i = 1 To Int((Width - 2) * (SelectedItem\State / 100.0) / 10.0)
-						DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
-					Next
-					SelectedItem\State = Min(SelectedItem\State + FPSfactor, 100.0)
-					
-					If SelectedItem\State = 100.0 Then
-						If Wearing1499 > 0 Then
-							Wearing1499 = False
-							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))
-						Else
-							If SelectedItem\ItemTemplate\TempName = "scp1499" Then
-								Wearing1499 = 1
-							Else
-								Wearing1499 = 2
-							EndIf
-							If SelectedItem\itemtemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))
-							GiveAchievement(Achv1499)
-							If WearingNightVision Then CameraFogFar = StoredCameraFogFar
-							WearingGasMask = 0
-							WearingNightVision = 0
-							For r.Rooms = Each Rooms
-								If r\RoomTemplate\Name = "dimension1499" Then
-									BlinkTimer = -1.0
-									NTF_1499PrevRoom = PlayerRoom
-									NTF_1499PrevX = EntityX(Collider)
-									NTF_1499PrevY = EntityY(Collider)
-									NTF_1499PrevZ = EntityZ(Collider)
-									
-									If NTF_1499X = 0.0 And NTF_1499Y = 0.0 And NTF_1499Z = 0.0 Then
-										PositionEntity(Collider, r\x + 6086.0 * RoomScale, r\y + 304.0 * RoomScale, r\z + 2292.5 * RoomScale)
-										RotateEntity(Collider, 0.0, 90.0, 0.0, True)
-									Else
-										PositionEntity(Collider, NTF_1499X, NTF_1499Y + 0.05, NTF_1499Z)
-									EndIf
-									ResetEntity(Collider)
-									UpdateDoors()
-									UpdateRooms()
-									For it.Items = Each Items
-										it\DistTimer = 0.0
-									Next
-									PlayerRoom = r
-									PlaySound_Strict(LoadTempSound("SFX\SCP\1499\Enter.ogg"))
-									NTF_1499X = 0.0
-									NTF_1499Y = 0.0
-									NTF_1499Z = 0.0
-									If Curr096 <> Null Then
-										If Curr096\SoundCHN <> 0 Then
-											SetStreamVolume_Strict(Curr096\SoundCHN, 0.0)
-										EndIf
-									EndIf
-									For e.Events = Each Events
-										If e\EventName = "dimension1499" Then
-											If EntityDistance(e\room\OBJ, Collider) > 8300.0 * RoomScale Then
-												If e\EventState2 < 5 Then
-													e\EventState2 = e\EventState2 + 1.0
-												EndIf
-											EndIf
-											Exit
-										EndIf
-									Next
-									Exit
-								EndIf
-							Next
-						EndIf
-						SelectedItem\State = 0.0
+				    ElseIf WearingGasMask > 0
+				        Msg = "You need to take off the gas mask in order to put on SCP-1499."
+						MsgTimer = 70 * 5.0
 						SelectedItem = Null
+						Return
+					Else
+						CurrSpeed = CurveValue(0.0, CurrSpeed, 5.0)
+						
+						DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						
+						Width = 300.0
+						Height = 20.0
+						x = GraphicWidth / 2 - Width / 2
+						y = GraphicHeight / 2 + 80
+						Rect(x, y, Width + 4, Height, False)
+						For i = 1 To Int((Width - 2) * (SelectedItem\State / 100.0) / 10.0)
+							DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
+						Next
+						SelectedItem\state = Min(SelectedItem\State + FPSfactor / 1.6, 100.0)
+						
+						If SelectedItem\State = 100.0 Then
+							If Wearing1499 > 0 Then
+								Wearing1499 = False
+								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))
+							Else
+								If SelectedItem\ItemTemplate\TempName = "scp1499" Then
+									Wearing1499 = 1
+								Else
+									Wearing1499 = 2
+								EndIf
+								If SelectedItem\itemtemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))
+								GiveAchievement(Achv1499)
+								If WearingNightVision Then CameraFogFar = StoredCameraFogFar
+								WearingGasMask = 0
+								WearingNightVision = 0
+								For r.Rooms = Each Rooms
+									If r\RoomTemplate\Name = "dimension1499" Then
+										BlinkTimer = -1.0
+										NTF_1499PrevRoom = PlayerRoom
+										NTF_1499PrevX = EntityX(Collider)
+										NTF_1499PrevY = EntityY(Collider)
+										NTF_1499PrevZ = EntityZ(Collider)
+										
+										If NTF_1499X = 0.0 And NTF_1499Y = 0.0 And NTF_1499Z = 0.0 Then
+											PositionEntity(Collider, r\x + 6086.0 * RoomScale, r\y + 304.0 * RoomScale, r\z + 2292.5 * RoomScale)
+											RotateEntity(Collider, 0.0, 90.0, 0.0, True)
+										Else
+											PositionEntity(Collider, NTF_1499X, NTF_1499Y + 0.05, NTF_1499Z)
+										EndIf
+										ResetEntity(Collider)
+										UpdateDoors()
+										UpdateRooms()
+										For it.Items = Each Items
+											it\DistTimer = 0.0
+										Next
+										PlayerRoom = r
+										PlaySound_Strict(LoadTempSound("SFX\SCP\1499\Enter.ogg"))
+										NTF_1499X = 0.0
+										NTF_1499Y = 0.0
+										NTF_1499Z = 0.0
+										If Curr096 <> Null Then
+											If Curr096\SoundCHN <> 0 Then
+												SetStreamVolume_Strict(Curr096\SoundCHN, 0.0)
+											EndIf
+										EndIf
+										For e.Events = Each Events
+											If e\EventName = "dimension1499" Then
+												If EntityDistance(e\room\OBJ, Collider) > 8300.0 * RoomScale Then
+													If e\EventState2 < 5 Then
+														e\EventState2 = e\EventState2 + 1.0
+													EndIf
+												EndIf
+												Exit
+											EndIf
+										Next
+										Exit
+									EndIf
+								Next
+							EndIf
+							SelectedItem\State = 0.0
+							SelectedItem = Null
+						EndIf
 					EndIf
 					;[End Block]
 				Case "badge"
@@ -6798,7 +6848,7 @@ Function DrawGUI()
 					If WearingHazmat = 0 Then
 						DropItem(SelectedItem, False)
 					EndIf
-				ElseIf IN = "scp1499" Or IN = "super1499"
+				ElseIf IN = "scp1499" Or IN = "super1499" Or IN = "gasmask" Or IN = "supergasmask" Or IN = "gasmask3"
 					SelectedItem\State = 0.0
 				EndIf
 				
@@ -6819,7 +6869,7 @@ Function DrawGUI()
 	For it.Items = Each Items
 		If it <> SelectedItem
 			Select it\ItemTemplate\TempName
-				Case "firstaid", "finefirstaid", "firstaid2", "vest", "finevest", "hazmatsuit", "hazmatsuit2", "hazmatsuit3", "scp1499", "super1499"
+				Case "firstaid", "finefirstaid", "firstaid2", "vest", "finevest", "hazmatsuit", "hazmatsuit2", "hazmatsuit3", "scp1499", "super1499", "gasmask", "supergasmask", "gasmask3"
 					;[Block]
 					it\State = 0.0
 					;[End Block]
@@ -11156,51 +11206,6 @@ Function CheckForPlayerInFacility()
 	Return(True)
 End Function
 
-Function IsItemGoodFor1162(itt.ItemTemplates)
-	Local IN$ = itt\TempName
-	
-	Select itt\TempName
-		Case "key1", "key2", "key3"
-			;[Block]
-			Return(True)
-			;[End Block]
-		Case "misc", "scp420j", "cigarette"
-			;[Block]
-			Return(True)
-			;[End Block]
-		Case "vest", "finevest","gasmask"
-			;[Block]
-			Return(True)
-			;[End Block]
-		Case "radio", "18vradio"
-			;[Block]
-			Return(True)
-			;[End Block]
-		Case "clipboard", "eyedrops", "nvgoggles"
-			;[Block]
-			Return(True)
-			;[End Block]
-		Case "drawing"
-			;[Block]
-			If itt\Img <> 0 Then FreeImage(itt\Img)	
-			itt\Img = LoadImage_Strict("GFX\items\1048\1048_" + Rand(1, 20) + ".jpg") ; ~ Gives a random drawing.
-			Return(True)
-			;[End Block]
-		Default
-			;[Block]
-			If itt\TempName <> "paper" Then
-				Return(False)
-			Else If Instr(itt\Name, "Leaflet")
-				Return(False)
-			Else
-				; ~ If the item is a paper, only allow spawning it if the name contains the word "note" or "log"
-				; ~ (Because those are items created recently, which D-9341 has most likely never seen)
-				Return(((Not Instr(itt\Name, "Note")) And (Not Instr(itt\Name, "Log"))))
-			EndIf
-			;[End Block]
-	End Select
-End Function
-
 Function ControlSoundVolume()
 	Local snd.Sound, i%
 	
@@ -11556,5 +11561,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#FB2#12DD#1AD8
+;~B#FB2#12DD#1B0A
 ;~C#Blitz3D

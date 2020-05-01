@@ -98,7 +98,7 @@ End Function
 Function InitItemTemplates()
 	Local it.ItemTemplates,it2.ItemTemplates
 	
-	; ~ [DOCUMENTS]
+	; ~ [PAPER]
 	
 	CreateItemTemplate("Document SCP-008", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc008.jpg", 0.003, 0)
 	CreateItemTemplate("Document SCP-012", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc012.jpg", 0.003, 0)
@@ -109,7 +109,6 @@ Function InitItemTemplates()
 	CreateItemTemplate("Document SCP-106", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc106.jpg", 0.003, 0)
 	CreateItemTemplate("Document SCP-173", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc173.jpg", 0.003, 0)
 	CreateItemTemplate("Document SCP-372", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc372.jpg", 0.003, 0)
-	CreateItemTemplate("Document SCP-427", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc427.jpg", 0.003, 0)
 	CreateItemTemplate("Document SCP-500", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc500.png", 0.003, 0)
 	CreateItemTemplate("Document SCP-513", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc513.jpg", 0.003, 0)
 	CreateItemTemplate("Document SCP-682", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc682.jpg", 0.003, 0)
@@ -130,8 +129,6 @@ Function InitItemTemplates()
 	CreateItemTemplate("SCP-035 Addendum", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc035ad.jpg", 0.003, 0)
 	
 	CreateItemTemplate("SCP-093 Recovered Materials", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc093rm.jpg", 0.003, 0)
-	
-	; ~ [NOTES, MISC DOCUMENTS, BADGES, TICKET, ORIGAMI]
 	
 	CreateItemTemplate("Addendum: 5/14 Test Log", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\docRAND2.jpg", 0.003, 0)
 	
@@ -163,10 +160,12 @@ Function InitItemTemplates()
 	
 	CreateItemTemplate("The Modular Site Project", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\docMSP.jpg", 0.003, 0)
 	
-	CreateItemTemplate("Blood-stained Note", "paper", "GFX\items\paper.x", "GFX\items\INVnote.jpg", "GFX\items\docL3.jpg", 0.0025, 0, "GFX\items\notetexture.jpg")
+	CreateItemTemplate("Blood-stained Note", "paper", "GFX\items\paper.x", "GFX\items\INV_note_bloody.png", "GFX\items\docL3.jpg", 0.0025, 0, "GFX\items\note_bloody.png")
 	
 	it = CreateItemTemplate("Burnt Note", "paper", "GFX\items\paper.x", "GFX\items\INVbn.jpg", "GFX\items\bn.it", 0.003, 0, "GFX\items\BurntNoteTexture.jpg")
 	it\Img = BurntNote
+	
+	CreateItemTemplate("Document SCP-427", "paper", "GFX\items\paper.x", "GFX\items\INV_paper_bloody.png", "GFX\items\doc427.jpg", 0.003, 0, "GFX\items\paper_bloody.png")
 	
 	CreateItemTemplate("Dr. Allok's Note", "paper", "GFX\items\paper.x", "GFX\items\INVpaper.jpg", "GFX\items\doc106_2.jpg", 0.006, 0, "GFX\items\notetexture.jpg")
 	

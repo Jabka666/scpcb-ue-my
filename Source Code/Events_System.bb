@@ -1985,7 +1985,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				
-				If e\room\RoomTemplate\Name = "checkpoint2"
+				If e\room\RoomTemplate\Name = "checkpoint2" Then
 					For e2.Events = Each Events
 						If e2\EventName = "008"
 							If e2\EventState = 2.0
@@ -1995,7 +1995,7 @@ Function UpdateEvents()
 									e\room\RoomDoors[1]\Locked = False
 								EndIf
 							Else
-								If e\room\Dist < 12
+								If e\room\Dist < 12.0
 									UpdateCheckpointMonitors(1)
 									e\room\RoomDoors[0]\Locked = True
 									e\room\RoomDoors[1]\Locked = True
@@ -2004,23 +2004,25 @@ Function UpdateEvents()
 						EndIf
 					Next
 				Else
-					For e2.Events = Each Events
-						If e2\EventName = "room2sl"
-							If e2\EventState3 = 0.0
-								If e\room\Dist < 12.0
-									TurnCheckpointMonitorsOff(0)
-									e\room\RoomDoors[0]\Locked = False
-									e\room\RoomDoors[1]\Locked = False
-								EndIf
-							Else
-								If e\room\Dist < 12
-									UpdateCheckpointMonitors(0)
-									e\room\RoomDoors[0]\Locked = True
-									e\room\RoomDoors[1]\Locked = True
+					If e\room\RoomTemplate\Name = "checkpoint1" Or e\room\RoomTemplate\Name = "room4info" Then
+						For e2.Events = Each Events
+							If e2\EventName = "room2sl"
+								If e2\EventState3 = 0.0
+									If e\room\Dist < 12.0
+										TurnCheckpointMonitorsOff(0)
+										e\room\RoomDoors[0]\Locked = False
+										e\room\RoomDoors[1]\Locked = False
+									EndIf
+								Else
+									If e\room\Dist < 12.0
+										UpdateCheckpointMonitors(0)
+										e\room\RoomDoors[0]\Locked = True
+										e\room\RoomDoors[1]\Locked = True
+									EndIf
 								EndIf
 							EndIf
-						EndIf
-					Next
+						Next
+					EndIf
 				EndIf
 				
 				If e\room\RoomDoors[0]\Open <> e\EventState Then
@@ -7959,96 +7961,109 @@ Function UpdateEvents()
 				;[End Block]
 			Case "room1162"
 				;[Block]
-				;e\EventState = A variable to determine the "nostalgia" items
-				;- 0.0 = No nostalgia item
-				;- 1.0 = Lost key
-				;- 2.0 = Disciplinary Hearing DH-S-4137-17092
-				;- 3.0 = Coin
-				;- 4.0 = Movie Ticket
-				;- 5.0 = Old Badge
-				;e\EventState2 = Defining which slot from the Inventory should be picked
-				;e\EventState3 = A check for if a item should be removed
-				;- 0.0 = no item "trade" will happen
-				;- 1.0 = item "trade" will happen
-				;- 2.0 = the player doesn't has any items in the Inventory, giving him heavily Injuries and giving him a random item
-				;- 3.0 = player got a memorial item (to explain a bit D-9341's background)
-				;- 3.1 = player got a memorial item + injuries (because he didn't had any item in his inventory before)
+				; ~ e\EventState = A variable to determine the "nostalgia" items
+				; ~ 0.0 = No nostalgia item
+				; ~  1.0 = Lost key
+				; ~  2.0 = Disciplinary Hearing DH-S-4137-17092
+				; ~  3.0 = Coin
+				; ~  4.0 = Movie Ticket
+				; ~  5.0 = Old Badge
+				
+				; ~ e\EventState2 = Defining which slot from the Inventory should be picked
+				
+				; ~ e\EventState3 = A check for if a item should be removed
+				; ~ 0.0 = no item "trade" will happen
+				; ~ 1.0 = item "trade" will happen
+				; ~ 2.0 = the player doesn't has any items in the Inventory, giving him heavily Injuries and giving him a random item
+				; ~ 3.0 = player got a memorial item (to explain a bit D-9341's background)
+				; ~ 3.1 = player got a memorial item + injuries (because he didn't had any item in his inventory before)
 				If PlayerRoom = e\room
-					
 					GrabbedEntity = 0
 					
-					e\EventState = 0
+					e\EventState = 0.0
 					
 					Local Pick1162% = True
-					Local pp% = CreatePivot(e\room\obj)
-					PositionEntity pp,976,128,-640,False
+					Local pp% = CreatePivot(e\room\OBJ)
+					
+					PositionEntity(pp, 976.0, 128.0, -640.0)
 					
 					For it.Items = Each Items
-						If (Not it\Picked)
-							If EntityDistance(it\collider,e\room\Objects[0])<0.75
-								Pick1162% = False
+						If (Not it\Picked) Then
+							If EntityDistance(it\Collider, e\room\Objects[0]) < 0.75
+								Pick1162 = False
 							EndIf
 						EndIf
 					Next
 					
-					If EntityDistance(e\room\Objects[0],Collider)<0.75 And Pick1162%
+					If EntityDistance(e\room\Objects[0], Collider) < 0.75 And Pick1162
 						DrawHandIcon = True
 						If MouseHit1 Then GrabbedEntity = e\room\Objects[0]
 					EndIf
 					
 					If GrabbedEntity <> 0
-						e\EventState2 = Rand(0,MaxItemAmount-1)
-						If Inventory(e\EventState2)<>Null
-							;randomly picked item slot has an item in it, using this slot
+						e\EventState2 = Rand(0, MaxItemAmount - 1)
+						If Inventory(e\EventState2) <> Null
+							; ~ Randomly picked item slot has an item in it, using this slot
 							e\EventState3 = 1.0
-							
 						Else
-							;randomly picked item slot is empty, getting the first available slot
-							For i = 0 To MaxItemAmount-1
-								Local isSlotEmpty% = (Inventory((i+e\EventState2) Mod MaxItemAmount) = Null)
+							; ~ Randomly picked item slot is empty, getting the first available slot
+							For i = 0 To MaxItemAmount - 1
+								Local IsSlotEmpty% = (Inventory((i + e\EventState2) Mod MaxItemAmount) = Null)
 								
-								If (Not isSlotEmpty) Then
-									;successful
-									e\EventState2 = (i+e\EventState2) Mod MaxItemAmount
+								If (Not IsSlotEmpty) Then
+									; ~ Successful
+									e\EventState2 = (i + e\EventState2) Mod MaxItemAmount
 								EndIf
 								
-								If Rand(8)=1 Then
-									If isSlotEmpty Then
+								If Rand(8) = 1 Then
+									If IsSlotEmpty Then
 										e\EventState3 = 3.1
 									Else
 										e\EventState3 = 3.0
 									EndIf
 									
-									e\EventState = Rand(1,5)
+									e\EventState = Rand(1, 5)
 									
-									;Checking if the selected nostalgia item already exists or not
-									Local itemName$ = ""
-									Select (e\EventState)
+									; ~ Checking if the selected nostalgia item already exists or not
+									Local ItemName$ = ""
+									
+									Select e\EventState
 										Case 1
-											itemName = "Lost Key"
+											;[Block]
+											ItemName = "Lost Key"
+											;[End Block]
 										Case 2
-											itemName = "Disciplinary Hearing DH-S-4137-17092"
+											;[Block]
+											ItemName = "Disciplinary Hearing DH-S-4137-17092"
+											;[End Block]
 										Case 3
-											itemName = "Coin"
+											;[Block]
+											ItemName = "Coin"
+											;[End Block]
 										Case 4
-											itemName = "Movie Ticket"
+											;[Block[
+											ItemName = "Movie Ticket"
+											;[End Block]
 										Case 5
-											itemName = "Old Badge"
+											;[Block]
+											ItemName = "Old Badge"
+											;[End Block]
 									End Select
 									
-									Local itemExists% = False
+									Local ItemExists% = False
+									
 									For it.Items = Each Items
-										If (it\name = itemName) Then
-											itemExists = True
+										If it\Name = ItemName Then
+											ItemExists = True
 											e\EventState3 = 1.0
 											e\EventState = 0.0
 											Exit
 										EndIf
 									Next
 									
-									If ((Not itemExists) And (Not isSlotEmpty)) Exit
+									If (Not ItemExists) And (Not IsSlotEmpty) Then Exit
 								Else
-									If isSlotEmpty Then
+									If IsSlotEmpty Then
 										e\EventState3 = 2.0
 									Else
 										e\EventState3 = 1.0
@@ -8059,146 +8074,164 @@ Function UpdateEvents()
 						EndIf
 					EndIf
 					
-					
-					;trade successful
+					; ~ Trade successful
 					If e\EventState3 = 1.0
-						Local shouldCreateItem% = False
+						Local ShouldCreateItem% = False
 						
 						For itt.ItemTemplates = Each ItemTemplates
 							If (IsItemGoodFor1162(itt)) Then
-								Select Inventory(e\EventState2)\itemtemplate\tempname
+								Select Inventory(e\EventState2)\ItemTemplate\TempName
 									Case "key"
-										If itt\tempname = "key1" Or itt\tempname = "key2" And Rand(2)=1
-											shouldCreateItem = True
-											
+										;[Block]
+										If itt\TempName = "key1" Or itt\TempName = "key2" And Rand(2) = 1
+											ShouldCreateItem = True
 										EndIf
-									Case "paper","oldpaper"
-										If itt\tempname = "paper" And Rand(12)=1 Then
-											shouldCreateItem = True
-											
+										;[End Block]
+									Case "paper", "oldpaper"
+										;[Block]
+										If itt\TempName = "paper" And Rand(12) = 1 Then
+											ShouldCreateItem = True
 										EndIf
-									Case "gasmask","gasmask3","supergasmask","hazmatsuit","hazmatsuit2","hazmatsuit3"
-										If itt\tempname = "gasmask" Or itt\tempname = "gasmask3" Or itt\tempname = "supergasmask" Or itt\tempname = "hazmatsuit" Or itt\tempname = "hazmatsuit2" Or itt\tempname = "hazmatsuit3" And Rand(2)=1
-											shouldCreateItem = True
-											
+										;[End Block]
+									Case "gasmask", "gasmask3", "supergasmask", "hazmatsuit", "hazmatsuit2", "hazmatsuit3"
+										;[Block]
+										If itt\TempName = "gasmask" Or itt\TempName = "gasmask3" Or itt\TempName = "supergasmask" Or itt\TempName = "hazmatsuit" Or itt\TempName = "hazmatsuit2" Or itt\TempName = "hazmatsuit3" And Rand(2) = 1
+											ShouldCreateItem = True
 										EndIf
-									Case "key1","key2","key3"
-										If itt\tempname = "key1" Or itt\tempname = "key2" Or itt\tempname = "key3" Or itt\tempname = "misc" And Rand(6)=1
-											shouldCreateItem = True
-											
+										;[End Block]
+									Case "key1", "key2", "key3"
+										;[Block]
+										If itt\TempName = "key1" Or itt\TempName = "key2" Or itt\TempName = "key3" Or itt\TempName = "misc" And Rand(6) = 1
+											ShouldCreateItem = True
 										EndIf
-									Case "vest","finevest"
-										If itt\tempname = "vest" Or itt\tempname = "finevest" And Rand(1)=1
-											shouldCreateItem = True
-											
+										;[End Block]
+									Case "vest", "finevest"
+										;[Block]
+										If itt\TempName = "vest" Or itt\TempName = "finevest" And Rand(1) = 1
+											ShouldCreateItem = True
 										EndIf
+										;[End Block]
 									Default
-										If itt\tempname = "misc" And Rand(6)=1
-											shouldCreateItem = True
-											
+										;[Block]
+										If itt\TempName = "misc" And Rand(6) = 1
+											ShouldCreateItem = True
 										EndIf
+										;[End Block]
 								End Select
 							EndIf
 							
-							If (shouldCreateItem) Then
+							If ShouldCreateItem Then
 								RemoveItem(Inventory(e\EventState2))
-								it=CreateItem(itt\name,itt\tempname,EntityX(pp,True),EntityY(pp,True),EntityZ(pp,True))
-								EntityType(it\collider, HIT_ITEM)
-								PlaySound_Strict LoadTempSound("SFX\SCP\1162\Exchange"+Rand(0,4)+".ogg")
+								it = CreateItem(itt\Name, itt\TempName, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+								EntityType(it\Collider, HIT_ITEM)
+								PlaySound_Strict(LoadTempSound("SFX\SCP\1162\Exchange" + Rand(0, 4) + ".ogg"))
 								e\EventState3 = 0.0
-								
 								
 								GiveAchievement(Achv1162)
 								MouseHit1 = False
 								Exit
 							EndIf
 						Next
-					;trade not sucessful (player got in return to injuries a new item)
+					; ~ Trade not sucessful (player got in return to injuries a new item)
 					ElseIf e\EventState3 = 2.0
 						Injuries = Injuries + 5.0
 						Pvt = CreatePivot()
-						PositionEntity Pvt, EntityX(Collider),EntityY(Collider)-0.05,EntityZ(Collider)
-						TurnEntity Pvt, 90, 0, 0
+						PositionEntity(Pvt, EntityX(Collider), EntityY(Collider) - 0.05, EntityZ(Collider))
+						TurnEntity(Pvt, 90.0, 0.0, 0.0)
 						EntityPick(Pvt,0.3)
-						de.decals = CreateDecal(3, PickedX(), PickedY()+0.005, PickedZ(), 90, Rand(360), 0)
-						de\size = 0.75 : ScaleSprite de\obj, de\size, de\size
-						FreeEntity Pvt
+						de.Decals = CreateDecal(3, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0)
+						de\Size = 0.75
+						ScaleSprite(de\OBJ, de\Size, de\Size)
+						FreeEntity(Pvt)
 						For itt.ItemTemplates = Each ItemTemplates
-							If IsItemGoodFor1162(itt) And Rand(6)=1
-								it = CreateItem(itt\name, itt\tempname, EntityX(pp,True),EntityY(pp,True),EntityZ(pp,True))
-								EntityType(it\collider, HIT_ITEM)
+							If IsItemGoodFor1162(itt) And Rand(6) = 1
+								it = CreateItem(itt\Name, itt\TempName, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+								EntityType(it\Collider, HIT_ITEM)
 								GiveAchievement(Achv1162)
 								MouseHit1 = False
 								e\EventState3 = 0.0
-								If Injuries > 15
+								If Injuries > 15.0
 									DeathMSG = "A dead Class D subject was discovered within the containment chamber of SCP-1162."
 									DeathMSG = DeathMSG + " An autopsy revealed that his right lung was missing, which suggests"
 									DeathMSG = DeathMSG + " interaction with SCP-1162."
-									PlaySound_Strict LoadTempSound("SFX\SCP\1162\BodyHorrorExchange"+Rand(1,4)+".ogg")
+									PlaySound_Strict(LoadTempSound("SFX\SCP\1162\BodyHorrorExchange" + Rand(1, 4) + ".ogg"))
 									LightFlash = 5.0
 									Kill()
 								Else
-									PlaySound_Strict LoadTempSound("SFX\SCP\1162\BodyHorrorExchange"+Rand(1,4)+".ogg")
+									PlaySound_Strict(LoadTempSound("SFX\SCP\1162\BodyHorrorExchange" + Rand(1, 4) + ".ogg"))
 									LightFlash = 5.0
 									Msg = "You feel a sudden overwhelming pain in your chest."
-									MsgTimer = 70*5
+									MsgTimer = 70 * 5.0
 								EndIf
 								Exit
 							EndIf
 						Next
-					;trade with nostalgia item
+					; ~ Trade with nostalgia item
 					ElseIf e\EventState3 >= 3.0
 						If e\EventState3 < 3.1
-							PlaySound_Strict LoadTempSound("SFX\SCP\1162\Exchange"+Rand(0,4)+".ogg")
+							PlaySound_Strict(LoadTempSound("SFX\SCP\1162\Exchange" + Rand(0, 4) + ".ogg"))
 							RemoveItem(Inventory(e\EventState2))
 						Else
 							Injuries = Injuries + 5.0
 							Pvt = CreatePivot()
-							PositionEntity Pvt, EntityX(Collider),EntityY(Collider)-0.05,EntityZ(Collider)
-							TurnEntity Pvt, 90, 0, 0
-							EntityPick(Pvt,0.3)
-							de.decals = CreateDecal(3, PickedX(), PickedY()+0.005, PickedZ(), 90, Rand(360), 0)
-							de\size = 0.75 : ScaleSprite de\obj, de\size, de\size
-							FreeEntity Pvt
-							If Injuries > 15
+							PositionEntity(Pvt, EntityX(Collider), EntityY(Collider) - 0.05, EntityZ(Collider))
+							TurnEntity(Pvt, 90.0, 0.0, 0.0)
+							EntityPick(Pvt, 0.3)
+							de.Decals = CreateDecal(3, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0)
+							de\Size = 0.75 
+							ScaleSprite(de\OBJ, de\Size, de\Size)
+							FreeEntity(Pvt)
+							If Injuries > 15.0
 								DeathMSG = "A dead Class D subject was discovered within the containment chamber of SCP-1162."
 								DeathMSG = DeathMSG + " An autopsy revealed that his right lung was missing, which suggests"
 								DeathMSG = DeathMSG + " interaction with SCP-1162."
-								PlaySound_Strict LoadTempSound("SFX\SCP\1162\BodyHorrorExchange"+Rand(1,4)+".ogg")
+								PlaySound_Strict(LoadTempSound("SFX\SCP\1162\BodyHorrorExchange" + Rand(1, 4) + ".ogg"))
 								LightFlash = 5.0
 								Kill()
 							Else
-								PlaySound_Strict LoadTempSound("SFX\SCP\1162\BodyHorrorExchange"+Rand(1,4)+".ogg")
+								PlaySound_Strict(LoadTempSound("SFX\SCP\1162\BodyHorrorExchange" + Rand(1, 4) + ".ogg"))
 								LightFlash = 5.0
 								Msg = "You notice something moving in your pockets and a sudden pain in your chest."
-								MsgTimer = 70*5
+								MsgTimer = 70 * 5.0
 							EndIf
 							e\EventState2 = 0.0
 						EndIf
 						Select e\EventState
 							Case 1
-								it = CreateItem("Lost Key","key",EntityX(pp,True),EntityY(pp,True),EntityZ(pp,True))
+								;[Block]
+								it = CreateItem("Lost Key", "key", EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+								;[End Block]
 							Case 2
-								it = CreateItem("Disciplinary Hearing DH-S-4137-17092","oldpaper",EntityX(pp,True),EntityY(pp,True),EntityZ(pp,True))
+								;[Block]
+								it = CreateItem("Disciplinary Hearing DH-S-4137-17092", "oldpaper", EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+								;[End Block]
 							Case 3
-								it = CreateItem("Coin","coin",EntityX(pp,True),EntityY(pp,True),EntityZ(pp,True))
+								;[Block]
+								it = CreateItem("Coin", "coin", EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+								;[End Block]
 							Case 4
-								it = CreateItem("Movie Ticket","ticket",EntityX(pp,True),EntityY(pp,True),EntityZ(pp,True))
+								;[Block]
+								it = CreateItem("Movie Ticket", "ticket", EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+								;[End Block]
 							Case 5
-								it = CreateItem("Old Badge","badge",EntityX(pp,True),EntityY(pp,True),EntityZ(pp,True))
+								;[Block]
+								it = CreateItem("Old Badge", "badge", EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+								;[End Block]
 						End Select
-						EntityType(it\collider, HIT_ITEM)
+						EntityType(it\Collider, HIT_ITEM)
 						GiveAchievement(Achv1162)
 						MouseHit1 = False
 						e\EventState3 = 0.0
 					EndIf
-					FreeEntity pp
+					FreeEntity(pp)
 				EndIf
 				;[End Block]
 			Case "room2gw"
 				;[Block]
 				; ~ e\EventState: Determines if the airlock is in operation or not
+				
 				; ~ e\EventState2: The timer for the airlocks
+				
 				; ~ e\EventState3: Checks if the player had left the airlock or not
 				
 				e\room\RoomDoors[0]\Locked = True
@@ -10188,7 +10221,7 @@ Function UpdateEndings()
 				PlaySound_Strict(ExplosionSFX)			
 				For i = 0 To (10 + (10 * (ParticleAmount + 1)))
 					p.Particles = CreateParticle(EntityX(Collider) + Rnd(-0.5, 0.5), EntityY(Collider) - Rnd(0.2, 1.5), EntityZ(Collider) + Rnd(-0.5, 0.5), 0, Rnd(0.2, 0.6), 0.0, 350.0)
-					p\speed = Rnd(0.05, 0.07)
+					p\Speed = Rnd(0.05, 0.07)
 					RotateEntity(p\Pvt, -90.0, 0.0, 0.0, True)
 				Next
 			EndIf
@@ -10213,6 +10246,51 @@ Function RemoveEvent(e.Events)
 	Delete(e)
 End Function
 
+Function IsItemGoodFor1162(itt.ItemTemplates)
+	Local IN$ = itt\TempName
+	
+	Select itt\TempName
+		Case "key1", "key2", "key3"
+			;[Block]
+			Return(True)
+			;[End Block]
+		Case "misc", "scp420j", "cigarette"
+			;[Block]
+			Return(True)
+			;[End Block]
+		Case "vest", "finevest","gasmask"
+			;[Block]
+			Return(True)
+			;[End Block]
+		Case "radio", "18vradio"
+			;[Block]
+			Return(True)
+			;[End Block]
+		Case "clipboard", "eyedrops", "nvgoggles"
+			;[Block]
+			Return(True)
+			;[End Block]
+		Case "drawing"
+			;[Block]
+			If itt\Img <> 0 Then FreeImage(itt\Img)	
+			itt\Img = LoadImage_Strict("GFX\items\1048\1048_" + Rand(1, 20) + ".jpg") ; ~ Gives a random drawing.
+			Return(True)
+			;[End Block]
+		Default
+			;[Block]
+			If itt\TempName <> "paper" Then
+				Return(False)
+			Else If Instr(itt\Name, "Leaflet")
+				Return(False)
+			Else
+				; ~ If the item is a paper, only allow spawning it if the name contains the word "note" or "log"
+				; ~ (Because those are items created recently, which D-9341 has most likely never seen)
+				Return(((Not Instr(itt\Name, "Note")) And (Not Instr(itt\Name, "Log"))))
+			EndIf
+			;[End Block]
+	End Select
+End Function
+
 ;~IDEal Editor Parameters:
-;~B#1279#1EA2
+;~B#127B#1EA4
 ;~C#Blitz3D
