@@ -26,7 +26,6 @@ v5.6
 - Now SCP-500-01, SCP-427 and command "heal" heal from SCP-1048-A's effects. ;FORGOT TO ADD MESSAGE
 - Now SCP-966, SCP-1048-A, guards (Intro scene and Gate B) and SCP-860-2 don't react on the player, if he used a command "notarget".
 ~~~~~~~~~~
-; GUARD AT GATE B SIDE NEED FIXES
 - Now guard in "room2elevator" event can kill the player, if he too close.
 
 - Changed SCP-650, SCP-409, SCP-079 and SCP-457's label.
@@ -68,6 +67,7 @@ v5.6
 - Optimized items.
 ~~~~~~~~
 - Optimized startup videos.
+- Optimized event of SCP-012's containment chamber event.
 
 Bug Fixes:
 
@@ -90,12 +90,15 @@ Bug Fixes:
 - Fixed SCP-049 spam-closing the door behind it, if the player tries to open it. ;NOT DONE
 - Fixed SCP-106's eyes glowing in the dark and flying in midair while he is emerging. ;NOT DONE
 - Fixed SCP-173's head poking out of its box when recontained by the MTFs. ;NOT DONE
-- Fixed item's positions in room2closets, room1archive and room2storage. ;NOT DONE
+- Fixed item's positions in room2closets, room1archive. ;NOT DONE
 - Fixed small lamps in room2pit.
 - Fixed missing pipes in SCP-035's containment chamber. ;NOT DONE
 - Fixed font for startup videos.
 - Fixed SCP-106's glowing eyes.
 - Fixed lockdown monitor in room4info.
+- Fixed 106sinkhole event when player using NVG.
+- Fixed items not pushing each other away in SCP-970's room.
+- Fixed unnecessary door opening sound in room2sl event.
 
 - Again fixed some buttons' positions.
 
@@ -1216,7 +1219,7 @@ v4.6
 - Added new pick up's sounds.
 - Added spawn of.
 
-- Changed arrangement of items in room2gs, room2poffices and room2storage.
+- Changed arrangement of items in room2gs, room2poffices and SCP-970's room.
 - Changed knife's icon.
 - Changed appearance of the blood in room2vent's event.
 - Changed brightness of SCP-1079 loading screen.

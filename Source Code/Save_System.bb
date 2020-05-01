@@ -300,7 +300,6 @@ Function SaveGame(File$)
 		WriteByte(f, do\Open)
 		WriteFloat(f, do\OpenState)
 		WriteByte(f, do\Locked)
-		WriteByte(f, do\Locked079)
 		WriteByte(f, do\AutoClose)
 		
 		WriteFloat(f, EntityX(do\OBJ, True))
@@ -967,7 +966,6 @@ Function LoadGame(File$)
 		Local Open% = ReadByte(f)
 		Local OpenState# = ReadFloat(f)
 		Local Locked% = ReadByte(f)
-		Local Locked079% = ReadByte(f)
 		Local AutoClose% = ReadByte(f)
 		
 		Local OBJX# = ReadFloat(f)
@@ -987,7 +985,6 @@ Function LoadGame(File$)
 				do\Open = Open
 				do\OpenState = OpenState
 				do\Locked = Locked
-				do\Locked079 = Locked079
 				do\AutoClose = AutoClose
 				do\Timer = Timer
 				do\TimerState = TimerState
@@ -1711,7 +1708,6 @@ Function LoadGameQuick(File$)
 		Local Open% = ReadByte(f)
 		Local OpenState# = ReadFloat(f)
 		Local Locked% = ReadByte(f)
-		Local Locked079% = ReadByte(f)
 		Local AutoClose% = ReadByte(f)
 		
 		Local OBJX# = ReadFloat(f)
@@ -1733,7 +1729,6 @@ Function LoadGameQuick(File$)
 						do\Open = Open
 						do\OpenState = OpenState
 						do\Locked = Locked
-						do\Locked079 = Locked079
 						do\AutoClose = AutoClose
 						do\Timer = Timer
 						do\TimerState = TimerState

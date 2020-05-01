@@ -1483,18 +1483,18 @@ Function UpdateConsole()
 			        ;[Block]
 			        For e2.Events = Each Events
 				        If e2\EventName = "room2sl"
-							e2\EventState3 = 0
+							e2\EventState3 = 0.0
 							UpdateLever(e2\room\Levers[0])
-							RotateEntity e2\room\Levers[0], 0, EntityYaw(e2\room\Levers[0]), 0
+							RotateEntity(e2\room\Levers[0], 0.0, EntityYaw(e2\room\Levers[0]), 0.0)
 							TurnCheckpointMonitorsOff(0)
 						EndIf
 					Next
 					
 					For e2.Events = Each Events
-				        If e2\EventName = "room008"
-							e2\EventState = 2
+				        If e2\EventName = "008"
+							e2\EventState = 2.0
 							UpdateLever(e2\room\Levers[0])
-							RotateEntity e2\room\Levers[0], 0, EntityYaw(e2\room\Levers[0]), 30
+							RotateEntity(e2\room\Levers[0], 0.0, EntityYaw(e2\room\Levers[0]), 30.0)
 							TurnCheckpointMonitorsOff(1)
 							Exit
 						EndIf
@@ -1524,7 +1524,7 @@ Function UpdateConsole()
 							;[Block]
 							For e.Events = Each Events
 								If e\EventName = "gateaentrance" Then
-									e\EventState3 = 1
+									e\EventState3 = 1.0
 									e\room\RoomDoors[1]\Open = True
 									Exit
 								EndIf
@@ -1535,7 +1535,7 @@ Function UpdateConsole()
 							;[Block]
 							For e.Events = Each Events
 								If e\EventName = "exit1" Then
-									e\EventState3 = 1
+									e\EventState3 = 1.0
 									e\room\RoomDoors[4]\Open = True
 									Exit
 								EndIf
@@ -1546,17 +1546,16 @@ Function UpdateConsole()
 							;[Block]
 							For e.Events = Each Events
 								If e\EventName = "gateaentrance" Then
-									e\EventState3 = 1
+									e\EventState3 = 1.0
 									e\room\RoomDoors[1]\Open = True
 								ElseIf e\EventName = "exit1" Then
-									e\EventState3 = 1
+									e\EventState3 = 1.0
 									e\room\RoomDoors[4]\Open = True
 								EndIf
 							Next
 							CreateConsoleMsg("Gate A and B are now unlocked.")	
 							;[End Block]
 					End Select
-					
 					RemoteDoorOn = True
 					;[End Block]
 				Case "kill", "suicide"
@@ -2098,7 +2097,7 @@ Global DoorTempID%
 
 Type Doors
 	Field OBJ%, OBJ2%, FrameOBJ%, Buttons%[2]
-	Field Locked%, Locked079%, Open%, Angle%, OpenState#, FastOpen%
+	Field Locked%, Open%, Angle%, OpenState#, FastOpen%
 	Field Dir%
 	Field Timer%, TimerState#
 	Field KeyCard%
@@ -2494,7 +2493,7 @@ Function UpdateDoors()
 		EndIf
 		UpdateSoundOrigin(d\SoundCHN, Camera, d\FrameOBJ)
 		
-		If d\Dir = 1 And d\Locked079 Then
+		If d\Dir = 1 And d\Locked = 2 Then
 			If d\OpenState > 48.0 Then
 				d\Open = False
 				d\OpenState = Min(d\OpenState, 48.0)
@@ -2566,7 +2565,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 			ElseIf Temp >= d\KeyCard 
 				SelectedItem = Null
 				If ShowMsg = True Then
-					If d\Locked Then
+					If d\Locked = True Then
 						PlaySound_Strict(KeyCardSFX2)
 						Msg = "The keycard was inserted into the slot but nothing happened."
 						MsgTimer = 70 * 7.0
@@ -2581,7 +2580,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 				SelectedItem = Null
 				If ShowMsg = True Then 
 					PlaySound_Strict(KeyCardSFX2)					
-					If d\Locked Then
+					If d\Locked = True Then
 						Msg = "The keycard was inserted into the slot but nothing happened."
 					Else
 						Msg = "A keycard with security clearance " + d\KeyCard + " or higher is required to operate this door."
@@ -2612,7 +2611,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 			Return			
 		EndIf
 	Else
-		If d\Locked Then
+		If d\Locked = True Then
 			If ShowMsg = True Then 
 				If Not (d\IsElevatorDoor > 0) Then
 					PlaySound_Strict(ButtonSFX2)
@@ -2679,7 +2678,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 		If d\Open Then
 			If d\LinkedDoor <> Null Then d\LinkedDoor\TimerState = d\LinkedDoor\Timer
 			d\TimerState = d\Timer
-			If d\Locked079 Then
+			If d\Dir = 1 And d\Locked = 2 Then
 				d\SoundCHN = PlaySound2(BigDoorErrorSFX(Sound), Camera, d\OBJ)
 			Else
 				d\SoundCHN = PlaySound2(OpenDoorSFX(d\Dir, Sound), Camera, d\OBJ)
@@ -7602,10 +7601,11 @@ Function MouseOn%(x%, y%, Width%, Height%)
 	Return(False)
 End Function
 
-Include "Source Code\LoadAllSounds.bb"
+Include "Source Code\Sound_System.bb"
 
 Function LoadEntities()
 	CatchErrors("Uncaught (LoadEntities)")
+	
 	DrawLoading(0)
 	
 	Local i%
@@ -8118,7 +8118,7 @@ Function InitNewGame()
 	
 	HideDistance = 15.0
 	
-	HeartBeatRate = 70
+	HeartBeatRate = 70.0
 	
 	AccessCode = 0
 	For i = 0 To 3
@@ -8222,7 +8222,7 @@ Function InitNewGame()
 		Delete(tw)
 	Next
 	
-	TurnEntity(Collider, 0.0, Rand(160.0, 200.0), 0.0)
+	TurnEntity(Collider, 0.0, Rnd(160.0, 200.0), 0.0)
 	
 	ResetEntity(Collider)
 	
@@ -8230,13 +8230,13 @@ Function InitNewGame()
 	
 	For e.Events = Each Events
 		If e\EventName = "room2nuke"
-			e\EventState = 1
+			e\EventState = 1.0
 		EndIf
 		If e\EventName = "room106"
-			e\EventState2 = 1
+			e\EventState2 = 1.0
 		EndIf	
 		If e\EventName = "room2sl"
-			e\EventState3 = 1
+			e\EventState3 = 1.0
 		EndIf
 	Next
 	
@@ -8246,9 +8246,9 @@ Function InitNewGame()
 	
 	HidePointer()
 	
-	BlinkTimer = -10
-	BlurTimer = 100
-	Stamina = 100
+	BlinkTimer = -10.0
+	BlurTimer = 100.0
+	Stamina = 100.0
 	
 	For i = 0 To 70
 		FPSfactor = 1.0
@@ -8276,7 +8276,8 @@ End Function
 
 Function InitLoadGame()
 	CatchErrors("Uncaught (InitLoadGame)")
-	Local d.Doors, sc.SecurityCams, rt.RoomTemplates, e.Events
+	
+	Local d.Doors, sc.SecurityCams, rt.RoomTemplates, e.Events, i%
 	
 	DrawLoading(80)
 	
@@ -8304,7 +8305,7 @@ Function InitLoadGame()
 	HidePointer()
 	
 	BlinkTimer = BLINKFREQ
-	Stamina = 100
+	Stamina = 100.0
 	
 	For rt.RoomTemplates = Each RoomTemplates
 		If rt\OBJ <> 0 Then FreeEntity(rt\OBJ) : rt\OBJ = 0
@@ -8315,7 +8316,7 @@ Function InitLoadGame()
 	For e.Events = Each Events
 		; ~ Loading the necessary stuff for dimension1499, but this will only be done if the player is in this dimension already
 		If e\EventName = "dimension1499"
-			If e\EventState = 2
+			If e\EventState = 2.0
 				;[Block]
 				DrawLoading(91)
 				e\room\Objects[0] = CreatePlane()
@@ -8324,7 +8325,7 @@ Function InitLoadGame()
 				
 				EntityTexture(e\room\Objects[0], PlaneTex)
 				FreeTexture(PlaneTex)
-				PositionEntity(e\room\Objects[0], 0, EntityY(e\room\OBJ), 0)
+				PositionEntity(e\room\Objects[0], 0.0, EntityY(e\room\OBJ), 0.0)
 				EntityType(e\room\Objects[0], HIT_MAP)
 				DrawLoading(92)
 				NTF_1499Sky = sky_CreateSky("GFX\map\sky\1499sky")
@@ -8358,7 +8359,7 @@ Function InitLoadGame()
 	DrawLoading(100)
 	
 	PrevTime = MilliSecs()
-	FPSfactor = 0
+	FPSfactor = 0.0
 	ResetInput()
 End Function
 
@@ -8381,7 +8382,7 @@ Function NullGame(PlayButtonSFX% = True)
 	UnableToMove = False
 	
 	QuickLoadPercent = -1
-	QuickLoadPercent_DisplayTimer# = 0
+	QuickLoadPercent_DisplayTimer = 0.0
 	QuickLoad_CurrEvent = Null
 	
 	DeathMsg = ""
@@ -8402,7 +8403,7 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	GameSaved = 0
 	
-	HideDistance# = 15.0
+	HideDistance = 15.0
 	
 	For Lvl = 0 To 0
 		For x = 0 To MapWidth + 1
@@ -8644,413 +8645,6 @@ End Function
 
 Include "Source Code\Save_System.bb"
 
-Function PlaySound2%(SoundHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0)
-	Range = Max(Range, 1.0)
-	
-	Local SoundCHN% = 0
-	
-	If Volume > 0.0 Then 
-		Local Dist# = EntityDistance(Cam, Entity) / Range
-		
-		If 1.0 - Dist > 0.0 And 1.0 - Dist < 1.0 Then
-			Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
-			
-			SoundCHN = PlaySound_Strict(SoundHandle)
-			
-			ChannelVolume(SoundCHN, Volume * (1.0 - Dist) * SFXVolume)
-			ChannelPan(SoundCHN, PanValue)			
-		EndIf
-	EndIf
-	Return(SoundCHN)
-End Function
-
-Function LoopSound2%(SoundHandle%, CHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0)
-	Range = Max(Range, 1.0)
-	
-	If Volume > 0.0 Then
-		Local Dist# = EntityDistance(Cam, Entity) / Range
-		Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
-		
-		If CHN = 0 Then
-			CHN = PlaySound_Strict(SoundHandle)
-		Else
-			If (Not ChannelPlaying(CHN)) Then CHN = PlaySound_Strict(SoundHandle)
-		EndIf
-		
-		ChannelVolume(CHN, Volume * (1.0 - Dist) * SFXVolume)
-		ChannelPan(CHN, PanValue)
-	Else
-		If CHN <> 0 Then
-			ChannelVolume (CHN, 0)
-		EndIf 
-	EndIf
-	Return(CHN)
-End Function
-
-Function LoadTempSound(File$)
-	If TempSounds[TempSoundIndex] <> 0 Then FreeSound_Strict(TempSounds[TempSoundIndex])
-	TempSound = LoadSound_Strict(File)
-	TempSounds[TempSoundIndex] = TempSound
-	TempSoundIndex = (TempSoundIndex + 1) Mod 10
-	Return(TempSound)
-End Function
-
-Function LoadEventSound(e.Events, File$, Number% = 0)
-	If Number = 0 Then
-		If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
-		e\Sound = LoadSound_Strict(File)
-		Return(e\Sound)
-	Else If Number = 1 Then
-		If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
-		e\Sound2 = LoadSound_Strict(File)
-		Return(e\Sound2)
-	EndIf
-End Function
-
-Function UpdateMusic()
-	If ConsoleFlush Then
-		If Not ChannelPlaying(ConsoleMusPlay) Then ConsoleMusPlay = PlaySound(ConsoleMusFlush)
-	ElseIf (Not PlayCustomMusic)
-		If NowPlaying <> ShouldPlay ; ~ Playing the wrong clip, fade out
-			CurrMusicVolume = Max(CurrMusicVolume - (FPSfactor / 250.0), 0.0)
-			If CurrMusicVolume = 0
-				If NowPlaying < 66
-					StopStream_Strict(MusicCHN)
-				EndIf
-				NowPlaying = ShouldPlay
-				MusicCHN = 0
-				CurrMusic = 0
-			EndIf
-		Else ; ~ Playing the right clip
-			CurrMusicVolume = CurrMusicVolume + (MusicVolume - CurrMusicVolume) * (0.1 * FPSfactor)
-		EndIf
-		
-		If NowPlaying < 66
-			If CurrMusic = 0
-				MusicCHN = StreamSound_Strict("SFX\Music\" + Music(NowPlaying) + ".ogg", 0.0, Mode)
-				CurrMusic = 1
-			EndIf
-			SetStreamVolume_Strict(MusicCHN, CurrMusicVolume)
-		EndIf
-	Else
-		If FPSfactor > 0 Or OptionsMenu = 2 Then
-			If ChannelPlaying(MusicCHN) = False Then MusicCHN = PlaySound_Strict(CustomMusic)
-			ChannelVolume(MusicCHN, 1.0 * MusicVolume)
-		EndIf
-	EndIf
-	
-End Function 
-
-Function PauseSounds()
-	For e.Events = Each Events
-		If e\SoundCHN <> 0 Then
-			If (Not e\SoundCHN_IsStream)
-				If ChannelPlaying(e\SoundCHN) = True Then PauseChannel(e\SoundCHN)
-			Else
-				SetStreamPaused_Strict(e\SoundCHN, True)
-			EndIf
-		EndIf
-		
-		If e\SoundCHN2 <> 0 Then
-			If (Not e\SoundCHN2_IsStream)
-				If ChannelPlaying(e\SoundCHN2) = True Then PauseChannel(e\SoundCHN2)
-			Else
-				SetStreamPaused_Strict(e\SoundCHN2, True)
-			EndIf
-		EndIf		
-	Next
-	
-	For n.NPCs = Each NPCs
-		If n\SoundCHN <> 0 Then
-			If (Not n\SoundCHN_IsStream)
-				If ChannelPlaying(n\SoundCHN) = True Then PauseChannel(n\SoundCHN)
-			Else
-				If n\SoundCHN_IsStream = True
-					SetStreamPaused_Strict(n\SoundCHN, True)
-				EndIf
-			EndIf
-		EndIf
-		
-		If n\SoundCHN2 <> 0 Then
-			If (Not n\SoundCHN2_IsStream)
-				If ChannelPlaying(n\SoundCHN2) = True Then PauseChannel(n\SoundCHN2)
-			Else
-				If n\SoundCHN2_IsStream = True
-					SetStreamPaused_Strict(n\SoundCHN2, True)
-				EndIf
-			EndIf
-		EndIf
-	Next	
-	
-	For d.Doors = Each Doors
-		If d\SoundCHN <> 0 Then
-			If ChannelPlaying(d\SoundCHN) = True Then PauseChannel(d\SoundCHN)
-		EndIf
-	Next
-	
-	For dem.DevilEmitters = Each DevilEmitters
-		If dem\SoundCHN <> 0 Then
-			If ChannelPlaying(dem\SoundCHN) = True Then PauseChannel(dem\SoundCHN)
-		EndIf
-	Next
-	
-	If AmbientSFXCHN <> 0 Then
-		If ChannelPlaying(AmbientSFXCHN) = True Then PauseChannel(AmbientSFXCHN)
-	EndIf
-	
-	If BreathCHN <> 0 Then
-		If ChannelPlaying(BreathCHN) = True Then PauseChannel(BreathCHN)
-	EndIf
-	
-	If IntercomStreamCHN <> 0
-		SetStreamPaused_Strict(IntercomStreamCHN, True)
-	EndIf
-End Function
-
-Function ResumeSounds()
-	For e.Events = Each Events
-		If e\SoundCHN <> 0 Then
-			If (Not e\SoundCHN_IsStream)
-				If ChannelPlaying(e\SoundCHN) = True Then ResumeChannel(e\SoundCHN)
-			Else
-				SetStreamPaused_Strict(e\SoundCHN, False)
-			EndIf
-		EndIf
-		If e\SoundCHN2 <> 0 Then
-			If (Not e\SoundCHN2_IsStream)
-				If ChannelPlaying(e\SoundCHN2) = True Then ResumeChannel(e\SoundCHN2)
-			Else
-				SetStreamPaused_Strict(e\SoundCHN2, False)
-			EndIf
-		EndIf	
-	Next
-	
-	For n.NPCs = Each NPCs
-		If n\SoundCHN <> 0 Then
-			If (Not n\SoundCHN_IsStream)
-				If ChannelPlaying(n\SoundCHN) = True Then ResumeChannel(n\SoundCHN)
-			Else
-				If n\soundchn_IsStream = True
-					SetStreamPaused_Strict(n\SoundCHN, False)
-				EndIf
-			EndIf
-		EndIf
-		If n\SoundCHN2 <> 0 Then
-			If (Not n\SoundCHN2_IsStream)
-				If ChannelPlaying(n\SoundCHN2) = True Then ResumeChannel(n\SoundCHN2)
-			Else
-				If n\SoundCHN2_IsStream = True
-					SetStreamPaused_Strict(n\SoundCHN2, False)
-				EndIf
-			EndIf
-		EndIf
-	Next	
-	
-	For d.Doors = Each Doors
-		If d\SoundCHN <> 0 Then
-			If ChannelPlaying(d\SoundCHN) = True Then ResumeChannel(d\SoundCHN)
-		EndIf
-	Next
-	
-	For dem.DevilEmitters = Each DevilEmitters
-		If dem\SoundCHN <> 0 Then
-			If ChannelPlaying(dem\SoundCHN) = True Then ResumeChannel(dem\SoundCHN)
-		EndIf
-	Next
-	
-	If AmbientSFXCHN <> 0 Then
-		If ChannelPlaying(AmbientSFXCHN) = True Then ResumeChannel(AmbientSFXCHN)
-	EndIf	
-	
-	If BreathCHN <> 0 Then
-		If ChannelPlaying(BreathCHN) = True Then ResumeChannel(BreathCHN)
-	EndIf
-	
-	If IntercomStreamCHN <> 0
-		SetStreamPaused_Strict(IntercomStreamCHN, False)
-	EndIf
-End Function
-
-Function KillSounds()
-	Local i%, e.Events, n.NPCs, d.Doors, dem.DevilEmitters, snd.Sound
-	
-	For i = 0 To 9
-		If TempSounds[i] <> 0 Then FreeSound_Strict(TempSounds[i]) : TempSounds[i] = 0
-	Next
-	For e.Events = Each Events
-		If e\SoundCHN <> 0 Then
-			If (Not e\SoundCHN_IsStream)
-				If ChannelPlaying(e\SoundCHN) = True Then StopChannel(e\SoundCHN)
-			Else
-				StopStream_Strict(e\SoundCHN)
-			EndIf
-		EndIf
-		
-		If e\SoundCHN2 <> 0 Then
-			If (Not e\SoundCHN2_IsStream)
-				If ChannelPlaying(e\SoundCHN2) = True Then StopChannel(e\SoundCHN2)
-			Else
-				StopStream_Strict(e\SoundCHN2)
-			EndIf
-		EndIf		
-	Next
-	
-	For n.NPCs = Each NPCs
-		If n\SoundCHN <> 0 Then
-			If (Not n\SoundCHN_IsStream)
-				If ChannelPlaying(n\SoundCHN) = True Then StopChannel(n\SoundCHN)
-			Else
-				StopStream_Strict(n\SoundCHN)
-			EndIf
-		EndIf
-		
-		If n\SoundCHN2 <> 0 Then
-			If (Not n\SoundCHN2_IsStream)
-				If ChannelPlaying(n\SoundCHN2) = True Then StopChannel(n\SoundCHN2)
-			Else
-				StopStream_Strict(n\SoundCHN2)
-			EndIf
-		EndIf
-	Next
-	
-	For d.Doors = Each Doors
-		If d\SoundCHN <> 0 Then
-			If ChannelPlaying(d\SoundCHN) = True Then StopChannel(d\SoundCHN)
-		EndIf
-	Next
-	
-	For dem.DevilEmitters = Each DevilEmitters
-		If dem\SoundCHN <> 0 Then
-			If ChannelPlaying(dem\SoundCHN) = True Then StopChannel(dem\SoundCHN)
-		EndIf
-	Next
-	
-	If AmbientSFXCHN <> 0 Then
-		If ChannelPlaying(AmbientSFXCHN) = True Then StopChannel(AmbientSFXCHN)
-	EndIf
-	
-	If BreathCHN <> 0 Then
-		If ChannelPlaying(BreathCHN) = True Then StopChannel(BreathCHN)
-	EndIf
-	
-	If IntercomStreamCHN <> 0
-		StopStream_Strict(IntercomStreamCHN)
-		IntercomStreamCHN = 0
-	EndIf
-	
-	If EnableSFXRelease
-		For snd.Sound = Each Sound
-			If snd\InternalHandle <> 0 Then
-				FreeSound(snd\InternalHandle)
-				snd\InternalHandle = 0
-				snd\ReleaseTime = 0
-			EndIf
-		Next
-	EndIf
-	
-	For snd.Sound = Each Sound
-		For i = 0 To 31
-			If snd\Channels[i] <> 0 Then
-				StopChannel(snd\Channels[i])
-			EndIf
-		Next
-	Next
-End Function
-
-Function GetStepSound(Entity%)
-    Local Picker%, Brush%, Texture%, Name$
-    Local mat.Materials
-    
-    Picker = LinePick(EntityX(Entity), EntityY(Entity), EntityZ(Entity), 0, -1, 0)
-    If Picker <> 0 Then
-        If GetEntityType(Picker) <> HIT_MAP Then Return(0)
-        Brush = GetSurfaceBrush(GetSurface(Picker, CountSurfaces(Picker)))
-        If Brush <> 0 Then
-            Texture = GetBrushTexture(Brush, 3)
-            If Texture <> 0 Then
-                Name = StripPath(TextureName(Texture))
-                If (Name <> "") Then FreeTexture(Texture)
-				For mat.Materials = Each Materials
-					If mat\Name = Name Then
-						If mat\StepSound > 0 Then
-							FreeBrush(Brush)
-							Return(mat\StepSound - 1)
-						EndIf
-						Exit
-					EndIf
-				Next                
-			EndIf
-			Texture = GetBrushTexture(Brush, 2)
-			If Texture <> 0 Then
-				Name = StripPath(TextureName(Texture))
-				If (Name <> "") Then FreeTexture(Texture)
-				For mat.Materials = Each Materials
-					If mat\Name = Name Then
-						If mat\StepSound > 0 Then
-							FreeBrush(Brush)
-							Return(mat\StepSound - 1)
-						EndIf
-						Exit
-					EndIf
-				Next                
-			EndIf
-			Texture = GetBrushTexture(Brush, 1)
-			If Texture <> 0 Then
-				Name = StripPath(TextureName(Texture))
-				If (Name <> "") Then FreeTexture(Texture)
-				FreeBrush(Brush)
-				For mat.Materials = Each Materials
-					If mat\Name = Name Then
-						If mat\StepSound > 0 Then
-							Return(mat\StepSound - 1)
-						EndIf
-						Exit
-					EndIf
-				Next                
-			EndIf
-		EndIf
-	EndIf
-	Return(0)
-End Function
-
-Function UpdateSoundOrigin2(CHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0)
-	Range = Max(Range, 1.0)
-	
-	If Volume > 0.0 Then
-		Local Dist# = EntityDistance(Cam, Entity) / Range
-		
-		If 1.0 - Dist > 0.0 And 1.0 - Dist < 1.0 Then
-			Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
-			
-			ChannelVolume(CHN, Volume * (1. - Dist))
-			ChannelPan(CHN, PanValue)
-		EndIf
-	Else
-		If CHN <> 0 Then
-			ChannelVolume(CHN, 0)
-		EndIf 
-	EndIf
-End Function
-
-Function UpdateSoundOrigin(CHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0)
-	Range = Max(Range, 1.0)
-	
-	If Volume > 0.0 Then
-		Local Dist# = EntityDistance(Cam, Entity) / Range#
-		
-		If 1.0 - Dist > 0.0 And 1.0 - Dist < 1.0 Then
-			Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
-			
-			ChannelVolume(CHN, Volume# * (1.0 - Dist) * SFXVolume)
-			ChannelPan(CHN, PanValue)
-		EndIf
-	Else
-		If CHN <> 0 Then
-			ChannelVolume (CHN, 0)
-		EndIf 
-	EndIf
-End Function
-
 Function AnimateNPC(n.NPCs, Start#, Quit#, Speed#, Loop% = True)
 	Local NewTime#
 	
@@ -9128,11 +8722,11 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 	
 	Local it2.Items, i%
 	
-	Select item\itemtemplate\name
+	Select item\ItemTemplate\Name
 		Case "Gas Mask", "Heavy Gas Mask"
 			;[Block]
 			Select Setting
-				Case "rough", "coarse"
+				Case "Rough", "Coarse"
 					;[Block]
 					d.Decals = CreateDecal(0, x, 8 * RoomScale + 0.005, z, 90.0, Rand(360.0), 0.0)
 					d\Size = 0.12
@@ -9144,7 +8738,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					PositionEntity(item\Collider, x, y, z)
 					ResetEntity(item\Collider)
 					;[End Block]
-				Case "fine", "very fine"
+				Case "Fine", "Very Fine"
 					;[Block]
 					it2 = CreateItem("Gas Mask", "supergasmask", x, y, z)
 					RemoveItem(item)
@@ -9154,7 +8748,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 		Case "SCP-1499"
 			;[Block]
 			Select Setting
-				Case "rough", "coarse"
+				Case "Rough", "Coarse"
 					;[Block]
 					d.Decals = CreateDecal(0, x, 8 * RoomScale + 0.005, z, 90.0, Rand(360.0), 0.0)
 					d\Size = 0.12
@@ -9166,12 +8760,12 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					it2 = CreateItem("Gas Mask", "gasmask", x, y, z)
 					RemoveItem(item)
 					;[End Block]
-				Case "fine"
+				Case "Fine"
 					;[Block]
 					it2 = CreateItem("SCP-1499", "super1499", x, y, z)
 					RemoveItem(item)
 					;[End Block]
-				Case "very fine"
+				Case "Very Fine"
 					;[Block]
 					n.NPCs = CreateNPC(NPCtype1499, x, y, z)
 					n\State = 1.0
@@ -9185,7 +8779,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 		Case "Ballistic Vest"
 			;[Block]
 			Select Setting
-				Case "rough", "coarse"
+				Case "Rough", "Coarse"
 					;[Block]
 					d.Decals = CreateDecal(0, x, 8 * RoomScale + 0.005, z, 90.0, Rand(360.0), 0.0)
 					d\Size = 0.12
@@ -9197,12 +8791,12 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					PositionEntity(item\Collider, x, y, z)
 					ResetEntity(item\Collider)
 					;[End Block]
-				Case "fine"
+				Case "Fine"
 					;[Block]
 					it2 = CreateItem("Heavy Ballistic Vest", "finevest", x, y, z)
 					RemoveItem(item)
 					;[End Block]
-				Case "very fine"
+				Case "Very Fine"
 					;[Block]
 					it2 = CreateItem("Bulky Ballistic Vest", "veryfinevest", x, y, z)
 					RemoveItem(item)
@@ -9211,11 +8805,11 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 		Case "Clipboard"
 			;[Block]
 			Select Setting
-				Case "rough", "coarse"
+				Case "Rough", "Coarse"
 					;[Block]
 					d.Decals = CreateDecal(7, x, 8 * RoomScale + 0.005, z, 90.0, Rand(360.0), 0.0)
 					d\Size = 0.12
-					ScaleSprite(d\obj, d\Size, d\Size)
+					ScaleSprite(d\OBJ, d\Size, d\Size)
 					
 					For i = 0 To 19
 						If item\SecondInv[i] <> Null Then RemoveItem(item\SecondInv[i])
@@ -9228,13 +8822,13 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					PositionEntity(item\Collider, x, y, z)
 					ResetEntity(item\Collider)
 					;[End Block]
-				Case "fine"
+				Case "Fine"
 					;[Block]
 					item\InvSlots = Max(item\State2, 15.0)
 					PositionEntity(item\Collider, x, y, z)
 					ResetEntity(item\Collider)
 					;[End Block]
-				Case "very fine"
+				Case "Very Fine"
 					;[Block]
 					item\InvSlots = Max(item\State2, 20.0)
 					PositionEntity(item\Collider, x, y, z)
@@ -9244,11 +8838,11 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 		Case "Wallet"
 			;[Block]
 			Select Setting
-				Case "rough", "coarse"
+				Case "Rough", "Coarse"
 					;[Block]
 					d.Decals = CreateDecal(7, x, 8 * RoomScale + 0.005, z, 90.0, Rand(360.0), 0.0)
 					d\Size = 0.12
-					ScaleSprite(d\obj, d\Size, d\Size)
+					ScaleSprite(d\OBJ, d\Size, d\Size)
 					
 					For i = 0 To 19
 						If item\SecondInv[i] <> Null Then RemoveItem(item\SecondInv[i])
@@ -9261,13 +8855,13 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					PositionEntity(item\Collider, x, y, z)
 					ResetEntity(item\Collider)
 					;[End Block]
-				Case "fine"
+				Case "Fine"
 					;[Block]
 					item\InvSlots = Max(item\State2, 15.0)
 					PositionEntity(item\Collider, x, y, z)
 					ResetEntity(item\Collider)
 					;[End Block]
-				Case "very fine"
+				Case "Very Fine"
 					;[Block]
 					item\InvSlots = Max(item\State2, 20.0)
 					PositionEntity(item\Collider, x, y, z)
@@ -9278,7 +8872,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 		Case "Night Vision Goggles"
 			;[Block]
 			Select Setting
-				Case "rough", "coarse"
+				Case "Rough", "Coarse"
 					;[Block]
 					d.Decals = CreateDecal(0, x, 8 * RoomScale + 0.005, z, 90.0, Rand(360.0), 0.0)
 					d\Size = 0.12
@@ -9290,12 +8884,12 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					PositionEntity(item\Collider, x, y, z)
 					ResetEntity(item\Collider)
 					;[End Block]
-				Case "fine"
+				Case "Fine"
 					;[Block]
 					it2 = CreateItem("Night Vision Goggles", "finenvgoggles", x, y, z)
 					RemoveItem(item)
 					;[End Block]
-				Case "very fine"
+				Case "Very Fine"
 					;[Block]
 					it2 = CreateItem("Night Vision Goggles", "supernv", x, y, z)
 					it2\State = 1000.0
@@ -9306,12 +8900,12 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 		Case "Metal Panel", "SCP-148 Ingot"
 			;[Block]
 			Select Setting
-				Case "rough", "coarse"
+				Case "Rough", "Coarse"
 					;[Block]
 					it2 = CreateItem("SCP-148 Ingot", "scp148ingot", x, y, z)
 					RemoveItem(item)
 					;[End Block]
-				Case "1:1", "fine", "very fine"
+				Case "1:1", "Fine", "Very Fine"
 					;[Block]
 					it2 = Null
 					For it.Items = Each Items
@@ -9365,13 +8959,13 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 		Case "Severed Hand", "Black Severed Hand"
 			;[Block]
 			Select Setting
-				Case "rough", "coarse"
+				Case "Rough", "Coarse"
 					;[Block]
 					d.Decals = CreateDecal(3, x, 8.0 * RoomScale + 0.005, z, 90.0, Rand(360.0), 0.0)
 					d\Size = 0.12
 					ScaleSprite(d\OBJ, d\Size, d\Size)
 					;[End Block]
-				Case "1:1", "fine", "very fine"
+				Case "1:1", "Fine", "Very Fine"
 					;[Block]
 					If (item\ItemTemplate\Name = "Severed Hand")
 						it2 = CreateItem("Black Severed Hand", "hand2", x, y, z)
@@ -9385,7 +8979,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 		Case "First Aid Kit", "Blue First Aid Kit"
 			;[Block]
 			Select Setting
-				Case "rough", "coarse"
+				Case "Rough", "Coarse"
 					;[Block]
 					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rand(360.0), 0.0)
 					d\Size = 0.12
@@ -9399,11 +8993,11 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 						it2 = CreateItem("First Aid Kit", "firstaid", x, y, z)
 					EndIf
 					;[End Block]
-				Case "fine"
+				Case "Fine"
 					;[Block]
 					it2 = CreateItem("Small First Aid Kit", "finefirstaid", x, y, z)
 					;[End Block]
-				Case "very fine"
+				Case "Very Fine"
 					;[Block]
 					it2 = CreateItem("Strange Bottle", "veryfinefirstaid", x, y, z)
 					;[End Block]
@@ -9414,7 +9008,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 		Case "Level 1 Key Card", "Level 2 Key Card", "Level 3 Key Card", "Level 4 Key Card", "Level 5 Key Card"
 			;[Block]
 			Select Setting
-				Case "rough", "coarse"
+				Case "Rough", "Coarse"
 					;[Block]
 					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rand(360.0), 0.0)
 					d\Size = 0.07
@@ -9424,7 +9018,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					;[Block]
 					it2 = CreateItem("Playing Card", "misc", x, y, z)
 					;[End Block]
-				Case "fine"
+				Case "Fine"
 					;[Block]
 					Select item\ItemTemplate\Name
 						Case "Level 1 Key Card"
@@ -9570,7 +9164,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 							;[End Block]
 					End Select
 					;[End Block]
-				Case "very fine"
+				Case "Very Fine"
 					;[Block]
 					CurrAchvAmount = 0
 					For i = 0 To MAXACHIEVEMENTS - 1
@@ -9612,7 +9206,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 		Case "Key Card Omni"
 			;[Block]
 			Select Setting
-				Case "rough", "coarse"
+				Case "Rough", "Coarse"
 					;[Block]
 					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rand(360.0), 0.0)
 					d\Size = 0.07
@@ -9626,7 +9220,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 						it2 = CreateItem("Playing Card", "misc", x, y, z)			
 					EndIf	
 					;[End Block]
-				Case "fine", "very fine"
+				Case "Fine", "Very Fine"
 					;[Block]
 					it2 = CreateItem("Key Card Omni", "key6", x, y, z)
 					;[End Block]
@@ -9636,7 +9230,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 		Case "Playing Card", "Coin", "Quarter"
 			;[Block]
 			Select Setting
-				Case "rough", "coarse"
+				Case "Rough", "Coarse"
 					;[Block]
 					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rand(360.0), 0.0)
 					d\Size = 0.07
@@ -9646,7 +9240,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					;[Block]
 					it2 = CreateItem("Level 1 Key Card", "key1", x, y, z)
 					;[End Block]
-			    Case "fine", "very fine"
+			    Case "Fine", "Very fine"
 					;[Block]
 					it2 = CreateItem("Level 2 Key Card", "key2", x, y, z)
 					;[End Block]
@@ -9656,13 +9250,13 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 		Case "Mastercard"
 			;[Block]
 			Select Setting
-				Case "rough"
+				Case "Rough"
 					;[Block]
 					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rand(360.0), 0.0)
 					d\Size = 0.07
 					ScaleSprite(d\OBJ, d\Size, d\Size)
 					;[End Block]
-				Case "coarse"
+				Case "Coarse"
 					;[Block]
 					it2 = CreateItem("Quarter", "25ct", x, y, z)
 					
@@ -9681,7 +9275,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					;[Block]
 					it2 = CreateItem("Level 1 Key Card", "key1", x, y, z)
 					;[End Block]
-			    Case "fine", "very fine"
+			    Case "Fine", "Very Fine"
 					;[Block]
 					it2 = CreateItem("Level 2 Key Card", "key2", x, y, z)
 					;[End Block]
@@ -9691,7 +9285,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 		Case "S-NAV 300 Navigator", "S-NAV 310 Navigator", "S-NAV Navigator", "S-NAV Navigator Ultimate"
 			;[Block]
 			Select Setting
-				Case "rough", "coarse"
+				Case "Rough", "Coarse"
 					;[Block]
 					it2 = CreateItem("Electronical components", "misc", x, y, z)
 					;[End Block]
@@ -9700,12 +9294,12 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					it2 = CreateItem("S-NAV Navigator", "nav", x, y, z)
 					it2\State = 100.0
 					;[End Block]
-				Case "fine"
+				Case "Fine"
 					;[Block]
 					it2 = CreateItem("S-NAV 310 Navigator", "nav", x, y, z)
 					it2\State = 100.0
 					;[End Block]
-				Case "very fine"
+				Case "Very Fine"
 					;[Block]
 					it2 = CreateItem("S-NAV Navigator Ultimate", "nav", x, y, z)
 					it2\State = 101.0
@@ -9716,7 +9310,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 		Case "Radio Transceiver"
 			;[Block]
 			Select Setting
-				Case "rough", "coarse"
+				Case "Rough", "Coarse"
 					;[Block]
 					it2 = CreateItem("Electronical components", "misc", x, y, z)
 					;[End Block]
@@ -9725,12 +9319,12 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					it2 = CreateItem("Radio Transceiver", "18vradio", x, y, z)
 					it2\State = 100.0
 					;[End Block]
-				Case "fine"
+				Case "Fine"
 					;[Block]
 					it2 = CreateItem("Radio Transceiver", "fineradio", x, y, z)
 					it2\State = 101.0
 					;[End Block]
-				Case "very fine"
+				Case "Very Fine"
 					;[Block]
 					it2 = CreateItem("Radio Transceiver", "veryfineradio", x, y, z)
 					it2\State = 101.0
@@ -9741,7 +9335,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 		Case "SCP-513"
 			;[Block]
 			Select Setting
-				Case "rough", "coarse"
+				Case "Rough", "Coarse"
 					;[Block]
 					PlaySound_Strict(LoadTempSound("SFX\SCP\513\914Refine.ogg"))
 					For n.NPCs = Each NPCs
@@ -9752,7 +9346,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					EntityAlpha(d\OBJ, 0.8)
 					ScaleSprite(d\OBJ, d\Size, d\Size)
 					;[End Block]
-				Case "1:1", "fine", "very fine"
+				Case "1:1", "Fine", "Very Fine"
 					;[Block]
 					it2 = CreateItem("SCP-513", "scp513", x, y, z)
 					;[End Block]
@@ -9762,7 +9356,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 		Case "Some SCP-420-J", "Cigarette"
 			;[Block]
 			Select Setting
-				Case "rough", "coarse"
+				Case "Rough", "Coarse"
 					;[Block]
 					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rand(360.0), 0.0)
 					d\Size = 0.2
@@ -9773,11 +9367,11 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					;[Block]
 					it2 = CreateItem("Cigarette", "cigarette", x + 1.5, y + 0.5, z + 1.0)
 					;[End Block]
-				Case "fine"
+				Case "Fine"
 					;[Block]
 					it2 = CreateItem("Joint", "joint", x + 1.5, y + 0.5, z + 1.0)
 					;[End Block]
-				Case "very fine"
+				Case "Very Fine"
 					;[Block]
 					it2 = CreateItem("Smelly Joint", "scp420s", x + 1.5, y + 0.5, z + 1.0)
 					;[End Block]
@@ -9787,7 +9381,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 		Case "9V Battery", "18V Battery", "Strange Battery"
 			;[Block]
 			Select Setting
-				Case "rough", "coarse"
+				Case "Rough", "Coarse"
 					;[Block]
 					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rand(360.0), 0.0)
 					d\Size = 0.2
@@ -9798,11 +9392,11 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					;[Block]
 					it2 = CreateItem("18V Battery", "18vbat", x, y, z)
 					;[End Block]
-				Case "fine"
+				Case "Fine"
 					;[Block]
 					it2 = CreateItem("Strange Battery", "killbat", x, y, z)
 					;[End Block]
-				Case "very fine"
+				Case "Very Fine"
 					;[Block]
 					it2 = CreateItem("Strange Battery", "killbat", x, y, z)
 					;[End Block]
@@ -9812,7 +9406,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 		Case "ReVision Eyedrops", "RedVision Eyedrops", "Eyedrops"
 			;[Block]
 			Select Setting
-				Case "rough", "coarse"
+				Case "Rough", "Coarse"
 					;[Block]
 					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rand(360.0), 0.0)
 					d\Size = 0.2
@@ -9823,11 +9417,11 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					;[Block]
 					it2 = CreateItem("RedVision Eyedrops", "eyedrops", x, y, z)
 					;[End Block]
-				Case "fine"
+				Case "Fine"
 					;[Block]
 					it2 = CreateItem("Eyedrops", "fineeyedrops", x, y, z)
 					;[End Block]
-				Case "very fine"
+				Case "Very Fine"
 					;[Block]
 					it2 = CreateItem("Eyedrops", "supereyedrops", x, y, z)
 					;[End Block]
@@ -9837,7 +9431,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 		Case "Hazmat Suit"
 			;[Block]
 			Select Setting
-				Case "rough", "coarse"
+				Case "Rough", "Coarse"
 					;[Block]
 					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rand(360.0), 0.0)
 					d\Size = 0.2
@@ -9848,11 +9442,11 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					;[Block]
 					it2 = CreateItem("Hazmat Suit", "hazmatsuit", x, y, z)
 					;[End Block]
-				Case "fine"
+				Case "Fine"
 					;[Block]
 					it2 = CreateItem("Hazmat Suit", "hazmatsuit2", x, y, z)
 					;[End Block]
-				Case "very fine"
+				Case "Very Fine"
 					;[Block]
 					it2 = CreateItem("Hazmat Suit", "hazmatsuit2", x, y, z)
 					;[End Block]
@@ -9865,7 +9459,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 				Case "syringe"
 					;[Block]
 					Select Setting
-						Case "rough", "coarse"
+						Case "Rough", "Coarse"
 							;[Block]
 							d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rand(360.0), 0.0)
 							d\Size = 0.07
@@ -9875,11 +9469,11 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 							;[Block]
 							it2 = CreateItem("Small First Aid Kit", "finefirstaid", x, y, z)
 							;[End Block]
-						Case "fine"
+						Case "Fine"
 							;[Block]
 							it2 = CreateItem("Syringe", "finesyringe", x, y, z)
 							;[End Block]
-						Case "very fine"
+						Case "Very Fine"
 							;[Block]
 							it2 = CreateItem("Syringe", "veryfinesyringe", x, y, z)
 							;[End Block]
@@ -9888,13 +9482,13 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 				Case "finesyringe"
 					;[Block]
 					Select Setting
-						Case "rough"
+						Case "Rough"
 							;[Block]
 							d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rand(360.0), 0.0)
 							d\Size = 0.07
 							ScaleSprite(d\OBJ, d\Size, d\Size)
 							;[End Block]
-						Case "coarse"
+						Case "Coarse"
 							;[Block]
 							it2 = CreateItem("First Aid Kit", "firstaid", x, y, z)
 							;[End Block]
@@ -9902,7 +9496,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 							;[Block]
 							it2 = CreateItem("Blue First Aid Kit", "firstaid2", x, y, z)
 							;[End Block]
-						Case "fine", "very fine"
+						Case "Fine", "Very Fine"
 							;[Block]
 							it2 = CreateItem("Syringe", "veryfinesyringe", x, y, z)
 							;[End Block]
@@ -9911,11 +9505,11 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 				Case "veryfinesyringe"
 					;[Block]
 					Select Setting
-						Case "rough", "coarse", "1:1", "fine"
+						Case "Rough", "Coarse", "1:1", "Fine"
 							;[Block]
 							it2 = CreateItem("Electronical components", "misc", x, y, z)	
 							;[End Block]
-						Case "very fine"
+						Case "Very Fine"
 							;[Block]
 							n.NPCs = CreateNPC(NPCtype008, x, y, z)
 							n\State = 2.0
@@ -9927,7 +9521,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 		Case "SCP-500-01", "Upgraded pill", "Pill"
 			;[Block]
 			Select Setting
-				Case "rough", "coarse"
+				Case "Rough", "Coarse"
 					;[Block]
 					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rand(360.0), 0.0)
 					d\Size = 0.2
@@ -9939,7 +9533,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					it2 = CreateItem("Pill", "pill", x, y, z)
 					RemoveItem(item)
 					;[End Block]
-				Case "fine"
+				Case "Fine"
 					;[Block]
 					Local NO427Spawn% = False
 					
@@ -9956,7 +9550,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					EndIf
 					RemoveItem(item)
 					;[End Block]
-				Case "very fine"
+				Case "Very Fine"
 					;[Block]
 					it2 = CreateItem("Upgraded pill", "scp500death", x, y, z)
 					RemoveItem(item)
@@ -9965,11 +9559,11 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 			;[End Block]
 		Default
 			;[Block]
-			Select item\itemtemplate\tempname
+			Select item\ItemTemplate\TempName
 				Case "cup"
 					;[Block]
 					Select Setting
-						Case "rough", "coarse"
+						Case "Rough", "Coarse"
 							;[Block]
 							d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rand(360.0), 0.0)
 							d\Size = 0.2
@@ -9978,24 +9572,24 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 							;[End Block]
 						Case "1:1"
 							;[Block]
-							it2 = CreateItem("cup", "cup", x, y, z)
+							it2 = CreateItem("Cup", "cup", x, y, z)
 							it2\Name = item\Name
 							it2\R = 255 - item\R
 							it2\G = 255 - item\G
 							it2\B = 255 - item\B
 							;[End Block]
-						Case "fine"
+						Case "Fine"
 							;[Block]
-							it2 = CreateItem("cup", "cup", x,y,z)
+							it2 = CreateItem("Cup", "cup", x, y, z)
 							it2\Name = item\Name
 							it2\State = 1.0
 							it2\R = Min(item\R * Rnd(0.9, 1.1), 255)
 							it2\G = Min(item\G * Rnd(0.9, 1.1), 255)
 							it2\B = Min(item\B * Rnd(0.9, 1.1), 255)
 							;[End Block]
-						Case "very fine"
+						Case "Very Fine"
 							;[Block]
-							it2 = CreateItem("cup", "cup", x, y, z)
+							it2 = CreateItem("Cup", "cup", x, y, z)
 							it2\Name = item\Name
 							it2\State = Max(it2\State * 2.0, 2.0)	
 							it2\R = Min(item\R * Rnd(0.5, 1.5), 255)
@@ -10011,7 +9605,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 				Case "paper"
 					;[Block]
 					Select Setting
-						Case "rough", "coarse"
+						Case "Rough", "Coarse"
 							;[Block]
 							d.Decals = CreateDecal(7, x, 8.0 * RoomScale + 0.005, z, 90.0, Rand(360.0), 0.0)
 							d\Size = 0.12
@@ -10098,7 +9692,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 									;[End Block]
 							End Select
 							;[End Block]
-						Case "fine", "very fine"
+						Case "Fine", "Very Fine"
 							;[Block]
 							it2 = CreateItem("Origami", "misc", x, y, z)
 							;[End Block]
@@ -11206,16 +10800,6 @@ Function CheckForPlayerInFacility()
 	Return(True)
 End Function
 
-Function ControlSoundVolume()
-	Local snd.Sound, i%
-	
-	For snd.Sound = Each Sound
-		For i = 0 To 31
-			ChannelVolume(snd\Channels[i], SFXVolume)
-		Next
-	Next
-End Function
-
 Function UpdateDeafPlayer()
 	If DeafTimer > 0
 		DeafTimer = DeafTimer - FPSfactor
@@ -11318,15 +10902,6 @@ Function CatchErrors(Location$)
 		
 		CloseFile(ErrF)
 	EndIf
-End Function
-
-Function PlayAnnouncement(File$) ; ~ This function streams the announcement currently playing
-	If IntercomStreamCHN <> 0 Then
-		StopStream_Strict(IntercomStreamCHN)
-		IntercomStreamCHN = 0
-	EndIf
-	
-	IntercomStreamCHN = StreamSound_Strict(File, SFXVolume, 0)
 End Function
 
 Function UpdateStreamSounds()
@@ -11502,7 +11077,7 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 			If Abs(EntityZ(Collider) - EntityZ(ElevatorOBJ, True)) =< 280.0 * RoomScale + (0.015 * FPSfactor) Then
 				If Abs(EntityY(Collider) - EntityY(ElevatorOBJ, True)) =< 280.0 * RoomScale + (0.015 * FPSfactor) Then
 					d\Locked = True
-					If EventState = 0 Then
+					If EventState = 0.0 Then
 						TeleportEntity(Curr096\Collider, EntityX(d\FrameOBJ), EntityY(d\FrameOBJ) + 1.0, EntityZ(d\FrameOBJ), Curr096\CollRadius)
 						PointEntity(Curr096\Collider, ElevatorOBJ)
 						RotateEntity(Curr096\Collider, 0.0, EntityYaw(Curr096\Collider), 0.0)
@@ -11561,5 +11136,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#FB2#12DD#1B0A
+;~B#FB1#12DC#1B09
 ;~C#Blitz3D

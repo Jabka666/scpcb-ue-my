@@ -272,8 +272,8 @@ Function InitItemTemplates()
 	CreateItemTemplate("Radio Transceiver", "veryfineradio", "GFX\items\radio.x", "GFX\items\INVradio.jpg", "GFX\items\radioHUD.png", 1.0, 1)
 	CreateItemTemplate("Radio Transceiver", "18vradio", "GFX\items\radio.x", "GFX\items\INVradio.jpg", "GFX\items\radioHUD.png", 1.02, 1)
 	
-	CreateItemTemplate("Severed Hand", "hand", "GFX\items\severedhand.b3d", "GFX\items\INVhand.jpg", "", 0.025, 2)
-	CreateItemTemplate("Black Severed Hand", "hand2", "GFX\items\severedhand.b3d", "GFX\items\INVhand2.jpg", "", 0.025, 2, "GFX\items\shand2.png")
+	CreateItemTemplate("Severed Hand", "hand", "GFX\items\severedhand.b3d", "GFX\items\INVhand.jpg", "", 0.03, 2)
+	CreateItemTemplate("Black Severed Hand", "hand2", "GFX\items\severedhand.b3d", "GFX\items\INVhand2.jpg", "", 0.03, 2, "GFX\items\shand2.png")
 	
 	CreateItemTemplate("S-NAV Navigator", "nav", "GFX\items\navigator.x", "GFX\items\INVnavigator.jpg", "GFX\items\navigator.png", 0.0008, 1)
 	CreateItemTemplate("S-NAV Navigator Ultimate", "nav", "GFX\items\navigator.x", "GFX\items\INVnavigator.jpg", "GFX\items\navigator.png", 0.0008, 1)
@@ -326,7 +326,7 @@ End Function
 Type Items
 	Field Name$
 	Field Collider%, Model%
-	Field itemtemplate.ItemTemplates
+	Field ItemTemplate.ItemTemplates
 	Field DropSpeed#
 	Field R%, G%, B%, A#
 	Field Level%
@@ -354,7 +354,7 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 	For it.ItemTemplates = Each ItemTemplates
 		If Lower(it\Name) = Name Then
 			If Lower(it\TempName) = TempName Then
-				i\itemtemplate = it
+				i\ItemTemplate = it
 				i\Collider = CreatePivot()			
 				EntityRadius(i\Collider, 0.01)
 				EntityPickMode(i\Collider, 1, False)
@@ -368,7 +368,7 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 	
 	i\WontColl = False
 	
-	If i\itemtemplate = Null Then RuntimeError("Item template not found (" + Name + ", " + TempName + ")")
+	If i\ItemTemplate = Null Then RuntimeError("Item template not found (" + Name + ", " + TempName + ")")
 	
 	ResetEntity(i\Collider)		
 	PositionEntity(i\Collider, x, y, z, True)
@@ -384,7 +384,7 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 		
 		Local Liquid% = CopyEntity(LiquidOBJ)
 		
-		ScaleEntity(Liquid, i\itemtemplate\Scale, i\itemtemplate\Scale, i\itemtemplate\Scale, True)
+		ScaleEntity(Liquid, i\ItemTemplate\Scale, i\ItemTemplate\Scale, i\ItemTemplate\Scale, True)
 		PositionEntity(Liquid, EntityX(i\Collider, True), EntityY(i\Collider, True), EntityZ(i\Collider, True))
 		EntityParent(Liquid, i\Model)
 		EntityColor(Liquid, R, G, B)
@@ -521,7 +521,7 @@ Function UpdateItems()
 				Else
 					If ShouldEntitiesFall
 						Pick = LinePick(EntityX(i\Collider), EntityY(i\Collider), EntityZ(i\Collider), 0.0, -10.0, 0.0)
-						If Pick
+						If Pick Then
 							i\DropSpeed = i\DropSpeed - 0.0004 * FPSfactor
 							TranslateEntity(i\Collider, i\xSpeed * FPSfactor, i\DropSpeed * FPSfactor, i\zSpeed * FPSfactor)
 							If i\WontColl Then ResetEntity(i\Collider)
@@ -547,18 +547,16 @@ Function UpdateItems()
 							ed# = (xTemp * xTemp + zTemp * zTemp)
 							If ed < 0.07 And Abs(yTemp) < 0.25 Then
 								; ~ Items are too close together, push away
-								If PlayerRoom\RoomTemplate\Name	<> "room2storage" Then
-									xTemp = xTemp * (0.07 - ed)
-									zTemp = zTemp * (0.07 - ed)
+								xTemp = xTemp * (0.07 - ed)
+								zTemp = zTemp * (0.07 - ed)
 									
-									While Abs(xTemp) + Abs(zTemp) < 0.001
-										xTemp = xTemp + Rnd(-0.002, 0.002)
-										zTemp = zTemp + Rnd(-0.002, 0.002)
-									Wend
+								While Abs(xTemp) + Abs(zTemp) < 0.001
+									xTemp = xTemp + Rnd(-0.002, 0.002)
+									zTemp = zTemp + Rnd(-0.002, 0.002)
+								Wend
 									
-									TranslateEntity(i2\Collider, xTemp, 0.0, zTemp)
-									TranslateEntity(i\Collider, -xTemp, 0.0, -zTemp)
-								EndIf
+								TranslateEntity(i2\Collider, xTemp, 0.0, zTemp)
+								TranslateEntity(i\Collider, -xTemp, 0.0, -zTemp)
 							EndIf
 						EndIf
 					Next

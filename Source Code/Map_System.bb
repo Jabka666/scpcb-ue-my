@@ -2025,8 +2025,8 @@ Function FillRoom(r.Rooms)
 					; ~ Elevator
 					r\RoomDoors[1] = CreateDoor(r\Zone, r\x + 1544.0 * RoomScale, r\y, r\z - 64.0 * RoomScale, 90.0, r, False, 3)
 					r\RoomDoors[1]\AutoClose = False : r\RoomDoors[1]\Open = False
-					PositionEntity(r\RoomDoors[1]\Buttons[0], r\x + 1584.0 * RoomScale, EntityY(r\RoomDoors[1]\Buttons[0], True), r\z + 80.0 * RoomScale, True)
-					PositionEntity(r\RoomDoors[1]\Buttons[1], r\x + 1456.0 * RoomScale, EntityY(r\RoomDoors[1]\Buttons[1], True), r\z - 208.0 * RoomScale, True)
+					PositionEntity(r\RoomDoors[1]\Buttons[0], r\x + 1578.0 * RoomScale, EntityY(r\RoomDoors[1]\Buttons[0], True), r\z + 80.0 * RoomScale, True)
+					PositionEntity(r\RoomDoors[1]\Buttons[1], r\x + 1462.0 * RoomScale, EntityY(r\RoomDoors[1]\Buttons[1], True), r\z - 208.0 * RoomScale, True)
 					
 					r2\Objects[1] = CreatePivot()
 					PositionEntity(r2\Objects[1], r\x + 1848.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 64.0 * RoomScale)
@@ -2087,8 +2087,8 @@ Function FillRoom(r.Rooms)
 		Case "gateaentrance"
 			;[Block]
 			; ~ Elevator
-			r\RoomDoors[0] = CreateDoor(r\Zone, r\x + 744.0 * RoomScale, r\y, r\z + 512.0 * RoomScale, 90.0, r, True, 3)
-			r\RoomDoors[0]\AutoClose = False : r\RoomDoors[0]\Open = True : r\RoomDoors[0]\Locked079 = True
+			r\RoomDoors[0] = CreateDoor(r\Zone, r\x + 736.0 * RoomScale, r\y, r\z + 512.0 * RoomScale, 90.0, r, True, 3)
+			r\RoomDoors[0]\AutoClose = False : r\RoomDoors[0]\Open = True : r\RoomDoors[0]\Locked = 2
 			PositionEntity(r\RoomDoors[0]\Buttons[1], EntityX(r\RoomDoors[0]\Buttons[1], True) - 0.061, EntityY(r\RoomDoors[0]\Buttons[1], True), EntityZ(r\RoomDoors[0]\Buttons[1], True), True)
 			PositionEntity(r\RoomDoors[0]\Buttons[0], EntityX(r\RoomDoors[0]\Buttons[0], True) + 0.061, EntityY(r\RoomDoors[0]\Buttons[0], True), EntityZ(r\RoomDoors[0]\Buttons[0], True), True)
 			
@@ -2099,6 +2099,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\RoomDoors[1]\Buttons[0], r\x - 522.0 * RoomScale, EntityY(r\RoomDoors[1]\Buttons[0], True), EntityZ(r\RoomDoors[1]\Buttons[0], True), True)
 			RotateEntity(r\RoomDoors[1]\Buttons[0], 0.0, r\Angle - 225, 0.0, True)
 			
+			; ~ Elevator's pivot
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x + 1048.0 * RoomScale, r\y, r\z + 512.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
@@ -2106,12 +2107,12 @@ Function FillRoom(r.Rooms)
 		Case "exit1"
 			;[Block]
 			; ~ Elevators
-			r\RoomDoors[0] = CreateDoor(r\Zone, r\x + 720.0 * RoomScale, r\y, r\z + 1432.0 * RoomScale, 0.0, r, True, 3)
+			r\RoomDoors[0] = CreateDoor(r\Zone, r\x + 720.0 * RoomScale, r\y, r\z + 1432.0 * RoomScale, 180.0, r, True, 3)
 			r\RoomDoors[0]\AutoClose = False : r\RoomDoors[0]\Open = True
 			PositionEntity(r\RoomDoors[0]\Buttons[0], EntityX(r\RoomDoors[0]\Buttons[0], True), EntityY(r\RoomDoors[0]\Buttons[0], True), EntityZ(r\RoomDoors[0]\Buttons[0], True) - 0.031, True)
 			PositionEntity(r\RoomDoors[0]\Buttons[1], EntityX(r\RoomDoors[0]\Buttons[1], True), EntityY(r\RoomDoors[0]\Buttons[1], True), EntityZ(r\RoomDoors[0]\Buttons[1], True) + 0.031, True)	
 			
-			r\RoomDoors[1] = CreateDoor(r\Zone, r\x - 5424.0 * RoomScale, r\y + 10784.0 * RoomScale, r\z - 1380.0 * RoomScale, 0.0, r, False, 3)
+			r\RoomDoors[1] = CreateDoor(r\Zone, r\x - 5424.0 * RoomScale, r\y + 10784.0 * RoomScale, r\z - 1380.0 * RoomScale, 180.0, r, False, 3)
 			r\RoomDoors[1]\AutoClose = False : r\RoomDoors[1]\Open = False
 			PositionEntity(r\RoomDoors[1]\Buttons[0], EntityX(r\RoomDoors[1]\Buttons[0], True), EntityY(r\RoomDoors[1]\Buttons[0], True), EntityZ(r\RoomDoors[1]\Buttons[0], True) - 0.031, True)
 			PositionEntity(r\RoomDoors[1]\Buttons[1], EntityX(r\RoomDoors[1]\Buttons[1], True), EntityY(r\RoomDoors[1]\Buttons[1], True), EntityZ(r\RoomDoors[1]\Buttons[1], True) + 0.031, True)
@@ -2123,8 +2124,8 @@ Function FillRoom(r.Rooms)
 			r\RoomDoors[3] = CreateDoor(r\Zone, r\x + 4352.0 * RoomScale, r\y + 10784.0 * RoomScale, r\z + 500.0 * RoomScale, 0.0, r)
 			r\RoomDoors[3]\AutoClose = False : r\RoomDoors[3]\Open = False	
 			
-			r\RoomDoors[4] = CreateDoor(r\Zone, r\x, 0, r\z - 320.0 * RoomScale, 0.0, r, False, True, 5, "", True)
-			r\RoomDoors[4]\AutoClose = False : r\RoomDoors[4]\Open = False : r\RoomDoors[4]\Locked079 = True
+			r\RoomDoors[4] = CreateDoor(r\Zone, r\x, r\y, r\z - 320.0 * RoomScale, 0.0, r, False, True, 5)
+			r\RoomDoors[4]\AutoClose = False : r\RoomDoors[4]\Open = False : r\RoomDoors[4]\Locked = 2
 			PositionEntity(r\RoomDoors[4]\Buttons[1], r\x + 358.0 * RoomScale, EntityY(r\RoomDoors[4]\Buttons[1], True), r\z - 528.0 * RoomScale, True)
 			RotateEntity(r\RoomDoors[4]\Buttons[1], 0.0, r\Angle - 90, 0.0, True)
 			PositionEntity(r\RoomDoors[4]\Buttons[0], EntityX(r\RoomDoors[4]\Buttons[0], True), EntityY(r\RoomDoors[4]\Buttons[0], True), r\z - 198.0 * RoomScale, True)
@@ -2156,7 +2157,7 @@ Function FillRoom(r.Rooms)
 			r\Objects[7] = CreatePivot()
 			PositionEntity(r\Objects[7], r\x + 5192.0 * RoomScale, r\y + 12192.0 * RoomScale, r\z - 4352.0 * RoomScale)
 			
-			; ~ Elevator pivots
+			; ~ Elevators' pivots
 			r\Objects[8] = CreatePivot()
 			PositionEntity(r\Objects[8], r\x + 720.0 * RoomScale, r\y, r\z + 1744.0 * RoomScale)
 			
@@ -2229,7 +2230,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(d\Buttons[0], r\x - 240.0 * RoomScale, r\y - 250.0 * RoomScale, r\z + 1366.0 * RoomScale, True)	
 			
 			r\RoomDoors[0] = CreateDoor(r\Zone, r\x + 1456.0 * RoomScale, r\y - 448.0 * RoomScale, r\z + 976.0 * RoomScale, 0.0, r, False, True, 3)
-			r\RoomDoors[0]\AutoClose = False : r\RoomDoors[0]\Open = False : r\RoomDoors[0]\Locked079 = True
+			r\RoomDoors[0]\AutoClose = False : r\RoomDoors[0]\Open = False : r\RoomDoors[0]\Locked = 2
 			PositionEntity(r\RoomDoors[0]\Buttons[1], r\x + 1760.0 * RoomScale, r\y - 250.0 * RoomScale, r\z + 1236.0 * RoomScale, True)
 			TurnEntity(r\RoomDoors[0]\Buttons[0], 0.0, -90.0 - 90.0, 0.0, True)
 			PositionEntity(r\RoomDoors[0]\Buttons[0], r\x + 1760.0 * RoomScale, r\y - 240.0 * RoomScale, r\z + 740.0 * RoomScale, True)
@@ -2272,6 +2273,10 @@ Function FillRoom(r.Rooms)
 			r\RoomDoors[1] = CreateDoor(r\Zone, r\x - 352.0 * RoomScale, r\y, r\z - 128.0 * RoomScale, 0.0, r, False, False, 3)
 			r\RoomDoors[1]\AutoClose = False : r\RoomDoors[1]\Timer = 70 * 5
 			
+			For i = 0 To 1
+				FreeEntity(r\RoomDoors[1]\Buttons[i]) : r\RoomDoors[1]\Buttons[i] = 0
+			Next
+			
 			r\RoomDoors[0]\LinkedDoor = r\RoomDoors[1]
 			r\RoomDoors[1]\LinkedDoor = r\RoomDoors[0]
 			
@@ -2310,6 +2315,10 @@ Function FillRoom(r.Rooms)
 			
 			r\RoomDoors[1] = CreateDoor(r\Zone, r\x + 352.0 * RoomScale, r\y, r\z + 128.0 * RoomScale, 0.0, r, False, False, 5)
 			r\RoomDoors[1]\AutoClose = False
+			
+			For i = 0 To 1
+				FreeEntity(r\RoomDoors[1]\Buttons[i]) : r\RoomDoors[1]\Buttons[i] = 0
+			Next
 			
 			r\RoomDoors[0]\LinkedDoor = r\RoomDoors[1]
 			r\RoomDoors[1]\LinkedDoor = r\RoomDoors[0]
@@ -2666,7 +2675,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\RoomDoors[1]\Buttons[0], EntityX(r\RoomDoors[1]\Buttons[0], True) - 0.031, EntityY(r\RoomDoors[1]\Buttons[0], True), EntityZ(r\RoomDoors[1]\Buttons[0], True), True)
 			PositionEntity(r\RoomDoors[1]\Buttons[1], EntityX(r\RoomDoors[1]\Buttons[1], True) + 0.031, EntityY(r\RoomDoors[1]\Buttons[1], True), EntityZ(r\RoomDoors[1]\Buttons[1], True), True)
 			
-			; ~ Elevator pivots
+			; ~ Elevators' pivots
 			r\Objects[4] = CreatePivot()
 			PositionEntity(r\Objects[4], r\x + 1496.0 * RoomScale, r\y + 240.0 * RoomScale, r\z)
 			
@@ -3024,7 +3033,7 @@ Function FillRoom(r.Rooms)
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
 			Next
 			
-			; ~ Elevator pivots
+			; ~ Elevators' pivots
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x, r\y + 240.0 * RoomScale, r\z + 752.0 * RoomScale)
 			
@@ -3201,7 +3210,7 @@ Function FillRoom(r.Rooms)
 			d\Locked = True : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			
-			; ~ Elevator pivots
+			; ~ Elevators' pivots
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x + 640.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 656.0 * RoomScale)
 			
@@ -3466,7 +3475,10 @@ Function FillRoom(r.Rooms)
 			r\Objects[9] = CreatePivot()
 			PositionEntity(r\Objects[9], r\x - 848.0 * RoomScale, r\y + 0.5, r\z + 576.0 * RoomScale)
 			
-			For i = 6 To 9
+			r\Objects[10] = CreatePivot()
+			PositionEntity(r\Objects[10], r\x - 700.0 * RoomScale, r\y + 0.5, r\z)
+			
+			For i = 6 To 10
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			;[End Block]
@@ -8413,5 +8425,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#119F
+;~B#11AB
 ;~C#Blitz3D
