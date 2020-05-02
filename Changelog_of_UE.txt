@@ -99,6 +99,7 @@ Bug Fixes:
 - Fixed 106sinkhole event when player using NVG.
 - Fixed items not pushing each other away in SCP-970's room.
 - Fixed unnecessary door opening sound in room2sl event.
+- Fixed SCP-1048-A's double texture.
 
 - Again fixed some buttons' positions.
 

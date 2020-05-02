@@ -1951,7 +1951,7 @@ Function UpdateEvents()
 					If e\EventState3 = 0.0 Then
 						If Rand(2) = 1 Then
 							GiveAchievement(Achv1048)
-							e\room\Objects[1] = LoadAnimMesh_Strict("GFX\npcs\scp-1048.b3d")
+							e\room\Objects[1] = LoadAnimMesh_Strict("GFX\npcs\scp_1048.b3d")
 							ScaleEntity(e\room\Objects[1], 0.05, 0.05, 0.05)
 							PositionEntity(e\room\Objects[1], EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
 							SetAnimTime(e\room\Objects[1], 267.0)	
@@ -4468,11 +4468,11 @@ Function UpdateEvents()
 				;[Block]
 				If PlayerRoom = e\room Then
 					If e\room\Objects[2] = 0 Then
-						e\room\Objects[2] =	LoadAnimMesh_Strict("GFX\npcs\scp-1048pp.b3d")
+						e\room\Objects[2] =	LoadAnimMesh_Strict("GFX\npcs\scp_1048_pen.b3d")
 						ScaleEntity(e\room\Objects[2], 0.05, 0.05, 0.05)
 						SetAnimTime(e\room\Objects[2], 414.0)
 						
-						Local ImgPath$ = "GFX\items\1048\1048_" + Rand(1, 20) + ".jpg"
+						Local ImgPath$ = ItemsPath + "1048\1048_" + Rand(1, 26) + ".png"
 						Local itt.ItemTemplates
 						
 						For itt.ItemTemplates = Each ItemTemplates
@@ -4495,7 +4495,7 @@ Function UpdateEvents()
 							t% = GetBrushTexture(b, 0)
 							TexName$ = StripPath(TextureName(t))
 							
-							If Lower(TexName) = "1048_1.jpg" Then
+							If Lower(TexName) = "1048_1.png" Then
 								PaintSurface(SF, Brush)
 							EndIf
 							FreeBrush(b)
@@ -6939,7 +6939,7 @@ Function UpdateEvents()
 				If e <> Null Then
 					If PlayerRoom = e\room Then
 						If e\EventState = 0 Then
-							e\room\Objects[7]=LoadAnimMesh_Strict("GFX\npcs\scp-1048.b3d")
+							e\room\Objects[7]=LoadAnimMesh_Strict("GFX\npcs\scp_1048.b3d")
 							ScaleEntity e\room\Objects[7], 0.05,0.05,0.05
 							
 							TFormPoint EntityX(Collider),EntityY(Collider),EntityZ(Collider),0,e\room\obj
@@ -7663,7 +7663,7 @@ Function UpdateEvents()
 								EndIf
 							Next
 							If e\room\Objects[0] = 0 Then
-								e\room\Objects[0] =	LoadAnimMesh_Strict("GFX\npcs\scp-1048a.b3d")
+								e\room\Objects[0] =	LoadAnimMesh_Strict("GFX\npcs\scp_1048_a.b3d")
 							EndIf
 							ScaleEntity(e\room\Objects[0], 0.05, 0.05, 0.05)
 							SetAnimTime(e\room\Objects[0], 2)
@@ -10097,7 +10097,7 @@ Function IsItemGoodFor1162(itt.ItemTemplates)
 		Case "drawing"
 			;[Block]
 			If itt\Img <> 0 Then FreeImage(itt\Img)	
-			itt\Img = LoadImage_Strict("GFX\items\1048\1048_" + Rand(1, 20) + ".jpg") ; ~ Gives a random drawing.
+			itt\Img = LoadImage_Strict(ItemsPath + "1048\1048_" + Rand(1, 26) + ".png") ; ~ Gives a random drawing.
 			Return(True)
 			;[End Block]
 		Default
