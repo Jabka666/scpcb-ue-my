@@ -100,6 +100,7 @@ Bug Fixes:
 - Fixed items not pushing each other away in SCP-970's room.
 - Fixed unnecessary door opening sound in room2sl event.
 - Fixed SCP-1048-A's double texture.
+- Fixed breath sound in NoClip mode.
 
 - Again fixed some buttons' positions.
 
