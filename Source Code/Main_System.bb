@@ -1863,7 +1863,7 @@ Music(6) = "GateB2"
 Music(7) = "Room3Storage"
 Music(8) = "Room049"
 Music(9) = "8601"
-Music(10) = "106"
+Music(10) = "106Chase"
 Music(11) = "Menu"
 Music(12) = "8601Cancer"
 Music(13) = "Intro"
@@ -1875,7 +1875,7 @@ Music(18) = "1499"
 Music(19) = "1499Danger"
 Music(20) = "049Chase"
 Music(21) = "..\Ending\MenuBreath"
-Music(22) = "914"
+Music(22) = "Room914"
 Music(23) = "Ending"
 Music(24) = "Credits"
 Music(25) = "SaveMeFrom"
@@ -6463,7 +6463,7 @@ Function DrawGUI()
 							AAText(x, y + Height / 2 - 60, "LOCATION UNKNOWN", True)						
 						EndIf
 					Else
-						If SelectedItem\State > 0.0 And (Rnd(CoffinDistance + 15.0) > 1.0 Or PlayerRoom\RoomTemplate\Name <> "coffin") Then
+						If SelectedItem\State > 0.0 And (Rnd(CoffinDistance + 15.0) > 1.0 Or PlayerRoom\RoomTemplate\Name <> "room895") Then
 							PlayerX = Floor((EntityX(PlayerRoom\OBJ) + 8.0) / 8.0 + 0.5)
 							PlayerZ = Floor((EntityZ(PlayerRoom\OBJ) + 8.0) / 8.0 + 0.5)
 							
@@ -6590,7 +6590,7 @@ Function DrawGUI()
 										Exit
 									EndIf
 								Next
-								If PlayerRoom\RoomTemplate\Name = "coffin" Then
+								If PlayerRoom\RoomTemplate\Name = "room895" Then
 									If CoffinDistance < 8.0 Then
 										Dist = Rnd(4.0, 8.0)
 										Color(100, 0, 0)

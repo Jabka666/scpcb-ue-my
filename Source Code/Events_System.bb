@@ -148,9 +148,9 @@ Function InitEvents()
 	CreateEvent("room2nuke", "room2nuke", 0, 0)
 	
 	If Rand(5) < 5 Then 
-		CreateEvent("coffin106", "coffin", 0, 0)
+		CreateEvent("room895_106", "room895", 0, 0)
 	Else
-		CreateEvent("coffin", "coffin", 0, 0)
+		CreateEvent("room895", "room895", 0, 0)
 	EndIf 
 	
 	CreateEvent("checkpoint", "checkpoint1", 0, 1.0)
@@ -180,9 +180,9 @@ Function InitEvents()
 	
 	CreateEvent("room106", "room106", 0, 0.0)	
 	
-	CreateEvent("pj", "roompj", 0, 0.0)
+	CreateEvent("room372", "room372", 0, 0.0)
 	
-	CreateEvent("914", "914", 0, 0.0)
+	CreateEvent("room914", "room914", 0, 0.0)
 	
 	CreateEvent("buttghost", "room2toilets", 0, 0.0)
 	CreateEvent("toiletguard", "room2toilets", 1, 0.0)
@@ -2004,25 +2004,23 @@ Function UpdateEvents()
 						EndIf
 					Next
 				Else
-					If e\room\RoomTemplate\Name = "checkpoint1" Or e\room\RoomTemplate\Name = "room4info" Then
-						For e2.Events = Each Events
-							If e2\EventName = "room2sl"
-								If e2\EventState3 = 0.0
-									If e\room\Dist < 12.0
-										TurnCheckpointMonitorsOff(0)
-										e\room\RoomDoors[0]\Locked = False
-										e\room\RoomDoors[1]\Locked = False
-									EndIf
-								Else
-									If e\room\Dist < 12.0
-										UpdateCheckpointMonitors(0)
-										e\room\RoomDoors[0]\Locked = True
-										e\room\RoomDoors[1]\Locked = True
-									EndIf
+					For e2.Events = Each Events
+						If e2\EventName = "room2sl"
+							If e2\EventState3 = 0.0
+								If e\room\Dist < 12.0
+									TurnCheckpointMonitorsOff(0)
+									e\room\RoomDoors[0]\Locked = False
+									e\room\RoomDoors[1]\Locked = False
+								EndIf
+							Else
+								If e\room\Dist < 12.0
+									UpdateCheckpointMonitors(0)
+									e\room\RoomDoors[0]\Locked = True
+									e\room\RoomDoors[1]\Locked = True
 								EndIf
 							EndIf
-						Next
-					EndIf
+						EndIf
+					Next
 				EndIf
 				
 				If e\room\RoomDoors[0]\Open <> e\EventState Then
@@ -2039,7 +2037,7 @@ Function UpdateEvents()
 					UpdateSoundOrigin(e\SoundCHN2, Camera, e\room\RoomDoors[1]\OBJ)
 				EndIf
 				;[End Block]
-			Case "coffin", "coffin106"
+			Case "room895", "room895_106"
 				;[Block]
 				If e\EventState < MilliSecs2() Then
 					; ~ SCP-079 starts broadcasting 895 camera feed on monitors after leaving the first zone
@@ -2063,7 +2061,7 @@ Function UpdateEvents()
 					CoffinDistance = EntityDistance(Collider, e\room\Objects[1])
 					If CoffinDistance < 1.5 Then 
 						GiveAchievement(Achv895)
-						If (Not Contained106) And e\EventName = "coffin106" And e\EventState2 = 0.0 Then
+						If (Not Contained106) And e\EventName = "room895_106" And e\EventState2 = 0.0 Then
 							de.Decals = CreateDecal(0, EntityX(e\room\Objects[1], True), -1531.0 * RoomScale, EntityZ(e\room\Objects[1], True), 90.0, Rand(360.0), 0.0)
 							de\Size = 0.05 : de\SizeChange = 0.001 : UpdateDecals()
 							EntityAlpha(de\OBJ, 0.8)
@@ -2419,7 +2417,7 @@ Function UpdateEvents()
 					RemoveEvent(e)
 				End If
 				;[End Block]
-			Case "pj"
+			Case "room372"
 				;[Block]
 				If PlayerRoom = e\room Then
 					If e\EventState = 0.0 Then
@@ -7435,7 +7433,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "914"
+			Case "room914"
 				;[Block]
 				If PlayerRoom = e\room Then
 					If e\room\RoomDoors[2]\Open
@@ -10121,5 +10119,5 @@ Function IsItemGoodFor1162(itt.ItemTemplates)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#120D#1E40
+;~B#120B#1E3E
 ;~C#Blitz3D

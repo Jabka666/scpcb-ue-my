@@ -178,15 +178,15 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 					Select Lower(r\RoomTemplate\Name)
 						Case "room106"
 							MTFrooms[0]=r
-						Case "roompj"
+						Case "room372"
 							MTFrooms[1]=r	
 						Case "room079"
 							MTFrooms[2]=r	
 						Case "room2poffices"
 							MTFrooms[3]=r	
-						Case "914"
+						Case "room914"
 							MTFrooms[4]=r	
-						Case "coffin"
+						Case "room895"
 							MTFrooms[5]=r	
 						Case "start"
 							MTFrooms[6]=r
