@@ -2276,7 +2276,7 @@ Function CreateDoor.Doors(LVL, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, B
 			EntityAlpha(d\DoorHitOBJ, 0.0)
 			EntityFX(d\DoorHitOBJ, 1)
 			EntityType(d\DoorHitOBJ, HIT_MAP)
-			EntityColor(d\DoorHitOBJ, 255, 0, 0)
+			EntityColor(d\DoorHitOBJ, 255.0, 0.0, 0.0)
 			HideEntity(d\DoorHitOBJ)
 		EndIf
 	EndIf
@@ -2328,7 +2328,7 @@ Function UpdateDoors()
 	ClosestDoor = Null
 	
 	For d.Doors = Each Doors
-		If d\Dist < HideDistance * 2 Or d\IsElevatorDoor > 0 Then ; ~ Make elevator doors update everytime because if not, this can cause a bug where the elevators suddenly won't work, most noticeable in room2tunnel -- ENDSHN
+		If d\Dist < HideDistance * 2.0 Or d\IsElevatorDoor > 0 Then ; ~ Make elevator doors update everytime because if not, this can cause a bug where the elevators suddenly won't work, most noticeable in room2tunnel -- ENDSHN
 			If (d\OpenState >= 180.0 Or d\OpenState =< 0.0) And GrabbedEntity = 0 Then
 				For i = 0 To 1
 					If d\Buttons[i] <> 0 Then
@@ -3402,7 +3402,7 @@ Function Kill()
 	If KillTimer >= 0.0 Then
 		KillAnim = Rand(0, 1)
 		PlaySound_Strict(DamageSFX(0))
-		If SelectedDifficulty\permaDeath Then
+		If SelectedDifficulty\PermaDeath Then
 			DeleteFile(CurrentDir() + SavePath + CurrSave + "\Save.txt") 
 			DeleteDir(SavePath + CurrSave) 
 			LoadSaveGames()
@@ -3428,7 +3428,7 @@ Function DrawEnding()
 	
 	GiveAchievement(Achv055)
 	If (Not UsedConsole) Then GiveAchievement(AchvConsole)
-	If SelectedDifficulty\name = "Keter" Then GiveAchievement(AchvKeter)
+	If SelectedDifficulty\Name = "Keter" Then GiveAchievement(AchvKeter)
 	
 	Local x%, y%, Width%, Height%, i%
 	Local itt.ItemTemplates, r.Rooms

@@ -36,7 +36,6 @@ v5.6
 - Changed SCP-1033-RU's texture.
 - Changed SCP-109's mechanics.
 - Changed music in SCP-106's containment area.
-- Changed scale of the severed hands.
 - Changed helmet's texture for item and NPCs (guards, zombies and MTFs).
 
 - Removed loading screens' scaling.
@@ -82,6 +81,7 @@ Bug Fixes:
 - Fixed SCP-457's containment chamber doors.
 - Fixed flying monitors after endings.
 - Fixed Class Ds' rotation in the intro scene.
+- Fixed severed hands' scale.
 ~~~~~~
 - Fixed appearing of the gas from SCP-035's chamber in Maintenance Tunnels.
 - Fixed sounds for big doors, locked by SCP-079.
