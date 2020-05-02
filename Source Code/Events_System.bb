@@ -1432,6 +1432,7 @@ Function UpdateEvents()
 								RotateEntity(e\room\NPC[5]\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
 								e\room\NPC[5]\State = 7.0
 								e\room\NPC[5]\Sound2 = LoadSound_Strict("SFX\Room\Intro\Guard\PlayerEscape.ogg")
+								e\room\NPC[5]\UseHeadPhones = True
 								
 								e\room\NPC[6] = CreateNPC(NPCtypeD, e\room\x - 3712.0 * RoomScale, -0.3, e\room\z - 2208.0 * RoomScale)
 								ChangeNPCTextureID(e\room\NPC[6], 3)
@@ -5761,14 +5762,14 @@ Function UpdateEvents()
 										ShouldPlay = 0
 										
 										If e\room\NPC[0] = Null Then
-											If e\room\NPC[0] = Null Then e\room\NPC[0] = CreateNPC(NPCtypeTentacle, 0.0, 0.0, 0.0)
+											If e\room\NPC[0] = Null Then e\room\NPC[0] = CreateNPC(NPCtype035_Tentacle, 0.0, 0.0, 0.0)
 										EndIf
 										
 										PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[4], True), 0.0, EntityZ(e\room\Objects[4], True))
 										
 										If e\room\NPC[0]\State > 0.0 Then 
 											If e\room\NPC[1] = Null Then
-												If e\room\NPC[1] = Null Then e\room\NPC[1] = CreateNPC(NPCtypeTentacle, 0.0, 0.0, 0.0)
+												If e\room\NPC[1] = Null Then e\room\NPC[1] = CreateNPC(NPCtype035_Tentacle, 0.0, 0.0, 0.0)
 											EndIf
 										EndIf
 										
@@ -6565,9 +6566,11 @@ Function UpdateEvents()
 				;[End block]
 			Case "room860"
 				;[Block]
-				; ~ e\EventState = is the player in the forest
-				; ~ e\EventState2 = which side of the door did the player enter from
-				; ~ e\EventState3 = monster spawn timer
+				; ~ e\EventState = Is the player in the forest
+				
+				; ~ e\EventState2 = Which side of the door did the player enter from
+				
+				; ~ e\EventState3 = Monster spawn timer
 				
 				Local fr.Forest = e\room\fr
 				
@@ -8743,7 +8746,7 @@ Function UpdateEvents()
 						EndIf
 						If e\room\NPC[1] = Null
 							If EntityDistance(e\room\NPC[0]\Collider, Collider) < 2.5
-								e\room\NPC[1] = CreateNPC(NPCtypeTentacle, EntityX(e\room\NPC[0]\Collider), 0.0, EntityZ(e\room\NPC[0]\Collider))
+								e\room\NPC[1] = CreateNPC(NPCtype035_Tentacle, EntityX(e\room\NPC[0]\Collider), 0.0, EntityZ(e\room\NPC[0]\Collider))
 								RotateEntity(e\room\NPC[1]\Collider, 0.0, e\room\Angle, 0.0)
 								MoveEntity(e\room\NPC[1]\Collider, 0.0, 0.0, 0.6)
 							EndIf
@@ -10118,6 +10121,64 @@ Function IsItemGoodFor1162(itt.ItemTemplates)
 	End Select
 End Function
 
+Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
+	Local PrevEventState# = EventState
+	
+	If EventState < 0.0 Then
+		EventState = 0.0
+		PrevEventState = 0.0
+	EndIf
+	
+	If d\OpenState = 0.0 And d\Open = False Then
+		If Abs(EntityX(Collider) - EntityX(ElevatorOBJ, True)) =< 280.0 * RoomScale + (0.015 * FPSfactor) Then
+			If Abs(EntityZ(Collider) - EntityZ(ElevatorOBJ, True)) =< 280.0 * RoomScale + (0.015 * FPSfactor) Then
+				If Abs(EntityY(Collider) - EntityY(ElevatorOBJ, True)) =< 280.0 * RoomScale + (0.015 * FPSfactor) Then
+					d\Locked = True
+					If EventState = 0.0 Then
+						TeleportEntity(Curr096\Collider, EntityX(d\FrameOBJ), EntityY(d\FrameOBJ) + 1.0, EntityZ(d\FrameOBJ), Curr096\CollRadius)
+						PointEntity(Curr096\Collider, ElevatorOBJ)
+						RotateEntity(Curr096\Collider, 0.0, EntityYaw(Curr096\Collider), 0.0)
+						MoveEntity(Curr096\Collider, 0.0, 0.0, -0.5)
+						ResetEntity(Curr096\Collider)
+						Curr096\State = 6.0
+						SetNPCFrame(Curr096, 0.0)
+						e\Sound = LoadSound_Strict("SFX\SCP\096\ElevatorSlam.ogg")
+						EventState = EventState + FPSfactor * 1.4
+					EndIf
+				EndIf
+			EndIf
+		EndIf
+	EndIf
+	
+	If EventState > 0.0 Then
+		If PrevEventState = 0.0 Then
+			e\SoundCHN = PlaySound_Strict(e\Sound)
+		EndIf
+		
+		If EventState > 70.0 * 1.9 And EventState < 70.0 * 2 + FPSfactor
+			CameraShake = 7.0
+		ElseIf EventState > 70 * 4.2 And EventState < 70.0 * 4.25 + FPSfactor
+			CameraShake = 1.0
+		ElseIf EventState > 70 * 5.9 And EventState < 70.0 * 5.95 + FPSfactor
+			CameraShake = 1.0
+		ElseIf EventState > 70 * 7.25 And EventState < 70.0 * 7.3 + FPSfactor
+			CameraShake = 1.0
+			d\FastOpen = True
+			d\Open = True
+			Curr096\State = 4.0
+			Curr096\LastSeen = 1.0
+		ElseIf EventState > 70 * 8.1 And EventState < 70.0 * 8.15 + FPSfactor
+			CameraShake = 1.0
+		EndIf
+		
+		If EventState =< 70 * 8.1 Then
+			d\OpenState = Min(d\OpenState, 20.0)
+		EndIf
+		EventState = EventState + FPSfactor * 1.4
+	EndIf
+	Return(EventState)
+End Function
+
 ;~IDEal Editor Parameters:
-;~B#120B#1E3E
+;~B#120C#1E41
 ;~C#Blitz3D

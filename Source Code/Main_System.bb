@@ -830,7 +830,7 @@ Function UpdateConsole()
 							CreateConsoleMsg("Prints player, camera, and room information.")
 							CreateConsoleMsg("******************************")
 							;[End Block]
-						Case "weed", "scp-420-j", "420j", "scp420-j", "scp-420j"
+						Case "weed", "scp-420-j", "420j", "scp420-j", "scp-420j", "420"
 							;[Block]
 							CreateConsoleMsg("HELP - weed")
 							CreateConsoleMsg("******************************")
@@ -1170,7 +1170,7 @@ Function UpdateConsole()
 						CreateConsoleMsg("WHOA SLOW DOWN")
 					EndIf
 					;[End Block]
-				Case "scp-420-j", "420", "weed", "scp420-j", "scp-420j"
+				Case "scp-420-j", "420", "weed", "scp420-j", "scp-420j", "420j"
 					;[Block]
 					For i = 1 To 20
 						If Rand(2) = 1 Then
@@ -1972,6 +1972,8 @@ Dim Scp173SFX%(3)
 
 Dim HorrorSFX%(20)
 
+Global MissSFX%
+
 DrawLoading(25, True)
 
 Dim IntroSFX%(12)
@@ -1989,7 +1991,7 @@ Global BreathCHN%
 
 Dim NeckSnapSFX%(3)
 
-Dim DamageSFX%(9)
+Dim DamageSFX%(13)
 
 Dim MTFSFX%(8)
 
@@ -7810,7 +7812,7 @@ Function LoadEntities()
 	
 	o\NPCModelID[11] = LoadAnimMesh_Strict("GFX\npcs\scp_513_1.b3d") ; ~ SCP-513-1
 	
-	o\NPCModelID[12] = LoadAnimMesh_Strict("GFX\npcs\035tentacle.b3d") ; ~ SCP-035's Tentacle
+	o\NPCModelID[12] = LoadAnimMesh_Strict("GFX\npcs\scp_035_tentacle.b3d") ; ~ SCP-035's Tentacle
 	
 	o\NPCModelID[13] = LoadAnimMesh_Strict("GFX\npcs\scp_860_2.b3d") ; ~ SCP-860-2
 	
@@ -8771,78 +8773,6 @@ Function NullGame(PlayButtonSFX% = True)
 End Function
 
 Include "Source Code\Save_System.bb"
-
-Function AnimateNPC(n.NPCs, Start#, Quit#, Speed#, Loop% = True)
-	Local NewTime#
-	
-	If Speed > 0.0 Then 
-		NewTime = Max(Min(n\Frame + Speed * FPSfactor, Quit), Start)
-		
-		If Loop And NewTime >= Quit Then
-			NewTime = Start
-		EndIf
-	Else
-		If Start < Quit Then
-			Temp% = Start
-			Start = Quit
-			Quit = Temp
-		EndIf
-		
-		If Loop Then
-			NewTime = n\Frame + Speed * FPSfactor
-			
-			If NewTime < Quit Then 
-				NewTime = Start
-			Else If NewTime > Start 
-				NewTime = Quit
-			EndIf
-		Else
-			NewTime = Max(Min(n\Frame + Speed * FPSfactor, Start), Quit)
-		EndIf
-	EndIf
-	SetNPCFrame(n, NewTime)
-End Function
-
-Function SetNPCFrame(n.NPCs, Frame#)
-	If (Abs(n\Frame - Frame) < 0.001) Then Return
-	
-	SetAnimTime(n\OBJ, Frame)
-	
-	n\Frame = Frame
-End Function
-
-Function Animate2#(Entity%, Curr#, Start%, Quit%, Speed#, Loop% = True)
-	Local NewTime#
-	
-	If Speed > 0.0 Then 
-		NewTime = Max(Min(Curr + Speed * FPSfactor, Quit), Start)
-		
-		If Loop Then
-			If NewTime >= Quit Then 
-				NewTime = Start
-			EndIf
-		EndIf
-	Else
-		If Start < Quit Then
-			Temp% = Start
-			Start = Quit
-			Quit = Temp
-		EndIf
-		
-		If Loop Then
-			NewTime = Curr + Speed * FPSfactor
-			
-			If NewTime < Quit Then NewTime = Start
-			If NewTime > Start Then NewTime = Quit
-		Else
-			NewTime = Max(Min(Curr + Speed * FPSfactor, Start), Quit)
-		EndIf
-	EndIf
-	
-	SetAnimTime(Entity, NewTime)
-	
-	Return(NewTime)
-End Function 
 
 Function Use914(item.Items, Setting$, x#, y#, z#)
 	RefinedItems = RefinedItems + 1
@@ -11031,53 +10961,6 @@ Function CatchErrors(Location$)
 	EndIf
 End Function
 
-Function UpdateStreamSounds()
-	Local e.Events
-	
-	If FPSfactor > 0 Then
-		If IntercomStreamCHN <> 0 Then
-			SetStreamVolume_Strict(IntercomStreamCHN, SFXVolume)
-		EndIf
-		For e = Each Events
-			If e\SoundCHN <> 0 Then
-				If e\SoundCHN_IsStream
-					SetStreamVolume_Strict(e\SoundCHN, SFXVolume)
-				EndIf
-			EndIf
-			
-			If e\SoundCHN2 <> 0 Then
-				If e\SoundCHN2_IsStream
-					SetStreamVolume_Strict(e\SoundCHN2, SFXVolume)
-				EndIf
-			EndIf
-		Next
-	EndIf
-	
-	If (Not PlayerInReachableRoom()) Then
-		If PlayerRoom\RoomTemplate\Name <> "exit1" And PlayerRoom\RoomTemplate\Name <> "gatea" Then
-			If IntercomStreamCHN <> 0 Then
-				StopStream_Strict(IntercomStreamCHN)
-				IntercomStreamCHN = 0
-			EndIf
-			If PlayerRoom\RoomTemplate\Name <> "dimension1499" Then
-				For e = Each Events
-					If e\SoundCHN <> 0 And e\SoundCHN_IsStream Then
-						StopStream_Strict(e\SoundCHN)
-						e\SoundCHN = 0
-						e\SoundCHN_IsStream = 0
-					EndIf
-					
-					If e\SoundCHN2 <> 0 And e\SoundCHN2_IsStream Then
-						StopStream_Strict(e\SoundCHN2)
-						e\SoundCHN = 0
-						e\SoundCHN_IsStream = 0
-					EndIf
-				Next
-			EndIf
-		EndIf
-	EndIf
-End Function
-
 Function TeleportEntity(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = False, PickRange# = 2.0, Dir% = 0)
 	Local Pvt%, Pick#
 	; ~ Dir = 0 - towards the floor (default)
@@ -11191,64 +11074,6 @@ Function ResetInput()
 	Input_ResetTime = 10.0
 End Function
 
-Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
-	Local PrevEventState# = EventState
-	
-	If EventState < 0.0 Then
-		EventState = 0.0
-		PrevEventState = 0.0
-	EndIf
-	
-	If d\OpenState = 0.0 And d\Open = False Then
-		If Abs(EntityX(Collider) - EntityX(ElevatorOBJ, True)) =< 280.0 * RoomScale + (0.015 * FPSfactor) Then
-			If Abs(EntityZ(Collider) - EntityZ(ElevatorOBJ, True)) =< 280.0 * RoomScale + (0.015 * FPSfactor) Then
-				If Abs(EntityY(Collider) - EntityY(ElevatorOBJ, True)) =< 280.0 * RoomScale + (0.015 * FPSfactor) Then
-					d\Locked = True
-					If EventState = 0.0 Then
-						TeleportEntity(Curr096\Collider, EntityX(d\FrameOBJ), EntityY(d\FrameOBJ) + 1.0, EntityZ(d\FrameOBJ), Curr096\CollRadius)
-						PointEntity(Curr096\Collider, ElevatorOBJ)
-						RotateEntity(Curr096\Collider, 0.0, EntityYaw(Curr096\Collider), 0.0)
-						MoveEntity(Curr096\Collider, 0.0, 0.0, -0.5)
-						ResetEntity(Curr096\Collider)
-						Curr096\State = 6.0
-						SetNPCFrame(Curr096, 0.0)
-						e\Sound = LoadSound_Strict("SFX\SCP\096\ElevatorSlam.ogg")
-						EventState = EventState + FPSfactor * 1.4
-					EndIf
-				EndIf
-			EndIf
-		EndIf
-	EndIf
-	
-	If EventState > 0.0 Then
-		If PrevEventState = 0.0 Then
-			e\SoundCHN = PlaySound_Strict(e\Sound)
-		EndIf
-		
-		If EventState > 70.0 * 1.9 And EventState < 70.0 * 2 + FPSfactor
-			CameraShake = 7.0
-		ElseIf EventState > 70 * 4.2 And EventState < 70.0 * 4.25 + FPSfactor
-			CameraShake = 1.0
-		ElseIf EventState > 70 * 5.9 And EventState < 70.0 * 5.95 + FPSfactor
-			CameraShake = 1.0
-		ElseIf EventState > 70 * 7.25 And EventState < 70.0 * 7.3 + FPSfactor
-			CameraShake = 1.0
-			d\FastOpen = True
-			d\Open = True
-			Curr096\State = 4.0
-			Curr096\LastSeen = 1.0
-		ElseIf EventState > 70 * 8.1 And EventState < 70.0 * 8.15 + FPSfactor
-			CameraShake = 1.0
-		EndIf
-		
-		If EventState =< 70 * 8.1 Then
-			d\OpenState = Min(d\OpenState, 20.0)
-		EndIf
-		EventState = EventState + FPSfactor * 1.4
-	EndIf
-	Return(EventState)
-End Function
-
 Function RotateEntity90DegreeAngles(Entity%)
 	Local Angle# = WrapAngle(Entity)
 	
@@ -11263,5 +11088,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#FC5#12F1#1B1E
+;~B#FC7#12F3#1B20
 ;~C#Blitz3D

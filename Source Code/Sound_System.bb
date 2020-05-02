@@ -402,6 +402,53 @@ Function PlayAnnouncement(File$) ; ~ This function streams the announcement curr
 	IntercomStreamCHN = StreamSound_Strict(File, SFXVolume, 0)
 End Function
 
+Function UpdateStreamSounds()
+	Local e.Events
+	
+	If FPSfactor > 0.0 Then
+		If IntercomStreamCHN <> 0 Then
+			SetStreamVolume_Strict(IntercomStreamCHN, SFXVolume)
+		EndIf
+		For e = Each Events
+			If e\SoundCHN <> 0 Then
+				If e\SoundCHN_IsStream
+					SetStreamVolume_Strict(e\SoundCHN, SFXVolume)
+				EndIf
+			EndIf
+			
+			If e\SoundCHN2 <> 0 Then
+				If e\SoundCHN2_IsStream
+					SetStreamVolume_Strict(e\SoundCHN2, SFXVolume)
+				EndIf
+			EndIf
+		Next
+	EndIf
+	
+	If (Not PlayerInReachableRoom()) Then
+		If PlayerRoom\RoomTemplate\Name <> "exit1" And PlayerRoom\RoomTemplate\Name <> "gatea" Then
+			If IntercomStreamCHN <> 0 Then
+				StopStream_Strict(IntercomStreamCHN)
+				IntercomStreamCHN = 0
+			EndIf
+			If PlayerRoom\RoomTemplate\Name <> "dimension1499" Then
+				For e = Each Events
+					If e\SoundCHN <> 0 And e\SoundCHN_IsStream Then
+						StopStream_Strict(e\SoundCHN)
+						e\SoundCHN = 0
+						e\SoundCHN_IsStream = 0
+					EndIf
+					
+					If e\SoundCHN2 <> 0 And e\SoundCHN2_IsStream Then
+						StopStream_Strict(e\SoundCHN2)
+						e\SoundCHN = 0
+						e\SoundCHN_IsStream = 0
+					EndIf
+				Next
+			EndIf
+		EndIf
+	EndIf
+End Function
+
 Function ControlSoundVolume()
 	Local snd.Sound, i%
 	
@@ -549,7 +596,7 @@ Function LoadAllSounds()
 		NeckSnapSFX(i) =  LoadSound_Strict("SFX\SCP\173\NeckSnap" + (i + 1) + ".ogg")
 	Next
 	
-	For i = 0 To 8
+	For i = 0 To 12
 		DamageSFX(i) = LoadSound_Strict("SFX\Character\D9341\Damage" + (i + 1) + ".ogg")
 	Next
 	
@@ -577,6 +624,8 @@ Function LoadAllSounds()
 		Step2SFX(i) = LoadSound_Strict("SFX\Step\StepPD" + (i + 1) + ".ogg")
 		Step2SFX(i + 3) = LoadSound_Strict("SFX\Step\StepForest" + (i + 1) + ".ogg")
 	Next 
+	
+	MissSFX = LoadSound_Strict("SFX\General\Miss.ogg")
 End Function
 
 ;~IDEal Editor Parameters:

@@ -18,6 +18,8 @@ v5.6
 - Added two new corpses inside room3storage. ;ONE ISN't DONE
 - Added two benches in the hallway for room2medibay.
 - Added new doors.
+~~~~~~~~~~~
+- Added more names for NPC's console spawning.
 
 - Now SCP-005 can open door to SCP-860-1 (again).
 - Now SCP-005 can spawns in Dr. Maynard's office.
