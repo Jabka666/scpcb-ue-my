@@ -1148,13 +1148,13 @@ Function UpdateConsole()
 					;[Block]
 					HalloweenTex = Not HalloweenTex
 					If HalloweenTex Then
-						Local Tex% = LoadTexture_Strict("GFX\npcs\173h.pt", 1)
+						Local Tex% = LoadTexture_Strict("GFX\npcs\scp_173_h.pt", 1)
 						
 						EntityTexture(Curr173\OBJ, Tex, 0, 0)
 						FreeTexture(Tex)
 						CreateConsoleMsg("173 JACK-O-LANTERN ON")
 					Else
-						Local Tex2% = LoadTexture_Strict("GFX\npcs\173texture.jpg", 1)
+						Local Tex2% = LoadTexture_Strict("GFX\npcs\scp_173.png", 1)
 						
 						EntityTexture(Curr173\OBJ, Tex2, 0, 0)
 						FreeTexture(Tex2)
@@ -2007,7 +2007,7 @@ DrawLoading(30, True)
 
 Global PlayCustomMusic% = False, CustomMusic% = 0
 
-Global Monitor2%, Monitor3%, MonitorTexture2%, MonitorTexture3%, MonitorTexture4%, MonitorTextureOff%
+Global MonitorTexture%, MonitorTexture2%, MonitorTexture3%, MonitorTexture4%, MonitorTextureOff%
 Global MonitorTimer# = 0.0, MonitorTimer2# = 0.0, UpdateCheckpoint1%, UpdateCheckpoint2%
 
 ; ~ This variable is for when a camera detected the player
@@ -2058,14 +2058,11 @@ For i = 0 To 3
 Next
 NavImages(4) = LoadImage_Strict("GFX\navigator\batterymeter.png")
 
-Global NavBG = CreateImage(GraphicWidth, GraphicHeight)
+Global NavBG% = CreateImage(GraphicWidth, GraphicHeight)
 
 Global ParticleEffect%[10]
 
 Global DTextures%[MaxDTextures]
-
-Global NPC049OBJ%, NPC0492OBJ%
-Global ClerkOBJ%
 
 Global IntercomStreamCHN%
 
@@ -2081,7 +2078,7 @@ Global HandIcon2%
 
 Global StaminaMeterIMG%
 
-Global KeypadHUD
+Global KeypadHUD%
 
 Global Panel294, Using294%, Input294$
 
@@ -2117,35 +2114,33 @@ Type Doors
 	Field DoorHitOBJ%
 End Type 
 
-Dim BigDoorOBJ%(2), HeavyDoorOBJ%(2)
-Dim OBJTunnel%(7)
-
 Function CreateDoor.Doors(LVL, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, Big% = False, Keycard% = False, Code$ = "", UseCollisionMesh% = False)
 	Local d.Doors, Parent%, i%
+	Local o.Objects = First Objects
 	
 	If room <> Null Then Parent = room\OBJ
 	
 	Local d2.Doors
 	
 	d.Doors = New Doors
-	If Big = 1 Then
-		d\OBJ = CopyEntity(BigDoorOBJ(0))
+	If Big = 1 Then ; ~ Big Door
+		d\OBJ = CopyEntity(o\DoorModelID[5])
 		ScaleEntity(d\OBJ, 55.0 * RoomScale, 55.0 * RoomScale, 55.0 * RoomScale)
-		d\OBJ2 = CopyEntity(BigDoorOBJ(1))
+		d\OBJ2 = CopyEntity(o\DoorModelID[6])
 		ScaleEntity(d\OBJ2, 55.0 * RoomScale, 55.0 * RoomScale, 55.0 * RoomScale)
 		
-		d\FrameOBJ = CopyEntity(DoorColl)				
+		d\FrameOBJ = CopyEntity(o\DoorModelID[4])				
 		ScaleEntity(d\FrameOBJ, RoomScale, RoomScale, RoomScale)
 		EntityType(d\FrameOBJ, HIT_MAP)
 		EntityAlpha(d\FrameOBJ, 0.0)
-	ElseIf Big = 2 Then
-		d\OBJ = CopyEntity(HeavyDoorOBJ(0))
+	ElseIf Big = 2 Then ; ~ Heavy Door
+		d\OBJ = CopyEntity(o\DoorModelID[2])
 		ScaleEntity(d\OBJ, RoomScale, RoomScale, RoomScale)
-		d\OBJ2 = CopyEntity(HeavyDoorOBJ(1))
+		d\OBJ2 = CopyEntity(o\DoorModelID[3])
 		ScaleEntity(d\OBJ2, RoomScale, RoomScale, RoomScale)
 		
-		d\FrameOBJ = CopyEntity(DoorFrameOBJ)
-	ElseIf Big = 3 Then
+		d\FrameOBJ = CopyEntity(o\DoorModelID[1])
+	ElseIf Big = 3 Then ; ~ Elevator Door
 		For d2 = Each Doors
 			If d2 <> d And d2\Dir = 3 Then
 				d\OBJ = CopyEntity(d2\OBJ)
@@ -2156,19 +2151,26 @@ Function CreateDoor.Doors(LVL, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, B
 			EndIf
 		Next
 		If d\OBJ = 0 Then
-			d\OBJ = LoadMesh_Strict("GFX\map\elevatordoor.b3d")
+			d\OBJ = CopyEntity(o\DoorModelID[7])
 			d\OBJ2 = CopyEntity(d\OBJ)
 			ScaleEntity(d\OBJ, RoomScale, RoomScale, RoomScale)
 			ScaleEntity(d\OBJ2, RoomScale, RoomScale, RoomScale)
 		EndIf
-		d\FrameOBJ = CopyEntity(DoorFrameOBJ)
+		d\FrameOBJ = CopyEntity(o\DoorModelID[1])
+	ElseIf Big = 4 ; ~ One-sided Door
+		d\OBJ = CopyEntity(o\DoorModelID[11])
+		ScaleEntity(d\OBJ, RoomScale, RoomScale, RoomScale)
+		d\OBJ2 = CopyEntity(o\DoorModelID[11])
+		ScaleEntity(d\OBJ2, RoomScale, RoomScale, RoomScale)
+		
+		d\FrameOBJ = CopyEntity(o\DoorModelID[1])
 	Else
-		d\OBJ = CopyEntity(DoorOBJ)
+		d\OBJ = CopyEntity(o\DoorModelID[0])
 		ScaleEntity(d\OBJ, (204.0 * RoomScale) / MeshWidth(d\OBJ), 312.0 * RoomScale / MeshHeight(d\OBJ), 16.0 * RoomScale / MeshDepth(d\OBJ))
-		d\OBJ2 = CopyEntity(DoorOBJ)
+		d\OBJ2 = CopyEntity(o\DoorModelID[0])
 		ScaleEntity(d\OBJ2, (204.0 * RoomScale) / MeshWidth(d\OBJ), 312.0 * RoomScale / MeshHeight(d\OBJ), 16.0 * RoomScale / MeshDepth(d\OBJ))
 		
-		d\FrameOBJ = CopyEntity(DoorFrameOBJ)
+		d\FrameOBJ = CopyEntity(o\DoorModelID[1])
 	End If
 	
 	PositionEntity(d\FrameOBJ, x, y, z)
@@ -2187,15 +2189,20 @@ Function CreateDoor.Doors(LVL, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, B
 	
 	For i = 0 To 1
 		If Code <> "" Then 
-			d\Buttons[i] = CopyEntity(ButtonCodeOBJ)
+			d\Buttons[i] = CopyEntity(o\ButtonModelID[2])
 			EntityFX(d\Buttons[i], 1)
 		Else
 			If Keycard > 0 Then
-				d\Buttons[i] = CopyEntity(ButtonKeyOBJ)
+				d\Buttons[i] = CopyEntity(o\ButtonModelID[1])
 			ElseIf Keycard < 0
-				d\Buttons[i] = CopyEntity(ButtonScannerOBJ)	
+				d\Buttons[i] = CopyEntity(o\ButtonModelID[3])	
+			ElseIf Big = 3	
+			    d\Buttons[0] = CopyEntity(o\ButtonModelID[4])
+				ScaleEntity(d\Buttons[0], 0.03, 0.03, 0.03)
+				d\Buttons[1] = CopyEntity(o\ButtonModelID[0])
+				ScaleEntity(d\Buttons[1], 0.03, 0.03, 0.03)
 			Else
-				d\Buttons[i] = CopyEntity(ButtonOBJ)
+				d\Buttons[i] = CopyEntity(o\ButtonModelID[0])
 			End If
 		EndIf
 		ScaleEntity(d\Buttons[i], 0.03, 0.03, 0.03)
@@ -2265,7 +2272,7 @@ Function CreateDoor.Doors(LVL, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, B
 			EndIf
 		Next
 		If d\DoorHitOBJ = 0 Then
-			d\DoorHitOBJ = LoadMesh_Strict("GFX\doorhit.b3d", d\FrameOBJ)
+			d\DoorHitOBJ = CopyEntity(o\DoorModelID[10], d\FrameOBJ)
 			EntityAlpha(d\DoorHitOBJ, 0.0)
 			EntityFX(d\DoorHitOBJ, 1)
 			EntityType(d\DoorHitOBJ, HIT_MAP)
@@ -2277,7 +2284,8 @@ Function CreateDoor.Doors(LVL, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, B
 End Function
 
 Function CreateButton(x#, y#, z#, Pitch#, Yaw#, Roll# = 0.0)
-	Local OBJ% = CopyEntity(ButtonOBJ)	
+	Local o.Objects = First Objects
+	Local OBJ% = CopyEntity(o\ButtonModelID[0])	
 	
 	ScaleEntity(OBJ, 0.03, 0.03, 0.03)
 	PositionEntity(OBJ, x, y, z)
@@ -2377,7 +2385,13 @@ Function UpdateDoors()
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * FPSfactor / 162.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState)* (d\FastOpen * 2 + 1) * FPSfactor / 162.0, 0.0, 0.0)
 							;[End Block]
-						Case 4 ;Used for 914 only
+						Case 4
+						    ;[Block]
+							d\OpenState = Min(180, d\OpenState + FPSfactor * 2 * (d\FastOpen + 1))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * FPSfactor / 80.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-FPSfactor) / 80.0, 0.0, 0.0)	
+							;[End Block]	
+						Case 5 ;Used for 914 only
 							;[Block]
 							d\OpenState = Min(180.0, d\OpenState + FPSfactor * 1.4)
 							MoveEntity(d\OBJ, Sin(d\OpenState) * FPSfactor / 114.0, 0.0, 0.0)
@@ -2396,7 +2410,11 @@ Function UpdateDoors()
 						Sound = Rand(0, 2)
 						If d\TimerState = 0.0 Then 
 							d\Open = (Not d\Open)
-							d\SoundCHN = PlaySound2(CloseDoorSFX(d\Dir, Sound), Camera, d\OBJ)
+							If d\Dir <> 0 And d\Dir <> 4 Then
+								d\SoundCHN = PlaySound2(CloseDoorSFX(d\Dir, Sound), Camera, d\OBJ)
+							Else
+								d\SoundCHN = PlaySound2(CloseDoorSFX(0, Sound), Camera, d\OBJ)
+							EndIf
 						EndIf
 					EndIf
 					If d\AutoClose And RemoteDoorOn = True Then
@@ -2428,7 +2446,7 @@ Function UpdateDoors()
 										PositionEntity(Pvt, EntityX(d\FrameOBJ, True) + Rnd(-0.2, 0.2), EntityY(d\FrameOBJ, True) + Rnd(0.0, 1.2), EntityZ(d\FrameOBJ, True) + Rnd(-0.2, 0.2))
 										RotateEntity(Pvt, 0.0, Rnd(360.0), 0.0)
 										
-										Local p.Particles = CreateParticle(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 2, 0.002, 0.0, 300)
+										Local p.Particles = CreateParticle(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 2, 0.002, 0.0, 300.0)
 										
 										p\Speed = 0.005 : p\SizeChange = -0.00001 : p\Size = 0.01 : p\Achange = -0.01
 										RotateEntity(p\Pvt, Rnd(-20.0, 20.0), Rnd(360.0), 0.0)
@@ -2451,7 +2469,13 @@ Function UpdateDoors()
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (-FPSfactor) * (d\FastOpen + 1) / 162.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-FPSfactor) / 162.0, 0.0, 0.0)
 							;[End Block]
-						Case 4 ;Used for 914 only
+						Case 4
+						    ;[Block]
+							d\OpenState = Max(0, d\OpenState - FPSfactor * 2 * (d\FastOpen + 1))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * (-FPSfactor) * (d\FastOpen + 1) / 80.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * FPSfactor / 80.0, 0.0, 0.0)
+							;[End Block]	
+						Case 5 ;Used for 914 only
 							;[Block]
 							d\OpenState = Min(180.0, d\OpenState - FPSfactor * 1.4)
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (-FPSfactor) / 114.0, 0.0, 0.0)
@@ -2556,7 +2580,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 			
 			If Temp = -1 Then 
 				If ShowMsg = True Then
-					If (Instr(Msg, "The keycard") = 0 And Instr(Msg, "A keycard with") = 0) Or (MsgTimer < 70 * 3.0) Then
+					If (Instr(Msg, "The keycard") = 0 And Instr(Msg, "A keycard with") = 0) Or MsgTimer < 70 * 3.0 Then
 						Msg = "A keycard is required to operate this door."
 						MsgTimer = 70 * 7.0
 					EndIf
@@ -2598,7 +2622,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 		SelectedItem = Null
 		If Temp <> 0 Then
 			PlaySound_Strict(ScannerSFX1)
-			If (Instr(Msg, "You placed your") = 0) Or (MsgTimer < 70 * 3.0) Then
+			If Instr(Msg, "You placed your") = 0 Or MsgTimer < 70 * 3.0 Then
 				Msg = "You place the palm of the hand onto the scanner. The scanner reads: " + Chr(34) + "DNA verified. Access granted." + Chr(34)
 			EndIf
 			MsgTimer = 70 * 10.0
@@ -2632,8 +2656,8 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 					ElseIf d\IsElevatorDoor = 3 Then
 						Msg = "The elevator is already on this floor."
 						MsgTimer = 70 * 5.0
-					ElseIf (Msg <> "You called the elevator.")
-						If (Msg = "You already called the elevator.") Or (MsgTimer < 70 * 3.0)	
+					ElseIf Msg <> "You called the elevator."
+						If Msg = "You already called the elevator." Or MsgTimer < 70 * 3.0
 							Select Rand(10)
 								Case 1
 									;[Block]
@@ -2681,10 +2705,18 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 			If d\Dir = 1 And d\Locked = 2 Then
 				d\SoundCHN = PlaySound2(BigDoorErrorSFX(Sound), Camera, d\OBJ)
 			Else
-				d\SoundCHN = PlaySound2(OpenDoorSFX(d\Dir, Sound), Camera, d\OBJ)
+				If d\Dir <> 0 And d\Dir <> 4 Then
+					d\SoundCHN = PlaySound2(OpenDoorSFX(d\Dir, Sound), Camera, d\OBJ)
+				Else
+					d\SoundCHN = PlaySound2(OpenDoorSFX(0, Sound), Camera, d\OBJ)
+				EndIf
 			EndIf
 		Else
-			d\SoundCHN = PlaySound2(CloseDoorSFX(d\Dir, Sound), Camera, d\OBJ)
+			If d\Dir <> 0 And d\Dir <> 4 Then
+				d\SoundCHN = PlaySound2(CloseDoorSFX(d\Dir, Sound), Camera, d\OBJ)
+			Else
+				d\SoundCHN = PlaySound2(CloseDoorSFX(0, Sound), Camera, d\OBJ)
+			EndIf
 		EndIf
 		UpdateSoundOrigin(d\SoundCHN, Camera, d\OBJ)
 	Else
@@ -2742,28 +2774,16 @@ Global TeslaTexture%
 
 Global LightTexture%, Light%
 Dim LightSpriteTex%(5)
-Global DoorOBJ%, DoorFrameOBJ%
-
-Global LeverOBJ%, LeverBaseOBJ%
-
-Global DoorColl%
-Global ButtonOBJ%, ButtonKeyOBJ%, ButtonCodeOBJ%, ButtonScannerOBJ%
 
 Dim DecalTextures%(20)
-
-Global Monitor%, MonitorTexture%
-Global CamBaseOBJ%, CamOBJ%
-
-Global LiquidOBJ%, MTFOBJ%, GuardOBJ%, ClassDOBJ%
-Global ApacheOBJ%, ApacheRotorOBJ%
 
 Global UnableToMove% = False
 Global ShouldEntitiesFall% = True
 Global PlayerFallingPickDistance# = 10.0
 
-Global Save_MSG$ = ""
-Global Save_MSG_Timer# = 0.0
-Global Save_MSG_Y# = 0.0
+Global Save_Msg$ = ""
+Global Save_Msg_Timer# = 0.0
+Global Save_Msg_Y# = 0.0
 
 Global MTF_CameraCheckTimer# = 0.0
 Global MTF_CameraCheckDetected% = False
@@ -2884,7 +2904,7 @@ Repeat
 	Else
 		UpdateStreamSounds()
 		
-		ShouldPlay = Min(PlayerZone, 2)
+		ShouldPlay = Min(PlayerZone, 2.0)
 		
 		DrawHandIcon = False
 		
@@ -4258,6 +4278,7 @@ Function DrawGUI()
 	Local x2#, y2#, z2#
 	Local n%, xTemp, yTemp, StrTemp$
 	Local e.Events, it.Items
+	Local o.Objects = First Objects
 	
 	If MenuOpen Or ConsoleOpen Or SelectedDoor <> Null Or InvOpen Or OtherOpen <> Null Or EndingTimer < 0.0 Then
 		ShowPointer()
@@ -4274,7 +4295,7 @@ Function DrawGUI()
 							If e\Img = 0 Then
 								If BlinkTimer > -5 And Rand(30) = 1 Then
 									PlaySound_Strict(DripSFX(0))
-									If e\Img = 0 Then e\Img = LoadImage_Strict("GFX\npcs\106face.jpg")
+									If e\Img = 0 Then e\Img = LoadImage_Strict("GFX\npcs\scp_106_face.png")
 								EndIf
 							Else
 								DrawImage(e\Img, GraphicWidth / 2 - Rand(390, 310), GraphicHeight / 2 - Rand(290, 310))
@@ -4544,9 +4565,9 @@ Function DrawGUI()
 			PointEntity(Camera, ClosestButton)
 			FreeEntity(Pvt)
 			
-			CameraProject(Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) + MeshHeight(ButtonOBJ) * 0.015, EntityZ(ClosestButton, True))
+			CameraProject(Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) + MeshHeight(o\ButtonModelID[0]) * 0.015, EntityZ(ClosestButton, True))
 			ProjY# = ProjectedY()
-			CameraProject(Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) - MeshHeight(ButtonOBJ) * 0.015, EntityZ(ClosestButton, True))
+			CameraProject(Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) - MeshHeight(o\ButtonModelID[0]) * 0.015, EntityZ(ClosestButton, True))
 			Scale# = (ProjectedY() - Projy) / 462.0
 			
 			x = GraphicWidth / 2 - ImageWidth(KeypadHUD) * Scale / 2
@@ -7603,11 +7624,23 @@ End Function
 
 Include "Source Code\Sound_System.bb"
 
+Type Objects
+	Field DoorModelID%[MaxDoorModelIDAmount - 1]
+	Field NPCModelID%[MaxNPCModelIDAmount - 1]
+	Field MTModelID%[MaxMTModelIDAmount - 1]
+	Field ButtonModelID%[MaxButtonModelIDAmount - 1]
+	Field LeverModelID%[MaxLeverModelIDAmount - 1]
+	Field CamModelID%[MaxCamModelIDAmount - 1]
+	Field MonitorModelID%[MaxMonitorModelIDAmount - 1]
+	Field MiscModelID%[MaxMiscModelIDAmount - 1]
+End Type
+
 Function LoadEntities()
 	CatchErrors("Uncaught (LoadEntities)")
 	
 	DrawLoading(0)
 	
+	Local o.Objects = New Objects
 	Local i%
 	
 	For i = 0 To 9
@@ -7626,7 +7659,7 @@ Function LoadEntities()
 
 	StaminaMeterIMG = LoadImage_Strict("GFX\staminameter.jpg")
 
-	KeypadHUD =  LoadImage_Strict("GFX\keypadhud.jpg")
+	KeypadHUD =  LoadImage_Strict("GFX\keypadhud.png")
 	MaskImage(KeypadHUD, 255, 0, 255)
 
 	Panel294 = LoadImage_Strict("GFX\294panel.jpg")
@@ -7751,66 +7784,147 @@ Function LoadEntities()
 	EntityRadius(Head, 0.15)
 	EntityType(Head, HIT_PLAYER)
 	
-	LiquidOBJ = LoadMesh_Strict("GFX\items\cupliquid.x") ; ~ Optimized the cups dispensed by 294
+	; ~ [NPCs]
 	
-	MTFOBJ = LoadAnimMesh_Strict("GFX\npcs\MTF2.b3d") ; ~ Optimized MTFs
-	GuardOBJ = LoadAnimMesh_Strict("GFX\npcs\guard.b3d") ; ~ Optimized Guards
+	o\NPCModelID[0] = LoadMesh_Strict("GFX\npcs\scp_173.b3d") ; ~ SCP-173
 	
-	ClassDOBJ = LoadAnimMesh_Strict("GFX\npcs\classd.b3d") ; ~ Optimized Class-D's and scientists/researchers
-	ApacheOBJ = LoadAnimMesh_Strict("GFX\apache.b3d") ; ~ Ooptimized Apaches (helicopters)
-	ApacheRotorOBJ = LoadAnimMesh_Strict("GFX\apacherotor.b3d") ; ~ Optimized the Apaches even more
+    o\NPCModelID[1] = LoadAnimMesh_Strict("GFX\npcs\scp_106.b3d") ; ~ SCP-106
 	
-	HideEntity(LiquidOBJ)
-	HideEntity(MTFOBJ)
-	HideEntity(GuardOBJ)
-	HideEntity(ClassDOBJ)
-	HideEntity(ApacheOBJ)
-	HideEntity(ApacheRotorOBJ)
+	o\NPCModelID[2] = LoadAnimMesh_Strict("GFX\npcs\guard.b3d") ; ~ Guard
 	
-	NPC049OBJ = LoadAnimMesh_Strict("GFX\npcs\scp-049.b3d")
-	HideEntity(NPC049OBJ)
-	NPC0492OBJ = LoadAnimMesh_Strict("GFX\npcs\zombie1.b3d")
-	HideEntity(NPC0492OBJ)
-	ClerkOBJ = LoadAnimMesh_Strict("GFX\npcs\clerk.b3d")
-	HideEntity(ClerkOBJ)	
+    o\NPCModelID[3] = LoadAnimMesh_Strict("GFX\npcs\class_d.b3d") ; ~ Class-D
+	
+	o\NPCModelID[4] = LoadAnimMesh_Strict("GFX\npcs\372.b3d") ; ~ SCP-372
+	
+	o\NPCModelID[5] = LoadAnimMesh_Strict("GFX\npcs\apache.b3d") ; ~ Apache Helicopter
+	
+	o\NPCModelID[6] = LoadAnimMesh_Strict("GFX\npcs\apache_rotor.b3d") ; ~ Helicopter's Rotor #1
+	
+	o\NPCModelID[7] = LoadAnimMesh_Strict("GFX\npcs\MTF.b3d") ; ~ MTF
+	
+	o\NPCModelID[8] = LoadAnimMesh_Strict("GFX\npcs\scp_096.b3d") ; ~ SCP-096
+	
+	o\NPCModelID[9] = LoadAnimMesh_Strict("GFX\npcs\scp_049.b3d") ; ~ SCP-049
+	
+	o\NPCModelID[10] = LoadAnimMesh_Strict("GFX\npcs\scp_049_2.b3d") ; ~ SCP-049-2
+	
+	o\NPCModelID[11] = LoadAnimMesh_Strict("GFX\npcs\scp_513_1.b3d") ; ~ SCP-513-1
+	
+	o\NPCModelID[12] = LoadAnimMesh_Strict("GFX\npcs\035tentacle.b3d") ; ~ SCP-035's Tentacle
+	
+	o\NPCModelID[13] = LoadAnimMesh_Strict("GFX\npcs\scp_860_2.b3d") ; ~ SCP-860-2
+	
+	o\NPCModelID[14] = LoadAnimMesh_Strict("GFX\npcs\scp_939.b3d") ; ~ SCP-939
+	
+	o\NPCModelID[15] = LoadAnimMesh_Strict("GFX\npcs\scp_066.b3d") ; ~ SCP-066
+	
+	o\NPCModelID[16] = LoadAnimMesh_Strict("GFX\npcs\scp_966.b3d") ; ~ SCP-966
+	
+	o\NPCModelID[17] = LoadAnimMesh_Strict("GFX\npcs\scp_1048_a.b3d") ; ~ SCP-1048-A
+	
+	o\NPCModelID[18] = LoadAnimMesh_Strict("GFX\npcs\scp_1499_1.b3d") ; ~ SCP-1499-1
+	
+	o\NPCModelID[19] = LoadAnimMesh_Strict("GFX\npcs\scp_008_1.b3d") ; ~ SCP-008-1
+	
+	o\NPCModelID[20] = LoadAnimMesh_Strict("GFX\npcs\clerk.b3d") ; ~ Clerk
+	
+	o\NPCModelID[21] = LoadAnimMesh_Strict("GFX\npcs\apache_rotor(2).b3d") ; ~ Helicopter's Rotor #2
+	
+	o\NPCModelID[22] = LoadAnimMesh_Strict("GFX\npcs\nazi_officer.b3d") ; ~ Nazi Officer
+	
+	o\NPCModelID[23] = LoadAnimMesh_Strict("GFX\npcs\scp_1048.b3d") ; ~ SCP-1048
+	
+	o\NPCModelID[24] = LoadAnimMesh_Strict("GFX\npcs\scp_1048_pen.b3d") ; ~ SCP-1048 With Pen
+	
+	o\NPCModelID[25] = LoadAnimMesh_Strict("GFX\npcs\duck.b3d") ; ~ Anomalous Duck
+	
+	o\NPCModelID[26] = LoadAnimMesh_Strict("GFX\npcs\CI.b3d") ; ~ CI
+	
+	o\NPCModelID[27] = LoadAnimMesh_Strict("GFX\npcs\scp_035.b3d") ; ~ SCP-035
+	
+	o\NPCModelID[28] = LoadMesh_Strict("GFX\npcs\scp_682_arm.b3d") ; ~ SCP-682's Arm
+	
+	o\NPCModelID[29] = LoadMesh_Strict("GFX\npcs\scp_173_box.b3d") ; ~ SCP-173's Box
+	
+	o\NPCModelID[30] = LoadAnimMesh_Strict("GFX\npcs\scp_205_demon.b3d") ; ~ SCP-205's Demon #1
+	
+	o\NPCModelID[31] = LoadAnimMesh_Strict("GFX\npcs\scp_205_demon(2).b3d") ; ~ SCP-205's Demon #2
+	
+	o\NPCModelID[32] = LoadAnimMesh_Strict("GFX\npcs\scp_205_demon(3).b3d") ; ~ SCP-205's Demon #3
+	
+	o\NPCModelID[33] = LoadAnimMesh_Strict("GFX\npcs\scp_205_woman.b3d") ; ~ SCP-205's Woman
+	
+    For i = 0 To MaxNPCModelIDAmount - 1
+        HideEntity(o\NPCModelID[i])
+    Next
+	
+	; ~ [DOORS]
+	
+	o\DoorModelID[0] = LoadMesh_Strict("GFX\map\Door01.x") ; ~ Default Door
+	
+	o\DoorModelID[1] = LoadMesh_Strict("GFX\map\DoorFrame.x") ; ~ Frame #1
+	
+	o\DoorModelID[2] = LoadMesh_Strict("GFX\map\HeavyDoor1.x") ; ~ Heavy door #1
+	
+	o\DoorModelID[3] = LoadMesh_Strict("GFX\map\HeavyDoor2.x") ; ~ Heavy door #2
+	
+	o\DoorModelID[4] = LoadMesh_Strict("GFX\map\DoorColl.x") ; ~ Collider
+	
+	o\DoorModelID[5] = LoadMesh_Strict("GFX\map\ContDoorLeft.x") ; ~ Big Door #1
+	
+	o\DoorModelID[6] = LoadMesh_Strict("GFX\map\ContDoorRight.x") ; ~ Big Door #2
+	
+	o\DoorModelID[7] = LoadMesh_Strict("GFX\map\ElevatorDoor.b3d") ; ~ Elevator Door
+	
+	o\DoorModelID[8] = LoadMesh_Strict("GFX\map\forest\Door_Frame.b3d") ; ~ Frame #2
+	
+	o\DoorModelID[9] = LoadMesh_Strict("GFX\map\forest\Door.b3d") ; ~ Wooden Door
+	
+	o\DoorModelID[10] = LoadMesh_Strict("GFX\map\DoorHitBox.b3d") ; ~ Door's HitBox
+	
+	o\DoorModelID[11] = LoadMesh_Strict("GFX\map\Door02.x") ; ~ One-sided Door
+	
+	For i = 0 To MaxDoorModelIDAmount - 1
+	    HideEntity(o\DoorModelID[i])
+	Next
+	
+	; ~ [LEVERS]
+	
+	o\LeverModelID[0] = LoadMesh_Strict("GFX\map\leverbase.x") ; ~ Lever Base
+	
+	o\LeverModelID[1] = LoadMesh_Strict("GFX\map\leverhandle.x") ; ~ Lever Handle
+	
+	For i = 0 To MaxLeverModelIDAmount - 1
+	    HideEntity(o\LeverModelID[i])
+	Next
+	
+	; ~ [BUTTONS]
+	
+	o\ButtonModelID[0] = LoadMesh_Strict("GFX\map\Button.b3d") ; ~ Button
+	
+	o\ButtonModelID[1] = LoadMesh_Strict("GFX\map\ButtonKeycard.b3d") ; ~ Keycard Button
+	
+	o\ButtonModelID[2] = LoadMesh_Strict("GFX\map\ButtonCode.b3d") ; ~ Code Button
+	
+	o\ButtonModelID[3] = LoadMesh_Strict("GFX\map\ButtonScanner.b3d") ; ~ Scanner Button
+	
+	o\ButtonModelID[4] = LoadMesh_Strict("GFX\map\ButtonElevator.b3d") ; ~ Elevator Button
+	
+	For i = 0 To MaxButtonModelIDAmount - 1
+        HideEntity(o\ButtonModelID[i])
+    Next	
+	
+	; ~ [MISC]
+	
+	o\MiscModelID[0] = LoadMesh_Strict("GFX\items\cupliquid.x") ; ~ Liquid for cups dispensed by SCP-294
+	
+	For i = 0 To MaxMiscModelIDAmount - 1
+		HideEntity(o\MiscModelID[i])
+	Next
 	
 	LightSpriteTex(0) = LoadTexture_Strict("GFX\light1.jpg", 1)
 	LightSpriteTex(1) = LoadTexture_Strict("GFX\light2.jpg", 1)
 	LightSpriteTex(2) = LoadTexture_Strict("GFX\lightsprite.jpg", 1)
-	
-	DrawLoading(10)
-	
-	DoorOBJ = LoadMesh_Strict("GFX\map\door01.x")
-	HideEntity(DoorOBJ)
-	DoorFrameOBJ = LoadMesh_Strict("GFX\map\doorframe.x")
-	HideEntity(DoorFrameOBJ)
-	
-	HeavyDoorOBJ(0) = LoadMesh_Strict("GFX\map\heavydoor1.x")
-	HideEntity(HeavyDoorOBJ(0))
-	HeavyDoorOBJ(1) = LoadMesh_Strict("GFX\map\heavydoor2.x")
-	HideEntity(HeavyDoorOBJ(1))
-	
-	DoorColl = LoadMesh_Strict("GFX\map\doorcoll.x")
-	HideEntity(DoorColl)
-	
-	ButtonOBJ = LoadMesh_Strict("GFX\map\Button.x")
-	HideEntity(ButtonOBJ)
-	ButtonKeyOBJ = LoadMesh_Strict("GFX\map\ButtonKeycard.x")
-	HideEntity(ButtonKeyOBJ)
-	ButtonCodeOBJ = LoadMesh_Strict("GFX\map\ButtonCode.x")
-	HideEntity(ButtonCodeOBJ)	
-	ButtonScannerOBJ = LoadMesh_Strict("GFX\map\ButtonScanner.x")
-	HideEntity(ButtonScannerOBJ)	
-	
-	BigDoorOBJ(0) = LoadMesh_Strict("GFX\map\ContDoorLeft.x")
-	HideEntity(BigDoorOBJ(0))
-	BigDoorOBJ(1) = LoadMesh_Strict("GFX\map\ContDoorRight.x")
-	HideEntity(BigDoorOBJ(1))
-	
-	LeverBaseOBJ = LoadMesh_Strict("GFX\map\leverbase.x")
-	HideEntity(LeverBaseOBJ)
-	LeverOBJ = LoadMesh_Strict("GFX\map\leverhandle.x")
-	HideEntity(LeverOBJ)
 	
 	DrawLoading(15)
 	
@@ -7843,19 +7957,29 @@ Function LoadEntities()
 	
 	DrawLoading(25)
 	
-	Monitor = LoadMesh_Strict("GFX\map\monitor.b3d")
-	HideEntity(Monitor)
+	; ~ [CAMS]
+	
+	o\CamModelID[0] = LoadMesh_Strict("GFX\map\cambase.x") ; ~ Cam Base
+	
+	o\CamModelID[1] = LoadMesh_Strict("GFX\map\CamHead.b3d") ; ~ Cam Head
+	
+	For i = 0 To MaxCamModelIDAmount - 1
+        HideEntity(o\CamModelID[i])
+    Next
+	
+	; ~ [MONITORS]
+	
+	o\MonitorModelID[0] = LoadMesh_Strict("GFX\map\monitor.b3d") ; ~ Monitor
+	
+	o\MonitorModelID[1] = LoadMesh_Strict("GFX\map\monitor_checkpoint.b3d") ; ~ Checkpoint Monitor LCZ
+	
+	o\MonitorModelID[2] = LoadMesh_Strict("GFX\map\monitor_checkpoint.b3d") ; ~ Checkpoint Monitor HCZ
+	
+    For i = 0 To MaxMonitorModelIDAmount - 1
+        HideEntity(o\MonitorModelID[i])
+    Next
+	
 	MonitorTexture = LoadTexture_Strict("GFX\monitortexture.jpg")
-	
-	CamBaseOBJ = LoadMesh_Strict("GFX\map\cambase.x")
-	HideEntity(CamBaseOBJ)
-	CamOBJ = LoadMesh_Strict("GFX\map\CamHead.b3d")
-	HideEntity(CamOBJ)
-	
-	Monitor2 = LoadMesh_Strict("GFX\map\monitor_checkpoint.b3d")
-	HideEntity(Monitor2)
-	Monitor3 = LoadMesh_Strict("GFX\map\monitor_checkpoint.b3d")
-	HideEntity(Monitor3)
 	MonitorTexture2 = LoadTexture_Strict("GFX\map\LockdownScreen2.jpg")
 	MonitorTexture3 = LoadTexture_Strict("GFX\map\LockdownScreen.jpg")
 	MonitorTexture4 = LoadTexture_Strict("GFX\map\LockdownScreen3.jpg")
@@ -7865,24 +7989,8 @@ Function LoadEntities()
 	Cls
 	SetBuffer(BackBuffer())
 	
-	For i = 2 To CountSurfaces(Monitor2)
-		SF = GetSurface(Monitor2, i)
-		b = GetSurfaceBrush(SF)
-		If b <> 0 Then
-			t1 = GetBrushTexture(b, 0)
-			If t1 <> 0 Then
-				Name$ = StripPath(TextureName(t1))
-				If Lower(Name) <> "monitortexture.jpg"
-					BrushTexture(b, MonitorTextureOff, 0, 0)
-					PaintSurface(SF, b)
-				EndIf
-				If name <> "" Then FreeTexture t1
-			EndIf
-			FreeBrush b
-		EndIf
-	Next
-	For i = 2 To CountSurfaces(Monitor3)
-		sf = GetSurface(Monitor3, i)
+	For i = 2 To CountSurfaces(o\MonitorModelID[1])
+		SF = GetSurface(o\MonitorModelID[1], i)
 		b = GetSurfaceBrush(SF)
 		If b <> 0 Then
 			t1 = GetBrushTexture(b, 0)
@@ -7894,7 +8002,23 @@ Function LoadEntities()
 				EndIf
 				If Name <> "" Then FreeTexture(t1)
 			EndIf
-			FreeBrush b
+			FreeBrush(b)
+		EndIf
+	Next
+	For i = 2 To CountSurfaces(o\MonitorModelID[2])
+		sf = GetSurface(o\MonitorModelID[2], i)
+		b = GetSurfaceBrush(SF)
+		If b <> 0 Then
+			t1 = GetBrushTexture(b, 0)
+			If t1 <> 0 Then
+				Name$ = StripPath(TextureName(t1))
+				If Lower(Name) <> "monitortexture.jpg"
+					BrushTexture(b, MonitorTextureOff, 0, 0)
+					PaintSurface(SF, b)
+				EndIf
+				If Name <> "" Then FreeTexture(t1)
+			EndIf
+			FreeBrush(b)
 		EndIf
 	Next
 	
@@ -7939,7 +8063,7 @@ Function LoadEntities()
 	
 	; ~ NPCtypeD - different models with different textures (loaded using "CopyEntity") -- ENDSHN
 	For i = 1 To MaxDTextures
-		DTextures[i] = CopyEntity(ClassDOBJ)
+		DTextures[i] = CopyEntity(o\NPCModelID[3])
 		HideEntity(DTextures[i])
 	Next
 	
@@ -8010,26 +8134,25 @@ Function LoadEntities()
 	
 	LoadMaterials("Data\materials.ini")
 	
-	OBJTunnel(0) = LoadRMesh("GFX\map\mt1.rmesh", Null)	
-	HideEntity(OBJTunnel(0))	
+	; ~ [MAINTENANCE TUNNELS]
 	
-	OBJTunnel(1) = LoadRMesh("GFX\map\mt2.rmesh", Null)	
-	HideEntity(OBJTunnel(1))
+	o\MTModelID[0] = LoadRMesh("GFX\map\mt1.rmesh", Null) ; ~ End Room
 	
-	OBJTunnel(2) = LoadRMesh("GFX\map\mt2c.rmesh", Null)	
-	HideEntity(OBJTunnel(2))
+	o\MTModelID[1] = LoadRMesh("GFX\map\mt2.rmesh", Null) ; ~ Two-way Hallway
 	
-	OBJTunnel(3) = LoadRMesh("GFX\map\mt3.rmesh", Null)	
-	HideEntity(OBJTunnel(3))
+	o\MTModelID[2] = LoadRMesh("GFX\map\mt2c.rmesh", Null) ; ~ Corner Room
 	
-	OBJTunnel(4) = LoadRMesh("GFX\map\mt4.rmesh", Null)	
-	HideEntity(OBJTunnel(4))
+	o\MTModelID[3] = LoadRMesh("GFX\map\mt3.rmesh", Null) ; ~ Three-way Room
 	
-	OBJTunnel(5) = LoadRMesh("GFX\map\mt_elevator.rmesh", Null)
-	HideEntity(OBJTunnel(5))
+	o\MTModelID[4] = LoadRMesh("GFX\map\mt4.rmesh", Null) ; ~ Four-way Room
 	
-	OBJTunnel(6) = LoadRMesh("GFX\map\mt_generator.rmesh", Null)
-	HideEntity(OBJTunnel(6))
+	o\MTModelID[5] = LoadRMesh("GFX\map\mt_elevator.rmesh", Null) ; ~ Elevator Tunnel
+	
+	o\MTModelID[6] = LoadRMesh("GFX\map\mt_generator.rmesh", Null) ; ~ Generator Room
+	
+	For i = 0 To MaxMTModelIDAmount - 1
+        HideEntity(o\MTModelID[i])
+    Next
 	
 	TextureLodBias(TextureFloat)
 	; ~ Devil Particle System
@@ -8368,7 +8491,7 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	Local i%, x%, y%, Lvl%
 	Local itt.ItemTemplates, s.Screens, lt.LightTemplates, d.Doors, m.Materials
-	Local wp.WayPoints, twp.TempWayPoints, r.Rooms, it.Items
+	Local wp.WayPoints, twp.TempWayPoints, r.Rooms, it.Items, o.Objects
 	
 	KillSounds()
 	If PlayButtonSFX Then PlaySound_Strict(ButtonSFX)
@@ -8488,8 +8611,8 @@ Function NullGame(PlayButtonSFX% = True)
 	ConsoleInput = ""
 	ConsoleOpen = False
 	
-	EyeIrritation = 0
-	EyeStuck = 0
+	EyeIrritation = 0.0
+	EyeStuck = 0.0
 	
 	ShouldPlay = 0
 	
@@ -8565,6 +8688,10 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	For n.NPCs = Each NPCs
 		Delete(n)
+	Next
+	
+	For o.Objects = Each Objects
+		Delete(o)
 	Next
 	
 	Curr173 = Null
@@ -11136,5 +11263,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#FB1#12DC#1B09
+;~B#FC5#12F1#1B1E
 ;~C#Blitz3D

@@ -347,6 +347,7 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 	
 	Local i.Items = New Items
 	Local it.ItemTemplates
+	Local o.Objects = First Objects
 	
 	Name = Lower(Name)
 	TempName = Lower (TempName)
@@ -382,7 +383,7 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 		i\B = B
 		i\A = A
 		
-		Local Liquid% = CopyEntity(LiquidOBJ)
+		Local Liquid% = CopyEntity(o\MiscModelID[0])
 		
 		ScaleEntity(Liquid, i\ItemTemplate\Scale, i\ItemTemplate\Scale, i\ItemTemplate\Scale, True)
 		PositionEntity(Liquid, EntityX(i\Collider, True), EntityY(i\Collider, True), EntityZ(i\Collider, True))
@@ -398,11 +399,11 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 		EntityShininess(Liquid, 1.0)
 	EndIf
 	
-	i\InvImg = i\itemtemplate\InvImg
+	i\InvImg = i\ItemTemplate\InvImg
 	If (TempName = "clipboard") And (InvSlots = 0) Then
 		InvSlots = 10
 		SetAnimTime(i\Model, 17.0)
-		i\InvImg = i\itemtemplate\InvImg2
+		i\InvImg = i\ItemTemplate\InvImg2
 	ElseIf (TempName = "wallet") And (InvSlots = 0) Then
 		InvSlots = 10
 		SetAnimTime(i\Model, 0.0)

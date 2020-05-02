@@ -10,7 +10,19 @@ Const OptionFile$ = "options.ini"
 
 Const VersionNumber$ = "5.6"
 
+; ~ [OBJECTS]
+
+Const MaxMTModelIDAmount% = 7
+Const MaxMonitorModelIDAmount% = 3
+Const MaxDoorModelIDAmount% = 12
+Const MaxButtonModelIDAmount% = 5
+Const MaxLeverModelIDAmount% = 2
+Const MaxCamModelIDAmount% = 2
+Const MaxMiscModelIDAmount% = 1
+
 ; ~ [NPCs]
+
+Const MaxNPCModelIDAmount% = 34
 
 Const NPCtype008% = 1, NPCtype049% = 2, NPCtype066% = 3, NPCtype096% = 4, NPCtype173% = 5
 Const NPCtype372% = 6, NPCtype5131% = 7, NPCtype860% = 8, NPCtype939% = 9, NPCtype966% = 10, NPCtype1499% = 11

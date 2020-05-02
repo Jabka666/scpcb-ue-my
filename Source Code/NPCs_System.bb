@@ -67,6 +67,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 	Local n.NPCs = New NPCs, n2.NPCs
 	Local temp#, i%, diff1, bump1, spec1
 	Local sf, b, t1
+	Local o.Objects = First Objects
 	
 	n\NPCtype = NPCtype
 	n\GravityMult = 1.0
@@ -82,12 +83,12 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			EntityType n\Collider, HIT_PLAYER
 			n\Gravity = True
 			
-			n\obj = LoadMesh_Strict("GFX\npcs\173_2.b3d")
+			n\obj = CopyEntity(o\NPCModelID[0])
 			
 			;On Halloween set jack-o-latern texture.
 			If (Left(CurrentDate(), 7) = "31 Oct ") Then
 				HalloweenTex = True
-				Local texFestive = LoadTexture_Strict("GFX\npcs\173h.pt", 1)
+				Local texFestive = LoadTexture_Strict("GFX\npcs\scp_173_h.pt", 1)
 				EntityTexture n\obj, texFestive, 0, 0
 				FreeTexture texFestive
 			EndIf
@@ -97,8 +98,8 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			
 			n\Speed = (GetINIFloat("DATA\NPCs.ini", "SCP-173", "speed") / 100.0)
 			
-			n\obj2 = LoadMesh_Strict("GFX\173box.b3d")
-			ScaleEntity n\obj2, RoomScale, RoomScale, RoomScale
+			n\obj2 = CopyEntity(o\NPCModelID[29])
+			ScaleEntity n\obj2, RoomScale, 1.05 * RoomScale, RoomScale
 			HideEntity n\obj2
 			
 			n\CollRadius = 0.32
@@ -111,12 +112,12 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			n\MaxGravity = 0.0
 			EntityRadius n\Collider, 0.2
 			EntityType n\Collider, HIT_PLAYER
-			n\obj = LoadAnimMesh_Strict("GFX\npcs\106_2.b3d")
+			n\obj = CopyEntity(o\NPCModelID[1])
 			
 			temp# = (GetINIFloat("DATA\NPCs.ini", "SCP-106", "scale") / 2.2)		
 			ScaleEntity n\obj, temp, temp, temp
 			
-			Local OldManEyes% = LoadTexture_Strict("GFX\npcs\oldmaneyes.jpg")
+			Local OldManEyes% = LoadTexture_Strict("GFX\npcs\scp_106_eyes.png")
 			
 			n\Speed = (GetINIFloat("DATA\NPCs.ini", "SCP-106", "speed") / 100.0)
 			
@@ -136,14 +137,14 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			EntityRadius n\Collider, 0.2
 			;EntityRadius Collider, 0.15, 0.30
 			EntityType n\Collider, HIT_PLAYER
-			n\obj = CopyEntity(GuardObj) ;LoadAnimMesh_Strict("GFX\npcs\mtf.b3d")
+			n\obj = CopyEntity(o\NPCModelID[2])
 			
 			n\Speed = (GetINIFloat("DATA\NPCs.ini", "Guard", "speed") / 100.0)
 			temp# = (GetINIFloat("DATA\NPCs.ini", "Guard", "scale") / 2.5)
 			
 			ScaleEntity n\obj, temp, temp, temp
 			
-			MeshCullBox (n\obj, -MeshWidth(GuardObj), -MeshHeight(GuardObj), -MeshDepth(GuardObj), MeshWidth(GuardObj)*2, MeshHeight(GuardObj)*2, MeshDepth(GuardObj)*2)
+			MeshCullBox (n\obj, -MeshWidth(n\obj), -MeshHeight(n\obj), -MeshDepth(n\obj), MeshWidth(n\obj)*2, MeshHeight(n\obj)*2, MeshDepth(n\obj)*2)
 			;[End Block]
 		Case NPCtypeMTF
 			;[Block]
@@ -153,7 +154,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			;EntityRadius Collider, 0.15, 0.30
 			EntityType n\Collider, HIT_PLAYER
 			;EntityPickMode n\Collider, 1
-			n\obj = CopyEntity(MTFObj) ;LoadAnimMesh_Strict("GFX\npcs\mtf.b3d")
+			n\obj = CopyEntity(o\NPCModelID[7])
 			
 			n\Speed = (GetINIFloat("DATA\NPCs.ini", "MTF", "speed") / 100.0)
 			
@@ -161,7 +162,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			
 			ScaleEntity n\obj, temp, temp, temp
 			
-			MeshCullBox (n\obj, -MeshWidth(MTFObj), -MeshHeight(MTFObj), -MeshDepth(MTFObj), MeshWidth(MTFObj)*2, MeshHeight(MTFObj)*2, MeshDepth(MTFObj)*2) 
+			MeshCullBox (n\obj, -MeshWidth(n\obj), -MeshHeight(n\obj), -MeshDepth(n\obj), MeshWidth(n\obj)*2, MeshHeight(n\obj)*2, MeshDepth(n\obj)*2) 
 			
 			If MTFSFX(0)=0 Then
 				MTFSFX(0)=LoadSound_Strict("SFX\Character\MTF\ClassD1.ogg")
@@ -200,14 +201,14 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			EntityRadius n\Collider, 0.32
 			EntityType n\Collider, HIT_PLAYER
 			
-			n\obj = CopyEntity(ClassDObj)
+			n\obj = CopyEntity(o\NPCModelID[3])
 			
 			temp# = 0.52 / MeshWidth(n\obj)
 			ScaleEntity n\obj, temp, temp, temp
 			
 			n\Speed = 2.0 / 100
 			
-			MeshCullBox (n\obj, -MeshWidth(ClassDObj), -MeshHeight(ClassDObj), -MeshDepth(ClassDObj), MeshWidth(ClassDObj)*2, MeshHeight(ClassDObj)*2, MeshDepth(ClassDObj)*2)
+			MeshCullBox (n\obj, -MeshWidth(n\obj), -MeshHeight(n\obj), -MeshDepth(n\obj), MeshWidth(n\obj)*2, MeshHeight(n\obj)*2, MeshDepth(n\obj)*2)
 			
 			n\CollRadius = 0.32
 			;[End Block]
@@ -215,7 +216,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			;[Block]
 			n\Collider = CreatePivot()
 			EntityRadius n\Collider, 0.2
-			n\obj = LoadAnimMesh_Strict("GFX\npcs\372.b3d")
+			n\obj = CopyEntity(o\NPCModelID[4])
 			
 			temp# = 0.35 / MeshWidth(n\obj)
 			ScaleEntity n\obj, temp, temp, temp
@@ -225,9 +226,9 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			n\NVName = "SCP-513-1"
 			n\Collider = CreatePivot()
 			EntityRadius n\Collider, 0.2
-			n\obj = LoadAnimMesh_Strict("GFX\npcs\bll.b3d")
+			n\obj = CopyEntity(o\NPCModelID[11])
 			
-			n\obj2 = CopyEntity (n\obj)
+			n\obj2 = CopyEntity(n\obj)
 			EntityAlpha n\obj2, 0.6
 			
 			temp# = 1.8 / MeshWidth(n\obj)
@@ -240,7 +241,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			n\Collider = CreatePivot()
 			EntityRadius n\Collider, 0.26
 			EntityType n\Collider, HIT_PLAYER
-			n\obj = LoadAnimMesh_Strict("GFX\npcs\scp096.b3d")
+			n\obj = CopyEntity(o\NPCModelID[8])
 			
 			n\Speed = (GetINIFloat("DATA\NPCs.ini", "SCP-096", "speed") / 100.0)
 			
@@ -257,8 +258,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			n\Collider = CreatePivot()
 			EntityRadius n\Collider, 0.2
 			EntityType n\Collider, HIT_PLAYER
-			;n\obj = LoadAnimMesh_Strict("GFX\npcs\scp-049.b3d")
-			n\obj = CopyEntity(NPC049OBJ)
+			n\obj = CopyEntity(o\NPCModelID[9])
 			
 			n\Speed = (GetINIFloat("DATA\NPCs.ini", "SCP-049", "speed") / 100.0)
 			
@@ -278,16 +278,15 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			EntityRadius n\Collider, 0.2
 			EntityType n\Collider, HIT_PLAYER
 			
-			;For n2.NPCs = Each NPCs
-			;	If n\NPCtype = n2\NPCtype And n<>n2 Then
-			;		n\obj = CopyEntity (n2\obj)
-			;		Exit
-			;	EndIf
-			;Next
+			For n2.NPCs = Each NPCs
+				If n\NPCtype = n2\NPCtype And n<>n2 Then
+					n\obj = CopyEntity (n2\obj)
+					Exit
+				EndIf
+			Next
 			
 			If n\obj = 0 Then 
-				;n\obj = LoadAnimMesh_Strict("GFX\npcs\zombie1.b3d")
-				n\obj = CopyEntity(NPC0492OBJ)
+				n\obj = CopyEntity(o\NPCModelID[10])
 				
 				temp# = (GetINIFloat("DATA\NPCs.ini", "SCP-049-2", "scale") / 2.5)
 				ScaleEntity n\obj, temp, temp, temp
@@ -310,9 +309,9 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			n\MaxGravity = 0.0
 			n\Collider = CreatePivot()
 			EntityRadius n\Collider, 0.2
-			n\obj = CopyEntity(ApacheObj);LoadAnimMesh_Strict("GFX\apache.b3d")
+			n\obj = CopyEntity(o\NPCModelID[5])
 			
-			n\obj2 = CopyEntity(ApacheRotorObj);LoadAnimMesh_Strict("GFX\apacherotor.b3d",n\obj)
+			n\obj2 = CopyEntity(o\NPCModelID[6])
 			EntityParent n\obj2,n\obj
 			
 			For i = -1 To 1 Step 2
@@ -321,7 +320,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 				EntityAlpha rotor2, 0.5
 			Next
 			
-			n\obj3 = LoadAnimMesh_Strict("GFX\apacherotor2.b3d",n\obj)
+			n\obj3 = CopyEntity(o\NPCModelID[21], n\obj)
 			PositionEntity n\obj3, 0.0, 2.15, -5.48
 			
 			EntityType n\Collider, HIT_APACHE
@@ -359,7 +358,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			Next
 			
 			If n\obj = 0 Then 
-				n\obj = LoadAnimMesh_Strict("GFX\NPCs\035tentacle.b3d")
+				n\obj = CopyEntity(o\NPCModelID[12])
 				ScaleEntity n\obj, 0.065,0.065,0.065
 			EndIf
 			
@@ -372,11 +371,11 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			n\Collider = CreatePivot()
 			EntityRadius n\Collider, 0.25
 			EntityType n\Collider, HIT_PLAYER
-			n\obj = LoadAnimMesh_Strict("GFX\npcs\forestmonster.b3d")
+			n\obj = CopyEntity(o\NPCModelID[13])
 			
 			EntityFX(n\obj, 1)
 			
-			tex = LoadTexture_Strict("GFX\npcs\860_eyes.png",1+2)
+			tex = LoadTexture_Strict("GFX\npcs\scp_860_2_eyes.png",1+2)
 			
 			n\obj2 = CreateSprite()
 			ScaleSprite(n\obj2, 0.1, 0.1)
@@ -398,11 +397,6 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			;[End Block]
 		Case NPCtype939
 			;[Block]
-			;i = 53
-			;For n2.NPCs = Each NPCs
-			;	If (n\NPCtype = n2\NPCtype) And (n<>n2) Then i=i+36
-			;Next
-			;n\NVName = "SCP-939-"+i
 			Local amount939% = 0
 			For n2.NPCs = Each NPCs
 				If (n\NPCtype = n2\NPCtype) And (n<>n2)
@@ -425,36 +419,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			Next
 			
 			If n\obj = 0 Then 
-				n\obj = LoadAnimMesh_Strict("GFX\NPCs\scp-939.b3d")
-				
-				;If BumpEnabled Then
-				;	bump1 = LoadTexture_Strict("GFX\npcs\scp-939_licker_normal.png")
-				;	;TextureBlend bump1, FE_BUMP ;USE DOT3
-				;	
-				;	For i = 2 To CountSurfaces(n\obj)
-				;		sf = GetSurface(n\obj,i)
-				;		b = GetSurfaceBrush( sf )
-				;		If b<>0 Then
-				;			t1 = GetBrushTexture(b,0)
-				;			If t1<>0 Then
-				;				Select Lower(StripPath(TextureName(t1)))
-				;					Case "scp-939-licker_diffusetest01.png"
-				;						
-				;						;BrushTexture b, bump1, 0, 0
-				;						BrushTexture b, t1, 0, 1
-				;						PaintSurface sf,b
-				;						
-				;                  ;If StripPath(TextureName(t1)) <> "" Then FreeTexture t1
-				;                  ;FreeBrush b   
-				;				End Select
-				;				FreeTexture t1
-				;			EndIf
-				;			FreeBrush b
-				;		EndIf
-				;	Next
-				;	FreeTexture bump1
-				;EndIf
-				
+				n\obj = CopyEntity(o\NPCModelID[14])
 				temp# = GetINIFloat("DATA\NPCs.ini", "SCP-939", "scale")/2.5
 				ScaleEntity n\obj, temp, temp, temp		
 			EndIf
@@ -470,19 +435,9 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			EntityRadius n\Collider, 0.2
 			EntityType n\Collider, HIT_PLAYER
 			
-			n\obj = LoadAnimMesh_Strict("GFX\NPCs\scp-066.b3d")
+			n\obj = CopyEntity(o\NPCModelID[15])
 			temp# = GetINIFloat("DATA\NPCs.ini", "SCP-066", "scale")/2.5
 			ScaleEntity n\obj, temp, temp, temp		
-			
-			;If BumpEnabled Then 
-			;	diff1 = LoadTexture_Strict("GFX\npcs\scp-066_diffuse01.jpg")
-			;	bump1 = LoadTexture_Strict("GFX\npcs\scp-066_normal.png")
-			;	;TextureBlend bump1, FE_BUMP ;USE DOT3
-			;	EntityTexture n\obj, bump1, 0, 1
-			;	EntityTexture n\obj, diff1, 0, 2
-			;	FreeTexture diff1
-			;	FreeTexture bump1
-			;EndIf
 			
 			n\Speed = (GetINIFloat("DATA\NPCs.ini", "SCP-066", "speed") / 100.0)
 			;[End Block]
@@ -505,7 +460,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			Next
 			
 			If n\obj = 0 Then 
-				n\obj = LoadAnimMesh_Strict("GFX\npcs\scp-966.b3d")
+				n\obj = CopyEntity(o\NPCModelID[16])
 			EndIf
 			
 			EntityFX n\obj,1
@@ -535,7 +490,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			Next
 			
 			If n\obj = 0 Then 
-				n\obj = LoadAnimMesh_Strict("GFX\npcs\1499-1.b3d")
+				n\obj = CopyEntity(o\NPCModelID[18])
 			EndIf
 			
 			n\Speed = (GetINIFloat("DATA\NPCs.ini", "SCP-1499-1", "speed") / 100.0) * Rnd(0.9,1.1)
@@ -554,7 +509,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			EntityRadius n\Collider, 0.2
 			EntityType n\Collider, HIT_PLAYER
 			
-			n\obj = LoadAnimMesh_Strict("GFX\npcs\zombiesurgeon.b3d")
+			n\obj = CopyEntity(o\NPCModelID[19])
 			
 			temp# = 0.5 / MeshWidth(n\obj)
 			ScaleEntity n\obj, temp, temp, temp
@@ -576,14 +531,14 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			EntityRadius n\Collider, 0.32
 			EntityType n\Collider, HIT_PLAYER
 			
-			n\obj = CopyEntity(ClerkOBJ)
+			n\obj = CopyEntity(o\NPCModelID[20])
 			
 			temp# = 0.5 / MeshWidth(n\obj)
 			ScaleEntity n\obj, temp, temp, temp
 			
 			n\Speed = 2.0 / 100
 			
-			MeshCullBox (n\obj, -MeshWidth(ClerkOBJ), -MeshHeight(ClerkOBJ), -MeshDepth(ClerkOBJ), MeshWidth(ClerkOBJ)*2, MeshHeight(ClerkOBJ)*2, MeshDepth(ClerkOBJ)*2)
+			MeshCullBox(n\obj, -MeshWidth(n\obj), -MeshHeight(n\obj), -MeshDepth(n\obj), MeshWidth(n\obj)*2, MeshHeight(n\obj)*2, MeshDepth(n\obj)*2)
 			
 			n\CollRadius = 0.32
 			;[End Block]
@@ -7334,7 +7289,7 @@ Function ChangeNPCTextureID(n.NPCs,textureid%)
 	
 	temp# = 0.5 / MeshWidth(n\obj)
 	ScaleEntity n\obj, temp, temp, temp
-	MeshCullBox (n\obj, -MeshWidth(ClassDObj), -MeshHeight(ClassDObj), -MeshDepth(ClassDObj), MeshWidth(ClassDObj)*2, MeshHeight(ClassDObj)*2, MeshDepth(ClassDObj)*2)
+	MeshCullBox (n\obj, -MeshWidth(n\obj), -MeshHeight(n\obj), -MeshDepth(n\obj), MeshWidth(n\obj)*2, MeshHeight(n\obj)*2, MeshDepth(n\obj)*2)
 	
 	SetNPCFrame(n,n\Frame)
 	
@@ -7348,5 +7303,5 @@ End Function
 
 
 ;~IDEal Editor Parameters:
-;~B#190#1291#132B#13C4#1574#167F#1840#189C
+;~B#18F#1264#12FE#1397#1547#1652#1813#186F
 ;~C#Blitz3D

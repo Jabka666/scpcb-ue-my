@@ -258,6 +258,7 @@ Function QuickLoadEvents()
 	
 	Local e.Events = QuickLoad_CurrEvent
 	Local r.Rooms, sc.SecurityCams, sc2.SecurityCams, Scale#, Pvt%, n.NPCs, Tex%, i%, x#, z#
+	Local o.Objects = First Objects
 	
 	; ~ Might be a good idea to use QuickLoadPercent to determine the "steps" of the loading process 
 	; ~ Instead of magic values in e\eventState and e\eventStr
@@ -401,19 +402,19 @@ Function QuickLoadEvents()
 			;[Block]
 			If e\EventState = 0 Or e\EventStr <> "LoadDone" Then
 				If e\EventStr = "Load0"
-					e\room\Objects[3] = LoadAnimMesh_Strict("GFX\npcs\205_demon1.b3d")
+					e\room\Objects[3] = CopyEntity(o\NPCModelID[30])
 					QuickLoadPercent = 10
 					e\EventStr = "Load1"
 				ElseIf e\EventStr = "Load1"
-					e\room\Objects[4] = LoadAnimMesh_Strict("GFX\npcs\205_demon2.b3d")
+					e\room\Objects[4] = CopyEntity(o\NPCModelID[31])
 					QuickLoadPercent = 20
 					e\EventStr = "Load2"
 				ElseIf e\EventStr = "Load2"
-					e\room\Objects[5] = LoadAnimMesh_Strict("GFX\npcs\205_demon3.b3d")
+					e\room\Objects[5] = CopyEntity(o\NPCModelID[32])
 					QuickLoadPercent = 30
 					e\EventStr = "Load3"
 				ElseIf e\EventStr = "Load3"
-					e\room\Objects[6] = LoadAnimMesh_Strict("GFX\npcs\205_woman.b3d")
+					e\room\Objects[6] = CopyEntity(o\NPCModelID[33])
 					QuickLoadPercent = 40
 					e\EventStr = "Load4"
 				ElseIf e\EventStr = "Load4"
@@ -533,6 +534,7 @@ Function UpdateEvents()
 	Local CurrTrigger$ = ""
 	Local x#, y#, z#
 	Local Angle#
+	Local o.Objects = First Objects
 	
 	CurrStepSFX = 0
 	
@@ -1951,7 +1953,7 @@ Function UpdateEvents()
 					If e\EventState3 = 0.0 Then
 						If Rand(2) = 1 Then
 							GiveAchievement(Achv1048)
-							e\room\Objects[1] = LoadAnimMesh_Strict("GFX\npcs\scp_1048.b3d")
+							e\room\Objects[1] = CopyEntity(o\NPCModelID[23])
 							ScaleEntity(e\room\Objects[1], 0.05, 0.05, 0.05)
 							PositionEntity(e\room\Objects[1], EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
 							SetAnimTime(e\room\Objects[1], 267.0)	
@@ -3770,7 +3772,7 @@ Function UpdateEvents()
 						
 						; ~ Place the tunnels
 						For i = 0 To 6
-							Meshes[i] = CopyEntity(OBJTunnel(i))
+							Meshes[i] = CopyEntity(o\MTModelID[i])
 							HideEntity(Meshes[i])
 						Next
 						FreeTextureCache
@@ -4054,7 +4056,7 @@ Function UpdateEvents()
 					Else If e\room\grid\Meshes[0] = 0 Then
 						; ~ Place the tunnels
 						For i = 0 To 6
-							Meshes[i] = CopyEntity(OBJTunnel(i))
+							Meshes[i] = CopyEntity(o\MTModelID[i])
 							HideEntity(Meshes[i])
 						Next
 						
@@ -4439,9 +4441,9 @@ Function UpdateEvents()
 				;[Block]
 				If PlayerRoom = e\room Then
 					If e\room\Objects[2] = 0 Then
-						e\room\Objects[2] =	LoadMesh_Strict("GFX\npcs\duck_low_res.b3d")
+						e\room\Objects[2] =	CopyEntity(o\NPCModelID[25])
 						ScaleEntity(e\room\Objects[2], 0.07, 0.07, 0.07)
-						Tex = LoadTexture_Strict("GFX\npcs\duck1.png")
+						Tex = LoadTexture_Strict("GFX\npcs\duck(3).png")
 						EntityTexture(e\room\Objects[2], Tex)
 						FreeTexture(Tex)
 						PositionEntity(e\room\Objects[2], EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
@@ -4468,7 +4470,7 @@ Function UpdateEvents()
 				;[Block]
 				If PlayerRoom = e\room Then
 					If e\room\Objects[2] = 0 Then
-						e\room\Objects[2] =	LoadAnimMesh_Strict("GFX\npcs\scp_1048_pen.b3d")
+						e\room\Objects[2] =	CopyEntity(o\NPCModelID[24])
 						ScaleEntity(e\room\Objects[2], 0.05, 0.05, 0.05)
 						SetAnimTime(e\room\Objects[2], 414.0)
 						
@@ -4967,7 +4969,7 @@ Function UpdateEvents()
 							Case 60
 								;[Block]
 								If (Not HalloweenTex) Then
-									Local Tex970% = LoadTexture_Strict("GFX\npcs\173h.pt", 1)
+									Local Tex970% = LoadTexture_Strict("GFX\npcs\scp_173_h.pt", 1)
 									
 									EntityTexture(Curr173\OBJ, Tex970, 0, 0)
 									FreeTexture(Tex970)
@@ -5417,7 +5419,7 @@ Function UpdateEvents()
 									Temp = e\room\NPC[0]\Frame
 									
 									FreeEntity(e\room\NPC[0]\OBJ)
-									e\room\NPC[0]\OBJ = LoadAnimMesh_Strict("GFX\NPCs\035.b3d")
+									e\room\NPC[0]\OBJ = CopyEntity(o\NPCModelID[27])
 									x = 0.5 / MeshWidth(e\room\NPC[0]\OBJ)
 									e\room\NPC[0]\ModelScaleX = x
 									e\room\NPC[0]\ModelScaleY = x
@@ -6769,7 +6771,7 @@ Function UpdateEvents()
 						
 						e\room\NPC[0] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True), EntityZ(e\room\Objects[6], True))
 						
-						Nazi% = LoadAnimMesh_Strict("GFX\npcs\naziofficer.b3d")
+						Nazi% = CopyEntity(o\NPCModelID[22])
 						Scale# = 0.5 / MeshWidth(Nazi)
 						
 						FreeEntity(e\room\NPC[0]\OBJ)
@@ -6939,7 +6941,7 @@ Function UpdateEvents()
 				If e <> Null Then
 					If PlayerRoom = e\room Then
 						If e\EventState = 0 Then
-							e\room\Objects[7]=LoadAnimMesh_Strict("GFX\npcs\scp_1048.b3d")
+							e\room\Objects[7]=CopyEntity(o\NPCModelID[23])
 							ScaleEntity e\room\Objects[7], 0.05,0.05,0.05
 							
 							TFormPoint EntityX(Collider),EntityY(Collider),EntityZ(Collider),0,e\room\obj
@@ -7663,7 +7665,7 @@ Function UpdateEvents()
 								EndIf
 							Next
 							If e\room\Objects[0] = 0 Then
-								e\room\Objects[0] =	LoadAnimMesh_Strict("GFX\npcs\scp_1048_a.b3d")
+								e\room\Objects[0] =	CopyEntity(o\NPCModelID[17])
 							EndIf
 							ScaleEntity(e\room\Objects[0], 0.05, 0.05, 0.05)
 							SetAnimTime(e\room\Objects[0], 2)
@@ -8795,8 +8797,8 @@ Function UpdateEvents()
 				;[End Block]
 		End Select
 		
-		If e<>Null Then
-			CatchErrors(Chr(34)+e\EventName+Chr(34)+" event")
+		If e <> Null Then
+			CatchErrors(Chr(34) + e\EventName + Chr(34) + " event")
 		Else
 			CatchErrors("Deleted event")
 		EndIf
@@ -8838,7 +8840,7 @@ Function UpdateEvents()
 End Function
 
 Function UpdateDimension1499()
-	Local e.Events,n.NPCs, n2.NPCs, r.Rooms, it.Items, i%, j%, du.Dummy1499, du2.Dummy1499, Temp%, Scale#, x%, y%
+	Local e.Events,n.NPCs, n2.NPCs, r.Rooms, it.Items, i%, j%, du.Dummy1499, Temp%, Scale#, x%, y%
 	
 	For e.Events = Each Events
 		If e\EventName = "dimension1499"
@@ -8922,7 +8924,7 @@ Function UpdateDimension1499()
 						n\PrevState = 2
 						n\Angle = 270.0
 						RotateEntity(n\Collider, 0.0, n\Angle, 0.0)
-						Tex = LoadTexture_Strict("GFX\npcs\1499_King.jpg")
+						Tex = LoadTexture_Strict("GFX\npcs\scp_1499_1_king.png")
 						EntityTexture(n\OBJ, Tex)
 						FreeTexture(tex)
 						e\room\NPC[0] = n
@@ -9178,6 +9180,7 @@ End Function
 Function UpdateEndings()
 	Local e.Events, n.NPCs, r.Rooms, i%, Pvt%, p.Particles
 	Local Dist#
+	Local o.Objects = First Objects
 	
 	For e.Events = Each Events
 		Select e\EventName
@@ -9446,7 +9449,7 @@ Function UpdateEndings()
 							
 							If e\EventState > 70 * 26.5 Then
 								If e\room\Objects[12] = 0 Then
-									e\room\Objects[12] = LoadMesh_Strict("GFX\NPCs\682arm.b3d")
+									e\room\Objects[12] = CopyEntity(o\NPCModelID[28])
 									ScaleEntity(e\room\Objects[12], 0.15, 0.15, 0.15)
 									Temp = (Min(((EntityDistance(e\room\NPC[3]\Collider, Collider) / RoomScale) - 3000.0) / 4.0, 1000.0) + 12192.0) * RoomScale
 									PositionEntity(e\room\Objects[12], EntityX(e\room\NPC[3]\Collider), 12192.0 * RoomScale, EntityZ(e\room\NPC[3]\Collider))
@@ -9849,9 +9852,11 @@ Function UpdateEndings()
 									
 									If Abs(EntityY(Collider) - EntityY(e\room\Objects[11], True)) < 1.0 Then
 										If Distance(EntityX(Collider), EntityZ(Collider), EntityX(e\room\Objects[11], True), EntityZ(e\room\Objects[11], True)) < 7.0 Then
-											e\room\Objects[12] = LoadMesh_Strict("GFX\npcs\s2.b3d")
-											EntityColor(e\room\Objects[12], 0.0, 0.0, 0.0)
-											ScaleMesh(e\room\Objects[12], 0.32 / 21.3, 0.32 / 21.3, 0.32 / 21.3)
+											e\room\Objects[12] = CopyEntity(o\NPCModelID[26])
+											
+											Local Temp2# = 0.55 / MeshWidth(e\room\Objects[12])
+											
+											ScaleEntity(e\room\Objects[12], Temp2, Temp2, Temp2)
 											PositionEntity(e\room\Objects[12], EntityX(e\room\Objects[11], True), EntityY(e\room\Objects[11], True), EntityZ(e\room\Objects[11], True))
 											
 											e\room\Objects[17] = CopyEntity(e\room\Objects[12])
@@ -10116,5 +10121,5 @@ Function IsItemGoodFor1162(itt.ItemTemplates)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#120B#1E3E
+;~B#120D#1E40
 ;~C#Blitz3D
