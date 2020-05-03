@@ -1491,7 +1491,7 @@ Function UpdateConsole()
 					Next
 					
 					For e2.Events = Each Events
-				        If e2\EventName = "008"
+				        If e2\EventName = "room008"
 							e2\EventState = 2.0
 							UpdateLever(e2\room\Levers[0])
 							RotateEntity(e2\room\Levers[0], 0.0, EntityYaw(e2\room\Levers[0]), 30.0)
@@ -10262,7 +10262,7 @@ Function Update008()
 				If Infect >= 92.7 And Temp < 92.7 Then
 					If TeleportForInfect
 						For r.Rooms = Each Rooms
-							If r\RoomTemplate\Name = "008" Then
+							If r\RoomTemplate\Name = "room008" Then
 								PositionEntity(Collider, EntityX(r\Objects[7], True), EntityY(r\Objects[7], True), EntityZ(r\Objects[7], True), True)
 								ResetEntity(Collider)
 								r\NPC[0] = CreateNPC(NPCtypeD, EntityX(r\Objects[6], True),EntityY(r\Objects[6], True) + 0.2, EntityZ(r\Objects[6], True))

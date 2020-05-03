@@ -176,7 +176,7 @@ Function InitEvents()
 	
 	CreateEvent("room035", "room035", 0, 0.0)
 	
-	CreateEvent("008", "008", 0, 0.0)
+	CreateEvent("room008", "room008", 0, 0.0)
 	
 	CreateEvent("room106", "room106", 0, 0.0)	
 	
@@ -1987,7 +1987,7 @@ Function UpdateEvents()
 				
 				If e\room\RoomTemplate\Name = "checkpoint2" Then
 					For e2.Events = Each Events
-						If e2\EventName = "008"
+						If e2\EventName = "room008"
 							If e2\EventState = 2.0
 								If e\room\RoomDoors[0]\Locked
 									TurnCheckpointMonitorsOff(1)
@@ -7208,97 +7208,92 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-				
-			Case "008"
+			Case "room008"
 				;[Block]
 				If PlayerRoom = e\room Then	
-					GiveAchievement(Achv008)=True
-					;container open
-					If e\EventState = 0 Then
-						If Curr173\Idle<2 And EntityDistance(Curr173\Collider,Collider)>HideDistance ;Just making sure that 173 is far away enough to spawn him to this room
-							PositionEntity Curr173\Collider, EntityX(e\room\Objects[3],True),0.5,EntityZ(e\room\Objects[3],True),True
-							ResetEntity Curr173\Collider
-						EndIf
-						e\EventState = 1
-					ElseIf e\EventState = 1
-						e\SoundCHN = LoopSound2(AlarmSFX(0), e\SoundCHN, Camera, e\room\Objects[0], 5.0)
-						
-						If (MilliSecs2() Mod 1000)<500 Then
-							ShowEntity e\room\Objects[5] 
-						Else
-							HideEntity e\room\Objects[5]
-						EndIf
-						
-						Dist = EntityDistance(Collider, e\room\Objects[0])
-						If Dist<2.0 Then 
-							e\room\RoomDoors[0]\locked = True
-							e\room\RoomDoors[1]\locked = True
+				    If EntityY(Collider) < - 4496.0 * RoomScale Then
+					    GiveAchievement(Achv008)
+					    If e\EventState = 0.0 Then					
+						    If Curr173\Idle < 2 And EntityDistance(Curr173\Collider, Collider) > HideDistance ; ~ Just making sure that SCP-173 is far away enough to spawn him to this room
+							    PositionEntity(Curr173\Collider, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True), EntityZ(e\room\Objects[3], True), True)
+							    ResetEntity(Curr173\Collider)
+						    EndIf											
+						    e\EventState = 1.0
+					    ElseIf e\EventState = 1.0
+					        If EntityDistance(e\room\Objects[1], Collider) < 3.1 Then
+						        e\SoundCHN = LoopSound2(AlarmSFX(0), e\SoundCHN, Camera, e\room\Objects[0], 5.0)
+						    EndIf
 							
-							If e\EventState2=0 Then
-								ShowEntity e\room\Objects[2]
-								If EntityDistance(Curr173\Collider,e\room\Objects[4])<3.0
-									If (BlinkTimer<-10 Or (Not EntityInView(Curr173\obj,Camera))) And Curr173\Idle = 0 Then
-										PositionEntity Curr173\Collider, EntityX(e\room\Objects[4],True),0.5,EntityZ(e\room\Objects[4],True),True
-										ResetEntity Curr173\Collider
-										
-										HideEntity e\room\Objects[2]
-										
-										If (Not WearingHazmat) Then
-											Injuries=Injuries+0.1
-											If Infect=0 Then Infect=1
-											Msg = "The window shattered and a piece of glass cut your arm."
-											MsgTimer = 70*8
-										EndIf
-										
-										PlaySound2(LoadTempSound("SFX\General\GlassBreak.ogg"), Camera, e\room\Objects[0]) 
-										
-										e\EventState2=1
-									EndIf
-								EndIf
-							EndIf
+						    If (MilliSecs2() Mod 1000) < 500 Then
+						    	ShowEntity(e\room\Objects[5]) 
+						    Else
+							    HideEntity(e\room\Objects[5])
+						    EndIf
+						    
+						    Dist = EntityDistance(Collider, e\room\Objects[0])
+						    If Dist < 2.0 Then 
+							    e\room\RoomDoors[0]\Locked = True
+							    e\room\RoomDoors[1]\Locked = True
+							    
+							    If e\EventState2 = 0.0 Then
+								    ShowEntity(e\room\Objects[2])
+								    If EntityDistance(Curr173\Collider, e\room\Objects[4]) < 3.0
+									    If BlinkTimer < -10.0 Or (Not EntityInView(Curr173\OBJ, Camera)) And Curr173\Idle = 0 Then
+										    PositionEntity(Curr173\Collider, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True), True)
+										    ResetEntity(Curr173\Collider)
+											
+										    HideEntity(e\room\Objects[2])
+											
+										    If WearingHazmat = 0 Then
+												Injuries = Injuries + 0.1
+												Msg = "The window shattered and a piece of glass cut your arm."
+												MsgTimer = 70 * 8
+												
+											    If Infect = 0.0 Then Infect = 1.0
+											EndIf
+											PlaySound2(LoadTempSound("SFX\General\GlassBreak.ogg"), Camera, e\room\Objects[0]) 
+											
+											e\EventState2 = 1.0
+									    EndIf
+								    EndIf
+							    EndIf
+								
+							    If Dist < 1.0 Then
+								    If EntityInView(e\room\Objects[0], Camera) Then
+									    DrawHandIcon = True
+										If MouseDown1 Then
+										    DrawArrowIcon(2) = True
+										    RotateEntity(e\room\Levers[0], Max(Min(EntityPitch(e\room\Levers[0]) + Max(Min(-Mouse_Y_Speed_1, 10.0), -10.0), 89.0), 35.0), EntityYaw(e\room\Levers[0]), 0.0)
+									    EndIf
+								    EndIf
+							    EndIf
+								
+							    If WearingHazmat = 0 And Bloodloss > 0.0
+								    If Infect = 0.0
+									    Infect = 1.0
+								    EndIf
+							    EndIf
+						    EndIf
 							
-							If Dist<1.0 Then
-								If EntityInView(e\room\Objects[0], Camera) Then
-									DrawHandIcon = True
-									
-									If MouseDown1 Then
-										DrawArrowIcon(2) = True
-										RotateEntity(e\room\Levers[0], Max(Min(EntityPitch(e\room\Levers[0])+Max(Min(-mouse_y_speed_1,10.0),-10), 89), 35), EntityYaw(e\room\Levers[0]), 0)
-									EndIf
-								EndIf
-							EndIf
+						    If EntityPitch(e\room\Levers[0], True) < 40.0 Then 
+							    e\EventState = 2.0
+							    PlaySound_Strict(LeverSFX)
+						    Else
+							    p.Particles = CreateParticle(EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0],True), 6, 0.02, -0.12)
+								p\SizeChange = 0.012 :  p\Achange = -0.015
+							    RotateEntity(p\Pvt, -90.0, 0.0, 0.0, True)
+							    TurnEntity(p\Pvt, Rnd(-26.0, 26.0), Rnd(-26.0, 26.0), Rnd(360.0))
+							EndIf		
+					    Else
+						    HideEntity(e\room\Objects[5])
+						    e\room\RoomDoors[0]\Locked = False
+						    e\room\RoomDoors[1]\Locked = False
+						    e\room\RoomDoors[2]\Locked = False
 							
-							If (Not WearingHazmat) And Bloodloss>0.0
-								If Infect=0
-									Infect=1
-									
-								EndIf
-							EndIf
-						EndIf
-						
-						If EntityPitch(e\room\Levers[0],True)<40 Then 
-							e\EventState = 2
-							PlaySound_Strict LeverSFX
-						Else
-							p.Particles = CreateParticle(EntityX(e\room\Objects[0],True),EntityY(e\room\Objects[0],True),EntityZ(e\room\Objects[0],True), 6, 0.02, -0.12)
-							RotateEntity (p\pvt,-90,0,0,True)
-							TurnEntity(p\pvt, Rnd(-26,26), Rnd(-26,26), Rnd(360))
-							
-							p\SizeChange = 0.012
-							p\Achange = -0.015
-						EndIf		
-					Else
-						HideEntity e\room\Objects[5]
-						e\room\RoomDoors[0]\locked = False
-						e\room\RoomDoors[1]\locked = False
-						e\room\RoomDoors[2]\locked = False
-						
-						RotateEntity (e\room\Levers[0],CurveAngle(1,EntityPitch(e\room\Levers[0],True),15.0),EntityYaw(e\room\Levers[0],True),0,True)
-						
-						If EntityPitch(e\room\Levers[0],True)=<1.0 Then
-							RemoveEvent(e)
-						EndIf
-					EndIf
+						    RotateEntity(e\room\Levers[0], CurveAngle(1.0, EntityPitch(e\room\Levers[0], True), 15.0), EntityYaw(e\room\Levers[0], True), 0.0, True)
+					    EndIf
+				    EndIf
+				    e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[3], e\room\RoomDoors[4], e\room\Objects[8], e\room\Objects[9], e)
 				EndIf
 				;[End Block]
 			Case "106victim"
@@ -8525,7 +8520,7 @@ Function UpdateEvents()
 				EndIf
 				
 				For e2.Events = Each Events
-					If e2\EventName = "008"
+					If e2\EventName = "room008"
 						If e2\EventState = 2.0
 							EntityTexture(e\room\Objects[21], e\room\Textures[0], 3)
 						Else
@@ -10177,5 +10172,5 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#120B#1E3E
+;~B#120B#1E39
 ;~C#Blitz3D

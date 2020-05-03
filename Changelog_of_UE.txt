@@ -39,6 +39,8 @@ v5.6
 - Changed SCP-109's mechanics.
 - Changed music in SCP-106's containment area.
 - Changed helmet's texture for item and NPCs (guards, zombies and MTFs).
+~~~~~~~~~~~~
+- Changed one bump texture to the better one.
 
 - Removed loading screens' scaling.
 - Removed combined batteries with SCP-447.

@@ -2760,38 +2760,47 @@ Function FillRoom(r.Rooms)
 			it = CreateItem("Scorched Note", "paper", r\x + 64.0 * RoomScale, r\y + 144.0 * RoomScale, r\z - 384.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "008"
+		Case "room008"
 			;[Block]
-			d = CreateDoor(r\Zone, r\x + 296.0 * RoomScale, r\y, r\z - 672.0 * RoomScale, 180.0, r, True, False, 4)
+			d = CreateDoor(r\Zone, r\x + 296.0 * RoomScale, r\y - 5104.0 * RoomScale, r\z - 672.0 * RoomScale, 180.0, r, True, 4, 4)
 			d\AutoClose = False
 			PositionEntity(d\Buttons[1], r\x + 164.0 * RoomScale, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
-			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			r\RoomDoors[0] = d
 			
-			d2 = CreateDoor(r\Zone, r\x + 296.0 * RoomScale, r\y, r\z - 144.0 * RoomScale, 0.0, r)
+			d2 = CreateDoor(r\Zone, r\x + 296.0 * RoomScale, r\y - 5104.0 * RoomScale, r\z - 144.0 * RoomScale, 0.0, r, False, 4)
 			d2\AutoClose = False
-			PositionEntity(d2\Buttons[0], r\x + 432.0 * RoomScale, EntityY(d2\Buttons[0], True), r\z - 480.0 * RoomScale, True)
+			PositionEntity(d2\Buttons[0], r\x + 438.0 * RoomScale, EntityY(d2\Buttons[0], True), r\z - 480.0 * RoomScale, True)
 			RotateEntity(d2\Buttons[0], 0.0, -90.0, 0.0, True)			
-			PositionEntity (d2\Buttons[1], r\x + 164.0 * RoomScale, EntityY(d2\Buttons[0], True), r\z - 128.0 * RoomScale, True)
-			FreeEntity(d2\OBJ2) : d2\OBJ2 = 0
+			PositionEntity(d2\Buttons[1], r\x + 164.0 * RoomScale, EntityY(d2\Buttons[0], True), r\z - 134.0 * RoomScale, True)
 			r\RoomDoors[1] = d2
 			
 			d\LinkedDoor = d2
 			d2\LinkedDoor = d
 			
-			d = CreateDoor(r\Zone, r\x - 384.0 * RoomScale, r\y, r\z - 672.0 * RoomScale, 0.0, r, False, False, 4)
+			d = CreateDoor(r\Zone, r\x - 384.0 * RoomScale, r\y - 5104.0 * RoomScale, r\z - 672.0 * RoomScale, 0.0, r, False, False, 4)
 			d\AutoClose = False : d\Locked = True : r\RoomDoors[2] = d
 			
+			d = CreateDoor(r\Zone, r\x + 456.0 * RoomScale, r\y - 5104.0 * RoomScale, r\z - 864.0 * RoomScale, 90.0, r, False)
+			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.031, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.031, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.162, True)
+			
+			; ~ Elevators' doors
+			r\RoomDoors[3] = CreateDoor(r\Zone, r\x + 448.0 * RoomScale, r\y, r\z, 90.0, r, False, 3)
+			r\RoomDoors[3]\AutoClose = False : r\RoomDoors[3]\Open = True
+			
+			r\RoomDoors[4] = CreateDoor(r\Zone, r\x + 800.0 * RoomScale, r\y - 5104.0 * RoomScale, r\z - 287.0 * RoomScale, 90.0, r, False, 3)
+            r\RoomDoors[4]\AutoClose = False : r\RoomDoors[0]\Open = True
+			
 			; ~ The container
-			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x + 292.0 * RoomScale, r\y + 130.0 * RoomScale, r\z + 516.0 * RoomScale, True)
+		    r\Objects[0] = CreatePivot()
+			PositionEntity(r\Objects[0], r\x + 292.0 * RoomScale, r\y - 4985.0 * RoomScale, r\z + 516.0 * RoomScale)
 			
 			; ~ The lid of the container
-			r\Objects[1] = LoadMesh_Strict("GFX\map\008_2.b3d")
+			r\Objects[1] = LoadMesh_Strict("GFX\map\room008_2.b3d")
 			ScaleEntity(r\Objects[1], RoomScale, RoomScale, RoomScale)
-			PositionEntity(r\Objects[1], r\x + 292 * RoomScale, r\y + 151.0 * RoomScale, r\z + 576.0 * RoomScale, 0)
-			RotateEntity(r\Objects[1], 89.0, 0.0, 0.0, True)
+			PositionEntity(r\Objects[1], r\x + 292.0 * RoomScale, r\y - 4954.0 * RoomScale, r\z + 576.0 * RoomScale)
+			RotateEntity(r\Objects[1], 85.0, 0.0, 0.0, True)
 			
 			r\Levers[0] = r\Objects[1]
 			
@@ -2800,48 +2809,55 @@ Function FillRoom(r.Rooms)
 			EntityTexture(r\Objects[2], GlassTex)
 			SpriteViewMode(r\Objects[2], 2)
 			ScaleSprite(r\Objects[2], 256.0 * RoomScale * 0.5, 194.0 * RoomScale * 0.5)
-			PositionEntity(r\Objects[2], r\x - 176.0 * RoomScale, r\y + 224.0 * RoomScale, r\z + 448.0 * RoomScale)
-			TurnEntity(r\Objects[2], 0.0, 90.0, 0.0)			
-			FreeTexture GlassTex
+			PositionEntity(r\Objects[2], r\x - 176.0 * RoomScale, r\y - 4881.0 * RoomScale, r\z + 448.0 * RoomScale)
+			TurnEntity(r\Objects[2], 0, 90, 0)			
+        	FreeTexture(GlassTex)
 			
-			; ~ SCP-173 spawnpoint
+			; ~ SCP-173's spawnpoint
 			r\Objects[3] = CreatePivot()
-			PositionEntity(r\Objects[3], r\x - 445.0 * RoomScale, r\y + 120.0 * RoomScale, r\z + 544.0 * RoomScale)
+			PositionEntity(r\Objects[3], r\x - 445.0 * RoomScale, r\y - 4985.0 * RoomScale, r\z + 544.0 * RoomScale)
 			
-			; ~ SCP-173 attack point
+			; ~ SCP-173's attack point
 			r\Objects[4] = CreatePivot()
-			PositionEntity(r\Objects[4], r\x + 67.0 * RoomScale, r\y + 120.0 * RoomScale, r\z + 464.0 * RoomScale)
+			PositionEntity(r\Objects[4], r\x + 67.0 * RoomScale, r\y - 4985.0 * RoomScale, r\z + 464.0 * RoomScale)
 			
 			r\Objects[5] = CreateSprite()
-			PositionEntity(r\Objects[5], r\x - 158 * RoomScale, r\y + 368 * RoomScale, r\z + 298.0 * RoomScale)
+			PositionEntity(r\Objects[5], r\x - 158.0 * RoomScale, r\y - 4737.0 * RoomScale, r\z + 298.0 * RoomScale)
 			ScaleSprite(r\Objects[5], 0.02, 0.02)
 			EntityTexture(r\Objects[5], LightSpriteTex(1))
 			EntityBlend(r\Objects[5], 3)
 			HideEntity(r\Objects[5])
 			
-			; ~ Spawnpoint for the scientist used in the "SCP-008 zombie scene"
+			; ~ Spawnpoint for the scientist used in the "SCP-008's zombie scene"
 			r\Objects[6] = CreatePivot()
-			PositionEntity(r\Objects[6], r\x + 160.0 * RoomScale, r\y + 672.0 * RoomScale, r\z - 384.0 * RoomScale)
+			PositionEntity(r\Objects[6], r\x + 160.0 * RoomScale, r\y + 670.0 * RoomScale, r\z - 384.0 * RoomScale)
 			
 			; ~ Spawnpoint for the player
 			r\Objects[7] = CreatePivot()
-			PositionEntity(r\Objects[7], r\x, r\y + 672.0 * RoomScale, r\z + 352.0 * RoomScale)
+			PositionEntity(r\Objects[7], r\x, r\y + 672.0 * RoomScale, r\z + 350.0 * RoomScale)
 			
-			For i = 0 To 7
+			; ~ Elevators' pivots
+			r\Objects[8] = CreatePivot()
+			PositionEntity(r\Objects[8], r\x + 708.0 * RoomScale, r\y + 240.0 * RoomScale, r\z)
+			
+            r\Objects[9] = CreatePivot()
+			PositionEntity(r\Objects[9], r\x + 1058.0 * RoomScale, r\y - 4865.0 * RoomScale, r\z - 287.0  * RoomScale)
+			
+			For i = 0 To 9
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
-			it = CreateItem("Hazmat Suit", "hazmatsuit", r\x - 76.0 * RoomScale, r\y + 0.5, r\z - 396.0 * RoomScale)
+			it = CreateItem("Hazmat Suit", "hazmatsuit", r\x - 76.0 * RoomScale, r\y - 4895.0 * RoomScale, r\z - 396.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it = CreateItem("Document SCP-008", "paper", r\x - 245.0 * RoomScale, r\y + 192.0 * RoomScale, r\z + 368.0 * RoomScale)
+			it = CreateItem("Document SCP-008", "paper", r\x - 545.0 * RoomScale, r\y - 4895.0 * RoomScale, r\z + 368.0 * RoomScale)
+			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			sc = CreateSecurityCam(r\x + 578.956 * RoomScale, r\y + 444.956 * RoomScale, r\z + 772.0 * RoomScale, r)
-			sc\Angle = 135
-			sc\Turn = 45
-			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0, True)
+			sc.SecurityCams = CreateSecurityCam(r\x + 666.0 * RoomScale, r\y - 4654.0 * RoomScale, r\z + 755.0 * RoomScale, r)
+			sc\Angle = 135.0 : sc\Turn = 45.0
+			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			;[End Block]
 		Case "room035"
 			;[Block]
@@ -7156,7 +7172,7 @@ Function CreateMap()
 	
 	Dim MapRoom$(ROOM4 + 1, MaxRooms)
 	
-	; ~ LIGHT CONTAINMENT ZONE
+	; ~ [LIGHT CONTAINMENT ZONE]
 	
 	Local Min_Pos% = 1, Max_Pos% = Room1Amount[0] - 1
 	
@@ -7188,14 +7204,13 @@ Function CreateMap()
 	
 	MapRoom(ROOM4, Floor(0.3 * Float(Room4Amount[0]))) = "room4info"
 	
-	; ~ HEAVY CONTAINMENT ZONE
+	; ~ [HEAVY CONTAINMENT ZONE]
 	
 	Min_Pos = Room1Amount[0]
 	Max_Pos = Room1Amount[0] + Room1Amount[1] - 1
 	
 	SetRoom("room079", ROOM1, Room1Amount[0] + Floor(0.15 * Float(Room1Amount[1])), Min_Pos, Max_Pos)
     SetRoom("room106", ROOM1, Room1Amount[0] + Floor(0.3 * Float(Room1Amount[1])), Min_Pos, Max_Pos)
-    SetRoom("008", ROOM1, Room1Amount[0] + Floor(0.4 * Float(Room1Amount[1])), Min_Pos, Max_Pos)
     SetRoom("room035", ROOM1, Room1Amount[0] + Floor(0.5 * Float(Room1Amount[1])), Min_Pos, Max_Pos)
     SetRoom("room895", ROOM1, Room1Amount[0] + Floor(0.7 * Float(Room1Amount[1])), Min_Pos, Max_Pos)
 	
@@ -7205,7 +7220,8 @@ Function CreateMap()
 	MapRoom(ROOM2, Room2Amount[0] + Floor(0.1 * Float(Room2Amount[1]))) = "room2nuke"
 	SetRoom("room2tunnel", ROOM2, Room2Amount[0] + Floor(0.25 * Float(Room2Amount[1])), Min_Pos, Max_Pos)
 	SetRoom("room049", ROOM2, Room2Amount[0] + Floor(0.4 * Float(Room2Amount[1])), Min_Pos, Max_Pos)
-	SetRoom("room2shaft",ROOM2,Room2Amount[0] + Floor(0.6 * Float(Room2Amount[1])), Min_Pos, Max_Pos)
+	SetRoom("room008", ROOM2, Room2Amount[0] + Floor(0.5 * Float(Room2Amount[1])), Min_Pos, Max_Pos)
+	SetRoom("room2shaft", ROOM2, Room2Amount[0] + Floor(0.6 * Float(Room2Amount[1])), Min_Pos, Max_Pos)
 	SetRoom("room2testroom", ROOM2, Room2Amount[0] + Floor(0.7 * Float(Room2Amount[1])), Min_Pos, Max_Pos)
 	SetRoom("room2servers", ROOM2, Room2Amount[0] + Floor(0.9 * Room2Amount[1]), Min_Pos, Max_Pos)
 	
@@ -7214,7 +7230,7 @@ Function CreateMap()
 	MapRoom(ROOM3, Room3Amount[0] + Floor(0.3 * Float(Room3Amount[1]))) = "room513"
 	MapRoom(ROOM3, Room3Amount[0] + Floor(0.6 * Float(Room3Amount[1]))) = "room966"
 	
-	; ~ ENTRANCE ZONE
+	; ~ [ENTRANCE ZONE]
 	
 	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] - 2) = "exit1"
 	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] - 1) = "gateaentrance"
@@ -7241,7 +7257,7 @@ Function CreateMap()
 	MapRoom(ROOM3, Room3Amount[0] + Room3Amount[1] + Floor(0.7 * Float(Room3Amount[2]))) = "room3servers2"
 	MapRoom(ROOM3, Room3Amount[0] + Room3Amount[1] + Floor(0.5 * Float(Room3Amount[2]))) = "room3offices"
 	
-	; ~ Generate the map
+	; ~ [GENERATE THE MAP]
 	Temp = 0
 	
 	Local r.Rooms, Spacing# = 8.0
@@ -8426,5 +8442,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11AD
+;~B#11BD
 ;~C#Blitz3D

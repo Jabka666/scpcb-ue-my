@@ -990,6 +990,7 @@ Function CreateOverLapBox(r.Rooms)
 	If r\RoomTemplate\Name = "exit1" Then Return
 	If r\RoomTemplate\Name = "gatea" Then Return
 	If r\RoomTemplate\Name = "room049" Then Return
+	If r\RoomTemplate\Name = "room008" Then Return
 	If r\RoomTemplate\Name = "room3storage" Then Return
 	If r\RoomTemplate\Name = "room966" Then Return
 	If r\RoomTemplate\Name = "gateaentrance" Then Return
@@ -2111,9 +2112,8 @@ End Function
 
 
 
-
 ;~IDEal Editor Parameters:
-;~F#258#263#26E#2A7#306#322#349#368#36C#371#37F#39C#3D9#406#414#423#42B#453#45A#461
-;~F#468#481#489#491#5DE#5EE#5FF#615#62A#638#63C#68C#69A#6A2#6A9#6AD#6B1#6DF#6F6#709
-;~F#715#71B#726#72C#768#7DF
+;~F#258#263#26E#2A7#306#322#349#368#36C#371#37F#39C#407#415#424#42C#454#45B#462#469
+;~F#482#48A#492#5DF#5EF#600#616#62B#639#63D#68D#69B#6A3#6AA#6AE#6B2#6E0#6F7#70A#716
+;~F#71C#727#72D#769#7E0
 ;~C#Blitz3D
