@@ -83,7 +83,7 @@ Function InitEvents()
 	; ~ SCP-096 spawns in the first (and last) "room2clockroom3"
 	CreateEvent("room2clockroom096", "room2clockroom3", 0)
 	
-	CreateEvent("endroom106", "endroom", Rand(0, 1))
+	CreateEvent("room1endroom106", "room1endroom", Rand(0, 1))
 	
 	CreateEvent("room2poffices2", "room2poffices2", 0)
 	
@@ -2270,7 +2270,7 @@ Function UpdateEvents()
 					CoffinDistance = e\room\Dist
 				EndIf
 				;[End Block]
-			Case "endroom106"
+			Case "room1endroom106"
 				;[Block]
 				If (Not Contained106) Then
 					If e\EventState = 0.0 Then

@@ -1269,7 +1269,7 @@ Function UpdateLauncher()
 		Flip
 	Forever
 	
-	PutINIValue(OptionFile, "Global", "Hidth", GfxModeWidths(SelectedGFXMode))
+	PutINIValue(OptionFile, "Global", "Width", GfxModeWidths(SelectedGFXMode))
 	PutINIValue(OptionFile, "Global", "Height", GfxModeHeights(SelectedGFXMode))
 	If Fullscreen Then
 		PutINIValue(OptionFile, "Global", "Fullscreen", "true")

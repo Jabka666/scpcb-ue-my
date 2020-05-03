@@ -4036,7 +4036,7 @@ Function FillRoom(r.Rooms)
 			
 			r\Objects[1] = sc\ScrOBJ
 			;[End Block]
-		Case "endroom"
+		Case "room1endroom"
 			;[Block]
 			r\RoomDoors[0] = CreateDoor(r\Zone, r\x, r\y, r\z + 1136.0 * RoomScale, r\y, r, False, True)
 			r\RoomDoors[0]\AutoClose = False : r\RoomDoors[0]\Open = False
@@ -4049,8 +4049,8 @@ Function FillRoom(r.Rooms)
 			;[Block]
 			r\RoomDoors[0] = CreateDoor(r\Zone, r\x, r\y, r\z - 448.0 * RoomScale, 0.0, r, False, True, 2)
 			r\RoomDoors[0]\AutoClose = False : r\RoomDoors[0]\Open = False
-			PositionEntity(r\RoomDoors[0]\Buttons[0], r\x - 390.0 * RoomScale, EntityY(r\RoomDoors[0]\Buttons[i], Trye), r\z - 280.0 * RoomScale, True)
-            PositionEntity(r\RoomDoors[0]\Buttons[1], EntityX(r\RoomDoors[0]\buttons[1], True) + 0.025, EntityY(r\RoomDoors[0]\Buttons[1], True), EntityZ(r\RoomDoors[0]\Buttons[1], True), True) 
+			PositionEntity(r\RoomDoors[0]\Buttons[0], r\x - 390.0 * RoomScale, EntityY(r\RoomDoors[0]\Buttons[i], True), r\z - 280.0 * RoomScale, True)
+            PositionEntity(r\RoomDoors[0]\Buttons[1], EntityX(r\RoomDoors[0]\Buttons[1], True) + 0.025, EntityY(r\RoomDoors[0]\Buttons[1], True), EntityZ(r\RoomDoors[0]\Buttons[1], True), True) 
 			
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x, - 1320.0 * RoomScale, r\z + 2304.0 * RoomScale)
