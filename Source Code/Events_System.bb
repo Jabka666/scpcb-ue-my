@@ -141,7 +141,7 @@ Function InitEvents()
 		End Select 
 	EndIf 
 	
-	CreateEvent("testroom173", "room2testroom2", 0, 1.0)	
+	CreateEvent("room2testroom173", "room2testroom2", 0, 1.0)	
 	
 	CreateEvent("room2tesla", "room2tesla", 0, 0.9)
 	
@@ -191,7 +191,7 @@ Function InitEvents()
 	
 	CreateEvent("room2pit", "room2pit", 0, 0.4 + (0.4 * SelectedDifficulty\aggressiveNPCs))
 	
-	CreateEvent("testroom", "testroom", 0)
+	CreateEvent("room2testroom", "room2testroom", 0)
 	
 	CreateEvent("room2tunnel", "room2tunnel", 0)
 	
@@ -6936,50 +6936,48 @@ Function UpdateEvents()
 					End If
 				EndIf
 				;[End Block]
-			Case "testroom"
-				;[Block]
-				If e <> Null Then
-					If PlayerRoom = e\room Then
-						If e\EventState = 0 Then
-							e\room\Objects[7]=CopyEntity(o\NPCModelID[23])
-							ScaleEntity e\room\Objects[7], 0.05,0.05,0.05
-							
-							TFormPoint EntityX(Collider),EntityY(Collider),EntityZ(Collider),0,e\room\obj
-							If TFormedZ()=0 Then Temp = -1 Else Temp = -Sgn(TFormedZ())
-							TFormPoint -720,0,816*Temp,e\room\obj,0
-							PositionEntity(e\room\Objects[7],TFormedX(),0,TFormedZ())
-							
-							RotateEntity e\room\Objects[7],-90,e\room\angle-90,0
-							SetAnimTime e\room\Objects[7],297
-							e\EventState = 1
+			Case "room2testroom"
+			    ;[Block]
+                If e\EventState = 0.0
+                    If PlayerRoom = e\room Then
+                        e\room\Objects[7] = CopyEntity(o\NPCModelID[23])
+					    ScaleEntity(e\room\Objects[7], 0.05, 0.05, 0.05)
+						
+						TFormPoint(EntityX(Collider), EntityY(Collider), EntityZ(Collider), 0.0, e\room\OBJ)
+						If TFormedZ() = 0.0 Then Temp = -1 Else Temp = -Sgn(TFormedZ())
+						TFormPoint(-720.0, 0.0, 816.0 * Temp, e\room\OBJ, 0)
+						PositionEntity(e\room\Objects[7], TFormedX(), 0.0, TFormedZ())
+						
+						RotateEntity(e\room\Objects[7], -90.0, e\room\Angle - 90.0, 0.0)
+						SetAnimTime(e\room\Objects[7], 297.0)
+						e\EventState = 1.0
+                    EndIf
+                ElseIf e\EventState = 1.0
+                    If e\room\Objects[7] <> 0 Then
+						Animate2(e\room\Objects[7], AnimTime(e\room\Objects[7]), 284.0, 295.0, 0.3)
+						MoveEntity(e\room\Objects[7], 0.0, (-0.008) * FPSfactor, 0.0)
+						TFormPoint(EntityX(e\room\Objects[7]), EntityY(e\room\Objects[7]), EntityZ(e\room\Objects[7]), 0.0, e\room\OBJ)
+						
+						If Abs(TFormedX()) > 725 Or e\room\RoomDoors[0]\Open = True Then
+							FreeEntity(e\room\Objects[7]) : e\room\Objects[7] = 0
+							e\EventState = 2.0
 						EndIf
-						If EntityDistance(Collider, e\room\Objects[6]) < 2.5 And e\EventState > 0 Then
+					EndIf
+				EndIf
+				
+				If PlayerRoom = e\room Then
+                    If e\EventState = 2.0 Then
+                        If EntityDistance(Collider, e\room\Objects[6]) < 2.5 And e\EventState > 0.0 Then
 							PlaySound_Strict(LoadTempSound("SFX\SCP\079\TestroomWarning.ogg"))
 							For i = 0 To 5
 								em.Emitters = CreateEmitter(EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True), 0)
-								TurnEntity(em\Obj, 90, 0, 0, True)
-								;entityParent(em\obj, e\room\obj)
-								em\RandAngle = 5
-								em\Speed = 0.042
-								em\SizeChange = 0.0025									
+								em\RandAngle = 5 : em\Speed = 0.042 : em\SizeChange = 0.0025	
+								TurnEntity(em\OBJ, 90.0, 0.0, 0.0, True)
 							Next
-							;Delete e
-							e\EventState = e\EventState * -1
+							RemoveEvent(e)
 						EndIf
-						If e\room\Objects[7]<>0 Then
-							Animate2(e\room\Objects[7],AnimTime(e\room\Objects[7]),284,295,0.3)
-							MoveEntity e\room\Objects[7],0,-0.008*FPSfactor,0
-							TFormPoint EntityX(e\room\Objects[7]),EntityY(e\room\Objects[7]),EntityZ(e\room\Objects[7]),0,e\room\obj
-							
-							If Abs(TFormedX())>725 Then
-								FreeEntity(e\room\Objects[7])
-								e\room\Objects[7]=0
-								e\EventState = e\EventState *2
-							EndIf
-						EndIf
-						If e\EventState = -2 Then RemoveEvent(e)
 					EndIf
-				End If
+				EndIf
 				;[End Block]
 			Case "tunnel2smoke"
 				;[Block]
@@ -7115,7 +7113,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "testroom173"
+			Case "room2testroom173"
 				;[Block]
 				If PlayerRoom = e\room	
 					If Curr173\Idle = 0 Then 
@@ -10179,5 +10177,5 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#120B#1E40
+;~B#120B#1E3E
 ;~C#Blitz3D
