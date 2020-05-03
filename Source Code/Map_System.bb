@@ -1900,7 +1900,7 @@ Function FillRoom(r.Rooms)
 			RotateEntity(it\Collider, 0.0, r\Angle + 170, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "lockroom"
+		Case "room2clockroom"
 			;[Block]
 			; ~ Doors
 			d = CreateDoor(r\Zone, r\x - 736.0 * RoomScale, r\y, r\z - 104.0 * RoomScale, 0.0, r, True)
@@ -1917,7 +1917,7 @@ Function FillRoom(r.Rooms)
 			d\LinkedDoor = d2
 			d2\LinkedDoor = d
 			
-			; ~ Security camera inside the lockroom
+			; ~ Security camera inside
 			sc = CreateSecurityCam(r\x - 688.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 688.0 * RoomScale, r, True)
 			sc\Angle = 45 + 180
 			sc\Turn = 45
@@ -1957,9 +1957,9 @@ Function FillRoom(r.Rooms)
 			em\Achange = -0.006
 			em\Gravity = -0.24
 			;[End Block]
-		Case "lockroom2"
+		Case "room2clockroom3"
 			;[Block]
-			; ~ Security cameras inside the lockroom
+			; ~ Security cameras inside
 			sc = CreateSecurityCam(r\x + 512.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 384.0 * RoomScale, r, True)
 			sc\Angle = 45.0 + 90.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 40.0, 0.0, 0.0)
@@ -1975,7 +1975,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(sc\ScrOBJ, r\x + 96.0 * RoomScale, r\y + 1.1, r\z - 668.0 * RoomScale)
 			EntityParent(sc\ScrOBJ, r\OBJ)
 			
-			; ~ Create blood decals inside the lockroom
+			; ~ Create blood decals inside
 			For i = 0 To 5
 				de = CreateDecal(Rand(2, 3), r\x + Rnd(-392.0, 520.0) * RoomScale, r\y + 3.0 * RoomScale + Rnd(0, 0.001), r\z + Rnd(-392.0, 520.0) * RoomScale, 90.0, Rnd(360.0), 0.0)
 				de\Size = Rnd(0.3, 0.6)
@@ -5291,7 +5291,7 @@ Function FillRoom(r.Rooms)
 			EntityType(r\Objects[0], HIT_MAP)
 			EntityAlpha(r\Objects[0], 0.0)
 			;[End Block]
-		Case "lockroom3"
+		Case "room2clockroom2"
 			;[Block]
 			d = CreateDoor(r\Zone, r\x - 736.0 * RoomScale, r\y, r\z - 104.0 * RoomScale, 0.0, r, True)
 			d\Timer = 70 * 5.0 : d\AutoClose = False : d\Open = False : d\Locked = True
@@ -7166,7 +7166,7 @@ Function CreateMap()
 	SetRoom("room1archive", ROOM1, Floor(0.5 * Float(Room1Amount[0])), Min_Pos, Max_Pos)
 	SetRoom("room205", ROOM1, Floor(0.6 * Float(Room1Amount[0])), Min_Pos, Max_Pos)
 	
-	MapRoom(ROOM2C, 0) = "lockroom"
+	MapRoom(ROOM2C, 0) = "room2clockroom"
 	
 	Min_Pos = 1
 	Max_Pos = Room2Amount[0] - 1
@@ -7235,7 +7235,7 @@ Function CreateMap()
 	SetRoom("room2offices2", ROOM2, Min_Pos + Floor(0.9*Float(Room2Amount[2])), Min_Pos, Max_Pos)
 	
 	MapRoom(ROOM2C, Room2CAmount[0] + Room2CAmount[1]) = "room2ccont"	
-	MapRoom(ROOM2C, Room2CAmount[0] + Room2CAmount[1] + 1) = "lockroom2"		
+	MapRoom(ROOM2C, Room2CAmount[0] + Room2CAmount[1] + 1) = "room2clockroom3"		
 	
 	MapRoom(ROOM3, Room3Amount[0] + Room3Amount[1] + Floor(0.3 * Float(Room3Amount[2]))) = "room3servers"
 	MapRoom(ROOM3, Room3Amount[0] + Room3Amount[1] + Floor(0.7 * Float(Room3Amount[2]))) = "room3servers2"

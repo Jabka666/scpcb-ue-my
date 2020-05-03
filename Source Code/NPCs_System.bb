@@ -738,7 +738,7 @@ Function UpdateNPCs()
 										If Dist < 0.65 Then
 											If KillTimer >= 0.0 And (Not chs\GodMode) Then
 												Select PlayerRoom\RoomTemplate\Name
-													Case "lockroom", "room2closets", "room895"
+													Case "room2clockroom", "room2closets", "room895"
 														;[Block]
 														DeathMSG = "Subject D-9341. Cause of death: Fatal cervical fracture. The surveillance tapes confirm that the subject was killed by SCP-173."	
 														;[End Block]

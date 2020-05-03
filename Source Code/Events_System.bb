@@ -69,10 +69,10 @@ Function InitEvents()
 	; ~ There's a 7% chance that SCP-106 appears in the rooms named "tunnel"
 	CreateEvent("tunnel106", "tunnel", 0, 0.07 + (0.1 * SelectedDifficulty\aggressiveNPCs))
 	
-	; ~ The chance for SCP-173 appearing in the first lockroom is about 66%
-	; ~ There's a 30% chance that it appears in the later lockrooms
-	If Rand(3) < 3 Then CreateEvent("lockroom173", "lockroom", 0)
-	CreateEvent("lockroom173", "lockroom", 0, 0.3 + (0.5 * SelectedDifficulty\aggressiveNPCs))
+	; ~ The chance for SCP-173 appearing in the first room2clockroom is about 66%
+	; ~ There's a 30% chance that it appears in the later room2clockrooms
+	If Rand(3) < 3 Then CreateEvent("room2clockroom173", "room2clockroom", 0)
+	CreateEvent("room2clockroom173", "room2clockroom", 0, 0.3 + (0.5 * SelectedDifficulty\aggressiveNPCs))
 	
 	CreateEvent("room2trick", "room2", 0, 0.15)	
 	
@@ -80,8 +80,8 @@ Function InitEvents()
 	
 	CreateEvent("room2storage", "room2storage", 0)	
 	
-	; ~ SCP-096 spawns in the first (and last) "lockroom2"
-	CreateEvent("lockroom096", "lockroom2", 0)
+	; ~ SCP-096 spawns in the first (and last) "room2clockroom3"
+	CreateEvent("room2clockroom096", "room2clockroom3", 0)
 	
 	CreateEvent("endroom106", "endroom", Rand(0, 1))
 	
@@ -2393,7 +2393,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "lockroom173"
+			Case "room2clockroom173"
 				;[Block]
 				If e\room\Dist < 6.0  And e\room\Dist > 0.0 Then
 					If Curr173\Idle > 1 Then
@@ -2407,7 +2407,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "lockroom096"
+			Case "room2clockroom096"
 				;[Block]
 				If PlayerRoom = e\room Then
 					If Curr096 = Null Then
