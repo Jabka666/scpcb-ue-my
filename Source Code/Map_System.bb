@@ -1499,7 +1499,6 @@ Global HideDistance# = 15.0
 Global SecondaryLightOn# = True
 Global PrevSecondaryLightOn# = True
 Global RemoteDoorOn% = True
-Global Contained106% = False
 
 Type Rooms
 	Field Zone%
@@ -2613,7 +2612,7 @@ Function FillRoom(r.Rooms)
 		Case "room2elevator"
 			;[Block]
 			r\RoomDoors[0] = CreateDoor(r\Zone, r\x + 448.0 * RoomScale, r\y, r\z, 90.0, r, False, 3)
-			r\RoomDoors[0]\AutoClose = False : r\RoomDoors[0]\Open = True : r\RoomDoors[0]\Locked = True
+			r\RoomDoors[0]\AutoClose = False : r\RoomDoors[0]\Open = True : r\RoomDoors[0]\Locked = True : r\RoomDoors[0]\MTFClose = False
 			
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x + 888.0 * RoomScale, r\y + 240.0 * RoomScale, r\z, True)
@@ -5119,15 +5118,15 @@ Function FillRoom(r.Rooms)
 			;[Block]
 			; ~ Doors for room
 			r\RoomDoors[0] = CreateDoor(r\Zone, r\x + 480.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 90.0, r, False, False, 3)
-			r\RoomDoors[0]\AutoClose = False
+			r\RoomDoors[0]\AutoClose = False : r\RoomDoors[0]\MTFClose = False
 			PositionEntity(r\RoomDoors[0]\Buttons[0], r\x + 576.0 * RoomScale, EntityY(r\RoomDoors[0]\Buttons[0], True), r\z - 474.0 * RoomScale, True)
 			RotateEntity(r\RoomDoors[0]\Buttons[0], 0.0, 270.0, 0.0)
 			
 			r\RoomDoors[1] = CreateDoor(r\Zone, r\x + 544.0 * RoomScale, r\y + 480.0 * RoomScale, r\z + 256.0 * RoomScale, 270.0, r, False, 4, 3)
-			r\RoomDoors[1]\AutoClose = False
+			r\RoomDoors[1]\AutoClose = False : r\RoomDoors[1]\MTFClose = False
 			
 			d = CreateDoor(r\Zone, r\x + 1504.0 * RoomScale, r\y + 480.0 * RoomScale, r\z + 960.0 * RoomScale, 0.0, r)
-			d\AutoClose = False : d\Locked = True
+			d\AutoClose = False : d\Locked = True : d\MTFClose = False
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			
 			Local Scale# = RoomScale * 4.5 * 0.4
@@ -8427,5 +8426,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11AE
+;~B#11AD
 ;~C#Blitz3D

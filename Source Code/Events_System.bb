@@ -362,13 +362,13 @@ Function QuickLoadEvents()
 			;[Block]
 			If e\EventState = 0.0 Then
 				If e\EventStr = "Load0"
-					n.NPCs = CreateNPC(NPCtypeZombie, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True))
+					n.NPCs = CreateNPC(NPCtype049_2, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True))
 					PointEntity(n\Collider, e\room\OBJ)
 					TurnEntity(n\Collider, 0.0, 190.0, 0.0)
 					QuickLoadPercent = 20
 					e\EventStr = "Load1"
 				ElseIf e\EventStr = "Load1"
-					n.NPCs = CreateNPC(NPCtypeZombie, EntityX(e\room\Objects[5], True), EntityY(e\room\Objects[5], True), EntityZ(e\room\Objects[5], True))
+					n.NPCs = CreateNPC(NPCtype049_2, EntityX(e\room\Objects[5], True), EntityY(e\room\Objects[5], True), EntityZ(e\room\Objects[5], True))
 					PointEntity(n\Collider, e\room\OBJ)
 					TurnEntity(n\Collider, 0.0, 20.0, 0.0)
 					QuickLoadPercent = 60
@@ -1432,7 +1432,7 @@ Function UpdateEvents()
 								RotateEntity(e\room\NPC[5]\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
 								e\room\NPC[5]\State = 7.0
 								e\room\NPC[5]\Sound2 = LoadSound_Strict("SFX\Room\Intro\Guard\PlayerEscape.ogg")
-								e\room\NPC[5]\UseHeadPhones = True
+								e\room\NPC[5]\UseHeadphones = True
 								
 								e\room\NPC[6] = CreateNPC(NPCtypeD, e\room\x - 3712.0 * RoomScale, -0.3, e\room\z - 2208.0 * RoomScale)
 								ChangeNPCTextureID(e\room\NPC[6], 3)
@@ -1731,7 +1731,7 @@ Function UpdateEvents()
 								If e\EventState > 14080.0 And e\EventState - FPSfactor < 14080.0 Then PlaySound_Strict(IntroSFX(Rand(8, 10)))
 								CameraShake = 3.0
 							ElseIf e\EventState < 14200.0
-								Animate2(e\room\NPC[1]\OBJ, AnimTime(e\room\NPC[1]\obj), 0.0, 19.0, 0.2, False)
+								Animate2(e\room\NPC[1]\OBJ, AnimTime(e\room\NPC[1]\OBJ), 0.0, 19.0, 0.2, False)
 								
 								e\room\NPC[0]\State = 8.0
 								If e\EventState > 14105.0 Then
@@ -1759,10 +1759,10 @@ Function UpdateEvents()
 								Animate2(e\room\NPC[2]\OBJ, AnimTime(e\room\NPC[2]\OBJ), 45.0, 60.0, 0.2, False)
 								If e\EventState > 14300.0 Then 
 									If e\EventState > 14600.0 And e\EventState < 14700.0 Then 
-										BlinkTimer = -10
+										BlinkTimer = -10.0
 										LightBlink = 1.0
 									EndIf
-									If EntityX(Collider) < (EntityX(e\room\obj)) + 448.0 * RoomScale Then e\EventState = 20000.0
+									If EntityX(Collider) < (EntityX(e\room\OBJ)) + 448.0 * RoomScale Then e\EventState = 20000.0
 								EndIf
 							End If
 						ElseIf e\EventState < 30000.0
@@ -1796,9 +1796,8 @@ Function UpdateEvents()
 									CameraShake = 3.0
 								ElseIf e\EventState < 20300.0
 									PointEntity(e\room\NPC[0]\Collider, Curr173\Collider)
-									MoveEntity(e\room\NPC[0]\Collider, 0.0, 0.0, -0.002)
 									e\room\NPC[0]\State = 2.0
-									UpdateSoundOrigin(e\room\NPC[0]\SoundCHN, Camera,e\room\NPC[0]\Collider, 20.0)
+									UpdateSoundOrigin(e\room\NPC[0]\SoundCHN, Camera, e\room\NPC[0]\Collider, 20.0)
 									If e\EventState > 20260.0 And e\EventState - FPSfactor < 20260.0 Then PlaySound_Strict(IntroSFX(Rand(8, 10)))
 								Else
 									If e\EventState - FPSfactor < 20300.0 Then
@@ -5956,7 +5955,7 @@ Function UpdateEvents()
 								EndIf
 							ElseIf e\EventState < 70 * 240.0
 								For n.NPCs = Each NPCs ; ~ Awake the zombies
-									If n\NPCtype = NPCtypeZombie And n\State = 0.0 Then
+									If n\NPCtype = NPCtype049_2 And n\State = 0.0 Then
 										n\State = 1.0
 										SetNPCFrame(n, 155.0)
 									EndIf
@@ -5998,7 +5997,7 @@ Function UpdateEvents()
 								ResetEntity(e\room\NPC[0]\Collider)
 								
 								For n.NPCs = Each NPCs
-									If n\NPCtype = NPCtypeZombie Then
+									If n\NPCtype = NPCtype049_2 Then
 										PositionEntity(n\Collider, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True), True)
 										ResetEntity(n\Collider)
 										n\State = 4.0
@@ -8667,7 +8666,7 @@ Function UpdateEvents()
 				Else
 					ShowEntity(e\room\Objects[0])
 					If e\EventState = 0.0 Then
-						e\room\NPC[0] = CreateNPC(NPCtype008, EntityX(e\room\Objects[3], True), 0.5, EntityZ(e\room\Objects[3], True))
+						e\room\NPC[0] = CreateNPC(NPCtype008_1, EntityX(e\room\Objects[3], True), 0.5, EntityZ(e\room\Objects[3], True))
 						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle - 90.0, 0.0)
 						e\EventState = 1.0
 					EndIf
@@ -10180,5 +10179,5 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#120C#1E41
+;~B#120B#1E40
 ;~C#Blitz3D

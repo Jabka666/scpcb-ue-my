@@ -104,6 +104,8 @@ Bug Fixes:
 - Fixed SCP-1048-A's double texture.
 - Fixed breath sound in NoClip mode.
 - Fixed SCP-173's head poking out of its box when recontained by the MTFs.
+- Fixed weird balcony guard's moving in the intro scene.
+- Fixed step sounds for big contianment doors.
 
 - Again fixed some buttons' positions.
 

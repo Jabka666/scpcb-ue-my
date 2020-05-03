@@ -2161,9 +2161,9 @@ Function CreateDoor.Doors(LVL, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, B
 		d\FrameOBJ = CopyEntity(o\DoorModelID[1])
 	ElseIf Big = 4 ; ~ One-sided Door
 		d\OBJ = CopyEntity(o\DoorModelID[11])
-		ScaleEntity(d\OBJ, RoomScale, RoomScale, RoomScale)
+		ScaleEntity(d\OBJ, RoomScale, RoomScale, 2.35 * RoomScale)
 		d\OBJ2 = CopyEntity(o\DoorModelID[11])
-		ScaleEntity(d\OBJ2, RoomScale, RoomScale, RoomScale)
+		ScaleEntity(d\OBJ2, RoomScale, RoomScale, 2.35 * RoomScale)
 		
 		d\FrameOBJ = CopyEntity(o\DoorModelID[1])
 	Else
@@ -5431,7 +5431,7 @@ Function DrawGUI()
 					PlaySound_Strict(LoadTempSound("SFX\SCP\513\Bell1.ogg"))
 					
 					If Curr5131 = Null
-						Curr5131 = CreateNPC(NPCtype5131, 0.0, 0.0, 0.0)
+						Curr5131 = CreateNPC(NPCtype513_1, 0.0, 0.0, 0.0)
 					EndIf	
 					SelectedItem = Null
 					;[End Block]
@@ -7667,9 +7667,9 @@ Function LoadEntities()
 	Panel294 = LoadImage_Strict("GFX\294panel.jpg")
 	MaskImage(Panel294, 255, 0, 255)
 	
-	Brightness = GetINIFloat(OptionFile, "global", "brightness")
-	CameraFogNear = GetINIFloat(OptionFile, "global", "camera fog near")
-	CameraFogFar = GetINIFloat(OptionFile, "global", "camera fog far")
+	Brightness = GetINIFloat(OptionFile, "Global", "Brightness")
+	CameraFogNear = GetINIFloat(OptionFile, "Global", "Camera Fog Near")
+	CameraFogFar = GetINIFloat(OptionFile, "Global", "Camera Fog Far")
 	StoredCameraFogFar = CameraFogFar
 	
 	AmbientLightRoomTex = CreateTexture(2, 2, 257)
@@ -8260,7 +8260,7 @@ Function InitNewGame()
 	DrawLoading(79)
 	
 	Curr173 = CreateNPC(NPCtype173, 0.0, -30.0, 0.0)
-	Curr106 = CreateNPC(NPCtypeOldMan, 0.0, -30.0, 0.0)
+	Curr106 = CreateNPC(NPCtype106, 0.0, -30.0, 0.0)
 	Curr106\State = 70 * 60.0 * Rnd(12.0, 17.0)
 	
 	For d.Doors = Each Doors
@@ -9396,7 +9396,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					;[Block]
 					PlaySound_Strict(LoadTempSound("SFX\SCP\513\914Refine.ogg"))
 					For n.NPCs = Each NPCs
-						If n\NPCtype = NPCtype5131 Then RemoveNPC(n)
+						If n\NPCtype = NPCtype513_1 Then RemoveNPC(n)
 					Next
 					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rand(360.0), 0.0)
 					d\Size = 0.2
@@ -9568,7 +9568,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 							;[End Block]
 						Case "Very Fine"
 							;[Block]
-							n.NPCs = CreateNPC(NPCtype008, x, y, z)
+							n.NPCs = CreateNPC(NPCtype008_1, x, y, z)
 							n\State = 2.0
 							;[End Block]
 					End Select

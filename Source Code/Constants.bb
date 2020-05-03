@@ -24,11 +24,11 @@ Const MaxMiscModelIDAmount% = 1
 
 Const MaxNPCModelIDAmount% = 34
 
-Const NPCtype008% = 1, NPCtype049% = 2, NPCtype066% = 3, NPCtype096% = 4, NPCtype173% = 5
-Const NPCtype372% = 6, NPCtype5131% = 7, NPCtype860% = 8, NPCtype939% = 9, NPCtype966% = 10, NPCtype1499% = 11
+Const NPCtype008_1% = 1, NPCtype035_Tentacle% = 2, NPCtype049% = 3, NPCtype049_2% = 4, NPCtype066% = 5, NPCtype096% = 6
+Const NPCtype106% = 7, NPCtype173% = 8, NPCtype372% = 9, NPCtype513_1% = 10, NPCtype860% = 11, NPCtype939% = 12
+Const NPCtype966% = 13, NPCtype1499% = 14
 
-Const NPCtypeApache% = 12, NPCtypeClerk% = 13, NPCtypeD% = 14, NPCtypeGuard% = 15, NPCtypeMTF% = 16, NPCtypeOldman% = 17
-Const NPCtypeTentacle% = 18, NPCtypeZombie% = 19
+Const NPCtypeApache% = 15, NPCtypeClerk% = 16, NPCtypeD% = 17, NPCtypeGuard% = 18, NPCtypeMTF% = 19
 
 ; ~ [FOREST GENERATION]
 

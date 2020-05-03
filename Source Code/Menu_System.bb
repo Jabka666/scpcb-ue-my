@@ -231,7 +231,7 @@ Function UpdateMainMenu()
 		If DrawButton(x + width + 20 * MenuScale, y, 580 * MenuScale - width - 20 * MenuScale, height, "BACK", False) Then 
 			Select MainMenuTab
 				Case 1
-					PutINIValue(OptionFile, "global", "enable intro", IntroEnabled)
+					PutINIValue(OptionFile, "Global", "Enable Intro", IntroEnabled)
 					MainMenuTab = 0
 				Case 2
 					CurrLoadGamePage = 0
@@ -399,7 +399,7 @@ Function UpdateMainMenu()
 					FlushKeys()
 					FlushMouse()
 					
-					PutINIValue(OptionFile, "global", "enable intro", IntroEnabled)
+					PutINIValue(OptionFile, "Global", "Enable Intro", IntroEnabled)
 					
 				EndIf
 				
@@ -1269,29 +1269,29 @@ Function UpdateLauncher()
 		Flip
 	Forever
 	
-	PutINIValue(OptionFile, "global", "width", GfxModeWidths(SelectedGFXMode))
-	PutINIValue(OptionFile, "global", "height", GfxModeHeights(SelectedGFXMode))
+	PutINIValue(OptionFile, "Global", "Hidth", GfxModeWidths(SelectedGFXMode))
+	PutINIValue(OptionFile, "Global", "Height", GfxModeHeights(SelectedGFXMode))
 	If Fullscreen Then
-		PutINIValue(OptionFile, "global", "fullscreen", "true")
+		PutINIValue(OptionFile, "Global", "Fullscreen", "true")
 	Else
-		PutINIValue(OptionFile, "global", "fullscreen", "false")
+		PutINIValue(OptionFile, "Global", "Fullscreen", "false")
 	EndIf
 	If LauncherEnabled Then
-		PutINIValue(OptionFile, "launcher", "launcher Enabled", "true")
+		PutINIValue(OptionFile, "Launcher", "Launcher Enabled", "true")
 	Else
-		PutINIValue(OptionFile, "launcher", "launcher Enabled", "false")
+		PutINIValue(OptionFile, "Launcher", "Launcher Enabled", "false")
 	EndIf
 	If BorderlessWindowed Then
-		PutINIValue(OptionFile, "global", "borderless windowed", "true")
+		PutINIValue(OptionFile, "Global", "Borderless Windowed", "true")
 	Else
-		PutINIValue(OptionFile, "global", "borderless windowed", "false")
+		PutINIValue(OptionFile, "Global", "Borderless Windowed", "false")
 	EndIf
 	If Bit16Mode Then
-		PutINIValue(OptionFile, "global", "16bit", "true")
+		PutINIValue(OptionFile, "Global", "16Bit", "true")
 	Else
-		PutINIValue(OptionFile, "global", "16bit", "false")
+		PutINIValue(OptionFile, "Global", "16Bit", "false")
 	EndIf
-	PutINIValue(OptionFile, "global", "gfx driver", SelectedGFXDriver)
+	PutINIValue(OptionFile, "Global", "GFX Driver", SelectedGFXDriver)
 	
 End Function
 
