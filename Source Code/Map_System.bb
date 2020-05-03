@@ -4767,7 +4767,7 @@ Function FillRoom(r.Rooms)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
-			r\Objects[14] = LoadMesh_Strict("GFX\map\1123_hb.b3d", r\OBJ)
+			r\Objects[14] = LoadMesh_Strict("GFX\map\room1123_hb.b3d", r\OBJ)
 			EntityPickMode(r\Objects[14], 2)
 			EntityType(r\Objects[14], HIT_MAP)
 			EntityAlpha(r\Objects[14], 0.0)

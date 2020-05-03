@@ -2,9 +2,9 @@ Type Events
 	Field EventName$
 	Field room.Rooms
 	Field EventState#, EventState2#, EventState3#
-	Field SoundCHN%, SoundCHN2%
-	Field Sound, Sound2
-	Field SoundCHN_IsStream%, SoundCHN2_IsStream%
+	Field SoundCHN%, SoundCHN2%, SoundCHN3%
+	Field Sound%, Sound2%, Sound3%
+	Field SoundCHN_IsStream%, SoundCHN2_IsStream%, SoundCHN3_IsStream%
 	Field EventStr$
 	Field Img%
 End Type 
@@ -6758,11 +6758,19 @@ Function UpdateEvents()
 			Case "room1123"
 				;[Block]
 				If PlayerRoom = e\room Then
+					If EntityDistance(Collider, e\room\Objects[3]) < 0.9 Or (e\EventState > 0.0 And e\EventState < 7.0) Then
+					    If Wearing714 = 0 Or WearingHazmat < 3 Or WearingGasMask < 3 Then
+			                If e\EventState = 0.0 Then BlurTimer = 1000.0
+					        CameraShake = 1.0
+							If e\Sound3 = 0 Then e\Sound3 = LoadSound_Strict("SFX\SCP\1123\Ambient.ogg")
+							e\SoundCHN3 = LoopSound2(e\Sound3, e\SoundCHN3, Camera, Collider, 4.0, 4.0)
+					    EndIf
+				    EndIf
 					; ~ The event is started when the player picks up SCP-1123 (in Items.bb/UpdateItems())
 					If e\EventState > 0.0 And e\EventState < 7.0 Then
 						CanSave = False
 					EndIf
-					If e\EventState = 1 Then
+					If e\EventState = 1.0 Then
 						; ~ Saving Injuries and Bloodloss, so that the player won't be healed automatically
 						PrevInjuries = Injuries
 						PrevBloodloss = Bloodloss
@@ -6930,6 +6938,13 @@ Function UpdateEvents()
 							EndIf
 						Next
 						GiveAchievement(Achv1123)
+						
+						If e\SoundCHN3 <> 0 Then
+							If ChannelPlaying(e\SoundCHN3) = True Then StopChannel(e\SoundCHN3)
+							If e\Sound3 <> 0 Then
+								FreeSound_Strict(e\Sound3) : e\Sound3 = 0
+							EndIf
+						EndIf
 						
 						RemoveNPC(e\room\NPC[0])
 						RemoveEvent(e)						
@@ -10053,16 +10068,21 @@ Function LoadEventSound(e.Events, File$, Number% = 0)
 		If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
 		e\Sound = LoadSound_Strict(File)
 		Return(e\Sound)
-	Else If Number = 1 Then
+	ElseIf Number = 1 Then
 		If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
 		e\Sound2 = LoadSound_Strict(File)
 		Return(e\Sound2)
+	ElseIf Number = 2 Then
+		If e\Sound3 <> 0 Then FreeSound_Strict(e\Sound3) : e\Sound3 = 0
+		e\Sound3 = LoadSound_Strict(File)
+		Return(e\Sound3)
 	EndIf
 End Function
 
 Function RemoveEvent(e.Events)
 	If e\Sound <> 0 Then FreeSound_Strict(e\Sound)
 	If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2)
+	If e\Sound3 <> 0 Then FreeSound_Strict(e\Sound3)
 	If e\Img <> 0 Then FreeImage(e\Img)
 	
 	Delete(e)
@@ -10172,5 +10192,5 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#120B#1E39
+;~B#120B#1E48
 ;~C#Blitz3D

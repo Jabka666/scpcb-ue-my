@@ -8709,8 +8709,9 @@ Function NullGame(PlayButtonSFX% = True)
 	Local e.Events
 	
 	For e.Events = Each Events
-		If e\Sound <> 0 Then FreeSound_Strict(e\Sound)
-		If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2)
+		If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
+		If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
+		If e\Sound3 <> 0 Then FreeSound_Strict(e\Sound3) : e\Sound3 = 0
 		
 		Delete(e)
 	Next
