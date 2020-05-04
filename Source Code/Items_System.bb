@@ -294,18 +294,18 @@ Function InitItemTemplates()
 	
 	CreateItemTemplate("Coin", "coin", ItemsPath + "coin.b3d", ItemsPath + "INVcoin.jpg", "", 0.0005, 3)
 	
-	CreateItemTemplate("Key Card Omni", "key6", ItemsPath + "keycard.x", ItemsPath + "INVkeyomni.jpg", "", 0.0004, 1, ItemsPath + "keycardomni.jpg")
-	CreateItemTemplate("Level 1 Key Card", "key1", ItemsPath + "keycard.x", ItemsPath + "INVkey1.jpg", "", 0.0004, 1, ItemsPath + "keycard1.jpg")
-	CreateItemTemplate("Level 2 Key Card", "key2", ItemsPath + "keycard.x", ItemsPath + "INVkey2.jpg", "", 0.0004, 1, ItemsPath + "keycard2.jpg")
-	CreateItemTemplate("Level 3 Key Card", "key3", ItemsPath + "keycard.x", ItemsPath + "INVkey3.jpg", "", 0.0004, 1, ItemsPath + "keycard3.jpg")
-	CreateItemTemplate("Level 4 Key Card", "key4", ItemsPath + "keycard.x", ItemsPath + "INVkey4.jpg", "", 0.0004, 1, ItemsPath + "keycard4.jpg")
-	CreateItemTemplate("Level 5 Key Card", "key5", ItemsPath + "keycard.x", ItemsPath + "INVkey5.jpg", "", 0.0004, 1, ItemsPath + "keycard5.jpg")
+	CreateItemTemplate("Key Card Omni", "key6", ItemsPath + "key_card.x", ItemsPath + "INV_key_card_lvl_omni.png", "", 0.0004, 1, ItemsPath + "key_card_lvl_omni.png")
+	CreateItemTemplate("Level 1 Key Card", "key1", ItemsPath + "key_card.x", ItemsPath + "INV_key_card_lvl_1.png", "", 0.0004, 1, ItemsPath + "key_card_lvl_1.png")
+	CreateItemTemplate("Level 2 Key Card", "key2", ItemsPath + "key_card.x", ItemsPath + "INV_key_card_lvl_2.png", "", 0.0004, 1, ItemsPath + "key_card_lvl_2.png")
+	CreateItemTemplate("Level 3 Key Card", "key3", ItemsPath + "key_card.x", ItemsPath + "INV_key_card_lvl_3.png", "", 0.0004, 1, ItemsPath + "key_card_lvl_3.png")
+	CreateItemTemplate("Level 4 Key Card", "key4", ItemsPath + "key_card.x", ItemsPath + "INV_key_card_lvl_4.png", "", 0.0004, 1, ItemsPath + "key_card_lvl_4.png")
+	CreateItemTemplate("Level 5 Key Card", "key5", ItemsPath + "key_card.x", ItemsPath + "INV_key_card_lvl_5.png", "", 0.0004, 1, ItemsPath + "key_card_lvl_5.png")
 	
 	CreateItemTemplate("Lost Key", "key", ItemsPath + "key.b3d", ItemsPath + "INV1162_1.jpg", "", 0.0028, 3)
 	
-	CreateItemTemplate("Mastercard", "misc", ItemsPath + "keycard.x", ItemsPath + "INVmastercard.jpg", "", 0.0004, 1, ItemsPath + "mastercard.jpg")
+	CreateItemTemplate("Mastercard", "misc", ItemsPath + "key_card.x", ItemsPath + "INV_master_card.png", "", 0.0004, 1, ItemsPath + "master_card.png")
 	
-	CreateItemTemplate("Playing Card", "misc", ItemsPath + "keycard.x", ItemsPath + "INVcard.jpg", "", 0.0004, 1, ItemsPath + "card.jpg")
+	CreateItemTemplate("Playing Card", "misc", ItemsPath + "key_card.x", ItemsPath + "INV_playing_card.png", "", 0.0004, 1, ItemsPath + "playing_card.png")
 	
 	CreateItemTemplate("Quarter", "25ct", ItemsPath + "coin.b3d", ItemsPath + "INVcoin.jpg", "", 0.0005, 3)
 	
