@@ -1989,6 +1989,9 @@ Global VomitSFX%
 Dim BreathSFX%(2, 5)
 Global BreathCHN%
 
+Global BreathGasRelaxedSFX%
+Global BreathGasRelaxedCHN%
+
 Dim NeckSnapSFX%(3)
 
 Dim DamageSFX%(13)
@@ -2765,6 +2768,7 @@ DrawLoading(90, True)
 
 Global FogTexture%, Fog%
 Global GasMaskTexture%, GasMaskOverlay%
+Global HazmatSuitTexture%, HazmatSuitOverlay%
 Global InfectTexture%, InfectOverlay%
 Global DarkTexture%, Dark%
 Global Collider%, Head%
@@ -4154,18 +4158,35 @@ Function MouseLook()
 		MoveMouse(Viewport_Center_X, Viewport_Center_Y)
 	EndIf
 	
-	If WearingGasMask > 0 Or Wearing1499 > 0 Or WearingHazmat > 0 Then
+	If WearingGasMask > 0 Or Wearing1499 > 0 Then
 		If Wearing714 = 0 Then
-			If WearingGasMask = 2 Or Wearing1499 = 2 Or WearingHazmat = 2 Then
+			If WearingGasMask = 2 Or Wearing1499 = 2 Then
 				Stamina = Min(100.0, Stamina + (100.0 - Stamina) * 0.01 * FPSfactor)
 			EndIf
 		EndIf
-		If WearingHazmat = 1 Then
-			Stamina = Min(60.0, Stamina)
+		If ChannelPlaying(BreathCHN) = False Then
+			If ChannelPlaying(BreathGasRelaxedCHN) = False Then BreathGasRelaxedCHN = PlaySound_Strict(BreathGasRelaxedSFX)
+		Else
+			If ChannelPlaying(BreathGasRelaxedCHN) = True Then StopChannel(BreathGasRelaxedCHN)
 		EndIf
 		ShowEntity(GasMaskOverlay)
 	Else
+		If ChannelPlaying(BreathGasRelaxedCHN) = True Then StopChannel(BreathGasRelaxedCHN)
 		HideEntity(GasMaskOverlay)
+	End If
+	
+	If WearingHazmat > 0 Then
+		If WearingHazmat = 1 Then
+            Stamina = Min(60.0, Stamina)
+        EndIf
+		If Wearing714 = 0 Then
+			If WearingHazmat = 2 Then
+				Stamina = Min(100.0, Stamina + (100.0 - Stamina) * 0.01 * FPSfactor)
+			EndIf
+		EndIf
+		ShowEntity(HazmatSuitOverlay)
+	Else
+		HideEntity(HazmatSuitOverlay)
 	End If
 	
 	If WearingNightVision > 0 Then
@@ -4446,11 +4467,11 @@ Function DrawGUI()
 		Color(0, 0, 0)
 		Rect(x - 50, y, 30, 30)
 		
-		If PlayerRoom\RoomTemplate\Name = "pocketdimension" Or Wearing714 > 0 Or Injuries >= 1.5 Or StaminaEffect > 1.0 Or WearingHazmat > 0 Or WearingVest = 2
+		If PlayerRoom\RoomTemplate\Name = "pocketdimension" Or Wearing714 > 0 Or Injuries >= 1.5 Or StaminaEffect > 1.0 Or WearingHazmat = 1 Or WearingVest = 2 Then
 			Color(200, 0, 0)
 			Rect(x - 50 - 3, y - 3, 30 + 6, 30 + 6)
 		Else
-		    If chs\InfiniteStamina = True Or StaminaEffect < 1.0 Or WearingGasMask = 2 Or Wearing1499 = 2
+		    If chs\InfiniteStamina = True Or StaminaEffect < 1.0 Or WearingGasMask = 2 Or Wearing1499 = 2 Or WearingHazmat = 2 Then
                 Color(0, 200, 0)
 			    Rect(x - 50 - 3, y - 3, 30 + 6, 30 + 6)
             EndIf 
@@ -7714,6 +7735,16 @@ Function LoadEntities()
 	EntityOrder(GasMaskOverlay, -1003)
 	MoveEntity(GasMaskOverlay, 0.0, 0.0, 1.0)
 	HideEntity(GasMaskOverlay)
+	
+	HazmatSuitTexture = LoadTexture_Strict("GFX\HazmatSuitOverlay.png", 1)
+	HazmatSuitOverlay = CreateSprite(ark_blur_cam)
+	ScaleSprite(HazmatSuitOverlay, Max(GraphicWidth / 1024.0, 1.0), Max(GraphicHeight / 1024.0 * 0.8, 0.8))
+	EntityTexture(HazmatSuitOverlay, HazmatSuitTexture)
+	EntityBlend(HazmatSuitOverlay, 2)
+	EntityFX(HazmatSuitOverlay, 1)
+	EntityOrder(HazmatSuitOverlay, -1003)
+	MoveEntity(HazmatSuitOverlay, 0, 0, 1.0)
+	HideEntity(HazmatSuitOverlay)
 	
 	InfectTexture = LoadTexture_Strict("GFX\InfectOverlay.jpg", 1)
 	InfectOverlay = CreateSprite(Ark_Blur_Cam)
@@ -11089,5 +11120,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#FC7#12F3#1B20
+;~B#FCB#1308#1B35
 ;~C#Blitz3D

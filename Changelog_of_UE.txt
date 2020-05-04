@@ -108,6 +108,7 @@ Bug Fixes:
 - Fixed SCP-173's head poking out of its box when recontained by the MTFs.
 - Fixed weird balcony guard's moving in the intro scene.
 - Fixed step sounds for big contianment doors.
+- Fixed red and green frames for the HUD when player wearing a hazmat suit.
 
 - Again fixed some buttons' positions.
 

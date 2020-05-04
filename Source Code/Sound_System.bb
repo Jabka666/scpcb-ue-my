@@ -51,9 +51,9 @@ End Function
 
 Function UpdateMusic()
 	If ConsoleFlush Then
-		If Not ChannelPlaying(ConsoleMusPlay) Then ConsoleMusPlay = PlaySound(ConsoleMusFlush)
+		If ChannelPlaying(ConsoleMusPlay) = False Then ConsoleMusPlay = PlaySound(ConsoleMusFlush)
 	ElseIf (Not PlayCustomMusic)
-		If NowPlaying <> ShouldPlay ; ~ Playing the wrong clip, fade out
+		If NowPlaying <> ShouldPlay Then ; ~ Playing the wrong clip, fade out
 			CurrMusicVolume = Max(CurrMusicVolume - (FPSfactor / 250.0), 0.0)
 			If CurrMusicVolume = 0
 				If NowPlaying < 66
@@ -67,7 +67,7 @@ Function UpdateMusic()
 			CurrMusicVolume = CurrMusicVolume + (MusicVolume - CurrMusicVolume) * (0.1 * FPSfactor)
 		EndIf
 		
-		If NowPlaying < 66
+		If NowPlaying < 66 Then
 			If CurrMusic = 0
 				MusicCHN = StreamSound_Strict("SFX\Music\" + Music(NowPlaying) + ".ogg", 0.0, Mode)
 				CurrMusic = 1
@@ -80,7 +80,6 @@ Function UpdateMusic()
 			ChannelVolume(MusicCHN, 1.0 * MusicVolume)
 		EndIf
 	EndIf
-	
 End Function 
 
 Function PauseSounds()
@@ -237,6 +236,7 @@ Function KillSounds()
 	For i = 0 To 9
 		If TempSounds[i] <> 0 Then FreeSound_Strict(TempSounds[i]) : TempSounds[i] = 0
 	Next
+	
 	For e.Events = Each Events
 		If e\SoundCHN <> 0 Then
 			If (Not e\SoundCHN_IsStream) Then
@@ -631,7 +631,7 @@ Function LoadAllSounds()
 	Next
 	
 	For i = 0 To 2
-		NeckSnapSFX(i) =  LoadSound_Strict("SFX\SCP\173\NeckSnap" + (i + 1) + ".ogg")
+		NeckSnapSFX(i) = LoadSound_Strict("SFX\SCP\173\NeckSnap" + (i + 1) + ".ogg")
 	Next
 	
 	For i = 0 To 12
@@ -653,7 +653,7 @@ Function LoadAllSounds()
 			StepSFX(2, 0, i) = LoadSound_Strict("SFX\Character\MTF\Step" + (i + 1) + ".ogg")
 			StepSFX(3, 0, i) = LoadSound_Strict("SFX\SCP\049\Step"+ (i + 1) + ".ogg")
 		EndIf
-		If i < 4
+		If i < 4 Then
 			StepSFX(4, 0, i) = LoadSound_Strict("SFX\Step\SCP\StepSCP" + (i + 1) + ".ogg")
 		EndIf
 	Next
@@ -664,6 +664,8 @@ Function LoadAllSounds()
 	Next 
 	
 	MissSFX = LoadSound_Strict("SFX\General\Miss.ogg")
+	
+	BreathGasRelaxedSFX = LoadSound_Strict("SFX\Character\D9341\BreathGasRelaxed.ogg")
 End Function
 
 ;~IDEal Editor Parameters:
