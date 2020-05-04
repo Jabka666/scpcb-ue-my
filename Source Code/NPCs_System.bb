@@ -2388,14 +2388,14 @@ Function UpdateNPCs()
 											DeathMSG = ""
 										EndIf
 										
-										PlaySound2(GunshotSFX, Camera, n\Collider, 35.0)
+										PlaySound2(GunshotSFX, Camera, n\Collider, 15.0)
 										
 										RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
 										PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 										MoveEntity (Pvt,0.8 * 0.079, 10.75 * 0.079, 6.9 * 0.079)
 										
 										PointEntity(Pvt, Collider)
-										Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ShootAccuracy, False, InstaKillPlayer)
+										Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ShootAccuracy, True, InstaKillPlayer)
 										n\Reload = 7.0
 									Else
 										n\CurrSpeed = n\Speed
@@ -2432,7 +2432,7 @@ Function UpdateNPCs()
 						;[Block]
 						AnimateNPC(n, 245.0, 248.0, 0.35, True)
 						If n\Reload = 0.0
-							PlaySound2(GunshotSFX, Camera, n\Collider, 20.0)
+							PlaySound2(GunshotSFX, Camera, n\Collider, 15.0)
 							p.Particles = CreateParticle(EntityX(n\OBJ, True), EntityY(n\OBJ, True), EntityZ(n\OBJ, True), 1, 0.2, 0.0, 5.0)
 							PositionEntity(p\Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 							RotateEntity(p\Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
@@ -2554,7 +2554,7 @@ Function UpdateNPCs()
 							Local SearchPlayer% = False
 							
 							If Dist < 11.0
-								If EntityVisible(n\Collider,Collider)
+								If EntityVisible(n\Collider, Collider)
 									SearchPlayer = True
 								EndIf
 							EndIf
@@ -2578,15 +2578,15 @@ Function UpdateNPCs()
 										
 										DeathMSG = ""
 										
-										PlaySound2(GunshotSFX, Camera, n\Collider, 35.0)
+										PlaySound2(GunshotSFX, Camera, n\Collider, 15.0)
 										
 										RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
 										PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 										MoveEntity(Pvt, 0.8 * 0.079, 10.75 * 0.079, 6.9 * 0.079)
 										
 										PointEntity(Pvt, Collider)
-										Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 1.0, False, InstaKillPlayer)
-										n\Reload = 7
+										Shoot(EntityX(Pvt),EntityY(Pvt), EntityZ(Pvt),((25/Dist)*(1/Dist)), True, InstaKillPlayer)
+										n\Reload = 7.0
 									Else
 										n\CurrSpeed = n\Speed
 									End If
@@ -5306,7 +5306,6 @@ Function UpdateMTFUnit(n.NPCs)
 	Local r.Rooms
 	Local prevDist#,newDist#
 	Local n2.NPCs
-	
 	Local p.Particles, target, dist#, dist2#
 	
 	If n\IsDead Then
@@ -5743,10 +5742,9 @@ Function UpdateMTFUnit(n.NPCs)
                 n\Speed = 0.015
                 n\State2=n\State2-FPSfactor
                 If MeNPCSeesPlayer(n) = True Then
-					
+					Local dist_to_player# = EntityDistance(n\Collider, Collider)
 					;if close enough, start shooting at the player
-					If playerDist < 4.0 Then
-						
+					If dist_to_player < 7.0 Then
 						Local angle# = VectorYaw(EntityX(Collider)-EntityX(n\Collider),0,EntityZ(Collider)-EntityZ(n\Collider))
 						
 						RotateEntity(n\Collider, 0, CurveAngle(angle, EntityYaw(n\Collider), 10.0), 0, True)
@@ -5766,7 +5764,7 @@ Function UpdateMTFUnit(n.NPCs)
 									PositionEntity(pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 									MoveEntity (pvt,0.8*0.079, 10.75*0.079, 6.9*0.079)
 									
-									Shoot(EntityX(pvt),EntityY(pvt),EntityZ(pvt),5.0/playerDist, False)
+									Shoot(EntityX(pvt),EntityY(pvt), EntityZ(pvt),((25/dist_to_player)*(1/dist_to_player)), True)
 									n\Reload = 7
 									
 									FreeEntity(pvt)
@@ -6520,7 +6518,7 @@ Function UpdateMTFUnit(n.NPCs)
 							PositionEntity(pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 							MoveEntity (pvt,0.8*0.079, 10.75*0.079, 6.9*0.079)
 							
-							Shoot(EntityX(pvt),EntityY(pvt),EntityZ(pvt),0.9, False)
+							Shoot(EntityX(pvt),EntityY(pvt),EntityZ(pvt),0.9)
 							n\Reload = 7
 							
 							FreeEntity(pvt)
@@ -7524,5 +7522,5 @@ Function Animate2#(Entity%, Curr#, Start%, Quit%, Speed#, Loop% = True)
 End Function 
 
 ;~IDEal Editor Parameters:
-;~B#18A#12CE#1368#13F9#15A3#16BE#188F#18EB
+;~B#18A#12CE#1368#13F9#15A2#16BC#188D#18E9
 ;~C#Blitz3D
