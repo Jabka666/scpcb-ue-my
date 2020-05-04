@@ -1802,7 +1802,7 @@ Function LoadGameQuick(File$)
 			EndIf
 		Next	
 		e\EventStr = ReadString(f)
-		If e\EventName = "alarm"
+		If e\EventName = "room173"
 			; ~ A hacky fix for the case that the intro objects aren't loaded when they should
 			; ~ Altough I'm too lazy to add those objects there because at the time where you can save, those objects are already in the ground anyway -- ENDSHN
 			If e\room\Objects[0] = 0 Then
@@ -2531,12 +2531,12 @@ Function LoadMap(File$)
 		Next
 	Next
 	
-	If IntroEnabled Then r = CreateRoom(0, ROOM1, 8.0, 0.0, (MapHeight + 2) * 8.0, "173")
+	If IntroEnabled Then r = CreateRoom(0, ROOM1, 8.0, 0.0, (MapHeight + 2) * 8.0, "room173intro")
 	r = CreateRoom(0, ROOM1, (MapWidth + 2) * 8.0, 0.0, (MapHeight + 2) * 8.0, "pocketdimension")
 	r = CreateRoom(0, ROOM1, 0.0, 500.0, -16.0, "gatea")
 	r = CreateRoom(0, ROOM1, -16.0, 800.0, 0.0, "dimension1499")
 	
-	CreateEvent("173", "173", 0)
+	CreateEvent("room173intro", "room173intro", 0)
 	CreateEvent("pocketdimension", "pocketdimension", 0)   
 	CreateEvent("gatea", "gatea", 0)
 	CreateEvent("dimension1499", "dimension1499", 0)

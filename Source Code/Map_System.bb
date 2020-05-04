@@ -2476,7 +2476,7 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "room2sroom"
 			;[Block]
-			d = CreateDoor(r\Zone, r\x + 1440.0 * RoomScale, 224.0 * RoomScale, r\z + 32.0 * RoomScale, 90.0, r, False, False, 4)
+			d = CreateDoor(r\Zone, r\x + 1440.0 * RoomScale, 224.0 * RoomScale, r\z + 32.0 * RoomScale, 270.0, r, False, False, 4)
 			d\AutoClose = False : d\Open = False
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) + 0.061, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) - 0.061, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
@@ -2484,7 +2484,7 @@ Function FillRoom(r.Rooms)
 			it = CreateItem("Some SCP-420-J", "scp420j", r\x + 1776.0 * RoomScale, r\y + 400.0 * RoomScale, r\z + 427.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it = CreateItem("Some SCP-420-J", "scp420j", r\x + 1808.0 * RoomScale, r\y + 400.0 * RoomScale, r\z + 435.0 * RoomScale)
+			it = CreateItem("Some SCP-420-J", "scp420j", r\x + 1858.0 * RoomScale, r\y + 400.0 * RoomScale, r\z + 435.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it = CreateItem("Level 5 Key Card", "key5", r\x + 2232.0 * RoomScale, r\y + 392.0 * RoomScale, r\z + 387.0 * RoomScale)
@@ -3735,7 +3735,7 @@ Function FillRoom(r.Rooms)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			;[End Block]
-		Case "start"
+		Case "room173"
 			;[Block]
 			; ~ The containment doors
 			r\RoomDoors[1] = CreateDoor(r\Zone, r\x + 4000.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 1696.0 * RoomScale, 90.0, r, True, True)
@@ -4246,7 +4246,7 @@ Function FillRoom(r.Rooms)
 			
 			it = CreateItem("Dr. L's Note", "paper", r\x - 538.0 * RoomScale, r\y + 250.0 * RoomScale, r\z - 365.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
-		Case "173"
+		Case "room173intro"
 			;[Block]
 			r\RoomDoors[1] = CreateDoor(r\Zone, EntityX(r\OBJ) + 288.0 * RoomScale, r\y, EntityZ(r\OBJ) + 384.0 * RoomScale, 90.0, r, False, True)
 			r\RoomDoors[1]\AutoClose = False : r\RoomDoors[1]\Open = False : r\RoomDoors[1]\MTFClose = False
@@ -4282,10 +4282,6 @@ Function FillRoom(r.Rooms)
 			; ~ The door from the concrete tunnel to the large hall
 			d = CreateDoor(r\Zone, r\x - 6864.0 * RoomScale, r\y, r\z - 1248.0 * RoomScale, 90.0, r, True)
 			d\AutoClose = False : d\Locked = True : d\MTFClose = False
-			
-			; ~ The locked door to the lower level of the hall
-			d = CreateDoor(r\Zone, r\x - 5856.0 * RoomScale, r\y, r\z - 1504.0 * RoomScale, 0.0, r)
-			d\Locked = True : d\DisableWaypoint = True : d\MTFClose = False
 			
 			; ~ The door to the staircase in the office room
 			d = CreateDoor(r\Zone, r\x - 2432.0 * RoomScale, r\y, r\z - 1000.0 * RoomScale, 0.0, r)
@@ -7176,7 +7172,7 @@ Function CreateMap()
 	
 	Local Min_Pos% = 1, Max_Pos% = Room1Amount[0] - 1
 	
-	MapRoom(ROOM1, 0) = "start"	
+	MapRoom(ROOM1, 0) = "room173"	
 	SetRoom("room372", ROOM1, Floor(0.1 * Float(Room1Amount[0])), Min_Pos, Max_Pos)
 	SetRoom("room914", ROOM1, Floor(0.3 * Float(Room1Amount[0])), Min_Pos, Max_Pos)
 	SetRoom("room1archive", ROOM1, Floor(0.5 * Float(Room1Amount[0])), Min_Pos, Max_Pos)
@@ -7383,7 +7379,7 @@ Function CreateMap()
 	MapRoomID(ROOM1) = MapRoomID(ROOM1) + 1	
 	
 	If IntroEnabled
-		r = CreateRoom(0, ROOM1, 8.0, 0.0, (MapHeight - 1) * 8.0, "173")
+		r = CreateRoom(0, ROOM1, 8.0, 0.0, (MapHeight - 1) * 8.0, "room173intro")
 		MapRoomID(ROOM1) = MapRoomID(ROOM1) + 1
 	EndIf
 	
@@ -7739,7 +7735,7 @@ Function UpdateRoomLights(Cam%)
 										ShowEntity(r\LightSprites2[i])
 										r\LightSpriteHidden[i] = False
 									EndIf
-									If PlayerRoom\RoomTemplate\Name = "173" Then
+									If PlayerRoom\RoomTemplate\Name = "room173intro" Then
 										Random = Rnd(0.38, 0.42)
 									Else
 										If r\LightFlicker[i] < 5 Then
@@ -7766,7 +7762,6 @@ Function UpdateRoomLights(Cam%)
 										EndIf
 									EndIf
 									
-									;;;;;;;;;;;;;;
 									If r\RoomTemplate\UseLightSpark Then
 										If EntityDistance(Cam, r\LightSprites2[i]) >= 8.5 Or (Not EntityVisible(Cam, r\LightSpritesPivot[i])) Then
 											HideEntity(r\LightSprites2[i])
@@ -7813,7 +7808,7 @@ Function UpdateRoomLights(Cam%)
 							EndIf
 							Else
 								If EntityDistance(Cam, r\LightSprites2[i]) < 8.5 Then
-								If PlayerRoom\RoomTemplate\Name = "173" Then
+									If PlayerRoom\RoomTemplate\Name = "room173intro" Then
 									Random = Rnd(0.38, 0.42)
 								Else
 									If r\LightFlicker[i] < 5 Then
@@ -8311,7 +8306,7 @@ Function PreventRoomOverlap(r.Rooms)
 	Local IsIntersecting% = False
 	
 	; ~ Just skip it when it would try to check for the checkpoints
-	If r\RoomTemplate\Name = "checkpoint1" Or r\RoomTemplate\Name = "checkpoint2" Or r\RoomTemplate\Name = "start" Then Return True
+	If r\RoomTemplate\Name = "checkpoint1" Or r\RoomTemplate\Name = "checkpoint2" Or r\RoomTemplate\Name = "room173" Then Return(True)
 	
 	; ~ First, check if the room is actually intersecting at all
 	For r2 = Each Rooms
@@ -8367,8 +8362,8 @@ Function PreventRoomOverlap(r.Rooms)
 	Local x2%, y2%, Rot%, Rot2%
 	
 	For r2 = Each Rooms
-		If r2 <> r And (Not r2\RoomTemplate\DisableOverlapCheck)  Then
-			If r\RoomTemplate\Shape = r2\RoomTemplate\Shape And r\Zone = r2\Zone And (r2\RoomTemplate\Name <> "checkpoint1" And r2\RoomTemplate\Name <> "checkpoint2" And r2\RoomTemplate\Name <> "start") Then
+		If r2 <> r And (Not r2\RoomTemplate\DisableOverlapCheck) Then
+			If r\RoomTemplate\Shape = r2\RoomTemplate\Shape And r\Zone = r2\Zone And (r2\RoomTemplate\Name <> "checkpoint1" And r2\RoomTemplate\Name <> "checkpoint2" And r2\RoomTemplate\Name <> "room173") Then
 				x = r\x / 8.0
 				y = r\z / 8.0
 				Rot = r\Angle
@@ -8442,5 +8437,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11BD
+;~B#11B9
 ;~C#Blitz3D

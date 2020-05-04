@@ -61,8 +61,8 @@ End Function
 Function InitEvents()
 	Local e.Events
 	
-	CreateEvent("173", "173", 0)
-	CreateEvent("alarm", "start", 0)
+	CreateEvent("room173intro", "room173intro", 0)
+	CreateEvent("room173", "room173", 0)
 	
 	CreateEvent("pocketdimension", "pocketdimension", 0)	
 	
@@ -563,7 +563,7 @@ Function UpdateEvents()
 					EntityAlpha(Fog, 1.0)						
 				EndIf
 				;[End Block]
-			Case "alarm"
+			Case "room173"
 				;[Block]
 				If e\room\RoomDoors[5] = Null Then
 					For i = 0 To 3
@@ -815,7 +815,7 @@ Function UpdateEvents()
 					EndIf					
 				End If
 				;[End Block]
-			Case "173"
+			Case "room173intro"
 				;[Block]
 				If KillTimer >= 0.0 And e\EventState2 = 0.0 Then
 					PlayerZone = 0
@@ -1820,7 +1820,7 @@ Function UpdateEvents()
 										ResetEntity(Curr173\Collider)
 										
 										For r.Rooms = Each Rooms
-											If r\RoomTemplate\Name = "start" Then
+											If r\RoomTemplate\Name = "room173" Then
 												PlayerRoom = r
 												
 												x# = EntityX(r\OBJ, True) + 3712.0 * RoomScale

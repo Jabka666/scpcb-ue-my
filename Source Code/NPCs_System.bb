@@ -190,7 +190,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 							;[Block]
 							MTFrooms[5] = r
 							;[End Block]
-						Case "start"
+						Case "room173"
 							;[Block]
 							MTFrooms[6] = r
 							;[End Block]
@@ -743,7 +743,7 @@ Function UpdateNPCs()
 														;[Block]
 														DeathMSG = "Subject D-9341. Cause of death: Fatal cervical fracture. The surveillance tapes confirm that the subject was killed by SCP-173."	
 														;[End Block]
-													Case "173"
+													Case "room173intro"
 														;[Block]
 														DeathMSG = "Subject D-9341. Cause of death: Fatal cervical fracture. According to Security Chief Franklin who was present at SCP-173's containment "
 														DeathMSG = DeathMSG + "chamber during the breach, the subject was killed by SCP-173 as soon as the disruptions in the electrical network started."
@@ -2379,7 +2379,7 @@ Function UpdateNPCs()
 									If PickedEntity() = Collider Or n\State3 = 1 Then
 										Local InstaKillPlayer% = False
 										
-										If PlayerRoom\RoomTemplate\Name = "start" Then 
+										If PlayerRoom\RoomTemplate\Name = "room173" Then 
 											DeathMSG = "Subject D-9341. Cause of death: Gunshot wound to the head. The surveillance tapes confirm that the subject was terminated by Agent Ulgrin shortly after the site lockdown was initiated."
 											InstaKillPlayer = True
 										ElseIf PlayerRoom\RoomTemplate\Name = "gateb" Then
@@ -5057,7 +5057,7 @@ Function UpdateNPCs()
 						Local MaxX#, MinX#, MaxZ#, MinZ#
 						
 						If n\InFacility = 1 Then
-							If PlayerRoom\RoomTemplate\Name <> "173"
+							If PlayerRoom\RoomTemplate\Name <> "room173intro"
 								For e.Events = Each Events
 									If e\EventName = "room860"
 										If e\EventState = 1.0
@@ -5377,7 +5377,7 @@ Function UpdateMTFUnit(n.NPCs)
 							
 							If (Not tmp)
 								For r = Each Rooms
-									If r\RoomTemplate\Name$ = "start"
+									If r\RoomTemplate\Name$ = "room173"
 										Local foundChamber% = False
 										Local pvt% = CreatePivot()
 										PositionEntity pvt%,EntityX(r\obj,True)+4736*RoomScale,0.5,EntityZ(r\obj,True)+1692*RoomScale
@@ -7367,7 +7367,7 @@ Function PlayerInReachableRoom(CanSpawnIn049Chamber% = False)
 	Local e.Events, Temp%
 	
 	; ~ Player is in these rooms, returning false
-	If RN = "pocketdimension" Or RN = "gatea" Or RN = "dimension1499" Or RN = "173" Then
+	If RN = "pocketdimension" Or RN = "gatea" Or RN = "dimension1499" Or RN = "room173intro" Then
 		Return(False)
 	EndIf
 	; ~ Player is at Gate B and is at the surface, returning false

@@ -1391,7 +1391,7 @@ Function UpdateConsole()
 					EndIf
 					
 					For e.Events = Each Events
-						If e\EventName = "alarm" Then 
+						If e\EventName = "room173" Then 
 							If e\room\NPC[0] <> Null Then RemoveNPC(e\room\NPC[0])
 							If e\room\NPC[1] <> Null Then RemoveNPC(e\room\NPC[1])
 							If e\room\NPC[2] <> Null Then RemoveNPC(e\room\NPC[2])
@@ -2928,7 +2928,7 @@ Repeat
 				
 				If Rand(3) = 1 Then PlayerZone = 3
 				
-				If PlayerRoom\RoomTemplate\Name = "173" Then 
+				If PlayerRoom\RoomTemplate\Name = "room173intro" Then 
 					PlayerZone = 4
 				ElseIf PlayerRoom\RoomTemplate\Name = "room860"
 					For e.Events = Each Events
@@ -2970,7 +2970,7 @@ Repeat
 			If Rand(50000) = 3 Then
 				Local RN$ = PlayerRoom\RoomTemplate\Name
 				
-				If RN <> "room860" And RN <> "room1123" And RN <> "173" And RN <> "dimension1499" Then
+				If RN <> "room860" And RN <> "room1123" And RN <> "room173intro" And RN <> "dimension1499" Then
 					If FPSfactor > 0.0 Then LightBlink = Rnd(1.0, 2.0)
 					PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(1, 7) + ".ogg"))
 				EndIf 
@@ -3211,7 +3211,7 @@ Repeat
 		If KeyHit(KEY_SAVE) Then
 			If SelectedDifficulty\saveType = SAVEANYWHERE Then
 				RN$ = PlayerRoom\RoomTemplate\Name
-				If RN = "173" Or (RN = "gateb" And EntityY(Collider) > 1040.0 * RoomScale) Or RN = "gatea"
+				If RN = "room173intro" Or (RN = "gateb" And EntityY(Collider) > 1040.0 * RoomScale) Or RN = "gatea"
 					Msg = "You cannot save in this location."
 					MsgTimer = 70 * 4.0
 				ElseIf (Not CanSave) Or QuickLoadPercent > -1
@@ -3229,7 +3229,7 @@ Repeat
 					MsgTimer = 70 * 4.0
 				Else
 					RN = PlayerRoom\RoomTemplate\Name
-					If RN = "173" Or (RN = "gateb" And EntityY(Collider) > 1040.0 * RoomScale) Or RN = "gatea"
+					If RN = "room173intro" Or (RN = "gateb" And EntityY(Collider) > 1040.0 * RoomScale) Or RN = "gatea"
 						Msg = "You cannot save in this location."
 						MsgTimer = 70 * 4.0
 					ElseIf (Not CanSave) Or QuickLoadPercent > -1
@@ -3284,9 +3284,9 @@ Repeat
 		UpdateConsole()
 		
 		If PlayerRoom <> Null Then
-			If PlayerRoom\RoomTemplate\Name = "173" Then
+			If PlayerRoom\RoomTemplate\Name = "room173intro" Then
 				For e.Events = Each Events
-					If e\EventName = "173" Then
+					If e\EventName = "room173intro" Then
 						If e\EventState3 >= 40.0 And e\EventState3 < 50.0 Then
 							If InvOpen Then
 								Msg = "Double click on the document to view it."
@@ -7398,7 +7398,7 @@ Function DrawMenu()
 				Local RN$ = PlayerRoom\RoomTemplate\Name
 				Local AbleToSave% = True
 				
-				If RN = "173" Or RN = "gateb" Or RN = "gatea" Then AbleToSave = False
+				If RN = "room173intro" Or RN = "gateb" Or RN = "gatea" Then AbleToSave = False
 				If (Not CanSave) Then AbleToSave = False
 				If AbleToSave
 					QuitButton = 140
@@ -8308,7 +8308,7 @@ Function InitNewGame()
 			EndIf
 		EndIf
 		
-		If (r\RoomTemplate\Name = "start" And IntroEnabled = False) Then 
+		If r\RoomTemplate\Name = "room173" And IntroEnabled = False Then 
 			PositionEntity(Collider, EntityX(r\OBJ) + 3584.0 * RoomScale, 704.0 * RoomScale, EntityZ(r\OBJ) + 1024.0 * RoomScale)
 			PlayerRoom = r
 			it = CreateItem("Class D Orientation Leaflet", "paper", 1, 1, 1)
@@ -8329,7 +8329,7 @@ Function InitNewGame()
 			EntityType(it\Collider, HIT_ITEM)
 			EntityParent(it\Collider, 0)
 			ItemAmount = ItemAmount + 1
-		ElseIf (r\RoomTemplate\Name = "173" And IntroEnabled) Then
+		ElseIf r\RoomTemplate\Name = "room173intro" And IntroEnabled Then
 			PositionEntity(Collider, EntityX(r\OBJ), 1.0, EntityZ(r\OBJ))
 			PlayerRoom = r
 		EndIf
@@ -10571,7 +10571,7 @@ Function RenderWorld2()
 	ElseIf WearingNightVision = 3
 		AmbientLight(255.0, 255.0, 255.0)
 	ElseIf PlayerRoom <> Null
-		If (PlayerRoom\RoomTemplate\Name <> "173") And (PlayerRoom\RoomTemplate\Name <> "gateb") And (PlayerRoom\RoomTemplate\Name <> "gatea") Then
+		If (PlayerRoom\RoomTemplate\Name <> "room173intro") And (PlayerRoom\RoomTemplate\Name <> "gateb") And (PlayerRoom\RoomTemplate\Name <> "gatea") Then
 			AmbientLight(Brightness, Brightness, Brightness)
 		EndIf
 	EndIf

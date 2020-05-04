@@ -29,7 +29,7 @@ AddEvents()
 Global room_desc = CreateLabel("Room description:",5,40+ResHeight/2,ResWidth/4,ResHeight/11.8,WinHandle,3)
 SetGadgetLayout room_desc , 3,3,2,2
 
-Global grid_room_info = CreateLabel("",5,200+Resheight/2,ResWidth/4,ResHeight/11.6,WinHandle,3) ;95
+Global grid_room_info = CreateLabel("",5,200+ResHeight/2,ResWidth/4,ResHeight/11.6,WinHandle,3) ;95
 SetGadgetLayout grid_room_info , 3,3,2,2
 Global ChangeGridGadget% = False
 Global GridGadgetText$ = ""
@@ -146,8 +146,8 @@ Next
 
 Global PlusIcon
 PlusIcon = LoadImage("Assets\plus.png")
-MaskImage plusicon,255,255,255
-MidHandle(plusicon)
+MaskImage PlusIcon,255,255,255
+MidHandle(PlusIcon)
 
 SetGadgetLayout txtbox , 3,3,3,3
 SetGadgetLayout ok , 3,3,3,3
@@ -237,7 +237,7 @@ Global bluecursor = GetINIInt("options.INI","3d scene","cursor color B")
 
 labelrange=CreateLabel("Culling Range",10,170,80,20, optionwin)
 Global camerarange = CreateTextField(25, 150, 40, 20, optionwin)
-SetGadgetText camerarange, GetINIInt("options.INI","3d scene","camera range")
+SetGadgetText CameraRange, GetINIInt("options.INI","3d scene","camera range")
 
 ;labelrange=CreateLabel("Camera Range",10,140,80,20, optionwin)
 ;camerarange = CreateTextField(25, 145, 40, 20, optionwin)
@@ -515,7 +515,7 @@ Repeat
 											Else
 												EnableGadget combobox
 												If MapEvent(x,y)<>"" And MapEvent(x,y)<>"[none]"
-													For ev.event = Each event
+													For ev.event = Each Event
 														If ev\name = MapEvent(x,y)
 															SetGadgetText event_desc, "Event description:"+Chr(13)+ev\description
 															Exit
@@ -553,7 +553,7 @@ Repeat
 														Exit
 													EndIf
 												Next
-												If Map(x,y)\Name = "start" Or Map(x,y)\Name = "checkpoint1" Or Map(x,y)\Name = "checkpoint2"
+												If Map(x,y)\Name = "room173" Or Map(x,y)\Name = "checkpoint1" Or Map(x,y)\Name = "checkpoint2"
 													MapAngle(x,y)=180
 												EndIf
 												item2 = SelectedGadgetItem(combobox)
@@ -661,7 +661,7 @@ Repeat
 					If MouseX()>(GadgetX(map_2d)+GadgetX(WinHandle)) And MouseX()<((width)+GadgetX(map_2d)+GadgetX(WinHandle))
 						offset% = 45
 						If MouseY()>(GadgetY(map_2d)+GadgetY(WinHandle)+offset) And MouseY()<((height)+GadgetY(map_2d)+GadgetY(WinHandle)+offset)
-							If Map(Grid_SelectedX,Grid_SelectedY)\Name<>"start"
+							If Map(Grid_SelectedX,Grid_SelectedY)\Name<>"room173"
 								Local prevAngle = MapAngle(Grid_SelectedX,Grid_SelectedY)
 								;Left
 								If (MouseX()-GadgetX(map_2d))<(Float(width)/Float(MapWidth+1)*Grid_SelectedX+GadgetX(WinHandle))
@@ -1241,7 +1241,7 @@ Repeat
 			SetGadgetText labelcursorR,"R "+GetINIInt("options.INI","3d scene","cursor color R")
 			SetGadgetText labelcursorG,"G "+GetINIInt("options.INI","3d scene","cursor color G")
 			SetGadgetText labelcursorB,"B "+GetINIInt("options.INI","3d scene","cursor color B")
-			SetGadgetText camerarange, GetINIInt("options.INI","3d scene","camera range")
+			SetGadgetText CameraRange, GetINIInt("options.INI","3d scene","camera range")
 			SetButtonState vsync, GetINIInt("options.INI","3d scene","vsync")
 			SetButtonState showfps, GetINIInt("options.INI","3d scene","show fps")
 			HideGadget optionwin
@@ -1255,7 +1255,7 @@ Repeat
 			PutINIValue("options.INI","3d scene","cursor color R",redcursor)
 			PutINIValue("options.INI","3d scene","cursor color G",greencursor)
 			PutINIValue("options.INI","3d scene","cursor color B",bluecursor)
-			PutINIValue("options.INI","3d scene","camera range",TextFieldText$(camerarange))
+			PutINIValue("options.INI","3d scene","camera range",TextFieldText$(CameraRange))
 			PutINIValue("options.INI","3d scene","vsync",ButtonState(vsync))
 			PutINIValue("options.INI","3d scene","show fps",ButtonState(showfps))
 			WriteOptions()
@@ -1651,7 +1651,7 @@ Function LoadRoomTemplates(file$)
 			
 			Local AddRoom% = True
 			Select TemporaryString
-				Case "room ambience","173","pocketdimension","dimension1499","gatea"
+				Case "room ambience","room173intro","pocketdimension","dimension1499","gatea"
 					AddRoom = False
 			End Select
 			If AddRoom
@@ -2132,10 +2132,12 @@ Function WriteOptions()
 	WriteInt f,redcursor
 	WriteInt f,greencursor
 	WriteInt f,bluecursor
-	WriteInt f,TextFieldText$(camerarange)
+	WriteInt f,TextFieldText$(CameraRange)
 	WriteByte f,ButtonState(vsync)
 	WriteByte f,ButtonState(showfps)
 	WriteByte f,MenuChecked(adjdoor_place)
 	CloseFile f
 	
 End Function
+;~IDEal Editor Parameters:
+;~C#Blitz3D
