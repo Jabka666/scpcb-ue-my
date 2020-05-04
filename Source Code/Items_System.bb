@@ -434,7 +434,7 @@ Function RemoveItem(i.Items)
 		EndIf
 	Next
 	If SelectedItem = i Then
-		Select SelectedItem\itemtemplate\TempName 
+		Select SelectedItem\ItemTemplate\TempName 
 			Case "nvgoggles", "supernv"
 				;[Block]
 				WearingNightVision = 0
@@ -467,9 +467,9 @@ Function RemoveItem(i.Items)
 		
 		SelectedItem = Null
 	EndIf
-	If i\itemtemplate\Img <> 0
-		FreeImage(i\itemtemplate\Img)
-		i\itemtemplate\Img = 0
+	If i\ItemTemplate\Img <> 0
+		FreeImage(i\ItemTemplate\Img)
+		i\ItemTemplate\Img = 0
 	EndIf
 	Delete(i)
 	
@@ -575,8 +575,8 @@ Function UpdateItems()
 			i\zSpeed = 0.0
 		EndIf
 		
-		If Not DeletedItem Then
-			CatchErrors(Chr(34) + i\itemtemplate\Name + Chr(34) + " item")
+		If (Not DeletedItem) Then
+			CatchErrors(Chr(34) + i\ItemTemplate\Name + Chr(34) + " item")
 		EndIf
 		DeletedItem = False
 	Next
@@ -611,7 +611,7 @@ Function PickItem(item.Items)
 	If (Not FullINV) Then
 		For n = 0 To MaxItemAmount - 1
 			If Inventory(n) = Null Then
-				Select item\itemtemplate\TempName
+				Select item\ItemTemplate\TempName
 					Case "scp1123"
 						;[Block]
 						If Wearing714 = 0 And WearingGasMask < 3 And WearingHazmat < 3 Then
@@ -677,17 +677,17 @@ Function PickItem(item.Items)
 						;[End Block]
 					Case "navigator", "nav"
 						;[Block]
-						If item\itemtemplate\Name = "S-NAV Navigator Ultimate" Then GiveAchievement(AchvSNAV)
+						If item\ItemTemplate\Name = "S-NAV Navigator Ultimate" Then GiveAchievement(AchvSNAV)
 						;[End Block]
 					Case "hazmatsuit", "hazmatsuit2", "hazmatsuit3"
 						;[Block]
 						CanPickItem = True
 						For z = 0 To MaxItemAmount - 1
 							If Inventory(z) <> Null Then
-								If Inventory(z)\itemtemplate\TempName = "hazmatsuit" Or Inventory(z)\itemtemplate\TempName = "hazmatsuit2" Or Inventory(z)\itemtemplate\TempName = "hazmatsuit3" Then
+								If Inventory(z)\ItemTemplate\TempName = "hazmatsuit" Or Inventory(z)\ItemTemplate\TempName = "hazmatsuit2" Or Inventory(z)\ItemTemplate\TempName = "hazmatsuit3" Then
 									CanPickItem = False
 									Exit
-								ElseIf Inventory(z)\itemtemplate\TempName = "vest" Or Inventory(z)\itemtemplate\TempName = "finevest" Then
+								ElseIf Inventory(z)\ItemTemplate\TempName = "vest" Or Inventory(z)\ItemTemplate\TempName = "finevest" Then
 									CanPickItem = 2
 									Exit
 								EndIf
@@ -711,10 +711,10 @@ Function PickItem(item.Items)
 						CanPickItem = True
 						For z = 0 To MaxItemAmount - 1
 							If Inventory(z) <> Null Then
-								If Inventory(z)\itemtemplate\TempName = "vest" Or Inventory(z)\itemtemplate\TempName = "finevest" Then
+								If Inventory(z)\ItemTemplate\TempName = "vest" Or Inventory(z)\ItemTemplate\TempName = "finevest" Then
 									CanPickItem = False
 									Exit
-								ElseIf Inventory(z)\itemtemplate\TempName = "hazmatsuit" Or Inventory(z)\itemtemplate\TempName = "hazmatsuit2" Or Inventory(z)\itemtemplate\TempName = "hazmatsuit3" Then
+								ElseIf Inventory(z)\ItemTemplate\TempName = "hazmatsuit" Or Inventory(z)\ItemTemplate\TempName = "hazmatsuit2" Or Inventory(z)\ItemTemplate\TempName = "hazmatsuit3" Then
 									CanPickItem = 2
 									Exit
 								EndIf
@@ -735,11 +735,11 @@ Function PickItem(item.Items)
 						;[End Block]
 				End Select
 				
-				If item\itemtemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(item\itemtemplate\Sound))
+				If item\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(item\ItemTemplate\Sound))
 				item\Picked = True
 				item\Dropped = -1
 				
-				item\itemtemplate\Found = True
+				item\ItemTemplate\Found = True
 				ItemAmount = ItemAmount + 1
 				
 				Inventory(n) = item
@@ -767,7 +767,7 @@ Function DropItem(item.Items, PlayDropSound% = True)
 	Local z%
 	
 	If PlayDropSound Then
-		If item\itemtemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(item\itemtemplate\Sound))
+		If item\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(item\ItemTemplate\Sound))
 	EndIf
 	
 	item\Dropped = 1
@@ -783,7 +783,7 @@ Function DropItem(item.Items, PlayDropSound% = True)
 	For z = 0 To MaxItemAmount - 1
 		If Inventory(z) = item Then Inventory(z) = Null
 	Next
-	Select item\itemtemplate\TempName
+	Select item\ItemTemplate\TempName
 		Case "gasmask", "supergasmask", "gasmask3"
 			;[Block]
 			WearingGasMask = 0

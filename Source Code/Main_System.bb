@@ -1534,7 +1534,7 @@ Function UpdateConsole()
 						Case "b"
 							;[Block]
 							For e.Events = Each Events
-								If e\EventName = "exit1" Then
+								If e\EventName = "gateb" Then
 									e\EventState3 = 1.0
 									e\room\RoomDoors[4]\Open = True
 									Exit
@@ -1548,7 +1548,7 @@ Function UpdateConsole()
 								If e\EventName = "gateaentrance" Then
 									e\EventState3 = 1.0
 									e\room\RoomDoors[1]\Open = True
-								ElseIf e\EventName = "exit1" Then
+								ElseIf e\EventName = "gateb" Then
 									e\EventState3 = 1.0
 									e\room\RoomDoors[4]\Open = True
 								EndIf
@@ -2915,7 +2915,7 @@ Repeat
 		
 		If FPSfactor > 0.0 And PlayerRoom\RoomTemplate\Name <> "dimension1499" Then UpdateSecurityCams()
 		
-		If PlayerRoom\RoomTemplate\Name <> "pocketdimension" And PlayerRoom\RoomTemplate\Name <> "gatea" And PlayerRoom\RoomTemplate\Name <> "exit1" And (Not MenuOpen) And (Not ConsoleOpen) And (Not InvOpen) Then 
+		If PlayerRoom\RoomTemplate\Name <> "pocketdimension" And PlayerRoom\RoomTemplate\Name <> "gatea" And PlayerRoom\RoomTemplate\Name <> "gateb" And (Not MenuOpen) And (Not ConsoleOpen) And (Not InvOpen) Then 
 			
 			If Rand(1500) = 1 Then
 				For i = 0 To 5
@@ -3007,7 +3007,7 @@ Repeat
 					UpdateDimension1499()
 				EndIf
 				UpdateLeave1499()
-			ElseIf PlayerRoom\RoomTemplate\Name = "gatea" Or (PlayerRoom\RoomTemplate\Name = "exit1" And EntityY(Collider) > 1040.0 * RoomScale)
+			ElseIf PlayerRoom\RoomTemplate\Name = "gatea" Or (PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(Collider) > 1040.0 * RoomScale)
 				UpdateDoors()
 				If QuickLoadPercent = -1 Or QuickLoadPercent = 100
 					UpdateEndings()
@@ -3211,7 +3211,7 @@ Repeat
 		If KeyHit(KEY_SAVE) Then
 			If SelectedDifficulty\saveType = SAVEANYWHERE Then
 				RN$ = PlayerRoom\RoomTemplate\Name
-				If RN = "173" Or (RN = "exit1" And EntityY(Collider) > 1040.0 * RoomScale) Or RN = "gatea"
+				If RN = "173" Or (RN = "gateb" And EntityY(Collider) > 1040.0 * RoomScale) Or RN = "gatea"
 					Msg = "You cannot save in this location."
 					MsgTimer = 70 * 4.0
 				ElseIf (Not CanSave) Or QuickLoadPercent > -1
@@ -3229,7 +3229,7 @@ Repeat
 					MsgTimer = 70 * 4.0
 				Else
 					RN = PlayerRoom\RoomTemplate\Name
-					If RN = "173" Or (RN = "exit1" And EntityY(Collider) > 1040.0 * RoomScale) Or RN = "gatea"
+					If RN = "173" Or (RN = "gateb" And EntityY(Collider) > 1040.0 * RoomScale) Or RN = "gatea"
 						Msg = "You cannot save in this location."
 						MsgTimer = 70 * 4.0
 					ElseIf (Not CanSave) Or QuickLoadPercent > -1
@@ -4710,7 +4710,7 @@ Function DrawGUI()
 			CameraFogColor(Camera, 200, 200, 200)
 			CameraClsColor(Camera, 200, 200, 200)					
 			CameraRange(Camera, 0.05, 30)
-		Else If (PlayerRoom\RoomTemplate\Name = "exit1") And (EntityY(Collider) > 1040.0 * RoomScale)
+		Else If (PlayerRoom\RoomTemplate\Name = "gateb") And (EntityY(Collider) > 1040.0 * RoomScale)
 			HideEntity(Fog)
 			CameraFogRange(Camera, 5, 45)
 			CameraFogColor(Camera, 200, 200, 200)
@@ -4897,7 +4897,7 @@ Function DrawGUI()
 			CameraFogColor(Camera, 200.0, 200.0, 200.0)
 			CameraClsColor(Camera, 200.0, 200.0, 200.0)					
 			CameraRange(Camera, 0.05, 30.0)
-		ElseIf (PlayerRoom\RoomTemplate\Name = "exit1") And (EntityY(Collider) > 1040.0 * RoomScale)
+		ElseIf (PlayerRoom\RoomTemplate\Name = "gateb") And (EntityY(Collider) > 1040.0 * RoomScale)
 			HideEntity(Fog)
 			CameraFogRange(Camera, 5.0, 45.0)
 			CameraFogColor(Camera, 200.0, 200.0, 200.0)
@@ -5520,7 +5520,7 @@ Function DrawGUI()
 								
 								Local RoomName$ = PlayerRoom\RoomTemplate\Name
 								
-								If RoomName = "dimension1499" Or RoomName = "gatea" Or (RoomName="exit1" And EntityY(Collider) > 1040.0 * RoomScale)
+								If RoomName = "dimension1499" Or RoomName = "gatea" Or (RoomName = "gateb" And EntityY(Collider) > 1040.0 * RoomScale)
 									Injuries = 2.5
 									Msg = "You started bleeding heavily."
 									MsgTimer = 70.0 * 7.0
@@ -6918,7 +6918,7 @@ Function DrawMenu()
         Delay(1000.0) ; ~ Reduce the CPU take while game is not in focus
     EndIf
 	If MenuOpen Then
-		If PlayerRoom\RoomTemplate\Name <> "exit1" And PlayerRoom\RoomTemplate\Name <> "gatea"
+		If PlayerRoom\RoomTemplate\Name <> "gateb" And PlayerRoom\RoomTemplate\Name <> "gatea"
 			If StopHidingTimer = 0.0 Then
 				If EntityDistance(Curr173\Collider, Collider) < 4.0 Or EntityDistance(Curr106\Collider, Collider) < 4.0 Then 
 					StopHidingTimer = 1.0
@@ -7398,7 +7398,7 @@ Function DrawMenu()
 				Local RN$ = PlayerRoom\RoomTemplate\Name
 				Local AbleToSave% = True
 				
-				If RN = "173" Or RN = "exit1" Or RN = "gatea" Then AbleToSave = False
+				If RN = "173" Or RN = "gateb" Or RN = "gatea" Then AbleToSave = False
 				If (Not CanSave) Then AbleToSave = False
 				If AbleToSave
 					QuitButton = 140
@@ -10219,7 +10219,7 @@ Function Update008()
 		Next
 	ElseIf PlayerRoom\RoomTemplate\Name = "dimension1499" Or PlayerRoom\RoomTemplate\Name = "pocketdimension" Or PlayerRoom\RoomTemplate\Name = "gatea"
 		TeleportForInfect = False
-	ElseIf PlayerRoom\RoomTemplate\Name = "exit1" And EntityY(Collider) > 1040.0 * RoomScale
+	ElseIf PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(Collider) > 1040.0 * RoomScale
 		TeleportForInfect = False
 	EndIf
 	
@@ -10352,7 +10352,7 @@ Function Update008()
 				BlinkTimer = Max(Min((-10.0) * (Infect - 96.0), BlinkTimer), -10.0)
 				If PlayerRoom\RoomTemplate\Name = "dimension1499" Then
 					DeathMsg = "The whereabouts of SCP-1499 are still unknown, but a recon team has been dispatched to investigate reports of a violent attack to a church in the Russian town of [DATA REDACTED]."
-				ElseIf PlayerRoom\RoomTemplate\Name = "gatea" Or PlayerRoom\RoomTemplate\Name = "exit1" Then
+				ElseIf PlayerRoom\RoomTemplate\Name = "gatea" Or PlayerRoom\RoomTemplate\Name = "gateb" Then
 					DeathMsg = "Subject D-9341 found wandering around Gate "
 					If PlayerRoom\RoomTemplate\Name = "gatea" Then
 						DeathMsg = DeathMsg + "A"
@@ -10552,7 +10552,7 @@ Function ResizeImage2(Image%, Width%, Height%)
 	OldHeight% = ImageHeight(Image)
 	CopyRect(0, 0, OldWidth, OldHeight, 1024 - OldWidth / 2, 1024 - OldHeight / 2, ImageBuffer(Image), TextureBuffer(Fresize_Texture))
 	SetBuffer(BackBuffer())
-	ScaleRender(0, 0, 2048.0 / Float(RealGraphicWidth) * Float(Width) / Float(OldWidth), 2048.0 / Float(RealGraphicWidth) * Float(Height) / Float(OldHeight))
+	ScaleRender(0.0, 0.0, 2048.0 / Float(RealGraphicWidth) * Float(Width) / Float(OldWidth), 2048.0 / Float(RealGraphicWidth) * Float(Height) / Float(OldHeight))
 	; ~ Might want to replace Float(GraphicWidth) with Max(GraphicWidth, GraphicHeight) if portrait sizes cause issues
 	; ~ Everyone uses landscape so it's probably a non-issue
 	CopyRect(RealGraphicWidth / 2 - Width / 2, RealGraphicHeight / 2 - Height / 2, Width, Height, 0, 0, BackBuffer(), ImageBuffer(Img))
@@ -10571,7 +10571,7 @@ Function RenderWorld2()
 	ElseIf WearingNightVision = 3
 		AmbientLight(255.0, 255.0, 255.0)
 	ElseIf PlayerRoom <> Null
-		If (PlayerRoom\RoomTemplate\Name <> "173") And (PlayerRoom\RoomTemplate\Name <> "exit1") And (PlayerRoom\RoomTemplate\Name <> "gatea") Then
+		If (PlayerRoom\RoomTemplate\Name <> "173") And (PlayerRoom\RoomTemplate\Name <> "gateb") And (PlayerRoom\RoomTemplate\Name <> "gatea") Then
 			AmbientLight(Brightness, Brightness, Brightness)
 		EndIf
 	EndIf

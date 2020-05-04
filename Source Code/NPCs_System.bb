@@ -297,22 +297,19 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			
 			n\Speed = (GetINIFloat("Data\NPCs.ini", "SCP-049-2", "speed") / 100.0)
 			
-			n\Sound = LoadSound_Strict("SFX\SCP\049\0492Breath.ogg")
+			n\Sound = LoadSound_Strict("SFX\SCP\049_2\Breath.ogg")
 			
 			n\HP = 100
 			;[End Block]
 		Case NPCtypeApache
 			;[Block]
-			n\NVName = "Human"
+			n\NVName = "Apache Helicopter"
 			n\GravityMult = 0.0
 			n\MaxGravity = 0.0
 			n\Collider = CreatePivot()
-			EntityRadius n\Collider, 0.2
+			EntityRadius(n\Collider, 0.2)
 			
 			n\OBJ = CopyEntity(o\NPCModelID[5])
-			
-			Temp = 0.6
-			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			
 			n\OBJ2 = CopyEntity(o\NPCModelID[6])
 			EntityParent(n\OBJ2, n\OBJ)
@@ -324,7 +321,8 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 				EntityAlpha(Rotor2, 0.5)
 			Next
 			
-			n\OBJ3 = CopyEntity(o\NPCModelID[21], n\OBJ)
+			n\OBJ3 = CopyEntity(o\NPCModelID[21])
+			EntityParent(n\OBJ3, n\OBJ)
 			PositionEntity(n\OBJ3, 0.0, 2.15, -5.48)
 			
 			EntityType(n\Collider, HIT_APACHE)
@@ -339,12 +337,15 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 				
 				Local LightSprite% = CreateSprite(n\OBJ)
 				
-				PositionEntity(LightSprite, 1.65 * i, 1.17, 0, -0.25)
+				PositionEntity(LightSprite, 1.65 * i, 1.17, 0.0, -0.25)
 				ScaleSprite(LightSprite, 0.13, 0.13)
 				EntityTexture(LightSprite, LightSpriteTex(0))
 				EntityBlend(LightSprite, 3)
 				EntityFX(LightSprite, 1 + 8)				
 			Next
+			
+			Temp = 0.7
+			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			;[End Block]
 		Case NPCtype035_Tentacle
 			;[Block]
@@ -677,7 +678,7 @@ Function UpdateNPCs()
 								; ~ Teleport to a room closer to the player
 								If Dist > 50.0 Then
 									If Rand(70) = 1 Then
-										If PlayerRoom\RoomTemplate\Name <> "exit1" And PlayerRoom\RoomTemplate\Name <> "gatea" And PlayerRoom\RoomTemplate\Name <> "pocketdimension" Then
+										If PlayerRoom\RoomTemplate\Name <> "gateb" And PlayerRoom\RoomTemplate\Name <> "gatea" And PlayerRoom\RoomTemplate\Name <> "pocketdimension" Then
 											For w.Waypoints = Each WayPoints
 												If w\door = Null And Rand(5) = 1 Then
 													x = Abs(EntityX(Collider) - EntityX(w\OBJ, True))
@@ -2352,7 +2353,7 @@ Function UpdateNPCs()
 							Local DetectDistance# = 11.0
 							
 							; ~ If at Gate B increase his distance so that he can shoot the player from a distance after they are spotted.
-							If PlayerRoom\RoomTemplate\Name = "exit1" Then
+							If PlayerRoom\RoomTemplate\Name = "gateb" Then
 								DetectDistance = 21.0
 								ShootAccuracy = 0.0
 								If Rand(1, 8 - SelectedDifficulty\AggressiveNPCs * 4) < 2 Then ShootAccuracy = 0.03
@@ -2381,7 +2382,7 @@ Function UpdateNPCs()
 										If PlayerRoom\RoomTemplate\Name = "start" Then 
 											DeathMSG = "Subject D-9341. Cause of death: Gunshot wound to the head. The surveillance tapes confirm that the subject was terminated by Agent Ulgrin shortly after the site lockdown was initiated."
 											InstaKillPlayer = True
-										ElseIf PlayerRoom\RoomTemplate\Name = "exit1" Then
+										ElseIf PlayerRoom\RoomTemplate\Name = "gateb" Then
 											DeathMSG = Chr(34) + "Agent G. to control. Eliminated a Class D escapee in Gate B's courtyard." + Chr(34)
 										Else
 											DeathMSG = ""
@@ -3080,7 +3081,7 @@ Function UpdateNPCs()
 				;[Block]
 				Dist = EntityDistance(Collider, n\Collider)
 				If Dist<60.0 Then 
-					If PlayerRoom\RoomTemplate\Name = "exit1" Then 
+					If PlayerRoom\RoomTemplate\Name = "gateb" Then 
 						Dist2 = Max(Min(EntityDistance(n\Collider, PlayerRoom\Objects[3])/(8000.0*RoomScale),1.0),0.0)
 					Else 
 						Dist2 = 1.0
@@ -3165,7 +3166,7 @@ Function UpdateNPCs()
 												If WrapAngle(EntityYaw(Pvt)-EntityYaw(n\Collider))<10 Then
 													PlaySound2(Gunshot2SFX, Camera, n\Collider, 20)
 													
-													If PlayerRoom\RoomTemplate\Name = "exit1" Then
+													If PlayerRoom\RoomTemplate\Name = "gateb" Then
 														DeathMSG = Chr(34)+"CH-2 to control. Shot down a runaway Class D at Gate B."+Chr(34)
 													Else
 														DeathMSG = Chr(34)+"CH-2 to control. Shot down a runaway Class D at Gate A."+Chr(34)
@@ -7372,7 +7373,7 @@ Function PlayerInReachableRoom(CanSpawnIn049Chamber% = False)
 		Return(False)
 	EndIf
 	; ~ Player is at Gate B and is at the surface, returning false
-	If RN = "exit1" And EntityY(Collider) > 1040.0 * RoomScale Then
+	If RN = "gateb" And EntityY(Collider) > 1040.0 * RoomScale Then
 		Return(False)
 	EndIf
 	; ~ Player is in SCP-860's test room and inside the forest, returning false
@@ -7523,5 +7524,5 @@ Function Animate2#(Entity%, Curr#, Start%, Quit%, Speed#, Loop% = True)
 End Function 
 
 ;~IDEal Editor Parameters:
-;~B#189#12CD#1367#13F8#15A2#16BD#188E#18EA
+;~B#18A#12CE#1368#13F9#15A3#16BE#188F#18EB
 ;~C#Blitz3D

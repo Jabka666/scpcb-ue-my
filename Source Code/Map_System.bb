@@ -2019,7 +2019,7 @@ Function FillRoom(r.Rooms)
 			RotateEntity(d2\Buttons[1], 0.0, 90.0, 0.0, True)
 			
 			For r2.Rooms = Each Rooms
-				If r2\RoomTemplate\Name = "exit1" Then
+				If r2\RoomTemplate\Name = "gateb" Then
 					r\Objects[1] = r2\Objects[1]
 					r\Objects[2] = r2\Objects[2]	
 				ElseIf r2\RoomTemplate\Name = "gateaentrance"
@@ -2105,7 +2105,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\Objects[0], r\x + 1048.0 * RoomScale, r\y, r\z + 512.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
 			;[End Block]
-		Case "exit1"
+		Case "gateb"
 			;[Block]
 			; ~ Elevators
 			r\RoomDoors[0] = CreateDoor(r\Zone, r\x + 720.0 * RoomScale, r\y, r\z + 1432.0 * RoomScale, 180.0, r, True, 3)
@@ -7232,7 +7232,7 @@ Function CreateMap()
 	
 	; ~ [ENTRANCE ZONE]
 	
-	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] - 2) = "exit1"
+	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] - 2) = "gateb"
 	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] - 1) = "gateaentrance"
 	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1]) = "room1lifts"
 	

@@ -199,7 +199,7 @@ Function InitEvents()
 	
 	CreateEvent("gateaentrance", "gateaentrance", 0)
 	CreateEvent("gatea", "gatea", 0)	
-	CreateEvent("exit1", "exit1", 0)
+	CreateEvent("gateb", "gateb", 0)
 	
 	CreateEvent("room205", "room205", 0)
 	
@@ -542,7 +542,7 @@ Function UpdateEvents()
 	
 	For e.Events = Each Events
 		Select e\EventName
-			Case "exit1"
+			Case "gateb"
 				;[Block]
 				If RemoteDoorOn = False Then
 					e\room\RoomDoors[4]\Locked = True
@@ -6029,7 +6029,7 @@ Function UpdateEvents()
 								
 								PlaySound_Strict(LoadTempSound("SFX\Character\MTF\049\Player0492_1.ogg"))
 								
-								LoadEventSound(e, "SFX\SCP\049\0492Breath.ogg")
+								LoadEventSound(e, "SFX\SCP\049_2\Breath.ogg")
 								
 								IsZombie = True
 							EndIf
@@ -6142,8 +6142,8 @@ Function UpdateEvents()
 						e\EventState2 = 2.0
 						
 						For e2.Events = Each Events
-							If e2\EventName = "exit1" Or e2\EventName = "gateaentrance" Then
-								e2\EventState3 = 1
+							If e2\EventName = "gateb" Or e2\EventName = "gateaentrance" Then
+								e2\EventState3 = 1.0
 							EndIf
 						Next
 					EndIf	
@@ -9192,7 +9192,7 @@ Function UpdateEndings()
 	
 	For e.Events = Each Events
 		Select e\EventName
-			Case "exit1"
+			Case "gateb"
 				;[Block]
 				If PlayerRoom = e\room Then
 					If EntityY(Collider) > 1040.0 * RoomScale Then

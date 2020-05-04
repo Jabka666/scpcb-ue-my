@@ -987,7 +987,7 @@ Function CreateOverLapBox(r.Rooms)
 	Local s
 	Local sizeadd# = 0.02
 	
-	If r\RoomTemplate\Name = "exit1" Then Return
+	If r\RoomTemplate\Name = "gateb" Then Return
 	If r\RoomTemplate\Name = "gatea" Then Return
 	If r\RoomTemplate\Name = "room049" Then Return
 	If r\RoomTemplate\Name = "room008" Then Return

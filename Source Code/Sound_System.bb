@@ -152,7 +152,7 @@ Function PauseSounds()
 		If ChannelPlaying(BreathCHN) = True Then PauseChannel(BreathCHN)
 	EndIf
 	
-	If IntercomStreamCHN <> 0
+	If IntercomStreamCHN <> 0 Then
 		SetStreamPaused_Strict(IntercomStreamCHN, True)
 	EndIf
 End Function
@@ -189,7 +189,7 @@ Function ResumeSounds()
 			If (Not n\SoundCHN_IsStream)
 				If ChannelPlaying(n\SoundCHN) = True Then ResumeChannel(n\SoundCHN)
 			Else
-				If n\soundchn_IsStream = True
+				If n\SoundCHN_IsStream = True
 					SetStreamPaused_Strict(n\SoundCHN, False)
 				EndIf
 			EndIf
@@ -226,7 +226,7 @@ Function ResumeSounds()
 		If ChannelPlaying(BreathCHN) = True Then ResumeChannel(BreathCHN)
 	EndIf
 	
-	If IntercomStreamCHN <> 0
+	If IntercomStreamCHN <> 0 Then
 		SetStreamPaused_Strict(IntercomStreamCHN, False)
 	EndIf
 End Function
@@ -301,7 +301,7 @@ Function KillSounds()
 		If ChannelPlaying(BreathCHN) = True Then StopChannel(BreathCHN)
 	EndIf
 	
-	If IntercomStreamCHN <> 0
+	If IntercomStreamCHN <> 0 Then
 		StopStream_Strict(IntercomStreamCHN)
 		IntercomStreamCHN = 0
 	EndIf
@@ -457,7 +457,7 @@ Function UpdateStreamSounds()
 	EndIf
 	
 	If (Not PlayerInReachableRoom()) Then
-		If PlayerRoom\RoomTemplate\Name <> "exit1" And PlayerRoom\RoomTemplate\Name <> "gatea" Then
+		If PlayerRoom\RoomTemplate\Name <> "gateb" And PlayerRoom\RoomTemplate\Name <> "gatea" Then
 			If IntercomStreamCHN <> 0 Then
 				StopStream_Strict(IntercomStreamCHN)
 				IntercomStreamCHN = 0

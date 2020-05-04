@@ -2029,7 +2029,7 @@ Function LoadGameQuick(File$)
 				FreeEntity(r\Objects[12]) : r\Objects[12] = 0
 				FreeEntity(r\Objects[17]) : r\Objects[17] = 0
 			EndIf
-		ElseIf r\RoomTemplate\Name = "exit1" Then
+		ElseIf r\RoomTemplate\Name = "gateb" Then
 			If r\Objects[0] <> 0 Then
 				xTemp = EntityX(r\Objects[0], True)
 				zTemp = EntityZ(r\Objects[0], True)
