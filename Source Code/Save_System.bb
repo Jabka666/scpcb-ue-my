@@ -1106,11 +1106,6 @@ Function LoadGame(File$)
 		Local TempName$ = ReadString(f)
 		Local Name$ = ReadString(f)
 		
-		If TempName = "50ct" Then
-			IttName = "Quarter"
-			TempName = "25ct"
-		EndIf
-		
 		x = ReadFloat(f)
 		y = ReadFloat(f)
 		z = ReadFloat(f)
@@ -1833,11 +1828,6 @@ Function LoadGameQuick(File$)
 		Local TempName$ = ReadString(f)
 		Local Name$ = ReadString(f)
 		
-		If TempName = "50ct" Then
-			IttName = "Quarter"
-			TempName = "25ct"
-		EndIf
-		
 		x = ReadFloat(f)
 		y = ReadFloat(f)
 		z = ReadFloat(f)
@@ -1946,7 +1936,7 @@ Function LoadGameQuick(File$)
 		If closestroom <> Null Then PlayerRoom = closestroom
 	EndIf
 	
-	; ~ This will hopefully fix the 895 crash bug after the player died by it's sanity effect and then quickloaded the game - ENDSHN
+	; ~ This will hopefully fix the SCP-895 crash bug after the player died by it's sanity effect and then quickloaded the game -- ENDSHN
 	For sc.SecurityCams = Each SecurityCams
 		sc\PlayerState = 0
 	Next
@@ -2049,7 +2039,7 @@ End Function
 Function LoadSaveGames()
 	CatchErrors("Uncaught (LoadSaveGames)")
 	
-	Local i%, myDir%, File$
+	Local i%, myDir%, File$, j%
 	
 	SaveGameAmount = 0
 	If FileType(SavePath) = 1 Then RuntimeError("Can't create dir " + Chr(34) + SavePath + Chr(34))

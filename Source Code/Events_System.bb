@@ -347,7 +347,7 @@ Function QuickLoadEvents()
 			;[Block]
 			If e\room\NPC[0] = Null Then
 				e\room\NPC[0] = CreateNPC(NPCtype939, 0, 0, 0)
-				QuickLoadPercent = 20
+				QuickLoadPercent = 25
 			ElseIf e\room\NPC[1] = Null Then
 				e\room\NPC[1] = CreateNPC(NPCtype939, 0, 0, 0)
 				QuickLoadPercent = 50
