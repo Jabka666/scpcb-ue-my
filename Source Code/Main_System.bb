@@ -1689,11 +1689,12 @@ Function UpdateConsole()
 					StrTemp = Piece(Args$, 1, " ")
 					StrTemp2$ = Piece(Args$, 2, " ")
 					StrTemp3$ = Piece(Args$, 3, " ")
+					StrTemp4$ = Piece(Args$, 4, " ")
 					
 					Local PL_Room_Found% = False
 					
-					If StrTemp = "" Or StrTemp2 = "" Or StrTemp3 = ""
-						CreateConsoleMsg("Too few parameters. This command requires 3.", 255, 150, 0)
+					If StrTemp = "" Or StrTemp2 = "" Or StrTemp3 = "" Or StrTemp4 = "" Then
+						CreateConsoleMsg("Too few parameters. This command requires 4.", 255, 150, 0)
 					Else
 						For e.Events = Each Events
 							If e\room = PlayerRoom
@@ -1706,12 +1707,15 @@ Function UpdateConsole()
 								If Lower(StrTemp3) <> "keep"
 									e\EventState3 = Float(StrTemp3)
 								EndIf
-								CreateConsoleMsg("Changed event states from current player room to: " + e\EventState + "|" + e\EventState2 + "|" + e\EventState3)
+								If Lower(StrTemp4) <> "keep"
+									e\EventState4 = Float(StrTemp4)
+								EndIf
+								CreateConsoleMsg("Changed event states from current player room to: " + e\EventState + "|" + e\EventState2 + "|" + e\EventState3 + "|" + e\EventState4)
 								PL_Room_Found = True
 								Exit
 							EndIf
 						Next
-						If (Not PL_Room_Found)
+						If (Not PL_Room_Found) Then
 							CreateConsoleMsg("The current room doesn't has any event applied.", 255, 150, 0)
 						EndIf
 					EndIf
@@ -11114,5 +11118,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#FCB#1302#1B2F
+;~B#FCF#1306#1B33
 ;~C#Blitz3D
