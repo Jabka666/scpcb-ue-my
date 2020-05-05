@@ -1180,7 +1180,7 @@ Function UpdateConsole()
 						EndIf
 						EntityType(it\Collider, HIT_ITEM)
 					Next
-					PlaySound_Strict(LoadTempSound("SFX\Music\420J.ogg"))
+					PlaySound_Strict(LoadTempSound("SFX\Music\Using420J.ogg"))
 					;[End Block]
 				Case "godmode", "god"
 					;[Block]
@@ -1857,26 +1857,26 @@ Global TempSoundIndex% = 0
 
 ; ~ The Music now has to be pre-defined, as the new system uses streaming instead of the usual sound loading system Blitz3D has
 Dim Music$(40)
-Music(0) = "The Dread"
-Music(1) = "HeavyContainment"
+Music(0) = "LightContainmentZone"
+Music(1) = "HeavyContainmentZone"
 Music(2) = "EntranceZone"
 Music(3) = "PD"
-Music(4) = "079"
+Music(4) = "Room079"
 Music(5) = "GateB1"
 Music(6) = "GateB2"
 Music(7) = "Room3Storage"
 Music(8) = "Room049"
-Music(9) = "8601"
+Music(9) = "Room860_1"
 Music(10) = "106Chase"
 Music(11) = "Menu"
-Music(12) = "8601Cancer"
-Music(13) = "Intro"
+Music(12) = "860_2Chase"
+Music(13) = "Room173Intro"
 Music(14) = "178"
 Music(15) = "PDTrench"
-Music(16) = "205"
+Music(16) = "Room205"
 Music(17) = "GateA"
 Music(18) = "1499"
-Music(19) = "1499Danger"
+Music(19) = "1499_1Chase"
 Music(20) = "049Chase"
 Music(21) = "..\Ending\MenuBreath"
 Music(22) = "Room914"
@@ -6277,7 +6277,7 @@ Function DrawGUI()
 							Injuries = Max(Injuries - 0.5, 0.0)
 							BlurTimer = 500.0
 							GiveAchievement(Achv420J)
-							PlaySound_Strict(LoadTempSound("SFX\Music\420J.ogg"))
+							PlaySound_Strict(LoadTempSound("SFX\Music\Using420J.ogg"))
 						EndIf
 						MsgTimer = 70.0 * 5.0
 						RemoveItem(SelectedItem)

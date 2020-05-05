@@ -6793,7 +6793,7 @@ Function UpdateEvents()
 						BlurTimer = Max(BlurTimer, 100.0)
 						
 						If e\EventState2 > 200.0 And e\EventState2 - FPSfactor =< 200.0 Then 							
-							e\Sound = LoadSound_Strict("SFX\Music\1123.ogg")
+							e\Sound = LoadSound_Strict("SFX\Music\Room1123.ogg")
 							e\SoundCHN = PlaySound_Strict(e\Sound)
 						EndIf
 						
