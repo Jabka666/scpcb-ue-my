@@ -4158,34 +4158,28 @@ Function MouseLook()
 		MoveMouse(Viewport_Center_X, Viewport_Center_Y)
 	EndIf
 	
-	If WearingGasMask > 0 Or Wearing1499 > 0 Then
-		If Wearing714 = 0 Then
-			If WearingGasMask = 2 Or Wearing1499 = 2 Then
-				Stamina = Min(100.0, Stamina + (100.0 - Stamina) * 0.01 * FPSfactor)
-			EndIf
-		EndIf
-		If ChannelPlaying(BreathCHN) = False Then
-			If ChannelPlaying(BreathGasRelaxedCHN) = False Then BreathGasRelaxedCHN = PlaySound_Strict(BreathGasRelaxedSFX)
-		Else
-			If ChannelPlaying(BreathGasRelaxedCHN) = True Then StopChannel(BreathGasRelaxedCHN)
-		EndIf
-		ShowEntity(GasMaskOverlay)
-	Else
-		If ChannelPlaying(BreathGasRelaxedCHN) = True Then StopChannel(BreathGasRelaxedCHN)
-		HideEntity(GasMaskOverlay)
-	End If
-	
-	If WearingHazmat > 0 Then
+	If WearingGasMask > 0 Or Wearing1499 > 0 Or WearingHazmat > 0 Then
 		If WearingHazmat = 1 Then
             Stamina = Min(60.0, Stamina)
         EndIf
 		If Wearing714 = 0 Then
-			If WearingHazmat = 2 Then
+			If WearingGasMask = 2 Or Wearing1499 = 2 Or WearingHazmat = 2 Then
 				Stamina = Min(100.0, Stamina + (100.0 - Stamina) * 0.01 * FPSfactor)
 			EndIf
 		EndIf
-		ShowEntity(HazmatSuitOverlay)
+		If WearingGasMask > 0 Or Wearing1499 > 0 Then
+			If ChannelPlaying(BreathCHN) = False Then
+				If ChannelPlaying(BreathGasRelaxedCHN) = False Then BreathGasRelaxedCHN = PlaySound_Strict(BreathGasRelaxedSFX)
+			Else
+				If ChannelPlaying(BreathGasRelaxedCHN) = True Then StopChannel(BreathGasRelaxedCHN)
+			EndIf
+			ShowEntity(GasMaskOverlay)
+		Else
+			ShowEntity(HazmatSuitOverlay)
+		EndIf
 	Else
+		If ChannelPlaying(BreathGasRelaxedCHN) = True Then StopChannel(BreathGasRelaxedCHN)
+		HideEntity(GasMaskOverlay)
 		HideEntity(HazmatSuitOverlay)
 	End If
 	
@@ -11120,5 +11114,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#FCB#1308#1B35
+;~B#FCB#1302#1B2F
 ;~C#Blitz3D
