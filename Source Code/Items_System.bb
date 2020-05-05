@@ -562,7 +562,7 @@ Function UpdateItems()
 						EndIf
 					Next
 				EndIf
-				If EntityY(i\Collider) < -35.0 Then 
+				If EntityY(i\Collider) < -60.0 Then 
 					RemoveItem(i)
 					DeletedItem = True
 				EndIf
@@ -778,7 +778,7 @@ Function DropItem(item.Items, PlayDropSound% = True)
 	RotateEntity(item\Collider, EntityPitch(Camera), EntityYaw(Camera) + Rnd(-20.0, 20.0), 0.0)
 	MoveEntity(item\Collider, 0.0, -0.1, 0.1)
 	RotateEntity(item\Collider, 0.0, EntityYaw(Camera) + Rnd(-110.0, 110.0), 0.0)
-	ResetEntity (item\Collider)
+	ResetEntity(item\Collider)
 	
 	item\Picked = False
 	For z = 0 To MaxItemAmount - 1

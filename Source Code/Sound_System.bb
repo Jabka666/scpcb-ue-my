@@ -472,14 +472,14 @@ Function UpdateStreamSounds()
 					
 					If e\SoundCHN2 <> 0 And e\SoundCHN2_IsStream Then
 						StopStream_Strict(e\SoundCHN2)
-						e\SoundCHN = 0
-						e\SoundCHN_IsStream = 0
+						e\SoundCHN2 = 0
+						e\SoundCHN2_IsStream = 0
 					EndIf
 					
 					If e\SoundCHN3 <> 0 And e\SoundCHN3_IsStream Then
 						StopStream_Strict(e\SoundCHN3)
-						e\SoundCHN = 0
-						e\SoundCHN_IsStream = 0
+						e\SoundCHN3 = 0
+						e\SoundCHN3_IsStream = 0
 					EndIf
 				Next
 			EndIf

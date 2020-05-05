@@ -1846,6 +1846,7 @@ Function FillRoom(r.Rooms)
 	Local dX#, dZ#, dSize#, dID%
 	Local i%, k%
 	Local o.Objects = First Objects
+	Local tt.TempTextures = First TempTextures
 	
 	Select r\RoomTemplate\Name
 		Case "room860"
@@ -2224,26 +2225,39 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "room079"
 			;[Block]
-			; ~ Doors to the containment chamber
-			d = CreateDoor(r\Zone, r\x, r\y - 448.0 * RoomScale, r\z + 1136.0 * RoomScale, 0.0, r, False, True, 4)
-			d\AutoClose = False : d\Open = False
-			PositionEntity(d\Buttons[1], r\x + 224.0 * RoomScale, r\y - 250.0 * RoomScale, r\z + 918.0 * RoomScale, True)
-			PositionEntity(d\Buttons[0], r\x - 240.0 * RoomScale, r\y - 250.0 * RoomScale, r\z + 1366.0 * RoomScale, True)	
+			; ~ Doors
+		    d = CreateDoor(r\Zone, r\x - 1648.0 * RoomScale, r\y - 10688.0 * RoomScale, r\z - 260.0 * RoomScale, 90.0, r, False, True, 4)
+			d\AutoClose = False
+			PositionEntity(d\Buttons[1], r\x - 1418.0 * RoomScale, r\y - 10490.0 * RoomScale, r\z - 26.0 * RoomScale, True) 
+			PositionEntity(d\Buttons[0], r\x - 1894.0 * RoomScale, r\y - 10490.0 * RoomScale, r\z - 503.0 * RoomScale, True)
 			
-			r\RoomDoors[0] = CreateDoor(r\Zone, r\x + 1456.0 * RoomScale, r\y - 448.0 * RoomScale, r\z + 976.0 * RoomScale, 0.0, r, False, True, 3)
-			r\RoomDoors[0]\AutoClose = False : r\RoomDoors[0]\Open = False : r\RoomDoors[0]\Locked = 2
-			PositionEntity(r\RoomDoors[0]\Buttons[1], r\x + 1760.0 * RoomScale, r\y - 250.0 * RoomScale, r\z + 1236.0 * RoomScale, True)
-			TurnEntity(r\RoomDoors[0]\Buttons[0], 0.0, -90.0 - 90.0, 0.0, True)
-			PositionEntity(r\RoomDoors[0]\Buttons[0], r\x + 1760.0 * RoomScale, r\y - 240.0 * RoomScale, r\z + 740.0 * RoomScale, True)
-			TurnEntity(r\RoomDoors[0]\Buttons[1], 0.0, 90.0 - 90.0, 0.0, True)
+			r\RoomDoors[0] = CreateDoor(r\Zone, r\x - 1484.0 * RoomScale, r\y - 10688.0 * RoomScale, r\z + 1205.0 * RoomScale, 90.0, r, False, True, 4)
+			r\RoomDoors[0]\AutoClose = False
+			PositionEntity(r\RoomDoors[0]\Buttons[1], r\x - 1700.0 * RoomScale, r\y - 10490.0 * RoomScale, r\z + 777.5 * RoomScale, True)
+			RotateEntity(r\RoomDoors[0]\Buttons[1], 0.0, 90.0, 0.0)
+			PositionEntity(r\RoomDoors[0]\Buttons[0], r\x - 1216.0 * RoomScale, r\y - 10490.0 * RoomScale, r\z + 1502.0 * RoomScale, True) 
+			RotateEntity(r\RoomDoors[0]\Buttons[0], 0.0, -90.0, 0.0)
 			
-			; ~ DNA door
-			d = CreateDoor(r\Zone, r\x + 1144.0 * RoomScale, r\y - 448.0 * RoomScale, r\z + 704.0 * RoomScale, 90.0, r, False, False, -1)
+			d = CreateDoor(r\Zone, r\x - 1216.0 * RoomScale, r\y - 10688.0 * RoomScale, r\z + 888.0 * RoomScale, 0.0, r, False, False, -1)
+			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.061, True)
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.061, True)
 			
-			r\Objects[0] = LoadAnimMesh_Strict("GFX\map\079.b3d")
-			ScaleEntity(r\Objects[0], 1.3, 1.3, 1.3, True)
-			PositionEntity(r\Objects[0], r\x + 1856.0 * RoomScale, r\y - 560.0 * RoomScale, r\z - 672.0 * RoomScale)
-			TurnEntity(r\Objects[0], 0.0, 180.0, 0.0)
+			d = CreateDoor(r\Zone, r\x, r\y, r\z + 64.0 * RoomScale, 0.0, r, False, 2, 4)
+			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
+			d\AutoClose = False : d\Locked = True : d\MTFClose = False : d\DisableWayPoint = True
+			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
+			
+			; ~ Elevators' doors
+			r\RoomDoors[1] = CreateDoor(r\Zone, r\x + 512.0 * RoomScale, r\y, r\z - 256.0 * RoomScale, 90.0, r, True, 3)
+			r\RoomDoors[1]\AutoClose = False
+			
+			r\RoomDoors[2] = CreateDoor(r\Zone, r\x + 512.0 * RoomScale, r\y - 10240.0 * RoomScale, r\z - 256.0 * RoomScale, 90.0, r, False, 3)
+			r\RoomDoors[2]\AutoClose = False
+			
+			If r\Objects[0] = 0 Then r\Objects[0] = LoadAnimMesh_Strict("GFX\map\079.b3d")
+			ScaleEntity(r\Objects[0], 1.3, 1.3, 1.3)
+			PositionEntity(r\Objects[0], r\x + 166.0 * RoomScale, r\y - 10800.0 * RoomScale, r\z + 1606.0 * RoomScale)
+			TurnEntity(r\Objects[0], 0.0, -90.0, 0.0)
 			EntityParent(r\Objects[0], r\OBJ)
 			
 			r\Objects[1] = CreateSprite(r\Objects[0])
@@ -2252,14 +2266,24 @@ Function FillRoom(r.Rooms)
 			ScaleSprite(r\Objects[1], 0.18 * 0.5, 0.145 * 0.5)
 			TurnEntity(r\Objects[1], 0.0, 13.0, 0.0)
 			MoveEntity(r\Objects[1], 0.0, 0.0, -0.022)
-			EntityTexture(r\Objects[1], OldAiPics(0))
+			EntityTexture(r\Objects[1], tt\MiscTextureID[6])
 			HideEntity(r\Objects[1])
 			
 			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], r\x + 1184.0 * RoomScale, r\y - 448.0 * RoomScale, r\z + 1792.0 * RoomScale)
-			EntityParent(r\Objects[2], r\OBJ)
+			PositionEntity(r\Objects[2], r\x - 2260.0 * RoomScale, r\y - 10688.0 * RoomScale, r\z + 1000.0 * RoomScale)
 			
-			de = CreateDecal(3, r\x + 1184.0 * RoomScale, r\y - 448.0 * RoomScale + 0.01, r\z + 1792.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
+			; ~ Elevators' pivots
+			r\Objects[3] = CreatePivot()
+			PositionEntity(r\Objects[3], r\x + 772.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 256.0 * RoomScale)
+			
+			r\Objects[4] = CreatePivot()
+			PositionEntity(r\Objects[4], r\x + 772.0 * RoomScale, r\y - 10000.0 * RoomScale, r\z - 256.0 * RoomScale)
+			
+			For i = 2 To 4
+				EntityParent(r\Objects[i], r\OBJ)
+			Next
+			
+			de = CreateDecal(3, r\x - 2200.0 * RoomScale, r\y - 10688.0 * RoomScale + 0.01, r\z + 1000.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
 			de\Size = 0.5
 			ScaleSprite(de\OBJ, de\Size, de\Size)
 			EntityParent(de\OBJ, r\OBJ)
@@ -6158,7 +6182,6 @@ Dim MapName$(MapWidth, MapHeight)
 Dim MapRoomID%(ROOM4 + 1)
 Dim MapRoom$(ROOM4 + 1, 0)
 
-Dim GorePics%(10)
 Global SelectedMonitor.SecurityCams
 Global CoffinCam.SecurityCams
 
@@ -6239,6 +6262,7 @@ Function UpdateSecurityCams()
 	CatchErrors("Uncaught (UpdateSecurityCams)")
 	
 	Local sc.SecurityCams
+	Local tt.TempTextures = First TempTextures
 	
 	; ~ CoffinEffect = 0, not affected by SCP-895
 	; ~ CoffinEffect = 1, constantly affected by SCP-895
@@ -6402,10 +6426,10 @@ Function UpdateSecurityCams()
 							
 							FreeEntity(Pvt)
 							If (sc\CoffinEffect = 1 Or sc\CoffinEffect = 3) And (Wearing714 = 0 Or WearingGasMask < 3 Or WearingHazmat < 3) Then
-								If Sanity < -800 Then
+								If Sanity < -800.0 Then
 									If Rand(3) = 1 Then EntityTexture(sc\ScrOverlay, MonitorTexture)
 									If Rand(6) < 5 Then
-										EntityTexture(sc\ScrOverlay, GorePics(Rand(0, 5)))
+										EntityTexture(sc\ScrOverlay, tt\MiscTextureID[Rand(7, 12)])
 										If sc\PlayerState = 1 Then PlaySound_Strict(HorrorSFX(1))
 										sc\PlayerState = 2
 										If sc\SoundCHN = 0 Then
@@ -6422,7 +6446,7 @@ Function UpdateSecurityCams()
 								ElseIf Sanity < -500.0
 									If Rand(7) = 1 Then EntityTexture(sc\ScrOverlay, MonitorTexture)
 									If Rand(50) = 1 Then
-										EntityTexture(sc\ScrOverlay, GorePics(Rand(0, 5)))
+										EntityTexture(sc\ScrOverlay, tt\MiscTextureID[Rand(7, 12)])
 										If sc\PlayerState = 0 Then PlaySound_Strict(HorrorSFX(0))
 										sc\PlayerState = Max(sc\PlayerState, 1)
 										If sc\CoffinEffect = 3 And Rand(100) = 1 Then sc\CoffinEffect = 2 : sc\PlayerState = Rand(10000, 20000)
@@ -6446,7 +6470,7 @@ Function UpdateSecurityCams()
 						EndIf
 						
 						If Rand(500) = 1 Then
-							EntityTexture(sc\ScrOverlay, OldAiPics(0))
+							EntityTexture(sc\ScrOverlay, tt\MiscTextureID[6])
 						End If
 						
 						If (MilliSecs2() Mod sc\PlayerState) >= Rand(600) Then
@@ -6459,7 +6483,7 @@ Function UpdateSecurityCams()
 								sc\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(1, 3) + ".ogg"))
 								If sc\CoffinEffect = 2 Then sc\CoffinEffect = 3 : sc\PlayerState = 0
 							EndIf
-							EntityTexture(sc\ScrOverlay, OldAiPics(0))
+							EntityTexture(sc\ScrOverlay, tt\MiscTextureID[6])
 						EndIf
 					EndIf
 				EndIf
@@ -8479,5 +8503,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11E3
+;~B#11FB
 ;~C#Blitz3D

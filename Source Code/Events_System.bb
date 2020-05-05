@@ -536,6 +536,7 @@ Function UpdateEvents()
 	Local Angle#
 	Local o.Objects = First Objects
 	Local ov.Overlays = First Overlays
+	Local tt.TempTextures = First TempTextures
 	
 	CurrStepSFX = 0
 	
@@ -2199,7 +2200,7 @@ Function UpdateEvents()
 							ElseIf Sanity < -800.0 Then
 								If Rand(3) = 1 Then EntityTexture(ov\OverlayID[4], ov\OverlayTextureID[4])
 								If Rand(6) < 5 Then
-									EntityTexture(ov\OverlayID[4], GorePics(Rand(0, 5)))
+									EntityTexture(ov\OverlayID[4], tt\MiscTextureID[Rand(7, 12)])
 									For i = 0 To MaxItemAmount - 1
 										If (Inventory(i) <> Null) Then
 											If (WearingNightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvgoggles") Or (WearingNightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernv") Or (WearingNightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvgoggles") Then
@@ -2217,7 +2218,7 @@ Function UpdateEvents()
 							ElseIf Sanity < -500.0 Then
 								If Rand(7) = 1 Then EntityTexture(ov\OverlayID[4], ov\OverlayTextureID[4])
 								If Rand(50) = 1 Then
-									EntityTexture(ov\OverlayID[4], GorePics(Rand(0, 5)))
+									EntityTexture(ov\OverlayID[4], tt\MiscTextureID[Rand(7, 12)])
 									For i = 0 To MaxItemAmount - 1
 										If (Inventory(i) <> Null) Then
 											If (WearingNightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvgoggles") Or (WearingNightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernv") Or (WearingNightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvgoggles") Then
@@ -6064,82 +6065,84 @@ Function UpdateEvents()
 			Case "room079"
 				;[Block]
 				If PlayerRoom = e\room Then
-					If e\EventState = 0.0 Then
-						e\room\NPC[0] = CreateNPC(NPCtypeGuard, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True) + 0.5, EntityZ(e\room\Objects[2], True))
-						PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
-						RotateEntity(e\room\NPC[0]\Collider, 0.0, EntityYaw(e\room\NPC[0]\Collider), 0.0, True)
-						SetNPCFrame(e\room\NPC[0], 288.0)
-						e\room\NPC[0]\State = 8.0
+					If EntityY(Collider) < -9500.0 * RoomScale Then
+						If e\EventState = 0.0 Then
+							e\room\NPC[0] = CreateNPC(NPCtypeGuard, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True) + 0.5, EntityZ(e\room\Objects[2], True))
+							PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
+							RotateEntity(e\room\NPC[0]\Collider, 0.0, EntityYaw(e\room\NPC[0]\Collider), 0.0, True)
+							SetNPCFrame(e\room\NPC[0], 288.0)
+							e\room\NPC[0]\State = 8.0
+							
+							e\EventState = 1.0
+						EndIf
+						ShouldPlay = 4
 						
-						e\EventState = 1.0
-					EndIf
-					ShouldPlay = 4
-					
-					If RemoteDoorOn Then 
-						e\room\RoomDoors[0]\Locked = 2
-					ElseIf e\EventState < 10000.0
-						e\room\RoomDoors[0]\Locked = False
-						
-						If e\EventState = 1.0 Then 
-							e\EventState = 2.0
-						ElseIf e\EventState = 2.0
-							If EntityDistance(e\room\Objects[0], Collider) < 3.0 Then 
-								GiveAchievement(Achv079)
-								e\EventState = 3.0
-								e\EventState2 = 1.0
-								e\SoundCHN = StreamSound_Strict("SFX\SCP\079\Speech.ogg", SFXVolume, 0.0)
-								e\SoundCHN_IsStream = True
-							EndIf							
-						ElseIf e\EventState < 2000.0 Then
-							If IsStreamPlaying_Strict(e\SoundCHN)
-								If Rand(3) = 1 Then
-									EntityTexture(e\room\Objects[1], OldAiPics(0))
-									ShowEntity(e\room\Objects[1])
-								ElseIf Rand(10) = 1 
-									HideEntity(e\room\Objects[1])							
+						If RemoteDoorOn Then 
+							e\room\RoomDoors[0]\Locked = 2
+						ElseIf e\EventState < 10000.0
+							e\room\RoomDoors[0]\Locked = False
+							If e\EventState = 1.0 Then 
+								e\EventState = 2.0
+							ElseIf e\EventState = 2.0
+								If EntityDistance(e\room\Objects[0], Collider) < 3.0 Then 
+									GiveAchievement(Achv079)
+									e\EventState = 3.0
+									e\EventState2 = 1.0
+									e\SoundCHN3 = StreamSound_Strict("SFX\SCP\079\Speech.ogg", SFXVolume, 0.0)
+									e\SoundCHN3_IsStream = True
 								EndIf							
-							Else
-								If e\SoundCHN <> 0
-									StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0
+							ElseIf e\EventState < 2000.0 Then
+								If IsStreamPlaying_Strict(e\SoundCHN3) Then
+									If Rand(4) = 1 Then
+										EntityTexture(e\room\Objects[1], tt\MiscTextureID[Rand(1, 6)])
+										ShowEntity(e\room\Objects[1])
+									ElseIf Rand(10) = 1 
+										HideEntity(e\room\Objects[1])							
+									EndIf							
+								Else
+									If e\SoundCHN3 <> 0 Then
+										StopStream_Strict(e\SoundCHN3) : e\SoundCHN3 = 0
+									EndIf
+									EntityTexture(e\room\Objects[1], tt\MiscTextureID[0])
+									ShowEntity(e\room\Objects[1])
+									e\EventState = e\EventState + FPSfactor
 								EndIf
-								EntityTexture(e\room\Objects[1], OldAiPics(1))
-								ShowEntity (e\room\Objects[1])
-								e\EventState = e\EventState + FPSfactor
+							Else
+								If EntityDistance(e\room\Objects[0], Collider) < 2.5 Then 
+									e\EventState = 10001.0
+									If e\SoundCHN3 <> 0 Then
+										StopStream_Strict(e\SoundCHN3) : e\SoundCHN3 = 0 
+									EndIf
+									e\SoundCHN3 = StreamSound_Strict("SFX\SCP\079\Refuse.ogg", SFXVolume, 0.0)
+								EndIf
 							EndIf
 						Else
-							If EntityDistance(e\room\Objects[0], Collider) < 2.5 Then 
-								e\EventState = 10001.0
-								If e\SoundCHN <> 0
-									StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 
-								EndIf
-								e\SoundCHN = StreamSound_Strict("SFX\SCP\079\Refuse.ogg", SFXVolume, 0.0)
-							EndIf
-						EndIf
-					Else
-						If e\SoundCHN <> 0
-							If (Not IsStreamPlaying_Strict(e\SoundCHN))
-								e\SoundCHN = 0
-								EntityTexture(e\room\Objects[1], OldAiPics(1))
-								ShowEntity(e\room\Objects[1])
-							Else
-								If Rand(3) = 1 Then
-									EntityTexture(e\room\Objects[1], OldAiPics(0))
+							If e\SoundCHN3 <> 0 Then
+								If (Not IsStreamPlaying_Strict(e\SoundCHN3)) Then
+									e\SoundCHN3 = 0
+									EntityTexture(e\room\Objects[1], tt\MiscTextureID[0])
 									ShowEntity(e\room\Objects[1])
-								ElseIf Rand(10) = 1 
-									HideEntity(e\room\Objects[1])							
+								Else
+									If Rand(4) = 1 Then
+										EntityTexture(e\room\Objects[1], tt\MiscTextureID[Rand(1, 6)])
+										ShowEntity(e\room\Objects[1])
+									ElseIf Rand(10) = 1 
+										HideEntity(e\room\Objects[1])							
+									EndIf
 								EndIf
 							EndIf
 						EndIf
 					EndIf
+					e\EventState4 = UpdateElevators(e\EventState4, e\room\RoomDoors[1], e\room\RoomDoors[2], e\room\Objects[3], e\room\Objects[4], e)	
 				EndIf
 				
 				If e\EventState2 = 1.0 Then
 					If RemoteDoorOn Then 	
-						If e\SoundCHN <> 0
-							StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0
+						If e\SoundCHN3 <> 0
+							StopStream_Strict(e\SoundCHN3) : e\SoundCHN3 = 0
 						EndIf
-						e\SoundCHN = StreamSound_Strict("SFX\SCP\079\GateB.ogg", SFXVolume, 0.0)
-						e\SoundCHN_IsStream = True
+						e\SoundCHN3 = StreamSound_Strict("SFX\SCP\079\GateB.ogg", SFXVolume, 0.0)
+						e\SoundCHN3_IsStream = True
 						e\EventState2 = 2.0
 						
 						For e2.Events = Each Events
@@ -10186,5 +10189,5 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#120C#1E41
+;~B#120D#1E44
 ;~C#Blitz3D
