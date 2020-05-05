@@ -9211,7 +9211,7 @@ Function UpdateEndings()
 							Curr173 = Null
 							Curr106 = Null
 							Curr096 = Null
-							Curr5131 = Null
+							Curr513_1 = Null
 							
 							CameraFogMode(Camera, 0)
 							SecondaryLightOn = True
@@ -9567,7 +9567,7 @@ Function UpdateEndings()
 						Next
 						Curr173\Idle = 1
 						Curr096 = Null
-						Curr5131 = Null
+						Curr513_1 = Null
 						
 						CameraFogMode(Camera, 0)
 						SecondaryLightOn = True

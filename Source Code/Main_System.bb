@@ -5465,8 +5465,8 @@ Function DrawGUI()
 					;[Block]
 					PlaySound_Strict(LoadTempSound("SFX\SCP\513\Bell1.ogg"))
 					
-					If Curr5131 = Null
-						Curr5131 = CreateNPC(NPCtype513_1, 0.0, 0.0, 0.0)
+					If Curr513_1 = Null
+						Curr513_1 = CreateNPC(NPCtype513_1, 0.0, 0.0, 0.0)
 					EndIf	
 					SelectedItem = Null
 					;[End Block]
@@ -8742,6 +8742,7 @@ Function NullGame(PlayButtonSFX% = True)
 	Curr173 = Null
 	Curr106 = Null
 	Curr096 = Null
+	Curr513_1 = Null
 	
 	For i = 0 To 6
 		MTFRooms[i] = Null

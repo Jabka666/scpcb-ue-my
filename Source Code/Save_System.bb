@@ -630,7 +630,7 @@ Function LoadGame(File$)
 				;[End Block]
 			Case NPCtype513_1
 				;[Block]
-				Curr5131 = n
+				Curr513_1 = n
 				;[End Block]
 		End Select
 		
@@ -1492,7 +1492,7 @@ Function LoadGameQuick(File$)
 				;[End Block]
 			Case NPCtype513_1
 				;[Block]
-				Curr5131 = n
+				Curr513_1 = n
 				;[End Block]
 		End Select
 		

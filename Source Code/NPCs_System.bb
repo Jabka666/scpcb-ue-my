@@ -1,4 +1,4 @@
-Global Curr173.NPCs, Curr106.NPCs, Curr096.NPCs, Curr5131.NPCs
+Global Curr173.NPCs, Curr106.NPCs, Curr096.NPCs, Curr513_1.NPCs
 Global Contained106% = False
 
 Type NPCs
