@@ -7732,7 +7732,7 @@ Function LoadEntities()
 	CreateBlurImage()
 	CameraProjMode(Ark_Blur_Cam, 0)
 	
-	ov\OverlayTextureID[0] = LoadTexture_Strict("GFX\fog.png", 1)
+	ov\OverlayTextureID[0] = LoadTexture_Strict("GFX\fog.png", 1) ; ~ FOG
 	ov\OverlayID[0] = CreateSprite(Ark_Blur_Cam)
 	ScaleSprite(ov\OverlayID[0], Max(GraphicWidth / 1240, 1), Max(GraphicHeight / 960 * 0.8, 0.8))
 	EntityTexture(ov\OverlayID[0], ov\OverlayTextureID[0])
@@ -7740,7 +7740,7 @@ Function LoadEntities()
 	EntityOrder(ov\OverlayID[0], -1000)
 	MoveEntity(ov\OverlayID[0], 0.0, 0.0, 1.0)
 	
-	ov\OverlayTextureID[1] = LoadTexture_Strict("GFX\GasmaskOverlay.png", 1)
+	ov\OverlayTextureID[1] = LoadTexture_Strict("GFX\GasmaskOverlay.png", 1) ; ~ GAS MASK
 	ov\OverlayID[1] = CreateSprite(Ark_Blur_Cam)
 	ScaleSprite(ov\OverlayID[1], Max(GraphicWidth / 1024, 1), Max(GraphicHeight / 1024 * 0.8, 0.8))
 	EntityTexture(ov\OverlayID[1], ov\OverlayTextureID[1])
@@ -7748,9 +7748,8 @@ Function LoadEntities()
 	EntityFX(ov\OverlayID[1], 1)
 	EntityOrder(ov\OverlayID[1], -1003)
 	MoveEntity(ov\OverlayID[1], 0.0, 0.0, 1.0)
-	HideEntity(ov\OverlayID[1])
 	
-	ov\OverlayTextureID[2] = LoadTexture_Strict("GFX\HazmatSuitOverlay.png", 1)
+	ov\OverlayTextureID[2] = LoadTexture_Strict("GFX\HazmatSuitOverlay.png", 1) ; ~ HAZMAT SUIT
 	ov\OverlayID[2] = CreateSprite(Ark_Blur_Cam)
 	ScaleSprite(ov\OverlayID[2], Max(GraphicWidth / 1024.0, 1.0), Max(GraphicHeight / 1024.0 * 0.8, 0.8))
 	EntityTexture(ov\OverlayID[2], ov\OverlayTextureID[2])
@@ -7758,9 +7757,8 @@ Function LoadEntities()
 	EntityFX(ov\OverlayID[2], 1)
 	EntityOrder(ov\OverlayID[2], -1003)
 	MoveEntity(ov\OverlayID[2], 0, 0, 1.0)
-	HideEntity(ov\OverlayID[2])
 	
-	ov\OverlayTextureID[3] = LoadTexture_Strict("GFX\InfectOverlay.png", 1)
+	ov\OverlayTextureID[3] = LoadTexture_Strict("GFX\InfectOverlay.png", 1) ; ~ SCP-008
 	ov\OverlayID[3] = CreateSprite(Ark_Blur_Cam)
 	ScaleSprite(ov\OverlayID[3], Max(GraphicWidth / 1024, 1), Max(GraphicHeight / 1024 * 0.8, 0.8))
 	EntityTexture(ov\OverlayID[3], ov\OverlayTextureID[3])
@@ -7768,9 +7766,8 @@ Function LoadEntities()
 	EntityFX(ov\OverlayID[3], 1)
 	EntityOrder(ov\OverlayID[3], -1003)
 	MoveEntity(ov\OverlayID[3], 0.0, 0.0, 1.0)
-	HideEntity(ov\OverlayID[3])
 	
-	ov\OverlayTextureID[4] = LoadTexture_Strict("GFX\NightVisionOverlay.png", 1)
+	ov\OverlayTextureID[4] = LoadTexture_Strict("GFX\NightVisionOverlay.png", 1) ; NIGHT VISION GOGGLES
 	ov\OverlayID[4] = CreateSprite(Ark_Blur_Cam)
 	ScaleSprite(ov\OverlayID[4], Max(GraphicWidth / 1024, 1), Max(GraphicHeight / 1024 * 0.8, 0.8))
 	EntityTexture(ov\OverlayID[4], ov\OverlayTextureID[4])
@@ -7778,20 +7775,22 @@ Function LoadEntities()
 	EntityFX(ov\OverlayID[4], 1)
 	EntityOrder(ov\OverlayID[4], -1003)
 	MoveEntity(ov\OverlayID[4], 0.0, 0.0, 1.0)
-	HideEntity(ov\OverlayID[4])
 	
-	ov\OverlayTextureID[5] = LoadTexture_Strict("GFX\fogNV.png", 1)
+	ov\OverlayTextureID[5] = LoadTexture_Strict("GFX\fogNV.png", 1) ; ~ FOG IN NIGHT VISION GOGGLES
 	ov\OverlayID[5] = CreateSprite(Ark_Blur_Cam)
 	ScaleSprite(ov\OverlayID[5], Max(GraphicWidth / 1024, 1), Max(GraphicHeight / 1024 * 0.8, 0.8))
 	EntityColor(ov\OverlayID[5], 0.0, 0.0, 0.0)
 	EntityFX(ov\OverlayID[5], 1)
 	EntityOrder(ov\OverlayID[5], -1005)
 	MoveEntity(ov\OverlayID[5], 0.0, 0.0, 1.0)
-	HideEntity(ov\OverlayID[5])
+	
+	For i = 1 To 5
+		HideEntity(ov\OverlayID[i])
+	Next
 	
 	DrawLoading(5)
 	
-	ov\OverlayTextureID[6] = CreateTexture(1024, 1024, 1 + 2)
+	ov\OverlayTextureID[6] = CreateTexture(1024, 1024, 1 + 2) ; ~ DARK
 	SetBuffer(TextureBuffer(ov\OverlayTextureID[6]))
 	Cls
 	SetBuffer(BackBuffer())
@@ -7803,7 +7802,7 @@ Function LoadEntities()
 	MoveEntity(ov\OverlayID[6], 0.0, 0.0, 1.0)
 	EntityAlpha(ov\OverlayID[6], 0.0)
 	
-	ov\OverlayTextureID[7] = CreateTexture(1024, 1024, 1 + 2 + 256)
+	ov\OverlayTextureID[7] = CreateTexture(1024, 1024, 1 + 2 + 256) ; ~ LIGHT
 	SetBuffer(TextureBuffer(ov\OverlayTextureID[7]))
 	ClsColor(255, 255, 255)
 	Cls
@@ -7975,13 +7974,13 @@ Function LoadEntities()
 	tt\MiscTextureID[0] = LoadTexture_Strict("GFX\079Overlays\079Overlay.png")
 	
 	For i = 1 To 6
-		tt\MiscTextureID[i] = LoadTexture_Strict("GFX\079Overlays\079Overlay(" + (i + 1) + ").png")	
+		tt\MiscTextureID[i] = LoadTexture_Strict("GFX\079Overlays\079Overlay(" + (i + 1) + ").png")	; ~ SCP-079
 	Next
 	
 	tt\MiscTextureID[7] = LoadTexture_Strict("GFX\895Overlays\895Overlay.png")
 	
 	For i = 8 To 12
-		tt\MiscTextureID[i] = LoadTexture_Strict("GFX\895Overlays\895Overlay(" + (i - 6) + ").png")
+		tt\MiscTextureID[i] = LoadTexture_Strict("GFX\895Overlays\895Overlay(" + (i - 6) + ").png") ; ~ SCP-895
 	Next
 	
 	DrawLoading(20)
