@@ -5334,7 +5334,7 @@ Function FillRoom(r.Rooms)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			;[End Block]
-		Case "medibay"
+		Case "room2medibay2"
 			;[Block]
 			d = CreateDoor(r\Zone, r\x - 264.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 90.0, r, False, False, 3)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.031, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
@@ -7242,7 +7242,7 @@ Function CreateMap()
 	SetRoom("room2offices", ROOM2, Min_Pos + Floor(0.45 * Room2Amount[2]), Min_Pos, Max_Pos)
 	SetRoom("room2offices4", ROOM2, Min_Pos + Floor(0.5 * Room2Amount[2]), Min_Pos, Max_Pos)	
 	SetRoom("room860", ROOM2, Min_Pos + Floor(0.6 * Room2Amount[2]), Min_Pos, Max_Pos)
-	SetRoom("medibay", ROOM2, Min_Pos + Floor(0.7 * Float(Room2Amount[2])), Min_Pos, Max_Pos)
+	SetRoom("room2medibay2", ROOM2, Min_Pos + Floor(0.7 * Float(Room2Amount[2])), Min_Pos, Max_Pos)
 	SetRoom("room2poffices2", ROOM2, Min_Pos + Floor(0.8*Room2Amount[2]), Min_Pos, Max_Pos)
 	SetRoom("room2offices2", ROOM2, Min_Pos + Floor(0.9*Float(Room2Amount[2])), Min_Pos, Max_Pos)
 	

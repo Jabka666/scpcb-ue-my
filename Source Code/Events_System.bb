@@ -225,7 +225,7 @@ Function InitEvents()
 	
 	CreateEvent("room2sl", "room2sl", 0)
 	
-	CreateEvent("medibay", "medibay", 0)
+	CreateEvent("room2medibay2", "room2medibay2", 0)
 	
 	CreateEvent("room2shaft", "room2shaft", 0)
 	
@@ -8662,7 +8662,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "medibay"
+			Case "room2medibay2"
 				;[Block]
 				; ~ e\EventState: Determines if the player has entered the room or not
 				; ~ 0 : Not entered
