@@ -8703,11 +8703,11 @@ Function UpdateEvents()
 					HideEntity(NTF_1499Sky)
 					HideChunks()
 					For n.NPCs = Each NPCs
-						If n\NPCtype = NPCtype1499 Then
+						If n\NPCtype = NPCtype1499_1 Then
 							RemoveNPC(n)
 						EndIf
 					Next
-					For du.Dummy1499 = Each Dummy1499
+					For du.Dummy1499_1 = Each Dummy1499_1
 						FreeEntity(du\OBJ)
 						Delete(du)
 					Next
@@ -8840,7 +8840,7 @@ Function UpdateEvents()
 End Function
 
 Function UpdateDimension1499()
-	Local e.Events,n.NPCs, n2.NPCs, r.Rooms, it.Items, i%, j%, du.Dummy1499, Temp%, Scale#, x%, y%
+	Local e.Events,n.NPCs, n2.NPCs, r.Rooms, it.Items, i%, j%, du.Dummy1499_1, Temp%, Scale#, x%, y%
 	
 	For e.Events = Each Events
 		If e\EventName = "dimension1499"
@@ -8872,12 +8872,12 @@ Function UpdateDimension1499()
 						For i = -1 To 1
 							For j = -1 To 1
 								If i <> 0 And j <> 0 Then
-									n.NPCs = CreateNPC(NPCtype1499, EntityX(Collider) + (0.75 * i), EntityY(Collider) + 0.05, EntityZ(Collider) + (0.75 * j))
+									n.NPCs = CreateNPC(NPCtype1499_1, EntityX(Collider) + (0.75 * i), EntityY(Collider) + 0.05, EntityZ(Collider) + (0.75 * j))
 									PointEntity(n\Collider, Collider)
 									RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0)
 									n\State = 2.0
 								ElseIf i <> 0 Or j <> 0 Then
-									n.NPCs = CreateNPC(NPCtype1499, EntityX(Collider) + i, EntityY(Collider) + 0.05, EntityZ(Collider) + j)
+									n.NPCs = CreateNPC(NPCtype1499_1, EntityX(Collider) + i, EntityY(Collider) + 0.05, EntityZ(Collider) + j)
 									PointEntity(n\Collider, Collider)
 									RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0)
 									n\State = 2.0
@@ -8888,11 +8888,11 @@ Function UpdateDimension1499()
 					EndIf
 					If e\EventState3 < 70 * 30.0 Then
 						; ~ Guards at the entrance to church
-						n.NPCs = CreateNPC(NPCtype1499, e\room\x + 4055.0 * RoomScale, e\room\y + 240.0 * RoomScale, e\room\z + 1884.0 * RoomScale)
+						n.NPCs = CreateNPC(NPCtype1499_1, e\room\x + 4055.0 * RoomScale, e\room\y + 240.0 * RoomScale, e\room\z + 1884.0 * RoomScale)
 						n\PrevState = 3
 						n\Angle = 270.0
 						RotateEntity(n\Collider, 0.0, n\Angle, 0.0)
-						n2.NPCs = CreateNPC(NPCtype1499, e\room\x + 4055.0 * RoomScale, e\room\y + 240.0 * RoomScale, e\room\z + 2876.0 * RoomScale)
+						n2.NPCs = CreateNPC(NPCtype1499_1, e\room\x + 4055.0 * RoomScale, e\room\y + 240.0 * RoomScale, e\room\z + 2876.0 * RoomScale)
 						n2\PrevState = 3
 						n2\Angle = 270.0
 						RotateEntity(n2\Collider, 0.0, n2\Angle, 0.0)
@@ -8901,11 +8901,11 @@ Function UpdateDimension1499()
 						e\room\NPC[2] = n
 						e\room\NPC[3] = n2
 						; ~ More guards
-						n.NPCs = CreateNPC(NPCtype1499, e\room\x - 1877.0 * RoomScale, e\room\y + 192.0 * RoomScale, e\room\z + 1071.0 * RoomScale)
+						n.NPCs = CreateNPC(NPCtype1499_1, e\room\x - 1877.0 * RoomScale, e\room\y + 192.0 * RoomScale, e\room\z + 1071.0 * RoomScale)
 						n\PrevState = 3
 						n\Angle = 270.0
 						RotateEntity(n\Collider, 0.0, n\Angle, 0.0)
-						n2.NPCs = CreateNPC(NPCtype1499, e\room\x - 1877.0 * RoomScale, e\room\y + 192.0 * RoomScale, e\room\z + 3503.0 * RoomScale)
+						n2.NPCs = CreateNPC(NPCtype1499_1, e\room\x - 1877.0 * RoomScale, e\room\y + 192.0 * RoomScale, e\room\z + 3503.0 * RoomScale)
 						n2\PrevState = 3
 						n2\Angle = 270.0
 						RotateEntity(n2\Collider, 0.0, n2\Angle, 0.0)
@@ -8914,22 +8914,22 @@ Function UpdateDimension1499()
 						e\room\NPC[4] = n
 						e\room\NPC[5] = n2
 						; ~ Guard at stairs
-						n.NPCs = CreateNPC(NPCtype1499, e\room\x - 2761.0 * RoomScale, e\room\y + 240.0 * RoomScale, e\room\z + 3204.0 * RoomScale)
+						n.NPCs = CreateNPC(NPCtype1499_1, e\room\x - 2761.0 * RoomScale, e\room\y + 240.0 * RoomScale, e\room\z + 3204.0 * RoomScale)
 						n\PrevState = 1
 						n\Angle = 180.0
 						RotateEntity(n\Collider, 0.0, n\Angle, 0.0)
 						n\Speed = 0.0
 						; ~ King
-						n.NPCs = CreateNPC(NPCtype1499, e\room\x - 1917.0 * RoomScale, e\room\y + 1904.0 * RoomScale, e\room\z + 2308.0 * RoomScale)
+						n.NPCs = CreateNPC(NPCtype1499_1, e\room\x - 1917.0 * RoomScale, e\room\y + 1904.0 * RoomScale, e\room\z + 2308.0 * RoomScale)
 						n\PrevState = 2
 						n\Angle = 270.0
 						RotateEntity(n\Collider, 0.0, n\Angle, 0.0)
 						Tex = LoadTexture_Strict("GFX\npcs\scp_1499_1_king.png")
 						EntityTexture(n\OBJ, Tex)
-						FreeTexture(tex)
+						FreeTexture(Tex)
 						e\room\NPC[0] = n
 						; ~ Guard next to king
-						n.NPCs = CreateNPC(NPCtype1499, e\room\x - 1917.0 * RoomScale, e\room\y + 1904.0 * RoomScale, e\room\z + 2052.0 * RoomScale)
+						n.NPCs = CreateNPC(NPCtype1499_1, e\room\x - 1917.0 * RoomScale, e\room\y + 1904.0 * RoomScale, e\room\z + 2052.0 * RoomScale)
 						n\PrevState = 1
 						n\Angle = 270.0
 						RotateEntity(n\Collider, 0.0, n\Angle, 0.0)
@@ -8938,9 +8938,9 @@ Function UpdateDimension1499()
 						; ~ Zone 1
 						For x = 0 To 7
 							For y = 0 To 2
-								du = New Dummy1499
+								du = New Dummy1499_1
 								For n.NPCs = Each NPCs
-									If n\NPCtype = NPCtype1499 And n\PrevState <> 2 Then
+									If n\NPCtype = NPCtype1499_1 And n\PrevState <> 2 Then
 										du\OBJ = CopyEntity(n\OBJ)
 										Exit
 									EndIf
@@ -8957,9 +8957,9 @@ Function UpdateDimension1499()
 						; ~ Zone 2
 						For x = 0 To 6
 							For y = 0 To 2
-								du = New Dummy1499
+								du = New Dummy1499_1
 								For n.NPCs = Each NPCs
-									If n\NPCtype = NPCtype1499 And n\PrevState <> 2 Then
+									If n\NPCtype = NPCtype1499_1 And n\PrevState <> 2 Then
 										du\OBJ = CopyEntity(n\OBJ)
 										Exit
 									EndIf
@@ -8978,7 +8978,7 @@ Function UpdateDimension1499()
 					EndIf
 					
 					For i = 0 To 14
-						n.NPCs = CreateNPC(NPCtype1499, EntityX(Collider) + Rnd(-20.0, 20.0), EntityY(Collider) + 0.1, EntityZ(Collider) + Rnd(-20.0, 20.0))
+						n.NPCs = CreateNPC(NPCtype1499_1, EntityX(Collider) + Rnd(-20.0, 20.0), EntityY(Collider) + 0.1, EntityZ(Collider) + Rnd(-20.0, 20.0))
 						If Rand(2) = 1 Then n\State2 = 1500.0
 						n\Angle = Rnd(360.0)
 						n\State2 = 0.0
@@ -9022,7 +9022,7 @@ Function UpdateDimension1499()
 							EndIf
 						EndIf
 					Next
-					For du = Each Dummy1499
+					For du = Each Dummy1499_1
 						If e\EventState3 < 70 * 30.0 Then
 							If du\Anim = 0 Then
 								If AnimTime(du\OBJ) =< 360.5 Then
@@ -9132,11 +9132,11 @@ Function UpdateDimension1499()
 					EndIf
 					
 					If EntityDistance(Collider, e\room\OBJ) > 40.0
-						For du.Dummy1499 = Each Dummy1499
+						For du.Dummy1499_1 = Each Dummy1499_1
 							HideEntity(du\OBJ)
 						Next
 					Else
-						For du.Dummy1499 = Each Dummy1499
+						For du.Dummy1499_1 = Each Dummy1499_1
 							ShowEntity(du\OBJ)
 						Next
 					EndIf
@@ -9156,11 +9156,11 @@ Function UpdateDimension1499()
 					HideEntity(NTF_1499Sky)
 					HideChunks()
 					For n.NPCs = Each NPCs
-						If n\NPCtype = NPCtype1499
+						If n\NPCtype = NPCtype1499_1
 							RemoveNPC(n)
 						EndIf
 					Next
-					For du.Dummy1499 = Each Dummy1499
+					For du.Dummy1499_1 = Each Dummy1499_1
 						FreeEntity(du\OBJ)
 						Delete(du)
 					Next

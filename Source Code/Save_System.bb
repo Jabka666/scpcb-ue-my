@@ -1071,16 +1071,16 @@ Function LoadGame(File$)
 				HideChunks()
 				DeleteChunks()
 				For n.NPCs = Each NPCs
-					If n\NPCtype = NPCtype1499
+					If n\NPCtype = NPCtype1499_1
 						If n\InFacility = 0
 							RemoveNPC(n)
 						EndIf
 					EndIf
 				Next
 				
-				Local du.Dummy1499
+				Local du.Dummy1499_1
 				
-				For du.Dummy1499 = Each Dummy1499
+				For du.Dummy1499_1 = Each Dummy1499_1
 					Delete(du)
 				Next
 			EndIf

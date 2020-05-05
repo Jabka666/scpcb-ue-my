@@ -8175,7 +8175,7 @@ Function UpdateChunks(r.Rooms, ChunkPartAmount%, SpawnNPCs% = True)
 	Local CurrNPCNumber% = 0
 	
 	For n = Each NPCs
-		If n\NPCtype = NPCtype1499
+		If n\NPCtype = NPCtype1499_1
 			CurrNPCNumber = CurrNPCNumber + 1
 		EndIf
 	Next
@@ -8196,42 +8196,42 @@ Function UpdateChunks(r.Rooms, ChunkPartAmount%, SpawnNPCs% = True)
 		Select Rand(1, 8)
 			Case 1
 				;[Block]
-				n.NPCs = CreateNPC(NPCtype1499, EntityX(Collider) + Rnd(40.0, 80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(Collider) + Rnd(40.0, 80.0))
+				n.NPCs = CreateNPC(NPCtype1499_1, EntityX(Collider) + Rnd(40.0, 80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(Collider) + Rnd(40.0, 80.0))
 				;[End Block]
 			Case 2
 				;[Block]
-				n.NPCs = CreateNPC(NPCtype1499, EntityX(Collider) + Rnd(40.0, 80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(Collider) + Rnd(-40.0, 40.0))
+				n.NPCs = CreateNPC(NPCtype1499_1, EntityX(Collider) + Rnd(40.0, 80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(Collider) + Rnd(-40.0, 40.0))
 				;[End Block]
 			Case 3
 				;[Block]
-				n.NPCs = CreateNPC(NPCtype1499, EntityX(Collider) + Rnd(40.0, 80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(Collider) + Rnd(-40.0, -80.0))
+				n.NPCs = CreateNPC(NPCtype1499_1, EntityX(Collider) + Rnd(40.0, 80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(Collider) + Rnd(-40.0, -80.0))
 				;[End Block]
 			Case 4
 				;[Block]
-				n.NPCs = CreateNPC(NPCtype1499, EntityX(Collider) + Rnd(-40.0, 40.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(Collider) + Rnd(-40.0, -80.0))
+				n.NPCs = CreateNPC(NPCtype1499_1, EntityX(Collider) + Rnd(-40.0, 40.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(Collider) + Rnd(-40.0, -80.0))
 				;[End Block]
 			Case 5
 				;[Block]
-				n.NPCs = CreateNPC(NPCtype1499, EntityX(Collider) + Rnd(-40.0, -80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(Collider) + Rnd(-40.0, -80.0))
+				n.NPCs = CreateNPC(NPCtype1499_1, EntityX(Collider) + Rnd(-40.0, -80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(Collider) + Rnd(-40.0, -80.0))
 				;[End Block]
 			Case 6
 				;[Block]
-				n.NPCs = CreateNPC(NPCtype1499, EntityX(Collider) + Rnd(-40.0, -80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(Collider) + Rnd(-40.0, 40.0))
+				n.NPCs = CreateNPC(NPCtype1499_1, EntityX(Collider) + Rnd(-40.0, -80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(Collider) + Rnd(-40.0, 40.0))
 				;[End Block]
 			Case 7
 				;[Block]
-				n.NPCs = CreateNPC(NPCtype1499, EntityX(Collider) + Rnd(-40.0, -80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(Collider) + Rnd(40.0, 80.0))
+				n.NPCs = CreateNPC(NPCtype1499_1, EntityX(Collider) + Rnd(-40.0, -80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(Collider) + Rnd(40.0, 80.0))
 				;[End Block]
 			Case 8
 				;[Block]
-				n.NPCs = CreateNPC(NPCtype1499, EntityX(Collider) + Rnd(-40.0, 40.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(Collider) + Rnd(40.0, 80.0))
+				n.NPCs = CreateNPC(NPCtype1499_1, EntityX(Collider) + Rnd(-40.0, 40.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(Collider) + Rnd(40.0, 80.0))
 				;[End Block]
 		End Select
 		If Rand(2) = 1 Then n\State2 = 500.0 * 3.0
 		n\Angle = Rnd(360.0)
 	Else
 		For n = Each NPCs
-			If n\NPCtype = NPCtype1499 Then
+			If n\NPCtype = NPCtype1499_1 Then
 				If n\PrevState = 0 Then
 					If EntityDistance(n\Collider, Collider) > ChunkMaxDistance Or EntityY(n\Collider) < EntityY(PlayerRoom\obj) - 5 Then
 						; ~ This will be updated like this so that new NPCs can spawn for the player
@@ -8264,7 +8264,7 @@ Function DeleteChunks()
 	Delete Each ChunkPart
 End Function
 
-Type Dummy1499
+Type Dummy1499_1
 	Field Anim%
 	Field OBJ%
 End Type

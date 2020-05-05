@@ -1871,7 +1871,7 @@ Music(10) = "106Chase"
 Music(11) = "Menu"
 Music(12) = "860_2Chase"
 Music(13) = "Room173Intro"
-Music(14) = "178"
+Music(14) = "Using178"
 Music(15) = "PDTrench"
 Music(16) = "Room205"
 Music(17) = "GateA"
@@ -2060,7 +2060,7 @@ Global room2gw_BrokenDoor% = False
 Global room2gw_x# = 0.0
 Global room2gw_z# = 0.0
 
-Dim NavImages(5)
+Dim NavImages%(5)
 For i = 0 To 3
 	NavImages(i) = LoadImage_Strict("GFX\navigator\roomborder" + i + ".png")
 	MaskImage(NavImages(i), 255, 0, 255)
@@ -8854,7 +8854,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					;[End Block]
 				Case "Very Fine"
 					;[Block]
-					n.NPCs = CreateNPC(NPCtype1499, x, y, z)
+					n.NPCs = CreateNPC(NPCtype1499_1, x, y, z)
 					n\State = 1.0
 					n\Sound = LoadSound_Strict("SFX\SCP\1499\Triggered.ogg")
 					n\SoundCHN = PlaySound2(n\Sound, Camera, n\Collider, 20.0)
