@@ -1301,6 +1301,8 @@ Function LoadGameQuick(File$)
 	
 	CatchErrors("Uncaught (LoadGameQuick)")
 	
+	Local ov.Overlays = First Overlays
+	
 	DebugHUD = False
 	GameSaved = True
 	IsZombie = False
@@ -1943,7 +1945,7 @@ Function LoadGameQuick(File$)
 	For sc.SecurityCams = Each SecurityCams
 		sc\PlayerState = 0
 	Next
-	EntityTexture(NVOverlay, NVTexture)
+	EntityTexture(ov\OverlayID[4], ov\OverlayTextureID[4])
 	RestoreSanity = True
 	
 	CameraFogFar = ReadFloat(f)

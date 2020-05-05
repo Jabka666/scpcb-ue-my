@@ -590,6 +590,7 @@ Function PickItem(item.Items)
 	Local n% = 0
 	Local CanPickItem = True
 	Local FullINV% = True
+	Local ov.Overlays = First Overlays
 	
 	For n = 0 To MaxItemAmount - 1
 		If Inventory(n) = Null
@@ -616,7 +617,7 @@ Function PickItem(item.Items)
 						;[Block]
 						If Wearing714 = 0 And WearingGasMask < 3 And WearingHazmat < 3 Then
 							If PlayerRoom\RoomTemplate\Name <> "room1123" Then
-								ShowEntity(Light)
+								ShowEntity(ov\OverlayID[7])
 								LightFlash = 7.0
 								PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))		
 								DeathMSG = "Subject D-9341 was shot dead after attempting to attack a member of Nine-Tailed Fox. Surveillance tapes show that the subject had been "
@@ -629,7 +630,7 @@ Function PickItem(item.Items)
 							For e.Events = Each Events
 								If e\EventName = "room1123" Then 
 									If e\EventState = 0.0 Then
-										ShowEntity(Light)
+										ShowEntity(ov\OverlayID[7])
 										LightFlash = 3.0
 										PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))
 									EndIf
@@ -642,7 +643,7 @@ Function PickItem(item.Items)
 						;[End Block]
 					Case "killbat"
 						;[Block]
-						ShowEntity(Light)
+						ShowEntity(ov\OverlayID[7])
 						LightFlash = 1.0
 						PlaySound_Strict(IntroSFX(Rand(8, 10)))
 						DeathMSG = "Subject D-9341 found dead inside SCP-914's output booth next to what appears to be an ordinary nine-volt battery. The subject is covered in severe "

@@ -68,12 +68,15 @@ Const HIT_DEAD% = 6
 
 ; ~ [MATH]
 
-Const INFINITY# = (999.0) ^ (99999.0)
-Const NAN# = (-1.0) ^ (0.5)
+Const INFINITY# = 999.0 ^ 99999.0
+Const NAN# = (-1.0) ^ 0.5
 
 ; ~ [TEXTURES]
 
 Const MaxDTextures% = 13
+
+Const MaxOverlayTextureID% = 8
+Const MaxOverlayID% = 8
 
 ; ~ [ITEMS]
 

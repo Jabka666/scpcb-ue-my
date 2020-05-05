@@ -535,6 +535,7 @@ Function UpdateEvents()
 	Local x#, y#, z#
 	Local Angle#
 	Local o.Objects = First Objects
+	Local ov.Overlays = First Overlays
 	
 	CurrStepSFX = 0
 	
@@ -560,7 +561,7 @@ Function UpdateEvents()
 					Else
 						e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[8], e\room\Objects[9], e)
 					EndIf
-					EntityAlpha(Fog, 1.0)						
+					EntityAlpha(ov\OverlayID[0], 1.0)						
 				EndIf
 				;[End Block]
 			Case "room173"
@@ -578,7 +579,7 @@ Function UpdateEvents()
 					If PlayerRoom = e\room Then
 						e\room\RoomDoors[2]\Open = True
 						
-						ShowEntity(Fog)
+						ShowEntity(ov\OverlayID[0])
 						AmbientLight(Brightness, Brightness, Brightness)
 						CameraFogRange(Camera, CameraFogNear, CameraFogFar)
 						CameraFogMode(Camera, 1)
@@ -841,8 +842,8 @@ Function UpdateEvents()
 								
 								PlaySound_Strict(IntroSFX(Rand(8, 10)))
 								BlurTimer = 500.0
-								ShowEntity(Light)
-								EntityAlpha(Light, 0.5)
+								ShowEntity(ov\OverlayID[7])
+								EntityAlpha(ov\OverlayID[7], 0.5)
 							EndIf
 							
 							If e\EventState3 < 3.0 Then
@@ -865,8 +866,8 @@ Function UpdateEvents()
 									
 									If e\EventState3 - FPSfactor / 30.0 < 12.0 And e\EventState3 > 12.0 Then PlaySound2(StepSFX(0, 0, 0), Camera, Collider, 8.0, 0.3)
 									
-									ShowEntity(Light)
-									EntityAlpha(Light, 0.9 - (e\EventState3 / 2.0))
+									ShowEntity(ov\OverlayID[7])
+									EntityAlpha(ov\OverlayID[7], 0.9 - (e\EventState3 / 2.0))
 									
 									x = x + (EntityX(e\room\OBJ) - (3048.0 + 1024.0) * RoomScale - x) * Max((e\EventState3 - 10.0) / 4.0, 0.0) 
 									
@@ -887,7 +888,7 @@ Function UpdateEvents()
 									DropSpeed = 0.0
 									UnableToMove = True
 								Else
-									HideEntity(Light)
+									HideEntity(ov\OverlayID[7])
 									
 									PositionEntity(Collider, EntityX(Collider), 0.302, EntityZ(Collider))
 									ResetEntity(Collider)
@@ -1870,7 +1871,7 @@ Function UpdateEvents()
 													If sc\room = e\room Then Delete(sc)
 												Next
 												
-												ShowEntity(Fog)
+												ShowEntity(ov\OverlayID[0])
 												AmbientLight(Brightness, Brightness, Brightness)
 												CameraFogRange(Camera, CameraFogNear, CameraFogFar)
 												CameraFogMode(Camera, 1)
@@ -1911,7 +1912,7 @@ Function UpdateEvents()
 					EndIf	
 					CameraFogMode(Camera, 0)
 	 	            AmbientLight(140.0, 140.0, 140.0)
-	   				HideEntity(Fog)
+	   				HideEntity(ov\OverlayID[0])
 					
 					LightVolume = 4.0
 					TempLightVolume = 4.0			
@@ -2167,13 +2168,13 @@ Function UpdateEvents()
 							EndIf
 						Next
 						If (CoffinDistance < 4.0) And (HasBatteryFor895) And Wearing714 = 0 And WearingGasMask < 3 And WearingHazmat < 3 Then
-							tempF# = point_direction(EntityX(Collider, True), EntityZ(Collider, True), EntityX(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
-							tempF2# = EntityYaw(Collider)
-							tempF3# = angleDist(tempF + 90.0 + Sin(WrapAngle(e\EventState3 / 10.0)), tempF2)
-							TurnEntity(Collider, 0.0, tempF3 / 4.0, 0.0, True)
-							tempF# = Abs(point_distance(EntityX(Collider, True), EntityZ(Collider, True), EntityX(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True)))
-							tempF2# = -60.0 * Min(Max((2.0 - tempF) / 2.0, 0.0), 1.0)
-							User_Camera_Pitch = (User_Camera_Pitch * 0.8) + (tempF2 * 0.2)
+							TempF# = point_direction(EntityX(Collider, True), EntityZ(Collider, True), EntityX(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
+							TempF2# = EntityYaw(Collider)
+							TempF3# = angleDist(TempF + 90.0 + Sin(WrapAngle(e\EventState3 / 10.0)), TempF2)
+							TurnEntity(Collider, 0.0, TempF3 / 4.0, 0.0, True)
+							TempF# = Abs(point_distance(EntityX(Collider, True), EntityZ(Collider, True), EntityX(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True)))
+							TempF2# = (-60.0) * Min(Max((2.0 - TempF) / 2.0, 0.0), 1.0)
+							User_Camera_Pitch = (User_Camera_Pitch * 0.8) + (TempF2 * 0.2)
 							
 							Sanity = Sanity - (FPSfactor * 1.1 / WearingNightVision)
 							RestoreSanity = False
@@ -2185,20 +2186,20 @@ Function UpdateEvents()
 							EndIf
 							
 							If Sanity < -1000.0 Then
-								If WearingNightVision > 1
+								If WearingNightVision > 0
 									DeathMSG = Chr(34) + "Class D viewed SCP-895 through a pair of digital night vision goggles, presumably enhanced by SCP-914. It might be possible that the subject "
 									DeathMSG = DeathMSG + "was able to resist the memetic effects partially through these goggles. The goggles have been stored for further study." + Chr(34)
 								Else
 									DeathMSG = Chr(34) + "Class D viewed SCP-895 through a pair of digital night vision goggles, killing him." + Chr(34)
 								EndIf
-								EntityTexture(NVOverlay, NVTexture)
+								EntityTexture(ov\OverlayID[4], ov\OverlayTextureID[4])
 								If VomitTimer < -10.0 Then
 									Kill()
 								EndIf
 							ElseIf Sanity < -800.0 Then
-								If Rand(3) = 1 Then EntityTexture(NVOverlay, NVTexture)
+								If Rand(3) = 1 Then EntityTexture(ov\OverlayID[4], ov\OverlayTextureID[4])
 								If Rand(6) < 5 Then
-									EntityTexture(NVOverlay, GorePics(Rand(0, 5)))
+									EntityTexture(ov\OverlayID[4], GorePics(Rand(0, 5)))
 									For i = 0 To MaxItemAmount - 1
 										If (Inventory(i) <> Null) Then
 											If (WearingNightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvgoggles") Or (WearingNightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernv") Or (WearingNightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvgoggles") Then
@@ -2214,9 +2215,9 @@ Function UpdateEvents()
 									VomitTimer = 1.0
 								EndIf
 							ElseIf Sanity < -500.0 Then
-								If Rand(7) = 1 Then EntityTexture(NVOverlay, NVTexture)
+								If Rand(7) = 1 Then EntityTexture(ov\OverlayID[4], ov\OverlayTextureID[4])
 								If Rand(50) = 1 Then
-									EntityTexture(NVOverlay, GorePics(Rand(0, 5)))
+									EntityTexture(ov\OverlayID[4], GorePics(Rand(0, 5)))
 									For i = 0 To MaxItemAmount - 1
 										If (Inventory(i) <> Null) Then
 											If (WearingNightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvgoggles") Or (WearingNightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernv") Or (WearingNightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvgoggles") Then
@@ -2228,7 +2229,7 @@ Function UpdateEvents()
 									Next
 								EndIf
 							Else
-								EntityTexture(NVOverlay, NVTexture)
+								EntityTexture(ov\OverlayID[4], ov\OverlayTextureID[4])
 								For i = 0 To MaxItemAmount - 1
 									If (Inventory(i) <> Null) Then
 										If (WearingNightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvgoggles") Or (WearingNightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernv") Or (WearingNightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvgoggles") Then
@@ -2243,11 +2244,11 @@ Function UpdateEvents()
 					If e\EventState3 > 0.0 Then e\EventState3 = Max(e\EventState3 - FPSfactor, 0.0)
 					If e\EventState3 = 0.0 Then
 						e\EventState3 = -1.0
-						EntityTexture(NVOverlay, NVTexture)
+						EntityTexture(ov\OverlayID[4], ov\OverlayTextureID[4])
 						If WearingNightVision = 1 Then
-							EntityColor(NVOverlay, 0, 255, 0)
+							EntityColor(ov\OverlayID[4], 0.0, 255.0, 0.0)
 						ElseIf WearingNightVision = 2 Then
-							EntityColor(NVOverlay, 0, 100, 255)
+							EntityColor(ov\OverlayID[4], 0.0, 100.0, 255.0)
 						EndIf
 					EndIf
 					
@@ -3442,7 +3443,7 @@ Function UpdateEvents()
 								If KillTimer >= 0.0 Then 
 									For i = 0 To 2
 										If Distance(EntityX(Collider), EntityZ(Collider), EntityX(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True)) < 250.0 * RoomScale Then
-											ShowEntity(Light)
+											ShowEntity(ov\OverlayID[7])
 											LightFlash = 0.4
 											CameraShake = 1.0
 											Kill()
@@ -3458,7 +3459,7 @@ Function UpdateEvents()
 								If Curr106\State < -10.0 Then
 									For i = 0 To 2
 										If Distance(EntityX(Curr106\Collider), EntityZ(Curr106\Collider), EntityX(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True)) < 250.0 * RoomScale Then
-											ShowEntity(Light)
+											ShowEntity(ov\OverlayID[7])
 											LightFlash = 0.3
 											If ParticleAmount > 0
 												For i = 0 To 5 + (5 * (ParticleAmount - 1))
@@ -6909,7 +6910,7 @@ Function UpdateEvents()
 					ElseIf e\EventState = 7.0
 						PositionEntity(Collider, EntityX(e\room\OBJ, True), 0.3, EntityZ(e\room\OBJ, True), True)
 						ResetEntity(Collider)
-						ShowEntity(Light)
+						ShowEntity(ov\OverlayID[7])
 						LightFlash = 6.0
 						BlurTimer = 500.0
 						Injuries = PrevInjuries
@@ -9181,6 +9182,7 @@ Function UpdateEndings()
 	Local e.Events, n.NPCs, r.Rooms, i%, Pvt%, p.Particles
 	Local Dist#
 	Local o.Objects = First Objects
+	Local ov.Overlays = First Overlays
 	
 	For e.Events = Each Events
 		Select e\EventName
@@ -9493,7 +9495,7 @@ Function UpdateEndings()
 								EndIf
 							EndIf
 						EndIf
-						HideEntity(Fog)
+						HideEntity(ov\OverlayID[0])
 						CameraFogRange(Camera, 5.0, 45.0)
 						
 						Angle = Max(Sin(EntityYaw(Collider)), 0.0)
@@ -9650,14 +9652,14 @@ Function UpdateEndings()
 						ShouldPlay = 17
 						
 						e\EventState = e\EventState + FPSfactor
-						HideEntity(Fog)
+						HideEntity(ov\OverlayID[0])
 						CameraFogRange(Camera, 5.0, 30.0)
 						
 						Angle = Max(Sin(EntityYaw(Collider) + 90.0), 0.0)
 						CameraFogColor(Camera, 200.0 + (Angle * 40.0), 200.0 + (Angle * 20), 200)
 						CameraClsColor(Camera, 200.0 + (Angle * 40.0), 200.0 + (Angle * 20), 200)		
 						CameraRange(Camera, 0.05, 30.0)
-						AmbientLight (140.0, 140.0, 140.0)
+						AmbientLight(140.0, 140.0, 140.0)
 						
 						For i = 2 To 4
 							If e\room\NPC[i] <> Null Then 
@@ -10184,5 +10186,5 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#120B#1E40
+;~B#120C#1E41
 ;~C#Blitz3D

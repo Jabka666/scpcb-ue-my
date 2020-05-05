@@ -90,10 +90,10 @@ Bug Fixes:
 - Fixed appearing of the gas from SCP-035's chamber in Maintenance Tunnels.
 - Fixed sounds for big doors, locked by SCP-079.
 - Fixed lights in SCP-012's containment chamber.
-- Fixed SCP-1048-A's scream being able to be heard anywhere. ;NOT DONE
+- Fixed SCP-1048-A's scream being able to be heard anywhere.
 - Fixed SCP-049 spam-closing the door behind it, if the player tries to open it. ;NOT DONE
-- Fixed SCP-106's eyes glowing in the dark and flying in midair while he is emerging. ;NOT DONE
-- Fixed SCP-173's head poking out of its box when recontained by the MTFs. ;NOT DONE
+- Fixed SCP-106's eyes glowing in the dark and flying in midair while he is emerging.
+- Fixed SCP-173's head poking out of its box when recontained by the MTFs.
 - Fixed item's positions in room2closets, room1archive. ;NOT DONE
 - Fixed small lamps in room2pit.
 - Fixed missing pipes in SCP-035's containment chamber. ;NOT DONE
@@ -109,6 +109,7 @@ Bug Fixes:
 - Fixed weird balcony guard's moving in the intro scene.
 - Fixed step sounds for big contianment doors.
 - Fixed red and green frames for the HUD when player wearing a hazmat suit.
+- Fixed fog for any NVG.
 
 - Again fixed some buttons' positions.
 

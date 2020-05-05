@@ -1784,7 +1784,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 				EndIf
 				
 				CalculateRoomExtents(r)
-				Return r
+				Return(r)
 			EndIf
 		Next
 	EndIf
@@ -8274,7 +8274,7 @@ Function UpdateLightSpark(room.Rooms)
 	
 	For i = 0 To MaxRoomLights - 1
 		If room\Lights[i] <> 0 Then
-			If room\LightFlicker[i] > 4.0
+			If room\LightFlicker[i] > 4.0 Then
 				room\LightSpark[i] = CreateSprite()
 				ScaleSprite(room\LightSpark[i], 1.0, 1.0)
 				EntityTexture(room\LightSpark[i], ParticleTextures(8))
