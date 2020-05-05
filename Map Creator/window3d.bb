@@ -993,6 +993,8 @@ Function CreateOverLapBox(r.Rooms)
 	If r\RoomTemplate\Name = "room008" Then Return
 	If r\RoomTemplate\Name = "room3storage" Then Return
 	If r\RoomTemplate\Name = "room966" Then Return
+	If r\RoomTemplate\Name = "room106" Then Return
+	If r\RoomTemplate\Name = "room079" Then Return
 	If r\RoomTemplate\Name = "gateaentrance" Then Return
 	
 	r\overlapcheckbox = CreateMesh()
@@ -2113,7 +2115,7 @@ End Function
 
 
 ;~IDEal Editor Parameters:
-;~F#258#263#26E#2A7#306#322#349#368#36C#371#37F#39C#407#415#424#42C#454#45B#462#469
-;~F#482#48A#492#5DF#5EF#600#616#62B#639#63D#68D#69B#6A3#6AA#6AE#6B2#6E0#6F7#70A#716
-;~F#71C#727#72D#769#7E0
+;~F#258#263#26E#2A7#306#322#349#368#36C#371#37F#39C#409#417#426#42E#456#45D#464#46B
+;~F#484#48C#494#5E1#5F1#602#618#62D#63B#63F#68F#69D#6A5#6AC#6B0#6B4#6E2#6F9#70C#718
+;~F#71E#729#72F#76B#7E2
 ;~C#Blitz3D
