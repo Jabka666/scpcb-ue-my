@@ -15,7 +15,7 @@ Include "Source Code\Fullscreen_Window_Fix.bb"
 Include "Source Code\KeyName.bb"
 Include "Source Code\INI_System.bb"
 
-Include "Source Code\DevilParticleSystem.bb"
+Include "Source Code\Devil_Particle_System.bb"
 
 Global ErrorFile$ = "error_log_"
 
