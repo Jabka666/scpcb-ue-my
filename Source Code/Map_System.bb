@@ -2624,10 +2624,10 @@ Function FillRoom(r.Rooms)
 			r\Objects[0] = CreatePivot(r\OBJ)
 			PositionEntity(r\Objects[0], r\x - 808.0 * RoomScale, r\y + 1.0, r\z - 72.0 * RoomScale, True)
 			
-			it = CreateItem("Dr. L's Burnt Note", "paper", r\x - 688.0 * RoomScale, r\y + 1.0, r\z - 16.0 * RoomScale)
+			it = CreateItem("Dr. L's Burnt Note #1", "paper", r\x - 688.0 * RoomScale, r\y + 1.0, r\z - 16.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it = CreateItem("Dr L's Burnt Note", "paper", r\x - 808.0 * RoomScale, r\y + 1.0, r\z - 72.0 * RoomScale)
+			it = CreateItem("Dr. L's Burnt Note #2", "paper", r\x - 808.0 * RoomScale, r\y + 1.0, r\z - 72.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it = CreateItem("The Modular Site Project", "paper", r\x + 622.0 * RoomScale, r\y + 125.0 * RoomScale, r\z - 73.0 * RoomScale)
@@ -4266,7 +4266,7 @@ Function FillRoom(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
 			
-			it = CreateItem("Dr. L's Note", "paper", r\x - 538.0 * RoomScale, r\y + 250.0 * RoomScale, r\z - 365.0 * RoomScale)
+			it = CreateItem("Dr. L's Note #1", "paper", r\x - 538.0 * RoomScale, r\y + 250.0 * RoomScale, r\z - 365.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 		Case "room173intro"
 			;[Block]
@@ -5453,7 +5453,7 @@ Function FillRoom(r.Rooms)
             TurnEntity(em\OBJ, -90.0, 0.0, 0.0)
             EntityParent(em\OBJ, r\OBJ)
 			
-			it = CreateItem("Dr L's Note", "paper", r\x - 160.0 * RoomScale, r\y + 32.0 * RoomScale, r\z - 353.0 * RoomScale)
+			it = CreateItem("Dr. L's Note #2", "paper", r\x - 160.0 * RoomScale, r\y + 32.0 * RoomScale, r\z - 353.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case "dimension1499"

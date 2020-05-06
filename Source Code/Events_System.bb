@@ -67,12 +67,12 @@ Function InitEvents()
 	CreateEvent("pocketdimension", "pocketdimension", 0)	
 	
 	; ~ There's a 7% chance that SCP-106 appears in the rooms named "tunnel"
-	CreateEvent("tunnel106", "tunnel", 0, 0.07 + (0.1 * SelectedDifficulty\aggressiveNPCs))
+	CreateEvent("tunnel106", "tunnel", 0, 0.07 + (0.1 * SelectedDifficulty\AggressiveNPCs))
 	
 	; ~ The chance for SCP-173 appearing in the first room2clockroom is about 66%
 	; ~ There's a 30% chance that it appears in the later room2clockrooms
 	If Rand(3) < 3 Then CreateEvent("room2clockroom173", "room2clockroom", 0)
-	CreateEvent("room2clockroom173", "room2clockroom", 0, 0.3 + (0.5 * SelectedDifficulty\aggressiveNPCs))
+	CreateEvent("room2clockroom173", "room2clockroom", 0, 0.3 + (0.5 * SelectedDifficulty\AggressiveNPCs))
 	
 	CreateEvent("room2trick", "room2", 0, 0.15)	
 	
@@ -96,10 +96,10 @@ Function InitEvents()
 	
 	CreateEvent("tunnel2smoke", "tunnel2", 0, 0.2)
 	CreateEvent("tunnel2", "tunnel2", Rand(0, 2), 0.0)
-	CreateEvent("tunnel2", "tunnel2", 0, (0.2 * SelectedDifficulty\aggressiveNPCs))
+	CreateEvent("tunnel2", "tunnel2", 0, (0.2 * SelectedDifficulty\AggressiveNPCs))
 	
 	; ~ SCP-173 appears in half of the "room2doors"-rooms
-	CreateEvent("room2doors173", "room2doors", 0, 0.5 + (0.4 * SelectedDifficulty\aggressiveNPCs))
+	CreateEvent("room2doors173", "room2doors", 0, 0.5 + (0.4 * SelectedDifficulty\AggressiveNPCs))
 	
 	; ~ The anomalous duck in "room2offices2"-rooms
 	CreateEvent("room2offices2", "room2offices2", 0, 0.7)
@@ -189,7 +189,7 @@ Function InitEvents()
 	
 	CreateEvent("room2pipes106", "room2pipes", Rand(0, 3)) 
 	
-	CreateEvent("room2pit", "room2pit", 0, 0.4 + (0.4 * SelectedDifficulty\aggressiveNPCs))
+	CreateEvent("room2pit", "room2pit", 0, 0.4 + (0.4 * SelectedDifficulty\AggressiveNPCs))
 	
 	CreateEvent("room2testroom", "room2testroom", 0)
 	
@@ -231,21 +231,21 @@ Function InitEvents()
 	
 	CreateEvent("room1lifts", "room1lifts", 0)
 	
-	CreateEvent("096spawn", "room4pit", 0, 0.6 + (0.2 * SelectedDifficulty\aggressiveNPCs))
-	CreateEvent("096spawn", "room3pit", 0, 0.6 + (0.2 * SelectedDifficulty\aggressiveNPCs))
-	CreateEvent("096spawn", "room2pipes", 0, 0.4 + (0.2 * SelectedDifficulty\aggressiveNPCs))
-	CreateEvent("096spawn", "room2pit", 0, 0.5 + (0.2 * SelectedDifficulty\aggressiveNPCs))
-	CreateEvent("096spawn", "room3tunnel", 0, 0.6 + (0.2 * SelectedDifficulty\aggressiveNPCs))
-	CreateEvent("096spawn", "room4tunnels", 0, 0.7 + (0.2 * SelectedDifficulty\aggressiveNPCs))
-	CreateEvent("096spawn", "tunnel", 0, 0.6 + (0.2 * SelectedDifficulty\aggressiveNPCs))
-	CreateEvent("096spawn", "tunnel2", 0, 0.4 + (0.2 * SelectedDifficulty\aggressiveNPCs))
-	CreateEvent("096spawn", "room3z2", 0, 0.7 + (0.2 * SelectedDifficulty\aggressiveNPCs))
+	CreateEvent("096spawn", "room4pit", 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent("096spawn", "room3pit", 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent("096spawn", "room2pipes", 0, 0.4 + (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent("096spawn", "room2pit", 0, 0.5 + (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent("096spawn", "room3tunnel", 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent("096spawn", "room4tunnels", 0, 0.7 + (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent("096spawn", "tunnel", 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent("096spawn", "tunnel2", 0, 0.4 + (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent("096spawn", "room3z2", 0, 0.7 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	
-	CreateEvent("room2pit", "room2_4", 0, 0.4 + (0.4 * SelectedDifficulty\aggressiveNPCs))
+	CreateEvent("room2pit", "room2_4", 0, 0.4 + (0.4 * SelectedDifficulty\AggressiveNPCs))
 	
 	CreateEvent("room2offices035", "room2offices", 0)
 	
-	CreateEvent("room2pit106", "room2pit", 0, 0.07 + (0.1 * SelectedDifficulty\aggressiveNPCs))
+	CreateEvent("room2pit106", "room2pit", 0, 0.07 + (0.1 * SelectedDifficulty\AggressiveNPCs))
 	
 	CreateEvent("room4info", "room4info", 0)
 	
