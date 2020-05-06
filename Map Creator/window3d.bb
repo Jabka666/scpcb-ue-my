@@ -631,12 +631,12 @@ Function LoadRoomTemplates(file$)
 		TemporaryString = Trim(ReadLine(f))
 		If Left(TemporaryString,1) = "[" Then
 			TemporaryString = Mid(TemporaryString, 2, Len(TemporaryString) - 2)
-			StrTemp = GetINIString(file, TemporaryString, "mesh path")
+			StrTemp = GetINIString(file, TemporaryString, "Mesh Path")
 			
 			rt = CreateRoomTemplate(StrTemp)
 			rt\Name = Lower(TemporaryString)
 			
-			StrTemp = Lower(GetINIString(file, TemporaryString, "shape"))
+			StrTemp = Lower(GetINIString(file, TemporaryString, "Shape"))
 			
 			Select StrTemp
 				Case "room1", "1"
@@ -653,12 +653,12 @@ Function LoadRoomTemplates(file$)
 			End Select
 			
 			For i = 0 To 4
-				rt\zone[i]= GetINIInt(file, TemporaryString, "zone"+(i+1))
+				rt\zone[i]= GetINIInt(file, TemporaryString, "Zone"+(i+1))
 			Next
 			
-			rt\Commonness = Max(Min(GetINIInt(file, TemporaryString, "commonness"), 100), 0)
-			rt\Large = GetINIInt(file, TemporaryString, "large")
-			rt\DisableDecals = GetINIInt(file, TemporaryString, "disabledecals")
+			rt\Commonness = Max(Min(GetINIInt(file, TemporaryString, "Commonness"), 100), 0)
+			rt\Large = GetINIInt(file, TemporaryString, "Large")
+			rt\DisableDecals = GetINIInt(file, TemporaryString, "Disabledecals")
 		EndIf
 	Wend
 	
@@ -2115,7 +2115,6 @@ End Function
 
 
 ;~IDEal Editor Parameters:
-;~F#258#263#26E#2A7#306#322#349#368#36C#371#37F#39C#409#417#426#42E#456#45D#464#46B
-;~F#484#48C#494#5E1#5F1#602#618#62D#63B#63F#68F#69D#6A5#6AC#6B0#6B4#6E2#6F9#70C#718
-;~F#71E#729#72F#76B#7E2
+;~F#2A7#322#349#368#36C#371#37F#417#426#42E#456#45D#464#46B#484#48C#494#5E1#5F1#602
+;~F#618#62D#63B#63F#68F#69D#6A5#6AC#6B0#6B4#6E2#6F9#70C#718#71E#729#72F#76B#7E2
 ;~C#Blitz3D

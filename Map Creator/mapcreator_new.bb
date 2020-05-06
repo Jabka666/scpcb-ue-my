@@ -1658,7 +1658,7 @@ Function LoadRoomTemplates(file$)
 				rt = CreateRoomTemplate()
 				rt\Name = TemporaryString
 				
-				StrTemp = Lower(GetINIString(file, TemporaryString, "shape"))
+				StrTemp = Lower(GetINIString(file, TemporaryString, "Shape"))
 				Select StrTemp
 					Case "room1", "1"
 						rt\Shape = ROOM1
@@ -1673,8 +1673,8 @@ Function LoadRoomTemplates(file$)
 					Default
 				End Select
 				
-				rt\Description = GetINIString(file, TemporaryString, "descr")
-				rt\Large = GetINIInt(file, TemporaryString, "large")
+				rt\Description = GetINIString(file, TemporaryString, "Descr")
+				rt\Large = GetINIInt(file, TemporaryString, "Large")
 				
 				rt\MapGrid = 0
 			EndIf
@@ -1685,32 +1685,32 @@ Function LoadRoomTemplates(file$)
 	;Forest pieces
 	Local fr_prefix$ = "SCP-860-1 "
 	rt = CreateRoomTemplate()
-	rt\Name = fr_Prefix$+"door"
+	rt\Name = fr_prefix$+"door"
 	rt\Shape = ROOM1
 	rt\Description = "FRDOOR"
 	rt\MapGrid = 1
 	rt = CreateRoomTemplate()
-	rt\Name = fr_Prefix$+"endroom"
+	rt\Name = fr_prefix$+"endroom"
 	rt\Shape = ROOM1
 	rt\Description = "FRENDROOM"
 	rt\MapGrid = 1
 	rt = CreateRoomTemplate()
-	rt\Name = fr_Prefix$+"path"
+	rt\Name = fr_prefix$+"path"
 	rt\Shape = ROOM2
 	rt\Description = "FRPATH"
 	rt\MapGrid = 1
 	rt = CreateRoomTemplate()
-	rt\Name = fr_Prefix$+"corner"
+	rt\Name = fr_prefix$+"corner"
 	rt\Shape = ROOM2C
 	rt\Description = "FRCORNER"
 	rt\MapGrid = 1
 	rt = CreateRoomTemplate()
-	rt\Name = fr_Prefix$+"t-shaped path"
+	rt\Name = fr_prefix$+"t-shaped path"
 	rt\Shape = ROOM3
 	rt\Description = "FRTSHAPE"
 	rt\MapGrid = 1
 	rt = CreateRoomTemplate()
-	rt\Name = fr_Prefix$+"4-way path"
+	rt\Name = fr_prefix$+"4-way path"
 	rt\Shape = ROOM4
 	rt\Description = "FR4WAY"
 	rt\MapGrid = 1
@@ -1719,37 +1719,37 @@ Function LoadRoomTemplates(file$)
 	Local mt_prefix$ = "Maintenance tunnel "
 	rt = CreateRoomTemplate()
 	rt\Name = mt_prefix$+"endroom"
-	rt\shape = ROOM1
+	rt\Shape = ROOM1
 	rt\Description = "MTENDROOM"
 	rt\MapGrid = 2
 	rt = CreateRoomTemplate()
 	rt\Name = mt_prefix$+"corridor"
-	rt\shape = ROOM2
+	rt\Shape = ROOM2
 	rt\Description = "MTCORRIDOR"
 	rt\MapGrid = 2
 	rt = CreateRoomTemplate()
 	rt\Name = mt_prefix$+"corner"
-	rt\shape = ROOM2C
+	rt\Shape = ROOM2C
 	rt\Description = "MTCORNER"
 	rt\MapGrid = 2
 	rt = CreateRoomTemplate()
 	rt\Name = mt_prefix$+"t-shaped room"
-	rt\shape = ROOM3
+	rt\Shape = ROOM3
 	rt\Description = "MTTSHAPE"
 	rt\MapGrid = 2
 	rt = CreateRoomTemplate()
 	rt\Name = mt_prefix$+"4-way room"
-	rt\shape = ROOM4
+	rt\Shape = ROOM4
 	rt\Description = "MT4WAY"
 	rt\MapGrid = 2
 	rt = CreateRoomTemplate()
 	rt\Name = mt_prefix$+"elevator"
-	rt\shape = ROOM2
+	rt\Shape = ROOM2
 	rt\Description = "MTELEVATOR"
 	rt\MapGrid = 2
 	rt = CreateRoomTemplate()
 	rt\Name = mt_prefix$+"generator room"
-	rt\shape = ROOM1
+	rt\Shape = ROOM1
 	rt\Description = "MTGENERATOR"
 	rt\MapGrid = 2
 	

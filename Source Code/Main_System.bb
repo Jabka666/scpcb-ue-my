@@ -2275,7 +2275,7 @@ Function CreateDoor.Doors(LVL, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, B
 					EntityAlpha(d\DoorHitOBJ, 0.0)
 					EntityFX(d\DoorHitOBJ, 1)
 					EntityType(d\DoorHitOBJ, HIT_MAP)
-					EntityColor(d\DoorHitOBJ, 255, 0, 0)
+					EntityColor(d\DoorHitOBJ, 255.0, 0.0, 0.0)
 					HideEntity(d\DoorHitOBJ)
 					Exit
 				EndIf
@@ -2314,7 +2314,7 @@ Function UpdateDoors()
 			
 			d\Dist = xDist + zDist
 			
-			If d\Dist > HideDistance * 2 Then
+			If d\Dist > HideDistance * 2.0 Then
 				If d\OBJ <> 0 Then HideEntity(d\OBJ)
 				If d\FrameOBJ <> 0 Then HideEntity(d\FrameOBJ)
 				If d\OBJ2 <> 0 Then HideEntity(d\OBJ2)
@@ -2397,7 +2397,7 @@ Function UpdateDoors()
 							;[End Block]
 						Case 4
 						    ;[Block]
-							d\OpenState = Min(180, d\OpenState + FPSfactor * 2 * (d\FastOpen + 1))
+							d\OpenState = Min(180.0, d\OpenState + FPSfactor * 2 * (d\FastOpen + 1))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * FPSfactor / 80.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-FPSfactor) / 80.0, 0.0, 0.0)	
 							;[End Block]	
@@ -2481,7 +2481,7 @@ Function UpdateDoors()
 							;[End Block]
 						Case 4
 						    ;[Block]
-							d\OpenState = Max(0, d\OpenState - FPSfactor * 2 * (d\FastOpen + 1))
+							d\OpenState = Max(0.0, d\OpenState - FPSfactor * 2 * (d\FastOpen + 1))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (-FPSfactor) * (d\FastOpen + 1) / 80.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * FPSfactor / 80.0, 0.0, 0.0)
 							;[End Block]	
@@ -3217,7 +3217,7 @@ Repeat
 		
 		If KeyHit(KEY_SAVE) Then
 			If SelectedDifficulty\saveType = SAVEANYWHERE Then
-				RN$ = PlayerRoom\RoomTemplate\Name
+				RN = PlayerRoom\RoomTemplate\Name
 				If RN = "room173intro" Or (RN = "gateb" And EntityY(Collider) > 1040.0 * RoomScale) Or RN = "gatea"
 					Msg = "You cannot save in this location."
 					MsgTimer = 70 * 4.0
@@ -10941,10 +10941,10 @@ Function CheckTriggers$()
 			sZ = EntityScaleZ(PlayerRoom\TriggerBox[i], 1)
 			GetMeshExtents(PlayerRoom\TriggerBox[i])
 			If DebugHUD
-				EntityColor(PlayerRoom\TriggerBox[i], 255, 255, 0)
+				EntityColor(PlayerRoom\TriggerBox[i], 255.0, 255.0, 0.0)
 				EntityAlpha(PlayerRoom\TriggerBox[i], 0.2)
 			Else
-				EntityColor(PlayerRoom\TriggerBox[i], 255, 255, 255)
+				EntityColor(PlayerRoom\TriggerBox[i], 255.0, 255.0, 255.0)
 				EntityAlpha(PlayerRoom\TriggerBox[i], 0.0)
  			EndIf
 			If EntityX(Collider) > ((sX * Mesh_MinX) + PlayerRoom\x) And EntityX(Collider) < ((sX * Mesh_MaxX) + PlayerRoom\x)

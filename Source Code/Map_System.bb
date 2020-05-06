@@ -1390,12 +1390,12 @@ Function LoadRoomTemplates(File$)
 		TemporaryString = Trim(ReadLine(f))
 		If Left(TemporaryString, 1) = "[" Then
 			TemporaryString = Mid(TemporaryString, 2, Len(TemporaryString) - 2)
-			StrTemp = GetINIString(File, TemporaryString, "mesh path")
+			StrTemp = GetINIString(File, TemporaryString, "Mesh Path")
 			
 			rt = CreateRoomTemplate(StrTemp)
 			rt\Name = Lower(TemporaryString)
 			
-			StrTemp = Lower(GetINIString(File, TemporaryString, "shape"))
+			StrTemp = Lower(GetINIString(File, TemporaryString, "Shape"))
 			
 			Select StrTemp
 				Case "room1", "1"
@@ -1421,20 +1421,20 @@ Function LoadRoomTemplates(File$)
 			End Select
 			
 			For i = 0 To 4
-				rt\Zone[i] = GetINIInt(File, TemporaryString, "zone" + (i + 1))
+				rt\Zone[i] = GetINIInt(File, TemporaryString, "Zone" + (i + 1))
 			Next
 			
-			rt\Commonness = Max(Min(GetINIInt(File, TemporaryString, "commonness"), 100), 0)
-			rt\Large = GetINIInt(File, TemporaryString, "large")
-			rt\DisableDecals = GetINIInt(File, TemporaryString, "disabledecals")
-			rt\UseLightSpark = GetINIInt(File, TemporaryString, "uselightspark")
-			rt\DisableOverlapCheck = GetINIInt(File, TemporaryString, "disableoverlapcheck")
+			rt\Commonness = Max(Min(GetINIInt(File, TemporaryString, "Commonness"), 100), 0)
+			rt\Large = GetINIInt(File, TemporaryString, "Large")
+			rt\DisableDecals = GetINIInt(File, TemporaryString, "Disabledecals")
+			rt\UseLightSpark = GetINIInt(File, TemporaryString, "UseLightSpark")
+			rt\DisableOverlapCheck = GetINIInt(File, TemporaryString, "DisableOverlapCheck")
 		EndIf
 	Wend
 	
 	i = 1
 	Repeat
-		StrTemp = GetINIString(File, "room ambience", "ambience" + i)
+		StrTemp = GetINIString(File, "room ambience", "Ambience" + i)
 		If StrTemp = "" Then Exit
 		
 		RoomAmbience[i] = LoadSound_Strict(StrTemp)
@@ -1603,26 +1603,26 @@ Function PlaceGrid_MapCreator(r.Rooms)
 				Select r\grid\Grid[x + (y * GridSZ)]
 					Case ROOM1
 						;[Block]
-						AddLight%(Null, r\x + x * 2.0, 8.0 + (368.0 * RoomScale), r\z + y * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
+						AddLight(Null, r\x + x * 2.0, 8.0 + (368.0 * RoomScale), r\z + y * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
 						;[End Block]
 					Case ROOM2, ROOM2C
 						;[Block]
-						AddLight%(Null, r\x + x * 2.0, 8.0 + (368.0 * RoomScale), r\z + y * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
+						AddLight(Null, r\x + x * 2.0, 8.0 + (368.0 * RoomScale), r\z + y * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
 						;[End Block]
 					Case ROOM2C
 						;[Block]
-						AddLight%(Null, r\x + x * 2.0, 8.0 + (412.0 * RoomScale), r\z + y * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
+						AddLight(Null, r\x + x * 2.0, 8.0 + (412.0 * RoomScale), r\z + y * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
 						;[End Block]
 					Case ROOM3, ROOM4
 						;[Block]
-						AddLight%(Null, r\x + x * 2.0, 8.0 + (412.0 * RoomScale), r\z + y * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
+						AddLight(Null, r\x + x * 2.0, 8.0 + (412.0 * RoomScale), r\z + y * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
 						;[End Block]
 					Case ROOM4 + 1
 						;[Block]
 						dr = CreateDoor(r\Zone, r\x + (x * 2.0) + (Cos(EntityYaw(Tile_Entity, True)) * 240.0 * RoomScale), 8.0, r\z + (y * 2.0) + (Sin(EntityYaw(Tile_Entity, True)) * 240.0 * RoomScale), EntityYaw(Tile_Entity, True) + 90.0, Null, False, 3)
 						PositionEntity(dr\Buttons[0], EntityX(dr\Buttons[0], True) + (Cos(EntityYaw(Tile_Entity, True)) * 0.05), EntityY(dr\buttons[0], True) + 0.0, EntityZ(dr\buttons[0], True) + (Sin(EntityYaw(Tile_Entity, True)) * 0.05), True)
 						
-						AddLight%(Null, r\x + x * 2.0 + (Cos(EntityYaw(Tile_Entity, True)) * 555.0 * RoomScale), 8.0 + (469.0 * RoomScale), r\z + y * 2.0 + (Sin(EntityYaw(Tile_Entity, True)) * 555.0 * RoomScale), 2, 600.0 * RoomScale, 255, 255, 255)
+						AddLight(Null, r\x + x * 2.0 + (Cos(EntityYaw(Tile_Entity, True)) * 555.0 * RoomScale), 8.0 + (469.0 * RoomScale), r\z + y * 2.0 + (Sin(EntityYaw(Tile_Entity, True)) * 555.0 * RoomScale), 2, 600.0 * RoomScale, 255, 255, 255)
 						
 						Local TempInt2% = CreatePivot()
 						
@@ -1640,7 +1640,7 @@ Function PlaceGrid_MapCreator(r.Rooms)
 						;[End Block]
 					Case ROOM4 + 2
 						;[Block]
-						AddLight%(Null, r\x + x * 2.0 - (Sin(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale), 8.0 + (396.0 * RoomScale), r\z + y * 2.0 + (Cos(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale), 2, 500.0 * RoomScale, 255, 200, 200)
+						AddLight(Null, r\x + x * 2.0 - (Sin(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale), 8.0 + (396.0 * RoomScale), r\z + y * 2.0 + (Cos(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale), 2, 500.0 * RoomScale, 255, 200, 200)
 						it = CreateItem("SCP-500-01", "scp500", r\x + x * 2.0 + (Cos(EntityYaw(Tile_Entity, True)) * (-208.0) * RoomScale) - (Sin(EntityYaw(Tile_Entity, True)) * 1226.0 * RoomScale), 8.0 + (80.0 * RoomScale), r\z + y * 2.0 + (Sin(EntityYaw(Tile_Entity, True)) * (-208.0) * RoomScale) + (Cos(EntityYaw(Tile_Entity, True)) * 1226.0 * RoomScale))
 						EntityType(it\Collider, HIT_ITEM)
 						
@@ -4862,11 +4862,9 @@ Function FillRoom(r.Rooms)
 			r\Objects[9] = LoadMesh_Strict("GFX\map\pocketdimension4.b3d") ; ~ The flying pillar
 			
 			r\Objects[10] = CopyEntity(r\Objects[9])
-			ScaleEntity(r\Objects[10], RoomScale * 1.5, RoomScale * 2.0, RoomScale * 1.5, True)	
 			
-			r\Objects[11] = LoadMesh_Strict("GFX\map\pocketdimension5.b3d") ; ~ The pillar room			PositionEntity(r\Objects[11], r\x, r\y, r\z + 64.0, True)	
-			
-			Local Terrain% = LoadMesh_Strict("GFX\map\pocketdimensionterrain.b3d")
+			r\Objects[11] = LoadMesh_Strict("GFX\map\pocketdimension5.b3d") ; ~ The pillar room
+						Local Terrain% = LoadMesh_Strict("GFX\map\pocketdimensionterrain.b3d")
 			
 			ScaleEntity(Terrain, RoomScale, RoomScale, RoomScale, True)
 			PositionEntity(Terrain, r\x, r\y + 29440.0, r\z, True)
@@ -4912,6 +4910,9 @@ Function FillRoom(r.Rooms)
 			de\Size = Rnd(0.8, 0.8) : de\BlendMode = 2 : de\FX = 1 + 8
 			ScaleSprite(de\OBJ, de\Size, de\Size)
 			EntityParent(de\OBJ, r\OBJ)
+			
+			ScaleEntity(r\Objects[10], RoomScale * 1.5, RoomScale * 2.0, RoomScale * 1.5, True)			
+			PositionEntity(r\Objects[11], r\x, r\y, r\z + 64.0, True)	
 			
 			For i = 1 To 8
 				r\Objects[i - 1] = CopyEntity(Hallway)
@@ -4966,6 +4967,7 @@ Function FillRoom(r.Rooms)
 			EntityBlend (r\Objects[17], 3)
 			EntityFX(r\Objects[17], 1 + 8)
 			SpriteViewMode(r\Objects[17], 2)
+			FreeTexture(OldManEyes)
 			
 			r\Objects[18] = LoadTexture_Strict("GFX\npcs\pd_plane.png", 1 + 2)
 			
@@ -4978,10 +4980,11 @@ Function FillRoom(r.Rooms)
 			EntityBlend(r\Objects[20], 2)
 			EntityFX(r\Objects[20], 1 + 8)
 			SpriteViewMode(r\Objects[20], 2)
-			FreeTexture(t)
+			
 			FreeEntity(Hallway)
 			
 			it = CreateItem("Burnt Note", "paper", EntityX(r\OBJ), r\y + 0.5, EntityZ(r\OBJ) + 3.5)
+			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case "room3z3"
 			;[Block]
@@ -5005,7 +5008,7 @@ Function FillRoom(r.Rooms)
 			
 			sc = CreateSecurityCam(r\x + 384.0 * RoomScale, r\y + (448.0 - 64.0) * RoomScale, r\z - 960.0 * RoomScale, r, True)
 			sc\Angle = 45.0 : sc\Turn = 45.0 : sc\room = r
-			TurnEntity(sc\CameraOBJ, 20, 0, 0)
+			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			EntityParent(sc\OBJ, r\OBJ)
 			
 			w.WayPoints = CreateWaypoint(r\x, r\y + 66.0 * RoomScale, r\z, Null, r)
@@ -7453,7 +7456,7 @@ Function CreateMap()
 	r = CreateRoom(0, ROOM1, (MapWidth - 1) * 8.0, 0.0, (MapHeight - 1) * 8.0, "pocketdimension")
 	MapRoomID(ROOM1) = MapRoomID(ROOM1) + 1	
 	
-	If IntroEnabled
+	If IntroEnabled Then
 		r = CreateRoom(0, ROOM1, 8.0, 0.0, (MapHeight - 1) * 8.0, "room173intro")
 		MapRoomID(ROOM1) = MapRoomID(ROOM1) + 1
 	EndIf
@@ -8355,13 +8358,13 @@ Function CalculateRoomExtents(r.Rooms)
 	r\MaxY = TFormedY() - ShrinkAmount
 	r\MaxZ = TFormedZ() - ShrinkAmount + r\z
 	
-	If (r\MinX > r\MaxX) Then
+	If r\MinX > r\MaxX Then
 		Local TempX# = r\MaxX
 		
 		r\MaxX = r\MinX
 		r\MinX = TempX
 	EndIf
-	If (r\MinZ > r\MaxZ) Then
+	If r\MinZ > r\MaxZ Then
 		Local TempZ# = r\MaxZ
 		
 		r\MaxZ = r\MinZ
@@ -8396,8 +8399,8 @@ Function PreventRoomOverlap(r.Rooms)
 	Next
 	
 	; ~ If not, then simply return it as True
-	If (Not IsIntersecting)
-		Return True
+	If (Not IsIntersecting) Then
+		Return(True)
 	EndIf
 	
 	; ~ Room is interseting: First, check if the given room is a ROOM2, so we could potentially just turn it by 180 degrees
@@ -8506,7 +8509,7 @@ Function PreventRoomOverlap(r.Rooms)
 	Next
 	
 	; ~ Room was able to the placed in a different spot
-	If (Not IsIntersecting)
+	If (Not IsIntersecting) Then
 		Return(True)
 	EndIf
 	
