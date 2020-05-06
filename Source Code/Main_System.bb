@@ -299,7 +299,8 @@ Dim RadioState4%(9)
 Dim RadioCHN%(8)
 
 Type TempTextures
-	Field MiscTextureID[MaxMiscTextureID - 1]
+	Field MiscTextureID%[MaxMiscTextureIDAmount - 1]
+	Field MonitorTextureID%[MaxMonitorTextureIDAmount - 1]
 End Type
 
 Global PlayTime%
@@ -2017,7 +2018,6 @@ DrawLoading(30, True)
 
 Global PlayCustomMusic% = False, CustomMusic% = 0
 
-Global MonitorTexture%, MonitorTexture2%, MonitorTexture3%, MonitorTexture4%, MonitorTextureOff%
 Global MonitorTimer# = 0.0, MonitorTimer2# = 0.0, UpdateCheckpoint1%, UpdateCheckpoint2%
 
 ; ~ This variable is for when a camera detected the player
@@ -2772,8 +2772,8 @@ Collisions(HIT_DEAD, HIT_MAP, 2, 2)
 DrawLoading(90, True)
 
 Type Overlays
-	Field OverlayTextureID[MaxOverlayTextureID - 1]
-	Field OverlayID[MaxOverlayID - 1]
+	Field OverlayTextureID%[MaxOverlayTextureIDAmount - 1]
+	Field OverlayID%[MaxOverlayIDAmount - 1]
 End Type
 
 Global Collider%, Head%
@@ -8027,12 +8027,12 @@ Function LoadEntities()
         HideEntity(o\MonitorModelID[i])
     Next
 	
-	MonitorTexture = LoadTexture_Strict("GFX\monitortexture.jpg")
-	MonitorTexture2 = LoadTexture_Strict("GFX\map\LockdownScreen2.jpg")
-	MonitorTexture3 = LoadTexture_Strict("GFX\map\LockdownScreen.jpg")
-	MonitorTexture4 = LoadTexture_Strict("GFX\map\LockdownScreen3.jpg")
-	MonitorTextureOff = CreateTexture(1, 1)
-	SetBuffer(TextureBuffer(MonitorTextureOff))
+	tt\MonitorTextureID[0] = LoadTexture_Strict("GFX\monitoroverlay.png")
+	tt\MonitorTextureID[1] = LoadTexture_Strict("GFX\map\LockdownScreen2.jpg")
+	tt\MonitorTextureID[2] = LoadTexture_Strict("GFX\map\LockdownScreen.jpg")
+	tt\MonitorTextureID[3] = LoadTexture_Strict("GFX\map\LockdownScreen3.jpg")
+	tt\MonitorTextureID[4] = CreateTexture(1, 1)
+	SetBuffer(TextureBuffer(tt\MonitorTextureID[4]))
 	ClsColor(0, 0, 0)
 	Cls
 	SetBuffer(BackBuffer())
@@ -8044,8 +8044,8 @@ Function LoadEntities()
 			t1 = GetBrushTexture(b, 0)
 			If t1 <> 0 Then
 				Name$ = StripPath(TextureName(t1))
-				If Lower(Name) <> "monitortexture.jpg"
-					BrushTexture(b, MonitorTextureOff, 0, 0)
+				If Lower(Name) <> "monitoroverlay.png"
+					BrushTexture(b, tt\MonitorTextureID[4], 0, 0)
 					PaintSurface(SF, b)
 				EndIf
 				If Name <> "" Then FreeTexture(t1)
@@ -8060,8 +8060,8 @@ Function LoadEntities()
 			t1 = GetBrushTexture(b, 0)
 			If t1 <> 0 Then
 				Name$ = StripPath(TextureName(t1))
-				If Lower(Name) <> "monitortexture.jpg"
-					BrushTexture(b, MonitorTextureOff, 0, 0)
+				If Lower(Name) <> "monitoroverlay.png"
+					BrushTexture(b, tt\MonitorTextureID[4], 0, 0)
 					PaintSurface(SF, b)
 				EndIf
 				If Name <> "" Then FreeTexture(t1)

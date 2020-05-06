@@ -5210,8 +5210,8 @@ Function FillRoom(r.Rooms)
 			Local Scale# = RoomScale * 4.5 * 0.4
 			Local Screen%
 			
-			r\Textures[0] = LoadAnimTexture("GFX\SL_monitors_checkpoint.jpg", 1, 512, 512, 0, 4)
-			r\Textures[1] = LoadAnimTexture("GFX\Sl_monitors.jpg", 1, 256, 256, 0, 8)
+			r\Textures[0] = LoadAnimTexture("GFX\SL_monitors_checkpoint.png", 1, 512, 512, 0, 4)
+			r\Textures[1] = LoadAnimTexture("GFX\Sl_monitors.png", 1, 256, 256, 0, 10)
 			
 			; ~ Monitor Objects
 			For i = 0 To 14
@@ -5228,6 +5228,10 @@ Function FillRoom(r.Rooms)
 								;[Block]
 								EntityTexture(Screen, r\Textures[1], 0)
 								;[End Block]
+							Case 1
+								;[Block]
+								EntityTexture(Screen, r\Textures[1], 9)
+								;[End Block]
 							Case 2
 								;[Block]
 								EntityTexture(Screen, r\Textures[1], 2)
@@ -5235,6 +5239,10 @@ Function FillRoom(r.Rooms)
 							Case 3
 								;[Block]
 								EntityTexture(Screen, r\Textures[1], 1)
+								;[End Block]
+							Case 5
+								;[Block]
+								EntityTexture(Screen, r\Textures[1], 8)
 								;[End Block]
 							Case 8
 								;[Block]
@@ -6210,6 +6218,7 @@ Global Room2slCam%
 Function CreateSecurityCam.SecurityCams(x#, y#, z#, r.Rooms, Screen% = False)
 	Local sc.SecurityCams = New SecurityCams
 	Local o.Objects = First Objects
+	Local tt.TempTextures = First TempTextures
 	
 	sc\OBJ = CopyEntity(o\CamModelID[0])
 	ScaleEntity(sc\OBJ, 0.0015, 0.0015, 0.0015)
@@ -6236,7 +6245,7 @@ Function CreateSecurityCam.SecurityCams(x#, y#, z#, r.Rooms, Screen% = False)
 		sc\ScrOverlay = CreateSprite(sc\ScrOBJ)
 		ScaleSprite(sc\ScrOverlay, MeshWidth(o\MonitorModelID[0]) * Scale * 0.95 * 0.5, MeshHeight(o\MonitorModelID[0]) * Scale * 0.95 * 0.5)
 		MoveEntity(sc\ScrOverlay, 0.0, 0.0, -0.0005)
-		EntityTexture(sc\ScrOverlay, MonitorTexture)
+		EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
 		SpriteViewMode(sc\ScrOverlay, 2)
 		EntityBlend(sc\ScrOverlay, 3)
 		
@@ -6427,7 +6436,7 @@ Function UpdateSecurityCams()
 							FreeEntity(Pvt)
 							If (sc\CoffinEffect = 1 Or sc\CoffinEffect = 3) And (Wearing714 = 0 Or WearingGasMask < 3 Or WearingHazmat < 3) Then
 								If Sanity < -800.0 Then
-									If Rand(3) = 1 Then EntityTexture(sc\ScrOverlay, MonitorTexture)
+									If Rand(3) = 1 Then EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
 									If Rand(6) < 5 Then
 										EntityTexture(sc\ScrOverlay, tt\MiscTextureID[Rand(7, 12)])
 										If sc\PlayerState = 1 Then PlaySound_Strict(HorrorSFX(1))
@@ -6444,7 +6453,7 @@ Function UpdateSecurityCams()
 										VomitTimer = 1.0
 									EndIf
 								ElseIf Sanity < -500.0
-									If Rand(7) = 1 Then EntityTexture(sc\ScrOverlay, MonitorTexture)
+									If Rand(7) = 1 Then EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
 									If Rand(50) = 1 Then
 										EntityTexture(sc\ScrOverlay, tt\MiscTextureID[Rand(7, 12)])
 										If sc\PlayerState = 0 Then PlaySound_Strict(HorrorSFX(0))
@@ -6452,14 +6461,14 @@ Function UpdateSecurityCams()
 										If sc\CoffinEffect = 3 And Rand(100) = 1 Then sc\CoffinEffect = 2 : sc\PlayerState = Rand(10000, 20000)
 									End If
 								Else
-									EntityTexture(sc\ScrOverlay, MonitorTexture)
+									EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
 								EndIf
 							EndIf
 						EndIf
 					Else
 						If sc\InSight Then
 							If Wearing714 = 1 Or WearingHazmat = 3 Or WearingGasMask = 3 Then
-								EntityTexture(sc\ScrOverlay, MonitorTexture)
+								EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
 							EndIf
 						EndIf
 					EndIf
@@ -6474,7 +6483,7 @@ Function UpdateSecurityCams()
 						End If
 						
 						If (MilliSecs2() Mod sc\PlayerState) >= Rand(600) Then
-							EntityTexture(sc\ScrOverlay, MonitorTexture)
+							EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
 						Else
 							If sc\SoundCHN = 0 Then
 								sc\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(1, 3) + ".ogg"))
@@ -7939,6 +7948,7 @@ Function UpdateCheckpointMonitors(Number%)
 	Local i%, SF%, b%, t1%
 	Local Entity%
 	Local o.Objects = First Objects
+	Local tt.TempTextures = First TempTextures
 	
 	If Number = 0
 		Entity = o\MonitorModelID[1]
@@ -7952,21 +7962,21 @@ Function UpdateCheckpointMonitors(Number%)
 		SF = GetSurface(Entity, i)
 		b = GetSurfaceBrush(SF)
 		If b <> 0 Then
-			t1 = GetBrushTexture(b,0)
+			t1 = GetBrushTexture(b, 0)
 			If t1 <> 0 Then
 				Name$ = StripPath(TextureName(t1))
-				If Lower(Name) <> "monitortexture.jpg"
-					If Number = 0
-						If MonitorTimer < 50
-							BrushTexture(b, MonitorTexture2, 0, 0)
+				If Lower(Name) <> "monitoroverlay.png"
+					If Number = 0 Then
+						If MonitorTimer < 50.0
+							BrushTexture(b, tt\MonitorTextureID[1], 0, 0)
 						Else
-							BrushTexture(b, MonitorTexture4, 0, 0)
+							BrushTexture(b, tt\MonitorTextureID[3], 0, 0)
 						EndIf
 					Else
-						If MonitorTimer2 < 50
-							BrushTexture(b, MonitorTexture2, 0, 0)
+						If MonitorTimer2 < 50.0
+							BrushTexture(b, tt\MonitorTextureID[1], 0, 0)
 						Else
-							BrushTexture(b, MonitorTexture3, 0, 0)
+							BrushTexture(b, tt\MonitorTextureID[2], 0, 0)
 						EndIf
 					EndIf
 					PaintSurface(SF, b)
@@ -7982,8 +7992,9 @@ Function TurnCheckpointMonitorsOff(Number%)
 	Local i%, SF%, b%, t1%
 	Local Entity%
 	Local o.Objects = First Objects
+	Local tt.TempTextures = First TempTextures
 	
-	If Number = 0
+	If Number = 0 Then
 		Entity = o\MonitorModelID[1]
 		UpdateCheckpoint1 = False
 		MonitorTimer = 0.0
@@ -8000,8 +8011,8 @@ Function TurnCheckpointMonitorsOff(Number%)
 			t1 = GetBrushTexture(b, 0)
 			If t1 <> 0 Then
 				Name$ = StripPath(TextureName(t1))
-				If Lower(Name) <> "monitortexture.jpg"
-					BrushTexture(b, MonitorTextureOff, 0, 0)
+				If Lower(Name) <> "monitoroverlay.png"
+					BrushTexture(b, tt\MonitorTextureID[4], 0, 0)
 					PaintSurface(SF, b)
 				EndIf
 				If Name <> "" Then FreeTexture(t1)

@@ -75,10 +75,12 @@ Const NAN# = (-1.0) ^ 0.5
 
 Const MaxDTextures% = 13
 
-Const MaxMiscTextureID% = 13
+Const MaxMiscTextureIDAmount% = 13
 
-Const MaxOverlayTextureID% = 8
-Const MaxOverlayID% = 8
+Const MaxMonitorTextureIDAmount% = 5
+
+Const MaxOverlayTextureIDAmount% = 8
+Const MaxOverlayIDAmount% = 8
 
 ; ~ [ITEMS]
 
