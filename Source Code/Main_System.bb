@@ -3445,7 +3445,7 @@ Function DrawEnding()
 	Select Lower(SelectedEnding)
 		Case "b2", "a1"
 			;[Block]
-			ClsColor(Max(255 + (EndingTimer) * 2.8, 0), Max(255 + (EndingTimer) * 2.8, 0), Max(255 + (EndingTimer) * 2.8, 0))
+			ClsColor(Max(255 + (EndingTimer) * 2.8, 0.0), Max(255 + (EndingTimer) * 2.8, 0), Max(255 + (EndingTimer) * 2.8, 0.0))
 			;[End Block]
 		Default
 			;[Block]
@@ -7425,7 +7425,7 @@ Function DrawMenu()
 					EndIf
 					;[End Block]
 			End Select
-		ElseIf AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg > 0 And KillTimer >= 0
+		ElseIf AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg > 0 And KillTimer >= 0.0
 			Local QuitButton% = 60 
 			
 			If SelectedDifficulty\SaveType = SAVEONQUIT Or SelectedDifficulty\SaveType = SAVEANYWHERE Then

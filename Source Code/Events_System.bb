@@ -247,7 +247,9 @@ Function InitEvents()
 	
 	CreateEvent("room2pit106", "room2pit", 0, 0.07 + (0.1 * SelectedDifficulty\aggressiveNPCs))
 	
-	CreateEvent("room4info","room4info", 0)
+	CreateEvent("room4info", "room4info", 0)
+	
+	CreateEvent("room2bio", "room2bio", 0)
 End Function
 
 Function QuickLoadEvents()
@@ -8817,6 +8819,14 @@ Function UpdateEvents()
 					EndIf
 				Next
 				;[End Block]
+			Case "room2bio"
+				;[Block]
+				If e\room\Dist < HideDistance Then
+					ShowEntity(e\room\Objects[0])
+				Else
+					HideEntity(e\room\Objects[0])
+				EndIf
+				;[End Block]
 		End Select
 		
 		If e <> Null Then
@@ -10207,5 +10217,5 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#120F#1E46
+;~B#1211#1E48
 ;~C#Blitz3D

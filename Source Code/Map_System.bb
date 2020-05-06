@@ -5479,6 +5479,18 @@ Function FillRoom(r.Rooms)
 			it = CreateItem("Radio Transceiver", "fineradio", r\x + 650.0 * RoomScale, r\y + 258.0 * RoomScale, r\z - 760.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
+		Case "room2bio"
+            ;[Block]	
+			r\Objects[0] = LoadMesh_Strict("GFX\map\room2bio_terrain.b3d")
+			ScaleEntity(r\Objects[0], RoomScale, RoomScale, RoomScale)
+			RotateEntity(r\Objects[0], 0.0, r\Angle, 0.0)
+			PositionEntity(r\Objects[0], r\x, r\y - 1.0 * RoomScale, r\z)	
+			EntityParent(r\Objects[0], r\OBJ)
+			
+			sc = CreateSecurityCam(r\x - 475.0 * RoomScale, r\y + 385.0 * RoomScale, r\z + 305.0 * RoomScale, r)
+			sc\Angle = 225.0 : sc\Turn = 45.0
+			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
+			;[End Block]
 	End Select
 	
 	For lt.LightTemplates = Each LightTemplates
@@ -7316,6 +7328,7 @@ Function CreateMap()
 	MapRoom(ROOM2, Min_Pos + Floor(0.1 * Float(Room2Amount[2]))) = "room2poffices"
 	SetRoom("room2cafeteria", ROOM2, Min_Pos + Floor(0.2 * Float(Room2Amount[2])), Min_Pos, Max_Pos)
 	SetRoom("room2sroom", ROOM2, Min_Pos + Floor(0.3 * Float(Room2Amount[2])), Min_Pos, Max_Pos)
+	SetRoom("room2bio", ROOM2, Min_Pos + Floor(0.35 * Float(Room2Amount[2])), Min_Pos, Max_Pos)
 	SetRoom("room2servers2", ROOM2, Min_Pos + Floor(0.4 * Room2Amount[2]), Min_Pos, Max_Pos)	
 	SetRoom("room2offices", ROOM2, Min_Pos + Floor(0.45 * Room2Amount[2]), Min_Pos, Max_Pos)
 	SetRoom("room2offices4", ROOM2, Min_Pos + Floor(0.5 * Room2Amount[2]), Min_Pos, Max_Pos)	
