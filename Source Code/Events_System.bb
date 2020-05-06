@@ -246,6 +246,8 @@ Function InitEvents()
 	CreateEvent("room2offices035", "room2offices", 0)
 	
 	CreateEvent("room2pit106", "room2pit", 0, 0.07 + (0.1 * SelectedDifficulty\aggressiveNPCs))
+	
+	CreateEvent("room4info","room4info", 0)
 End Function
 
 Function QuickLoadEvents()
@@ -1990,14 +1992,14 @@ Function UpdateEvents()
 				If e\room\RoomTemplate\Name = "checkpoint2" Then
 					For e2.Events = Each Events
 						If e2\EventName = "room008"
-							If e2\EventState = 2.0
-								If e\room\RoomDoors[0]\Locked
+							If e2\EventState = 2.0 Then
+								If e\room\RoomDoors[0]\Locked Then
 									TurnCheckpointMonitorsOff(1)
 									e\room\RoomDoors[0]\Locked = False
 									e\room\RoomDoors[1]\Locked = False
 								EndIf
 							Else
-								If e\room\Dist < 12.0
+								If e\room\Dist < 12.0 Then
 									UpdateCheckpointMonitors(1)
 									e\room\RoomDoors[0]\Locked = True
 									e\room\RoomDoors[1]\Locked = True
@@ -2007,15 +2009,15 @@ Function UpdateEvents()
 					Next
 				Else
 					For e2.Events = Each Events
-						If e2\EventName = "room2sl"
-							If e2\EventState3 = 0.0
-								If e\room\Dist < 12.0
+						If e2\EventName = "room2sl" Then
+							If e2\EventState3 = 0.0 Then
+								If e\room\Dist < 12.0 Then
 									TurnCheckpointMonitorsOff(0)
 									e\room\RoomDoors[0]\Locked = False
 									e\room\RoomDoors[1]\Locked = False
 								EndIf
 							Else
-								If e\room\Dist < 12.0
+								If e\room\Dist < 12.0 Then
 									UpdateCheckpointMonitors(0)
 									e\room\RoomDoors[0]\Locked = True
 									e\room\RoomDoors[1]\Locked = True
@@ -4888,20 +4890,20 @@ Function UpdateEvents()
 						Next
 						
 						Select e\EventState 
-							Case 2
+							Case 2.0
 								;[Block]
 								i = Rand(MaxItemAmount)
 								If Inventory(i) <> Null Then RemoveItem(Inventory(i))		
 								;[End Block]
-							Case 5
+							Case 5.0
 								;[Block]
 								Injuries = Injuries + 0.3
 								;[End Block]
-							Case 10
+							Case 10.0
 								;[Block]
 								de.Decals = CreateDecal(3, EntityX(e\room\OBJ) + Cos(e\room\Angle - 90.0) * 760.0 * RoomScale, 0.0005, EntityZ(e\room\OBJ) + Sin(e\room\Angle - 90.0) * 760.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
 								;[End Block]
-							Case 14
+							Case 14.0
 								;[Block]
 								For i = 0 To MaxItemAmount - 1
 									If Inventory(i) <> Null Then
@@ -4920,13 +4922,13 @@ Function UpdateEvents()
 									EndIf
 								Next
 								;[End Block]
-							Case 18
+							Case 18.0
 								;[Block]
 								TFormPoint(-344.0, 176.0, 272.0, e\room\OBJ, 0)
 								it.Items = CreateItem("Strange Note", "paper", TFormedX(), TFormedY(), TFormedZ())
 								EntityType(it\Collider, HIT_ITEM)
 								;[End Block]
-							Case 25
+							Case 25.0
 								;[Block]
 								e\room\NPC[0] = CreateNPC(NPCtypeD, EntityX(e\room\OBJ) + Cos(e\room\Angle - 90.0) * 760.0 * RoomScale, 0.35, EntityZ(e\room\OBJ) + Sin(e\room\Angle - 90.0) * 760.0 * RoomScale)
 								RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle - 200.0, 0.0, True)
@@ -4934,7 +4936,7 @@ Function UpdateEvents()
 								SetAnimTime(e\room\NPC[0]\OBJ, 80.0)
 								e\room\NPC[0]\State = 10.0
 								;[End Block]
-							Case 30
+							Case 30.0
 								;[Block]
 								i = Rand(0, MaxItemAmount - 1)
 								If Inventory(i) <> Null Then RemoveItem(Inventory(i))
@@ -4942,7 +4944,7 @@ Function UpdateEvents()
 								HideEntity(Inventory(i)\Collider)
 								Inventory(i)\Picked = True
 								;[End Block]
-							Case 35
+							Case 35.0
 								;[Block]
 								For i = 0 To 3
 									de.Decals = CreateDecal(17, e\room\x + Rnd(-2.0, 2.0), 700.0 * RoomScale, e\room\z + Rnd(-2.0, 2.0), 270.0, Rnd(360.0), 0.0)
@@ -4950,23 +4952,23 @@ Function UpdateEvents()
 									EntityAlpha(de\obj, 0.8)
 								Next
 								;[End Block]
-							Case 40
+							Case 40.0
 								;[Block]
 								PlaySound_Strict(LoadTempSound("SFX\Radio\Franklin4.ogg"))
 								;[End Block]
-							Case 50
+							Case 50.0
 								;[Block]
 								e\room\NPC[1] = CreateNPC(NPCtypeGuard, EntityX(e\room\OBJ) + Cos(e\room\Angle + 90.0) * 600.0 * RoomScale, 0.35, EntityZ(e\room\OBJ) + Sin(e\room\Angle + 90.0) * 600.0 * roomScale)
 								e\room\NPC[1]\State = 7.0
 								;[End Block]
-							Case 52
+							Case 52.0
 								;[Block]
 								If e\room\NPC[1] <> Null Then
 									RemoveNPC(e\room\NPC[1])
 									e\room\NPC[1] = Null
 								EndIf
 								;[Block]
-							Case 60
+							Case 60.0
 								;[Block]
 								If (Not HalloweenTex) Then
 									Local Tex970% = LoadTexture_Strict("GFX\npcs\scp_173_h.pt", 1)
@@ -8799,6 +8801,22 @@ Function UpdateEvents()
 					Next
 				EndIf
 				;[End Block]
+			Case "room4info"
+				;[Block]
+				For e2.Events = Each Events
+					If e2\EventName = "room2sl" Then
+						If e2\EventState3 = 0.0 Then
+							If e\room\Dist < 12.0 Then
+								TurnCheckpointMonitorsOff(0)
+							EndIf
+						Else
+							If e\room\Dist < 12.0 Then
+								UpdateCheckpointMonitors(0)
+							EndIf
+						EndIf
+					EndIf
+				Next
+				;[End Block]
 		End Select
 		
 		If e <> Null Then
@@ -10189,5 +10207,5 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#120D#1E44
+;~B#120F#1E46
 ;~C#Blitz3D
