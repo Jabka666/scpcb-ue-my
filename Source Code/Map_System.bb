@@ -2852,7 +2852,7 @@ Function FillRoom(r.Rooms)
 			EntityBlend(r\Objects[5], 3)
 			HideEntity(r\Objects[5])
 			
-			; ~ Spawnpoint for the scientist used in the "SCP-008's zombie scene"
+			; ~ Spawnpoint for the scientist used in the "SCP-008-1's scene"
 			r\Objects[6] = CreatePivot()
 			PositionEntity(r\Objects[6], r\x + 160.0 * RoomScale, r\y + 670.0 * RoomScale, r\z - 384.0 * RoomScale)
 			
@@ -4057,10 +4057,8 @@ Function FillRoom(r.Rooms)
 			Next
 			
 			sc = CreateSecurityCam(r\x - 1152.0 * RoomScale, r\y + 900.0 * RoomScale, r\z + 176.0 * RoomScale, r, True)
-			sc\Angle = 90.0 : sc\Turn = 0.0
+			sc\Angle = 90.0 : sc\Turn = 0.0 : sc\AllowSaving = False : sc\RenderInterval = 0
 			EntityParent(sc\OBJ, r\OBJ)
-			sc\AllowSaving = False
-			sc\RenderInterval = 0
 			PositionEntity(sc\ScrOBJ, r\x - 1716.0 * RoomScale, r\y + 160.0 * RoomScale, r\z + 176.0 * RoomScale, True)
 			TurnEntity(sc\ScrOBJ, 0.0, 90.0, 0.0)
 			ScaleSprite(sc\ScrOBJ, 896.0 * 0.5 * RoomScale, 896.0 * 0.5 * RoomScale)
@@ -5036,7 +5034,7 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "room2gw", "room2gw_b"
 		    ;[Block]
-			If r\RoomTemplate\Name = "room2gw_b"
+			If r\RoomTemplate\Name = "room2gw_b" Then
 				r\Objects[0] = CreatePivot()
 				PositionEntity(r\Objects[0], r\x + 280.0 * RoomScale, r\y + 345.0 * RoomScale, r\z - 340.0 * RoomScale)
 				EntityParent(r\Objects[0], r\OBJ)
@@ -5071,7 +5069,7 @@ Function FillRoom(r.Rooms)
 			If r\Objects[2] = 0 Then r\Objects[2] = LoadMesh_Strict("GFX\map\room2gw_pipes.b3d", r\OBJ)
 			EntityPickMode(r\Objects[2], 2)
 			
-			If r\RoomTemplate\Name = "room2gw"
+			If r\RoomTemplate\Name = "room2gw" Then
 				r\Objects[0] = CreatePivot()
 				PositionEntity(r\Objects[0], r\x + 344.0 * RoomScale, r\y + 128.0 * RoomScale, r\z)
 				EntityParent(r\Objects[0], r\OBJ)
@@ -5370,7 +5368,7 @@ Function FillRoom(r.Rooms)
 		Case "room3z2"
 			;[Block]
 			For r2.Rooms = Each Rooms
-				If r2\RoomTemplate\Name = r\RoomTemplate\Name And r2 <> r
+				If r2\RoomTemplate\Name = r\RoomTemplate\Name And r2 <> r Then
 					r\Objects[0] = CopyEntity(r2\Objects[0], r\OBJ) ; ~ Don't load the mesh again
 					Exit
 				EndIf
@@ -5488,8 +5486,27 @@ Function FillRoom(r.Rooms)
 			EntityParent(r\Objects[0], r\OBJ)
 			
 			sc = CreateSecurityCam(r\x - 475.0 * RoomScale, r\y + 385.0 * RoomScale, r\z + 305.0 * RoomScale, r)
-			sc\Angle = 225.0 : sc\Turn = 45.0
+			sc\Angle = 225.0 : sc\Turn = 30.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
+			;[End Block]
+		Case "room2offices5"
+            ;[Block]
+			r\Objects[0] = LoadMesh_Strict("GFX\map\room2offices5_hb.b3d", r\OBJ)
+			EntityPickMode(r\Objects[0], 2)
+			EntityType(r\Objects[0], HIT_MAP)
+			EntityAlpha(r\Objects[0], 0.0)
+			
+			sc = CreateSecurityCam(r\x - 475.0 * RoomScale, r\y + 385.0 * RoomScale, r\z + 305.0 * RoomScale, r)
+			sc\Angle = 225.0 : sc\Turn = 30.0
+			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
+			
+			it = CreateItem("9V Battery", "bat", r\x + 370.0 * RoomScale, r\y + 230.0 * RoomScale, r\z + 960.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ) 
+			
+			If Rand(2) = 1 Then
+				it = CreateItem("9V Battery", "bat", r\x + 420.0 * RoomScale, r\y + 230.0 * RoomScale, r\z + 960.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ) 
+			EndIf
 			;[End Block]
 	End Select
 	
@@ -7332,6 +7349,7 @@ Function CreateMap()
 	SetRoom("room2servers2", ROOM2, Min_Pos + Floor(0.4 * Room2Amount[2]), Min_Pos, Max_Pos)	
 	SetRoom("room2offices", ROOM2, Min_Pos + Floor(0.45 * Room2Amount[2]), Min_Pos, Max_Pos)
 	SetRoom("room2offices4", ROOM2, Min_Pos + Floor(0.5 * Room2Amount[2]), Min_Pos, Max_Pos)	
+	SetRoom("room2offices5", ROOM2, Min_Pos + Floor(0.55 * Room2Amount[2]), Min_Pos, Max_Pos)	
 	SetRoom("room860", ROOM2, Min_Pos + Floor(0.6 * Room2Amount[2]), Min_Pos, Max_Pos)
 	SetRoom("room2medibay2", ROOM2, Min_Pos + Floor(0.7 * Float(Room2Amount[2])), Min_Pos, Max_Pos)
 	SetRoom("room2poffices2", ROOM2, Min_Pos + Floor(0.8*Room2Amount[2]), Min_Pos, Max_Pos)
@@ -8530,5 +8548,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11FB
+;~B#11F9
 ;~C#Blitz3D
