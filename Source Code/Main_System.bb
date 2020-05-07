@@ -11096,7 +11096,7 @@ Function PlayStartupVideos()
 				MovieFile = "GFX\menu\startup_UET"
 				;[End Block]
 		End Select
-		BlitzMovie_OpenD3D(MovieFile + ".avi", SystemProperty("Direct3DDevice7"), SystemProperty("DirectDraw7")) ; ~ Get movie size
+		BlitzMovie_OpenD3D(MovieFile + ".avi", SystemProperty("Direct3DDevice7"), SystemProperty("DirectDraw7"))
 		
 		Local MovieW% = BlitzMovie_GetWidth()
 		Local MovieH% = BlitzMovie_GetHeight()
