@@ -5400,6 +5400,8 @@ Function UpdateEvents()
 					
 					; ~ EventState3 = has the player opened the gas valves (0 = no, 0 < x < 70 * 35 yes, x > 70 * 35 the host has died)
 					
+					ShouldPlay = 27
+					
 					If e\EventState = 0.0 Then
 						If EntityDistance(Collider, e\room\Objects[3]) < 2 Then
 							n.NPCs = CreateNPC(NPCtypeD, EntityX(e\room\Objects[4], True), 0.5,EntityZ(e\room\Objects[4], True))
@@ -10221,5 +10223,5 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1211#1E48
+;~B#1211#1E4A
 ;~C#Blitz3D

@@ -1872,7 +1872,7 @@ Global TempSoundCHN%
 Global TempSoundIndex% = 0
 
 ; ~ The Music now has to be pre-defined, as the new system uses streaming instead of the usual sound loading system Blitz3D has
-Dim Music$(27)
+Dim Music$(28)
 Music(0) = "LightContainmentZone"
 Music(1) = "HeavyContainmentZone"
 Music(2) = "EntranceZone"
@@ -1900,6 +1900,7 @@ Music(23) = "Ending"
 Music(24) = "Credits"
 Music(25) = "SaveMeFrom"
 Music(26) = "Room106"
+Music(27) = "Room035"
 
 Global MusicCHN%
 MusicCHN = StreamSound_Strict("SFX\Music\" + Music(2) + ".ogg", MusicVolume, Mode)
@@ -11163,5 +11164,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#FE3#131C#1B56
+;~B#FE4#131D#1B57
 ;~C#Blitz3D
