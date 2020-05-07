@@ -2997,7 +2997,7 @@ Repeat
 			If Rand(50000) = 3 Then
 				Local RN$ = PlayerRoom\RoomTemplate\Name
 				
-				If RN <> "room860" And RN <> "room1123" And RN <> "room173intro" And RN <> "dimension1499" Then
+				If RN <> "room860" And RN <> "room1123" And RN <> "room173intro" And RN <> "dimension1499" And RN <> "pocketdimension" Then
 					If FPSfactor > 0.0 Then LightBlink = Rnd(1.0, 2.0)
 					PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(1, 8) + ".ogg"))
 				EndIf 
