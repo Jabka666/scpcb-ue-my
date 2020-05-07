@@ -5508,6 +5508,24 @@ Function FillRoom(r.Rooms)
 				EntityParent(it\Collider, r\OBJ) 
 			EndIf
 			;[End Block]
+		Case "room1office"
+			;[Block]
+            d = CreateDoor(r\Zone, r\x, r\y, r\z - 240.0 * RoomScale, 0.0, r, False, False, False, "2411")
+   			d\AutoClose = False
+			
+            it = CreateItem("Field Agent Log #235-001-CO5", "paper", r\x, r\y + 200.0 * RoomScale, r\z + 870.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it = CreateItem("Groups of Interest Log", "paper", r\x + 100.0 * RoomScale, r\y + 200.0 * RoomScale, r\z + 100.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it = CreateItem("First Aid Kit", "firstaid", r\x + 680.0 * RoomScale, r\y + 260.0 * RoomScale, r\z + 892.5 * RoomScale)
+			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it = CreateItem("9V Battery", "bat", r\x - 700.0 * RoomScale, r\y + 210.0 * RoomScale, r\z + 920.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			;[End Block]
 	End Select
 	
 	For lt.LightTemplates = Each LightTemplates
@@ -7335,8 +7353,9 @@ Function CreateMap()
 	
 	; ~ [ENTRANCE ZONE]
 	
-	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] - 2) = "gateb"
-	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] - 1) = "gateaentrance"
+	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] - 3) = "gateb"
+	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] - 2) = "gateaentrance"
+	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] - 1) = "room1office"
 	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1]) = "room1lifts"
 	
 	Min_Pos = Room2Amount[0] + Room2Amount[1]

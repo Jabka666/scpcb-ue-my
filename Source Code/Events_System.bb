@@ -2131,9 +2131,12 @@ Function UpdateEvents()
 									LoadEventSound(e,"SFX\General\BodyFall.ogg")
 									e\SoundCHN = PlaySound_Strict(e\Sound)
 									
-									de.Decals = CreateDecal(3, EntityX(e\room\OBJ), -1531.0 * RoomScale, EntityZ(e\room\OBJ), 90.0, Rand(360.0), 0.0)
+									de.Decals = CreateDecal(3, EntityX(e\room\OBJ), -1534.0 * RoomScale, EntityZ(e\room\OBJ), 90.0, Rand(360.0), 0.0)
 									de\Size = 0.4 : UpdateDecals()
 									ScaleSprite(de\obj, de\Size, de\Size)
+									
+									it = CreateItem("Unknown Note", "paper", EntityX(e\room\NPC[0]\Collider, True), EntityY(e\room\NPC[0]\Collider, True) + 0.04, EntityZ(e\room\NPC[0]\Collider))
+									EntityType(it\Collider, HIT_ITEM)
 								EndIf
 								If e\room\NPC[0]\Frame = 286.0 Then
 									e\room\NPC[0]\PrevState = 2
@@ -10223,5 +10226,5 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1211#1E4A
+;~B#1214#1E4D
 ;~C#Blitz3D

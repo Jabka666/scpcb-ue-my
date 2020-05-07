@@ -2105,7 +2105,7 @@ Global StaminaMeterIMG%
 
 Global KeypadHUD%
 
-Global Panel294, Using294%, Input294$
+Global Panel294%, Using294%, Input294$
 
 DrawLoading(35, True)
 
@@ -4667,6 +4667,8 @@ Function DrawGUI()
 											GiveAchievement(AchvMaynard)
 										ElseIf SelectedDoor\Code = "7816"
 											GiveAchievement(AchvHarp)
+										ElseIf SelectedDoor\Code = "2411"
+										    GiveAchievement(AchvO5)
 										EndIf									
 										
 										SelectedDoor\Locked = 0
@@ -11164,5 +11166,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#FE4#131D#1B57
+;~B#FE4#131F#1B59
 ;~C#Blitz3D

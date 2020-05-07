@@ -138,6 +138,10 @@ Function InitItemTemplates()
 	
 	CreateItemTemplate("Document", "paper", ItemsPath + "paper.x", ItemsPath + "INV_paper.png", ItemsPath + "docRAND3.jpg", 0.003, 0)
 	
+	CreateItemTemplate("Field Agent Log #235-001-CO5", "paper", ItemsPath + "paper.x", ItemsPath + "INV_paper.png", ItemsPath + "doc_O5.png", 0.003, 0)
+	
+    CreateItemTemplate("Groups of Interest Log", "paper", ItemsPath + "paper.x", ItemsPath + "INV_paper.png", ItemsPath + "doc_O5(2).png", 0.003, 0)
+	
 	CreateItemTemplate("Incident Report SCP-106-0204", "paper", ItemsPath + "paper.x", ItemsPath + "INV_paper.png", ItemsPath + "docIR106.jpg", 0.003, 0)
 	
 	CreateItemTemplate("Mobile Task Forces", "paper", ItemsPath + "paper.x", ItemsPath + "INV_paper.png", ItemsPath + "docMTF.jpg", 0.003, 0)
@@ -198,6 +202,8 @@ Function InitItemTemplates()
 	CreateItemTemplate("Scorched Note", "paper", ItemsPath + "paper.x", ItemsPath + "INVbn.jpg", ItemsPath + "docL6.jpg", 0.0025, 0, ItemsPath + "BurntNoteTexture.jpg")
 	
 	CreateItemTemplate("Strange Note", "paper", ItemsPath + "paper.x", ItemsPath + "INV_note.png", ItemsPath + "docStrange.jpg", 0.0025, 0, ItemsPath + "note.png")
+	
+	CreateItemTemplate("Unknown Note", "paper", ItemsPath + "note.x", ItemsPath + "INV_note_bloody.png", ItemsPath + "unknown_note.png", 0.003, 0, ItemsPath + "note_bloody.png")
 	
 	; ~ [SCPs]
 	
