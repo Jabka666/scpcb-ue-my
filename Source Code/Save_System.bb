@@ -475,8 +475,6 @@ Function SaveGame(File$)
 End Function
 
 Function LoadGame(File$)
-	Local Version$ = ""
-	
 	CatchErrors("Uncaught (LoadGame)")
 	
 	DropSpeed = 0.0
@@ -512,7 +510,7 @@ Function LoadGame(File$)
 	RotateEntity(Collider, x, y, 0.0, 0.0)
 	
 	StrTemp = ReadString(f)
-	Version = StrTemp
+	If (StrTemp <> VersionNumber) Then RuntimeError("The save files of v" + StrTemp + " aren't compatible with SCP - Containment Breach Ultimate Edition v" + VersionNumber + ".")
 	
 	BlinkTimer = ReadFloat(f)
 	BlinkEffect = ReadFloat(f)	
@@ -726,12 +724,10 @@ Function LoadGame(File$)
 	room2gw_x = ReadFloat(f)
 	room2gw_z = ReadFloat(f)
 	
-	If Version = VersionNumber Then
-		I_Zone\Transition[0] = ReadByte(f)
-		I_Zone\Transition[1] = ReadByte(f)
-		I_Zone\HasCustomForest = ReadByte(f)
-		I_Zone\HasCustomMT = ReadByte(f)
-	EndIf
+	I_Zone\Transition[0] = ReadByte(f)
+	I_Zone\Transition[1] = ReadByte(f)
+	I_Zone\HasCustomForest = ReadByte(f)
+	I_Zone\HasCustomMT = ReadByte(f)
 	
 	Temp = ReadInt(f)
 	For i = 1 To Temp
@@ -1211,13 +1207,6 @@ Function LoadGame(File$)
 	I_427\Using = ReadByte(f)
 	I_427\Timer = ReadFloat(f)
 	
-	If Version = "1.3.10" Then
-		I_Zone\Transition[0] = ReadByte(f)
-		I_Zone\Transition[1] = ReadByte(f)
-		I_Zone\HasCustomForest = ReadByte(f)
-		I_Zone\HasCustomMT = ReadByte(f)
-	EndIf
-	
 	Wearing714 = ReadByte(f)
 	
 	CloseFile(f)
@@ -1297,8 +1286,6 @@ Function LoadGame(File$)
 End Function
 
 Function LoadGameQuick(File$)
-	Local Version$ = ""
-	
 	CatchErrors("Uncaught (LoadGameQuick)")
 	
 	Local ov.Overlays = First Overlays
@@ -1370,7 +1357,7 @@ Function LoadGameQuick(File$)
 	RotateEntity(Collider, x, y, 0.0, 0.0)
 	
 	StrTemp = ReadString(f)
-	Version = StrTemp
+	If (StrTemp <> VersionNumber) Then RuntimeError("The save files of v" + StrTemp + " aren't compatible with SCP - Containment Breach Ultimate Edition v" + VersionNumber + ".")
 	
 	BlinkTimer = ReadFloat(f)
 	BlinkEffect = ReadFloat(f)	
@@ -1588,12 +1575,10 @@ Function LoadGameQuick(File$)
 	room2gw_x = ReadFloat(f)
 	room2gw_z = ReadFloat(f)
 	
-	If Version = VersionNumber Then
-		I_Zone\Transition[0] = ReadByte(f)
-		I_Zone\Transition[1] = ReadByte(f)
-		I_Zone\HasCustomForest = ReadByte(f)
-		I_Zone\HasCustomMT = ReadByte(f)
-	EndIf
+	I_Zone\Transition[0] = ReadByte(f)
+	I_Zone\Transition[1] = ReadByte(f)
+	I_Zone\HasCustomForest = ReadByte(f)
+	I_Zone\HasCustomMT = ReadByte(f)
 	
 	Temp = ReadInt(f)
 	For i = 1 To Temp
@@ -1955,13 +1940,6 @@ Function LoadGameQuick(File$)
 	EndIf
 	I_427\Using = ReadByte(f)
 	I_427\Timer = ReadFloat(f)
-	
-	If Version = "1.3.10" Then
-		I_Zone\Transition[0] = ReadByte(f)
-		I_Zone\Transition[1] = ReadByte(f)
-		I_Zone\HasCustomForest = ReadByte(f)
-		I_Zone\HasCustomMT = ReadByte(f)
-	EndIf
 	
 	Wearing714 = ReadByte(f)
 	CloseFile(f)
