@@ -2090,6 +2090,8 @@ Function UpdateEvents()
 							e\room\NPC[0]\SoundCHN = PlaySound2(e\room\NPC[0]\Sound, Camera, e\room\NPC[0]\Collider)
 							e\room\NPC[0]\IsDead = True
 							e\room\NPC[0]\FallingPickDistance = 0.0
+							
+							If e\room\RoomDoors[0]\Open = False Then e\room\RoomDoors[0]\Open = True
 						EndIf
 					ElseIf CoffinDistance > 5.0 Then
 						If e\room\NPC[0] <> Null Then
@@ -10226,5 +10228,5 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1214#1E4D
+;~B#1216#1E4F
 ;~C#Blitz3D
