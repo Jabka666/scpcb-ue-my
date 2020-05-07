@@ -5,8 +5,11 @@
 - Added more names for NPC's console spawning.
 
 - Now guard in "room2elevator" event can kill the player, if he too close.
+- Now the pass code for O5 Council's office drops from falling guard in SCP-895's event.
 
 - Changed one bump texture to the better one.
+
+- Replaced O5-14 Burnt Document to batteries in room2offices5.
 
 - Removed light cones.
 - Removed unnecessary variables and functions in the code.
