@@ -3090,10 +3090,10 @@ Function UpdateEvents()
 					; ~ Remote Door Control
 					RemoteDoorOn = UpdateLever(e\room\Objects[5])
 					
-					If e\EventState > 0.0 And e\EventState < 200.0 Then
-						e\EventState = e\EventState + FPSfactor
-						RotateEntity(e\room\Objects[3], CurveValue(-85.0, EntityPitch(e\room\Objects[3]), 5), EntityYaw(e\room\Objects[3]), 0)
-					EndIf 
+					If e\EventState = 1.0 Then
+						RotateEntity(e\room\Objects[3], 0.0, EntityYaw(e\room\Objects[3]), 0.0)
+						e\EventState = 2.0
+					EndIf
 				EndIf
 				;[End Block]
 			Case "room2closets"

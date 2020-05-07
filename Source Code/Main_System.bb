@@ -1120,7 +1120,7 @@ Function UpdateConsole()
 			        ;[Block]
 			        For n.NPCs = Each NPCs
 			            If n\NPCtype = NPCtype966
-			                n\State = 0
+			                n\State = 0.0
 			                ShowEntity(n\Collider)
 			                If WearinNightVision > 0 Then ShowEntity(n\OBJ)
 			            EndIf
@@ -1468,17 +1468,29 @@ Function UpdateConsole()
 					    Else
 					        it.Items = CreateItem("Coin", "coin", EntityX(Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(Camera, True), EntityZ(Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
 					    EndIf
-					    EntityType (it\Collider, HIT_ITEM)
+					    EntityType(it\Collider, HIT_ITEM)
 					Next
 					;[End Block]
 				Case "disablecontrol"
 				    ;[Block]
-				    RemoteDoorOn = False
+				    For e2.Events = Each Events
+				        If e2\EventName = "room2ccont"
+							UpdateLever(e2\room\Objects[5])
+							RotateEntity(e2\room\Objects[5], 0.0, EntityYaw(e2\room\Objects[5]), 0.0)
+							RemoteDoorOn = False
+						EndIf
+					Next
 				    CreateConsoleMsg("Remote door control disabled.", 255, 255, 255)
 				    ;[End Block]
 				Case "enablecontrol"
 				    ;[Block]
-				    RemoteDoorOn = True
+				    For e2.Events = Each Events
+				        If e2\EventName = "room2ccont"
+							UpdateLever(e2\room\Objects[5])
+							RotateEntity(e2\room\Objects[5], 0.0, EntityYaw(e2\room\Objects[5]), 30.0)
+							RemoteDoorOn = True
+						EndIf
+					Next
 				    CreateConsoleMsg("Remote door control enabled.", 255, 255, 255)
 				    ;[End Block]
 			    Case "unlockcheckpoints"
@@ -1511,8 +1523,8 @@ Function UpdateConsole()
 							e2\EventState = 0.0
 							UpdateLever(e2\room\Objects[1])
 							UpdateLever(e2\room\Objects[3])
-							RotateEntity(e2\room\Objects[1], 0.0, EntityYaw(e2\room\Objects[1]), 30.0)
-							RotateEntity(e2\room\Objects[3], 0.0, EntityYaw(e2\room\Objects[3]), 30.0)
+							RotateEntity(e2\room\Objects[1], 0.0, EntityYaw(e2\room\Objects[1]), 0.0)
+							RotateEntity(e2\room\Objects[3], 0.0, EntityYaw(e2\room\Objects[3]), 0.0)
 							Exit
 						EndIf
 				    Next
@@ -11143,5 +11155,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#FCF#1308#1B42
+;~B#FDB#1314#1B4E
 ;~C#Blitz3D
