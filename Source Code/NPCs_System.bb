@@ -4964,8 +4964,8 @@ Function UpdateNPCs()
 									If (Abs(DeltaYaw(n\Collider,Collider))<=60.0)
 										PlaySound_Strict DamageSFX(Rand(5,8))
 										Injuries = Injuries+Rnd(0.4,1.0)
-										Infect = Infect + (1+(1*SelectedDifficulty\aggressiveNPCs))
-										DeathMSG = "Subject D-9341. Cause of death: multiple lacerations and severe blunt force trauma caused by [DATA EXPUNGED], who was infected with SCP-008. Said subject was located by Nine-Tailed Fox and terminated."
+										I_008\Timer = I_008\Timer + (1+(1*SelectedDifficulty\aggressiveNPCs))
+										DeathMSG = "Subject D-9341. Cause of death: multiple lacerations and severe blunt force trauma caused by [DATA REDACTED], who was infected with SCP-008. Said subject was located by Nine-Tailed Fox and terminated."
 									EndIf
 								EndIf
 							ElseIf n\Frame => 164

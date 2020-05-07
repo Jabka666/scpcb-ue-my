@@ -5977,7 +5977,7 @@ Function UpdateEvents()
 				
 				If e\EventState < 0.0 Then
 					If e\EventState > (-70) * 4.0 Then
-						Infect = 0.0
+						I_008\Timer = 0.0
 						If FallTimer >= 0.0 Then 
 							FallTimer = Min(-1.0, FallTimer)
 							PositionEntity(Head, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True), True)
@@ -6045,7 +6045,7 @@ Function UpdateEvents()
 						ForceMove = 0.5
 						Injuries = Max(2.0, Injuries)
 						Bloodloss = 0.0
-						Infect = 0.0
+						I_008\Timer = 0.0
 						
 						Pvt = CreatePivot()
 						PositionEntity(Pvt, EntityX(e\room\NPC[1]\Collider), EntityY(e\room\NPC[1]\Collider) + 0.2, EntityZ(e\room\NPC[1]\Collider))
@@ -7264,7 +7264,7 @@ Function UpdateEvents()
 												Msg = "The window shattered and a piece of glass cut your arm."
 												MsgTimer = 70 * 8
 												
-											    If Infect = 0.0 Then Infect = 1.0
+											    If I_008\Timer = 0.0 Then I_008\Timer = 1.0
 											EndIf
 											PlaySound2(LoadTempSound("SFX\General\GlassBreak.ogg"), Camera, e\room\Objects[0]) 
 											
@@ -7284,8 +7284,8 @@ Function UpdateEvents()
 							    EndIf
 								
 							    If WearingHazmat = 0 And Bloodloss > 0.0
-								    If Infect = 0.0
-									    Infect = 1.0
+								    If I_008\Timer = 0.0
+									    I_008\Timer = 1.0
 								    EndIf
 							    EndIf
 						    EndIf

@@ -236,7 +236,7 @@ Global NVTimer#
 
 Global SuperMan%, SuperManTimer#
 
-Global Injuries#, Bloodloss#, Infect#, HealTimer#
+Global Injuries#, Bloodloss#, HealTimer#
 
 Global RefinedItems%
 
@@ -931,7 +931,7 @@ Function UpdateConsole()
 					;[Block]
 					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 					
-					Infect = Float(StrTemp)
+					I_008\Timer = Float(StrTemp)
 					;[End Block]
 				Case "heal"
 					;[Block]
@@ -940,7 +940,7 @@ Function UpdateConsole()
 					
 					BlurTimer = 0.0
 					
-					Infect = 0.0
+					I_008\Timer = 0.0
 					
 					DeathTimer = 0.0
 					
@@ -2846,6 +2846,12 @@ End Type
 
 Global I_427.SCP427 = New SCP427
 
+Type SCP008
+	Field Timer#
+End Type
+
+Global I_008.SCP008 = New SCP008
+
 Type MapZones
 	Field Transition%[1]
 	Field HasCustomForest%
@@ -4563,7 +4569,7 @@ Function DrawGUI()
 			AAText(x + 350, 110, "Triangles rendered: " + CurrTrisAmount)
 			AAText(x + 350, 130, "Active textures: " + ActiveTextures())
 			AAText(x + 350, 150, "SCP-427 state (secs): " + Int(I_427\Timer / 70))
-			AAText(x + 350, 170, "SCP-008 infection: " + Infect)
+			AAText(x + 350, 170, "SCP-008 infection: " + I_008\Timer)
 			For i = 0 To 5
 				AAText(x + 350, 190 + (20 * i), "SCP-1025 State " + i + ": " + SCP1025State[i])
 			Next
@@ -5489,7 +5495,7 @@ Function DrawGUI()
 					If CanUseItem(False, False, True)
 						GiveAchievement(Achv500)
 						
-						If Infect > 0 Then
+						If I_008\Timer > 0 Then
 							Msg = "You swallowed the pill. Your nausea is fading."
 						Else
 							Msg = "You swallowed the pill."
@@ -5497,7 +5503,7 @@ Function DrawGUI()
 						MsgTimer = 70 * 7.0
 						
 						DeathTimer = 0.0
-						Infect = 0.0
+						I_008\Timer = 0.0
 						Stamina = 100.0
 						
 						For i = 0 To 5
@@ -8616,7 +8622,7 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	Bloodloss = 0.0
 	Injuries = 0.0
-	Infect = 0.0
+	I_008\Timer = 0.0
 	
 	For i = 0 To 5
 		SCP1025State[i] = 0.0
@@ -10110,8 +10116,8 @@ Function Use427()
 			If Bloodloss > 0.0 And Injuries =< 1.0 Then
 				Bloodloss = Max(Bloodloss - 0.001 * FPSfactor, 0.0)
 			EndIf
-			If Infect > 0.0 Then
-				Infect = Max(Infect - 0.001 * FPSfactor, 0.0)
+			If I_008\Timer > 0.0 Then
+				I_008\Timer = Max(I_008\Timer - 0.001 * FPSfactor, 0.0)
 			EndIf
 			For i = 0 To 5
 				If SCP1025State[i] > 0.0 Then
@@ -10272,7 +10278,7 @@ Function UpdateMTF%()
 End Function
 
 Function Update008()
-	Local Temp#, i%, r.Rooms
+	Local PrevI008Timer#, i%, r.Rooms
 	Local TeleportForInfect% = True
 	Local ov.Overlays = First Overlays
 	
@@ -10291,45 +10297,45 @@ Function Update008()
 		TeleportForInfect = False
 	EndIf
 	
-	If Infect > 0.0 Then
+	If I_008\Timer > 0.0 Then
 		ShowEntity(ov\OverlayID[3])
-		If Infect < 93.0 Then
-			Temp = Infect
+		If I_008\Timer < 93.0 Then
+			PrevI008Timer = I_008\Timer
 			If I_427\Using = 0 And I_427\Timer < 70 * 360.0 Then
-				Infect = Min(Infect + FPSfactor * 0.002, 100.0)
+				I_008\Timer = Min(I_008\Timer + FPSfactor * 0.002, 100.0)
 			EndIf
 			
-			BlurTimer = Max(Infect * 3.0 * (2.0 - CrouchState), BlurTimer)
+			BlurTimer = Max(I_008\Timer * 3.0 * (2.0 - CrouchState), BlurTimer)
 			
 			HeartBeatRate = Max(HeartBeatRate, 100.0)
-			HeartBeatVolume = Max(HeartBeatVolume, Infect / 120.0)
+			HeartBeatVolume = Max(HeartBeatVolume, I_008\Timer / 120.0)
 			
-			EntityAlpha(ov\OverlayID[3], Min(((Infect * 0.2) ^ 2.0) / 1000.0, 0.5) * (Sin(MilliSecs2() / 8.0) + 2.0))
+			EntityAlpha(ov\OverlayID[3], Min(((I_008\Timer * 0.2) ^ 2.0) / 1000.0, 0.5) * (Sin(MilliSecs2() / 8.0) + 2.0))
 			
 			For i = 0 To 6
-				If Infect > i * 15.0 + 10.0 And Temp =< i * 15.0 + 10.0 Then
+				If I_008\Timer > i * 15.0 + 10.0 And PrevI008Timer =< i * 15.0 + 10.0 Then
 					PlaySound_Strict(LoadTempSound("SFX\SCP\008\Voices" + i + ".ogg"))
 				EndIf
 			Next
 			
-			If Infect > 20.0 And Temp =< 20.0 Then
+			If I_008\Timer > 20.0 And PrevI008Timer =< 20.0 Then
 				Msg = "You feel kinda feverish."
 				MsgTimer = 70 * 6.0
-			ElseIf Infect > 40.0 And Temp =< 40.0
+			ElseIf I_008\Timer > 40.0 And PrevI008Timer =< 40.0
 				Msg = "You feel nauseated."
 				MsgTimer = 70 * 6.0
-			ElseIf Infect > 60.0 And Temp =< 60.0
+			ElseIf I_008\Timer > 60.0 And PrevI008Timer =< 60.0
 				Msg = "The nausea's getting worse."
 				MsgTimer = 70 * 6.0
-			ElseIf Infect > 80.0 And Temp =< 80.0
+			ElseIf I_008\Timer > 80.0 And PrevI008Timer =< 80.0
 				Msg = "You feel very faint."
 				MsgTimer = 70 * 6.0
-			ElseIf Infect >= 91.5
-				BlinkTimer = Max(Min((-10.0) * (Infect - 91.5), BlinkTimer), -10.0)
+			ElseIf I_008\Timer >= 91.5
+				BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 91.5), BlinkTimer), -10.0)
 				IsZombie = True
 				UnableToMove = True
-				If Infect >= 92.7 And Temp < 92.7 Then
-					If TeleportForInfect
+				If I_008\Timer >= 92.7 And PrevI008Timer < 92.7 Then
+					If TeleportForInfect Then
 						For r.Rooms = Each Rooms
 							If r\RoomTemplate\Name = "room008" Then
 								PositionEntity(Collider, EntityX(r\Objects[7], True), EntityY(r\Objects[7], True), EntityZ(r\Objects[7], True), True)
@@ -10348,15 +10354,15 @@ Function Update008()
 				EndIf
 			EndIf
 		Else
-			Temp = Infect
-			Infect = Min(Infect + FPSfactor * 0.004, 100.0)
+			PrevI008Timer = I_008\Timer
+			I_008\Timer = Min(I_008\Timer + FPSfactor * 0.004, 100.0)
 			
-			If TeleportForInfect
-				If Infect < 94.7 Then
+			If TeleportForInfect Then
+				If I_008\Timer < 94.7 Then
 					EntityAlpha(ov\OverlayID[3], 0.5 * (Sin(MilliSecs2() / 8.0) + 2.0))
 					BlurTimer = 900.0
 					
-					If Infect > 94.5 Then BlinkTimer = Max(Min((-50.0) * (Infect - 94.5), BlinkTimer), -10.0)
+					If I_008\Timer > 94.5 Then BlinkTimer = Max(Min((-50.0) * (I_008\Timer - 94.5), BlinkTimer), -10.0)
 					PointEntity(Collider, PlayerRoom\NPC[0]\Collider)
 					PointEntity(PlayerRoom\NPC[0]\Collider, Collider)
 					PointEntity(Camera, PlayerRoom\NPC[0]\Collider, EntityRoll(Camera))
@@ -10366,7 +10372,7 @@ Function Update008()
 					UnableToMove = False
 					
 					Animate2(PlayerRoom\NPC[0]\OBJ, AnimTime(PlayerRoom\NPC[0]\OBJ), 357.0, 381.0, 0.3)
-				ElseIf Infect < 98.5
+				ElseIf I_008\Timer < 98.5
 					EntityAlpha(ov\OverlayID[3], 0.5 * (Sin(MilliSecs2() / 5.0) + 2.0))
 					BlurTimer = 950
 					
@@ -10374,7 +10380,7 @@ Function Update008()
 					UnableToMove = True
 					PointEntity(Camera, PlayerRoom\NPC[0]\Collider)
 					
-					If Temp < 94.7 Then 
+					If PrevI008Timer < 94.7 Then 
 						PlayerRoom\NPC[0]\Sound = LoadSound_Strict("SFX\SCP\008\KillScientist2.ogg")
 						PlayerRoom\NPC[0]\SoundCHN = PlaySound_Strict(PlayerRoom\NPC[0]\Sound)
 						
@@ -10385,8 +10391,8 @@ Function Update008()
 						de.Decals = CreateDecal(3, EntityX(PlayerRoom\NPC[0]\Collider), 544.0 * RoomScale + 0.01, EntityZ(PlayerRoom\NPC[0]\Collider), 90.0, Rnd(360.0), 0.0)
 						de\Size = 0.8
 						ScaleSprite(de\OBJ, de\Size, de\Size)
-					ElseIf Infect > 96.0
-						BlinkTimer = Max(Min((-10.0) * (Infect - 96.0), BlinkTimer), -10.0)
+					ElseIf I_008\Timer > 96.0
+						BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 96.0), BlinkTimer), -10.0)
 					Else
 						KillTimer = Max(-350.0, KillTimer)
 					EndIf
@@ -10414,7 +10420,7 @@ Function Update008()
 				EndIf
 			Else
 				Kill()
-				BlinkTimer = Max(Min((-10.0) * (Infect - 96.0), BlinkTimer), -10.0)
+				BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 96.0), BlinkTimer), -10.0)
 				If PlayerRoom\RoomTemplate\Name = "dimension1499" Then
 					DeathMsg = "The whereabouts of SCP-1499 are still unknown, but a recon team has been dispatched to investigate reports of a violent attack to a church in the Russian town of [DATA REDACTED]."
 				ElseIf PlayerRoom\RoomTemplate\Name = "gatea" Or PlayerRoom\RoomTemplate\Name = "gateb" Then
@@ -11155,5 +11161,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#FDB#1314#1B4E
+;~B#FE1#131A#1B54
 ;~C#Blitz3D
