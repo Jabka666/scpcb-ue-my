@@ -111,6 +111,7 @@ Bug Fixes:
 - Fixed red and green frames for the HUD when player wearing a hazmat suit.
 - Fixed fog for any NVG.
 - Fixed annoying "Secondary Lighting" lever in room2ccont.
+- Fixed button sound not working when not using launcher.
 
 - Again fixed some buttons' positions.
 
@@ -282,8 +283,8 @@ v5.5
 - Added two new loading screens.
 - Added a special vehicle in the intro scene.
 - Added new commotion sound.
-- Added a drips sound in SCP-457's containment chamber.
-- Added a memorable document SCP-970.
+- Added drips sound in SCP-457's containment chamber.
+- Added a memorable document for SCP-970.
 - Added room2catwalk.
 - Added music in SCP-106's containment area.
 - Added a special badges for all personnel (except Class D).

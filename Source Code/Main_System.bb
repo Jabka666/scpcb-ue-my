@@ -88,7 +88,7 @@ If LauncherEnabled Then
 	If BorderlessWindowed
 		Graphics3DExt(G_Viewport_Width, G_VieWport_Height, 0, 2)
 		
-		; ~ Change the window style to 'WS_POPUP' and then set the window position to force the style to update.
+		; ~ Change the window style to 'WS_POPUP' and then set the window position to force the style to update
 		Api_SetWindowLong(G_App_Handle, C_GWL_STYLE, C_WS_POPUP)
 		Api_SetWindowPos(G_App_Handle, C_HWND_TOP, G_Viewport_x, G_Viewport_y, G_Viewport_Width, G_Viewport_Height, C_SWP_SHOWWINDOW)
 		
@@ -109,6 +109,8 @@ If LauncherEnabled Then
 		End If
 	EndIf
 Else
+	ButtonSFX = LoadSound_Strict("SFX\Interact\Button.ogg")
+	
 	For i% = 1 To TotalGFXModes
 		Local SameFound% = False
 		
@@ -126,11 +128,11 @@ Else
 	GraphicWidth = GfxModeWidths(SelectedGFXMode)
 	GraphicHeight = GfxModeHeights(SelectedGFXMode)
 	
-	; ~ New "fake fullscreen" - ENDSHN Psst, it's called borderless windowed mode --Love Mark,
+	; ~ New "fake fullscreen" - ENDSHN Psst, it's called borderless windowed mode -- Love Mark
 	If BorderlessWindowed
 		Graphics3DExt(G_Viewport_Width, G_Viewport_Height, 0, 2)
 		
-		; ~ Change the window style to 'WS_POPUP' and then set the window position to force the style to update.
+		; ~ Change the window style to 'WS_POPUP' and then set the window position to force the style to update
 		Api_SetWindowLong(G_App_Handle, C_GWL_STYLE, C_WS_POPUP)
 		Api_SetWindowPos(G_App_Handle, C_HWND_TOP, G_Viewport_x, G_Viewport_y, G_Viewport_Width, G_Viewport_Height, C_SWP_SHOWWINDOW)
 		
@@ -1870,7 +1872,7 @@ Global TempSoundCHN%
 Global TempSoundIndex% = 0
 
 ; ~ The Music now has to be pre-defined, as the new system uses streaming instead of the usual sound loading system Blitz3D has
-Dim Music$(40)
+Dim Music$(27)
 Music(0) = "LightContainmentZone"
 Music(1) = "HeavyContainmentZone"
 Music(2) = "EntranceZone"
@@ -2997,7 +2999,7 @@ Repeat
 				
 				If RN <> "room860" And RN <> "room1123" And RN <> "room173intro" And RN <> "dimension1499" Then
 					If FPSfactor > 0.0 Then LightBlink = Rnd(1.0, 2.0)
-					PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(1, 7) + ".ogg"))
+					PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(1, 8) + ".ogg"))
 				EndIf 
 			EndIf
 		EndIf
@@ -3166,7 +3168,7 @@ Repeat
 				SelectedItem = Null
 				SelectedScreen = Null
 				SelectedMonitor = Null
-				BlurTimer = Abs(KillTimer * 5)
+				BlurTimer = Abs(KillTimer * 5.0)
 				KillTimer = KillTimer - (FPSfactor * 0.8)
 				If KillTimer < - 360.0 Then 
 					MenuOpen = True 
@@ -11161,5 +11163,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#FE1#131A#1B54
+;~B#FE3#131C#1B56
 ;~C#Blitz3D
