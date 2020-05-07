@@ -8733,17 +8733,17 @@ Function UpdateEvents()
 				Local Is035Released% = False
 				
 				For e2.Events = Each Events
-					If e2 <> e And e2\EventName = "room035"
-						If e2\EventState < 0.0
+					If e2 <> e And e2\EventName = "room035" Then
+						If e2\EventState < 0.0 Then
 							Is035Released = True
 							Exit
 						EndIf
 					EndIf
 				Next
 				
-				If Is035Released
-					If e\room\Dist < 8.0
-						If e\room\NPC[0] = Null
+				If Is035Released Then
+					If e\room\Dist < 8.0 Then
+						If e\room\NPC[0] = Null Then
 							e\room\NPC[0] = CreateNPC(NPCtypeD, e\room\x, 0.5, e\room\z)
 							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 180.0, 0.0)
 							MoveEntity(e\room\NPC[0]\Collider, 0.0, 0.0, -0.5)
@@ -8751,9 +8751,9 @@ Function UpdateEvents()
 							ChangeNPCTextureID(e\room\NPC[0], 7)
 							SetNPCFrame(e\room\NPC[0], 19.0)
 						EndIf
-						If e\room\NPC[1] = Null
-							If EntityDistance(e\room\NPC[0]\Collider, Collider) < 2.5
-								e\room\NPC[1] = CreateNPC(NPCtype035_Tentacle, EntityX(e\room\NPC[0]\Collider), 0.0, EntityZ(e\room\NPC[0]\Collider))
+						If e\room\NPC[1] = Null Then
+							If EntityDistance(e\room\NPC[0]\Collider, Collider) < 2.5 Then
+								e\room\NPC[1] = CreateNPC(NPCtype035_Tentacle, EntityX(e\room\NPC[0]\Collider), 0.13, EntityZ(e\room\NPC[0]\Collider))
 								RotateEntity(e\room\NPC[1]\Collider, 0.0, e\room\Angle, 0.0)
 								MoveEntity(e\room\NPC[1]\Collider, 0.0, 0.0, 0.6)
 							EndIf
@@ -8766,6 +8766,10 @@ Function UpdateEvents()
 							EndIf
 						EndIf
 					EndIf
+				EndIf
+				
+				If e\room\NPC[1] <> Null Then
+					If e\room\NPC[1]\IsDead = True Then RemoveEvent(e)
 				EndIf
 				;[End Block]
 			Case "room2shaft"
