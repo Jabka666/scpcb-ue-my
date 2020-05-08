@@ -5504,7 +5504,7 @@ Function DrawGUI()
 					;[End Block]
 				Case "scp500"
 					;[Block]
-					If CanUseItem(False, False, True)
+					If CanUseItem(False, True) Then
 						GiveAchievement(Achv500)
 						
 						If I_008\Timer > 0 Then
@@ -5552,7 +5552,7 @@ Function DrawGUI()
 					;[End Block]
 				Case "veryfinefirstaid"
 					;[Block]
-					If CanUseItem(False, False, True)
+					If CanUseItem(False, True) Then
 						Select Rand(5)
 							Case 1
 								;[Block]
@@ -5620,102 +5620,100 @@ Function DrawGUI()
 						MsgTimer = 70 * 5.0
 						SelectedItem = Null
 					Else
-						If CanUseItem(False, True, True)
-							CurrSpeed = CurveValue(0.0, CurrSpeed, 5.0)
-							Crouch = True
-							
-							DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
-							
-							Width = 300.0
-							Height = 20.0
-							x = GraphicWidth / 2 - Width / 2
-							y = GraphicHeight / 2 + 80
-							Rect(x, y, Width + 4, Height, False)
-							For i = 1 To Int((Width - 2) * (SelectedItem\State / 100.0) / 10)
-								DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
-							Next
-							SelectedItem\State = Min(SelectedItem\State + (FPSfactor / 5.0), 100.0)			
-							
-							If SelectedItem\State = 100.0 Then
-								If SelectedItem\ItemTemplate\TempName = "finefirstaid" Then
-									Bloodloss = 0.0
-									Injuries = Max(0.0, Injuries - 2.0)
-									If Injuries = 0 Then
-										Msg = "You bandaged the wounds and took a painkiller. You feel fine."
-									ElseIf Injuries > 1.0
-										Msg = "You bandaged the wounds and took a painkiller, but you were not able to stop the bleeding."
-									Else
-										Msg = "You bandaged the wounds and took a painkiller, but you still feel sore."
-									EndIf
-									MsgTimer = 70 * 5.0
-									RemoveItem(SelectedItem)
+						CurrSpeed = CurveValue(0.0, CurrSpeed, 5.0)
+						Crouch = True
+						
+						DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						
+						Width = 300.0
+						Height = 20.0
+						x = GraphicWidth / 2 - Width / 2
+						y = GraphicHeight / 2 + 80
+						Rect(x, y, Width + 4, Height, False)
+						For i = 1 To Int((Width - 2) * (SelectedItem\State / 100.0) / 10)
+							DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
+						Next
+						SelectedItem\State = Min(SelectedItem\State + (FPSfactor / 5.0), 100.0)			
+						
+						If SelectedItem\State = 100.0 Then
+							If SelectedItem\ItemTemplate\TempName = "finefirstaid" Then
+								Bloodloss = 0.0
+								Injuries = Max(0.0, Injuries - 2.0)
+								If Injuries = 0 Then
+									Msg = "You bandaged the wounds and took a painkiller. You feel fine."
+								ElseIf Injuries > 1.0
+									Msg = "You bandaged the wounds and took a painkiller, but you were not able to stop the bleeding."
 								Else
-									Bloodloss = Max(0.0, Bloodloss - Rnd(10.0, 20.0))
-									If Injuries >= 2.5 Then
-										Msg = "The wounds were way too severe to staunch the bleeding completely."
-										Injuries = Max(2.5, Injuries - Rnd(0.3, 0.7))
-									ElseIf Injuries > 1.0
-										Injuries = Max(0.5, Injuries - Rnd(0.5, 1.0))
-										If Injuries > 1.0 Then
-											Msg = "You bandaged the wounds but were unable to staunch the bleeding completely."
-										Else
-											Msg = "You managed to stop the bleeding."
-										EndIf
+									Msg = "You bandaged the wounds and took a painkiller, but you still feel sore."
+								EndIf
+								MsgTimer = 70 * 5.0
+								RemoveItem(SelectedItem)
+							Else
+								Bloodloss = Max(0.0, Bloodloss - Rnd(10.0, 20.0))
+								If Injuries >= 2.5 Then
+									Msg = "The wounds were way too severe to staunch the bleeding completely."
+									Injuries = Max(2.5, Injuries - Rnd(0.3, 0.7))
+								ElseIf Injuries > 1.0
+									Injuries = Max(0.5, Injuries - Rnd(0.5, 1.0))
+									If Injuries > 1.0 Then
+										Msg = "You bandaged the wounds but were unable to staunch the bleeding completely."
 									Else
-										If Injuries > 0.5 Then
-											Injuries = 0.5
-											Msg = "You took a painkiller, easing the pain slightly."
-										Else
-											Injuries = 0.5
-											Msg = "You took a painkiller, but it still hurts to walk."
-										EndIf
+										Msg = "You managed to stop the bleeding."
 									EndIf
-									
-									If SelectedItem\ItemTemplate\TempName = "firstaid2" Then 
-										Select Rand(6)
-											Case 1
-												;[Block]
-												SuperMan = True
-												Msg = "You have becomed overwhelmedwithadrenalineholyshitWOOOOOO~!"
-												;[End Block]
-											Case 2
-												;[Block]
-												InvertMouse = (Not InvertMouse)
-												Msg = "You suddenly find it very difficult to turn your head."
-												;[End Block]
-											Case 3
-												;[Block]
-												BlurTimer = 5000.0
-												Msg = "You feel nauseated."
-												;[End Block]
-											Case 4
-												;[Block]
-												BlinkEffect = 0.6
-												BlinkEffectTimer = Rnd(20.0, 30.0)
-												;[End Block]
-											Case 5
-												;[Block]
-												Bloodloss = 0.0
-												Injuries = 0.0
-												Msg = "You bandaged the wounds. The bleeding stopped completely and you feel fine."
-												;[End Block]
-											Case 6
-												;[Block]
-												Msg = "You bandaged the wounds and blood started pouring heavily through the bandages."
-												Injuries = 3.5
-												;[End Block]
-										End Select
+								Else
+									If Injuries > 0.5 Then
+										Injuries = 0.5
+										Msg = "You took a painkiller, easing the pain slightly."
+									Else
+										Injuries = 0.5
+										Msg = "You took a painkiller, but it still hurts to walk."
 									EndIf
-									MsgTimer = 70 * 5.0
-									RemoveItem(SelectedItem)
-								EndIf							
+								EndIf
+								
+								If SelectedItem\ItemTemplate\TempName = "firstaid2" Then 
+									Select Rand(6)
+										Case 1
+											;[Block]
+											SuperMan = True
+											Msg = "You have becomed overwhelmedwithadrenalineholyshitWOOOOOO~!"
+											;[End Block]
+										Case 2
+											;[Block]
+											InvertMouse = (Not InvertMouse)
+											Msg = "You suddenly find it very difficult to turn your head."
+											;[End Block]
+										Case 3
+											;[Block]
+											BlurTimer = 5000.0
+											Msg = "You feel nauseated."
+											;[End Block]
+										Case 4
+											;[Block]
+											BlinkEffect = 0.6
+											BlinkEffectTimer = Rnd(20.0, 30.0)
+											;[End Block]
+										Case 5
+											;[Block]
+											Bloodloss = 0.0
+											Injuries = 0.0
+											Msg = "You bandaged the wounds. The bleeding stopped completely and you feel fine."
+											;[End Block]
+										Case 6
+											;[Block]
+											Msg = "You bandaged the wounds and blood started pouring heavily through the bandages."
+											Injuries = 3.5
+											;[End Block]
+									End Select
+								EndIf
+								MsgTimer = 70 * 5.0
+								RemoveItem(SelectedItem)
 							EndIf
 						EndIf
 					EndIf
 					;[End Block]
 				Case "eyedrops"
 					;[Block]
-					If CanUseItem(False, False, False)
+					If CanUseItem(False, False) Then
 						BlinkEffect = 0.6
 						BlinkEffectTimer = Rnd(20.0, 30.0)
 						BlurTimer = 200.0
@@ -5728,7 +5726,7 @@ Function DrawGUI()
 					;[End Block]
 				Case "fineeyedrops"
 					;[Block]
-					If CanUseItem(False, False, False)
+					If CanUseItem(False, False) Then
 						BlinkEffect = 0.4
 						BlinkEffectTimer = Rnd(30.0, 40.0)
 						Bloodloss = Max(Bloodloss - 1.0, 0.0)
@@ -5742,7 +5740,7 @@ Function DrawGUI()
 					;[End Block]
 				Case "supereyedrops"
 					;[Block]
-					If CanUseItem(False, False, False)
+					If CanUseItem(False, False) Then
 						BlinkEffect = 0.0
 						BlinkEffectTimer = 60.0
 						EyeStuck = 10000.0
@@ -5821,7 +5819,7 @@ Function DrawGUI()
 					;[End Block]
 				Case "cup"
 					;[Block]
-					If CanUseItem(False, False, True)
+					If CanUseItem(False, True) Then
 						SelectedItem\Name = Trim(Lower(SelectedItem\Name))
 						If Left(SelectedItem\Name, Min(6, Len(SelectedItem\Name))) = "cup of" Then
 							SelectedItem\Name = Right(SelectedItem\Name, Len(SelectedItem\Name) - 7)
@@ -5881,56 +5879,50 @@ Function DrawGUI()
 					;[End Block]
 				Case "syringe"
 					;[Block]
-					If CanUseItem(False, True, True)
-						HealTimer = 30.0
-						StaminaEffect = 0.5
-						StaminaEffectTimer = 20.0
-						
-						Msg = "You injected yourself with the syringe and feel a slight adrenaline rush."
-						MsgTimer = 70 * 8.0
-						
-						RemoveItem(SelectedItem)
-					EndIf
+					HealTimer = 30.0
+					StaminaEffect = 0.5
+					StaminaEffectTimer = 20.0
+					
+					Msg = "You injected yourself with the syringe and feel a slight adrenaline rush."
+					MsgTimer = 70 * 8.0
+					
+					RemoveItem(SelectedItem)
 					;[End Block]
 				Case "finesyringe"
 					;[Block]
-					If CanUseItem(False, True, True)
-						HealTimer = Rnd(20.0, 40.0)
-						StaminaEffect = Rnd(0.5, 0.8)
-						StaminaEffectTimer = Rnd(20.0, 30.0)
-						
-						Msg = "You injected yourself with the syringe and feel an adrenaline rush."
-						MsgTimer = 70 * 8.0
-						
-						RemoveItem(SelectedItem)
-					EndIf
+					HealTimer = Rnd(20.0, 40.0)
+					StaminaEffect = Rnd(0.5, 0.8)
+					StaminaEffectTimer = Rnd(20.0, 30.0)
+					
+					Msg = "You injected yourself with the syringe and feel an adrenaline rush."
+					MsgTimer = 70 * 8.0
+					
+					RemoveItem(SelectedItem)
 					;[End Block]
 				Case "veryfinesyringe"
 					;[Block]
-					If CanUseItem(False, True, True)
-						Select Rand(3)
-							Case 1
-								;[Block]
-								HealTimer = Rnd(40.0, 60.0)
-								StaminaEffect = 0.1
-								StaminaEffectTimer = 30.0
-								Msg = "You injected yourself with the syringe and feel a huge adrenaline rush."
-								;[End Block]
-							Case 2
-								;[Block]
-								SuperMan = True
-								Msg = "You injected yourself with the syringe and feel a humongous adrenaline rush."
-								;[End Block]
-							Case 3
-								;[Block]
-								VomitTimer = 30.0
-								Msg = "You injected yourself with the syringe and feel a pain in your stomach."
-								;[End Block]
-						End Select
-						
-						MsgTimer = 70 * 8.0
-						RemoveItem(SelectedItem)
-					EndIf
+					Select Rand(3)
+						Case 1
+							;[Block]
+							HealTimer = Rnd(40.0, 60.0)
+							StaminaEffect = 0.1
+							StaminaEffectTimer = 30.0
+							Msg = "You injected yourself with the syringe and feel a huge adrenaline rush."
+							;[End Block]
+						Case 2
+							;[Block]
+							SuperMan = True
+							Msg = "You injected yourself with the syringe and feel a humongous adrenaline rush."
+							;[End Block]
+						Case 3
+							;[Block]
+							VomitTimer = 30.0
+							Msg = "You injected yourself with the syringe and feel a pain in your stomach."
+							;[End Block]
+					End Select
+					
+					MsgTimer = 70 * 8.0
+					RemoveItem(SelectedItem)
 					;[End Block]
 				Case "radio", "18vradio", "fineradio", "veryfineradio"
 					;[Block]
@@ -6284,7 +6276,7 @@ Function DrawGUI()
 					;[End Block]
 				Case "cigarette"
 					;[Block]
-					If CanUseItem(False, False, True) Then
+					If CanUseItem(False, True) Then
 						Select Rand(6)
 							Case 1
 								;[Block]
@@ -6317,7 +6309,7 @@ Function DrawGUI()
 					;[End Block]
 				Case "scp420j"
 					;[Block]
-					If CanUseItem(False, False, True) Then
+					If CanUseItem(False, True) Then
 						If Wearing714 = 1 Or WearingGasMask = 3 Or WearingHazmat = 3 Then
 							Msg = Chr(34) + "DUDE WTF THIS SHIT DOESN'T EVEN WORK." + Chr(34)
 						Else
@@ -6333,7 +6325,7 @@ Function DrawGUI()
 					;[End Block]
 				Case "joint"
 					;[Block]
-					If CanUseItem(False, False, True) Then
+					If CanUseItem(False, True) Then
 						If Wearing714 = 1 Or WearingGasMask = 3 Or WearingHazmat = 3 Then
 							Msg = Chr(34) + "DUDE WTF THIS SHIT DOESN'T EVEN WORK." + Chr(34)
 						Else
@@ -6856,7 +6848,7 @@ Function DrawGUI()
 					;[End Block]
 				Case "pill"
 					;[Block]
-					If CanUseItem(False, False, True)
+					If CanUseItem(False, True) Then
 						Msg = "You swallowed the pill."
 						MsgTimer = 70.0 * 7.0
 						
@@ -6866,7 +6858,7 @@ Function DrawGUI()
 					;[End Block]
 				Case "scp500death"
 					;[Block]
-					If CanUseItem(False, False, True)
+					If CanUseItem(False, True) Then
 						Msg = "You swallowed the pill."
 						MsgTimer = 70.0 * 7.0
 						
@@ -6963,7 +6955,7 @@ Function DrawGUI()
 		EndIf
 	Next
 	
-	If PrevInvOpen And (Not InvOpen) Then MoveMouse Viewport_Center_X, Viewport_Center_Y
+	If PrevInvOpen And (Not InvOpen) Then MoveMouse(Viewport_Center_X, Viewport_Center_Y)
 	
 	CatchErrors("DrawGUI")
 End Function
@@ -8651,7 +8643,7 @@ Function NullGame(PlayButtonSFX% = True)
 	Shake = 0.0
 	LightFlash = 0.0
 	
-	WireframeState = 0
+	WireFrameState = 0
 	WireFrame(0)
 	WearingGasMask = 0
 	WearingHazmat = 0
@@ -10823,7 +10815,7 @@ Function ScaleRender(x#, y#, hScale# = 1.0, vScale# = 1.0)
 	RenderWorld()
 	HideEntity(Fresize_Cam)
 	HideEntity(Fresize_Image)
-	WireFrame(WireframeState)
+	WireFrame(WireFrameState)
 	If Camera <> 0 Then ShowEntity(Camera)
 End Function
 
@@ -11136,17 +11128,15 @@ Function PlayStartupVideos()
 	FreeFont(fo\FontID[0])
 End Function
 
-Function CanUseItem(CanUseWithHazmat%, CanUseWithGasMask%, CanUseWithEyewear%)
-	If (CanUseWithHazmat = False And WearingHazmat) Then
-		Msg = "You can't use that item while wearing a hazmat suit."
-		MsgTimer = 70.0 * 5.0
-		Return(False)
-	Else If (CanUseWithGasMask = False And (WearingGasMask Or Wearing1499))
+Function CanUseItem(CanUseWithGasMask%, CanUseWithEyewear%)
+	If (CanUseWithGasMask = False And (WearingGasMask > 0 Or Wearing1499 > 0))
 		Msg = "You can't use that item while wearing a gas mask."
 		MsgTimer = 70.0 * 5.0
 		Return(False)
-	Else If (CanUseWithEyewear = False And (WearingNightVision))
+	Else If (CanUseWithEyewear = False And (WearingNightVision > 0))
 		Msg = "You can't use that item while wearing headgear."
+		MsgTimer = 70.0 * 5.0
+		Return(False)
 	EndIf
 	Return(True)
 End Function
@@ -11179,5 +11169,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#FEA#1326#1B61
+;~B#FEA#1326#1B59
 ;~C#Blitz3D
