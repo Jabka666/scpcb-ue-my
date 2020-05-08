@@ -52,7 +52,8 @@ LoadSaveGames()
 Global CurrLoadGamePage% = 0
 
 Function UpdateMainMenu()
-	Local x%, y%, width%, height%, temp%
+	Local x%, y%, Width%, Height%, Temp%
+	Local fo.Fonts = First Fonts
 	
 	Color 0,0,0
 	Rect 0,0,GraphicWidth,GraphicHeight,True
@@ -70,7 +71,7 @@ Function UpdateMainMenu()
 		MenuBlinkDuration(0) = Rand(200, 500)
 	End If
 	
-	AASetFont Font1
+	AASetFont fo\FontID[0]
 	
 	MenuBlinkTimer(1)=MenuBlinkTimer(1)-FPSfactor
 	If MenuBlinkTimer(1) < MenuBlinkDuration(1) Then
@@ -115,7 +116,7 @@ Function UpdateMainMenu()
 		EndIf
 	EndIf
 	
-	AASetFont Font2
+	AASetFont fo\FontID[1]
 	
 	DrawImage(MenuText, GraphicWidth / 2 - ImageWidth(MenuText) / 2, GraphicHeight - 20 * MenuScale - ImageHeight(MenuText))
 	
@@ -264,7 +265,7 @@ Function UpdateMainMenu()
 				height = 70 * MenuScale
 				
 				Color(255, 255, 255)
-				AASetFont Font2
+				AASetFont fo\FontID[1]
 				AAText(x + width / 2, y + height / 2, "NEW GAME", True, True)
 				
 				x = 160 * MenuScale
@@ -274,7 +275,7 @@ Function UpdateMainMenu()
 				
 				DrawFrame(x, y, width, height)				
 				
-				AASetFont Font1
+				AASetFont fo\FontID[0]
 				
 				AAText (x + 20 * MenuScale, y + 20 * MenuScale, "Name:")
 				CurrSave = InputBox(x + 150 * MenuScale, y + 15 * MenuScale, 200 * MenuScale, 30 * MenuScale, CurrSave, 1)
@@ -373,7 +374,7 @@ Function UpdateMainMenu()
 					LoadSavedMaps()
 				EndIf
 				
-				AASetFont Font2
+				AASetFont fo\FontID[1]
 				
 				If DrawButton(x + 420 * MenuScale, y + height + 20 * MenuScale, 160 * MenuScale, 70 * MenuScale, "START", False) Then
 					If CurrSave = "" Then CurrSave = "untitled"
@@ -421,7 +422,7 @@ Function UpdateMainMenu()
 				height = 70 * MenuScale
 				
 				Color(255, 255, 255)
-				AASetFont Font2
+				AASetFont fo\FontID[1]
 				AAText(x + width / 2, y + height / 2, "LOAD GAME", True, True)
 				
 				x = 160 * MenuScale
@@ -429,9 +430,9 @@ Function UpdateMainMenu()
 				width = 580 * MenuScale
 				height = 296 * MenuScale
 				
-				;AASetFont Font1	
+				;AASetFont fo\FontID[0]	
 				
-				AASetFont Font2
+				AASetFont fo\FontID[1]
 				
 				If CurrLoadGamePage < Ceil(Float(SaveGameAmount)/6.0)-1 And SaveMSG = "" Then 
 					If DrawButton(x+530*MenuScale, y + 510*MenuScale, 50*MenuScale, 55*MenuScale, ">") Then
@@ -456,7 +457,7 @@ Function UpdateMainMenu()
 				
 				AAText(x+(width/2.0),y+536*MenuScale,"Page "+Int(Max((CurrLoadGamePage+1),1))+"/"+Int(Max((Int(Ceil(Float(SaveGameAmount)/6.0))),1)),True,True)
 				
-				AASetFont Font1
+				AASetFont fo\FontID[0]
 				
 				If CurrLoadGamePage > Ceil(Float(SaveGameAmount)/6.0)-1 Then
 					CurrLoadGamePage = CurrLoadGamePage - 1
@@ -555,7 +556,7 @@ Function UpdateMainMenu()
 				height = 70 * MenuScale
 				
 				Color(255, 255, 255)
-				AASetFont Font2
+				AASetFont fo\FontID[1]
 				AAText(x + width / 2, y + height / 2, "OPTIONS", True, True)
 				
 				x = 160 * MenuScale
@@ -581,7 +582,7 @@ Function UpdateMainMenu()
 				If DrawButton(x+300*MenuScale,y+15*MenuScale,width/5,height/2, "CONTROLS", False) Then MainMenuTab = 6
 				If DrawButton(x+440*MenuScale,y+15*MenuScale,width/5,height/2, "ADVANCED", False) Then MainMenuTab = 7
 				
-				AASetFont Font1
+				AASetFont fo\FontID[0]
 				y = y + 70 * MenuScale
 				
 				If MainMenuTab <> 5
@@ -1000,12 +1001,12 @@ Function UpdateMainMenu()
 							;Next
 						EndIf
 						InitAAFont()
-						Font1% = AALoadFont("GFX\font\cour\Courier New.ttf", Int(18 * (GraphicHeight / 1024.0)), 0,0,0)
-						Font2% = AALoadFont("GFX\font\courbd\Courier New.ttf", Int(58 * (GraphicHeight / 1024.0)), 0,0,0)
-						Font3% = AALoadFont("GFX\font\DS-DIGI\DS-Digital.ttf", Int(22 * (GraphicHeight / 1024.0)), 0,0,0)
-						Font4% = AALoadFont("GFX\font\DS-DIGI\DS-Digital.ttf", Int(60 * (GraphicHeight / 1024.0)), 0,0,0)
-						Font5% = AALoadFont("GFX\font\Journal\Journal.ttf", Int(58 * (GraphicHeight / 1024.0)), 0,0,0)
-						ConsoleFont% = AALoadFont("Blitz", Int(22 * (GraphicHeight / 1024.0)), 0,0,0,1)
+						fo\FontID[0] = AALoadFont("GFX\font\cour\Courier New.ttf", Int(18 * (GraphicHeight / 1024.0)), 0,0,0)
+						fo\FontID[1] = AALoadFont("GFX\font\courbd\Courier New.ttf", Int(58 * (GraphicHeight / 1024.0)), 0,0,0)
+						fo\FontID[2] = AALoadFont("GFX\font\DS-DIGI\DS-Digital.ttf", Int(22 * (GraphicHeight / 1024.0)), 0,0,0)
+						fo\FontID[3] = AALoadFont("GFX\font\DS-DIGI\DS-Digital.ttf", Int(60 * (GraphicHeight / 1024.0)), 0,0,0)
+						fo\FontID[4] = AALoadFont("GFX\font\Journal\Journal.ttf", Int(58 * (GraphicHeight / 1024.0)), 0,0,0)
+						fo\ConsoleFont = AALoadFont("Blitz", Int(22 * (GraphicHeight / 1024.0)), 0,0,0,1)
 						;ReloadAAFont()
 						AATextEnable_Prev% = AATextEnable
 					EndIf
@@ -1030,7 +1031,7 @@ Function UpdateMainMenu()
 				height = 70 * MenuScale
 				
 				Color(255, 255, 255)
-				AASetFont Font2
+				AASetFont fo\FontID[1]
 				AAText(x + width / 2, y + height / 2, "LOAD MAP", True, True)
 				
 				x = 160 * MenuScale
@@ -1038,7 +1039,7 @@ Function UpdateMainMenu()
 				width = 580 * MenuScale
 				height = 350 * MenuScale
 				
-				AASetFont Font2
+				AASetFont fo\FontID[1]
 				
 				tx# = x+width
 				ty# = y
@@ -1068,13 +1069,13 @@ Function UpdateMainMenu()
 				
 				AAText(x+(width/2.0),y+536*MenuScale,"Page "+Int(Max((CurrLoadGamePage+1),1))+"/"+Int(Max((Int(Ceil(Float(SavedMapsAmount)/6.0))),1)),True,True)
 				
-				AASetFont Font1
+				AASetFont fo\FontID[0]
 				
 				If CurrLoadGamePage > Ceil(Float(SavedMapsAmount)/6.0)-1 Then
 					CurrLoadGamePage = CurrLoadGamePage - 1
 				EndIf
 				
-				AASetFont Font1
+				AASetFont fo\FontID[0]
 				
 				If SavedMaps(0)="" Then 
 					AAText (x + 20 * MenuScale, y + 20 * MenuScale, "No saved maps. Use the Map Creator to create new maps.")
@@ -1108,17 +1109,19 @@ Function UpdateMainMenu()
 	End If
 	
 	Color 255,255,255
-	AASetFont ConsoleFont
+	AASetFont fo\ConsoleFont
 	AAText(20, GraphicHeight - 50, "v" + VersionNumber)
 	
 	;DrawTiledImageRect(MenuBack, 985 * MenuScale, 860 * MenuScale, 200 * MenuScale, 20 * MenuScale, 1200 * MenuScale, 866 * MenuScale, 300, 20 * MenuScale)
 	
 	If Fullscreen Then DrawImage CursorIMG, ScaledMouseX(),ScaledMouseY()
 	
-	AASetFont Font1
+	AASetFont fo\FontID[0]
 End Function
 
 Function UpdateLauncher()
+	Local fo.Fonts = First Fonts
+	
 	MenuScale = 1
 	
 	Graphics3DExt(LauncherWidth, LauncherHeight, 0, 2)
@@ -1130,8 +1133,8 @@ Function UpdateLauncher()
 	RealGraphicWidth = GraphicWidth
 	RealGraphicHeight = GraphicHeight
 	
-	Font1 = LoadFont_Strict("GFX\font\cour\Courier New.ttf", 18, 0,0,0)
-	SetFont Font1
+	fo\FontID[0] = LoadFont_Strict("GFX\font\cour\Courier New.ttf", 18, 0,0,0)
+	SetFont fo\FontID[0]
 	MenuWhite = LoadImage_Strict("GFX\menu\menuwhite.jpg")
 	MenuBlack = LoadImage_Strict("GFX\menu\menublack.jpg")	
 	MaskImage MenuBlack, 255,255,0
@@ -1386,7 +1389,7 @@ Function InitLoadingScreens(file$)
 End Function
 
 Function DrawLoading(percent%, shortloading=False)
-	
+	Local fo.Fonts = First Fonts
 	Local x%, y%
 	
 	If percent = 0 Then
@@ -1466,7 +1469,7 @@ Function DrawLoading(percent%, shortloading=False)
 				EndIf
 			EndIf
 			
-			AASetFont Font2
+			AASetFont fo\FontID[1]
 			strtemp$ = ""
 			temp = Rand(2,9)
 			For i = 0 To temp
@@ -1517,20 +1520,20 @@ Function DrawLoading(percent%, shortloading=False)
 			For i = 0 To Rand(10,15);temp
 				strtemp$ = Replace(SelectedLoadingScreen\txt[0],Mid(SelectedLoadingScreen\txt[0],Rand(1,Len(strtemp)-1),1),Chr(Rand(130,250)))
 			Next		
-			AASetFont Font1
+			AASetFont fo\FontID[0]
 			RowText(strtemp, GraphicWidth / 2-200, GraphicHeight / 2 +120,400,300,True)		
 		Else
 			
 			Color 0,0,0
-			AASetFont Font2
+			AASetFont fo\FontID[1]
 			AAText(GraphicWidth / 2 + 1, GraphicHeight / 2 + 80 + 1, SelectedLoadingScreen\title, True, True)
-			AASetFont Font1
+			AASetFont fo\FontID[0]
 			RowText(SelectedLoadingScreen\txt[LoadingScreenText], GraphicWidth / 2-200+1, GraphicHeight / 2 +120+1,400,300,True)
 			
 			Color 255,255,255
-			AASetFont Font2
+			AASetFont fo\FontID[1]
 			AAText(GraphicWidth / 2, GraphicHeight / 2 +80, SelectedLoadingScreen\title, True, True)
-			AASetFont Font1
+			AASetFont fo\FontID[0]
 			RowText(SelectedLoadingScreen\txt[LoadingScreenText], GraphicWidth / 2-200, GraphicHeight / 2 +120,400,300,True)
 			
 		EndIf
@@ -1660,13 +1663,14 @@ Function DrawFrame(x%, y%, width%, height%, xoffset%=0, yoffset%=0)
 End Function
 
 Function DrawButton%(x%, y%, width%, height%, txt$, bigfont% = True, waitForMouseUp%=False, usingAA%=True)
-	Local clicked% = False
+	Local Clicked% = False
+	Local fo.Fonts = First Fonts
 	
 	DrawFrame (x, y, width, height)
 	If MouseOn(x, y, width, height) Then
 		Color(30, 30, 30)
 		If (MouseHit1 And (Not waitForMouseUp)) Or (MouseUp1 And waitForMouseUp) Then 
-			clicked = True
+			Clicked = True
 			PlaySound_Strict(ButtonSFX)
 		EndIf
 		Rect(x + 4, y + 4, width - 8, height - 8)	
@@ -1676,34 +1680,35 @@ Function DrawButton%(x%, y%, width%, height%, txt$, bigfont% = True, waitForMous
 	
 	Color (255, 255, 255)
 	If usingAA Then
-		If bigfont Then AASetFont Font2 Else AASetFont Font1
+		If bigfont Then AASetFont fo\FontID[1] Else AASetFont fo\FontID[0]
 		AAText(x + width / 2, y + height / 2, txt, True, True)
 	Else
-		If bigfont Then SetFont Font2 Else SetFont Font1
+		If bigfont Then SetFont fo\FontID[1] Else SetFont fo\FontID[0]
 		Text(x + width / 2, y + height / 2, txt, True, True)
 	EndIf
 	
-	Return clicked
+	Return Clicked
 End Function
 
 Function DrawButton2%(x%, y%, width%, height%, txt$, bigfont% = True)
-	Local clicked% = False
+	Local Clicked% = False
+	Local fo.Fonts = First Fonts
 	
 	DrawFrame (x, y, width, height)
 	Local hit% = MouseHit(1)
 	If MouseOn(x, y, width, height) Then
 		Color(30, 30, 30)
-		If hit Then clicked = True : PlaySound_Strict(ButtonSFX)
+		If hit Then Clicked = True : PlaySound_Strict(ButtonSFX)
 		Rect(x + 4, y + 4, width - 8, height - 8)	
 	Else
 		Color(0, 0, 0)
 	EndIf
 	
 	Color (255, 255, 255)
-	If bigfont Then SetFont Font2 Else SetFont Font1
+	If bigfont Then SetFont fo\FontID[1] Else SetFont fo\FontID[0]
 	Text(x + width / 2, y + height / 2, txt, True, True)
 	
-	Return clicked
+	Return Clicked
 End Function
 
 Function DrawTick%(x%, y%, selected%, locked% = False)
@@ -1967,16 +1972,16 @@ Function LimitText%(txt$, x%, y%, width%, usingAA%=True)
 End Function
 
 Function DrawTooltip(message$)
-	Local scale# = GraphicHeight/768.0
-	
-	Local width = (AAStringWidth(message$))+20*MenuScale
+	Local Scale# = GraphicHeight/768.0
+	Local Width = (AAStringWidth(message$))+20*MenuScale
+	Local fo.Fonts = First Fonts
 	
 	Color 25,25,25
-	Rect(ScaledMouseX()+20,ScaledMouseY(),width,19*scale,True)
+	Rect(ScaledMouseX()+20,ScaledMouseY(),Width,19*Scale,True)
 	Color 150,150,150
-	Rect(ScaledMouseX()+20,ScaledMouseY(),width,19*scale,False)
-	AASetFont Font1
-	AAText(ScaledMouseX()+(20*MenuScale)+(width/2),ScaledMouseY()+(12*MenuScale), message$, True, True)
+	Rect(ScaledMouseX()+20,ScaledMouseY(),Width,19*Scale,False)
+	AASetFont fo\FontID[0]
+	AAText(ScaledMouseX()+(20*MenuScale)+(Width/2),ScaledMouseY()+(12*MenuScale), message$, True, True)
 End Function
 
 Global QuickLoadPercent% = -1
@@ -1984,12 +1989,13 @@ Global QuickLoadPercent_DisplayTimer# = 0
 Global QuickLoad_CurrEvent.Events
 
 Function DrawQuickLoading()
+	Local fo.Fonts = First Fonts
 	
 	If QuickLoadPercent > -1
 		MidHandle QuickLoadIcon
 		DrawImage QuickLoadIcon,GraphicWidth-90,GraphicHeight-150
 		Color 255,255,255
-		AASetFont Font1
+		AASetFont fo\FontID[0]
 		AAText GraphicWidth-100,GraphicHeight-90,"LOADING: "+QuickLoadPercent+"%",1
 		If QuickLoadPercent > 99
 			If QuickLoadPercent_DisplayTimer < 70
@@ -2016,8 +2022,9 @@ Function DrawOptionsTooltip(x%,y%,width%,height%,option$,value#=0,ingame%=False)
 	Local txt$ = ""
 	Local txt2$ = "", R% = 0, G% = 0, B% = 0
 	Local usetestimg% = False, extraspace% = 0
+	Local fo.Fonts = First Fonts
 	
-	AASetFont Font1
+	AASetFont fo\FontID[0]
 	Color 255,255,255
 	Select Lower(option$)
 		;Graphic options
@@ -2170,8 +2177,9 @@ Function DrawMapCreatorTooltip(x%,y%,width%,height%,mapname$)
 	Local fw# = width-12*MenuScale
 	Local fh# = height-12*MenuScale
 	Local lines% = 0
+	Local fo.Fonts = First Fonts
 	
-	AASetFont Font1
+	AASetFont fo\FontID[0]
 	Color 255,255,255
 	
 	Local txt$[5]

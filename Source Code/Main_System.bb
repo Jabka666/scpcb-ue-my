@@ -5,9 +5,7 @@ If FileSize("dplayx.dll") = 0 Then InitErrorStr = InitErrorStr + "dplayx.dll" + 
 If FileSize("BlitzMovie.dll") = 0 Then InitErrorStr = InitErrorStr + "BlitzMovie.dll" + Chr(13) + Chr(10)
 If FileSize("FreeImage.dll") = 0 Then InitErrorStr = InitErrorStr + "FreeImage.dll" + Chr(13) + Chr(10)
 
-If Len(InitErrorStr) > 0 Then
-	RuntimeError("The following DLLs were not found in the game directory:" + Chr(13) + Chr(10) + Chr(13) + Chr(10) + InitErrorStr)
-EndIf
+If Len(InitErrorStr) > 0 Then RuntimeError("The following DLLs were not found in the game directory:" + Chr(13) + Chr(10) + Chr(13) + Chr(10) + InitErrorStr)
 
 Include "Source Code\FMod.bb"
 Include "Source Code\StrictLoads.bb"
@@ -26,15 +24,20 @@ While FileType(ErrorFile + Str(ErrorFileInd) + ".txt") <> 0
 Wend
 ErrorFile = ErrorFile + Str(ErrorFileInd) + ".txt"
 
-Global Font1%, Font2%, Font3%, Font4%, Font5%
-Global ConsoleFont%
+Type Fonts
+	Field FontID%[MaxFontIDAmount - 1]
+	Field ConsoleFont%
+	Field CreditsFontID%[MaxCreditsFontIDAmount - 1]
+End Type
+
+Local fo.Fonts = New Fonts
 
 Global MenuWhite%, MenuBlack%
 Global ButtonSFX%
 
 Global EnableSFXRelease_Prev% = EnableSFXRelease
 
-Dim ArrowIMG(4)
+Dim ArrowIMG%(4)
 
 Global Depth% = 0
 
@@ -45,7 +48,7 @@ Global SelectedGFXMode%
 Global Fresize_Image%, Fresize_Texture%, Fresize_Texture2%
 Global Fresize_Cam%
 
-Global WireframeState%
+Global WireFrameState%
 Global HalloweenTex%
 
 Global TotalGFXModes% = CountGfxModes3D(), GFXModes%
@@ -86,11 +89,11 @@ If LauncherEnabled Then
 	
 	; ~ New "fake fullscreen" - ENDSHN Psst, it's called borderless windowed mode -- Love Mark
 	If BorderlessWindowed
-		Graphics3DExt(G_Viewport_Width, G_VieWport_Height, 0, 2)
+		Graphics3DExt(G_Viewport_Width, G_Viewport_Height, 0, 2)
 		
 		; ~ Change the window style to 'WS_POPUP' and then set the window position to force the style to update
 		Api_SetWindowLong(G_App_Handle, C_GWL_STYLE, C_WS_POPUP)
-		Api_SetWindowPos(G_App_Handle, C_HWND_TOP, G_Viewport_x, G_Viewport_y, G_Viewport_Width, G_Viewport_Height, C_SWP_SHOWWINDOW)
+		Api_SetWindowPos(G_App_Handle, C_HWND_TOP, G_Viewport_X, G_Viewport_Y, G_Viewport_Width, G_Viewport_Height, C_SWP_SHOWWINDOW)
 		
 		RealGraphicWidth = G_Viewport_Width
 		RealGraphicHeight = G_Viewport_Height
@@ -185,17 +188,15 @@ InitAAFont()
 ; ~ Don't match their "internal name" (i.e. their display name in applications like Word and such).
 ; ~ As a workaround, I moved the files and renamed them so they
 ; ~ Can load without FastText.
-Font1 = AALoadFont("GFX\font\cour\Courier New.ttf", Int(19 * (GraphicHeight / 1024.0)), 0, 0, 0)
-Font2 = AALoadFont("GFX\font\courbd\Courier New.ttf", Int(58 * (GraphicHeight / 1024.0)), 0, 0, 0)
-Font3 = AALoadFont("GFX\font\DS-DIGI\DS-Digital.ttf", Int(22 * (GraphicHeight / 1024.0)), 0, 0, 0)
-Font4 = AALoadFont("GFX\font\DS-DIGI\DS-Digital.ttf", Int(60 * (GraphicHeight / 1024.0)), 0, 0, 0)
-Font5 = AALoadFont("GFX\font\Journal\Journal.ttf", Int(58 * (GraphicHeight / 1024.0)), 0, 0, 0)
+fo\FontID[0] = AALoadFont("GFX\font\cour\Courier New.ttf", Int(19 * (GraphicHeight / 1024.0)), 0, 0, 0)
+fo\FontID[1] = AALoadFont("GFX\font\courbd\Courier New.ttf", Int(58 * (GraphicHeight / 1024.0)), 0, 0, 0)
+fo\FontID[2] = AALoadFont("GFX\font\DS-DIGI\DS-Digital.ttf", Int(22 * (GraphicHeight / 1024.0)), 0, 0, 0)
+fo\FontID[3] = AALoadFont("GFX\font\DS-DIGI\DS-Digital.ttf", Int(60 * (GraphicHeight / 1024.0)), 0, 0, 0)
+fo\FontID[4] = AALoadFont("GFX\font\Journal\Journal.ttf", Int(58 * (GraphicHeight / 1024.0)), 0, 0, 0)
 
-Global CreditsFont%, CreditsFont2%
+fo\ConsoleFont = AALoadFont("Blitz", Int(20 * (GraphicHeight / 1024.0)), 0, 0, 0, 1)
 
-ConsoleFont = AALoadFont("Blitz", Int(20 * (GraphicHeight / 1024.0)), 0, 0, 0, 1)
-
-AASetFont(Font2)
+AASetFont(fo\FontID[1])
 
 Global BlinkMeterIMG% = LoadImage_Strict("GFX\blinkmeter.jpg")
 
@@ -342,6 +343,7 @@ End Function
 
 Function UpdateConsole()
 	Local e.Events
+	Local fo.Fonts = First Fonts
 	
 	If CanOpenConsole = False Then
 		ConsoleOpen = False
@@ -351,7 +353,7 @@ Function UpdateConsole()
 	If ConsoleOpen Then
 		Local cm.ConsoleMsg
 		
-		AASetFont(ConsoleFont)
+		AASetFont(fo\ConsoleFont)
 		
 		ConsoleR = 255 : ConsoleG = 255 : ConsoleB = 255
 		
@@ -1824,7 +1826,7 @@ Function UpdateConsole()
 		If FullScreen Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	End If
 	
-	AASetFont(Font1)
+	AASetFont(fo\FontID[0])
 End Function
 
 ConsoleR = 0 : ConsoleG = 255 : ConsoleB = 255
@@ -3359,7 +3361,7 @@ Repeat
 		End If
 		
 		Color(255, 255, 255)
-		If ShowFPS Then AASetFont(ConsoleFont) : AAText(20, 20, "FPS: " + FPS) : AASetFont(Font1)
+		If ShowFPS Then AASetFont(fo\ConsoleFont) : AAText(20, 20, "FPS: " + FPS) : AASetFont(fo\FontID[0])
 		
 		DrawQuickLoading()
 		
@@ -3447,6 +3449,8 @@ Function Kill()
 End Function
 
 Function DrawEnding()
+	Local fo.Fonts = First Fonts
+	
 	ShowPointer()
 	
 	FPSfactor = 0.0
@@ -3531,9 +3535,9 @@ Function DrawEnding()
 				DrawImage(PauseMenuIMG, x, y)
 				
 				Color(255, 255, 255)
-				AASetFont(Font2)
+				AASetFont(fo\FontID[1])
 				AAText(x + Width / 2 + 40 * MenuScale, y + 20 * MenuScale, "THE END", True)
-				AASetFont(Font1)
+				AASetFont(fo\FontID[0])
 				
 				If AchievementsMenu = 0 Then 
 					x = x + 132 * MenuScale
@@ -3608,7 +3612,7 @@ Function DrawEnding()
 	EndIf
 	If FullScreen Then DrawImage(CursorIMG), ScaledMouseX(), ScaledMouseY()
 	
-	AASetFont(Font1)
+	AASetFont(fo\FontID[0])
 End Function
 
 Type CreditsLine
@@ -3621,12 +3625,13 @@ Global CreditsTimer# = 0.0
 Global CreditsScreen%
 
 Function InitCredits()
+	Local fo.Fonts = First Fonts
 	Local cl.CreditsLine
 	Local File% = OpenFile("Credits.txt")
 	Local l$
 	
-	CreditsFont = LoadFont_Strict("GFX\font\cour\Courier New.ttf", Int(21 * (GraphicHeight / 1024)), 0, 0, 0)
-	CreditsFont2 = LoadFont_Strict("GFX\font\courbd\Courier New.ttf", Int(35 * (GraphicHeight / 1024)), 0, 0, 0)
+	fo\CreditsFontID[0] = LoadFont_Strict("GFX\font\cour\Courier New.ttf", Int(21 * (GraphicHeight / 1024)), 0, 0, 0)
+	fo\CreditsFontID[1] = LoadFont_Strict("GFX\font\courbd\Courier New.ttf", Int(35 * (GraphicHeight / 1024)), 0, 0, 0)
 	
 	If CreditsScreen = 0
 		CreditsScreen = LoadImage_Strict("GFX\creditsscreen.pt")
@@ -3648,6 +3653,7 @@ Function DrawCredits()
     Local ID%
     Local EndLinesAmount%
 	Local LastCreditLine.CreditsLine
+	Local fo.Fonts = First Fonts
 	
     Cls
 	
@@ -3662,14 +3668,14 @@ Function DrawCredits()
 	For cl = Each CreditsLine
 		cl\ID = ID
 		If Left(cl\Txt, 1) = "*"
-			SetFont(CreditsFont2)
+			SetFont(fo\CreditsFontID[1])
 			If cl\Stay = False
 				Text(GraphicWidth / 2, Credits_Y + (24 * cl\ID * MenuScale), Right(cl\Txt, Len(cl\Txt) - 1), True)
 			EndIf
 		ElseIf Left(cl\Txt, 1) = "/"
 			LastCreditLine = Before(cl)
 		Else
-			SetFont(CreditsFont)
+			SetFont(fo\CreditsFontID[0])
 			If cl\Stay = False
 				Text(GraphicWidth / 2, Credits_Y + (24 * cl\ID * MenuScale), cl\Txt, True)
 			EndIf
@@ -3703,7 +3709,7 @@ Function DrawCredits()
 	If CreditsTimer <> 0.0
 		For cl = Each CreditsLine
 			If cl\Stay
-				SetFont(CreditsFont)
+				SetFont(fo\CreditsFontID[0])
 				If Left(cl\Txt, 1) = "/"
 					Text(GraphicWidth / 2, (GraphicHeight / 2) + (EndLinesAmount / 2) + (24 * cl\ID * MenuScale), Right(cl\Txt, Len(cl\Txt) - 1), True)
 				Else
@@ -3716,8 +3722,8 @@ Function DrawCredits()
 	If GetKey() Then CreditsTimer = -1.0
 	
 	If CreditsTimer = -1.0
-		FreeFont(CreditsFont)
-		FreeFont(CreditsFont2)
+		FreeFont(fo\CreditsFontID[0])
+		FreeFont(fo\CreditsFontID[1])
 		FreeImage(CreditsScreen)
 		CreditsScreen = 0
 		FreeImage(EndingScreen)
@@ -4323,6 +4329,7 @@ Function DrawGUI()
 	Local e.Events, it.Items
 	Local o.Objects = First Objects
 	Local ov.Overlays = First Overlays
+	Local fo.Fonts = First Fonts
 	
 	If MenuOpen Or ConsoleOpen Or SelectedDoor <> Null Or InvOpen Or OtherOpen <> Null Or EndingTimer < 0.0 Then
 		ShowPointer()
@@ -4508,7 +4515,7 @@ Function DrawGUI()
 		
 		If DebugHUD Then
 			Color(255, 255, 255)
-			AASetFont(ConsoleFont)
+			AASetFont(fo\ConsoleFont)
 			AAText(x - 50, 50, "Player Position: (" + f2s(EntityX(Collider), 3) + ", " + f2s(EntityY(Collider), 3) + ", " + f2s(EntityZ(Collider), 3) + ")")
 			AAText(x - 50, 70, "Camera Position: (" + f2s(EntityX(Camera), 3) + ", " + f2s(EntityY(Camera), 3) + ", " + f2s(EntityZ(Camera), 3) + ")")
 			AAText(x - 50, 100, "Player Rotation: (" + f2s(EntityPitch(Collider), 3) + ", " + f2s(EntityYaw(Collider), 3) + ", " + f2s(EntityRoll(Collider), 3) + ")")
@@ -4581,7 +4588,7 @@ Function DrawGUI()
 			Else
 				AAText(x + 350, 310, "Current monitor: NULL")
 			EndIf
-			AASetFont(Font1)
+			AASetFont(fo\FontID[0])
 		EndIf
 	EndIf
 	
@@ -4617,7 +4624,7 @@ Function DrawGUI()
 			x = GraphicWidth / 2 - ImageWidth(KeypadHUD) * Scale / 2
 			y = GraphicHeight / 2 - ImageHeight(KeypadHUD) * Scale / 2		
 			
-			AASetFont(Font3)
+			AASetFont(fo\FontID[2])
 			If KeypadMsg <> "" Then 
 				KeypadTimer = KeypadTimer - FPSfactor2
 				
@@ -4629,7 +4636,7 @@ Function DrawGUI()
 				EndIf
 			Else
 				AAText(GraphicWidth / 2, y + 70 * Scale, "ACCESS CODE: ", True, True)	
-				AASetFont(Font4)
+				AASetFont(fo\FontID[3])
 				AAText(GraphicWidth / 2, y + 124 * Scale, KeypadInput, True, True)
 			EndIf
 			
@@ -5068,7 +5075,7 @@ Function DrawGUI()
 							EndIf
 						EndIf
 						
-						AASetFont(Font1)
+						AASetFont(fo\FontID[0])
 						Color(0, 0, 0)
 						AAText(x + Width / 2 + 1, y + Height + Spacing - 15 + 1, Inventory(n)\Name, True)							
 						Color(255, 255, 255)	
@@ -5767,7 +5774,7 @@ Function DrawGUI()
 								
 								SetBuffer(ImageBuffer(SelectedItem\ItemTemplate\Img))
 								Color(37, 45, 137)
-								AASetFont(Font5)
+								AASetFont(fo\FontID[4])
 								Temp = ((Int(AccessCode) * 3) Mod 10000)
 								If Temp < 1000 Then Temp = Temp + 1000
 								AAText(383 * MenuScale, 734 * MenuScale, Temp, True, True)
@@ -6225,7 +6232,7 @@ Function DrawGUI()
 								Next
 							EndIf	
 							
-							AASetFont(Font3)
+							AASetFont(fo\FontID[2])
 							AAText(x + 60, y, "CHN")						
 							
 							If SelectedItem\ItemTemplate\TempName = "veryfineradio" Then
@@ -6249,7 +6256,7 @@ Function DrawGUI()
 									StrTemp = StrTemp + Chr(Rand(1, 100))
 								Next
 								
-								AASetFont(Font4)
+								AASetFont(fo\FontID[3])
 								AAText(x + 97, y + 16.0, Rand(0, 9), True, True)
 							Else
 								For i = 2 To 6
@@ -6262,16 +6269,16 @@ Function DrawGUI()
 										If RadioCHN(SelectedItem\State2) <> 0 Then ResumeChannel(RadioCHN(SelectedItem\State2))
 									EndIf
 								Next
-								AASetFont(Font4)
+								AASetFont(fo\FontID[3])
 								AAText(x + 97, y + 16, Int(SelectedItem\State2 + 1), True, True)
 							EndIf
 							
-							AASetFont(Font3)
+							AASetFont(fo\FontID[2])
 							If StrTemp <> "" Then
 								StrTemp = Right(Left(StrTemp, (Int(MilliSecs2() / 300) Mod Len(StrTemp))), 10)
 								AAText(x + 32, y + 33, StrTemp)
 							EndIf
-							AASetFont(Font1)
+							AASetFont(fo\FontID[0])
 						EndIf
 					EndIf
 					;[End Block]
@@ -6501,7 +6508,7 @@ Function DrawGUI()
 					
 					DrawImage(SelectedItem\ItemTemplate\Img, x - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, y - ImageHeight(SelectedItem\ItemTemplate\Img) / 2 + 85)
 					
-					AASetFont(Font3)
+					AASetFont(fo\FontID[2])
 					
 					Local NavWorks% = True
 					
@@ -6672,7 +6679,7 @@ Function DrawGUI()
 								For i = 1 To Ceil(SelectedItem\State / 10.0)
 									DrawImage(NavImages(4), xTemp + i * 8 - 6, yTemp + 4)
 								Next
-								AASetFont(Font3)
+								AASetFont(fo\FontID[2])
 							EndIf
 						EndIf
 					EndIf
@@ -6966,6 +6973,7 @@ Function DrawMenu()
 	
 	Local x%, y%, Width%, Height%
 	Local i%
+	Local fo.Fonts = First Fonts
 	
 	If api_GetFocus() = 0 Then ; ~ Game is out of focus then pause the game
 		If (Not Using294) Then
@@ -7014,25 +7022,25 @@ Function DrawMenu()
 		EndIf
 		
 		If AchievementsMenu > 0 Then
-			AASetFont(Font2)
+			AASetFont(fo\FontID[1])
 			AAText(x, y - (122 - 45) * MenuScale, "ACHIEVEMENTS", False, True)
-			AASetFont(Font1)
+			AASetFont(fo\FontID[0])
 		ElseIf OptionsMenu > 0 Then
-			AASetFont(Font2)
+			AASetFont(fo\FontID[1])
 			AAText(x, y - (122 - 45) * MenuScale, "OPTIONS", False, True)
-			AASetFont(Font1)
+			AASetFont(fo\FontID[0])
 		ElseIf QuitMsg > 0 Then
-			AASetFont(Font2)
+			AASetFont(fo\FontID[1])
 			AAText(x, y - (122 - 45) * MenuScale, "QUIT?", False, True)
-			AASetFont(Font1)
+			AASetFont(fo\FontID[0])
 		ElseIf KillTimer >= 0.0 Then
-			AASetFont(Font2)
+			AASetFont(fo\FontID[1])
 			AAText(x, y - (122 - 45) * MenuScale, "PAUSED", False, True)
-			AASetFont(Font1)
+			AASetFont(fo\FontID[0])
 		Else
-			AASetFont(Font2)
+			AASetFont(fo\FontID[1])
 			AAText(x, y - (122 - 45) * MenuScale, "YOU DIED", False, True)
-			AASetFont(Font1)
+			AASetFont(fo\FontID[0])
 		End If		
 		
 		Local AchvXIMG% = (x + (22.0 * MenuScale))
@@ -7041,7 +7049,7 @@ Function DrawMenu()
 		Local ImgSize% = 64.0
 		
 		If AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg =< 0
-			AASetFont(Font1)
+			AASetFont(fo\FontID[0])
 			AAText(x, y, "Difficulty: " + SelectedDifficulty\name)
 			AAText(x, y + 20 * MenuScale, "Save: " + CurrSave)
 			AAText(x, y + 40 * MenuScale, "Map seed: " + RandomSeed)
@@ -7082,7 +7090,7 @@ Function DrawMenu()
 			Select OptionsMenu
 				Case 1 ; ~ Graphics
 					;[Block]
-					AASetFont(Font1)
+					AASetFont(fo\FontID[0])
 					
 					y = y + 50 * MenuScale
 					
@@ -7180,7 +7188,7 @@ Function DrawMenu()
 					;[End Block]
 				Case 2 ; ~ Audio
 					;[Block]
-					AASetFont(Font1)
+					AASetFont(fo\FontID[0])
 					
 					y = y + 50 * MenuScale
 					
@@ -7236,7 +7244,7 @@ Function DrawMenu()
 					;[End Block]
 				Case 3 ; ~ Controls
 					;[Block]
-					AASetFont(Font1)
+					AASetFont(fo\FontID[0])
 					y = y + 50 * MenuScale
 					
 					MouseSensitivity = (SlideBar(x + 270 * MenuScale, y - 4 * MenuScale, 100 * MenuScale, (MouseSensitivity + 0.5) * 100.0) / 100.0) - 0.5
@@ -7347,7 +7355,7 @@ Function DrawMenu()
 					;[End Block]
 				Case 4 ; ~ Advanced
 					;[Block]
-					AASetFont(Font1)
+					AASetFont(fo\FontID[0])
 					
 					y = y + 50 * MenuScale
 					
@@ -7435,12 +7443,12 @@ Function DrawMenu()
 							FreeEntity(AATextCam)
 						EndIf
 						InitAAFont()
-						Font1 = AALoadFont("GFX\font\cour\Courier New.ttf", Int(18 * (GraphicHeight / 1024.0)), 0, 0, 0)
-						Font2 = AALoadFont("GFX\font\courbd\Courier New.ttf", Int(58 * (GraphicHeight / 1024.0)), 0, 0, 0)
-						Font3 = AALoadFont("GFX\font\DS-DIGI\DS-Digital.ttf", Int(22 * (GraphicHeight / 1024.0)), 0, 0, 0)
-						Font4 = AALoadFont("GFX\font\DS-DIGI\DS-Digital.ttf", Int(60 * (GraphicHeight / 1024.0)), 0, 0, 0)
-						Font5 = AALoadFont("GFX\font\Journal\Journal.ttf", Int(58 * (GraphicHeight / 1024.0)), 0, 0, 0)
-						ConsoleFont = AALoadFont("Blitz", Int(22 * (GraphicHeight / 1024.0)), 0, 0, 0, 1)
+						fo\FontID[0] = AALoadFont("GFX\font\cour\Courier New.ttf", Int(18 * (GraphicHeight / 1024.0)), 0, 0, 0)
+						fo\FontID[1] = AALoadFont("GFX\font\courbd\Courier New.ttf", Int(58 * (GraphicHeight / 1024.0)), 0, 0, 0)
+						fo\FontID[2] = AALoadFont("GFX\font\DS-DIGI\DS-Digital.ttf", Int(22 * (GraphicHeight / 1024.0)), 0, 0, 0)
+						fo\FontID[3] = AALoadFont("GFX\font\DS-DIGI\DS-Digital.ttf", Int(60 * (GraphicHeight / 1024.0)), 0, 0, 0)
+						fo\FontID[4] = AALoadFont("GFX\font\Journal\Journal.ttf", Int(58 * (GraphicHeight / 1024.0)), 0, 0, 0)
+						fo\ConsoleFont = AALoadFont("Blitz", Int(22 * (GraphicHeight / 1024.0)), 0, 0, 0, 1)
 						AATextEnable_Prev% = AATextEnable
 					EndIf
 					If MouseOn(x + 270 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
@@ -7550,7 +7558,7 @@ Function DrawMenu()
 							LoadGameQuick(SavePath + CurrSave + "\")
 							
 							MoveMouse Viewport_Center_X, Viewport_Center_Y
-							AASetFont(Font1)
+							AASetFont(fo\FontID[0])
 							HidePointer ()
 							
 							FlushKeys()
@@ -7586,7 +7594,7 @@ Function DrawMenu()
 					Else
 						DrawFrame(x, y, 390 * MenuScale, 60 * MenuScale)
 						Color(100, 100, 100)
-						AASetFont(Font2)
+						AASetFont(fo\FontID[1])
 						AAText(x + (390 * MenuScale) / 2, y + (60 * MenuScale) / 2, "Load Game", True, True)
 					EndIf
 					y = y + 75 * MenuScale
@@ -7606,7 +7614,7 @@ Function DrawMenu()
 						LoadGameQuick(SavePath + CurrSave + "\")
 						
 						MoveMouse(Viewport_Center_X, Viewport_Center_Y)
-						AASetFont(Font1)
+						AASetFont(fo\FontID[0])
 						HidePointer ()
 						
 						FlushKeys()
@@ -7661,13 +7669,13 @@ Function DrawMenu()
 				EndIf
 			EndIf
 			
-			AASetFont(Font1)
+			AASetFont(fo\FontID[0])
 			If KillTimer < 0.0 Then RowText(DeathMsg, x, y + 80 * MenuScale, 390 * MenuScale, 600 * MenuScale)
 		EndIf
 		If FullScreen Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	End If
 	
-	AASetFont(Font1)
+	AASetFont(fo\FontID[0])
 	
 	CatchErrors("DrawMenu")
 End Function
@@ -8307,6 +8315,7 @@ Function InitNewGame()
 	CatchErrors("Uncaught (InitNewGame)")
 	
 	Local i%, de.Decals, d.Doors, it.Items, r.Rooms, sc.SecurityCams, e.Events
+	Local fo.Fonts = First Fonts
 	
 	DrawLoading(45)
 	
@@ -8436,7 +8445,7 @@ Function InitNewGame()
 	
 	MoveMouse(Viewport_Center_X, Viewport_Center_Y)
 	
-	AASetFont(Font1)
+	AASetFont(fo\FontID[0])
 	
 	HidePointer()
 	
@@ -8472,6 +8481,7 @@ Function InitLoadGame()
 	CatchErrors("Uncaught (InitLoadGame)")
 	
 	Local d.Doors, sc.SecurityCams, rt.RoomTemplates, e.Events, i%
+	Local fo.Fonts = First Fonts
 	
 	DrawLoading(80)
 	
@@ -8494,7 +8504,7 @@ Function InitLoadGame()
 	
 	MoveMouse(Viewport_Center_X, Viewport_Center_Y)
 	
-	AASetFont(Font1)
+	AASetFont(fo\FontID[0])
 	
 	HidePointer()
 	
@@ -10639,6 +10649,7 @@ End Function
 Function RenderWorld2()
 	Local i%, Dist#
 	Local ov.Overlays = First Overlays
+	Local fo.Fonts = First Fonts
 	
 	CameraProjMode(Ark_Blur_Cam, 0)
 	CameraProjMode(Camera, 1)
@@ -10711,7 +10722,7 @@ Function RenderWorld2()
 			
 			Color(255, 255, 255)
 			
-			AASetFont(Font3)
+			AASetFont(fo\FontID[2])
 			
 			Local PlusY% = 0
 			
@@ -10794,7 +10805,7 @@ Function RenderWorld2()
 	If BlinkTimer < - 16.0 Or BlinkTimer > - 6.0
 		If (WearingNightVision = 1 Or WearingNightVision = 2) And (HasBattery = 1) And ((MilliSecs2() Mod 800) < 400) Then
 			Color(255, 0, 0)
-			AASetFont(Font3)
+			AASetFont(fo\FontID[2])
 			
 			AAText(GraphicWidth / 2, 20 * MenuScale, "WARNING: LOW BATTERY", True, False)
 			Color(255, 255, 255)
@@ -11066,9 +11077,11 @@ Function TeleportEntity(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = Fa
 End Function
 
 Function PlayStartupVideos()
+	Local fo.Fonts = First Fonts
+	
 	If PlayStartup = 0 Then Return
 	
-	Font1 = LoadFont_Strict("GFX\font\cour\Courier New.ttf", Int(18 * (GraphicHeight / 1024.0)), 0, 0, 0)
+	fo\FontID[0] = LoadFont_Strict("GFX\font\cour\Courier New.ttf", Int(18 * (GraphicHeight / 1024.0)), 0, 0, 0)
 	
 	Local ScaledGraphicHeight%
 	Local Ratio# = Float(RealGraphicWidth) / Float(RealGraphicHeight)
@@ -11109,7 +11122,7 @@ Function PlayStartupVideos()
 			Cls
 			BlitzMovie_DrawD3D(0, (RealGraphicHeight / 2 - ScaledGraphicHeight / 2), RealGraphicWidth, ScaledGraphicHeight)
 			Color(255, 255, 255)
-			SetFont(Font1)
+			SetFont(fo\FontID[0])
 	        Text(GraphicWidth / 2, GraphicHeight - 50, "PRESS ANY KEY TO SKIP", True, True)
 			Flip
 		Until (GetKey() Or (Not IsStreamPlaying_Strict(SplashScreenAudio)))
@@ -11120,7 +11133,7 @@ Function PlayStartupVideos()
 		Cls
 		Flip
 	Next
-	FreeFont(Font1)
+	FreeFont(fo\FontID[0])
 End Function
 
 Function CanUseItem(CanUseWithHazmat%, CanUseWithGasMask%, CanUseWithEyewear%)
@@ -11166,5 +11179,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#FE4#131F#1B59
+;~B#FEA#1326#1B61
 ;~C#Blitz3D

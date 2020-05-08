@@ -135,5 +135,10 @@ Const Achv1025% = 24, Achv1048% = 25, Achv1123% = 26, Achv1162% = 27, Achv1499% 
 
 Const AchvConsole% = 29, AchvHarp% = 30, AchvKeter% = 31, AchvMaynard% = 32, AchvOmni% = 33, AchvO5% = 34, AchvPD% = 35, AchvSNAV% = 36, AchvTesla% = 37
 
+; ~ [FONTS]
+
+Const MaxFontIDAmount% = 5
+
+Const MaxCreditsFontIDAmount% = 2
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D
