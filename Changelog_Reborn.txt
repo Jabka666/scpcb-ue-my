@@ -43,7 +43,7 @@ Bug Fixes:
 - Fixed weird balcony guard's moving in the intro scene.
 - Fixed step sounds for big contianment doors.
 - Fixed red and green frames for the HUD when player wearing a hazmat suit.
-- Fixed fog for any NVG.
+- Fixed wearing system for NVG.
 - Fixed annoying "Secondary Lighting" lever in room2ccont.
 - Fixed button sound not working when not using launcher.
 - Fixed "CanUseItem" function for eyegear.
