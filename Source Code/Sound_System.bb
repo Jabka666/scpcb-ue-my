@@ -666,6 +666,10 @@ Function LoadAllSounds()
 	MissSFX = LoadSound_Strict("SFX\General\Miss.ogg")
 	
 	BreathGasRelaxedSFX = LoadSound_Strict("SFX\Character\D9341\BreathGasRelaxed.ogg")
+	
+	For i = 0 To 1
+  	    ScientistRadioSFX(i) = LoadSound_Strict("SFX\Character\Scientist\Radio" + i + ".ogg")
+	Next
 End Function
 
 ;~IDEal Editor Parameters:

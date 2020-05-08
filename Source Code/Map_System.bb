@@ -5474,6 +5474,16 @@ Function FillRoom(r.Rooms)
 			RotateEntity(r\Objects[0], 0.0, 0.0, 0.0)
 			EntityFX(r\Objects[0], 1)
 			
+			r\Objects[1] = CreatePivot()
+			PositionEntity(r\Objects[1], r\x + 492.0 * RoomScale, r\y + 258.0 * RoomScale, r\z - 810.0 * RoomScale) 
+			
+			r\Objects[2] = CreatePivot()
+			PositionEntity(r\Objects[2], r\x + 650.0 * RoomScale, r\y + 258.0 * RoomScale, r\z - 760.0 * RoomScale) 
+			
+			For i = 1 To 2
+				EntityParent(r\Objects[i], r\OBJ)
+			Next
+			
 			it = CreateItem("Radio Transceiver", "fineradio", r\x + 650.0 * RoomScale, r\y + 258.0 * RoomScale, r\z - 760.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]

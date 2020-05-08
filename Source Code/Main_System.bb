@@ -2029,7 +2029,9 @@ Global ApacheSFX%
 Global CurrStepSFX%
 Dim StepSFX%(5, 2, 8) ; ~ (Normal / Metal, Walk / Run, ID)
 
-Dim Step2SFX(6)
+Dim Step2SFX%(6)
+
+Dim ScientistRadioSFX%(2)
 
 DrawLoading(30, True)
 
@@ -5933,9 +5935,9 @@ Function DrawGUI()
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
-					; ~ RadioState(5) = has the "use the number keys" -message been shown yet (True / False)
-					; ~ RadioState(6) = a timer for the "code channel"
-					; ~ RadioState(7) = another timer for the "code channel"
+					; ~ RadioState(5) = Has the "use the number keys" -message been shown yet (True / False)
+					; ~ RadioState(6) = A timer for the "code channel"
+					; ~ RadioState(7) = Another timer for the "code channel"
 					
 					If RadioState(5) = 0 Then 
 						Msg = "Use the numbered keys 1 through 5 to cycle between various channels."
@@ -11169,5 +11171,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#FEA#1326#1B59
+;~B#FEC#1328#1B5B
 ;~C#Blitz3D

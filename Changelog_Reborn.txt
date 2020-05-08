@@ -46,6 +46,7 @@ Bug Fixes:
 - Fixed fog for any NVG.
 - Fixed annoying "Secondary Lighting" lever in room2ccont.
 - Fixed button sound not working when not using launcher.
+- Fixed "CanUseItem" function for eyegear.
 
 - Small fixes for room2testroom2 event.
 - Small fixes for commands "disablenuke" and "enable/disablecontrol.
