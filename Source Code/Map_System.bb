@@ -593,15 +593,14 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 End Function
 
 Function StripPath$(File$) 
-	Local Name$ = ""
-	Local i%
+	Local mi$, i%, Name$ = ""
 	
 	If Len(File) > 0 
 		For i = Len(File) To 1 Step -1 
-			mi$ = Mid(File, i, 1) 
-			If mi$ = "\" Or mi$ = "/" Then Return(Name)
+			mi = Mid(File, i, 1) 
+			If mi = "\" Or mi = "/" Then Return(Name)
 			
-			Name = mi$ + Name 
+			Name = mi + Name 
 		Next 
 	EndIf 
 	
@@ -804,7 +803,7 @@ Function GenForestGrid(fr.Forest)
 				Exit ; ~ Break simply to stop creating the branch
 			EndIf
 			fr\Grid[((GridSize - 1 - Temp_Y) * GridSize) + New_X] = Branch_Type ; ~ Make 4s so you don't confuse your branch for a path; will be changed later
-			If Branch_Pos = 0 Then New_X = LeftMost - 2 Else New_X = rightmost + 2
+			If Branch_Pos = 0 Then New_X = LeftMost - 2 Else New_X = RightMost + 2
 			fr\Grid[((GridSize - 1 - Temp_Y) * GridSize) + New_X] = Branch_Type ; ~ Branch out twice to avoid creating an unwanted 2x2 path with the real path
 			i = 2
 			While i < Branch_Max_Life
@@ -8577,5 +8576,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11F9
+;~B#11F8
 ;~C#Blitz3D

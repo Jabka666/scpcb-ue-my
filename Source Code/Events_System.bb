@@ -3722,7 +3722,7 @@ Function UpdateEvents()
 									If (e\room\grid\Grid[iX + 1 + ((iY + 1) * GridSZ)] < 3) And (e\room\grid\Grid[iX + 1 + ((iY - 1) * GridSZ)] < 3) Then
 										CanRetry = 1
 										If Rand(0, 1) = 1 Then
-											e\room\grid\Grid[iX + 1 + ((iY) * gridSZ)] = e\room\grid\Grid[iX + 1 + ((iY) * gridsz)] + 1
+											e\room\grid\Grid[iX + 1 + ((iY) * GridSZ)] = e\room\grid\Grid[iX + 1 + ((iY) * GridSZ)] + 1
 											e\room\grid\Grid[iX + ((iY) * GridSZ)] = 7 ; ~ Generator room
 											CanRetry = 0
 											Exit
@@ -3875,7 +3875,7 @@ Function UpdateEvents()
 												e\room\grid\Angles[iX + (iY * GridSZ)] = 1
 											ElseIf ib > 0 And ic > 0 And id > 0 Then
 												RotateEntity(TempInt, 0.0, 270.0, 0.0)
-												e\room\grid\angles[iX + (iY * GridSZ)] = 3
+												e\room\grid\Angles[iX + (iY * GridSZ)] = 3
 											ElseIf ic > 0 And ia > 0 And ib > 0 Then
 												RotateEntity(TempInt, 0.0, 0.0, 0.0)
 												e\room\grid\Angles[iX + (iY * GridSZ)] = 0
@@ -3885,12 +3885,14 @@ Function UpdateEvents()
 											EndIf
 											;[End Block]
 										Case 4
+											;[Block]
 											TempInt = CopyEntity(Meshes[e\room\grid\Grid[iX + (iY * GridSZ)]])
 											
 											TempInt2 = Rand(0, 3)
 											RotateEntity(TempInt, 0.0, TempInt2 * 90.0, 0.0)
 											
 											e\room\grid\Angles[iX + (iY * GridSZ)] = TempInt2
+											;[End Block]
 									End Select
 									
 									ScaleEntity(TempInt, RoomScale, RoomScale, RoomScale, True)
@@ -3960,7 +3962,7 @@ Function UpdateEvents()
 									
 									e\room\grid\waypoints[iX + (iY * GridSZ)] = wayp
 									
-									If iY<gridsz-1 Then
+									If iY < GridSZ - 1 Then
 										If e\room\grid\waypoints[iX + ((iY + 1) * GridSZ)] <> Null Then
 											Dist = EntityDistance(e\room\grid\waypoints[iX + (iY * GridSZ)]\OBJ, e\room\grid\waypoints[iX + ((iY + 1) * GridSZ)]\OBJ)
 											For i = 0 To 3
@@ -4179,7 +4181,7 @@ Function UpdateEvents()
 												EndIf
 											Next
 											For i = 0 To 3
-												If e\room\grid\waypoints[iX + ((iY + 1) * GridSZ)]\connected[i]=e\room\grid\waypoints[iX+(iY*GridSZ)] Then
+												If e\room\grid\waypoints[iX + ((iY + 1) * GridSZ)]\connected[i] = e\room\grid\waypoints[iX + (iY * GridSZ)] Then
 													Exit
 												ElseIf e\room\grid\waypoints[iX + ((iY + 1) * GridSZ)]\connected[i] = Null Then
 													e\room\grid\waypoints[iX + ((iY + 1) * GridSZ)]\connected[i] = e\room\grid\waypoints[iX + (iY * GridSZ)]
@@ -4300,11 +4302,11 @@ Function UpdateEvents()
 							Else
 								Temp = 1
 							EndIf
-							e\EventState = 2
+							e\EventState = 2.0
 							
 							If (Not Contained106) Then 	
 								de.Decals = CreateDecal(0, EntityX(e\room\Objects[Temp], True), EntityY(e\room\Objects[Temp], True) + 0.05, EntityZ(e\room\Objects[Temp], True), 90.0, Rand(360.0), 0.0)
-								de\Size = 0.05 : de\SizeChange = 0.001 : EntityAlpha(de\obj, 0.8) : UpdateDecals()
+								de\Size = 0.05 : de\SizeChange = 0.001 : EntityAlpha(de\OBJ, 0.8) : UpdateDecals()
 								
 								PositionEntity(Curr106\Collider, EntityX(e\room\Objects[Temp], True), EntityY(Collider, True) - 3.0, EntityZ(e\room\Objects[Temp], True))
 								SetAnimTime(Curr106\OBJ, 110.0)
@@ -4339,10 +4341,10 @@ Function UpdateEvents()
 					e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[2], e\room\Objects[3], e, False)
 					e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[2], e\room\RoomDoors[3], e\room\Objects[4], e\room\Objects[5], e, False)
 				Else
-					If e\room\grid <> Null
-						If e\room\grid\Meshes[0] <> 0
+					If e\room\grid <> Null Then
+						If e\room\grid\Meshes[0] <> 0 Then
 							For iY = 0 To GridSZ - 1
-								For iX = 0 To GridSZ-1
+								For iX = 0 To GridSZ - 1
 									If e\room\grid\Entities[iX + (iY * GridSZ)] <> 0
 										HideEntity(e\room\grid\Entities[iX + (iY * GridSZ)])
 									EndIf
@@ -10242,5 +10244,5 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1216#1E4F
+;~B#1218#1E51
 ;~C#Blitz3D

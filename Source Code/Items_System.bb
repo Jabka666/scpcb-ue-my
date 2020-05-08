@@ -185,9 +185,9 @@ Function InitItemTemplates()
 	
 	CreateItemTemplate("Leaflet", "paper", ItemsPath + "paper.x", ItemsPath + "INV_note.png", ItemsPath + "leaflet.jpg", 0.003, 0, ItemsPath + "note.png")
 	
-	CreateItemTemplate("Log #1", "paper", ItemsPath + "paper.x", ItemsPath + "INV_note.png", ItemsPath + "f4.jpg", 0.002, 0, ItemsPath + "note.png")
-	CreateItemTemplate("Log #2", "paper", ItemsPath + "paper.x", ItemsPath + "INV_note.png", ItemsPath + "f5.jpg", 0.002, 0, ItemsPath + "note.png")
-	CreateItemTemplate("Log #3", "paper", ItemsPath + "paper.x", ItemsPath + "INV_note.png", ItemsPath + "f6.jpg", 0.002, 0, ItemsPath + "note.png")
+	CreateItemTemplate("Log #1", "paper", ItemsPath + "paper.x", ItemsPath + "INV_note.png", ItemsPath + "f4.jpg", 0.004, 0, ItemsPath + "note.png")
+	CreateItemTemplate("Log #2", "paper", ItemsPath + "paper.x", ItemsPath + "INV_note.png", ItemsPath + "f5.jpg", 0.004, 0, ItemsPath + "note.png")
+	CreateItemTemplate("Log #3", "paper", ItemsPath + "paper.x", ItemsPath + "INV_note.png", ItemsPath + "f6.jpg", 0.004, 0, ItemsPath + "note.png")
 	
 	CreateItemTemplate("Movie Ticket", "ticket", ItemsPath + "ticket.b3d", ItemsPath + "INVticket.jpg", ItemsPath + "ticket_HUD.png", 0.002, 0, ItemsPath + "ticket.png", "", 0, 1 + 2 + 8)
 	
