@@ -461,7 +461,7 @@ Function QuickLoadEvents()
 				e\EventStr = "Load2"
 			ElseIf e\EventStr = "Load2"
 				QuickLoadPercent = 100
-				If e\room\NPC[0] = Null Then e\room\NPC[0] = CreateNPC(NPCtype860, 0, 0, 0)
+				If e\room\NPC[0] = Null Then e\room\NPC[0] = CreateNPC(NPCtype860_2, 0.0, 0.0, 0.0)
 				e\EventStr = "LoadDone"
 			EndIf
 			;[End Block]

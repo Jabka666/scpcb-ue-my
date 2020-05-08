@@ -2400,7 +2400,7 @@ Function UpdateDoors()
 							;[Block]
 							d\OpenState = Min(180.0, d\OpenState + FPSfactor * 0.8)
 							MoveEntity(d\OBJ, Sin(d\OpenState) * FPSfactor / 180.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, -Sin(d\OpenState) * FPSfactor / 180.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, (-Sin(d\OpenState)) * FPSfactor / 180.0, 0.0, 0.0)
 							;[End Block]
 						Case 2
 							;[Block]
@@ -2964,8 +2964,8 @@ Repeat
 					PlayerZone = 4
 				ElseIf PlayerRoom\RoomTemplate\Name = "room860"
 					For e.Events = Each Events
-						If e\EventName = "room860"
-							If e\EventState = 1.0
+						If e\EventName = "room860" Then
+							If e\EventState = 1.0 Then
 								PlayerZone = 5
 								PositionEntity(SoundEmitter, EntityX(SoundEmitter), 30.0, EntityZ(SoundEmitter))
 							EndIf

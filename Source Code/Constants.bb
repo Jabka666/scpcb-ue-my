@@ -25,7 +25,7 @@ Const MaxMiscModelIDAmount% = 1
 Const MaxNPCModelIDAmount% = 34
 
 Const NPCtype008_1% = 1, NPCtype035_Tentacle% = 2, NPCtype049% = 3, NPCtype049_2% = 4, NPCtype066% = 5, NPCtype096% = 6
-Const NPCtype106% = 7, NPCtype173% = 8, NPCtype372% = 9, NPCtype513_1% = 10, NPCtype860% = 11, NPCtype939% = 12
+Const NPCtype106% = 7, NPCtype173% = 8, NPCtype372% = 9, NPCtype513_1% = 10, NPCtype860_2% = 11, NPCtype939% = 12
 Const NPCtype966% = 13, NPCtype1499_1% = 14
 
 Const NPCtypeApache% = 15, NPCtypeClerk% = 16, NPCtypeD% = 17, NPCtypeGuard% = 18, NPCtypeMTF% = 19

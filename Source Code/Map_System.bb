@@ -5,7 +5,7 @@ Include "Source Code\Texture_Cache_System.bb"
 Function LoadWorld(File$, rt.RoomTemplates)
 	Local Map% = LoadAnimMesh_Strict(File)
 	
-	If Not Map Then Return
+	If (Not Map) Then Return
 	
 	Local x#, y#, z#, i%, c%
 	Local mat.Materials
