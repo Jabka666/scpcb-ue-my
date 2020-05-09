@@ -167,6 +167,8 @@ Function InitItemTemplates()
 	it = CreateItemTemplate("Burnt Note", "paper", ItemsPath + "paper.x", ItemsPath + "INVbn.jpg", ItemsPath + "bn.it", 0.003, 0, ItemsPath + "BurntNoteTexture.jpg")
 	it\Img = BurntNote
 	
+	CreateItemTemplate("Data Report", "paper", ItemsPath + "paper.x", ItemsPath + "INV_paper_bloody.png", ItemsPath + "doc_data.png", 0.003, 0, ItemsPath + "paper_bloody.png")
+	
 	CreateItemTemplate("Document SCP-427", "paper", ItemsPath + "paper.x", ItemsPath + "INV_paper_bloody.png", ItemsPath + "doc427.jpg", 0.003, 0, ItemsPath + "paper_bloody.png")
 	
 	CreateItemTemplate("Drawing", "paper", ItemsPath + "paper.x", ItemsPath + "INV_note.png", ItemsPath + "doc1048.jpg", 0.003, 0, ItemsPath + "note.png")
