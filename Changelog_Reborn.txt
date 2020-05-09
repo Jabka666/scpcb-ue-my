@@ -16,6 +16,7 @@
 - Removed unnecessary room1archive event.
 - Removed NPCs bumps.
 - Removed all stuff from other mods, except SCP-409, SCP-005, FOV and some files from BoH.
+- Removed event of SCP-096's containment chamber.
 
 - Optimized items.
 - Optimized startup videos.
@@ -47,6 +48,7 @@ Bug Fixes:
 - Fixed annoying "Secondary Lighting" lever in room2ccont.
 - Fixed button sound not working when not using launcher.
 - Fixed "CanUseItem" function for eyegear.
+- Fixed elevators' pivots for SCP-008, SCP-106 and SCP-079's containment chambers.
 
 - Small fixes for room2testroom2 event.
 - Small fixes for commands "disablenuke" and "enable/disablecontrol.
