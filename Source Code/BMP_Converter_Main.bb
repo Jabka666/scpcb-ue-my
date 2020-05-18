@@ -424,8 +424,8 @@ If State = 1 Then
 		TemporaryString = Trim(ReadLine(f))
 		If Left(TemporaryString, 1) = "[" Then
 			TemporaryString = Mid(TemporaryString, 2, Len(TemporaryString) - 2)
-			If TemporaryString <> "room ambience" Then
-				Stri = GetINIString("Data\rooms.ini", TemporaryString, "mesh path")
+			If TemporaryString <> "Room Ambience" Then
+				Stri = GetINIString("Data\rooms.ini", TemporaryString, "Mesh Path")
 				
 				LoadRMesh(Stri)
 				
@@ -436,7 +436,7 @@ If State = 1 Then
 				ic.INIConvert = New INIConvert
 				ic\File = "Data\rooms.ini"
 				ic\Section = TemporaryString
-				ic\Key = "mesh path"
+				ic\Key = "Mesh Path"
 				ic\Value = Replace(Stri, ".rmesh", ".rmesh")
 			EndIf
 		EndIf
@@ -470,13 +470,13 @@ ElseIf State = 3
 		If Left(TemporaryString, 1) = "[" Then
 			TemporaryString = Mid(TemporaryString, 2, Len(TemporaryString) - 2)
 			
-			If TemporaryString <> "room ambience" Then
-				Stri = GetINIString("Data\rooms.ini", TemporaryString, "mesh path")
+			If TemporaryString <> "Room Ambience" Then
+				Stri = GetINIString("Data\rooms.ini", TemporaryString, "Mesh Path")
 				
 				ic.INIConvert = New INIConvert
 				ic\File = "Data\rooms.ini"
 				ic\Section = TemporaryString
-				ic\Key = "mesh path"
+				ic\Key = "Mesh Path"
 				ic\Value = Replace(Stri, "_opt.rmesh", ".rmesh")
 			EndIf
 		EndIf
