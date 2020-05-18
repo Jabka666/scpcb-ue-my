@@ -3784,7 +3784,7 @@ Function UpdateEvents()
 							Meshes[i] = CopyEntity(o\MTModelID[i])
 							HideEntity(Meshes[i])
 						Next
-						FreeTextureCache
+						FreeTextureCache()
 						
 						TempInt = 0
 						
@@ -4071,7 +4071,7 @@ Function UpdateEvents()
 							HideEntity(Meshes[i])
 						Next
 						
-						FreeTextureCache
+						FreeTextureCache()
 						
 						TempInt = 0
 						

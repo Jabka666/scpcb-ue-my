@@ -202,10 +202,10 @@ Global BlinkMeterIMG% = LoadImage_Strict("GFX\blinkmeter.jpg")
 
 DrawLoading(0, True)
 
-; ~ Viewport.
+; ~ Viewport
 Global Viewport_Center_X% = GraphicWidth / 2, Viewport_Center_Y% = GraphicHeight / 2
 
-; ~ Mouselook.
+; ~ Mouselook
 Global Mouselook_X_Inc# = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the X axis.
 Global Mouselook_Y_Inc# = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the Y axis.
 ; ~ Used to limit the mouse movement to within a certain number of pixels (250 is used here) from the center of the screen. This produces smoother mouse movement than continuously moving the mouse back to the center each loop.
@@ -384,7 +384,7 @@ Function UpdateConsole()
 		If ConsoleScrollDragging Then Color(255, 255, 255)
 		Rect(x + Width - 23 * MenuScale, y + Height - ScrollBarHeight + (ConsoleScroll * ScrollBarHeight / Height), 20 * MenuScale, ScrollBarHeight, True)
 		
-		If Not MouseDown(1) Then
+		If (Not MouseDown(1)) Then
 			ConsoleScrollDragging = False
 		ElseIf ConsoleScrollDragging Then
 			ConsoleScroll = ConsoleScroll + ((ScaledMouseY() - ConsoleMouseMem) * Height / ScrollBarHeight)
@@ -455,7 +455,7 @@ Function UpdateConsole()
 		EndIf
 		
 		If KeyHit(208) Then
-			ReissuePos = -ConsoleHeight + 15 * MenuScale
+			ReissuePos = (-ConsoleHeight) + 15 * MenuScale
 			If (ConsoleReissue = Null) Then
 				ConsoleReissue = Last ConsoleMsg
 				
@@ -479,7 +479,7 @@ Function UpdateConsole()
 				While True
 					If (ConsoleReissue = Null) Then
 						ConsoleReissue = Last ConsoleMsg
-						ReissuePos = -ConsoleHeight + 15 * MenuScale
+						ReissuePos = (-ConsoleHeight) + 15 * MenuScale
 					EndIf
 					
 					If (ConsoleReissue\IsCommand) Then
@@ -496,7 +496,7 @@ Function UpdateConsole()
 			EndIf
 		EndIf
 		
-		If ConsoleScroll < -ConsoleHeight + Height Then ConsoleScroll = -ConsoleHeight + Height
+		If ConsoleScroll < (-ConsoleHeight) + Height Then ConsoleScroll = (-ConsoleHeight) + Height
 		If ConsoleScroll > 0 Then ConsoleScroll = 0
 		
 		Color(255, 255, 255)
@@ -951,7 +951,7 @@ Function UpdateConsole()
 					Stamina = 100.0
 					
 					For i = 0 To 5
-						SCP1025State[i] = 0
+						SCP1025State[i] = 0.0
 					Next
 					
 					If I_427\Timer >= 70 * 360.0 Then I_427\Timer = 0.0
@@ -1016,25 +1016,25 @@ Function UpdateConsole()
 					Select StrTemp
 						Case "on", "1", "true"
 							;[Block]
-							WireframeState = True
+							WireFrameState = True
 							;[End Block]
 						Case "off", "0", "false"
 							;[Block]
-							WireframeState = False
+							WireFrameState = False
 							;[End Block]
 						Default
 							;[Block]
-							WireframeState = Not WireframeState
+							WireFrameState = (Not WireFrameState)
 							;[End Block]
 					End Select
 					
-					If WireframeState Then
+					If WireFrameState Then
 						CreateConsoleMsg("WIREFRAME ON")
 					Else
 						CreateConsoleMsg("WIREFRAME OFF")	
 					EndIf
 					
-					WireFrame(WireframeState)
+					WireFrame(WireFrameState)
 					;[End Block]
 				Case "173speed"
 					;[Block]
@@ -1152,7 +1152,7 @@ Function UpdateConsole()
 					;[End Block]
 				Case "halloween"
 					;[Block]
-					HalloweenTex = Not HalloweenTex
+					HalloweenTex = (Not HalloweenTex)
 					If HalloweenTex Then
 						Local Tex% = LoadTexture_Strict("GFX\npcs\scp_173_h.pt", 1)
 						
@@ -1169,7 +1169,7 @@ Function UpdateConsole()
 					;[End Block]
 				Case "sanic"
 					;[Block]
-					SuperMan = Not SuperMan
+					SuperMan = (Not SuperMan)
 					If SuperMan = True Then
 						CreateConsoleMsg("GOTTA GO FAST")
 					Else
@@ -1203,7 +1203,7 @@ Function UpdateConsole()
 							;[End Block]
 						Default
 							;[Block]
-							chs\GodMode = Not chs\GodMode
+							chs\GodMode = (Not chs\GodMode)
 							;[End Block]
 					End Select	
 					If chs\GodMode Then
@@ -1229,11 +1229,11 @@ Function UpdateConsole()
 					FallTimer = 0.0
 					MenuOpen = False
 					
+					chs\Cheats = False
 					chs\InfiniteStamina = False
 					chs\NoClip = False
 					chs\NoBlink = False
 					chs\NoTarget = False
-					chs\Cheats = False
 					
 					; ~ If death by SCP-173, enable GodMode, prevent instant death again -- Salvage
 					If Curr173\Idle Then
@@ -1267,7 +1267,7 @@ Function UpdateConsole()
 							;[End Block]
 						Default
 							;[Block]
-							chs\NoClip = Not chs\NoClip
+							chs\NoClip = (Not chs\NoClip)
 							If chs\NoClip = False Then		
 								RotateEntity(Collider, 0.0, EntityYaw(Collider), 0.0)
 							Else
@@ -1300,7 +1300,7 @@ Function UpdateConsole()
 							;[End Block]
 						Default
 							;[Block]
-							chs\NoBlink = Not chs\NoBlink
+							chs\NoBlink = (Not chs\NoBlink)
 							;[End Block]
 					End Select	
 					If chs\NoBlink Then
@@ -1324,7 +1324,7 @@ Function UpdateConsole()
 							;[End Block]
 						Default
 							;[Block]
-							chs\Cheats = Not chs\Cheats
+							chs\Cheats = (Not chs\Cheats)
 							;[End Block]
 					End Select	
 					
@@ -1371,7 +1371,7 @@ Function UpdateConsole()
 							;[End Block]
 						Default
 							;[Block]
-							DebugHUD = Not DebugHUD
+							DebugHUD = (Not DebugHUD)
 							;[End Block]
 					End Select
 					
@@ -1454,7 +1454,7 @@ Function UpdateConsole()
 							;[End Block]
 						Default
 							;[Block]
-							chs\InfiniteStamina = Not chs\InfiniteStamina
+							chs\InfiniteStamina = (Not chs\InfiniteStamina)
 							;[End Block]
 					End Select
 					
@@ -1518,7 +1518,7 @@ Function UpdateConsole()
 						EndIf
 				    Next
 					
-				    CreateConsoleMsg("Checkpoints unlocked.", 255, 255, 255)								
+				    CreateConsoleMsg("Checkpoints are now unlocked.", 255, 255, 255)								
 					;[End Block]
 				Case "disablenuke"
 					;[Block]
@@ -1628,8 +1628,8 @@ Function UpdateConsole()
 				Case "tp"
 					;[Block]
 					For n.NPCs = Each NPCs
-						If n\NPCtype = NPCtypeMTF
-							If n\MTFLeader = Null
+						If n\NPCtype = NPCtypeMTF Then
+							If n\MTFLeader = Null Then
 								PositionEntity(Collider, EntityX(n\Collider), EntityY(n\Collider) + 5.0, EntityZ(n\Collider))
 								ResetEntity(Collider)
 								Exit
@@ -1664,7 +1664,7 @@ Function UpdateConsole()
 							;[End Block]
 						Default
 							;[Block]
-							chs\NoTarget = Not chs\NoTarget
+							chs\NoTarget = (Not chs\NoTarget)
 							;[End Block]
 					End Select
 					
@@ -1761,7 +1761,7 @@ Function UpdateConsole()
 						StrTemp = ""
 					EndIf
 					
-					If Int(StrTemp) >= 0 And Int(StrTemp) < MAXACHIEVEMENTS
+					If Int(StrTemp) >= 0 And Int(StrTemp) < MAXACHIEVEMENTS Then
 						Achievements(Int(StrTemp)) = True
 						CreateConsoleMsg("Achievemt " + AchievementStrings(Int(StrTemp)) + " unlocked.")
 					Else
@@ -2666,7 +2666,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 	Else
 		If d\Locked = True Then
 			If ShowMsg = True Then 
-				If Not (d\IsElevatorDoor > 0) Then
+				If (Not (d\IsElevatorDoor > 0)) Then
 					PlaySound_Strict(ButtonSFX2)
 					If PlayerRoom\RoomTemplate\Name <> "room2elevator" Then
                         If d\Open Then
@@ -3233,7 +3233,7 @@ Repeat
 					Else
 						PauseSounds()
 					EndIf
-					InvOpen = Not InvOpen
+					InvOpen = (Not InvOpen)
 					If OtherOpen <> Null Then OtherOpen = Null
 					SelectedItem = Null
 				EndIf
@@ -3334,15 +3334,15 @@ Repeat
 		If MsgTimer > 0.0 Then
 			Local Temp% = False
 			
-			If (Not InvOpen)
-				If SelectedItem <> Null
+			If (Not InvOpen) Then
+				If SelectedItem <> Null Then
 					If SelectedItem\ItemTemplate\TempName = "paper" Or SelectedItem\ItemTemplate\TempName = "oldpaper"
 						Temp = True
 					EndIf
 				EndIf
 			EndIf
 			
-			If (Not Temp)
+			If (Not Temp) Then
 				Color(0, 0, 0)
 				AAText((GraphicWidth / 2) + 1, (GraphicHeight / 2) + 201, Msg, True, False, Min(MsgTimer / 2.0, 255.0) / 255.0)
 				Color(255, 255, 255)
@@ -3528,7 +3528,7 @@ Function DrawEnding()
 		Else
 			DrawImage(EndingScreen, GraphicWidth / 2 - 400, GraphicHeight / 2 - 400)
 			
-			If EndingTimer < -1000.0 And EndingTimer > -2000.0
+			If EndingTimer < -1000.0 And EndingTimer > -2000.0 Then
 				Width = ImageWidth(PauseMenuIMG)
 				Height = ImageHeight(PauseMenuIMG)
 				x = GraphicWidth / 2 - Width / 2
@@ -3555,7 +3555,7 @@ Function DrawEnding()
 					Local DocAmount% = 0, DocsFound% = 0
 					
 					For itt.ItemTemplates = Each ItemTemplates
-						If itt\tempname = "paper" Then
+						If itt\TempName = "paper" Then
 							DocAmount = DocAmount + 1
 							DocsFound = DocsFound + itt\Found
 						EndIf
@@ -3584,11 +3584,11 @@ Function DrawEnding()
 					x = x + Width / 2
 					y = y + Height - 100 * MenuScale
 					
-					If DrawButton(x - 145 * MenuScale, y - 200 * MenuScale, 390 * MenuScale, 60 * MenuScale, "ACHIEVEMENTS", True) Then
+					If DrawButton(x - 170 * MenuScale, y - 200 * MenuScale, 430 * MenuScale, 60 * MenuScale, "ACHIEVEMENTS", True) Then
 						AchievementsMenu = 1
 					EndIf
 					
-					If DrawButton(x - 145 * MenuScale, y - 100 * MenuScale, 390 * MenuScale, 60 * MenuScale, "MAIN MENU", True)
+					If DrawButton(x - 170 * MenuScale, y - 100 * MenuScale, 430 * MenuScale, 60 * MenuScale, "MAIN MENU", True)
 						ShouldPlay = 24
 						NowPlaying = ShouldPlay
 						For i = 0 To 9
@@ -3927,7 +3927,7 @@ Function MovePlayer()
 		EndIf
 		
 		Temp = False
-		If (Not IsZombie)
+		If (Not IsZombie) Then
 			If KeyDown(KEY_DOWN) And Playable Then
 				Temp = True 
 				Angle = 180.0
@@ -4565,7 +4565,7 @@ Function DrawGUI()
 				EndIf
 			Next
 			If PlayerRoom\RoomTemplate\Name = "dimension1499"
-				AAText(x + 350, 50, "Current Chunk X/Z: (" + (Int((EntityX(Collider) + 20) / 40)) + ", "+(Int((EntityZ(Collider) + 20) / 40)) + ")")
+				AAText(x + 350, 50, "Current Chunk X/Z: (" + (Int((EntityX(Collider) + 20) / 40)) + ", " + (Int((EntityZ(Collider) + 20) / 40)) + ")")
 				
 				Local CH_Amount% = 0
 				
@@ -5963,7 +5963,7 @@ Function DrawGUI()
 									;[Block]
 									ResumeChannel(RadioCHN(0))
 									StrTemp = "        USER TRACK PLAYER - "
-									If (Not EnableUserTracks)
+									If (Not EnableUserTracks) Then
 										If ChannelPlaying(RadioCHN(0)) = False Then RadioCHN(0) = PlaySound_Strict(RadioStatic)
 										StrTemp = StrTemp + "NOT ENABLED     "
 									ElseIf UserTrackMusicAmount < 1
@@ -5971,7 +5971,7 @@ Function DrawGUI()
 										StrTemp = StrTemp + "NO TRACKS FOUND     "
 									Else
 										If ChannelPlaying(RadioCHN(0)) = False Then
-											If (Not UserTrackFlag)
+											If (Not UserTrackFlag) Then
 												If UserTrackMode
 													If RadioState(0) < (UserTrackMusicAmount - 1)
 														RadioState(0) = RadioState(0) + 1
@@ -5993,7 +5993,7 @@ Function DrawGUI()
 										
 										If KeyHit(2) Then
 											PlaySound_Strict(RadioSquelch)
-											If (Not UserTrackFlag)
+											If (Not UserTrackFlag) Then
 												If UserTrackMode
 													If RadioState(0) < (UserTrackMusicAmount - 1)
 														RadioState(0) = RadioState(0) + 1
@@ -6051,7 +6051,7 @@ Function DrawGUI()
 										Select RadioState(3)
 											Case 40
 												;[Block]
-												If Not RadioState3(0) Then
+												If (Not RadioState3(0)) Then
 													RadioCHN(3) = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random1.ogg"))
 													RadioState(3) = RadioState(3) + 1	
 													RadioState3(0) = True	
@@ -6059,7 +6059,7 @@ Function DrawGUI()
 												;[End Block]
 											Case 400
 												;[Block]
-												If Not RadioState3(1) Then
+												If (Not RadioState3(1)) Then
 													RadioCHN(3) = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random2.ogg"))
 													RadioState(3) = RadioState(3) + 1	
 													RadioState3(1) = True	
@@ -6067,7 +6067,7 @@ Function DrawGUI()
 												;[End Block]
 											Case 800
 												;[Block]
-												If Not RadioState3(2) Then
+												If (Not RadioState3(2)) Then
 													RadioCHN(3) = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random3.ogg"))
 													RadioState(3) = RadioState(3) + 1	
 													RadioState3(2) = True
@@ -6075,7 +6075,7 @@ Function DrawGUI()
 												;[End Block]
 											Case 1200
 												;[Block]
-												If Not RadioState3(3) Then
+												If (Not RadioState3(3)) Then
 													RadioCHN(3) = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random4.ogg"))	
 													RadioState(3) = RadioState(3) + 1	
 													RadioState3(3) = True
@@ -6083,7 +6083,7 @@ Function DrawGUI()
 												;[End Block]
 											Case 1600
 												;[Block]
-												If Not RadioState3(4) Then
+												If (Not RadioState3(4)) Then
 													RadioCHN(3) = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random5.ogg"))	
 													RadioState(3) = RadioState(3) + 1
 													RadioState3(4) = True
@@ -6091,7 +6091,7 @@ Function DrawGUI()
 												;[End Block]
 											Case 2000
 												;[Block]
-												If Not RadioState3(5) Then
+												If (Not RadioState3(5)) Then
 													RadioCHN(3) = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random6.ogg"))	
 													RadioState(3) = RadioState(3) + 1
 													RadioState3(5) = True
@@ -6099,7 +6099,7 @@ Function DrawGUI()
 												;[End Block]
 											Case 2400
 												;[Block]
-												If Not RadioState3(6) Then
+												If (Not RadioState3(6)) Then
 													RadioCHN(3) = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random7.ogg"))	
 													RadioState(3) = RadioState(3) + 1
 													RadioState3(6) = True
@@ -6124,8 +6124,8 @@ Function DrawGUI()
 											Select RadioState(4)
 												Case 10
 													;[Block]
-													If (Not Contained106)
-														If Not RadioState4(0) Then
+													If (Not Contained106) Then
+														If (Not RadioState4(0)) Then
 															RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\radio\OhGod.ogg"))
 															RadioState(4) = RadioState(4) + 1
 															RadioState4(0) = True
@@ -6134,7 +6134,7 @@ Function DrawGUI()
 													;[End Block]
 												Case 100
 													;[Block]
-													If Not RadioState4(1) Then
+													If (Not RadioState4(1)) Then
 														RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\radio\Chatter2.ogg"))
 														RadioState(4) = RadioState(4) + 1
 														RadioState4(1) = True
@@ -6150,7 +6150,7 @@ Function DrawGUI()
 													;[End Block]
 												Case 200
 													;[Block]
-													If Not RadioState4(3) Then
+													If (Not RadioState4(3)) Then
 														RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\Radio\Chatter4.ogg"))
 														RadioState(4) = RadioState(4) + 1
 														RadioState4(3) = True
@@ -6158,7 +6158,7 @@ Function DrawGUI()
 													;[End Block]
 												Case 260
 													;[Block]
-													If Not RadioState4(4) Then
+													If (Not RadioState4(4)) Then
 														RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\SCP\035\RadioHelp1.ogg"))
 														RadioState(4) = RadioState(4) + 1
 														RadioState4(4) = True
@@ -6166,7 +6166,7 @@ Function DrawGUI()
 													;[End Block]
 												Case 300
 													;[Block]
-													If Not RadioState4(5) Then
+													If (Not RadioState4(5)) Then
 														RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\Radio\Chatter1.ogg"))	
 														RadioState(4) = RadioState(4) + 1	
 														RadioState4(5) = True
@@ -6174,7 +6174,7 @@ Function DrawGUI()
 													;[End Block]
 												Case 350
 													;[Block]
-													If Not RadioState4(6) Then
+													If (Not RadioState4(6)) Then
 														RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\Radio\Franklin2.ogg"))
 														RadioState(4) = RadioState(4) + 1
 														RadioState4(6) = True
@@ -6182,7 +6182,7 @@ Function DrawGUI()
 													;[End Block]
 												Case 400
 													;[Block]
-													If Not RadioState4(7) Then
+													If (Not RadioState4(7)) Then
 														RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\SCP\035\RadioHelp2.ogg"))
 														RadioState(4) = RadioState(4) + 1
 														RadioState4(7) = True
@@ -6190,7 +6190,7 @@ Function DrawGUI()
 													;[End Block]
 												Case 450
 													;[Block]
-													If Not RadioState4(8) Then
+													If (Not RadioState4(8)) Then
 														RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\Radio\Franklin3.ogg"))	
 														RadioState(4) = RadioState(4) + 1		
 														RadioState4(8) = True
@@ -6198,7 +6198,7 @@ Function DrawGUI()
 													;[End Block]
 												Case 600
 													;[Block]
-													If Not RadioState4(9) Then
+													If (Not RadioState4(9)) Then
 														RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\Radio\Franklin4.ogg"))	
 														RadioState(4) = RadioState(4) + 1	
 														RadioState4(9) = True
@@ -6920,7 +6920,7 @@ Function DrawGUI()
 					SelectedItem\State = 0.0
 				ElseIf IN = "vest" Or IN = "finevest"
 					SelectedItem\State = 0.0
-					If (Not WearingVest)
+					If (Not WearingVest) Then
 						DropItem(SelectedItem, False)
 					EndIf
 				ElseIf IN = "hazmatsuit" Or IN = "hazmatsuit2" Or IN = "hazmatsuit3"
@@ -7423,11 +7423,11 @@ Function DrawMenu()
 					
 					Color(255, 255, 255)
 					AAText(x, y, "Antialiased text:")
-					AATextEnable% = DrawTick(x + 270 * MenuScale, y + MenuScale, AATextEnable%)
-					If AATextEnable_Prev% <> AATextEnable
+					AATextEnable = DrawTick(x + 270 * MenuScale, y + MenuScale, AATextEnable)
+					If AATextEnable_Prev <> AATextEnable
 						For font.AAFont = Each AAFont
-							FreeFont(font\LowResFont%)
-							If (Not AATextEnable)
+							FreeFont(font\LowResFont)
+							If (Not AATextEnable) Then
 								FreeTexture(font\Texture)
 								FreeImage(font\Backup)
 							EndIf
@@ -7459,9 +7459,9 @@ Function DrawMenu()
 				
 				If RN = "room173intro" Or RN = "gateb" Or RN = "gatea" Then AbleToSave = False
 				If (Not CanSave) Then AbleToSave = False
-				If AbleToSave
+				If AbleToSave Then
 					QuitButton = 140
-					If DrawButton(x, y + 60 * MenuScale, 390 * MenuScale, 60 * MenuScale, "Save & Quit") Then
+					If DrawButton(x, y + 60 * MenuScale, 430 * MenuScale, 60 * MenuScale, "Save & Quit") Then
 						DropSpeed = 0
 						SaveGame(SavePath + CurrSave + "\")
 						NullGame()
@@ -7474,7 +7474,7 @@ Function DrawMenu()
 				EndIf
 			EndIf
 			
-			If DrawButton(x, y + QuitButton*MenuScale, 390 * MenuScale, 60 * MenuScale, "Quit") Then
+			If DrawButton(x, y + QuitButton*MenuScale, 430 * MenuScale, 60 * MenuScale, "Quit") Then
 				NullGame()
 				MenuOpen = False
 				MainMenuOpen = True
@@ -7536,7 +7536,7 @@ Function DrawMenu()
 			If KillTimer >= 0 Then	
 				y = y + 72 * MenuScale
 				
-				If DrawButton(x, y, 390 * MenuScale, 60 * MenuScale, "Resume", True, True) Then
+				If DrawButton(x, y, 430 * MenuScale, 60 * MenuScale, "Resume", True, True) Then
 					MenuOpen = False
 					ResumeSounds()
 					MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : Mouse_X_Speed_1 = 0.0 : Mouse_Y_Speed_1 = 0.0
@@ -7545,15 +7545,15 @@ Function DrawMenu()
 				y = y + 75 * MenuScale
 				If (Not SelectedDifficulty\PermaDeath) Then
 					If GameSaved Then
-						If DrawButton(x, y, 390 * MenuScale, 60 * MenuScale, "Load Game") Then
+						If DrawButton(x, y, 430 * MenuScale, 60 * MenuScale, "Load Game") Then
 							DrawLoading(0)
 							
 							MenuOpen = False
 							LoadGameQuick(SavePath + CurrSave + "\")
 							
-							MoveMouse Viewport_Center_X, Viewport_Center_Y
+							MoveMouse(Viewport_Center_X, Viewport_Center_Y)
 							AASetFont(fo\FontID[0])
-							HidePointer ()
+							HidePointer()
 							
 							FlushKeys()
 							FlushMouse()
@@ -7586,22 +7586,22 @@ Function DrawMenu()
 							ResetInput()
 						EndIf
 					Else
-						DrawFrame(x, y, 390 * MenuScale, 60 * MenuScale)
+						DrawFrame(x, y, 430 * MenuScale, 60 * MenuScale)
 						Color(100, 100, 100)
 						AASetFont(fo\FontID[1])
-						AAText(x + (390 * MenuScale) / 2, y + (60 * MenuScale) / 2, "Load Game", True, True)
+						AAText(x + (430 * MenuScale) / 2, y + (60 * MenuScale) / 2, "Load Game", True, True)
 					EndIf
 					y = y + 75 * MenuScale
 				EndIf
 				
-				If DrawButton(x, y, 390 * MenuScale, 60 * MenuScale, "Achievements") Then AchievementsMenu = 1
+				If DrawButton(x, y, 430 * MenuScale, 60 * MenuScale, "Achievements") Then AchievementsMenu = 1
 				y = y + 75 * MenuScale
-				If DrawButton(x, y, 390 * MenuScale, 60 * MenuScale, "Options") Then OptionsMenu = 1
+				If DrawButton(x, y, 430 * MenuScale, 60 * MenuScale, "Options") Then OptionsMenu = 1
 				y = y + 75 * MenuScale
 			Else
 				y = y + 104 * MenuScale
 				If GameSaved And (Not SelectedDifficulty\PermaDeath) Then
-					If DrawButton(x, y, 390 * MenuScale, 60 * MenuScale, "Load Game") Then
+					If DrawButton(x, y, 430 * MenuScale, 60 * MenuScale, "Load Game") Then
 						DrawLoading(0)
 						
 						MenuOpen = False
@@ -7642,11 +7642,11 @@ Function DrawMenu()
 						ResetInput()
 					EndIf
 				Else
-					DrawButton(x, y, 390 * MenuScale, 60 * MenuScale, "")
+					DrawButton(x, y, 430 * MenuScale, 60 * MenuScale, "")
 					Color(50, 50, 50)
 					AAText(x + 185 * MenuScale, y + 30 * MenuScale, "Load Game", True, True)
 				EndIf
-				If DrawButton(x, y + 80 * MenuScale, 390 * MenuScale, 60 * MenuScale, "Quit to Menu") Then
+				If DrawButton(x, y + 80 * MenuScale, 430 * MenuScale, 60 * MenuScale, "Quit to Menu") Then
 					NullGame()
 					MenuOpen = False
 					MainMenuOpen = True
@@ -7657,14 +7657,14 @@ Function DrawMenu()
 				y= y + 80 * MenuScale
 			EndIf
 			
-			If KillTimer >= 0.0 And (Not MainMenuOpen)
-				If DrawButton(x, y, 390 * MenuScale, 60 * MenuScale, "Quit") Then
+			If KillTimer >= 0.0 And (Not MainMenuOpen) Then
+				If DrawButton(x, y, 430 * MenuScale, 60 * MenuScale, "Quit") Then
 					QuitMsg = 1
 				EndIf
 			EndIf
 			
 			AASetFont(fo\FontID[0])
-			If KillTimer < 0.0 Then RowText(DeathMsg, x, y + 80 * MenuScale, 390 * MenuScale, 600 * MenuScale)
+			If KillTimer < 0.0 Then RowText(DeathMsg, x, y + 80 * MenuScale, 430 * MenuScale, 600 * MenuScale)
 		EndIf
 		If FullScreen Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	End If
@@ -8459,11 +8459,11 @@ Function InitNewGame()
 		EndIf
 	Next
 	
-	FreeTextureCache
+	FreeTextureCache()
 	DrawLoading(100)
 	
-	FlushKeys
-	FlushMouse
+	FlushKeys()
+	FlushMouse()
 	
 	DropSpeed = 0
 	
@@ -8551,7 +8551,7 @@ Function InitLoadGame()
 		EndIf
 	Next
 	
-	FreeTextureCache
+	FreeTextureCache()
 	
 	CatchErrors("InitLoadGame")
 	DrawLoading(100)
@@ -8573,7 +8573,7 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	FreeParticles()
 	
-	ClearTextureCache
+	ClearTextureCache()
 	
 	DebugHUD = False
 	
@@ -10626,10 +10626,10 @@ Function Graphics3DExt%(Width%, Height%, Depth% = 32, Mode% = 2)
 End Function
 
 Function ResizeImage2(Image%, Width%, Height%)
-    Img% = CreateImage(Width, Height)
+    Local Img% = CreateImage(Width, Height)
+	Local OldWidth% = ImageWidth(Image)
+	Local OldHeight% = ImageHeight(Image)
 	
-	OldWidth% = ImageWidth(Image)
-	OldHeight% = ImageHeight(Image)
 	CopyRect(0, 0, OldWidth, OldHeight, 1024 - OldWidth / 2, 1024 - OldHeight / 2, ImageBuffer(Image), TextureBuffer(Fresize_Texture))
 	SetBuffer(BackBuffer())
 	ScaleRender(0.0, 0.0, 2048.0 / Float(RealGraphicWidth) * Float(Width) / Float(OldWidth), 2048.0 / Float(RealGraphicWidth) * Float(Height) / Float(OldHeight))
@@ -10757,7 +10757,7 @@ Function RenderWorld2()
 							yValue# = Sin(PitchValue)
 						EndIf
 						
-						If (Not IsNVGBlinking)
+						If (Not IsNVGBlinking) Then
 							AAText(GraphicWidth / 2 + xValue * (GraphicWidth / 2), GraphicHeight / 2 - yValue * (GraphicHeight / 2), np\NVName, True, True)
 							AAText(GraphicWidth / 2 + xValue * (GraphicWidth / 2), GraphicHeight / 2 - yValue * (GraphicHeight / 2) + 30 * MenuScale, f2s(Dist, 1) + " m", True, True)
 						EndIf
@@ -10959,7 +10959,7 @@ Function CheckTriggers$()
 	Local i%, sX#, sY#, sZ#
 	Local Inside% = -1
 	
-	If PlayerRoom\TriggerBoxAmount = 0
+	If PlayerRoom\TriggerBoxAmount = 0 Then
 		Return("")
 	Else
 		For i = 0 To PlayerRoom\TriggerBoxAmount - 1
@@ -10968,7 +10968,7 @@ Function CheckTriggers$()
 			sY = Max(EntityScaleY(PlayerRoom\TriggerBox[i], 1), 0.001)
 			sZ = EntityScaleZ(PlayerRoom\TriggerBox[i], 1)
 			GetMeshExtents(PlayerRoom\TriggerBox[i])
-			If DebugHUD
+			If DebugHUD Then
 				EntityColor(PlayerRoom\TriggerBox[i], 255.0, 255.0, 0.0)
 				EntityAlpha(PlayerRoom\TriggerBox[i], 0.2)
 			Else
