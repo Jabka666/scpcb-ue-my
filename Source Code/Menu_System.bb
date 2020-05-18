@@ -1605,24 +1605,31 @@ Function DrawLoading(percent%, shortloading=False)
 	Until (GetKey()<>0 Or MouseHit(1))
 End Function
 
-
+Global SymMilliSecs%, SymMilliSecs2%
 
 Function rInput$(aString$)
-	Local value% = GetKey()
-	Local length% = Len(aString$)
+	Local Value% = GetKey()
+	Local Length% = Len(aString$)
 	
-	If value = 8 Then
-		value = 0
-		If length > 0 Then aString$ = Left(aString, length - 1)
+	If Value = 8 Then
+		Value = 0
+		If Length > 0 Then aString = Left(aString, Length - 1)
+		SymMilliSecs = MilliSecs() + 500
 	EndIf
-	
-	If value = 13 Or value = 0 Then
-		Return aString$
-	ElseIf value > 0 And value < 7 Or value > 26 And value < 32 Or value = 9
-		Return aString$
+	If KeyDown(14) And MilliSecs() > SymMilliSecs Then
+		If Length > 0 And MilliSecs() > SymMilliSecs2 Then
+			aString = Left(aString, Length - 1)
+			SymMilliSecs2 = MilliSecs() + 20
+		EndIf
+		Return(aString)
+	EndIf
+	If Value = 13 Or Value = 0 Then
+		Return(aString)
+	ElseIf Value > 0 And Value < 7 Or Value > 26 And Value < 32 Or Value = 9
+		Return(aString)
 	Else
-		aString$ = aString$ + Chr(value)
-		Return aString$
+		aString = aString + Chr(Value)
+		Return(aString)
 	End If
 End Function
 
