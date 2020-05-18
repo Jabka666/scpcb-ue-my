@@ -3,6 +3,7 @@
 ===============================================================
 
 - Added more names for NPC's console spawning.
+- Added symbols' fast erasing
 
 - Now guard in "room2elevator" event can kill the player, if he too close.
 - Now the pass code for O5 Council's office drops from falling guard in SCP-895's event.
