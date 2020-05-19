@@ -2,10 +2,10 @@
 ---------------------------REBORN.-----------------------------
 ===============================================================
 
-- Added more names for NPC's console spawning.
+- Added more console names for NPC's spawning.
 - Added symbols' fast erasing.
 
-- Now guard in "room2elevator" event can kill the player, if he too close.
+- Now guard in "room2elevator" event can kill the player if he too close.
 - Now the pass code for O5 Council's office drops from falling guard in SCP-895's event.
 
 - Changed one bump texture to the better one.
@@ -19,6 +19,9 @@
 - Removed all stuff from other mods, except SCP-409, SCP-005, FOV and some files from BoH.
 - Removed event of SCP-096's containment chamber.
 
+- Renamed room2testroom to room2testroom2. ;NOT DONE
+- Renamed room2testroom2 to room2testroom. ;NOT DONE
+
 - Optimized items.
 - Optimized startup videos.
 - Optimized event of SCP-012's containment chamber event.
@@ -26,7 +29,7 @@
 Bug Fixes:
 
 - Fixed appearing of the gas from SCP-035's chamber in Maintenance Tunnels.
-- Fixed sounds for big doors, locked by SCP-079.
+- Fixed sounds for big doors locked by SCP-079.
 - Fixed lights in SCP-012's containment chamber.
 - Fixed SCP-1048-A's scream being able to be heard anywhere.
 - Fixed SCP-049 spam-closing the door behind it, if the player tries to open it. ;NOT DONE
@@ -50,6 +53,7 @@ Bug Fixes:
 - Fixed button sound not working when not using launcher.
 - Fixed "CanUseItem" function for eyegear.
 - Fixed elevators' pivots for SCP-008, SCP-106 and SCP-079's containment chambers.
+- Fixed lamps' texture in room1endroom3 and SCP-008's containment chamber. ;008's CHAMBER NOT DONE
 
 - Small fixes for room2testroom2 event.
 - Small fixes for commands "disablenuke" and "enable/disablecontrol.
