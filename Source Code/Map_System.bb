@@ -2929,6 +2929,18 @@ Function FillRoom(r.Rooms)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
+			em = CreateEmitter(r\x - 269.0 * RoomScale, r\y + 20.0, r\z + 624.0 * RoomScale, 0)
+			em\RandAngle = 15.0 : em\Speed = 0.05 : em\SizeChange = 0.007 : em\Achange = -0.006 : em\Gravity = -0.24
+			TurnEntity(em\OBJ, 90.0, 0.0, 0.0)
+			EntityParent(em\OBJ, r\OBJ)
+			r\Objects[5] = em\OBJ
+			
+			em = CreateEmitter(r\x - 269.0 * RoomScale, r\y + 20.0, r\z + 135.0 * RoomScale, 0) ;112
+			em\RandAngle = 15.0 : em\Speed = 0.05 : em\SizeChange = 0.007 : em\Achange = -0.006 : em\Gravity = -0.24
+			TurnEntity(em\OBJ, 90.0, 0.0, 0.0)
+			EntityParent(em\OBJ, r\OBJ)
+			r\Objects[6] = em\OBJ
+			
 			; ~ The corners of the cont chamber (needed to calculate whether the player is inside the chamber)
 			r\Objects[7] = CreatePivot()
 			PositionEntity(r\Objects[7], r\x - 720.0 * RoomScale, r\y + 0.5, r\z + 880.0 * RoomScale)
@@ -2938,14 +2950,6 @@ Function FillRoom(r.Rooms)
 			
 			For i = 7 To 8
 				EntityParent(r\Objects[i], r\OBJ)
-			Next
-			
-			For i = 0 To 1
-				em = CreateEmitter(r\x - 272.0 * RoomScale, r\y + 20.0, r\z + (624.0 - i * 512.0) * RoomScale, 0)
-				em\RandAngle = 15.0 : em\Speed = 0.05 : em\SizeChange = 0.007 : em\Achange = -0.006 : em\Gravity = -0.24
-				TurnEntity(em\OBJ, 90.0, 0.0, 0.0)
-				EntityParent(em\OBJ, r\OBJ)
-				r\Objects[5 + i] = em\OBJ
 			Next
 			
 			it = CreateItem("SCP-035 Addendum", "paper", r\x + 248.0 * RoomScale, r\y + 220.0 * RoomScale, r\z + 576.0 * RoomScale)
@@ -8614,5 +8618,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11F1
+;~B#11F5
 ;~C#Blitz3D

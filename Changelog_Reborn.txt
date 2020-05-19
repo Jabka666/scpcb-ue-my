@@ -34,7 +34,7 @@ Bug Fixes:
 - Fixed SCP-173's head poking out of its box when recontained by the MTFs.
 - Fixed item's positions in room2closets, room1archive. ;NOT DONE
 - Fixed small lamps in room2pit.
-- Fixed missing pipes in SCP-035's containment chamber. ;NOT DONE
+- Fixed missing pipes in SCP-035's containment chamber.
 - Fixed font for startup videos.
 - Fixed lockdown monitor in room4info.
 - Fixed 106sinkhole event when player using NVG.

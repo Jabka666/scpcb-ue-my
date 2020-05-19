@@ -5762,8 +5762,8 @@ Function UpdateEvents()
 							PositionEntity(e\room\Objects[5], EntityX(e\room\Objects[5], True), 424.0 * RoomScale, EntityZ(e\room\Objects[5], True), True)
 							PositionEntity(e\room\Objects[6], EntityX(e\room\Objects[6], True), 424.0 * RoomScale, EntityZ(e\room\Objects[6], True), True)
 						Else
-							PositionEntity(e\room\Objects[5], EntityX(e\room\Objects[5], True), 10.0, EntityZ(e\room\Objects[5], True), True)
-							PositionEntity(e\room\Objects[6], EntityX(e\room\Objects[6], True), 10.0, EntityZ(e\room\Objects[6], True), True)
+							PositionEntity(e\room\Objects[5], EntityX(e\room\Objects[5], True), 20.0, EntityZ(e\room\Objects[5], True), True)
+							PositionEntity(e\room\Objects[6], EntityX(e\room\Objects[6], True), 20.0, EntityZ(e\room\Objects[6], True), True)
 						EndIf
 						
 						Temp = False
