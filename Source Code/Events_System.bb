@@ -141,7 +141,7 @@ Function InitEvents()
 		End Select 
 	EndIf 
 	
-	CreateEvent("room2testroom173", "room2testroom2", 0, 1.0)	
+	CreateEvent("room2testroom173", "room2testroom", 0, 1.0)	
 	
 	CreateEvent("room2tesla", "room2tesla", 0, 0.9)
 	
@@ -191,7 +191,7 @@ Function InitEvents()
 	
 	CreateEvent("room2pit", "room2pit", 0, 0.4 + (0.4 * SelectedDifficulty\AggressiveNPCs))
 	
-	CreateEvent("room2testroom", "room2testroom", 0)
+	CreateEvent("room2testroom2", "room2testroom2", 0)
 	
 	CreateEvent("room2tunnel", "room2tunnel", 0)
 	
@@ -6960,7 +6960,7 @@ Function UpdateEvents()
 					End If
 				EndIf
 				;[End Block]
-			Case "room2testroom"
+			Case "room2testroom2"
 			    ;[Block]
                 If e\EventState = 0.0
                     If PlayerRoom = e\room Then

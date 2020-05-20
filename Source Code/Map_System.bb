@@ -2394,7 +2394,7 @@ Function FillRoom(r.Rooms)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			;[End Block]
-		Case "room2testroom2"
+		Case "room2testroom"
 			;[Block]
 			r\RoomDoors[0] = CreateDoor(r\Zone, r\x - 240.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 90.0, r, False, False, 1)
 			r\RoomDoors[0]\AutoClose = False
@@ -3574,7 +3574,7 @@ Function FillRoom(r.Rooms)
 			it = CreateItem("Gas Mask", "gasmask", r\x + 954.0 * RoomScale, r\y - 504.0 * RoomScale, r\z + 235.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)		
 			;[End Block]
-		Case "room2testroom"
+		Case "room2testroom2"
 			;[Block]
 			; ~ DNA door
 			r\RoomDoors[0] = CreateDoor(r\Zone, r\x + 720.0 * RoomScale, r\y, r\z, 0.0, r, False, 2, -1)
@@ -7359,7 +7359,7 @@ Function CreateMap()
 	Max_Pos = Room2Amount[0] - 1
 	
 	MapRoom(ROOM2, 0) = "room2closets" 
-	SetRoom("room2testroom2", ROOM2, Floor(0.1 * Float(Room2Amount[0])), Min_Pos, Max_Pos)
+	SetRoom("room2testroom", ROOM2, Floor(0.1 * Float(Room2Amount[0])), Min_Pos, Max_Pos)
 	SetRoom("room2scps", ROOM2, Floor(0.2 * Float(Room2Amount[0])), Min_Pos, Max_Pos)
 	SetRoom("room2storage", ROOM2, Floor(0.3 * Float(Room2Amount[0])),Min_Pos, Max_Pos)
 	SetRoom("room2gw_b", ROOM2, Floor(0.4 * Float(Room2Amount[0])), Min_Pos, Max_Pos)
@@ -7394,7 +7394,7 @@ Function CreateMap()
 	SetRoom("room049", ROOM2, Room2Amount[0] + Floor(0.4 * Float(Room2Amount[1])), Min_Pos, Max_Pos)
 	SetRoom("room008", ROOM2, Room2Amount[0] + Floor(0.5 * Float(Room2Amount[1])), Min_Pos, Max_Pos)
 	SetRoom("room2shaft", ROOM2, Room2Amount[0] + Floor(0.6 * Float(Room2Amount[1])), Min_Pos, Max_Pos)
-	SetRoom("room2testroom", ROOM2, Room2Amount[0] + Floor(0.7 * Float(Room2Amount[1])), Min_Pos, Max_Pos)
+	SetRoom("room2testroom2", ROOM2, Room2Amount[0] + Floor(0.7 * Float(Room2Amount[1])), Min_Pos, Max_Pos)
 	SetRoom("room2servers", ROOM2, Room2Amount[0] + Floor(0.9 * Room2Amount[1]), Min_Pos, Max_Pos)
 	
 	MapRoom(ROOM2C, Room2CAmount[0] + Floor(0.5 * Float(Room2CAmount[1]))) = "room2cpit"

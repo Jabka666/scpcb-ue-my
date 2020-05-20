@@ -54,6 +54,7 @@ Bug Fixes:
 - Fixed "CanUseItem" function for eyegear.
 - Fixed elevators' pivots for SCP-008, SCP-106 and SCP-079's containment chambers.
 - Fixed lamps' texture in room1endroom3 and SCP-008's containment chamber. ;008's CHAMBER NOT DONE
+- Fixed some rooms' descriptions.
 
 - Small fixes for room2testroom2 event.
 - Small fixes for commands "disablenuke" and "enable/disablecontrol.

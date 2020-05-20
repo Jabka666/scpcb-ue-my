@@ -588,7 +588,7 @@ If state=1 Then ;convert B3D to Rmesh
 		If Left(TemporaryString,1) = "[" Then
 			TemporaryString = Mid(TemporaryString, 2, Len(TemporaryString) - 2)
 			
-			If TemporaryString <> "Room Ambience" Then
+			If TemporaryString <> "room ambience" Then
 				Stri=GetINIString("Data\rooms.ini",TemporaryString,"Mesh Path")
 				
 				mesh=LoadAnimMesh(Stri)
@@ -640,7 +640,7 @@ ElseIf state=3
 		If Left(TemporaryString,1) = "[" Then
 			TemporaryString = Mid(TemporaryString, 2, Len(TemporaryString) - 2)
 			
-			If TemporaryString <> "Room Ambience" Then
+			If TemporaryString <> "room ambience" Then
 				Stri=GetINIString("Data\rooms.ini",TemporaryString,"Mesh Path")
 				
 				ic.INIConvert=New INIConvert
