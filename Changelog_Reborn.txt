@@ -17,11 +17,11 @@
 - Removed unnecessary variables and functions in the code.
 - Removed unnecessary room1archive event.
 - Removed NPCs bumps.
-- Removed all stuff from other mods, except SCP-409, SCP-005, FOV and some files from BoH.
+- Removed all stuff from other mods, except SCP-409, SCP-005, FOV and some files from Box of Horrors.
 - Removed event of SCP-096's containment chamber.
 
-- Renamed room2testroom to room2testroom2. ;NOT DONE
-- Renamed room2testroom2 to room2testroom. ;NOT DONE
+- Renamed room2testroom to room2testroom2.
+- Renamed room2testroom2 to room2testroom.
 
 - Optimized items.
 - Optimized startup videos.
@@ -57,6 +57,7 @@ Bug Fixes:
 - Fixed lamps' texture in room1endroom3 and SCP-008's containment chamber. ;008's CHAMBER NOT DONE
 - Fixed some rooms' descriptions.
 - Fixed SCP-049 spam-closing the door behind it, if the player tries to open it.
+- Fixed missing small lamp in room2testroom.
 
-- Small fixes for room2testroom2 event.
+- Small fixes for room2testroom's event.
 - Small fixes for commands "disablenuke" and "enable/disablecontrol.
