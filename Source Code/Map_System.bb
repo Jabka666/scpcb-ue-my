@@ -1904,12 +1904,12 @@ Function FillRoom(r.Rooms)
 			;[Block]
 			; ~ Doors
 			d = CreateDoor(r\Zone, r\x - 736.0 * RoomScale, r\y, r\z - 104.0 * RoomScale, 0.0, r)
-			d\Timer = 70 * 5 : d\AutoClose = False
+			d\Timer = 70.0 * 5.0 : d\AutoClose = False
 			PositionEntity(d\Buttons[0], r\x - 288.0 * RoomScale, EntityY(d\Buttons[0], True), r\z - 634.0 * RoomScale, True)
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			
 			d2 = CreateDoor(r\Zone, r\x + 104.0 * RoomScale, r\y, r\z + 736.0 * RoomScale, 270.0, r)
-			d2\Timer = 70 * 5 : d2\AutoClose = False
+			d2\Timer = 70.0 * 5.0 : d2\AutoClose = False
 			PositionEntity(d2\Buttons[0], r\x + 634.0 * RoomScale, r\y + 0.7, r\z + 288.0 * RoomScale, True)
 			RotateEntity(d2\Buttons[0], 0.0, 90.0, 0.0, True)
 			FreeEntity(d2\Buttons[1]) : d2\Buttons[1] = 0
@@ -2282,12 +2282,12 @@ Function FillRoom(r.Rooms)
 		Case "checkpoint1"
 			;[Block]
 			r\RoomDoors[0] = CreateDoor(r\Zone, r\x + 48.0 * RoomScale, r\y, r\z - 128.0 * RoomScale, 0.0, r, False, False, 3)
-			r\RoomDoors[0]\AutoClose = False : r\RoomDoors[0]\Timer = 70 * 5
+			r\RoomDoors[0]\AutoClose = False : r\RoomDoors[0]\Timer = 70.0 * 5.0
 			PositionEntity(r\RoomDoors[0]\Buttons[0], r\x - 152.0 * RoomScale, EntityY(r\RoomDoors[0]\Buttons[0], True), r\z - 346.0 * RoomScale, True)
 			PositionEntity(r\RoomDoors[0]\Buttons[1], r\x - 152.0 * RoomScale, EntityY(r\RoomDoors[0]\Buttons[1], True), r\z + 90.0 * RoomScale, True)
 			
 			r\RoomDoors[1] = CreateDoor(r\Zone, r\x - 352.0 * RoomScale, r\y, r\z - 128.0 * RoomScale, 0.0, r, False, False, 3)
-			r\RoomDoors[1]\AutoClose = False : r\RoomDoors[1]\Timer = 70 * 5
+			r\RoomDoors[1]\AutoClose = False : r\RoomDoors[1]\Timer = 70.0 * 5.0
 			
 			For i = 0 To 1
 				FreeEntity(r\RoomDoors[1]\Buttons[i]) : r\RoomDoors[1]\Buttons[i] = 0
@@ -2325,12 +2325,12 @@ Function FillRoom(r.Rooms)
 		Case "checkpoint2"
 			;[Block]
 			r\RoomDoors[0] = CreateDoor(r\Zone, r\x - 48.0 * RoomScale, r\y, r\z + 128.0 * RoomScale, 0.0, r, False, False, 5)
-			r\RoomDoors[0]\AutoClose = False
+			r\RoomDoors[0]\AutoClose = False : r\RoomDoors[0]\Timer = 70.0 * 5.0
 			PositionEntity(r\RoomDoors[0]\Buttons[0], r\x + 152.0 * RoomScale, EntityY(r\RoomDoors[0]\Buttons[0], True), r\z - 90.0 * RoomScale, True)			
 			PositionEntity(r\RoomDoors[0]\Buttons[1], r\x + 152.0 * RoomScale, EntityY(r\RoomDoors[0]\Buttons[1], True), r\z + 346.0 * RoomScale, True)
 			
 			r\RoomDoors[1] = CreateDoor(r\Zone, r\x + 352.0 * RoomScale, r\y, r\z + 128.0 * RoomScale, 0.0, r, False, False, 5)
-			r\RoomDoors[1]\AutoClose = False
+			r\RoomDoors[1]\AutoClose = False : r\RoomDoors[1]\Timer = 70.0 * 5.0
 			
 			For i = 0 To 1
 				FreeEntity(r\RoomDoors[1]\Buttons[i]) : r\RoomDoors[1]\Buttons[i] = 0
@@ -2355,9 +2355,6 @@ Function FillRoom(r.Rooms)
 			ScaleEntity(r\Objects[3], 2.0, 2.0, 2.0)
 			RotateEntity(r\Objects[3], 0.0, 0.0, 0.0)
 			EntityFX(r\Objects[3], 1)
-			
-			r\RoomDoors[0]\Timer = 70 * 5
-			r\RoomDoors[1]\Timer = 70 * 5
 			
 			If MapTemp(Floor(r\x / 8.0), Floor(r\z / 8.0) - 1) = 0 Then
 				d = CreateDoor(r\Zone, r\x, r\y, r\z  - 4.0, 0.0, r, False, False, False, "GEAR")
@@ -5377,12 +5374,12 @@ Function FillRoom(r.Rooms)
 		Case "room2clockroom2"
 			;[Block]
 			d = CreateDoor(r\Zone, r\x - 736.0 * RoomScale, r\y, r\z - 104.0 * RoomScale, 0.0, r)
-			d\Timer = 70 * 5.0 : d\AutoClose = False : d\Locked = True
+			d\Timer = 70.0 * 5.0 : d\AutoClose = False : d\Locked = True
 			PositionEntity(d\Buttons[0], r\x - 288.0 * RoomScale, EntityY(d\Buttons[0], True), r\z - 634.0 * RoomScale, True)
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			
 			d2 = CreateDoor(r\Zone, r\x + 104.0 * RoomScale, r\y, r\z + 736.0 * RoomScale, 270.0, r)
-			d2\Timer = 70 * 5.0 : d2\AutoClose = False : d2\locked = True
+			d2\Timer = 70.0 * 5.0 : d2\AutoClose = False : d2\Locked = True
 			PositionEntity(d2\Buttons[0], r\x + 634.0 * RoomScale, EntityY(d2\Buttons[0], True), r\z + 288.0 * RoomScale, True)
 			RotateEntity(d2\Buttons[0], 0.0, 90.0, 0.0, True)
 			FreeEntity(d2\Buttons[1]) : d2\Buttons[1] = 0
@@ -8618,5 +8615,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11F5
+;~B#11F2
 ;~C#Blitz3D

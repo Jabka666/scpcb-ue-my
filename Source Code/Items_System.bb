@@ -609,7 +609,7 @@ Function PickItem(item.Items)
 	
 	If WearingHazmat > 0 Then
 		Msg = "You cannot pick up any items while wearing a hazmat suit."
-		MsgTimer = 70 * 5.0
+		MsgTimer = 70.0 * 5.0
 		Return
 	EndIf
 	
@@ -677,7 +677,7 @@ Function PickItem(item.Items)
 					Case "veryfinevest"
 						;[Block]
 						Msg = "The vest is too heavy to pick up."
-						MsgTimer = 70 * 6.0
+						MsgTimer = 70.0 * 6.0
 						Exit
 						;[End Block]
 					Case "firstaid", "finefirstaid", "veryfinefirstaid", "firstaid2"
@@ -705,11 +705,11 @@ Function PickItem(item.Items)
 						
 						If CanPickItem = False Then
 							Msg = "You are not able to wear two hazmat suits at the same time."
-							MsgTimer = 70 * 5.0
+							MsgTimer = 70.0 * 5.0
 							Return
 						ElseIf CanPickItem = 2 Then
 							Msg = "You are not able to wear a vest and a hazmat suit at the same time."
-							MsgTimer = 70 * 5.0
+							MsgTimer = 70.0 * 5.0
 							Return
 						Else
 							SelectedItem = item
@@ -732,11 +732,11 @@ Function PickItem(item.Items)
 						
 						If CanPickItem = False Then
 							Msg = "You are not able to wear two vests at the same time."
-							MsgTimer = 70 * 5.0
+							MsgTimer = 70.0 * 5.0
 							Return
 						ElseIf CanPickItem = 2 Then
 							Msg = "You are not able to wear a vest and a hazmat suit at the same time."
-							MsgTimer = 70 * 5.0
+							MsgTimer = 70.0 * 5.0
 							Return
 						Else
 							SelectedItem = item
@@ -758,7 +758,7 @@ Function PickItem(item.Items)
 		Next
 	Else
 		Msg = "You cannot carry any more items."
-		MsgTimer = 70 * 5.0
+		MsgTimer = 70.0 * 5.0
 	EndIf
 	
 	CatchErrors("PickItem")
@@ -767,7 +767,7 @@ End Function
 Function DropItem(item.Items, PlayDropSound% = True)
 	If WearingHazmat > 0 Then
 		Msg = "You cannot drop any items while wearing a hazmat suit."
-		MsgTimer = 70 * 5.0
+		MsgTimer = 70.0 * 5.0
 		Return
 	EndIf
 	
@@ -849,7 +849,7 @@ Function Update294()
 		VomitTimer = VomitTimer - (FPSfactor / 70.0)
 		
 		If (MilliSecs2() Mod 1600) < Rand(200, 400) Then
-			If BlurTimer = 0.0 Then BlurTimer = 70 * Rnd(10.0, 20.0)
+			If BlurTimer = 0.0 Then BlurTimer = 70.0 * Rnd(10.0, 20.0)
 			CameraShake = Rnd(0.0, 2.0)
 		EndIf
 		
@@ -880,14 +880,14 @@ Function Update294()
 		EndIf
 		
 		If (Not Vomit) Then
-			BlurTimer = 70 * 40.0
+			BlurTimer = 70.0 * 40.0
 			VomitSFX = LoadSound_Strict("SFX\SCP\294\Vomit.ogg")
 			VomitCHN = PlaySound_Strict(VomitSFX)
 			PrevInjuries = Injuries
 			PrevBloodloss = Bloodloss
 			Injuries = 1.5
 			Bloodloss = 70.0
-			EyeIrritation = 70 * 9.0
+			EyeIrritation = 70.0 * 9.0
 			
 			Pvt = CreatePivot()
 			PositionEntity(Pvt, EntityX(Camera), EntityY(Collider) - 0.05, EntityZ(Camera))

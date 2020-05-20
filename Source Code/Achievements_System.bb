@@ -113,12 +113,12 @@ Function UpdateAchievementMsg()
 	
 	For amsg = Each AchievementMsg
 		If amsg\MsgTime <> 0.0
-			If amsg\MsgTime > 0.0 And amsg\MsgTime < 70 * 7.0
+			If amsg\MsgTime > 0.0 And amsg\MsgTime < 70.0 * 7.0
 				amsg\MsgTime = amsg\MsgTime + FPSfactor2
 				If amsg\MsgX > -Width
 					amsg\MsgX = Max(amsg\MsgX - 4.0 * FPSfactor2, -Width)
 				EndIf
-			ElseIf amsg\MsgTime >= 70 * 7.0
+			ElseIf amsg\MsgTime >= 70.0 * 7.0
 				amsg\MsgTime = -1.0
 			ElseIf amsg\MsgTime = -1.0
 				If amsg\MsgX < 0.0

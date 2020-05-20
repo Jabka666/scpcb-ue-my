@@ -7,6 +7,7 @@
 
 - Now guard in "room2elevator" event can kill the player if he too close.
 - Now the pass code for O5 Council's office drops from falling guard in SCP-895's event.
+- Now ballistic vest reduces damage from NPC.
 
 - Changed one bump texture to the better one.
 
@@ -55,6 +56,7 @@ Bug Fixes:
 - Fixed elevators' pivots for SCP-008, SCP-106 and SCP-079's containment chambers.
 - Fixed lamps' texture in room1endroom3 and SCP-008's containment chamber. ;008's CHAMBER NOT DONE
 - Fixed some rooms' descriptions.
+- Fixed SCP-049 spam-closing the door behind it, if the player tries to open it.
 
 - Small fixes for room2testroom2 event.
 - Small fixes for commands "disablenuke" and "enable/disablecontrol.

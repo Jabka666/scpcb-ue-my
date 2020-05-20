@@ -468,7 +468,7 @@ Function SaveGame(File$)
 		EndIf
 		
 		Msg = "Game progress saved."
-		MsgTimer = 70 * 4.0
+		MsgTimer = 70.0 * 4.0
 	EndIf
 	
 	CatchErrors("SaveGame")
