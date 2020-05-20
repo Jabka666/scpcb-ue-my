@@ -1588,7 +1588,7 @@ Function UpdateConsole()
 							;[End Block]
 						Case 2
 							;[Block]
-							DeathMsg = "Subject D-9341 found dead in Sector [DATA REDACTED]. "
+							DeathMsg = SubjectName + " found dead in Sector [DATA REDACTED]. "
 							DeathMsg = DeathMsg + "The subject appears to have attained no physical damage, and there is no visible indication as to what killed him. "
 							DeathMsg = DeathMsg + "Body was sent for autopsy."
 							;[End Block]
@@ -1598,7 +1598,7 @@ Function UpdateConsole()
 							;[End Block]
 						Case 4
 							;[Block]
-							DeathMsg = "Subject D-9341 found dead in Sector [DATA REDACTED]. "
+							DeathMsg = SubjectName + " found dead in Sector [DATA REDACTED]. "
 							DeathMsg = DeathMsg + "The subject appears to have scribbled the letters " + Chr(34) + "kys" + Chr(34) + " in his own blood beside him. "
 							DeathMsg = DeathMsg + "No other signs of physical trauma or struggle can be observed. Body was sent for autopsy."
 							;[End Block]
@@ -4331,7 +4331,7 @@ Function DrawGUI()
 	
 	Local Temp%, x%, y%, z%, i%, YawValue#, PitchValue#
 	Local x2#, y2#, z2#
-	Local n%, xTemp, yTemp, StrTemp$
+	Local n%, xTemp, yTemp, StrTemp$, GroupDesignation$
 	Local e.Events, it.Items
 	Local o.Objects = First Objects
 	Local ov.Overlays = First Overlays
@@ -5474,8 +5474,14 @@ Function DrawGUI()
 						If PlayerRoom\RoomTemplate\Name <> "room1123" Then
 							ShowEntity(ov\OverlayID[7])
 							LightFlash = 7.0
-							PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))		
-							DeathMsg = "Subject D-9341 was shot dead after attempting to attack a member of Nine-Tailed Fox. Surveillance tapes show that the subject had been "
+							PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))	
+							
+							If Rand(2) = 1 Then
+								GroupDesignation = "Nine-Tailed Fox"
+							Else
+								GroupDesignation = "See No Evil"
+							EndIf
+							DeathMsg = SubjectName + " was shot dead after attempting to attack a member of " + GroupDesignation + ". Surveillance tapes show that the subject had been "
 							DeathMsg = DeathMsg + "wandering around the site approximately 9 minutes prior, shouting the phrase " + Chr(34) + "get rid of the four pests" + Chr(34)
 							DeathMsg = DeathMsg + " in chinese. SCP-1123 was found in [DATA REDACTED] nearby, suggesting the subject had come into physical contact with it. How "
 							DeathMsg = DeathMsg + "exactly SCP-1123 was removed from its containment chamber is still unknown."
@@ -6335,11 +6341,11 @@ Function DrawGUI()
 						If Wearing714 = 1 Or WearingGasMask = 3 Or WearingHazmat = 3 Then
 							Msg = Chr(34) + "DUDE WTF THIS SHIT DOESN'T EVEN WORK." + Chr(34)
 						Else
-							DeathMsg = "Subject D-9341 found in a comatose state in [DATA REDACTED]. The subject was holding what appears to be a cigarette while smiling widely. "
+							DeathMsg = SubjectName + " found in a comatose state in [DATA REDACTED]. The subject was holding what appears to be a cigarette while smiling widely. "
 							DeathMsg = DeathMsg + "Chemical analysis of the cigarette has been inconclusive, although it seems to contain a high concentration of an unidentified chemical "
 							DeathMsg = DeathMsg + "whose molecular structure is remarkably similar to that of tetrahydrocannabinol."
 							Msg = Chr(34) + "UH WHERE... WHAT WAS I DOING AGAIN... MAN I NEED TO TAKE A NAP..." + Chr(34)
-							KillTimer = -1.0						
+							Kill()						
 						EndIf
 						MsgTimer = 70.0 * 6.0
 						RemoveItem(SelectedItem)
@@ -10293,6 +10299,7 @@ End Function
 Function Update008()
 	Local PrevI008Timer#, i%, r.Rooms
 	Local TeleportForInfect% = True
+	Local GroupDesignation$
 	Local ov.Overlays = First Overlays
 	
 	If PlayerRoom\RoomTemplate\Name = "room860"
@@ -10397,9 +10404,13 @@ Function Update008()
 						PlayerRoom\NPC[0]\Sound = LoadSound_Strict("SFX\SCP\008\KillScientist2.ogg")
 						PlayerRoom\NPC[0]\SoundCHN = PlaySound_Strict(PlayerRoom\NPC[0]\Sound)
 						
-						DeathMsg = "Subject D-9341 found ingesting Dr. [DATA REDACTED] at Sector [DATA REDACTED]. Subject was immediately terminated by Nine-Tailed Fox and sent for autopsy. "
+						If Rand(2) = 1 Then
+							GroupDesignation = "Nine-Tailed Fox"
+						Else
+							GroupDesignation = "See No Evil"
+						EndIf
+						DeathMsg = SubjectName + " found ingesting Dr. [DATA REDACTED] at Sector [DATA REDACTED]. Subject was immediately terminated by " + GroupDesignation + " and sent for autopsy. "
 						DeathMsg = DeathMsg + "SCP-008 infection was confirmed, after which the body was incinerated."
-						
 						Kill()
 						de.Decals = CreateDecal(3, EntityX(PlayerRoom\NPC[0]\Collider), 544.0 * RoomScale + 0.01, EntityZ(PlayerRoom\NPC[0]\Collider), 90.0, Rnd(360.0), 0.0)
 						de\Size = 0.8
@@ -10437,13 +10448,18 @@ Function Update008()
 				If PlayerRoom\RoomTemplate\Name = "dimension1499" Then
 					DeathMsg = "The whereabouts of SCP-1499 are still unknown, but a recon team has been dispatched to investigate reports of a violent attack to a church in the Russian town of [DATA REDACTED]."
 				ElseIf PlayerRoom\RoomTemplate\Name = "gatea" Or PlayerRoom\RoomTemplate\Name = "gateb" Then
-					DeathMsg = "Subject D-9341 found wandering around Gate "
+					DeathMsg = SubjectName + " found wandering around Gate "
 					If PlayerRoom\RoomTemplate\Name = "gatea" Then
 						DeathMsg = DeathMsg + "A"
 					Else
 						DeathMsg = DeathMsg + "B"
 					EndIf
-					DeathMsg = DeathMsg + ". Subject was immediately terminated by Nine-Tailed Fox and sent for autopsy. "
+					If Rand(2) = 1 Then
+						GroupDesignation = "Nine-Tailed Fox"
+					Else
+						GroupDesignation = "See No Evil"
+					EndIf
+					DeathMsg = DeathMsg + ". Subject was immediately terminated by " + GroupDesignation + " and sent for autopsy. "
 					DeathMsg = DeathMsg + "SCP-008 infection was confirmed, after which the body was incinerated."
 				Else
 					DeathMsg = ""
@@ -11175,5 +11191,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#FF0#132C#1B5F
+;~B#FF0#132C#1B65
 ;~C#Blitz3D

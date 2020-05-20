@@ -141,5 +141,9 @@ Const MaxFontIDAmount% = 5
 
 Const MaxCreditsFontIDAmount% = 2
 
+; ~ [PLAYER]
+
+Const SubjectName$ = "Subject D-9341"
+
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D

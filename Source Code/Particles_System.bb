@@ -128,7 +128,7 @@ Function UpdateEmitters()
 	If InSmoke Then
 		If EyeIrritation > (70.0 * 6.0) Then BlurVolume = Max(BlurVolume, (EyeIrritation - (70.0 * 6.0)) / (70.0 * 24.0))
 		If EyeIrritation > (70.0 * 24.0) Then 
-			DeathMsg = "Subject D-9341 found dead in [DATA REDACTED]. Cause of death: Suffocation due to decontamination gas."
+			DeathMsg = SubjectName + " found dead in [DATA REDACTED]. Cause of death: Suffocation due to decontamination gas."
 			Kill()
 		EndIf
 		
@@ -245,7 +245,7 @@ Function UpdateDevilEmitters()
 	If InSmoke Then
 		If EyeIrritation > (70.0 * 6.0) Then BlurVolume = Max(BlurVolume, (EyeIrritation - (70.0 * 6.0)) / (70.0 * 24.0))
 		If EyeIrritation > (70.0 * 24.0) Then 
-			DeathMsg = "Subject D-9341 found dead in [DATA REDACTED]. Cause of death: Suffocation due to decontamination gas."
+			DeathMsg = SubjectName + " found dead in [DATA REDACTED]. Cause of death: Suffocation due to decontamination gas."
 			Kill()
 		EndIf
 		
