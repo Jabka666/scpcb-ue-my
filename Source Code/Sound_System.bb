@@ -497,6 +497,21 @@ Function ControlSoundVolume()
 	Next
 End Function
 
+Function UpdateDeafPlayer()
+	If DeafTimer > 0.0
+		DeafTimer = DeafTimer - FPSfactor
+		SFXVolume = 0.0
+		If SFXVolume > 0.0
+			ControlSoundVolume()
+		EndIf
+	Else
+		DeafTimer = 0
+		SFXVolume = PrevSFXVolume
+		If DeafPlayer Then ControlSoundVolume()
+		DeafPlayer = False
+	EndIf
+End Function
+
 Function LoadAllSounds()
 	Local i%
 	

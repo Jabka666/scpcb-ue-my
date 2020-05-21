@@ -2011,8 +2011,8 @@ Function UpdateNPCs()
 								n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * FPSfactor)
 								
-								If Dist < 0.7
-									If Abs(DeltaYaw(n\Collider, Collider)) =< 60.0
+								If Dist < 0.7 Then
+									If Abs(DeltaYaw(n\Collider, Collider)) =< 60.0 Then
 										n\State = 4.0
 										If Rand(2) = 1 Then
 											SetNPCFrame(n, 2.0)
@@ -2361,19 +2361,19 @@ Function UpdateNPCs()
 						;[End Block]
 					Case 5.0 ; ~ Following a target
 						;[Block]
-						RotateEntity n\Collider, 0, CurveAngle(VectorYaw(n\EnemyX-EntityX(n\Collider), 0, n\EnemyZ-EntityZ(n\Collider))+n\Angle, EntityYaw(n\Collider), 20.0), 0
+						RotateEntity(n\Collider, 0.0, CurveAngle(VectorYaw(n\EnemyX - EntityX(n\Collider), 0.0, n\EnemyZ - EntityZ(n\Collider)) + n\Angle, EntityYaw(n\Collider), 20.0), 0.0)
 						
-						Dist# = Distance(EntityX(n\Collider),EntityZ(n\Collider),n\EnemyX,n\EnemyZ)
+						Dist# = Distance(EntityX(n\Collider), EntityZ(n\Collider), n\EnemyX, n\EnemyZ)
 						
-						AnimateNPC(n,1,38,n\CurrSpeed*40)
+						AnimateNPC(n, 1.0, 38.0, n\CurrSpeed * 40.0)
 						
 						If Dist > 2.0 Or Dist < 1.0  Then
-							n\CurrSpeed = CurveValue(n\Speed*Sgn(Dist-1.5)*0.75, n\CurrSpeed, 10.0)
+							n\CurrSpeed = CurveValue(n\Speed * Sgn(Dist - 1.5) * 0.75, n\CurrSpeed, 10.0)
 						Else
-							n\CurrSpeed = CurveValue(0, n\CurrSpeed, 10.0)
+							n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 10.0)
 						EndIf
 						
-						MoveEntity n\Collider, 0, 0, n\CurrSpeed * FPSfactor
+						MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * FPSfactor)
 						;[End Block]
 					Case 7.0 ; ~ Just walking
 						;[Block]
@@ -3784,7 +3784,7 @@ Function UpdateNPCs()
 								Next
 								n\State2 = MilliSecs2() + 5000.0
 							EndIf
-						ElseIf Dist < 8.0 And (Not chs\NoTarget) Then
+						ElseIf Dist < 8.0 Then
 							n\LastDist = Rnd(1.0, 2.5)
 							n\State = 1.0
 						EndIf
@@ -3824,44 +3824,49 @@ Function UpdateNPCs()
 										PlaySound2(LoadTempSound("SFX\SCP\066\Notes" + Rand(1, 6) + ".ogg"), Camera, n\Collider, 8.0)
 									EndIf									
 									
-									Select Rand(1, 6)
-										Case 1
-											;[Block]
-											If n\Sound2 = 0 Then n\Sound2 = LoadSound_Strict("SFX\SCP\066\Beethoven.ogg")
-											n\SoundCHN2 = PlaySound2(n\Sound2, Camera, n\Collider)
-											DeafTimer = 70.0 * (45.0 + (15.0 * SelectedDifficulty\AggressiveNPCs))
-											DeafPlayer = True
-											CameraShake = 10.0
-											;[End Block]
-										Case 2
-											;[Block]
-											n\State3 = Rand(700.0, 1400.0)
-											;[End Block]
-										Case 3
-											;[Block]
-											For d.Doors = Each Doors
-												If d\Locked = False And d\KeyCard = 0 And d\Code = "" Then
-													If Abs(EntityX(d\FrameOBJ) - EntityX(n\Collider)) < 16.0 Then
-														If Abs(EntityZ(d\FrameOBJ) - EntityZ(n\Collider)) < 16.0 Then
-															UseDoor(d, False)
+									If (Not chs\Notarget) Then
+										Select Rand(1, 6)
+											Case 1
+												;[Block]
+												If n\Sound2 = 0 Then n\Sound2 = LoadSound_Strict("SFX\SCP\066\Beethoven.ogg")
+												n\SoundCHN2 = PlaySound2(n\Sound2, Camera, n\Collider)
+												DeafTimer = 70.0 * (45.0 + (15.0 * SelectedDifficulty\AggressiveNPCs))
+												DeafPlayer = True
+												CameraShake = 10.0
+												;[End Block]
+											Case 2
+												;[Block]
+												n\State3 = Rand(700.0, 1400.0)
+												;[End Block]
+											Case 3
+												;[Block]
+												For d.Doors = Each Doors
+													If d\Locked = False And d\KeyCard = 0 And d\Code = "" Then
+														If Abs(EntityX(d\FrameOBJ) - EntityX(n\Collider)) < 16.0 Then
+															If Abs(EntityZ(d\FrameOBJ) - EntityZ(n\Collider)) < 16.0 Then
+																UseDoor(d, False)
+															EndIf
 														EndIf
 													EndIf
+												Next
+												;[End Block]
+											Case 4
+												;[Block]
+												If PlayerRoom\RoomTemplate\DisableDecals = False Then
+													CameraShake = 5.0
+													de.Decals = CreateDecal(1, EntityX(n\Collider), 0.01, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0)
+													de\Size = 0.3 : UpdateDecals()
+													PlaySound_Strict(LoadTempSound("SFX\General\BodyFall.ogg"))
+													If Distance(EntityX(Collider), EntityZ(Collider), EntityX(n\Collider), EntityZ(n\Collider)) < 0.8 Then
+														Injuries = Injuries + Rnd(0.3, 0.5) - (WearingVest * Rnd(0.1, 0.15))
+													EndIf
 												EndIf
-											Next
-											;[End Block]
-										Case 4
-											;[Block]
-											If PlayerRoom\RoomTemplate\DisableDecals = False Then
-												CameraShake = 5.0
-												de.Decals = CreateDecal(1, EntityX(n\Collider), 0.01, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0)
-												de\Size = 0.3 : UpdateDecals()
-												PlaySound_Strict(LoadTempSound("SFX\General\BodyFall.ogg"))
-												If Distance(EntityX(Collider), EntityZ(Collider), EntityX(n\Collider), EntityZ(n\Collider)) < 0.8 Then
-													Injuries = Injuries + Rnd(0.3, 0.5) - (WearingVest * Rnd(0.1, 0.15))
-												EndIf
-											EndIf
-											;[End Block]
-									End Select
+												;[End Block]
+											Case 5, 6 ; ~ No effect
+												;[Block]
+												;[End Block]
+										End Select
+									EndIf
 								EndIf
 								
 								n\State2 = n\State2 + FPSfactor
@@ -3904,8 +3909,6 @@ Function UpdateNPCs()
 						EndIf
 						;[End Block]
 				End Select
-				
-				If chs\Notarget Then n\State = 1.0
 				
 				If n\State > 1.0 Then
 					If n\Sound = 0 Then n\Sound = LoadSound_Strict("SFX\SCP\066\Rolling.ogg")
@@ -7445,5 +7448,5 @@ Function Animate2#(Entity%, Curr#, Start%, Quit%, Speed#, Loop% = True)
 End Function 
 
 ;~IDEal Editor Parameters:
-;~B#18A#1235#135C#13AC#1555#166F#1840#189C
+;~B#18A#1238#135F#13AF#1558#1672#1843#189F
 ;~C#Blitz3D

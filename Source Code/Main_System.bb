@@ -3021,7 +3021,7 @@ Repeat
 			CameraFogMode(Camera, 1)
 			CameraRange(Camera, 0.05, Min(CameraFogFar * LightVolume * 1.5, 28.0))	
 			If PlayerRoom\RoomTemplate\Name <> "pocketdimension" Then
-				CameraClsColor(Camera, 0, 0, 0)
+				CameraClsColor(Camera, 0.0, 0.0, 0.0)
 			EndIf
 			
 			AmbientLight(Brightness, Brightness, Brightness)
@@ -10888,9 +10888,9 @@ Function UpdateLeave1499()
 	Local r.Rooms, it.Items, r2.Rooms, i%
 	Local r1499.Rooms
 	
-	If (Not Wearing1499) And PlayerRoom\RoomTemplate\Name = "dimension1499"
+	If (Not Wearing1499) And PlayerRoom\RoomTemplate\Name = "dimension1499" Then
 		For r.Rooms = Each Rooms
-			If r = NTF_1499PrevRoom
+			If r = NTF_1499PrevRoom Then
 				BlinkTimer = -1.0
 				NTF_1499X = EntityX(Collider)
 				NTF_1499Y = EntityY(Collider)
@@ -10915,7 +10915,7 @@ Function UpdateLeave1499()
 					CameraClsColor(Camera, 0.0, 0.0, 0.0)
 				EndIf
 				For r2.Rooms = Each Rooms
-					If r2\RoomTemplate\Name = "dimension1499"
+					If r2\RoomTemplate\Name = "dimension1499" Then
 						r1499 = r2
 						Exit
 					EndIf
@@ -10958,21 +10958,6 @@ Function CheckForPlayerInFacility()
 		Return(2)
 	EndIf
 	Return(True)
-End Function
-
-Function UpdateDeafPlayer()
-	If DeafTimer > 0
-		DeafTimer = DeafTimer - FPSfactor
-		SFXVolume = 0.0
-		If SFXVolume > 0.0
-			ControlSoundVolume()
-		EndIf
-	Else
-		DeafTimer = 0
-		SFXVolume = PrevSFXVolume
-		If DeafPlayer Then ControlSoundVolume()
-		DeafPlayer = False
-	EndIf
 End Function
 
 Function CheckTriggers$()
