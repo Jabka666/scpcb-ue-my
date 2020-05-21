@@ -3164,7 +3164,7 @@ Repeat
 			EndIf
 			
 			LightBlink = Max(LightBlink - (FPSfactor / 35.0), 0.0)
-			If LightBlink > 0.0 And WearingNightVision = 0 Then DarkA = Min(Max(DarkA, LightBlink * Rnd(0.3, 0.8)), 1.0)
+			If LightBlink > 0.0 And WearingNightVision = 0 And (Not chs\NoBlink) Then DarkA = Min(Max(DarkA, LightBlink * Rnd(0.3, 0.8)), 1.0)
 			
 			If Using294 Then DarkA = 1.0
 			
@@ -11008,8 +11008,8 @@ Function CatchErrors(Location$)
 	If Len(ErrStr) > 0 Then
 		If FileType(ErrorFile) = 0 Then
 			ErrF = WriteFile(ErrorFile)
-			WriteLine(ErrF, "An error occured in SCP - Containment Breach!")
-			WriteLine(ErrF, "Mod Version: v" + VersionNumber)
+			WriteLine(ErrF, "An error occured in SCP - Containment Breach Ultimate Edition!")
+			WriteLine(ErrF, "Version: v" + VersionNumber)
 			WriteLine(ErrF, "Date and time: " + CurrentDate() + " at " + CurrentTime())
 			WriteLine(ErrF, "Total video memory (MB): " + TotalVidMem() / 1024 / 1024)
 			WriteLine(ErrF, "Available video memory (MB): " + AvailVidMem() / 1024 / 1024)
@@ -11043,7 +11043,7 @@ Function CatchErrors(Location$)
 			Wend
 		EndIf
 		Msg = "Blitz3D Error! Details in " + Chr(34) + ErrorFile + Chr(34)
-		MsgTimer = 20.0 * 70.0
+		MsgTimer = 70.0 * 20.0
 		
 		CloseFile(ErrF)
 	EndIf

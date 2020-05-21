@@ -207,7 +207,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			
 			n\OBJ = CopyEntity(o\NPCModelID[3])
 			
-			Temp = 0.52 / MeshWidth(n\OBJ)
+			Temp = 0.51 / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			
 			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2, MeshHeight(n\OBJ) * 2, MeshDepth(n\OBJ) * 2)
@@ -2711,10 +2711,10 @@ Function UpdateNPCs()
 					EndIf
 				EndIf
 				
-				If n\Frame = 19.0 Or n\Frame = 60.0
+				If n\Frame = 19.0 Or n\Frame = 60.0 Or n\Frame = 711.0 Or n\Frame = 779.0 Then
 					n\IsDead = True
 				EndIf
-				If AnimTime(n\OBJ) = 19.0 Or AnimTime(n\OBJ) = 60.0
+				If AnimTime(n\OBJ) = 19.0 Or AnimTime(n\OBJ) = 60.0 Or AnimTime(n\OBJ) = 711.0 Or AnimTime(n\OBJ) = 779.0 Then
 					n\IsDead = True
 				EndIf
 				
@@ -7353,7 +7353,7 @@ Function FinishWalking(n.NPCs, StartFrame#, EndFrame#, Speed#)
 	EndIf
 End Function
 
-Function ChangeNPCTextureID(n.NPCs, TextureID%)
+Function ChangeNPCTextureID(n.NPCs, TextureID%) ; ~ Works only for Class D model
 	Local Temp#
 	
 	If (n = Null) Then
@@ -7368,7 +7368,7 @@ Function ChangeNPCTextureID(n.NPCs, TextureID%)
 	FreeEntity(n\OBJ)
 	n\OBJ = CopyEntity(DTextures[TextureID + 1])
 	
-	Temp = 0.5 / MeshWidth(n\OBJ)
+	Temp = 0.51 / MeshWidth(n\OBJ)
 	ScaleEntity(n\OBJ, Temp, Temp, Temp)
 	MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2, MeshHeight(n\OBJ) * 2, MeshDepth(n\OBJ) * 2)
 	

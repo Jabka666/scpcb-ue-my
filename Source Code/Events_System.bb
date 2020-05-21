@@ -631,14 +631,14 @@ Function UpdateEvents()
 							MoveEntity(e\room\NPC[3]\Collider, 1.0, 0.0, 0.0)
 							
 							e\room\NPC[4] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[3], True), 0.5, EntityZ(e\room\Objects[3], True))
-							SetNPCFrame(e\room\NPC[4], 19.0)
+							SetNPCFrame(e\room\NPC[4], 711.0)
 							e\room\NPC[4]\State = 3.0
 							RotateEntity(e\room\NPC[4]\Collider, 0.0, 270.0, 0.0)
 							MoveEntity(e\room\NPC[4]\Collider, 0.0, 0.0, 2.65)
 							
 							e\room\NPC[5] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[4], True), 0.5, EntityZ(e\room\Objects[4], True))
 							ChangeNPCTextureID(e\room\NPC[5], 6)
-							SetNPCFrame(e\room\NPC[5], 19.0)
+							SetNPCFrame(e\room\NPC[5], 779.0)
 							e\room\NPC[5]\State = 3.0
 							RotateEntity(e\room\NPC[5]\Collider, 0.0, 270.0, 0.0)
 							MoveEntity(e\room\NPC[5]\Collider, 0.25, 0.0, 3.0)
@@ -1689,7 +1689,7 @@ Function UpdateEvents()
 										RotateEntity(Curr173\Collider, 0.0, EntityYaw(Curr173\Collider), 0)
 										MoveEntity(Curr173\Collider, 0.0, 0.0, Curr173\Speed * 0.6 * FPSfactor)
 										
-										Curr173\SoundCHN = LoopSound2(StoneDragSFX, Curr173\SoundChn, Camera, Curr173\Collider, 10.0, Curr173\State)
+										Curr173\SoundCHN = LoopSound2(StoneDragSFX, Curr173\SoundCHN, Camera, Curr173\Collider, 10.0, Curr173\State)
 										
 										Curr173\State = CurveValue(1.0, Curr173\State, 3.0)
 									Else
@@ -1722,7 +1722,7 @@ Function UpdateEvents()
 									e\room\NPC[0]\SoundCHN = PlaySound2(e\room\NPC[0]\Sound, Camera, e\room\NPC[0]\Collider, 20.0)
 									e\room\NPC[0]\State2 = 0.0
 								Else
-									Animate2(e\room\NPC[1]\OBJ, AnimTime(e\room\NPC[1]\OBJ), 0.0, 19.0, 0.2, False)
+									Animate2(e\room\NPC[1]\OBJ, AnimTime(e\room\NPC[1]\OBJ), 678.0, 711.0, 0.5, False)
 									
 									If e\room\NPC[2]\Sound <> 0 Then
 										FreeSound_Strict(e\room\NPC[2]\Sound) : e\room\NPC[2]\Sound = 0
@@ -1737,10 +1737,10 @@ Function UpdateEvents()
 								If e\EventState > 14080.0 And e\EventState - FPSfactor < 14080.0 Then PlaySound_Strict(IntroSFX(Rand(8, 10)))
 								CameraShake = 3.0
 							ElseIf e\EventState < 14200.0
-								Animate2(e\room\NPC[1]\OBJ, AnimTime(e\room\NPC[1]\OBJ), 0.0, 19.0, 0.2, False)
+								Animate2(e\room\NPC[1]\OBJ, AnimTime(e\room\NPC[1]\OBJ), 678.0, 711.0, 0.5, False)
 								
 								e\room\NPC[0]\State = 8.0
-								If e\EventState > 14105.0 Then
+								If e\EventState > 14115.0 Then
 									If e\room\NPC[2]\Sound <> 0 Then
 										FreeSound_Strict(e\room\NPC[2]\Sound) : e\room\NPC[2]\Sound = 0
 									EndIf
@@ -1756,13 +1756,14 @@ Function UpdateEvents()
 									BlinkTimer = -10.0
 									LightBlink = 1.0
 								Else 
-									Animate2(e\room\NPC[2]\OBJ, AnimTime(e\room\NPC[2]\OBJ), 50.0, 60.0, 0.2, False)
+									Animate2(e\room\NPC[2]\OBJ, AnimTime(e\room\NPC[2]\OBJ), 712.0, 779.0, 0.5, False)
+									
 									Curr173\Idle = False
 								EndIf
 								If e\EventState > 14100.0 And e\EventState - FPSfactor < 14100.0 Then PlaySound_Strict(IntroSFX(6))
 								If e\EventState < 14150.0 Then CameraShake = 5.0
 							Else
-								Animate2(e\room\NPC[2]\OBJ, AnimTime(e\room\NPC[2]\OBJ), 45.0, 60.0, 0.2, False)
+								Animate2(e\room\NPC[2]\OBJ, AnimTime(e\room\NPC[2]\OBJ), 735.0, 779.0, 0.5, False)
 								If e\EventState > 14300.0 Then 
 									If e\EventState > 14600.0 And e\EventState < 14700.0 Then 
 										BlinkTimer = -10.0
@@ -10244,5 +10245,5 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1218#1E51
+;~B#1219#1E52
 ;~C#Blitz3D
