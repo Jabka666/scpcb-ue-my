@@ -8,6 +8,7 @@
 - Now guard in "room2elevator" event can kill the player if he too close.
 - Now the pass code for O5 Council's office drops from falling guard in SCP-895's event.
 - Now ballistic vest reduces damage from NPC.
+- Now paper strips and origami can be used in SCP-914.
 
 - Changed one bump texture to the better one.
 
@@ -58,6 +59,8 @@ Bug Fixes:
 - Fixed some rooms' descriptions.
 - Fixed SCP-049 spam-closing the door behind it, if the player tries to open it.
 - Fixed missing small lamp in room2testroom.
+- Fixed missing "spark(2).png" file.
+- Fixed bug with joint.
 
 - Small fixes for room2testroom's event.
 - Small fixes for commands "disablenuke" and "enable/disablecontrol.

@@ -4028,7 +4028,7 @@ Function MovePlayer()
 			
 			de.Decals = CreateDecal(Rand(15, 16), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rand(360.0), 0.0)
 			de\Size = Rnd(0.03, 0.08) * Min(Injuries, 3.0) : EntityAlpha(de\OBJ, 1.0)
-			ScaleSprite de\OBJ, de\size, de\size
+			ScaleSprite(de\OBJ, de\Size, de\Size)
 			TempCHN = PlaySound_Strict(DripSFX(Rand(0, 2)))
 			ChannelVolume(TempCHN, Rnd(0.0, 0.8) * SFXVolume)
 			ChannelPitch(TempCHN, Rand(20000, 30000))
@@ -8000,9 +8000,9 @@ Function LoadEntities()
 		HideEntity(o\MiscModelID[i])
 	Next
 	
-	LightSpriteTex(0) = LoadTexture_Strict("GFX\light1.jpg", 1)
-	LightSpriteTex(1) = LoadTexture_Strict("GFX\light2.jpg", 1)
-	LightSpriteTex(2) = LoadTexture_Strict("GFX\lightsprite.jpg", 1)
+	LightSpriteTex(0) = LoadTexture_Strict("GFX\light.png", 1)
+	LightSpriteTex(1) = LoadTexture_Strict("GFX\light(2).png", 1)
+	LightSpriteTex(2) = LoadTexture_Strict("GFX\lightsprite.png", 1)
 	
 	DrawLoading(15)
 	
@@ -8020,23 +8020,27 @@ Function LoadEntities()
 	
 	DrawLoading(20)
 	
-	For i = 0 To 6
-		DecalTextures(i) = LoadTexture_Strict("GFX\decal" + (i + 1) + ".png", 1 + 2)
+	DecalTextures(0) = LoadTexture_Strict("GFX\decal.png", 1 + 2)
+	For i = 1 To 7
+		DecalTextures(i) = LoadTexture_Strict("GFX\decal(" + (i + 1) + ").png", 1 + 2)
 	Next
-	DecalTextures(7) = LoadTexture_Strict("GFX\items\INVpaperstrips.jpg", 1 + 2)
-	For i = 8 To 12
-		DecalTextures(i) = LoadTexture_Strict("GFX\decalpd" + (i - 7) + ".jpg", 1 + 2)	
+	
+	DecalTextures(8) = LoadTexture_Strict("GFX\decalpd.png", 1 + 2)	
+	For i = 9 To 12
+		DecalTextures(i) = LoadTexture_Strict("GFX\decalpd(" + (i - 7) + ").png", 1 + 2)	
 	Next
-	For i = 13 To 14
-		DecalTextures(i) = LoadTexture_Strict("GFX\bullethole" + (i - 12) + ".jpg", 1 + 2)	
-	Next	
-	For i = 15 To 16
-		DecalTextures(i) = LoadTexture_Strict("GFX\blooddrop" + (i - 14) + ".png", 1 + 2)	
-	Next
-	DecalTextures(17) = LoadTexture_Strict("GFX\decal8.png", 1 + 2)	
-	DecalTextures(18) = LoadTexture_Strict("GFX\decalpd6.dc", 1 + 2)	
-	DecalTextures(19) = LoadTexture_Strict("GFX\decal19.png", 1 + 2)
-	DecalTextures(20) = LoadTexture_Strict("GFX\decal427.png", 1 + 2)
+	
+	DecalTextures(13) = LoadTexture_Strict("GFX\bullethole.png", 1 + 2)	
+	DecalTextures(14) = LoadTexture_Strict("GFX\bullethole(2).png", 1 + 2)	
+	
+	DecalTextures(15) = LoadTexture_Strict("GFX\blooddrop.png", 1 + 2)
+	DecalTextures(16) = LoadTexture_Strict("GFX\blooddrop(2).png", 1 + 2)
+	
+	DecalTextures(17) = LoadTexture_Strict("GFX\decal427.png", 1 + 2)
+	
+	DecalTextures(18) = LoadTexture_Strict("GFX\decalpd(6).dc", 1 + 2)	
+	
+	DecalTextures(19) = LoadTexture_Strict("GFX\decal409.png", 1 + 2)
 	
 	DrawLoading(25)
 	
@@ -8062,7 +8066,7 @@ Function LoadEntities()
         HideEntity(o\MonitorModelID[i])
     Next
 	
-	tt\MonitorTextureID[0] = LoadTexture_Strict("GFX\monitoroverlay.png")
+	tt\MonitorTextureID[0] = LoadTexture_Strict("GFX\MonitorOverlay.png")
 	tt\MonitorTextureID[1] = LoadTexture_Strict("GFX\map\LockdownScreen2.jpg")
 	tt\MonitorTextureID[2] = LoadTexture_Strict("GFX\map\LockdownScreen.jpg")
 	tt\MonitorTextureID[3] = LoadTexture_Strict("GFX\map\LockdownScreen3.jpg")
@@ -8079,7 +8083,7 @@ Function LoadEntities()
 			t1 = GetBrushTexture(b, 0)
 			If t1 <> 0 Then
 				Name$ = StripPath(TextureName(t1))
-				If Lower(Name) <> "monitoroverlay.png"
+				If Lower(Name) <> "MonitorOverlay.png"
 					BrushTexture(b, tt\MonitorTextureID[4], 0, 0)
 					PaintSurface(SF, b)
 				EndIf
@@ -8095,7 +8099,7 @@ Function LoadEntities()
 			t1 = GetBrushTexture(b, 0)
 			If t1 <> 0 Then
 				Name$ = StripPath(TextureName(t1))
-				If Lower(Name) <> "monitoroverlay.png"
+				If Lower(Name) <> "MonitorOverlay.png"
 					BrushTexture(b, tt\MonitorTextureID[4], 0, 0)
 					PaintSurface(SF, b)
 				EndIf
@@ -8133,13 +8137,13 @@ Function LoadEntities()
 	InitItemTemplates()
 	
 	ParticleTextures(0) = LoadTexture_Strict("GFX\smoke.png", 1 + 2)
-	ParticleTextures(1) = LoadTexture_Strict("GFX\flash.jpg", 1 + 2)
-	ParticleTextures(2) = LoadTexture_Strict("GFX\dust.jpg", 1 + 2)
+	ParticleTextures(1) = LoadTexture_Strict("GFX\flash.png", 1 + 2)
+	ParticleTextures(2) = LoadTexture_Strict("GFX\dust.png", 1 + 2)
 	ParticleTextures(3) = LoadTexture_Strict("GFX\npcs\hg.pt", 1 + 2)
-	ParticleTextures(4) = LoadTexture_Strict("GFX\map\sun.jpg", 1 + 2)
+	ParticleTextures(4) = LoadTexture_Strict("GFX\map\sun.png", 1 + 2)
 	ParticleTextures(5) = LoadTexture_Strict("GFX\bloodsprite.png", 1 + 2)
 	ParticleTextures(6) = LoadTexture_Strict("GFX\smoke2.png", 1 + 2)
-	ParticleTextures(7) = LoadTexture_Strict("GFX\spark.jpg", 1 + 2)
+	ParticleTextures(7) = LoadTexture_Strict("GFX\spark.png", 1 + 2)
 	ParticleTextures(8) = LoadTexture_Strict("GFX\particle.png", 1 + 2)
 	
 	SetChunkDataValues()
@@ -8254,7 +8258,7 @@ Function LoadEntities()
 	SetTemplateParticlesPerInterval(ParticleEffect[0], 6)
 	SetTemplateEmitterLifeTime(ParticleEffect[0], 6)
 	SetTemplateParticleLifeTime(ParticleEffect[0], 20, 30)
-	SetTemplateTexture(ParticleEffect[0], "GFX\Spark.png", 2, 3)
+	SetTemplateTexture(ParticleEffect[0], "GFX\spark(2).png", 2, 3)
 	SetTemplateOffset(ParticleEffect[0], -0.1, 0.1, -0.1, 0.1, -0.1, 0.1)
 	SetTemplateVelocity(ParticleEffect[0], -0.0375, 0.0375, -0.0375, 0.0375, -0.0375, 0.0375)
 	SetTemplateAlignToFall(ParticleEffect[0], True, 45)
@@ -8957,9 +8961,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 			Select Setting
 				Case "Rough", "Coarse"
 					;[Block]
-					d.Decals = CreateDecal(7, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0)
-					d\Size = 0.12
-					ScaleSprite(d\OBJ, d\Size, d\Size)
+					it2 = CreateItem("Paper Strips", "misc", x, y, z)
 					
 					For i = 0 To 19
 						If item\SecondInv[i] <> Null Then RemoveItem(item\SecondInv[i])
@@ -8990,9 +8992,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 			Select Setting
 				Case "Rough", "Coarse"
 					;[Block]
-					d.Decals = CreateDecal(7, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0)
-					d\Size = 0.12
-					ScaleSprite(d\OBJ, d\Size, d\Size)
+					it2 = CreateItem("Paper Strips", "misc", x, y, z)
 					
 					For i = 0 To 19
 						If item\SecondInv[i] <> Null Then RemoveItem(item\SecondInv[i])
@@ -9707,6 +9707,97 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
+		Case "Paper Strips", "Origami"
+			Select Setting
+				Case "Rough", "Coarse"
+					;[Block]
+					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0)
+					d\Size = 0.2
+					EntityAlpha(d\OBJ, 0.8)
+					ScaleSprite(d\OBJ, d\Size, d\Size)
+					;[End Block]
+				Case "1:1", "Very Fine", "Fine"
+					;[Block]
+					Select Rand(19)
+						Case 1
+							;[Block]
+							it2 = CreateItem("Document SCP-008", "paper", x, y, z)
+							;[End Block]
+						Case 2
+							;[Block]
+							it2 = CreateItem("Document SCP-012", "paper", x, y, z)
+							;[End Block]
+						Case 3
+							;[Block]
+							it2 = CreateItem("Document SCP-035", "paper", x, y, z)
+							;[End Block]
+						Case 4
+							;[Block]
+							it2 = CreateItem("Document SCP-049", "paper", x, y, z)
+							;[End Block]
+						Case 5
+							;[Block]
+							it2 = CreateItem("Document SCP-096", "paper", x, y, z)
+							;[End Block]
+						Case 6
+							;[Block]
+							it2 = CreateItem("Document SCP-106", "paper", x, y, z)
+							;[End Block]
+						Case 7
+							;[Block]
+							it2 = CreateItem("Document SCP-173", "paper", x, y, z)
+							;[End Block]
+						Case 8
+							;[Block]
+							it2 = CreateItem("Document SCP-513", "paper", x, y, z)
+							;[End Block]
+						Case 9
+							;[Block]
+							it2 = CreateItem("Document SCP-682", "paper", x, y, z)
+							;[End Block]
+						Case 10
+							;[Block]
+							it2 = CreateItem("Document SCP-714", "paper", x, y, z)
+							;[End Block]
+						Case 11
+							;[Block]
+							it2 = CreateItem("Document SCP-860", "paper", x, y, z)
+							;[End Block]
+						Case 12
+							;[Block]
+							it2 = CreateItem("Document SCP-860-1", "paper", x, y, z)
+							;[End Block]
+						Case 13
+							;[Block]
+							it2 = CreateItem("Document SCP-895", "paper", x, y, z)
+							;[End Block]
+						Case 14
+							;[Block]
+							it2 = CreateItem("Document SCP-939", "paper", x, y, z)
+							;[End Block]
+						Case 15
+							;[Block]
+							it2 = CreateItem("Document SCP-966", "paper", x, y, z)
+							;[End Block]
+						Case 16
+							;[Block]
+							it2 = CreateItem("Document SCP-970", "paper", x, y, z)
+							;[End Block]
+						Case 17
+							;[Block]
+							it2 = CreateItem("Document SCP-1048", "paper", x, y, z)
+							;[End Block]
+						Case 18
+							;[Block]
+							it2 = CreateItem("Document SCP-1162", "paper", x, y, z)
+							;[End Block]
+						Case 19
+							;[Block]
+							it2 = CreateItem("Document SCP-1499", "paper", x, y, z)
+							;[End Block]
+					End Select
+					;[End Block]
+			End Select
 		Default
 			;[Block]
 			Select item\ItemTemplate\TempName
@@ -9757,9 +9848,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					Select Setting
 						Case "Rough", "Coarse"
 							;[Block]
-							d.Decals = CreateDecal(7, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0)
-							d\Size = 0.12
-							ScaleSprite(d\OBJ, d\Size, d\Size)
+							it2 = CreateItem("Paper Strips", "misc", x, y, z)
 							;[End Block]
 						Case "1:1"
 							;[Block]
@@ -9855,7 +9944,6 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					ResetEntity(item\Collider)	
 					;[End Block]
 			End Select
-			
 	End Select
 	
 	If it2 <> Null Then EntityType(it2\Collider, HIT_ITEM)
@@ -10194,7 +10282,7 @@ Function Use427()
 			PositionEntity(Pvt, EntityX(Collider) + Rnd(-0.05, 0.05), EntityY(Collider) - 0.05, EntityZ(Collider) + Rnd(-0.05, 0.05))
 			TurnEntity(Pvt, 90.0, 0.0, 0.0)
 			EntityPick(Pvt, 0.3)
-			de.Decals = CreateDecal(20, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rand(360.0), 0.0)
+			de.Decals = CreateDecal(17, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rand(360.0), 0.0)
 			de\Size = Rnd(0.03, 0.08) * 2.0
 			EntityAlpha(de\OBJ, 1.0)
 			ScaleSprite(de\OBJ, de\Size, de\Size)

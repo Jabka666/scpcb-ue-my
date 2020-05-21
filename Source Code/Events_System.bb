@@ -3237,7 +3237,7 @@ Function UpdateEvents()
 							If e\EventState - FPSfactor < 70.0 * 12.6 Then
 								de.Decals = CreateDecal(3, EntityX(e\room\Objects[0], True), 0.0005, EntityZ(e\room\Objects[0], True), 90.0, Rnd(360.0), 0.0)
 								
-								de.Decals = CreateDecal(17, EntityX(e\room\Objects[0], True), 0.002, EntityZ(e\room\Objects[0], True), 90.0, Rnd(360.0), 0.0)
+								de.Decals = CreateDecal(7, EntityX(e\room\Objects[0], True), 0.002, EntityZ(e\room\Objects[0], True), 90.0, Rnd(360.0), 0.0)
 								de\Size = 0.5
 								
 								de.Decals = CreateDecal(3, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True), 0.0, e\room\Angle + 270.0, 0.0)
@@ -4957,7 +4957,7 @@ Function UpdateEvents()
 							Case 35.0
 								;[Block]
 								For i = 0 To 3
-									de.Decals = CreateDecal(17, e\room\x + Rnd(-2.0, 2.0), 700.0 * RoomScale, e\room\z + Rnd(-2.0, 2.0), 270.0, Rnd(360.0), 0.0)
+									de.Decals = CreateDecal(7, e\room\x + Rnd(-2.0, 2.0), 700.0 * RoomScale, e\room\z + Rnd(-2.0, 2.0), 270.0, Rnd(360.0), 0.0)
 									de\Size = 0.05 : de\SizeChange = 0.0005  : UpdateDecals()
 									EntityAlpha(de\obj, 0.8)
 								Next
@@ -5350,7 +5350,7 @@ Function UpdateEvents()
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech7.ogg"))
 											Crouch = True
 											
-											de.Decals = CreateDecal(17,  EntityX(Collider), (-768.0) * RoomScale + 0.01, EntityZ(Collider), 90.0, Rnd(360.0), 0.0)
+											de.Decals = CreateDecal(7,  EntityX(Collider), (-768.0) * RoomScale + 0.01, EntityZ(Collider), 90.0, Rnd(360.0), 0.0)
 											de\Size = 0.1 : de\MaxSize = 0.45 : de\SizeChange = 0.0002 : UpdateDecals()
 										ElseIf e\EventState3 > 70.0 * 85.0 And e\EventState3 - FPSfactor =< 70.0 * 85.0	
 											DeathMsg = SubjectName + " found in a pool of blood next to SCP-012. Subject seems to have ripped open his wrists and written three extra "
@@ -7195,32 +7195,28 @@ Function UpdateEvents()
 				;[End Block]
 			Case "toiletguard"
 				;[Block]
-				If e\EventState = 0 Then
-					If e\room\dist < 8.0  And e\room\dist > 0 Then e\EventState = 1
-				ElseIf e\EventState = 1
-					e\room\NPC[0]=CreateNPC(NPCtypeGuard, EntityX(e\room\Objects[1],True), EntityY(e\room\Objects[1],True)+0.5, EntityZ(e\room\Objects[1],True))
-					PointEntity e\room\NPC[0]\Collider, e\room\obj
-					RotateEntity e\room\NPC[0]\Collider, 0, EntityYaw(e\room\NPC[0]\Collider)-20,0, True
+				If e\EventState = 0.0 Then
+					If e\room\dist < 8.0 And e\room\Dist > 0.0 Then e\EventState = 1.0
+				ElseIf e\EventState = 1.0
+					e\room\NPC[0] = CreateNPC(NPCtypeGuard, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True) + 0.5, EntityZ(e\room\Objects[1], True))
+					PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
+					RotateEntity(e\room\NPC[0]\Collider, 0.0, EntityYaw(e\room\NPC[0]\Collider) - 20.0, 0.0, True)
 					
-					SetNPCFrame (e\room\NPC[0], 287)
-					e\room\NPC[0]\State = 8
+					SetNPCFrame(e\room\NPC[0], 287.0)
+					e\room\NPC[0]\State = 8.0
 					
-					e\EventState = 2	
+					e\EventState = 2.0	
 				Else
 					If e\Sound = 0 Then e\Sound = LoadSound_Strict("SFX\Character\Guard\SuicideGuard1.ogg")
-					If e\room\dist < 15.0 And e\room\dist >= 4.0 Then 
+					If e\room\Dist < 15.0 And e\room\Dist >= 4.0 Then 
 						e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\NPC[0]\Collider, 15.0)
-						
-					ElseIf e\room\dist<4.0 And PlayerSoundVolume > 1.0
-						If e\EventState2=0
-							;Y=0.01
-							de.Decals = CreateDecal(3,  EntityX(e\room\Objects[2],True), EntityY(e\room\Objects[2],True), EntityZ(e\room\Objects[2],True),0,e\room\angle+270,0)
-							de\Size = 0.3 : ScaleSprite (de\obj, de\size, de\size)
+					ElseIf e\room\Dist < 4.0 And PlayerSoundVolume > 1.0
+						If e\EventState2 = 0.0 Then
+							de.Decals = CreateDecal(3, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True), 0.0, e\room\Angle + 270.0, 0.0)
+							de\Size = 0.3
+							ScaleSprite(de\OBJ, de\Size, de\Size)
 							
-							;de.Decals = CreateDecal(17,  EntityX(e\room\Objects[2],True), 0.01, EntityZ(e\room\Objects[2],True),90,Rnd(360),0)
-							;de\Size = 0.1 : de\maxsize = 0.45 : de\sizechange = 0.0002 : UpdateDecals()
-							
-							e\EventState2 = 1
+							e\EventState2 = 1.0
 						EndIf
 						If e\SoundCHN2 = 0
 							StopChannel(e\SoundCHN)
@@ -7228,8 +7224,8 @@ Function UpdateEvents()
 							e\room\NPC[0]\Sound = LoadSound_Strict("SFX\Character\Guard\SuicideGuard2.ogg")
 							e\SoundCHN2 = PlaySound2(e\room\NPC[0]\Sound, Camera, e\room\NPC[0]\Collider, 15.0)
 						EndIf
-						UpdateSoundOrigin(e\SoundCHN2,Camera,e\room\NPC[0]\Collider,15.0)
-						If (Not ChannelPlaying(e\SoundCHN2)) Then RemoveEvent(e)
+						UpdateSoundOrigin(e\SoundCHN2, Camera, e\room\NPC[0]\Collider, 15.0)
+						If ChannelPlaying(e\SoundCHN2) = False Then RemoveEvent(e)
 					EndIf
 				EndIf
 				;[End Block]
@@ -10244,5 +10240,5 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1219#1E52
+;~B#1219#1E4E
 ;~C#Blitz3D

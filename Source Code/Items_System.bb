@@ -201,6 +201,8 @@ Function InitItemTemplates()
 	
 	CreateItemTemplate("Origami", "misc", ItemsPath + "origami.b3d", ItemsPath + "INV_origami.png", "", 0.003, 0)
 	
+	CreateItemTemplate("Paper Strips", "misc", ItemsPath + "paper_strips.x", ItemsPath + "INV_paper_strips.png", "", 0.003, 0)
+	
 	CreateItemTemplate("Scorched Note", "paper", ItemsPath + "paper.x", ItemsPath + "INVbn.jpg", ItemsPath + "docL6.jpg", 0.0025, 0, ItemsPath + "BurntNoteTexture.jpg")
 	
 	CreateItemTemplate("Strange Note", "paper", ItemsPath + "paper.x", ItemsPath + "INV_note.png", ItemsPath + "docStrange.jpg", 0.0025, 0, ItemsPath + "note.png")
