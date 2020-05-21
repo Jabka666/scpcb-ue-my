@@ -62,3 +62,4 @@ Bug Fixes:
 - Small fixes for room2testroom's event.
 - Small fixes for commands "disablenuke" and "enable/disablecontrol.
 - Small fixes for gateaentrance's walls.
+- Small fixes for gateb's walls.
