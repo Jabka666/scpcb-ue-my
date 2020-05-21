@@ -5507,9 +5507,9 @@ Function DrawGUI()
 					;[End Block]
 				Case "scp513"
 					;[Block]
-					PlaySound_Strict(LoadTempSound("SFX\SCP\513\Bell1.ogg"))
+					PlaySound_Strict(LoadTempSound("SFX\SCP\513\Bell.ogg"))
 					
-					If Curr513_1 = Null
+					If Curr513_1 = Null Then
 						Curr513_1 = CreateNPC(NPCtype513_1, 0.0, 0.0, 0.0)
 					EndIf	
 					SelectedItem = Null

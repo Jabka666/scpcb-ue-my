@@ -2795,7 +2795,7 @@ Function UpdateNPCs()
 									If EntityInView(n\Collider, Camera) Then
 										If EntityVisible(Collider, n\Collider) Then
 											n\LastSeen = 1.0
-											PlaySound_Strict(LoadTempSound("SFX\SCP\513\Bell" + Rand(2, 3) + ".ogg"))
+											PlaySound_Strict(LoadTempSound("SFX\SCP\513_1\Bell" + Rand(1, 3) + ".ogg"))
 										EndIf
 									EndIf
 								EndIf								
@@ -2840,7 +2840,7 @@ Function UpdateNPCs()
 													If EntityInView(n\Collider, Camera) Then
 														If EntityVisible(Collider, n\Collider) Then
 															n\LastSeen = 1.0
-															PlaySound_Strict(LoadTempSound("SFX\SCP\513\Bell" + Rand(2, 3) + ".ogg"))
+															PlaySound_Strict(LoadTempSound("SFX\SCP\513_1\Bell" + Rand(1, 3) + ".ogg"))
 														EndIf
 													EndIf
 												EndIf
