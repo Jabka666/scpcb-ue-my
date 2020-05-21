@@ -5408,8 +5408,6 @@ Function UpdateEvents()
 					
 					; ~ EventState3 = has the player opened the gas valves (0 = no, 0 < x < 70.0 * 35.0 yes, x > 70.0 * 35.0 the host has died)
 					
-					ShouldPlay = 27
-					
 					If e\EventState = 0.0 Then
 						If EntityDistance(Collider, e\room\Objects[3]) < 2 Then
 							n.NPCs = CreateNPC(NPCtypeD, EntityX(e\room\Objects[4], True), 0.5,EntityZ(e\room\Objects[4], True))
@@ -5448,9 +5446,11 @@ Function UpdateEvents()
 							Next
 						EndIf
 						
+						ShouldPlay = 27
+						
 						If e\room\NPC[0]\SoundCHN <> 0 Then
 							If ChannelPlaying(e\room\NPC[0]\SoundCHN) = True Then
-								e\room\NPC[0]\SoundChn = LoopSound2(e\room\NPC[0]\Sound, e\room\NPC[0]\SoundCHN, Camera, e\room\OBJ, 6.0)
+								e\room\NPC[0]\SoundCHN = LoopSound2(e\room\NPC[0]\Sound, e\room\NPC[0]\SoundCHN, Camera, e\room\OBJ, 6.0)
 							EndIf
 						EndIf
 						
@@ -5470,11 +5470,11 @@ Function UpdateEvents()
 								Temp = UpdateLever(e\room\Levers[1], False)
 								If Temp Or (e\EventState3 > 70.0 * 25.0 And e\EventState3 < 70.0 * 50.0) Then 
 									If Temp Then 
-										PositionEntity(e\room\Objects[5], EntityX(e\room\Objects[5], True), 424.0 * RoomScale, EntityZ(e\room\Objects[5], True), True)
-										PositionEntity(e\room\Objects[6], EntityX(e\room\Objects[6], True), 424.0 * RoomScale, EntityZ(e\room\Objects[6], True), True)
+										PositionEntity(e\room\Objects[5], EntityX(e\room\Objects[5], True), 400.0 * RoomScale, EntityZ(e\room\Objects[5], True), True)
+										PositionEntity(e\room\Objects[6], EntityX(e\room\Objects[6], True), 400.0 * RoomScale, EntityZ(e\room\Objects[6], True), True)
 									Else
-										PositionEntity(e\room\Objects[5], EntityX(e\room\Objects[5], True), 10.0, EntityZ(e\room\Objects[5], True), True)
-										PositionEntity(e\room\Objects[6], EntityX(e\room\Objects[6], True), 10.0, EntityZ(e\room\Objects[6], True), True)
+										PositionEntity(e\room\Objects[5], EntityX(e\room\Objects[5], True), 20.0, EntityZ(e\room\Objects[5], True), True)
+										PositionEntity(e\room\Objects[6], EntityX(e\room\Objects[6], True), 20.0, EntityZ(e\room\Objects[6], True), True)
 									EndIf
 									
 									If e\EventState3 > (-70.0) * 30.0 Then 
@@ -5532,8 +5532,8 @@ Function UpdateEvents()
 										EndIf	
 									EndIf
 									
-									PositionEntity(e\room\Objects[5], EntityX(e\room\Objects[5], True), 10.0, EntityZ(e\room\Objects[5], True), True)
-									PositionEntity(e\room\Objects[6], EntityX(e\room\Objects[6], True), 10.0, EntityZ(e\room\Objects[6], True), True)
+									PositionEntity(e\room\Objects[5], EntityX(e\room\Objects[5], True), 20.0, EntityZ(e\room\Objects[5], True), True)
+									PositionEntity(e\room\Objects[6], EntityX(e\room\Objects[6], True), 20.0, EntityZ(e\room\Objects[6], True), True)
 									
 									If e\room\NPC[0]\State = 0.0 Then
 										PointEntity(e\room\NPC[0]\OBJ, Collider)
@@ -5760,12 +5760,14 @@ Function UpdateEvents()
 						EndIf
 					Else ; ~ SCP-035 has left
 						If UpdateLever(e\room\Levers[1], False) Then 
-							PositionEntity(e\room\Objects[5], EntityX(e\room\Objects[5], True), 424.0 * RoomScale, EntityZ(e\room\Objects[5], True), True)
-							PositionEntity(e\room\Objects[6], EntityX(e\room\Objects[6], True), 424.0 * RoomScale, EntityZ(e\room\Objects[6], True), True)
+							PositionEntity(e\room\Objects[5], EntityX(e\room\Objects[5], True), 400.0 * RoomScale, EntityZ(e\room\Objects[5], True), True)
+							PositionEntity(e\room\Objects[6], EntityX(e\room\Objects[6], True), 400.0 * RoomScale, EntityZ(e\room\Objects[6], True), True)
 						Else
 							PositionEntity(e\room\Objects[5], EntityX(e\room\Objects[5], True), 20.0, EntityZ(e\room\Objects[5], True), True)
 							PositionEntity(e\room\Objects[6], EntityX(e\room\Objects[6], True), 20.0, EntityZ(e\room\Objects[6], True), True)
 						EndIf
+						
+						ShouldPlay = 1
 						
 						Temp = False
 						
@@ -5774,13 +5776,11 @@ Function UpdateEvents()
 							If EntityX(Collider) < Max(EntityX(e\room\Objects[7], True), EntityX(e\room\Objects[8], True)) Then
 								If EntityZ(Collider) > Min(EntityZ(e\room\Objects[7], True), EntityZ(e\room\Objects[8], True)) Then
 									If EntityZ(Collider) < Max(EntityZ(e\room\Objects[7], True), EntityZ(e\room\Objects[8], True)) Then
-										ShouldPlay = 0
-										
 										If e\room\NPC[0] = Null Then
 											If e\room\NPC[0] = Null Then e\room\NPC[0] = CreateNPC(NPCtype035_Tentacle, 0.0, 0.0, 0.0)
 										EndIf
 										
-										PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[4], True), 0.0, EntityZ(e\room\Objects[4], True))
+										PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[4], True), 0.13, EntityZ(e\room\Objects[4], True))
 										
 										If e\room\NPC[0]\State > 0.0 Then 
 											If e\room\NPC[1] = Null Then
@@ -5820,7 +5820,7 @@ Function UpdateEvents()
 						EndIf
 						
 						If e\room\NPC[1] <> Null Then 
-							PositionEntity e\room\NPC[1]\Collider, EntityX(e\room\OBJ, True), 0.0, EntityZ(e\room\OBJ, True)
+							PositionEntity e\room\NPC[1]\Collider, EntityX(e\room\OBJ, True), 0.13, EntityZ(e\room\OBJ, True)
 							Angle = WrapAngle(EntityYaw(e\room\NPC[1]\Collider) - e\room\Angle)
 							
 							If Angle > 90.0 Then 
@@ -8771,8 +8771,7 @@ Function UpdateEvents()
 					Else
 						If e\room\Dist > HideDistance
 							If e\room\NPC[1] <> Null
-								RemoveNPC(e\room\NPC[1])
-								e\room\NPC[1] = Null
+								RemoveNPC(e\room\NPC[1]) : e\room\NPC[1] = Null
 							EndIf
 						EndIf
 					EndIf
