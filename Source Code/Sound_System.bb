@@ -548,7 +548,7 @@ Function LoadAllSounds()
 	
 	BurstSFX = LoadSound_Strict("SFX\Room\TunnelBurst.ogg")
 	
-	For i = 0 To 2
+	For i = 0 To 5
 		RustleSFX(i) = LoadSound_Strict("SFX\SCP\372\Rustle" + i + ".ogg")
 	Next
 	

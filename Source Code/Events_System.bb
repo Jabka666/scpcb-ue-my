@@ -2432,8 +2432,8 @@ Function UpdateEvents()
 				;[Block]
 				If PlayerRoom = e\room Then
 					If e\EventState = 0.0 Then
-						If e\room\RoomDoors[0]\Open Then
-							PlaySound_Strict(RustleSFX(Rand(0, 2)))
+						If EntityDistance(Collider, e\room\OBJ) < 2.5 Then
+							PlaySound_Strict(RustleSFX(Rand(0, 5)))
 							CreateNPC(NPCtype372, 0.0, 0.0, 0.0)
 							e\EventState = 1.0
 							

@@ -1953,7 +1953,7 @@ Global BurstSFX%
 
 DrawLoading(20, True)
 
-Dim RustleSFX%(3)
+Dim RustleSFX%(6)
 
 Global Use914SFX%
 Global Death914SFX% 
@@ -7872,7 +7872,7 @@ Function LoadEntities()
 	
     o\NPCModelID[3] = LoadAnimMesh_Strict("GFX\npcs\class_d.b3d") ; ~ Class-D
 	
-	o\NPCModelID[4] = LoadAnimMesh_Strict("GFX\npcs\372.b3d") ; ~ SCP-372
+	o\NPCModelID[4] = LoadAnimMesh_Strict("GFX\npcs\scp_372.b3d") ; ~ SCP-372
 	
 	o\NPCModelID[5] = LoadAnimMesh_Strict("GFX\npcs\apache.b3d") ; ~ Apache Helicopter
 	

@@ -224,7 +224,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			
 			n\OBJ = CopyEntity(o\NPCModelID[4])
 			
-			Temp = 0.35 / MeshWidth(n\OBJ)
+			Temp = 0.25 / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			;[End Block]
 		Case NPCtype513_1
@@ -2905,13 +2905,13 @@ Function UpdateNPCs()
 							n\Idle = False
 							n\State = Rnd(20.0, 60.0)
 							
-							If Rand(300) = 1 Then PlaySound2(RustleSFX(Rand(0, 2)), Camera, n\OBJ, 8.0, Rnd(0.0, 0.2))
+							If Rand(300) = 1 Then PlaySound2(RustleSFX(Rand(0, 5)), Camera, n\OBJ, 8.0, Rnd(0.0, 0.2))
 						End If
 					Else
 						PositionEntity(n\OBJ, EntityX(n\Collider) + Rnd(-0.005, 0.005), EntityY(n\Collider) + 0.3 + 0.1 * Sin(MilliSecs2() / 2.0), EntityZ(n\Collider) + Rnd(-0.005, 0.005))
 						RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider), ((MilliSecs2() / 5.0) Mod 360.0))
 						
-						AnimateNPC(n, 32.0, 113.0, 0.4)
+						AnimateNPC(n, 1.0, 300.0, Rnd(0.8, 2.5))
 						
 						If EntityInView(n\OBJ, Camera) Then
 							GiveAchievement(Achv372)
@@ -2919,7 +2919,7 @@ Function UpdateNPCs()
 							If Rand(30) = 1 Then 
 								If ChannelPlaying(n\SoundCHN) = False Then
 									If EntityVisible(Camera, n\OBJ) Then 
-										n\SoundCHN = PlaySound2(RustleSFX(Rand(0, 2)), Camera, n\OBJ, 8.0, 0.3)
+										n\SoundCHN = PlaySound2(RustleSFX(Rand(0, 5)), Camera, n\OBJ, 8.0, 0.3)
 									EndIf
 								EndIf
 							EndIf
@@ -2937,10 +2937,8 @@ Function UpdateNPCs()
 							FreeEntity(Temp)
 							
 							MoveEntity(n\Collider, 0.0, 0.0, 0.03 * FPSfactor)
-							
-							n\State = n\State - FPSfactor
 						EndIf
-						n\State = n\State - (FPSfactor / 80.0)
+						n\State = n\State - (FPSfactor * 0.8)
 						If n\State =< 0.0 Then n\Idle = True	
 					End If
 				EndIf
@@ -7447,5 +7445,5 @@ Function Animate2#(Entity%, Curr#, Start%, Quit%, Speed#, Loop% = True)
 End Function 
 
 ;~IDEal Editor Parameters:
-;~B#18A#1237#135E#13AE#1557#1671#1842#189E
+;~B#18A#1235#135C#13AC#1555#166F#1840#189C
 ;~C#Blitz3D
