@@ -9603,7 +9603,7 @@ Function UpdateEndings()
 					If e\EventState = 0.0 Then
 						DrawLoading(0)
 						
-						e\room\Objects[0] = LoadMesh_Strict("GFX\map\gateatunnel.b3d")
+						e\room\Objects[0] = LoadRMesh("GFX\map\gateatunnel_opt.rmesh", Null)
 						PositionEntity(e\room\Objects[0], EntityX(e\room\OBJ, True), EntityY(e\room\OBJ, True), EntityZ(e\room\OBJ, True))
 						ScaleEntity(e\room\Objects[0],RoomScale, RoomScale, RoomScale)
 						EntityType(e\room\Objects[0], HIT_MAP)
