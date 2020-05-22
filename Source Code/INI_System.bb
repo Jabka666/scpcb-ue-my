@@ -309,6 +309,8 @@ Global ConsoleOpening% = GetINIInt(OptionFile, "Advanced", "Console Auto Opening
 
 Global FrameLimit% = GetINIInt(OptionFile, "Advanced", "Frame Limit")
 
+Global ConsoleVersion% = GetINIInt(OptionFile, "Advanced", "Console Version")
+
 ; ~ [CONTROLS]
 
 Global KEY_RIGHT% = GetINIInt(OptionFile, "Controls", "Right Key")
@@ -405,6 +407,8 @@ Function SaveOptionsINI()
 	PutINIValue(OptionFile, "Advanced", "Enable Console", CanOpenConsole)
 	
 	PutINIValue(OptionFile, "Advanced", "Console Auto Opening", ConsoleOpening)
+	
+	PutINIValue(OptionFile, "Advanced", "Console Version", ConsoleVersion)
 	
 	PutINIValue(OptionFile, "Advanced", "Antialiased Text", AATextEnable)
 	

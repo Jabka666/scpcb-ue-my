@@ -56,7 +56,7 @@ Function UpdateMusic()
 		If NowPlaying <> ShouldPlay Then ; ~ Playing the wrong clip, fade out
 			CurrMusicVolume = Max(CurrMusicVolume - (FPSfactor / 250.0), 0.0)
 			If CurrMusicVolume = 0
-				If NowPlaying < 66
+				If NowPlaying < 66 Then
 					StopStream_Strict(MusicCHN)
 				EndIf
 				NowPlaying = ShouldPlay

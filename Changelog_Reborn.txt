@@ -63,6 +63,7 @@ Bug Fixes:
 - Fixed bug with joint.
 - Fixed severed hands' scale.
 - Fixed SCP-1048's document inside the clipboard in room2closets.
+- Fixed messages being visible in the pause menu or console.
 
 - Small fixes for room2testroom's event.
 - Small fixes for commands "disablenuke" and "enablecontrol/disablecontrol.

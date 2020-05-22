@@ -198,7 +198,7 @@ fo\ConsoleFont = AALoadFont("Blitz", Int(20 * (GraphicHeight / 1024.0)), 0, 0, 0
 
 AASetFont(fo\FontID[1])
 
-Global BlinkMeterIMG% = LoadImage_Strict("GFX\blinkmeter.jpg")
+Global BlinkMeterIMG% = LoadImage_Strict("GFX\BlinkMeter.png")
 
 DrawLoading(0, True)
 
@@ -357,7 +357,15 @@ Function UpdateConsole()
 		
 		ConsoleR = 255 : ConsoleG = 255 : ConsoleB = 255
 		
-		Local x% = 0, y% = GraphicHeight - 300 * MenuScale, Width% = GraphicWidth, Height% = 300 * MenuScale - 30 * MenuScale
+		If ConsoleVersion = 1 Then
+			Local x% = 0, y% = GraphicHeight - 300 * MenuScale, Width% = GraphicWidth, Height% = 300 * MenuScale - 30 * MenuScale
+		Else
+			x% = 20
+		    y% = 40
+		    Width% = 400
+		    Height% = 500
+		EndIf
+		
 		Local StrTemp$, Temp%,  i%
 		Local ev.Events, r.Rooms, it.Items
 		
@@ -2107,7 +2115,7 @@ Global CrouchIcon%
 Global HandIcon%
 Global HandIcon2%
 
-Global StaminaMeterIMG%
+Global StaminaMeterIMG%, StaminaMeterRedIMG%, BlinkMeterRedIMG%
 
 Global KeypadHUD%
 
@@ -3309,6 +3317,8 @@ Repeat
 		
 		DrawGUI()
 		
+		UpdateMessages()
+		
 		If EndingTimer < 0.0 Then
 			If SelectedEnding <> "" Then DrawEnding()
 		Else
@@ -3316,53 +3326,6 @@ Repeat
 		EndIf
 		
 		UpdateConsole()
-		
-		If PlayerRoom <> Null Then
-			If PlayerRoom\RoomTemplate\Name = "room173intro" Then
-				For e.Events = Each Events
-					If e\EventName = "room173intro" Then
-						If e\EventState3 >= 40.0 And e\EventState3 < 50.0 Then
-							If InvOpen Then
-								Msg = "Double click on the document to view it."
-								MsgTimer = 70.0 * 7.0
-								e\EventState3 = 50.0
-							EndIf
-						EndIf
-					EndIf
-				Next
-			EndIf
-		EndIf
-		
-		If MsgTimer > 0.0 Then
-			Local Temp% = False
-			
-			If (Not InvOpen) Then
-				If SelectedItem <> Null Then
-					If SelectedItem\ItemTemplate\TempName = "paper" Or SelectedItem\ItemTemplate\TempName = "oldpaper"
-						Temp = True
-					EndIf
-				EndIf
-			EndIf
-			
-			If (Not Temp) Then
-				Color(0, 0, 0)
-				AAText((GraphicWidth / 2) + 1, (GraphicHeight / 2) + 201, Msg, True, False, Min(MsgTimer / 2.0, 255.0) / 255.0)
-				Color(255, 255, 255)
-				If Left(Msg, 14) = "Blitz3D Error!" Then
-					Color(255, 0, 0)
-				EndIf
-				AAText((GraphicWidth / 2), (GraphicHeight / 2) + 200, Msg, True, False, Min(MsgTimer / 2.0, 255.0) / 255.0)
-			Else
-				Color(0, 0, 0)
-				AAText((GraphicWidth / 2) + 1, (GraphicHeight * 0.94) + 1, Msg, True, False, Min(MsgTimer / 2.0, 255.0) / 255.0)
-				Color(255, 255, 255)
-				If Left(Msg, 14) = "Blitz3D Error!" Then
-					Color(255, 0, 0)
-				EndIf
-				AAText((GraphicWidth / 2), (GraphicHeight * 0.94), Msg, True, False, Min(MsgTimer / 2.0, 255.0) / 255.0)
-			EndIf
-			MsgTimer = MsgTimer - FPSfactor2 
-		End If
 		
 		Color(255, 255, 255)
 		If ShowFPS Then AASetFont(fo\ConsoleFont) : AAText(20, 20, "FPS: " + FPS) : AASetFont(fo\FontID[0])
@@ -3427,6 +3390,57 @@ Repeat
 		Flip(1)
 	EndIf
 Forever
+
+Function UpdateMessages()
+	Local e.Events
+	
+	If PlayerRoom <> Null Then
+		If PlayerRoom\RoomTemplate\Name = "room173intro" Then
+			For e.Events = Each Events
+				If e\EventName = "room173intro" Then
+					If e\EventState3 >= 40.0 And e\EventState3 < 50.0 Then
+						If InvOpen Then
+							Msg = "Double click on the document to view it."
+							MsgTimer = 70.0 * 7.0
+							e\EventState3 = 50.0
+						EndIf
+					EndIf
+				EndIf
+			Next
+		EndIf
+	EndIf
+	
+	If MsgTimer > 0.0 Then
+		Local Temp% = False
+		
+		If (Not InvOpen) Then
+			If SelectedItem <> Null Then
+				If SelectedItem\ItemTemplate\TempName = "paper" Or SelectedItem\ItemTemplate\TempName = "oldpaper"
+					Temp = True
+				EndIf
+			EndIf
+		EndIf
+		
+		If (Not Temp) Then
+			Color(0, 0, 0)
+			AAText((GraphicWidth / 2) + 1, (GraphicHeight / 2) + 201, Msg, True, False, Min(MsgTimer / 2.0, 255.0) / 255.0)
+			Color(255, 255, 255)
+			If Left(Msg, 14) = "Blitz3D Error!" Then
+				Color(255, 0, 0)
+			EndIf
+			AAText((GraphicWidth / 2), (GraphicHeight / 2) + 200, Msg, True, False, Min(MsgTimer / 2.0, 255.0) / 255.0)
+		Else
+			Color(0, 0, 0)
+			AAText((GraphicWidth / 2) + 1, (GraphicHeight * 0.94) + 1, Msg, True, False, Min(MsgTimer / 2.0, 255.0) / 255.0)
+			Color(255, 255, 255)
+			If Left(Msg, 14) = "Blitz3D Error!" Then
+				Color(255, 0, 0)
+			EndIf
+			AAText((GraphicWidth / 2), (GraphicHeight * 0.94), Msg, True, False, Min(MsgTimer / 2.0, 255.0) / 255.0)
+		EndIf
+		MsgTimer = MsgTimer - FPSfactor2 
+	End If
+End Function
 
 Function Kill()
 	If chs\GodMode Then Return
@@ -4470,7 +4484,11 @@ Function DrawGUI()
 		Color(255, 255, 255)
 		Rect(x, y, Width, Height, False)
 		For i = 1 To Int(((Width - 2) * (BlinkTimer / (BLINKFREQ))) / 10.0)
-			DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
+			If BlinkTimer < 130.0 Then
+				DrawImage(BlinkMeterRedIMG, x + 3 + 10 * (i - 1), y + 3)
+			Else
+				DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
+			EndIf
 		Next	
 		Color(0, 0, 0)
 		Rect(x - 50, y, 30, 30)
@@ -4495,7 +4513,11 @@ Function DrawGUI()
 		Color(255, 255, 255)
 		Rect(x, y, Width, Height, False)
 		For i = 1 To Int(((Width - 2) * (Stamina / 100.0)) / 10.0)
-			DrawImage(StaminaMeterIMG, x + 3 + 10 * (i - 1), y + 3)
+			If Stamina < 30.0 Then
+				DrawImage(StaminaMeterRedIMG, x + 3 + 10 * (i - 1), y + 3)
+			Else
+				DrawImage(StaminaMeterIMG, x + 3 + 10 * (i - 1), y + 3)
+			EndIf
 		Next	
 		
 		Color(0, 0, 0)
@@ -7390,7 +7412,23 @@ Function DrawMenu()
 						EndIf
 					EndIf
 					
-					y = y + 50 * MenuScale
+					y = y + 30*MenuScale
+					
+					If CanOpenConsole Then
+					    Color(255, 255, 255)
+					    AAText(x, y, "Console Version:")
+					    ConsoleVersion = DrawTick(x + 270 * MenuScale, y + MenuScale, ConsoleVersion)
+					    If ConsoleVersion = 1 Then
+					        AAText(x + 310 * MenuScale, y, "New Version")
+					    Else
+					        AAText(x + 310 * MenuScale, y, "Classic Version")
+					    EndIf    
+					    If MouseOn(x + 270 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
+						    DrawOptionsTooltip(tX, tY, tW, tH, "consoleversion")
+					    EndIf
+					EndIf
+					
+					y = y + 30 * MenuScale
 					
 					Color(255, 255, 255)
 					AAText(x, y, "Achievement popups:")
@@ -7431,7 +7469,7 @@ Function DrawMenu()
 						DrawOptionsTooltip(tX, tY, tW, tH, "framelimit", FrameLimit)
 					EndIf
 					
-					y = y + 80 * MenuScale
+					y = y + 70 * MenuScale
 					
 					Color(255, 255, 255)
 					AAText(x, y, "Antialiased text:")
@@ -7722,7 +7760,7 @@ Function LoadEntities()
 		TempSounds[i] = 0
 	Next
 	
-	PauseMenuIMG = LoadImage_Strict("GFX\menu\pausemenu.jpg")
+	PauseMenuIMG = LoadImage_Strict("GFX\menu\pausemenu.png")
 	MaskImage(PauseMenuIMG, 255, 255, 0)
 	ScaleImage(PauseMenuIMG, MenuScale, MenuScale)
 	
@@ -7731,8 +7769,11 @@ Function LoadEntities()
 	CrouchIcon = LoadImage_Strict("GFX\sneakicon.png")
 	HandIcon = LoadImage_Strict("GFX\handsymbol.png")
 	HandIcon2 = LoadImage_Strict("GFX\handsymbol2.png")
-
-	StaminaMeterIMG = LoadImage_Strict("GFX\staminameter.jpg")
+	
+	BlinkMeterRedIMG = LoadImage_Strict("GFX\BlinkMeterRed.png")
+	
+	StaminaMeterIMG = LoadImage_Strict("GFX\StaminaMeter.png")
+	StaminaMeterRedIMG = LoadImage_Strict("GFX\StaminaMeterRed.png")
 
 	KeypadHUD =  LoadImage_Strict("GFX\keypadhud.png")
 	MaskImage(KeypadHUD, 255, 0, 255)
@@ -11266,5 +11307,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#FF0#132C#1B65
+;~B#FFE#1342#1B7B
 ;~C#Blitz3D

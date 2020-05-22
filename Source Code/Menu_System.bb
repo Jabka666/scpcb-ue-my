@@ -1,8 +1,8 @@
 Global MenuBack% = LoadImage_Strict("GFX\menu\back.jpg")
 Global MenuText% = LoadImage_Strict("GFX\menu\scptext.jpg")
 Global Menu173% = LoadImage_Strict("GFX\menu\173back.jpg")
-MenuWhite = LoadImage_Strict("GFX\menu\menuwhite.jpg")
-MenuBlack = LoadImage_Strict("GFX\menu\menublack.jpg")
+MenuWhite = LoadImage_Strict("GFX\menu\MenuWhite.png")
+MenuBlack = LoadImage_Strict("GFX\menu\MenuBlack.png")
 MaskImage MenuBlack, 255,255,0
 Global QuickLoadIcon% = LoadImage_Strict("GFX\menu\QuickLoading.png")
 
@@ -907,7 +907,7 @@ Function UpdateMainMenu()
 					;[End Block]
 				ElseIf MainMenuTab = 7 ;Advanced
 					;[Block]
-					Height = 320 * MenuScale
+					Height = 330 * MenuScale
 					DrawFrame(x, y, Width, Height)	
 					
 					y = y + 20*MenuScale
@@ -939,7 +939,23 @@ Function UpdateMainMenu()
 						EndIf
 					EndIf
 					
-					y = y + 50*MenuScale
+					y = y + 30 * MenuScale
+					
+					If CanOpenConsole Then
+					    Color(255, 255, 255)
+					    AAText(x + 20 * MenuScale, y, "Console Version:")
+				        ConsoleVersion = DrawTick(x + 310 * MenuScale, y + MenuScale, ConsoleVersion)
+					    If ConsoleVersion = 1 Then
+							AAText(x + 350 * MenuScale, y, "New Version")
+					    Else
+					        AAText(x + 350 * MenuScale, y, "Classic Version")
+					    EndIf    
+					    If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
+							DrawOptionsTooltip(tx, ty, tw, th, "consoleversion")
+					    EndIf
+					EndIf
+					
+					y = y + 30*MenuScale
 					
 					Color 255,255,255
 					AAText(x + 20 * MenuScale, y, "Achievement popups:")
@@ -982,7 +998,7 @@ Function UpdateMainMenu()
 						DrawOptionsTooltip(tx,ty,tw,th,"framelimit",FrameLimit)
 					EndIf
 					
-					y = y + 80*MenuScale
+					y = y + 70*MenuScale
 					
 					Color 255,255,255
 					AAText(x + 20 * MenuScale, y, "Antialiased text:")
@@ -1020,30 +1036,30 @@ Function UpdateMainMenu()
 				;[End Block]
 			Case 4 ; load map
 				;[Block]
-				y = y + height + 20 * MenuScale
-				width = 580 * MenuScale
-				height = 510 * MenuScale
+				y = y + Height + 20 * MenuScale
+				Width = 580 * MenuScale
+				Height = 510 * MenuScale
 				
-				DrawFrame(x, y, width, height)
+				DrawFrame(x, y, Width, Height)
 				
 				x = 159 * MenuScale
 				y = 286 * MenuScale
 				
-				width = 400 * MenuScale
-				height = 70 * MenuScale
+				Width = 400 * MenuScale
+				Height = 70 * MenuScale
 				
 				Color(255, 255, 255)
 				AASetFont fo\FontID[1]
-				AAText(x + width / 2, y + height / 2, "LOAD MAP", True, True)
+				AAText(x + Width / 2, y + Height / 2, "LOAD MAP", True, True)
 				
 				x = 160 * MenuScale
-				y = y + height + 20 * MenuScale
-				width = 580 * MenuScale
-				height = 350 * MenuScale
+				y = y + Height + 20 * MenuScale
+				Width = 580 * MenuScale
+				Height = 350 * MenuScale
 				
 				AASetFont fo\FontID[1]
 				
-				tx# = x+width
+				tx# = x+Width
 				ty# = y
 				tw# = 400*MenuScale
 				th# = 150*MenuScale
@@ -1067,9 +1083,9 @@ Function UpdateMainMenu()
 					AAText(x+25*MenuScale, y + 537.5*MenuScale, "<", True, True)
 				EndIf
 				
-				DrawFrame(x+50*MenuScale,y+510*MenuScale,width-100*MenuScale,55*MenuScale)
+				DrawFrame(x+50*MenuScale,y+510*MenuScale,Width-100*MenuScale,55*MenuScale)
 				
-				AAText(x+(width/2.0),y+536*MenuScale,"Page "+Int(Max((CurrLoadGamePage+1),1))+"/"+Int(Max((Int(Ceil(Float(SavedMapsAmount)/6.0))),1)),True,True)
+				AAText(x+(Width/2.0),y+536*MenuScale,"Page "+Int(Max((CurrLoadGamePage+1),1))+"/"+Int(Max((Int(Ceil(Float(SavedMapsAmount)/6.0))),1)),True,True)
 				
 				AASetFont fo\FontID[0]
 				
@@ -1137,18 +1153,12 @@ Function UpdateLauncher()
 	
 	fo\FontID[0] = LoadFont_Strict("GFX\font\cour\Courier New.ttf", 18, 0,0,0)
 	SetFont fo\FontID[0]
-	MenuWhite = LoadImage_Strict("GFX\menu\menuwhite.jpg")
-	MenuBlack = LoadImage_Strict("GFX\menu\menublack.jpg")	
+	MenuWhite = LoadImage_Strict("GFX\menu\MenuWhite.png")
+	MenuBlack = LoadImage_Strict("GFX\menu\MenuBlack.png")	
 	MaskImage MenuBlack, 255,255,0
-	LauncherIMG = LoadImage_Strict("GFX\menu\launcher.jpg")
+	LauncherIMG = LoadImage_Strict("GFX\menu\Launcher.png")
 	ButtonSFX = LoadSound_Strict("SFX\Interact\Button.ogg")
 	Local i%	
-	
-	For i = 0 To 3
-		ArrowIMG(i) = LoadImage_Strict("GFX\menu\arrow.png")
-		RotateImage(ArrowIMG(i), 90 * i)
-		HandleImage(ArrowIMG(i), 0, 0)
-	Next
 	
 	For i% = 1 To TotalGFXModes
 		Local samefound% = False
@@ -1162,8 +1172,6 @@ Function UpdateLauncher()
 			GFXModes=GFXModes+1 
 		End If
 	Next
-	
-	BlinkMeterIMG% = LoadImage_Strict("GFX\blinkmeter.jpg")
 	
 	AppTitle "SCP - Containment Breach Ultimate Edition Launcher"
 	
@@ -2152,6 +2160,8 @@ Function DrawOptionsTooltip(x%,y%,width%,height%,option$,value#=0,ingame%=False)
 		Case "antialiastext"
 			txt = Chr(34)+"Antialiased text"+Chr(34)+" smooths out the text before displaying. Makes text easier to read at high resolutions."
 			;[End Block]
+		Case "consoleversion"
+		    txt = Chr(34) + "Change console version" + Chr(34) + " is self-explanatory."
 	End Select
 	
 	lines% = GetLineAmount(txt,fw,fh)
