@@ -2711,10 +2711,10 @@ Function UpdateNPCs()
 					EndIf
 				EndIf
 				
-				If n\Frame = 19.0 Or n\Frame = 60.0 Or n\Frame = 711.0 Or n\Frame = 779.0 Then
+				If n\Frame = 19.0 Or n\Frame = 60.0 Or n\Frame = 629.0 Or n\Frame = 677.0 Or n\Frame = 711.0 Or n\Frame = 779.0 Then
 					n\IsDead = True
 				EndIf
-				If AnimTime(n\OBJ) = 19.0 Or AnimTime(n\OBJ) = 60.0 Or AnimTime(n\OBJ) = 711.0 Or AnimTime(n\OBJ) = 779.0 Then
+				If AnimTime(n\OBJ) = 19.0 Or AnimTime(n\OBJ) = 60.0 Or AnimTime(n\OBJ) = 629.0 Or AnimTime(n\OBJ) = 677.0 Or AnimTime(n\OBJ) = 711.0 Or AnimTime(n\OBJ) = 779.0 Then
 					n\IsDead = True
 				EndIf
 				

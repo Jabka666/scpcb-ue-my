@@ -20,6 +20,7 @@
 - Removed NPCs bumps.
 - Removed all stuff from other mods, except SCP-409, SCP-005, FOV and some files from Box of Horrors.
 - Removed event of SCP-096's containment chamber.
+- Removed some unnecessary files.
 
 - Renamed room2testroom to room2testroom2.
 - Renamed room2testroom2 to room2testroom.
@@ -34,10 +35,10 @@ Bug Fixes:
 - Fixed sounds for big doors locked by SCP-079.
 - Fixed lights in SCP-012's containment chamber.
 - Fixed SCP-1048-A's scream being able to be heard anywhere.
-- Fixed SCP-049 spam-closing the door behind it, if the player tries to open it. ;NOT DONE
+- Fixed SCP-049 spam-closing the door behind it, if the player tries to open it.
 - Fixed SCP-106's eyes glowing in the dark and flying in midair while he is emerging.
 - Fixed SCP-173's head poking out of its box when recontained by the MTFs.
-- Fixed item's positions in room2closets, room1archive. ;NOT DONE
+- Fixed item's positions in room2closets.
 - Fixed small lamps in room2pit.
 - Fixed missing pipes in SCP-035's containment chamber.
 - Fixed font for startup videos.
@@ -48,21 +49,22 @@ Bug Fixes:
 - Fixed SCP-1048-A's double texture.
 - Fixed breath sound in NoClip mode.
 - Fixed weird balcony guard's moving in the intro scene.
-- Fixed step sounds for big contianment doors.
+- Fixed step sounds for big containment doors.
 - Fixed red and green frames for the HUD when player wearing a hazmat suit.
 - Fixed wearing system for NVG.
 - Fixed annoying "Secondary Lighting" lever in room2ccont.
 - Fixed button sound not working when not using launcher.
 - Fixed "CanUseItem" function for eyegear.
 - Fixed elevators' pivots for SCP-008, SCP-106 and SCP-079's containment chambers.
-- Fixed lamps' texture in room1endroom3 and SCP-008's containment chamber. ;008's CHAMBER NOT DONE
+- Fixed lamps' texture in room1endroom3 and SCP-008's containment chamber.
 - Fixed some rooms' descriptions.
-- Fixed SCP-049 spam-closing the door behind it, if the player tries to open it.
 - Fixed missing small lamp in room2testroom.
 - Fixed missing "spark(2).png" file.
 - Fixed bug with joint.
+- Fixed severed hands' scale.
+- Fixed SCP-1048's document inside the clipboard in room2closets.
 
 - Small fixes for room2testroom's event.
-- Small fixes for commands "disablenuke" and "enable/disablecontrol.
+- Small fixes for commands "disablenuke" and "enablecontrol/disablecontrol.
 - Small fixes for gateaentrance's walls.
 - Small fixes for gateb's walls.

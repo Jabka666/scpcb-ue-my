@@ -3104,8 +3104,8 @@ Function UpdateEvents()
 				;[End Block]
 			Case "room2closets"
 				;[Block]
-				If e\EventState = 0 Then
-					If PlayerRoom = e\room And Curr173\Idle<2 Then
+				If e\EventState = 0.0 Then
+					If PlayerRoom = e\room And Curr173\Idle < 2 Then
 						If e\EventStr = "" And QuickLoadPercent = -1
 							QuickLoadPercent = 0
 							QuickLoad_CurrEvent = e
@@ -3113,64 +3113,80 @@ Function UpdateEvents()
 						EndIf
 					EndIf
 				Else
-					e\EventState=e\EventState+FPSfactor
-					If e\EventState < 70*3.5 Then
-						RotateEntity(e\room\NPC[1]\Collider,0,CurveAngle(e\room\angle+90,EntityYaw(e\room\NPC[1]\Collider),100.0),0,True)
+					e\EventState = e\EventState + FPSfactor
+					If e\EventState < 70.0 * 3.0 Then
+						RotateEntity(e\room\NPC[1]\Collider, 0.0, CurveAngle(e\room\Angle + 90.0, EntityYaw(e\room\NPC[1]\Collider), 100.0), 0.0, True)
 						
-						e\room\NPC[0]\State=1
-						If e\EventState > 70*3.2 And e\EventState-FPSfactor =< 70*3.2 Then PlaySound2(IntroSFX(11),Camera,e\room\obj,15.0)
-					ElseIf e\EventState < 70*6.5
-						If e\EventState-FPSfactor < 70*3.5 Then
-							e\room\NPC[0]\State=0
-							e\room\NPC[1]\SoundChn = PlaySound2(e\room\NPC[1]\Sound, Camera, e\room\NPC[1]\Collider,12.0)
+						e\room\NPC[0]\State = 1.0
+						If e\EventState > 70.0 * 3.2 And e\EventState - FPSfactor =< 70.0 * 3.2 Then PlaySound2(IntroSFX(11), Camera, e\room\OBJ, 15.0)
+					ElseIf e\EventState < 70.0 * 6.5
+						If e\EventState - FPSfactor < 70.0 * 3.0 Then
+							e\room\NPC[0]\State = 0.0
+							e\room\NPC[1]\SoundCHN = PlaySound2(e\room\NPC[1]\Sound, Camera, e\room\NPC[1]\Collider, 12.0)
 						EndIf
 						
-						If e\EventState > 70*4.5 Then
-							PointEntity e\room\NPC[0]\obj, e\room\obj
-							RotateEntity(e\room\NPC[0]\Collider,0,CurveAngle(EntityYaw(e\room\NPC[0]\obj),EntityYaw(e\room\NPC[0]\Collider),30.0),0,True)
+						If e\EventState > 70.0 * 4.5 Then
+							PointEntity(e\room\NPC[0]\OBJ, e\room\OBJ)
+							RotateEntity(e\room\NPC[0]\Collider, 0.0, CurveAngle(EntityYaw(e\room\NPC[0]\OBJ), EntityYaw(e\room\NPC[0]\Collider), 30.0), 0.0, True)
 						EndIf
-						PointEntity e\room\NPC[1]\obj, e\room\obj
-						TurnEntity e\room\NPC[1]\obj, 0, Sin(e\EventState)*25, 0
-						RotateEntity(e\room\NPC[1]\Collider,0,CurveAngle(EntityYaw(e\room\NPC[1]\obj),EntityYaw(e\room\NPC[1]\Collider),30.0),0,True)
+						PointEntity(e\room\NPC[1]\OBJ, e\room\OBJ)
+						TurnEntity(e\room\NPC[1]\OBJ, 0.0, Sin(e\EventState) * 25.0, 0.0)
+						RotateEntity(e\room\NPC[1]\Collider, 0.0, CurveAngle(EntityYaw(e\room\NPC[1]\OBJ), EntityYaw(e\room\NPC[1]\Collider), 30.0), 0.0, True)
 					Else
-						If e\EventState-FPSfactor < 70*6.5 Then 
-							PlaySound_Strict (HorrorSFX(0))
-							PlaySound_Strict (LightSFX)
-						EndIf
-						BlinkTimer = Max((70*6.5-e\EventState)/5.0 - Rnd(0.0,2.0),-10)
-						If BlinkTimer =-10 Then
-							If e\EventState > 70*7.5 And e\EventState-FPSfactor =< 70*7.5 Then
-								PlaySound2(NeckSnapSFX(0),Camera,e\room\NPC[0]\Collider,8.0)
-								;Wallet spawning (with 3 coins)
-								it.Items = CreateItem("Wallet","wallet",EntityX(e\room\NPC[0]\Collider,True),EntityY(e\room\NPC[0]\Collider,True),EntityZ(e\room\NPC[0]\Collider,True))
-								EntityType(it\collider, HIT_ITEM)
-								PointEntity it\collider,e\room\NPC[1]\Collider
-								MoveEntity it\collider,-0.4,0,-0.2
-								TeleportEntity(it\collider,EntityX(it\collider),EntityY(it\collider),EntityZ(it\collider),-0.02,True,10)
-								For i = 0 To 1
-									it2.Items = CreateItem("Quarter","25ct",1,1,1)
-									it2\Picked = True
-									it2\Dropped = -1
-									it2\itemtemplate\found=True
-									it\SecondInv[i] = it2
-									HideEntity(it2\collider)
-									EntityType(it2\collider, HIT_ITEM)
-								Next
-							EndIf
-							If e\EventState > 70*8.0 And e\EventState-FPSfactor =< 70*8.0 Then
-								PlaySound2(NeckSnapSFX(1),Camera,e\room\NPC[1]\Collider,8.0)
-							EndIf
-							SetNPCFrame e\room\NPC[0], 60
-							e\room\NPC[0]\State=8
-							
-							SetNPCFrame e\room\NPC[1], 19
-							e\room\NPC[1]\State = 6
+						If e\EventState - FPSfactor < 70.0 * 6.5 Then 
+							PlaySound_Strict(HorrorSFX(0))
+							PlaySound_Strict(LightSFX)
+							LightBlink = 10.0
 						EndIf
 						
-						If e\EventState > 70*8.5 Then
-							PositionEntity Curr173\Collider, (EntityX(e\room\Objects[0],True)+EntityX(e\room\Objects[1],True))/2,EntityY(e\room\Objects[0],True),(EntityZ(e\room\Objects[0],True)+EntityZ(e\room\Objects[1],True))/2
-							PointEntity Curr173\Collider, Collider
-							ResetEntity Curr173\Collider
+						If e\EventState > 70.0 * 7.5 Then
+							e\room\NPC[0]\State = 8.0
+							Animate2(e\room\NPC[0]\OBJ, AnimTime(e\room\NPC[0]\OBJ), 555.0, 629.0, 0.5, False)
+						EndIf
+						
+						If e\EventState > 70.0 * 7.5 And e\EventState - FPSfactor =< 70.0 * 7.5 Then
+							If WearingNightVision > 0 Then BlinkTimer = -10.0
+							
+							PlaySound2(NeckSnapSFX(0), Camera, e\room\NPC[0]\Collider, 8.0)
+							
+							PositionEntity(Curr173\Collider, EntityX(e\room\NPC[0]\Collider, True) + 0.35, EntityY(e\room\NPC[0]\Collider, True) + 0.1, EntityZ(e\room\NPC[0]\Collider, True))													
+							PointEntity(Curr173\Collider, e\room\NPC[0]\Collider)
+							ResetEntity(Curr173\Collider)
+							Curr173\Idle = True
+							
+							it.Items = CreateItem("Wallet", "wallet", EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True))
+							EntityType(it\Collider, HIT_ITEM)
+							PointEntity(it\Collider, e\room\NPC[0]\Collider)
+							RotateEntity(it\Collider, 0.0, Rnd(360.0), 0.0)
+							TeleportEntity(it\Collider, EntityX(it\Collider), EntityY(it\Collider), EntityZ(it\Collider), -0.02, True, 10)
+							For i = 0 To 1
+								it2.Items = CreateItem("Quarter", "25ct", 1.0, 1.0, 1.0)
+								it2\Picked = True
+								it2\Dropped = -1
+								it2\ItemTemplate\Found = True
+								it\SecondInv[i] = it2
+								HideEntity(it2\Collider)
+								EntityType(it2\Collider, HIT_ITEM)
+							Next
+						EndIf
+						
+						If e\EventState > 70.0 * 8.0 Then
+							e\room\NPC[1]\State = 6.0
+							Animate2(e\room\NPC[1]\OBJ, AnimTime(e\room\NPC[1]\OBJ), 630.0, 677.0, 0.5, False) 
+						EndIf
+						
+						If e\EventState > 70.0 * 8.0 And e\EventState - FPSfactor =< 70.0 * 8.0 Then
+							If WearingNightVision > 0 Then BlinkTimer = -10.0
+							
+							PlaySound2(NeckSnapSFX(1), Camera, e\room\NPC[1]\Collider, 8.0)
+							
+							PositionEntity(Curr173\Collider, EntityX(e\room\NPC[1]\Collider, True) + 0.35, EntityY(e\room\NPC[1]\Collider, True) + 0.1, EntityZ(e\room\NPC[1]\Collider, True))												
+							PointEntity(Curr173\Collider, e\room\NPC[1]\Collider)
+							ResetEntity(Curr173\Collider)
+							Curr173\Idle = False
+						EndIf
+						
+						If e\EventState > 70.0 * 10.0 Then
 							RemoveEvent(e)
 						EndIf
 					EndIf
@@ -10240,5 +10256,5 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1219#1E4E
+;~B#1229#1E5E
 ;~C#Blitz3D

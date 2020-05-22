@@ -246,9 +246,9 @@ Function InitItemTemplates()
 	
 	CreateItemTemplate("Cup", "cup", ItemsPath + "cup.x", ItemsPath + "INVcup.jpg", "", 0.04, 2)
 	
-	CreateItemTemplate("Clipboard", "clipboard", ItemsPath + "clipboard.b3d", ItemsPath + "INVclipboard.jpg", "", 0.003, 1, "", ItemsPath + "INVclipboard2.jpg", 1)
+	CreateItemTemplate("Clipboard", "clipboard", ItemsPath + "clipboard.b3d", ItemsPath + "INV_clipboard.png", "", 0.003, 1, "", ItemsPath + "INV_clipboard(2).png", 1)
 	
-	CreateItemTemplate("Electronical components", "misc", ItemsPath + "electronics.x", ItemsPath + "INVelectronics.jpg", "", 0.0011, 1)
+	CreateItemTemplate("Electronical Components", "misc", ItemsPath + "electronics.x", ItemsPath + "INVelectronics.jpg", "", 0.0011, 1)
 	
 	CreateItemTemplate("Empty Cup", "emptycup", ItemsPath + "cup.x", ItemsPath + "INVcup.jpg", "", 0.04, 2)
 	

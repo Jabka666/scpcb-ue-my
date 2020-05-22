@@ -9437,7 +9437,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 			Select Setting
 				Case "Rough", "Coarse"
 					;[Block]
-					it2 = CreateItem("Electronical components", "misc", x, y, z)
+					it2 = CreateItem("Electronical Components", "misc", x, y, z)
 					;[End Block]
 				Case "1:1"
 					;[Block]
@@ -9462,7 +9462,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 			Select Setting
 				Case "Rough", "Coarse"
 					;[Block]
-					it2 = CreateItem("Electronical components", "misc", x, y, z)
+					it2 = CreateItem("Electronical Components", "misc", x, y, z)
 					;[End Block]
 				Case "1:1"
 					;[Block]
@@ -9657,7 +9657,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					Select Setting
 						Case "Rough", "Coarse", "1:1", "Fine"
 							;[Block]
-							it2 = CreateItem("Electronical components", "misc", x, y, z)	
+							it2 = CreateItem("Electronical Components", "misc", x, y, z)	
 							;[End Block]
 						Case "Very Fine"
 							;[Block]

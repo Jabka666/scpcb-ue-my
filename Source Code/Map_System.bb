@@ -3608,12 +3608,15 @@ Function FillRoom(r.Rooms)
 			PositionEntity(d\Buttons[1], r\x - 250.0 * RoomScale, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			
 			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x - 1120.0 * RoomScale, r\y - 256.0 * RoomScale, r\z + 896.0 * RoomScale)
+			PositionEntity(r\Objects[0], r\x - 1180.0 * RoomScale, r\y - 256.0 * RoomScale, r\z + 896.0 * RoomScale)
 			
 			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x - 1232.0 * RoomScale, r\y - 256.0 * RoomScale, r\z - 160.0 * RoomScale)
+			PositionEntity(r\Objects[1], r\x - 1292.0 * RoomScale, r\y - 256.0 * RoomScale, r\z - 160.0 * RoomScale)
 			
-			For i = 0 To 1
+			r\Objects[2] = CreatePivot()
+			PositionEntity(r\Objects[2], r\x - 1065.0 * RoomScale, r\y - 380.0 * RoomScale, r\z + 50.0 * RoomScale)
+			
+			For i = 0 To 2
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
@@ -3621,33 +3624,41 @@ Function FillRoom(r.Rooms)
 			sc\Angle = 180.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			
-			it = CreateItem("Document SCP-1048", "paper", r\x + 736.0 * RoomScale, r\y + 176.0 * RoomScale, r\z + 736.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
-			
 			it = CreateItem("Gas Mask", "gasmask", r\x + 736.0 * RoomScale, r\y + 176.0 * RoomScale, r\z + 544.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it = CreateItem("9V Battery", "bat", r\x + 736.0 * RoomScale, r\y + 176.0 * RoomScale, r\z - 448.0 * RoomScale)
+			it = CreateItem("9V Battery", "bat", r\x + 736.0 * RoomScale, r\y + 100.0 * RoomScale, r\z - 448.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			If Rand(2) = 1 Then
-				it = CreateItem("9V Battery", "bat", r\x + 730.0 * RoomScale, r\y + 176.0 * RoomScale, r\z - 496.0 * RoomScale)
+				it = CreateItem("9V Battery", "bat", r\x + 730.0 * RoomScale, r\y + 176.0 * RoomScale, r\z - 580.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			
 			If Rand(2) = 1 Then
-				it = CreateItem("9V Battery", "bat", r\x + 740.0 * RoomScale, r\y + 176.0 * RoomScale, r\z - 560.0 * RoomScale)
+				it = CreateItem("9V Battery", "bat", r\x + 740.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 750.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			
 			it = CreateItem("Level 1 Key Card", "key1", r\x + 736.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 752.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			Local clipboard.Items = CreateItem("Clipboard","clipboard", r\x + 736.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 480.0 * RoomScale)
+			Local clipboard.Items = CreateItem("Clipboard", "clipboard", r\x - 400.0 * RoomScale, r\y - 50.0 * RoomScale, r\z - 700.0 * RoomScale)
 			
-			EntityParent(it\Collider, r\OBJ)
+			; ~ A hacky fix for clipboard's model and icon
+			clipboard\InvImg = clipboard\ItemTemplate\InvImg
+			SetAnimTime(clipboard\Model, 0.0)
+			EntityParent(clipboard\Collider, r\OBJ)
 			
-			it = CreateItem("Incident Report SCP-1048-A", "paper", r\x + 736.0 * RoomScale, r\y + 224.0 * RoomScale, r\z -480.0 * RoomScale)
+			Local it2.Items = CreateItem("Document SCP-1048", "paper", 1.0, 1.0, 1.0)
+			
+			it2\Picked = True
+			it2\Dropped = -1
+			clipboard\SecondInv[0] = it2
+			HideEntity(it2\Collider)
+			EntityParent(it2\Collider, r\OBJ)
+			
+			it = CreateItem("Incident Report SCP-1048-A", "paper", r\x + 736.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 480.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case "room2offices"
@@ -5503,11 +5514,11 @@ Function FillRoom(r.Rooms)
 			sc\Angle = 225.0 : sc\Turn = 30.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			
-			it = CreateItem("9V Battery", "bat", r\x + 370.0 * RoomScale, r\y + 230.0 * RoomScale, r\z + 960.0 * RoomScale)
+			it = CreateItem("9V Battery", "bat", r\x + 360.0 * RoomScale, r\y + 230.0 * RoomScale, r\z + 960.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ) 
 			
 			If Rand(2) = 1 Then
-				it = CreateItem("9V Battery", "bat", r\x + 420.0 * RoomScale, r\y + 230.0 * RoomScale, r\z + 960.0 * RoomScale)
+				it = CreateItem("9V Battery", "bat", r\x + 435.0 * RoomScale, r\y + 230.0 * RoomScale, r\z + 960.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ) 
 			EndIf
 			;[End Block]
@@ -8615,5 +8626,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11F2
+;~B#11FD
 ;~C#Blitz3D
