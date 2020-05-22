@@ -7381,11 +7381,13 @@ Function DrawMenu()
 					
 					y = y + 30 * MenuScale
 					
-					Color(255, 255, 255)
-					AAText(x, y, "Open console on error:")
-					ConsoleOpening = DrawTick(x + 270 * MenuScale, y + MenuScale, ConsoleOpening)
-					If MouseOn(x + 270 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
-						DrawOptionsTooltip(tX, tY, tW, tH, "consoleerror")
+					If CanOpenConsole Then
+						Color(255, 255, 255)
+						AAText(x, y, "Open console on error:")
+						ConsoleOpening = DrawTick(x + 270 * MenuScale, y + MenuScale, ConsoleOpening)
+						If MouseOn(x + 270 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
+							DrawOptionsTooltip(tX, tY, tW, tH, "consoleerror")
+						EndIf
 					EndIf
 					
 					y = y + 50 * MenuScale

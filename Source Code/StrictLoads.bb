@@ -68,7 +68,7 @@ Function PlaySound_Strict%(SNDHandle%)
 					If snd\InternalHandle = 0 Then
 						If FileType(snd\Name) <> 1 Then
 							CreateConsoleMsg("Sound " + Chr(34) + snd\Name + Chr(34) + " not found.")
-							If ConsoleOpening
+							If ConsoleOpening And CanOpenConsole Then
 								ConsoleOpen = True
 							EndIf
 						Else
@@ -76,7 +76,7 @@ Function PlaySound_Strict%(SNDHandle%)
 						EndIf
 						If snd\InternalHandle = 0 Then
 							CreateConsoleMsg("Failed to load Sound: " + Chr(34) + snd\Name + Chr(34))
-							If ConsoleOpening
+							If ConsoleOpening And CanOpenConsole Then
 								ConsoleOpen = True
 							EndIf
 						EndIf
@@ -94,7 +94,7 @@ Function PlaySound_Strict%(SNDHandle%)
 				If snd\InternalHandle = 0 Then
 					If FileType(snd\Name) <> 1 Then
 						CreateConsoleMsg("Sound " + Chr(34) + snd\Name + Chr(34) + " not found.")
-						If ConsoleOpening
+						If ConsoleOpening And CanOpenConsole Then
 							ConsoleOpen = True
 						EndIf
 					Else
@@ -103,7 +103,7 @@ Function PlaySound_Strict%(SNDHandle%)
 						
 					If snd\InternalHandle = 0 Then
 						CreateConsoleMsg("Failed to load Sound: " + Chr(34) + snd\Name + Chr(34))
-						If ConsoleOpening
+						If ConsoleOpening And CanOpenConsole Then
 							ConsoleOpen = True
 						EndIf
 					EndIf
@@ -155,7 +155,7 @@ End Type
 Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode% = Mode)
 	If FileType(File) <> 1
 		CreateConsoleMsg("Sound " + Chr(34) + File + Chr(34) + " not found.")
-		If ConsoleOpening
+		If ConsoleOpening And CanOpenConsole Then
 			ConsoleOpen = True
 		EndIf
 		Return(0)
@@ -167,7 +167,7 @@ Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode% = Mode)
 	
 	If st\SFX = 0
 		CreateConsoleMsg("Failed to stream Sound (returned 0): " + Chr(34) + File + Chr(34))
-		If ConsoleOpening
+		If ConsoleOpening And CanOpenConsole Then
 			ConsoleOpen = True
 		EndIf
 		Return(0)
@@ -177,7 +177,7 @@ Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode% = Mode)
 	
 	If st\CHN = -1
 		CreateConsoleMsg("Failed to stream Sound (returned -1): " + Chr(34) + File + Chr(34))
-		If ConsoleOpening
+		If ConsoleOpening And CanOpenConsole Then
 			ConsoleOpen = True
 		EndIf
 		Return(-1)

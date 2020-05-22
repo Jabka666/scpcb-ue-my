@@ -907,8 +907,8 @@ Function UpdateMainMenu()
 					;[End Block]
 				ElseIf MainMenuTab = 7 ;Advanced
 					;[Block]
-					height = 320 * MenuScale
-					DrawFrame(x, y, width, height)	
+					Height = 320 * MenuScale
+					DrawFrame(x, y, Width, Height)	
 					
 					y = y + 20*MenuScale
 					
@@ -930,11 +930,13 @@ Function UpdateMainMenu()
 					
 					y = y + 30*MenuScale
 					
-					Color 255,255,255
-					AAText(x + 20 * MenuScale, y, "Open console on error:")
-					ConsoleOpening = DrawTick(x + 310 * MenuScale, y + MenuScale, ConsoleOpening)
-					If MouseOn(x+310*MenuScale,y+MenuScale,20*MenuScale,20*MenuScale)
-						DrawOptionsTooltip(tx,ty,tw,th,"consoleerror")
+					If CanOpenConsole Then
+						Color 255,255,255
+						AAText(x + 20 * MenuScale, y, "Open console on error:")
+						ConsoleOpening = DrawTick(x + 310 * MenuScale, y + MenuScale, ConsoleOpening)
+						If MouseOn(x+310*MenuScale,y+MenuScale,20*MenuScale,20*MenuScale)
+							DrawOptionsTooltip(tx,ty,tw,th,"consoleerror")
+						EndIf
 					EndIf
 					
 					y = y + 50*MenuScale
