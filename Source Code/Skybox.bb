@@ -7,7 +7,7 @@ Function sky_CreateSky(FileName$, Parent% = 0)
 	For Face = 1 To 6
 		Read Direction$
 		
-		Local FName$ = FileName$ + Direction$ + ".jpg"
+		Local FName$ = FileName + Direction$ + ".png"
 		
 		If FileType(FName$) = 1 Then
 			Local b = LoadBrush_Strict(FName$, %110001)
