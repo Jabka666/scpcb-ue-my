@@ -544,7 +544,6 @@ Function UpdateConsole()
 							;[Block]
 							CreateConsoleMsg("LIST OF COMMANDS - PAGE 1 / 3")
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("- status")
 							CreateConsoleMsg("- camerapick")
 							CreateConsoleMsg("- ending")
 							CreateConsoleMsg("- notarget")
@@ -837,13 +836,6 @@ Function UpdateConsole()
 							CreateConsoleMsg("the model the camera is pointing at.")
 							CreateConsoleMsg("******************************")
 							;[End Block]
-						Case "status"
-							;[Block]
-							CreateConsoleMsg("HELP - status")
-							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Prints player, camera, and room information.")
-							CreateConsoleMsg("******************************")
-							;[End Block]
 						Case "weed", "scp-420-j", "420j", "scp420-j", "scp-420j", "420"
 							;[Block]
 							CreateConsoleMsg("HELP - weed")
@@ -864,38 +856,6 @@ Function UpdateConsole()
 							CreateConsoleMsg("There is no help available for that command.", 255, 150, 0)
 							;[End Block]
 					End Select
-					;[End Block]
-				Case "status"
-					;[Block]
-					ConsoleR = 0 : ConsoleG = 255 : ConsoleB = 0
-					CreateConsoleMsg("******************************")
-					CreateConsoleMsg("Status: ")
-					CreateConsoleMsg("Coordinates: ")
-					CreateConsoleMsg("    - collider: " + EntityX(Collider) + ", " + EntityY(Collider) + ", " + EntityZ(Collider))
-					CreateConsoleMsg("    - camera: " + EntityX(Camera) + ", " + EntityY(Camera) + ", " + EntityZ(Camera))
-				 	
-					CreateConsoleMsg("Rotation: ")
-					CreateConsoleMsg("    - collider: " + EntityPitch(Collider) + ", " + EntityYaw(Collider) + ", " + EntityRoll(Collider))
-					CreateConsoleMsg("    - camera: " + EntityPitch(Camera) + ", " + EntityYaw(Camera)+", " + EntityRoll(Camera))
-					
-					CreateConsoleMsg("Room: " + PlayerRoom\RoomTemplate\Name)
-					For ev.Events = Each Events
-						If ev\room = PlayerRoom Then
-							CreateConsoleMsg("Room event: " + ev\EventName)	
-							CreateConsoleMsg("-    state: " + ev\EventState)
-							CreateConsoleMsg("-    state2: " + ev\EventState2)	
-							CreateConsoleMsg("-    state3: " + ev\EventState3)
-							Exit
-						EndIf
-					Next
-					
-					CreateConsoleMsg("Room coordinates: " + Floor(EntityX(PlayerRoom\OBJ) / 8.0 + 0.5) + ", " + Floor(EntityZ(PlayerRoom\OBJ) / 8.0 + 0.5))
-					CreateConsoleMsg("Stamina: " + Stamina)
-					CreateConsoleMsg("Death timer: " + KillTimer)					
-					CreateConsoleMsg("Blinktimer: " + BlinkTimer)
-					CreateConsoleMsg("Injuries: " + Injuries)
-					CreateConsoleMsg("Bloodloss: " + Bloodloss)
-					CreateConsoleMsg("******************************")
 					;[End Block]
 				Case "camerapick"
 					;[Block]
@@ -1853,7 +1813,6 @@ CreateConsoleMsg("  - wireframe [on / off]")
 CreateConsoleMsg("  - debughud [on / off]")
 CreateConsoleMsg("  - camerafog [near] [far]")
 CreateConsoleMsg(" ")
-CreateConsoleMsg("  - status")
 CreateConsoleMsg("  - heal")
 CreateConsoleMsg(" ")
 CreateConsoleMsg("  - spawnitem [item name]")
@@ -4484,7 +4443,7 @@ Function DrawGUI()
 		Color(255, 255, 255)
 		Rect(x, y, Width, Height, False)
 		For i = 1 To Int(((Width - 2) * (BlinkTimer / (BLINKFREQ))) / 10.0)
-			If BlinkTimer < 130.0 Then
+			If BlinkTimer < 180.0 Then
 				DrawImage(BlinkMeterRedIMG, x + 3 + 10 * (i - 1), y + 3)
 			Else
 				DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
@@ -4544,78 +4503,108 @@ Function DrawGUI()
 		If DebugHUD Then
 			Color(255, 255, 255)
 			AASetFont(fo\ConsoleFont)
-			AAText(x - 50, 50, "Player Position: (" + f2s(EntityX(Collider), 3) + ", " + f2s(EntityY(Collider), 3) + ", " + f2s(EntityZ(Collider), 3) + ")")
-			AAText(x - 50, 70, "Camera Position: (" + f2s(EntityX(Camera), 3) + ", " + f2s(EntityY(Camera), 3) + ", " + f2s(EntityZ(Camera), 3) + ")")
-			AAText(x - 50, 100, "Player Rotation: (" + f2s(EntityPitch(Collider), 3) + ", " + f2s(EntityYaw(Collider), 3) + ", " + f2s(EntityRoll(Collider), 3) + ")")
-			AAText(x - 50, 120, "Camera Rotation: (" + f2s(EntityPitch(Camera), 3) + ", " + f2s(EntityYaw(Camera), 3) + ", " + f2s(EntityRoll(Camera), 3) + ")")
-			AAText(x - 50, 150, "Room: " + PlayerRoom\RoomTemplate\Name)
+			
+			AAText(x - 60, 40, "*****************************")
+			AAText(x - 60, 60, "*********** STATS ***********")
+			AAText(x - 60, 80, "*****************************")
+			
+			AAText(x - 60, 120, "Room: " + PlayerRoom\RoomTemplate\Name)
+            AAText(x - 60, 140, "Room Coordinates: (" + Floor(EntityX(PlayerRoom\OBJ) / 8.0 + 0.5) + ", " + Floor(EntityZ(PlayerRoom\OBJ) / 8.0 + 0.5) + ", Angle: "+ PlayerRoom\Angle + ")")
 			For ev.Events = Each Events
 				If ev\room = PlayerRoom Then
-					AAText(x - 50, 170, "Room event: " + ev\EventName)   
-					AAText(x - 50, 190, "state: " + ev\EventState)
-					AAText(x - 50, 210, "state2: " + ev\EventState2)  
-					AAText(x - 50, 230, "state3: " + ev\EventState3)
-					AAText(x - 50, 250, "str: "+ ev\EventStr)
+					AAText(x - 60, 160, "Room Event: " + ev\EventName) 
+					AAText(x - 60, 180, "State: " + ev\EventState)
+					AAText(x - 60, 200, "State2: " + ev\EventState2)   
+					AAText(x - 60, 220, "State3: " + ev\EventState3)
+					AAText(x - 60, 240, "State4: " + ev\EventState4)
+					AAText(x - 60, 260, "Str: "+ ev\EventStr)
 					Exit
 				EndIf
 			Next
-			AAText(x - 50, 280, "Room coordinates: (" + Floor(EntityX(PlayerRoom\OBJ) / 8.0 + 0.5) + ", " + Floor(EntityZ(PlayerRoom\OBJ) / 8.0 + 0.5) + ", angle: " + PlayerRoom\Angle + ")")
-			AAText(x - 50, 300, "Stamina: " + f2s(Stamina, 3))
-			AAText(x - 50, 320, "Death timer: " + f2s(KillTimer, 3))             
-			AAText(x - 50, 340, "Blink timer: " + f2s(BlinkTimer, 3))
-			AAText(x - 50, 360, "Injuries: " + Injuries)
-			AAText(x - 50, 380, "Bloodloss: " + Bloodloss)
+            GlobalMemoryStatus(m.MEMORYSTATUS)
+			AAText(x - 60, 300, "Memory: " + (m\dwAvailPhys / 1024 / 1024) + " MB/" + (m\dwTotalPhys / 1024 / 1024) + " MB (" + (m\dwAvailPhys / 1024) + " KB/" + (m\dwTotalPhys / 1024) + " KB)")
+			AAText(x - 60, 320, "Triangles Rendered: " + CurrTrisAmount)
+			AAText(x - 60, 340, "Active Textures: " + ActiveTextures())	
+			
 			If Curr173 <> Null Then
-				AAText(x - 50, 410, "SCP - 173 Position (collider): (" + f2s(EntityX(Curr173\Collider), 3) + ", " + f2s(EntityY(Curr173\Collider), 3) + ", " + f2s(EntityZ(Curr173\Collider), 3) + ")")
-				AAText(x - 50, 430, "SCP - 173 Position (obj): (" + f2s(EntityX(Curr173\OBJ), 3) + ", " + f2s(EntityY(Curr173\OBJ), 3) + ", " + f2s(EntityZ(Curr173\OBJ), 3) + ")")
-				AAText(x - 50, 450, "SCP - 173 State: " + Curr173\State)
+				AAText(x - 60, 380, "SCP - 173 Position (Collider): (" + f2s(EntityX(Curr173\Collider), 3) + ", " + f2s(EntityY(Curr173\Collider), 3) + ", " + f2s(EntityZ(Curr173\Collider), 3) + ")")
+				AAText(x - 60, 400, "SCP - 173 Position (Object): (" + f2s(EntityX(Curr173\OBJ), 3) + ", " + f2s(EntityY(Curr173\OBJ), 3) + ", " + f2s(EntityZ(Curr173\OBJ), 3) + ")")
+				AAText(x - 60, 420, "SCP - 173 State: " + Curr173\State)
 			EndIf
 			If Curr106 <> Null Then
-				AAText(x - 50, 470, "SCP - 106 Position: (" + f2s(EntityX(Curr106\OBJ), 3) + ", " + f2s(EntityY(Curr106\OBJ), 3) + ", " + f2s(EntityZ(Curr106\OBJ), 3) + ")")
-				AAText(x - 50, 490, "SCP - 106 Idle: " + Curr106\Idle)
-				AAText(x - 50, 510, "SCP - 106 State: " + Curr106\State)
+				AAText(x - 60, 440, "SCP - 106 Position: (" + f2s(EntityX(Curr106\OBJ), 3) + ", " + f2s(EntityY(Curr106\OBJ), 3) + ", " + f2s(EntityZ(Curr106\OBJ), 3) + ")")
+				AAText(x - 60, 460, "SCP - 106 Idle: " + Curr106\Idle)
+				AAText(x - 60, 480, "SCP - 106 State: " + Curr106\State)
 			EndIf
 			Offset% = 0
 			For npc.NPCs = Each NPCs
 				If npc\NPCtype = NPCtype096 Then
-					AAText(x - 50, 530, "SCP - 096 Position: (" + f2s(EntityX(npc\OBJ), 3) + ", " + f2s(EntityY(npc\OBJ), 3) + ", " + f2s(EntityZ(npc\OBJ), 3) + ")")
-					AAText(x - 50, 550, "SCP - 096 Idle: " + npc\Idle)
-					AAText(x - 50, 570, "SCP - 096 State: " + npc\State)
-					AAText(x - 50, 590, "SCP - 096 Speed: " + f2s(npc\CurrSpeed, 5.0))
+					AAText(x - 60, 500, "SCP - 096 Position: (" + f2s(EntityX(npc\OBJ), 3) + ", " + f2s(EntityY(npc\OBJ), 3) + ", " + f2s(EntityZ(npc\OBJ), 3) + ")")
+					AAText(x - 60, 520, "SCP - 096 Idle: " + npc\Idle)
+					AAText(x - 60, 540, "SCP - 096 State: " + npc\State)
+					AAText(x - 60, 560, "SCP - 096 Speed: " + f2s(npc\CurrSpeed, 5))
 				EndIf
-				If npc\NPCtype = NPCtypeMTF Then
-					AAText(x - 50, 620 + 60 * Offset, "MTF " + Offset + " Position: (" + f2s(EntityX(npc\OBJ), 3) + ", " + f2s(EntityY(npc\OBJ), 3) + ", " + f2s(EntityZ(npc\OBJ), 3) + ")")
-					AAText(x - 50, 640 + 60 * Offset, "MTF " + Offset + " State: " + npc\State)
-					AAText(x - 50, 660 + 60 * Offset, "MTF " + Offset + " LastSeen: " + npc\LastSeen)					
-					Offset = Offset + 1
+				If npc\NPCtype = NPCtype049 Then
+					AAText(x - 60, 580, "SCP - 049 Position: (" + f2s(EntityX(npc\OBJ), 3) + ", " + f2s(EntityY(npc\OBJ), 3) + ", " + f2s(EntityZ(npc\OBJ), 3) + ")")
+					AAText(x - 60, 600, "SCP - 049 Idle: " + npc\Idle)
+					AAText(x - 60, 620, "SCP - 049 State: " + npc\State)
+					AAText(x - 60, 640, "SCP - 049 Speed: " + f2s(npc\CurrSpeed, 5))
 				EndIf
 			Next
+			
 			If PlayerRoom\RoomTemplate\Name = "dimension1499"
-				AAText(x + 350, 50, "Current Chunk X/Z: (" + (Int((EntityX(Collider) + 20) / 40)) + ", " + (Int((EntityZ(Collider) + 20) / 40)) + ")")
+				AAText(x - 60, 680, "Current Chunk X / Z: (" + (Int((EntityX(Collider) + 20) / 40)) + ", "+(Int((EntityZ(Collider) + 20) / 40))+")")
 				
 				Local CH_Amount% = 0
 				
 				For ch.Chunk = Each Chunk
 					CH_Amount = CH_Amount + 1
 				Next
-				AAText(x + 350, 70, "Current Chunk Amount: " + CH_Amount)
+				AAText(x - 60, 700, "Current Chunk Amount: " + CH_Amount)
 			Else
-				AAText(x + 350, 50, "Current Room Position: (" + PlayerRoom\x + ", " + PlayerRoom\y + ", " + PlayerRoom\z + ")")
+				AAText(x - 60, 700, "Current Room Position: (" + PlayerRoom\x + ", " + PlayerRoom\y + ", " + PlayerRoom\z + ")")
 			EndIf
-			GlobalMemoryStatus m.MEMORYSTATUS
-			AAText(x + 350, 90, (m\dwAvailPhys / 1024 / 1024) + " MB/" + (m\dwTotalPhys / 1024 / 1024) + " MB (" + (m\dwAvailPhys / 1024) + " KB/" + (m\dwTotalPhys / 1024) + " KB)")
-			AAText(x + 350, 110, "Triangles rendered: " + CurrTrisAmount)
-			AAText(x + 350, 130, "Active textures: " + ActiveTextures())
-			AAText(x + 350, 150, "SCP-427 state (secs): " + Int(I_427\Timer / 70))
-			AAText(x + 350, 170, "SCP-008 infection: " + I_008\Timer)
-			For i = 0 To 5
-				AAText(x + 350, 190 + (20 * i), "SCP-1025 State " + i + ": " + SCP1025State[i])
-			Next
 			If SelectedMonitor <> Null Then
-				AAText(x + 350, 310, "Current monitor: " + SelectedMonitor\ScrOBJ)
+				AAText(x - 60, 720, "Current Monitor: " + SelectedMonitor\ScrOBJ)
 			Else
-				AAText(x + 350, 310, "Current monitor: NULL")
+				AAText(x - 60, 720, "Current Monitor: Null")
 			EndIf
+			
+			AAText(x + 380, 40, "******************************")
+			AAText(x + 380, 60, "******** PLAYER STATS ********")
+			AAText(x + 380, 80, "******************************")
+			
+			AAText(x + 380, 120, "Player Position: (" + f2s(EntityX(Collider), 3) + ", " + f2s(EntityY(Collider), 3) + ", " + f2s(EntityZ(Collider), 3) + ")")
+			AAText(x + 380, 140, "Camera Position: (" + f2s(EntityX(Camera), 3)+ ", " + f2s(EntityY(Camera), 3) +", " + f2s(EntityZ(Camera), 3) + ")")
+			AAText(x + 380, 160, "Player Rotation: (" + f2s(EntityPitch(Collider), 3) + ", " + f2s(EntityYaw(Collider), 3) + ", " + f2s(EntityRoll(Collider), 3) + ")")
+			AAText(x + 380, 180, "Camera Rotation: (" + f2s(EntityPitch(Camera), 3)+ ", " + f2s(EntityYaw(Camera), 3) +", " + f2s(EntityRoll(Camera), 3) + ")")
+			
+			AAText(x + 380, 220, "Stamina: " + f2s(Stamina, 3))
+			AAText(x + 380, 240, "Death Timer: " + f2s(KillTimer, 3))               
+			AAText(x + 380, 260, "Blink Timer: " + f2s(BlinkTimer, 3))
+			AAText(x + 380, 280, "Injuries: " + Injuries)
+			AAText(x + 380, 300, "Bloodloss: " + Bloodloss)
+			AAText(x + 380, 320, "Vomit Timer: " + VomitTimer)
+			AAText(x + 380, 340, "Sanity: " + Sanity)
+			AAText(x + 380, 360, "Deaf Timer: " + DeafTimer)
+			AAText(x + 380, 380, "Blink Effect Timer: " + BlinkEffectTimer)
+			AAText(x + 380, 400, "Stamina Effect Timer: " + StaminaEffectTimer)
+			
+			AAText(x + 380, 440, "SCP-008 Infection: " + I_008\Timer)
+			AAText(x + 380, 460, "SCP-427 State (Secs): " + Int(I_427\Timer / 70.0))
+			For i = 0 To 5
+				AAText(x + 380, 480 + (20 * i), "SCP-1025 State " + i + ": " + SCP1025State[i])
+			Next
+			
+			AAText(x + 720, 40, "*****************************")
+			AAText(x + 720, 60, "******** OTHER STATS ********")
+			AAText(x + 720, 80, "*****************************")
+			
+			AAText(x + 720, 120, "Blur Timer: " + BlurTimer)
+			AAText(x + 720, 140, "Light Blink: " + LightBlink)
+			AAText(x + 720, 160, "Light Flash: " + LightFlash)
+			AAText(x + 720, 180, "MTF Timer: " + MTFTimer)
+			
 			AASetFont(fo\FontID[0])
 		EndIf
 	EndIf
@@ -11307,5 +11296,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#FFE#1342#1B7B
+;~B#FD5#1337#1B70
 ;~C#Blitz3D

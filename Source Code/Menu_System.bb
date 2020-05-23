@@ -552,35 +552,35 @@ Function UpdateMainMenu()
 				x = 159 * MenuScale
 				y = 286 * MenuScale
 				
-				width = 400 * MenuScale
-				height = 70 * MenuScale
+				Width = 400 * MenuScale
+				Height = 70 * MenuScale
 				
 				Color(255, 255, 255)
 				AASetFont fo\FontID[1]
-				AAText(x + width / 2, y + height / 2, "OPTIONS", True, True)
+				AAText(x + Width / 2, y + Height / 2, "OPTIONS", True, True)
 				
 				x = 160 * MenuScale
-				y = y + height + 20 * MenuScale
-				width = 580 * MenuScale
-				height = 60 * MenuScale
-				DrawFrame(x, y, width, height)
+				y = y + Height + 20 * MenuScale
+				Width = 580 * MenuScale
+				Height = 60 * MenuScale
+				DrawFrame(x, y, Width, Height)
 				
 				Color 0,255,0
 				If MainMenuTab = 3
-					Rect(x+15*MenuScale,y+10*MenuScale,(width/5)+10*MenuScale,(height/2)+10*MenuScale,True)
+					Rect(x+15*MenuScale,y+10*MenuScale,(Width/5)+10*MenuScale,(Height/2)+10*MenuScale,True)
 				ElseIf MainMenuTab = 5
-					Rect(x+155*MenuScale,y+10*MenuScale,(width/5)+10*MenuScale,(height/2)+10*MenuScale,True)
+					Rect(x+155*MenuScale,y+10*MenuScale,(Width/5)+10*MenuScale,(Height/2)+10*MenuScale,True)
 				ElseIf MainMenuTab = 6
-					Rect(x+295*MenuScale,y+10*MenuScale,(width/5)+10*MenuScale,(height/2)+10*MenuScale,True)
+					Rect(x+295*MenuScale,y+10*MenuScale,(Width/5)+10*MenuScale,(Height/2)+10*MenuScale,True)
 				ElseIf MainMenuTab = 7
-					Rect(x+435*MenuScale,y+10*MenuScale,(width/5)+10*MenuScale,(height/2)+10*MenuScale,True)
+					Rect(x+435*MenuScale,y+10*MenuScale,(Width/5)+10*MenuScale,(Height/2)+10*MenuScale,True)
 				EndIf
 				
 				Color 255,255,255
-				If DrawButton(x+20*MenuScale,y+15*MenuScale,width/5,height/2, "GRAPHICS", False) Then MainMenuTab = 3
-				If DrawButton(x+160*MenuScale,y+15*MenuScale,width/5,height/2, "AUDIO", False) Then MainMenuTab = 5
-				If DrawButton(x+300*MenuScale,y+15*MenuScale,width/5,height/2, "CONTROLS", False) Then MainMenuTab = 6
-				If DrawButton(x+440*MenuScale,y+15*MenuScale,width/5,height/2, "ADVANCED", False) Then MainMenuTab = 7
+				If DrawButton(x+20*MenuScale,y+15*MenuScale,Width/5,Height/2, "GRAPHICS", False) Then MainMenuTab = 3
+				If DrawButton(x+160*MenuScale,y+15*MenuScale,Width/5,Height/2, "AUDIO", False) Then MainMenuTab = 5
+				If DrawButton(x+300*MenuScale,y+15*MenuScale,Width/5,Height/2, "CONTROLS", False) Then MainMenuTab = 6
+				If DrawButton(x+440*MenuScale,y+15*MenuScale,Width/5,Height/2, "ADVANCED", False) Then MainMenuTab = 7
 				
 				AASetFont fo\FontID[0]
 				y = y + 70 * MenuScale
@@ -814,8 +814,8 @@ Function UpdateMainMenu()
 					;[End Block]
 				ElseIf MainMenuTab = 6 ;Controls
 					;[Block]
-					height = 270 * MenuScale
-					DrawFrame(x, y, width, height)	
+					Height = 280 * MenuScale
+					DrawFrame(x, y, Width, Height)	
 					
 					y = y + 20*MenuScale
 					
