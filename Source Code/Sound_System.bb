@@ -662,21 +662,20 @@ Function LoadAllSounds()
 	For i = 0 To 7
 		StepSFX(0, 0, i) = LoadSound_Strict("SFX\Step\Step" + (i + 1) + ".ogg")
 		StepSFX(1, 0, i) = LoadSound_Strict("SFX\Step\StepMetal" + (i + 1) + ".ogg")
-		StepSFX(0, 1, i)= LoadSound_Strict("SFX\Step\Run" + (i + 1) + ".ogg")
+		StepSFX(0, 1, i) = LoadSound_Strict("SFX\Step\Run" + (i + 1) + ".ogg")
 		StepSFX(1, 1, i) = LoadSound_Strict("SFX\Step\RunMetal" + (i + 1) + ".ogg")
-		If i < 3
-			StepSFX(2, 0, i) = LoadSound_Strict("SFX\Character\MTF\Step" + (i + 1) + ".ogg")
-			StepSFX(3, 0, i) = LoadSound_Strict("SFX\SCP\049\Step"+ (i + 1) + ".ogg")
+		If i < 3 Then
+			StepSFX(2, 0, i) = LoadSound_Strict("SFX\Step\StepPD" + (i + 1) + ".ogg")
+			StepSFX(3, 0, i) = LoadSound_Strict("SFX\Step\StepForest" + (i + 1) + ".ogg")
 		EndIf
-		If i < 4 Then
-			StepSFX(4, 0, i) = LoadSound_Strict("SFX\Step\SCP\StepSCP" + (i + 1) + ".ogg")
+		
+		If i < 3
+			StepSFX(4, 0, i) = LoadSound_Strict("SFX\Character\MTF\Step" + (i + 1) + ".ogg")
+		EndIf
+		If i < 7 Then
+			StepSFX(5, 0, i) = LoadSound_Strict("SFX\Step\SCP\StepMetal" + (i + 1) + ".ogg")
 		EndIf
 	Next
-	
-	For i = 0 To 2
-		Step2SFX(i) = LoadSound_Strict("SFX\Step\StepPD" + (i + 1) + ".ogg")
-		Step2SFX(i + 3) = LoadSound_Strict("SFX\Step\StepForest" + (i + 1) + ".ogg")
-	Next 
 	
 	MissSFX = LoadSound_Strict("SFX\General\Miss.ogg")
 	

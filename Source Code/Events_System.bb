@@ -2068,7 +2068,7 @@ Function UpdateEvents()
 					CoffinDistance = EntityDistance(Collider, e\room\Objects[1])
 					If CoffinDistance < 1.5 Then 
 						GiveAchievement(Achv895)
-						If (Not Contained106) And e\EventName = "room895_106" And e\EventState2 = 0.0 Then
+						If (Not Curr106\Contained) And e\EventName = "room895_106" And e\EventState2 = 0.0 Then
 							de.Decals = CreateDecal(0, EntityX(e\room\Objects[1], True), -1531.0 * RoomScale, EntityZ(e\room\Objects[1], True), 90.0, Rand(360.0), 0.0)
 							de\Size = 0.05 : de\SizeChange = 0.001 : UpdateDecals()
 							EntityAlpha(de\OBJ, 0.8)
@@ -2284,7 +2284,7 @@ Function UpdateEvents()
 				;[End Block]
 			Case "room1endroom106"
 				;[Block]
-				If (Not Contained106) Then
+				If (Not Curr106\Contained) Then
 					If e\EventState = 0.0 Then
 						If e\room\Dist < 8.0 And e\room\Dist > 0.0 Then
 							If Curr106\State < 0 Then 
@@ -2391,7 +2391,7 @@ Function UpdateEvents()
 						Else
 							e\EventState = UpdateElevators(e\EventState, e\room\RoomDoors[0], gatea\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 						EndIf
-						If Contained106 = False Then 
+						If Curr106\Contained = False Then 
 							If e\EventState < -1.5 And e\EventState + FPSfactor >= -1.5 Then
 								PlaySound_Strict(OldManSFX(3))
 							EndIf
@@ -4321,7 +4321,7 @@ Function UpdateEvents()
 							EndIf
 							e\EventState = 2.0
 							
-							If (Not Contained106) Then 	
+							If (Not Curr106\Contained) Then 	
 								de.Decals = CreateDecal(0, EntityX(e\room\Objects[Temp], True), EntityY(e\room\Objects[Temp], True) + 0.05, EntityZ(e\room\Objects[Temp], True), 90.0, Rand(360.0), 0.0)
 								de\Size = 0.05 : de\SizeChange = 0.001 : EntityAlpha(de\OBJ, 0.8) : UpdateDecals()
 								
@@ -4373,7 +4373,7 @@ Function UpdateEvents()
 				;[End Block]
 			Case "room2pipes106"
 				;[Block]
-				If (Not Contained106) Then 
+				If (Not Curr106\Contained) Then 
 					If e\EventState = 0.0 Then
 						If PlayerRoom = e\room Then e\EventState = 1.0
 					Else
@@ -4431,7 +4431,7 @@ Function UpdateEvents()
 				;[End Block]
 			Case "room2pit106"
                 ;[Block]
-                If (Not Contained106) And Curr106\State > 0.0 Then 
+                If (Not Curr106\Contained) And Curr106\State > 0.0 Then 
                     If e\EventState = 0.0 Then
                         If PlayerRoom = e\room Then e\EventState = 1
                     Else
@@ -6285,7 +6285,7 @@ Function UpdateEvents()
 							    If e\EventState3 >= 2500.0 Then
 							    	If e\EventState2 = 1.0 And e\EventState3 - FPSfactor < 2500.0 Then
 									    PositionEntity(Curr106\Collider, EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True), EntityZ(e\room\Objects[6], True))
-									    Contained106 = False
+									    Curr106\Contained = False
 									    ShowEntity(Curr106\OBJ)
 									    Curr106\Idle = False
 									    Curr106\State = -11.0
@@ -6325,11 +6325,11 @@ Function UpdateEvents()
 										EntityParent(d\OBJ, e\room\Objects[7])
 									ElseIf e\EventState3 > 3200.0 Then
 										If e\EventState2 = True Then
-										    Contained106 = True
+										    Curr106\Contained = True
 									    Else
 										    PositionEntity(Curr106\Collider, EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True), EntityZ(e\room\Objects[6], True))
 											
-										    Contained106 = False
+										    Curr106\Contained = False
 										    ShowEntity(Curr106\OBJ)
 										    Curr106\Idle = False
 										    Curr106\State = -11.0
@@ -6697,7 +6697,7 @@ Function UpdateEvents()
 							CameraFogColor(Camera, x * 98.0, x * 133.0, x * 162.0)
 						EndIf
 					Else
-						If (Not Contained106) Then Curr106\Idle = False
+						If (Not Curr106\Contained) Then Curr106\Idle = False
 						If EntityYaw(e\room\Objects[3]) = 0.0 Then
 							HideEntity(fr.Forest\Forest_Pivot)
 							If Abs(Distance(EntityX(e\room\Objects[3], True), EntityZ(e\room\Objects[3], True), EntityX(Collider, True), EntityZ(Collider, True))) < 1.0 Then
@@ -7093,7 +7093,7 @@ Function UpdateEvents()
 								e\EventState2 = 1.0
 							EndIf
 						EndIf
-					ElseIf Contained106
+					ElseIf Curr106\Contained
 						RemoveEvent(e)
 					EndIf
 				ElseIf e\EventState = 1.0
@@ -7335,7 +7335,7 @@ Function UpdateEvents()
 				;[End Block]
 			Case "106victim"
 				;[Block]
-				If (Not Contained106) Then
+				If (Not Curr106\Contained) Then
 					If PlayerRoom = e\room Then
 						If e\EventState = 0.0 Then
 							de.Decals = CreateDecal(0, EntityX(e\room\OBJ), 799.0 * RoomScale, EntityZ(e\room\OBJ), -90.0, Rnd(360.0), 0.0)
@@ -7864,7 +7864,7 @@ Function UpdateEvents()
 			Case "room2scps2"
 				;[Block]
 				If e\room\Dist < 15.0
-					If Contained106 Then e\EventState = 2.0
+					If Curr106\Contained Then e\EventState = 2.0
 					If Curr106\State < 0.0 Then e\EventState = 2.0
 					
 					If e\EventState < 2.0
@@ -9214,7 +9214,7 @@ Function UpdateDimension1499()
 				Else
 					DropSpeed = 0.0
 				EndIf
-				CurrStepSFX = 3
+				CurrStepSFX = 0
 				PlayerFallingPickDistance = 0.0
 			Else
 				If e\EventState = 2.0
@@ -9646,7 +9646,7 @@ Function UpdateEndings()
 						
 						For i = 2 To 4
 							e\room\NPC[i] = CreateNPC(NPCtypeApache, e\room\x, e\room\y + 11.0, e\room\z)
-							e\room\NPC[i]\State = (Not Contained106)
+							e\room\NPC[i]\State = (Not Curr106\Contained)
 						Next
 						
 						CreateConsoleMsg("")
@@ -9678,7 +9678,7 @@ Function UpdateEndings()
 							PointEntity(e\room\NPC[i]\Collider, e\room\Objects[3])
 						Next		
 						
-						If Contained106 Then
+						If Curr106\Contained Then
 							e\room\RoomDoors[2]\Locked = True
 							
 							PositionEntity(e\room\NPC[5]\Collider, EntityX(e\room\Objects[15], True) + (i - 6) * 0.2, EntityY(e\room\Objects[15], True), EntityZ(e\room\Objects[15], True) + (i - 6) * 0.2, True)
@@ -9715,7 +9715,7 @@ Function UpdateEndings()
 						
 						RotateEntity(Collider, 0.0, EntityYaw(Collider) + (e\room\Angle + 180.0), 0.0)
 						
-						If (Not Contained106) Then PlaySound_Strict LoadTempSound("SFX\Ending\GateA\106Escape.ogg") 
+						If (Not Curr106\Contained) Then PlaySound_Strict LoadTempSound("SFX\Ending\GateA\106Escape.ogg") 
 						
 						DrawLoading(100)
 					Else
@@ -9743,7 +9743,7 @@ Function UpdateEndings()
 						UpdateSky()
 						
 						If e\EventState >= 350.0 Then
-							If Contained106 = False Then
+							If Curr106\Contained = False Then
 								If e\EventState - FPSfactor < 350.0
 									Curr106\State = -0.1
 									SetNPCFrame(Curr106, 110.0)

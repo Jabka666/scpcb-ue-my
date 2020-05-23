@@ -1069,12 +1069,12 @@ Function UpdateConsole()
 					;[Block]
 					Curr106\Idle = True
 					Curr106\State = 200000.0
-					Contained106 = True
+					Curr106\Contained = True
 					;[End Block]
 				Case "enable106"
 					;[Block]
 					Curr106\Idle = False
-					Contained106 = False
+					Curr106\Contained = False
 					ShowEntity(Curr106\Collider)
 					ShowEntity(Curr106\OBJ)
 					;[End Block]
@@ -1995,10 +1995,9 @@ Global CoughCHN%, VomitCHN%
 
 Global MachineSFX% 
 Global ApacheSFX%
-Global CurrStepSFX%
-Dim StepSFX%(5, 2, 8) ; ~ (Normal / Metal, Walk / Run, ID)
 
-Dim Step2SFX%(6)
+Global CurrStepSFX%
+Dim StepSFX%(6, 2, 8) ; ~ (Normal / Metal, Walk / Run, ID)
 
 Dim ScientistRadioSFX%(2)
 
@@ -3848,21 +3847,11 @@ Function MovePlayer()
 						ChannelVolume(TempCHN, (1.0 - (Crouch * 0.6)) * SFXVolume)
 					End If
 				ElseIf CurrStepSFX = 1
-					TempCHN = PlaySound_Strict(Step2SFX(Rand(0, 2)))
+					TempCHN = PlaySound_Strict(StepSFX(2, 0, Rand(0, 2)))
 					ChannelVolume(TempCHN, (1.0 - (Crouch * 0.4)) * SFXVolume)
 				ElseIf CurrStepSFX = 2
-					TempCHN = PlaySound_Strict(Step2SFX(Rand(3, 5)))
+					TempCHN = PlaySound_Strict(StepSFX(3, 0, Rand(0, 2)))
 					ChannelVolume(TempCHN, (1.0 - (Crouch * 0.4)) * SFXVolume)
-				ElseIf CurrStepSFX = 3
-					If Sprint = 1.0 Then
-						PlayerSoundVolume = Max(4.0, PlayerSoundVolume)
-						TempCHN = PlaySound_Strict(StepSFX(0, 0, Rand(0, 7)))
-						ChannelVolume(TempCHN, (1.0 - (Crouch * 0.6)) * SFXVolume)
-					Else
-						PlayerSoundVolume = Max(2.5 - (Crouch * 0.6), PlayerSoundVolume)
-						TempCHN = PlaySound_Strict(StepSFX(0, 1, Rand(0, 7)))
-						ChannelVolume(TempCHN, (1.0 - (Crouch * 0.6)) * SFXVolume)
-					End If
 				EndIf
 			EndIf	
 		EndIf
@@ -3946,11 +3935,9 @@ Function MovePlayer()
 				If CurrStepSFX = 0 Then
 					PlaySound_Strict(StepSFX(GetStepSound(Collider), 0, Rand(0, 7)))
 				ElseIf CurrStepSFX = 1
-					PlaySound_Strict(Step2SFX(Rand(0, 2)))
+					PlaySound_Strict(StepSFX(2, 0, Rand(0, 2)))
 				ElseIf CurrStepSFX = 2
-					PlaySound_Strict(Step2SFX(Rand(3, 5)))
-				ElseIf CurrStepSFX = 3
-					PlaySound_Strict(StepSFX(0, 0, Rand(0, 7)))
+					PlaySound_Strict(StepSFX(3, 0, Rand(0, 2)))
 				EndIf
 				PlayerSoundVolume = Max(3.0, PlayerSoundVolume)
 			EndIf
@@ -6137,7 +6124,7 @@ Function DrawGUI()
 									ResumeChannel(RadioCHN(4))
 									If ChannelPlaying(RadioCHN(4)) = False Then 
 										If RemoteDoorOn = False And RadioState(8) = False Then
-											RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\radio\Chatter3.ogg"))	
+											RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\Radio\Chatter3.ogg"))	
 											RadioState(8) = True
 										Else
 											RadioState(4) = RadioState(4) + Max(Rand(-10, 1), 0)
@@ -6145,9 +6132,9 @@ Function DrawGUI()
 											Select RadioState(4)
 												Case 10
 													;[Block]
-													If (Not Contained106) Then
+													If (Not Curr106\Contained) Then
 														If (Not RadioState4(0)) Then
-															RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\radio\OhGod.ogg"))
+															RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\Radio\OhGod.ogg"))
 															RadioState(4) = RadioState(4) + 1
 															RadioState4(0) = True
 														EndIf
@@ -6156,7 +6143,7 @@ Function DrawGUI()
 												Case 100
 													;[Block]
 													If (Not RadioState4(1)) Then
-														RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\radio\Chatter2.ogg"))
+														RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\Radio\Chatter2.ogg"))
 														RadioState(4) = RadioState(4) + 1
 														RadioState4(1) = True
 													EndIf	
@@ -8710,7 +8697,6 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	CoffinDistance = 100.0
 	
-	Contained106 = False
 	If Curr173 <> Null Then Curr173\Idle = False
 	
 	MTFTimer = 0.0
@@ -11296,5 +11282,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#FD5#1337#1B70
+;~B#FC8#132A#1B63
 ;~C#Blitz3D

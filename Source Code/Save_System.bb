@@ -116,7 +116,6 @@ Function SaveGame(File$)
 	WriteFloat(f, PrevSecondaryLightOn)
 	WriteByte(f, RemoteDoorOn)
 	WriteByte(f, SoundTransmission)
-	WriteByte(f, Contained106)
 	
 	For i = 0 To MAXACHIEVEMENTS - 1
 		WriteByte(f, Achievements(i))
@@ -182,6 +181,8 @@ Function SaveGame(File$)
 		
 		WriteFloat(f, AnimTime(n\OBJ))
 		
+		WriteByte(f, n\UseHeadphones)
+		WriteByte(f, n\Contained)
 		WriteInt(f, n\IsDead)
 		WriteFloat(f, n\PathX)
 		WriteFloat(f, n\PathZ)
@@ -586,7 +587,6 @@ Function LoadGame(File$)
 	PrevSecondaryLightOn = ReadFloat(f)
 	RemoteDoorOn = ReadByte(f)
 	SoundTransmission = ReadByte(f)	
-	Contained106 = ReadByte(f)	
 	
 	For i = 0 To MAXACHIEVEMENTS - 1
 		Achievements(i) = ReadByte(f)
@@ -673,7 +673,8 @@ Function LoadGame(File$)
 		End Select
 		
 		n\Frame = Frame
-		
+		n\UseHeadphones = ReadByte(f)
+		n\Contained = ReadByte(f)
 		n\IsDead = ReadInt(f)
 		n\PathX = ReadFloat(f)
 		n\PathZ = ReadFloat(f)
@@ -1433,7 +1434,6 @@ Function LoadGameQuick(File$)
 	PrevSecondaryLightOn = ReadFloat(f)
 	RemoteDoorOn = ReadByte(f)
 	SoundTransmission = ReadByte(f)	
-	Contained106 = ReadByte(f)	
 	
 	For i = 0 To MAXACHIEVEMENTS - 1
 		Achievements(i) = ReadByte(f)
@@ -1524,7 +1524,8 @@ Function LoadGameQuick(File$)
 		End Select		
 		
 		n\Frame = Frame
-		
+		n\UseHeadphones = ReadByte(f)
+		n\Contained = ReadByte(f)
 		n\IsDead = ReadInt(f)
 		n\PathX = ReadFloat(f)
 		n\PathZ = ReadFloat(f)
