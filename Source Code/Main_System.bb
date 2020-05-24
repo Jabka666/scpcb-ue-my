@@ -4883,7 +4883,7 @@ Function DrawGUI()
 								If OtherOpen\SecondInv[z] <> Null Then
 									Local Name$ = OtherOpen\SecondInv[z]\ItemTemplate\TempName
 									
-									If Name <> "25ct" And Name <> "coin" And Name <> "key" And Name <> "scp860" And Name <> "scp500" And Name <> "scp500death" Then
+									If Name <> "25ct" And Name <> "coin" And Name <> "key" And Name <> "scp860" And Name <> "scp500pill" And Name <> "scp500pilldeath" Then
 										IsEmpty = False
 										Exit
 									EndIf
@@ -5158,7 +5158,7 @@ Function DrawGUI()
 						SelectedItem = Null
 					ElseIf Inventory(MouseSlot) <> SelectedItem
 						Select SelectedItem\ItemTemplate\TempName
-							Case "paper", "key1", "key2", "key3", "key4", "key5", "key6", "misc", "oldpaper", "badge", "ticket", "25ct", "coin", "key", "scp860", "scp500", "scp500death"
+							Case "paper", "key1", "key2", "key3", "key4", "key5", "key6", "misc", "oldpaper", "badge", "ticket", "25ct", "coin", "key", "scp860", "scp500pill", "scp500pilldeath"
 								;[Block]
 								If Inventory(MouseSlot)\ItemTemplate\TempName = "clipboard" Then
 									; ~ Add an item to clipboard
@@ -5166,7 +5166,7 @@ Function DrawGUI()
 									Local b$ = SelectedItem\ItemTemplate\TempName
 									Local b2$ = SelectedItem\ItemTemplate\Name
 									
-									If (b <> "misc" And b <> "25ct" And b <> "coin" And b <> "key" And b <> "scp860" And b <> "scp500" And b <> "scp500death") Or (b2 = "Playing Card" Or b2 = "Mastercard") Then
+									If (b <> "misc" And b <> "25ct" And b <> "coin" And b <> "key" And b <> "scp860" And b <> "scp500pill" And b <> "scp500pilldeath") Or (b2 = "Playing Card" Or b2 = "Mastercard") Then
 										For c% = 0 To Inventory(MouseSlot)\InvSlots - 1
 											If (Inventory(MouseSlot)\SecondInv[c] = Null)
 												If SelectedItem <> Null Then
@@ -5213,7 +5213,7 @@ Function DrawGUI()
 												If SelectedItem <> Null Then
 													Inventory(MouseSlot)\SecondInv[c] = SelectedItem
 													Inventory(MouseSlot)\State = 1.0
-													If b <> "25ct" And b <> "coin" And b <> "key" And b <> "scp860" And b <> "scp500" And b <> "scp500death"
+													If b <> "25ct" And b <> "coin" And b <> "key" And b <> "scp860" And b <> "scp500pill" And b <> "scp500pilldeath"
 														SetAnimTime(Inventory(MouseSlot)\Model, 3.0)
 													EndIf
 													Inventory(MouseSlot)\InvImg = Inventory(MouseSlot)\ItemTemplate\InvImg
@@ -5512,7 +5512,7 @@ Function DrawGUI()
 					EndIf	
 					SelectedItem = Null
 					;[End Block]
-				Case "scp500"
+				Case "scp500pill"
 					;[Block]
 					If CanUseItem(False, True) Then
 						GiveAchievement(Achv500)
@@ -5768,9 +5768,10 @@ Function DrawGUI()
 						Select SelectedItem\ItemTemplate\Name
 							Case "Burnt Note" 
 								;[Block]
-								SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\items\bn.it")
+								SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\items\note_Maynard.png")
 								SetBuffer(ImageBuffer(SelectedItem\ItemTemplate\Img))
 								Color(0, 0, 0)
+								AASetFont(fo\FontID[4])
 								AAText(277, 469, AccessCode, True, True)
 								Color(255, 255, 255)
 								SetBuffer(BackBuffer())
@@ -5817,7 +5818,7 @@ Function DrawGUI()
 					GiveAchievement(Achv1025) 
 					If SelectedItem\ItemTemplate\Img = 0 Then
 						SelectedItem\State = Rand(0.0, 5.0)
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\items\1025\1025_" + Int(SelectedItem\State) + ".jpg")	
+						SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\items\1025\1025(" + Int(SelectedItem\State) + ").png")	
 						SelectedItem\ItemTemplate\Img = ResizeImage2(SelectedItem\ItemTemplate\Img, ImageWidth(SelectedItem\ItemTemplate\Img) * MenuScale, ImageHeight(SelectedItem\ItemTemplate\Img) * MenuScale)
 						
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
@@ -6866,7 +6867,7 @@ Function DrawGUI()
 						SelectedItem = Null
 					EndIf	
 					;[End Block]
-				Case "scp500death"
+				Case "scp500pilldeath"
 					;[Block]
 					If CanUseItem(False, True) Then
 						Msg = "You swallowed the pill."
@@ -8021,7 +8022,7 @@ Function LoadEntities()
 	
 	; ~ [MISC]
 	
-	o\MiscModelID[0] = LoadMesh_Strict("GFX\items\cupliquid.x") ; ~ Liquid for cups dispensed by SCP-294
+	o\MiscModelID[0] = LoadMesh_Strict("GFX\items\cup_liquid.x") ; ~ Liquid for cups dispensed by SCP-294
 	
 	For i = 0 To MaxMiscModelIDAmount - 1
 		HideEntity(o\MiscModelID[i])
@@ -9734,7 +9735,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 			End Select
 			RemoveItem(item)
 			;[End Block]
-		Case "SCP-500-01", "Upgraded pill", "Pill"
+		Case "SCP-500-01", "Upgraded Pill", "Pill"
 			;[Block]
 			Select Setting
 				Case "Rough", "Coarse"
@@ -9762,13 +9763,13 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					If (Not NO427Spawn) Then
 						it2 = CreateItem("SCP-427", "scp427", x, y, z)
 					Else
-						it2 = CreateItem("Upgraded pill", "scp500death", x, y, z)
+						it2 = CreateItem("Upgraded Pill", "scp500pilldeath", x, y, z)
 					EndIf
 					RemoveItem(item)
 					;[End Block]
 				Case "Very Fine"
 					;[Block]
-					it2 = CreateItem("Upgraded pill", "scp500death", x, y, z)
+					it2 = CreateItem("Upgraded Pill", "scp500pilldeath", x, y, z)
 					RemoveItem(item)
 					;[End Block]
 			End Select
@@ -11330,5 +11331,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#FC8#132A#1B6B
+;~B#FC8#132A#1B6C
 ;~C#Blitz3D

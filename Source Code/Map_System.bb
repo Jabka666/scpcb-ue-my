@@ -1640,7 +1640,7 @@ Function PlaceGrid_MapCreator(r.Rooms)
 					Case ROOM4 + 2
 						;[Block]
 						AddLight(Null, r\x + x * 2.0 - (Sin(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale), 8.0 + (396.0 * RoomScale), r\z + y * 2.0 + (Cos(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale), 2, 500.0 * RoomScale, 255, 200, 200)
-						it = CreateItem("SCP-500-01", "scp500", r\x + x * 2.0 + (Cos(EntityYaw(Tile_Entity, True)) * (-208.0) * RoomScale) - (Sin(EntityYaw(Tile_Entity, True)) * 1226.0 * RoomScale), 8.0 + (80.0 * RoomScale), r\z + y * 2.0 + (Sin(EntityYaw(Tile_Entity, True)) * (-208.0) * RoomScale) + (Cos(EntityYaw(Tile_Entity, True)) * 1226.0 * RoomScale))
+						it = CreateItem("SCP-500-01", "scp500pill", r\x + x * 2.0 + (Cos(EntityYaw(Tile_Entity, True)) * (-208.0) * RoomScale) - (Sin(EntityYaw(Tile_Entity, True)) * 1226.0 * RoomScale), 8.0 + (80.0 * RoomScale), r\z + y * 2.0 + (Sin(EntityYaw(Tile_Entity, True)) * (-208.0) * RoomScale) + (Cos(EntityYaw(Tile_Entity, True)) * 1226.0 * RoomScale))
 						EntityType(it\Collider, HIT_ITEM)
 						
 						it = CreateItem("Night Vision Goggles", "nvgoggles", r\x + x * 2.0 - (Sin(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale), 8.0 + (80.0 * RoomScale),  r\z + y * 2.0 + (Cos(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale))
@@ -1837,7 +1837,7 @@ End Function
 Function FillRoom(r.Rooms)
 	CatchErrors("Uncaught (FillRoom)")
 	Local d.Doors, d2.Doors, sc.SecurityCams, de.Decals, r2.Rooms, sc2.SecurityCams
-	Local it.Items
+	Local it.Items, it2.Items, clipboard.Items
 	Local xTemp%, yTemp%, zTemp%
 	Local t1%
 	Local scX#, scY#, scZ#, scAngle#
@@ -2932,7 +2932,7 @@ Function FillRoom(r.Rooms)
 			EntityParent(em\OBJ, r\OBJ)
 			r\Objects[5] = em\OBJ
 			
-			em = CreateEmitter(r\x - 269.0 * RoomScale, r\y + 20.0, r\z + 135.0 * RoomScale, 0) ;112
+			em = CreateEmitter(r\x - 269.0 * RoomScale, r\y + 20.0, r\z + 135.0 * RoomScale, 0)
 			em\RandAngle = 15.0 : em\Speed = 0.05 : em\SizeChange = 0.007 : em\Achange = -0.006 : em\Gravity = -0.24
 			TurnEntity(em\OBJ, 90.0, 0.0, 0.0)
 			EntityParent(em\OBJ, r\OBJ)
@@ -2955,7 +2955,7 @@ Function FillRoom(r.Rooms)
 			it = CreateItem("Radio Transceiver", "radio", r\x - 544.0 * RoomScale, r\y + 0.5, r\z + 704.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it = CreateItem("SCP-500-01", "scp500", r\x + 1168.0 * RoomScale, r\y + 250.0 * RoomScale, r\z + 576 * RoomScale)
+			it = CreateItem("SCP-500-01", "scp500pill", r\x + 1168.0 * RoomScale, r\y + 250.0 * RoomScale, r\z + 576 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it = CreateItem("Metal Panel", "scp148", r\x - 360.0 * RoomScale, r\y + 0.5, r\z + 644.0 * RoomScale)
@@ -3643,15 +3643,13 @@ Function FillRoom(r.Rooms)
 			it = CreateItem("Level 1 Key Card", "key1", r\x + 736.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 752.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			Local clipboard.Items = CreateItem("Clipboard", "clipboard", r\x - 400.0 * RoomScale, r\y - 50.0 * RoomScale, r\z - 700.0 * RoomScale)
-			
+			clipboard = CreateItem("Clipboard", "clipboard", r\x - 400.0 * RoomScale, r\y - 50.0 * RoomScale, r\z - 700.0 * RoomScale)
 			; ~ A hacky fix for clipboard's model and icon
 			clipboard\InvImg = clipboard\ItemTemplate\InvImg
 			SetAnimTime(clipboard\Model, 0.0)
 			EntityParent(clipboard\Collider, r\OBJ)
 			
-			Local it2.Items = CreateItem("Document SCP-1048", "paper", 1.0, 1.0, 1.0)
-			
+			it2 = CreateItem("Document SCP-1048", "paper", 1.0, 1.0, 1.0)
 			it2\Picked = True
 			it2\Dropped = -1
 			clipboard\SecondInv[0] = it2
@@ -5020,7 +5018,6 @@ Function FillRoom(r.Rooms)
 			d = CreateDoor(r\Zone, r\x + 264.0 * RoomScale, r\y, r\z + 672.0 * RoomScale, 270.0, r, False, False, 3)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.031, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.031, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)	
-			RotateEntity(d\Buttons[1], 0.0, 0.0, 0.0, True)
 			
 			d = CreateDoor(r\Zone, r\x - 512.0 * RoomScale, r\y - 768.0 * RoomScale, r\z - 336.0 * RoomScale, 0.0, r, False, False, 3)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.061, True)
@@ -8636,5 +8633,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11FD
+;~B#11FB
 ;~C#Blitz3D

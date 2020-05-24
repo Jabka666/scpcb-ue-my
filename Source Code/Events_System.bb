@@ -3927,7 +3927,7 @@ Function UpdateEvents()
 										Case 7
 											;[Block]
 											AddLight(Null, e\room\x + iX * 2.0 - (Sin(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 16.0 * RoomScale), 8.0 + (396.0 * RoomScale), e\room\z + iY * 2.0 + (Cos(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(TempInt, True)) * 16.0 * RoomScale), 2, 500.0 * RoomScale, 255, 200, 200)
-											it = CreateItem("SCP-500-01", "scp500", e\room\x + iX * 2.0 + (Cos(EntityYaw(TempInt, True)) * (-208.0) * RoomScale) - (Sin(EntityYaw(TempInt, True)) * 1226.0 * RoomScale), 8.0 + (80.0 * RoomScale), e\room\z + iY * 2.0 + (Sin(EntityYaw(TempInt, True)) * (-208.0) * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 1226.0 * RoomScale))
+											it = CreateItem("SCP-500-01", "scp500pill", e\room\x + iX * 2.0 + (Cos(EntityYaw(TempInt, True)) * (-208.0) * RoomScale) - (Sin(EntityYaw(TempInt, True)) * 1226.0 * RoomScale), 8.0 + (80.0 * RoomScale), e\room\z + iY * 2.0 + (Sin(EntityYaw(TempInt, True)) * (-208.0) * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 1226.0 * RoomScale))
 											EntityType(it\Collider, HIT_ITEM)
 											
 											it = CreateItem("Night Vision Goggles", "nvgoggles", e\room\x + iX * 2.0 - (Sin(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 16.0 * RoomScale), 8.0 + (80.0 * RoomScale), e\room\z + iY * 2.0 + (Cos(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(TempInt, True)) * 16.0 * RoomScale))
@@ -4502,7 +4502,7 @@ Function UpdateEvents()
 						ScaleEntity(e\room\Objects[2], 0.05, 0.05, 0.05)
 						SetAnimTime(e\room\Objects[2], 414.0)
 						
-						Local ImgPath$ = ItemsPath + "1048\1048_" + Rand(1, 26) + ".png"
+						Local ImgPath$ = ItemsPath + "1048\1048_" + Rand(0, 25) + ".png"
 						Local itt.ItemTemplates
 						
 						For itt.ItemTemplates = Each ItemTemplates
