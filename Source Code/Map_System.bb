@@ -5439,11 +5439,21 @@ Function FillRoom(r.Rooms)
 			it = CreateItem("First Aid Kit", "firstaid", r\x - 506.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 322.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it = CreateItem("Syringe", "syringe", r\x - 333.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 97.3 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
+			If Rand(2) = 1 Then
+				it = CreateItem("Syringe", "syringe", r\x - 333.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 97.3 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			Else
+				it = CreateItem("Syringe", "syringeinf", r\x - 333.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 97.3 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
 			
-			it = CreateItem("Syringe", "syringe", r\x - 340.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 52.3 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
+			If Rand(2) = 1 Then
+				it = CreateItem("Syringe", "syringe", r\x - 340.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 52.3 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			Else
+				it = CreateItem("Syringe", "syringeinf", r\x - 340.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 52.3 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
 			;[End Block]
 		Case "room2cpit"
 			;[Block]

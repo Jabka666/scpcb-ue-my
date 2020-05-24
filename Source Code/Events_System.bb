@@ -7468,7 +7468,7 @@ Function UpdateEvents()
 			Case "room914"
 				;[Block]
 				If PlayerRoom = e\room Then
-					If e\room\RoomDoors[2]\Open
+					If e\room\RoomDoors[2]\Open Or e\room\RoomDoors[3]\Open Then
 						GiveAchievement(Achv914)
 						e\EventState2 = 1.0
 					EndIf

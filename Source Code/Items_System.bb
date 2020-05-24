@@ -290,13 +290,14 @@ Function InitItemTemplates()
 	CreateItemTemplate("S-NAV 300 Navigator", "nav", ItemsPath + "navigator.x", ItemsPath + "INVnavigator.jpg", ItemsPath + "navigator.png", 0.0008, 1)
 	CreateItemTemplate("S-NAV 310 Navigator", "nav", ItemsPath + "navigator.x", ItemsPath + "INVnavigator.jpg", ItemsPath + "navigator.png", 0.0008, 1)
 	
-	CreateItemTemplate("9V Battery", "bat", ItemsPath + "Battery\Battery.x", ItemsPath + "Battery\INVbattery9v.jpg", "", 0.008, 1)
-	CreateItemTemplate("18V Battery", "18vbat", ItemsPath + "Battery\Battery.x", ItemsPath + "Battery\INVbattery18v.jpg", "", 0.01, 1, ItemsPath + "Battery\Battery 18V.jpg")
-	CreateItemTemplate("Strange Battery", "killbat", ItemsPath + "Battery\Battery.x", ItemsPath + "Battery\INVbattery22900.jpg", "", 0.01, 1, ItemsPath + "Battery\Strange Battery.jpg")
+	CreateItemTemplate("9V Battery", "bat", ItemsPath + "battery.x", ItemsPath + "INV_battery_9v.png", "", 0.008, 1)
+	CreateItemTemplate("18V Battery", "18vbat", ItemsPath + "battery.x", ItemsPath + "INV_battery_18v.png", "", 0.01, 1, ItemsPath + "battery_18V.png")
+	CreateItemTemplate("Strange Battery", "killbat", ItemsPath + "battery.x", ItemsPath + "INV_strange_battery.png", "", 0.01, 1, ItemsPath + "strange_battery.png")
 	
-	CreateItemTemplate("Syringe", "syringe", ItemsPath + "Syringe\syringe.b3d", ItemsPath + "Syringe\inv.png", "", 0.005, 2)
-	CreateItemTemplate("Syringe", "finesyringe", ItemsPath + "Syringe\syringe.b3d", ItemsPath + "Syringe\inv.png", "", 0.005, 2)
-	CreateItemTemplate("Syringe", "veryfinesyringe", ItemsPath + "Syringe\syringe.b3d", ItemsPath + "Syringe\inv.png", "", 0.005, 2)
+	CreateItemTemplate("Syringe", "syringe", ItemsPath + "syringe.b3d", ItemsPath + "INV_syringe.png", "", 0.005, 2)
+	CreateItemTemplate("Syringe", "finesyringe", ItemsPath + "syringe.b3d", ItemsPath + "INV_syringe.png", "", 0.005, 2)
+	CreateItemTemplate("Syringe", "veryfinesyringe", ItemsPath + "syringe.b3d", ItemsPath + "INV_syringe.png", "", 0.005, 2)
+	CreateItemTemplate("Syringe", "syringeinf", ItemsPath + "syringe.b3d", ItemsPath + "INV_syringe_infect.png", "", 0.005, 2, ItemsPath + "syringe_infect.png")
 	
 	CreateItemTemplate("Wallet", "wallet", ItemsPath + "wallet.b3d", ItemsPath + "INVwallet.jpg", "", 0.0005, 2, "", "", 1)
 	

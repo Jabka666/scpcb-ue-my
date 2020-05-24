@@ -4557,40 +4557,40 @@ Function DrawGUI()
 				AAText(x - 60, 720, "Current Monitor: Null")
 			EndIf
 			
-			AAText(x + 380, 40, "******************************")
-			AAText(x + 380, 60, "******** PLAYER STATS ********")
-			AAText(x + 380, 80, "******************************")
+			AAText(x + 400, 40, "******************************")
+			AAText(x + 400, 60, "******** PLAYER STATS ********")
+			AAText(x + 400, 80, "******************************")
 			
-			AAText(x + 380, 120, "Player Position: (" + f2s(EntityX(Collider), 3) + ", " + f2s(EntityY(Collider), 3) + ", " + f2s(EntityZ(Collider), 3) + ")")
-			AAText(x + 380, 140, "Camera Position: (" + f2s(EntityX(Camera), 3)+ ", " + f2s(EntityY(Camera), 3) +", " + f2s(EntityZ(Camera), 3) + ")")
-			AAText(x + 380, 160, "Player Rotation: (" + f2s(EntityPitch(Collider), 3) + ", " + f2s(EntityYaw(Collider), 3) + ", " + f2s(EntityRoll(Collider), 3) + ")")
-			AAText(x + 380, 180, "Camera Rotation: (" + f2s(EntityPitch(Camera), 3)+ ", " + f2s(EntityYaw(Camera), 3) +", " + f2s(EntityRoll(Camera), 3) + ")")
+			AAText(x + 400, 120, "Player Position: (" + f2s(EntityX(Collider), 3) + ", " + f2s(EntityY(Collider), 3) + ", " + f2s(EntityZ(Collider), 3) + ")")
+			AAText(x + 400, 140, "Camera Position: (" + f2s(EntityX(Camera), 3)+ ", " + f2s(EntityY(Camera), 3) +", " + f2s(EntityZ(Camera), 3) + ")")
+			AAText(x + 400, 160, "Player Rotation: (" + f2s(EntityPitch(Collider), 3) + ", " + f2s(EntityYaw(Collider), 3) + ", " + f2s(EntityRoll(Collider), 3) + ")")
+			AAText(x + 400, 180, "Camera Rotation: (" + f2s(EntityPitch(Camera), 3)+ ", " + f2s(EntityYaw(Camera), 3) +", " + f2s(EntityRoll(Camera), 3) + ")")
 			
-			AAText(x + 380, 220, "Stamina: " + f2s(Stamina, 3))
-			AAText(x + 380, 240, "Death Timer: " + f2s(KillTimer, 3))               
-			AAText(x + 380, 260, "Blink Timer: " + f2s(BlinkTimer, 3))
-			AAText(x + 380, 280, "Injuries: " + Injuries)
-			AAText(x + 380, 300, "Bloodloss: " + Bloodloss)
-			AAText(x + 380, 320, "Vomit Timer: " + VomitTimer)
-			AAText(x + 380, 340, "Sanity: " + Sanity)
-			AAText(x + 380, 360, "Deaf Timer: " + DeafTimer)
-			AAText(x + 380, 380, "Blink Effect Timer: " + BlinkEffectTimer)
-			AAText(x + 380, 400, "Stamina Effect Timer: " + StaminaEffectTimer)
+			AAText(x + 400, 220, "Stamina: " + f2s(Stamina, 3))
+			AAText(x + 400, 240, "Death Timer: " + f2s(KillTimer, 3))               
+			AAText(x + 400, 260, "Blink Timer: " + f2s(BlinkTimer, 3))
+			AAText(x + 400, 280, "Injuries: " + Injuries)
+			AAText(x + 400, 300, "Bloodloss: " + Bloodloss)
+			AAText(x + 400, 320, "Vomit Timer: " + VomitTimer)
+			AAText(x + 400, 340, "Sanity: " + Sanity)
+			AAText(x + 400, 360, "Deaf Timer: " + DeafTimer)
+			AAText(x + 400, 380, "Blink Effect Timer: " + BlinkEffectTimer)
+			AAText(x + 400, 400, "Stamina Effect Timer: " + StaminaEffectTimer)
 			
-			AAText(x + 380, 440, "SCP-008 Infection: " + I_008\Timer)
-			AAText(x + 380, 460, "SCP-427 State (Secs): " + Int(I_427\Timer / 70.0))
+			AAText(x + 400, 440, "SCP-008 Infection: " + I_008\Timer)
+			AAText(x + 400, 460, "SCP-427 State (Secs): " + Int(I_427\Timer / 70.0))
 			For i = 0 To 5
-				AAText(x + 380, 480 + (20 * i), "SCP-1025 State " + i + ": " + SCP1025State[i])
+				AAText(x + 400, 480 + (20 * i), "SCP-1025 State " + i + ": " + SCP1025State[i])
 			Next
 			
-			AAText(x + 720, 40, "*****************************")
-			AAText(x + 720, 60, "******** OTHER STATS ********")
-			AAText(x + 720, 80, "*****************************")
+			AAText(x + 760, 40, "*****************************")
+			AAText(x + 760, 60, "******** OTHER STATS ********")
+			AAText(x + 760, 80, "*****************************")
 			
-			AAText(x + 720, 120, "Blur Timer: " + BlurTimer)
-			AAText(x + 720, 140, "Light Blink: " + LightBlink)
-			AAText(x + 720, 160, "Light Flash: " + LightFlash)
-			AAText(x + 720, 180, "MTF Timer: " + MTFTimer)
+			AAText(x + 760, 120, "Blur Timer: " + BlurTimer)
+			AAText(x + 760, 140, "Light Blink: " + LightBlink)
+			AAText(x + 760, 160, "Light Flash: " + LightFlash)
+			AAText(x + 760, 180, "MTF Timer: " + MTFTimer)
 			
 			AASetFont(fo\FontID[0])
 		EndIf
@@ -5894,7 +5894,7 @@ Function DrawGUI()
 					StaminaEffectTimer = 20.0
 					
 					Msg = "You injected yourself with the syringe and feel a slight adrenaline rush."
-					MsgTimer = 70.0 * 8.0
+					MsgTimer = 70.0 * 5.0
 					
 					RemoveItem(SelectedItem)
 					;[End Block]
@@ -5905,7 +5905,7 @@ Function DrawGUI()
 					StaminaEffectTimer = Rnd(20.0, 30.0)
 					
 					Msg = "You injected yourself with the syringe and feel an adrenaline rush."
-					MsgTimer = 70.0 * 8.0
+					MsgTimer = 70.0 * 5.0
 					
 					RemoveItem(SelectedItem)
 					;[End Block]
@@ -5931,7 +5931,7 @@ Function DrawGUI()
 							;[End Block]
 					End Select
 					
-					MsgTimer = 70.0 * 8.0
+					MsgTimer = 70.0 * 5.0
 					RemoveItem(SelectedItem)
 					;[End Block]
 				Case "radio", "18vradio", "fineradio", "veryfineradio"
@@ -6860,7 +6860,7 @@ Function DrawGUI()
 					;[Block]
 					If CanUseItem(False, True) Then
 						Msg = "You swallowed the pill."
-						MsgTimer = 70.0 * 7.0
+						MsgTimer = 70.0 * 5.0
 						
 						RemoveItem(SelectedItem)
 						SelectedItem = Null
@@ -6870,7 +6870,7 @@ Function DrawGUI()
 					;[Block]
 					If CanUseItem(False, True) Then
 						Msg = "You swallowed the pill."
-						MsgTimer = 70.0 * 7.0
+						MsgTimer = 70.0 * 5.0
 						
 						If I_427\Timer < 70.0 * 360.0 Then
 							I_427\Timer = 70.0 * 360.0
@@ -6879,6 +6879,14 @@ Function DrawGUI()
 						RemoveItem(SelectedItem)
 						SelectedItem = Null
 					EndIf
+					;[End Block]
+				Case "syringeinf"
+					;[Block]
+					Msg = "You injected yourself the syringe."
+					MsgTimer = 70 * 8.0
+					
+				    I_008\Timer = I_008\Timer + (1 + (1 * SelectedDifficulty\AggressiveNPCs))
+					RemoveItem(SelectedItem)
 					;[End Block]
 				Default
 					;[Block]
@@ -9643,7 +9651,11 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 							;[End Block]
 						Case "Very Fine"
 							;[Block]
-							it2 = CreateItem("Syringe", "veryfinesyringe", x, y, z)
+							If Rand(3) = 1 Then
+								it2 = CreateItem("Syringe", "veryfinesyringe", x, y, z)
+							Else
+								it2 = CreateItem("Syringe", "syringeinf", x, y, z)
+							EndIf
 							;[End Block]
 					End Select
 					;[End Block]
@@ -9666,22 +9678,58 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 							;[End Block]
 						Case "Fine", "Very Fine"
 							;[Block]
-							it2 = CreateItem("Syringe", "veryfinesyringe", x, y, z)
+							If Rand(3) = 1 Then
+								it2 = CreateItem("Syringe", "veryfinesyringe", x, y, z)
+							Else
+								it2 = CreateItem("Syringe", "syringeinf", x, y, z)
+							EndIf
 							;[End Block]
 					End Select
 					;[End Block]
 				Case "veryfinesyringe"
 					;[Block]
 					Select Setting
-						Case "Rough", "Coarse", "1:1", "Fine"
+						Case "Rough", "Coarse", "1:1"
 							;[Block]
 							it2 = CreateItem("Electronical Components", "misc", x, y, z)	
 							;[End Block]
+						Case "Fine"
+							it2 = CreateItem("Syringe", "syringeinf", x, y, z)
 						Case "Very Fine"
 							;[Block]
-							n.NPCs = CreateNPC(NPCtype008_1, x, y, z)
-							n\State = 2.0
+							If Rand(2) = 1 Then
+								n.NPCs = CreateNPC(NPCtype008_1, x, y, z)
+								n\State = 2.0
+							Else
+								it2 = CreateItem("Syringe", "syringeinf", x, y, z)
+							EndIf
 							;[End Block]
+					End Select
+				Case "syringeinf"
+				    ;[Block]
+			        Select Setting
+					    Case "Rough", "Coarse"
+					        ;[Block]
+					        d.Decals = CreateDecal(0, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0)
+							d\Size = 0.07 : ScaleSprite(d\OBJ, d\Size, d\Size)
+							;[End Block]
+						Case "1:1"
+						    ;[Block]
+						    n.NPCs = CreateNPC(NPCtype008_1, x, y, z)
+							n\State = 2.0
+							;[End Block]	
+						Case "Fine"
+						    ;[Block]
+						    it2 = CreateItem("Syringe", "syringe", x, y, z)
+						    ;[End Block]
+						Case "Very Fine"
+						    ;[Block]
+							If Rand(4) = 1 Then
+								it2 = CreateItem("Blue First Aid Kit", "firstaid2", x, y, z)
+							Else
+								it2 = CreateItem("Syringe", "finesyringe", x, y, z)
+							EndIf
+						    ;[End Block]
 					End Select
 			End Select
 			RemoveItem(item)
@@ -11282,5 +11330,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#FC8#132A#1B63
+;~B#FC8#132A#1B6B
 ;~C#Blitz3D
