@@ -7754,7 +7754,7 @@ Function LoadEntities()
 	KeypadHUD =  LoadImage_Strict("GFX\keypadhud.png")
 	MaskImage(KeypadHUD, 255, 0, 255)
 
-	Panel294 = LoadImage_Strict("GFX\294panel.jpg")
+	Panel294 = LoadImage_Strict("GFX\294panel.png")
 	MaskImage(Panel294, 255, 0, 255)
 	
 	Brightness = GetINIFloat(OptionFile, "Global", "Brightness")
