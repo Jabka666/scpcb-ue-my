@@ -8179,7 +8179,7 @@ Function LoadEntities()
 	FreeTexture(Tex)
 	
 	; ~ SCP-970's corpse
-	Tex = LoadTexture_Strict("GFX\npcs\scp_970_corpse.png")
+	Tex = LoadTexture_Strict("GFX\npcs\D_9341(2).png")
 	EntityTexture(DTextures[2], Tex)
 	FreeTexture(Tex)
 	
