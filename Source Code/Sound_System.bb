@@ -684,6 +684,8 @@ Function LoadAllSounds()
 	For i = 0 To 1
   	    ScientistRadioSFX(i) = LoadSound_Strict("SFX\Character\Scientist\Radio" + i + ".ogg")
 	Next
+	
+	CrouchSFX = LoadSound_Strict("SFX\Character\D9341\Crouch.ogg")
 End Function
 
 ;~IDEal Editor Parameters:

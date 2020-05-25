@@ -9,6 +9,7 @@
 - Now the pass code for O5 Council's office drops from falling guard in SCP-895's event.
 - Now ballistic vest reduces damage from NPC.
 - Now paper strips and origami can be used in SCP-914.
+- Now crouching reduces stamina.
 
 - Changed one bump texture to the better one.
 

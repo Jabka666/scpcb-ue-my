@@ -591,10 +591,10 @@ Function UpdateEvents()
 						
 						If SelectedDifficulty\SaveType = SAVEANYWHERE Then
 							Msg = "Press " + KeyName(KEY_SAVE) + " to save."
-							MsgTimer = 70.0 * 4.0
+							MsgTimer = 70.0 * 6.0
 						ElseIf SelectedDifficulty\SaveType = SAVEONSCREENS Then
 							Msg = "Saving is only permitted on clickable monitors scattered throughout the facility."
-							MsgTimer = 70.0 * 8.0
+							MsgTimer = 70.0 * 6.0
 						EndIf
 						
 						Curr173\Idle = False
@@ -736,7 +736,7 @@ Function UpdateEvents()
                                             EndIf
 											ResetEntity(Curr173\Collider)
 											Msg = "Hold " + KeyName(KEY_SPRINT) + " to run."
-											MsgTimer = 70.0 * 8.0
+											MsgTimer = 70.0 * 6.0
 										EndIf
 									EndIf
 								EndIf
@@ -891,7 +891,7 @@ Function UpdateEvents()
 									HideEntity(Collider)
 									PositionEntity(Collider, x, 0.302, z)	
 									DropSpeed = 0.0
-									UnableToMove = True
+									PlayAble = False
 								Else
 									HideEntity(ov\OverlayID[7])
 									
@@ -899,10 +899,10 @@ Function UpdateEvents()
 									ResetEntity(Collider)
 									ShowEntity(Collider)
 									DropSpeed = 0.0
-									UnableToMove = False
+									PlayAble = True
 									
 									Msg = "Pick up the paper on the desk."
-									MsgTimer = 70.0 * 7.0
+									MsgTimer = 70.0 * 6.0
 									
 									e\EventState3 = 15.0
 								EndIf
@@ -912,7 +912,7 @@ Function UpdateEvents()
 							ElseIf e\EventState3 < 40.0
 								If Inventory(0) <> Null Then
 									Msg = "Press " + KeyName(KEY_INV) + " to open the inventory."
-									MsgTimer = 70.0 * 7.0
+									MsgTimer = 70.0 * 6.0
 									e\EventState3 = 40.0
 									Exit
 								EndIf
@@ -1494,7 +1494,7 @@ Function UpdateEvents()
 								If EntityVisible(Curr173\Collider, Collider) Then
 									If EntityInView(Curr173\OBJ, Camera) Then
 										Msg = "Press " + KeyName(KEY_BLINK) + " to blink."
-										MsgTimer = 70.0 * 4.0
+										MsgTimer = 70.0 * 6.0
 										PlaySound_Strict(IntroSFX(3))
 										IntroSFX(3) = 0
 									EndIf
@@ -3049,11 +3049,11 @@ Function UpdateEvents()
 									ElseIf e\EventState2 = 1.0 And (Not Inserted) Then
 										Using294 = False
 										Msg = "You need to insert another Quarter in order to use this machine."
-										MsgTimer = 70.0 * 5.0
+										MsgTimer = 70.0 * 6.0
 									ElseIf (Not Inserted) Then
 										Using294 = False
 										Msg = "You need to insert two Quarters in order to use this machine."
-										MsgTimer = 70.0 * 5.0
+										MsgTimer = 70.0 * 6.0
 									EndIf
 								EndIf
 							EndIf
@@ -4555,7 +4555,7 @@ Function UpdateEvents()
 								If MouseHit1 Then
 									If ItemAmount >= MaxItemAmount Then
 										Msg = "You cannot carry any more items."
-										MsgTimer = 70.0 * 5.0
+										MsgTimer = 70.0 * 6.0
 									Else
 										SelectedItem = CreateItem("Drawing", "paper", 0.0, 0.0, 0.0)
 										EntityType(SelectedItem\Collider, HIT_ITEM)
@@ -5331,7 +5331,7 @@ Function UpdateEvents()
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech1.ogg"))
 										ElseIf e\EventState3 > 70.0 * 13.0 And e\EventState3 - FPSfactor =< 70.0 * 13.0
 											Msg="You start pushing your nails into your wrist, drawing blood."
-											MsgTimer = 70.0 * 7.0
+											MsgTimer = 70.0 * 6.0
 											Injuries = Injuries + 0.5
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech2.ogg"))
 										ElseIf e\EventState3 > 70.0 * 31.0 And e\EventState3 - FPSfactor =< 70.0 * 31.0
@@ -5340,12 +5340,12 @@ Function UpdateEvents()
 											FreeTexture(Tex)
 											
 											Msg="You tear open your left wrist and start writing on the composition with your blood."
-											MsgTimer = 70.0 * 7.0
+											MsgTimer = 70.0 * 6.0
 											Injuries = Max(Injuries, 1.5)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech" + Rand(3, 4) + ".ogg"))
 										ElseIf e\EventState3 > 70.0 * 49.0 And e\EventState3 - FPSfactor =< 70.0 * 49.0
 											Msg="You push your fingers deeper into the wound."
-											MsgTimer = 70.0 * 8.0
+											MsgTimer = 70.0 * 6.0
 											Injuries = Injuries + 0.3
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech5.ogg"))
 										ElseIf e\EventState3 > 70.0 * 63.0 And e\EventState3 - FPSfactor =< 70.0 * 63.0
@@ -5355,16 +5355,16 @@ Function UpdateEvents()
 											
 											Injuries = Injuries + 0.5
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech6.ogg"))
-										ElseIf e\EventState3 > 70.0 * 74 And e\EventState3 - FPSfactor =< 70.0 * 74.0
+										ElseIf e\EventState3 > 70.0 * 74.0 And e\EventState3 - FPSfactor =< 70.0 * 74.0
 											Tex = LoadTexture_Strict("GFX\map\scp-012_3.jpg")
 											EntityTexture(e\room\Objects[4], Tex, 0, 1)
 											FreeTexture(Tex)
 											
 											Msg = "You rip the wound wide open. Grabbing scoops of blood pouring out."
-											MsgTimer = 70.0 * 7.0
+											MsgTimer = 70.0 * 6.0
 											Injuries = Injuries + 0.8
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech7.ogg"))
-											Crouch = True
+											If (Not Crouch) Then SetCrouch(True)
 											
 											de.Decals = CreateDecal(7,  EntityX(Collider), (-768.0) * RoomScale + 0.01, EntityZ(Collider), 90.0, Rnd(360.0), 0.0)
 											de\Size = 0.1 : de\MaxSize = 0.45 : de\SizeChange = 0.0002 : UpdateDecals()
@@ -5376,7 +5376,7 @@ Function UpdateEvents()
 										
 										RotateEntity(Collider, EntityPitch(Collider), CurveAngle(EntityYaw(Collider) + Sin(e\EventState3 * (e\EventState3 / 2000.0)) * (e\EventState3 / 300.0), EntityYaw(Collider), 80.0), 0.0)
 									Else
-										Angle = WrapAngle(EntityYaw(Pvt)-EntityYaw(Collider))
+										Angle = WrapAngle(EntityYaw(Pvt) - EntityYaw(Collider))
 										If Angle < 40.0 Then
 											ForceMove = (40.0 - Angle) * 0.02
 										ElseIf Angle > 310.0
@@ -6677,7 +6677,7 @@ Function UpdateEvents()
 										Else
 											PlaySound_Strict(LoadTempSound("SFX\Door\WoodenDoorBudge.ogg"))
 											Msg = "The door will not budge."
-											MsgTimer = 70.0 * 5.0
+											MsgTimer = 70.0 * 6.0
 										EndIf
 									EndIf
 								EndIf
@@ -6707,7 +6707,7 @@ Function UpdateEvents()
 									If MouseHit1 Then
 										PlaySound_Strict(LoadTempSound("SFX\Door\WoodenDoorBudge.ogg"))
 										Msg = "The door will not budge."
-										MsgTimer = 70.0 * 5.0
+										MsgTimer = 70.0 * 6.0
 									EndIf
 								ElseIf SelectedItem\itemtemplate\tempname = "scp860" 
 									If MouseHit1 Then
@@ -6953,7 +6953,7 @@ Function UpdateEvents()
 						PrevInjuries = 0.0
 						PrevBloodloss = 0.0
 						PrevSecondaryLightOn = 0.0
-						Crouch = False
+						If (Not Crouch) Then SetCrouch(True)
 						CanSave = True
 						For i = 0 To MaxItemAmount - 1
 							If Inventory(i) <> Null Then
@@ -7284,7 +7284,7 @@ Function UpdateEvents()
 										    If WearingHazmat = 0 Then
 												Injuries = Injuries + 0.1
 												Msg = "The window shattered and a piece of glass cut your arm."
-												MsgTimer = 70.0 * 8
+												MsgTimer = 70.0 * 6.0
 												
 											    If I_008\Timer = 0.0 Then I_008\Timer = 1.0
 											EndIf
@@ -7644,7 +7644,7 @@ Function UpdateEvents()
 										;[Block]
 										Injuries = 4.0
 										Msg = "You notice countless small incisions all around your body. They are bleeding heavily."
-										MsgTimer = 70.0 * 8.0
+										MsgTimer = 70.0 * 6.0
 										;[End Block]
 									Case "1:1"
 										;[Block]
@@ -7742,7 +7742,7 @@ Function UpdateEvents()
 									PlaySound_Strict(e\Sound2)
 									
 									Msg = "Something is growing all around your body."
-									MsgTimer = 70.0 * 3.0
+									MsgTimer = 70.0 * 6.0
 								Else
 									e\EventState3 = 70.0 * 30.0
 								EndIf
@@ -7792,7 +7792,7 @@ Function UpdateEvents()
 											Msg = Chr(34) + "Can't... Breathe..." + Chr(34)
 											;[End Block]
 									End Select
-									MsgTimer = 70.0 * 5.0
+									MsgTimer = 70.0 * 6.0
 								EndIf
 							EndIf
 							
@@ -8091,7 +8091,7 @@ Function UpdateEvents()
 									PlaySound_Strict(LoadTempSound("SFX\SCP\1162\BodyHorrorExchange" + Rand(1, 4) + ".ogg"))
 									LightFlash = 5.0
 									Msg = "You feel a sudden overwhelming pain in your chest."
-									MsgTimer = 70.0 * 5.0
+									MsgTimer = 70.0 * 6.0
 								EndIf
 								Exit
 							EndIf
@@ -8122,7 +8122,7 @@ Function UpdateEvents()
 								PlaySound_Strict(LoadTempSound("SFX\SCP\1162\BodyHorrorExchange" + Rand(1, 4) + ".ogg"))
 								LightFlash = 5.0
 								Msg = "You notice something moving in your pockets and a sudden pain in your chest."
-								MsgTimer = 70.0 * 5.0
+								MsgTimer = 70.0 * 6.0
 							EndIf
 							e\EventState2 = 0.0
 						EndIf
@@ -8809,7 +8809,7 @@ Function UpdateEvents()
 					If ClosestButton = e\room\Objects[2] And MouseHit1 Then
 						Msg = "The elevator appears to be broken."
 						PlaySound2(ButtonSFX2, Camera, e\room\Objects[2])
-						MsgTimer = 70.0 * 5.0
+						MsgTimer = 70.0 * 6.0
 						MouseHit1 = 0
 					EndIf
 				EndIf
@@ -8822,7 +8822,7 @@ Function UpdateEvents()
 						If ClosestButton = e\room\Objects[i] And MouseHit1 Then
 							Msg = "The elevator appears to be broken."
 							PlaySound2(ButtonSFX2, Camera, e\room\Objects[i])
-							MsgTimer = 70.0 * 5.0
+							MsgTimer = 70.0 * 6.0
 							MouseHit1 = 0
 						EndIf
 					Next
