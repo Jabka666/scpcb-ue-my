@@ -250,6 +250,8 @@ Function InitEvents()
 	CreateEvent("room4info", "room4info", 0)
 	
 	CreateEvent("room2bio", "room2bio", 0)
+	
+	CreateEvent("room409", "room409", 0)
 End Function
 
 Function QuickLoadEvents()
@@ -8866,6 +8868,49 @@ Function UpdateEvents()
 					HideEntity(e\room\Objects[0])
 				EndIf
 				;[End Block]
+			Case "room409"
+				;[Block]
+				If PlayerRoom = e\room Then
+					If EntityY(Collider) < -4000.0 * RoomScale Then
+						ShouldPlay = 28
+						
+					    If e\EventState = 0.0 Then
+							e\room\NPC[0] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True) + 0.5, EntityZ(e\room\Objects[0], True))
+							ChangeNPCTextureID(e\room\NPC[0], 13)
+							SetNPCFrame(e\room\NPC[0], 19.0)
+							e\room\NPC[0]\State = 8.0
+							TurnEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle, 0.0)
+							e\room\NPC[0]\IsDead = True
+							
+					        de.Decals = CreateDecal(19, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True) + 0.01, EntityZ(e\room\Objects[2], True), 90.0, Rnd(360.0), 0.0)
+							de\Size = 0.05
+							EntityAlpha(de\OBJ, 0.8)
+							
+							e\EventState = 1.0
+				        ElseIf e\EventState = 1.0 Then 
+				            If e\room\RoomDoors[2]\Open = True Then GiveAchievement(Achv409)
+					        Dist = EntityDistance(Collider, e\room\NPC[0]\Collider)
+					        If Dist < 1.0 And I_409\Timer < 1.0 Then
+						        I_409\Timer = 1.0
+					        EndIf
+					        ; ~ Touching the SCP-409
+					        If EntityDistance(e\room\Objects[4], Collider) < 0.6 Then
+					            If I_409\Timer < 1.0 Then
+						            DrawHandIcon = True
+						            If MouseHit1 Then
+						                Msg = "You touched SCP-409."
+						                MsgTimer = 70.0 * 6.0
+						                BlurTimer = 2000.0
+						                I_409\Timer = I_409\Timer + 1.0
+						                GiveAchievement(Achv409)
+						            EndIf
+						        EndIf
+						    EndIf
+						EndIf
+					EndIf
+                    e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[1], e\room\Objects[3], e)
+				EndIf
+				;[End Block]
 		End Select
 		
 		If e <> Null Then
@@ -10256,5 +10301,5 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1229#1E5E
+;~B#122B#1E60
 ;~C#Blitz3D

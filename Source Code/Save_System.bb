@@ -68,6 +68,7 @@ Function SaveGame(File$)
 	WriteByte(f, Vomit)
 	WriteFloat(f, CameraShakeTimer)
 	WriteFloat(f, I_008\Timer)
+	WriteFloat(f, I_409\Timer)
 	
 	For i = 0 To CUSTOM
 		If SelectedDifficulty = difficulties(i) Then
@@ -546,6 +547,7 @@ Function LoadGame(File$)
 	Vomit = ReadByte(f)
 	CameraShakeTimer = ReadFloat(f)
 	I_008\Timer = ReadFloat(f)
+	I_409\Timer = ReadFloat(f)
 	
 	Local DifficultyIndex = ReadByte(f)
 	
@@ -1393,6 +1395,7 @@ Function LoadGameQuick(File$)
 	Vomit = ReadByte(f)
 	CameraShakeTimer = ReadFloat(f)
 	I_008\Timer = ReadFloat(f)
+	I_409\Timer = ReadFloat(f)
 	
 	Local DifficultyIndex = ReadByte(f)
 	

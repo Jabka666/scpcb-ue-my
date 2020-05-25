@@ -605,6 +605,7 @@ Function UpdateConsole()
 							CreateConsoleMsg("- gamma [value]")
 							CreateConsoleMsg("- injure [value]")
 							CreateConsoleMsg("- infect [value]")
+							CreateConsoleMsg("- crystal [value]") 
 							CreateConsoleMsg("- teleport [room name]")
 							CreateConsoleMsg("- spawnitem [item name]")
 							CreateConsoleMsg("******************************")
@@ -851,6 +852,18 @@ Function UpdateConsole()
 							CreateConsoleMsg("from " + Chr(34) + "SFX\Music\Custom\" + Chr(34) + ".")
 							CreateConsoleMsg("******************************")
 							;[End Block]
+						Case "infect" 
+							CreateConsoleMsg("HELP - infect")
+							CreateConsoleMsg("******************************")
+							CreateConsoleMsg("SCP-008 infects player.")
+							CreateConsoleMsg("Example: infect 80")
+							CreateConsoleMsg("******************************")
+						Case "crystal" 
+							CreateConsoleMsg("HELP - crystal")
+							CreateConsoleMsg("******************************")
+							CreateConsoleMsg("SCP-409 crystallizes player.")
+							CreateConsoleMsg("Example: crystal 52")
+							CreateConsoleMsg("******************************")
 						Default
 							;[Block]
 							CreateConsoleMsg("There is no help available for that command.", 255, 150, 0)
@@ -905,6 +918,12 @@ Function UpdateConsole()
 					
 					I_008\Timer = Float(StrTemp)
 					;[End Block]
+				Case "crystal"
+					;[Block]
+					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+					
+					I_409\Timer = Float(StrTemp)
+					;[End Block]
 				Case "heal"
 					;[Block]
 					Injuries = 0.0
@@ -913,6 +932,7 @@ Function UpdateConsole()
 					BlurTimer = 0.0
 					
 					I_008\Timer = 0.0
+					I_409\Timer = 0.0
 					
 					DeafTimer = 0.0
 					DeathTimer = 0.0
@@ -1854,7 +1874,7 @@ Global TempSoundCHN%
 Global TempSoundIndex% = 0
 
 ; ~ The Music now has to be pre-defined, as the new system uses streaming instead of the usual sound loading system Blitz3D has
-Dim Music$(28)
+Dim Music$(29)
 Music(0) = "LightContainmentZone"
 Music(1) = "HeavyContainmentZone"
 Music(2) = "EntranceZone"
@@ -1883,6 +1903,7 @@ Music(24) = "Credits"
 Music(25) = "SaveMeFrom"
 Music(26) = "Room106"
 Music(27) = "Room035"
+Music(28) = "Room409" 
 
 Global MusicCHN%
 MusicCHN = StreamSound_Strict("SFX\Music\" + Music(2) + ".ogg", MusicVolume, Mode)
@@ -1999,7 +2020,7 @@ Global BreathGasRelaxedCHN%
 
 Dim NeckSnapSFX%(3)
 
-Dim DamageSFX%(13)
+Dim DamageSFX%(14)
 
 Dim MTFSFX%(8)
 
@@ -2839,6 +2860,12 @@ Type SCP008
 End Type
 
 Global I_008.SCP008 = New SCP008
+
+Type SCP409
+    Field Timer#
+End Type 
+
+Global I_409.SCP409 = New SCP409
 
 Type MapZones
 	Field Transition%[1]
@@ -3743,6 +3770,7 @@ Function MovePlayer()
 	CatchErrors("Uncaught (MovePlayer)")
 	
 	Local Sprint# = 1.0, Speed# = 0.018, i%, Angle#
+	Local Temporary#
 	Local ov.Overlays = First Overlays
 	
 	If SuperMan Then
@@ -3817,6 +3845,11 @@ Function MovePlayer()
 	If Wearing714 = 1 Then
 		Stamina = Min(Stamina, 10.0)
 		Sanity = Max(-850.0, Sanity)
+	EndIf
+	
+	If I_409\Timer > 10.0 Then 
+		Temporary = I_409\Timer / 15.0
+		Stamina = Max(Stamina, Temporary)
 	EndIf
 	
 	If IsZombie Then 
@@ -4009,6 +4042,7 @@ Function MovePlayer()
 	If Injuries < 0.0 Then Injuries = 0.0
 	
 	Update008()
+	Update409()
 	
 	If Bloodloss > 0.0 Then
 		If Rnd(200.0) < Min(Injuries, 4.0) Then
@@ -4612,9 +4646,10 @@ Function DrawGUI()
 			AAText(x + 400, 400, "Stamina Effect Timer: " + StaminaEffectTimer)
 			
 			AAText(x + 400, 440, "SCP-008 Infection: " + I_008\Timer)
-			AAText(x + 400, 460, "SCP-427 State (Secs): " + Int(I_427\Timer / 70.0))
+			AAText(x + 400, 460, "SCP-409 Crystallization: " + I_409\Timer)
+			AAText(x + 400, 480, "SCP-427 State (Secs): " + Int(I_427\Timer / 70.0))
 			For i = 0 To 5
-				AAText(x + 400, 480 + (20 * i), "SCP-1025 State " + i + ": " + SCP1025State[i])
+				AAText(x + 400, 500 + (20 * i), "SCP-1025 State " + i + ": " + SCP1025State[i])
 			Next
 			
 			AAText(x + 760, 40, "*****************************")
@@ -5514,7 +5549,7 @@ Function DrawGUI()
 								GroupDesignation = "See No Evil"
 							EndIf
 							DeathMsg = SubjectName + " was shot dead after attempting to attack a member of " + GroupDesignation + ". Surveillance tapes show that the subject had been "
-							DeathMsg = DeathMsg + "wandering around the site approximately 9 minutes prior, shouting the phrase " + Chr(34) + "get rid of the four pests" + Chr(34)
+							DeathMsg = DeathMsg + "wandering around the site approximately 9 (nine) minutes prior, shouting the phrase " + Chr(34) + "get rid of the four pests" + Chr(34)
 							DeathMsg = DeathMsg + " in chinese. SCP-1123 was found in [DATA REDACTED] nearby, suggesting the subject had come into physical contact with it. How "
 							DeathMsg = DeathMsg + "exactly SCP-1123 was removed from its containment chamber is still unknown."
 							Kill()
@@ -5551,15 +5586,19 @@ Function DrawGUI()
 					If CanUseItem(False, True) Then
 						GiveAchievement(Achv500)
 						
-						If I_008\Timer > 0 Then
+						If I_008\Timer > 0.0 Then
 							Msg = "You swallowed the pill. Your nausea is fading."
+						ElseIf I_409\Timer > 0.0 Then
+						    Msg = "You swallowed the pill. Your body is getting warmer and the crystals are receding."
 						Else
 							Msg = "You swallowed the pill."
 						EndIf
 						MsgTimer = 70.0 * 6.0
 						
-						DeathTimer = 0.0
 						I_008\Timer = 0.0
+						I_409\Timer = 0.0
+						
+						DeathTimer = 0.0
 						Stamina = 100.0
 						
 						For i = 0 To 5
@@ -5898,6 +5937,10 @@ Function DrawGUI()
 							PlaySound_Strict(LoadTempSound(StrTemp))
 						EndIf
 						If GetINIInt2(INIStr, Loc, "stomachache") Then SCP1025State[3] = 1.0
+						
+						If GetINIInt2(INIStr, Loc, "infection") Then I_008\Timer = 1.0
+						
+						If GetINIInt2(INIStr, Loc, "crystallization") Then I_409\Timer = 1.0
 						
 						DeathTimer = GetINIInt2(INIStr, Loc, "deathtimer") * 70.0
 						
@@ -7933,6 +7976,16 @@ Function LoadEntities()
 	MoveEntity(ov\OverlayID[7], 0.0, 0.0, 1.0)
 	HideEntity(ov\OverlayID[7])
 	
+	ov\OverlayTextureID[8] = LoadTexture_Strict("GFX\CrystalOverlay.png", 1) ;SCP-409
+	ov\OverlayID[8] = CreateSprite(Ark_Blur_Cam)
+	ScaleSprite(ov\OverlayID[8], Max(GraphicWidth / 1024.0, 1.0), Max(GraphicHeight / 1024.0 * 0.8, 0.8))
+	EntityTexture(ov\OverlayID[8], ov\OverlayTextureID[8])
+	EntityBlend(ov\OverlayID[8], 3)
+	EntityFX(ov\OverlayID[8], 1)
+	EntityOrder(ov\OverlayID[8], -1001)
+	MoveEntity(ov\OverlayID[8], 0.0, 0.0, 1.0)
+	HideEntity(ov\OverlayID[8])
+	
 	TeslaTexture = LoadTexture_Strict("GFX\map\tesla.jpg", 1 + 2)
 	
 	Collider = CreatePivot()
@@ -8299,6 +8352,11 @@ Function LoadEntities()
 	; ~ SCP-008-1's victim
 	Tex = LoadTexture_Strict("GFX\npcs\scp_008_1_victim.png")
 	EntityTexture(DTextures[13], Tex)
+	FreeTexture(Tex)
+	
+	; ~ Body # 3
+	Tex = LoadTexture_Strict("GFX\npcs\body(3).png")
+	EntityTexture(DTextures[14], Tex)
 	FreeTexture(Tex)
 	
 	LoadMaterials("Data\materials.ini")
@@ -8728,6 +8786,7 @@ Function NullGame(PlayButtonSFX% = True)
 	Bloodloss = 0.0
 	Injuries = 0.0
 	I_008\Timer = 0.0
+	I_409\Timer = 0.0
 	
 	For i = 0 To 5
 		SCP1025State[i] = 0.0
@@ -8741,7 +8800,7 @@ Function NullGame(PlayButtonSFX% = True)
 	Shake = 0.0
 	LightFlash = 0.0
 	
-	WireFrameState = 0
+	WireFrameState = 0.0
 	WireFrame(0)
 	WearingGasMask = 0
 	WearingHazmat = 0
@@ -10347,6 +10406,9 @@ Function Use427()
 			If I_008\Timer > 0.0 Then
 				I_008\Timer = Max(I_008\Timer - 0.001 * FPSfactor, 0.0)
 			EndIf
+			If I_409\Timer > 0.0 Then
+				I_409\Timer = Max(I_409\Timer - 0.003 * FPSfactor, 0.0)
+			EndIf
 			For i = 0 To 5
 				If SCP1025State[i] > 0.0 Then
 					SCP1025State[i] = Max(SCP1025State[i] - 0.001 * FPSfactor, 0.0)
@@ -10678,6 +10740,51 @@ Function Update008()
 	Else
 		HideEntity(ov\OverlayID[3])
 	EndIf
+End Function
+
+Function Update409()
+	Local ov.Overlays = First Overlays
+	Local prevI409Timer# = I_409\Timer
+	
+	If I_409\Timer > 0.0 Then
+		ShowEntity(ov\OverlayID[8])
+		
+		If I_427\Using = 0 And I_427\Timer < 70.0 * 360.0 Then
+			I_409\Timer = ((Min(I_409\Timer + FPSfactor * 0.004, 100.0)))
+		EndIf	
+		EntityAlpha(ov\OverlayID[8], Min(((I_409\Timer * 0.2) ^ 2.0) / 1000.0, 0.5))
+	    BlurTimer = Max(I_409\Timer * 3.0 * (2.0 - CrouchState), BlurTimer)
+		
+        If I_409\Timer > 40.0 And prevI409Timer =< 40.0 Then
+			Msg = "Crystals are enveloping the skin on your legs."
+			MsgTimer = 70.0 * 6.0
+		ElseIf I_409\Timer > 55.0 And prevI409Timer =< 55.0 Then
+			Msg = "Crystals are up to your abdomen."
+			MsgTimer = 70.0 * 6.0
+		ElseIf I_409\Timer > 70.0 And prevI409Timer =< 70.0 Then
+			Msg = "Crystals are starting to envelop your arms."
+			MsgTimer = 70.0 * 6.0
+		ElseIf I_409\Timer > 85.0 And prevI409Timer =< 85.0 Then
+			Msg = "Crystals starting to envelop your head."
+			MsgTimer = 70.0 * 6.0
+		ElseIf I_409\Timer > 93.0 And prevI409Timer =< 93.0 Then
+			PlaySound_Strict(DamageSFX(13))
+			Injuries = Max(Injuries, 2.0)
+		ElseIf I_409\Timer > 94.0 Then
+			I_409\Timer = Min(I_409\Timer + FPSfactor * 0.004, 100.0)
+			Playable = False
+			CanBreathe = False
+			BlurTimer = 4.0
+			CameraShake = 3.0
+		EndIf
+		If I_409\Timer >= 96.9222 Then
+			DeathMsg = "Pile of SCP-409 crystals found and, by comparing list of the dead, was found to be " + SubjectName + " who had physical contact with SCP-409. "
+			DeathMsg = DeathMsg + "Remains were incinerated along with crystal-infested areas of facility."
+			Kill()
+        EndIf
+    Else
+		HideEntity(ov\OverlayID[8])	
+    EndIf
 End Function
 
 Include "Source Code\Math_System.bb"
@@ -11385,5 +11492,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#FE9#134C#1BA2
+;~B#100B#136F#1BCD
 ;~C#Blitz3D

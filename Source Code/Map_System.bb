@@ -5591,6 +5591,53 @@ Function FillRoom(r.Rooms)
 			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 		    ;[End Block]
+		Case "room409" ;Box of Horrors room.
+			;[Block]
+			; ~ Elevators' doors
+			r\RoomDoors[0] = CreateDoor(r\Zone, r\x + 264.0 * RoomScale, r\y, r\z + 655.0 * RoomScale, 90.0, r, True, 3)
+			r\RoomDoors[0]\AutoClose = False
+			PositionEntity(r\RoomDoors[0]\Buttons[0], EntityX(r\RoomDoors[0]\Buttons[0], True) + 0.031, EntityY(r\RoomDoors[0]\Buttons[0], True), EntityZ(r\RoomDoors[0]\Buttons[0], True), True)
+			PositionEntity(r\RoomDoors[0]\Buttons[1], EntityX(r\RoomDoors[0]\Buttons[1], True) - 0.031, EntityY(r\RoomDoors[0]\Buttons[1], True), EntityZ(r\RoomDoors[0]\Buttons[1], True), True)							
+			
+			r\RoomDoors[1] = CreateDoor(r\Zone, r\x - 2328.0 * RoomScale, r\y - 4528.0 * RoomScale, r\z - 656.0 * RoomScale, 90.0, r, False, 3)
+			r\RoomDoors[1]\AutoClose = False
+			PositionEntity(r\RoomDoors[1]\Buttons[0], EntityX(r\RoomDoors[1]\Buttons[0], True) + 0.031, EntityY(r\RoomDoors[1]\Buttons[1], True), EntityZ(r\RoomDoors[1]\Buttons[0], True), True)
+			PositionEntity(r\RoomDoors[1]\Buttons[1], EntityX(r\RoomDoors[1]\Buttons[1], True) - 0.031, EntityY(r\RoomDoors[1]\Buttons[1], True), EntityZ(r\RoomDoors[1]\Buttons[1], True), True)					
+			
+	        ; ~ A door to the containment chamber	
+			r\RoomDoors[2] = CreateDoor(r\Zone, r\x - 4336.0 * RoomScale, r\y - 4528.0 * RoomScale, r\z + 1552.0 * RoomScale, 0.0, r, False, False, 4)
+			r\RoomDoors[2]\AutoClose = False
+			PositionEntity(r\RoomDoors[2]\Buttons[0], EntityX(r\RoomDoors[2]\Buttons[0], True), EntityY(r\RoomDoors[2]\Buttons[1], True), EntityZ(r\RoomDoors[2]\Buttons[0], True) + 0.061, True)
+			PositionEntity(r\RoomDoors[2]\Buttons[1], EntityX(r\RoomDoors[2]\Buttons[1], True), EntityY(r\RoomDoors[2]\Buttons[1], True), EntityZ(r\RoomDoors[2]\Buttons[1], True) - 0.061, True)					
+			
+			r\Objects[0] = CreatePivot()
+			PositionEntity(r\Objects[0], r\x - 4951.0 * RoomScale, r\y - 4763.0 * RoomScale, r\z + 1828.0 * RoomScale)
+            
+			r\Objects[1] = CreatePivot()
+			PositionEntity(r\Objects[1], r\x + 552.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 656.0 * RoomScale)
+			
+			r\Objects[2] = CreatePivot()
+			PositionEntity(r\Objects[2], r\x - 4951.0 * RoomScale, r\y - 4769.0 * RoomScale, r\z + 1692.0 * RoomScale)
+			
+			r\Objects[3] = CreatePivot()
+			PositionEntity(r\Objects[3], r\x - 2040.0 * RoomScale, r\y - 4283.0 * RoomScale, r\z - 656.0 * RoomScale)				
+			
+			r\Objects[4] = CreatePivot()
+			PositionEntity(r\Objects[4], r\x - 4885.0 * RoomScale, r\y - 4598.0 * RoomScale, r\z + 2235.0 * RoomScale)
+			
+			For i = 0 To 4
+				EntityParent(r\Objects[i], r\OBJ)
+			Next
+			
+			it = CreateItem("Document SCP-409", "paper", r\x - 3595.0 * RoomScale, r\y - 4608.0 * RoomScale, r\z + 2234.0 * RoomScale)
+			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
+			EntityParent(it\Collider, r\OBJ)
+			
+			sc = CreateSecurityCam(r\x - 3624.0 * RoomScale, r\y - 4112.0 * RoomScale, r\z + 2248.0 * RoomScale, r)
+			sc\Angle = 100.0 : sc\Turn = 45.0
+			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
+			EntityParent(sc\OBJ, r\OBJ)
+			;[End Block]
 	End Select
 	
 	For lt.LightTemplates = Each LightTemplates
@@ -7405,6 +7452,7 @@ Function CreateMap()
 	Max_Pos = Room2Amount[0] + Room2Amount[1] - 1
 	
 	MapRoom(ROOM2, Room2Amount[0] + Floor(0.1 * Float(Room2Amount[1]))) = "room2nuke"
+	SetRoom("room409", ROOM2, Room2Amount[0] + Floor(0.15 * Float(Room2Amount[1])), Min_Pos, Max_Pos)
 	SetRoom("room2tunnel", ROOM2, Room2Amount[0] + Floor(0.25 * Float(Room2Amount[1])), Min_Pos, Max_Pos)
 	SetRoom("room049", ROOM2, Room2Amount[0] + Floor(0.4 * Float(Room2Amount[1])), Min_Pos, Max_Pos)
 	SetRoom("room008", ROOM2, Room2Amount[0] + Floor(0.5 * Float(Room2Amount[1])), Min_Pos, Max_Pos)

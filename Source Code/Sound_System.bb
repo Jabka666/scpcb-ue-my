@@ -649,7 +649,7 @@ Function LoadAllSounds()
 		NeckSnapSFX(i) = LoadSound_Strict("SFX\SCP\173\NeckSnap" + (i + 1) + ".ogg")
 	Next
 	
-	For i = 0 To 12
+	For i = 0 To 13
 		DamageSFX(i) = LoadSound_Strict("SFX\Character\D9341\Damage" + (i + 1) + ".ogg")
 	Next
 	

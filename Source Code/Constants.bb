@@ -73,14 +73,14 @@ Const NAN# = (-1.0) ^ 0.5
 
 ; ~ [TEXTURES]
 
-Const MaxDTextures% = 13
+Const MaxDTextures% = 14
 
 Const MaxMiscTextureIDAmount% = 13
 
 Const MaxMonitorTextureIDAmount% = 5
 
-Const MaxOverlayTextureIDAmount% = 8
-Const MaxOverlayIDAmount% = 8
+Const MaxOverlayTextureIDAmount% = 9
+Const MaxOverlayIDAmount% = 9
 
 ; ~ [ITEMS]
 
@@ -126,14 +126,14 @@ Const HARD% = 2
 
 ; ~ [ACHIEVEMENTS]
 
-Const MAXACHIEVEMENTS% = 38
+Const MAXACHIEVEMENTS% = 39
 
 Const Achv008% = 0, Achv012% = 1, Achv035% = 2, Achv049% = 3, Achv055% = 4,  Achv079% = 5, Achv096% = 6, Achv106% = 7
-Const Achv148% = 8, Achv205% = 9, Achv294% = 10, Achv372% = 11, Achv420J% = 12, Achv427% = 13, Achv500% = 14, Achv513% = 15
-Const Achv714% = 16, Achv789J% = 17, Achv860% = 18, Achv895% = 19, Achv914% = 20, Achv939% = 21, Achv966% = 22, Achv970% = 23
-Const Achv1025% = 24, Achv1048% = 25, Achv1123% = 26, Achv1162% = 27, Achv1499% = 28
+Const Achv148% = 8, Achv205% = 9, Achv294% = 10, Achv372% = 11, Achv409% = 12, Achv420J% = 13, Achv427% = 14, Achv500% = 15, Achv513% = 16
+Const Achv714% = 17, Achv789J% = 18, Achv860% = 19, Achv895% = 20, Achv914% = 21, Achv939% = 22, Achv966% = 23, Achv970% = 24
+Const Achv1025% = 25, Achv1048% = 26, Achv1123% = 27, Achv1162% = 28, Achv1499% = 29
 
-Const AchvConsole% = 29, AchvHarp% = 30, AchvKeter% = 31, AchvMaynard% = 32, AchvOmni% = 33, AchvO5% = 34, AchvPD% = 35, AchvSNAV% = 36, AchvTesla% = 37
+Const AchvConsole% = 30, AchvHarp% = 31, AchvKeter% = 32, AchvMaynard% = 33, AchvOmni% = 34, AchvO5% = 35, AchvPD% = 36, AchvSNAV% = 37, AchvTesla% = 38
 
 ; ~ [FONTS]
 
