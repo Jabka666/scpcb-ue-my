@@ -181,7 +181,7 @@ Function InitItemTemplates()
 	CreateItemTemplate("Dr. L's Burnt Note #1", "paper", ItemsPath + "paper.x", ItemsPath + "INV_burnt_note.png", ItemsPath + "note_L(4).png", 0.0025, 0, ItemsPath + "burnt_note.png")
 	CreateItemTemplate("Dr. L's Burnt Note #2", "paper", ItemsPath + "paper.x", ItemsPath + "INV_burnt_note.png", ItemsPath + "note_L(5).png", 0.0025, 0, ItemsPath + "burnt_note.png")
 	
-	CreateItemTemplate("Emily Ross' Badge", "badge", ItemsPath + "badge.x", ItemsPath + "INVbadge.jpg", ItemsPath + "badge1.jpg", 0.0001, 1, ItemsPath + "badge1_tex.jpg")
+	CreateItemTemplate("Emily Ross' Badge", "badge", ItemsPath + "badge.x", ItemsPath + "INV_Emily_badge.png", ItemsPath + "Emily_badge_HUD.png", 0.0001, 1, ItemsPath + "Emily_badge.png")
 	
 	CreateItemTemplate("Journal Page", "paper", ItemsPath + "paper.x", ItemsPath + "INV_note.png", ItemsPath + "note_Gonzales.png", 0.0025, 0, ItemsPath + "note.png")
 	
@@ -191,13 +191,13 @@ Function InitItemTemplates()
 	CreateItemTemplate("Log #2", "paper", ItemsPath + "paper.x", ItemsPath + "INV_note.png", ItemsPath + "note_forest(2).png", 0.004, 0, ItemsPath + "note.png")
 	CreateItemTemplate("Log #3", "paper", ItemsPath + "paper.x", ItemsPath + "INV_note.png", ItemsPath + "note_forest(3).png", 0.004, 0, ItemsPath + "note.png")
 	
-	CreateItemTemplate("Movie Ticket", "ticket", ItemsPath + "ticket.b3d", ItemsPath + "INVticket.jpg", ItemsPath + "ticket_HUD.png", 0.002, 0, ItemsPath + "ticket.png", "", 0, 1 + 2 + 8)
+	CreateItemTemplate("Movie Ticket", "ticket", ItemsPath + "ticket.b3d", ItemsPath + "INV_ticket.png", ItemsPath + "ticket_HUD.png", 0.002, 0, ItemsPath + "ticket.png", "", 0, 1 + 2 + 8)
 	
 	CreateItemTemplate("Mysterious Note", "paper", ItemsPath + "paper.x", ItemsPath + "INV_note.png", ItemsPath + "note_mysterious.png", 0.003, 0, ItemsPath + "note.png")
 	
 	CreateItemTemplate("Notification", "paper", ItemsPath + "paper.x", ItemsPath + "INV_note.png", ItemsPath + "doc_RAND.png", 0.003, 0, ItemsPath + "note.png")
 	
-	CreateItemTemplate("Old Badge", "badge", ItemsPath + "badge.x", ItemsPath + "INVoldbadge.jpg", ItemsPath + "badge2.png", 0.0001, 1, ItemsPath + "badge2_tex.png", "", 0, 1 + 2 + 8)
+	CreateItemTemplate("Old Badge", "badge", ItemsPath + "badge.x", ItemsPath + "INV_D_9341_badge.png", ItemsPath + "D_9341_badge_HUD.png", 0.0001, 1, ItemsPath + "D_9341_badge.png", "", 0, 1 + 2 + 8)
 	
 	CreateItemTemplate("Origami", "misc", ItemsPath + "origami.b3d", ItemsPath + "INV_origami.png", "", 0.003, 0)
 	
@@ -219,7 +219,7 @@ Function InitItemTemplates()
 	
 	CreateItemTemplate("SCP-513", "scp513", ItemsPath + "scp_513.x", ItemsPath + "INV_scp_513.png", "", 0.1, 2)
 	CreateItemTemplate("SCP-714", "scp714", ItemsPath + "scp_714.b3d", ItemsPath + "INV_scp_714.png", "", 0.3, 3)
-	CreateItemTemplate("SCP-860", "scp860", ItemsPath + "scp_860.b3d", ItemsPath + "INV_scp_860.png", "", 0.0028, 3)
+	CreateItemTemplate("SCP-860", "scp860", ItemsPath + "scp_860.b3d", ItemsPath + "INV_scp_860.png", "", 0.003, 3)
 	CreateItemTemplate("SCP-1025", "scp1025", ItemsPath + "scp_1025.b3d", ItemsPath + "INV_scp_1025.png", "", 0.1, 0)
 	CreateItemTemplate("SCP-1123", "scp1123", ItemsPath + "scp_1123.b3d", ItemsPath + "INV_scp_1123.png", "", 0.015, 2)
 	CreateItemTemplate("SCP-1499", "scp1499", ItemsPath + "scp_1499.b3d", ItemsPath + "INV_scp_1499.png", "", 0.022, 2)
@@ -252,16 +252,16 @@ Function InitItemTemplates()
 	
 	CreateItemTemplate("Empty Cup", "emptycup", ItemsPath + "cup.x", ItemsPath + "INV_cup.png", "", 0.04, 2)
 	
-	CreateItemTemplate("ReVision Eyedrops", "eyedrops",ItemsPath + "eyedrops.b3d", ItemsPath + "INVeyedrops.jpg", "", 0.0012, 1, ItemsPath + "eyedrops.jpg")
-	CreateItemTemplate("Eyedrops", "fineeyedrops", ItemsPath + "eyedrops.b3d", ItemsPath + "INVeyedrops.jpg", "", 0.0012, 1, ItemsPath + "eyedrops.jpg")
-	CreateItemTemplate("Eyedrops", "supereyedrops", ItemsPath + "eyedrops.b3d", ItemsPath + "INVeyedrops.jpg", "", 0.0012, 1, ItemsPath + "eyedrops.jpg")
-	CreateItemTemplate("RedVision Eyedrops", "eyedrops", ItemsPath + "eyedrops.b3d", ItemsPath + "INVeyedropsred.jpg", "", 0.0012, 1, ItemsPath + "eyedropsred.jpg")
+	CreateItemTemplate("ReVision Eyedrops", "eyedrops",ItemsPath + "eye_drops.b3d", ItemsPath + "INV_eye_drops.png", "", 0.0012, 1)
+	CreateItemTemplate("Eyedrops", "fineeyedrops", ItemsPath + "eye_drops.b3d", ItemsPath + "INV_eye_drops.png", "", 0.0012, 1)
+	CreateItemTemplate("Eyedrops", "supereyedrops", ItemsPath + "eye_drops.b3d", ItemsPath + "INV_eye_drops.png", "", 0.0012, 1)
+	CreateItemTemplate("RedVision Eyedrops", "eyedrops", ItemsPath + "eye_drops.b3d", ItemsPath + "INV_eye_drops_red.png", "", 0.0012, 1, ItemsPath + "eye_drops_red.png")
 	
-	CreateItemTemplate("First Aid Kit", "firstaid", ItemsPath + "firstaid.x", ItemsPath + "INVfirstaid.jpg", "", 0.05, 1)
-	CreateItemTemplate("Small First Aid Kit", "finefirstaid", ItemsPath + "firstaid.x", ItemsPath + "INVfirstaid.jpg", "", 0.03, 1)
-	CreateItemTemplate("Blue First Aid Kit", "firstaid2", ItemsPath + "firstaid.x", ItemsPath + "INVfirstaid2.jpg", "", 0.03, 1, ItemsPath + "firstaidkit2.jpg")
-	CreateItemTemplate("Strange Bottle", "veryfinefirstaid", ItemsPath + "eyedrops.b3d", ItemsPath + "INVbottle.jpg", "", 0.002, 1, ItemsPath + "bottle.jpg")	
-	
+	CreateItemTemplate("First Aid Kit", "firstaid", ItemsPath + "first_aid.x", ItemsPath + "INV_first_aid.png", "", 0.05, 1)
+	CreateItemTemplate("Small First Aid Kit", "finefirstaid", ItemsPath + "first_aid.x", ItemsPath + "INV_first_aid.png", "", 0.03, 1)
+	CreateItemTemplate("Blue First Aid Kit", "firstaid2", ItemsPath + "first_aid.x", ItemsPath + "INV_first_aid(2).png", "", 0.03, 1, ItemsPath + "first_aid_kit(2).png")
+	CreateItemTemplate("Strange Bottle", "veryfinefirstaid", ItemsPath + "eye_drops.b3d", ItemsPath + "INV_strange_bottle.png", "", 0.002, 1, ItemsPath + "strange_bottle.png")	
+
 	CreateItemTemplate("Gas Mask", "gasmask", ItemsPath + "gas_mask.b3d", ItemsPath + "INV_gas_mask.png", "", 0.019, 2)
 	CreateItemTemplate("Gas Mask", "supergasmask", ItemsPath + "gas_mask.b3d", ItemsPath + "INV_gas_mask.png", "", 0.02, 2)
 	CreateItemTemplate("Heavy Gas Mask", "gasmask3", ItemsPath + "gas_mask.b3d", ItemsPath + "INV_gas_mask.png", "", 0.02, 2)
@@ -277,18 +277,18 @@ Function InitItemTemplates()
 	it = CreateItemTemplate("Pill", "pill", ItemsPath + "pill.b3d", ItemsPath + "INV_pill.png", "", 0.0001, 2)
 	EntityColor(it\OBJ, 255.0, 255.0, 255.0)
 	
-	CreateItemTemplate("Radio Transceiver", "radio", ItemsPath + "radio.x", ItemsPath + "INVradio.jpg", ItemsPath + "radioHUD.png", 1.0, 1)
-	CreateItemTemplate("Radio Transceiver", "fineradio", ItemsPath + "radio.x", ItemsPath + "INVradio.jpg", ItemsPath + "radioHUD.png", 1.0, 1)
-	CreateItemTemplate("Radio Transceiver", "veryfineradio", ItemsPath + "radio.x", ItemsPath + "INVradio.jpg", ItemsPath + "radioHUD.png", 1.0, 1)
-	CreateItemTemplate("Radio Transceiver", "18vradio", ItemsPath + "radio.x", ItemsPath + "INVradio.jpg", ItemsPath + "radioHUD.png", 1.02, 1)
+	CreateItemTemplate("Radio Transceiver", "radio", ItemsPath + "radio.x", ItemsPath + "INV_radio.png", ItemsPath + "radio_HUD.png", 1.0, 1)
+	CreateItemTemplate("Radio Transceiver", "fineradio", ItemsPath + "radio.x", ItemsPath + "INV_radio.png", ItemsPath + "radio_HUD.png", 1.0, 1)
+	CreateItemTemplate("Radio Transceiver", "veryfineradio", ItemsPath + "radio.x", ItemsPath + "INV_radio.png", ItemsPath + "radio_HUD.png", 1.0, 1)
+	CreateItemTemplate("Radio Transceiver", "18vradio", ItemsPath + "radio.x", ItemsPath + "INV_radio.png", ItemsPath + "radio_HUD.png", 1.02, 1)
 	
 	CreateItemTemplate("Severed Hand", "hand", ItemsPath + "severed_hand.b3d", ItemsPath + "INV_severed_hand.png", "", 0.03, 2)
 	CreateItemTemplate("Black Severed Hand", "hand2", ItemsPath + "severed_hand.b3d", ItemsPath + "INV_severed_hand(2).png", "", 0.03, 2, ItemsPath + "severed_hand(2).png")
 	
-	CreateItemTemplate("S-NAV Navigator", "nav", ItemsPath + "navigator.x", ItemsPath + "INVnavigator.jpg", ItemsPath + "navigator.png", 0.0008, 1)
-	CreateItemTemplate("S-NAV Navigator Ultimate", "nav", ItemsPath + "navigator.x", ItemsPath + "INVnavigator.jpg", ItemsPath + "navigator.png", 0.0008, 1)
-	CreateItemTemplate("S-NAV 300 Navigator", "nav", ItemsPath + "navigator.x", ItemsPath + "INVnavigator.jpg", ItemsPath + "navigator.png", 0.0008, 1)
-	CreateItemTemplate("S-NAV 310 Navigator", "nav", ItemsPath + "navigator.x", ItemsPath + "INVnavigator.jpg", ItemsPath + "navigator.png", 0.0008, 1)
+	CreateItemTemplate("S-NAV Navigator", "nav", ItemsPath + "navigator.x", ItemsPath + "INV_navigator.png", ItemsPath + "navigator_HUD.png", 0.0008, 1)
+	CreateItemTemplate("S-NAV Navigator Ultimate", "nav", ItemsPath + "navigator.x", ItemsPath + "INV_navigator.png", ItemsPath + "navigator_HUD.png", 0.0008, 1)
+	CreateItemTemplate("S-NAV 300 Navigator", "nav", ItemsPath + "navigator.x", ItemsPath + "INV_navigator.png", ItemsPath + "navigator_HUD.png", 0.0008, 1)
+	CreateItemTemplate("S-NAV 310 Navigator", "nav", ItemsPath + "navigator.x", ItemsPath + "INV_navigator.png", ItemsPath + "navigator_HUD.png", 0.0008, 1)
 	
 	CreateItemTemplate("9V Battery", "bat", ItemsPath + "battery.x", ItemsPath + "INV_battery_9v.png", "", 0.008, 1)
 	CreateItemTemplate("18V Battery", "18vbat", ItemsPath + "battery.x", ItemsPath + "INV_battery_18v.png", "", 0.01, 1, ItemsPath + "battery_18V.png")
@@ -312,7 +312,7 @@ Function InitItemTemplates()
 	CreateItemTemplate("Level 4 Key Card", "key4", ItemsPath + "key_card.x", ItemsPath + "INV_key_card_lvl_4.png", "", 0.0004, 1, ItemsPath + "key_card_lvl_4.png")
 	CreateItemTemplate("Level 5 Key Card", "key5", ItemsPath + "key_card.x", ItemsPath + "INV_key_card_lvl_5.png", "", 0.0004, 1, ItemsPath + "key_card_lvl_5.png")
 	
-	CreateItemTemplate("Lost Key", "key", ItemsPath + "key.b3d", ItemsPath + "INV_key.png", "", 0.0028, 3)
+	CreateItemTemplate("Lost Key", "key", ItemsPath + "key.b3d", ItemsPath + "INV_key.png", "", 0.003, 3)
 	
 	CreateItemTemplate("Mastercard", "misc", ItemsPath + "key_card.x", ItemsPath + "INV_master_card.png", "", 0.0004, 1, ItemsPath + "master_card.png")
 	

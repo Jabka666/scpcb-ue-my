@@ -914,6 +914,7 @@ Function UpdateConsole()
 					
 					I_008\Timer = 0.0
 					
+					DeafTimer = 0.0
 					DeathTimer = 0.0
 					
 					Stamina = 100.0
@@ -933,6 +934,16 @@ Function UpdateConsole()
 							RemoveEvent(e)
 						EndIf
 					Next
+					
+					If BlinkEffect > 1.0 Then 
+						BlinkEffect = 1.0
+						BlinkEffectTimer = 0.0
+					EndIf
+					
+					If StaminaEffect > 1.0 Then
+						StaminaEffect = 1.0
+						StaminaEffectTimer = 0.0
+					EndIf
 					;[End Block]
 				Case "teleport"
 					;[Block]
@@ -3073,7 +3084,7 @@ Repeat
 				EndIf
 			End If
 			
-			If EyeStuck > 0 Then 
+			If EyeStuck > 0.0 Then 
 				BlinkTimer = BLINKFREQ
 				EyeStuck = Max(EyeStuck - FPSfactor, 0.0)
 				
@@ -3085,16 +3096,16 @@ Repeat
 				EndIf
 			EndIf
 			
-			If BlinkTimer < 0 Then
-				If BlinkTimer > - 5.0 Then
+			If BlinkTimer < 0.0 Then
+				If BlinkTimer > -5.0 Then
 					DarkA = Max(DarkA, Sin(Abs(BlinkTimer * 18.0)))
-				ElseIf BlinkTimer > - 15.0
+				ElseIf BlinkTimer > -15.0
 					DarkA = 1.0
 				Else
 					DarkA = Max(DarkA, Abs(Sin(BlinkTimer * 18.0)))
 				EndIf
 				
-				If BlinkTimer =< - 20 Then
+				If BlinkTimer =< -20.0 Then
 					; ~ Randomizes the frequency of blinking. Scales with difficulty.
 					Select SelectedDifficulty\OtherFactors
 						Case EASY
@@ -4019,7 +4030,7 @@ Function MovePlayer()
 		
 	If Playable Then
 		If KeyHit(KEY_BLINK) Then BlinkTimer = 0.0
-		If KeyDown(KEY_BLINK) And BlinkTimer < - 10.0 Then BlinkTimer = -10.0
+		If KeyDown(KEY_BLINK) And BlinkTimer < -10.0 Then BlinkTimer = -10.0
 	EndIf
 	
 	If HeartBeatVolume > 0.0 Then
@@ -4310,7 +4321,7 @@ Function DrawGUI()
 					If e\EventState > 600.0 Then
 						If BlinkTimer < -3.0 And BlinkTimer > -10.0 Then
 							If e\Img = 0 Then
-								If BlinkTimer > -5 And Rand(30) = 1 Then
+								If BlinkTimer > -5.0 And Rand(30) = 1 Then
 									PlaySound_Strict(DripSFX(0))
 									If e\Img = 0 Then e\Img = LoadImage_Strict("GFX\npcs\scp_106_face.png")
 								EndIf
@@ -4337,7 +4348,7 @@ Function DrawGUI()
 						EndIf
 					Else
 						If e\Img <> 0 Then FreeImage(e\Img) : e\Img = 0
-						If BlinkTimer < -3 Then
+						If BlinkTimer < -3.0 Then
 							If ChannelPlaying(e\SoundCHN) = False Then e\SoundCHN = PlaySound_Strict(e\Sound)
 						Else
 							If ChannelPlaying(e\SoundCHN) = True Then StopChannel(e\SoundCHN)
@@ -4430,7 +4441,7 @@ Function DrawGUI()
 		Color(255, 255, 255)
 		Rect(x, y, Width, Height, False)
 		For i = 1 To Int(((Width - 2) * (BlinkTimer / (BLINKFREQ))) / 10.0)
-			If BlinkTimer < 180.0 Then
+			If BlinkTimer < 160.0 Then
 				DrawImage(BlinkMeterRedIMG, x + 3 + 10 * (i - 1), y + 3)
 			Else
 				DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
@@ -4459,7 +4470,7 @@ Function DrawGUI()
 		Color(255, 255, 255)
 		Rect(x, y, Width, Height, False)
 		For i = 1 To Int(((Width - 2) * (Stamina / 100.0)) / 10.0)
-			If Stamina < 30.0 Then
+			If Stamina < 25.0 Then
 				DrawImage(StaminaMeterRedIMG, x + 3 + 10 * (i - 1), y + 3)
 			Else
 				DrawImage(StaminaMeterIMG, x + 3 + 10 * (i - 1), y + 3)
@@ -6344,6 +6355,22 @@ Function DrawGUI()
 							DeathMsg = DeathMsg + "Chemical analysis of the cigarette has been inconclusive, although it seems to contain a high concentration of an unidentified chemical "
 							DeathMsg = DeathMsg + "whose molecular structure is remarkably similar to that of tetrahydrocannabinol."
 							Msg = Chr(34) + "UH WHERE... WHAT WAS I DOING AGAIN... MAN I NEED TO TAKE A NAP..." + Chr(34)
+							Kill()						
+						EndIf
+						MsgTimer = 70.0 * 6.0
+						RemoveItem(SelectedItem)
+					EndIf
+					;[End Block]
+				Case "scp420s"
+					;[Block]
+					If CanUseItem(False, True) Then
+						If Wearing714 = 1 Or WearingGasMask = 3 Or WearingHazmat = 3 Then
+							Msg = Chr(34) + "DUDE WTF THIS SHIT DOESN'T EVEN WORK." + Chr(34)
+						Else
+							DeathMsg = SubjectName + " found in a comatose state in [DATA REDACTED]. The subject was holding what appears to be a cigarette while smiling widely. "
+							DeathMsg = DeathMsg + "Chemical analysis of the cigarette has been inconclusive, although it seems to contain a high concentration of an unidentified chemical "
+							DeathMsg = DeathMsg + "whose molecular structure is remarkably similar to that of tetrahydrocannabinol."
+							Msg = Chr(34) + "UUUUUUUUUUUUHHHHHHHHHHHH..." + Chr(34)
 							Kill()						
 						EndIf
 						MsgTimer = 70.0 * 6.0
@@ -10851,7 +10878,7 @@ Function RenderWorld2()
 						HasBattery = 0
 						Msg = "The batteries in these night vision goggles died."
 						BlinkTimer = -1.0
-						MsgTimer = 350
+						MsgTimer = 70 * 5.0
 						Exit
 					ElseIf Inventory(i)\State =< 100.0 Then
 						HasBattery = 1
@@ -10873,7 +10900,7 @@ Function RenderWorld2()
 		ShowEntity(ov\OverlayID[5])
 	EndIf
 	
-	If BlinkTimer < - 16.0 Or BlinkTimer > - 6.0
+	If BlinkTimer < -16.0 Or BlinkTimer > -6.0
 		If WearingNightVision = 2 And HasBattery <> 0 Then ; ~ Show a HUD
 			NVTimer = NVTimer - FPSfactor
 			If NVTimer =< 0.0 Then
@@ -10971,7 +10998,7 @@ Function RenderWorld2()
 	RenderWorld()
 	CameraProjMode(Ark_Blur_Cam, 0)
 	
-	If BlinkTimer < - 16.0 Or BlinkTimer > - 6.0
+	If BlinkTimer < -16.0 Or BlinkTimer > -6.0
 		If (WearingNightVision = 1 Or WearingNightVision = 2) And (HasBattery = 1) And ((MilliSecs2() Mod 800) < 400) Then
 			Color(255, 0, 0)
 			AASetFont(fo\FontID[2])
@@ -11331,5 +11358,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#FC8#132A#1B6C
+;~B#FD3#1335#1B87
 ;~C#Blitz3D
