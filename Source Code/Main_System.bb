@@ -13,8 +13,6 @@ Include "Source Code\Fullscreen_Window_Fix.bb"
 Include "Source Code\KeyName.bb"
 Include "Source Code\INI_System.bb"
 
-Include "Source Code\Devil_Particle_System.bb"
-
 Global ErrorFile$ = "error_log_"
 
 Local ErrorFileInd% = 0
@@ -1739,21 +1737,6 @@ Function UpdateConsole()
 						EndIf
 					EndIf
 					;[End Block]
-				Case "spawnparticles"
-					;[Block]
-					If Instr(ConsoleInput, " ") <> 0 Then
-						StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
-					Else
-						StrTemp = ""
-					EndIf
-					
-					If Int(StrTemp) > -1 And Int(StrTemp) =< 1 ; ~ This is the maximum ID of particles by Devil Particle system, will be increased after time -- ENDSHN
-						SetEmitter(Collider, ParticleEffect[Int(StrTemp)])
-						CreateConsoleMsg("Spawned particle emitter with ID " + Int(StrTemp) + " at player's position.")
-					Else
-						CreateConsoleMsg("Particle emitter with ID " + Int(StrTemp) + " not found.", 255, 150, 0)
-					EndIf
-					;[End Block]
 				Case "giveachievement"
 					;[Block]
 					If Instr(ConsoleInput, " ") <> 0 Then
@@ -2090,8 +2073,6 @@ Next
 NavImages(4) = LoadImage_Strict("GFX\navigator\batterymeter.png")
 
 Global NavBG% = CreateImage(GraphicWidth, GraphicHeight)
-
-Global ParticleEffect%[10]
 
 Global DTextures%[MaxDTextures]
 
@@ -3074,8 +3055,6 @@ Repeat
 			; ~ Added a simple code for updating the Particles function depending on the FPSFactor (still WIP, might not be the final version of it) -- ENDSHN
 			UpdateParticles_Time = Min(1.0, UpdateParticles_Time + FPSfactor)
 			If UpdateParticles_Time = 1.0
-				UpdateDevilEmitters()
-				UpdateParticles_Devil()
 				UpdateParticles_Time = 0.0
 			EndIf
 		EndIf
@@ -8257,7 +8236,7 @@ Function LoadEntities()
 			If File$ = "" Then Exit
 			If FileType("SFX\Radio\UserTracks\" + File$) = 1 Then
 				Test = LoadSound("SFX\Radio\UserTracks\" + File$)
-				If Test <> 0
+				If Test <> 0 Then
 					UserTrackName(UserTrackMusicAmount) = File$
 					UserTrackMusicAmount = UserTrackMusicAmount + 1
 				EndIf
@@ -8275,7 +8254,7 @@ Function LoadEntities()
 	ParticleTextures(3) = LoadTexture_Strict("GFX\npcs\hg.pt", 1 + 2)
 	ParticleTextures(4) = LoadTexture_Strict("GFX\map\sun.png", 1 + 2)
 	ParticleTextures(5) = LoadTexture_Strict("GFX\bloodsprite.png", 1 + 2)
-	ParticleTextures(6) = LoadTexture_Strict("GFX\smoke2.png", 1 + 2)
+	ParticleTextures(6) = LoadTexture_Strict("GFX\smoke(2).png", 1 + 2)
 	ParticleTextures(7) = LoadTexture_Strict("GFX\spark.png", 1 + 2)
 	ParticleTextures(8) = LoadTexture_Strict("GFX\particle.png", 1 + 2)
 	
@@ -8380,71 +8359,6 @@ Function LoadEntities()
     Next
 	
 	TextureLodBias(TextureFloat)
-	; ~ Devil Particle System
-	; ~ ParticleEffect[] numbers:
-	; ~ 0 - electric spark
-	; ~ 1 - smoke effect
-	
-	Local t0%
-	
-	InitParticles(Camera)
-	
-	; ~ Spark Effect (short)
-	ParticleEffect[0] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[0], 3)
-	SetTemplateInterval(ParticleEffect[0], 1)
-	SetTemplateParticlesPerInterval(ParticleEffect[0], 6)
-	SetTemplateEmitterLifeTime(ParticleEffect[0], 6)
-	SetTemplateParticleLifeTime(ParticleEffect[0], 20, 30)
-	SetTemplateTexture(ParticleEffect[0], "GFX\spark(2).png", 2, 3)
-	SetTemplateOffset(ParticleEffect[0], -0.1, 0.1, -0.1, 0.1, -0.1, 0.1)
-	SetTemplateVelocity(ParticleEffect[0], -0.0375, 0.0375, -0.0375, 0.0375, -0.0375, 0.0375)
-	SetTemplateAlignToFall(ParticleEffect[0], True, 45)
-	SetTemplateGravity(ParticleEffect[0], 0.001)
-	SetTemplateAlphaVel(ParticleEffect[0], True)
-	SetTemplateSize(ParticleEffect[0], 0.03125, 0.0625, 0.7, 1)
-	SetTemplateColors(ParticleEffect[0], $0000FF, $6565FF)
-	SetTemplateFloor(ParticleEffect[0], 0.0, 0.5)
-	
-	; ~ Smoke effect (for some vents)
-	ParticleEffect[1] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[1], 1)
-	SetTemplateInterval(ParticleEffect[1], 1)
-	SetTemplateEmitterLifeTime(ParticleEffect[1], 3)
-	SetTemplateParticleLifeTime(ParticleEffect[1], 30, 45)
-	SetTemplateTexture(ParticleEffect[1], "GFX\smoke2.png", 2, 1)
-	SetTemplateOffset(ParticleEffect[1], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
-	SetTemplateVelocity(ParticleEffect[1], 0.0, 0.0, 0.02, 0.025, 0.0, 0.0)
-	SetTemplateAlphaVel(ParticleEffect[1], True)
-	SetTemplateSize(ParticleEffect[1], 0.4, 0.4, 0.5, 1.5)
-	SetTemplateSizeVel(ParticleEffect[1], .01, 1.01)
-	
-	; ~ Smoke effect (for decontamination gas)
-	ParticleEffect[2] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[2], 1)
-	SetTemplateInterval(ParticleEffect[2], 1)
-	SetTemplateEmitterLifeTime(ParticleEffect[2], 3)
-	SetTemplateParticleLifeTime(ParticleEffect[2], 30, 45)
-	SetTemplateTexture(ParticleEffect[2], "GFX\smoke.png", 2, 1)
-	SetTemplateOffset(ParticleEffect[2], -0.1, 0.1, -0.1, 0.1, -0.1, 0.1)
-	SetTemplateVelocity(ParticleEffect[2], -0.005, 0.005, 0.0, -0.03, -0.005, 0.005)
-	SetTemplateAlphaVel(ParticleEffect[2], True)
-	SetTemplateSize(ParticleEffect[2], 0.4, 0.4, 0.5, 1.5)
-	SetTemplateSizeVel(ParticleEffect[2], .01, 1.01)
-	SetTemplateGravity(ParticleEffect[2], 0.005)
-	t0 = CreateTemplate()
-	SetTemplateEmitterBlend(t0, 1)
-	SetTemplateInterval(t0, 1)
-	SetTemplateEmitterLifeTime(t0, 3)
-	SetTemplateParticleLifeTime(t0, 30, 45)
-	SetTemplateTexture(t0, "GFX\smoke2.png", 2, 1)
-	SetTemplateOffset(t0, -0.1, 0.1, -0.1, 0.1, -0.1, 0.1)
-	SetTemplateVelocity(t0, -0.005, 0.005, 0.0, -0.03, -0.005, 0.005)
-	SetTemplateAlphaVel(t0, True)
-	SetTemplateSize(t0, 0.4, 0.4, 0.5, 1.5)
-	SetTemplateSizeVel(t0, .01, 1.01)
-	SetTemplateGravity(ParticleEffect[2], 0.005)
-	SetTemplateSubTemplate(ParticleEffect[2], t0)
 	
 	Room2slCam = CreateCamera()
 	CameraViewport(Room2slCam, 0, 0, 128, 128)
@@ -8723,8 +8637,6 @@ Function NullGame(PlayButtonSFX% = True)
 	KillSounds()
 	If PlayButtonSFX Then PlaySound_Strict(ButtonSFX)
 	
-	FreeParticles()
-	
 	ClearTextureCache()
 	
 	DebugHUD = False
@@ -8979,8 +8891,6 @@ Function NullGame(PlayButtonSFX% = True)
 	NTF_1499Z = 0.0
 	Wearing1499 = False
 	DeleteChunks()
-	
-	DeleteDevilEmitters()
 	
 	OptionsMenu = -1
 	QuitMsg = -1
@@ -11490,5 +11400,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#1009#136D#1BCB
+;~B#FF4#1358#1BB6
 ;~C#Blitz3D

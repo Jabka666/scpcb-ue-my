@@ -137,12 +137,6 @@ Function PauseSounds()
 		EndIf
 	Next
 	
-	For dem.DevilEmitters = Each DevilEmitters
-		If dem\SoundCHN <> 0 Then
-			If ChannelPlaying(dem\SoundCHN) = True Then PauseChannel(dem\SoundCHN)
-		EndIf
-	Next
-	
 	If AmbientSFXCHN <> 0 Then
 		If ChannelPlaying(AmbientSFXCHN) = True Then PauseChannel(AmbientSFXCHN)
 	EndIf
@@ -211,12 +205,6 @@ Function ResumeSounds()
 		EndIf
 	Next
 	
-	For dem.DevilEmitters = Each DevilEmitters
-		If dem\SoundCHN <> 0 Then
-			If ChannelPlaying(dem\SoundCHN) = True Then ResumeChannel(dem\SoundCHN)
-		EndIf
-	Next
-	
 	If AmbientSFXCHN <> 0 Then
 		If ChannelPlaying(AmbientSFXCHN) = True Then ResumeChannel(AmbientSFXCHN)
 	EndIf	
@@ -231,7 +219,7 @@ Function ResumeSounds()
 End Function
 
 Function KillSounds()
-	Local i%, e.Events, n.NPCs, d.Doors, dem.DevilEmitters, snd.Sound
+	Local i%, e.Events, n.NPCs, d.Doors, snd.Sound
 	
 	For i = 0 To 9
 		If TempSounds[i] <> 0 Then FreeSound_Strict(TempSounds[i]) : TempSounds[i] = 0
@@ -284,12 +272,6 @@ Function KillSounds()
 	For d.Doors = Each Doors
 		If d\SoundCHN <> 0 Then
 			If ChannelPlaying(d\SoundCHN) = True Then StopChannel(d\SoundCHN)
-		EndIf
-	Next
-	
-	For dem.DevilEmitters = Each DevilEmitters
-		If dem\SoundCHN <> 0 Then
-			If ChannelPlaying(dem\SoundCHN) = True Then StopChannel(dem\SoundCHN)
 		EndIf
 	Next
 	

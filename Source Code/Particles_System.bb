@@ -95,6 +95,46 @@ Type Emitters
 	Field SizeChange#, AChange#
 End Type 
 
+Function CreateEmitter.Emitters(x#, y#, z#, EmitterType%) 
+	Local e.Emitters = New Emitters
+	
+	e\OBJ = CreatePivot()
+	NameEntity(e\OBJ, "Emitter1")
+	PositionEntity(e\OBJ, x, y, z, True)
+	
+	Select EmitterType
+		Case 0
+			;[Block]
+			e\Size = 0.03
+			e\Gravity = -0.2
+			e\LifeTime = 200.0
+			e\SizeChange = 0.005
+			e\Speed = 0.004
+			e\RandAngle = 20.0
+			e\AChange = -0.008
+			;[End Block]
+		Case 1
+			;[Block]
+			e\Size = 0.03
+			e\Gravity = -0.2
+			e\LifeTime = 200.0
+			e\SizeChange = 0.008
+			e\Speed = 0.004
+			e\RandAngle = 40
+			e\AChange = -0.01
+			e\MinImage = 6 : e\MaxImage = 6
+			;[End Block]
+	End Select
+	
+	For r.Rooms = Each Rooms
+		If Abs(EntityX(e\OBJ) - EntityX(r\OBJ)) < 4.0 And Abs(EntityZ(e\OBJ) - EntityZ(r\OBJ)) < 4.0 Then
+			e\Room = r
+		EndIf
+	Next
+	
+	Return(e)
+End Function
+
 Function UpdateEmitters()
 	InSmoke = False
 	For e.Emitters = Each Emitters
@@ -143,127 +183,6 @@ Function UpdateEmitters()
 		EndIf
 		EyeIrritation = EyeIrritation + FPSfactor * 4.0
 	EndIf	
-End Function
-	
-Function CreateEmitter.Emitters(x#, y#, z#, EmitterType%) 
-	Local e.Emitters = New Emitters
-		
-	e\OBJ = CreatePivot()
-	NameEntity(e\OBJ, "Emitter1")
-	PositionEntity(e\OBJ, x, y, z, True)
-		
-	Select EmitterType
-		Case 0
-			;[Block]
-			e\Size = 0.03
-			e\Gravity = -0.2
-			e\LifeTime = 200.0
-			e\SizeChange = 0.005
-			e\Speed = 0.004
-			e\RandAngle = 20.0
-			e\AChange = -0.008
-			;[End Block]
-		Case 1
-			;[Block]
-			e\Size = 0.03
-			e\Gravity = -0.2
-			e\LifeTime = 200.0
-			e\SizeChange = 0.008
-			e\Speed = 0.004
-			e\RandAngle = 40
-			e\AChange = -0.01
-			e\MinImage = 6 : e\MaxImage = 6
-			;[End Block]
-	End Select
-	
-	For r.Rooms = Each Rooms
-		If Abs(EntityX(e\OBJ) - EntityX(r\OBJ)) < 4.0 And Abs(EntityZ(e\OBJ) - EntityZ(r\OBJ)) < 4.0 Then
-			e\Room = r
-		EndIf
-	Next
-	
-	Return(e)
-End Function
-
-Type DevilEmitters
-	Field OBJ%
-	Field x#, y#, z#
-	Field ParticleID%
-	Field room.Rooms
-	Field Timer# = 0.0
-	Field MaxTimer#
-	Field SoundCHN%
-	Field IsDeconGas% = False
-End Type
-
-Function CreateDevilEmitter.DevilEmitters(x#, y#, z#, room.Rooms, ParticleID%, MaxTime# = 2.0)
-	Local dem.DevilEmitters = New DevilEmitters
-	
-	dem\OBJ = CreatePivot()
-	NameEntity(dem\OBJ, "Emitter2")
-	PositionEntity(dem\OBJ, x, y, z, True)
-	EntityParent(dem\OBJ, room\OBJ)
-	dem\room = room
-	dem\x = x
-	dem\y = y
-	dem\z = z
-	dem\ParticleID = ParticleID
-	dem\MaxTimer = MaxTime
-	
-	Return(dem)
-End Function
-
-Function UpdateDevilEmitters()
-	Local dem.DevilEmitters
-	Local InSmoke = False
-	
-	For dem = Each DevilEmitters
-		If FPSfactor > 0.0 And (PlayerRoom = dem\room Or dem\room\Dist < 8.0)
-			If dem\Timer = 0.0
-				SetEmitter(dem\OBJ, ParticleEffect[dem\ParticleID])
-				dem\Timer = FPSfactor
-			ElseIf dem\Timer < dem\MaxTimer
-				dem\Timer = Min(dem\Timer + FPSfactor, dem\MaxTimer)
-			Else
-				dem\Timer = 0.0
-			EndIf
-			If dem\IsDeconGas
-				dem\SoundCHN = LoopSound2(HissSFX, dem\SoundCHN, Camera, dem\OBJ)
-				If InSmoke = False Then
-					If WearingGasMask = 0 And WearingHazmat = 0 Then
-						Local Dist# = Distance(EntityX(Camera, True), EntityZ(Camera, True), EntityX(dem\OBJ, True), EntityZ(dem\OBJ, True))
-						
-						If Dist < 0.8 Then
-							If Abs(EntityY(Camera, True) - EntityY(dem\OBJ, True)) < 5.0 Then InSmoke = True
-						EndIf
-					EndIf					
-				EndIf
-			EndIf
-		EndIf
-	Next
-	
-	If InSmoke Then
-		If EyeIrritation > (70.0 * 6.0) Then BlurVolume = Max(BlurVolume, (EyeIrritation - (70.0 * 6.0)) / (70.0 * 24.0))
-		If EyeIrritation > (70.0 * 24.0) Then 
-			DeathMsg = SubjectName + " found dead in [DATA REDACTED]. Cause of death: Suffocation due to decontamination gas."
-			Kill()
-		EndIf
-		
-		If KillTimer >= 0.0 Then 
-			If Rand(150) = 1 Then
-				If CoughCHN = 0 Then
-					CoughCHN = PlaySound_Strict(CoughSFX(Rand(0, 2)))
-				Else
-					If ChannelPlaying(CoughCHN) = False Then CoughCHN = PlaySound_Strict(CoughSFX(Rand(0, 2)))
-				End If
-			EndIf
-		EndIf
-		EyeIrritation = EyeIrritation + FPSfactor * 4.0
-	EndIf
-End Function
-
-Function DeleteDevilEmitters()
-	Delete Each DevilEmitters
 End Function
 
 ;~IDEal Editor Parameters:

@@ -1837,7 +1837,7 @@ End Function
 Function FillRoom(r.Rooms)
 	CatchErrors("Uncaught (FillRoom)")
 	Local d.Doors, d2.Doors, sc.SecurityCams, de.Decals, r2.Rooms, sc2.SecurityCams
-	Local it.Items, it2.Items, clipboard.Items
+	Local it.Items, it2.Items, clipboard.Items, em.Emitters
 	Local xTemp%, yTemp%, zTemp%
 	Local t1%
 	Local scX#, scY#, scZ#, scAngle#
@@ -1938,8 +1938,7 @@ Function FillRoom(r.Rooms)
 			EntityParent(sc\ScrOBJ, r\OBJ)
 			
 			; ~ Smoke
-			Local em.Emitters = CreateEmitter(r\x - 175.0 * RoomScale, r\y + 370.0 * RoomScale, r\z + 656.0 * RoomScale, 0.0)
-			
+			em = CreateEmitter(r\x - 175.0 * RoomScale, r\y + 370.0 * RoomScale, r\z + 656.0 * RoomScale, 0)
 			em\RandAngle = 20.0 : em\Speed = 0.05 : em\SizeChange = 0.007 : em\Achange = -0.006 : em\Gravity = -0.24
 			TurnEntity(em\OBJ, 90.0, 0.0, 0.0)
 			EntityParent(em\OBJ, r\OBJ)
@@ -2368,7 +2367,7 @@ Function FillRoom(r.Rooms)
 			For xTemp = -1 To 1 Step 2
 				For zTemp = -1 To 1
 					em = CreateEmitter(r\x + 202.0 * RoomScale * xTemp, 8.0 * RoomScale, r\z + 256.0 * RoomScale * zTemp, 0)
-					em\RandAngle = 30 : em\Speed = 0.0045 : em\SizeChange = 0.007 : em\Achange = -0.016
+					em\RandAngle = 30.0 : em\Speed = 0.0045 : em\SizeChange = 0.007 : em\Achange = -0.016
 					r\Objects[i] = em\OBJ
 					If i < 3 Then 
 						TurnEntity(em\OBJ, 0.0, -90.0, 0.0) 
@@ -3830,9 +3829,6 @@ Function FillRoom(r.Rooms)
 			PositionEntity(sc\ScrOBJ, r\x + 1456.0 * RoomScale, r\y + 608.0 * RoomScale, r\z + 352.0 * RoomScale)
 			TurnEntity(sc\ScrOBJ, 0.0, 90.0, 0.0)
 			EntityParent(sc\ScrOBJ, r\OBJ)
-			
-			; ~ White smoke under balcony
-			CreateDevilEmitter(r\x + 3384.0 * RoomScale, r\y + 510.0 * RoomScale, r\z + 2400.0 * RoomScale, r, 1, 4)
 			
 			de = CreateDecal(0, r\x + 272.0 * RoomScale, r\y + 0.005, r\z + 262.0 * RoomScale, 90.0, Rand(360.0), 0.0)
 			EntityParent(de\OBJ, r\OBJ)
@@ -8040,7 +8036,6 @@ Function UpdateRoomLights(Cam%)
 							If r\RoomTemplate\UseLightSpark Then
 								If r\LightFlicker[i] > 4.0 Then
 									If Rand(400) = 1 Then
-										SetEmitter(r\LightSpritesPivot[i], ParticleEffect[0])
 										PlaySound2(IntroSFX(Rand(8, 10)), Cam, r\LightSpritesPivot[i])
 										ShowEntity(r\LightSpark[i])
 										r\LightSparkTimer[i] = FPSfactor
@@ -8680,5 +8675,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11FA
+;~B#11F6
 ;~C#Blitz3D
