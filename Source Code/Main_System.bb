@@ -3135,7 +3135,9 @@ Repeat
 				BlinkTimer = BlinkTimer - FPSfactor
 			Else
 				BlinkTimer = BlinkTimer - FPSfactor * 0.6 * BlinkEffect
-				If EyeIrritation > 0.0 Then BlinkTimer = BlinkTimer - Min(EyeIrritation / 100.0 + 1.0, 4.0) * FPSfactor
+				If WearingNightVision = 0 Then
+					If EyeIrritation > 0.0 Then BlinkTimer = BlinkTimer - Min(EyeIrritation / 100.0 + 1.0, 4.0) * FPSfactor
+				EndIf
 				
 				DarkA = Max(DarkA, 0.0)
 			End If
@@ -4484,7 +4486,7 @@ Function DrawGUI()
 		Color(0, 0, 0)
 		Rect(x - 50, y, 30, 30)
 		
-		If BlurTimer > 550.0 Or BlinkEffect > 1.0 Or LightFlash > 0.0 Or LightBlink > 0.0 Or EyeIrritation > 0.0 Then
+		If BlurTimer > 550.0 Or BlinkEffect > 1.0 Or LightFlash > 0.0 Or ((LightBlink > 0.0 Or EyeIrritation > 0.0) And WearingNightVision = 0) Then
 			Color(200, 0, 0)
 			Rect(x - 50 - 3, y - 3, 30 + 6, 30 + 6)
 		Else
@@ -4621,12 +4623,13 @@ Function DrawGUI()
 			AAText(x + 400, 360, "Deaf Timer: " + DeafTimer)
 			AAText(x + 400, 380, "Blink Effect Timer: " + BlinkEffectTimer)
 			AAText(x + 400, 400, "Stamina Effect Timer: " + StaminaEffectTimer)
+			AAText(x + 400, 420, "Eye Irritation Timer: " + EyeIrritation)
 			
-			AAText(x + 400, 440, "SCP-008 Infection: " + I_008\Timer)
-			AAText(x + 400, 460, "SCP-409 Crystallization: " + I_409\Timer)
-			AAText(x + 400, 480, "SCP-427 State (Secs): " + Int(I_427\Timer / 70.0))
+			AAText(x + 400, 460, "SCP-008 Infection: " + I_008\Timer)
+			AAText(x + 400, 480, "SCP-409 Crystallization: " + I_409\Timer)
+			AAText(x + 400, 500, "SCP-427 State (Secs): " + Int(I_427\Timer / 70.0))
 			For i = 0 To 5
-				AAText(x + 400, 500 + (20 * i), "SCP-1025 State " + i + ": " + SCP1025State[i])
+				AAText(x + 400, 520 + (20 * i), "SCP-1025 State " + i + ": " + SCP1025State[i])
 			Next
 			
 			AAText(x + 760, 40, "*****************************")
@@ -11400,5 +11403,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#FF4#1358#1BB6
+;~B#FF6#135B#1BB9
 ;~C#Blitz3D
