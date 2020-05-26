@@ -3781,14 +3781,13 @@ Function FillRoom(r.Rooms)
 			d\AutoClose = False : d\Locked = True : d\MTFClose = False
 			
 			d = CreateDoor(r\Zone, r\x - 640.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 64.0 * RoomScale, 90.0, r)
-			d\Locked = True : d\AutoClose = False
+			d\Locked = True : d\AutoClose = False : d\MTFClose = False
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			
-			d = CreateDoor(r\Zone, r\x + 1280.0 * RoomScale, r\y + 383.9 * RoomScale, r\z + 312.0 * RoomScale, 180.0, r, True)
+			d = CreateDoor(r\Zone, r\x + 1280.0 * RoomScale, r\y + 383.9 * RoomScale, r\z + 312.0 * RoomScale, 180.0, r, True, 4)
 			d\Locked = True : d\AutoClose = False : d\MTFClose = False
 			PositionEntity(d\Buttons[0], r\x + 1120.0 * RoomScale, EntityY(d\Buttons[0], True), r\z + 322.0 * RoomScale, True)
 			PositionEntity(d\Buttons[1], r\x + 1120.0 * RoomScale, EntityY(d\Buttons[1], True), r\z + 302.0 * RoomScale, True)
-			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
 			d = CreateDoor(r\Zone, r\x, r\y, r\z + 1184.0 * RoomScale, 0.0, r)
 			d\Locked = True : d\MTFClose = False
@@ -3803,7 +3802,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\Objects[1], r\x + 448.0 * RoomScale, r\y, r\z + 192.0 * RoomScale)
 			
 			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], EntityX(r\OBJ) + 40.0 * RoomScale, r\y + 460.0 * RoomScale, EntityZ(r\OBJ) + 1072.0 * RoomScale)
+			PositionEntity(r\Objects[2], EntityX(r\OBJ) - 40.0 * RoomScale, r\y + 460.0 * RoomScale, EntityZ(r\OBJ) + 1072.0 * RoomScale)
 			
 			r\Objects[3] = CreatePivot()
 			PositionEntity(r\Objects[3], EntityX(r\OBJ) - 80.0 * RoomScale, r\y + 100.0 * RoomScale, EntityZ(r\OBJ) + 526.0 * RoomScale)
@@ -4307,7 +4306,7 @@ Function FillRoom(r.Rooms)
 			d\AutoClose = False : d\Locked = True : d\MTFClose = False
 			
 			; ~ The door to the staircase in the office room
-			d = CreateDoor(r\Zone, r\x - 2432.0 * RoomScale, r\y, r\z - 1000.0 * RoomScale, 0.0, r)
+			d = CreateDoor(r\Zone, r\x - 2432.0 * RoomScale, r\y, r\z - 1000.0 * RoomScale, 0.0, r, False, 4)
 			d\Locked = True : d\DisableWaypoint = True : d\MTFClose = False
 			PositionEntity(d\Buttons[0], r\x - 2592.0 * RoomScale, EntityY(d\Buttons[0], True), r\z - 1010.0 * RoomScale, True)
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
@@ -8681,5 +8680,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11FB
+;~B#11FA
 ;~C#Blitz3D

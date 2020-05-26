@@ -4,6 +4,7 @@
 
 - Added more console names for NPC's spawning.
 - Added symbols' fast erasing.
+- Added more details to the Gate A.
 
 - Now guard in "room2elevator" event can kill the player if he too close.
 - Now the pass code for O5 Council's office drops from falling guard in SCP-895's event.
@@ -13,12 +14,12 @@
 
 - Changed one bump texture to the better one.
 
-- Replaced O5-14 Burnt Document to batteries in room2offices5.
+- Replaced O5-14 Burnt Document by batteries in room2offices5.
 
 - Removed light cones.
 - Removed unnecessary variables and functions in the code.
 - Removed unnecessary room1archive event.
-- Removed NPCs bumps.
+- Removed NPCs' bumps.
 - Removed all stuff from other mods, except SCP-409, SCP-005, FOV and some files from Box of Horrors.
 - Removed event of SCP-096's containment chamber.
 - Removed some unnecessary files.
@@ -28,43 +29,45 @@
 
 - Optimized items.
 - Optimized startup videos.
-- Optimized event of SCP-012's containment chamber event.
+- Optimized event of SCP-012's containment chamber.
 
 Bug Fixes:
 
-- Fixed appearing of the gas from SCP-035's chamber in Maintenance Tunnels.
+- Fixed appearing of the gas from SCP-035's containment chamber in Maintenance Tunnels.
 - Fixed sounds for big doors locked by SCP-079.
-- Fixed lights in SCP-012's containment chamber.
+- Fixed light in SCP-012's containment chamber.
 - Fixed SCP-1048-A's scream being able to be heard anywhere.
 - Fixed SCP-049 spam-closing the door behind it, if the player tries to open it.
 - Fixed SCP-106's eyes glowing in the dark and flying in midair while he is emerging.
 - Fixed SCP-173's head poking out of its box when recontained by the MTFs.
 - Fixed item's positions in room2closets.
-- Fixed small lamps in room2pit.
+- Fixed missing lamps in room2pit.
 - Fixed missing pipes in SCP-035's containment chamber.
 - Fixed font for startup videos.
 - Fixed lockdown monitor in room4info.
 - Fixed 106sinkhole event when player using NVG.
 - Fixed items not pushing each other away in SCP-970's room.
-- Fixed unnecessary door opening sound in room2sl event.
+- Fixed unnecessary door opening sound in room2sl's event.
 - Fixed SCP-1048-A's double texture.
 - Fixed breath sound in NoClip mode.
 - Fixed weird balcony guard's moving in the intro scene.
 - Fixed step sounds for big containment doors.
 - Fixed red and green frames for the HUD when player wearing a hazmat suit.
 - Fixed wearing system for NVG.
-- Fixed annoying "Secondary Lighting" lever in room2ccont.
+- Fixed annoying Secondary Lighting lever in room2ccont.
 - Fixed button sound not working when not using launcher.
 - Fixed "CanUseItem" function for eyegear.
 - Fixed elevators' pivots for SCP-008, SCP-106 and SCP-079's containment chambers.
 - Fixed lamps' texture in room1endroom3 and SCP-008's containment chamber.
 - Fixed some rooms' descriptions.
-- Fixed missing small lamp in room2testroom.
+- Fixed missing lamp in room2testroom.
 - Fixed missing "spark(2).png" file.
 - Fixed bug with joint.
 - Fixed severed hands' scale.
 - Fixed SCP-1048's document inside the clipboard in room2closets.
 - Fixed messages being visible in the pause menu or console.
+- Fixed crouch sound.
+- Fixed smelly joint.
 
 - Small fixes for room2testroom's event.
 - Small fixes for commands "disablenuke" and "enablecontrol/disablecontrol.

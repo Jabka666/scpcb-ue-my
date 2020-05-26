@@ -3757,12 +3757,10 @@ Function DrawCredits()
 End Function
 
 Function SetCrouch(IsCrouch%)
-	If Stamina > 0.0 Then 
+	If Stamina > 5.0 Then 
+		Crouch = IsCrouch
+		PlaySound_Strict(CrouchSFX)
 		Stamina = Stamina - 20.0
-		If Stamina >= 5.0 Then
-			Crouch = IsCrouch
-			PlaySound_Strict(CrouchSFX)
-		EndIf
 	EndIf
 End Function
 
@@ -11492,5 +11490,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#100B#136F#1BCD
+;~B#1009#136D#1BCB
 ;~C#Blitz3D
