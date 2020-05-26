@@ -2075,12 +2075,12 @@ Function UpdateEvents()
 							de\Size = 0.05 : de\SizeChange = 0.001 : UpdateDecals()
 							EntityAlpha(de\OBJ, 0.8)
 							
-							If Curr106\State > 0.0 Then
-								PositionEntity(Curr106\Collider, EntityX(e\room\Objects[1], True), -10240.0 * RoomScale, EntityZ(e\room\Objects[1], True))
-								Curr106\State = -0.1
-								ShowEntity(Curr106\OBJ)
-								e\EventState2 = 1.0
-							EndIf
+							PositionEntity(Curr106\Collider, EntityX(e\room\Objects[1], True), -1541.0 * RoomScale, EntityZ(e\room\Objects[1], True))
+							SetAnimTime(Curr106\OBJ, 110.0)
+							Curr106\State = -0.1
+							Curr106\PrevY = EntityY(Collider)
+							
+							e\EventState2 = 1.0
 						EndIf
 					ElseIf CoffinDistance < 3.0 Then
 						If e\room\NPC[0] = Null Then
@@ -4602,7 +4602,7 @@ Function UpdateEvents()
 				;[End Block]
 			Case "room2servers"
 				;[Block]
-				If e\EventState = 0 Then
+				If e\EventState = 0.0 Then
 					If PlayerRoom = e\room Then
 						; ~ Close the doors when the player enters the room
 						UseDoor(e\room\RoomDoors[0], False)
@@ -4680,8 +4680,7 @@ Function UpdateEvents()
 									PointEntity(e\room\NPC[0]\Collider, Curr096\Collider)
 								EndIf
 							EndIf
-							If EntityVisible(e\room\NPC[0]\Collider, Curr096\Collider)
-								e\room\RoomDoors[2]\Open = False
+							If EntityVisible(e\room\NPC[0]\Collider, Curr096\Collider) Then
 								e\room\NPC[0]\State = 13.0
 								PointEntity(e\room\NPC[0]\OBJ, Curr096\Collider)
 								RotateEntity(e\room\NPC[0]\Collider, 0.0, CurveAngle(EntityYaw(e\room\NPC[0]\OBJ), EntityYaw(e\room\NPC[0]\Collider), 30.0), 0.0)
@@ -4696,7 +4695,7 @@ Function UpdateEvents()
 								Curr096\Target = e\room\NPC[0]
 							Else
 								If e\EventState > 70.0 * 22.0 Then Curr096\State = 4.0
-								If e\room\NPC[0]\State = 13 Then
+								If e\room\NPC[0]\State = 13.0 Then
 									e\room\NPC[0]\State = 14.0
 									e\room\NPC[0]\PathStatus = FindPath(e\room\NPC[0], EntityX(e\room\OBJ, True), 0.4, EntityZ(e\room\OBJ, True))
 									e\room\NPC[0]\PathTimer = 300.0
@@ -4705,7 +4704,7 @@ Function UpdateEvents()
 							EndIf
 						EndIf
 						
-						If AnimTime(Curr096\OBJ) > 25 And AnimTime(Curr096\OBJ) < 150.0 Then
+						If AnimTime(Curr096\OBJ) > 25.0 And AnimTime(Curr096\OBJ) < 150.0 Then
 							If e\Sound <> 0 Then
 								FreeSound_Strict(e\Sound) : e\Sound = 0
 							EndIf
@@ -10301,5 +10300,5 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#122B#1E60
+;~B#122B#1E5F
 ;~C#Blitz3D

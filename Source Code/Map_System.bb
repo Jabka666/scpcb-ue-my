@@ -3449,13 +3449,6 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\RoomDoors[1]\Buttons[0], EntityX(r\RoomDoors[1]\Buttons[0], True) - 0.061, EntityY(r\RoomDoors[1]\Buttons[0], True), EntityZ(r\RoomDoors[1]\Buttons[0], True), True)
 			PositionEntity(r\RoomDoors[1]\Buttons[1], EntityX(r\RoomDoors[1]\Buttons[1], True) + 0.061, EntityY(r\RoomDoors[1]\Buttons[1], True), EntityZ(r\RoomDoors[1]\Buttons[1], True), True)
 			
-			r\RoomDoors[2] = CreateDoor(r\Zone, r\x - 672.0 * RoomScale, r\y, r\z - 1024.0 * RoomScale, 0.0, r)
-			r\RoomDoors[2]\AutoClose = False : r\RoomDoors[2]\DisableWaypoint = True : r\RoomDoors[2]\MTFClose = False
-			
-			For i = 0 To 1
-				FreeEntity(r\RoomDoors[2]\Buttons[i]) : r\RoomDoors[2]\Buttons[i] = 0
-			Next
-			
 			For k = 0 To 2
 				r\Objects[k * 2] = CopyEntity(o\LeverModelID[0])
 				r\Objects[k * 2 + 1] = CopyEntity(o\LeverModelID[1])
@@ -8675,5 +8668,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11F6
+;~B#11EF
 ;~C#Blitz3D

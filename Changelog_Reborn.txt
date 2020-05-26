@@ -68,6 +68,7 @@ Bug Fixes:
 - Fixed messages being visible in the pause menu or console.
 - Fixed crouch sound.
 - Fixed smelly joint.
+- Fixed SCP-106's appearing in SCP-895's containment chamber.
 
 - Small fixes for room2testroom's event.
 - Small fixes for commands "disablenuke" and "enablecontrol/disablecontrol.

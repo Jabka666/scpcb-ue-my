@@ -4486,7 +4486,7 @@ Function DrawGUI()
 		Color(0, 0, 0)
 		Rect(x - 50, y, 30, 30)
 		
-		If BlurTimer > 550.0 Or BlinkEffect > 1.0 Or LightFlash > 0.0 Or ((LightBlink > 0.0 Or EyeIrritation > 0.0) And WearingNightVision = 0) Then
+		If BlurTimer > 550.0 Or BlinkEffect > 1.0 Or LightFlash > 0.0 Or (((LightBlink > 0.0 And (Not chs\NoBlink)) Or EyeIrritation > 0.0) And WearingNightVision = 0) Then
 			Color(200, 0, 0)
 			Rect(x - 50 - 3, y - 3, 30 + 6, 30 + 6)
 		Else
