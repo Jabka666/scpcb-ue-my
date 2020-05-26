@@ -1570,14 +1570,14 @@ Function UpdateNPCs()
 													EndIf
 												Next
 											EndIf
-										ElseIf Wearing714 = 1 Then
+										ElseIf I_714\Using = 1 Then
 											BlurTimer = BlurTimer + FPSfactor * 2.5
 											If BlurTimer > 250.0 And BlurTimer - FPSfactor * 2.5 =< 250.0 And n\PrevState <> 3 Then
 												If n\SoundCHN2 <> 0 Then StopChannel(n\SoundCHN2)
 												n\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\049\714Equipped.ogg"))
 												n\PrevState = 3
 											ElseIf BlurTimer >= 500.0
-												Wearing714 = False
+												I_714\Using = 0
 											EndIf
 										Else
 											CurrCameraZoom = 20.0
@@ -4068,7 +4068,7 @@ Function UpdateNPCs()
 									If n\State3 < 900.0 Then
 										BlurTimer = ((Sin(MilliSecs2() / 50) + 1.0) * 200) / Dist
 										
-										If Wearing714 = 0 And WearingGasMask < 3 And WearingHazmat < 3 And Dist < 16.0 Then
+										If I_714\Using = 0 And WearingGasMask < 3 And WearingHazmat < 3 And Dist < 16.0 Then
 											BlinkEffect = Max(BlinkEffect, 1.5)
 											BlinkEffectTimer = 1000.0
 											

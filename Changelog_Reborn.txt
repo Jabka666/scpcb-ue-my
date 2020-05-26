@@ -23,6 +23,7 @@
 - Removed all stuff from other mods, except SCP-409, SCP-005, FOV and some files from Box of Horrors.
 - Removed event of SCP-096's containment chamber.
 - Removed some unnecessary files.
+- Removed quick loading from SCP-966 and SCP-409's containment chambers.
 
 - Renamed room2testroom to room2testroom2.
 - Renamed room2testroom2 to room2testroom.

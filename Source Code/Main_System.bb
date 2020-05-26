@@ -232,7 +232,7 @@ Global SCP1025State#[6]
 
 Global HeartBeatRate#, HeartBeatTimer#, HeartBeatVolume#
 
-Global WearingGasMask%, WearingHazmat%, WearingVest%, Wearing714%, WearingNightVision%
+Global WearingGasMask%, WearingHazmat%, WearingVest%, WearingNightVision%
 Global NVTimer#
 
 Global SuperMan%, SuperManTimer#
@@ -2431,7 +2431,7 @@ Function UpdateDoors()
 					EndIf
 					If d\AutoClose And RemoteDoorOn = True Then
 						If EntityDistance(Camera, d\OBJ) < 2.1 Then
-							If Wearing714 = 0 And WearingGasMask < 3 And WearingHazmat < 3 Then PlaySound_Strict(HorrorSFX(7))
+							If I_714\Using = 0 And WearingGasMask < 3 And WearingHazmat < 3 Then PlaySound_Strict(HorrorSFX(7))
 							d\Open = False : d\SoundCHN = PlaySound2(CloseDoorSFX(Min(d\Dir, 1), Rand(0, 2)), Camera, d\OBJ) : d\AutoClose = False
 						EndIf
 					EndIf				
@@ -2847,6 +2847,12 @@ Type SCP409
 End Type 
 
 Global I_409.SCP409 = New SCP409
+
+Type SCP714
+	Field Using%
+End Type
+
+Global I_714.SCP714 = New SCP714
 
 Type MapZones
 	Field Transition%[1]
@@ -3821,7 +3827,7 @@ Function MovePlayer()
 		EndIf
 	Next
 	
-	If Wearing714 = 1 Then
+	If I_714\Using = 1 Then
 		Stamina = Min(Stamina, 10.0)
 		Sanity = Max(-850.0, Sanity)
 	EndIf
@@ -4207,7 +4213,7 @@ Function MouseLook()
 		If WearingHazmat = 1 Then
             Stamina = Min(60.0, Stamina)
         EndIf
-		If Wearing714 = 0 Then
+		If I_714\Using = 0 Then
 			If WearingGasMask = 2 Or Wearing1499 = 2 Or WearingHazmat = 2 Then
 				Stamina = Min(100.0, Stamina + (100.0 - Stamina) * 0.01 * FPSfactor)
 			EndIf
@@ -4516,7 +4522,7 @@ Function DrawGUI()
 		Color(0, 0, 0)
 		Rect(x - 50, y, 30, 30)
 		
-		If PlayerRoom\RoomTemplate\Name = "pocketdimension" Or Wearing714 > 0 Or Injuries >= 1.5 Or StaminaEffect > 1.0 Or WearingHazmat = 1 Or WearingVest = 2 Then
+		If PlayerRoom\RoomTemplate\Name = "pocketdimension" Or I_714\Using > 0 Or Injuries >= 1.5 Or StaminaEffect > 1.0 Or WearingHazmat = 1 Or WearingVest = 2 Then
 			Color(200, 0, 0)
 			Rect(x - 50 - 3, y - 3, 30 + 6, 30 + 6)
 		Else
@@ -5064,7 +5070,7 @@ Function DrawGUI()
 						;[End Block]
 					Case "scp714"
 						;[Block]
-						If Wearing714 = 1 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
+						If I_714\Using = 1 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
 						;[End Block]
 					Case "nvgoggles"
 						;[Block]
@@ -5517,7 +5523,7 @@ Function DrawGUI()
 					;[End Block]
 				Case "scp1123"
 					;[Block]
-					If Wearing714 = 0 And WearingGasMask < 3 And WearingHazmat < 3 Then
+					If I_714\Using = 0 And WearingGasMask < 3 And WearingHazmat < 3 Then
 						If PlayerRoom\RoomTemplate\Name <> "room1123" Then
 							ShowEntity(ov\OverlayID[7])
 							LightFlash = 7.0
@@ -5880,7 +5886,7 @@ Function DrawGUI()
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
-					If Wearing714 = 0 And WearingGasMask < 3 And WearingHazmat < 3 Then SCP1025State[SelectedItem\State] = Max(1.0, SCP1025State[SelectedItem\State])
+					If I_714\Using = 0 And WearingGasMask < 3 And WearingHazmat < 3 Then SCP1025State[SelectedItem\State] = Max(1.0, SCP1025State[SelectedItem\State])
 					
 					DrawImage(SelectedItem\ItemTemplate\Img, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\itemtemplate\img) / 2)
 					;[End Block]
@@ -6381,7 +6387,7 @@ Function DrawGUI()
 				Case "scp420j"
 					;[Block]
 					If CanUseItem(False, True) Then
-						If Wearing714 = 1 Or WearingGasMask = 3 Or WearingHazmat = 3 Then
+						If I_714\Using = 1 Or WearingGasMask = 3 Or WearingHazmat = 3 Then
 							Msg = Chr(34) + "DUDE WTF THIS SHIT DOESN'T EVEN WORK." + Chr(34)
 						Else
 							Msg = Chr(34) + "MAN DATS SUM GOOD ASS SHIT." + Chr(34)
@@ -6397,7 +6403,7 @@ Function DrawGUI()
 				Case "joint"
 					;[Block]
 					If CanUseItem(False, True) Then
-						If Wearing714 = 1 Or WearingGasMask = 3 Or WearingHazmat = 3 Then
+						If I_714\Using = 1 Or WearingGasMask = 3 Or WearingHazmat = 3 Then
 							Msg = Chr(34) + "DUDE WTF THIS SHIT DOESN'T EVEN WORK." + Chr(34)
 						Else
 							DeathMsg = SubjectName + " found in a comatose state in [DATA REDACTED]. The subject was holding what appears to be a cigarette while smiling widely. "
@@ -6413,7 +6419,7 @@ Function DrawGUI()
 				Case "scp420s"
 					;[Block]
 					If CanUseItem(False, True) Then
-						If Wearing714 = 1 Or WearingGasMask = 3 Or WearingHazmat = 3 Then
+						If I_714\Using = 1 Or WearingGasMask = 3 Or WearingHazmat = 3 Then
 							Msg = Chr(34) + "DUDE WTF THIS SHIT DOESN'T EVEN WORK." + Chr(34)
 						Else
 							DeathMsg = SubjectName + " found in a comatose state in [DATA REDACTED]. The subject was holding what appears to be a cigarette while smiling widely. "
@@ -6428,13 +6434,13 @@ Function DrawGUI()
 					;[End Block]
 				Case "scp714"
 					;[Block]
-					If Wearing714 = 1 Then
+					If I_714\Using = 1 Then
 						Msg = "You removed the ring."
-						Wearing714 = 0
+						I_714\Using = 0
 					Else
 						GiveAchievement(Achv714)
 						Msg = "You put on the ring."
-						Wearing714 = 1
+						I_714\Using = 1
 					EndIf
 					MsgTimer = 70.0 * 6.0
 					SelectedItem = Null	
@@ -8718,7 +8724,7 @@ Function NullGame(PlayButtonSFX% = True)
 	WearingGasMask = 0
 	WearingHazmat = 0
 	WearingVest = 0
-	Wearing714 = 0
+	I_714\Using = 0
 	If WearingNightVision Then
 		CameraFogFar = StoredCameraFogFar
 		WearingNightVision = 0
@@ -11403,5 +11409,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#FF6#135B#1BB9
+;~B#FFC#1361#1BBF
 ;~C#Blitz3D

@@ -465,7 +465,7 @@ Function RemoveItem(i.Items)
 				;[End Block]
 			Case "scp714"
 				;[Block]
-				Wearing714 = 0
+				I_714\Using = 0
 				;[End Block]
 			Case "scp1499", "super1499"
 				;[Block]
@@ -629,7 +629,7 @@ Function PickItem(item.Items)
 				Select item\ItemTemplate\TempName
 					Case "scp1123"
 						;[Block]
-						If Wearing714 = 0 And WearingGasMask < 3 And WearingHazmat < 3 Then
+						If I_714\Using = 0 And WearingGasMask < 3 And WearingHazmat < 3 Then
 							If PlayerRoom\RoomTemplate\Name <> "room1123" Then
 								ShowEntity(ov\OverlayID[7])
 								LightFlash = 7.0
@@ -831,7 +831,7 @@ Function DropItem(item.Items, PlayDropSound% = True)
 			;[End Block]
 		Case "scp714"
 			;[Block]
-			Wearing714 = 0
+			I_714\Using = 0
 			;[End Block]
 		Case "scp1499", "super1499"
 			;[Block]

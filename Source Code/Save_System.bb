@@ -459,7 +459,7 @@ Function SaveGame(File$)
 	WriteByte(f, I_427\Using)
 	WriteFloat(f, I_427\Timer)
 	
-	WriteByte(f, Wearing714)
+	WriteByte(f, I_714\Using)
 	CloseFile(f)
 	
 	If Not MenuOpen Then
@@ -1210,7 +1210,7 @@ Function LoadGame(File$)
 	I_427\Using = ReadByte(f)
 	I_427\Timer = ReadFloat(f)
 	
-	Wearing714 = ReadByte(f)
+	I_714\Using = ReadByte(f)
 	
 	CloseFile(f)
 	
@@ -1945,7 +1945,7 @@ Function LoadGameQuick(File$)
 	I_427\Using = ReadByte(f)
 	I_427\Timer = ReadFloat(f)
 	
-	Wearing714 = ReadByte(f)
+	I_714\Using = ReadByte(f)
 	CloseFile(f)
 	
 	If Collider <> 0 Then

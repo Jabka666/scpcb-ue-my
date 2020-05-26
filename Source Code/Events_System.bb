@@ -467,25 +467,6 @@ Function QuickLoadEvents()
 				e\EventStr = "LoadDone"
 			EndIf
 			;[End Block]
-		Case "room966"
-			;[Block]
-			If e\EventState = 1.0
-				e\EventState2 = e\EventState2 + FPSfactor
-				If e\EventState2 > 30.0 Then
-					If e\EventStr = ""
-						CreateNPC(NPCtype966, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
-						QuickLoadPercent = 50
-						e\EventStr = "Load0"
-					ElseIf e\EventStr = "Load0"
-						CreateNPC(NPCtype966, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True))
-						QuickLoadPercent = 100
-						e\EventState = 2.0
-					EndIf
-				Else
-					QuickLoadPercent = Int(e\EventState2)
-				EndIf
-			EndIf
-			;[End Block]
 		Case "dimension1499"
 			;[Block]
 			If e\EventState = 0.0
@@ -680,8 +661,10 @@ Function UpdateEvents()
 							ShowEntity(Curr173\OBJ)
 							If e\EventState > 900.0 And e\room\RoomDoors[5]\open Then
 								If e\EventState - FPSfactor =< 900.0 Then 
-									e\room\NPC[1]\Sound = LoadSound_Strict("SFX\Room\Intro\WhatThe.ogg")
+									e\room\NPC[1]\Sound = LoadSound_Strict("SFX\Room\Intro\WhatThe1a.ogg")
 									e\room\NPC[1]\SoundCHN = PlaySound2(e\room\NPC[1]\Sound, Camera, e\room\NPC[1]\Collider)
+									e\room\NPC[2]\Sound = LoadSound_Strict("SFX\Room\Intro\WhatThe1b.ogg")
+									e\room\NPC[2]\SoundCHN = PlaySound2(e\room\NPC[2]\Sound, Camera, e\room\NPC[2]\Collider)
 								EndIf
 								e\room\NPC[1]\State = 3.0
 								e\room\NPC[1]\CurrSpeed = CurveValue(-0.008, e\room\NPC[1]\CurrSpeed, 5.0)
@@ -803,7 +786,7 @@ Function UpdateEvents()
 					If ((e\EventState Mod 600.0 > 300.0) And ((e\EventState + FPSfactor) Mod 600.0 < 300.0)) Then
 						i = Floor((e\EventState - 5000.0) / 600.0) + 1.0
 						
-						If i = 0 Then PlaySound_Strict(LoadTempSound("SFX\Room\Intro\PA\Scripted\Scripted6.ogg"))
+						If i = 0 Then PlaySound_Strict(LoadTempSound("SFX\Room\Intro\IA\Scripted\Scripted6.ogg"))
 						
 						If (i > 0 And i < 26) Then
 							If (Not CommotionState(i)) Then ; ~ Prevents the same commotion file from playing more then once.
@@ -1047,40 +1030,7 @@ Function UpdateEvents()
 								If Rand(3) = 1 Then
 									e\EventStr = "Scripted\Scripted" + Rand(1, 5) + ".ogg|Off.ogg|"
 								Else
-									; ~ Generate the PA message
-									e\EventStr = "1\Attention" + Rand(1, 2) + ".ogg"
-									Select Rand(3)
-										Case 1
-											StrTemp = "Crew"
-											e\EventStr = e\EventStr + "|2\Crew" + Rand(0, 5) + ".ogg"
-										Case 2
-											StrTemp = "Scientist"
-											e\EventStr = e\EventStr + "|2\Scientist" + Rand(0, 19) + ".ogg"
-										Case 3
-											StrTemp = "Security"	
-											e\EventStr = e\EventStr + "|2\security" + Rand(0, 5) + ".ogg"
-									End Select
-									If Rand(2) = 1 And StrTemp = "Scientist" Then ;Call on line...
-										e\EventStr = e\EventStr + "|3\CallOnLine.ogg"
-										
-										e\EventStr = e\EventStr + "|Numbers\" + Rand(1, 9) + ".ogg"
-										If Rand(2) = 1 Then e\EventStr = e\EventStr + "|Numbers\" + Rand(1, 9) + ".ogg"
-									Else
-										e\EventStr = e\EventStr + "|3\Report" + Rand(0, 1) + ".ogg"
-										
-										Select StrTemp
-											Case "Crew"
-												e\EventStr = e\EventStr + "|4\Crew" + Rand(0, 6) + ".ogg"
-												If Rand(2) = 1 Then e\EventStr = e\EventStr + "|5\Crew" + Rand(0, 6) + ".ogg"
-											Case "Scientist"
-												e\EventStr = e\EventStr + "|4\Scientist" + Rand(0, 7) + ".ogg"
-												If Rand(2) = 1 Then e\EventStr = e\EventStr + "|5\Scientist0.ogg"
-											Case "Security"
-												e\EventStr = e\EventStr + "|4\Security" + Rand(0, 5) + ".ogg"
-												If Rand(2) = 1 Then e\EventStr = e\EventStr + "|5\Security" + Rand(1, 2) + ".ogg"
-										End Select
-									EndIf
-									e\EventStr = e\EventStr + "|Off.ogg|"
+									GenerateIA()
 								EndIf
 							EndIf
 							
@@ -1094,7 +1044,7 @@ Function UpdateEvents()
 													FreeSound_Strict(e\Sound) : e\Sound = 0
 												EndIf
 												
-												e\Sound = LoadSound_Strict("SFX\Room\Intro\PA\scripted\announcement" + Rand(1, 7) + ".ogg")
+												e\Sound = LoadSound_Strict("SFX\Room\Intro\IA\Scripted\Announcement" + Rand(1, 7) + ".ogg")
 												e\SoundCHN = PlaySound_Strict(e\Sound)
 											EndIf
 										EndIf
@@ -1132,11 +1082,11 @@ Function UpdateEvents()
 							
 							If e\EventStr <> "" And e\EventStr <> "Done" Then
 								If e\SoundCHN = 0 Then 
-									e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Room\Intro\PA\On.ogg"))
+									e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Room\Intro\IA\On.ogg"))
 								EndIf
 								If ChannelPlaying(e\SoundCHN) = False Then
 									StrTemp = Left(e\EventStr, Instr(e\EventStr, "|", 1) - 1)
-									e\Sound = LoadSound_Strict("SFX\Room\Intro\PA\" + StrTemp)
+									e\Sound = LoadSound_Strict("SFX\Room\Intro\IA\" + StrTemp)
 									e\SoundCHN = PlaySound_Strict(e\Sound)
 									e\EventStr = Right(e\EventStr, Len(e\EventStr) - Len(StrTemp) - 1)
 									If e\EventStr = "" Then 
@@ -1149,6 +1099,7 @@ Function UpdateEvents()
 										e\room\NPC[3]\SoundCHN = PlaySound2(e\room\NPC[3]\Sound, Camera, e\room\NPC[3]\Collider)
 										e\room\NPC[4]\Sound = LoadSound_Strict("SFX\Room\Intro\Guard\Conversation" + Temp + "b.ogg")
 										e\room\NPC[4]\SoundCHN = PlaySound2(e\room\NPC[4]\Sound, Camera, e\room\NPC[4]\Collider)
+										
 										e\EventStr = "Done"
 									EndIf
 								EndIf
@@ -2180,7 +2131,7 @@ Function UpdateEvents()
 								EndIf
 							EndIf
 						Next
-						If (CoffinDistance < 4.0) And (HasBatteryFor895) And Wearing714 = 0 And WearingGasMask < 3 And WearingHazmat < 3 Then
+						If (CoffinDistance < 4.0) And (HasBatteryFor895) And I_714\Using = 0 And WearingGasMask < 3 And WearingHazmat < 3 Then
 							TempF# = point_direction(EntityX(Collider, True), EntityZ(Collider, True), EntityX(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
 							TempF2# = EntityYaw(Collider)
 							TempF3# = angleDist(TempF + 90.0 + Sin(WrapAngle(e\EventState3 / 10.0)), TempF2)
@@ -5302,7 +5253,7 @@ Function UpdateEvents()
 								EndIf
 							EndIf
 							
-							If Wearing714 = 0 And WearingGasMask < 3 And WearingHazmat < 3 Then
+							If I_714\Using = 0 And WearingGasMask < 3 And WearingHazmat < 3 Then
 								If EntityVisible(e\room\Objects[2], Camera) Then 							
 									e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\Objects[3], 10.0, e\EventState3 / (86.0 * 70.0))
 									
@@ -5815,7 +5766,7 @@ Function UpdateEvents()
 										e\EventState2 = Min(e\EventState2 + (FPSfactor / 6000.0), 1.0)
 										e\EventState3 = CurveValue(e\EventState2, e\EventState3, 50.0)
 										
-										If Wearing714 = 0 And WearingHazmat < 3 And WearingGasMask < 3 Then
+										If I_714\Using = 0 And WearingHazmat < 3 And WearingGasMask < 3 Then
 											Sanity = Sanity - FPSfactor * 1.1
 											BlurTimer = Sin(MilliSecs2() / 10.0) * Abs(Sanity)
 										EndIf
@@ -5854,7 +5805,7 @@ Function UpdateEvents()
 							e\EventState3 = Max(e\EventState3 - (FPSfactor / 100.0), 0.0)
 						EndIf
 						
-						If e\EventState3 > 0.0 And Wearing714 = 0 And WearingHazmat < 3 And WearingGasMask < 3 Then 
+						If e\EventState3 > 0.0 And I_714\Using = 0 And WearingHazmat < 3 And WearingGasMask < 3 Then 
 							e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\OBJ, 10.0, e\EventState3)
 							e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\OBJ, 10.0, (e\EventState3 - 0.5) * 2.0)
 						EndIf
@@ -6764,29 +6715,22 @@ Function UpdateEvents()
 			Case "room966"
 				;[Block]
 				If PlayerRoom = e\room Then
-					Select e\EventState
-						Case 0.0
-							;[Block]
-							; ~ A dirty workaround to hide the pause when loading 966 model
-							If QuickLoadPercent = -1
-								e\EventState = 1.0
-								QuickLoadPercent = 0
-								QuickLoad_CurrEvent = e
-							EndIf
-							;[End Block]
-						Case 2.0
-							;[Block]
-							e\EventState = 2.0
-							RemoveEvent(e)
-							;[End Block]
-					End Select
+					If e\EventState = 0.0 Then
+						CreateNPC(NPCtype966, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
+						
+						CreateNPC(NPCtype966, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
+						
+						e\EventState = 1.0
+						
+						RemoveEvent(e)	
+					EndIf
 				EndIf
 				;[End Block]
 			Case "room1123"
 				;[Block]
 				If PlayerRoom = e\room Then
 					If EntityDistance(Collider, e\room\Objects[3]) < 0.9 Or (e\EventState > 0.0 And e\EventState < 7.0) Then
-					    If Wearing714 = 0 Or WearingHazmat < 3 Or WearingGasMask < 3 Then
+					    If I_714\Using = 0 Or WearingHazmat < 3 Or WearingGasMask < 3 Then
 			                If e\EventState = 0.0 Then BlurTimer = 1000.0
 					        CameraShake = 1.0
 							If e\Sound3 = 0 Then e\Sound3 = LoadSound_Strict("SFX\SCP\1123\Ambient.ogg")
@@ -7089,7 +7033,7 @@ Function UpdateEvents()
 						If Curr106\State >= 0.0 Then
 							e\EventState = 1.0
 						Else
-							If Curr106\State =< -10.0 And EntityDistance(Curr106\Collider, Collider) > 5 And (Not EntityInView(Curr106\OBJ, Camera)) Then
+							If Curr106\State =< -10.0 And EntityDistance(Curr106\Collider, Collider) > 5.0 And (Not EntityInView(Curr106\OBJ, Camera)) Then
 								e\EventState = 1.0
 								e\EventState2 = 1.0
 							EndIf
@@ -7101,8 +7045,9 @@ Function UpdateEvents()
 					If e\room\Dist < 3.0 Or Rand(7000) = 1 Then
 						e\EventState = 2.0
 						d.Decals = CreateDecal(0, EntityX(e\room\OBJ), 445.0 * RoomScale, EntityZ(e\room\OBJ), -90.0, Rand(360.0), 0.0)
-						d\Size = Rnd(0.5, 0.7) : EntityAlpha(d\OBJ, 0.7) : d\ID = 1 : ScaleSprite(d\OBJ, d\Size, d\Size)
+						d\Size = Rnd(0.5, 0.7) : d\ID = 1
 						EntityAlpha(d\OBJ, Rnd(0.7, 0.85))
+						ScaleSprite(d\OBJ, d\Size, d\Size)
 						
 						PlaySound_Strict(HorrorSFX(10))
 					ElseIf e\room\Dist > 8.0
@@ -7139,7 +7084,8 @@ Function UpdateEvents()
 						Curr106\PathStatus = 0
 						Curr106\PathLocation = 0
 						de.Decals = CreateDecal(0, EntityX(e\room\OBJ, True), 0.01, EntityZ(e\room\OBJ, True), 90.0, Rand(360.0), 0.0)
-						de\Size = 0.05 : de\SizeChange = 0.01 : EntityAlpha(de\OBJ, 0.8) : UpdateDecals()
+						de\Size = 0.05 : de\SizeChange = 0.01 : UpdateDecals()
+						EntityAlpha(de\OBJ, 0.8)
 						e\EventState = 300.0
 					ElseIf e\EventState < 800.0
 						If EntityY(Curr106\Collider) >= EntityY(Collider) - 0.05 Then
@@ -10299,6 +10245,64 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 	Return(EventState)
 End Function
 
+Function GenerateIA()
+	Local e.Events
+	Local StrTemp$
+	
+	For e.Events = Each Events
+		If e\EventName = "room173intro" Then
+			; ~ GENERATE THE IA...
+			; ~ ATTENTION...
+			e\EventStr = "1\Attention" + Rand(0, 1) + ".ogg"
+			Select Rand(3)
+				Case 1
+					;[Block]
+					StrTemp = "Crew"
+					e\EventStr = e\EventStr + "|2\Crew" + Rand(0, 4) + ".ogg"
+					;[End Block]
+				Case 2
+					;[Block]
+					StrTemp = "Scientist"
+					e\EventStr = e\EventStr + "|2\Scientist" + Rand(0, 18) + ".ogg"
+					;[End Block]
+				Case 3
+					;[Block]
+					StrTemp = "Security"	
+					e\EventStr = e\EventStr + "|2\Security" + Rand(0, 5) + ".ogg"
+					;[End Block]
+			End Select
+			If Rand(2) = 1 And StrTemp = "Scientist" Then
+				; ~ CALL ON LINE...
+				e\EventStr = e\EventStr + "|3\CallOnLine.ogg"
+				
+				e\EventStr = e\EventStr + "|Numbers\" + Rand(1, 9) + ".ogg"
+				If Rand(2) = 1 Then e\EventStr = e\EventStr + "|Numbers\" + Rand(1, 9) + ".ogg"
+			Else
+				; ~ REPORT TO...
+				e\EventStr = e\EventStr + "|3\Report" + Rand(0, 1) + ".ogg"
+				
+				Select StrTemp
+					Case "Crew"
+						;[Block]
+						e\EventStr = e\EventStr + "|4\Crew" + Rand(0, 6) + ".ogg"
+						If Rand(2) = 1 Then e\EventStr = e\EventStr + "|5\Crew" + Rand(0, 6) + ".ogg"
+						;[End Block]
+					Case "Scientist"
+						;[Block]
+						e\EventStr = e\EventStr + "|4\Scientist" + Rand(0, 7) + ".ogg"
+						If Rand(2) = 1 Then e\EventStr = e\EventStr + "|5\Scientist0.ogg"
+						;[End Block]
+					Case "Security"
+						;[Block]
+						e\EventStr = e\EventStr + "|4\Security" + Rand(0, 5) + ".ogg"
+						If Rand(2) = 1 Then e\EventStr = e\EventStr + "|5\Security" + Rand(0, 2) + ".ogg"
+						;[End Block]
+				End Select
+			EndIf
+			e\EventStr = e\EventStr + "|Off.ogg|"
+		EndIf
+	Next
+End Function
 ;~IDEal Editor Parameters:
-;~B#122B#1E5F
+;~B#11FA#1E29
 ;~C#Blitz3D

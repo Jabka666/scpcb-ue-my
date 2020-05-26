@@ -2988,25 +2988,19 @@ Function FillRoom(r.Rooms)
 			
 			d = CreateDoor(r\Zone, r\x, r\y, r\z - 480.0 * RoomScale, 180.0, r, False, False, 3)
 			
-			sc = CreateSecurityCam(r\x - 312.0 * RoomScale, r\y + 452.0 * RoomScale, r\z + 644.0 * RoomScale, r)
-			sc\Angle = 225.0 : sc\Turn = 45.0
-			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
-			
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x, r\y + 0.5, r\z + 512.0 * RoomScale)
 			
 			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x + 64.0 * RoomScale, r\y + 0.5, r\z - 640.0 * RoomScale)
+			PositionEntity(r\Objects[1], r\x, r\y + 0.5, r\z)
 			
-			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], r\x, r\y + 0.5, r\z)
-			
-			r\Objects[3] = CreatePivot()
-			PositionEntity(r\Objects[3], r\x + 320.0 * RoomScale, r\y + 0.5, r\z + 704.0 * RoomScale)
-			
-			For i = 0 To 3
+			For i = 0 To 1
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
+			
+			sc = CreateSecurityCam(r\x - 312.0 * RoomScale, r\y + 452.0 * RoomScale, r\z + 644.0 * RoomScale, r)
+			sc\Angle = 225.0 : sc\Turn = 45.0
+			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			
 			it = CreateItem("Night Vision Goggles", "nvgoggles", r\x + 320.0 * RoomScale, r\y + 0.5, r\z + 704.0 * RoomScale)
 			it\State = 300.0
@@ -6503,7 +6497,7 @@ Function UpdateSecurityCams()
 					sc\State = sc\State + FPSfactor
 					If BlinkTimer > -5.0 And EntityInView(sc\ScrOBJ, Camera) Then
 						If EntityVisible(Camera, sc\ScrOBJ) Then
-							If (sc\CoffinEffect = 1 Or sc\CoffinEffect = 3) And Wearing714 = 0 And WearingHazmat < 3 And WearingGasMask < 3 Then
+							If (sc\CoffinEffect = 1 Or sc\CoffinEffect = 3) And I_714\Using = 0 And WearingHazmat < 3 And WearingGasMask < 3 Then
 								If BlinkTimer > -5.0
 									Sanity = Sanity - FPSfactor
 									RestoreSanity = False
@@ -6570,7 +6564,7 @@ Function UpdateSecurityCams()
 						sc\State = 0.0
 					EndIf
 					
-					If (sc\CoffinEffect = 1 Or sc\CoffinEffect = 3) And Wearing714 = 0 And WearingHazmat < 3 And WearingGasMask < 3 Then
+					If (sc\CoffinEffect = 1 Or sc\CoffinEffect = 3) And I_714\Using = 0 And WearingHazmat < 3 And WearingGasMask < 3 Then
 						If sc\InSight Then
 							Local Pvt% = CreatePivot()
 							
@@ -6584,7 +6578,7 @@ Function UpdateSecurityCams()
 							User_Camera_Pitch = User_Camera_Pitch - 90.0
 							
 							FreeEntity(Pvt)
-							If (sc\CoffinEffect = 1 Or sc\CoffinEffect = 3) And (Wearing714 = 0 Or WearingGasMask < 3 Or WearingHazmat < 3) Then
+							If (sc\CoffinEffect = 1 Or sc\CoffinEffect = 3) And (I_714\Using = 0 Or WearingGasMask < 3 Or WearingHazmat < 3) Then
 								If Sanity < -800.0 Then
 									If Rand(3) = 1 Then EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
 									If Rand(6) < 5 Then
@@ -6617,7 +6611,7 @@ Function UpdateSecurityCams()
 						EndIf
 					Else
 						If sc\InSight Then
-							If Wearing714 = 1 Or WearingHazmat = 3 Or WearingGasMask = 3 Then
+							If I_714\Using = 1 Or WearingHazmat = 3 Or WearingGasMask = 3 Then
 								EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
 							EndIf
 						EndIf
@@ -8668,5 +8662,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11EF
+;~B#11E9
 ;~C#Blitz3D
