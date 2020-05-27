@@ -302,6 +302,9 @@ Dim RadioCHN%(8)
 Type TempTextures
 	Field MiscTextureID%[MaxMiscTextureIDAmount - 1]
 	Field MonitorTextureID%[MaxMonitorTextureIDAmount - 1]
+	Field DecalTextureID%[MaxDecalTextureIDAmount - 1]
+	Field ParticleTextureID%[MaxParticleTextureIDAmount - 1]
+	Field LightSpriteID%[MaxLightSpriteIDAmount - 1]
 End Type
 
 Global PlayTime%
@@ -1849,8 +1852,6 @@ Global StoredCameraFogFar# = CameraFogFar
 
 Include "Source Code\Dreamfilter.bb"
 
-Dim LightSpriteTex(10)
-
 Global SoundEmitter%
 Global TempSounds%[10]
 Global TempSoundCHN%
@@ -2779,12 +2780,6 @@ Type Overlays
 End Type
 
 Global Collider%, Head%
-
-Global TeslaTexture%
-
-Dim LightSpriteTex%(5)
-
-Dim DecalTextures%(20)
 
 Global UnableToMove% = False
 Global ShouldEntitiesFall% = True
@@ -7843,7 +7838,7 @@ Function LoadEntities()
 	StaminaMeterIMG = LoadImage_Strict("GFX\StaminaMeter.png")
 	StaminaMeterRedIMG = LoadImage_Strict("GFX\StaminaMeterRed.png")
 
-	KeypadHUD =  LoadImage_Strict("GFX\keypadhud.png")
+	KeypadHUD = LoadImage_Strict("GFX\keypadhud.png")
 	MaskImage(KeypadHUD, 255, 0, 255)
 
 	Panel294 = LoadImage_Strict("GFX\294panel.png")
@@ -7971,8 +7966,6 @@ Function LoadEntities()
 	EntityOrder(ov\OverlayID[8], -1001)
 	MoveEntity(ov\OverlayID[8], 0.0, 0.0, 1.0)
 	HideEntity(ov\OverlayID[8])
-	
-	TeslaTexture = LoadTexture_Strict("GFX\map\tesla.jpg", 1 + 2)
 	
 	Collider = CreatePivot()
 	EntityRadius Collider, 0.15, 0.30
@@ -8121,9 +8114,9 @@ Function LoadEntities()
 		HideEntity(o\MiscModelID[i])
 	Next
 	
-	LightSpriteTex(0) = LoadTexture_Strict("GFX\light.png", 1)
-	LightSpriteTex(1) = LoadTexture_Strict("GFX\light(2).png", 1)
-	LightSpriteTex(2) = LoadTexture_Strict("GFX\lightsprite.png", 1)
+	tt\LightSpriteID[0] = LoadTexture_Strict("GFX\light.png", 1)
+	tt\LightSpriteID[1] = LoadTexture_Strict("GFX\light(2).png", 1)
+	tt\LightSpriteID[2] = LoadTexture_Strict("GFX\lightsprite.png", 1)
 	
 	DrawLoading(15)
 	
@@ -8139,29 +8132,31 @@ Function LoadEntities()
 		tt\MiscTextureID[i] = LoadTexture_Strict("GFX\895Overlays\895Overlay(" + (i - 6) + ").png") ; ~ SCP-895
 	Next
 	
+	tt\MiscTextureID[13] = LoadTexture_Strict("GFX\map\tesla.png", 1 + 2)
+	
 	DrawLoading(20)
 	
-	DecalTextures(0) = LoadTexture_Strict("GFX\decal.png", 1 + 2)
+	tt\DecalTextureID[0] = LoadTexture_Strict("GFX\decal.png", 1 + 2)
 	For i = 1 To 7
-		DecalTextures(i) = LoadTexture_Strict("GFX\decal(" + (i + 1) + ").png", 1 + 2)
+		tt\DecalTextureID[i] = LoadTexture_Strict("GFX\decal(" + (i + 1) + ").png", 1 + 2)
 	Next
 	
-	DecalTextures(8) = LoadTexture_Strict("GFX\decalpd.png", 1 + 2)	
+	tt\DecalTextureID[8] = LoadTexture_Strict("GFX\decalpd.png", 1 + 2)	
 	For i = 9 To 12
-		DecalTextures(i) = LoadTexture_Strict("GFX\decalpd(" + (i - 7) + ").png", 1 + 2)	
+		tt\DecalTextureID[i] = LoadTexture_Strict("GFX\decalpd(" + (i - 7) + ").png", 1 + 2)	
 	Next
 	
-	DecalTextures(13) = LoadTexture_Strict("GFX\bullethole.png", 1 + 2)	
-	DecalTextures(14) = LoadTexture_Strict("GFX\bullethole(2).png", 1 + 2)	
+	tt\DecalTextureID[13] = LoadTexture_Strict("GFX\bullethole.png", 1 + 2)	
+	tt\DecalTextureID[14] = LoadTexture_Strict("GFX\bullethole(2).png", 1 + 2)	
 	
-	DecalTextures(15) = LoadTexture_Strict("GFX\blooddrop.png", 1 + 2)
-	DecalTextures(16) = LoadTexture_Strict("GFX\blooddrop(2).png", 1 + 2)
+	tt\DecalTextureID[15] = LoadTexture_Strict("GFX\blooddrop.png", 1 + 2)
+	tt\DecalTextureID[16] = LoadTexture_Strict("GFX\blooddrop(2).png", 1 + 2)
 	
-	DecalTextures(17) = LoadTexture_Strict("GFX\decal427.png", 1 + 2)
+	tt\DecalTextureID[17] = LoadTexture_Strict("GFX\decal427.png", 1 + 2)
 	
-	DecalTextures(18) = LoadTexture_Strict("GFX\decalpd(6).dc", 1 + 2)	
+	tt\DecalTextureID[18] = LoadTexture_Strict("GFX\decalpd(6).dc", 1 + 2)	
 	
-	DecalTextures(19) = LoadTexture_Strict("GFX\decal409.png", 1 + 2)
+	tt\DecalTextureID[19] = LoadTexture_Strict("GFX\decal409.png", 1 + 2)
 	
 	DrawLoading(25)
 	
@@ -8257,15 +8252,15 @@ Function LoadEntities()
 	
 	InitItemTemplates()
 	
-	ParticleTextures(0) = LoadTexture_Strict("GFX\smoke.png", 1 + 2)
-	ParticleTextures(1) = LoadTexture_Strict("GFX\flash.png", 1 + 2)
-	ParticleTextures(2) = LoadTexture_Strict("GFX\dust.png", 1 + 2)
-	ParticleTextures(3) = LoadTexture_Strict("GFX\npcs\hg.pt", 1 + 2)
-	ParticleTextures(4) = LoadTexture_Strict("GFX\map\sun.png", 1 + 2)
-	ParticleTextures(5) = LoadTexture_Strict("GFX\bloodsprite.png", 1 + 2)
-	ParticleTextures(6) = LoadTexture_Strict("GFX\smoke(2).png", 1 + 2)
-	ParticleTextures(7) = LoadTexture_Strict("GFX\spark.png", 1 + 2)
-	ParticleTextures(8) = LoadTexture_Strict("GFX\particle.png", 1 + 2)
+	tt\ParticleTextureID[0] = LoadTexture_Strict("GFX\smoke.png", 1 + 2)
+	tt\ParticleTextureID[1] = LoadTexture_Strict("GFX\flash.png", 1 + 2)
+	tt\ParticleTextureID[2] = LoadTexture_Strict("GFX\dust.png", 1 + 2)
+	tt\ParticleTextureID[3] = LoadTexture_Strict("GFX\npcs\hg.pt", 1 + 2)
+	tt\ParticleTextureID[4] = LoadTexture_Strict("GFX\map\sun.png", 1 + 2)
+	tt\ParticleTextureID[5] = LoadTexture_Strict("GFX\bloodsprite.png", 1 + 2)
+	tt\ParticleTextureID[6] = LoadTexture_Strict("GFX\smoke(2).png", 1 + 2)
+	tt\ParticleTextureID[7] = LoadTexture_Strict("GFX\spark.png", 1 + 2)
+	tt\ParticleTextureID[8] = LoadTexture_Strict("GFX\particle.png", 1 + 2)
 	
 	SetChunkDataValues()
 	
@@ -10434,7 +10429,7 @@ Function UpdateMTF%()
 			EndIf
 		EndIf
 	Else
-		If MTFTimer =< 70.0 * 120.0
+		If MTFTimer =< 70.0 * 120.0 Then
 			MTFTimer = MTFTimer + FPSfactor
 		ElseIf MTFTimer > 70.0 * 120.0 And MTFTimer < 10000.0
 			If PlayerInReachableRoom()
@@ -10714,6 +10709,7 @@ End Type
 
 Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#)
 	Local d.Decals = New Decals
+	Local tt.TempTextures = First TempTextures
 	
 	d\x = x
 	d\y = y
@@ -10729,7 +10725,7 @@ Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#)
 	d\OBJ = CreateSprite()
 	d\BlendMode = 1
 	
-	EntityTexture(d\OBJ, DecalTextures(ID))
+	EntityTexture(d\OBJ, tt\DecalTextureID[ID])
 	EntityFX(d\OBJ, 0)
 	SpriteViewMode(d\OBJ, 2)
 	PositionEntity(d\OBJ, x, y, z)
@@ -10737,7 +10733,7 @@ Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#)
 	
 	d\ID = ID
 	
-	If DecalTextures(ID) = 0 Or d\OBJ = 0 Then Return(Null)
+	If tt\DecalTextureID[ID] = 0 Or d\OBJ = 0 Then Return(Null)
 	
 	Return(d)
 End Function
@@ -11402,5 +11398,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#FFC#1361#1BBF
+;~B#FF7#135C#1BBA
 ;~C#Blitz3D

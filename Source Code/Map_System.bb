@@ -2835,7 +2835,7 @@ Function FillRoom(r.Rooms)
 			r\Objects[5] = CreateSprite()
 			PositionEntity(r\Objects[5], r\x - 158.0 * RoomScale, r\y - 4737.0 * RoomScale, r\z + 298.0 * RoomScale)
 			ScaleSprite(r\Objects[5], 0.02, 0.02)
-			EntityTexture(r\Objects[5], LightSpriteTex(1))
+			EntityTexture(r\Objects[5], tt\LightSpriteID[1])
 			EntityBlend(r\Objects[5], 3)
 			HideEntity(r\Objects[5])
 			
@@ -3355,7 +3355,7 @@ Function FillRoom(r.Rooms)
 			r\Objects[3] = CreateSprite()
 			PositionEntity(r\Objects[3], r\x - 43.5 * RoomScale, - 574.0 * RoomScale, r\z - 362.0 * RoomScale)
 			ScaleSprite(r\Objects[3], 0.015, 0.015)
-			EntityTexture(r\Objects[3], LightSpriteTex(1))
+			EntityTexture(r\Objects[3], tt\LightSpriteID[1])
 			EntityBlend(r\Objects[3], 3)
 			HideEntity(r\Objects[3])
 			
@@ -4131,7 +4131,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\Objects[2], r\x, r\y, r\z)	
 			
 			r\Objects[3] = CreateSprite()
-			EntityTexture(r\Objects[3], TeslaTexture)
+			EntityTexture(r\Objects[3], tt\MiscTextureID[13])
 			SpriteViewMode(r\Objects[3], 2) 
 			EntityBlend(r\Objects[3], 3) 
 			EntityFX(r\Objects[3], 1 + 8 + 16)
@@ -4141,7 +4141,7 @@ Function FillRoom(r.Rooms)
 			r\Objects[4] = CreateSprite()
 			PositionEntity(r\Objects[4], r\x - 32.0 * RoomScale, r\y + 568.0 * RoomScale, r\z)
 			ScaleSprite(r\Objects[4], 0.03, 0.03)
-			EntityTexture(r\Objects[4], LightSpriteTex(1))
+			EntityTexture(r\Objects[4], tt\LightSpriteID[1])
 			EntityBlend(r\Objects[4], 3)
 			HideEntity(r\Objects[4])
 			
@@ -5834,6 +5834,7 @@ End Function
 Global LightVolume#, TempLightVolume#
 
 Function AddLight%(room.Rooms, x#, y#, z#, lType%, Range#, R%, G%, B%)
+	Local tt.TempTextures = First TempTextures
 	Local i%
 	
 	If room <> Null Then
@@ -5850,7 +5851,7 @@ Function AddLight%(room.Rooms, x#, y#, z#, lType%, Range#, R%, G%, B%)
 				room\LightSprites[i] = CreateSprite()
 				PositionEntity(room\LightSprites[i], x, y, z)
 				ScaleSprite(room\LightSprites[i], 0.13 , 0.13)
-				EntityTexture(room\LightSprites[i], LightSpriteTex(0))
+				EntityTexture(room\LightSprites[i], tt\LightSpriteID[0])
 				EntityBlend(room\LightSprites[i], 3)
 				
 				EntityParent(room\LightSprites[i], room\OBJ)
@@ -5863,7 +5864,7 @@ Function AddLight%(room.Rooms, x#, y#, z#, lType%, Range#, R%, G%, B%)
 				room\LightSprites2[i] = CreateSprite()
 				PositionEntity(room\LightSprites2[i], x, y, z)
 				ScaleSprite(room\LightSprites2[i], 0.6, 0.6)
-				EntityTexture(room\LightSprites2[i], LightSpriteTex(2))
+				EntityTexture(room\LightSprites2[i], tt\LightSpriteID[2])
 				EntityBlend(room\LightSprites2[i], 3)
 				EntityOrder(room\LightSprites2[i], -1)
 				EntityColor(room\LightSprites2[i], R, G, B)
@@ -5896,7 +5897,7 @@ Function AddLight%(room.Rooms, x#, y#, z#, lType%, Range#, R%, G%, B%)
 		Sprite = CreateSprite()
 		PositionEntity(Sprite, x, y, z)
 		ScaleSprite(Sprite, 0.13 , 0.13)
-		EntityTexture(Sprite, LightSpriteTex(0))
+		EntityTexture(Sprite, tt\LightSpriteID[0])
 		EntityBlend(Sprite, 3)
 		Return(Light)
 	EndIf
@@ -5944,6 +5945,8 @@ Type WayPoints
 End Type
 
 Function CreateWaypoint.WayPoints(x#, y#, z#, door.Doors, room.Rooms)
+	Local tt.TempTextures = First TempTextures
+	
 	w.Waypoints = New WayPoints
 	
 	If 1 Then
@@ -5953,7 +5956,7 @@ Function CreateWaypoint.WayPoints(x#, y#, z#, door.Doors, room.Rooms)
 		w\OBJ = CreateSprite()
 		PositionEntity(w\OBJ, x, y, z)
 		ScaleSprite(w\OBJ, 0.15 , 0.15)
-		EntityTexture(w\OBJ, LightSpriteTex(0))
+		EntityTexture(w\OBJ, tt\LightSpriteID[0])
 		EntityBlend(w\OBJ, 3)	
 	EndIf
 	
@@ -8453,6 +8456,7 @@ Type Dummy1499_1
 End Type
 
 Function UpdateLightSpark(room.Rooms)
+	Local tt.TempTextures = First TempTextures
 	Local i%
 	
 	For i = 0 To MaxRoomLights - 1
@@ -8460,7 +8464,7 @@ Function UpdateLightSpark(room.Rooms)
 			If room\LightFlicker[i] > 4.0 Then
 				room\LightSpark[i] = CreateSprite()
 				ScaleSprite(room\LightSpark[i], 1.0, 1.0)
-				EntityTexture(room\LightSpark[i], ParticleTextures(8))
+				EntityTexture(room\LightSpark[i], tt\ParticleTextureID[8])
 				SpriteViewMode(room\LightSpark[i], 2)
 				EntityFX(room\LightSpark[i], 1)
 				RotateEntity(room\LightSpark[i], -90.0, 0.0, 0.0)

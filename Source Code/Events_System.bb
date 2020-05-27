@@ -3458,7 +3458,7 @@ Function UpdateEvents()
 								HideEntity(e\room\Objects[4])
 								
 								If Rand(5) < 5 Then 
-									PositionTexture(TeslaTexture, 0.0, Rnd(0.0, 1.0))
+									PositionTexture(tt\MiscTextureID[13], 0.0, Rnd(0.0, 1.0))
 									ShowEntity(e\room\Objects[3])			
 								EndIf
 							Else 

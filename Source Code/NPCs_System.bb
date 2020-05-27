@@ -55,6 +55,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 	Local Temp#, i%, Tex%
 	Local SF%, b%, t1%
 	Local o.Objects = First Objects
+	Local tt.TempTextures = First TempTextures
 	
 	n\NPCtype = NPCtype
 	n\GravityMult = 1.0
@@ -300,7 +301,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 				
 				PositionEntity(LightSprite, 1.65 * i, 1.17, 0.0, -0.25)
 				ScaleSprite(LightSprite, 0.13, 0.13)
-				EntityTexture(LightSprite, LightSpriteTex(0))
+				EntityTexture(LightSprite, tt\LightSpriteID[0])
 				EntityBlend(LightSprite, 3)
 				EntityFX(LightSprite, 1 + 8)				
 			Next
@@ -7321,5 +7322,5 @@ Function Animate2#(Entity%, Curr#, Start%, Quit%, Speed#, Loop% = True)
 End Function 
 
 ;~IDEal Editor Parameters:
-;~B#163#1211#1338#1388#1502#161F#17F3#184E
+;~B#164#1212#1339#1389#1503#1620#17F4#184F
 ;~C#Blitz3D

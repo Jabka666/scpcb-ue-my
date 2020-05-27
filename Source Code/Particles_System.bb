@@ -1,5 +1,3 @@
-Dim ParticleTextures%(10)
-
 Type Particles
 	Field OBJ%, Pvt%
 	Field Image%
@@ -12,12 +10,13 @@ End Type
 	
 Function CreateParticle.Particles(x#, y#, z#, Image%, Size#, Gravity# = 1.0, LifeTime# = 200.0)
 	Local p.Particles = New Particles
+	Local tt.TempTextures = First TempTextures
 	
 	p\LifeTime = LifeTime
 	
 	p\OBJ = CreateSprite()
 	PositionEntity(p\OBJ, x, y, z, True)
-	EntityTexture(p\OBJ, ParticleTextures(Image))
+	EntityTexture(p\OBJ, tt\ParticleTextureID[Image])
 	RotateEntity(p\OBJ, 0.0, 0.0, Rnd(360.0))
 	EntityFX(p\OBJ, 1 + 8)
 	
