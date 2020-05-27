@@ -70,6 +70,7 @@ Bug Fixes:
 - Fixed crouch sound.
 - Fixed smelly joint.
 - Fixed SCP-106's appearing in SCP-895's containment chamber.
+- Fixed blinking sound for MTF.
 
 - Small fixes for room2testroom's event.
 - Small fixes for commands "disablenuke" and "enablecontrol/disablecontrol.

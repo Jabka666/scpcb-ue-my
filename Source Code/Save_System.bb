@@ -196,14 +196,6 @@ Function SaveGame(File$)
 	Next
 	
 	WriteFloat(f, MTFTimer)
-	For i = 0 To 6
-		If MTFRooms[0] <> Null Then 
-			WriteString(f, MTFRooms[0]\RoomTemplate\Name) 
-		Else 
-			WriteString(f, "a")
-		EndIf
-		WriteInt(f, MTFRoomState[i])
-	Next
 	
 	WriteInt(f, 632)
 	
@@ -709,17 +701,6 @@ Function LoadGame(File$)
 	Next
 	
 	MTFTimer = ReadFloat(f)
-	For i = 0 To 6
-		StrTemp = ReadString(f)
-		If StrTemp <> "a" Then
-			For r.Rooms = Each Rooms
-				If r\RoomTemplate\Name = StrTemp Then
-					MTFRooms[i] = r
-				EndIf
-			Next
-		EndIf
-		MTFRoomState[i] = ReadInt(f)
-	Next
 	
 	If ReadInt(f) <> 632 Then RuntimeError("Couldn't load the game, save file corrupted (error 1)")
 	
@@ -1561,17 +1542,6 @@ Function LoadGameQuick(File$)
 	Next
 	
 	MTFTimer = ReadFloat(f)
-	For i = 0 To 6
-		StrTemp = ReadString(f)
-		If StrTemp <> "a" Then
-			For r.Rooms = Each Rooms
-				If r\RoomTemplate\Name = StrTemp Then
-					MTFRooms[i] = r
-				EndIf
-			Next
-		EndIf
-		MTFRoomState[i] = ReadInt(f)
-	Next
 	
 	If ReadInt(f) <> 632 Then RuntimeError("Couldn't load the game, save file corrupted (error 1)")
 	

@@ -292,7 +292,7 @@ Dim DrawArrowIcon%(4)
 
 Include "Source Code\Difficulty.bb"
 
-Global MTFTimer#, MTFRooms.Rooms[10], MTFRoomState%[10]
+Global MTFTimer#
 
 Dim RadioState#(10)
 Dim RadioState3%(10)
@@ -2005,7 +2005,7 @@ Dim NeckSnapSFX%(3)
 
 Dim DamageSFX%(14)
 
-Dim MTFSFX%(8)
+Dim MTFSFX%(2)
 
 Dim CoughSFX%(3)
 Global CoughCHN%, VomitCHN%
@@ -8741,10 +8741,6 @@ Function NullGame(PlayButtonSFX% = True)
 	If Curr173 <> Null Then Curr173\Idle = False
 	
 	MTFTimer = 0.0
-	For i = 0 To 9
-		MTFRooms[i] = Null
-		MTFRoomState[i] = 0
-	Next
 	
 	For s.Screens = Each Screens
 		If s\Img <> 0 Then FreeImage(s\Img) : s\Img = 0
@@ -8855,9 +8851,6 @@ Function NullGame(PlayButtonSFX% = True)
 	Curr096 = Null
 	Curr513_1 = Null
 	
-	For i = 0 To 6
-		MTFRooms[i] = Null
-	Next
 	ForestNPC = 0
 	ForestNPCTex = 0
 	
@@ -10427,7 +10420,7 @@ Function UpdateMTF%()
 					Local leader.NPCs
 					
 					For i = 0 To 2
-						n.NPCs = CreateNPC(NPCtypeMTF, EntityX(entrance\OBJ) + 0.3 * (i - 1), 1.0, EntityZ(entrance\OBJ) + 8.0)
+						n.NPCs = CreateNPC(NPCtypeMTF, EntityX(entrance\OBJ) + 0.3 * (i - 1), 0.6, EntityZ(entrance\OBJ) + 8.0)
 						
 						If i = 0 Then 
 							leader = n
