@@ -10146,7 +10146,7 @@ Function IsItemGoodFor1162(itt.ItemTemplates)
 	Local IN$ = itt\TempName
 	
 	Select itt\TempName
-		Case "key1", "key2", "key3"
+		Case "key0", "key1", "key2", "key3"
 			;[Block]
 			Return(True)
 			;[End Block]

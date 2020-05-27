@@ -186,7 +186,7 @@ InitAAFont()
 ; ~ Don't match their "internal name" (i.e. their display name in applications like Word and such).
 ; ~ As a workaround, I moved the files and renamed them so they
 ; ~ Can load without FastText.
-fo\FontID[0] = AALoadFont("GFX\font\cour\Courier New.ttf", Int(19 * (GraphicHeight / 1024.0)), 0, 0, 0)
+fo\FontID[0] = AALoadFont("GFX\font\cour\Courier New.ttf", Int(18 * (GraphicHeight / 1024.0)), 0, 0, 0)
 fo\FontID[1] = AALoadFont("GFX\font\courbd\Courier New.ttf", Int(58 * (GraphicHeight / 1024.0)), 0, 0, 0)
 fo\FontID[2] = AALoadFont("GFX\font\DS-DIGI\DS-Digital.ttf", Int(22 * (GraphicHeight / 1024.0)), 0, 0, 0)
 fo\FontID[3] = AALoadFont("GFX\font\DS-DIGI\DS-Digital.ttf", Int(60 * (GraphicHeight / 1024.0)), 0, 0, 0)
@@ -2127,7 +2127,7 @@ Type Doors
 	Field DoorHitOBJ%
 End Type 
 
-Function CreateDoor.Doors(LVL, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, Big% = False, Keycard% = False, Code$ = "", UseCollisionMesh% = False)
+Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, Big% = False, Keycard% = False, Code$ = "", UseCollisionMesh% = False, CheckIfZero% = False)
 	Local d.Doors, Parent%, i%
 	Local o.Objects = First Objects
 	
@@ -2195,9 +2195,18 @@ Function CreateDoor.Doors(LVL, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, B
 	d\ID = DoorTempID
 	DoorTempID = DoorTempID + 1
 	
-	d\KeyCard = Keycard
+	If Keycard > 0 Then
+		If CheckIfZero Then
+			d\KeyCard = Keycard + 1
+		Else
+			d\KeyCard = Keycard + 2
+		EndIf
+	Else
+		d\KeyCard = Keycard 
+	EndIf
+	
 	d\Code = Code
-	d\Level = LVL
+	d\Level = Lvl
 	d\LevelDest = 66
 	
 	For i = 0 To 1
@@ -2561,29 +2570,37 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 			Return
 		Else
 			Select SelectedItem\ItemTemplate\TempName
-				Case "key1"
+				Case "key6"
 					;[Block]
 					Temp = 1
 					;[End Block]
-				Case "key2"
+				Case "key0"
 					;[Block]
 					Temp = 2
 					;[End Block]
-				Case "key3"
+				Case "key1"
 					;[Block]
 					Temp = 3
 					;[End Block]
-				Case "key4"
+				Case "key2"
 					;[Block]
 					Temp = 4
 					;[End Block]
-				Case "key5"
+				Case "key3"
 					;[Block]
 					Temp = 5
 					;[End Block]
-				Case "key6"
+				Case "key4"
 					;[Block]
 					Temp = 6
+					;[End Block]
+				Case "key5"
+					;[Block]
+					Temp = 7
+					;[End Block]
+				Case "key7"
+					;[Block]
+					Temp = 8
 					;[End Block]
 				Default
 					;[Block]
@@ -2604,8 +2621,13 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 				If ShowMsg = True Then
 					If d\Locked = True Then
 						PlaySound_Strict(KeyCardSFX2)
-						Msg = "The keycard was inserted into the slot but nothing happened."
-						MsgTimer = 70.0 * 6.0
+						If Temp = 1 Then 
+							Msg = "The keycard was inserted into the slot. UNKNOWN ERROR! " Chr(34) + "Do" + Chr(Rand(48, 122)) + "s th" + Chr(Rand(48, 122)) + " B" + Chr(Rand(48, 122)) + "ack " + Chr(Rand(48, 122)) + "oon howl? " + Chr(Rand(48, 122)) + "es. N" + Chr(Rand(48, 122)) + ". Ye" + Chr(Rand(48, 122)) + ". " + Chr(Rand(48, 122)) + "o." + Chr(34)
+							MsgTimer = 70.0 * 8.0
+						Else
+							Msg = "The keycard was inserted into the slot but nothing happened."
+							MsgTimer = 70.0 * 6.0
+						EndIf
 						Return
 					Else
 						PlaySound_Strict(KeyCardSFX1)
@@ -2618,17 +2640,28 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 				If ShowMsg = True Then 
 					PlaySound_Strict(KeyCardSFX2)					
 					If d\Locked = True Then
-						Msg = "The keycard was inserted into the slot but nothing happened."
+						If Temp = 1 Then 
+							Msg = "The keycard was inserted into the slot. UNKNOWN ERROR! " +  Chr(34) + "Do" + Chr(Rand(48, 122)) + "s th" + Chr(Rand(48, 122)) + " B" + Chr(Rand(48, 122)) + "ack " + Chr(Rand(48, 122)) + "oon howl? " + Chr(Rand(48, 122)) + "es. N" + Chr(Rand(48, 122)) + ". Ye" + Chr(Rand(48, 122)) + ". " + Chr(Rand(48, 122)) + "o." + Chr(34)
+							MsgTimer = 70.0 * 8.0
+						Else
+							Msg = "The keycard was inserted into the slot but nothing happened."
+							MsgTimer = 70.0 * 6.0
+						EndIf
 					Else
-						Msg = "A keycard with security clearance " + d\KeyCard + " or higher is required to operate this door."
+						If Temp = 1 Then 
+							Msg = "The keycard was inserted into the slot. UNKNOWN ERROR! " + Chr(34) + "Do" + Chr(Rand(48, 122)) + "s th" + Chr(Rand(48, 122)) + " B" + Chr(Rand(48, 122)) + "ack " + Chr(Rand(48, 122)) + "oon howl? " + Chr(Rand(48, 122)) + "es. N" + Chr(Rand(48, 122)) + ". Ye" + Chr(Rand(48, 122)) + ". " + Chr(Rand(48, 122)) + "o." + Chr(34)
+							MsgTimer = 70.0 * 8.0
+						Else
+							Msg = "A keycard with security clearance " + (d\KeyCard - 2) + " or higher is required to operate this door."
+							MsgTimer = 70.0 * 6.0
+						EndIf
 					EndIf
-					MsgTimer = 70.0 * 6.0					
 				EndIf
 				Return
 			End If
 		EndIf	
 	ElseIf d\KeyCard < 0
-		; ~ I can't find any way to produce short circuited boolean expressions so work around this by using a temporary variable - risingstar64
+		; ~ I can't find any way to produce short circuited boolean expressions so work around this by using a temporary variable -- risingstar64
 		If SelectedItem <> Null Then
 			Temp = (SelectedItem\ItemTemplate\TempName = "hand" And d\KeyCard = -1) Or (SelectedItem\ItemTemplate\TempName = "hand2" And d\KeyCard = -2)
 		EndIf
@@ -3086,7 +3119,7 @@ Repeat
 				If RestoreSanity Then Sanity = Min(Sanity + FPSfactor, 0.0)
 				If Sanity < -200.0 Then 
 					DarkA = Max(Min((-Sanity - 200.0) / 700.0, 0.6), DarkA)
-					If KillTimer >= 0 Then 
+					If KillTimer >= 0.0 Then 
 						HeartBeatVolume = Min(Abs(Sanity + 20.00) / 500.0, 1.0)
 						HeartBeatRate = Max(70.0 + Abs(Sanity + 200.0) / 6.0, HeartBeatRate)
 					EndIf
@@ -3165,7 +3198,7 @@ Repeat
 				SelectedMonitor = Null
 				BlurTimer = Abs(KillTimer * 5.0)
 				KillTimer = KillTimer - (FPSfactor * 0.8)
-				If KillTimer < - 360.0 Then 
+				If KillTimer < -360.0 Then 
 					MenuOpen = True 
 					If SelectedEnding <> "" Then EndingTimer = Min(KillTimer, -0.1)
 				EndIf
@@ -5208,7 +5241,7 @@ Function DrawGUI()
 						SelectedItem = Null
 					ElseIf Inventory(MouseSlot) <> SelectedItem
 						Select SelectedItem\ItemTemplate\TempName
-							Case "paper", "key1", "key2", "key3", "key4", "key5", "key6", "misc", "oldpaper", "badge", "ticket", "25ct", "coin", "key", "scp860", "scp500pill", "scp500pilldeath"
+							Case "paper", "key0", "key1", "key2", "key3", "key4", "key5", "key6", "key7", "misc", "oldpaper", "badge", "ticket", "25ct", "coin", "key", "scp860", "scp500pill", "scp500pilldeath"
 								;[Block]
 								If Inventory(MouseSlot)\ItemTemplate\TempName = "clipboard" Then
 									; ~ Add an item to clipboard
@@ -5549,7 +5582,7 @@ Function DrawGUI()
 						Next
 					EndIf
 					;[End Block]
-				Case "key1", "key2", "key3", "key4", "key5", "key6", "scp860", "hand", "hand2", "25ct"
+				Case "key0", "key1", "key2", "key3", "key4", "key5", "key6", "key7", "scp860", "hand", "hand2", "25ct"
 					;[Block]
 					DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 					;[End Block]
@@ -9200,7 +9233,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 			
 			RemoveItem(item)
 			;[End Block]
-		Case "Level 1 Key Card", "Level 2 Key Card", "Level 3 Key Card", "Level 4 Key Card", "Level 5 Key Card"
+		Case "Level 0 Key Card", "Level 1 Key Card", "Level 2 Key Card", "Level 3 Key Card", "Level 4 Key Card", "Level 5 Key Card", "Level 6 Key Card"
 			;[Block]
 			Select Setting
 				Case "Rough", "Coarse"
@@ -9216,6 +9249,31 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 				Case "Fine"
 					;[Block]
 					Select item\ItemTemplate\Name
+						Case "Level 0 Key Card"
+							;[Block]
+							Select SelectedDifficulty\OtherFactors
+								Case EASY
+									;[Block]
+									it2 = CreateItem("Level 1 Key Card", "key1", x, y, z)
+									;[End Block]
+								Case NORMAL
+									;[Block]
+									If Rand(6) = 1 Then
+										it2 = CreateItem("Mastercard", "misc", x, y, z)
+									Else
+										it2 = CreateItem("Level 1 Key Card", "key1", x, y, z)
+									EndIf
+									;[End Block]
+								Case HARD
+									;[Block]
+									If Rand(5) = 1 Then
+										it2 = CreateItem("Mastercard", "misc", x, y, z)
+									Else
+										it2 = CreateItem("Level 1 Key Card", "key1", x, y, z)
+									EndIf
+									;[End Block]
+							End Select
+							;[End Block]
 						Case "Level 1 Key Card"
 							;[Block]
 							Select SelectedDifficulty\OtherFactors
@@ -9333,24 +9391,65 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 							Select SelectedDifficulty\OtherFactors
 								Case EASY
 									;[Block]
-									If Rand(0, ((MAXACHIEVEMENTS - 1) * 3) - ((CurrAchvAmount - 1) * 3)) = 0
-										it2 = CreateItem("Key Card Omni", "key6", x, y, z)
+									If Rand(0, ((MAXACHIEVEMENTS - 1) * 3) - ((CurrAchvAmount - 1) * 3)) = 0 Then
+										it2 = CreateItem("Key Card Omni", "key7", x, y, z)
+									Else
+										If Rand(10) = 1 Then
+											it2 = CreateItem("Level 6 Key Card", "key6", x, y, z)
+										Else
+											it2 = CreateItem("Mastercard", "misc", x, y, z)
+										EndIf
+									EndIf
+									;[End Block]
+								Case NORMAL
+									;[Block]
+									If Rand(0, ((MAXACHIEVEMENTS - 1) * 4) - ((CurrAchvAmount - 1) * 3)) = 0 Then
+										it2 = CreateItem("Key Card Omni", "key7", x, y, z)
+									Else
+										If Rand(15) = 1 Then
+											it2 = CreateItem("Level 6 Key Card", "key6", x, y, z)
+										Else
+											it2 = CreateItem("Mastercard", "misc", x, y, z)
+										EndIf
+									EndIf
+									;[End Block]
+								Case HARD
+									;[Block]
+									If Rand(0, ((MAXACHIEVEMENTS - 1) * 5) - ((CurrAchvAmount - 1) * 3)) = 0 Then
+										it2 = CreateItem("Key Card Omni", "key7", x, y, z)
+									Else
+										If Rand(20) = 1 Then
+											it2 = CreateItem("Level 6 Key Card", "key6", x, y, z)
+										Else
+											it2 = CreateItem("Mastercard", "misc", x, y, z)
+										EndIf
+									EndIf
+									;[End Block]
+							End Select
+							;[End Block]
+						Case "Level 6 Key Card"	
+							;[Block]
+							Select SelectedDifficulty\OtherFactors
+								Case EASY
+									;[Block]
+									If Rand(3) = 1 Then
+										it2 = CreateItem("Key Card Omni", "key7", x, y, z)
 									Else
 										it2 = CreateItem("Mastercard", "misc", x, y, z)
 									EndIf
 									;[End Block]
 								Case NORMAL
 									;[Block]
-									If Rand(0, ((MAXACHIEVEMENTS - 1) * 4) - ((CurrAchvAmount - 1) * 3)) = 0
-										it2 = CreateItem("Key Card Omni", "key6", x, y, z)
+									If Rand(4) = 1 Then
+										it2 = CreateItem("Key Card Omni", "key7", x, y, z)
 									Else
 										it2 = CreateItem("Mastercard", "misc", x, y, z)
 									EndIf
 									;[End Block]
 								Case HARD
 									;[Block]
-									If Rand(0, ((MAXACHIEVEMENTS - 1) * 5) - ((CurrAchvAmount - 1) * 3)) = 0
-										it2 = CreateItem("Key Card Omni", "key6", x, y, z)
+									If Rand(5) = 1 Then
+										it2 = CreateItem("Key Card Omni", "key7", x, y, z)
 									Else
 										it2 = CreateItem("Mastercard", "misc", x, y, z)
 									EndIf
@@ -9372,25 +9471,37 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 						Case EASY
 							;[Block]
 							If Rand(0, ((MAXACHIEVEMENTS - 1) * 3) - ((CurrAchvAmount - 1) * 3)) = 0
-								it2 = CreateItem("Key Card Omni", "key6", x, y, z)
+								it2 = CreateItem("Key Card Omni", "key7", x, y, z)
 							Else
-								it2 = CreateItem("Mastercard", "misc", x, y, z)
+								If Rand(20) = 1 Then
+									it2 = CreateItem("Level 6 Key Card", "key6", x, y, z)
+								Else
+									it2 = CreateItem("Mastercard", "misc", x, y, z)
+								EndIf
 							EndIf
 							;[End Block]
 						Case NORMAL
 							;[Block]
 							If Rand(0, ((MAXACHIEVEMENTS - 1) * 4) - ((CurrAchvAmount - 1) * 3)) = 0
-								it2 = CreateItem("Key Card Omni", "key6", x, y, z)
+								it2 = CreateItem("Key Card Omni", "key7", x, y, z)
 							Else
-								it2 = CreateItem("Mastercard", "misc", x, y, z)
+								If Rand(25) = 1 Then
+									it2 = CreateItem("Level 6 Key Card", "key6", x, y, z)
+								Else
+									it2 = CreateItem("Mastercard", "misc", x, y, z)
+								EndIf
 							EndIf
 							;[End Block]
 						Case HARD
 							;[Block]
 							If Rand(0, ((MAXACHIEVEMENTS - 1) * 5) - ((CurrAchvAmount - 1) * 3)) = 0
-								it2 = CreateItem("Key Card Omni", "key6", x, y, z)
+								it2 = CreateItem("Key Card Omni", "key7", x, y, z)
 							Else
-								it2 = CreateItem("Mastercard", "misc", x, y, z)
+								If Rand(30) = 1 Then
+									it2 = CreateItem("Level 6 Key Card", "key6", x, y, z)
+								Else
+									it2 = CreateItem("Mastercard", "misc", x, y, z)
+								EndIf
 							EndIf
 							;[End Block]
 					End Select
@@ -9417,7 +9528,32 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					;[End Block]
 				Case "Fine", "Very Fine"
 					;[Block]
-					it2 = CreateItem("Key Card Omni", "key6", x, y, z)
+					Select SelectedDifficulty\OtherFactors
+						Case EASY
+							;[Block]
+							If Rand(3) = 1 Then
+								it2 = CreateItem("Level 6 Key Card", "key6", x, y, z)
+							Else
+								it2 = CreateItem("Mastercard", "misc", x, y, z)
+							EndIf
+							;[End Block]
+						Case NORMAL
+							;[Block]
+							If Rand(4) = 1 Then
+								it2 = CreateItem("Level 6 Key Card", "key6", x, y, z)
+							Else
+								it2 = CreateItem("Mastercard", "misc", x, y, z)
+							EndIf
+							;[End Block]
+						Case HARD
+							;[Block]
+							If Rand(5) = 1 Then
+								it2 = CreateItem("Level 6 Key Card", "key6", x, y, z)
+							Else
+								it2 = CreateItem("Mastercard", "misc", x, y, z)
+							EndIf
+							;[End Block]
+					End Select
 					;[End Block]
 			End Select		
 			RemoveItem(item)
@@ -9433,9 +9569,13 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					;[End Block]
 				Case "1:1"
 					;[Block]
+					it2 = CreateItem("Level 0 Key Card", "key0", x, y, z)
+					;[End Block]
+			    Case "Fine"
+					;[Block]
 					it2 = CreateItem("Level 1 Key Card", "key1", x, y, z)
 					;[End Block]
-			    Case "Fine", "Very fine"
+				Case "Very fine"
 					;[Block]
 					it2 = CreateItem("Level 2 Key Card", "key2", x, y, z)
 					;[End Block]
@@ -9468,9 +9608,13 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					;[End Block]
 				Case "1:1"
 					;[Block]
+					it2 = CreateItem("Level 0 Key Card", "key0", x, y, z)
+					;[End Block]
+			    Case "Fine"
+					;[Block]
 					it2 = CreateItem("Level 1 Key Card", "key1", x, y, z)
 					;[End Block]
-			    Case "Fine", "Very Fine"
+				Case "Very fine"
 					;[Block]
 					it2 = CreateItem("Level 2 Key Card", "key2", x, y, z)
 					;[End Block]
@@ -11398,5 +11542,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#FF7#135C#1BBA
+;~B#1018#137D#1BDB
 ;~C#Blitz3D

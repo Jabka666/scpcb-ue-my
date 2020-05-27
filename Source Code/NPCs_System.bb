@@ -7103,10 +7103,10 @@ End Function
 
 Function GetNPCManipulationValue$(NPC$, Bone$, Section$, ValueType% = 0)
 	; ~ Valuetype determines what type of variable should the Output be returned
-	; ~ 0 - String
-	; ~ 1 - Int
-	; ~ 2 - Float
-	; ~ 3 - Boolean
+	; ~ 0: String
+	; ~ 1: Int
+	; ~ 2: Float
+	; ~ 3: Boolean
 	
 	Local Value$ = GetINIString("Data\NPCBones.ini", NPC, Bone + "_" + Section)
 	
@@ -7249,32 +7249,32 @@ Function ChangeNPCTextureID(n.NPCs, TextureID%) ; ~ Works only for Class D model
 	SetNPCFrame(n, n\Frame)
 End Function
 
-Function AnimateNPC(n.NPCs, Start#, Quit#, Speed#, Loop% = True)
+Function AnimateNPC(n.NPCs, FirstFrame#, LastFrame#, Speed#, Loop% = True)
 	Local NewTime#, Temp%
 	
 	If Speed > 0.0 Then 
-		NewTime = Max(Min(n\Frame + Speed * FPSfactor, Quit), Start)
+		NewTime = Max(Min(n\Frame + Speed * FPSfactor, LastFrame), FirstFrame)
 		
-		If Loop And NewTime >= Quit Then
-			NewTime = Start
+		If Loop And NewTime >= LastFrame Then
+			NewTime = FirstFrame
 		EndIf
 	Else
-		If Start < Quit Then
-			Temp = Start
-			Start = Quit
-			Quit = Temp
+		If FirstFrame < LastFrame Then
+			Temp = FirstFrame
+			FirstFrame = LastFrame
+			LastFrame = Temp
 		EndIf
 		
 		If Loop Then
 			NewTime = n\Frame + Speed * FPSfactor
 			
-			If NewTime < Quit Then 
-				NewTime = Start
-			Else If NewTime > Start 
-				NewTime = Quit
+			If NewTime < LastFrame Then 
+				NewTime = FirstFrame
+			Else If NewTime > FirstFrame 
+				NewTime = LastFrame
 			EndIf
 		Else
-			NewTime = Max(Min(n\Frame + Speed * FPSfactor, Start), Quit)
+			NewTime = Max(Min(n\Frame + Speed * FPSfactor, FirstFrame), LastFrame)
 		EndIf
 	EndIf
 	SetNPCFrame(n, NewTime)

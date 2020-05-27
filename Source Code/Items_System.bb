@@ -306,12 +306,14 @@ Function InitItemTemplates()
 	
 	CreateItemTemplate("Coin", "coin", ItemsPath + "coin.b3d", ItemsPath + "INV_coin.png", "", 0.0005, 3)
 	
-	CreateItemTemplate("Key Card Omni", "key6", ItemsPath + "key_card.x", ItemsPath + "INV_key_card_lvl_omni.png", "", 0.0004, 1, ItemsPath + "key_card_lvl_omni.png")
+	CreateItemTemplate("Level 0 Key Card", "key0", ItemsPath + "key_card.x", ItemsPath + "INV_key_card_lvl_0.png", "", 0.0004, 1, ItemsPath + "key_card_lvl_0.png")
 	CreateItemTemplate("Level 1 Key Card", "key1", ItemsPath + "key_card.x", ItemsPath + "INV_key_card_lvl_1.png", "", 0.0004, 1, ItemsPath + "key_card_lvl_1.png")
 	CreateItemTemplate("Level 2 Key Card", "key2", ItemsPath + "key_card.x", ItemsPath + "INV_key_card_lvl_2.png", "", 0.0004, 1, ItemsPath + "key_card_lvl_2.png")
 	CreateItemTemplate("Level 3 Key Card", "key3", ItemsPath + "key_card.x", ItemsPath + "INV_key_card_lvl_3.png", "", 0.0004, 1, ItemsPath + "key_card_lvl_3.png")
 	CreateItemTemplate("Level 4 Key Card", "key4", ItemsPath + "key_card.x", ItemsPath + "INV_key_card_lvl_4.png", "", 0.0004, 1, ItemsPath + "key_card_lvl_4.png")
 	CreateItemTemplate("Level 5 Key Card", "key5", ItemsPath + "key_card.x", ItemsPath + "INV_key_card_lvl_5.png", "", 0.0004, 1, ItemsPath + "key_card_lvl_5.png")
+	CreateItemTemplate("Level 6 Key Card", "key6", ItemsPath + "key_card.x", ItemsPath + "INV_key_card_lvl_6.png", "", 0.0004, 1, ItemsPath + "key_card_lvl_6.png")
+	CreateItemTemplate("Key Card Omni", "key7", ItemsPath + "key_card.x", ItemsPath + "INV_key_card_lvl_omni.png", "", 0.0004, 1, ItemsPath + "key_card_lvl_omni.png")
 	
 	CreateItemTemplate("Lost Key", "key", ItemsPath + "key.b3d", ItemsPath + "INV_key.png", "", 0.003, 3)
 	
@@ -683,6 +685,10 @@ Function PickItem(item.Items)
 						GiveAchievement(Achv860)
 						;[End Block]
 					Case "key6"
+						;[Block]
+						GiveAchievement(AchvKeyCard6)
+						;[End Block]
+					Case "key7"
 						;[Block]
 						GiveAchievement(AchvOmni)
 						;[End Block]

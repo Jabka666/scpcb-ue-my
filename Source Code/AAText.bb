@@ -108,7 +108,7 @@ Function AASetFont(Fnt%)
 	
 	If AATextEnable And font\IsAA Then
 		For i = 0 To 149
-			EntityTexture(AATextSprite[i],font\Texture)
+			EntityTexture(AATextSprite[i], font\Texture)
 		Next
 	EndIf
 End Function
@@ -153,13 +153,13 @@ Function AAText(x%, y%, Txt$, cX% = False, cY% = False, A# = 1.0)
 	If (GraphicsBuffer() <> BackBuffer()) Or (Not AATextEnable) Or (Not font\IsAA) Then
 		SetFont(font\LowResFont)
 		
-		Local oldr% = ColorRed()
-		Local oldg% = ColorGreen()
-		Local oldb% = ColorBlue()
+		Local oldR% = ColorRed()
+		Local oldG% = ColorGreen()
+		Local oldB% = ColorBlue()
 		
-		Color(oldr * A, oldg * A, oldb * A)
+		Color(oldR * A, oldG * A, oldB * A)
 		Text(x, y, Txt, cX, cY)
-		Color(oldr, oldg, oldb)
+		Color(oldR, oldG, oldB)
 		Return
 	EndIf
 	
@@ -270,7 +270,7 @@ Function AALoadFont%(File$ = "Tahoma", Height% = 13, Bold% = 0, Italic% = 0, Und
 		For i = 32 To 126
 			SetBuffer(ImageBuffer(tCharImage))
 			Cls
-
+			
 			Color(255, 255, 255)
 			SetFont(hResFont)
 			Text(AATextScaleFactor / 2, AATextScaleFactor / 2, Chr(i))
@@ -314,7 +314,7 @@ Function AALoadFont%(File$ = "Tahoma", Height% = 13, Bold% = 0, Italic% = 0, Und
 						Local iiY%, iiX%
 						
 						For iiY% = rsY To rdY - 1
-							For iiX% = rsX To rdX - 1
+							For iiX = rsX To rdX - 1
 								Ar = Ar + ((ReadPixelFast(iiX, iiY, ImageBuffer(tCharImage)) And $FF))
 							Next
 						Next
@@ -370,6 +370,5 @@ Function AALoadFont%(File$ = "Tahoma", Height% = 13, Bold% = 0, Italic% = 0, Und
 	EndIf
 	Return(Handle(newFont))
 End Function
-
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D

@@ -131,14 +131,15 @@ Const HARD% = 2
 
 ; ~ [ACHIEVEMENTS]
 
-Const MAXACHIEVEMENTS% = 39
+Const MAXACHIEVEMENTS% = 40
 
 Const Achv008% = 0, Achv012% = 1, Achv035% = 2, Achv049% = 3, Achv055% = 4,  Achv079% = 5, Achv096% = 6, Achv106% = 7
 Const Achv148% = 8, Achv205% = 9, Achv294% = 10, Achv372% = 11, Achv409% = 12, Achv420J% = 13, Achv427% = 14, Achv500% = 15, Achv513% = 16
 Const Achv714% = 17, Achv789J% = 18, Achv860% = 19, Achv895% = 20, Achv914% = 21, Achv939% = 22, Achv966% = 23, Achv970% = 24
 Const Achv1025% = 25, Achv1048% = 26, Achv1123% = 27, Achv1162% = 28, Achv1499% = 29
 
-Const AchvConsole% = 30, AchvHarp% = 31, AchvKeter% = 32, AchvMaynard% = 33, AchvOmni% = 34, AchvO5% = 35, AchvPD% = 36, AchvSNAV% = 37, AchvTesla% = 38
+Const AchvConsole% = 30, AchvHarp% = 31, AchvKeter% = 32, AchvKeyCard6% = 33, AchvMaynard% = 34, AchvOmni% = 35
+Const AchvO5% = 36, AchvPD% = 37, AchvSNAV% = 38, AchvTesla% = 39
 
 ; ~ [FONTS]
 

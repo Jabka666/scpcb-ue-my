@@ -2482,7 +2482,7 @@ Function FillRoom(r.Rooms)
 			it = CreateItem("Empty Cup", "emptycup", r\x - 672.0 * RoomScale, 240.0 * RoomScale, r\z + 288.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it = CreateItem("Level 1 Key Card", "key1", r\x - 672.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 224.0 * RoomScale)
+			it = CreateItem("Level 0 Key Card", "key0", r\x - 672.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 224.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case "room2sroom"
@@ -3622,7 +3622,7 @@ Function FillRoom(r.Rooms)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			
-			it = CreateItem("Level 1 Key Card", "key1", r\x + 736.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 752.0 * RoomScale)
+			it = CreateItem("Level 0 Key Card", "key0", r\x + 736.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 752.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			clipboard = CreateItem("Clipboard", "clipboard", r\x - 400.0 * RoomScale, r\y - 50.0 * RoomScale, r\z - 700.0 * RoomScale)
@@ -4672,7 +4672,7 @@ Function FillRoom(r.Rooms)
 								;[End Block]
 							Case (Chance >= 40) And (Chance < 45) ; ~ 5% chance for a key card
 								;[Block]
-								Temp3% = Rand(1, 2)
+								Temp3% = Rand(0, 2)
 								TempStr = "Level " + Str(Temp3) + " Key Card"
 								TempStr2 = "key" + Str(Temp3)
 								;[End Block]
@@ -5615,6 +5615,28 @@ Function FillRoom(r.Rooms)
 			sc\Angle = 100.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			EntityParent(sc\OBJ, r\OBJ)
+			;[End Block]
+		Case "room2posters"
+		    ;[Block]
+		    d = CreateDoor(r\Zone, r\x + 272.0 * RoomScale, r\y, r\z + 576.0 * RoomScale, 90.0, r, False, False, 1, "", False, True)
+			d\AutoClose = False
+			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) + 0.061, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
+            PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) - 0.061, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
+			
+			sc = CreateSecurityCam(r\x + 980.0 * RoomScale, r\y + 515.0 * RoomScale, r\z + 100.0 * RoomScale, r, True)
+			sc\Angle = 30.0 : sc\Turn = 30.0
+			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
+			EntityParent(sc\OBJ, r\OBJ)
+			
+            it = CreateItem("Level 1 Key Card", "key1", r\x + 468.0 * RoomScale, r\y + 160.0 * RoomScale, r\z + 980.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it = CreateItem("Origami", "misc", r\x + 460.0 * RoomScale, r\y + 250.0 * RoomScale, r\z + 80.0 * RoomScale)
+			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it = CreateItem("9V Battery", "bat", r\x + 900.0 * RoomScale, r\y + 250.0 * RoomScale, r\z + 80.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 	End Select
 	
@@ -7411,6 +7433,7 @@ Function CreateMap()
 	SetRoom("room2scps2", ROOM2, Floor(0.6 * Float(Room2Amount[0])), Min_Pos, Max_Pos)
 	SetRoom("room1123", ROOM2, Floor(0.7 * Float(Room2Amount[0])), Min_Pos, Max_Pos)
 	SetRoom("room2elevator", ROOM2, Floor(0.85 * Float(Room2Amount[0])), Min_Pos, Max_Pos)
+	SetRoom("room2posters", ROOM2, Floor(0.9 * Float(Room2Amount[0])), Min_Pos, Max_Pos)
 	
 	MapRoom(ROOM2C, Floor(0.5 * Float(Room2CAmount[0]))) = "room1162"
 	
