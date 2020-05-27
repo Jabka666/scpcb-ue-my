@@ -23,7 +23,7 @@ For rt.RoomTemplates = Each RoomTemplates
 Next
 SetGadgetLayout listbox, 3,3,2,2
 
-InitEvents("..\Data\events.ini")
+InitEvents("..\Data\Events_MC.ini")
 AddEvents()
 ;room_desc = CreateLabel("Room description:",5,40+ResHeight/2,ResWidth/4,ResHeight/8.05,WinHandle,3)
 Global room_desc = CreateLabel("Room description:",5,40+ResHeight/2,ResWidth/4,ResHeight/11.8,WinHandle,3)
@@ -357,7 +357,7 @@ Repeat
 			Else
 				EnableGadget combobox
 				If MapEvent(Grid_SelectedX,Grid_SelectedY)<>"" And MapEvent(Grid_SelectedX,Grid_SelectedY)<>"[none]"
-					For ev.event = Each event
+					For ev.event = Each Event
 						If ev\name = MapEvent(Grid_SelectedX,Grid_SelectedY)
 							SetGadgetText event_desc, "Event description:"+Chr(13)+ev\description
 							Exit
@@ -1306,7 +1306,7 @@ Repeat
 				name$ = GadgetItemText$(combobox,item)
 				
 				If item > 0
-					For ev.event = Each event
+					For ev.event = Each Event
 						If ev\name = name
 							SetGadgetText event_desc, "Event description:"+Chr(13)+ev\description
 							Exit
@@ -1380,7 +1380,7 @@ Repeat
 				Else
 					EnableGadget combobox
 					If SelectedGadgetItem(combobox)<>0
-						For ev.event = Each event
+						For ev.event = Each Event
 							If ev\name = currRT\events[0]
 								SetGadgetText event_desc, "Event description:"+Chr(13)+ev\description
 								Exit
@@ -1780,10 +1780,10 @@ Function InitEvents(file$)
 			e = New Event
 			e\Name = TemporaryString
 			
-			e\Description = GetINIString(file, TemporaryString, "descr")
+			e\Description = GetINIString(file, TemporaryString, "Descr")
 			
 			For i = 1 To MaxEvents
-				e\Room[i] = GetINIString(file, TemporaryString, "room"+i)
+				e\Room[i] = GetINIString(file, TemporaryString, "Room"+i)
 			Next
 			
 		EndIf
