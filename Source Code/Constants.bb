@@ -13,16 +13,22 @@ Const VersionNumber$ = "5.6"
 ; ~ [OBJECTS]
 
 Const MaxMTModelIDAmount% = 7
+
 Const MaxMonitorModelIDAmount% = 3
+
 Const MaxDoorModelIDAmount% = 12
+
 Const MaxButtonModelIDAmount% = 5
+
 Const MaxLeverModelIDAmount% = 2
+
 Const MaxCamModelIDAmount% = 2
+
 Const MaxMiscModelIDAmount% = 1
 
-; ~ [NPCs]
-
 Const MaxNPCModelIDAmount% = 34
+
+; ~ [NPCs]
 
 Const NPCtype008_1% = 1, NPCtype035_Tentacle% = 2, NPCtype049% = 3, NPCtype049_2% = 4, NPCtype066% = 5, NPCtype096% = 6
 Const NPCtype106% = 7, NPCtype173% = 8, NPCtype372% = 9, NPCtype513_1% = 10, NPCtype860_2% = 11, NPCtype939% = 12
@@ -87,6 +93,7 @@ Const MaxDecalTextureIDAmount% = 20
 Const MaxParticleTextureIDAmount% = 9
 
 Const MaxLightSpriteIDAmount% = 3
+
 ; ~ [ITEMS]
 
 Const MaxItemAmount% = 10

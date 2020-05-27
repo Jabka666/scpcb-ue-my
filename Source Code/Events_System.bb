@@ -1062,7 +1062,7 @@ Function UpdateEvents()
 								EndIf
 							EndIf
 							
-							If e\room\NPC[8] <> Null Then
+							If e\room\NPC[8] <> Null Or e\room\NPC[9] <> Null Or e\room\NPC[10] <> Null Then
 								If e\room\NPC[8]\State = 7.0 Then
 									If Distance(EntityX(Collider), EntityZ(Collider), EntityX(e\room\OBJ, True) - 6688.0 * RoomScale, EntityZ(e\room\OBJ, True) - 1252.0 * RoomScale) < 2.5 Then
 										e\room\NPC[8]\State = 10.0
@@ -1070,8 +1070,9 @@ Function UpdateEvents()
 										e\room\NPC[10]\State = 10.0
 									EndIf
 								Else
-									If EntityX(e\room\NPC[8]\Collider) < EntityX(e\room\obj, True) - 7100.0 * RoomScale Then
+									If EntityX(e\room\NPC[8]\Collider) < EntityX(e\room\OBJ, True) - 7100.0 * RoomScale Then
 										For i = 8 To 10
+											e\room\NPC[i]\State = 0.0
 											If e\room\NPC[i] <> Null Then RemoveNPC(e\room\NPC[i])
 										Next
 									EndIf
@@ -1414,7 +1415,7 @@ Function UpdateEvents()
 								
 								e\room\NPC[10] = CreateNPC(NPCtypeGuard, e\room\x - 4200.0 * RoomScale, 1.0, e\room\z - 3900.0 * RoomScale)
 								e\room\NPC[10]\State = 7.0
-									
+								
 								For i = 8 To 10
 									PositionEntity(Pvt, EntityX(e\room\NPC[i]\Collider), EntityY(e\room\NPC[i]\Collider), EntityZ(e\room\NPC[i]\Collider))
 									EntityPick(Pvt, 20.0)
@@ -9980,6 +9981,11 @@ Function UpdateEndings()
 											e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\CI.ogg"))
 										EndIf
 										
+										If e\EventState3 >= 480.0 Then 
+											Animate2(e\room\Objects[12], AnimTime(e\room\Objects[12]), 176.0, 210.0, 0.2)
+											MoveEntity(e\room\Objects[12], 0.0, 0.0, 0.01 * FPSfactor)
+										EndIf
+										
 										If ChannelPlaying(e\SoundCHN) = False And SelectedEnding = "" Then
 											PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\Bell2.ogg"))
 											
@@ -10304,5 +10310,5 @@ Function GenerateIA()
 	Next
 End Function
 ;~IDEal Editor Parameters:
-;~B#11FA#1E29
+;~B#11FB#1E2A
 ;~C#Blitz3D
