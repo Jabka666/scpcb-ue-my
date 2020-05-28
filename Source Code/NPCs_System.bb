@@ -134,7 +134,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			
-			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2, MeshHeight(n\OBJ) * 2, MeshDepth(n\OBJ) * 2)
+			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0)
 			
 			n\Speed = GetINIFloat("Data\NPCs.ini", "Guard", "speed") / 100.0
 			;[End Block]
@@ -151,7 +151,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			
-			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2, MeshHeight(n\OBJ) * 2, MeshDepth(n\OBJ) * 2) 
+			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0) 
 			
 			n\Speed = GetINIFloat("Data\NPCs.ini", "MTF", "speed") / 100.0
 			
@@ -172,7 +172,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			Temp = 0.51 / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			
-			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2, MeshHeight(n\OBJ) * 2, MeshDepth(n\OBJ) * 2)
+			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0)
 			
 			n\Speed = 2.0 / 100
 			
@@ -217,7 +217,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			Temp = GetINIFloat("Data\NPCs.ini", "SCP-096", "scale") / 3.0
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)	
 			
-			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ) * 2, -MeshHeight(n\OBJ) * 2, -MeshDepth(n\OBJ) * 2, MeshWidth(n\OBJ) * 2, MeshHeight(n\OBJ) * 4, MeshDepth(n\OBJ) * 4)
+			MeshCullBox(n\OBJ, (-MeshWidth(n\OBJ)) * 2.0, (-MeshHeight(n\OBJ)) * 2.0, (-MeshDepth(n\OBJ)) * 2.0, MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 4.0, MeshDepth(n\OBJ) * 4.0)
 			
 			n\CollRadius = 0.26
 			;[End Block]
@@ -253,7 +253,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			Temp = GetINIFloat("Data\NPCs.ini", "SCP-049-2", "scale") / 2.5
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			
-			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2, MeshHeight(n\OBJ) * 2, MeshDepth(n\OBJ) * 2)
+			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0)
 			
 			SetAnimTime(n\OBJ, 107)
 			
@@ -348,7 +348,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			Temp = GetINIFloat("Data\NPCs.ini", "forestmonster", "scale") / 20.0
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)	
 			
-			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ) * 2, -MeshHeight(n\OBJ) * 2, -MeshDepth(n\OBJ) * 2, MeshWidth(n\OBJ) * 2, MeshHeight(n\OBJ) * 4, MeshDepth(n\OBJ) * 4)
+			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ) * 2.0, (-MeshHeight(n\OBJ)) * 2.0, (-MeshDepth(n\OBJ)) * 2.0, MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 4.0, MeshDepth(n\OBJ) * 4.0)
 			
 			n\CollRadius = 0.25
 			;[End Block]
@@ -447,7 +447,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			Temp = 0.5 / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			
-			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2, MeshHeight(n\OBJ) * 2, MeshDepth(n\OBJ) * 2)
+			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0)
 			
 			SetNPCFrame(n, 11)
 			
@@ -471,9 +471,27 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			
 			n\Speed = 2.0 / 100
 			
-			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2, MeshHeight(n\OBJ) * 2, MeshDepth(n\OBJ) * 2)
+			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0)
 			
 			n\CollRadius = 0.32
+			;[End Block]
+		Case NPCtypeVehicle
+			;[Block]
+			n\NVName = "Vehicle"
+			n\Collider = CreatePivot()
+			EntityRadius(n\Collider, 0.32)
+			EntityType(n\Collider, HIT_PLAYER)
+			
+            n\OBJ = CopyEntity(o\NPCModelID[34])
+			
+			Temp = 1.86 / MeshWidth(n\OBJ)
+			ScaleEntity n\OBJ, Temp, Temp, Temp
+			
+			MeshCullBox (n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0)
+			
+			n\Speed = 2.0 / 100.0
+			
+		    n\CollRadius = 0.72
 			;[End Block]
 	End Select
 	
@@ -4919,6 +4937,44 @@ Function UpdateNPCs()
 				RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
 				PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.2, EntityZ(n\Collider))
 				;[End Block]
+			Case NPCtypeVehicle 
+				;[Block]
+				Select n\State
+					Case 0.0 ; ~ Idles
+						;[Block]
+					    n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
+						;[End Block]
+					Case 1.0 ; ~ Moves
+						;[Block]
+						n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
+						Animate2(n\OBJ, AnimTime(n\OBJ), 1.0, 20.0, n\CurrSpeed * 18.0)
+						;[End Block]
+				End Select
+				
+				If n\State = 0.0 Then
+					If n\Sound = 0 Then
+						n\Sound = LoadSound_Strict("SFX\Character\Vehicle\Idle.ogg")
+					EndIf
+					If n\Sound2 <> 0 Then
+						FreeSound_Strict(n\Sound2) : n\Sound2 = 0
+					EndIf
+					n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider, 11.5, 1.0)
+				Else
+					If n\Sound2 = 0 Then
+						n\Sound2 = LoadSound_Strict("SFX\Character\Vehicle\Move.ogg")
+					EndIf
+					If n\Sound <> 0 Then
+						FreeSound_Strict(n\Sound) : n\Sound = 0
+					EndIf
+					n\SoundCHN2 = LoopSound2(n\Sound2, n\SoundCHN2, Camera, n\Collider, 11.5, 1.0)
+				EndIf
+				
+				MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * FPSfactor)
+				
+				PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.32, EntityZ(n\Collider))
+				
+				RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider), 0.0)
+				;[End Block]
 		End Select
 		
 		If n\IsDead
@@ -5541,7 +5597,7 @@ Function UpdateMTFUnit(n.NPCs)
 								If n\Sound <> 0 Then 
 									FreeSound_Strict(n\Sound) : n\Sound = 0
 								EndIf
-								n\Sound = LoadSound_Strict("SFX\Character\MTF\049\Player0492_1.ogg")
+								n\Sound = LoadSound_Strict("SFX\Character\MTF\049_2\Spotted.ogg")
 								PlayMTFSound(n\Sound, n)
 								Exit
 							EndIf
@@ -5910,7 +5966,7 @@ Function UpdateMTFUnit(n.NPCs)
 								If n\Sound <> 0 Then 
 									FreeSound_Strict(n\Sound) : n\Sound = 0
 								EndIf
-								n\Sound = LoadSound_Strict("SFX\Character\MTF\049\Player0492_1.ogg")
+								n\Sound = LoadSound_Strict("SFX\Character\MTF\049_2\Spotted.ogg")
 								PlayMTFSound(n\Sound, n)
 								Exit
 							EndIf
@@ -6537,7 +6593,7 @@ Function UpdateMTFUnit(n.NPCs)
 										FreeSound_Strict(n\Sound) : n\Sound = 0
 									EndIf	
 									If n\Target\NPCtype = NPCtype049_2
-										n\Sound = LoadSound_Strict("SFX\Character\MTF\049\Player0492_2.ogg")
+										n\Sound = LoadSound_Strict("SFX\Character\MTF\049_2\TargetTerminated.ogg")
 										PlayMTFSound(n\Sound, n)
 									EndIf
 								EndIf
@@ -7025,6 +7081,11 @@ Function Console_SpawnNPC(C_Input$, C_State$ = "")
 			n.NPCs = CreateNPC(NPCtypeClerk, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
 			ConsoleMsg = "Clerk spawned."
 			;[End Block]
+		Case "vehicle", "truck"
+			;[Block]
+			n.NPCs = CreateNPC(NPCtypeVehicle, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
+			ConsoleMsg = "Vehicle spawned."
+			;[End Block]
 		Default 
 			;[Block]
 			CreateConsoleMsg("NPC type not found.", 255, 0, 0) : Return
@@ -7322,5 +7383,5 @@ Function Animate2#(Entity%, Curr#, Start%, Quit%, Speed#, Loop% = True)
 End Function 
 
 ;~IDEal Editor Parameters:
-;~B#164#1212#1339#1389#1503#1620#17F4#184F
+;~B#164#1224#1371#13C1#153B#1658#182C#1887
 ;~C#Blitz3D

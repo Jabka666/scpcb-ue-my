@@ -4271,25 +4271,6 @@ Function FillRoom(r.Rooms)
 			r\RoomDoors[4] = CreateDoor(r\Zone, r\x - 4352.0 * RoomScale, r\y, r\z - 1248.0 * RoomScale, 90.0, r, True)
 			r\RoomDoors[4]\AutoClose = False : r\RoomDoors[4]\Locked = True : r\RoomDoors[4]\MTFClose = False	
 			
-			; ~ The door in the office below the walkway
-			r\RoomDoors[7] = CreateDoor(r\Zone, r\x - 3712.0 * RoomScale, r\y - 385.0 * RoomScale, r\z - 128.0 * RoomScale, 0.0, r, True)
-			r\RoomDoors[7]\AutoClose = False : r\RoomDoors[7]\MTFClose = False : r\RoomDoors[7]\Locked = True
-			FreeEntity(r\RoomDoors[7]\Buttons[1]) : r\RoomDoors[7]\Buttons[1] = 0
-			
-			d = CreateDoor(r\Zone, r\x - 3712 * RoomScale, r\y - 385.0 * RoomScale, r\z - 2336.0 * RoomScale, 0.0, r)
-			d\Locked = True : d\DisableWaypoint = True : d\MTFClose = False
-			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
-			
-			; ~ The door from the concrete tunnel to the large hall
-			d = CreateDoor(r\Zone, r\x - 6864.0 * RoomScale, r\y, r\z - 1248.0 * RoomScale, 90.0, r, True)
-			d\AutoClose = False : d\Locked = True : d\MTFClose = False
-			
-			; ~ The door to the staircase in the office room
-			d = CreateDoor(r\Zone, r\x - 2432.0 * RoomScale, r\y, r\z - 1000.0 * RoomScale, 0.0, r, False, 4)
-			d\Locked = True : d\DisableWaypoint = True : d\MTFClose = False
-			PositionEntity(d\Buttons[0], r\x - 2592.0 * RoomScale, EntityY(d\Buttons[0], True), r\z - 1010.0 * RoomScale, True)
-			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
-			
 			Tex = LoadTexture_Strict("GFX\map\Door02.jpg")
 			For zTemp = 0 To 1
 				d = CreateDoor(r\Zone, r\x - 5760.0 * RoomScale, r\y, r\z + (320.0 + 896.0 * zTemp) * RoomScale, 0.0, r)
@@ -4330,9 +4311,28 @@ Function FillRoom(r.Rooms)
 						FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
 					Next
 					
-					If xTemp = 2 And zTemp = 1 Then r\RoomDoors[6] = d
+					If xTemp = 2 And zTemp = 1 Then r\RoomDoors[5] = d
 				Next	
 			Next
+			
+			; ~ The door in the office below the walkway
+			r\RoomDoors[6] = CreateDoor(r\Zone, r\x - 3712.0 * RoomScale, r\y - 385.0 * RoomScale, r\z - 128.0 * RoomScale, 0.0, r, True)
+			r\RoomDoors[6]\AutoClose = False : r\RoomDoors[6]\MTFClose = False : r\RoomDoors[6]\Locked = True
+			FreeEntity(r\RoomDoors[6]\Buttons[1]) : r\RoomDoors[6]\Buttons[1] = 0
+			
+			d = CreateDoor(r\Zone, r\x - 3712 * RoomScale, r\y - 385.0 * RoomScale, r\z - 2336.0 * RoomScale, 0.0, r)
+			d\Locked = True : d\DisableWaypoint = True : d\MTFClose = False
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			
+			; ~ The door from the concrete tunnel to the large hall
+			d = CreateDoor(r\Zone, r\x - 6864.0 * RoomScale, r\y, r\z - 1248.0 * RoomScale, 90.0, r, True)
+			d\AutoClose = False : d\Locked = True : d\MTFClose = False
+			
+			; ~ The door to the staircase in the office room
+			d = CreateDoor(r\Zone, r\x - 2432.0 * RoomScale, r\y, r\z - 1000.0 * RoomScale, 0.0, r, False, 4)
+			d\Locked = True : d\DisableWaypoint = True : d\MTFClose = False
+			PositionEntity(d\Buttons[0], r\x - 2592.0 * RoomScale, EntityY(d\Buttons[0], True), r\z - 1010.0 * RoomScale, True)
+			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], EntityX(r\OBJ) + 40.0 * RoomScale, 460.0 * RoomScale, EntityZ(r\OBJ) + 1072.0 * RoomScale)
@@ -5781,7 +5781,7 @@ Function UpdateRooms()
 				If r\Lights[i] <> 0 Then
 					Dist = EntityDistance(Collider, r\Lights[i])
 					If Dist < HideDistance Then
-						TempLightVolume = TempLightVolume + r\LightIntensity[i]*r\LightIntensity[i] * ((HideDistance - Dist) / HideDistance)						
+						TempLightVolume = TempLightVolume + r\LightIntensity[i] * r\LightIntensity[i] * ((HideDistance - Dist) / HideDistance)						
 					EndIf
 				Else
 					Exit

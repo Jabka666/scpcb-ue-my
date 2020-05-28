@@ -8079,6 +8079,8 @@ Function LoadEntities()
 	
 	o\NPCModelID[33] = LoadAnimMesh_Strict("GFX\npcs\scp_205_woman.b3d") ; ~ SCP-205's Woman
 	
+	o\NPCModelID[34] = LoadAnimMesh_Strict("GFX\npcs\vehicle.b3d") ; ~ Vehicle
+	
     For i = 0 To MaxNPCModelIDAmount - 1
         HideEntity(o\NPCModelID[i])
     Next
