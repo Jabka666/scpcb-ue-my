@@ -9035,7 +9035,7 @@ Function UpdateDimension1499()
 										Exit
 									EndIf
 								Next
-								Scale = (GetINIFloat("Data\NPCs.ini", "SCP-1499-1", "scale") / 4.0) * Rnd(0.8, 1.0)
+								Scale = GetINIFloat("Data\NPCs.ini", "SCP-1499-1", "Scale") / 4.0 * Rnd(0.8, 1.0)
 								ScaleEntity(du\OBJ, Scale, Scale, Scale)
 								EntityFX(du\OBJ, 1)
 								du\Anim = Rand(0, 1)
@@ -9054,7 +9054,7 @@ Function UpdateDimension1499()
 										Exit
 									EndIf
 								Next
-								Scale = (GetINIFloat("Data\NPCs.ini", "SCP-1499-1", "scale") / 4.0) * Rnd(0.8, 1.0)
+								Scale = GetINIFloat("Data\NPCs.ini", "SCP-1499-1", "Scale") / 4.0 * Rnd(0.8, 1.0)
 								ScaleEntity(du\OBJ, Scale, Scale, Scale)
 								EntityFX(du\OBJ, 1)
 								du\Anim = Rand(0, 1)
