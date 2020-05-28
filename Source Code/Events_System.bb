@@ -1034,7 +1034,7 @@ Function UpdateEvents()
 								If Rand(3) = 1 Then
 									e\EventStr = "Scripted\Scripted" + Rand(1, 5) + ".ogg|Off.ogg|"
 								Else
-									GenerateIA()
+									GenerateRandomIA()
 								EndIf
 							EndIf
 							
@@ -4497,7 +4497,7 @@ Function UpdateEvents()
 						ScaleEntity(e\room\Objects[2], 0.05, 0.05, 0.05)
 						SetAnimTime(e\room\Objects[2], 414.0)
 						
-						Local ImgPath$ = ItemsPath + "1048\1048_" + Rand(0, 25) + ".png"
+						Local ImgPath$ = ItemsPath + "1048\1048(" + Rand(0, 25) + ").png"
 						Local itt.ItemTemplates
 						
 						For itt.ItemTemplates = Each ItemTemplates
@@ -4520,7 +4520,7 @@ Function UpdateEvents()
 							t% = GetBrushTexture(b, 0)
 							TexName$ = StripPath(TextureName(t))
 							
-							If Lower(TexName) = "1048_1.png" Then
+							If Lower(TexName) = "1048(1).png" Then
 								PaintSurface(SF, Brush)
 							EndIf
 							FreeBrush(b)
@@ -10203,7 +10203,7 @@ Function IsItemGoodFor1162(itt.ItemTemplates)
 		Case "drawing"
 			;[Block]
 			If itt\Img <> 0 Then FreeImage(itt\Img)	
-			itt\Img = LoadImage_Strict(ItemsPath + "1048\1048_" + Rand(1, 26) + ".png") ; ~ Gives a random drawing.
+			itt\Img = LoadImage_Strict(ItemsPath + "1048\1048(" + Rand(0, 25) + ").png") ; ~ Gives a random drawing.
 			Return(True)
 			;[End Block]
 		Default
@@ -10279,7 +10279,7 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 	Return(EventState)
 End Function
 
-Function GenerateIA()
+Function GenerateRandomIA()
 	Local e.Events
 	Local StrTemp$
 	
