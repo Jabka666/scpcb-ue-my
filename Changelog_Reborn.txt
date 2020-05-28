@@ -26,6 +26,7 @@
 - Removed event of SCP-096's containment chamber.
 - Removed some unnecessary files.
 - Removed quick loading from SCP-966 and SCP-409's containment chambers.
+- Removed achievement of anomalous ducks.
 
 - Renamed room2testroom to room2testroom2.
 - Renamed room2testroom2 to room2testroom.

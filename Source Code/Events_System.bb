@@ -141,10 +141,6 @@ Function InitEvents()
 		End Select 
 	EndIf 
 	
-	CreateEvent("room2testroom173", "room2testroom", 0, 1.0)	
-	
-	CreateEvent("room2tesla", "room2tesla", 0, 0.9)
-	
 	CreateEvent("room2nuke", "room2nuke", 0, 0)
 	
 	If Rand(5) < 5 Then 
@@ -192,6 +188,7 @@ Function InitEvents()
 	CreateEvent("room2pit", "room2pit", 0, 0.4 + (0.4 * SelectedDifficulty\AggressiveNPCs))
 	
 	CreateEvent("room2testroom2", "room2testroom2", 0)
+	CreateEvent("room2testroom173", "room2testroom", 0, 1.0)	
 	
 	CreateEvent("room2tunnel", "room2tunnel", 0)
 	
@@ -211,6 +208,7 @@ Function InitEvents()
 	
 	CreateEvent("room2tesla", "room2tesla_lcz", 0, 0.9)
 	CreateEvent("room2tesla", "room2tesla_hcz", 0, 0.9)
+	CreateEvent("room2tesla", "room2tesla", 0, 0.9)
 	
 	CreateEvent("room4tunnels", "room4tunnels", 0)
 	
@@ -225,6 +223,7 @@ Function InitEvents()
 	
 	CreateEvent("room2sl", "room2sl", 0)
 	
+	CreateEvent("room2medibay", "room2medibay", 0)
 	CreateEvent("room2medibay2", "room2medibay2", 0)
 	
 	CreateEvent("room2shaft", "room2shaft", 0)
@@ -8662,24 +8661,20 @@ Function UpdateEvents()
 				;[End Block]
 			Case "room2medibay2"
 				;[Block]
-				; ~ e\EventState: Determines if the player has entered the room or not
-				; ~ 0 : Not entered
-				; ~ 1 : Has entered
-				
 				; ~ Hiding / Showing the props in this room
 				If PlayerRoom <> e\room Then
 					HideEntity(e\room\Objects[0])
 				Else
 					ShowEntity(e\room\Objects[0])
 					If e\EventState = 0.0 Then
-						e\room\NPC[0] = CreateNPC(NPCtype008_1, EntityX(e\room\Objects[3], True), 0.5, EntityZ(e\room\Objects[3], True))
+						e\room\NPC[0] = CreateNPC(NPCtype008_1, EntityX(e\room\Objects[1], True), 0.5, EntityZ(e\room\Objects[1], True))
 						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle - 90.0, 0.0)
 						e\EventState = 1.0
 					EndIf
 					
 					If EntityDistance(e\room\NPC[0]\Collider, Collider) < 1.2 Then
 						If e\EventState2 = 0.0 Then
-							LightBlink = 12.0
+							LightBlink = 10.0
 							PlaySound_Strict(LightSFX)
 							e\room\NPC[0]\State = 1.0
 							e\EventState2 = 1.0
@@ -8836,6 +8831,7 @@ Function UpdateEvents()
 				;[End Block]
 			Case "room2bio"
 				;[Block]
+				; ~ Hiding / Showing the terrain in this room
 				If e\room\Dist < HideDistance Then
 					ShowEntity(e\room\Objects[0])
 				Else
@@ -8868,7 +8864,7 @@ Function UpdateEvents()
 						        I_409\Timer = 1.0
 					        EndIf
 					        ; ~ Touching the SCP-409
-					        If EntityDistance(e\room\Objects[4], Collider) < 0.6 Then
+					        If EntityDistance(e\room\Objects[4], Collider) < 0.7 Then
 					            If I_409\Timer < 1.0 Then
 						            DrawHandIcon = True
 						            If MouseHit1 Then
@@ -8885,6 +8881,26 @@ Function UpdateEvents()
                     e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[1], e\room\Objects[3], e)
 				EndIf
 				;[End Block]
+			Case "room2medibay"
+				;[Block]
+				; ~ Hiding / Showing the props in this room
+				If PlayerRoom <> e\room Then
+					HideEntity(e\room\Objects[0])
+				Else
+					ShowEntity(e\room\Objects[0])
+					
+					If EntityDistance(e\room\Objects[1], Collider) < 0.7 Then
+						DrawHandIcon = True
+						If MouseHit1 Then
+							Msg = "You feel a cold breeze next to your body."
+							MsgTimer = 70.0 * 6.0
+							Injuries = Injuries + Rnd(-0.5, 0.3)
+							Bloodloss = 0.0
+							e\Sound = LoadSound_Strict("SFX\SCP\Joke\Quack.ogg")
+							e\SoundCHN = PlaySound_Strict(e\Sound)
+						EndIf
+					EndIf
+				EndIf
 		End Select
 		
 		If e <> Null Then
@@ -10338,5 +10354,5 @@ Function GenerateRandomIA()
 	Next
 End Function
 ;~IDEal Editor Parameters:
-;~B#1224#1E46
+;~B#1223#1E45
 ;~C#Blitz3D

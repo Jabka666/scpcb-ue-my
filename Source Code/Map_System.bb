@@ -5399,17 +5399,8 @@ Function FillRoom(r.Rooms)
 			EntityPickMode(r\Objects[0], 2)
 			
 			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x - 762.0 * RoomScale, r\y, r\z - 346.0 * RoomScale)
-			
-			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], EntityX(r\Objects[1], True) + 126.0 * RoomScale, EntityY(r\Objects[1], True), EntityZ(r\Objects[1], True))
-			
-			r\Objects[3] = CreatePivot()
-			PositionEntity(r\Objects[3], r\x - 820.0 * RoomScale, r\y, r\z - 318.399 * RoomScale)
-			
-			For i = 1 To 3
-				EntityParent(r\Objects[i], r\OBJ)
-			Next
+			PositionEntity(r\Objects[1], r\x - 820.0 * RoomScale, r\y, r\z - 318.399 * RoomScale)
+			EntityParent(r\Objects[1], r\OBJ)
 			
 			it = CreateItem("First Aid Kit", "firstaid", r\x - 506.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 322.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -5637,6 +5628,45 @@ Function FillRoom(r.Rooms)
 			
 			it = CreateItem("9V Battery", "bat", r\x + 900.0 * RoomScale, r\y + 250.0 * RoomScale, r\z + 80.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
+			;[End Block]
+		Case "room2medibay"
+			;[Block]
+			d = CreateDoor(r\Zone, r\x - 264.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 90.0, r, False, False, 3)
+			d\AutoClose = False
+			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.031, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.031, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
+			
+			If r\Objects[0] = 0 Then r\Objects[0] = LoadMesh_Strict("GFX\map\medibay_props.b3d", r\OBJ)
+			EntityType(r\Objects[0], HIT_MAP)
+			EntityPickMode(r\Objects[0], 2)
+			
+			If r\Objects[1] = 0 Then r\Objects[1] = CopyEntity(o\NPCModelID[25])
+			Tex = LoadTexture_Strict("GFX\npcs\duck(4).png")
+			EntityTexture(r\Objects[1], Tex)
+			FreeTexture(Tex)
+			ScaleEntity(r\Objects[1], 0.07, 0.07, 0.07)
+			PositionEntity(r\Objects[1], r\x - 910.0 * RoomScale, r\y + 144.0 * RoomScale, r\z - 778.0 * RoomScale, True)				
+			TurnEntity(r\Objects[1], 6.0, 180.0, 0.0)
+			EntityParent(r\Objects[1], r\OBJ)
+			
+			If Rand(2) = 1 Then
+				it = CreateItem("Syringe", "syringe", r\x - 333.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 97.3 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			Else
+				it = CreateItem("Syringe", "syringeinf", r\x - 333.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 97.3 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
+			
+			If Rand(2) = 1 Then
+				it = CreateItem("Syringe", "syringe", r\x - 340.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 52.3 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			Else
+				it = CreateItem("Syringe", "syringeinf", r\x - 340.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 52.3 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
+			
+			it = CreateItem("First Aid Kit", "firstaid", r\x - 506.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 322.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)	
 			;[End Block]
 	End Select
 	
@@ -7431,7 +7461,8 @@ Function CreateMap()
 	SetRoom("room2sl", ROOM2, Floor(0.5 * Float(Room2Amount[0])), Min_Pos, Max_Pos)
 	SetRoom("room012", ROOM2, Floor(0.55 * Float(Room2Amount[0])), Min_Pos, Max_Pos)
 	SetRoom("room2scps2", ROOM2, Floor(0.6 * Float(Room2Amount[0])), Min_Pos, Max_Pos)
-	SetRoom("room1123", ROOM2, Floor(0.7 * Float(Room2Amount[0])), Min_Pos, Max_Pos)
+	SetRoom("room2medibay", ROOM2, Floor(0.7 * Float(Room2Amount[0])), Min_Pos, Max_Pos)
+	SetRoom("room1123", ROOM2, Floor(0.75 * Float(Room2Amount[0])), Min_Pos, Max_Pos)
 	SetRoom("room2elevator", ROOM2, Floor(0.85 * Float(Room2Amount[0])), Min_Pos, Max_Pos)
 	SetRoom("room2posters", ROOM2, Floor(0.9 * Float(Room2Amount[0])), Min_Pos, Max_Pos)
 	
