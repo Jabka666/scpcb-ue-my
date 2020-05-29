@@ -1073,7 +1073,7 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 				fr\Door[i] = CopyEntity(r\Objects[3])
 				PositionEntity(fr\Door[i], 72.0 * RoomScale, 32.0 * RoomScale, 0.0, True)
 				RotateEntity(fr\Door[i], 0.0, 180.0, 0.0)
-				ScaleEntity(fr\Door[i], 48.0 * RoomScale, 45.0 * RoomScale, 48.0 * RoomScale, True)
+				ScaleEntity(fr\Door[i], 49.0 * RoomScale, 45.0 * RoomScale, 48.0 * RoomScale, True)
 				EntityParent(fr\Door[i], fr\DetailEntities[i])
 				
 				Frame = CopyEntity(r\Objects[2], fr\Door[i])
@@ -1867,17 +1867,17 @@ Function FillRoom(r.Rooms)
 			; ~ The wooden doors
 			r\Objects[2] = CopyEntity(o\DoorModelID[8])
 			PositionEntity(r\Objects[2], r\x + 184.0 * RoomScale, r\y, r\z)
-			ScaleEntity(r\Objects[2], 45.0 * RoomScale, 45.0 * RoomScale, 80.0 * RoomScale)
+			ScaleEntity(r\Objects[2], 46.0 * RoomScale, 45.0 * RoomScale, 80.0 * RoomScale)
 			
 			r\Objects[3] = CopyEntity(o\DoorModelID[9])
 			PositionEntity(r\Objects[3], r\x + 112.0 * RoomScale, r\y, r\z + 0.05)
 			EntityType(r\Objects[3], HIT_MAP)
-			ScaleEntity(r\Objects[3], 46.0 * RoomScale, 45.0 * RoomScale, 46.0 * RoomScale)
+			ScaleEntity(r\Objects[3], 49.0 * RoomScale, 45.0 * RoomScale, 46.0 * RoomScale)
 			
 			r\Objects[4] = CopyEntity(r\Objects[3])
 			PositionEntity(r\Objects[4], r\x + 256.0 * RoomScale, r\y, r\z - 0.05)
 			RotateEntity(r\Objects[4], 0.0, 180.0, 0.0)
-			ScaleEntity(r\Objects[4], 46.0 * RoomScale, 45.0 * RoomScale, 46.0 * RoomScale)
+			ScaleEntity(r\Objects[4], 49.0 * RoomScale, 45.0 * RoomScale, 46.0 * RoomScale)
 			
 			For i = 2 To 4
 				EntityParent(r\Objects[i], r\OBJ)
@@ -1893,11 +1893,11 @@ Function FillRoom(r.Rooms)
 			EndIf
 			
 			it = CreateItem("Document SCP-860-1", "paper", r\x + 672.0 * RoomScale, r\y + 176.0 * RoomScale, r\z + 335.0 * RoomScale)
-			RotateEntity(it\Collider, 0.0, r\Angle + 10, 0.0)
+			RotateEntity(it\Collider, 0.0, r\Angle + 10.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it = CreateItem("Document SCP-860", "paper", r\x + 1152.0 * RoomScale, r\y + 176.0 * RoomScale, r\z - 384.0 * RoomScale)
-			RotateEntity(it\Collider, 0.0, r\Angle + 170, 0.0)
+			RotateEntity(it\Collider, 0.0, r\Angle + 170.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case "room2clockroom"
@@ -4773,35 +4773,35 @@ Function FillRoom(r.Rooms)
 			r\Objects[8] = CopyEntity(o\DoorModelID[8])
 			PositionEntity(r\Objects[8], r\x - 272.0 * RoomScale, r\y + 512.0 * RoomScale, r\z + 288.0 * RoomScale)
 			RotateEntity(r\Objects[8], 0.0, 90.0, 0.0)
-			ScaleEntity(r\Objects[8], 45.0 * RoomScale, 45.0 * RoomScale, 80.0 * RoomScale)
+			ScaleEntity(r\Objects[8], 46.0 * RoomScale, 45.0 * RoomScale, 80.0 * RoomScale)
 			
 			r\Objects[9] = CopyEntity(o\DoorModelID[9])
 			PositionEntity(r\Objects[9],r\x - 272.0 * RoomScale, r\y + 512.0 * RoomScale, r\z + (288.0 - 70.0) * RoomScale)
 			RotateEntity(r\Objects[9], 0.0, 10.0, 0.0)
 			EntityType(r\Objects[9], HIT_MAP)
-			ScaleEntity(r\Objects[9], 46.0 * RoomScale, 45.0 * RoomScale, 46.0 * RoomScale)
+			ScaleEntity(r\Objects[9], 48.0 * RoomScale, 45.0 * RoomScale, 46.0 * RoomScale)
 			
 			r\Objects[10] = CopyEntity(r\Objects[8])
 			PositionEntity(r\Objects[10], r\x - 272.0 * RoomScale, r\y + 512.0 * RoomScale, r\z + 736.0 * RoomScale)
 			RotateEntity(r\Objects[10], 0.0, 90.0, 0.0)
-			ScaleEntity(r\Objects[10], 45.0 * RoomScale, 45.0 * RoomScale, 80.0 * RoomScale)
+			ScaleEntity(r\Objects[10], 46.0 * RoomScale, 45.0 * RoomScale, 80.0 * RoomScale)
 			
-			r\Objects[11] =  CopyEntity(r\Objects[9])
+			r\Objects[11] = CopyEntity(r\Objects[9])
 			PositionEntity(r\Objects[11], r\x - 272.0 * RoomScale, r\y + 512.0 * RoomScale, r\z + (736.0 - 70.0) * RoomScale)
 			RotateEntity(r\Objects[11], 0.0, 90.0, 0.0)
 			EntityType(r\Objects[11], HIT_MAP)
-			ScaleEntity(r\Objects[11], 46.0 * RoomScale, 45.0 * RoomScale, 46.0 * RoomScale)
+			ScaleEntity(r\Objects[11], 48.0 * RoomScale, 45.0 * RoomScale, 46.0 * RoomScale)
 			
 			r\Objects[12] = CopyEntity(r\Objects[8])
 			PositionEntity(r\Objects[12], r\x - 592.0 * RoomScale, r\y + 512.0 * RoomScale, r\z - 704.0 * RoomScale)
 			RotateEntity(r\Objects[12], 0.0, 0.0, 0.0)
-			ScaleEntity(r\Objects[12], 45.0 * RoomScale, 45.0 * RoomScale, 80.0 * RoomScale)
+			ScaleEntity(r\Objects[12], 46.0 * RoomScale, 45.0 * RoomScale, 80.0 * RoomScale)
 			
-			r\Objects[13] =  CopyEntity(r\Objects[9])
+			r\Objects[13] = CopyEntity(r\Objects[9])
 			PositionEntity(r\Objects[13],r\x - (592.0 + 70.0) * RoomScale, r\y + 512.0 * RoomScale, r\z - 704.0 * RoomScale)
 			RotateEntity(r\Objects[13], 0.0, 0.0, 0.0)
 			EntityType(r\Objects[13], HIT_MAP)
-			ScaleEntity(r\Objects[13], 46.0 * RoomScale, 45.0 * RoomScale, 46.0 * RoomScale)	
+			ScaleEntity(r\Objects[13], 48.0 * RoomScale, 45.0 * RoomScale, 46.0 * RoomScale)	
 			
 			For i = 3 To 13
 				EntityParent(r\Objects[i], r\OBJ)
@@ -5406,18 +5406,22 @@ Function FillRoom(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			
 			If Rand(2) = 1 Then
-				it = CreateItem("Syringe", "syringe", r\x - 333.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 97.3 * RoomScale)
+				it = CreateItem("Syringe", "syringe", r\x - 340.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 52.3 * RoomScale)
+				RotateEntity(it\Collider, 0.0, Rnd(100.0, 110.0), 0.0)
 				EntityParent(it\Collider, r\OBJ)
 			Else
-				it = CreateItem("Syringe", "syringeinf", r\x - 333.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 97.3 * RoomScale)
+				it = CreateItem("Syringe", "syringeinf", r\x - 340.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 52.3 * RoomScale)
+				RotateEntity(it\Collider, 0.0, Rnd(100.0, 110.0), 0.0)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			
 			If Rand(2) = 1 Then
-				it = CreateItem("Syringe", "syringe", r\x - 340.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 52.3 * RoomScale)
+				it = CreateItem("Syringe", "syringe", r\x - 340.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 97.3 * RoomScale)
+				RotateEntity(it\Collider, 0.0, Rnd(250.0, 260.0), 0.0)
 				EntityParent(it\Collider, r\OBJ)
 			Else
-				it = CreateItem("Syringe", "syringeinf", r\x - 340.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 52.3 * RoomScale)
+				it = CreateItem("Syringe", "syringeinf", r\x - 340.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 97.3 * RoomScale)
+				RotateEntity(it\Collider, 0.0, Rnd(250.0, 260.0), 0.0)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			;[End Block]
@@ -5650,18 +5654,22 @@ Function FillRoom(r.Rooms)
 			EntityParent(r\Objects[1], r\OBJ)
 			
 			If Rand(2) = 1 Then
-				it = CreateItem("Syringe", "syringe", r\x - 333.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 97.3 * RoomScale)
+				it = CreateItem("Syringe", "syringe", r\x - 340.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 52.3 * RoomScale)
+				RotateEntity(it\Collider, 0.0, Rnd(100.0, 110.0), 0.0)
 				EntityParent(it\Collider, r\OBJ)
 			Else
-				it = CreateItem("Syringe", "syringeinf", r\x - 333.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 97.3 * RoomScale)
+				it = CreateItem("Syringe", "syringeinf", r\x - 340.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 52.3 * RoomScale)
+				RotateEntity(it\Collider, 0.0, Rnd(100.0, 110.0), 0.0)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			
 			If Rand(2) = 1 Then
-				it = CreateItem("Syringe", "syringe", r\x - 340.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 52.3 * RoomScale)
+				it = CreateItem("Syringe", "syringe", r\x - 340.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 97.3 * RoomScale)
+				RotateEntity(it\Collider, 0.0, Rnd(250.0, 260.0), 0.0)
 				EntityParent(it\Collider, r\OBJ)
 			Else
-				it = CreateItem("Syringe", "syringeinf", r\x - 340.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 52.3 * RoomScale)
+				it = CreateItem("Syringe", "syringeinf", r\x - 340.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 97.3 * RoomScale)
+				RotateEntity(it\Collider, 0.0, Rnd(250.0, 260.0), 0.0)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			

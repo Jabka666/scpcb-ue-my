@@ -6701,7 +6701,7 @@ Function UpdateEvents()
 										Msg = "The door will not budge."
 										MsgTimer = 70.0 * 6.0
 									EndIf
-								ElseIf SelectedItem\itemtemplate\tempname = "scp860" 
+								ElseIf SelectedItem\ItemTemplate\TempName = "scp860" 
 									If MouseHit1 Then
 										PlaySound_Strict(LoadTempSound("SFX\Door\WoodenDoorOpen.ogg"))
 										ShowEntity(fr.Forest\Forest_Pivot)
@@ -6769,9 +6769,9 @@ Function UpdateEvents()
 			Case "room1123"
 				;[Block]
 				If PlayerRoom = e\room Then
-					If EntityDistance(Collider, e\room\Objects[3]) < 0.9 Or (e\EventState > 0.0 And e\EventState < 7.0) Then
-					    If I_714\Using = 0 Or WearingHazmat < 3 Or WearingGasMask < 3 Then
-			                If e\EventState = 0.0 Then BlurTimer = 1000.0
+					If I_714\Using = 0 Or WearingHazmat < 3 Or WearingGasMask < 3 Then
+						If EntityDistance(Collider, e\room\Objects[3]) < 0.9 Or (e\EventState > 0.0 And e\EventState < 7.0) Then
+							If e\EventState = 0.0 Then BlurTimer = 1000.0
 					        CameraShake = 1.0
 							If e\Sound3 = 0 Then e\Sound3 = LoadSound_Strict("SFX\SCP\1123\Ambient.ogg")
 							e\SoundCHN3 = LoopSound2(e\Sound3, e\SoundCHN3, Camera, Collider, 4.0, 4.0)
