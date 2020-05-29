@@ -8055,27 +8055,25 @@ Function LoadEntities()
 	
 	o\NPCModelID[23] = LoadAnimMesh_Strict("GFX\npcs\scp_1048.b3d") ; ~ SCP-1048
 	
-	o\NPCModelID[24] = LoadAnimMesh_Strict("GFX\npcs\scp_1048_pen.b3d") ; ~ SCP-1048 With Pen
+	o\NPCModelID[24] = LoadAnimMesh_Strict("GFX\npcs\duck.b3d") ; ~ Anomalous Duck
 	
-	o\NPCModelID[25] = LoadAnimMesh_Strict("GFX\npcs\duck.b3d") ; ~ Anomalous Duck
+	o\NPCModelID[25] = LoadAnimMesh_Strict("GFX\npcs\CI.b3d") ; ~ CI
 	
-	o\NPCModelID[26] = LoadAnimMesh_Strict("GFX\npcs\CI.b3d") ; ~ CI
+	o\NPCModelID[26] = LoadAnimMesh_Strict("GFX\npcs\scp_035.b3d") ; ~ SCP-035
 	
-	o\NPCModelID[27] = LoadAnimMesh_Strict("GFX\npcs\scp_035.b3d") ; ~ SCP-035
+	o\NPCModelID[27] = LoadMesh_Strict("GFX\npcs\scp_682_arm.b3d") ; ~ SCP-682's Arm
 	
-	o\NPCModelID[28] = LoadMesh_Strict("GFX\npcs\scp_682_arm.b3d") ; ~ SCP-682's Arm
+	o\NPCModelID[28] = LoadMesh_Strict("GFX\npcs\scp_173_box.b3d") ; ~ SCP-173's Box
 	
-	o\NPCModelID[29] = LoadMesh_Strict("GFX\npcs\scp_173_box.b3d") ; ~ SCP-173's Box
+	o\NPCModelID[29] = LoadAnimMesh_Strict("GFX\npcs\scp_205_demon.b3d") ; ~ SCP-205's Demon #1
 	
-	o\NPCModelID[30] = LoadAnimMesh_Strict("GFX\npcs\scp_205_demon.b3d") ; ~ SCP-205's Demon #1
+	o\NPCModelID[30] = LoadAnimMesh_Strict("GFX\npcs\scp_205_demon(2).b3d") ; ~ SCP-205's Demon #2
 	
-	o\NPCModelID[31] = LoadAnimMesh_Strict("GFX\npcs\scp_205_demon(2).b3d") ; ~ SCP-205's Demon #2
+	o\NPCModelID[31] = LoadAnimMesh_Strict("GFX\npcs\scp_205_demon(3).b3d") ; ~ SCP-205's Demon #3
 	
-	o\NPCModelID[32] = LoadAnimMesh_Strict("GFX\npcs\scp_205_demon(3).b3d") ; ~ SCP-205's Demon #3
+	o\NPCModelID[32] = LoadAnimMesh_Strict("GFX\npcs\scp_205_woman.b3d") ; ~ SCP-205's Woman
 	
-	o\NPCModelID[33] = LoadAnimMesh_Strict("GFX\npcs\scp_205_woman.b3d") ; ~ SCP-205's Woman
-	
-	o\NPCModelID[34] = LoadAnimMesh_Strict("GFX\npcs\vehicle.b3d") ; ~ Vehicle
+	o\NPCModelID[33] = LoadAnimMesh_Strict("GFX\npcs\vehicle.b3d") ; ~ Vehicle
 	
     For i = 0 To MaxNPCModelIDAmount - 1
         HideEntity(o\NPCModelID[i])

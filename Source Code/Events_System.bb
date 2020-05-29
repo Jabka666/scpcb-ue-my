@@ -407,19 +407,19 @@ Function QuickLoadEvents()
 			;[Block]
 			If e\EventState = 0 Or e\EventStr <> "LoadDone" Then
 				If e\EventStr = "Load0"
-					e\room\Objects[3] = CopyEntity(o\NPCModelID[30])
+					e\room\Objects[3] = CopyEntity(o\NPCModelID[29])
 					QuickLoadPercent = 10
 					e\EventStr = "Load1"
 				ElseIf e\EventStr = "Load1"
-					e\room\Objects[4] = CopyEntity(o\NPCModelID[31])
+					e\room\Objects[4] = CopyEntity(o\NPCModelID[30])
 					QuickLoadPercent = 20
 					e\EventStr = "Load2"
 				ElseIf e\EventStr = "Load2"
-					e\room\Objects[5] = CopyEntity(o\NPCModelID[32])
+					e\room\Objects[5] = CopyEntity(o\NPCModelID[31])
 					QuickLoadPercent = 30
 					e\EventStr = "Load3"
 				ElseIf e\EventStr = "Load3"
-					e\room\Objects[6] = CopyEntity(o\NPCModelID[33])
+					e\room\Objects[6] = CopyEntity(o\NPCModelID[32])
 					QuickLoadPercent = 40
 					e\EventStr = "Load4"
 				ElseIf e\EventStr = "Load4"
@@ -4463,7 +4463,7 @@ Function UpdateEvents()
 				;[Block]
 				If PlayerRoom = e\room Then
 					If e\room\Objects[2] = 0 Then
-						e\room\Objects[2] =	CopyEntity(o\NPCModelID[25])
+						e\room\Objects[2] =	CopyEntity(o\NPCModelID[24])
 						ScaleEntity(e\room\Objects[2], 0.07, 0.07, 0.07)
 						Tex = LoadTexture_Strict("GFX\npcs\duck(3).png")
 						EntityTexture(e\room\Objects[2], Tex)
@@ -4492,9 +4492,9 @@ Function UpdateEvents()
 				;[Block]
 				If PlayerRoom = e\room Then
 					If e\room\Objects[2] = 0 Then
-						e\room\Objects[2] =	CopyEntity(o\NPCModelID[24])
+						e\room\Objects[2] =	CopyEntity(o\NPCModelID[23])
 						ScaleEntity(e\room\Objects[2], 0.05, 0.05, 0.05)
-						SetAnimTime(e\room\Objects[2], 414.0)
+						SetAnimTime(e\room\Objects[2], 488.0)
 						
 						Local ImgPath$ = ItemsPath + "1048\1048(" + Rand(0, 25) + ").png"
 						Local itt.ItemTemplates
@@ -4539,12 +4539,12 @@ Function UpdateEvents()
 									GiveAchievement(Achv1048)
 								EndIf
 							EndIf
-						Else If e\EventState = 1.0
-							Animate2(e\room\Objects[2], AnimTime(e\room\Objects[2]), 1.0, 205.0, 0.5, False)
-							If AnimTime(e\room\Objects[2]) = 205.0 Then e\EventState = 2.0
-						Else If e\EventState = 2.0
-							Animate2(e\room\Objects[2], AnimTime(e\room\Objects[2]), 205.0, 353.0, 1.0)	
-							If (EntityDistance(Collider, e\room\Objects[2]) < 1.5) Then
+						ElseIf e\EventState = 1.0
+							Animate2(e\room\Objects[2], AnimTime(e\room\Objects[2]), 488.0, 634.0, 0.5, False)
+                            If AnimTime(e\room\Objects[2]) = 634.0 Then e\EventState = 2.0
+						ElseIf e\EventState = 2.0
+							Animate2(e\room\Objects[2], AnimTime(e\room\Objects[2]), 339.0, 487.0, 1.0)
+							If EntityDistance(Collider, e\room\Objects[2]) < 1.5 Then
 								DrawHandIcon = True
 								If MouseHit1 Then
 									If ItemAmount >= MaxItemAmount Then
@@ -5413,7 +5413,7 @@ Function UpdateEvents()
 			Case "room035"
 				;[Block]
 				If PlayerRoom = e\room Then
-					; ~ EventState2 = has 035 told the code to the storage room (true / false)
+					; ~ EventState2 = has SCP-035 told the code to the storage room (true / false)
 					
 					; ~ EventState3 = has the player opened the gas valves (0 = no, 0 < x < 70.0 * 35.0 yes, x > 70.0 * 35.0 the host has died)
 					
@@ -5440,8 +5440,8 @@ Function UpdateEvents()
 									Temp = e\room\NPC[0]\Frame
 									
 									FreeEntity(e\room\NPC[0]\OBJ)
-									e\room\NPC[0]\OBJ = CopyEntity(o\NPCModelID[27])
-									x = 0.5 / MeshWidth(e\room\NPC[0]\OBJ)
+									e\room\NPC[0]\OBJ = CopyEntity(o\NPCModelID[26])
+									x = GetINIFloat("Data\NPCs.ini", "Class D", "Scale") / MeshWidth(e\room\NPC[0]\OBJ)
 									e\room\NPC[0]\ModelScaleX = x
 									e\room\NPC[0]\ModelScaleY = x
 									e\room\NPC[0]\ModelScaleZ = x
@@ -9556,7 +9556,7 @@ Function UpdateEndings()
 							
 							If e\EventState > 70.0 * 26.5 Then
 								If e\room\Objects[12] = 0 Then
-									e\room\Objects[12] = CopyEntity(o\NPCModelID[28])
+									e\room\Objects[12] = CopyEntity(o\NPCModelID[27])
 									ScaleEntity(e\room\Objects[12], 0.15, 0.15, 0.15)
 									Temp = (Min(((EntityDistance(e\room\NPC[3]\Collider, Collider) / RoomScale) - 3000.0) / 4.0, 1000.0) + 12192.0) * RoomScale
 									PositionEntity(e\room\Objects[12], EntityX(e\room\NPC[3]\Collider), 12192.0 * RoomScale, EntityZ(e\room\NPC[3]\Collider))
@@ -9959,7 +9959,7 @@ Function UpdateEndings()
 									
 									If Abs(EntityY(Collider) - EntityY(e\room\Objects[11], True)) < 1.0 Then
 										If Distance(EntityX(Collider), EntityZ(Collider), EntityX(e\room\Objects[11], True), EntityZ(e\room\Objects[11], True)) < 7.0 Then
-											e\room\Objects[12] = CopyEntity(o\NPCModelID[26])
+											e\room\Objects[12] = CopyEntity(o\NPCModelID[25])
 											
 											Local Temp2# = 0.55 / MeshWidth(e\room\Objects[12])
 											

@@ -26,7 +26,7 @@ Const MaxCamModelIDAmount% = 2
 
 Const MaxMiscModelIDAmount% = 1
 
-Const MaxNPCModelIDAmount% = 35
+Const MaxNPCModelIDAmount% = 34
 
 ; ~ [NPCs]
 

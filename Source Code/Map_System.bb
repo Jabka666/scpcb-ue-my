@@ -3504,7 +3504,7 @@ Function FillRoom(r.Rooms)
 			r\Objects[2] = CreatePivot()
 			PositionEntity(r\Objects[2], r\x + 736.0 * RoomScale, r\y - 512.0 * RoomScale, r\z + 272.0 * RoomScale)
 			
-			r\Objects[3] = CopyEntity(o\NPCModelID[25])
+			r\Objects[3] = CopyEntity(o\NPCModelID[24])
 			ScaleEntity(r\Objects[3], 0.07, 0.07, 0.07)
 			Tex = LoadTexture_Strict("GFX\npcs\duck(2).png")
 			EntityTexture(r\Objects[3], Tex)
@@ -3663,7 +3663,7 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "room2offices2"
 			;[Block]
-			r\Objects[0] = CopyEntity(o\NPCModelID[25])
+			r\Objects[0] = CopyEntity(o\NPCModelID[24])
 			ScaleEntity(r\Objects[0], 0.07, 0.07, 0.07)
 			
 			r\Objects[1] = CreatePivot()
@@ -5537,23 +5537,12 @@ Function FillRoom(r.Rooms)
 		    PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			
-			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x - 860.0 * RoomScale, r\y + 0.005, r\z + 369.0 * RoomScale)
-			
-			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x - 477.0 * RoomScale, r\y + 0.005, r\z - 710.0 * RoomScale)
-			
-			For i = 0 To 1
-				EntityParent(r\Objects[i], r\OBJ)
-			Next
-			
-			Temp = Rand(0, 1)
-			de.Decals = CreateDecal(3, EntityX(r\Objects[Temp], True), EntityY(r\Objects[Temp], True), EntityZ(r\Objects[Temp], True), 90.0, Rnd(360.0), 0.0)
+			de.Decals = CreateDecal(3, r\x - 477.0 * RoomScale, r\y + 0.005, r\z - 710.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
 			de\Size = 0.5
 			ScaleSprite(de\OBJ, de\Size, de\Size)
 			EntityParent(de\OBJ, r\OBJ)
 			
-			it = CreateItem("Data Report", "paper", EntityX(r\Objects[Temp], True), EntityY(r\Objects[Temp], True) * 20.0, EntityZ(r\Objects[Temp], True))
+			it = CreateItem("Data Report", "paper", r\x - 477.0 * RoomScale, r\y + 90.0 * RoomScale, r\z - 710.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -5644,7 +5633,7 @@ Function FillRoom(r.Rooms)
 			EntityType(r\Objects[0], HIT_MAP)
 			EntityPickMode(r\Objects[0], 2)
 			
-			If r\Objects[1] = 0 Then r\Objects[1] = CopyEntity(o\NPCModelID[25])
+			If r\Objects[1] = 0 Then r\Objects[1] = CopyEntity(o\NPCModelID[24])
 			Tex = LoadTexture_Strict("GFX\npcs\duck(4).png")
 			EntityTexture(r\Objects[1], Tex)
 			FreeTexture(Tex)

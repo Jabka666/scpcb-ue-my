@@ -88,7 +88,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			
 			n\Speed = GetINIFloat("Data\NPCs.ini", "SCP-173", "Speed") / 100.0
 			
-			n\OBJ2 = CopyEntity(o\NPCModelID[29])
+			n\OBJ2 = CopyEntity(o\NPCModelID[28])
 			ScaleEntity(n\OBJ2, RoomScale, 1.025 * RoomScale, RoomScale)
 			HideEntity(n\OBJ2)
 			
@@ -484,7 +484,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			EntityRadius(n\Collider, 0.32)
 			EntityType(n\Collider, HIT_PLAYER)
 			
-            n\OBJ = CopyEntity(o\NPCModelID[34])
+            n\OBJ = CopyEntity(o\NPCModelID[33])
 			
 			Temp = GetINIFloat("Data\NPCs.ini", "Vehicle", "Scale") / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
@@ -7305,7 +7305,7 @@ Function ChangeNPCTextureID(n.NPCs, TextureID%) ; ~ Works only for Class D model
 	FreeEntity(n\OBJ)
 	n\OBJ = CopyEntity(DTextures[TextureID + 1])
 	
-	Temp = 0.51 / MeshWidth(n\OBJ)
+	Temp = GetINIFloat("Data\NPCs.ini", "Class D", "Scale") / MeshWidth(n\OBJ)
 	ScaleEntity(n\OBJ, Temp, Temp, Temp)
 	MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2, MeshHeight(n\OBJ) * 2, MeshDepth(n\OBJ) * 2)
 	
