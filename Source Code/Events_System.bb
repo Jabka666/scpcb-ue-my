@@ -522,7 +522,7 @@ Function UpdateEvents()
 	Local Angle#
 	Local o.Objects = First Objects
 	Local ov.Overlays = First Overlays
-	Local tt.TempTextures = First TempTextures
+	Local tt.TextureTemplate = First TextureTemplate
 	
 	CurrStepSFX = 0
 	

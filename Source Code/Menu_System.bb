@@ -1,8 +1,8 @@
 Global MenuBack% = LoadImage_Strict("GFX\menu\back.jpg")
 Global MenuText% = LoadImage_Strict("GFX\menu\scptext.jpg")
 Global Menu173% = LoadImage_Strict("GFX\menu\173back.jpg")
-MenuWhite = LoadImage_Strict("GFX\menu\MenuWhite.png")
-MenuBlack = LoadImage_Strict("GFX\menu\MenuBlack.png")
+MenuWhite = LoadImage_Strict("GFX\menu\menu_white.png")
+MenuBlack = LoadImage_Strict("GFX\menu\menu_black.png")
 MaskImage MenuBlack, 255,255,0
 Global QuickLoadIcon% = LoadImage_Strict("GFX\menu\QuickLoading.png")
 
@@ -1153,10 +1153,10 @@ Function UpdateLauncher()
 	
 	fo\FontID[0] = LoadFont_Strict("GFX\font\cour\Courier New.ttf", 18, 0,0,0)
 	SetFont fo\FontID[0]
-	MenuWhite = LoadImage_Strict("GFX\menu\MenuWhite.png")
-	MenuBlack = LoadImage_Strict("GFX\menu\MenuBlack.png")	
+	MenuWhite = LoadImage_Strict("GFX\menu\menu_white.png")
+	MenuBlack = LoadImage_Strict("GFX\menu\menu_black.png")	
 	MaskImage MenuBlack, 255,255,0
-	LauncherIMG = LoadImage_Strict("GFX\menu\Launcher.png")
+	LauncherIMG = LoadImage_Strict("GFX\menu\launcher.png")
 	ButtonSFX = LoadSound_Strict("SFX\Interact\Button.ogg")
 	Local i%	
 	

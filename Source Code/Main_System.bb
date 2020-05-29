@@ -196,7 +196,7 @@ fo\ConsoleFont = AALoadFont("Blitz", Int(20 * (GraphicHeight / 1024.0)), 0, 0, 0
 
 AASetFont(fo\FontID[1])
 
-Global BlinkMeterIMG% = LoadImage_Strict("GFX\BlinkMeter.png")
+Global BlinkMeterIMG% = LoadImage_Strict("GFX\blink_meter.png")
 
 DrawLoading(0, True)
 
@@ -299,12 +299,14 @@ Dim RadioState3%(10)
 Dim RadioState4%(9)
 Dim RadioCHN%(8)
 
-Type TempTextures
+Type TextureTemplate
 	Field MiscTextureID%[MaxMiscTextureIDAmount - 1]
 	Field MonitorTextureID%[MaxMonitorTextureIDAmount - 1]
 	Field DecalTextureID%[MaxDecalTextureIDAmount - 1]
 	Field ParticleTextureID%[MaxParticleTextureIDAmount - 1]
 	Field LightSpriteID%[MaxLightSpriteIDAmount - 1]
+	Field IconID%[MaxIconIDAmount - 1]
+	Field ImageID%[MaxImageIDAmount - 1]
 End Type
 
 Global PlayTime%
@@ -2081,19 +2083,7 @@ Global IntercomStreamCHN%
 
 Global ForestNPC%, ForestNPCTex%, ForestNPCData#[3]
 
-Global PauseMenuIMG%
-
-Global SprintIcon%
-Global BlinkIcon%
-Global CrouchIcon%
-Global HandIcon%
-Global HandIcon2%
-
-Global StaminaMeterIMG%, StaminaMeterRedIMG%, BlinkMeterRedIMG%
-
-Global KeypadHUD%
-
-Global Panel294%, Using294%, Input294$
+Global Using294%, Input294$
 
 DrawLoading(35, True)
 
@@ -3481,6 +3471,7 @@ End Function
 
 Function DrawEnding()
 	Local fo.Fonts = First Fonts
+	Local tt.TextureTemplate = First TextureTemplate
 	
 	ShowPointer()
 	
@@ -3558,12 +3549,12 @@ Function DrawEnding()
 			DrawImage(EndingScreen, GraphicWidth / 2 - 400, GraphicHeight / 2 - 400)
 			
 			If EndingTimer < -1000.0 And EndingTimer > -2000.0 Then
-				Width = ImageWidth(PauseMenuIMG)
-				Height = ImageHeight(PauseMenuIMG)
+				Width = ImageWidth(tt\ImageID[0])
+				Height = ImageHeight(tt\ImageID[0])
 				x = GraphicWidth / 2 - Width / 2
 				y = GraphicHeight / 2 - Height / 2
 				
-				DrawImage(PauseMenuIMG, x, y)
+				DrawImage(tt\ImageID[0], x, y)
 				
 				Color(255, 255, 255)
 				AASetFont(fo\FontID[1])
@@ -4377,6 +4368,7 @@ Function DrawGUI()
 	Local o.Objects = First Objects
 	Local ov.Overlays = First Overlays
 	Local fo.Fonts = First Fonts
+	Local tt.TextureTemplate = First TextureTemplate
 	
 	If MenuOpen Or ConsoleOpen Or SelectedDoor <> Null Or InvOpen Or OtherOpen <> Null Or EndingTimer < 0.0 Then
 		ShowPointer()
@@ -4443,7 +4435,7 @@ Function DrawGUI()
 		
 		FreeEntity(Temp)
 		
-		DrawImage(HandIcon, GraphicWidth / 2 + Sin(YawValue) * (GraphicWidth / 3) - 32, GraphicHeight / 2 - Sin(PitchValue) * (GraphicHeight / 3) - 32)
+		DrawImage(tt\IconID[4], GraphicWidth / 2 + Sin(YawValue) * (GraphicWidth / 3) - 32, GraphicHeight / 2 - Sin(PitchValue) * (GraphicHeight / 3) - 32)
 		
 		If MouseUp1 Then
 			MouseUp1 = False
@@ -4466,10 +4458,10 @@ Function DrawGUI()
 		If PitchValue > 90.0 And PitchValue =< 180.0 Then PitchValue = 90.0
 		If PitchValue > 180.0 And PitchValue < 270.0 Then PitchValue = 270.0
 		
-		DrawImage(HandIcon2, GraphicWidth / 2 + Sin(YawValue) * (GraphicWidth / 3) - 32, GraphicHeight / 2 - Sin(PitchValue) * (GraphicHeight / 3) - 32)
+		DrawImage(tt\IconID[5], GraphicWidth / 2 + Sin(YawValue) * (GraphicWidth / 3) - 32, GraphicHeight / 2 - Sin(PitchValue) * (GraphicHeight / 3) - 32)
 	EndIf
 	
-	If DrawHandIcon Then DrawImage(HandIcon, GraphicWidth / 2 - 32, GraphicHeight / 2 - 32)
+	If DrawHandIcon Then DrawImage(tt\IconID[4], GraphicWidth / 2 - 32, GraphicHeight / 2 - 32)
 	For i = 0 To 3
 		If DrawArrowIcon(i) Then
 			x = GraphicWidth / 2 - 32
@@ -4492,7 +4484,7 @@ Function DrawGUI()
 					x = x - 5 - 64
 					;[End Block]
 			End Select
-			DrawImage(HandIcon, x, y)
+			DrawImage(tt\IconID[4], x, y)
 			Color(0, 0, 0)
 			Rect(x + 4, y + 4, 64 - 8, 64 - 8)
 			DrawImage(ArrowIMG(i), x + 21, y + 21)
@@ -4512,7 +4504,7 @@ Function DrawGUI()
 		Rect(x, y, Width, Height, False)
 		For i = 1 To Int(((Width - 2) * (BlinkTimer / (BLINKFREQ))) / 10.0)
 			If BlinkTimer < 160.0 Then
-				DrawImage(BlinkMeterRedIMG, x + 3 + 10 * (i - 1), y + 3)
+				DrawImage(tt\ImageID[1], x + 3 + 10 * (i - 1), y + 3)
 			Else
 				DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
 			EndIf
@@ -4533,7 +4525,7 @@ Function DrawGUI()
 		Color(255, 255, 255)
 		Rect(x - 50 - 1, y - 1, 30 + 2, 30 + 2, False)
 		
-		DrawImage(BlinkIcon, x - 50, y)
+		DrawImage(tt\IconID[3], x - 50, y)
 		
 		y = GraphicHeight - 55.0
 		
@@ -4541,9 +4533,9 @@ Function DrawGUI()
 		Rect(x, y, Width, Height, False)
 		For i = 1 To Int(((Width - 2) * (Stamina / 100.0)) / 10.0)
 			If Stamina < 25.0 Then
-				DrawImage(StaminaMeterRedIMG, x + 3 + 10 * (i - 1), y + 3)
+				DrawImage(tt\ImageID[3], x + 3 + 10 * (i - 1), y + 3)
 			Else
-				DrawImage(StaminaMeterIMG, x + 3 + 10 * (i - 1), y + 3)
+				DrawImage(tt\ImageID[2], x + 3 + 10 * (i - 1), y + 3)
 			EndIf
 		Next	
 		
@@ -4563,9 +4555,11 @@ Function DrawGUI()
 		Color(255, 255, 255)
 		Rect(x - 50 - 1, y - 1, 30 + 2, 30 + 2, False)
 		If Crouch Then
-			DrawImage(CrouchIcon, x - 50, y)
+			DrawImage(tt\IconID[2], x - 50, y)
+		ElseIf KeyDown(KEY_SPRINT)
+			DrawImage(tt\IconID[1], x - 50, y)
 		Else
-			DrawImage(SprintIcon, x - 50, y)
+			DrawImage(tt\IconID[0], x - 50, y)
 		EndIf
 		
 		If DebugHUD Then
@@ -4708,8 +4702,8 @@ Function DrawGUI()
 			CameraProject(Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) - MeshHeight(o\ButtonModelID[0]) * 0.015, EntityZ(ClosestButton, True))
 			Scale# = (ProjectedY() - Projy) / 462.0
 			
-			x = GraphicWidth / 2 - ImageWidth(KeypadHUD) * Scale / 2
-			y = GraphicHeight / 2 - ImageHeight(KeypadHUD) * Scale / 2		
+			x = GraphicWidth / 2 - ImageWidth(tt\ImageID[4]) * Scale / 2
+			y = GraphicHeight / 2 - ImageHeight(tt\ImageID[4]) * Scale / 2		
 			
 			AASetFont(fo\FontID[2])
 			If KeypadMsg <> "" Then 
@@ -7096,6 +7090,7 @@ Function DrawMenu()
 	Local x%, y%, Width%, Height%
 	Local i%
 	Local fo.Fonts = First Fonts
+	Local tt.TextureTemplate = First TextureTemplate
 	
 	If api_GetFocus() = 0 Then ; ~ Game is out of focus then pause the game
 		If (Not Using294) Then
@@ -7117,7 +7112,7 @@ Function DrawMenu()
 					If StopHidingTimer >= 40.0 Then
 						PlaySound_Strict(HorrorSFX(15))
 						Msg = "STOP HIDING"
-						MsgTimer = 6 * 70
+						MsgTimer = 70.0 * 6.0
 						MenuOpen = False
 						Return
 					EndIf
@@ -7127,12 +7122,12 @@ Function DrawMenu()
 		
 		InvOpen = False
 		
-		Width = ImageWidth(PauseMenuIMG)
-		Height = ImageHeight(PauseMenuIMG)
+		Width = ImageWidth(tt\ImageID[0])
+		Height = ImageHeight(tt\ImageID[0])
 		x = GraphicWidth / 2.0 - Width / 2.0
 		y = GraphicHeight / 2.0 - Height / 2.0
 		
-		DrawImage(PauseMenuIMG, x, y)
+		DrawImage(tt\ImageID[0], x, y)
 		
 		Color(255, 255, 255)
 		
@@ -7850,32 +7845,33 @@ Function LoadEntities()
 	Local o.Objects = New Objects
 	Local i%
 	Local ov.Overlays = New Overlays
-	Local tt.TempTextures = New TempTextures
+	Local tt.TextureTemplate = New TextureTemplate
 	
 	For i = 0 To 9
 		TempSounds[i] = 0
 	Next
 	
-	PauseMenuIMG = LoadImage_Strict("GFX\menu\pausemenu.png")
-	MaskImage(PauseMenuIMG, 255, 255, 0)
-	ScaleImage(PauseMenuIMG, MenuScale, MenuScale)
+	tt\ImageID[0] = LoadImage_Strict("GFX\menu\pause_menu.png")
+	MaskImage(tt\ImageID[0], 255, 255, 0)
+	ScaleImage(tt\ImageID[0], MenuScale, MenuScale)
 	
-	SprintIcon = LoadImage_Strict("GFX\sprinticon.png")
-	BlinkIcon = LoadImage_Strict("GFX\blinkicon.png")
-	CrouchIcon = LoadImage_Strict("GFX\sneakicon.png")
-	HandIcon = LoadImage_Strict("GFX\handsymbol.png")
-	HandIcon2 = LoadImage_Strict("GFX\handsymbol2.png")
+	tt\IconID[0] = LoadImage_Strict("GFX\walk_icon.png")
+	tt\IconID[1]= LoadImage_Strict("GFX\sprint_icon.png")
+	tt\IconID[2] = LoadImage_Strict("GFX\crouch_icon.png")
+	tt\IconID[3] = LoadImage_Strict("GFX\blink_icon.png")
+	tt\IconID[4] = LoadImage_Strict("GFX\hand_symbol.png")
+	tt\IconID[5] = LoadImage_Strict("GFX\hand_symbol(2).png")
 	
-	BlinkMeterRedIMG = LoadImage_Strict("GFX\BlinkMeterRed.png")
+	tt\ImageID[1] = LoadImage_Strict("GFX\blink_meter_red.png")
 	
-	StaminaMeterIMG = LoadImage_Strict("GFX\StaminaMeter.png")
-	StaminaMeterRedIMG = LoadImage_Strict("GFX\StaminaMeterRed.png")
+	tt\ImageID[2] = LoadImage_Strict("GFX\stamina_meter.png")
+	tt\ImageID[3] = LoadImage_Strict("GFX\stamina_meter_red.png")
 
-	KeypadHUD = LoadImage_Strict("GFX\keypadhud.png")
-	MaskImage(KeypadHUD, 255, 0, 255)
+	tt\ImageID[4] = LoadImage_Strict("GFX\keypad_HUD.png")
+	MaskImage(tt\ImageID[4], 255, 0, 255)
 
-	Panel294 = LoadImage_Strict("GFX\294panel.png")
-	MaskImage(Panel294, 255, 0, 255)
+	tt\ImageID[5] = LoadImage_Strict("GFX\scp_294_panel.png")
+	MaskImage(tt\ImageID[5], 255, 0, 255)
 	
 	Brightness = GetINIFloat(OptionFile, "Global", "Brightness")
 	CameraFogNear = GetINIFloat(OptionFile, "Global", "Camera Fog Near")
@@ -8671,7 +8667,7 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	Local i%, x%, y%, Lvl%
 	Local itt.ItemTemplates, s.Screens, lt.LightTemplates, d.Doors, m.Materials
-	Local wp.WayPoints, twp.TempWayPoints, r.Rooms, it.Items, o.Objects, ov.Overlays, tt.TempTextures
+	Local wp.WayPoints, twp.TempWayPoints, r.Rooms, it.Items, o.Objects, ov.Overlays, tt.TextureTemplate
 	
 	KillSounds()
 	If PlayButtonSFX Then PlaySound_Strict(ButtonSFX)
@@ -8872,7 +8868,7 @@ Function NullGame(PlayButtonSFX% = True)
 		Delete(ov)
 	Next
 	
-	For tt.TempTextures = Each TempTextures
+	For tt.TextureTemplate = Each TextureTemplate
 		Delete(tt)
 	Next
 	
@@ -10182,12 +10178,13 @@ End Function
 
 Function Use294()
 	Local x#, y#, xTemp%, yTemp%, StrTemp$, Temp%
+	Local tt.TextureTemplate = First TextureTemplate
 	
 	ShowPointer()
 	
-	x = GraphicWidth / 2 - (ImageWidth(Panel294) / 2)
-	y = GraphicHeight / 2 - (ImageHeight(Panel294) / 2)
-	DrawImage(Panel294, x, y)
+	x = GraphicWidth / 2 - (ImageWidth(tt\ImageID[5]) / 2)
+	y = GraphicHeight / 2 - (ImageHeight(tt\ImageID[5]) / 2)
+	DrawImage(tt\ImageID[5], x, y)
 	If FullScreen Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	
 	Temp = True
@@ -10855,7 +10852,7 @@ End Type
 
 Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#)
 	Local d.Decals = New Decals
-	Local tt.TempTextures = First TempTextures
+	Local tt.TextureTemplate = First TextureTemplate
 	
 	d\x = x
 	d\y = y
@@ -11544,5 +11541,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#1018#137D#1BDB
+;~B#100F#1377#1BD6
 ;~C#Blitz3D

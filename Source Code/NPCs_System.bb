@@ -55,7 +55,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 	Local Temp#, i%, Tex%
 	Local SF%, b%, t1%
 	Local o.Objects = First Objects
-	Local tt.TempTextures = First TempTextures
+	Local tt.TextureTemplate = First TextureTemplate
 	
 	n\NPCtype = NPCtype
 	n\GravityMult = 1.0

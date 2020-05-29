@@ -10,7 +10,7 @@ End Type
 	
 Function CreateParticle.Particles(x#, y#, z#, Image%, Size#, Gravity# = 1.0, LifeTime# = 200.0)
 	Local p.Particles = New Particles
-	Local tt.TempTextures = First TempTextures
+	Local tt.TextureTemplate = First TextureTemplate
 	
 	p\LifeTime = LifeTime
 	

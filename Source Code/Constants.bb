@@ -94,6 +94,9 @@ Const MaxParticleTextureIDAmount% = 9
 
 Const MaxLightSpriteIDAmount% = 3
 
+Const MaxIconIDAmount% = 6
+Const MaxImageIDAmount% = 6
+
 ; ~ [ITEMS]
 
 Const MaxItemAmount% = 10
