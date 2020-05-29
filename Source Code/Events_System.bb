@@ -4990,7 +4990,7 @@ Function UpdateEvents()
 							Case 60.0
 								;[Block]
 								If (Not HalloweenTex) Then
-									Local Tex970% = LoadTexture_Strict("GFX\npcs\scp_173_h.pt", 1)
+									Local Tex970% = LoadTexture_Strict("GFX\npcs\scp_173_H.png", 1)
 									
 									EntityTexture(Curr173\OBJ, Tex970, 0, 0)
 									FreeTexture(Tex970)
@@ -5418,8 +5418,8 @@ Function UpdateEvents()
 					; ~ EventState3 = has the player opened the gas valves (0 = no, 0 < x < 70.0 * 35.0 yes, x > 70.0 * 35.0 the host has died)
 					
 					If e\EventState = 0.0 Then
-						If EntityDistance(Collider, e\room\Objects[3]) < 2 Then
-							n.NPCs = CreateNPC(NPCtypeD, EntityX(e\room\Objects[4], True), 0.5,EntityZ(e\room\Objects[4], True))
+						If EntityDistance(Collider, e\room\Objects[3]) < 2.0 Then
+							n.NPCs = CreateNPC(NPCtypeD, EntityX(e\room\Objects[4], True), 0.5, EntityZ(e\room\Objects[4], True))
 							n\Texture = "GFX\NPCs\scp_035_victim.png"
 							n\Model = "GFX\NPCs\035.b3d"
 							HideEntity(n\OBJ)

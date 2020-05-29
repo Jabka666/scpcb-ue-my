@@ -47,7 +47,7 @@ Global Fresize_Image%, Fresize_Texture%, Fresize_Texture2%
 Global Fresize_Cam%
 
 Global WireFrameState%
-Global HalloweenTex%
+Global HalloweenTex%, NewYearTex%
 
 Global TotalGFXModes% = CountGfxModes3D(), GFXModes%
 Dim GfxModeWidths%(TotalGFXModes), GfxModeHeights%(TotalGFXModes)
@@ -347,6 +347,7 @@ End Function
 Function UpdateConsole()
 	Local e.Events
 	Local fo.Fonts = First Fonts
+	Local Tex%, Tex2%
 	
 	If CanOpenConsole = False Then
 		ConsoleOpen = False
@@ -584,6 +585,7 @@ Function UpdateConsole()
 							CreateConsoleMsg("- disable966")
 							CreateConsoleMsg("- enable966")
 							CreateConsoleMsg("- halloween")
+							CreateConsoleMsg("- newyear") 
 							CreateConsoleMsg("- sanic")
 							CreateConsoleMsg("- weed")
 							CreateConsoleMsg("- money")
@@ -1158,17 +1160,32 @@ Function UpdateConsole()
 					;[Block]
 					HalloweenTex = (Not HalloweenTex)
 					If HalloweenTex Then
-						Local Tex% = LoadTexture_Strict("GFX\npcs\scp_173_h.pt", 1)
-						
+						Tex = LoadTexture_Strict("GFX\npcs\scp_173_H.png", 1)
 						EntityTexture(Curr173\OBJ, Tex, 0, 0)
 						FreeTexture(Tex)
 						CreateConsoleMsg("173 JACK-O-LANTERN ON")
 					Else
-						Local Tex2% = LoadTexture_Strict("GFX\npcs\scp_173.png", 1)
-						
+						If NewYearTex Then NewYearTex = (Not NewYearTex)
+						Tex2 = LoadTexture_Strict("GFX\npcs\scp_173.png", 1)
 						EntityTexture(Curr173\OBJ, Tex2, 0, 0)
 						FreeTexture(Tex2)
 						CreateConsoleMsg("173 JACK-O-LANTERN OFF")
+					EndIf
+					;[End Block]
+				Case "newyear" 
+					;[Block]
+					NewYearTex = (Not NewYearTex)
+					If NewYearTex Then
+						Tex = LoadTexture_Strict("GFX\npcs\scp_173_NY.png", 1)
+						EntityTexture(Curr173\OBJ, Tex, 0, 0)
+						FreeTexture(Tex)
+						CreateConsoleMsg("173 COOKIE ON")
+					Else
+						If HalloweenTex Then HalloweenTex= (Not HalloweenTex)
+						Tex2 = LoadTexture_Strict("GFX\npcs\scp_173.png", 1)
+						EntityTexture(Curr173\OBJ, Tex2, 0, 0)
+						FreeTexture(Tex2)
+						CreateConsoleMsg("173 COOKIE OFF")
 					EndIf
 					;[End Block]
 				Case "sanic"
@@ -11539,5 +11556,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#100F#1377#1BD6
+;~B#1020#1388#1BE7
 ;~C#Blitz3D

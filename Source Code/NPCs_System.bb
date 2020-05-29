@@ -52,7 +52,7 @@ End Type
 
 Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 	Local n.NPCs = New NPCs, n2.NPCs
-	Local Temp#, i%, Tex%
+	Local Temp#, i%, Tex%, TexFestive%
 	Local SF%, b%, t1%
 	Local o.Objects = First Objects
 	Local tt.TextureTemplate = First TextureTemplate
@@ -76,9 +76,15 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			; ~ On Halloween set Jack-o'-lantern texture.
 			If (Left(CurrentDate(), 7) = "31 Oct ") Then
 				HalloweenTex = True
-				
-				Local TexFestive% = LoadTexture_Strict("GFX\npcs\scp_173_h.pt", 1)
-				
+				TexFestive = LoadTexture_Strict("GFX\npcs\scp_173_H.png", 1)
+				EntityTexture(n\OBJ, TexFestive, 0, 0)
+				FreeTexture(TexFestive)
+			EndIf
+			
+			; ~ On New Year set cookie texture.
+			If (Left(CurrentDate(), 7) = "01 Jan ") Then
+				NewYearTex = True
+				TexFestive = LoadTexture_Strict("GFX\npcs\scp_173_NY.png", 1)
 				EntityTexture(n\OBJ, TexFestive, 0, 0)
 				FreeTexture(TexFestive)
 			EndIf
@@ -7385,5 +7391,5 @@ Function Animate2#(Entity%, Curr#, Start%, Quit%, Speed#, Loop% = True)
 End Function 
 
 ;~IDEal Editor Parameters:
-;~B#166#1226#1373#13C3#153D#165A#182E#1889
+;~B#16C#122C#1379#13C9#1543#1660#1834#188F
 ;~C#Blitz3D
