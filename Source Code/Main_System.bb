@@ -5488,7 +5488,7 @@ Function DrawGUI()
 					;[Block]
 					If CanUseItem2(False, True, False, False) Then
 						If WearingNightVision > 0 And WearingNightVision <> 1 Then
-							Msg = "You can't use two pairs of the goggles at the same."
+							Msg = "You can't use two pairs of the goggles at the same time."
 							MsgTimer = 70 * 5.0
 							SelectedItem = Null
 							Return
@@ -5512,7 +5512,7 @@ Function DrawGUI()
 					;[Block]
 					If CanUseItem2(False, True, False, False) Then
 						If WearingNightVision > 0 And WearingNightVision <> 2 Then
-							Msg = "You can't use two pairs of the goggles at the same."
+							Msg = "You can't use two pairs of the goggles at the same time."
 							MsgTimer = 70 * 5.0
 							SelectedItem = Null
 							Return
@@ -5536,7 +5536,7 @@ Function DrawGUI()
 					;[Block]
 					If CanUseItem2(False, True, False, False) Then
 						If WearingNightVision > 0 And WearingNightVision <> 3 Then
-							Msg = "You can't use two pairs of the goggles at the same."
+							Msg = "You can't use two pairs of the goggles at the same time."
 							MsgTimer = 70 * 5.0
 							SelectedItem = Null
 							Return
