@@ -476,7 +476,7 @@ Function QuickLoadEvents()
 					e\EventStr = "Load1"
 				ElseIf e\EventStr = "Load1"
 					QuickLoadPercent = 30
-					NTF_1499Sky = sky_CreateSky("GFX\map\sky\1499sky")
+					I_1499\Sky = sky_CreateSky("GFX\map\sky\1499sky")
 					e\EventStr = 1
 				Else
 					If Int(e\EventStr) < 16
@@ -521,7 +521,6 @@ Function UpdateEvents()
 	Local x#, y#, z#
 	Local Angle#
 	Local o.Objects = First Objects
-	Local ov.Overlays = First Overlays
 	Local tt.TextureTemplate = First TextureTemplate
 	
 	CurrStepSFX = 0
@@ -548,7 +547,7 @@ Function UpdateEvents()
 					Else
 						e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[8], e\room\Objects[9], e)
 					EndIf
-					EntityAlpha(ov\OverlayID[0], 1.0)						
+					EntityAlpha(tt\OverlayID[0], 1.0)						
 				EndIf
 				;[End Block]
 			Case "room173"
@@ -566,7 +565,7 @@ Function UpdateEvents()
 					If PlayerRoom = e\room Then
 						e\room\RoomDoors[2]\Open = True
 						
-						ShowEntity(ov\OverlayID[0])
+						ShowEntity(tt\OverlayID[0])
 						AmbientLight(Brightness, Brightness, Brightness)
 						CameraFogRange(Camera, CameraFogNear, CameraFogFar)
 						CameraFogMode(Camera, 1)
@@ -831,8 +830,8 @@ Function UpdateEvents()
 								
 								PlaySound_Strict(IntroSFX(Rand(8, 10)))
 								BlurTimer = 500.0
-								ShowEntity(ov\OverlayID[7])
-								EntityAlpha(ov\OverlayID[7], 0.5)
+								ShowEntity(tt\OverlayID[7])
+								EntityAlpha(tt\OverlayID[7], 0.5)
 								
 								CreateConsoleMsg("")
 								CreateConsoleMsg("WARNING! Using the console commands or teleporting away from the intro scene may cause bugs or crashing.", 255, 0, 0)
@@ -859,8 +858,8 @@ Function UpdateEvents()
 									
 									If e\EventState3 - FPSfactor / 30.0 < 12.0 And e\EventState3 > 12.0 Then PlaySound2(StepSFX(0, 0, 0), Camera, Collider, 8.0, 0.3)
 									
-									ShowEntity(ov\OverlayID[7])
-									EntityAlpha(ov\OverlayID[7], 0.9 - (e\EventState3 / 2.0))
+									ShowEntity(tt\OverlayID[7])
+									EntityAlpha(tt\OverlayID[7], 0.9 - (e\EventState3 / 2.0))
 									
 									x = x + (EntityX(e\room\OBJ) - (3048.0 + 1024.0) * RoomScale - x) * Max((e\EventState3 - 10.0) / 4.0, 0.0) 
 									
@@ -881,7 +880,7 @@ Function UpdateEvents()
 									DropSpeed = 0.0
 									PlayAble = False
 								Else
-									HideEntity(ov\OverlayID[7])
+									HideEntity(tt\OverlayID[7])
 									
 									PositionEntity(Collider, EntityX(Collider), 0.302, EntityZ(Collider))
 									ResetEntity(Collider)
@@ -1871,7 +1870,7 @@ Function UpdateEvents()
 													If sc\room = e\room Then Delete(sc)
 												Next
 												
-												ShowEntity(ov\OverlayID[0])
+												ShowEntity(tt\OverlayID[0])
 												AmbientLight(Brightness, Brightness, Brightness)
 												CameraFogRange(Camera, CameraFogNear, CameraFogFar)
 												CameraFogMode(Camera, 1)
@@ -1912,7 +1911,7 @@ Function UpdateEvents()
 					EndIf	
 					CameraFogMode(Camera, 0)
 	 	            AmbientLight(140.0, 140.0, 140.0)
-	   				HideEntity(ov\OverlayID[0])
+	   				HideEntity(tt\OverlayID[0])
 					
 					LightVolume = 4.0
 					TempLightVolume = 4.0			
@@ -2197,14 +2196,14 @@ Function UpdateEvents()
 								Else
 									DeathMsg = Chr(34) + "Class D viewed SCP-895 through a pair of digital night vision goggles, killing him." + Chr(34)
 								EndIf
-								EntityTexture(ov\OverlayID[4], ov\OverlayTextureID[4])
+								EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
 								If VomitTimer < -10.0 Then
 									Kill()
 								EndIf
 							ElseIf Sanity < -800.0 Then
-								If Rand(3) = 1 Then EntityTexture(ov\OverlayID[4], ov\OverlayTextureID[4])
+								If Rand(3) = 1 Then EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
 								If Rand(6) < 5 Then
-									EntityTexture(ov\OverlayID[4], tt\MiscTextureID[Rand(7, 12)])
+									EntityTexture(tt\OverlayID[4], tt\MiscTextureID[Rand(7, 12)])
 									For i = 0 To MaxItemAmount - 1
 										If (Inventory(i) <> Null) Then
 											If (WearingNightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvgoggles") Or (WearingNightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernv") Or (WearingNightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvgoggles") Then
@@ -2220,9 +2219,9 @@ Function UpdateEvents()
 									VomitTimer = 1.0
 								EndIf
 							ElseIf Sanity < -500.0 Then
-								If Rand(7) = 1 Then EntityTexture(ov\OverlayID[4], ov\OverlayTextureID[4])
+								If Rand(7) = 1 Then EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
 								If Rand(50) = 1 Then
-									EntityTexture(ov\OverlayID[4], tt\MiscTextureID[Rand(7, 12)])
+									EntityTexture(tt\OverlayID[4], tt\MiscTextureID[Rand(7, 12)])
 									For i = 0 To MaxItemAmount - 1
 										If (Inventory(i) <> Null) Then
 											If (WearingNightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvgoggles") Or (WearingNightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernv") Or (WearingNightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvgoggles") Then
@@ -2234,7 +2233,7 @@ Function UpdateEvents()
 									Next
 								EndIf
 							Else
-								EntityTexture(ov\OverlayID[4], ov\OverlayTextureID[4])
+								EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
 								For i = 0 To MaxItemAmount - 1
 									If (Inventory(i) <> Null) Then
 										If (WearingNightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvgoggles") Or (WearingNightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernv") Or (WearingNightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvgoggles") Then
@@ -2249,11 +2248,11 @@ Function UpdateEvents()
 					If e\EventState3 > 0.0 Then e\EventState3 = Max(e\EventState3 - FPSfactor, 0.0)
 					If e\EventState3 = 0.0 Then
 						e\EventState3 = -1.0
-						EntityTexture(ov\OverlayID[4], ov\OverlayTextureID[4])
+						EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
 						If WearingNightVision = 1 Then
-							EntityColor(ov\OverlayID[4], 0.0, 255.0, 0.0)
+							EntityColor(tt\OverlayID[4], 0.0, 255.0, 0.0)
 						ElseIf WearingNightVision = 2 Then
-							EntityColor(ov\OverlayID[4], 0.0, 100.0, 255.0)
+							EntityColor(tt\OverlayID[4], 0.0, 100.0, 255.0)
 						EndIf
 					EndIf
 					
@@ -3464,7 +3463,7 @@ Function UpdateEvents()
 								If KillTimer >= 0.0 Then 
 									For i = 0 To 2
 										If Distance(EntityX(Collider), EntityZ(Collider), EntityX(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True)) < 250.0 * RoomScale Then
-											ShowEntity(ov\OverlayID[7])
+											ShowEntity(tt\OverlayID[7])
 											LightFlash = 0.4
 											CameraShake = 1.0
 											Kill()
@@ -3480,7 +3479,7 @@ Function UpdateEvents()
 								If Curr106\State < -10.0 Then
 									For i = 0 To 2
 										If Distance(EntityX(Curr106\Collider), EntityZ(Curr106\Collider), EntityX(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True)) < 250.0 * RoomScale Then
-											ShowEntity(ov\OverlayID[7])
+											ShowEntity(tt\OverlayID[7])
 											LightFlash = 0.3
 											If ParticleAmount > 0
 												For i = 0 To 5 + (5 * (ParticleAmount - 1))
@@ -6928,7 +6927,7 @@ Function UpdateEvents()
 					ElseIf e\EventState = 7.0
 						PositionEntity(Collider, EntityX(e\room\OBJ, True), 0.3, EntityZ(e\room\OBJ, True), True)
 						ResetEntity(Collider)
-						ShowEntity(ov\OverlayID[7])
+						ShowEntity(tt\OverlayID[7])
 						LightFlash = 6.0
 						BlurTimer = 500.0
 						Injuries = PrevInjuries
@@ -8701,7 +8700,7 @@ Function UpdateEvents()
 						e\SoundCHN = 0
 						e\SoundCHN2 = 0
 					EndIf
-					HideEntity(NTF_1499Sky)
+					HideEntity(I_1499\Sky)
 					HideChunks()
 					For n.NPCs = Each NPCs
 						If n\NPCtype = NPCtype1499_1 Then
@@ -9112,7 +9111,7 @@ Function UpdateDimension1499()
 				ShowEntity(e\room\OBJ)
 				If QuickLoadPercent = 100 Or QuickLoadPercent = -1
 					UpdateChunks(e\room, 15)
-					ShowEntity(NTF_1499Sky)
+					ShowEntity(I_1499\Sky)
 					Update1499Sky()
 					ShouldPlay = 18
 					If EntityY(Collider) < 800.0
@@ -9259,7 +9258,7 @@ Function UpdateDimension1499()
 						e\SoundCHN = 0
 						e\SoundCHN2 = 0
 					EndIf
-					HideEntity(NTF_1499Sky)
+					HideEntity(I_1499\Sky)
 					HideChunks()
 					For n.NPCs = Each NPCs
 						If n\NPCtype = NPCtype1499_1
@@ -9287,7 +9286,7 @@ Function UpdateEndings()
 	Local e.Events, n.NPCs, r.Rooms, i%, Pvt%, p.Particles
 	Local Dist#
 	Local o.Objects = First Objects
-	Local ov.Overlays = First Overlays
+	Local tt.TextureTemplate = First TextureTemplate
 	
 	For e.Events = Each Events
 		Select e\EventName
@@ -9600,7 +9599,7 @@ Function UpdateEndings()
 								EndIf
 							EndIf
 						EndIf
-						HideEntity(ov\OverlayID[0])
+						HideEntity(tt\OverlayID[0])
 						CameraFogRange(Camera, 5.0, 45.0)
 						
 						Angle = Max(Sin(EntityYaw(Collider)), 0.0)
@@ -9757,7 +9756,7 @@ Function UpdateEndings()
 						ShouldPlay = 17
 						
 						e\EventState = e\EventState + FPSfactor
-						HideEntity(ov\OverlayID[0])
+						HideEntity(tt\OverlayID[0])
 						CameraFogRange(Camera, 5.0, 30.0)
 						
 						Angle = Max(Sin(EntityYaw(Collider) + 90.0), 0.0)
@@ -10354,5 +10353,5 @@ Function GenerateRandomIA()
 	Next
 End Function
 ;~IDEal Editor Parameters:
-;~B#1223#1E45
+;~B#1222#1E44
 ;~C#Blitz3D

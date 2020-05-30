@@ -473,7 +473,7 @@ Function RemoveItem(i.Items)
 				;[End Block]
 			Case "scp1499", "super1499"
 				;[Block]
-				Wearing1499 = 0
+				I_1499\Using = 0
 				;[End Block]
 			Case "scp427"
 				;[Block]
@@ -607,8 +607,7 @@ Function PickItem(item.Items)
 	Local CanPickItem = True
 	Local FullINV% = True
 	Local GroupDesignation$
-	
-	Local ov.Overlays = First Overlays
+	Local tt.TextureTemplate = First TextureTemplate
 	
 	For n = 0 To MaxItemAmount - 1
 		If Inventory(n) = Null
@@ -635,7 +634,7 @@ Function PickItem(item.Items)
 						;[Block]
 						If I_714\Using = 0 And WearingGasMask < 3 And WearingHazmat < 3 Then
 							If PlayerRoom\RoomTemplate\Name <> "room1123" Then
-								ShowEntity(ov\OverlayID[7])
+								ShowEntity(tt\OverlayID[7])
 								LightFlash = 7.0
 								PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))	
 								
@@ -654,7 +653,7 @@ Function PickItem(item.Items)
 							For e.Events = Each Events
 								If e\EventName = "room1123" Then 
 									If e\EventState = 0.0 Then
-										ShowEntity(ov\OverlayID[7])
+										ShowEntity(tt\OverlayID[7])
 										LightFlash = 3.0
 										PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))
 									EndIf
@@ -667,7 +666,7 @@ Function PickItem(item.Items)
 						;[End Block]
 					Case "killbat"
 						;[Block]
-						ShowEntity(ov\OverlayID[7])
+						ShowEntity(tt\OverlayID[7])
 						LightFlash = 1.0
 						PlaySound_Strict(IntroSFX(Rand(8, 10)))
 						DeathMsg = SubjectName + " found dead inside SCP-914's output booth next to what appears to be an ordinary nine-volt battery. The subject is covered in severe "
@@ -844,7 +843,7 @@ Function DropItem(item.Items, PlayDropSound% = True)
 			;[End Block]
 		Case "scp1499", "super1499"
 			;[Block]
-			Wearing1499 = 0
+			I_1499\Using = 0
 			;[End Block]
 		Case "scp427"
 			;[Block]

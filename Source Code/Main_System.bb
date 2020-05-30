@@ -307,6 +307,8 @@ Type TextureTemplate
 	Field LightSpriteID%[MaxLightSpriteIDAmount - 1]
 	Field IconID%[MaxIconIDAmount - 1]
 	Field ImageID%[MaxImageIDAmount - 1]
+	Field OverlayTextureID%[MaxOverlayTextureIDAmount - 1]
+	Field OverlayID%[MaxOverlayIDAmount - 1]
 End Type
 
 Global PlayTime%
@@ -2053,21 +2055,11 @@ Global PrevInjuries#, PrevBloodloss#
 Global NVGImages% = LoadAnimImage("GFX\battery.png", 64, 64, 0, 2)
 MaskImage(NVGImages, 255, 0, 255)
 
-Global Wearing1499% = False
 Global AmbientLightRoomTex%, AmbientLightRoomVal%
 
 Global UserTrackCheck% = 0, UserTrackCheck2% = 0
 Global UserTrackMusicAmount% = 0, CurrUserTrack%, UserTrackFlag% = False
 Dim UserTrackName$(256)
-
-Global NTF_1499PrevX#
-Global NTF_1499PrevY#
-Global NTF_1499PrevZ#
-Global NTF_1499PrevRoom.Rooms
-Global NTF_1499X#
-Global NTF_1499Y#
-Global NTF_1499Z#
-Global NTF_1499Sky%
 
 Global OptionsMenu% = 0
 Global QuitMsg% = 0
@@ -2814,11 +2806,6 @@ Collisions(HIT_DEAD, HIT_MAP, 2, 2)
 
 DrawLoading(90, True)
 
-Type Overlays
-	Field OverlayTextureID%[MaxOverlayTextureIDAmount - 1]
-	Field OverlayID%[MaxOverlayIDAmount - 1]
-End Type
-
 Global Collider%, Head%
 
 Global UnableToMove% = False
@@ -2865,8 +2852,8 @@ Global Input_ResetTime# = 0.0
 Type SCP427
 	Field Using%
 	Field Timer#
-	Field Sound[1]
-	Field SoundCHN[1]
+	Field Sound%[1]
+	Field SoundCHN%[1]
 End Type
 
 Global I_427.SCP427 = New SCP427
@@ -2889,6 +2876,16 @@ End Type
 
 Global I_714.SCP714 = New SCP714
 
+Type SCP1499
+	Field Using%
+    Field PrevX#, PrevY#, PrevZ#
+    Field PrevRoom.Rooms
+    Field x#, y#, z#
+	Field Sky%
+End Type
+
+Global I_1499.SCP1499 = New SCP1499
+
 Type MapZones
 	Field Transition%[1]
 	Field HasCustomForest%
@@ -2900,7 +2897,7 @@ Global I_Zone.MapZones = New MapZones
 Repeat
 	Cls
 	
-	Local ov.Overlays = First Overlays
+	Local tt.TextureTemplate = First TextureTemplate
 	
 	CurTime = MilliSecs2()
 	ElapsedTime = (CurTime - PrevTime) / 1000.0
@@ -3234,18 +3231,18 @@ Repeat
 			End If
 			If SelectedScreen <> Null Then DarkA = Max(DarkA, 0.5)
 			
-			EntityAlpha(ov\OverlayID[6], DarkA)	
+			EntityAlpha(tt\OverlayID[6], DarkA)	
 		EndIf
 		
-		If LightFlash > 0 Then
-			ShowEntity(ov\OverlayID[7])
-			EntityAlpha(ov\OverlayID[7], Max(Min(LightFlash + Rnd(-0.2, 0.2), 1.0), 0.0))
+		If LightFlash > 0.0 Then
+			ShowEntity(tt\OverlayID[7])
+			EntityAlpha(tt\OverlayID[7], Max(Min(LightFlash + Rnd(-0.2, 0.2), 1.0), 0.0))
 			LightFlash = Max(LightFlash - (FPSfactor / 70.0), 0.0)
 		Else
-			HideEntity(ov\OverlayID[7])
+			HideEntity(tt\OverlayID[7])
 		EndIf
 		
-		EntityColor(ov\OverlayID[7], 255.0, 255.0, 255.0)
+		EntityColor(tt\OverlayID[7], 255.0, 255.0, 255.0)
 		
 		If KeyHit(KEY_INV) And VomitTimer >= 0.0 Then
 			If (Not UnableToMove) And (Not IsZombie) And (Not Using294) Then
@@ -3792,7 +3789,7 @@ Function MovePlayer()
 	
 	Local Sprint# = 1.0, Speed# = 0.018, i%, Angle#
 	Local Temporary#
-	Local ov.Overlays = First Overlays
+	Local tt.TextureTemplate = First TextureTemplate
 	
 	If SuperMan Then
 		Speed = Speed * 3.0
@@ -3805,10 +3802,10 @@ Function MovePlayer()
 			DeathMsg = "A Class D jumpsuit found in [DATA REDACTED]. Upon further examination, the jumpsuit was found to be filled with 12.5 kilograms of blue ash-like substance. "
 			DeathMsg = DeathMsg + "Chemical analysis of the substance remains non-conclusive. Most likely related to SCP-914."
 			Kill()
-			ShowEntity(ov\OverlayID[0])
+			ShowEntity(tt\OverlayID[0])
 		Else
 			BlurTimer = 500.0		
-			HideEntity(ov\OverlayID[0])
+			HideEntity(tt\OverlayID[0])
 		EndIf
 	End If
 	
@@ -3837,18 +3834,18 @@ Function MovePlayer()
 		If KeyDown(KEY_SPRINT) And (Not chs\NoClip) Then
 			If Stamina < 5.0 Then
 				Temp = 0.0
-				If WearingGasMask > 0 Or Wearing1499 > 0 Then Temp = 1
+				If WearingGasMask > 0 Or I_1499\Using > 0 Then Temp = 1
 				If ChannelPlaying(BreathCHN) = False Then BreathCHN = PlaySound_Strict(BreathSFX((Temp), 0))
 			ElseIf Stamina < 40.0
 				If BreathCHN = 0 Then
 					Temp = 0.0
-					If WearingGasMask > 0 Or Wearing1499 > 0 Then Temp = 1
+					If WearingGasMask > 0 Or I_1499\Using > 0 Then Temp = 1
 					BreathCHN = PlaySound_Strict(BreathSFX((Temp), Rand(1, 3)))
 					ChannelVolume(BreathCHN, Min((70.0 - Stamina) / 70.0, 1.0) * SFXVolume)
 				Else
 					If ChannelPlaying(BreathCHN) = False Then
 						Temp = 0.0
-						If WearingGasMask > 0 Or Wearing1499 > 0 Then Temp = 1
+						If WearingGasMask > 0 Or I_1499\Using > 0 Then Temp = 1
 						BreathCHN = PlaySound_Strict(BreathSFX((Temp), Rand(1, 3)))
 						ChannelVolume(BreathCHN, Min((70.0 - Stamina) / 70.0, 1.0) * SFXVolume)		
 					EndIf
@@ -4128,7 +4125,7 @@ End Function
 
 Function MouseLook()
 	Local i%
-	Local ov.Overlays = First Overlays
+	Local tt.TextureTemplate = First TextureTemplate
 	
 	CameraShake = Max(CameraShake - (FPSfactor / 10.0), 0.0)
 	
@@ -4245,54 +4242,54 @@ Function MouseLook()
 		MoveMouse(Viewport_Center_X, Viewport_Center_Y)
 	EndIf
 	
-	If WearingGasMask > 0 Or Wearing1499 > 0 Or WearingHazmat > 0 Then
+	If WearingGasMask > 0 Or I_1499\Using > 0 Or WearingHazmat > 0 Then
 		If WearingHazmat = 1 Then
             Stamina = Min(60.0, Stamina)
         EndIf
 		If I_714\Using = 0 Then
-			If WearingGasMask = 2 Or Wearing1499 = 2 Or WearingHazmat = 2 Then
+			If WearingGasMask = 2 Or I_1499\Using = 2 Or WearingHazmat = 2 Then
 				Stamina = Min(100.0, Stamina + (100.0 - Stamina) * 0.01 * FPSfactor)
 			EndIf
 		EndIf
-		If WearingGasMask > 0 Or Wearing1499 > 0 Then
+		If WearingGasMask > 0 Or I_1499\Using > 0 Then
 			If ChannelPlaying(BreathCHN) = False Then
 				If ChannelPlaying(BreathGasRelaxedCHN) = False Then BreathGasRelaxedCHN = PlaySound_Strict(BreathGasRelaxedSFX)
 			Else
 				If ChannelPlaying(BreathGasRelaxedCHN) = True Then StopChannel(BreathGasRelaxedCHN)
 			EndIf
-			ShowEntity(ov\OverlayID[1])
+			ShowEntity(tt\OverlayID[1])
 		Else
-			ShowEntity(ov\OverlayID[2])
+			ShowEntity(tt\OverlayID[2])
 		EndIf
 	Else
 		If ChannelPlaying(BreathGasRelaxedCHN) = True Then StopChannel(BreathGasRelaxedCHN)
-		HideEntity(ov\OverlayID[1])
-		HideEntity(ov\OverlayID[2])
+		HideEntity(tt\OverlayID[1])
+		HideEntity(tt\OverlayID[2])
 	End If
 	
 	If WearingHelmet > 0 Then
-        ShowEntity(ov\OverlayID[9])
+        ShowEntity(tt\OverlayID[9])
     Else
-        HideEntity(ov\OverlayID[9])
+        HideEntity(tt\OverlayID[9])
     EndIf
 	
 	If WearingNightVision > 0 Then
-		ShowEntity(ov\OverlayID[4])
+		ShowEntity(tt\OverlayID[4])
 		If WearingNightVision = 2 Then
-			EntityColor(ov\OverlayID[4], 0.0, 100.0, 255.0)
+			EntityColor(tt\OverlayID[4], 0.0, 100.0, 255.0)
 			AmbientLightRooms(15)
 		ElseIf WearingNightVision = 3 Then
-			EntityColor(ov\OverlayID[4], 255.0, 0.0, 0.0)
+			EntityColor(tt\OverlayID[4], 255.0, 0.0, 0.0)
 			AmbientLightRooms(15)
 		Else
-			EntityColor(ov\OverlayID[4], 0.0, 255.0, 0.0)
+			EntityColor(tt\OverlayID[4], 0.0, 255.0, 0.0)
 			AmbientLightRooms(15)
 		EndIf
-		EntityTexture(ov\OverlayID[0], ov\OverlayTextureID[5])
+		EntityTexture(tt\OverlayID[0], tt\OverlayTextureID[5])
 	Else
 		AmbientLightRooms(0)
-		HideEntity(ov\OverlayID[4])
-		EntityTexture(ov\OverlayID[0], ov\OverlayTextureID[0])
+		HideEntity(tt\OverlayID[4])
+		EntityTexture(tt\OverlayID[0], tt\OverlayTextureID[0])
 	EndIf
 	
 	For i = 0 To 5
@@ -4389,7 +4386,6 @@ Function DrawGUI()
 	Local n%, xTemp, yTemp, StrTemp$, GroupDesignation$
 	Local e.Events, it.Items
 	Local o.Objects = First Objects
-	Local ov.Overlays = First Overlays
 	Local fo.Fonts = First Fonts
 	Local tt.TextureTemplate = First TextureTemplate
 	
@@ -4569,7 +4565,7 @@ Function DrawGUI()
 			Color(200, 0, 0)
 			Rect(x - 50 - 3, y - 3, 30 + 6, 30 + 6)
 		Else
-		    If chs\InfiniteStamina = True Or StaminaEffect < 1.0 Or WearingGasMask = 2 Or Wearing1499 = 2 Or WearingHazmat = 2 Then
+		    If chs\InfiniteStamina = True Or StaminaEffect < 1.0 Or WearingGasMask = 2 Or I_1499\Using = 2 Or WearingHazmat = 2 Then
                 Color(0, 200, 0)
 			    Rect(x - 50 - 3, y - 3, 30 + 6, 30 + 6)
             EndIf 
@@ -4860,13 +4856,13 @@ Function DrawGUI()
 	
 	If OtherOpen <> Null Then
 		If (PlayerRoom\RoomTemplate\Name = "gatea") Then
-			HideEntity(ov\OverlayID[0])
+			HideEntity(tt\OverlayID[0])
 			CameraFogRange(Camera, 5.0, 30.0)
 			CameraFogColor(Camera, 200.0, 200.0, 200.0)
 			CameraClsColor(Camera, 200.0, 200.0, 200.0)					
 			CameraRange(Camera, 0.05, 30.0)
 		Else If (PlayerRoom\RoomTemplate\Name = "gateb") And (EntityY(Collider) > 1040.0 * RoomScale)
-			HideEntity(ov\OverlayID[0])
+			HideEntity(tt\OverlayID[0])
 			CameraFogRange(Camera, 5.0, 45.0)
 			CameraFogColor(Camera, 200.0, 200.0, 200.0)
 			CameraClsColor(Camera, 200.0, 200.0, 200.0)					
@@ -5047,13 +5043,13 @@ Function DrawGUI()
 		EndIf
 	Else If InvOpen Then
 		If (PlayerRoom\RoomTemplate\Name = "gatea") Then
-			HideEntity(ov\OverlayID[0])
+			HideEntity(tt\OverlayID[0])
 			CameraFogRange(Camera, 5.0, 30.0)
 			CameraFogColor(Camera, 200.0, 200.0, 200.0)
 			CameraClsColor(Camera, 200.0, 200.0, 200.0)					
 			CameraRange(Camera, 0.05, 30.0)
 		ElseIf (PlayerRoom\RoomTemplate\Name = "gateb") And (EntityY(Collider) > 1040.0 * RoomScale)
-			HideEntity(ov\OverlayID[0])
+			HideEntity(tt\OverlayID[0])
 			CameraFogRange(Camera, 5.0, 45.0)
 			CameraFogColor(Camera, 200.0, 200.0, 200.0)
 			CameraClsColor(Camera, 200.0, 200.0, 200.0)					
@@ -5131,11 +5127,11 @@ Function DrawGUI()
 						;[End Block]
 					Case "scp1499"
 						;[Block]
-						If Wearing1499 = 1 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
+						If I_1499\Using = 1 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
 						;[End Block]
 					Case "super1499"
 						;[Block]
-						If Wearing1499 = 2 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
+						If I_1499\Using = 2 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
 						;[End Block]
 					Case "finenvgoggles"
 						;[Block]
@@ -5224,7 +5220,7 @@ Function DrawGUI()
 							;[End Block]
 						Case "scp1499", "super1499"
 							;[Block]
-							If Wearing1499 > 0 Then
+							If I_1499\Using > 0 Then
 								Msg = "Double click on this item to take it off."
 								MsgTimer = 70.0 * 6.0
 							Else
@@ -5487,6 +5483,7 @@ Function DrawGUI()
 				Case "nvgoggles"
 					;[Block]
 					If CanUseItem2(False, True, False, False) Then
+						; ~ A hacky fix for a fog
 						If WearingNightVision > 0 And WearingNightVision <> 1 Then
 							Msg = "You can't use two pairs of the goggles at the same time."
 							MsgTimer = 70 * 5.0
@@ -5560,7 +5557,7 @@ Function DrawGUI()
 					;[Block]
 					If I_714\Using = 0 And WearingGasMask < 3 And WearingHazmat < 3 Then
 						If PlayerRoom\RoomTemplate\Name <> "room1123" Then
-							ShowEntity(ov\OverlayID[7])
+							ShowEntity(tt\OverlayID[7])
 							LightFlash = 7.0
 							PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))	
 							
@@ -5579,7 +5576,7 @@ Function DrawGUI()
 						For e.Events = Each Events
 							If e\EventName = "room1123" Then 
 								If e\EventState = 0.0 Then
-									ShowEntity(ov\OverlayID[7])
+									ShowEntity(tt\OverlayID[7])
 									LightFlash = 3.0
 									PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))		
 								EndIf
@@ -6813,30 +6810,30 @@ Function DrawGUI()
 						SelectedItem\state = Min(SelectedItem\State + FPSfactor / 1.6, 100.0)
 						
 						If SelectedItem\State = 100.0 Then
-							If Wearing1499 > 0 Then
-								Wearing1499 = False
+							If I_1499\Using > 0 Then
+								I_1499\Using = False
 								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))
 							Else
 								If SelectedItem\ItemTemplate\TempName = "scp1499" Then
-									Wearing1499 = 1
+									I_1499\Using = 1
 								Else
-									Wearing1499 = 2
+									I_1499\Using = 2
 								EndIf
 								If SelectedItem\itemtemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))
 								GiveAchievement(Achv1499)
 								For r.Rooms = Each Rooms
 									If r\RoomTemplate\Name = "dimension1499" Then
 										BlinkTimer = -1.0
-										NTF_1499PrevRoom = PlayerRoom
-										NTF_1499PrevX = EntityX(Collider)
-										NTF_1499PrevY = EntityY(Collider)
-										NTF_1499PrevZ = EntityZ(Collider)
+										I_1499\PrevRoom = PlayerRoom
+										I_1499\PrevX = EntityX(Collider)
+										I_1499\PrevY = EntityY(Collider)
+										I_1499\PrevZ = EntityZ(Collider)
 										
-										If NTF_1499X = 0.0 And NTF_1499Y = 0.0 And NTF_1499Z = 0.0 Then
+										If I_1499\x = 0.0 And I_1499\y = 0.0 And I_1499\z = 0.0 Then
 											PositionEntity(Collider, r\x + 6086.0 * RoomScale, r\y + 304.0 * RoomScale, r\z + 2292.5 * RoomScale)
 											RotateEntity(Collider, 0.0, 90.0, 0.0, True)
 										Else
-											PositionEntity(Collider, NTF_1499X, NTF_1499Y + 0.05, NTF_1499Z)
+											PositionEntity(Collider, I_1499\x, I_1499\y + 0.05, I_1499\z)
 										EndIf
 										ResetEntity(Collider)
 										UpdateDoors()
@@ -6846,9 +6843,9 @@ Function DrawGUI()
 										Next
 										PlayerRoom = r
 										PlaySound_Strict(LoadTempSound("SFX\SCP\1499\Enter.ogg"))
-										NTF_1499X = 0.0
-										NTF_1499Y = 0.0
-										NTF_1499Z = 0.0
+										I_1499\x = 0.0
+										I_1499\y = 0.0
+										I_1499\z = 0.0
 										If Curr096 <> Null Then
 											If Curr096\SoundCHN <> 0 Then
 												SetStreamVolume_Strict(Curr096\SoundCHN, 0.0)
@@ -7059,7 +7056,7 @@ Function DrawGUI()
 			EndIf
 			
 			If MouseHit2 Then
-				EntityAlpha(ov\OverlayID[6], 0.0)
+				EntityAlpha(tt\OverlayID[6], 0.0)
 				
 				IN = SelectedItem\ItemTemplate\TempName
 				If IN = "scp1025" Then
@@ -7872,7 +7869,6 @@ Function LoadEntities()
 	
 	Local o.Objects = New Objects
 	Local i%
-	Local ov.Overlays = New Overlays
 	Local tt.TextureTemplate = New TextureTemplate
 	
 	For i = 0 To 9
@@ -7930,109 +7926,109 @@ Function LoadEntities()
 	CreateBlurImage()
 	CameraProjMode(Ark_Blur_Cam, 0)
 	
-	ov\OverlayTextureID[0] = LoadTexture_Strict("GFX\fog.png", 1) ; ~ FOG
-	ov\OverlayID[0] = CreateSprite(Ark_Blur_Cam)
-	ScaleSprite(ov\OverlayID[0], Max(GraphicWidth / 1240, 1), Max(GraphicHeight / 960 * 0.8, 0.8))
-	EntityTexture(ov\OverlayID[0], ov\OverlayTextureID[0])
-	EntityBlend(ov\OverlayID[0], 2)
-	EntityOrder(ov\OverlayID[0], -1000)
-	MoveEntity(ov\OverlayID[0], 0.0, 0.0, 1.0)
+	tt\OverlayTextureID[0] = LoadTexture_Strict("GFX\fog.png", 1) ; ~ FOG
+	tt\OverlayID[0] = CreateSprite(Ark_Blur_Cam)
+	ScaleSprite(tt\OverlayID[0], Max(GraphicWidth / 1240, 1), Max(GraphicHeight / 960 * 0.8, 0.8))
+	EntityTexture(tt\OverlayID[0], tt\OverlayTextureID[0])
+	EntityBlend(tt\OverlayID[0], 2)
+	EntityOrder(tt\OverlayID[0], -1000)
+	MoveEntity(tt\OverlayID[0], 0.0, 0.0, 1.0)
 	
-	ov\OverlayTextureID[1] = LoadTexture_Strict("GFX\gas_mask_overlay.png", 1) ; ~ GAS MASK
-	ov\OverlayID[1] = CreateSprite(Ark_Blur_Cam)
-	ScaleSprite(ov\OverlayID[1], Max(GraphicWidth / 1024, 1), Max(GraphicHeight / 1024 * 0.8, 0.8))
-	EntityTexture(ov\OverlayID[1], ov\OverlayTextureID[1])
-	EntityBlend(ov\OverlayID[1], 2)
-	EntityFX(ov\OverlayID[1], 1)
-	EntityOrder(ov\OverlayID[1], -1003)
-	MoveEntity(ov\OverlayID[1], 0.0, 0.0, 1.0)
+	tt\OverlayTextureID[1] = LoadTexture_Strict("GFX\gas_mask_overlay.png", 1) ; ~ GAS MASK
+	tt\OverlayID[1] = CreateSprite(Ark_Blur_Cam)
+	ScaleSprite(tt\OverlayID[1], Max(GraphicWidth / 1024, 1), Max(GraphicHeight / 1024 * 0.8, 0.8))
+	EntityTexture(tt\OverlayID[1], tt\OverlayTextureID[1])
+	EntityBlend(tt\OverlayID[1], 2)
+	EntityFX(tt\OverlayID[1], 1)
+	EntityOrder(tt\OverlayID[1], -1003)
+	MoveEntity(tt\OverlayID[1], 0.0, 0.0, 1.0)
 	
-	ov\OverlayTextureID[2] = LoadTexture_Strict("GFX\hazmat_suit_overlay.png", 1) ; ~ HAZMAT SUIT
-	ov\OverlayID[2] = CreateSprite(Ark_Blur_Cam)
-	ScaleSprite(ov\OverlayID[2], Max(GraphicWidth / 1024.0, 1.0), Max(GraphicHeight / 1024.0 * 0.8, 0.8))
-	EntityTexture(ov\OverlayID[2], ov\OverlayTextureID[2])
-	EntityBlend(ov\OverlayID[2], 2)
-	EntityFX(ov\OverlayID[2], 1)
-	EntityOrder(ov\OverlayID[2], -1003)
-	MoveEntity(ov\OverlayID[2], 0, 0, 1.0)
+	tt\OverlayTextureID[2] = LoadTexture_Strict("GFX\hazmat_suit_overlay.png", 1) ; ~ HAZMAT SUIT
+	tt\OverlayID[2] = CreateSprite(Ark_Blur_Cam)
+	ScaleSprite(tt\OverlayID[2], Max(GraphicWidth / 1024.0, 1.0), Max(GraphicHeight / 1024.0 * 0.8, 0.8))
+	EntityTexture(tt\OverlayID[2], tt\OverlayTextureID[2])
+	EntityBlend(tt\OverlayID[2], 2)
+	EntityFX(tt\OverlayID[2], 1)
+	EntityOrder(tt\OverlayID[2], -1003)
+	MoveEntity(tt\OverlayID[2], 0, 0, 1.0)
 	
-	ov\OverlayTextureID[3] = LoadTexture_Strict("GFX\scp_008_overlay.png", 1) ; ~ SCP-008
-	ov\OverlayID[3] = CreateSprite(Ark_Blur_Cam)
-	ScaleSprite(ov\OverlayID[3], Max(GraphicWidth / 1024, 1), Max(GraphicHeight / 1024 * 0.8, 0.8))
-	EntityTexture(ov\OverlayID[3], ov\OverlayTextureID[3])
-	EntityBlend(ov\OverlayID[3], 3)
-	EntityFX(ov\OverlayID[3], 1)
-	EntityOrder(ov\OverlayID[3], -1003)
-	MoveEntity(ov\OverlayID[3], 0.0, 0.0, 1.0)
+	tt\OverlayTextureID[3] = LoadTexture_Strict("GFX\scp_008_overlay.png", 1) ; ~ SCP-008
+	tt\OverlayID[3] = CreateSprite(Ark_Blur_Cam)
+	ScaleSprite(tt\OverlayID[3], Max(GraphicWidth / 1024, 1), Max(GraphicHeight / 1024 * 0.8, 0.8))
+	EntityTexture(tt\OverlayID[3], tt\OverlayTextureID[3])
+	EntityBlend(tt\OverlayID[3], 3)
+	EntityFX(tt\OverlayID[3], 1)
+	EntityOrder(tt\OverlayID[3], -1003)
+	MoveEntity(tt\OverlayID[3], 0.0, 0.0, 1.0)
 	
-	ov\OverlayTextureID[4] = LoadTexture_Strict("GFX\night_vision_goggles_overlay.png", 1) ; NIGHT VISION GOGGLES
-	ov\OverlayID[4] = CreateSprite(Ark_Blur_Cam)
-	ScaleSprite(ov\OverlayID[4], Max(GraphicWidth / 1024, 1), Max(GraphicHeight / 1024 * 0.8, 0.8))
-	EntityTexture(ov\OverlayID[4], ov\OverlayTextureID[4])
-	EntityBlend(ov\OverlayID[4], 2)
-	EntityFX(ov\OverlayID[4], 1)
-	EntityOrder(ov\OverlayID[4], -1003)
-	MoveEntity(ov\OverlayID[4], 0.0, 0.0, 1.0)
+	tt\OverlayTextureID[4] = LoadTexture_Strict("GFX\night_vision_goggles_overlay.png", 1) ; NIGHT VISION GOGGLES
+	tt\OverlayID[4] = CreateSprite(Ark_Blur_Cam)
+	ScaleSprite(tt\OverlayID[4], Max(GraphicWidth / 1024, 1), Max(GraphicHeight / 1024 * 0.8, 0.8))
+	EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
+	EntityBlend(tt\OverlayID[4], 2)
+	EntityFX(tt\OverlayID[4], 1)
+	EntityOrder(tt\OverlayID[4], -1003)
+	MoveEntity(tt\OverlayID[4], 0.0, 0.0, 1.0)
 	
-	ov\OverlayTextureID[5] = LoadTexture_Strict("GFX\fogNV.png", 1) ; ~ FOG IN NIGHT VISION GOGGLES
-	ov\OverlayID[5] = CreateSprite(Ark_Blur_Cam)
-	ScaleSprite(ov\OverlayID[5], Max(GraphicWidth / 1024, 1), Max(GraphicHeight / 1024 * 0.8, 0.8))
-	EntityColor(ov\OverlayID[5], 0.0, 0.0, 0.0)
-	EntityFX(ov\OverlayID[5], 1)
-	EntityOrder(ov\OverlayID[5], -1005)
-	MoveEntity(ov\OverlayID[5], 0.0, 0.0, 1.0)
+	tt\OverlayTextureID[5] = LoadTexture_Strict("GFX\fog_night_vision_goggles.png", 1) ; ~ FOG IN NIGHT VISION GOGGLES
+	tt\OverlayID[5] = CreateSprite(Ark_Blur_Cam)
+	ScaleSprite(tt\OverlayID[5], Max(GraphicWidth / 1024, 1), Max(GraphicHeight / 1024 * 0.8, 0.8))
+	EntityColor(tt\OverlayID[5], 0.0, 0.0, 0.0)
+	EntityFX(tt\OverlayID[5], 1)
+	EntityOrder(tt\OverlayID[5], -1005)
+	MoveEntity(tt\OverlayID[5], 0.0, 0.0, 1.0)
 	
 	For i = 1 To 5
-		HideEntity(ov\OverlayID[i])
+		HideEntity(tt\OverlayID[i])
 	Next
 	
 	DrawLoading(5)
 	
-	ov\OverlayTextureID[6] = CreateTexture(1024, 1024, 1 + 2) ; ~ DARK
-	SetBuffer(TextureBuffer(ov\OverlayTextureID[6]))
+	tt\OverlayTextureID[6] = CreateTexture(1024, 1024, 1 + 2) ; ~ DARK
+	SetBuffer(TextureBuffer(tt\OverlayTextureID[6]))
 	Cls
 	SetBuffer(BackBuffer())
-	ov\OverlayID[6] = CreateSprite(Camera)
-	ScaleSprite(ov\OverlayID[6], Max(GraphicWidth / 1240, 1), Max(GraphicHeight / 960 * 0.8, 0.8))
-	EntityTexture(ov\OverlayID[6], ov\OverlayTextureID[6])
-	EntityBlend(ov\OverlayID[6], 1)
-	EntityOrder(ov\OverlayID[6], -1002)
-	MoveEntity(ov\OverlayID[6], 0.0, 0.0, 1.0)
-	EntityAlpha(ov\OverlayID[6], 0.0)
+	tt\OverlayID[6] = CreateSprite(Camera)
+	ScaleSprite(tt\OverlayID[6], Max(GraphicWidth / 1240, 1), Max(GraphicHeight / 960 * 0.8, 0.8))
+	EntityTexture(tt\OverlayID[6], tt\OverlayTextureID[6])
+	EntityBlend(tt\OverlayID[6], 1)
+	EntityOrder(tt\OverlayID[6], -1002)
+	MoveEntity(tt\OverlayID[6], 0.0, 0.0, 1.0)
+	EntityAlpha(tt\OverlayID[6], 0.0)
 	
-	ov\OverlayTextureID[7] = CreateTexture(1024, 1024, 1 + 2 + 256) ; ~ LIGHT
-	SetBuffer(TextureBuffer(ov\OverlayTextureID[7]))
+	tt\OverlayTextureID[7] = CreateTexture(1024, 1024, 1 + 2 + 256) ; ~ LIGHT
+	SetBuffer(TextureBuffer(tt\OverlayTextureID[7]))
 	ClsColor(255, 255, 255)
 	Cls
 	ClsColor(0, 0, 0)
 	SetBuffer(BackBuffer())
-	ov\OverlayID[7] = CreateSprite(Camera)
-	ScaleSprite(ov\OverlayID[7], Max(GraphicWidth / 1240, 1), Max(GraphicHeight / 960 * 0.8, 0.8))
-	EntityTexture(ov\OverlayID[7], ov\OverlayTextureID[7])
-	EntityBlend(ov\OverlayID[7], 1)
-	EntityOrder(ov\OverlayID[7], -1002)
-	MoveEntity(ov\OverlayID[7], 0.0, 0.0, 1.0)
-	HideEntity(ov\OverlayID[7])
+	tt\OverlayID[7] = CreateSprite(Camera)
+	ScaleSprite(tt\OverlayID[7], Max(GraphicWidth / 1240, 1), Max(GraphicHeight / 960 * 0.8, 0.8))
+	EntityTexture(tt\OverlayID[7], tt\OverlayTextureID[7])
+	EntityBlend(tt\OverlayID[7], 1)
+	EntityOrder(tt\OverlayID[7], -1002)
+	MoveEntity(tt\OverlayID[7], 0.0, 0.0, 1.0)
+	HideEntity(tt\OverlayID[7])
 	
-	ov\OverlayTextureID[8] = LoadTexture_Strict("GFX\scp_409_overlay.png", 1) ; ~ SCP-409
-	ov\OverlayID[8] = CreateSprite(Ark_Blur_Cam)
-	ScaleSprite(ov\OverlayID[8], Max(GraphicWidth / 1024.0, 1.0), Max(GraphicHeight / 1024.0 * 0.8, 0.8))
-	EntityTexture(ov\OverlayID[8], ov\OverlayTextureID[8])
-	EntityBlend(ov\OverlayID[8], 3)
-	EntityFX(ov\OverlayID[8], 1)
-	EntityOrder(ov\OverlayID[8], -1001)
-	MoveEntity(ov\OverlayID[8], 0.0, 0.0, 1.0)
-	HideEntity(ov\OverlayID[8])
+	tt\OverlayTextureID[8] = LoadTexture_Strict("GFX\scp_409_overlay.png", 1) ; ~ SCP-409
+	tt\OverlayID[8] = CreateSprite(Ark_Blur_Cam)
+	ScaleSprite(tt\OverlayID[8], Max(GraphicWidth / 1024.0, 1.0), Max(GraphicHeight / 1024.0 * 0.8, 0.8))
+	EntityTexture(tt\OverlayID[8], tt\OverlayTextureID[8])
+	EntityBlend(tt\OverlayID[8], 3)
+	EntityFX(tt\OverlayID[8], 1)
+	EntityOrder(tt\OverlayID[8], -1001)
+	MoveEntity(tt\OverlayID[8], 0.0, 0.0, 1.0)
+	HideEntity(tt\OverlayID[8])
 	
-	ov\OverlayTextureID[9] = LoadTexture_Strict("GFX\helmet_overlay.png", 1) ; ~ HELMET
-	ov\OverlayID[9] = CreateSprite(Ark_Blur_Cam)
-	ScaleSprite(ov\OverlayID[9], Max(GraphicWidth / 1024.0, 1.0), Max(GraphicHeight / 1024.0 * 0.8, 0.8))
-	EntityTexture(ov\OverlayID[9], ov\OverlayTextureID[9])
-	EntityBlend(ov\OverlayID[9], 2)
-	EntityFX(ov\OverlayID[9], 1)
-	EntityOrder(ov\OverlayID[9], -1003)
-	MoveEntity(ov\OverlayID[9], 0.0, 0.0, 1.0)
-	HideEntity(ov\OverlayID[9])
+	tt\OverlayTextureID[9] = LoadTexture_Strict("GFX\helmet_overlay.png", 1) ; ~ HELMET
+	tt\OverlayID[9] = CreateSprite(Ark_Blur_Cam)
+	ScaleSprite(tt\OverlayID[9], Max(GraphicWidth / 1024.0, 1.0), Max(GraphicHeight / 1024.0 * 0.8, 0.8))
+	EntityTexture(tt\OverlayID[9], tt\OverlayTextureID[9])
+	EntityBlend(tt\OverlayID[9], 2)
+	EntityFX(tt\OverlayID[9], 1)
+	EntityOrder(tt\OverlayID[9], -1003)
+	MoveEntity(tt\OverlayID[9], 0.0, 0.0, 1.0)
+	HideEntity(tt\OverlayID[9])
 	
 	Collider = CreatePivot()
 	EntityRadius Collider, 0.15, 0.30
@@ -8213,15 +8209,15 @@ Function LoadEntities()
 		tt\DecalTextureID[i] = LoadTexture_Strict("GFX\decalpd(" + (i - 7) + ").png", 1 + 2)	
 	Next
 	
-	tt\DecalTextureID[13] = LoadTexture_Strict("GFX\bullethole.png", 1 + 2)	
-	tt\DecalTextureID[14] = LoadTexture_Strict("GFX\bullethole(2).png", 1 + 2)	
+	tt\DecalTextureID[13] = LoadTexture_Strict("GFX\bullet_hole.png", 1 + 2)	
+	tt\DecalTextureID[14] = LoadTexture_Strict("GFX\bullet_hole(2).png", 1 + 2)	
 	
-	tt\DecalTextureID[15] = LoadTexture_Strict("GFX\blooddrop.png", 1 + 2)
-	tt\DecalTextureID[16] = LoadTexture_Strict("GFX\blooddrop(2).png", 1 + 2)
+	tt\DecalTextureID[15] = LoadTexture_Strict("GFX\blood_drop.png", 1 + 2)
+	tt\DecalTextureID[16] = LoadTexture_Strict("GFX\blood_drop(2).png", 1 + 2)
 	
 	tt\DecalTextureID[17] = LoadTexture_Strict("GFX\decal427.png", 1 + 2)
 	
-	tt\DecalTextureID[18] = LoadTexture_Strict("GFX\decalpd(6).dc", 1 + 2)	
+	tt\DecalTextureID[18] = LoadTexture_Strict("GFX\decalpd(6).png", 1 + 2)	
 	
 	tt\DecalTextureID[19] = LoadTexture_Strict("GFX\decal409.png", 1 + 2)
 	
@@ -8324,7 +8320,7 @@ Function LoadEntities()
 	tt\ParticleTextureID[2] = LoadTexture_Strict("GFX\dust.png", 1 + 2)
 	tt\ParticleTextureID[3] = LoadTexture_Strict("GFX\npcs\hg.pt", 1 + 2)
 	tt\ParticleTextureID[4] = LoadTexture_Strict("GFX\map\sun.png", 1 + 2)
-	tt\ParticleTextureID[5] = LoadTexture_Strict("GFX\bloodsprite.png", 1 + 2)
+	tt\ParticleTextureID[5] = LoadTexture_Strict("GFX\blood_sprite.png", 1 + 2)
 	tt\ParticleTextureID[6] = LoadTexture_Strict("GFX\smoke(2).png", 1 + 2)
 	tt\ParticleTextureID[7] = LoadTexture_Strict("GFX\spark.png", 1 + 2)
 	tt\ParticleTextureID[8] = LoadTexture_Strict("GFX\particle.png", 1 + 2)
@@ -8663,7 +8659,7 @@ Function InitLoadGame()
 				PositionEntity(e\room\Objects[0], 0.0, EntityY(e\room\OBJ), 0.0)
 				EntityType(e\room\Objects[0], HIT_MAP)
 				DrawLoading(92)
-				NTF_1499Sky = sky_CreateSky("GFX\map\sky\1499sky")
+				I_1499\Sky = sky_CreateSky("GFX\map\sky\1499sky")
 				DrawLoading(93)
 				For i = 1 To 15
 					e\room\Objects[i] = LoadMesh_Strict("GFX\map\dimension1499\1499object" + i + ".b3d")
@@ -8703,7 +8699,7 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	Local i%, x%, y%, Lvl%
 	Local itt.ItemTemplates, s.Screens, lt.LightTemplates, d.Doors, m.Materials
-	Local wp.WayPoints, twp.TempWayPoints, r.Rooms, it.Items, o.Objects, ov.Overlays, tt.TextureTemplate
+	Local wp.WayPoints, twp.TempWayPoints, r.Rooms, it.Items, o.Objects, tt.TextureTemplate
 	
 	KillSounds()
 	If PlayButtonSFX Then PlaySound_Strict(ButtonSFX)
@@ -8901,10 +8897,6 @@ Function NullGame(PlayButtonSFX% = True)
 		Delete(o)
 	Next
 	
-	For ov.Overlays = Each Overlays
-		Delete(ov)
-	Next
-	
 	For tt.TextureTemplate = Each TextureTemplate
 		Delete(tt)
 	Next
@@ -8947,14 +8939,14 @@ Function NullGame(PlayButtonSFX% = True)
 		If ChannelPlaying(RadioCHN(i)) Then StopChannel(RadioCHN(i))
 	Next
 	
-	NTF_1499PrevX = 0.0
-	NTF_1499PrevY = 0.0
-	NTF_1499PrevZ = 0.0
-	NTF_1499PrevRoom = Null
-	NTF_1499X = 0.0
-	NTF_1499Y = 0.0
-	NTF_1499Z = 0.0
-	Wearing1499 = False
+	I_1499\PrevX = 0.0
+	I_1499\PrevY = 0.0
+	I_1499\PrevZ = 0.0
+	I_1499\PrevRoom = Null
+	I_1499\x = 0.0
+	I_1499\y = 0.0
+	I_1499\z = 0.0
+	I_1499\Using = False
 	DeleteChunks()
 	
 	OptionsMenu = -1
@@ -10677,7 +10669,7 @@ Function Update008()
 	Local PrevI008Timer#, i%, r.Rooms
 	Local TeleportForInfect% = True
 	Local GroupDesignation$
-	Local ov.Overlays = First Overlays
+	Local tt.TextureTemplate = First TextureTemplate
 	
 	If PlayerRoom\RoomTemplate\Name = "room860"
 		For e.Events = Each Events
@@ -10695,7 +10687,7 @@ Function Update008()
 	EndIf
 	
 	If I_008\Timer > 0.0 Then
-		ShowEntity(ov\OverlayID[3])
+		ShowEntity(tt\OverlayID[3])
 		If I_008\Timer < 93.0 Then
 			PrevI008Timer = I_008\Timer
 			If I_427\Using = 0 And I_427\Timer < 70.0 * 360.0 Then
@@ -10707,7 +10699,7 @@ Function Update008()
 			HeartBeatRate = Max(HeartBeatRate, 100.0)
 			HeartBeatVolume = Max(HeartBeatVolume, I_008\Timer / 120.0)
 			
-			EntityAlpha(ov\OverlayID[3], Min(((I_008\Timer * 0.2) ^ 2.0) / 1000.0, 0.5) * (Sin(MilliSecs2() / 8.0) + 2.0))
+			EntityAlpha(tt\OverlayID[3], Min(((I_008\Timer * 0.2) ^ 2.0) / 1000.0, 0.5) * (Sin(MilliSecs2() / 8.0) + 2.0))
 			
 			For i = 0 To 6
 				If I_008\Timer > i * 15.0 + 10.0 And PrevI008Timer =< i * 15.0 + 10.0 Then
@@ -10756,7 +10748,7 @@ Function Update008()
 			
 			If TeleportForInfect Then
 				If I_008\Timer < 94.7 Then
-					EntityAlpha(ov\OverlayID[3], 0.5 * (Sin(MilliSecs2() / 8.0) + 2.0))
+					EntityAlpha(tt\OverlayID[3], 0.5 * (Sin(MilliSecs2() / 8.0) + 2.0))
 					BlurTimer = 900.0
 					
 					If I_008\Timer > 94.5 Then BlinkTimer = Max(Min((-50.0) * (I_008\Timer - 94.5), BlinkTimer), -10.0)
@@ -10770,7 +10762,7 @@ Function Update008()
 					
 					Animate2(PlayerRoom\NPC[0]\OBJ, AnimTime(PlayerRoom\NPC[0]\OBJ), 357.0, 381.0, 0.3)
 				ElseIf I_008\Timer < 98.5
-					EntityAlpha(ov\OverlayID[3], 0.5 * (Sin(MilliSecs2() / 5.0) + 2.0))
+					EntityAlpha(tt\OverlayID[3], 0.5 * (Sin(MilliSecs2() / 5.0) + 2.0))
 					BlurTimer = 950
 					
 					ForceMove = 0.0
@@ -10844,21 +10836,21 @@ Function Update008()
 			EndIf
 		EndIf
 	Else
-		HideEntity(ov\OverlayID[3])
+		HideEntity(tt\OverlayID[3])
 	EndIf
 End Function
 
 Function Update409()
-	Local ov.Overlays = First Overlays
+	Local tt.TextureTemplate = First TextureTemplate
 	Local prevI409Timer# = I_409\Timer
 	
 	If I_409\Timer > 0.0 Then
-		ShowEntity(ov\OverlayID[8])
+		ShowEntity(tt\OverlayID[8])
 		
 		If I_427\Using = 0 And I_427\Timer < 70.0 * 360.0 Then
 			I_409\Timer = ((Min(I_409\Timer + FPSfactor * 0.004, 100.0)))
 		EndIf	
-		EntityAlpha(ov\OverlayID[8], Min(((I_409\Timer * 0.2) ^ 2.0) / 1000.0, 0.5))
+		EntityAlpha(tt\OverlayID[8], Min(((I_409\Timer * 0.2) ^ 2.0) / 1000.0, 0.5))
 	    BlurTimer = Max(I_409\Timer * 3.0 * (2.0 - CrouchState), BlurTimer)
 		
         If I_409\Timer > 40.0 And prevI409Timer =< 40.0 Then
@@ -10889,7 +10881,7 @@ Function Update409()
 			Kill()
         EndIf
     Else
-		HideEntity(ov\OverlayID[8])	
+		HideEntity(tt\OverlayID[8])	
     EndIf
 End Function
 
@@ -11085,7 +11077,7 @@ End Function
 
 Function RenderWorld2()
 	Local i%, Dist#
-	Local ov.Overlays = First Overlays
+	Local tt.TextureTemplate = First TextureTemplate
 	Local fo.Fonts = First Fonts
 	
 	CameraProjMode(Ark_Blur_Cam, 0)
@@ -11102,14 +11094,14 @@ Function RenderWorld2()
 	EndIf
 	
 	IsNVGBlinking = False
-	HideEntity(ov\OverlayID[5])
+	HideEntity(tt\OverlayID[5])
 	
 	CameraViewport(Camera, 0, 0, GraphicWidth, GraphicHeight)
 	
 	Local HasBattery% = 2
 	Local Power% = 0
 	
-	If (WearingNightVision = 1) Or (WearingNightVision = 2)
+	If WearingNightVision = 1 Or WearingNightVision = 2 Then
 		For i = 0 To MaxItemAmount - 1
 			If (Inventory(i) <> Null) Then
 				If (WearingNightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvgoggles") Or (WearingNightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernv") Then
@@ -11136,9 +11128,9 @@ Function RenderWorld2()
 	
 	CurrTrisAmount = TrisRendered()
 
-	If HasBattery = 0 And WearingNightVision <> 3
+	If HasBattery = 0 And WearingNightVision <> 3 Then
 		IsNVGBlinking = True
-		ShowEntity(ov\OverlayID[5])
+		ShowEntity(tt\OverlayID[5])
 	EndIf
 	
 	If BlinkTimer < -16.0 Or BlinkTimer > -6.0
@@ -11151,7 +11143,7 @@ Function RenderWorld2()
 					np\NVZ = EntityZ(np\Collider, True)
 				Next
 				IsNVGBlinking = True
-				ShowEntity(ov\OverlayID[5])
+				ShowEntity(tt\OverlayID[5])
 				If NVTimer =< -10.0 Then
 					NVTimer = 600.0
 				EndIf
@@ -11311,14 +11303,14 @@ Function UpdateLeave1499()
 	Local r.Rooms, it.Items, r2.Rooms, i%
 	Local r1499.Rooms
 	
-	If (Not Wearing1499) And PlayerRoom\RoomTemplate\Name = "dimension1499" Then
+	If (Not I_1499\Using) And PlayerRoom\RoomTemplate\Name = "dimension1499" Then
 		For r.Rooms = Each Rooms
-			If r = NTF_1499PrevRoom Then
+			If r = I_1499\PrevRoom Then
 				BlinkTimer = -1.0
-				NTF_1499X = EntityX(Collider)
-				NTF_1499Y = EntityY(Collider)
-				NTF_1499Z = EntityZ(Collider)
-				PositionEntity(Collider, NTF_1499PrevX, NTF_1499PrevY + 0.05, NTF_1499PrevZ)
+				I_1499\x = EntityX(Collider)
+				I_1499\y = EntityY(Collider)
+				I_1499\z = EntityZ(Collider)
+				PositionEntity(Collider, I_1499\PrevX, I_1499\PrevY + 0.05, I_1499\PrevZ)
 				ResetEntity(Collider)
 				PlayerRoom = r
 				UpdateDoors()
@@ -11347,7 +11339,7 @@ Function UpdateLeave1499()
 					it\DistTimer = 0.0
 					If it\ItemTemplate\TempName = "scp1499" Or it\ItemTemplate\TempName = "super1499"
 						If EntityY(it\Collider) >= EntityY(r1499\OBJ) - 5.0
-							PositionEntity(it\Collider, NTF_1499PrevX, NTF_1499PrevY + (EntityY(it\Collider) - EntityY(r1499\OBJ)), NTF_1499PrevZ)
+							PositionEntity(it\Collider, I_1499\PrevX, I_1499\PrevY + (EntityY(it\Collider) - EntityY(r1499\OBJ)), I_1499\PrevZ)
 							ResetEntity(it\Collider)
 							Exit
 						EndIf
@@ -11356,10 +11348,10 @@ Function UpdateLeave1499()
 				r1499 = Null
 				ShouldEntitiesFall = False
 				PlaySound_Strict(LoadTempSound("SFX\SCP\1499\Exit.ogg"))
-				NTF_1499PrevX = 0.0
-				NTF_1499PrevY = 0.0
-				NTF_1499PrevZ = 0.0
-				NTF_1499PrevRoom = Null
+				I_1499\PrevX = 0.0
+				I_1499\PrevY = 0.0
+				I_1499\PrevZ = 0.0
+				I_1499\PrevRoom = Null
 				Exit
 			EndIf
 		Next
@@ -11559,7 +11551,7 @@ Function PlayStartupVideos()
 End Function
 
 Function CanUseItem(CanUseWithGasMask%, CanUseWithEyewear%)
-	If (CanUseWithGasMask = False And (WearingGasMask > 0 Or Wearing1499 > 0)) Then
+	If (CanUseWithGasMask = False And (WearingGasMask > 0 Or I_1499\Using > 0)) Then
 		Msg = "You can't use that item while wearing a gas mask."
 		MsgTimer = 70.0 * 6.0
 		Return(False)
@@ -11577,7 +11569,7 @@ Function CanUseItem2(GasMask%, NVG%, SCP1499%, Helmet%)
 		MsgTimer = 70.0 * 6.0
 		SelectedItem = Null
 		Return(False)
-	ElseIf SCP1499 = False And Wearing1499 > 0
+	ElseIf SCP1499 = False And I_1499\Using > 0
 		Msg = "You need to take off SCP-1499 in order to use that item."
 		MsgTimer = 70.0 * 6.0
 		SelectedItem = Null
@@ -11624,5 +11616,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#1020#138E#1BF2
+;~B#101D#138A#1BEF
 ;~C#Blitz3D

@@ -93,16 +93,16 @@ Function SaveGame(File$)
 	WriteByte(f, WearingHazmat)
 	
 	WriteByte(f, WearingNightVision)
-	WriteByte(f, Wearing1499)
-	WriteFloat(f, NTF_1499PrevX)
-	WriteFloat(f, NTF_1499PrevY)
-	WriteFloat(f, NTF_1499PrevZ)
-	WriteFloat(f, NTF_1499X)
-	WriteFloat(f, NTF_1499Y)
-	WriteFloat(f, NTF_1499Z)
-	If NTF_1499PrevRoom <> Null
-		WriteFloat(f, NTF_1499PrevRoom\x)
-		WriteFloat(f, NTF_1499PrevRoom\z)
+	WriteByte(f, I_1499\Using)
+	WriteFloat(f, I_1499\PrevX)
+	WriteFloat(f, I_1499\PrevY)
+	WriteFloat(f, I_1499\PrevZ)
+	WriteFloat(f, I_1499\x)
+	WriteFloat(f, I_1499\y)
+	WriteFloat(f, I_1499\z)
+	If I_1499\PrevRoom <> Null
+		WriteFloat(f, I_1499\PrevRoom\x)
+		WriteFloat(f, I_1499\PrevRoom\z)
 	Else
 		WriteFloat(f, 0.0)
 		WriteFloat(f, 0.0)
@@ -562,13 +562,13 @@ Function LoadGame(File$)
 	WearingHazmat = ReadByte(f)
 	
 	WearingNightVision = ReadByte(f)
-	Wearing1499 = ReadByte(f)
-	NTF_1499PrevX = ReadFloat(f)
-	NTF_1499PrevY = ReadFloat(f)
-	NTF_1499PrevZ = ReadFloat(f)
-	NTF_1499X = ReadFloat(f)
-	NTF_1499Y = ReadFloat(f)
-	NTF_1499Z = ReadFloat(f)
+	I_1499\Using = ReadByte(f)
+	I_1499\PrevX = ReadFloat(f)
+	I_1499\PrevY = ReadFloat(f)
+	I_1499\PrevZ = ReadFloat(f)
+	I_1499\x = ReadFloat(f)
+	I_1499\y = ReadFloat(f)
+	I_1499\z = ReadFloat(f)
 	
 	Local r1499_x# = ReadFloat(f)
 	Local r1499_z# = ReadFloat(f)
@@ -828,7 +828,7 @@ Function LoadGame(File$)
 	
 	For r.Rooms = Each Rooms
 		If r\x = r1499_x And r\z = r1499_z
-			NTF_1499PrevRoom = r
+			I_1499\PrevRoom = r
 			Exit
 		EndIf
 	Next
@@ -1247,7 +1247,7 @@ Function LoadGame(File$)
 	If PlayerRoom\RoomTemplate\Name = "dimension1499"
 		BlinkTimer = -1.0
 		ShouldEntitiesFall = False
-		PlayerRoom = NTF_1499PrevRoom
+		PlayerRoom = I_1499\PrevRoom
 		UpdateDoors()
 		UpdateRooms()
 		For it.Items = Each Items
@@ -1274,7 +1274,7 @@ End Function
 Function LoadGameQuick(File$)
 	CatchErrors("Uncaught (LoadGameQuick)")
 	
-	Local ov.Overlays = First Overlays
+	Local tt.TextureTemplate = First TextureTemplate
 	
 	DebugHUD = False
 	GameSaved = True
@@ -1400,13 +1400,13 @@ Function LoadGameQuick(File$)
 	WearingHazmat = ReadByte(f)
 	
 	WearingNightVision = ReadByte(f)
-	Wearing1499 = ReadByte(f)
-	NTF_1499PrevX = ReadFloat(f)
-	NTF_1499PrevY = ReadFloat(f)
-	NTF_1499PrevZ = ReadFloat(f)
-	NTF_1499X = ReadFloat(f)
-	NTF_1499Y = ReadFloat(f)
-	NTF_1499Z = ReadFloat(f)
+	I_1499\Using = ReadByte(f)
+	I_1499\PrevX = ReadFloat(f)
+	I_1499\PrevY = ReadFloat(f)
+	I_1499\PrevZ = ReadFloat(f)
+	I_1499\x = ReadFloat(f)
+	I_1499\y = ReadFloat(f)
+	I_1499\z = ReadFloat(f)
 	
 	Local r1499_x# = ReadFloat(f)
 	Local r1499_z# = ReadFloat(f)
@@ -1652,7 +1652,7 @@ Function LoadGameQuick(File$)
 	
 	For r.Rooms = Each Rooms
 		If r\x = r1499_x And r\z = r1499_z
-			NTF_1499PrevRoom = r
+			I_1499\PrevRoom = r
 			Exit
 		EndIf
 	Next
@@ -1907,7 +1907,7 @@ Function LoadGameQuick(File$)
 	For sc.SecurityCams = Each SecurityCams
 		sc\PlayerState = 0
 	Next
-	EntityTexture(ov\OverlayID[4], ov\OverlayTextureID[4])
+	EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
 	RestoreSanity = True
 	
 	CameraFogFar = ReadFloat(f)

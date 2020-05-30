@@ -33,7 +33,7 @@ Function UpdateSky()
 End Function
 
 Function Update1499Sky()
-	PositionEntity(NTF_1499Sky, EntityX(Camera), EntityY(Camera), EntityZ(Camera), True)
+	PositionEntity(I_1499\Sky, EntityX(Camera), EntityY(Camera), EntityZ(Camera), True)
 End Function
 
 .sky_SkyboxData
