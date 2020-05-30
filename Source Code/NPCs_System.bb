@@ -73,7 +73,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			
 			n\OBJ = CopyEntity(o\NPCModelID[0])
 			
-			; ~ On Halloween set Jack-o'-lantern texture.
+			; ~ On Halloween set Jack-o'-lantern texture
 			If (Left(CurrentDate(), 7) = "31 Oct ") Then
 				HalloweenTex = True
 				TexFestive = LoadTexture_Strict("GFX\npcs\scp_173_H.png", 1)
@@ -81,7 +81,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 				FreeTexture(TexFestive)
 			EndIf
 			
-			; ~ On New Year set cookie texture.
+			; ~ On New Year set cookie texture
 			If (Left(CurrentDate(), 7) = "01 Jan ") Then
 				NewYearTex = True
 				TexFestive = LoadTexture_Strict("GFX\npcs\scp_173_NY.png", 1)
@@ -6735,138 +6735,329 @@ Function UpdateMTFUnit(n.NPCs)
 	EndIf
 End Function
 
-Function Shoot(x#, y#, z#, hitProb# = 1.0, particles% = True, instaKill% = False)
+Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False)  
+    Local p.Particles, de.Decals
+	Local Pvt%, ShotMessageUpdate$, i%
 	
-	;muzzle flash
-	Local p.particles = CreateParticle(x,y,z, 1, Rnd(0.08,0.1), 0.0, 5)
-	TurnEntity p\obj, 0,0,Rnd(360)
+	p.Particles = CreateParticle(x, y, z, 1, Rnd(0.08, 0.1), 0.0, 5.0)
 	p\Achange = -0.15
+	TurnEntity(p\OBJ, 0.0, 0.0, Rnd(360.0))
 	
-	LightVolume = TempLightVolume*1.2
+	If InstaKill Then Kill() : PlaySound_Strict(BullethitSFX) : Return
 	
-	
-	If instaKill Then Kill() : PlaySound_Strict BullethitSFX : Return
-	
-	If Rnd(1.0) =< hitProb Then
-		TurnEntity Camera, Rnd(-3,3), Rnd(-3,3), 0
-		
-		Local ShotMessageUpdate$
-		If WearingVest>0 Then
+	If Rnd(1.0) =< HitProb Then
+		TurnEntity(Camera, Rnd(-3.0, 3.0), Rnd(-3.0, 3.0), 0.0)
+		If WearingVest > 0 And WearingHelmet = 0 Then ; ~ If player is wearing the ballistic vest only
 			If WearingVest = 1 Then
-				Select Rand(8)
-					Case 1,2,3,4,5
-						BlurTimer = 500
-						Stamina = 0
+				Select Rand(16)
+					Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ; ~ Vest
+						;[Block]
+						BlurTimer = 650.0
 						ShotMessageUpdate = "A bullet penetrated your vest, making you gasp."
-						Injuries = Injuries + Rnd(0.1,0.5)
-					Case 6
-						BlurTimer = 500
+						Injuries = Injuries + Rnd(0.1, 0.2)
+						;[End Block]
+					Case 11 ; ~ Left Leg
+						;[Block]
+						BlurTimer = 650.0
+						Stamina = 0.0
 						ShotMessageUpdate = "A bullet hit your left leg."
-						Injuries = Injuries + Rnd(0.8,1.2)
-					Case 7
-						BlurTimer = 500
+						Injuries = Injuries + Rnd(0.7, 0.9)
+						;[End Block]
+					Case 12 ; ~ Right Leg
+						;[Block]
+					    BlurTimer = 650.0
+					    Stamina = 0.0
 						ShotMessageUpdate = "A bullet hit your right leg."
-						Injuries = Injuries + Rnd(0.8,1.2)
-					Case 8
-						BlurTimer = 500
-						Stamina = 0
+						Injuries = Injuries + Rnd(0.7, 0.9)
+						;[End Block]
+					Case 13 ; ~ Left Arm
+						;[Block]
+						BlurTimer = 650.0
+						ShotMessageUpdate = "A bullet hit your left arm."
+						Injuries = Injuries + Rnd(0.5, 0.7)
+						;[End Block]
+					Case 14 ; ~ Right Arm
+						;[Block]
+					    BlurTimer = 650.0
+						ShotMessageUpdate = "A bullet hit your right arm."
+						Injuries = Injuries + Rnd(0.5, 0.7)
+						;[End Block]
+					Case 15 ; ~ Neck
+						;[Block]
+					    BlurTimer = 650.0
 						ShotMessageUpdate = "A bullet struck your neck, making you gasp."
-						Injuries = Injuries + Rnd(1.2,1.6)
-				End Select	
+						Injuries = Injuries + Rnd(1.1, 1.3)
+						;[End Block]
+					Case 16 ; ~ Face or Head
+					    ;[Block]
+					    For n.NPCs = Each NPCs
+					        If n\NPCtype = NPCtypeMTF Or n\NPCtype = NPCtypeApache Or n\NPCtype = NPCtypeGuard
+		                        If EntityInView(n\OBJ, Camera) Then
+					                ShotMessageUpdate = "A bullet hit your face."
+								Else
+					                ShotMessageUpdate = "A bullet hit your head."
+								EndIf
+								Kill()
+					        EndIf
+					    Next
+                        ;[End Block]
+			    End Select	
 			Else
-				If Rand(10)=1 Then
-					BlurTimer = 500
-					Stamina = Stamina - 1
+				If Rand(10) = 1 Then ; ~ Chest (more damage)
+					;[Block]
+				    BlurTimer = 650.0
 					ShotMessageUpdate = "A bullet hit your chest. The vest absorbed some of the damage."
-					Injuries = Injuries + Rnd(0.8,1.1)
-				Else
+					Injuries = Injuries + Rnd(0.7, 0.8)
+					;[End Block]
+				Else ; ~ Chest
+					;[Block]
 					ShotMessageUpdate = "A bullet hit your chest. The vest absorbed most of the damage."
-					Injuries = Injuries + Rnd(0.1,0.5)
+					Injuries = Injuries + Rnd(0.1, 0.2)
+					;[End Block]
 				EndIf
 			EndIf
-			
-			If Injuries >= 5
-				If Rand(3) = 1 Then Kill()
+		Else If WearingVest > 0 And WearingHelmet > 0 Then ; ~ If player is wearing the ballistic vest and the ballistic helmet
+			If WearingVest = 1 Then
+				Select Rand(22)
+					Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ; ~ Vest
+						;[Block]
+						BlurTimer = 650.0
+						ShotMessageUpdate = "A bullet penetrated your vest, making you gasp."
+						Injuries = Injuries + Rnd(0.1, 0.2)
+						;[End Block]
+					Case 11 ; ~ Left Leg
+						;[Block]
+					    BlurTimer = 650.0
+					    Stamina = 0.0
+						ShotMessageUpdate = "A bullet hit your left leg."
+						Injuries = Injuries + Rnd(0.7, 0.9)
+						;[End Block]
+					Case 12 ; ~ Right Leg
+						;[Block]
+					    BlurTimer = 650.0
+						Stamina = 0.0
+						ShotMessageUpdate = "A bullet hit your right leg."
+						Injuries = Injuries + Rnd(0.7, 0.9)
+						;[End Block]
+					Case 13 ; ~ Left Arm
+						;[Block]
+						BlurTimer = 650.0
+						ShotMessageUpdate = "A bullet hit your left arm."
+						Injuries = Injuries + Rnd(0.5, 0.7)
+						;[End Block]
+					Case 14 ; ~ Right Arm
+						;[Block]
+					    BlurTimer = 650.0
+						ShotMessageUpdate = "A bullet hit your right arm."
+						Injuries = Injuries + Rnd(0.5, 0.7)
+						;[End Block]
+					Case 15 ;Neck
+						;[Block]
+						BlurTimer = 650.0
+						ShotMessageUpdate = "A bullet struck your neck, making you gasp."
+						Injuries = Injuries + Rnd(1.1, 1.3)
+						;[End Block]
+					Case 16, 17, 18, 19, 20, 21, 22 ; ~ Helmet
+						;[Block]
+						BlurTimer = 650.0
+						ShotMessageUpdate = "A bullet hit your helmet."
+						;[End Block]
+				End Select	
+			Else
+				If Rand(10) = 1 Then ;Chest (more damage)
+					;[Block]
+				    BlurTimer = 650.0
+					ShotMessageUpdate = "A bullet hit your chest. The vest absorbed some of the damage."
+					Injuries = Injuries + Rnd(0.7, 0.9)
+					;[End Block]
+				Else ; ~ Chest
+					;[Block]
+					ShotMessageUpdate = "A bullet hit your chest. The vest absorbed most of the damage."
+					Injuries = Injuries + Rnd(0.1, 0.2)
+					;[End Block]
+				EndIf
 			EndIf
-		Else
-			Select Rand(6)
-				Case 1
-					Kill()
-				Case 2
-					BlurTimer = 500
+		Else If WearingVest = 0 And WearingHelmet > 0 ; ~ If player is wearing the ballistic helmet only
+			Select Rand(16)
+				Case 1, 2, 3, 4, 5, 6, 7 ; ~ Helmet
+					;[Block]
+					BlurTimer = 650.0
+					ShotMessageUpdate = "A bullet hit your helmet."
+					;[End Block]
+				Case 8 ; ~ Left Leg
+					;[Block]
+					BlurTimer = 650.0
+					Stamina = 0.0
 					ShotMessageUpdate = "A bullet hit your left leg."
-					Injuries = Injuries + Rnd(0.8,1.2)
-				Case 3
-					BlurTimer = 500
+					Injuries = Injuries + Rnd(0.7, 0.9)
+					;[End Block]
+				Case 9 ; ~ Right Leg
+					;[Block]
+					BlurTimer = 650
+					Stamina = 0.0
 					ShotMessageUpdate = "A bullet hit your right leg."
-					Injuries = Injuries + Rnd(0.8,1.2)
-				Case 4
-					BlurTimer = 500
+					Injuries = Injuries + Rnd(0.7, 0.9)
+					;[End Block]
+				Case 10 ; ~ Left Arm
+					;[Block]
+					BlurTimer = 650.0
+					ShotMessageUpdate = "A bullet hit your left arm."
+					Injuries = Injuries + Rnd(0.5, 0.7)
+					;[End Block]
+				Case 11 ; ~ Right Arm
+					;[Block]
+					BlurTimer = 650.0
+					ShotMessageUpdate = "A bullet hit your right arm."
+					Injuries = Injuries + Rnd(0.5, 0.7)
+					;[End Block]
+				Case 12 ;Right Shoulder
+					;[Block]
+				    BlurTimer = 650.0
 					ShotMessageUpdate = "A bullet hit your right shoulder."
-					Injuries = Injuries + Rnd(0.8,1.2)	
-				Case 5
-					BlurTimer = 500
+					Injuries = Injuries + Rnd(0.9, 1.1)
+					;[End Block]	
+				Case 13 ; ~ Left Shoulder
+					;[Block]
+					BlurTimer = 650.0
 					ShotMessageUpdate = "A bullet hit your left shoulder."
-					Injuries = Injuries + Rnd(0.8,1.2)	
-				Case 6
-					BlurTimer = 500
+					Injuries = Injuries + Rnd(0.9, 1.1)	
+					;[End Block]
+			    Case 14 ; ~ Right Shoulder (more damage)
+					;[Block]
+					BlurTimer = 650.0
 					ShotMessageUpdate = "A bullet hit your right shoulder."
-					Injuries = Injuries + Rnd(2.5,4.0)
+					Injuries = Injuries + Rnd(2.4, 2.6)
+					;[End Block]
+				Case 15 ; ~ Left Shoulder (more damage)
+					;[Block]
+					BlurTimer = 650.0
+					ShotMessageUpdate = "A bullet hit your left shoulder."
+					Injuries = Injuries + Rnd(2.4, 2.6)
+					;[End Block]
+				Case 16 ; ~ Neck
+					;[Block]
+					BlurTimer = 650.0
+					ShotMessageUpdate = "A bullet struck your neck, making you gasp."
+					Injuries = Injuries + Rnd(1.1, 1.3)
+					;[End Block]
 			End Select
+		Else If WearingVest = 0 And WearingHelmet = 0 ; ~ If player isn't wearing the ballistic vest and the ballistic helmet
+			Select Rand(10)
+				Case 1 ; ~ Left Leg
+					;[Block]
+					BlurTimer = 650.0
+					Stamina = 0.0
+					ShotMessageUpdate = "A bullet hit your left leg."
+					Injuries = Injuries + Rnd(0.7, 0.9)
+					;[End Block]
+			    Case 2 ; ~ Right Leg
+					;[Block]
+					BlurTimer = 650.0
+					Stamina = 0.0
+					ShotMessageUpdate = "A bullet hit your right leg."
+					Injuries = Injuries + Rnd(0.7, 0.9)
+					;[End Block]
+				Case 3 ; ~ Right Shoulder
+					;[Block]
+					BlurTimer = 650.0
+					ShotMessageUpdate = "A bullet hit your right shoulder."
+					Injuries = Injuries + Rnd(0.9, 1.1)
+					;[End Block]	
+				Case 4 ; ~ Left Shoulder
+					;[Block]
+					BlurTimer = 650.0
+					ShotMessageUpdate = "A bullet hit your left shoulder."
+					Injuries = Injuries + Rnd(0.9, 1.1)	
+					;[End Block]
+				Case 5 ; ~ Right Shoulder (more damage)
+					;[Block]
+					BlurTimer = 650.0
+					ShotMessageUpdate = "A bullet hit your right shoulder."
+					Injuries = Injuries + Rnd(2.4, 2.6)
+					;[End Block]
+				Case 6 ; ~ Left Shoulder (more damage)
+					;[Block]
+					BlurTimer = 650.0
+					ShotMessageUpdate = "A bullet hit your left shoulder."
+					Injuries = Injuries + Rnd(2.4, 2.6)
+					;[End Block]
+				Case 7 ; ~ Left Arm
+					;[Block]
+					BlurTimer = 650.0
+					ShotMessageUpdate = "A bullet hit your left arm."
+					Injuries = Injuries + Rnd(0.5, 0.7)
+					;[End Block]
+				Case 8 ; ~ Right Arm
+				    ;[Block]
+					BlurTimer = 650.0
+				    ShotMessageUpdate = "A bullet hit your right arm."
+					Injuries = Injuries + Rnd(0.5, 0.7)
+					;[End Block]
+				Case 9 ; ~ Neck
+					;[Block]
+					BlurTimer = 650.0
+				    ShotMessageUpdate = "A bullet struck your neck, making you gasp."
+					Injuries = Injuries + Rnd(1.1, 1.3)
+					;[End Block]
+                Case 10 ; ~ Face or Head
+					;[Block]
+					For n.NPCs = Each NPCs
+						If n\NPCtype = NPCtypeMTF Or n\NPCtype = NPCtypeApache Or n\NPCtype = NPCtypeGuard
+							If EntityInView(n\OBJ, Camera) Then
+								ShotMessageUpdate = "A bullet hit your face."
+							Else
+								ShotMessageUpdate = "A bullet hit your head."
+							EndIf
+							Kill()
+						EndIf
+					Next
+					;[End Block]
+		    End Select
 		EndIf
 		
-		;Only updates the message if it's been more than two seconds.
-		If (MsgTimer < 64*4) Then
+		If MsgTimer < 70.0 * 5.0 Then
 			Msg = ShotMessageUpdate
-			MsgTimer = 70*6
+			MsgTimer = 70.0 * 6.0
 		EndIf
-
-		Injuries = Min(Injuries, 4.0)
 		
-		;Kill()
-		PlaySound_Strict BullethitSFX
-	ElseIf particles And ParticleAmount>0
-		pvt = CreatePivot()
-		PositionEntity pvt, EntityX(Collider),(EntityY(Collider)+EntityY(Camera))/2,EntityZ(Collider)
-		PointEntity pvt, p\obj
-		TurnEntity pvt, 0, 180, 0
+		If Injuries >= 7.0 Then Kill()
 		
-		EntityPick(pvt, 2.5)
+		PlaySound_Strict(BullethitSFX)
+	ElseIf Particles And ParticleAmount > 0
+		Pvt = CreatePivot()
+		PositionEntity(Pvt, EntityX(Collider), (EntityY(Collider) + EntityY(Camera)) / 2.0, EntityZ(Collider))
+		PointEntity(Pvt, p\OBJ)
+		TurnEntity(Pvt, 0.0, 180.0, 0.0)
+		
+		EntityPick(Pvt, 2.5)
 		
 		If PickedEntity() <> 0 Then 
-			PlaySound2(Gunshot3SFX, Camera, pvt, 0.4, Rnd(0.8,1.0))
+			PlaySound2(Gunshot3SFX, Camera, Pvt, 0.4, Rnd(0.8, 1.0))
 			
-			If particles Then 
-				;dust/smoke particles
-				p.particles = CreateParticle(PickedX(),PickedY(),PickedZ(), 0, 0.03, 0, 80)
-				p\speed = 0.001
-				p\SizeChange = 0.003
-				p\A = 0.8
-				p\Achange = -0.01
-				RotateEntity p\pvt, EntityPitch(pvt)-180, EntityYaw(pvt),0
+			If Particles Then 
+				p.Particles = CreateParticle(PickedX(), PickedY(), PickedZ(), 0, 0.03, 0.0, 80.0)
+				p\Speed = 0.001 : p\SizeChange = 0.003 : p\A = 0.8 : p\Achange = -0.01
+				RotateEntity(p\Pvt, EntityPitch(Pvt) - 180.0, EntityYaw(Pvt), 0)
 				
 				For i = 0 To Rand(2,3)
-					p.particles = CreateParticle(PickedX(),PickedY(),PickedZ(), 0, 0.006, 0.003, 80)
-					p\speed = 0.02
-					p\A = 0.8
-					p\Achange = -0.01
-					RotateEntity p\pvt, EntityPitch(pvt)+Rnd(170,190), EntityYaw(pvt)+Rnd(-10,10),0	
+					p.Particles = CreateParticle(PickedX(), PickedY(), PickedZ(), 0, 0.006, 0.003, 80.0)
+					p\Speed = 0.02 : p\A = 0.8 : p\Achange = -0.01
+					RotateEntity(p\Pvt, EntityPitch(Pvt) + Rnd(170.0, 190.0), EntityYaw(Pvt) + Rnd(-10.0, 10.0), 0)	
 				Next
 				
-				;bullet hole decal
-				Local de.Decals = CreateDecal(Rand(13,14), PickedX(),PickedY(),PickedZ(), 0,0,0)
-				AlignToVector de\obj,-PickedNX(),-PickedNY(),-PickedNZ(),3
-				MoveEntity de\obj, 0,0,-0.001
-				EntityFX de\obj, 1
-				de\lifetime = 70*20
-				EntityBlend de\obj, 2
-				de\Size = Rnd(0.028,0.034)
-				ScaleSprite de\obj, de\Size, de\Size
+				de.Decals = CreateDecal(Rand(13, 14), PickedX(), PickedY() + Rnd(-0.05, 0.05), PickedZ(), Rnd(-4.0, 4.0), Rnd(-4.0, 4.0), Rnd(-4.0, 4.0))
+				de\Size = Rnd(0.028, 0.034) : de\LifeTime = 70.0 * 20.0
+				AlignToVector(de\OBJ, -PickedNX(), -PickedNY(), -PickedNZ(), 3)
+				MoveEntity(de\OBJ, 0.0, 0.0, -0.001)
+				EntityFX(de\OBJ, 1)
+				EntityBlend(de\OBJ, 2)
+				ScaleSprite(de\OBJ, de\Size, de\Size)
 			EndIf				
-		EndIf
-		FreeEntity pvt
+		EndIf	
+		FreeEntity(Pvt)
 	EndIf
 End Function
+
 
 Function PlayMTFSound(Sound%, n.NPCs)
 	If n <> Null Then

@@ -8163,7 +8163,7 @@ Function UpdateCheckpointMonitors(Number%)
 			t1 = GetBrushTexture(b, 0)
 			If t1 <> 0 Then
 				Name$ = StripPath(TextureName(t1))
-				If Lower(Name) <> "MonitorOverlay.png"
+				If Lower(Name) <> "monitor_overlay.png"
 					If Number = 0 Then
 						If MonitorTimer < 50.0
 							BrushTexture(b, tt\MonitorTextureID[1], 0, 0)
@@ -8209,7 +8209,7 @@ Function TurnCheckpointMonitorsOff(Number%)
 			t1 = GetBrushTexture(b, 0)
 			If t1 <> 0 Then
 				Name$ = StripPath(TextureName(t1))
-				If Lower(Name) <> "MonitorOverlay.png"
+				If Lower(Name) <> "monitor_overlay.png"
 					BrushTexture(b, tt\MonitorTextureID[4], 0, 0)
 					PaintSurface(SF, b)
 				EndIf

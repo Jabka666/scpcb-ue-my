@@ -232,7 +232,7 @@ Global SCP1025State#[6]
 
 Global HeartBeatRate#, HeartBeatTimer#, HeartBeatVolume#
 
-Global WearingGasMask%, WearingHazmat%, WearingVest%, WearingNightVision%
+Global WearingGasMask%, WearingHazmat%, WearingVest%, WearingNightVision%, WearingHelmet%
 Global NVTimer#
 
 Global SuperMan%, SuperManTimer#
@@ -4270,6 +4270,12 @@ Function MouseLook()
 		HideEntity(ov\OverlayID[2])
 	End If
 	
+	If WearingHelmet > 0 Then
+        ShowEntity(ov\OverlayID[9])
+    Else
+        HideEntity(ov\OverlayID[9])
+    EndIf
+	
 	If WearingNightVision > 0 Then
 		ShowEntity(ov\OverlayID[4])
 		If WearingNightVision = 2 Then
@@ -5107,6 +5113,10 @@ Function DrawGUI()
 						;[Block]
 						If WearingVest = 2 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
 						;[End Block]
+					Case "helmet"
+						;[Block]
+						If WearingHelmet = 1 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
+						;[End Block]
 					Case "scp714"
 						;[Block]
 						If I_714\Using = 1 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
@@ -5226,6 +5236,17 @@ Function DrawGUI()
 						Case "gasmask", "gasmask3", "supergasmask"
                             ;[Block]
 							If WearingGasMask > 0 Then
+								Msg = "Double click on this item to take it off."
+								MsgTimer = 70.0 * 6.0
+							Else
+								DropItem(SelectedItem)
+								SelectedItem = Null
+								InvOpen = False
+							EndIf
+						    ;[End Block]
+						Case "helmet"
+                            ;[Block]
+							If WearingHelmet > 0 Then
 								Msg = "Double click on this item to take it off."
 								MsgTimer = 70.0 * 6.0
 							Else
@@ -5481,6 +5502,11 @@ Function DrawGUI()
 						MsgTimer = 70.0 * 6.0
 						SelectedItem = Null
 						Return
+					ElseIf WearingHelmet > 0
+                        Msg = "You need to take off the helmet in order to put on the goggles."
+						MsgTimer = 70.0 * 6.0
+						SelectedItem = Null
+						Return
 					Else			
 						If WearingNightVision = 1 Then
 							Msg = "You removed the goggles."
@@ -5513,6 +5539,11 @@ Function DrawGUI()
 						MsgTimer = 70.0 * 6.0
 						SelectedItem = Null
 						Return
+					ElseIf WearingHelmet > 0
+                        Msg = "You need to take off the helmet in order to put on the goggles."
+						MsgTimer = 70.0 * 6.0
+						SelectedItem = Null
+						Return
 					Else			
 						If WearingNightVision = 2 Then
 							Msg = "You removed the goggles."
@@ -5542,6 +5573,11 @@ Function DrawGUI()
 						Return
 					ElseIf WearingNightVision > 0 And WearingNightVision <> 3
 						Msg = "You can't use two pairs of the goggles at the same time."
+						MsgTimer = 70.0 * 6.0
+						SelectedItem = Null
+						Return
+					ElseIf WearingHelmet > 0
+                        Msg = "You need to take off the helmet in order to put on the goggles."
 						MsgTimer = 70.0 * 6.0
 						SelectedItem = Null
 						Return
@@ -6574,6 +6610,11 @@ Function DrawGUI()
                         MsgTimer = 70.0 * 6.0
                         SelectedItem = Null
 					    Return
+					ElseIf WearingHelmet > 0
+                        Msg = "You need to take off the helmet in order to put on the goggles."
+						MsgTimer = 70.0 * 6.0
+						SelectedItem = Null
+						Return
 					Else		
 					    CurrSpeed = CurveValue(0.0, CurrSpeed, 5.0)
 						
@@ -6820,6 +6861,11 @@ Function DrawGUI()
 						MsgTimer = 70.0 * 6.0
 						SelectedItem = Null
 						Return
+					ElseIf WearingHelmet > 0
+                        Msg = "You need to take off the helmet in order to put on the goggles."
+						MsgTimer = 70.0 * 6.0
+						SelectedItem = Null
+						Return
 					Else
 						CurrSpeed = CurveValue(0.0, CurrSpeed, 5.0)
 						
@@ -7010,6 +7056,55 @@ Function DrawGUI()
 				    I_008\Timer = I_008\Timer + (1 + (1 * SelectedDifficulty\AggressiveNPCs))
 					RemoveItem(SelectedItem)
 					;[End Block]
+				Case "helmet"
+					;[Block]
+					If Wearing1499 > 0
+					    Msg = "You need to take off SCP-1499 in order to put on a helmet."	
+					    MsgTimer = 70.0 * 6.0
+					    SelectedItem = Null
+					    Return
+					ElseIf WearingNightVision > 0
+					    Msg = "You need to take off the goggles in order to put on a helmet."
+                        MsgTimer = 70.0 * 6.0
+                        SelectedItem = Null
+					    Return
+				    ElseIf WearingGasMask > 0
+					    Msg = "You need to take off the gas mask in order to put on a helmet."
+                        MsgTimer = 70.0 * 6.0
+                        SelectedItem = Null
+					    Return
+					Else		
+					    CurrSpeed = CurveValue(0.0, CurrSpeed, 5.0)
+						
+					    DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						
+					    Width = 300
+					    Height = 20
+					    x = GraphicWidth / 2 - Width / 2
+					    y = GraphicHeight / 2 + 80
+					    Rect(x, y, Width + 4, Height, False)
+						For  i% = 1 To Int((Width - 2) * (SelectedItem\State / 100.0) / 10.0)
+					    	DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
+					    Next
+						
+					    SelectedItem\State = Min(SelectedItem\State + FPSfactor, 100.0)
+						
+					    If SelectedItem\State = 100.0 Then
+                            If WearingHelmet > 0 Then
+                                WearingHelmet = False
+                                Msg = "You removed the helmet."
+                                If SelectedItem\itemtemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))
+                            Else
+						        Msg = "You put on the helmet."
+							    WearingHelmet = 1
+							    If SelectedItem\itemtemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))
+                            EndIf
+						    SelectedItem\State = 0.0
+						    MsgTimer = 70.0 * 6.0
+						    SelectedItem = Null
+					    EndIf
+					EndIf
+					;[End Block]
 				Default
 					;[Block]
 					; ~ Check if the item is an inventory-type object
@@ -7067,7 +7162,7 @@ Function DrawGUI()
 					If WearingHazmat = 0 Then
 						DropItem(SelectedItem, False)
 					EndIf
-				ElseIf IN = "scp1499" Or IN = "super1499" Or IN = "gasmask" Or IN = "supergasmask" Or IN = "gasmask3"
+				ElseIf IN = "scp1499" Or IN = "super1499" Or IN = "gasmask" Or IN = "supergasmask" Or IN = "gasmask3" Or IN = "helmet"
 					SelectedItem\State = 0.0
 				EndIf
 				
@@ -7088,7 +7183,7 @@ Function DrawGUI()
 	For it.Items = Each Items
 		If it <> SelectedItem
 			Select it\ItemTemplate\TempName
-				Case "firstaid", "finefirstaid", "firstaid2", "vest", "finevest", "hazmatsuit", "hazmatsuit2", "hazmatsuit3", "scp1499", "super1499", "gasmask", "supergasmask", "gasmask3"
+				Case "firstaid", "finefirstaid", "firstaid2", "vest", "finevest", "hazmatsuit", "hazmatsuit2", "hazmatsuit3", "scp1499", "super1499", "gasmask", "supergasmask", "gasmask3", "helmet"
 					;[Block]
 					it\State = 0.0
 					;[End Block]
@@ -7927,7 +8022,7 @@ Function LoadEntities()
 	EntityOrder(ov\OverlayID[0], -1000)
 	MoveEntity(ov\OverlayID[0], 0.0, 0.0, 1.0)
 	
-	ov\OverlayTextureID[1] = LoadTexture_Strict("GFX\GasmaskOverlay.png", 1) ; ~ GAS MASK
+	ov\OverlayTextureID[1] = LoadTexture_Strict("GFX\gas_mask_overlay.png", 1) ; ~ GAS MASK
 	ov\OverlayID[1] = CreateSprite(Ark_Blur_Cam)
 	ScaleSprite(ov\OverlayID[1], Max(GraphicWidth / 1024, 1), Max(GraphicHeight / 1024 * 0.8, 0.8))
 	EntityTexture(ov\OverlayID[1], ov\OverlayTextureID[1])
@@ -7936,7 +8031,7 @@ Function LoadEntities()
 	EntityOrder(ov\OverlayID[1], -1003)
 	MoveEntity(ov\OverlayID[1], 0.0, 0.0, 1.0)
 	
-	ov\OverlayTextureID[2] = LoadTexture_Strict("GFX\HazmatSuitOverlay.png", 1) ; ~ HAZMAT SUIT
+	ov\OverlayTextureID[2] = LoadTexture_Strict("GFX\hazmat_suit_overlay.png", 1) ; ~ HAZMAT SUIT
 	ov\OverlayID[2] = CreateSprite(Ark_Blur_Cam)
 	ScaleSprite(ov\OverlayID[2], Max(GraphicWidth / 1024.0, 1.0), Max(GraphicHeight / 1024.0 * 0.8, 0.8))
 	EntityTexture(ov\OverlayID[2], ov\OverlayTextureID[2])
@@ -7945,7 +8040,7 @@ Function LoadEntities()
 	EntityOrder(ov\OverlayID[2], -1003)
 	MoveEntity(ov\OverlayID[2], 0, 0, 1.0)
 	
-	ov\OverlayTextureID[3] = LoadTexture_Strict("GFX\InfectOverlay.png", 1) ; ~ SCP-008
+	ov\OverlayTextureID[3] = LoadTexture_Strict("GFX\scp_008_overlay.png", 1) ; ~ SCP-008
 	ov\OverlayID[3] = CreateSprite(Ark_Blur_Cam)
 	ScaleSprite(ov\OverlayID[3], Max(GraphicWidth / 1024, 1), Max(GraphicHeight / 1024 * 0.8, 0.8))
 	EntityTexture(ov\OverlayID[3], ov\OverlayTextureID[3])
@@ -7954,7 +8049,7 @@ Function LoadEntities()
 	EntityOrder(ov\OverlayID[3], -1003)
 	MoveEntity(ov\OverlayID[3], 0.0, 0.0, 1.0)
 	
-	ov\OverlayTextureID[4] = LoadTexture_Strict("GFX\NightVisionOverlay.png", 1) ; NIGHT VISION GOGGLES
+	ov\OverlayTextureID[4] = LoadTexture_Strict("GFX\night_vision_goggles_overlay.png", 1) ; NIGHT VISION GOGGLES
 	ov\OverlayID[4] = CreateSprite(Ark_Blur_Cam)
 	ScaleSprite(ov\OverlayID[4], Max(GraphicWidth / 1024, 1), Max(GraphicHeight / 1024 * 0.8, 0.8))
 	EntityTexture(ov\OverlayID[4], ov\OverlayTextureID[4])
@@ -8003,7 +8098,7 @@ Function LoadEntities()
 	MoveEntity(ov\OverlayID[7], 0.0, 0.0, 1.0)
 	HideEntity(ov\OverlayID[7])
 	
-	ov\OverlayTextureID[8] = LoadTexture_Strict("GFX\CrystalOverlay.png", 1) ;SCP-409
+	ov\OverlayTextureID[8] = LoadTexture_Strict("GFX\scp_409_overlay.png", 1) ; ~ SCP-409
 	ov\OverlayID[8] = CreateSprite(Ark_Blur_Cam)
 	ScaleSprite(ov\OverlayID[8], Max(GraphicWidth / 1024.0, 1.0), Max(GraphicHeight / 1024.0 * 0.8, 0.8))
 	EntityTexture(ov\OverlayID[8], ov\OverlayTextureID[8])
@@ -8012,6 +8107,16 @@ Function LoadEntities()
 	EntityOrder(ov\OverlayID[8], -1001)
 	MoveEntity(ov\OverlayID[8], 0.0, 0.0, 1.0)
 	HideEntity(ov\OverlayID[8])
+	
+	ov\OverlayTextureID[9] = LoadTexture_Strict("GFX\helmet_overlay.png", 1) ; ~ HELMET
+	ov\OverlayID[9] = CreateSprite(Ark_Blur_Cam)
+	ScaleSprite(ov\OverlayID[9], Max(GraphicWidth / 1024.0, 1.0), Max(GraphicHeight / 1024.0 * 0.8, 0.8))
+	EntityTexture(ov\OverlayID[9], ov\OverlayTextureID[9])
+	EntityBlend(ov\OverlayID[9], 2)
+	EntityFX(ov\OverlayID[9], 1)
+	EntityOrder(ov\OverlayID[9], -1003)
+	MoveEntity(ov\OverlayID[9], 0.0, 0.0, 1.0)
+	HideEntity(ov\OverlayID[9])
 	
 	Collider = CreatePivot()
 	EntityRadius Collider, 0.15, 0.30
@@ -8228,7 +8333,7 @@ Function LoadEntities()
         HideEntity(o\MonitorModelID[i])
     Next
 	
-	tt\MonitorTextureID[0] = LoadTexture_Strict("GFX\MonitorOverlay.png")
+	tt\MonitorTextureID[0] = LoadTexture_Strict("GFX\monitor_overlay.png")
 	tt\MonitorTextureID[1] = LoadTexture_Strict("GFX\map\LockdownScreen2.jpg")
 	tt\MonitorTextureID[2] = LoadTexture_Strict("GFX\map\LockdownScreen.jpg")
 	tt\MonitorTextureID[3] = LoadTexture_Strict("GFX\map\LockdownScreen3.jpg")
@@ -8245,7 +8350,7 @@ Function LoadEntities()
 			t1 = GetBrushTexture(b, 0)
 			If t1 <> 0 Then
 				Name$ = StripPath(TextureName(t1))
-				If Lower(Name) <> "MonitorOverlay.png"
+				If Lower(Name) <> "monitor_overlay.png"
 					BrushTexture(b, tt\MonitorTextureID[4], 0, 0)
 					PaintSurface(SF, b)
 				EndIf
@@ -8261,7 +8366,7 @@ Function LoadEntities()
 			t1 = GetBrushTexture(b, 0)
 			If t1 <> 0 Then
 				Name$ = StripPath(TextureName(t1))
-				If Lower(Name) <> "MonitorOverlay.png"
+				If Lower(Name) <> "monitor_overlay.png"
 					BrushTexture(b, tt\MonitorTextureID[4], 0, 0)
 					PaintSurface(SF, b)
 				EndIf
@@ -8765,6 +8870,7 @@ Function NullGame(PlayButtonSFX% = True)
 	WearingGasMask = 0
 	WearingHazmat = 0
 	WearingVest = 0
+	WearingHelmet = 0
 	I_714\Using = 0
 	If WearingNightVision Then
 		CameraFogFar = StoredCameraFogFar
@@ -9047,6 +9153,27 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					RemoveItem(item)
 					;[End Block]
 			End Select
+			;[End Block]
+		Case "Ballistic Helmet"
+		    ;[Block]
+			Select Setting
+				Case "Rough", "Coarse"
+				    ;[Block]
+					d.Decals = CreateDecal(0, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0)
+					d\Size = 0.07
+					ScaleSprite(d\OBJ, d\Size, d\Size)
+					;[End Block]
+				Case "1:1"
+				    ;[Block]
+					it2 = CreateItem("Ballistic Vest", "vest", x, y, z)
+					;[End Block]	
+			    Case "Fine", "Very Fine"
+			        ;[Block]
+					it2 = CreateItem("Heavy Ballistic Vest", "finevest", x, y, z)
+					;[End Block]
+			End Select
+			RemoveItem(item)
+			;[End Block]
 		Case "Clipboard"
 			;[Block]
 			Select Setting
@@ -11556,5 +11683,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#1020#1388#1BE7
+;~B#1020#138E#1C46
 ;~C#Blitz3D

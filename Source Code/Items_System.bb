@@ -239,6 +239,8 @@ Function InitItemTemplates()
 	
 	; ~ [MISC ITEMS]
 	
+	CreateItemTemplate("Ballistic Helmet", "helmet", ItemsPath + "helmet.x", ItemsPath + "INV_helmet.png", "", 0.02, 2)
+	
 	CreateItemTemplate("Ballistic Vest", "vest", ItemsPath + "vest.x", ItemsPath + "INV_vest.png", "", 0.02, 2)
 	CreateItemTemplate("Bulky Ballistic Vest", "veryfinevest", ItemsPath + "vest.x", ItemsPath + "INV_vest.png", "", 0.025, 2)
 	CreateItemTemplate("Heavy Ballistic Vest", "finevest", ItemsPath + "vest.x", ItemsPath + "INV_vest.png", "", 0.022, 2)

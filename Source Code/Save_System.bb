@@ -89,6 +89,7 @@ Function SaveGame(File$)
 	
 	WriteByte(f, WearingGasMask)
 	WriteByte(f, WearingVest)
+	WriteByte(f, WearingHelmet)
 	WriteByte(f, WearingHazmat)
 	
 	WriteByte(f, WearingNightVision)
@@ -556,7 +557,8 @@ Function LoadGame(File$)
 	Sanity = ReadFloat(f)
 	
 	WearingGasMask = ReadByte(f)
-	WearingVest = ReadByte(f)	
+	WearingVest = ReadByte(f)
+	WearingHelmet = ReadByte(f)
 	WearingHazmat = ReadByte(f)
 	
 	WearingNightVision = ReadByte(f)
@@ -1393,7 +1395,8 @@ Function LoadGameQuick(File$)
 	Sanity = ReadFloat(f)
 	
 	WearingGasMask = ReadByte(f)
-	WearingVest = ReadByte(f)	
+	WearingVest = ReadByte(f)
+	WearingHelmet = ReadByte(f)
 	WearingHazmat = ReadByte(f)
 	
 	WearingNightVision = ReadByte(f)
