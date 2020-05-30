@@ -5486,114 +5486,74 @@ Function DrawGUI()
 			Select SelectedItem\ItemTemplate\TempName
 				Case "nvgoggles"
 					;[Block]
-					; ~ A hacky fix for overlapping of wearable items (MAKE A FUNCTION IN THE FUTURE!) -- Jabka
-					If WearingGasMask > 0
-				        Msg= "You need to take off the gas mask in order to put on the goggles."
-				        MsgTimer = 70.0 * 6.0
-				        SelectedItem = Null
-						Return
-					ElseIf Wearing1499 > 0
-                        Msg= "You need to take off SCP-1499 in order to put on the goggles."
-						MsgTimer = 70.0 * 6.0
-						SelectedItem = Null
-						Return
-					ElseIf WearingNightVision > 0 And WearingNightVision <> 1
-						Msg = "You can't use two pairs of the goggles at the same time."
-						MsgTimer = 70.0 * 6.0
-						SelectedItem = Null
-						Return
-					ElseIf WearingHelmet > 0
-                        Msg = "You need to take off the helmet in order to put on the goggles."
-						MsgTimer = 70.0 * 6.0
-						SelectedItem = Null
-						Return
-					Else			
-						If WearingNightVision = 1 Then
-							Msg = "You removed the goggles."
-							CameraFogFar = StoredCameraFogFar
+					If CanUseItem2(False, True, False, False) Then
+						If WearingNightVision > 0 And WearingNightVision <> 1 Then
+							Msg = "You can't use two pairs of the goggles at the same."
+							MsgTimer = 70 * 5.0
+							SelectedItem = Null
+							Return
 						Else
-							Msg = "You put on the goggles."
-							WearingNightVision = 0
-							StoredCameraFogFar = CameraFogFar
-							CameraFogFar = 30.0
+							If WearingNightVision = 1 Then
+								Msg = "You removed the goggles."
+								CameraFogFar = StoredCameraFogFar
+							Else
+								Msg = "You put on the goggles."
+								WearingNightVision = 0
+								StoredCameraFogFar = CameraFogFar
+								CameraFogFar = 30.0
+							EndIf
+							WearingNightVision = (Not WearingNightVision)
+							MsgTimer = 70.0 * 6.0
+							SelectedItem = Null
 						EndIf
-						WearingNightVision = (Not WearingNightVision)
-						MsgTimer = 70.0 * 6.0
-						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "supernv"
 					;[Block]
-					If WearingGasMask > 0
-				        Msg = "You need to take off the gas mask in order to put on the goggles."
-				        MsgTimer = 70.0 * 6.0
-				        SelectedItem = Null
-						Return
-					ElseIf Wearing1499 > 0
-                        Msg = "You need to take off SCP-1499 in order to put on the goggles."
-						MsgTimer = 70.0 * 6.0
-						SelectedItem = Null
-						Return
-					ElseIf WearingNightVision > 0 And WearingNightVision <> 2
-						Msg = "You can't use two pairs of the goggles at the same time."
-						MsgTimer = 70.0 * 6.0
-						SelectedItem = Null
-						Return
-					ElseIf WearingHelmet > 0
-                        Msg = "You need to take off the helmet in order to put on the goggles."
-						MsgTimer = 70.0 * 6.0
-						SelectedItem = Null
-						Return
-					Else			
-						If WearingNightVision = 2 Then
-							Msg = "You removed the goggles."
-							CameraFogFar = StoredCameraFogFar
+					If CanUseItem2(False, True, False, False) Then
+						If WearingNightVision > 0 And WearingNightVision <> 2 Then
+							Msg = "You can't use two pairs of the goggles at the same."
+							MsgTimer = 70 * 5.0
+							SelectedItem = Null
+							Return
 						Else
-							Msg = "You put on the goggles."
-							WearingNightVision = 0
-							StoredCameraFogFar = CameraFogFar
-							CameraFogFar = 30.0
+							If WearingNightVision = 2 Then
+								Msg = "You removed the goggles."
+								CameraFogFar = StoredCameraFogFar
+							Else
+								Msg = "You put on the goggles."
+								WearingNightVision = 0
+								StoredCameraFogFar = CameraFogFar
+								CameraFogFar = 30.0
+							EndIf
+							WearingNightVision = (Not WearingNightVision) * 2
+							MsgTimer = 70.0 * 6.0
+							SelectedItem = Null
 						EndIf
-						WearingNightVision = (Not WearingNightVision) * 2
-						MsgTimer = 70.0 * 6.0
-						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "finenvgoggles"
 					;[Block]
-					If WearingGasMask > 0
-				        Msg = "You need to take off the gas mask in order to put on the goggles."
-				        MsgTimer = 70.0 * 6.0
-				        SelectedItem = Null
-						Return
-					ElseIf Wearing1499 > 0
-                        Msg = "You need to take off SCP-1499 in order to put on the goggles."
-						MsgTimer = 70.0 * 6.0
-						SelectedItem = Null
-						Return
-					ElseIf WearingNightVision > 0 And WearingNightVision <> 3
-						Msg = "You can't use two pairs of the goggles at the same time."
-						MsgTimer = 70.0 * 6.0
-						SelectedItem = Null
-						Return
-					ElseIf WearingHelmet > 0
-                        Msg = "You need to take off the helmet in order to put on the goggles."
-						MsgTimer = 70.0 * 6.0
-						SelectedItem = Null
-						Return
-					Else			
-						If WearingNightVision = 3 Then
-							Msg = "You removed the goggles."
-							CameraFogFar = StoredCameraFogFar
+					If CanUseItem2(False, True, False, False) Then
+						If WearingNightVision > 0 And WearingNightVision <> 3 Then
+							Msg = "You can't use two pairs of the goggles at the same."
+							MsgTimer = 70 * 5.0
+							SelectedItem = Null
+							Return
 						Else
-							Msg = "You put on the goggles."
-							WearingNightVision = 0
-							StoredCameraFogFar = CameraFogFar
-							CameraFogFar = 30.0
+							If WearingNightVision = 3 Then
+								Msg = "You removed the goggles."
+								CameraFogFar = StoredCameraFogFar
+							Else
+								Msg = "You put on the goggles."
+								WearingNightVision = 0
+								StoredCameraFogFar = CameraFogFar
+								CameraFogFar = 30.0
+							EndIf
+							WearingNightVision = (Not WearingNightVision) * 3
+							MsgTimer = 70.0 * 6.0
+							SelectedItem = Null
 						EndIf
-						WearingNightVision = (Not WearingNightVision) * 3
-						MsgTimer = 70.0 * 6.0
-						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "scp1123"
@@ -6555,6 +6515,7 @@ Function DrawGUI()
 								If WearingNightVision Then CameraFogFar = StoredCameraFogFar
 								WearingGasMask = 0
 								WearingNightVision = 0
+								WearingHelmet = 0
 							EndIf
 							SelectedItem\State = 0.0
 							MsgTimer = 70.0 * 6.0
@@ -6600,45 +6561,30 @@ Function DrawGUI()
 					;[End Block]
 				Case "gasmask", "supergasmask", "gasmask3"
 					;[Block]
-					If Wearing1499 > 0
-					    Msg = "You need to take off SCP-1499 in order to put on a gas mask."	
-					    MsgTimer = 70.0 * 6.0
-					    SelectedItem = Null
-					    Return
-					ElseIf WearingNightVision > 0
-					    Msg = "You need to take off the goggles in order to put on a gas mask."
-                        MsgTimer = 70.0 * 6.0
-                        SelectedItem = Null
-					    Return
-					ElseIf WearingHelmet > 0
-                        Msg = "You need to take off the helmet in order to put on the goggles."
-						MsgTimer = 70.0 * 6.0
-						SelectedItem = Null
-						Return
-					Else		
-					    CurrSpeed = CurveValue(0.0, CurrSpeed, 5.0)
+					If CanUseItem2(True, False, False, False) Then
+						CurrSpeed = CurveValue(0.0, CurrSpeed, 5.0)
 						
 						DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
 						Width = 300
-					    Height = 20
-					    x = GraphicWidth / 2 - Width / 2
-					    y = GraphicHeight / 2 + 80
-					    Rect(x, y, Width + 4, Height, False)
+						Height = 20
+						x = GraphicWidth / 2 - Width / 2
+						y = GraphicHeight / 2 + 80
+						Rect(x, y, Width + 4, Height, False)
 						For  i% = 1 To Int((Width - 2) * (SelectedItem\state / 100.0) / 10)
 							DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
 						Next
 						SelectedItem\State = Min(SelectedItem\State + (FPSfactor) / 1.6, 100.0)
 						
-					    If SelectedItem\State = 100.0 Then
-                            If WearingGasMask > 0 Then
-                                WearingGasMask = False
-                                Msg = "You removed the gas mask."
-                                If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))
-                            Else
-						        If SelectedItem\ItemTemplate\TempName = "supergasmask"
-							        Msg = "You put on the gas mask and you can breathe easier."
-							        WearingGasMask = 2
+						If SelectedItem\State = 100.0 Then
+							If WearingGasMask > 0 Then
+								WearingGasMask = False
+								Msg = "You removed the gas mask."
+								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))
+							Else
+								If SelectedItem\ItemTemplate\TempName = "supergasmask"
+									Msg = "You put on the gas mask and you can breathe easier."
+									WearingGasMask = 2
 								Else
 									If SelectedItem\Itemtemplate\TempName = "gasmask3"
 										WearingGasMask = 3
@@ -6646,13 +6592,13 @@ Function DrawGUI()
 										WearingGasMask = 1
 									EndIf
 									Msg = "You put on the gas mask."
-						        EndIf
-					            If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))
-                            EndIf
-						    SelectedItem\State = 0.0
-						    MsgTimer = 70.0 * 6.0
-						    SelectedItem = Null
-					    EndIf
+								EndIf
+								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))
+							EndIf
+							SelectedItem\State = 0.0
+							MsgTimer = 70.0 * 6.0
+							SelectedItem = Null
+						EndIf
 					EndIf
 					;[End Block]
 				Case "navigator", "nav"
@@ -6851,22 +6797,7 @@ Function DrawGUI()
 					;[End Block]
 				Case "scp1499", "super1499"
 					;[Block]
-					If WearingNightVision > 0
-						Msg = "You need to take off the goggles in order to put on SCP-1499."
-						MsgTimer = 70.0 * 6.0
-						SelectedItem = Null
-						Return
-				    ElseIf WearingGasMask > 0
-				        Msg = "You need to take off the gas mask in order to put on SCP-1499."
-						MsgTimer = 70.0 * 6.0
-						SelectedItem = Null
-						Return
-					ElseIf WearingHelmet > 0
-                        Msg = "You need to take off the helmet in order to put on the goggles."
-						MsgTimer = 70.0 * 6.0
-						SelectedItem = Null
-						Return
-					Else
+					If CanUseItem2(False, False, True, False) Then
 						CurrSpeed = CurveValue(0.0, CurrSpeed, 5.0)
 						
 						DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
@@ -7058,23 +6989,8 @@ Function DrawGUI()
 					;[End Block]
 				Case "helmet"
 					;[Block]
-					If Wearing1499 > 0
-					    Msg = "You need to take off SCP-1499 in order to put on a helmet."	
-					    MsgTimer = 70.0 * 6.0
-					    SelectedItem = Null
-					    Return
-					ElseIf WearingNightVision > 0
-					    Msg = "You need to take off the goggles in order to put on a helmet."
-                        MsgTimer = 70.0 * 6.0
-                        SelectedItem = Null
-					    Return
-				    ElseIf WearingGasMask > 0
-					    Msg = "You need to take off the gas mask in order to put on a helmet."
-                        MsgTimer = 70.0 * 6.0
-                        SelectedItem = Null
-					    Return
-					Else		
-					    CurrSpeed = CurveValue(0.0, CurrSpeed, 5.0)
+					If CanUseItem2(False, False, False, True) Then
+						CurrSpeed = CurveValue(0.0, CurrSpeed, 5.0)
 						
 					    DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
@@ -11643,13 +11559,38 @@ Function PlayStartupVideos()
 End Function
 
 Function CanUseItem(CanUseWithGasMask%, CanUseWithEyewear%)
-	If (CanUseWithGasMask = False And (WearingGasMask > 0 Or Wearing1499 > 0))
+	If (CanUseWithGasMask = False And (WearingGasMask > 0 Or Wearing1499 > 0)) Then
 		Msg = "You can't use that item while wearing a gas mask."
 		MsgTimer = 70.0 * 6.0
 		Return(False)
 	Else If (CanUseWithEyewear = False And (WearingNightVision > 0))
 		Msg = "You can't use that item while wearing headgear."
 		MsgTimer = 70.0 * 6.0
+		Return(False)
+	EndIf
+	Return(True)
+End Function
+
+Function CanUseItem2(GasMask%, NVG%, SCP1499%, Helmet%)
+	If GasMask = False And WearingGasMask > 0 Then
+		Msg = "You need to take off the gas mask in order to use that item."
+		MsgTimer = 70.0 * 6.0
+		SelectedItem = Null
+		Return(False)
+	ElseIf SCP1499 = False And Wearing1499 > 0
+		Msg = "You need to take off SCP-1499 in order to use that item."
+		MsgTimer = 70.0 * 6.0
+		SelectedItem = Null
+		Return(False)
+	ElseIf NVG = False And WearingNightVision > 0 Then
+		Msg = "You need to take off the goggles in order to use that item."
+		MsgTimer = 70.0 * 6.0
+		SelectedItem = Null
+		Return(False)
+	ElseIf Helmet = False And WearingHelmet > 0
+		Msg = "You need to take off the helmet in order to use that item."
+		MsgTimer = 70.0 * 6.0
+		SelectedItem = Null
 		Return(False)
 	EndIf
 	Return(True)
@@ -11683,5 +11624,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#1020#138E#1C46
+;~B#1020#138E#1BF2
 ;~C#Blitz3D
