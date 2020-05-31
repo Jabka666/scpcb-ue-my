@@ -646,8 +646,6 @@ Function KeyValue$(Entity, Key$, DefaultValue$ = "")
 	Forever 
 End Function
 
-Include "Source Code\Drawportals.bb"
-
 Type Forest
 	Field TileMesh%[6]
 	Field DetailMesh%[6]
@@ -1508,7 +1506,7 @@ Type Rooms
 	Field RoomTemplate.RoomTemplates
 	Field Dist#
 	Field SoundCHN%
-	Field dp.DrawPortal, fr.Forest
+	Field fr.Forest
 	Field SoundEmitter%[MaxRoomEmitters]
 	Field SoundEmitterOBJ%[MaxRoomEmitters]
 	Field SoundEmitterRange#[MaxRoomEmitters]
@@ -8713,5 +8711,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11E5
+;~B#11E3
 ;~C#Blitz3D

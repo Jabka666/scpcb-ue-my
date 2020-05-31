@@ -153,7 +153,7 @@ Type Stream
 End Type
 
 Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode% = Mode)
-	If FileType(File) <> 1
+	If FileType(File) <> 1 Then
 		CreateConsoleMsg("Sound " + Chr(34) + File + Chr(34) + " not found.")
 		If ConsoleOpening And CanOpenConsole Then
 			ConsoleOpen = True
@@ -165,7 +165,7 @@ Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode% = Mode)
 	
 	st\SFX = FSOUND_Stream_Open(File, CustomMode, 0)
 	
-	If st\SFX = 0
+	If st\SFX = 0 Then
 		CreateConsoleMsg("Failed to stream Sound (returned 0): " + Chr(34) + File + Chr(34))
 		If ConsoleOpening And CanOpenConsole Then
 			ConsoleOpen = True
@@ -175,7 +175,7 @@ Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode% = Mode)
 	
 	st\CHN = FSOUND_Stream_Play(FreeChannel, st\SFX)
 	
-	If st\CHN = -1
+	If st\CHN = -1 Then
 		CreateConsoleMsg("Failed to stream Sound (returned -1): " + Chr(34) + File + Chr(34))
 		If ConsoleOpening And CanOpenConsole Then
 			ConsoleOpen = True
@@ -270,7 +270,7 @@ Function SetStreamPan_Strict(StreamHandle%, Pan#)
 	
 	Local FMod_Pan% = 0
 	
-	FMod_Pan = Int((255.0 / 2.0) + ((255.0 / 2.0) * Pan#))
+	FMod_Pan = Int((255.0 / 2.0) + ((255.0 / 2.0) * Pan))
 	FSOUND_SetPan(st\CHN, FMod_Pan)
 End Function
 
@@ -280,10 +280,10 @@ Function UpdateStreamSoundOrigin(StreamHandle%, Cam%, Entity%, Range# = 10.0, Vo
 	If Volume > 0 Then
 		Local Dist# = EntityDistance(Cam, Entity) / Range
 		
-		If 1.0 - Dist > 0.0 And 1.0 - Dist# < 1.0 Then
+		If 1.0 - Dist > 0.0 And 1.0 - Dist < 1.0 Then
 			Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 			
-			SetStreamVolume_Strict(StreamHandle, Volume# * (1 - Dist#) * SFXVolume#)
+			SetStreamVolume_Strict(StreamHandle, Volume * (1 - Dist) * SFXVolume#)
 			SetStreamPan_Strict(StreamHandle, PanValue)
 		Else
 			SetStreamVolume_Strict(StreamHandle, 0.0)
