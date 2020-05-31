@@ -17,23 +17,27 @@ Function Distance#(x1#, y1#, x2#, y2#)
 End Function
 
 Function CurveValue#(Number#, Old#, Smooth#)
-	If FPSfactor = 0.0 Then Return(Old)
+	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
+	
+	If fpst\FPSFactor[0] = 0.0 Then Return(Old)
 	
 	If Number < Old Then
-		Return(Max(Old + (Number - Old) * (1.0 / Smooth * FPSfactor), Number))
+		Return(Max(Old + (Number - Old) * (1.0 / Smooth * fpst\FPSFactor[0]), Number))
 	Else
-		Return(Min(Old + (Number - Old) * (1.0 / Smooth * FPSfactor), Number))
+		Return(Min(Old + (Number - Old) * (1.0 / Smooth * fpst\FPSFactor[0]), Number))
 	EndIf
 End Function
 
 Function CurveAngle#(Val#, Old#, Smooth#)
-	If FPSfactor = 0.0 Then Return(Old)
+	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
+	
+	If fpst\FPSFactor[0] = 0.0 Then Return(Old)
 	
 	Local Diff# = WrapAngle(Val) - WrapAngle(Old)
 	
 	If Diff > 180.0 Then Diff = Diff - 360.0
 	If Diff < - 180.0 Then Diff = Diff + 360.0
-	Return(WrapAngle(Old + Diff * (1.0 / Smooth * FPSfactor)))
+	Return(WrapAngle(Old + Diff * (1.0 / Smooth * fpst\FPSFactor[0])))
 End Function
 
 Function WrapAngle#(Angle#)

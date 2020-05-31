@@ -50,11 +50,13 @@ Function LoadTempSound(File$)
 End Function
 
 Function UpdateMusic()
+	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
+	
 	If ConsoleFlush Then
 		If ChannelPlaying(ConsoleMusPlay) = False Then ConsoleMusPlay = PlaySound(ConsoleMusFlush)
 	ElseIf (Not PlayCustomMusic)
 		If NowPlaying <> ShouldPlay Then ; ~ Playing the wrong clip, fade out
-			CurrMusicVolume = Max(CurrMusicVolume - (FPSfactor / 250.0), 0.0)
+			CurrMusicVolume = Max(CurrMusicVolume - (fpst\FPSFactor[0] / 250.0), 0.0)
 			If CurrMusicVolume = 0
 				If NowPlaying < 66 Then
 					StopStream_Strict(MusicCHN)
@@ -64,7 +66,7 @@ Function UpdateMusic()
 				CurrMusic = 0
 			EndIf
 		Else ; ~ Playing the right clip
-			CurrMusicVolume = CurrMusicVolume + (MusicVolume - CurrMusicVolume) * (0.1 * FPSfactor)
+			CurrMusicVolume = CurrMusicVolume + (MusicVolume - CurrMusicVolume) * (0.1 * fpst\FPSFactor[0])
 		EndIf
 		
 		If NowPlaying < 66 Then
@@ -75,7 +77,7 @@ Function UpdateMusic()
 			SetStreamVolume_Strict(MusicCHN, CurrMusicVolume)
 		EndIf
 	Else
-		If FPSfactor > 0 Or OptionsMenu = 2 Then
+		If fpst\FPSFactor[0] > 0.0 Or OptionsMenu = 2 Then
 			If ChannelPlaying(MusicCHN) = False Then MusicCHN = PlaySound_Strict(CustomMusic)
 			ChannelVolume(MusicCHN, 1.0 * MusicVolume)
 		EndIf
@@ -412,8 +414,9 @@ End Function
 
 Function UpdateStreamSounds()
 	Local e.Events
+	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
 	
-	If FPSfactor > 0.0 Then
+	If fpst\FPSFactor[0] > 0.0 Then
 		If IntercomStreamCHN <> 0 Then
 			SetStreamVolume_Strict(IntercomStreamCHN, SFXVolume)
 		EndIf
@@ -480,8 +483,10 @@ Function ControlSoundVolume()
 End Function
 
 Function UpdateDeafPlayer()
+	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
+	
 	If DeafTimer > 0.0
-		DeafTimer = DeafTimer - FPSfactor
+		DeafTimer = DeafTimer - fpst\FPSFactor[0]
 		SFXVolume = 0.0
 		If SFXVolume > 0.0
 			ControlSoundVolume()

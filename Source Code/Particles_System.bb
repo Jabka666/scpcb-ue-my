@@ -45,26 +45,27 @@ Function CreateParticle.Particles(x#, y#, z#, Image%, Size#, Gravity# = 1.0, Lif
 End Function
 	
 Function UpdateParticles()
+	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
 	Local p.Particles
 	
 	For p.Particles = Each Particles
-		MoveEntity(p\Pvt, 0.0, 0.0, p\Speed * FPSfactor)
-		If p\Gravity <> 0 Then p\ySpeed = p\ySpeed - p\Gravity * FPSfactor
-		TranslateEntity(p\Pvt, 0.0, p\ySpeed * FPSfactor, 0.0, True)
+		MoveEntity(p\Pvt, 0.0, 0.0, p\Speed * fpst\FPSFactor[0])
+		If p\Gravity <> 0 Then p\ySpeed = p\ySpeed - p\Gravity * fpst\FPSFactor[0]
+		TranslateEntity(p\Pvt, 0.0, p\ySpeed * fpst\FPSFactor[0], 0.0, True)
 		
 		PositionEntity(p\OBJ, EntityX(p\Pvt, True), EntityY(p\Pvt, True), EntityZ(p\Pvt, True), True)
 		
 		If p\AChange <> 0.0 Then
-			p\A = Min(Max(p\A + p\AChange * FPSfactor, 0.0), 1.0)
+			p\A = Min(Max(p\A + p\AChange * fpst\FPSFactor[0], 0.0), 1.0)
 			EntityAlpha(p\OBJ, p\A)		
 		EndIf
 		
 		If p\SizeChange <> 0.0 Then 
-			p\Size = p\Size + p\SizeChange * FPSfactor
+			p\Size = p\Size + p\SizeChange * fpst\FPSFactor[0]
 			ScaleSprite(p\OBJ, p\Size, p\Size)
 		EndIf
 		
-		p\LifeTime = p\LifeTime - FPSfactor
+		p\LifeTime = p\LifeTime - fpst\FPSFactor[0]
 		If p\LifeTime =< 0.0 Or p\Size < 0.00001 Or p\A =< 0.0 Then
 			RemoveParticle(p)
 		End If
@@ -135,9 +136,12 @@ Function CreateEmitter.Emitters(x#, y#, z#, EmitterType%)
 End Function
 
 Function UpdateEmitters()
+	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
+	Local msg.Messages = First Messages
+	
 	InSmoke = False
 	For e.Emitters = Each Emitters
-		If FPSfactor > 0.0 And (PlayerRoom = e\room Or e\room\Dist < 8.0) Then
+		If fpst\FPSFactor[0] > 0.0 And (PlayerRoom = e\room Or e\room\Dist < 8.0) Then
 			Local p.Particles = CreateParticle(EntityX(e\OBJ, True), EntityY(e\OBJ, True), EntityZ(e\OBJ, True), Rand(e\MinImage, e\MaxImage), e\Size, e\Gravity, e\LifeTime)
 			
 			p\Speed = e\speed
@@ -167,7 +171,7 @@ Function UpdateEmitters()
 	If InSmoke Then
 		If EyeIrritation > (70.0 * 6.0) Then BlurVolume = Max(BlurVolume, (EyeIrritation - (70.0 * 6.0)) / (70.0 * 24.0))
 		If EyeIrritation > (70.0 * 24.0) Then 
-			DeathMsg = SubjectName + " found dead in [DATA REDACTED]. Cause of death: Suffocation due to decontamination gas."
+			msg\DeathMsg = SubjectName + " found dead in [DATA REDACTED]. Cause of death: Suffocation due to decontamination gas."
 			Kill()
 		EndIf
 		
@@ -180,7 +184,7 @@ Function UpdateEmitters()
 				End If
 			EndIf
 		EndIf
-		EyeIrritation = EyeIrritation + FPSfactor * 4.0
+		EyeIrritation = EyeIrritation + fpst\FPSFactor[0] * 4.0
 	EndIf	
 End Function
 

@@ -54,6 +54,7 @@ Global CurrLoadGamePage% = 0
 Function UpdateMainMenu()
 	Local x%, y%, Width%, Height%, Temp%
 	Local fo.Fonts = First Fonts
+	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
 	
 	Color 0,0,0
 	Rect 0,0,GraphicWidth,GraphicHeight,True
@@ -73,7 +74,7 @@ Function UpdateMainMenu()
 	
 	AASetFont fo\FontID[0]
 	
-	MenuBlinkTimer(1)=MenuBlinkTimer(1)-FPSfactor
+	MenuBlinkTimer(1)=MenuBlinkTimer(1)-fpst\FPSFactor[0]
 	If MenuBlinkTimer(1) < MenuBlinkDuration(1) Then
 		Color(50, 50, 50)
 		AAText(MenuStrX + Rand(-5, 5), MenuStrY + Rand(-5, 5), MenuStr, True)
@@ -2007,6 +2008,7 @@ Global QuickLoad_CurrEvent.Events
 
 Function DrawQuickLoading()
 	Local fo.Fonts = First Fonts
+	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
 	
 	If QuickLoadPercent > -1
 		MidHandle QuickLoadIcon
@@ -2016,7 +2018,7 @@ Function DrawQuickLoading()
 		AAText GraphicWidth-100,GraphicHeight-90,"LOADING: "+QuickLoadPercent+"%",1
 		If QuickLoadPercent > 99
 			If QuickLoadPercent_DisplayTimer < 70
-				QuickLoadPercent_DisplayTimer# = Min(QuickLoadPercent_DisplayTimer+FPSfactor,70)
+				QuickLoadPercent_DisplayTimer# = Min(QuickLoadPercent_DisplayTimer+fpst\FPSFactor[0],70)
 			Else
 				QuickLoadPercent = -1
 			EndIf

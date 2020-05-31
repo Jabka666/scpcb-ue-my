@@ -500,6 +500,7 @@ Function UpdateItems()
 	Local Pick%
 	Local HideDist# = HideDistance * 0.5
 	Local DeletedItem% = False
+	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
 	
 	ClosestItem = Null
 	For i.Items = Each Items
@@ -539,8 +540,8 @@ Function UpdateItems()
 					If ShouldEntitiesFall
 						Pick = LinePick(EntityX(i\Collider), EntityY(i\Collider), EntityZ(i\Collider), 0.0, -10.0, 0.0)
 						If Pick Then
-							i\DropSpeed = i\DropSpeed - 0.0004 * FPSfactor
-							TranslateEntity(i\Collider, i\xSpeed * FPSfactor, i\DropSpeed * FPSfactor, i\zSpeed * FPSfactor)
+							i\DropSpeed = i\DropSpeed - 0.0004 * fpst\FPSfactor[0]
+							TranslateEntity(i\Collider, i\xSpeed * fpst\FPSfactor[0], i\DropSpeed * fpst\FPSfactor[0], i\zSpeed * fpst\FPSfactor[0])
 							If i\WontColl Then ResetEntity(i\Collider)
 						Else
 							i\DropSpeed = 0.0
@@ -608,6 +609,7 @@ Function PickItem(item.Items)
 	Local FullINV% = True
 	Local GroupDesignation$
 	Local tt.TextureTemplate = First TextureTemplate
+	Local msg.Messages = First Messages
 	
 	For n = 0 To MaxItemAmount - 1
 		If Inventory(n) = Null
@@ -617,8 +619,8 @@ Function PickItem(item.Items)
 	Next
 	
 	If WearingHazmat > 0 Then
-		Msg = "You cannot pick up any items while wearing a hazmat suit."
-		MsgTimer = 70.0 * 6.0
+		msg\Msg = "You cannot pick up any items while wearing a hazmat suit."
+		msg\Timer = 70.0 * 6.0
 		Return
 	EndIf
 	
@@ -643,10 +645,10 @@ Function PickItem(item.Items)
 								Else
 									GroupDesignation = "See No Evil"
 								EndIf
-								DeathMsg = SubjectName + " was shot dead after attempting to attack a member of " + GroupDesignation + ". Surveillance tapes show that the subject had been "
-								DeathMsg = DeathMsg + "wandering around the site approximately 9 (nine) minutes prior, shouting the phrase " + Chr(34) + "get rid of the four pests" + Chr(34)
-								DeathMsg = DeathMsg + " in chinese. SCP-1123 was found in [DATA REDACTED] nearby, suggesting the subject had come into physical contact with it. How "
-								DeathMsg = DeathMsg + "exactly SCP-1123 was removed from its containment chamber is still unknown."
+								msg\DeathMsg = SubjectName + " was shot dead after attempting to attack a member of " + GroupDesignation + ". Surveillance tapes show that the subject had been "
+								msg\DeathMsg = msg\DeathMsg + "wandering around the site approximately 9 (nine) minutes prior, shouting the phrase " + Chr(34) + "get rid of the four pests" + Chr(34)
+								msg\DeathMsg = msg\DeathMsg + " in chinese. SCP-1123 was found in [DATA REDACTED] nearby, suggesting the subject had come into physical contact with it. How "
+								msg\DeathMsg = msg\DeathMsg + "exactly SCP-1123 was removed from its containment chamber is still unknown."
 								Kill()
 							EndIf
 							
@@ -669,8 +671,8 @@ Function PickItem(item.Items)
 						ShowEntity(tt\OverlayID[7])
 						LightFlash = 1.0
 						PlaySound_Strict(IntroSFX(Rand(8, 10)))
-						DeathMsg = SubjectName + " found dead inside SCP-914's output booth next to what appears to be an ordinary nine-volt battery. The subject is covered in severe "
-						DeathMsg = DeathMsg + "electrical burns, and assumed to be killed via an electrical shock caused by the battery. The battery has been stored for further study."
+						msg\DeathMsg = SubjectName + " found dead inside SCP-914's output booth next to what appears to be an ordinary nine-volt battery. The subject is covered in severe "
+						msg\DeathMsg = msg\DeathMsg + "electrical burns, and assumed to be killed via an electrical shock caused by the battery. The battery has been stored for further study."
 						Kill()
 						;[End Block]
 					Case "scp148"
@@ -695,8 +697,8 @@ Function PickItem(item.Items)
 						;[End Block]
 					Case "veryfinevest"
 						;[Block]
-						Msg = "The vest is too heavy to pick up."
-						MsgTimer = 70.0 * 6.0
+						msg\Msg = "The vest is too heavy to pick up."
+						msg\Timer = 70.0 * 6.0
 						Exit
 						;[End Block]
 					Case "firstaid", "finefirstaid", "veryfinefirstaid", "firstaid2"
@@ -723,12 +725,12 @@ Function PickItem(item.Items)
 						Next
 						
 						If CanPickItem = False Then
-							Msg = "You are not able to wear two hazmat suits at the same time."
-							MsgTimer = 70.0 * 6.0
+							msg\Msg = "You are not able to wear two hazmat suits at the same time."
+							msg\Timer = 70.0 * 6.0
 							Return
 						ElseIf CanPickItem = 2 Then
-							Msg = "You are not able to wear a vest and a hazmat suit at the same time."
-							MsgTimer = 70.0 * 6.0
+							msg\Msg = "You are not able to wear a vest and a hazmat suit at the same time."
+							msg\Timer = 70.0 * 6.0
 							Return
 						Else
 							SelectedItem = item
@@ -750,12 +752,12 @@ Function PickItem(item.Items)
 						Next
 						
 						If CanPickItem = False Then
-							Msg = "You are not able to wear two vests at the same time."
-							MsgTimer = 70.0 * 6.0
+							msg\Msg = "You are not able to wear two vests at the same time."
+							msg\Timer = 70.0 * 6.0
 							Return
 						ElseIf CanPickItem = 2 Then
-							Msg = "You are not able to wear a vest and a hazmat suit at the same time."
-							MsgTimer = 70.0 * 6.0
+							msg\Msg = "You are not able to wear a vest and a hazmat suit at the same time."
+							msg\Timer = 70.0 * 6.0
 							Return
 						Else
 							SelectedItem = item
@@ -776,17 +778,19 @@ Function PickItem(item.Items)
 			EndIf
 		Next
 	Else
-		Msg = "You cannot carry any more items."
-		MsgTimer = 70.0 * 6.0
+		msg\Msg = "You cannot carry any more items."
+		msg\Timer = 70.0 * 6.0
 	EndIf
 	
 	CatchErrors("PickItem")
 End Function
 
 Function DropItem(item.Items, PlayDropSound% = True)
+	Local msg.Messages = First Messages
+	
 	If WearingHazmat > 0 Then
-		Msg = "You cannot drop any items while wearing a hazmat suit."
-		MsgTimer = 70.0 * 6.0
+		msg\Msg = "You cannot drop any items while wearing a hazmat suit."
+		msg\Timer = 70.0 * 6.0
 		Return
 	EndIf
 	
@@ -858,15 +862,16 @@ End Function
 Function Update294()
 	CatchErrors("Uncaught (Update294)")
 	
+	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
 	Local Pvt%
 	
 	If CameraShakeTimer > 0.0 Then
-		CameraShakeTimer = CameraShakeTimer - (FPSfactor / 70.0)
+		CameraShakeTimer = CameraShakeTimer - (fpst\FPSfactor[0] / 70.0)
 		CameraShake = 2.0
 	EndIf
 	
 	If VomitTimer > 0.0 Then
-		VomitTimer = VomitTimer - (FPSfactor / 70.0)
+		VomitTimer = VomitTimer - (fpst\FPSfactor[0] / 70.0)
 		
 		If (MilliSecs2() Mod 1600) < Rand(200, 400) Then
 			If BlurTimer = 0.0 Then BlurTimer = 70.0 * Rnd(10.0, 20.0)
@@ -889,7 +894,7 @@ Function Update294()
 			Regurgitate = 0
 		EndIf
 	ElseIf VomitTimer < 0.0 Then ; ~ Vomit
-		VomitTimer = VomitTimer - (FPSfactor / 70.0)
+		VomitTimer = VomitTimer - (fpst\FPSfactor[0] / 70.0)
 		
 		If VomitTimer > -5.0 Then
 			If (MilliSecs2() Mod 400) < 50 Then CameraShake = 4.0 

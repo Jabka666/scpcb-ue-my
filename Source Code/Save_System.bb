@@ -1,9 +1,12 @@
 Function SaveGame(File$)
 	CatchErrors("Uncaught (SaveGame)")
 	
+	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
+	Local msg.Messages = First Messages
+	
 	If (Not Playable) Then Return ; ~ Don't save if the player can't move at all
 	
-	If DropSpeed > 0.02 * FPSfactor Or DropSpeed < -0.02 * FPSfactor Then Return
+	If DropSpeed > 0.02 * fpst\FPSFactor[0] Or DropSpeed < (-0.02) * fpst\FPSFactor[0] Then Return
 	
 	If KillTimer < 0.0 Then Return
 	
@@ -58,7 +61,7 @@ Function SaveGame(File$)
 	WriteFloat(f, PrevInjuries)
 	WriteFloat(f, PrevBloodloss)
 	
-	WriteString(f, DeathMsg)
+	WriteString(f, msg\DeathMsg)
 	
 	For i = 0 To 5
 		WriteFloat(f, SCP1025State[i])
@@ -462,8 +465,8 @@ Function SaveGame(File$)
 			PlaySound_Strict(LoadTempSound("SFX\General\Save1.ogg"))
 		EndIf
 		
-		Msg = "Game progress saved."
-		MsgTimer = 70.0 * 4.0
+		msg\Msg = "Game progress saved."
+		msg\Timer = 70.0 * 4.0
 	EndIf
 	
 	CatchErrors("SaveGame")
@@ -471,6 +474,8 @@ End Function
 
 Function LoadGame(File$)
 	CatchErrors("Uncaught (LoadGame)")
+	
+	Local msg.Messages = First Messages
 	
 	DropSpeed = 0.0
 	
@@ -530,7 +535,7 @@ Function LoadGame(File$)
 	PrevInjuries = ReadFloat(f)
 	PrevBloodloss = ReadFloat(f)
 	
-	DeathMsg = ReadString(f)
+	msg\DeathMsg = ReadString(f)
 	
 	For i = 0 To 5
 		SCP1025State[i] = ReadFloat(f)
@@ -1275,6 +1280,7 @@ Function LoadGameQuick(File$)
 	CatchErrors("Uncaught (LoadGameQuick)")
 	
 	Local tt.TextureTemplate = First TextureTemplate
+	Local msg.Messages = First Messages
 	
 	DebugHUD = False
 	GameSaved = True
@@ -1282,8 +1288,10 @@ Function LoadGameQuick(File$)
 	DeafPlayer = False
 	DeafTimer = 0.0
 	UnableToMove = False
-	Msg = ""
+	msg\Msg = ""
 	SelectedEnding = ""
+	
+	HideEntity(tt\OverlayID[10])
 	
 	PositionEntity(Collider, 0.0, 1000.0, 0.0, True)
 	ResetEntity(Collider)
@@ -1368,7 +1376,7 @@ Function LoadGameQuick(File$)
 	PrevInjuries = ReadFloat(f)
 	PrevBloodloss = ReadFloat(f)
 	
-	DeathMsg = ReadString(f)
+	msg\DeathMsg = ReadString(f)
 	
 	For i = 0 To 5
 		SCP1025State[i] = ReadFloat(f)

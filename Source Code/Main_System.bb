@@ -159,7 +159,15 @@ Global MenuScale# = (GraphicHeight / 1024.0)
 
 SetBuffer(BackBuffer())
 
-Global CurTime%, PrevTime%, LoopDelay%, FPSfactor#, FPSfactor2#, PrevFPSFactor#
+Type FramesPerSecondsTemplate
+	Field CurTime%
+	Field PrevTime%
+	Field LoopDelay%
+	Field FPSFactor#[2]
+	Field PrevFPSFactor#
+End Type
+
+Local fpst.FramesPerSecondsTemplate = New FramesPerSecondsTemplate
 
 Local CheckFPS%, ElapsedLoops%, FPS%, ElapsedTime#
 
@@ -283,9 +291,16 @@ Global OtherOpen.Items = Null
 
 Global SelectedEnding$, EndingScreen%, EndingTimer#
 
-Global MsgTimer#, Msg$, DeathMsg$
+Type Messages
+	Field Msg$
+	Field Timer#
+	Field DeathMsg$
+	Field KeypadMsg$
+End Type
 
-Global AccessCode%, KeypadInput$, KeypadTimer#, KeypadMsg$
+Local msg.Messages = New Messages
+
+Global AccessCode%, KeypadInput$, KeypadTimer#
 
 Global DrawHandIcon%
 Dim DrawArrowIcon%(4)
@@ -347,9 +362,10 @@ Function CreateConsoleMsg(Txt$, R% = -1, G% = -1, B% = -1, IsCommand% = False)
 End Function
 
 Function UpdateConsole()
+	Local Tex%, Tex2%
 	Local e.Events
 	Local fo.Fonts = First Fonts
-	Local Tex%, Tex2%
+	Local msg.Messages = First Messages
 	
 	If CanOpenConsole = False Then
 		ConsoleOpen = False
@@ -1270,7 +1286,7 @@ Function UpdateConsole()
 					ShowEntity(Collider)
 					
 					KillTimer = 0.0
-					KillAnim = 0.0
+					KillAnim = 0
 					;[End Block]
 				Case "noclip", "fly"
 					;[Block]
@@ -1605,23 +1621,23 @@ Function UpdateConsole()
 					Select Rand(4)
 						Case 1
 							;[Block]
-							DeathMsg = "[DATA REDACTED]"
+							msg\DeathMsg = "[DATA REDACTED]"
 							;[End Block]
 						Case 2
 							;[Block]
-							DeathMsg = SubjectName + " found dead in Sector [DATA REDACTED]. "
-							DeathMsg = DeathMsg + "The subject appears to have attained no physical damage, and there is no visible indication as to what killed him. "
-							DeathMsg = DeathMsg + "Body was sent for autopsy."
+							msg\DeathMsg = SubjectName + " found dead in Sector [DATA REDACTED]. "
+							msg\DeathMsg = msg\DeathMsg + "The subject appears to have attained no physical damage, and there is no visible indication as to what killed him. "
+							msg\DeathMsg = msg\DeathMsg + "Body was sent for autopsy."
 							;[End Block]
 						Case 3
 							;[Block]
-							DeathMsg = "EXCP_ACCESS_VIOLATION"
+							msg\DeathMsg = "EXCP_ACCESS_VIOLATION"
 							;[End Block]
 						Case 4
 							;[Block]
-							DeathMsg = SubjectName + " found dead in Sector [DATA REDACTED]. "
-							DeathMsg = DeathMsg + "The subject appears to have scribbled the letters " + Chr(34) + "kys" + Chr(34) + " in his own blood beside him. "
-							DeathMsg = DeathMsg + "No other signs of physical trauma or struggle can be observed. Body was sent for autopsy."
+							msg\DeathMsg = SubjectName + " found dead in Sector [DATA REDACTED]. "
+							msg\DeathMsg = msg\DeathMsg + "The subject appears to have scribbled the letters " + Chr(34) + "kys" + Chr(34) + " in his own blood beside him. "
+							msg\DeathMsg = msg\DeathMsg + "No other signs of physical trauma or struggle can be observed. Body was sent for autopsy."
 							;[End Block]
 					End Select
 					;[End Block]
@@ -2317,6 +2333,7 @@ End Function
 
 Function UpdateDoors()
 	Local i%, d.Doors, x#, z#, Dist#
+	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
 	
 	If UpdateDoorsTimer =< 0.0 Then
 		For d.Doors = Each Doors
@@ -2342,7 +2359,7 @@ Function UpdateDoors()
 		
 		UpdateDoorsTimer = 30.0
 	Else
-		UpdateDoorsTimer = Max(UpdateDoorsTimer - FPSfactor, 0.0)
+		UpdateDoorsTimer = Max(UpdateDoorsTimer - fpst\FPSFactor[0], 0.0)
 	EndIf
 	
 	ClosestButton = 0
@@ -2384,38 +2401,38 @@ Function UpdateDoors()
 					Select d\Dir
 						Case 0
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + FPSfactor * 2.0 * (d\FastOpen + 1))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * FPSfactor / 80.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * FPSfactor / 80.0, 0.0, 0.0)	
+							d\OpenState = Min(180.0, d\OpenState + fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fpst\FPSFactor[0] / 80.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * fpst\FPSFactor[0] / 80.0, 0.0, 0.0)	
 							;[End Block]
 						Case 1
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + FPSfactor * 0.8)
-							MoveEntity(d\OBJ, Sin(d\OpenState) * FPSfactor / 180.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, (-Sin(d\OpenState)) * FPSfactor / 180.0, 0.0, 0.0)
+							d\OpenState = Min(180.0, d\OpenState + fpst\FPSFactor[0] * 0.8)
+							MoveEntity(d\OBJ, Sin(d\OpenState) * fpst\FPSFactor[0] / 180.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, (-Sin(d\OpenState)) * fpst\FPSFactor[0] / 180.0, 0.0, 0.0)
 							;[End Block]
 						Case 2
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + FPSfactor * 2.0 * (d\FastOpen + 1))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen + 1) * FPSfactor / 85.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * FPSfactor / 120.0, 0.0, 0.0)
+							d\OpenState = Min(180.0, d\OpenState + fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen + 1) * fpst\FPSFactor[0] / 85.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fpst\FPSFactor[0] / 120.0, 0.0, 0.0)
 							;[End Block]
 						Case 3
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + FPSfactor * 2.0 * (d\FastOpen + 1))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * FPSfactor / 162.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState)* (d\FastOpen * 2 + 1) * FPSfactor / 162.0, 0.0, 0.0)
+							d\OpenState = Min(180.0, d\OpenState + fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fpst\FPSFactor[0] / 162.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState)* (d\FastOpen * 2 + 1) * fpst\FPSFactor[0] / 162.0, 0.0, 0.0)
 							;[End Block]
 						Case 4
 						    ;[Block]
-							d\OpenState = Min(180.0, d\OpenState + FPSfactor * 2 * (d\FastOpen + 1))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * FPSfactor / 80.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-FPSfactor) / 80.0, 0.0, 0.0)	
+							d\OpenState = Min(180.0, d\OpenState + fpst\FPSFactor[0] * 2 * (d\FastOpen + 1))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fpst\FPSFactor[0] / 80.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fpst\FPSFactor[0]) / 80.0, 0.0, 0.0)	
 							;[End Block]	
-						Case 5 ;Used for 914 only
+						Case 5 ;Used for SCP-914 only
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + FPSfactor * 1.4)
-							MoveEntity(d\OBJ, Sin(d\OpenState) * FPSfactor / 114.0, 0.0, 0.0)
+							d\OpenState = Min(180.0, d\OpenState + fpst\FPSFactor[0] * 1.4)
+							MoveEntity(d\OBJ, Sin(d\OpenState) * fpst\FPSFactor[0] / 114.0, 0.0, 0.0)
 							;[End Block]
 					End Select
 				Else
@@ -2423,8 +2440,8 @@ Function UpdateDoors()
 					ResetEntity(d\OBJ)
 					If d\OBJ2 <> 0 Then ResetEntity(d\OBJ2)
 					If d\TimerState > 0.0 Then
-						d\TimerState = Max(0.0, d\TimerState - FPSfactor)
-						If d\TimerState + FPSfactor > 110.0 And d\TimerState =< 110.0 Then d\SoundCHN = PlaySound2(CautionSFX, Camera, d\OBJ)
+						d\TimerState = Max(0.0, d\TimerState - fpst\FPSFactor[0])
+						If d\TimerState + fpst\FPSFactor[0] > 110.0 And d\TimerState =< 110.0 Then d\SoundCHN = PlaySound2(CautionSFX, Camera, d\OBJ)
 						
 						Local Sound%
 						
@@ -2450,16 +2467,16 @@ Function UpdateDoors()
 					Select d\Dir
 						Case 0
 							;[Block]
-							d\OpenState = Max(0.0, d\OpenState - FPSfactor * 2.0 * (d\FastOpen + 1))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (-FPSfactor) * (d\FastOpen + 1) / 80.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-FPSfactor) / 80.0, 0.0, 0.0)	
+							d\OpenState = Max(0.0, d\OpenState - fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fpst\FPSFactor[0]) * (d\FastOpen + 1) / 80.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fpst\FPSFactor[0]) / 80.0, 0.0, 0.0)	
 							;[End Block]
 						Case 1
 							;[Block]
-							d\OpenState = Max(0.0, d\OpenState - FPSfactor * 0.8)
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (-FPSfactor) / 180.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * FPSfactor / 180.0, 0.0, 0.0)
-							If d\OpenState < 15.0 And d\OpenState + FPSfactor >= 15.0
+							d\OpenState = Max(0.0, d\OpenState - fpst\FPSFactor[0] * 0.8)
+							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fpst\FPSFactor[0]) / 180.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * fpst\FPSFactor[0] / 180.0, 0.0, 0.0)
+							If d\OpenState < 15.0 And d\OpenState + fpst\FPSFactor[0] >= 15.0
 								If ParticleAmount = 2
 									For i = 0 To Rand(75, 99)
 										Local Pvt% = CreatePivot()
@@ -2480,26 +2497,26 @@ Function UpdateDoors()
 							;[End Block]
 						Case 2
 							;[Block]
-							d\OpenState = Max(0.0, d\OpenState - FPSfactor * 2.0 * (d\FastOpen + 1))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (-FPSfactor) * (d\FastOpen + 1) / 85.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-FPSfactor) / 120.0, 0.0, 0.0)
+							d\OpenState = Max(0.0, d\OpenState - fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fpst\FPSFactor[0]) * (d\FastOpen + 1) / 85.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fpst\FPSFactor[0]) / 120.0, 0.0, 0.0)
 							;[End Block]
 						Case 3
 							;[Block]
-							d\OpenState = Max(0.0, d\OpenState - FPSfactor * 2.0 * (d\FastOpen + 1))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (-FPSfactor) * (d\FastOpen + 1) / 162.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-FPSfactor) / 162.0, 0.0, 0.0)
+							d\OpenState = Max(0.0, d\OpenState - fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fpst\FPSFactor[0]) * (d\FastOpen + 1) / 162.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fpst\FPSFactor[0]) / 162.0, 0.0, 0.0)
 							;[End Block]
 						Case 4
 						    ;[Block]
-							d\OpenState = Max(0.0, d\OpenState - FPSfactor * 2 * (d\FastOpen + 1))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (-FPSfactor) * (d\FastOpen + 1) / 80.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * FPSfactor / 80.0, 0.0, 0.0)
+							d\OpenState = Max(0.0, d\OpenState - fpst\FPSFactor[0] * 2 * (d\FastOpen + 1))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fpst\FPSFactor[0]) * (d\FastOpen + 1) / 80.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * fpst\FPSFactor[0] / 80.0, 0.0, 0.0)
 							;[End Block]	
-						Case 5 ;Used for 914 only
+						Case 5 ;Used for SCP-914 only
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState - FPSfactor * 1.4)
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (-FPSfactor) / 114.0, 0.0, 0.0)
+							d\OpenState = Min(180.0, d\OpenState - fpst\FPSFactor[0] * 1.4)
+							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fpst\FPSFactor[0]) / 114.0, 0.0, 0.0)
 							;[End Block]
 					End Select
 					
@@ -2557,13 +2574,14 @@ End Function
 
 Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 	Local Temp% = 0
+	Local msg.Messages = First Messages
 	
 	If d\KeyCard > 0 Then
 		If SelectedItem = Null Then
 			If ShowMsg = True Then
-				If (Instr(Msg, "The keycard") = 0 And Instr(Msg, "A keycard with") = 0) Or (MsgTimer < 70.0 * 3.0) Then
-					Msg = "A keycard is required to operate this door."
-					MsgTimer = 70.0 * 6.0
+				If (Instr(msg\Msg, "The keycard") = 0 And Instr(msg\Msg, "A keycard with") = 0) Or (msg\Timer < 70.0 * 3.0) Then
+					msg\Msg = "A keycard is required to operate this door."
+					msg\Timer = 70.0 * 6.0
 				EndIf
 			EndIf
 			Return
@@ -2609,9 +2627,9 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 			
 			If Temp = -1 Then 
 				If ShowMsg = True Then
-					If (Instr(Msg, "The keycard") = 0 And Instr(Msg, "A keycard with") = 0) Or MsgTimer < 70.0 * 3.0 Then
-						Msg = "A keycard is required to operate this door."
-						MsgTimer = 70.0 * 6.0
+					If (Instr(msg\Msg, "The keycard") = 0 And Instr(msg\Msg, "A keycard with") = 0) Or msg\Timer < 70.0 * 3.0 Then
+						msg\Msg = "A keycard is required to operate this door."
+						msg\Timer = 70.0 * 6.0
 					EndIf
 				EndIf
 				Return				
@@ -2621,17 +2639,17 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 					If d\Locked = True Then
 						PlaySound_Strict(KeyCardSFX2)
 						If Temp = 1 Then 
-							Msg = "The keycard was inserted into the slot. UNKNOWN ERROR! " Chr(34) + "Do" + Chr(Rand(48, 122)) + "s th" + Chr(Rand(48, 122)) + " B" + Chr(Rand(48, 122)) + "ack " + Chr(Rand(48, 122)) + "oon howl? " + Chr(Rand(48, 122)) + "es. N" + Chr(Rand(48, 122)) + ". Ye" + Chr(Rand(48, 122)) + ". " + Chr(Rand(48, 122)) + "o." + Chr(34)
-							MsgTimer = 70.0 * 8.0
+							msg\Msg = "The keycard was inserted into the slot. UNKNOWN ERROR! " Chr(34) + "Do" + Chr(Rand(48, 122)) + "s th" + Chr(Rand(48, 122)) + " B" + Chr(Rand(48, 122)) + "ack " + Chr(Rand(48, 122)) + "oon howl? " + Chr(Rand(48, 122)) + "es. N" + Chr(Rand(48, 122)) + ". Ye" + Chr(Rand(48, 122)) + ". " + Chr(Rand(48, 122)) + "o." + Chr(34)
+							msg\Timer = 70.0 * 8.0
 						Else
-							Msg = "The keycard was inserted into the slot but nothing happened."
-							MsgTimer = 70.0 * 6.0
+							msg\Msg = "The keycard was inserted into the slot but nothing happened."
+							msg\Timer = 70.0 * 6.0
 						EndIf
 						Return
 					Else
 						PlaySound_Strict(KeyCardSFX1)
-						Msg = "The keycard was inserted into the slot."
-						MsgTimer = 70.0 * 6.0
+						msg\Msg = "The keycard was inserted into the slot."
+						msg\Timer = 70.0 * 6.0
 					EndIf
 				EndIf
 			Else
@@ -2640,19 +2658,19 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 					PlaySound_Strict(KeyCardSFX2)					
 					If d\Locked = True Then
 						If Temp = 1 Then 
-							Msg = "The keycard was inserted into the slot. UNKNOWN ERROR! " +  Chr(34) + "Do" + Chr(Rand(48, 122)) + "s th" + Chr(Rand(48, 122)) + " B" + Chr(Rand(48, 122)) + "ack " + Chr(Rand(48, 122)) + "oon howl? " + Chr(Rand(48, 122)) + "es. N" + Chr(Rand(48, 122)) + ". Ye" + Chr(Rand(48, 122)) + ". " + Chr(Rand(48, 122)) + "o." + Chr(34)
-							MsgTimer = 70.0 * 8.0
+							msg\Msg = "The keycard was inserted into the slot. UNKNOWN ERROR! " +  Chr(34) + "Do" + Chr(Rand(48, 122)) + "s th" + Chr(Rand(48, 122)) + " B" + Chr(Rand(48, 122)) + "ack " + Chr(Rand(48, 122)) + "oon howl? " + Chr(Rand(48, 122)) + "es. N" + Chr(Rand(48, 122)) + ". Ye" + Chr(Rand(48, 122)) + ". " + Chr(Rand(48, 122)) + "o." + Chr(34)
+							msg\Timer = 70.0 * 8.0
 						Else
-							Msg = "The keycard was inserted into the slot but nothing happened."
-							MsgTimer = 70.0 * 6.0
+							msg\Msg = "The keycard was inserted into the slot but nothing happened."
+							msg\Timer = 70.0 * 6.0
 						EndIf
 					Else
 						If Temp = 1 Then 
-							Msg = "The keycard was inserted into the slot. UNKNOWN ERROR! " + Chr(34) + "Do" + Chr(Rand(48, 122)) + "s th" + Chr(Rand(48, 122)) + " B" + Chr(Rand(48, 122)) + "ack " + Chr(Rand(48, 122)) + "oon howl? " + Chr(Rand(48, 122)) + "es. N" + Chr(Rand(48, 122)) + ". Ye" + Chr(Rand(48, 122)) + ". " + Chr(Rand(48, 122)) + "o." + Chr(34)
-							MsgTimer = 70.0 * 8.0
+							msg\Msg = "The keycard was inserted into the slot. UNKNOWN ERROR! " + Chr(34) + "Do" + Chr(Rand(48, 122)) + "s th" + Chr(Rand(48, 122)) + " B" + Chr(Rand(48, 122)) + "ack " + Chr(Rand(48, 122)) + "oon howl? " + Chr(Rand(48, 122)) + "es. N" + Chr(Rand(48, 122)) + ". Ye" + Chr(Rand(48, 122)) + ". " + Chr(Rand(48, 122)) + "o." + Chr(34)
+							msg\Timer = 70.0 * 8.0
 						Else
-							Msg = "A keycard with security clearance " + (d\KeyCard - 2) + " or higher is required to operate this door."
-							MsgTimer = 70.0 * 6.0
+							msg\Msg = "A keycard with security clearance " + (d\KeyCard - 2) + " or higher is required to operate this door."
+							msg\Timer = 70.0 * 6.0
 						EndIf
 					EndIf
 				EndIf
@@ -2667,15 +2685,15 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 		SelectedItem = Null
 		If Temp <> 0 Then
 			PlaySound_Strict(ScannerSFX1)
-			If Instr(Msg, "You placed your") = 0 Or MsgTimer < 70.0 * 3.0 Then
-				Msg = "You place the palm of the hand onto the scanner. The scanner reads: " + Chr(34) + "DNA verified. Access granted." + Chr(34)
+			If Instr(msg\Msg, "You placed your") = 0 Or msg\Timer < 70.0 * 3.0 Then
+				msg\Msg = "You place the palm of the hand onto the scanner. The scanner reads: " + Chr(34) + "DNA verified. Access granted." + Chr(34)
 			EndIf
-			MsgTimer = 70.0 * 10.0
+			msg\Timer = 70.0 * 10.0
 		Else
 			If ShowMsg = True Then 
 				PlaySound_Strict(ScannerSFX2)
-				Msg = "You placed your palm onto the scanner. The scanner reads: " + Chr(34) + "DNA does not match known sample. Access denied." + Chr(34)
-				MsgTimer = 70.0 * 10.0
+				msg\Msg = "You placed your palm onto the scanner. The scanner reads: " + Chr(34) + "DNA does not match known sample. Access denied." + Chr(34)
+				msg\Timer = 70.0 * 10.0
 			EndIf
 			Return			
 		EndIf
@@ -2686,49 +2704,49 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 					PlaySound_Strict(ButtonSFX2)
 					If PlayerRoom\RoomTemplate\Name <> "room2elevator" Then
                         If d\Open Then
-                            Msg = "You pushed the button but nothing happened."
+                            msg\Msg = "You pushed the button but nothing happened."
                         Else    
-                            Msg = "The door appears to be locked."
+                            msg\Msg = "The door appears to be locked."
                         EndIf    
                     Else
-                        Msg = "The elevator appears to be broken."
+                        msg\Msg = "The elevator appears to be broken."
                     EndIf
-					MsgTimer = 70.0 * 6.0
+					msg\Timer = 70.0 * 6.0
 				Else
 					If d\IsElevatorDoor = 1 Then
-						Msg = "You called the elevator."
-						MsgTimer = 70.0 * 6.0
+						msg\Msg = "You called the elevator."
+						msg\Timer = 70.0 * 6.0
 					ElseIf d\IsElevatorDoor = 3 Then
-						Msg = "The elevator is already on this floor."
-						MsgTimer = 70.0 * 6.0
-					ElseIf Msg <> "You called the elevator."
-						If Msg = "You already called the elevator." Or MsgTimer < 70.0 * 3.0
+						msg\Msg = "The elevator is already on this floor."
+						msg\Timer = 70.0 * 6.0
+					ElseIf msg\Msg <> "You called the elevator."
+						If msg\Msg = "You already called the elevator." Or msg\Timer < 70.0 * 3.0
 							Select Rand(10)
 								Case 1
 									;[Block]
-									Msg = "Stop spamming the button."
-									MsgTimer = 70.0 * 6.0
+									msg\Msg = "Stop spamming the button."
+									msg\Timer = 70.0 * 6.0
 									;[End Block]
 								Case 2
 									;[Block]
-									Msg = "Pressing it harder does not make the elevator come faster."
-									MsgTimer = 70.0 * 6.0
+									msg\Msg = "Pressing it harder does not make the elevator come faster."
+									msg\Timer = 70.0 * 6.0
 									;[End Block]
 								Case 3
 									;[Block]
-									Msg = "If you continue pressing this button I will generate a Memory Access Violation."
-									MsgTimer = 70.0 * 6.0
+									msg\Msg = "If you continue pressing this button I will generate a Memory Access Violation."
+									msg\Timer = 70.0 * 6.0
 									;[End Block]
 								Default
 									;[Block]
-									Msg = "You already called the elevator."
-									MsgTimer = 70.0 * 6.0
+									msg\Msg = "You already called the elevator."
+									msg\Timer = 70.0 * 6.0
 									;[End Block]
 							End Select
 						EndIf
 					Else
-						Msg = "You already called the elevator."
-						MsgTimer = 70.0 * 6.0
+						msg\Msg = "You already called the elevator."
+						msg\Timer = 70.0 * 6.0
 					EndIf
 				EndIf
 			EndIf
@@ -2841,7 +2859,7 @@ FlushMouse()
 
 DrawLoading(100, True)
 
-LoopDelay = MilliSecs()
+fpst\LoopDelay = MilliSecs()
 
 Global UpdateParticles_Time# = 0.0
 
@@ -2897,24 +2915,22 @@ Global I_Zone.MapZones = New MapZones
 Repeat
 	Cls
 	
-	Local tt.TextureTemplate = First TextureTemplate
+	fpst\CurTime = MilliSecs2()
+	ElapsedTime = (fpst\CurTime - fpst\PrevTime) / 1000.0
+	fpst\PrevTime = fpst\CurTime
+	fpst\PrevFPSFactor = fpst\FPSFactor[0]
+	fpst\FPSFactor[0] = Max(Min(ElapsedTime * 70.0, 5.0), 0.2)
+	fpst\FPSFactor[1] = fpst\FPSFactor[0]
 	
-	CurTime = MilliSecs2()
-	ElapsedTime = (CurTime - PrevTime) / 1000.0
-	PrevTime = CurTime
-	PrevFPSFactor = FPSfactor
-	FPSfactor = Max(Min(ElapsedTime * 70.0, 5.0), 0.2)
-	FPSfactor2 = FPSfactor
-	
-	If MenuOpen Or InvOpen Or OtherOpen <> Null Or ConsoleOpen Or SelectedDoor <> Null Or SelectedScreen <> Null Or Using294 Then FPSfactor = 0.0
+	If MenuOpen Or InvOpen Or OtherOpen <> Null Or ConsoleOpen Or SelectedDoor <> Null Or SelectedScreen <> Null Or Using294 Then fpst\FPSFactor[0] = 0.0
 	
 	If FrameLimit > 0 Then
 	    ; ~ Frame Limit
-		Local WaitingTime% = (1000.0 / FrameLimit) - (MilliSecs2() - LoopDelay)
+		Local WaitingTime% = (1000.0 / FrameLimit) - (MilliSecs2() - fpst\LoopDelay)
 		
 		Delay(WaitingTime)
 		
-		LoopDelay = MilliSecs2()
+		fpst\LoopDelay = MilliSecs2()
 	EndIf
 	
 	; ~ Counting the fps
@@ -2942,7 +2958,7 @@ Repeat
 		
 		If (Not MouseDown1) And (Not MouseHit1) Then GrabbedEntity = 0
 	Else
-		Input_ResetTime = Max(Input_ResetTime - FPSfactor, 0.0)
+		Input_ResetTime = Max(Input_ResetTime - fpst\FPSFactor[0], 0.0)
 	EndIf
 	
 	UpdateMusic()
@@ -2963,394 +2979,9 @@ Repeat
 		EndIf
 		UpdateMainMenu()
 	Else
-		UpdateStreamSounds()
-		
-		ShouldPlay = Min(PlayerZone, 2.0)
-		
-		DrawHandIcon = False
-		
-		RestoreSanity = True
-		ShouldEntitiesFall = True
-		
-		If FPSfactor > 0.0 And PlayerRoom\RoomTemplate\Name <> "dimension1499" Then UpdateSecurityCams()
-		
-		If PlayerRoom\RoomTemplate\Name <> "pocketdimension" And PlayerRoom\RoomTemplate\Name <> "gatea" And PlayerRoom\RoomTemplate\Name <> "gateb" And (Not MenuOpen) And (Not ConsoleOpen) And (Not InvOpen) Then 
-			
-			If Rand(1500) = 1 Then
-				For i = 0 To 5
-					If AmbientSFX(i, CurrAmbientSFX) <> 0 Then
-						If ChannelPlaying(AmbientSFXCHN) = False Then FreeSound_Strict(AmbientSFX(i, CurrAmbientSFX)) : AmbientSFX(i,CurrAmbientSFX) = 0
-					EndIf			
-				Next
-				
-				PositionEntity(SoundEmitter, EntityX(Camera) + Rnd(-1.0, 1.0), 0.0, EntityZ(Camera) + Rnd(-1.0, 1.0))
-				
-				If Rand(3) = 1 Then PlayerZone = 3
-				
-				If PlayerRoom\RoomTemplate\Name = "room173intro" Then 
-					PlayerZone = 4
-				ElseIf PlayerRoom\RoomTemplate\Name = "room860"
-					For e.Events = Each Events
-						If e\EventName = "room860" Then
-							If e\EventState = 1.0 Then
-								PlayerZone = 5
-								PositionEntity(SoundEmitter, EntityX(SoundEmitter), 30.0, EntityZ(SoundEmitter))
-							EndIf
-							Exit
-						EndIf
-					Next
-				EndIf
-				
-				CurrAmbientSFX = Rand(0, AmbientSFXAmount(PlayerZone) - 1)
-				
-				Select PlayerZone
-					Case 0, 1, 2
-						;[Block]
-						If AmbientSFX(PlayerZone, CurrAmbientSFX) = 0 Then AmbientSFX(PlayerZone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Zone" + (PlayerZone + 1) + "\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
-						;[End Block]
-					Case 3
-						;[Block]
-						If AmbientSFX(PlayerZone, CurrAmbientSFX) = 0 Then AmbientSFX(PlayerZone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\General\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
-						;[End Block]
-					Case 4
-						;[Block]
-						If AmbientSFX(PlayerZone, CurrAmbientSFX) = 0 Then AmbientSFX(PlayerZone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Pre-breach\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
-						;[End Block]
-					Case 5
-						;[Block]
-						If AmbientSFX(PlayerZone, CurrAmbientSFX) = 0 Then AmbientSFX(PlayerZone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Forest\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
-						;[End Block]
-				End Select
-				
-				AmbientSFXCHN = PlaySound2(AmbientSFX(PlayerZone, CurrAmbientSFX), Camera, SoundEmitter)
-			EndIf
-			UpdateSoundOrigin(AmbientSFXCHN, Camera, SoundEmitter)
-			
-			If Rand(50000) = 3 Then
-				Local RN$ = PlayerRoom\RoomTemplate\Name
-				
-				If RN <> "room860" And RN <> "room1123" And RN <> "room173intro" And RN <> "dimension1499" And RN <> "pocketdimension" Then
-					If FPSfactor > 0.0 Then LightBlink = Rnd(1.0, 2.0)
-					PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(1, 8) + ".ogg"))
-				EndIf 
-			EndIf
-		EndIf
-		
-		UpdateCheckpoint1 = False
-		UpdateCheckpoint2 = False
-		
-		If (Not MenuOpen) And (Not InvOpen) And (OtherOpen = Null) And (SelectedDoor = Null) And (ConsoleOpen = False) And (Using294 = False) And (SelectedScreen = Null) And EndingTimer >= 0.0 Then
-			LightVolume = CurveValue(TempLightVolume, LightVolume, 50.0)
-			CameraFogRange(Camera, CameraFogNear * LightVolume, CameraFogFar * LightVolume)
-			CameraFogColor(Camera, 0.0, 0.0, 0.0)
-			CameraFogMode(Camera, 1)
-			CameraRange(Camera, 0.05, Min(CameraFogFar * LightVolume * 1.5, 28.0))	
-			If PlayerRoom\RoomTemplate\Name <> "pocketdimension" Then
-				CameraClsColor(Camera, 0.0, 0.0, 0.0)
-			EndIf
-			
-			AmbientLight(Brightness, Brightness, Brightness)
-			PlayerSoundVolume = CurveValue(0.0, PlayerSoundVolume, 5.0)
-			
-			CanSave = True
-			UpdateDeafPlayer()
-			UpdateEmitters()
-			MouseLook()
-			If PlayerRoom\RoomTemplate\Name = "dimension1499" And QuickLoadPercent > 0 And QuickLoadPercent < 100
-				ShouldEntitiesFall = False
-			EndIf
-			MovePlayer()
-			InFacility = CheckForPlayerInFacility()
-			If PlayerRoom\RoomTemplate\Name = "dimension1499"
-				If QuickLoadPercent = -1 Or QuickLoadPercent = 100
-					UpdateDimension1499()
-				EndIf
-				UpdateLeave1499()
-			ElseIf PlayerRoom\RoomTemplate\Name = "gatea" Or (PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(Collider) > 1040.0 * RoomScale)
-				UpdateDoors()
-				If QuickLoadPercent = -1 Or QuickLoadPercent = 100
-					UpdateEndings()
-				EndIf
-				UpdateScreens()
-				UpdateRoomLights(Camera)
-			Else
-				UpdateDoors()
-				If QuickLoadPercent = -1 Or QuickLoadPercent = 100
-					UpdateEvents()
-				EndIf
-				UpdateScreens()
-				TimeCheckpointMonitors()
-				Update294()
-				UpdateRoomLights(Camera)
-			EndIf
-			UpdateDecals()
-			UpdateMTF()
-			UpdateNPCs()
-			UpdateItems()
-			UpdateParticles()
-			Use427()
-			UpdateMonitorSaving()
-			; ~ Added a simple code for updating the Particles function depending on the FPSFactor (still WIP, might not be the final version of it) -- ENDSHN
-			UpdateParticles_Time = Min(1.0, UpdateParticles_Time + FPSfactor)
-			If UpdateParticles_Time = 1.0
-				UpdateParticles_Time = 0.0
-			EndIf
-		EndIf
-		
-		If chs\InfiniteStamina Then Stamina = Min(100.0, Stamina + (100.0 - Stamina) * 0.01 * FPSfactor)
-		If chs\NoBlink Then BlinkTimer = Min(BLINKFREQ, BlinkTimer + (BLINKFREQ + BlinkTimer) * 0.01 * FPSfactor)
-		
-		If FPSfactor = 0.0
-			UpdateWorld(0)
-		Else
-			UpdateWorld()
-			ManipulateNPCBones()
-		EndIf
-		RenderWorld2()
-		
-		BlurVolume = Min(CurveValue(0.0, BlurVolume, 20.0), 0.95)
-		If BlurTimer > 0.0 Then
-			BlurVolume = Max(Min(0.95, BlurTimer / 1000.0), BlurVolume)
-			BlurTimer = Max(BlurTimer - FPSfactor, 0.0)
-		End If
-		
-		UpdateBlur(BlurVolume)
-		
-		Local DarkA# = 0.0
-		
-		If (Not MenuOpen)  Then
-			If Sanity < 0.0 Then
-				If RestoreSanity Then Sanity = Min(Sanity + FPSfactor, 0.0)
-				If Sanity < -200.0 Then 
-					DarkA = Max(Min((-Sanity - 200.0) / 700.0, 0.6), DarkA)
-					If KillTimer >= 0.0 Then 
-						HeartBeatVolume = Min(Abs(Sanity + 20.00) / 500.0, 1.0)
-						HeartBeatRate = Max(70.0 + Abs(Sanity + 200.0) / 6.0, HeartBeatRate)
-					EndIf
-				EndIf
-			End If
-			
-			If EyeStuck > 0.0 Then 
-				BlinkTimer = BLINKFREQ
-				EyeStuck = Max(EyeStuck - FPSfactor, 0.0)
-				
-				If EyeStuck < 9000.0 Then BlurTimer = Max(BlurTimer, (9000.0 - EyeStuck) * 0.5)
-				If EyeStuck < 6000.0 Then DarkA = Min(Max(DarkA, (6000.0 - EyeStuck) / 5000.0), 1.0)
-				If EyeStuck < 9000.0 And EyeStuck + FPSfactor >= 9000.0 Then 
-					Msg = "The eyedrops are causing your eyes to tear up."
-					MsgTimer = 70.0 * 6.0
-				EndIf
-			EndIf
-			
-			If BlinkTimer < 0.0 Then
-				If BlinkTimer > -5.0 Then
-					DarkA = Max(DarkA, Sin(Abs(BlinkTimer * 18.0)))
-				ElseIf BlinkTimer > -15.0
-					DarkA = 1.0
-				Else
-					DarkA = Max(DarkA, Abs(Sin(BlinkTimer * 18.0)))
-				EndIf
-				
-				If BlinkTimer =< -20.0 Then
-					; ~ Randomizes the frequency of blinking. Scales with difficulty.
-					Select SelectedDifficulty\OtherFactors
-						Case EASY
-							;[Block]
-							BLINKFREQ = Rnd(490.0, 700.0)
-							;[End Block]
-						Case NORMAL
-							;[Block]
-							BLINKFREQ = Rnd(455.0, 665.0)
-							;[End Block]
-						Case HARD
-							;[Block]
-							BLINKFREQ = Rnd(420.0, 630.0)
-							;[End Block]
-					End Select 
-					BlinkTimer = BLINKFREQ
-				EndIf
-				
-				BlinkTimer = BlinkTimer - FPSfactor
-			Else
-				BlinkTimer = BlinkTimer - FPSfactor * 0.6 * BlinkEffect
-				If WearingNightVision = 0 Then
-					If EyeIrritation > 0.0 Then BlinkTimer = BlinkTimer - Min(EyeIrritation / 100.0 + 1.0, 4.0) * FPSfactor
-				EndIf
-				
-				DarkA = Max(DarkA, 0.0)
-			End If
-			
-			EyeIrritation = Max(0.0, EyeIrritation - FPSfactor)
-			
-			If BlinkEffectTimer > 0.0 Then
-				BlinkEffectTimer = BlinkEffectTimer - (FPSfactor / 70.0)
-			Else
-				If BlinkEffect <> 1.0 Then BlinkEffect = 1.0
-			EndIf
-			
-			LightBlink = Max(LightBlink - (FPSfactor / 35.0), 0.0)
-			If LightBlink > 0.0 And WearingNightVision = 0 And (Not chs\NoBlink) Then DarkA = Min(Max(DarkA, LightBlink * Rnd(0.3, 0.8)), 1.0)
-			
-			If Using294 Then DarkA = 1.0
-			
-			If WearingNightVision = 0 Then DarkA = Max((1.0 - SecondaryLightOn) * 0.9, DarkA)
-			
-			If KillTimer < 0.0 Then
-				InvOpen = False
-				SelectedItem = Null
-				SelectedScreen = Null
-				SelectedMonitor = Null
-				BlurTimer = Abs(KillTimer * 5.0)
-				KillTimer = KillTimer - (FPSfactor * 0.8)
-				If KillTimer < -360.0 Then 
-					MenuOpen = True 
-					If SelectedEnding <> "" Then EndingTimer = Min(KillTimer, -0.1)
-				EndIf
-				DarkA = Max(DarkA, Min(Abs(KillTimer / 400.0), 1.0))
-			EndIf
-			
-			If FallTimer < 0.0 Then
-				If SelectedItem <> Null Then
-					If Instr(SelectedItem\ItemTemplate\TempName, "hazmatsuit") Or Instr(SelectedItem\ItemTemplate\TempName, "vest") Then
-						If WearingHazmat = 0 And WearingVest = 0 Then
-							DropItem(SelectedItem)
-						EndIf
-					EndIf
-				EndIf
-				InvOpen = False
-				SelectedItem = Null
-				SelectedScreen = Null
-				SelectedMonitor = Null
-				BlurTimer = Abs(FallTimer * 10)
-				FallTimer = FallTimer - FPSfactor
-				DarkA = Max(DarkA, Min(Abs(FallTimer / 400.0), 1.0))				
-			EndIf
-			
-			If SelectedItem <> Null Then
-				If SelectedItem\ItemTemplate\TempName = "navigator" Or SelectedItem\ItemTemplate\TempName = "nav" Then DarkA = Max(DarkA, 0.5)
-			End If
-			If SelectedScreen <> Null Then DarkA = Max(DarkA, 0.5)
-			
-			EntityAlpha(tt\OverlayID[6], DarkA)	
-		EndIf
-		
-		If LightFlash > 0.0 Then
-			ShowEntity(tt\OverlayID[7])
-			EntityAlpha(tt\OverlayID[7], Max(Min(LightFlash + Rnd(-0.2, 0.2), 1.0), 0.0))
-			LightFlash = Max(LightFlash - (FPSfactor / 70.0), 0.0)
-		Else
-			HideEntity(tt\OverlayID[7])
-		EndIf
-		
-		EntityColor(tt\OverlayID[7], 255.0, 255.0, 255.0)
-		
-		If KeyHit(KEY_INV) And VomitTimer >= 0.0 Then
-			If (Not UnableToMove) And (Not IsZombie) And (Not Using294) Then
-				Local W$ = ""
-				Local V# = 0
-				
-				If SelectedItem <> Null
-					W = SelectedItem\ItemTemplate\TempName
-					V = SelectedItem\State
-				EndIf
-				If (W <> "vest" And W <> "finevest" And W <> "hazmatsuit" And W <> "hazmatsuit2" And W <> "hazmatsuit3") Or V = 0 Or V = 100
-					If InvOpen Then
-						ResumeSounds()
-						MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : Mouse_X_Speed_1 = 0.0 : Mouse_Y_Speed_1 = 0.0
-					Else
-						PauseSounds()
-					EndIf
-					InvOpen = (Not InvOpen)
-					If OtherOpen <> Null Then OtherOpen = Null
-					SelectedItem = Null
-				EndIf
-			EndIf
-		EndIf
-		
-		If KeyHit(KEY_SAVE) Then
-			If SelectedDifficulty\saveType = SAVEANYWHERE Then
-				RN = PlayerRoom\RoomTemplate\Name
-				If RN = "room173intro" Or (RN = "gateb" And EntityY(Collider) > 1040.0 * RoomScale) Or RN = "gatea"
-					Msg = "You cannot save in this location."
-					MsgTimer = 70.0 * 6.0
-				ElseIf (Not CanSave) Or QuickLoadPercent > -1
-					Msg = "You cannot save at this moment."
-					MsgTimer = 70.0 * 6.0
-					If QuickLoadPercent > -1
-						Msg = Msg + " (game is loading)"
-					EndIf
-				Else
-					SaveGame(SavePath + CurrSave + "\")
-				EndIf
-			ElseIf SelectedDifficulty\SaveType = SAVEONSCREENS
-				If SelectedScreen = Null And SelectedMonitor = Null Then
-					Msg = "Saving is only permitted on clickable monitors scattered throughout the facility."
-					MsgTimer = 70.0 * 6.0
-				Else
-					RN = PlayerRoom\RoomTemplate\Name
-					If RN = "room173intro" Or (RN = "gateb" And EntityY(Collider) > 1040.0 * RoomScale) Or RN = "gatea"
-						Msg = "You cannot save in this location."
-						MsgTimer = 70.0 * 6.0
-					ElseIf (Not CanSave) Or QuickLoadPercent > -1
-						Msg = "You cannot save at this moment."
-						MsgTimer = 70.0 * 6.0
-						If QuickLoadPercent > -1
-							Msg = Msg + " (game is loading)"
-						EndIf
-					Else
-						If SelectedScreen <> Null
-							GameSaved = False
-							Playable = True
-							DropSpeed = 0.0
-						EndIf
-						SaveGame(SavePath + CurrSave + "\")
-					EndIf
-				EndIf
-			Else
-				Msg = "Quick saving is disabled."
-				MsgTimer = 70.0 * 6.0
-			EndIf
-		Else If SelectedDifficulty\SaveType = SAVEONSCREENS And (SelectedScreen <> Null Or SelectedMonitor <> Null)
-			If (Msg <> "Game progress saved." And Msg <> "You cannot save in this location." And Msg <> "You cannot save at this moment.") Or MsgTimer =< 0 Then
-				Msg = "Press " + KeyName(KEY_SAVE) + " to save."
-				MsgTimer = 70.0 * 6.0
-			EndIf
-			If MouseHit2 Then SelectedMonitor = Null
-		EndIf
-		
-		If KeyHit(KEY_CONSOLE) Then
-			If CanOpenConsole
-				If ConsoleOpen Then
-					UsedConsole = True
-					ResumeSounds()
-					MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : Mouse_X_Speed_1 = 0.0 : Mouse_Y_Speed_1 = 0.0
-				Else
-					PauseSounds()
-				EndIf
-				ConsoleOpen = (Not ConsoleOpen)
-				FlushKeys()
-			EndIf
-		EndIf
-		
-		DrawGUI()
-		
-		UpdateMessages()
-		
-		If EndingTimer < 0.0 Then
-			If SelectedEnding <> "" Then DrawEnding()
-		Else
-			DrawMenu()			
-		EndIf
-		
-		UpdateConsole()
-		
+		MainLoop()
 		Color(255, 255, 255)
 		If ShowFPS Then AASetFont(fo\ConsoleFont) : AAText(20, 20, "FPS: " + FPS) : AASetFont(fo\FontID[0])
-		
-		DrawQuickLoading()
-		
-		UpdateAchievementMsg()
-		RenderAchievementMsg()
 	End If
 	
 	If BorderlessWindowed Then
@@ -3410,6 +3041,8 @@ Forever
 
 Function UpdateMessages()
 	Local e.Events
+	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
+	Local msg.Messages = First Messages
 	
 	If PlayerRoom <> Null Then
 		If PlayerRoom\RoomTemplate\Name = "room173intro" Then
@@ -3417,8 +3050,8 @@ Function UpdateMessages()
 				If e\EventName = "room173intro" Then
 					If e\EventState3 >= 40.0 And e\EventState3 < 50.0 Then
 						If InvOpen Then
-							Msg = "Double click on the document to view it."
-							MsgTimer = 70.0 * 6.0
+							msg\Msg = "Double click on the document to view it."
+							msg\Timer = 70.0 * 6.0
 							e\EventState3 = 50.0
 						EndIf
 					EndIf
@@ -3427,7 +3060,7 @@ Function UpdateMessages()
 		EndIf
 	EndIf
 	
-	If MsgTimer > 0.0 Then
+	If msg\Timer > 0.0 Then
 		Local Temp% = False
 		
 		If (Not InvOpen) Then
@@ -3440,26 +3073,422 @@ Function UpdateMessages()
 		
 		If (Not Temp) Then
 			Color(0, 0, 0)
-			AAText((GraphicWidth / 2) + 1, (GraphicHeight / 2) + 201, Msg, True, False, Min(MsgTimer / 2.0, 255.0) / 255.0)
+			AAText((GraphicWidth / 2) + 1, (GraphicHeight / 2) + 201, msg\Msg, True, False, Min(msg\Timer / 2.0, 255.0) / 255.0)
 			Color(255, 255, 255)
-			If Left(Msg, 14) = "Blitz3D Error!" Then
+			If Left(msg\Msg, 14) = "Blitz3D Error!" Then
 				Color(255, 0, 0)
 			EndIf
-			AAText((GraphicWidth / 2), (GraphicHeight / 2) + 200, Msg, True, False, Min(MsgTimer / 2.0, 255.0) / 255.0)
+			AAText((GraphicWidth / 2), (GraphicHeight / 2) + 200, msg\Msg, True, False, Min(msg\Timer / 2.0, 255.0) / 255.0)
 		Else
 			Color(0, 0, 0)
-			AAText((GraphicWidth / 2) + 1, (GraphicHeight * 0.94) + 1, Msg, True, False, Min(MsgTimer / 2.0, 255.0) / 255.0)
+			AAText((GraphicWidth / 2) + 1, (GraphicHeight * 0.94) + 1, msg\Msg, True, False, Min(msg\Timer / 2.0, 255.0) / 255.0)
 			Color(255, 255, 255)
-			If Left(Msg, 14) = "Blitz3D Error!" Then
+			If Left(msg\Msg, 14) = "Blitz3D Error!" Then
 				Color(255, 0, 0)
 			EndIf
-			AAText((GraphicWidth / 2), (GraphicHeight * 0.94), Msg, True, False, Min(MsgTimer / 2.0, 255.0) / 255.0)
+			AAText((GraphicWidth / 2), (GraphicHeight * 0.94), msg\Msg, True, False, Min(msg\Timer / 2.0, 255.0) / 255.0)
 		EndIf
-		MsgTimer = MsgTimer - FPSfactor2 
+		msg\Timer = msg\Timer - fpst\FPSFactor[1] 
 	End If
 End Function
 
-Function Kill()
+Function MainLoop()
+	Local e.Events
+	Local fo.Fonts = First Fonts
+	Local tt.TextureTemplate = First TextureTemplate
+	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
+	Local msg.Messages = First Messages
+	
+	UpdateStreamSounds()
+	
+	ShouldPlay = Min(PlayerZone, 2.0)
+	
+	DrawHandIcon = False
+	
+	RestoreSanity = True
+	ShouldEntitiesFall = True
+	
+	If fpst\FPSFactor[0] > 0.0 And PlayerRoom\RoomTemplate\Name <> "dimension1499" Then UpdateSecurityCams()
+	
+	If PlayerRoom\RoomTemplate\Name <> "pocketdimension" And PlayerRoom\RoomTemplate\Name <> "gatea" And PlayerRoom\RoomTemplate\Name <> "gateb" And (Not MenuOpen) And (Not ConsoleOpen) And (Not InvOpen) Then 
+		
+		If Rand(1500) = 1 Then
+			For i = 0 To 5
+				If AmbientSFX(i, CurrAmbientSFX) <> 0 Then
+					If ChannelPlaying(AmbientSFXCHN) = False Then FreeSound_Strict(AmbientSFX(i, CurrAmbientSFX)) : AmbientSFX(i,CurrAmbientSFX) = 0
+				EndIf			
+			Next
+			
+			PositionEntity(SoundEmitter, EntityX(Camera) + Rnd(-1.0, 1.0), 0.0, EntityZ(Camera) + Rnd(-1.0, 1.0))
+			
+			If Rand(3) = 1 Then PlayerZone = 3
+			
+			If PlayerRoom\RoomTemplate\Name = "room173intro" Then 
+				PlayerZone = 4
+			ElseIf PlayerRoom\RoomTemplate\Name = "room860"
+				For e.Events = Each Events
+					If e\EventName = "room860" Then
+						If e\EventState = 1.0 Then
+							PlayerZone = 5
+							PositionEntity(SoundEmitter, EntityX(SoundEmitter), 30.0, EntityZ(SoundEmitter))
+						EndIf
+						Exit
+					EndIf
+				Next
+			EndIf
+			
+			CurrAmbientSFX = Rand(0, AmbientSFXAmount(PlayerZone) - 1)
+			
+			Select PlayerZone
+				Case 0, 1, 2
+					;[Block]
+					If AmbientSFX(PlayerZone, CurrAmbientSFX) = 0 Then AmbientSFX(PlayerZone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Zone" + (PlayerZone + 1) + "\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
+					;[End Block]
+				Case 3
+					;[Block]
+					If AmbientSFX(PlayerZone, CurrAmbientSFX) = 0 Then AmbientSFX(PlayerZone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\General\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
+					;[End Block]
+				Case 4
+					;[Block]
+					If AmbientSFX(PlayerZone, CurrAmbientSFX) = 0 Then AmbientSFX(PlayerZone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Pre-breach\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
+					;[End Block]
+				Case 5
+					;[Block]
+					If AmbientSFX(PlayerZone, CurrAmbientSFX) = 0 Then AmbientSFX(PlayerZone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Forest\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
+					;[End Block]
+			End Select
+			
+			AmbientSFXCHN = PlaySound2(AmbientSFX(PlayerZone, CurrAmbientSFX), Camera, SoundEmitter)
+		EndIf
+		UpdateSoundOrigin(AmbientSFXCHN, Camera, SoundEmitter)
+		
+		If Rand(50000) = 3 Then
+			Local RN$ = PlayerRoom\RoomTemplate\Name
+			
+			If RN <> "room860" And RN <> "room1123" And RN <> "room173intro" And RN <> "dimension1499" And RN <> "pocketdimension" Then
+				If fpst\FPSFactor[0] > 0.0 Then LightBlink = Rnd(1.0, 2.0)
+				PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(1, 8) + ".ogg"))
+			EndIf 
+		EndIf
+	EndIf
+	
+	UpdateCheckpoint1 = False
+	UpdateCheckpoint2 = False
+	
+	If (Not MenuOpen) And (Not InvOpen) And (OtherOpen = Null) And (SelectedDoor = Null) And (ConsoleOpen = False) And (Using294 = False) And (SelectedScreen = Null) And EndingTimer >= 0.0 Then
+		LightVolume = CurveValue(TempLightVolume, LightVolume, 50.0)
+		CameraFogRange(Camera, CameraFogNear * LightVolume, CameraFogFar * LightVolume)
+		CameraFogColor(Camera, 0.0, 0.0, 0.0)
+		CameraFogMode(Camera, 1)
+		CameraRange(Camera, 0.05, Min(CameraFogFar * LightVolume * 1.5, 28.0))	
+		If PlayerRoom\RoomTemplate\Name <> "pocketdimension" Then
+			CameraClsColor(Camera, 0.0, 0.0, 0.0)
+		EndIf
+		
+		AmbientLight(Brightness, Brightness, Brightness)
+		PlayerSoundVolume = CurveValue(0.0, PlayerSoundVolume, 5.0)
+		
+		CanSave = True
+		UpdateDeafPlayer()
+		UpdateEmitters()
+		MouseLook()
+		If PlayerRoom\RoomTemplate\Name = "dimension1499" And QuickLoadPercent > 0 And QuickLoadPercent < 100
+			ShouldEntitiesFall = False
+		EndIf
+		MovePlayer()
+		InFacility = CheckForPlayerInFacility()
+		If PlayerRoom\RoomTemplate\Name = "dimension1499"
+			If QuickLoadPercent = -1 Or QuickLoadPercent = 100
+				UpdateDimension1499()
+			EndIf
+			UpdateLeave1499()
+		ElseIf PlayerRoom\RoomTemplate\Name = "gatea" Or (PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(Collider) > 1040.0 * RoomScale)
+			UpdateDoors()
+			If QuickLoadPercent = -1 Or QuickLoadPercent = 100
+				UpdateEndings()
+			EndIf
+			UpdateScreens()
+			UpdateRoomLights(Camera)
+		Else
+			UpdateDoors()
+			If QuickLoadPercent = -1 Or QuickLoadPercent = 100
+				UpdateEvents()
+			EndIf
+			UpdateScreens()
+			TimeCheckpointMonitors()
+			Update294()
+			UpdateRoomLights(Camera)
+		EndIf
+		UpdateDecals()
+		UpdateMTF()
+		UpdateNPCs()
+		UpdateItems()
+		UpdateParticles()
+		Use427()
+		UpdateMonitorSaving()
+		; ~ Added a simple code for updating the Particles function depending on the fpst\FPSFactor[0] (still WIP, might not be the final version of it) -- ENDSHN
+		UpdateParticles_Time = Min(1.0, UpdateParticles_Time + fpst\FPSFactor[0])
+		If UpdateParticles_Time = 1.0
+			UpdateParticles_Time = 0.0
+		EndIf
+	EndIf
+	
+	If chs\InfiniteStamina Then Stamina = Min(100.0, Stamina + (100.0 - Stamina) * 0.01 * fpst\FPSFactor[0])
+	If chs\NoBlink Then BlinkTimer = Min(BLINKFREQ, BlinkTimer + (BLINKFREQ + BlinkTimer) * 0.01 * fpst\FPSFactor[0])
+	
+	If fpst\FPSFactor[0] = 0.0
+		UpdateWorld(0)
+	Else
+		UpdateWorld()
+		ManipulateNPCBones()
+	EndIf
+	RenderWorld2()
+	
+	BlurVolume = Min(CurveValue(0.0, BlurVolume, 20.0), 0.95)
+	If BlurTimer > 0.0 Then
+		BlurVolume = Max(Min(0.95, BlurTimer / 1000.0), BlurVolume)
+		BlurTimer = Max(BlurTimer - fpst\FPSFactor[0], 0.0)
+	End If
+	
+	UpdateBlur(BlurVolume)
+	
+	Local DarkA# = 0.0
+	
+	If (Not MenuOpen)  Then
+		If Sanity < 0.0 Then
+			If RestoreSanity Then Sanity = Min(Sanity + fpst\FPSFactor[0], 0.0)
+			If Sanity < -200.0 Then 
+				DarkA = Max(Min((-Sanity - 200.0) / 700.0, 0.6), DarkA)
+				If KillTimer >= 0.0 Then 
+					HeartBeatVolume = Min(Abs(Sanity + 20.00) / 500.0, 1.0)
+					HeartBeatRate = Max(70.0 + Abs(Sanity + 200.0) / 6.0, HeartBeatRate)
+				EndIf
+			EndIf
+		End If
+		
+		If EyeStuck > 0.0 Then 
+			BlinkTimer = BLINKFREQ
+			EyeStuck = Max(EyeStuck - fpst\FPSFactor[0], 0.0)
+			
+			If EyeStuck < 9000.0 Then BlurTimer = Max(BlurTimer, (9000.0 - EyeStuck) * 0.5)
+			If EyeStuck < 6000.0 Then DarkA = Min(Max(DarkA, (6000.0 - EyeStuck) / 5000.0), 1.0)
+			If EyeStuck < 9000.0 And EyeStuck + fpst\FPSFactor[0] >= 9000.0 Then 
+				msg\Msg = "The eyedrops are causing your eyes to tear up."
+				msg\Timer = 70.0 * 6.0
+			EndIf
+		EndIf
+		
+		If BlinkTimer < 0.0 Then
+			If BlinkTimer > -5.0 Then
+				DarkA = Max(DarkA, Sin(Abs(BlinkTimer * 18.0)))
+			ElseIf BlinkTimer > -15.0
+				DarkA = 1.0
+			Else
+				DarkA = Max(DarkA, Abs(Sin(BlinkTimer * 18.0)))
+			EndIf
+			
+			If BlinkTimer =< -20.0 Then
+					; ~ Randomizes the frequency of blinking. Scales with difficulty.
+				Select SelectedDifficulty\OtherFactors
+					Case EASY
+						;[Block]
+						BLINKFREQ = Rnd(490.0, 700.0)
+						;[End Block]
+					Case NORMAL
+						;[Block]
+						BLINKFREQ = Rnd(455.0, 665.0)
+						;[End Block]
+					Case HARD
+						;[Block]
+						BLINKFREQ = Rnd(420.0, 630.0)
+						;[End Block]
+				End Select 
+				BlinkTimer = BLINKFREQ
+			EndIf
+			
+			BlinkTimer = BlinkTimer - fpst\FPSFactor[0]
+		Else
+			BlinkTimer = BlinkTimer - fpst\FPSFactor[0] * 0.6 * BlinkEffect
+			If WearingNightVision = 0 Then
+				If EyeIrritation > 0.0 Then BlinkTimer = BlinkTimer - Min(EyeIrritation / 100.0 + 1.0, 4.0) * fpst\FPSFactor[0]
+			EndIf
+			
+			DarkA = Max(DarkA, 0.0)
+		End If
+		
+		EyeIrritation = Max(0.0, EyeIrritation - fpst\FPSFactor[0])
+		
+		If BlinkEffectTimer > 0.0 Then
+			BlinkEffectTimer = BlinkEffectTimer - (fpst\FPSFactor[0] / 70.0)
+		Else
+			If BlinkEffect <> 1.0 Then BlinkEffect = 1.0
+		EndIf
+		
+		LightBlink = Max(LightBlink - (fpst\FPSFactor[0] / 35.0), 0.0)
+		If LightBlink > 0.0 And WearingNightVision = 0 And (Not chs\NoBlink) Then DarkA = Min(Max(DarkA, LightBlink * Rnd(0.3, 0.8)), 1.0)
+		
+		If Using294 Then DarkA = 1.0
+		
+		If WearingNightVision = 0 Then DarkA = Max((1.0 - SecondaryLightOn) * 0.9, DarkA)
+		
+		If KillTimer < 0.0 Then
+			InvOpen = False
+			SelectedItem = Null
+			SelectedScreen = Null
+			SelectedMonitor = Null
+			BlurTimer = Abs(KillTimer * 5.0)
+			KillTimer = KillTimer - (fpst\FPSFactor[0] * 0.8)
+			If KillTimer < -360.0 Then 
+				MenuOpen = True 
+				If SelectedEnding <> "" Then EndingTimer = Min(KillTimer, -0.1)
+			EndIf
+			DarkA = Max(DarkA, Min(Abs(KillTimer / 400.0), 1.0))
+		EndIf
+		
+		If FallTimer < 0.0 Then
+			If SelectedItem <> Null Then
+				If Instr(SelectedItem\ItemTemplate\TempName, "hazmatsuit") Or Instr(SelectedItem\ItemTemplate\TempName, "vest") Then
+					If WearingHazmat = 0 And WearingVest = 0 Then
+						DropItem(SelectedItem)
+					EndIf
+				EndIf
+			EndIf
+			InvOpen = False
+			SelectedItem = Null
+			SelectedScreen = Null
+			SelectedMonitor = Null
+			BlurTimer = Abs(FallTimer * 10)
+			FallTimer = FallTimer - fpst\FPSFactor[0]
+			DarkA = Max(DarkA, Min(Abs(FallTimer / 400.0), 1.0))				
+		EndIf
+		
+		If SelectedItem <> Null Then
+			If SelectedItem\ItemTemplate\TempName = "navigator" Or SelectedItem\ItemTemplate\TempName = "nav" Then DarkA = Max(DarkA, 0.5)
+		End If
+		If SelectedScreen <> Null Then DarkA = Max(DarkA, 0.5)
+		
+		EntityAlpha(tt\OverlayID[6], DarkA)	
+	EndIf
+	
+	If LightFlash > 0.0 Then
+		ShowEntity(tt\OverlayID[7])
+		EntityAlpha(tt\OverlayID[7], Max(Min(LightFlash + Rnd(-0.2, 0.2), 1.0), 0.0))
+		LightFlash = Max(LightFlash - (fpst\FPSFactor[0] / 70.0), 0.0)
+	Else
+		HideEntity(tt\OverlayID[7])
+	EndIf
+	
+	EntityColor(tt\OverlayID[7], 255.0, 255.0, 255.0)
+	
+	If KeyHit(KEY_INV) And VomitTimer >= 0.0 Then
+		If (Not UnableToMove) And (Not IsZombie) And (Not Using294) Then
+			Local W$ = ""
+			Local V# = 0
+			
+			If SelectedItem <> Null
+				W = SelectedItem\ItemTemplate\TempName
+				V = SelectedItem\State
+			EndIf
+			If (W <> "vest" And W <> "finevest" And W <> "hazmatsuit" And W <> "hazmatsuit2" And W <> "hazmatsuit3") Or V = 0 Or V = 100
+				If InvOpen Then
+					ResumeSounds()
+					MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : Mouse_X_Speed_1 = 0.0 : Mouse_Y_Speed_1 = 0.0
+				Else
+					PauseSounds()
+				EndIf
+				InvOpen = (Not InvOpen)
+				If OtherOpen <> Null Then OtherOpen = Null
+				SelectedItem = Null
+			EndIf
+		EndIf
+	EndIf
+	
+	If KeyHit(KEY_SAVE) Then
+		If SelectedDifficulty\saveType = SAVEANYWHERE Then
+			RN = PlayerRoom\RoomTemplate\Name
+			If RN = "room173intro" Or (RN = "gateb" And EntityY(Collider) > 1040.0 * RoomScale) Or RN = "gatea"
+				msg\Msg = "You cannot save in this location."
+				msg\Timer = 70.0 * 6.0
+			ElseIf (Not CanSave) Or QuickLoadPercent > -1
+				msg\Msg = "You cannot save at this moment."
+				msg\Timer = 70.0 * 6.0
+				If QuickLoadPercent > -1
+					msg\Msg = msg\Msg + " (game is loading)"
+				EndIf
+			Else
+				SaveGame(SavePath + CurrSave + "\")
+			EndIf
+		ElseIf SelectedDifficulty\SaveType = SAVEONSCREENS
+			If SelectedScreen = Null And SelectedMonitor = Null Then
+				msg\Msg = "Saving is only permitted on clickable monitors scattered throughout the facility."
+				msg\Timer = 70.0 * 6.0
+			Else
+				RN = PlayerRoom\RoomTemplate\Name
+				If RN = "room173intro" Or (RN = "gateb" And EntityY(Collider) > 1040.0 * RoomScale) Or RN = "gatea"
+					msg\Msg = "You cannot save in this location."
+					msg\Timer = 70.0 * 6.0
+				ElseIf (Not CanSave) Or QuickLoadPercent > -1
+					msg\Msg = "You cannot save at this moment."
+					msg\Timer = 70.0 * 6.0
+					If QuickLoadPercent > -1
+						msg\Msg = msg\Msg + " (game is loading)"
+					EndIf
+				Else
+					If SelectedScreen <> Null
+						GameSaved = False
+						Playable = True
+						DropSpeed = 0.0
+					EndIf
+					SaveGame(SavePath + CurrSave + "\")
+				EndIf
+			EndIf
+		Else
+			msg\Msg = "Quick saving is disabled."
+			msg\Timer = 70.0 * 6.0
+		EndIf
+	Else If SelectedDifficulty\SaveType = SAVEONSCREENS And (SelectedScreen <> Null Or SelectedMonitor <> Null)
+		If (msg\Msg <> "Game progress saved." And msg\Msg <> "You cannot save in this location." And msg\Msg <> "You cannot save at this moment.") Or msg\Timer =< 0 Then
+			msg\Msg = "Press " + KeyName(KEY_SAVE) + " to save."
+			msg\Timer = 70.0 * 6.0
+		EndIf
+		If MouseHit2 Then SelectedMonitor = Null
+	EndIf
+	
+	If KeyHit(KEY_CONSOLE) Then
+		If CanOpenConsole
+			If ConsoleOpen Then
+				UsedConsole = True
+				ResumeSounds()
+				MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : Mouse_X_Speed_1 = 0.0 : Mouse_Y_Speed_1 = 0.0
+			Else
+				PauseSounds()
+			EndIf
+			ConsoleOpen = (Not ConsoleOpen)
+			FlushKeys()
+		EndIf
+	EndIf
+	
+	DrawGUI()
+	
+	UpdateMessages()
+	
+	If EndingTimer < 0.0 Then
+		If SelectedEnding <> "" Then DrawEnding()
+	Else
+		DrawMenu()			
+	EndIf
+	
+	UpdateConsole()
+	
+	DrawQuickLoading()
+	
+	UpdateAchievementMsg()
+	RenderAchievementMsg()
+End Function
+
+Function Kill(IsBloody% = False)
+	Local tt.TextureTemplate = First TextureTemplate
+	
 	If chs\GodMode Then Return
 	
 	If BreathCHN <> 0 Then
@@ -3467,6 +3496,8 @@ Function Kill()
 	EndIf
 	
 	If KillTimer >= 0.0 Then
+		If IsBloody Then ShowEntity(tt\OverlayID[10])
+		
 		KillAnim = Rand(0, 1)
 		PlaySound_Strict(DamageSFX(0))
 		If SelectedDifficulty\PermaDeath Then
@@ -3486,14 +3517,15 @@ End Function
 Function DrawEnding()
 	Local fo.Fonts = First Fonts
 	Local tt.TextureTemplate = First TextureTemplate
+	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
 	
 	ShowPointer()
 	
-	FPSfactor = 0.0
+	fpst\FPSFactor[0] = 0.0
 	If EndingTimer > -2000.0
-		EndingTimer = Max(EndingTimer - FPSfactor2, -1111.0)
+		EndingTimer = Max(EndingTimer - fpst\FPSFactor[1], -1111.0)
 	Else
-		EndingTimer = EndingTimer - FPSfactor2
+		EndingTimer = EndingTimer - fpst\FPSFactor[1]
 	EndIf
 	
 	GiveAchievement(Achv055)
@@ -3547,7 +3579,7 @@ Function DrawEnding()
 				Color(255, 255, 255)
 			EndIf
 			
-			If EndingTimer + FPSfactor2 > -450.0 And EndingTimer =< -450.0 Then
+			If EndingTimer + fpst\FPSFactor[1] > -450.0 And EndingTimer =< -450.0 Then
 				Select Lower(SelectedEnding)
 					Case "a1", "a2"
 						;[Block]
@@ -3690,6 +3722,7 @@ Function DrawCredits()
     Local EndLinesAmount%
 	Local LastCreditLine.CreditsLine
 	Local fo.Fonts = First Fonts
+	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
 	
     Cls
 	
@@ -3727,7 +3760,7 @@ Function DrawCredits()
 		ID = ID + 1
 	Next
 	If (Credits_Y + (24 * LastCreditLine\ID * MenuScale)) < -StringHeight(LastCreditLine\Txt)
-		CreditsTimer = CreditsTimer + (0.5 * FPSfactor2)
+		CreditsTimer = CreditsTimer + (0.5 * fpst\FPSFactor[1])
 		If CreditsTimer >= 0.0 And CreditsTimer < 255.0
 			Color(Max(Min(CreditsTimer, 255.0), 0.0), Max(Min(CreditsTimer, 255.0), 0.0), Max(Min(CreditsTimer, 255.0), 0.0))
 		ElseIf CreditsTimer >= 255.0
@@ -3790,17 +3823,19 @@ Function MovePlayer()
 	Local Sprint# = 1.0, Speed# = 0.018, i%, Angle#
 	Local Temporary#
 	Local tt.TextureTemplate = First TextureTemplate
+	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
+	Local msg.Messages = First Messages
 	
 	If SuperMan Then
 		Speed = Speed * 3.0
 		
-		SuperManTimer = SuperManTimer + FPSfactor
+		SuperManTimer = SuperManTimer + fpst\FPSFactor[0]
 		
 		CameraShake = Sin(SuperManTimer / 5.0) * (SuperManTimer / 1500.0)
 		
 		If SuperManTimer > 70.0 * 50.0 Then
-			DeathMsg = "A Class D jumpsuit found in [DATA REDACTED]. Upon further examination, the jumpsuit was found to be filled with 12.5 kilograms of blue ash-like substance. "
-			DeathMsg = DeathMsg + "Chemical analysis of the substance remains non-conclusive. Most likely related to SCP-914."
+			msg\DeathMsg = "A Class D jumpsuit found in [DATA REDACTED]. Upon further examination, the jumpsuit was found to be filled with 12.5 kilograms of blue ash-like substance. "
+			msg\DeathMsg = msg\DeathMsg + "Chemical analysis of the substance remains non-conclusive. Most likely related to SCP-914."
 			Kill()
 			ShowEntity(tt\OverlayID[0])
 		Else
@@ -3810,20 +3845,20 @@ Function MovePlayer()
 	End If
 	
 	If DeathTimer > 0.0 Then
-		DeathTimer = DeathTimer - FPSfactor
+		DeathTimer = DeathTimer - fpst\FPSFactor[0]
 		If DeathTimer < 1.0 Then DeathTimer = -1.0
 	ElseIf DeathTimer < 0.0 
 		Kill()
 	EndIf
 	
 	If CurrSpeed > 0.0 Then
-        Stamina = Min(Stamina + 0.15 * FPSfactor / 1.25, 100.0)
+        Stamina = Min(Stamina + 0.15 * fpst\FPSFactor[0] / 1.25, 100.0)
     Else
-        Stamina = Min(Stamina + 0.15 * FPSfactor * 1.25, 100.0)
+        Stamina = Min(Stamina + 0.15 * fpst\FPSFactor[0] * 1.25, 100.0)
     EndIf
 	
 	If StaminaEffectTimer > 0.0 Then
-		StaminaEffectTimer = StaminaEffectTimer - (FPSfactor / 70.0)
+		StaminaEffectTimer = StaminaEffectTimer - (fpst\FPSFactor[0] / 70.0)
 	Else
 		If StaminaEffect <> 1.0 Then StaminaEffect = 1.0
 	EndIf
@@ -3884,7 +3919,7 @@ Function MovePlayer()
 		If ((KeyDown(KEY_DOWN) Or KeyDown(KEY_UP)) Or (KeyDown(KEY_RIGHT) Or KeyDown(KEY_LEFT)) And Playable) Or ForceMove > 0 Then
 			If Crouch = False And (KeyDown(KEY_SPRINT)) And Stamina > 0.0 And (Not IsZombie) Then
 				Sprint = 2.5
-				Stamina = Stamina - FPSfactor * 0.4 * StaminaEffect
+				Stamina = Stamina - fpst\FPSFactor[0] * 0.4 * StaminaEffect
 				If Stamina =< 0.0 Then Stamina = -20.0
 			End If
 			
@@ -3908,7 +3943,7 @@ Function MovePlayer()
 			
 			Local TempCHN%
 			
-			If (Not UnableToMove) Then Shake = (Shake + FPSfactor * Min(Sprint, 1.5) * 7.0) Mod 720.0
+			If (Not UnableToMove) Then Shake = (Shake + fpst\FPSFactor[0] * Min(Sprint, 1.5) * 7.0) Mod 720.0
 			If Temp < 180.0 And (Shake Mod 360.0) >= 180.0 And KillTimer >= 0.0 Then
 				If CurrStepSFX = 0 Then
 					Temp = GetStepSound(Collider)
@@ -3959,11 +3994,11 @@ Function MovePlayer()
 		
 		Temp2 = Temp2 * NoClipSpeed
 		
-		If KeyDown(KEY_DOWN) Then MoveEntity(Collider, 0.0, 0.0, -Temp2 * FPSfactor)
-		If KeyDown(KEY_UP) Then MoveEntity(Collider, 0.0, 0.0, Temp2 * FPSfactor)
+		If KeyDown(KEY_DOWN) Then MoveEntity(Collider, 0.0, 0.0, (-Temp2) * fpst\FPSFactor[0])
+		If KeyDown(KEY_UP) Then MoveEntity(Collider, 0.0, 0.0, Temp2 * fpst\FPSFactor[0])
 		
-		If KeyDown(KEY_LEFT) Then MoveEntity(Collider, -Temp2 * FPSfactor, 0.0, 0.0)
-		If KeyDown(KEY_RIGHT) Then MoveEntity(Collider, Temp2 * FPSfactor, 0.0, 0.0)
+		If KeyDown(KEY_LEFT) Then MoveEntity(Collider, (-Temp2) * fpst\FPSFactor[0], 0.0, 0.0)
+		If KeyDown(KEY_RIGHT) Then MoveEntity(Collider, Temp2 * fpst\FPSFactor[0], 0.0, 0.0)
 		
 		ResetEntity(Collider)
 	Else
@@ -4004,7 +4039,7 @@ Function MovePlayer()
 			CurrSpeed = Max(CurveValue(0.0, CurrSpeed - 0.1, 1.0), 0.0)
 		EndIf
 		
-		If (Not UnableToMove) Then TranslateEntity(Collider, Cos(Angle) * CurrSpeed * FPSfactor, 0.0, Sin(Angle) * CurrSpeed * FPSfactor, True)
+		If (Not UnableToMove) Then TranslateEntity(Collider, Cos(Angle) * CurrSpeed * fpst\FPSFactor[0], 0.0, Sin(Angle) * CurrSpeed * fpst\FPSFactor[0], True)
 		
 		Local CollidedFloor% = False
 		
@@ -4029,17 +4064,17 @@ Function MovePlayer()
 				Local Pick# = LinePick(EntityX(Collider), EntityY(Collider), EntityZ(Collider), 0.0, -PlayerFallingPickDistance, 0.0)
 				
 				If Pick
-					DropSpeed = Min(Max(DropSpeed - 0.006 * FPSfactor, -2.0), 0.0)
+					DropSpeed = Min(Max(DropSpeed - 0.006 * fpst\FPSFactor[0], -2.0), 0.0)
 				Else
 					DropSpeed = 0
 				EndIf
 			Else
-				DropSpeed = Min(Max(DropSpeed - 0.006 * FPSfactor, -2.0), 0.0)
+				DropSpeed = Min(Max(DropSpeed - 0.006 * fpst\FPSFactor[0], -2.0), 0.0)
 			EndIf
 		EndIf
 		PlayerFallingPickDistance = 10.0
 		
-		If (Not UnableToMove) And ShouldEntitiesFall Then TranslateEntity(Collider, 0.0, DropSpeed * FPSfactor, 0.0)
+		If (Not UnableToMove) And ShouldEntitiesFall Then TranslateEntity(Collider, 0.0, DropSpeed * fpst\FPSFactor[0], 0.0)
 	EndIf
 	
 	ForceMove = False
@@ -4048,12 +4083,12 @@ Function MovePlayer()
 		Temp2 = Bloodloss
 		BlurTimer = Max(Max(Sin(MilliSecs2() / 100.0) * Bloodloss * 30.0, Bloodloss * 2.0 * (2.0 - CrouchState)), BlurTimer)
 		If I_427\Using = 0 And I_427\Timer < 70.0 * 360.0 Then
-			Bloodloss = Min(Bloodloss + (Min(Injuries, 3.5) / 300.0) * FPSfactor, 100.0)
+			Bloodloss = Min(Bloodloss + (Min(Injuries, 3.5) / 300.0) * fpst\FPSFactor[0], 100.0)
 		EndIf
 		
 		If Temp2 =< 60.0 And Bloodloss > 60.0 Then
-			Msg = "You are feeling faint from the amount of blood you have lost."
-			MsgTimer = 70.0 * 6.0
+			msg\Msg = "You are feeling faint from the amount of blood you have lost."
+			msg\Timer = 70.0 * 6.0
 		EndIf
 	EndIf
 	
@@ -4085,7 +4120,7 @@ Function MovePlayer()
 			If (Not Crouch) Then SetCrouch(True)
 		EndIf
 		If Bloodloss >= 100.0 Then 
-			Kill()
+			Kill(True)
 			HeartBeatVolume = 0.0
 		ElseIf Bloodloss > 80.0
 			HeartBeatRate = Max(150.0 - (Bloodloss - 80.0) * 5.0, HeartBeatRate)
@@ -4097,9 +4132,9 @@ Function MovePlayer()
 	EndIf
 	
 	If HealTimer > 0.0 Then
-		HealTimer = HealTimer - (FPSfactor / 70.0)
-		Bloodloss = Min(Bloodloss + (2.0 / 400.0) * FPSfactor, 100.0)
-		Injuries = Max(Injuries - (FPSfactor / 70.0) / 30.0, 0.0)
+		HealTimer = HealTimer - (fpst\FPSFactor[0] / 70.0)
+		Bloodloss = Min(Bloodloss + (2.0 / 400.0) * fpst\FPSFactor[0], 100.0)
+		Injuries = Max(Injuries - (fpst\FPSFactor[0] / 70.0) / 30.0, 0.0)
 	EndIf
 		
 	If Playable Then
@@ -4114,10 +4149,10 @@ Function MovePlayer()
 			
 			HeartBeatTimer = 70.0 * (60.0 / Max(HeartBeatRate, 1.0))
 		Else
-			HeartBeatTimer = HeartBeatTimer - FPSfactor
+			HeartBeatTimer = HeartBeatTimer - fpst\FPSFactor[0]
 		EndIf
 		
-		HeartBeatVolume = Max(HeartBeatVolume - FPSfactor * 0.05, 0.0)
+		HeartBeatVolume = Max(HeartBeatVolume - fpst\FPSFactor[0] * 0.05, 0.0)
 	EndIf
 	
 	CatchErrors("MovePlayer")
@@ -4126,11 +4161,13 @@ End Function
 Function MouseLook()
 	Local i%
 	Local tt.TextureTemplate = First TextureTemplate
+	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
+	Local msg.Messages = First Messages
 	
-	CameraShake = Max(CameraShake - (FPSfactor / 10.0), 0.0)
+	CameraShake = Max(CameraShake - (fpst\FPSFactor[0] / 10.0), 0.0)
 	
 	CameraZoom(Camera, Min(1.0 + (CurrCameraZoom / 400.0), 1.1))
-	CurrCameraZoom = Max(CurrCameraZoom - FPSfactor, 0.0)
+	CurrCameraZoom = Max(CurrCameraZoom - fpst\FPSFactor[0], 0.0)
 	
 	If KillTimer >= 0.0 And FallTimer >= 0.0 Then
 		HeadDropSpeed = 0.0
@@ -4154,8 +4191,8 @@ Function MouseLook()
 		; ~ Update the smoothing que to smooth the movement of the mouse.
 		Mouse_X_Speed_1 = CurveValue(MouseXSpeed() * (MouseSensitivity + 0.6) , Mouse_X_Speed_1, (6.0 / (MouseSensitivity + 1.0)) * MouseSmoothing) 
 		If Int(Mouse_X_Speed_1) = Int(Nan1) Then Mouse_X_Speed_1 = 0.0
-		If PrevFPSFactor > 0.0 Then
-            If Abs(FPSfactor / PrevFPSFactor - 1.0) > 1.0 Then
+		If fpst\PrevFPSFactor > 0.0 Then
+            If Abs(fpst\FPSFactor[0] / fpst\PrevFPSFactor - 1.0) > 1.0 Then
                 ; ~ Stop all camera movement
                 Mouse_X_Speed_1 = 0.0
                 Mouse_Y_Speed_1 = 0.0
@@ -4207,13 +4244,13 @@ Function MouseLook()
 				RotateEntity(Camera, CurveAngle(EntityPitch(Head) + 40.0, EntityPitch(Camera), 40.0), EntityYaw(Camera), EntityRoll(Camera))
 			EndIf
 			
-			HeadDropSpeed = HeadDropSpeed - 0.002 * FPSfactor
+			HeadDropSpeed = HeadDropSpeed - 0.002 * fpst\FPSFactor[0]
 		EndIf
 		
 		If InvertMouse Then
-			TurnEntity(Camera, (-MouseYSpeed()) * 0.05 * FPSfactor, (-MouseXSpeed()) * 0.15 * FPSfactor, 0.0)
+			TurnEntity(Camera, (-MouseYSpeed()) * 0.05 * fpst\FPSFactor[0], (-MouseXSpeed()) * 0.15 * fpst\FPSFactor[0], 0.0)
 		Else
-			TurnEntity(Camera, MouseYSpeed() * 0.05 * FPSfactor, (-MouseXSpeed()) * 0.15 * FPSfactor, 0.0)
+			TurnEntity(Camera, MouseYSpeed() * 0.05 * fpst\FPSFactor[0], (-MouseXSpeed()) * 0.15 * fpst\FPSFactor[0], 0.0)
 		End If
 	EndIf
 	
@@ -4248,7 +4285,7 @@ Function MouseLook()
         EndIf
 		If I_714\Using = 0 Then
 			If WearingGasMask = 2 Or I_1499\Using = 2 Or WearingHazmat = 2 Then
-				Stamina = Min(100.0, Stamina + (100.0 - Stamina) * 0.01 * FPSfactor)
+				Stamina = Min(100.0, Stamina + (100.0 - Stamina) * 0.01 * fpst\FPSFactor[0])
 			EndIf
 		EndIf
 		If WearingGasMask > 0 Or I_1499\Using > 0 Then
@@ -4297,7 +4334,7 @@ Function MouseLook()
 			Select i
 				Case 0 ; ~ Common cold
 					;[Block]
-					If FPSfactor > 0.0 Then 
+					If fpst\FPSFactor[0] > 0.0 Then 
 						If Rand(1000) = 1 Then
 							If CoughCHN = 0 Then
 								CoughCHN = PlaySound_Strict(CoughSFX(Rand(0, 2)))
@@ -4306,18 +4343,18 @@ Function MouseLook()
 							End If
 						EndIf
 					EndIf
-					Stamina = Stamina - FPSfactor * 0.3
+					Stamina = Stamina - fpst\FPSFactor[0] * 0.3
 					;[End Block]
 				Case 1 ; ~ Chicken pox
 					;[Block]
-					If Rand(9000) = 1 And Msg = "" Then
-						Msg = "Your skin is feeling itchy."
-						MsgTimer = 70.0 * 6.0
+					If Rand(9000) = 1 And msg\Msg = "" Then
+						msg\Msg = "Your skin is feeling itchy."
+						msg\Timer = 70.0 * 6.0
 					EndIf
 					;[End Block]
 				Case 2 ; ~ Cancer of the lungs
 					;[Block]
-					If FPSfactor > 0.0 Then 
+					If fpst\FPSFactor[0] > 0.0 Then 
 						If Rand(800) = 1 Then
 							If CoughCHN = 0 Then
 								CoughCHN = PlaySound_Strict(CoughSFX(Rand(0, 2)))
@@ -4326,18 +4363,18 @@ Function MouseLook()
 							End If
 						EndIf
 					EndIf
-					Stamina = Stamina - FPSfactor * 0.1
+					Stamina = Stamina - (fpst\FPSFactor[0] * 0.1)
 					;[End Block]
 				Case 3 ; ~ Appendicitis
 					; ~ 0.035 / sec = 2.1 / min
 					If I_427\Using = 0 And I_427\Timer < 70.0 * 360.0 Then
-						SCP1025State[i] = SCP1025State[i] + FPSfactor * 0.0005
+						SCP1025State[i] = SCP1025State[i] + fpst\FPSFactor[0] * 0.0005
 					EndIf
 					If SCP1025State[i] > 20.0 Then
-						If SCP1025State[i] - FPSfactor =< 20.0 Then Msg = "The pain in your stomach is becoming unbearable."
-						Stamina = Stamina - FPSfactor * 0.3
+						If SCP1025State[i] - fpst\FPSFactor[0] =< 20.0 Then msg\Msg = "The pain in your stomach is becoming unbearable."
+						Stamina = Stamina - fpst\FPSFactor[0] * 0.3
 					ElseIf SCP1025State[i] > 10.0
-						If SCP1025State[i] - FPSfactor =< 10.0 Then Msg = "Your stomach is aching."
+						If SCP1025State[i] - fpst\FPSFactor[0] =< 10.0 Then msg\Msg = "Your stomach is aching."
 					EndIf
 					;[End Block]
 				Case 4 ; ~ Asthma
@@ -4356,7 +4393,7 @@ Function MouseLook()
 				Case 5 ; ~ Cardiac arrest
 					;[Block]
 					If I_427\Using = 0 And I_427\Timer < 70.0 * 360.0 Then
-						SCP1025State[i] = SCP1025State[i] + FPSfactor * 0.35
+						SCP1025State[i] = SCP1025State[i] + fpst\FPSFactor[0] * 0.35
 					EndIf
 					
 					; ~ 35 / sec
@@ -4364,8 +4401,8 @@ Function MouseLook()
 						HeartBeatRate = 0.0
 						BlurTimer = Max(BlurTimer, 500.0)
 						If SCP1025State[i] > 140.0 Then 
-							DeathMsg = Chr(34) + "He died of a cardiac arrest after reading SCP-1025, that's for sure. Is there such a thing as psychosomatic cardiac arrest, or does SCP-1025 have some "
-							DeathMsg = DeathMsg + "anomalous properties we are not yet aware of?" + Chr(34)
+							msg\DeathMsg = Chr(34) + "He died of a cardiac arrest after reading SCP-1025, that's for sure. Is there such a thing as psychosomatic cardiac arrest, or does SCP-1025 have some "
+							msg\DeathMsg = msg\DeathMsg + "anomalous properties we are not yet aware of?" + Chr(34)
 							Kill()
 						EndIf
 					Else
@@ -4388,6 +4425,8 @@ Function DrawGUI()
 	Local o.Objects = First Objects
 	Local fo.Fonts = First Fonts
 	Local tt.TextureTemplate = First TextureTemplate
+	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
+	Local msg.Messages = First Messages
 	
 	If MenuOpen Or ConsoleOpen Or SelectedDoor <> Null Or InvOpen Or OtherOpen <> Null Or EndingTimer < 0.0 Then
 		ShowPointer()
@@ -4725,12 +4764,12 @@ Function DrawGUI()
 			y = GraphicHeight / 2 - ImageHeight(tt\ImageID[4]) * Scale / 2		
 			
 			AASetFont(fo\FontID[2])
-			If KeypadMsg <> "" Then 
-				KeypadTimer = KeypadTimer - FPSfactor2
+			If msg\KeypadMsg <> "" Then 
+				KeypadTimer = KeypadTimer - fpst\FPSFactor[1]
 				
-				If (KeypadTimer Mod 70.0) < 35.0 Then AAText(GraphicWidth / 2, y + 124 * Scale, KeypadMsg, True, True)
+				If (KeypadTimer Mod 70.0) < 35.0 Then AAText(GraphicWidth / 2, y + 124 * Scale, msg\KeypadMsg, True, True)
 				If KeypadTimer =< 0 Then
-					KeypadMsg = ""
+					msg\KeypadMsg = ""
 					SelectedDoor = Null
 					MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : Mouse_X_Speed_1 = 0.0 : Mouse_Y_Speed_1 = 0.0
 				EndIf
@@ -4749,7 +4788,7 @@ Function DrawGUI()
 					yTemp = y + (67.0 * Scale) * i
 					
 					Temp = False
-					If MouseOn(xTemp, yTemp, 54 * Scale, 65 * Scale) And KeypadMsg = "" Then
+					If MouseOn(xTemp, yTemp, 54 * Scale, 65 * Scale) And msg\KeypadMsg = "" Then
 						If MouseUp1 Then 
 							PlaySound_Strict(ButtonSFX)
 							
@@ -4784,7 +4823,7 @@ Function DrawGUI()
 										MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : Mouse_X_Speed_1 = 0.0 : Mouse_Y_Speed_1 = 0.0
 									Else
 										PlaySound_Strict(ScannerSFX2)
-										KeypadMsg = "ACCESS DENIED"
+										msg\KeypadMsg = "ACCESS DENIED"
 										KeypadTimer = 210
 										KeypadInput = ""	
 									EndIf
@@ -4817,7 +4856,7 @@ Function DrawGUI()
 	Else
 		KeypadInput = ""
 		KeypadTimer = 0
-		KeypadMsg = ""
+		msg\KeypadMsg = ""
 	EndIf
 	
 	If KeyHit(1) And EndingTimer = 0.0 And (Not Using294) Then
@@ -5025,8 +5064,8 @@ Function DrawGUI()
 						Select SelectedItem\ItemTemplate\TempName
 							Default
 								;[Block]
-								Msg = "You cannot combine these two items."
-								MsgTimer = 70.0 * 6.0
+								msg\Msg = "You cannot combine these two items."
+								msg\Timer = 70.0 * 6.0
 								;[End Block]
 						End Select					
 					EndIf
@@ -5168,8 +5207,8 @@ Function DrawGUI()
 							
 							If DoubleClick Then
 								If WearingHazmat > 0 And Instr(SelectedItem\ItemTemplate\TempName, "hazmatsuit") = 0 Then
-									Msg = "You cannot use any items while wearing a hazmat suit."
-									MsgTimer = 70.0 * 6.0
+									msg\Msg = "You cannot use any items while wearing a hazmat suit."
+									msg\Timer = 70.0 * 6.0
 									SelectedItem = Null
 									Return
 								EndIf
@@ -5215,14 +5254,14 @@ Function DrawGUI()
 					Select SelectedItem\ItemTemplate\TempName
 						Case "vest", "finevest", "hazmatsuit", "hazmatsuit2", "hazmatsuit3"
 							;[Block]
-							Msg = "Double click on this item to take it off."
-							MsgTimer = 70.0 * 6.0
+							msg\Msg = "Double click on this item to take it off."
+							msg\Timer = 70.0 * 6.0
 							;[End Block]
 						Case "scp1499", "super1499"
 							;[Block]
 							If I_1499\Using > 0 Then
-								Msg = "Double click on this item to take it off."
-								MsgTimer = 70.0 * 6.0
+								msg\Msg = "Double click on this item to take it off."
+								msg\Timer = 70.0 * 6.0
 							Else
 								DropItem(SelectedItem)
 								SelectedItem = Null
@@ -5232,8 +5271,8 @@ Function DrawGUI()
 						Case "gasmask", "gasmask3", "supergasmask"
                             ;[Block]
 							If WearingGasMask > 0 Then
-								Msg = "Double click on this item to take it off."
-								MsgTimer = 70.0 * 6.0
+								msg\Msg = "Double click on this item to take it off."
+								msg\Timer = 70.0 * 6.0
 							Else
 								DropItem(SelectedItem)
 								SelectedItem = Null
@@ -5243,8 +5282,8 @@ Function DrawGUI()
 						Case "helmet"
                             ;[Block]
 							If WearingHelmet > 0 Then
-								Msg = "Double click on this item to take it off."
-								MsgTimer = 70.0 * 6.0
+								msg\Msg = "Double click on this item to take it off."
+								msg\Timer = 70.0 * 6.0
 							Else
 								DropItem(SelectedItem)
 								SelectedItem = Null
@@ -5298,20 +5337,20 @@ Function DrawGUI()
 											EndIf
 										Next
 										If SelectedItem <> Null Then
-											Msg = "The paperclip is not strong enough to hold any more items."
+											msg\Msg = "The paperclip is not strong enough to hold any more items."
 										Else
 											If added\ItemTemplate\TempName = "paper" Or added\ItemTemplate\TempName = "oldpaper" Then
-												Msg = "This document was added to the clipboard."
+												msg\Msg = "This document was added to the clipboard."
 											ElseIf added\ItemTemplate\TempName = "badge"
-												Msg = added\ItemTemplate\Name + " was added to the clipboard."
+												msg\Msg = added\ItemTemplate\Name + " was added to the clipboard."
 											Else
-												Msg = "The " + added\ItemTemplate\Name + " was added to the clipboard."
+												msg\Msg = "The " + added\ItemTemplate\Name + " was added to the clipboard."
 											EndIf
 										EndIf
-										MsgTimer = 70.0 * 6.0
+										msg\Timer = 70.0 * 6.0
 									Else
-										Msg = "You cannot combine these two items."
-										MsgTimer = 70.0 * 6.0
+										msg\Msg = "You cannot combine these two items."
+										msg\Timer = 70.0 * 6.0
 									EndIf
 								ElseIf Inventory(MouseSlot)\ItemTemplate\TempName = "wallet" Then
 									; ~ Add an item to clipboard
@@ -5341,18 +5380,18 @@ Function DrawGUI()
 											EndIf
 										Next
 										If SelectedItem <> Null Then
-											Msg = "The wallet is full."
+											msg\Msg = "The wallet is full."
 										Else
-											Msg = "You put " + added\ItemTemplate\Name + " into the wallet."
+											msg\Msg = "You put " + added\ItemTemplate\Name + " into the wallet."
 										EndIf
-										MsgTimer = 70.0 * 6.0
+										msg\Timer = 70.0 * 6.0
 									Else
-										Msg = "You cannot combine these two items."
-										MsgTimer = 70.0 * 6.0
+										msg\Msg = "You cannot combine these two items."
+										msg\Timer = 70.0 * 6.0
 									EndIf
 								Else
-									Msg = "You cannot combine these two items."
-									MsgTimer = 70.0 * 6.0
+									msg\Msg = "You cannot combine these two items."
+									msg\Timer = 70.0 * 6.0
 								EndIf
 								SelectedItem = Null
 								;[End Block]
@@ -5365,26 +5404,26 @@ Function DrawGUI()
 										RemoveItem(SelectedItem)
 										SelectedItem = Null
 										Inventory(MouseSlot)\State = 100.0
-										Msg = "You replaced the navigator's battery."
-										MsgTimer = 70.0 * 6.0
+										msg\Msg = "You replaced the navigator's battery."
+										msg\Timer = 70.0 * 6.0
 										;[End Block]
 									Case "S-NAV Navigator Ultimate"
 										;[Block]
-										Msg = "There seems to be no place for batteries in this navigator."
-										MsgTimer = 70.0 * 6.0
+										msg\Msg = "There seems to be no place for batteries in this navigator."
+										msg\Timer = 70.0 * 6.0
 										;[End Block]
 									Case "Radio Transceiver"
 										;[Block]
 										Select Inventory(MouseSlot)\ItemTemplate\TempName 
 											Case "fineradio", "veryfineradio"
 												;[Block]
-												Msg = "There seems to be no place for batteries in this radio."
-												MsgTimer = 70.0 * 6.0
+												msg\Msg = "There seems to be no place for batteries in this radio."
+												msg\Timer = 70.0 * 6.0
 												;[End Block]
 											Case "18vradio"
 												;[Block]
-												Msg = "The battery does not fit inside this radio."
-												MsgTimer = 70.0 * 6.0
+												msg\Msg = "The battery does not fit inside this radio."
+												msg\Timer = 70.0 * 6.0
 												;[End Block]
 											Case "radio"
 												;[Block]
@@ -5392,8 +5431,8 @@ Function DrawGUI()
 												RemoveItem(SelectedItem)
 												SelectedItem = Null
 												Inventory(MouseSlot)\State = 100.0
-												Msg = "You replaced the radio's battery."
-												MsgTimer = 70.0 * 6.0
+												msg\Msg = "You replaced the radio's battery."
+												msg\Timer = 70.0 * 6.0
 												;[End Block]
 										End Select
 										;[End Block]
@@ -5406,17 +5445,17 @@ Function DrawGUI()
 											RemoveItem (SelectedItem)
 											SelectedItem = Null
 											Inventory(MouseSlot)\State = 1000.0
-											Msg = "You replaced the goggles' battery."
-											MsgTimer = 70.0 * 6.0
+											msg\Msg = "You replaced the goggles' battery."
+											msg\Timer = 70.0 * 6.0
 										Else
-											Msg = "There seems to be no place for batteries in these night vision goggles."
-											MsgTimer = 70.0 * 6.0
+											msg\Msg = "There seems to be no place for batteries in these night vision goggles."
+											msg\Timer = 70.0 * 6.0
 										EndIf
 										;[End Block]
 									Default
 										;[Block]
-										Msg = "You cannot combine these two items."
-										MsgTimer = 70.0 * 6.0
+										msg\Msg = "You cannot combine these two items."
+										msg\Timer = 70.0 * 6.0
 										;[End Block]
 								End Select
 								;[End Block]
@@ -5425,21 +5464,21 @@ Function DrawGUI()
 								Select Inventory(MouseSlot)\ItemTemplate\Name
 									Case "S-NAV Navigator", "S-NAV 300 Navigator", "S-NAV 310 Navigator"
 										;[Block]
-										Msg = "The battery does not fit inside this navigator."
-										MsgTimer = 70.0 * 6.0
+										msg\Msg = "The battery does not fit inside this navigator."
+										msg\Timer = 70.0 * 6.0
 										;[End Block]
 									Case "S-NAV Navigator Ultimate"
 										;[Block]
-										Msg = "There seems to be no place for batteries in this navigator."
-										MsgTimer = 70.0 * 6.0
+										msg\Msg = "There seems to be no place for batteries in this navigator."
+										msg\Timer = 70.0 * 6.0
 										;[End Block]
 									Case "Radio Transceiver"
 										;[Block]
 										Select Inventory(MouseSlot)\ItemTemplate\TempName 
 											Case "fineradio", "veryfineradio"
 												;[Block]
-												Msg = "There seems to be no place for batteries in this radio."
-												MsgTimer = 70.0 * 6.0	
+												msg\Msg = "There seems to be no place for batteries in this radio."
+												msg\Timer = 70.0 * 6.0	
 												;[End Block]
 											Case "18vradio"
 												;[Block]
@@ -5447,22 +5486,22 @@ Function DrawGUI()
 												RemoveItem(SelectedItem)
 												SelectedItem = Null
 												Inventory(MouseSlot)\State = 100.0
-												Msg = "You replaced the radio's battery."
-												MsgTimer = 70.0 * 6.0
+												msg\Msg = "You replaced the radio's battery."
+												msg\Timer = 70.0 * 6.0
 												;[End Block]
 										End Select 
 										;[End Block]
 									Default
 										;[Block]
-										Msg = "You cannot combine these two items."
-										MsgTimer = 70.0 * 6.0	
+										msg\Msg = "You cannot combine these two items."
+										msg\Timer = 70.0 * 6.0	
 										;[End Block]
 								End Select
 								;[End Block]
 							Default
 								;[Block]
-								Msg = "You cannot combine these two items."
-								MsgTimer = 70.0 * 6.0
+								msg\Msg = "You cannot combine these two items."
+								msg\Timer = 70.0 * 6.0
 								;[End Block]
 						End Select					
 					End If
@@ -5485,22 +5524,22 @@ Function DrawGUI()
 					If CanUseItem2(False, True, False, False) Then
 						; ~ A hacky fix for a fog
 						If WearingNightVision > 0 And WearingNightVision <> 1 Then
-							Msg = "You can't use two pairs of the goggles at the same time."
-							MsgTimer = 70 * 5.0
+							msg\Msg = "You can't use two pairs of the goggles at the same time."
+							msg\Timer = 70 * 5.0
 							SelectedItem = Null
 							Return
 						Else
 							If WearingNightVision = 1 Then
-								Msg = "You removed the goggles."
+								msg\Msg = "You removed the goggles."
 								CameraFogFar = StoredCameraFogFar
 							Else
-								Msg = "You put on the goggles."
+								msg\Msg = "You put on the goggles."
 								WearingNightVision = 0
 								StoredCameraFogFar = CameraFogFar
 								CameraFogFar = 30.0
 							EndIf
 							WearingNightVision = (Not WearingNightVision)
-							MsgTimer = 70.0 * 6.0
+							msg\Timer = 70.0 * 6.0
 							SelectedItem = Null
 						EndIf
 					EndIf
@@ -5509,22 +5548,22 @@ Function DrawGUI()
 					;[Block]
 					If CanUseItem2(False, True, False, False) Then
 						If WearingNightVision > 0 And WearingNightVision <> 2 Then
-							Msg = "You can't use two pairs of the goggles at the same time."
-							MsgTimer = 70 * 5.0
+							msg\Msg = "You can't use two pairs of the goggles at the same time."
+							msg\Timer = 70 * 5.0
 							SelectedItem = Null
 							Return
 						Else
 							If WearingNightVision = 2 Then
-								Msg = "You removed the goggles."
+								msg\Msg = "You removed the goggles."
 								CameraFogFar = StoredCameraFogFar
 							Else
-								Msg = "You put on the goggles."
+								msg\Msg = "You put on the goggles."
 								WearingNightVision = 0
 								StoredCameraFogFar = CameraFogFar
 								CameraFogFar = 30.0
 							EndIf
 							WearingNightVision = (Not WearingNightVision) * 2
-							MsgTimer = 70.0 * 6.0
+							msg\Timer = 70.0 * 6.0
 							SelectedItem = Null
 						EndIf
 					EndIf
@@ -5533,22 +5572,22 @@ Function DrawGUI()
 					;[Block]
 					If CanUseItem2(False, True, False, False) Then
 						If WearingNightVision > 0 And WearingNightVision <> 3 Then
-							Msg = "You can't use two pairs of the goggles at the same time."
-							MsgTimer = 70 * 5.0
+							msg\Msg = "You can't use two pairs of the goggles at the same time."
+							msg\Timer = 70 * 5.0
 							SelectedItem = Null
 							Return
 						Else
 							If WearingNightVision = 3 Then
-								Msg = "You removed the goggles."
+								msg\Msg = "You removed the goggles."
 								CameraFogFar = StoredCameraFogFar
 							Else
-								Msg = "You put on the goggles."
+								msg\Msg = "You put on the goggles."
 								WearingNightVision = 0
 								StoredCameraFogFar = CameraFogFar
 								CameraFogFar = 30.0
 							EndIf
 							WearingNightVision = (Not WearingNightVision) * 3
-							MsgTimer = 70.0 * 6.0
+							msg\Timer = 70.0 * 6.0
 							SelectedItem = Null
 						EndIf
 					EndIf
@@ -5566,10 +5605,10 @@ Function DrawGUI()
 							Else
 								GroupDesignation = "See No Evil"
 							EndIf
-							DeathMsg = SubjectName + " was shot dead after attempting to attack a member of " + GroupDesignation + ". Surveillance tapes show that the subject had been "
-							DeathMsg = DeathMsg + "wandering around the site approximately 9 (nine) minutes prior, shouting the phrase " + Chr(34) + "get rid of the four pests" + Chr(34)
-							DeathMsg = DeathMsg + " in chinese. SCP-1123 was found in [DATA REDACTED] nearby, suggesting the subject had come into physical contact with it. How "
-							DeathMsg = DeathMsg + "exactly SCP-1123 was removed from its containment chamber is still unknown."
+							msg\DeathMsg = SubjectName + " was shot dead after attempting to attack a member of " + GroupDesignation + ". Surveillance tapes show that the subject had been "
+							msg\DeathMsg = msg\DeathMsg + "wandering around the site approximately 9 (nine) minutes prior, shouting the phrase " + Chr(34) + "get rid of the four pests" + Chr(34)
+							msg\DeathMsg = msg\DeathMsg + " in chinese. SCP-1123 was found in [DATA REDACTED] nearby, suggesting the subject had come into physical contact with it. How "
+							msg\DeathMsg = msg\DeathMsg + "exactly SCP-1123 was removed from its containment chamber is still unknown."
 							Kill()
 							Return
 						EndIf
@@ -5605,13 +5644,13 @@ Function DrawGUI()
 						GiveAchievement(Achv500)
 						
 						If I_008\Timer > 0.0 Then
-							Msg = "You swallowed the pill. Your nausea is fading."
+							msg\Msg = "You swallowed the pill. Your nausea is fading."
 						ElseIf I_409\Timer > 0.0 Then
-						    Msg = "You swallowed the pill. Your body is getting warmer and the crystals are receding."
+						    msg\Msg = "You swallowed the pill. Your body is getting warmer and the crystals are receding."
 						Else
-							Msg = "You swallowed the pill."
+							msg\Msg = "You swallowed the pill."
 						EndIf
-						MsgTimer = 70.0 * 6.0
+						msg\Timer = 70.0 * 6.0
 						
 						I_008\Timer = 0.0
 						I_409\Timer = 0.0
@@ -5640,8 +5679,8 @@ Function DrawGUI()
 									If e\room\Objects[0] <> 0 Then
 										FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
 									EndIf
-									Msg = "You swallowed the pill. Ear-like organs are falling from your body."
-									MsgTimer = 70.0 * 6.0
+									msg\Msg = "You swallowed the pill. Ear-like organs are falling from your body."
+									msg\Timer = 70.0 * 6.0
 									RemoveEvent(e)
 								EndIf
 							EndIf
@@ -5658,29 +5697,29 @@ Function DrawGUI()
 							Case 1
 								;[Block]
 								Injuries = 3.5
-								Msg = "You started bleeding heavily."
-								MsgTimer = 70.0 * 6.0
+								msg\Msg = "You started bleeding heavily."
+								msg\Timer = 70.0 * 6.0
 								;[End Block]
 							Case 2
 								;[Block]
 								Injuries = 0.0
 								Bloodloss = 0.0
-								Msg = "Your wounds are healing up rapidly."
-								MsgTimer = 70.0 * 6.0
+								msg\Msg = "Your wounds are healing up rapidly."
+								msg\Timer = 70.0 * 6.0
 								;[End Block]
 							Case 3
 								;[Block]
 								Injuries = Max(0.0, Injuries - Rnd(0.5, 3.5))
 								Bloodloss = Max(0.0, Bloodloss - Rnd(10.0, 100.0))
-								Msg = "You feel much better."
-								MsgTimer = 70.0 * 6.0
+								msg\Msg = "You feel much better."
+								msg\Timer = 70.0 * 6.0
 								;[End Block]
 							Case 4
 								;[Block]
 								BlurTimer = 10000.0
 								Bloodloss = 0.0
-								Msg = "You feel nauseated."
-								MsgTimer = 70.0 * 6.0
+								msg\Msg = "You feel nauseated."
+								msg\Timer = 70.0 * 6.0
 								;[End Block]
 							Case 5
 								;[Block]
@@ -5690,8 +5729,8 @@ Function DrawGUI()
 								
 								If RoomName = "dimension1499" Or RoomName = "gatea" Or (RoomName = "gateb" And EntityY(Collider) > 1040.0 * RoomScale)
 									Injuries = 2.5
-									Msg = "You started bleeding heavily."
-									MsgTimer = 70.0 * 6.0
+									msg\Msg = "You started bleeding heavily."
+									msg\Timer = 70.0 * 6.0
 								Else
 									For r.Rooms = Each Rooms
 										If r\RoomTemplate\Name = "pocketdimension" Then
@@ -5705,8 +5744,8 @@ Function DrawGUI()
 											Exit
 										EndIf
 									Next
-									Msg = "For some inexplicable reason, you find yourself inside the pocket dimension."
-									MsgTimer = 70.0 * 6.0
+									msg\Msg = "For some inexplicable reason, you find yourself inside the pocket dimension."
+									msg\Timer = 70.0 * 6.0
 								EndIf
 								;[End Block]
 						End Select
@@ -5717,8 +5756,8 @@ Function DrawGUI()
 				Case "firstaid", "finefirstaid", "firstaid2"
 					;[Block]
 					If Bloodloss = 0.0 And Injuries = 0.0 Then
-						Msg = "You do not need to use a first aid right now."
-						MsgTimer = 70.0 * 6.0
+						msg\Msg = "You do not need to use a first aid right now."
+						msg\Timer = 70.0 * 6.0
 						SelectedItem = Null
 					Else
 						CurrSpeed = CurveValue(0.0, CurrSpeed, 5.0)
@@ -5736,40 +5775,40 @@ Function DrawGUI()
 						For i = 1 To Int((Width - 2) * (SelectedItem\State / 100.0) / 10)
 							DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
 						Next
-						SelectedItem\State = Min(SelectedItem\State + (FPSfactor / 5.0), 100.0)			
+						SelectedItem\State = Min(SelectedItem\State + (fpst\FPSFactor[0] / 5.0), 100.0)			
 						
 						If SelectedItem\State = 100.0 Then
 							If SelectedItem\ItemTemplate\TempName = "finefirstaid" Then
 								Bloodloss = 0.0
 								Injuries = Max(0.0, Injuries - 2.0)
 								If Injuries = 0 Then
-									Msg = "You bandaged the wounds and took a painkiller. You feel fine."
+									msg\Msg = "You bandaged the wounds and took a painkiller. You feel fine."
 								ElseIf Injuries > 1.0
-									Msg = "You bandaged the wounds and took a painkiller, but you were not able to stop the bleeding."
+									msg\Msg = "You bandaged the wounds and took a painkiller, but you were not able to stop the bleeding."
 								Else
-									Msg = "You bandaged the wounds and took a painkiller, but you still feel sore."
+									msg\Msg = "You bandaged the wounds and took a painkiller, but you still feel sore."
 								EndIf
-								MsgTimer = 70.0 * 6.0
+								msg\Timer = 70.0 * 6.0
 								RemoveItem(SelectedItem)
 							Else
 								Bloodloss = Max(0.0, Bloodloss - Rnd(10.0, 20.0))
 								If Injuries >= 2.5 Then
-									Msg = "The wounds were way too severe to staunch the bleeding completely."
+									msg\Msg = "The wounds were way too severe to staunch the bleeding completely."
 									Injuries = Max(2.5, Injuries - Rnd(0.3, 0.7))
 								ElseIf Injuries > 1.0
 									Injuries = Max(0.5, Injuries - Rnd(0.5, 1.0))
 									If Injuries > 1.0 Then
-										Msg = "You bandaged the wounds but were unable to staunch the bleeding completely."
+										msg\Msg = "You bandaged the wounds but were unable to staunch the bleeding completely."
 									Else
-										Msg = "You managed to stop the bleeding."
+										msg\Msg = "You managed to stop the bleeding."
 									EndIf
 								Else
 									If Injuries > 0.5 Then
 										Injuries = 0.5
-										Msg = "You took a painkiller, easing the pain slightly."
+										msg\Msg = "You took a painkiller, easing the pain slightly."
 									Else
 										Injuries = 0.5
-										Msg = "You took a painkiller, but it still hurts to walk."
+										msg\Msg = "You took a painkiller, but it still hurts to walk."
 									EndIf
 								EndIf
 								
@@ -5778,17 +5817,17 @@ Function DrawGUI()
 										Case 1
 											;[Block]
 											SuperMan = True
-											Msg = "You have becomed overwhelmedwithadrenalineholyshitWOOOOOO~!"
+											msg\Msg = "You have becomed overwhelmedwithadrenalineholyshitWOOOOOO~!"
 											;[End Block]
 										Case 2
 											;[Block]
 											InvertMouse = (Not InvertMouse)
-											Msg = "You suddenly find it very difficult to turn your head."
+											msg\Msg = "You suddenly find it very difficult to turn your head."
 											;[End Block]
 										Case 3
 											;[Block]
 											BlurTimer = 5000.0
-											Msg = "You feel nauseated."
+											msg\Msg = "You feel nauseated."
 											;[End Block]
 										Case 4
 											;[Block]
@@ -5799,16 +5838,16 @@ Function DrawGUI()
 											;[Block]
 											Bloodloss = 0.0
 											Injuries = 0.0
-											Msg = "You bandaged the wounds. The bleeding stopped completely and you feel fine."
+											msg\Msg = "You bandaged the wounds. The bleeding stopped completely and you feel fine."
 											;[End Block]
 										Case 6
 											;[Block]
-											Msg = "You bandaged the wounds and blood started pouring heavily through the bandages."
+											msg\Msg = "You bandaged the wounds and blood started pouring heavily through the bandages."
 											Injuries = 3.5
 											;[End Block]
 									End Select
 								EndIf
-								MsgTimer = 70.0 * 6.0
+								msg\Timer = 70.0 * 6.0
 								Playable = True
 								RemoveItem(SelectedItem)
 							EndIf
@@ -5822,8 +5861,8 @@ Function DrawGUI()
 						BlinkEffectTimer = Rnd(20.0, 30.0)
 						BlurTimer = 200.0
 						
-						Msg = "You used the eyedrops. Your eyes feel moisturized."
-				        MsgTimer = 70.0 * 6.0
+						msg\Msg = "You used the eyedrops. Your eyes feel moisturized."
+				        msg\Timer = 70.0 * 6.0
 						
 						RemoveItem(SelectedItem)
 					EndIf
@@ -5836,8 +5875,8 @@ Function DrawGUI()
 						Bloodloss = Max(Bloodloss - 1.0, 0.0)
 						BlurTimer = 200.0
 						
-						Msg = "You used the eyedrops. Your eyes feel very moisturized."
-					    MsgTimer = 70.0 * 6.0
+						msg\Msg = "You used the eyedrops. Your eyes feel very moisturized."
+					    msg\Timer = 70.0 * 6.0
 						
 						RemoveItem(SelectedItem)
 					EndIf
@@ -5850,8 +5889,8 @@ Function DrawGUI()
 						EyeStuck = 10000.0
 						BlurTimer = 1000.0
 						
-						Msg = "You used the eyedrops. Your eyes feel very moisturized."
-					    MsgTimer = 70.0 * 6.0
+						msg\Msg = "You used the eyedrops. Your eyes feel very moisturized."
+					    msg\Timer = 70.0 * 6.0
 						
 						RemoveItem(SelectedItem)
 					EndIf
@@ -5890,8 +5929,8 @@ Function DrawGUI()
 								SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
 								
 								If (SelectedItem\State = 0.0) Then
-									Msg = Chr(34) + "Hey, I remember this movie!" + Chr(34)
-									MsgTimer = 70.0 * 10.0
+									msg\Msg = Chr(34) + "Hey, I remember this movie!" + Chr(34)
+									msg\Timer = 70.0 * 10.0
 									PlaySound_Strict(LoadTempSound("SFX\SCP\1162\NostalgiaCancer" + Rand(1, 5) + ".ogg"))
 									SelectedItem\State = 1.0
 								EndIf
@@ -5939,10 +5978,10 @@ Function DrawGUI()
 						Local Loc% = GetINISectionLocation(INIStr, SelectedItem\Name)
 						
 						StrTemp = GetINIString2(INIStr, Loc, "message")
-						If StrTemp <> "" Then Msg = StrTemp : MsgTimer = 70.0 * 6.0
+						If StrTemp <> "" Then msg\Msg = StrTemp : msg\Timer = 70.0 * 6.0
 						
 						If GetINIInt2(INIStr, Loc, "lethal") Or GetINIInt2(INIStr, Loc, "deathtimer") Then 
-							DeathMsg = GetINIString2(INIStr, Loc, "deathmessage")
+							msg\DeathMsg = GetINIString2(INIStr, Loc, "deathmessage")
 							If GetINIInt2(INIStr, Loc, "lethal") Then Kill()
 						EndIf
 						BlurTimer = GetINIInt2(INIStr, Loc, "blur") * 70.0
@@ -5970,8 +6009,8 @@ Function DrawGUI()
 						
 						StrTemp = GetINIString2(INIStr, Loc, "refusemessage")
 						If StrTemp <> "" Then
-							Msg = StrTemp 
-							MsgTimer = 70.0 * 6.0		
+							msg\Msg = StrTemp 
+							msg\Timer = 70.0 * 6.0		
 						Else
 							it.Items = CreateItem("Empty Cup", "emptycup", 0.0, 0.0, 0.0)
 							it\Picked = True
@@ -5992,8 +6031,8 @@ Function DrawGUI()
 					StaminaEffect = 0.5
 					StaminaEffectTimer = 20.0
 					
-					Msg = "You injected yourself with the syringe and feel a slight adrenaline rush."
-					MsgTimer = 70.0 * 6.0
+					msg\Msg = "You injected yourself with the syringe and feel a slight adrenaline rush."
+					msg\Timer = 70.0 * 6.0
 					
 					RemoveItem(SelectedItem)
 					;[End Block]
@@ -6003,8 +6042,8 @@ Function DrawGUI()
 					StaminaEffect = Rnd(0.5, 0.8)
 					StaminaEffectTimer = Rnd(20.0, 30.0)
 					
-					Msg = "You injected yourself with the syringe and feel an adrenaline rush."
-					MsgTimer = 70.0 * 6.0
+					msg\Msg = "You injected yourself with the syringe and feel an adrenaline rush."
+					msg\Timer = 70.0 * 6.0
 					
 					RemoveItem(SelectedItem)
 					;[End Block]
@@ -6016,26 +6055,26 @@ Function DrawGUI()
 							HealTimer = Rnd(40.0, 60.0)
 							StaminaEffect = 0.1
 							StaminaEffectTimer = 30.0
-							Msg = "You injected yourself with the syringe and feel a huge adrenaline rush."
+							msg\Msg = "You injected yourself with the syringe and feel a huge adrenaline rush."
 							;[End Block]
 						Case 2
 							;[Block]
 							SuperMan = True
-							Msg = "You injected yourself with the syringe and feel a humongous adrenaline rush."
+							msg\Msg = "You injected yourself with the syringe and feel a humongous adrenaline rush."
 							;[End Block]
 						Case 3
 							;[Block]
 							VomitTimer = 30.0
-							Msg = "You injected yourself with the syringe and feel a pain in your stomach."
+							msg\Msg = "You injected yourself with the syringe and feel a pain in your stomach."
 							;[End Block]
 					End Select
 					
-					MsgTimer = 70.0 * 6.0
+					msg\Timer = 70.0 * 6.0
 					RemoveItem(SelectedItem)
 					;[End Block]
 				Case "radio", "18vradio", "fineradio", "veryfineradio"
 					;[Block]
-					If SelectedItem\State =< 100.0 Then SelectedItem\State = Max(0.0, SelectedItem\State - FPSfactor * 0.004)
+					If SelectedItem\State =< 100.0 Then SelectedItem\State = Max(0.0, SelectedItem\State - fpst\FPSFactor[0] * 0.004)
 					
 					If SelectedItem\ItemTemplate\Img = 0 Then
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
@@ -6047,8 +6086,8 @@ Function DrawGUI()
 					; ~ RadioState(7) = Another timer for the "code channel"
 					
 					If RadioState(5) = 0 Then 
-						Msg = "Use the numbered keys 1 through 5 to cycle between various channels."
-						MsgTimer = 70.0 * 6.0
+						msg\Msg = "Use the numbered keys 1 through 5 to cycle between various channels."
+						msg\Timer = 70.0 * 6.0
 						RadioState(5) = 1
 						RadioState(0) = -1
 					EndIf
@@ -6339,9 +6378,9 @@ Function DrawGUI()
 							If SelectedItem\ItemTemplate\TempName = "veryfineradio" Then
 								ResumeChannel(RadioCHN(0))
 								If ChannelPlaying(RadioCHN(0)) = False Then RadioCHN(0) = PlaySound_Strict(RadioStatic)
-								RadioState(6) = RadioState(6) + FPSfactor
+								RadioState(6) = RadioState(6) + fpst\FPSFactor[0]
 								Temp = Mid(Str(AccessCode), RadioState(8) + 1, 1)
-								If RadioState(6) - FPSfactor =< RadioState(7) * 50 And RadioState(6) > RadioState(7) * 50 Then
+								If RadioState(6) - fpst\FPSFactor[0] =< RadioState(7) * 50 And RadioState(6) > RadioState(7) * 50 Then
 									PlaySound_Strict(RadioBuzz)
 									RadioState(7) = RadioState(7) + 1
 									If RadioState(7) >= Temp Then
@@ -6389,30 +6428,30 @@ Function DrawGUI()
 						Select Rand(6)
 							Case 1
 								;[Block]
-								Msg = Chr(34) + "I don't have anything to light it with. Umm, what about that... Nevermind." + Chr(34)
+								msg\Msg = Chr(34) + "I don't have anything to light it with. Umm, what about that... Nevermind." + Chr(34)
 								;[End Block]
 							Case 2
 								;[Block]
-								Msg = "You are unable to get lit."
+								msg\Msg = "You are unable to get lit."
 								;[End Block]
 							Case 3
 								;[Block]
-								Msg = Chr(34) + "I quit that a long time ago." + Chr(34)
+								msg\Msg = Chr(34) + "I quit that a long time ago." + Chr(34)
 								;[End Block]
 							Case 4
 								;[Block]
-								Msg = Chr(34) + "Even if I wanted one, I have nothing to light it with." + Chr(34)
+								msg\Msg = Chr(34) + "Even if I wanted one, I have nothing to light it with." + Chr(34)
 								;[End Block]
 							Case 5
 								;[Block]
-								Msg = Chr(34) + "Could really go for one now... Wish I had a lighter." + Chr(34)
+								msg\Msg = Chr(34) + "Could really go for one now... Wish I had a lighter." + Chr(34)
 								;[End Block]
 							Case 6
 								;[Block]
-								Msg = Chr(34) + "Don't plan on starting, even at a time like this." + Chr(34)
+								msg\Msg = Chr(34) + "Don't plan on starting, even at a time like this." + Chr(34)
 								;[End Block]
 						End Select
-						MsgTimer = 70.0 * 6.0
+						msg\Timer = 70.0 * 6.0
 						RemoveItem(SelectedItem)
 					EndIf
 					;[End Block]
@@ -6420,15 +6459,15 @@ Function DrawGUI()
 					;[Block]
 					If CanUseItem(False, True) Then
 						If I_714\Using = 1 Or WearingGasMask = 3 Or WearingHazmat = 3 Then
-							Msg = Chr(34) + "DUDE WTF THIS SHIT DOESN'T EVEN WORK." + Chr(34)
+							msg\Msg = Chr(34) + "DUDE WTF THIS SHIT DOESN'T EVEN WORK." + Chr(34)
 						Else
-							Msg = Chr(34) + "MAN DATS SUM GOOD ASS SHIT." + Chr(34)
+							msg\Msg = Chr(34) + "MAN DATS SUM GOOD ASS SHIT." + Chr(34)
 							Injuries = Max(Injuries - 0.5, 0.0)
 							BlurTimer = 500.0
 							GiveAchievement(Achv420J)
 							PlaySound_Strict(LoadTempSound("SFX\Music\Using420J.ogg"))
 						EndIf
-						MsgTimer = 70.0 * 6.0
+						msg\Timer = 70.0 * 6.0
 						RemoveItem(SelectedItem)
 					EndIf
 					;[End Block]
@@ -6436,15 +6475,15 @@ Function DrawGUI()
 					;[Block]
 					If CanUseItem(False, True) Then
 						If I_714\Using = 1 Or WearingGasMask = 3 Or WearingHazmat = 3 Then
-							Msg = Chr(34) + "DUDE WTF THIS SHIT DOESN'T EVEN WORK." + Chr(34)
+							msg\Msg = Chr(34) + "DUDE WTF THIS SHIT DOESN'T EVEN WORK." + Chr(34)
 						Else
-							DeathMsg = SubjectName + " found in a comatose state in [DATA REDACTED]. The subject was holding what appears to be a cigarette while smiling widely. "
-							DeathMsg = DeathMsg + "Chemical analysis of the cigarette has been inconclusive, although it seems to contain a high concentration of an unidentified chemical "
-							DeathMsg = DeathMsg + "whose molecular structure is remarkably similar to that of tetrahydrocannabinol."
-							Msg = Chr(34) + "UH WHERE... WHAT WAS I DOING AGAIN... MAN I NEED TO TAKE A NAP..." + Chr(34)
+							msg\DeathMsg = SubjectName + " found in a comatose state in [DATA REDACTED]. The subject was holding what appears to be a cigarette while smiling widely. "
+							msg\DeathMsg = msg\DeathMsg + "Chemical analysis of the cigarette has been inconclusive, although it seems to contain a high concentration of an unidentified chemical "
+							msg\DeathMsg = msg\DeathMsg + "whose molecular structure is remarkably similar to that of tetrahydrocannabinol."
+							msg\Msg = Chr(34) + "UH WHERE... WHAT WAS I DOING AGAIN... MAN I NEED TO TAKE A NAP..." + Chr(34)
 							Kill()						
 						EndIf
-						MsgTimer = 70.0 * 6.0
+						msg\Timer = 70.0 * 6.0
 						RemoveItem(SelectedItem)
 					EndIf
 					;[End Block]
@@ -6452,29 +6491,29 @@ Function DrawGUI()
 					;[Block]
 					If CanUseItem(False, True) Then
 						If I_714\Using = 1 Or WearingGasMask = 3 Or WearingHazmat = 3 Then
-							Msg = Chr(34) + "DUDE WTF THIS SHIT DOESN'T EVEN WORK." + Chr(34)
+							msg\Msg = Chr(34) + "DUDE WTF THIS SHIT DOESN'T EVEN WORK." + Chr(34)
 						Else
-							DeathMsg = SubjectName + " found in a comatose state in [DATA REDACTED]. The subject was holding what appears to be a cigarette while smiling widely. "
-							DeathMsg = DeathMsg + "Chemical analysis of the cigarette has been inconclusive, although it seems to contain a high concentration of an unidentified chemical "
-							DeathMsg = DeathMsg + "whose molecular structure is remarkably similar to that of tetrahydrocannabinol."
-							Msg = Chr(34) + "UUUUUUUUUUUUHHHHHHHHHHHH..." + Chr(34)
+							msg\DeathMsg = SubjectName + " found in a comatose state in [DATA REDACTED]. The subject was holding what appears to be a cigarette while smiling widely. "
+							msg\DeathMsg = msg\DeathMsg + "Chemical analysis of the cigarette has been inconclusive, although it seems to contain a high concentration of an unidentified chemical "
+							msg\DeathMsg = msg\DeathMsg + "whose molecular structure is remarkably similar to that of tetrahydrocannabinol."
+							msg\Msg = Chr(34) + "UUUUUUUUUUUUHHHHHHHHHHHH..." + Chr(34)
 							Kill()						
 						EndIf
-						MsgTimer = 70.0 * 6.0
+						msg\Timer = 70.0 * 6.0
 						RemoveItem(SelectedItem)
 					EndIf
 					;[End Block]
 				Case "scp714"
 					;[Block]
 					If I_714\Using = 1 Then
-						Msg = "You removed the ring."
+						msg\Msg = "You removed the ring."
 						I_714\Using = 0
 					Else
 						GiveAchievement(Achv714)
-						Msg = "You put on the ring."
+						msg\Msg = "You put on the ring."
 						I_714\Using = 1
 					EndIf
-					MsgTimer = 70.0 * 6.0
+					msg\Timer = 70.0 * 6.0
 					SelectedItem = Null	
 					;[End Block]
 				Case "hazmatsuit", "hazmatsuit2", "hazmatsuit3"
@@ -6492,11 +6531,11 @@ Function DrawGUI()
 						For i = 1 To Int((Width - 2) * (SelectedItem\State / 100.0) / 10.0)
 							DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
 						Next
-						SelectedItem\State = Min(SelectedItem\State + (FPSfactor / 4.0), 100.0)
+						SelectedItem\State = Min(SelectedItem\State + (fpst\FPSFactor[0] / 4.0), 100.0)
 						
 						If SelectedItem\State = 100.0 Then
 							If WearingHazmat > 0 Then
-								Msg = "You removed the hazmat suit."
+								msg\Msg = "You removed the hazmat suit."
 								WearingHazmat = False
 								DropItem(SelectedItem)
 							Else
@@ -6508,14 +6547,14 @@ Function DrawGUI()
 									WearingHazmat = 3
 								EndIf
 								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))
-								Msg = "You put on the hazmat suit."
+								msg\Msg = "You put on the hazmat suit."
 								If WearingNightVision Then CameraFogFar = StoredCameraFogFar
 								WearingGasMask = 0
 								WearingNightVision = 0
 								WearingHelmet = 0
 							EndIf
 							SelectedItem\State = 0.0
-							MsgTimer = 70.0 * 6.0
+							msg\Timer = 70.0 * 6.0
 							SelectedItem = Null
 						EndIf
 					EndIf
@@ -6534,25 +6573,25 @@ Function DrawGUI()
 					For i = 1 To Int((Width - 2.0) * (SelectedItem\State / 100.0) / 10.0)
 						DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
 					Next
-					SelectedItem\State = Min(SelectedItem\State + (FPSfactor / (2.0 + (0.5 * (SelectedItem\ItemTemplate\TempName = "finevest")))), 100)
+					SelectedItem\State = Min(SelectedItem\State + (fpst\FPSFactor[0] / (2.0 + (0.5 * (SelectedItem\ItemTemplate\TempName = "finevest")))), 100)
 					
 					If SelectedItem\State = 100.0 Then
 						If WearingVest > 0 Then
-							Msg = "You removed the vest."
+							msg\Msg = "You removed the vest."
 							WearingVest = False
 							DropItem(SelectedItem)
 						Else
 							If SelectedItem\ItemTemplate\TempName = "vest" Then
-								Msg = "You put on the vest and feel slightly encumbered."
+								msg\Msg = "You put on the vest and feel slightly encumbered."
 								WearingVest = 1
 							Else
-								Msg = "You put on the vest and feel heavily encumbered."
+								msg\Msg = "You put on the vest and feel heavily encumbered."
 								WearingVest = 2
 							EndIf
 							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))
 						EndIf
 						SelectedItem\State = 0.0
-						MsgTimer = 70.0 * 6.0
+						msg\Timer = 70.0 * 6.0
 						SelectedItem = Null
 					EndIf
 					;[End Block]
@@ -6571,16 +6610,16 @@ Function DrawGUI()
 						For  i% = 1 To Int((Width - 2) * (SelectedItem\state / 100.0) / 10)
 							DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
 						Next
-						SelectedItem\State = Min(SelectedItem\State + (FPSfactor) / 1.6, 100.0)
+						SelectedItem\State = Min(SelectedItem\State + (fpst\FPSFactor[0]) / 1.6, 100.0)
 						
 						If SelectedItem\State = 100.0 Then
 							If WearingGasMask > 0 Then
 								WearingGasMask = False
-								Msg = "You removed the gas mask."
+								msg\Msg = "You removed the gas mask."
 								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))
 							Else
 								If SelectedItem\ItemTemplate\TempName = "supergasmask"
-									Msg = "You put on the gas mask and you can breathe easier."
+									msg\Msg = "You put on the gas mask and you can breathe easier."
 									WearingGasMask = 2
 								Else
 									If SelectedItem\Itemtemplate\TempName = "gasmask3"
@@ -6588,12 +6627,12 @@ Function DrawGUI()
 									Else
 										WearingGasMask = 1
 									EndIf
-									Msg = "You put on the gas mask."
+									msg\Msg = "You put on the gas mask."
 								EndIf
 								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))
 							EndIf
 							SelectedItem\State = 0.0
-							MsgTimer = 70.0 * 6.0
+							msg\Timer = 70.0 * 6.0
 							SelectedItem = Null
 						EndIf
 					EndIf
@@ -6605,7 +6644,7 @@ Function DrawGUI()
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
-					If SelectedItem\State =< 100.0 Then SelectedItem\State = Max(0.0, SelectedItem\State - FPSfactor * 0.005)
+					If SelectedItem\State =< 100.0 Then SelectedItem\State = Max(0.0, SelectedItem\State - fpst\FPSFactor[0] * 0.005)
 					
 					x = GraphicWidth - ImageWidth(SelectedItem\ItemTemplate\Img) * 0.5 + 20.0
 					y = GraphicHeight - ImageHeight(SelectedItem\ItemTemplate\Img) * 0.4 - 85.0
@@ -6807,7 +6846,7 @@ Function DrawGUI()
 						For i = 1 To Int((Width - 2) * (SelectedItem\State / 100.0) / 10.0)
 							DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
 						Next
-						SelectedItem\state = Min(SelectedItem\State + FPSfactor / 1.6, 100.0)
+						SelectedItem\State = Min(SelectedItem\State + fpst\FPSFactor[0] / 1.6, 100.0)
 						
 						If SelectedItem\State = 100.0 Then
 							If I_1499\Using > 0 Then
@@ -6885,8 +6924,8 @@ Function DrawGUI()
 						Select SelectedItem\ItemTemplate\Name
 							Case "Old Badge"
 								;[Block]
-								Msg = Chr(34) + "Huh? This guy looks just like me!" + Chr(34)
-								MsgTimer = 70.0 * 10.0
+								msg\Msg = Chr(34) + "Huh? This guy looks just like me!" + Chr(34)
+								msg\Timer = 70.0 * 10.0
 								;[End Block]
 						End Select
 						
@@ -6898,8 +6937,8 @@ Function DrawGUI()
 					If SelectedItem\State = 0.0 Then
 						PlaySound_Strict(LoadTempSound("SFX\SCP\1162\NostalgiaCancer" + Rand(6, 10) + ".ogg"))
 						
-						Msg = Chr(34) + "Isn't this the key to that old shack? The one where I... No, it can't be." + Chr(34)
-						MsgTimer = 70.0 * 10.0						
+						msg\Msg = Chr(34) + "Isn't this the key to that old shack? The one where I... No, it can't be." + Chr(34)
+						msg\Timer = 70.0 * 10.0						
 					EndIf
 					
 					SelectedItem\State = 1.0
@@ -6922,8 +6961,8 @@ Function DrawGUI()
 								;[Block]
 								BlurTimer = 1000.0
 								
-								Msg = Chr(34) + "Why does this seem so familiar?" + Chr(34)
-								MsgTimer = 70.0 * 10.0
+								msg\Msg = Chr(34) + "Why does this seem so familiar?" + Chr(34)
+								msg\Timer = 70.0 * 10.0
 								PlaySound_Strict(LoadTempSound("SFX\SCP\1162\NostalgiaCancer" + Rand(6, 10) + ".ogg"))
 								SelectedItem\state = 1.0
 								;[End Block]
@@ -6942,21 +6981,21 @@ Function DrawGUI()
 				Case "scp427"
 					;[Block]
 					If I_427\Using = 1 Then
-						Msg = "You closed the locket."
+						msg\Msg = "You closed the locket."
 						I_427\Using = 0
 					Else
 						GiveAchievement(Achv427)
-						Msg = "You opened the locket."
+						msg\Msg = "You opened the locket."
 						I_427\Using = 1
 					EndIf
-					MsgTimer = 70.0 * 6.0
+					msg\Timer = 70.0 * 6.0
 					SelectedItem = Null
 					;[End Block]
 				Case "pill"
 					;[Block]
 					If CanUseItem(False, True) Then
-						Msg = "You swallowed the pill."
-						MsgTimer = 70.0 * 6.0
+						msg\Msg = "You swallowed the pill."
+						msg\Timer = 70.0 * 6.0
 						
 						RemoveItem(SelectedItem)
 						SelectedItem = Null
@@ -6965,8 +7004,8 @@ Function DrawGUI()
 				Case "scp500pilldeath"
 					;[Block]
 					If CanUseItem(False, True) Then
-						Msg = "You swallowed the pill."
-						MsgTimer = 70.0 * 6.0
+						msg\Msg = "You swallowed the pill."
+						msg\Timer = 70.0 * 6.0
 						
 						If I_427\Timer < 70.0 * 360.0 Then
 							I_427\Timer = 70.0 * 360.0
@@ -6978,8 +7017,8 @@ Function DrawGUI()
 					;[End Block]
 				Case "syringeinf"
 					;[Block]
-					Msg = "You injected yourself the syringe."
-					MsgTimer = 70 * 8.0
+					msg\Msg = "You injected yourself the syringe."
+					msg\Timer = 70 * 8.0
 					
 				    I_008\Timer = I_008\Timer + (1 + (1 * SelectedDifficulty\AggressiveNPCs))
 					RemoveItem(SelectedItem)
@@ -7000,20 +7039,20 @@ Function DrawGUI()
 					    	DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
 					    Next
 						
-					    SelectedItem\State = Min(SelectedItem\State + FPSfactor, 100.0)
+					    SelectedItem\State = Min(SelectedItem\State + fpst\FPSFactor[0], 100.0)
 						
 					    If SelectedItem\State = 100.0 Then
                             If WearingHelmet > 0 Then
                                 WearingHelmet = False
-                                Msg = "You removed the helmet."
+                                msg\Msg = "You removed the helmet."
                                 If SelectedItem\itemtemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))
                             Else
-						        Msg = "You put on the helmet."
+						        msg\Msg = "You put on the helmet."
 							    WearingHelmet = 1
 							    If SelectedItem\itemtemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))
                             EndIf
 						    SelectedItem\State = 0.0
-						    MsgTimer = 70.0 * 6.0
+						    msg\Timer = 70.0 * 6.0
 						    SelectedItem = Null
 					    EndIf
 					EndIf
@@ -7116,6 +7155,8 @@ Function DrawMenu()
 	Local i%
 	Local fo.Fonts = First Fonts
 	Local tt.TextureTemplate = First TextureTemplate
+	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
+	Local msg.Messages = First Messages
 	
 	If api_GetFocus() = 0 Then ; ~ Game is out of focus then pause the game
 		If (Not Using294) Then
@@ -7132,12 +7173,12 @@ Function DrawMenu()
 				EndIf	
 			ElseIf StopHidingTimer < 40.0
 				If KillTimer >= 0.0 Then 
-					StopHidingTimer = StopHidingTimer + FPSfactor
+					StopHidingTimer = StopHidingTimer + fpst\FPSFactor[0]
 					
 					If StopHidingTimer >= 40.0 Then
 						PlaySound_Strict(HorrorSFX(15))
-						Msg = "STOP HIDING"
-						MsgTimer = 70.0 * 6.0
+						msg\Msg = "STOP HIDING"
+						msg\Timer = 70.0 * 6.0
 						MenuOpen = False
 						Return
 					EndIf
@@ -7742,12 +7783,12 @@ Function DrawMenu()
 							
 							DrawLoading(100)
 							
-							DropSpeed = 0
+							DropSpeed = 0.0
 							
 							UpdateWorld 0.0
 							
-							PrevTime = MilliSecs()
-							FPSfactor = 0
+							fpst\PrevTime = MilliSecs()
+							fpst\FPSFactor[0] = 0.0
 							
 							ResetInput()
 						EndIf
@@ -7798,12 +7839,12 @@ Function DrawMenu()
 						
 						DrawLoading(100)
 						
-						DropSpeed = 0
+						DropSpeed = 0.0
 						
 						UpdateWorld(0.0)
 						
-						PrevTime = MilliSecs()
-						FPSfactor = 0
+						fpst\PrevTime = MilliSecs()
+						fpst\FPSFactor[0] = 0.0
 						
 						ResetInput()
 					EndIf
@@ -7830,7 +7871,7 @@ Function DrawMenu()
 			EndIf
 			
 			AASetFont(fo\FontID[0])
-			If KillTimer < 0.0 Then RowText(DeathMsg, x, y + 80 * MenuScale, 430 * MenuScale, 600 * MenuScale)
+			If KillTimer < 0.0 Then RowText(msg\DeathMsg, x, y + 80 * MenuScale, 430 * MenuScale, 600 * MenuScale)
 		EndIf
 		If FullScreen Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	End If
@@ -8029,6 +8070,16 @@ Function LoadEntities()
 	EntityOrder(tt\OverlayID[9], -1003)
 	MoveEntity(tt\OverlayID[9], 0.0, 0.0, 1.0)
 	HideEntity(tt\OverlayID[9])
+	
+	tt\OverlayTextureID[10] = LoadTexture_Strict("GFX\bloody_overlay.png", 1) ; ~ BLOOD
+	tt\OverlayID[10] = CreateSprite(Ark_Blur_Cam)
+	ScaleSprite(tt\OverlayID[10], Max(GraphicWidth / 1024.0, 1.0), Max(GraphicHeight / 1024.0 * 0.8, 0.8))
+	EntityTexture(tt\OverlayID[10], tt\OverlayTextureID[10])
+	EntityBlend(tt\OverlayID[10], 2)
+	EntityFX(tt\OverlayID[10], 1)
+	EntityOrder(tt\OverlayID[10], -1003)
+	MoveEntity(tt\OverlayID[10], 0, 0, 1.0)
+	HideEntity(tt\OverlayID[10])
 	
 	Collider = CreatePivot()
 	EntityRadius Collider, 0.15, 0.30
@@ -8443,6 +8494,7 @@ Function InitNewGame()
 	
 	Local i%, de.Decals, d.Doors, it.Items, r.Rooms, sc.SecurityCams, e.Events
 	Local fo.Fonts = First Fonts
+	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
 	
 	DrawLoading(45)
 	
@@ -8581,7 +8633,7 @@ Function InitNewGame()
 	Stamina = 100.0
 	
 	For i = 0 To 70
-		FPSfactor = 1.0
+		fpst\FPSFactor[0] = 1.0
 		FlushKeys()
 		MovePlayer()
 		UpdateDoors()
@@ -8598,9 +8650,9 @@ Function InitNewGame()
 	FlushKeys()
 	FlushMouse()
 	
-	DropSpeed = 0
+	DropSpeed = 0.0
 	
-	PrevTime = MilliSecs()
+	fpst\PrevTime = MilliSecs()
 	CatchErrors("InitNewGame")
 End Function
 
@@ -8609,6 +8661,7 @@ Function InitLoadGame()
 	
 	Local d.Doors, sc.SecurityCams, rt.RoomTemplates, e.Events, i%
 	Local fo.Fonts = First Fonts
+	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
 	
 	DrawLoading(80)
 	
@@ -8689,8 +8742,8 @@ Function InitLoadGame()
 	CatchErrors("InitLoadGame")
 	DrawLoading(100)
 	
-	PrevTime = MilliSecs()
-	FPSfactor = 0.0
+	fpst\PrevTime = MilliSecs()
+	fpst\FPSFactor[0] = 0.0
 	ResetInput()
 End Function
 
@@ -8700,6 +8753,7 @@ Function NullGame(PlayButtonSFX% = True)
 	Local i%, x%, y%, Lvl%
 	Local itt.ItemTemplates, s.Screens, lt.LightTemplates, d.Doors, m.Materials
 	Local wp.WayPoints, twp.TempWayPoints, r.Rooms, it.Items, o.Objects, tt.TextureTemplate
+	Local msg.Messages = First Messages
 	
 	KillSounds()
 	If PlayButtonSFX Then PlaySound_Strict(ButtonSFX)
@@ -8714,7 +8768,7 @@ Function NullGame(PlayButtonSFX% = True)
 	QuickLoadPercent_DisplayTimer = 0.0
 	QuickLoad_CurrEvent = Null
 	
-	DeathMsg = ""
+	msg\DeathMsg = ""
 	
 	chs\GodMode = False
 	chs\NoTarget = False
@@ -8837,8 +8891,8 @@ Function NullGame(PlayButtonSFX% = True)
 	RemoteDoorOn = True
 	SoundTransmission = False
 	
-	Msg = ""
-	MsgTimer = 0.0
+	msg\Msg = ""
+	msg\Timer = 0.0
 	
 	SelectedItem = Null
 	
@@ -10229,6 +10283,7 @@ End Function
 Function Use294()
 	Local x#, y#, xTemp%, yTemp%, StrTemp$, Temp%
 	Local tt.TextureTemplate = First TextureTemplate
+	Local msg.Messages = First Messages
 	
 	ShowPointer()
 	
@@ -10425,7 +10480,7 @@ Function Use294()
 					
 					If GetINIInt2("Data\SCP-294.ini", Loc, "explosion") = True Then 
 						ExplosionTimer = 135
-						DeathMsg = GetINIString2("Data\SCP-294.ini", Loc, "deathmessage")
+						msg\DeathMsg = GetINIString2("Data\SCP-294.ini", Loc, "deathmessage")
 					EndIf
 					
 					StrTemp = GetINIString2("Data\SCP-294.ini", Loc, "color")
@@ -10484,32 +10539,34 @@ End Function
 Function Use427()
 	Local i%, Pvt%, de.Decals, TempCHN%
 	Local PrevI427Timer# = I_427\Timer
+	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
+	Local msg.Messages = First Messages
 	
 	If I_427\Timer < 70.0 * 360.0
 		If I_427\Using = 1 Then
-			I_427\Timer = I_427\Timer + FPSfactor
+			I_427\Timer = I_427\Timer + fpst\FPSFactor[0]
 			For e.Events = Each Events
 				If e\EventName = "1048a" Then
 					If e\EventState2 > 0.0 Then
-						e\EventState2 = Max(e\EventState2 - 0.5 * FPSfactor, 0.0)
+						e\EventState2 = Max(e\EventState2 - 0.5 * fpst\FPSFactor[0], 0.0)
 					EndIf
 				EndIf
 			Next
 			If Injuries > 0.0 Then
-				Injuries = Max(Injuries - 0.0005 * FPSfactor, 0.0)
+				Injuries = Max(Injuries - 0.0005 * fpst\FPSFactor[0], 0.0)
 			EndIf
 			If Bloodloss > 0.0 And Injuries =< 1.0 Then
-				Bloodloss = Max(Bloodloss - 0.001 * FPSfactor, 0.0)
+				Bloodloss = Max(Bloodloss - 0.001 * fpst\FPSFactor[0], 0.0)
 			EndIf
 			If I_008\Timer > 0.0 Then
-				I_008\Timer = Max(I_008\Timer - 0.001 * FPSfactor, 0.0)
+				I_008\Timer = Max(I_008\Timer - 0.001 * fpst\FPSFactor[0], 0.0)
 			EndIf
 			If I_409\Timer > 0.0 Then
-				I_409\Timer = Max(I_409\Timer - 0.003 * FPSfactor, 0.0)
+				I_409\Timer = Max(I_409\Timer - 0.003 * fpst\FPSFactor[0], 0.0)
 			EndIf
 			For i = 0 To 5
 				If SCP1025State[i] > 0.0 Then
-					SCP1025State[i] = Max(SCP1025State[i] - 0.001 * FPSfactor, 0.0)
+					SCP1025State[i] = Max(SCP1025State[i] - 0.001 * fpst\FPSFactor[0], 0.0)
 				EndIf
 			Next
 			If I_427\Sound[0] = 0 Then
@@ -10527,11 +10584,11 @@ Function Use427()
 				EndIf
 			EndIf
 			If PrevI427Timer < 70.0 * 60.0 And I_427\Timer >= 70.0 * 60.0 Then
-				Msg = "You feel refreshed and energetic."
-				MsgTimer = 70.0 * 6.0
+				msg\Msg = "You feel refreshed and energetic."
+				msg\Timer = 70.0 * 6.0
 			ElseIf PrevI427Timer < 70.0 * 180.0 And I_427\Timer >= 70.0 * 180.0 Then
-				Msg = "You feel gentle muscle spasms all over your body."
-				MsgTimer = 70.0 * 6.0
+				msg\Msg = "You feel gentle muscle spasms all over your body."
+				msg\Timer = 70.0 * 6.0
 			EndIf
 		Else
 			For i = 0 To 1
@@ -10541,14 +10598,14 @@ Function Use427()
 			Next
 		EndIf
 	Else
-		If PrevI427Timer - FPSfactor < 70.0 * 360.0 And I_427\Timer >= 70.0 * 360.0 Then
-			Msg = "Your muscles are swelling. You feel more powerful than ever."
-			MsgTimer = 70.0 * 6.0
-		ElseIf PrevI427Timer - FPSfactor < 70.0 * 390.0 And I_427\Timer >= 70.0 * 390.0 Then
-			Msg = "You can't feel your legs. But you don't need legs anymore."
-			MsgTimer = 70.0 * 6.0
+		If PrevI427Timer - fpst\FPSFactor[0] < 70.0 * 360.0 And I_427\Timer >= 70.0 * 360.0 Then
+			msg\Msg = "Your muscles are swelling. You feel more powerful than ever."
+			msg\Timer = 70.0 * 6.0
+		ElseIf PrevI427Timer - fpst\FPSFactor[0] < 70.0 * 390.0 And I_427\Timer >= 70.0 * 390.0 Then
+			msg\Msg = "You can't feel your legs. But you don't need legs anymore."
+			msg\Timer = 70.0 * 6.0
 		EndIf
-		I_427\Timer = I_427\Timer + FPSfactor
+		I_427\Timer = I_427\Timer + fpst\FPSFactor[0]
 		If I_427\Sound[0] = 0 Then
 			I_427\Sound[0] = LoadSound_Strict("SFX\SCP\427\Effect.ogg")
 		EndIf
@@ -10575,7 +10632,7 @@ Function Use427()
 		EndIf
 		If I_427\Timer >= 70.0 * 420.0 Then
 			Kill()
-			DeathMsg = Chr(34) + "Requesting support from MTF Nu-7. We need more firepower to take this thing down." + Chr(34)
+			msg\DeathMsg = Chr(34) + "Requesting support from MTF Nu-7. We need more firepower to take this thing down." + Chr(34)
 		ElseIf I_427\Timer >= 70.0 * 390.0 Then
 			If (Not Crouch) Then SetCrouch(True)
 		EndIf
@@ -10587,6 +10644,7 @@ Function UpdateMTF%()
 	
 	Local r.Rooms, n.NPCs
 	Local Dist#, i%
+	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
 	
 	If MTFTimer = 0.0 Then
 		If Rand(30) = 1 And PlayerRoom\RoomTemplate\Name <> "dimension1499" Then
@@ -10603,7 +10661,7 @@ Function UpdateMTF%()
 						PlayAnnouncement("SFX\Character\MTF\Announc.ogg")
 					EndIf
 					
-					MTFTimer = FPSfactor
+					MTFTimer = fpst\FPSFactor[0]
 					
 					Local leader.NPCs
 					
@@ -10623,21 +10681,21 @@ Function UpdateMTF%()
 		EndIf
 	Else
 		If MTFTimer =< 70.0 * 120.0 Then
-			MTFTimer = MTFTimer + FPSfactor
+			MTFTimer = MTFTimer + fpst\FPSFactor[0]
 		ElseIf MTFTimer > 70.0 * 120.0 And MTFTimer < 10000.0
 			If PlayerInReachableRoom()
 				PlayAnnouncement("SFX\Character\MTF\AnnouncAfter1.ogg")
 			EndIf
 			MTFTimer = 10000.0
 		ElseIf MTFTimer >= 10000.0 And MTFTimer =< 10000.0 + (70.0 * 120.0)
-			MTFTimer = MTFTimer + FPSfactor
+			MTFTimer = MTFTimer + fpst\FPSFactor[0]
 		ElseIf MTFTimer > 10000.0 + (70.0 * 120.0) And MTFTimer < 20000.0
 			If PlayerInReachableRoom()
 				PlayAnnouncement("SFX\Character\MTF\AnnouncAfter2.ogg")
 			EndIf
 			MTFTimer = 20000.0
 		ElseIf MTFTimer >= 20000.0 And MTFTimer =< 20000.0 + (70.0 * 60.0)
-			MTFTimer = MTFTimer + FPSfactor
+			MTFTimer = MTFTimer + fpst\FPSFactor[0]
 		ElseIf MTFTimer > 20000.0 + (70.0 * 60.0) And MTFTimer < 25000.0
 			If PlayerInReachableRoom()
 				; ~ If the player has an SCP in their inventory play special voice line.
@@ -10655,7 +10713,7 @@ Function UpdateMTF%()
 			EndIf
 			MTFTimer = 25000.0
 		ElseIf MTFTimer >= 25000.0 And MTFTimer =< 25000.0 + (70.0 * 60.0)
-			MTFTimer = MTFTimer + FPSfactor
+			MTFTimer = MTFTimer + fpst\FPSFactor[0]
 		ElseIf MTFTimer > 25000.0 + (70.0 * 60.0) And MTFTimer < 30000.0
 			If PlayerInReachableRoom()
 				PlayAnnouncement("SFX\Character\MTF\ThreatAnnouncFinal.ogg")
@@ -10670,6 +10728,8 @@ Function Update008()
 	Local TeleportForInfect% = True
 	Local GroupDesignation$
 	Local tt.TextureTemplate = First TextureTemplate
+	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
+	Local msg.Messages = First Messages
 	
 	If PlayerRoom\RoomTemplate\Name = "room860"
 		For e.Events = Each Events
@@ -10691,7 +10751,7 @@ Function Update008()
 		If I_008\Timer < 93.0 Then
 			PrevI008Timer = I_008\Timer
 			If I_427\Using = 0 And I_427\Timer < 70.0 * 360.0 Then
-				I_008\Timer = Min(I_008\Timer + FPSfactor * 0.002, 100.0)
+				I_008\Timer = Min(I_008\Timer + fpst\FPSFactor[0] * 0.002, 100.0)
 			EndIf
 			
 			BlurTimer = Max(I_008\Timer * 3.0 * (2.0 - CrouchState), BlurTimer)
@@ -10708,17 +10768,17 @@ Function Update008()
 			Next
 			
 			If I_008\Timer > 20.0 And PrevI008Timer =< 20.0 Then
-				Msg = "You feel kinda feverish."
-				MsgTimer = 70.0 * 6.0
+				msg\Msg = "You feel kinda feverish."
+				msg\Timer = 70.0 * 6.0
 			ElseIf I_008\Timer > 40.0 And PrevI008Timer =< 40.0
-				Msg = "You feel nauseated."
-				MsgTimer = 70.0 * 6.0
+				msg\Msg = "You feel nauseated."
+				msg\Timer = 70.0 * 6.0
 			ElseIf I_008\Timer > 60.0 And PrevI008Timer =< 60.0
-				Msg = "The nausea's getting worse."
-				MsgTimer = 70.0 * 6.0
+				msg\Msg = "The nausea's getting worse."
+				msg\Timer = 70.0 * 6.0
 			ElseIf I_008\Timer > 80.0 And PrevI008Timer =< 80.0
-				Msg = "You feel very faint."
-				MsgTimer = 70.0 * 6.0
+				msg\Msg = "You feel very faint."
+				msg\Timer = 70.0 * 6.0
 			ElseIf I_008\Timer >= 91.5
 				BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 91.5), BlinkTimer), -10.0)
 				IsZombie = True
@@ -10744,7 +10804,7 @@ Function Update008()
 			EndIf
 		Else
 			PrevI008Timer = I_008\Timer
-			I_008\Timer = Min(I_008\Timer + FPSfactor * 0.004, 100.0)
+			I_008\Timer = Min(I_008\Timer + fpst\FPSFactor[0] * 0.004, 100.0)
 			
 			If TeleportForInfect Then
 				If I_008\Timer < 94.7 Then
@@ -10778,8 +10838,8 @@ Function Update008()
 						Else
 							GroupDesignation = "See No Evil"
 						EndIf
-						DeathMsg = SubjectName + " found ingesting Dr. [DATA REDACTED] at Sector [DATA REDACTED]. Subject was immediately terminated by " + GroupDesignation + " and sent for autopsy. "
-						DeathMsg = DeathMsg + "SCP-008 infection was confirmed, after which the body was incinerated."
+						msg\DeathMsg = SubjectName + " found ingesting Dr. [DATA REDACTED] at Sector [DATA REDACTED]. Subject was immediately terminated by " + GroupDesignation + " and sent for autopsy. "
+						msg\DeathMsg = msg\DeathMsg + "SCP-008 infection was confirmed, after which the body was incinerated."
 						Kill()
 						de.Decals = CreateDecal(3, EntityX(PlayerRoom\NPC[0]\Collider), 544.0 * RoomScale + 0.01, EntityZ(PlayerRoom\NPC[0]\Collider), 90.0, Rnd(360.0), 0.0)
 						de\Size = 0.8
@@ -10815,23 +10875,23 @@ Function Update008()
 				Kill()
 				BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 96.0), BlinkTimer), -10.0)
 				If PlayerRoom\RoomTemplate\Name = "dimension1499" Then
-					DeathMsg = "The whereabouts of SCP-1499 are still unknown, but a recon team has been dispatched to investigate reports of a violent attack to a church in the Russian town of [DATA REDACTED]."
+					msg\DeathMsg = "The whereabouts of SCP-1499 are still unknown, but a recon team has been dispatched to investigate reports of a violent attack to a church in the Russian town of [DATA REDACTED]."
 				ElseIf PlayerRoom\RoomTemplate\Name = "gatea" Or PlayerRoom\RoomTemplate\Name = "gateb" Then
-					DeathMsg = SubjectName + " found wandering around Gate "
+					msg\DeathMsg = SubjectName + " found wandering around Gate "
 					If PlayerRoom\RoomTemplate\Name = "gatea" Then
-						DeathMsg = DeathMsg + "A"
+						msg\DeathMsg = msg\DeathMsg + "A"
 					Else
-						DeathMsg = DeathMsg + "B"
+						msg\DeathMsg = msg\DeathMsg + "B"
 					EndIf
 					If Rand(2) = 1 Then
 						GroupDesignation = "Nine-Tailed Fox"
 					Else
 						GroupDesignation = "See No Evil"
 					EndIf
-					DeathMsg = DeathMsg + ". Subject was immediately terminated by " + GroupDesignation + " and sent for autopsy. "
-					DeathMsg = DeathMsg + "SCP-008 infection was confirmed, after which the body was incinerated."
+					msg\DeathMsg = msg\DeathMsg + ". Subject was immediately terminated by " + GroupDesignation + " and sent for autopsy. "
+					msg\DeathMsg = msg\DeathMsg + "SCP-008 infection was confirmed, after which the body was incinerated."
 				Else
-					DeathMsg = ""
+					msg\DeathMsg = ""
 				EndIf
 			EndIf
 		EndIf
@@ -10841,44 +10901,46 @@ Function Update008()
 End Function
 
 Function Update409()
-	Local tt.TextureTemplate = First TextureTemplate
 	Local prevI409Timer# = I_409\Timer
+	Local tt.TextureTemplate = First TextureTemplate
+	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
+	Local msg.Messages = First Messages
 	
 	If I_409\Timer > 0.0 Then
 		ShowEntity(tt\OverlayID[8])
 		
 		If I_427\Using = 0 And I_427\Timer < 70.0 * 360.0 Then
-			I_409\Timer = ((Min(I_409\Timer + FPSfactor * 0.004, 100.0)))
+			I_409\Timer = ((Min(I_409\Timer + fpst\FPSFactor[0] * 0.004, 100.0)))
 		EndIf	
 		EntityAlpha(tt\OverlayID[8], Min(((I_409\Timer * 0.2) ^ 2.0) / 1000.0, 0.5))
 	    BlurTimer = Max(I_409\Timer * 3.0 * (2.0 - CrouchState), BlurTimer)
 		
         If I_409\Timer > 40.0 And prevI409Timer =< 40.0 Then
-			Msg = "Crystals are enveloping the skin on your legs."
-			MsgTimer = 70.0 * 6.0
+			msg\Msg = "Crystals are enveloping the skin on your legs."
+			msg\Timer = 70.0 * 6.0
 		ElseIf I_409\Timer > 55.0 And prevI409Timer =< 55.0 Then
-			Msg = "Crystals are up to your abdomen."
-			MsgTimer = 70.0 * 6.0
+			msg\Msg = "Crystals are up to your abdomen."
+			msg\Timer = 70.0 * 6.0
 		ElseIf I_409\Timer > 70.0 And prevI409Timer =< 70.0 Then
-			Msg = "Crystals are starting to envelop your arms."
-			MsgTimer = 70.0 * 6.0
+			msg\Msg = "Crystals are starting to envelop your arms."
+			msg\Timer = 70.0 * 6.0
 		ElseIf I_409\Timer > 85.0 And prevI409Timer =< 85.0 Then
-			Msg = "Crystals starting to envelop your head."
-			MsgTimer = 70.0 * 6.0
+			msg\Msg = "Crystals starting to envelop your head."
+			msg\Timer = 70.0 * 6.0
 		ElseIf I_409\Timer > 93.0 And prevI409Timer =< 93.0 Then
 			PlaySound_Strict(DamageSFX(13))
 			Injuries = Max(Injuries, 2.0)
 		ElseIf I_409\Timer > 94.0 Then
-			I_409\Timer = Min(I_409\Timer + FPSfactor * 0.004, 100.0)
+			I_409\Timer = Min(I_409\Timer + fpst\FPSFactor[0] * 0.004, 100.0)
 			Playable = False
 			CanBreathe = False
 			BlurTimer = 4.0
 			CameraShake = 3.0
 		EndIf
 		If I_409\Timer >= 96.9222 Then
-			DeathMsg = "Pile of SCP-409 crystals found and, by comparing list of the dead, was found to be " + SubjectName + " who had physical contact with SCP-409. "
-			DeathMsg = DeathMsg + "Remains were incinerated along with crystal-infested areas of facility."
-			Kill()
+			msg\DeathMsg = "Pile of SCP-409 crystals found and, by comparing list of the dead, was found to be " + SubjectName + " who had physical contact with SCP-409. "
+			msg\DeathMsg = msg\DeathMsg + "Remains were incinerated along with crystal-infested areas of facility."
+			Kill(True)
         EndIf
     Else
 		HideEntity(tt\OverlayID[8])	
@@ -10933,10 +10995,11 @@ End Function
 
 Function UpdateDecals()
 	Local d.Decals
+	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
 	
 	For d.Decals = Each Decals
 		If d\SizeChange <> 0.0 Then
-			d\Size = d\Size + d\SizeChange * FPSfactor
+			d\Size = d\Size + d\SizeChange * fpst\FPSFactor[0]
 			ScaleSprite(d\OBJ, d\Size, d\Size)
 			
 			Select d\ID
@@ -10951,7 +11014,7 @@ Function UpdateDecals()
 						PlaySound2(DecaySFX(Rand(1, 3)), Camera, d2\OBJ, 10.0, Rnd(0.1, 0.5))
 						d\Timer = Rnd(50.0, 100.0)
 					Else
-						d\Timer = d\Timer - FPSfactor
+						d\Timer = d\Timer - fpst\FPSFactor[0]
 					End If
 					;[End Block]
 			End Select
@@ -10960,12 +11023,12 @@ Function UpdateDecals()
 		End If
 		
 		If d\AlphaChange <> 0.0 Then
-			d\Alpha = Min(d\Alpha + FPSfactor * d\AlphaChange, 1.0)
+			d\Alpha = Min(d\Alpha + fpst\FPSFactor[0] * d\AlphaChange, 1.0)
 			EntityAlpha(d\OBJ, d\Alpha)
 		End If
 		
 		If d\LifeTime > 0.0 Then
-			d\LifeTime = Max(d\LifeTime - FPSfactor, 5.0)
+			d\LifeTime = Max(d\LifeTime - fpst\FPSFactor[0], 5.0)
 		EndIf
 		
 		If d\Size =< 0.0 Or d\Alpha =< 0.0 Or d\LifeTime = 5.0  Then
@@ -11079,6 +11142,8 @@ Function RenderWorld2()
 	Local i%, Dist#
 	Local tt.TextureTemplate = First TextureTemplate
 	Local fo.Fonts = First Fonts
+	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
+	Local msg.Messages = First Messages
 	
 	CameraProjMode(Ark_Blur_Cam, 0)
 	CameraProjMode(Camera, 1)
@@ -11105,13 +11170,13 @@ Function RenderWorld2()
 		For i = 0 To MaxItemAmount - 1
 			If (Inventory(i) <> Null) Then
 				If (WearingNightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvgoggles") Or (WearingNightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernv") Then
-					Inventory(i)\State = Inventory(i)\State - (FPSfactor * (0.02 * WearingNightVision))
+					Inventory(i)\State = Inventory(i)\State - (fpst\FPSFactor[0] * (0.02 * WearingNightVision))
 					Power = Int(Inventory(i)\State)
 					If Inventory(i)\State =< 0.0 Then ; ~ This NVG can't be used
 						HasBattery = 0
-						Msg = "The batteries in these night vision goggles died."
+						msg\Msg = "The batteries in these night vision goggles died."
+						msg\Timer = 70 * 5.0
 						BlinkTimer = -1.0
-						MsgTimer = 70 * 5.0
 						Exit
 					ElseIf Inventory(i)\State =< 100.0 Then
 						HasBattery = 1
@@ -11135,7 +11200,7 @@ Function RenderWorld2()
 	
 	If BlinkTimer < -16.0 Or BlinkTimer > -6.0
 		If WearingNightVision = 2 And HasBattery <> 0 Then ; ~ Show a HUD
-			NVTimer = NVTimer - FPSfactor
+			NVTimer = NVTimer - fpst\FPSFactor[0]
 			If NVTimer =< 0.0 Then
 				For np.NPCs = Each NPCs
 					np\NVX = EntityX(np\Collider, True)
@@ -11419,6 +11484,7 @@ End Function
 Function CatchErrors(Location$)
 	Local ErrStr$ = ErrorLog()
 	Local ErrF%
+	Local msg.Messages = First Messages
 	
 	If Len(ErrStr) > 0 Then
 		If FileType(ErrorFile) = 0 Then
@@ -11457,8 +11523,8 @@ Function CatchErrors(Location$)
 				ErrStr = ErrorLog()
 			Wend
 		EndIf
-		Msg = "Blitz3D Error! Details in " + Chr(34) + ErrorFile + Chr(34)
-		MsgTimer = 70.0 * 20.0
+		msg\Msg = "Blitz3D Error! Details in " + Chr(34) + ErrorFile + Chr(34)
+		msg\Timer = 70.0 * 20.0
 		
 		CloseFile(ErrF)
 	EndIf
@@ -11551,37 +11617,41 @@ Function PlayStartupVideos()
 End Function
 
 Function CanUseItem(CanUseWithGasMask%, CanUseWithEyewear%)
+	Local msg.Messages = First Messages
+	
 	If (CanUseWithGasMask = False And (WearingGasMask > 0 Or I_1499\Using > 0)) Then
-		Msg = "You can't use that item while wearing a gas mask."
-		MsgTimer = 70.0 * 6.0
+		msg\Msg = "You can't use that item while wearing a gas mask."
+		msg\Timer = 70.0 * 6.0
 		Return(False)
 	Else If (CanUseWithEyewear = False And (WearingNightVision > 0))
-		Msg = "You can't use that item while wearing headgear."
-		MsgTimer = 70.0 * 6.0
+		msg\Msg = "You can't use that item while wearing headgear."
+		msg\Timer = 70.0 * 6.0
 		Return(False)
 	EndIf
 	Return(True)
 End Function
 
 Function CanUseItem2(GasMask%, NVG%, SCP1499%, Helmet%)
+	Local msg.Messages = First Messages
+	
 	If GasMask = False And WearingGasMask > 0 Then
-		Msg = "You need to take off the gas mask in order to use that item."
-		MsgTimer = 70.0 * 6.0
+		msg\Msg = "You need to take off the gas mask in order to use that item."
+		msg\Timer = 70.0 * 6.0
 		SelectedItem = Null
 		Return(False)
 	ElseIf SCP1499 = False And I_1499\Using > 0
-		Msg = "You need to take off SCP-1499 in order to use that item."
-		MsgTimer = 70.0 * 6.0
+		msg\Msg = "You need to take off SCP-1499 in order to use that item."
+		msg\Timer = 70.0 * 6.0
 		SelectedItem = Null
 		Return(False)
 	ElseIf NVG = False And WearingNightVision > 0 Then
-		Msg = "You need to take off the goggles in order to use that item."
-		MsgTimer = 70.0 * 6.0
+		msg\Msg = "You need to take off the goggles in order to use that item."
+		msg\Timer = 70.0 * 6.0
 		SelectedItem = Null
 		Return(False)
 	ElseIf Helmet = False And WearingHelmet > 0
-		Msg = "You need to take off the helmet in order to use that item."
-		MsgTimer = 70.0 * 6.0
+		msg\Msg = "You need to take off the helmet in order to use that item."
+		msg\Timer = 70.0 * 6.0
 		SelectedItem = Null
 		Return(False)
 	EndIf
@@ -11616,5 +11686,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#101D#138A#1BEF
+;~B#1040#13B1#1C18
 ;~C#Blitz3D
