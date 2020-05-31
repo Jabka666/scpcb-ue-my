@@ -8894,11 +8894,11 @@ Function NullGame(PlayButtonSFX% = True)
 	Next
 	
 	For o.Objects = Each Objects
-		Delete(o)
+		Delete Each Objects
 	Next
 	
 	For tt.TextureTemplate = Each TextureTemplate
-		Delete(tt)
+		Delete Each TextureTemplate
 	Next
 	
 	Curr173 = Null
