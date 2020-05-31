@@ -32,8 +32,7 @@ Global G_App_Handle% = SystemProperty("AppHWND")
 If (Not Windowed3D()) Then RuntimeError("FATAL ERROR: Your computer does not support the rendering of 3D graphics within a window.")
 
 Function GetDesktopSize()
-	; ~ Gets the width and height of the desktop on the main monitor and returns them in
-	; ~ The globals G_desktop_screen_width and G_desktop_screen_height.
+	; ~ Gets the width and height of the desktop on the main monitor and returns them in the globals G_Desktop_Screen_Width And G_Desktop_Screen_Height.
 	
 	Local RectAngle% = CreateBank(16)
 	
