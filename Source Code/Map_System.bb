@@ -2585,6 +2585,11 @@ Function FillRoom(r.Rooms)
 			it = CreateItem("First Aid Kit", "firstaid", r\x + 912.0 * RoomScale, r\y + 112.0 * RoomScale, r\z - 336.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
+			
+			If ChanceToSpawn005 = 2 Then 
+                it = CreateItem("SCP-005", "scp005",  r\x + 736.0 * RoomScale, r\y + 224.0 * RoomScale, r\z + 755.0 * RoomScale)
+                EntityParent(it\Collider, r\OBJ)
+            EndIf
 			;[End Block]
 		Case "room2poffices2"
 			;[Block]
@@ -5603,14 +5608,19 @@ Function FillRoom(r.Rooms)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
-			it = CreateItem("Document SCP-409", "paper", r\x - 3595.0 * RoomScale, r\y - 4608.0 * RoomScale, r\z + 2234.0 * RoomScale)
-			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
-			EntityParent(it\Collider, r\OBJ)
-			
 			sc = CreateSecurityCam(r\x - 3624.0 * RoomScale, r\y - 4112.0 * RoomScale, r\z + 2248.0 * RoomScale, r)
 			sc\Angle = 100.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			EntityParent(sc\OBJ, r\OBJ)
+			
+			it = CreateItem("Document SCP-409", "paper", r\x - 3595.0 * RoomScale, r\y - 4608.0 * RoomScale, r\z + 2234.0 * RoomScale)
+			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
+			EntityParent(it\Collider, r\OBJ)
+			
+			If ChanceToSpawn005 = 3 Then
+				it = CreateItem("SCP-005", "scp005", r\x - 5050.0 * RoomScale, r\y - 4688.0 * RoomScale, r\z + 1720.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)	
+			EndIf
 			;[End Block]
 		Case "room2posters"
 		    ;[Block]
@@ -5676,6 +5686,42 @@ Function FillRoom(r.Rooms)
 			
 			it = CreateItem("First Aid Kit", "firstaid", r\x - 506.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 322.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)	
+			;[End Block]
+		Case "room005"
+			;[Block]
+			d = CreateDoor(r\Zone, r\x, r\y, r\z - 672.0 * RoomScale, 0.0, r, False, False, 4)
+			d\AutoClose = False
+			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.061, True)
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.061, True)
+			
+			r\Objects[0] = CreatePivot()
+			PositionEntity(r\Objects[0], r\x, r\y + 76.0 * RoomScale, r\z - 260.0 * RoomScale)
+			
+			r\Objects[1] = CreatePivot()
+			PositionEntity(r\Objects[1], r\x, r\y + 188.0 * RoomScale, r\z - 25.0 * RoomScale)			
+			
+			r\Objects[2] = CreatePivot()
+			PositionEntity(r\Objects[2], r\x, r\y + 12.0 * RoomScale, r\z + 55.0 * RoomScale)
+			
+			For i = 0 To 2
+			    EntityParent(r\Objects[i], r\OBJ)
+			Next			
+			
+			sc = CreateSecurityCam(r\x, r\y + 415.0 * RoomScale, r\z - 572.0 * RoomScale, r)
+			sc\Angle = 0.0 : sc\Turn = 30.0
+			TurnEntity(sc\CameraOBJ, 30.0, 0.0, 0.0)
+			EntityParent(sc\OBJ, r\OBJ)
+			
+			it = CreateItem("Document SCP-005", "paper", r\x + 338.0 * RoomScale, r\y + 152.0 * RoomScale, r\z - 500.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			If ChanceToSpawn005 = 1 Then
+				it = CreateItem("SCP-005", "scp005", r\x, r\y + 254.0 * RoomScale, r\z - 260.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			ElseIf ChanceToSpawn005 = 2 Then
+				it = CreateItem("Note from Maynard", "paper", r\x, r\y + 254.0 * RoomScale, r\z - 260.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)	
+			EndIf
 			;[End Block]
 	End Select
 	
@@ -7455,9 +7501,10 @@ Function CreateMap()
 	
 	MapRoom(ROOM1, 0) = "room173"	
 	SetRoom("room372", ROOM1, Floor(0.1 * Float(Room1Amount[0])), Min_Pos, Max_Pos)
-	SetRoom("room914", ROOM1, Floor(0.3 * Float(Room1Amount[0])), Min_Pos, Max_Pos)
-	SetRoom("room1archive", ROOM1, Floor(0.5 * Float(Room1Amount[0])), Min_Pos, Max_Pos)
-	SetRoom("room205", ROOM1, Floor(0.6 * Float(Room1Amount[0])), Min_Pos, Max_Pos)
+	SetRoom("room005", ROOM1, Floor(0.3 * Float(Room1Amount[0])), Min_Pos, Max_Pos)
+	SetRoom("room914", ROOM1, Floor(0.35 * Float(Room1Amount[0])), Min_Pos, Max_Pos)
+	SetRoom("room205", ROOM1, Floor(0.5 * Float(Room1Amount[0])), Min_Pos, Max_Pos)
+	SetRoom("room1archive", ROOM1, Floor(0.6 * Float(Room1Amount[0])), Min_Pos, Max_Pos)
 	
 	MapRoom(ROOM2C, 0) = "room2clockroom"
 	
@@ -8730,5 +8777,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11F1
+;~B#11F6
 ;~C#Blitz3D

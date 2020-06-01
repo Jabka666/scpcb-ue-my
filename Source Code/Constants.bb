@@ -141,15 +141,15 @@ Const HARD% = 2
 
 ; ~ [ACHIEVEMENTS]
 
-Const MAXACHIEVEMENTS% = 40
+Const MAXACHIEVEMENTS% = 41
 
-Const Achv008% = 0, Achv012% = 1, Achv035% = 2, Achv049% = 3, Achv055% = 4,  Achv079% = 5, Achv096% = 6, Achv106% = 7
-Const Achv148% = 8, Achv205% = 9, Achv294% = 10, Achv372% = 11, Achv409% = 12, Achv420J% = 13, Achv427% = 14, Achv500% = 15, Achv513% = 16
-Const Achv714% = 17, Achv789J% = 18, Achv860% = 19, Achv895% = 20, Achv914% = 21, Achv939% = 22, Achv966% = 23, Achv970% = 24
-Const Achv1025% = 25, Achv1048% = 26, Achv1123% = 27, Achv1162% = 28, Achv1499% = 29
+Const Achv005% = 0, Achv008% = 1, Achv012% = 2, Achv035% = 3, Achv049% = 4, Achv055% = 5,  Achv079% = 6, Achv096% = 7, Achv106% = 8
+Const Achv148% = 9, Achv205% = 10, Achv294% = 11, Achv372% = 12, Achv409% = 13, Achv420J% = 14, Achv427% = 15, Achv500% = 16, Achv513% = 17
+Const Achv714% = 18, Achv789J% = 19, Achv860% = 20, Achv895% = 21, Achv914% = 22, Achv939% = 23, Achv966% = 24, Achv970% = 25
+Const Achv1025% = 26, Achv1048% = 27, Achv1123% = 28, Achv1162% = 29, Achv1499% = 30
 
-Const AchvConsole% = 30, AchvHarp% = 31, AchvKeter% = 32, AchvKeyCard6% = 33, AchvMaynard% = 34, AchvOmni% = 35
-Const AchvO5% = 36, AchvPD% = 37, AchvSNAV% = 38, AchvTesla% = 39
+Const AchvConsole% = 31, AchvHarp% = 32, AchvKeter% = 33, AchvKeyCard6% = 34, AchvMaynard% = 35, AchvOmni% = 36
+Const AchvO5% = 37, AchvPD% = 38, AchvSNAV% = 39, AchvTesla% = 40
 
 ; ~ [FONTS]
 

@@ -249,6 +249,8 @@ Global Injuries#, Bloodloss#, HealTimer#
 
 Global RefinedItems%
 
+Global ChanceToSpawn005%
+
 Include "Source Code\Achievements_System.bb"
 
 Global DropSpeed#, HeadDropSpeed#, CurrSpeed#
@@ -2579,7 +2581,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 	If d\KeyCard > 0 Then
 		If SelectedItem = Null Then
 			If ShowMsg = True Then
-				If (Instr(msg\Msg, "The keycard") = 0 And Instr(msg\Msg, "A keycard with") = 0) Or (msg\Timer < 70.0 * 3.0) Then
+				If (Instr(msg\Msg, "The keycard") = 0 And Instr(msg\Msg, "A keycard with") = 0 And Instr(msg\Msg, "You hold the") = 0) Or (msg\Timer < 70.0 * 3.0) Then
 					msg\Msg = "A keycard is required to operate this door."
 					msg\Timer = 70.0 * 6.0
 				EndIf
@@ -2619,6 +2621,10 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 					;[Block]
 					Temp = 8
 					;[End Block]
+				Case "scp005"
+				    ;[Block]
+					Temp = 9
+					;[End Block]
 				Default
 					;[Block]
 					Temp = -1
@@ -2627,7 +2633,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 			
 			If Temp = -1 Then 
 				If ShowMsg = True Then
-					If (Instr(msg\Msg, "The keycard") = 0 And Instr(msg\Msg, "A keycard with") = 0) Or msg\Timer < 70.0 * 3.0 Then
+					If (Instr(msg\Msg, "The keycard") = 0 And Instr(msg\Msg, "A keycard with") = 0 And Instr(msg\Msg, "You hold the") = 0) Or (msg\Timer < 70.0 * 3.0) Then
 						msg\Msg = "A keycard is required to operate this door."
 						msg\Timer = 70.0 * 6.0
 					EndIf
@@ -2642,13 +2648,21 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 							msg\Msg = "The keycard was inserted into the slot. UNKNOWN ERROR! " Chr(34) + "Do" + Chr(Rand(48, 122)) + "s th" + Chr(Rand(48, 122)) + " B" + Chr(Rand(48, 122)) + "ack " + Chr(Rand(48, 122)) + "oon howl? " + Chr(Rand(48, 122)) + "es. N" + Chr(Rand(48, 122)) + ". Ye" + Chr(Rand(48, 122)) + ". " + Chr(Rand(48, 122)) + "o." + Chr(34)
 							msg\Timer = 70.0 * 8.0
 						Else
-							msg\Msg = "The keycard was inserted into the slot but nothing happened."
+							If Temp = 9 Then
+								msg\Msg = "You hold the key close to the slot but nothing happened."
+							Else
+								msg\Msg = "The keycard was inserted into the slot but nothing happened."
+							EndIf
 							msg\Timer = 70.0 * 6.0
 						EndIf
 						Return
 					Else
 						PlaySound_Strict(KeyCardSFX1)
-						msg\Msg = "The keycard was inserted into the slot."
+						If Temp = 9 Then
+							msg\Msg = "You hold the key close to the slot."
+						Else
+							msg\Msg = "The keycard was inserted into the slot."
+						EndIf
 						msg\Timer = 70.0 * 6.0
 					EndIf
 				EndIf
@@ -2661,7 +2675,11 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 							msg\Msg = "The keycard was inserted into the slot. UNKNOWN ERROR! " +  Chr(34) + "Do" + Chr(Rand(48, 122)) + "s th" + Chr(Rand(48, 122)) + " B" + Chr(Rand(48, 122)) + "ack " + Chr(Rand(48, 122)) + "oon howl? " + Chr(Rand(48, 122)) + "es. N" + Chr(Rand(48, 122)) + ". Ye" + Chr(Rand(48, 122)) + ". " + Chr(Rand(48, 122)) + "o." + Chr(34)
 							msg\Timer = 70.0 * 8.0
 						Else
-							msg\Msg = "The keycard was inserted into the slot but nothing happened."
+							If Temp = 9 Then
+								msg\Msg = "You hold the key close to the slot but nothing happened."
+							Else
+								msg\Msg = "The keycard was inserted into the slot but nothing happened."
+							EndIf
 							msg\Timer = 70.0 * 6.0
 						EndIf
 					Else
@@ -2669,7 +2687,11 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 							msg\Msg = "The keycard was inserted into the slot. UNKNOWN ERROR! " + Chr(34) + "Do" + Chr(Rand(48, 122)) + "s th" + Chr(Rand(48, 122)) + " B" + Chr(Rand(48, 122)) + "ack " + Chr(Rand(48, 122)) + "oon howl? " + Chr(Rand(48, 122)) + "es. N" + Chr(Rand(48, 122)) + ". Ye" + Chr(Rand(48, 122)) + ". " + Chr(Rand(48, 122)) + "o." + Chr(34)
 							msg\Timer = 70.0 * 8.0
 						Else
-							msg\Msg = "A keycard with security clearance " + (d\KeyCard - 2) + " or higher is required to operate this door."
+							If Temp = 9 Then
+								msg\Msg = "You hold the key close to the slot but nothing happened."
+							Else
+								msg\Msg = "A keycard with security clearance " + (d\KeyCard - 2) + " or higher is required to operate this door."
+							EndIf
 							msg\Timer = 70.0 * 6.0
 						EndIf
 					EndIf
@@ -2680,22 +2702,55 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 	ElseIf d\KeyCard < 0
 		; ~ I can't find any way to produce short circuited boolean expressions so work around this by using a temporary variable -- risingstar64
 		If SelectedItem <> Null Then
-			Temp = (SelectedItem\ItemTemplate\TempName = "hand" And d\KeyCard = -1) Or (SelectedItem\ItemTemplate\TempName = "hand2" And d\KeyCard = -2)
+			If SelectedItem\ItemTemplate\TempName = "scp005" Then
+				Temp = 2
+			ElseIf SelectedItem\ItemTemplate\TempName = "key0" Or SelectedItem\ItemTemplate\TempName = "key1" Or SelectedItem\ItemTemplate\TempName = "key2" Or SelectedItem\ItemTemplate\TempName = "key3" Or SelectedItem\ItemTemplate\TempName = "key4" Or SelectedItem\ItemTemplate\TempName = "key5" Or SelectedItem\ItemTemplate\TempName = "key6" Or SelectedItem\ItemTemplate\TempName = "key7"
+				Temp = 3
+			ElseIf SelectedItem\ItemTemplate\TempName = "key" Or SelectedItem\ItemTemplate\TempName = "scp860"
+				Temp = 4
+			Else
+				Temp = (SelectedItem\ItemTemplate\TempName = "hand" And d\KeyCard = -1) Or (SelectedItem\ItemTemplate\TempName = "hand2" And d\KeyCard = -2)
+			EndIf
 		EndIf
 		SelectedItem = Null
-		If Temp <> 0 Then
-			PlaySound_Strict(ScannerSFX1)
-			If Instr(msg\Msg, "You placed your") = 0 Or msg\Timer < 70.0 * 3.0 Then
-				msg\Msg = "You place the palm of the hand onto the scanner. The scanner reads: " + Chr(34) + "DNA verified. Access granted." + Chr(34)
-			EndIf
-			msg\Timer = 70.0 * 10.0
-		Else
-			If ShowMsg = True Then 
+		If ShowMsg = True Then
+			If Temp <> 0 Then
+				If Temp >= 3 Then
+					PlaySound_Strict(ButtonSFX)
+					If Temp = 4 Then
+						If (Instr(msg\Msg, "You placed your") = 0 And Instr(msg\Msg, "You place") = 0 And Instr(msg\Msg, "You hold the") = 0 And Instr(msg\Msg, "The type of") = 0) Or (msg\Timer < 70.0 * 3.0) Then
+							msg\Msg = "There is no place to insert the key."
+							msg\Timer = 70 * 6.0
+						EndIf
+					Else
+						If (Instr(msg\Msg, "You placed your") = 0 And Instr(msg\Msg, "You place") = 0 And Instr(msg\Msg, "You hold the") = 0 And Instr(msg\Msg, "There is") = 0) Or (msg\Timer < 70.0 * 3.0) Then
+							msg\Msg = "The type of this slot doesn't require keycards."
+							msg\Timer = 70 * 6.0
+						EndIf
+					EndIf
+					Return
+				Else
+					PlaySound_Strict(ScannerSFX1)
+					If Temp = 2 Then
+						If (Instr(msg\Msg, "You placed your") = 0 And Instr(msg\Msg, "You place") = 0 And Instr(msg\Msg, "The type of") = 0 And Instr(msg\Msg, "There is") = 0) Or (msg\Timer < 70.0 * 3.0) Then
+							msg\Msg = "You hold the key onto the scanner. The scanner reads: " + Chr(34) + "Unknown DNA verified. ERROR! Access granted." + Chr(34)
+							msg\Timer = 70.0 * 8.0
+						EndIf
+					Else
+						If (Instr(msg\Msg, "You place") = 0 And Instr(msg\Msg, "You hold the") = 0 And Instr(msg\Msg, "The type of") = 0 And Instr(msg\Msg, "There is") = 0) Or (msg\Timer < 70.0 * 3.0) Then
+							msg\Msg = "You place the palm of the hand onto the scanner. The scanner reads: " + Chr(34) + "DNA verified. Access granted." + Chr(34)
+							msg\Timer = 70.0 * 8.0
+						EndIf
+					EndIf
+				EndIf
+			Else
 				PlaySound_Strict(ScannerSFX2)
-				msg\Msg = "You placed your palm onto the scanner. The scanner reads: " + Chr(34) + "DNA does not match known sample. Access denied." + Chr(34)
-				msg\Timer = 70.0 * 10.0
+				If (Instr(msg\Msg, "You place") = 0 And Instr(msg\Msg, "You hold the") = 0 And Instr(msg\Msg, "The type of") = 0 And Instr(msg\Msg, "There is") = 0) Or (msg\Timer < 70.0 * 3.0) Then
+					msg\Msg = "You placed your palm onto the scanner. The scanner reads: " + Chr(34) + "DNA does not match known sample. Access denied." + Chr(34)
+					msg\Timer = 70.0 * 8.0
+				EndIf
+				Return			
 			EndIf
-			Return			
 		EndIf
 	Else
 		If d\Locked = True Then
@@ -4746,6 +4801,35 @@ Function DrawGUI()
 	Local ShouldDrawHUD% = True
 	
 	If SelectedDoor <> Null Then
+		If SelectedItem <> Null Then
+			If SelectedItem\ItemTemplate\TempName = "scp005" Then 
+				ShouldDrawHUD = False
+				If SelectedDoor\Code <> "GEAR" Then
+					SelectedDoor\Locked = 1					
+					
+					If SelectedDoor\Code = Str(AccessCode) Then
+						GiveAchievement(AchvMaynard)
+					ElseIf SelectedDoor\Code = "7816"
+						GiveAchievement(AchvHarp)
+				    ElseIf SelectedDoor\Code = "2411"
+				        GiveAchievement(AchvO5)
+					EndIf
+					
+					SelectedDoor\Locked = 0					
+					UseDoor(SelectedDoor, True)
+					SelectedDoor = Null
+					PlaySound_Strict(ScannerSFX1)
+					msg\Msg = "You hold the key close to the keypad."
+					msg\Timer = 70.0 * 6.0
+				Else
+					SelectedDoor = Null
+					PlaySound_Strict(ScannerSFX2)
+					msg\Msg = "You hold the key close to the keypad but nothing happens."
+					msg\Timer = 70.0 * 6.0
+				EndIf
+			EndIf
+		EndIf
+		
 		SelectedItem = Null
 		If ShouldDrawHUD Then
 			Pvt = CreatePivot()
@@ -5019,7 +5103,7 @@ Function DrawGUI()
 								If OtherOpen\SecondInv[z] <> Null Then
 									Local Name$ = OtherOpen\SecondInv[z]\ItemTemplate\TempName
 									
-									If Name <> "25ct" And Name <> "coin" And Name <> "key" And Name <> "scp860" And Name <> "scp500pill" And Name <> "scp500pilldeath" Then
+									If Name <> "25ct" And Name <> "coin" And Name <> "key" And Name <> "scp860" And Name <> "scp500pill" And Name <> "scp500pilldeath" And Name <> "scp005" Then
 										IsEmpty = False
 										Exit
 									EndIf
@@ -5309,7 +5393,7 @@ Function DrawGUI()
 						SelectedItem = Null
 					ElseIf Inventory(MouseSlot) <> SelectedItem
 						Select SelectedItem\ItemTemplate\TempName
-							Case "paper", "key0", "key1", "key2", "key3", "key4", "key5", "key6", "key7", "misc", "oldpaper", "badge", "ticket", "25ct", "coin", "key", "scp860", "scp500pill", "scp500pilldeath"
+							Case "paper", "key0", "key1", "key2", "key3", "key4", "key5", "key6", "key7", "misc", "oldpaper", "badge", "ticket", "25ct", "coin", "key", "scp860", "scp500pill", "scp500pilldeath", "scp005"
 								;[Block]
 								If Inventory(MouseSlot)\ItemTemplate\TempName = "clipboard" Then
 									; ~ Add an item to clipboard
@@ -5317,7 +5401,7 @@ Function DrawGUI()
 									Local b$ = SelectedItem\ItemTemplate\TempName
 									Local b2$ = SelectedItem\ItemTemplate\Name
 									
-									If (b <> "misc" And b <> "25ct" And b <> "coin" And b <> "key" And b <> "scp860" And b <> "scp500pill" And b <> "scp500pilldeath") Or (b2 = "Playing Card" Or b2 = "Mastercard") Then
+									If (b <> "misc" And b <> "25ct" And b <> "coin" And b <> "key" And b <> "scp860" And b <> "scp500pill" And b <> "scp500pilldeath" And b <> "scp005") Or (b2 = "Playing Card" Or b2 = "Mastercard") Then
 										For c% = 0 To Inventory(MouseSlot)\InvSlots - 1
 											If (Inventory(MouseSlot)\SecondInv[c] = Null)
 												If SelectedItem <> Null Then
@@ -5364,7 +5448,7 @@ Function DrawGUI()
 												If SelectedItem <> Null Then
 													Inventory(MouseSlot)\SecondInv[c] = SelectedItem
 													Inventory(MouseSlot)\State = 1.0
-													If b <> "25ct" And b <> "coin" And b <> "key" And b <> "scp860" And b <> "scp500pill" And b <> "scp500pilldeath"
+													If b <> "25ct" And b <> "coin" And b <> "key" And b <> "scp860" And b <> "scp500pill" And b <> "scp500pilldeath" And b <> "scp005"
 														SetAnimTime(Inventory(MouseSlot)\Model, 3.0)
 													EndIf
 													Inventory(MouseSlot)\InvImg = Inventory(MouseSlot)\ItemTemplate\InvImg
@@ -5626,7 +5710,7 @@ Function DrawGUI()
 						Next
 					EndIf
 					;[End Block]
-				Case "key0", "key1", "key2", "key3", "key4", "key5", "key6", "key7", "scp860", "hand", "hand2", "25ct"
+				Case "key0", "key1", "key2", "key3", "key4", "key5", "key6", "key7", "scp860", "hand", "hand2", "25ct", "scp005"
 					;[Block]
 					DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 					;[End Block]
@@ -6962,7 +7046,7 @@ Function DrawGUI()
 					EndIf
 					
 					SelectedItem\State = 1.0
-					SelectedItem = Null
+					DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 					;[End Block]
 				Case "oldpaper"
 					;[Block]
@@ -8548,6 +8632,8 @@ Function InitNewGame()
 	
 	HeartBeatRate = 70.0
 	
+	ChanceToSpawn005 = Rand(1, 3)
+	
 	AccessCode = 0
 	For i = 0 To 3
 		AccessCode = AccessCode + Rand(1, 9) * (10 ^ i)
@@ -8868,6 +8954,8 @@ Function NullGame(PlayButtonSFX% = True)
 	For i = 0 To 5
 		SCP1025State[i] = 0.0
 	Next
+	
+	ChanceToSpawn005 = 0
 	
 	SelectedEnding = ""
 	EndingTimer = 0.0
@@ -11732,5 +11820,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#1040#13B2#1C2D
+;~B#1077#1406#1C81
 ;~C#Blitz3D

@@ -31,6 +31,8 @@ Function SaveGame(File$)
 	WriteFloat(f, EntityY(Head))
 	WriteFloat(f, EntityZ(Head))
 	
+	WriteByte(f, ChanceToSpawn005)
+	
 	WriteString(f, Str(AccessCode))
 	
 	WriteFloat(f, EntityPitch(Collider))
@@ -502,6 +504,8 @@ Function LoadGame(File$)
 	z = ReadFloat(f)	
 	PositionEntity(Head, x, y + 0.05, z)
 	ResetEntity(Head)
+	
+	ChanceToSpawn005 = ReadByte(f)
 	
 	AccessCode = Int(ReadString(f))
 	
@@ -1343,6 +1347,8 @@ Function LoadGameQuick(File$)
 	z = ReadFloat(f)	
 	PositionEntity(Head, x, y + 0.05, z)
 	ResetEntity(Head)
+	
+	ChanceToSpawn005 = ReadByte(f)
 	
 	AccessCode = Int(ReadString(f))
 	

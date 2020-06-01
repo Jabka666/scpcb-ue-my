@@ -4990,7 +4990,7 @@ Function UpdateNPCs()
 		Local GravityDist# = Distance(EntityX(Collider), EntityZ(Collider), EntityX(n\Collider), EntityZ(n\Collider))
 		
 		If GravityDist < HideDistance * 0.7 Or n\NPCtype = NPCtype1499_1 Then
-			If n\InFacility = InFacility
+			If n\InFacility = InFacility Then
 				TranslateEntity(n\Collider, 0.0, n\DropSpeed, 0.0)
 				
 				Local CollidedFloor% = False
@@ -5007,9 +5007,9 @@ Function UpdateNPCs()
 						Local MaxX#, MinX#, MaxZ#, MinZ#
 						
 						If n\InFacility = 1 Then
-							If PlayerRoom\RoomTemplate\Name <> "room173intro"
+							If PlayerRoom\RoomTemplate\Name <> "room173intro" Then
 								For e.Events = Each Events
-									If e\EventName = "room860"
+									If e\EventName = "room860" Then
 										If e\EventState = 1.0
 											UpdateGravity = True
 											Exit

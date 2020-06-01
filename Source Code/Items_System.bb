@@ -100,7 +100,8 @@ Function InitItemTemplates()
 	
 	; ~ [PAPER]
 	
-	CreateItemTemplate("Document SCP-008", "paper", ItemsPath + "paper.x", ItemsPath + "INV_paper.png", ItemsPath + "doc_008.png", 0.003, 0)
+	CreateItemTemplate("Document SCP-005", "paper", ItemsPath + "paper.x", ItemsPath + "INV_paper.png", ItemsPath + "doc_005.png", 0.003, 0)
+    CreateItemTemplate("Document SCP-008", "paper", ItemsPath + "paper.x", ItemsPath + "INV_paper.png", ItemsPath + "doc_008.png", 0.003, 0)
 	CreateItemTemplate("Document SCP-012", "paper", ItemsPath + "paper.x", ItemsPath + "INV_paper.png", ItemsPath + "doc_012.png", 0.003, 0)
 	CreateItemTemplate("Document SCP-035", "paper", ItemsPath + "paper.x", ItemsPath + "INV_paper.png", ItemsPath + "doc_035.png", 0.003, 0)
 	CreateItemTemplate("Document SCP-049", "paper", ItemsPath + "paper.x", ItemsPath + "INV_paper.png", ItemsPath + "doc_049.png", 0.003, 0)
@@ -196,6 +197,8 @@ Function InitItemTemplates()
 	
 	CreateItemTemplate("Mysterious Note", "paper", ItemsPath + "paper.x", ItemsPath + "INV_note.png", ItemsPath + "note_mysterious.png", 0.003, 0, ItemsPath + "note.png")
 	
+	CreateItemTemplate("Note from Maynard", "paper", ItemsPath + "note.x", ItemsPath + "INV_note.png", ItemsPath + "note_Maynard(2).png", 0.0025, 0, ItemsPath + "note.png")
+	
 	CreateItemTemplate("Notification", "paper", ItemsPath + "paper.x", ItemsPath + "INV_note.png", ItemsPath + "doc_RAND.png", 0.003, 0, ItemsPath + "note.png")
 	
 	CreateItemTemplate("Old Badge", "badge", ItemsPath + "badge.x", ItemsPath + "INV_D_9341_badge.png", ItemsPath + "D_9341_badge_HUD.png", 0.0001, 1, ItemsPath + "D_9341_badge.png", "", 0, 1 + 2 + 8)
@@ -212,6 +215,7 @@ Function InitItemTemplates()
 	
 	; ~ [SCPs]
 	
+	CreateItemTemplate("SCP-005", "scp005", ItemsPath + "scp_005.b3d", ItemsPath + "INV_scp_005.png", "", 0.0004, 1)
 	CreateItemTemplate("SCP-148 Ingot", "scp148ingot", ItemsPath + "scp_148.x", ItemsPath + "INV_scp_148.png", "", RoomScale, 2)
 	CreateItemTemplate("SCP-427", "scp427", ItemsPath + "scp_427.b3d", ItemsPath + "INV_scp_427.png", "", 0.001, 3)
 	
@@ -694,6 +698,10 @@ Function PickItem(item.Items)
 					Case "key7"
 						;[Block]
 						GiveAchievement(AchvOmni)
+						;[End Block]
+					Case "scp005"
+				        ;[Block]    
+				   	    GiveAchievement(Achv005)
 						;[End Block]
 					Case "veryfinevest"
 						;[Block]

@@ -251,6 +251,8 @@ Function InitEvents()
 	CreateEvent("room2bio", "room2bio", 0)
 	
 	CreateEvent("room409", "room409", 0)
+	
+	CreateEvent("room005", "room005", 0)
 End Function
 
 Function QuickLoadEvents()
@@ -6760,7 +6762,7 @@ Function UpdateEvents()
 										msg\Msg = "The door will not budge."
 										msg\Timer = 70.0 * 6.0
 									EndIf
-								ElseIf SelectedItem\ItemTemplate\TempName = "scp860" 
+								ElseIf SelectedItem\ItemTemplate\TempName = "scp860" Or SelectedItem\ItemTemplate\TempName = "scp005" 
 									If MouseHit1 Then
 										PlaySound_Strict(LoadTempSound("SFX\Door\WoodenDoorOpen.ogg"))
 										ShowEntity(fr.Forest\Forest_Pivot)
@@ -8960,6 +8962,32 @@ Function UpdateEvents()
 						EndIf
 					EndIf
 				EndIf
+				;[End Block]
+			Case "room005"
+			    ;[Block]
+			    If (Not Contained106) Then 
+			        If PlayerRoom = e\room Then
+			            If EntityDistance(Collider, e\room\Objects[0]) < 1.5 Then
+				            If e\EventState = 0.0 And ChanceToSpawn005 <> 2 Then
+				                PlaySound_Strict(HorrorSFX(10))
+								
+							    d.Decals = CreateDecal(0, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True), 0.0, e\room\Angle + 360.0, Rnd(360.0))
+						        d\Size = 0.1 : d\SizeChange = 0.003 : d\Alpha = 0.01 : d\AlphaChange = 0.005 : d\ID = 1
+								ScaleSprite(d\OBJ, d\Size, d\Size)
+								
+						        PositionEntity(Curr106\Collider, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True))
+							    Curr106\State = -11.0
+								ShowEntity(Curr106\OBJ)
+							    e\EventState = 1.0
+							Else
+							    RemoveEvent(e)
+				            EndIf
+				        EndIf
+				    EndIf
+				Else
+				    RemoveEvent(e)
+				EndIf		    
+				;[End Block]
 		End Select
 		
 		If e <> Null Then
@@ -10417,5 +10445,5 @@ Function GenerateRandomIA()
 	Next
 End Function
 ;~IDEal Editor Parameters:
-;~B#1252#1E80
+;~B#1254#1E82
 ;~C#Blitz3D
