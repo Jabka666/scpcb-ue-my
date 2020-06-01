@@ -5143,7 +5143,7 @@ Function UpdateEvents()
 					If EntityY(Collider) < -4600.0 * RoomScale Then
 						GiveAchievement(Achv939)
 						
-						BlurTimer = 700.0
+						BlurTimer = Min(BlurTimer + (fpst\FPSFactor[0] * 1.1), 1000.0)
 						
 						ShouldPlay = 7
 						

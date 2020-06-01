@@ -4707,15 +4707,16 @@ Function DrawGUI()
 			AAText(x + 400, 320, "Vomit Timer: " + VomitTimer)
 			AAText(x + 400, 340, "Sanity: " + Sanity)
 			AAText(x + 400, 360, "Deaf Timer: " + DeafTimer)
-			AAText(x + 400, 380, "Blink Effect Timer: " + BlinkEffectTimer)
-			AAText(x + 400, 400, "Stamina Effect Timer: " + StaminaEffectTimer)
-			AAText(x + 400, 420, "Eye Irritation Timer: " + EyeIrritation)
+			AAText(x + 400, 380, "Blur Timer: " + BlurTimer)
+			AAText(x + 400, 400, "Blink Effect Timer: " + BlinkEffectTimer)
+			AAText(x + 400, 420, "Stamina Effect Timer: " + StaminaEffectTimer)
+			AAText(x + 400, 440, "Eye Irritation Timer: " + EyeIrritation)
 			
-			AAText(x + 400, 460, "SCP-008 Infection: " + I_008\Timer)
-			AAText(x + 400, 480, "SCP-409 Crystallization: " + I_409\Timer)
-			AAText(x + 400, 500, "SCP-427 State (Secs): " + Int(I_427\Timer / 70.0))
+			AAText(x + 400, 480, "SCP-008 Infection: " + I_008\Timer)
+			AAText(x + 400, 500, "SCP-409 Crystallization: " + I_409\Timer)
+			AAText(x + 400, 520, "SCP-427 State (Secs): " + Int(I_427\Timer / 70.0))
 			For i = 0 To 5
-				AAText(x + 400, 520 + (20 * i), "SCP-1025 State " + i + ": " + SCP1025State[i])
+				AAText(x + 400, 540 + (20 * i), "SCP-1025 State " + i + ": " + SCP1025State[i])
 			Next
 			
 			AAText(x + 760, 40, "*****************************")
@@ -10593,25 +10594,25 @@ Function Use427()
 			For e.Events = Each Events
 				If e\EventName = "1048a" Then
 					If e\EventState2 > 0.0 Then
-						e\EventState2 = Max(e\EventState2 - 0.5 * fpst\FPSFactor[0], 0.0)
+						e\EventState2 = Max(e\EventState2 - (fpst\FPSFactor[0] * 0.5), 0.0)
 					EndIf
 				EndIf
 			Next
 			If Injuries > 0.0 Then
-				Injuries = Max(Injuries - 0.0005 * fpst\FPSFactor[0], 0.0)
+				Injuries = Max(Injuries - (fpst\FPSFactor[0] * 0.0005), 0.0)
 			EndIf
 			If Bloodloss > 0.0 And Injuries =< 1.0 Then
-				Bloodloss = Max(Bloodloss - 0.001 * fpst\FPSFactor[0], 0.0)
+				Bloodloss = Max(Bloodloss - (fpst\FPSFactor[0] * 0.001), 0.0)
 			EndIf
 			If I_008\Timer > 0.0 Then
-				I_008\Timer = Max(I_008\Timer - 0.001 * fpst\FPSFactor[0], 0.0)
+				I_008\Timer = Max(I_008\Timer - (fpst\FPSFactor[0] * 0.001), 0.0)
 			EndIf
 			If I_409\Timer > 0.0 Then
-				I_409\Timer = Max(I_409\Timer - 0.003 * fpst\FPSFactor[0], 0.0)
+				I_409\Timer = Max(I_409\Timer - (fpst\FPSFactor[0] * 0.003), 0.0)
 			EndIf
 			For i = 0 To 5
 				If SCP1025State[i] > 0.0 Then
-					SCP1025State[i] = Max(SCP1025State[i] - 0.001 * fpst\FPSFactor[0], 0.0)
+					SCP1025State[i] = Max(SCP1025State[i] - (fpst\FPSFactor[0] * 0.001), 0.0)
 				EndIf
 			Next
 			If I_427\Sound[0] = 0 Then
@@ -10796,7 +10797,7 @@ Function Update008()
 		If I_008\Timer < 93.0 Then
 			PrevI008Timer = I_008\Timer
 			If I_427\Using = 0 And I_427\Timer < 70.0 * 360.0 Then
-				I_008\Timer = Min(I_008\Timer + fpst\FPSFactor[0] * 0.002, 100.0)
+				I_008\Timer = Min(I_008\Timer + (fpst\FPSFactor[0] * 0.002), 100.0)
 			EndIf
 			
 			BlurTimer = Max(I_008\Timer * 3.0 * (2.0 - CrouchState), BlurTimer)
@@ -10849,7 +10850,7 @@ Function Update008()
 			EndIf
 		Else
 			PrevI008Timer = I_008\Timer
-			I_008\Timer = Min(I_008\Timer + fpst\FPSFactor[0] * 0.004, 100.0)
+			I_008\Timer = Min(I_008\Timer + (fpst\FPSFactor[0] * 0.004), 100.0)
 			
 			If TeleportForInfect Then
 				If I_008\Timer < 94.7 Then
@@ -10955,7 +10956,7 @@ Function Update409()
 		ShowEntity(tt\OverlayID[8])
 		
 		If I_427\Using = 0 And I_427\Timer < 70.0 * 360.0 Then
-			I_409\Timer = ((Min(I_409\Timer + fpst\FPSFactor[0] * 0.004, 100.0)))
+			I_409\Timer = Min(I_409\Timer + (fpst\FPSFactor[0] * 0.004), 100.0)
 		EndIf	
 		EntityAlpha(tt\OverlayID[8], Min(((I_409\Timer * 0.2) ^ 2.0) / 1000.0, 0.5))
 	    BlurTimer = Max(I_409\Timer * 3.0 * (2.0 - CrouchState), BlurTimer)
@@ -11084,7 +11085,7 @@ Function UpdateDecals()
 	Next
 End Function
 
-; ~ Create a collision box For a mesh entity taking into account entity scale
+; ~ Create a collision box for a mesh entity taking into account entity scale
 ; (~ Won't work in non-uniform scaled space)
 Function MakeCollBox(Mesh%)
 	Local sX# = EntityScaleX(Mesh, 1)
@@ -11731,5 +11732,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#1040#13B1#1C2C
+;~B#1040#13B2#1C2D
 ;~C#Blitz3D
