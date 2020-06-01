@@ -80,6 +80,7 @@ Bug Fixes:
 - Fixed blinking sound for MTF.
 - Fixed lights and some textures in room2servers2.
 - Fixed weird battery's selecting.
+- Fixed type of the door in checkpoints-endrooms.
 
 - Small fixes for room2testroom's event.
 - Small fixes for commands "disablenuke" and "enablecontrol/disablecontrol.

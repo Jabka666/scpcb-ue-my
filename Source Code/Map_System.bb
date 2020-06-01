@@ -2315,7 +2315,8 @@ Function FillRoom(r.Rooms)
 			EntityFX(r\Objects[3], 1)
 			
 			If MapTemp(Floor(r\x / 8.0), Floor(r\z / 8.0) - 1) = 0 Then
-				d = CreateDoor(r\Zone, r\x, r\y, r\z  - 4.0, 0.0, r, False, False, False, "GEAR")
+				d = CreateDoor(r\Zone, r\x, r\y, r\z  - 4.0, 0.0, r, False, 2, False, "GEAR")
+				d\AutoClose = False : d\Locked = True : d\DisableWayPoint = True : d\MTFClose = False
 				FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			EndIf
 			;[End Block]
@@ -2354,7 +2355,8 @@ Function FillRoom(r.Rooms)
 			EntityFX(r\Objects[3], 1)
 			
 			If MapTemp(Floor(r\x / 8.0), Floor(r\z / 8.0) - 1) = 0 Then
-				d = CreateDoor(r\Zone, r\x, r\y, r\z  - 4.0, 0.0, r, False, False, False, "GEAR")
+				d = CreateDoor(r\Zone, r\x, r\y, r\z  - 4.0, 0.0, r, False, 2, False, "GEAR")
+				d\AutoClose = False : d\Locked = True : d\DisableWayPoint = True : d\MTFClose = False
 				FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			EndIf
 			;[End Block]
@@ -8728,5 +8730,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11EF
+;~B#11F1
 ;~C#Blitz3D
