@@ -84,3 +84,4 @@ Bug Fixes:
 - Small fixes for gateaentrance's walls.
 - Small fixes for gateb's walls.
 - Small fixes for syringes' positions in room2medibay and room2medibay2.
+- Small fixes for room2pipes and room2pipes2.
