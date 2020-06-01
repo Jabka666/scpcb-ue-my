@@ -12,6 +12,7 @@
 - Now ballistic vest reduces damage from NPC.
 - Now paper strips and origami can be used in SCP-914.
 - Now crouching reduces stamina.
+- Now ballistic helmet protects from zombies' attacks.
 
 - Changed one bump texture to the better one.
 - Changed text when player is using Level 6 Key Card.
@@ -78,6 +79,7 @@ Bug Fixes:
 - Fixed SCP-106's appearing in SCP-895's containment chamber.
 - Fixed blinking sound for MTF.
 - Fixed lights and some textures in room2servers2.
+- Fixed weird battery's selecting.
 
 - Small fixes for room2testroom's event.
 - Small fixes for commands "disablenuke" and "enablecontrol/disablecontrol.

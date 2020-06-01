@@ -121,7 +121,6 @@
 *Mod Creators
 
 		Nikita Sidorov ("Jabka")
-		Ashad Jackson ("ashadttt") 
 		Andre Pari ("ADMClef")
 		Dawid Mleczko ("Mleczyk76")
 		Dmitriy Sazanov ("Dmitriy-Bars")
@@ -141,6 +140,7 @@
 		Leonard Blackmore ("UnknownDev")
 		Ivan Mikhailov ("Redbull.Ivan")
 		Elan S.
+		Ashad Jackson ("ashadttt") 
 		Vladislav Borisevich ("Vane Brain")
 		Salvage
 
@@ -150,40 +150,15 @@
 		LoneWolf
 		[dataexpunded]
 	
-*The Content Taken From:
+*Some Content Taken From:
 
-		Nine Tailed Fox
 		Box of Horrors
-		Project Resurrection
-		Fan Breach
-		SCP - 914 Expansion
-		SCP - 294 More Drinks
-		SCP - Unlockables
 		Field Of View (FOV) Mod
-		Story of Site
 
 
 *Developers of Included Mods:
 
 		
-
-*Nine Tailed Fox
-		
-		Shaun Gaylard ("ENDSHN")
-		Vladislav Borisevich ("Vane Brain")
-		revo794
-		undead003
-		Alphive
-		Turtle Sandwich/Catnipbuddy
-		enotovski
-		Sic
-		FireFox
-		Arseny ("PolkovnikAbramov")
-		Alex Morganidze
-		Anon4743
-		Caleb Yu ("Omniary")
-		Ivan Mikhailov ("Redbull.Ivan")
-
 *Box of Horrors
 		
 		Prune
@@ -195,52 +170,7 @@
 		FireFox
 		Niborius
 
-				
-*Fan Breach
-
-		Ikobot
-		Ivan Mikhailov ("Redbull.Ivan")
-		The KMan
-		OgaraOrCynder
-		ICAS-14
-		Ivan Badikov
-		JeLlegendz
-		Idera
-		Kenneth Crooker	
-
-
-*Project Resurrection
-
-		Shaun Gaylard ("ENDSHN")
-		Diszxchat
-		Ikobot
-		Vladislav Borisevich ("Vane Brain")
-		Rarity From Valley Of Avalar
-		The KMan
-		Ivan Mikhailov ("Redbull.Ivan")
-		Sam Lynch ("InnocentSam")
-		Juan Pablo Arce ("Juanjpro")
-		DL_Baryonyx	
-		KennethCrooker
-
-
-*SCP-914 Expansion
-
-		EternalError
-
-
-*SCP-294 More Drinks
-
-		TheKlabadisco
-
-
-*Unlockables Mod
-
-		Shaun Gaylard ("ENDSHN")
-
-
-*Field of View (FoV) Mod
-
+*Field of View Mod
 
 		TheHappyJammer
 		Shaun Gaylard ("ENDSHN")
@@ -249,11 +179,6 @@
 		Earok
 		Sswift
 		RadReed
-
-*Story of Site
-
-
-		Ivan Mikhailov ("Redbull.Ivan")
 
 *Some Materials Taken From:
 
@@ -281,9 +206,6 @@ author unknown
 		SCP-008 is based on "SCP-008 - Zombie Plague",
 by "Lee Byron"
 
-		SCP-009 is based on "SCP-009 - Red Ice",
-by "Chameleon X"
-
 		SCP-012 is based on "SCP-012 - A Bad Composition",
 by "xthevilecorruptor"
 
@@ -308,9 +230,6 @@ by "Dr. Dan"
 		SCP-106 is based on "SCP-106 - The Old Man",
 by "Dr. Gears"
 
-		SCP-109 is based on "SCP-109 - Infinite Canteen",
-by "Kain Pathos Crow"
-
 		SCP-148 is based on "SCP-148 - The "Telekill" Alloy",
 by "Lt Masipag"
 
@@ -319,9 +238,6 @@ by "Lt Masipag"
 
 		SCP-178 is based on "SCP-178 - "3-D" Specs",
 by "Dr. Wartheim"
-
-		SCP-198 is based on "SCP-198 - Cup of Joe",
-by "Soulbane"
 
 		SCP-205 is based on "SCP-205 - Shadow Lamps", 
 by "Sorts"
@@ -350,26 +266,17 @@ by "Quikngruvn"
 		SCP-427 is based on "SCP-427 - Lovecraftian Locket",
 by "Dr. Ouros"
 
-		SCP-447 is based on "SCP-447 - The Ball of Green Slime",
-by "Dr. Clef"
-
-		SCP-457 is based on "SCP-457 - The Burning Man", 
-by "agatharights"
-
 		SCP-500 is based on "SCP-500 - Panacea",
 by "far2"
-
-		SCP-650 is based on "SCP-650 - Startling Statue",
-by "Dr. Talson"
 
 		SCP-513-1 is based on "SCP-513 - A Cowbell",
 by "beefwit"
 
-		SCP-714 is based on "SCP-714 - The Jaded Ring",
-by "Arcalane"
-
 		SCP-682 is based on "SCP-682 - Hard-to-Destroy Reptile",
 by "Dr. Gears"
+
+		SCP-714 is based on "SCP-714 - The Jaded Ring",
+by "Arcalane"
 
 		SCP-789-J is based on "SCP-789-J - The Butt Ghost!!!",
 by "Salman Corbette"
@@ -401,9 +308,6 @@ author unknown
 		SCP-1048 is based on "SCP-1048 - Builder Bear",
 by "Researcher Dios"
 
-		SCP-1074 is based on "SCP-1074 - Stendhal's Nightmare",
-by "Smapti"
-
 		SCP-1123 is based on "SCP-1123 - Atrocity Skull",
 by "sandrewswann"
 
@@ -413,7 +317,7 @@ by "Dedaluminus"
 		SCP-1499 is based on "SCP-1499 - The Gas Mask",
 by "Trasknari"
 
-		The Anomalous Ducks are based on "Log of Anomalous Ducks".
+		The Anomalous Ducks are based on "Log of Anomalous Ducks",
 by "Skara Brae"
 
 /
@@ -429,11 +333,11 @@ by "Skara Brae"
 	- Joonas Rikkonen ("Regalis")
 
 /
-	Many thanks to the people who give ideas for mod
+	So big thanks to the people who gave ideas for mod
 	- as well as those who diligently searched for bugs and supported the mod.
 
-	We hope our mod will always amaze you and give you the best emotions.
-	Thanks to all the mods that gave rise to Ultimate Edition.
+	We hope that our mod will always amaze you and give you the best emotions.
+	Thanks to all mods that gave rise to Ultimate Edition.
 
 	- Ultimate Edition Team
 

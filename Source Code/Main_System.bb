@@ -5395,7 +5395,7 @@ Function DrawGUI()
 								EndIf
 								SelectedItem = Null
 								;[End Block]
-							Case "battery", "bat"
+							Case "bat"
 								;[Block]
 								Select Inventory(MouseSlot)\ItemTemplate\Name
 									Case "S-NAV Navigator", "S-NAV 300 Navigator", "S-NAV 310 Navigator"
@@ -5442,7 +5442,7 @@ Function DrawGUI()
 										
 										If NVName = "nvgoggles" Or NVName = "supernv" Then
 											If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))	
-											RemoveItem (SelectedItem)
+											RemoveItem(SelectedItem)
 											SelectedItem = Null
 											Inventory(MouseSlot)\State = 1000.0
 											msg\Msg = "You replaced the goggles' battery."
@@ -5751,6 +5751,7 @@ Function DrawGUI()
 						End Select
 						
 						RemoveItem(SelectedItem)
+						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "firstaid", "finefirstaid", "firstaid2"
@@ -5790,6 +5791,7 @@ Function DrawGUI()
 								EndIf
 								msg\Timer = 70.0 * 6.0
 								RemoveItem(SelectedItem)
+								SelectedItem = Null
 							Else
 								Bloodloss = Max(0.0, Bloodloss - Rnd(10.0, 20.0))
 								If Injuries >= 2.5 Then
@@ -5850,6 +5852,7 @@ Function DrawGUI()
 								msg\Timer = 70.0 * 6.0
 								Playable = True
 								RemoveItem(SelectedItem)
+								SelectedItem = Null
 							EndIf
 						EndIf
 					EndIf
@@ -5865,6 +5868,7 @@ Function DrawGUI()
 				        msg\Timer = 70.0 * 6.0
 						
 						RemoveItem(SelectedItem)
+						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "fineeyedrops"
@@ -5879,6 +5883,7 @@ Function DrawGUI()
 					    msg\Timer = 70.0 * 6.0
 						
 						RemoveItem(SelectedItem)
+						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "supereyedrops"
@@ -5893,6 +5898,7 @@ Function DrawGUI()
 					    msg\Timer = 70.0 * 6.0
 						
 						RemoveItem(SelectedItem)
+						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "paper", "ticket"
@@ -6019,11 +6025,17 @@ Function DrawGUI()
 							Next					
 							EntityType(it\Collider, HIT_ITEM)
 							
-							RemoveItem(SelectedItem)						
+							RemoveItem(SelectedItem)
+							SelectedItem = Null
 						EndIf
 						
 						SelectedItem = Null
 					EndIf
+					;[End Block]
+				Case "bat", "18vbat"
+					;[Block]
+					; ~ A hacky fix for weird selecting
+					SelectedItem = Null
 					;[End Block]
 				Case "syringe"
 					;[Block]
@@ -6035,6 +6047,7 @@ Function DrawGUI()
 					msg\Timer = 70.0 * 6.0
 					
 					RemoveItem(SelectedItem)
+					SelectedItem = Null
 					;[End Block]
 				Case "finesyringe"
 					;[Block]
@@ -6046,6 +6059,7 @@ Function DrawGUI()
 					msg\Timer = 70.0 * 6.0
 					
 					RemoveItem(SelectedItem)
+					SelectedItem = Null
 					;[End Block]
 				Case "veryfinesyringe"
 					;[Block]
@@ -6071,6 +6085,7 @@ Function DrawGUI()
 					
 					msg\Timer = 70.0 * 6.0
 					RemoveItem(SelectedItem)
+					SelectedItem = Null
 					;[End Block]
 				Case "radio", "18vradio", "fineradio", "veryfineradio"
 					;[Block]
@@ -6453,6 +6468,7 @@ Function DrawGUI()
 						End Select
 						msg\Timer = 70.0 * 6.0
 						RemoveItem(SelectedItem)
+						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "scp420j"
@@ -6469,6 +6485,7 @@ Function DrawGUI()
 						EndIf
 						msg\Timer = 70.0 * 6.0
 						RemoveItem(SelectedItem)
+						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "joint"
@@ -6485,6 +6502,7 @@ Function DrawGUI()
 						EndIf
 						msg\Timer = 70.0 * 6.0
 						RemoveItem(SelectedItem)
+						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "scp420s"
@@ -6501,6 +6519,7 @@ Function DrawGUI()
 						EndIf
 						msg\Timer = 70.0 * 6.0
 						RemoveItem(SelectedItem)
+						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "scp714"
@@ -7022,6 +7041,7 @@ Function DrawGUI()
 					
 				    I_008\Timer = I_008\Timer + (1 + (1 * SelectedDifficulty\AggressiveNPCs))
 					RemoveItem(SelectedItem)
+					SelectedItem = Null
 					;[End Block]
 				Case "helmet"
 					;[Block]
@@ -11686,5 +11706,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#1040#13B1#1C18
+;~B#1040#13B1#1C2C
 ;~C#Blitz3D

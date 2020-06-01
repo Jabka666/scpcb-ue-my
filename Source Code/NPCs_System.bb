@@ -2148,7 +2148,7 @@ Function UpdateNPCs()
 									If Dist < 1.1 Then
 										If Abs(DeltaYaw(n\Collider, Collider)) =< 60.0
 											PlaySound2(DamageSFX(Rand(5, 8)), Camera, n\Collider)
-											Injuries = Injuries + Rnd(0.4, 1.0) - (WearingVest * Rnd(0.1, 0.2))
+											Injuries = Injuries + Rnd(0.4, 1.0) - (WearingVest * Rnd(0.1, 0.2)) - (WearingHelmet * Crouch * 0.1)
 											
 											If Injuries > 3.0 Then
 												msg\DeathMsg = SubjectName + ". Cause of death: multiple lacerations and severe blunt force trauma caused by an instance of SCP-049-2."
@@ -4852,7 +4852,7 @@ Function UpdateNPCs()
 								If Dist < 1.1 Then
 									If (Abs(DeltaYaw(n\Collider, Collider)) =< 60.0) Then
 										PlaySound_Strict(DamageSFX(Rand(5, 8)))
-										Injuries = Injuries + Rnd(0.4, 1.0) - (WearingVest * Rnd(0.1, 0.2))
+										Injuries = Injuries + Rnd(0.4, 1.0) - (WearingVest * Rnd(0.1, 0.2)) - (WearingHelmet * Crouch * 0.1)
 										I_008\Timer = I_008\Timer + (1.0 + (1.0 * SelectedDifficulty\AggressiveNPCs))
 										If Injuries > 3.0 Then
 											If Rand(2) = 1 Then
