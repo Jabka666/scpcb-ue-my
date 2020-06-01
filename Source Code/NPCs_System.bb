@@ -4684,12 +4684,6 @@ Function UpdateNPCs()
 				; ~ n\State3: A timer for making the NPC idle (if the player escapes during that time)
 				
 				If (Not n\IsDead) Then
-					;If n\State = 0.0
-					;	EntityType(n\Collider, HIT_DEAD)
-					;Else
-					;	EntityType(n\Collider, HIT_PLAYER)
-					;EndIf
-					
 					Dist = EntityDistance(n\Collider, Collider)
 					
 					PrevFrame = n\Frame
@@ -4705,8 +4699,8 @@ Function UpdateNPCs()
 							;[End Block]
 						Case 1.0 ; ~ Stands up
 							;[Block]
-							AnimateNPC(n, 11.0, 32.0, 0.1, False)
-							If n\Frame >= 29.0
+							AnimateNPC(n, 11.0, 29.0, 0.1, False)
+							If n\Frame = 29.0
 								n\State = 2.0
 							EndIf
 							;[End Block]
@@ -4726,7 +4720,7 @@ Function UpdateNPCs()
 								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fpst\FPSFactor[0])
 								
 								If EntityDistance(n\Collider, Collider) < 1.0
-									If (Abs(DeltaYaw(n\Collider, Collider)) =< 60.0)
+									If Abs(DeltaYaw(n\Collider, Collider)) =< 60.0 Then
 										n\State = 4.0
 									EndIf
 								EndIf
@@ -4989,7 +4983,7 @@ Function UpdateNPCs()
 				;[End Block]
 		End Select
 		
-		If n\IsDead
+		If n\IsDead Then
 			EntityType(n\Collider, HIT_DEAD)
 		EndIf
 		
@@ -7591,5 +7585,5 @@ Function Animate2#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = True
 End Function 
 
 ;~IDEal Editor Parameters:
-;~B#16C#1230#137D#13CD#1549#1666#183A#1895
+;~B#16C#1230#1377#13C7#1543#1660#1834#188F
 ;~C#Blitz3D

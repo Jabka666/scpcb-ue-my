@@ -24,7 +24,7 @@ Function CreateEvent.Events(Eventname$, RoomName$, ID%, Prob# = 0.0)
 	
 	If Prob = 0.0 Then
 		For r.Rooms = Each Rooms
-			If (RoomName = "" Or RoomName = r\RoomTemplate\Name) Then
+			If RoomName = "" Or RoomName = r\RoomTemplate\Name Then
 				Temp = False
 				For e2.Events = Each Events
 					If e2\room = r Then Temp = True : Exit
@@ -41,7 +41,7 @@ Function CreateEvent.Events(Eventname$, RoomName$, ID%, Prob# = 0.0)
 		Next
 	Else
 		For r.Rooms = Each Rooms
-			If (RoomName = "" Or RoomName = r\RoomTemplate\Name) Then
+			If RoomName = "" Or RoomName = r\RoomTemplate\Name Then
 				Temp = False
 				For e2.Events = Each Events
 					If e2\room = r Then Temp = True : Exit
@@ -3463,6 +3463,23 @@ Function UpdateEvents()
 								EndIf
 							Next
 						EndIf
+						
+						For n.NPCs = Each NPCs
+							If (n\NPCtype = NPCtype049_2 Or n\NPCtype = NPCtype008_1) And (Not n\IsDead) Then
+								For i = 0 To 2
+									If Distance(EntityX(n\Collider), EntityZ(n\Collider), EntityX(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True)) < 300.0 * RoomScale Then
+										; ~ Play the activation sound
+										If KillTimer >= 0.0 Then 
+											StopChannel(e\SoundCHN)
+											e\SoundCHN = PlaySound2(TeslaActivateSFX, Camera, e\room\Objects[3], 4.0, 0.5)
+											HideEntity(e\room\Objects[4])
+											e\EventState = 1.0
+											Exit
+										EndIf
+									EndIf
+								Next
+							EndIf
+						Next
 					Else
 						e\EventState = e\EventState + fpst\FPSFactor[0]
 						If e\EventState =< 40.0 Then
@@ -3499,7 +3516,7 @@ Function UpdateEvents()
 									For i = 0 To 2
 										If Distance(EntityX(Curr106\Collider), EntityZ(Curr106\Collider), EntityX(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True)) < 250.0 * RoomScale Then
 											ShowEntity(tt\OverlayID[7])
-											LightFlash = 0.3
+											If PlayerRoom = e\room Then LightFlash = 0.3
 											If ParticleAmount > 0
 												For i = 0 To 5 + (5 * (ParticleAmount - 1))
 													p.Particles = CreateParticle(EntityX(Curr106\Collider, True), EntityY(Curr106\Collider, True), EntityZ(Curr106\Collider, True), 0, 0.015, -0.2, 250.0)
@@ -3512,6 +3529,18 @@ Function UpdateEvents()
 										EndIf
 									Next								
 								EndIf
+								
+								For n.NPCs = Each NPCs
+									If (n\NPCtype = NPCtype049_2 Or n\NPCtype = NPCtype008_1) And (Not n\IsDead) Then
+										For i = 0 To 2
+											If Distance(EntityX(n\Collider), EntityZ(n\Collider), EntityX(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True)) < 250.0 * RoomScale Then
+												ShowEntity(tt\OverlayID[7])
+												If PlayerRoom = e\room Then LightFlash = 0.3
+												n\IsDead = True
+											EndIf
+										Next	
+									EndIf
+								Next
 								
 								HideEntity(e\room\Objects[3])
 								HideEntity(e\room\Objects[4])
@@ -10388,5 +10417,5 @@ Function GenerateRandomIA()
 	Next
 End Function
 ;~IDEal Editor Parameters:
-;~B#1235#1E63
+;~B#1252#1E80
 ;~C#Blitz3D
