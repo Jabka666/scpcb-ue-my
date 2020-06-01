@@ -8469,9 +8469,19 @@ Function LoadEntities()
 	EntityTexture(DTextures[13], Tex)
 	FreeTexture(Tex)
 	
-	; ~ Body # 3
+	; ~ SCP-409's victim
 	Tex = LoadTexture_Strict("GFX\npcs\body(3).png")
 	EntityTexture(DTextures[14], Tex)
+	FreeTexture(Tex)
+	
+	; ~ SCP-939's victim # 2
+	Tex = LoadTexture_Strict("GFX\npcs\scp_939_victim.png")
+	EntityTexture(DTextures[15], Tex)
+	FreeTexture(Tex)
+	
+	; ~ SCP-939's victim # 1
+	Tex = LoadTexture_Strict("GFX\npcs\scp_939_victim(2).png")
+	EntityTexture(DTextures[16], Tex)
 	FreeTexture(Tex)
 	
 	LoadMaterials("Data\materials.ini")
@@ -11402,7 +11412,7 @@ Function UpdateLeave1499()
 				UpdateRooms()
 				If PlayerRoom\RoomTemplate\Name = "room3storage"
 					If EntityY(Collider) < -4600.0 * RoomScale
-						For i = 0 To 2
+						For i = 0 To 3
 							PlayerRoom\NPC[i]\State = 2.0
 							PositionEntity(PlayerRoom\NPC[i]\Collider, EntityX(PlayerRoom\Objects[PlayerRoom\NPC[i]\State2], True), EntityY(PlayerRoom\Objects[PlayerRoom\NPC[i]\State2], True) + 0.2, EntityZ(PlayerRoom\Objects[PlayerRoom\NPC[i]\State2], True))
 							ResetEntity(PlayerRoom\NPC[i]\Collider)
@@ -11446,7 +11456,7 @@ End Function
 Function CheckForPlayerInFacility()
 	; ~ False (= 0): NPC is not in facility (mostly meant for "dimension1499")
 	; ~ True (= 1): NPC is in facility
-	; ~ 2: NPC is in tunnels (maintenance tunnels / 049 tunnels / 939 storage room, etc...)
+	; ~ 2: NPC is in tunnels (maintenance tunnels / SCP-049's tunnels / SCP-939's storage room, etc...)
 	
 	If EntityY(Collider) > 100.0
 		Return(False)

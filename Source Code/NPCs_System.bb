@@ -366,13 +366,14 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			
 			For n2.NPCs = Each NPCs
 				If n\NPCtype = n2\NPCtype And n <> n2
-					Amount939% = Amount939 + 1
+					Amount939 = Amount939 + 1
 				EndIf
 			Next
 			
-			If Amount939% = 0 Then i = 53
-			If Amount939% = 1 Then i = 89
-			If Amount939% = 2 Then i = 96
+			If Amount939 = 0 Then i = 1
+			If Amount939 = 1 Then i = 2
+			If Amount939 = 2 Then i = 3
+			If Amount939 = 3 Then i = 4
 			n\NVName = "SCP-939-" + i
 			
 			n\Collider = CreatePivot()
@@ -2702,10 +2703,10 @@ Function UpdateNPCs()
 					EndIf
 				EndIf
 				
-				If n\Frame = 19.0 Or n\Frame = 60.0 Or n\Frame = 629.0 Or n\Frame = 677.0 Or n\Frame = 711.0 Or n\Frame = 779.0 Then
+				If n\Frame = 19.0 Or n\Frame = 40.0 Or n\Frame = 60.0 Or n\Frame = 629.0 Or n\Frame = 677.0 Or n\Frame = 711.0 Or n\Frame = 779.0 Then
 					n\IsDead = True
 				EndIf
-				If AnimTime(n\OBJ) = 19.0 Or AnimTime(n\OBJ) = 60.0 Or AnimTime(n\OBJ) = 629.0 Or AnimTime(n\OBJ) = 677.0 Or AnimTime(n\OBJ) = 711.0 Or AnimTime(n\OBJ) = 779.0 Then
+				If AnimTime(n\OBJ) = 19.0 Or AnimTime(n\OBJ) = 40.0 Or AnimTime(n\OBJ) = 60.0 Or AnimTime(n\OBJ) = 629.0 Or AnimTime(n\OBJ) = 677.0 Or AnimTime(n\OBJ) = 711.0 Or AnimTime(n\OBJ) = 779.0 Then
 					n\IsDead = True
 				EndIf
 				
@@ -3665,7 +3666,7 @@ Function UpdateNPCs()
 									
 									If Injuries > 4.0 Then 
 										msg\DeathMsg = Chr(34) + "All four (4) escaped SCP-939 specimens have been captured and recontained successfully. "
-										msg\DeathMsg = msg\DeathMsg + "Three (3) of them made quite a mess at Storage Area 6. A cleaning team has been dispatched." + Chr(34)
+										msg\DeathMsg = msg\DeathMsg + "They made quite a mess at Storage Area 6. A cleaning team has been dispatched." + Chr(34)
 										Kill(True)
 										If (Not chs\GodMode) Then n\State = 5.0
 									EndIf								
@@ -7590,5 +7591,5 @@ Function Animate2#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = True
 End Function 
 
 ;~IDEal Editor Parameters:
-;~B#16C#122F#137C#13CC#1548#1665#1839#1894
+;~B#16C#1230#137D#13CD#1549#1666#183A#1895
 ;~C#Blitz3D

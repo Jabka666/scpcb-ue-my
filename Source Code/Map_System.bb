@@ -3105,14 +3105,37 @@ Function FillRoom(r.Rooms)
 			r\Objects[16] = CreatePivot()
 			PositionEntity(r\Objects[16], r\x - 432.0 * RoomScale, r\y - 5550.0 * RoomScale, r\z + 2976.0 * RoomScale)
 			
-			For i = 0 To 16
+			; ~ Corpses
+			r\Objects[17] = CreatePivot()
+			PositionEntity(r\Objects[17], r\x + 2200.0 * RoomScale, r\y - 5540.0 * RoomScale, r\z + 2932.0 * RoomScale)
+			
+			r\Objects[18] = CreatePivot()
+			PositionEntity(r\Objects[18], r\x + 1015.5 * RoomScale, r\y - 5540.0 * RoomScale, r\z + 2964.0 * RoomScale)
+			
+			For i = 0 To 18
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
-			r\Objects[20] = LoadMesh_Strict("GFX\map\room3storage_hb.b3d", r\OBJ)
-			EntityPickMode(r\Objects[20], 2)
-			EntityType(r\Objects[20], HIT_MAP)
-			EntityAlpha(r\Objects[20], 0.0)
+			For k = 10 To 11
+				r\Objects[k * 2] = CopyEntity(o\LeverModelID[0])
+				r\Objects[k * 2 + 1] = CopyEntity(o\LeverModelID[1])
+				
+				r\Levers[k - 10] = r\Objects[k * 2 + 1]
+				
+				For i = 0 To 1
+					ScaleEntity(r\Objects[k * 2 + i], 0.04, 0.04, 0.04)
+					If k = 10
+						PositionEntity(r\Objects[k * 2 + i], r\x + 3095.5 * RoomScale, r\y - 5461.0 * RoomScale, r\z + 6568.0 * RoomScale)
+					Else
+						PositionEntity(r\Objects[k * 2 + i], r\x + 1215.5 * RoomScale, r\y - 5461.0 * RoomScale, r\z + 3164.0 * RoomScale)
+					EndIf
+					EntityParent(r\Objects[k * 2 + i], r\OBJ)
+				Next
+				RotateEntity(r\Objects[k * 2], 0.0, 0.0, 0.0)
+				RotateEntity(r\Objects[k * 2 + 1], -10.0, 0.0 - 180.0, 0.0)
+				EntityPickMode(r\Objects[k * 2 + 1], 1, False)
+				EntityRadius(r\Objects[k * 2 + 1], 0.1)
+			Next
 			
 			em = CreateEmitter(r\x + 5218.0 * RoomScale, r\y - 5584.0 * RoomScale, r\z - 600.0 * RoomScale, 0)
 			em\RandAngle = 15 : em\Speed = 0.03 : em\SizeChange = 0.01 : em\Achange = -0.006 : em\Gravity = -0.2 
@@ -3149,26 +3172,15 @@ Function FillRoom(r.Rooms)
 			ScaleSprite(de\OBJ, de\Size, de\Size)
 			EntityParent(de\OBJ, r\OBJ)
 			
-			For k = 10 To 11
-				r\Objects[k * 2] = CopyEntity(o\LeverModelID[0])
-				r\Objects[k * 2 + 1] = CopyEntity(o\LeverModelID[1])
-				
-				r\Levers[k - 10] = r\Objects[k * 2 + 1]
-				
-				For i = 0 To 1
-					ScaleEntity(r\Objects[k * 2 + i], 0.04, 0.04, 0.04)
-					If k = 10
-						PositionEntity(r\Objects[k * 2 + i], r\x + 3095.5 * RoomScale, r\y - 5461.0 * RoomScale, r\z + 6568.0 * RoomScale)
-					Else
-						PositionEntity(r\Objects[k * 2 + i], r\x + 1215.5 * RoomScale, r\y - 5461.0 * RoomScale, r\z + 3164.0 * RoomScale)
-					EndIf
-					EntityParent(r\Objects[k * 2 + i], r\OBJ)
-				Next
-				RotateEntity(r\Objects[k * 2], 0.0, 0.0, 0.0)
-				RotateEntity(r\Objects[k * 2 + 1], -10.0, 0.0 - 180.0, 0.0)
-				EntityPickMode(r\Objects[k * 2 + 1], 1, False)
-				EntityRadius(r\Objects[k * 2 + 1], 0.1)
-			Next
+			de = CreateDecal(3, r\x + 2268.0 * RoomScale, r\y - 5510.0 * RoomScale, r\z + 2932.0 * RoomScale, 0.0, r\Angle + 270.0, 0.0)
+			de\Size = 0.3
+			ScaleSprite(de\OBJ, de\Size, de\Size)
+			EntityParent(de\OBJ, r\OBJ)
+			
+			de = CreateDecal(7, r\x + 1215.5 * RoomScale, r\y - 5632.0 * RoomScale + 0.01, r\z + 2964.0 * RoomScale, 90.0, r\Angle + 180.0, 0.0)
+			de\Size = 0.4
+			ScaleSprite(de\OBJ, de\Size, de\Size)
+			EntityParent(de\OBJ, r\OBJ)
 			;[End Block]
 		Case "room049"
 			;[Block]
@@ -8716,5 +8728,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11E3
+;~B#11EF
 ;~C#Blitz3D

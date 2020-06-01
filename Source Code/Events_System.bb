@@ -351,13 +351,30 @@ Function QuickLoadEvents()
 		Case "room3storage"
 			;[Block]
 			If e\room\NPC[0] = Null Then
-				e\room\NPC[0] = CreateNPC(NPCtype939, 0, 0, 0)
-				QuickLoadPercent = 25
-			ElseIf e\room\NPC[1] = Null Then
-				e\room\NPC[1] = CreateNPC(NPCtype939, 0, 0, 0)
-				QuickLoadPercent = 50
-			ElseIf e\room\NPC[2] = Null Then
-				e\room\NPC[2] = CreateNPC(NPCtype939, 0, 0, 0)
+				e\room\NPC[0] = CreateNPC(NPCtype939, 0.0, 0.0, 0.0)
+				QuickLoadPercent = 16
+			ElseIf e\room\NPC[1] = Null
+				e\room\NPC[1] = CreateNPC(NPCtype939, 0.0, 0.0, 0.0)
+				QuickLoadPercent = 32
+			ElseIf e\room\NPC[2] = Null
+				e\room\NPC[2] = CreateNPC(NPCtype939, 0.0, 0.0, 0.0)
+				QuickLoadPercent = 48
+			ElseIf e\room\NPC[3] = Null
+				e\room\NPC[3] = CreateNPC(NPCtype939, 0.0, 0.0, 0.0)
+				QuickLoadPercent = 62
+			ElseIf e\room\NPC[4] = Null
+				e\room\NPC[4] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[17], True), EntityY(e\room\Objects[17], True), EntityZ(e\room\Objects[17], True))
+				TurnEntity(e\room\NPC[4]\Collider, 0.0, e\room\Angle + 90.0, 0.0)
+				ChangeNPCTextureID(e\room\NPC[4], 14)
+				e\room\NPC[4]\State = 3.0
+				SetNPCFrame(e\room\NPC[4], 40.0)
+				QuickLoadPercent = 78
+			ElseIf e\room\NPC[5] = Null
+				e\room\NPC[5] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[18], True), EntityY(e\room\Objects[18], True), EntityZ(e\room\Objects[18], True))
+				TurnEntity(e\room\NPC[5]\Collider, 0.0, e\room\Angle + 90.0, 0.0)
+				ChangeNPCTextureID(e\room\NPC[5], 15)
+				e\room\NPC[5]\State = 8.0
+				SetNPCFrame(e\room\NPC[5], 19.0)
 				QuickLoadPercent = 100
 			Else
 				If QuickLoadPercent > -1 Then QuickLoadPercent = 100
@@ -3331,7 +3348,7 @@ Function UpdateEvents()
 					If e\EventState3 = 0.0 Then
 						n.NPCs = CreateNPC(NPCtypeD, EntityX(e\room\Objects[6], True), 0.55, EntityZ(e\room\Objects[6], True))
 						RotateEntity(n\Collider, 0.0, e\room\Angle + 90.0, 0.0)
-						n\State = 3.0 : n\IsDead = True
+						n\State = 3.0
 						ChangeNPCTextureID(n, 9)
 						SetNPCFrame(n, 40.0)
 						e\EventState3 = 1.0
@@ -5130,32 +5147,38 @@ Function UpdateEvents()
 						
 						ShouldPlay = 7
 						
-						If e\room\NPC[0] = Null Or e\room\NPC[1] = Null Or e\room\NPC[2] = Null Then
+						If e\room\NPC[0] = Null Or e\room\NPC[1] = Null Or e\room\NPC[2] = Null Or e\room\NPC[3] = Null Then
 							If QuickLoadPercent = -1 Then
 								QuickLoadPercent = 0
 								QuickLoad_CurrEvent = e
 							EndIf
 						Else
 							If e\EventState = 0.0 Then
-								;Instance # 1
+								; ~ Instance # 1
 								PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True) + 0.2, EntityZ(e\room\Objects[4], True))
 								ResetEntity(e\room\NPC[0]\Collider)
 								e\room\NPC[0]\State = 2.0
 								e\room\NPC[0]\State2 = 5.0
 								e\room\NPC[0]\PrevState = 7
-								;Instance # 2
+								; ~ Instance # 2
 								PositionEntity(e\room\NPC[1]\Collider, EntityX(e\room\Objects[9], True), EntityY(e\room\Objects[9], True) + 0.2, EntityZ(e\room\Objects[9], True))
 								ResetEntity(e\room\NPC[1]\Collider)
 								e\room\NPC[1]\State = 2.0
 								e\room\NPC[1]\State2 = 10.0
 								e\room\NPC[1]\PrevState = 12
-								;Instance # 3
+								; ~ Instance # 3
 								PositionEntity(e\room\NPC[2]\Collider, EntityX(e\room\Objects[13], True), EntityY(e\room\Objects[13], True) + 0.2, EntityZ(e\room\Objects[13], True))
 								ResetEntity(e\room\NPC[2]\Collider)
 								e\room\NPC[2]\State = 2.0
 								e\room\NPC[2]\State2 = 14.0
 								e\room\NPC[2]\PrevState = 16
-								; ~ Other
+								; ~ Instance # 4
+								PositionEntity(e\room\NPC[3]\Collider, EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True) + 0.2, EntityZ(e\room\Objects[6], True)) 
+							    ResetEntity(e\room\NPC[3]\Collider)                                                                                                            
+							    e\room\NPC[3]\State = 2.0                                                                                                                        
+							    e\room\NPC[3]\State2 = 7.0
+							    e\room\NPC[3]\PrevState = 7.0
+								
 								e\EventState = 1.0
 							EndIf
 							
@@ -5183,6 +5206,7 @@ Function UpdateEvents()
 							
 							e\room\NPC[0]\IgnorePlayer = False
 							e\room\NPC[2]\IgnorePlayer = False
+							e\room\NPC[3]\IgnorePlayer = False
 							
 							CurrTrigger = CheckTriggers()
 							
@@ -5190,6 +5214,7 @@ Function UpdateEvents()
 								Case "939-1_fix"
 									;[Block]
 									e\room\NPC[0]\IgnorePlayer = True
+									e\room\NPC[3]\IgnorePlayer = True
 									;[End Block]
 								Case "939-3_fix"
 									;[Block]
@@ -5204,7 +5229,7 @@ Function UpdateEvents()
 							PlayerFallingPickDistance = 0.0
 							
 							If EntityY(Collider) < -6400.0 * RoomScale And KillTimer >= 0.0 And FallTimer >= 0.0 Then
-								PlaySound_Strict LoadTempSound("SFX\Room\PocketDimension\Impact.ogg")
+								PlaySound_Strict(LoadTempSound("SFX\Room\PocketDimension\Impact.ogg"))
 								KillTimer = -1.0
 							EndIf
 						EndIf
@@ -5213,11 +5238,13 @@ Function UpdateEvents()
 						If e\room\NPC[0] <> Null Then e\room\NPC[0]\State = 66
 						If e\room\NPC[1] <> Null Then e\room\NPC[1]\State = 66
 						If e\room\NPC[2] <> Null Then e\room\NPC[2]\State = 66
+						If e\room\NPC[3] <> Null Then e\room\NPC[3]\State = 66
 					EndIf
 				Else
 					If e\room\NPC[0] <> Null Then e\room\NPC[0]\State = 66
 					If e\room\NPC[1] <> Null Then e\room\NPC[1]\State = 66
 					If e\room\NPC[2] <> Null Then e\room\NPC[2]\State = 66
+					If e\room\NPC[3] <> Null Then e\room\NPC[3]\State = 66
 				EndIf 
 				;[End Block]
 			Case "room3tunnel"
@@ -10361,5 +10388,5 @@ Function GenerateRandomIA()
 	Next
 End Function
 ;~IDEal Editor Parameters:
-;~B#1224#1E48
+;~B#1235#1E63
 ;~C#Blitz3D
