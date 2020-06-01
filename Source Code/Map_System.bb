@@ -4757,7 +4757,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\Objects[3], r\x + 832.0 * RoomScale, r\y + 166.0 * RoomScale, r\z + 784.0 * RoomScale)
 			
 			r\Objects[4] = CreatePivot()
-			PositionEntity(r\Objects[4], r\x -648.0 * RoomScale, r\y + 592.0 * RoomScale, r\z + 692.0 * RoomScale)
+			PositionEntity(r\Objects[4], r\x - 648.0 * RoomScale, r\y + 592.0 * RoomScale, r\z + 692.0 * RoomScale)
 			
 			r\Objects[5] = CreatePivot()
 			PositionEntity(r\Objects[5], r\x + 828.0 * RoomScale, r\y + 592.0 * RoomScale, r\z + 592.0 * RoomScale)
@@ -5896,7 +5896,6 @@ Function AddLight%(room.Rooms, x#, y#, z#, lType%, Range#, R%, G%, B%)
 				ScaleSprite(room\LightSprites[i], 0.13 , 0.13)
 				EntityTexture(room\LightSprites[i], tt\LightSpriteID[0])
 				EntityBlend(room\LightSprites[i], 3)
-				
 				EntityParent(room\LightSprites[i], room\OBJ)
 				
 				room\LightSpritesPivot[i] = CreatePivot()
@@ -5958,15 +5957,15 @@ End Type
 
 Function AddTempLight.LightTemplates(rt.RoomTemplates, x#, y#, z#, lType%, Range#, R%, G%, B%)
 	lt.Lighttemplates = New LightTemplates
-	lt\roomtemplate = rt
+	lt\RoomTemplate = rt
 	lt\x = x
 	lt\y = y
 	lt\z = z
 	lt\lType = lType
 	lt\Range = Range
-	lt\r = R
-	lt\g = G
-	lt\b = B
+	lt\R = R
+	lt\G = G
+	lt\B = B
 	
 	Return(lt)
 End Function
@@ -7988,7 +7987,7 @@ Function UpdateRoomLights(Cam%)
 		If r\Dist < HideDistance * 0.7 Or r = PlayerRoom Then
 			For i = 0 To r\MaxLights
 				If r\Lights[i] <> 0 Then
-					If EnableRoomLights% And (SecondaryLightOn > 0.5) And Cam = Camera Then
+					If EnableRoomLights And (SecondaryLightOn > 0.5) And Cam = Camera Then
 						EntityOrder(r\LightSprites2[i], -1)
 						If UpdateRoomLightsTimer = 0.0 Then
 							ShowEntity(r\LightSprites[i])
@@ -8062,7 +8061,7 @@ Function UpdateRoomLights(Cam%)
 							
 							If r\RoomTemplate\UseLightSpark Then
 								If r\LightSpark[i] <> 0 Then
-									If r\LightSparkTimer[i] > 0.0 And r\LightSparkTimer[i] < 10.0
+									If r\LightSparkTimer[i] > 0.0 And r\LightSparkTimer[i] < 10.0 Then
 										ShowEntity(r\LightSpark[i])
 										r\LightSparkTimer[i] = r\LightSparkTimer[i] + fpst\FPSFactor[0]
 									Else

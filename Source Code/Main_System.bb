@@ -2142,7 +2142,7 @@ Type Doors
 	Field DoorHitOBJ%
 End Type 
 
-Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, Big% = False, Keycard% = False, Code$ = "", UseCollisionMesh% = False, CheckIfZero% = False)
+Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, Big% = False, Keycard% = False, Code$ = "", UseCollisionMesh% = False, CheckIfZeroCard% = False)
 	Local d.Doors, Parent%, i%
 	Local o.Objects = First Objects
 	
@@ -2187,16 +2187,16 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, B
 		d\FrameOBJ = CopyEntity(o\DoorModelID[1])
 	ElseIf Big = 4 ; ~ One-sided Door
 		d\OBJ = CopyEntity(o\DoorModelID[11])
-		ScaleEntity(d\OBJ, RoomScale, RoomScale, 2.35 * RoomScale)
+		ScaleEntity(d\OBJ, (203.0 * RoomScale) / MeshWidth(d\OBJ), 313.0 * RoomScale / MeshHeight(d\OBJ), 15.0 * RoomScale / MeshDepth(d\OBJ))
 		d\OBJ2 = CopyEntity(o\DoorModelID[11])
-		ScaleEntity(d\OBJ2, RoomScale, RoomScale, 2.35 * RoomScale)
+		ScaleEntity(d\OBJ2, (203.0 * RoomScale) / MeshWidth(d\OBJ2), 313.0 * RoomScale / MeshHeight(d\OBJ2), 15.0 * RoomScale / MeshDepth(d\OBJ2))
 		
 		d\FrameOBJ = CopyEntity(o\DoorModelID[1])
 	Else
 		d\OBJ = CopyEntity(o\DoorModelID[0])
 		ScaleEntity(d\OBJ, (204.0 * RoomScale) / MeshWidth(d\OBJ), 312.0 * RoomScale / MeshHeight(d\OBJ), 16.0 * RoomScale / MeshDepth(d\OBJ))
 		d\OBJ2 = CopyEntity(o\DoorModelID[0])
-		ScaleEntity(d\OBJ2, (204.0 * RoomScale) / MeshWidth(d\OBJ), 312.0 * RoomScale / MeshHeight(d\OBJ), 16.0 * RoomScale / MeshDepth(d\OBJ))
+		ScaleEntity(d\OBJ2, (204.0 * RoomScale) / MeshWidth(d\OBJ2), 312.0 * RoomScale / MeshHeight(d\OBJ2), 16.0 * RoomScale / MeshDepth(d\OBJ2))
 		
 		d\FrameOBJ = CopyEntity(o\DoorModelID[1])
 	End If
@@ -2211,7 +2211,7 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, B
 	DoorTempID = DoorTempID + 1
 	
 	If Keycard > 0 Then
-		If CheckIfZero Then
+		If CheckIfZeroCard Then
 			d\KeyCard = Keycard + 1
 		Else
 			d\KeyCard = Keycard + 2
@@ -2543,7 +2543,7 @@ Function UpdateDoors()
 					d\FastOpen = 0
 					PositionEntity(d\OBJ, EntityX(d\FrameOBJ, True), EntityY(d\FrameOBJ, True), EntityZ(d\FrameOBJ, True))
 					If d\OBJ2 <> 0 Then PositionEntity(d\OBJ2, EntityX(d\FrameOBJ, True), EntityY(d\FrameOBJ, True), EntityZ(d\FrameOBJ, True))
-					If d\OBJ2 <> 0 And d\Dir = 0 Then
+					If d\OBJ2 <> 0 And (d\Dir = 0 Or d\Dir = 4) Then
 						MoveEntity(d\OBJ, 0.0, 0.0, 8.0 * RoomScale)
 						MoveEntity(d\OBJ2, 0.0, 0.0, 8.0 * RoomScale)
 					EndIf
@@ -4209,7 +4209,7 @@ Function MouseLook()
 		Local The_Pitch# = Mouse_Y_Speed_1 * Mouselook_Y_Inc / (1.0 + WearingVest)
 		
 		TurnEntity(Collider, 0.0, -The_Yaw, 0.0) ; ~ Turn the user on the Y (Yaw) axis.
-		User_Camera_Pitch = User_Camera_Pitch# + The_Pitch
+		User_Camera_Pitch = User_Camera_Pitch + The_Pitch
 		; ~ Limit the user's camera to within 180 degrees of pitch rotation. Returns useless values so we need to use a variable to keep track of the camera pitch.
 		If User_Camera_Pitch > 70.0 Then User_Camera_Pitch = 70.0
 		If User_Camera_Pitch < -70.0 Then User_Camera_Pitch = -70.0
@@ -8527,7 +8527,7 @@ Function InitNewGame()
 		If d\Buttons[0] <> 0 Then EntityParent(d\Buttons[0], 0)
 		If d\Buttons[1] <> 0 Then EntityParent(d\Buttons[1], 0)
 		
-		If d\OBJ2 <> 0 And d\Dir = 0 Then
+		If d\OBJ2 <> 0 And (d\Dir = 0 Or d\Dir = 4) Then
 			MoveEntity(d\OBJ, 0.0, 0.0, 8.0 * RoomScale)
 			MoveEntity(d\OBJ2, 0.0, 0.0, 8.0 * RoomScale)
 		EndIf	

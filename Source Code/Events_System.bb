@@ -5126,6 +5126,8 @@ Function UpdateEvents()
 					If EntityY(Collider) < -4600.0 * RoomScale Then
 						GiveAchievement(Achv939)
 						
+						BlurTimer = 700.0
+						
 						ShouldPlay = 7
 						
 						If e\room\NPC[0] = Null Or e\room\NPC[1] = Null Or e\room\NPC[2] = Null Then
@@ -10359,5 +10361,5 @@ Function GenerateRandomIA()
 	Next
 End Function
 ;~IDEal Editor Parameters:
-;~B#1224#1E46
+;~B#1224#1E48
 ;~C#Blitz3D
