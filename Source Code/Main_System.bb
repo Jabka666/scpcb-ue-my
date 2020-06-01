@@ -4166,7 +4166,7 @@ Function MouseLook()
 	
 	CameraShake = Max(CameraShake - (fpst\FPSFactor[0] / 10.0), 0.0)
 	
-	CameraZoom(Camera, Min(1.0 + (CurrCameraZoom / 400.0), 1.1))
+	CameraZoom(Camera, Min(1.0 + (CurrCameraZoom / 400.0), 1.1) / (Tan((2.0 * ATan(Tan((FOV) / 2.0) * (Float(RealGraphicWidth) / Float(RealGraphicHeight)))) / 2.0)))
 	CurrCameraZoom = Max(CurrCameraZoom - fpst\FPSFactor[0], 0.0)
 	
 	If KillTimer >= 0.0 And FallTimer >= 0.0 Then
@@ -7257,7 +7257,7 @@ Function DrawMenu()
 			AAText(x, y + 20 * MenuScale, "Save: " + CurrSave)
 			AAText(x, y + 40 * MenuScale, "Map seed: " + RandomSeed)
 		ElseIf AchievementsMenu =< 0 And OptionsMenu > 0 And QuitMsg =< 0 And KillTimer >= 0
-			If DrawButton(x + 101 * MenuScale, y + 390 * MenuScale, 230 * MenuScale, 60 * MenuScale, "Back") Then
+			If DrawButton(x + 101 * MenuScale, y + 410 * MenuScale, 230 * MenuScale, 60 * MenuScale, "Back") Then
 				AchievementsMenu = 0
 				OptionsMenu = 0
 				QuitMsg = 0
@@ -7388,6 +7388,21 @@ Function DrawMenu()
 					If MouseOn(x + 270 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
 						DrawOptionsTooltip(tX, tY, tW, tH, "vram")
 					EndIf
+					
+					y = y + 40 * MenuScale
+					
+					Local SlideBarFOV# = FOV - 40
+					
+					SlideBarFOV = (SlideBar(x + 270 * MenuScale, y + 6 * MenuScale, 100 * MenuScale, SlideBarFOV * 2.0) / 2.0)
+					FOV = SlideBarFOV + 40
+					Color(255, 255, 255)
+					AAText(x, y, "Field of view:")
+					Color(255, 255, 0)
+					AAText(x + 5 * MenuScale, y + 25 * MenuScale, Int(FOV) + "°")
+					If MouseOn(x + 270 * MenuScale, y + 6 * MenuScale, 100 * MenuScale + 14, 20)
+						DrawOptionsTooltip(tX, tY, tW, tH, "fov")
+					EndIf
+					CameraZoom(Camera, Min(1.0 + (CurrCameraZoom / 400.0), 1.1) / Tan((2.0 * ATan(Tan((FOV) / 2.0) * RealGraphicWidth / RealGraphicHeight)) / 2.0))
 					;[End Block]
 				Case 2 ; ~ Audio
 					;[Block]
@@ -11169,7 +11184,7 @@ Function ResizeImage2(Image%, Width%, Height%)
 End Function
 
 Function RenderWorld2()
-	Local i%, Dist#
+	Local i%, Dist#, Temp%, Temp2%
 	Local tt.TextureTemplate = First TextureTemplate
 	Local fo.Fonts = First Fonts
 	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
@@ -11257,7 +11272,7 @@ Function RenderWorld2()
 			AAText(GraphicWidth / 2, (60 + PlusY) * MenuScale, Max(f2s(NVTimer / 60.0, 1), 0.0), True, False)
 			AAText(GraphicWidth / 2, (100 + PlusY) * MenuScale, "SECONDS", True, False)
 			
-			Temp% = CreatePivot() : Temp2% = CreatePivot()
+			Temp = CreatePivot() : Temp2 = CreatePivot()
 			PositionEntity(Temp, EntityX(Collider), EntityY(Collider), EntityZ(Collider))
 			
 			Color(255, 255, 255)
@@ -11326,7 +11341,7 @@ Function RenderWorld2()
 	RenderWorld()
 	CameraProjMode(Ark_Blur_Cam, 0)
 	
-	If BlinkTimer < -16.0 Or BlinkTimer > -6.0
+	If BlinkTimer < -16.0 Or BlinkTimer > -6.0 Then
 		If (WearingNightVision = 1 Or WearingNightVision = 2) And (HasBattery = 1) And ((MilliSecs2() Mod 800) < 400) Then
 			Color(255, 0, 0)
 			AASetFont(fo\FontID[2])

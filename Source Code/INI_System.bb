@@ -281,6 +281,8 @@ Global ScreenGamma# = GetINIFloat(OptionFile, "Graphics", "Screen gamma")
 
 Global TextureDetails% = GetINIInt(OptionFile, "Graphics", "Texture details")
 
+Global FOV# = GetINIFloat(OptionFile, "Graphics", "FOV")
+
 ; ~ [AUDIO]
 
 Global MusicVolume# = GetINIFloat(OptionFile, "Audio", "Music Volume")
@@ -393,6 +395,8 @@ Function SaveOptionsINI()
 	PutINIValue(OptionFile, "Graphics", "Enable Room Lights", EnableRoomLights)
 	
 	PutINIValue(OptionFile, "Graphics", "Texture Details", TextureDetails)
+	
+	PutINIValue(OptionFile, "Graphics", "FOV", Int(FOV))
 	
 	; ~ [ADVANCED]
 	

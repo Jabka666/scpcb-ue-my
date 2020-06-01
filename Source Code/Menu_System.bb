@@ -131,21 +131,21 @@ Function UpdateMainMenu()
 	
 	If MainMenuTab = 0 Then
 		For i% = 0 To 3
-			temp = False
+			Temp = False
 			x = 159 * MenuScale
 			y = (286 + 100 * i) * MenuScale
 			
-			width = 400 * MenuScale
-			height = 70 * MenuScale
+			Width = 400 * MenuScale
+			Height = 70 * MenuScale
 			
-			temp = (MouseHit1 And MouseOn(x, y, width, height))
+			Temp = (MouseHit1 And MouseOn(x, y, Width, Height))
 			
 			Local txt$
 			Select i
 				Case 0
 					txt = "NEW GAME"
 					RandomSeed = ""
-					If temp Then 
+					If Temp Then 
 						If Rand(15)=1 Then 
 							Select Rand(13)
 								Case 1 
@@ -191,16 +191,16 @@ Function UpdateMainMenu()
 					EndIf
 				Case 1
 					txt = "LOAD GAME"
-					If temp Then
+					If Temp Then
 						LoadSaveGames()
 						MainMenuTab = 2
 					EndIf
 				Case 2
 					txt = "OPTIONS"
-					If temp Then MainMenuTab = 3
+					If Temp Then MainMenuTab = 3
 				Case 3
 					txt = "QUIT"
-					If temp Then
+					If Temp Then
 						;DeInitExt
 						;alDestroy()
 						;FMOD_Pause(MusicCHN)
@@ -213,7 +213,7 @@ Function UpdateMainMenu()
 					EndIf
 			End Select
 			
-			DrawButton(x, y, width, height, txt)
+			DrawButton(x, y, Width, Height, txt)
 			
 			;rect(x + 4, y + 4, width - 8, height - 8)
 			;color 255, 255, 255	
@@ -225,12 +225,12 @@ Function UpdateMainMenu()
 		x = 159 * MenuScale
 		y = 286 * MenuScale
 		
-		width = 400 * MenuScale
-		height = 70 * MenuScale
+		Width = 400 * MenuScale
+		Height = 70 * MenuScale
 		
-		DrawFrame(x, y, width, height)
+		DrawFrame(x, y, Width, Height)
 		
-		If DrawButton(x + width + 20 * MenuScale, y, 580 * MenuScale - width - 20 * MenuScale, height, "BACK", False) Then 
+		If DrawButton(x + Width + 20 * MenuScale, y, 580 * MenuScale - Width - 20 * MenuScale, Height, "BACK", False) Then 
 			Select MainMenuTab
 				Case 1
 					PutINIValue(OptionFile, "Global", "Enable Intro", IntroEnabled)
@@ -262,19 +262,19 @@ Function UpdateMainMenu()
 				x = 159 * MenuScale
 				y = 286 * MenuScale
 				
-				width = 400 * MenuScale
-				height = 70 * MenuScale
+				Width = 400 * MenuScale
+				Height = 70 * MenuScale
 				
 				Color(255, 255, 255)
 				AASetFont fo\FontID[1]
-				AAText(x + width / 2, y + height / 2, "NEW GAME", True, True)
+				AAText(x + Width / 2, y + Height / 2, "NEW GAME", True, True)
 				
 				x = 160 * MenuScale
-				y = y + height + 20 * MenuScale
-				width = 580 * MenuScale
-				height = 330 * MenuScale
+				y = y + Height + 20 * MenuScale
+				Width = 580 * MenuScale
+				Height = 330 * MenuScale
 				
-				DrawFrame(x, y, width, height)				
+				DrawFrame(x, y, Width, Height)				
 				
 				AASetFont fo\FontID[0]
 				
@@ -370,14 +370,14 @@ Function UpdateMainMenu()
 					RowText(SelectedDifficulty\description, x+160*MenuScale, y+160*MenuScale, (410-20)*MenuScale, 200)					
 				EndIf
 				
-				If DrawButton(x, y + height + 20 * MenuScale, 160 * MenuScale, 70 * MenuScale, "Load map", False) Then
+				If DrawButton(x, y + Height + 20 * MenuScale, 160 * MenuScale, 70 * MenuScale, "Load map", False) Then
 					MainMenuTab = 4
 					LoadSavedMaps()
 				EndIf
 				
 				AASetFont fo\FontID[1]
 				
-				If DrawButton(x + 420 * MenuScale, y + height + 20 * MenuScale, 160 * MenuScale, 70 * MenuScale, "START", False) Then
+				If DrawButton(x + 420 * MenuScale, y + Height + 20 * MenuScale, 160 * MenuScale, 70 * MenuScale, "START", False) Then
 					If CurrSave = "" Then CurrSave = "untitled"
 					
 					If RandomSeed = "" Then
@@ -409,27 +409,27 @@ Function UpdateMainMenu()
 			Case 2 ;load game
 				;[Block]
 				
-				y = y + height + 20 * MenuScale
-				width = 580 * MenuScale
+				y = y + Height + 20 * MenuScale
+				Width = 580 * MenuScale
 				;height = 300 * MenuScale
-				height = 510 * MenuScale
+				Height = 510 * MenuScale
 				
-				DrawFrame(x, y, width, height)
+				DrawFrame(x, y, Width, Height)
 				
 				x = 159 * MenuScale
 				y = 286 * MenuScale
 				
-				width = 400 * MenuScale
-				height = 70 * MenuScale
+				Width = 400 * MenuScale
+				Height = 70 * MenuScale
 				
 				Color(255, 255, 255)
 				AASetFont fo\FontID[1]
-				AAText(x + width / 2, y + height / 2, "LOAD GAME", True, True)
+				AAText(x + Width / 2, y + Height / 2, "LOAD GAME", True, True)
 				
 				x = 160 * MenuScale
-				y = y + height + 20 * MenuScale
-				width = 580 * MenuScale
-				height = 296 * MenuScale
+				y = y + Height + 20 * MenuScale
+				Width = 580 * MenuScale
+				Height = 296 * MenuScale
 				
 				;AASetFont fo\FontID[0]	
 				
@@ -454,9 +454,9 @@ Function UpdateMainMenu()
 					AAText(x+25*MenuScale, y + 537.5*MenuScale, "<", True, True)
 				EndIf
 				
-				DrawFrame(x+50*MenuScale,y+510*MenuScale,width-100*MenuScale,55*MenuScale)
+				DrawFrame(x+50*MenuScale,y+510*MenuScale,Width-100*MenuScale,55*MenuScale)
 				
-				AAText(x+(width/2.0),y+536*MenuScale,"Page "+Int(Max((CurrLoadGamePage+1),1))+"/"+Int(Max((Int(Ceil(Float(SaveGameAmount)/6.0))),1)),True,True)
+				AAText(x+(Width/2.0),y+536*MenuScale,"Page "+Int(Max((CurrLoadGamePage+1),1))+"/"+Int(Max((Int(Ceil(Float(SaveGameAmount)/6.0))),1)),True,True)
 				
 				AASetFont fo\FontID[0]
 				
@@ -591,7 +591,7 @@ Function UpdateMainMenu()
 					UserTrackCheck2% = 0
 				EndIf
 				
-				Local tx# = x+width
+				Local tx# = x+Width
 				Local ty# = y
 				Local tw# = 400*MenuScale
 				Local th# = 150*MenuScale
@@ -601,8 +601,8 @@ Function UpdateMainMenu()
 				If MainMenuTab = 3 ;Graphics
 					;[Block]
 					;height = 380 * MenuScale
-					height = 330 * MenuScale
-					DrawFrame(x, y, width, height)
+					Height = 410 * MenuScale
+					DrawFrame(x, y, Width, Height)
 					
 					y=y+20*MenuScale
 					
@@ -692,11 +692,24 @@ Function UpdateMainMenu()
 						DrawOptionsTooltip(tx,ty,tw,th,"vram")
 					EndIf
 					
+					y = y + 50 * MenuScale
+					
+					Local SlideBarFOV# = FOV - 40
+					
+					SlideBarFOV = (SlideBar(x + 310 * MenuScale, y + 6 * MenuScale, 150 * MenuScale, SlideBarFOV * 2.0) / 2.0)
+					FOV = SlideBarFOV + 40
+					Color(255, 255, 255)
+					AAText(x + 20 * MenuScale, y, "Field of view:")
+					Color(255, 255, 0)
+					AAText(x + 25 * MenuScale, y + 25 * MenuScale, Int(FOV) + "°")
+					If MouseOn(x + 310 * MenuScale, y + 6 * MenuScale, 150 * MenuScale + 14, 20)
+						DrawOptionsTooltip(tx, ty, tw, th, "fov")
+					EndIf
 					;[End Block]
 				ElseIf MainMenuTab = 5 ;Audio
 					;[Block]
-					height = 220 * MenuScale
-					DrawFrame(x, y, width, height)	
+					Height = 220 * MenuScale
+					DrawFrame(x, y, Width, Height)	
 					
 					y = y + 20*MenuScale
 					
@@ -873,7 +886,7 @@ Function UpdateMainMenu()
 					AAText(x + 280 * MenuScale, y + 100 * MenuScale, "Open/Close Console")
 					InputBox(x + 470 * MenuScale, y + 100 * MenuScale,100*MenuScale,20*MenuScale,KeyName(Min(KEY_CONSOLE,210)),12)
 					
-					If MouseOn(x+20*MenuScale,y,width-40*MenuScale,120*MenuScale)
+					If MouseOn(x+20*MenuScale,y,Width-40*MenuScale,120*MenuScale)
 						DrawOptionsTooltip(tx,ty,tw,th,"controls")
 					EndIf
 					
@@ -2164,6 +2177,10 @@ Function DrawOptionsTooltip(x%,y%,width%,height%,option$,value#=0,ingame%=False)
 			;[End Block]
 		Case "consoleversion"
 		    txt = Chr(34) + "Change console version" + Chr(34) + " is self-explanatory."
+		Case "fov"
+			txt = Chr(34) + "Field of view" + Chr(34) + " is the amount of game view that is on display during a game."
+			txt2 = "Current value: " + Int(FOV) + "° (default is 74°)"
+			;[End Block]
 	End Select
 	
 	lines% = GetLineAmount(txt,fw,fh)
