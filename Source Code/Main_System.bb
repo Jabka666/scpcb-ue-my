@@ -173,6 +173,8 @@ Local CheckFPS%, ElapsedLoops%, FPS%, ElapsedTime#
 
 Global CurrFrameLimit# = (FrameLimit - 19.0) / 100.0
 
+Global CurrFOV# = FOV - 40
+
 SeedRnd(MilliSecs())
 
 Global GameSaved%
@@ -7371,10 +7373,10 @@ Function DrawMenu()
 			If DrawButton(x + 215 * MenuScale, y, 100 * MenuScale, 30 * MenuScale, "CONTROLS", False) Then OptionsMenu = 3
 			If DrawButton(x + 325 * MenuScale, y, 100 * MenuScale, 30 * MenuScale, "ADVANCED", False) Then OptionsMenu = 4
 			
-			Local tX# = (GraphicWidth / 2) + (Width / 2)
+			Local tX# = (GraphicWidth / 2.0) + (Width / 2.0)
 			Local tY# = y
-			Local tW# = 400 * MenuScale
-			Local tH# = 150 * MenuScale
+			Local tW# = 400.0 * MenuScale
+			Local tH# = 150.0 * MenuScale
 			
 			Color(255, 255, 255)
 			Select OptionsMenu
@@ -7478,10 +7480,8 @@ Function DrawMenu()
 					
 					y = y + 40 * MenuScale
 					
-					Local SlideBarFOV# = FOV - 40
-					
-					SlideBarFOV = (SlideBar(x + 270 * MenuScale, y + 6 * MenuScale, 100 * MenuScale, SlideBarFOV * 2.0) / 2.0)
-					FOV = SlideBarFOV + 40
+					CurrFOV = (SlideBar(x + 270 * MenuScale, y + 6 * MenuScale, 100 * MenuScale, CurrFOV * 2.0) / 2.0)
+					FOV = CurrFOV + 40
 					Color(255, 255, 255)
 					AAText(x, y, "Field of view:")
 					Color(255, 255, 0)
@@ -11822,5 +11822,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#1077#1406#1C83
+;~B#1079#1408#1C85
 ;~C#Blitz3D

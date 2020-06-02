@@ -2347,10 +2347,10 @@ Function UpdateEvents()
 						Curr106\Idle = True
 						
 						If Dist < 0.4 Then
-							If e\room\NPC[0]\State = 1 Then 
+							If e\room\NPC[0]\State = 1.0 Then 
 								SetNPCFrame(e\room\NPC[0], 41)
 							EndIf
-							e\EventState = e\EventState + fpst\FPSFactor[0] / 2.0
+							e\EventState = e\EventState + (fpst\FPSFactor[0] / 2.0)
 							e\room\NPC[0]\State = 6.0
 							e\room\NPC[0]\CurrSpeed = CurveValue(0.0, e\room\NPC[0]\CurrSpeed, 25.0)
 							PositionEntity(e\room\NPC[0]\Collider, CurveValue(EntityX(e\room\OBJ, True), EntityX(e\room\NPC[0]\Collider), 25.0), 0.3 - e\EventState / 70.0, CurveValue(EntityZ(e\room\OBJ, True), EntityZ(e\room\NPC[0]\Collider), 25.0))
@@ -2459,16 +2459,16 @@ Function UpdateEvents()
 				;[End Block]
 			Case "pocketdimension"
 				;[Block]
-				; ~ [EventState]: a timer for scaling the tunnels in the starting room
+				; ~ EventState: a timer for scaling the tunnels in the starting room
 				
-				; ~ [EventState2]:
+				; ~ EventState2:
 				
 				; ~ 0 if the player is in the starting room
 				; ~ 1 if in the room with the throne, moving pillars, plane etc
 				; ~ 12-15 if player is in the room with the tall pillars 
 				; ~ (goes down from 15 to 12 and SCP-106 teleports from pillar to another, pillars being room\Objects[12 to 15])
 				
-				; ~ [EventState3]:
+				; ~ EventState3:
 				; ~ 1 when appearing in the tunnel that looks like the tunnels in HCZ
 				; ~ 2 after opening the door in the tunnel
 				; ~ otherwise 0
@@ -2833,7 +2833,7 @@ Function UpdateEvents()
 								UpdateRooms()
 							Else ; ~ The player is not at the exit, must've fallen down
 								If KillTimer >= 0 Then 
-									PlaySound_Strict HorrorSFX(8)
+									PlaySound_Strict(HorrorSFX(8))
 									msg\DeathMsg = "In addition to the decomposed appearance typical of the victims of SCP-106, the subject seems to have suffered multiple heavy fractures to both of his legs."
 								EndIf
 								KillTimer = Min(-1.0, KillTimer)	
@@ -2877,7 +2877,7 @@ Function UpdateEvents()
 									PositionEntity(Collider, EntityX(e\room\Objects[8], True), 0.5, EntityZ(e\room\Objects[8], True))
 									ResetEntity(Collider)
 									;[End Block]
-								Case 11, 12 ;middle of the large starting room
+								Case 11, 12 ; ~ Middle of the large starting room
 									;[Block]
 									BlurTimer = 500.0
 									PositionEntity(Collider, EntityX(e\room\OBJ), 0.5, EntityZ(e\room\OBJ))
@@ -3492,7 +3492,7 @@ Function UpdateEvents()
 								HideEntity(e\room\Objects[4])
 							EndIf
 						Else
-							If e\room\Dist < 2.0
+							If e\room\Dist < 2.0 Then
 								If e\EventState - fpst\FPSFactor[0] =< 40.0 Then PlaySound_Strict(TeslaShockSFX)	
 							Else
 								If e\EventState - fpst\FPSFactor[0] =< 40.0 Then PlaySound2(TeslaShockSFX, Camera, e\room\Objects[2])
@@ -4476,7 +4476,7 @@ Function UpdateEvents()
                 ;[Block]
                 If (Not Curr106\Contained) And Curr106\State > 0.0 Then 
                     If e\EventState = 0.0 Then
-                        If PlayerRoom = e\room Then e\EventState = 1
+                        If PlayerRoom = e\room Then e\EventState = 1.0
                     Else
                         e\EventState = e\EventState + 1.0
                         PositionEntity(Curr106\Collider, EntityX(e\room\Objects[7], True), EntityY(e\room\Objects[7], True), EntityZ(e\room\Objects[7], True))
@@ -4622,7 +4622,7 @@ Function UpdateEvents()
 				If PlayerRoom = e\room Then
 					If e\EventState = 0.0 Then
 						If e\room\RoomDoors[0]\Open = True Then 
-							If e\room\RoomDoors[0]\Openstate = 180.0 Then 
+							If e\room\RoomDoors[0]\OpenState = 180.0 Then 
 								e\EventState = 1.0
 								PlaySound_Strict(HorrorSFX(5))
 							EndIf
@@ -4636,7 +4636,7 @@ Function UpdateEvents()
 							HeartBeatVolume = CurveValue(0.5, HeartBeatVolume, 5.0)
 							HeartBeatRate = CurveValue(120.0, HeartBeatRate, 150.0) 
 							e\SoundCHN = LoopSound2(OldManSFX(4), e\SoundCHN, Camera, e\room\OBJ, 5.0, 0.3)
-							Curr106\State = Curr106\State - fpst\FPSFactor[0] * 3
+							Curr106\State = Curr106\State - (fpst\FPSFactor[0] * 3.0)
 						EndIf
 					EndIf
 				EndIf
@@ -5076,7 +5076,7 @@ Function UpdateEvents()
 									For i = - 1 To 1 Step 2
 										TFormPoint(x + 1024.0 * i, y, z, e\room\OBJ, 0)
 										it2.Items = CreateItem(it\Name, it\ItemTemplate\TempName, TFormedX(), EntityY(it\Collider), TFormedZ())
-										RotateEntity(it2\Collider, EntityPitch(it\Collider), EntityYaw(it\Collider), 0)
+										RotateEntity(it2\Collider, EntityPitch(it\Collider), EntityYaw(it\Collider), 0.0)
 										EntityType(it2\Collider, HIT_ITEM)
 									Next
 								Else
@@ -5106,7 +5106,7 @@ Function UpdateEvents()
 								e\room\NPC[0]\DropSpeed = 0.0
 								y = CurveValue(1.5 + Sin(Float(MilliSecs2()) / 20.0) * 0.1, EntityY(e\room\NPC[0]\Collider), 50.0)
 								PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\NPC[0]\Collider), y, EntityZ(e\room\NPC[0]\Collider))
-								TurnEntity(e\room\NPC[0]\Collider, 0.0, 0.1 * fpst\FPSFactor[0], 0.0)
+								TurnEntity(e\room\NPC[0]\Collider, 0.0, fpst\FPSFactor[0] * 0.1, 0.0)
 							EndIf 								
 						EndIf
 					EndIf
@@ -6238,7 +6238,7 @@ Function UpdateEvents()
 				;[End Block]
 			Case "room106"
 				;[Block]
-				; ~ EventState2 = Are the magnets on
+				; ~ EventState2: Are the magnets on
 				
 				If SoundTransmission Then 
 					If e\EventState = 1.0 Then
@@ -6607,7 +6607,7 @@ Function UpdateEvents()
 										e\EventState2 = Rnd(-0.1, 0.1)
 										e\EventState3 = Rnd(-0.1, 0.1)
 										
-										If (Injuries > 5.0) Then Kill(True)
+										If Injuries > 5.0 Then Kill(True)
 									EndIf
 								EndIf
 								
@@ -6644,11 +6644,11 @@ Function UpdateEvents()
 				;[End block]
 			Case "room860"
 				;[Block]
-				; ~ e\EventState = Is the player in the forest
+				; ~ e\EventState: Is the player in the forest
 				
-				; ~ e\EventState2 = Which side of the door did the player enter from
+				; ~ e\EventState2: Which side of the door did the player enter from
 				
-				; ~ e\EventState3 = Monster spawn timer
+				; ~ e\EventState3: SCP-860-2 spawn timer
 				
 				Local fr.Forest = e\room\fr
 				
@@ -6806,7 +6806,7 @@ Function UpdateEvents()
 						EndIf
 					EndIf
 				Else
-					If (fr = Null) Then
+					If fr = Null Then
 						RemoveEvent(e)
 					Else
 						If fr\Forest_Pivot <> 0 Then HideEntity(fr\Forest_Pivot)
@@ -7260,7 +7260,7 @@ Function UpdateEvents()
 			Case "toiletguard"
 				;[Block]
 				If e\EventState = 0.0 Then
-					If e\room\dist < 8.0 And e\room\Dist > 0.0 Then e\EventState = 1.0
+					If e\room\Dist < 8.0 And e\room\Dist > 0.0 Then e\EventState = 1.0
 				ElseIf e\EventState = 1.0
 					e\room\NPC[0] = CreateNPC(NPCtypeGuard, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True) + 0.5, EntityZ(e\room\Objects[1], True))
 					PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
@@ -7927,17 +7927,17 @@ Function UpdateEvents()
 				;[End Block]
 			Case "room1162"
 				;[Block]
-				; ~ e\EventState = A variable to determine the "nostalgia" items
+				; ~ e\EventState: A variable to determine the "nostalgia" items
 				; ~ 0.0 = No nostalgia item
-				; ~  1.0 = Lost key
-				; ~  2.0 = Disciplinary Hearing DH-S-4137-17092
-				; ~  3.0 = Coin
-				; ~  4.0 = Movie Ticket
-				; ~  5.0 = Old Badge
+				; ~ 1.0 = Lost key
+				; ~ 2.0 = Disciplinary Hearing DH-S-4137-17092
+				; ~ 3.0 = Coin
+				; ~ 4.0 = Movie Ticket
+				; ~ 5.0 = Old Badge
 				
-				; ~ e\EventState2 = Defining which slot from the Inventory should be picked
+				; ~ e\EventState2: Defining which slot from the Inventory should be picked
 				
-				; ~ e\EventState3 = A check for if a item should be removed
+				; ~ e\EventState3: A check for if a item should be removed
 				; ~ 0.0 = no item "trade" will happen
 				; ~ 1.0 = item "trade" will happen
 				; ~ 2.0 = the player doesn't has any items in the Inventory, giving him heavily Injuries and giving him a random item
@@ -8593,8 +8593,8 @@ Function UpdateEvents()
 				EndIf
 				
 				For e2.Events = Each Events
-					If e2\EventName = "room008"
-						If e2\EventState = 2.0
+					If e2\EventName = "room008" Then
+						If e2\EventState = 2.0 Then
 							EntityTexture(e\room\Objects[21], e\room\Textures[0], 3)
 						Else
 							EntityTexture(e\room\Objects[21], e\room\Textures[1], 6)
@@ -8957,8 +8957,7 @@ Function UpdateEvents()
 							msg\Timer = 70.0 * 6.0
 							Injuries = Injuries + Rnd(-0.5, 0.3)
 							Bloodloss = 0.0
-							e\Sound = LoadSound_Strict("SFX\SCP\Joke\Quack.ogg")
-							e\SoundCHN = PlaySound_Strict(e\Sound)
+							PlaySound_Strict(LoadTempSound("SFX\SCP\Joke\Quack.ogg"))
 						EndIf
 					EndIf
 				EndIf
@@ -9033,7 +9032,7 @@ Function UpdateEvents()
 End Function
 
 Function UpdateDimension1499()
-	Local e.Events,n.NPCs, n2.NPCs, r.Rooms, it.Items, i%, j%, du.Dummy1499_1, Temp%, Scale#, x%, y%
+	Local e.Events, n.NPCs, n2.NPCs, r.Rooms, it.Items, i%, j%, du.Dummy1499_1, Temp%, Scale#, x%, y%
 	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
 	
 	For e.Events = Each Events
