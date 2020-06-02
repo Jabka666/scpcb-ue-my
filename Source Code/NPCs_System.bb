@@ -362,18 +362,10 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			;[End Block]
 		Case NPCtype939
 			;[Block]
-			Local Amount939% = 0
-			
+			i = 1
 			For n2.NPCs = Each NPCs
-				If n\NPCtype = n2\NPCtype And n <> n2
-					Amount939 = Amount939 + 1
-				EndIf
+				If n\NPCtype = n2\NPCtype And n <> n2 Then i = i + 1
 			Next
-			
-			If Amount939 = 0 Then i = 1
-			If Amount939 = 1 Then i = 2
-			If Amount939 = 2 Then i = 3
-			If Amount939 = 3 Then i = 4
 			n\NVName = "SCP-939-" + i
 			
 			n\Collider = CreatePivot()
@@ -7585,5 +7577,5 @@ Function Animate2#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = True
 End Function 
 
 ;~IDEal Editor Parameters:
-;~B#16C#1230#1377#13C7#1543#1660#1834#188F
+;~B#16C#1228#136F#13BF#153B#1658#182C#1887
 ;~C#Blitz3D
