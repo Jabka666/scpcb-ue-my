@@ -2593,7 +2593,8 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "room2poffices2"
 			;[Block]
-			d = CreateDoor(r\Zone, r\x + 240.0 * RoomScale, r\y, r\z + 48.0 * RoomScale, 270.0, r, False, False, 3)			d\AutoClose = False
+			d = CreateDoor(r\Zone, r\x + 240.0 * RoomScale, r\y, r\z + 48.0 * RoomScale, 270.0, r, False, False, 3)
+			d\AutoClose = False
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) + 0.061, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) - 0.061, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)			
 			
@@ -4751,13 +4752,13 @@ Function FillRoom(r.Rooms)
 		Case "room1123"
 			;[Block]
 			; ~ Fake door to the contianment chamber itself
-			r\RoomDoors[1] = CreateDoor(r\Zone, r\x + 832.0 * RoomScale, r\y + 512.0 * RoomScale, r\z + 368.0 * RoomScale, 0.0, r, True, 4, 3)
+			r\RoomDoors[1] = CreateDoor(r\Zone, r\x + 656.0 * RoomScale, r\y + 512.0 * RoomScale, r\z, 90.0, r, True, 4, 3)
 			r\RoomDoors[1]\Locked = True : r\RoomDoors[1]\AutoClose = False
 			PositionEntity(r\RoomDoors[1]\Buttons[0], EntityX(r\RoomDoors[1]\Buttons[0], True) - 0.12, EntityY(r\RoomDoors[1]\Buttons[0], True), EntityZ(r\RoomDoors[1]\buttons[0], True) + 0.061, True)
 			PositionEntity(r\RoomDoors[1]\Buttons[1], EntityX(r\RoomDoors[1]\Buttons[1], True) + 0.12, EntityY(r\RoomDoors[1]\Buttons[1], True), EntityZ(r\RoomDoors[1]\buttons[1], True) - 0.061, True)
 			
 			; ~ Door to the containment chamber itself
-			d = CreateDoor(r\Zone, r\x + 832.0 * RoomScale, r\y, r\z + 368.0 * RoomScale, 0.0, r, False, 4, 3)
+			d = CreateDoor(r\Zone, r\x + 656.0 * RoomScale, r\y, r\z, 90.0, r, False, 4, 3)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.12, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.061, True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.12, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.061, True)
 			
@@ -4859,7 +4860,8 @@ Function FillRoom(r.Rooms)
 			r\Objects[10] = CopyEntity(r\Objects[9])
 			
 			r\Objects[11] = LoadMesh_Strict("GFX\map\pocketdimension5.b3d") ; ~ The pillar room
-						Local Terrain% = LoadMesh_Strict("GFX\map\pocketdimensionterrain.b3d")
+			
+			Local Terrain% = LoadMesh_Strict("GFX\map\pocketdimensionterrain.b3d")
 			
 			ScaleEntity(Terrain, RoomScale, RoomScale, RoomScale, True)
 			PositionEntity(Terrain, r\x, r\y + 29440.0, r\z, True)
