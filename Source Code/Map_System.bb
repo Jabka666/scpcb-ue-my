@@ -1835,7 +1835,7 @@ End Function
 Function FillRoom(r.Rooms)
 	CatchErrors("Uncaught (FillRoom)")
 	Local d.Doors, d2.Doors, sc.SecurityCams, de.Decals, r2.Rooms, sc2.SecurityCams
-	Local it.Items, it2.Items, clipboard.Items, em.Emitters
+	Local it.Items, it2.Items, em.Emitters
 	Local xTemp%, yTemp%, zTemp%
 	Local t1%
 	Local scX#, scY#, scZ#, scAngle#
@@ -3642,16 +3642,16 @@ Function FillRoom(r.Rooms)
 			it = CreateItem("Level 0 Key Card", "key0", r\x + 736.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 752.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			clipboard = CreateItem("Clipboard", "clipboard", r\x - 400.0 * RoomScale, r\y - 50.0 * RoomScale, r\z - 700.0 * RoomScale)
+			it = CreateItem("Clipboard", "clipboard", r\x - 400.0 * RoomScale, r\y - 50.0 * RoomScale, r\z - 700.0 * RoomScale)
 			; ~ A hacky fix for clipboard's model and icon
-			clipboard\InvImg = clipboard\ItemTemplate\InvImg
-			SetAnimTime(clipboard\Model, 0.0)
-			EntityParent(clipboard\Collider, r\OBJ)
+			it\InvImg = it\ItemTemplate\InvImg
+			SetAnimTime(it\Model, 0.0)
+			EntityParent(it\Collider, r\OBJ)
 			
 			it2 = CreateItem("Document SCP-1048", "paper", 1.0, 1.0, 1.0)
 			it2\Picked = True
 			it2\Dropped = -1
-			clipboard\SecondInv[0] = it2
+			it\SecondInv[0] = it2
 			HideEntity(it2\Collider)
 			EntityParent(it2\Collider, r\OBJ)
 			

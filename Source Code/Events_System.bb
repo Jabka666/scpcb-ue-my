@@ -312,44 +312,6 @@ Function QuickLoadEvents()
 				EndIf
 			EndIf
 			;[End Block]
-		Case "room2closets"
-			;[Block]
-			If e\EventState = 0.0
-				If e\EventStr = "Load0"
-					QuickLoadPercent = 10
-					If e\room\NPC[0] = Null Then
-						e\room\NPC[0] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
-					EndIf
-					ChangeNPCTextureID(e\room\NPC[0], 11)
-					e\EventStr = "Load1"
-				ElseIf e\EventStr = "Load1"
-					QuickLoadPercent = 20
-					e\room\NPC[0]\Sound = LoadSound_Strict("SFX\Room\Storeroom\Escape1.ogg")
-					e\EventStr = "Load2"
-				ElseIf e\EventStr = "Load2"
-					QuickLoadPercent = 35
-					e\room\NPC[0]\SoundCHN = PlaySound2(e\room\NPC[0]\Sound, Camera, e\room\NPC[0]\Collider, 12.0)
-					e\EventStr = "Load3"
-				ElseIf e\EventStr = "Load3"
-					QuickLoadPercent = 55
-					If e\room\NPC[1] = Null Then
-						e\room\NPC[1] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
-					EndIf
-					ChangeNPCTextureID(e\room\NPC[1], 2)
-					e\EventStr = "Load4"
-				ElseIf e\EventStr = "Load4"
-					QuickLoadPercent = 80
-					e\room\NPC[1]\Sound = LoadSound_Strict("SFX\Room\Storeroom\Escape2.ogg")
-					e\EventStr = "Load5"
-				ElseIf e\EventStr = "Load5"
-					QuickLoadPercent = 100
-					PointEntity(e\room\NPC[0]\Collider, e\room\NPC[1]\Collider)
-					PointEntity(e\room\NPC[1]\Collider, e\room\NPC[0]\Collider)
-					
-					e\EventState = 1.0
-				EndIf
-			EndIf
-			;[End Block]
 		Case "room3storage"
 			;[Block]
 			If e\room\NPC[0] = Null Then
@@ -3120,22 +3082,30 @@ Function UpdateEvents()
 				;[Block]
 				If e\EventState = 0.0 Then
 					If PlayerRoom = e\room And Curr173\Idle < 2 Then
-						If e\EventStr = "" And QuickLoadPercent = -1
-							QuickLoadPercent = 0
-							QuickLoad_CurrEvent = e
-							e\EventStr = "Load0"
-						EndIf
+						e\room\NPC[0] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
+						ChangeNPCTextureID(e\room\NPC[0], 11)
+						
+						e\room\NPC[0]\Sound = LoadSound_Strict("SFX\Room\Storeroom\Escape1.ogg")
+						e\room\NPC[0]\SoundCHN = PlaySound2(e\room\NPC[0]\Sound, Camera, e\room\NPC[0]\Collider, 12.0)
+						
+						e\room\NPC[1] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
+						ChangeNPCTextureID(e\room\NPC[1], 2)
+						
+						PointEntity(e\room\NPC[0]\Collider, e\room\NPC[1]\Collider)
+						PointEntity(e\room\NPC[1]\Collider, e\room\NPC[0]\Collider)
+						
+						e\EventState = 1.0
 					EndIf
 				Else
 					e\EventState = e\EventState + fpst\FPSFactor[0]
 					If e\EventState < 70.0 * 3.0 Then
 						RotateEntity(e\room\NPC[1]\Collider, 0.0, CurveAngle(e\room\Angle + 90.0, EntityYaw(e\room\NPC[1]\Collider), 100.0), 0.0, True)
-						
 						e\room\NPC[0]\State = 1.0
-						If e\EventState > 70.0 * 3.2 And e\EventState - fpst\FPSFactor[0] =< 70.0 * 3.2 Then PlaySound2(IntroSFX(11), Camera, e\room\OBJ, 15.0)
+						If e\EventState > 70.0 * 2.9 And e\EventState - fpst\FPSFactor[0] =< 70.0 * 2.9 Then PlaySound2(IntroSFX(11), Camera, e\room\OBJ, 15.0)
 					ElseIf e\EventState < 70.0 * 6.5
 						If e\EventState - fpst\FPSFactor[0] < 70.0 * 3.0 Then
 							e\room\NPC[0]\State = 0.0
+							e\room\NPC[1]\Sound = LoadSound_Strict("SFX\Room\Storeroom\Escape2.ogg")
 							e\room\NPC[1]\SoundCHN = PlaySound2(e\room\NPC[1]\Sound, Camera, e\room\NPC[1]\Collider, 12.0)
 						EndIf
 						
@@ -3167,21 +3137,6 @@ Function UpdateEvents()
 							PointEntity(Curr173\Collider, e\room\NPC[0]\Collider)
 							ResetEntity(Curr173\Collider)
 							Curr173\Idle = True
-							
-							it.Items = CreateItem("Wallet", "wallet", EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True))
-							EntityType(it\Collider, HIT_ITEM)
-							PointEntity(it\Collider, e\room\NPC[0]\Collider)
-							RotateEntity(it\Collider, 0.0, Rnd(360.0), 0.0)
-							TeleportEntity(it\Collider, EntityX(it\Collider), EntityY(it\Collider), EntityZ(it\Collider), -0.02, True, 10)
-							For i = 0 To 1
-								it2.Items = CreateItem("Quarter", "25ct", 1.0, 1.0, 1.0)
-								it2\Picked = True
-								it2\Dropped = -1
-								it2\ItemTemplate\Found = True
-								it\SecondInv[i] = it2
-								HideEntity(it2\Collider)
-								EntityType(it2\Collider, HIT_ITEM)
-							Next
 						EndIf
 						
 						If e\EventState > 70.0 * 8.0 Then
@@ -3198,6 +3153,23 @@ Function UpdateEvents()
 							PointEntity(Curr173\Collider, e\room\NPC[1]\Collider)
 							ResetEntity(Curr173\Collider)
 							Curr173\Idle = False
+						EndIf
+						
+						If e\EventState > 70.0 * 9.0 And e\EventState - fpst\FPSFactor[0] =< 70.0 * 9.0 Then
+							it.Items = CreateItem("Wallet", "wallet", EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True))
+							EntityType(it\Collider, HIT_ITEM)
+							PointEntity(it\Collider, e\room\NPC[0]\Collider)
+							RotateEntity(it\Collider, 0.0, Rnd(360.0), 0.0)
+							TeleportEntity(it\Collider, EntityX(it\Collider), EntityY(it\Collider), EntityZ(it\Collider), -0.02, True, 10)
+							For i = 0 To 1
+								it2.Items = CreateItem("Quarter", "25ct", 1.0, 1.0, 1.0)
+								it2\Picked = True
+								it2\Dropped = -1
+								it2\ItemTemplate\Found = True
+								it\SecondInv[i] = it2
+								HideEntity(it2\Collider)
+								EntityType(it2\Collider, HIT_ITEM)
+							Next
 						EndIf
 						
 						If e\EventState > 70.0 * 10.0 Then
@@ -10444,5 +10416,5 @@ Function GenerateRandomIA()
 	Next
 End Function
 ;~IDEal Editor Parameters:
-;~B#1254#1E82
+;~B#1238#1E66
 ;~C#Blitz3D

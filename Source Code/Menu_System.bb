@@ -33,8 +33,8 @@ Global SavePath$ = "Saves\"
 Global SaveMSG$
 
 Global CurrSave$
-
 Global SaveGameAmount%
+
 Dim SaveGames$(SaveGameAmount + 1) 
 Dim SaveGameTime$(SaveGameAmount + 1)
 Dim SaveGameDate$(SaveGameAmount + 1)
@@ -1222,7 +1222,6 @@ Function UpdateLauncher()
 	MenuBlack = LoadImage_Strict("GFX\menu\menu_black.png")	
 	MaskImage(MenuBlack, 255, 255, 0)
 	LauncherIMG = LoadImage_Strict("GFX\menu\launcher.png")
-	ButtonSFX = LoadSound_Strict("SFX\Interact\Button.ogg")
 	
 	For i = 1 To TotalGFXModes
 		Local SameFound% = False
@@ -1840,11 +1839,18 @@ Function DrawTick%(x%, y%, Selected%, Locked% = False)
 	Color(255, 255, 255)
 	DrawTiledImageRect(MenuWhite, (x Mod 256), (y Mod 256), 512, 512, x, y, Width, Height)
 	
-	Local Highlight% = MouseOn(x, y, Width, Height) And (Not Locked)
+	Local Highlight% = MouseOn(x, y, Width, Height)
 	
 	If Highlight Then
 		Color(50, 50, 50)
-		If MouseHit1 Then Selected = (Not Selected) : PlaySound_Strict (ButtonSFX)
+		If MouseHit1 Then 
+			If Locked Then
+				PlaySound_Strict(ButtonSFX2)
+			Else
+				Selected = (Not Selected)
+				PlaySound_Strict(ButtonSFX)
+			EndIf
+		EndIf
 	Else
 		Color(0, 0, 0)		
 	End If

@@ -6,6 +6,7 @@
 - Added symbols' fast erasing.
 - Added more details to the Gate A.
 - Added sitting animation for hazmat suit.
+- Added sound for locked menu buttons.
 
 - Now guard in "room2elevator" event can kill the player if he too close.
 - Now the pass code for O5 Council's office drops from falling guard in SCP-895's event.

@@ -31,7 +31,8 @@ End Type
 Local fo.Fonts = New Fonts
 
 Global MenuWhite%, MenuBlack%
-Global ButtonSFX%
+Global ButtonSFX% = LoadSound_Strict("SFX\Interact\Button.ogg")
+Global ButtonSFX2% = LoadSound_Strict("SFX\Interact\Button2.ogg")
 
 Global EnableSFXRelease_Prev% = EnableSFXRelease
 
@@ -110,8 +111,6 @@ If LauncherEnabled Then
 		End If
 	EndIf
 Else
-	ButtonSFX = LoadSound_Strict("SFX\Interact\Button.ogg")
-	
 	For i% = 1 To TotalGFXModes
 		Local SameFound% = False
 		
@@ -1943,7 +1942,6 @@ Dim BigDoorErrorSFX%(3)
 
 Global KeyCardSFX1% 
 Global KeyCardSFX2% 
-Global ButtonSFX2% 
 Global ScannerSFX1%
 Global ScannerSFX2%
 
@@ -11822,5 +11820,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#1079#1408#1C85
+;~B#1077#1406#1C83
 ;~C#Blitz3D
