@@ -4152,7 +4152,7 @@ Function MovePlayer()
 	Update008()
 	Update409()
 	
-	If Bloodloss > 0.0 Then
+	If Bloodloss > 0.0 And VomitTimer >= 0.0 Then
 		If Rnd(200.0) < Min(Injuries, 4.0) Then
 			Pvt = CreatePivot()
 			PositionEntity(Pvt, EntityX(Collider) + Rnd(-0.05, 0.05), EntityY(Collider) - 0.05, EntityZ(Collider) + Rnd(-0.05, 0.05))
@@ -7123,6 +7123,8 @@ Function DrawGUI()
 					;[Block]
 					msg\Msg = "You injected yourself the syringe."
 					msg\Timer = 70 * 8.0
+					
+					VomitTimer = 70.0 * 1.0
 					
 				    I_008\Timer = I_008\Timer + (1 + (1 * SelectedDifficulty\AggressiveNPCs))
 					RemoveItem(SelectedItem)
@@ -11820,5 +11822,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#1077#1406#1C81
+;~B#1077#1406#1C83
 ;~C#Blitz3D
