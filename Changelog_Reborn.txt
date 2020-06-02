@@ -17,6 +17,7 @@
 - Changed one bump texture to the better one.
 - Changed text when player is using Level 6 Key Card.
 - Changed Level 6 Key Card's achievement name.
+- Changed bloody textures in fake SCP-1123's containment chamber.
 
 - Replaced O5-14 Burnt Document by batteries in room2offices5.
 
@@ -81,6 +82,8 @@ Bug Fixes:
 - Fixed lights and some textures in room2servers2.
 - Fixed weird battery's selecting.
 - Fixed type of the door in checkpoints-endrooms.
+- Fixed grammatical mistake for one of the SCP-1048's drawings.
+- Fixed SCP-1123 for SCP-714.
 
 - Small fixes for room2testroom's event.
 - Small fixes for commands "disablenuke" and "enablecontrol/disablecontrol.

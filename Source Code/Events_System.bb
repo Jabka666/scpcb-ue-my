@@ -6830,7 +6830,7 @@ Function UpdateEvents()
 			Case "room1123"
 				;[Block]
 				If PlayerRoom = e\room Then
-					If I_714\Using = 0 Or WearingHazmat < 3 Or WearingGasMask < 3 Then
+					If I_714\Using = 0 And WearingHazmat < 3 And WearingGasMask < 3 Then
 						If EntityDistance(Collider, e\room\Objects[3]) < 0.9 Or (e\EventState > 0.0 And e\EventState < 7.0) Then
 							If e\EventState = 0.0 Then BlurTimer = 1000.0
 					        CameraShake = 1.0
@@ -6852,7 +6852,7 @@ Function UpdateEvents()
 						e\room\NPC[0] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True), EntityZ(e\room\Objects[6], True))
 						
 						Nazi% = CopyEntity(o\NPCModelID[22])
-						Scale# = 0.5 / MeshWidth(Nazi)
+						Scale# = GetINIFloat("Data\NPCs.ini", "Class D", "Scale") / MeshWidth(Nazi)
 						
 						FreeEntity(e\room\NPC[0]\OBJ)
 						e\room\NPC[0]\OBJ = CopyEntity(Nazi)
@@ -6917,7 +6917,6 @@ Function UpdateEvents()
 						EndIf
 						
 						If EntityYaw(e\room\Objects[13], False) = 0 Then
-							
 							If EntityDistance(Collider, e\room\Objects[12]) < 1.0 Then
 								DrawHandIcon = True
 								If MouseHit1 Then
@@ -6967,7 +6966,8 @@ Function UpdateEvents()
 							BlinkTimer = -10.0
 							
 							de.Decals = CreateDecal(3, EntityX(Collider), 512.0 * RoomScale + 0.0005, EntityZ(Collider), 90.0, Rnd(360.0), 0.0)
-							de\Size = 0.5 : ScaleSprite(de\OBJ, de\Size, de\Size)
+							de\Size = 0.5
+							ScaleSprite(de\OBJ, de\Size, de\Size)
 							
 							e\room\NPC[0]\Sound = LoadSound_Strict("SFX\SCP\1123\Officer3.ogg")
 							
