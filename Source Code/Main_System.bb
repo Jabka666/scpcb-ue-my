@@ -3612,7 +3612,7 @@ Function DrawEnding()
 		EndIf
 		
 		If EndingScreen = 0 Then
-			EndingScreen = LoadImage_Strict("GFX\endingscreen.pt")
+			EndingScreen = LoadImage_Strict("GFX\ending_screen.png")
 			
 			ShouldPlay = 23
 			CurrMusicVolume = MusicVolume
@@ -3757,7 +3757,7 @@ Function InitCredits()
 	fo\CreditsFontID[1] = LoadFont_Strict("GFX\font\courbd\Courier New.ttf", Int(35 * (GraphicHeight / 1024)), 0, 0, 0)
 	
 	If CreditsScreen = 0
-		CreditsScreen = LoadImage_Strict("GFX\creditsscreen.pt")
+		CreditsScreen = LoadImage_Strict("GFX\credits_screen.png")
 	EndIf
 	
 	Repeat
@@ -4513,7 +4513,7 @@ Function DrawGUI()
 						If e\Img = 0 Then
 							If BlinkTimer > -5.0 Then
 								If e\Img = 0 Then
-									e\Img = LoadImage_Strict("GFX\kneelmortal.pd")
+									e\Img = LoadImage_Strict("GFX\kneel_mortal.png")
 									If ChannelPlaying(e\SoundCHN) = True Then StopChannel(e\SoundCHN)
 									e\SoundCHN = PlaySound_Strict(e\Sound)
 								EndIf
@@ -8350,20 +8350,20 @@ Function LoadEntities()
 	
 	tt\LightSpriteID[0] = LoadTexture_Strict("GFX\light.png", 1)
 	tt\LightSpriteID[1] = LoadTexture_Strict("GFX\light(2).png", 1)
-	tt\LightSpriteID[2] = LoadTexture_Strict("GFX\lightsprite.png", 1)
+	tt\LightSpriteID[2] = LoadTexture_Strict("GFX\light_sprite.png", 1)
 	
 	DrawLoading(15)
 	
-	tt\MiscTextureID[0] = LoadTexture_Strict("GFX\079Overlays\079Overlay.png")
+	tt\MiscTextureID[0] = LoadTexture_Strict("GFX\scp_079_overlay.png")
 	
 	For i = 1 To 6
-		tt\MiscTextureID[i] = LoadTexture_Strict("GFX\079Overlays\079Overlay(" + (i + 1) + ").png")	; ~ SCP-079
+		tt\MiscTextureID[i] = LoadTexture_Strict("GFX\scp_079_overlay(" + (i + 1) + ").png")
 	Next
 	
-	tt\MiscTextureID[7] = LoadTexture_Strict("GFX\895Overlays\895Overlay.png")
+	tt\MiscTextureID[7] = LoadTexture_Strict("GFX\scp_895_overlay.png")
 	
 	For i = 8 To 12
-		tt\MiscTextureID[i] = LoadTexture_Strict("GFX\895Overlays\895Overlay(" + (i - 6) + ").png") ; ~ SCP-895
+		tt\MiscTextureID[i] = LoadTexture_Strict("GFX\scp_895_overlay(" + (i - 6) + ").png")
 	Next
 	
 	tt\MiscTextureID[13] = LoadTexture_Strict("GFX\map\tesla.png", 1 + 2)
@@ -8375,9 +8375,9 @@ Function LoadEntities()
 		tt\DecalTextureID[i] = LoadTexture_Strict("GFX\decal(" + (i + 1) + ").png", 1 + 2)
 	Next
 	
-	tt\DecalTextureID[8] = LoadTexture_Strict("GFX\decalpd.png", 1 + 2)	
+	tt\DecalTextureID[8] = LoadTexture_Strict("GFX\decal_pd.png", 1 + 2)	
 	For i = 9 To 12
-		tt\DecalTextureID[i] = LoadTexture_Strict("GFX\decalpd(" + (i - 7) + ").png", 1 + 2)	
+		tt\DecalTextureID[i] = LoadTexture_Strict("GFX\decal_pd(" + (i - 7) + ").png", 1 + 2)	
 	Next
 	
 	tt\DecalTextureID[13] = LoadTexture_Strict("GFX\bullet_hole.png", 1 + 2)	
@@ -8386,11 +8386,11 @@ Function LoadEntities()
 	tt\DecalTextureID[15] = LoadTexture_Strict("GFX\blood_drop.png", 1 + 2)
 	tt\DecalTextureID[16] = LoadTexture_Strict("GFX\blood_drop(2).png", 1 + 2)
 	
-	tt\DecalTextureID[17] = LoadTexture_Strict("GFX\decal427.png", 1 + 2)
+	tt\DecalTextureID[17] = LoadTexture_Strict("GFX\decal_scp_427.png", 1 + 2)
 	
-	tt\DecalTextureID[18] = LoadTexture_Strict("GFX\decalpd(6).png", 1 + 2)	
+	tt\DecalTextureID[18] = LoadTexture_Strict("GFX\decal_pd(6).png", 1 + 2)	
 	
-	tt\DecalTextureID[19] = LoadTexture_Strict("GFX\decal409.png", 1 + 2)
+	tt\DecalTextureID[19] = LoadTexture_Strict("GFX\decal_scp_409.png", 1 + 2)
 	
 	DrawLoading(25)
 	
@@ -8417,9 +8417,9 @@ Function LoadEntities()
     Next
 	
 	tt\MonitorTextureID[0] = LoadTexture_Strict("GFX\monitor_overlay.png")
-	tt\MonitorTextureID[1] = LoadTexture_Strict("GFX\map\LockdownScreen2.jpg")
-	tt\MonitorTextureID[2] = LoadTexture_Strict("GFX\map\LockdownScreen.jpg")
-	tt\MonitorTextureID[3] = LoadTexture_Strict("GFX\map\LockdownScreen3.jpg")
+	tt\MonitorTextureID[1] = LoadTexture_Strict("GFX\map\lockdown_screen(2).png")
+	tt\MonitorTextureID[2] = LoadTexture_Strict("GFX\map\lockdown_screen.png")
+	tt\MonitorTextureID[3] = LoadTexture_Strict("GFX\map\lockdown_screen(3).png")
 	tt\MonitorTextureID[4] = CreateTexture(1, 1)
 	SetBuffer(TextureBuffer(tt\MonitorTextureID[4]))
 	ClsColor(0, 0, 0)

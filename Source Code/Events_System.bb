@@ -2421,7 +2421,7 @@ Function UpdateEvents()
 				;[End Block]
 			Case "pocketdimension"
 				;[Block]
-				; ~ EventState: a timer for scaling the tunnels in the starting room
+				; ~ EventState: A timer for scaling the tunnels in the starting room
 				
 				; ~ EventState2:
 				
