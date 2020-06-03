@@ -5643,6 +5643,9 @@ Function FillRoom(r.Rooms)
 			
 			it = CreateItem("9V Battery", "bat", r\x + 900.0 * RoomScale, r\y + 250.0 * RoomScale, r\z + 80.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
+			
+			it = CreateItem("Ballistic Helmet", "helmet", r\x + 980.0 * RoomScale, r\y + 250.0 * RoomScale, r\z + 300.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case "room2medibay"
 			;[Block]
