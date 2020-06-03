@@ -5851,7 +5851,7 @@ Function DrawGUI()
 							If SelectedItem\ItemTemplate\TempName = "finefirstaid" Then
 								Bloodloss = 0.0
 								Injuries = Max(0.0, Injuries - 2.0)
-								If Injuries = 0 Then
+								If Injuries = 0.0 Then
 									msg\Msg = "You bandaged the wounds and took a painkiller. You feel fine."
 								ElseIf Injuries > 1.0
 									msg\Msg = "You bandaged the wounds and took a painkiller, but you were not able to stop the bleeding."
@@ -11750,6 +11750,19 @@ Function RotateEntity90DegreeAngles(Entity%)
 		Return(270.0)
 	EndIf
 End Function
+
+Function InjurePlayer(Injuries_#, Infection# = 0.0, BlurTimer_# = 0.0, WithVest% = False, VestFactor# = 0.0, WithHelmet% = False, HelmetFactor# = 0.0)
+	If WithVest And WearingVest > 0 Then
+		Injuries = Injuries + Injuries_ - VestFactor
+	Else If WithHelmet And WearingVest > 0 And WearingHelmet > 0
+		Injuries = Injuries + Injuries_ - VestFactor - (Crouch * HelmetFactor)
+	Else
+		Injuries = Injuries + Injuries_
+	End If
+	BlurTimer = BlurTimer_
+	I_008\Timer = I_008\Timer + Infection
+End Function
+
 ;~IDEal Editor Parameters:
 ;~B#106F#13F6#1C6E
 ;~C#Blitz3D

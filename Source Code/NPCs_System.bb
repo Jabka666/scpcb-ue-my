@@ -508,7 +508,6 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 End Function
 
 Function RemoveNPC(n.NPCs)
-	
 	If n = Null Then Return
 	
 	If n\OBJ2 <> 0 Then 
@@ -772,7 +771,7 @@ Function UpdateNPCs()
 							EndIf
 						EndIf
 						PositionEntity(n\Collider, EntityX(n\Collider), Min(EntityY(n\Collider), 0.35), EntityZ(n\Collider))
-					Else ; ~ SCP-173 was captured by MTFs
+					Else ; ~ SCP-173 was captured by MTF
 						If n\Target <> Null Then
 							Local Tmp% = False
 							
@@ -804,7 +803,7 @@ Function UpdateNPCs()
 						RotateEntity(n\OBJ2, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
 					EndIf
 				EndIf
-				;[End block]
+				;[End Block]
 			Case NPCtype106
 				;[Block]
 				If n\Contained Then
@@ -1003,7 +1002,7 @@ Function UpdateNPCs()
 											PlaySound_Strict(DamageSFX(1))
 											PlaySound_Strict(HorrorSFX(5))											
 											If PlayerRoom\RoomTemplate\Name = "pocketdimension" Then
-												msg\DeathMsg = SubjetName + ". Body partially decomposed by what is assumed to be SCP-106's " + Chr(34) + "corrosion" + Chr(34) + " effect. Body disposed of via incineration."
+												msg\DeathMsg = SubjectName + ". Body partially decomposed by what is assumed to be SCP-106's " + Chr(34) + "corrosion" + Chr(34) + " effect. Body disposed of via incineration."
 												Kill(True)
 											Else
 												PlaySound_Strict(OldManSFX(3))
@@ -1049,14 +1048,14 @@ Function UpdateNPCs()
                                     EndIf
                                 EndIf
                             EndIf
-                            n\Reload = Max(0, n\Reload - fpst\FPSFactor[0])
+                            n\Reload = Max(0.0, n\Reload - fpst\FPSFactor[0])
 							
-							UpdateSoundOrigin(n\SoundCHN2,Camera,n\Collider)
+							UpdateSoundOrigin(n\SoundCHN2, Camera, n\Collider)
 						Else ; ~ Idling outside the map
-							n\CurrSpeed = 0
-							MoveEntity n\Collider, 0, ((EntityY(Collider) - 30) - EntityY(n\Collider)) / 200.0, 0
-							n\DropSpeed = 0
-							n\Frame = 110
+							n\CurrSpeed = 0.0
+							MoveEntity(n\Collider, 0.0, ((EntityY(Collider) - 30.0) - EntityY(n\Collider)) / 200.0, 0.0)
+							n\DropSpeed = 0.0
+							SetNPCFrame(n, 110.0)
 							
 							If (Not PlayerRoom\RoomTemplate\DisableDecals) Then
 								If PlayerRoom\RoomTemplate\Name <> "gatea"
@@ -2015,7 +2014,7 @@ Function UpdateNPCs()
 								n\State = 2.0
 							EndIf
 							
-							If n\PathStatus = 1
+							If n\PathStatus = 1 Then
 								If n\Path[n\PathLocation] = Null Then 
 									If n\PathLocation > 19 Then 
 										n\PathLocation = 0 : n\PathStatus = 0
@@ -2116,7 +2115,7 @@ Function UpdateNPCs()
 									If Dist < 1.1 Then
 										If Abs(DeltaYaw(n\Collider, Collider)) =< 60.0
 											PlaySound2(DamageSFX(Rand(5, 8)), Camera, n\Collider)
-											Injuries = Injuries + Rnd(0.4, 1.0) - (WearingVest * Rnd(0.1, 0.2))
+											InjurePlayer(Rnd(0.4, 1.0), 0.0, 0.0, True, Rnd(0.1, 0.2))
 											
 											If Injuries > 3.0 Then
 												msg\DeathMsg = SubjectName + ". Cause of death: multiple lacerations and severe blunt force trauma caused by an instance of SCP-049-2."
@@ -2137,7 +2136,7 @@ Function UpdateNPCs()
 									If Dist < 1.1 Then
 										If Abs(DeltaYaw(n\Collider, Collider)) =< 60.0
 											PlaySound2(DamageSFX(Rand(5, 8)), Camera, n\Collider)
-											Injuries = Injuries + Rnd(0.4, 1.0) - (WearingVest * Rnd(0.1, 0.2)) - (WearingHelmet * Crouch * 0.1)
+											InjurePlayer(Rnd(0.4, 1.0), 0.0, 0.0, True, Rnd(0.1, 0.2), True, 0.1)
 											
 											If Injuries > 3.0 Then
 												msg\DeathMsg = SubjectName + ". Cause of death: multiple lacerations and severe blunt force trauma caused by an instance of SCP-049-2."
@@ -2405,7 +2404,7 @@ Function UpdateNPCs()
 							
 							Local SearchPlayer% = False
 							
-							If Dist < 11.0
+							If Dist < 11.0 Then
 								If EntityVisible(n\Collider, Collider)
 									SearchPlayer = True
 								EndIf
@@ -2464,7 +2463,7 @@ Function UpdateNPCs()
 								
 								FreeEntity(Pvt)
 							Else
-								If n\PathStatus = 1
+								If n\PathStatus = 1 Then
 									If n\Path[n\PathLocation] = Null Then 
 										If n\PathLocation > 19 Then 
 											n\PathLocation = 0 : n\PathStatus = 0
@@ -2623,14 +2622,14 @@ Function UpdateNPCs()
 				End Select
 				
 				If n\CurrSpeed > 0.01 Then
-					If PrevFrame < 5.0 And n\Frame >= 5.0
+					If PrevFrame < 5.0 And n\Frame >= 5.0 Then
 						PlaySound2(StepSFX(4, 0, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.5, 0.7))						
 					ElseIf PrevFrame < 23.0 And n\Frame >= 23.0
 						PlaySound2(StepSFX(4, 0, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.5, 0.7))						
 					EndIf
 				EndIf
 				
-				If n\Frame > 286.5 And n\Frame < 288.5
+				If n\Frame > 286.5 And n\Frame < 288.5 Then
 					n\IsDead = True
 				EndIf
 				
@@ -2838,7 +2837,7 @@ Function UpdateNPCs()
 						Select n\State 
 							Case 1.0
 								;[Block]
-								If n\PrevState = 0
+								If n\PrevState = 0 Then
 									AnimateNPC(n, 125.0, 194.0, n\CurrSpeed * 20.0)
 								Else
 									AnimateNPC(n, 195.0, 264.0, n\CurrSpeed * 20.0)
@@ -2847,7 +2846,7 @@ Function UpdateNPCs()
 								;[End Block]
 							Case 2.0
 								;[Block]
-								If n\PrevState = 0
+								If n\PrevState = 0 Then
 									AnimateNPC(n, 2.0, 74.0, 0.2)
 								Else
 									AnimateNPC(n, 75.0, 124.0, 0.2)
@@ -2935,7 +2934,6 @@ Function UpdateNPCs()
 					Else 
 						Dist2 = 1.0
 					EndIf
-					
 					n\SoundCHN = LoopSound2(ApacheSFX, n\SoundCHN, Camera, n\Collider, 25.0, Dist2)
 				EndIf
 				
@@ -2989,7 +2987,7 @@ Function UpdateNPCs()
 									
 									MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fpst\FPSFactor[0])
 									
-									If n\PathTimer = 0 Then
+									If n\PathTimer = 0.0 Then
 										n\PathStatus = EntityVisible(n\Collider, Target)
 										n\PathTimer = Rnd(100.0, 200.0)
 									Else
@@ -3068,7 +3066,7 @@ Function UpdateNPCs()
 				;[Block]
 				Dist = EntityDistance(n\Collider, Collider)
 				
-				If Dist < HideDistance
+				If Dist < HideDistance Then
 					If (Not n\IsDead) Then
 					    Select n\State 
 						    Case 0.0 ; ~ Spawns
@@ -3139,12 +3137,10 @@ Function UpdateNPCs()
 										    If Abs(DeltaYaw(n\Collider, Collider)) < 20.0 Then 
 											    If WearingHazmat > 0 Then
 											        PlaySound_Strict(LoadTempSound("SFX\General\BodyFall.ogg"))
-											        BlurTimer = 100.0
-													Injuries = Injuries + Rnd(0.5)
+													InjurePlayer(Rnd(0.5))
 												Else
-												    BlurTimer = 100.0
 												    PlaySound_Strict(DamageSFX(Rand(9, 10)))
-													Injuries = Injuries + Rnd(1.0, 1.5) - (WearingVest * Rnd(0.1, 0.5))
+													InjurePlayer(Rnd(1.0, 1.5), 0.0, 100.0, True, Rnd(0.1, 0.5))
 													
 													If Injuries > 3.0 Then
 													    If PlayerRoom\RoomTemplate\Name = "room2offices" Then
@@ -3645,8 +3641,7 @@ Function UpdateNPCs()
 									If Temp Then
 										If Distance(n\EnemyX, n\EnemyZ, EntityX(n\Collider), EntityZ(n\Collider)) < 1.5 Then
 											PlaySound_Strict(DamageSFX(11))
-											Injuries = Injuries + Rnd(1.5, 2.5) - (WearingVest * Rnd(0.1, 0.725))
-											BlurTimer = 500.0		
+											InjurePlayer(Rnd(1.5, 2.5), 0.0, 500.0, True, Rnd(0.1, 0.725))
 										Else
 											SetNPCFrame(n, 449.0)
 										EndIf
@@ -3838,7 +3833,7 @@ Function UpdateNPCs()
 													de\Size = 0.3 : UpdateDecals()
 													PlaySound_Strict(LoadTempSound("SFX\General\BodyFall.ogg"))
 													If Distance(EntityX(Collider), EntityZ(Collider), EntityX(n\Collider), EntityZ(n\Collider)) < 0.8 Then
-														Injuries = Injuries + Rnd(0.3, 0.5) - (WearingVest * Rnd(0.1, 0.15))
+														InjurePlayer(Rnd(0.3, 0.5), 0.0, 200.0)
 													EndIf
 												EndIf
 												;[End Block]
@@ -4238,7 +4233,7 @@ Function UpdateNPCs()
 									If Dist < 1.0 Then
 										If (Abs(DeltaYaw(n\Collider, Collider)) =< 60.0) Then
 											PlaySound2(DamageSFX(Rand(11, 12)), Camera, n\Collider)
-											Injuries = Injuries + Rnd(0.5, 1.0)	- (WearingVest * Rnd(0.1, 0.25))	
+											InjurePlayer(Rnd(0.5, 1.0), 0.0, 500.0, True, Rnd(0.1, 0.25))
 										EndIf
 									Else
 										PlaySound2(MissSFX, Camera, n\Collider, 2.5)
@@ -4580,7 +4575,7 @@ Function UpdateNPCs()
 									If Dist > 0.85 Or Abs(DeltaYaw(n\Collider, Collider)) > 60.0 Then
 										PlaySound2(MissSFX, Camera, n\Collider, 2.5)
 									Else
-										Injuries = Injuries + Rnd(0.75, 1.5) - (WearingVest * Rnd(0.1, 0.375))
+										InjurePlayer(Rnd(0.75, 1.5), 0.0, 500.0, True, Rnd(0.1, 0.375))
 										PlaySound2(DamageSFX(Rand(11, 12)), Camera, n\Collider)
 										If Injuries > 10.0 Then
 											Kill(True)
@@ -4610,7 +4605,7 @@ Function UpdateNPCs()
 									If Dist > 0.85 Or Abs(DeltaYaw(n\Collider, Collider)) > 60.0 Then
 										PlaySound2(MissSFX, Camera, n\Collider, 2.5)
 									Else
-										Injuries = Injuries + Rnd(0.75, 1.5) - (WearingVest * Rnd(0.1, 0.375))
+										InjurePlayer(Rnd(0.75, 1.5), 0.0, 500.0, True, Rnd(0.1, 0.375))
 										PlaySound2(DamageSFX(Rand(11, 12)), Camera, n\Collider)
 										If Injuries > 10.0 Then
 											Kill(True)
@@ -4833,10 +4828,9 @@ Function UpdateNPCs()
 							AnimateNPC(n, 126.0, 165.0, 0.6, False)
 							If (n\Frame >= 146.0 And PrevFrame < 146.0)
 								If Dist < 1.1 Then
-									If (Abs(DeltaYaw(n\Collider, Collider)) =< 60.0) Then
+									If Abs(DeltaYaw(n\Collider, Collider)) =< 60.0 Then
 										PlaySound_Strict(DamageSFX(Rand(5, 8)))
-										Injuries = Injuries + Rnd(0.4, 1.0) - (WearingVest * Rnd(0.1, 0.2)) - (WearingHelmet * Crouch * 0.1)
-										I_008\Timer = I_008\Timer + (1.0 + (1.0 * SelectedDifficulty\AggressiveNPCs))
+										InjurePlayer(Rnd(0.4, 1.0), 1.0 + (1.0 * SelectedDifficulty\AggressiveNPCs), 0.0, True, Rnd(0.1, 0.2), True, 0.1)
 										If Injuries > 3.0 Then
 											If Rand(2) = 1 Then
 												GroupDesignation = "Nine-Tailed Fox"
@@ -5217,7 +5211,7 @@ Function UpdateMTFUnit(n.NPCs)
 	
 	n\BlinkTimer = n\BlinkTimer - fpst\FPSFactor[0]
 	If n\BlinkTimer =< -5.0 Then 
-		; ~ Only play the "blinking" sound clip if searching/containing SCP-173
+		; ~ Only play the "blinking" sound clip if searching / containing SCP-173
 		If n\State = 2.0
 			If EntityDistance(Curr173\Collider, n\Collider) < 8.0 Then
 				PlayMTFSound(LoadTempSound("SFX\Character\MTF\173\BLINKING.ogg"), n)
@@ -6000,7 +5994,7 @@ Function UpdateMTFUnit(n.NPCs)
 					EndIf
 				Next
 				;[End Block]
-			Case 2.0 ; ~ Searching for/looking at SCP-173
+			Case 2.0 ; ~ Searching for / looking at SCP-173
                 ;[Block]
                 If Curr173\Idle = 2 Then
 					n\State = 0.0
@@ -6397,7 +6391,6 @@ Function UpdateMTFUnit(n.NPCs)
 						EndIf	
 					EndIf
 				EndIf
-				
 				;[End Block]
 			Case 7.0 ; ~ Just shooting
 				;[Block]
@@ -6580,7 +6573,7 @@ Function UpdateMTFUnit(n.NPCs)
 							TurnEntity(p\OBJ, 0.0, 0.0, Rnd(360.0))
 							
 							If n\Target\HP > 0
-								n\Target\HP = Max(n\Target\HP - Rand(5, 10), 0)
+								n\Target\HP = Max(n\Target\HP - Rand(5, 10), 0.0)
 							Else
 								If (Not n\Target\IsDead) Then
 									If n\Sound <> 0 Then 
@@ -6738,41 +6731,35 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 				Select Rand(16)
 					Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ; ~ Vest
 						;[Block]
-						BlurTimer = 650.0
+						InjurePlayer(Rnd(0.1, 0.2), 0.0, 650.0)
 						ShotMessageUpdate = "A bullet penetrated your vest, making you gasp."
-						Injuries = Injuries + Rnd(0.1, 0.2)
 						;[End Block]
 					Case 11 ; ~ Left Leg
 						;[Block]
-						BlurTimer = 650.0
 						Stamina = 0.0
+						InjurePlayer(Rnd(0.7, 0.9), 0.0, 650.0)
 						ShotMessageUpdate = "A bullet hit your left leg."
-						Injuries = Injuries + Rnd(0.7, 0.9)
 						;[End Block]
 					Case 12 ; ~ Right Leg
 						;[Block]
-					    BlurTimer = 650.0
-					    Stamina = 0.0
+						Stamina = 0.0
+						InjurePlayer(Rnd(0.7, 0.9), 0.0, 650.0)
 						ShotMessageUpdate = "A bullet hit your right leg."
-						Injuries = Injuries + Rnd(0.7, 0.9)
 						;[End Block]
 					Case 13 ; ~ Left Arm
 						;[Block]
-						BlurTimer = 650.0
+						InjurePlayer(Rnd(0.5, 0.7), 0.0, 650.0)
 						ShotMessageUpdate = "A bullet hit your left arm."
-						Injuries = Injuries + Rnd(0.5, 0.7)
 						;[End Block]
 					Case 14 ; ~ Right Arm
 						;[Block]
-					    BlurTimer = 650.0
+					    InjurePlayer(Rnd(0.5, 0.7), 0.0, 650.0)
 						ShotMessageUpdate = "A bullet hit your right arm."
-						Injuries = Injuries + Rnd(0.5, 0.7)
 						;[End Block]
 					Case 15 ; ~ Neck
 						;[Block]
-					    BlurTimer = 650.0
+					    InjurePlayer(Rnd(1.1, 1.3), 0.0, 650.0)
 						ShotMessageUpdate = "A bullet struck your neck, making you gasp."
-						Injuries = Injuries + Rnd(1.1, 1.3)
 						;[End Block]
 					Case 16 ; ~ Face or Head
 					    ;[Block]
@@ -6791,14 +6778,13 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 			Else
 				If Rand(10) = 1 Then ; ~ Chest (more damage)
 					;[Block]
-				    BlurTimer = 650.0
+				    InjurePlayer(Rnd(0.7, 0.8))
 					ShotMessageUpdate = "A bullet hit your chest. The vest absorbed some of the damage."
-					Injuries = Injuries + Rnd(0.7, 0.8)
 					;[End Block]
 				Else ; ~ Chest
 					;[Block]
+					InjurePlayer(Rnd(0.1, 0.2))
 					ShotMessageUpdate = "A bullet hit your chest. The vest absorbed most of the damage."
-					Injuries = Injuries + Rnd(0.1, 0.2)
 					;[End Block]
 				EndIf
 			EndIf
@@ -6807,41 +6793,35 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 				Select Rand(22)
 					Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ; ~ Vest
 						;[Block]
-						BlurTimer = 650.0
+						InjurePlayer(Rnd(0.1, 0.2))
 						ShotMessageUpdate = "A bullet penetrated your vest, making you gasp."
-						Injuries = Injuries + Rnd(0.1, 0.2)
 						;[End Block]
 					Case 11 ; ~ Left Leg
 						;[Block]
-					    BlurTimer = 650.0
-					    Stamina = 0.0
+						Stamina = 0.0
+						InjurePlayer(Rnd(0.7, 0.9), 0.0, 650.0)
 						ShotMessageUpdate = "A bullet hit your left leg."
-						Injuries = Injuries + Rnd(0.7, 0.9)
 						;[End Block]
 					Case 12 ; ~ Right Leg
 						;[Block]
-					    BlurTimer = 650.0
-						Stamina = 0.0
+					    Stamina = 0.0
+						InjurePlayer(Rnd(0.7, 0.9), 0.0, 650.0)
 						ShotMessageUpdate = "A bullet hit your right leg."
-						Injuries = Injuries + Rnd(0.7, 0.9)
 						;[End Block]
 					Case 13 ; ~ Left Arm
 						;[Block]
-						BlurTimer = 650.0
+						InjurePlayer(Rnd(0.5, 0.7), 0.0, 650.0)
 						ShotMessageUpdate = "A bullet hit your left arm."
-						Injuries = Injuries + Rnd(0.5, 0.7)
 						;[End Block]
 					Case 14 ; ~ Right Arm
 						;[Block]
-					    BlurTimer = 650.0
+					    InjurePlayer(Rnd(0.5, 0.7), 0.0, 650.0)
 						ShotMessageUpdate = "A bullet hit your right arm."
-						Injuries = Injuries + Rnd(0.5, 0.7)
 						;[End Block]
 					Case 15 ;Neck
 						;[Block]
-						BlurTimer = 650.0
+						InjurePlayer(Rnd(1.1, 1.3), 0.0, 650.0)
 						ShotMessageUpdate = "A bullet struck your neck, making you gasp."
-						Injuries = Injuries + Rnd(1.1, 1.3)
 						;[End Block]
 					Case 16, 17, 18, 19, 20, 21, 22 ; ~ Helmet
 						;[Block]
@@ -6852,14 +6832,13 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 			Else
 				If Rand(10) = 1 Then ;Chest (more damage)
 					;[Block]
-				    BlurTimer = 650.0
+				    InjurePlayer(Rnd(0.7, 0.9))
 					ShotMessageUpdate = "A bullet hit your chest. The vest absorbed some of the damage."
-					Injuries = Injuries + Rnd(0.7, 0.9)
 					;[End Block]
 				Else ; ~ Chest
 					;[Block]
+					InjurePlayer(Rnd(0.7, 0.9))
 					ShotMessageUpdate = "A bullet hit your chest. The vest absorbed most of the damage."
-					Injuries = Injuries + Rnd(0.1, 0.2)
 					;[End Block]
 				EndIf
 			EndIf
@@ -6872,118 +6851,100 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 					;[End Block]
 				Case 8 ; ~ Left Leg
 					;[Block]
-					BlurTimer = 650.0
 					Stamina = 0.0
+					InjurePlayer(Rnd(0.7, 0.8), 0.0, 650.0)
 					ShotMessageUpdate = "A bullet hit your left leg."
-					Injuries = Injuries + Rnd(0.7, 0.9)
 					;[End Block]
 				Case 9 ; ~ Right Leg
 					;[Block]
-					BlurTimer = 650
 					Stamina = 0.0
+					InjurePlayer(Rnd(0.7, 0.8), 0.0, 650.0)
 					ShotMessageUpdate = "A bullet hit your right leg."
-					Injuries = Injuries + Rnd(0.7, 0.9)
 					;[End Block]
 				Case 10 ; ~ Left Arm
 					;[Block]
-					BlurTimer = 650.0
+					InjurePlayer(Rnd(0.5, 0.7), 0.0, 650.0)
 					ShotMessageUpdate = "A bullet hit your left arm."
-					Injuries = Injuries + Rnd(0.5, 0.7)
 					;[End Block]
 				Case 11 ; ~ Right Arm
 					;[Block]
-					BlurTimer = 650.0
+					InjurePlayer(Rnd(0.5, 0.7), 0.0, 650.0)
 					ShotMessageUpdate = "A bullet hit your right arm."
-					Injuries = Injuries + Rnd(0.5, 0.7)
 					;[End Block]
 				Case 12 ;Right Shoulder
 					;[Block]
-				    BlurTimer = 650.0
+				    InjurePlayer(Rnd(0.9, 1.1), 0.0, 650.0)
 					ShotMessageUpdate = "A bullet hit your right shoulder."
-					Injuries = Injuries + Rnd(0.9, 1.1)
 					;[End Block]	
 				Case 13 ; ~ Left Shoulder
 					;[Block]
-					BlurTimer = 650.0
+					InjurePlayer(Rnd(0.9, 1.1), 0.0, 650.0)
 					ShotMessageUpdate = "A bullet hit your left shoulder."
-					Injuries = Injuries + Rnd(0.9, 1.1)	
 					;[End Block]
 			    Case 14 ; ~ Right Shoulder (more damage)
 					;[Block]
-					BlurTimer = 650.0
+					InjurePlayer(Rnd(2.4, 2.6), 0.0, 650.0)
 					ShotMessageUpdate = "A bullet hit your right shoulder."
-					Injuries = Injuries + Rnd(2.4, 2.6)
 					;[End Block]
 				Case 15 ; ~ Left Shoulder (more damage)
 					;[Block]
-					BlurTimer = 650.0
+					InjurePlayer(Rnd(2.4, 2.6), 0.0, 650.0)
 					ShotMessageUpdate = "A bullet hit your left shoulder."
-					Injuries = Injuries + Rnd(2.4, 2.6)
 					;[End Block]
 				Case 16 ; ~ Neck
 					;[Block]
-					BlurTimer = 650.0
+					InjurePlayer(Rnd(1.1, 1.3), 0.0, 650.0)
 					ShotMessageUpdate = "A bullet struck your neck, making you gasp."
-					Injuries = Injuries + Rnd(1.1, 1.3)
 					;[End Block]
 			End Select
 		Else If WearingVest = 0 And WearingHelmet = 0 ; ~ If player isn't wearing the ballistic vest and the ballistic helmet
 			Select Rand(10)
 				Case 1 ; ~ Left Leg
 					;[Block]
-					BlurTimer = 650.0
 					Stamina = 0.0
+					InjurePlayer(Rnd(0.7, 0.9), 0.0, 650.0)
 					ShotMessageUpdate = "A bullet hit your left leg."
-					Injuries = Injuries + Rnd(0.7, 0.9)
 					;[End Block]
 			    Case 2 ; ~ Right Leg
 					;[Block]
-					BlurTimer = 650.0
 					Stamina = 0.0
+					InjurePlayer(Rnd(0.7, 0.9), 0.0, 650.0)
 					ShotMessageUpdate = "A bullet hit your right leg."
-					Injuries = Injuries + Rnd(0.7, 0.9)
 					;[End Block]
 				Case 3 ; ~ Right Shoulder
 					;[Block]
-					BlurTimer = 650.0
+					InjurePlayer(Rnd(0.9, 1.1), 0.0, 650.0)
 					ShotMessageUpdate = "A bullet hit your right shoulder."
-					Injuries = Injuries + Rnd(0.9, 1.1)
 					;[End Block]	
 				Case 4 ; ~ Left Shoulder
 					;[Block]
-					BlurTimer = 650.0
+					InjurePlayer(Rnd(0.9, 1.1), 0.0, 650.0)
 					ShotMessageUpdate = "A bullet hit your left shoulder."
-					Injuries = Injuries + Rnd(0.9, 1.1)	
 					;[End Block]
 				Case 5 ; ~ Right Shoulder (more damage)
 					;[Block]
-					BlurTimer = 650.0
+					InjurePlayer(Rnd(2.4, 2.6), 0.0, 650.0)
 					ShotMessageUpdate = "A bullet hit your right shoulder."
-					Injuries = Injuries + Rnd(2.4, 2.6)
 					;[End Block]
 				Case 6 ; ~ Left Shoulder (more damage)
 					;[Block]
-					BlurTimer = 650.0
+					InjurePlayer(Rnd(2.4, 2.6), 0.0, 650.0)
 					ShotMessageUpdate = "A bullet hit your left shoulder."
-					Injuries = Injuries + Rnd(2.4, 2.6)
 					;[End Block]
 				Case 7 ; ~ Left Arm
 					;[Block]
-					BlurTimer = 650.0
+					InjurePlayer(Rnd(0.5, 0.7), 0.0, 650.0)
 					ShotMessageUpdate = "A bullet hit your left arm."
-					Injuries = Injuries + Rnd(0.5, 0.7)
 					;[End Block]
 				Case 8 ; ~ Right Arm
 				    ;[Block]
-					BlurTimer = 650.0
+					InjurePlayer(Rnd(0.5, 0.7), 0.0, 650.0)
 				    ShotMessageUpdate = "A bullet hit your right arm."
-					Injuries = Injuries + Rnd(0.5, 0.7)
 					;[End Block]
 				Case 9 ; ~ Neck
 					;[Block]
-					BlurTimer = 650.0
+					InjurePlayer(Rnd(1.1, 1.3), 0.0, 650.0)
 				    ShotMessageUpdate = "A bullet struck your neck, making you gasp."
-					Injuries = Injuries + Rnd(1.1, 1.3)
 					;[End Block]
                 Case 10 ; ~ Face or Head
 					;[Block]
@@ -7044,7 +7005,6 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 	EndIf
 End Function
 
-
 Function PlayMTFSound(Sound%, n.NPCs)
 	If n <> Null Then
 		n\SoundCHN = PlaySound2(Sound, Camera, n\Collider, 8.0)	
@@ -7082,7 +7042,7 @@ Function MoveToPocketDimension()
 			
 			BlinkTimer = -10.0
 			
-			Injuries = Injuries + 0.5
+			InjurePlayer(0.5)
 			
 			PlayerRoom = r
 			
@@ -7386,7 +7346,7 @@ Function ChangeAngleValueForCorrectBoneAssigning(Value#)
 	If Value =< 180.0
 		Numb = Value
 	Else
-		Numb = -360.0 + Value
+		Numb = (-360.0) + Value
 	EndIf
 	
 	Return(Numb)
@@ -7409,7 +7369,7 @@ Function NPCSpeedChange(n.NPCs)
 End Function
 
 Function PlayerInReachableRoom(CanSpawnIn049Chamber% = False)
-	Local RN$ = PlayerRoom\RoomTemplate\Name$
+	Local RN$ = PlayerRoom\RoomTemplate\Name
 	Local e.Events, Temp%
 	
 	; ~ Player is in these rooms, returning false
@@ -7445,7 +7405,7 @@ End Function
 Function CheckForNPCInFacility(n.NPCs)
 	; ~ False (= 0): NPC is not in facility (mostly meant for "dimension1499")
 	; ~ True (= 1): NPC is in facility
-	; ~ 2: NPC is in tunnels (maintenance tunnels / 049 tunnels / 939 storage room, etc...)
+	; ~ 2: NPC is in tunnels (Maintenance Tunnels / SCP-049 tunnels / SCP-939 storage room, etc...)
 	
 	If EntityY(n\Collider) > 100.0
 		Return(False)
@@ -7478,9 +7438,7 @@ Function ChangeNPCTextureID(n.NPCs, TextureID%) ; ~ Works only for Class D model
 	
 	If (n = Null) Then
 		CreateConsoleMsg("Tried to change the texture of an invalid NPC")
-		If ConsoleOpening Then
-			ConsoleOpen = True
-		EndIf
+		ConsoleOpen = True
 		Return
 	EndIf
 	
@@ -7568,5 +7526,5 @@ Function Animate2#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = True
 End Function 
 
 ;~IDEal Editor Parameters:
-;~B#16A#1224#136B#13BB#1535#1652#1826#1881
+;~B#16A#121F#1365#13B5#152F#164C#1820#187B
 ;~C#Blitz3D

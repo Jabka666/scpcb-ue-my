@@ -2409,7 +2409,7 @@ Function UpdateEvents()
 				;[Block]
 				If PlayerRoom = e\room Then
 					If e\EventState = 0.0 Then
-						If EntityDistance(Collider, e\room\OBJ) < 2.5 Then
+						If EntityDistance(Collider, e\room\OBJ) < 2.0 Then
 							PlaySound_Strict(RustleSFX(Rand(0, 5)))
 							CreateNPC(NPCtype372, 0.0, 0.0, 0.0)
 							e\EventState = 1.0
@@ -2440,7 +2440,7 @@ Function UpdateEvents()
 					
 					PlayerFallingPickDistance = 0.0
 					
-					Injuries = Injuries + (fpst\FPSFactor[0] * 0.00005)
+					InjurePlayer(fpst\FPSFactor[0] * 0.00005)
 					PrevSecondaryLightOn = SecondaryLightOn : SecondaryLightOn = True
 					
 					If (EntityY(Collider) < 2000.0 * RoomScale Or EntityY(Collider) > 2608.0 * RoomScale) Then CurrStepSFX = 1
@@ -2583,7 +2583,7 @@ Function UpdateEvents()
 								ElseIf Dist < 8.0
 									e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\Objects[20], 8.0)
 									EntityTexture(e\room\Objects[20], e\room\Objects[19])
-									Injuries = Injuries + (8.0 - Dist) * (fpst\FPSFactor[0] * 0.0003)
+									InjurePlayer((8.0 - Dist) * (fpst\FPSFactor[0] * 0.0003))
 									
 									If Dist < 7.0 Then 
 										Pvt = CreatePivot()
@@ -2659,7 +2659,7 @@ Function UpdateEvents()
 								
 								Temp = EntityDistance(Collider, e\room\Objects[17])
 								If Temp < 2000.0 * RoomScale Then
-									Injuries = Injuries + (fpst\FPSFactor[0] / 4000.0)
+									InjurePlayer(fpst\FPSFactor[0] / 4000.0)
 									e\EventStr = Float(e\EventStr) + (fpst\FPSFactor[0] / 1000.0)
 									
 									If Float(e\EventStr) > 1.0 And Float(e\EventStr) < 1000.0 Then
@@ -4937,7 +4937,7 @@ Function UpdateEvents()
 								;[End Block]
 							Case 5.0
 								;[Block]
-								Injuries = Injuries + 0.3
+								InjurePlayer(0.3)
 								;[End Block]
 							Case 10.0
 								;[Block]
@@ -5358,7 +5358,7 @@ Function UpdateEvents()
 										ElseIf e\EventState3 > 70.0 * 13.0 And e\EventState3 - fpst\FPSFactor[0] =< 70.0 * 13.0
 											msg\Msg = "You start pushing your nails into your wrist, drawing blood."
 											msg\Timer = 70.0 * 6.0
-											Injuries = Injuries + 0.5
+											InjurePlayer(0.5)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech2.ogg"))
 										ElseIf e\EventState3 > 70.0 * 31.0 And e\EventState3 - fpst\FPSFactor[0] =< 70.0 * 31.0
 											Tex = LoadTexture_Strict("GFX\map\scp-012_1.jpg")
@@ -5367,19 +5367,19 @@ Function UpdateEvents()
 											
 											msg\Msg = "You tear open your left wrist and start writing on the composition with your blood."
 											msg\Timer = 70.0 * 6.0
-											Injuries = Max(Injuries, 1.5)
+											Injure = Max(Injuries, 1.5)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech" + Rand(3, 4) + ".ogg"))
 										ElseIf e\EventState3 > 70.0 * 49.0 And e\EventState3 - fpst\FPSFactor[0] =< 70.0 * 49.0
 											msg\Msg = "You push your fingers deeper into the wound."
 											msg\Timer = 70.0 * 6.0
-											Injuries = Injuries + 0.3
+											InjurePlayer(0.3)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech5.ogg"))
 										ElseIf e\EventState3 > 70.0 * 63.0 And e\EventState3 - fpst\FPSFactor[0] =< 70.0 * 63.0
 											Tex = LoadTexture_Strict("GFX\map\scp-012_2.jpg")
 											EntityTexture(e\room\Objects[4], Tex, 0, 1)	
 											FreeTexture(Tex)
 											
-											Injuries = Injuries + 0.5
+											InjurePlayer(0.5)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech6.ogg"))
 										ElseIf e\EventState3 > 70.0 * 74.0 And e\EventState3 - fpst\FPSFactor[0] =< 70.0 * 74.0
 											Tex = LoadTexture_Strict("GFX\map\scp-012_3.jpg")
@@ -5388,7 +5388,7 @@ Function UpdateEvents()
 											
 											msg\Msg = "You rip the wound wide open. Grabbing scoops of blood pouring out."
 											msg\Timer = 70.0 * 6.0
-											Injuries = Injuries + 0.8
+											InjurePlayer(0.8)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech7.ogg"))
 											If (Not Crouch) Then SetCrouch(True)
 											
@@ -5846,9 +5846,9 @@ Function UpdateEvents()
 										EndIf
 										
 										If WearingHazmat = 0 Then
-											Injuries = Injuries + (fpst\FPSFactor[0] / 5000.0)
+											InjurePlayer(fpst\FPSFactor[0] / 5000.0)
 										Else
-											Injuries = Injuries + (fpst\FPSFactor[0] / 10000.0)
+											InjurePlayer(fpst\FPSFactor[0] / 10000.0)
 										EndIf
 										
 										If KillTimer < 0.0 And Bloodloss >= 100.0 Then
@@ -6572,7 +6572,7 @@ Function UpdateEvents()
 										msg\DeathMsg = msg\DeathMsg + "The subject exhibits signs of blunt force trauma typical for personnel who have "
 										msg\DeathMsg = msg\DeathMsg + "entered the chamber when the lights are off."
 										
-										Injuries = Injuries + Rnd(0.4, 0.8)
+										InjurePlayer(Rnd(0.4, 0.8), 0.0, 300.0)
 										PlaySound_Strict(DamageSFX(Rand(2, 3)))
 										CameraShake = 0.5
 										
@@ -7302,11 +7302,9 @@ Function UpdateEvents()
 										    HideEntity(e\room\Objects[2])
 											
 										    If WearingHazmat = 0 Then
-												Injuries = Injuries + 0.1
+												InjurePlayer(0.1, 1.0)
 												msg\Msg = "The window shattered and a piece of glass cut your arm."
 												msg\Timer = 70.0 * 6.0
-												
-											    If I_008\Timer = 0.0 Then I_008\Timer = 1.0
 											EndIf
 											PlaySound2(LoadTempSound("SFX\General\GlassBreak.ogg"), Camera, e\room\Objects[0]) 
 											
@@ -8072,7 +8070,7 @@ Function UpdateEvents()
 						Next
 					; ~ Trade not sucessful (player got in return to injuries a new item)
 					ElseIf e\EventState3 = 2.0
-						Injuries = Injuries + 5.0
+						InjurePlayer(5.0)
 						Pvt = CreatePivot()
 						PositionEntity(Pvt, EntityX(Collider), EntityY(Collider) - 0.05, EntityZ(Collider))
 						TurnEntity(Pvt, 90.0, 0.0, 0.0)
@@ -8110,7 +8108,7 @@ Function UpdateEvents()
 							PlaySound_Strict(LoadTempSound("SFX\SCP\1162\Exchange" + Rand(0, 4) + ".ogg"))
 							RemoveItem(Inventory(e\EventState2))
 						Else
-							Injuries = Injuries + 5.0
+							InjurePlayer(5.0)
 							Pvt = CreatePivot()
 							PositionEntity(Pvt, EntityX(Collider), EntityY(Collider) - 0.05, EntityZ(Collider))
 							TurnEntity(Pvt, 90.0, 0.0, 0.0)
@@ -8927,7 +8925,7 @@ Function UpdateEvents()
 						If MouseHit1 Then
 							msg\Msg = "You feel a cold breeze next to your body."
 							msg\Timer = 70.0 * 6.0
-							Injuries = Injuries + Rnd(-0.5, 0.3)
+							InjurePlayer(Rnd(-0.5, 0.3))
 							Bloodloss = 0.0
 							PlaySound_Strict(LoadTempSound("SFX\SCP\Joke\Quack.ogg"))
 						EndIf
@@ -10416,5 +10414,5 @@ Function GenerateRandomIA()
 	Next
 End Function
 ;~IDEal Editor Parameters:
-;~B#1238#1E66
+;~B#1238#1E64
 ;~C#Blitz3D
