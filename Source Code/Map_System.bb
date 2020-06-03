@@ -1575,7 +1575,6 @@ Function PlaceGrid_MapCreator(r.Rooms)
 	Local x%, y%, i%
 	Local Meshes[6]
 	Local dr.Doors, it.Items
-	Local o.Objects = First Objects
 	
 	For i = 0 To 6
 		Meshes[i] = CopyEntity(o\MTModelID[i])
@@ -1842,8 +1841,6 @@ Function FillRoom(r.Rooms)
 	Local iX#, iy#, iZ#
 	Local dX#, dZ#, dSize#, dID%
 	Local i%, k%, Temp%
-	Local o.Objects = First Objects
-	Local tt.TextureTemplate = First TextureTemplate
 	
 	Select r\RoomTemplate\Name
 		Case "room860"
@@ -5940,7 +5937,6 @@ End Function
 Global LightVolume#, TempLightVolume#
 
 Function AddLight%(room.Rooms, x#, y#, z#, lType%, Range#, R%, G%, B%)
-	Local tt.TextureTemplate = First TextureTemplate
 	Local i%
 	
 	If room <> Null Then
@@ -6050,8 +6046,6 @@ Type WayPoints
 End Type
 
 Function CreateWaypoint.WayPoints(x#, y#, z#, door.Doors, room.Rooms)
-	Local tt.TextureTemplate = First TextureTemplate
-	
 	w.Waypoints = New WayPoints
 	
 	If 1 Then
@@ -6469,8 +6463,6 @@ Global Room2slCam%
 
 Function CreateSecurityCam.SecurityCams(x#, y#, z#, r.Rooms, Screen% = False)
 	Local sc.SecurityCams = New SecurityCams
-	Local o.Objects = First Objects
-	Local tt.TextureTemplate = First TextureTemplate
 	
 	sc\OBJ = CopyEntity(o\CamModelID[0])
 	ScaleEntity(sc\OBJ, 0.0015, 0.0015, 0.0015)
@@ -6523,9 +6515,6 @@ Function UpdateSecurityCams()
 	CatchErrors("Uncaught (UpdateSecurityCams)")
 	
 	Local sc.SecurityCams
-	Local tt.TextureTemplate = First TextureTemplate
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
-	Local msg.Messages = First Messages
 	
 	; ~ CoffinEffect = 0, not affected by SCP-895
 	; ~ CoffinEffect = 1, constantly affected by SCP-895
@@ -6608,7 +6597,7 @@ Function UpdateSecurityCams()
 					If BlinkTimer > -5.0 And EntityInView(sc\ScrOBJ, Camera) Then
 						If EntityVisible(Camera, sc\ScrOBJ) Then
 							If (sc\CoffinEffect = 1 Or sc\CoffinEffect = 3) And I_714\Using = 0 And WearingHazmat < 3 And WearingGasMask < 3 Then
-								If BlinkTimer > -5.0
+								If BlinkTimer > -5.0 Then
 									Sanity = Sanity - fpst\FPSFactor[0]
 									RestoreSanity = False
 								EndIf
@@ -6887,7 +6876,6 @@ End Function
 Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.Events, IgnoreRotation% = True)
 	Local x#, z#, Sound%
 	Local Dist#, Dir#, n.NPCs, it.Items
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
 	
 	door1\IsElevatorDoor = 1
 	door2\IsElevatorDoor = 1
@@ -8045,7 +8033,6 @@ Global UpdateRoomLightsTimer# = 0.0
 
 Function UpdateRoomLights(Cam%)
 	Local r.Rooms, i%, Random#, Alpha#, Dist#
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
 	
 	For r.Rooms = Each Rooms
 		If r\Dist < HideDistance * 0.7 Or r = PlayerRoom Then
@@ -8210,8 +8197,6 @@ End Function
 Function UpdateCheckpointMonitors(Number%)
 	Local i%, SF%, b%, t1%
 	Local Entity%
-	Local o.Objects = First Objects
-	Local tt.TextureTemplate = First TextureTemplate
 	
 	If Number = 0
 		Entity = o\MonitorModelID[1]
@@ -8254,8 +8239,6 @@ End Function
 Function TurnCheckpointMonitorsOff(Number%)
 	Local i%, SF%, b%, t1%
 	Local Entity%
-	Local o.Objects = First Objects
-	Local tt.TextureTemplate = First TextureTemplate
 	
 	If Number = 0 Then
 		Entity = o\MonitorModelID[1]
@@ -8286,16 +8269,14 @@ Function TurnCheckpointMonitorsOff(Number%)
 End Function
 
 Function TimeCheckpointMonitors()
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
-	
-	If UpdateCheckpoint1
+	If UpdateCheckpoint1 Then
 		If MonitorTimer < 100.0
 			MonitorTimer = Min(MonitorTimer + fpst\FPSFactor[0], 100.0)
 		Else
 			MonitorTimer = 0.0
 		EndIf
 	EndIf
-	If UpdateCheckpoint2
+	If UpdateCheckpoint2 Then
 		If MonitorTimer2 < 100.0
 			MonitorTimer2 = Min(MonitorTimer2 + fpst\FPSFactor[0], 100.0)
 		Else
@@ -8570,7 +8551,6 @@ Type Dummy1499_1
 End Type
 
 Function UpdateLightSpark(room.Rooms)
-	Local tt.TextureTemplate = First TextureTemplate
 	Local i%
 	
 	For i = 0 To MaxRoomLights - 1
@@ -8780,5 +8760,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11F6
+;~B#11F3
 ;~C#Blitz3D

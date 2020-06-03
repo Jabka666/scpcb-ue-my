@@ -52,8 +52,6 @@ Global CurrLoadGamePage% = 0
 
 Function UpdateMainMenu()
 	Local x%, y%, Width%, Height%, Temp%, i%
-	Local fo.Fonts = First Fonts
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
 	
 	Color(0, 0, 0)
 	Rect(0, 0, GraphicWidth, GraphicHeight, True)
@@ -411,7 +409,7 @@ Function UpdateMainMenu()
 							If SelectedDifficulty\OtherFactors < HARD
 								SelectedDifficulty\OtherFactors = SelectedDifficulty\OtherFactors + 1
 							Else
-								SelectedDifficulty\otherFactors = EASY
+								SelectedDifficulty\OtherFactors = EASY
 							EndIf
 							PlaySound_Strict(ButtonSFX)
 						EndIf
@@ -1204,7 +1202,6 @@ Function UpdateMainMenu()
 End Function
 
 Function UpdateLauncher()
-	Local fo.Fonts = First Fonts
 	Local i%, n%
 	
 	MenuScale = 1
@@ -1468,7 +1465,6 @@ Function InitLoadingScreens(File$)
 End Function
 
 Function DrawLoading(Percent%, ShortLoading% = False)
-	Local fo.Fonts = First Fonts
 	Local x%, y%, Temp%, FirstLoop%
 	
 	If Percent = 0 Then
@@ -1771,7 +1767,6 @@ Function DrawFrame(x%, y%, Width%, Height%, xOffset% = 0, yOffset% = 0)
 End Function
 
 Function DrawButton%(x%, y%, Width%, Height%, Txt$, BigFont% = True, WaitForMouseUp% = False, UsingAA% = True)
-	Local fo.Fonts = First Fonts
 	Local Clicked% = False
 	
 	DrawFrame(x, y, Width, Height)
@@ -1807,7 +1802,6 @@ Function DrawButton%(x%, y%, Width%, Height%, Txt$, BigFont% = True, WaitForMous
 End Function
 
 Function DrawButton2%(x%, y%, Width%, Height%, Txt$, BigFont% = True)
-	Local fo.Fonts = First Fonts
 	Local Clicked% = False
 	
 	DrawFrame(x, y, Width, Height)
@@ -2102,7 +2096,6 @@ End Function
 Function DrawTooltip(Message$)
 	Local Scale# = GraphicHeight / 768.0
 	Local Width% = (AAStringWidth(Message)) + 20 * MenuScale
-	Local fo.Fonts = First Fonts
 	
 	Color(25, 25, 25)
 	Rect(ScaledMouseX() + 20, ScaledMouseY(), Width, 19 * Scale, True)
@@ -2117,10 +2110,7 @@ Global QuickLoadPercent_DisplayTimer# = 0.0
 Global QuickLoad_CurrEvent.Events
 
 Function DrawQuickLoading()
-	Local fo.Fonts = First Fonts
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
-	
-	If QuickLoadPercent > -1
+	If QuickLoadPercent > -1 Then
 		MidHandle(QuickLoadIcon)
 		DrawImage(QuickLoadIcon, GraphicWidth - 90, GraphicHeight - 150)
 		Color(255, 255, 255)
@@ -2150,7 +2140,6 @@ Function DrawOptionsTooltip(x%, y%, Width%, Height%, Option$, Value# = 0.0, InGa
 	Local Txt$ = ""
 	Local Txt2$ = "", R% = 0, G% = 0, B% = 0
 	Local ExtraSpace% = 0
-	Local fo.Fonts = First Fonts
 	
 	AASetFont(fo\FontID[0])
 	Color(255, 255, 255)
@@ -2346,7 +2335,6 @@ Function DrawMapCreatorTooltip(x%, y%, Width%, Height%, MapName$)
 	Local fW# = Width - 12.0 * MenuScale
 	Local fH# = Height - 12.0 * MenuScale
 	Local Lines% = 0
-	Local fo.Fonts = First Fonts
 	
 	AASetFont(fo\FontID[0])
 	Color(255, 255, 255)

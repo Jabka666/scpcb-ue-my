@@ -45,7 +45,6 @@ Function CreateParticle.Particles(x#, y#, z#, Image%, Size#, Gravity# = 1.0, Lif
 End Function
 	
 Function UpdateParticles()
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
 	Local p.Particles
 	
 	For p.Particles = Each Particles
@@ -136,9 +135,6 @@ Function CreateEmitter.Emitters(x#, y#, z#, EmitterType%)
 End Function
 
 Function UpdateEmitters()
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
-	Local msg.Messages = First Messages
-	
 	InSmoke = False
 	For e.Emitters = Each Emitters
 		If fpst\FPSFactor[0] > 0.0 And (PlayerRoom = e\room Or e\room\Dist < 8.0) Then

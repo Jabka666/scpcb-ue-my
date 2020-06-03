@@ -68,9 +68,7 @@ Function PlaySound_Strict%(SNDHandle%)
 					If snd\InternalHandle = 0 Then
 						If FileType(snd\Name) <> 1 Then
 							CreateConsoleMsg("Sound " + Chr(34) + snd\Name + Chr(34) + " not found.")
-							If ConsoleOpening And CanOpenConsole Then
-								ConsoleOpen = True
-							EndIf
+							ConsoleOpen = True
 						Else
 							If EnableSFXRelease Then snd\InternalHandle = LoadSound(snd\Name)
 						EndIf
@@ -94,18 +92,14 @@ Function PlaySound_Strict%(SNDHandle%)
 				If snd\InternalHandle = 0 Then
 					If FileType(snd\Name) <> 1 Then
 						CreateConsoleMsg("Sound " + Chr(34) + snd\Name + Chr(34) + " not found.")
-						If ConsoleOpening And CanOpenConsole Then
-							ConsoleOpen = True
-						EndIf
+						ConsoleOpen = True
 					Else
 						If EnableSFXRelease Then snd\InternalHandle = LoadSound(snd\Name)
 					EndIf
 						
 					If snd\InternalHandle = 0 Then
 						CreateConsoleMsg("Failed to load Sound: " + Chr(34) + snd\Name + Chr(34))
-						If ConsoleOpening And CanOpenConsole Then
-							ConsoleOpen = True
-						EndIf
+						ConsoleOpen = True
 					EndIf
 				EndIf
 				If ConsoleFlushSnd Then
@@ -155,9 +149,7 @@ End Type
 Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode% = Mode)
 	If FileType(File) <> 1 Then
 		CreateConsoleMsg("Sound " + Chr(34) + File + Chr(34) + " not found.")
-		If ConsoleOpening And CanOpenConsole Then
-			ConsoleOpen = True
-		EndIf
+		ConsoleOpen = True
 		Return(0)
 	EndIf
 	
@@ -167,9 +159,7 @@ Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode% = Mode)
 	
 	If st\SFX = 0 Then
 		CreateConsoleMsg("Failed to stream Sound (returned 0): " + Chr(34) + File + Chr(34))
-		If ConsoleOpening And CanOpenConsole Then
-			ConsoleOpen = True
-		EndIf
+		ConsoleOpen = True
 		Return(0)
 	EndIf
 	
@@ -177,9 +167,7 @@ Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode% = Mode)
 	
 	If st\CHN = -1 Then
 		CreateConsoleMsg("Failed to stream Sound (returned -1): " + Chr(34) + File + Chr(34))
-		If ConsoleOpening And CanOpenConsole Then
-			ConsoleOpen = True
-		EndIf
+		ConsoleOpen = True
 		Return(-1)
 	EndIf
 	

@@ -54,8 +54,6 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 	Local n.NPCs = New NPCs, n2.NPCs
 	Local Temp#, i%, Tex%, TexFestive%
 	Local SF%, b%, t1%
-	Local o.Objects = First Objects
-	Local tt.TextureTemplate = First TextureTemplate
 	
 	n\NPCtype = NPCtype
 	n\GravityMult = 1.0
@@ -558,8 +556,6 @@ Function UpdateNPCs()
 	Local n.NPCs, n2.NPCs, d.Doors, de.Decals, r.Rooms
 	Local i%, j%, Dist#, Dist2#, Angle#, x#, y#, z#, PrevFrame#, PlayerSeeAble%, RN$
 	Local Target%, Pvt%, Pick%, GroupDesignation$
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
-	Local msg.Messages = First Messages
 	
 	For n.NPCs = Each NPCs
 		; ~ A variable to determine if the NPC is in the facility or not
@@ -5207,8 +5203,6 @@ Function UpdateMTFUnit(n.NPCs)
 	Local PrevDist#, NewDist#
 	Local n2.NPCs
 	Local p.Particles, Target%, Dist#, Dist2#
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
-	Local msg.Messages = First Messages
 	
 	If n\IsDead Then
 		n\BlinkTimer = -1.0
@@ -6730,7 +6724,6 @@ End Function
 Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False)  
     Local p.Particles, de.Decals
 	Local Pvt%, ShotMessageUpdate$, i%
-	Local msg.Messages = First Messages
 	
 	p.Particles = CreateParticle(x, y, z, 1, Rnd(0.08, 0.1), 0.0, 5.0)
 	p\Achange = -0.15
@@ -7504,7 +7497,6 @@ End Function
 
 Function AnimateNPC(n.NPCs, FirstFrame#, LastFrame#, Speed#, Loop% = True)
 	Local NewTime#, Temp%
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
 	
 	If Speed > 0.0 Then 
 		NewTime = Max(Min(n\Frame + Speed * fpst\FPSFactor[0], LastFrame), FirstFrame)
@@ -7544,7 +7536,6 @@ End Function
 
 Function Animate2#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = True)
 	Local NewTime#, Temp%
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
 	
 	If Speed > 0.0 Then 
 		NewTime = Max(Min(Curr + Speed * fpst\FPSFactor[0], LastFrame), FirstFrame)
@@ -7577,5 +7568,5 @@ Function Animate2#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = True
 End Function 
 
 ;~IDEal Editor Parameters:
-;~B#16C#1228#136F#13BF#153B#1658#182C#1887
+;~B#16A#1224#136B#13BB#1535#1652#1826#1881
 ;~C#Blitz3D

@@ -50,8 +50,6 @@ Function LoadTempSound(File$)
 End Function
 
 Function UpdateMusic()
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
-	
 	If ConsoleFlush Then
 		If ChannelPlaying(ConsoleMusPlay) = False Then ConsoleMusPlay = PlaySound(ConsoleMusFlush)
 	ElseIf (Not PlayCustomMusic)
@@ -414,7 +412,6 @@ End Function
 
 Function UpdateStreamSounds()
 	Local e.Events
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
 	
 	If fpst\FPSFactor[0] > 0.0 Then
 		If IntercomStreamCHN <> 0 Then
@@ -448,7 +445,7 @@ Function UpdateStreamSounds()
 				IntercomStreamCHN = 0
 			EndIf
 			If PlayerRoom\RoomTemplate\Name <> "dimension1499" Then
-				For e = Each Events
+				For e.Events = Each Events
 					If e\SoundCHN <> 0 And e\SoundCHN_IsStream Then
 						StopStream_Strict(e\SoundCHN)
 						e\SoundCHN = 0
@@ -483,8 +480,6 @@ Function ControlSoundVolume()
 End Function
 
 Function UpdateDeafPlayer()
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
-	
 	If DeafTimer > 0.0
 		DeafTimer = DeafTimer - fpst\FPSFactor[0]
 		SFXVolume = 0.0

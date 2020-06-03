@@ -39,7 +39,6 @@ End Function
 
 Function AchievementTooltip(AchvNo%)
     Local Scale# = GraphicHeight / 768.0
-    Local fo.Fonts = First Fonts
 
     AASetFont(fo\FontID[2])
 	
@@ -93,7 +92,6 @@ End Type
 
 Function CreateAchievementMsg.AchievementMsg(ID%, Txt$)
 	Local amsg.AchievementMsg = New AchievementMsg
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
 	
 	amsg\AchvID = ID
 	amsg\Txt = Txt
@@ -107,7 +105,6 @@ End Function
 
 Function UpdateAchievementMsg()
 	Local amsg.AchievementMsg, amsg2.AchievementMsg
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
 	Local Scale# = GraphicHeight / 768.0
 	Local Width% = 264.0 * Scale
 	Local Height% = 84.0 * Scale
@@ -137,7 +134,6 @@ End Function
 
 Function RenderAchievementMsg()
 	Local amsg.AchievementMsg, amsg2.AchievementMsg
-	Local fo.Fonts = First Fonts
 	Local Scale# = GraphicHeight / 768.0
 	Local Width% = 264.0 * Scale
 	Local Height% = 84.0 * Scale

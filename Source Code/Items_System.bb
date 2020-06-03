@@ -367,7 +367,6 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 	
 	Local i.Items = New Items
 	Local it.ItemTemplates
-	Local o.Objects = First Objects
 	
 	Name = Lower(Name)
 	TempName = Lower (TempName)
@@ -504,7 +503,6 @@ Function UpdateItems()
 	Local Pick%
 	Local HideDist# = HideDistance * 0.5
 	Local DeletedItem% = False
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
 	
 	ClosestItem = Null
 	For i.Items = Each Items
@@ -612,8 +610,6 @@ Function PickItem(item.Items)
 	Local CanPickItem = True
 	Local FullINV% = True
 	Local GroupDesignation$
-	Local tt.TextureTemplate = First TextureTemplate
-	Local msg.Messages = First Messages
 	
 	For n = 0 To MaxItemAmount - 1
 		If Inventory(n) = Null
@@ -794,8 +790,6 @@ Function PickItem(item.Items)
 End Function
 
 Function DropItem(item.Items, PlayDropSound% = True)
-	Local msg.Messages = First Messages
-	
 	If WearingHazmat > 0 Then
 		msg\Msg = "You cannot drop any items while wearing a hazmat suit."
 		msg\Timer = 70.0 * 6.0
@@ -870,7 +864,6 @@ End Function
 Function Update294()
 	CatchErrors("Uncaught (Update294)")
 	
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
 	Local Pvt%
 	
 	If CameraShakeTimer > 0.0 Then

@@ -1,9 +1,6 @@
 Function SaveGame(File$)
 	CatchErrors("Uncaught (SaveGame)")
 	
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
-	Local msg.Messages = First Messages
-	
 	If (Not Playable) Then Return ; ~ Don't save if the player can't move at all
 	
 	If DropSpeed > 0.02 * fpst\FPSFactor[0] Or DropSpeed < (-0.02) * fpst\FPSFactor[0] Then Return
@@ -31,8 +28,6 @@ Function SaveGame(File$)
 	WriteFloat(f, EntityY(Head))
 	WriteFloat(f, EntityZ(Head))
 	
-	WriteByte(f, ChanceToSpawn005)
-	
 	WriteString(f, Str(AccessCode))
 	
 	WriteFloat(f, EntityPitch(Collider))
@@ -49,6 +44,8 @@ Function SaveGame(File$)
 	WriteFloat(f, HealTimer)
 	
 	WriteByte(f, Crouch)
+	
+	WriteByte(f, ChanceToSpawn005)
 	
 	WriteFloat(f, Stamina)
 	WriteFloat(f, StaminaEffect)
@@ -447,7 +444,7 @@ Function SaveGame(File$)
 		WriteByte(f, itt\Found)
 	Next
 	
-	If UsedConsole
+	If UsedConsole Then
 		WriteInt(f, 100)
 	Else
 		WriteInt(f, 994)
@@ -458,6 +455,7 @@ Function SaveGame(File$)
 	WriteFloat(f, I_427\Timer)
 	
 	WriteByte(f, I_714\Using)
+	
 	CloseFile(f)
 	
 	If Not MenuOpen Then
@@ -476,8 +474,6 @@ End Function
 
 Function LoadGame(File$)
 	CatchErrors("Uncaught (LoadGame)")
-	
-	Local msg.Messages = First Messages
 	
 	DropSpeed = 0.0
 	
@@ -505,8 +501,6 @@ Function LoadGame(File$)
 	PositionEntity(Head, x, y + 0.05, z)
 	ResetEntity(Head)
 	
-	ChanceToSpawn005 = ReadByte(f)
-	
 	AccessCode = Int(ReadString(f))
 	
 	x = ReadFloat(f)
@@ -525,6 +519,8 @@ Function LoadGame(File$)
 	HealTimer = ReadFloat(f)
 	
 	Crouch = ReadByte(f)
+	
+	ChanceToSpawn005 = ReadByte(f)
 	
 	Stamina = ReadFloat(f)
 	StaminaEffect = ReadFloat(f)	
@@ -1283,9 +1279,6 @@ End Function
 Function LoadGameQuick(File$)
 	CatchErrors("Uncaught (LoadGameQuick)")
 	
-	Local tt.TextureTemplate = First TextureTemplate
-	Local msg.Messages = First Messages
-	
 	DebugHUD = False
 	GameSaved = True
 	IsZombie = False
@@ -1294,8 +1287,6 @@ Function LoadGameQuick(File$)
 	UnableToMove = False
 	msg\Msg = ""
 	SelectedEnding = ""
-	
-	HideEntity(tt\OverlayID[10])
 	
 	PositionEntity(Collider, 0.0, 1000.0, 0.0, True)
 	ResetEntity(Collider)
@@ -1348,8 +1339,6 @@ Function LoadGameQuick(File$)
 	PositionEntity(Head, x, y + 0.05, z)
 	ResetEntity(Head)
 	
-	ChanceToSpawn005 = ReadByte(f)
-	
 	AccessCode = Int(ReadString(f))
 	
 	x = ReadFloat(f)
@@ -1368,6 +1357,8 @@ Function LoadGameQuick(File$)
 	HealTimer = ReadFloat(f)
 	
 	Crouch = ReadByte(f)
+	
+	ChanceToSpawn005 = ReadByte(f)
 	
 	Stamina = ReadFloat(f)
 	StaminaEffect = ReadFloat(f)	
@@ -1694,8 +1685,8 @@ Function LoadGameQuick(File$)
 		Local Timer% = ReadFloat(f)
 		Local TimerState# = ReadFloat(f)
 		
-		Local IsElevDoor = ReadByte(f)
-		Local MTFClose = ReadByte(f)
+		Local IsElevDoor% = ReadByte(f)
+		Local MTFClose% = ReadByte(f)
 		
 		For do.Doors = Each Doors
 			If EntityX(do\FrameOBJ, True) = x Then 
@@ -1933,6 +1924,7 @@ Function LoadGameQuick(File$)
 	I_427\Timer = ReadFloat(f)
 	
 	I_714\Using = ReadByte(f)
+	
 	CloseFile(f)
 	
 	If Collider <> 0 Then

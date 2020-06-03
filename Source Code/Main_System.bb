@@ -28,7 +28,7 @@ Type Fonts
 	Field CreditsFontID%[MaxCreditsFontIDAmount - 1]
 End Type
 
-Local fo.Fonts = New Fonts
+Global fo.Fonts = New Fonts
 
 Global MenuWhite%, MenuBlack%
 Global ButtonSFX% = LoadSound_Strict("SFX\Interact\Button.ogg")
@@ -166,7 +166,7 @@ Type FramesPerSecondsTemplate
 	Field PrevFPSFactor#
 End Type
 
-Local fpst.FramesPerSecondsTemplate = New FramesPerSecondsTemplate
+Global fpst.FramesPerSecondsTemplate = New FramesPerSecondsTemplate
 
 Local CheckFPS%, ElapsedLoops%, FPS%, ElapsedTime#
 
@@ -180,7 +180,7 @@ Global GameSaved%
 
 Global CanSave% = True
 
-AppTitle "SCP - Containment Breach Ultimate Edition v" + VersionNumber
+AppTitle("SCP - Containment Breach Ultimate Edition v" + VersionNumber)
 
 PlayStartupVideos()
 
@@ -194,7 +194,7 @@ InitAAFont()
 ; ~ For some reason, Blitz3D doesn't load fonts that have filenames that
 ; ~ Don't match their "internal name" (i.e. their display name in applications like Word and such).
 ; ~ As a workaround, I moved the files and renamed them so they
-; ~ Can load without FastText.
+; ~ Can load without FastText
 fo\FontID[0] = AALoadFont("GFX\font\cour\Courier New.ttf", Int(18 * (GraphicHeight / 1024.0)), 0, 0, 0)
 fo\FontID[1] = AALoadFont("GFX\font\courbd\Courier New.ttf", Int(58 * (GraphicHeight / 1024.0)), 0, 0, 0)
 fo\FontID[2] = AALoadFont("GFX\font\DS-DIGI\DS-Digital.ttf", Int(22 * (GraphicHeight / 1024.0)), 0, 0, 0)
@@ -301,7 +301,7 @@ Type Messages
 	Field KeypadMsg$
 End Type
 
-Local msg.Messages = New Messages
+Global msg.Messages = New Messages
 
 Global AccessCode%, KeypadInput$, KeypadTimer#
 
@@ -328,6 +328,21 @@ Type TextureTemplate
 	Field OverlayTextureID%[MaxOverlayTextureIDAmount - 1]
 	Field OverlayID%[MaxOverlayIDAmount - 1]
 End Type
+
+Global tt.TextureTemplate = New TextureTemplate
+
+Type Objects
+	Field DoorModelID%[MaxDoorModelIDAmount - 1]
+	Field NPCModelID%[MaxNPCModelIDAmount - 1]
+	Field MTModelID%[MaxMTModelIDAmount - 1]
+	Field ButtonModelID%[MaxButtonModelIDAmount - 1]
+	Field LeverModelID%[MaxLeverModelIDAmount - 1]
+	Field CamModelID%[MaxCamModelIDAmount - 1]
+	Field MonitorModelID%[MaxMonitorModelIDAmount - 1]
+	Field MiscModelID%[MaxMiscModelIDAmount - 1]
+End Type
+
+Global o.Objects = New Objects
 
 Global PlayTime%
 Global ConsoleFlush%
@@ -367,8 +382,6 @@ End Function
 Function UpdateConsole()
 	Local Tex%, Tex2%
 	Local e.Events
-	Local fo.Fonts = First Fonts
-	Local msg.Messages = First Messages
 	
 	If CanOpenConsole = False Then
 		ConsoleOpen = False
@@ -2146,7 +2159,6 @@ End Type
 
 Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, Big% = False, Keycard% = False, Code$ = "", UseCollisionMesh% = False, CheckIfZeroCard% = False)
 	Local d.Doors, Parent%, i%
-	Local o.Objects = First Objects
 	
 	If room <> Null Then Parent = room\OBJ
 	
@@ -2322,9 +2334,8 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, B
 	Return(d)
 End Function
 
-Function CreateButton(x#, y#, z#, Pitch#, Yaw#, Roll# = 0.0)
-	Local o.Objects = First Objects
-	Local OBJ% = CopyEntity(o\ButtonModelID[0])	
+Function CreateButton(x#, y#, z#, Pitch#, Yaw#, Roll# = 0.0, ButtonID% = 0)
+	Local OBJ% = CopyEntity(o\ButtonModelID[ButtonID])	
 	
 	ScaleEntity(OBJ, 0.03, 0.03, 0.03)
 	PositionEntity(OBJ, x, y, z)
@@ -2335,7 +2346,6 @@ End Function
 
 Function UpdateDoors()
 	Local i%, d.Doors, x#, z#, Dist#
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
 	
 	If UpdateDoorsTimer =< 0.0 Then
 		For d.Doors = Each Doors
@@ -2576,7 +2586,6 @@ End Function
 
 Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 	Local Temp% = 0
-	Local msg.Messages = First Messages
 	
 	If d\KeyCard > 0 Then
 		If SelectedItem = Null Then
@@ -3096,8 +3105,6 @@ Forever
 
 Function UpdateMessages()
 	Local e.Events
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
-	Local msg.Messages = First Messages
 	
 	If PlayerRoom <> Null Then
 		If PlayerRoom\RoomTemplate\Name = "room173intro" Then
@@ -3149,10 +3156,6 @@ End Function
 
 Function MainLoop()
 	Local e.Events
-	Local fo.Fonts = First Fonts
-	Local tt.TextureTemplate = First TextureTemplate
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
-	Local msg.Messages = First Messages
 	
 	UpdateStreamSounds()
 	
@@ -3398,6 +3401,8 @@ Function MainLoop()
 				If SelectedEnding <> "" Then EndingTimer = Min(KillTimer, -0.1)
 			EndIf
 			DarkA = Max(DarkA, Min(Abs(KillTimer / 400.0), 1.0))
+		Else
+			HideEntity(tt\OverlayID[10])
 		EndIf
 		
 		If FallTimer < 0.0 Then
@@ -3485,11 +3490,11 @@ Function MainLoop()
 				ElseIf (Not CanSave) Or QuickLoadPercent > -1
 					msg\Msg = "You cannot save at this moment."
 					msg\Timer = 70.0 * 6.0
-					If QuickLoadPercent > -1
+					If QuickLoadPercent > -1 Then
 						msg\Msg = msg\Msg + " (game is loading)"
 					EndIf
 				Else
-					If SelectedScreen <> Null
+					If SelectedScreen <> Null Then
 						GameSaved = False
 						Playable = True
 						DropSpeed = 0.0
@@ -3542,8 +3547,6 @@ Function MainLoop()
 End Function
 
 Function Kill(IsBloody% = False)
-	Local tt.TextureTemplate = First TextureTemplate
-	
 	If chs\GodMode Then Return
 	
 	If BreathCHN <> 0 Then
@@ -3570,14 +3573,10 @@ Function Kill(IsBloody% = False)
 End Function
 
 Function DrawEnding()
-	Local fo.Fonts = First Fonts
-	Local tt.TextureTemplate = First TextureTemplate
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
-	
 	ShowPointer()
 	
 	fpst\FPSFactor[0] = 0.0
-	If EndingTimer > -2000.0
+	If EndingTimer > -2000.0 Then
 		EndingTimer = Max(EndingTimer - fpst\FPSFactor[1], -1111.0)
 	Else
 		EndingTimer = EndingTimer - fpst\FPSFactor[1]
@@ -3606,7 +3605,6 @@ Function DrawEnding()
 	Cls
 	
 	If EndingTimer < -200.0 Then
-		
 		If BreathCHN <> 0 Then
 			If ChannelPlaying(BreathCHN) Then StopChannel(BreathCHN) : Stamina = 100.0
 		EndIf
@@ -3748,7 +3746,6 @@ Global CreditsTimer# = 0.0
 Global CreditsScreen%
 
 Function InitCredits()
-	Local fo.Fonts = First Fonts
 	Local cl.CreditsLine
 	Local File% = OpenFile("Credits.txt")
 	Local l$
@@ -3776,8 +3773,6 @@ Function DrawCredits()
     Local ID%
     Local EndLinesAmount%
 	Local LastCreditLine.CreditsLine
-	Local fo.Fonts = First Fonts
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
 	
     Cls
 	
@@ -3877,9 +3872,6 @@ Function MovePlayer()
 	
 	Local Sprint# = 1.0, Speed# = 0.018, i%, Angle#
 	Local Temporary#
-	Local tt.TextureTemplate = First TextureTemplate
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
-	Local msg.Messages = First Messages
 	
 	If SuperMan Then
 		Speed = Speed * 3.0
@@ -4215,9 +4207,6 @@ End Function
 
 Function MouseLook()
 	Local i%
-	Local tt.TextureTemplate = First TextureTemplate
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
-	Local msg.Messages = First Messages
 	
 	CameraShake = Max(CameraShake - (fpst\FPSFactor[0] / 10.0), 0.0)
 	
@@ -4477,11 +4466,6 @@ Function DrawGUI()
 	Local x2#, y2#, z2#
 	Local n%, xTemp, yTemp, StrTemp$, GroupDesignation$
 	Local e.Events, it.Items
-	Local o.Objects = First Objects
-	Local fo.Fonts = First Fonts
-	Local tt.TextureTemplate = First TextureTemplate
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
-	Local msg.Messages = First Messages
 	
 	If MenuOpen Or ConsoleOpen Or SelectedDoor <> Null Or InvOpen Or OtherOpen <> Null Or EndingTimer < 0.0 Then
 		ShowPointer()
@@ -7259,10 +7243,6 @@ Function DrawMenu()
 	CatchErrors("Uncaught (DrawMenu)")
 	
 	Local x%, y%, Width%, Height%, i%
-	Local fo.Fonts = First Fonts
-	Local tt.TextureTemplate = First TextureTemplate
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
-	Local msg.Messages = First Messages
 	
 	If api_GetFocus() = 0 Then ; ~ Game is out of focus then pause the game
 		If (Not Using294) Then
@@ -8013,25 +7993,12 @@ End Function
 
 Include "Source Code\Sound_System.bb"
 
-Type Objects
-	Field DoorModelID%[MaxDoorModelIDAmount - 1]
-	Field NPCModelID%[MaxNPCModelIDAmount - 1]
-	Field MTModelID%[MaxMTModelIDAmount - 1]
-	Field ButtonModelID%[MaxButtonModelIDAmount - 1]
-	Field LeverModelID%[MaxLeverModelIDAmount - 1]
-	Field CamModelID%[MaxCamModelIDAmount - 1]
-	Field MonitorModelID%[MaxMonitorModelIDAmount - 1]
-	Field MiscModelID%[MaxMiscModelIDAmount - 1]
-End Type
-
 Function LoadEntities()
 	CatchErrors("Uncaught (LoadEntities)")
 	
 	DrawLoading(0)
 	
-	Local o.Objects = New Objects
 	Local i%
-	Local tt.TextureTemplate = New TextureTemplate
 	
 	For i = 0 To 9
 		TempSounds[i] = 0
@@ -8123,7 +8090,7 @@ Function LoadEntities()
 	EntityOrder(tt\OverlayID[3], -1003)
 	MoveEntity(tt\OverlayID[3], 0.0, 0.0, 1.0)
 	
-	tt\OverlayTextureID[4] = LoadTexture_Strict("GFX\night_vision_goggles_overlay.png", 1) ; NIGHT VISION GOGGLES
+	tt\OverlayTextureID[4] = LoadTexture_Strict("GFX\night_vision_goggles_overlay.png", 1) ; ~ NIGHT VISION GOGGLES
 	tt\OverlayID[4] = CreateSprite(Ark_Blur_Cam)
 	ScaleSprite(tt\OverlayID[4], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
@@ -8624,8 +8591,6 @@ Function InitNewGame()
 	CatchErrors("Uncaught (InitNewGame)")
 	
 	Local i%, de.Decals, d.Doors, it.Items, r.Rooms, sc.SecurityCams, e.Events
-	Local fo.Fonts = First Fonts
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
 	
 	DrawLoading(45)
 	
@@ -8793,8 +8758,6 @@ Function InitLoadGame()
 	CatchErrors("Uncaught (InitLoadGame)")
 	
 	Local d.Doors, sc.SecurityCams, rt.RoomTemplates, e.Events, i%
-	Local fo.Fonts = First Fonts
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
 	
 	DrawLoading(80)
 	
@@ -8885,8 +8848,7 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	Local i%, x%, y%, Lvl%
 	Local itt.ItemTemplates, s.Screens, lt.LightTemplates, d.Doors, m.Materials
-	Local wp.WayPoints, twp.TempWayPoints, r.Rooms, it.Items, o.Objects, tt.TextureTemplate
-	Local msg.Messages = First Messages
+	Local wp.WayPoints, twp.TempWayPoints, r.Rooms, it.Items
 	
 	KillSounds()
 	If PlayButtonSFX Then PlaySound_Strict(ButtonSFX)
@@ -9074,20 +9036,12 @@ Function NullGame(PlayButtonSFX% = True)
 		Delete(pr)
 	Next
 	
-	For de.decals = Each Decals
+	For de.Decals = Each Decals
 		Delete(de)
 	Next
 	
 	For n.NPCs = Each NPCs
 		Delete(n)
-	Next
-	
-	For o.Objects = Each Objects
-		Delete Each Objects
-	Next
-	
-	For tt.TextureTemplate = Each TextureTemplate
-		Delete Each TextureTemplate
 	Next
 	
 	Curr173 = Null
@@ -10417,8 +10371,6 @@ End Function
 
 Function Use294()
 	Local x#, y#, xTemp%, yTemp%, StrTemp$, Temp%
-	Local tt.TextureTemplate = First TextureTemplate
-	Local msg.Messages = First Messages
 	
 	ShowPointer()
 	
@@ -10674,8 +10626,6 @@ End Function
 Function Use427()
 	Local i%, Pvt%, de.Decals, TempCHN%
 	Local PrevI427Timer# = I_427\Timer
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
-	Local msg.Messages = First Messages
 	
 	If I_427\Timer < 70.0 * 360.0
 		If I_427\Using = 1 Then
@@ -10779,7 +10729,6 @@ Function UpdateMTF%()
 	
 	Local r.Rooms, n.NPCs
 	Local Dist#, i%
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
 	
 	If MTFTimer = 0.0 Then
 		If Rand(30) = 1 And PlayerRoom\RoomTemplate\Name <> "dimension1499" Then
@@ -10862,9 +10811,6 @@ Function Update008()
 	Local PrevI008Timer#, i%, r.Rooms
 	Local TeleportForInfect% = True
 	Local GroupDesignation$
-	Local tt.TextureTemplate = First TextureTemplate
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
-	Local msg.Messages = First Messages
 	
 	If PlayerRoom\RoomTemplate\Name = "room860"
 		For e.Events = Each Events
@@ -11037,9 +10983,6 @@ End Function
 
 Function Update409()
 	Local prevI409Timer# = I_409\Timer
-	Local tt.TextureTemplate = First TextureTemplate
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
-	Local msg.Messages = First Messages
 	
 	If I_409\Timer > 0.0 Then
 		ShowEntity(tt\OverlayID[8])
@@ -11099,7 +11042,6 @@ End Type
 
 Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#)
 	Local d.Decals = New Decals
-	Local tt.TextureTemplate = First TextureTemplate
 	
 	d\x = x
 	d\y = y
@@ -11130,7 +11072,6 @@ End Function
 
 Function UpdateDecals()
 	Local d.Decals
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
 	
 	For d.Decals = Each Decals
 		If d\SizeChange <> 0.0 Then
@@ -11275,10 +11216,6 @@ End Function
 
 Function RenderWorld2()
 	Local i%, Dist#, Temp%, Temp2%
-	Local tt.TextureTemplate = First TextureTemplate
-	Local fo.Fonts = First Fonts
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
-	Local msg.Messages = First Messages
 	
 	CameraProjMode(Ark_Blur_Cam, 0)
 	CameraProjMode(Camera, 1)
@@ -11619,7 +11556,6 @@ End Function
 Function CatchErrors(Location$)
 	Local ErrStr$ = ErrorLog()
 	Local ErrF%
-	Local msg.Messages = First Messages
 	
 	If Len(ErrStr) > 0 Then
 		If FileType(ErrorFile) = 0 Then
@@ -11692,8 +11628,6 @@ Function TeleportEntity(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = Fa
 End Function
 
 Function PlayStartupVideos()
-	Local fo.Fonts = First Fonts
-	
 	If PlayStartup = 0 Then Return
 	
 	fo\FontID[0] = LoadFont_Strict("GFX\font\cour\Courier New.ttf", Int(18 * (GraphicHeight / 1024.0)), 0, 0, 0)
@@ -11752,8 +11686,6 @@ Function PlayStartupVideos()
 End Function
 
 Function CanUseItem(CanUseWithGasMask%, CanUseWithEyewear%)
-	Local msg.Messages = First Messages
-	
 	If (CanUseWithGasMask = False And (WearingGasMask > 0 Or I_1499\Using > 0)) Then
 		msg\Msg = "You can't use that item while wearing a gas mask."
 		msg\Timer = 70.0 * 6.0
@@ -11767,8 +11699,6 @@ Function CanUseItem(CanUseWithGasMask%, CanUseWithEyewear%)
 End Function
 
 Function CanUseItem2(GasMask%, NVG%, SCP1499%, Helmet%)
-	Local msg.Messages = First Messages
-	
 	If GasMask = False And WearingGasMask > 0 Then
 		msg\Msg = "You need to take off the gas mask in order to use that item."
 		msg\Timer = 70.0 * 6.0
@@ -11821,5 +11751,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#1077#1406#1C82
+;~B#106F#13F6#1C6E
 ;~C#Blitz3D
