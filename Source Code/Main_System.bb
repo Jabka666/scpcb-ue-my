@@ -7258,8 +7258,7 @@ End Function
 Function DrawMenu()
 	CatchErrors("Uncaught (DrawMenu)")
 	
-	Local x%, y%, Width%, Height%
-	Local i%
+	Local x%, y%, Width%, Height%, i%
 	Local fo.Fonts = First Fonts
 	Local tt.TextureTemplate = First TextureTemplate
 	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
@@ -7607,14 +7606,16 @@ Function DrawMenu()
 						DrawOptionsTooltip(tX, tY, tW, tH, "controls")
 					EndIf
 					
+					Local Key%
+					
 					For i = 0 To 227
-						If KeyHit(i) Then key = i : Exit
+						If KeyHit(i) Then Key = i : Exit
 					Next
-					If key <> 0 Then
+					If Key <> 0 Then
 						Select SelectedInputBox
 							Case 3
 								;[Block]
-								KEY_LEFT = key
+								KEY_LEFT = Key
 								;[End Block]
 							Case 4
 								;[Block]
@@ -8089,7 +8090,7 @@ Function LoadEntities()
 	
 	tt\OverlayTextureID[0] = LoadTexture_Strict("GFX\fog.png", 1) ; ~ FOG
 	tt\OverlayID[0] = CreateSprite(Ark_Blur_Cam)
-	ScaleSprite(tt\OverlayID[0], Max(GraphicWidth / 1240, 1), Max(GraphicHeight / 960 * 0.8, 0.8))
+	ScaleSprite(tt\OverlayID[0], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityTexture(tt\OverlayID[0], tt\OverlayTextureID[0])
 	EntityBlend(tt\OverlayID[0], 2)
 	EntityOrder(tt\OverlayID[0], -1000)
@@ -8097,7 +8098,7 @@ Function LoadEntities()
 	
 	tt\OverlayTextureID[1] = LoadTexture_Strict("GFX\gas_mask_overlay.png", 1) ; ~ GAS MASK
 	tt\OverlayID[1] = CreateSprite(Ark_Blur_Cam)
-	ScaleSprite(tt\OverlayID[1], Max(GraphicWidth / 1024, 1), Max(GraphicHeight / 1024 * 0.8, 0.8))
+	ScaleSprite(tt\OverlayID[1], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityTexture(tt\OverlayID[1], tt\OverlayTextureID[1])
 	EntityBlend(tt\OverlayID[1], 2)
 	EntityFX(tt\OverlayID[1], 1)
@@ -8106,7 +8107,7 @@ Function LoadEntities()
 	
 	tt\OverlayTextureID[2] = LoadTexture_Strict("GFX\hazmat_suit_overlay.png", 1) ; ~ HAZMAT SUIT
 	tt\OverlayID[2] = CreateSprite(Ark_Blur_Cam)
-	ScaleSprite(tt\OverlayID[2], Max(GraphicWidth / 1024.0, 1.0), Max(GraphicHeight / 1024.0 * 0.8, 0.8))
+	ScaleSprite(tt\OverlayID[2], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityTexture(tt\OverlayID[2], tt\OverlayTextureID[2])
 	EntityBlend(tt\OverlayID[2], 2)
 	EntityFX(tt\OverlayID[2], 1)
@@ -8115,7 +8116,7 @@ Function LoadEntities()
 	
 	tt\OverlayTextureID[3] = LoadTexture_Strict("GFX\scp_008_overlay.png", 1) ; ~ SCP-008
 	tt\OverlayID[3] = CreateSprite(Ark_Blur_Cam)
-	ScaleSprite(tt\OverlayID[3], Max(GraphicWidth / 1024, 1), Max(GraphicHeight / 1024 * 0.8, 0.8))
+	ScaleSprite(tt\OverlayID[3], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityTexture(tt\OverlayID[3], tt\OverlayTextureID[3])
 	EntityBlend(tt\OverlayID[3], 3)
 	EntityFX(tt\OverlayID[3], 1)
@@ -8124,7 +8125,7 @@ Function LoadEntities()
 	
 	tt\OverlayTextureID[4] = LoadTexture_Strict("GFX\night_vision_goggles_overlay.png", 1) ; NIGHT VISION GOGGLES
 	tt\OverlayID[4] = CreateSprite(Ark_Blur_Cam)
-	ScaleSprite(tt\OverlayID[4], Max(GraphicWidth / 1024, 1), Max(GraphicHeight / 1024 * 0.8, 0.8))
+	ScaleSprite(tt\OverlayID[4], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
 	EntityBlend(tt\OverlayID[4], 2)
 	EntityFX(tt\OverlayID[4], 1)
@@ -8133,7 +8134,7 @@ Function LoadEntities()
 	
 	tt\OverlayTextureID[5] = LoadTexture_Strict("GFX\fog_night_vision_goggles.png", 1) ; ~ FOG IN NIGHT VISION GOGGLES
 	tt\OverlayID[5] = CreateSprite(Ark_Blur_Cam)
-	ScaleSprite(tt\OverlayID[5], Max(GraphicWidth / 1024, 1), Max(GraphicHeight / 1024 * 0.8, 0.8))
+	ScaleSprite(tt\OverlayID[5], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityColor(tt\OverlayID[5], 0.0, 0.0, 0.0)
 	EntityFX(tt\OverlayID[5], 1)
 	EntityOrder(tt\OverlayID[5], -1005)
@@ -8150,7 +8151,7 @@ Function LoadEntities()
 	Cls
 	SetBuffer(BackBuffer())
 	tt\OverlayID[6] = CreateSprite(Camera)
-	ScaleSprite(tt\OverlayID[6], Max(GraphicWidth / 1240, 1), Max(GraphicHeight / 960 * 0.8, 0.8))
+	ScaleSprite(tt\OverlayID[6], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityTexture(tt\OverlayID[6], tt\OverlayTextureID[6])
 	EntityBlend(tt\OverlayID[6], 1)
 	EntityOrder(tt\OverlayID[6], -1002)
@@ -8164,7 +8165,7 @@ Function LoadEntities()
 	ClsColor(0, 0, 0)
 	SetBuffer(BackBuffer())
 	tt\OverlayID[7] = CreateSprite(Camera)
-	ScaleSprite(tt\OverlayID[7], Max(GraphicWidth / 1240, 1), Max(GraphicHeight / 960 * 0.8, 0.8))
+	ScaleSprite(tt\OverlayID[7], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityTexture(tt\OverlayID[7], tt\OverlayTextureID[7])
 	EntityBlend(tt\OverlayID[7], 1)
 	EntityOrder(tt\OverlayID[7], -1002)
@@ -8173,7 +8174,7 @@ Function LoadEntities()
 	
 	tt\OverlayTextureID[8] = LoadTexture_Strict("GFX\scp_409_overlay.png", 1) ; ~ SCP-409
 	tt\OverlayID[8] = CreateSprite(Ark_Blur_Cam)
-	ScaleSprite(tt\OverlayID[8], Max(GraphicWidth / 1024.0, 1.0), Max(GraphicHeight / 1024.0 * 0.8, 0.8))
+	ScaleSprite(tt\OverlayID[8], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityTexture(tt\OverlayID[8], tt\OverlayTextureID[8])
 	EntityBlend(tt\OverlayID[8], 3)
 	EntityFX(tt\OverlayID[8], 1)
@@ -8183,7 +8184,7 @@ Function LoadEntities()
 	
 	tt\OverlayTextureID[9] = LoadTexture_Strict("GFX\helmet_overlay.png", 1) ; ~ HELMET
 	tt\OverlayID[9] = CreateSprite(Ark_Blur_Cam)
-	ScaleSprite(tt\OverlayID[9], Max(GraphicWidth / 1024.0, 1.0), Max(GraphicHeight / 1024.0 * 0.8, 0.8))
+	ScaleSprite(tt\OverlayID[9], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityTexture(tt\OverlayID[9], tt\OverlayTextureID[9])
 	EntityBlend(tt\OverlayID[9], 2)
 	EntityFX(tt\OverlayID[9], 1)
@@ -8193,7 +8194,7 @@ Function LoadEntities()
 	
 	tt\OverlayTextureID[10] = LoadTexture_Strict("GFX\bloody_overlay.png", 1) ; ~ BLOOD
 	tt\OverlayID[10] = CreateSprite(Ark_Blur_Cam)
-	ScaleSprite(tt\OverlayID[10], Max(GraphicWidth / 1024.0, 1.0), Max(GraphicHeight / 1024.0 * 0.8, 0.8))
+	ScaleSprite(tt\OverlayID[10], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityTexture(tt\OverlayID[10], tt\OverlayTextureID[10])
 	EntityBlend(tt\OverlayID[10], 2)
 	EntityFX(tt\OverlayID[10], 1)
@@ -11820,5 +11821,5 @@ Function RotateEntity90DegreeAngles(Entity%)
 	EndIf
 End Function
 ;~IDEal Editor Parameters:
-;~B#1077#1406#1C83
+;~B#1077#1406#1C82
 ;~C#Blitz3D
