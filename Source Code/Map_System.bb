@@ -2590,7 +2590,8 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "room2poffices2"
 			;[Block]
-			d = CreateDoor(r\Zone, r\x + 240.0 * RoomScale, r\y, r\z + 48.0 * RoomScale, 270.0, r, False, False, 3)			d\AutoClose = False
+			d = CreateDoor(r\Zone, r\x + 240.0 * RoomScale, r\y, r\z + 48.0 * RoomScale, 270.0, r, False, False, 3)
+			d\AutoClose = False
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) + 0.061, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) - 0.061, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)			
 			
@@ -4748,39 +4749,53 @@ Function FillRoom(r.Rooms)
 		Case "room1123"
 			;[Block]
 			; ~ Fake door to the contianment chamber itself
-			r\RoomDoors[1] = CreateDoor(r\Zone, r\x + 832.0 * RoomScale, r\y + 512.0 * RoomScale, r\z + 368.0 * RoomScale, 0.0, r, True, 4, 3)
+			r\RoomDoors[1] = CreateDoor(r\Zone, r\x + 656.0 * RoomScale, r\y + 512.0 * RoomScale, r\z, 90.0, r, True, False, 3)
 			r\RoomDoors[1]\Locked = True : r\RoomDoors[1]\AutoClose = False
-			PositionEntity(r\RoomDoors[1]\Buttons[0], EntityX(r\RoomDoors[1]\Buttons[0], True) - 0.12, EntityY(r\RoomDoors[1]\Buttons[0], True), EntityZ(r\RoomDoors[1]\buttons[0], True) + 0.061, True)
-			PositionEntity(r\RoomDoors[1]\Buttons[1], EntityX(r\RoomDoors[1]\Buttons[1], True) + 0.12, EntityY(r\RoomDoors[1]\Buttons[1], True), EntityZ(r\RoomDoors[1]\buttons[1], True) - 0.061, True)
+			PositionEntity(r\RoomDoors[1]\Buttons[0] , EntityX(r\RoomDoors[1]\Buttons[0], True)+ 0.12, EntityY(r\RoomDoors[1]\Buttons[0], True), EntityZ(r\RoomDoors[1]\buttons[0], True) + 0.061, True)
+			PositionEntity(r\RoomDoors[1]\Buttons[1] , EntityX(r\RoomDoors[1]\Buttons[1], True)- 0.12, EntityY(r\RoomDoors[1]\Buttons[1], True), EntityZ(r\RoomDoors[1]\buttons[1], True) - 0.061, True)
 			
 			; ~ Door to the containment chamber itself
-			d = CreateDoor(r\Zone, r\x + 832.0 * RoomScale, r\y, r\z + 368.0 * RoomScale, 0.0, r, False, 4, 3)
-			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.12, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.061, True)
-			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.12, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.061, True)
+			d = CreateDoor(r\Zone, r\x + 656.0 * RoomScale, r\y, r\z, 90.0, r, False, False, 3)
+			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True)+ 0.12 , EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.061, True)
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) - 0.12, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.061, True)
 			
-			; ~ Door to the pre-containment chamber
-			d = CreateDoor(r\Zone, r\x + 280.0 * RoomScale, r\y, r\z - 607.0 * RoomScale, 90.0, r)
+			; ~ Doors to the pre-containment chamber
+			d = CreateDoor(r\Zone, r\x + 280.0 * RoomScale, r\y, r\z -639.0 * RoomScale, 90.0, r)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.031, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.031, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			
-			; ~ Fake door to the pre-containment chamber
-			d = CreateDoor(r\Zone, r\x + 280.0 * RoomScale, r\y + 512.0 * RoomScale, r\z - 607.0 * RoomScale, 90.0, r)
+			d = CreateDoor(r\Zone, r\x + 280.0 * RoomScale, r\y, r\z + 608.0 * RoomScale, 90.0, r)
+			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.031, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.031, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
+			
+			; ~ Fake doors to the pre-containment chamber
+			d = CreateDoor(r\Zone, r\x + 280.0 * RoomScale, r\y+ 512.0 * RoomScale, r\z - 639.0 * RoomScale, 90.0, r)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.031, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
-			r\RoomDoors[0] = d	
+			r\RoomDoors[0] = d
 			
+			d = CreateDoor(r\Zone, r\x + 280.0 * RoomScale, r\y+ 512.0 * RoomScale, r\z + 608.0 * RoomScale, 90.0, r)
+			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.031, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
+			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
+			d\AutoClose = False : d\Locked = True
+
+			;1123 area reference for blur
 			r\Objects[3] = CreatePivot()
-			PositionEntity(r\Objects[3], r\x + 832.0 * RoomScale, r\y + 166.0 * RoomScale, r\z + 784.0 * RoomScale)
+			PositionEntity(r\Objects[3], r\x + 960.0 * RoomScale, r\y + 166.0 * RoomScale, r\z)
 			
+			;Spawn player reference 1
 			r\Objects[4] = CreatePivot()
 			PositionEntity(r\Objects[4], r\x - 648.0 * RoomScale, r\y + 592.0 * RoomScale, r\z + 692.0 * RoomScale)
 			
+			;Spawn player reference 2
 			r\Objects[5] = CreatePivot()
-			PositionEntity(r\Objects[5], r\x + 828.0 * RoomScale, r\y + 592.0 * RoomScale, r\z + 592.0 * RoomScale)
+			PositionEntity(r\Objects[5], r\x + 800.0 * RoomScale, r\y + 592.0 * RoomScale, r\z)
 			
+			;nazi 1
 			r\Objects[6] = CreatePivot()
 			PositionEntity(r\Objects[6], r\x - 76.0 * RoomScale, r\y + 620.0 * RoomScale, r\z + 744.0 * RoomScale)
 			
+			;nazi 2
 			r\Objects[7] = CreatePivot()
 			PositionEntity(r\Objects[7], r\x - 640.0 * RoomScale, r\y + 620.0 * RoomScale, r\z - 864.0 * RoomScale)	
 			
@@ -4815,29 +4830,35 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\Objects[13],r\x - (592.0 + 70.0) * RoomScale, r\y + 512.0 * RoomScale, r\z - 704.0 * RoomScale)
 			RotateEntity(r\Objects[13], 0.0, 0.0, 0.0)
 			EntityType(r\Objects[13], HIT_MAP)
-			ScaleEntity(r\Objects[13], 48.0 * RoomScale, 45.0 * RoomScale, 46.0 * RoomScale)	
+			ScaleEntity(r\Objects[13], 48.0 * RoomScale, 45.0 * RoomScale, 46.0 * RoomScale)
 			
-			For i = 3 To 13
+			;nazi final death
+			r\Objects[14] = CreatePivot()
+			PositionEntity(r\Objects[14], r\x + 832.0 * RoomScale, r\y -384.0 * RoomScale, r\z + 416* RoomScale)
+			
+			;gas valves
+			r\Objects[15] = CreatePivot()
+			PositionEntity(r\Objects[15], r\x + 754 * RoomScale, r\y -110.0 * RoomScale, r\z-32.0* RoomScale)
+			
+			For i = 3 To 15
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
-			
-			r\Objects[14] = LoadMesh_Strict("GFX\map\room1123_hb.b3d", r\OBJ)
-			EntityPickMode(r\Objects[14], 2)
-			EntityType(r\Objects[14], HIT_MAP)
-			EntityAlpha(r\Objects[14], 0.0)
-			
+						
 			it = CreateItem("Document SCP-1123", "paper", r\x + 511.0 * RoomScale, r\y + 125.0 * RoomScale, r\z - 936.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
+			EntityParent(it\Collider, r\obj)
 			
-			it = CreateItem("SCP-1123", "scp1123", r\x + 832.0 * RoomScale, r\y + 166.0 * RoomScale, r\z + 784.0 * RoomScale)
+			it = CreateItem("SCP-1123", "1123", r\x + 960.0 * RoomScale, r\y + 166.0 * RoomScale, r\z)
 			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
-			EntityParent(it\Collider, r\OBJ)
+			EntityParent(it\Collider, r\obj)
 			
 			it = CreateItem("Leaflet", "paper", r\x - 816.0 * RoomScale, r\y + 704.0 * RoomScale, r\z+ 888.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
+			EntityParent(it\Collider, r\obj)
+			
+			it = CreateItem("9V Battery", "bat", r\x + 361.0 * RoomScale, r\y + 150.0 * RoomScale, r\z + 960.0 * RoomScale)
+			EntityParent(it\Collider, r\obj)
 			
 			it = CreateItem("Gas Mask", "gasmask", r\x + 457.0 * RoomScale, r\y + 150.0 * RoomScale, r\z + 960.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
+			EntityParent(it\Collider, r\obj)
 			;[End Block]
 		Case "pocketdimension"
 			;[Block]
@@ -4856,7 +4877,8 @@ Function FillRoom(r.Rooms)
 			r\Objects[10] = CopyEntity(r\Objects[9])
 			
 			r\Objects[11] = LoadMesh_Strict("GFX\map\pocketdimension5.b3d") ; ~ The pillar room
-						Local Terrain% = LoadMesh_Strict("GFX\map\pocketdimensionterrain.b3d")
+			
+			Local Terrain% = LoadMesh_Strict("GFX\map\pocketdimensionterrain.b3d")
 			
 			ScaleEntity(Terrain, RoomScale, RoomScale, RoomScale, True)
 			PositionEntity(Terrain, r\x, r\y + 29440.0, r\z, True)
