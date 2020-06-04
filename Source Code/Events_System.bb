@@ -9472,6 +9472,9 @@ Function UpdateEndings()
 									
 									e\room\NPC[0]\State = 3.0
 									
+									If e\room\NPC[1] <> Null Then
+										RemoveNPC(e\room\NPC[1])
+									EndIf
 									PlayAnnouncement("SFX\Ending\GateB\682Battle.ogg")
 								EndIf								
 							Else
@@ -9703,23 +9706,25 @@ Function UpdateEndings()
 						EndIf
 						
 						; ~ Helicopter spots or player is within range. --> Start shooting.
-						If e\room\NPC[1]\State <> 1 Then
-							If (EntityDistance(e\room\NPC[1]\Collider, Collider) < 15.0) Or EntityVisible(e\room\NPC[0]\Collider, Collider) And (Not chs\Notarget) Then
-								e\room\NPC[1]\State = 1.0
-								e\room\NPC[1]\State3 = 1.0
-							Else
+						If e\room\NPC[1] <> Null Then
+							If e\room\NPC[1]\State <> 1 Then
+								If (EntityDistance(e\room\NPC[1]\Collider, Collider) < 15.0) Or EntityVisible(e\room\NPC[0]\Collider, Collider) And (Not chs\Notarget) Then
+									e\room\NPC[1]\State = 1.0
+									e\room\NPC[1]\State3 = 1.0
+								Else
+									e\room\NPC[1]\State = 0.0
+									e\room\NPC[1]\State3 = 0.0
+								EndIf
+							EndIf
+							
+							; ~ Below roof or inside catwalk. --> Stop shooting.
+							If (EntityDistance(e\room\NPC[1]\Collider, Collider) < 8.9) Or (EntityDistance(e\room\Objects[5], Collider) < 16.9) Or chs\Notarget Then
 								e\room\NPC[1]\State = 0.0
 								e\room\NPC[1]\State3 = 0.0
+							Else
+								e\room\NPC[1]\State = 1.0
+								e\room\NPC[1]\State3 = 1.0
 							EndIf
-						EndIf
-						
-						; ~ Below roof or inside catwalk. --> Stop shooting.
-						If (EntityDistance(e\room\NPC[1]\Collider, Collider) < 8.9) Or (EntityDistance(e\room\Objects[5], Collider) < 16.9) Or chs\Notarget Then
-							e\room\NPC[1]\State = 0.0
-							e\room\NPC[1]\State3 = 0.0
-						Else
-							e\room\NPC[1]\State = 1.0
-							e\room\NPC[1]\State3 = 1.0
 						EndIf
 					EndIf
 				EndIf
