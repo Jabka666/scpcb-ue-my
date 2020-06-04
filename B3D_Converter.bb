@@ -1,4 +1,4 @@
-; ~ .B3D CONVERTER UNIVERSAL FOR "SCP - Containment Breach Ultimate Edition Mod"
+; ~ .B3D CONVERTER UNIVERSAL FOR "SCP - Containment Breach Ultimate Edition"
 
 Include "Source Code\B3D_Converter_Main.bb"
 

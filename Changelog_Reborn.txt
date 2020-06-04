@@ -19,6 +19,7 @@
 - Changed text when player is using Level 6 Key Card.
 - Changed Level 6 Key Card's achievement name.
 - Changed bloody textures in fake SCP-1123's containment chamber.
+- Changed SCP-1123's containment chamber.
 
 - Replaced O5-14 Burnt Document by batteries in room2offices5.
 
@@ -88,7 +89,8 @@ Bug Fixes:
 
 - Small fixes for room2testroom's event.
 - Small fixes for commands "disablenuke" and "enablecontrol/disablecontrol.
-- Small fixes for gateaentrance's walls.
-- Small fixes for gateb's walls.
+- Small fixes for gateb and gateaentrance's walls.
 - Small fixes for syringes' positions in room2medibay and room2medibay2.
+- Small fixes for room2medibay2 and room2medibay's walls.
 - Small fixes for room2pipes and room2pipes2.
+- Small fixes for ending tunnel in the Gate A.
