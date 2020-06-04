@@ -6866,7 +6866,7 @@ Function UpdateEvents()
 								BlinkTimer = -10.0
 								BlurTimer = 500.0
 								PositionEntity(Collider, EntityX(e\room\Objects[5], True), EntityY(e\room\Objects[5], True), EntityZ(e\room\Objects[5], True), True)
-								RotateEntity(Collider, 0.0, EntityYaw(e\room\OBJ, True) + 180.0, 0.0)
+								RotateEntity(Collider, 0.0, EntityYaw(e\room\OBJ, True) + 90.0, 0.0)
 								ResetEntity(Collider)
 								e\EventState = 3.0
 							EndIf
@@ -6906,7 +6906,7 @@ Function UpdateEvents()
 								If e\room\NPC[0]\Frame >= 54.0 Then
 									e\EventState = 5.0
 									e\EventState2 = 0.0
-									PositionEntity(Collider, EntityX(e\room\OBJ, True), 0.3, EntityZ(e\room\OBJ, True), True)
+									PositionEntity(Collider, EntityX(e\room\OBJ, True), 0.3, EntityZ(e\room\OBJ, True)-160.0 * RoomScale, True)
 									ResetEntity(Collider)									
 									BlinkTimer = -10.0
 									BlurTimer = 500.0
@@ -6990,8 +6990,51 @@ Function UpdateEvents()
 							EndIf
 						EndIf
 						
-						RemoveNPC(e\room\NPC[0])
-						RemoveEvent(e)						
+						e\EventState2 = -1
+						
+						;RemoveNPC(e\room\NPC[0])
+						;RemoveEvent(e)	
+						
+					ElseIf e\EventState = 8.0
+							CanSave = False
+							BlurTimer = 100.0
+							Injuries = 1.5
+							
+							PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[14], True), EntityY(e\room\Objects[14], True), EntityZ(e\room\Objects[14], True))
+							ResetEntity(e\room\NPC[0]\Collider)
+							
+							PositionEntity(Collider, EntityX(e\room\Objects[15], True), EntityX(e\room\Objects[14], EntityX(e\room\Objects[5], True)
+							ResetEntity(Collider)
+						
+							If e\EventState3 = 0.0 Then
+							For i = 0 To 1
+								em.Emitters = CreateEmitter(EntityX(e\room\Objects[15] + (128.0 * i)*RoomScale, True), EntityY(e\room\Objects[15], True), EntityZ(e\room\Objects[15], True), 0)
+								TurnEntity(em\OBJ, 90.0, 0.0, 0.0, True)
+								EntityParent(em\OBJ, e\room\OBJ)
+								em\Size = 0.05 : em\RandAngle = 10 : em\Speed = 0.06 : em\SizeChange = 0.007
+								For z = 0 To Ceil(3.3333 * (ParticleAmount + 1))
+									p.Particles = CreateParticle(EntityX(em\OBJ, True), 448.0 * RoomScale, EntityZ(em\OBJ, True), Rand(em\MinImage, em\MaxImage), em\Size, em\Gravity, em\LifeTime)
+									p\Speed = em\Speed : p\size = 0.05 : p\SizeChange = 0.008
+									RotateEntity(p\Pvt, Rnd(360.0), Rnd(360.0), 0.0, True)
+								Next
+							Next
+							e\EventState3 = e\EventState3 + fpst\FPSFactor[0]	
+							EndIf		
+						If e\EventState3 > 1500.0
+							ShowEntity(tt\OverlayID[7])
+							LightFlash = 7.0
+								
+							If Rand(3) = 1 Then
+								GroupDesignation = "Nine-Tailed Fox"
+							Else
+								GroupDesignation = "See No Evil"
+							EndIf
+							msg\DeathMsg = SubjectName + " was shot dead after attempting to attack a member of " + GroupDesignation + ". Surveillance tapes show that the subject had been "
+							msg\DeathMsg = msg\DeathMsg + "wandering around the site approximately 9 (nine) minutes prior, shouting the phrase " + Chr(34) + "get rid of the four pests" + Chr(34)
+							msg\DeathMsg = msg\DeathMsg + " in chinese. SCP-1123 was found in [DATA REDACTED] nearby, suggesting the subject had come into physical contact with it. How "
+							msg\DeathMsg = msg\DeathMsg + "exactly SCP-1123 was removed from its containment chamber is still unknown."
+							Kill()
+						EndIf
 					End If
 				EndIf
 				;[End Block]
