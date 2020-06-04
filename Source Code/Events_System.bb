@@ -265,7 +265,6 @@ Function QuickLoadEvents()
 	
 	Local e.Events = QuickLoad_CurrEvent
 	Local r.Rooms, sc.SecurityCams, sc2.SecurityCams, Scale#, Pvt%, n.NPCs, Tex%, i%, x#, z#
-	Local o.Objects = First Objects
 	
 	; ~ Might be a good idea to use QuickLoadPercent to determine the "steps" of the loading process 
 	; ~ Instead of magic values in e\eventState and e\eventStr
@@ -500,11 +499,7 @@ Function UpdateEvents()
 	Local p.Particles, n.NPCs, r.Rooms, e.Events, e2.Events, it.Items, it2.Items, em.Emitters, sc.SecurityCams, sc2.SecurityCams
 	Local CurrTrigger$ = ""
 	Local x#, y#, z#
-	Local Angle#
-	Local o.Objects = First Objects
-	Local tt.TextureTemplate = First TextureTemplate
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
-	Local msg.Messages = First Messages
+	Local Angle#, GroupDesignation$
 	
 	CurrStepSFX = 0
 	
@@ -965,19 +960,13 @@ Function UpdateEvents()
 											UseDoor(e\room\RoomDoors[5], False)
 											e\room\RoomDoors[5]\Locked = True
 											
-											em.Emitters = CreateEmitter(PlayerRoom\x - (2976.0 + 1024.0) * RoomScale, 373.0 * RoomScale, PlayerRoom\z + 204.0 * RoomScale, 0)
+											em.Emitters = CreateEmitter(PlayerRoom\x - (2976.0 + 1024.0) * RoomScale, PlayerRoom\y + 373.0 * RoomScale, PlayerRoom\z + 204.0 * RoomScale, 0)
+											em\RandAngle = 7.0 : em\Speed = 0.03 : em\SizeChange = 0.003 : em\Room = PlayerRoom
 											TurnEntity(em\OBJ, 90.0, 0.0, 0.0, True)
-											em\RandAngle = 7.0
-											em\Speed = 0.03
-											em\SizeChange = 0.003
-											em\Room = PlayerRoom
 											
-											em.Emitters = CreateEmitter(PlayerRoom\x - (3168.0 + 1024.0) * RoomScale, 373.0 * RoomScale, PlayerRoom\z + 204.0 * RoomScale, 0)
+											em.Emitters = CreateEmitter(PlayerRoom\x - (3168.0 + 1024.0) * RoomScale, PlayerRoom\y + 373.0 * RoomScale, PlayerRoom\z + 204.0 * RoomScale, 0)
+											em\RandAngle = 7.0 : em\Speed = 0.03 : em\SizeChange = 0.003 : em\Room = PlayerRoom
 											TurnEntity(em\OBJ, 90.0, 0.0, 0.0, True)
-											em\RandAngle = 7.0
-											em\Speed = 0.03
-											em\SizeChange = 0.003
-											em\Room = PlayerRoom
 										EndIf
 										EyeIrritation = Max(EyeIrritation + fpst\FPSFactor[0] * 4.0, 1.0)
 									EndIf
@@ -2472,7 +2461,7 @@ Function UpdateEvents()
 						e\room\RoomDoors[0]\Open = False
 						e\room\RoomDoors[1]\Open = False
 						
-						If Curr106\State > 0.0 ; ~ SCP-106 circles around the starting room
+						If Curr106\State > 0.0 Then ; ~ SCP-106 circles around the starting room
 							Angle = (e\EventState / 10.0 Mod 360.0)
 							PositionEntity(Curr106\Collider, EntityX(e\room\OBJ), 0.2 + 0.35 + Sin(e\EventState / 14.0 + i * 20.0) * 0.4, EntityX(e\room\OBJ))
 							RotateEntity(Curr106\Collider, 0.0, Angle, 0.0)
@@ -2515,7 +2504,7 @@ Function UpdateEvents()
 						TranslateEntity(e\room\Objects[10], Sin(e\EventState * 1.6) * 4.0, 0.0, Cos(e\EventState * 0.8) * 5.0, True)
 						RotateEntity(e\room\Objects[10], 0.0, e\EventState * 2.0, 0.0)
 						
-						If e\EventState3 = 1.0 Or e\EventState3 = 2.0 Then ;the "trick room"
+						If e\EventState3 = 1.0 Or e\EventState3 = 2.0 Then
 							If e\EventState3 = 1.0 And (e\room\RoomDoors[0]\OpenState > 150.0 Or e\room\RoomDoors[1]\OpenState > 150.0) Then
 								PlaySound_Strict(LoadTempSound("SFX\Horror\Horror16.ogg"))
 								BlurTimer = 800.0
@@ -6803,7 +6792,7 @@ Function UpdateEvents()
 				;[Block]
 				If PlayerRoom = e\room Then
 					If I_714\Using = 0 And WearingHazmat < 3 And WearingGasMask < 3 Then
-						If EntityDistance(Collider, e\room\Objects[3]) < 0.9 Or (e\EventState > 0.0 And e\EventState < 7.0) Then
+						If EntityDistance(Collider, e\room\Objects[3]) < 0.9 Or e\EventState > 0.0 Then
 							If e\EventState = 0.0 Then BlurTimer = 1000.0
 					        CameraShake = 1.0
 							If e\Sound3 = 0 Then e\Sound3 = LoadSound_Strict("SFX\SCP\1123\Ambient.ogg")
@@ -6811,7 +6800,7 @@ Function UpdateEvents()
 					    EndIf
 				    EndIf
 					; ~ The event is started when the player picks up SCP-1123 (in Items.bb/UpdateItems())
-					If e\EventState > 0.0 And e\EventState < 7.0 Then
+					If e\EventState > 0.0 Then
 						CanSave = False
 					EndIf
 					If e\EventState = 1.0 Then
@@ -6861,7 +6850,7 @@ Function UpdateEvents()
 								PlaySound2(LoadTempSound("SFX\SCP\1123\Officer2.ogg"), Camera, e\room\NPC[0]\OBJ)
 							EndIf
 							e\room\NPC[0]\State = 3.0
-							AnimateNPC(e\room\NPC[0], 3.0, 26.0, 0.2, True)
+							AnimateNPC(e\room\NPC[0], 3.0, 26.0, 0.2)
 							If EntityDistance(Collider, e\room\Objects[4]) > 392.0 * RoomScale Then
 								BlinkTimer = -10.0
 								BlurTimer = 500.0
@@ -6972,7 +6961,6 @@ Function UpdateEvents()
 						PrevBloodloss = 0.0
 						PrevSecondaryLightOn = 0.0
 						If (Not Crouch) Then SetCrouch(True)
-						CanSave = True
 						For i = 0 To MaxItemAmount - 1
 							If Inventory(i) <> Null Then
 								If Inventory(i)\ItemTemplate\Name = "Leaflet"
@@ -6990,41 +6978,40 @@ Function UpdateEvents()
 							EndIf
 						EndIf
 						
-						e\EventState2 = -1
+						RemoveEvent(e)
+					ElseIf e\EventState = 8.0 ; ~ If SCP-1123 was touched again
+						BlurTimer = 1000.0
+						Injuries = 1.5
 						
-						;RemoveNPC(e\room\NPC[0])
-						;RemoveEvent(e)	
+						PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[14], True), EntityY(e\room\Objects[14], True), EntityZ(e\room\Objects[14], True), True)
+						ResetEntity(e\room\NPC[0]\Collider)
 						
-					ElseIf e\EventState = 8.0
-							CanSave = False
-							BlurTimer = 100.0
-							Injuries = 1.5
-							
-							PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[14], True), EntityY(e\room\Objects[14], True), EntityZ(e\room\Objects[14], True))
-							ResetEntity(e\room\NPC[0]\Collider)
-							
-							PositionEntity(Collider, EntityX(e\room\Objects[15], True), EntityX(e\room\Objects[14], EntityX(e\room\Objects[5], True)
-							ResetEntity(Collider)
+						PositionEntity(Collider, EntityX(e\room\Objects[15], True), EntityY(e\room\Objects[15], True), EntityZ(e\room\Objects[15], True), True)
+						ResetEntity(Collider)
 						
-							If e\EventState3 = 0.0 Then
+						If e\room\NPC[0]\Sound <> 0 Then
+							FreeSound_Strict(e\room\NPC[0]\Sound) : e\room\NPC[0]\Sound = 0
+						EndIf
+						PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Dialogue.ogg"))
+						
+						e\EventState = 9.0
+					ElseIf e\EventState = 9.0
+						AnimateNPC(e\room\NPC[0], 3.0, 26.0, 0.2)
+						PointEntity(e\room\NPC[0]\Collider, Collider)
+						If e\EventState3 = 0.0 Then
 							For i = 0 To 1
-								em.Emitters = CreateEmitter(EntityX(e\room\Objects[15] + (128.0 * i)*RoomScale, True), EntityY(e\room\Objects[15], True), EntityZ(e\room\Objects[15], True), 0)
-								TurnEntity(em\OBJ, 90.0, 0.0, 0.0, True)
+								em.Emitters = CreateEmitter(EntityX(e\room\Objects[i + 15], True), -105.0 * RoomScale, EntityZ(e\room\Objects[i + 15], True), 0)
+								em\Size = 0.08 : em\RandAngle = 10.0 : em\Speed = 0.06 : em\SizeChange = 0.007 : em\Achange = -0.006
+								TurnEntity(em\OBJ, 90.0, 0.0, 0.0)
 								EntityParent(em\OBJ, e\room\OBJ)
-								em\Size = 0.05 : em\RandAngle = 10 : em\Speed = 0.06 : em\SizeChange = 0.007
-								For z = 0 To Ceil(3.3333 * (ParticleAmount + 1))
-									p.Particles = CreateParticle(EntityX(em\OBJ, True), 448.0 * RoomScale, EntityZ(em\OBJ, True), Rand(em\MinImage, em\MaxImage), em\Size, em\Gravity, em\LifeTime)
-									p\Speed = em\Speed : p\size = 0.05 : p\SizeChange = 0.008
-									RotateEntity(p\Pvt, Rnd(360.0), Rnd(360.0), 0.0, True)
-								Next
 							Next
-							e\EventState3 = e\EventState3 + fpst\FPSFactor[0]	
-							EndIf		
-						If e\EventState3 > 1500.0
-							ShowEntity(tt\OverlayID[7])
-							LightFlash = 7.0
-								
-							If Rand(3) = 1 Then
+							e\EventState3 = 1.0
+						Else
+							e\EventState3 = e\EventState3 + fpst\FPSFactor[0]
+						EndIf
+						
+						If e\EventState3 > 1500.0 Then
+							If Rand(2) = 1 Then
 								GroupDesignation = "Nine-Tailed Fox"
 							Else
 								GroupDesignation = "See No Evil"
@@ -7034,8 +7021,9 @@ Function UpdateEvents()
 							msg\DeathMsg = msg\DeathMsg + " in chinese. SCP-1123 was found in [DATA REDACTED] nearby, suggesting the subject had come into physical contact with it. How "
 							msg\DeathMsg = msg\DeathMsg + "exactly SCP-1123 was removed from its containment chamber is still unknown."
 							Kill()
+							RemoveEvent(e)
 						EndIf
-					End If
+					EndIf
 				EndIf
 				;[End Block]
 			Case "room2testroom2"
@@ -9046,7 +9034,6 @@ End Function
 
 Function UpdateDimension1499()
 	Local e.Events, n.NPCs, n2.NPCs, r.Rooms, it.Items, i%, j%, du.Dummy1499_1, Temp%, Scale#, x%, y%
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
 	
 	For e.Events = Each Events
 		If e\EventName = "dimension1499"
@@ -9386,10 +9373,6 @@ End Function
 Function UpdateEndings()
 	Local Dist#, i%, Pvt%
 	Local e.Events, n.NPCs, r.Rooms, p.Particles
-	Local o.Objects = First Objects
-	Local tt.TextureTemplate = First TextureTemplate
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
-	Local msg.Messages = First Messages
 	
 	For e.Events = Each Events
 		Select e\EventName
@@ -10341,7 +10324,6 @@ End Function
 
 Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 	Local PrevEventState# = EventState
-	Local fpst.FramesPerSecondsTemplate = First FramesPerSecondsTemplate
 	
 	If EventState < 0.0 Then
 		EventState = 0.0
@@ -10456,6 +10438,7 @@ Function GenerateRandomIA()
 		EndIf
 	Next
 End Function
+
 ;~IDEal Editor Parameters:
-;~B#1238#1E64
+;~B#122D#1E58
 ;~C#Blitz3D

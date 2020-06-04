@@ -610,6 +610,7 @@ Function PickItem(item.Items)
 	Local CanPickItem = True
 	Local FullINV% = True
 	Local GroupDesignation$
+	Local e.Events
 	
 	For n = 0 To MaxItemAmount - 1
 		If Inventory(n) = Null
@@ -658,15 +659,14 @@ Function PickItem(item.Items)
 										ShowEntity(tt\OverlayID[7])
 										LightFlash = 3.0
 										PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))
-									EndIf
-									e\EventState = Max(1.0, e\EventState)
-									ElseIf e\EventState = 7.0 Then
+										e\EventState = 1.0
+									ElseIf e\EventState = 3.0 Then
 										ShowEntity(tt\OverlayID[7])
 										LightFlash = 3.0
 										PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))
+										e\EventState = 8.0
+										Exit
 									EndIf
-									e\EventState = Max(8.0, e\EventState)
-									Exit
 								EndIf
 							Next
 						EndIf
@@ -953,6 +953,7 @@ Function Update294()
 	
 	CatchErrors("Update294")
 End Function
+
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D
