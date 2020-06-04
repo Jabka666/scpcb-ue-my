@@ -89,8 +89,8 @@ Bug Fixes:
 
 - Small fixes for room2testroom's event.
 - Small fixes for commands "disablenuke" and "enablecontrol/disablecontrol.
-- Small fixes for gateaentrance's walls.
-- Small fixes for gateb's walls.
+- Small fixes for gateb and gateaentrance's walls.
 - Small fixes for syringes' positions in room2medibay and room2medibay2.
+- Small fixes for room2medibay2 and room2medibay's walls.
 - Small fixes for room2pipes and room2pipes2.
-- Small fixes for ending tunnel in gatea.
+- Small fixes for ending tunnel in the Gate A.
