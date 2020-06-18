@@ -46,7 +46,6 @@ Global Fresize_Image%, Fresize_Texture%, Fresize_Texture2%
 Global Fresize_Cam%
 
 Global WireFrameState%
-Global HalloweenTex%, NewYearTex%
 
 Global TotalGFXModes% = CountGfxModes3D(), GFXModes%
 Dim GfxModeWidths%(TotalGFXModes), GfxModeHeights%(TotalGFXModes)
@@ -1124,14 +1123,14 @@ Function UpdateConsole()
 					;[End Block]
 				Case "halloween"
 					;[Block]
-					HalloweenTex = (Not HalloweenTex)
-					If HalloweenTex Then
+					tt\MiscTextureID[14] = (Not tt\MiscTextureID[14])
+					If tt\MiscTextureID[14] Then
 						Tex = LoadTexture_Strict("GFX\npcs\scp_173_H.png", 1)
 						EntityTexture(Curr173\OBJ, Tex, 0, 0)
 						FreeTexture(Tex)
 						CreateConsoleMsg("173 JACK-O-LANTERN ON")
 					Else
-						If NewYearTex Then NewYearTex = (Not NewYearTex)
+						If tt\MiscTextureID[15] Then tt\MiscTextureID[15] = (Not tt\MiscTextureID[15])
 						Tex2 = LoadTexture_Strict("GFX\npcs\scp_173.png", 1)
 						EntityTexture(Curr173\OBJ, Tex2, 0, 0)
 						FreeTexture(Tex2)
@@ -1140,14 +1139,14 @@ Function UpdateConsole()
 					;[End Block]
 				Case "newyear" 
 					;[Block]
-					NewYearTex = (Not NewYearTex)
-					If NewYearTex Then
+					tt\MiscTextureID[15] = (Not tt\MiscTextureID[15])
+					If tt\MiscTextureID[15] Then
 						Tex = LoadTexture_Strict("GFX\npcs\scp_173_NY.png", 1)
 						EntityTexture(Curr173\OBJ, Tex, 0, 0)
 						FreeTexture(Tex)
 						CreateConsoleMsg("173 COOKIE ON")
 					Else
-						If HalloweenTex Then HalloweenTex= (Not HalloweenTex)
+						If tt\MiscTextureID[14] Then tt\MiscTextureID[14] = (Not tt\MiscTextureID[14])
 						Tex2 = LoadTexture_Strict("GFX\npcs\scp_173.png", 1)
 						EntityTexture(Curr173\OBJ, Tex2, 0, 0)
 						FreeTexture(Tex2)
@@ -3735,11 +3734,11 @@ Function DrawCredits()
 	EndIf
 End Function
 
-Function SetCrouch(IsCrouch%)
+Function SetCrouch(NewCrouch%)
 	If Stamina > 5.0 Then 
-		Crouch = IsCrouch
-		PlaySound_Strict(CrouchSFX)
-		Stamina = Stamina - 20.0
+		If NewCrouch <> Crouch Then PlaySound_Strict(CrouchSFX)
+		Crouch = NewCrouch
+		Stamina = Stamina - Rnd(15.0, 25.0)
 	EndIf
 End Function
 
@@ -3747,7 +3746,6 @@ Function MovePlayer()
 	CatchErrors("Uncaught (MovePlayer)")
 	
 	Local Sprint# = 1.0, Speed# = 0.018, i%, Angle#
-	Local Temporary#
 	
 	If chs\SuperMan Then
 		Speed = Speed * 3.0
@@ -3824,8 +3822,7 @@ Function MovePlayer()
 	EndIf
 	
 	If I_409\Timer > 10.0 Then 
-		Temporary = I_409\Timer / 15.0
-		Stamina = Max(Stamina, Temporary)
+		Stamina = Max(Stamina, I_409\Timer / 15.0)
 	EndIf
 	
 	If IsZombie Then 
@@ -3897,12 +3894,8 @@ Function MovePlayer()
 		EndIf
 	EndIf
 	
-	If KeyHit(KEY_CROUCH) And Playable And (Not IsZombie) And Bloodloss < 60.0 And I_427\Timer < 70.0 * 390.0 Then 
-		If Crouch = False Then
-			SetCrouch(True)
-		Else
-			SetCrouch(False)
-		EndIf
+	If KeyHit(KEY_CROUCH) And Playable And (Not IsZombie) And Bloodloss < 60.0 And I_427\Timer < 70.0 * 390.0 And (Not chs\NoClip) Then 
+		SetCrouch((Not Crouch))
 	EndIf
 	
 	Local Temp2# = (Speed * Sprint) / (1.0 + CrouchState)
@@ -4529,7 +4522,7 @@ Function DrawGUI()
 		Rect(x - 50 - 1, y - 1, 30 + 2, 30 + 2, False)
 		If Crouch Then
 			DrawImage(tt\IconID[2], x - 50, y)
-		ElseIf KeyDown(KEY_SPRINT)
+		ElseIf KeyDown(KEY_SPRINT) And CurrSpeed > 0.0 And (Not chs\NoClip) And Stamina > 0.0
 			DrawImage(tt\IconID[1], x - 50, y)
 		Else
 			DrawImage(tt\IconID[0], x - 50, y)
@@ -5709,8 +5702,6 @@ Function DrawGUI()
 						CurrSpeed = CurveValue(0.0, CurrSpeed, 5.0)
 						If (Not Crouch) Then SetCrouch(True)
 						
-						Playable = False
-						
 						DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
 						Width = 300.0
@@ -5795,7 +5786,6 @@ Function DrawGUI()
 									End Select
 								EndIf
 								msg\Timer = 70.0 * 6.0
-								Playable = True
 								RemoveItem(SelectedItem)
 								SelectedItem = Null
 							EndIf
@@ -7070,7 +7060,6 @@ Function DrawGUI()
 					SelectedItem\ItemTemplate\Img = 0
 				ElseIf IN = "firstaid" Or IN = "finefirstaid" Or IN = "firstaid2"
 					SelectedItem\State = 0.0
-					Playable = True
 				ElseIf IN = "vest" Or IN = "finevest"
 					SelectedItem\State = 0.0
 					If (Not WearingVest) Then
@@ -10881,7 +10870,6 @@ Function Update409()
 		ElseIf I_409\Timer > 94.0 Then
 			I_409\Timer = Min(I_409\Timer + fpst\FPSFactor[0] * 0.004, 100.0)
 			Playable = False
-			CanBreathe = False
 			BlurTimer = 4.0
 			CameraShake = 3.0
 		EndIf
@@ -11641,5 +11629,5 @@ Function InjurePlayer(Injuries_#, Infection# = 0.0, BlurTimer_# = 0.0, WithVest%
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#FF3#137A#1BF2
+;~B#FEC#1373#1BE7
 ;~C#Blitz3D

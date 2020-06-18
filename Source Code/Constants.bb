@@ -81,7 +81,7 @@ Const NAN# = (-1.0) ^ 0.5
 
 Const MaxDTextures% = 16
 
-Const MaxMiscTextureIDAmount% = 14
+Const MaxMiscTextureIDAmount% = 16
 
 Const MaxMonitorTextureIDAmount% = 5
 

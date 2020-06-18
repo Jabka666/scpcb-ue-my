@@ -4999,7 +4999,7 @@ Function UpdateEvents()
 								;[Block]
 							Case 60.0
 								;[Block]
-								If (Not HalloweenTex) Then
+								If (Not tt\MiscTextureID[14]) Then
 									Local Tex970% = LoadTexture_Strict("GFX\npcs\scp_173_H.png", 1)
 									
 									EntityTexture(Curr173\OBJ, Tex970, 0, 0)

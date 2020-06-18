@@ -73,7 +73,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			
 			; ~ On Halloween set Jack-o'-lantern texture
 			If (Left(CurrentDate(), 7) = "31 Oct ") Then
-				HalloweenTex = True
+				tt\MiscTextureID[14] = True
 				TexFestive = LoadTexture_Strict("GFX\npcs\scp_173_H.png", 1)
 				EntityTexture(n\OBJ, TexFestive, 0, 0)
 				FreeTexture(TexFestive)
@@ -81,7 +81,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			
 			; ~ On New Year set cookie texture
 			If (Left(CurrentDate(), 7) = "01 Jan ") Then
-				NewYearTex = True
+				tt\MiscTextureID[15] = True
 				TexFestive = LoadTexture_Strict("GFX\npcs\scp_173_NY.png", 1)
 				EntityTexture(n\OBJ, TexFestive, 0, 0)
 				FreeTexture(TexFestive)
