@@ -311,78 +311,6 @@ Function QuickLoadEvents()
 				EndIf
 			EndIf
 			;[End Block]
-		Case "room3storage"
-			;[Block]
-			If e\room\NPC[0] = Null Then
-				e\room\NPC[0] = CreateNPC(NPCtype939, 0.0, 0.0, 0.0)
-				QuickLoadPercent = 16
-			ElseIf e\room\NPC[1] = Null
-				e\room\NPC[1] = CreateNPC(NPCtype939, 0.0, 0.0, 0.0)
-				QuickLoadPercent = 32
-			ElseIf e\room\NPC[2] = Null
-				e\room\NPC[2] = CreateNPC(NPCtype939, 0.0, 0.0, 0.0)
-				QuickLoadPercent = 48
-			ElseIf e\room\NPC[3] = Null
-				e\room\NPC[3] = CreateNPC(NPCtype939, 0.0, 0.0, 0.0)
-				QuickLoadPercent = 62
-			ElseIf e\room\NPC[4] = Null
-				e\room\NPC[4] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[17], True), EntityY(e\room\Objects[17], True), EntityZ(e\room\Objects[17], True))
-				TurnEntity(e\room\NPC[4]\Collider, 0.0, e\room\Angle + 90.0, 0.0)
-				ChangeNPCTextureID(e\room\NPC[4], 14)
-				e\room\NPC[4]\State = 3.0
-				SetNPCFrame(e\room\NPC[4], 40.0)
-				QuickLoadPercent = 78
-			ElseIf e\room\NPC[5] = Null
-				e\room\NPC[5] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[18], True), EntityY(e\room\Objects[18], True), EntityZ(e\room\Objects[18], True))
-				TurnEntity(e\room\NPC[5]\Collider, 0.0, e\room\Angle + 90.0, 0.0)
-				ChangeNPCTextureID(e\room\NPC[5], 15)
-				e\room\NPC[5]\State = 8.0
-				SetNPCFrame(e\room\NPC[5], 19.0)
-				QuickLoadPercent = 100
-			Else
-				If QuickLoadPercent > -1 Then QuickLoadPercent = 100
-			EndIf
-			;[End Block]
-		Case "room049"
-			;[Block]
-			If e\EventState = 0.0 Then
-				If e\EventStr = "Load0"
-					n.NPCs = CreateNPC(NPCtype049_2, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True))
-					PointEntity(n\Collider, e\room\OBJ)
-					TurnEntity(n\Collider, 0.0, 190.0, 0.0)
-					QuickLoadPercent = 20
-					e\EventStr = "Load1"
-				ElseIf e\EventStr = "Load1"
-					n.NPCs = CreateNPC(NPCtype049_2, EntityX(e\room\Objects[5], True), EntityY(e\room\Objects[5], True), EntityZ(e\room\Objects[5], True))
-					PointEntity(n\Collider, e\room\OBJ)
-					TurnEntity(n\Collider, 0.0, 20.0, 0.0)
-					QuickLoadPercent = 60
-					e\EventStr = "Load2"
-				ElseIf e\EventStr = "Load2"
-					For n.NPCs = Each NPCs
-						If n\NPCtype = NPCtype049
-							e\room\NPC[0] = n
-							e\room\NPC[0]\State = 2.0
-							e\room\NPC[0]\Idle = 1
-							e\room\NPC[0]\HideFromNVG = True
-							PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True) + 3, EntityZ(e\room\Objects[4], True))
-							ResetEntity(e\room\NPC[0]\Collider)
-							Exit
-						EndIf
-					Next
-					If e\room\NPC[0] = Null
-						n.NPCs = CreateNPC(NPCtype049, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True) + 3, EntityZ(e\room\Objects[4], True))
-						PointEntity(n\Collider, e\room\OBJ)
-						n\State = 2.0
-						n\Idle = 1
-						n\HideFromNVG = True
-						e\room\NPC[0] = n
-					EndIf
-					QuickLoadPercent = 100
-					e\EventState = 1.0
-				EndIf
-			EndIf
-			;[End Block]
 		Case "room205"
 			;[Block]
 			If e\EventState = 0 Or e\EventStr <> "LoadDone" Then
@@ -5137,15 +5065,30 @@ Function UpdateEvents()
 					If EntityY(Collider) < -4600.0 * RoomScale Then
 						GiveAchievement(Achv939)
 						
-						BlurTimer = Min(BlurTimer + (fpst\FPSFactor[0] * 1.1), 1000.0)
+						BlurTimer = Min(BlurTimer + (fpst\FPSFactor[0] * 1.05), 1000.0)
 						
 						ShouldPlay = 7
 						
-						If e\room\NPC[0] = Null Or e\room\NPC[1] = Null Or e\room\NPC[2] = Null Or e\room\NPC[3] = Null Then
-							If QuickLoadPercent = -1 Then
-								QuickLoadPercent = 0
-								QuickLoad_CurrEvent = e
-							EndIf
+						If e\room\NPC[0] = Null Or e\room\NPC[1] = Null Or e\room\NPC[2] = Null Or e\room\NPC[3] = Null Or e\room\NPC[4] = Null Or e\room\NPC[5] = Null Then
+							e\room\NPC[0] = CreateNPC(NPCtype939, 0.0, 0.0, 0.0)
+							
+							e\room\NPC[1] = CreateNPC(NPCtype939, 0.0, 0.0, 0.0)
+							
+							e\room\NPC[2] = CreateNPC(NPCtype939, 0.0, 0.0, 0.0)
+							
+							e\room\NPC[3] = CreateNPC(NPCtype939, 0.0, 0.0, 0.0)
+							
+							e\room\NPC[4] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[17], True), EntityY(e\room\Objects[17], True), EntityZ(e\room\Objects[17], True))
+							e\room\NPC[4]\State = 3.0
+							ChangeNPCTextureID(e\room\NPC[4], 14)
+							SetNPCFrame(e\room\NPC[4], 40.0)
+							TurnEntity(e\room\NPC[4]\Collider, 0.0, e\room\Angle + 90.0, 0.0)
+							
+							e\room\NPC[5] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[18], True), EntityY(e\room\Objects[18], True), EntityZ(e\room\Objects[18], True))
+							e\room\NPC[5]\State = 8.0
+							ChangeNPCTextureID(e\room\NPC[5], 15)
+							SetNPCFrame(e\room\NPC[5], 19.0)
+							TurnEntity(e\room\NPC[5]\Collider, 0.0, e\room\Angle + 90.0, 0.0)
 						Else
 							If e\EventState = 0.0 Then
 								; ~ Instance # 1
@@ -5902,11 +5845,30 @@ Function UpdateEvents()
 						ShouldPlay = 25
 						
 						If e\EventState = 0.0 Then
-							If e\EventStr = "" And QuickLoadPercent = -1
-								QuickLoadPercent = 0
-								QuickLoad_CurrEvent = e
-								e\EventStr = "Load0"
+							n.NPCs = CreateNPC(NPCtype049_2, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True))
+							PointEntity(n\Collider, e\room\OBJ)
+							TurnEntity(n\Collider, 0.0, 190.0, 0.0)
+							
+							n.NPCs = CreateNPC(NPCtype049_2, EntityX(e\room\Objects[5], True), EntityY(e\room\Objects[5], True), EntityZ(e\room\Objects[5], True))
+							PointEntity(n\Collider, e\room\OBJ)
+							TurnEntity(n\Collider, 0.0, 20.0, 0.0)
+							
+							For n.NPCs = Each NPCs
+								If n\NPCtype = NPCtype049
+									e\room\NPC[0] = n
+									e\room\NPC[0]\State = 2.0 : e\room\NPC[0]\Idle = 1 : e\room\NPC[0]\HideFromNVG = True
+									PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True) + 3.0, EntityZ(e\room\Objects[4], True))
+									ResetEntity(e\room\NPC[0]\Collider)
+									Exit
+								EndIf
+							Next
+							If e\room\NPC[0] = Null
+								n.NPCs = CreateNPC(NPCtype049, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True) + 3, EntityZ(e\room\Objects[4], True))
+								PointEntity(n\Collider, e\room\OBJ)
+								n\State = 2.0 : n\Idle = 1 : n\HideFromNVG = True
+								e\room\NPC[0] = n
 							EndIf
+							
 							PlaySound_Strict(LoadTempSound("SFX\Room\Blackout.ogg"))
 							If EntityDistance(e\room\Objects[11], Collider) < EntityDistance(e\room\Objects[12], Collider) Then
 								it = CreateItem("Research Sector-02 Scheme", "paper", EntityX(e\room\Objects[11], True), EntityY(e\room\Objects[11], True), EntityZ(e\room\Objects[11], True))
@@ -5915,6 +5877,8 @@ Function UpdateEvents()
 								it = CreateItem("Research Sector-02 Scheme", "paper", EntityX(e\room\Objects[12], True), EntityY(e\room\Objects[12], True), EntityZ(e\room\Objects[12], True))
 								EntityType(it\Collider, HIT_ITEM)
 							EndIf
+							
+							e\EventState = 1.0
 						ElseIf e\EventState > 0.0
 							Local PrevGenLever%
 							
@@ -7487,8 +7451,10 @@ Function UpdateEvents()
 							
 							e\EventState2 = Min(e\EventState2 + fpst\FPSFactor[0] / 200.0, 2.0)
 							
-							If e\EventState2 >= 0.2 Then BlinkTimer = -10.0
-							
+							LightBlink = Min(e\EventState2 * 5.0, 10.0)
+							If wi\NightVision > 0 Then
+								If e\EventState2 >= 0.2 Then BlinkTimer = -10.0
+							EndIf
 							BlurTimer = e\EventState2 * 500.0
 							
 							If e\EventState2 = 2.0 Then MoveToPocketDimension()
@@ -10436,5 +10402,5 @@ Function GenerateRandomIA()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#122F#1E5A
+;~B#11E7#1E38
 ;~C#Blitz3D
