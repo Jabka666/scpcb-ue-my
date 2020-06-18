@@ -11630,6 +11630,8 @@ End Function
 Function PlayStartupVideos()
 	If PlayStartup = 0 Then Return
 	
+	HidePointer()
+	
 	fo\FontID[0] = LoadFont_Strict("GFX\font\cour\Courier New.ttf", Int(18 * (GraphicHeight / 1024.0)), 0, 0, 0)
 	
 	Local ScaledGraphicHeight%
@@ -11658,11 +11660,13 @@ Function PlayStartupVideos()
 				MovieFile = "GFX\menu\startup_UET"
 				;[End Block]
 		End Select
-		BlitzMovie_OpenD3D(MovieFile + ".avi", SystemProperty("Direct3DDevice7"), SystemProperty("DirectDraw7"))
 		
-		Local MovieW% = BlitzMovie_GetWidth()
-		Local MovieH% = BlitzMovie_GetHeight()
+		Local SplashScreenVideo% = BlitzMovie_OpenD3D(MovieFile + ".avi", SystemProperty("Direct3DDevice7"), SystemProperty("DirectDraw7"))
 		
+		If SplashScreenVideo = 0 Then
+			PutINIValue(OptionFile, "Global", "Play Startup Video", 0)
+			Return
+		EndIf
 		SplashScreenVideo = BlitzMovie_Play()
 		
 		Local SplashScreenAudio% = StreamSound_Strict(MovieFile + ".ogg", SFXVolume, 0)
@@ -11679,10 +11683,13 @@ Function PlayStartupVideos()
 		BlitzMovie_Stop()
 		BlitzMovie_Close()
 		
+		If i = 3 Then FreeFont(fo\FontID[0])
+		
 		Cls
 		Flip
 	Next
-	FreeFont(fo\FontID[0])
+	
+	ShowPointer()
 End Function
 
 Function CanUseItem(CanUseWithGasMask%, CanUseWithEyewear%)
