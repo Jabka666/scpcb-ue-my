@@ -4039,7 +4039,7 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "room205"
 			;[Block]
-			r\RoomDoors[1] = CreateDoor(r\Zone, r\x + 128.0 * RoomScale, r\y, r\z + 640.0 *RoomScale, 90.0, r, False, False, 3)
+			r\RoomDoors[1] = CreateDoor(r\Zone, r\x + 128.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 90.0, r, False, False, 3)
 			r\RoomDoors[1]\AutoClose = False
 			
 			r\RoomDoors[0] = CreateDoor(r\Zone, r\x - 1392.0 * RoomScale, r\y - 128.0 * RoomScale, r\z - 384.0 * RoomScale, 0.0, r, False, False, 3, "", True)
@@ -4068,6 +4068,10 @@ Function FillRoom(r.Rooms)
 			EntityParent(r\Objects[0], r\OBJ)
 			
 			r\Objects[1] = sc\ScrOBJ
+			
+			it = CreateItem("Document SCP-205", "paper", r\x + 56.0 * RoomScale, r\y + 320.0 * RoomScale, r\z - 286.0 * RoomScale)
+			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
+			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case "room1endroom"
 			;[Block]
@@ -4608,80 +4612,92 @@ Function FillRoom(r.Rooms)
 							Case Chance < 40 ; ~ 40% chance for a document
 								;[Block]
 								TempStr = "Document SCP-"
-								Select Rand(19)
+								Select Rand(22)
 									Case 1
 										;[Block]
-										TempStr = TempStr + "008"
+										TempStr = TempStr + "005"
 										;[End Block]
 									Case 2
 										;[Block]
-										TempStr = TempStr + "012"
+										TempStr = TempStr + "008"
 										;[End Block]
 									Case 3
 										;[Block]
-										TempStr = TempStr + "035"
+										TempStr = TempStr + "012"
 										;[End Block]
 									Case 4
 										;[Block]
-										TempStr = TempStr + "049"
+										TempStr = TempStr + "035"
 										;[End Block]
 									Case 5
 										;[Block]
-										TempStr = TempStr + "096"
+										TempStr = TempStr + "049"
 										;[End Block]
 									Case 6
 										;[Block]
-										TempStr = TempStr + "106"
+										TempStr = TempStr + "096"
 										;[End Block]
 									Case 7
 										;[Block]
-										TempStr = TempStr + "173"
+										TempStr = TempStr + "106"
 										;[End Block]
 									Case 8
 										;[Block]
-										TempStr = TempStr + "513"
+										TempStr = TempStr + "173"
 										;[End Block]
 									Case 9
 										;[Block]
-										TempStr = TempStr + "682"
+										TempStr = TempStr + "205"
 										;[End Block]
 									Case 10
 										;[Block]
-										TempStr = TempStr + "714"
+										TempStr = TempStr + "409"
 										;[End Block]
 									Case 11
 										;[Block]
-										TempStr = TempStr + "860"
+										TempStr = TempStr + "513"
 										;[End Block]
 									Case 12
 										;[Block]
-										TempStr = TempStr + "860-1"
+										TempStr = TempStr + "682"
 										;[End Block]
 									Case 13
 										;[Block]
-										TempStr = TempStr + "895"
+										TempStr = TempStr + "714"
 										;[End Block]
 									Case 14
 										;[Block]
-										TempStr = TempStr + "939"
+										TempStr = TempStr + "860"
 										;[End Block]
 									Case 15
 										;[Block]
-										TempStr = TempStr + "966"
+										TempStr = TempStr + "860-1"
 										;[End Block]
 									Case 16
 										;[Block]
-										TempStr = TempStr + "970"
+										TempStr = TempStr + "895"
 										;[End Block]
 									Case 17
 										;[Block]
-										TempStr = TempStr + "1048"
+										TempStr = TempStr + "939"
 										;[End Block]
 									Case 18
 										;[Block]
-										TempStr = TempStr + "1162"
+										TempStr = TempStr + "966"
 										;[End Block]
 									Case 19
+										;[Block]
+										TempStr = TempStr + "970"
+										;[End Block]
+									Case 20
+										;[Block]
+										TempStr = TempStr + "1048"
+										;[End Block]
+									Case 21
+										;[Block]
+										TempStr = TempStr + "1162"
+										;[End Block]
+									Case 22
 										;[Block]
 										TempStr = TempStr + "1499"
 										;[End Block]
@@ -8787,5 +8803,5 @@ End Function
 
 
 ;~IDEal Editor Parameters:
-;~B#11F6
+;~B#11FA
 ;~C#Blitz3D

@@ -9126,7 +9126,10 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 			Select Setting
 				Case "Rough", "Coarse"
 					;[Block]
-					it2 = CreateItem("Paper Strips", "misc", x, y, z)
+					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0)
+					d\Size = 0.2
+					EntityAlpha(d\OBJ, 0.8)
+					ScaleSprite(d\OBJ, d\Size, d\Size)
 					
 					For i = 0 To 19
 						If item\SecondInv[i] <> Null Then RemoveItem(item\SecondInv[i])
@@ -9157,7 +9160,10 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 			Select Setting
 				Case "Rough", "Coarse"
 					;[Block]
-					it2 = CreateItem("Paper Strips", "misc", x, y, z)
+					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0)
+					d\Size = 0.2
+					EntityAlpha(d\OBJ, 0.8)
+					ScaleSprite(d\OBJ, d\Size, d\Size)
 					
 					For i = 0 To 19
 						If item\SecondInv[i] <> Null Then RemoveItem(item\SecondInv[i])
@@ -10023,91 +10029,107 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
-		Case "Paper Strips", "Origami"
+		Case "Origami"
 			Select Setting
-				Case "Rough", "Coarse"
+				Case "Rough"
 					;[Block]
 					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0)
 					d\Size = 0.2
 					EntityAlpha(d\OBJ, 0.8)
 					ScaleSprite(d\OBJ, d\Size, d\Size)
 					;[End Block]
+				Case "Coarse"
+					;[Block]
+					it2 = CreateItem("Blank Paper", "paper", x, y, z)
+					;[End Block]
 				Case "1:1", "Very Fine", "Fine"
 					;[Block]
-					Select Rand(19)
+					Select Rand(22)
 						Case 1
 							;[Block]
-							it2 = CreateItem("Document SCP-008", "paper", x, y, z)
+							it2 = CreateItem("Document SCP-005", "paper", x, y, z)
 							;[End Block]
 						Case 2
 							;[Block]
-							it2 = CreateItem("Document SCP-012", "paper", x, y, z)
+							it2 = CreateItem("Document SCP-008", "paper", x, y, z)
 							;[End Block]
 						Case 3
 							;[Block]
-							it2 = CreateItem("Document SCP-035", "paper", x, y, z)
+							it2 = CreateItem("Document SCP-012", "paper", x, y, z)
 							;[End Block]
 						Case 4
 							;[Block]
-							it2 = CreateItem("Document SCP-049", "paper", x, y, z)
+							it2 = CreateItem("Document SCP-035", "paper", x, y, z)
 							;[End Block]
 						Case 5
 							;[Block]
-							it2 = CreateItem("Document SCP-096", "paper", x, y, z)
+							it2 = CreateItem("Document SCP-049", "paper", x, y, z)
 							;[End Block]
 						Case 6
 							;[Block]
-							it2 = CreateItem("Document SCP-106", "paper", x, y, z)
+							it2 = CreateItem("Document SCP-096", "paper", x, y, z)
 							;[End Block]
 						Case 7
 							;[Block]
-							it2 = CreateItem("Document SCP-173", "paper", x, y, z)
+							it2 = CreateItem("Document SCP-106", "paper", x, y, z)
 							;[End Block]
 						Case 8
 							;[Block]
-							it2 = CreateItem("Document SCP-513", "paper", x, y, z)
+							it2 = CreateItem("Document SCP-173", "paper", x, y, z)
 							;[End Block]
 						Case 9
 							;[Block]
-							it2 = CreateItem("Document SCP-682", "paper", x, y, z)
+							it2 = CreateItem("Document SCP-205", "paper", x, y, z)
 							;[End Block]
 						Case 10
 							;[Block]
-							it2 = CreateItem("Document SCP-714", "paper", x, y, z)
+							it2 = CreateItem("Document SCP-409", "paper", x, y, z)
 							;[End Block]
 						Case 11
 							;[Block]
-							it2 = CreateItem("Document SCP-860", "paper", x, y, z)
+							it2 = CreateItem("Document SCP-513", "paper", x, y, z)
 							;[End Block]
 						Case 12
 							;[Block]
-							it2 = CreateItem("Document SCP-860-1", "paper", x, y, z)
+							it2 = CreateItem("Document SCP-682", "paper", x, y, z)
 							;[End Block]
 						Case 13
 							;[Block]
-							it2 = CreateItem("Document SCP-895", "paper", x, y, z)
+							it2 = CreateItem("Document SCP-714", "paper", x, y, z)
 							;[End Block]
 						Case 14
 							;[Block]
-							it2 = CreateItem("Document SCP-939", "paper", x, y, z)
+							it2 = CreateItem("Document SCP-860", "paper", x, y, z)
 							;[End Block]
 						Case 15
 							;[Block]
-							it2 = CreateItem("Document SCP-966", "paper", x, y, z)
+							it2 = CreateItem("Document SCP-860-1", "paper", x, y, z)
 							;[End Block]
 						Case 16
 							;[Block]
-							it2 = CreateItem("Document SCP-970", "paper", x, y, z)
+							it2 = CreateItem("Document SCP-895", "paper", x, y, z)
 							;[End Block]
 						Case 17
 							;[Block]
-							it2 = CreateItem("Document SCP-1048", "paper", x, y, z)
+							it2 = CreateItem("Document SCP-939", "paper", x, y, z)
 							;[End Block]
 						Case 18
 							;[Block]
-							it2 = CreateItem("Document SCP-1162", "paper", x, y, z)
+							it2 = CreateItem("Document SCP-966", "paper", x, y, z)
 							;[End Block]
 						Case 19
+							;[Block]
+							it2 = CreateItem("Document SCP-970", "paper", x, y, z)
+							;[End Block]
+						Case 20
+							;[Block]
+							it2 = CreateItem("Document SCP-1048", "paper", x, y, z)
+							;[End Block]
+						Case 21
+							;[Block]
+							it2 = CreateItem("Document SCP-1162", "paper", x, y, z)
+							;[End Block]
+						Case 22
 							;[Block]
 							it2 = CreateItem("Document SCP-1499", "paper", x, y, z)
 							;[End Block]
@@ -10162,86 +10184,105 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 				Case "paper"
 					;[Block]
 					Select Setting
-						Case "Rough", "Coarse"
+						Case "Rough"
 							;[Block]
-							it2 = CreateItem("Paper Strips", "misc", x, y, z)
+							d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0)
+							d\Size = 0.2
+							EntityAlpha(d\OBJ, 0.8)
+							ScaleSprite(d\OBJ, d\Size, d\Size)
+							;[End Block]
+						Case "Coarse"
+							;[Block]
+							it2 = CreateItem("Blank Paper", "paper", x, y, z)
 							;[End Block]
 						Case "1:1"
 							;[Block]
-							Select Rand(19)
+							Select Rand(22)
 								Case 1
 									;[Block]
-									it2 = CreateItem("Document SCP-008", "paper", x, y, z)
+									it2 = CreateItem("Document SCP-005", "paper", x, y, z)
 									;[End Block]
 								Case 2
 									;[Block]
-									it2 = CreateItem("Document SCP-012", "paper", x, y, z)
+									it2 = CreateItem("Document SCP-008", "paper", x, y, z)
 									;[End Block]
 								Case 3
 									;[Block]
-									it2 = CreateItem("Document SCP-035", "paper", x, y, z)
+									it2 = CreateItem("Document SCP-012", "paper", x, y, z)
 									;[End Block]
 								Case 4
 									;[Block]
-									it2 = CreateItem("Document SCP-049", "paper", x, y, z)
+									it2 = CreateItem("Document SCP-035", "paper", x, y, z)
 									;[End Block]
 								Case 5
 									;[Block]
-									it2 = CreateItem("Document SCP-096", "paper", x, y, z)
+									it2 = CreateItem("Document SCP-049", "paper", x, y, z)
 									;[End Block]
 								Case 6
 									;[Block]
-									it2 = CreateItem("Document SCP-106", "paper", x, y, z)
+									it2 = CreateItem("Document SCP-096", "paper", x, y, z)
 									;[End Block]
 								Case 7
 									;[Block]
-									it2 = CreateItem("Document SCP-173", "paper", x, y, z)
+									it2 = CreateItem("Document SCP-106", "paper", x, y, z)
 									;[End Block]
 								Case 8
 									;[Block]
-									it2 = CreateItem("Document SCP-513", "paper", x, y, z)
+									it2 = CreateItem("Document SCP-173", "paper", x, y, z)
 									;[End Block]
 								Case 9
 									;[Block]
-									it2 = CreateItem("Document SCP-682", "paper", x, y, z)
+									it2 = CreateItem("Document SCP-205", "paper", x, y, z)
 									;[End Block]
 								Case 10
 									;[Block]
-									it2 = CreateItem("Document SCP-714", "paper", x, y, z)
+									it2 = CreateItem("Document SCP-409", "paper", x, y, z)
 									;[End Block]
 								Case 11
 									;[Block]
-									it2 = CreateItem("Document SCP-860", "paper", x, y, z)
+									it2 = CreateItem("Document SCP-513", "paper", x, y, z)
 									;[End Block]
 								Case 12
 									;[Block]
-									it2 = CreateItem("Document SCP-860-1", "paper", x, y, z)
+									it2 = CreateItem("Document SCP-682", "paper", x, y, z)
 									;[End Block]
 								Case 13
 									;[Block]
-									it2 = CreateItem("Document SCP-895", "paper", x, y, z)
+									it2 = CreateItem("Document SCP-714", "paper", x, y, z)
 									;[End Block]
 								Case 14
 									;[Block]
-									it2 = CreateItem("Document SCP-939", "paper", x, y, z)
+									it2 = CreateItem("Document SCP-860", "paper", x, y, z)
 									;[End Block]
 								Case 15
 									;[Block]
-									it2 = CreateItem("Document SCP-966", "paper", x, y, z)
+									it2 = CreateItem("Document SCP-860-1", "paper", x, y, z)
 									;[End Block]
 								Case 16
 									;[Block]
-									it2 = CreateItem("Document SCP-970", "paper", x, y, z)
+									it2 = CreateItem("Document SCP-895", "paper", x, y, z)
 									;[End Block]
 								Case 17
 									;[Block]
-									it2 = CreateItem("Document SCP-1048", "paper", x, y, z)
+									it2 = CreateItem("Document SCP-939", "paper", x, y, z)
 									;[End Block]
 								Case 18
 									;[Block]
-									it2 = CreateItem("Document SCP-1162", "paper", x, y, z)
+									it2 = CreateItem("Document SCP-966", "paper", x, y, z)
 									;[End Block]
 								Case 19
+									;[Block]
+									it2 = CreateItem("Document SCP-970", "paper", x, y, z)
+									;[End Block]
+								Case 20
+									;[Block]
+									it2 = CreateItem("Document SCP-1048", "paper", x, y, z)
+									;[End Block]
+								Case 21
+									;[Block]
+									it2 = CreateItem("Document SCP-1162", "paper", x, y, z)
+									;[End Block]
+								Case 22
 									;[Block]
 									it2 = CreateItem("Document SCP-1499", "paper", x, y, z)
 									;[End Block]

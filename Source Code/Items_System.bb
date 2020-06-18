@@ -109,6 +109,7 @@ Function InitItemTemplates()
 	CreateItemTemplate("Document SCP-096", "paper", ItemsPath + "paper.x", ItemsPath + "INV_paper.png", ItemsPath + "doc_096.png", 0.003, 0)
 	CreateItemTemplate("Document SCP-106", "paper", ItemsPath + "paper.x", ItemsPath + "INV_paper.png", ItemsPath + "doc_106.png", 0.003, 0)
 	CreateItemTemplate("Document SCP-173", "paper", ItemsPath + "paper.x", ItemsPath + "INV_paper.png", ItemsPath + "doc_173.png", 0.003, 0)
+	CreateItemTemplate("Document SCP-205", "paper", ItemsPath + "paper.x", ItemsPath + "INV_paper.png", ItemsPath + "doc_205.png", 0.003, 0)
 	CreateItemTemplate("Document SCP-372", "paper", ItemsPath + "paper.x", ItemsPath + "INV_paper.png", ItemsPath + "doc_372.png", 0.003, 0)
 	CreateItemTemplate("Document SCP-409", "paper", ItemsPath + "paper.x", ItemsPath + "INV_paper.png", ItemsPath + "doc_409.png", 0.003, 0)
 	CreateItemTemplate("Document SCP-500", "paper", ItemsPath + "paper.x", ItemsPath + "INV_paper.png", ItemsPath + "doc_500.png", 0.003, 0)
@@ -164,6 +165,8 @@ Function InitItemTemplates()
 	
 	CreateItemTemplate("The Modular Site Project", "paper", ItemsPath + "paper.x", ItemsPath + "INV_paper.png", ItemsPath + "doc_MSP.png", 0.003, 0)
 	
+	CreateItemTemplate("Blank Paper", "paper", ItemsPath + "paper.x", ItemsPath + "INV_paper_blank.png", ItemsPath + "doc_blank.png", 0.003, 0, ItemsPath + "paper_blank.png")
+	
 	CreateItemTemplate("Blood-stained Note", "paper", ItemsPath + "note.x", ItemsPath + "INV_note_bloody.png", ItemsPath + "note_L(3).png", 0.0025, 0, ItemsPath + "note_bloody.png")
 	
 	it = CreateItemTemplate("Burnt Note", "paper", ItemsPath + "paper.x", ItemsPath + "INV_burnt_note.png", ItemsPath + "note_Maynard.png", 0.003, 0, ItemsPath + "burnt_note.png")
@@ -204,8 +207,6 @@ Function InitItemTemplates()
 	CreateItemTemplate("Old Badge", "badge", ItemsPath + "badge.x", ItemsPath + "INV_D_9341_badge.png", ItemsPath + "D_9341_badge_HUD.png", 0.0001, 1, ItemsPath + "D_9341_badge.png", "", 0, 1 + 2 + 8)
 	
 	CreateItemTemplate("Origami", "misc", ItemsPath + "origami.b3d", ItemsPath + "INV_origami.png", "", 0.003, 0)
-	
-	CreateItemTemplate("Paper Strips", "misc", ItemsPath + "paper_strips.x", ItemsPath + "INV_paper_strips.png", "", 0.003, 0)
 	
 	CreateItemTemplate("Scorched Note", "paper", ItemsPath + "paper.x", ItemsPath + "INV_burnt_note.png", ItemsPath + "note_L(6).png", 0.0025, 0, ItemsPath + "burnt_note.png")
 	
@@ -310,7 +311,7 @@ Function InitItemTemplates()
 	
 	; ~ [KEYCARDS, KEYS, CARDS, COINS]
 	
-	CreateItemTemplate("Coin", "coin", ItemsPath + "coin.b3d", ItemsPath + "INV_coin.png", "", 0.0005, 3)
+	CreateItemTemplate("Coin", "coin", ItemsPath + "coin.b3d", ItemsPath + "INV_coin_rusty.png", "", 0.0005, 3, ItemsPath + "coin_rusty.png")
 	
 	CreateItemTemplate("Level 0 Key Card", "key0", ItemsPath + "key_card.x", ItemsPath + "INV_key_card_lvl_0.png", "", 0.0004, 1, ItemsPath + "key_card_lvl_0.png")
 	CreateItemTemplate("Level 1 Key Card", "key1", ItemsPath + "key_card.x", ItemsPath + "INV_key_card_lvl_1.png", "", 0.0004, 1, ItemsPath + "key_card_lvl_1.png")
