@@ -866,7 +866,7 @@ Function UpdateMainMenu()
 					;[End Block]
 				ElseIf MainMenuTab = 6 ; ~ Controls
 					;[Block]
-					Height = 280 * MenuScale
+					Height = 300 * MenuScale
 					DrawFrame(x, y, Width, Height)	
 					
 					y = y + 20 * MenuScale
@@ -923,6 +923,8 @@ Function UpdateMainMenu()
 					InputBox(x + 470 * MenuScale, y + 80 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\CROUCH, 210.0)], 10)	
 					AAText(x + 280 * MenuScale, y + 100 * MenuScale, "Open/Close Console")
 					InputBox(x + 470 * MenuScale, y + 100 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210.0)], 12)
+					AAText(x + 280 * MenuScale, y + 120 * MenuScale, "Take Screenshot")
+					InputBox(x + 470 * MenuScale, y + 120 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, 210.0)], 13)
 					
 					If MouseOn(x + 20 * MenuScale, y, Width - 40 * MenuScale, 120 * MenuScale)
 						DrawOptionsTooltip(tX, tY, tW, tH, "controls")
@@ -974,6 +976,10 @@ Function UpdateMainMenu()
 							Case 12
 								;[Block]
 								key\CONSOLE = TempKey
+								;[End Block]
+							Case 13
+								;[Block]
+								key\SCREENSHOT = TempKey
 								;[End Block]
 						End Select
 						SelectedInputBox = 0

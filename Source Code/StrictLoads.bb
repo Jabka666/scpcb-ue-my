@@ -84,7 +84,7 @@ Function PlaySound_Strict%(SNDHandle%)
 					Else
 						snd\Channels[i] = PlaySound(snd\InternalHandle)
 					EndIf
-					ChannelVolume(snd\Channels[i], SFXVolume#)
+					ChannelVolume(snd\Channels[i], SFXVolume)
 					snd\ReleaseTime = MilliSecs2() + 5000 ; ~ Release after 5 seconds
 					Return(snd\Channels[i])
 				EndIf
@@ -107,7 +107,7 @@ Function PlaySound_Strict%(SNDHandle%)
 				Else
 					snd\Channels[i] = PlaySound(snd\InternalHandle)
 				EndIf
-				ChannelVolume(snd\Channels[i], SFXVolume#)
+				ChannelVolume(snd\Channels[i], SFXVolume)
 				snd\ReleaseTime = MilliSecs2() + 5000 ; ~ Release after 5 seconds
 				Return(snd\Channels[i])
 			EndIf
@@ -265,13 +265,13 @@ End Function
 Function UpdateStreamSoundOrigin(StreamHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0)
 	Range = Max(Range, 1.0)
 	
-	If Volume > 0 Then
+	If Volume > 0.0 Then
 		Local Dist# = EntityDistance(Cam, Entity) / Range
 		
 		If 1.0 - Dist > 0.0 And 1.0 - Dist < 1.0 Then
 			Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 			
-			SetStreamVolume_Strict(StreamHandle, Volume * (1 - Dist) * SFXVolume#)
+			SetStreamVolume_Strict(StreamHandle, Volume * (1.0 - Dist) * SFXVolume)
 			SetStreamPan_Strict(StreamHandle, PanValue)
 		Else
 			SetStreamVolume_Strict(StreamHandle, 0.0)

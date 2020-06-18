@@ -2987,6 +2987,38 @@ Repeat
 	EntityBlend(Fresize_Image, 1)
 	EntityAlpha(Fresize_Image, 1.0)
 	
+	Local x%, y%, ScreenshotCount%
+	
+	If KeyHit(key\SCREENSHOT) Then
+		If FileType("Screenshots\") <> 2 Then
+			CreateDir("Screenshots")
+		EndIf
+		
+		Local Bank% = CreateBank(RealGraphicWidth * RealGraphicHeight * 3)
+		
+		LockBuffer(BackBuffer())
+		For x = 0 To RealGraphicWidth - 1
+			For y = 0 To RealGraphicHeight - 1
+				Local Pixel% = ReadPixelFast(x, y, BackBuffer())
+				
+				PokeByte(Bank, (y * (RealGraphicWidth * 3)) + (x * 3), (Pixel Shr 0) And $FF)
+				PokeByte(Bank, (y * (RealGraphicWidth * 3)) + (x * 3) + 1, (Pixel Shr 8) And $FF)
+				PokeByte(Bank, (y * (RealGraphicWidth * 3)) + (x * 3) + 2, (Pixel Shr 16) And $FF)
+			Next
+		Next
+		UnlockBuffer(BackBuffer())
+		
+		Local fiBuffer% = FI_ConvertFromRawBits(Bank, RealGraphicWidth, RealGraphicHeight, RealGraphicWidth * 3, 24, $FF0000, $00FF00, $0000FF, True)
+		
+		FI_Save(FIF_PNG, fiBuffer, "Screenshots\Screenshot" + ScreenshotCount + ".png", 0)
+		FI_Unload(fiBuffer)
+		FreeBank(Bank)
+		ScreenshotCount = ScreenshotCount + 1
+		msg\Msg = "Screenshot Taken."
+		msg\Timer = 70.0 * 6
+		PlaySound_Strict(LoadTempSound("SFX\General\Screenshot.ogg"))
+	EndIf
+	
 	CatchErrors("Main loop / uncaught")
 	
 	If VSync = 0 Then
@@ -7467,6 +7499,8 @@ Function DrawMenu()
 					InputBox(x + 200 * MenuScale, y + 180 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\SAVE, 210.0)], 11)	
 					AAText(x, y + 200 * MenuScale, "Open/Close Console")
 					InputBox(x + 200 * MenuScale, y + 200 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210.0)], 12)
+					AAText(x, y + 220 * MenuScale, "Take Screenshot")
+					InputBox(x + 200 * MenuScale, y + 220 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, 210.0)], 13)
 					
 					If MouseOn(x, y, 300 * MenuScale, 220 * MenuScale)
 						DrawOptionsTooltip(tX, tY, tW, tH, "controls")
@@ -7518,6 +7552,10 @@ Function DrawMenu()
 							Case 12
 								;[Block]
 								key\CONSOLE = TempKey
+								;[End Block]
+							Case 13
+								;[Block]
+								key\SCREENSHOT = TempKey
 								;[End Block]
 						End Select
 						SelectedInputBox = 0
@@ -8659,7 +8697,7 @@ End Function
 Function InitLoadGame()
 	CatchErrors("Uncaught (InitLoadGame)")
 	
-	Local d.Doors, sc.SecurityCams, rt.RoomTemplates, e.Events, i%
+	Local d.Doors, sc.SecurityCams, rt.RoomTemplates, e.Events, i%, x#, z#
 	
 	DrawLoading(80)
 	
@@ -8719,8 +8757,8 @@ Function InitLoadGame()
 				DrawLoading(96)
 				CreateChunkParts(e\room)
 				DrawLoading(97)
-				x# = EntityX(e\room\OBJ)
-				z# = EntityZ(e\room\OBJ)
+				x = EntityX(e\room\OBJ)
+				z = EntityZ(e\room\OBJ)
 				
 				Local ch.Chunk
 				
@@ -8990,7 +9028,7 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	OptionsMenu = -1
 	QuitMsg = -1
-	AchievementsMenu% = -1
+	AchievementsMenu = -1
 	
 	MusicVolume = PrevMusicVolume
 	SFXVolume = PrevSFXVolume
@@ -11704,5 +11742,5 @@ Function InjurePlayer(Injuries_#, Infection# = 0.0, BlurTimer_# = 0.0, WithVest%
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1003#138A#1BFC
+;~B#1023#13AA#1C1C
 ;~C#Blitz3D
