@@ -7701,7 +7701,7 @@ Function UpdateEvents()
 										;[End Block]
 									Case "Fine", "Very Fine"
 										;[Block]
-										SuperMan = True
+										chs\SuperMan = True
 										;[End Block]
 								End Select
 								BlurTimer = 1000.0
@@ -9619,11 +9619,7 @@ Function UpdateEndings()
 												ShouldPlay = 0
 												CurrSpeed = 0.0
 												PlaySound_Strict LoadTempSound("SFX\Ending\GateB\Gunshot.ogg")
-												chs\GodMode = False
-												chs\NoClip = False
-												chs\InfiniteStamina = False
-												chs\NoBlink = False
-												chs\Cheats = False
+												ClearCheats(chs)
 												LightFlash = 20.0
 												KillTimer = -0.1
 												msg\DeathMsg = ""
@@ -10130,10 +10126,7 @@ Function UpdateEndings()
 											
 											SelectedEnding = "A1"
 											chs\GodMode = 0
-											chs\NoClip = 0
-											chs\NoBlink = 0
-											chs\InfiniteStamina = 0
-											chs\Cheats = 0
+											ClearCheats(chs)
 											KillTimer = -0.1
 											msg\DeathMsg = ""
 											Kill()
@@ -10198,11 +10191,7 @@ Function UpdateEndings()
 										If ChannelPlaying(e\SoundCHN) = False Then
 											PlaySound_Strict(IntroSFX(7))
 											SelectedEnding = "A2"
-											chs\GodMode = 0
-											chs\NoClip = 0
-											chs\NoBlink = 0
-											chs\InfiniteStamina = 0
-											chs\Cheats = 0
+											ClearCheats(chs)
 											LightFlash = 20.0
 											KillTimer = -0.1
 											msg\DeathMsg = ""

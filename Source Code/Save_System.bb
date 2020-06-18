@@ -110,8 +110,8 @@ Function SaveGame(File$)
 		WriteFloat(f, 0.0)
 	EndIf
 	
-	WriteByte(f, SuperMan)
-	WriteFloat(f, SuperManTimer)
+	WriteByte(f, chs\SuperMan)
+	WriteFloat(f, chs\SuperManTimer)
 	WriteByte(f, LightsOn)
 	
 	WriteString(f, RandomSeed)
@@ -578,8 +578,8 @@ Function LoadGame(File$)
 	Local r1499_x# = ReadFloat(f)
 	Local r1499_z# = ReadFloat(f)
 	
-	SuperMan = ReadByte(f)
-	SuperManTimer = ReadFloat(f)
+	chs\SuperMan = ReadByte(f)
+	chs\SuperManTimer = ReadFloat(f)
 	LightsOn = ReadByte(f)
 	
 	RandomSeed = ReadString(f)
@@ -1314,12 +1314,7 @@ Function LoadGameQuick(File$)
 	FallTimer = 0.0
 	MenuOpen = False
 	
-	chs\Cheats = 0
-	chs\GodMode = 0
-	chs\InfiniteStamina = 0
-	chs\NoBlink = 0
-	chs\NoClip = 0
-	chs\NoTarget = 0
+	ClearCheats(chs)
 	WireFrame(0)
 	
 	PlayTime = ReadInt(f)
@@ -1416,8 +1411,8 @@ Function LoadGameQuick(File$)
 	Local r1499_x# = ReadFloat(f)
 	Local r1499_z# = ReadFloat(f)
 	
-	SuperMan = ReadByte(f)
-	SuperManTimer = ReadFloat(f)
+	chs\SuperMan = ReadByte(f)
+	chs\SuperManTimer = ReadFloat(f)
 	LightsOn = ReadByte(f)
 	
 	RandomSeed = ReadString(f)

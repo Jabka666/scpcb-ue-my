@@ -242,8 +242,6 @@ Global HeartBeatRate#, HeartBeatTimer#, HeartBeatVolume#
 Global WearingGasMask%, WearingHazmat%, WearingVest%, WearingNightVision%, WearingHelmet%
 Global NVTimer#
 
-Global SuperMan%, SuperManTimer#
-
 Global Injuries#, Bloodloss#, HealTimer#
 
 Global RefinedItems%
@@ -262,18 +260,28 @@ Global GrabbedEntity%
 
 Global MouseHit1%, MouseDown1%, MouseHit2%, DoubleClick%, LastMouseHit1%, MouseUp1%
 
-Global NoClipSpeed# = 2.0
-
 Type Cheats
 	Field GodMode%
 	Field NoBlink%
 	Field NoTarget%
-	Field NoClip%
+	Field NoClip%, NoClipSpeed#
 	Field InfiniteStamina%
-	Field Cheats%
+	Field SuperMan%, SuperManTimer#
 End Type
 
+Function ClearCheats(chs.Cheats)
+	chs\GodMode = 0
+	chs\NoBlink = 0
+	chs\NoTarget = 0
+	chs\NoClip = 0
+	chs\NoClipSpeed = 2.0
+	chs\InfiniteStamina = 0
+	chs\SuperMan = 0
+	chs\SuperManTimer = 0.0
+End Function
+
 Global chs.Cheats = New Cheats
+ClearCheats(chs)
 
 Global CoffinDistance# = 100.0
 
@@ -580,7 +588,6 @@ Function UpdateConsole()
 							;[Block]
 							CreateConsoleMsg("LIST OF COMMANDS - PAGE 1 / 3")
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("- camerapick")
 							CreateConsoleMsg("- ending")
 							CreateConsoleMsg("- notarget")
 							CreateConsoleMsg("- godmode")
@@ -588,15 +595,16 @@ Function UpdateConsole()
 							CreateConsoleMsg("- noclipspeed")
 							CreateConsoleMsg("- infinitestamina")
 							CreateConsoleMsg("- noblink")
-							CreateConsoleMsg("- cheats")
+							CreateConsoleMsg("- asd")
 							CreateConsoleMsg("- revive")
 							CreateConsoleMsg("- heal")
 							CreateConsoleMsg("- wireframe")
-							CreateConsoleMsg("- 173speed")
-							CreateConsoleMsg("- 106speed")
-							CreateConsoleMsg("- 173state")
-							CreateConsoleMsg("- 106state")
-							CreateConsoleMsg("- 096state")
+							CreateConsoleMsg("- halloween")
+							CreateConsoleMsg("- newyear") 
+							CreateConsoleMsg("- sanic")
+							CreateConsoleMsg("- weed")
+							CreateConsoleMsg("- money")
+							CreateConsoleMsg("- debughud")
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("Use " + Chr(34) + "help 2 / 3" + Chr(34) + " to find more commands.")
 							CreateConsoleMsg("Use " + Chr(34) + "help [command name]" + Chr(34) + " to get more information about a command.")
@@ -616,12 +624,6 @@ Function UpdateConsole()
 							CreateConsoleMsg("- enable049")
 							CreateConsoleMsg("- disable966")
 							CreateConsoleMsg("- enable966")
-							CreateConsoleMsg("- halloween")
-							CreateConsoleMsg("- newyear") 
-							CreateConsoleMsg("- sanic")
-							CreateConsoleMsg("- weed")
-							CreateConsoleMsg("- money")
-							CreateConsoleMsg("- debughud")
 							CreateConsoleMsg("- enablecontrol") 
 							CreateConsoleMsg("- disablecontrol") 
 							CreateConsoleMsg("- unlockcheckpoints") 
@@ -639,7 +641,6 @@ Function UpdateConsole()
 							CreateConsoleMsg("- playmusic [clip + .wav / .ogg]")
 							CreateConsoleMsg("- camerafog [near] [far]")
 							CreateConsoleMsg("- spawn [npc type] [state]")
-							CreateConsoleMsg("- gamma [value]")
 							CreateConsoleMsg("- injure [value]")
 							CreateConsoleMsg("- infect [value]")
 							CreateConsoleMsg("- crystal [value]") 
@@ -658,15 +659,6 @@ Function UpdateConsole()
 							CreateConsoleMsg("away from the camera and becomes completely opaque")
 							CreateConsoleMsg("at 'CameraFogFar' units away from the camera.")
 							CreateConsoleMsg("Example: camerafog 20 40")
-							CreateConsoleMsg("******************************")
-							;[End Block]
-						Case "gamma"
-							;[Block]
-							CreateConsoleMsg("HELP - gamma")
-							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Sets the gamma correction.")
-							CreateConsoleMsg("Should be set to a value between 0.0 and 2.0.")
-							CreateConsoleMsg("Default is 1.0.")
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "noclip", "fly"
@@ -714,12 +706,6 @@ Function UpdateConsole()
 							CreateConsoleMsg("Makes player to be invisible for NPCs.")
 							CreateConsoleMsg("******************************")
 							;[End Block]
-						Case "cheats" 
-							CreateConsoleMsg("HELP - cheats")
-							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Actives GodMode, NoClip, NoTarget, InfiniteStamina and NoBlink")
-							CreateConsoleMsg("is specified (on / off).")
-							CreateConsoleMsg("******************************")
 						Case "wireframe", "wf"
 							;[Block]
 							CreateConsoleMsg("HELP - wireframe")
@@ -807,6 +793,13 @@ Function UpdateConsole()
 							CreateConsoleMsg("Turns off the Remote Door Control lever.")
 							CreateConsoleMsg("******************************")
 							;[End Block]
+						Case "asd"
+							;[Block]
+							CreateConsoleMsg("HELP - asd")
+							CreateConsoleMsg("******************************")
+							CreateConsoleMsg("Activates all cheats.")
+							CreateConsoleMsg("******************************")
+							;[End Block]
 						Case "unlockcheckpoints" 
 							;[Block]
 							CreateConsoleMsg("HELP - unlockcheckpoints")
@@ -866,14 +859,6 @@ Function UpdateConsole()
 							CreateConsoleMsg("Stops all currently playing sounds.")
 							CreateConsoleMsg("******************************")
 							;[End Block]
-						Case "camerapick"
-							;[Block]
-							CreateConsoleMsg("HELP - camerapick")
-							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Prints the texture name and coordinates of")
-							CreateConsoleMsg("the model the camera is pointing at.")
-							CreateConsoleMsg("******************************")
-							;[End Block]
 						Case "weed", "scp-420-j", "420j", "scp420-j", "scp-420j", "420"
 							;[Block]
 							CreateConsoleMsg("HELP - weed")
@@ -907,31 +892,6 @@ Function UpdateConsole()
 							;[End Block]
 					End Select
 					;[End Block]
-				Case "camerapick"
-					;[Block]
-					ConsoleR = 0 : ConsoleG = 255 : ConsoleB = 0
-					c = CameraPick(Camera, GraphicWidth / 2, GraphicHeight / 2)
-					If c = 0 Then
-						CreateConsoleMsg("******************************")
-						CreateConsoleMsg("No entity  picked")
-						CreateConsoleMsg("******************************")								
-					Else
-						CreateConsoleMsg("******************************")
-						CreateConsoleMsg("Picked entity:")
-						SF = GetSurface(c, 1)
-						b = GetSurfaceBrush(SF)
-						t = GetBrushTexture(b, 0)
-						TexName$ =  StripPath(TextureName(t))
-						CreateConsoleMsg("Texture name: " + TexName)
-						CreateConsoleMsg("Coordinates: " + EntityX(c) + ", " + EntityY(c) + ", " + EntityZ(c))
-						CreateConsoleMsg("******************************")							
-					EndIf
-					;[End Block]
-				Case "hidedistance"
-					;[Block]
-					HideDistance = Float(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
-					CreateConsoleMsg("Hidedistance set to " + HideDistance)
-					;[End Block]
 				Case "ending"
 					;[Block]
 					SelectedEnding = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
@@ -941,7 +901,7 @@ Function UpdateConsole()
 					;[Block]
 					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 					
-					NoClipSpeed = Float(StrTemp)
+					chs\NoClipSpeed = Float(StrTemp)
 					;[End Block]
 				Case "injure"
 					;[Block]
@@ -1072,32 +1032,6 @@ Function UpdateConsole()
 					
 					WireFrame(WireFrameState)
 					;[End Block]
-				Case "173speed"
-					;[Block]
-					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
-					Curr173\Speed = Float(StrTemp)
-					CreateConsoleMsg("173's speed set to " + StrTemp)
-					;[End Block]
-				Case "106speed"
-					;[Block]
-					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
-					Curr106\Speed = Float(StrTemp)
-					CreateConsoleMsg("106's speed set to " + StrTemp)
-					;[End Block]
-				Case "173state"
-					;[Block]
-					CreateConsoleMsg("SCP-173")
-					CreateConsoleMsg("Position: " + EntityX(Curr173\OBJ) + ", " + EntityY(Curr173\OBJ) + ", " + EntityZ(Curr173\OBJ))
-					CreateConsoleMsg("Idle: " + Curr173\Idle)
-					CreateConsoleMsg("State: " + Curr173\State)
-					;[End Block]
-				Case "106state"
-					;[Block]
-					CreateConsoleMsg("SCP-106")
-					CreateConsoleMsg("Position: " + EntityX(Curr106\OBJ) + ", " + EntityY(Curr106\OBJ) + ", " + EntityZ(Curr106\OBJ))
-					CreateConsoleMsg("Idle: " + Curr106\Idle)
-					CreateConsoleMsg("State: " + Curr106\State)
-					;[End Block]
 				Case "reset096"
 					;[Block]
 					For n.NPCs = Each NPCs
@@ -1222,8 +1156,8 @@ Function UpdateConsole()
 					;[End Block]
 				Case "sanic"
 					;[Block]
-					SuperMan = (Not SuperMan)
-					If SuperMan = True Then
+					chs\SuperMan = (Not chs\SuperMan)
+					If chs\SuperMan = True Then
 						CreateConsoleMsg("GOTTA GO FAST")
 					Else
 						CreateConsoleMsg("WHOA SLOW DOWN")
@@ -1282,11 +1216,7 @@ Function UpdateConsole()
 					FallTimer = 0.0
 					MenuOpen = False
 					
-					chs\Cheats = False
-					chs\InfiniteStamina = False
-					chs\NoClip = False
-					chs\NoBlink = False
-					chs\NoTarget = False
+					ClearCheats(chs)
 					
 					; ~ If death by SCP-173, enable GodMode, prevent instant death again -- Salvage
 					If Curr173\Idle Then
@@ -1362,54 +1292,6 @@ Function UpdateConsole()
 						CreateConsoleMsg("NOBLINK OFF")	
 					EndIf
 					;[End Block]
-				Case "cheats" 
-					;[Block]
-					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
-					
-					Select StrTemp
-						Case "on", "1", "true"
-							;[Block]
-							chs\Cheats = True	
-							;[End Block]
-						Case "off", "0", "false"
-							;[Block]
-	                        chs\Cheats = False
-							;[End Block]
-						Default
-							;[Block]
-							chs\Cheats = (Not chs\Cheats)
-							;[End Block]
-					End Select	
-					
-					If chs\Cheats = True Then
-                        chs\GodMode = True
-                        chs\NoTarget = True
-                        chs\NoClip = True
-                        chs\InfiniteStamina = True
-                        chs\NoBlink = True
-						CreateConsoleMsg("CHEATS ON")
-					Else
-					    chs\GodMode = False
-                        chs\NoTarget = False
-                        chs\NoClip = False
-                        chs\InfiniteStamina = False
-                        chs\NoBlink = False
-						CreateConsoleMsg("CHEATS OFF")	
-					EndIf
-					;[End Block]
-				Case "096state"
-					;[Block]
-					For n.NPCs = Each NPCs
-						If n\NPCtype = NPCtype096 Then
-							CreateConsoleMsg("SCP-096")
-							CreateConsoleMsg("Position: " + EntityX(n\OBJ) + ", " + EntityY(n\OBJ) + ", " + EntityZ(n\OBJ))
-							CreateConsoleMsg("Idle: " + n\Idle)
-							CreateConsoleMsg("State: " + n\State)
-							Exit
-						EndIf
-					Next
-					CreateConsoleMsg("SCP-096 has not spawned.")
-					;[End Block]
 				Case "debughud"
 					;[Block]
 					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
@@ -1472,12 +1354,6 @@ Function UpdateConsole()
 					CameraFogNear = Float(Left(Args, Len(Args) - Instr(Args, " ")))
 					CameraFogFar = Float(Right(Args, Len(Args) - Instr(Args, " ")))
 					CreateConsoleMsg("Near set to: " + CameraFogNear + ", far set to: " + CameraFogFar)
-					;[End Block]
-				Case "gamma"
-					;[Block]
-					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
-					ScreenGamma = Int(StrTemp)
-					CreateConsoleMsg("Gamma set to " + ScreenGamma)
 					;[End Block]
 				Case "spawn"
 					;[Block]
@@ -1678,18 +1554,6 @@ Function UpdateConsole()
 						If MusicCHN <> 0 Then StopChannel(MusicCHN)
 					EndIf
 					;[End Block]
-				Case "tp"
-					;[Block]
-					For n.NPCs = Each NPCs
-						If n\NPCtype = NPCtypeMTF Then
-							If n\MTFLeader = Null Then
-								PositionEntity(Collider, EntityX(n\Collider), EntityY(n\Collider) + 5.0, EntityZ(n\Collider))
-								ResetEntity(Collider)
-								Exit
-							EndIf
-						EndIf
-					Next
-					;[End Block]
 				Case "tele"
 					;[Block]
 					Args$ = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
@@ -1701,6 +1565,46 @@ Function UpdateConsole()
 					ResetEntity(Collider)
 					ResetEntity(Camera)
 					CreateConsoleMsg("Teleported to coordinates (X|Y|Z): " + EntityX(Collider) + "|" + EntityY(Collider) + "|" + EntityZ(Collider))
+					;[End Block]
+				Case "asd"
+					;[Block]
+					chs\NoBlink = True
+					chs\NoTarget = True
+					chs\NoClip = True
+					chs\GodMode = True
+					chs\InfiniteStamina = True
+					
+					CameraFogFar = 50.0
+					
+					For snd.Sound = Each Sound
+						For i = 0 To 31
+							If snd\Channels[i] <> 0 Then
+								StopChannel(snd\Channels[i])
+							EndIf
+						Next
+					Next
+					
+					If IntercomStreamCHN <> 0 Then
+						StopStream_Strict(IntercomStreamCHN)
+						IntercomStreamCHN = 0
+					EndIf
+					
+					For e.Events = Each Events
+						If e\EventName = "room173" Then 
+							If e\room\NPC[0] <> Null Then RemoveNPC(e\room\NPC[0])
+							If e\room\NPC[1] <> Null Then RemoveNPC(e\room\NPC[1])
+							If e\room\NPC[2] <> Null Then RemoveNPC(e\room\NPC[2])
+							
+							FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
+							FreeEntity(e\room\Objects[1]) : e\room\Objects[1] = 0
+							PositionEntity(Curr173\Collider, 0.0, 0.0, 0.0)
+							ResetEntity(Curr173\Collider)
+							ShowEntity(Curr173\OBJ)
+							RemoveEvent(e)
+							Exit
+						EndIf
+					Next
+					CreateConsoleMsg("Stopped all sounds.")
 					;[End Block]
 				Case "notarget", "nt"
 					;[Block]
@@ -1727,27 +1631,9 @@ Function UpdateConsole()
 						CreateConsoleMsg("NOTARGET ON")	
 					EndIf
 					;[End Block]
-				Case "spawnradio"
-					;[Block]
-					it.Items = CreateItem("Radio Transceiver", "fineradio", EntityX(Collider), EntityY(Camera, True), EntityZ(Collider))
-					EntityType(it\Collider, HIT_ITEM)
-					it\State = 101.0
-					;[End Block]
-				Case "spawnnvg"
-					;[Block]
-					it.Items = CreateItem("Night Vision Goggles", "nvgoggles", EntityX(Collider), EntityY(Camera, True), EntityZ(Collider))
-					EntityType(it\Collider, HIT_ITEM)
-					it\State = 1000.0
-					;[End Block]
 				Case "spawnpumpkin", "pumpkin"
 					;[Block]
 					CreateConsoleMsg("What pumpkin?")
-					;[End Block]
-				Case "spawnnav"
-					;[Block]
-					it.Items = CreateItem("S-NAV Navigator Ultimate", "nav", EntityX(Collider), EntityY(Camera, True), EntityZ(Collider))
-					EntityType(it\Collider, HIT_ITEM)
-					it\State = 101.0
 					;[End Block]
 				Case "teleport173"
 					;[Block]
@@ -1817,13 +1703,6 @@ Function UpdateConsole()
 					Curr106\State = 0.0
 					Curr106\Idle = False
 					;[End Block]
-				Case "setblinkeffect"
-					;[Block]
-					Args$ = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
-					BlinkEffect = Float(Left(Args, Len(Args) - Instr(Args, " ")))
-					BlinkEffectTimer = Float(Right(Args, Len(Args) - Instr(Args, " ")))
-					CreateConsoleMsg("Set BlinkEffect to: " + BlinkEffect + "and BlinkEffect timer: " + BlinkEffectTimer)
-					;[End Block]
 				Case "jorge"
 					;[Block]	
 					CreateConsoleMsg(Chr(74) + Chr(79) + Chr(82) + Chr(71) + Chr(69) + Chr(32) + Chr(72) + Chr(65) + Chr(83) + Chr(32) + Chr(66) + Chr(69) + Chr(69) + Chr(78) + Chr(32) + Chr(69) + Chr(88) + Chr(80) + Chr(69) + Chr(67) + Chr(84) + Chr(73) + Chr(78) + Chr(71) + Chr(32) + Chr(89) + Chr(79) + Chr(85) + Chr(46))
@@ -1872,11 +1751,10 @@ CreateConsoleMsg("Console commands: ")
 CreateConsoleMsg("  - teleport [room name]")
 CreateConsoleMsg("  - godmode [on / off]")
 CreateConsoleMsg("  - noclip [on / off]")
-CreateConsoleMsg("  - cheats [on / off]")
 CreateConsoleMsg("  - infinitestamina[on / off]")
 CreateConsoleMsg("  - noblink [on / off]")
 CreateConsoleMsg("  - notarget [on / off]")
-CreateConsoleMsg("  - noclipspeed [x] (default = 2.0)")
+CreateConsoleMsg("  - chs\NoClipSpeed [x] (default = 2.0)")
 CreateConsoleMsg("  - wireframe [on / off]")
 CreateConsoleMsg("  - debughud [on / off]")
 CreateConsoleMsg("  - camerafog [near] [far]")
@@ -3289,8 +3167,8 @@ Function MainLoop()
 		EndIf
 	EndIf
 	
-	If chs\InfiniteStamina Then Stamina = Min(100.0, Stamina + (100.0 - Stamina) * 0.01 * fpst\FPSFactor[0])
-	If chs\NoBlink Then BlinkTimer = Min(BLINKFREQ, BlinkTimer + (BLINKFREQ + BlinkTimer) * 0.01 * fpst\FPSFactor[0])
+	If chs\InfiniteStamina Then Stamina = 100.0
+	If chs\NoBlink Then BlinkTimer = BLINKFREQ
 	
 	If fpst\FPSFactor[0] = 0.0
 		UpdateWorld(0)
@@ -3871,14 +3749,14 @@ Function MovePlayer()
 	Local Sprint# = 1.0, Speed# = 0.018, i%, Angle#
 	Local Temporary#
 	
-	If SuperMan Then
+	If chs\SuperMan Then
 		Speed = Speed * 3.0
 		
-		SuperManTimer = SuperManTimer + fpst\FPSFactor[0]
+		chs\SuperManTimer = chs\SuperManTimer + fpst\FPSFactor[0]
 		
-		CameraShake = Sin(SuperManTimer / 5.0) * (SuperManTimer / 1500.0)
+		CameraShake = Sin(chs\SuperManTimer / 5.0) * (chs\SuperManTimer / 1500.0)
 		
-		If SuperManTimer > 70.0 * 50.0 Then
+		If chs\SuperManTimer > 70.0 * 50.0 Then
 			msg\DeathMsg = "A Class D jumpsuit found in [DATA REDACTED]. Upon further examination, the jumpsuit was found to be filled with 12.5 kilograms of blue ash-like substance. "
 			msg\DeathMsg = msg\DeathMsg + "Chemical analysis of the substance remains non-conclusive. Most likely related to SCP-914."
 			Kill()
@@ -4037,7 +3915,7 @@ Function MovePlayer()
 		
 		RotateEntity(Collider, WrapAngle(EntityPitch(Camera)), WrapAngle(EntityYaw(Camera)), 0.0)
 		
-		Temp2 = Temp2 * NoClipSpeed
+		Temp2 = Temp2 * chs\NoClipSpeed
 		
 		If KeyDown(KEY_DOWN) Then MoveEntity(Collider, 0.0, 0.0, (-Temp2) * fpst\FPSFactor[0])
 		If KeyDown(KEY_UP) Then MoveEntity(Collider, 0.0, 0.0, Temp2 * fpst\FPSFactor[0])
@@ -5885,7 +5763,7 @@ Function DrawGUI()
 									Select Rand(6)
 										Case 1
 											;[Block]
-											SuperMan = True
+											chs\SuperMan = True
 											msg\Msg = "You have becomed overwhelmedwithadrenalineholyshitWOOOOOO~!"
 											;[End Block]
 										Case 2
@@ -6140,7 +6018,7 @@ Function DrawGUI()
 							;[End Block]
 						Case 2
 							;[Block]
-							SuperMan = True
+							chs\SuperMan = True
 							msg\Msg = "You injected yourself with the syringe and feel a humongous adrenaline rush."
 							;[End Block]
 						Case 3
@@ -8863,13 +8741,6 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	msg\DeathMsg = ""
 	
-	chs\GodMode = False
-	chs\NoTarget = False
-	chs\InfiniteStamina = False
-	chs\NoBlink = False
-	chs\NoClip = False
-	chs\Cheats = False
-	
 	SelectedMap = ""
 	
 	UsedConsole = False
@@ -8895,7 +8766,6 @@ Function NullGame(PlayButtonSFX% = True)
 	Next
 	
 	DropSpeed = 0.0
-	Shake = 0.0
 	CurrSpeed = 0.0
 	
 	DeathTimer = 0.0
@@ -8926,17 +8796,21 @@ Function NullGame(PlayButtonSFX% = True)
 	Shake = 0.0
 	LightFlash = 0.0
 	
+	ClearCheats(chs)
 	WireFrameState = 0.0
 	WireFrame(0)
+	
 	WearingGasMask = 0
 	WearingHazmat = 0
 	WearingVest = 0
 	WearingHelmet = 0
-	I_714\Using = 0
 	If WearingNightVision Then
 		CameraFogFar = StoredCameraFogFar
 		WearingNightVision = 0
 	EndIf
+	
+	I_714\Using = 0
+	
 	I_427\Using = 0
 	I_427\Timer = 0.0
 	
@@ -8972,8 +8846,6 @@ Function NullGame(PlayButtonSFX% = True)
 	FallTimer = 0.0
 	Stamina = 100.0
 	BlurTimer = 0.0
-	SuperMan = False
-	SuperManTimer = 0.0
 	Sanity = 0.0
 	RestoreSanity = True
 	Crouch = False
@@ -11769,5 +11641,5 @@ Function InjurePlayer(Injuries_#, Infection# = 0.0, BlurTimer_# = 0.0, WithVest%
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#106D#13F4#1C6C
+;~B#FF3#137A#1BF2
 ;~C#Blitz3D
