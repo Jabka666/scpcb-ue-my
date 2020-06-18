@@ -47,7 +47,7 @@ Const Max_Deviation_Distance% = 3
 Const Return_Chance% = 27
 Const Center% = 5
 
-; ~ [MAP GENERATION]
+; ~ [MAP]
 
 Const MaxRoomLights% = 32
 Const MaxRoomEmitters% = 8
@@ -61,7 +61,9 @@ Const ROOM4% = 5
 
 Const ZONEAMOUNT% = 3
 
-Const GridSZ% = 19 ; ~ Same size as the main map itself (better for the map creator). What means "sz? - Jabka
+Const GridSZ% = 19 ; ~ Same size as the main map itself (better for the map creator)
+
+Const RoomScale# = 8.0 / 2048.0
 
 ; ~ [COLLISIONS]
 
@@ -81,7 +83,7 @@ Const NAN# = (-1.0) ^ 0.5
 
 Const MaxDTextures% = 16
 
-Const MaxMiscTextureIDAmount% = 16
+Const MaxMiscTextureIDAmount% = 18
 
 Const MaxMonitorTextureIDAmount% = 5
 

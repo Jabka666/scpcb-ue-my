@@ -7,6 +7,7 @@
 - Added more details to the Gate A.
 - Added sitting animation for hazmat suit.
 - Added sound for locked menu buttons.
+- Added red glowing for buttons.
 
 - Now guard in "room2elevator" event can kill the player if he too close.
 - Now the pass code for O5 Council's office drops from falling guard in SCP-895's event.
@@ -86,6 +87,7 @@ Bug Fixes:
 - Fixed type of the door in checkpoints-endrooms.
 - Fixed grammatical mistake for one of the SCP-1048's drawings.
 - Fixed SCP-1123 for SCP-714.
+- Fixed some buttons' positions.
 
 - Small fixes for room2testroom's event.
 - Small fixes for commands "disablenuke" and "enablecontrol/disablecontrol.

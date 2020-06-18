@@ -1999,7 +1999,7 @@ Global DoorTempID%
 
 Type Doors
 	Field OBJ%, OBJ2%, FrameOBJ%, Buttons%[2]
-	Field Locked%, Open%, Angle%, OpenState#, FastOpen%
+	Field Locked%, LockedUpdated%, Open%, Angle%, OpenState#, FastOpen%
 	Field Dir%
 	Field Timer%, TimerState#
 	Field KeyCard%
@@ -2070,18 +2070,18 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, B
 		d\FrameOBJ = CopyEntity(o\DoorModelID[1])
 	Else
 		d\OBJ = CopyEntity(o\DoorModelID[0])
-		ScaleEntity(d\OBJ, (204.0 * RoomScale) / MeshWidth(d\OBJ), 312.0 * RoomScale / MeshHeight(d\OBJ), 16.0 * RoomScale / MeshDepth(d\OBJ))
+		ScaleEntity(d\OBJ, (204.0 * RoomScale) / MeshWidth(d\OBJ), 313.0 * RoomScale / MeshHeight(d\OBJ), 16.0 * RoomScale / MeshDepth(d\OBJ))
 		d\OBJ2 = CopyEntity(o\DoorModelID[0])
-		ScaleEntity(d\OBJ2, (204.0 * RoomScale) / MeshWidth(d\OBJ2), 312.0 * RoomScale / MeshHeight(d\OBJ2), 16.0 * RoomScale / MeshDepth(d\OBJ2))
+		ScaleEntity(d\OBJ2, (204.0 * RoomScale) / MeshWidth(d\OBJ2), 313.0 * RoomScale / MeshHeight(d\OBJ2), 16.0 * RoomScale / MeshDepth(d\OBJ2))
 		
 		d\FrameOBJ = CopyEntity(o\DoorModelID[1])
-	End If
+	EndIf
 	
 	PositionEntity(d\FrameOBJ, x, y, z)
 	ScaleEntity(d\FrameOBJ, (8.0 / 2048.0), (8.0 / 2048.0), (8.0 / 2048.0))
 	EntityPickMode(d\FrameOBJ, 2)
 	EntityType(d\OBJ, HIT_MAP)
-	EntityType(d\OBJ2, HIT_MAP)
+	If d\OBJ2 <> 0 Then EntityType(d\OBJ2, HIT_MAP)
 	
 	d\ID = DoorTempID
 	DoorTempID = DoorTempID + 1
@@ -2109,11 +2109,9 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, B
 				d\Buttons[i] = CopyEntity(o\ButtonModelID[1])
 			ElseIf Keycard < 0
 				d\Buttons[i] = CopyEntity(o\ButtonModelID[3])	
-			ElseIf Big = 3	
-			    d\Buttons[0] = CopyEntity(o\ButtonModelID[4])
-				ScaleEntity(d\Buttons[0], 0.03, 0.03, 0.03)
-				d\Buttons[1] = CopyEntity(o\ButtonModelID[0])
-				ScaleEntity(d\Buttons[1], 0.03, 0.03, 0.03)
+			ElseIf Big = 3
+				d\Buttons[i] = CopyEntity(o\ButtonModelID[(i * 4)])
+				ScaleEntity(d\Buttons[i], 0.03, 0.03, 0.03)
 			Else
 				d\Buttons[i] = CopyEntity(o\ButtonModelID[0])
 			End If
@@ -2121,20 +2119,27 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, B
 		ScaleEntity(d\Buttons[i], 0.03, 0.03, 0.03)
 	Next
 	
-	If Big = 1 Then
-		PositionEntity(d\Buttons[0], x - 432.0 * RoomScale, y + 0.7, z + 192.0 * RoomScale)
-		RotateEntity(d\Buttons[0], 0.0, 90.0, 0.0)
-		PositionEntity(d\Buttons[1], x + 432.0 * RoomScale, y + 0.7, z - 192.0 * RoomScale)
-		RotateEntity(d\Buttons[1], 0.0, 270.0, 0.0)
-	Else
-		PositionEntity(d\Buttons[0], x + 0.6, y + 0.7, z - 0.1)
-		PositionEntity(d\Buttons[1], x - 0.6, y + 0.7, z + 0.1)
-		RotateEntity(d\Buttons[1], 0.0, 180.0, 0.0)
-	End If
-	EntityParent(d\Buttons[0], d\FrameOBJ)
-	EntityParent(d\Buttons[1], d\FrameOBJ)
-	EntityPickMode(d\Buttons[0], 2)
-	EntityPickMode(d\Buttons[1], 2)
+	For i = 0 To 1
+		If d\Buttons[i] <> 0 Then
+			If Big = 1 Then
+				If i = 0 Then
+					PositionEntity(d\Buttons[i], x - 432.0 * RoomScale, y + 0.7, z + 192.0 * RoomScale)
+				Else
+					PositionEntity(d\Buttons[i], x + 432.0 * RoomScale, y + 0.7, z - 192.0 * RoomScale)
+				EndIf
+				RotateEntity(d\Buttons[i], 0.0, 90.0 + (i * 180.0), 0.0)
+			Else
+				If i = 0 Then
+					PositionEntity(d\Buttons[i], x + 0.6, y + 0.7, z - 0.1)
+				Else
+					PositionEntity(d\Buttons[i], x - 0.6, y + 0.7, z + 0.1)
+					RotateEntity(d\Buttons[i], 0.0, 180.0, 0.0)
+				EndIf
+			EndIf
+			EntityParent(d\Buttons[i], d\FrameOBJ)
+			EntityPickMode(d\Buttons[i], 2)
+		EndIf
+	Next
 	
 	PositionEntity(d\OBJ, x, y, z)
 	
@@ -2158,9 +2163,7 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, B
 	d\Open = dOpen		
 	
 	EntityPickMode(d\OBJ, 2)
-	If d\OBJ2 <> 0 Then
-		EntityPickMode(d\OBJ2, 2)
-	EndIf
+	If d\OBJ2 <> 0 Then EntityPickMode(d\OBJ2, 2)
 	
 	EntityPickMode(d\FrameOBJ, 2)
 	
@@ -2196,9 +2199,10 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, B
 	Return(d)
 End Function
 
-Function CreateButton(x#, y#, z#, Pitch#, Yaw#, Roll# = 0.0, ButtonID% = 0)
+Function CreateButton(x#, y#, z#, Pitch#, Yaw#, Roll# = 0.0, ButtonID% = 0, Locked% = False)
 	Local OBJ% = CopyEntity(o\ButtonModelID[ButtonID])	
 	
+	If Locked Then EntityTexture(OBJ, tt\MiscTextureID[17])
 	ScaleEntity(OBJ, 0.03, 0.03, 0.03)
 	PositionEntity(OBJ, x, y, z)
 	RotateEntity(OBJ, Pitch, Yaw, Roll)
@@ -2259,7 +2263,7 @@ Function UpdateDoors()
 											ClosestDoor = d
 										Else
 											If Dist < EntityDistance(Collider, ClosestButton) Then ClosestButton = d\Buttons[i] : ClosestDoor = d
-										End If							
+										EndIf							
 									End If
 									FreeEntity(Temp)
 								EndIf							
@@ -2317,15 +2321,12 @@ Function UpdateDoors()
 						d\TimerState = Max(0.0, d\TimerState - fpst\FPSFactor[0])
 						If d\TimerState + fpst\FPSFactor[0] > 110.0 And d\TimerState =< 110.0 Then d\SoundCHN = PlaySound2(CautionSFX, Camera, d\OBJ)
 						
-						Local Sound%
-						
-						Sound = Rand(0, 2)
 						If d\TimerState = 0.0 Then 
 							d\Open = (Not d\Open)
 							If d\Dir <> 0 And d\Dir <> 4 Then
-								d\SoundCHN = PlaySound2(CloseDoorSFX(d\Dir, Sound), Camera, d\OBJ)
+								d\SoundCHN = PlaySound2(CloseDoorSFX(d\Dir, Rand(0, 2)), Camera, d\OBJ)
 							Else
-								d\SoundCHN = PlaySound2(CloseDoorSFX(0, Sound), Camera, d\OBJ)
+								d\SoundCHN = PlaySound2(CloseDoorSFX(0, Rand(0, 2)), Camera, d\OBJ)
 							EndIf
 						EndIf
 					EndIf
@@ -2428,6 +2429,19 @@ Function UpdateDoors()
 			EndIf
 		EndIf
 		UpdateSoundOrigin(d\SoundCHN, Camera, d\FrameOBJ)
+		
+		If d\Locked <> d\LockedUpdated Then
+			If d\Locked = True Then
+				For i = 0 To 2
+					If d\Buttons[i] <> 0 Then EntityTexture(d\Buttons[i], tt\MiscTextureID[17])
+				Next
+			Else
+				For i = 0 To 2
+					If d\Buttons[i] <> 0 Then EntityTexture(d\Buttons[i], tt\MiscTextureID[16])
+				Next
+			EndIf
+			d\LockedUpdated = d\Locked
+		EndIf
 		
 		If d\Dir = 1 And d\Locked = 2 Then
 			If d\OpenState > 48.0 Then
@@ -2683,28 +2697,24 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 	d\Open = (Not d\Open)
 	If d\LinkedDoor <> Null Then d\LinkedDoor\Open = (Not d\LinkedDoor\Open)
 	
-	Local Sound% = 0
-	
-	Sound = Rand(0, 2)
-	
 	If PlaySFX = True Then
 		If d\Open Then
 			If d\LinkedDoor <> Null Then d\LinkedDoor\TimerState = d\LinkedDoor\Timer
 			d\TimerState = d\Timer
 			If d\Dir = 1 And d\Locked = 2 Then
-				d\SoundCHN = PlaySound2(BigDoorErrorSFX(Sound), Camera, d\OBJ)
+				d\SoundCHN = PlaySound2(BigDoorErrorSFX(Rand(0, 2)), Camera, d\OBJ)
 			Else
 				If d\Dir <> 0 And d\Dir <> 4 Then
-					d\SoundCHN = PlaySound2(OpenDoorSFX(d\Dir, Sound), Camera, d\OBJ)
+					d\SoundCHN = PlaySound2(OpenDoorSFX(d\Dir, Rand(0, 2)), Camera, d\OBJ)
 				Else
-					d\SoundCHN = PlaySound2(OpenDoorSFX(0, Sound), Camera, d\OBJ)
+					d\SoundCHN = PlaySound2(OpenDoorSFX(0, Rand(0, 2)), Camera, d\OBJ)
 				EndIf
 			EndIf
 		Else
 			If d\Dir <> 0 And d\Dir <> 4 Then
-				d\SoundCHN = PlaySound2(CloseDoorSFX(d\Dir, Sound), Camera, d\OBJ)
+				d\SoundCHN = PlaySound2(CloseDoorSFX(d\Dir, Rand(0, 2)), Camera, d\OBJ)
 			Else
-				d\SoundCHN = PlaySound2(CloseDoorSFX(0, Sound), Camera, d\OBJ)
+				d\SoundCHN = PlaySound2(CloseDoorSFX(0, Rand(0, 2)), Camera, d\OBJ)
 			EndIf
 		EndIf
 		UpdateSoundOrigin(d\SoundCHN, Camera, d\OBJ)
@@ -2714,18 +2724,20 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 			d\TimerState = d\Timer
 		EndIf
 	EndIf
-	
 End Function
 
 Function RemoveDoor(d.Doors)
-	If d\Buttons[0] <> 0 Then EntityParent(d\Buttons[0], 0)
-	If d\Buttons[1] <> 0 Then EntityParent(d\Buttons[1], 0)
+	Local i%
 	
+	For i = 0 To 1
+		If d\Buttons[i] <> 0 Then EntityParent(d\Buttons[i], 0)
+	Next
 	If d\OBJ <> 0 Then FreeEntity(d\OBJ) : d\OBJ = 0
 	If d\OBJ2 <> 0 Then FreeEntity(d\OBJ2) : d\OBJ2 = 0
 	If d\FrameOBJ <> 0 Then FreeEntity(d\FrameOBJ) : d\FrameOBJ = 0
-	If d\Buttons[0] <> 0 Then FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
-	If d\Buttons[1] <> 0 Then FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
+	For i = 0 To 1
+		If d\Buttons[i] <> 0 Then FreeEntity(d\Buttons[i]) : d\Buttons[0] = 0
+	Next
 	
 	Delete(d)
 End Function
@@ -4343,7 +4355,7 @@ Function DrawGUI()
 	CatchErrors("Uncaught (DrawGUI)")
 	
 	Local Temp%, x%, y%, z%, i%, YawValue#, PitchValue#
-	Local x2#, y2#, z2#
+	Local x1#, x2#, x3#, y2#, z2#, ProjY#, Scale#, Pvt%
 	Local n%, xTemp, yTemp, StrTemp$, GroupDesignation$
 	Local e.Events, it.Items
 	
@@ -4705,9 +4717,9 @@ Function DrawGUI()
 			FreeEntity(Pvt)
 			
 			CameraProject(Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) + MeshHeight(o\ButtonModelID[0]) * 0.015, EntityZ(ClosestButton, True))
-			ProjY# = ProjectedY()
+			ProjY = ProjectedY()
 			CameraProject(Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) - MeshHeight(o\ButtonModelID[0]) * 0.015, EntityZ(ClosestButton, True))
-			Scale# = (ProjectedY() - Projy) / 462.0
+			Scale = (ProjectedY() - ProjY) / 462.0
 			
 			x = GraphicWidth / 2 - ImageWidth(tt\ImageID[4]) * Scale / 2
 			y = GraphicHeight / 2 - ImageHeight(tt\ImageID[4]) * Scale / 2		
@@ -8223,6 +8235,9 @@ Function LoadEntities()
 	
 	tt\MiscTextureID[13] = LoadTexture_Strict("GFX\map\tesla.png", 1 + 2)
 	
+	tt\MiscTextureID[16] = LoadTexture_Strict("GFX\map\keypad.jpg")
+	tt\MiscTextureID[17] = LoadTexture_Strict("GFX\map\keypad_locked.png")
+	
 	DrawLoading(20)
 	
 	tt\DecalTextureID[0] = LoadTexture_Strict("GFX\decal.png", 1 + 2)
@@ -11648,5 +11663,5 @@ Function InjurePlayer(Injuries_#, Infection# = 0.0, BlurTimer_# = 0.0, WithVest%
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#FF7#137E#1BF0
+;~B#1003#138A#1BFC
 ;~C#Blitz3D
