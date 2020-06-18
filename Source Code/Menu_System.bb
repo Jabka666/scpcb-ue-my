@@ -12,9 +12,9 @@ ResizeImage(Menu173, ImageWidth(Menu173) * MenuScale, ImageHeight(Menu173) * Men
 ResizeImage(QuickLoadIcon, ImageWidth(QuickLoadIcon) * MenuScale, ImageHeight(QuickLoadIcon) * MenuScale)
 
 For i = 0 To 3
-	ArrowIMG(i) = LoadImage_Strict("GFX\menu\arrow.png")
-	RotateImage(ArrowIMG(i), 90.0 * i)
-	HandleImage(ArrowIMG(i), 0, 0)
+	ArrowIMG[i] = LoadImage_Strict("GFX\menu\arrow.png")
+	RotateImage(ArrowIMG[i], 90.0 * i)
+	HandleImage(ArrowIMG[i], 0, 0)
 Next
 
 Global RandomSeed$
@@ -377,10 +377,10 @@ Function UpdateMainMenu()
 				IntroEnabled = DrawTick(x + 280 * MenuScale, y + 110 * MenuScale, IntroEnabled)	
 				
 				AAText(x + 20 * MenuScale, y + 150 * MenuScale, "Difficulty:")				
-				For i = SAFE To CUSTOM
-					If DrawTick(x + 20 * MenuScale, y + (180 + 30 * i) * MenuScale, (SelectedDifficulty = difficulties(i))) Then SelectedDifficulty = difficulties(i)
-					Color(difficulties(i)\R, difficulties(i)\G, difficulties(i)\B)
-					AAText(x + 60 * MenuScale, y + (180 + 30 * i) * MenuScale, difficulties(i)\Name)
+				For i = SAFE To ESOTERIC
+					If DrawTick(x + 20 * MenuScale, y + (180 + 30 * i) * MenuScale, (SelectedDifficulty = difficulties[i])) Then SelectedDifficulty = difficulties[i]
+					Color(difficulties[i]\R, difficulties[i]\G, difficulties[i]\B)
+					AAText(x + 60 * MenuScale, y + (180 + 30 * i) * MenuScale, difficulties[i]\Name)
 				Next
 				
 				Color(255, 255, 255)
@@ -403,9 +403,9 @@ Function UpdateMainMenu()
 					
 					; ~ Other factor's difficulty
 					Color(255, 255, 255)
-					DrawImage(ArrowIMG(1), x + 155 * MenuScale, y + 251 * MenuScale)
+					DrawImage(ArrowIMG[1], x + 155 * MenuScale, y + 251 * MenuScale)
 					If MouseHit1 Then
-						If ImageRectOverlap(ArrowIMG(1), x + 155 * MenuScale, y + 251 * MenuScale, ScaledMouseX(), ScaledMouseY(), 0, 0)
+						If ImageRectOverlap(ArrowIMG[1], x + 155 * MenuScale, y + 251 * MenuScale, ScaledMouseX(), ScaledMouseY(), 0, 0)
 							If SelectedDifficulty\OtherFactors < HARD
 								SelectedDifficulty\OtherFactors = SelectedDifficulty\OtherFactors + 1
 							Else
@@ -903,77 +903,77 @@ Function UpdateMainMenu()
 					y = y + 10 * MenuScale
 					
 					AAText(x + 20 * MenuScale, y + 20 * MenuScale, "Move Forward")
-					InputBox(x + 160 * MenuScale, y + 20 * MenuScale, 100 * MenuScale, 20 * MenuScale, KeyName(Min(KEY_UP, 210)), 5)		
+					InputBox(x + 160 * MenuScale, y + 20 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_UP, 210.0)], 5)		
 					AAText(x + 20 * MenuScale, y + 40 * MenuScale, "Strafe Left")
-					InputBox(x + 160 * MenuScale, y + 40 * MenuScale, 100 * MenuScale, 20 * MenuScale, KeyName(Min(KEY_LEFT, 210)), 3)	
+					InputBox(x + 160 * MenuScale, y + 40 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_LEFT, 210.0)], 3)	
 					AAText(x + 20 * MenuScale, y + 60 * MenuScale, "Move Backward")
-					InputBox(x + 160 * MenuScale, y + 60 * MenuScale, 100 * MenuScale, 20 * MenuScale, KeyName(Min(KEY_DOWN, 210)), 6)				
+					InputBox(x + 160 * MenuScale, y + 60 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_DOWN, 210.0)], 6)				
 					AAText(x + 20 * MenuScale, y + 80 * MenuScale, "Strafe Right")
-					InputBox(x + 160 * MenuScale, y + 80 * MenuScale, 100 * MenuScale, 20 * MenuScale, KeyName(Min(KEY_RIGHT, 210)), 4)	
+					InputBox(x + 160 * MenuScale, y + 80 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_RIGHT, 210.0)], 4)	
 					AAText(x + 20 * MenuScale, y + 100 * MenuScale, "Quick Save")
-					InputBox(x + 160 * MenuScale, y + 100 * MenuScale, 100 * MenuScale, 20 * MenuScale, KeyName(Min(KEY_SAVE, 210)), 11)
+					InputBox(x + 160 * MenuScale, y + 100 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\SAVE, 210.0)], 11)
 					
 					AAText(x + 280 * MenuScale, y + 20 * MenuScale, "Manual Blink")
-					InputBox(x + 470 * MenuScale, y + 20 * MenuScale, 100 * MenuScale, 20 * MenuScale, KeyName(Min(KEY_BLINK, 210)), 7)				
+					InputBox(x + 470 * MenuScale, y + 20 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\BLINK, 210.0)], 7)				
 					AAText(x + 280 * MenuScale, y + 40 * MenuScale, "Sprint")
-					InputBox(x + 470 * MenuScale, y + 40 * MenuScale, 100 * MenuScale, 20 * MenuScale, KeyName(Min(KEY_SPRINT, 210)), 8)
+					InputBox(x + 470 * MenuScale, y + 40 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\SPRINT, 210.0)], 8)
 					AAText(x + 280 * MenuScale, y + 60 * MenuScale, "Open/Close Inventory")
-					InputBox(x + 470 * MenuScale, y + 60 * MenuScale, 100 * MenuScale, 20 * MenuScale, KeyName(Min(KEY_INV, 210)), 9)
+					InputBox(x + 470 * MenuScale, y + 60 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\INVENTORY, 210.0)], 9)
 					AAText(x + 280 * MenuScale, y + 80 * MenuScale, "Crouch")
-					InputBox(x + 470 * MenuScale, y + 80 * MenuScale, 100 * MenuScale, 20 * MenuScale, KeyName(Min(KEY_CROUCH, 210)), 10)	
+					InputBox(x + 470 * MenuScale, y + 80 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\CROUCH, 210.0)], 10)	
 					AAText(x + 280 * MenuScale, y + 100 * MenuScale, "Open/Close Console")
-					InputBox(x + 470 * MenuScale, y + 100 * MenuScale, 100 * MenuScale, 20 * MenuScale, KeyName(Min(KEY_CONSOLE, 210)), 12)
+					InputBox(x + 470 * MenuScale, y + 100 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210.0)], 12)
 					
 					If MouseOn(x + 20 * MenuScale, y, Width - 40 * MenuScale, 120 * MenuScale)
 						DrawOptionsTooltip(tX, tY, tW, tH, "controls")
 					EndIf
 					
-					Local Key%
+					Local TempKey%
 					
 					For i = 0 To 227
-						If KeyHit(i) Then Key = i : Exit
+						If KeyHit(i) Then TempKey = i : Exit
 					Next
-					If Key <> 0 Then
+					If TempKey <> 0 Then
 						Select SelectedInputBox
 							Case 3
 								;[Block]
-								KEY_LEFT = Key
+								key\MOVEMENT_LEFT = TempKey
 								;[End Block]
 							Case 4
 								;[Block]
-								KEY_RIGHT = Key
+								key\MOVEMENT_RIGHT = TempKey
 								;[End Block]
 							Case 5
 								;[Block]
-								KEY_UP = Key
+								key\MOVEMENT_UP = TempKey
 								;[End Block]
 							Case 6
 								;[Block]
-								KEY_DOWN = Key
+								key\MOVEMENT_DOWN = TempKey
 								;[End Block]
 							Case 7
 								;[Block]
-								KEY_BLINK = Key
+								key\BLINK = TempKey
 								;[End Block]
 							Case 8
 								;[Block]
-								KEY_SPRINT = Key
+								key\SPRINT = TempKey
 								;[End Block]
 							Case 9
 								;[Block]
-								KEY_INV = Key
+								key\INVENTORY = TempKey
 								;[End Block]
 							Case 10
 								;[Block]
-								KEY_CROUCH = Key
+								key\CROUCH = TempKey
 								;[End Block]
 							Case 11
 								;[Block]
-								KEY_SAVE = Key
+								key\SAVE = TempKey
 								;[End Block]
 							Case 12
 								;[Block]
-								KEY_CONSOLE = Key
+								key\CONSOLE = TempKey
 								;[End Block]
 						End Select
 						SelectedInputBox = 0
@@ -2230,7 +2230,7 @@ Function DrawOptionsTooltip(x%, y%, Width%, Height%, Option$, Value# = 0.0, InGa
 			;[End Block]
 		Case "consoleenable"
 			;[Block]
-			Txt = "Toggles the use of the developer console. Can be used in-game by pressing " + KeyName(KEY_CONSOLE) + "."
+			Txt = "Toggles the use of the developer console. Can be used in-game by pressing " + key\Name[key\CONSOLE] + "."
 			;[End Block]
 		Case "consoleerror"
 			;[Block]

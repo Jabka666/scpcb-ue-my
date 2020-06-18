@@ -456,19 +456,19 @@ Function RemoveItem(i.Items)
 		Select SelectedItem\ItemTemplate\TempName 
 			Case "nvgoggles", "supernv"
 				;[Block]
-				WearingNightVision = 0
+				wi\NightVision = 0
 				;[End Block]
 			Case "gasmask", "supergasmask", "gasmask2", "gasmask3"
 				;[Block]
-				WearingGasMask = 0
+				wi\GasMask = 0
 				;[End Block]
 			Case "vest", "finevest", "veryfinevest"
 				;[Block]
-				WearingVest = 0
+				wi\BallisticVest = 0
 				;[End Block]
 			Case "hazmatsuit", "hazmatsuit2", "hazmatsuit3"
 				;[Block]
-				WearingHazmat = 0
+				wi\HazmatSuit = 0
 				;[End Block]
 			Case "scp714"
 				;[Block]
@@ -619,7 +619,7 @@ Function PickItem(item.Items)
 		EndIf
 	Next
 	
-	If WearingHazmat > 0 Then
+	If wi\HazmatSuit > 0 Then
 		msg\Msg = "You cannot pick up any items while wearing a hazmat suit."
 		msg\Timer = 70.0 * 6.0
 		Return
@@ -635,7 +635,7 @@ Function PickItem(item.Items)
 				Select item\ItemTemplate\TempName
 					Case "scp1123"
 						;[Block]
-						If I_714\Using = 0 And WearingGasMask < 3 And WearingHazmat < 3 Then
+						If I_714\Using = 0 And wi\GasMask < 3 And wi\HazmatSuit < 3 Then
 							If PlayerRoom\RoomTemplate\Name <> "room1123" Then
 								ShowEntity(tt\OverlayID[7])
 								LightFlash = 7.0
@@ -796,7 +796,7 @@ Function PickItem(item.Items)
 End Function
 
 Function DropItem(item.Items, PlayDropSound% = True)
-	If WearingHazmat > 0 Then
+	If wi\HazmatSuit > 0 Then
 		msg\Msg = "You cannot drop any items while wearing a hazmat suit."
 		msg\Timer = 70.0 * 6.0
 		Return
@@ -826,28 +826,28 @@ Function DropItem(item.Items, PlayDropSound% = True)
 	Select item\ItemTemplate\TempName
 		Case "gasmask", "supergasmask", "gasmask3"
 			;[Block]
-			WearingGasMask = 0
+			wi\GasMask = 0
 			;[End Block]
 		Case "hazmatsuit",  "hazmatsuit2", "hazmatsuit3"
 			;[Block]
-			WearingHazmat = 0
+			wi\HazmatSuit = 0
 			SetAnimTime(item\Model, 4.0)
 			;[End Block]
 		Case "vest", "finevest"
 			;[Block]
-			WearingVest = 0
+			wi\BallisticVest = 0
 			;[End Block]
 		Case "nvgoggles"
 			;[Block]
-			If WearingNightVision = 1 Then CameraFogFar = StoredCameraFogFar : WearingNightVision = 0
+			If wi\NightVision = 1 Then CameraFogFar = StoredCameraFogFar : wi\NightVision = 0
 			;[End Block]
 		Case "supernv"
 			;[Block]
-			If WearingNightVision = 2 Then CameraFogFar = StoredCameraFogFar : WearingNightVision = 0
+			If wi\NightVision = 2 Then CameraFogFar = StoredCameraFogFar : wi\NightVision = 0
 			;[End Block]
 		Case "finenvgoggles"
 			;[Block]
-			If WearingNightVision = 3 Then CameraFogFar = StoredCameraFogFar : WearingNightVision = 0
+			If wi\NightVision = 3 Then CameraFogFar = StoredCameraFogFar : wi\NightVision = 0
 			;[End Block]
 		Case "scp714"
 			;[Block]

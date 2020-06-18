@@ -601,7 +601,7 @@ Function UpdateNPCs()
 								n\PrevX = EntityX(n\Collider)
 								n\PrevZ = EntityZ(n\Collider)				
 								
-								If (BlinkTimer < -16.0 Or BlinkTimer > -6.0) And (IsNVGBlinking = False) Then
+								If (BlinkTimer < -16.0 Or BlinkTimer > -6.0) And (wi\IsNVGBlinking = False) Then
 									If EntityInView(n\OBJ, Camera) Then Move = False
 								EndIf
 							EndIf
@@ -1526,7 +1526,7 @@ Function UpdateNPCs()
 									RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0)
 									
 									If Dist < 0.5 Then
-										If WearingHazmat > 0 Then
+										If wi\HazmatSuit > 0 Then
 											BlurTimer = BlurTimer + fpst\FPSFactor[0] * 2.5
 											If BlurTimer > 250.0 And BlurTimer - fpst\FPSFactor[0] * 2.5 =< 250.0 And n\PrevState <> 3 Then
 												If n\SoundCHN2 <> 0 Then StopChannel(n\SoundCHN2)
@@ -1535,14 +1535,14 @@ Function UpdateNPCs()
 											ElseIf BlurTimer >= 500.0
 												For i = 0 To MaxItemAmount - 1
 													If Inventory(i) <> Null Then
-														If Instr(Inventory(i)\ItemTemplate\TempName, "hazmatsuit") And WearingHazmat < 3 Then
+														If Instr(Inventory(i)\ItemTemplate\TempName, "hazmatsuit") And wi\HazmatSuit < 3 Then
 															If Inventory(i)\State2 < 3 Then
 																Inventory(i)\State2 = Inventory(i)\State2 + 1
 																BlurTimer = 260.0
 																CameraShake = 2.0
 															Else
 																RemoveItem(Inventory(i))
-																WearingHazmat = False
+																wi\HazmatSuit = False
 															EndIf
 															Exit
 														EndIf
@@ -3135,7 +3135,7 @@ Function UpdateNPCs()
 								    If n\Frame >= 5.0 And n\Frame < 6.0 Then
 									    If Dist < 1.8 Then
 										    If Abs(DeltaYaw(n\Collider, Collider)) < 20.0 Then 
-											    If WearingHazmat > 0 Then
+											    If wi\HazmatSuit > 0 Then
 											        PlaySound_Strict(LoadTempSound("SFX\General\BodyFall.ogg"))
 													InjurePlayer(Rnd(0.5))
 												Else
@@ -3923,7 +3923,7 @@ Function UpdateNPCs()
 						; ~ n\State2: Timer for doing raycasts
 						
 						If EntityVisible(n\Collider, Camera) Then
-							If WearingNightVision > 0 Then GiveAchievement(Achv966)
+							If wi\NightVision > 0 Then GiveAchievement(Achv966)
 						EndIf
 						
 						PrevFrame = n\Frame
@@ -3940,7 +3940,7 @@ Function UpdateNPCs()
 						PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - 0.2, EntityZ(n\Collider, True))
 						RotateEntity(n\OBJ, -90.0, EntityYaw(n\Collider), 0.0)
 						
-						If WearingNightVision = 0 Then
+						If wi\NightVision = 0 Then
 							HideEntity(n\OBJ)
 							If (Not chs\Notarget) Then
 								If Dist < 1.0 And n\Reload =< 0.0 And msg\Timer =< 0.0 Then
@@ -4043,7 +4043,7 @@ Function UpdateNPCs()
 									If n\State3 < 900.0 Then
 										BlurTimer = ((Sin(MilliSecs2() / 50) + 1.0) * 200) / Dist
 										
-										If I_714\Using = 0 And WearingGasMask < 3 And WearingHazmat < 3 And Dist < 16.0 Then
+										If I_714\Using = 0 And wi\GasMask < 3 And wi\HazmatSuit < 3 And Dist < 16.0 Then
 											BlinkEffect = Max(BlinkEffect, 1.5)
 											BlinkEffectTimer = 1000.0
 											
@@ -6726,8 +6726,8 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 	
 	If Rnd(1.0) =< HitProb Then
 		TurnEntity(Camera, Rnd(-3.0, 3.0), Rnd(-3.0, 3.0), 0.0)
-		If WearingVest > 0 And WearingHelmet = 0 Then ; ~ If player is wearing the ballistic vest only
-			If WearingVest = 1 Then
+		If wi\BallisticVest > 0 And wi\BallisticHelmet = 0 Then ; ~ If player is wearing the ballistic vest only
+			If wi\BallisticVest = 1 Then
 				Select Rand(16)
 					Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ; ~ Vest
 						;[Block]
@@ -6788,8 +6788,8 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 					;[End Block]
 				EndIf
 			EndIf
-		Else If WearingVest > 0 And WearingHelmet > 0 Then ; ~ If player is wearing the ballistic vest and the ballistic helmet
-			If WearingVest = 1 Then
+		Else If wi\BallisticVest > 0 And wi\BallisticHelmet > 0 Then ; ~ If player is wearing the ballistic vest and the ballistic helmet
+			If wi\BallisticVest = 1 Then
 				Select Rand(22)
 					Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ; ~ Vest
 						;[Block]
@@ -6842,7 +6842,7 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 					;[End Block]
 				EndIf
 			EndIf
-		Else If WearingVest = 0 And WearingHelmet > 0 ; ~ If player is wearing the ballistic helmet only
+		Else If wi\BallisticVest = 0 And wi\BallisticHelmet > 0 ; ~ If player is wearing the ballistic helmet only
 			Select Rand(16)
 				Case 1, 2, 3, 4, 5, 6, 7 ; ~ Helmet
 					;[Block]
@@ -6897,7 +6897,7 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 					ShotMessageUpdate = "A bullet struck your neck, making you gasp."
 					;[End Block]
 			End Select
-		Else If WearingVest = 0 And WearingHelmet = 0 ; ~ If player isn't wearing the ballistic vest and the ballistic helmet
+		Else If wi\BallisticVest = 0 And wi\BallisticHelmet = 0 ; ~ If player isn't wearing the ballistic vest and the ballistic helmet
 			Select Rand(10)
 				Case 1 ; ~ Left Leg
 					;[Block]

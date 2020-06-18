@@ -95,11 +95,14 @@ Const MaxParticleTextureIDAmount% = 9
 Const MaxLightSpriteIDAmount% = 3
 
 Const MaxIconIDAmount% = 6
-Const MaxImageIDAmount% = 6
+Const MaxImageIDAmount% = 13
 
 ; ~ [ITEMS]
 
 Const MaxItemAmount% = 10
+
+Const NAV_WIDTH% = 287
+Const NAV_HEIGHT% = 256
 
 ; ~ [FULLSCREEN FIX]
 
@@ -129,7 +132,7 @@ Const FreeChannel% = -1
 Const SAFE% = 0
 Const EUCLID% = 1
 Const KETER% = 2
-Const CUSTOM% = 3
+Const ESOTERIC% = 3
 
 Const SAVEANYWHERE% = 0
 Const SAVEONQUIT% = 1

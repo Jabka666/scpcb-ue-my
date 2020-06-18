@@ -45,7 +45,7 @@ Function SaveGame(File$)
 	
 	WriteByte(f, Crouch)
 	
-	WriteByte(f, ChanceToSpawn005)
+	WriteByte(f, I_005\ChanceToSpawn)
 	
 	WriteFloat(f, Stamina)
 	WriteFloat(f, StaminaEffect)
@@ -63,7 +63,7 @@ Function SaveGame(File$)
 	WriteString(f, msg\DeathMsg)
 	
 	For i = 0 To 5
-		WriteFloat(f, SCP1025State[i])
+		WriteFloat(f, I_1025\State[i])
 	Next
 	
 	WriteFloat(f, VomitTimer)
@@ -72,11 +72,11 @@ Function SaveGame(File$)
 	WriteFloat(f, I_008\Timer)
 	WriteFloat(f, I_409\Timer)
 	
-	For i = 0 To CUSTOM
-		If SelectedDifficulty = difficulties(i) Then
+	For i = 0 To ESOTERIC
+		If SelectedDifficulty = difficulties[i] Then
 			WriteByte(f, i)
 			
-			If (i = CUSTOM) Then
+			If (i = ESOTERIC) Then
 				WriteByte(f, SelectedDifficulty\AggressiveNPCs)
 				WriteByte(f, SelectedDifficulty\PermaDeath)
 				WriteByte(f, SelectedDifficulty\SaveType)
@@ -89,12 +89,12 @@ Function SaveGame(File$)
 	
 	WriteFloat(f, Sanity)
 	
-	WriteByte(f, WearingGasMask)
-	WriteByte(f, WearingVest)
-	WriteByte(f, WearingHelmet)
-	WriteByte(f, WearingHazmat)
+	WriteByte(f, wi\GasMask)
+	WriteByte(f, wi\BallisticVest)
+	WriteByte(f, wi\BallisticHelmet)
+	WriteByte(f, wi\HazmatSuit)
+	WriteByte(f, wi\NightVision)
 	
-	WriteByte(f, WearingNightVision)
 	WriteByte(f, I_1499\Using)
 	WriteFloat(f, I_1499\PrevX)
 	WriteFloat(f, I_1499\PrevY)
@@ -122,7 +122,7 @@ Function SaveGame(File$)
 	WriteByte(f, SoundTransmission)
 	
 	For i = 0 To MAXACHIEVEMENTS - 1
-		WriteByte(f, Achievements(i))
+		WriteByte(f, Achievements[i])
 	Next
 	WriteInt(f, RefinedItems)
 	
@@ -520,7 +520,7 @@ Function LoadGame(File$)
 	
 	Crouch = ReadByte(f)
 	
-	ChanceToSpawn005 = ReadByte(f)
+	I_005\ChanceToSpawn = ReadByte(f)
 	
 	Stamina = ReadFloat(f)
 	StaminaEffect = ReadFloat(f)	
@@ -538,7 +538,7 @@ Function LoadGame(File$)
 	msg\DeathMsg = ReadString(f)
 	
 	For i = 0 To 5
-		SCP1025State[i] = ReadFloat(f)
+		I_1025\State[i] = ReadFloat(f)
 	Next
 	
 	VomitTimer = ReadFloat(f)
@@ -549,8 +549,8 @@ Function LoadGame(File$)
 	
 	Local DifficultyIndex = ReadByte(f)
 	
-	SelectedDifficulty = difficulties(DifficultyIndex)
-	If (DifficultyIndex = CUSTOM) Then
+	SelectedDifficulty = difficulties[DifficultyIndex]
+	If (DifficultyIndex = ESOTERIC) Then
 		SelectedDifficulty\AggressiveNPCs = ReadByte(f)
 		SelectedDifficulty\PermaDeath = ReadByte(f)
 		SelectedDifficulty\SaveType	= ReadByte(f)
@@ -561,12 +561,12 @@ Function LoadGame(File$)
 	
 	Sanity = ReadFloat(f)
 	
-	WearingGasMask = ReadByte(f)
-	WearingVest = ReadByte(f)
-	WearingHelmet = ReadByte(f)
-	WearingHazmat = ReadByte(f)
+	wi\GasMask = ReadByte(f)
+	wi\BallisticVest = ReadByte(f)
+	wi\BallisticHelmet = ReadByte(f)
+	wi\HazmatSuit = ReadByte(f)
+	wi\NightVision = ReadByte(f)
 	
-	WearingNightVision = ReadByte(f)
 	I_1499\Using = ReadByte(f)
 	I_1499\PrevX = ReadFloat(f)
 	I_1499\PrevY = ReadFloat(f)
@@ -590,7 +590,7 @@ Function LoadGame(File$)
 	SoundTransmission = ReadByte(f)	
 	
 	For i = 0 To MAXACHIEVEMENTS - 1
-		Achievements(i) = ReadByte(f)
+		Achievements[i] = ReadByte(f)
 	Next
 	RefinedItems = ReadInt(f)
 	
@@ -1353,7 +1353,7 @@ Function LoadGameQuick(File$)
 	
 	Crouch = ReadByte(f)
 	
-	ChanceToSpawn005 = ReadByte(f)
+	I_005\ChanceToSpawn = ReadByte(f)
 	
 	Stamina = ReadFloat(f)
 	StaminaEffect = ReadFloat(f)	
@@ -1371,7 +1371,7 @@ Function LoadGameQuick(File$)
 	msg\DeathMsg = ReadString(f)
 	
 	For i = 0 To 5
-		SCP1025State[i] = ReadFloat(f)
+		I_1025\State[i] = ReadFloat(f)
 	Next
 	
 	VomitTimer = ReadFloat(f)
@@ -1382,8 +1382,8 @@ Function LoadGameQuick(File$)
 	
 	Local DifficultyIndex = ReadByte(f)
 	
-	SelectedDifficulty = difficulties(DifficultyIndex)
-	If (DifficultyIndex = CUSTOM) Then
+	SelectedDifficulty = difficulties[DifficultyIndex]
+	If (DifficultyIndex = ESOTERIC) Then
 		SelectedDifficulty\AggressiveNPCs = ReadByte(f)
 		SelectedDifficulty\PermaDeath = ReadByte(f)
 		SelectedDifficulty\SaveType	= ReadByte(f)
@@ -1394,12 +1394,12 @@ Function LoadGameQuick(File$)
 	
 	Sanity = ReadFloat(f)
 	
-	WearingGasMask = ReadByte(f)
-	WearingVest = ReadByte(f)
-	WearingHelmet = ReadByte(f)
-	WearingHazmat = ReadByte(f)
+	wi\GasMask = ReadByte(f)
+	wi\BallisticVest = ReadByte(f)
+	wi\BallisticHelmet = ReadByte(f)
+	wi\HazmatSuit = ReadByte(f)
+	wi\NightVision = ReadByte(f)
 	
-	WearingNightVision = ReadByte(f)
 	I_1499\Using = ReadByte(f)
 	I_1499\PrevX = ReadFloat(f)
 	I_1499\PrevY = ReadFloat(f)
@@ -1423,7 +1423,7 @@ Function LoadGameQuick(File$)
 	SoundTransmission = ReadByte(f)	
 	
 	For i = 0 To MAXACHIEVEMENTS - 1
-		Achievements(i) = ReadByte(f)
+		Achievements[i] = ReadByte(f)
 	Next
 	RefinedItems = ReadInt(f)
 	

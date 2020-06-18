@@ -153,7 +153,7 @@ Function UpdateEmitters()
 			e\SoundCHN = LoopSound2(HissSFX, e\SoundCHN, Camera, e\OBJ)
 			
 			If InSmoke = False Then
-				If WearingGasMask = 0 And WearingHazmat = 0 Then
+				If wi\GasMask = 0 And wi\HazmatSuit = 0 Then
 					Local Dist# = Distance(EntityX(Camera, True), EntityZ(Camera, True), EntityX(e\OBJ, True), EntityZ(e\OBJ, True))
 					
 					If Dist < 0.8 Then

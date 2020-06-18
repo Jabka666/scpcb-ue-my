@@ -315,25 +315,25 @@ Global ConsoleVersion% = GetINIInt(OptionFile, "Advanced", "Console Version")
 
 ; ~ [CONTROLS]
 
-Global KEY_RIGHT% = GetINIInt(OptionFile, "Controls", "Right Key")
+key\MOVEMENT_RIGHT = GetINIInt(OptionFile, "Controls", "Right Key")
 
-Global KEY_LEFT% = GetINIInt(OptionFile, "Controls", "Left Key")
+key\MOVEMENT_LEFT = GetINIInt(OptionFile, "Controls", "Left Key")
 
-Global KEY_UP% = GetINIInt(OptionFile, "Controls", "Up Key")
+key\MOVEMENT_UP = GetINIInt(OptionFile, "Controls", "Up Key")
 
-Global KEY_DOWN% = GetINIInt(OptionFile, "Controls", "Down Key")
+key\MOVEMENT_DOWN = GetINIInt(OptionFile, "Controls", "Down Key")
 
-Global KEY_BLINK% = GetINIInt(OptionFile, "Controls", "Blink Key")
+key\BLINK = GetINIInt(OptionFile, "Controls", "Blink Key")
 
-Global KEY_SPRINT% = GetINIInt(OptionFile, "Controls", "Sprint Key")
+key\SPRINT = GetINIInt(OptionFile, "Controls", "Sprint Key")
 
-Global KEY_INV% = GetINIInt(OptionFile, "Controls", "Inventory Key")
+key\INVENTORY = GetINIInt(OptionFile, "Controls", "Inventory Key")
 
-Global KEY_CROUCH% = GetINIInt(OptionFile, "Controls", "Crouch Key")
+key\CROUCH = GetINIInt(OptionFile, "Controls", "Crouch Key")
 
-Global KEY_SAVE% = GetINIInt(OptionFile, "Controls", "Save Key")
+key\SAVE = GetINIInt(OptionFile, "Controls", "Save Key")
 
-Global KEY_CONSOLE% = GetINIInt(OptionFile, "Controls", "Console Key")
+key\CONSOLE = GetINIInt(OptionFile, "Controls", "Console Key")
 
 Global MouseSmoothing# = GetINIFloat(OptionFile, "Controls", "Mouse Smoothing", 1.0)
 
@@ -416,25 +416,25 @@ Function SaveOptionsINI()
 	
 	PutINIValue(OptionFile, "Controls", "Mouse Smoothing", MouseSmoothing)
 	
-	PutINIValue(OptionFile, "Controls", "Right Key", KEY_RIGHT)
+	PutINIValue(OptionFile, "Controls", "Right Key", key\MOVEMENT_RIGHT)
 	
-	PutINIValue(OptionFile, "Controls", "Left Key", KEY_LEFT)
+	PutINIValue(OptionFile, "Controls", "Left Key", key\MOVEMENT_LEFT)
 	
-	PutINIValue(OptionFile, "Controls", "Up Key", KEY_UP)
+	PutINIValue(OptionFile, "Controls", "Up Key", key\MOVEMENT_UP)
 	
-	PutINIValue(OptionFile, "Controls", "Down Key", KEY_DOWN)
+	PutINIValue(OptionFile, "Controls", "Down Key", key\MOVEMENT_DOWN)
 	
-	PutINIValue(OptionFile, "Controls", "Blink Key", KEY_BLINK)
+	PutINIValue(OptionFile, "Controls", "Blink Key", key\BLINK)
 	
-	PutINIValue(OptionFile, "Controls", "Sprint Key", KEY_SPRINT)
+	PutINIValue(OptionFile, "Controls", "Sprint Key", key\SPRINT)
 	
-	PutINIValue(OptionFile, "Controls", "Inventory Key", KEY_INV)
+	PutINIValue(OptionFile, "Controls", "Inventory Key", key\INVENTORY)
 	
-	PutINIValue(OptionFile, "Controls", "Crouch Key", KEY_CROUCH)
+	PutINIValue(OptionFile, "Controls", "Crouch Key", key\CROUCH)
 	
-	PutINIValue(OptionFile, "Controls", "Save Key", KEY_SAVE)
+	PutINIValue(OptionFile, "Controls", "Save Key", key\SAVE)
 	
-	PutINIValue(OptionFile, "Controls", "Console Key", KEY_CONSOLE)
+	PutINIValue(OptionFile, "Controls", "Console Key", key\CONSOLE)
 	
 	; ~ [AUDIO]
 	

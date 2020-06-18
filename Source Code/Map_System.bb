@@ -2583,7 +2583,7 @@ Function FillRoom(r.Rooms)
 			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			If ChanceToSpawn005 = 2 Then 
+			If I_005\ChanceToSpawn = 2 Then 
                 it = CreateItem("SCP-005", "scp005",  r\x + 736.0 * RoomScale, r\y + 224.0 * RoomScale, r\z + 755.0 * RoomScale)
                 EntityParent(it\Collider, r\OBJ)
             EndIf
@@ -5635,7 +5635,7 @@ Function FillRoom(r.Rooms)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			If ChanceToSpawn005 = 3 Then
+			If I_005\ChanceToSpawn = 3 Then
 				it = CreateItem("SCP-005", "scp005", r\x - 5050.0 * RoomScale, r\y - 4688.0 * RoomScale, r\z + 1720.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)	
 			EndIf
@@ -5736,10 +5736,10 @@ Function FillRoom(r.Rooms)
 			it = CreateItem("Document SCP-005", "paper", r\x + 338.0 * RoomScale, r\y + 152.0 * RoomScale, r\z - 500.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			If ChanceToSpawn005 = 1 Then
+			If I_005\ChanceToSpawn = 1 Then
 				it = CreateItem("SCP-005", "scp005", r\x, r\y + 254.0 * RoomScale, r\z - 260.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
-			ElseIf ChanceToSpawn005 = 2 Then
+			ElseIf I_005\ChanceToSpawn = 2 Then
 				it = CreateItem("Note from Maynard", "paper", r\x, r\y + 254.0 * RoomScale, r\z - 260.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)	
 			EndIf
@@ -6617,7 +6617,7 @@ Function UpdateSecurityCams()
 					sc\State = sc\State + fpst\FPSFactor[0]
 					If BlinkTimer > -5.0 And EntityInView(sc\ScrOBJ, Camera) Then
 						If EntityVisible(Camera, sc\ScrOBJ) Then
-							If (sc\CoffinEffect = 1 Or sc\CoffinEffect = 3) And I_714\Using = 0 And WearingHazmat < 3 And WearingGasMask < 3 Then
+							If (sc\CoffinEffect = 1 Or sc\CoffinEffect = 3) And I_714\Using = 0 And wi\HazmatSuit < 3 And wi\GasMask < 3 Then
 								If BlinkTimer > -5.0 Then
 									Sanity = Sanity - fpst\FPSFactor[0]
 									RestoreSanity = False
@@ -6684,7 +6684,7 @@ Function UpdateSecurityCams()
 						sc\State = 0.0
 					EndIf
 					
-					If (sc\CoffinEffect = 1 Or sc\CoffinEffect = 3) And I_714\Using = 0 And WearingHazmat < 3 And WearingGasMask < 3 Then
+					If (sc\CoffinEffect = 1 Or sc\CoffinEffect = 3) And I_714\Using = 0 And wi\HazmatSuit < 3 And wi\GasMask < 3 Then
 						If sc\InSight Then
 							Local Pvt% = CreatePivot()
 							
@@ -6698,7 +6698,7 @@ Function UpdateSecurityCams()
 							User_Camera_Pitch = User_Camera_Pitch - 90.0
 							
 							FreeEntity(Pvt)
-							If (sc\CoffinEffect = 1 Or sc\CoffinEffect = 3) And (I_714\Using = 0 Or WearingGasMask < 3 Or WearingHazmat < 3) Then
+							If (sc\CoffinEffect = 1 Or sc\CoffinEffect = 3) And (I_714\Using = 0 Or wi\GasMask < 3 Or wi\HazmatSuit < 3) Then
 								If Sanity < -800.0 Then
 									If Rand(3) = 1 Then EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
 									If Rand(6) < 5 Then
@@ -6731,7 +6731,7 @@ Function UpdateSecurityCams()
 						EndIf
 					Else
 						If sc\InSight Then
-							If I_714\Using = 1 Or WearingHazmat = 3 Or WearingGasMask = 3 Then
+							If I_714\Using = 1 Or wi\HazmatSuit = 3 Or wi\GasMask = 3 Then
 								EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
 							EndIf
 						EndIf

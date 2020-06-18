@@ -549,7 +549,7 @@ Function UpdateEvents()
 						CameraFogMode(Camera, 1)
 						
 						If SelectedDifficulty\SaveType = SAVEANYWHERE Then
-							msg\Msg = "Press " + KeyName(KEY_SAVE) + " to save."
+							msg\Msg = "Press " + key\Name[key\SAVE] + " to save."
 							msg\Timer = 70.0 * 6.0
 						ElseIf SelectedDifficulty\SaveType = SAVEONSCREENS Then
 							msg\Msg = "Saving is only permitted on clickable monitors scattered throughout the facility."
@@ -696,7 +696,7 @@ Function UpdateEvents()
                                                 PositionEntity(Curr173\Collider, 0.0, 0.0, 0.0)
                                             EndIf
 											ResetEntity(Curr173\Collider)
-											msg\Msg = "Hold " + KeyName(KEY_SPRINT) + " to run."
+											msg\Msg = "Hold " + key\Name[key\SPRINT] + " to run."
 											msg\Timer = 70.0 * 6.0
 										EndIf
 									EndIf
@@ -876,7 +876,7 @@ Function UpdateEvents()
 								RotateEntity(Collider, 0.0, EntityYaw(Camera), 0.0)
 							ElseIf e\EventState3 < 40.0
 								If Inventory(0) <> Null Then
-									msg\Msg = "Press " + KeyName(KEY_INV) + " to open the inventory."
+									msg\Msg = "Press " + key\Name[key\INVENTORY] + " to open the inventory."
 									msg\Timer = 70.0 * 6.0
 									e\EventState3 = 40.0
 									Exit
@@ -1458,7 +1458,7 @@ Function UpdateEvents()
 							If IntroSFX(3) <> 0 Then
 								If EntityVisible(Curr173\Collider, Collider) Then
 									If EntityInView(Curr173\OBJ, Camera) Then
-										msg\Msg = "Press " + KeyName(KEY_BLINK) + " to blink."
+										msg\Msg = "Press " + key\Name[key\BLINK] + " to blink."
 										msg\Timer = 70.0 * 6.0
 										PlaySound_Strict(IntroSFX(3))
 										IntroSFX(3) = 0
@@ -2130,20 +2130,20 @@ Function UpdateEvents()
 						EndIf
 					EndIf
 					
-					If WearingNightVision > 0 Then
+					If wi\NightVision > 0 Then
 						Local HasBatteryFor895% = 0
 						
 						For i = 0 To MaxItemAmount - 1
 							If (Inventory(i) <> Null) Then
-								If (WearingNightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvgoggles") Or (WearingNightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernv") Or (WearingNightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvgoggles") Then
-									If Inventory(i)\state > 0.0 Or WearingNightVision = 3 Then
+								If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvgoggles") Or (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernv") Or (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvgoggles") Then
+									If Inventory(i)\state > 0.0 Or wi\NightVision = 3 Then
 										HasBatteryFor895 = 1
 										Exit
 									EndIf
 								EndIf
 							EndIf
 						Next
-						If (CoffinDistance < 4.0) And (HasBatteryFor895) And I_714\Using = 0 And WearingGasMask < 3 And WearingHazmat < 3 Then
+						If (CoffinDistance < 4.0) And (HasBatteryFor895) And I_714\Using = 0 And wi\GasMask < 3 And wi\HazmatSuit < 3 Then
 							TempF# = point_direction(EntityX(Collider, True), EntityZ(Collider, True), EntityX(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
 							TempF2# = EntityYaw(Collider)
 							TempF3# = angleDist(TempF + 90.0 + Sin(WrapAngle(e\EventState3 / 10.0)), TempF2)
@@ -2152,7 +2152,7 @@ Function UpdateEvents()
 							TempF2# = (-60.0) * Min(Max((2.0 - TempF) / 2.0, 0.0), 1.0)
 							User_Camera_Pitch = (User_Camera_Pitch * 0.8) + (TempF2 * 0.2)
 							
-							Sanity = Sanity - (fpst\FPSFactor[0] * 1.1 / WearingNightVision)
+							Sanity = Sanity - (fpst\FPSFactor[0] * 1.1 / wi\NightVision)
 							RestoreSanity = False
 							BlurTimer = Sin(MilliSecs2() / 10) * Abs(Sanity)
 							
@@ -2162,7 +2162,7 @@ Function UpdateEvents()
 							EndIf
 							
 							If Sanity < -1000.0 Then
-								If WearingNightVision > 0
+								If wi\NightVision > 0
 									msg\DeathMsg = Chr(34) + "Class D viewed SCP-895 through a pair of digital night vision goggles, presumably enhanced by SCP-914. It might be possible that the subject "
 									msg\DeathMsg = msg\DeathMsg + "was able to resist the memetic effects partially through these goggles. The goggles have been stored for further study." + Chr(34)
 								Else
@@ -2178,7 +2178,7 @@ Function UpdateEvents()
 									EntityTexture(tt\OverlayID[4], tt\MiscTextureID[Rand(7, 12)])
 									For i = 0 To MaxItemAmount - 1
 										If (Inventory(i) <> Null) Then
-											If (WearingNightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvgoggles") Or (WearingNightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernv") Or (WearingNightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvgoggles") Then
+											If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvgoggles") Or (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernv") Or (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvgoggles") Then
 												If Inventory(i)\State2 = 1.0 Then PlaySound_Strict(HorrorSFX(1))
 												Inventory(i)\State2 = 2.0
 												Exit
@@ -2196,7 +2196,7 @@ Function UpdateEvents()
 									EntityTexture(tt\OverlayID[4], tt\MiscTextureID[Rand(7, 12)])
 									For i = 0 To MaxItemAmount - 1
 										If (Inventory(i) <> Null) Then
-											If (WearingNightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvgoggles") Or (WearingNightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernv") Or (WearingNightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvgoggles") Then
+											If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvgoggles") Or (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernv") Or (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvgoggles") Then
 												If Inventory(i)\State2 = 0.0 Then PlaySound_Strict(HorrorSFX(0))
 												Inventory(i)\State2 = 1.0
 												Exit
@@ -2208,7 +2208,7 @@ Function UpdateEvents()
 								EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
 								For i = 0 To MaxItemAmount - 1
 									If (Inventory(i) <> Null) Then
-										If (WearingNightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvgoggles") Or (WearingNightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernv") Or (WearingNightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvgoggles") Then
+										If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvgoggles") Or (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernv") Or (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvgoggles") Then
 											Inventory(i)\State2 = 0.0
 										EndIf
 									EndIf
@@ -2221,9 +2221,9 @@ Function UpdateEvents()
 					If e\EventState3 = 0.0 Then
 						e\EventState3 = -1.0
 						EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
-						If WearingNightVision = 1 Then
+						If wi\NightVision = 1 Then
 							EntityColor(tt\OverlayID[4], 0.0, 255.0, 0.0)
-						ElseIf WearingNightVision = 2 Then
+						ElseIf wi\NightVision = 2 Then
 							EntityColor(tt\OverlayID[4], 0.0, 100.0, 255.0)
 						EndIf
 					EndIf
@@ -2977,7 +2977,7 @@ Function UpdateEvents()
 			Case "room2cafeteria"
 				;[Block]
 				If PlayerRoom = e\room Then
-					If (Not Using294) Then
+					If (Not I_294\Using) Then
 						If EntityDistance(e\room\Objects[0], Collider) < 1.5 Then
 							GiveAchievement(Achv294)
 							If EntityInView(e\room\Objects[0], Camera) Then
@@ -3009,14 +3009,14 @@ Function UpdateEvents()
 										EndIf
 									EndIf
 									If e\EventState2 = 2.0 Then
-										Using294 = Temp
-										If Using294 Then MouseHit1 = False
+										I_294\Using = Temp
+										If I_294\Using Then MouseHit1 = False
 									ElseIf e\EventState2 = 1.0 And (Not Inserted) Then
-										Using294 = False
+										I_294\Using = False
 										msg\Msg = "You need to insert another Quarter in order to use this machine."
 										msg\Timer = 70.0 * 6.0
 									ElseIf (Not Inserted) Then
-										Using294 = False
+										I_294\Using = False
 										msg\Msg = "You need to insert two Quarters in order to use this machine."
 										msg\Timer = 70.0 * 6.0
 									EndIf
@@ -3118,7 +3118,7 @@ Function UpdateEvents()
 						EndIf
 						
 						If e\EventState > 70.0 * 7.5 And e\EventState - fpst\FPSFactor[0] =< 70.0 * 7.5 Then
-							If WearingNightVision > 0 Then BlinkTimer = -10.0
+							If wi\NightVision > 0 Then BlinkTimer = -10.0
 							
 							PlaySound2(NeckSnapSFX(0), Camera, e\room\NPC[0]\Collider, 8.0)
 							
@@ -3134,7 +3134,7 @@ Function UpdateEvents()
 						EndIf
 						
 						If e\EventState > 70.0 * 8.0 And e\EventState - fpst\FPSFactor[0] =< 70.0 * 8.0 Then
-							If WearingNightVision > 0 Then BlinkTimer = -10.0
+							If wi\NightVision > 0 Then BlinkTimer = -10.0
 							
 							PlaySound2(NeckSnapSFX(1), Camera, e\room\NPC[1]\Collider, 8.0)
 							
@@ -5316,7 +5316,7 @@ Function UpdateEvents()
 								EndIf
 							EndIf
 							
-							If I_714\Using = 0 And WearingGasMask < 3 And WearingHazmat < 3 Then
+							If I_714\Using = 0 And wi\GasMask < 3 And wi\HazmatSuit < 3 Then
 								If EntityVisible(e\room\Objects[2], Camera) Then 							
 									e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\Objects[3], 10.0, e\EventState3 / (86.0 * 70.0))
 									
@@ -5829,12 +5829,12 @@ Function UpdateEvents()
 										e\EventState2 = Min(e\EventState2 + (fpst\FPSFactor[0] / 6000.0), 1.0)
 										e\EventState3 = CurveValue(e\EventState2, e\EventState3, 50.0)
 										
-										If I_714\Using = 0 And WearingHazmat < 3 And WearingGasMask < 3 Then
+										If I_714\Using = 0 And wi\HazmatSuit < 3 And wi\GasMask < 3 Then
 											Sanity = Sanity - fpst\FPSFactor[0] * 1.1
 											BlurTimer = Sin(MilliSecs2() / 10.0) * Abs(Sanity)
 										EndIf
 										
-										If WearingHazmat = 0 Then
+										If wi\HazmatSuit = 0 Then
 											InjurePlayer(fpst\FPSFactor[0] / 5000.0)
 										Else
 											InjurePlayer(fpst\FPSFactor[0] / 10000.0)
@@ -5868,7 +5868,7 @@ Function UpdateEvents()
 							e\EventState3 = Max(e\EventState3 - (fpst\FPSFactor[0] / 100.0), 0.0)
 						EndIf
 						
-						If e\EventState3 > 0.0 And I_714\Using = 0 And WearingHazmat < 3 And WearingGasMask < 3 Then 
+						If e\EventState3 > 0.0 And I_714\Using = 0 And wi\HazmatSuit < 3 And wi\GasMask < 3 Then 
 							e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\OBJ, 10.0, e\EventState3)
 							e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\OBJ, 10.0, (e\EventState3 - 0.5) * 2.0)
 						EndIf
@@ -6791,7 +6791,7 @@ Function UpdateEvents()
 			Case "room1123"
 				;[Block]
 				If PlayerRoom = e\room Then
-					If I_714\Using = 0 And WearingHazmat < 3 And WearingGasMask < 3 Then
+					If I_714\Using = 0 And wi\HazmatSuit < 3 And wi\GasMask < 3 Then
 						If EntityDistance(Collider, e\room\Objects[3]) < 0.9 Or e\EventState > 0.0 Then
 							If e\EventState = 0.0 Then BlurTimer = 1000.0
 					        CameraShake = 1.0
@@ -7332,7 +7332,7 @@ Function UpdateEvents()
 											
 										    HideEntity(e\room\Objects[2])
 											
-										    If WearingHazmat = 0 Then
+										    If wi\HazmatSuit = 0 Then
 												InjurePlayer(0.1, 1.0)
 												msg\Msg = "The window shattered and a piece of glass cut your arm."
 												msg\Timer = 70.0 * 6.0
@@ -7354,7 +7354,7 @@ Function UpdateEvents()
 								    EndIf
 							    EndIf
 								
-							    If WearingHazmat = 0 And Bloodloss > 0.0
+							    If wi\HazmatSuit = 0 And Bloodloss > 0.0
 								    If I_008\Timer = 0.0
 									    I_008\Timer = 1.0
 								    EndIf
@@ -8968,7 +8968,7 @@ Function UpdateEvents()
 			    If (Not Contained106) Then 
 			        If PlayerRoom = e\room Then
 			            If EntityDistance(Collider, e\room\Objects[0]) < 1.5 Then
-				            If e\EventState = 0.0 And ChanceToSpawn005 <> 2 Then
+				            If e\EventState = 0.0 And I_005\ChanceToSpawn <> 2 Then
 				                PlaySound_Strict(HorrorSFX(10))
 								
 							    d.Decals = CreateDecal(0, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True), 0.0, e\room\Angle + 360.0, Rnd(360.0))

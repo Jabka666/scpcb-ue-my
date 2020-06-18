@@ -1,23 +1,23 @@
-Dim Achievements%(MAXACHIEVEMENTS)
+Global Achievements%[MAXACHIEVEMENTS]
 
 Global UsedConsole%
 
 Global AchievementsMenu%
-Dim AchievementStrings$(MAXACHIEVEMENTS)
-Dim AchievementDescs$(MAXACHIEVEMENTS)
-Dim AchvIMG%(MAXACHIEVEMENTS)
+Global AchievementStrings$[MAXACHIEVEMENTS]
+Global AchievementDescs$[MAXACHIEVEMENTS]
+Global AchvIMG%[MAXACHIEVEMENTS]
 
 For i = 0 To MAXACHIEVEMENTS - 1
 	Local Loc2% = GetINISectionLocation("Data\Achievements.ini", "s" + Str(i))
 	
-	AchievementStrings(i) = GetINIString2("Data\Achievements.ini", Loc2, "AchvName")
-	AchievementDescs(i) = GetINIString2("Data\Achievements.ini", Loc2, "AchvDesc")
+	AchievementStrings[i] = GetINIString2("Data\Achievements.ini", Loc2, "AchvName")
+	AchievementDescs[i] = GetINIString2("Data\Achievements.ini", Loc2, "AchvDesc")
 	
 	Local Image$ = GetINIString2("Data\Achievements.ini", Loc2, "AchvImage") 
 	
-	AchvIMG(i) = LoadImage_Strict("GFX\menu\Achievements\" + Image + ".png")
-	AchvIMG(i) = ResizeImage2(AchvIMG(i), ImageWidth(AchvIMG(i)) * GraphicHeight / 768.0, ImageHeight(AchvIMG(i)) * GraphicHeight / 768.0)
-	BufferDirty(ImageBuffer(AchvIMG(i)))
+	AchvIMG[i] = LoadImage_Strict("GFX\menu\Achievements\" + Image + ".png")
+	AchvIMG[i] = ResizeImage2(AchvIMG[i], ImageWidth(AchvIMG[i]) * GraphicHeight / 768.0, ImageHeight(AchvIMG[i]) * GraphicHeight / 768.0)
+	BufferDirty(ImageBuffer(AchvIMG[i]))
 Next
 
 Global AchvLocked% = LoadImage_Strict("GFX\menu\Achievements\AchvLocked.png")
@@ -26,8 +26,8 @@ AchvLocked = ResizeImage2(AchvLocked, ImageWidth(AchvLocked) * GraphicHeight / 7
 BufferDirty(ImageBuffer(AchvLocked))
 
 Function GiveAchievement(AchvName%, ShowMessage% = True)
-	If Achievements(AchvName) <> True Then
-		Achievements(AchvName) = True
+	If Achievements[AchvName] <> True Then
+		Achievements[AchvName] = True
 		If AchvMsgEnabled And ShowMessage Then
 			Local Loc2% = GetINISectionLocation("Data\Achievements.ini", "s" + AchvName)
 			Local AchievementName$ = GetINIString2("Data\Achievements.ini", Loc2, "AchvName")
@@ -42,11 +42,11 @@ Function AchievementTooltip(AchvNo%)
 
     AASetFont(fo\FontID[2])
 	
-    Local Width = AAStringWidth(AchievementStrings(AchvNo))
+    Local Width = AAStringWidth(AchievementStrings[AchvNo])
 	
     AASetFont(fo\FontID[0])
-    If (AAStringWidth(AchievementDescs(AchvNo)) > Width) Then
-        Width = AAStringWidth(AchievementDescs(AchvNo))
+    If AAStringWidth(AchievementDescs[AchvNo]) > Width Then
+        Width = AAStringWidth(AchievementDescs[AchvNo])
     EndIf
     Width = Width + 20 * MenuScale
     
@@ -57,9 +57,9 @@ Function AchievementTooltip(AchvNo%)
     Color(150, 150, 150)
     Rect(ScaledMouseX() + (20 * MenuScale), ScaledMouseY() + (20 * MenuScale), Width, Height, False)
     AASetFont(fo\FontID[2])
-    AAText(ScaledMouseX() + (20 * MenuScale) + (Width / 2), ScaledMouseY() + (35 * MenuScale), AchievementStrings(AchvNo), True, True)
+    AAText(ScaledMouseX() + (20 * MenuScale) + (Width / 2), ScaledMouseY() + (35 * MenuScale), AchievementStrings[AchvNo], True, True)
     AASetFont(fo\FontID[0])
-    AAText(ScaledMouseX() + (20 * MenuScale) + (Width / 2), ScaledMouseY() + (55 * MenuScale), AchievementDescs(AchvNo), True, True)
+    AAText(ScaledMouseX() + (20 * MenuScale) + (Width / 2), ScaledMouseY() + (55 * MenuScale), AchievementDescs[AchvNo], True, True)
 End Function
 
 Function DrawAchvIMG(x%, y%, AchvNo%)
@@ -70,8 +70,8 @@ Function DrawAchvIMG(x%, y%, AchvNo%)
 	Row = AchvNo Mod 4
 	Color(0, 0, 0)
 	Rect((x + ((Row) * SeparationConst2)), y, 64 * Scale, 64 * Scale, True)
-	If Achievements(AchvNo) = True Then
-		DrawImage(AchvIMG(AchvNo), (x + (Row * SeparationConst2)), y)
+	If Achievements[AchvNo] = True Then
+		DrawImage(AchvIMG[AchvNo], (x + (Row * SeparationConst2)), y)
 	Else
 		DrawImage(AchvLocked, (x + (Row * SeparationConst2)), y)
 	EndIf
@@ -153,7 +153,7 @@ Function RenderAchievementMsg()
 			DrawFrame(x, y, Width, Height)
 			Color(0, 0, 0)
 			Rect(x + 10.0 * Scale, y + 10.0 * Scale, 64.0 * Scale, 64.0 * Scale, True)
-			DrawImage(AchvIMG(amsg\AchvID), x + 10 * Scale, y + 10 * Scale)
+			DrawImage(AchvIMG[amsg\AchvID], x + 10 * Scale, y + 10 * Scale)
 			Color(50, 50, 50)
 			Rect(x + 10.0 * Scale, y + 10.0 * Scale, 64.0 * Scale, 64.0 * Scale, False)
 			Color(255, 255, 255)
