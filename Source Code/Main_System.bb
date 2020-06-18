@@ -3323,6 +3323,11 @@ Function MainLoop()
 			If SelectedItem <> Null
 				W = SelectedItem\ItemTemplate\TempName
 				V = SelectedItem\State
+				; ~ Reset SCP-1025
+				If SelectedItem\ItemTemplate\TempName = "scp1025" Then
+					If SelectedItem\ItemTemplate\Img <> 0 Then FreeImage(SelectedItem\ItemTemplate\Img)
+					SelectedItem\ItemTemplate\Img = 0
+				EndIf
 			EndIf
 			If (W <> "vest" And W <> "finevest" And W <> "hazmatsuit" And W <> "hazmatsuit2" And W <> "hazmatsuit3") Or V = 0 Or V = 100
 				If InvOpen Then
@@ -4284,10 +4289,10 @@ Function MouseLook()
 						SCP1025State[i] = SCP1025State[i] + fpst\FPSFactor[0] * 0.0005
 					EndIf
 					If SCP1025State[i] > 20.0 Then
-						If SCP1025State[i] - fpst\FPSFactor[0] =< 20.0 Then msg\Msg = "The pain in your stomach is becoming unbearable."
+						If SCP1025State[i] - fpst\FPSFactor[0] =< 20.0 Then msg\Msg = "The pain in your stomach is becoming unbearable." : msg\Timer = 70.0 * 6.0
 						Stamina = Stamina - fpst\FPSFactor[0] * 0.3
 					ElseIf SCP1025State[i] > 10.0
-						If SCP1025State[i] - fpst\FPSFactor[0] =< 10.0 Then msg\Msg = "Your stomach is aching."
+						If SCP1025State[i] - fpst\FPSFactor[0] =< 10.0 Then msg\Msg = "Your stomach is aching." : msg\Timer = 70.0 * 6.0
 					EndIf
 					;[End Block]
 				Case 4 ; ~ Asthma
@@ -11629,5 +11634,5 @@ Function InjurePlayer(Injuries_#, Infection# = 0.0, BlurTimer_# = 0.0, WithVest%
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#FEC#1373#1BE7
+;~B#FF1#1378#1BEC
 ;~C#Blitz3D
