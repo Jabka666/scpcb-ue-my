@@ -42,6 +42,8 @@
 
 - Combined "scp_1048_pen.b3d" and "scp_1048.b3d" models. 
 
+- Improved some loading screens.
+
 - Optimized items.
 - Optimized startup videos.
 - Optimized event of SCP-012's containment chamber.
