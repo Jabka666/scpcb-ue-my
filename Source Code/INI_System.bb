@@ -343,10 +343,6 @@ Global MouseSensitivity# = GetINIFloat(OptionFile, "Controls", "Mouse Sensitivit
 
 ; ~ [LAUNCHER]
 
-Global LauncherWidth% = Min(GetINIInt(OptionFile, "Launcher", "Launcher Width"), 1024)
-
-Global LauncherHeight% = Min(GetINIInt(OptionFile, "Launcher", "Launcher Height"), 768)
-
 Global LauncherEnabled% = GetINIInt(OptionFile, "Launcher", "Launcher Enabled")
 
 ; ~ [GLOBAL]
@@ -357,11 +353,7 @@ Global GraphicHeight% = GetINIInt(OptionFile, "Global", "Height")
 
 Global FullScreen% = GetINIInt(OptionFile, "Global", "Fullscreen")
 
-Global SelectedGFXDriver% = Max(GetINIInt(OptionFile, "Global", "GFX Driver"), 1)
-
 Global BorderlessWindowed% = GetINIInt(OptionFile, "Global", "Borderless Windowed")
-
-Global Bit16Mode% = GetINIInt(OptionFile, "Global", "16Bit")
 
 Global Brightness% = GetINIFloat(OptionFile, "Global", "Brightness")
 

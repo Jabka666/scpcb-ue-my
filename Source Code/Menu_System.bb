@@ -1218,7 +1218,8 @@ Function UpdateLauncher()
 	MenuWhite = LoadImage_Strict("GFX\menu\menu_white.png")
 	MenuBlack = LoadImage_Strict("GFX\menu\menu_black.png")	
 	MaskImage(MenuBlack, 255, 255, 0)
-	LauncherIMG = LoadImage_Strict("GFX\menu\launcher.png")
+	
+	Local LauncherIMG% = LoadImage_Strict("GFX\menu\launcher.png")
 	
 	For i = 1 To TotalGFXModes
 		Local SameFound% = False
@@ -1235,6 +1236,8 @@ Function UpdateLauncher()
 	Next
 	
 	AppTitle("SCP - Containment Breach Ultimate Edition Launcher")
+	
+	Local Quit% = False
 	
 	Repeat
 		Color(0, 0, 0)
@@ -1269,21 +1272,7 @@ Function UpdateLauncher()
 		x = 30
 		y = 369
 		Rect(x - 10, y, 340, 95)
-		Text(x - 10, y - 25, "Graphics:")
-		
-		y = y + 10
-		For i = 1 To CountGfxDrivers()
-			Color(0, 0, 0)
-			If SelectedGFXDriver = i Then Rect(x - 1, y - 1, 290, 20, False)
-			LimitText(GfxDriverName(i), x, y, 290, False)
-			If MouseOn(x - 1, y - 1, 290, 20) Then
-				Color(100, 100, 100)
-				Rect(x - 1, y - 1, 290, 20, False)
-				If MouseHit1 Then SelectedGFXDriver = i
-			EndIf
-			
-			y = y + 20
-		Next
+		Text(x - 10, y - 25, "Changelog:")
 		
 		Fullscreen = DrawTick(40 + 430 - 15, 260 - 55 + 5 - 8, Fullscreen, BorderlessWindowed)
 		BorderlessWindowed = DrawTick(40 + 430 - 15, 260 - 55 + 35, BorderlessWindowed)
@@ -1291,12 +1280,11 @@ Function UpdateLauncher()
 		Local Lock% = False
 		
 		If BorderlessWindowed Or (Not Fullscreen) Then Lock = True
-		Bit16Mode = DrawTick(40 + 430 - 15, 260 - 55 + 65 + 8, Bit16Mode, Lock)
-		LauncherEnabled = DrawTick(40 + 430 - 15, 260 - 55 + 95 + 8, LauncherEnabled)
+		LauncherEnabled = DrawTick(40 + 430 - 15, 260 - 55 + 65 + 8, LauncherEnabled)
 		
 		If BorderlessWindowed Then
 			Color(255, 0, 0)
- 		   Fullscreen = False
+			Fullscreen = False
 		Else
 			Color(255, 255, 255)
 		EndIf
@@ -1306,35 +1294,14 @@ Function UpdateLauncher()
 		Text(40 + 430 + 15, 262 - 55 + 35 - 8, "Borderless", False, False)
 		Text(40 + 430 + 15, 262 - 55 + 35 + 12, "windowed mode", False, False)
 		
-		If BorderlessWindowed Or (Not Fullscreen) Then
-			Color(255, 0, 0)
- 		   Bit16Mode = False
-		Else
-		    Color(255, 255, 255)
-		EndIf
-		
-		Text(40 + 430 + 15, 262 - 55 + 65 + 8, "16 Bit")
 		Color(255, 255, 255)
-		Text(40 + 430 + 15, 262 - 55 + 95 + 8, "Use launcher")
-		
-		If (Not BorderlessWindowed) Then
-			If Fullscreen Then
-				Text(40 + 260 + 15, 262 - 55 + 140, "Current Resolution: " + (GfxModeWidths(SelectedGFXMode) + "x" + GfxModeHeights(SelectedGFXMode) + "," + (16 + (16 * (Not Bit16Mode)))))
-			Else
-				Text(40 + 260 + 15, 262 - 55 + 140, "Current Resolution: " + (GfxModeWidths(SelectedGFXMode) + "x" + GfxModeHeights(SelectedGFXMode) + ",32"))
-			EndIf
-		Else
-	        Text(40 + 260 + 15, 262 - 55 + 140, "Current Resolution: " + GfxModeWidths(SelectedGFXMode) + "x" + GfxModeHeights(SelectedGFXMode) + ",32")
-			If GfxModeWidths(SelectedGFXMode) < G_Viewport_Width Then
-				Text(40 + 260 + 65, 262 - 55 + 200, "(upscaled to " + G_Viewport_Width + "x" + G_Viewport_Height + ",32)")
-			ElseIf GfxModeWidths(SelectedGFXMode) > G_Viewport_Width Then
-				Text(40 + 260 + 65, 262 - 55 + 200, "(downscaled to " + G_Viewport_Width + "x" + G_Viewport_Height + ",32)")
-			EndIf
-		EndIf
+		Text(40 + 430 + 15, 262 - 55 + 65 + 8, "Use launcher")
+		Text(40 + 260 + 15, 262 - 55 + 140, "Current Resolution: " + (GfxModeWidths(SelectedGFXMode) + "x" + GfxModeHeights(SelectedGFXMode) + ",32"))
 		
 		If DrawButton(LauncherWidth - 275, LauncherHeight - 50 - 55, 150, 30, "REPORT A BUG!", False, False, False) Then
 		    ExecFile("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition/news/bug-reports1")
-			End
+			Quit = True
+			Exit
 		EndIf
 		
 		If DrawButton(LauncherWidth - 275, LauncherHeight - 50, 150, 30, "SEE CHANGELOG", False, False, False) Then
@@ -1349,33 +1316,19 @@ Function UpdateLauncher()
 			Exit
 		EndIf
 		
-		If DrawButton(LauncherWidth - 30 - 90, LauncherHeight - 50, 100, 30, "EXIT", False, False, False) Then End
+		If DrawButton(LauncherWidth - 30 - 90, LauncherHeight - 50, 100, 30, "EXIT", False, False, False) Then Quit = True : Exit
 		Flip
 	Forever
 	
 	PutINIValue(OptionFile, "Global", "Width", GfxModeWidths(SelectedGFXMode))
 	PutINIValue(OptionFile, "Global", "Height", GfxModeHeights(SelectedGFXMode))
-	If Fullscreen Then
-		PutINIValue(OptionFile, "Global", "Fullscreen", "true")
-	Else
-		PutINIValue(OptionFile, "Global", "Fullscreen", "false")
-	EndIf
-	If LauncherEnabled Then
-		PutINIValue(OptionFile, "Launcher", "Launcher Enabled", "true")
-	Else
-		PutINIValue(OptionFile, "Launcher", "Launcher Enabled", "false")
-	EndIf
-	If BorderlessWindowed Then
-		PutINIValue(OptionFile, "Global", "Borderless Windowed", "true")
-	Else
-		PutINIValue(OptionFile, "Global", "Borderless Windowed", "false")
-	EndIf
-	If Bit16Mode Then
-		PutINIValue(OptionFile, "Global", "16Bit", "true")
-	Else
-		PutINIValue(OptionFile, "Global", "16Bit", "false")
-	EndIf
-	PutINIValue(OptionFile, "Global", "GFX Driver", SelectedGFXDriver)
+	PutINIValue(OptionFile, "Global", "Fullscreen", Fullscreen)
+	PutINIValue(OptionFile, "Launcher", "Launcher Enabled", LauncherEnabled)
+	PutINIValue(OptionFile, "Global", "Borderless Windowed", BorderlessWindowed)
+	
+	If Quit Then End
+	
+	FreeImage(LauncherIMG)
 End Function
 
 Function DrawTiledImageRect(Img%, SrcX%, SrcY%, SrcWidth#, SrcHeight#, x%, y%, Width%, Height%)

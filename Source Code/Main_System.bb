@@ -40,8 +40,6 @@ Dim ArrowIMG%(4)
 
 Global Depth% = 0
 
-Global LauncherIMG%
-
 Global SelectedGFXMode%
 
 Global Fresize_Image%, Fresize_Texture%, Fresize_Texture2%
@@ -105,7 +103,7 @@ If LauncherEnabled Then
 		RealGraphicWidth = GraphicWidth
 		RealGraphicHeight = GraphicHeight
 		If FullScreen Then
-			Graphics3DExt(GraphicWidth, GraphicHeight, (16 * Bit16Mode), 1)
+			Graphics3DExt(GraphicWidth, GraphicHeight, 0, 1)
 		Else
 			Graphics3DExt(GraphicWidth, GraphicHeight, 0, 2)
 		End If
@@ -147,7 +145,7 @@ Else
 		RealGraphicWidth = GraphicWidth
 		RealGraphicHeight = GraphicHeight
 		If FullScreen Then
-			Graphics3DExt(GraphicWidth, GraphicHeight, (16 * Bit16Mode), 1)
+			Graphics3DExt(GraphicWidth, GraphicHeight, 0, 1)
 		Else
 			Graphics3DExt(GraphicWidth, GraphicHeight, 0, 2)
 		End If
@@ -11771,5 +11769,5 @@ Function InjurePlayer(Injuries_#, Infection# = 0.0, BlurTimer_# = 0.0, WithVest%
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#106F#13F6#1C6E
+;~B#106D#13F4#1C6C
 ;~C#Blitz3D

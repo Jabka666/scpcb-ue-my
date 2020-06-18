@@ -161,5 +161,10 @@ Const MaxCreditsFontIDAmount% = 2
 
 Const SubjectName$ = "Subject D-9341"
 
+; ~ [LAUNCHER]
+
+Const LauncherWidth% = 640
+Const LauncherHeight% = 480
+
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D
