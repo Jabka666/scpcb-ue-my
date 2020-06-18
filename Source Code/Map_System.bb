@@ -4235,10 +4235,10 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\RoomDoors[3]\Buttons[0], EntityX(r\RoomDoors[3]\Buttons[0], True) - 0.061, EntityY(r\RoomDoors[3]\Buttons[0], True), EntityZ(r\RoomDoors[3]\Buttons[0], True), True)
 			PositionEntity(r\RoomDoors[3]\Buttons[1], EntityX(r\RoomDoors[3]\Buttons[1], True) + 0.061, EntityY(r\RoomDoors[3]\Buttons[1], True), EntityZ(r\RoomDoors[3]\Buttons[1], True), True)
 			
-			r\Objects[0] = LoadMesh_Strict("GFX\map\914key.x")
+			r\Objects[0] = LoadMesh_Strict("GFX\map\914key.b3d")
 			PositionEntity(r\Objects[0], r\x - 416.0 * RoomScale, r\y + 190.0 * RoomScale, r\z + 374.0 * RoomScale, True)
 			
-			r\Objects[1] = LoadMesh_Strict("GFX\map\914knob.x")
+			r\Objects[1] = LoadMesh_Strict("GFX\map\914knob.b3d")
 			PositionEntity(r\Objects[1], r\x - 416.0 * RoomScale, r\y + 230.0 * RoomScale, r\z + 374.0 * RoomScale, True)
 			
 			For i = 0 To 1

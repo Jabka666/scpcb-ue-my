@@ -8209,7 +8209,7 @@ Function LoadEntities()
 	
 	; ~ [MISC]
 	
-	o\MiscModelID[0] = LoadMesh_Strict("GFX\items\cup_liquid.x") ; ~ Liquid for cups dispensed by SCP-294
+	o\MiscModelID[0] = LoadMesh_Strict("GFX\items\cup_liquid.b3d") ; ~ Liquid for cups dispensed by SCP-294
 	
 	For i = 0 To MaxMiscModelIDAmount - 1
 		HideEntity(o\MiscModelID[i])
