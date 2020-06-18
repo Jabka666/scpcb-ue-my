@@ -35,7 +35,7 @@ Function LoopSound2%(SoundHandle%, CHN%, Cam%, Entity%, Range# = 10.0, Volume# =
 		ChannelPan(CHN, PanValue)
 	Else
 		If CHN <> 0 Then
-			ChannelVolume (CHN, 0)
+			ChannelVolume(CHN, 0)
 		EndIf 
 	EndIf
 	Return(CHN)
@@ -145,6 +145,14 @@ Function PauseSounds()
 		If ChannelPlaying(BreathCHN) = True Then PauseChannel(BreathCHN)
 	EndIf
 	
+	If BreathGasRelaxedCHN <> 0 Then
+		If ChannelPlaying(BreathGasRelaxedCHN) = True Then PauseChannel(BreathGasRelaxedCHN)
+	EndIf
+	
+	If VomitCHN <> 0 Then
+		If ChannelPlaying(VomitCHN) = True Then PauseChannel(VomitCHN)
+	EndIf
+	
 	If IntercomStreamCHN <> 0 Then
 		SetStreamPaused_Strict(IntercomStreamCHN, True)
 	EndIf
@@ -211,6 +219,14 @@ Function ResumeSounds()
 	
 	If BreathCHN <> 0 Then
 		If ChannelPlaying(BreathCHN) = True Then ResumeChannel(BreathCHN)
+	EndIf
+	
+	If BreathGasRelaxedCHN <> 0 Then
+		If ChannelPlaying(BreathGasRelaxedCHN) = True Then ResumeChannel(BreathGasRelaxedCHN)
+	EndIf
+	
+	If VomitCHN <> 0 Then
+		If ChannelPlaying(VomitCHN) = True Then ResumeChannel(VomitCHN)
 	EndIf
 	
 	If IntercomStreamCHN <> 0 Then
@@ -283,6 +299,14 @@ Function KillSounds()
 		If ChannelPlaying(BreathCHN) = True Then StopChannel(BreathCHN)
 	EndIf
 	
+	If BreathGasRelaxedCHN <> 0 Then
+		If ChannelPlaying(BreathGasRelaxedCHN) = True Then StopChannel(BreathGasRelaxedCHN)
+	EndIf
+	
+	If VomitCHN <> 0 Then
+		If ChannelPlaying(VomitCHN) = True Then StopChannel(VomitCHN)
+	EndIf
+	
 	If IntercomStreamCHN <> 0 Then
 		StopStream_Strict(IntercomStreamCHN)
 		IntercomStreamCHN = 0
@@ -319,7 +343,7 @@ Function GetStepSound(Entity%)
             Texture = GetBrushTexture(Brush, 3)
             If Texture <> 0 Then
                 Name = StripPath(TextureName(Texture))
-                If (Name <> "") Then FreeTexture(Texture)
+                If Name <> "" Then FreeTexture(Texture)
 				For mat.Materials = Each Materials
 					If mat\Name = Name Then
 						If mat\StepSound > 0 Then
@@ -333,7 +357,7 @@ Function GetStepSound(Entity%)
 			Texture = GetBrushTexture(Brush, 2)
 			If Texture <> 0 Then
 				Name = StripPath(TextureName(Texture))
-				If (Name <> "") Then FreeTexture(Texture)
+				If Name <> "" Then FreeTexture(Texture)
 				For mat.Materials = Each Materials
 					If mat\Name = Name Then
 						If mat\StepSound > 0 Then
@@ -347,7 +371,7 @@ Function GetStepSound(Entity%)
 			Texture = GetBrushTexture(Brush, 1)
 			If Texture <> 0 Then
 				Name = StripPath(TextureName(Texture))
-				If (Name <> "") Then FreeTexture(Texture)
+				If Name <> "" Then FreeTexture(Texture)
 				FreeBrush(Brush)
 				For mat.Materials = Each Materials
 					If mat\Name = Name Then
@@ -372,7 +396,7 @@ Function UpdateSoundOrigin2(CHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0)
 		If 1.0 - Dist > 0.0 And 1.0 - Dist < 1.0 Then
 			Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 			
-			ChannelVolume(CHN, Volume * (1. - Dist))
+			ChannelVolume(CHN, Volume * (1.0 - Dist))
 			ChannelPan(CHN, PanValue)
 		EndIf
 	Else
@@ -386,7 +410,7 @@ Function UpdateSoundOrigin(CHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0)
 	Range = Max(Range, 1.0)
 	
 	If Volume > 0.0 Then
-		Local Dist# = EntityDistance(Cam, Entity) / Range#
+		Local Dist# = EntityDistance(Cam, Entity) / Range
 		
 		If 1.0 - Dist > 0.0 And 1.0 - Dist < 1.0 Then
 			Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
@@ -504,12 +528,8 @@ Function LoadAllSounds()
 		CloseDoorSFX(2, i) = LoadSound_Strict("SFX\Door\Door2Close" + (i + 1) + ".ogg")
 		OpenDoorSFX(3, i) = LoadSound_Strict("SFX\Door\ElevatorOpen" + (i + 1) + ".ogg")
 		CloseDoorSFX(3, i) = LoadSound_Strict("SFX\Door\ElevatorClose" + (i + 1) + ".ogg")
-	Next
-	For i = 0 To 2
 		OpenDoorSFX(1, i) = LoadSound_Strict("SFX\Door\BigDoorOpen" + (i + 1) + ".ogg")
 		CloseDoorSFX(1, i) = LoadSound_Strict("SFX\Door\BigDoorClose" + (i + 1) + ".ogg")
-	Next
-	For i = 0 To 2
 		BigDoorErrorSFX(i) = LoadSound_Strict("SFX\Door\BigDoorError" + (i + 1) + ".ogg")
 	Next
 	
@@ -519,7 +539,7 @@ Function LoadAllSounds()
 	ScannerSFX2 = LoadSound_Strict("SFX\Interact\ScannerUse2.ogg")
 	
 	OpenDoorFastSFX = LoadSound_Strict("SFX\Door\DoorOpenFast.ogg")
-	CautionSFX% = LoadSound_Strict("SFX\Room\LockroomSiren.ogg")
+	CautionSFX = LoadSound_Strict("SFX\Room\LockroomSiren.ogg")
 	
 	CameraSFX = LoadSound_Strict("SFX\General\Camera.ogg") 
 	
