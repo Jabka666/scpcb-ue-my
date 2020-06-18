@@ -8070,14 +8070,14 @@ Function UpdateRoomLights(Cam%)
 							ShowEntity(r\LightSprites[i])
 							
 							If EntityDistance(Cam, r\Lights[i]) < 8.5 Then
-								If r\LightHidden[i] Then
+								If (Not r\LightHidden[i]) Then
 									ShowEntity(r\Lights[i])
-									r\LightHidden[i] = False
+									r\LightHidden[i] = True
 								EndIf
 							Else
-								If (Not r\LightHidden[i]) Then
+								If r\LightHidden[i] Then
 									HideEntity(r\Lights[i])
-									r\LightHidden[i] = True
+									r\LightHidden[i] = False
 								EndIf
 							EndIf
 							
@@ -8199,9 +8199,9 @@ Function UpdateRoomLights(Cam%)
 							ShowEntity(r\LightSprites[i])
 						EndIf
 						
-						If (Not r\LightHidden[i]) Then
+						If r\LightHidden[i] Then
 							HideEntity(r\Lights[i])
-							r\LightHidden[i] = True
+							r\LightHidden[i] = False
 						EndIf
 						If (Not r\LightSpriteHidden[i]) Then
 							HideEntity(r\LightSprites2[i])

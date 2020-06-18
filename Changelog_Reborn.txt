@@ -20,7 +20,6 @@
 - Changed text when player is using Level 6 Key Card.
 - Changed Level 6 Key Card's achievement name.
 - Changed bloody textures in fake SCP-1123's containment chamber.
-- Changed SCP-1123's containment chamber.
 
 - Replaced O5-14 Burnt Document by batteries in room2offices5.
 
@@ -88,6 +87,7 @@ Bug Fixes:
 - Fixed grammatical mistake for one of the SCP-1048's drawings.
 - Fixed SCP-1123 for SCP-714.
 - Fixed some buttons' positions.
+- Fixed room lights not working most of the time.
 
 - Small fixes for room2testroom's event.
 - Small fixes for commands "disablenuke" and "enablecontrol/disablecontrol.
