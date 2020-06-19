@@ -4422,7 +4422,7 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "room2ccont"
 			;[Block]
-			d = CreateDoor(r\Zone, r\x + 64.0 * RoomScale, r\y, r\z + 368.0 * RoomScale, 180.0, r, False, False, 3)
+			d = CreateDoor(r\Zone, r\x + 64.0 * RoomScale, r\y, r\z + 368.0 * RoomScale, 0.0, r, False, False, 3)
 			d\AutoClose = False
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0],True) + 0.061, True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1],True) - 0.061, True)
