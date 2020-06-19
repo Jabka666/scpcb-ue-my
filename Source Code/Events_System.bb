@@ -9339,7 +9339,7 @@ Function UpdateDimension1499()
 End Function
 
 Function UpdateEndings()
-	Local Dist#, i%, Pvt%
+	Local Dist#, i%, Pvt%, Temp%, xTemp#, zTemp#, Angle#
 	Local e.Events, n.NPCs, r.Rooms, p.Particles
 	
 	For e.Events = Each Events
@@ -9348,6 +9348,7 @@ Function UpdateEndings()
 				;[Block]
 				If PlayerRoom = e\room Then
 					If EntityY(Collider) > 1040.0 * RoomScale Then
+						e\room\RoomDoors[1]\Locked = True
 						
 						For r.Rooms = Each Rooms
 							HideEntity(r\OBJ)
@@ -9525,7 +9526,7 @@ Function UpdateEndings()
 										Temp = True
 										For e2.Events = Each Events
 											If e2\EventName = "room2nuke" Then
-												temp = e2\EventState
+												Temp = e2\EventState
 												Exit
 											EndIf
 										Next

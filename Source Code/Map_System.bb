@@ -1826,10 +1826,10 @@ Function FillRoom(r.Rooms)
 			;[Block]
 			; ~ Doors to observation booth
 			d = CreateDoor(r\Zone, r\x + 928.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 0.0, r, False, False, False, "GEAR")
-			d\AutoClose = False
+			d\AutoClose = False : d\Locked = True
 			
 			d = CreateDoor(r\Zone, r\x + 928.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 0.0, r, True, False, False, "GEAR")
-			d\AutoClose = False
+			d\AutoClose = False : d\Locked = True
 			
 			; ~ Doors to the room itself
 			d = CreateDoor(r\Zone, r\x + 416.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 0.0, r, False, False, 3)
@@ -2096,7 +2096,7 @@ Function FillRoom(r.Rooms)
 			RotateEntity(r\RoomDoors[4]\Buttons[0], 0.0, r\Angle - 180, 0.0, True)
 			
 			r\RoomDoors[5] = CreateDoor(r\Zone, r\x + 3248.0 * RoomScale, r\y + 9856.0 * RoomScale, r\z + 6400.0 * RoomScale, 0.0, r, False, False, False, "GEAR")
-			r\RoomDoors[5]\AutoClose = False	
+			r\RoomDoors[5]\AutoClose = False : r\RoomDoors[5]\Locked = True
 			FreeEntity(r\RoomDoors[5]\Buttons[1]) : r\RoomDoors[5]\Buttons[1] = 0	
 			
 			d = CreateDoor(r\Zone, r\x + 3072.0 * RoomScale, r\y + 9856.0 * RoomScale, r\z + 5800.0 * RoomScale, 90.0, r, False, False, 3)
@@ -2534,7 +2534,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) - 0.061, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)	
 			
 			d = CreateDoor(r\Zone, r\x - 496.0 * RoomScale, r\y, r\z, 270.0, r, False, False, False, "GEAR")
-			d\AutoClose = False : d\Locked = True	
+			d\AutoClose = False : d\Locked = True : d\MTFClose = False : d\DisableWayPoint = True
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) + 0.061, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) - 0.061, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)						
 			
