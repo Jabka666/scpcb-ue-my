@@ -4598,7 +4598,7 @@ Function DrawGUI()
 		Rect(x - 50 - 1, y - 1, 30 + 2, 30 + 2, False)
 		If Crouch Then
 			DrawImage(tt\IconID[2], x - 50, y)
-		ElseIf KeyDown(key\SPRINT) And CurrSpeed > 0.0 And (Not chs\NoClip) And Stamina > 0.0
+		ElseIf KeyDown(key\SPRINT) And CurrSpeed > 0.0 And (Not chs\NoClip) And Stamina > 0.0 And PlayerRoom\RoomTemplate\Name <> "pocketdimension"
 			DrawImage(tt\IconID[1], x - 50, y)
 		Else
 			DrawImage(tt\IconID[0], x - 50, y)
