@@ -1894,6 +1894,7 @@ Dim RadioSFX%(5, 10)
 
 Global RadioSquelch% 
 Global RadioStatic% 
+Global RadioStatic895%
 Global RadioBuzz% 
 
 Global ElevatorBeepSFX%, ElevatorMoveSFX% 
@@ -6126,8 +6127,8 @@ Function DrawGUI()
 					If RadioState(5) = 0 Then 
 						msg\Msg = "Use the numbered keys 1 through 5 to cycle between various channels."
 						msg\Timer = 70.0 * 6.0
-						RadioState(5) = 1
-						RadioState(0) = -1
+						RadioState(5) = 1.0
+						RadioState(0) = -1.0
 					EndIf
 					
 					StrTemp = ""
@@ -6138,9 +6139,11 @@ Function DrawGUI()
 					DrawImage(SelectedItem\ItemTemplate\Img, x, y)
 					
 					If SelectedItem\State > 0.0 Then
-						If PlayerRoom\RoomTemplate\Name = "pocketdimension" Or CoffinDistance < 4.0 Then
+						If PlayerRoom\RoomTemplate\Name = "pocketdimension" Then
 							ResumeChannel(RadioCHN(5))
 							If ChannelPlaying(RadioCHN(5)) = False Then RadioCHN(5) = PlaySound_Strict(RadioStatic)	
+						ElseIf CoffinDistance < 8.0
+							If ChannelPlaying(RadioCHN(5)) = False Then RadioCHN(5) = PlaySound_Strict(RadioStatic895)	
 						Else
 							Select Int(SelectedItem\State2)
 								Case 0
@@ -6158,9 +6161,9 @@ Function DrawGUI()
 											If (Not UserTrackFlag) Then
 												If UserTrackMode
 													If RadioState(0) < (UserTrackMusicAmount - 1)
-														RadioState(0) = RadioState(0) + 1
+														RadioState(0) = RadioState(0) + 1.0
 													Else
-														RadioState(0) = 0
+														RadioState(0) = 0.0
 													EndIf
 													UserTrackFlag = True
 												Else
@@ -6180,13 +6183,13 @@ Function DrawGUI()
 											If (Not UserTrackFlag) Then
 												If UserTrackMode
 													If RadioState(0) < (UserTrackMusicAmount - 1)
-														RadioState(0) = RadioState(0) + 1
+														RadioState(0) = RadioState(0) + 1.0
 													Else
-														RadioState(0) = 0
+														RadioState(0) = 0.0
 													EndIf
 													UserTrackFlag = True
 												Else
-													RadioState(0) = Rand(0, UserTrackMusicAmount - 1)
+													RadioState(0) = Rand(0.0, UserTrackMusicAmount - 1)
 												EndIf
 											EndIf
 											If CurrUserTrack <> 0 Then FreeSound_Strict(CurrUserTrack) : CurrUserTrack = 0
@@ -6201,11 +6204,11 @@ Function DrawGUI()
 									StrTemp = "        WARNING - CONTAINMENT BREACH          "
 									If ChannelPlaying(RadioCHN(1)) = False Then
 										
-										If RadioState(1) >= 5 Then
+										If RadioState(1) >= 5.0 Then
 											RadioCHN(1) = PlaySound_Strict(RadioSFX(1, 1))	
-											RadioState(1) = 0
+											RadioState(1) = 0.0
 										Else
-											RadioState(1) = RadioState(1) + 1	
+											RadioState(1) = RadioState(1) + 1.0	
 											RadioCHN(1) = PlaySound_Strict(RadioSFX(1, 0))	
 										EndIf
 									EndIf
@@ -6215,8 +6218,8 @@ Function DrawGUI()
 									ResumeChannel(RadioCHN(2))
 									StrTemp = "        SCP Foundation On-Site Radio          "
 									If ChannelPlaying(RadioCHN(2)) = False Then
-										RadioState(2) = RadioState(2) + 1
-										If RadioState(2) = 17 Then RadioState(2) = 1
+										RadioState(2) = RadioState(2) + 1.0
+										If RadioState(2) = 17 Then RadioState(2) = 1.0
 										If Floor(RadioState(2) / 2) = Ceil(RadioState(2) / 2) Then
 											RadioCHN(2) = PlaySound_Strict(RadioSFX(2, Int(RadioState(2) / 2)))	
 										Else
@@ -6231,13 +6234,13 @@ Function DrawGUI()
 									If ChannelPlaying(RadioCHN(3)) = False Then RadioCHN(3) = PlaySound_Strict(RadioStatic)
 									
 									If MTFTimer > 0.0 Then 
-										RadioState(3) = RadioState(3) + Max(Rand(-10, 1), 0)
+										RadioState(3) = RadioState(3) + Max(Rand(-10, 1), 0.0)
 										Select RadioState(3)
 											Case 40
 												;[Block]
 												If (Not RadioState3(0)) Then
 													RadioCHN(3) = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random1.ogg"))
-													RadioState(3) = RadioState(3) + 1	
+													RadioState(3) = RadioState(3) + 1.0	
 													RadioState3(0) = True	
 												EndIf	
 												;[End Block]
@@ -6245,7 +6248,7 @@ Function DrawGUI()
 												;[Block]
 												If (Not RadioState3(1)) Then
 													RadioCHN(3) = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random2.ogg"))
-													RadioState(3) = RadioState(3) + 1	
+													RadioState(3) = RadioState(3) + 1.0	
 													RadioState3(1) = True	
 												EndIf	
 												;[End Block]
@@ -6253,7 +6256,7 @@ Function DrawGUI()
 												;[Block]
 												If (Not RadioState3(2)) Then
 													RadioCHN(3) = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random3.ogg"))
-													RadioState(3) = RadioState(3) + 1	
+													RadioState(3) = RadioState(3) + 1.0	
 													RadioState3(2) = True
 												EndIf		
 												;[End Block]
@@ -6261,7 +6264,7 @@ Function DrawGUI()
 												;[Block]
 												If (Not RadioState3(3)) Then
 													RadioCHN(3) = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random4.ogg"))	
-													RadioState(3) = RadioState(3) + 1	
+													RadioState(3) = RadioState(3) + 1.0	
 													RadioState3(3) = True
 												EndIf
 												;[End Block]
@@ -6269,7 +6272,7 @@ Function DrawGUI()
 												;[Block]
 												If (Not RadioState3(4)) Then
 													RadioCHN(3) = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random5.ogg"))	
-													RadioState(3) = RadioState(3) + 1
+													RadioState(3) = RadioState(3) + 1.0
 													RadioState3(4) = True
 												EndIf
 												;[End Block]
@@ -6277,7 +6280,7 @@ Function DrawGUI()
 												;[Block]
 												If (Not RadioState3(5)) Then
 													RadioCHN(3) = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random6.ogg"))	
-													RadioState(3) = RadioState(3) + 1
+													RadioState(3) = RadioState(3) + 1.0
 													RadioState3(5) = True
 												EndIf
 												;[End Block]
@@ -6285,7 +6288,7 @@ Function DrawGUI()
 												;[Block]
 												If (Not RadioState3(6)) Then
 													RadioCHN(3) = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random7.ogg"))	
-													RadioState(3) = RadioState(3) + 1
+													RadioState(3) = RadioState(3) + 1.0
 													RadioState3(6) = True
 												EndIf
 												;[End Block]
@@ -6303,7 +6306,7 @@ Function DrawGUI()
 											RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\Radio\Chatter3.ogg"))	
 											RadioState(8) = True
 										Else
-											RadioState(4) = RadioState(4) + Max(Rand(-10, 1), 0)
+											RadioState(4) = RadioState(4) + Max(Rand(-10, 1), 0.0)
 											
 											Select RadioState(4)
 												Case 10
@@ -6311,7 +6314,7 @@ Function DrawGUI()
 													If (Not Curr106\Contained) Then
 														If (Not RadioState4(0)) Then
 															RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\Radio\OhGod.ogg"))
-															RadioState(4) = RadioState(4) + 1
+															RadioState(4) = RadioState(4) + 1.0
 															RadioState4(0) = True
 														EndIf
 													EndIf
@@ -6320,7 +6323,7 @@ Function DrawGUI()
 													;[Block]
 													If (Not RadioState4(1)) Then
 														RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\Radio\Chatter2.ogg"))
-														RadioState(4) = RadioState(4) + 1
+														RadioState(4) = RadioState(4) + 1.0
 														RadioState4(1) = True
 													EndIf	
 													;[End Block]
@@ -6328,7 +6331,7 @@ Function DrawGUI()
 													;[Block]
 													If MTFTimer = 0.0 And (Not RadioState4(2)) Then 
 														RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\Radio\Franklin1.ogg"))
-														RadioState(4) = RadioState(4) + 1
+														RadioState(4) = RadioState(4) + 1.0
 														RadioState(2) = True
 													EndIf
 													;[End Block]
@@ -6336,7 +6339,7 @@ Function DrawGUI()
 													;[Block]
 													If (Not RadioState4(3)) Then
 														RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\Radio\Chatter4.ogg"))
-														RadioState(4) = RadioState(4) + 1
+														RadioState(4) = RadioState(4) + 1.0
 														RadioState4(3) = True
 													EndIf		
 													;[End Block]
@@ -6344,7 +6347,7 @@ Function DrawGUI()
 													;[Block]
 													If (Not RadioState4(4)) Then
 														RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\SCP\035\RadioHelp1.ogg"))
-														RadioState(4) = RadioState(4) + 1
+														RadioState(4) = RadioState(4) + 1.0
 														RadioState4(4) = True
 													EndIf		
 													;[End Block]
@@ -6352,7 +6355,7 @@ Function DrawGUI()
 													;[Block]
 													If (Not RadioState4(5)) Then
 														RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\Radio\Chatter1.ogg"))	
-														RadioState(4) = RadioState(4) + 1	
+														RadioState(4) = RadioState(4) + 1.0	
 														RadioState4(5) = True
 													EndIf		
 													;[End Block]
@@ -6360,7 +6363,7 @@ Function DrawGUI()
 													;[Block]
 													If (Not RadioState4(6)) Then
 														RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\Radio\Franklin2.ogg"))
-														RadioState(4) = RadioState(4) + 1
+														RadioState(4) = RadioState(4) + 1.0
 														RadioState4(6) = True
 													EndIf		
 													;[End Block]
@@ -6368,7 +6371,7 @@ Function DrawGUI()
 													;[Block]
 													If (Not RadioState4(7)) Then
 														RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\SCP\035\RadioHelp2.ogg"))
-														RadioState(4) = RadioState(4) + 1
+														RadioState(4) = RadioState(4) + 1.0
 														RadioState4(7) = True
 													EndIf		
 													;[End Block]
@@ -6376,7 +6379,7 @@ Function DrawGUI()
 													;[Block]
 													If (Not RadioState4(8)) Then
 														RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\Radio\Franklin3.ogg"))	
-														RadioState(4) = RadioState(4) + 1		
+														RadioState(4) = RadioState(4) + 1.0		
 														RadioState4(8) = True
 													EndIf		
 													;[End Block]
@@ -6384,7 +6387,7 @@ Function DrawGUI()
 													;[Block]
 													If (Not RadioState4(9)) Then
 														RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\Radio\Franklin4.ogg"))	
-														RadioState(4) = RadioState(4) + 1	
+														RadioState(4) = RadioState(4) + 1.0	
 														RadioState4(9) = True
 													EndIf		
 													;[End Block]
@@ -6420,12 +6423,12 @@ Function DrawGUI()
 								Temp = Mid(Str(AccessCode), RadioState(8) + 1, 1)
 								If RadioState(6) - fpst\FPSFactor[0] =< RadioState(7) * 50 And RadioState(6) > RadioState(7) * 50 Then
 									PlaySound_Strict(RadioBuzz)
-									RadioState(7) = RadioState(7) + 1
+									RadioState(7) = RadioState(7) + 1.0
 									If RadioState(7) >= Temp Then
-										RadioState(7) = 0
-										RadioState(6) = -100
-										RadioState(8) = RadioState(8) + 1
-										If RadioState(8) = 4 Then RadioState(8) = 0 : RadioState(6) = -200
+										RadioState(7) = 0.0
+										RadioState(6) = -100.0
+										RadioState(8) = RadioState(8) + 1.0
+										If RadioState(8) = 4.0 Then RadioState(8) = 0.0 : RadioState(6) = -200.0
 									EndIf
 								EndIf
 								
@@ -11750,5 +11753,5 @@ Function InjurePlayer(Injuries_#, Infection# = 0.0, BlurTimer_# = 0.0, WithVest%
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1037#13CB#1C3F
+;~B#1038#13CC#1C42
 ;~C#Blitz3D

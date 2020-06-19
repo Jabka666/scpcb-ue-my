@@ -687,6 +687,8 @@ Function LoadAllSounds()
 	Next
 	
 	CrouchSFX = LoadSound_Strict("SFX\Character\D9341\Crouch.ogg")
+	
+	RadioStatic895 = LoadSound_Strict("SFX\Radio\Static895.ogg")
 End Function
 
 ;~IDEal Editor Parameters:
