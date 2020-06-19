@@ -4,7 +4,7 @@ Const ItemsPath$ = "GFX\items\"
 
 ; ~ [OPTIONS]
 
-Const OptionFile$ = "options.ini"
+Const OptionFile$ = "Data\options.ini"
 
 ; ~ [VERSION]
 

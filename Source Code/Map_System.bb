@@ -8014,9 +8014,10 @@ Function LoadTerrain(HeightMap, yScale# = 0.7, t1%, t2%, Mask%)
 			; ~ You might get better results by downscaling the mask to the same size as the heightmap
 			Local MaskX# = Min(lx * Float(TextureWidth(Mask)) / Float(ImageWidth(HeightMap)), TextureWidth(Mask) - 1)
 			Local MaskY# = TextureHeight(Mask) - Min(ly * Float(TextureHeight(Mask)) / Float(ImageHeight(HeightMap)), TextureHeight(Mask) - 1)
+			Local RGB%, RED%
 			
-			RGB1 = ReadPixelFast(Min(lx, x - 1.0), y - Min(ly, y - 1.0), ImageBuffer(HeightMap))
-			r = (RGB1 And $FF0000) Shr 16 ; ~ Separate out the red
+			RGB = ReadPixelFast(Min(lx, x - 1.0), y - Min(ly, y - 1.0), ImageBuffer(HeightMap))
+			RED = (RGB And $FF0000) Shr 16 ; ~ Separate out the red
 			
 			Local Alpha# = (((ReadPixelFast(Max(MaskX -5.0, 5.0), Max(MaskY - 5.0, 5.0), TextureBuffer(Mask)) And $FF000000) Shr 24) / $FF)
 			
@@ -8027,8 +8028,8 @@ Function LoadTerrain(HeightMap, yScale# = 0.7, t1%, t2%, Mask%)
 			Alpha = Sqr(Alpha)
 			
 			Index = lx + ((x + 1) * ly)
-			VertexCoords(Surf, Index , VertexX(Surf,Index), r * yScale, VertexZ(Surf, Index))
-			VertexCoords(Surf2, Index , VertexX(Surf2,Index), r * yScale, VertexZ(Surf2, Index))
+			VertexCoords(Surf, Index , VertexX(Surf,Index), RED * yScale, VertexZ(Surf, Index))
+			VertexCoords(Surf2, Index , VertexX(Surf2,Index), RED * yScale, VertexZ(Surf2, Index))
 			VertexColor(Surf2, Index, 255.0, 255.0, 255.0, Alpha)
 			; ~ Set the terrain texture coordinates
 			VertexTexCoords(Surf, Index, lx, -ly )
