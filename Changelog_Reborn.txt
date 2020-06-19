@@ -12,21 +12,23 @@
 - Added blank paper.
 - Added SCP-205's document.
 - Added option to (re)enable/disable the launcher in-game.
+- Added command "106retreat".
+- Added new key card loading screen.
 
 - Now guard in "room2elevator" event can kill the player if he too close.
 - Now the pass code for O5 Council's office drops from falling guard in SCP-895's event.
-- Now ballistic vest reduces damage from NPC.
 - Now crouching reduces stamina.
-- Now ballistic helmet protects from zombies' attacks.
+- Now ballistic vest and ballistic helmet reduces damage from some NPCs.
 
 - Changed one bump texture to the better one.
 - Changed text when player is using Level 6 Key Card.
 - Changed level 6 key card's achievement name.
 - Changed bloody textures in fake SCP-1123's containment chamber.
-- Changed the name of the Custom difficulty to "Esoteric".
+- Changed the name of the custom difficulty to "Esoteric".
 - Changed design of SCP-1025's pages.
 - Changed console font.
 - Changed SCP-1048's achievement icon.
+- Changed NVG, SCP-008, SCP-682 and SCP-1048's loading screens.
 
 - Replaced O5-14 Burnt Document by batteries in room2offices5.
 

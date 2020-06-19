@@ -612,6 +612,7 @@ Function UpdateConsole()
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("- reset096")
 							CreateConsoleMsg("- reset372")
+							CreateConsoleMsg("- 106retreat")
 							CreateConsoleMsg("- disable173")
 							CreateConsoleMsg("- enable173")
 							CreateConsoleMsg("- disable106")
@@ -738,6 +739,13 @@ Function UpdateConsole()
 						    CreateConsoleMsg("HELP - reset372")
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("Returns SCP-372 to inactive state.")
+							CreateConsoleMsg("******************************")
+							;[End Block]
+						Case "106retreat" 
+							;[Block]
+						    CreateConsoleMsg("HELP - 106retreat")
+							CreateConsoleMsg("******************************")
+							CreateConsoleMsg("Returns SCP-106 to inactive state.")
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "disable106"
@@ -1117,6 +1125,15 @@ Function UpdateConsole()
 							n\Idle = False
 			            EndIf
 			        Next
+					;[End Block]
+				Case "106retreat"
+					;[Block]
+					If Curr106\State =< 0.0 Then
+						Curr106\State = Rnd(22000.0, 27000.0)
+						PositionEntity(Curr106\Collider, 0.0, 500.0, 0.0)
+					Else
+						CreateConsoleMsg("SCP-106 is currently not active, so it cannot retreat.")
+					EndIf
 					;[End Block]
 				Case "halloween"
 					;[Block]
@@ -1750,19 +1767,20 @@ CreateConsoleMsg("  - noclip [on / off]")
 CreateConsoleMsg("  - infinitestamina[on / off]")
 CreateConsoleMsg("  - noblink [on / off]")
 CreateConsoleMsg("  - notarget [on / off]")
-CreateConsoleMsg("  - chs\NoClipSpeed [x] (default = 2.0)")
+CreateConsoleMsg("  - noclipspeed [x] (default = 2.0)")
 CreateConsoleMsg("  - wireframe [on / off]")
 CreateConsoleMsg("  - debughud [on / off]")
 CreateConsoleMsg("  - camerafog [near] [far]")
 CreateConsoleMsg(" ")
 CreateConsoleMsg("  - heal")
+CreateConsoleMsg("  - revive")
+CreateConsoleMsg("  - asd")
 CreateConsoleMsg(" ")
 CreateConsoleMsg("  - spawnitem [item name]")
 CreateConsoleMsg(" ")
-CreateConsoleMsg("  - 173speed [x] (default = 35)")
+CreateConsoleMsg("  - 106retreat")
 CreateConsoleMsg("  - disable173 / enable173")
 CreateConsoleMsg("  - disable106 / enable106")
-CreateConsoleMsg("  - 173state / 106state / 096state")
 CreateConsoleMsg("  - spawn [NPC type]")
 
 Global DebugHUD%
@@ -11732,5 +11750,5 @@ Function InjurePlayer(Injuries_#, Infection# = 0.0, BlurTimer_# = 0.0, WithVest%
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1025#13B9#1C2D
+;~B#1037#13CB#1C3F
 ;~C#Blitz3D
