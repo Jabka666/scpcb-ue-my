@@ -3481,6 +3481,10 @@ Function Kill(IsBloody% = False)
 		If ChannelPlaying(BreathCHN) = True Then StopChannel(BreathCHN)
 	EndIf
 	
+	If BreathGasRelaxedCHN <> 0 Then
+		If ChannelPlaying(BreathGasRelaxedCHN) = True Then StopChannel(BreathGasRelaxedCHN)
+	EndIf
+	
 	If KillTimer >= 0.0 Then
 		If IsBloody Then ShowEntity(tt\OverlayID[10])
 		
@@ -11728,5 +11732,5 @@ Function InjurePlayer(Injuries_#, Infection# = 0.0, BlurTimer_# = 0.0, WithVest%
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1021#13B5#1C29
+;~B#1025#13B9#1C2D
 ;~C#Blitz3D

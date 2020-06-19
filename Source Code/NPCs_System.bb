@@ -93,7 +93,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			n\Speed = GetINIFloat("Data\NPCs.ini", "SCP-173", "Speed") / 100.0
 			
 			n\OBJ2 = CopyEntity(o\NPCModelID[28])
-			ScaleEntity(n\OBJ2, RoomScale, 1.025 * RoomScale, RoomScale)
+			ScaleEntity(n\OBJ2, RoomScale, RoomScale, RoomScale)
 			HideEntity(n\OBJ2)
 			
 			n\CollRadius = 0.32

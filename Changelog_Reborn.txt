@@ -48,7 +48,7 @@
 - Renamed room2testroom2 to room2testroom.
 
 - Combined "scp_1048_pen.b3d" and "scp_1048.b3d" models. 
-- Combined texture for SCP-173's cell.
+- Combined texture of SCP-173's cell.
 
 - Improved SCP-914.
 - Improved some loading screens.
