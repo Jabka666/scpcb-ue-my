@@ -5164,7 +5164,7 @@ Function FillRoom(r.Rooms)
 						zTemp = 150.0
 						;[End Block]
 				End Select
-				sc = CreateSecurityCam(r\x + scX * RoomScale, r\y + scY * RoomScale, r\z + scZ * RoomScale, r)
+				sc = CreateSecurityCam(r\x + xTemp * RoomScale, r\y + yTemp * RoomScale, r\z + zTemp * RoomScale, r)
 				If i = 0 Then
 					sc\Angle = 220.0
 				Else
