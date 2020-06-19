@@ -6463,7 +6463,7 @@ Global SelectedMonitor.SecurityCams
 Global CoffinCam.SecurityCams
 
 Type SecurityCams
-	Field OBJ%, MonitorOBJ%
+	Field OBJ%, MonitorOBJ%, Pvt%
 	Field BaseOBJ%, CameraOBJ%
 	Field ScrOBJ%, ScrWidth#, ScrHeight#
 	Field Screen%, Cam%, ScrTexture%, ScrOverlay%
@@ -6569,18 +6569,12 @@ Function UpdateSecurityCams()
 							EndIf
 						EndIf
 					EndIf
-					PointEntity(sc\CameraOBJ, Camera)
+					If sc\Pvt = 0 Then sc\Pvt = CreatePivot(sc\OBJ) : EntityParent(sc\Pvt, 0) ; ~ Sets position and rotation of the pivot to the cam object
+					PointEntity(sc\Pvt, Camera)
 					
-					Local Temp# = EntityPitch(sc\CameraOBJ)
-					
-					RotateEntity(sc\OBJ, 0.0, CurveAngle(EntityYaw(sc\CameraOBJ), EntityYaw(sc\OBJ), 75.0), 0.0)
-					
-					If Temp < 40.0 Then Temp = 40.0
-					If Temp > 70.0 Then Temp = 70.0
-					RotateEntity(sc\CameraOBJ, CurveAngle(Temp, EntityPitch(sc\CameraOBJ), 75.0), EntityYaw(sc\OBJ), 0.0)
+					RotateEntity(sc\CameraOBJ, CurveAngle(EntityPitch(sc\Pvt), EntityPitch(sc\CameraOBJ), 75.0), CurveAngle(EntityYaw(sc\Pvt), EntityYaw(sc\CameraOBJ), 75.0), 0.0)
 					
 					PositionEntity(sc\CameraOBJ, EntityX(sc\OBJ, True), EntityY(sc\OBJ, True) - 0.083, EntityZ(sc\OBJ, True))
-					RotateEntity(sc\CameraOBJ, EntityPitch(sc\CameraOBJ), EntityYaw(sc\OBJ), 0.0)
 				Else
 					If sc\Turn > 0.0 Then
 						If sc\Dir = 0 Then
@@ -6591,10 +6585,8 @@ Function UpdateSecurityCams()
 							If sc\CurrAngle < (-sc\Turn) * 1.3 Then sc\Dir = 0
 						End If
 					End If
-					RotateEntity(sc\OBJ, 0.0, sc\room\Angle + sc\Angle + Max(Min(sc\CurrAngle, sc\Turn), -sc\Turn), 0.0)
-					
 					PositionEntity(sc\CameraOBJ, EntityX(sc\OBJ, True), EntityY(sc\OBJ, True) - 0.083, EntityZ(sc\OBJ, True))
-					RotateEntity(sc\CameraOBJ, EntityPitch(sc\CameraOBJ), EntityYaw(sc\OBJ), 0.0)
+					RotateEntity(sc\CameraOBJ, EntityPitch(sc\CameraOBJ), sc\room\Angle + sc\Angle + Max(Min(sc\CurrAngle, sc\Turn), -sc\Turn), 0)
 					
 					If sc\Cam <> 0 Then 
 						PositionEntity(sc\Cam, EntityX(sc\CameraOBJ, True), EntityY(sc\CameraOBJ, True), EntityZ(sc\CameraOBJ, True))
@@ -6648,7 +6640,7 @@ Function UpdateSecurityCams()
 						sc\InSight = False
 					EndIf
 					
-					If (sc\State >= sc\RenderInterval)
+					If sc\State >= sc\RenderInterval Then
 						If BlinkTimer > -5.0 And EntityInView(sc\ScrOBJ, Camera)Then
 							If EntityVisible(Camera, sc\ScrOBJ) Then
 								If CoffinCam = Null Or Rand(5) = 5 Or sc\CoffinEffect <> 3 Then

@@ -103,6 +103,7 @@ Bug Fixes:
 - Fixed some buttons' positions.
 - Fixed room lights not working most of the time.
 - Fixed launcher options not saving when quitting.
+- Fixed security camera bases rotating with the cameras.
 
 - Small fixes for room2testroom's event.
 - Small fixes for commands "disablenuke" and "enablecontrol/disablecontrol.
