@@ -16,7 +16,6 @@
 - Now guard in "room2elevator" event can kill the player if he too close.
 - Now the pass code for O5 Council's office drops from falling guard in SCP-895's event.
 - Now ballistic vest reduces damage from NPC.
-- Now paper strips and origami can be used in SCP-914.
 - Now crouching reduces stamina.
 - Now ballistic helmet protects from zombies' attacks.
 
@@ -49,6 +48,7 @@
 
 - Combined "scp_1048_pen.b3d" and "scp_1048.b3d" models. 
 
+- Improved SCP-914.
 - Improved some loading screens.
 
 - Optimized items.
@@ -112,3 +112,4 @@ Bug Fixes:
 - Small fixes for room2medibay2 and room2medibay's walls.
 - Small fixes for room2pipes and room2pipes2.
 - Small fixes for ending tunnel in the Gate A.
+- Small fixes for headphones' texture.
