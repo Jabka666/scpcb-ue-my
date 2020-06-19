@@ -177,7 +177,7 @@ End Function
 Function LoadRMesh(File$, rt.RoomTemplates)
 	CatchErrors("Uncaught (LoadRMesh)")
 	; ~ Generate a texture made of white
-	Local BlankTexture%
+	Local BlankTexture%, BumpTex%
 	
 	BlankTexture = CreateTexture(4, 4, 1, 1)
 	ClsColor(255, 255, 255)
@@ -293,13 +293,13 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 			EndIf
 		Else
 			If Tex[0] <> 0 And Tex[1] <> 0 Then
-				BumpTex% = GetBumpFromCache(StripPath(TextureName(Tex[1])))
+				BumpTex = GetBumpFromCache(StripPath(TextureName(Tex[1])))
 				For j = 0 To 1
 					BrushTexture(Brush, Tex[j], 0, j + 1 + (BumpTex <> 0))
 				Next
 				
 				BrushTexture(Brush, AmbientLightRoomTex, 0)
-				If (BumpTex <> 0) Then
+				If BumpTex <> 0 Then
 					BrushTexture(Brush, BumpTex, 0, 1)
 				EndIf
 			Else
@@ -608,6 +608,8 @@ Function StripPath$(File$)
 End Function
 
 Function Piece$(s$, Entry%, Char$ = " ")
+	Local n%, p%, a$
+	
 	While Instr(s, Char + Char)
 		s = Replace(s, Char + Char, Char)
 	Wend
@@ -617,7 +619,7 @@ Function Piece$(s$, Entry%, Char$ = " ")
 	Next
 	p = Instr(s, Char)
 	If p < 1
-		a$ = s
+		a = s
 	Else
 		a = Left(s, p - 1)
 	EndIf
@@ -625,20 +627,22 @@ Function Piece$(s$, Entry%, Char$ = " ")
 End Function
 
 Function KeyValue$(Entity, Key$, DefaultValue$ = "")
-	Properties$ = EntityName(Entity)
-	Properties$ = Replace(Properties$, Chr(13), "")
+	Local Properties$, p%, TestKey$, Test$, Value$
+	
+	Properties = EntityName(Entity)
+	Properties = Replace(Properties, Chr(13), "")
 	Key = Lower(Key)
 	Repeat
 		p = Instr(Properties, Chr(10))
-		If p Then Test$ = (Left(Properties, p - 1)) Else Test = Properties
-		TestLey$ = Piece(Test, 1, "=")
+		If p Then Test = (Left(Properties, p - 1)) Else Test = Properties
+		TestKey = Piece(Test, 1, "=")
 		TestKey = Trim(TestKey)
-		Testkey = Replace(TestKey, Chr(34), "")
-		Testkey = Lower(TestKey)
-		If Testkey = Key Then
-			Value$ = Piece(Test, 2, "=")
-			Value$ = Trim(Value$)
-			Value$ = Replace(Value$, Chr(34), "")
+		TestKey = Replace(TestKey, Chr(34), "")
+		TestKey = Lower(TestKey)
+		If TestKey = Key Then
+			Value = Piece(Test, 2, "=")
+			Value = Trim(Value)
+			Value = Replace(Value, Chr(34), "")
 			Return(Value)
 		EndIf
 		If (Not p) Then Return(DefaultValue)
@@ -696,7 +700,7 @@ Function GenForestGrid(fr.Forest)
 	LastForestID = LastForestID + 1
 	
 	Local Door1_Pos%, Door2_Pos%
-	Local i%, j%
+	Local i%, j%, n%, LeftMost%, RightMost%
 	
 	Door1_Pos = Rand(3, 7)
 	Door2_Pos = Rand(3, 7)
@@ -1455,29 +1459,6 @@ Function LoadRoomMesh(rt.RoomTemplates)
 	CalculateRoomTemplateExtents(rt)
 	
 	HideEntity(rt\OBJ)
-End Function
-
-Function LoadRoomMeshes()
-	Local Temp% = 0
-	
-	For rt.RoomTemplates = Each RoomTemplates
-		Temp = Temp + 1
-	Next	
-	
-	Local i% = 0
-	
-	For rt.RoomTemplates = Each RoomTemplates
-		If Instr(rt\OBJPath, ".rmesh") <> 0 Then ; ~ File is .rmesh
-			rt\obj = LoadRMesh(rt\OBJPath, rt)
-		Else ; ~ File is .b3d
-			If rt\OBJPath <> "" Then rt\obj = LoadWorld(rt\OBJPath, rt) Else rt\OBJ = CreatePivot()
-		EndIf
-		If (Not rt\OBJ) Then RuntimeError "Failed to load map file " + Chr(34) + MapFile + Chr(34) + "."
-		
-		HideEntity(rt\OBJ)
-		DrawLoading(Int(30.0 + (15.0 / Temp) * i))
-		i = i + 1
-	Next
 End Function
 
 LoadRoomTemplates("Data\rooms.ini")
@@ -8803,5 +8784,5 @@ End Function
 
 
 ;~IDEal Editor Parameters:
-;~B#11FA
+;~B#11E7
 ;~C#Blitz3D

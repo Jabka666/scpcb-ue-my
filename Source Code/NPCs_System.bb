@@ -5175,22 +5175,6 @@ Function MeNPCSeesPlayer%(n.NPCs, DisableSoundOnCrouch% = False)
 	EndIf
 End Function
 
-Function TeleportMTFGroup(n.NPCs)
-	Local n2.NPCs
-	
-	If n\MTFLeader <> Null Then Return
-	
-	TeleportCloser(n)
-	
-	For n2 = Each NPCs
-		If n2\NPCtype = NPCtypeMTF
-			If n2\MTFLeader <> Null
-				PositionEntity(n2\Collider, EntityX(n2\MTFLeader\Collider), EntityY(n2\MTFLeader\Collider) + 0.1, EntityZ(n2\MTFLeader\Collider))
-			EndIf
-		EndIf
-	Next
-End Function
-
 Function UpdateMTFUnit(n.NPCs)
 	Local x#, y#, z#
 	Local r.Rooms
@@ -7513,5 +7497,5 @@ Function Animate2#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = True
 End Function 
 
 ;~IDEal Editor Parameters:
-;~B#16A#121F#1365#13B5#152C#1649#1819#1874
+;~B#16A#121F#1365#13B5#151C#1639#1809#1864
 ;~C#Blitz3D

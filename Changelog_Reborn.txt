@@ -11,6 +11,7 @@
 - Added rusty coin texture.
 - Added blank paper.
 - Added SCP-205's document.
+- Added option to (re)enable/disable the launcher in-game.
 
 - Now guard in "room2elevator" event can kill the player if he too close.
 - Now the pass code for O5 Council's office drops from falling guard in SCP-895's event.
@@ -23,6 +24,9 @@
 - Changed text when player is using Level 6 Key Card.
 - Changed Level 6 Key Card's achievement name.
 - Changed bloody textures in fake SCP-1123's containment chamber.
+- Changed the name of the Custom difficulty to "Esoteric".
+- Changed design of SCP-1025's pages.
+- Changed console font.
 
 - Replaced O5-14 Burnt Document by batteries in room2offices5.
 
@@ -36,6 +40,9 @@
 - Removed quick loading from SCP-966 and SCP-409's containment chambers.
 - Removed achievement of anomalous ducks.
 - Removed paper strips.
+- Removed Graphics Driver Selection, which did not actually change anything anyways.
+- Removed unnecessary console commands.
+- Removed Antialiased Text.
 
 - Renamed room2testroom to room2testroom2.
 - Renamed room2testroom2 to room2testroom.
@@ -95,6 +102,7 @@ Bug Fixes:
 - Fixed SCP-1123 for SCP-714.
 - Fixed some buttons' positions.
 - Fixed room lights not working most of the time.
+- Fixed launcher options not saving when quitting.
 
 - Small fixes for room2testroom's event.
 - Small fixes for commands "disablenuke" and "enablecontrol/disablecontrol.

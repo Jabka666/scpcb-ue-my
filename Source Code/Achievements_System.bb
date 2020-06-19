@@ -40,13 +40,13 @@ End Function
 Function AchievementTooltip(AchvNo%)
     Local Scale# = GraphicHeight / 768.0
 
-    AASetFont(fo\FontID[2])
+    SetFont(fo\FontID[2])
 	
-    Local Width = AAStringWidth(AchievementStrings[AchvNo])
+    Local Width = StringWidth(AchievementStrings[AchvNo])
 	
-    AASetFont(fo\FontID[0])
-    If AAStringWidth(AchievementDescs[AchvNo]) > Width Then
-        Width = AAStringWidth(AchievementDescs[AchvNo])
+    SetFont(fo\FontID[0])
+    If StringWidth(AchievementDescs[AchvNo]) > Width Then
+        Width = StringWidth(AchievementDescs[AchvNo])
     EndIf
     Width = Width + 20 * MenuScale
     
@@ -56,10 +56,10 @@ Function AchievementTooltip(AchvNo%)
     Rect(ScaledMouseX() + (20 * MenuScale), ScaledMouseY() + (20 * MenuScale), Width, Height, True)
     Color(150, 150, 150)
     Rect(ScaledMouseX() + (20 * MenuScale), ScaledMouseY() + (20 * MenuScale), Width, Height, False)
-    AASetFont(fo\FontID[2])
-    AAText(ScaledMouseX() + (20 * MenuScale) + (Width / 2), ScaledMouseY() + (35 * MenuScale), AchievementStrings[AchvNo], True, True)
-    AASetFont(fo\FontID[0])
-    AAText(ScaledMouseX() + (20 * MenuScale) + (Width / 2), ScaledMouseY() + (55 * MenuScale), AchievementDescs[AchvNo], True, True)
+    SetFont(fo\FontID[2])
+    Text(ScaledMouseX() + (20 * MenuScale) + (Width / 2), ScaledMouseY() + (35 * MenuScale), AchievementStrings[AchvNo], True, True)
+    SetFont(fo\FontID[0])
+    Text(ScaledMouseX() + (20 * MenuScale) + (Width / 2), ScaledMouseY() + (55 * MenuScale), AchievementDescs[AchvNo], True, True)
 End Function
 
 Function DrawAchvIMG(x%, y%, AchvNo%)
@@ -157,7 +157,7 @@ Function RenderAchievementMsg()
 			Color(50, 50, 50)
 			Rect(x + 10.0 * Scale, y + 10.0 * Scale, 64.0 * Scale, 64.0 * Scale, False)
 			Color(255, 255, 255)
-			AASetFont(fo\FontID[0])
+			SetFont(fo\FontID[0])
 			RowText("Achievement Unlocked - " + amsg\Txt, x + 84.0 * Scale, y + 10.0 * Scale, Width - 94.0 * Scale, y - 20.0 * Scale)
 		EndIf
 	Next
