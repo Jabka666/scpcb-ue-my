@@ -21,11 +21,12 @@
 
 - Changed one bump texture to the better one.
 - Changed text when player is using Level 6 Key Card.
-- Changed Level 6 Key Card's achievement name.
+- Changed level 6 key card's achievement name.
 - Changed bloody textures in fake SCP-1123's containment chamber.
 - Changed the name of the Custom difficulty to "Esoteric".
 - Changed design of SCP-1025's pages.
 - Changed console font.
+- Changed SCP-1048's achievement icon.
 
 - Replaced O5-14 Burnt Document by batteries in room2offices5.
 
@@ -39,14 +40,15 @@
 - Removed quick loading from SCP-966 and SCP-409's containment chambers.
 - Removed achievement of anomalous ducks.
 - Removed paper strips.
-- Removed Graphics Driver Selection, which did not actually change anything anyways.
+- Removed graphics driver selection, which did not actually change anything anyways.
 - Removed unnecessary console commands.
-- Removed Antialiased Text.
+- Removed antialiased text.
 
 - Renamed room2testroom to room2testroom2.
 - Renamed room2testroom2 to room2testroom.
 
 - Combined "scp_1048_pen.b3d" and "scp_1048.b3d" models. 
+- Combined texture for SCP-173's cell.
 
 - Improved SCP-914.
 - Improved some loading screens.
@@ -58,7 +60,7 @@
 
 Bug Fixes:
 
-- Fixed appearing of the gas from SCP-035's containment chamber in Maintenance Tunnels.
+- Fixed appearing of the gas from SCP-035's containment chamber in maintenance tunnels.
 - Fixed sounds for big doors locked by SCP-079.
 - Fixed light in SCP-012's containment chamber.
 - Fixed SCP-1048-A's scream being able to be heard anywhere.
@@ -74,14 +76,13 @@ Bug Fixes:
 - Fixed items not pushing each other away in SCP-970's room.
 - Fixed unnecessary door opening sound in room2sl's event.
 - Fixed SCP-1048-A's double texture.
-- Fixed breath sound in NoClip mode.
+- Fixed breath sound in noclip mode.
 - Fixed weird balcony guard's moving in the intro scene.
 - Fixed step sounds for big containment doors.
 - Fixed red and green frames for the HUD when player wearing a hazmat suit.
-- Fixed wearing system for NVG.
-- Fixed annoying Secondary Lighting lever in room2ccont.
+- Fixed annoying secondary lighting lever in room2ccont.
 - Fixed button sound not working when not using launcher.
-- Fixed "CanUseItem" function for eyegear.
+- Fixed using of the items while wearing night vision.
 - Fixed elevators' pivots for SCP-008, SCP-106 and SCP-079's containment chambers.
 - Fixed lamps' texture in room1endroom3 and SCP-008's containment chamber.
 - Fixed some rooms' descriptions.
@@ -104,6 +105,7 @@ Bug Fixes:
 - Fixed room lights not working most of the time.
 - Fixed launcher options not saving when quitting.
 - Fixed security camera bases rotating with the cameras.
+- Fixed fog while wearing night vision.
 
 - Small fixes for room2testroom's event.
 - Small fixes for commands "disablenuke" and "enablecontrol/disablecontrol.
