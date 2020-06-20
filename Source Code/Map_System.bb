@@ -6718,7 +6718,7 @@ Function UpdateSecurityCams()
 							EntityTexture(sc\ScrOverlay, tt\MiscTextureID[6])
 						End If
 						
-						If (MilliSecs2() Mod sc\PlayerState) >= Rand(600) Then
+						If (MilliSecs() Mod sc\PlayerState) >= Rand(600) Then
 							EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
 						Else
 							If sc\SoundCHN = 0 Then
@@ -8308,7 +8308,7 @@ Function SetChunkDataValues()
 		Next
 	Next
 	
-	SeedRnd(MilliSecs2())
+	SeedRnd(MilliSecs())
 End Function
 
 Type ChunkPart
@@ -8360,7 +8360,7 @@ Function CreateChunkParts(r.Rooms)
 		EndIf
 	Next
 	
-	SeedRnd(MilliSecs2())
+	SeedRnd(MilliSecs())
 End Function
 
 Type Chunk

@@ -160,12 +160,5 @@ Function Chance%(Chanc%)
 	Return(Rand(0, 100) =< Chanc)
 End Function
 
-Function MilliSecs2()
-	Local RetVal% = MilliSecs()
-	
-	If RetVal < 0 Then RetVal = RetVal + 2147483648
-	Return(RetVal)
-End Function
-
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D

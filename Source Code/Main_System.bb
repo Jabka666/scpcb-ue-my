@@ -2884,7 +2884,7 @@ Global I_Zone.MapZones = New MapZones
 Repeat
 	Cls
 	
-	fpst\CurTime = MilliSecs2()
+	fpst\CurTime = MilliSecs()
 	ElapsedTime = (fpst\CurTime - fpst\PrevTime) / 1000.0
 	fpst\PrevTime = fpst\CurTime
 	fpst\PrevFPSFactor = fpst\FPSFactor[0]
@@ -2895,18 +2895,18 @@ Repeat
 	
 	If FrameLimit > 0 Then
 	    ; ~ Frame Limit
-		Local WaitingTime% = (1000.0 / FrameLimit) - (MilliSecs2() - fpst\LoopDelay)
+		Local WaitingTime% = (1000.0 / FrameLimit) - (MilliSecs() - fpst\LoopDelay)
 		
 		Delay(WaitingTime)
 		
-		fpst\LoopDelay = MilliSecs2()
+		fpst\LoopDelay = MilliSecs()
 	EndIf
 	
 	; ~ Counting the fps
-	If CheckFPS < MilliSecs2() Then
+	If CheckFPS < MilliSecs() Then
 		FPS = ElapsedLoops
 		ElapsedLoops = 0
-		CheckFPS = MilliSecs2() + 1000.0
+		CheckFPS = MilliSecs() + 1000.0
 	EndIf
 	ElapsedLoops = ElapsedLoops + 1
 	
@@ -2914,8 +2914,8 @@ Repeat
 		DoubleClick = False
 		MouseHit1 = MouseHit(1)
 		If MouseHit1 Then
-			If MilliSecs2() - LastMouseHit1 < 800.0 Then DoubleClick = True
-			LastMouseHit1 = MilliSecs2()
+			If MilliSecs() - LastMouseHit1 < 800.0 Then DoubleClick = True
+			LastMouseHit1 = MilliSecs()
 		EndIf
 		
 		Local PrevMouseDown1% = MouseDown1
@@ -4075,7 +4075,7 @@ Function MovePlayer()
 	
 	If me\Injuries > 1.0 Then
 		Temp2 = me\Bloodloss
-		me\BlurTimer = Max(Max(Sin(MilliSecs2() / 100.0) * me\Bloodloss * 30.0, me\Bloodloss * 2.0 * (2.0 - me\CrouchState)), me\BlurTimer)
+		me\BlurTimer = Max(Max(Sin(MilliSecs() / 100.0) * me\Bloodloss * 30.0, me\Bloodloss * 2.0 * (2.0 - me\CrouchState)), me\BlurTimer)
 		If I_427\Using = 0 And I_427\Timer < 70.0 * 360.0 Then
 			me\Bloodloss = Min(me\Bloodloss + (Min(me\Injuries, 3.5) / 300.0) * fpst\FPSFactor[0], 100.0)
 		EndIf
@@ -4108,7 +4108,7 @@ Function MovePlayer()
 			FreeEntity(Pvt)
 		EndIf
 		
-		me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs2()) / 20.0) + 1.0) * me\Bloodloss * 0.2)
+		me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs()) / 20.0) + 1.0) * me\Bloodloss * 0.2)
 		
 		If me\Bloodloss > 60.0 Then 
 			If (Not me\Crouch) Then SetCrouch(True)
@@ -4209,7 +4209,7 @@ Function MouseLook()
 		
 		If PlayerRoom\RoomTemplate\Name = "pocketdimension" Then
 			If EntityY(Collider) < 2000.0 * RoomScale Or EntityY(Collider) > 2608.0 * RoomScale Then
-				RotateEntity(Camera, WrapAngle(EntityPitch(Camera)), WrapAngle(EntityYaw(Camera)), Roll + WrapAngle(Sin(MilliSecs2() / 150.0) * 30.0)) ; ~ Pitch the user's camera up and down.
+				RotateEntity(Camera, WrapAngle(EntityPitch(Camera)), WrapAngle(EntityYaw(Camera)), Roll + WrapAngle(Sin(MilliSecs() / 150.0) * 30.0)) ; ~ Pitch the user's camera up and down.
 			EndIf
 		EndIf
 	Else
@@ -6459,7 +6459,7 @@ Function DrawGUI()
 							
 							SetFont(fo\FontID[2])
 							If StrTemp <> "" Then
-								StrTemp = Right(Left(StrTemp, (Int(MilliSecs2() / 300) Mod Len(StrTemp))), 10)
+								StrTemp = Right(Left(StrTemp, (Int(MilliSecs() / 300) Mod Len(StrTemp))), 10)
 								Text(x + 32, y + 33, StrTemp)
 							EndIf
 							SetFont(fo\FontID[0])
@@ -6719,7 +6719,7 @@ Function DrawGUI()
 					EndIf
 					
 					If (Not NavWorks) Then
-						If (MilliSecs2() Mod 1000) > 300 Then
+						If (MilliSecs() Mod 1000) > 300 Then
 							Color(200, 0, 0)
 							Text(x, y + NAV_HEIGHT / 2 - 80, "ERROR 06", True)
 							Text(x, y + NAV_HEIGHT / 2 - 60, "LOCATION UNKNOWN", True)						
@@ -6791,7 +6791,7 @@ Function DrawGUI()
 							Else
 								Color(30, 30, 30)
 							EndIf
-							If (MilliSecs2() Mod 1000.0) > 300.0 Then
+							If (MilliSecs() Mod 1000.0) > 300.0 Then
 								If SelectedItem\ItemTemplate\Name <> "S-NAV 310 Navigator" And SelectedItem\ItemTemplate\Name <> "S-NAV Navigator Ultimate" Then
 									Text(x - NAV_WIDTH / 2 + 10, y - NAV_HEIGHT / 2 + 10, "MAP DATABASE OFFLINE")
 								EndIf
@@ -6808,7 +6808,7 @@ Function DrawGUI()
 							
 							Local SCPs_Found% = 0
 							
-							If SelectedItem\ItemTemplate\Name = "S-NAV Navigator Ultimate" And (MilliSecs2() Mod 600.0) < 400.0 Then
+							If SelectedItem\ItemTemplate\Name = "S-NAV Navigator Ultimate" And (MilliSecs() Mod 600.0) < 400.0 Then
 								If Curr173 <> Null Then
 									Local Dist# = EntityDistance(Camera, Curr173\OBJ)
 									
@@ -10838,7 +10838,7 @@ Function Update008()
 			me\HeartBeatRate = Max(me\HeartBeatRate, 100.0)
 			me\HeartBeatVolume = Max(me\HeartBeatVolume, I_008\Timer / 120.0)
 			
-			EntityAlpha(tt\OverlayID[3], Min(((I_008\Timer * 0.2) ^ 2.0) / 1000.0, 0.5) * (Sin(MilliSecs2() / 8.0) + 2.0))
+			EntityAlpha(tt\OverlayID[3], Min(((I_008\Timer * 0.2) ^ 2.0) / 1000.0, 0.5) * (Sin(MilliSecs() / 8.0) + 2.0))
 			
 			For i = 0 To 6
 				If I_008\Timer > i * 15.0 + 10.0 And PrevI008Timer =< i * 15.0 + 10.0 Then
@@ -10887,7 +10887,7 @@ Function Update008()
 			
 			If TeleportForInfect Then
 				If I_008\Timer < 94.7 Then
-					EntityAlpha(tt\OverlayID[3], 0.5 * (Sin(MilliSecs2() / 8.0) + 2.0))
+					EntityAlpha(tt\OverlayID[3], 0.5 * (Sin(MilliSecs() / 8.0) + 2.0))
 					me\BlurTimer = 900.0
 					
 					If I_008\Timer > 94.5 Then me\BlinkTimer = Max(Min((-50.0) * (I_008\Timer - 94.5), me\BlinkTimer), -10.0)
@@ -10901,7 +10901,7 @@ Function Update008()
 					
 					Animate2(PlayerRoom\NPC[0]\OBJ, AnimTime(PlayerRoom\NPC[0]\OBJ), 357.0, 381.0, 0.3)
 				ElseIf I_008\Timer < 98.5
-					EntityAlpha(tt\OverlayID[3], 0.5 * (Sin(MilliSecs2() / 5.0) + 2.0))
+					EntityAlpha(tt\OverlayID[3], 0.5 * (Sin(MilliSecs() / 5.0) + 2.0))
 					me\BlurTimer = 950.0
 					
 					me\ForceMove = 0.0
@@ -10946,9 +10946,9 @@ Function Update008()
 					EndIf
 					
 					PositionEntity(Head, EntityX(PlayerRoom\NPC[0]\Collider, True), EntityY(PlayerRoom\NPC[0]\Collider, True) + 0.65, EntityZ(PlayerRoom\NPC[0]\Collider, True), True)
-					RotateEntity(Head, (1.0 + Sin(MilliSecs2() / 5.0)) * 15.0, PlayerRoom\Angle - 180.0, 0.0, True)
+					RotateEntity(Head, (1.0 + Sin(MilliSecs() / 5.0)) * 15.0, PlayerRoom\Angle - 180.0, 0.0, True)
 					MoveEntity(Head, 0.0, 0.0, -0.4)
-					TurnEntity(Head, 80.0 + (Sin(MilliSecs2() / 5.0)) * 30.0, (Sin(MilliSecs2() / 5.0)) * 40.0, 0.0)
+					TurnEntity(Head, 80.0 + (Sin(MilliSecs() / 5.0)) * 30.0, (Sin(MilliSecs() / 5.0)) * 40.0, 0.0)
 				EndIf
 			Else
 				Kill()
@@ -11363,7 +11363,7 @@ Function RenderWorld2()
 	CameraProjMode(Ark_Blur_Cam, 0)
 	
 	If me\BlinkTimer < -16.0 Or me\BlinkTimer > -6.0 Then
-		If (wi\NightVision = 1 Or wi\NightVision = 2) And (HasBattery = 1) And ((MilliSecs2() Mod 800) < 400) Then
+		If (wi\NightVision = 1 Or wi\NightVision = 2) And (HasBattery = 1) And ((MilliSecs() Mod 800) < 400) Then
 			Color(255, 0, 0)
 			SetFont(fo\FontID[2])
 			

@@ -511,9 +511,9 @@ Function UpdateItems()
 		i\Dropped = 0
 		
 		If (Not i\Picked) Then
-			If i\DistTimer < MilliSecs2() Then
+			If i\DistTimer < MilliSecs() Then
 				i\Dist = EntityDistance(Camera, i\Collider)
-				i\DistTimer = MilliSecs2() + 700
+				i\DistTimer = MilliSecs() + 700
 				If i\Dist < HideDist Then ShowEntity(i\Collider)
 			EndIf
 			
@@ -883,22 +883,22 @@ Function Update294()
 	If me\VomitTimer > 0.0 Then
 		me\VomitTimer = me\VomitTimer - (fpst\FPSfactor[0] / 70.0)
 		
-		If (MilliSecs2() Mod 1600) < Rand(200, 400) Then
+		If (MilliSecs() Mod 1600) < Rand(200, 400) Then
 			If me\BlurTimer = 0.0 Then me\BlurTimer = 70.0 * Rnd(10.0, 20.0)
 			me\CameraShake = Rnd(0.0, 2.0)
 		EndIf
 		
-		If Rand(50) = 50 And (MilliSecs2() Mod 4000) < 200 Then PlaySound_Strict(CoughSFX(Rand(0, 2)))
+		If Rand(50) = 50 And (MilliSecs() Mod 4000) < 200 Then PlaySound_Strict(CoughSFX(Rand(0, 2)))
 		
 		; ~ Regurgitate when timer is below 10 seconds.
 		If me\VomitTimer < 10.0 And Rnd(0.0, 500.0 * me\VomitTimer) < 2.0 Then
 			If ChannelPlaying(VomitCHN) = False And (Not me\Regurgitate) Then
 				VomitCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Retch" + Rand(1, 2) + ".ogg"))
-				me\Regurgitate = MilliSecs2() + 50
+				me\Regurgitate = MilliSecs() + 50
 			EndIf
 		EndIf
 		
-		If me\Regurgitate > MilliSecs2() And me\Regurgitate <> 0 Then
+		If me\Regurgitate > MilliSecs() And me\Regurgitate <> 0 Then
 			Mouse_Y_Speed_1 = Mouse_Y_Speed_1 + 1.0
 		Else
 			me\Regurgitate = 0
@@ -907,7 +907,7 @@ Function Update294()
 		me\VomitTimer = me\VomitTimer - (fpst\FPSfactor[0] / 70.0)
 		
 		If me\VomitTimer > -5.0 Then
-			If (MilliSecs2() Mod 400) < 50 Then me\CameraShake = 4.0 
+			If (MilliSecs() Mod 400) < 50 Then me\CameraShake = 4.0 
 			Mouse_X_Speed_1 = 0.0
 			me\Playable = False
 		Else
