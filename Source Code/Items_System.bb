@@ -660,15 +660,10 @@ Function PickItem(item.Items)
 									If e\EventState = 0.0 Then
 										ShowEntity(tt\OverlayID[7])
 										me\LightFlash = 3.0
-										PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))
-										e\EventState = 1.0
-									ElseIf e\EventState = 3.0 Then
-										ShowEntity(tt\OverlayID[7])
-										me\LightFlash = 3.0
-										PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))
-										e\EventState = 8.0
-										Exit
+										PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))		
 									EndIf
+									e\EventState = Max(1.0, e\EventState)
+									Exit
 								EndIf
 							Next
 						EndIf

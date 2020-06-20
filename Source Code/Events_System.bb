@@ -6915,6 +6915,7 @@ Function UpdateEvents()
 					ElseIf e\EventState = 7.0
 						PositionEntity(Collider, EntityX(e\room\OBJ, True), 0.3, EntityZ(e\room\OBJ, True), True)
 						ResetEntity(Collider)
+						CanSave = True
 						ShowEntity(tt\OverlayID[7])
 						me\LightFlash = 6.0
 						me\BlurTimer = 500.0
@@ -6943,51 +6944,8 @@ Function UpdateEvents()
 							EndIf
 						EndIf
 						
+						If e\room\NPC[0] <> Null Then RemoveNPC(e\room\NPC[0])
 						RemoveEvent(e)
-					ElseIf e\EventState = 8.0 ; ~ If SCP-1123 was touched again
-						me\BlurTimer = 1000.0
-						me\Injuries = 1.5
-						
-						PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[14], True), EntityY(e\room\Objects[14], True), EntityZ(e\room\Objects[14], True), True)
-						ResetEntity(e\room\NPC[0]\Collider)
-						
-						PositionEntity(Collider, EntityX(e\room\Objects[15], True), EntityY(e\room\Objects[15], True), EntityZ(e\room\Objects[15], True), True)
-						ResetEntity(Collider)
-						
-						If e\room\NPC[0]\Sound <> 0 Then
-							FreeSound_Strict(e\room\NPC[0]\Sound) : e\room\NPC[0]\Sound = 0
-						EndIf
-						PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Dialogue.ogg"))
-						
-						e\EventState = 9.0
-					ElseIf e\EventState = 9.0
-						AnimateNPC(e\room\NPC[0], 3.0, 26.0, 0.2)
-						PointEntity(e\room\NPC[0]\Collider, Collider)
-						If e\EventState3 = 0.0 Then
-							For i = 0 To 1
-								em.Emitters = CreateEmitter(EntityX(e\room\Objects[i + 15], True), -105.0 * RoomScale, EntityZ(e\room\Objects[i + 15], True), 0)
-								em\Size = 0.08 : em\RandAngle = 10.0 : em\Speed = 0.06 : em\SizeChange = 0.007 : em\Achange = -0.006
-								TurnEntity(em\OBJ, 90.0, 0.0, 0.0)
-								EntityParent(em\OBJ, e\room\OBJ)
-							Next
-							e\EventState3 = 1.0
-						Else
-							e\EventState3 = e\EventState3 + fpst\FPSFactor[0]
-						EndIf
-						
-						If e\EventState3 > 1500.0 Then
-							If Rand(2) = 1 Then
-								GroupDesignation = "Nine-Tailed Fox"
-							Else
-								GroupDesignation = "See No Evil"
-							EndIf
-							msg\DeathMsg = SubjectName + " was shot dead after attempting to attack a member of " + GroupDesignation + ". Surveillance tapes show that the subject had been "
-							msg\DeathMsg = msg\DeathMsg + "wandering around the site approximately 9 (nine) minutes prior, shouting the phrase " + Chr(34) + "get rid of the four pests" + Chr(34)
-							msg\DeathMsg = msg\DeathMsg + " in chinese. SCP-1123 was found in [DATA REDACTED] nearby, suggesting the subject had come into physical contact with it. How "
-							msg\DeathMsg = msg\DeathMsg + "exactly SCP-1123 was removed from its containment chamber is still unknown."
-							Kill()
-							RemoveEvent(e)
-						EndIf
 					EndIf
 				EndIf
 				;[End Block]
@@ -10402,5 +10360,5 @@ Function GenerateRandomIA()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11E6#1E37
+;~B#11E6#1E0D
 ;~C#Blitz3D
