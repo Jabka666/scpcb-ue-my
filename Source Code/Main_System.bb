@@ -3715,7 +3715,7 @@ Function InitCredits()
 	Until Eof(File)
 	
 	Delete First CreditsLine
-	CreditsTimer = 0
+	CreditsTimer = 0.0
 End Function
 
 Function DrawCredits()
@@ -3727,7 +3727,7 @@ Function DrawCredits()
 	
     Cls
 	
-	If Rand(1, 300) > 1
+	If Rand(1, 300) > 1 Then
 		DrawImage(CreditsScreen, GraphicWidth / 2 - 400, GraphicHeight / 2 - 400)
 	EndIf
 	
@@ -4243,7 +4243,7 @@ Function MouseLook()
 		End If
 	EndIf
 	
-	If ParticleAmount = 2
+	If ParticleAmount = 2 Then
 		If Rand(35) = 1 Then
 			Local Pvt% = CreatePivot()
 			
@@ -9126,11 +9126,16 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 		Case "Ballistic Vest"
 			;[Block]
 			Select Setting
-				Case "Rough", "Coarse"
+				Case "Rough"
 					;[Block]
 					d.Decals = CreateDecal(0, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0)
 					d\Size = 0.12
 					ScaleSprite(d\OBJ, d\Size, d\Size)
+					RemoveItem(item)
+					;[End Block]
+				Case "Coarse"
+					;[Block]
+					it2 = CreateItem("Corrosive Ballistic Vest", "corrvest", x, y, z)
 					RemoveItem(item)
 					;[End Block]
 				Case "1:1"

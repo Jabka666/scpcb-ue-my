@@ -249,6 +249,7 @@ Function InitItemTemplates()
 	CreateItemTemplate("Ballistic Vest", "vest", ItemsPath + "vest.x", ItemsPath + "INV_vest.png", "", 0.02, 2)
 	CreateItemTemplate("Bulky Ballistic Vest", "veryfinevest", ItemsPath + "vest.x", ItemsPath + "INV_vest.png", "", 0.025, 2)
 	CreateItemTemplate("Heavy Ballistic Vest", "finevest", ItemsPath + "vest.x", ItemsPath + "INV_vest.png", "", 0.022, 2)
+	CreateItemTemplate("Corrosive Ballistic Vest", "corrvest", ItemsPath + "vest.x", ItemsPath + "INV_vest.png", "", 0.02, 2, ItemsPath + "vest_corrosive.png")
 	
 	CreateItemTemplate("Cigarette", "cigarette", ItemsPath + "scp_420_j.b3d", ItemsPath + "INV_scp_420_j.png", "", 0.0004, 2)
 	
@@ -501,7 +502,7 @@ Function UpdateItems()
 	Local n%, i.Items, i2.Items
 	Local xTemp#, yTemp#, zTemp#
 	Local Temp%, np.NPCs
-	Local Pick%
+	Local Pick%, ed#
 	Local HideDist# = HideDistance * 0.5
 	Local DeletedItem% = False
 	
@@ -565,7 +566,7 @@ Function UpdateItems()
 							yTemp# = EntityY(i2\Collider, True) - EntityY(i\Collider, True)
 							zTemp# = EntityZ(i2\Collider, True) - EntityZ(i\Collider, True)
 							
-							ed# = (xTemp * xTemp + zTemp * zTemp)
+							ed = (xTemp * xTemp + zTemp * zTemp)
 							If ed < 0.07 And Abs(yTemp) < 0.25 Then
 								; ~ Items are too close together, push away
 								xTemp = xTemp * (0.07 - ed)
@@ -709,6 +710,12 @@ Function PickItem(item.Items)
 					Case "veryfinevest"
 						;[Block]
 						msg\Msg = "The vest is too heavy to pick up."
+						msg\Timer = 70.0 * 6.0
+						Exit
+						;[End Block]
+					Case "corrvest"
+						;[Block]
+						msg\Msg = Chr(34) + "I won't pick up that!" + Chr(34)
 						msg\Timer = 70.0 * 6.0
 						Exit
 						;[End Block]
