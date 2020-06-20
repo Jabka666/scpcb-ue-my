@@ -640,7 +640,7 @@ Function PickItem(item.Items)
 						If I_714\Using = 0 And wi\GasMask < 3 And wi\HazmatSuit < 3 Then
 							If PlayerRoom\RoomTemplate\Name <> "room1123" Then
 								ShowEntity(tt\OverlayID[7])
-								LightFlash = 7.0
+								me\LightFlash = 7.0
 								PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))	
 								
 								If Rand(2) = 1 Then
@@ -659,12 +659,12 @@ Function PickItem(item.Items)
 								If e\EventName = "room1123" Then 
 									If e\EventState = 0.0 Then
 										ShowEntity(tt\OverlayID[7])
-										LightFlash = 3.0
+										me\LightFlash = 3.0
 										PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))
 										e\EventState = 1.0
 									ElseIf e\EventState = 3.0 Then
 										ShowEntity(tt\OverlayID[7])
-										LightFlash = 3.0
+										me\LightFlash = 3.0
 										PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))
 										e\EventState = 8.0
 										Exit
@@ -677,7 +677,7 @@ Function PickItem(item.Items)
 					Case "killbat"
 						;[Block]
 						ShowEntity(tt\OverlayID[7])
-						LightFlash = 1.0
+						me\LightFlash = 1.0
 						PlaySound_Strict(IntroSFX(Rand(8, 10)))
 						msg\DeathMsg = SubjectName + " found dead inside SCP-914's output booth next to what appears to be an ordinary nine-volt battery. The subject is covered in severe "
 						msg\DeathMsg = msg\DeathMsg + "electrical burns, and assumed to be killed via an electrical shock caused by the battery. The battery has been stored for further study."
@@ -880,55 +880,55 @@ Function Update294()
 	
 	Local Pvt%
 	
-	If CameraShakeTimer > 0.0 Then
-		CameraShakeTimer = CameraShakeTimer - (fpst\FPSfactor[0] / 70.0)
-		CameraShake = 2.0
+	If me\CameraShakeTimer > 0.0 Then
+		me\CameraShakeTimer = me\CameraShakeTimer - (fpst\FPSfactor[0] / 70.0)
+		me\CameraShake = 2.0
 	EndIf
 	
-	If VomitTimer > 0.0 Then
-		VomitTimer = VomitTimer - (fpst\FPSfactor[0] / 70.0)
+	If me\VomitTimer > 0.0 Then
+		me\VomitTimer = me\VomitTimer - (fpst\FPSfactor[0] / 70.0)
 		
 		If (MilliSecs2() Mod 1600) < Rand(200, 400) Then
-			If BlurTimer = 0.0 Then BlurTimer = 70.0 * Rnd(10.0, 20.0)
-			CameraShake = Rnd(0.0, 2.0)
+			If me\BlurTimer = 0.0 Then me\BlurTimer = 70.0 * Rnd(10.0, 20.0)
+			me\CameraShake = Rnd(0.0, 2.0)
 		EndIf
 		
 		If Rand(50) = 50 And (MilliSecs2() Mod 4000) < 200 Then PlaySound_Strict(CoughSFX(Rand(0, 2)))
 		
 		; ~ Regurgitate when timer is below 10 seconds.
-		If VomitTimer < 10.0 And Rnd(0.0, 500.0 * VomitTimer) < 2.0 Then
-			If ChannelPlaying(VomitCHN) = False And (Not Regurgitate) Then
+		If me\VomitTimer < 10.0 And Rnd(0.0, 500.0 * me\VomitTimer) < 2.0 Then
+			If ChannelPlaying(VomitCHN) = False And (Not me\Regurgitate) Then
 				VomitCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Retch" + Rand(1, 2) + ".ogg"))
-				Regurgitate = MilliSecs2() + 50
+				me\Regurgitate = MilliSecs2() + 50
 			EndIf
 		EndIf
 		
-		If Regurgitate > MilliSecs2() And Regurgitate <> 0 Then
+		If me\Regurgitate > MilliSecs2() And me\Regurgitate <> 0 Then
 			Mouse_Y_Speed_1 = Mouse_Y_Speed_1 + 1.0
 		Else
-			Regurgitate = 0
+			me\Regurgitate = 0
 		EndIf
-	ElseIf VomitTimer < 0.0 Then ; ~ Vomit
-		VomitTimer = VomitTimer - (fpst\FPSfactor[0] / 70.0)
+	ElseIf me\VomitTimer < 0.0 Then ; ~ Vomit
+		me\VomitTimer = me\VomitTimer - (fpst\FPSfactor[0] / 70.0)
 		
-		If VomitTimer > -5.0 Then
-			If (MilliSecs2() Mod 400) < 50 Then CameraShake = 4.0 
+		If me\VomitTimer > -5.0 Then
+			If (MilliSecs2() Mod 400) < 50 Then me\CameraShake = 4.0 
 			Mouse_X_Speed_1 = 0.0
-			Playable = False
+			me\Playable = False
 		Else
-			Playable = True
+			me\Playable = True
 		EndIf
 		
-		If (Not Vomit) Then
-			BlurTimer = 70.0 * 40.0
+		If (Not me\Vomit) Then
+			me\BlurTimer = 70.0 * 40.0
 			VomitSFX = LoadSound_Strict("SFX\SCP\294\Vomit.ogg")
 			VomitCHN = PlaySound_Strict(VomitSFX)
-			PrevInjuries = Injuries
-			PrevBloodloss = Bloodloss
+			me\PrevInjuries = me\Injuries
+			me\PrevBloodloss = me\Bloodloss
 			SetCrouch(True)
-			Injuries = 1.5
-			Bloodloss = 70.0
-			EyeIrritation = 70.0 * 9.0
+			me\Injuries = 1.5
+			me\Bloodloss = 70.0
+			me\EyeIrritation = 70.0 * 9.0
 			
 			Pvt = CreatePivot()
 			PositionEntity(Pvt, EntityX(Camera), EntityY(Collider) - 0.05, EntityZ(Camera))
@@ -940,22 +940,22 @@ Function Update294()
 			EntityColor(de\OBJ, 0.0, Rnd(200.0, 255.0), 0.0)
 			ScaleSprite(de\OBJ, de\Size, de\Size)
 			FreeEntity(Pvt)
-			Vomit = True
+			me\Vomit = True
 		EndIf
 		
 		UpdateDecals()
 		
-		Mouse_Y_Speed_1 = Mouse_Y_Speed_1 + Max((1.0 + VomitTimer / 10.0), 0.0)
+		Mouse_Y_Speed_1 = Mouse_Y_Speed_1 + Max((1.0 + me\VomitTimer / 10.0), 0.0)
 		
-		If VomitTimer < -15.0 Then
+		If me\VomitTimer < -15.0 Then
 			FreeSound_Strict(VomitSFX)
-			VomitTimer = 0.0
-			If KillTimer >= 0.0 Then
+			me\VomitTimer = 0.0
+			If me\KillTimer >= 0.0 Then
 				PlaySound_Strict(BreathSFX(0, 0))
 			EndIf
-			Injuries = PrevInjuries
-			Bloodloss = PrevBloodloss
-			Vomit = False
+			me\Injuries = me\PrevInjuries
+			me\Bloodloss = me\PrevBloodloss
+			me\Vomit = False
 		EndIf
 	EndIf
 	

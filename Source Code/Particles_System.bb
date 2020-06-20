@@ -165,13 +165,13 @@ Function UpdateEmitters()
 	Next
 	
 	If InSmoke Then
-		If EyeIrritation > (70.0 * 6.0) Then BlurVolume = Max(BlurVolume, (EyeIrritation - (70.0 * 6.0)) / (70.0 * 24.0))
-		If EyeIrritation > (70.0 * 24.0) Then 
+		If me\EyeIrritation > (70.0 * 6.0) Then me\BlurVolume = Max(me\BlurVolume, (me\EyeIrritation - (70.0 * 6.0)) / (70.0 * 24.0))
+		If me\EyeIrritation > (70.0 * 24.0) Then 
 			msg\DeathMsg = SubjectName + " found dead in [DATA REDACTED]. Cause of death: Suffocation due to decontamination gas."
 			Kill()
 		EndIf
 		
-		If KillTimer >= 0.0 Then 
+		If me\KillTimer >= 0.0 Then 
 			If Rand(150) = 1 Then
 				If CoughCHN = 0 Then
 					CoughCHN = PlaySound_Strict(CoughSFX(Rand(0, 2)))
@@ -180,7 +180,7 @@ Function UpdateEmitters()
 				End If
 			EndIf
 		EndIf
-		EyeIrritation = EyeIrritation + fpst\FPSFactor[0] * 4.0
+		me\EyeIrritation = me\EyeIrritation + (fpst\FPSFactor[0] * 4.0)
 	EndIf	
 End Function
 

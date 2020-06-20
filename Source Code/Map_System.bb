@@ -1961,7 +1961,7 @@ Function FillRoom(r.Rooms)
 			FreeEntity(d2\Buttons[0]) : d2\Buttons[0] = 0
 			
 			d2 = CreateDoor(r\Zone, r\x - 1440.0 * RoomScale, r\y - 480.0 * RoomScale, r\z + 2328.0 * RoomScale, 0.0, r, False, False, 2)
-			If SelectedEnding = "A2" Then 
+			If me\SelectedEnding = "A2" Then 
 				d2\AutoClose = False : d2\Open = True : d2\Locked = True	
 			Else
 				d2\AutoClose = False : d2\Open = False : d2\Locked = False	
@@ -1971,7 +1971,7 @@ Function FillRoom(r.Rooms)
 			RotateEntity(d2\Buttons[1], 0.0, 90.0, 0.0, True)
 			
 			d2 = CreateDoor(r\Zone, r\x - 1440 * RoomScale, r\y - 480.0 * RoomScale, r\z + 4352.0 * RoomScale, 0.0, r, False, False, 2)
-			If SelectedEnding = "A2" Then 
+			If me\SelectedEnding = "A2" Then 
 				d2\AutoClose = False : d2\Open = True : d2\Locked = True	
 			Else
 				d2\AutoClose = False : d2\Open = False : d2\Locked = False
@@ -5803,11 +5803,11 @@ Function UpdateRooms()
 	; ~ When the map gets spawned by a seed, it starts from LCZ to HCZ to EZ (bottom to top)
 	; ~ A map loaded by the map creator starts from EZ to HCZ to LCZ (top to bottom) and that's why this little code thing with the (SelectedMap = "") needs to be there - ENDSHN
 	If (EntityZ(Collider) / 8.0) < I_Zone\Transition[1] - (SelectedMap = "") Then
-		PlayerZone = 2
+		me\Zone = 2
 	ElseIf (EntityZ(Collider) / 8.0) >= I_Zone\Transition[1] - (SelectedMap = "") And (EntityZ(Collider) / 8.0) < I_Zone\Transition[0] - (SelectedMap = "") Then
-		PlayerZone = 1
+		me\Zone = 1
 	Else
-		PlayerZone = 0
+		me\Zone = 0
 	EndIf
 	
 	TempLightVolume = 0
@@ -6609,39 +6609,39 @@ Function UpdateSecurityCams()
 			If Close = True Then
 				If sc\Screen Then
 					sc\State = sc\State + fpst\FPSFactor[0]
-					If BlinkTimer > -5.0 And EntityInView(sc\ScrOBJ, Camera) Then
+					If me\BlinkTimer > -5.0 And EntityInView(sc\ScrOBJ, Camera) Then
 						If EntityVisible(Camera, sc\ScrOBJ) Then
 							If (sc\CoffinEffect = 1 Or sc\CoffinEffect = 3) And I_714\Using = 0 And wi\HazmatSuit < 3 And wi\GasMask < 3 Then
-								If BlinkTimer > -5.0 Then
-									Sanity = Sanity - fpst\FPSFactor[0]
-									RestoreSanity = False
+								If me\BlinkTimer > -5.0 Then
+									me\Sanity = me\Sanity - fpst\FPSFactor[0]
+									me\RestoreSanity = False
 								EndIf
 							EndIf
 						EndIf
 					EndIf
 					
-					If Sanity < (-1000.0) Then 
+					If me\Sanity < -1000.0 Then 
 						msg\DeathMsg = Chr(34) + "What we know is that he died of cardiac arrest. My guess is that it was caused by SCP-895, although it has never been observed affecting video equipment from this far before. "
 						msg\DeathMsg = msg\DeathMsg + "Further testing is needed to determine whether SCP-895's " + Chr(34) + "Red Zone" + Chr(34) + " is increasing." + Chr(34)
 						
-						If VomitTimer < -10.0 Then
+						If me\VomitTimer < -10.0 Then
 							Kill()
 						EndIf
 					EndIf
 					
-					If VomitTimer < 0.0 And Sanity < -800.0 Then
-						RestoreSanity = False
-						Sanity = -1010.0
+					If me\VomitTimer < 0.0 And me\Sanity < -800.0 Then
+						me\RestoreSanity = False
+						me\Sanity = -1010.0
 					EndIf
 					
-					If BlinkTimer > -5.0 And EntityInView(sc\ScrOBJ, Camera) And EntityVisible(Camera, sc\ScrOBJ) Then
+					If me\BlinkTimer > -5.0 And EntityInView(sc\ScrOBJ, Camera) And EntityVisible(Camera, sc\ScrOBJ) Then
 						sc\InSight = True
 					Else
 						sc\InSight = False
 					EndIf
 					
 					If sc\State >= sc\RenderInterval Then
-						If BlinkTimer > -5.0 And EntityInView(sc\ScrOBJ, Camera)Then
+						If me\BlinkTimer > -5.0 And EntityInView(sc\ScrOBJ, Camera)Then
 							If EntityVisible(Camera, sc\ScrOBJ) Then
 								If CoffinCam = Null Or Rand(5) = 5 Or sc\CoffinEffect <> 3 Then
 									HideEntity(Camera)
@@ -6685,15 +6685,15 @@ Function UpdateSecurityCams()
 							PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 							PointEntity(Pvt, sc\ScrOBJ)
 							
-							RotateEntity(Collider, EntityPitch(Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(Collider), Min(Max(15000.0 / (-Sanity), 20.0), 200.0)), 0.0)
+							RotateEntity(Collider, EntityPitch(Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(Collider), Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0)), 0.0)
 							
 							TurnEntity(Pvt, 90.0, 0.0, 0.0)
-							User_Camera_Pitch = CurveAngle(EntityPitch(Pvt), User_Camera_Pitch + 90.0, Min(Max(15000.0 / (-Sanity), 20.0), 200.0))
+							User_Camera_Pitch = CurveAngle(EntityPitch(Pvt), User_Camera_Pitch + 90.0, Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0))
 							User_Camera_Pitch = User_Camera_Pitch - 90.0
 							
 							FreeEntity(Pvt)
 							If (sc\CoffinEffect = 1 Or sc\CoffinEffect = 3) And (I_714\Using = 0 Or wi\GasMask < 3 Or wi\HazmatSuit < 3) Then
-								If Sanity < -800.0 Then
+								If me\Sanity < -800.0 Then
 									If Rand(3) = 1 Then EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
 									If Rand(6) < 5 Then
 										EntityTexture(sc\ScrOverlay, tt\MiscTextureID[Rand(7, 12)])
@@ -6706,11 +6706,11 @@ Function UpdateSecurityCams()
 										End If
 										If sc\CoffinEffect = 3 And Rand(200) = 1 Then sc\CoffinEffect = 2 : sc\PlayerState = Rand(10000, 20000)
 									End If	
-									BlurTimer = 1000.0
-									If VomitTimer = 0.0 Then
-										VomitTimer = 1.0
+									me\BlurTimer = 1000.0
+									If me\VomitTimer = 0.0 Then
+										me\VomitTimer = 1.0
 									EndIf
-								ElseIf Sanity < -500.0
+								ElseIf me\Sanity < -500.0
 									If Rand(7) = 1 Then EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
 									If Rand(50) = 1 Then
 										EntityTexture(sc\ScrOverlay, tt\MiscTextureID[Rand(7, 12)])
@@ -6802,9 +6802,9 @@ Function UpdateMonitorSaving()
 						
 						PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 						PointEntity(Pvt, sc\ScrOBJ)
-						RotateEntity(Collider, EntityPitch(Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(Collider), Min(Max(15000.0 / (-Sanity), 20.0), 200.0)), 0.0)
+						RotateEntity(Collider, EntityPitch(Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(Collider), Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0)), 0.0)
 						TurnEntity(Pvt, 90.0, 0.0, 0.0)
-						User_Camera_Pitch = CurveAngle(EntityPitch(Pvt), User_Camera_Pitch + 90.0, Min(Max(15000.0 / (-Sanity), 20.0), 200.0))
+						User_Camera_Pitch = CurveAngle(EntityPitch(Pvt), User_Camera_Pitch + 90.0, Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0))
 						User_Camera_Pitch = User_Camera_Pitch - 90.0
 						FreeEntity(Pvt)
 					EndIf
@@ -6829,7 +6829,7 @@ Function UpdateLever(OBJ%, Locked% = False)
 					If MouseHit1 Then GrabbedEntity = OBJ
 				End If
 				
-				PrevPitch# = EntityPitch(OBJ)
+				Local PrevPitch# = EntityPitch(OBJ)
 				
 				If MouseDown1 Or MouseHit1 Then
 					If GrabbedEntity <> 0 Then
@@ -6837,8 +6837,8 @@ Function UpdateLever(OBJ%, Locked% = False)
 							DrawHandIcon = True 
 							RotateEntity(GrabbedEntity, Max(Min(EntityPitch(OBJ) + Max(Min(Mouse_Y_Speed_1 * 8.0, 30.0), -30.0), 80.0), -80.0), EntityYaw(OBJ), 0.0)
 							
-							DrawArrowIcon(0) = True
-							DrawArrowIcon(2) = True
+							DrawArrowIcon[0] = True
+							DrawArrowIcon[2] = True
 						EndIf
 					EndIf
 				EndIf 
@@ -6955,7 +6955,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 								If (Not ChannelPlaying(event\SoundCHN)) Then event\SoundCHN = PlaySound_Strict(ElevatorMoveSFX)
 							EndIf
 							
-							CameraShake = Sin(Abs(State) / 3.0) * 0.3
+							me\CameraShake = Sin(Abs(State) / 3.0) * 0.3
 						EndIf
 					EndIf
 				EndIf
@@ -6981,7 +6981,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 						
 						TeleportEntity(Collider, EntityX(room2, True) + x, (0.1 * fpst\FPSFactor[0]) + EntityY(room2, True) + (EntityY(Collider) - EntityY(room1, True)), EntityZ(room2, True) + z, 0.3, True)
 						UpdateDoorsTimer = 0.0
-						DropSpeed = 0.0
+						me\DropSpeed = 0.0
 						UpdateDoors()
 						UpdateRooms()
 						
@@ -7054,7 +7054,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 								If (Not ChannelPlaying(event\SoundCHN)) Then event\SoundCHN = PlaySound_Strict(ElevatorMoveSFX)
 							EndIf
 							
-							CameraShake = Sin(Abs(State) / 3.0) * 0.3
+							me\CameraShake = Sin(Abs(State) / 3.0) * 0.3
 						EndIf
 					EndIf
 				EndIf	
@@ -7078,7 +7078,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 						EndIf
 						TeleportEntity(Collider, EntityX(room1, True) + x, (0.1 * fpst\FPSFactor[0]) + EntityY(room1, True) + (EntityY(Collider) - EntityY(room2, True)), EntityZ(room1, True) + z, 0.3, True)
 						UpdateDoorsTimer = 0.0
-						DropSpeed = 0.0
+						me\DropSpeed = 0.0
 						UpdateDoors()
 						UpdateRooms()
 						

@@ -1,11 +1,11 @@
 Function SaveGame(File$)
 	CatchErrors("Uncaught (SaveGame)")
 	
-	If (Not Playable) Then Return ; ~ Don't save if the player can't move at all
+	If (Not me\Playable) Then Return ; ~ Don't save if the player can't move at all
 	
-	If DropSpeed > 0.02 * fpst\FPSFactor[0] Or DropSpeed < (-0.02) * fpst\FPSFactor[0] Then Return
+	If me\DropSpeed > 0.02 * fpst\FPSFactor[0] Or me\DropSpeed < (-0.02) * fpst\FPSFactor[0] Then Return
 	
-	If KillTimer < 0.0 Then Return
+	If me\KillTimer < 0.0 Then Return
 	
 	GameSaved = True
 	
@@ -19,7 +19,7 @@ Function SaveGame(File$)
 	WriteString(f, CurrentTime())
 	WriteString(f, CurrentDate())
 	
-	WriteInt(f, PlayTime)
+	WriteInt(f, me\PlayTime)
 	WriteFloat(f, EntityX(Collider))
 	WriteFloat(f, EntityY(Collider))
 	WriteFloat(f, EntityZ(Collider))
@@ -35,30 +35,30 @@ Function SaveGame(File$)
 	
 	WriteString(f, VersionNumber)
 	
-	WriteFloat(f, BlinkTimer)
-	WriteFloat(f, BlinkEffect)
-	WriteFloat(f, BlinkEffectTimer)
+	WriteFloat(f, me\BlinkTimer)
+	WriteFloat(f, me\BlinkEffect)
+	WriteFloat(f, me\BlinkEffectTimer)
 	
-	WriteInt(f, DeathTimer)
-	WriteInt(f, BlurTimer)
-	WriteFloat(f, HealTimer)
+	WriteInt(f, me\DeathTimer)
+	WriteInt(f, me\BlurTimer)
+	WriteFloat(f, me\HealTimer)
 	
-	WriteByte(f, Crouch)
+	WriteByte(f, me\Crouch)
 	
 	WriteByte(f, I_005\ChanceToSpawn)
 	
-	WriteFloat(f, Stamina)
-	WriteFloat(f, StaminaEffect)
-	WriteFloat(f, StaminaEffectTimer)
+	WriteFloat(f, me\Stamina)
+	WriteFloat(f, me\StaminaEffect)
+	WriteFloat(f, me\StaminaEffectTimer)
 	
-	WriteFloat(f, EyeStuck)
-	WriteFloat(f, EyeIrritation)
+	WriteFloat(f, me\EyeStuck)
+	WriteFloat(f, me\EyeIrritation)
 	
-	WriteFloat(f, Injuries)
-	WriteFloat(f, Bloodloss)
+	WriteFloat(f, me\Injuries)
+	WriteFloat(f, me\Bloodloss)
 	
-	WriteFloat(f, PrevInjuries)
-	WriteFloat(f, PrevBloodloss)
+	WriteFloat(f, me\PrevInjuries)
+	WriteFloat(f, me\PrevBloodloss)
 	
 	WriteString(f, msg\DeathMsg)
 	
@@ -66,9 +66,9 @@ Function SaveGame(File$)
 		WriteFloat(f, I_1025\State[i])
 	Next
 	
-	WriteFloat(f, VomitTimer)
-	WriteByte(f, Vomit)
-	WriteFloat(f, CameraShakeTimer)
+	WriteFloat(f, me\VomitTimer)
+	WriteByte(f, me\Vomit)
+	WriteFloat(f, me\CameraShakeTimer)
 	WriteFloat(f, I_008\Timer)
 	WriteFloat(f, I_409\Timer)
 	
@@ -87,7 +87,7 @@ Function SaveGame(File$)
 	
 	WriteFloat(f, MonitorTimer)
 	
-	WriteFloat(f, Sanity)
+	WriteFloat(f, me\Sanity)
 	
 	WriteByte(f, wi\GasMask)
 	WriteByte(f, wi\BallisticVest)
@@ -124,7 +124,7 @@ Function SaveGame(File$)
 	For i = 0 To MAXACHIEVEMENTS - 1
 		WriteByte(f, Achievements[i])
 	Next
-	WriteInt(f, RefinedItems)
+	WriteInt(f, me\RefinedItems)
 	
 	WriteInt(f, MapWidth)
 	WriteInt(f, MapHeight)
@@ -475,7 +475,7 @@ End Function
 Function LoadGame(File$)
 	CatchErrors("Uncaught (LoadGame)")
 	
-	DropSpeed = 0.0
+	me\DropSpeed = 0.0
 	
 	DebugHUD = False
 	
@@ -487,7 +487,7 @@ Function LoadGame(File$)
 	StrTemp = ReadString(f)
 	StrTemp = ReadString(f)
 	
-	PlayTime = ReadInt(f)
+	me\PlayTime = ReadInt(f)
 	
 	x = ReadFloat(f)
 	y = ReadFloat(f)
@@ -510,30 +510,30 @@ Function LoadGame(File$)
 	StrTemp = ReadString(f)
 	If (StrTemp <> VersionNumber) Then RuntimeError("The save files of v" + StrTemp + " aren't compatible with SCP - Containment Breach Ultimate Edition v" + VersionNumber + ".")
 	
-	BlinkTimer = ReadFloat(f)
-	BlinkEffect = ReadFloat(f)	
-	BlinkEffectTimer = ReadFloat(f)
+	me\BlinkTimer = ReadFloat(f)
+	me\BlinkEffect = ReadFloat(f)	
+	me\BlinkEffectTimer = ReadFloat(f)
 	
-	DeathTimer = ReadInt(f)	
-	BlurTimer = ReadInt(f)	
-	HealTimer = ReadFloat(f)
+	me\DeathTimer = ReadInt(f)	
+	me\BlurTimer = ReadInt(f)	
+	me\HealTimer = ReadFloat(f)
 	
-	Crouch = ReadByte(f)
+	me\Crouch = ReadByte(f)
 	
 	I_005\ChanceToSpawn = ReadByte(f)
 	
-	Stamina = ReadFloat(f)
-	StaminaEffect = ReadFloat(f)	
-	StaminaEffectTimer = ReadFloat(f)	
+	me\Stamina = ReadFloat(f)
+	me\StaminaEffect = ReadFloat(f)	
+	me\StaminaEffectTimer = ReadFloat(f)	
 	
-	EyeStuck = ReadFloat(f)
-	EyeIrritation = ReadFloat(f)
+	me\EyeStuck = ReadFloat(f)
+	me\EyeIrritation = ReadFloat(f)
 	
-	Injuries = ReadFloat(f)
-	Bloodloss = ReadFloat(f)
+	me\Injuries = ReadFloat(f)
+	me\Bloodloss = ReadFloat(f)
 	
-	PrevInjuries = ReadFloat(f)
-	PrevBloodloss = ReadFloat(f)
+	me\PrevInjuries = ReadFloat(f)
+	me\PrevBloodloss = ReadFloat(f)
 	
 	msg\DeathMsg = ReadString(f)
 	
@@ -541,9 +541,9 @@ Function LoadGame(File$)
 		I_1025\State[i] = ReadFloat(f)
 	Next
 	
-	VomitTimer = ReadFloat(f)
-	Vomit = ReadByte(f)
-	CameraShakeTimer = ReadFloat(f)
+	me\VomitTimer = ReadFloat(f)
+	me\Vomit = ReadByte(f)
+	me\CameraShakeTimer = ReadFloat(f)
 	I_008\Timer = ReadFloat(f)
 	I_409\Timer = ReadFloat(f)
 	
@@ -559,7 +559,7 @@ Function LoadGame(File$)
 	
 	MonitorTimer = ReadFloat(f)
 	
-	Sanity = ReadFloat(f)
+	me\Sanity = ReadFloat(f)
 	
 	wi\GasMask = ReadByte(f)
 	wi\BallisticVest = ReadByte(f)
@@ -592,7 +592,7 @@ Function LoadGame(File$)
 	For i = 0 To MAXACHIEVEMENTS - 1
 		Achievements[i] = ReadByte(f)
 	Next
-	RefinedItems = ReadInt(f)
+	me\RefinedItems = ReadInt(f)
 	
 	MapWidth = ReadInt(f)
 	MapHeight = ReadInt(f)
@@ -1250,7 +1250,7 @@ Function LoadGame(File$)
 	Next
 	
 	If PlayerRoom\RoomTemplate\Name = "dimension1499"
-		BlinkTimer = -1.0
+		me\BlinkTimer = -1.0
 		ShouldEntitiesFall = False
 		PlayerRoom = I_1499\PrevRoom
 		UpdateDoors()
@@ -1281,12 +1281,12 @@ Function LoadGameQuick(File$)
 	
 	DebugHUD = False
 	GameSaved = True
-	IsZombie = False
-	DeafPlayer = False
-	DeafTimer = 0.0
+	me\Zombie = False
+	me\Deaf = False
+	me\DeafTimer = 0.0
 	UnableToMove = False
 	msg\Msg = ""
-	SelectedEnding = ""
+	me\SelectedEnding = ""
 	
 	PositionEntity(Collider, 0.0, 1000.0, 0.0, True)
 	ResetEntity(Collider)
@@ -1298,26 +1298,26 @@ Function LoadGameQuick(File$)
 	StrTemp = ReadString(f)
 	StrTemp = ReadString(f)
 	
-	DropSpeed = -0.1
-	HeadDropSpeed = 0.0
-	Shake = 0.0
-	CurrSpeed = 0.0
+	me\DropSpeed = -0.1
+	me\HeadDropSpeed = 0.0
+	me\Shake = 0.0
+	me\CurrSpeed = 0.0
 	
-	HeartBeatVolume = 0.0
+	me\HeartBeatVolume = 0.0
 	
-	CameraShake = 0.0
-	Shake = 0.0
-	LightFlash = 0.0
-	BlurTimer = 0.0
+	me\CameraShake = 0.0
+	me\Shake = 0.0
+	me\LightFlash = 0.0
+	me\BlurTimer = 0.0
 	
-	KillTimer = 0.0
-	FallTimer = 0.0
+	me\KillTimer = 0.0
+	me\FallTimer = 0.0
 	MenuOpen = False
 	
 	ClearCheats(chs)
 	WireFrame(0)
 	
-	PlayTime = ReadInt(f)
+	me\PlayTime = ReadInt(f)
 	
 	HideEntity(Collider)
 	
@@ -1343,30 +1343,30 @@ Function LoadGameQuick(File$)
 	StrTemp = ReadString(f)
 	If (StrTemp <> VersionNumber) Then RuntimeError("The save files of v" + StrTemp + " aren't compatible with SCP - Containment Breach Ultimate Edition v" + VersionNumber + ".")
 	
-	BlinkTimer = ReadFloat(f)
-	BlinkEffect = ReadFloat(f)	
-	BlinkEffectTimer = ReadFloat(f)	
+	me\BlinkTimer = ReadFloat(f)
+	me\BlinkEffect = ReadFloat(f)	
+	me\BlinkEffectTimer = ReadFloat(f)	
 	
-	DeathTimer = ReadInt(f)	
-	BlurTimer = ReadInt(f)	
-	HealTimer = ReadFloat(f)
+	me\DeathTimer = ReadInt(f)	
+	me\BlurTimer = ReadInt(f)	
+	me\HealTimer = ReadFloat(f)
 	
-	Crouch = ReadByte(f)
+	me\Crouch = ReadByte(f)
 	
 	I_005\ChanceToSpawn = ReadByte(f)
 	
-	Stamina = ReadFloat(f)
-	StaminaEffect = ReadFloat(f)	
-	StaminaEffectTimer = ReadFloat(f)	
+	me\Stamina = ReadFloat(f)
+	me\StaminaEffect = ReadFloat(f)	
+	me\StaminaEffectTimer = ReadFloat(f)	
 	
-	EyeStuck = ReadFloat(f)
-	EyeIrritation = ReadFloat(f)
+	me\EyeStuck = ReadFloat(f)
+	me\EyeIrritation = ReadFloat(f)
 	
-	Injuries = ReadFloat(f)
-	Bloodloss = ReadFloat(f)
+	me\Injuries = ReadFloat(f)
+	me\Bloodloss = ReadFloat(f)
 	
-	PrevInjuries = ReadFloat(f)
-	PrevBloodloss = ReadFloat(f)
+	me\PrevInjuries = ReadFloat(f)
+	me\PrevBloodloss = ReadFloat(f)
 	
 	msg\DeathMsg = ReadString(f)
 	
@@ -1374,9 +1374,9 @@ Function LoadGameQuick(File$)
 		I_1025\State[i] = ReadFloat(f)
 	Next
 	
-	VomitTimer = ReadFloat(f)
-	Vomit = ReadByte(f)
-	CameraShakeTimer = ReadFloat(f)
+	me\VomitTimer = ReadFloat(f)
+	me\Vomit = ReadByte(f)
+	me\CameraShakeTimer = ReadFloat(f)
 	I_008\Timer = ReadFloat(f)
 	I_409\Timer = ReadFloat(f)
 	
@@ -1392,7 +1392,7 @@ Function LoadGameQuick(File$)
 	
 	MonitorTimer = ReadFloat(f)
 	
-	Sanity = ReadFloat(f)
+	me\Sanity = ReadFloat(f)
 	
 	wi\GasMask = ReadByte(f)
 	wi\BallisticVest = ReadByte(f)
@@ -1425,7 +1425,7 @@ Function LoadGameQuick(File$)
 	For i = 0 To MAXACHIEVEMENTS - 1
 		Achievements[i] = ReadByte(f)
 	Next
-	RefinedItems = ReadInt(f)
+	me\RefinedItems = ReadInt(f)
 	
 	MapWidth = ReadInt(f)
 	MapHeight = ReadInt(f)
@@ -1908,7 +1908,7 @@ Function LoadGameQuick(File$)
 		sc\PlayerState = 0
 	Next
 	EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
-	RestoreSanity = True
+	me\RestoreSanity = True
 	
 	CameraFogFar = ReadFloat(f)
     StoredCameraFogFar = ReadFloat(f)

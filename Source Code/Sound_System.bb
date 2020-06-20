@@ -503,18 +503,18 @@ Function ControlSoundVolume()
 	Next
 End Function
 
-Function UpdateDeafPlayer()
-	If DeafTimer > 0.0
-		DeafTimer = DeafTimer - fpst\FPSFactor[0]
+Function UpdateDeaf()
+	If me\DeafTimer > 0.0
+		me\DeafTimer = me\DeafTimer - fpst\FPSFactor[0]
 		SFXVolume = 0.0
-		If SFXVolume > 0.0
+		If SFXVolume > 0.0 Then
 			ControlSoundVolume()
 		EndIf
 	Else
-		DeafTimer = 0
+		me\DeafTimer = 0.0
 		SFXVolume = PrevSFXVolume
-		If DeafPlayer Then ControlSoundVolume()
-		DeafPlayer = False
+		If me\Deaf Then ControlSoundVolume()
+		me\Deaf = False
 	EndIf
 End Function
 
@@ -639,7 +639,7 @@ Function LoadAllSounds()
 		AlarmSFX(i) = LoadSound_Strict("SFX\Alarm\Alarm" + (i + 1) + ".ogg")
 	Next
 	
-	HeartBeatSFX = LoadSound_Strict("SFX\Character\D9341\Heartbeat.ogg")
+	HeartBeatSFX = LoadSound_Strict("SFX\Character\D9341\HeartBeat.ogg")
 	
 	For i = 0 To 4
 		BreathSFX(0, i) = LoadSound_Strict("SFX\Character\D9341\Breath" + i + ".ogg")

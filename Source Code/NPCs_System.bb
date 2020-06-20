@@ -601,7 +601,7 @@ Function UpdateNPCs()
 								n\PrevX = EntityX(n\Collider)
 								n\PrevZ = EntityZ(n\Collider)				
 								
-								If (BlinkTimer < -16.0 Or BlinkTimer > -6.0) And (wi\IsNVGBlinking = False) Then
+								If (me\BlinkTimer < -16.0 Or me\BlinkTimer > -6.0) And (wi\IsNVGBlinking = False) Then
 									If EntityInView(n\OBJ, Camera) Then Move = False
 								EndIf
 							EndIf
@@ -610,8 +610,8 @@ Function UpdateNPCs()
 							
 							; ~ Doesn't move
 							If Move = False Then
-								BlurVolume = Max(Max(Min((4.0 - Dist) / 6.0, 0.9), 0.1), BlurVolume)
-								CurrCameraZoom = Max(CurrCameraZoom, (Sin(Float(MilliSecs2()) / 20.0) + 1.0) * 15.0 * Max((3.5 - Dist) / 3.5, 0.0))								
+								me\BlurVolume = Max(Max(Min((4.0 - Dist) / 6.0, 0.9), 0.1), me\BlurVolume)
+								me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs2()) / 20.0) + 1.0) * 15.0 * Max((3.5 - Dist) / 3.5, 0.0))								
 								
 								If Dist < 3.5 And MilliSecs2() - n\LastSeen > 60000 And Temp Then
 									PlaySound_Strict(HorrorSFX(Rand(3, 4)))
@@ -622,9 +622,9 @@ Function UpdateNPCs()
 								If Dist < 1.5 And Rand(700) = 1 Then PlaySound2(Scp173SFX(Rand(0, 2)), Camera, n\OBJ)
 								
 								If Dist < 1.5 And n\LastDist > 2.0 And Temp Then
-									CurrCameraZoom = 40.0
-									HeartBeatRate = Max(HeartBeatRate, 140.0)
-									HeartBeatVolume = 0.5
+									me\CurrCameraZoom = 40.0
+									me\HeartBeatRate = Max(me\HeartBeatRate, 140.0)
+									me\HeartBeatVolume = 0.5
 									
 									Select Rand(5)
 										Case 1
@@ -716,7 +716,7 @@ Function UpdateNPCs()
 									; ~ Attacks
 									If Temp Then 				
 										If Dist < 0.65 Then
-											If KillTimer >= 0.0 And (Not chs\GodMode) Then
+											If me\KillTimer >= 0.0 And (Not chs\GodMode) Then
 												Select PlayerRoom\RoomTemplate\Name
 													Case "room2clockroom", "room2closets", "room895"
 														;[Block]
@@ -898,11 +898,11 @@ Function UpdateNPCs()
 									If EntityInView(n\Collider, Camera) Then
 										GiveAchievement(Achv106)
 										
-										BlurVolume = Max(Max(Min((4.0 - Dist) / 6.0, 0.9), 0.1), BlurVolume)
-										CurrCameraZoom = Max(CurrCameraZoom, (Sin(Float(MilliSecs2()) / 20.0) + 1.0) * 20.0 * Max((4.0 - Dist) / 4.0, 0.0))
+										me\BlurVolume = Max(Max(Min((4.0 - Dist) / 6.0, 0.9), 0.1), me\BlurVolume)
+										me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs2()) / 20.0) + 1.0) * 20.0 * Max((4.0 - Dist) / 4.0, 0.0))
 										
 										If MilliSecs2() - n\LastSeen > 60000 Then 
-											CurrCameraZoom = 40.0
+											me\CurrCameraZoom = 40.0
 											PlaySound_Strict(HorrorSFX(6))
 											n\LastSeen = MilliSecs2()
 										EndIf
@@ -922,7 +922,7 @@ Function UpdateNPCs()
 										PointEntity(n\OBJ, Collider)
 										RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0.0)
 										
-										If KillTimer >= 0.0 Then
+										If me\KillTimer >= 0.0 Then
 											PrevFrame = n\Frame
 											AnimateNPC(n, 284.0, 333.0, n\CurrSpeed * 43.0)
 											
@@ -994,7 +994,7 @@ Function UpdateNPCs()
 									EndIf
 									AnimateNPC(n, 105.0, 110.0, 0.15, False)
 									
-									If KillTimer >= 0.0 And FallTimer >= 0.0 Then
+									If me\KillTimer >= 0.0 And me\FallTimer >= 0.0 Then
 										PointEntity(n\OBJ, Collider)
 										RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0.0)									
 										
@@ -1006,7 +1006,7 @@ Function UpdateNPCs()
 												Kill(True)
 											Else
 												PlaySound_Strict(OldManSFX(3))
-												FallTimer = Min(-1.0, FallTimer)
+												me\FallTimer = Min(-1.0, me\FallTimer)
 												PositionEntity(Head, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True), True)
 												ResetEntity(Head)
 												RotateEntity(Head, 0.0, EntityYaw(Camera) + Rnd(-45.0, 45.0), 0.0)
@@ -1024,7 +1024,7 @@ Function UpdateNPCs()
 								EndIf
 							EndIf
 							
-							If FallTimer < -250.0 Then
+							If me\FallTimer < -250.0 Then
 								MoveToPocketDimension()
 								n\State = 250.0 ; ~ Make SCP-106 idle for a while
 							EndIf
@@ -1139,10 +1139,10 @@ Function UpdateNPCs()
 									If ProjectedX() > 0.0 And ProjectedX() < GraphicWidth Then
 										If ProjectedY() > 0.0 And ProjectedY() < GraphicHeight Then
 											If EntityVisible(Collider, n\Collider) Then
-												If (BlinkTimer < -16.0 Or BlinkTimer > -6.0)
+												If (me\BlinkTimer < -16.0 Or me\BlinkTimer > -6.0)
 													PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"))
 													
-													CurrCameraZoom = 10.0
+													me\CurrCameraZoom = 10.0
 													
 													SetNPCFrame(n, 194.0)
 													
@@ -1160,7 +1160,7 @@ Function UpdateNPCs()
 						;[End Block]
 					Case 4.0
 						;[Block]
-						CurrCameraZoom = CurveValue(Max(CurrCameraZoom, (Sin(Float(MilliSecs2()) / 20.0) + 1.0) * 10.0), CurrCameraZoom, 8.0)
+						me\CurrCameraZoom = CurveValue(Max(me\CurrCameraZoom, (Sin(Float(MilliSecs2()) / 20.0) + 1.0) * 10.0), me\CurrCameraZoom, 8.0)
 						
 						If n\Target = Null Then 
 							If n\SoundCHN = 0 Then
@@ -1180,7 +1180,7 @@ Function UpdateNPCs()
 						
 						If chs\NoTarget And n\Target = Null Then n\State = 5.0
 						
-						If KillTimer >= 0.0 Then
+						If me\KillTimer >= 0.0 Then
 							If MilliSecs2() > n\State3 Then
 								n\LastSeen = 0
 								If n\Target = Null Then
@@ -1212,11 +1212,11 @@ Function UpdateNPCs()
 												PlaySound_Strict(DamageSFX(4))
 												
 												Pvt = CreatePivot()
-												CameraShake = 30.0
-												BlurTimer = 2000.0
+												me\CameraShake = 30.0
+												me\BlurTimer = 2000.0
 												msg\DeathMsg = "A large amount of blood found in [DATA REDACTED]. DNA indentified as " + SubjectName + ". Most likely [DATA REDACTED] by SCP-096."
 												Kill(True)
-												KillAnim = 1
+												me\KillAnim = 1
 												For i = 0 To 6
 													PositionEntity(Pvt, EntityX(Collider) + Rnd(-0.1, 0.1), EntityY(Collider) - 0.05, EntityZ(Collider) + Rnd(-0.1, 0.1))
 													TurnEntity(Pvt, 90.0, 0.0, 0.0)
@@ -1422,10 +1422,10 @@ Function UpdateNPCs()
 									If ProjectedX() > 0.0 And ProjectedX() < GraphicWidth Then
 										If ProjectedY() > 0.0 And ProjectedY() < GraphicHeight Then
 											If EntityVisible(Collider, n\Collider) Then
-												If (BlinkTimer < -16.0 Or BlinkTimer > -6.0)
+												If (me\BlinkTimer < -16.0 Or me\BlinkTimer > -6.0)
 													PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"))
 													
-													CurrCameraZoom = 10.0
+													me\CurrCameraZoom = 10.0
 													
 													If n\Frame >= 422.0 Then
 														SetNPCFrame(n, 677.0)
@@ -1527,19 +1527,19 @@ Function UpdateNPCs()
 									
 									If Dist < 0.5 Then
 										If wi\HazmatSuit > 0 Then
-											BlurTimer = BlurTimer + fpst\FPSFactor[0] * 2.5
-											If BlurTimer > 250.0 And BlurTimer - fpst\FPSFactor[0] * 2.5 =< 250.0 And n\PrevState <> 3 Then
+											me\BlurTimer = me\BlurTimer + fpst\FPSFactor[0] * 2.5
+											If me\BlurTimer > 250.0 And me\BlurTimer - fpst\FPSFactor[0] * 2.5 =< 250.0 And n\PrevState <> 3 Then
 												If n\SoundCHN2 <> 0 Then StopChannel(n\SoundCHN2)
 												n\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\049\TakeOffHazmat.ogg"))
 												n\PrevState = 3
-											ElseIf BlurTimer >= 500.0
+											ElseIf me\BlurTimer >= 500.0
 												For i = 0 To MaxItemAmount - 1
 													If Inventory(i) <> Null Then
 														If Instr(Inventory(i)\ItemTemplate\TempName, "hazmatsuit") And wi\HazmatSuit < 3 Then
 															If Inventory(i)\State2 < 3 Then
 																Inventory(i)\State2 = Inventory(i)\State2 + 1
-																BlurTimer = 260.0
-																CameraShake = 2.0
+																me\BlurTimer = 260.0
+																me\CameraShake = 2.0
 															Else
 																RemoveItem(Inventory(i))
 																wi\HazmatSuit = False
@@ -1550,17 +1550,17 @@ Function UpdateNPCs()
 												Next
 											EndIf
 										ElseIf I_714\Using = 1 Then
-											BlurTimer = BlurTimer + fpst\FPSFactor[0] * 2.5
-											If BlurTimer > 250.0 And BlurTimer - fpst\FPSFactor[0] * 2.5 =< 250.0 And n\PrevState <> 3 Then
+											me\BlurTimer = me\BlurTimer + fpst\FPSFactor[0] * 2.5
+											If me\BlurTimer > 250.0 And me\BlurTimer - fpst\FPSFactor[0] * 2.5 =< 250.0 And n\PrevState <> 3 Then
 												If n\SoundCHN2 <> 0 Then StopChannel(n\SoundCHN2)
 												n\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\049\714Equipped.ogg"))
 												n\PrevState = 3
-											ElseIf BlurTimer >= 500.0
+											ElseIf me\BlurTimer >= 500.0
 												I_714\Using = 0
 											EndIf
 										Else
-											CurrCameraZoom = 20.0
-											BlurTimer = 500.0
+											me\CurrCameraZoom = 20.0
+											me\BlurTimer = 500.0
 											
 											If (Not chs\GodMode) Then
 												If PlayerRoom\RoomTemplate\Name = "room049"
@@ -1575,7 +1575,7 @@ Function UpdateNPCs()
 														GroupDesignation = "See No Evil"
 													EndIf
 													msg\DeathMsg = "An active instance of SCP-049-2 was discovered in [DATA REDACTED]. Terminated by " + GroupDesignation + "."
-													Kill() : KillAnim = 0
+													Kill() : me\KillAnim = 0
 												EndIf
 												PlaySound_Strict(HorrorSFX(13))
 												If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2)
@@ -2115,9 +2115,9 @@ Function UpdateNPCs()
 									If Dist < 1.1 Then
 										If Abs(DeltaYaw(n\Collider, Collider)) =< 60.0
 											PlaySound2(DamageSFX(Rand(5, 8)), Camera, n\Collider)
-											InjurePlayer(Rnd(0.4, 1.0), 0.0, 0.0, True, Rnd(0.1, 0.2))
+											InjurePlayer(Rnd(0.4, 1.0), 0.0, 0.0, Rnd(0.1, 0.25), 0.2)
 											
-											If Injuries > 3.0 Then
+											If me\Injuries > 3.0 Then
 												msg\DeathMsg = SubjectName + ". Cause of death: multiple lacerations and severe blunt force trauma caused by an instance of SCP-049-2."
 												Kill(True)
 											EndIf
@@ -2136,9 +2136,9 @@ Function UpdateNPCs()
 									If Dist < 1.1 Then
 										If Abs(DeltaYaw(n\Collider, Collider)) =< 60.0
 											PlaySound2(DamageSFX(Rand(5, 8)), Camera, n\Collider)
-											InjurePlayer(Rnd(0.4, 1.0), 0.0, 0.0, True, Rnd(0.1, 0.2), True, 0.1)
+											InjurePlayer(Rnd(0.4, 1.0), 0.0, 0.0, Rnd(0.1, 0.25), 0.2)
 											
-											If Injuries > 3.0 Then
+											If me\Injuries > 3.0 Then
 												msg\DeathMsg = SubjectName + ". Cause of death: multiple lacerations and severe blunt force trauma caused by an instance of SCP-049-2."
 												Kill(True)
 											EndIf
@@ -2197,7 +2197,7 @@ Function UpdateNPCs()
 							If n\Frame >= 356.0 Then SetNPCFrame(n, 302.0)
 						EndIf
 						
-						If KillTimer >= 0.0 Then
+						If me\KillTimer >= 0.0 Then
 							Dist = EntityDistance(n\Collider, Collider)
 							
 							Local ShootAccuracy# = 0.4 + 0.5 * SelectedDifficulty\AggressiveNPCs
@@ -2210,7 +2210,7 @@ Function UpdateNPCs()
 								If Rand(1, 8 - SelectedDifficulty\AggressiveNPCs * 4) < 2 Then ShootAccuracy = 0.03
 								
 								; ~ Increase accuracy if the player is going slow
-								ShootAccuracy = ShootAccuracy + (0.5 - CurrSpeed * 20.0)
+								ShootAccuracy = ShootAccuracy + (0.5 - me\CurrSpeed * 20.0)
 							EndIf
 							
 							If Dist < DetectDistance Then
@@ -2399,7 +2399,7 @@ Function UpdateNPCs()
 						    EndIf
 						EndIf
 						
-						If KillTimer >= 0.0 Then
+						If me\KillTimer >= 0.0 Then
 							Dist = EntityDistance(n\Collider, Collider)
 							
 							Local SearchPlayer% = False
@@ -2875,7 +2875,7 @@ Function UpdateNPCs()
 				If RN <> "pocketdimension" And RN <> "dimension1499" Then 
 					If n\Idle Then
 						HideEntity(n\OBJ)
-						If Rand(50) = 1 And (BlinkTimer < -5.0 And BlinkTimer > -15.0) Then
+						If Rand(50) = 1 And (me\BlinkTimer < -5.0 And me\BlinkTimer > -15.0) Then
 							ShowEntity(n\OBJ)
 							Angle = EntityYaw(Collider) + Rnd(-90.0, 90.0)
 							
@@ -3050,7 +3050,7 @@ Function UpdateNPCs()
 							PositionEntity(n\Collider, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 							
 							If EntityDistance(n\OBJ, Target) < 0.3 Then
-								CameraShake = Max(CameraShake, 3.0)
+								me\CameraShake = Max(me\CameraShake, 3.0)
 								PlaySound_Strict(LoadTempSound("SFX\Character\Apache\Crash" + Rand(1, 2) + ".ogg"))
 								n\State = 5.0
 							EndIf
@@ -3072,8 +3072,8 @@ Function UpdateNPCs()
 						    Case 0.0 ; ~ Spawns
 								;[Block]
 							    If n\Frame > 283.0 Then
-								    HeartBeatVolume = Max(CurveValue(1.0, HeartBeatVolume, 50.0), HeartBeatVolume)
-								    HeartBeatRate = Max(CurveValue(130.0, HeartBeatRate, 100.0), HeartBeatRate)
+								    me\HeartBeatVolume = Max(CurveValue(1.0, me\HeartBeatVolume, 50.0), me\HeartBeatVolume)
+								    me\HeartBeatRate = Max(CurveValue(130.0, me\HeartBeatRate, 100.0), me\HeartBeatRate)
 									
 								    PointEntity(n\OBJ, Collider)
 								    RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 25.0), 0.0)
@@ -3140,9 +3140,9 @@ Function UpdateNPCs()
 													InjurePlayer(Rnd(0.5))
 												Else
 												    PlaySound_Strict(DamageSFX(Rand(9, 10)))
-													InjurePlayer(Rnd(1.0, 1.5), 0.0, 100.0, True, Rnd(0.1, 0.5))
+													InjurePlayer(Rnd(1.0, 1.5), 0.0, 100.0, Rnd(0.1, 0.55), 0.2)
 													
-													If Injuries > 3.0 Then
+													If me\Injuries > 3.0 Then
 													    If PlayerRoom\RoomTemplate\Name = "room2offices" Then
 														    msg\DeathMsg = Chr(34) + "One large and highly active tentacle-like appendage seems "
 														    msg\DeathMsg = msg\DeathMsg + "to have grown outside the dead body of a scientist within office area [DATA REDACTED]. It's level of aggression is "
@@ -3206,7 +3206,7 @@ Function UpdateNPCs()
 						If ForestNPCData[2] = 1.0
 							ShowEntity(ForestNPC)
 							If n\State <> 1.0
-								If (BlinkTimer < -8.0 And BlinkTimer > -12.0) Or (Not EntityInView(ForestNPC, Camera))
+								If (me\BlinkTimer < -8.0 And me\BlinkTimer > -12.0) Or (Not EntityInView(ForestNPC, Camera))
 									ForestNPCData[2] = 0.0
 									HideEntity(ForestNPC)
 								EndIf
@@ -3398,7 +3398,7 @@ Function UpdateNPCs()
 											PositionEntity(n\Collider, TFormedX(), EntityY(fr\Forest_Pivot, True) + 1.0, TFormedZ())
 											
 											If EntityInView(n\Collider, Camera) Then
-												BlinkTimer = -10.0
+												me\BlinkTimer = -10.0
 											Else
 												x2 = GridSize
 												Exit
@@ -3427,7 +3427,7 @@ Function UpdateNPCs()
 									EndIf
 								EndIf
 								
-								If CurrSpeed > 0.03 Then ; ~ The player is running
+								If me\CurrSpeed > 0.03 Then ; ~ The player is running
 									n\State3 = n\State3 + fpst\FPSFactor[0]
 									If Rnd(5000.0) < n\State3 Then
 										Temp = True
@@ -3477,7 +3477,7 @@ Function UpdateNPCs()
 							RotateEntity(n\Collider, 0.0, Angle - 90.0, 0.0, True)
 							
 							; ~ If close enough to attack or already attacking, play the attack anim
-							If (Dist < 1.1 Or (n\Frame > 451.0 And n\Frame < 493.0) Or KillTimer < 0.0) Then
+							If (Dist < 1.1 Or (n\Frame > 451.0 And n\Frame < 493.0) Or me\KillTimer < 0.0) Then
 								msg\DeathMsg = ""
 								
 								n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
@@ -3485,7 +3485,7 @@ Function UpdateNPCs()
 								AnimateNPC(n, 451.0, 493.0, 0.5, False)
 								
 								If (PrevFrame < 461.0 And n\Frame >= 461.0) Then 
-									If KillTimer >= 0.0 Then Kill(True) : KillAnim = 0
+									If me\KillTimer >= 0.0 Then Kill(True) : me\KillAnim = 0
 									PlaySound_Strict(DamageSFX(11))
 								EndIf
 								If (PrevFrame < 476.0 And n\Frame >= 476.0) Then PlaySound_Strict(DamageSFX(12))
@@ -3641,13 +3641,13 @@ Function UpdateNPCs()
 									If Temp Then
 										If Distance(n\EnemyX, n\EnemyZ, EntityX(n\Collider), EntityZ(n\Collider)) < 1.5 Then
 											PlaySound_Strict(DamageSFX(11))
-											InjurePlayer(Rnd(1.5, 2.5), 0.0, 500.0, True, Rnd(0.1, 0.725))
+											InjurePlayer(Rnd(1.5, 2.5), 0.0, 500.0, Rnd(0.1, 0.75))
 										Else
 											SetNPCFrame(n, 449.0)
 										EndIf
 									EndIf
 									
-									If Injuries > 4.0 Then 
+									If me\Injuries > 4.0 Then 
 										msg\DeathMsg = Chr(34) + "All four (4) escaped SCP-939 specimens have been captured and recontained successfully. "
 										msg\DeathMsg = msg\DeathMsg + "They made quite a mess at Storage Area 6. A cleaning team has been dispatched." + Chr(34)
 										Kill(True)
@@ -3696,7 +3696,7 @@ Function UpdateNPCs()
 						Dist = EntityDistance(n\Collider, Collider)
 						
 						If Dist < 4.0 Then Dist = Dist - EntityVisible(Collider, n\Collider)
-						If PlayerSoundVolume * 1.2 > Dist Or Dist < 1.5 Then
+						If me\SndVolume * 1.2 > Dist Or Dist < 1.5 Then
 							If n\State3 = 0.0 Then
 								If n\Sound <> 0 Then 
 									FreeSound_Strict(n\Sound) : n\Sound = 0
@@ -3709,7 +3709,7 @@ Function UpdateNPCs()
 							EndIf
 							
 							n\State = 3.0
-						ElseIf PlayerSoundVolume * 1.6 > Dist
+						ElseIf me\SndVolume * 1.6 > Dist
 							If n\State <> 1 And n\Reload =< 0.0 Then
 								If n\Sound <> 0 Then 
 									FreeSound_Strict(n\Sound) : n\Sound = 0
@@ -3805,9 +3805,9 @@ Function UpdateNPCs()
 												;[Block]
 												If n\Sound2 = 0 Then n\Sound2 = LoadSound_Strict("SFX\SCP\066\Beethoven.ogg")
 												n\SoundCHN2 = PlaySound2(n\Sound2, Camera, n\Collider)
-												DeafTimer = 70.0 * (45.0 + (15.0 * SelectedDifficulty\AggressiveNPCs))
-												DeafPlayer = True
-												CameraShake = 10.0
+												me\DeafTimer = 70.0 * (45.0 + (15.0 * SelectedDifficulty\AggressiveNPCs))
+												me\Deaf = True
+												me\CameraShake = 10.0
 												;[End Block]
 											Case 2
 												;[Block]
@@ -3828,7 +3828,7 @@ Function UpdateNPCs()
 											Case 4
 												;[Block]
 												If PlayerRoom\RoomTemplate\DisableDecals = False Then
-													CameraShake = 5.0
+													me\CameraShake = 5.0
 													de.Decals = CreateDecal(1, EntityX(n\Collider), 0.01, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0)
 													de\Size = 0.3 : UpdateDecals()
 													PlaySound_Strict(LoadTempSound("SFX\General\BodyFall.ogg"))
@@ -3899,13 +3899,13 @@ Function UpdateNPCs()
 				If n\State3 > 0.0 Then
 					n\State3 = n\State3 - fpst\FPSFactor[0]
 					LightVolume = TempLightVolume - TempLightVolume * Min(Max(n\State3 / 500.0, 0.01), 0.6)
-					HeartBeatRate = Max(HeartBeatRate, 130.0)
-					HeartBeatVolume = Max(HeartBeatVolume, Min(n\State3 / 1000.0, 1.0))
+					me\HeartBeatRate = Max(me\HeartBeatRate, 130.0)
+					me\HeartBeatVolume = Max(me\HeartBeatVolume, Min(n\State3 / 1000.0, 1.0))
 				EndIf
 				
 				If ChannelPlaying(n\SoundCHN2) = True Then
 					UpdateSoundOrigin2(n\SoundCHN2, Camera, n\Collider, 20.0)
-					BlurTimer = Max((5.0 - Dist) * 300.0, 0.0)
+					me\BlurTimer = Max((5.0 - Dist) * 300.0, 0.0)
 				EndIf
 				
 				PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.2, EntityZ(n\Collider))
@@ -3989,7 +3989,7 @@ Function UpdateNPCs()
 							n\State3 = 1000.0					
 						EndIf
 						
-						If Stamina < 10.0 Then 
+						If me\Stamina < 10.0 Then 
 							n\State3 = n\State3 + fpst\FPSFactor[0]
 						Else If n\State3 < 900.0
 							n\State3 = Max(n\State3 - fpst\FPSFactor[0] * 0.2, 0.0)
@@ -4041,16 +4041,16 @@ Function UpdateNPCs()
 									RotateEntity(n\Collider, 0.0, CurveAngle(Angle, EntityYaw(n\Collider), 20.0), 0.0)
 									
 									If n\State3 < 900.0 Then
-										BlurTimer = ((Sin(MilliSecs2() / 50) + 1.0) * 200) / Dist
+										me\BlurTimer = ((Sin(MilliSecs2() / 50) + 1.0) * 200) / Dist
 										
 										If I_714\Using = 0 And wi\GasMask < 3 And wi\HazmatSuit < 3 And Dist < 16.0 Then
-											BlinkEffect = Max(BlinkEffect, 1.5)
-											BlinkEffectTimer = 1000.0
+											me\BlinkEffect = Max(me\BlinkEffect, 1.5)
+											me\BlinkEffectTimer = 1000.0
 											
-											StaminaEffect = 2.0
-											StaminaEffectTimer = 1000.0
+											me\StaminaEffect = 2.0
+											me\StaminaEffectTimer = 1000.0
 											
-											If msg\Timer =< 0.0 And StaminaEffect < 1.5 Then
+											If msg\Timer =< 0.0 And me\StaminaEffect < 1.5 Then
 												Select Rand(4)
 													Case 1
 														;[Block]
@@ -4231,9 +4231,9 @@ Function UpdateNPCs()
 								
 								If n\Frame > 470.0 And PrevFrame =< 470.0 Or n\Frame > 500.0 And PrevFrame =< 500.0 Or n\Frame > 527.0 And PrevFrame =< 527.0 Then
 									If Dist < 1.0 Then
-										If (Abs(DeltaYaw(n\Collider, Collider)) =< 60.0) Then
+										If Abs(DeltaYaw(n\Collider, Collider)) =< 60.0 Then
 											PlaySound2(DamageSFX(Rand(11, 12)), Camera, n\Collider)
-											InjurePlayer(Rnd(0.5, 1.0), 0.0, 500.0, True, Rnd(0.1, 0.25))
+											InjurePlayer(Rnd(0.5, 1.0), 0.0, 500.0, Rnd(0.1, 0.3))
 										EndIf
 									Else
 										PlaySound2(MissSFX, Camera, n\Collider, 2.5)
@@ -4575,9 +4575,9 @@ Function UpdateNPCs()
 									If Dist > 0.85 Or Abs(DeltaYaw(n\Collider, Collider)) > 60.0 Then
 										PlaySound2(MissSFX, Camera, n\Collider, 2.5)
 									Else
-										InjurePlayer(Rnd(0.75, 1.5), 0.0, 500.0, True, Rnd(0.1, 0.375))
+										InjurePlayer(Rnd(0.75, 1.5), 0.0, 500.0, Rnd(0.1, 0.4), 0.2)
 										PlaySound2(DamageSFX(Rand(11, 12)), Camera, n\Collider)
-										If Injuries > 10.0 Then
+										If me\Injuries > 10.0 Then
 											Kill(True)
 											If PlayerRoom\RoomTemplate\Name = "dimension1499"
 												msg\DeathMsg = "All personnel situated within Evacuation Shelter LC-2 during the breach have been administered "
@@ -4605,9 +4605,9 @@ Function UpdateNPCs()
 									If Dist > 0.85 Or Abs(DeltaYaw(n\Collider, Collider)) > 60.0 Then
 										PlaySound2(MissSFX, Camera, n\Collider, 2.5)
 									Else
-										InjurePlayer(Rnd(0.75, 1.5), 0.0, 500.0, True, Rnd(0.1, 0.375))
+										InjurePlayer(Rnd(0.75, 1.5), 0.0, 500.0, Rnd(0.1, 0.4), 0.2)
 										PlaySound2(DamageSFX(Rand(11, 12)), Camera, n\Collider)
-										If Injuries > 10.0 Then
+										If me\Injuries > 10.0 Then
 											Kill(True)
 											If PlayerRoom\RoomTemplate\Name = "dimension1499"
 												msg\DeathMsg = "All personnel situated within Evacuation Shelter LC-2 during the breach have been administered "
@@ -4830,8 +4830,8 @@ Function UpdateNPCs()
 								If Dist < 1.1 Then
 									If Abs(DeltaYaw(n\Collider, Collider)) =< 60.0 Then
 										PlaySound_Strict(DamageSFX(Rand(5, 8)))
-										InjurePlayer(Rnd(0.4, 1.0), 1.0 + (1.0 * SelectedDifficulty\AggressiveNPCs), 0.0, True, Rnd(0.1, 0.2), True, 0.1)
-										If Injuries > 3.0 Then
+										InjurePlayer(Rnd(0.4, 1.0), 1.0 + (1.0 * SelectedDifficulty\AggressiveNPCs), 0.0, Rnd(0.1, 0.25), 0.2)
+										If me\Injuries > 3.0 Then
 											If Rand(2) = 1 Then
 												GroupDesignation = "Nine-Tailed Fox"
 											Else
@@ -5063,10 +5063,10 @@ Function UpdateNPCs()
 		MTF_CameraCheckTimer = MTF_CameraCheckTimer + fpst\FPSFactor[0]
 	ElseIf MTF_CameraCheckTimer >= 70.0 * 90.0
 		MTF_CameraCheckTimer = 0.0
-		If (Not PlayerDetected) Then
+		If (Not me\Detected) Then
 			If MTF_CameraCheckDetected Then
 				PlayAnnouncement("SFX\Character\MTF\AnnouncCameraFound" + Rand(1, 2) + ".ogg")
-				PlayerDetected = True
+				me\Detected = True
 				MTF_CameraCheckTimer = 70.0 * 60.0
 			Else
 				PlayAnnouncement("SFX\Character\MTF\AnnouncCameraNoFound.ogg")
@@ -5074,7 +5074,7 @@ Function UpdateNPCs()
 		EndIf
 		MTF_CameraCheckDetected = False
 		If MTF_CameraCheckTimer = 0.0 Then
-			PlayerDetected = False
+			me\Detected = False
 		EndIf
 	EndIf
 End Function
@@ -5146,16 +5146,16 @@ Function MeNPCSeesPlayer%(n.NPCs, DisableSoundOnCrouch% = False)
 	
 	If chs\NoTarget Then Return(False)
 	
-	If (Not PlayerDetected) Or n\NPCtype <> NPCtypeMTF
+	If (Not me\Detected) Or n\NPCtype <> NPCtypeMTF
 		If n\BlinkTimer =< 0.0 Then Return(False)
-		If EntityDistance(Collider, n\Collider) > (8.0 - CrouchState + PlayerSoundVolume) Then Return(False)
+		If EntityDistance(Collider, n\Collider) > (8.0 - me\CrouchState + me\SndVolume) Then Return(False)
 		
 		; ~ Spots the player if he's either in view or making a loud sound
-		If PlayerSoundVolume > 1.0
+		If me\SndVolume > 1.0
 			If (Abs(DeltaYaw(n\Collider, Collider)) > 60.0) And EntityVisible(n\Collider, Collider)
 				Return(1)
 			ElseIf (Not EntityVisible(n\Collider, Collider))
-				If DisableSoundOnCrouch And Crouch Then
+				If DisableSoundOnCrouch And me\Crouch Then
 					Return(False)
 				Else
 					Return(2)
@@ -5166,11 +5166,11 @@ Function MeNPCSeesPlayer%(n.NPCs, DisableSoundOnCrouch% = False)
 		EndIf
 		Return(EntityVisible(n\Collider, Collider))
 	Else
-		If EntityDistance(Collider, n\Collider) > (8.0 - CrouchState + PlayerSoundVolume) Then Return(3)
+		If EntityDistance(Collider, n\Collider) > (8.0 - me\CrouchState + me\SndVolume) Then Return(3)
 		If EntityVisible(n\Collider, Camera) Then Return(True)
 		
 		; ~ Spots the player if he's either in view or making a loud sound
-		If PlayerSoundVolume > 1.0 Then Return(2)
+		If me\SndVolume > 1.0 Then Return(2)
 		Return(3)
 	EndIf
 End Function
@@ -5620,11 +5620,11 @@ Function UpdateMTFUnit(n.NPCs)
 						RotateEntity(n\Collider, 0.0, CurveAngle(Angle, EntityYaw(n\Collider), 10.0), 0.0, True)
 						n\Angle = EntityYaw(n\Collider)
 						
-						If n\Reload =< 0.0 And KillTimer = 0.0 Then
+						If n\Reload =< 0.0 And me\KillTimer = 0.0 Then
 							If EntityVisible(n\Collider, Camera) Then
 								Angle = WrapAngle(Angle - EntityYaw(n\Collider))
 								If Angle < 5.0 Or Angle > 355.0 Then 
-									PrevKillTimer = KillTimer
+									PrevKillTimer = me\KillTimer
 									
 									PlaySound2(GunshotSFX, Camera, n\Collider, 15.0)
 									
@@ -5641,7 +5641,7 @@ Function UpdateMTFUnit(n.NPCs)
 									
 									msg\DeathMsg = SubjectName + ". Died of blood loss after being shot by Nine-Tailed Fox."
 									
-									If PrevKillTimer >= 0.0 And KillTimer < 0.0 Then
+									If PrevKillTimer >= 0.0 And me\KillTimer < 0.0 Then
 										msg\DeathMsg = SubjectName + ". Terminated by Nine-Tailed Fox."
 										PlayMTFSound(LoadTempSound("SFX\Character\MTF\Targetterminated" + Rand(1, 4) + ".ogg"), n)
 									EndIf
@@ -6348,10 +6348,10 @@ Function UpdateMTFUnit(n.NPCs)
 				
 				AnimateNPC(n, 79.0, 194.0, 0.2)
 				
-				If n\Reload =< 0 And KillTimer = 0 Then
+				If n\Reload =< 0.0 And me\KillTimer = 0.0 Then
 					If EntityVisible(n\Collider, Collider) Then
 						If (Abs(DeltaYaw(n\Collider, Collider)) < 50.0)
-							PlaySound2(GunshotSFX, Camera, n\Collider, 15)
+							PlaySound2(GunshotSFX, Camera, n\Collider, 15.0)
 							
 							Pvt = CreatePivot()
 							
@@ -6707,13 +6707,13 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 						;[End Block]
 					Case 11 ; ~ Left Leg
 						;[Block]
-						Stamina = 0.0
+						me\Stamina = 0.0
 						InjurePlayer(Rnd(0.7, 0.9), 0.0, 650.0)
 						ShotMessageUpdate = "A bullet hit your left leg."
 						;[End Block]
 					Case 12 ; ~ Right Leg
 						;[Block]
-						Stamina = 0.0
+						me\Stamina = 0.0
 						InjurePlayer(Rnd(0.7, 0.9), 0.0, 650.0)
 						ShotMessageUpdate = "A bullet hit your right leg."
 						;[End Block]
@@ -6769,13 +6769,13 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 						;[End Block]
 					Case 11 ; ~ Left Leg
 						;[Block]
-						Stamina = 0.0
+						me\Stamina = 0.0
 						InjurePlayer(Rnd(0.7, 0.9), 0.0, 650.0)
 						ShotMessageUpdate = "A bullet hit your left leg."
 						;[End Block]
 					Case 12 ; ~ Right Leg
 						;[Block]
-					    Stamina = 0.0
+					    me\Stamina = 0.0
 						InjurePlayer(Rnd(0.7, 0.9), 0.0, 650.0)
 						ShotMessageUpdate = "A bullet hit your right leg."
 						;[End Block]
@@ -6796,7 +6796,7 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 						;[End Block]
 					Case 16, 17, 18, 19, 20, 21, 22 ; ~ Helmet
 						;[Block]
-						BlurTimer = 650.0
+						me\BlurTimer = 650.0
 						ShotMessageUpdate = "A bullet hit your helmet."
 						;[End Block]
 				End Select	
@@ -6817,18 +6817,18 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 			Select Rand(16)
 				Case 1, 2, 3, 4, 5, 6, 7 ; ~ Helmet
 					;[Block]
-					BlurTimer = 650.0
+					me\BlurTimer = 650.0
 					ShotMessageUpdate = "A bullet hit your helmet."
 					;[End Block]
 				Case 8 ; ~ Left Leg
 					;[Block]
-					Stamina = 0.0
+					me\Stamina = 0.0
 					InjurePlayer(Rnd(0.7, 0.8), 0.0, 650.0)
 					ShotMessageUpdate = "A bullet hit your left leg."
 					;[End Block]
 				Case 9 ; ~ Right Leg
 					;[Block]
-					Stamina = 0.0
+					me\Stamina = 0.0
 					InjurePlayer(Rnd(0.7, 0.8), 0.0, 650.0)
 					ShotMessageUpdate = "A bullet hit your right leg."
 					;[End Block]
@@ -6872,13 +6872,13 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 			Select Rand(10)
 				Case 1 ; ~ Left Leg
 					;[Block]
-					Stamina = 0.0
+					me\Stamina = 0.0
 					InjurePlayer(Rnd(0.7, 0.9), 0.0, 650.0)
 					ShotMessageUpdate = "A bullet hit your left leg."
 					;[End Block]
 			    Case 2 ; ~ Right Leg
 					;[Block]
-					Stamina = 0.0
+					me\Stamina = 0.0
 					InjurePlayer(Rnd(0.7, 0.9), 0.0, 650.0)
 					ShotMessageUpdate = "A bullet hit your right leg."
 					;[End Block]
@@ -6938,7 +6938,7 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 			msg\Timer = 70.0 * 6.0
 		EndIf
 		
-		If Injuries >= 7.0 Then Kill(True)
+		If me\Injuries >= 10.0 Then Kill(True)
 		
 		PlaySound_Strict(BullethitSFX)
 	ElseIf Particles And ParticleAmount > 0
@@ -7001,17 +7001,17 @@ Function MoveToPocketDimension()
 	
 	For r.Rooms = Each Rooms
 		If r\RoomTemplate\Name = "pocketdimension" Then
-			FallTimer = 0.0
+			me\FallTimer = 0.0
 			UpdateDoors()
 			UpdateRooms()
 			ShowEntity(Collider)
 			PlaySound_Strict(Use914SFX)
 			PlaySound_Strict(OldManSFX(5))
 			PositionEntity(Collider, EntityX(r\OBJ), 0.8, EntityZ(r\OBJ))
-			DropSpeed = 0.0
+			me\DropSpeed = 0.0
 			ResetEntity(Collider)
 			
-			BlinkTimer = -10.0
+			me\BlinkTimer = -10.0
 			
 			InjurePlayer(0.5)
 			
