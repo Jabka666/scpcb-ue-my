@@ -189,12 +189,12 @@ InitLoadingScreens("LoadingScreens\LoadingScreens.ini")
 ; ~ Don't match their "internal name" (i.e. their display name in applications like Word and such)
 ; ~ As a workaround, I moved the files and renamed them so they
 ; ~ Can load without FastText
-fo\FontID[0] = LoadFont("GFX\font\cour\Courier New.ttf", Int(18 * (GraphicHeight / 1024.0)), 0, 0, 0)
-fo\FontID[1] = LoadFont("GFX\font\courbd\Courier New.ttf", Int(58 * (GraphicHeight / 1024.0)), 0, 0, 0)
-fo\FontID[2] = LoadFont("GFX\font\DS-DIGI\DS-Digital.ttf", Int(22 * (GraphicHeight / 1024.0)), 0, 0, 0)
-fo\FontID[3] = LoadFont("GFX\font\DS-DIGI\DS-Digital.ttf", Int(60 * (GraphicHeight / 1024.0)), 0, 0, 0)
-fo\FontID[4] = LoadFont("GFX\font\Journal\Journal.ttf", Int(58 * (GraphicHeight / 1024.0)), 0, 0, 0)
-fo\ConsoleFont = LoadFont("GFX\font\Andale\Andale Mono.ttf", Int(18 * (GraphicHeight / 1024.0)), 0, 0, 0)
+fo\FontID[0] = LoadFont_Strict("GFX\font\cour\Courier New.ttf", Int(18 * (GraphicHeight / 1024.0)), 0, 0, 0)
+fo\FontID[1] = LoadFont_Strict("GFX\font\courbd\Courier New.ttf", Int(58 * (GraphicHeight / 1024.0)), 0, 0, 0)
+fo\FontID[2] = LoadFont_Strict("GFX\font\DS-DIGI\DS-Digital.ttf", Int(22 * (GraphicHeight / 1024.0)), 0, 0, 0)
+fo\FontID[3] = LoadFont_Strict("GFX\font\DS-DIGI\DS-Digital.ttf", Int(60 * (GraphicHeight / 1024.0)), 0, 0, 0)
+fo\FontID[4] = LoadFont_Strict("GFX\font\Journal\Journal.ttf", Int(58 * (GraphicHeight / 1024.0)), 0, 0, 0)
+fo\ConsoleFont = LoadFont_Strict("GFX\font\Andale\Andale Mono.ttf", Int(18 * (GraphicHeight / 1024.0)), 0, 0, 0)
 
 SetFont(fo\FontID[1])
 
