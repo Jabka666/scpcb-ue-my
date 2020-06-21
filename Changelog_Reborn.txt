@@ -60,6 +60,7 @@
 - Optimized startup videos.
 - Optimized event of SCP-012's containment chamber.
 - Optimized game by converting some .x files to .b3d.
+- Optimized game by reworking FPS system.
 
 Bug Fixes:
 

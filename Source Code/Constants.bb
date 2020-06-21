@@ -47,6 +47,17 @@ Const Max_Deviation_Distance% = 3
 Const Return_Chance% = 27
 Const Center% = 5
 
+; ~ [MAIN MENU]
+
+Const MainMenuTab_Default% = 0
+Const MainMenuTab_New_Game% = 1
+Const MainMenuTab_Load_Game% = 2
+Const MainMenuTab_Options_Graphics% = 3
+Const MainMenuTab_Load_Map% = 4
+Const MainMenuTab_Options_Audio% = 5
+Const MainMenuTab_Options_Controls% = 6
+Const MainMenuTab_Options_Advanced% = 7
+
 ; ~ [MAP]
 
 Const MaxRoomLights% = 32
@@ -170,6 +181,10 @@ Const SubjectName$ = "Subject D-9341"
 
 Const LauncherWidth% = 640
 Const LauncherHeight% = 480
+
+; ~ [FPS]
+
+Const TICK_DURATION# = 70.0 / 60.0
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D
