@@ -29,6 +29,7 @@
 - Changed console font.
 - Changed SCP-1048's achievement icon.
 - Changed NVG, SCP-008, SCP-682 and SCP-1048's loading screens.
+- Changed chance to spawn SCP-005.
 
 - Replaced O5-14 Burnt Document by batteries in room2offices5.
 

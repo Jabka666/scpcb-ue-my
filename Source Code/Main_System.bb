@@ -186,7 +186,7 @@ Global LoadingBack% = LoadImage_Strict("LoadingScreens\loading_back.png")
 InitLoadingScreens("LoadingScreens\LoadingScreens.ini")
 
 ; ~ For some reason, Blitz3D doesn't load fonts that have filenames that
-; ~ Don't match their "internal name" (i.e. their display name in applications like Word and such).
+; ~ Don't match their "internal name" (i.e. their display name in applications like Word and such)
 ; ~ As a workaround, I moved the files and renamed them so they
 ; ~ Can load without FastText
 fo\FontID[0] = LoadFont("GFX\font\cour\Courier New.ttf", Int(18 * (GraphicHeight / 1024.0)), 0, 0, 0)
@@ -206,11 +206,11 @@ DrawLoading(0, True)
 Global Viewport_Center_X% = GraphicWidth / 2, Viewport_Center_Y% = GraphicHeight / 2
 
 ; ~ Mouselook
-Global Mouselook_X_Inc# = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the X axis.
-Global Mouselook_Y_Inc# = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the Y axis.
-; ~ Used to limit the mouse movement to within a certain number of pixels (250 is used here) from the center of the screen. This produces smoother mouse movement than continuously moving the mouse back to the center each loop.
+Global Mouselook_X_Inc# = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the X axis
+Global Mouselook_Y_Inc# = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the Y axis
+; ~ Used to limit the mouse movement to within a certain number of pixels (250 is used here) from the center of the screen. This produces smoother mouse movement than continuously moving the mouse back to the center each loop
 Global Mouse_Left_Limit% = 250, Mouse_Right_Limit% = GraphicsWidth () - 250
-Global Mouse_Top_Limit% = 150, Mouse_Bottom_Limit% = GraphicsHeight () - 150 ; ~ As above.
+Global Mouse_Top_Limit% = 150, Mouse_Bottom_Limit% = GraphicsHeight () - 150 ; ~ As above
 Global Mouse_X_Speed_1#, Mouse_Y_Speed_1#
 
 Global Mesh_MinX#, Mesh_MinY#, Mesh_MinZ#
@@ -8557,7 +8557,7 @@ Function InitNewGame()
 	
 	me\HeartBeatRate = 70.0
 	
-	I_005\ChanceToSpawn = Rand(1, 3)
+	I_005\ChanceToSpawn = Rand(1, 6)
 	
 	AccessCode = 0
 	For i = 0 To 3

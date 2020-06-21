@@ -8890,10 +8890,10 @@ Function UpdateEvents()
 				;[End Block]
 			Case "room005"
 			    ;[Block]
-			    If (Not Contained106) Then 
+			    If (Not Curr106\Contained) Then 
 			        If PlayerRoom = e\room Then
 			            If EntityDistance(Collider, e\room\Objects[0]) < 1.5 Then
-				            If e\EventState = 0.0 And I_005\ChanceToSpawn <> 2 Then
+				            If e\EventState = 0.0 And I_005\ChanceToSpawn =< 3 Then
 				                PlaySound_Strict(HorrorSFX(10))
 								
 							    d.Decals = CreateDecal(0, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True), 0.0, e\room\Angle + 360.0, Rnd(360.0))
@@ -8903,10 +8903,10 @@ Function UpdateEvents()
 						        PositionEntity(Curr106\Collider, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True))
 							    Curr106\State = -11.0
 								ShowEntity(Curr106\OBJ)
-							    e\EventState = 1.0
+								e\EventState = 1.0
 							Else
-							    RemoveEvent(e)
-				            EndIf
+								RemoveEvent(e)
+							EndIf
 				        EndIf
 				    EndIf
 				Else
