@@ -58,6 +58,11 @@ Const MainMenuTab_Options_Audio% = 5
 Const MainMenuTab_Options_Controls% = 6
 Const MainMenuTab_Options_Advanced% = 7
 
+; ~ [INVENTORY]
+
+Const INVENTORY_GFX_SIZE% = 70
+Const INVENTORY_GFX_SPACING% = 35
+
 ; ~ [MAP]
 
 Const MaxRoomLights% = 32

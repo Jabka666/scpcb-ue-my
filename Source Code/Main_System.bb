@@ -4020,7 +4020,7 @@ Function MovePlayer()
 	EndIf
 	
 	If (Not chs\NoClip) Then 
-		If ((KeyDown(key\MOVEMENT_DOWN) Or KeyDown(key\MOVEMENT_UP)) Or (KeyDown(key\MOVEMENT_RIGHT) Or KeyDown(key\MOVEMENT_LEFT)) And me\Playable) Or me\ForceMove > 0 Then
+		If (me\Playable And (KeyDown(key\MOVEMENT_DOWN) Or KeyDown(key\MOVEMENT_UP)) Or (KeyDown(key\MOVEMENT_RIGHT) Xor KeyDown(key\MOVEMENT_LEFT))) Or me\ForceMove > 0 Then
 			If me\Crouch = False And (KeyDown(key\SPRINT)) And me\Stamina > 0.0 And (Not me\Zombie) Then
 				Sprint = 2.5
 				me\Stamina = me\Stamina - fpst\FPSFactor[0] * 0.4 * me\StaminaEffect
@@ -4110,21 +4110,50 @@ Function MovePlayer()
 		Temp = False
 		If (Not me\Zombie) Then
 			If KeyDown(key\MOVEMENT_DOWN) And me\Playable Then
-				Temp = True 
-				Angle = 180.0
-				If KeyDown(key\MOVEMENT_LEFT) Then Angle = 135.0 
-				If KeyDown(key\MOVEMENT_RIGHT) Then Angle = -135.0 
-			ElseIf (KeyDown(key\MOVEMENT_UP) And me\Playable) Then
+				If (Not KeyDown(key\MOVEMENT_UP)) Then
+					Temp = True
+					Angle = 180.0
+					If KeyDown(key\MOVEMENT_LEFT) Then
+						If (Not KeyDown(key\MOVEMENT_RIGHT)) Then
+							Angle = 135.0
+						EndIf
+					ElseIf KeyDown(key\MOVEMENT_RIGHT)
+						Angle = -135.0
+					EndIf
+				Else
+					If KeyDown(key\MOVEMENT_LEFT) Then
+						If (Not KeyDown(key\MOVEMENT_RIGHT)) Then
+							Temp = True
+							Angle = 90.0
+						EndIf
+					ElseIf KeyDown(key\MOVEMENT_RIGHT)
+						Temp = True
+						Angle = -90.0
+					EndIf
+				EndIf
+			ElseIf KeyDown(key\MOVEMENT_UP) And me\Playable
 				Temp = True
 				Angle = 0.0
-				If KeyDown(key\MOVEMENT_LEFT) Then Angle = 45.0 
-				If KeyDown(key\MOVEMENT_RIGHT) Then Angle = -45.0 
-			ElseIf me\ForceMove > 0.0 Then
+				If KeyDown(key\MOVEMENT_LEFT) Then
+					If (Not KeyDown(key\MOVEMENT_RIGHT)) Then
+						Angle = 45.0
+					EndIf
+				ElseIf KeyDown(key\MOVEMENT_RIGHT)
+					Angle = -45.0
+				EndIf
+			ElseIf me\ForceMove > 0.0
 				Temp = True
 				Angle = me\ForceAngle
-			ElseIf me\Playable Then
-				If KeyDown(key\MOVEMENT_LEFT) Then Angle = 90.0 : Temp = True
-				If KeyDown(key\MOVEMENT_RIGHT) Then Angle = -90.0 : Temp = True 
+			ElseIf me\Playable
+				If KeyDown(key\MOVEMENT_LEFT) Then
+					If (Not KeyDown(key\MOVEMENT_RIGHT)) Then
+						Temp = True
+						Angle = 90.0
+					EndIf
+				ElseIf KeyDown(key\MOVEMENT_RIGHT)
+					Temp = True
+					Angle = -90.0
+				EndIf
 			EndIf
 		Else
 			Temp = True
@@ -4163,7 +4192,7 @@ Function MovePlayer()
 			If PlayerFallingPickDistance <> 0.0 Then
 				Local Pick# = LinePick(EntityX(Collider), EntityY(Collider), EntityZ(Collider), 0.0, -PlayerFallingPickDistance, 0.0)
 				
-				If Pick
+				If Pick Then
 					me\DropSpeed = Min(Max(me\DropSpeed - 0.006 * fpst\FPSFactor[0], -2.0), 0.0)
 				Else
 					me\DropSpeed = 0.0
@@ -4518,6 +4547,7 @@ Function DrawGUI()
 	Local Temp%, x%, y%, z%, i%, YawValue#, PitchValue#
 	Local x1#, x2#, x3#, y2#, z2#, ProjY#, Scale#, Pvt%
 	Local n%, xTemp%, yTemp%, StrTemp$
+	Local Width%, Height%
 	Local e.Events, it.Items
 	
 	If MenuOpen Or ConsoleOpen Or SelectedDoor <> Null Or InvOpen Or OtherOpen <> Null Or me\EndingTimer < 0.0 Then
@@ -4609,8 +4639,8 @@ Function DrawGUI()
 	If I_294\Using Then Use294()
 	
 	If HUDenabled Then 
-		Local Width% = 204, Height% = 20
-		
+		Width = 204
+		Height = 20
 		x = 80
 		y = GraphicHeight - 95
 		
@@ -4850,7 +4880,6 @@ Function DrawGUI()
 		EndIf
 	EndIf
 	
-	Local Spacing%
 	Local PrevOtherOpen.Items
 	Local OtherSize%, OtherAmount%
 	Local IsEmpty%
@@ -4869,17 +4898,13 @@ Function DrawGUI()
 		
 		Local TempX% = 0
 		
-		Width = 70
-		Height = 70
-		Spacing = 35
-		
-		x = GraphicWidth / 2 - (Width * MaxItemAmount / 2 + Spacing * (MaxItemAmount / 2 - 1)) / 2
-		y = GraphicHeight / 2 - (Height * OtherSize / 5 + Spacing * (OtherSize / 5 - 1)) / 2
+		x = GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
+		y = GraphicHeight / 2 - INVENTORY_GFX_SIZE * (Float(OtherSize) / MaxItemAmount * 2 - 1) - INVENTORY_GFX_SPACING
 		
 		For n = 0 To OtherSize - 1
 			IsMouseOn = False
-			If ScaledMouseX() > x And ScaledMouseX() < x + Width Then
-				If ScaledMouseY() > y And ScaledMouseY() < y + Height Then
+			If ScaledMouseX() > x And ScaledMouseX() < x + INVENTORY_GFX_SIZE Then
+				If ScaledMouseY() > y And ScaledMouseY() < y + INVENTORY_GFX_SIZE Then
 					IsMouseOn = True
 				EndIf
 			EndIf
@@ -4887,29 +4912,29 @@ Function DrawGUI()
 			If IsMouseOn Then
 				MouseSlot = n
 				Color(255, 0, 0)
-				Rect(x - 1, y - 1, Width + 2, Height + 2)
+				Rect(x - 1, y - 1, INVENTORY_GFX_SIZE + 2, INVENTORY_GFX_SIZE + 2)
 			EndIf
 			
-			DrawFrame(x, y, Width, Height, (x Mod 64), (x Mod 64))
+			DrawFrame(x, y, INVENTORY_GFX_SIZE, INVENTORY_GFX_SIZE, (x Mod 64), (x Mod 64))
 			
 			If OtherOpen = Null Then Exit
 			
 			If OtherOpen\SecondInv[n] <> Null Then
-				If (SelectedItem <> OtherOpen\SecondInv[n] Or IsMouseOn) Then DrawImage(OtherOpen\SecondInv[n]\InvImg, x + Width / 2 - 32, y + Height / 2 - 32)
+				If (SelectedItem <> OtherOpen\SecondInv[n] Or IsMouseOn) Then DrawImage(OtherOpen\SecondInv[n]\InvImg, x + INVENTORY_GFX_SIZE / 2 - 32, y + INVENTORY_GFX_SIZE / 2 - 32)
 			EndIf
 			If OtherOpen\SecondInv[n] <> Null And SelectedItem <> OtherOpen\SecondInv[n] Then
 				If IsMouseOn Then
 					Color(255, 255, 255)	
-					Text(x + Width / 2, y + Height + Spacing - 15, OtherOpen\SecondInv[n]\ItemTemplate\Name, True)				
+					Text(x + INVENTORY_GFX_SIZE / 2, y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - 15, OtherOpen\SecondInv[n]\ItemTemplate\Name, True)				
 				EndIf
 			EndIf					
 			
-			x = x + Width + Spacing
+			x = x + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING
 			TempX = TempX + 1
 			If TempX = 5 Then 
 				TempX = 0
-				y = y + Height * 2 
-				x = GraphicWidth / 2 - (Width * MaxItemAmount / 2 + Spacing * (MaxItemAmount / 2 - 1.0)) / 2
+				y = y + INVENTORY_GFX_SIZE * 2 
+				x = GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1.0)) / 2
 			EndIf
 		Next
 		
@@ -4925,17 +4950,13 @@ Function DrawGUI()
 		
 		If FullScreen Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	ElseIf InvOpen Then
-		Width = 70.0
-		Height = 70.0
-		Spacing = 35
-		
-		x = GraphicWidth / 2 - (Width * MaxItemAmount / 2 + Spacing * (MaxItemAmount / 2 - 1)) / 2
-		y = GraphicHeight / 2 - Height
+		x = GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
+		y = GraphicHeight / 2 - INVENTORY_GFX_SIZE - INVENTORY_GFX_SPACING
 		
 		For n = 0 To MaxItemAmount - 1
 			IsMouseOn = False
-			If ScaledMouseX() > x And ScaledMouseX() < x + Width Then
-				If ScaledMouseY() > y And ScaledMouseY() < y + Height Then
+			If ScaledMouseX() > x And ScaledMouseX() < x + INVENTORY_GFX_SIZE Then
+				If ScaledMouseY() > y And ScaledMouseY() < y + INVENTORY_GFX_SIZE Then
 					IsMouseOn = True
 				EndIf
 			EndIf
@@ -4945,67 +4966,67 @@ Function DrawGUI()
 				Select Inventory(n)\ItemTemplate\TempName 
 					Case "gasmask"
 						;[Block]
-						If wi\GasMask = 1 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
+						If wi\GasMask = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
 						;[End Block]
 					Case "supergasmask"
 						;[Block]
-						If wi\GasMask = 2 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
+						If wi\GasMask = 2 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
 						;[End Block]
 					Case "gasmask3"
 						;[Block]
-						If wi\GasMask = 3 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
+						If wi\GasMask = 3 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
 						;[End Block]
 					Case "hazmatsuit"
 						;[Block]
-						If wi\HazmatSuit = 1 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
+						If wi\HazmatSuit = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
 						;[End Block]
 					Case "hazmatsuit2"
 						;[Block]
-						If wi\HazmatSuit = 2 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
+						If wi\HazmatSuit = 2 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
 						;[End Block]
 					Case "hazmatsuit3
 						;[Block]"
-						If wi\HazmatSuit = 3 Then Rect(x - 3, y - 3, Width + 6, Height + 6)	
+						If wi\HazmatSuit = 3 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)	
 						;[End Block]
 					Case "vest"
 						;[Block]
-						If wi\BallisticVest = 1 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
+						If wi\BallisticVest = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
 						;[End Block]
 					Case "finevest"
 						;[Block]
-						If wi\BallisticVest = 2 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
+						If wi\BallisticVest = 2 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
 						;[End Block]
 					Case "helmet"
 						;[Block]
-						If wi\BallisticHelmet = 1 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
+						If wi\BallisticHelmet = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
 						;[End Block]
 					Case "scp714"
 						;[Block]
-						If I_714\Using = 1 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
+						If I_714\Using = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
 						;[End Block]
 					Case "nvgoggles"
 						;[Block]
-						If wi\NightVision = 1 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
+						If wi\NightVision = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
 						;[End Block]
 					Case "supernv"
 						;[Block]
-						If wi\NightVision = 2 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
+						If wi\NightVision = 2 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
 						;[End Block]
 					Case "scp1499"
 						;[Block]
-						If I_1499\Using = 1 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
+						If I_1499\Using = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
 						;[End Block]
 					Case "super1499"
 						;[Block]
-						If I_1499\Using = 2 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
+						If I_1499\Using = 2 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
 						;[End Block]
 					Case "finenvgoggles"
 						;[Block]
-						If wi\NightVision = 3 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
+						If wi\NightVision = 3 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
 						;[End Block]
 					Case "scp427"
 						;[Block]
-						If I_427\Using = 1 Then Rect(x - 3, y - 3, Width + 6, Height + 6)
+						If I_427\Using = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
 						;[End Block]
 				End Select
 			EndIf
@@ -5013,15 +5034,15 @@ Function DrawGUI()
 			If IsMouseOn Then
 				MouseSlot = n
 				Color(255, 0, 0)
-				Rect(x - 1, y - 1, Width + 2, Height + 2)
+				Rect(x - 1, y - 1, INVENTORY_GFX_SIZE + 2, INVENTORY_GFX_SIZE + 2)
 			EndIf
 			
 			Color(255, 255, 255)
-			DrawFrame(x, y, Width, Height, (x Mod 64), (x Mod 64))
+			DrawFrame(x, y, INVENTORY_GFX_SIZE, INVENTORY_GFX_SIZE, (x Mod 64), (x Mod 64))
 			
 			If Inventory(n) <> Null Then
 				If (SelectedItem <> Inventory(n) Or IsMouseOn) Then 
-					DrawImage(Inventory(n)\InvImg, x + Width / 2 - 32, y + Height / 2 - 32)
+					DrawImage(Inventory(n)\InvImg, x + INVENTORY_GFX_SIZE / 2 - 32, y + INVENTORY_GFX_SIZE / 2 - 32)
 				EndIf
 			EndIf
 			
@@ -5030,17 +5051,17 @@ Function DrawGUI()
 					If SelectedItem = Null Then
 						SetFont(fo\FontID[0])
 						Color(0, 0, 0)
-						Text(x + Width / 2 + 1, y + Height + Spacing - 15 + 1, Inventory(n)\Name, True)							
+						Text(x + INVENTORY_GFX_SIZE / 2 + 1, y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - 15 + 1, Inventory(n)\Name, True)							
 						Color(255, 255, 255)	
-						Text(x + Width / 2, y + Height + Spacing - 15, Inventory(n)\Name, True)	
+						Text(x + INVENTORY_GFX_SIZE / 2, y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - 15, Inventory(n)\Name, True)	
 					EndIf
 				EndIf
 			EndIf					
 			
-			x = x + Width + Spacing
+			x = x + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING
 			If n = 4 Then 
-				y = y + Height * 2 
-				x = GraphicWidth / 2 - (Width * MaxItemAmount / 2 + Spacing * (MaxItemAmount / 2 - 1)) / 2
+				y = y + INVENTORY_GFX_SIZE * 2 
+				x = GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
 			EndIf
 		Next
 		
@@ -5065,7 +5086,7 @@ Function DrawGUI()
 				Case "firstaid", "finefirstaid", "firstaid2"
 					;[Block]
 					DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
-						
+					
 					Width = 300.0
 					Height = 20.0
 					x = GraphicWidth / 2 - Width / 2
@@ -5741,7 +5762,6 @@ Function UpdateGUI()
 		EndIf
 	EndIf
 	
-	Local Spacing%
 	Local PrevOtherOpen.Items
 	Local OtherSize%, OtherAmount%
 	Local IsEmpty%
@@ -5777,18 +5797,14 @@ Function UpdateGUI()
 		
 		Local TempX% = 0
 		
-		Width = 70
-		Height = 70
-		Spacing = 35
-		
-		x = GraphicWidth / 2 - (Width * MaxItemAmount / 2 + Spacing * (MaxItemAmount / 2 - 1)) / 2
-		y = GraphicHeight / 2 - (Height * OtherSize / 5 + Spacing * (OtherSize / 5 - 1)) / 2
+		x = GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
+		y = GraphicHeight / 2 - INVENTORY_GFX_SIZE * (Float(OtherSize) / MaxItemAmount * 2 - 1) - INVENTORY_GFX_SPACING
 		
 		ItemAmount = 0
 		For n = 0 To OtherSize - 1
 			IsMouseOn = False
-			If ScaledMouseX() > x And ScaledMouseX() < x + Width Then
-				If ScaledMouseY() > y And ScaledMouseY() < y + Height Then
+			If ScaledMouseX() > x And ScaledMouseX() < x + INVENTORY_GFX_SIZE Then
+				If ScaledMouseY() > y And ScaledMouseY() < y + INVENTORY_GFX_SIZE Then
 					IsMouseOn = True
 				EndIf
 			EndIf
@@ -5826,12 +5842,12 @@ Function UpdateGUI()
 				EndIf
 			EndIf					
 			
-			x = x + Width + Spacing
+			x = x + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING
 			TempX = TempX + 1
 			If TempX = 5 Then 
 				TempX = 0
-				y = y + Height * 2 
-				x = GraphicWidth / 2 - (Width * MaxItemAmount / 2 + Spacing * (MaxItemAmount / 2 - 1.0)) / 2
+				y = y + INVENTORY_GFX_SIZE * 2 
+				x = GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1.0)) / 2
 			EndIf
 		Next
 		
@@ -5936,18 +5952,14 @@ Function UpdateGUI()
 		
 		SelectedDoor = Null
 		
-		Width = 70.0
-		Height = 70.0
-		Spacing = 35
-		
-		x = GraphicWidth / 2 - (Width * MaxItemAmount / 2 + Spacing * (MaxItemAmount / 2 - 1)) / 2
-		y = GraphicHeight / 2 - Height
+		x = GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
+		y = GraphicHeight / 2 - INVENTORY_GFX_SIZE - INVENTORY_GFX_SPACING
 		
 		ItemAmount = 0
 		For n = 0 To MaxItemAmount - 1
 			IsMouseOn = False
-			If ScaledMouseX() > x And ScaledMouseX() < x + Width Then
-				If ScaledMouseY() > y And ScaledMouseY() < y + Height Then
+			If ScaledMouseX() > x And ScaledMouseX() < x + INVENTORY_GFX_SIZE Then
+				If ScaledMouseY() > y And ScaledMouseY() < y + INVENTORY_GFX_SIZE Then
 					IsMouseOn = True
 				EndIf
 			EndIf
@@ -5987,10 +5999,10 @@ Function UpdateGUI()
 				End If
 			EndIf					
 			
-			x = x + Width + Spacing
+			x = x + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING
 			If n = 4 Then 
-				y = y + Height * 2 
-				x = GraphicWidth / 2 - (Width * MaxItemAmount / 2 + Spacing * (MaxItemAmount / 2 - 1)) / 2
+				y = y + INVENTORY_GFX_SIZE * 2 
+				x = GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
 			EndIf
 		Next
 		
@@ -6065,7 +6077,7 @@ Function UpdateGUI()
 									
 									If (b <> "misc" And b <> "25ct" And b <> "coin" And b <> "key" And b <> "scp860" And b <> "scp500pill" And b <> "scp500pilldeath" And b <> "scp005") Or (b2 = "Playing Card" Or b2 = "Mastercard") Then
 										For c = 0 To Inventory(MouseSlot)\InvSlots - 1
-											If (Inventory(MouseSlot)\SecondInv[c] = Null)
+											If Inventory(MouseSlot)\SecondInv[c] = Null Then
 												If SelectedItem <> Null Then
 													Inventory(MouseSlot)\SecondInv[c] = SelectedItem
 													Inventory(MouseSlot)\State = 1.0
@@ -6106,7 +6118,7 @@ Function UpdateGUI()
 									b2 = SelectedItem\ItemTemplate\Name
 									If (b <> "misc" And b <> "paper" And b <> "oldpaper") Or (b2 = "Playing Card" Or b2 = "Mastercard") Then
 										For c = 0 To Inventory(MouseSlot)\InvSlots - 1
-											If (Inventory(MouseSlot)\SecondInv[c] = Null)
+											If Inventory(MouseSlot)\SecondInv[c] = Null Then
 												If SelectedItem <> Null Then
 													Inventory(MouseSlot)\SecondInv[c] = SelectedItem
 													Inventory(MouseSlot)\State = 1.0
@@ -12307,5 +12319,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#10A4#133A#1D77
+;~B#10C1#1353#1D83
 ;~C#Blitz3D

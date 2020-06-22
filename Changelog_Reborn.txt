@@ -110,8 +110,10 @@ Bug Fixes:
 - Fixed launcher options not saving when quitting.
 - Fixed security camera bases rotating with the cameras.
 - Fixed fog while wearing night vision.
+- Fixed inventory not being fully centered.
+- Fixed SCP-173 not breaking the glass in the testroom event if the player looked away.
+- Fixed Right and Down movement always overriding Left and Up movement.
 
-- Small fixes for room2testroom's event.
 - Small fixes for commands "disablenuke" and "enablecontrol/disablecontrol.
 - Small fixes for gateb and gateaentrance's walls.
 - Small fixes for syringes' positions in room2medibay and room2medibay2.
