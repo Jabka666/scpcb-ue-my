@@ -3544,7 +3544,7 @@ Function Kill(IsBloody% = False)
 			DeleteFile(CurrentDir() + SavePath + CurrSave + "\Save.txt") 
 			DeleteDir(SavePath + CurrSave) 
 			LoadSaveGames()
-		End If
+		EndIf
 		
 		me\KillTimer = Min(-1.0, me\KillTimer)
 		ShowEntity(Head)
@@ -3563,7 +3563,7 @@ Function DrawEnding()
 	Select Lower(me\SelectedEnding)
 		Case "b2", "a1"
 			;[Block]
-			ClsColor(Max(255 + (me\EndingTimer) * 2.8, 0.0), Max(255 + (me\EndingTimer) * 2.8, 0), Max(255 + (me\EndingTimer) * 2.8, 0.0))
+			ClsColor(Max(255.0 + (me\EndingTimer) * 2.8, 0.0), Max(255.0 + (me\EndingTimer) * 2.8, 0.0), Max(255.0 + (me\EndingTimer) * 2.8, 0.0))
 			;[End Block]
 		Default
 			;[Block]
@@ -4517,7 +4517,7 @@ Function DrawGUI()
 	
 	Local Temp%, x%, y%, z%, i%, YawValue#, PitchValue#
 	Local x1#, x2#, x3#, y2#, z2#, ProjY#, Scale#, Pvt%
-	Local n%, xTemp, yTemp, StrTemp$, GroupDesignation$
+	Local n%, xTemp%, yTemp%, StrTemp$
 	Local e.Events, it.Items
 	
 	If MenuOpen Or ConsoleOpen Or SelectedDoor <> Null Or InvOpen Or OtherOpen <> Null Or me\EndingTimer < 0.0 Then
@@ -4833,9 +4833,6 @@ Function DrawGUI()
 			
 			x = GraphicWidth / 2 - ImageWidth(tt\ImageID[4]) * Scale / 2
 			y = GraphicHeight / 2 - ImageHeight(tt\ImageID[4]) * Scale / 2		
-			
-			msg\Msg = ""
-			msg\Timer = 0.0
 			
 			SetFont(fo\FontID[2])
 			If msg\KeypadMsg <> "" Then 
@@ -5497,7 +5494,7 @@ Function DrawGUI()
 					    x = GraphicWidth / 2 - Width / 2
 					    y = GraphicHeight / 2 + 80
 					    Rect(x, y, Width + 4, Height, False)
-						For  i% = 1 To Int((Width - 2) * (SelectedItem\State / 100.0) / 10.0)
+						For i = 1 To Int((Width - 2) * (SelectedItem\State / 100.0) / 10.0)
 					    	DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
 					    Next
 					EndIf
@@ -5543,9 +5540,9 @@ End Function
 Function UpdateGUI()
 	CatchErrors("Uncaught (UpdateGUI)")
 	
-	Local Temp%, x%, y%, z%, i%, YawValue#, PitchValue#
-	Local x1#, x2#, x3#, y2#, z2#, ProjY#, Scale#, Pvt%
-	Local n%, xTemp, yTemp, StrTemp$, GroupDesignation$
+	Local Temp%, x%, y%, z%, i%
+	Local x2#, ProjY#, Scale#, Pvt%
+	Local n%, xTemp%, yTemp%, StrTemp$, GroupDesignation$
 	Local e.Events, it.Items
 	
 	If ClosestButton <> 0 And SelectedDoor = Null And InvOpen = False And MenuOpen = False And OtherOpen = Null And ConsoleOpen = False Then
@@ -12310,5 +12307,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#10A4#133D#1D7A
+;~B#10A4#133A#1D77
 ;~C#Blitz3D
