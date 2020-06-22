@@ -425,7 +425,7 @@ Function UpdateEvents()
 	
 	Local Dist#, i%, Temp%, Pvt%, StrTemp$, j%, k%
 	Local p.Particles, n.NPCs, r.Rooms, e.Events, e2.Events, it.Items, it2.Items, em.Emitters, sc.SecurityCams, sc2.SecurityCams
-	Local CurrTrigger$ = ""
+	Local CurrTrigger$ = "", fDir#
 	Local x#, y#, z#, xTemp#, yTemp#
 	Local Angle#, GroupDesignation$
 	
@@ -2016,8 +2016,8 @@ Function UpdateEvents()
 							If EntityY(e\room\NPC[0]\Collider) > (-1531.0 * RoomScale) + 0.35 Then
 								Dist = EntityDistance(Collider, e\room\NPC[0]\Collider)
 								If Dist < 0.8 Then ; ~ Get the player out of the way
-									fdir# = point_direction(EntityX(Collider, True), EntityZ(Collider, True), EntityX(e\room\NPC[0]\Collider, True), EntityZ(e\room\NPC[0]\Collider, True))
-									TranslateEntity(Collider, Cos(-fdir + 90.0) * (Dist - 0.8) * (Dist - 0.8), 0, Sin(-fdir + 90.0) * (Dist - 0.8) * (Dist - 0.8))
+									fDir = PointDirection(EntityX(Collider, True), EntityZ(Collider, True), EntityX(e\room\NPC[0]\Collider, True), EntityZ(e\room\NPC[0]\Collider, True))
+									TranslateEntity(Collider, Cos(-fDir + 90.0) * (Dist - 0.8) * (Dist - 0.8), 0, Sin(-fDir + 90.0) * (Dist - 0.8) * (Dist - 0.8))
 								EndIf
 								If EntityY(e\room\NPC[0]\Collider) > 0.6 Then EntityType(e\room\NPC[0]\Collider, 0)
 							Else
@@ -2072,13 +2072,8 @@ Function UpdateEvents()
 							EndIf
 						Next
 						If (CoffinDistance < 4.0) And (HasBatteryFor895) And I_714\Using = 0 And wi\GasMask < 3 And wi\HazmatSuit < 3 Then
-							TempF# = point_direction(EntityX(Collider, True), EntityZ(Collider, True), EntityX(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
-							TempF2# = EntityYaw(Collider)
-							TempF3# = angleDist(TempF + 90.0 + Sin(WrapAngle(e\EventState3 / 10.0)), TempF2)
-							TurnEntity(Collider, 0.0, TempF3 / 4.0, 0.0, True)
-							TempF# = Abs(point_distance(EntityX(Collider, True), EntityZ(Collider, True), EntityX(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True)))
-							TempF2# = (-60.0) * Min(Max((2.0 - TempF) / 2.0, 0.0), 1.0)
-							User_Camera_Pitch = (User_Camera_Pitch * 0.8) + (TempF2 * 0.2)
+							TurnEntity(Collider, 0.0, AngleDist(PointDirection(EntityX(Collider, True), EntityZ(Collider, True), EntityX(e\room\Objects[1],True), EntityZ(e\room\Objects[1], True)) + 90.0 + Sin(WrapAngle(e\EventState3 / 10.0)), EntityYaw(Collider)) / 4.0, 0.0, True)
+							User_Camera_Pitch = (User_Camera_Pitch * 0.8) + (((-60.0) * Min(Max((2.0 - Distance(EntityX(Collider, True), EntityZ(Collider, True), EntityX(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))) / 2.0, 0.0), 1.0)) * 0.2)
 							
 							me\Sanity = me\Sanity - (fpst\FPSFactor[0] * 1.1 / wi\NightVision)
 							me\RestoreSanity = False
@@ -7341,10 +7336,10 @@ Function UpdateEvents()
 							EntityType(e\room\NPC[0]\Collider, HIT_PLAYER)
 							If EntityY(e\room\NPC[0]\Collider) > 0.35 Then
 								AnimateNPC(e\room\NPC[0], 1.0, 10.0, 0.12, False)
-								Dist# = EntityDistance(Collider, e\room\NPC[0]\Collider)
+								Dist = EntityDistance(Collider, e\room\NPC[0]\Collider)
 								If Dist < 0.8 Then ; ~ Get the player out of the way
-									fdir# = point_direction(EntityX(Collider, True), EntityZ(Collider, True), EntityX(e\room\NPC[0]\Collider, True), EntityZ(e\room\NPC[0]\Collider, True))
-									TranslateEntity(Collider, Cos(-fdir + 90.0) * (Dist - 0.8) * (Dist - 0.8), 0.0, Sin(-fdir + 90.0) * (Dist - 0.8) * (Dist - 0.8))
+									fDir = PointDirection(EntityX(Collider, True), EntityZ(Collider, True), EntityX(e\room\NPC[0]\Collider, True), EntityZ(e\room\NPC[0]\Collider, True))
+									TranslateEntity(Collider, Cos(-fDir + 90.0) * (Dist - 0.8) * (Dist - 0.8), 0.0, Sin(-fDir + 90.0) * (Dist - 0.8) * (Dist - 0.8))
 								EndIf
 								If EntityY(e\room\NPC[0]\Collider) > 0.6 Then EntityType(e\room\NPC[0]\Collider, 0)
 							Else
@@ -10360,5 +10355,5 @@ Function GenerateRandomIA()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11E6#1E0D
+;~B#11E1#1E08
 ;~C#Blitz3D

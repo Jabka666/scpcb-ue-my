@@ -589,6 +589,7 @@ Function LoadAllSounds()
 	Next
 	RadioSquelch = LoadSound_Strict("SFX\Radio\Squelch.ogg")
 	RadioStatic = LoadSound_Strict("SFX\Radio\Static.ogg")
+	RadioStatic895 = LoadSound_Strict("SFX\Radio\Static895.ogg")
 	RadioBuzz = LoadSound_Strict("SFX\Radio\Buzz.ogg")
 	
 	ElevatorBeepSFX = LoadSound_Strict("SFX\General\Elevator\Beep.ogg") 
@@ -687,8 +688,6 @@ Function LoadAllSounds()
 	Next
 	
 	CrouchSFX = LoadSound_Strict("SFX\Character\D9341\Crouch.ogg")
-	
-	RadioStatic895 = LoadSound_Strict("SFX\Radio\Static895.ogg")
 End Function
 
 ;~IDEal Editor Parameters:

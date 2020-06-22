@@ -3353,7 +3353,7 @@ Function UpdateNPCs()
 										AnimateNPC(n, 200.0, 297.0, 0.5, False)
 										If n\Frame = 297.0 Then n\Frame = 298.0 : PlaySound2(StepSFX(3, 0, Rand(0, 2)), Camera, n\Collider, 15.0)
 									Else
-										Angle = CurveAngle(point_direction(EntityX(n\Collider),EntityZ(n\Collider),EntityX(Collider),EntityZ(Collider)),EntityYaw(n\Collider)+90,20.0)
+										Angle = CurveAngle(PointDirection(EntityX(n\Collider),EntityZ(n\Collider),EntityX(Collider),EntityZ(Collider)),EntityYaw(n\Collider)+90,20.0)
 										
 										RotateEntity(n\Collider, 0.0, Angle - 90.0, 0.0, True)
 										
@@ -7075,13 +7075,13 @@ Function Find860Angle(n.NPCs, fr.Forest)
 					If (Abs(PlayerX - x2) + Abs(PlayerZ - z2)) < (Abs(PlayerX - xt) + Abs(PlayerZ - zt)) Then
 						; ~ Calculate the position of the tile in world coordinates
 						TFormPoint(x2 * 12.0, 0.0, z2 * 12.0, fr\Forest_Pivot, 0)
-						Return(point_direction(EntityX(n\Collider), EntityZ(n\Collider), TFormedX(), TFormedZ()) + 180.0)
+						Return(PointDirection(EntityX(n\Collider), EntityZ(n\Collider), TFormedX(), TFormedZ()) + 180.0)
 					EndIf
 				EndIf
 			Next
 		Next
 	Else
-		Return(point_direction(EntityX(n\Collider), EntityZ(n\Collider), EntityX(Collider), EntityZ(Collider)) + 180.0)
+		Return(PointDirection(EntityX(n\Collider), EntityZ(n\Collider), EntityX(Collider), EntityZ(Collider)) + 180.0)
 	EndIf		
 End Function
 

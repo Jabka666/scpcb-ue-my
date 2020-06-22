@@ -662,38 +662,6 @@ Type Forest
 	Field ID%
 End Type
 
-Function Move_Forward%(Dir%, PathX%, PathY%, RetVal% = 0)
-	; ~ Move 1 unit along the grid in the designated direction
-	If Dir = 1 Then
-		If RetVal = 0 Then
-			Return(PathX)
-		Else
-			Return(PathY + 1)
-		EndIf
-	EndIf
-	If RetVal = 0 Then
-		Return(PathX - 1 + Dir)
-	Else
-		Return(PathY)
-	EndIf
-End Function
-
-Function Turn_If_Deviating%(Max_Deviation_Distance_%, Pathx%, Center_%, Dir%, RetVal% = 0)
-	; ~ Check if deviating and return the answer. if deviating, turn around
-	Local Current_Deviation% = Center_ - Pathx
-	Local Deviated% = False
-	
-	If (Dir = 0 And Current_Deviation >= Max_Deviation_Distance_) Or (Dir = 2 And Current_Deviation =< -Max_Deviation_Distance_) Then
-		Dir = (Dir + 2) Mod 4
-		Deviated = True
-	EndIf
-	If RetVal = 0 Then 
-		Return(Dir) 
-	Else 
-		Return(Deviated)
-	EndIf
-End Function
-
 Function GenForestGrid(fr.Forest)
 	CatchErrors("Uncaught (GenForestGrid)")
 	fr\ID = LastForestID + 1
@@ -725,31 +693,31 @@ Function GenForestGrid(fr.Forest)
 	
 	Local Deviated%
 	
-	While PathY < GridSize -4
+	While PathY < GridSize - 4
 		If Dir = 1 Then ; ~ Determine whether to go forward or to the side
 			If Chance(Deviation_Chance) Then
 				; ~ Pick a branch direction
 				Dir = 2 * Rand(0, 1)
 				; ~ Make sure you have not passed max side distance
-				Dir = Turn_If_Deviating(Max_Deviation_Distance, PathX, Center, Dir)
-				Deviated = Turn_If_Deviating(Max_Deviation_Distance, PathX, Center, Dir, 1)
+				Dir = TurnIfDeviating(Max_Deviation_Distance, PathX, Center, Dir)
+				Deviated = TurnIfDeviating(Max_Deviation_Distance, PathX, Center, Dir, 1)
 				If Deviated Then fr\Grid[((GridSize - 1 - PathY) * GridSize) + PathX] = 1
-				PathX = Move_Forward(Dir, PathX, PathY)
-				PathY = Move_Forward(Dir, PathX, PathY, 1)
+				PathX = MoveForward(Dir, PathX, PathY)
+				PathY = MoveForward(Dir, PathX, PathY, 1)
 			EndIf
 		Else
 			; ~ We are going to the side, so determine whether to keep going or go forward again
-			Dir = Turn_If_Deviating(Max_Deviation_Distance, PathX, Center, Dir)
-			Deviated = Turn_If_Deviating(Max_Deviation_Distance, PathX, Center, Dir, 1)
+			Dir = TurnIfDeviating(Max_Deviation_Distance, PathX, Center, Dir)
+			Deviated = TurnIfDeviating(Max_Deviation_Distance, PathX, Center, Dir, 1)
 			If Deviated Or Chance(Return_Chance) Then Dir = 1
 			
-			PathX = Move_Forward(Dir, PathX, PathY)
-			PathY = Move_Forward(Dir, PathX, PathY, 1)
+			PathX = MoveForward(Dir, PathX, PathY)
+			PathY = MoveForward(Dir, PathX, PathY, 1)
 			; ~ If we just started going forward go twice so as to avoid creating a potential 2x2 line
 			If Dir = 1 Then
 				fr\Grid[((GridSize - 1 - PathY) * GridSize) + PathX] = 1
-				PathX = Move_Forward(Dir, PathX, PathY)
-				PathY = Move_Forward(Dir, PathX, PathY, 1)
+				PathX = MoveForward(Dir, PathX, PathY)
+				PathY = MoveForward(Dir, PathX, PathY, 1)
 			EndIf
 		EndIf
 		;~ Add our position to the grid
@@ -758,8 +726,8 @@ Function GenForestGrid(fr.Forest)
 	; ~ Finally, bring the path back to the door now that we have reached the end
 	Dir = 1
 	While PathY < GridSize - 2
-		PathX = Move_Forward(Dir, PathX, PathY)
-		PathY = Move_Forward(Dir, PathX, PathY, 1)
+		PathX = MoveForward(Dir, PathX, PathY)
+		PathY = MoveForward(Dir, PathX, PathY, 1)
 		fr\Grid[((GridSize - 1 - PathY) * GridSize) + PathX] = 1
 	Wend
 	
@@ -767,8 +735,8 @@ Function GenForestGrid(fr.Forest)
 		Dir = 0
 		If Door1_Pos > PathX Then Dir = 2
 		While PathX <> Door1_Pos
-			PathX = Move_Forward(Dir, PathX, PathY)
-			PathY = Move_Forward(Dir, PathX, PathY, 1)
+			PathX = MoveForward(Dir, PathX, PathY)
+			PathY = MoveForward(Dir, PathX, PathY, 1)
 			fr\Grid[((GridSize - 1 - PathY) * GridSize) + PathX] = 1
 		Wend
 	EndIf
@@ -6946,7 +6914,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 					If Inside Then
 						If (Not IgnoreRotation) Then
 							Dist = Distance(EntityX(Collider, True), EntityZ(Collider, True), EntityX(room1, True), EntityZ(room1, True))
-							Dir = Point_Direction(EntityX(Collider, True), EntityZ(Collider, True), EntityX(room1, True), EntityZ(room1, True))
+							Dir = PointDirection(EntityX(Collider, True), EntityZ(Collider, True), EntityX(room1, True), EntityZ(room1, True))
 							Dir = Dir + EntityYaw(room2, True) - EntityYaw(room1, True)
 							Dir = WrapAngle(Dir)
 							x = Max(Min(Cos(Dir) * Dist, 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
@@ -6973,7 +6941,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 								If Abs(EntityY(n\Collider) - EntityY(room1, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
 									If (Not IgnoreRotation) Then
 										Dist = Distance(EntityX(n\Collider, True), EntityZ(n\Collider, True), EntityX(room1, True), EntityZ(room1, True))
-										Dir = Point_Direction(EntityX(n\Collider, True), EntityZ(n\Collider, True), EntityX(room1, True), EntityZ(room1, True))
+										Dir = PointDirection(EntityX(n\Collider, True), EntityZ(n\Collider, True), EntityX(room1, True), EntityZ(room1, True))
 										Dir = Dir + EntityYaw(room2, True) - EntityYaw(room1, True)
 										Dir = WrapAngle(Dir)
 										x = Max(Min(Cos(Dir) * Dist, 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
@@ -6999,7 +6967,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 								If Abs(EntityY(it\Collider) - EntityY(room1, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
 									If (Not IgnoreRotation) Then
 										Dist = Distance(EntityX(it\Collider, True), EntityZ(it\Collider, True), EntityX(room1, True), EntityZ(room1, True))
-										Dir = Point_Direction(EntityX(it\Collider, True), EntityZ(it\Collider, True),EntityX(room1, True), EntityZ(room1, True))
+										Dir = PointDirection(EntityX(it\Collider, True), EntityZ(it\Collider, True),EntityX(room1, True), EntityZ(room1, True))
 										Dir = Dir + EntityYaw(room2, True) - EntityYaw(room1, True)
 										Dir = WrapAngle(Dir)
 										x = Max(Min(Cos(Dir) * Dist, 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
@@ -7045,7 +7013,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 					If Inside Then	
 						If (Not IgnoreRotation) Then
 							Dist = Distance(EntityX(Collider, True), EntityZ(Collider, True), EntityX(room2, True), EntityZ(room2, True))
-							Dir = Point_Direction(EntityX(Collider, True), EntityZ(Collider, True), EntityX(room2, True), EntityZ(room2, True))
+							Dir = PointDirection(EntityX(Collider, True), EntityZ(Collider, True), EntityX(room2, True), EntityZ(room2, True))
 							Dir = Dir + EntityYaw(room1, True) - EntityYaw(room2, True)
 							x = Max(Min(Cos(Dir) * Dist, 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
 							z = Max(Min(Sin(Dir) * Dist, 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
@@ -7070,7 +7038,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 								If Abs(EntityY(n\Collider) - EntityY(room2, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
 									If (Not IgnoreRotation) Then
 										Dist = Distance(EntityX(n\Collider, True), EntityZ(n\Collider, True), EntityX(room2, True), EntityZ(room2, True))
-										Dir = Point_Direction(EntityX(n\Collider, True), EntityZ(n\Collider, True), EntityX(room2, True), EntityZ(room2, True))
+										Dir = PointDirection(EntityX(n\Collider, True), EntityZ(n\Collider, True), EntityX(room2, True), EntityZ(room2, True))
 										Dir = Dir + EntityYaw(room1, True) - EntityYaw(room2, True)
 										x = Max(Min(Cos(Dir) * Dist, 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
 										z = Max(Min(Sin(Dir) * Dist, 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
@@ -7094,7 +7062,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 								If Abs(EntityY(it\Collider) - EntityY(room2, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
 									If (Not IgnoreRotation) Then
 										Dist = Distance(EntityX(it\Collider, True), EntityZ(it\Collider, True), EntityX(room2, True), EntityZ(room2, True))
-										Dir = Point_Direction(EntityX(it\Collider, True), EntityZ(it\Collider, True), EntityX(room2, True), EntityZ(room2, True))
+										Dir = PointDirection(EntityX(it\Collider, True), EntityZ(it\Collider, True), EntityX(room2, True), EntityZ(room2, True))
 										Dir = Dir + EntityYaw(room1, True) - EntityYaw(room2, True)
 										x = Max(Min(Cos(Dir) * Dist, 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
 										z = Max(Min(Sin(Dir) * Dist, 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
@@ -7109,7 +7077,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 						EndIf
 					Next
 					UseDoor(door1, False, Not Inside)
-					door2\open = False
+					door2\Open = False
 					
 					PlaySound2(ElevatorBeepSFX, Camera, room2, 4.0)
 				EndIf	
@@ -8068,9 +8036,7 @@ Function UpdateRoomLights(Cam%)
 									EndIf
 									ScaleSprite(r\LightSprites2[i], Random, Random)
 									
-									Dist = (EntityDistance(Cam, r\LightSpritesPivot[i]) + 0.5) / 7.5
-									Dist = Max(Min(Dist, 1.0), 0.0)
-									Alpha = Float(Inverse(Dist))
+									Alpha = 1.0 - Max(Min(((EntityDistance(Cam, r\LightSpritesPivot[i]) + 0.5) / 7.5), 1.0), 0.0)
 									
 									If Alpha > 0.0 Then
 										EntityAlpha(r\LightSprites2[i], Max(3.0 * (Brightness / 255.0) * (r\LightIntensity[i] / 2), 1.0) * Alpha)
@@ -8755,5 +8721,5 @@ End Function
 
 
 ;~IDEal Editor Parameters:
-;~B#11E7
+;~B#11C7
 ;~C#Blitz3D
