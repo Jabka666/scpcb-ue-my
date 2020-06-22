@@ -7352,16 +7352,15 @@ Function PlayerInReachableRoom(CanSpawnIn049Chamber% = False)
 		Return(False)
 	EndIf
 	; ~ Player is in SCP-860-1's test room and inside the forest, returning false
-	Temp = False
-	For e = Each Events
-		If e\EventName = "room860" And e\EventState = 1.0 Then
-			Temp = True
-			Exit
-		EndIf
-	Next
-	If RN = "room860" And Temp Then
-		Return(False)
+	If RN = "room860" Then
+		For e.Events = Each Events
+			If e\EventName = "room860" And e\EventState = 1.0 Then
+				Return(False)
+				Exit
+			EndIf
+		Next
 	EndIf
+	
 	If (Not CanSpawnIn049Chamber) Then
 		If SelectedDifficulty\AggressiveNPCs = False Then
 			If RN = "room049" And EntityY(Collider) =< -2848.0 * RoomScale Then
