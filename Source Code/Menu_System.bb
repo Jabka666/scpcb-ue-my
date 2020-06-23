@@ -444,7 +444,7 @@ Function UpdateMainMenu()
 									Else
 										DrawButton(x + 280 * MenuScale, y + 20 * MenuScale, 100 * MenuScale, 30 * MenuScale, "Load", False, False, True)
 									EndIf
-									DrawButton(x + 400 * MenuScale, y + 20 * MenuScale, 100 * MenuScale, 30 * MenuScale, "Delete", False, False, True, 100, 100, 100)
+									DrawButton(x + 400 * MenuScale, y + 20 * MenuScale, 100 * MenuScale, 30 * MenuScale, "Delete", False, False, True)
 								EndIf
 								y = y + 80 * MenuScale
 							Else
@@ -464,6 +464,7 @@ Function UpdateMainMenu()
 							EndIf
 							If DrawButton(x + 250 * MenuScale, y + 150 * MenuScale, 100 * MenuScale, 30 * MenuScale, "No", False) Then
 								SaveMSG = ""
+								ShouldDeleteGadgets = True
 							EndIf
 						EndIf
 					EndIf
@@ -811,6 +812,10 @@ Function UpdateMainMenu()
 							EndIf
 						Else
 							y = y + 20 * MenuScale
+							
+							BarStyle = DrawTick(x + 310 * MenuScale, y + MenuScale, BarStyle)
+							
+							y = y + 30 * MenuScale
 							
 							LauncherEnabled = DrawTick(x + 310 * MenuScale, y + MenuScale, LauncherEnabled)
 						EndIf
@@ -1418,7 +1423,7 @@ Function RenderMainMenu()
 							Color(255, 255, 255)
 							Text(x + 20 * MenuScale, y, "Console Version:")
 							If ConsoleVersion = 1 Then
-								Text(x + 350 * MenuScale, y, "New")
+								Text(x + 350 * MenuScale, y, "Advanced")
 							Else
 								Text(x + 350 * MenuScale, y, "Classic")
 							EndIf    
@@ -1460,6 +1465,21 @@ Function RenderMainMenu()
 						EndIf
 					Else
 						y = y + 20 * MenuScale
+						
+						If HUDenabled Then
+							Color(255, 255, 255)
+							Text(x + 20 * MenuScale, y, "Bar style")
+							If BarStyle = 1 Then
+								Text(x + 350 * MenuScale, y, "Dymanic")
+							Else
+								Text(x + 350 * MenuScale, y, "Classic")
+							EndIf 
+							If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
+								DrawOptionsTooltip(tX, tY, tW, tH, "barstyle")
+							EndIf
+						EndIf
+						
+						y = y + 30 * MenuScale
 						
 						Color(255, 255, 255)
 						Text(x + 20 * MenuScale, y, "Use launcher:")
@@ -1816,9 +1836,14 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 		y = GraphicHeight / 2 + 30 - 100
 		
 		Rect(x, y, Width + 4, Height, False)
-		For i = 1 To Int((Width - 2) * (Percent / 100.0) / 10)
-			DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
-		Next
+		If BarStyle = 1 Then
+		    Color(100, 100, 100)
+		    Rect(x + 3, y + 3, Float(Percent * 2.98), 14)
+		Else
+			For i = 1 To Int((Width - 2) * (Percent / 100.0) / 10)
+				DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
+			Next
+		EndIf
 		
 		If SelectedLoadingScreen\Title = "CWM" Then
 			
@@ -2076,6 +2101,7 @@ Function DrawButton%(x%, y%, Width%, Height%, Txt$, BigFont% = True, WaitForMous
 	Else
 		currMButton = mb
 		currMButton\Txt = Txt
+		currMButton\Locked = Locked
 	EndIf
 	
 	If MouseOn(x, y, Width, Height) Then
@@ -2884,6 +2910,8 @@ Function DrawOptionsTooltip(x%, y%, Width%, Height%, Option$, Value# = 0.0, InGa
 		Case "uselauncher"
 			;[Block]
 			Txt = Chr(34) + "Use launcher" + Chr(34) + " is self-explanatory."
+			R = 255
+			Txt2 = "This option cannot be changed in-game."
 			;[End Block]
 		Case "consoleversion"
 			;[Block]
@@ -2893,6 +2921,12 @@ Function DrawOptionsTooltip(x%, y%, Width%, Height%, Option$, Value# = 0.0, InGa
 			;[Block]
 			Txt = Chr(34) + "Field of view" + Chr(34) + " is the amount of game view that is on display during a game."
 			Txt2 = "Current value: " + Int(FOV) + "° (default is 74°)"
+			;[End Block]
+		Case "barstyle"
+			;[Block]
+		    Txt = "Changes the Bar's style to Dynamic or Classic one."
+			R = 255
+		    Txt2 = "This option cannot be changed in-game."
 			;[End Block]
 	End Select
 	

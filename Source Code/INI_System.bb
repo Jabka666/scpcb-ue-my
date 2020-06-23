@@ -313,6 +313,8 @@ Global FrameLimit% = GetINIInt(OptionFile, "Advanced", "Frame Limit")
 
 Global ConsoleVersion% = GetINIInt(OptionFile, "Advanced", "Console Version")
 
+Global BarStyle% = GetINIInt(OptionFile, "Advanced", "Bar Style")
+
 ; ~ [CONTROLS]
 
 key\MOVEMENT_RIGHT = GetINIInt(OptionFile, "Controls", "Right Key")
@@ -408,7 +410,9 @@ Function SaveOptionsINI()
 	
 	PutINIValue(OptionFile, "Advanced", "Console Version", ConsoleVersion)
 	
-	PutINIValue(OptionFile, "Advanced", "Antialiased Text", AATextEnable)
+	PutINIValue(OptionFile, "Launcher", "Launcher Enabled", LauncherEnabled)
+	
+	PutINIValue(OptionFile, "Advanced", "Bar Style", BarStyle)
 	
 	; ~ [CONTROLS]
 	

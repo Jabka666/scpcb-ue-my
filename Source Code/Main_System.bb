@@ -4646,13 +4646,22 @@ Function DrawGUI()
 		
 		Color(255, 255, 255)
 		Rect(x, y, Width, Height, False)
-		For i = 1 To Int(((Width - 2) * (me\BlinkTimer / (me\BLINKFREQ))) / 10.0)
+		If BarStyle = 1 Then
 			If me\BlinkTimer < 160.0 Then
-				DrawImage(tt\ImageID[1], x + 3 + 10 * (i - 1), y + 3)
-			Else
-				DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
-			EndIf
-		Next	
+		    	Color(100, 0, 0)
+	    	Else
+	        	Color(100, 100, 100)
+	    	EndIf		
+			Rect(x + 3, y + 3, Float(me\BlinkTimer * ((Width - 6.0) / me\BLINKFREQ)), 14)
+		Else
+			For i = 1 To Int(((Width - 2) * (me\BlinkTimer / (me\BLINKFREQ))) / 10.0)
+				If me\BlinkTimer < 160.0 Then
+					DrawImage(tt\ImageID[1], x + 3 + 10 * (i - 1), y + 3)
+				Else
+					DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
+				EndIf
+			Next	
+		EndIf
 		Color(0, 0, 0)
 		Rect(x - 50, y, 30, 30)
 		
@@ -4675,14 +4684,22 @@ Function DrawGUI()
 		
 		Color(255, 255, 255)
 		Rect(x, y, Width, Height, False)
-		For i = 1 To Int(((Width - 2) * (me\Stamina / 100.0)) / 10.0)
-			If me\Stamina < 25.0 Then
-				DrawImage(tt\ImageID[3], x + 3 + 10 * (i - 1), y + 3)
-			Else
-				DrawImage(tt\ImageID[2], x + 3 + 10 * (i - 1), y + 3)
-			EndIf
-		Next	
-		
+		If BarStyle = 1 Then
+			If me\Stamina < 27.0 Then
+		  	    Color(50, 0, 0)
+	    	Else
+	     	    Color(50, 50, 50)
+	    	EndIf		
+			Rect(x + 3, y + 3, Float(me\Stamina * (Width - 6.0) / 100.0), 14)	
+		Else
+			For i = 1 To Int(((Width - 2) * (me\Stamina / 100.0)) / 10.0)
+				If me\Stamina < 27.0 Then
+					DrawImage(tt\ImageID[3], x + 3 + 10 * (i - 1), y + 3)
+				Else
+					DrawImage(tt\ImageID[2], x + 3 + 10 * (i - 1), y + 3)
+				EndIf
+			Next
+		EndIf
 		Color(0, 0, 0)
 		Rect(x - 50, y, 30, 30)
 		
@@ -5092,9 +5109,14 @@ Function DrawGUI()
 					x = GraphicWidth / 2 - Width / 2
 					y = GraphicHeight / 2 + 80
 					Rect(x, y, Width + 4, Height, False)
-					For i = 1 To Int((Width - 2) * (SelectedItem\State / 100.0) / 10)
-						DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
-					Next
+					If BarStyle = 1 Then
+						Color(100, 100, 100)	
+						Rect(x + 3, y + 3, Float(SelectedItem\State * (Width - 6.0) / 100.0), 14)	
+					Else
+						For i = 1 To Int((Width - 2) * (SelectedItem\State / 100.0) / 10)
+							DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
+						Next
+					EndIf
 					;[End Block]
 				Case "paper", "ticket"
 					;[Block]
@@ -5112,7 +5134,7 @@ Function DrawGUI()
 								;[End Block]
 							Case "Document SCP-372"
 								;[Block]
-								SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\Imgpath)	
+								SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
 								SelectedItem\ItemTemplate\Img = ResizeImage2(SelectedItem\ItemTemplate\Img, ImageWidth(SelectedItem\ItemTemplate\Img) * MenuScale, ImageHeight(SelectedItem\ItemTemplate\Img) * MenuScale)
 								
 								SetBuffer(ImageBuffer(SelectedItem\ItemTemplate\Img))
@@ -5246,9 +5268,14 @@ Function DrawGUI()
 						x = GraphicWidth / 2 - Width / 2
 						y = GraphicHeight / 2 + 80.0
 						Rect(x, y, Width + 4, Height, False)
-						For i = 1 To Int((Width - 2) * (SelectedItem\State / 100.0) / 10.0)
-							DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
-						Next
+						If BarStyle = 1 Then
+							Color(100, 100, 100)	
+					        Rect(x + 3, y + 3, Float(SelectedItem\State * (Width - 6.0) / 100.0), 14)	
+						Else
+							For i = 1 To Int((Width - 2) * (SelectedItem\State / 100.0) / 10.0)
+								DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
+							Next
+						EndIf
 					EndIf
 					;[End Block]
 				Case "vest", "finevest"
@@ -5260,9 +5287,14 @@ Function DrawGUI()
 					x = GraphicWidth / 2 - Width / 2
 					y = GraphicHeight / 2 + 80.0
 					Rect(x, y, Width + 4, Height, False)
-					For i = 1 To Int((Width - 2.0) * (SelectedItem\State / 100.0) / 10.0)
-						DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
-					Next
+					If BarStyle = 1 Then
+						Color(100, 100, 100)	
+						Rect(x + 3, y + 3, Float(SelectedItem\State * (Width - 6.0) / 100.0), 14)	
+					Else
+						For i = 1 To Int((Width - 2.0) * (SelectedItem\State / 100.0) / 10.0)
+							DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
+						Next
+					EndIf
 					;[End Block]
 				Case "gasmask", "supergasmask", "gasmask3"
 					;[Block]
@@ -5274,9 +5306,14 @@ Function DrawGUI()
 						x = GraphicWidth / 2 - Width / 2
 						y = GraphicHeight / 2 + 80
 						Rect(x, y, Width + 4, Height, False)
-						For  i% = 1 To Int((Width - 2) * (SelectedItem\state / 100.0) / 10)
-							DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
-						Next
+						If BarStyle = 1 Then
+							Color(100, 100, 100)	
+					        Rect(x + 3, y + 3, Float(SelectedItem\State * (Width - 6.0) / 100.0), 14)	
+						Else
+							For i = 1 To Int((Width - 2) * (SelectedItem\state / 100.0) / 10)
+								DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
+							Next
+						EndIf
 					EndIf
 					;[End Block]
 				Case "navigator", "nav"
@@ -5479,9 +5516,14 @@ Function DrawGUI()
 						x = GraphicWidth / 2 - Width / 2
 						y = GraphicHeight / 2 + 80
 						Rect(x, y, Width + 4, Height, False)
-						For i = 1 To Int((Width - 2) * (SelectedItem\State / 100.0) / 10.0)
-							DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
-						Next
+						If BarStyle = 1 Then
+							Color(100, 100, 100)	
+					        Rect(x + 3, y + 3, Float(SelectedItem\State * (Width - 6.0) / 100.0), 14)	
+						Else
+							For i = 1 To Int((Width - 2) * (SelectedItem\State / 100.0) / 10.0)
+								DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
+							Next
+						EndIf
 					EndIf
 					;[End Block]
 				Case "badge"
@@ -5515,9 +5557,14 @@ Function DrawGUI()
 					    x = GraphicWidth / 2 - Width / 2
 					    y = GraphicHeight / 2 + 80
 					    Rect(x, y, Width + 4, Height, False)
-						For i = 1 To Int((Width - 2) * (SelectedItem\State / 100.0) / 10.0)
-					    	DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
-					    Next
+						If BarStyle = 1 Then
+							Color(100, 100, 100)	
+					        Rect(x + 3, y + 3, Float(SelectedItem\State * (Width - 6.0) / 100.0), 14)	
+						Else
+							For i = 1 To Int((Width - 2) * (SelectedItem\State / 100.0) / 10.0)
+								DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
+							Next
+						EndIf
 					EndIf
 					;[End Block]
 			End Select
@@ -8271,10 +8318,6 @@ Function UpdateMenu()
 							ShouldDeleteGadgets = True
 						EndIf
 					EndIf
-					
-					y = y + 70 * MenuScale
-					
-					LauncherEnabled = DrawTick(x + 270 * MenuScale, y + MenuScale, LauncherEnabled)
 					;[End Block]
 			End Select
 		ElseIf AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg > 0 And me\KillTimer >= 0.0
@@ -8517,10 +8560,12 @@ Function LoadEntities()
 	MaskImage(tt\ImageID[0], 255, 255, 0)
 	ScaleImage(tt\ImageID[0], MenuScale, MenuScale)
 	
-	tt\ImageID[1] = LoadImage_Strict("GFX\blink_meter_red.png")
-	
-	tt\ImageID[2] = LoadImage_Strict("GFX\stamina_meter.png")
-	tt\ImageID[3] = LoadImage_Strict("GFX\stamina_meter_red.png")
+	If BarStyle = 0 Then
+		tt\ImageID[1] = LoadImage_Strict("GFX\blink_meter_red.png")
+		
+		tt\ImageID[2] = LoadImage_Strict("GFX\stamina_meter.png")
+		tt\ImageID[3] = LoadImage_Strict("GFX\stamina_meter_red.png")
+	EndIf
 	
 	tt\ImageID[4] = LoadImage_Strict("GFX\keypad_HUD.png")
 	MaskImage(tt\ImageID[4], 255, 0, 255)
@@ -9037,10 +9082,12 @@ Function LoadEntities()
 	EntityTexture(DTextures[8], Tex)
 	FreeTexture(Tex)
 	
-	; ~ D-9341
-	Tex = LoadTexture_Strict("GFX\npcs\D_9341.png")
-	EntityTexture(DTextures[9], Tex)
-	FreeTexture(Tex)
+	If IntroEnabled Then
+		; ~ D-9341
+		Tex = LoadTexture_Strict("GFX\npcs\D_9341.png")
+		EntityTexture(DTextures[9], Tex)
+		FreeTexture(Tex)
+	EndIf
 	
 	; ~ Body # 1
 	Tex = LoadTexture_Strict("GFX\npcs\body.png")
@@ -12313,5 +12360,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#10C1#1353#1D83
+;~B#10C1#1364#1DB2
 ;~C#Blitz3D

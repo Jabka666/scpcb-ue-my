@@ -121,3 +121,4 @@ Bug Fixes:
 - Small fixes for room2pipes and room2pipes2.
 - Small fixes for ending tunnel in the Gate A.
 - Small fixes for headphones' texture.
+- Small fixes for main menu.
