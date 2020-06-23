@@ -1572,7 +1572,7 @@ Function UpdateLauncher()
 	RealGraphicWidth = GraphicWidth
 	RealGraphicHeight = GraphicHeight
 	
-	fo\FontID[0] = LoadFont_Strict("GFX\font\cour\Courier New.ttf", 18, 0,0,0)
+	fo\FontID[0] = LoadFont_Strict("GFX\font\cour\Courier New.ttf", 18, 0, 0, 0)
 	SetFont(fo\FontID[0])
 	MenuWhite = LoadImage_Strict("GFX\menu\menu_white.png")
 	MenuBlack = LoadImage_Strict("GFX\menu\menu_black.png")	
@@ -1626,12 +1626,6 @@ Function UpdateLauncher()
 			y = y + 20
 			If y >= 250 - 65 + (LauncherHeight - 80 - 260) Then y = 270 - 65 : x = x + 100
 		Next
-		
-		Color(255, 255, 255)
-		x = 30
-		y = 369
-		Rect(x - 10, y, 340, 95)
-		Text(x - 10, y - 25, "Changelog:")
 		
 		Fullscreen = DrawLauncherTick(40 + 430 - 15, 260 - 55 + 5 - 8, Fullscreen, BorderlessWindowed)
 		BorderlessWindowed = DrawLauncherTick(40 + 430 - 15, 260 - 55 + 35, BorderlessWindowed)

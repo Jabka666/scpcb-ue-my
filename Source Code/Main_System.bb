@@ -86,8 +86,8 @@ If LauncherEnabled Then
 		Graphics3DExt(G_Viewport_Width, G_Viewport_Height, 0, 2)
 		
 		; ~ Change the window style to 'WS_POPUP' and then set the window position to force the style to update
-		Api_SetWindowLong(G_App_Handle, C_GWL_STYLE, C_WS_POPUP)
-		Api_SetWindowPos(G_App_Handle, C_HWND_TOP, G_Viewport_X, G_Viewport_Y, G_Viewport_Width, G_Viewport_Height, C_SWP_SHOWWINDOW)
+		api_SetWindowLong(G_App_Handle, C_GWL_STYLE, C_WS_POPUP)
+		api_SetWindowPos(G_App_Handle, C_HWND_TOP, G_Viewport_X, G_Viewport_Y, G_Viewport_Width, G_Viewport_Height, C_SWP_SHOWWINDOW)
 		
 		RealGraphicWidth = G_Viewport_Width
 		RealGraphicHeight = G_Viewport_Height
@@ -128,8 +128,8 @@ Else
 		Graphics3DExt(G_Viewport_Width, G_Viewport_Height, 0, 2)
 		
 		; ~ Change the window style to 'WS_POPUP' and then set the window position to force the style to update
-		Api_SetWindowLong(G_App_Handle, C_GWL_STYLE, C_WS_POPUP)
-		Api_SetWindowPos(G_App_Handle, C_HWND_TOP, G_Viewport_x, G_Viewport_y, G_Viewport_Width, G_Viewport_Height, C_SWP_SHOWWINDOW)
+		api_SetWindowLong(G_App_Handle, C_GWL_STYLE, C_WS_POPUP)
+		api_SetWindowPos(G_App_Handle, C_HWND_TOP, G_Viewport_x, G_Viewport_y, G_Viewport_Width, G_Viewport_Height, C_SWP_SHOWWINDOW)
 		
 		RealGraphicWidth = G_Viewport_Width
 		RealGraphicHeight = G_Viewport_Height
