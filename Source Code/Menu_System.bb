@@ -255,6 +255,7 @@ Function UpdateMainMenu()
 						UserTrackCheck = 0
 						UserTrackCheck2 = 0
 						
+						CurrLoadGamePage = 0
 						AntiAlias(Opt_AntiAlias)
 						MainMenuTab = MainMenuTab_Default
 						;[End Block]
@@ -280,7 +281,6 @@ Function UpdateMainMenu()
 					Width = 400 * MenuScale
 					Height = 70 * MenuScale
 					
-					x = 160 * MenuScale
 					y = y + Height + 20 * MenuScale
 					Width = 580 * MenuScale
 					Height = 330 * MenuScale
@@ -388,26 +388,25 @@ Function UpdateMainMenu()
 					Width = 400 * MenuScale
 					Height = 70 * MenuScale
 					
-					x = 160 * MenuScale
 					y = y + Height + 20 * MenuScale
 					Width = 580 * MenuScale
 					Height = 296 * MenuScale
 					
 					If CurrLoadGamePage < Ceil(Float(SaveGameAmount) / 6.0) - 1 And SaveMSG = "" Then 
-						If DrawButton(x + 530 * MenuScale, y + 510 * MenuScale, 50 * MenuScale, 55 * MenuScale, ">") Then
+						If DrawButton(x + Width - 50 * MenuScale, y + 510 * MenuScale, 50 * MenuScale, 50 * MenuScale, ">") Then
 							CurrLoadGamePage = CurrLoadGamePage + 1
 							ShouldDeleteGadgets = True
 						EndIf
 					Else
-						DrawButton(x + 530 * MenuScale, y + 510 * MenuScale, 50 * MenuScale, 55 * MenuScale, ">", True, False, True)
+						DrawButton(x + Width - 50 * MenuScale, y + 510 * MenuScale, 50 * MenuScale, 50 * MenuScale, ">", True, False, True)
 					EndIf
 					If CurrLoadGamePage > 0 And SaveMSG = "" Then
-						If DrawButton(x, y + 510 * MenuScale, 50 * MenuScale, 55 * MenuScale, "<") Then
+						If DrawButton(x, y + 510 * MenuScale, 50 * MenuScale, 50 * MenuScale, "<") Then
 							CurrLoadGamePage = CurrLoadGamePage - 1
 							ShouldDeleteGadgets = True
 						EndIf
 					Else
-						DrawButton(x, y + 510 * MenuScale, 50 * MenuScale, 55 * MenuScale, "<", True, False, True)
+						DrawButton(x, y + 510 * MenuScale, 50 * MenuScale, 50 * MenuScale, "<", True, False, True)
 					EndIf
 					
 					If CurrLoadGamePage > Ceil(Float(SaveGameAmount) / 6.0) - 1 Then
@@ -477,7 +476,6 @@ Function UpdateMainMenu()
 					Width = 400 * MenuScale
 					Height = 70 * MenuScale
 					
-					x = 160 * MenuScale
 					y = y + Height + 20 * MenuScale
 					Width = 580 * MenuScale
 					Height = 60 * MenuScale
@@ -739,64 +737,83 @@ Function UpdateMainMenu()
 						;[Block]
 						Height = 330 * MenuScale
 						
-						y = y + 20 * MenuScale
-						
-						HUDenabled = DrawTick(x + 310 * MenuScale, y + MenuScale, HUDenabled)
-						
-						y = y + 30 * MenuScale
-						
-						Local PrevCanOpenConsole% = CanOpenConsole
-						
-						CanOpenConsole = DrawTick(x + 310 * MenuScale, y + MenuScale, CanOpenConsole)
-						
-						If PrevCanOpenConsole Then
-							If PrevCanOpenConsole <> CanOpenConsole
+						If CurrLoadGamePage = 0 Then 
+							If DrawButton(x + Width - 30 * MenuScale, y + Height, 30 * MenuScale, 30 * MenuScale, ">", False) Then
+								CurrLoadGamePage = CurrLoadGamePage + 1
 								ShouldDeleteGadgets = True
 							EndIf
-						EndIf
-						
-						y = y + 30 * MenuScale
-						
-						If CanOpenConsole Then
-							ConsoleOpening = DrawTick(x + 310 * MenuScale, y + MenuScale, ConsoleOpening)
-						EndIf
-						
-						y = y + 30 * MenuScale
-						
-						If CanOpenConsole Then
-							ConsoleVersion = DrawTick(x + 310 * MenuScale, y + MenuScale, ConsoleVersion)
-						EndIf
-						
-						y = y + 30 * MenuScale
-						
-						AchvMSGenabled = DrawTick(x + 310 * MenuScale, y + MenuScale, AchvMSGenabled)
-						
-						y = y + 50 * MenuScale
-						
-						ShowFPS = DrawTick(x + 310 * MenuScale, y + MenuScale, ShowFPS)
-						
-						y = y + 30 * MenuScale
-						
-						Local PrevCurrFrameLimit% = CurrFrameLimit > 0.0
-						
-						If DrawTick(x + 310 * MenuScale, y, CurrFrameLimit > 0.0) Then
-							CurrFrameLimit = (SlideBar(x + 150 * MenuScale, y + 30 * MenuScale, 100 * MenuScale, CurrFrameLimit * 99.0) / 99.0)
-							CurrFrameLimit = Max(CurrFrameLimit, 0.01)
-							FrameLimit = 19 + (CurrFrameLimit * 100.0)
 						Else
-							CurrFrameLimit = 0.0
-							FrameLimit = 0
+							DrawButton(x + Width - 30 * MenuScale, y + Height, 30 * MenuScale, 30 * MenuScale, ">", False, False, True)
 						EndIf
-						
-						If PrevCurrFrameLimit Then
-							If PrevCurrFrameLimit <> CurrFrameLimit Then
+						If CurrLoadGamePage = 1 Then
+							If DrawButton(x, y + Height, 30 * MenuScale, 30 * MenuScale, "<", False) Then
+								CurrLoadGamePage = CurrLoadGamePage - 1
 								ShouldDeleteGadgets = True
 							EndIf
+						Else
+							DrawButton(x, y + Height, 30 * MenuScale, 30 * MenuScale, "<", False, False, True)
 						EndIf
 						
-						y = y + 70 * MenuScale
-						
-						LauncherEnabled = DrawTick(x + 310 * MenuScale, y + MenuScale, LauncherEnabled)
+						If CurrLoadGamePage = 0 Then
+							y = y + 20 * MenuScale
+							
+							HUDenabled = DrawTick(x + 310 * MenuScale, y + MenuScale, HUDenabled)
+							
+							y = y + 30 * MenuScale
+							
+							Local PrevCanOpenConsole% = CanOpenConsole
+							
+							CanOpenConsole = DrawTick(x + 310 * MenuScale, y + MenuScale, CanOpenConsole)
+							
+							If PrevCanOpenConsole Then
+								If PrevCanOpenConsole <> CanOpenConsole
+									ShouldDeleteGadgets = True
+								EndIf
+							EndIf
+							
+							y = y + 30 * MenuScale
+							
+							If CanOpenConsole Then
+								ConsoleOpening = DrawTick(x + 310 * MenuScale, y + MenuScale, ConsoleOpening)
+							EndIf
+							
+							y = y + 30 * MenuScale
+							
+							If CanOpenConsole Then
+								ConsoleVersion = DrawTick(x + 310 * MenuScale, y + MenuScale, ConsoleVersion)
+							EndIf
+							
+							y = y + 30 * MenuScale
+							
+							AchvMSGenabled = DrawTick(x + 310 * MenuScale, y + MenuScale, AchvMSGenabled)
+							
+							y = y + 50 * MenuScale
+							
+							ShowFPS = DrawTick(x + 310 * MenuScale, y + MenuScale, ShowFPS)
+							
+							y = y + 30 * MenuScale
+							
+							Local PrevCurrFrameLimit% = CurrFrameLimit > 0.0
+							
+							If DrawTick(x + 310 * MenuScale, y, CurrFrameLimit > 0.0) Then
+								CurrFrameLimit = (SlideBar(x + 150 * MenuScale, y + 30 * MenuScale, 100 * MenuScale, CurrFrameLimit * 99.0) / 99.0)
+								CurrFrameLimit = Max(CurrFrameLimit, 0.01)
+								FrameLimit = 19 + (CurrFrameLimit * 100.0)
+							Else
+								CurrFrameLimit = 0.0
+								FrameLimit = 0
+							EndIf
+							
+							If PrevCurrFrameLimit Then
+								If PrevCurrFrameLimit <> CurrFrameLimit Then
+									ShouldDeleteGadgets = True
+								EndIf
+							EndIf
+						Else
+							y = y + 20 * MenuScale
+							
+							LauncherEnabled = DrawTick(x + 310 * MenuScale, y + MenuScale, LauncherEnabled)
+						EndIf
 						;[End Block]
 					EndIf
 					;[End Block]
@@ -812,26 +829,25 @@ Function UpdateMainMenu()
 					Width = 400 * MenuScale
 					Height = 70 * MenuScale
 					
-					x = 160 * MenuScale
 					y = y + Height + 20 * MenuScale
 					Width = 580 * MenuScale
 					Height = 350 * MenuScale
 					
 					If CurrLoadGamePage < Ceil(Float(SavedMapsAmount) / 6.0) - 1 Then 
-						If DrawButton(x + 530 * MenuScale, y + 510 * MenuScale, 50 * MenuScale, 55 * MenuScale, ">") Then
+						If DrawButton(x + Width - 50 * MenuScale, y + 510 * MenuScale, 50 * MenuScale, 50 * MenuScale, ">") Then
 							CurrLoadGamePage = CurrLoadGamePage + 1
 							ShouldDeleteGadgets = True
 						EndIf
 					Else
-						DrawButton(x + 530 * MenuScale, y + 510 * MenuScale, 50 * MenuScale, 55 * MenuScale, ">", True, False, True)
+						DrawButton(x + Width - 50 * MenuScale, y + 510 * MenuScale, 50 * MenuScale, 50 * MenuScale, ">", True, False, True)
 					EndIf
 					If CurrLoadGamePage > 0 Then
-						If DrawButton(x, y + 510 * MenuScale, 50 * MenuScale, 55 * MenuScale, "<") Then
+						If DrawButton(x, y + 510 * MenuScale, 50 * MenuScale, 50 * MenuScale, "<") Then
 							CurrLoadGamePage = CurrLoadGamePage - 1
 							ShouldDeleteGadgets = True
 						EndIf
 					Else
-						DrawButton(x, y + 510 * MenuScale, 50 * MenuScale, 55 * MenuScale, "<", True, False, True)
+						DrawButton(x, y + 510 * MenuScale, 50 * MenuScale, 50 * MenuScale, "<", True, False, True)
 					EndIf
 					
 					If CurrLoadGamePage > Ceil(Float(SavedMapsAmount) / 6.0) - 1 Then
@@ -849,7 +865,6 @@ Function UpdateMainMenu()
 									MainMenuTab = MainMenuTab_New_Game
 									ShouldDeleteGadgets = True
 								EndIf
-								
 								y = y + 80 * MenuScale
 							Else
 								Exit
@@ -991,7 +1006,6 @@ Function RenderMainMenu()
 				SetFont(fo\FontID[1])
 				Text(x + Width / 2, y + Height / 2, "NEW GAME", True, True)
 				
-				x = 160 * MenuScale
 				y = y + Height + 20 * MenuScale
 				Width = 580 * MenuScale
 				Height = 330 * MenuScale
@@ -1081,16 +1095,15 @@ Function RenderMainMenu()
 				SetFont(fo\FontID[1])
 				Text(x + Width / 2, y + Height / 2, "LOAD GAME", True, True)
 				
-				x = 160 * MenuScale
 				y = y + Height + 20 * MenuScale
 				Width = 580 * MenuScale
 				Height = 296 * MenuScale
 				
 				SetFont(fo\FontID[1])
 				
-				DrawFrame(x + 50 * MenuScale, y + 510 * MenuScale, Width - 100 * MenuScale, 55 * MenuScale)
+				DrawFrame(x, y + 510 * MenuScale, Width, 50 * MenuScale)
 				
-				Text(x + (Width / 2.0), y + 536 * MenuScale, "Page " + Int(Max((CurrLoadGamePage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SaveGameAmount) / 6.0))), 1)), True, True)
+				Text(x + (Width / 2.0), y + 535 * MenuScale, "Page " + Int(Max((CurrLoadGamePage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SaveGameAmount) / 6.0))), 1)), True, True)
 				
 				SetFont(fo\FontID[0])
 				
@@ -1141,7 +1154,6 @@ Function RenderMainMenu()
 				SetFont(fo\FontID[1])
 				Text(x + Width / 2, y + Height / 2, "OPTIONS", True, True)
 				
-				x = 160 * MenuScale
 				y = y + Height + 20 * MenuScale
 				Width = 580 * MenuScale
 				Height = 60 * MenuScale
@@ -1369,85 +1381,91 @@ Function RenderMainMenu()
 					Height = 330 * MenuScale
 					DrawFrame(x, y, Width, Height)	
 					
-					y = y + 20 * MenuScale
+					DrawFrame(x, y + Height, Width, 30 * MenuScale)	
 					
-					Color(255, 255, 255)				
-					Text(x + 20 * MenuScale, y, "Show HUD:")	
-					If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
-						DrawOptionsTooltip(tX, tY, tW, tH, "hud")
-					EndIf
+					Text(x + (Width / 2), y + Height + 15, "Page " + Int(Max((CurrLoadGamePage + 1), 1)) + "/2", True, True)
 					
-					y = y + 30 * MenuScale
-					
-					Color(255, 255, 255)
-					Text(x + 20 * MenuScale, y, "Enable console:")
-					If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
-						DrawOptionsTooltip(tX, tY, tW, tH, "consoleenable")
-					EndIf
-					
-					y = y + 30 * MenuScale
-					
-					If CanOpenConsole Then
-						Color(255, 255, 255)
-						Text(x + 20 * MenuScale, y, "Open console on error:")
+					If CurrLoadGamePage = 0 Then
+						y = y + 20 * MenuScale
+						
+						Color(255, 255, 255)				
+						Text(x + 20 * MenuScale, y, "Show HUD:")	
 						If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
-							DrawOptionsTooltip(tX, tY, tW, tH, "consoleerror")
+							DrawOptionsTooltip(tX, tY, tW, tH, "hud")
 						EndIf
-					EndIf
-					
-					y = y + 30 * MenuScale
-					
-					If CanOpenConsole Then
-					    Color(255, 255, 255)
-					    Text(x + 20 * MenuScale, y, "Console Version:")
-				        If ConsoleVersion = 1 Then
-							Text(x + 350 * MenuScale, y, "New")
-					    Else
-					        Text(x + 350 * MenuScale, y, "Classic")
-					    EndIf    
-					    If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
-							DrawOptionsTooltip(tX, tY, tW, tH, "consoleversion")
-					    EndIf
-					EndIf
-					
-					y = y + 30 * MenuScale
-					
-					Color(255, 255, 255)
-					Text(x + 20 * MenuScale, y, "Achievement popups:")
-					If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
-						DrawOptionsTooltip(tX, tY, tW, tH, "achpopup")
-					EndIf
-					
-					y = y + 50 * MenuScale
-					
-					Color(255, 255, 255)
-					Text(x + 20 * MenuScale, y, "Show FPS:")
-					If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
-						DrawOptionsTooltip(tX, tY, tW, tH, "showfps")
-					EndIf
-					
-					y = y + 30 * MenuScale
-					
-					Color(255, 255, 255)
-					Text(x + 20 * MenuScale, y, "Framelimit:")
-					Color(255, 255, 255)
-					If DrawTick(x + 310 * MenuScale, y, CurrFrameLimit > 0.0) Then
-						Color(255, 255, 0)
-						Text(x + 25 * MenuScale, y + 25 * MenuScale, FrameLimit + " FPS")
-					EndIf
-					If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
-						DrawOptionsTooltip(tX, tY, tW, tH, "framelimit", FrameLimit)
-					EndIf
-					If MouseOn(x + 150 * MenuScale, y + 30 * MenuScale, 100 * MenuScale + 14, 20)
-						DrawOptionsTooltip(tX, tY, tW, tH, "framelimit", FrameLimit)
-					EndIf
-					
-					y = y + 70 * MenuScale
-					
-					Color(255, 255, 255)
-					Text(x + 20 * MenuScale, y, "Use launcher:")
-					If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
-						DrawOptionsTooltip(tX, tY, tW, tH, "uselauncher")
+						
+						y = y + 30 * MenuScale
+						
+						Color(255, 255, 255)
+						Text(x + 20 * MenuScale, y, "Enable console:")
+						If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
+							DrawOptionsTooltip(tX, tY, tW, tH, "consoleenable")
+						EndIf
+						
+						y = y + 30 * MenuScale
+						
+						If CanOpenConsole Then
+							Color(255, 255, 255)
+							Text(x + 20 * MenuScale, y, "Open console on error:")
+							If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
+								DrawOptionsTooltip(tX, tY, tW, tH, "consoleerror")
+							EndIf
+						EndIf
+						
+						y = y + 30 * MenuScale
+						
+						If CanOpenConsole Then
+							Color(255, 255, 255)
+							Text(x + 20 * MenuScale, y, "Console Version:")
+							If ConsoleVersion = 1 Then
+								Text(x + 350 * MenuScale, y, "New")
+							Else
+								Text(x + 350 * MenuScale, y, "Classic")
+							EndIf    
+							If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
+								DrawOptionsTooltip(tX, tY, tW, tH, "consoleversion")
+							EndIf
+						EndIf
+						
+						y = y + 30 * MenuScale
+						
+						Color(255, 255, 255)
+						Text(x + 20 * MenuScale, y, "Achievement popups:")
+						If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
+							DrawOptionsTooltip(tX, tY, tW, tH, "achpopup")
+						EndIf
+						
+						y = y + 50 * MenuScale
+						
+						Color(255, 255, 255)
+						Text(x + 20 * MenuScale, y, "Show FPS:")
+						If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
+							DrawOptionsTooltip(tX, tY, tW, tH, "showfps")
+						EndIf
+						
+						y = y + 30 * MenuScale
+						
+						Color(255, 255, 255)
+						Text(x + 20 * MenuScale, y, "Framelimit:")
+						Color(255, 255, 255)
+						If DrawTick(x + 310 * MenuScale, y, CurrFrameLimit > 0.0) Then
+							Color(255, 255, 0)
+							Text(x + 25 * MenuScale, y + 25 * MenuScale, FrameLimit + " FPS")
+						EndIf
+						If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
+							DrawOptionsTooltip(tX, tY, tW, tH, "framelimit", FrameLimit)
+						EndIf
+						If MouseOn(x + 150 * MenuScale, y + 30 * MenuScale, 100 * MenuScale + 14, 20)
+							DrawOptionsTooltip(tX, tY, tW, tH, "framelimit", FrameLimit)
+						EndIf
+					Else
+						y = y + 20 * MenuScale
+						
+						Color(255, 255, 255)
+						Text(x + 20 * MenuScale, y, "Use launcher:")
+						If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
+							DrawOptionsTooltip(tX, tY, tW, tH, "uselauncher")
+						EndIf
 					EndIf
 					;[End Block]
 				EndIf
@@ -1470,7 +1488,6 @@ Function RenderMainMenu()
 				SetFont(fo\FontID[1])
 				Text(x + Width / 2, y + Height / 2, "LOAD MAP", True, True)
 				
-				x = 160 * MenuScale
 				y = y + Height + 20 * MenuScale
 				Width = 580 * MenuScale
 				Height = 350 * MenuScale
@@ -1482,9 +1499,9 @@ Function RenderMainMenu()
 				tW = 400 * MenuScale
 				tH = 150 * MenuScale
 				
-				DrawFrame(x + 50 * MenuScale, y + 510 * MenuScale, Width - 100 * MenuScale, 55 * MenuScale)
+				DrawFrame(x, y + 510 * MenuScale, Width, 50 * MenuScale)
 				
-				Text(x + (Width / 2.0), y + 536 * MenuScale, "Page " + Int(Max((CurrLoadGamePage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SavedMapsAmount) / 6.0))), 1)), True, True)
+				Text(x + (Width / 2.0), y + 535 * MenuScale, "Page " + Int(Max((CurrLoadGamePage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SavedMapsAmount) / 6.0))), 1)), True, True)
 				
 				SetFont(fo\FontID[0])
 				
@@ -2870,7 +2887,7 @@ Function DrawOptionsTooltip(x%, y%, Width%, Height%, Option$, Value# = 0.0, InGa
 			;[End Block]
 		Case "consoleversion"
 			;[Block]
-		    Txt = Chr(34) + "Change console version" + Chr(34) + " is self-explanatory."
+		    Txt = Chr(34) + "Console version" + Chr(34) + " is self-explanatory."
 			;[End Block]
 		Case "fov"
 			;[Block]

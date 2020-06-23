@@ -7881,14 +7881,6 @@ Function DrawMenu()
 					If MouseOn(x + 150 * MenuScale, y + 30 * MenuScale, 100 * MenuScale + 14, 20)
 						DrawOptionsTooltip(tX, tY, tW, tH, "framelimit", FrameLimit)
 					EndIf
-					
-					y = y + 70 * MenuScale
-					
-					Color(255, 255, 255)
-					Text(x, y, "Use launcher:")
-					If MouseOn(x + 270 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
-						DrawOptionsTooltip(tX, tY, tW, tH, "uselauncher")
-					EndIf
 					;[End Block]
 			End Select
 		ElseIf AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg > 0 And me\KillTimer >= 0.0
