@@ -1845,6 +1845,8 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 			Next
 		EndIf
 		
+		Color(255, 255, 255)
+		
 		If SelectedLoadingScreen\Title = "CWM" Then
 			
 			If (Not ShortLoading) Then 
