@@ -1565,7 +1565,7 @@ Function UpdateLauncher()
 	
 	MenuScale = 1
 	
-	Graphics3DExt(LauncherWidth, LauncherHeight, 0, 2)
+	Graphics3DExt(LauncherWidth, LauncherHeight, 2)
 	
 	SetBuffer(BackBuffer())
 	

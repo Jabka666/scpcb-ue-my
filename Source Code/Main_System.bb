@@ -82,8 +82,8 @@ If LauncherEnabled Then
 	UpdateLauncher()
 	
 	; ~ New "fake fullscreen" - ENDSHN Psst, it's called borderless windowed mode -- Love Mark
-	If BorderlessWindowed
-		Graphics3DExt(G_Viewport_Width, G_Viewport_Height, 0, 2)
+	If BorderlessWindowed Then
+		Graphics3DExt(G_Viewport_Width, G_Viewport_Height, 2)
 		
 		; ~ Change the window style to 'WS_POPUP' and then set the window position to force the style to update
 		api_SetWindowLong(G_App_Handle, C_GWL_STYLE, C_WS_POPUP)
@@ -100,10 +100,10 @@ If LauncherEnabled Then
 		RealGraphicWidth = GraphicWidth
 		RealGraphicHeight = GraphicHeight
 		If FullScreen Then
-			Graphics3DExt(GraphicWidth, GraphicHeight, 0, 1)
+			Graphics3DExt(GraphicWidth, GraphicHeight, 1)
 		Else
-			Graphics3DExt(GraphicWidth, GraphicHeight, 0, 2)
-		End If
+			Graphics3DExt(GraphicWidth, GraphicHeight, 2)
+		EndIf
 	EndIf
 Else
 	For i% = 1 To TotalGFXModes
@@ -124,8 +124,8 @@ Else
 	GraphicHeight = GFXModeHeights(SelectedGFXMode)
 	
 	; ~ New "fake fullscreen" - ENDSHN Psst, it's called borderless windowed mode -- Love Mark
-	If BorderlessWindowed
-		Graphics3DExt(G_Viewport_Width, G_Viewport_Height, 0, 2)
+	If BorderlessWindowed Then
+		Graphics3DExt(G_Viewport_Width, G_Viewport_Height, 2)
 		
 		; ~ Change the window style to 'WS_POPUP' and then set the window position to force the style to update
 		api_SetWindowLong(G_App_Handle, C_GWL_STYLE, C_WS_POPUP)
@@ -142,10 +142,10 @@ Else
 		RealGraphicWidth = GraphicWidth
 		RealGraphicHeight = GraphicHeight
 		If FullScreen Then
-			Graphics3DExt(GraphicWidth, GraphicHeight, 0, 1)
+			Graphics3DExt(GraphicWidth, GraphicHeight, 1)
 		Else
-			Graphics3DExt(GraphicWidth, GraphicHeight, 0, 2)
-		End If
+			Graphics3DExt(GraphicWidth, GraphicHeight, 2)
+		EndIf
 	EndIf
 EndIf
 
@@ -11811,7 +11811,7 @@ Function EntityScaleZ#(Entity%, Globl% = False)
 	Return(Sqr(TFormedX() * TFormedX() + TFormedY() * TFormedY() + TFormedZ() * TFormedZ()))
 End Function 
 
-Function Graphics3DExt%(Width%, Height%, Depth% = 32, Mode% = 2)
+Function Graphics3DExt%(Width%, Height%, Mode% = 2)
 	Graphics3D(Width, Height, Depth, Mode)
 	InitFastResize()
 	AntiAlias(Opt_AntiAlias)
