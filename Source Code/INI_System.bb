@@ -355,9 +355,7 @@ Global GraphicWidth% = GetINIInt(OptionFile, "Global", "Width")
 
 Global GraphicHeight% = GetINIInt(OptionFile, "Global", "Height")
 
-Global FullScreen% = GetINIInt(OptionFile, "Global", "Fullscreen")
-
-Global BorderlessWindowed% = GetINIInt(OptionFile, "Global", "Borderless Windowed")
+Global DisplayMode% = GetINIInt(OptionFile, "Global", "Display Mode")
 
 Global Brightness% = GetINIFloat(OptionFile, "Global", "Brightness")
 

@@ -13,15 +13,6 @@ Include "Source Code\StrictLoads.bb"
 Include "Source Code\Keys_System.bb"
 Include "Source Code\INI_System.bb"
 
-Global ErrorFile$ = "error_log_"
-
-Local ErrorFileInd% = 0
-
-While FileType(ErrorFile + Str(ErrorFileInd) + ".txt") <> 0
-	ErrorFileInd = ErrorFileInd + 1
-Wend
-ErrorFile = ErrorFile + Str(ErrorFileInd) + ".txt"
-
 Type Fonts
 	Field FontID%[MaxFontIDAmount - 1]
 	Field ConsoleFont%
@@ -38,15 +29,10 @@ Global EnableSFXRelease_Prev% = EnableSFXRelease
 
 Global ArrowIMG%[4]
 
-Global SelectedGFXMode%
-
 Global Fresize_Image%, Fresize_Texture%, Fresize_Texture2%
 Global Fresize_Cam%
 
 Global WireFrameState%
-
-Global TotalGFXModes% = CountGfxModes3D(), GFXModes%
-Dim GFXModeWidths%(TotalGFXModes), GFXModeHeights%(TotalGFXModes)
 
 Global RealGraphicWidth%, RealGraphicHeight%
 Global AspectRatioRatio#
@@ -75,68 +61,38 @@ Select TextureDetails
 		;[End Block]
 End Select
 
-If LauncherEnabled Then 
+Type Launcher
+	Field TotalGFXModes%
+	Field GFXModes%
+	Field SelectedGFXMode%
+	Field GFXModeWidths%[64], GFXModeHeights%[64]
+End Type
+
+If LauncherEnabled Then
+	Local lnchr.Launcher = New Launcher
+	
+	lnchr\TotalGFXModes = CountGfxModes3D()
+	
 	AspectRatioRatio = 1.0
-	UpdateLauncher()
 	
-	; ~ New "fake fullscreen" - ENDSHN Psst, it's called borderless windowed mode -- Love Mark
-	If BorderlessWindowed Then
-		Graphics3DExt(DesktopWidth(), DesktopHeight(), 4)
-		
-		RealGraphicWidth = DesktopWidth()
-		RealGraphicHeight = DesktopHeight()
-		
-		AspectRatioRatio = (Float(GraphicWidth) / Float(GraphicHeight)) / (Float(RealGraphicWidth) / Float(RealGraphicHeight))
-		
-		FullScreen = False
-	Else
-		AspectRatioRatio = 1.0
-		RealGraphicWidth = GraphicWidth
-		RealGraphicHeight = GraphicHeight
-		If FullScreen Then
-			Graphics3DExt(GraphicWidth, GraphicHeight, 1)
-		Else
-			Graphics3DExt(GraphicWidth, GraphicHeight, 2)
-		EndIf
-	EndIf
+	UpdateLauncher(lnchr)
+	
+	Delete(lnchr)
+EndIf
+
+; ~ New "fake fullscreen" - ENDSHN Psst, it's called borderless windowed mode -- Love Mark
+If DisplayMode = 1 Then
+	Graphics3DExt(DesktopWidth(), DesktopHeight(), 4)
+	
+	RealGraphicWidth = DesktopWidth()
+	RealGraphicHeight = DesktopHeight()
+	
+	AspectRatioRatio = (Float(GraphicWidth) / Float(GraphicHeight)) / (Float(RealGraphicWidth) / Float(RealGraphicHeight))
 Else
-	For i% = 1 To TotalGFXModes
-		Local SameFound% = False
-		
-		For n% = 0 To TotalGFXModes - 1
-			If GFXModeWidths(n) = GfxModeWidth(i) And GFXModeHeights(n) = GfxModeHeight(i) Then SameFound = True : Exit
-		Next
-		If SameFound = False Then
-			If GraphicWidth = GfxModeWidth(i) And GraphicHeight = GfxModeHeight(i) Then SelectedGFXMode = GFXModes
-			GFXModeWidths(GFXModes) = GfxModeWidth(i)
-			GFXModeHeights(GFXModes) = GfxModeHeight(i)
-			GFXModes = GFXModes + 1
-		End If
-	Next
-	
-	GraphicWidth = GFXModeWidths(SelectedGFXMode)
-	GraphicHeight = GFXModeHeights(SelectedGFXMode)
-	
-	; ~ New "fake fullscreen" - ENDSHN Psst, it's called borderless windowed mode -- Love Mark
-	If BorderlessWindowed Then
-		Graphics3DExt(DesktopWidth(), DesktopHeight(), 4)
-		
-		RealGraphicWidth = DesktopWidth()
-		RealGraphicHeight = DesktopHeight()
-		
-		AspectRatioRatio = (Float(GraphicWidth) / Float(GraphicHeight)) / (Float(RealGraphicWidth) / Float(RealGraphicHeight))
-		
-		FullScreen = False
-	Else
-		AspectRatioRatio = 1.0
-		RealGraphicWidth = GraphicWidth
-		RealGraphicHeight = GraphicHeight
-		If FullScreen Then
-			Graphics3DExt(GraphicWidth, GraphicHeight, 1)
-		Else
-			Graphics3DExt(GraphicWidth, GraphicHeight, 2)
-		EndIf
-	EndIf
+	AspectRatioRatio = 1.0
+	RealGraphicWidth = GraphicWidth
+	RealGraphicHeight = GraphicHeight
+	Graphics3DExt(GraphicWidth, GraphicHeight, (DisplayMode = 0) + 1)
 EndIf
 
 Global MenuScale# = (GraphicHeight / 1024.0)
@@ -1764,7 +1720,7 @@ Function UpdateConsole()
 		
 		RenderMenuInputBoxes()
 		
-		If FullScreen Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+		If DisplayMode = 2 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	EndIf
 	
 	SetFont(fo\FontID[0])
@@ -2928,7 +2884,7 @@ Repeat
 		MainLoop()
 	EndIf
 	
-	If BorderlessWindowed Then
+	If DisplayMode = 1 Then
 		If (RealGraphicWidth <> GraphicWidth) Lor (RealGraphicHeight <> GraphicHeight) Then
 			SetBuffer(TextureBuffer(Fresize_Texture))
 			ClsColor(0, 0, 0) : Cls
@@ -3649,7 +3605,7 @@ Function DrawEnding()
 	
 	RenderMenuButtons()
 	
-	If FullScreen Then DrawImage(CursorIMG), ScaledMouseX(), ScaledMouseY()
+	If DisplayMode = 2 Then DrawImage(CursorIMG), ScaledMouseX(), ScaledMouseY()
 	
 	SetFont(fo\FontID[0])
 End Function
@@ -4885,7 +4841,7 @@ Function DrawGUI()
 			x = x + 44 * Scale
 			y = y + 249 * Scale
 			
-			If FullScreen Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+			If DisplayMode = 2 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 		EndIf
 	EndIf
 	
@@ -4957,7 +4913,7 @@ Function DrawGUI()
 			EndIf
 		EndIf
 		
-		If FullScreen Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+		If DisplayMode = 2 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	ElseIf InvOpen Then
 		x = GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
 		y = GraphicHeight / 2 - INVENTORY_GFX_SIZE - INVENTORY_GFX_SPACING
@@ -5084,7 +5040,7 @@ Function DrawGUI()
 			EndIf
 		EndIf
 		
-		If FullScreen Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+		If DisplayMode = 2 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	Else
 		If SelectedItem <> Null Then
 			Select SelectedItem\ItemTemplate\TempName
@@ -7977,7 +7933,7 @@ Function DrawMenu()
 		RenderMenuSlideBars()
 		RenderMenuSliders()
 		
-		If FullScreen Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+		If DisplayMode = 2 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	EndIf
 	
 	SetFont(fo\FontID[0])
@@ -10986,7 +10942,7 @@ Function Use294()
 	x = GraphicWidth / 2 - (ImageWidth(tt\ImageID[5]) / 2)
 	y = GraphicHeight / 2 - (ImageHeight(tt\ImageID[5]) / 2)
 	DrawImage(tt\ImageID[5], x, y)
-	If FullScreen Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+	If DisplayMode = 2 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	
 	Temp = True
 	If PlayerRoom\SoundCHN <> 0 Then Temp = False
@@ -12285,5 +12241,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#10C3#135C#1DAA
+;~B#1097#1330#1D7E
 ;~C#Blitz3D

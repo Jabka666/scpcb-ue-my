@@ -890,7 +890,7 @@ Function UpdateMainMenu()
 	Text(20, GraphicHeight - 50, "v" + VersionNumber)
 	If ShowFPS Then SetFont(fo\ConsoleFont) : Text(20, GraphicHeight - 30, "FPS: " + ft\fps) : SetFont(fo\FontID[0])
 	
-	If Fullscreen Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+	If DisplayMode = 2 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	
 	SetFont(fo\FontID[0])
 End Function
@@ -1390,7 +1390,7 @@ Function RenderMainMenu()
 					
 					DrawFrame(x, y + Height, Width, 30 * MenuScale)	
 					
-					Text(x + (Width / 2), y + Height + 15, "Page " + Int(Max((CurrLoadGamePage + 1), 1)) + "/2", True, True)
+					Text(x + (Width / 2), y + Height + 15 * MenuScale, "Page " + Int(Max((CurrLoadGamePage + 1), 1)) + "/2", True, True)
 					
 					If CurrLoadGamePage = 0 Then
 						y = y + 20 * MenuScale
@@ -1562,7 +1562,7 @@ Function RenderMainMenu()
 	RenderMenuSliders()
 End Function
 
-Function UpdateLauncher()
+Function UpdateLauncher(lnchr.Launcher)
 	Local i%, n%
 	
 	MenuScale = 1
@@ -1581,19 +1581,23 @@ Function UpdateLauncher()
 	MaskImage(MenuBlack, 255, 255, 0)
 	
 	Local LauncherIMG% = LoadImage_Strict("GFX\menu\launcher.png")
+	Local LauncherArrowIMG% = LoadImage_Strict("GFX\menu\arrow.png")
 	
-	For i = 1 To TotalGFXModes
+	RotateImage(LauncherArrowIMG, -90.0)
+	MidHandle(LauncherArrowIMG)
+	
+	For i = 1 To lnchr\TotalGFXModes
 		Local SameFound% = False
 		
-		For n = 0 To TotalGFXModes - 1
-			If GfxModeWidths(n) = GfxModeWidth(i) And GfxModeHeights(n) = GfxModeHeight(i) Then SameFound = True : Exit
+		For n = 0 To lnchr\TotalGFXModes - 1
+			If lnchr\GfxModeWidths[n] = GfxModeWidth(i) And lnchr\GfxModeHeights[n] = GfxModeHeight(i) Then SameFound = True : Exit
 		Next
 		If SameFound = False Then
-			If GraphicWidth = GfxModeWidth(i) And GraphicHeight = GfxModeHeight(i) Then SelectedGFXMode = GFXModes
-			GfxModeWidths(GFXModes) = GfxModeWidth(i)
-			GfxModeHeights(GFXModes) = GfxModeHeight(i)
-			GFXModes = GFXModes + 1 
-		End If
+			If GraphicWidth = GfxModeWidth(i) And GraphicHeight = GfxModeHeight(i) Then lnchr\SelectedGFXMode = lnchr\GFXModes
+			lnchr\GfxModeWidths[lnchr\GFXModes] = GfxModeWidth(i)
+			lnchr\GfxModeHeights[lnchr\GFXModes] = GfxModeHeight(i)
+			lnchr\GFXModes = lnchr\GFXModes + 1 
+		EndIf
 	Next
 	
 	AppTitle("SCP - Containment Breach Ultimate Edition Launcher")
@@ -1614,46 +1618,62 @@ Function UpdateLauncher()
 		Local x% = 40
 		Local y% = 270 - 65
 		
-		For i = 0 To (GFXModes - 1)
+		For i = 0 To (lnchr\GFXModes - 1)
 			Color(0, 0, 0)
-			If SelectedGFXMode = i Then Rect(x - 1, y - 5, 100, 20, False)
+			If lnchr\SelectedGFXMode = i Then Rect(x - 1, y - 5, 100, 20, False)
 			
-			Text(x, y, (GfxModeWidths(i) + "x" + GfxModeHeights(i)))
+			Text(x, y, (lnchr\GFXModeWidths[i] + "x" + lnchr\GfxModeHeights[i]))
 			If MouseOn(x - 1, y - 5, 100, 20) Then
 				Color(100, 100, 100)
 				Rect(x - 1, y - 5, 100, 20, False)
-				If MouseHit1 Then SelectedGFXMode = i
+				If MouseHit1 Then lnchr\SelectedGFXMode = i
 			EndIf
 			
 			y = y + 20
-			If y >= 250 - 65 + (LauncherHeight - 80 - 260) Then y = 270 - 65 : x = x + 100
+			If y >= 250 - 65 + (LauncherHeight - 340) Then y = 270 - 65 : x = x + 100
 		Next
 		
-		Fullscreen = DrawLauncherTick(40 + 430 - 15, 260 - 55 + 5 - 8, Fullscreen, BorderlessWindowed)
-		BorderlessWindowed = DrawLauncherTick(40 + 430 - 15, 260 - 55 + 35, BorderlessWindowed)
+		LauncherEnabled = DrawLauncherTick(455, 202, LauncherEnabled)
+		Text(485, 206, "Use launcher")
 		
-		Local Lock% = False
+		Text(455, 234, "Display Mode:")
 		
-		If BorderlessWindowed Lor (Not Fullscreen) Then Lock = True
-		LauncherEnabled = DrawLauncherTick(40 + 430 - 15, 260 - 55 + 65 + 8, LauncherEnabled)
+		Local Txt$
 		
-		If BorderlessWindowed Then
-			Color(255, 0, 0)
-			Fullscreen = False
-		Else
-			Color(255, 255, 255)
+		Select DisplayMode
+			Case 0
+				;[Block]
+				Txt = "Windowed"
+				Text(478, 262 - 55 + 140, "Current Resolution: " + lnchr\GfxModeWidths[lnchr\SelectedGFXMode] + "x" + lnchr\GfxModeHeights[lnchr\SelectedGFXMode] + ",32", True)
+				;[End Block]
+			Case 1
+				;[Block]
+				Txt = "Borderless"
+				Text(478, 262 - 55 + 140, "Current Resolution: " + lnchr\GfxModeWidths[lnchr\SelectedGFXMode] + "x" + lnchr\GfxModeHeights[lnchr\SelectedGFXMode] + ",32", True)
+				If lnchr\GfxModeWidths[lnchr\SelectedGFXMode] < DesktopWidth() Then
+					Text(365, 412, "(upscaled to: " + DesktopWidth() + "x" + DesktopHeight() + ",32)")
+				ElseIf lnchr\GfxModeWidths[lnchr\SelectedGFXMode] > DesktopWidth() Then
+					Text(365, 412, "(downscaled to: " + DesktopWidth() + "x" + DesktopHeight() + ",32)")
+				EndIf
+				;[End Block]
+			Case 2
+				;[Block]
+				Txt = "Fullscreen"
+				Text(478, 262 - 55 + 140, "Current Resolution: " + lnchr\GfxModeWidths[lnchr\SelectedGFXMode] + "x" + lnchr\GfxModeHeights[lnchr\SelectedGFXMode] + ",32", True)
+				;[End Block]
+		End Select
+		DrawFrame(455, 254, 120, 30)
+		Text(515, 264, Txt, True)
+		If DrawLauncherButton(575, 254, 30, 30, "", False) Then
+			If DisplayMode < 2 Then
+				DisplayMode = DisplayMode + 1
+			Else
+				DisplayMode = 0
+			EndIf
 		EndIf
+		DrawImage(LauncherArrowIMG, 589, 268)
 		
-		Text(40 + 430 + 15, 262 - 55 + 5 - 8, "Fullscreen")
-		Color(255, 255, 255)
-		Text(40 + 430 + 15, 262 - 55 + 35 - 8, "Borderless", False, False)
-		Text(40 + 430 + 15, 262 - 55 + 35 + 12, "windowed mode", False, False)
-		
-		Color(255, 255, 255)
-		Text(40 + 430 + 15, 262 - 55 + 65 + 8, "Use launcher")
-		Text(40 + 260 + 15, 262 - 55 + 140, "Current Resolution: " + (GfxModeWidths(SelectedGFXMode) + "x" + GfxModeHeights(SelectedGFXMode) + ",32"))
-		
-		If DrawLauncherButton(LauncherWidth - 275, LauncherHeight - 50 - 55, 150, 30, "REPORT A BUG!", False, False) Then
+		If DrawLauncherButton(LauncherWidth - 275, LauncherHeight - 105, 150, 30, "REPORT A BUG!", False, False) Then
 		    ExecFile("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition/news/bug-reports1")
 			Quit = True
 			Exit
@@ -1663,9 +1683,9 @@ Function UpdateLauncher()
 		    ExecFile("Changelog_Reborn.txt")
 		EndIf
 		
-		If DrawLauncherButton(LauncherWidth - 30 - 90, LauncherHeight - 50 - 55, 100, 30, "LAUNCH", False, False) Then
-			GraphicWidth = GfxModeWidths(SelectedGFXMode)
-			GraphicHeight = GfxModeHeights(SelectedGFXMode)
+		If DrawLauncherButton(LauncherWidth - 30 - 90, LauncherHeight - 105, 100, 30, "LAUNCH", False, False) Then
+			GraphicWidth = lnchr\GFXModeWidths[lnchr\SelectedGFXMode]
+			GraphicHeight = lnchr\GFXModeHeights[lnchr\SelectedGFXMode]
 			RealGraphicWidth = GraphicWidth
 			RealGraphicHeight = GraphicHeight
 			Exit
@@ -1675,14 +1695,14 @@ Function UpdateLauncher()
 		Flip
 	Forever
 	
-	PutINIValue(OptionFile, "Global", "Width", GfxModeWidths(SelectedGFXMode))
-	PutINIValue(OptionFile, "Global", "Height", GfxModeHeights(SelectedGFXMode))
-	PutINIValue(OptionFile, "Global", "Fullscreen", Fullscreen)
+	PutINIValue(OptionFile, "Global", "Width", lnchr\GFXModeWidths[lnchr\SelectedGFXMode])
+	PutINIValue(OptionFile, "Global", "Height", lnchr\GFXModeHeights[lnchr\SelectedGFXMode])
 	PutINIValue(OptionFile, "Launcher", "Launcher Enabled", LauncherEnabled)
-	PutINIValue(OptionFile, "Global", "Borderless Windowed", BorderlessWindowed)
+	PutINIValue(OptionFile, "Global", "Display Mode", DisplayMode)
 	
 	If Quit Then End
 	
+	FreeImage(LauncherArrowIMG)
 	FreeImage(LauncherIMG)
 End Function
 
@@ -1964,8 +1984,8 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 			FlushMouse()
 		EndIf
 		
-		If BorderlessWindowed Then
-			If (RealGraphicWidth <> GraphicWidth) Lor (RealGraphicHeight <> GraphicHeight) Then
+		If DisplayMode = 1 Then
+			If RealGraphicWidth <> GraphicWidth Lor RealGraphicHeight <> GraphicHeight Then
 				SetBuffer(TextureBuffer(Fresize_Texture))
 				ClsColor(0, 0, 0) : Cls
 				CopyRect(0, 0, GraphicWidth, GraphicHeight, 1024 - GraphicWidth / 2, 1024 - GraphicHeight / 2, BackBuffer(), TextureBuffer(Fresize_Texture))
