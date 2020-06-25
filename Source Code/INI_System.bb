@@ -13,7 +13,7 @@ Function ReadINILine$(file.INIFile)
 	Local RetStr$ = ""
 	
 	RdByte = PeekByte(Bank, Offset)
-	While ((FirstByte) Or ((RdByte <> 13) And (RdByte <> 10))) And (Offset < file\Size)
+	While ((FirstByte) Lor ((RdByte <> 13) And (RdByte <> 10))) And (Offset < file\Size)
 		RdByte = PeekByte(Bank, Offset)
 		If ((RdByte <> 13) And (RdByte <> 10)) Then
 			FirstByte = False
@@ -46,7 +46,7 @@ Function UpdateINIFile$(FileName$)
 	Wend
 	file\Bank = CreateBank(FleSize)
 	file\Size = 0
-	While Not Eof(f)
+	While (Not Eof(f))
 		PokeByte(file\Bank, file\Size, ReadByte(f))
 		file\Size = file\Size + 1
 	Wend
@@ -85,7 +85,7 @@ Function GetINIString$(File$, Section$, Parameter$, DefaultValue$ = "")
 					If Lower(Trim(Left(TemporaryString, Max(Instr(TemporaryString, "=") - 1, 0)))) = Lower(Parameter) Then
 						Return(Trim(Right(TemporaryString, Len(TemporaryString) - Instr(TemporaryString, "="))))
 					EndIf
-				Until (Left(TemporaryString, 1) = "[") Or (lfile\BankOffset >= lfile\Size)
+				Until (Left(TemporaryString, 1) = "[") Lor (lfile\BankOffset >= lfile\Size)
 				Return(DefaultValue)
 			EndIf
 		EndIf
@@ -114,7 +114,7 @@ Function GetINIString2$(File$, Start%, Parameter$, DefaultValue$ = "")
 	Local f% = ReadFile(File)
 	Local n% = 0
 	
-	While Not Eof(f)
+	While (Not Eof(f))
 		Local StrTemp$ = ReadLine(f)
 		
 		n = n + 1
@@ -125,7 +125,7 @@ Function GetINIString2$(File$, Start%, Parameter$, DefaultValue$ = "")
 					CloseFile(f)
 					Return(Trim(Right(TemporaryString, Len(TemporaryString) - Instr(TemporaryString, "="))))
 				EndIf
-			Until Left(TemporaryString, 1) = "[" Or Eof(f)
+			Until Left(TemporaryString, 1) = "[" Lor Eof(f)
 			CloseFile(f)
 			Return(DefaultValue)
 		EndIf
@@ -154,7 +154,7 @@ Function GetINISectionLocation%(File$, Section$)
 	
 	Local n% = 0
 	
-	While Not Eof(f)
+	While (Not Eof(f))
 		Local StrTemp$ = ReadLine(f)
 		
 		n = n + 1
@@ -162,7 +162,7 @@ Function GetINISectionLocation%(File$, Section$)
 			StrTemp = Lower(StrTemp)
 			Temp = Instr(StrTemp, Section)
 			If Temp > 0 Then
-				If Mid(StrTemp, Temp - 1, 1) = "[" Or Mid(StrTemp, Temp - 1, 1) = "|" Then
+				If Mid(StrTemp, Temp - 1, 1) = "[" Lor Mid(StrTemp, Temp - 1, 1) = "|" Then
 					CloseFile(f)
 					Return(n)
 				EndIf
@@ -174,7 +174,7 @@ Function GetINISectionLocation%(File$, Section$)
 End Function
 
 Function PutINIValue%(File$, INI_sSection$, INI_sKey$, INI_sValue$)
-	; ~ Returns: True (Success) Or False (Failed)
+	; ~ Returns: True (Success) or False (Failed)
 	INI_sSection = "[" + Trim(INI_sSection) + "]"
 	
 	Local INI_sUpperSection$ = Upper(INI_sSection)

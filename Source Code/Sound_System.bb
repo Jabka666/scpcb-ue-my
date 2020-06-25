@@ -69,13 +69,13 @@ Function UpdateMusic()
 		
 		If NowPlaying < 66 Then
 			If CurrMusic = 0
-				MusicCHN = StreamSound_Strict("SFX\Music\" + Music(NowPlaying) + ".ogg", 0.0, Mode)
+				MusicCHN = StreamSound_Strict("SFX\Music\" + Music(NowPlaying) + ".ogg", 0.0, 2)
 				CurrMusic = 1
 			EndIf
 			SetStreamVolume_Strict(MusicCHN, CurrMusicVolume)
 		EndIf
 	Else
-		If fpst\FPSFactor[0] > 0.0 Or OptionsMenu = 2 Then
+		If fpst\FPSFactor[0] > 0.0 Lor OptionsMenu = 2 Then
 			If ChannelPlaying(MusicCHN) = False Then MusicCHN = PlaySound_Strict(CustomMusic)
 			ChannelVolume(MusicCHN, 1.0 * MusicVolume)
 		EndIf

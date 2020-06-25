@@ -10,12 +10,6 @@ Function GenerateSeedNumber(Seed$)
 	Return(Temp)
 End Function
 
-Function Distance#(x1#, y1#, x2#, y2#)
-	Local x# = x2 - x1, y# = y2 - y1
-	
-	Return(Sqr(x * x + y * y))
-End Function
-
 Function CurveValue#(Number#, Old#, Smooth#)
 	If fpst\FPSFactor[0] = 0.0 Then Return(Old)
 	
@@ -42,54 +36,6 @@ Function WrapAngle#(Angle#)
 		Return(360.0 + (Angle Mod 360.0))
 	Else
 		Return(Angle Mod 360.0)
-	EndIf
-End Function
-
-Function MoveForward%(Dir%, PathX%, PathY%, RetVal% = 0)
-	; ~ Move 1 unit along the grid in the designated direction
-	If Dir = 1 Then
-		If RetVal = 0 Then
-			Return(PathX)
-		Else
-			Return(PathY + 1)
-		EndIf
-	EndIf
-	If RetVal = 0 Then
-		Return(PathX - 1 + Dir)
-	Else
-		Return(PathY)
-	EndIf
-End Function
-
-Function TurnIfDeviating%(Max_Deviation_Distance_%, Pathx%, Center_%, Dir%, RetVal% = 0)
-	; ~ Check if deviating and return the answer. if deviating, turn around
-	Local Current_Deviation% = Center_ - Pathx
-	Local Deviated% = False
-	
-	If (Dir = 0 And Current_Deviation >= Max_Deviation_Distance_) Or (Dir = 2 And Current_Deviation =< -Max_Deviation_Distance_) Then
-		Dir = (Dir + 2) Mod 4
-		Deviated = True
-	EndIf
-	If RetVal = 0 Then 
-		Return(Dir) 
-	Else 
-		Return(Deviated)
-	EndIf
-End Function
-
-Function Min#(a#, b#)
-	If a < b Then
-		Return(a)
-	Else
-		Return(b)
-	EndIf
-End Function
-
-Function Max#(a#, b#)
-	If a > b Then
-		Return(a)
-	Else
-		Return(b)
 	EndIf
 End Function
 
@@ -124,6 +70,38 @@ End Function
 Function Chance%(Chanc%)
 	; ~ Perform a chance given a probability
 	Return(Rand(0, 100) =< Chanc)
+End Function
+
+Function MoveForward%(Dir%, PathX%, PathY%, RetVal% = 0)
+	; ~ Move 1 unit along the grid in the designated direction
+	If Dir = 1 Then
+		If RetVal = 0 Then
+			Return(PathX)
+		Else
+			Return(PathY + 1)
+		EndIf
+	EndIf
+	If RetVal = 0 Then
+		Return(PathX - 1 + Dir)
+	Else
+		Return(PathY)
+	EndIf
+End Function
+
+Function TurnIfDeviating%(Max_Deviation_Distance_%, Pathx%, Center_%, Dir%, RetVal% = 0)
+	; ~ Check if deviating and return the answer. if deviating, turn around
+	Local Current_Deviation% = Center_ - Pathx
+	Local Deviated% = False
+	
+	If (Dir = 0 And Current_Deviation >= Max_Deviation_Distance_) Lor (Dir = 2 And Current_Deviation =< -Max_Deviation_Distance_) Then
+		Dir = (Dir + 2) Mod 4
+		Deviated = True
+	EndIf
+	If RetVal = 0 Then 
+		Return(Dir) 
+	Else 
+		Return(Deviated)
+	EndIf
 End Function
 
 ;~IDEal Editor Parameters:

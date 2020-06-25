@@ -90,11 +90,6 @@ Const HIT_APACHE% = 4
 Const HIT_178% = 5
 Const HIT_DEAD% = 6
 
-; ~ [MATH]
-
-Const INFINITY# = 999.0 ^ 99999.0
-Const NAN# = (-1.0) ^ 0.5
-
 ; ~ [TEXTURES]
 
 Const MaxDTextures% = 16
@@ -128,22 +123,6 @@ Const C_GWL_STYLE% = -16
 Const C_WS_POPUP% = $80000000
 Const C_HWND_TOP% = 0
 Const C_SWP_SHOWWINDOW% = $0040
-
-; ~ [SOUNDS]
-
-Const Freq% = 44100 ; ~ HZ
-Const Channels% = 64 ; ~ Standartwert
-Const Flags% = 0
-Const Mode% = 2 ; ~ Mode = 2 (Means that the sounds play in a loop)
-Const F_Offset% = 0
-Const Lenght% = 0
-Const MaxVol% = 255
-Const MinVol% = 0
-Const PanLeft% = 0
-Const PanRight% = 255
-Const PanMid% = -1
-Const AllChannel% = -3
-Const FreeChannel% = -1
 
 ; ~ [DIFFICULTY]
 

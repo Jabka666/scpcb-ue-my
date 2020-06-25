@@ -1,9 +1,3 @@
-; ~ ID: 2975
-; ~ Author: RifRaf, further modified by MonocleBios
-; ~ Date: 2012-09-11 11:44:22
-; ~ Title: Safe Loads (b3d) ;strict loads sounds more appropriate IMO
-; ~ Description: Get the missing filename reported
-
 ; ~ Safe loads for MAV trapping media issues
 
 ; ~ Basic wrapper functions that check to make sure that the file exists before attempting to load it, raises an RTE if it doesn't
@@ -146,7 +140,7 @@ Type Stream
 	Field CHN%
 End Type
 
-Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode% = Mode)
+Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode% = 2)
 	If FileType(File) <> 1 Then
 		CreateConsoleMsg("Sound " + Chr(34) + File + Chr(34) + " not found.")
 		ConsoleOpen = True
@@ -155,24 +149,14 @@ Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode% = Mode)
 	
 	Local st.Stream = New Stream
 	
-	st\SFX = FSOUND_Stream_Open(File, CustomMode, 0)
-	
-	If st\SFX = 0 Then
-		CreateConsoleMsg("Failed to stream Sound (returned 0): " + Chr(34) + File + Chr(34))
-		ConsoleOpen = True
-		Return(0)
-	EndIf
-	
-	st\CHN = FSOUND_Stream_Play(FreeChannel, st\SFX)
+	st\CHN = PlayMusic(File, CustomMode)
 	
 	If st\CHN = -1 Then
 		CreateConsoleMsg("Failed to stream Sound (returned -1): " + Chr(34) + File + Chr(34))
 		ConsoleOpen = True
 		Return(-1)
 	EndIf
-	
-	FSOUND_SetVolume(st\CHN, Volume * 255)
-	FSOUND_SetPaused(st\CHN, False)
+	ChannelVolume(st\CHN, Volume * 1.0)
 	
 	Return(Handle(st))
 End Function
@@ -180,18 +164,15 @@ End Function
 Function StopStream_Strict(StreamHandle%)
 	Local st.Stream = Object.Stream(StreamHandle)
 	
-	If st = Null
+	If st = Null Then
 		CreateConsoleMsg("Failed to stop stream Sound: Unknown Stream")
 		Return
 	EndIf
-	If st\CHN = 0 Or st\CHN = -1
+	If st\CHN = 0 Lor st\CHN = -1 Then
 		CreateConsoleMsg("Failed to stop stream Sound: Return value " + st\CHN)
 		Return
 	EndIf
-	
-	FSOUND_StopSound(st\CHN)
-	FSOUND_Stream_Stop(st\SFX)
-	FSOUND_Stream_Close(st\SFX)
+	StopChannel(st\CHN)
 	
 	Delete(st)
 End Function
@@ -199,67 +180,61 @@ End Function
 Function SetStreamVolume_Strict(StreamHandle%, Volume#)
 	Local st.Stream = Object.Stream(StreamHandle)
 	
-	If st = Null
+	If st = Null Then
 		CreateConsoleMsg("Failed to set stream Sound volume: Unknown Stream")
 		Return
 	EndIf
-	If st\CHN = 0 Or st\CHN = -1
+	If st\CHN = 0 Lor st\CHN = -1 Then
 		CreateConsoleMsg("Failed to set stream Sound volume: Return value " + st\CHN)
 		Return
 	EndIf
-	
-	FSOUND_SetVolume(st\CHN, Volume * 255.0)
-	FSOUND_SetPaused(st\CHN, False)
+	ChannelVolume(st\CHN, Volume * 1.0)
 End Function
 
 Function SetStreamPaused_Strict(StreamHandle%, Paused%)
 	Local st.Stream = Object.Stream(StreamHandle)
 	
-	If st = Null
+	If st = Null Then
 		CreateConsoleMsg("Failed to pause / unpause stream Sound: Unknown Stream")
 		Return
 	EndIf
-	If st\CHN = 0 Or st\CHN = -1
+	If st\CHN = 0 Lor st\CHN = -1 Then
 		CreateConsoleMsg("Failed to pause / unpause stream Sound: Return value " + st\CHN)
 		Return
 	EndIf
-	FSOUND_SetPaused(st\CHN, Paused)
+	If Paused Then
+		PauseChannel(st\CHN)
+	Else
+		ResumeChannel(st\CHN)
+	EndIf
 End Function
 
 Function IsStreamPlaying_Strict(StreamHandle%)
 	Local st.Stream = Object.Stream(StreamHandle)
 	
-	If st = Null
+	If st = Null Then
 		CreateConsoleMsg("Failed to find stream Sound: Unknown Stream")
 		Return
 	EndIf
-	If st\CHN = 0 Or st\CHN = -1
+	If st\CHN = 0 Lor st\CHN = -1 Then
 		CreateConsoleMsg("Failed to find stream Sound: Return value " + st\CHN)
 		Return
 	EndIf
-	Return(FSOUND_IsPlaying(st\CHN))
+	Return(ChannelPlaying(st\CHN))
 End Function
 
 Function SetStreamPan_Strict(StreamHandle%, Pan#)
 	Local st.Stream = Object.Stream(StreamHandle)
 	
-	If st = Null
+	If st = Null Then
 		CreateConsoleMsg("Failed to find stream Sound: Unknown Stream")
 		Return
 	EndIf
-	If st\CHN = 0 Or st\CHN = -1
+	If st\CHN = 0 Lor st\CHN = -1 Then
 		CreateConsoleMsg("Failed to find stream Sound: Return value " + st\CHN)
 		Return
 	EndIf
-	
-	; ~ -1 = Left = 0
-	; ~ 0 = Middle = 127.5 (127)
-	; ~ 1 = Right = 255
-	
-	Local FMod_Pan% = 0
-	
-	FMod_Pan = Int((255.0 / 2.0) + ((255.0 / 2.0) * Pan))
-	FSOUND_SetPan(st\CHN, FMod_Pan)
+	ChannelPan(st\CHN, Pan)
 End Function
 
 Function UpdateStreamSoundOrigin(StreamHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0)
@@ -312,9 +287,9 @@ Function LoadBrush_Strict(File$, Flags%, u# = 1.0, v# = 1.0)
 	Return(Tmp)
 End Function 
 
-Function LoadFont_Strict(File$ = "Tahoma", Height% = 13, Bold% = 0, Italic% = 0, UnderLine% = 0)
+Function LoadFont_Strict(File$ = "Tahoma", Height% = 13)
 	If FileType(File) <> 1 Then RuntimeError("Font " + File + " not found.")
-	Tmp = LoadFont(File, Height, Bold, Italic, UnderLine)  
+	Tmp = LoadFont(File, Height)  
 	If Tmp = 0 Then RuntimeError("Failed to load Font: " + File)
 	Return(Tmp)
 End Function

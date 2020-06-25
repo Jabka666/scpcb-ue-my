@@ -3,7 +3,7 @@ Function SaveGame(File$)
 	
 	If (Not me\Playable) Then Return ; ~ Don't save if the player can't move at all
 	
-	If me\DropSpeed > 0.02 * fpst\FPSFactor[0] Or me\DropSpeed < (-0.02) * fpst\FPSFactor[0] Then Return
+	If me\DropSpeed > 0.02 * fpst\FPSFactor[0] Lor me\DropSpeed < (-0.02) * fpst\FPSFactor[0] Then Return
 	
 	If me\KillTimer < 0.0 Then Return
 	
@@ -868,19 +868,19 @@ Function LoadGame(File$)
 								;[End Block]
 							Case ROOM2
 								;[Block]
-								If r\Angle = 90 Or r\Angle = 270
+								If r\Angle = 90 Lor r\Angle = 270
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM2C
 								;[Block]
-								If r\Angle = 0 Or r\Angle = 90
+								If r\Angle = 0 Lor r\Angle = 90
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM3
 								;[Block]
-								If r\Angle = 0 Or r\Angle = 180 Or r\Angle = 90
+								If r\Angle = 0 Lor r\Angle = 180 Lor r\Angle = 90
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
@@ -908,19 +908,19 @@ Function LoadGame(File$)
 								;[End Block]
 							Case ROOM2
 								;[Block]
-								If r\Angle = 0 Or r\Angle = 180
+								If r\Angle = 0 Lor r\Angle = 180
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM2C
 								;[Block]
-								If r\Angle = 180 Or r\Angle = 90
+								If r\Angle = 180 Lor r\Angle = 90
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM3
 								;[Block]
-								If r\Angle = 180 Or r\Angle = 90 Or r\Angle = 270
+								If r\Angle = 180 Lor r\Angle = 90 Lor r\Angle = 270
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
@@ -2080,7 +2080,7 @@ Function LoadSavedMaps()
 		If File = "" Then Exit
 		If FileType(CurrentDir() + "Map Creator\Maps\" + File) = 1 Then 
 			If File <> "." And File <> ".." Then
-				If Right(File, 6) = "cbmap2" Or Right(File, 5) = "cbmap" Then
+				If Right(File, 6) = "cbmap2" Lor Right(File, 5) = "cbmap" Then
 					SavedMapsAmount = SavedMapsAmount + 1
 				EndIf
 			EndIf
@@ -2099,7 +2099,7 @@ Function LoadSavedMaps()
 		If File = "" Then Exit
 		If FileType(CurrentDir() + "Map Creator\Maps\" + File) = 1 Then 
 			If File <> "." And File <> ".." Then
-				If Right(File, 6) = "cbmap2" Or Right(File, 5) = "cbmap" Then
+				If Right(File, 6) = "cbmap2" Lor Right(File, 5) = "cbmap" Then
 					SavedMaps(i) = File
 					If Right(File, 6) = "cbmap2" Then
 						Local f% = ReadFile("Map Creator\Maps\" + File)
@@ -2293,7 +2293,7 @@ Function LoadMap(File$)
 			If Angle <> 1 And Angle <> 3 Then
 				Angle = Angle + 2
 			EndIf
-			If Name = "maintenance tunnel corner" Or Name = "maintenance tunnel t-shaped room" Then
+			If Name = "maintenance tunnel corner" Lor Name = "maintenance tunnel t-shaped room" Then
 				Angle = Angle + 3
 			EndIf
 			If Angle > 3 Then
@@ -2341,10 +2341,10 @@ Function LoadMap(File$)
 		I_Zone\Transition[1] = 7
 		I_Zone\HasCustomForest = False
 		I_Zone\HasCustomMT = False
-		While Not Eof(f)
+		While (Not Eof(f))
 			x = ReadByte(f)
 			y = ReadByte(f)
-			Name$ = Lower(ReadString(f))
+			Name = Lower(ReadString(f))
 			
 			Angle = ReadByte(f) * 90
 			
@@ -2417,18 +2417,18 @@ Function LoadMap(File$)
 								;[End Block]
 							Case ROOM2
 								;[Block]
-								If r\Angle = 90 Or r\Angle = 270
+								If r\Angle = 90 Lor r\Angle = 270
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM2C
 								;[Block]
-								If r\Angle = 0 Or r\Angle = 90
+								If r\Angle = 0 Lor r\Angle = 90
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM3
-								If r\Angle = 0 Or r\Angle = 180 Or r\Angle = 90
+								If r\Angle = 0 Lor r\Angle = 180 Lor r\Angle = 90
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
@@ -2456,19 +2456,19 @@ Function LoadMap(File$)
 								;[End Block]
 							Case ROOM2
 								;[Block]
-								If r\Angle = 0 Or r\Angle = 180
+								If r\Angle = 0 Lor r\Angle = 180
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM2C
 								;[Block]
-								If r\Angle = 180 Or r\Angle = 90
+								If r\Angle = 180 Lor r\Angle = 90
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM3
 								;[Block]
-								If r\Angle = 180 Or r\Angle = 90 Or r\Angle = 270
+								If r\Angle = 180 Lor r\Angle = 90 Lor r\Angle = 270
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]

@@ -21,9 +21,9 @@ Function LoadMaterials(File$)
 	Local TemporaryString$
 	Local mat.Materials = Null
 	Local StrTemp$ = ""
-	Local f = OpenFile(File)
+	Local f% = OpenFile(File)
 	
-	While Not Eof(f)
+	While (Not Eof(f))
 		TemporaryString = Trim(ReadLine(f))
 		If Left(TemporaryString, 1) = "[" Then
 			TemporaryString = Mid(TemporaryString, 2, Len(TemporaryString) - 2)

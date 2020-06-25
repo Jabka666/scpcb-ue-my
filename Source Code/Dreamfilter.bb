@@ -27,20 +27,20 @@ Function CreateBlurImage()
 	AddTriangle(SF, 0, 1, 2)
 	AddTriangle(SF, 3, 2, 1)
 	EntityFX(SPR, 17)
-	ScaleEntity(SPR, 2048.0 / Float(Ark_Sw), 2048.0 / Float(Ark_Sw), 1)
+	ScaleEntity(SPR, SMALLEST_POWER_TWO / Float(Ark_Sw), SMALLEST_POWER_TWO / Float(Ark_Sw), 1)
 	PositionEntity(SPR, 0, 0, 1.0001)
 	EntityOrder(SPR, -100000)
 	EntityBlend(SPR, 1)
 	Ark_Blur_Image = SPR
 	
 	; ~ Create blur texture
-	Ark_Blur_Texture = CreateTexture(2048, 2048, 256)
+	Ark_Blur_Texture = CreateTexture(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO, 256)
 	EntityTexture(SPR, Ark_Blur_Texture)
 End Function
 
 Function UpdateBlur(Power#)
 	EntityAlpha(Ark_Blur_Image, Power#)
-	CopyRect(0, 0, GraphicWidth, GraphicHeight, 1024.0 - GraphicWidth / 2, 1024.0 - GraphicHeight / 2, BackBuffer(), TextureBuffer(Ark_Blur_Texture))
+	CopyRect(0, 0, Ark_Sw, Ark_Sh, SMALLEST_POWER_TWO_HALF - (Ark_Sw / 2), SMALLEST_POWER_TWO_HALF - (Ark_Sh / 2), BackBuffer(), TextureBuffer(Ark_Blur_Texture))
 End Function
 
 ;~IDEal Editor Parameters:

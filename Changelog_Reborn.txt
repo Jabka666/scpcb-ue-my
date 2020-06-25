@@ -14,6 +14,8 @@
 - Added option to (re)enable/disable the launcher in-game.
 - Added command "106retreat".
 - Added new key card loading screen.
+- Added anisotropic filtering.
+- Added support for resolutions of up to 4k.
 
 - Now guard in "room2elevator" event can kill the player if he too close.
 - Now the pass code for O5 Council's office drops from falling guard in SCP-895's event.

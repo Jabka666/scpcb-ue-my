@@ -64,7 +64,7 @@ Function UpdateParticles()
 		EndIf
 		
 		p\LifeTime = p\LifeTime - fpst\FPSFactor[0]
-		If p\LifeTime =< 0.0 Or p\Size < 0.00001 Or p\A =< 0.0 Then
+		If p\LifeTime =< 0.0 Lor p\Size < 0.00001 Lor p\A =< 0.0 Then
 			RemoveParticle(p)
 		End If
 	Next
@@ -136,7 +136,7 @@ End Function
 Function UpdateEmitters()
 	InSmoke = False
 	For e.Emitters = Each Emitters
-		If fpst\FPSFactor[0] > 0.0 And (PlayerRoom = e\room Or e\room\Dist < 8.0) Then
+		If fpst\FPSFactor[0] > 0.0 And (PlayerRoom = e\room Lor e\room\Dist < 8.0) Then
 			Local p.Particles = CreateParticle(EntityX(e\OBJ, True), EntityY(e\OBJ, True), EntityZ(e\OBJ, True), Rand(e\MinImage, e\MaxImage), e\Size, e\Gravity, e\LifeTime)
 			
 			p\Speed = e\speed
@@ -153,7 +153,7 @@ Function UpdateEmitters()
 			
 			If InSmoke = False Then
 				If wi\GasMask = 0 And wi\HazmatSuit = 0 Then
-					Local Dist# = Distance(EntityX(Camera, True), EntityZ(Camera, True), EntityX(e\OBJ, True), EntityZ(e\OBJ, True))
+					Local Dist# = Distance(EntityX(Camera, True), EntityX(e\OBJ, True), EntityZ(Camera, True), EntityZ(e\OBJ, True))
 					
 					If Dist < 0.8 Then
 						If Abs(EntityY(Camera, True) - EntityY(e\OBJ, True)) < 5.0 Then InSmoke = True

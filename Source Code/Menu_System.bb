@@ -27,7 +27,7 @@ Global MenuStr$, MenuStrX%, MenuStrY%
 
 Global MainMenuTab%, PrevMainMenuTab%, ShouldDeleteGadgets%
 
-Global SelectedInputBox%
+Global SelectedInputBox%, CursorPos% = -1
 
 Global SavePath$ = "Saves\"
 Global SaveMSG$
@@ -221,7 +221,7 @@ Function UpdateMainMenu()
 						;[Block]
 						Txt = "QUIT"
 						If Temp Then
-							FSOUND_Stream_Stop(CurrMusicStream)
+							StopChannel(CurrMusicStream)
 							End
 						EndIf
 						;[End Block]
@@ -285,21 +285,23 @@ Function UpdateMainMenu()
 					Width = 580 * MenuScale
 					Height = 330 * MenuScale
 					
-					CurrSave = InputBox(x + 150 * MenuScale, y + 15 * MenuScale, 200 * MenuScale, 30 * MenuScale, CurrSave, 1)
-					CurrSave = Left(CurrSave, 15)
-					CurrSave = Replace(CurrSave, ":", "")
-					CurrSave = Replace(CurrSave, ".", "")
-					CurrSave = Replace(CurrSave, "/", "")
-					CurrSave = Replace(CurrSave, "\", "")
-					CurrSave = Replace(CurrSave, "<", "")
-					CurrSave = Replace(CurrSave, ">", "")
-					CurrSave = Replace(CurrSave, "|", "")
-					CurrSave = Replace(CurrSave, "?", "")
-					CurrSave = Replace(CurrSave, Chr(34), "")
-					CurrSave = Replace(CurrSave, "*", "")
+					CurrSave = InputBox(x + 150 * MenuScale, y + 15 * MenuScale, 200 * MenuScale, 30 * MenuScale, CurrSave, 1, 15)
+					If SelectedInputBox = 1 Then
+						CurrSave = Replace(CurrSave, ":", "")
+						CurrSave = Replace(CurrSave, ".", "")
+						CurrSave = Replace(CurrSave, "/", "")
+						CurrSave = Replace(CurrSave, "\", "")
+						CurrSave = Replace(CurrSave, "<", "")
+						CurrSave = Replace(CurrSave, ">", "")
+						CurrSave = Replace(CurrSave, "|", "")
+						CurrSave = Replace(CurrSave, "?", "")
+						CurrSave = Replace(CurrSave, Chr(34), "")
+						CurrSave = Replace(CurrSave, "*", "")
+						CursorPos = Min(CursorPos, Len(CurrSave))
+					EndIf
 					
 					If SelectedMap = "" Then
-						RandomSeed = Left(InputBox(x + 150 * MenuScale, y + 55 * MenuScale, 200 * MenuScale, 30 * MenuScale, RandomSeed, 3), 15)	
+						RandomSeed = InputBox(x + 150 * MenuScale, y + 55 * MenuScale, 200 * MenuScale, 30 * MenuScale, RandomSeed, 3, 15)	
 					Else
 						If DrawButton(x + 370 * MenuScale, y + 55 * MenuScale, 120 * MenuScale, 30 * MenuScale, "Deselect", False) Then
 							SelectedMap = ""
@@ -1234,7 +1236,7 @@ Function RenderMainMenu()
 					
 					Color(255, 255, 255)
 					Text(x + 20 * MenuScale, y, "Particle amount:")
-					If (MouseOn(x + 310 * MenuScale, y - 6 * MenuScale, 150 * MenuScale + 14, 20) And OnSliderID = 0) Or OnSliderID = 2
+					If (MouseOn(x + 310 * MenuScale, y - 6 * MenuScale, 150 * MenuScale + 14, 20) And OnSliderID = 0) Lor OnSliderID = 2
 						DrawOptionsTooltip(tX, tY, tW, tH, "particleamount", ParticleAmount)
 					EndIf
 					
@@ -1242,7 +1244,7 @@ Function RenderMainMenu()
 					
 					Color(255, 255, 255)
 					Text(x + 20 * MenuScale, y, "Texture LOD Bias:")
-					If (MouseOn(x + 310 * MenuScale, y - 6 * MenuScale, 150 * MenuScale + 14, 20) And OnSliderID = 0) Or OnSliderID = 3
+					If (MouseOn(x + 310 * MenuScale, y - 6 * MenuScale, 150 * MenuScale + 14, 20) And OnSliderID = 0) Lor OnSliderID = 3
 						DrawOptionsTooltip(tX, tY, tW, tH + 100 * MenuScale, "texquality")
 					EndIf
 					
@@ -1572,7 +1574,7 @@ Function UpdateLauncher()
 	RealGraphicWidth = GraphicWidth
 	RealGraphicHeight = GraphicHeight
 	
-	fo\FontID[0] = LoadFont_Strict("GFX\font\cour\Courier New.ttf", 18, 0, 0, 0)
+	fo\FontID[0] = LoadFont_Strict("GFX\font\cour\Courier New.ttf", 16)
 	SetFont(fo\FontID[0])
 	MenuWhite = LoadImage_Strict("GFX\menu\menu_white.png")
 	MenuBlack = LoadImage_Strict("GFX\menu\menu_black.png")	
@@ -1614,12 +1616,12 @@ Function UpdateLauncher()
 		
 		For i = 0 To (GFXModes - 1)
 			Color(0, 0, 0)
-			If SelectedGFXMode = i Then Rect(x - 1, y - 1, 100, 20, False)
+			If SelectedGFXMode = i Then Rect(x - 1, y - 5, 100, 20, False)
 			
 			Text(x, y, (GfxModeWidths(i) + "x" + GfxModeHeights(i)))
-			If MouseOn(x - 1, y - 1, 100, 20) Then
+			If MouseOn(x - 1, y - 5, 100, 20) Then
 				Color(100, 100, 100)
-				Rect(x - 1, y - 1, 100, 20, False)
+				Rect(x - 1, y - 5, 100, 20, False)
 				If MouseHit1 Then SelectedGFXMode = i
 			EndIf
 			
@@ -1632,7 +1634,7 @@ Function UpdateLauncher()
 		
 		Local Lock% = False
 		
-		If BorderlessWindowed Or (Not Fullscreen) Then Lock = True
+		If BorderlessWindowed Lor (Not Fullscreen) Then Lock = True
 		LauncherEnabled = DrawLauncherTick(40 + 430 - 15, 260 - 55 + 65 + 8, LauncherEnabled)
 		
 		If BorderlessWindowed Then
@@ -1713,10 +1715,9 @@ End Type
 Function InitLoadingScreens(File$)
 	Local TemporaryString$, i%
 	Local ls.LoadingScreens
-	
 	Local f% = OpenFile(File)
 	
-	While Not Eof(f)
+	While (Not Eof(f))
 		TemporaryString = Trim(ReadLine(f))
 		If Left(TemporaryString, 1) = "[" Then
 			TemporaryString = Mid(TemporaryString, 2, Len(TemporaryString) - 2)
@@ -1964,7 +1965,7 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 		EndIf
 		
 		If BorderlessWindowed Then
-			If (RealGraphicWidth <> GraphicWidth) Or (RealGraphicHeight <> GraphicHeight) Then
+			If (RealGraphicWidth <> GraphicWidth) Lor (RealGraphicHeight <> GraphicHeight) Then
 				SetBuffer(TextureBuffer(Fresize_Texture))
 				ClsColor(0, 0, 0) : Cls
 				CopyRect(0, 0, GraphicWidth, GraphicHeight, 1024 - GraphicWidth / 2, 1024 - GraphicHeight / 2, BackBuffer(), TextureBuffer(Fresize_Texture))
@@ -2016,7 +2017,7 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 		
 		Local Close% = False
 		
-		If GetKey() <> 0 Or MouseHit(1)
+		If GetKey() <> 0 Lor MouseHit(1)
 			FlushKeys()
 			FlushMouse()
 			ResetTimingAccumulator()
@@ -2054,7 +2055,7 @@ Function RenderMenuButtons()
 		EndIf
 		
 		If mb\Locked Then
-			If mb\R <> 255 Or mb\G <> 255 Or mb\B <> 255 Then
+			If mb\R <> 255 Lor mb\G <> 255 Lor mb\B <> 255 Then
 				Color(mb\R, mb\G, mb\B)
 			Else
 				Color(100, 100, 100)
@@ -2101,7 +2102,7 @@ Function DrawButton%(x%, y%, Width%, Height%, Txt$, BigFont% = True, WaitForMous
 	EndIf
 	
 	If MouseOn(x, y, Width, Height) Then
-		If (MouseHit1 And (Not WaitForMouseUp)) Or (MouseUp1 And WaitForMouseUp) Then
+		If (MouseHit1 And (Not WaitForMouseUp)) Lor (MouseUp1 And WaitForMouseUp) Then
 			If Locked Then
 				PlaySound_Strict(ButtonSFX2)
 			Else
@@ -2120,7 +2121,7 @@ Function DrawLauncherButton%(x%, y%, Width%, Height%, Txt$, BigFont% = True, Wai
 	DrawFrame(x, y, Width, Height)
 	If MouseOn(x, y, Width, Height) Then
 		Color(30, 30, 30)
-		If (MouseHit1 And (Not WaitForMouseUp)) Or (MouseUp1 And WaitForMouseUp) Then 
+		If (MouseHit1 And (Not WaitForMouseUp)) Lor (MouseUp1 And WaitForMouseUp) Then 
 			If Locked Then
 				PlaySound_Strict(ButtonSFX2)
 			Else
@@ -2134,7 +2135,7 @@ Function DrawLauncherButton%(x%, y%, Width%, Height%, Txt$, BigFont% = True, Wai
 	EndIf
 	
 	If Locked Then
-		If R <> 255 Or G <> 255 Or B <> 255 Then
+		If R <> 255 Lor G <> 255 Lor B <> 255 Then
 			Color(R, G, B)
 		Else
 			Color(100, 100, 100)
@@ -2266,32 +2267,33 @@ Function DrawLauncherTick%(x%, y%, Selected%, Locked% = False)
 	Return(Selected)
 End Function
 
-Global SymMilliSecs%, SymMilliSecs2%
-
-Function rInput$(aString$)
+Function rInput$(aString$, MaxChr%)
 	Local Value% = GetKey()
-	Local Length% = Len(aString$)
+	Local Length% = Len(aString)
 	
-	If Value = 8 Then
-		Value = 0
-		If Length > 0 Then aString = Left(aString, Length - 1)
-		SymMilliSecs = MilliSecs() + 500
-	EndIf
-	If KeyDown(14) And MilliSecs() > SymMilliSecs Then
-		If Length > 0 And MilliSecs() > SymMilliSecs2 Then
-			aString = Left(aString, Length - 1)
-			SymMilliSecs2 = MilliSecs() + 20
+	If CursorPos = -1 Then CursorPos = Length
+	
+	If KeyDown(29) Then
+		If Value = 30 Then CursorPos = Length
+		If Value = 31 Then CursorPos = 0
+		If Value = 22 Then
+			aString = Left(aString, CursorPos) + GetClipboardContents() + Right(aString, Length - CursorPos)
+			CursorPos = CursorPos + Len(aString) - Length
+			If MaxChr > 0 And MaxChr < Len(aString) Then aString = Left(aString, MaxChr) : CursorPos = MaxChr
 		EndIf
 		Return(aString)
 	EndIf
-	If Value = 13 Or Value = 0 Then
-		Return(aString)
-	ElseIf Value > 0 And Value < 7 Or Value > 26 And Value < 32 Or Value = 9
-		Return(aString)
+	
+	If Value = 30 Then
+		CursorPos = Min(CursorPos + 1, Length)
+	ElseIf Value = 31
+		CursorPos = Max(CursorPos - 1, 0)
 	Else
-		aString = aString + Chr(Value)
-		Return(aString)
+		aString = TextInput(Left(aString, CursorPos)) + Mid(aString, CursorPos + 1)
+		CursorPos = CursorPos + Len(aString) - Length
+		If MaxChr > 0 And MaxChr < Len(aString) Then aString = Left(aString, MaxChr) : CursorPos = MaxChr
 	EndIf
+	Return(aString)
 End Function
 
 Type MenuInputBox
@@ -2316,14 +2318,14 @@ Function RenderMenuInputBoxes()
 		Color(255, 255, 255)	
 		
 		If SelectedInputBox = mib\ID Then
-			If (MilliSecs() Mod 800) < 400 Then Rect(mib\x + mib\Width / 2 + StringWidth(mib\Txt) / 2 + 2, mib\y + mib\Height / 2 - 5, 2, 12)
+			If (MilliSecs() Mod 800) < 400 Then Rect(mib\x + mib\Width / 2 - (StringWidth(mib\Txt)) / 2 + StringWidth(Left(mib\Txt, CursorPos)), mib\y + mib\Height / 2 - 5, 2, 12)
 		EndIf	
 		
 		Text(mib\x + mib\Width / 2, mib\y + mib\Height / 2, mib\Txt, True, True)
 	Next
 End Function
 
-Function InputBox$(x%, y%, Width%, Height%, Txt$, ID% = 0)
+Function InputBox$(x%, y%, Width%, Height%, Txt$, ID% = 0, MaxChr% = 0)
 	Local mib.MenuInputBox, currInputBox.MenuInputBox
 	Local InputBoxExists% = False
 	
@@ -2350,13 +2352,13 @@ Function InputBox$(x%, y%, Width%, Height%, Txt$, ID% = 0)
 	
 	If MouseOn(x, y, Width, Height) Then
 		MouseOnBox = True
-		If MouseHit1 Then SelectedInputBox = ID : FlushKeys
+		If MouseHit1 Then SelectedInputBox = ID : FlushKeys() : CursorPos = -1
 	EndIf
 	
-	If (Not MouseOnBox) And MouseHit1 And SelectedInputBox = ID Then SelectedInputBox = 0
+	If (Not MouseOnBox) And MouseHit1 And SelectedInputBox = ID Then SelectedInputBox = 0 : CursorPos = -1
 	
 	If SelectedInputBox = ID Then
-		Txt = rInput(Txt)
+		Txt = rInput(Txt, MaxChr)
 	EndIf	
 	
 	Return(Txt)

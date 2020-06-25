@@ -527,7 +527,7 @@ Function UpdateItems()
 								ClosestItem = i
 							EndIf
 						EndIf
-					ElseIf ClosestItem = i Or i\Dist < EntityDistance(Camera, ClosestItem\Collider) Then 
+					ElseIf ClosestItem = i Lor i\Dist < EntityDistance(Camera, ClosestItem\Collider) Then 
 						If EntityInView(i\Model, Camera) Then
 							If EntityVisible(i\Collider, Camera) Then
 								ClosestItem = i
@@ -727,10 +727,10 @@ Function PickItem(item.Items)
 						CanPickItem = True
 						For z = 0 To MaxItemAmount - 1
 							If Inventory(z) <> Null Then
-								If Inventory(z)\ItemTemplate\TempName = "hazmatsuit" Or Inventory(z)\ItemTemplate\TempName = "hazmatsuit2" Or Inventory(z)\ItemTemplate\TempName = "hazmatsuit3" Then
+								If Inventory(z)\ItemTemplate\TempName = "hazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "hazmatsuit2" Lor Inventory(z)\ItemTemplate\TempName = "hazmatsuit3" Then
 									CanPickItem = False
 									Exit
-								ElseIf Inventory(z)\ItemTemplate\TempName = "vest" Or Inventory(z)\ItemTemplate\TempName = "finevest" Then
+								ElseIf Inventory(z)\ItemTemplate\TempName = "vest" Lor Inventory(z)\ItemTemplate\TempName = "finevest" Then
 									CanPickItem = 2
 									Exit
 								EndIf
@@ -754,10 +754,10 @@ Function PickItem(item.Items)
 						CanPickItem = True
 						For z = 0 To MaxItemAmount - 1
 							If Inventory(z) <> Null Then
-								If Inventory(z)\ItemTemplate\TempName = "vest" Or Inventory(z)\ItemTemplate\TempName = "finevest" Then
+								If Inventory(z)\ItemTemplate\TempName = "vest" Lor Inventory(z)\ItemTemplate\TempName = "finevest" Then
 									CanPickItem = False
 									Exit
-								ElseIf Inventory(z)\ItemTemplate\TempName = "hazmatsuit" Or Inventory(z)\ItemTemplate\TempName = "hazmatsuit2" Or Inventory(z)\ItemTemplate\TempName = "hazmatsuit3" Then
+								ElseIf Inventory(z)\ItemTemplate\TempName = "hazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "hazmatsuit2" Lor Inventory(z)\ItemTemplate\TempName = "hazmatsuit3" Then
 									CanPickItem = 2
 									Exit
 								EndIf
