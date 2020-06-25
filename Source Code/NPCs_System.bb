@@ -3917,7 +3917,7 @@ Function UpdateNPCs()
 				Dist = EntityDistance(n\Collider, Collider)
 				
 				If n\State > -1.0 Then
-					If (Dist < HideDistance) Then
+					If Dist < HideDistance Then
 						; ~ n\State: The "general" state (Idles / Wanders off/ Attacks / Echo and etc.)
 						
 						; ~ n\State2: Timer for doing raycasts
@@ -3928,15 +3928,6 @@ Function UpdateNPCs()
 						
 						PrevFrame = n\Frame
 						
-						If n\Sound <> 0 Then
-							Temp = 0.5
-							; ~ The ambient sound gets louder when the NPCs are attacking
-							If n\State > 0.0 Then Temp = 1.0	
-							
-							n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, Camera, 10.0, Temp)
-						EndIf
-						
-						Temp = Rnd(-1.0, 1.0)
 						PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - 0.2, EntityZ(n\Collider, True))
 						RotateEntity(n\OBJ, -90.0, EntityYaw(n\Collider), 0.0)
 						
@@ -4085,7 +4076,7 @@ Function UpdateNPCs()
 									If n\Frame > 456.0 Then n\State = 0.0
 								EndIf
 								
-								If n\Frame > 271.0 And PrevFrame =< 271.0 Lor n\Frame > 354 Lor n\Frame > 314.0 And PrevFrame =< 314.0 Lor n\Frame > 301.0 And PrevFrame =< 301.0 Then
+								If n\Frame > 271.0 And PrevFrame =< 271.0 Lor n\Frame > 314.0 And PrevFrame =< 314.0 Lor n\Frame > 301.0 And PrevFrame =< 301.0 Then
 									PlaySound2(LoadTempSound("SFX\SCP\966\Idle" + Rand(1, 3) + ".ogg"), Camera, n\Collider)
 								EndIf
 								
@@ -7496,5 +7487,5 @@ Function Animate2#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = True
 End Function 
 
 ;~IDEal Editor Parameters:
-;~B#16A#121F#1365#13B5#151C#1639#1809#1864
+;~B#16A#1216#135C#13AC#1513#1630#1800#185B
 ;~C#Blitz3D
