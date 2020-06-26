@@ -3986,7 +3986,7 @@ Function UpdateNPCs()
 							n\State3 = Max(n\State3 - fpst\FPSFactor[0] * 0.2, 0.0)
 						EndIf
 						
-						If n\State <> 10.0
+						If n\State <> 10.0 Then
 							n\LastSeen = 0
 						EndIf
 						
@@ -4090,7 +4090,7 @@ Function UpdateNPCs()
 								If n\Frame < 580.0 And n\Frame > 214.0
 									AnimateNPC(n, 556.0, 580.0, 0.25, False)
 								Else
-									If n\CurrSpeed >= 0.0 Then
+									If n\CurrSpeed > 0.0 Then
 										AnimateNPC(n, 580.0, 628.0, n\CurrSpeed * 25.0)
 									Else
 										AnimateNPC(n, 2.0, 214.0, 0.25)
@@ -4189,7 +4189,7 @@ Function UpdateNPCs()
 									n\LastSeen = 1
 								EndIf
 								
-								If n\Frame > 557.0
+								If n\Frame > 557.0 Then
 									AnimateNPC(n, 628, 652, 0.25, False)
 									If n\Frame > 651.0
 										Select Rand(3)
