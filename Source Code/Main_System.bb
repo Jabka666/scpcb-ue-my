@@ -92,7 +92,7 @@ Else
 	AspectRatioRatio = 1.0
 	RealGraphicWidth = GraphicWidth
 	RealGraphicHeight = GraphicHeight
-	Graphics3DExt(GraphicWidth, GraphicHeight, (DisplayMode = 0) + 1)
+	Graphics3DExt(GraphicWidth, GraphicHeight, (DisplayMode = 2) + 1)
 EndIf
 
 Global MenuScale# = (GraphicHeight / 1024.0)
@@ -1720,7 +1720,7 @@ Function UpdateConsole()
 		
 		RenderMenuInputBoxes()
 		
-		If DisplayMode = 2 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+		If DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	EndIf
 	
 	SetFont(fo\FontID[0])
@@ -3605,7 +3605,7 @@ Function DrawEnding()
 	
 	RenderMenuButtons()
 	
-	If DisplayMode = 2 Then DrawImage(CursorIMG), ScaledMouseX(), ScaledMouseY()
+	If DisplayMode = 0 Then DrawImage(CursorIMG), ScaledMouseX(), ScaledMouseY()
 	
 	SetFont(fo\FontID[0])
 End Function
@@ -3879,7 +3879,7 @@ Function SetCrouch(NewCrouch%)
 End Function
 
 Function InjurePlayer(Injuries_#, Infection# = 0.0, BlurTimer_# = 0.0, VestFactor# = 0.0, HelmetFactor# = 0.0)
-	me\Injuries = me\Injuries + Injuries_ - (wi\BallisticVest = 1 * VestFactor) - (wi\BallisticVest = 2 * VestFactor / 0.5) - (me\Crouch * wi\BallisticHelmet * HelmetFactor)
+	me\Injuries = me\Injuries + Injuries_ - (wi\BallisticVest * VestFactor) - (me\Crouch * wi\BallisticHelmet * HelmetFactor)
 	me\BlurTimer = BlurTimer_
 	I_008\Timer = I_008\Timer + Infection
 End Function
@@ -4841,7 +4841,7 @@ Function DrawGUI()
 			x = x + 44 * Scale
 			y = y + 249 * Scale
 			
-			If DisplayMode = 2 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+			If DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 		EndIf
 	EndIf
 	
@@ -4913,7 +4913,7 @@ Function DrawGUI()
 			EndIf
 		EndIf
 		
-		If DisplayMode = 2 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+		If DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	ElseIf InvOpen Then
 		x = GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
 		y = GraphicHeight / 2 - INVENTORY_GFX_SIZE - INVENTORY_GFX_SPACING
@@ -5040,7 +5040,7 @@ Function DrawGUI()
 			EndIf
 		EndIf
 		
-		If DisplayMode = 2 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+		If DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	Else
 		If SelectedItem <> Null Then
 			Select SelectedItem\ItemTemplate\TempName
@@ -7933,7 +7933,7 @@ Function DrawMenu()
 		RenderMenuSlideBars()
 		RenderMenuSliders()
 		
-		If DisplayMode = 2 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+		If DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	EndIf
 	
 	SetFont(fo\FontID[0])
@@ -9607,7 +9607,7 @@ Function NullGame(PlayButtonSFX% = True)
 	I_1499\x = 0.0
 	I_1499\y = 0.0
 	I_1499\z = 0.0
-	I_1499\Using = False
+	I_1499\Using = 0
 	DeleteChunks()
 	
 	OptionsMenu = -1
@@ -10942,7 +10942,7 @@ Function Use294()
 	x = GraphicWidth / 2 - (ImageWidth(tt\ImageID[5]) / 2)
 	y = GraphicHeight / 2 - (ImageHeight(tt\ImageID[5]) / 2)
 	DrawImage(tt\ImageID[5], x, y)
-	If DisplayMode = 2 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+	If DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	
 	Temp = True
 	If PlayerRoom\SoundCHN <> 0 Then Temp = False
@@ -11289,7 +11289,7 @@ Function Use427()
 	EndIf
 End Function
 
-Function UpdateMTF%()
+Function UpdateMTF()
 	If PlayerRoom\RoomTemplate\Name = "gateaentrance" Then Return
 	
 	Local r.Rooms, n.NPCs

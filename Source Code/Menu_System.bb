@@ -890,7 +890,7 @@ Function UpdateMainMenu()
 	Text(20, GraphicHeight - 50, "v" + VersionNumber)
 	If ShowFPS Then SetFont(fo\ConsoleFont) : Text(20, GraphicHeight - 30, "FPS: " + ft\fps) : SetFont(fo\FontID[0])
 	
-	If DisplayMode = 2 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+	If DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	
 	SetFont(fo\FontID[0])
 End Function
@@ -1643,13 +1643,11 @@ Function UpdateLauncher(lnchr.Launcher)
 		Select DisplayMode
 			Case 0
 				;[Block]
-				Txt = "Windowed"
-				Text(478, 262 - 55 + 140, "Current Resolution: " + lnchr\GfxModeWidths[lnchr\SelectedGFXMode] + "x" + lnchr\GfxModeHeights[lnchr\SelectedGFXMode] + ",32", True)
+				Txt = "Fullscreen"
 				;[End Block]
 			Case 1
 				;[Block]
 				Txt = "Borderless"
-				Text(478, 262 - 55 + 140, "Current Resolution: " + lnchr\GfxModeWidths[lnchr\SelectedGFXMode] + "x" + lnchr\GfxModeHeights[lnchr\SelectedGFXMode] + ",32", True)
 				If lnchr\GfxModeWidths[lnchr\SelectedGFXMode] < DesktopWidth() Then
 					Text(365, 412, "(upscaled to: " + DesktopWidth() + "x" + DesktopHeight() + ",32)")
 				ElseIf lnchr\GfxModeWidths[lnchr\SelectedGFXMode] > DesktopWidth() Then
@@ -1658,18 +1656,14 @@ Function UpdateLauncher(lnchr.Launcher)
 				;[End Block]
 			Case 2
 				;[Block]
-				Txt = "Fullscreen"
-				Text(478, 262 - 55 + 140, "Current Resolution: " + lnchr\GfxModeWidths[lnchr\SelectedGFXMode] + "x" + lnchr\GfxModeHeights[lnchr\SelectedGFXMode] + ",32", True)
+				Txt = "Windowed"
 				;[End Block]
 		End Select
+		Text(478, 262 - 55 + 140, "Current Resolution: " + lnchr\GfxModeWidths[lnchr\SelectedGFXMode] + "x" + lnchr\GfxModeHeights[lnchr\SelectedGFXMode] + ",32", True)
 		DrawFrame(455, 254, 120, 30)
 		Text(515, 264, Txt, True)
 		If DrawLauncherButton(575, 254, 30, 30, "", False) Then
-			If DisplayMode < 2 Then
-				DisplayMode = DisplayMode + 1
-			Else
-				DisplayMode = 0
-			EndIf
+			DisplayMode = (DisplayMode + 1) Mod 3
 		EndIf
 		DrawImage(LauncherArrowIMG, 589, 268)
 		
@@ -1977,7 +1971,7 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 		Text(GraphicWidth / 2, GraphicHeight / 2 - 100, "LOADING - " + Percent + " %", True, True)
 		
 		If Percent = 100 Then 
-			If FirstLoop And SelectedLoadingScreen\title <> "CWM" Then PlaySound_Strict LoadTempSound(("SFX\Horror\Horror8.ogg"))
+			If FirstLoop And SelectedLoadingScreen\Title <> "CWM" Then PlaySound_Strict LoadTempSound(("SFX\Horror\Horror8.ogg"))
 			Text(GraphicWidth / 2, GraphicHeight - 50, "PRESS ANY KEY TO CONTINUE", True, True)
 		Else
 			FlushKeys()
