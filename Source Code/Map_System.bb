@@ -5841,7 +5841,7 @@ Function UpdateRooms()
 					Exit
 				EndIf
 			Next
-			If DebugHUD
+			If chs\DebugHUD Then
 				If r\TriggerboxAmount > 0
 					For i = 0 To r\TriggerboxAmount - 1
 						EntityColor(r\Triggerbox[i], 255, 255, 0)

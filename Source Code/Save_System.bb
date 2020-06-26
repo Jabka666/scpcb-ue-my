@@ -477,8 +477,6 @@ Function LoadGame(File$)
 	
 	me\DropSpeed = 0.0
 	
-	DebugHUD = False
-	
 	GameSaved = True
 	
 	Local x#, y#, z#, i%, Temp%, StrTemp$, r.Rooms, ID%, n.NPCs, do.Doors
@@ -1279,7 +1277,6 @@ End Function
 Function LoadGameQuick(File$)
 	CatchErrors("Uncaught (LoadGameQuick)")
 	
-	DebugHUD = False
 	GameSaved = True
 	me\Zombie = False
 	me\Deaf = False

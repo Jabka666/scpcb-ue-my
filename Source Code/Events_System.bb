@@ -6664,7 +6664,7 @@ Function UpdateEvents()
 							x = 2.0
 						EndIf
 						
-						If (Not DebugHUD)
+						If (Not chs\DebugHUD) Then
 							CameraClsColor(Camera, x * 98.0, x * 133.0, x * 162.0)
 							CameraRange(Camera, RoomScale, 8.5)
 							CameraFogRange(Camera, 0.5, 8.0)
@@ -9101,7 +9101,7 @@ Function UpdateDimension1499()
 					Next
 				EndIf
 				
-				If (Not DebugHUD) Then
+				If (Not chs\DebugHUD) Then
 					CameraFogRange(Camera, 40.0, 80.0)
 					CameraFogColor(Camera, 96.0, 97.0, 104.0)
 					CameraClsColor(Camera, 96.0, 97.0, 104.0)

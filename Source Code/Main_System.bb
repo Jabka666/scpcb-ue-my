@@ -232,6 +232,7 @@ Type Cheats
 	Field NoClip%, NoClipSpeed#
 	Field InfiniteStamina%
 	Field SuperMan%, SuperManTimer#
+	Field DebugHUD%
 End Type
 
 Function ClearCheats(chs.Cheats)
@@ -243,6 +244,7 @@ Function ClearCheats(chs.Cheats)
 	chs\InfiniteStamina = 0
 	chs\SuperMan = 0
 	chs\SuperManTimer = 0.0
+	chs\DebugHUD = 0
 End Function
 
 Global chs.Cheats = New Cheats
@@ -1276,19 +1278,19 @@ Function UpdateConsole()
 					Select StrTemp
 						Case "on", "1", "true"
 							;[Block]
-							DebugHUD = True
+							chs\DebugHUD = True
 							;[End Block]
 						Case "off", "0", "false"
 							;[Block]
-							DebugHUD = False
+							chs\DebugHUD = False
 							;[End Block]
 						Default
 							;[Block]
-							DebugHUD = (Not DebugHUD)
+							chs\DebugHUD = (Not chs\DebugHUD)
 							;[End Block]
 					End Select
 					
-					If DebugHUD Then
+					If chs\DebugHUD Then
 						CreateConsoleMsg("DEBUG MODE ON")
 					Else
 						CreateConsoleMsg("DEBUG MODE OFF")
@@ -1749,8 +1751,6 @@ CreateConsoleMsg("  - 106retreat")
 CreateConsoleMsg("  - disable173 / enable173")
 CreateConsoleMsg("  - disable106 / enable106")
 CreateConsoleMsg("  - spawn [NPC type]")
-
-Global DebugHUD%
 
 Global Camera%
 
@@ -2424,7 +2424,7 @@ Function UpdateDoors()
 		EndIf
 		
 		If d\DoorHitOBJ <> 0 Then
-			If DebugHUD Then
+			If chs\DebugHUD Then
 				EntityAlpha(d\DoorHitOBJ, 0.5)
 			Else
 				EntityAlpha(d\DoorHitOBJ, 0.0)
@@ -4671,7 +4671,7 @@ Function DrawGUI()
 			DrawImage(tt\IconID[0], x - 50, y)
 		EndIf
 		
-		If DebugHUD Then
+		If chs\DebugHUD Then
 			Color(255, 255, 255)
 			SetFont(fo\ConsoleFont)
 			
@@ -4682,14 +4682,16 @@ Function DrawGUI()
 			Text(x - 60, 120, "Room: " + PlayerRoom\RoomTemplate\Name)
             Text(x - 60, 140, "Room Coordinates: (" + Floor(EntityX(PlayerRoom\OBJ) / 8.0 + 0.5) + ", " + Floor(EntityZ(PlayerRoom\OBJ) / 8.0 + 0.5) + ", Angle: " + PlayerRoom\Angle + ")")
 			For ev.Events = Each Events
-				If ev\room = PlayerRoom Then
-					Text(x - 60, 160, "Room Event: " + ev\EventName) 
-					Text(x - 60, 180, "State: " + ev\EventState)
-					Text(x - 60, 200, "State2: " + ev\EventState2)   
-					Text(x - 60, 220, "State3: " + ev\EventState3)
-					Text(x - 60, 240, "State4: " + ev\EventState4)
-					Text(x - 60, 260, "Str: "+ ev\EventStr)
-					Exit
+				If PlayerRoom <> Null Then
+					If ev\room = PlayerRoom Then
+						Text(x - 60, 160, "Room Event: " + ev\EventName) 
+						Text(x - 60, 180, "State: " + ev\EventState)
+						Text(x - 60, 200, "State2: " + ev\EventState2)   
+						Text(x - 60, 220, "State3: " + ev\EventState3)
+						Text(x - 60, 240, "State4: " + ev\EventState4)
+						Text(x - 60, 260, "Str: "+ ev\EventStr)
+						Exit
+					EndIf
 				EndIf
 			Next
             GlobalMemoryStatus(m.MEMORYSTATUS)
@@ -4722,17 +4724,19 @@ Function DrawGUI()
 				EndIf
 			Next
 			
-			If PlayerRoom\RoomTemplate\Name = "dimension1499"
-				Text(x - 60, 680, "Current Chunk X / Z: (" + (Int((EntityX(Collider) + 20) / 40)) + ", "+(Int((EntityZ(Collider) + 20) / 40)) + ")")
-				
-				Local CH_Amount% = 0
-				
-				For ch.Chunk = Each Chunk
-					CH_Amount = CH_Amount + 1
-				Next
-				Text(x - 60, 700, "Current Chunk Amount: " + CH_Amount)
-			Else
-				Text(x - 60, 700, "Current Room Position: (" + PlayerRoom\x + ", " + PlayerRoom\y + ", " + PlayerRoom\z + ")")
+			If PlayerRoom <> Null Then
+				If PlayerRoom\RoomTemplate\Name = "dimension1499"
+					Text(x - 60, 680, "Current Chunk X / Z: (" + (Int((EntityX(Collider) + 20) / 40)) + ", "+(Int((EntityZ(Collider) + 20) / 40)) + ")")
+					
+					Local CH_Amount% = 0
+					
+					For ch.Chunk = Each Chunk
+						CH_Amount = CH_Amount + 1
+					Next
+					Text(x - 60, 700, "Current Chunk Amount: " + CH_Amount)
+				Else
+					Text(x - 60, 700, "Current Room Position: (" + PlayerRoom\x + ", " + PlayerRoom\y + ", " + PlayerRoom\z + ")")
+				EndIf
 			EndIf
 			If SelectedMonitor <> Null Then
 				Text(x - 60, 720, "Current Monitor: " + SelectedMonitor\ScrOBJ)
@@ -9379,8 +9383,6 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	ClearTextureCache()
 	
-	DebugHUD = False
-	
 	UnableToMove = False
 	
 	QuickLoadPercent = -1
@@ -12069,7 +12071,7 @@ Function CheckTriggers$()
 			sY = Max(EntityScaleY(PlayerRoom\TriggerBox[i], 1), 0.001)
 			sZ = EntityScaleZ(PlayerRoom\TriggerBox[i], 1)
 			GetMeshExtents(PlayerRoom\TriggerBox[i])
-			If DebugHUD Then
+			If chs\DebugHUD Then
 				EntityColor(PlayerRoom\TriggerBox[i], 255.0, 255.0, 0.0)
 				EntityAlpha(PlayerRoom\TriggerBox[i], 0.2)
 			Else
@@ -12241,5 +12243,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1097#1330#1D7E
+;~B#1097#1334#1D82
 ;~C#Blitz3D
