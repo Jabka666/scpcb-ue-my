@@ -6683,8 +6683,8 @@ Function UpdateSecurityCams()
 						EndIf
 						
 						If Rand(500) = 1 Then
-							EntityTexture(sc\ScrOverlay, tt\MiscTextureID[6])
-						End If
+							EntityTexture(sc\ScrOverlay, tt\MiscTextureID[Rand(1, 6)])
+						EndIf
 						
 						If (MilliSecs() Mod sc\PlayerState) >= Rand(600) Then
 							EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
@@ -6696,7 +6696,7 @@ Function UpdateSecurityCams()
 								sc\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(1, 3) + ".ogg"))
 								If sc\CoffinEffect = 2 Then sc\CoffinEffect = 3 : sc\PlayerState = 0
 							EndIf
-							EntityTexture(sc\ScrOverlay, tt\MiscTextureID[6])
+							EntityTexture(sc\ScrOverlay, tt\MiscTextureID[Rand(1, 6)])
 						EndIf
 					EndIf
 				EndIf

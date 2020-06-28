@@ -2084,10 +2084,9 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, B
 				d\Buttons[i] = CopyEntity(o\ButtonModelID[3])	
 			ElseIf Big = 3
 				d\Buttons[i] = CopyEntity(o\ButtonModelID[(i * 4)])
-				ScaleEntity(d\Buttons[i], 0.03, 0.03, 0.03)
 			Else
 				d\Buttons[i] = CopyEntity(o\ButtonModelID[0])
-			End If
+			EndIf
 		EndIf
 		ScaleEntity(d\Buttons[i], 0.03, 0.03, 0.03)
 	Next
@@ -12243,5 +12242,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1097#1334#1D82
+;~B#1096#1333#1D81
 ;~C#Blitz3D
