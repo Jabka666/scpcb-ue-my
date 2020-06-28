@@ -11791,8 +11791,8 @@ Function RenderWorld2(Tween#)
 					HasBattery = 0
 					msg\Msg = "The batteries in these night vision goggles died."
 					msg\Timer = 70.0 * 6.0
-					IsNVGBlinking = True
-					BlinkTimer = -1.0
+					wi\IsNVGBlinking = True
+					me\BlinkTimer = -1.0
 				ElseIf Power =< 100.0 Then
 					HasBattery = 1
 				Else
@@ -11824,15 +11824,15 @@ Function RenderWorld2(Tween#)
 	
 	ScrambleActive = 0
 	
-	If hasBattery > 0 Then
-		If wi\NightVision = 2 Then ; ~ show a HUD
+	If HasBattery > 0 Then
+		If wi\NightVision = 2 Then ; ~ Show a HUD
 			Color(255, 255, 255)
 			
 			SetFont(fo\FontID[2])
 			
 			Local PlusY% = 0
 			
-			If hasBattery = 1 Then PlusY = 40
+			If HasBattery = 1 Then PlusY = 40
 			
 			Text(GraphicWidth / 2, (20 + PlusY) * MenuScale, "REFRESHING DATA IN", True, False)
 			
@@ -11862,7 +11862,7 @@ Function RenderWorld2(Tween#)
 						yValue = 0.0
 						If PitchValue > 90.0 And PitchValue =< 180.0 Then
 							yValue = Sin(90.0) / 90.0 * PitchValue
-						ElseIf PitchValue > 180 And PitchValue < 270.0 Then
+						ElseIf PitchValue > 180.0 And PitchValue < 270.0 Then
 							yValue = Sin(270.0) / PitchValue * 270.0
 						Else
 							yValue = Sin(PitchValue)
@@ -11899,7 +11899,7 @@ Function RenderWorld2(Tween#)
 		Else
 			Color(55, 55, 55)
 		EndIf
-		If hasBattery = 1 And ((MilliSecs() Mod 800) < 400) Then
+		If HasBattery = 1 And ((MilliSecs() Mod 800) < 400) Then
 			Color(255, 0, 0)
 			SetFont(fo\FontID[2])
 			
