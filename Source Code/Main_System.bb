@@ -2089,28 +2089,24 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, B
 			EndIf
 		EndIf
 		ScaleEntity(d\Buttons[i], 0.03, 0.03, 0.03)
-	Next
-	
-	For i = 0 To 1
-		If d\Buttons[i] <> 0 Then
-			If Big = 1 Then
-				If i = 0 Then
-					PositionEntity(d\Buttons[i], x - 432.0 * RoomScale, y + 0.7, z + 192.0 * RoomScale)
-				Else
-					PositionEntity(d\Buttons[i], x + 432.0 * RoomScale, y + 0.7, z - 192.0 * RoomScale)
-				EndIf
-				RotateEntity(d\Buttons[i], 0.0, 90.0 + (i * 180.0), 0.0)
+		
+		If Big = 1 Then
+			If i = 0 Then
+				PositionEntity(d\Buttons[i], x - 432.0 * RoomScale, y + 0.7, z + 192.0 * RoomScale)
 			Else
-				If i = 0 Then
-					PositionEntity(d\Buttons[i], x + 0.6, y + 0.7, z - 0.1)
-				Else
-					PositionEntity(d\Buttons[i], x - 0.6, y + 0.7, z + 0.1)
-					RotateEntity(d\Buttons[i], 0.0, 180.0, 0.0)
-				EndIf
+				PositionEntity(d\Buttons[i], x + 432.0 * RoomScale, y + 0.7, z - 192.0 * RoomScale)
 			EndIf
-			EntityParent(d\Buttons[i], d\FrameOBJ)
-			EntityPickMode(d\Buttons[i], 2)
+			RotateEntity(d\Buttons[i], 0.0, 90.0 + (i * 180.0), 0.0)
+		Else
+			If i = 0 Then
+				PositionEntity(d\Buttons[i], x + 0.6, y + 0.7, z - 0.1)
+			Else
+				PositionEntity(d\Buttons[i], x - 0.6, y + 0.7, z + 0.1)
+				RotateEntity(d\Buttons[i], 0.0, 180.0, 0.0)
+			EndIf
 		EndIf
+		EntityParent(d\Buttons[i], d\FrameOBJ)
+		EntityPickMode(d\Buttons[i], 2)
 	Next
 	
 	PositionEntity(d\OBJ, x, y, z)
@@ -11961,7 +11957,7 @@ Function InitFastResize()
 	AddTriangle(SF, 0, 1, 2)
 	AddTriangle(SF, 3, 2, 1)
 	EntityFX(SPR, 17)
-	ScaleEntity(SPR, SMALLEST_POWER_TWO / Float(RealGraphicWidth), SMALLEST_POWER_TWO / Float(RealGraphicHeight), 1.0)
+	ScaleEntity(SPR, 2048.0 / Float(RealGraphicWidth), 2048.0 / Float(RealGraphicHeight), 1.0) ; ~ CHECK WHY NOT SMALLEST_POWER_TWO
 	PositionEntity(SPR, 0, 0, 1.0001)
 	EntityOrder(SPR, -100001)
 	EntityBlend(SPR, 1)
@@ -12242,5 +12238,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1096#1333#1D81
+;~B#1092#132F#1D7D
 ;~C#Blitz3D
