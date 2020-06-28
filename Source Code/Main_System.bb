@@ -5769,7 +5769,7 @@ Function UpdateGUI()
 			CameraFogColor(Camera, 200.0, 200.0, 200.0)
 			CameraClsColor(Camera, 200.0, 200.0, 200.0)					
 			CameraRange(Camera, 0.05, 30.0)
-		ElseIf (PlayerRoom\RoomTemplate\Name = "gateb") And (EntityY(Collider) > 1040.0 * RoomScale)
+		ElseIf PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(Collider) > 1040.0 * RoomScale
 			HideEntity(tt\OverlayID[0])
 			CameraFogRange(Camera, 5.0, 45.0)
 			CameraFogColor(Camera, 200.0, 200.0, 200.0)
@@ -5936,7 +5936,7 @@ Function UpdateGUI()
 			CameraFogColor(Camera, 200.0, 200.0, 200.0)
 			CameraClsColor(Camera, 200.0, 200.0, 200.0)					
 			CameraRange(Camera, 0.05, 30.0)
-		ElseIf (PlayerRoom\RoomTemplate\Name = "gateb") And (EntityY(Collider) > 1040.0 * RoomScale)
+		ElseIf PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(Collider) > 1040.0 * RoomScale
 			HideEntity(tt\OverlayID[0])
 			CameraFogRange(Camera, 5.0, 45.0)
 			CameraFogColor(Camera, 200.0, 200.0, 200.0)
@@ -7951,7 +7951,7 @@ Function UpdateMenu()
 		EndIf
 		ShouldDeleteGadgets = False
 		
-		If PlayerRoom\RoomTemplate\Name <> "gateb" And PlayerRoom\RoomTemplate\Name <> "gatea"
+		If (PlayerRoom\RoomTemplate\Name <> "gateb" And EntityY(Collider) =< 1040.0 * RoomScale) And PlayerRoom\RoomTemplate\Name <> "gatea"
 			If StopHidingTimer = 0.0 Then
 				If Curr173 <> Null And Curr106 <> Null Then
 					If EntityDistance(Curr173\Collider, Collider) < 4.0 Lor EntityDistance(Curr106\Collider, Collider) < 4.0 Then 
@@ -11521,7 +11521,7 @@ Function Update008()
 				me\BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 96.0), me\BlinkTimer), -10.0)
 				If PlayerRoom\RoomTemplate\Name = "dimension1499" Then
 					msg\DeathMsg = "The whereabouts of SCP-1499 are still unknown, but a recon team has been dispatched to investigate reports of a violent attack to a church in the Russian town of [DATA REDACTED]."
-				ElseIf PlayerRoom\RoomTemplate\Name = "gatea" Lor PlayerRoom\RoomTemplate\Name = "gateb" Then
+				ElseIf PlayerRoom\RoomTemplate\Name = "gatea" Lor (PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(Collider) > 1040.0 * RoomScale) Then
 					msg\DeathMsg = SubjectName + " found wandering around Gate "
 					If PlayerRoom\RoomTemplate\Name = "gatea" Then
 						msg\DeathMsg = msg\DeathMsg + "A"
