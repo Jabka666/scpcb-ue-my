@@ -95,7 +95,7 @@ Else
 	Graphics3DExt(GraphicWidth, GraphicHeight, (DisplayMode = 2) + 1)
 EndIf
 
-Global MenuScale# = (GraphicHeight / 1024.0)
+Global MenuScale# = GraphicHeight / 1024.0
 
 SetBuffer(BackBuffer())
 
@@ -2861,8 +2861,8 @@ Repeat
 	EndIf
 	ft\PrevTime = ft\CurrTime
 	
-	If Framelimit > 0 Then
-		;Framelimit
+	If Framelimit > 0.0 Then
+		; ~ Framelimit
 		Local WaitingTime% = (1000.0 / Framelimit) - (MilliSecs() - fpst\LoopDelay)
 		
 		Delay(WaitingTime)
@@ -11770,137 +11770,142 @@ Function RenderWorld2(Tween#)
 	ElseIf wi\NightVision = 3
 		AmbientLight(255.0, 255.0, 255.0)
 	ElseIf PlayerRoom <> Null
-		If (PlayerRoom\RoomTemplate\Name <> "room173intro") And (PlayerRoom\RoomTemplate\Name <> "gateb") And (PlayerRoom\RoomTemplate\Name <> "gatea") Then
+		If (PlayerRoom\RoomTemplate\Name <> "room173intro") And (PlayerRoom\RoomTemplate\Name <> "gateb" And EntityY(Collider) =< 1040.0 * RoomScale) And (PlayerRoom\RoomTemplate\Name <> "gatea") Then
 			AmbientLight(Brightness, Brightness, Brightness)
 		EndIf
 	EndIf
 	
 	wi\IsNVGBlinking = False
-	HideEntity(tt\OverlayID[5])
 	
 	CameraViewport(Camera, 0, 0, GraphicWidth, GraphicHeight)
 	
-	Local HasBattery% = 2
-	Local Power% = 0
+	Local HasBattery%
+	Local Power%
 	
-	If wi\NightVision = 1 Lor wi\NightVision = 2 Then
+	If wi\NightVision <> 0 And wi\NightVision <> 3 Then
 		For i = 0 To MaxItemAmount - 1
-			If (Inventory(i) <> Null) Then
-				If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvgoggles") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernv") Then
-					Inventory(i)\State = Inventory(i)\State - (fpst\FPSFactor[0] * (0.02 * wi\NightVision))
-					Power = Int(Inventory(i)\State)
-					If Inventory(i)\State =< 0.0 Then ; ~ This NVG can't be used
-						HasBattery = 0
-						msg\Msg = "The batteries in these night vision goggles died."
-						msg\Timer = 70 * 5.0
-						me\BlinkTimer = -1.0
-						Exit
-					ElseIf Inventory(i)\State =< 100.0 Then
-						HasBattery = 1
-					EndIf
+			If Inventory(i) <> Null And (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvgoggles") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernv") Then
+				Inventory(i)\State = Max(0.0, Inventory(i)\State - (fpst\FPSFactor[0] * ((0.02 * wi\NightVision))))
+				Power = Int(Inventory(i)\State)
+				If Power = 0 Then ; ~ This NVG can't be used
+					HasBattery = 0
+					msg\Msg = "The batteries in these night vision goggles died."
+					msg\Timer = 70.0 * 6.0
+					IsNVGBlinking = True
+					BlinkTimer = -1.0
+				ElseIf Power =< 100.0 Then
+					HasBattery = 1
+				Else
+					HasBattery = 2
 				EndIf
+				Exit
 			EndIf
 		Next
-		If HasBattery Then
-			RenderWorld()
+		
+		If wi\NightVision = 2 Then
+			If wi\NVGTimer =< 0.0 Then
+				For np.NPCs = Each NPCs
+					np\NVX = EntityX(np\Collider, True)
+					np\NVY = EntityY(np\Collider, True)
+					np\NVZ = EntityZ(np\Collider, True)
+				Next
+				If wi\NVGTimer =< -10.0
+					wi\NVGTimer = 600.0
+				EndIf
+				wi\IsNVGBlinking = True
+			EndIf
+			wi\NVGTimer = wi\NVGTimer - fpst\FPSFactor[0]
 		EndIf
-	Else
-		RenderWorld(Tween)
 	EndIf
+	
+	If (Not wi\IsNVGBlinking) Then RenderWorld(Tween)
 	
 	CurrTrisAmount = TrisRendered()
-
-	If HasBattery = 0 And wi\NightVision <> 3 Then
-		wi\IsNVGBlinking = True
-		ShowEntity(tt\OverlayID[5])
-	EndIf
 	
-	If me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0 Then
-		If HasBattery <> 0 And (wi\NightVision > 0 And wi\NightVision < 3) Then
-			If wi\NightVision = 2 Then ; ~ Show a HUD
-				wi\NVGTimer = wi\NVGTimer - fpst\FPSFactor[0]
-				If wi\NVGTimer =< 0.0 Then
-					For np.NPCs = Each NPCs
-						np\NVX = EntityX(np\Collider, True)
-						np\NVY = EntityY(np\Collider, True)
-						np\NVZ = EntityZ(np\Collider, True)
-					Next
-					wi\IsNVGBlinking = True
-					ShowEntity(tt\OverlayID[5])
-					If wi\NVGTimer =< -10.0 Then
-						wi\NVGTimer = 600.0
-					EndIf
-				EndIf
-				
-				Color(255, 255, 255)
-				
-				SetFont(fo\FontID[2])
-				
-				Local PlusY% = 0
-				
-				If HasBattery = 1 Then PlusY% = 40
-				
-				Text(GraphicWidth / 2, (20 + PlusY) * MenuScale, "REFRESHING DATA IN", True, False)
-				
-				Text(GraphicWidth / 2, (60 + PlusY) * MenuScale, Max(f2s(wi\NVGTimer / 60.0, 1), 0.0), True, False)
-				Text(GraphicWidth / 2, (100 + PlusY) * MenuScale, "SECONDS", True, False)
-				
-				Temp = CreatePivot() : Temp2 = CreatePivot()
-				PositionEntity(Temp, EntityX(Collider), EntityY(Collider), EntityZ(Collider))
-				
-				Color(255, 255, 255)
-				
-				For np.NPCs = Each NPCs
-					If np\NVName <> "" And (Not np\HideFromNVG) Then ; ~ Don't waste your time if the string is empty
-						PositionEntity(Temp2, np\NVX, np\NVY, np\NVZ)
-						Dist = EntityDistance(Temp2, Collider)
-						If Dist < 23.5 Then ; ~ Don't draw text if the NPC is too far away
-							PointEntity(Temp, Temp2)
-							YawValue = WrapAngle(EntityYaw(Camera) - EntityYaw(Temp))
-							xValue = 0.0
-							If YawValue > 90.0 And YawValue =< 180.0 Then
-								xValue = Sin(90.0) / 90.0 * YawValue
-							Else If YawValue > 180.0 And YawValue < 270.0 Then
-								xValue = Sin(270.0) / YawValue * 270.0
-							Else
-								xValue = Sin(YawValue)
-							EndIf
-							PitchValue = WrapAngle(EntityPitch(Camera) - EntityPitch(Temp))
-							yValue = 0.0
-							If PitchValue > 90.0 And PitchValue =< 180.0 Then
-								yValue = Sin(90.0) / 90.0 * PitchValue
-							Else If PitchValue > 180.0 And PitchValue < 270.0 Then
-								yValue = Sin(270.0) / PitchValue * 270.0
-							Else
-								yValue = Sin(PitchValue)
-							EndIf
-							
-							If (Not wi\IsNVGBlinking) Then
-								Text(GraphicWidth / 2 + xValue * (GraphicWidth / 2), GraphicHeight / 2 - yValue * (GraphicHeight / 2), np\NVName, True, True)
-								Text(GraphicWidth / 2 + xValue * (GraphicWidth / 2), GraphicHeight / 2 - yValue * (GraphicHeight / 2) + 30 * MenuScale, f2s(Dist, 1) + " m", True, True)
-							EndIf
+	ScrambleActive = 0
+	
+	If hasBattery > 0 Then
+		If wi\NightVision = 2 Then ; ~ show a HUD
+			Color(255, 255, 255)
+			
+			SetFont(fo\FontID[2])
+			
+			Local PlusY% = 0
+			
+			If hasBattery = 1 Then PlusY = 40
+			
+			Text(GraphicWidth / 2, (20 + PlusY) * MenuScale, "REFRESHING DATA IN", True, False)
+			
+			Text(GraphicWidth / 2, (60 + PlusY) * MenuScale, Max(f2s(wi\NVGTimer / 60.0, 1), 0.0), True, False)
+			Text(GraphicWidth / 2, (100 + PlusY) * MenuScale, "SECONDS", True, False)
+			
+			Temp = CreatePivot() : Temp2 = CreatePivot()
+			PositionEntity(Temp, EntityX(Collider), EntityY(Collider), EntityZ(Collider))
+			
+			Color(255, 255, 255)
+			
+			For np.NPCs = Each NPCs
+				If np\NVName <> "" And (Not np\HideFromNVG) Then ; ~ Don't waste your time if the string is empty
+					PositionEntity(Temp2, np\NVX, np\NVY, np\NVZ)
+					If EntityDistanceSquared(Temp2, Collider) < PowTwo(23.5) Then ; ~ Don't draw text if the NPC is too far away
+						PointEntity(Temp, Temp2)
+						YawValue = WrapAngle(EntityYaw(Camera) - EntityYaw(Temp))
+						xValue = 0.0
+						If YawValue > 90.0 And YawValue =< 180.0 Then
+							xValue = Sin(90.0) / 90.0 * YawValue
+						ElseIf YawValue > 180.0 And YawValue < 270.0 Then
+							xValue = Sin(270.0) / YawValue * 270.0
+						Else
+							xValue = Sin(YawValue)
+						EndIf
+						PitchValue = WrapAngle(EntityPitch(Camera) - EntityPitch(Temp))
+						yValue = 0.0
+						If PitchValue > 90.0 And PitchValue =< 180.0 Then
+							yValue = Sin(90.0) / 90.0 * PitchValue
+						ElseIf PitchValue > 180 And PitchValue < 270.0 Then
+							yValue = Sin(270.0) / PitchValue * 270.0
+						Else
+							yValue = Sin(PitchValue)
+						EndIf
+						
+						If (Not wi\IsNVGBlinking) Then
+							Text(GraphicWidth / 2 + xValue * (GraphicWidth / 2), GraphicHeight / 2 - yValue * (GraphicHeight / 2), np\NVName, True, True)
+							Text(GraphicWidth / 2 + xValue * (GraphicWidth / 2), GraphicHeight / 2 - yValue * (GraphicHeight / 2) + 30.0 * MenuScale, f2s(Sqr(Dist), 1) + " m", True, True)
 						EndIf
 					EndIf
-				Next
-				FreeEntity(Temp) : FreeEntity(Temp2)
-				
-				Color(0, 0, 55)
-			ElseIf wi\NightVision = 1
-				Color(0, 55, 0)
-			EndIf
-			For k = 0 To 10
-				Rect(45, GraphicHeight * 0.5 - (k * 20), 54, 10, True)
+				EndIf
 			Next
-			If wi\NightVision = 2 Then
-				Color(0, 0, 255)
-			ElseIf wi\NightVision = 1
-				Color(0, 255, 0)
-			EndIf
-			For l = 0 To Floor((Power + 50) * 0.01)
-				Rect(45, GraphicHeight * 0.5 - (l * 20), 54, 10, True)
-			Next
-			DrawImage(tt\ImageID[6], 40, GraphicHeight * 0.5 + 30)
+			
+			FreeEntity (Temp) : FreeEntity (Temp2)
+			
+			Color(0, 0, 55)
+		ElseIf wi\NightVision = 1
+			Color(0, 55, 0)
+		Else
+			Color(55, 55, 55)
 		EndIf
+		For k = 0 To 10
+			Rect(45, GraphicHeight * 0.5 - (k * 20), 54, 10, True)
+		Next
+		
+		For l = 0 To Min(Floor((Power + 50) * 0.01), 11)
+			Rect(45, GraphicHeight * 0.5 - (l * 20), 54, 10, True)
+		Next
+		DrawImage(tt\ImageID[6], 40, GraphicHeight * 0.5 + 30)
+		If wi\NightVision = 2 Then
+			Color(0, 0, 55)
+		ElseIf wi\NightVision = 1
+			Color(0, 55, 0)
+		Else
+			Color(55, 55, 55)
+		EndIf
+		If hasBattery = 1 And ((MilliSecs() Mod 800) < 400) Then
+			Color(255, 0, 0)
+			SetFont(fo\FontID[2])
+			
+			Text(GraphicWidth / 2, 20 * MenuScale, "WARNING: LOW BATTERY", True, False)
+		EndIf
+		Color(255, 255, 255)
 	EndIf
 	
 	; ~ Render sprites
@@ -11908,16 +11913,6 @@ Function RenderWorld2(Tween#)
 	CameraProjMode(Camera, 0)
 	RenderWorld()
 	CameraProjMode(Ark_Blur_Cam, 0)
-	
-	If me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0 Then
-		If (wi\NightVision = 1 Lor wi\NightVision = 2) And (HasBattery = 1) And ((MilliSecs() Mod 800) < 400) Then
-			Color(255, 0, 0)
-			SetFont(fo\FontID[2])
-			
-			Text(GraphicWidth / 2, 20 * MenuScale, "WARNING: LOW BATTERY", True, False)
-			Color(255, 255, 255)
-		EndIf
-	EndIf
 End Function
 
 Function ScaleRender(x#, y#, hScale# = 1.0, vScale# = 1.0)
@@ -11957,7 +11952,7 @@ Function InitFastResize()
 	AddTriangle(SF, 0, 1, 2)
 	AddTriangle(SF, 3, 2, 1)
 	EntityFX(SPR, 17)
-	ScaleEntity(SPR, 2048.0 / Float(RealGraphicWidth), 2048.0 / Float(RealGraphicHeight), 1.0) ; ~ CHECK WHY NOT SMALLEST_POWER_TWO
+	ScaleEntity(SPR, SMALLEST_POWER_TWO / Float(RealGraphicWidth), SMALLEST_POWER_TWO / Float(RealGraphicHeight), 1.0)
 	PositionEntity(SPR, 0, 0, 1.0001)
 	EntityOrder(SPR, -100001)
 	EntityBlend(SPR, 1)
