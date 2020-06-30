@@ -1960,7 +1960,7 @@ Function UpdateNPCs()
 							
 							If n\Frame = 777.0 Then
 								If Rand(700) = 1 Then
-									If EntityDistance(Collider, n\Collider) < 5.0 Then
+									If Dist < 5.0 Then
 										SetNPCFrame(n, 719.0)
 									EndIf
 								EndIf
@@ -4693,7 +4693,7 @@ Function UpdateNPCs()
 								n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
 								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fpst\FPSFactor[0])
 								
-								If EntityDistance(n\Collider, Collider) < 1.0
+								If Dist < 1.0 Then
 									If Abs(DeltaYaw(n\Collider, Collider)) =< 60.0 Then
 										n\State = 4.0
 									EndIf

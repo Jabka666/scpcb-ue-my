@@ -1240,7 +1240,7 @@ Function UpdateEvents()
 									AnimateNPC(e\room\NPC[3], 358.0, 482.0, 0.4, False)
 								Else
 									AnimateNPC(e\room\NPC[3], 483.0, 607.0, 0.2, True)
-									If (EntityDistance(Collider, e\room\NPC[3]\Collider) < 1.5) Then
+									If EntityDistance(Collider, e\room\NPC[3]\Collider) < 1.5 Then
 										If EntityInView(e\room\NPC[3]\OBJ, Camera) Then
 											DrawHandIcon = True
 											
@@ -1480,10 +1480,8 @@ Function UpdateEvents()
 							e\EventState = Min(e\EventState + fpst\FPSFactor[0], 13000.0)
 							
 							For i = 1 To 2
-								If Distance(EntityX(e\room\NPC[i]\Collider), EntityX(e\room\Objects[i + 2], True), EntityZ(e\room\NPC[i]\Collider), EntityZ(e\room\Objects[i + 2], True)) < 0.3 Then
-									PointEntity(e\room\NPC[i]\OBJ, e\room\Objects[5])
-									RotateEntity(e\room\NPC[i]\Collider, 0.0, CurveValue(EntityYaw(e\room\NPC[i]\OBJ), EntityYaw(e\room\NPC[i]\Collider), 15.0), 0.0)
-								EndIf
+								PointEntity(e\room\NPC[i]\OBJ, e\room\Objects[5])
+								RotateEntity(e\room\NPC[i]\Collider, 0.0, CurveValue(EntityYaw(e\room\NPC[i]\OBJ), EntityYaw(e\room\NPC[i]\Collider), 15.0), 0.0)
 							Next
 							
 							If e\EventState < 10300.0 Then
@@ -1940,7 +1938,7 @@ Function UpdateEvents()
 			Case "room895", "room895_106"
 				;[Block]
 				If e\EventState < MilliSecs() Then
-					; ~ SCP-079 starts broadcasting 895 camera feed on monitors after leaving the first zone
+					; ~ SCP-079 starts broadcasting SCP-895's camera feed on monitors after leaving the first zone
 					If me\Zone > 0 Then 
 						If EntityPitch(e\room\Levers[0], True) > 0.0 Then ; ~ Camera feed on
 							For sc.SecurityCams = Each SecurityCams
@@ -2071,7 +2069,7 @@ Function UpdateEvents()
 								EndIf
 							EndIf
 						Next
-						If (CoffinDistance < 4.0) And (HasBatteryFor895) And I_714\Using = 0 And wi\GasMask < 3 And wi\HazmatSuit < 3 Then
+						If CoffinDistance < 4.0 And HasBatteryFor895 And I_714\Using = 0 And wi\GasMask < 3 And wi\HazmatSuit < 3 Then
 							TurnEntity(Collider, 0.0, AngleDist(PointDirection(EntityX(Collider, True), EntityZ(Collider, True), EntityX(e\room\Objects[1],True), EntityZ(e\room\Objects[1], True)) + 90.0 + Sin(WrapAngle(e\EventState3 / 10.0)), EntityYaw(Collider)) / 4.0, 0.0, True)
 							User_Camera_Pitch = (User_Camera_Pitch * 0.8) + (((-60.0) * Min(Max((2.0 - Distance(EntityX(Collider, True), EntityX(e\room\Objects[1], True), EntityZ(Collider, True), EntityZ(e\room\Objects[1], True))) / 2.0, 0.0), 1.0)) * 0.2)
 							
@@ -2175,7 +2173,7 @@ Function UpdateEvents()
 				If (Not Curr106\Contained) Then
 					If e\EventState = 0.0 Then
 						If e\room\Dist < 8.0 And e\room\Dist > 0.0 Then
-							If Curr106\State < 0 Then 
+							If Curr106\State < 0.0 Then 
 								RemoveEvent(e)
 							Else
 								e\room\RoomDoors[0]\Open = True
@@ -2718,7 +2716,7 @@ Function UpdateEvents()
 						UpdateDoors()
 						UpdateRooms()
 					ElseIf e\EventState2 = 0.0
-						Dist# = EntityDistance(Collider, e\room\OBJ)	
+						Dist = EntityDistance(Collider, e\room\OBJ)	
 						
 						If Dist > 1700.0 * RoomScale Then
 							me\BlinkTimer = -10.0
@@ -4825,7 +4823,7 @@ Function UpdateEvents()
 					EndIf
 					
 					If Temp = True Then 
-						e\EventState = e\EventState + 1
+						e\EventState = e\EventState + 1.0
 						For it.Items = Each Items
 							If EntityDistance(it\Collider, Collider) < 5.0 Then
 								TFormPoint(EntityX(it\Collider), EntityY(it\Collider), EntityZ(it\Collider), 0, e\room\OBJ)
@@ -6373,7 +6371,7 @@ Function UpdateEvents()
 						EndIf
 					Else
 						ShouldPlay = 16
-						If (e\EventState < 65) Then
+						If e\EventState < 65.0 Then
 							If Distance(EntityX(Collider), EntityX(e\room\Objects[0], True), EntityZ(Collider), EntityZ(e\room\Objects[0], True)) < 2.0 Then
 								PlaySound_Strict(LoadTempSound("SFX\SCP\205\Enter.ogg"))
 								
@@ -7503,12 +7501,12 @@ Function UpdateEvents()
 											RotateEntity(GrabbedEntity, 0.0, 0.0, 270.0)
 										EndIf
 									EndIf
-								End If
-							End If
-						End If
+								EndIf
+							EndIf
+						EndIf
 					Else
 						GrabbedEntity = 0
-					End If
+					EndIf
 					
 					Local Setting$ = ""
 					
@@ -7542,8 +7540,8 @@ Function UpdateEvents()
 								GrabbedEntity = 0
 							ElseIf EntityDistance(e\room\Objects[i], Camera) > 1.0
 								GrabbedEntity = 0
-							End If
-						End If
+							EndIf
+						EndIf
 					Next
 					
 					If e\EventState > 0.0 Then
@@ -7603,8 +7601,8 @@ Function UpdateEvents()
 								If it\Collider <> 0 And it\Picked = False Then
 									If Distance(EntityX(it\Collider), EntityX(e\room\Objects[2], True), EntityZ(it\Collider), EntityZ(e\room\Objects[2], True)) < 180.0 * RoomScale Then
 										Use914(it, Setting, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True), EntityZ(e\room\Objects[3], True))
-									End If
-								End If
+									EndIf
+								EndIf
 							Next
 							
 							If Distance(EntityX(Collider), EntityX(e\room\Objects[2], True), EntityZ(Collider), EntityZ(e\room\Objects[2], True)) < 160.0 * RoomScale Then
@@ -7673,7 +7671,7 @@ Function UpdateEvents()
 							;[Block]
 							Animate2(e\room\Objects[0], AnimTime(e\room\Objects[0]), 2.0, 395.0, 1.0)
 							
-							If (EntityDistance(Collider, e\room\Objects[0]) < 2.5) Then e\EventState = 2.0
+							If EntityDistance(Collider, e\room\Objects[0]) < 2.5 Then e\EventState = 2.0
 							;[End Block]
 						Case 2.0
 							;[Block]
@@ -8396,7 +8394,7 @@ Function UpdateEvents()
 						e\room\NPC[0]\State = 2.0
 						For r.Rooms = Each Rooms
 							If r <> PlayerRoom
-								If (EntityDistance(r\OBJ, e\room\NPC[0]\Collider) < HideDistance * 2 And EntityDistance(r\OBJ, e\room\NPC[0]\Collider) > HideDistance)
+								If EntityDistance(r\OBJ, e\room\NPC[0]\Collider) < HideDistance * 2 And EntityDistance(r\OBJ, e\room\NPC[0]\Collider) > HideDistance
 									e\room\NPC[0]\PathStatus = FindPath(e\room\NPC[0], EntityX(r\OBJ), EntityY(r\OBJ), EntityZ(r\OBJ))
 									e\room\NPC[0]\PathTimer = 0.0
 									If e\room\NPC[0]\PathStatus = 1 Then e\EventState2 = 6.0
@@ -8841,8 +8839,7 @@ Function UpdateEvents()
 							e\EventState = 1.0
 				        ElseIf e\EventState = 1.0 Then 
 				            If e\room\RoomDoors[2]\Open = True Then GiveAchievement(Achv409)
-					        Dist = EntityDistance(Collider, e\room\NPC[0]\Collider)
-					        If Dist < 1.0 And I_409\Timer < 1.0 Then
+					        If EntityDistance(Collider, e\room\NPC[0]\Collider) < 1.0 And I_409\Timer < 1.0 Then
 						        I_409\Timer = 1.0
 					        EndIf
 					        ; ~ Touching the SCP-409
@@ -10355,5 +10352,5 @@ Function GenerateRandomIA()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11E1#1E08
+;~B#11DF#1E06
 ;~C#Blitz3D

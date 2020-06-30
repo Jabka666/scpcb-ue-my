@@ -4320,7 +4320,7 @@ Function MouseLook()
 			TurnEntity(Camera, (-MouseYSpeed()) * 0.05 * fpst\FPSFactor[0], (-MouseXSpeed()) * 0.15 * fpst\FPSFactor[0], 0.0)
 		Else
 			TurnEntity(Camera, MouseYSpeed() * 0.05 * fpst\FPSFactor[0], (-MouseXSpeed()) * 0.15 * fpst\FPSFactor[0], 0.0)
-		End If
+		EndIf
 	EndIf
 	
 	If ParticleAmount = 2 Then
