@@ -176,6 +176,7 @@ End Function
 
 Function LoadRMesh(File$, rt.RoomTemplates)
 	CatchErrors("Uncaught (LoadRMesh)")
+	
 	; ~ Generate a texture made of white
 	Local BlankTexture%, BumpTex%
 	
@@ -664,6 +665,7 @@ End Type
 
 Function GenForestGrid(fr.Forest)
 	CatchErrors("Uncaught (GenForestGrid)")
+	
 	fr\ID = LastForestID + 1
 	LastForestID = LastForestID + 1
 	
@@ -1258,6 +1260,7 @@ End Function
 
 Function DestroyForest(fr.Forest)
 	CatchErrors("Uncaught (DestroyForest)")
+	
 	Local tX%, tY%, i%
 	
 	For tX% = 0 To GridSize - 1
@@ -1700,6 +1703,7 @@ End Function
 
 Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 	CatchErrors("Uncaught (CreateRoom)")
+	
 	Local r.Rooms = New Rooms
 	Local rt.RoomTemplates
 	
@@ -8720,5 +8724,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11C7
+;~B#11CB
 ;~C#Blitz3D

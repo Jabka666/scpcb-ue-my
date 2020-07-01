@@ -7862,7 +7862,8 @@ Function UpdateEvents()
 				; ~ 2.0 = the player doesn't has any items in the Inventory, giving him heavily injuries and giving him a random item
 				; ~ 3.0 = player got a memorial item (to explain a bit D-9341's background)
 				; ~ 3.1 = player got a memorial item + injuries (because he didn't had any item in his inventory before)
-				If PlayerRoom = e\room
+				
+				If PlayerRoom = e\room Then
 					GrabbedEntity = 0
 					
 					e\EventState = 0.0
@@ -8781,19 +8782,19 @@ Function UpdateEvents()
 				;[End Block]
 			Case "room4info"
 				;[Block]
-				If e\EventState = 0.0 Then
-					e\room\NPC[0] = CreateNPC(NPCtypeClerk, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
-					RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 270.0, 0.0)
-					e\room\NPC[0]\State = 3.0
-					SetNPCFrame(e\room\NPC[0], 40.0)
-					e\room\NPC[0]\IsDead = True
-					Tex = LoadTexture_Strict("GFX\npcs\body_c.png")
-					EntityTexture(e\room\NPC[0]\OBJ, Tex)
-					FreeTexture(Tex)
-					e\EventState = 1.0
-				Else
-					e\SoundCHN = LoopSound2(ScientistRadioSFX(Rand(0, 1)), e\SoundCHN, Camera, e\room\Objects[2], 4.0, 0.5)
-			    EndIf
+				If PlayerRoom = e\room Then
+					If e\EventState = 0.0 Then
+						e\room\NPC[0] = CreateNPC(NPCtypeClerk, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
+						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 270.0, 0.0)
+						e\room\NPC[0]\State = 3.0
+						SetNPCFrame(e\room\NPC[0], 40.0)
+						e\room\NPC[0]\IsDead = True
+						Tex = LoadTexture_Strict("GFX\npcs\body_c.png")
+						EntityTexture(e\room\NPC[0]\OBJ, Tex)
+						FreeTexture(Tex)
+						e\EventState = 1.0
+					EndIf
+				EndIf
 				
 				For e2.Events = Each Events
 					If e2\EventName = "room2sl" Then

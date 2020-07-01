@@ -1924,8 +1924,6 @@ Global ApacheSFX%
 Global CurrStepSFX%
 Dim StepSFX%(6, 2, 8) ; ~ (Normal / Metal, Walk / Run, ID)
 
-Dim ScientistRadioSFX%(2)
-
 DrawLoading(30, True)
 
 Global PlayCustomMusic% = False, CustomMusic% = 0
@@ -12233,5 +12231,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1092#132F#1D7D
+;~B#1090#132D#1D7B
 ;~C#Blitz3D

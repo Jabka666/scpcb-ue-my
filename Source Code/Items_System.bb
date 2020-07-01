@@ -499,6 +499,7 @@ End Function
 
 Function UpdateItems()
 	CatchErrors("Uncaught (UpdateItems)")
+	
 	Local n%, i.Items, i2.Items
 	Local xTemp#, yTemp#, zTemp#
 	Local Temp%, np.NPCs
@@ -956,7 +957,6 @@ Function Update294()
 	
 	CatchErrors("Update294")
 End Function
-
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D
