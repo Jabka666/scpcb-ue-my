@@ -95,7 +95,7 @@ Else
 	Graphics3DExt(GraphicWidth, GraphicHeight, (DisplayMode = 2) + 1)
 EndIf
 
-Global MenuScale# = (GraphicHeight / 1024.0)
+Global MenuScale# = GraphicHeight / 1024.0
 
 SetBuffer(BackBuffer())
 
@@ -2859,8 +2859,8 @@ Repeat
 	EndIf
 	ft\PrevTime = ft\CurrTime
 	
-	If Framelimit > 0 Then
-		;Framelimit
+	If Framelimit > 0.0 Then
+		; ~ Framelimit
 		Local WaitingTime% = (1000.0 / Framelimit) - (MilliSecs() - fpst\LoopDelay)
 		
 		Delay(WaitingTime)
@@ -4674,8 +4674,8 @@ Function DrawGUI()
 			
 			Text(x - 60, 120, "Room: " + PlayerRoom\RoomTemplate\Name)
             Text(x - 60, 140, "Room Coordinates: (" + Floor(EntityX(PlayerRoom\OBJ) / 8.0 + 0.5) + ", " + Floor(EntityZ(PlayerRoom\OBJ) / 8.0 + 0.5) + ", Angle: " + PlayerRoom\Angle + ")")
-			For ev.Events = Each Events
-				If PlayerRoom <> Null Then
+			If PlayerRoom <> Null Then
+				For ev.Events = Each Events
 					If ev\room = PlayerRoom Then
 						Text(x - 60, 160, "Room Event: " + ev\EventName) 
 						Text(x - 60, 180, "State: " + ev\EventState)
@@ -4685,8 +4685,8 @@ Function DrawGUI()
 						Text(x - 60, 260, "Str: "+ ev\EventStr)
 						Exit
 					EndIf
-				EndIf
-			Next
+				Next
+			EndIf
             GlobalMemoryStatus(m.MEMORYSTATUS)
 			Text(x - 60, 300, "Memory: " + (m\dwAvailPhys / 1024 / 1024) + " MB/" + (m\dwTotalPhys / 1024 / 1024) + " MB (" + (m\dwAvailPhys / 1024) + " KB/" + (m\dwTotalPhys / 1024) + " KB)")
 			Text(x - 60, 320, "Triangles Rendered: " + CurrTrisAmount)
@@ -4717,19 +4717,17 @@ Function DrawGUI()
 				EndIf
 			Next
 			
-			If PlayerRoom <> Null Then
-				If PlayerRoom\RoomTemplate\Name = "dimension1499"
-					Text(x - 60, 680, "Current Chunk X / Z: (" + (Int((EntityX(Collider) + 20) / 40)) + ", "+(Int((EntityZ(Collider) + 20) / 40)) + ")")
+			If PlayerRoom\RoomTemplate\Name = "dimension1499"
+				Text(x - 60, 680, "Current Chunk X / Z: (" + (Int((EntityX(Collider) + 20) / 40)) + ", "+(Int((EntityZ(Collider) + 20) / 40)) + ")")
 					
-					Local CH_Amount% = 0
+				Local CH_Amount% = 0
 					
-					For ch.Chunk = Each Chunk
-						CH_Amount = CH_Amount + 1
-					Next
-					Text(x - 60, 700, "Current Chunk Amount: " + CH_Amount)
-				Else
-					Text(x - 60, 700, "Current Room Position: (" + PlayerRoom\x + ", " + PlayerRoom\y + ", " + PlayerRoom\z + ")")
-				EndIf
+				For ch.Chunk = Each Chunk
+					CH_Amount = CH_Amount + 1
+				Next
+				Text(x - 60, 700, "Current Chunk Amount: " + CH_Amount)
+			Else
+				Text(x - 60, 700, "Current Room Position: (" + PlayerRoom\x + ", " + PlayerRoom\y + ", " + PlayerRoom\z + ")")
 			EndIf
 			If SelectedMonitor <> Null Then
 				Text(x - 60, 720, "Current Monitor: " + SelectedMonitor\ScrOBJ)
@@ -4785,6 +4783,7 @@ Function DrawGUI()
 			Text(x + 840, 140, "Light Flash: " + me\LightFlash)
 			Text(x + 840, 160, "MTF Timer: " + MTFTimer)
 			Text(x + 840, 180, "Explosion Timer: " + me\ExplosionTimer)
+			Text(x + 840, 200, "Ending Timer: " + me\EndingTimer)
 			
 			SetFont(fo\FontID[0])
 		EndIf
@@ -11768,7 +11767,7 @@ Function RenderWorld2(Tween#)
 	ElseIf wi\NightVision = 3
 		AmbientLight(255.0, 255.0, 255.0)
 	ElseIf PlayerRoom <> Null
-		If (PlayerRoom\RoomTemplate\Name <> "room173intro") And (PlayerRoom\RoomTemplate\Name <> "gateb") And (PlayerRoom\RoomTemplate\Name <> "gatea") Then
+		If (PlayerRoom\RoomTemplate\Name <> "room173intro") And (PlayerRoom\RoomTemplate\Name <> "gateb" And EntityY(Collider) =< 1040.0 * RoomScale) And (PlayerRoom\RoomTemplate\Name <> "gatea") Then
 			AmbientLight(Brightness, Brightness, Brightness)
 		EndIf
 	EndIf
@@ -11851,8 +11850,8 @@ Function RenderWorld2(Tween#)
 				For np.NPCs = Each NPCs
 					If np\NVName <> "" And (Not np\HideFromNVG) Then ; ~ Don't waste your time if the string is empty
 						PositionEntity(Temp2, np\NVX, np\NVY, np\NVZ)
-						Dist = EntityDistance(Temp2, Collider)
-						If Dist < 23.5 Then ; ~ Don't draw text if the NPC is too far away
+						Dist = EntityDistanceSquared(Temp2, Collider)
+						If Dist < PowTwo(23.5) Then ; ~ Don't draw text if the NPC is too far away
 							PointEntity(Temp, Temp2)
 							YawValue = WrapAngle(EntityYaw(Camera) - EntityYaw(Temp))
 							xValue = 0.0
@@ -11875,7 +11874,7 @@ Function RenderWorld2(Tween#)
 							
 							If (Not wi\IsNVGBlinking) Then
 								Text(GraphicWidth / 2 + xValue * (GraphicWidth / 2), GraphicHeight / 2 - yValue * (GraphicHeight / 2), np\NVName, True, True)
-								Text(GraphicWidth / 2 + xValue * (GraphicWidth / 2), GraphicHeight / 2 - yValue * (GraphicHeight / 2) + 30 * MenuScale, f2s(Dist, 1) + " m", True, True)
+								Text(GraphicWidth / 2 + xValue * (GraphicWidth / 2), GraphicHeight / 2 - yValue * (GraphicHeight / 2) + 30 * MenuScale, f2s(Sqr(Dist), 1) + " m", True, True)
 							EndIf
 						EndIf
 					EndIf
@@ -12236,5 +12235,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1090#132D#1D7B
+;~B#1090#132C#1D7A
 ;~C#Blitz3D
