@@ -4500,18 +4500,48 @@ Function DrawGUI()
 	If PlayerRoom\RoomTemplate\Name = "pocketdimension" Then
 		For e.Events = Each Events
 			If e\room = PlayerRoom Then
-				If e\EventState > 600.0 Then
+				If Float(e\EventStr) < 1000.0 Then
+					If e\EventState > 600.0 Then
+						If me\BlinkTimer < -3.0 And me\BlinkTimer > -10.0 Then
+							If e\Img = 0 Then
+								If me\BlinkTimer > -5.0 And Rand(30) = 1 Then
+									PlaySound_Strict(DripSFX(Rand(0, 5)))
+									If e\Img = 0 Then e\Img = LoadImage_Strict("GFX\npcs\scp_106_face.png")
+								EndIf
+							Else
+								DrawImage(e\Img, GraphicWidth / 2 - Rand(390, 310), GraphicHeight / 2 - Rand(290, 310))
+							EndIf
+						Else
+							If e\Img <> 0 Then FreeImage(e\Img) : e\Img = 0
+						EndIf
+						Exit
+					EndIf
+				Else
 					If me\BlinkTimer < -3.0 And me\BlinkTimer > -10.0 Then
 						If e\Img = 0 Then
-							If me\BlinkTimer > -5.0 And Rand(30) = 1 Then
-								PlaySound_Strict(DripSFX(0))
-								If e\Img = 0 Then e\Img = LoadImage_Strict("GFX\npcs\scp_106_face.png")
+							If me\BlinkTimer > -5.0 Then
+								If e\Img = 0 Then
+									e\Img = LoadImage_Strict("GFX\kneel_mortal.png")
+									If (ChannelPlaying(e\SoundCHN)) Then
+										StopChannel(e\SoundCHN)
+									EndIf
+									e\SoundCHN = PlaySound_Strict(e\Sound)
+								EndIf
 							EndIf
 						Else
 							DrawImage(e\Img, GraphicWidth / 2 - Rand(390, 310), GraphicHeight / 2 - Rand(290, 310))
 						EndIf
 					Else
 						If e\Img <> 0 Then FreeImage(e\Img) : e\Img = 0
+						If me\BlinkTimer < -3.0 Then
+							If (Not ChannelPlaying(e\SoundCHN)) Then
+								e\SoundCHN = PlaySound_Strict(e\Sound)
+							EndIf
+						Else
+							If (ChannelPlaying(e\SoundCHN)) Then
+								StopChannel(e\SoundCHN)
+							EndIf
+						EndIf
 					EndIf
 					Exit
 				EndIf
@@ -12235,5 +12265,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1090#132C#1D7A
+;~B#1090#134A#1D98
 ;~C#Blitz3D
