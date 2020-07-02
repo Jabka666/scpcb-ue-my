@@ -126,6 +126,8 @@
 		Dmitriy Sazanov ("Dmitriy-Bars")
 		Yuri Novikov ("BayanForce")
 		C45
+		slend
+		Salvage
 
 *Development Helpers
 		
@@ -142,8 +144,7 @@
 		Elan S.
 		Ashad Jackson ("ashadttt") 
 		Vladislav Borisevich ("Vane Brain")
-		Salvage
-
+		
 *Mod Testers
 
 		Alexey Krasnov("TaskeWSH")
