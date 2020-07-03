@@ -1591,7 +1591,7 @@ Function PlaceGrid_MapCreator(r.Rooms)
 						it = CreateItem("SCP-500-01", "scp500pill", r\x + x * 2.0 + (Cos(EntityYaw(Tile_Entity, True)) * (-208.0) * RoomScale) - (Sin(EntityYaw(Tile_Entity, True)) * 1226.0 * RoomScale), 8.0 + (80.0 * RoomScale), r\z + y * 2.0 + (Sin(EntityYaw(Tile_Entity, True)) * (-208.0) * RoomScale) + (Cos(EntityYaw(Tile_Entity, True)) * 1226.0 * RoomScale))
 						EntityType(it\Collider, HIT_ITEM)
 						
-						it = CreateItem("Night Vision Goggles", "nvgoggles", r\x + x * 2.0 - (Sin(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale), 8.0 + (80.0 * RoomScale),  r\z + y * 2.0 + (Cos(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale))
+						it = CreateItem("Night Vision Goggles", "nvg", r\x + x * 2.0 - (Sin(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale), 8.0 + (80.0 * RoomScale),  r\z + y * 2.0 + (Cos(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale))
 						EntityType(it\Collider, HIT_ITEM)
 						;[End Block]
 				End Select
@@ -2953,7 +2953,7 @@ Function FillRoom(r.Rooms)
 			sc\Angle = 225.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			
-			it = CreateItem("Night Vision Goggles", "nvgoggles", r\x + 320.0 * RoomScale, r\y + 0.5, r\z + 704.0 * RoomScale)
+			it = CreateItem("Night Vision Goggles", "nvg", r\x + 320.0 * RoomScale, r\y + 0.5, r\z + 704.0 * RoomScale)
 			it\State = 300.0
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
@@ -3120,7 +3120,7 @@ Function FillRoom(r.Rooms)
 			it = CreateItem("Black Severed Hand", "hand2", r\x + xTemp * RoomScale, r\y - 5596.0 * RoomScale + 1.0, r\z + zTemp * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it = CreateItem("Night Vision Goggles", "nvgoggles", r\x + 1936.0 * RoomScale, r\y - 5496.0 * RoomScale, r\z - 944.0 * RoomScale)
+			it = CreateItem("Night Vision Goggles", "nvg", r\x + 1936.0 * RoomScale, r\y - 5496.0 * RoomScale, r\z - 944.0 * RoomScale)
 			it\State = 450.0
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -4081,7 +4081,7 @@ Function FillRoom(r.Rooms)
 			it = CreateItem("Level 3 Key Card", "key3", r\x + 240.0 * RoomScale, r\y - 1456.0 * RoomScale, r\z + 2064.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it = CreateItem("Night Vision Goggles", "nvgoggles", r\x + 280.0 * RoomScale, r\y - 1456.0 * RoomScale, r\z + 2164.0 * RoomScale)
+			it = CreateItem("Night Vision Goggles", "nvg", r\x + 280.0 * RoomScale, r\y - 1456.0 * RoomScale, r\z + 2164.0 * RoomScale)
 			it\State = 400.0
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
@@ -4990,7 +4990,7 @@ Function FillRoom(r.Rooms)
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.012, True)
 			
-			it = CreateItem("Night Vision Goggles", "nvgoggles", r\x + 56.0154 * RoomScale, r\y - 648.0 * RoomScale, r\z + 749.638 * RoomScale)
+			it = CreateItem("Night Vision Goggles", "nvg", r\x + 56.0154 * RoomScale, r\y - 648.0 * RoomScale, r\z + 749.638 * RoomScale)
 			it\State = 200.0
 			RotateEntity(it\Collider, 0.0, r\Angle + Rand(245), 0.0)
 			EntityParent(it\Collider, r\OBJ)

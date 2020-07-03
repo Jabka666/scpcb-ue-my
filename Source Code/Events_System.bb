@@ -2061,7 +2061,7 @@ Function UpdateEvents()
 						
 						For i = 0 To MaxItemAmount - 1
 							If (Inventory(i) <> Null) Then
-								If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvgoggles") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernv") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvgoggles") Then
+								If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Then
 									If Inventory(i)\State > 0.0 Lor wi\NightVision = 3 Then
 										HasBatteryFor895 = 1
 										Exit
@@ -2099,7 +2099,7 @@ Function UpdateEvents()
 									EntityTexture(tt\OverlayID[4], tt\MiscTextureID[Rand(7, 12)])
 									For i = 0 To MaxItemAmount - 1
 										If Inventory(i) <> Null Then
-											If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvgoggles") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernv") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvgoggles") Then
+											If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Then
 												If Inventory(i)\State2 = 1.0 Then PlaySound_Strict(HorrorSFX(1))
 												Inventory(i)\State2 = 2.0
 												Exit
@@ -2117,7 +2117,7 @@ Function UpdateEvents()
 									EntityTexture(tt\OverlayID[4], tt\MiscTextureID[Rand(7, 12)])
 									For i = 0 To MaxItemAmount - 1
 										If (Inventory(i) <> Null) Then
-											If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvgoggles") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernv") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvgoggles") Then
+											If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Then
 												If Inventory(i)\State2 = 0.0 Then PlaySound_Strict(HorrorSFX(0))
 												Inventory(i)\State2 = 1.0
 												Exit
@@ -2129,7 +2129,7 @@ Function UpdateEvents()
 								EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
 								For i = 0 To MaxItemAmount - 1
 									If (Inventory(i) <> Null) Then
-										If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvgoggles") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernv") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvgoggles") Then
+										If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Then
 											Inventory(i)\State2 = 0.0
 										EndIf
 									EndIf
@@ -3854,7 +3854,7 @@ Function UpdateEvents()
 											it = CreateItem("SCP-500-01", "scp500pill", e\room\x + iX * 2.0 + (Cos(EntityYaw(TempInt, True)) * (-208.0) * RoomScale) - (Sin(EntityYaw(TempInt, True)) * 1226.0 * RoomScale), 8.0 + (80.0 * RoomScale), e\room\z + iY * 2.0 + (Sin(EntityYaw(TempInt, True)) * (-208.0) * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 1226.0 * RoomScale))
 											EntityType(it\Collider, HIT_ITEM)
 											
-											it = CreateItem("Night Vision Goggles", "nvgoggles", e\room\x + iX * 2.0 - (Sin(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 16.0 * RoomScale), 8.0 + (80.0 * RoomScale), e\room\z + iY * 2.0 + (Cos(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(TempInt, True)) * 16.0 * RoomScale))
+											it = CreateItem("Night Vision Goggles", "nvg", e\room\x + iX * 2.0 - (Sin(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 16.0 * RoomScale), 8.0 + (80.0 * RoomScale), e\room\z + iY * 2.0 + (Cos(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(TempInt, True)) * 16.0 * RoomScale))
 											EntityType(it\Collider, HIT_ITEM)
 											;[End Block]
 									End Select
@@ -10210,7 +10210,7 @@ Function IsItemGoodFor1162(itt.ItemTemplates)
 			;[Block]
 			Return(True)
 			;[End Block]
-		Case "clipboard", "eyedrops", "nvgoggles"
+		Case "clipboard", "eyedrops", "nvg"
 			;[Block]
 			Return(True)
 			;[End Block]

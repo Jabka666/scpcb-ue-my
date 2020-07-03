@@ -279,9 +279,9 @@ Function InitItemTemplates()
 	CreateItemTemplate("Hazmat Suit", "hazmatsuit2", ItemsPath + "hazmat_suit.b3d", ItemsPath + "INV_hazmat_suit.png", "", 0.013, 2, "", "", 1)
 	CreateItemTemplate("Heavy Hazmat Suit", "hazmatsuit3", ItemsPath + "hazmat_suit.b3d", ItemsPath + "INV_hazmat_suit.png", "", 0.013, 2, "", "", 1)
 	
-	CreateItemTemplate("Night Vision Goggles", "nvgoggles", ItemsPath + "night_vision_goggles.b3d", ItemsPath + "INV_night_vision_goggles.png", "", 0.02, 2)
-	CreateItemTemplate("Night Vision Goggles", "finenvgoggles", ItemsPath + "night_vision_goggles.b3d", ItemsPath + "INV_night_vision_goggles(2).png", "", 0.02, 2)
-	CreateItemTemplate("Night Vision Goggles", "supernv", ItemsPath + "night_vision_goggles.b3d", ItemsPath + "INV_night_vision_goggles(3).png", "", 0.02, 2)
+	CreateItemTemplate("Night Vision Goggles", "nvg", ItemsPath + "night_vision_goggles.b3d", ItemsPath + "INV_night_vision_goggles.png", "", 0.02, 2)
+	CreateItemTemplate("Night Vision Goggles", "finenvg", ItemsPath + "night_vision_goggles.b3d", ItemsPath + "INV_night_vision_goggles(2).png", "", 0.02, 2)
+	CreateItemTemplate("Night Vision Goggles", "supernvg", ItemsPath + "night_vision_goggles.b3d", ItemsPath + "INV_night_vision_goggles(3).png", "", 0.02, 2)
 	
 	it = CreateItemTemplate("Pill", "pill", ItemsPath + "pill.b3d", ItemsPath + "INV_pill.png", "", 0.0001, 2)
 	EntityColor(it\OBJ, 255.0, 255.0, 255.0)
@@ -456,7 +456,7 @@ Function RemoveItem(i.Items)
 	Next
 	If SelectedItem = i Then
 		Select SelectedItem\ItemTemplate\TempName 
-			Case "nvgoggles", "supernv"
+			Case "nvg", "supernvg"
 				;[Block]
 				wi\NightVision = 0
 				;[End Block]
@@ -841,15 +841,15 @@ Function DropItem(item.Items, PlayDropSound% = True)
 			;[Block]
 			wi\BallisticVest = 0
 			;[End Block]
-		Case "nvgoggles"
+		Case "nvg"
 			;[Block]
 			If wi\NightVision = 1 Then CameraFogFar = StoredCameraFogFar : wi\NightVision = 0
 			;[End Block]
-		Case "supernv"
+		Case "supernvg"
 			;[Block]
 			If wi\NightVision = 2 Then CameraFogFar = StoredCameraFogFar : wi\NightVision = 0
 			;[End Block]
-		Case "finenvgoggles"
+		Case "finenvg"
 			;[Block]
 			If wi\NightVision = 3 Then CameraFogFar = StoredCameraFogFar : wi\NightVision = 0
 			;[End Block]

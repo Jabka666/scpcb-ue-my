@@ -5023,11 +5023,11 @@ Function DrawGUI()
 						;[Block]
 						If I_714\Using = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
 						;[End Block]
-					Case "nvgoggles"
+					Case "nvg"
 						;[Block]
 						If wi\NightVision = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
 						;[End Block]
-					Case "supernv"
+					Case "supernvg"
 						;[Block]
 						If wi\NightVision = 2 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
 						;[End Block]
@@ -5039,7 +5039,7 @@ Function DrawGUI()
 						;[Block]
 						If I_1499\Using = 2 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
 						;[End Block]
-					Case "finenvgoggles"
+					Case "finenvg"
 						;[Block]
 						If wi\NightVision = 3 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
 						;[End Block]
@@ -6248,7 +6248,7 @@ Function UpdateGUI()
 										;[Block]
 										Local NVName$ = Inventory(MouseSlot)\ItemTemplate\TempName
 										
-										If NVName = "nvgoggles" Lor NVName = "supernv" Then
+										If NVName = "nvg" Lor NVName = "supernvg" Then
 											If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))	
 											RemoveItem(SelectedItem)
 											SelectedItem = Null
@@ -6325,7 +6325,7 @@ Function UpdateGUI()
 	Else
 		If SelectedItem <> Null Then
 			Select SelectedItem\ItemTemplate\TempName
-				Case "nvgoggles"
+				Case "nvg"
 					;[Block]
 					If PreventItemOverlapping(False, True, False, False) Then
 						; ~ A hacky fix for a fog
@@ -6350,7 +6350,7 @@ Function UpdateGUI()
 						EndIf
 					EndIf
 					;[End Block]
-				Case "supernv"
+				Case "supernvg"
 					;[Block]
 					If PreventItemOverlapping(False, True, False, False) Then
 						If wi\NightVision > 0 And wi\NightVision <> 2 Then
@@ -6374,7 +6374,7 @@ Function UpdateGUI()
 						EndIf
 					EndIf
 					;[End Block]
-				Case "finenvgoggles"
+				Case "finenvg"
 					;[Block]
 					If PreventItemOverlapping(False, True, False, False) Then
 						If wi\NightVision > 0 And wi\NightVision <> 3 Then
@@ -9898,12 +9898,12 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					;[End Block]
 				Case "Fine"
 					;[Block]
-					it2 = CreateItem("Night Vision Goggles", "finenvgoggles", x, y, z)
+					it2 = CreateItem("Night Vision Goggles", "finenvg", x, y, z)
 					RemoveItem(item)
 					;[End Block]
 				Case "Very Fine"
 					;[Block]
-					it2 = CreateItem("Night Vision Goggles", "supernv", x, y, z)
+					it2 = CreateItem("Night Vision Goggles", "supernvg", x, y, z)
 					it2\State = 1000.0
 					RemoveItem(item)
 					;[End Block]
@@ -11852,7 +11852,7 @@ Function RenderWorld2(Tween#)
 	If wi\NightVision = 1 Lor wi\NightVision = 2 Then
 		For i = 0 To MaxItemAmount - 1
 			If (Inventory(i) <> Null) Then
-				If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvgoggles") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernv") Then
+				If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Then
 					Inventory(i)\State = Inventory(i)\State - (fpst\FPSFactor[0] * (0.02 * wi\NightVision))
 					Power = Int(Inventory(i)\State)
 					If Inventory(i)\State =< 0.0 Then ; ~ This NVG can't be used
@@ -12023,7 +12023,7 @@ Function InitFastResize()
 	AddTriangle(SF, 0, 1, 2)
 	AddTriangle(SF, 3, 2, 1)
 	EntityFX(SPR, 17)
-	ScaleEntity(SPR, 2048.0 / Float(RealGraphicWidth), 2048.0 / Float(RealGraphicHeight), 1.0) ; ~ CHECK WHY NOT SMALLEST_POWER_TWO
+	ScaleEntity(SPR, SMALLEST_POWER_TWO / Float(RealGraphicWidth), SMALLEST_POWER_TWO / Float(RealGraphicHeight), 1.0)
 	PositionEntity(SPR, 0, 0, 1.0001)
 	EntityOrder(SPR, -100001)
 	EntityBlend(SPR, 1)
