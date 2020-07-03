@@ -98,8 +98,8 @@ Const MaxMiscTextureIDAmount% = 18
 
 Const MaxMonitorTextureIDAmount% = 5
 
-Const MaxOverlayTextureIDAmount% = 11
-Const MaxOverlayIDAmount% = 11
+Const MaxOverlayTextureIDAmount% = 12
+Const MaxOverlayIDAmount% = 12
 
 Const MaxDecalTextureIDAmount% = 20
 

@@ -206,7 +206,7 @@ End Type
 Global me.PlayerStats = New PlayerStats
 
 Type WearableItems
-	Field GasMask%
+	Field GasMask%, GasMaskFogTimer#
 	Field HazmatSuit%
 	Field BallisticVest%
 	Field BallisticHelmet%
@@ -4346,30 +4346,57 @@ Function MouseLook()
 		MoveMouse(Viewport_Center_X, Viewport_Center_Y)
 	EndIf
 	
-	If wi\GasMask > 0 Lor I_1499\Using > 0 Lor wi\HazmatSuit > 0 Then
+	If wi\GasMask > 0 Lor I_1499\Using > 0 Then
+		If I_714\Using = 0 Then
+			If wi\GasMask = 2 Lor I_1499\Using = 2 Then
+				me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fpst\FPSFactor[0])
+			EndIf
+		EndIf
+		If ChannelPlaying(BreathCHN) = False Then
+			If ChannelPlaying(BreathGasRelaxedCHN) = False Then BreathGasRelaxedCHN = PlaySound_Strict(BreathGasRelaxedSFX)
+		Else
+			If ChannelPlaying(BreathGasRelaxedCHN) = True Then StopChannel(BreathGasRelaxedCHN)
+		EndIf
+		
+		ShowEntity(tt\OverlayID[1])
+		ShowEntity(tt\OverlayID[11])
+		
+		If ChannelPlaying(BreathCHN) = True Then
+			wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + fpst\FPSFactor[0] * 2.0, 100.0)
+		Else
+			If wi\GasMask = 2 Lor I_1499\Using = 2 Then
+				If me\CurrSpeed > 0.0 And KeyDown(key\SPRINT) Then
+					wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + fpst\FPSFactor[0] * 0.2, 100.0)
+				Else
+					wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - fpst\FPSFactor[0] * 0.15)
+				EndIf
+			Else
+				wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - fpst\FPSFactor[0] * 0.15)
+			EndIf
+		EndIf
+		
+		EntityAlpha(tt\OverlayID[11], Min(((wi\GasMaskFogTimer * 0.2) ^ 2.0) / 1000.0, 0.45))
+	Else
+		If ChannelPlaying(BreathGasRelaxedCHN) = True Then StopChannel(BreathGasRelaxedCHN)
+		wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fpst\FPSFactor[0] * 0.15))
+		HideEntity(tt\OverlayID[1])
+		HideEntity(tt\OverlayID[11])
+	EndIf
+	
+	If wi\HazmatSuit > 0 Then
 		If wi\HazmatSuit = 1 Then
             me\Stamina = Min(60.0, me\Stamina)
         EndIf
 		If I_714\Using = 0 Then
-			If wi\GasMask = 2 Lor I_1499\Using = 2 Lor wi\HazmatSuit = 2 Then
+			If wi\HazmatSuit = 2 Then
 				me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fpst\FPSFactor[0])
 			EndIf
 		EndIf
-		If wi\GasMask > 0 Lor I_1499\Using > 0 Then
-			If ChannelPlaying(BreathCHN) = False Then
-				If ChannelPlaying(BreathGasRelaxedCHN) = False Then BreathGasRelaxedCHN = PlaySound_Strict(BreathGasRelaxedSFX)
-			Else
-				If ChannelPlaying(BreathGasRelaxedCHN) = True Then StopChannel(BreathGasRelaxedCHN)
-			EndIf
-			ShowEntity(tt\OverlayID[1])
-		Else
-			ShowEntity(tt\OverlayID[2])
-		EndIf
+		
+		ShowEntity(tt\OverlayID[2])
 	Else
-		If ChannelPlaying(BreathGasRelaxedCHN) = True Then StopChannel(BreathGasRelaxedCHN)
-		HideEntity(tt\OverlayID[1])
 		HideEntity(tt\OverlayID[2])
-	End If
+	EndIf
 	
 	If wi\BallisticHelmet > 0 Then
         ShowEntity(tt\OverlayID[9])
@@ -4814,6 +4841,7 @@ Function DrawGUI()
 			Text(x + 840, 160, "MTF Timer: " + MTFTimer)
 			Text(x + 840, 180, "Explosion Timer: " + me\ExplosionTimer)
 			Text(x + 840, 200, "Ending Timer: " + me\EndingTimer)
+			Text(x + 840, 220, "Gas Mask Fog Timer: " + wi\GasMaskFogTimer)
 			
 			SetFont(fo\FontID[0])
 		EndIf
@@ -8710,6 +8738,16 @@ Function LoadEntities()
 	MoveEntity(tt\OverlayID[10], 0, 0, 1.0)
 	HideEntity(tt\OverlayID[10])
 	
+	tt\OverlayTextureID[11] = LoadTexture_Strict("GFX\fog_gas_mask.png", 1) ; ~ FOG IN GAS MASK
+	tt\OverlayID[11] = CreateSprite(Ark_Blur_Cam)
+	ScaleSprite(tt\OverlayID[11], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
+	EntityTexture(tt\OverlayID[11], tt\OverlayTextureID[11])
+	EntityBlend(tt\OverlayID[11], 3)
+	EntityFX(tt\OverlayID[11], 1)
+	EntityOrder(tt\OverlayID[11], -1000)
+	MoveEntity(tt\OverlayID[11], 0, 0, 1.0)
+	HideEntity(tt\OverlayID[11])
+	
 	Collider = CreatePivot()
 	EntityRadius Collider, 0.15, 0.30
 	EntityPickMode(Collider, 1)
@@ -9472,6 +9510,7 @@ Function NullGame(PlayButtonSFX% = True)
 	WireFrameState = 0.0
 	WireFrame(0)
 	
+	wi\GasMaskFogTimer = 0.0
 	wi\GasMask = 0
 	wi\HazmatSuit = 0
 	wi\BallisticVest = 0
@@ -12265,5 +12304,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1090#134A#1D98
+;~B#1090#1366#1DB4
 ;~C#Blitz3D

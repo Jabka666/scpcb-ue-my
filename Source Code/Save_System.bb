@@ -89,6 +89,8 @@ Function SaveGame(File$)
 	
 	WriteFloat(f, me\Sanity)
 	
+	WriteFloat(f, wi\GasMaskFogTimer)
+	
 	WriteByte(f, wi\GasMask)
 	WriteByte(f, wi\BallisticVest)
 	WriteByte(f, wi\BallisticHelmet)
@@ -558,6 +560,8 @@ Function LoadGame(File$)
 	MonitorTimer = ReadFloat(f)
 	
 	me\Sanity = ReadFloat(f)
+	
+	wi\GasMaskFogTimer = ReadFloat(f)
 	
 	wi\GasMask = ReadByte(f)
 	wi\BallisticVest = ReadByte(f)
@@ -1390,6 +1394,8 @@ Function LoadGameQuick(File$)
 	MonitorTimer = ReadFloat(f)
 	
 	me\Sanity = ReadFloat(f)
+	
+	wi\GasMaskFogTimer = ReadFloat(f)
 	
 	wi\GasMask = ReadByte(f)
 	wi\BallisticVest = ReadByte(f)
