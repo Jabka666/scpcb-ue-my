@@ -3716,7 +3716,7 @@ Function InitCredits()
 	Local l$
 	
 	fo\CreditsFontID[0] = LoadFont_Strict("GFX\font\cour\Courier New.ttf", Int(21 * (GraphicHeight / 1024)))
-	fo\CreditsFontID[1] = LoadFont_Strict("GFX\font\courbd\Courier New.ttf", Int(35 * (GraphicHeight / 1024)))
+	fo\CreditsFontID[1] = LoadFont_Strict("GFX\font\cour\Courier New.ttf", Int(35 * (GraphicHeight / 1024)))
 	
 	If me\CreditsScreen = 0
 		me\CreditsScreen = LoadImage_Strict("GFX\credits_screen.png")
