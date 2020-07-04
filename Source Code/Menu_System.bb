@@ -515,17 +515,17 @@ Function UpdateMainMenu()
 						
 						EnableRoomLights = DrawTick(x + 310 * MenuScale, y + MenuScale, EnableRoomLights)
 						
-						y = y + 30 * MenuScale
+						y = y + 40 * MenuScale
 						
-						ScreenGamma = (SlideBar(x + 310 * MenuScale, y + 6 * MenuScale, 150 * MenuScale, ScreenGamma * 50.0) / 50.0)
-						
-						y = y + 50 * MenuScale
-						
-						ParticleAmount = Slider3(x + 310  * MenuScale, y + 6 * MenuScale, 150 * MenuScale, ParticleAmount, 2, "MINIMAL", "REDUCED", "FULL")
+						ScreenGamma = (SlideBar(x + 310 * MenuScale, y, 150 * MenuScale, ScreenGamma * 50.0) / 50.0)
 						
 						y = y + 50 * MenuScale
 						
-						TextureDetails = Slider5(x + 310 * MenuScale, y + 6 * MenuScale, 150 * MenuScale, TextureDetails, 3, "0.8", "0.4", "0.0", "-0.4", "-0.8")
+						ParticleAmount = Slider3(x + 310  * MenuScale, y, 150 * MenuScale, ParticleAmount, 2, "MINIMAL", "REDUCED", "FULL")
+						
+						y = y + 50 * MenuScale
+						
+						TextureDetails = Slider5(x + 310 * MenuScale, y, 150 * MenuScale, TextureDetails, 3, "0.8", "0.4", "0.0", "-0.4", "-0.8")
 						Select TextureDetails
 							Case 0
 								;[Block]
@@ -556,7 +556,7 @@ Function UpdateMainMenu()
 						
 						y = y + 50 * MenuScale
 						
-						CurrFOV = (SlideBar(x + 310 * MenuScale, y + 6 * MenuScale, 150 * MenuScale, CurrFOV * 2.0) / 2.0)
+						CurrFOV = (SlideBar(x + 310 * MenuScale, y, 150 * MenuScale, CurrFOV * 2.0) / 2.0)
 						FOV = CurrFOV + 40
 						;[End Block]
 					ElseIf MainMenuTab = MainMenuTab_Options_Audio
@@ -565,14 +565,14 @@ Function UpdateMainMenu()
 						
 						y = y + 20 * MenuScale
 						
-						MusicVolume = (SlideBar(x + 310 * MenuScale, y - 4 * MenuScale, 150 * MenuScale, MusicVolume * 100.0) / 100.0)
+						MusicVolume = (SlideBar(x + 310 * MenuScale, y, 150 * MenuScale, MusicVolume * 100.0) / 100.0)
 						
 						y = y + 40 * MenuScale
 						
-						PrevSFXVolume = (SlideBar(x + 310 * MenuScale, y - 4 * MenuScale, 150 * MenuScale, SFXVolume * 100.0) / 100.0)
+						PrevSFXVolume = (SlideBar(x + 310 * MenuScale, y, 150 * MenuScale, SFXVolume * 100.0) / 100.0)
 						SFXVolume = PrevSFXVolume
 						
-						y = y + 30 * MenuScale
+						y = y + 40 * MenuScale
 						
 						EnableSFXRelease = DrawTick(x + 310 * MenuScale, y + MenuScale, EnableSFXRelease)
 						If EnableSFXRelease_Prev <> EnableSFXRelease
@@ -645,7 +645,7 @@ Function UpdateMainMenu()
 						
 						y = y + 20 * MenuScale
 						
-						MouseSensitivity = (SlideBar(x + 310 * MenuScale, y - 4 * MenuScale, 150 * MenuScale, (MouseSensitivity + 0.5) * 100.0) / 100.0) - 0.5
+						MouseSensitivity = (SlideBar(x + 310 * MenuScale, y, 150 * MenuScale, (MouseSensitivity + 0.5) * 100.0) / 100.0) - 0.5
 						
 						y = y + 40 * MenuScale
 						
@@ -653,7 +653,7 @@ Function UpdateMainMenu()
 						
 						y = y + 40 * MenuScale
 						
-						MouseSmoothing = (SlideBar(x + 310 * MenuScale, y - 4 * MenuScale, 150 * MenuScale, (MouseSmoothing) * 50.0) / 50.0)
+						MouseSmoothing = (SlideBar(x + 310 * MenuScale, y, 150 * MenuScale, (MouseSmoothing) * 50.0) / 50.0)
 						
 						y = y + 30 * MenuScale
 						
@@ -1195,7 +1195,7 @@ Function RenderMainMenu()
 					y = y + 20 * MenuScale
 					
 					Color(255, 255, 255)				
-					Text(x + 20 * MenuScale, y, "Enable bump mapping:")	
+					Text(x + 20 * MenuScale, y + 4 * MenuScale, "Enable bump mapping:")	
 					If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
 						DrawOptionsTooltip(tX, tY, tW, tH, "bump")
 					EndIf
@@ -1203,7 +1203,7 @@ Function RenderMainMenu()
 					y = y + 30 * MenuScale
 					
 					Color(255, 255, 255)
-					Text(x + 20 * MenuScale, y, "VSync:")
+					Text(x + 20 * MenuScale, y + 4 * MenuScale, "VSync:")
 					If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
 						DrawOptionsTooltip(tX, tY, tW, tH, "vsync")
 					EndIf
@@ -1211,7 +1211,7 @@ Function RenderMainMenu()
 					y = y + 30 * MenuScale
 					
 					Color(255, 255, 255)
-					Text(x + 20 * MenuScale, y, "Anti-aliasing:")
+					Text(x + 20 * MenuScale, y + 4 * MenuScale, "Anti-aliasing:")
 					If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
 						DrawOptionsTooltip(tX, tY, tW, tH, "antialias")
 					EndIf
@@ -1219,15 +1219,15 @@ Function RenderMainMenu()
 					y = y + 30 * MenuScale
 					
 					Color(255, 255, 255)
-					Text(x + 20 * MenuScale, y, "Enable room lights:")
+					Text(x + 20 * MenuScale, y + 4 * MenuScale, "Enable room lights:")
 					If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
 						DrawOptionsTooltip(tX, tY, tW, tH, "roomlights")
 					EndIf
 					
-					y = y + 30 * MenuScale
+					y = y + 40 * MenuScale
 					
 					Color(255, 255, 255)
-					Text(x + 20 * MenuScale, y, "Screen gamma:")
+					Text(x + 20 * MenuScale, y + 4 * MenuScale, "Screen gamma:")
 					If MouseOn(x + 310 * MenuScale, y + 6 * MenuScale, 150 * MenuScale + 14, 20) And OnSliderID = 0
 						DrawOptionsTooltip(tX, tY, tW, tH, "gamma", ScreenGamma)
 					EndIf
@@ -1235,7 +1235,7 @@ Function RenderMainMenu()
 					y = y + 50 * MenuScale
 					
 					Color(255, 255, 255)
-					Text(x + 20 * MenuScale, y, "Particle amount:")
+					Text(x + 20 * MenuScale, y + 4 * MenuScale, "Particle amount:")
 					If (MouseOn(x + 310 * MenuScale, y - 6 * MenuScale, 150 * MenuScale + 14, 20) And OnSliderID = 0) Lor OnSliderID = 2
 						DrawOptionsTooltip(tX, tY, tW, tH, "particleamount", ParticleAmount)
 					EndIf
@@ -1243,7 +1243,7 @@ Function RenderMainMenu()
 					y = y + 50 * MenuScale
 					
 					Color(255, 255, 255)
-					Text(x + 20 * MenuScale, y, "Texture LOD Bias:")
+					Text(x + 20 * MenuScale, y + 4 * MenuScale, "Texture LOD Bias:")
 					If (MouseOn(x + 310 * MenuScale, y - 6 * MenuScale, 150 * MenuScale + 14, 20) And OnSliderID = 0) Lor OnSliderID = 3
 						DrawOptionsTooltip(tX, tY, tW, tH + 100 * MenuScale, "texquality")
 					EndIf
@@ -1251,7 +1251,7 @@ Function RenderMainMenu()
 					y = y + 50 * MenuScale
 					
 					Color(255, 255, 255)
-					Text(x + 20 * MenuScale, y, "Save textures in the VRAM:")
+					Text(x + 20 * MenuScale, y + 4 * MenuScale, "Save textures in the VRAM:")
 					If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
 						DrawOptionsTooltip(tX, tY, tW, tH, "vram")
 					EndIf
@@ -1259,22 +1259,26 @@ Function RenderMainMenu()
 					y = y + 50 * MenuScale
 					
 					Color(255, 255, 255)
-					Text(x + 20 * MenuScale, y, "Field of view:")
+					Text(x + 20 * MenuScale, y + 4 * MenuScale, "Field of view:")
 					Color(255, 255, 0)
-					Text(x + 25 * MenuScale, y + 25 * MenuScale, Int(FOV) + "°")
+					Text(x + 25 * MenuScale, y + 30 * MenuScale, Int(FOV) + "°")
 					If MouseOn(x + 310 * MenuScale, y + 6 * MenuScale, 150 * MenuScale + 14, 20)
 						DrawOptionsTooltip(tX, tY, tW, tH, "fov")
 					EndIf
 					;[End Block]
 				ElseIf MainMenuTab = MainMenuTab_Options_Audio
 					;[Block]
-					Height = 220 * MenuScale
+					If EnableUserTracks Then
+						Height = 220 * MenuScale
+					Else
+						Height = 160 * MenuScale
+					EndIf
 					DrawFrame(x, y, Width, Height)	
 					
 					y = y + 20 * MenuScale
 					
 					Color(255, 255, 255)
-					Text(x + 20 * MenuScale, y, "Music volume:")
+					Text(x + 20 * MenuScale, y + 4 * MenuScale, "Music volume:")
 					If MouseOn(x + 310 * MenuScale, y - 4 * MenuScale, 150 * MenuScale + 14, 20)
 						DrawOptionsTooltip(tX, tY, tW, tH, "musicvol", MusicVolume)
 					EndIf
@@ -1282,34 +1286,35 @@ Function RenderMainMenu()
 					y = y + 40 * MenuScale
 					
 					Color(255, 255, 255)
-					Text(x + 20 * MenuScale, y, "Sound volume:")
+					Text(x + 20 * MenuScale, y + 4 * MenuScale, "Sound volume:")
 					If MouseOn(x + 310 * MenuScale, y - 4 * MenuScale, 150 * MenuScale + 14, 20)
 						DrawOptionsTooltip(tX, tY, tW, tH, "soundvol", PrevSFXVolume)
 					EndIf
 					
-					y = y + 30 * MenuScale
+					y = y + 40 * MenuScale
 					
 					Color(255, 255, 255)
-					Text(x + 20 * MenuScale, y, "Sound auto-release:")
+					Text(x + 20 * MenuScale, y + 4 * MenuScale, "Sound auto-release:")
 					If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
 						DrawOptionsTooltip(tX, tY, tW, tH + 220 * MenuScale, "sfxautorelease")
 					EndIf
 					y = y + 30 * MenuScale
 					
 					Color(255, 255, 255)
-					Text(x + 20 * MenuScale, y, "Enable user tracks:")
+					Text(x + 20 * MenuScale, y + 4 * MenuScale, "Enable user tracks:")
 					If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
 						DrawOptionsTooltip(tX, tY, tW, tH, "usertrack")
 					EndIf
 					
+					y = y + 30 * MenuScale
+					
 					If EnableUserTracks Then
-						y = y + 30 * MenuScale
 						Color(255, 255, 255)
-						Text(x + 20 * MenuScale, y, "User track mode:")
+						Text(x + 20 * MenuScale, y + 4 * MenuScale, "User track mode:")
 						If UserTrackMode
-							Text(x + 350 * MenuScale, y + MenuScale, "Repeat")
+							Text(x + 350 * MenuScale, y + 4 * MenuScale, "Repeat")
 						Else
-							Text(x + 350 * MenuScale, y + MenuScale, "Random")
+							Text(x + 350 * MenuScale, y + 4 * MenuScale, "Random")
 						EndIf
 						If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
 							DrawOptionsTooltip(tX, tY, tW, tH, "usertrackmode")
@@ -1330,7 +1335,7 @@ Function RenderMainMenu()
 					y = y + 20 * MenuScale
 					
 					Color(255, 255, 255)
-					Text(x + 20 * MenuScale, y, "Mouse sensitivity:")
+					Text(x + 20 * MenuScale, y + 4 * MenuScale, "Mouse sensitivity:")
 					If MouseOn(x + 310 * MenuScale, y - 4 * MenuScale, 150 * MenuScale + 14, 20)
 						DrawOptionsTooltip(tX, tY, tW, tH, "mousesensitivity", MouseSensitivity)
 					EndIf
@@ -1338,7 +1343,7 @@ Function RenderMainMenu()
 					y = y + 40 * MenuScale
 					
 					Color(255, 255, 255)
-					Text(x + 20 * MenuScale, y, "Invert mouse Y-axis:")
+					Text(x + 20 * MenuScale, y + 4 * MenuScale, "Invert mouse Y-axis:")
 					If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
 						DrawOptionsTooltip(tX, tY, tW, tH, "mouseinvert")
 					EndIf
@@ -1346,7 +1351,7 @@ Function RenderMainMenu()
 					y = y + 40 * MenuScale
 					
 					Color(255, 255, 255)
-					Text(x + 20 * MenuScale, y, "Mouse smoothing:")
+					Text(x + 20 * MenuScale, y + 4 * MenuScale, "Mouse smoothing:")
 					If MouseOn(x + 310 * MenuScale, y - 4 * MenuScale, 150 * MenuScale + 14, 20)
 						DrawOptionsTooltip(tX, tY, tW, tH, "mousesmoothing", MouseSmoothing)
 					EndIf
@@ -1354,30 +1359,30 @@ Function RenderMainMenu()
 					Color(255, 255, 255)
 					
 					y = y + 30 * MenuScale
-					Text(x + 20 * MenuScale, y, "Control configuration:")
+					Text(x + 20 * MenuScale, y + 4 * MenuScale, "Control configuration:")
 					y = y + 10 * MenuScale
 					
-					Text(x + 20 * MenuScale, y + 20 * MenuScale, "Move Forward")
+					Text(x + 20 * MenuScale, y + 24 * MenuScale, "Move Forward")
 					
-					Text(x + 20 * MenuScale, y + 40 * MenuScale, "Strafe Left")
+					Text(x + 20 * MenuScale, y + 44 * MenuScale, "Strafe Left")
 					
-					Text(x + 20 * MenuScale, y + 60 * MenuScale, "Move Backward")
+					Text(x + 20 * MenuScale, y + 64 * MenuScale, "Move Backward")
 					
-					Text(x + 20 * MenuScale, y + 80 * MenuScale, "Strafe Right")
+					Text(x + 20 * MenuScale, y + 84 * MenuScale, "Strafe Right")
 					
-					Text(x + 20 * MenuScale, y + 100 * MenuScale, "Quick Save")
+					Text(x + 20 * MenuScale, y + 104 * MenuScale, "Quick Save")
 					
-					Text(x + 280 * MenuScale, y + 20 * MenuScale, "Manual Blink")
+					Text(x + 280 * MenuScale, y + 24 * MenuScale, "Manual Blink")
 					
-					Text(x + 280 * MenuScale, y + 40 * MenuScale, "Sprint")
+					Text(x + 280 * MenuScale, y + 44 * MenuScale, "Sprint")
 					
-					Text(x + 280 * MenuScale, y + 60 * MenuScale, "Open/Close Inventory")
+					Text(x + 280 * MenuScale, y + 64 * MenuScale, "Open/Close Inventory")
 					
-					Text(x + 280 * MenuScale, y + 80 * MenuScale, "Crouch")
+					Text(x + 280 * MenuScale, y + 84 * MenuScale, "Crouch")
 					
-					Text(x + 280 * MenuScale, y + 100 * MenuScale, "Open/Close Console")
+					Text(x + 280 * MenuScale, y + 104 * MenuScale, "Open/Close Console")
 					
-					Text(x + 280 * MenuScale, y + 120 * MenuScale, "Take Screenshot")
+					Text(x + 280 * MenuScale, y + 124 * MenuScale, "Take Screenshot")
 					
 					If MouseOn(x + 20 * MenuScale, y, Width - 40 * MenuScale, 120 * MenuScale)
 						DrawOptionsTooltip(tX, tY, tW, tH, "controls")
@@ -1396,7 +1401,7 @@ Function RenderMainMenu()
 						y = y + 20 * MenuScale
 						
 						Color(255, 255, 255)				
-						Text(x + 20 * MenuScale, y, "Show HUD:")	
+						Text(x + 20 * MenuScale, y + 4 * MenuScale, "Show HUD:")	
 						If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
 							DrawOptionsTooltip(tX, tY, tW, tH, "hud")
 						EndIf
@@ -1404,7 +1409,7 @@ Function RenderMainMenu()
 						y = y + 30 * MenuScale
 						
 						Color(255, 255, 255)
-						Text(x + 20 * MenuScale, y, "Enable console:")
+						Text(x + 20 * MenuScale, y + 4 * MenuScale, "Enable console:")
 						If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
 							DrawOptionsTooltip(tX, tY, tW, tH, "consoleenable")
 						EndIf
@@ -1413,7 +1418,7 @@ Function RenderMainMenu()
 						
 						If CanOpenConsole Then
 							Color(255, 255, 255)
-							Text(x + 20 * MenuScale, y, "Open console on error:")
+							Text(x + 20 * MenuScale, y + 4 * MenuScale, "Open console on error:")
 							If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
 								DrawOptionsTooltip(tX, tY, tW, tH, "consoleerror")
 							EndIf
@@ -1423,11 +1428,11 @@ Function RenderMainMenu()
 						
 						If CanOpenConsole Then
 							Color(255, 255, 255)
-							Text(x + 20 * MenuScale, y, "Console Version:")
+							Text(x + 20 * MenuScale, y + 4 * MenuScale, "Console Version:")
 							If ConsoleVersion = 1 Then
-								Text(x + 350 * MenuScale, y, "Advanced")
+								Text(x + 350 * MenuScale, y + 4 * MenuScale, "Advanced")
 							Else
-								Text(x + 350 * MenuScale, y, "Classic")
+								Text(x + 350 * MenuScale, y + 4 * MenuScale, "Classic")
 							EndIf    
 							If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
 								DrawOptionsTooltip(tX, tY, tW, tH, "consoleversion")
@@ -1437,7 +1442,7 @@ Function RenderMainMenu()
 						y = y + 30 * MenuScale
 						
 						Color(255, 255, 255)
-						Text(x + 20 * MenuScale, y, "Achievement popups:")
+						Text(x + 20 * MenuScale, y + 4 * MenuScale, "Achievement popups:")
 						If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
 							DrawOptionsTooltip(tX, tY, tW, tH, "achpopup")
 						EndIf
@@ -1445,7 +1450,7 @@ Function RenderMainMenu()
 						y = y + 50 * MenuScale
 						
 						Color(255, 255, 255)
-						Text(x + 20 * MenuScale, y, "Show FPS:")
+						Text(x + 20 * MenuScale, y + 4 * MenuScale, "Show FPS:")
 						If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
 							DrawOptionsTooltip(tX, tY, tW, tH, "showfps")
 						EndIf
@@ -1453,11 +1458,11 @@ Function RenderMainMenu()
 						y = y + 30 * MenuScale
 						
 						Color(255, 255, 255)
-						Text(x + 20 * MenuScale, y, "Framelimit:")
+						Text(x + 20 * MenuScale, y + 4 * MenuScale, "Framelimit:")
 						Color(255, 255, 255)
-						If DrawTick(x + 310 * MenuScale, y, CurrFrameLimit > 0.0) Then
+						If CurrFrameLimit > 0.0 Then
 							Color(255, 255, 0)
-							Text(x + 25 * MenuScale, y + 25 * MenuScale, FrameLimit + " FPS")
+							Text(x + 25 * MenuScale, y + 34 * MenuScale, FrameLimit + " FPS")
 						EndIf
 						If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
 							DrawOptionsTooltip(tX, tY, tW, tH, "framelimit", FrameLimit)
@@ -1470,11 +1475,11 @@ Function RenderMainMenu()
 						
 						If HUDenabled Then
 							Color(255, 255, 255)
-							Text(x + 20 * MenuScale, y, "Bar style")
+							Text(x + 20 * MenuScale, y + 4 * MenuScale, "Bar style:")
 							If BarStyle = 1 Then
-								Text(x + 350 * MenuScale, y, "Dymanic")
+								Text(x + 350 * MenuScale, y + 4 * MenuScale, "Dymanic")
 							Else
-								Text(x + 350 * MenuScale, y, "Classic")
+								Text(x + 350 * MenuScale, y + 4 * MenuScale, "Classic")
 							EndIf 
 							If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
 								DrawOptionsTooltip(tX, tY, tW, tH, "barstyle")
@@ -1484,7 +1489,7 @@ Function RenderMainMenu()
 						y = y + 30 * MenuScale
 						
 						Color(255, 255, 255)
-						Text(x + 20 * MenuScale, y, "Use launcher:")
+						Text(x + 20 * MenuScale, y + 4 * MenuScale, "Use launcher:")
 						If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
 							DrawOptionsTooltip(tX, tY, tW, tH, "uselauncher")
 						EndIf
