@@ -104,5 +104,56 @@ Function TurnIfDeviating%(Max_Deviation_Distance_%, Pathx%, Center_%, Dir%, RetV
 	EndIf
 End Function
 
+; ~ Find mesh extents
+Function GetMeshExtents(Mesh%)
+	Local s%, Surf%, Surfs%, v%, Verts%, x#, y#, z#
+	Local MinX# = INFINITY
+	Local MinY# = INFINITY
+	Local MinZ# = INFINITY
+	Local MaxX# = -INFINITY
+	Local MaxY# = -INFINITY
+	Local MaxZ# = -INFINITY
+	
+	Surfs = CountSurfaces(Mesh)
+	
+	For s = 1 To Surfs
+		Surf = GetSurface(Mesh, s)
+		Verts = CountVertices(Surf)
+		For v = 0 To Verts - 1
+			x = VertexX(Surf, v)
+			y = VertexY(Surf, v)
+			z = VertexZ(Surf, v)
+			
+			If x < MinX Then MinX = x
+			If x > MaxX Then MaxX = x
+			If y < MinY Then MinY = y
+			If y > MaxY Then MaxY = y
+			If z < MinZ Then MinZ = z
+			If z > MaxZ Then MaxZ = z
+		Next
+	Next
+	
+	Mesh_MinX = MinX
+	Mesh_MinY = MinY
+	Mesh_MinZ = MinZ
+	Mesh_MaxX = MaxX
+	Mesh_MaxY = MaxY
+	Mesh_MaxZ = MaxZ
+	Mesh_MagX = MaxX - MinX
+	Mesh_MagY = MaxY - MinY
+	Mesh_MagZ = MaxZ - MinZ
+End Function
+
+; ~ Create a collision box for a mesh entity taking into account entity scale
+; (~ Won't work in non-uniform scaled space)
+Function MakeCollBox(Mesh%)
+	Local sX# = EntityScaleX(Mesh, 1)
+	Local sY# = Max(EntityScaleY(Mesh, 1), 0.001)
+	Local sZ# = EntityScaleZ(Mesh, 1)
+	
+	GetMeshExtents(Mesh)
+	EntityBox(Mesh, Mesh_MinX * sX, Mesh_MinY * sY, Mesh_MinZ * sZ, Mesh_MagX * sX, Mesh_MagY * sY, Mesh_MagZ * sZ)
+End Function
+
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D

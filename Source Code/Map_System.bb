@@ -6518,8 +6518,8 @@ Function UpdateSecurityCams()
 						Else
 							sc\CurrAngle = sc\CurrAngle - 0.2 * fpst\FPSFactor[0]
 							If sc\CurrAngle < (-sc\Turn) * 1.3 Then sc\Dir = 0
-						End If
-					End If
+						EndIf
+					EndIf
 					PositionEntity(sc\CameraOBJ, EntityX(sc\OBJ, True), EntityY(sc\OBJ, True) - 0.083, EntityZ(sc\OBJ, True))
 					RotateEntity(sc\CameraOBJ, EntityPitch(sc\CameraOBJ), sc\room\Angle + sc\Angle + Max(Min(sc\CurrAngle, sc\Turn), -sc\Turn), 0)
 					
@@ -6585,7 +6585,7 @@ Function UpdateSecurityCams()
 									
 									UpdateRoomLights(sc\Cam)
 									
-									SetBuffer BackBuffer()
+									SetBuffer(BackBuffer())
 									RenderWorld()
 									CopyRect(0, 0, 512, 512, 0, 0, BackBuffer(), TextureBuffer(ScreenTexs[sc\ScrTexture]))
 									
@@ -6600,7 +6600,7 @@ Function UpdateSecurityCams()
 									
 									UpdateRoomLights(CoffinCam\Cam)
 									
-									SetBuffer BackBuffer()
+									SetBuffer(BackBuffer())
 									RenderWorld()
 									CopyRect(0, 0, 512, 512, 0, 0, BackBuffer(), TextureBuffer(ScreenTexs[sc\ScrTexture]))
 									
@@ -6638,9 +6638,9 @@ Function UpdateSecurityCams()
 											sc\SoundCHN = PlaySound_Strict(HorrorSFX(4))
 										Else
 											If ChannelPlaying(sc\SoundCHN) = False Then sc\SoundCHN = PlaySound_Strict(HorrorSFX(4))
-										End If
+										EndIf
 										If sc\CoffinEffect = 3 And Rand(200) = 1 Then sc\CoffinEffect = 2 : sc\PlayerState = Rand(10000, 20000)
-									End If	
+									EndIf	
 									me\BlurTimer = 1000.0
 									If me\VomitTimer = 0.0 Then
 										me\VomitTimer = 1.0
@@ -6652,7 +6652,7 @@ Function UpdateSecurityCams()
 										If sc\PlayerState = 0 Then PlaySound_Strict(HorrorSFX(0))
 										sc\PlayerState = Max(sc\PlayerState, 1)
 										If sc\CoffinEffect = 3 And Rand(100) = 1 Then sc\CoffinEffect = 2 : sc\PlayerState = Rand(10000, 20000)
-									End If
+									EndIf
 								Else
 									EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
 								EndIf
@@ -7103,10 +7103,10 @@ Function CreateMap()
 	I_Zone\HasCustomForest = False
 	I_Zone\HasCustomMT = False
 	
-	Local x%, y%, Temp%
+	Local x%, y%, Temp%, Temp2
 	Local i%, x2%, y2%
-	Local Width%, Height%
-	Local Zone%
+	Local Width%, Height%, TempHeight%
+	Local Zone%, yHallways%
 	
 	SeedRnd(GenerateSeedNumber(RandomSeed))
 	
@@ -7218,6 +7218,8 @@ Function CreateMap()
 		Next
 	Next		
 	
+	Local Placed%
+	
 	; ~ Force more room1s (if needed)
 	For i = 0 To 2
 		; ~ Need more rooms if there are less than 5 of them
@@ -7257,7 +7259,7 @@ Function CreateMap()
 										;[Block]
 										Room3Amount[i] = Room3Amount[i] - 1
 										Room4Amount[i] = Room4Amount[i] + 1	
-										placed = True
+										Placed = True
 										;[End Block]
 								End Select
 								
@@ -7357,7 +7359,7 @@ Function CreateMap()
 										MapTemp(x + 1, y) = 2
 										MapTemp(x + 1, y - 1) = 1
 										Temp = 1
-									Else If (MapTemp(x + 1, y + 2) + MapTemp(x + 2, y + 1) + MapTemp(x + 1, y + 1)) = 0 Then
+									ElseIf (MapTemp(x + 1, y + 2) + MapTemp(x + 2, y + 1) + MapTemp(x + 1, y + 1)) = 0 Then
 										MapTemp(x, y) = 2
 										MapTemp(x + 1, y) = 2
 										MapTemp(x + 1, y + 1) = 1
@@ -7373,7 +7375,7 @@ Function CreateMap()
 										MapTemp(x - 1, y) = 2
 										MapTemp(x - 1, y - 1) = 1
 										Temp = 1
-									Else If (MapTemp(x - 1, y + 2) + MapTemp(x - 2, y + 1) + MapTemp(x - 1, y + 1)) = 0 Then
+									ElseIf (MapTemp(x - 1, y + 2) + MapTemp(x - 2, y + 1) + MapTemp(x - 1, y + 1)) = 0 Then
 										MapTemp(x, y) = 2
 										MapTemp(x - 1, y) = 2
 										MapTemp(x - 1, y + 1 ) = 1
@@ -7389,7 +7391,7 @@ Function CreateMap()
 										MapTemp(x, y + 1) = 2
 										MapTemp(x - 1, y + 1) = 1
 										Temp = 1
-									Else If (MapTemp(x + 2, y + 1) + MapTemp(x + 1, y + 2) + MapTemp(x + 1, y + 1)) = 0 Then
+									ElseIf (MapTemp(x + 2, y + 1) + MapTemp(x + 1, y + 2) + MapTemp(x + 1, y + 1)) = 0 Then
 										MapTemp(x, y) = 2
 										MapTemp(x, y + 1) = 2
 										MapTemp(x + 1, y + 1) = 1
@@ -7405,7 +7407,7 @@ Function CreateMap()
 										MapTemp(x, y - 1) = 2
 										MapTemp(x - 1, y - 1) = 1
 										Temp = 1
-									Else If (MapTemp(x + 2, y - 1) + MapTemp(x + 1, y - 2) + MapTemp(x + 1, y - 1)) = 0 Then
+									ElseIf (MapTemp(x + 2, y - 1) + MapTemp(x + 1, y - 2) + MapTemp(x + 1, y - 1)) = 0 Then
 										MapTemp(x, y) = 2
 										MapTemp(x, y - 1) = 2
 										MapTemp(x + 1, y - 1) = 1
@@ -7530,6 +7532,7 @@ Function CreateMap()
 	MapRoom(ROOM3, Room3Amount[0] + Room3Amount[1] + Floor(0.5 * Float(Room3Amount[2]))) = "room3offices"
 	
 	; ~ [GENERATE THE MAP]
+	
 	Temp = 0
 	
 	Local r.Rooms, Spacing# = 8.0
@@ -7635,6 +7638,7 @@ Function CreateMap()
 						MapRoomID(ROOM3) = MapRoomID(ROOM3) + 1
 						;[End Block]
 					Case 4 ; ~ Generate ROOM4s
+						;[Block]
 						If MapRoomID(ROOM4) < MaxRooms And MapName(x, y) = ""  Then
 							If MapRoom(ROOM4, MapRoomID(ROOM4)) <> "" Then MapName(x, y) = MapRoom(ROOM4, MapRoomID(ROOM4))	
 						EndIf
@@ -7679,17 +7683,17 @@ Function CreateMap()
 					Else
 						If MapTemp(x, y) = 255 Then
 							Color(0, 200, 0)
-						Else If MapTemp(x, y) = 4 Then
+						ElseIf MapTemp(x, y) = 4 Then
 							Color(50, 50, 255)
-						Else If MapTemp(x, y) = 3 Then
+						ElseIf MapTemp(x, y) = 3 Then
 							Color(50, 255, 255)
-						Else If MapTemp(x, y) = 2 Then
+						ElseIf MapTemp(x, y) = 2 Then
 							Color(255, 255, 50)
 						Else
 							Color(255, 255, 255)
 						EndIf
 						Rect(x * 32, y * 32, 30, 30)
-					End If
+					EndIf
 				Next
 			Next	
 			
@@ -7707,7 +7711,7 @@ Function CreateMap()
 					
 					If MapTemp(x, y) > 0 Then
 						Text(x * 32 + 2, (y) * 32.0 + 2.0, MapTemp(x, y) + " " + MapName(x, y))
-					End If
+					EndIf
 				Next
 			Next			
 			Flip
@@ -7771,7 +7775,7 @@ Function CreateMap()
 						End Select
 						
 						If ShouldSpawnDoor
-							If (x + 1) < (MapWidth + 1)
+							If x + 1 < MapWidth + 1
 								If MapTemp(x + 1, y) > 0 Then
 									d.Doors = CreateDoor(r\Zone, Float(x) * Spacing + Spacing / 2.0, 0, Float(y) * Spacing, 90.0, r, Max(Rand(-3, 1), 0), Temp)
 									r\AdjDoor[0] = d
@@ -7811,18 +7815,17 @@ Function CreateMap()
 								;[End Block]
 						End Select
 						If ShouldSpawnDoor
-							If (y + 1) < (MapHeight + 1)
+							If y + 1 < MapHeight + 1
 								If MapTemp(x, y + 1) > 0 Then
 									d.Doors = CreateDoor(r\Zone, Float(x) * Spacing, 0.0, Float(y) * Spacing + Spacing / 2.0, 0.0, r, Max(Rand(-3, 1), 0), Temp)
 									r\AdjDoor[3] = d
 								EndIf
 							EndIf
 						EndIf
-						
 						Exit
 					EndIf
                 Next
-   			End If
+   			EndIf
 		Next
 	Next
 	
@@ -7835,24 +7838,24 @@ Function CreateMap()
 		For r2.Rooms = Each Rooms
 			If r <> r2 Then
 				If r2\z = r\z Then
-					If (r2\x) = (r\x + 8.0) Then
+					If r2\x = r\x + 8.0 Then
 						r\Adjacent[0] = r2
 						If r\AdjDoor[0] = Null Then r\AdjDoor[0] = r2\AdjDoor[2]
-					ElseIf (r2\x) = (r\x - 8.0)
+					ElseIf r2\x = r\x - 8.0
 						r\Adjacent[2] = r2
 						If r\AdjDoor[2] = Null Then r\AdjDoor[2] = r2\AdjDoor[0]
 					EndIf
 				ElseIf r2\x = r\x Then
-					If (r2\z) = (r\z - 8.0) Then
+					If r2\z = r\z - 8.0 Then
 						r\Adjacent[1] = r2
 						If r\AdjDoor[1] = Null Then r\AdjDoor[1] = r2\AdjDoor[3]
-					ElseIf (r2\z) = (r\z + 8.0)
+					ElseIf r2\z = r\z + 8.0
 						r\Adjacent[3] = r2
 						If r\AdjDoor[3] = Null Then r\AdjDoor[3] = r2\AdjDoor[1]
 					EndIf
 				EndIf
 			EndIf
-			If (r\Adjacent[0] <> Null) And (r\Adjacent[1] <> Null) And (r\Adjacent[2] <> Null) And (r\Adjacent[3] <> Null) Then Exit
+			If r\Adjacent[0] <> Null And r\Adjacent[1] <> Null And r\Adjacent[2] <> Null And r\Adjacent[3] <> Null Then Exit
 		Next
 	Next
 End Function
@@ -8099,7 +8102,7 @@ End Function
 
 Function UpdateCheckpointMonitors(Number%)
 	Local i%, SF%, b%, t1%
-	Local Entity%
+	Local Entity%, Name$
 	
 	If Number = 0
 		Entity = o\MonitorModelID[1]
@@ -8115,7 +8118,7 @@ Function UpdateCheckpointMonitors(Number%)
 		If b <> 0 Then
 			t1 = GetBrushTexture(b, 0)
 			If t1 <> 0 Then
-				Name$ = StripPath(TextureName(t1))
+				Name = StripPath(TextureName(t1))
 				If Lower(Name) <> "monitor_overlay.png"
 					If Number = 0 Then
 						If MonitorTimer < 50.0
@@ -8141,7 +8144,7 @@ End Function
 
 Function TurnCheckpointMonitorsOff(Number%)
 	Local i%, SF%, b%, t1%
-	Local Entity%
+	Local Entity%, Name$
 	
 	If Number = 0 Then
 		Entity = o\MonitorModelID[1]
@@ -8159,7 +8162,7 @@ Function TurnCheckpointMonitorsOff(Number%)
 		If b <> 0 Then
 			t1 = GetBrushTexture(b, 0)
 			If t1 <> 0 Then
-				Name$ = StripPath(TextureName(t1))
+				Name = StripPath(TextureName(t1))
 				If Lower(Name) <> "monitor_overlay.png"
 					BrushTexture(b, tt\MonitorTextureID[4], 0, 0)
 					PaintSurface(SF, b)

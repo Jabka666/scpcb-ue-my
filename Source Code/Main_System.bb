@@ -2468,7 +2468,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 					;[Block]
 					Temp = 7
 					;[End Block]
-				Case "key7"
+				Case "keyomni"
 					;[Block]
 					Temp = 8
 					;[End Block]
@@ -2555,7 +2555,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 		If SelectedItem <> Null Then
 			If SelectedItem\ItemTemplate\TempName = "scp005" Then
 				Temp = 2
-			ElseIf SelectedItem\ItemTemplate\TempName = "key0" Lor SelectedItem\ItemTemplate\TempName = "key1" Lor SelectedItem\ItemTemplate\TempName = "key2" Lor SelectedItem\ItemTemplate\TempName = "key3" Lor SelectedItem\ItemTemplate\TempName = "key4" Lor SelectedItem\ItemTemplate\TempName = "key5" Lor SelectedItem\ItemTemplate\TempName = "key6" Lor SelectedItem\ItemTemplate\TempName = "key7"
+			ElseIf SelectedItem\ItemTemplate\TempName = "key0" Lor SelectedItem\ItemTemplate\TempName = "key1" Lor SelectedItem\ItemTemplate\TempName = "key2" Lor SelectedItem\ItemTemplate\TempName = "key3" Lor SelectedItem\ItemTemplate\TempName = "key4" Lor SelectedItem\ItemTemplate\TempName = "key5" Lor SelectedItem\ItemTemplate\TempName = "key6" Lor SelectedItem\ItemTemplate\TempName = "keyomni"
 				Temp = 3
 			ElseIf SelectedItem\ItemTemplate\TempName = "key" Lor SelectedItem\ItemTemplate\TempName = "scp860"
 				Temp = 4
@@ -5098,7 +5098,7 @@ Function DrawGUI()
 	Else
 		If SelectedItem <> Null Then
 			Select SelectedItem\ItemTemplate\TempName
-				Case "key0", "key1", "key2", "key3", "key4", "key5", "key6", "key7", "scp860", "hand", "hand2", "25ct", "scp005", "key", "coin"
+				Case "key0", "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "scp860", "hand", "hand2", "25ct", "scp005", "key", "coin"
 					;[Block]
 					DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 					;[End Block]
@@ -6115,7 +6115,7 @@ Function UpdateGUI()
 						SelectedItem = Null
 					ElseIf Inventory(MouseSlot) <> SelectedItem
 						Select SelectedItem\ItemTemplate\TempName
-							Case "paper", "key0", "key1", "key2", "key3", "key4", "key5", "key6", "key7", "misc", "oldpaper", "badge", "ticket", "25ct", "coin", "key", "scp860", "scp500pill", "scp500pilldeath", "scp005"
+							Case "paper", "key0", "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "misc", "oldpaper", "badge", "ticket", "25ct", "coin", "key", "scp860", "scp500pill", "scp500pilldeath", "scp005"
 								;[Block]
 								If Inventory(MouseSlot)\ItemTemplate\TempName = "clipboard" Then
 									; ~ Add an item to clipboard
@@ -10170,7 +10170,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 								Case EASY
 									;[Block]
 									If Rand(0, ((MAXACHIEVEMENTS - 1) * 3) - ((CurrAchvAmount - 1) * 3)) = 0 Then
-										it2 = CreateItem("Key Card Omni", "key7", x, y, z)
+										it2 = CreateItem("Key Card Omni", "keyomni", x, y, z)
 									Else
 										If Rand(10) = 1 Then
 											it2 = CreateItem("Level 6 Key Card", "key6", x, y, z)
@@ -10182,7 +10182,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 								Case NORMAL
 									;[Block]
 									If Rand(0, ((MAXACHIEVEMENTS - 1) * 4) - ((CurrAchvAmount - 1) * 3)) = 0 Then
-										it2 = CreateItem("Key Card Omni", "key7", x, y, z)
+										it2 = CreateItem("Key Card Omni", "keyomni", x, y, z)
 									Else
 										If Rand(15) = 1 Then
 											it2 = CreateItem("Level 6 Key Card", "key6", x, y, z)
@@ -10194,7 +10194,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 								Case HARD
 									;[Block]
 									If Rand(0, ((MAXACHIEVEMENTS - 1) * 5) - ((CurrAchvAmount - 1) * 3)) = 0 Then
-										it2 = CreateItem("Key Card Omni", "key7", x, y, z)
+										it2 = CreateItem("Key Card Omni", "keyomni", x, y, z)
 									Else
 										If Rand(20) = 1 Then
 											it2 = CreateItem("Level 6 Key Card", "key6", x, y, z)
@@ -10211,7 +10211,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 								Case EASY
 									;[Block]
 									If Rand(3) = 1 Then
-										it2 = CreateItem("Key Card Omni", "key7", x, y, z)
+										it2 = CreateItem("Key Card Omni", "keyomni", x, y, z)
 									Else
 										it2 = CreateItem("Mastercard", "misc", x, y, z)
 									EndIf
@@ -10219,7 +10219,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 								Case NORMAL
 									;[Block]
 									If Rand(4) = 1 Then
-										it2 = CreateItem("Key Card Omni", "key7", x, y, z)
+										it2 = CreateItem("Key Card Omni", "keyomni", x, y, z)
 									Else
 										it2 = CreateItem("Mastercard", "misc", x, y, z)
 									EndIf
@@ -10227,7 +10227,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 								Case HARD
 									;[Block]
 									If Rand(5) = 1 Then
-										it2 = CreateItem("Key Card Omni", "key7", x, y, z)
+										it2 = CreateItem("Key Card Omni", "keyomni", x, y, z)
 									Else
 										it2 = CreateItem("Mastercard", "misc", x, y, z)
 									EndIf
@@ -10249,7 +10249,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 						Case EASY
 							;[Block]
 							If Rand(0, ((MAXACHIEVEMENTS - 1) * 3) - ((CurrAchvAmount - 1) * 3)) = 0
-								it2 = CreateItem("Key Card Omni", "key7", x, y, z)
+								it2 = CreateItem("Key Card Omni", "keyomni", x, y, z)
 							Else
 								If Rand(20) = 1 Then
 									it2 = CreateItem("Level 6 Key Card", "key6", x, y, z)
@@ -10261,7 +10261,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 						Case NORMAL
 							;[Block]
 							If Rand(0, ((MAXACHIEVEMENTS - 1) * 4) - ((CurrAchvAmount - 1) * 3)) = 0
-								it2 = CreateItem("Key Card Omni", "key7", x, y, z)
+								it2 = CreateItem("Key Card Omni", "keyomni", x, y, z)
 							Else
 								If Rand(25) = 1 Then
 									it2 = CreateItem("Level 6 Key Card", "key6", x, y, z)
@@ -10273,7 +10273,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 						Case HARD
 							;[Block]
 							If Rand(0, ((MAXACHIEVEMENTS - 1) * 5) - ((CurrAchvAmount - 1) * 3)) = 0
-								it2 = CreateItem("Key Card Omni", "key7", x, y, z)
+								it2 = CreateItem("Key Card Omni", "keyomni", x, y, z)
 							Else
 								If Rand(30) = 1 Then
 									it2 = CreateItem("Level 6 Key Card", "key6", x, y, z)
@@ -11734,57 +11734,6 @@ Function UpdateDecals()
 			Delete(d)
 		End If
 	Next
-End Function
-
-; ~ Create a collision box for a mesh entity taking into account entity scale
-; (~ Won't work in non-uniform scaled space)
-Function MakeCollBox(Mesh%)
-	Local sX# = EntityScaleX(Mesh, 1)
-	Local sY# = Max(EntityScaleY(Mesh, 1), 0.001)
-	Local sZ# = EntityScaleZ(Mesh, 1)
-	
-	GetMeshExtents(Mesh)
-	EntityBox(Mesh, Mesh_MinX * sX, Mesh_MinY * sY, Mesh_MinZ * sZ, Mesh_MagX * sX, Mesh_MagY * sY, Mesh_MagZ * sZ)
-End Function
-
-; ~ Find mesh extents
-Function GetMeshExtents(Mesh%)
-	Local s%, Surf%, Surfs%, v%, Verts%, x#, y#, z#
-	Local MinX# = INFINITY
-	Local MinY# = INFINITY
-	Local MinZ# = INFINITY
-	Local MaxX# = -INFINITY
-	Local MaxY# = -INFINITY
-	Local MaxZ# = -INFINITY
-	
-	Surfs = CountSurfaces(Mesh)
-	
-	For s = 1 To Surfs
-		Surf = GetSurface(Mesh, s)
-		Verts = CountVertices(Surf)
-		For v = 0 To Verts - 1
-			x = VertexX(Surf, v)
-			y = VertexY(Surf, v)
-			z = VertexZ(Surf, v)
-			
-			If x < MinX Then MinX = x
-			If x > MaxX Then MaxX = x
-			If y < MinY Then MinY = y
-			If y > MaxY Then MaxY = y
-			If z < MinZ Then MinZ = z
-			If z > MaxZ Then MaxZ = z
-		Next
-	Next
-	
-	Mesh_MinX = MinX
-	Mesh_MinY = MinY
-	Mesh_MinZ = MinZ
-	Mesh_MaxX = MaxX
-	Mesh_MaxY = MaxY
-	Mesh_MaxZ = MaxZ
-	Mesh_MagX = MaxX - MinX
-	Mesh_MagY = MaxY - MinY
-	Mesh_MagZ = MaxZ - MinZ
 End Function
 
 Global SMALLEST_POWER_TWO#
