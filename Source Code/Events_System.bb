@@ -36,7 +36,7 @@ Function CreateEvent.Events(Eventname$, RoomName$, ID%, Prob# = 0.0)
 					e\EventName = Eventname					
 					e\room = r
 					Return(e)
-				End If
+				EndIf
 			EndIf
 		Next
 	Else
@@ -51,7 +51,7 @@ Function CreateEvent.Events(Eventname$, RoomName$, ID%, Prob# = 0.0)
 					e.Events = New Events
 					e\EventName = Eventname					
 					e\room = r
-				End If
+				EndIf
 			EndIf
 		Next		
 	EndIf

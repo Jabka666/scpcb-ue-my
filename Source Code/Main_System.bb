@@ -9160,12 +9160,6 @@ Function LoadEntities()
 	
 	TextureLodBias(TextureFloat)
 	
-	Room2slCam = CreateCamera()
-	CameraViewport(Room2slCam, 0, 0, 128, 128)
-	CameraRange(Room2slCam, 0.05, 6.0)
-	CameraZoom(Room2slCam, 0.8)
-	HideEntity(Room2slCam)
-	
 	DrawLoading(30)
 	
 	CatchErrors("LoadEntities")

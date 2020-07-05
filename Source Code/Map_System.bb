@@ -1332,7 +1332,6 @@ Type RoomTemplates
 	Field TempTriggerboxAmount
 	Field TempTriggerbox[128]
 	Field TempTriggerboxName$[128]
-	Field UseLightSpark%
 	Field DisableOverlapCheck% = True
 	Field MinX#, MinY#, MinZ#
 	Field MaxX#, MaxY#, MaxZ#
@@ -1399,7 +1398,6 @@ Function LoadRoomTemplates(File$)
 			rt\Commonness = Max(Min(GetINIInt(File, TemporaryString, "Commonness"), 100), 0)
 			rt\Large = GetINIInt(File, TemporaryString, "Large")
 			rt\DisableDecals = GetINIInt(File, TemporaryString, "Disabledecals")
-			rt\UseLightSpark = GetINIInt(File, TemporaryString, "UseLightSpark")
 			rt\DisableOverlapCheck = GetINIInt(File, TemporaryString, "DisableOverlapCheck")
 		EndIf
 	Wend
@@ -1486,8 +1484,6 @@ Type Rooms
 	Field TriggerboxName$[128]
 	Field MaxWayPointY#
 	Field LightR#[MaxRoomLights], LightG#[MaxRoomLights], LightB#[MaxRoomLights]
-	Field LightSpark%[MaxRoomLights]
-	Field LightSparkTimer#[MaxRoomLights]
 	Field MinX#, MinY#, MinZ#
 	Field MaxX#, MaxY#, MaxZ#
 End Type 
@@ -1727,10 +1723,6 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 				PositionEntity(r\OBJ, x, y, z)
 				FillRoom(r)
 				
-				If r\RoomTemplate\UseLightSpark
-					UpdateLightSpark(r)
-				EndIf
-				
 				CalculateRoomExtents(r)
 				Return(r)
 			EndIf
@@ -1768,10 +1760,6 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 					
 					PositionEntity(r\OBJ, x, y, z)
 					FillRoom(r)
-					
-					If r\RoomTemplate\UseLightSpark
-						UpdateLightSpark(r)
-					EndIf
 					
 					CalculateRoomExtents(r)
 					Return r	
@@ -4003,7 +3991,7 @@ Function FillRoom(r.Rooms)
 			Next
 			
 			sc = CreateSecurityCam(r\x - 1152.0 * RoomScale, r\y + 900.0 * RoomScale, r\z + 176.0 * RoomScale, r, True)
-			sc\Angle = 90.0 : sc\Turn = 0.0 : sc\AllowSaving = False : sc\RenderInterval = 0
+			sc\Angle = 90.0 : sc\Turn = 0.0 : sc\AllowSaving = False : sc\RenderInterval = 0.0
 			EntityParent(sc\OBJ, r\OBJ)
 			PositionEntity(sc\ScrOBJ, r\x - 1716.0 * RoomScale, r\y + 160.0 * RoomScale, r\z + 176.0 * RoomScale, True)
 			TurnEntity(sc\ScrOBJ, 0.0, 90.0, 0.0)
@@ -6431,9 +6419,6 @@ End Type
 
 Global ScreenTexs%[2]
 
-Global CurrRoom2slRenderCam%
-Global Room2slCam%
-
 Function CreateSecurityCam.SecurityCams(x#, y#, z#, r.Rooms, Screen% = False)
 	Local sc.SecurityCams = New SecurityCams
 	
@@ -6448,7 +6433,7 @@ Function CreateSecurityCam.SecurityCams(x#, y#, z#, r.Rooms, Screen% = False)
 	If Screen Then
 		sc\AllowSaving = True
 		
-		sc\RenderInterval = 12
+		sc\RenderInterval = 12.0
 		
 		Local Scale# = RoomScale * 4.5 * 0.4
 		
@@ -8032,7 +8017,7 @@ Function UpdateRoomLights(Cam%)
 									Else
 										If r\LightFlicker[i] < 5 Then
 											Random = Rnd(0.38, 0.42)
-										ElseIf r\LightFlicker%[i] > 4 And r\LightFlicker[i] < 10 Then
+										ElseIf r\LightFlicker[i] > 4 And r\LightFlicker[i] < 10 Then
 											Random = Rnd(0.35, 0.45)
 										Else
 											Random = Rnd(0.3, 0.5)
@@ -8043,17 +8028,10 @@ Function UpdateRoomLights(Cam%)
 									Alpha = 1.0 - Max(Min(((EntityDistance(Cam, r\LightSpritesPivot[i]) + 0.5) / 7.5), 1.0), 0.0)
 									
 									If Alpha > 0.0 Then
-										EntityAlpha(r\LightSprites2[i], Max(3.0 * (Brightness / 255.0) * (r\LightIntensity[i] / 2), 1.0) * Alpha)
+										EntityAlpha(r\LightSprites2[i], Max(3.0 * (Brightness / 255.0) * (r\LightIntensity[i] / 2.0), 1.0) * Alpha)
 									Else
 										; ~ Instead of rendering the sprite invisible, just hiding it if the player is far away from it
 										If (Not r\LightSpriteHidden[i]) Then
-											HideEntity(r\LightSprites2[i])
-											r\LightSpriteHidden[i] = True
-										EndIf
-									EndIf
-									
-									If r\RoomTemplate\UseLightSpark Then
-										If EntityDistance(Cam, r\LightSprites2[i]) >= 8.5 Lor (Not EntityVisible(Cam, r\LightSpritesPivot[i])) Then
 											HideEntity(r\LightSprites2[i])
 											r\LightSpriteHidden[i] = True
 										EndIf
@@ -8068,36 +8046,11 @@ Function UpdateRoomLights(Cam%)
 								If (Not r\LightSpriteHidden[i]) Then
 									HideEntity(r\LightSprites2[i])
 									r\LightSpriteHidden[i] = True
-									If r\RoomTemplate\UseLightSpark Then
-										If r\LightSpark[i] <> 0 Then HideEntity(r\LightSpark[i])
-									EndIf
 								EndIf
 							EndIf
-							
-							If r\RoomTemplate\UseLightSpark Then
-								If r\LightSpark[i] <> 0 Then
-									If r\LightSparkTimer[i] > 0.0 And r\LightSparkTimer[i] < 10.0 Then
-										ShowEntity(r\LightSpark[i])
-										r\LightSparkTimer[i] = r\LightSparkTimer[i] + fpst\FPSFactor[0]
-									Else
-										HideEntity(r\LightSpark[i])
-										r\LightSparkTimer[i] = 0.0
-									EndIf
-								EndIf
-							EndIf
-							
-							If r\RoomTemplate\UseLightSpark Then
-								If r\LightFlicker[i] > 4.0 Then
-									If Rand(400) = 1 Then
-										PlaySound2(IntroSFX(Rand(8, 10)), Cam, r\LightSpritesPivot[i])
-										ShowEntity(r\LightSpark[i])
-										r\LightSparkTimer[i] = fpst\FPSFactor[0]
-									EndIf
-								EndIf
-							EndIf
-							Else
-								If EntityDistance(Cam, r\LightSprites2[i]) < 8.5 Then
-									If PlayerRoom\RoomTemplate\Name = "room173intro" Then
+						Else
+							If EntityDistance(Cam, r\LightSprites2[i]) < 8.5 Then
+								If PlayerRoom\RoomTemplate\Name = "room173intro" Then
 									Random = Rnd(0.38, 0.42)
 								Else
 									If r\LightFlicker[i] < 5 Then
@@ -8113,19 +8066,8 @@ Function UpdateRoomLights(Cam%)
 									ScaleSprite(r\LightSprites2[i], Random, Random)
 								EndIf
 							EndIf
-							
-							If r\RoomTemplate\UseLightSpark Then
-								If r\LightSpark[i] <> 0 Then
-									If r\LightSparkTimer[i] > 0.0 And r\LightSparkTimer[i] < 10.0 Then
-										ShowEntity(r\LightSpark[i])
-										r\LightSparkTimer[i] = r\LightSparkTimer[i] + fpst\FPSFactor[0]
-									Else
-										HideEntity(r\LightSpark[i])
-										r\LightSparkTimer[i] = 0.0
-									EndIf
-								EndIf
-							EndIf
 						EndIf
+						
 						UpdateRoomLightsTimer = UpdateRoomLightsTimer + fpst\FPSFactor[0]
 						If UpdateRoomLightsTimer >= 8.0 Then
 							UpdateRoomLightsTimer = 0.0
@@ -8144,9 +8086,6 @@ Function UpdateRoomLights(Cam%)
 						If (Not r\LightSpriteHidden[i]) Then
 							HideEntity(r\LightSprites2[i])
 							r\LightSpriteHidden[i] = True
-						EndIf
-						If r\RoomTemplate\UseLightSpark Then
-							If r\LightSpark[i] <> 0 Then HideEntity(r\LightSpark[i])
 						EndIf
 					Else
 						; ~ This will make the lightsprites not glitch through the wall when they are rendered by the cameras
@@ -8264,13 +8203,13 @@ Function AmbientLightRooms(Value% = 0)
 	SetBuffer(OldBuffer)
 End Function
 
-Dim CHUNKDATA(64, 64)
+Dim CHUNKDATA%(64, 64)
 
 Function SetChunkDataValues()
 	Local StrTemp$, i%, j%
 	
 	StrTemp = ""
-	SeedRnd GenerateSeedNumber(RandomSeed)
+	SeedRnd(GenerateSeedNumber(RandomSeed))
 	
 	For i = 0 To 63
 		For j = 0 To 63
@@ -8295,7 +8234,7 @@ Function CreateChunkParts(r.Rooms)
 	Local chp.ChunkPart, chp2.ChunkPart
 	
 	StrTemp = ""
-	SeedRnd GenerateSeedNumber(RandomSeed)
+	SeedRnd(GenerateSeedNumber(RandomSeed))
 	
 	For i = 0 To ChunkAmount
 		Local Loc% = GetINISectionLocation(File, "chunk" + i)
@@ -8514,27 +8453,6 @@ Type Dummy1499_1
 	Field OBJ%
 End Type
 
-Function UpdateLightSpark(room.Rooms)
-	Local i%
-	
-	For i = 0 To MaxRoomLights - 1
-		If room\Lights[i] <> 0 Then
-			If room\LightFlicker[i] > 4.0 Then
-				room\LightSpark[i] = CreateSprite()
-				ScaleSprite(room\LightSpark[i], 1.0, 1.0)
-				EntityTexture(room\LightSpark[i], tt\ParticleTextureID[8])
-				SpriteViewMode(room\LightSpark[i], 2)
-				EntityFX(room\LightSpark[i], 1)
-				RotateEntity(room\LightSpark[i], -90.0, 0.0, 0.0)
-				EntityBlend(room\LightSpark[i], 3)
-				EntityAlpha(room\LightSpark[i], 1.0)
-				PositionEntity(room\LightSpark[i], EntityX(room\LightSpritesPivot[i], True), EntityY(room\LightSpritesPivot[i], True) + 0.05, EntityZ(room\LightSpritesPivot[i], True), True)
-				EntityParent(room\LightSpark[i], room\LightSpritesPivot[i])
-			EndIf
-		EndIf
-	Next
-End Function
-
 Function CalculateRoomTemplateExtents(r.RoomTemplates)
 	If r\DisableOverlapCheck Then Return
 	
@@ -8724,5 +8642,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11CB
+;~B#11BF
 ;~C#Blitz3D
