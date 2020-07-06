@@ -16,6 +16,7 @@
 - Added new key card loading screen.
 - Added anisotropic filtering.
 - Added support for resolutions of up to 4k.
+- Added coloring of the fog.
 
 - Now guard in "room2elevator" event can kill the player if he too close.
 - Now the pass code for O5 Council's office drops from falling guard in SCP-895's event.
@@ -115,6 +116,7 @@ Bug Fixes:
 - Fixed inventory not being fully centered.
 - Fixed SCP-173 not breaking the glass in the testroom event if the player looked away.
 - Fixed Right and Down movement always overriding Left and Up movement.
+- Fixed steps sound inside the fake tunnel in pocket dimension.
 
 - Small fixes for commands "disablenuke" and "enablecontrol/disablecontrol.
 - Small fixes for gateb and gateaentrance's walls.

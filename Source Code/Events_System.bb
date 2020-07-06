@@ -200,9 +200,9 @@ Function InitEvents()
 	
 	CreateEvent("room205", "room205", 0)
 	
-	CreateEvent("room860","room860", 0)
+	CreateEvent("room860", "room860", 0)
 	
-	CreateEvent("room966","room966", 0)
+	CreateEvent("room966", "room966", 0)
 	
 	CreateEvent("room1123", "room1123", 0, 0.0)
 	
@@ -1803,9 +1803,9 @@ Function UpdateEvents()
 				
 				If PlayerRoom = e\room Then
 					If e\EventState >= 10.0 Then
-						CameraRange(Camera, 0.05, 15.0)
+						CameraRange(Camera, 0.01, 15.0)
 					Else															
-						CameraRange(Camera, 0.05, 40.0)
+						CameraRange(Camera, 0.01, 40.0)
 					EndIf	
 					CameraFogMode(Camera, 0)
 	 	            AmbientLight(140.0, 140.0, 140.0)
@@ -2353,14 +2353,16 @@ Function UpdateEvents()
 					InjurePlayer(fpst\FPSFactor[0] * 0.00005)
 					PrevSecondaryLightOn = SecondaryLightOn : SecondaryLightOn = True
 					
-					If (EntityY(Collider) < 2000.0 * RoomScale Lor EntityY(Collider) > 2608.0 * RoomScale) Then CurrStepSFX = 1
+					If EntityY(Collider) < 2000.0 * RoomScale Lor EntityY(Collider) > 2608.0 * RoomScale Then 
+						CurrStepSFX = 1
+					Else
+						CurrStepSFX = 3
+					EndIf
 					
 					If e\Sound = 0 Then LoadEventSound(e, "SFX\Room\PocketDimension\Rumble.ogg")
 					If e\Sound2 = 0 Then e\Sound2 = LoadEventSound(e, "SFX\Room\PocketDimension\PrisonVoices.ogg", 1)
 					
 					If e\EventState = 0.0 Then
-						CameraFogColor(Camera, 0.0, 0.0, 0.0)
-						CameraClsColor(Camera, 0.0, 0.0, 0.0)
 						e\EventState = 0.1
 					EndIf
 					
@@ -2414,7 +2416,7 @@ Function UpdateEvents()
 						Curr106\State = -10.0
 					EndIf
 					
-					If e\EventState2 = 1 Then ; ~ In the second room
+					If e\EventState2 = 1.0 Then ; ~ In the second room
 						PositionEntity(e\room\Objects[9], EntityX(e\room\Objects[8], True) + 3384.0 * RoomScale, 0.0, EntityZ(e\room\Objects[8], True))
 						
 						TranslateEntity(e\room\Objects[9], Cos(e\EventState * 0.8) * 5.0, 0.0, Sin(e\EventState * 1.6) * 4.0, True)
@@ -2431,19 +2433,16 @@ Function UpdateEvents()
 								me\BlurTimer = 800.0
 								e\EventState3 = 2.0
 							EndIf
-							If EntityY(Collider) < 5.0 Then e\EventState3 = 0
+							If EntityY(Collider) < 5.0 Then e\EventState3 = 0.0
 						Else
 							; ~ The trenches
 							If EntityY(Collider) > 6.0 Then
 								ShouldPlay = 15
 								
-								CameraFogColor(Camera, 38.0, 55.0, 47.0)
-								CameraClsColor(Camera, 38.0, 55.0, 47.0)
-								
 								If EntityX(e\room\Objects[20], True) < EntityX(e\room\Objects[8], True) - 4000.0 * RoomScale Then
 									e\SoundCHN2 = PlaySound_Strict(e\Sound2)
 									
-									PositionEntity e\room\Objects[20], EntityX(Collider, True) + 4000.0 * RoomScale, 12.0, EntityZ(Collider, True)
+									PositionEntity(e\room\Objects[20], EntityX(Collider, True) + 4000.0 * RoomScale, 12.0, EntityZ(Collider, True))
 								EndIf
 								
 								MoveEntity(Collider, 0.0, Min((12.0 - EntityY(Collider)), 0.0) * fpst\FPSFactor[0], 0.0)
@@ -2521,9 +2520,6 @@ Function UpdateEvents()
 									
 									PositionEntity(Collider, EntityX(e\room\Objects[8], True) - 400.0 * RoomScale, -304.0 * RoomScale, EntityZ(e\room\Objects[8], True))
 									ResetEntity(Collider)
-									
-									CameraFogColor(Camera, 0.0, 0.0, 0.0)
-									CameraClsColor(Camera, 0.0, 0.0, 0.0)
 								EndIf
 							Else
 								e\EventState3 = 0.0
@@ -2663,9 +2659,6 @@ Function UpdateEvents()
 						
 						If EntityY(Collider) < -1600.0 * RoomScale Then
 							If EntityDistance(Collider, e\room\Objects[8]) > 4750.0 * RoomScale Then
-								CameraFogColor(Camera, 0.0, 0.0, 0.0)
-								CameraClsColor(Camera, 0.0, 0.0, 0.0)
-								
 								me\DropSpeed = 0.0
 								me\BlurTimer = 1500.0
 								PositionEntity(Collider, EntityX(e\room\OBJ,True), 0.4, EntityX(e\room\OBJ, True))
@@ -2817,9 +2810,6 @@ Function UpdateEvents()
 							UpdateRooms()
 						EndIf					
 					Else ; ~ Pillar room
-						CameraFogColor(Camera, 38.0 * 0.5, 55.0 * 0.5, 47.0 * 0.5)
-						CameraClsColor(Camera, 38.0 * 0.5, 55.0 * 0.5, 47.0 * 0.5)
-						
 						If ParticleAmount > 0
 							If Rand(800) = 1 Then 
 								Angle = EntityYaw(Camera, True) + Rnd(150, 210)
@@ -2868,9 +2858,6 @@ Function UpdateEvents()
 						If EntityY(Collider) < -1600.0 * RoomScale Then
 							; ~ Player is at the exit
 							If Distance(EntityX(e\room\Objects[16], True), EntityX(Collider), EntityZ(e\room\Objects[16], True), EntityZ(Collider)) < 144.0 * RoomScale Then
-								CameraFogColor(Camera, 0.0, 0.0, 0.0)
-								CameraClsColor(Camera, 0.0, 0.0, 0.0)
-								
 								me\DropSpeed = 0.0
 								me\BlurTimer = 500.0
 								PositionEntity(Collider, EntityX(e\room\OBJ), 0.5, EntityZ(e\room\OBJ))
@@ -6656,18 +6643,8 @@ Function UpdateEvents()
 							EndIf
 						Next
 						
-						If e\room\NPC[0] <> Null
-							x = Max(1.0 - (e\room\NPC[0]\State3 / 300.0), 0.1)
-						Else
-							x = 2.0
-						EndIf
-						
-						If (Not chs\DebugHUD) Then
-							CameraClsColor(Camera, x * 98.0, x * 133.0, x * 162.0)
-							CameraRange(Camera, RoomScale, 8.5)
-							CameraFogRange(Camera, 0.5, 8.0)
-							CameraFogColor(Camera, x * 98.0, x * 133.0, x * 162.0)
-						EndIf
+						CameraRange(Camera, RoomScale, 8.5)
+						CameraFogRange(Camera, 0.5, 8.0)
 					Else
 						If (Not Curr106\Contained) Then Curr106\Idle = False
 						If EntityYaw(e\room\Objects[3]) = 0.0 Then
@@ -9099,17 +9076,8 @@ Function UpdateDimension1499()
 					Next
 				EndIf
 				
-				If (Not chs\DebugHUD) Then
-					CameraFogRange(Camera, 40.0, 80.0)
-					CameraFogColor(Camera, 96.0, 97.0, 104.0)
-					CameraClsColor(Camera, 96.0, 97.0, 104.0)
-					CameraRange(Camera, 0.05, 90.0)
-				Else
-					CameraFogRange(Camera, 120.0, 120.0)
-					CameraFogColor(Camera, 96.0, 97.0, 104.0)
-					CameraClsColor(Camera, 96.0, 97.0 ,104.0)
-					CameraRange(Camera, 0.05, 120.0)
-				EndIf
+				CameraFogRange(Camera, 40.0, 80.0)
+				CameraRange(Camera, 0.01, 90.0)
 				
 				For r.Rooms = Each Rooms
 					HideEntity(r\OBJ)
@@ -9607,9 +9575,7 @@ Function UpdateEndings()
 						CameraFogRange(Camera, 5.0, 45.0)
 						
 						Angle = Max(Sin(EntityYaw(Collider)), 0.0)
-						CameraFogColor(Camera, 200.0 + (Angle * 50.0), 200.0 + (Angle * 30.0), 200.0)
-						CameraClsColor(Camera, 200.0 + (Angle * 50.0), 200.0 + (Angle * 30.0), 200.0)					
-						CameraRange(Camera, 0.05, 60.0)
+						CameraRange(Camera, 0.01, 60.0)
 						AmbientLight(140.0, 140.0, 140.0)
 						
 						If ParticleAmount > 0
@@ -9766,9 +9732,7 @@ Function UpdateEndings()
 						CameraFogRange(Camera, 5.0, 30.0)
 						
 						Angle = Max(Sin(EntityYaw(Collider) + 90.0), 0.0)
-						CameraFogColor(Camera, 200.0 + (Angle * 40.0), 200.0 + (Angle * 20), 200)
-						CameraClsColor(Camera, 200.0 + (Angle * 40.0), 200.0 + (Angle * 20), 200)		
-						CameraRange(Camera, 0.05, 30.0)
+						CameraRange(Camera, 0.01, 30.0)
 						AmbientLight(140.0, 140.0, 140.0)
 						
 						For i = 2 To 4
@@ -10353,5 +10317,5 @@ Function GenerateRandomIA()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11DF#1E06
+;~B#11D2#1DEF
 ;~C#Blitz3D

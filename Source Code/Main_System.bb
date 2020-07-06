@@ -845,18 +845,22 @@ Function UpdateConsole()
 							CreateConsoleMsg("from " + Chr(34) + "SFX\Music\Custom\" + Chr(34) + ".")
 							CreateConsoleMsg("******************************")
 							;[End Block]
-						Case "infect" 
+						Case "infect"
+							;[Block]
 							CreateConsoleMsg("HELP - infect")
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("SCP-008 infects player.")
 							CreateConsoleMsg("Example: infect 80")
 							CreateConsoleMsg("******************************")
+							;[End Block]
 						Case "crystal" 
+							;[Block]
 							CreateConsoleMsg("HELP - crystal")
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("SCP-409 crystallizes player.")
 							CreateConsoleMsg("Example: crystal 52")
 							CreateConsoleMsg("******************************")
+							;[End Block]
 						Default
 							;[Block]
 							CreateConsoleMsg("There is no help available for that command.", 255, 150, 0)
@@ -2946,7 +2950,7 @@ Repeat
 		
 		Local fiBuffer% = FI_ConvertFromRawBits(Bank, RealGraphicWidth, RealGraphicHeight, RealGraphicWidth * 3, 24, $FF0000, $00FF00, $0000FF, True)
 		
-		FI_Save(FIF_PNG, fiBuffer, "Screenshots\Screenshot" + ScreenshotCount + ".png", 0)
+		FI_Save(13, fiBuffer, "Screenshots\Screenshot" + ScreenshotCount + ".png", 0)
 		FI_Unload(fiBuffer)
 		FreeBank(Bank)
 		ScreenshotCount = ScreenshotCount + 1
@@ -2975,7 +2979,7 @@ Repeat
 Forever
 
 Function MainLoop()
-	Local e.Events, i%
+	Local e.Events, r.Rooms, i%
 	
 	While ft\Accumulator > 0.0
 		ft\Accumulator = ft\Accumulator - TICK_DURATION
@@ -3086,12 +3090,15 @@ Function MainLoop()
 		If (Not MenuOpen) And (Not InvOpen) And (OtherOpen = Null) And (SelectedDoor = Null) And (ConsoleOpen = False) And (I_294\Using = False) And (SelectedScreen = Null) And me\EndingTimer >= 0.0 Then
 			LightVolume = CurveValue(TempLightVolume, LightVolume, 50.0)
 			CameraFogRange(Camera, CameraFogNear * LightVolume, CameraFogFar * LightVolume)
-			CameraFogColor(Camera, 0.0, 0.0, 0.0)
 			CameraFogMode(Camera, 1)
-			CameraRange(Camera, 0.05, Min(CameraFogFar * LightVolume * 1.5, 28.0))	
-			If PlayerRoom\RoomTemplate\Name <> "pocketdimension" Then
-				CameraClsColor(Camera, 0.0, 0.0, 0.0)
-			EndIf
+			CameraRange(Camera, 0.01, Min(CameraFogFar * LightVolume * 1.5, 28.0))	
+			For r.Rooms = Each Rooms
+				For i = 0 To r\MaxLights
+					If r\Lights[i] <> 0 Then
+						EntityAutoFade(r\LightSprites[i], CameraFogNear * LightVolume, CameraFogFar * LightVolume)
+					EndIf
+				Next
+			Next
 			
 			AmbientLight(Brightness, Brightness, Brightness)
 			me\SndVolume = CurveValue(0.0, me\SndVolume, 5.0)
@@ -3140,6 +3147,59 @@ Function MainLoop()
 				UpdateParticles_Time = 0.0
 			EndIf
 		EndIf
+		
+		Local CurrFogColor$ = "", Temp%
+		
+		If PlayerRoom <> Null Then
+			If PlayerRoom\RoomTemplate\Name = "room3storage" And EntityY(Collider) < -4100.0 * RoomScale Then
+				CurrFogColor = FogColorStorageTunnels
+			ElseIf PlayerRoom\RoomTemplate\Name = "gatea" Lor (PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(Collider) > 1040.0 * RoomScale) Then
+				CurrFogColor = FogColorOutside
+			ElseIf PlayerRoom\RoomTemplate\Name = "dimension1499"
+				CurrFogColor = FogColorDimension1499
+			ElseIf PlayerRoom\RoomTemplate\Name = "room860"
+				For e.Events = Each Events
+					If e\EventName = "room860" Then
+						If e\EventState = 1.0 Then
+							CurrFogColor = FogColorForest
+						EndIf
+					EndIf
+				Next
+			ElseIf PlayerRoom\RoomTemplate\Name = "pocketdimension"
+				For e.Events = Each Events
+					If e\EventName = "pocketdimension"
+						If EntityY(Collider) > 2608.0 * RoomScale Lor e\EventState2 > 1.0 Then
+							CurrFogColor = FogColorPDTrench
+						Else
+							CurrFogColor = FogColorPD
+						EndIf
+					EndIf
+				Next
+			EndIf
+		EndIf
+		If CurrFogColor = "" Then
+			Select me\Zone
+				Case 0
+					;[Block]
+					CurrFogColor = FogColorLCZ
+					;[End Block]
+				Case 1
+					;[Block]
+					CurrFogColor = FogColorHCZ
+					;[End Block]
+				Case 2
+					;[Block]
+					CurrFogColor = FogColorEZ
+					;[End Block]
+			End Select
+		EndIf
+		
+		Local FogColorR% = Left(CurrFogColor, 3)
+		Local FogColorG% = Mid(CurrFogColor, 4, 3)
+		Local FogColorB% = Right(CurrFogColor, 3)
+		
+		CameraFogColor(Camera, FogColorR, FogColorG, FogColorB)
+		CameraClsColor(Camera, FogColorR, FogColorG, FogColorB)
 		
 		If chs\InfiniteStamina Then me\Stamina = 100.0
 		If chs\NoBlink Then me\BlinkTimer = me\BLINKFREQ
@@ -3193,7 +3253,7 @@ Function MainLoop()
 				EndIf
 				
 				If me\BlinkTimer =< -20.0 Then
-						; ~ Randomizes the frequency of blinking. Scales with difficulty.
+					; ~ Randomizes the frequency of blinking. Scales with difficulty
 					Select SelectedDifficulty\OtherFactors
 						Case EASY
 							;[Block]
@@ -4011,13 +4071,23 @@ Function MovePlayer()
 						me\SndVolume = Max(2.5 - (me\Crouch * 0.6), me\SndVolume)
 						TempCHN = PlaySound_Strict(StepSFX(Temp, 1, Rand(0, 7)))
 						ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.6)) * SFXVolume)
-					End If
+					EndIf
 				ElseIf CurrStepSFX = 1
 					TempCHN = PlaySound_Strict(StepSFX(2, 0, Rand(0, 2)))
 					ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.4)) * SFXVolume)
 				ElseIf CurrStepSFX = 2
 					TempCHN = PlaySound_Strict(StepSFX(3, 0, Rand(0, 2)))
 					ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.4)) * SFXVolume)
+				ElseIf CurrStepSFX = 3
+					If Sprint = 1.0 Then
+						me\SndVolume = Max(4.0, me\SndVolume)
+						TempCHN = PlaySound_Strict(StepSFX(1, 0, Rand(0, 7)))
+						ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.6)) * SFXVolume)
+					Else
+						me\SndVolume = Max(2.5 - (me\Crouch * 0.6), me\SndVolume)
+						TempCHN = PlaySound_Strict(StepSFX(1, 1, Rand(0, 7)))
+						ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.6)) * SFXVolume)
+					EndIf
 				EndIf
 			EndIf	
 		EndIf
@@ -5821,15 +5891,11 @@ Function UpdateGUI()
 		If (PlayerRoom\RoomTemplate\Name = "gatea") Then
 			HideEntity(tt\OverlayID[0])
 			CameraFogRange(Camera, 5.0, 30.0)
-			CameraFogColor(Camera, 200.0, 200.0, 200.0)
-			CameraClsColor(Camera, 200.0, 200.0, 200.0)					
-			CameraRange(Camera, 0.05, 30.0)
+			CameraRange(Camera, 0.01, 30.0)
 		ElseIf PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(Collider) > 1040.0 * RoomScale
 			HideEntity(tt\OverlayID[0])
 			CameraFogRange(Camera, 5.0, 45.0)
-			CameraFogColor(Camera, 200.0, 200.0, 200.0)
-			CameraClsColor(Camera, 200.0, 200.0, 200.0)					
-			CameraRange(Camera, 0.05, 60.0)
+			CameraRange(Camera, 0.01, 60.0)
 		EndIf
 		
 		PrevOtherOpen = OtherOpen
@@ -5988,15 +6054,11 @@ Function UpdateGUI()
 		If (PlayerRoom\RoomTemplate\Name = "gatea") Then
 			HideEntity(tt\OverlayID[0])
 			CameraFogRange(Camera, 5.0, 30.0)
-			CameraFogColor(Camera, 200.0, 200.0, 200.0)
-			CameraClsColor(Camera, 200.0, 200.0, 200.0)					
-			CameraRange(Camera, 0.05, 30.0)
+			CameraRange(Camera, 0.01, 30.0)
 		ElseIf PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(Collider) > 1040.0 * RoomScale
 			HideEntity(tt\OverlayID[0])
 			CameraFogRange(Camera, 5.0, 45.0)
-			CameraFogColor(Camera, 200.0, 200.0, 200.0)
-			CameraClsColor(Camera, 200.0, 200.0, 200.0)					
-			CameraRange(Camera, 0.05, 60.0)
+			CameraRange(Camera, 0.01, 60.0)
 		EndIf
 		
 		SelectedDoor = Null
@@ -8612,10 +8674,9 @@ Function LoadEntities()
 	
 	Camera = CreateCamera()
 	CameraViewport(Camera, 0, 0, GraphicWidth, GraphicHeight)
-	CameraRange(Camera, 0.05, CameraFogFar)
+	CameraRange(Camera, 0.01, CameraFogFar)
 	CameraFogMode(Camera, 1)
 	CameraFogRange(Camera, CameraFogNear, CameraFogFar)
-	CameraFogColor(Camera, 0.0, 0.0, 0.0)
 	AmbientLight(Brightness, Brightness, Brightness)
 	
 	ScreenTexs[0] = CreateTexture(512, 512, 1 + 256)
@@ -9333,6 +9394,7 @@ Function InitNewGame()
 	me\DropSpeed = 0.0
 	
 	fpst\PrevTime = MilliSecs()
+	
 	CatchErrors("InitNewGame")
 End Function
 
@@ -9418,6 +9480,7 @@ Function InitLoadGame()
 	FreeTextureCache()
 	
 	CatchErrors("InitLoadGame")
+	
 	DrawLoading(100)
 	
 	fpst\PrevTime = MilliSecs()
@@ -9425,7 +9488,7 @@ Function InitLoadGame()
 	ResetInput()
 End Function
 
-Function NullGame(PlayButtonSFX% = True)
+Function NullGame(PlayButtonSFX% = True) ; ~ CHECK WHAT IS WRONG HERE!
 	CatchErrors("Uncaught (NullGame)")
 	
 	Local i%, x%, y%, Lvl%
@@ -11717,12 +11780,12 @@ Function UpdateDecals()
 			End Select
 			
 			If d\Size >= d\MaxSize Then d\SizeChange = 0.0 : d\Size = d\MaxSize
-		End If
+		EndIf
 		
 		If d\AlphaChange <> 0.0 Then
 			d\Alpha = Min(d\Alpha + fpst\FPSFactor[0] * d\AlphaChange, 1.0)
 			EntityAlpha(d\OBJ, d\Alpha)
-		End If
+		EndIf
 		
 		If d\LifeTime > 0.0 Then
 			d\LifeTime = Max(d\LifeTime - fpst\FPSFactor[0], 5.0)
@@ -11732,7 +11795,7 @@ Function UpdateDecals()
 			FreeEntity(d\OBJ)
 			
 			Delete(d)
-		End If
+		EndIf
 	Next
 End Function
 
@@ -11912,12 +11975,6 @@ Function RenderWorld2(Tween#)
 		EndIf
 	EndIf
 	
-	; ~ Render sprites
-	CameraProjMode(Ark_Blur_Cam, 2)
-	CameraProjMode(Camera, 0)
-	RenderWorld()
-	CameraProjMode(Ark_Blur_Cam, 0)
-	
 	If me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0 Then
 		If (wi\NightVision = 1 Lor wi\NightVision = 2) And (HasBattery = 1) And ((MilliSecs() Mod 800) < 400) Then
 			Color(255, 0, 0)
@@ -11927,6 +11984,12 @@ Function RenderWorld2(Tween#)
 			Color(255, 255, 255)
 		EndIf
 	EndIf
+	
+	; ~ Render sprites
+	CameraProjMode(Ark_Blur_Cam, 2)
+	CameraProjMode(Camera, 0)
+	RenderWorld()
+	CameraProjMode(Ark_Blur_Cam, 0)
 End Function
 
 Function ScaleRender(x#, y#, hScale# = 1.0, vScale# = 1.0)
@@ -11966,7 +12029,7 @@ Function InitFastResize()
 	AddTriangle(SF, 0, 1, 2)
 	AddTriangle(SF, 3, 2, 1)
 	EntityFX(SPR, 17)
-	ScaleEntity(SPR, SMALLEST_POWER_TWO / Float(RealGraphicWidth), SMALLEST_POWER_TWO / Float(RealGraphicHeight), 1.0)
+	ScaleEntity(SPR, 2048.0 / Float(RealGraphicWidth), 2048.0 / Float(RealGraphicHeight), 1.0) ; ~ CHECK WHY NOT "SMALLEST_POWER_TWO"
 	PositionEntity(SPR, 0, 0, 1.0001)
 	EntityOrder(SPR, -100001)
 	EntityBlend(SPR, 1)
@@ -12012,9 +12075,6 @@ Function UpdateLeave1499()
 							If PlayerRoom\NPC[i]\State2 > PlayerRoom\NPC[i]\PrevState Then PlayerRoom\NPC[i]\State2 = (PlayerRoom\NPC[i]\PrevState - 3)
 						Next
 					EndIf
-				ElseIf PlayerRoom\RoomTemplate\Name = "pocketdimension"
-					CameraFogColor(Camera, 0.0, 0.0, 0.0)
-					CameraClsColor(Camera, 0.0, 0.0, 0.0)
 				EndIf
 				For r2.Rooms = Each Rooms
 					If r2\RoomTemplate\Name = "dimension1499" Then
@@ -12247,5 +12307,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1090#1366#1DB4
+;~B#10D6#13AC#1DF2
 ;~C#Blitz3D

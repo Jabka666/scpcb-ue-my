@@ -47,7 +47,7 @@ Const Max_Deviation_Distance% = 3
 Const Return_Chance% = 27
 Const Center% = 5
 
-; ~ [MAIN MENU]
+; ~ [MAIN MENU TABS]
 
 Const MainMenuTab_Default% = 0
 Const MainMenuTab_New_Game% = 1
@@ -58,7 +58,19 @@ Const MainMenuTab_Options_Audio% = 5
 Const MainMenuTab_Options_Controls% = 6
 Const MainMenuTab_Options_Advanced% = 7
 
-; ~ [INVENTORY]
+; ~ [FOG]
+
+Const FogColorLCZ$ = "010010010"
+Const FogColorHCZ$ = "010006006"
+Const FogColorEZ$ = "010010020"
+Const FogColorStorageTunnels$ = "005015003"
+Const FogColorOutside$ = "255255255"
+Const FogColorDimension1499$ = "096097104"
+Const FogColorPD$ = "000000000"
+Const FogColorPDTrench$ = "038055047"
+Const FogColorForest$ = "098133162"
+
+; ~ [INVENTORY SIZE]
 
 Const INVENTORY_GFX_SIZE% = 70
 Const INVENTORY_GFX_SPACING% = 35

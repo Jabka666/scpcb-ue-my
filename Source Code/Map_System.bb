@@ -3759,7 +3759,7 @@ Function FillRoom(r.Rooms)
 			Next
 			
 			sc = CreateSecurityCam(r\x - 336.0 * RoomScale, r\y + 352.0 * RoomScale, r\z + 48.0 * RoomScale, r, True)
-			sc\Angle = 270 : sc\Turn = 45 : sc\room = r
+			sc\Angle = 270.0 : sc\Turn = 45.0 : sc\room = r
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			EntityParent(sc\OBJ, r\OBJ)
 			PositionEntity(sc\ScrOBJ, r\x + 1456.0 * RoomScale, r\y + 608.0 * RoomScale, r\z + 352.0 * RoomScale)
@@ -5915,7 +5915,9 @@ Function AddLight%(room.Rooms, x#, y#, z#, lType%, Range#, R%, G%, B%)
 				PositionEntity(room\LightSprites[i], x, y, z)
 				ScaleSprite(room\LightSprites[i], 0.13 , 0.13)
 				EntityTexture(room\LightSprites[i], tt\LightSpriteID[0])
+				EntityFX(room\LightSprites[i], 1 + 8)
 				EntityBlend(room\LightSprites[i], 3)
+				EntityColor(room\LightSprites[i], R, G, B)
 				EntityParent(room\LightSprites[i], room\OBJ)
 				
 				room\LightSpritesPivot[i] = CreatePivot()
@@ -5931,7 +5933,7 @@ Function AddLight%(room.Rooms, x#, y#, z#, lType%, Range#, R%, G%, B%)
 				EntityOrder(room\LightSprites2[i], -1)
 				EntityColor(room\LightSprites2[i], R, G, B)
 				EntityParent(room\LightSprites2[i], room\OBJ)
-				EntityFX(room\LightSprites2[i], 1)
+				EntityFX(room\LightSprites2[i], 1 + 8)
 				RotateEntity(room\LightSprites2[i], 0.0, 0.0, Rnd(360.0))
 				SpriteViewMode(room\LightSprites2[i], 1)
 				room\LightSpriteHidden[i] = True
@@ -5956,7 +5958,9 @@ Function AddLight%(room.Rooms, x#, y#, z#, lType%, Range#, R%, G%, B%)
 		LightRange(Light, Range)
 		LightColor(Light, R, G, B)
 		PositionEntity(Light, x, y, z, True)
+		
 		Sprite = CreateSprite()
+		EntityFX(Sprite, 1 + 8)
 		PositionEntity(Sprite, x, y, z)
 		ScaleSprite(Sprite, 0.13 , 0.13)
 		EntityTexture(Sprite, tt\LightSpriteID[0])
@@ -6449,6 +6453,7 @@ Function CreateSecurityCam.SecurityCams(x#, y#, z#, r.Rooms, Screen% = False)
 		MoveEntity(sc\ScrOverlay, 0.0, 0.0, -0.0005)
 		EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
 		SpriteViewMode(sc\ScrOverlay, 2)
+		EntityFX(sc\ScrOverlay, 1)
 		EntityBlend(sc\ScrOverlay, 3)
 		
 		sc\MonitorOBJ = CopyEntity(o\MonitorModelID[0], sc\ScrOBJ)
@@ -6457,10 +6462,10 @@ Function CreateSecurityCam.SecurityCams(x#, y#, z#, r.Rooms, Screen% = False)
 		
 		sc\Cam = CreateCamera()
 		CameraViewport(sc\Cam, 0, 0, 512, 512)
-		CameraRange(sc\Cam, 0.05, 8.0)
+		CameraRange(sc\Cam, 0.01, 8.0)
 		CameraZoom(sc\Cam, 0.8)
 		HideEntity(sc\Cam)	
-	End If
+	EndIf
 	
 	PositionEntity(sc\OBJ, x, y, z)
 	
@@ -6762,7 +6767,7 @@ Function UpdateLever(OBJ%, Locked% = False)
 				If PickedEntity() = OBJ Then
 					DrawHandIcon = True
 					If MouseHit1 Then GrabbedEntity = OBJ
-				End If
+				EndIf
 				
 				Local PrevPitch# = EntityPitch(OBJ)
 				
@@ -6793,7 +6798,7 @@ Function UpdateLever(OBJ%, Locked% = False)
 				RotateEntity(OBJ, CurveValue(-80.0, EntityPitch(OBJ), 10.0), EntityYaw(OBJ), 0.0)
 			EndIf
 			GrabbedEntity = 0
-		End If
+		EndIf
 	EndIf
 	
 	If EntityPitch(OBJ, True) > 0 Then
@@ -6817,8 +6822,8 @@ Function UpdateButton(OBJ%)
 				ClosestButton = OBJ
 			Else
 				If Dist < EntityDistance(Collider, ClosestButton) Then ClosestButton = OBJ
-			End If							
-		End If
+			EndIf							
+		EndIf
 		FreeEntity(Temp)
 	EndIf			
 End Function
@@ -6942,8 +6947,8 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 									EndIf
 									
 									TeleportEntity(n\Collider, EntityX(room2, True) + x, (0.1 * fpst\FPSFactor[0]) + EntityY(room2, True) + (EntityY(n\Collider) - EntityY(room1, True)), EntityZ(room2, True) + z, n\CollRadius, True)
-									If n = Curr173
-										Curr173\IdleTimer = 10
+									If n = Curr173 Then
+										Curr173\IdleTimer = 10.0
 									EndIf
 								EndIf
 							EndIf
