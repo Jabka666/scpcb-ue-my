@@ -19,9 +19,9 @@ Next
 
 Global RandomSeed$
 
-Dim MenuBlinkTimer%(2), MenuBlinkDuration%(2)
-MenuBlinkTimer%(0) = 1
-MenuBlinkTimer%(1) = 1
+Global MenuBlinkTimer%[2], MenuBlinkDuration%[2]
+MenuBlinkTimer[0] = 1
+MenuBlinkTimer[1] = 1
 
 Global MenuStr$, MenuStrX%, MenuStrY%
 
@@ -93,16 +93,16 @@ Function UpdateMainMenu()
 			ShouldPlay = 11
 		EndIf
 		
-		MenuBlinkTimer(1) = MenuBlinkTimer(1) - fpst\FPSFactor[0]
 		If Rand(300) = 1 Then
-			MenuBlinkTimer(0) = Rand(4000, 8000)
-			MenuBlinkDuration(0) = Rand(200, 500)
+			MenuBlinkTimer[0] = Rand(4000, 8000)
+			MenuBlinkDuration[0] = Rand(200, 500)
 		EndIf
 		
-		If MenuBlinkTimer(1) < MenuBlinkDuration(1) Then
-			If MenuBlinkTimer(1) < 0 Then
-				MenuBlinkTimer(1) = Rand(700, 800)
-				MenuBlinkDuration(1) = Rand(10, 35)
+		MenuBlinkTimer[1] = MenuBlinkTimer[1] - fpst\FPSFactor[0]
+		If MenuBlinkTimer[1] < MenuBlinkDuration[1] Then
+			If MenuBlinkTimer[1] < 0 Then
+				MenuBlinkTimer[1] = Rand(700, 800)
+				MenuBlinkDuration[1] = Rand(10, 35)
 			EndIf
 		EndIf
 		
@@ -905,16 +905,16 @@ Function RenderMainMenu()
 	
 	DrawImage(MenuBack, 0, 0)
 	
-	If (MilliSecs() Mod MenuBlinkTimer(0)) >= Rand(MenuBlinkDuration(0)) Then
+	If (MilliSecs() Mod MenuBlinkTimer[0]) >= Rand(MenuBlinkDuration[0]) Then
 		DrawImage(Menu173, GraphicWidth - ImageWidth(Menu173), GraphicHeight - ImageHeight(Menu173))
 	EndIf
 	
 	SetFont(fo\FontID[0])
 	
-	If MenuBlinkTimer(1) < MenuBlinkDuration(1) Then
+	If MenuBlinkTimer[1] < MenuBlinkDuration[1] Then
 		Color(50, 50, 50)
 		Text(MenuStrX + Rand(-5, 5), MenuStrY + Rand(-5, 5), MenuStr, True)
-		If MenuBlinkTimer(1) < 0 Then
+		If MenuBlinkTimer[1] < 0 Then
 			MenuStrX = Rand(700, 1000) * MenuScale
 			MenuStrY = Rand(100, 600) * MenuScale
 			

@@ -1,7 +1,7 @@
 Global BurntNote%
 
 Global ItemAmount%
-Dim Inventory.Items(MaxItemAmount + 1)
+Global Inventory.Items[MaxItemAmount + 1]
 Global InvSelect%, SelectedItem.Items
 
 Global ClosestItem.Items
@@ -448,8 +448,8 @@ Function RemoveItem(i.Items)
 	FreeEntity(i\Model) : FreeEntity(i\Collider) : i\Collider = 0
 	
 	For n = 0 To MaxItemAmount - 1
-		If Inventory(n) = i
-			Inventory(n) = Null
+		If Inventory[n] = i
+			Inventory[n] = Null
 			ItemAmount = ItemAmount - 1
 			Exit
 		EndIf
@@ -616,7 +616,7 @@ Function PickItem(item.Items)
 	Local e.Events
 	
 	For n = 0 To MaxItemAmount - 1
-		If Inventory(n) = Null
+		If Inventory[n] = Null
 			FullINV = False
 			Exit
 		EndIf
@@ -634,7 +634,7 @@ Function PickItem(item.Items)
 	
 	If (Not FullINV) Then
 		For n = 0 To MaxItemAmount - 1
-			If Inventory(n) = Null Then
+			If Inventory[n] = Null Then
 				Select item\ItemTemplate\TempName
 					Case "scp1123"
 						;[Block]
@@ -674,7 +674,7 @@ Function PickItem(item.Items)
 						;[Block]
 						ShowEntity(tt\OverlayID[7])
 						me\LightFlash = 1.0
-						PlaySound_Strict(IntroSFX(Rand(8, 10)))
+						PlaySound_Strict(IntroSFX[Rand(8, 10)])
 						msg\DeathMsg = SubjectName + " found dead inside SCP-914's output booth next to what appears to be an ordinary nine-volt battery. The subject is covered in severe "
 						msg\DeathMsg = msg\DeathMsg + "electrical burns, and assumed to be killed via an electrical shock caused by the battery. The battery has been stored for further study."
 						Kill()
@@ -727,11 +727,11 @@ Function PickItem(item.Items)
 						;[Block]
 						CanPickItem = True
 						For z = 0 To MaxItemAmount - 1
-							If Inventory(z) <> Null Then
-								If Inventory(z)\ItemTemplate\TempName = "hazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "hazmatsuit2" Lor Inventory(z)\ItemTemplate\TempName = "hazmatsuit3" Then
+							If Inventory[z] <> Null Then
+								If Inventory[z]\ItemTemplate\TempName = "hazmatsuit" Lor Inventory[z]\ItemTemplate\TempName = "hazmatsuit2" Lor Inventory[z]\ItemTemplate\TempName = "hazmatsuit3" Then
 									CanPickItem = False
 									Exit
-								ElseIf Inventory(z)\ItemTemplate\TempName = "vest" Lor Inventory(z)\ItemTemplate\TempName = "finevest" Then
+								ElseIf Inventory[z]\ItemTemplate\TempName = "vest" Lor Inventory[z]\ItemTemplate\TempName = "finevest"
 									CanPickItem = 2
 									Exit
 								EndIf
@@ -754,11 +754,11 @@ Function PickItem(item.Items)
 						;[Block]
 						CanPickItem = True
 						For z = 0 To MaxItemAmount - 1
-							If Inventory(z) <> Null Then
-								If Inventory(z)\ItemTemplate\TempName = "vest" Lor Inventory(z)\ItemTemplate\TempName = "finevest" Then
+							If Inventory[z] <> Null Then
+								If Inventory[z]\ItemTemplate\TempName = "vest" Lor Inventory[z]\ItemTemplate\TempName = "finevest" Then
 									CanPickItem = False
 									Exit
-								ElseIf Inventory(z)\ItemTemplate\TempName = "hazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "hazmatsuit2" Lor Inventory(z)\ItemTemplate\TempName = "hazmatsuit3" Then
+								ElseIf Inventory[z]\ItemTemplate\TempName = "hazmatsuit" Lor Inventory[z]\ItemTemplate\TempName = "hazmatsuit2" Lor Inventory[z]\ItemTemplate\TempName = "hazmatsuit3"
 									CanPickItem = 2
 									Exit
 								EndIf
@@ -779,14 +779,14 @@ Function PickItem(item.Items)
 						;[End Block]
 				End Select
 				
-				If item\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(item\ItemTemplate\Sound))
+				If item\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[item\ItemTemplate\Sound])
 				item\Picked = True
 				item\Dropped = -1
 				
 				item\ItemTemplate\Found = True
 				ItemAmount = ItemAmount + 1
 				
-				Inventory(n) = item
+				Inventory[n] = item
 				HideEntity(item\Collider)
 				Exit
 			EndIf
@@ -811,7 +811,7 @@ Function DropItem(item.Items, PlayDropSound% = True)
 	Local z%
 	
 	If PlayDropSound Then
-		If item\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(item\ItemTemplate\Sound))
+		If item\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[item\ItemTemplate\Sound])
 	EndIf
 	
 	item\Dropped = 1
@@ -825,7 +825,7 @@ Function DropItem(item.Items, PlayDropSound% = True)
 	
 	item\Picked = False
 	For z = 0 To MaxItemAmount - 1
-		If Inventory(z) = item Then Inventory(z) = Null
+		If Inventory[z] = item Then Inventory[z] = Null
 	Next
 	Select item\ItemTemplate\TempName
 		Case "gasmask", "supergasmask", "gasmask3"
@@ -889,7 +889,7 @@ Function Update294()
 			me\CameraShake = Rnd(0.0, 2.0)
 		EndIf
 		
-		If Rand(50) = 50 And (MilliSecs() Mod 4000) < 200 Then PlaySound_Strict(CoughSFX(Rand(0, 2)))
+		If Rand(50) = 50 And (MilliSecs() Mod 4000) < 200 Then PlaySound_Strict(CoughSFX[Rand(0, 2)])
 		
 		; ~ Regurgitate when timer is below 10 seconds.
 		If me\VomitTimer < 10.0 And Rnd(0.0, 500.0 * me\VomitTimer) < 2.0 Then

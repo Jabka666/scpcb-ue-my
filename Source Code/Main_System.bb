@@ -282,7 +282,7 @@ Global MTFTimer#
 Global RadioState#[10]
 Global RadioState3%[10]
 Global RadioState4%[9]
-Dim RadioCHN%(8)
+Global RadioCHN%[8]
 
 Type TextureTemplate
 	Field MiscTextureID%[MaxMiscTextureIDAmount - 1]
@@ -373,7 +373,8 @@ Function UpdateConsole()
 		    Height = 500
 		EndIf
 		
-		Local StrTemp$, Temp%,  i%
+		Local Temp%, i%
+		Local Args$, StrTemp$, StrTemp2$, StrTemp3$, StrTemp4$
 		Local ev.Events, r.Rooms, it.Items
 		
 		DrawFrame(x, y, Width, Height + 30 * MenuScale)
@@ -534,7 +535,7 @@ Function UpdateConsole()
 				StrTemp = Lower(Left(ConsoleInput, Instr(ConsoleInput, " ") - 1))
 			Else
 				StrTemp = Lower(ConsoleInput)
-			End If
+			EndIf
 			
 			Select Lower(StrTemp)
 				Case "help"
@@ -963,19 +964,19 @@ Function UpdateConsole()
 					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 					Temp = False 
 					For itt.Itemtemplates = Each ItemTemplates
-						If (Lower(itt\Name) = StrTemp) Then
+						If Lower(itt\Name) = StrTemp Then
 							Temp = True
 							CreateConsoleMsg(itt\Name + " spawned.")
 							it.Items = CreateItem(itt\Name, itt\TempName, EntityX(Collider), EntityY(Camera, True), EntityZ(Collider))
 							EntityType(it\Collider, HIT_ITEM)
 							Exit
-						Else If (Lower(itt\TempName) = StrTemp) Then
+						ElseIf (Lower(itt\TempName) = StrTemp) Then
 							Temp = True
 							CreateConsoleMsg(itt\Name + " spawned.")
 							it.Items = CreateItem(itt\Name, itt\TempName, EntityX(Collider), EntityY(Camera, True), EntityZ(Collider))
 							EntityType(it\Collider, HIT_ITEM)
 							Exit
-						End If
+						EndIf
 					Next
 					
 					If Temp = False Then CreateConsoleMsg("Item not found.", 255, 150, 0)
@@ -1254,7 +1255,7 @@ Function UpdateConsole()
 					;[End Block]
 				Case "noblink", "nb"
 					;[Block]
-					StrTemp$ = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 					
 					Select StrTemp
 						Case "on", "1", "true"
@@ -1334,19 +1335,19 @@ Function UpdateConsole()
 					;[End Block]
 				Case "camerafog"
 					;[Block]
-					Args$ = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+					Args = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 					CameraFogNear = Float(Left(Args, Len(Args) - Instr(Args, " ")))
 					CameraFogFar = Float(Right(Args, Len(Args) - Instr(Args, " ")))
 					CreateConsoleMsg("Near set to: " + CameraFogNear + ", far set to: " + CameraFogFar)
 					;[End Block]
 				Case "spawn"
 					;[Block]
-					Args$ = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
-					StrTemp = Piece(Args$, 1)
-					StrTemp2$ = Piece(Args$, 2)
+					Args = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+					StrTemp = Piece(Args, 1)
+					StrTemp2 = Piece(Args, 2)
 					
 					; ~ Hacky fix for when the user doesn't input a second parameter.
-					If (StrTemp <> StrTemp2) Then
+					If StrTemp <> StrTemp2 Then
 						Console_SpawnNPC(StrTemp, StrTemp2)
 					Else
 						Console_SpawnNPC(StrTemp)
@@ -1524,12 +1525,12 @@ Function UpdateConsole()
 						StrTemp = ""
 					EndIf
 					
-					If StrTemp <> ""
+					If StrTemp <> "" Then
 						PlayCustomMusic = True
 						If CustomMusic <> 0 Then FreeSound_Strict(CustomMusic) : CustomMusic = 0
 						If MusicCHN <> 0 Then StopChannel(MusicCHN)
 						CustomMusic = LoadSound_Strict("SFX\Music\Custom\" + StrTemp)
-						If CustomMusic = 0
+						If CustomMusic = 0 Then
 							PlayCustomMusic = False
 						EndIf
 					Else
@@ -1540,12 +1541,12 @@ Function UpdateConsole()
 					;[End Block]
 				Case "tele"
 					;[Block]
-					Args$ = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
-					StrTemp = Piece(Args$, 1, " ")
-					StrTemp2$ = Piece(Args$, 2, " ")
-					StrTemp3$ = Piece(Args$, 3, " ")
-					PositionEntity(Collider, Float(StrTemp), Float(StrTemp2$), Float(StrTemp3$))
-					PositionEntity(Camera, Float(StrTemp), Float(StrTemp2$), Float(StrTemp3$))
+					Args = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+					StrTemp = Piece(Args, 1, " ")
+					StrTemp2 = Piece(Args, 2, " ")
+					StrTemp3 = Piece(Args, 3, " ")
+					PositionEntity(Collider, Float(StrTemp), Float(StrTemp2), Float(StrTemp3))
+					PositionEntity(Camera, Float(StrTemp), Float(StrTemp2), Float(StrTemp3))
 					ResetEntity(Collider)
 					ResetEntity(Camera)
 					CreateConsoleMsg("Teleported to coordinates (X|Y|Z): " + EntityX(Collider) + "|" + EntityY(Collider) + "|" + EntityZ(Collider))
@@ -1626,11 +1627,11 @@ Function UpdateConsole()
 					;[End Block]
 				Case "seteventstate"
 					;[Block]
-					Args$ = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
-					StrTemp = Piece(Args$, 1, " ")
-					StrTemp2$ = Piece(Args$, 2, " ")
-					StrTemp3$ = Piece(Args$, 3, " ")
-					StrTemp4$ = Piece(Args$, 4, " ")
+					Args = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+					StrTemp = Piece(Args, 1, " ")
+					StrTemp2 = Piece(Args, 2, " ")
+					StrTemp3 = Piece(Args, 3, " ")
+					StrTemp4 = Piece(Args, 4, " ")
 					
 					Local PL_Room_Found% = False
 					
@@ -1639,16 +1640,16 @@ Function UpdateConsole()
 					Else
 						For e.Events = Each Events
 							If e\room = PlayerRoom
-								If Lower(StrTemp) <> "keep"
+								If Lower(StrTemp) <> "keep" Then
 									e\EventState = Float(StrTemp)
 								EndIf
-								If Lower(StrTemp2) <> "keep"
+								If Lower(StrTemp2) <> "keep" Then
 									e\EventState2 = Float(StrTemp2)
 								EndIf
-								If Lower(StrTemp3) <> "keep"
+								If Lower(StrTemp3) <> "keep" Then
 									e\EventState3 = Float(StrTemp3)
 								EndIf
-								If Lower(StrTemp4) <> "keep"
+								If Lower(StrTemp4) <> "keep" Then
 									e\EventState4 = Float(StrTemp4)
 								EndIf
 								CreateConsoleMsg("Changed event states from current player room to: " + e\EventState + "|" + e\EventState2 + "|" + e\EventState3 + "|" + e\EventState4)
@@ -1768,40 +1769,40 @@ Global TempSoundCHN%
 Global TempSoundIndex% = 0
 
 ; ~ The Music now has to be pre-defined, as the new system uses streaming instead of the usual sound loading system Blitz3D has
-Dim Music$(29)
+Global Music$[29]
 
-Music(0) = "LightContainmentZone"
-Music(1) = "HeavyContainmentZone"
-Music(2) = "EntranceZone"
-Music(3) = "PD"
-Music(4) = "Room079"
-Music(5) = "GateB1"
-Music(6) = "GateB2"
-Music(7) = "Room3Storage"
-Music(8) = "Room049"
-Music(9) = "Room860_1"
-Music(10) = "106Chase"
-Music(11) = "Menu"
-Music(12) = "860_2Chase"
-Music(13) = "Room173Intro"
-Music(14) = "Using178"
-Music(15) = "PDTrench"
-Music(16) = "Room205"
-Music(17) = "GateA"
-Music(18) = "1499"
-Music(19) = "1499_1Chase"
-Music(20) = "049Chase"
-Music(21) = "..\Ending\MenuBreath"
-Music(22) = "Room914"
-Music(23) = "Ending"
-Music(24) = "Credits"
-Music(25) = "SaveMeFrom"
-Music(26) = "Room106"
-Music(27) = "Room035"
-Music(28) = "Room409" 
+Music[0] = "LightContainmentZone"
+Music[1] = "HeavyContainmentZone"
+Music[2] = "EntranceZone"
+Music[3] = "PD"
+Music[4] = "Room079"
+Music[5] = "GateB1"
+Music[6] = "GateB2"
+Music[7] = "Room3Storage"
+Music[8] = "Room049"
+Music[9] = "Room860_1"
+Music[10] = "106Chase"
+Music[11] = "Menu"
+Music[12] = "860_2Chase"
+Music[13] = "Room173Intro"
+Music[14] = "Using178"
+Music[15] = "PDTrench"
+Music[16] = "Room205"
+Music[17] = "GateA"
+Music[18] = "1499"
+Music[19] = "1499_1Chase"
+Music[20] = "049Chase"
+Music[21] = "..\Ending\MenuBreath"
+Music[22] = "Room914"
+Music[23] = "Ending"
+Music[24] = "Credits"
+Music[25] = "SaveMeFrom"
+Music[26] = "Room106"
+Music[27] = "Room035"
+Music[28] = "Room409" 
 
 Global MusicCHN%
-MusicCHN = StreamSound_Strict("SFX\Music\" + Music(2) + ".ogg", MusicVolume, 2)
+MusicCHN = StreamSound_Strict("SFX\Music\" + Music[2] + ".ogg", MusicVolume, 2)
 
 Global CurrMusicVolume# = 1.0, NowPlaying% = 2, ShouldPlay% = 11
 Global CurrMusic% = 1
@@ -1809,7 +1810,7 @@ Global CurrMusic% = 1
 DrawLoading(10, True)
 
 Dim OpenDoorSFX%(3, 3), CloseDoorSFX%(3, 3)
-Dim BigDoorErrorSFX%(3)
+Global BigDoorErrorSFX%[3]
 
 Global KeyCardSFX1% 
 Global KeyCardSFX2% 
@@ -1842,18 +1843,18 @@ Global EndBreathSFX%
 
 Global CrouchSFX%
 
-Dim DecaySFX%(5)
+Global DecaySFX%[5]
 
 Global BurstSFX% 
 
 DrawLoading(20, True)
 
-Dim RustleSFX%(6)
+Global RustleSFX%[6]
 
 Global Use914SFX%
 Global Death914SFX% 
 
-Dim DripSFX%(4)
+Global DripSFX%[4]
 
 Global LeverSFX%, LightSFX% 
 Global ButtGhostSFX% 
@@ -1867,10 +1868,10 @@ Global RadioBuzz%
 
 Global ElevatorBeepSFX%, ElevatorMoveSFX% 
 
-Dim PickSFX%(10)
+Global PickSFX%[10]
 
 Global AmbientSFXCHN%, CurrAmbientSFX%
-Dim AmbientSFXAmount%(6)
+Global AmbientSFXAmount%[6]
 ; ~ 0 = Light Containment Zone
 ; ~ 1 = Heavy Containment Zone
 ; ~ 2 = Entrance Zone
@@ -1878,30 +1879,30 @@ Dim AmbientSFXAmount%(6)
 ; ~ 4 = Pre-Breach
 ; ~ 5 = SCP-860-1
 
-AmbientSFXAmount(0) = 8 
-AmbientSFXAmount(1) = 11
-AmbientSFXAmount(2) = 12
-AmbientSFXAmount(3) = 15 
-AmbientSFXAmount(4) = 5
-AmbientSFXAmount(5) = 10
+AmbientSFXAmount[0] = 8 
+AmbientSFXAmount[1] = 11
+AmbientSFXAmount[2]= 12
+AmbientSFXAmount[3] = 15 
+AmbientSFXAmount[4] = 5
+AmbientSFXAmount[5] = 10
 
 Dim AmbientSFX%(6, 15)
 
-Dim OldManSFX%(8)
+Global OldManSFX%[8]
 
-Dim Scp173SFX%(3)
+Global Scp173SFX%[3]
 
-Dim HorrorSFX%(20)
+Global HorrorSFX%[20]
 
 Global MissSFX%
 
 DrawLoading(25, True)
 
-Dim IntroSFX%(12)
+Global IntroSFX%[12]
 
-Dim AlarmSFX%(5)
+Global AlarmSFX%[5]
 
-Dim CommotionState%(25)
+Global CommotionState%[25]
 
 Global HeartBeatSFX% 
 
@@ -1913,13 +1914,13 @@ Global BreathCHN%
 Global BreathGasRelaxedSFX%
 Global BreathGasRelaxedCHN%
 
-Dim NeckSnapSFX%(3)
+Global NeckSnapSFX%[3]
 
-Dim DamageSFX%(14)
+Global DamageSFX%[14]
 
-Dim MTFSFX%(2)
+Global MTFSFX%[2]
 
-Dim CoughSFX%(3)
+Global CoughSFX%[3]
 Global CoughCHN%, VomitCHN%
 
 Global MachineSFX% 
@@ -1942,7 +1943,7 @@ Global AmbientLightRoomTex%, AmbientLightRoomVal%
 
 Global UserTrackCheck% = 0, UserTrackCheck2% = 0
 Global UserTrackMusicAmount% = 0, CurrUserTrack%, UserTrackFlag% = False
-Dim UserTrackName$(256)
+Global UserTrackName$[256]
 
 Global OptionsMenu% = 0
 Global QuitMsg% = 0
@@ -2302,7 +2303,7 @@ Function UpdateDoors()
 					EndIf
 					If d\AutoClose And RemoteDoorOn = True Then
 						If EntityDistance(Camera, d\OBJ) < 2.1 Then
-							If I_714\Using = 0 And wi\GasMask < 3 And wi\HazmatSuit < 3 Then PlaySound_Strict(HorrorSFX(7))
+							If I_714\Using = 0 And wi\GasMask < 3 And wi\HazmatSuit < 3 Then PlaySound_Strict(HorrorSFX[7])
 							d\Open = False : d\SoundCHN = PlaySound2(CloseDoorSFX(Min(d\Dir, 1), Rand(0, 2)), Camera, d\OBJ) : d\AutoClose = False
 						EndIf
 					EndIf				
@@ -2672,7 +2673,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 			If d\LinkedDoor <> Null Then d\LinkedDoor\TimerState = d\LinkedDoor\Timer
 			d\TimerState = d\Timer
 			If d\Dir = 1 And d\Locked = 2 Then
-				d\SoundCHN = PlaySound2(BigDoorErrorSFX(Rand(0, 2)), Camera, d\OBJ)
+				d\SoundCHN = PlaySound2(BigDoorErrorSFX[Rand(0, 2)], Camera, d\OBJ)
 			Else
 				If d\Dir <> 0 And d\Dir <> 4 Then
 					d\SoundCHN = PlaySound2(OpenDoorSFX(d\Dir, Rand(0, 2)), Camera, d\OBJ)
@@ -3049,7 +3050,7 @@ Function MainLoop()
 					Next
 				EndIf
 				
-				CurrAmbientSFX = Rand(0, AmbientSFXAmount(me\Zone) - 1)
+				CurrAmbientSFX = Rand(0, AmbientSFXAmount[me\Zone] - 1)
 				
 				Select me\Zone
 					Case 0, 1, 2
@@ -3550,7 +3551,7 @@ Function Kill(IsBloody% = False)
 		If IsBloody Then ShowEntity(tt\OverlayID[10])
 		
 		me\KillAnim = Rand(0, 1)
-		PlaySound_Strict(DamageSFX(0))
+		PlaySound_Strict(DamageSFX[0])
 		If SelectedDifficulty\PermaDeath Then
 			DeleteFile(CurrentDir() + SavePath + CurrSave + "\Save.txt") 
 			DeleteDir(SavePath + CurrSave) 
@@ -3697,7 +3698,7 @@ Function UpdateEnding()
 			
 			CurrMusicVolume = MusicVolume
 			StopStream_Strict(MusicCHN)
-			MusicCHN = StreamSound_Strict("SFX\Music\" + Music(23) + ".ogg", CurrMusicVolume, 0)
+			MusicCHN = StreamSound_Strict("SFX\Music\" + Music[23] + ".ogg", CurrMusicVolume, 0)
 			NowPlaying = ShouldPlay
 			
 			PlaySound_Strict(LightSFX)
@@ -3744,7 +3745,7 @@ Function UpdateEnding()
 							If TempSounds[i] <> 0 Then FreeSound_Strict(TempSounds[i]) : TempSounds[i] = 0
 						Next
 						StopStream_Strict(MusicCHN)
-						MusicCHN = StreamSound_Strict("SFX\Music\" + Music(NowPlaying) + ".ogg", 0.0, 2)
+						MusicCHN = StreamSound_Strict("SFX\Music\" + Music[NowPlaying] + ".ogg", 0.0, 2)
 						SetStreamVolume_Strict(MusicCHN, 1.0 * MusicVolume)
 						FlushKeys()
 						me\EndingTimer = -2000.0
@@ -4006,8 +4007,8 @@ Function MovePlayer()
 	EndIf
 	
 	For i = 0 To MaxItemAmount - 1
-		If Inventory(i) <> Null Then
-			If Inventory(i)\ItemTemplate\TempName = "finevest" Then me\Stamina = Min(me\Stamina, 60.0)
+		If Inventory[i] <> Null Then
+			If Inventory[i]\ItemTemplate\TempName = "finevest" Then me\Stamina = Min(me\Stamina, 60.0)
 		EndIf
 	Next
 	
@@ -4257,7 +4258,7 @@ Function MovePlayer()
 			de.Decals = CreateDecal(Rand(15, 16), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rand(360.0), 0.0)
 			de\Size = Rnd(0.03, 0.08) * Min(me\Injuries, 3.0) : EntityAlpha(de\OBJ, 1.0)
 			ScaleSprite(de\OBJ, de\Size, de\Size)
-			TempCHN = PlaySound_Strict(DripSFX(Rand(0, 2)))
+			TempCHN = PlaySound_Strict(DripSFX[Rand(0, 2)])
 			ChannelVolume(TempCHN, Rnd(0.0, 0.8) * SFXVolume)
 			ChannelPitch(TempCHN, Rand(20000, 30000))
 			
@@ -4501,9 +4502,9 @@ Function MouseLook()
 					If fpst\FPSFactor[0] > 0.0 Then 
 						If Rand(1000) = 1 Then
 							If CoughCHN = 0 Then
-								CoughCHN = PlaySound_Strict(CoughSFX(Rand(0, 2)))
+								CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
 							Else
-								If ChannelPlaying(CoughCHN) = False Then CoughCHN = PlaySound_Strict(CoughSFX(Rand(0, 2)))
+								If ChannelPlaying(CoughCHN) = False Then CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
 							End If
 						EndIf
 					EndIf
@@ -4521,9 +4522,9 @@ Function MouseLook()
 					If fpst\FPSFactor[0] > 0.0 Then 
 						If Rand(800) = 1 Then
 							If CoughCHN = 0 Then
-								CoughCHN = PlaySound_Strict(CoughSFX(Rand(0, 2)))
+								CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
 							Else
-								If ChannelPlaying(CoughCHN) = False Then CoughCHN = PlaySound_Strict(CoughSFX(Rand(0, 2)))
+								If ChannelPlaying(CoughCHN) = False Then CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
 							End If
 						EndIf
 					EndIf
@@ -4546,9 +4547,9 @@ Function MouseLook()
 					If me\Stamina < 35.0 Then
 						If Rand(Int(140 + me\Stamina * 8)) = 1 Then
 							If CoughCHN = 0 Then
-								CoughCHN = PlaySound_Strict(CoughSFX(Rand(0, 2)))
+								CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
 							Else
-								If ChannelPlaying(CoughCHN) = False Then CoughCHN = PlaySound_Strict(CoughSFX(Rand(0, 2)))
+								If ChannelPlaying(CoughCHN) = False Then CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
 							End If
 						EndIf
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0 + me\Stamina * 15.0)
@@ -4602,7 +4603,7 @@ Function DrawGUI()
 						If me\BlinkTimer < -3.0 And me\BlinkTimer > -10.0 Then
 							If e\Img = 0 Then
 								If me\BlinkTimer > -5.0 And Rand(30) = 1 Then
-									PlaySound_Strict(DripSFX(Rand(0, 5)))
+									PlaySound_Strict(DripSFX[Rand(0, 5)])
 									If e\Img = 0 Then e\Img = LoadImage_Strict("GFX\npcs\scp_106_face.png")
 								EndIf
 							Else
@@ -5050,9 +5051,9 @@ Function DrawGUI()
 				EndIf
 			EndIf
 			
-			If Inventory(n) <> Null Then
+			If Inventory[n] <> Null Then
 				Color(200, 200, 200)
-				Select Inventory(n)\ItemTemplate\TempName 
+				Select Inventory[n]\ItemTemplate\TempName 
 					Case "gasmask"
 						;[Block]
 						If wi\GasMask = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
@@ -5129,20 +5130,20 @@ Function DrawGUI()
 			Color(255, 255, 255)
 			DrawFrame(x, y, INVENTORY_GFX_SIZE, INVENTORY_GFX_SIZE, (x Mod 64), (x Mod 64))
 			
-			If Inventory(n) <> Null Then
-				If (SelectedItem <> Inventory(n) Lor IsMouseOn) Then 
-					DrawImage(Inventory(n)\InvImg, x + INVENTORY_GFX_SIZE / 2 - 32, y + INVENTORY_GFX_SIZE / 2 - 32)
+			If Inventory[n] <> Null Then
+				If (SelectedItem <> Inventory[n] Lor IsMouseOn) Then 
+					DrawImage(Inventory[n]\InvImg, x + INVENTORY_GFX_SIZE / 2 - 32, y + INVENTORY_GFX_SIZE / 2 - 32)
 				EndIf
 			EndIf
 			
-			If Inventory(n) <> Null And SelectedItem <> Inventory(n) Then
+			If Inventory[n] <> Null And SelectedItem <> Inventory[n] Then
 				If IsMouseOn Then
 					If SelectedItem = Null Then
 						SetFont(fo\FontID[0])
 						Color(0, 0, 0)
-						Text(x + INVENTORY_GFX_SIZE / 2 + 1, y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - 15 + 1, Inventory(n)\Name, True)							
+						Text(x + INVENTORY_GFX_SIZE / 2 + 1, y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - 15 + 1, Inventory[n]\Name, True)							
 						Color(255, 255, 255)	
-						Text(x + INVENTORY_GFX_SIZE / 2, y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - 15, Inventory(n)\Name, True)	
+						Text(x + INVENTORY_GFX_SIZE / 2, y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - 15, Inventory[n]\Name, True)	
 					EndIf
 				EndIf
 			EndIf					
@@ -5158,7 +5159,7 @@ Function DrawGUI()
 			If MouseDown1 Then
 				If MouseSlot = 66 Then
 					DrawImage(SelectedItem\InvImg, ScaledMouseX() - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, ScaledMouseY() - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
-				ElseIf SelectedItem <> Inventory(MouseSlot)
+				ElseIf SelectedItem <> Inventory[MouseSlot]
 					DrawImage(SelectedItem\InvImg, ScaledMouseX() - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, ScaledMouseY() - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 				EndIf
 			EndIf
@@ -5275,8 +5276,8 @@ Function DrawGUI()
 									ElseIf UserTrackMusicAmount < 1
 										StrTemp = StrTemp + "NO TRACKS FOUND     "
 									Else
-										If ChannelPlaying(RadioCHN(0)) = True Then
-											StrTemp = StrTemp + Upper(UserTrackName(RadioState[0])) + "          "
+										If ChannelPlaying(RadioCHN[0]) = True Then
+											StrTemp = StrTemp + Upper(UserTrackName[RadioState[0]]) + "          "
 										EndIf
 									EndIf
 									;[End Block]
@@ -5306,7 +5307,7 @@ Function DrawGUI()
 							EndIf	
 							
 							SetFont(fo\FontID[2])
-							Text(x + 60, y, "CHN")						
+							Text(x + 60, y, "CHN")	
 							
 							If SelectedItem\ItemTemplate\TempName = "veryfineradio" Then
 								StrTemp = ""
@@ -5938,7 +5939,7 @@ Function UpdateGUI()
 							MouseHit1 = False
 							
 							If DoubleClick Then
-								If OtherOpen\SecondInv[n]\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(OtherOpen\SecondInv[n]\ItemTemplate\Sound))
+								If OtherOpen\SecondInv[n]\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[OtherOpen\SecondInv[n]\ItemTemplate\Sound])
 								OtherOpen = Null
 								ClosedInv = True
 								InvOpen = False
@@ -5969,7 +5970,7 @@ Function UpdateGUI()
 		If SelectedItem <> Null Then
 			If (Not MouseDown1) Then
 				If MouseSlot = 66 Then
-					If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))
+					If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 					ShowEntity(SelectedItem\Collider)
 					PositionEntity(SelectedItem\Collider, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 					RotateEntity(SelectedItem\Collider, EntityPitch(Camera), EntityYaw(Camera), 0.0)
@@ -6079,11 +6080,11 @@ Function UpdateGUI()
 				MouseSlot = n
 			EndIf
 			
-			If Inventory(n) <> Null And SelectedItem <> Inventory(n) Then
+			If Inventory[n] <> Null And SelectedItem <> Inventory[n] Then
 				If IsMouseOn Then
 					If SelectedItem = Null Then
 						If MouseHit1 Then
-							SelectedItem = Inventory(n)
+							SelectedItem = Inventory[n]
 							MouseHit1 = False
 							
 							If DoubleClick Then
@@ -6093,7 +6094,7 @@ Function UpdateGUI()
 									SelectedItem = Null
 									Return
 								EndIf
-								If Inventory(n)\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(Inventory(n)\ItemTemplate\Sound))
+								If Inventory[n]\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[Inventory[n]\ItemTemplate\Sound])
 								InvOpen = False
 								DoubleClick = False
 							EndIf
@@ -6104,9 +6105,9 @@ Function UpdateGUI()
 			Else
 				If IsMouseOn And MouseHit1 Then
 					For z = 0 To MaxItemAmount - 1
-						If Inventory(z) = SelectedItem Then Inventory(z) = Null
+						If Inventory[z] = SelectedItem Then Inventory[z] = Null
 					Next
-					Inventory(n) = SelectedItem
+					Inventory[n] = SelectedItem
 				End If
 			EndIf					
 			
@@ -6169,17 +6170,17 @@ Function UpdateGUI()
 					
 					MoveMouse(Viewport_Center_X, Viewport_Center_Y)
 				Else
-					If Inventory(MouseSlot) = Null Then
+					If Inventory[MouseSlot] = Null Then
 						For z = 0 To MaxItemAmount - 1
-							If Inventory(z) = SelectedItem Then Inventory(z) = Null
+							If Inventory[z] = SelectedItem Then Inventory[z] = Null
 						Next
-						Inventory(MouseSlot) = SelectedItem
+						Inventory[MouseSlot] = SelectedItem
 						SelectedItem = Null
-					ElseIf Inventory(MouseSlot) <> SelectedItem
+					ElseIf Inventory[MouseSlot] <> SelectedItem
 						Select SelectedItem\ItemTemplate\TempName
 							Case "paper", "key0", "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "misc", "oldpaper", "badge", "ticket", "25ct", "coin", "key", "scp860", "scp500pill", "scp500pilldeath", "scp005"
 								;[Block]
-								If Inventory(MouseSlot)\ItemTemplate\TempName = "clipboard" Then
+								If Inventory[MouseSlot]\ItemTemplate\TempName = "clipboard" Then
 									; ~ Add an item to clipboard
 									Local added.Items = Null
 									Local b$ = SelectedItem\ItemTemplate\TempName
@@ -6187,18 +6188,18 @@ Function UpdateGUI()
 									Local c%, ri%
 									
 									If (b <> "misc" And b <> "25ct" And b <> "coin" And b <> "key" And b <> "scp860" And b <> "scp500pill" And b <> "scp500pilldeath" And b <> "scp005") Lor (b2 = "Playing Card" Lor b2 = "Mastercard") Then
-										For c = 0 To Inventory(MouseSlot)\InvSlots - 1
-											If Inventory(MouseSlot)\SecondInv[c] = Null Then
+										For c = 0 To Inventory[MouseSlot]\InvSlots - 1
+											If Inventory[MouseSlot]\SecondInv[c] = Null Then
 												If SelectedItem <> Null Then
-													Inventory(MouseSlot)\SecondInv[c] = SelectedItem
-													Inventory(MouseSlot)\State = 1.0
-													SetAnimTime(Inventory(MouseSlot)\Model, 0.0)
-													Inventory(MouseSlot)\InvImg = Inventory(MouseSlot)\ItemTemplate\InvImg
+													Inventory[MouseSlot]\SecondInv[c] = SelectedItem
+													Inventory[MouseSlot]\State = 1.0
+													SetAnimTime(Inventory[MouseSlot]\Model, 0.0)
+													Inventory[MouseSlot]\InvImg = Inventory[MouseSlot]\ItemTemplate\InvImg
 													
 													For ri = 0 To MaxItemAmount - 1
-														If Inventory(ri) = SelectedItem Then
-															Inventory(ri) = Null
-															PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))
+														If Inventory[ri] = SelectedItem Then
+															Inventory[ri] = Null
+															PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 														EndIf
 													Next
 													added = SelectedItem
@@ -6222,26 +6223,26 @@ Function UpdateGUI()
 										msg\Msg = "You cannot combine these two items."
 										msg\Timer = 70.0 * 6.0
 									EndIf
-								ElseIf Inventory(MouseSlot)\ItemTemplate\TempName = "wallet" Then
+								ElseIf Inventory[MouseSlot]\ItemTemplate\TempName = "wallet" Then
 									; ~ Add an item to clipboard
 									added.Items = Null
 									b = SelectedItem\ItemTemplate\TempName
 									b2 = SelectedItem\ItemTemplate\Name
 									If (b <> "misc" And b <> "paper" And b <> "oldpaper") Lor (b2 = "Playing Card" Lor b2 = "Mastercard") Then
-										For c = 0 To Inventory(MouseSlot)\InvSlots - 1
-											If Inventory(MouseSlot)\SecondInv[c] = Null Then
+										For c = 0 To Inventory[MouseSlot]\InvSlots - 1
+											If Inventory[MouseSlot]\SecondInv[c] = Null Then
 												If SelectedItem <> Null Then
-													Inventory(MouseSlot)\SecondInv[c] = SelectedItem
-													Inventory(MouseSlot)\State = 1.0
+													Inventory[MouseSlot]\SecondInv[c] = SelectedItem
+													Inventory[MouseSlot]\State = 1.0
 													If b <> "25ct" And b <> "coin" And b <> "key" And b <> "scp860" And b <> "scp500pill" And b <> "scp500pilldeath" And b <> "scp005"
-														SetAnimTime(Inventory(MouseSlot)\Model, 3.0)
+														SetAnimTime(Inventory[MouseSlot]\Model, 3.0)
 													EndIf
-													Inventory(MouseSlot)\InvImg = Inventory(MouseSlot)\ItemTemplate\InvImg
+													Inventory[MouseSlot]\InvImg = Inventory[MouseSlot]\ItemTemplate\InvImg
 													
 													For ri = 0 To MaxItemAmount - 1
-														If Inventory(ri) = SelectedItem Then
-															Inventory(ri) = Null
-															PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))
+														If Inventory[ri] = SelectedItem Then
+															Inventory[ri] = Null
+															PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 														EndIf
 													Next
 													added = SelectedItem
@@ -6267,13 +6268,13 @@ Function UpdateGUI()
 								;[End Block]
 							Case "bat"
 								;[Block]
-								Select Inventory(MouseSlot)\ItemTemplate\Name
+								Select Inventory[MouseSlot]\ItemTemplate\Name
 									Case "S-NAV Navigator", "S-NAV 300 Navigator", "S-NAV 310 Navigator"
 										;[Block]
-										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))	
+										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
 										SelectedItem = Null
-										Inventory(MouseSlot)\State = 100.0
+										Inventory[MouseSlot]\State = 100.0
 										msg\Msg = "You replaced the navigator's battery."
 										msg\Timer = 70.0 * 6.0
 										;[End Block]
@@ -6284,7 +6285,7 @@ Function UpdateGUI()
 										;[End Block]
 									Case "Radio Transceiver"
 										;[Block]
-										Select Inventory(MouseSlot)\ItemTemplate\TempName 
+										Select Inventory[MouseSlot]\ItemTemplate\TempName 
 											Case "fineradio", "veryfineradio"
 												;[Block]
 												msg\Msg = "There seems to be no place for batteries in this radio."
@@ -6297,10 +6298,10 @@ Function UpdateGUI()
 												;[End Block]
 											Case "radio"
 												;[Block]
-												If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))	
+												If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 												RemoveItem(SelectedItem)
 												SelectedItem = Null
-												Inventory(MouseSlot)\State = 100.0
+												Inventory[MouseSlot]\State = 100.0
 												msg\Msg = "You replaced the radio's battery."
 												msg\Timer = 70.0 * 6.0
 												;[End Block]
@@ -6308,13 +6309,13 @@ Function UpdateGUI()
 										;[End Block]
 									Case "Night Vision Goggles"
 										;[Block]
-										Local NVName$ = Inventory(MouseSlot)\ItemTemplate\TempName
+										Local NVName$ = Inventory[MouseSlot]\ItemTemplate\TempName
 										
 										If NVName = "nvg" Lor NVName = "supernvg" Then
-											If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))	
+											If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 											RemoveItem(SelectedItem)
 											SelectedItem = Null
-											Inventory(MouseSlot)\State = 1000.0
+											Inventory[MouseSlot]\State = 1000.0
 											msg\Msg = "You replaced the goggles' battery."
 											msg\Timer = 70.0 * 6.0
 										Else
@@ -6331,7 +6332,7 @@ Function UpdateGUI()
 								;[End Block]
 							Case "18vbat"
 								;[Block]
-								Select Inventory(MouseSlot)\ItemTemplate\Name
+								Select Inventory[MouseSlot]\ItemTemplate\Name
 									Case "S-NAV Navigator", "S-NAV 300 Navigator", "S-NAV 310 Navigator"
 										;[Block]
 										msg\Msg = "The battery does not fit inside this navigator."
@@ -6344,7 +6345,7 @@ Function UpdateGUI()
 										;[End Block]
 									Case "Radio Transceiver"
 										;[Block]
-										Select Inventory(MouseSlot)\ItemTemplate\TempName 
+										Select Inventory[MouseSlot]\ItemTemplate\TempName 
 											Case "fineradio", "veryfineradio"
 												;[Block]
 												msg\Msg = "There seems to be no place for batteries in this radio."
@@ -6352,10 +6353,10 @@ Function UpdateGUI()
 												;[End Block]
 											Case "18vradio"
 												;[Block]
-												If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))	
+												If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 												RemoveItem(SelectedItem)
 												SelectedItem = Null
-												Inventory(MouseSlot)\State = 100.0
+												Inventory[MouseSlot]\State = 100.0
 												msg\Msg = "You replaced the radio's battery."
 												msg\Timer = 70.0 * 6.0
 												;[End Block]
@@ -6831,7 +6832,7 @@ Function UpdateGUI()
 							it.Items = CreateItem("Empty Cup", "emptycup", 0.0, 0.0, 0.0)
 							it\Picked = True
 							For i = 0 To MaxItemAmount - 1
-								If Inventory(i) = SelectedItem Then Inventory(i) = it : Exit
+								If Inventory[i] = SelectedItem Then Inventory[i] = it : Exit
 							Next					
 							EntityType(it\Collider, HIT_ITEM)
 							
@@ -6917,21 +6918,21 @@ Function UpdateGUI()
 					
 					If SelectedItem\State > 0.0 Then
 						If PlayerRoom\RoomTemplate\Name = "pocketdimension" Then
-							ResumeChannel(RadioCHN(5))
-							If ChannelPlaying(RadioCHN(5)) = False Then RadioCHN(5) = PlaySound_Strict(RadioStatic)	
+							ResumeChannel(RadioCHN[5])
+							If ChannelPlaying(RadioCHN[5]) = False Then RadioCHN[5] = PlaySound_Strict(RadioStatic)	
 						ElseIf CoffinDistance < 8.0
-							If ChannelPlaying(RadioCHN(5)) = False Then RadioCHN(5) = PlaySound_Strict(RadioStatic895)	
+							If ChannelPlaying(RadioCHN[5]) = False Then RadioCHN[5] = PlaySound_Strict(RadioStatic895)	
 						Else
 							Select Int(SelectedItem\State2)
 								Case 0
 									;[Block]
-									ResumeChannel(RadioCHN(0))
+									ResumeChannel(RadioCHN[0])
 									If (Not EnableUserTracks) Then
-										If ChannelPlaying(RadioCHN(0)) = False Then RadioCHN(0) = PlaySound_Strict(RadioStatic)
+										If ChannelPlaying(RadioCHN[0]) = False Then RadioCHN[0] = PlaySound_Strict(RadioStatic)
 									ElseIf UserTrackMusicAmount < 1
-										If ChannelPlaying(RadioCHN(0)) = False Then RadioCHN(0) = PlaySound_Strict(RadioStatic)
+										If ChannelPlaying(RadioCHN[0]) = False Then RadioCHN[0] = PlaySound_Strict(RadioStatic)
 									Else
-										If ChannelPlaying(RadioCHN(0)) = False Then
+										If ChannelPlaying(RadioCHN[0]) = False Then
 											If (Not UserTrackFlag) Then
 												If UserTrackMode
 													If RadioState[0] < (UserTrackMusicAmount - 1)
@@ -6945,8 +6946,8 @@ Function UpdateGUI()
 												EndIf
 											EndIf
 											If CurrUserTrack <> 0 Then FreeSound_Strict(CurrUserTrack) : CurrUserTrack = 0
-											CurrUserTrack = LoadSound_Strict("SFX\Radio\UserTracks\" + UserTrackName(RadioState[0]))
-											RadioCHN(0) = PlaySound_Strict(CurrUserTrack)
+											CurrUserTrack = LoadSound_Strict("SFX\Radio\UserTracks\" + UserTrackName[RadioState[0]])
+											RadioCHN[0] = PlaySound_Strict(CurrUserTrack)
 										Else
 											UserTrackFlag = False
 										EndIf
@@ -6966,41 +6967,41 @@ Function UpdateGUI()
 												EndIf
 											EndIf
 											If CurrUserTrack <> 0 Then FreeSound_Strict(CurrUserTrack) : CurrUserTrack = 0
-											CurrUserTrack = LoadSound_Strict("SFX\Radio\UserTracks\" + UserTrackName(RadioState[0]))
-											RadioCHN(0) = PlaySound_Strict(CurrUserTrack)
+											CurrUserTrack = LoadSound_Strict("SFX\Radio\UserTracks\" + UserTrackName[RadioState[0]])
+											RadioCHN[0] = PlaySound_Strict(CurrUserTrack)
 										EndIf
 									EndIf
 									;[End Block]
 								Case 1
 									;[Block]
-									ResumeChannel(RadioCHN(1))
-									If ChannelPlaying(RadioCHN(1)) = False Then
+									ResumeChannel(RadioCHN[1])
+									If ChannelPlaying(RadioCHN[1]) = False Then
 										If RadioState[1] >= 5.0 Then
-											RadioCHN(1) = PlaySound_Strict(RadioSFX(1, 1))	
+											RadioCHN[1] = PlaySound_Strict(RadioSFX(1, 1))	
 											RadioState[1] = 0.0
 										Else
 											RadioState[1] = RadioState[1] + 1.0	
-											RadioCHN(1) = PlaySound_Strict(RadioSFX(1, 0))	
+											RadioCHN[1] = PlaySound_Strict(RadioSFX(1, 0))	
 										EndIf
 									EndIf
 									;[End Block]
 								Case 2
 									;[Block]
-									ResumeChannel(RadioCHN(2))
-									If ChannelPlaying(RadioCHN(2)) = False Then
+									ResumeChannel(RadioCHN[2])
+									If ChannelPlaying(RadioCHN[2]) = False Then
 										RadioState[2] = RadioState[2] + 1.0
 										If RadioState[2] = 17.0 Then RadioState[2] = 1.0
 										If Floor(RadioState[2] / 2.0) = Ceil(RadioState[2] / 2.0) Then
-											RadioCHN(2) = PlaySound_Strict(RadioSFX(2, Int(RadioState[2] / 2.0)))	
+											RadioCHN[2] = PlaySound_Strict(RadioSFX(2, Int(RadioState[2] / 2.0)))	
 										Else
-											RadioCHN(2) = PlaySound_Strict(RadioSFX(2, 0))
+											RadioCHN[2] = PlaySound_Strict(RadioSFX(2, 0))
 										EndIf
 									EndIf 
 									;[End Block]
 								Case 3
 									;[Block]
-									ResumeChannel(RadioCHN(3))
-									If ChannelPlaying(RadioCHN(3)) = False Then RadioCHN(3) = PlaySound_Strict(RadioStatic)
+									ResumeChannel(RadioCHN[3])
+									If ChannelPlaying(RadioCHN[3]) = False Then RadioCHN[3] = PlaySound_Strict(RadioStatic)
 									
 									If MTFTimer > 0.0 Then 
 										RadioState[3] = RadioState[3] + Max(Rand(-10, 1), 0.0)
@@ -7008,7 +7009,7 @@ Function UpdateGUI()
 											Case 40
 												;[Block]
 												If (Not RadioState3[0]) Then
-													RadioCHN(3) = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random1.ogg"))
+													RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random1.ogg"))
 													RadioState[3] = RadioState[3] + 1.0	
 													RadioState3[0] = True	
 												EndIf	
@@ -7016,7 +7017,7 @@ Function UpdateGUI()
 											Case 400
 												;[Block]
 												If (Not RadioState3[1]) Then
-													RadioCHN(3) = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random2.ogg"))
+													RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random2.ogg"))
 													RadioState[3] = RadioState[3] + 1.0	
 													RadioState3[1] = True	
 												EndIf	
@@ -7024,7 +7025,7 @@ Function UpdateGUI()
 											Case 800
 												;[Block]
 												If (Not RadioState3[2]) Then
-													RadioCHN(3) = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random3.ogg"))
+													RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random3.ogg"))
 													RadioState[3] = RadioState[3] + 1.0	
 													RadioState3[2] = True
 												EndIf		
@@ -7032,7 +7033,7 @@ Function UpdateGUI()
 											Case 1200
 												;[Block]
 												If (Not RadioState3[3]) Then
-													RadioCHN(3) = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random4.ogg"))	
+													RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random4.ogg"))	
 													RadioState[3] = RadioState[3] + 1.0	
 													RadioState3[3] = True
 												EndIf
@@ -7040,7 +7041,7 @@ Function UpdateGUI()
 											Case 1600
 												;[Block]
 												If (Not RadioState3[4]) Then
-													RadioCHN(3) = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random5.ogg"))	
+													RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random5.ogg"))	
 													RadioState[3] = RadioState[3] + 1.0
 													RadioState3[4] = True
 												EndIf
@@ -7048,7 +7049,7 @@ Function UpdateGUI()
 											Case 2000
 												;[Block]
 												If (Not RadioState3[5]) Then
-													RadioCHN(3) = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random6.ogg"))	
+													RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random6.ogg"))	
 													RadioState[3] = RadioState[3] + 1.0
 													RadioState3[5] = True
 												EndIf
@@ -7056,7 +7057,7 @@ Function UpdateGUI()
 											Case 2400
 												;[Block]
 												If (Not RadioState3[6]) Then
-													RadioCHN(3) = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random7.ogg"))	
+													RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random7.ogg"))	
 													RadioState[3] = RadioState[3] + 1.0
 													RadioState3[6] = True
 												EndIf
@@ -7066,13 +7067,13 @@ Function UpdateGUI()
 									;[End Block]
 								Case 4
 									;[Block]
-									ResumeChannel(RadioCHN(6))
-									If ChannelPlaying(RadioCHN(6)) = False Then RadioCHN(6) = PlaySound_Strict(RadioStatic)									
+									ResumeChannel(RadioCHN[6])
+									If ChannelPlaying(RadioCHN[6]) = False Then RadioCHN[6] = PlaySound_Strict(RadioStatic)									
 									
-									ResumeChannel(RadioCHN(4))
-									If ChannelPlaying(RadioCHN(4)) = False Then 
+									ResumeChannel(RadioCHN[4])
+									If ChannelPlaying(RadioCHN[4]) = False Then 
 										If RemoteDoorOn = False And RadioState[8] = False Then
-											RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\Radio\Chatter3.ogg"))	
+											RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\Radio\Chatter3.ogg"))	
 											RadioState[8] = True
 										Else
 											RadioState[4] = RadioState[4] + Max(Rand(-10, 1), 0.0)
@@ -7082,7 +7083,7 @@ Function UpdateGUI()
 													;[Block]
 													If (Not Curr106\Contained) Then
 														If (Not RadioState4[0]) Then
-															RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\Radio\OhGod.ogg"))
+															RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\Radio\OhGod.ogg"))
 															RadioState[4] = RadioState[4] + 1.0
 															RadioState4[0] = True
 														EndIf
@@ -7091,7 +7092,7 @@ Function UpdateGUI()
 												Case 100
 													;[Block]
 													If (Not RadioState4[1]) Then
-														RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\Radio\Chatter2.ogg"))
+														RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\Radio\Chatter2.ogg"))
 														RadioState[4] = RadioState[4] + 1.0
 														RadioState4[1] = True
 													EndIf	
@@ -7099,7 +7100,7 @@ Function UpdateGUI()
 												Case 158
 													;[Block]
 													If MTFTimer = 0.0 And (Not RadioState4[2]) Then 
-														RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\Radio\Franklin1.ogg"))
+														RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\Radio\Franklin1.ogg"))
 														RadioState[4] = RadioState[4] + 1.0
 														RadioState[2] = True
 													EndIf
@@ -7107,7 +7108,7 @@ Function UpdateGUI()
 												Case 200
 													;[Block]
 													If (Not RadioState4[3]) Then
-														RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\Radio\Chatter4.ogg"))
+														RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\Radio\Chatter4.ogg"))
 														RadioState[4] = RadioState[4] + 1.0
 														RadioState4[3] = True
 													EndIf		
@@ -7115,7 +7116,7 @@ Function UpdateGUI()
 												Case 260
 													;[Block]
 													If (Not RadioState4[4]) Then
-														RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\SCP\035\RadioHelp1.ogg"))
+														RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\SCP\035\RadioHelp1.ogg"))
 														RadioState[4] = RadioState[4] + 1.0
 														RadioState4[4] = True
 													EndIf		
@@ -7123,7 +7124,7 @@ Function UpdateGUI()
 												Case 300
 													;[Block]
 													If (Not RadioState4[5]) Then
-														RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\Radio\Chatter1.ogg"))	
+														RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\Radio\Chatter1.ogg"))	
 														RadioState[4] = RadioState[4] + 1.0	
 														RadioState4[5] = True
 													EndIf		
@@ -7131,7 +7132,7 @@ Function UpdateGUI()
 												Case 350
 													;[Block]
 													If (Not RadioState4[6]) Then
-														RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\Radio\Franklin2.ogg"))
+														RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\Radio\Franklin2.ogg"))
 														RadioState[4] = RadioState[4] + 1.0
 														RadioState4[6] = True
 													EndIf		
@@ -7139,7 +7140,7 @@ Function UpdateGUI()
 												Case 400
 													;[Block]
 													If (Not RadioState4[7]) Then
-														RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\SCP\035\RadioHelp2.ogg"))
+														RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\SCP\035\RadioHelp2.ogg"))
 														RadioState[4] = RadioState[4] + 1.0
 														RadioState4[7] = True
 													EndIf		
@@ -7147,7 +7148,7 @@ Function UpdateGUI()
 												Case 450
 													;[Block]
 													If (Not RadioState4[8]) Then
-														RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\Radio\Franklin3.ogg"))	
+														RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\Radio\Franklin3.ogg"))	
 														RadioState[4] = RadioState[4] + 1.0		
 														RadioState4[8] = True
 													EndIf		
@@ -7155,7 +7156,7 @@ Function UpdateGUI()
 												Case 600
 													;[Block]
 													If (Not RadioState4[9]) Then
-														RadioCHN(4) = PlaySound_Strict(LoadTempSound("SFX\Radio\Franklin4.ogg"))	
+														RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\Radio\Franklin4.ogg"))	
 														RadioState[4] = RadioState[4] + 1.0	
 														RadioState4[9] = True
 													EndIf		
@@ -7166,8 +7167,8 @@ Function UpdateGUI()
 									;[End Block]
 								Case 5
 									;[Block]
-									ResumeChannel(RadioCHN(5))
-									If ChannelPlaying(RadioCHN(5)) = False Then RadioCHN(5) = PlaySound_Strict(RadioStatic)
+									ResumeChannel(RadioCHN[5])
+									If ChannelPlaying(RadioCHN[5]) = False Then RadioCHN[5] = PlaySound_Strict(RadioStatic)
 									;[End Block]
 							End Select 
 							
@@ -7175,8 +7176,8 @@ Function UpdateGUI()
 							y = y + 419.0
 							
 							If SelectedItem\ItemTemplate\TempName = "veryfineradio" Then
-								ResumeChannel(RadioCHN(0))
-								If ChannelPlaying(RadioCHN(0)) = False Then RadioCHN(0) = PlaySound_Strict(RadioStatic)
+								ResumeChannel(RadioCHN[0])
+								If ChannelPlaying(RadioCHN[0]) = False Then RadioCHN[0] = PlaySound_Strict(RadioStatic)
 								RadioState[6] = RadioState[6] + fpst\FPSFactor[0]
 								Temp = Mid(Str(AccessCode), RadioState[8] + 1.0, 1)
 								If RadioState[6] - fpst\FPSFactor[0] =< RadioState[7] * 50.0 And RadioState[6] > RadioState[7] * 50.0 Then
@@ -7194,10 +7195,10 @@ Function UpdateGUI()
 									If KeyHit(i) Then
 										If SelectedItem\State2 <> i - 2 Then
 											PlaySound_Strict(RadioSquelch)
-											If RadioCHN(Int(SelectedItem\State2)) <> 0 Then PauseChannel(RadioCHN(Int(SelectedItem\State2)))
+											If RadioCHN[Int(SelectedItem\State2)] <> 0 Then PauseChannel(RadioCHN[Int(SelectedItem\State2)])
 										EndIf
 										SelectedItem\State2 = i - 2
-										If RadioCHN(SelectedItem\State2) <> 0 Then ResumeChannel(RadioCHN(SelectedItem\State2))
+										If RadioCHN[SelectedItem\State2] <> 0 Then ResumeChannel(RadioCHN[SelectedItem\State2])
 									EndIf
 								Next
 							EndIf
@@ -7322,7 +7323,7 @@ Function UpdateGUI()
 								Else
 									wi\HazmatSuit = 3
 								EndIf
-								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))
+								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 								msg\Msg = "You put on the hazmat suit."
 								If wi\NightVision Then CameraFogFar = StoredCameraFogFar
 								wi\GasMask = 0
@@ -7354,7 +7355,7 @@ Function UpdateGUI()
 								msg\Msg = "You put on the vest and feel heavily encumbered."
 								wi\BallisticVest = 2
 							EndIf
-							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))
+							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 						EndIf
 						SelectedItem\State = 0.0
 						msg\Timer = 70.0 * 6.0
@@ -7372,7 +7373,7 @@ Function UpdateGUI()
 							If wi\GasMask > 0 Then
 								wi\GasMask = 0
 								msg\Msg = "You removed the gas mask."
-								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))
+								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 							Else
 								If SelectedItem\ItemTemplate\TempName = "supergasmask"
 									msg\Msg = "You put on the gas mask and you can breathe easier."
@@ -7385,7 +7386,7 @@ Function UpdateGUI()
 									EndIf
 									msg\Msg = "You put on the gas mask."
 								EndIf
-								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))
+								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 							EndIf
 							SelectedItem\State = 0.0
 							msg\Timer = 70.0 * 6.0
@@ -7407,14 +7408,14 @@ Function UpdateGUI()
 						If SelectedItem\State = 100.0 Then
 							If I_1499\Using > 0 Then
 								I_1499\Using = False
-								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))
+								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 							Else
 								If SelectedItem\ItemTemplate\TempName = "scp1499" Then
 									I_1499\Using = 1
 								Else
 									I_1499\Using = 2
 								EndIf
-								If SelectedItem\itemtemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))
+								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 								GiveAchievement(Achv1499)
 								For r.Rooms = Each Rooms
 									If r\RoomTemplate\Name = "dimension1499" Then
@@ -7571,15 +7572,15 @@ Function UpdateGUI()
 						SelectedItem\State = Min(SelectedItem\State + fpst\FPSFactor[0], 100.0)
 						
 					    If SelectedItem\State = 100.0 Then
-                            If wi\BallisticHelmet > 0 Then
-                                wi\BallisticHelmet = False
+							If wi\BallisticHelmet > 0 Then
+                                wi\BallisticHelmet = 0
                                 msg\Msg = "You removed the helmet."
-                                If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))
-                            Else
+								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
+							Else
+								wi\BallisticHelmet = 1
 						        msg\Msg = "You put on the helmet."
-							    wi\BallisticHelmet = 1
-							    If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))
-                            EndIf
+							    If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
+							EndIf
 						    SelectedItem\State = 0.0
 						    msg\Timer = 70.0 * 6.0
 						    SelectedItem = Null
@@ -7621,7 +7622,7 @@ Function UpdateGUI()
 					SelectedItem\State = 0.0
 				EndIf
 				
-				If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX(SelectedItem\ItemTemplate\Sound))
+				If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 				SelectedItem = Null
 			EndIf
 		EndIf		
@@ -7629,8 +7630,8 @@ Function UpdateGUI()
 	
 	If SelectedItem = Null Then
 		For i = 0 To 6
-			If RadioCHN(i) <> 0 Then 
-				If ChannelPlaying(RadioCHN(i)) Then PauseChannel(RadioCHN(i))
+			If RadioCHN[i] <> 0 Then 
+				If ChannelPlaying(RadioCHN[i]) Then PauseChannel(RadioCHN[i])
 			EndIf
 		Next
 	EndIf
@@ -8080,7 +8081,7 @@ Function UpdateMenu()
 					StopHidingTimer = StopHidingTimer + fpst\FPSFactor[0]
 					
 					If StopHidingTimer >= 40.0 Then
-						PlaySound_Strict(HorrorSFX(15))
+						PlaySound_Strict(HorrorSFX[15])
 						msg\Msg = "STOP HIDING"
 						msg\Timer = 70.0 * 6.0
 						MenuOpen = False
@@ -8615,6 +8616,8 @@ Function LoadEntities()
 	DrawLoading(0)
 	
 	Local i%, Tex%
+	Local b%, t1%, SF%
+	Local Name$, Test%, File$
 	
 	For i = 0 To 9
 		TempSounds[i] = 0
@@ -9043,7 +9046,7 @@ Function LoadEntities()
 		If b <> 0 Then
 			t1 = GetBrushTexture(b, 0)
 			If t1 <> 0 Then
-				Name$ = StripPath(TextureName(t1))
+				Name = StripPath(TextureName(t1))
 				If Lower(Name) <> "monitor_overlay.png"
 					BrushTexture(b, tt\MonitorTextureID[4], 0, 0)
 					PaintSurface(SF, b)
@@ -9054,12 +9057,12 @@ Function LoadEntities()
 		EndIf
 	Next
 	For i = 2 To CountSurfaces(o\MonitorModelID[2])
-		sf = GetSurface(o\MonitorModelID[2], i)
+		SF = GetSurface(o\MonitorModelID[2], i)
 		b = GetSurfaceBrush(SF)
 		If b <> 0 Then
 			t1 = GetBrushTexture(b, 0)
 			If t1 <> 0 Then
-				Name$ = StripPath(TextureName(t1))
+				Name = StripPath(TextureName(t1))
 				If Lower(Name) <> "monitor_overlay.png"
 					BrushTexture(b, tt\MonitorTextureID[4], 0, 0)
 					PaintSurface(SF, b)
@@ -9081,12 +9084,12 @@ Function LoadEntities()
 		Local Dir% = ReadDir("SFX\Radio\UserTracks\")
 		
 		Repeat
-			File$ = NextFile(Dir)
-			If File$ = "" Then Exit
-			If FileType("SFX\Radio\UserTracks\" + File$) = 1 Then
-				Test = LoadSound("SFX\Radio\UserTracks\" + File$)
+			File = NextFile(Dir)
+			If File = "" Then Exit
+			If FileType("SFX\Radio\UserTracks\" + File) = 1 Then
+				Test = LoadSound("SFX\Radio\UserTracks\" + File)
 				If Test <> 0 Then
-					UserTrackName(UserTrackMusicAmount) = File$
+					UserTrackName[UserTrackMusicAmount] = File
 					UserTrackMusicAmount = UserTrackMusicAmount + 1
 				EndIf
 				FreeSound(Test)
@@ -9313,7 +9316,7 @@ Function InitNewGame()
 			it\Picked = True
 			it\Dropped = -1
 			it\ItemTemplate\Found = True
-			Inventory(0) = it
+			Inventory[0] = it
 			HideEntity(it\Collider)
 			EntityType(it\Collider, HIT_ITEM)
 			EntityParent(it\Collider, 0)
@@ -9322,7 +9325,7 @@ Function InitNewGame()
 			it\Picked = True
 			it\Dropped = -1
 			it\ItemTemplate\Found = True
-			Inventory(1) = it
+			Inventory[1] = it
 			HideEntity(it\Collider)
 			EntityType(it\Collider, HIT_ITEM)
 			EntityParent(it\Collider, 0)
@@ -9632,7 +9635,7 @@ Function NullGame(PlayButtonSFX% = True) ; ~ CHECK WHAT IS WRONG HERE!
 	SelectedItem = Null
 	
 	For i = 0 To MaxItemAmount - 1
-		Inventory(i) = Null
+		Inventory[i] = Null
 	Next
 	SelectedItem = Null
 	
@@ -9717,7 +9720,7 @@ Function NullGame(PlayButtonSFX% = True) ; ~ CHECK WHAT IS WRONG HERE!
 	Next
 	
 	For i = 0 To 5
-		If ChannelPlaying(RadioCHN(i)) Then StopChannel(RadioCHN(i))
+		If ChannelPlaying(RadioCHN[i]) Then StopChannel(RadioCHN[i])
 	Next
 	
 	I_1499\PrevX = 0.0
@@ -11394,7 +11397,7 @@ Function Use427()
 			de\Size = Rnd(0.03, 0.08) * 2.0
 			EntityAlpha(de\OBJ, 1.0)
 			ScaleSprite(de\OBJ, de\Size, de\Size)
-			TempCHN = PlaySound_Strict(DripSFX(Rand(0, 2)))
+			TempCHN = PlaySound_Strict(DripSFX[Rand(0, 2)])
 			ChannelVolume(TempCHN, Rnd(0.0, 0.8) * SFXVolume)
 			ChannelPitch(TempCHN, Rand(20000, 30000))
 			FreeEntity(Pvt)
@@ -11471,8 +11474,8 @@ Function UpdateMTF()
 			If PlayerInReachableRoom()
 				; ~ If the player has an SCP in their inventory play special voice line.
 				For i = 0 To MaxItemAmount - 1
-					If Inventory(i) <> Null Then
-						If (Left(Inventory(i)\ItemTempLate\Name, 4) = "SCP-") And (Left(Inventory(i)\ItemTemplate\Name, 7) <> "SCP-035") And (Left(Inventory(i)\ItemTemplate\Name, 7) <> "SCP-093")
+					If Inventory[i] <> Null Then
+						If (Left(Inventory[i]\ItemTempLate\Name, 4) = "SCP-") And (Left(Inventory[i]\ItemTemplate\Name, 7) <> "SCP-035") And (Left(Inventory[i]\ItemTemplate\Name, 7) <> "SCP-093")
 							PlayAnnouncement("SFX\Character\MTF\ThreatAnnouncPossession.ogg")
 							MTFTimer = 25000.0
 							Return
@@ -11669,7 +11672,7 @@ Function Update008()
 End Function
 
 Function Update409()
-	Local prevI409Timer# = I_409\Timer
+	Local PrevI409Timer# = I_409\Timer
 	
 	If I_409\Timer > 0.0 Then
 		ShowEntity(tt\OverlayID[8])
@@ -11680,20 +11683,20 @@ Function Update409()
 		EntityAlpha(tt\OverlayID[8], Min(((I_409\Timer * 0.2) ^ 2.0) / 1000.0, 0.5))
 	    me\BlurTimer = Max(I_409\Timer * 3.0 * (2.0 - me\CrouchState), me\BlurTimer)
 		
-        If I_409\Timer > 40.0 And prevI409Timer =< 40.0 Then
+        If I_409\Timer > 40.0 And PrevI409Timer =< 40.0 Then
 			msg\Msg = "Crystals are enveloping the skin on your legs."
 			msg\Timer = 70.0 * 6.0
-		ElseIf I_409\Timer > 55.0 And prevI409Timer =< 55.0 Then
+		ElseIf I_409\Timer > 55.0 And PrevI409Timer =< 55.0 Then
 			msg\Msg = "Crystals are up to your abdomen."
 			msg\Timer = 70.0 * 6.0
-		ElseIf I_409\Timer > 70.0 And prevI409Timer =< 70.0 Then
+		ElseIf I_409\Timer > 70.0 And PrevI409Timer =< 70.0 Then
 			msg\Msg = "Crystals are starting to envelop your arms."
 			msg\Timer = 70.0 * 6.0
-		ElseIf I_409\Timer > 85.0 And prevI409Timer =< 85.0 Then
+		ElseIf I_409\Timer > 85.0 And PrevI409Timer =< 85.0 Then
 			msg\Msg = "Crystals starting to envelop your head."
 			msg\Timer = 70.0 * 6.0
-		ElseIf I_409\Timer > 93.0 And prevI409Timer =< 93.0 Then
-			PlaySound_Strict(DamageSFX(13))
+		ElseIf I_409\Timer > 93.0 And PrevI409Timer =< 93.0 Then
+			PlaySound_Strict(DamageSFX[13])
 			me\Injuries = Max(me\Injuries, 2.0)
 		ElseIf I_409\Timer > 94.0 Then
 			I_409\Timer = Min(I_409\Timer + fpst\FPSFactor[0] * 0.004, 100.0)
@@ -11771,7 +11774,7 @@ Function UpdateDecals()
 						Local d2.Decals = CreateDecal(1, EntityX(d\OBJ) + Cos(Angle) * Temp, EntityY(d\OBJ) - 0.0005, EntityZ(d\OBJ) + Sin(Angle) * Temp, EntityPitch(d\OBJ), Rnd(360.0), EntityRoll(d\OBJ))
 						
 						d2\Size = Rnd(0.1, 0.5) : ScaleSprite(d2\OBJ, d2\Size, d2\Size)
-						PlaySound2(DecaySFX(Rand(1, 3)), Camera, d2\OBJ, 10.0, Rnd(0.1, 0.5))
+						PlaySound2(DecaySFX[Rand(1, 3)], Camera, d2\OBJ, 10.0, Rnd(0.1, 0.5))
 						d\Timer = Rnd(50.0, 100.0)
 					Else
 						d\Timer = d\Timer - fpst\FPSFactor[0]
@@ -11857,17 +11860,17 @@ Function RenderWorld2(Tween#)
 	
 	If wi\NightVision = 1 Lor wi\NightVision = 2 Then
 		For i = 0 To MaxItemAmount - 1
-			If (Inventory(i) <> Null) Then
-				If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Then
-					Inventory(i)\State = Inventory(i)\State - (fpst\FPSFactor[0] * (0.02 * wi\NightVision))
-					Power = Int(Inventory(i)\State)
-					If Inventory(i)\State =< 0.0 Then ; ~ This NVG can't be used
+			If Inventory[i] <> Null Then
+				If (wi\NightVision = 1 And Inventory[i]\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory[i]\ItemTemplate\TempName = "supernvg") Then
+					Inventory[i]\State = Inventory[i]\State - (fpst\FPSFactor[0] * (0.02 * wi\NightVision))
+					Power = Int(Inventory[i]\State)
+					If Power =< 0.0 Then ; ~ This NVG can't be used
 						HasBattery = 0
 						msg\Msg = "The batteries in these night vision goggles died."
 						msg\Timer = 70 * 5.0
 						me\BlinkTimer = -1.0
 						Exit
-					ElseIf Inventory(i)\State =< 100.0 Then
+					ElseIf Power =< 100.0 Then
 						HasBattery = 1
 					EndIf
 				EndIf
@@ -12307,5 +12310,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#10D6#13AC#1DF2
+;~B#10D7#13AD#1DF3
 ;~C#Blitz3D

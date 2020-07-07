@@ -66,7 +66,7 @@ Function UpdateParticles()
 		p\LifeTime = p\LifeTime - fpst\FPSFactor[0]
 		If p\LifeTime =< 0.0 Lor p\Size < 0.00001 Lor p\A =< 0.0 Then
 			RemoveParticle(p)
-		End If
+		EndIf
 	Next
 End Function
 	
@@ -173,10 +173,10 @@ Function UpdateEmitters()
 		If me\KillTimer >= 0.0 Then 
 			If Rand(150) = 1 Then
 				If CoughCHN = 0 Then
-					CoughCHN = PlaySound_Strict(CoughSFX(Rand(0, 2)))
+					CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
 				Else
-					If ChannelPlaying(CoughCHN) = False Then CoughCHN = PlaySound_Strict(CoughSFX(Rand(0, 2)))
-				End If
+					If ChannelPlaying(CoughCHN) = False Then CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
+				EndIf
 			EndIf
 		EndIf
 		me\EyeIrritation = me\EyeIrritation + (fpst\FPSFactor[0] * 4.0)

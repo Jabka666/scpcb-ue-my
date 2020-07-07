@@ -310,7 +310,7 @@ Function SaveGame(File$)
 		Else
 			WriteFloat(f, 0.0)
 			WriteFloat(f, 0.0)
-		End If
+		EndIf
 		
 		WriteFloat(f, do\Timer)
 		WriteFloat(f, do\TimerState)
@@ -402,7 +402,7 @@ Function SaveGame(File$)
 		Local ItemFound% = False
 		
 		For i = 0 To MaxItemAmount - 1
-			If Inventory(i) = it Then ItemFound = True : Exit
+			If Inventory[i] = it Then ItemFound = True : Exit
 		Next
 		If ItemFound Then 
 			WriteByte(f, i) 
@@ -746,7 +746,7 @@ Function LoadGame(File$)
 				r\Angle = Angle
 				r\Found = Found
 				Exit
-			End If
+			EndIf
 		Next
 		
 		If Temp2 = 1 Then PlayerRoom = r.Rooms
@@ -764,7 +764,7 @@ Function LoadGame(File$)
 			ID = ReadByte(f)
 			If ID = 2 Then
 				Exit
-			Else If ID = 1 Then
+			ElseIf ID = 1 Then
 				RotateEntity(r\Levers[x], 78.0, EntityYaw(r\Levers[x]), 0.0)
 			Else
 				RotateEntity(r\Levers[x], -78.0, EntityYaw(r\Levers[x]), 0.0)
@@ -942,7 +942,7 @@ Function LoadGame(File$)
 						Exit
 					EndIf
                 Next
-			End If
+			EndIf
 		Next
 	Next
 	
@@ -984,7 +984,7 @@ Function LoadGame(File$)
 				PositionEntity(do\OBJ, OBJX, y, OBJZ, True)
 				If do\OBJ2 <> 0 Then PositionEntity(do\OBJ2, OBJ2X, y, OBJ2Z, True)
 				Exit
-			End If
+			EndIf
 		Next		
 	Next
 	
@@ -1124,7 +1124,7 @@ Function LoadGame(File$)
 		
 		nt = ReadByte(f)
 		If nt < 66
-			Inventory(nt) = it
+			Inventory[nt] = it
 			ItemAmount = ItemAmount + 1
 		EndIf
 		
@@ -1598,7 +1598,7 @@ Function LoadGameQuick(File$)
 			ID = ReadByte(f)
 			If ID = 2 Then
 				Exit
-			Else If ID = 1 Then
+			ElseIf ID = 1 Then
 				RotateEntity(r\Levers[x], 78.0, EntityYaw(r\Levers[x]), 0.0)
 			Else
 				RotateEntity(r\Levers[x], -78.0, EntityYaw(r\Levers[x]), 0.0)
@@ -1705,7 +1705,7 @@ Function LoadGameQuick(File$)
 						Exit
 					EndIf
 				EndIf
-			End If
+			EndIf
 		Next		
 	Next
 	
@@ -1824,8 +1824,8 @@ Function LoadGameQuick(File$)
 		If nt = True Then SelectedItem = it
 		
 		nt = ReadByte(f)
-		If nt < 66
-			Inventory(nt) = it
+		If nt < 66 Then
+			Inventory[nt] = it
 			ItemAmount = ItemAmount + 1
 		EndIf
 		
@@ -2018,7 +2018,7 @@ Function LoadSaveGames()
 					SaveGameAmount = SaveGameAmount + 1
 				EndIf
 			EndIf
-		End If 
+		EndIf 
 	Forever 
 	CloseDir(myDir)
 	
@@ -2036,7 +2036,7 @@ Function LoadSaveGames()
 					i = i + 1
 				EndIf
 			EndIf
-		End If 
+		EndIf 
 	Forever 
 	CloseDir(myDir)
 	
@@ -2394,6 +2394,7 @@ Function LoadMap(File$)
 	Local Spacing# = 8.0
 	Local ShouldSpawnDoor% = False
 	Local d.Doors
+	
 	For y = MapHeight To 0 Step -1
 		If y < I_Zone\Transition[1] Then
 			Zone = 3
@@ -2414,24 +2415,24 @@ Function LoadMap(File$)
 						Select r\RoomTemplate\Shape
 							Case ROOM1
 								;[Block]
-								If r\Angle = 90
+								If r\Angle = 90.0
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM2
 								;[Block]
-								If r\Angle = 90 Lor r\Angle = 270
+								If r\Angle = 90.0 Lor r\Angle = 270.0
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM2C
 								;[Block]
-								If r\Angle = 0 Lor r\Angle = 90
+								If r\Angle = 0.0 Lor r\Angle = 90.0
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM3
-								If r\Angle = 0 Lor r\Angle = 180 Lor r\Angle = 90
+								If r\Angle = 0.0 Lor r\Angle = 180.0 Lor r\Angle = 90.0
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
@@ -2453,25 +2454,25 @@ Function LoadMap(File$)
 						Select r\RoomTemplate\Shape
 							Case ROOM1
 								;[Block]
-								If r\Angle = 180
+								If r\Angle = 180.0
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM2
 								;[Block]
-								If r\Angle = 0 Lor r\Angle = 180
+								If r\Angle = 0.0 Lor r\Angle = 180.0
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM2C
 								;[Block]
-								If r\Angle = 180 Lor r\Angle = 90
+								If r\Angle = 180.0 Lor r\Angle = 90.0
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM3
 								;[Block]
-								If r\Angle = 180 Lor r\Angle = 90 Lor r\Angle = 270
+								If r\Angle = 180.0 Lor r\Angle = 90.0 Lor r\Angle = 270.0
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
@@ -2491,7 +2492,7 @@ Function LoadMap(File$)
 						Exit
 					EndIf
                 Next
-			End If
+			EndIf
 		Next
 	Next
 	

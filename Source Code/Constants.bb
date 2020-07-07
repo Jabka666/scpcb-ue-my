@@ -1,7 +1,3 @@
-; ~ [ITEMS]
-
-Const ItemsPath$ = "GFX\items\"
-
 ; ~ [OPTIONS]
 
 Const OptionFile$ = "Data\options.ini"
@@ -124,17 +120,12 @@ Const MaxImageIDAmount% = 13
 
 ; ~ [ITEMS]
 
+Const ItemsPath$ = "GFX\items\"
+
 Const MaxItemAmount% = 10
 
 Const NAV_WIDTH% = 287
 Const NAV_HEIGHT% = 256
-
-; ~ [FULLSCREEN FIX]
-
-Const C_GWL_STYLE% = -16
-Const C_WS_POPUP% = $80000000
-Const C_HWND_TOP% = 0
-Const C_SWP_SHOWWINDOW% = $0040
 
 ; ~ [DIFFICULTY]
 

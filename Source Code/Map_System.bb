@@ -905,12 +905,12 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 						Tile_Entity = CopyEntity(fr\TileMesh[ROOM1])
 						
 						If fr\Grid[((tY + 1) * GridSize) + tX] > 0 Then
-							Angle = 180
+							Angle = 180.0
 						ElseIf fr\Grid[(tY * GridSize) + tX - 1] > 0
-							Angle = 270
+							Angle = 270.0
 						ElseIf fr\Grid[(tY * GridSize) + tX + 1] > 0
-							Angle = 90
-						End If
+							Angle = 90.0
+						EndIf
 						
 						Tile_Type = ROOM1
 						;[End Block]
@@ -921,18 +921,18 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 							Tile_Type = ROOM2
 						ElseIf fr\Grid[(tY * GridSize) + tX + 1] > 0 And fr\Grid[(tY * GridSize) + tX - 1] > 0
 							Tile_Entity = CopyEntity(fr\TileMesh[ROOM2])
-							Angle = 90
+							Angle = 90.0
 							Tile_Type = ROOM2
 						Else
 							Tile_Entity = CopyEntity(fr\TileMesh[ROOM2C])
 							If fr\Grid[(tY * GridSize) + tX - 1] > 0 And fr\Grid[((tY + 1) * GridSize) + tX] > 0 Then
-								Angle = 180
+								Angle = 180.0
 							ElseIf fr\Grid[(tY * GridSize) + tX + 1] > 0 And fr\Grid[((tY - 1) * GridSize) + tX] > 0
 								
 							ElseIf fr\Grid[(tY * GridSize) + tX - 1] > 0 And fr\Grid[((tY - 1) * GridSize) + tX] > 0
-								Angle = 270
+								Angle = 270.0
 							Else
-								Angle = 90
+								Angle = 90.0
 							EndIf
 							Tile_Type = ROOM2C
 						EndIf
@@ -942,12 +942,12 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 						Tile_Entity = CopyEntity(fr\TileMesh[ROOM3])
 						
 						If fr\Grid[((tY - 1) * GridSize) + tX] = 0 Then
-							Angle = 180
+							Angle = 180.0
 						ElseIf fr\Grid[(tY * GridSize) + tX - 1] = 0
-							Angle = 90
+							Angle = 90.0
 						ElseIf fr\Grid[(tY * GridSize) + tX + 1] = 0
-							Angle = 270
-						End If
+							Angle = 270.0
+						EndIf
 						
 						Tile_Type = ROOM3
 						;[End Block]
@@ -1762,8 +1762,8 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 					FillRoom(r)
 					
 					CalculateRoomExtents(r)
-					Return r	
-				End If
+					Return(r)	
+				EndIf
 			EndIf
 		Next
 	Next
@@ -6321,6 +6321,8 @@ Function FindPath(n.NPCs, x#, y#, z#)
 End Function
 
 Function CreateLine(x1#, y1#, z1#, x2#, y2#, z2#, Mesh% = 0)
+	Local Surf%, Verts%
+	
 	If Mesh = 0 Then 
 		Mesh = CreateMesh()
 		EntityFX(Mesh, 16)
@@ -6331,7 +6333,7 @@ Function CreateLine(x1#, y1#, z1#, x2#, y2#, z2#, Mesh% = 0)
 	Else
 		Surf = GetSurface(Mesh, 1)
 		Verts = CountVertices(Surf) - 1
-	End If
+	EndIf
 	
 	AddVertex(Surf, (x1 + x2) / 2.0, (y1 + y2) / 2.0, (z1 + z2) / 2.0, 0.0, 0.0) 
 	; ~ You could skip creating the above vertex and change the line below to
@@ -6534,7 +6536,7 @@ Function UpdateSecurityCams()
 						MoveEntity(sc\Cam, 0.0, 0.0, 0.1)
 					EndIf
 					
-					If sc <> CoffinCam
+					If sc <> CoffinCam Then
 						If (Abs(DeltaYaw(sc\CameraOBJ, Camera)) < 60.0)
 							If EntityVisible(sc\CameraOBJ, Camera)
 								If MTF_CameraCheckTimer > 0.0
@@ -6637,12 +6639,12 @@ Function UpdateSecurityCams()
 									If Rand(3) = 1 Then EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
 									If Rand(6) < 5 Then
 										EntityTexture(sc\ScrOverlay, tt\MiscTextureID[Rand(7, 12)])
-										If sc\PlayerState = 1 Then PlaySound_Strict(HorrorSFX(1))
+										If sc\PlayerState = 1 Then PlaySound_Strict(HorrorSFX[1])
 										sc\PlayerState = 2
 										If sc\SoundCHN = 0 Then
-											sc\SoundCHN = PlaySound_Strict(HorrorSFX(4))
+											sc\SoundCHN = PlaySound_Strict(HorrorSFX[4])
 										Else
-											If ChannelPlaying(sc\SoundCHN) = False Then sc\SoundCHN = PlaySound_Strict(HorrorSFX(4))
+											If ChannelPlaying(sc\SoundCHN) = False Then sc\SoundCHN = PlaySound_Strict(HorrorSFX[4])
 										EndIf
 										If sc\CoffinEffect = 3 And Rand(200) = 1 Then sc\CoffinEffect = 2 : sc\PlayerState = Rand(10000, 20000)
 									EndIf	
@@ -6654,7 +6656,7 @@ Function UpdateSecurityCams()
 									If Rand(7) = 1 Then EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
 									If Rand(50) = 1 Then
 										EntityTexture(sc\ScrOverlay, tt\MiscTextureID[Rand(7, 12)])
-										If sc\PlayerState = 0 Then PlaySound_Strict(HorrorSFX(0))
+										If sc\PlayerState = 0 Then PlaySound_Strict(HorrorSFX[0])
 										sc\PlayerState = Max(sc\PlayerState, 1)
 										If sc\CoffinEffect = 3 And Rand(100) = 1 Then sc\CoffinEffect = 2 : sc\PlayerState = Rand(10000, 20000)
 									EndIf
@@ -7178,7 +7180,7 @@ Function CreateMap()
 				Next
 				
 				If TempHeight = Height Then Temp = x2
-			End If
+			EndIf
 		Next
 		x = Temp
 		y = y - Height
@@ -7286,7 +7288,7 @@ Function CreateMap()
 		EndIf
 	Next
 	
-	; ~ Force more room4s and room2Cs
+	; ~ Force more ROOM4 and ROOM2C
 	For i = 0 To 2
 		Select i
 			Case 2
@@ -7306,7 +7308,7 @@ Function CreateMap()
 				;[End Block]
 		End Select
 		
-		If Room4Amount[i] < 1 Then ; ~ We want at least 1 ROOM4
+		If Room4Amount[i] < 1 Then ; ~ We want at least one ROOM4
 			Temp = 0
 			For y = Zone To Temp2
 				For x = 2 To MapWidth - 2
@@ -7346,7 +7348,7 @@ Function CreateMap()
 			Next
 		EndIf
 		
-		If Room2CAmount[i] < 1 Then ; ~ We want at least 1 ROOM2C
+		If Room2CAmount[i] < 1 Then ; ~ We want at least one ROOM2C
 			Temp = 0
 			
 			Zone = Zone + 1
@@ -7561,7 +7563,7 @@ Function CreateMap()
 			ElseIf MapTemp(x, y) > 0				
 				Temp = Min(MapTemp(x + 1, y), 1) + Min(MapTemp(x - 1, y), 1) + Min(MapTemp(x, y + 1), 1) + Min(MapTemp(x, y - 1), 1)
 				Select Temp
-					Case 1 ; ~ Generate ROOM1s
+					Case 1 ; ~ Generate ROOM1
 						;[Block]
 						If MapRoomID(ROOM1) < MaxRooms And MapName(x, y) = "" Then
 							If MapRoom(ROOM1, MapRoomID(ROOM1)) <> "" Then MapName(x, y) = MapRoom(ROOM1, MapRoomID(ROOM1))	
@@ -7569,27 +7571,27 @@ Function CreateMap()
 						
 						r = CreateRoom(Zone, ROOM1, x * 8.0, 0.0, y * 8.0, MapName(x, y))
 						If MapTemp(x, y + 1) Then
-							r\Angle = 180 
+							r\Angle = 180.0
 							TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 						ElseIf MapTemp(x - 1, y)
-							r\Angle = 270
+							r\Angle = 270.0
 							TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 						ElseIf MapTemp(x + 1, y)
-							r\Angle = 90
+							r\Angle = 90.0
 							TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 						Else 
-							r\Angle = 0
-						End If
+							r\Angle = 0.0
+						EndIf
 						MapRoomID(ROOM1) = MapRoomID(ROOM1) + 1
 						;[End Block]
-					Case 2 ; ~ Generate ROOM2s
+					Case 2 ; ~ Generate ROOM2
 						;[Block]
 						If MapTemp(x - 1, y) > 0 And MapTemp(x + 1, y) > 0 Then
 							If MapRoomID(ROOM2) < MaxRooms And MapName(x, y) = ""  Then
 								If MapRoom(ROOM2, MapRoomID(ROOM2)) <> "" Then MapName(x, y) = MapRoom(ROOM2, MapRoomID(ROOM2))	
 							EndIf
 							r = CreateRoom(Zone, ROOM2, x * 8.0, 0.0, y * 8.0, MapName(x, y))
-							If Rand(2) = 1 Then r\Angle = 90 Else r\Angle = 270
+							If Rand(2) = 1 Then r\Angle = 90.0 Else r\Angle = 270.0
 							TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 							MapRoomID(ROOM2) = MapRoomID(ROOM2) + 1
 						ElseIf MapTemp(x, y - 1) > 0 And MapTemp(x, y + 1) > 0
@@ -7597,7 +7599,7 @@ Function CreateMap()
 								If MapRoom(ROOM2, MapRoomID(ROOM2)) <> "" Then MapName(x, y) = MapRoom(ROOM2, MapRoomID(ROOM2))	
 							EndIf
 							r = CreateRoom(Zone, ROOM2, x * 8.0, 0.0, y * 8.0, MapName(x, y))
-							If Rand(2) = 1 Then r\Angle = 180 Else r\Angle = 0
+							If Rand(2) = 1 Then r\Angle = 180.0 Else r\Angle = 0.0
 							TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 							MapRoomID(ROOM2) = MapRoomID(ROOM2) + 1
 						Else
@@ -7607,23 +7609,23 @@ Function CreateMap()
 							
 							If MapTemp(x - 1, y) > 0 And MapTemp(x, y + 1) > 0 Then
 								r = CreateRoom(Zone, ROOM2C, x * 8.0, 0.0, y * 8.0, MapName(x, y))
-								r\Angle = 180
+								r\Angle = 180.0
 								TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 							ElseIf MapTemp(x + 1, y) > 0 And MapTemp(x, y + 1) > 0
 								r = CreateRoom(Zone, ROOM2C, x * 8.0, 0.0, y * 8.0, MapName(x, y))
-								r\Angle = 90
+								r\Angle = 90.0
 								TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 							ElseIf MapTemp(x - 1, y) > 0 And MapTemp(x, y - 1) > 0
 								r = CreateRoom(Zone, ROOM2C, x * 8.0, 0.0, y * 8.0, MapName(x, y))
 								TurnEntity(r\OBJ, 0.0, 270.0, 0.0)
-								r\Angle = 270
+								r\Angle = 270.0
 							Else
 								r = CreateRoom(Zone, ROOM2C, x * 8.0, 0.0, y * 8.0, MapName(x, y))
 							EndIf
 							MapRoomID(ROOM2C) = MapRoomID(ROOM2C) + 1
 						EndIf
 						;[End Block]
-					Case 3 ; ~ Generate ROOM3s
+					Case 3 ; ~ Generate ROOM3
 						;[Block]
 						If MapRoomID(ROOM3) < MaxRooms And MapName(x, y) = ""  Then
 							If MapRoom(ROOM3, MapRoomID(ROOM3)) <> "" Then MapName(x, y) = MapRoom(ROOM3, MapRoomID(ROOM3))	
@@ -7632,17 +7634,17 @@ Function CreateMap()
 						r = CreateRoom(Zone, ROOM3, x * 8.0, 0.0, y * 8.0, MapName(x, y))
 						If (Not MapTemp(x, y - 1)) Then
 							TurnEntity(r\OBJ, 0.0, 180.0, 0.0)
-							r\Angle = 180
+							r\Angle = 180.0
 						ElseIf (Not MapTemp(x - 1, y))
 							TurnEntity(r\OBJ, 0.0, 90.0, 0.0)
-							r\Angle = 90
+							r\Angle = 90.0
 						ElseIf (Not MapTemp(x + 1, y))
 							TurnEntity(r\OBJ, 0.0, -90.0, 0.0)
-							r\Angle = 270
-						End If
+							r\Angle = 270.0
+						EndIf
 						MapRoomID(ROOM3) = MapRoomID(ROOM3) + 1
 						;[End Block]
-					Case 4 ; ~ Generate ROOM4s
+					Case 4 ; ~ Generate ROOM4
 						;[Block]
 						If MapRoomID(ROOM4) < MaxRooms And MapName(x, y) = ""  Then
 							If MapRoom(ROOM4, MapRoomID(ROOM4)) <> "" Then MapName(x, y) = MapRoom(ROOM4, MapRoomID(ROOM4))	
@@ -7751,25 +7753,25 @@ Function CreateMap()
 						Select r\RoomTemplate\Shape
 							Case ROOM1
 								;[Block]
-								If r\Angle = 90
+								If r\Angle = 90.0
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM2
 								;[Block]
-								If r\Angle = 90 Lor r\Angle = 270
+								If r\Angle = 90.0 Lor r\Angle = 270.0
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM2C
 								;[Block]
-								If r\Angle = 0 Lor r\Angle = 90
+								If r\Angle = 0.0 Lor r\Angle = 90.0
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM3
 								;[Block]
-								If r\Angle = 0 Lor r\Angle = 180 Lor r\Angle = 90
+								If r\Angle = 0.0 Lor r\Angle = 180.0 Lor r\Angle = 90.0
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
@@ -7792,25 +7794,25 @@ Function CreateMap()
 						Select r\RoomTemplate\Shape
 							Case ROOM1
 								;[Block]
-								If r\Angle = 180
+								If r\Angle = 180.0
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM2
 								;[Block]
-								If r\Angle = 0 Lor r\Angle = 180
+								If r\Angle = 0.0 Lor r\Angle = 180.0
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM2C
 								;[Block]
-								If r\Angle = 180 Lor r\Angle = 90
+								If r\Angle = 180.0 Lor r\Angle = 90.0
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM3
 								;[Block]
-								If r\Angle = 180 Lor r\Angle = 90 Lor r\Angle = 270
+								If r\Angle = 180.0 Lor r\Angle = 90.0 Lor r\Angle = 270.0
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
@@ -8301,7 +8303,7 @@ Function CreateChunk.Chunk(OBJ%, x#, y#, z#, IsSpawnChunk% = False)
 	
 	ch\IsSpawnChunk = IsSpawnChunk
 	
-	If OBJ > -1
+	If OBJ > -1 Then
 		ch\Amount = GetINIInt("Data\1499chunks.ini", "chunk" + OBJ, "count")
 		For chp = Each ChunkPart
 			If chp\ID = OBJ
@@ -8422,7 +8424,7 @@ Function UpdateChunks(r.Rooms, ChunkPartAmount%, SpawnNPCs% = True)
 		If Rand(2) = 1 Then n\State2 = 500.0 * 3.0
 		n\Angle = Rnd(360.0)
 	Else
-		For n = Each NPCs
+		For n.NPCs = Each NPCs
 			If n\NPCtype = NPCtype1499_1 Then
 				If n\PrevState = 0 Then
 					If EntityDistance(n\Collider, Collider) > ChunkMaxDistance Lor EntityY(n\Collider) < EntityY(PlayerRoom\obj) - 5 Then

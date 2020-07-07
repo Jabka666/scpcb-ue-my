@@ -144,8 +144,7 @@ Function GetMeshExtents(Mesh%)
 	Mesh_MagZ = MaxZ - MinZ
 End Function
 
-; ~ Create a collision box for a mesh entity taking into account entity scale
-; (~ Won't work in non-uniform scaled space)
+; ~ Create a collision box for a mesh entity taking into account entity scale (won't work in non-uniform scaled space)
 Function MakeCollBox(Mesh%)
 	Local sX# = EntityScaleX(Mesh, 1)
 	Local sY# = Max(EntityScaleY(Mesh, 1), 0.001)
