@@ -9199,7 +9199,7 @@ Function LoadEntities()
 			File = NextFile(Dir)
 			If File = "" Then Exit
 			If FileType("SFX\Radio\UserTracks\" + File) = 1 Then
-				Test = LoadSound("SFX\Radio\UserTracks\" + File)
+				Test = LoadSound_Strict("SFX\Radio\UserTracks\" + File)
 				If Test <> 0 Then
 					UserTrackName[UserTrackMusicAmount] = File
 					UserTrackMusicAmount = UserTrackMusicAmount + 1

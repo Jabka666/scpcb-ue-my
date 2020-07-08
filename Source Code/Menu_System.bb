@@ -52,6 +52,7 @@ Global CurrLoadGamePage% = 0
 
 Function UpdateMainMenu()
 	Local x%, y%, Width%, Height%, Temp%, i%, n%, j%
+	Local Dir%, File$, Test%
 	
 	While ft\Accumulator > 0.0
 		ft\Accumulator = ft\Accumulator - TICK_DURATION
@@ -622,11 +623,11 @@ Function UpdateMainMenu()
 								
 								Dir = ReadDir("SFX\Radio\UserTracks\")
 								Repeat
-									File$ = NextFile(Dir)
-									If File$ = "" Then Exit
+									File = NextFile(Dir)
+									If File = "" Then Exit
 									If FileType("SFX\Radio\UserTracks\" + File$) = 1 Then
 										UserTrackCheck = UserTrackCheck + 1
-										Test = LoadSound("SFX\Radio\UserTracks\" + File$)
+										Test = LoadSound_Strict("SFX\Radio\UserTracks\" + File$)
 										If Test <> 0 Then
 											UserTrackCheck2 = UserTrackCheck2 + 1
 										EndIf
@@ -1269,9 +1270,9 @@ Function RenderMainMenu()
 				ElseIf MainMenuTab = MainMenuTab_Options_Audio
 					;[Block]
 					If EnableUserTracks Then
-						Height = 220 * MenuScale
+						Height = 230 * MenuScale
 					Else
-						Height = 160 * MenuScale
+						Height = 170 * MenuScale
 					EndIf
 					DrawFrame(x, y, Width, Height)	
 					
