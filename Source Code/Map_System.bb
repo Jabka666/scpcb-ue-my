@@ -7893,7 +7893,9 @@ Function SetRoom(Room_Name$, Room_Type%, Pos%, Min_Pos%, Max_Pos%) ; ~ Place a r
 End Function
 
 Function GetZone(y%)
-	Return(Min(Floor((Float(MapWidth - y) / MapWidth * ZONEAMOUNT)), ZONEAMOUNT - 1))
+	Local ZoneAmount% = 3
+	
+	Return(Min(Floor((Float(MapWidth - y) / MapWidth * ZoneAmount)), ZoneAmount - 1))
 End Function
 
 Function LoadTerrain(HeightMap, yScale# = 0.7, t1%, t2%, Mask%)

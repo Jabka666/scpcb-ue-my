@@ -83,8 +83,6 @@ Const ROOM2C% = 3
 Const ROOM3% = 4
 Const ROOM4% = 5
 
-Const ZONEAMOUNT% = 3
-
 Const GridSZ% = 19 ; ~ Same size as the main map itself (better for the map creator)
 
 Const RoomScale# = 8.0 / 2048.0
