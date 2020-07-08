@@ -143,7 +143,9 @@ End Type
 Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode% = 2)
 	If FileType(File) <> 1 Then
 		CreateConsoleMsg("Sound " + Chr(34) + File + Chr(34) + " not found.")
-		ConsoleOpen = True
+		If ConsoleOpening Then
+			ConsoleOpen = True
+		EndIf
 		Return(0)
 	EndIf
 	
@@ -153,7 +155,9 @@ Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode% = 2)
 	
 	If st\CHN = -1 Then
 		CreateConsoleMsg("Failed to stream Sound (returned -1): " + Chr(34) + File + Chr(34))
-		ConsoleOpen = True
+		If ConsoleOpening
+			ConsoleOpen = True
+		EndIf
 		Return(-1)
 	EndIf
 	ChannelVolume(st\CHN, Volume * 1.0)
