@@ -5274,7 +5274,7 @@ Function UpdateEvents()
 											InjurePlayer(0.5)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech2.ogg"))
 										ElseIf e\EventState3 > 70.0 * 31.0 And e\EventState3 - fpst\FPSFactor[0] =< 70.0 * 31.0
-											Tex = LoadTexture_Strict("GFX\map\scp-012_1.jpg")
+											Tex = LoadTexture_Strict("GFX\map\scp-012_1.png")
 											EntityTexture(e\room\Objects[4], Tex, 0, 1)
 											FreeTexture(Tex)
 											
@@ -5288,14 +5288,14 @@ Function UpdateEvents()
 											InjurePlayer(0.3)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech5.ogg"))
 										ElseIf e\EventState3 > 70.0 * 63.0 And e\EventState3 - fpst\FPSFactor[0] =< 70.0 * 63.0
-											Tex = LoadTexture_Strict("GFX\map\scp-012_2.jpg")
+											Tex = LoadTexture_Strict("GFX\map\scp-012_2.png")
 											EntityTexture(e\room\Objects[4], Tex, 0, 1)	
 											FreeTexture(Tex)
 											
 											InjurePlayer(0.5)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech6.ogg"))
 										ElseIf e\EventState3 > 70.0 * 74.0 And e\EventState3 - fpst\FPSFactor[0] =< 70.0 * 74.0
-											Tex = LoadTexture_Strict("GFX\map\scp-012_3.jpg")
+											Tex = LoadTexture_Strict("GFX\map\scp-012_3.png")
 											EntityTexture(e\room\Objects[4], Tex, 0, 1)
 											FreeTexture(Tex)
 											

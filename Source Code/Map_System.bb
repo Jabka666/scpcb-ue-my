@@ -3315,8 +3315,9 @@ Function FillRoom(r.Rooms)
 			Next
 			
 			r\Objects[4] = LoadMesh_Strict("GFX\map\room012_3.b3d")
-			Tex = LoadTexture_Strict("GFX\map\scp-012_0.jpg")
+			Tex = LoadTexture_Strict("GFX\map\scp-012_0.png")
 			EntityTexture(r\Objects[4], Tex, 0, 1)
+			FreeTexture(Tex)
 			ScaleEntity(r\Objects[4], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[4], r\x - 360.0 * RoomScale, r\y - 130.0 * RoomScale, r\z + 456.0 * RoomScale)
 			EntityParent(r\Objects[4], r\Objects[2])
@@ -8652,5 +8653,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11BF
+;~B#11C0
 ;~C#Blitz3D
