@@ -3390,7 +3390,7 @@ Function MainLoop()
 				ElseIf (Not CanSave) Lor QuickLoadPercent > -1
 					msg\Msg = "You cannot save at this moment."
 					msg\Timer = 70.0 * 6.0
-					If QuickLoadPercent > -1
+					If QuickLoadPercent > -1 Then
 						msg\Msg = msg\Msg + " (game is loading)"
 					EndIf
 				Else

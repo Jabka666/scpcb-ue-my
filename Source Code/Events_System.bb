@@ -5261,7 +5261,11 @@ Function UpdateEvents()
 									me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs()) / 20.0) + 1.0) * 8.0 * Max((3.0 - Dist), 0.0))
 									
 									If BreathCHN <> 0 Then
-										If ChannelPlaying(BreathCHN) Then StopChannel(BreathCHN)
+										If ChannelPlaying(BreathCHN) = True Then StopChannel(BreathCHN)
+									EndIf
+									
+									If BreathGasRelaxedCHN <> 0 Then
+										If ChannelPlaying(BreathGasRelaxedCHN) = True Then StopChannel(BreathGasRelaxedCHN)
 									EndIf
 									
 									If Dist < 0.6 Then
@@ -10317,5 +10321,5 @@ Function GenerateRandomIA()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11D2#1DF1
+;~B#11D2#1DF5
 ;~C#Blitz3D
