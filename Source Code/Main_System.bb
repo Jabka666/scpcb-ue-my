@@ -2750,19 +2750,6 @@ Include "Source Code\Menu_System.bb"
 
 MainMenuOpen = True
 
-Type MEMORYSTATUS
-    Field dwLength%
-    Field dwMemoryLoad%
-    Field dwTotalPhys%
-    Field dwAvailPhys%
-    Field dwTotalPageFile%
-    Field dwAvailPageFile%
-    Field dwTotalVirtual%
-    Field dwAvailVirtual%
-End Type
-
-Global m.MEMORYSTATUS = New MEMORYSTATUS
-
 FlushKeys()
 FlushMouse()
 
@@ -4815,52 +4802,52 @@ Function DrawGUI()
 					EndIf
 				Next
 			EndIf
-            GlobalMemoryStatus(m.MEMORYSTATUS)
-			Text(x - 60, 300, "Memory: " + (m\dwAvailPhys / 1024 / 1024) + " MB/" + (m\dwTotalPhys / 1024 / 1024) + " MB (" + (m\dwAvailPhys / 1024) + " KB/" + (m\dwTotalPhys / 1024) + " KB)")
-			Text(x - 60, 320, "Triangles Rendered: " + CurrTrisAmount)
-			Text(x - 60, 340, "Active Textures: " + ActiveTextures())	
+			Text(x - 60, 300, "Video memory: " + ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)) + " MB/" + (TotalVidMem() / 1024) + " MB" + Chr(10))
+			Text(x - 60, 320, "Global memory status: " + ((TotalPhys() / 1024) - (AvailPhys() / 1024)) + " MB/" + (TotalPhys() / 1024) + " MB")
+			Text(x - 60, 340, "Triangles Rendered: " + CurrTrisAmount)
+			Text(x - 60, 360, "Active Textures: " + ActiveTextures())	
 			
 			If Curr173 <> Null Then
-				Text(x - 60, 380, "SCP-173 Position (Collider): (" + f2s(EntityX(Curr173\Collider), 1) + ", " + f2s(EntityY(Curr173\Collider), 1) + ", " + f2s(EntityZ(Curr173\Collider), 1) + ")")
-				Text(x - 60, 400, "SCP-173 Position (Object): (" + f2s(EntityX(Curr173\OBJ), 1) + ", " + f2s(EntityY(Curr173\OBJ), 1) + ", " + f2s(EntityZ(Curr173\OBJ), 1) + ")")
-				Text(x - 60, 420, "SCP-173 State: " + Curr173\State)
+				Text(x - 60, 400, "SCP-173 Position (Collider): (" + f2s(EntityX(Curr173\Collider), 1) + ", " + f2s(EntityY(Curr173\Collider), 1) + ", " + f2s(EntityZ(Curr173\Collider), 1) + ")")
+				Text(x - 60, 420, "SCP-173 Position (Object): (" + f2s(EntityX(Curr173\OBJ), 1) + ", " + f2s(EntityY(Curr173\OBJ), 1) + ", " + f2s(EntityZ(Curr173\OBJ), 1) + ")")
+				Text(x - 60, 440, "SCP-173 State: " + Curr173\State)
 			EndIf
 			If Curr106 <> Null Then
-				Text(x - 60, 440, "SCP-106 Position: (" + f2s(EntityX(Curr106\OBJ), 1) + ", " + f2s(EntityY(Curr106\OBJ), 1) + ", " + f2s(EntityZ(Curr106\OBJ), 1) + ")")
-				Text(x - 60, 460, "SCP-106 Idle: " + Curr106\Idle)
-				Text(x - 60, 480, "SCP-106 State: " + Curr106\State)
+				Text(x - 60, 460, "SCP-106 Position: (" + f2s(EntityX(Curr106\OBJ), 1) + ", " + f2s(EntityY(Curr106\OBJ), 1) + ", " + f2s(EntityZ(Curr106\OBJ), 1) + ")")
+				Text(x - 60, 480, "SCP-106 Idle: " + Curr106\Idle)
+				Text(x - 60, 500, "SCP-106 State: " + Curr106\State)
 			EndIf
 			For npc.NPCs = Each NPCs
 				If npc\NPCtype = NPCtype096 Then
-					Text(x - 60, 500, "SCP-096 Position: (" + f2s(EntityX(npc\OBJ), 1) + ", " + f2s(EntityY(npc\OBJ), 1) + ", " + f2s(EntityZ(npc\OBJ), 1) + ")")
-					Text(x - 60, 520, "SCP-096 Idle: " + npc\Idle)
-					Text(x - 60, 540, "SCP-096 State: " + npc\State)
-					Text(x - 60, 560, "SCP-096 Speed: " + f2s(npc\CurrSpeed, 1))
+					Text(x - 60, 520, "SCP-096 Position: (" + f2s(EntityX(npc\OBJ), 1) + ", " + f2s(EntityY(npc\OBJ), 1) + ", " + f2s(EntityZ(npc\OBJ), 1) + ")")
+					Text(x - 60, 540, "SCP-096 Idle: " + npc\Idle)
+					Text(x - 60, 560, "SCP-096 State: " + npc\State)
+					Text(x - 60, 580, "SCP-096 Speed: " + f2s(npc\CurrSpeed, 1))
 				EndIf
 				If npc\NPCtype = NPCtype049 Then
-					Text(x - 60, 580, "SCP-049 Position: (" + f2s(EntityX(npc\OBJ), 1) + ", " + f2s(EntityY(npc\OBJ), 1) + ", " + f2s(EntityZ(npc\OBJ), 1) + ")")
-					Text(x - 60, 600, "SCP-049 Idle: " + npc\Idle)
-					Text(x - 60, 620, "SCP-049 State: " + npc\State)
-					Text(x - 60, 640, "SCP-049 Speed: " + f2s(npc\CurrSpeed, 1))
+					Text(x - 60, 600, "SCP-049 Position: (" + f2s(EntityX(npc\OBJ), 1) + ", " + f2s(EntityY(npc\OBJ), 1) + ", " + f2s(EntityZ(npc\OBJ), 1) + ")")
+					Text(x - 60, 620, "SCP-049 Idle: " + npc\Idle)
+					Text(x - 60, 640, "SCP-049 State: " + npc\State)
+					Text(x - 60, 660, "SCP-049 Speed: " + f2s(npc\CurrSpeed, 1))
 				EndIf
 			Next
 			
 			If PlayerRoom\RoomTemplate\Name = "dimension1499"
-				Text(x - 60, 680, "Current Chunk X / Z: (" + (Int((EntityX(Collider) + 20) / 40)) + ", "+(Int((EntityZ(Collider) + 20) / 40)) + ")")
+				Text(x - 60, 700, "Current Chunk X / Z: (" + (Int((EntityX(Collider) + 20) / 40)) + ", "+(Int((EntityZ(Collider) + 20) / 40)) + ")")
 					
 				Local CH_Amount% = 0
 					
 				For ch.Chunk = Each Chunk
 					CH_Amount = CH_Amount + 1
 				Next
-				Text(x - 60, 700, "Current Chunk Amount: " + CH_Amount)
+				Text(x - 60, 720, "Current Chunk Amount: " + CH_Amount)
 			Else
-				Text(x - 60, 700, "Current Room Position: (" + PlayerRoom\x + ", " + PlayerRoom\y + ", " + PlayerRoom\z + ")")
+				Text(x - 60, 720, "Current Room Position: (" + PlayerRoom\x + ", " + PlayerRoom\y + ", " + PlayerRoom\z + ")")
 			EndIf
 			If SelectedMonitor <> Null Then
-				Text(x - 60, 720, "Current Monitor: " + SelectedMonitor\ScrOBJ)
+				Text(x - 60, 740, "Current Monitor: " + SelectedMonitor\ScrOBJ)
 			Else
-				Text(x - 60, 720, "Current Monitor: Null")
+				Text(x - 60, 740, "Current Monitor: Null")
 			EndIf
 			
 			Text(x + 440, 40, "******************************")
@@ -12435,5 +12422,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#10D7#13AD#1E70
+;~B#10CA#13A0#1E63
 ;~C#Blitz3D
