@@ -76,7 +76,7 @@ Function SaveGame(File$)
 		If SelectedDifficulty = difficulties[i] Then
 			WriteByte(f, i)
 			
-			If (i = ESOTERIC) Then
+			If i = ESOTERIC Then
 				WriteByte(f, SelectedDifficulty\AggressiveNPCs)
 				WriteByte(f, SelectedDifficulty\PermaDeath)
 				WriteByte(f, SelectedDifficulty\SaveType)
@@ -391,6 +391,8 @@ Function SaveGame(File$)
 		WriteFloat(f, EntityYaw(it\Collider))
 		
 		WriteFloat(f, it\State)
+		WriteFloat(f, it\State2)
+		WriteFloat(f, it\State3)
 		WriteByte(f, it\Picked)
 		
 		If SelectedItem = it Then 
@@ -1116,6 +1118,8 @@ Function LoadGame(File$)
 		RotateEntity(it\Collider, x, y, 0.0)
 		
 		it\State = ReadFloat(f)
+		it\State2 = ReadFloat(f)
+		it\State3 = ReadFloat(f)
 		it\Picked = ReadByte(f)
 		If it\Picked Then HideEntity(it\Collider)
 		
@@ -1817,6 +1821,8 @@ Function LoadGameQuick(File$)
 		RotateEntity(it\Collider, x, y, 0.0)
 		
 		it\State = ReadFloat(f)
+		it\State2 = ReadFloat(f)
+		it\State3 = ReadFloat(f)
 		it\Picked = ReadByte(f)
 		If it\Picked Then HideEntity(it\Collider)
 		

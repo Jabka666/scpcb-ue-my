@@ -354,7 +354,7 @@ Type Items
 	Field Level%
 	Field SoundCHN%
 	Field Dist#, DistTimer#
-	Field State#, State2#
+	Field State#, State2#, State3#
 	Field Picked%, Dropped%
 	Field InvImg%
 	Field WontColl% = False

@@ -5169,26 +5169,102 @@ Function DrawGUI()
 	Else
 		If SelectedItem <> Null Then
 			Select SelectedItem\ItemTemplate\TempName
+				Case "nvg"
+					;[Block]
+					If PreventItemOverlapping(False, True, False, False) Then
+						If wi\NightVision > 0 And wi\NightVision <> 1 Then
+							Return
+						Else
+							DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+							
+							Width = 300
+							Height = 20
+							x = GraphicWidth / 2 - Width / 2
+							y = GraphicHeight / 2 + 80
+							Rect(x, y, Width + 4, Height, False)
+							If BarStyle = 1 Then
+								Color(100, 100, 100)	
+								Rect(x + 3, y + 3, Float(SelectedItem\State3 * (Width - 6.0) / 100.0), 14)	
+							Else
+								For i = 1 To Int((Width - 2) * (SelectedItem\State3 / 100.0) / 10.0)
+									DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
+								Next
+							EndIf
+						EndIf
+					EndIf
+					;[End Block]
+				Case "supernvg"
+					;[Block]
+					If PreventItemOverlapping(False, True, False, False) Then
+						If wi\NightVision > 0 And wi\NightVision <> 2 Then
+							Return
+						Else
+							DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+							
+							Width = 300
+							Height = 20
+							x = GraphicWidth / 2 - Width / 2
+							y = GraphicHeight / 2 + 80
+							Rect(x, y, Width + 4, Height, False)
+							If BarStyle = 1 Then
+								Color(100, 100, 100)	
+								Rect(x + 3, y + 3, Float(SelectedItem\State3 * (Width - 6.0) / 100.0), 14)	
+							Else
+								For i = 1 To Int((Width - 2) * (SelectedItem\State3 / 100.0) / 10.0)
+									DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
+								Next
+							EndIf
+						EndIf
+					EndIf
+					;[End Block]
+				Case "finenvg"
+					;[Block]
+					If PreventItemOverlapping(False, True, False, False) Then
+						If wi\NightVision > 0 And wi\NightVision <> 3 Then
+							Return
+						Else
+							DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+							
+							Width = 300
+							Height = 20
+							x = GraphicWidth / 2 - Width / 2
+							y = GraphicHeight / 2 + 80
+							Rect(x, y, Width + 4, Height, False)
+							If BarStyle = 1 Then
+								Color(100, 100, 100)	
+								Rect(x + 3, y + 3, Float(SelectedItem\State3 * (Width - 6.0) / 100.0), 14)	
+							Else
+								For i = 1 To Int((Width - 2) * (SelectedItem\State3 / 100.0) / 10.0)
+									DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
+								Next
+							EndIf
+						EndIf
+					EndIf
+					;[End Block]
 				Case "key0", "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "scp860", "hand", "hand2", "25ct", "scp005", "key", "coin"
 					;[Block]
 					DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 					;[End Block]
 				Case "firstaid", "finefirstaid", "firstaid2"
 					;[Block]
-					DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
-					
-					Width = 300.0
-					Height = 20.0
-					x = GraphicWidth / 2 - Width / 2
-					y = GraphicHeight / 2 + 80
-					Rect(x, y, Width + 4, Height, False)
-					If BarStyle = 1 Then
-						Color(100, 100, 100)	
-						Rect(x + 3, y + 3, Float(SelectedItem\State * (Width - 6.0) / 100.0), 14)	
+					If me\Bloodloss = 0.0 And me\Injuries = 0.0 Then
+						Return
 					Else
-						For i = 1 To Int((Width - 2) * (SelectedItem\State / 100.0) / 10)
-							DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
-						Next
+						DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						
+						Width = 300.0
+						Height = 20.0
+						x = GraphicWidth / 2 - Width / 2
+						y = GraphicHeight / 2 + 80
+						Rect(x, y, Width + 4, Height, False)
+						If BarStyle = 1 Then
+							Color(100, 100, 100)	
+							Rect(x + 3, y + 3, Float(SelectedItem\State * (Width - 6.0) / 100.0), 14)	
+						Else
+							For i = 1 To Int((Width - 2) * (SelectedItem\State / 100.0) / 10)
+								DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
+							Next
+						EndIf
 					EndIf
 					;[End Block]
 				Case "paper", "ticket"
@@ -5319,7 +5395,7 @@ Function DrawGUI()
 								Text(x + 97, y + 16.0, Rand(0, 9), True, True)
 							Else
 								SetFont(fo\FontID[3])
-								Text(x + 97, y + 16, Int(SelectedItem\State2 + 1), True, True)
+								Text(x + 97, y + 16, Int(SelectedItem\State2 + 1.0), True, True)
 							EndIf
 							
 							SetFont(fo\FontID[2])
@@ -5383,7 +5459,7 @@ Function DrawGUI()
 							Color(100, 100, 100)	
 					        Rect(x + 3, y + 3, Float(SelectedItem\State * (Width - 6.0) / 100.0), 14)	
 						Else
-							For i = 1 To Int((Width - 2) * (SelectedItem\state / 100.0) / 10)
+							For i = 1 To Int((Width - 2) * (SelectedItem\State / 100.0) / 10.0)
 								DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
 							Next
 						EndIf
@@ -6160,6 +6236,17 @@ Function UpdateGUI()
 								InvOpen = False
 							EndIf
 						    ;[End Block] 
+						Case "nvg", "supernvg", "finenvg"
+                            ;[Block]
+							If wi\NightVision > 0 Then
+								msg\Msg = "Double click on this item to take it off."
+								msg\Timer = 70.0 * 6.0
+							Else
+								DropItem(SelectedItem)
+								SelectedItem = Null
+								InvOpen = False
+							EndIf
+						    ;[End Block]
 						Default
 							;[Block]
 							DropItem(SelectedItem)
@@ -6398,18 +6485,27 @@ Function UpdateGUI()
 							SelectedItem = Null
 							Return
 						Else
-							If wi\NightVision = 1 Then
-								msg\Msg = "You removed the goggles."
-								CameraFogFar = StoredCameraFogFar
-							Else
-								msg\Msg = "You put on the goggles."
-								wi\NightVision = 0
-								StoredCameraFogFar = CameraFogFar
-								CameraFogFar = 30.0
+							me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
+							
+							SelectedItem\State3 = Min(SelectedItem\State3 + (fpst\FPSFactor[0] / 1.6), 100.0)
+							
+							If SelectedItem\State3 = 100.0 Then
+								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
+								
+								If wi\NightVision = 1 Then
+									msg\Msg = "You removed the goggles."
+									CameraFogFar = StoredCameraFogFar
+								Else
+									msg\Msg = "You put on the goggles."
+									wi\NightVision = 0
+									StoredCameraFogFar = CameraFogFar
+									CameraFogFar = 30.0
+								EndIf
+								wi\NightVision = (Not wi\NightVision)
+								SelectedItem\State3 = 0.0
+								msg\Timer = 70.0 * 6.0
+								SelectedItem = Null
 							EndIf
-							wi\NightVision = (Not wi\NightVision)
-							msg\Timer = 70.0 * 6.0
-							SelectedItem = Null
 						EndIf
 					EndIf
 					;[End Block]
@@ -6422,18 +6518,27 @@ Function UpdateGUI()
 							SelectedItem = Null
 							Return
 						Else
-							If wi\NightVision = 2 Then
-								msg\Msg = "You removed the goggles."
-								CameraFogFar = StoredCameraFogFar
-							Else
-								msg\Msg = "You put on the goggles."
-								wi\NightVision = 0
-								StoredCameraFogFar = CameraFogFar
-								CameraFogFar = 30.0
+							me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
+							
+							SelectedItem\State3 = Min(SelectedItem\State3 + (fpst\FPSFactor[0] / 1.6), 100.0)
+							
+							If SelectedItem\State3 = 100.0 Then
+								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
+								
+								If wi\NightVision = 2 Then
+									msg\Msg = "You removed the goggles."
+									CameraFogFar = StoredCameraFogFar
+								Else
+									msg\Msg = "You put on the goggles."
+									wi\NightVision = 0
+									StoredCameraFogFar = CameraFogFar
+									CameraFogFar = 30.0
+								EndIf
+								wi\NightVision = (Not wi\NightVision) * 2
+								SelectedItem\State3 = 0.0
+								msg\Timer = 70.0 * 6.0
+								SelectedItem = Null
 							EndIf
-							wi\NightVision = (Not wi\NightVision) * 2
-							msg\Timer = 70.0 * 6.0
-							SelectedItem = Null
 						EndIf
 					EndIf
 					;[End Block]
@@ -6446,18 +6551,27 @@ Function UpdateGUI()
 							SelectedItem = Null
 							Return
 						Else
-							If wi\NightVision = 3 Then
-								msg\Msg = "You removed the goggles."
-								CameraFogFar = StoredCameraFogFar
-							Else
-								msg\Msg = "You put on the goggles."
-								wi\NightVision = 0
-								StoredCameraFogFar = CameraFogFar
-								CameraFogFar = 30.0
+							me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
+							
+							SelectedItem\State3 = Min(SelectedItem\State3 + (fpst\FPSFactor[0] / 1.6), 100.0)
+							
+							If SelectedItem\State3 = 100.0 Then
+								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
+								
+								If wi\NightVision = 3 Then
+									msg\Msg = "You removed the goggles."
+									CameraFogFar = StoredCameraFogFar
+								Else
+									msg\Msg = "You put on the goggles."
+									wi\NightVision = 0
+									StoredCameraFogFar = CameraFogFar
+									CameraFogFar = 30.0
+								EndIf
+								wi\NightVision = (Not wi\NightVision) * 3
+								SelectedItem\State3 = 0.0
+								msg\Timer = 70.0 * 6.0
+								SelectedItem = Null
 							EndIf
-							wi\NightVision = (Not wi\NightVision) * 3
-							msg\Timer = 70.0 * 6.0
-							SelectedItem = Null
 						EndIf
 					EndIf
 					;[End Block]
@@ -6625,6 +6739,7 @@ Function UpdateGUI()
 						msg\Msg = "You do not need to use a first aid right now."
 						msg\Timer = 70.0 * 6.0
 						SelectedItem = Null
+						Return
 					Else
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						If (Not me\Crouch) Then SetCrouch(True)
@@ -7313,9 +7428,11 @@ Function UpdateGUI()
 						If SelectedItem\State = 100.0 Then
 							If wi\HazmatSuit > 0 Then
 								msg\Msg = "You removed the hazmat suit."
-								wi\HazmatSuit = False
+								wi\HazmatSuit = 0
 								DropItem(SelectedItem)
 							Else
+								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
+								msg\Msg = "You put on the hazmat suit."
 								If SelectedItem\ItemTemplate\TempName = "hazmatsuit" Then
 									wi\HazmatSuit = 1
 								ElseIf SelectedItem\ItemTemplate\TempName = "hazmatsuit2" Then
@@ -7323,8 +7440,6 @@ Function UpdateGUI()
 								Else
 									wi\HazmatSuit = 3
 								EndIf
-								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
-								msg\Msg = "You put on the hazmat suit."
 								If wi\NightVision Then CameraFogFar = StoredCameraFogFar
 								wi\GasMask = 0
 								wi\NightVision = 0
@@ -7345,9 +7460,10 @@ Function UpdateGUI()
 					If SelectedItem\State = 100.0 Then
 						If wi\BallisticVest > 0 Then
 							msg\Msg = "You removed the vest."
-							wi\BallisticVest = False
+							wi\BallisticVest = 0
 							DropItem(SelectedItem)
 						Else
+							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 							If SelectedItem\ItemTemplate\TempName = "vest" Then
 								msg\Msg = "You put on the vest and feel slightly encumbered."
 								wi\BallisticVest = 1
@@ -7355,7 +7471,6 @@ Function UpdateGUI()
 								msg\Msg = "You put on the vest and feel heavily encumbered."
 								wi\BallisticVest = 2
 							EndIf
-							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 						EndIf
 						SelectedItem\State = 0.0
 						msg\Timer = 70.0 * 6.0
@@ -7370,23 +7485,23 @@ Function UpdateGUI()
 						SelectedItem\State = Min(SelectedItem\State + (fpst\FPSFactor[0]) / 1.6, 100.0)
 						
 						If SelectedItem\State = 100.0 Then
+							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
+							
 							If wi\GasMask > 0 Then
-								wi\GasMask = 0
 								msg\Msg = "You removed the gas mask."
-								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
+								wi\GasMask = 0
 							Else
 								If SelectedItem\ItemTemplate\TempName = "supergasmask"
 									msg\Msg = "You put on the gas mask and you can breathe easier."
 									wi\GasMask = 2
 								Else
+									msg\Msg = "You put on the gas mask."
 									If SelectedItem\Itemtemplate\TempName = "gasmask3"
 										wi\GasMask = 3
 									Else
 										wi\GasMask = 1
 									EndIf
-									msg\Msg = "You put on the gas mask."
 								EndIf
-								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 							EndIf
 							SelectedItem\State = 0.0
 							msg\Timer = 70.0 * 6.0
@@ -7406,16 +7521,19 @@ Function UpdateGUI()
 						SelectedItem\State = Min(SelectedItem\State + fpst\FPSFactor[0] / 1.6, 100.0)
 						
 						If SelectedItem\State = 100.0 Then
+							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
+							
 							If I_1499\Using > 0 Then
-								I_1499\Using = False
-								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
+								msg\Msg = "You removed the gas mask."
+								I_1499\Using = 0
 							Else
 								If SelectedItem\ItemTemplate\TempName = "scp1499" Then
+									msg\Msg = "You put on the gas mask."
 									I_1499\Using = 1
 								Else
+									msg\Msg = "You put on the gas mask and you can breathe easier."
 									I_1499\Using = 2
 								EndIf
-								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 								GiveAchievement(Achv1499)
 								For r.Rooms = Each Rooms
 									If r\RoomTemplate\Name = "dimension1499" Then
@@ -7462,6 +7580,7 @@ Function UpdateGUI()
 								Next
 							EndIf
 							SelectedItem\State = 0.0
+							msg\Timer = 70.0 * 6.0
 							SelectedItem = Null
 						EndIf
 					EndIf
@@ -7572,14 +7691,14 @@ Function UpdateGUI()
 						SelectedItem\State = Min(SelectedItem\State + fpst\FPSFactor[0], 100.0)
 						
 					    If SelectedItem\State = 100.0 Then
+							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
+							
 							If wi\BallisticHelmet > 0 Then
+								msg\Msg = "You removed the helmet."
                                 wi\BallisticHelmet = 0
-                                msg\Msg = "You removed the helmet."
-								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 							Else
+								msg\Msg = "You put on the helmet."
 								wi\BallisticHelmet = 1
-						        msg\Msg = "You put on the helmet."
-							    If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 							EndIf
 						    SelectedItem\State = 0.0
 						    msg\Timer = 70.0 * 6.0
@@ -7620,6 +7739,8 @@ Function UpdateGUI()
 					EndIf
 				ElseIf IN = "scp1499" Lor IN = "super1499" Lor IN = "gasmask" Lor IN = "supergasmask" Lor IN = "gasmask3" Lor IN = "helmet"
 					SelectedItem\State = 0.0
+				ElseIf IN = "nvg" Lor IN = "supernvg" Lor IN = "finenvg"
+					SelectedItem\State3 = 0.0
 				EndIf
 				
 				If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
@@ -7642,6 +7763,10 @@ Function UpdateGUI()
 				Case "firstaid", "finefirstaid", "firstaid2", "vest", "finevest", "hazmatsuit", "hazmatsuit2", "hazmatsuit3", "scp1499", "super1499", "gasmask", "supergasmask", "gasmask3", "helmet"
 					;[Block]
 					it\State = 0.0
+					;[End Block]
+				Case "nvg", "supernvg", "finenvg"
+					;[Block]
+					it\State3 = 0.0
 					;[End Block]
 			End Select
 		EndIf
@@ -12310,5 +12435,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#10D7#13AD#1DF3
+;~B#10D7#13AD#1E70
 ;~C#Blitz3D
