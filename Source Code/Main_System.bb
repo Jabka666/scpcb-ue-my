@@ -12197,7 +12197,7 @@ Function PlayStartupVideos()
 	
 	HidePointer()
 	
-	fo\FontID[0] = LoadFont_Strict("GFX\font\cour\Courier New.ttf", Int(18 * (GraphicHeight / 1024.0)))
+	fo\FontID[0] = LoadFont_Strict("GFX\font\cour\Courier New.ttf", Int(16 * (GraphicHeight / 1024.0)))
 	
 	Local ScaledGraphicHeight%
 	Local Ratio# = Float(RealGraphicWidth) / Float(RealGraphicHeight)
