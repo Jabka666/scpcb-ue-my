@@ -820,6 +820,10 @@ Function UpdateMainMenu()
 							
 							y = y + 30 * MenuScale
 							
+							PlayStartup = DrawTick(x + 310 * MenuScale, y + MenuScale, PlayStartup)
+							
+							y = y + 30 * MenuScale
+							
 							LauncherEnabled = DrawTick(x + 310 * MenuScale, y + MenuScale, LauncherEnabled)
 						EndIf
 						;[End Block]
@@ -1490,6 +1494,14 @@ Function RenderMainMenu()
 						y = y + 30 * MenuScale
 						
 						Color(255, 255, 255)
+						Text(x + 20 * MenuScale, y + 4 * MenuScale, "Play startup videos:")
+						If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
+							DrawOptionsTooltip(tX, tY, tW, tH, "playstartup")
+						EndIf
+						
+						y = y + 30 * MenuScale
+						
+						Color(255, 255, 255)
 						Text(x + 20 * MenuScale, y + 4 * MenuScale, "Use launcher:")
 						If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
 							DrawOptionsTooltip(tX, tY, tW, tH, "uselauncher")
@@ -1699,7 +1711,7 @@ Function UpdateLauncher(lnchr.Launcher)
 	
 	PutINIValue(OptionFile, "Global", "Width", lnchr\GFXModeWidths[lnchr\SelectedGFXMode])
 	PutINIValue(OptionFile, "Global", "Height", lnchr\GFXModeHeights[lnchr\SelectedGFXMode])
-	PutINIValue(OptionFile, "Launcher", "Launcher Enabled", LauncherEnabled)
+	PutINIValue(OptionFile, "Advanced", "Launcher Enabled", LauncherEnabled)
 	PutINIValue(OptionFile, "Global", "Display Mode", DisplayMode)
 	
 	If Quit Then End
@@ -2882,6 +2894,12 @@ Function DrawOptionsTooltip(x%, y%, Width%, Height%, Option$, Value# = 0.0, InGa
 				G = 255
 				Txt2 = "Usually, 60 FPS or higher is preferred. If you are noticing excessive stuttering at this setting, try lowering it to make your framerate more consistent."
 			EndIf
+			;[End Block]
+		Case "playstartup"
+			;[Block]
+			Txt = Chr(34) + "Play startup videos" + Chr(34) + " is self-explanatory."
+			R = 255
+			Txt2 = "This option cannot be changed in-game."
 			;[End Block]
 		Case "uselauncher"
 			;[Block]

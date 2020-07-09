@@ -313,6 +313,10 @@ Global FrameLimit% = GetINIInt(OptionFile, "Advanced", "Frame Limit")
 
 Global ConsoleVersion% = GetINIInt(OptionFile, "Advanced", "Console Version")
 
+Global PlayStartup% = GetINIInt(OptionFile, "Advanced", "Play Startup Videos")
+
+Global LauncherEnabled% = GetINIInt(OptionFile, "Advanced", "Launcher Enabled")
+
 Global BarStyle% = GetINIInt(OptionFile, "Advanced", "Bar Style")
 
 ; ~ [CONTROLS]
@@ -345,10 +349,6 @@ Global InvertMouse% = GetINIInt(OptionFile, "Controls", "Invert Mouse By Y")
 
 Global MouseSensitivity# = GetINIFloat(OptionFile, "Controls", "Mouse Sensitivity")
 
-; ~ [LAUNCHER]
-
-Global LauncherEnabled% = GetINIInt(OptionFile, "Launcher", "Launcher Enabled")
-
 ; ~ [GLOBAL]
 
 Global GraphicWidth% = GetINIInt(OptionFile, "Global", "Width")
@@ -362,8 +362,6 @@ Global Brightness% = GetINIFloat(OptionFile, "Global", "Brightness")
 Global CameraFogNear# = GetINIFloat(OptionFile, "Global", "camera Fog Near")
 
 Global CameraFogFar# = GetINIFloat(OptionFile, "Global", "Camera Fog Far")
-
-Global PlayStartup% = GetINIInt(OptionFile, "Global", "Play Startup Video")
 
 Global MapWidth% = GetINIInt(OptionFile, "Global", "Map Size")
 
@@ -408,7 +406,9 @@ Function SaveOptionsINI()
 	
 	PutINIValue(OptionFile, "Advanced", "Console Version", ConsoleVersion)
 	
-	PutINIValue(OptionFile, "Launcher", "Launcher Enabled", LauncherEnabled)
+	PutINIValue(OptionFile, "Advanced", "Play Startup Videos", PlayStartup)
+	
+	PutINIValue(OptionFile, "Advanced", "Launcher Enabled", LauncherEnabled)
 	
 	PutINIValue(OptionFile, "Advanced", "Bar Style", BarStyle)
 	

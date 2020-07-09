@@ -12345,7 +12345,7 @@ Function PlayStartupVideos()
 		Local SplashScreenVideo% = BlitzMovie_OpenD3D(MovieFile + ".avi", SystemProperty("Direct3DDevice7"), SystemProperty("DirectDraw7"))
 		
 		If SplashScreenVideo = 0 Then
-			PutINIValue(OptionFile, "Global", "Play Startup Video", 0)
+			PutINIValue(OptionFile, "Advanced", "Play Startup Videos", 0)
 			Return
 		EndIf
 		SplashScreenVideo = BlitzMovie_Play()
