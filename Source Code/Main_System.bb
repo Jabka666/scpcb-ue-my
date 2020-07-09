@@ -11127,6 +11127,8 @@ End Function
 
 Function Use294()
 	Local x#, y#, xTemp%, yTemp%, StrTemp$, Temp%
+	Local Sep1%, Sep2%, Alpha#, Glow%
+	Local R%, G%, B%
 	
 	ShowPointer()
 	
@@ -11330,11 +11332,11 @@ Function Use294()
 					
 					Sep1 = Instr(StrTemp, ",", 1)
 					Sep2 = Instr(StrTemp, ",", Sep1 + 1)
-					R% = Trim(Left(StrTemp, Sep1 - 1))
-					G% = Trim(Mid(StrTemp, Sep1 + 1, Sep2 - Sep1 - 1))
-					B% = Trim(Right(StrTemp, Len(StrTemp) - Sep2))
+					R = Trim(Left(StrTemp, Sep1 - 1))
+					G = Trim(Mid(StrTemp, Sep1 + 1, Sep2 - Sep1 - 1))
+					B = Trim(Right(StrTemp, Len(StrTemp) - Sep2))
 					
-					Alpha# = Float(GetINIString2("Data\SCP-294.ini", Loc, "alpha", 1.0))
+					Alpha = Float(GetINIString2("Data\SCP-294.ini", Loc, "alpha", 1.0))
 					Glow = GetINIInt2("Data\SCP-294.ini", Loc, "glow")
 					If Glow Then Alpha = -Alpha
 					
@@ -11566,7 +11568,7 @@ Function UpdateMTF()
 End Function
 
 Function Update008()
-	Local PrevI008Timer#, i%, r.Rooms
+	Local PrevI008Timer#, i%, r.Rooms, e.Events
 	Local TeleportForInfect% = True
 	Local GroupDesignation$
 	
