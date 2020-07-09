@@ -1802,7 +1802,7 @@ Music[27] = "Room035"
 Music[28] = "Room409" 
 
 Global MusicCHN%
-MusicCHN = StreamSound_Strict("SFX\Music\" + Music[2] + ".ogg", MusicVolume, 2)
+MusicCHN = StreamSound_Strict("SFX\Music\" + Music[2] + ".ogg", MusicVolume, Mode)
 
 Global CurrMusicVolume# = 1.0, NowPlaying% = 2, ShouldPlay% = 11
 Global CurrMusic% = 1
@@ -2830,12 +2830,12 @@ Global I_Zone.MapZones = New MapZones
 Function CatchErrors(Location$)
 	InitErrorMsgs(8)
 	SetErrorMsg(0, "An error occured in SCP - Containment Breach Ultimate Edition v" + VersionNumber + ". Engine version: " + SystemProperty("blitzversion") + Chr(10))
-    SetErrorMsg(1, "Date and time: " + CurrentDate() + " at " + CurrentTime() + Chr(10) + "OS: " + SystemProperty("os") + " " + (32 + (GetEnv("ProgramFiles(X86)") <> 0) * 32) + " bit (Build: " + SystemProperty("osbuild") + ")" + Chr(10))
+	SetErrorMsg(1, "Date and time: " + CurrentDate() + " at " + CurrentTime() + Chr(10) + "OS: " + SystemProperty("os") + " " + (32 + (GetEnv("ProgramFiles(X86)") <> 0) * 32) + " bit (Build: " + SystemProperty("osbuild") + ")" + Chr(10))
 	SetErrorMsg(2, "CPU: " + GetEnv("PROCESSOR_IDENTIFIER") + " (Arch: " + GetEnv("PROCESSOR_ARCHITECTURE") + ", " + GetEnv("NUMBER_OF_PROCESSORS") + " Threads)" + Chr(10))
-    SetErrorMsg(3, "GPU: " + GfxDriverName(CountGfxDrivers()) + " (" + ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)) + " MB/" + (TotalVidMem() / 1024) + " MB)" + Chr(10))
-    SetErrorMsg(4, "Video memory: " + ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)) + " MB/" + (TotalVidMem() / 1024) + " MB" + Chr(10))
-    SetErrorMsg(5, "Global memory status: " + ((TotalPhys() / 1024) - (AvailPhys() / 1024)) + " MB/" + (TotalPhys() / 1024) + " MB" + Chr(10))
-    SetErrorMsg(6, "Triangles rendered: " + CurrTrisAmount + ", Active textures: " + ActiveTextures() + Chr(10) + Chr(10))
+	SetErrorMsg(3, "GPU: " + GfxDriverName(CountGfxDrivers()) + " (" + ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)) + " MB/" + (TotalVidMem() / 1024) + " MB)" + Chr(10))
+	SetErrorMsg(4, "Video memory: " + ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)) + " MB/" + (TotalVidMem() / 1024) + " MB" + Chr(10))
+	SetErrorMsg(5, "Global memory status: " + ((TotalPhys() / 1024) - (AvailPhys() / 1024)) + " MB/" + (TotalPhys() / 1024) + " MB" + Chr(10))
+	SetErrorMsg(6, "Triangles rendered: " + CurrTrisAmount + ", Active textures: " + ActiveTextures() + Chr(10) + Chr(10))
 	SetErrorMsg(7, "Error located in: " + Location + Chr(10) + Chr(10) + "Please take a screenshot of this error and send it to us!") 
 End Function
 
@@ -3688,7 +3688,7 @@ Function UpdateEnding()
 							If TempSounds[i] <> 0 Then FreeSound_Strict(TempSounds[i]) : TempSounds[i] = 0
 						Next
 						StopStream_Strict(MusicCHN)
-						MusicCHN = StreamSound_Strict("SFX\Music\" + Music[NowPlaying] + ".ogg", 0.0, 2)
+						MusicCHN = StreamSound_Strict("SFX\Music\" + Music[NowPlaying] + ".ogg", 0.0, Mode)
 						SetStreamVolume_Strict(MusicCHN, 1.0 * MusicVolume)
 						FlushKeys()
 						me\EndingTimer = -2000.0

@@ -6,6 +6,8 @@
 ; ~ Added zero checks since blitz load functions return zero sometimes even if the filetype exists
 
 Function LoadImage_Strict(File$)
+	Local Tmp%, Tmp2%
+	
 	If FileType(File) <> 1 Then RuntimeError("Image " + Chr(34) + File + Chr(34) + " missing. ")
 	Tmp = LoadImage(File)
 	Return(Tmp)
@@ -136,11 +138,10 @@ Function FreeSound_Strict(SNDHandle%)
 End Function
 
 Type Stream
-	Field SFX%
 	Field CHN%
 End Type
 
-Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode% = 2)
+Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode% = Mode)
 	If FileType(File) <> 1 Then
 		CreateConsoleMsg("Sound " + Chr(34) + File + Chr(34) + " not found.")
 		If ConsoleOpening Then
@@ -151,7 +152,7 @@ Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode% = 2)
 	
 	Local st.Stream = New Stream
 	
-	st\CHN = PlayMusic(File, CustomMode)
+	st\CHN = PlayMusic(File, CustomMode + TwoD)
 	
 	If st\CHN = -1 Then
 		CreateConsoleMsg("Failed to stream Sound (returned -1): " + Chr(34) + File + Chr(34))
@@ -263,6 +264,8 @@ Function UpdateStreamSoundOrigin(StreamHandle%, Cam%, Entity%, Range# = 10.0, Vo
 End Function
 
 Function LoadMesh_Strict(File$, Parent% = 0)
+	Local Tmp%
+	
 	If FileType(File) <> 1 Then RuntimeError("3D Mesh " + File + " not found.")
 	Tmp = LoadMesh(File, Parent)
 	If Tmp = 0 Then RuntimeError("Failed to load 3D Mesh: " + File)
@@ -270,6 +273,8 @@ Function LoadMesh_Strict(File$, Parent% = 0)
 End Function   
 
 Function LoadAnimMesh_Strict(File$, Parent% = 0)
+	Local Tmp%
+	
 	If FileType(File) <> 1 Then RuntimeError("3D Animated Mesh " + File + " not found.")
 	Tmp = LoadAnimMesh(File, Parent)
 	If Tmp = 0 Then RuntimeError("Failed to load 3D Animated Mesh: " + File)
@@ -278,6 +283,8 @@ End Function
 
 ; ~ Don't use in LoadRMesh, as Reg does this manually there. If you wanna fuck around with the logic in that function, be my guest 
 Function LoadTexture_Strict(File$, Flags% = 1)
+	Local Tmp%
+	
 	If FileType(File) <> 1 Then RuntimeError("Texture " + File + " not found.")
 	Tmp = LoadTexture(File, Flags + (256 * (SaveTexturesInVRAM = True)))
 	If Tmp = 0 Then RuntimeError("Failed to load Texture: " + File)
@@ -285,6 +292,8 @@ Function LoadTexture_Strict(File$, Flags% = 1)
 End Function   
 
 Function LoadBrush_Strict(File$, Flags%, u# = 1.0, v# = 1.0)
+	Local Tmp%
+	
 	If FileType(File) <> 1 Then RuntimeError("Brush Texture " + File + "not found.")
 	Tmp = LoadBrush(File, Flags, u, v)
 	If Tmp = 0 Then RuntimeError("Failed to load Brush: " + File)
@@ -292,6 +301,8 @@ Function LoadBrush_Strict(File$, Flags%, u# = 1.0, v# = 1.0)
 End Function 
 
 Function LoadFont_Strict(File$ = "Tahoma", Height% = 13)
+	Local Tmp%
+	
 	If FileType(File) <> 1 Then RuntimeError("Font " + File + " not found.")
 	Tmp = LoadFont(File, Height)  
 	If Tmp = 0 Then RuntimeError("Failed to load Font: " + File)

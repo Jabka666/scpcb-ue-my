@@ -2124,11 +2124,13 @@ Function LoadSavedMaps()
 		EndIf 
 	Forever 
 	CloseDir(Dir)
+	
 	CatchErrors("LoadSavedMaps")
 End Function
 
 Function LoadMap(File$)
 	CatchErrors("Uncaught (LoadMap)")
+	
 	Local f%, x%, y%, Name$, Angle%, Prob#
 	Local r.Rooms, rt.RoomTemplates, e.Events
 	Local RoomAmount%, ForestPieceAmount%, MTPieceAmount%, i%

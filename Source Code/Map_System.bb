@@ -13,6 +13,9 @@ Function LoadWorld(File$, rt.RoomTemplates)
 	Local Meshes% = CreatePivot(World)
 	Local RenderBrushes% = CreateMesh(World)
 	Local CollisionBrushes% = CreatePivot(World)
+	Local Range#, lColor$, Intensity#, Angles$
+	Local R%, G%, B%
+	Local Pitch#, Yaw#, Roll#
 	
 	EntityType(CollisionBrushes, HIT_MAP)
 	
@@ -83,9 +86,9 @@ Function LoadWorld(File$, rt.RoomTemplates)
 				z = EntityZ(Node) * RoomScale
 				
 				If x <> 0 Lor y <> 0 Lor z <> 0 Then 
-					Range# = Float(KeyValue(Node, "range", "1")) / 2000.0
-					lColor$ = KeyValue(Node, "color", "255 255 255")
-					Intensity# = Min(Float(KeyValue(Node, "intensity", "1.0")) * 0.8, 1.0)
+					Range = Float(KeyValue(Node, "range", "1")) / 2000.0
+					lColor = KeyValue(Node, "color", "255 255 255")
+					Intensity = Min(Float(KeyValue(Node, "intensity", "1.0")) * 0.8, 1.0)
 					R = Int(Piece(lColor, 1, " ")) * Intensity
 					G = Int(Piece(lColor, 2, " ")) * Intensity
 					B = Int(Piece(lColor, 3, " ")) * Intensity
@@ -99,18 +102,18 @@ Function LoadWorld(File$, rt.RoomTemplates)
 				y = EntityY(Node) * RoomScale
 				z = EntityZ(Node) * RoomScale
 				If x <> 0 Lor y <> 0 Lor z <> 0 Then 
-					Range# = Float(KeyValue(Node, "range", "1")) / 700.0
-					lColor$ = KeyValue(Node, "color", "255 255 255")
-					Intensity# = Min(Float(KeyValue(Node, "intensity", "1.0")) * 0.8, 1.0)
+					Range = Float(KeyValue(Node, "range", "1")) / 700.0
+					lColor = KeyValue(Node, "color", "255 255 255")
+					Intensity = Min(Float(KeyValue(Node, "intensity", "1.0")) * 0.8, 1.0)
 					R = Int(Piece(lColor, 1, " ")) * Intensity
 					G = Int(Piece(lColor, 2, " ")) * Intensity
 					B = Int(Piece(lColor, 3, " ")) * Intensity
 					
 					Local lt.LightTemplates = AddTempLight(rt, x, y, z, 3, Range, R, G, B)
 					
-					Angles$ = KeyValue(Node, "angles", "0 0 0")
-					Pitch# = Piece(Angles, 1, " ")
-					Yaw# = Piece(Angles, 2, " ")
+					Angles = KeyValue(Node, "angles", "0 0 0")
+					Pitch = Piece(Angles, 1, " ")
+					Yaw = Piece(Angles, 2, " ")
 					lt\Pitch = Pitch
 					lt\Yaw = Yaw
 					
@@ -142,10 +145,10 @@ Function LoadWorld(File$, rt.RoomTemplates)
 			; ~ Camera start position point entity
 			Case "playerstart"
 				;[Block]
-				Angles$ = KeyValue(Node, "angles", "0 0 0")
-				Pitch# = Piece(Angles, 1, " ")
-				Yaw# = Piece(Angles, 2, " ")
-				Roll# = Piece(Angles, 3, " ")
+				Angles = KeyValue(Node, "angles", "0 0 0")
+				Pitch = Piece(Angles, 1, " ")
+				Yaw = Piece(Angles, 2, " ")
+				Roll = Piece(Angles, 3, " ")
 				If Cam Then
 					PositionEntity(Cam, EntityX(Node), EntityY(Node), EntityZ(Node))
 					RotateEntity(Cam, Pitch, Yaw, Roll)
@@ -198,7 +201,8 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 	
 	; ~ Read the file
 	Local f% = ReadFile(File)
-	Local i%, j%, k%, x#, y#, z#, Yaw#
+	Local i%, j%, k%, x#, y#, z#
+	Local Yaw#, Pitch#, Roll#
 	Local Vertex%
 	Local Temp1i%, Temp2i%, Temp3i%
 	Local Temp1#, Temp2#, Temp3#
@@ -209,7 +213,7 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 	For i = 0 To 3 ; ~ Reattempt up to 3 times
 		If f = 0 Then
 			f = ReadFile(File)
-			Else
+		Else
 			Exit
 		EndIf
 	Next
@@ -363,6 +367,7 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 			AddMesh(FlipChild, ChildMesh)
 			FreeEntity(FlipChild)			
 		EndIf
+		HideEntity(ChildMesh)
 	Next
 	
 	Local HiddenMesh%
@@ -413,6 +418,9 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 		Next
 	EndIf
 	
+	Local Range#, lColor$, Intensity#, Angles$
+	Local R%, G%, B%
+	
 	Count = ReadInt(f) ; ~ Point entities
 	For i = 1 To Count
 		Temp1s = ReadString(f)
@@ -455,12 +463,12 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 				Temp3 = ReadFloat(f) * RoomScale
 				
 				If Temp1 <> 0 Lor Temp2 <> 0 Lor Temp3 <> 0 Then 
-					Range# = ReadFloat(f) / 2000.0
-					lColor$ = ReadString(f)
-					Intensity# = Min(ReadFloat(f) * 0.8, 1.0)
-					R% = Int(Piece(lColor, 1, " ")) * Intensity
-					G% = Int(Piece(lColor, 2, " ")) * Intensity
-					B% = Int(Piece(lColor, 3, " ")) * Intensity
+					Range = ReadFloat(f) / 2000.0
+					lColor = ReadString(f)
+					Intensity = Min(ReadFloat(f) * 0.8, 1.0)
+					R = Int(Piece(lColor, 1, " ")) * Intensity
+					G = Int(Piece(lColor, 2, " ")) * Intensity
+					B = Int(Piece(lColor, 3, " ")) * Intensity
 					
 					AddTempLight(rt, Temp1, Temp2, Temp3, 2, Range, R, G, B)
 				Else
@@ -474,17 +482,17 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 				Temp3 = ReadFloat(f) * RoomScale
 				
 				If Temp1 <> 0 Lor Temp2 <> 0 Lor Temp3 <> 0 Then 
-					Range# = ReadFloat(f) / 2000.0
-					lColor$ = ReadString(f)
-					Intensity# = Min(ReadFloat(f) * 0.8, 1.0)
-					R% = Int(Piece(lColor, 1, " ")) * Intensity
-					G% = Int(Piece(lColor, 2, " ")) * Intensity
-					B% = Int(Piece(lColor, 3, " ")) * Intensity
+					Range = ReadFloat(f) / 2000.0
+					lColor = ReadString(f)
+					Intensity = Min(ReadFloat(f) * 0.8, 1.0)
+					R = Int(Piece(lColor, 1, " ")) * Intensity
+					G = Int(Piece(lColor, 2, " ")) * Intensity
+					B = Int(Piece(lColor, 3, " ")) * Intensity
 					
 					Local lt.LightTemplates = AddTempLight(rt, Temp1, Temp2, Temp3, 2, Range, R, G, B)
 					
-					Angles$ = ReadString(f)
-					Pitch# = Piece(Angles, 1, " ")
+					Angles = ReadString(f)
+					Pitch = Piece(Angles, 1, " ")
 					Yaw = Piece(Angles, 2, " ")
 					lt\Pitch = Pitch
 					lt\Yaw = Yaw
@@ -525,11 +533,11 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 				;[Block]
 				Temp1 = ReadFloat(f) : Temp2 = ReadFloat(f) : Temp3 = ReadFloat(f)
 				
-				Angles$ = ReadString(f)
-				Pitch# = Piece(Angles, 1, " ")
+				Angles = ReadString(f)
+				Pitch = Piece(Angles, 1, " ")
 				Yaw = Piece(Angles, 2, " ")
-				Roll# = Piece(Angles, 3, " ")
-				If cam Then
+				Roll = Piece(Angles, 3, " ")
+				If Cam Then
 					PositionEntity(Cam, Temp1, Temp2, Temp3)
 					RotateEntity(Cam, Pitch, Yaw, Roll)
 				EndIf
@@ -829,8 +837,8 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 	Local Tile_Size# = 12.0
 	Local Tile_Type%
 	Local Tile_Entity%, Detail_Entity%
-	Local Tempf1#, Tempf2#, Tempf3#
-	Local i%
+	Local Tempf1#, Tempf2#, Tempf3#, Tempf4#
+	Local i%, Width%, Frame%, lX%, lY%, d%
 	
 	If fr\Forest_Pivot <> 0 Then FreeEntity(fr\Forest_Pivot) : fr\Forest_Pivot = 0
 	For i = 0 To 3
@@ -973,10 +981,10 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 					; ~ Only placed on spots where the value of the heightmap is above 100
 					SetBuffer(ImageBuffer(hMap[Tile_Type]))
 					Width = ImageWidth(hMap[Tile_Type])
-					Tempf4# = (Tempf3 / Float(Width))
-					For lx = 3 To Width - 2
-						For ly = 3 To Width - 2
-							GetColor(lx, Width - ly)
+					Tempf4 = (Tempf3 / Float(Width))
+					For lX = 3 To Width - 2
+						For lY = 3 To Width - 2
+							GetColor(lX, Width - lY)
 							If ColorRed() > Rand(100, 260) Then
 								Select Rand(0, 7)
 									Case 0, 1, 2, 3, 4, 5, 6 ; ~ Create a tree
@@ -987,19 +995,19 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 										For i = 0 To 3
 											d = CopyEntity(fr\DetailMesh[4])
 											RotateEntity(d, 0.0, 90.0 * i + Rnd(-20.0, 20.0), 0.0)
-											EntityParent(d,Detail_Entity)
+											EntityParent(d, Detail_Entity)
 											EntityFX(d, 1)
 										Next
 										
 										ScaleEntity(Detail_Entity, Tempf2 * 1.1, Tempf2, Tempf2 * 1.1, True)
-										PositionEntity(Detail_Entity, lx * Tempf4 - (Tempf3 / 2.0), ColorRed() * 0.03 - Rnd(3.0, 3.2), ly * Tempf4 - (Tempf3 / 2.0), True)
+										PositionEntity(Detail_Entity, lX * Tempf4 - (Tempf3 / 2.0), ColorRed() * 0.03 - Rnd(3.0, 3.2), lY * Tempf4 - (Tempf3 / 2.0), True)
 										RotateEntity(Detail_Entity, Rnd(-5.0, 5.0), Rnd(360.0), 0.0, True)
 										;[End Block]
 									Case 7 ; ~ Add a rock
 										;[Block]
 										Detail_Entity = CopyEntity(fr\DetailMesh[2])
 										Tempf2 = Rnd(0.01, 0.012)
-										PositionEntity(Detail_Entity, lx * Tempf4 - (Tempf3 / 2.0), ColorRed() * 0.03 - 1.3, ly * Tempf4 - (Tempf3 / 2.0), True)
+										PositionEntity(Detail_Entity, lX * Tempf4 - (Tempf3 / 2.0), ColorRed() * 0.03 - 1.3, lY * Tempf4 - (Tempf3 / 2.0), True)
 										EntityFX(Detail_Entity, 1)
 										RotateEntity(Detail_Entity, 0.0, Rnd(360.0), 0.0, True)
 										;[End Block]
@@ -1008,7 +1016,7 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 										Detail_Entity = CopyEntity(fr\DetailMesh[4])
 										Tempf2 = Rnd(0.1, 0.12)
 										ScaleEntity(Detail_Entity, Tempf2, Tempf2, Tempf2, True)
-										PositionEntity(Detail_Entity, lx * Tempf4 - (Tempf3 / 2.0), ColorRed() * 0.03 - 1.3, ly * Tempf4 - (Tempf3 / 2.0), True)
+										PositionEntity(Detail_Entity, lX * Tempf4 - (Tempf3 / 2.0), ColorRed() * 0.03 - 1.3, lY * Tempf4 - (Tempf3 / 2.0), True)
 										;[End Block]
 								End Select
 								EntityFX(Detail_Entity, 1)
@@ -1036,7 +1044,7 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 	
 	; ~ Place the wall		
 	For i = 0 To 1
-		tY = ((GridSize - 1) * i)
+		tY = (GridSize - 1) * i
 		For tX = 1 To GridSize - 1
 			If fr\Grid[(tY * GridSize) + tX] = 3 Then
 				fr\DetailEntities[i] = CopyEntity(fr\DetailMesh[5])
@@ -1070,10 +1078,10 @@ Function PlaceForest_MapCreator(fr.Forest, x#, y#, z#, r.Rooms)
 	
 	Local tX%, tY%
 	Local Tile_Size# = 12.0
-	Local Tile_Type%
+	Local Tile_Type%, Detail_Entity%
 	Local Tile_Entity%, Eetail_Entity%
-	Local Tempf1#, Tempf2#, Tempf3#
-	Local i%
+	Local Tempf1#, Tempf2#, Tempf3#, Tempf4#
+	Local i%, Width%, Frame%, lX%, lY%, d%
 	
 	If fr\Forest_Pivot <> 0 Then FreeEntity(fr\Forest_Pivot) : fr\Forest_Pivot = 0
 	For i = 0 To 3
@@ -1161,10 +1169,10 @@ Function PlaceForest_MapCreator(fr.Forest, x#, y#, z#, r.Rooms)
 					; ~ Only placed on spots where the value of the heightmap is above 100
 					SetBuffer(ImageBuffer(hMap[Tile_Type]))
 					Width = ImageWidth(hMap[Tile_Type])
-					Tempf4# = (Tempf3 / Float(Width))
-					For lx = 3 To Width - 2
-						For ly = 3 To width - 2
-							GetColor lx, width - ly
+					Tempf4 = (Tempf3 / Float(Width))
+					For lX = 3 To Width - 2
+						For lY = 3 To Width - 2
+							GetColor lX, Width - lY
 							If ColorRed() > Rand(100, 260) Then
 								Detail_Entity = 0
 								Select Rand(0, 7)
@@ -1176,11 +1184,11 @@ Function PlaceForest_MapCreator(fr.Forest, x#, y#, z#, r.Rooms)
 										For i = 0 To 3
 											d = CopyEntity(fr\DetailMesh[4])
 											RotateEntity(d, 0.0, 90.0 * i + Rnd(-20.0, 20.0), 0.0)
-											EntityParent(d, Detail_entity)
+											EntityParent(d, Detail_Entity)
 											EntityFX(d, 1)
 										Next
 										ScaleEntity(Detail_Entity, Tempf2 * 1.1, Tempf2, Tempf2 * 1.1, True)
-										PositionEntity(Detail_Entity, lx * Tempf4 - (Tempf3 / 2.0), ColorRed() * 0.03 - Rnd(3.0, 3.2), ly * Tempf4 - (Tempf3 / 2.0), True)
+										PositionEntity(Detail_Entity, lX * Tempf4 - (Tempf3 / 2.0), ColorRed() * 0.03 - Rnd(3.0, 3.2), lY * Tempf4 - (Tempf3 / 2.0), True)
 										
 										RotateEntity(Detail_Entity, Rnd(-5.0, 5.0), Rnd(360.0), 0.0, True)
 										;[End Block]
@@ -1188,7 +1196,7 @@ Function PlaceForest_MapCreator(fr.Forest, x#, y#, z#, r.Rooms)
 										;[Block]
 										Detail_Entity = CopyEntity(fr\DetailMesh[2])
 										Tempf2 = Rnd(0.01, 0.012)
-										PositionEntity(Detail_Entity, lx * Tempf4 - (Tempf3 / 2.0), ColorRed() * 0.03 - 1.3, ly * Tempf4 - (Tempf3 / 2.0), True)
+										PositionEntity(Detail_Entity, lX * Tempf4 - (Tempf3 / 2.0), ColorRed() * 0.03 - 1.3, lY * Tempf4 - (Tempf3 / 2.0), True)
 										EntityFX(Detail_Entity, 1)
 										RotateEntity(Detail_Entity, 0.0, Rnd(360.0), 0.0, True)
 										;[End Block]
@@ -1197,7 +1205,7 @@ Function PlaceForest_MapCreator(fr.Forest, x#, y#, z#, r.Rooms)
 										Detail_Entity = CopyEntity(fr\DetailMesh[4])
 										Tempf2 = Rnd(0.1, 0.12)
 										ScaleEntity(Detail_Entity, Tempf2, Tempf2, Tempf2, True)
-										PositionEntity(Detail_Entity, lx * Tempf4 - (Tempf3 / 2.0), ColorRed() * 0.03 - 1.3, ly * Tempf4 - (Tempf3 / 2.0), True)
+										PositionEntity(Detail_Entity, lX * Tempf4 - (Tempf3 / 2.0), ColorRed() * 0.03 - 1.3, lY * Tempf4 - (Tempf3 / 2.0), True)
 										;[End Block]
 								End Select
 								
@@ -1235,8 +1243,7 @@ Function PlaceForest_MapCreator(fr.Forest, x#, y#, z#, r.Rooms)
 							ScaleEntity(fr\Door[i], 48.0 * RoomScale, 45.0 * RoomScale, 48.0 * RoomScale, True)
 							EntityParent(fr\Door[i], fr\DetailEntities[i])
 							
-							Local Frame% = CopyEntity(r\Objects[2], fr\Door[i])
-							
+							Frame = CopyEntity(r\Objects[2], fr\Door[i])
 							PositionEntity(Frame, 0.0, 32.0 * RoomScale, 0.0, True)
 							ScaleEntity(Frame, 48.0 * RoomScale, 45.0 * RoomScale, 48.0 * RoomScale, True)
 							EntityParent(Frame, fr\DetailEntities[i])
@@ -6035,8 +6042,9 @@ End Function
 
 Function InitWayPoints(loadingstart = 45)
 	Local d.Doors, w.WayPoints, w2.WayPoints, r.Rooms, ClosestRoom.Rooms
-	Local x#, y#, z#
-	Local i%, n%
+	Local x#, y#, z#, tLine%
+	Local i%, n%, Temper%
+	Local Amount%, Number%, Iter%
 	
 	Temper = MilliSecs()
 	
@@ -6069,7 +6077,7 @@ Function InitWayPoints(loadingstart = 45)
 		If (Not d\DisableWaypoint) Then CreateWaypoint(EntityX(d\frameOBJ, True), EntityY(d\frameOBJ, True) + 0.18, EntityZ(d\frameOBJ, True), d, ClosestRoom)
 	Next
 	
-	Amount# = 0
+	Amount = 0
 	For w.WayPoints = Each WayPoints
 		EntityPickMode(w\OBJ, 1, True)
 		EntityRadius(w\OBJ, 0.2)
@@ -6832,7 +6840,7 @@ Function UpdateButton(OBJ%)
 End Function
 
 Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.Events, IgnoreRotation% = True)
-	Local x#, z#, Sound%
+	Local x#, z#
 	Local Dist#, Dir#, n.NPCs, it.Items
 	
 	door1\IsElevatorDoor = 1
@@ -6928,8 +6936,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 						UpdateDoors()
 						UpdateRooms()
 						
-						Sound = Rand(0, 2)
-						door2\SoundCHN = PlaySound_Strict(OpenDoorSFX(3, Sound))
+						door2\SoundCHN = PlaySound_Strict(OpenDoorSFX(3, Rand(0, 2)))
 					EndIf
 					
 					For n.NPCs = Each NPCs
@@ -6980,7 +6987,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 						EndIf
 					Next
 					UseDoor(door2, False, Not Inside)
-					door1\open = False
+					door1\Open = False
 					
 					PlaySound2(ElevatorBeepSFX, Camera, room1, 4.0)
 				EndIf
@@ -7025,8 +7032,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 						UpdateDoors()
 						UpdateRooms()
 						
-						Sound = Rand(0, 2)
-						door1\SoundCHN = PlaySound_Strict(OpenDoorSFX(3, Sound))
+						door1\SoundCHN = PlaySound_Strict(OpenDoorSFX(3, Rand(0, 2)))
 					EndIf
 					
 					For n.NPCs = Each NPCs
@@ -7095,13 +7101,13 @@ Function CreatePropObj(File$)
 	
 	For p.Props = Each Props
 		If p\File = File Then
-			Return CopyEntity(p\OBJ)
+			Return(CopyEntity(p\OBJ))
 		EndIf
 	Next
 	
 	p.Props = New Props
 	p\File = File
-	p\OBJ = LoadMesh(File)
+	p\OBJ = LoadMesh_Strict(File)
 	Return(p\OBJ)
 End Function
 
@@ -8655,5 +8661,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11C0
+;~B#11C7
 ;~C#Blitz3D

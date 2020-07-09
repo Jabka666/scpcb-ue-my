@@ -171,5 +171,10 @@ Const LauncherHeight% = 480
 
 Const TICK_DURATION# = 70.0 / 60.0
 
+; ~ [SOUNDS]
+
+Const Mode% = 2
+Const TwoD% = 8192
+
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D

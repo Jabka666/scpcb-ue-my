@@ -51,7 +51,7 @@ End Function
 
 Function UpdateMusic()
 	If ConsoleFlush Then
-		If ChannelPlaying(ConsoleMusPlay) = False Then ConsoleMusPlay = PlaySound(ConsoleMusFlush)
+		If ChannelPlaying(ConsoleMusPlay) = False Then ConsoleMusPlay = PlaySound_Strict(ConsoleMusFlush)
 	ElseIf (Not PlayCustomMusic)
 		If NowPlaying <> ShouldPlay Then ; ~ Playing the wrong clip, fade out
 			CurrMusicVolume = Max(CurrMusicVolume - (fpst\FPSFactor[0] / 250.0), 0.0)
@@ -69,7 +69,7 @@ Function UpdateMusic()
 		
 		If NowPlaying < 66 Then
 			If CurrMusic = 0
-				MusicCHN = StreamSound_Strict("SFX\Music\" + Music[NowPlaying] + ".ogg", 0.0, 2)
+				MusicCHN = StreamSound_Strict("SFX\Music\" + Music[NowPlaying] + ".ogg", 0.0, Mode)
 				CurrMusic = 1
 			EndIf
 			SetStreamVolume_Strict(MusicCHN, CurrMusicVolume)
