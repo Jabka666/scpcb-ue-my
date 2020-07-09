@@ -1611,6 +1611,8 @@ Function UpdateLauncher(lnchr.Launcher)
 	Local Quit% = False
 	
 	Repeat
+		Cls
+		
 		Color(0, 0, 0)
 		Rect(0, 0, LauncherWidth, LauncherHeight, True)
 		
@@ -1991,7 +1993,7 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 				CopyRect(0, 0, GraphicWidth, GraphicHeight, 1024 - GraphicWidth / 2, 1024 - GraphicHeight / 2, BackBuffer(), TextureBuffer(Fresize_Texture))
 				SetBuffer(BackBuffer())
 				ClsColor(0, 0, 0) : Cls
-				ScaleRender(0, 0, 2050.0 / Float(GraphicWidth) * AspectRatioRatio, 2050.0 / Float(GraphicWidth) * AspectRatioRatio)
+				ScaleRender(0, 0, 2048.0 / Float(GraphicWidth) * AspectRatioRatio, 2048.0 / Float(GraphicWidth) * AspectRatioRatio)
 				; ~ Might want to replace Float(GraphicWidth) with Max(GraphicWidth, GraphicHeight) if portrait sizes cause issues
 				; ~ Everyone uses landscape so it's probably a non-issue
 			EndIf

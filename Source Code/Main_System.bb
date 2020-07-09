@@ -2876,7 +2876,7 @@ Repeat
 			CopyRect(0, 0, GraphicWidth, GraphicHeight, 1024 - GraphicWidth / 2, 1024 - GraphicHeight / 2, BackBuffer(), TextureBuffer(Fresize_Texture))
 			SetBuffer(BackBuffer())
 			ClsColor(0, 0, 0) : Cls
-			ScaleRender(0, 0, 2050.0 / Float(GraphicWidth) * AspectRatioRatio, 2050.0 / Float(GraphicWidth) * AspectRatioRatio)
+			ScaleRender(0, 0, 2048.0 / Float(GraphicWidth) * AspectRatioRatio, 2048.0 / Float(GraphicWidth) * AspectRatioRatio)
 			; ~ Might want to replace Float(GraphicWidth) with Max(GraphicWidth, GraphicHeight) if portrait sizes cause issues
 			; ~ Everyone uses landscape so it's probably a non-issue
 		EndIf
@@ -2884,7 +2884,7 @@ Repeat
 	
 	; ~ Not by any means a perfect solution
 	; ~ Not even proper gamma correction but it's a nice looking alternative that works in windowed mode
-	If ScreenGamma > 1.0 Then
+	If ScreenGamma > 1.0 Then ; ~ CHECK WHY WINDOWED MODE IS BROKEN
 		CopyRect(0, 0, RealGraphicWidth, RealGraphicHeight, 1024 - RealGraphicWidth / 2, 1024 - RealGraphicHeight / 2, BackBuffer(), TextureBuffer(Fresize_Texture))
 		EntityBlend(Fresize_Image, 1)
 		ClsColor(0, 0, 0) : Cls
