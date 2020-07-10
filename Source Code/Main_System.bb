@@ -1992,10 +1992,9 @@ Type Doors
 	Field IsElevatorDoor% = False
 	Field MTFClose% = True
 	Field NPCCalledElevator% = False
-	Field DoorHitOBJ%
 End Type 
 
-Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, Big% = False, Keycard% = False, Code$ = "", UseCollisionMesh% = False, CheckIfZeroCard% = False)
+Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, Big% = False, Keycard% = False, Code$ = "", CheckIfZeroCard% = False)
 	Local d.Doors, Parent%, i%
 	
 	If room <> Null Then Parent = room\OBJ
@@ -2038,9 +2037,9 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, B
 		EndIf
 		d\FrameOBJ = CopyEntity(o\DoorModelID[1])
 	ElseIf Big = 4 ; ~ One-sided Door
-		d\OBJ = CopyEntity(o\DoorModelID[11])
+		d\OBJ = CopyEntity(o\DoorModelID[10])
 		ScaleEntity(d\OBJ, (203.0 * RoomScale) / MeshWidth(d\OBJ), 313.0 * RoomScale / MeshHeight(d\OBJ), 15.0 * RoomScale / MeshDepth(d\OBJ))
-		d\OBJ2 = CopyEntity(o\DoorModelID[11])
+		d\OBJ2 = CopyEntity(o\DoorModelID[10])
 		ScaleEntity(d\OBJ2, (203.0 * RoomScale) / MeshWidth(d\OBJ2), 313.0 * RoomScale / MeshHeight(d\OBJ2), 15.0 * RoomScale / MeshDepth(d\OBJ2))
 		
 		d\FrameOBJ = CopyEntity(o\DoorModelID[1])
@@ -2134,7 +2133,11 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, B
 	d\Open = dOpen		
 	
 	EntityPickMode(d\OBJ, 2)
-	If d\OBJ2 <> 0 Then EntityPickMode(d\OBJ2, 2)
+	MakeCollBox(d\OBJ)
+	If d\OBJ2 <> 0 Then
+		EntityPickMode(d\OBJ2, 3)
+		MakeCollBox(d\OBJ2)
+	EndIf
 	
 	EntityPickMode(d\FrameOBJ, 2)
 	
@@ -2144,29 +2147,6 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, B
 	
 	d\MTFClose = True
 	
-	If UseCollisionMesh Then
-		For d2.Doors = Each Doors
-			If d2 <> d Then
-				If d2\DoorHitOBJ <> 0 Then
-					d\DoorHitOBJ = CopyEntity(d2\DoorHitOBJ, d\FrameOBJ)
-					EntityAlpha(d\DoorHitOBJ, 0.0)
-					EntityFX(d\DoorHitOBJ, 1)
-					EntityType(d\DoorHitOBJ, HIT_MAP)
-					EntityColor(d\DoorHitOBJ, 255.0, 0.0, 0.0)
-					HideEntity(d\DoorHitOBJ)
-					Exit
-				EndIf
-			EndIf
-		Next
-		If d\DoorHitOBJ = 0 Then
-			d\DoorHitOBJ = CopyEntity(o\DoorModelID[10], d\FrameOBJ)
-			EntityAlpha(d\DoorHitOBJ, 0.0)
-			EntityFX(d\DoorHitOBJ, 1)
-			EntityType(d\DoorHitOBJ, HIT_MAP)
-			EntityColor(d\DoorHitOBJ, 255.0, 0.0, 0.0)
-			HideEntity(d\DoorHitOBJ)
-		EndIf
-	EndIf
 	Return(d)
 End Function
 
@@ -2381,10 +2361,6 @@ Function UpdateDoors()
 							EndIf
 						EndIf
 					EndIf
-					
-					If d\DoorHitOBJ <> 0 Then
-						ShowEntity(d\DoorHitOBJ)
-					EndIf
 				Else
 					d\FastOpen = 0
 					PositionEntity(d\OBJ, EntityX(d\FrameOBJ, True), EntityY(d\FrameOBJ, True), EntityZ(d\FrameOBJ, True))
@@ -2392,9 +2368,6 @@ Function UpdateDoors()
 					If d\OBJ2 <> 0 And (d\Dir = 0 Lor d\Dir = 4) Then
 						MoveEntity(d\OBJ, 0.0, 0.0, 8.0 * RoomScale)
 						MoveEntity(d\OBJ2, 0.0, 0.0, 8.0 * RoomScale)
-					EndIf
-					If d\DoorHitOBJ <> 0 Then
-						HideEntity(d\DoorHitOBJ)
 					EndIf
 				EndIf
 			EndIf
@@ -2419,14 +2392,6 @@ Function UpdateDoors()
 				d\Open = False
 				d\OpenState = Min(d\OpenState, 48.0)
 			EndIf	
-		EndIf
-		
-		If d\DoorHitOBJ <> 0 Then
-			If chs\DebugHUD Then
-				EntityAlpha(d\DoorHitOBJ, 0.5)
-			Else
-				EntityAlpha(d\DoorHitOBJ, 0.0)
-			EndIf
 		EndIf
 	Next
 End Function
@@ -8985,9 +8950,7 @@ Function LoadEntities()
 	
 	o\DoorModelID[9] = LoadMesh_Strict("GFX\map\forest\Door.b3d") ; ~ Wooden Door
 	
-	o\DoorModelID[10] = LoadMesh_Strict("GFX\map\DoorHitBox.b3d") ; ~ Door's HitBox
-	
-	o\DoorModelID[11] = LoadMesh_Strict("GFX\map\Door02.x") ; ~ One-sided Door
+	o\DoorModelID[10] = LoadMesh_Strict("GFX\map\Door02.x") ; ~ One-sided Door
 	
 	For i = 0 To MaxDoorModelIDAmount - 1
 	    HideEntity(o\DoorModelID[i])
@@ -12428,5 +12391,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#109E#1374#1E37
+;~B#107B#1351#1E14
 ;~C#Blitz3D

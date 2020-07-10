@@ -12,7 +12,7 @@ Const MaxMTModelIDAmount% = 7
 
 Const MaxMonitorModelIDAmount% = 3
 
-Const MaxDoorModelIDAmount% = 12
+Const MaxDoorModelIDAmount% = 11
 
 Const MaxButtonModelIDAmount% = 5
 
