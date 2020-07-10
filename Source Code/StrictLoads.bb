@@ -64,7 +64,9 @@ Function PlaySound_Strict%(SNDHandle%)
 					If snd\InternalHandle = 0 Then
 						If FileType(snd\Name) <> 1 Then
 							CreateConsoleMsg("Sound " + Chr(34) + snd\Name + Chr(34) + " not found.")
-							ConsoleOpen = True
+							If ConsoleOpening And CanOpenConsole Then
+								ConsoleOpen = True
+							EndIf
 						Else
 							If EnableSFXRelease Then snd\InternalHandle = LoadSound(snd\Name)
 						EndIf
@@ -88,14 +90,18 @@ Function PlaySound_Strict%(SNDHandle%)
 				If snd\InternalHandle = 0 Then
 					If FileType(snd\Name) <> 1 Then
 						CreateConsoleMsg("Sound " + Chr(34) + snd\Name + Chr(34) + " not found.")
-						ConsoleOpen = True
+						If ConsoleOpening And CanOpenConsole Then
+							ConsoleOpen = True
+						EndIf
 					Else
 						If EnableSFXRelease Then snd\InternalHandle = LoadSound(snd\Name)
 					EndIf
 						
 					If snd\InternalHandle = 0 Then
 						CreateConsoleMsg("Failed to load Sound: " + Chr(34) + snd\Name + Chr(34))
-						ConsoleOpen = True
+						If ConsoleOpening And CanOpenConsole Then
+							ConsoleOpen = True
+						EndIf
 					EndIf
 				EndIf
 				If ConsoleFlushSnd Then
@@ -144,7 +150,7 @@ End Type
 Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode% = Mode)
 	If FileType(File) <> 1 Then
 		CreateConsoleMsg("Sound " + Chr(34) + File + Chr(34) + " not found.")
-		If ConsoleOpening Then
+		If ConsoleOpening And CanOpenConsole Then
 			ConsoleOpen = True
 		EndIf
 		Return(0)
@@ -156,7 +162,7 @@ Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode% = Mode)
 	
 	If st\CHN = -1 Then
 		CreateConsoleMsg("Failed to stream Sound (returned -1): " + Chr(34) + File + Chr(34))
-		If ConsoleOpening
+		If ConsoleOpening And CanOpenConsole Then
 			ConsoleOpen = True
 		EndIf
 		Return(-1)

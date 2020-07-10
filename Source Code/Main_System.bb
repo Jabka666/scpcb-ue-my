@@ -1698,7 +1698,7 @@ Function UpdateConsole()
 					;[End Block]
 			End Select
 			ConsoleInput = ""
-		End If
+		EndIf
 		
 		Local TempY# = y + Height - 25.0 * MenuScale - ConsoleScroll
 		Local Count% = 0
@@ -2235,7 +2235,7 @@ Function UpdateDoors()
 										Else
 											If Dist < EntityDistance(Collider, ClosestButton) Then ClosestButton = d\Buttons[i] : ClosestDoor = d
 										EndIf							
-									End If
+									EndIf
 									FreeEntity(Temp)
 								EndIf							
 							EndIf
@@ -2553,7 +2553,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 					EndIf
 				EndIf
 				Return
-			End If
+			EndIf
 		EndIf	
 	ElseIf d\KeyCard < 0
 		; ~ I can't find any way to produce short circuited boolean expressions so work around this by using a temporary variable -- risingstar64
@@ -3173,7 +3173,7 @@ Function MainLoop()
 						me\HeartBeatRate = Max(70.0 + Abs(me\Sanity + 200.0) / 6.0, me\HeartBeatRate)
 					EndIf
 				EndIf
-			End If
+			EndIf
 			
 			If me\EyeStuck > 0.0 Then 
 				me\BlinkTimer = me\BLINKFREQ
@@ -3275,7 +3275,7 @@ Function MainLoop()
 			
 			If SelectedItem <> Null Then
 				If SelectedItem\ItemTemplate\TempName = "navigator" Lor SelectedItem\ItemTemplate\TempName = "nav" Then DarkA = Max(DarkA, 0.5)
-			End If
+			EndIf
 			If SelectedScreen <> Null Then DarkA = Max(DarkA, 0.5)
 			
 			EntityAlpha(tt\OverlayID[6], DarkA)	
@@ -3902,7 +3902,7 @@ Function MovePlayer()
 			me\BlurTimer = 500.0		
 			HideEntity(tt\OverlayID[0])
 		EndIf
-	End If
+	EndIf
 	
 	If me\DeathTimer > 0.0 Then
 		me\DeathTimer = me\DeathTimer - fpst\FPSFactor[0]
@@ -3980,7 +3980,7 @@ Function MovePlayer()
 				Sprint = 2.5
 				me\Stamina = me\Stamina - fpst\FPSFactor[0] * 0.4 * me\StaminaEffect
 				If me\Stamina =< 0.0 Then me\Stamina = -20.0
-			End If
+			EndIf
 			
 			If PlayerRoom\RoomTemplate\Name = "pocketdimension" Then 
 				If EntityY(Collider) < 2000.0 * RoomScale Lor EntityY(Collider) > 2608.0 * RoomScale Then
@@ -4345,14 +4345,14 @@ Function MouseLook()
 				MoveEntity(Pvt, 0.0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
 			Else
 				MoveEntity(Pvt, 0.0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
-			End If
+			EndIf
 			
 			Local p.Particles = CreateParticle(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 2, 0.002, 0.0, 300.0)
 			
 			p\Speed = 0.001 : p\SizeChange = -0.00001
 			RotateEntity(p\Pvt, Rnd(-20.0, 20.0), Rnd(360.0), 0.0)
 			FreeEntity(Pvt)
-		End If
+		EndIf
 	EndIf
 	
 	; ~ Limit the mouse's movement. Using this method produces smoother mouselook movement than centering the mouse each loop.
@@ -4448,7 +4448,7 @@ Function MouseLook()
 								CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
 							Else
 								If ChannelPlaying(CoughCHN) = False Then CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
-							End If
+							EndIf
 						EndIf
 					EndIf
 					me\Stamina = me\Stamina - (fpst\FPSFactor[0] * 0.3)
@@ -4468,7 +4468,7 @@ Function MouseLook()
 								CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
 							Else
 								If ChannelPlaying(CoughCHN) = False Then CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
-							End If
+							EndIf
 						EndIf
 					EndIf
 					me\Stamina = me\Stamina - (fpst\FPSFactor[0] * 0.1)
@@ -4493,7 +4493,7 @@ Function MouseLook()
 								CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
 							Else
 								If ChannelPlaying(CoughCHN) = False Then CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
-							End If
+							EndIf
 						EndIf
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0 + me\Stamina * 15.0)
 					EndIf
@@ -4685,7 +4685,7 @@ Function DrawGUI()
 		        Color(0, 200, 0)
 			    Rect(x - 50 - 3, y - 3, 30 + 6, 30 + 6)
             EndIf
-		End If
+		EndIf
 		
 		Color(255, 255, 255)
 		Rect(x - 50 - 1, y - 1, 30 + 2, 30 + 2, False)
@@ -4723,7 +4723,7 @@ Function DrawGUI()
                 Color(0, 200, 0)
 			    Rect(x - 50 - 3, y - 3, 30 + 6, 30 + 6)
             EndIf 
-		End If
+		EndIf
 		
 		Color(255, 255, 255)
 		Rect(x - 50 - 1, y - 1, 30 + 2, 30 + 2, False)
@@ -5581,7 +5581,7 @@ Function DrawGUI()
 										Text(x - NAV_WIDTH / 2 + 10, y - NAV_HEIGHT / 2 + 30 + (20 * SCPs_Found), "SCP-895")
 									EndIf
 								EndIf
-							End If
+							EndIf
 							
 							Color(30, 30, 30)
 							If SelectedItem\ItemTemplate\Name = "S-NAV Navigator" Then Color(100, 0, 0)
@@ -6127,7 +6127,7 @@ Function UpdateGUI()
 						If Inventory[z] = SelectedItem Then Inventory[z] = Null
 					Next
 					Inventory[n] = SelectedItem
-				End If
+				EndIf
 			EndIf					
 			
 			x = x + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING
@@ -7763,7 +7763,7 @@ Function DrawMenu()
 			SetFont(fo\FontID[1])
 			Text(x, y - (122 - 45) * MenuScale, "YOU DIED", False, True)
 			SetFont(fo\FontID[0])
-		End If		
+		EndIf		
 		
 		Local AchvXIMG% = (x + (22.0 * MenuScale))
 		Local Scale# = GraphicHeight / 768.0
@@ -8563,7 +8563,7 @@ Function UpdateMenu()
 										If Abs(EntityY(Collider) - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r
 										MapFound(Floor(EntityX(r\OBJ) / 8.0), Floor(EntityZ(r\OBJ) / 8.0)) = 1
 									EndIf
-								End If
+								EndIf
 							Next
 							
 							DrawLoading(100)
@@ -8625,7 +8625,7 @@ Function UpdateMenu()
 									If Abs(EntityY(Collider) - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r
 									MapFound(Floor(EntityX(r\OBJ) / 8.0), Floor(EntityZ(r\OBJ) / 8.0)) = 1
 								EndIf
-							End If
+							EndIf
 						Next
 						
 						DrawLoading(100)
@@ -10056,8 +10056,8 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 							ElseIf Distance(EntityX(it\Collider, True), x, EntityZ(it\Collider, True), z) < (180.0 * RoomScale)
 								it2 = it
 								Exit
-							End If
-						End If
+							EndIf
+						EndIf
 					Next
 					
 					If it2 <> Null Then
@@ -11848,7 +11848,7 @@ Function UpdateDecals()
 						d\Timer = Rnd(50.0, 100.0)
 					Else
 						d\Timer = d\Timer - fpst\FPSFactor[0]
-					End If
+					EndIf
 					;[End Block]
 			End Select
 			
@@ -12005,7 +12005,7 @@ Function RenderWorld2(Tween#)
 							xValue = 0.0
 							If YawValue > 90.0 And YawValue =< 180.0 Then
 								xValue = Sin(90.0) / 90.0 * YawValue
-							Else If YawValue > 180.0 And YawValue < 270.0 Then
+							ElseIf YawValue > 180.0 And YawValue < 270.0 Then
 								xValue = Sin(270.0) / YawValue * 270.0
 							Else
 								xValue = Sin(YawValue)
@@ -12014,7 +12014,7 @@ Function RenderWorld2(Tween#)
 							yValue = 0.0
 							If PitchValue > 90.0 And PitchValue =< 180.0 Then
 								yValue = Sin(90.0) / 90.0 * PitchValue
-							Else If PitchValue > 180.0 And PitchValue < 270.0 Then
+							ElseIf PitchValue > 180.0 And PitchValue < 270.0 Then
 								yValue = Sin(270.0) / PitchValue * 270.0
 							Else
 								yValue = Sin(PitchValue)
@@ -12380,7 +12380,7 @@ Function CanUseItem(CanUseWithGasMask%, CanUseWithEyewear%)
 		msg\Msg = "You can't use that item while wearing a gas mask."
 		msg\Timer = 70.0 * 6.0
 		Return(False)
-	Else If (CanUseWithEyewear = False And (wi\NightVision > 0))
+	ElseIf (CanUseWithEyewear = False And (wi\NightVision > 0))
 		msg\Msg = "You can't use that item while wearing headgear."
 		msg\Timer = 70.0 * 6.0
 		Return(False)

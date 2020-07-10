@@ -587,7 +587,7 @@ Function UpdateMainMenu()
 										EndIf
 									Next
 									If snd\InternalHandle <> 0 Then
-										FreeSound(snd\InternalHandle)
+										FreeSound_Strict(snd\InternalHandle)
 										snd\InternalHandle = 0
 									EndIf
 									snd\ReleaseTime = 0
