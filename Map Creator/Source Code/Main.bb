@@ -1,14 +1,12 @@
 Global ResWidth% = 910
 Global ResHeight% = 660
 
-Const VersionNumberMC$ = "5.6"
-
 LoadingWindow = CreateWindow("", GraphicsWidth() / 2 - 160, GraphicsHeight() / 2 - 120, 320, 260, WinHandle, 8)
 PanelLoading = CreatePanel(0, 0, 320, 260, LoadingWindow, 0)
 SetPanelImage(PanelLoading, "Assets\map_logo.png")
 
 ; ~ Create a window to put the toolbar in
-WinHandle = CreateWindow("SCP-CB Ultimate Edition Map Creator " + VersionNumberMC, GraphicsWidth() / 2 - ResWidth / 2, GraphicsHeight() / 2 - ResHeight / 2, ResWidth, ResHeight, 0, 13) 
+WinHandle = CreateWindow("SCP-CB Ultimate Edition Map Creator", GraphicsWidth() / 2 - ResWidth / 2, GraphicsHeight() / 2 - ResHeight / 2, ResWidth, ResHeight, 0, 13) 
 
 Global MainHwnd% = GetActiveWindow() ; ~ User32.dll
 
@@ -1113,7 +1111,7 @@ Repeat
 		EndIf
 		
 		If EID = 6 Then ExecFile("Manual.pdf")
-		If EID = 40 Then Notify("SCP Containement Breach Ultimate Edition Map Creator v" + VersionNumberMC + "" + Chr(13))
+		If EID = 40 Then Notify("SCP Containment Breach Ultimate Edition Map Creator" + Chr(13))
 		If EID = 17 Then 
 			ShowGadget(OptionWin)
 		EndIf
@@ -1492,15 +1490,15 @@ Function PutINIValue%(INI_sAppName$, INI_sSection$, INI_sKey$, INI_sValue$)
 	
     ; ~ (Re)Create the INI file updating / adding the SECTION, KEY and VALUE
 	
-	INI_bWrittenKey% = False
-	INI_bSectionFound% = False
+	INI_bWrittenKey = False
+	INI_bSectionFound = False
 	INI_sCurrentSection$ = ""
 	
 	INI_lFileHandle = WriteFile(INI_sFilename)
 	If INI_lFileHandle = 0 Then Return(False) ; ~ Create file failed!
 	
-	INI_lOldPos% = 1
-	INI_lPos% = Instr(INI_sContents, Chr(0))
+	INI_lOldPos = 1
+	INI_lPos = Instr(INI_sContents, Chr(0))
 	
 	While INI_lPos <> 0
 		INI_sTemp$ = Trim(Mid(INI_sContents, INI_lOldPos, (INI_lPos - INI_lOldPos)))
@@ -1582,7 +1580,6 @@ Function Max#(a#, b#)
 End Function
 
 Const ROOM1% = 1, ROOM2% = 2, ROOM2C% = 3, ROOM3% = 4, ROOM4% = 5
-Const ZONEAMOUNT% = 3
 
 Global RoomTempID%
 
@@ -1797,7 +1794,9 @@ Function AssignEventToRoomTemplate(rt.RoomTemplates, e.Event)
 End Function
 
 Function GetZone(y%)
-	Return(Min(Floor((Float(MapWidth - y) / MapWidth * ZONEAMOUNT)), ZONEAMOUNT - 1))
+	Local ZoneAmount% = 3
+	
+	Return(Min(Floor((Float(MapWidth - y) / MapWidth * ZoneAmount)), ZoneAmount - 1))
 End Function
 
 Function EraseMap()

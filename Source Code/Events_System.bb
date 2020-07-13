@@ -553,7 +553,7 @@ Function UpdateEvents()
 						e\EventState = Max(e\EventState, 500.0)
 					EndIf
 					
-					If e\EventState < 850.0
+					If e\EventState < 850.0 Then
 						PositionEntity(Curr173\Collider, e\room\x + 32.0 * RoomScale, 0.31, e\room\z + 1072.0 * RoomScale, True)
 						HideEntity(Curr173\OBJ)
 					EndIf
@@ -666,7 +666,7 @@ Function UpdateEvents()
 						EndIf
 					EndIf
 					
-					If (e\EventState < 2000.0) Then
+					If e\EventState < 2000.0 Then
 						If e\SoundCHN = 0 Then
 							e\SoundCHN = PlaySound_Strict(AlarmSFX[0])
 						Else
@@ -674,7 +674,7 @@ Function UpdateEvents()
 						EndIf
 					EndIf
 					
-					If (e\EventState3 < 11.0) Then
+					If e\EventState3 < 11.0 Then
 						If ChannelPlaying(e\SoundCHN2) = False Then
 							e\EventState3 = e\EventState3 + 1.0
 							
@@ -8763,20 +8763,6 @@ Function UpdateEvents()
 				;[End Block]
 			Case "room4info"
 				;[Block]
-				If PlayerRoom = e\room Then
-					If e\EventState = 0.0 Then
-						e\room\NPC[0] = CreateNPC(NPCtypeClerk, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
-						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 270.0, 0.0)
-						e\room\NPC[0]\State = 3.0
-						SetNPCFrame(e\room\NPC[0], 40.0)
-						e\room\NPC[0]\IsDead = True
-						Tex = LoadTexture_Strict("GFX\npcs\body_c.png")
-						EntityTexture(e\room\NPC[0]\OBJ, Tex)
-						FreeTexture(Tex)
-						e\EventState = 1.0
-					EndIf
-				EndIf
-				
 				For e2.Events = Each Events
 					If e2\EventName = "room2sl" Then
 						If e2\EventState3 = 0.0 Then

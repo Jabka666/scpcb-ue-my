@@ -1,10 +1,3 @@
-Const C_GWL_STYLE% = -16
-Const C_WS_POPUP% = $80000000
-Const C_HWND_TOP% = 0
-Const C_SWP_SHOWWINDOW% = $0040
-
-Const VersionNumberMC$ = "5.6"
-
 Const ClrR% = 50, ClrG% = 50, ClrB% = 50
 
 Global MouseDown1%, MouseHit1%, MouseDown2%, MouseSpeedX#, MouseSpeedY#, MouseSpeedZ#
@@ -17,15 +10,10 @@ Global ResWidth% = 895
 Global ResHeight% = 560
 Global ResFactor# = ResHeight / 768.0
 
-Graphics3D(ResWidth,ResHeight, 0, 2)
+Graphics3D(ResWidth, ResHeight, 0, 2)
 HHWND = api_GetActiveWindow() ; ~ User32.dll
 api_ShowWindow(HHWND, 0) ; ~ User32.dll
 SetBuffer(BackBuffer())
-
-Global G_app_handle% = SystemProperty("AppHWND")
-; ~ Change the window style to 'WS_POPUP' and then set the window position to force the style to update.
-api_SetWindowLong(G_app_handle, C_GWL_STYLE, C_WS_POPUP)
-api_SetWindowPos(G_app_handle, C_HWND_TOP, 0, 0, ResWidth, ResHeight, C_SWP_SHOWWINDOW)
 
 AppTitle("MapCreator 3D View")
 
@@ -69,7 +57,7 @@ HideEntity(Door_HCZ_2)
 Global Door_Frame% = LoadMesh("..\GFX\map\DoorFrame.x")
 HideEntity(Door_Frame)
 
-Global Door_Button% = LoadMesh("..\GFX\map\Button.x")
+Global Door_Button% = LoadMesh("..\GFX\map\Button.b3d")
 HideEntity(Door_Button)
 
 Global MenuOpen% = True
@@ -89,7 +77,6 @@ Const MaterialsFile$ = "..\Data\materials.ini"
 LoadMaterials(MaterialsFile)
 
 Const RoomScale# = 8.0 / 2048.0
-Const ZONEAMOUNT% = 3
 
 Global MapWidth% = GetINIInt(OptionFile, "Global", "Map Size"), MapHeight% = GetINIInt(OptionFile, "Global", "Map Size")
 
@@ -320,8 +307,8 @@ Repeat
 							r\GridZ = y
 							
 							r\Angle = Angle
-							If r\Angle <> 90 And r\Angle <> 270 Then
-								r\Angle = r\Angle + 180
+							If r\Angle <> 90.0 And r\Angle <> 270.0 Then
+								r\Angle = r\Angle + 180.0
 							EndIf
 							
 							r\Angle = WrapAngle(r\Angle)
@@ -376,11 +363,11 @@ Repeat
 							r\GridZ = y
 							
 							r\Angle = Angle
-							If r\Angle <> 90 And r\Angle <> 270 Then
-								r\Angle = r\Angle + 180
+							If r\Angle <> 90.0 And r\Angle <> 270.0 Then
+								r\Angle = r\Angle + 180.0
 							EndIf
-							If rt\Shape = ROOM2C Or rt\Shape = ROOM3 Then
-								r\Angle = r\Angle - 90
+							If rt\Shape = ROOM2C Lor rt\Shape = ROOM3 Then
+								r\Angle = r\Angle - 90.0
 							EndIf
 							r\Angle = WrapAngle(r\Angle)
 							
@@ -422,7 +409,7 @@ Repeat
 		
 		For r = Each Rooms
 			If r\ResetOverlayTex And r <> PickedRoom
-				SetBuffer TextureBuffer(r\OverlayTex)
+				SetBuffer(TextureBuffer(r\OverlayTex))
 				If CurrMapGrid <> 1 Then
 					ClsColor(0, 0, 0)
 				Else
@@ -434,13 +421,13 @@ Repeat
 			EndIf
 			PickedRoom = Null
 			If CurrMapGrid <> 1 Then
-				If EntityDistance(Camera, r\OBJ) > CamRange Or (Not EntityInView(GetChild(r\OBJ, 2), Camera))
+				If EntityDistance(Camera, r\OBJ) > CamRange Lor (Not EntityInView(GetChild(r\OBJ, 2), Camera))
 					HideEntity(r\OBJ)
 				Else
 					ShowEntity(r\OBJ)
 				EndIf
 			Else
-				If EntityDistance(Camera, r\OBJ) > CamRange Or (Not EntityInView(r\OBJ, Camera))
+				If EntityDistance(Camera, r\OBJ) > CamRange Lor (Not EntityInView(r\OBJ, Camera))
 					HideEntity(r\OBJ)
 				Else
 					ShowEntity(r\OBJ)
@@ -449,7 +436,7 @@ Repeat
 		Next
 		
 		For d.Doors = Each Doors
-			If EntityDistance(Camera, d\FrameOBJ) > CamRange Or (Not EntityInView(d\FrameOBJ, Camera))
+			If EntityDistance(Camera, d\FrameOBJ) > CamRange Lor (Not EntityInView(d\FrameOBJ, Camera))
 				HideEntity(d\FrameOBJ)
 				HideEntity(d\OBJ)
 				HideEntity(d\OBJ2)
@@ -467,7 +454,7 @@ Repeat
 		If (Not IsRemote) Then
 			HidePointer()
 			
-			If (MouseX() > Mouse_Right_Limit) Or (MouseX() < Mouse_Left_Limit) Or (MouseY() > Mouse_Bottom_Limit) Or (MouseY() < Mouse_Top_Limit)
+			If (MouseX() > Mouse_Right_Limit) Lor (MouseX() < Mouse_Left_Limit) Lor (MouseY() > Mouse_Bottom_Limit) Lor (MouseY() < Mouse_Top_Limit)
 				MoveMouse(GraphicsWidth() / 2, GraphicsHeight() / 2)
 			EndIf
 			
@@ -599,7 +586,7 @@ Repeat
 	Else
 		Flip(0)
 	EndIf
-Until api_FindWindow("BlitzMax_Window_Class", "SCP-CB Ultimate Edition Map Creator " + VersionNumberMC) = 0
+Until api_FindWindow("BlitzMax_Window_Class", "SCP-CB Ultimate Edition Map Creator") = 0
 End
 
 Type RoomTemplates
@@ -871,7 +858,9 @@ Function SetRoom(Room_Name$, Room_Type%, Pos%, Min_Pos%, Max_Pos%) ; ~ Place a r
 End Function
 
 Function GetZone(y%)
-	Return(Min(Floor((Float(MapWidth - y) / MapWidth * ZONEAMOUNT)), ZONEAMOUNT - 1))
+	Local ZoneAmount% = 3
+	
+	Return(Min(Floor((Float(MapWidth - y) / MapWidth * ZoneAmount)), ZoneAmount - 1))
 End Function
 
 Type Props
@@ -943,7 +932,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 				PositionEntity(r\OBJ, x, y, z)
 				
 				If Name = "scp-860-1 door" Then
-					r\ForestWallOBJ = LoadMesh("..\GFX\map\forest\wall.b3d")
+					r\ForestWallOBJ = LoadRMesh("..\GFX\map\forest\wall_opt.rmesh", Null)
 					ScaleEntity(r\ForestWallOBJ, RoomScale, RoomScale, RoomScale)
 					PositionEntity(r\ForestWallOBJ, x, y, z, True)
 					EntityParent(r\ForestWallOBJ, r\OBJ)
@@ -1040,7 +1029,7 @@ Function StripFilename$(File$)
 	If Len(File) > 0 Then
 		For i = 1 To Len(File)
 			mi = Mid(File, i, 1)
-			If mi = "\" Or mi = "/" Then
+			If mi = "\" Lor mi = "/" Then
 				LastSlash = i
 			EndIf
 		Next
@@ -1329,6 +1318,7 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 			AddMesh(FlipChild, ChildMesh)
 			FreeEntity(FlipChild)	
 		EndIf
+		HideEntity(ChildMesh)
 	Next
 	
 	Local HiddenMesh%
@@ -1481,7 +1471,7 @@ Function StripPath$(File$)
 	If Len(File) > 0 Then 
 		For i = Len(File) To 1 Step -1 
 			mi = Mid(File, i, 1) 
-			If mi = "\" Or mi = "/" Then Return(Name)
+			If mi = "\" Lor mi = "/" Then Return(Name)
 			
 			Name = mi + Name
 		Next 
@@ -1545,7 +1535,7 @@ Function GetINIString$(File$, Section$, Parameter$)
 					CloseFile(f)
 					Return(Trim(Right(TemporaryString, Len(TemporaryString) - Instr(TemporaryString, "="))))
 				EndIf
-			Until Left(TemporaryString, 1) = "[" Or Eof(f)
+			Until Left(TemporaryString, 1) = "[" Lor Eof(f)
 			CloseFile(f)
 			Return("")
 		EndIf
@@ -1665,22 +1655,6 @@ Function INI_CreateKey%(INI_lFileHandle%, INI_sKey$, INI_sValue$)
 	Return(True)
 End Function
 
-Function Min#(a#, b#)
-	If a < b Then 
-		Return(a)
-	Else
-		Return(b)
-	EndIf
-End Function
-
-Function Max#(a#, b#)
-	If a > b Then 
-		Return(a)
-	Else 
-		Return(b)
-	EndIf
-End Function
-
 Function Button%(x%, y%, Width%, Height%, Txt$, Disabled% = False)
 	Local Pushed% = False
 	
@@ -1720,6 +1694,7 @@ Function Button%(x%, y%, Width%, Height%, Txt$, Disabled% = False)
 	
 	Color(255, 255, 255)
 	If Disabled Then Color(70, 70, 70)
+	SetFont(Font1)
 	Text((x + Width / 2) * ResFactor, (y + Height / 2 - 1) * ResFactor, Txt, True, True)
 	
 	Color(0, 0, 0)
@@ -1766,6 +1741,7 @@ Function TextBox(x%, y%, Width%, Height%, Txt$)
 	Line((x + 1) * ResFactor, (y + Height - 2) * ResFactor, (x + Width - 2) * ResFactor, (y + Height - 2) * ResFactor)
 	
 	Color(0, 0, 0)
+	SetFont(Font1)
 	Text((x + Width / 2) * ResFactor, (y + Height / 2) * ResFactor, Txt, True, True)
 End Function
 
@@ -1777,7 +1753,7 @@ Function rInput$(aString$)
 	If Value = 8 Then Value = 0 : If Length > 0 Then aString = Left(aString, Length - 1)
 	If Value = 13 Then Goto ende
 	If Value = 0 Then Goto ende
-	If Value > 0 And Value < 7 Or Value > 26 And Value < 32 Or Value = 9 Then Goto ende
+	If Value > 0 And Value < 7 Lor Value > 26 And Value < 32 Lor Value = 9 Then Goto ende
 	aString = aString + Chr(Value)
 	.ende
 	Return(aString)
@@ -1828,15 +1804,12 @@ Function CreateDoor.Doors(x#, y#, z#, Angle#, room.Rooms, Big% = False)
 	
 	For i = 0 To 1
 		d\Buttons[i] = CopyEntity(Door_Button)
-		
 		ScaleEntity(d\Buttons[i], 0.03, 0.03, 0.03)
+		
+		PositionEntity(d\Buttons[i], x + 0.6 + (i * (-1.2)), y + 0.7, z - 0.1 + (i * 0.2))
+		RotateEntity(d\Buttons[i], 0.0, (i * 180.0), 0.0)
+		EntityParent(d\Buttons[i], d\FrameOBJ)
 	Next
-	
-	PositionEntity(d\Buttons[0], x + 0.6, y + 0.7, z - 0.1)
-	PositionEntity(d\Buttons[1], x - 0.6, y + 0.7, z + 0.1)
-	RotateEntity(d\Buttons[1], 0.0, 180.0, 0.0)
-	EntityParent(d\Buttons[0], d\FrameOBJ)
-	EntityParent(d\Buttons[1], d\FrameOBJ)
 	
 	PositionEntity(d\OBJ, x, y, z)
 	
@@ -1881,25 +1854,25 @@ Function PlaceAdjacentDoors()
 						Select r\RoomTemplate\Shape
 							Case ROOM1
 								;[Block]
-								If r\Angle = 90 Then
+								If r\Angle = 90.0 Then
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM2
 								;[Block]
-								If r\Angle = 90 Or r\Angle = 270 Then 
+								If r\Angle = 90.0 Lor r\Angle = 270.0 Then 
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM2C
 								;[Block]
-								If r\Angle = 0 Or r\Angle = 90 Then
+								If r\Angle = 0.0 Lor r\Angle = 90.0 Then
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM3
 								;[Block]
-								If r\Angle = 0 Or r\Angle = 180 Or r\Angle = 90 Then
+								If r\Angle = 0.0 Lor r\Angle = 180.0 Lor r\Angle = 90.0 Then
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
@@ -1921,25 +1894,25 @@ Function PlaceAdjacentDoors()
 						Select r\RoomTemplate\Shape
 							Case ROOM1
 								;[Block]
-								If r\Angle = 180 Then
+								If r\Angle = 180.0 Then
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM2
 								;[Block]
-								If r\Angle = 0 Or r\Angle = 180 Then
+								If r\Angle = 0.0 Lor r\Angle = 180.0 Then
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM2C
 								;[Block]
-								If r\Angle = 180 Or r\Angle = 90 Then
+								If r\Angle = 180.0 Lor r\Angle = 90.0 Then
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM3
 								;[Block]
-								If r\Angle = 180 Or r\Angle = 90 Or r\Angle = 270 Then
+								If r\Angle = 180.0 Lor r\Angle = 90.0 Lor r\Angle = 270.0 Then
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]

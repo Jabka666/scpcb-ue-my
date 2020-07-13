@@ -4,7 +4,7 @@ Const OptionFile$ = "Data\options.ini"
 
 ; ~ [VERSION]
 
-Const VersionNumber$ = "5.6"
+Const VersionNumber$ = "1.0.0"
 
 ; ~ [OBJECTS]
 

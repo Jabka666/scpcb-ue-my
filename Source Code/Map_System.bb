@@ -883,7 +883,7 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 	fr\DetailMesh[2] = LoadMesh_Strict("GFX\map\forest\detail\rock.b3d")
 	fr\DetailMesh[3] = LoadMesh_Strict("GFX\map\forest\detail\rock2.b3d")
 	fr\DetailMesh[4] = LoadMesh_Strict("GFX\map\forest\detail\treetest5.b3d")
-	fr\DetailMesh[5] = LoadMesh_Strict("GFX\map\forest\wall.b3d")
+	fr\DetailMesh[5] = LoadRMesh("GFX\map\forest\wall_opt.rmesh", Null)
 	
 	For i = ROOM1 To ROOM4
 		HideEntity(fr\TileMesh[i])
@@ -1126,7 +1126,7 @@ Function PlaceForest_MapCreator(fr.Forest, x#, y#, z#, r.Rooms)
 	fr\DetailMesh[2] = LoadMesh_Strict("GFX\map\forest\detail\rock.b3d")
 	fr\DetailMesh[3] = LoadMesh_Strict("GFX\map\forest\detail\rock2.b3d")
 	fr\DetailMesh[4] = LoadMesh_Strict("GFX\map\forest\detail\treetest5.b3d")
-	fr\DetailMesh[5] = LoadMesh_Strict("GFX\map\forest\wall.b3d")
+	fr\DetailMesh[5] = LoadRMesh("GFX\map\forest\wall_opt.rmesh", Null)
 	
 	For i = ROOM1 To ROOM4
 		HideEntity(fr\TileMesh[i])
@@ -2752,7 +2752,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\Objects[0], r\x + 292.0 * RoomScale, r\y - 4985.0 * RoomScale, r\z + 516.0 * RoomScale)
 			
 			; ~ The lid of the container
-			r\Objects[1] = LoadMesh_Strict("GFX\map\room008_2.b3d")
+			r\Objects[1] = LoadRMesh("GFX\map\008_2_opt.rmesh", Null)
 			ScaleEntity(r\Objects[1], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[1], r\x + 292.0 * RoomScale, r\y - 4954.0 * RoomScale, r\z + 576.0 * RoomScale)
 			RotateEntity(r\Objects[1], 85.0, 0.0, 0.0, True)
@@ -3276,7 +3276,7 @@ Function FillRoom(r.Rooms)
 					EndIf
 				EndIf
 			Next
-			If r\Objects[0] = 0 Then r\Objects[0] = LoadMesh_Strict("GFX\map\fan.b3d")
+			If r\Objects[0] = 0 Then r\Objects[0] = LoadRMesh("GFX\map\fan_opt.rmesh", Null)
 			ScaleEntity(r\Objects[0], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[0], r\x - 248.0 * RoomScale, r\y + 528.0 * RoomScale, r\z)
 			EntityParent(r\Objects[0], r\OBJ)
@@ -3306,7 +3306,7 @@ Function FillRoom(r.Rooms)
 			EntityPickMode(r\Objects[1], 1, False)
 			EntityRadius(r\Objects[1], 0.1)
 			
-			r\Objects[2] = LoadMesh_Strict("GFX\map\room012_2.b3d")
+			r\Objects[2] = LoadRMesh("GFX\map\room012_2_opt.rmesh", Null)
 			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[2], r\x - 360 * RoomScale, - 130.0 * RoomScale, r\z + 456.0 * RoomScale)
 			
@@ -3736,11 +3736,11 @@ Function FillRoom(r.Rooms)
 			d\Locked = True : d\MTFClose = False
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			
-			r\Objects[0] = LoadMesh_Strict("GFX\map\IntroDesk.b3d")
+			r\Objects[0] = LoadRMesh("GFX\map\IntroDesk_opt.rmesh", Null)
 			ScaleEntity(r\Objects[0], RoomScale, RoomScale ,RoomScale)
 			PositionEntity(r\Objects[0], r\x + 272.0 * RoomScale, r\y, r\z + 400.0 * RoomScale)
 			
-			r\Objects[1] = LoadMesh_Strict("GFX\map\IntroDrawer.b3d")
+			r\Objects[1] = LoadRMesh("GFX\map\IntroDrawer_opt.rmesh", Null)
 			ScaleEntity(r\Objects[1], RoomScale, RoomScale ,RoomScale)
 			PositionEntity(r\Objects[1], r\x + 448.0 * RoomScale, r\y, r\z + 192.0 * RoomScale)
 			
@@ -4485,7 +4485,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\Objects[5], r\x + 1088.0 * RoomScale, r\y - 6224.0 * RoomScale, r\z + 1824.0 * RoomScale) 
 			
 			; ~ Chamber		
-			If r\Objects[6] = 0 Then r\Objects[6] = LoadMesh_Strict("GFX\map\room1062.b3d")
+			If r\Objects[6] = 0 Then r\Objects[6] = LoadRMesh("GFX\map\room1062_opt.rmesh", Null)
 			ScaleEntity(r\Objects[6], RoomScale, RoomScale, RoomScale)
 			EntityType(r\Objects[6], HIT_MAP)
 			EntityPickMode(r\Objects[6], 3)
@@ -5440,19 +5440,6 @@ Function FillRoom(r.Rooms)
 			ScaleEntity(r\Objects[0], 2.0, 2.0, 2.0)
 			RotateEntity(r\Objects[0], 0.0, 0.0, 0.0)
 			EntityFX(r\Objects[0], 1)
-			
-			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x + 492.0 * RoomScale, r\y + 258.0 * RoomScale, r\z - 810.0 * RoomScale) 
-			
-			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], r\x + 650.0 * RoomScale, r\y + 258.0 * RoomScale, r\z - 760.0 * RoomScale) 
-			
-			For i = 1 To 2
-				EntityParent(r\Objects[i], r\OBJ)
-			Next
-			
-			it = CreateItem("Radio Transceiver", "fineradio", r\x + 650.0 * RoomScale, r\y + 258.0 * RoomScale, r\z - 760.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case "room2bio"
             ;[Block]	
@@ -6839,7 +6826,7 @@ Function UpdateButton(OBJ%)
 	EndIf			
 End Function
 
-Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.Events, IgnoreRotation% = True)
+Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondPivot%, event.Events, IgnoreRotation% = True)
 	Local x#, z#
 	Local Dist#, Dir#, n.NPCs, it.Items
 	
@@ -6851,7 +6838,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 		If (ClosestButton = door2\Buttons[0] Lor ClosestButton = door2\Buttons[1]) And MouseHit1 Then
 			UseDoor(door1, False)
 		EndIf
-	ElseIf door2\Open = True And door1\open = False And door2\OpenState = 180.0 Then
+	ElseIf door2\Open = True And door1\Open = False And door2\OpenState = 180.0 Then
 		State = 1.0
 		door2\Locked = False
 		If (ClosestButton = door1\Buttons[0] Lor ClosestButton = door1\Buttons[1]) And MouseHit1 Then
@@ -6866,9 +6853,9 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 	door2\Locked = True
 	If door1\Open Then
 		door1\IsElevatorDoor = 3
-		If Abs(EntityX(Collider) - EntityX(room1, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
-			If Abs(EntityZ(Collider) - EntityZ(room1, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then	
-				If Abs(EntityY(Collider) - EntityY(room1, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then	
+		If Abs(EntityX(Collider) - EntityX(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
+			If Abs(EntityZ(Collider) - EntityZ(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then	
+				If Abs(EntityY(Collider) - EntityY(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then	
 					door1\Locked = False
 					door1\IsElevatorDoor = 1
 				EndIf
@@ -6877,9 +6864,9 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 	EndIf
 	If door2\Open Then
 		door2\IsElevatorDoor = 3
-		If Abs(EntityX(Collider) - EntityX(room2, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
-			If Abs(EntityZ(Collider) - EntityZ(room2, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then	
-				If Abs(EntityY(Collider) - EntityY(room2, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
+		If Abs(EntityX(Collider) - EntityX(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
+			If Abs(EntityZ(Collider) - EntityZ(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then	
+				If Abs(EntityY(Collider) - EntityY(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
 					door2\Locked = False
 					door2\IsElevatorDoor = 1
 				EndIf
@@ -6892,12 +6879,12 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 	If door1\Open = False And door2\Open = False Then
 		door1\Locked = True
 		door2\Locked = True
-		If door1\OpenState = 0.0 And door2\openstate = 0.0 Then
+		If door1\OpenState = 0.0 And door2\OpenState = 0.0 Then
 			If State < 0.0 Then
 				State = State - fpst\FPSFactor[0]
-				If Abs(EntityX(Collider) - EntityX(room1, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
-					If Abs(EntityZ(Collider) - EntityZ(room1, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then	
-						If Abs(EntityY(Collider) - EntityY(room1, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then	
+				If Abs(EntityX(Collider) - EntityX(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
+					If Abs(EntityZ(Collider) - EntityZ(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then	
+						If Abs(EntityY(Collider) - EntityY(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then	
 							Inside = True
 							
 							If event\SoundCHN = 0 Then
@@ -6918,19 +6905,19 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 					
 					If Inside Then
 						If (Not IgnoreRotation) Then
-							Dist = Distance(EntityX(Collider, True), EntityX(room1, True), EntityZ(Collider, True), EntityZ(room1, True))
-							Dir = PointDirection(EntityX(Collider, True), EntityZ(Collider, True), EntityX(room1, True), EntityZ(room1, True))
-							Dir = Dir + EntityYaw(room2, True) - EntityYaw(room1, True)
+							Dist = Distance(EntityX(Collider, True), EntityX(FirstPivot, True), EntityZ(Collider, True), EntityZ(FirstPivot, True))
+							Dir = PointDirection(EntityX(Collider, True), EntityZ(Collider, True), EntityX(FirstPivot, True), EntityZ(FirstPivot, True))
+							Dir = Dir + EntityYaw(SecondPivot, True) - EntityYaw(FirstPivot, True)
 							Dir = WrapAngle(Dir)
 							x = Max(Min(Cos(Dir) * Dist, 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
 							z = Max(Min(Sin(Dir) * Dist, 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
-							RotateEntity(Collider, EntityPitch(Collider, True), EntityYaw(room2, True) + AngleDist(EntityYaw(Collider, True), EntityYaw(room1, True)), EntityRoll(Collider, True), True)
+							RotateEntity(Collider, EntityPitch(Collider, True), EntityYaw(SecondPivot, True) + AngleDist(EntityYaw(Collider, True), EntityYaw(FirstPivot, True)), EntityRoll(Collider, True), True)
 						Else
-							x = Max(Min((EntityX(Collider) - EntityX(room1, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
-							z = Max(Min((EntityZ(Collider) - EntityZ(room1, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
+							x = Max(Min((EntityX(Collider) - EntityX(FirstPivot, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
+							z = Max(Min((EntityZ(Collider) - EntityZ(FirstPivot, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
 						EndIf
 						
-						TeleportEntity(Collider, EntityX(room2, True) + x, (0.1 * fpst\FPSFactor[0]) + EntityY(room2, True) + (EntityY(Collider) - EntityY(room1, True)), EntityZ(room2, True) + z, 0.3, True)
+						TeleportEntity(Collider, EntityX(SecondPivot, True) + x, (0.1 * fpst\FPSFactor[0]) + EntityY(SecondPivot, True) + (EntityY(Collider) - EntityY(FirstPivot, True)), EntityZ(SecondPivot, True) + z, 0.3, True)
 						UpdateDoorsTimer = 0.0
 						me\DropSpeed = 0.0
 						UpdateDoors()
@@ -6940,23 +6927,23 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 					EndIf
 					
 					For n.NPCs = Each NPCs
-						If Abs(EntityX(n\Collider) - EntityX(room1, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
-							If Abs(EntityZ(n\Collider) - EntityZ(room1, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
-								If Abs(EntityY(n\Collider) - EntityY(room1, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
+						If Abs(EntityX(n\Collider) - EntityX(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
+							If Abs(EntityZ(n\Collider) - EntityZ(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
+								If Abs(EntityY(n\Collider) - EntityY(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
 									If (Not IgnoreRotation) Then
-										Dist = Distance(EntityX(n\Collider, True), EntityX(room1, True), EntityZ(n\Collider, True), EntityZ(room1, True))
-										Dir = PointDirection(EntityX(n\Collider, True), EntityZ(n\Collider, True), EntityX(room1, True), EntityZ(room1, True))
-										Dir = Dir + EntityYaw(room2, True) - EntityYaw(room1, True)
+										Dist = Distance(EntityX(n\Collider, True), EntityX(FirstPivot, True), EntityZ(n\Collider, True), EntityZ(FirstPivot, True))
+										Dir = PointDirection(EntityX(n\Collider, True), EntityZ(n\Collider, True), EntityX(FirstPivot, True), EntityZ(FirstPivot, True))
+										Dir = Dir + EntityYaw(SecondPivot, True) - EntityYaw(FirstPivot, True)
 										Dir = WrapAngle(Dir)
 										x = Max(Min(Cos(Dir) * Dist, 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
 										z = Max(Min(Sin(Dir) * Dist, 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
-										RotateEntity(n\Collider, EntityPitch(n\Collider, True), EntityYaw(room2, True) + AngleDist(EntityYaw(n\Collider, True), EntityYaw(room1, True)), EntityRoll(n\Collider, True), True)
+										RotateEntity(n\Collider, EntityPitch(n\Collider, True), EntityYaw(SecondPivot, True) + AngleDist(EntityYaw(n\Collider, True), EntityYaw(FirstPivot, True)), EntityRoll(n\Collider, True), True)
 									Else
-										x = Max(Min((EntityX(n\Collider) - EntityX(room1, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
-										z = Max(Min((EntityZ(n\Collider) - EntityZ(room1, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
+										x = Max(Min((EntityX(n\Collider) - EntityX(FirstPivot, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
+										z = Max(Min((EntityZ(n\Collider) - EntityZ(FirstPivot, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
 									EndIf
 									
-									TeleportEntity(n\Collider, EntityX(room2, True) + x, (0.1 * fpst\FPSFactor[0]) + EntityY(room2, True) + (EntityY(n\Collider) - EntityY(room1, True)), EntityZ(room2, True) + z, n\CollRadius, True)
+									TeleportEntity(n\Collider, EntityX(SecondPivot, True) + x, (0.1 * fpst\FPSFactor[0]) + EntityY(SecondPivot, True) + (EntityY(n\Collider) - EntityY(FirstPivot, True)), EntityZ(SecondPivot, True) + z, n\CollRadius, True)
 									If n = Curr173 Then
 										Curr173\IdleTimer = 10.0
 									EndIf
@@ -6966,36 +6953,36 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 					Next
 					
 					For it.Items = Each Items
-						If Abs(EntityX(it\Collider) - EntityX(room1, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
-							If Abs(EntityZ(it\Collider) - EntityZ(room1, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
-								If Abs(EntityY(it\Collider) - EntityY(room1, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
+						If Abs(EntityX(it\Collider) - EntityX(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
+							If Abs(EntityZ(it\Collider) - EntityZ(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
+								If Abs(EntityY(it\Collider) - EntityY(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
 									If (Not IgnoreRotation) Then
-										Dist = Distance(EntityX(it\Collider, True), EntityX(room1, True), EntityZ(it\Collider, True), EntityZ(room1, True))
-										Dir = PointDirection(EntityX(it\Collider, True), EntityZ(it\Collider, True),EntityX(room1, True), EntityZ(room1, True))
-										Dir = Dir + EntityYaw(room2, True) - EntityYaw(room1, True)
+										Dist = Distance(EntityX(it\Collider, True), EntityX(FirstPivot, True), EntityZ(it\Collider, True), EntityZ(FirstPivot, True))
+										Dir = PointDirection(EntityX(it\Collider, True), EntityZ(it\Collider, True), EntityX(FirstPivot, True), EntityZ(FirstPivot, True))
+										Dir = Dir + EntityYaw(SecondPivot, True) - EntityYaw(FirstPivot, True)
 										Dir = WrapAngle(Dir)
 										x = Max(Min(Cos(Dir) * Dist, 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
 										z = Max(Min(Sin(Dir) * Dist, 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
-										RotateEntity(it\Collider, EntityPitch(it\Collider, True), EntityYaw(room2, True) + AngleDist(EntityYaw(it\Collider, True), EntityYaw(room1, True)), EntityRoll(it\Collider, True), True)
+										RotateEntity(it\Collider, EntityPitch(it\Collider, True), EntityYaw(SecondPivot, True) + AngleDist(EntityYaw(it\Collider, True), EntityYaw(FirstPivot, True)), EntityRoll(it\Collider, True), True)
 									Else
-										x = Max(Min((EntityX(it\Collider) - EntityX(room1, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
-										z = Max(Min((EntityZ(it\Collider) - EntityZ(room1, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
+										x = Max(Min((EntityX(it\Collider) - EntityX(FirstPivot, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
+										z = Max(Min((EntityZ(it\Collider) - EntityZ(FirstPivot, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
 									EndIf
-									TeleportEntity(it\Collider, EntityX(room2, True) + x, (0.1 * fpst\FPSFactor[0]) + EntityY(room2, True) + (EntityY(it\Collider) - EntityY(room1, True)), EntityZ(room2, True) + z, 0.01, True)
+									TeleportEntity(it\Collider, EntityX(SecondPivot, True) + x, (0.1 * fpst\FPSFactor[0]) + EntityY(SecondPivot, True) + (EntityY(it\Collider) - EntityY(FirstPivot, True)), EntityZ(SecondPivot, True) + z, 0.01, True)
 								EndIf
 							EndIf
 						EndIf
 					Next
-					UseDoor(door2, False, Not Inside)
+					UseDoor(door2, False, (Not Inside))
 					door1\Open = False
 					
-					PlaySound2(ElevatorBeepSFX, Camera, room1, 4.0)
+					PlaySound2(ElevatorBeepSFX, Camera, FirstPivot, 4.0)
 				EndIf
 			Else
 				State = State + fpst\FPSFactor[0]
-				If Abs(EntityX(Collider) - EntityX(room2, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
-					If Abs(EntityZ(Collider) - EntityZ(room2, True)) <  280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then	
-						If Abs(EntityY(Collider) - EntityY(room2, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
+				If Abs(EntityX(Collider) - EntityX(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
+					If Abs(EntityZ(Collider) - EntityZ(SecondPivot, True)) <  280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then	
+						If Abs(EntityY(Collider) - EntityY(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
 							Inside = True
 							
 							If event\SoundCHN = 0 Then
@@ -7016,17 +7003,17 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 					
 					If Inside Then	
 						If (Not IgnoreRotation) Then
-							Dist = Distance(EntityX(Collider, True), EntityX(room2, True), EntityZ(Collider, True), EntityZ(room2, True))
-							Dir = PointDirection(EntityX(Collider, True), EntityZ(Collider, True), EntityX(room2, True), EntityZ(room2, True))
-							Dir = Dir + EntityYaw(room1, True) - EntityYaw(room2, True)
+							Dist = Distance(EntityX(Collider, True), EntityX(SecondPivot, True), EntityZ(Collider, True), EntityZ(SecondPivot, True))
+							Dir = PointDirection(EntityX(Collider, True), EntityZ(Collider, True), EntityX(SecondPivot, True), EntityZ(SecondPivot, True))
+							Dir = Dir + EntityYaw(FirstPivot, True) - EntityYaw(SecondPivot, True)
 							x = Max(Min(Cos(Dir) * Dist, 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
 							z = Max(Min(Sin(Dir) * Dist, 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
-							RotateEntity(Collider, EntityPitch(Collider, True), EntityYaw(room2, True) + AngleDist(EntityYaw(Collider, True), EntityYaw(room1, True)), EntityRoll(Collider, True), True)
+							RotateEntity(Collider, EntityPitch(Collider, True), EntityYaw(SecondPivot, True) + AngleDist(EntityYaw(Collider, True), EntityYaw(FirstPivot, True)), EntityRoll(Collider, True), True)
 						Else
-							x = Max(Min((EntityX(Collider) - EntityX(room2, True)), 280 * RoomScale - 0.22), (-280) * RoomScale + 0.22)
-							z = Max(Min((EntityZ(Collider) - EntityZ(room2, True)), 280 * RoomScale - 0.22), (-280) * RoomScale + 0.22)
+							x = Max(Min((EntityX(Collider) - EntityX(SecondPivot, True)), 280 * RoomScale - 0.22), (-280) * RoomScale + 0.22)
+							z = Max(Min((EntityZ(Collider) - EntityZ(SecondPivot, True)), 280 * RoomScale - 0.22), (-280) * RoomScale + 0.22)
 						EndIf
-						TeleportEntity(Collider, EntityX(room1, True) + x, (0.1 * fpst\FPSFactor[0]) + EntityY(room1, True) + (EntityY(Collider) - EntityY(room2, True)), EntityZ(room1, True) + z, 0.3, True)
+						TeleportEntity(Collider, EntityX(FirstPivot, True) + x, (0.1 * fpst\FPSFactor[0]) + EntityY(FirstPivot, True) + (EntityY(Collider) - EntityY(SecondPivot, True)), EntityZ(FirstPivot, True) + z, 0.3, True)
 						UpdateDoorsTimer = 0.0
 						me\DropSpeed = 0.0
 						UpdateDoors()
@@ -7036,21 +7023,21 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 					EndIf
 					
 					For n.NPCs = Each NPCs
-						If Abs(EntityX(n\Collider) - EntityX(room2, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
-							If Abs(EntityZ(n\Collider) - EntityZ(room2, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
-								If Abs(EntityY(n\Collider) - EntityY(room2, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
+						If Abs(EntityX(n\Collider) - EntityX(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
+							If Abs(EntityZ(n\Collider) - EntityZ(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
+								If Abs(EntityY(n\Collider) - EntityY(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
 									If (Not IgnoreRotation) Then
-										Dist = Distance(EntityX(n\Collider, True), EntityX(room2, True), EntityZ(n\Collider, True), EntityZ(room2, True))
-										Dir = PointDirection(EntityX(n\Collider, True), EntityZ(n\Collider, True), EntityX(room2, True), EntityZ(room2, True))
-										Dir = Dir + EntityYaw(room1, True) - EntityYaw(room2, True)
+										Dist = Distance(EntityX(n\Collider, True), EntityX(SecondPivot, True), EntityZ(n\Collider, True), EntityZ(SecondPivot, True))
+										Dir = PointDirection(EntityX(n\Collider, True), EntityZ(n\Collider, True), EntityX(SecondPivot, True), EntityZ(SecondPivot, True))
+										Dir = Dir + EntityYaw(FirstPivot, True) - EntityYaw(SecondPivot, True)
 										x = Max(Min(Cos(Dir) * Dist, 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
 										z = Max(Min(Sin(Dir) * Dist, 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
-										RotateEntity(n\Collider, EntityPitch(n\Collider, True), EntityYaw(room2, True) + AngleDist(EntityYaw(n\Collider, True), EntityYaw(room1, True)), EntityRoll(n\Collider, True), True)
+										RotateEntity(n\Collider, EntityPitch(n\Collider, True), EntityYaw(SecondPivot, True) + AngleDist(EntityYaw(n\Collider, True), EntityYaw(FirstPivot, True)), EntityRoll(n\Collider, True), True)
 									Else
-										x = Max(Min((EntityX(n\Collider) - EntityX(room2, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
-										z = Max(Min((EntityZ(n\Collider) - EntityZ(room2, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
+										x = Max(Min((EntityX(n\Collider) - EntityX(SecondPivot, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
+										z = Max(Min((EntityZ(n\Collider) - EntityZ(SecondPivot, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
 									EndIf
-									TeleportEntity(n\Collider, EntityX(room1, True) + x, (0.1 * fpst\FPSFactor[0]) + EntityY(room1, True) + (EntityY(n\Collider) - EntityY(room2, True)), EntityZ(room1, True) + z, n\CollRadius, True)
+									TeleportEntity(n\Collider, EntityX(FirstPivot, True) + x, (0.1 * fpst\FPSFactor[0]) + EntityY(FirstPivot, True) + (EntityY(n\Collider) - EntityY(SecondPivot, True)), EntityZ(FirstPivot, True) + z, n\CollRadius, True)
 									If n = Curr173
 										Curr173\IdleTimer = 10.0
 									EndIf
@@ -7060,29 +7047,29 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 					Next
 					
 					For it.Items = Each Items
-						If Abs(EntityX(it\Collider) - EntityX(room2, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
-							If Abs(EntityZ(it\Collider) - EntityZ(room2, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
-								If Abs(EntityY(it\Collider) - EntityY(room2, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
+						If Abs(EntityX(it\Collider) - EntityX(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
+							If Abs(EntityZ(it\Collider) - EntityZ(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
+								If Abs(EntityY(it\Collider) - EntityY(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
 									If (Not IgnoreRotation) Then
-										Dist = Distance(EntityX(it\Collider, True), EntityX(room2, True), EntityZ(it\Collider, True), EntityZ(room2, True))
-										Dir = PointDirection(EntityX(it\Collider, True), EntityZ(it\Collider, True), EntityX(room2, True), EntityZ(room2, True))
-										Dir = Dir + EntityYaw(room1, True) - EntityYaw(room2, True)
+										Dist = Distance(EntityX(it\Collider, True), EntityX(SecondPivot, True), EntityZ(it\Collider, True), EntityZ(SecondPivot, True))
+										Dir = PointDirection(EntityX(it\Collider, True), EntityZ(it\Collider, True), EntityX(SecondPivot, True), EntityZ(SecondPivot, True))
+										Dir = Dir + EntityYaw(FirstPivot, True) - EntityYaw(SecondPivot, True)
 										x = Max(Min(Cos(Dir) * Dist, 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
 										z = Max(Min(Sin(Dir) * Dist, 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
-										RotateEntity(it\Collider, EntityPitch(it\Collider, True), EntityYaw(room2, True) + AngleDist(EntityYaw(it\Collider, True), EntityYaw(room1, True)), EntityRoll(it\Collider, True), True)
+										RotateEntity(it\Collider, EntityPitch(it\Collider, True), EntityYaw(SecondPivot, True) + AngleDist(EntityYaw(it\Collider, True), EntityYaw(FirstPivot, True)), EntityRoll(it\Collider, True), True)
 									Else
-										x = Max(Min((EntityX(it\Collider) - EntityX(room2, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
-										z = Max(Min((EntityZ(it\Collider) - EntityZ(room2, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
+										x = Max(Min((EntityX(it\Collider) - EntityX(SecondPivot, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
+										z = Max(Min((EntityZ(it\Collider) - EntityZ(SecondPivot, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
 									EndIf
-									TeleportEntity(it\Collider, EntityX(room1, True) + x, (0.1 * fpst\FPSFactor[0]) + EntityY(room1, True) + (EntityY(it\Collider) - EntityY(room2, True)), EntityZ(room1, True) + z, 0.01, True)
+									TeleportEntity(it\Collider, EntityX(FirstPivot, True) + x, (0.1 * fpst\FPSFactor[0]) + EntityY(FirstPivot, True) + (EntityY(it\Collider) - EntityY(SecondPivot, True)), EntityZ(FirstPivot, True) + z, 0.01, True)
 								EndIf
 							EndIf
 						EndIf
 					Next
-					UseDoor(door1, False, Not Inside)
+					UseDoor(door1, False, (Not Inside))
 					door2\Open = False
 					
-					PlaySound2(ElevatorBeepSFX, Camera, room2, 4.0)
+					PlaySound2(ElevatorBeepSFX, Camera, SecondPivot, 4.0)
 				EndIf	
 			EndIf
 		EndIf

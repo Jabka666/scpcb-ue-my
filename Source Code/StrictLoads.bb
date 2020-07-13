@@ -43,7 +43,7 @@ Function AutoReleaseSounds()
 		If TryRelease Then
 			If snd\ReleaseTime < MilliSecs() Then
 				If snd\InternalHandle <> 0 Then
-					FreeSound(snd\InternalHandle)
+					FreeSound_Strict(snd\InternalHandle)
 					snd\InternalHandle = 0
 				EndIf
 			EndIf
@@ -120,6 +120,7 @@ End Function
 
 Function LoadSound_Strict(File$)
 	Local snd.Sound = New Sound
+	
 	snd\Name = File
 	snd\InternalHandle = 0
 	snd\ReleaseTime = 0
@@ -292,7 +293,7 @@ Function LoadTexture_Strict(File$, Flags% = 1)
 	Local Tmp%
 	
 	If FileType(File) <> 1 Then RuntimeError("Texture " + File + " not found.")
-	Tmp = LoadTexture(File, Flags + (256 * (SaveTexturesInVRAM = True)))
+	Tmp = LoadTexture(File, Flags + (256 * (SaveTexturesInVRAM)))
 	If Tmp = 0 Then RuntimeError("Failed to load Texture: " + File)
 	Return(Tmp)
 End Function   

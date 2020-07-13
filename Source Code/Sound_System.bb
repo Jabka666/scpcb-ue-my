@@ -324,10 +324,10 @@ Function KillSounds()
 		IntercomStreamCHN = 0
 	EndIf
 	
-	If EnableSFXRelease
+	If EnableSFXRelease Then
 		For snd.Sound = Each Sound
 			If snd\InternalHandle <> 0 Then
-				FreeSound(snd\InternalHandle)
+				FreeSound_Strict(snd\InternalHandle)
 				snd\InternalHandle = 0
 				snd\ReleaseTime = 0
 			EndIf
