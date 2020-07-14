@@ -347,12 +347,12 @@ Function UpdateMainMenu()
 						EndIf
 					EndIf
 					
-					If DrawButton(x, y + Height + 20 * MenuScale, 160 * MenuScale, 70 * MenuScale, "Load map", False) Then
+					If DrawButton(x, y + Height + 10 * MenuScale, 160 * MenuScale, 70 * MenuScale, "Load map", False) Then
 						MainMenuTab = MainMenuTab_Load_Map
 						LoadSavedMaps()
 					EndIf
 					
-					If DrawButton(x + 420 * MenuScale, y + Height + 20 * MenuScale, 160 * MenuScale, 70 * MenuScale, "START", False) Then
+					If DrawButton(x + 420 * MenuScale, y + Height + 10 * MenuScale, 160 * MenuScale, 70 * MenuScale, "START", False) Then
 						If CurrSave = "" Then CurrSave = "untitled"
 						
 						If RandomSeed = "" Then
@@ -383,7 +383,7 @@ Function UpdateMainMenu()
 					;[Block]
 					y = y + Height + 20 * MenuScale
 					Width = 580 * MenuScale
-					Height = 510 * MenuScale
+					Height = 430 * MenuScale
 					
 					x = 159 * MenuScale
 					y = 286 * MenuScale
@@ -396,20 +396,20 @@ Function UpdateMainMenu()
 					Height = 296 * MenuScale
 					
 					If CurrLoadGamePage < Ceil(Float(SaveGameAmount) / 6.0) - 1 And SaveMSG = "" Then 
-						If DrawButton(x + Width - 50 * MenuScale, y + 510 * MenuScale, 50 * MenuScale, 50 * MenuScale, ">") Then
+						If DrawButton(x + Width - 50 * MenuScale, y + 440 * MenuScale, 50 * MenuScale, 50 * MenuScale, ">") Then
 							CurrLoadGamePage = CurrLoadGamePage + 1
 							ShouldDeleteGadgets = True
 						EndIf
 					Else
-						DrawButton(x + Width - 50 * MenuScale, y + 510 * MenuScale, 50 * MenuScale, 50 * MenuScale, ">", True, False, True)
+						DrawButton(x + Width - 50 * MenuScale, y + 440 * MenuScale, 50 * MenuScale, 50 * MenuScale, ">", True, False, True)
 					EndIf
 					If CurrLoadGamePage > 0 And SaveMSG = "" Then
-						If DrawButton(x, y + 510 * MenuScale, 50 * MenuScale, 50 * MenuScale, "<") Then
+						If DrawButton(x, y + 440 * MenuScale, 50 * MenuScale, 50 * MenuScale, "<") Then
 							CurrLoadGamePage = CurrLoadGamePage - 1
 							ShouldDeleteGadgets = True
 						EndIf
 					Else
-						DrawButton(x, y + 510 * MenuScale, 50 * MenuScale, 50 * MenuScale, "<", True, False, True)
+						DrawButton(x, y + 440 * MenuScale, 50 * MenuScale, 50 * MenuScale, "<", True, False, True)
 					EndIf
 					
 					If CurrLoadGamePage > Ceil(Float(SaveGameAmount) / 6.0) - 1 Then
@@ -631,7 +631,7 @@ Function UpdateMainMenu()
 										If Test <> 0 Then
 											UserTrackCheck2 = UserTrackCheck2 + 1
 										EndIf
-										FreeSound(Test)
+										FreeSound_Strict(Test)
 									EndIf
 								Forever
 								CloseDir(Dir)
@@ -742,20 +742,20 @@ Function UpdateMainMenu()
 						Height = 330 * MenuScale
 						
 						If CurrLoadGamePage = 0 Then 
-							If DrawButton(x + Width - 30 * MenuScale, y + Height, 30 * MenuScale, 30 * MenuScale, ">", False) Then
+							If DrawButton(x + Width - 30 * MenuScale, y + Height + 5 * MenuScale, 30 * MenuScale, 30 * MenuScale, ">", False) Then
 								CurrLoadGamePage = CurrLoadGamePage + 1
 								ShouldDeleteGadgets = True
 							EndIf
 						Else
-							DrawButton(x + Width - 30 * MenuScale, y + Height, 30 * MenuScale, 30 * MenuScale, ">", False, False, True)
+							DrawButton(x + Width - 30 * MenuScale, y + Height + 5 * MenuScale, 30 * MenuScale, 30 * MenuScale, ">", False, False, True)
 						EndIf
 						If CurrLoadGamePage = 1 Then
-							If DrawButton(x, y + Height, 30 * MenuScale, 30 * MenuScale, "<", False) Then
+							If DrawButton(x, y + Height + 5 * MenuScale, 30 * MenuScale, 30 * MenuScale, "<", False) Then
 								CurrLoadGamePage = CurrLoadGamePage - 1
 								ShouldDeleteGadgets = True
 							EndIf
 						Else
-							DrawButton(x, y + Height, 30 * MenuScale, 30 * MenuScale, "<", False, False, True)
+							DrawButton(x, y + Height + 5 * MenuScale, 30 * MenuScale, 30 * MenuScale, "<", False, False, True)
 						EndIf
 						
 						If CurrLoadGamePage = 0 Then
@@ -841,7 +841,7 @@ Function UpdateMainMenu()
 					;[Block]
 					y = y + Height + 20 * MenuScale
 					Width = 580 * MenuScale
-					Height = 510 * MenuScale
+					Height = 430 * MenuScale
 					
 					x = 159 * MenuScale
 					y = 286 * MenuScale
@@ -854,20 +854,20 @@ Function UpdateMainMenu()
 					Height = 350 * MenuScale
 					
 					If CurrLoadGamePage < Ceil(Float(SavedMapsAmount) / 6.0) - 1 Then 
-						If DrawButton(x + Width - 50 * MenuScale, y + 510 * MenuScale, 50 * MenuScale, 50 * MenuScale, ">") Then
+						If DrawButton(x + Width - 50 * MenuScale, y + 440 * MenuScale, 50 * MenuScale, 50 * MenuScale, ">") Then
 							CurrLoadGamePage = CurrLoadGamePage + 1
 							ShouldDeleteGadgets = True
 						EndIf
 					Else
-						DrawButton(x + Width - 50 * MenuScale, y + 510 * MenuScale, 50 * MenuScale, 50 * MenuScale, ">", True, False, True)
+						DrawButton(x + Width - 50 * MenuScale, y + 440 * MenuScale, 50 * MenuScale, 50 * MenuScale, ">", True, False, True)
 					EndIf
 					If CurrLoadGamePage > 0 Then
-						If DrawButton(x, y + 510 * MenuScale, 50 * MenuScale, 50 * MenuScale, "<") Then
+						If DrawButton(x, y + 440 * MenuScale, 50 * MenuScale, 50 * MenuScale, "<") Then
 							CurrLoadGamePage = CurrLoadGamePage - 1
 							ShouldDeleteGadgets = True
 						EndIf
 					Else
-						DrawButton(x, y + 510 * MenuScale, 50 * MenuScale, 50 * MenuScale, "<", True, False, True)
+						DrawButton(x, y + 440 * MenuScale, 50 * MenuScale, 50 * MenuScale, "<", True, False, True)
 					EndIf
 					
 					If CurrLoadGamePage > Ceil(Float(SavedMapsAmount) / 6.0) - 1 Then
@@ -1101,7 +1101,7 @@ Function RenderMainMenu()
 				;[Block]
 				y = y + Height + 20 * MenuScale
 				Width = 580 * MenuScale
-				Height = 510 * MenuScale
+				Height = 430 * MenuScale
 				
 				DrawFrame(x, y, Width, Height)
 				
@@ -1121,9 +1121,9 @@ Function RenderMainMenu()
 				
 				SetFont(fo\FontID[1])
 				
-				DrawFrame(x, y + 510 * MenuScale, Width, 50 * MenuScale)
+				DrawFrame(x + 60 * MenuScale, y + 440 * MenuScale, Width - 120 * MenuScale, 50 * MenuScale)
 				
-				Text(x + (Width / 2.0), y + 535 * MenuScale, "Page " + Int(Max((CurrLoadGamePage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SaveGameAmount) / 6.0))), 1)), True, True)
+				Text(x + (Width / 2.0), y + 465 * MenuScale, "Page " + Int(Max((CurrLoadGamePage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SaveGameAmount) / 6.0))), 1)), True, True)
 				
 				SetFont(fo\FontID[0])
 				
@@ -1404,11 +1404,12 @@ Function RenderMainMenu()
 				ElseIf MainMenuTab = MainMenuTab_Options_Advanced
 					;[Block]
 					Height = 330 * MenuScale
+					
 					DrawFrame(x, y, Width, Height)	
 					
-					DrawFrame(x, y + Height, Width, 30 * MenuScale)	
+					DrawFrame(x + 35 * MenuScale, y + Height + 5 * MenuScale, Width - 70 * MenuScale, 30 * MenuScale)	
 					
-					Text(x + (Width / 2), y + Height + 15 * MenuScale, "Page " + Int(Max((CurrLoadGamePage + 1), 1)) + "/2", True, True)
+					Text(x + (Width / 2), y + Height + 20 * MenuScale, "Page " + Int(Max((CurrLoadGamePage + 1), 1)) + "/2", True, True)
 					
 					If CurrLoadGamePage = 0 Then
 						y = y + 20 * MenuScale
@@ -1522,7 +1523,7 @@ Function RenderMainMenu()
 				;[Block]
 				y = y + Height + 20 * MenuScale
 				Width = 580 * MenuScale
-				Height = 510 * MenuScale
+				Height = 430 * MenuScale
 				
 				DrawFrame(x, y, Width, Height)
 				
@@ -1547,9 +1548,9 @@ Function RenderMainMenu()
 				tW = 400 * MenuScale
 				tH = 150 * MenuScale
 				
-				DrawFrame(x, y + 510 * MenuScale, Width, 50 * MenuScale)
+				DrawFrame(x + 60 * MenuScale, y + 440 * MenuScale, Width - 120 * MenuScale, 50 * MenuScale)
 				
-				Text(x + (Width / 2.0), y + 535 * MenuScale, "Page " + Int(Max((CurrLoadGamePage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SavedMapsAmount) / 6.0))), 1)), True, True)
+				Text(x + (Width / 2.0), y + 465 * MenuScale, "Page " + Int(Max((CurrLoadGamePage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SavedMapsAmount) / 6.0))), 1)), True, True)
 				
 				SetFont(fo\FontID[0])
 				
