@@ -15,7 +15,7 @@ Function ReadINILine$(file.INIFile)
 	RdByte = PeekByte(Bank, Offset)
 	While ((FirstByte) Lor ((RdByte <> 13) And (RdByte <> 10))) And (Offset < file\Size)
 		RdByte = PeekByte(Bank, Offset)
-		If ((RdByte <> 13) And (RdByte <> 10)) Then
+		If RdByte <> 13 And RdByte <> 10 Then
 			FirstByte = False
 			RetStr = RetStr + Chr(RdByte)
 		EndIf
@@ -359,7 +359,7 @@ Global DisplayMode% = GetINIInt(OptionFile, "Global", "Display Mode")
 
 Global Brightness% = GetINIFloat(OptionFile, "Global", "Brightness")
 
-Global CameraFogNear# = GetINIFloat(OptionFile, "Global", "camera Fog Near")
+Global CameraFogNear# = GetINIFloat(OptionFile, "Global", "Camera Fog Near")
 
 Global CameraFogFar# = GetINIFloat(OptionFile, "Global", "Camera Fog Far")
 

@@ -5787,7 +5787,7 @@ Function UpdateRooms()
 				If r\SoundEmitter[i] <> 0 Then 
 					Dist = EntityDistance(r\SoundEmitterOBJ[i], Collider)
 					If Dist < r\SoundEmitterRange[i] Then
-						r\SoundEmitterCHN[i] = LoopSound2(RoomAmbience[r\SoundEmitter[i]], r\SoundEmitterCHN[i], Camera, r\SoundEmitterOBJ[i], r\SoundEmitterRange[i])
+						r\SoundEmitterCHN[i] = LoopSound2(RoomAmbience[r\SoundEmitter[i]], r\SoundEmitterCHN[i], me\Camera, r\SoundEmitterOBJ[i], r\SoundEmitterRange[i])
 					EndIf
 				EndIf
 			Next
@@ -5860,7 +5860,7 @@ Function UpdateRooms()
 					z = Abs(EntityZ(Collider, True) - EntityZ(PlayerRoom\AdjDoor[i]\FrameOBJ, True))
 					If PlayerRoom\AdjDoor[i]\OpenState = 0.0 Then
 						EntityAlpha(GetChild(PlayerRoom\Adjacent[i]\OBJ, 2), 0.0)
-					ElseIf (Not EntityInView(PlayerRoom\AdjDoor[i]\FrameOBJ, Camera))
+					ElseIf (Not EntityInView(PlayerRoom\AdjDoor[i]\FrameOBJ, me\Camera))
 						EntityAlpha(GetChild(PlayerRoom\Adjacent[i]\OBJ, 2), 0.0)
 					Else
 						EntityAlpha(GetChild(PlayerRoom\Adjacent[i]\OBJ, 2), 1.0)
@@ -6378,7 +6378,7 @@ Function UpdateScreens()
 	For s.Screens = Each Screens
 		If s\room = PlayerRoom Then
 			If EntityDistance(Collider, s\OBJ) < 1.2 Then
-				EntityPick(Camera, 1.2)
+				EntityPick(me\Camera, 1.2)
 				If PickedEntity() = s\OBJ And s\ImgPath <> "" Then
 					DrawHandIcon = True
 					If MouseUp1 Then 
@@ -6501,14 +6501,14 @@ Function UpdateSecurityCams()
 			If Close Lor sc = CoffinCam Then 
 				If sc\FollowPlayer Then
 					If sc <> CoffinCam
-						If EntityVisible(sc\CameraOBJ, Camera)
+						If EntityVisible(sc\CameraOBJ, me\Camera)
 							If MTF_CameraCheckTimer > 0.0
 								MTF_CameraCheckDetected = True
 							EndIf
 						EndIf
 					EndIf
 					If sc\Pvt = 0 Then sc\Pvt = CreatePivot(sc\OBJ) : EntityParent(sc\Pvt, 0) ; ~ Sets position and rotation of the pivot to the cam object
-					PointEntity(sc\Pvt, Camera)
+					PointEntity(sc\Pvt, me\Camera)
 					
 					RotateEntity(sc\CameraOBJ, CurveAngle(EntityPitch(sc\Pvt), EntityPitch(sc\CameraOBJ), 75.0), CurveAngle(EntityYaw(sc\Pvt), EntityYaw(sc\CameraOBJ), 75.0), 0.0)
 					
@@ -6533,8 +6533,8 @@ Function UpdateSecurityCams()
 					EndIf
 					
 					If sc <> CoffinCam Then
-						If (Abs(DeltaYaw(sc\CameraOBJ, Camera)) < 60.0)
-							If EntityVisible(sc\CameraOBJ, Camera)
+						If (Abs(DeltaYaw(sc\CameraOBJ, me\Camera)) < 60.0)
+							If EntityVisible(sc\CameraOBJ, me\Camera)
 								If MTF_CameraCheckTimer > 0.0
 									MTF_CameraCheckDetected = True
 								EndIf
@@ -6547,8 +6547,8 @@ Function UpdateSecurityCams()
 			If Close = True Then
 				If sc\Screen Then
 					sc\State = sc\State + fpst\FPSFactor[0]
-					If me\BlinkTimer > -5.0 And EntityInView(sc\ScrOBJ, Camera) Then
-						If EntityVisible(Camera, sc\ScrOBJ) Then
+					If me\BlinkTimer > -5.0 And EntityInView(sc\ScrOBJ, me\Camera) Then
+						If EntityVisible(me\Camera, sc\ScrOBJ) Then
 							If (sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3) And I_714\Using = 0 And wi\HazmatSuit < 3 And wi\GasMask < 3 Then
 								If me\BlinkTimer > -5.0 Then
 									me\Sanity = me\Sanity - fpst\FPSFactor[0]
@@ -6572,17 +6572,17 @@ Function UpdateSecurityCams()
 						me\Sanity = -1010.0
 					EndIf
 					
-					If me\BlinkTimer > -5.0 And EntityInView(sc\ScrOBJ, Camera) And EntityVisible(Camera, sc\ScrOBJ) Then
+					If me\BlinkTimer > -5.0 And EntityInView(sc\ScrOBJ, me\Camera) And EntityVisible(me\Camera, sc\ScrOBJ) Then
 						sc\InSight = True
 					Else
 						sc\InSight = False
 					EndIf
 					
 					If sc\State >= sc\RenderInterval Then
-						If me\BlinkTimer > -5.0 And EntityInView(sc\ScrOBJ, Camera)Then
-							If EntityVisible(Camera, sc\ScrOBJ) Then
+						If me\BlinkTimer > -5.0 And EntityInView(sc\ScrOBJ, me\Camera) Then
+							If EntityVisible(me\Camera, sc\ScrOBJ) Then
 								If CoffinCam = Null Lor Rand(5) = 5 Lor sc\CoffinEffect <> 3 Then
-									HideEntity(Camera)
+									HideEntity(me\Camera)
 									ShowEntity(sc\Cam)
 									Cls
 									
@@ -6593,9 +6593,9 @@ Function UpdateSecurityCams()
 									CopyRect(0, 0, 512, 512, 0, 0, BackBuffer(), TextureBuffer(ScreenTexs[sc\ScrTexture]))
 									
 									HideEntity(sc\Cam)
-									ShowEntity(Camera)										
+									ShowEntity(me\Camera)										
 								Else
-									HideEntity(Camera)
+									HideEntity(me\Camera)
 									ShowEntity(CoffinCam\room\OBJ)
 									EntityAlpha(GetChild(CoffinCam\room\OBJ, 2), 1.0)
 									ShowEntity(CoffinCam\Cam)
@@ -6609,7 +6609,7 @@ Function UpdateSecurityCams()
 									
 									HideEntity(CoffinCam\room\OBJ)
 									HideEntity(CoffinCam\Cam)
-									ShowEntity(Camera)										
+									ShowEntity(me\Camera)										
 								EndIf
 							EndIf
 						EndIf
@@ -6620,7 +6620,7 @@ Function UpdateSecurityCams()
 						If sc\InSight Then
 							Local Pvt% = CreatePivot()
 							
-							PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
+							PositionEntity(Pvt, EntityX(me\Camera), EntityY(me\Camera), EntityZ(me\Camera))
 							PointEntity(Pvt, sc\ScrOBJ)
 							
 							RotateEntity(Collider, EntityPitch(Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(Collider), Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0)), 0.0)
@@ -6692,7 +6692,7 @@ Function UpdateSecurityCams()
 						EndIf
 					EndIf
 				EndIf
-				If (Not sc\InSight) Then sc\SoundCHN = LoopSound2(CameraSFX, sc\SoundCHN, Camera, sc\CameraOBJ, 4.0)
+				If (Not sc\InSight) Then sc\SoundCHN = LoopSound2(CameraSFX, sc\SoundCHN, me\Camera, sc\CameraOBJ, 4.0)
 			EndIf
 			
 			If sc <> Null Then
@@ -6723,8 +6723,8 @@ Function UpdateMonitorSaving()
 			EndIf
 			
 			If Close And GrabbedEntity = 0 And ClosestButton = 0 Then
-				If EntityInView(sc\ScrOBJ, Camera) And EntityDistance(sc\ScrOBJ, Camera) < 1.0 Then
-					If EntityVisible(sc\ScrOBJ, Camera) Then
+				If EntityInView(sc\ScrOBJ, me\Camera) And EntityDistance(sc\ScrOBJ, me\Camera) < 1.0 Then
+					If EntityVisible(sc\ScrOBJ, me\Camera) Then
 						DrawHandIcon = True
 						If MouseHit1 Then SelectedMonitor = sc
 					Else
@@ -6738,7 +6738,7 @@ Function UpdateMonitorSaving()
 					If sc\InSight Then
 						Local Pvt% = CreatePivot()
 						
-						PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
+						PositionEntity(Pvt, EntityX(me\Camera), EntityY(me\Camera), EntityZ(me\Camera))
 						PointEntity(Pvt, sc\ScrOBJ)
 						RotateEntity(Collider, EntityPitch(Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(Collider), Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0)), 0.0)
 						TurnEntity(Pvt, 90.0, 0.0, 0.0)
@@ -6755,12 +6755,12 @@ Function UpdateMonitorSaving()
 End Function
 
 Function UpdateLever(OBJ%, Locked% = False)
-	Local Dist# = EntityDistance(Camera, OBJ)
+	Local Dist# = EntityDistance(me\Camera, OBJ)
 	
 	If Dist < 8.0 Then 
 		If Dist < 0.8 And (Not Locked) Then 
-			If EntityInView(OBJ, Camera) Then 
-				EntityPick(Camera, 0.65)
+			If EntityInView(OBJ, me\Camera) Then 
+				EntityPick(me\Camera, 0.65)
 				
 				If PickedEntity() = OBJ Then
 					DrawHandIcon = True
@@ -6782,9 +6782,9 @@ Function UpdateLever(OBJ%, Locked% = False)
 				EndIf 
 				
 				If EntityPitch(OBJ, True) > 75 Then
-					If PrevPitch =< 75.0 Then PlaySound2(LeverSFX, Camera, OBJ, 1.0)
+					If PrevPitch =< 75.0 Then PlaySound2(LeverSFX, me\Camera, OBJ, 1.0)
 				ElseIf EntityPitch(OBJ, True) < -75.0
-					If PrevPitch >= -75.0 Then PlaySound2(LeverSFX, Camera, OBJ, 1.0)	
+					If PrevPitch >= -75.0 Then PlaySound2(LeverSFX, me\Camera, OBJ, 1.0)	
 				EndIf						
 			EndIf
 		EndIf
@@ -6812,7 +6812,7 @@ Function UpdateButton(OBJ%)
 	If Dist < 0.8 Then
 		Local Temp% = CreatePivot()
 		
-		PositionEntity(Temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
+		PositionEntity(Temp, EntityX(me\Camera), EntityY(me\Camera), EntityZ(me\Camera))
 		PointEntity(Temp, OBJ)
 		
 		If EntityPick(Temp, 0.65) = OBJ Then
@@ -6976,7 +6976,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 					UseDoor(door2, False, (Not Inside))
 					door1\Open = False
 					
-					PlaySound2(ElevatorBeepSFX, Camera, FirstPivot, 4.0)
+					PlaySound2(ElevatorBeepSFX, me\Camera, FirstPivot, 4.0)
 				EndIf
 			Else
 				State = State + fpst\FPSFactor[0]
@@ -7069,7 +7069,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 					UseDoor(door1, False, (Not Inside))
 					door2\Open = False
 					
-					PlaySound2(ElevatorBeepSFX, Camera, SecondPivot, 4.0)
+					PlaySound2(ElevatorBeepSFX, me\Camera, SecondPivot, 4.0)
 				EndIf	
 			EndIf
 		EndIf
@@ -7995,7 +7995,7 @@ Function UpdateRoomLights(Cam%)
 		If r\Dist < HideDistance * 0.7 Lor r = PlayerRoom Then
 			For i = 0 To r\MaxLights
 				If r\Lights[i] <> 0 Then
-					If EnableRoomLights And (SecondaryLightOn > 0.5) And Cam = Camera Then
+					If EnableRoomLights And (SecondaryLightOn > 0.5) And Cam = me\Camera Then
 						EntityOrder(r\LightSprites2[i], -1)
 						If UpdateRoomLightsTimer = 0.0 Then
 							ShowEntity(r\LightSprites[i])
@@ -8078,7 +8078,7 @@ Function UpdateRoomLights(Cam%)
 						If UpdateRoomLightsTimer >= 8.0 Then
 							UpdateRoomLightsTimer = 0.0
 						EndIf
-					ElseIf Cam = Camera Then
+					ElseIf Cam = me\Camera Then
 						If SecondaryLightOn =< 0.5 Then
 							HideEntity(r\LightSprites[i])
 						Else

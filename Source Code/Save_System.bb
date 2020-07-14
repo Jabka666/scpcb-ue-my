@@ -24,9 +24,9 @@ Function SaveGame(File$)
 	WriteFloat(f, EntityY(Collider))
 	WriteFloat(f, EntityZ(Collider))
 	
-	WriteFloat(f, EntityX(Head))
-	WriteFloat(f, EntityY(Head))
-	WriteFloat(f, EntityZ(Head))
+	WriteFloat(f, EntityX(me\Head))
+	WriteFloat(f, EntityY(me\Head))
+	WriteFloat(f, EntityZ(me\Head))
 	
 	WriteString(f, Str(AccessCode))
 	
@@ -500,8 +500,8 @@ Function LoadGame(File$)
 	x = ReadFloat(f)
 	y = ReadFloat(f)
 	z = ReadFloat(f)	
-	PositionEntity(Head, x, y + 0.05, z)
-	ResetEntity(Head)
+	PositionEntity(me\Head, x, y + 0.05, z)
+	ResetEntity(me\Head)
 	
 	AccessCode = Int(ReadString(f))
 	
@@ -1336,8 +1336,8 @@ Function LoadGameQuick(File$)
 	x = ReadFloat(f)
 	y = ReadFloat(f)
 	z = ReadFloat(f)	
-	PositionEntity(Head, x, y + 0.05, z)
-	ResetEntity(Head)
+	PositionEntity(me\Head, x, y + 0.05, z)
+	ResetEntity(me\Head)
 	
 	AccessCode = Int(ReadString(f))
 	
@@ -2000,7 +2000,7 @@ Function LoadGameQuick(File$)
 		EndIf
 	Next
 	; ~ Resetting some stuff (those get changed when going to the endings)
-	CameraFogMode(Camera, 1)
+	CameraFogMode(me\Camera, 1)
 	HideDistance = 15.0
 	
 	CatchErrors("LoadGameQuick")
