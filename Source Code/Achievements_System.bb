@@ -42,7 +42,7 @@ Function AchievementTooltip(AchvNo%)
 
     SetFont(fo\FontID[2])
 	
-    Local Width = StringWidth(AchievementStrings[AchvNo])
+    Local Width% = StringWidth(AchievementStrings[AchvNo])
 	
     SetFont(fo\FontID[0])
     If StringWidth(AchievementDescs[AchvNo]) > Width Then
@@ -50,7 +50,7 @@ Function AchievementTooltip(AchvNo%)
     EndIf
     Width = Width + 20 * MenuScale
     
-    Local Height = 38 * Scale
+    Local Height% = 38 * Scale
     
     Color(25, 25, 25)
     Rect(ScaledMouseX() + (20 * MenuScale), ScaledMouseY() + (20 * MenuScale), Width, Height, True)
@@ -110,7 +110,7 @@ Function UpdateAchievementMsg()
 	Local Height% = 84.0 * Scale
 	Local x%, y%
 	
-	For amsg = Each AchievementMsg
+	For amsg.AchievementMsg = Each AchievementMsg
 		If amsg\MsgTime <> 0.0
 			If amsg\MsgTime > 0.0 And amsg\MsgTime < 70.0 * 7.0
 				amsg\MsgTime = amsg\MsgTime + fpst\FPSFactor[1]
@@ -139,11 +139,11 @@ Function RenderAchievementMsg()
 	Local Height% = 84.0 * Scale
 	Local x%, y%
 	
-	For amsg = Each AchievementMsg
+	For amsg.AchievementMsg = Each AchievementMsg
 		If amsg\MsgTime <> 0.0
             x = GraphicWidth + amsg\MsgX
 			y = 0
-			For amsg2 = Each AchievementMsg
+			For amsg2.AchievementMsg = Each AchievementMsg
 				If amsg2 <> amsg
 					If amsg2\MsgID > amsg\MsgID
 						y = y + Height 

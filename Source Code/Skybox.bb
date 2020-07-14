@@ -1,15 +1,16 @@
 Function sky_CreateSky(FileName$, Parent% = 0)
-	Local Sky%
+	Local Sky%, Face%, Direction$, Vert%
+	Local s%, x%, y%, z%, u%, v%
 
 	Restore sky_SkyboxData
 	Sky = CreateMesh(Parent)
 	For Face = 1 To 6
-		Read Direction$
+		Read Direction
 		
-		Local FName$ = FileName + Direction$ + ".png"
+		Local FName$ = FileName + Direction + ".png"
 		
-		If FileType(FName$) = 1 Then
-			Local b = LoadBrush_Strict(FName$, %110001)
+		If FileType(FName) = 1 Then
+			Local b = LoadBrush_Strict(FName, %110001)
 			
 			s = CreateSurface(Sky, b)
 			For Vert = 1 To 4

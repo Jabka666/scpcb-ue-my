@@ -24,7 +24,7 @@ Function AddTextureToCache(Texture%)
 	
 	If tc.Materials = Null Then
 		tc.Materials = New Materials
-		tc\name = StripPath(TextureName(Texture))
+		tc\Name = StripPath(TextureName(Texture))
 		If BumpEnabled Then
 			Local Temp$ = GetINIString("Data\materials.ini", tc\Name, "bump")
 			

@@ -201,7 +201,7 @@ Type PlayerStats
 	Field Detected%
 	Field ExplosionTimer#
 	Field Zone%
-	Field Camera%, Head%
+	Field Collider%, Camera%, Head%
 End Type
 
 Global me.PlayerStats = New PlayerStats
@@ -945,8 +945,8 @@ Function UpdateConsole()
 					
 					For r.Rooms = Each Rooms
 						If r\RoomTemplate\Name = StrTemp Then
-							PositionEntity(Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.7, EntityZ(r\OBJ))
-							ResetEntity(Collider)
+							PositionEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.7, EntityZ(r\OBJ))
+							ResetEntity(me\Collider)
 							UpdateDoors()
 							UpdateRooms()
 							For it.Items = Each Items
@@ -968,13 +968,13 @@ Function UpdateConsole()
 						If Lower(itt\Name) = StrTemp Then
 							Temp = True
 							CreateConsoleMsg(itt\Name + " spawned.")
-							it.Items = CreateItem(itt\Name, itt\TempName, EntityX(Collider), EntityY(me\Camera, True), EntityZ(Collider))
+							it.Items = CreateItem(itt\Name, itt\TempName, EntityX(me\Collider), EntityY(me\Camera, True), EntityZ(me\Collider))
 							EntityType(it\Collider, HIT_ITEM)
 							Exit
 						ElseIf (Lower(itt\TempName) = StrTemp) Then
 							Temp = True
 							CreateConsoleMsg(itt\Name + " spawned.")
-							it.Items = CreateItem(itt\Name, itt\TempName, EntityX(Collider), EntityY(me\Camera, True), EntityZ(Collider))
+							it.Items = CreateItem(itt\Name, itt\TempName, EntityX(me\Collider), EntityY(me\Camera, True), EntityZ(me\Collider))
 							EntityType(it\Collider, HIT_ITEM)
 							Exit
 						EndIf
@@ -1153,9 +1153,9 @@ Function UpdateConsole()
 					;[Block]
 					For i = 1 To 20
 						If Rand(2) = 1 Then
-							it.Items = CreateItem("Some SCP-420-J", "scp420j", EntityX(Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(me\Camera, True), EntityZ(Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
+							it.Items = CreateItem("Some SCP-420-J", "scp420j", EntityX(me\Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(me\Camera, True), EntityZ(me\Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
 						Else
-							it.Items = CreateItem("Joint", "joint", EntityX(Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(me\Camera, True), EntityZ(Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
+							it.Items = CreateItem("Joint", "joint", EntityX(me\Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(me\Camera, True), EntityZ(me\Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
 						EndIf
 						EntityType(it\Collider, HIT_ITEM)
 					Next
@@ -1213,7 +1213,7 @@ Function UpdateConsole()
 						chs\GodMode = False
 					EndIf
 					
-					ShowEntity(Collider)
+					ShowEntity(me\Collider)
 					
 					me\KillTimer = 0.0
 					me\KillAnim = 0
@@ -1232,13 +1232,13 @@ Function UpdateConsole()
 						Case "off", "0", "false"
 							;[Block]
 							chs\NoClip = False	
-							RotateEntity(Collider, 0.0, EntityYaw(Collider), 0.0)
+							RotateEntity(me\Collider, 0.0, EntityYaw(me\Collider), 0.0)
 							;[End Block]
 						Default
 							;[Block]
 							chs\NoClip = (Not chs\NoClip)
 							If chs\NoClip = False Then		
-								RotateEntity(Collider, 0.0, EntityYaw(Collider), 0.0)
+								RotateEntity(me\Collider, 0.0, EntityYaw(me\Collider), 0.0)
 							Else
 								me\Playable = True
 								UnableToMove = False
@@ -1383,9 +1383,9 @@ Function UpdateConsole()
 					;[Block]
 					For i = 1 To 20
 					    If Rand(2) = 1 Then
-						    it.Items = CreateItem("Quarter", "25ct", EntityX(Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(me\Camera, True), EntityZ(Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
+						    it.Items = CreateItem("Quarter", "25ct", EntityX(me\Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(me\Camera, True), EntityZ(me\Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
 					    Else
-					        it.Items = CreateItem("Coin", "coin", EntityX(Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(me\Camera, True), EntityZ(Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
+					        it.Items = CreateItem("Coin", "coin", EntityX(me\Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(me\Camera, True), EntityZ(me\Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
 					    EndIf
 					    EntityType(it\Collider, HIT_ITEM)
 					Next
@@ -1546,11 +1546,11 @@ Function UpdateConsole()
 					StrTemp = Piece(Args, 1, " ")
 					StrTemp2 = Piece(Args, 2, " ")
 					StrTemp3 = Piece(Args, 3, " ")
-					PositionEntity(Collider, Float(StrTemp), Float(StrTemp2), Float(StrTemp3))
+					PositionEntity(me\Collider, Float(StrTemp), Float(StrTemp2), Float(StrTemp3))
 					PositionEntity(me\Camera, Float(StrTemp), Float(StrTemp2), Float(StrTemp3))
-					ResetEntity(Collider)
+					ResetEntity(me\Collider)
 					ResetEntity(me\Camera)
-					CreateConsoleMsg("Teleported to coordinates (X|Y|Z): " + EntityX(Collider) + "|" + EntityY(Collider) + "|" + EntityZ(Collider))
+					CreateConsoleMsg("Teleported to coordinates (X|Y|Z): " + EntityX(me\Collider) + "|" + EntityY(me\Collider) + "|" + EntityZ(me\Collider))
 					;[End Block]
 				Case "asd"
 					;[Block]
@@ -1623,7 +1623,7 @@ Function UpdateConsole()
 					;[End Block]
 				Case "teleport173"
 					;[Block]
-					PositionEntity(Curr173\Collider, EntityX(Collider), EntityY(Collider) + 0.2, EntityZ(Collider))
+					PositionEntity(Curr173\Collider, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 					ResetEntity(Curr173\Collider)
 					;[End Block]
 				Case "seteventstate"
@@ -2153,8 +2153,8 @@ Function UpdateDoors()
 	
 	If UpdateDoorsTimer =< 0.0 Then
 		For d.Doors = Each Doors
-			Local xDist# = Abs(EntityX(Collider) - EntityX(d\OBJ, True))
-			Local zDist# = Abs(EntityZ(Collider) - EntityZ(d\OBJ, True))
+			Local xDist# = Abs(EntityX(me\Collider) - EntityX(d\OBJ, True))
+			Local zDist# = Abs(EntityZ(me\Collider) - EntityZ(d\OBJ, True))
 			
 			d\Dist = xDist + zDist
 			
@@ -2186,9 +2186,9 @@ Function UpdateDoors()
 			If (d\OpenState >= 180.0 Lor d\OpenState =< 0.0) And GrabbedEntity = 0 Then
 				For i = 0 To 1
 					If d\Buttons[i] <> 0 Then
-						If Abs(EntityX(Collider) - EntityX(d\Buttons[i], True)) < 1.0 Then 
-							If Abs(EntityZ(Collider) - EntityZ(d\Buttons[i], True)) < 1.0 Then 
-								Dist = Distance(EntityX(Collider, True), EntityX(d\Buttons[i], True), EntityZ(Collider, True), EntityZ(d\Buttons[i], True))
+						If Abs(EntityX(me\Collider) - EntityX(d\Buttons[i], True)) < 1.0 Then 
+							If Abs(EntityZ(me\Collider) - EntityZ(d\Buttons[i], True)) < 1.0 Then 
+								Dist = Distance(EntityX(me\Collider, True), EntityX(d\Buttons[i], True), EntityZ(me\Collider, True), EntityZ(d\Buttons[i], True))
 								If Dist < 0.7 Then
 									Local Temp% = CreatePivot()
 									
@@ -2200,7 +2200,7 @@ Function UpdateDoors()
 											ClosestButton = d\Buttons[i]
 											ClosestDoor = d
 										Else
-											If Dist < EntityDistance(Collider, ClosestButton) Then ClosestButton = d\Buttons[i] : ClosestDoor = d
+											If Dist < EntityDistance(me\Collider, ClosestButton) Then ClosestButton = d\Buttons[i] : ClosestDoor = d
 										EndIf							
 									EndIf
 									FreeEntity(Temp)
@@ -2334,17 +2334,17 @@ Function UpdateDoors()
 					End Select
 					
 					If d\Angle = 0.0 Lor d\Angle = 180.0 Then
-						If Abs(EntityZ(d\FrameOBJ, True) - EntityZ(Collider)) < 0.15 Then
-							If Abs(EntityX(d\FrameOBJ, True) - EntityX(Collider)) < 0.7 * (d\Dir * 2 + 1) Then
-								z = CurveValue(EntityZ(d\FrameOBJ, True) + 0.15 * Sgn(EntityZ(Collider) - EntityZ(d\FrameOBJ, True)), EntityZ(Collider), 5)
-								PositionEntity(Collider, EntityX(Collider), EntityY(Collider), z)
+						If Abs(EntityZ(d\FrameOBJ, True) - EntityZ(me\Collider)) < 0.15 Then
+							If Abs(EntityX(d\FrameOBJ, True) - EntityX(me\Collider)) < 0.7 * (d\Dir * 2 + 1) Then
+								z = CurveValue(EntityZ(d\FrameOBJ, True) + 0.15 * Sgn(EntityZ(me\Collider) - EntityZ(d\FrameOBJ, True)), EntityZ(me\Collider), 5)
+								PositionEntity(me\Collider, EntityX(me\Collider), EntityY(me\Collider), z)
 							EndIf
 						EndIf
 					Else
-						If Abs(EntityX(d\FrameOBJ, True) - EntityX(Collider)) < 0.15 Then	
-							If Abs(EntityZ(d\FrameOBJ, True) - EntityZ(Collider)) < 0.7 * (d\Dir * 2 + 1) Then
-								x = CurveValue(EntityX(d\FrameOBJ, True) + 0.15 * Sgn(EntityX(Collider) - EntityX(d\FrameOBJ, True)), EntityX(Collider), 5)
-								PositionEntity(Collider, x, EntityY(Collider), EntityZ(Collider))
+						If Abs(EntityX(d\FrameOBJ, True) - EntityX(me\Collider)) < 0.15 Then	
+							If Abs(EntityZ(d\FrameOBJ, True) - EntityZ(me\Collider)) < 0.7 * (d\Dir * 2 + 1) Then
+								x = CurveValue(EntityX(d\FrameOBJ, True) + 0.15 * Sgn(EntityX(me\Collider) - EntityX(d\FrameOBJ, True)), EntityX(me\Collider), 5)
+								PositionEntity(me\Collider, x, EntityY(me\Collider), EntityZ(me\Collider))
 							EndIf
 						EndIf
 					EndIf
@@ -2685,8 +2685,6 @@ Collisions(HIT_DEAD, HIT_MAP, 2, 2)
 
 DrawLoading(90, True)
 
-Global Collider%
-
 Global UnableToMove% = False
 Global ShouldEntitiesFall% = True
 Global PlayerFallingPickDistance# = 10.0
@@ -2919,7 +2917,7 @@ Function MainLoop()
 			ShouldPlay = Min(me\Zone, 2.0)
 		EndIf
 		
-		If PlayerRoom\RoomTemplate\Name <> "pocketdimension" And PlayerRoom\RoomTemplate\Name <> "gatea" And (PlayerRoom\RoomTemplate\Name <> "gateb" And EntityY(Collider) =< 1040.0 * RoomScale) And (Not MenuOpen) And (Not ConsoleOpen) And (Not InvOpen) Then 
+		If PlayerRoom\RoomTemplate\Name <> "pocketdimension" And PlayerRoom\RoomTemplate\Name <> "gatea" And (PlayerRoom\RoomTemplate\Name <> "gateb" And EntityY(me\Collider) =< 1040.0 * RoomScale) And (Not MenuOpen) And (Not ConsoleOpen) And (Not InvOpen) Then 
 			If Rand(1500) = 1 Then
 				For i = 0 To 5
 					If AmbientSFX(i, CurrAmbientSFX) <> 0 Then
@@ -3013,7 +3011,7 @@ Function MainLoop()
 					UpdateDimension1499()
 				EndIf
 				UpdateLeave1499()
-			ElseIf PlayerRoom\RoomTemplate\Name = "gatea" Lor (PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(Collider) > 1040.0 * RoomScale)
+			ElseIf PlayerRoom\RoomTemplate\Name = "gatea" Lor (PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale)
 				UpdateDoors()
 				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100
 					UpdateEndings()
@@ -3047,9 +3045,9 @@ Function MainLoop()
 		Local CurrFogColor$ = ""
 		
 		If PlayerRoom <> Null Then
-			If PlayerRoom\RoomTemplate\Name = "room3storage" And EntityY(Collider) < -4100.0 * RoomScale Then
+			If PlayerRoom\RoomTemplate\Name = "room3storage" And EntityY(me\Collider) < -4100.0 * RoomScale Then
 				CurrFogColor = FogColorStorageTunnels
-			ElseIf PlayerRoom\RoomTemplate\Name = "gatea" Lor (PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(Collider) > 1040.0 * RoomScale) Then
+			ElseIf PlayerRoom\RoomTemplate\Name = "gatea" Lor (PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale) Then
 				CurrFogColor = FogColorOutside
 			ElseIf PlayerRoom\RoomTemplate\Name = "dimension1499"
 				CurrFogColor = FogColorDimension1499
@@ -3064,7 +3062,7 @@ Function MainLoop()
 			ElseIf PlayerRoom\RoomTemplate\Name = "pocketdimension"
 				For e.Events = Each Events
 					If e\EventName = "pocketdimension"
-						If EntityY(Collider) > 2608.0 * RoomScale Lor e\EventState2 > 1.0 Then
+						If EntityY(me\Collider) > 2608.0 * RoomScale Lor e\EventState2 > 1.0 Then
 							CurrFogColor = FogColorPDTrench
 						Else
 							CurrFogColor = FogColorPD
@@ -3292,7 +3290,7 @@ Function MainLoop()
 		If KeyHit(key\SAVE) Then
 			If SelectedDifficulty\SaveType = SAVEANYWHERE Then
 				RN = PlayerRoom\RoomTemplate\Name
-				If RN = "room173intro" Lor (RN = "gateb" And EntityY(Collider) > 1040.0 * RoomScale) Lor RN = "gatea"
+				If RN = "room173intro" Lor (RN = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale) Lor RN = "gatea"
 					msg\Msg = "You cannot save in this location."
 					msg\Timer = 70.0 * 6.0
 				ElseIf (Not CanSave) Lor QuickLoadPercent > -1
@@ -3310,7 +3308,7 @@ Function MainLoop()
 					msg\Timer = 70.0 * 6.0
 				Else
 					RN = PlayerRoom\RoomTemplate\Name
-					If RN = "room173intro" Lor (RN = "gateb" And EntityY(Collider) > 1040.0 * RoomScale) Lor RN = "gatea"
+					If RN = "room173intro" Lor (RN = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale) Lor RN = "gatea"
 						msg\Msg = "You cannot save in this location."
 						msg\Timer = 70.0 * 6.0
 					ElseIf (Not CanSave) Lor QuickLoadPercent > -1
@@ -3935,7 +3933,7 @@ Function MovePlayer()
 			EndIf
 			
 			If PlayerRoom\RoomTemplate\Name = "pocketdimension" Then 
-				If EntityY(Collider) < 2000.0 * RoomScale Lor EntityY(Collider) > 2608.0 * RoomScale Then
+				If EntityY(me\Collider) < 2000.0 * RoomScale Lor EntityY(me\Collider) > 2608.0 * RoomScale Then
 					me\Stamina = 0.0
 					Speed = 0.015
 					Sprint = 1.0					
@@ -3957,7 +3955,7 @@ Function MovePlayer()
 			If (Not UnableToMove) Then me\Shake = (me\Shake + fpst\FPSFactor[0] * Min(Sprint, 1.5) * 7.0) Mod 720.0
 			If Temp < 180.0 And (me\Shake Mod 360.0) >= 180.0 And me\KillTimer >= 0.0 Then
 				If CurrStepSFX = 0 Then
-					Temp = GetStepSound(Collider)
+					Temp = GetStepSound(me\Collider)
 					
 					If Sprint = 1.0 Then
 						me\SndVolume = Max(4.0, me\SndVolume)
@@ -4007,17 +4005,17 @@ Function MovePlayer()
 		me\CrouchState = 0.0
 		me\Crouch = False
 		
-		RotateEntity(Collider, WrapAngle(EntityPitch(me\Camera)), WrapAngle(EntityYaw(me\Camera)), 0.0)
+		RotateEntity(me\Collider, WrapAngle(EntityPitch(me\Camera)), WrapAngle(EntityYaw(me\Camera)), 0.0)
 		
 		Temp2 = Temp2 * chs\NoClipSpeed
 		
-		If KeyDown(key\MOVEMENT_DOWN) Then MoveEntity(Collider, 0.0, 0.0, (-Temp2) * fpst\FPSFactor[0])
-		If KeyDown(key\MOVEMENT_UP) Then MoveEntity(Collider, 0.0, 0.0, Temp2 * fpst\FPSFactor[0])
+		If KeyDown(key\MOVEMENT_DOWN) Then MoveEntity(me\Collider, 0.0, 0.0, (-Temp2) * fpst\FPSFactor[0])
+		If KeyDown(key\MOVEMENT_UP) Then MoveEntity(me\Collider, 0.0, 0.0, Temp2 * fpst\FPSFactor[0])
 		
-		If KeyDown(key\MOVEMENT_LEFT) Then MoveEntity(Collider, (-Temp2) * fpst\FPSFactor[0], 0.0, 0.0)
-		If KeyDown(key\MOVEMENT_RIGHT) Then MoveEntity(Collider, Temp2 * fpst\FPSFactor[0], 0.0, 0.0)
+		If KeyDown(key\MOVEMENT_LEFT) Then MoveEntity(me\Collider, (-Temp2) * fpst\FPSFactor[0], 0.0, 0.0)
+		If KeyDown(key\MOVEMENT_RIGHT) Then MoveEntity(me\Collider, Temp2 * fpst\FPSFactor[0], 0.0, 0.0)
 		
-		ResetEntity(Collider)
+		ResetEntity(me\Collider)
 	Else
 		Temp2 = Temp2 / Max((me\Injuries + 3.0) / 3.0, 1.0)
 		If me\Injuries > 0.5 Then 
@@ -4077,7 +4075,7 @@ Function MovePlayer()
 			Angle = me\ForceAngle
 		EndIf
 		
-		Angle = WrapAngle(EntityYaw(Collider, True) + Angle + 90.0)
+		Angle = WrapAngle(EntityYaw(me\Collider, True) + Angle + 90.0)
 		
 		If Temp Then 
 			me\CurrSpeed = CurveValue(Temp2, me\CurrSpeed, 20.0)
@@ -4085,18 +4083,18 @@ Function MovePlayer()
 			me\CurrSpeed = Max(CurveValue(0.0, me\CurrSpeed - 0.1, 1.0), 0.0)
 		EndIf
 		
-		If (Not UnableToMove) Then TranslateEntity(Collider, Cos(Angle) * me\CurrSpeed * fpst\FPSFactor[0], 0.0, Sin(Angle) * me\CurrSpeed * fpst\FPSFactor[0], True)
+		If (Not UnableToMove) Then TranslateEntity(me\Collider, Cos(Angle) * me\CurrSpeed * fpst\FPSFactor[0], 0.0, Sin(Angle) * me\CurrSpeed * fpst\FPSFactor[0], True)
 		
 		Local CollidedFloor% = False
 		
-		For i = 1 To CountCollisions(Collider)
-			If CollisionY(Collider, i) < EntityY(Collider) - 0.25 Then CollidedFloor = True
+		For i = 1 To CountCollisions(me\Collider)
+			If CollisionY(me\Collider, i) < EntityY(me\Collider) - 0.25 Then CollidedFloor = True
 		Next
 		
 		If CollidedFloor = True Then
 			If me\DropSpeed < -0.07 Then 
 				If CurrStepSFX = 0 Then
-					PlaySound_Strict(StepSFX(GetStepSound(Collider), 0, Rand(0, 7)))
+					PlaySound_Strict(StepSFX(GetStepSound(me\Collider), 0, Rand(0, 7)))
 				ElseIf CurrStepSFX = 1
 					PlaySound_Strict(StepSFX(2, 0, Rand(0, 2)))
 				ElseIf CurrStepSFX = 2
@@ -4107,7 +4105,7 @@ Function MovePlayer()
 			me\DropSpeed = 0.0
 		Else
 			If PlayerFallingPickDistance <> 0.0 Then
-				Local Pick# = LinePick(EntityX(Collider), EntityY(Collider), EntityZ(Collider), 0.0, -PlayerFallingPickDistance, 0.0)
+				Local Pick# = LinePick(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0.0, -PlayerFallingPickDistance, 0.0)
 				
 				If Pick Then
 					me\DropSpeed = Min(Max(me\DropSpeed - 0.006 * fpst\FPSFactor[0], -2.0), 0.0)
@@ -4120,7 +4118,7 @@ Function MovePlayer()
 		EndIf
 		PlayerFallingPickDistance = 10.0
 		
-		If (Not UnableToMove) And ShouldEntitiesFall Then TranslateEntity(Collider, 0.0, me\DropSpeed * fpst\FPSFactor[0], 0.0)
+		If (Not UnableToMove) And ShouldEntitiesFall Then TranslateEntity(me\Collider, 0.0, me\DropSpeed * fpst\FPSFactor[0], 0.0)
 	EndIf
 	
 	me\ForceMove = False
@@ -4146,7 +4144,7 @@ Function MovePlayer()
 	If me\Bloodloss > 0.0 And me\VomitTimer >= 0.0 Then
 		If Rnd(200.0) < Min(me\Injuries, 4.0) Then
 			Pvt = CreatePivot()
-			PositionEntity(Pvt, EntityX(Collider) + Rnd(-0.05, 0.05), EntityY(Collider) - 0.05, EntityZ(Collider) + Rnd(-0.05, 0.05))
+			PositionEntity(Pvt, EntityX(me\Collider) + Rnd(-0.05, 0.05), EntityY(me\Collider) - 0.05, EntityZ(me\Collider) + Rnd(-0.05, 0.05))
 			TurnEntity(Pvt, 90.0, 0.0, 0.0)
 			EntityPick(Pvt, 0.3)
 			
@@ -4218,8 +4216,8 @@ Function MouseLook()
 		Local Up# = (Sin(me\Shake) / (20.0 + me\CrouchState * 20.0)) * 0.6		
 		Local Roll# = Max(Min(Sin(me\Shake / 2.0) * 2.5 * Min(me\Injuries + 0.25, 3.0), 8.0), -8.0)
 		
-		PositionEntity(me\Camera, EntityX(Collider) + Side, EntityY(Collider) + Up + 0.6 + me\CrouchState * -0.3, EntityZ(Collider))
-		RotateEntity(me\Camera, 0.0, EntityYaw(Collider), Roll * 0.5)
+		PositionEntity(me\Camera, EntityX(me\Collider) + Side, EntityY(me\Collider) + Up + 0.6 + me\CrouchState * -0.3, EntityZ(me\Collider))
+		RotateEntity(me\Camera, 0.0, EntityYaw(me\Collider), Roll * 0.5)
 		
 		; ~ Update the smoothing que to smooth the movement of the mouse
 		Mouse_X_Speed_1 = CurveValue(MouseXSpeed() * (MouseSensitivity + 0.6) , Mouse_X_Speed_1, (6.0 / (MouseSensitivity + 1.0)) * MouseSmoothing) 
@@ -4241,21 +4239,21 @@ Function MouseLook()
 		Local The_Yaw# = ((Mouse_X_Speed_1)) * Mouselook_X_Inc / (1.0 + wi\BallisticVest)
 		Local The_Pitch# = ((Mouse_Y_Speed_1)) * Mouselook_Y_Inc / (1.0 + wi\BallisticVest)
 		
-		TurnEntity(Collider, 0.0, -The_Yaw, 0.0) ; ~ Turn the user on the Y (Yaw) axis
+		TurnEntity(me\Collider, 0.0, -The_Yaw, 0.0) ; ~ Turn the user on the Y (Yaw) axis
 		User_Camera_Pitch = User_Camera_Pitch + The_Pitch
 		; ~ Limit the user's camera To within 180.0 degrees of pitch rotation. Returns useless values so we need to use a variable to keep track of the camera pitch
 		If User_Camera_Pitch > 70.0 Then User_Camera_Pitch = 70.0
 		If User_Camera_Pitch < -70.0 Then User_Camera_Pitch = -70.0
 		
-		RotateEntity(me\Camera, WrapAngle(User_Camera_Pitch + Rnd(-me\CameraShake, me\CameraShake)), WrapAngle(EntityYaw(Collider) + Rnd(-me\CameraShake, me\CameraShake)), Roll) ; ~ Pitch the user's camera up and down
+		RotateEntity(me\Camera, WrapAngle(User_Camera_Pitch + Rnd(-me\CameraShake, me\CameraShake)), WrapAngle(EntityYaw(me\Collider) + Rnd(-me\CameraShake, me\CameraShake)), Roll) ; ~ Pitch the user's camera up and down
 		
 		If PlayerRoom\RoomTemplate\Name = "pocketdimension" Then
-			If EntityY(Collider) < 2000.0 * RoomScale Lor EntityY(Collider) > 2608.0 * RoomScale Then
+			If EntityY(me\Collider) < 2000.0 * RoomScale Lor EntityY(me\Collider) > 2608.0 * RoomScale Then
 				RotateEntity(me\Camera, WrapAngle(EntityPitch(me\Camera)), WrapAngle(EntityYaw(me\Camera)), Roll + WrapAngle(Sin(MilliSecs() / 150.0) * 30.0)) ; ~ Pitch the user's camera up and down
 			EndIf
 		EndIf
 	Else
-		HideEntity(Collider)
+		HideEntity(me\Collider)
 		PositionEntity(me\Camera, EntityX(me\Head), EntityY(me\Head), EntityZ(me\Head))
 		
 		Local CollidedFloor% = False
@@ -4716,7 +4714,7 @@ Function DrawGUI()
 			Text(x - 60, 360, "Active Textures: " + ActiveTextures())	
 			
 			If Curr173 <> Null Then
-				Text(x - 60, 400, "SCP-173 Position (Collider): (" + f2s(EntityX(Curr173\Collider), 1) + ", " + f2s(EntityY(Curr173\Collider), 1) + ", " + f2s(EntityZ(Curr173\Collider), 1) + ")")
+				Text(x - 60, 400, "SCP-173 Position (me\Collider): (" + f2s(EntityX(Curr173\Collider), 1) + ", " + f2s(EntityY(Curr173\Collider), 1) + ", " + f2s(EntityZ(Curr173\Collider), 1) + ")")
 				Text(x - 60, 420, "SCP-173 Position (Object): (" + f2s(EntityX(Curr173\OBJ), 1) + ", " + f2s(EntityY(Curr173\OBJ), 1) + ", " + f2s(EntityZ(Curr173\OBJ), 1) + ")")
 				Text(x - 60, 440, "SCP-173 State: " + Curr173\State)
 			EndIf
@@ -4741,7 +4739,7 @@ Function DrawGUI()
 			Next
 			
 			If PlayerRoom\RoomTemplate\Name = "dimension1499"
-				Text(x - 60, 700, "Current Chunk X / Z: (" + (Int((EntityX(Collider) + 20) / 40)) + ", "+(Int((EntityZ(Collider) + 20) / 40)) + ")")
+				Text(x - 60, 700, "Current Chunk X / Z: (" + (Int((EntityX(me\Collider) + 20) / 40)) + ", "+(Int((EntityZ(me\Collider) + 20) / 40)) + ")")
 				
 				Local CH_Amount% = 0
 				
@@ -4762,9 +4760,9 @@ Function DrawGUI()
 			Text(x + 440, 60, "******** PLAYER STATS ********")
 			Text(x + 440, 80, "******************************")
 			
-			Text(x + 440, 120, "Player Position: (" + f2s(EntityX(Collider), 1) + ", " + f2s(EntityY(Collider), 1) + ", " + f2s(EntityZ(Collider), 1) + ")")
+			Text(x + 440, 120, "Player Position: (" + f2s(EntityX(me\Collider), 1) + ", " + f2s(EntityY(me\Collider), 1) + ", " + f2s(EntityZ(me\Collider), 1) + ")")
 			Text(x + 440, 140, "Camera Position: (" + f2s(EntityX(me\Camera), 1)+ ", " + f2s(EntityY(me\Camera), 1) +", " + f2s(EntityZ(me\Camera), 1) + ")")
-			Text(x + 440, 160, "Player Rotation: (" + f2s(EntityPitch(Collider), 1) + ", " + f2s(EntityYaw(Collider), 1) + ", " + f2s(EntityRoll(Collider), 1) + ")")
+			Text(x + 440, 160, "Player Rotation: (" + f2s(EntityPitch(me\Collider), 1) + ", " + f2s(EntityYaw(me\Collider), 1) + ", " + f2s(EntityRoll(me\Collider), 1) + ")")
 			Text(x + 440, 180, "Camera Rotation: (" + f2s(EntityPitch(me\Camera), 1) + ", " + f2s(EntityYaw(me\Camera), 1) +", " + f2s(EntityRoll(me\Camera), 1) + ")")
 			
 			Text(x + 440, 220, "Playable: " + me\Playable)
@@ -5409,8 +5407,8 @@ Function DrawGUI()
 							
 							DrawImage(SelectedItem\ItemTemplate\Img, xx, yy)
 							
-							x = x - 12.0 + (((EntityX(Collider) - 4.0) + 8.0) Mod 8.0) * 3.0
-							y = y + 12.0 - (((EntityZ(Collider) - 4.0) + 8.0) Mod 8.0) * 3.0
+							x = x - 12.0 + (((EntityX(me\Collider) - 4.0) + 8.0) Mod 8.0) * 3.0
+							y = y + 12.0 - (((EntityZ(me\Collider) - 4.0) + 8.0) Mod 8.0) * 3.0
 							For x2 = Max(0.0, PlayerX - 6.0) To Min(MapWidth, PlayerX + 6.0)
 								For z2 = Max(0.0, PlayerZ - 6.0) To Min(MapHeight, PlayerZ + 6.0)
 									If CoffinDistance > 16.0 Lor Rnd(16.0) < CoffinDistance Then 
@@ -5469,7 +5467,7 @@ Function DrawGUI()
 									Text(x - NAV_WIDTH / 2 + 10, y - NAV_HEIGHT / 2 + 10, "MAP DATABASE OFFLINE")
 								EndIf
 								
-								YawValue = EntityYaw(Collider) - 90.0
+								YawValue = EntityYaw(me\Collider) - 90.0
 								x1 = x + Cos(YawValue) * 6.0 : y1 = y - Sin(YawValue) * 6.0
 								x2 = x + Cos(YawValue - 140.0) * 5.0 : y2 = y - Sin(YawValue - 140.0) * 5.0				
 								x3 = x + Cos(YawValue + 140.0) * 5.0 : y3 = y - Sin(YawValue + 140.0) * 5.0
@@ -5864,7 +5862,7 @@ Function UpdateGUI()
 			HideEntity(tt\OverlayID[0])
 			CameraFogRange(me\Camera, 5.0, 30.0)
 			CameraRange(me\Camera, 0.01, 30.0)
-		ElseIf PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(Collider) > 1040.0 * RoomScale
+		ElseIf PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale
 			HideEntity(tt\OverlayID[0])
 			CameraFogRange(me\Camera, 5.0, 45.0)
 			CameraRange(me\Camera, 0.01, 60.0)
@@ -6027,7 +6025,7 @@ Function UpdateGUI()
 			HideEntity(tt\OverlayID[0])
 			CameraFogRange(me\Camera, 5.0, 30.0)
 			CameraRange(me\Camera, 0.01, 30.0)
-		ElseIf PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(Collider) > 1040.0 * RoomScale
+		ElseIf PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale
 			HideEntity(tt\OverlayID[0])
 			CameraFogRange(me\Camera, 5.0, 45.0)
 			CameraRange(me\Camera, 0.01, 60.0)
@@ -6601,15 +6599,15 @@ Function UpdateGUI()
 								
 								Local RoomName$ = PlayerRoom\RoomTemplate\Name
 								
-								If RoomName = "dimension1499" Lor RoomName = "gatea" Lor (RoomName = "gateb" And EntityY(Collider) > 1040.0 * RoomScale)
+								If RoomName = "dimension1499" Lor RoomName = "gatea" Lor (RoomName = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale)
 									me\Injuries = 2.5
 									msg\Msg = "You started bleeding heavily."
 									msg\Timer = 70.0 * 6.0
 								Else
 									For r.Rooms = Each Rooms
 										If r\RoomTemplate\Name = "pocketdimension" Then
-											PositionEntity(Collider, EntityX(r\OBJ), 0.8, EntityZ(r\OBJ))		
-											ResetEntity(Collider)									
+											PositionEntity(me\Collider, EntityX(r\OBJ), 0.8, EntityZ(r\OBJ))		
+											ResetEntity(me\Collider)									
 											UpdateDoors()
 											UpdateRooms()
 											PlaySound_Strict(Use914SFX)
@@ -7434,17 +7432,17 @@ Function UpdateGUI()
 									If r\RoomTemplate\Name = "dimension1499" Then
 										me\BlinkTimer = -1.0
 										I_1499\PrevRoom = PlayerRoom
-										I_1499\PrevX = EntityX(Collider)
-										I_1499\PrevY = EntityY(Collider)
-										I_1499\PrevZ = EntityZ(Collider)
+										I_1499\PrevX = EntityX(me\Collider)
+										I_1499\PrevY = EntityY(me\Collider)
+										I_1499\PrevZ = EntityZ(me\Collider)
 										
 										If I_1499\x = 0.0 And I_1499\y = 0.0 And I_1499\z = 0.0 Then
-											PositionEntity(Collider, r\x + 6086.0 * RoomScale, r\y + 304.0 * RoomScale, r\z + 2292.5 * RoomScale)
-											RotateEntity(Collider, 0.0, 90.0, 0.0, True)
+											PositionEntity(me\Collider, r\x + 6086.0 * RoomScale, r\y + 304.0 * RoomScale, r\z + 2292.5 * RoomScale)
+											RotateEntity(me\Collider, 0.0, 90.0, 0.0, True)
 										Else
-											PositionEntity(Collider, I_1499\x, I_1499\y + 0.05, I_1499\z)
+											PositionEntity(me\Collider, I_1499\x, I_1499\y + 0.05, I_1499\z)
 										EndIf
-										ResetEntity(Collider)
+										ResetEntity(me\Collider)
 										UpdateDoors()
 										UpdateRooms()
 										For it.Items = Each Items
@@ -7462,7 +7460,7 @@ Function UpdateGUI()
 										EndIf
 										For e.Events = Each Events
 											If e\EventName = "dimension1499" Then
-												If EntityDistance(e\room\OBJ, Collider) > 8300.0 * RoomScale Then
+												If EntityDistance(e\room\OBJ, me\Collider) > 8300.0 * RoomScale Then
 													If e\EventState2 < 5 Then
 														e\EventState2 = e\EventState2 + 1.0
 													EndIf
@@ -8089,10 +8087,10 @@ Function UpdateMenu()
 		EndIf
 		ShouldDeleteGadgets = False
 		
-		If (PlayerRoom\RoomTemplate\Name <> "gateb" And EntityY(Collider) =< 1040.0 * RoomScale) And PlayerRoom\RoomTemplate\Name <> "gatea"
+		If (PlayerRoom\RoomTemplate\Name <> "gateb" And EntityY(me\Collider) =< 1040.0 * RoomScale) And PlayerRoom\RoomTemplate\Name <> "gatea"
 			If StopHidingTimer = 0.0 Then
 				If Curr173 <> Null And Curr106 <> Null Then
-					If EntityDistance(Curr173\Collider, Collider) < 4.0 Lor EntityDistance(Curr106\Collider, Collider) < 4.0 Then 
+					If EntityDistance(Curr173\Collider, me\Collider) < 4.0 Lor EntityDistance(Curr106\Collider, me\Collider) < 4.0 Then 
 						StopHidingTimer = 1.0
 					EndIf	
 				EndIf
@@ -8412,7 +8410,7 @@ Function UpdateMenu()
 				Local RN$ = PlayerRoom\RoomTemplate\Name
 				Local AbleToSave% = True
 				
-				If RN = "room173intro" Lor (RN = "gateb" And EntityY(Collider) > 1040.0 * RoomScale) Lor RN = "gatea" Then AbleToSave = False
+				If RN = "room173intro" Lor (RN = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale) Lor RN = "gatea" Then AbleToSave = False
 				If (Not CanSave) Then AbleToSave = False
 				If AbleToSave Then
 					QuitButton = 140
@@ -8506,13 +8504,13 @@ Function UpdateMenu()
 							UpdateRooms()
 							
 							For r.Rooms = Each Rooms
-								x = Abs(EntityX(Collider) - EntityX(r\OBJ))
-								z = Abs(EntityZ(Collider) - EntityZ(r\OBJ))
+								x = Abs(EntityX(me\Collider) - EntityX(r\OBJ))
+								z = Abs(EntityZ(me\Collider) - EntityZ(r\OBJ))
 								
 								If x < 12.0 And z < 12.0 Then
 									MapFound(Floor(EntityX(r\OBJ) / 8.0), Floor(EntityZ(r\OBJ) / 8.0)) = Max(MapFound(Floor(EntityX(r\OBJ) / 8.0), Floor(EntityZ(r\OBJ) / 8.0)), 1)
 									If x < 4.0 And z < 4.0 Then
-										If Abs(EntityY(Collider) - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r
+										If Abs(EntityY(me\Collider) - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r
 										MapFound(Floor(EntityX(r\OBJ) / 8.0), Floor(EntityZ(r\OBJ) / 8.0)) = 1
 									EndIf
 								EndIf
@@ -8568,13 +8566,13 @@ Function UpdateMenu()
 						UpdateRooms()
 						
 						For r.Rooms = Each Rooms
-							x = Abs(EntityX(Collider) - EntityX(r\OBJ))
-							z = Abs(EntityZ(Collider) - EntityZ(r\OBJ))
+							x = Abs(EntityX(me\Collider) - EntityX(r\OBJ))
+							z = Abs(EntityZ(me\Collider) - EntityZ(r\OBJ))
 							
 							If x < 12.0 And z < 12.0 Then
 								MapFound(Floor(EntityX(r\OBJ) / 8.0), Floor(EntityZ(r\OBJ) / 8.0)) = Max(MapFound(Floor(EntityX(r\OBJ) / 8.0), Floor(EntityZ(r\OBJ) / 8.0)), 1)
 								If x < 4.0 And z < 4.0 Then
-									If Abs(EntityY(Collider) - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r
+									If Abs(EntityY(me\Collider) - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r
 									MapFound(Floor(EntityX(r\OBJ) / 8.0), Floor(EntityZ(r\OBJ) / 8.0)) = 1
 								EndIf
 							EndIf
@@ -8819,7 +8817,7 @@ Function LoadEntities()
 	EntityBlend(tt\OverlayID[10], 2)
 	EntityFX(tt\OverlayID[10], 1)
 	EntityOrder(tt\OverlayID[10], -1003)
-	MoveEntity(tt\OverlayID[10], 0, 0, 1.0)
+	MoveEntity(tt\OverlayID[10], 0.0, 0.0, 1.0)
 	HideEntity(tt\OverlayID[10])
 	
 	tt\OverlayTextureID[11] = LoadTexture_Strict("GFX\fog_gas_mask.png", 1) ; ~ FOG IN GAS MASK
@@ -8829,13 +8827,13 @@ Function LoadEntities()
 	EntityBlend(tt\OverlayID[11], 3)
 	EntityFX(tt\OverlayID[11], 1)
 	EntityOrder(tt\OverlayID[11], -1000)
-	MoveEntity(tt\OverlayID[11], 0, 0, 1.0)
+	MoveEntity(tt\OverlayID[11], 0.0, 0.0, 1.0)
 	HideEntity(tt\OverlayID[11])
 	
-	Collider = CreatePivot()
-	EntityRadius Collider, 0.15, 0.30
-	EntityPickMode(Collider, 1)
-	EntityType(Collider, HIT_PLAYER)
+	me\Collider = CreatePivot()
+	EntityRadius(me\Collider, 0.15, 0.30)
+	EntityPickMode(me\Collider, 1)
+	EntityType(me\Collider, HIT_PLAYER)
 	
 	me\Head = CreatePivot()
 	EntityRadius(me\Head, 0.15)
@@ -9328,7 +9326,7 @@ Function InitNewGame()
 		EndIf
 		
 		If r\RoomTemplate\Name = "room173" And IntroEnabled = False Then 
-			PositionEntity(Collider, EntityX(r\OBJ) + 3584.0 * RoomScale, 704.0 * RoomScale, EntityZ(r\OBJ) + 1024.0 * RoomScale)
+			PositionEntity(me\Collider, EntityX(r\OBJ) + 3584.0 * RoomScale, 704.0 * RoomScale, EntityZ(r\OBJ) + 1024.0 * RoomScale)
 			PlayerRoom = r
 			it = CreateItem("Class D Orientation Leaflet", "paper", 1, 1, 1)
 			it\Picked = True
@@ -9349,7 +9347,7 @@ Function InitNewGame()
 			EntityParent(it\Collider, 0)
 			ItemAmount = ItemAmount + 1
 		ElseIf r\RoomTemplate\Name = "room173intro" And IntroEnabled Then
-			PositionEntity(Collider, EntityX(r\OBJ), 1.0, EntityZ(r\OBJ))
+			PositionEntity(me\Collider, EntityX(r\OBJ), 1.0, EntityZ(r\OBJ))
 			PlayerRoom = r
 		EndIf
 	Next
@@ -9366,9 +9364,9 @@ Function InitNewGame()
 		Delete(tw)
 	Next
 	
-	TurnEntity(Collider, 0.0, Rnd(160.0, 200.0), 0.0)
+	TurnEntity(me\Collider, 0.0, Rnd(160.0, 200.0), 0.0)
 	
-	ResetEntity(Collider)
+	ResetEntity(me\Collider)
 	
 	If SelectedMap = "" Then InitEvents()
 	
@@ -9439,7 +9437,7 @@ Function InitLoadGame()
 		EntityParent(sc\OBJ, 0)
 	Next
 	
-	ResetEntity(Collider)
+	ResetEntity(me\Collider)
 	
 	DrawLoading(90)
 	
@@ -9768,7 +9766,7 @@ Function NullGame(PlayButtonSFX% = True) ; ~ CHECK WHAT IS WRONG HERE!
 	ClearWorld()
 	me\Camera = 0
 	Ark_Blur_Cam = 0
-	Collider = 0
+	me\Collider = 0
 	Sky = 0
 	InitFastResize()
 	
@@ -11410,7 +11408,7 @@ Function Use427()
 		Next
 		If Rnd(200) < 2.0 Then
 			Pvt = CreatePivot()
-			PositionEntity(Pvt, EntityX(Collider) + Rnd(-0.05, 0.05), EntityY(Collider) - 0.05, EntityZ(Collider) + Rnd(-0.05, 0.05))
+			PositionEntity(Pvt, EntityX(me\Collider) + Rnd(-0.05, 0.05), EntityY(me\Collider) - 0.05, EntityZ(me\Collider) + Rnd(-0.05, 0.05))
 			TurnEntity(Pvt, 90.0, 0.0, 0.0)
 			EntityPick(Pvt, 0.3)
 			de.Decals = CreateDecal(17, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rand(360.0), 0.0)
@@ -11449,7 +11447,7 @@ Function UpdateMTF()
 			
 			If entrance <> Null Then 
 				If me\Zone = 2 Then
-					If Abs(EntityZ(entrance\OBJ) - EntityZ(Collider)) < 30.0 Then
+					If Abs(EntityZ(entrance\OBJ) - EntityZ(me\Collider)) < 30.0 Then
 						If PlayerInReachableRoom()
 							PlayAnnouncement("SFX\Character\MTF\Announc.ogg")
 						EndIf
@@ -11533,7 +11531,7 @@ Function Update008()
 		Next
 	ElseIf PlayerRoom\RoomTemplate\Name = "dimension1499" Lor PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor PlayerRoom\RoomTemplate\Name = "gatea"
 		TeleportForInfect = False
-	ElseIf PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(Collider) > 1040.0 * RoomScale
+	ElseIf PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale
 		TeleportForInfect = False
 	EndIf
 	
@@ -11578,8 +11576,8 @@ Function Update008()
 					If TeleportForInfect Then
 						For r.Rooms = Each Rooms
 							If r\RoomTemplate\Name = "room008" Then
-								PositionEntity(Collider, EntityX(r\Objects[7], True), EntityY(r\Objects[7], True), EntityZ(r\Objects[7], True), True)
-								ResetEntity(Collider)
+								PositionEntity(me\Collider, EntityX(r\Objects[7], True), EntityY(r\Objects[7], True), EntityZ(r\Objects[7], True), True)
+								ResetEntity(me\Collider)
 								r\NPC[0] = CreateNPC(NPCtypeD, EntityX(r\Objects[6], True),EntityY(r\Objects[6], True) + 0.2, EntityZ(r\Objects[6], True))
 								r\NPC[0]\Sound = LoadSound_Strict("SFX\SCP\008\KillScientist1.ogg")
 								r\NPC[0]\SoundCHN = PlaySound_Strict(r\NPC[0]\Sound)
@@ -11603,8 +11601,8 @@ Function Update008()
 					me\BlurTimer = 900.0
 					
 					If I_008\Timer > 94.5 Then me\BlinkTimer = Max(Min((-50.0) * (I_008\Timer - 94.5), me\BlinkTimer), -10.0)
-					PointEntity(Collider, PlayerRoom\NPC[0]\Collider)
-					PointEntity(PlayerRoom\NPC[0]\Collider, Collider)
+					PointEntity(me\Collider, PlayerRoom\NPC[0]\Collider)
+					PointEntity(PlayerRoom\NPC[0]\Collider, me\Collider)
 					PointEntity(me\Camera, PlayerRoom\NPC[0]\Collider, EntityRoll(me\Camera))
 					me\ForceMove = 0.75
 					me\Injuries = 2.5
@@ -11667,7 +11665,7 @@ Function Update008()
 				me\BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 96.0), me\BlinkTimer), -10.0)
 				If PlayerRoom\RoomTemplate\Name = "dimension1499" Then
 					msg\DeathMsg = "The whereabouts of SCP-1499 are still unknown, but a recon team has been dispatched to investigate reports of a violent attack to a church in the Russian town of [DATA REDACTED]."
-				ElseIf PlayerRoom\RoomTemplate\Name = "gatea" Lor (PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(Collider) > 1040.0 * RoomScale) Then
+				ElseIf PlayerRoom\RoomTemplate\Name = "gatea" Lor (PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale) Then
 					msg\DeathMsg = SubjectName + " found wandering around Gate "
 					If PlayerRoom\RoomTemplate\Name = "gatea" Then
 						msg\DeathMsg = msg\DeathMsg + "A"
@@ -11865,7 +11863,7 @@ Function RenderWorld2(Tween#)
 	ElseIf wi\NightVision = 3
 		AmbientLight(255.0, 255.0, 255.0)
 	ElseIf PlayerRoom <> Null
-		If (PlayerRoom\RoomTemplate\Name <> "room173intro") And (PlayerRoom\RoomTemplate\Name <> "gateb" And EntityY(Collider) =< 1040.0 * RoomScale) And (PlayerRoom\RoomTemplate\Name <> "gatea") Then
+		If (PlayerRoom\RoomTemplate\Name <> "room173intro") And (PlayerRoom\RoomTemplate\Name <> "gateb" And EntityY(me\Collider) =< 1040.0 * RoomScale) And (PlayerRoom\RoomTemplate\Name <> "gatea") Then
 			AmbientLight(Brightness, Brightness, Brightness)
 		EndIf
 	EndIf
@@ -11941,14 +11939,14 @@ Function RenderWorld2(Tween#)
 				Text(GraphicWidth / 2, (100 + PlusY) * MenuScale, "SECONDS", True, False)
 				
 				Temp = CreatePivot() : Temp2 = CreatePivot()
-				PositionEntity(Temp, EntityX(Collider), EntityY(Collider), EntityZ(Collider))
+				PositionEntity(Temp, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 				
 				Color(255, 255, 255)
 				
 				For np.NPCs = Each NPCs
 					If np\NVName <> "" And (Not np\HideFromNVG) Then ; ~ Don't waste your time if the string is empty
 						PositionEntity(Temp2, np\NVX, np\NVY, np\NVZ)
-						Dist = EntityDistanceSquared(Temp2, Collider)
+						Dist = EntityDistanceSquared(Temp2, me\Collider)
 						If Dist < PowTwo(23.5) Then ; ~ Don't draw text if the NPC is too far away
 							PointEntity(Temp, Temp2)
 							YawValue = WrapAngle(EntityYaw(me\Camera) - EntityYaw(Temp))
@@ -12128,16 +12126,16 @@ Function UpdateLeave1499()
 		For r.Rooms = Each Rooms
 			If r = I_1499\PrevRoom Then
 				me\BlinkTimer = -1.0
-				I_1499\x = EntityX(Collider)
-				I_1499\y = EntityY(Collider)
-				I_1499\z = EntityZ(Collider)
-				PositionEntity(Collider, I_1499\PrevX, I_1499\PrevY + 0.05, I_1499\PrevZ)
-				ResetEntity(Collider)
+				I_1499\x = EntityX(me\Collider)
+				I_1499\y = EntityY(me\Collider)
+				I_1499\z = EntityZ(me\Collider)
+				PositionEntity(me\Collider, I_1499\PrevX, I_1499\PrevY + 0.05, I_1499\PrevZ)
+				ResetEntity(me\Collider)
 				PlayerRoom = r
 				UpdateDoors()
 				UpdateRooms()
 				If PlayerRoom\RoomTemplate\Name = "room3storage"
-					If EntityY(Collider) < -4600.0 * RoomScale
+					If EntityY(me\Collider) < -4600.0 * RoomScale
 						For i = 0 To 3
 							PlayerRoom\NPC[i]\State = 2.0
 							PositionEntity(PlayerRoom\NPC[i]\Collider, EntityX(PlayerRoom\Objects[PlayerRoom\NPC[i]\State2], True), EntityY(PlayerRoom\Objects[PlayerRoom\NPC[i]\State2], True) + 0.2, EntityZ(PlayerRoom\Objects[PlayerRoom\NPC[i]\State2], True))
@@ -12181,13 +12179,13 @@ Function CheckForPlayerInFacility()
 	; ~ True (= 1): NPC is in facility
 	; ~ 2: NPC is in tunnels (maintenance tunnels / SCP-049's tunnels / SCP-939's storage room, etc...)
 	
-	If EntityY(Collider) > 100.0
+	If EntityY(me\Collider) > 100.0
 		Return(False)
 	EndIf
-	If EntityY(Collider) < -10.0
+	If EntityY(me\Collider) < -10.0
 		Return(2)
 	EndIf
-	If EntityY(Collider) > 7.0 And EntityY(Collider) =< 100.0
+	If EntityY(me\Collider) > 7.0 And EntityY(me\Collider) =< 100.0
 		Return(2)
 	EndIf
 	Return(True)
@@ -12213,9 +12211,9 @@ Function CheckTriggers$()
 				EntityColor(PlayerRoom\TriggerBox[i], 255.0, 255.0, 255.0)
 				EntityAlpha(PlayerRoom\TriggerBox[i], 0.0)
  			EndIf
-			If EntityX(Collider) > ((sX * Mesh_MinX) + PlayerRoom\x) And EntityX(Collider) < ((sX * Mesh_MaxX) + PlayerRoom\x)
-				If EntityY(Collider) > ((sY * Mesh_MinY) + PlayerRoom\y) And EntityY(Collider) < ((sY * Mesh_MaxY) + PlayerRoom\y)
-					If EntityZ(Collider) > ((sZ * Mesh_MinZ) + PlayerRoom\z) And EntityZ(Collider) < ((sZ * Mesh_MaxZ) + PlayerRoom\z)
+			If EntityX(me\Collider) > ((sX * Mesh_MinX) + PlayerRoom\x) And EntityX(me\Collider) < ((sX * Mesh_MaxX) + PlayerRoom\x)
+				If EntityY(me\Collider) > ((sY * Mesh_MinY) + PlayerRoom\y) And EntityY(me\Collider) < ((sY * Mesh_MaxY) + PlayerRoom\y)
+					If EntityZ(me\Collider) > ((sZ * Mesh_MinZ) + PlayerRoom\z) And EntityZ(me\Collider) < ((sZ * Mesh_MaxZ) + PlayerRoom\z)
 						Inside = i 
 						Exit
 					EndIf
@@ -12378,5 +12376,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#106E#1344#1E07
+;~B#106C#1342#1E05
 ;~C#Blitz3D

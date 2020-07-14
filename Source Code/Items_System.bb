@@ -395,7 +395,7 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 	ResetEntity(i\Collider)		
 	PositionEntity(i\Collider, x, y, z, True)
 	RotateEntity(i\Collider, 0.0, Rand(360.0), 0.0)
-	i\Dist = EntityDistance(Collider, i\Collider)
+	i\Dist = EntityDistance(me\Collider, i\Collider)
 	i\DropSpeed = 0.0
 	
 	If TempName = "cup" Then
@@ -927,7 +927,7 @@ Function Update294()
 			me\EyeIrritation = 70.0 * 9.0
 			
 			Pvt = CreatePivot()
-			PositionEntity(Pvt, EntityX(me\Camera), EntityY(Collider) - 0.05, EntityZ(me\Camera))
+			PositionEntity(Pvt, EntityX(me\Camera), EntityY(me\Collider) - 0.05, EntityZ(me\Camera))
 			TurnEntity(Pvt, 90.0, 0.0, 0.0)
 			EntityPick(Pvt, 0.3)
 			de.Decals = CreateDecal(5, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, 180.0, 0.0)

@@ -20,9 +20,9 @@ Function SaveGame(File$)
 	WriteString(f, CurrentDate())
 	
 	WriteInt(f, me\PlayTime)
-	WriteFloat(f, EntityX(Collider))
-	WriteFloat(f, EntityY(Collider))
-	WriteFloat(f, EntityZ(Collider))
+	WriteFloat(f, EntityX(me\Collider))
+	WriteFloat(f, EntityY(me\Collider))
+	WriteFloat(f, EntityZ(me\Collider))
 	
 	WriteFloat(f, EntityX(me\Head))
 	WriteFloat(f, EntityY(me\Head))
@@ -30,8 +30,8 @@ Function SaveGame(File$)
 	
 	WriteString(f, Str(AccessCode))
 	
-	WriteFloat(f, EntityPitch(Collider))
-	WriteFloat(f, EntityYaw(Collider))
+	WriteFloat(f, EntityPitch(me\Collider))
+	WriteFloat(f, EntityYaw(me\Collider))
 	
 	WriteString(f, VersionNumber)
 	
@@ -494,8 +494,8 @@ Function LoadGame(File$)
 	x = ReadFloat(f)
 	y = ReadFloat(f)
 	z = ReadFloat(f)	
-	PositionEntity(Collider, x, y + 0.05, z)
-	ResetEntity(Collider)
+	PositionEntity(me\Collider, x, y + 0.05, z)
+	ResetEntity(me\Collider)
 	
 	x = ReadFloat(f)
 	y = ReadFloat(f)
@@ -507,7 +507,7 @@ Function LoadGame(File$)
 	
 	x = ReadFloat(f)
 	y = ReadFloat(f)
-	RotateEntity(Collider, x, y, 0.0, 0.0)
+	RotateEntity(me\Collider, x, y, 0.0)
 	
 	StrTemp = ReadString(f)
 	If (StrTemp <> VersionNumber) Then RuntimeError("The save files of v" + StrTemp + " aren't compatible with SCP - Containment Breach Ultimate Edition v" + VersionNumber + ".")
@@ -1266,12 +1266,12 @@ Function LoadGame(File$)
 		Next
 	EndIf
 	
-	If Collider <> 0 Then
+	If me\Collider <> 0 Then
 		If PlayerRoom <> Null Then
 			ShowEntity(PlayerRoom\OBJ)
 		EndIf
-		ShowEntity(Collider)
-		TeleportEntity(Collider, EntityX(Collider), EntityY(Collider) + 0.5, EntityZ(Collider), 0.3, True)
+		ShowEntity(me\Collider)
+		TeleportEntity(me\Collider, EntityX(me\Collider), EntityY(me\Collider) + 0.5, EntityZ(me\Collider), 0.3, True)
 		If PlayerRoom <> Null Then
 			HideEntity(PlayerRoom\OBJ)
 		EndIf
@@ -1293,8 +1293,8 @@ Function LoadGameQuick(File$)
 	msg\Msg = ""
 	me\SelectedEnding = ""
 	
-	PositionEntity(Collider, 0.0, 1000.0, 0.0, True)
-	ResetEntity(Collider)
+	PositionEntity(me\Collider, 0.0, 1000.0, 0.0, True)
+	ResetEntity(me\Collider)
 	
 	Local x#, y#, z#, i%, Temp%, StrTemp$, ID%
 	Local Player_X#, Player_Y#, Player_Z#, r.Rooms, n.NPCs, do.Doors
@@ -1324,14 +1324,14 @@ Function LoadGameQuick(File$)
 	
 	me\PlayTime = ReadInt(f)
 	
-	HideEntity(Collider)
+	HideEntity(me\Collider)
 	
 	x = ReadFloat(f)
 	y = ReadFloat(f)
 	z = ReadFloat(f)	
-	PositionEntity(Collider, x, y + 0.05, z)
+	PositionEntity(me\Collider, x, y + 0.05, z)
 	
-	ShowEntity(Collider)
+	ShowEntity(me\Collider)
 	
 	x = ReadFloat(f)
 	y = ReadFloat(f)
@@ -1343,7 +1343,7 @@ Function LoadGameQuick(File$)
 	
 	x = ReadFloat(f)
 	y = ReadFloat(f)
-	RotateEntity(Collider, x, y, 0.0, 0.0)
+	RotateEntity(me\Collider, x, y, 0.0)
 	
 	StrTemp = ReadString(f)
 	If (StrTemp <> VersionNumber) Then RuntimeError("The save files of v" + StrTemp + " aren't compatible with SCP - Containment Breach Ultimate Edition v" + VersionNumber + ".")
@@ -1902,7 +1902,7 @@ Function LoadGameQuick(File$)
 		closestroom = Null
 		Dist = 30.0
 		For r.Rooms = Each Rooms
-			Dist2# = EntityDistance(r\OBJ, Collider)
+			Dist2# = EntityDistance(r\OBJ, me\Collider)
 			If Dist2 < Dist Then
 				Dist = Dist2
 				closestroom = r
@@ -1931,12 +1931,12 @@ Function LoadGameQuick(File$)
 	
 	CloseFile(f)
 	
-	If Collider <> 0 Then
+	If me\Collider <> 0 Then
 		If PlayerRoom <> Null Then
 			ShowEntity(PlayerRoom\OBJ)
 		EndIf
-		ShowEntity(Collider)
-		TeleportEntity(Collider, EntityX(Collider), EntityY(Collider) + 0.5, EntityZ(Collider), 0.3, True)
+		ShowEntity(me\Collider)
+		TeleportEntity(me\Collider, EntityX(me\Collider), EntityY(me\Collider) + 0.5, EntityZ(me\Collider), 0.3, True)
 		If PlayerRoom <> Null Then
 			HideEntity(PlayerRoom\OBJ)
 		EndIf

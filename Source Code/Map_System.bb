@@ -1509,9 +1509,9 @@ Function UpdateGrid(grid.Grids)
 	For tX = 0 To GridSZ - 1
 		For tY = 0 To GridSZ - 1
 			If grid\Entities[tX + (tY * GridSZ)] <> 0 Then
-				If Abs(EntityY(Collider, True) - EntityY(grid\Entities[tX + (tY * GridSZ)], True)) > 4.0 Then Exit
-				If Abs(EntityX(Collider, True) - EntityX(grid\Entities[tX + (tY * GridSZ)], True)) < HideDistance Then
-					If Abs(EntityZ(Collider, True) - EntityZ(grid\Entities[tX + (tY * GridSZ)], True)) < HideDistance Then
+				If Abs(EntityY(me\Collider, True) - EntityY(grid\Entities[tX + (tY * GridSZ)], True)) > 4.0 Then Exit
+				If Abs(EntityX(me\Collider, True) - EntityX(grid\Entities[tX + (tY * GridSZ)], True)) < HideDistance Then
+					If Abs(EntityZ(me\Collider, True) - EntityZ(grid\Entities[tX + (tY * GridSZ)], True)) < HideDistance Then
 						ShowEntity(grid\Entities[tX + (tY * GridSZ)])
 					Else
 						HideEntity(grid\Entities[tX + (tY * GridSZ)])
@@ -5735,9 +5735,9 @@ Function UpdateRooms()
 	; ~ The reason why it is like this:
 	; ~ When the map gets spawned by a seed, it starts from LCZ to HCZ to EZ (bottom to top)
 	; ~ A map loaded by the map creator starts from EZ to HCZ to LCZ (top to bottom) and that's why this little code thing with the (SelectedMap = "") needs to be there - ENDSHN
-	If (EntityZ(Collider) / 8.0) < I_Zone\Transition[1] - (SelectedMap = "") Then
+	If (EntityZ(me\Collider) / 8.0) < I_Zone\Transition[1] - (SelectedMap = "") Then
 		me\Zone = 2
-	ElseIf (EntityZ(Collider) / 8.0) >= I_Zone\Transition[1] - (SelectedMap = "") And (EntityZ(Collider) / 8.0) < I_Zone\Transition[0] - (SelectedMap = "") Then
+	ElseIf (EntityZ(me\Collider) / 8.0) >= I_Zone\Transition[1] - (SelectedMap = "") And (EntityZ(me\Collider) / 8.0) < I_Zone\Transition[0] - (SelectedMap = "") Then
 		me\Zone = 1
 	Else
 		me\Zone = 0
@@ -5748,10 +5748,10 @@ Function UpdateRooms()
 	Local FoundNewPlayerRoom% = False
 	
 	If PlayerRoom <> Null Then
-		If Abs(EntityY(Collider) - EntityY(PlayerRoom\OBJ)) < 1.5 Then
-			x = Abs(PlayerRoom\x - EntityX(Collider, True))
+		If Abs(EntityY(me\Collider) - EntityY(PlayerRoom\OBJ)) < 1.5 Then
+			x = Abs(PlayerRoom\x - EntityX(me\Collider, True))
 			If x < 4.0 Then
-				z = Abs(PlayerRoom\z - EntityZ(Collider, True))
+				z = Abs(PlayerRoom\z - EntityZ(me\Collider, True))
 				If z < 4.0 Then
 					FoundNewPlayerRoom = True
 				EndIf
@@ -5760,9 +5760,9 @@ Function UpdateRooms()
 			If FoundNewPlayerRoom = False Then ; ~ It's likely that an adjacent room is the new player room, check for that
 				For i = 0 To 3
 					If PlayerRoom\Adjacent[i] <> Null Then
-						x = Abs(PlayerRoom\Adjacent[i]\x - EntityX(Collider, True))
+						x = Abs(PlayerRoom\Adjacent[i]\x - EntityX(me\Collider, True))
 						If x < 4.0 Then
-							z = Abs(PlayerRoom\Adjacent[i]\z - EntityZ(Collider, True))
+							z = Abs(PlayerRoom\Adjacent[i]\z - EntityZ(me\Collider, True))
 							If z < 4.0 Then
 								FoundNewPlayerRoom = True
 								PlayerRoom = PlayerRoom\Adjacent[i]
@@ -5778,14 +5778,14 @@ Function UpdateRooms()
 	EndIf
 	
 	For r.Rooms = Each Rooms
-		x = Abs(r\x - EntityX(Collider, True))
-		z = Abs(r\z - EntityZ(Collider, True))
+		x = Abs(r\x - EntityX(me\Collider, True))
+		z = Abs(r\z - EntityZ(me\Collider, True))
 		r\Dist = Max(x, z)
 		
 		If x < 16 And z < 16 Then
 			For i = 0 To MaxRoomEmitters - 1
 				If r\SoundEmitter[i] <> 0 Then 
-					Dist = EntityDistance(r\SoundEmitterOBJ[i], Collider)
+					Dist = EntityDistance(r\SoundEmitterOBJ[i], me\Collider)
 					If Dist < r\SoundEmitterRange[i] Then
 						r\SoundEmitterCHN[i] = LoopSound2(RoomAmbience[r\SoundEmitter[i]], r\SoundEmitterCHN[i], me\Camera, r\SoundEmitterOBJ[i], r\SoundEmitterRange[i])
 					EndIf
@@ -5795,7 +5795,7 @@ Function UpdateRooms()
 			If (Not FoundNewPlayerRoom) And (PlayerRoom <> r) Then				
 				If x < 4.0 Then
 					If z < 4.0 Then
-						If Abs(EntityY(Collider) - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r
+						If Abs(EntityY(me\Collider) - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r
 						FoundNewPlayerRoom = True
 					EndIf
 				EndIf				
@@ -5820,7 +5820,7 @@ Function UpdateRooms()
 			ShowEntity(r\OBJ)
 			For i = 0 To MaxRoomLights - 1
 				If r\Lights[i] <> 0 Then
-					Dist = EntityDistance(Collider, r\Lights[i])
+					Dist = EntityDistance(me\Collider, r\Lights[i])
 					If Dist < HideDistance Then
 						TempLightVolume = TempLightVolume + r\LightIntensity[i] * r\LightIntensity[i] * ((HideDistance - Dist) / HideDistance)						
 					EndIf
@@ -5856,8 +5856,8 @@ Function UpdateRooms()
 		For i = 0 To 3
 			If PlayerRoom\Adjacent[i] <> Null Then
 				If PlayerRoom\AdjDoor[i] <> Null
-					x = Abs(EntityX(Collider, True) - EntityX(PlayerRoom\AdjDoor[i]\FrameOBJ, True))
-					z = Abs(EntityZ(Collider, True) - EntityZ(PlayerRoom\AdjDoor[i]\FrameOBJ, True))
+					x = Abs(EntityX(me\Collider, True) - EntityX(PlayerRoom\AdjDoor[i]\FrameOBJ, True))
+					z = Abs(EntityZ(me\Collider, True) - EntityZ(PlayerRoom\AdjDoor[i]\FrameOBJ, True))
 					If PlayerRoom\AdjDoor[i]\OpenState = 0.0 Then
 						EntityAlpha(GetChild(PlayerRoom\Adjacent[i]\OBJ, 2), 0.0)
 					ElseIf (Not EntityInView(PlayerRoom\AdjDoor[i]\FrameOBJ, me\Camera))
@@ -6377,7 +6377,7 @@ Function UpdateScreens()
 	
 	For s.Screens = Each Screens
 		If s\room = PlayerRoom Then
-			If EntityDistance(Collider, s\OBJ) < 1.2 Then
+			If EntityDistance(me\Collider, s\OBJ) < 1.2 Then
 				EntityPick(me\Camera, 1.2)
 				If PickedEntity() = s\OBJ And s\ImgPath <> "" Then
 					DrawHandIcon = True
@@ -6623,7 +6623,7 @@ Function UpdateSecurityCams()
 							PositionEntity(Pvt, EntityX(me\Camera), EntityY(me\Camera), EntityZ(me\Camera))
 							PointEntity(Pvt, sc\ScrOBJ)
 							
-							RotateEntity(Collider, EntityPitch(Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(Collider), Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0)), 0.0)
+							RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0)), 0.0)
 							
 							TurnEntity(Pvt, 90.0, 0.0, 0.0)
 							User_Camera_Pitch = CurveAngle(EntityPitch(Pvt), User_Camera_Pitch + 90.0, Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0))
@@ -6740,7 +6740,7 @@ Function UpdateMonitorSaving()
 						
 						PositionEntity(Pvt, EntityX(me\Camera), EntityY(me\Camera), EntityZ(me\Camera))
 						PointEntity(Pvt, sc\ScrOBJ)
-						RotateEntity(Collider, EntityPitch(Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(Collider), Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0)), 0.0)
+						RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0)), 0.0)
 						TurnEntity(Pvt, 90.0, 0.0, 0.0)
 						User_Camera_Pitch = CurveAngle(EntityPitch(Pvt), User_Camera_Pitch + 90.0, Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0))
 						User_Camera_Pitch = User_Camera_Pitch - 90.0
@@ -6807,7 +6807,7 @@ Function UpdateLever(OBJ%, Locked% = False)
 End Function
 
 Function UpdateButton(OBJ%)
-	Local Dist# = EntityDistance(Collider, OBJ)
+	Local Dist# = EntityDistance(me\Collider, OBJ)
 	
 	If Dist < 0.8 Then
 		Local Temp% = CreatePivot()
@@ -6819,7 +6819,7 @@ Function UpdateButton(OBJ%)
 			If ClosestButton = 0 Then 
 				ClosestButton = OBJ
 			Else
-				If Dist < EntityDistance(Collider, ClosestButton) Then ClosestButton = OBJ
+				If Dist < EntityDistance(me\Collider, ClosestButton) Then ClosestButton = OBJ
 			EndIf							
 		EndIf
 		FreeEntity(Temp)
@@ -6853,9 +6853,9 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 	door2\Locked = True
 	If door1\Open Then
 		door1\IsElevatorDoor = 3
-		If Abs(EntityX(Collider) - EntityX(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
-			If Abs(EntityZ(Collider) - EntityZ(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then	
-				If Abs(EntityY(Collider) - EntityY(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then	
+		If Abs(EntityX(me\Collider) - EntityX(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
+			If Abs(EntityZ(me\Collider) - EntityZ(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then	
+				If Abs(EntityY(me\Collider) - EntityY(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then	
 					door1\Locked = False
 					door1\IsElevatorDoor = 1
 				EndIf
@@ -6864,9 +6864,9 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 	EndIf
 	If door2\Open Then
 		door2\IsElevatorDoor = 3
-		If Abs(EntityX(Collider) - EntityX(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
-			If Abs(EntityZ(Collider) - EntityZ(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then	
-				If Abs(EntityY(Collider) - EntityY(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
+		If Abs(EntityX(me\Collider) - EntityX(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
+			If Abs(EntityZ(me\Collider) - EntityZ(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then	
+				If Abs(EntityY(me\Collider) - EntityY(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
 					door2\Locked = False
 					door2\IsElevatorDoor = 1
 				EndIf
@@ -6882,9 +6882,9 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 		If door1\OpenState = 0.0 And door2\OpenState = 0.0 Then
 			If State < 0.0 Then
 				State = State - fpst\FPSFactor[0]
-				If Abs(EntityX(Collider) - EntityX(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
-					If Abs(EntityZ(Collider) - EntityZ(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then	
-						If Abs(EntityY(Collider) - EntityY(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then	
+				If Abs(EntityX(me\Collider) - EntityX(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
+					If Abs(EntityZ(me\Collider) - EntityZ(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then	
+						If Abs(EntityY(me\Collider) - EntityY(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then	
 							Inside = True
 							
 							If event\SoundCHN = 0 Then
@@ -6905,19 +6905,19 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 					
 					If Inside Then
 						If (Not IgnoreRotation) Then
-							Dist = Distance(EntityX(Collider, True), EntityX(FirstPivot, True), EntityZ(Collider, True), EntityZ(FirstPivot, True))
-							Dir = PointDirection(EntityX(Collider, True), EntityZ(Collider, True), EntityX(FirstPivot, True), EntityZ(FirstPivot, True))
+							Dist = Distance(EntityX(me\Collider, True), EntityX(FirstPivot, True), EntityZ(me\Collider, True), EntityZ(FirstPivot, True))
+							Dir = PointDirection(EntityX(me\Collider, True), EntityZ(me\Collider, True), EntityX(FirstPivot, True), EntityZ(FirstPivot, True))
 							Dir = Dir + EntityYaw(SecondPivot, True) - EntityYaw(FirstPivot, True)
 							Dir = WrapAngle(Dir)
 							x = Max(Min(Cos(Dir) * Dist, 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
 							z = Max(Min(Sin(Dir) * Dist, 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
-							RotateEntity(Collider, EntityPitch(Collider, True), EntityYaw(SecondPivot, True) + AngleDist(EntityYaw(Collider, True), EntityYaw(FirstPivot, True)), EntityRoll(Collider, True), True)
+							RotateEntity(me\Collider, EntityPitch(me\Collider, True), EntityYaw(SecondPivot, True) + AngleDist(EntityYaw(me\Collider, True), EntityYaw(FirstPivot, True)), EntityRoll(me\Collider, True), True)
 						Else
-							x = Max(Min((EntityX(Collider) - EntityX(FirstPivot, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
-							z = Max(Min((EntityZ(Collider) - EntityZ(FirstPivot, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
+							x = Max(Min((EntityX(me\Collider) - EntityX(FirstPivot, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
+							z = Max(Min((EntityZ(me\Collider) - EntityZ(FirstPivot, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
 						EndIf
 						
-						TeleportEntity(Collider, EntityX(SecondPivot, True) + x, (0.1 * fpst\FPSFactor[0]) + EntityY(SecondPivot, True) + (EntityY(Collider) - EntityY(FirstPivot, True)), EntityZ(SecondPivot, True) + z, 0.3, True)
+						TeleportEntity(me\Collider, EntityX(SecondPivot, True) + x, (0.1 * fpst\FPSFactor[0]) + EntityY(SecondPivot, True) + (EntityY(me\Collider) - EntityY(FirstPivot, True)), EntityZ(SecondPivot, True) + z, 0.3, True)
 						UpdateDoorsTimer = 0.0
 						me\DropSpeed = 0.0
 						UpdateDoors()
@@ -6980,9 +6980,9 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 				EndIf
 			Else
 				State = State + fpst\FPSFactor[0]
-				If Abs(EntityX(Collider) - EntityX(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
-					If Abs(EntityZ(Collider) - EntityZ(SecondPivot, True)) <  280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then	
-						If Abs(EntityY(Collider) - EntityY(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
+				If Abs(EntityX(me\Collider) - EntityX(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
+					If Abs(EntityZ(me\Collider) - EntityZ(SecondPivot, True)) <  280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then	
+						If Abs(EntityY(me\Collider) - EntityY(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
 							Inside = True
 							
 							If event\SoundCHN = 0 Then
@@ -7003,17 +7003,17 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 					
 					If Inside Then	
 						If (Not IgnoreRotation) Then
-							Dist = Distance(EntityX(Collider, True), EntityX(SecondPivot, True), EntityZ(Collider, True), EntityZ(SecondPivot, True))
-							Dir = PointDirection(EntityX(Collider, True), EntityZ(Collider, True), EntityX(SecondPivot, True), EntityZ(SecondPivot, True))
+							Dist = Distance(EntityX(me\Collider, True), EntityX(SecondPivot, True), EntityZ(me\Collider, True), EntityZ(SecondPivot, True))
+							Dir = PointDirection(EntityX(me\Collider, True), EntityZ(me\Collider, True), EntityX(SecondPivot, True), EntityZ(SecondPivot, True))
 							Dir = Dir + EntityYaw(FirstPivot, True) - EntityYaw(SecondPivot, True)
 							x = Max(Min(Cos(Dir) * Dist, 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
 							z = Max(Min(Sin(Dir) * Dist, 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
-							RotateEntity(Collider, EntityPitch(Collider, True), EntityYaw(SecondPivot, True) + AngleDist(EntityYaw(Collider, True), EntityYaw(FirstPivot, True)), EntityRoll(Collider, True), True)
+							RotateEntity(me\Collider, EntityPitch(me\Collider, True), EntityYaw(SecondPivot, True) + AngleDist(EntityYaw(me\Collider, True), EntityYaw(FirstPivot, True)), EntityRoll(me\Collider, True), True)
 						Else
-							x = Max(Min((EntityX(Collider) - EntityX(SecondPivot, True)), 280 * RoomScale - 0.22), (-280) * RoomScale + 0.22)
-							z = Max(Min((EntityZ(Collider) - EntityZ(SecondPivot, True)), 280 * RoomScale - 0.22), (-280) * RoomScale + 0.22)
+							x = Max(Min((EntityX(me\Collider) - EntityX(SecondPivot, True)), 280 * RoomScale - 0.22), (-280) * RoomScale + 0.22)
+							z = Max(Min((EntityZ(me\Collider) - EntityZ(SecondPivot, True)), 280 * RoomScale - 0.22), (-280) * RoomScale + 0.22)
 						EndIf
-						TeleportEntity(Collider, EntityX(FirstPivot, True) + x, (0.1 * fpst\FPSFactor[0]) + EntityY(FirstPivot, True) + (EntityY(Collider) - EntityY(SecondPivot, True)), EntityZ(FirstPivot, True) + z, 0.3, True)
+						TeleportEntity(me\Collider, EntityX(FirstPivot, True) + x, (0.1 * fpst\FPSFactor[0]) + EntityY(FirstPivot, True) + (EntityY(me\Collider) - EntityY(SecondPivot, True)), EntityZ(FirstPivot, True) + z, 0.3, True)
 						UpdateDoorsTimer = 0.0
 						me\DropSpeed = 0.0
 						UpdateDoors()
@@ -8321,8 +8321,8 @@ Function UpdateChunks(r.Rooms, ChunkPartAmount%, SpawnNPCs% = True)
 	Local ch.Chunk, StrTemp$, i%, x#, z#, ch2.Chunk, y#, n.NPCs, j%
 	Local ChunkX#, ChunkZ#, ChunkMaxDistance# = 3.0 * 40.0
 	
-	ChunkX = Int(EntityX(Collider) / 40)
-	ChunkZ = Int(EntityZ(Collider) / 40)
+	ChunkX = Int(EntityX(me\Collider) / 40.0)
+	ChunkZ = Int(EntityZ(me\Collider) / 40.0)
 	
 	y = EntityY(PlayerRoom\OBJ)
 	x = (-ChunkMaxDistance) + (ChunkX * 40.0)
@@ -8355,7 +8355,7 @@ Function UpdateChunks(r.Rooms, ChunkPartAmount%, SpawnNPCs% = True)
 	
 	For ch = Each Chunk
 		If (Not ch\IsSpawnChunk)
-			If Distance(EntityX(Collider), EntityX(ch\ChunkPivot), EntityZ(Collider), EntityZ(ch\ChunkPivot)) > ChunkMaxDistance
+			If Distance(EntityX(me\Collider), EntityX(ch\ChunkPivot), EntityZ(me\Collider), EntityZ(ch\ChunkPivot)) > ChunkMaxDistance
 				FreeEntity(ch\ChunkPivot)
 				Delete(ch)
 			EndIf
@@ -8386,35 +8386,35 @@ Function UpdateChunks(r.Rooms, ChunkPartAmount%, SpawnNPCs% = True)
 		Select Rand(1, 8)
 			Case 1
 				;[Block]
-				n.NPCs = CreateNPC(NPCtype1499_1, EntityX(Collider) + Rnd(40.0, 80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(Collider) + Rnd(40.0, 80.0))
+				n.NPCs = CreateNPC(NPCtype1499_1, EntityX(me\Collider) + Rnd(40.0, 80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(me\Collider) + Rnd(40.0, 80.0))
 				;[End Block]
 			Case 2
 				;[Block]
-				n.NPCs = CreateNPC(NPCtype1499_1, EntityX(Collider) + Rnd(40.0, 80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(Collider) + Rnd(-40.0, 40.0))
+				n.NPCs = CreateNPC(NPCtype1499_1, EntityX(me\Collider) + Rnd(40.0, 80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(me\Collider) + Rnd(-40.0, 40.0))
 				;[End Block]
 			Case 3
 				;[Block]
-				n.NPCs = CreateNPC(NPCtype1499_1, EntityX(Collider) + Rnd(40.0, 80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(Collider) + Rnd(-40.0, -80.0))
+				n.NPCs = CreateNPC(NPCtype1499_1, EntityX(me\Collider) + Rnd(40.0, 80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(me\Collider) + Rnd(-40.0, -80.0))
 				;[End Block]
 			Case 4
 				;[Block]
-				n.NPCs = CreateNPC(NPCtype1499_1, EntityX(Collider) + Rnd(-40.0, 40.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(Collider) + Rnd(-40.0, -80.0))
+				n.NPCs = CreateNPC(NPCtype1499_1, EntityX(me\Collider) + Rnd(-40.0, 40.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(me\Collider) + Rnd(-40.0, -80.0))
 				;[End Block]
 			Case 5
 				;[Block]
-				n.NPCs = CreateNPC(NPCtype1499_1, EntityX(Collider) + Rnd(-40.0, -80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(Collider) + Rnd(-40.0, -80.0))
+				n.NPCs = CreateNPC(NPCtype1499_1, EntityX(me\Collider) + Rnd(-40.0, -80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(me\Collider) + Rnd(-40.0, -80.0))
 				;[End Block]
 			Case 6
 				;[Block]
-				n.NPCs = CreateNPC(NPCtype1499_1, EntityX(Collider) + Rnd(-40.0, -80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(Collider) + Rnd(-40.0, 40.0))
+				n.NPCs = CreateNPC(NPCtype1499_1, EntityX(me\Collider) + Rnd(-40.0, -80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(me\Collider) + Rnd(-40.0, 40.0))
 				;[End Block]
 			Case 7
 				;[Block]
-				n.NPCs = CreateNPC(NPCtype1499_1, EntityX(Collider) + Rnd(-40.0, -80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(Collider) + Rnd(40.0, 80.0))
+				n.NPCs = CreateNPC(NPCtype1499_1, EntityX(me\Collider) + Rnd(-40.0, -80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(me\Collider) + Rnd(40.0, 80.0))
 				;[End Block]
 			Case 8
 				;[Block]
-				n.NPCs = CreateNPC(NPCtype1499_1, EntityX(Collider) + Rnd(-40.0, 40.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(Collider) + Rnd(40.0, 80.0))
+				n.NPCs = CreateNPC(NPCtype1499_1, EntityX(me\Collider) + Rnd(-40.0, 40.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(me\Collider) + Rnd(40.0, 80.0))
 				;[End Block]
 		End Select
 		If Rand(2) = 1 Then n\State2 = 500.0 * 3.0
@@ -8423,7 +8423,7 @@ Function UpdateChunks(r.Rooms, ChunkPartAmount%, SpawnNPCs% = True)
 		For n.NPCs = Each NPCs
 			If n\NPCtype = NPCtype1499_1 Then
 				If n\PrevState = 0 Then
-					If EntityDistance(n\Collider, Collider) > ChunkMaxDistance Lor EntityY(n\Collider) < EntityY(PlayerRoom\obj) - 5 Then
+					If EntityDistance(n\Collider, me\Collider) > ChunkMaxDistance Lor EntityY(n\Collider) < EntityY(PlayerRoom\obj) - 5 Then
 						; ~ This will be updated like this so that new NPCs can spawn for the player
 						RemoveNPC(n)
 					EndIf
