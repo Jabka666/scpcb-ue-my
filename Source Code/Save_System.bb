@@ -1320,6 +1320,7 @@ Function LoadGameQuick(File$)
 	MenuOpen = False
 	
 	ClearCheats(chs)
+	WireFrameState = 0
 	WireFrame(0)
 	
 	me\PlayTime = ReadInt(f)

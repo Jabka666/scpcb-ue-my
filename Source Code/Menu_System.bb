@@ -825,6 +825,14 @@ Function UpdateMainMenu()
 							y = y + 30 * MenuScale
 							
 							LauncherEnabled = DrawTick(x + 310 * MenuScale, y + MenuScale, LauncherEnabled)
+							
+							y = y + 30 * MenuScale
+							
+							If DrawButton(x + 20 * MenuScale, y, 220, 30, "RESET OPTIONS", False) Then
+								Delay(200)
+								ResetOptionsINI()
+								SaveOptionsINI(True)
+							EndIf
 						EndIf
 						;[End Block]
 					EndIf

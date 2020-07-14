@@ -32,8 +32,6 @@ Global ArrowIMG%[4]
 Global Fresize_Image%, Fresize_Texture%, Fresize_Texture2%
 Global Fresize_Cam%
 
-Global WireFrameState%
-
 Global RealGraphicWidth%, RealGraphicHeight%
 Global AspectRatioRatio#
 
@@ -4595,7 +4593,7 @@ Function DrawGUI()
 	
 	If I_294\Using Then Use294()
 	
-	If HUDenabled Then 
+	If HUDEnabled Then 
 		Width = 204
 		Height = 20
 		x = 80
@@ -8350,7 +8348,7 @@ Function UpdateMenu()
 					;[Block]
 					y = y + 50 * MenuScale
 					
-					HUDenabled = DrawTick(x + 270 * MenuScale, y + MenuScale, HUDenabled)
+					HUDEnabled = DrawTick(x + 270 * MenuScale, y + MenuScale, HUDEnabled)
 					
 					y = y + 30 * MenuScale
 					
@@ -9584,7 +9582,7 @@ Function NullGame(PlayButtonSFX% = True) ; ~ CHECK WHAT IS WRONG HERE!
 	me\LightFlash = 0.0
 	
 	ClearCheats(chs)
-	WireFrameState = 0.0
+	WireFrameState = 0
 	WireFrame(0)
 	
 	wi\GasMaskFogTimer = 0.0
@@ -12369,5 +12367,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1067#133D#1E06
+;~B#1065#133B#1E04
 ;~C#Blitz3D

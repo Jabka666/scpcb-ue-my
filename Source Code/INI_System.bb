@@ -303,7 +303,7 @@ Global AchvMsgEnabled% = GetINIInt(OptionFile, "Advanced", "Enable Achievement P
 
 Global CanOpenConsole% = GetINIInt(OptionFile, "Advanced", "Enable Console")
 
-Global HUDenabled% = GetINIInt(OptionFile, "Advanced", "Enable HUD")
+Global HUDEnabled% = GetINIInt(OptionFile, "Advanced", "Enable HUD")
 
 Global ShowFPS% = GetINIInt(OptionFile, "Advanced", "Show FPS")
 
@@ -369,7 +369,7 @@ Global MapHeight% = GetINIInt(OptionFile, "Global", "Map Size")
 
 Global IntroEnabled% = GetINIInt(OptionFile, "Global", "Enable Intro")
 
-Function SaveOptionsINI()
+Function SaveOptionsINI(SaveGlobal% = False)
 	; ~ [GRAPHICS]
 	
 	PutINIValue(OptionFile, "Graphics", "Enable Bump Mapping", BumpEnabled)
@@ -392,7 +392,7 @@ Function SaveOptionsINI()
 	
 	; ~ [ADVANCED]
 	
-	PutINIValue(OptionFile, "Advanced", "Enable HUD", HUDenabled)
+	PutINIValue(OptionFile, "Advanced", "Enable HUD", HUDEnabled)
 	
 	PutINIValue(OptionFile, "Advanced", "Show FPS", ShowFPS)
 	
@@ -453,6 +453,125 @@ Function SaveOptionsINI()
 	PutINIValue(OptionFile, "Audio", "Enable User Tracks", EnableUserTracks)
 	
 	PutINIValue(OptionFile, "Audio", "User Track Setting", UserTrackMode)
+	
+	If SaveGlobal Then
+		; ~ [GLOBAL]
+		
+		PutINIValue(OptionFile, "Global", "Brightness", Brightness)
+		
+		PutINIValue(OptionFile, "Global", "Camera Fog Near", CameraFogNear)
+		
+		PutINIValue(OptionFile, "Global", "Camera Fog Far", CameraFogFar)
+		
+		PutINIValue(OptionFile, "Global", "Map Size", MapWidth)
+		
+		PutINIValue(OptionFile, "Global", "Map Size", MapHeight)
+		
+		PutINIValue(OptionFile, "Global", "Enable Intro", IntroEnabled)
+	EndIf
+End Function
+
+Function ResetOptionsINI()
+	; ~ [GRAPHICS]
+	
+	BumpEnabled = 1
+	
+	ScreenGamma = 1.0
+	
+	Opt_AntiAlias = 1
+	
+	VSync = 1
+	
+	ParticleAmount = 2
+	
+	SaveTexturesInVRAM = 0
+	
+	EnableRoomLights = 1
+	
+	TextureDetails = 3
+	
+	CurrFOV = 34.0 ; ~ Don't forget to decrease by "40.0"
+	FOV = 74.0
+	
+	; ~ [ADVANCED]
+	
+	HUDEnabled = 1
+	
+	ShowFPS = 0
+	
+	CurrFrameLimit = 0.0
+	FrameLimit = 0
+	
+	AchvMsgEnabled = 1
+	
+	CanOpenConsole = 0
+	
+	ConsoleOpening = 0
+	
+	ConsoleVersion = 1
+	
+	PlayStartup = 1
+	
+	LauncherEnabled = 1
+	
+	BarStyle = 0
+	
+	; ~ [CONTROLS]
+	
+	MouseSensitivity = 0.0
+	
+	InvertMouse = 0
+	
+	MouseSmoothing = 1.0
+	
+	key\MOVEMENT_RIGHT = 32
+	
+	key\MOVEMENT_LEFT = 30
+	
+	key\MOVEMENT_UP = 17
+	
+	key\MOVEMENT_DOWN = 31
+	
+	key\BLINK = 57
+	
+	key\SPRINT = 42
+	
+	key\INVENTORY = 15
+	
+	key\CROUCH = 29
+	
+	key\SAVE = 63
+	
+	key\CONSOLE = 61
+	
+	key\SCREENSHOT = 59
+	
+	; ~ [AUDIO]
+	
+	MusicVolume = 0.5
+	
+	PrevSFXVolume = 0.5
+	SFXVolume = 0.5
+	
+	EnableSFXRelease = 1
+	
+	EnableUserTracks = 0
+	
+	UserTrackMode = 0
+	
+	; ~ [GLOBAL]
+	
+	Brightness = 50
+	
+	CameraFogNear = 0.1
+	
+	CameraFogFar = 6.0
+	
+	MapWidth = 18
+	
+	MapHeight = 18
+	
+	IntroEnabled = 1
 End Function
 
 ;~IDEal Editor Parameters:
