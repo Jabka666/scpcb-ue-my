@@ -11820,18 +11820,10 @@ Function UpdateDecals()
 	Next
 End Function
 
-Global SMALLEST_POWER_TWO#
-Global SMALLEST_POWER_TWO_HALF#
-
 Function Graphics3DExt%(Width%, Height%, Mode% = 2)
 	Graphics3D(Width, Height, 32, Mode)
 	TextureFilter("", 8192) ; ~ This turns on Anisotropic filtering for textures
 	TextureAnisotropic(16)
-	SMALLEST_POWER_TWO = 512.0
-	While SMALLEST_POWER_TWO < Width Lor SMALLEST_POWER_TWO < Height
-		SMALLEST_POWER_TWO = SMALLEST_POWER_TWO * 2.0
-	Wend
-	SMALLEST_POWER_TWO_HALF = SMALLEST_POWER_TWO / 2.0
 	InitFastResize()
 	AntiAlias(Opt_AntiAlias)
 End Function
@@ -12050,15 +12042,15 @@ Function InitFastResize()
 	AddTriangle(SF, 0, 1, 2)
 	AddTriangle(SF, 3, 2, 1)
 	EntityFX(SPR, 17)
-	ScaleEntity(SPR, 2048.0 / Float(RealGraphicWidth), 2048.0 / Float(RealGraphicHeight), 1.0) ; ~ CHECK WHY NOT "SMALLEST_POWER_TWO"
+	ScaleEntity(SPR, 2048.0 / Float(RealGraphicWidth), 2048.0 / Float(RealGraphicHeight), 1.0)
 	PositionEntity(SPR, 0, 0, 1.0001)
 	EntityOrder(SPR, -100001)
 	EntityBlend(SPR, 1)
 	Fresize_Image = SPR
 	
     ; ~ Create texture
-	Fresize_Texture = CreateTexture(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO, 1 + 256)
-	Fresize_Texture2 = CreateTexture(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO, 1 + 256)
+	Fresize_Texture = CreateTexture(2048, 2048, 1 + 256)
+	Fresize_Texture2 = CreateTexture(2048, 2048, 1 + 256)
 	TextureBlend(Fresize_Texture2, 3)
 	SetBuffer(TextureBuffer(Fresize_Texture2))
 	ClsColor(0, 0, 0)
