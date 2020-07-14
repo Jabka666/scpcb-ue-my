@@ -32,6 +32,8 @@ Global ArrowIMG%[4]
 Global Fresize_Image%, Fresize_Texture%, Fresize_Texture2%
 Global Fresize_Cam%
 
+Global WireFrameState%
+
 Global RealGraphicWidth%, RealGraphicHeight%
 Global AspectRatioRatio#
 
@@ -12367,5 +12369,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1065#133B#1E04
+;~B#1067#133D#1E06
 ;~C#Blitz3D
