@@ -224,7 +224,7 @@ Global PlayerRoom.Rooms
 
 Global GrabbedEntity%
 
-Global MouseHit1%, MouseDown1%, MouseHit2%, DoubleClick%, LastMouseHit1%, MouseUp1%
+Global MouseHit1%, MouseDown1%, MouseHit2%, DoubleClick%, LastMouseHit1%, MouseUp1%, DoubleClickSlot%
 
 Type Cheats
 	Field GodMode%
@@ -3262,6 +3262,7 @@ Function MainLoop()
 						ResumeSounds()
 						MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : Mouse_X_Speed_1 = 0.0 : Mouse_Y_Speed_1 = 0.0
 					Else
+						DoubleClickSlot = -1
 						PauseSounds()
 					EndIf
 					InvOpen = (Not InvOpen)
@@ -3359,9 +3360,7 @@ Function MainLoop()
 			UpdateMenu()			
 		EndIf
 		
-		If msg\Timer > 0.0 Then
-			msg\Timer = msg\Timer - fpst\FPSFactor[0] 
-		EndIf
+		UpdateMessages()
 		
 		UpdateQuickLoading()
 		
@@ -3377,7 +3376,7 @@ Function MainLoop()
 	
 	DrawGUI()
 	
-	DrawMessages()
+	RenderMessages()
 	
 	If me\EndingTimer < 0.0 Then
 		If me\SelectedEnding <> "" Then DrawEnding()
@@ -3392,16 +3391,18 @@ Function MainLoop()
 	RenderAchievementMsg()
 End Function
 
-Function DrawMessages()
+Function UpdateMessages()
+	If msg\Timer > 0.0 Then
+		msg\Timer = msg\Timer - fpst\FPSFactor[0] 
+	EndIf
+End Function
+
+Function RenderMessages()
 	If msg\Timer > 0.0 Then
 		Local Temp% = False
 		
-		If (Not InvOpen) Then
-			If SelectedItem <> Null Then
-				If SelectedItem\ItemTemplate\TempName = "paper" Lor SelectedItem\ItemTemplate\TempName = "oldpaper"
-					Temp = True
-				EndIf
-			EndIf
+		If (Not (InvOpen Lor OtherOpen <> Null)) And SelectedItem <> Null And (SelectedItem\ItemTemplate\TempName = "paper" Lor SelectedItem\ItemTemplate\TempName = "oldpaper") Then
+			Temp = True
 		EndIf
 		
 		Local Temp2% = Min(msg\Timer / 2.0, 255.0)
@@ -3410,17 +3411,11 @@ Function DrawMessages()
 			Color(0, 0, 0)
 			Text((GraphicWidth / 2) + 1, (GraphicHeight / 2) + 201, msg\Msg, True, False)
 			Color(Temp2, Temp2, Temp2)
-			If Left(msg\Msg, 14) = "Blitz3D Error!" Then
-				Color(Temp2, 0, 0)
-			EndIf
 			Text((GraphicWidth / 2), (GraphicHeight / 2) + 200, msg\Msg, True, False)
 		Else
 			Color(0, 0, 0)
 			Text((GraphicWidth / 2) + 1, (GraphicHeight * 0.94) + 1, msg\Msg, True, False)
 			Color(Temp2, Temp2, Temp2)
-			If Left(msg\Msg, 14) = "Blitz3D Error!" Then
-				Color(Temp2, 0, 0)
-			EndIf
 			Text((GraphicWidth / 2), (GraphicHeight * 0.94), msg\Msg, True, False)
 		EndIf
 	EndIf
@@ -3993,7 +3988,7 @@ Function MovePlayer()
 		EndIf
 	EndIf
 	
-	If KeyHit(key\CROUCH) And me\Playable And (Not me\Zombie) And me\Bloodloss < 60.0 And I_427\Timer < 70.0 * 390.0 And (Not chs\NoClip) Then 
+	If KeyHit(key\CROUCH) And me\Playable And (Not me\Zombie) And me\Bloodloss < 60.0 And I_427\Timer < 70.0 * 390.0 And (Not chs\NoClip) And (SelectedItem = Null Lor (SelectedItem\ItemTemplate\TempName <> "firstaid" And SelectedItem\ItemTemplate\TempName <> "finefirstaid" And SelectedItem\ItemTemplate\TempName <> "firstaid2")) Then 
 		SetCrouch((Not me\Crouch))
 	EndIf
 	
@@ -4884,15 +4879,15 @@ Function DrawGUI()
 		x = GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
 		y = GraphicHeight / 2 - INVENTORY_GFX_SIZE * (Float(OtherSize) / MaxItemAmount * 2 - 1) - INVENTORY_GFX_SPACING
 		
+		IsMouseOn = -1
 		For n = 0 To OtherSize - 1
-			IsMouseOn = False
 			If ScaledMouseX() > x And ScaledMouseX() < x + INVENTORY_GFX_SIZE Then
 				If ScaledMouseY() > y And ScaledMouseY() < y + INVENTORY_GFX_SIZE Then
-					IsMouseOn = True
+					IsMouseOn = n
 				EndIf
 			EndIf
 			
-			If IsMouseOn Then
+			If IsMouseOn = n Then
 				MouseSlot = n
 				Color(255, 0, 0)
 				Rect(x - 1, y - 1, INVENTORY_GFX_SIZE + 2, INVENTORY_GFX_SIZE + 2)
@@ -4903,10 +4898,10 @@ Function DrawGUI()
 			If OtherOpen = Null Then Exit
 			
 			If OtherOpen\SecondInv[n] <> Null Then
-				If (SelectedItem <> OtherOpen\SecondInv[n] Lor IsMouseOn) Then DrawImage(OtherOpen\SecondInv[n]\InvImg, x + INVENTORY_GFX_SIZE / 2 - 32, y + INVENTORY_GFX_SIZE / 2 - 32)
+				If (SelectedItem <> OtherOpen\SecondInv[n] Lor IsMouseOn = n) Then DrawImage(OtherOpen\SecondInv[n]\InvImg, x + INVENTORY_GFX_SIZE / 2 - 32, y + INVENTORY_GFX_SIZE / 2 - 32)
 			EndIf
 			If OtherOpen\SecondInv[n] <> Null And SelectedItem <> OtherOpen\SecondInv[n] Then
-				If IsMouseOn Then
+				If IsMouseOn = n Then
 					Color(255, 255, 255)	
 					Text(x + INVENTORY_GFX_SIZE / 2, y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - 15, OtherOpen\SecondInv[n]\ItemTemplate\Name, True)				
 				EndIf
@@ -4936,11 +4931,11 @@ Function DrawGUI()
 		x = GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
 		y = GraphicHeight / 2 - INVENTORY_GFX_SIZE - INVENTORY_GFX_SPACING
 		
+		IsMouseOn = -1
 		For n = 0 To MaxItemAmount - 1
-			IsMouseOn = False
 			If ScaledMouseX() > x And ScaledMouseX() < x + INVENTORY_GFX_SIZE Then
 				If ScaledMouseY() > y And ScaledMouseY() < y + INVENTORY_GFX_SIZE Then
-					IsMouseOn = True
+					IsMouseOn = n
 				EndIf
 			EndIf
 			
@@ -5014,7 +5009,7 @@ Function DrawGUI()
 				End Select
 			EndIf
 			
-			If IsMouseOn Then
+			If IsMouseOn = n Then
 				MouseSlot = n
 				Color(255, 0, 0)
 				Rect(x - 1, y - 1, INVENTORY_GFX_SIZE + 2, INVENTORY_GFX_SIZE + 2)
@@ -5024,13 +5019,13 @@ Function DrawGUI()
 			DrawFrame(x, y, INVENTORY_GFX_SIZE, INVENTORY_GFX_SIZE, (x Mod 64), (x Mod 64))
 			
 			If Inventory[n] <> Null Then
-				If (SelectedItem <> Inventory[n] Lor IsMouseOn) Then 
+				If (SelectedItem <> Inventory[n] Lor IsMouseOn = n) Then 
 					DrawImage(Inventory[n]\InvImg, x + INVENTORY_GFX_SIZE / 2 - 32, y + INVENTORY_GFX_SIZE / 2 - 32)
 				EndIf
 			EndIf
 			
 			If Inventory[n] <> Null And SelectedItem <> Inventory[n] Then
-				If IsMouseOn Then
+				If IsMouseOn = n Then
 					If SelectedItem = Null Then
 						SetFont(fo\FontID[0])
 						Color(0, 0, 0)
@@ -5886,28 +5881,27 @@ Function UpdateGUI()
 		y = GraphicHeight / 2 - INVENTORY_GFX_SIZE * (Float(OtherSize) / MaxItemAmount * 2 - 1) - INVENTORY_GFX_SPACING
 		
 		ItemAmount = 0
+		IsMouseOn = -1
 		For n = 0 To OtherSize - 1
-			IsMouseOn = False
 			If ScaledMouseX() > x And ScaledMouseX() < x + INVENTORY_GFX_SIZE Then
 				If ScaledMouseY() > y And ScaledMouseY() < y + INVENTORY_GFX_SIZE Then
-					IsMouseOn = True
+					IsMouseOn = n
 				EndIf
 			EndIf
 			
-			If IsMouseOn Then
+			If IsMouseOn = n Then
 				MouseSlot = n
 			EndIf
 			
 			If OtherOpen = Null Then Exit
 			
 			If OtherOpen\SecondInv[n] <> Null And SelectedItem <> OtherOpen\SecondInv[n] Then
-				If IsMouseOn Then
+				If IsMouseOn = n Then
 					If SelectedItem = Null Then
 						If MouseHit1 Then
 							SelectedItem = OtherOpen\SecondInv[n]
-							MouseHit1 = False
 							
-							If DoubleClick Then
+							If DoubleClick And DoubleClickSlot = n Then
 								If OtherOpen\SecondInv[n]\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[OtherOpen\SecondInv[n]\ItemTemplate\Sound])
 								OtherOpen = Null
 								ClosedInv = True
@@ -5919,7 +5913,7 @@ Function UpdateGUI()
 				EndIf
 				ItemAmount = ItemAmount + 1
 			Else
-				If IsMouseOn And MouseHit1 Then
+				If IsMouseOn = n And MouseHit1 Then
 					For z = 0 To OtherSize - 1
 						If OtherOpen\SecondInv[z] = SelectedItem Then OtherOpen\SecondInv[z] = Null
 					Next
@@ -5935,6 +5929,10 @@ Function UpdateGUI()
 				x = GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1.0)) / 2
 			EndIf
 		Next
+		
+		If MouseHit1 Then
+			DoubleClickSlot = IsMouseOn
+		EndIf
 		
 		If SelectedItem <> Null Then
 			If (Not MouseDown1) Then
@@ -6037,26 +6035,25 @@ Function UpdateGUI()
 		y = GraphicHeight / 2 - INVENTORY_GFX_SIZE - INVENTORY_GFX_SPACING
 		
 		ItemAmount = 0
+		IsMouseOn = -1
 		For n = 0 To MaxItemAmount - 1
-			IsMouseOn = False
 			If ScaledMouseX() > x And ScaledMouseX() < x + INVENTORY_GFX_SIZE Then
 				If ScaledMouseY() > y And ScaledMouseY() < y + INVENTORY_GFX_SIZE Then
-					IsMouseOn = True
+					IsMouseOn = n
 				EndIf
 			EndIf
 			
-			If IsMouseOn Then
+			If IsMouseOn = n Then
 				MouseSlot = n
 			EndIf
 			
 			If Inventory[n] <> Null And SelectedItem <> Inventory[n] Then
-				If IsMouseOn Then
+				If IsMouseOn = n Then
 					If SelectedItem = Null Then
 						If MouseHit1 Then
 							SelectedItem = Inventory[n]
-							MouseHit1 = False
 							
-							If DoubleClick Then
+							If DoubleClick And DoubleClickSlot = n Then
 								If wi\HazmatSuit > 0 And Instr(SelectedItem\ItemTemplate\TempName, "hazmatsuit") = 0 Then
 									msg\Msg = "You cannot use any items while wearing a hazmat suit."
 									msg\Timer = 70.0 * 6.0
@@ -6072,7 +6069,7 @@ Function UpdateGUI()
 				EndIf
 				ItemAmount = ItemAmount + 1
 			Else
-				If IsMouseOn And MouseHit1 Then
+				If IsMouseOn = n And MouseHit1 Then
 					For z = 0 To MaxItemAmount - 1
 						If Inventory[z] = SelectedItem Then Inventory[z] = Null
 					Next
@@ -6086,6 +6083,10 @@ Function UpdateGUI()
 				x = GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
 			EndIf
 		Next
+		
+		If MouseHit1 Then
+			DoubleClickSlot = IsMouseOn
+		EndIf
 		
 		If SelectedItem <> Null Then
 			If (Not MouseDown1) Then
@@ -12368,5 +12369,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#106C#1342#1E05
+;~B#1067#133D#1E06
 ;~C#Blitz3D

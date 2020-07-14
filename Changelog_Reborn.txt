@@ -117,6 +117,9 @@ Bug Fixes:
 - Fixed SCP-173 not breaking the glass in the testroom event if the player looked away.
 - Fixed Right and Down movement always overriding Left and Up movement.
 - Fixed steps sound inside the fake tunnel in pocket dimension.
+- Fixed input boxes displaying too many characters for a frame, if too many characters are entered.
+- Fixed inventory single clicks being recognized as double clicks.
+- Fixed message being moved down if selecting a document, while a clipboard/wallet is open.
 
 - Small fixes for commands "disablenuke" and "enablecontrol/disablecontrol.
 - Small fixes for gateb and gateaentrance's walls.
@@ -124,5 +127,5 @@ Bug Fixes:
 - Small fixes for room2medibay2 and room2medibay's walls.
 - Small fixes for room2pipes and room2pipes2.
 - Small fixes for ending tunnel in the Gate A.
-- Small fixes for headphones' texture.
+- Small fixes for earphones' texture.
 - Small fixes for main menu.
