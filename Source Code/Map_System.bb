@@ -1796,7 +1796,7 @@ Function FillRoom(r.Rooms)
 			d\AutoClose = False : d\Locked = True
 			
 			d = CreateDoor(r\Zone, r\x + 928.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 0.0, r, True, False, False, "GEAR")
-			d\AutoClose = False : d\Locked = True
+			d\AutoClose = False : d\Locked = True : d\MTFClose = False
 			
 			; ~ Doors to the room itself
 			d = CreateDoor(r\Zone, r\x + 416.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 0.0, r, False, False, 3)
