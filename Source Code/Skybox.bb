@@ -10,7 +10,7 @@ Function sky_CreateSky(FileName$, Parent% = 0)
 		Local FName$ = FileName + Direction + ".png"
 		
 		If FileType(FName) = 1 Then
-			Local b = LoadBrush_Strict(FName, %110001)
+			Local b% = LoadBrush_Strict(FName, %110001)
 			
 			s = CreateSurface(Sky, b)
 			For Vert = 1 To 4

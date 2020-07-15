@@ -146,7 +146,7 @@ Const HARD% = 2
 
 ; ~ [ACHIEVEMENTS]
 
-Const AchievementsFile$ = "Data\Achievements.ini"
+Const AchievementsFile$ = "Data\achievements.ini"
 
 Const MAXACHIEVEMENTS% = 41
 
@@ -188,7 +188,7 @@ Const MaterialsFile$ = "Data\materials.ini"
 
 ; ~ [LOADING SCREENS]
 
-Const LoadingScreensFile$ = "LoadingScreens\LoadingScreens.ini"
+Const LoadingScreensFile$ = "LoadingScreens\loading_screens.ini"
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D

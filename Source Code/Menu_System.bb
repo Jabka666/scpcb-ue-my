@@ -1632,7 +1632,7 @@ Function UpdateLauncher(lnchr.Launcher)
 	Local Quit% = False
 	
 	Repeat
-		Cls
+		Cls()
 		
 		Color(0, 0, 0)
 		Rect(0, 0, LauncherWidth, LauncherHeight, True)
@@ -1715,7 +1715,7 @@ Function UpdateLauncher(lnchr.Launcher)
 		EndIf
 		
 		If DrawLauncherButton(LauncherWidth - 30 - 90, LauncherHeight - 50, 100, 30, "EXIT", False, False) Then Quit = True : Exit
-		Flip
+		Flip()
 	Forever
 	
 	PutINIValue(OptionFile, "Global", "Width", lnchr\GFXModeWidths[lnchr\SelectedGFXMode])
@@ -1834,7 +1834,7 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 	
 	Repeat 
 		ClsColor(0, 0, 0)
-		Cls
+		Cls()
 		
 		If Percent > 20 Then
 			UpdateMusic()

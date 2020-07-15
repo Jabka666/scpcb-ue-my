@@ -2792,7 +2792,7 @@ Function CatchErrors(Location$)
 End Function
 
 Repeat
-	Cls
+	Cls()
 	
 	Local ElapsedMilliSeconds%
 	
@@ -3473,7 +3473,7 @@ Function DrawEnding()
 			;[End Block]
 	End Select
 	
-	Cls
+	Cls()
 	
 	If me\EndingTimer < -200.0 Then
 		If me\EndingTimer > -700.0 Then 
@@ -3690,7 +3690,7 @@ Function DrawCredits()
     Local EndLinesAmount%
 	Local LastCreditLine.CreditsLine
 	
-    Cls
+    Cls()
 	
 	If Rand(1, 300) > 1 Then
 		DrawImage(me\CreditsScreen, GraphicWidth / 2 - 400, GraphicHeight / 2 - 400)
@@ -8690,7 +8690,7 @@ Function LoadEntities()
 	TextureBlend(AmbientLightRoomTex, 5)
 	SetBuffer(TextureBuffer(AmbientLightRoomTex))
 	ClsColor(0, 0, 0)
-	Cls
+	Cls()
 	SetBuffer(BackBuffer())
 	AmbientLightRoomVal = 0
 	
@@ -8769,7 +8769,7 @@ Function LoadEntities()
 	
 	tt\OverlayTextureID[6] = CreateTexture(1024, 1024, 1 + 2) ; ~ DARK
 	SetBuffer(TextureBuffer(tt\OverlayTextureID[6]))
-	Cls
+	Cls()
 	SetBuffer(BackBuffer())
 	tt\OverlayID[6] = CreateSprite(ArkBlurCam)
 	ScaleSprite(tt\OverlayID[6], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
@@ -8782,7 +8782,7 @@ Function LoadEntities()
 	tt\OverlayTextureID[7] = CreateTexture(1024, 1024, 1 + 2 + 256) ; ~ LIGHT
 	SetBuffer(TextureBuffer(tt\OverlayTextureID[7]))
 	ClsColor(255, 255, 255)
-	Cls
+	Cls()
 	ClsColor(0, 0, 0)
 	SetBuffer(BackBuffer())
 	tt\OverlayID[7] = CreateSprite(ArkBlurCam)
@@ -9056,7 +9056,7 @@ Function LoadEntities()
 	tt\MonitorTextureID[4] = CreateTexture(1, 1)
 	SetBuffer(TextureBuffer(tt\MonitorTextureID[4]))
 	ClsColor(0, 0, 0)
-	Cls
+	Cls()
 	SetBuffer(BackBuffer())
 	
 	For i = 2 To CountSurfaces(o\MonitorModelID[1])
@@ -12057,7 +12057,7 @@ Function InitFastResize()
 	TextureBlend(Fresize_Texture2, 3)
 	SetBuffer(TextureBuffer(Fresize_Texture2))
 	ClsColor(0, 0, 0)
-	Cls
+	Cls()
 	SetBuffer(BackBuffer())
 	EntityTexture(SPR, Fresize_Texture, 0, 0)
 	EntityTexture(SPR, Fresize_Texture2, 0, 1)
@@ -12069,10 +12069,10 @@ Function GammaUpdate()
 	If DisplayMode = 1 Then
 		If (RealGraphicWidth <> GraphicWidth) Lor (RealGraphicHeight <> GraphicHeight) Then
 			SetBuffer(TextureBuffer(Fresize_Texture))
-			ClsColor(0, 0, 0) : Cls
+			ClsColor(0, 0, 0) : Cls()
 			CopyRect(0, 0, GraphicWidth, GraphicHeight, 1024 - GraphicWidth / 2, 1024 - GraphicHeight / 2, BackBuffer(), TextureBuffer(Fresize_Texture))
 			SetBuffer(BackBuffer())
-			ClsColor(0, 0, 0) : Cls
+			ClsColor(0, 0, 0) : Cls()
 			ScaleRender(0, 0, 2048.0 / Float(GraphicWidth) * AspectRatioRatio, 2048.0 / Float(GraphicWidth) * AspectRatioRatio)
 			; ~ Might want to replace Float(GraphicWidth) with Max(GraphicWidth, GraphicHeight) if portrait sizes cause issues
 			; ~ Everyone uses landscape so it's probably a non-issue
@@ -12084,7 +12084,7 @@ Function GammaUpdate()
 	If ScreenGamma > 1.0 Then ; ~ CHECK WHY WINDOWED MODE IS BROKEN
 		CopyRect(0, 0, RealGraphicWidth, RealGraphicHeight, 1024 - RealGraphicWidth / 2, 1024 - RealGraphicHeight / 2, BackBuffer(), TextureBuffer(Fresize_Texture))
 		EntityBlend(Fresize_Image, 1)
-		ClsColor(0, 0, 0) : Cls
+		ClsColor(0, 0, 0) : Cls()
 		ScaleRender((-1.0) / Float(RealGraphicWidth), 1.0 / Float(RealGraphicWidth), 2048.0 / Float(RealGraphicWidth), 2048.0 / Float(RealGraphicWidth))
 		EntityFX(Fresize_Image, 1 + 32)
 		EntityBlend(Fresize_Image, 3)
@@ -12093,19 +12093,19 @@ Function GammaUpdate()
 	ElseIf ScreenGamma < 1.0 Then ; ~ Maybe optimize this if it's too slow, alternatively give players the option to disable gamma
 		CopyRect(0, 0, RealGraphicWidth, RealGraphicHeight, 1024 - RealGraphicWidth / 2, 1024 - RealGraphicHeight / 2, BackBuffer(), TextureBuffer(Fresize_Texture))
 		EntityBlend(Fresize_Image, 1)
-		ClsColor(0, 0, 0) : Cls
+		ClsColor(0, 0, 0) : Cls()
 		ScaleRender((-1.0) / Float(RealGraphicWidth), 1.0 / Float(RealGraphicWidth), 2048.0 / Float(RealGraphicWidth), 2048.0 / Float(RealGraphicWidth))
 		EntityFX(Fresize_Image, 1 + 32)
 		EntityBlend(Fresize_Image, 2)
 		EntityAlpha(Fresize_Image, 1.0)
 		SetBuffer(TextureBuffer(Fresize_Texture2))
 		ClsColor(255 * ScreenGamma, 255 * ScreenGamma, 255 * ScreenGamma)
-		Cls
+		Cls()
 		SetBuffer(BackBuffer())
 		ScaleRender((-1.0) / Float(RealGraphicWidth), 1.0 / Float(RealGraphicWidth), 2048.0 / Float(RealGraphicWidth), 2048.0 / Float(RealGraphicWidth))
 		SetBuffer(TextureBuffer(Fresize_Texture2))
 		ClsColor(0, 0, 0)
-		Cls
+		Cls()
 		SetBuffer(BackBuffer())
 	EndIf
 	EntityFX(Fresize_Image, 1)
@@ -12298,12 +12298,12 @@ Function PlayStartupVideos()
 		Local SplashScreenAudio% = StreamSound_Strict(MovieFile + ".ogg", SFXVolume, 0)
 		
 		Repeat
-			Cls
+			Cls()
 			BlitzMovie_DrawD3D(0, (RealGraphicHeight / 2 - ScaledGraphicHeight / 2), RealGraphicWidth, ScaledGraphicHeight)
 			Color(255, 255, 255)
 			SetFont(fo\FontID[0])
 	        Text(GraphicWidth / 2, GraphicHeight - 50, "PRESS ANY KEY TO SKIP", True, True)
-			Flip
+			Flip()
 		Until (GetKey() Lor (Not IsStreamPlaying_Strict(SplashScreenAudio)))
 		StopStream_Strict(SplashScreenAudio)
 		BlitzMovie_Stop()
@@ -12311,8 +12311,8 @@ Function PlayStartupVideos()
 		
 		If i = 3 Then FreeFont(fo\FontID[0])
 		
-		Cls
-		Flip
+		Cls()
+		Flip()
 	Next
 	
 	ShowPointer()

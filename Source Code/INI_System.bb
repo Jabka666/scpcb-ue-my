@@ -204,7 +204,7 @@ Function PutINIValue%(File$, INI_sSection$, INI_sKey$, INI_sValue$)
 				; ~ Process SECTION
 				If (INI_sCurrentSection = INI_sUpperSection) And (INI_bWrittenKey = False) Then
 					INI_bWrittenKey = INI_CreateKey(INI_lFileHandle, INI_sKey, INI_sValue)
-				End If
+				EndIf
 				INI_sCurrentSection = Upper(INI_CreateSection(INI_lFileHandle, INI_sTemp))
 				If INI_sCurrentSection = INI_sUpperSection Then INI_bSectionFound = True
 			Else
@@ -248,7 +248,7 @@ Function INI_FileToString$(INI_sFilename$)
 			INI_sString = INI_sString + ReadLine(INI_lFileHandle) + Chr(0)
 		Wend
 		CloseFile(INI_lFileHandle)
-	End If
+	EndIf
 	Return(INI_sString)
 End Function
 

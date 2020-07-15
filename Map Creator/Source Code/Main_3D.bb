@@ -41,7 +41,7 @@ Global AmbientLightRoomTex% = CreateTexture(2, 2, 257)
 TextureBlend(AmbientLightRoomTex, 5)
 SetBuffer(TextureBuffer(AmbientLightRoomTex))
 ClsColor(0, 0, 0)
-Cls
+Cls()
 SetBuffer(BackBuffer())
 
 ; ~ Loading door-relevant meshes (for adjacent doors)
@@ -140,7 +140,7 @@ Global PrevTime% = MilliSecs()
 Global ElapsedTime#
 
 Repeat
-	Cls
+	Cls()
 	
 	If ShowFPS
 		If CheckFPS < MilliSecs() Then
@@ -415,7 +415,7 @@ Repeat
 				Else
 					ClsColor(255, 255, 255)
 				EndIf
-				Cls
+				Cls()
 				SetBuffer(BackBuffer())
 				r\ResetOverlayTex = False
 			EndIf
@@ -483,7 +483,7 @@ Repeat
 						If PickedEntity() = GetChild(r\OBJ, 2)
 							SetBuffer(TextureBuffer(r\OverlayTex))
 							ClsColor(70, 70, 20 + (Float(Sin(MilliSecs() / 4.0)) * 20))
-							Cls
+							Cls()
 							SetBuffer(BackBuffer())
 							PickedRoom = r
 							r\ResetOverlayTex = True
@@ -493,7 +493,7 @@ Repeat
 						If PickedEntity() = r\OBJ
 							SetBuffer(TextureBuffer(r\OverlayTex))
 							ClsColor(60, 60, 50 - (Float(Sin(MilliSecs() / 4.0)) * 50))
-							Cls
+							Cls()
 							SetBuffer(BackBuffer())
 							PickedRoom = r
 							r\ResetOverlayTex = True
@@ -944,7 +944,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 					r\OverlayTex = CreateTexture(1, 1)
 					SetBuffer(TextureBuffer(r\OverlayTex))
 					ClsColor(0, 0, 0)
-					Cls
+					Cls()
 					SetBuffer(BackBuffer())
 					EntityTexture(GetChild(r\OBJ, 2), r\OverlayTex, 0, 0)
 				Else
@@ -952,7 +952,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 					TextureBlend(r\OverlayTex, 5)
 					SetBuffer(TextureBuffer(r\OverlayTex))
 					ClsColor(255, 255, 255)
-					Cls
+					Cls()
 					SetBuffer(BackBuffer())
 					EntityTexture(r\OBJ, r\OverlayTex, 0, 0)
 				EndIf
@@ -1143,7 +1143,7 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 	BlankTexture = CreateTexture(4, 4, 1, 1)
 	ClsColor(255, 255, 255)
 	SetBuffer(TextureBuffer(BlankTexture))
-	Cls
+	Cls()
 	SetBuffer(BackBuffer())
 	
 	Local PinkTexture%
@@ -1151,7 +1151,7 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 	PinkTexture = CreateTexture(4, 4, 1, 1)
 	ClsColor(255, 255, 255)
 	SetBuffer(TextureBuffer(PinkTexture))
-	Cls
+	Cls()
 	SetBuffer(BackBuffer())
 	
 	ClsColor(0, 0, 0)

@@ -1,6 +1,6 @@
 Graphics3D(640, 480, 0, 2)
 
-AppTitle("Optimize lightmaps (convert bmp to png)")
+AppTitle("Optimize lightmaps (convert .bmp to .png)")
 
 Const FIF_UNKNOWN% = -1
 Const FIF_BMP% = 0
@@ -52,7 +52,7 @@ Function GetINIString$(File$, Section$, Parameter$)
 					CloseFile(f)
 					Return(Trim(Right(TemporaryString, Len(TemporaryString) - Instr(TemporaryString, "="))))
 				EndIf
-			Until Left(TemporaryString, 1) = "[" Or Eof(f)
+			Until Left(TemporaryString, 1) = "[" Lor Eof(f)
 			CloseFile(f)
 			Return("")
 		EndIf
@@ -97,15 +97,15 @@ Function PutINIValue%(INI_sAppName$, INI_sSection$, INI_sKey$, INI_sValue$)
 	INI_sContents$ = INI_FileToString(INI_sFilename)
 	
 	; ~ (Re)Create the INI file updating/adding the SECTION, KEY and VALUE
-	INI_bWrittenKey% = False
-	INI_bSectionFound% = False
+	INI_bWrittenKey = False
+	INI_bSectionFound = False
 	INI_sCurrentSection$ = ""
 	
 	INI_lFileHandle = WriteFile(INI_sFilename)
 	If INI_lFileHandle = 0 Then Return(False) ; ~ Create file failed!
 	
-	INI_lOldPos% = 1
-	INI_lPos% = Instr(INI_sContents, Chr(0))
+	INI_lOldPos = 1
+	INI_lPos = Instr(INI_sContents, Chr(0))
 	
 	While INI_lPos <> 0
 		INI_sTemp$ = Trim(Mid(INI_sContents, INI_lOldPos, (INI_lPos - INI_lOldPos)))
@@ -116,32 +116,32 @@ Function PutINIValue%(INI_sAppName$, INI_sSection$, INI_sKey$, INI_sValue$)
 				
 				If INI_sCurrentSection = INI_sUpperSection And INI_bWrittenKey = False Then
 					INI_bWrittenKey = INI_CreateKey(INI_lFileHandle, INI_sKey, INI_sValue)
-				End If
+				EndIf
 				INI_sCurrentSection = Upper(INI_CreateSection(INI_lFileHandle, INI_sTemp))
 				If INI_sCurrentSection = INI_sUpperSection Then INI_bSectionFound = True
 			Else
-				lEqualsPos% = Instr(INI_sTemp, "=")
+				lEqualsPos = Instr(INI_sTemp, "=")
 				If lEqualsPos <> 0 Then
 					If INI_sCurrentSection = INI_sUpperSection And Upper(Trim(Left(INI_sTemp, (lEqualsPos - 1)))) = Upper(INI_sKey) Then
 						If INI_sValue <> "" Then INI_CreateKey(INI_lFileHandle, INI_sKey, INI_sValue)
 						INI_bWrittenKey = True
 					Else
 						WriteLine(INI_lFileHandle, INI_sTemp)
-					End If
-				End If
-			End If
-		End If
+					EndIf
+				EndIf
+			EndIf
+		EndIf
 		
 		; ~ Move through the INI file...
 		INI_lOldPos = INI_lPos + 1
-		INI_lPos% = Instr(INI_sContents, Chr(0), INI_lOldPos)
+		INI_lPos = Instr(INI_sContents, Chr(0), INI_lOldPos)
 	Wend
 	
 	; ~ KEY wasn't found in the INI file - Append a new SECTION if required and create our KEY = VALUE line
 	If INI_bWrittenKey = False Then
 		If INI_bSectionFound = False Then INI_CreateSection(INI_lFileHandle, INI_sSection)
 		INI_CreateKey(INI_lFileHandle, INI_sKey, INI_sValue)
-	End If
+	EndIf
 	
 	CloseFile(INI_lFileHandle)
 	
@@ -150,13 +150,13 @@ End Function
 
 Function INI_FileToString$(INI_sFilename$)
 	INI_sString$ = ""
-	INI_lFileHandle% = ReadFile(INI_sFilename)
+	INI_lFileHandle = ReadFile(INI_sFilename)
 	If INI_lFileHandle <> 0 Then
 		While (Not(Eof(INI_lFileHandle)))
 			INI_sString = INI_sString + ReadLine(INI_lFileHandle) + Chr(0)
 		Wend
 		CloseFile(INI_lFileHandle)
-	End If
+	EndIf
 	Return(INI_sString)
 End Function
 
@@ -171,29 +171,13 @@ Function INI_CreateKey%(INI_lFileHandle%, INI_sKey$, INI_sValue$)
 	Return(True)
 End Function
 
-Function Min#(a#, b#)
-	If a < b Then 
-		Return(a)
-	Else 
-		Return(b)
-	EndIf
-End Function
-
-Function Max#(a#, b#)
-	If a > b Then 
-		Return(a)
-	Else 
-		Return(b)
-	EndIf
-End Function
-
 Function StripPath$(File$) 
 	Local Name$ = "", i%, mi$
 	
 	If Len(File) > 0 Then 
 		For i = Len(File) To 1 Step - 1 
 			mi = Mid(File, i, 1) 
-			If mi = "\" Or mi = "/" Then Return(Name) Else Name = mi + Name 
+			If mi = "\" Lor mi = "/" Then Return(Name) Else Name = mi + Name 
 		Next 
 	EndIf 
 	
@@ -206,40 +190,13 @@ Function StripFilename$(File$)
 	If Len(File) > 0 Then
 		For i = 1 To Len(File)
 			mi = Mid(File, i, 1)
-			If mi = "\" Or mi = "/" Then
+			If mi = "\" Lor mi = "/" Then
 				LastSlash = i
 			EndIf
 		Next
 	EndIf
 	
 	Return(Left(File, LastSlash))
-End Function
-
-Function EntityScaleX#(Entity%, Globl% = False) 
-	If Globl Then 
-		TFormVector(1.0, 0.0, 0.0, Entity, 0) 
-	Else 
-		TFormVector(1.0, 0.0, 0.0, Entity, GetParent(Entity))
-	EndIf
-	Return(Sqr(TFormedX() * TFormedX() + TFormedY() * TFormedY() + TFormedZ() * TFormedZ()))
-End Function 
-
-Function EntityScaleY#(Entity%, Globl% = False)
-	If Globl Then 
-		TFormVector(0.0, 1.0, 0.0, Entity, 0)  
-	Else 
-		TFormVector(0.0, 1.0, 0.0, Entity, GetParent(Entity))  
-	EndIf
-	Return(Sqr(TFormedX() * TFormedX() + TFormedY() * TFormedY() + TFormedZ() * TFormedZ()))
-End Function 
-
-Function EntityScaleZ#(Entity%, Globl% = False)
-	If Globl Then 
-		TFormVector(0.0, 0.0, 1.0, Entity, 0)
-	Else 
-		TFormVector(0.0, 0.0, 1.0, Entity, GetParent(Entity))
-	EndIf
-	Return(Sqr(TFormedX() * TFormedX() + TFormedY() * TFormedY() + TFormedZ() * TFormedZ()))
 End Function
 
 Function Piece$(s$, Entry%, Char$ = " ")
@@ -298,6 +255,7 @@ Function LoadRMesh(File$)
 	Local Temp1i%, Temp2i%, Temp3i%
 	Local Temp1#, Temp2#, Temp3#
 	Local Temp1s$, Temp2s$
+	Local Done%, LoadTex%
 	
 	Temp2s = ReadString(f)
 	WriteString(fw, Temp2s)
@@ -314,20 +272,20 @@ Function LoadRMesh(File$)
 	Local u#, v#
 	
 	For i = 1 To Count ; ~ Drawn mesh
-		For j=0 To 1
+		For j = 0 To 1
 			Temp1i = ReadByte(f)
 			WriteByte(fw, Temp1i)
 			If Temp1i <> 0 Then
 				Temp1s = ReadString(f)
 				If Instr(Temp1s, ".bmp") <> 0 Then
-					Done% = 0
+					Done = 0
 					For r.Converted = Each Converted
-						If r\name = Temp1s Then Done = 1 : Exit
+						If r\Name = Temp1s Then Done = 1 : Exit
 					Next
-					If (Not done) Then
+					If (Not Done) Then
 						r.Converted = New Converted
 						r\Name = Temp1s
-						LoadTex% = FI_Load(FIF_BMP, File + Temp1s, 0)
+						LoadTex = FI_Load(FIF_BMP, File + Temp1s, 0)
 					EndIf
 					CopyFile(File + Temp1s, File + "bmp_lm\" + Temp1s)
 					DeleteFile(File + Temp1s)
@@ -387,18 +345,18 @@ Global State% = 0
 
 SetBuffer(BackBuffer())
 ClsColor(0, 0, 0)
-Cls
+Cls()
 Color(255, 255, 255)
 Text(5, 5, "Press a key:")
 Text(5, 25, "1 - Convert BMPs to PNGs, and modify rmeshes to use them")
 Text(5, 45, "2 - Convert BMPs to PNGs for a specific room and modify it to use them")
 Text(5, 65, "3 - Revert options.ini to use the old rmeshes")
 Text(5, 85, "ESC - Close without doing anything")
-Flip
+Flip()
 
 While (Not KeyHit(1))
-	If KeyHit(2) Or KeyHit(79) Then State = 1 : Exit
-	If KeyHit(3) Or KeyHit(80) Then State = 2 : Exit
+	If KeyHit(2) Lor KeyHit(79) Then State = 1 : Exit
+	If KeyHit(3) Lor KeyHit(80) Then State = 2 : Exit
 Wend
 
 Local Stri$, TemporaryString$, f%
@@ -429,9 +387,9 @@ If State = 1 Then
 				
 				LoadRMesh(Stri)
 				
-				Cls
+				Cls()
 				Text(5, 5, "Converted " + Chr(34) + Stri + Chr(34))
-				Flip
+				Flip()
 				
 				ic.INIConvert = New INIConvert
 				ic\File = "Data\rooms.ini"
@@ -446,22 +404,22 @@ If State = 1 Then
 		PutINIValue(ic\File, ic\Section, ic\Key, ic\Value)
 	Next
 	
-	Cls
+	Cls()
 	Text(5, 5, "Conversion complete")
-	Flip
+	Flip()
 	Delay(1000)
 	
 	CloseFile(f)
 ElseIf State = 2
-	Cls
-	Flip
+	Cls()
+	Flip()
 	FlushKeys()
 	
 	Stri = Input("Path for the room to be converted: ")
 	LoadRMesh(Stri)
-	Cls
+	Cls()
 	Text(5, 5, "Conversion of " + Stri + " complete")
-	Flip
+	Flip()
 	Delay(1000)
 ElseIf State = 3
 	f = ReadFile("Data\rooms.ini")
@@ -487,9 +445,9 @@ ElseIf State = 3
 		PutINIValue(ic\File, ic\Section, ic\Key, ic\Value)
 	Next
 	
-	Cls
+	Cls()
 	Text(5, 5, "Reset complete, you need to restore the bmp lightmaps manually")
-	Flip
+	Flip()
 	Delay(1000)
 	
 	CloseFile(f)

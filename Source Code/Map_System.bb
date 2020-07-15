@@ -186,7 +186,7 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 	BlankTexture = CreateTexture(4, 4, 1, 1)
 	ClsColor(255, 255, 255)
 	SetBuffer(TextureBuffer(BlankTexture))
-	Cls
+	Cls()
 	SetBuffer(BackBuffer())
 	
 	Local PinkTexture%
@@ -194,7 +194,7 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 	PinkTexture = CreateTexture(4, 4, 1, 1)
 	ClsColor(255, 255, 255)
 	SetBuffer(TextureBuffer(PinkTexture))
-	Cls
+	Cls()
 	SetBuffer(BackBuffer())
 	
 	ClsColor(0, 0, 0) 
@@ -6584,7 +6584,7 @@ Function UpdateSecurityCams()
 								If CoffinCam = Null Lor Rand(5) = 5 Lor sc\CoffinEffect <> 3 Then
 									HideEntity(me\Camera)
 									ShowEntity(sc\Cam)
-									Cls
+									Cls()
 									
 									UpdateRoomLights(sc\Cam)
 									
@@ -6599,7 +6599,7 @@ Function UpdateSecurityCams()
 									ShowEntity(CoffinCam\room\OBJ)
 									EntityAlpha(GetChild(CoffinCam\room\OBJ, 2), 1.0)
 									ShowEntity(CoffinCam\Cam)
-									Cls
+									Cls()
 									
 									UpdateRoomLights(CoffinCam\Cam)
 									
@@ -6706,7 +6706,7 @@ Function UpdateSecurityCams()
 			EndIf
 		EndIf
 	Next
-	Cls
+	Cls()
 End Function
 
 Function UpdateMonitorSaving()
@@ -7673,7 +7673,7 @@ Function CreateMap()
 	
 	If 0 Then 
 		Repeat
-			Cls
+			Cls()
 			For x = 0 To MapWidth - 1
 				For y = 0 To MapHeight - 1
 					If MapTemp(x, y) = 0 Then
@@ -7715,7 +7715,7 @@ Function CreateMap()
 					EndIf
 				Next
 			Next			
-			Flip
+			Flip()
 		Until KeyHit(28)		
 	EndIf
 	
@@ -8203,7 +8203,7 @@ Function AmbientLightRooms(Value% = 0)
 	SetBuffer(TextureBuffer(AmbientLightRoomTex))
 	
 	ClsColor(Value, Value, Value)
-	Cls
+	Cls()
 	ClsColor(0, 0, 0)
 	
 	SetBuffer(OldBuffer)

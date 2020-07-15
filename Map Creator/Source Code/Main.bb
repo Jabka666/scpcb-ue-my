@@ -446,7 +446,7 @@ Repeat
 	EndIf
 	
 	If ShowGrid Then
-		Cls
+		Cls()
 		
 		Local Width# = GadgetWidth(Map_2D)
 		Local Height# = GadgetHeight(Map_2D)

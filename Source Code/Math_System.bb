@@ -20,13 +20,13 @@ Function CurveValue#(Number#, Old#, Smooth#)
 	EndIf
 End Function
 
-Function CurveAngle#(Val#, Old#, Smooth#)
+Function CurveAngle#(Value#, Old#, Smooth#)
 	If fpst\FPSFactor[0] = 0.0 Then Return(Old)
 	
-	Local Diff# = WrapAngle(Val) - WrapAngle(Old)
+	Local Diff# = WrapAngle(Value) - WrapAngle(Old)
 	
 	If Diff > 180.0 Then Diff = Diff - 360.0
-	If Diff < - 180.0 Then Diff = Diff + 360.0
+	If Diff < -180.0 Then Diff = Diff + 360.0
 	Return(WrapAngle(Old + Diff * (1.0 / Smooth * fpst\FPSFactor[0])))
 End Function
 
