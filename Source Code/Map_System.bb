@@ -1437,7 +1437,7 @@ Function LoadRoomMesh(rt.RoomTemplates)
 	HideEntity(rt\OBJ)
 End Function
 
-LoadRoomTemplates("Data\rooms.ini")
+LoadRoomTemplates(RoomsFile)
 
 Dim MapTemp%(MapWidth + 1, MapHeight + 1)
 Dim MapFound%(MapWidth + 1, MapHeight + 1)
@@ -6502,8 +6502,8 @@ Function UpdateSecurityCams()
 				If sc\FollowPlayer Then
 					If sc <> CoffinCam
 						If EntityVisible(sc\CameraOBJ, me\Camera)
-							If MTF_CameraCheckTimer > 0.0
-								MTF_CameraCheckDetected = True
+							If MTFCameraCheckTimer > 0.0
+								MTFCameraCheckDetected = True
 							EndIf
 						EndIf
 					EndIf
@@ -6535,8 +6535,8 @@ Function UpdateSecurityCams()
 					If sc <> CoffinCam Then
 						If (Abs(DeltaYaw(sc\CameraOBJ, me\Camera)) < 60.0)
 							If EntityVisible(sc\CameraOBJ, me\Camera)
-								If MTF_CameraCheckTimer > 0.0
-									MTF_CameraCheckDetected = True
+								If MTFCameraCheckTimer > 0.0
+									MTFCameraCheckDetected = True
 								EndIf
 							EndIf
 						EndIf
@@ -6626,8 +6626,8 @@ Function UpdateSecurityCams()
 							RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0)), 0.0)
 							
 							TurnEntity(Pvt, 90.0, 0.0, 0.0)
-							User_Camera_Pitch = CurveAngle(EntityPitch(Pvt), User_Camera_Pitch + 90.0, Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0))
-							User_Camera_Pitch = User_Camera_Pitch - 90.0
+							CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0))
+							CameraPitch = CameraPitch - 90.0
 							
 							FreeEntity(Pvt)
 							If (sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3) And (I_714\Using = 0 Lor wi\GasMask < 3 Lor wi\HazmatSuit < 3) Then
@@ -6742,8 +6742,8 @@ Function UpdateMonitorSaving()
 						PointEntity(Pvt, sc\ScrOBJ)
 						RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0)), 0.0)
 						TurnEntity(Pvt, 90.0, 0.0, 0.0)
-						User_Camera_Pitch = CurveAngle(EntityPitch(Pvt), User_Camera_Pitch + 90.0, Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0))
-						User_Camera_Pitch = User_Camera_Pitch - 90.0
+						CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0))
+						CameraPitch = CameraPitch - 90.0
 						FreeEntity(Pvt)
 					EndIf
 				EndIf

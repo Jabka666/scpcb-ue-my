@@ -800,7 +800,7 @@ Function UpdateEvents()
 									e\EventState3 = 15.0
 								EndIf
 								
-								User_Camera_Pitch = 0.0
+								CameraPitch = 0.0
 								RotateEntity(me\Collider, 0.0, EntityYaw(me\Camera), 0.0)
 							ElseIf e\EventState3 < 40.0
 								If Inventory[0] <> Null Then
@@ -1562,8 +1562,8 @@ Function UpdateEvents()
 							RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), 40.0), 0.0)
 							
 							TurnEntity(Pvt, 90.0, 0.0, 0.0)
-							User_Camera_Pitch = CurveAngle(EntityPitch(Pvt), User_Camera_Pitch + 90.0, 40.0)
-							User_Camera_Pitch = User_Camera_Pitch - 90.0
+							CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, 40.0)
+							CameraPitch = CameraPitch - 90.0
 							FreeEntity(Pvt)
 							
 							e\room\NPC[6]\State = 6.0
@@ -2071,7 +2071,7 @@ Function UpdateEvents()
 						Next
 						If CoffinDistance < 4.0 And HasBatteryFor895 And I_714\Using = 0 And wi\GasMask < 3 And wi\HazmatSuit < 3 Then
 							TurnEntity(me\Collider, 0.0, AngleDist(PointDirection(EntityX(me\Collider, True), EntityZ(me\Collider, True), EntityX(e\room\Objects[1],True), EntityZ(e\room\Objects[1], True)) + 90.0 + Sin(WrapAngle(e\EventState3 / 10.0)), EntityYaw(me\Collider)) / 4.0, 0.0, True)
-							User_Camera_Pitch = (User_Camera_Pitch * 0.8) + (((-60.0) * Min(Max((2.0 - Distance(EntityX(me\Collider, True), EntityX(e\room\Objects[1], True), EntityZ(me\Collider, True), EntityZ(e\room\Objects[1], True))) / 2.0, 0.0), 1.0)) * 0.2)
+							CameraPitch = (CameraPitch * 0.8) + (((-60.0) * Min(Max((2.0 - Distance(EntityX(me\Collider, True), EntityX(e\room\Objects[1], True), EntityZ(me\Collider, True), EntityZ(e\room\Objects[1], True))) / 2.0, 0.0), 1.0)) * 0.2)
 							
 							me\Sanity = me\Sanity - (fpst\FPSFactor[0] * 1.1 / wi\NightVision)
 							me\RestoreSanity = False
@@ -2499,8 +2499,8 @@ Function UpdateEvents()
 										PositionEntity Pvt, EntityX(me\Camera), EntityY(me\Camera), EntityZ(me\Camera)
 										PointEntity(Pvt, e\room\Objects[20])
 										TurnEntity(Pvt, 90.0, 0.0, 0.0)
-										User_Camera_Pitch = CurveAngle(EntityPitch(Pvt), User_Camera_Pitch + 90.0, 10.0)
-										User_Camera_Pitch = User_Camera_Pitch - 90.0
+										CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, 10.0)
+										CameraPitch = CameraPitch - 90.0
 										RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), 10.0), 0.0)
 										FreeEntity(Pvt)
 									EndIf
@@ -2582,8 +2582,8 @@ Function UpdateEvents()
 									PositionEntity(Pvt, EntityX(me\Camera), EntityY(me\Camera), EntityZ(me\Camera))
 									PointEntity(Pvt, e\room\Objects[17])
 									TurnEntity(Pvt, 90.0, 0.0, 0.0)
-									User_Camera_Pitch = CurveAngle(EntityPitch(Pvt), User_Camera_Pitch + 90.0, Min(Max(15000.0 / (-me\Sanity), 15.0), 500.0))
-									User_Camera_Pitch = User_Camera_Pitch - 90.0
+									CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, Min(Max(15000.0 / (-me\Sanity), 15.0), 500.0))
+									CameraPitch = CameraPitch - 90.0
 									RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), Min(Max(15000.0 / (-me\Sanity), 15.0), 500.0)), 0)
 									FreeEntity(Pvt)
 									
@@ -5250,8 +5250,8 @@ Function UpdateEvents()
 									RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), 80.0 - (e\EventState3 / 200.0)), 0.0)
 									
 									TurnEntity(Pvt, 90.0, 0.0, 0.0)
-									User_Camera_Pitch = CurveAngle(EntityPitch(Pvt) + 25.0, User_Camera_Pitch + 90.0, 80.0 - (e\EventState3 / 200.0))
-									User_Camera_Pitch = User_Camera_Pitch - 90
+									CameraPitch = CurveAngle(EntityPitch(Pvt) + 25.0, CameraPitch + 90.0, 80.0 - (e\EventState3 / 200.0))
+									CameraPitch = CameraPitch - 90
 									
 									Dist = Distance(EntityX(me\Collider), EntityX(e\room\Objects[2],True), EntityZ(me\Collider), EntityZ(e\room\Objects[2], True))
 									
@@ -5333,8 +5333,8 @@ Function UpdateEvents()
 										Pvt = CreatePivot()
 										PositionEntity Pvt, EntityX(me\Camera), EntityY(me\Collider), EntityZ(me\Camera)
 										PointEntity(Pvt, e\room\RoomDoors[0]\FrameOBJ)
-										User_Camera_Pitch = CurveAngle(90.0, User_Camera_Pitch + 90.0, 100.0)
-										User_Camera_Pitch = User_Camera_Pitch - 90.0
+										CameraPitch = CurveAngle(90.0, CameraPitch + 90.0, 100.0)
+										CameraPitch = CameraPitch - 90.0
 										RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), 150.0), 0.0)
 										
 										Angle = WrapAngle(EntityYaw(Pvt) - EntityYaw(me\Collider))
@@ -5391,7 +5391,7 @@ Function UpdateEvents()
 									
 									FreeEntity(e\room\NPC[0]\OBJ)
 									e\room\NPC[0]\OBJ = CopyEntity(o\NPCModelID[26])
-									x = GetINIFloat("Data\NPCs.ini", "Class D", "Scale") / MeshWidth(e\room\NPC[0]\OBJ)
+									x = GetINIFloat(NPCsFile, "Class D", "Scale") / MeshWidth(e\room\NPC[0]\OBJ)
 									e\room\NPC[0]\ModelScaleX = x
 									e\room\NPC[0]\ModelScaleY = x
 									e\room\NPC[0]\ModelScaleZ = x
@@ -6752,7 +6752,7 @@ Function UpdateEvents()
 						e\room\NPC[0] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True), EntityZ(e\room\Objects[6], True))
 						
 						Nazi% = CopyEntity(o\NPCModelID[22])
-						Scale# = GetINIFloat("Data\NPCs.ini", "Class D", "Scale") / MeshWidth(Nazi)
+						Scale# = GetINIFloat(NPCsFile, "Class D", "Scale") / MeshWidth(Nazi)
 						
 						FreeEntity(e\room\NPC[0]\OBJ)
 						e\room\NPC[0]\OBJ = CopyEntity(Nazi)
@@ -9023,7 +9023,7 @@ Function UpdateDimension1499()
 										Exit
 									EndIf
 								Next
-								Scale = GetINIFloat("Data\NPCs.ini", "SCP-1499-1", "Scale") / 4.0 * Rnd(0.8, 1.0)
+								Scale = GetINIFloat(NPCsFile, "SCP-1499-1", "Scale") / 4.0 * Rnd(0.8, 1.0)
 								ScaleEntity(du\OBJ, Scale, Scale, Scale)
 								EntityFX(du\OBJ, 1)
 								du\Anim = Rand(0, 1)
@@ -9042,7 +9042,7 @@ Function UpdateDimension1499()
 										Exit
 									EndIf
 								Next
-								Scale = GetINIFloat("Data\NPCs.ini", "SCP-1499-1", "Scale") / 4.0 * Rnd(0.8, 1.0)
+								Scale = GetINIFloat(NPCsFile, "SCP-1499-1", "Scale") / 4.0 * Rnd(0.8, 1.0)
 								ScaleEntity(du\OBJ, Scale, Scale, Scale)
 								EntityFX(du\OBJ, 1)
 								du\Anim = Rand(0, 1)

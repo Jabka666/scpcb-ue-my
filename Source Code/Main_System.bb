@@ -89,10 +89,12 @@ If DisplayMode = 1 Then
 	
 	AspectRatioRatio = (Float(GraphicWidth) / Float(GraphicHeight)) / (Float(RealGraphicWidth) / Float(RealGraphicHeight))
 Else
-	AspectRatioRatio = 1.0
+	Graphics3DExt(GraphicWidth, GraphicHeight, (DisplayMode = 2) + 1)
+	
 	RealGraphicWidth = GraphicWidth
 	RealGraphicHeight = GraphicHeight
-	Graphics3DExt(GraphicWidth, GraphicHeight, (DisplayMode = 2) + 1)
+	
+	AspectRatioRatio = 1.0
 EndIf
 
 Global MenuScale# = GraphicHeight / 1024.0
@@ -142,7 +144,7 @@ Global CursorIMG% = LoadImage_Strict("GFX\cursor.png")
 
 Global SelectedLoadingScreen.LoadingScreens, LoadingScreenAmount%, LoadingScreenText%
 Global LoadingBack% = LoadImage_Strict("LoadingScreens\loading_back.png")
-InitLoadingScreens("LoadingScreens\LoadingScreens.ini")
+InitLoadingScreens(LoadingScreensFile)
 
 ; ~ For some reason, Blitz3D doesn't load fonts that have filenames that
 ; ~ Don't match their "internal name" (i.e. their display name in applications like Word and such)
@@ -218,7 +220,7 @@ Global wi.WearableItems = New WearableItems
 
 Include "Source Code\Achievements_System.bb"
 
-Global User_Camera_Pitch#, Side#
+Global CameraPitch#, Side#
 
 Global PlayerRoom.Rooms
 
@@ -249,6 +251,7 @@ Function ClearCheats(chs.Cheats)
 End Function
 
 Global chs.Cheats = New Cheats
+
 ClearCheats(chs)
 
 Global CoffinDistance# = 100.0
@@ -347,7 +350,6 @@ End Function
 Function UpdateConsole()
 	Local Tex%, Tex2%, InBar%, InBox%, MouseScroll#
 	Local e.Events
-	
 	Local x%, y%, Width%, Height%
 	
 	If CanOpenConsole = False Then
@@ -2693,8 +2695,8 @@ Global Save_Msg$ = ""
 Global Save_Msg_Timer# = 0.0
 Global Save_Msg_Y# = 0.0
 
-Global MTF_CameraCheckTimer# = 0.0
-Global MTF_CameraCheckDetected% = False
+Global MTFCameraCheckTimer# = 0.0
+Global MTFCameraCheckDetected% = False
 
 Include "Source Code\Menu_System.bb"
 
@@ -4235,12 +4237,12 @@ Function MouseLook()
 		Local The_Pitch# = ((Mouse_Y_Speed_1)) * Mouselook_Y_Inc / (1.0 + wi\BallisticVest)
 		
 		TurnEntity(me\Collider, 0.0, -The_Yaw, 0.0) ; ~ Turn the user on the Y (Yaw) axis
-		User_Camera_Pitch = User_Camera_Pitch + The_Pitch
+		CameraPitch = CameraPitch + The_Pitch
 		; ~ Limit the user's camera To within 180.0 degrees of pitch rotation. Returns useless values so we need to use a variable to keep track of the camera pitch
-		If User_Camera_Pitch > 70.0 Then User_Camera_Pitch = 70.0
-		If User_Camera_Pitch < -70.0 Then User_Camera_Pitch = -70.0
+		If CameraPitch > 70.0 Then CameraPitch = 70.0
+		If CameraPitch < -70.0 Then CameraPitch = -70.0
 		
-		RotateEntity(me\Camera, WrapAngle(User_Camera_Pitch + Rnd(-me\CameraShake, me\CameraShake)), WrapAngle(EntityYaw(me\Collider) + Rnd(-me\CameraShake, me\CameraShake)), Roll) ; ~ Pitch the user's camera up and down
+		RotateEntity(me\Camera, WrapAngle(CameraPitch + Rnd(-me\CameraShake, me\CameraShake)), WrapAngle(EntityYaw(me\Collider) + Rnd(-me\CameraShake, me\CameraShake)), Roll) ; ~ Pitch the user's camera up and down
 		
 		If PlayerRoom\RoomTemplate\Name = "pocketdimension" Then
 			If EntityY(me\Collider) < 2000.0 * RoomScale Lor EntityY(me\Collider) > 2608.0 * RoomScale Then
@@ -8705,10 +8707,10 @@ Function LoadEntities()
 	ScreenTexs[1] = CreateTexture(512, 512, 1 + 256)
 	
 	CreateBlurImage()
-	CameraProjMode(Ark_Blur_Cam, 0)
+	CameraProjMode(ArkBlurCam, 0)
 	
 	tt\OverlayTextureID[0] = LoadTexture_Strict("GFX\fog.png", 1) ; ~ FOG
-	tt\OverlayID[0] = CreateSprite(Ark_Blur_Cam)
+	tt\OverlayID[0] = CreateSprite(ArkBlurCam)
 	ScaleSprite(tt\OverlayID[0], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityTexture(tt\OverlayID[0], tt\OverlayTextureID[0])
 	EntityBlend(tt\OverlayID[0], 2)
@@ -8716,7 +8718,7 @@ Function LoadEntities()
 	MoveEntity(tt\OverlayID[0], 0.0, 0.0, 1.0)
 	
 	tt\OverlayTextureID[1] = LoadTexture_Strict("GFX\gas_mask_overlay.png", 1) ; ~ GAS MASK
-	tt\OverlayID[1] = CreateSprite(Ark_Blur_Cam)
+	tt\OverlayID[1] = CreateSprite(ArkBlurCam)
 	ScaleSprite(tt\OverlayID[1], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityTexture(tt\OverlayID[1], tt\OverlayTextureID[1])
 	EntityBlend(tt\OverlayID[1], 2)
@@ -8725,7 +8727,7 @@ Function LoadEntities()
 	MoveEntity(tt\OverlayID[1], 0.0, 0.0, 1.0)
 	
 	tt\OverlayTextureID[2] = LoadTexture_Strict("GFX\hazmat_suit_overlay.png", 1) ; ~ HAZMAT SUIT
-	tt\OverlayID[2] = CreateSprite(Ark_Blur_Cam)
+	tt\OverlayID[2] = CreateSprite(ArkBlurCam)
 	ScaleSprite(tt\OverlayID[2], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityTexture(tt\OverlayID[2], tt\OverlayTextureID[2])
 	EntityBlend(tt\OverlayID[2], 2)
@@ -8734,7 +8736,7 @@ Function LoadEntities()
 	MoveEntity(tt\OverlayID[2], 0, 0, 1.0)
 	
 	tt\OverlayTextureID[3] = LoadTexture_Strict("GFX\scp_008_overlay.png", 1) ; ~ SCP-008
-	tt\OverlayID[3] = CreateSprite(Ark_Blur_Cam)
+	tt\OverlayID[3] = CreateSprite(ArkBlurCam)
 	ScaleSprite(tt\OverlayID[3], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityTexture(tt\OverlayID[3], tt\OverlayTextureID[3])
 	EntityBlend(tt\OverlayID[3], 3)
@@ -8743,7 +8745,7 @@ Function LoadEntities()
 	MoveEntity(tt\OverlayID[3], 0.0, 0.0, 1.0)
 	
 	tt\OverlayTextureID[4] = LoadTexture_Strict("GFX\night_vision_goggles_overlay.png", 1) ; ~ NIGHT VISION GOGGLES
-	tt\OverlayID[4] = CreateSprite(Ark_Blur_Cam)
+	tt\OverlayID[4] = CreateSprite(ArkBlurCam)
 	ScaleSprite(tt\OverlayID[4], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
 	EntityBlend(tt\OverlayID[4], 2)
@@ -8752,7 +8754,7 @@ Function LoadEntities()
 	MoveEntity(tt\OverlayID[4], 0.0, 0.0, 1.0)
 	
 	tt\OverlayTextureID[5] = LoadTexture_Strict("GFX\fog_night_vision_goggles.png", 1) ; ~ FOG IN NIGHT VISION GOGGLES
-	tt\OverlayID[5] = CreateSprite(Ark_Blur_Cam)
+	tt\OverlayID[5] = CreateSprite(ArkBlurCam)
 	ScaleSprite(tt\OverlayID[5], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityColor(tt\OverlayID[5], 0.0, 0.0, 0.0)
 	EntityFX(tt\OverlayID[5], 1)
@@ -8769,7 +8771,7 @@ Function LoadEntities()
 	SetBuffer(TextureBuffer(tt\OverlayTextureID[6]))
 	Cls
 	SetBuffer(BackBuffer())
-	tt\OverlayID[6] = CreateSprite(Ark_Blur_Cam)
+	tt\OverlayID[6] = CreateSprite(ArkBlurCam)
 	ScaleSprite(tt\OverlayID[6], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityTexture(tt\OverlayID[6], tt\OverlayTextureID[6])
 	EntityBlend(tt\OverlayID[6], 1)
@@ -8783,7 +8785,7 @@ Function LoadEntities()
 	Cls
 	ClsColor(0, 0, 0)
 	SetBuffer(BackBuffer())
-	tt\OverlayID[7] = CreateSprite(Ark_Blur_Cam)
+	tt\OverlayID[7] = CreateSprite(ArkBlurCam)
 	ScaleSprite(tt\OverlayID[7], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityTexture(tt\OverlayID[7], tt\OverlayTextureID[7])
 	EntityBlend(tt\OverlayID[7], 1)
@@ -8792,7 +8794,7 @@ Function LoadEntities()
 	HideEntity(tt\OverlayID[7])
 	
 	tt\OverlayTextureID[8] = LoadTexture_Strict("GFX\scp_409_overlay.png", 1) ; ~ SCP-409
-	tt\OverlayID[8] = CreateSprite(Ark_Blur_Cam)
+	tt\OverlayID[8] = CreateSprite(ArkBlurCam)
 	ScaleSprite(tt\OverlayID[8], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityTexture(tt\OverlayID[8], tt\OverlayTextureID[8])
 	EntityBlend(tt\OverlayID[8], 3)
@@ -8802,7 +8804,7 @@ Function LoadEntities()
 	HideEntity(tt\OverlayID[8])
 	
 	tt\OverlayTextureID[9] = LoadTexture_Strict("GFX\helmet_overlay.png", 1) ; ~ HELMET
-	tt\OverlayID[9] = CreateSprite(Ark_Blur_Cam)
+	tt\OverlayID[9] = CreateSprite(ArkBlurCam)
 	ScaleSprite(tt\OverlayID[9], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityTexture(tt\OverlayID[9], tt\OverlayTextureID[9])
 	EntityBlend(tt\OverlayID[9], 2)
@@ -8812,7 +8814,7 @@ Function LoadEntities()
 	HideEntity(tt\OverlayID[9])
 	
 	tt\OverlayTextureID[10] = LoadTexture_Strict("GFX\bloody_overlay.png", 1) ; ~ BLOOD
-	tt\OverlayID[10] = CreateSprite(Ark_Blur_Cam)
+	tt\OverlayID[10] = CreateSprite(ArkBlurCam)
 	ScaleSprite(tt\OverlayID[10], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityTexture(tt\OverlayID[10], tt\OverlayTextureID[10])
 	EntityBlend(tt\OverlayID[10], 2)
@@ -8822,7 +8824,7 @@ Function LoadEntities()
 	HideEntity(tt\OverlayID[10])
 	
 	tt\OverlayTextureID[11] = LoadTexture_Strict("GFX\fog_gas_mask.png", 1) ; ~ FOG IN GAS MASK
-	tt\OverlayID[11] = CreateSprite(Ark_Blur_Cam)
+	tt\OverlayID[11] = CreateSprite(ArkBlurCam)
 	ScaleSprite(tt\OverlayID[11], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityTexture(tt\OverlayID[11], tt\OverlayTextureID[11])
 	EntityBlend(tt\OverlayID[11], 3)
@@ -9217,7 +9219,7 @@ Function LoadEntities()
 	EntityTexture(DTextures[16], Tex)
 	FreeTexture(Tex)
 	
-	LoadMaterials("Data\materials.ini")
+	LoadMaterials(MaterialsFile)
 	
 	; ~ [MAINTENANCE TUNNELS]
 	
@@ -9766,7 +9768,7 @@ Function NullGame(PlayButtonSFX% = True) ; ~ CHECK WHAT IS WRONG HERE!
 	
 	ClearWorld()
 	me\Camera = 0
-	Ark_Blur_Cam = 0
+	ArkBlurCam = 0
 	me\Collider = 0
 	Sky = 0
 	InitFastResize()
@@ -11848,7 +11850,7 @@ Function RenderWorld2(Tween#)
 	Local i%, Dist#, Temp%, Temp2%
 	Local l%, k%, xValue#, yValue#, PitchValue#, YawValue#
 	
-	CameraProjMode(Ark_Blur_Cam, 0)
+	CameraProjMode(ArkBlurCam, 0)
 	CameraProjMode(me\Camera, 1)
 	
 	If wi\NightVision > 0 And wi\NightVision < 3 Then
@@ -12000,10 +12002,10 @@ Function RenderWorld2(Tween#)
 	EndIf
 	
 	; ~ Render sprites
-	CameraProjMode(Ark_Blur_Cam, 2)
+	CameraProjMode(ArkBlurCam, 2)
 	CameraProjMode(me\Camera, 0)
 	RenderWorld()
-	CameraProjMode(Ark_Blur_Cam, 0)
+	CameraProjMode(ArkBlurCam, 0)
 End Function
 
 Function ScaleRender(x#, y#, hScale# = 1.0, vScale# = 1.0)
@@ -12369,5 +12371,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1067#133D#1E06
+;~B#1069#133F#1E08
 ;~C#Blitz3D

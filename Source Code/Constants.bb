@@ -26,6 +26,8 @@ Const MaxNPCModelIDAmount% = 34
 
 ; ~ [NPCs]
 
+Const NPCsFile$ = "Data\NPCs.ini"
+
 Const NPCtype008_1% = 1, NPCtype035_Tentacle% = 2, NPCtype049% = 3, NPCtype049_2% = 4, NPCtype066% = 5, NPCtype096% = 6
 Const NPCtype106% = 7, NPCtype173% = 8, NPCtype372% = 9, NPCtype513_1% = 10, NPCtype860_2% = 11, NPCtype939% = 12
 Const NPCtype966% = 13, NPCtype1499_1% = 14
@@ -72,6 +74,8 @@ Const INVENTORY_GFX_SIZE% = 70
 Const INVENTORY_GFX_SPACING% = 35
 
 ; ~ [MAP]
+
+Const RoomsFile$ = "Data\rooms.ini"
 
 Const MaxRoomLights% = 32
 Const MaxRoomEmitters% = 8
@@ -142,6 +146,8 @@ Const HARD% = 2
 
 ; ~ [ACHIEVEMENTS]
 
+Const AchievementsFile$ = "Data\Achievements.ini"
+
 Const MAXACHIEVEMENTS% = 41
 
 Const Achv005% = 0, Achv008% = 1, Achv012% = 2, Achv035% = 3, Achv049% = 4, Achv055% = 5,  Achv079% = 6, Achv096% = 7, Achv106% = 8
@@ -175,6 +181,14 @@ Const TICK_DURATION# = 70.0 / 60.0
 
 Const Mode% = 2
 Const TwoD% = 8192
+
+; ~ [MATERIALS]
+
+Const MaterialsFile$ = "Data\materials.ini"
+
+; ~ [LOADING SCREENS]
+
+Const LoadingScreensFile$ = "LoadingScreens\LoadingScreens.ini"
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D

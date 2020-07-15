@@ -8,12 +8,12 @@ Global AchievementDescs$[MAXACHIEVEMENTS]
 Global AchvIMG%[MAXACHIEVEMENTS]
 
 For i = 0 To MAXACHIEVEMENTS - 1
-	Local Loc2% = GetINISectionLocation("Data\Achievements.ini", "s" + Str(i))
+	Local Loc2% = GetINISectionLocation(AchievementsFile, "s" + Str(i))
 	
-	AchievementStrings[i] = GetINIString2("Data\Achievements.ini", Loc2, "AchvName")
-	AchievementDescs[i] = GetINIString2("Data\Achievements.ini", Loc2, "AchvDesc")
+	AchievementStrings[i] = GetINIString2(AchievementsFile, Loc2, "AchvName")
+	AchievementDescs[i] = GetINIString2(AchievementsFile, Loc2, "AchvDesc")
 	
-	Local Image$ = GetINIString2("Data\Achievements.ini", Loc2, "AchvImage") 
+	Local Image$ = GetINIString2(AchievementsFile, Loc2, "AchvImage") 
 	
 	AchvIMG[i] = LoadImage_Strict("GFX\menu\Achievements\" + Image + ".png")
 	AchvIMG[i] = ResizeImage2(AchvIMG[i], ImageWidth(AchvIMG[i]) * GraphicHeight / 768.0, ImageHeight(AchvIMG[i]) * GraphicHeight / 768.0)
@@ -29,8 +29,8 @@ Function GiveAchievement(AchvName%, ShowMessage% = True)
 	If Achievements[AchvName] <> True Then
 		Achievements[AchvName] = True
 		If AchvMsgEnabled And ShowMessage Then
-			Local Loc2% = GetINISectionLocation("Data\Achievements.ini", "s" + AchvName)
-			Local AchievementName$ = GetINIString2("Data\Achievements.ini", Loc2, "AchvName")
+			Local Loc2% = GetINISectionLocation(AchievementsFile, "s" + AchvName)
+			Local AchievementName$ = GetINIString2(AchievementsFile, Loc2, "AchvName")
 			
 			CreateAchievementMsg(AchvName, AchievementName)
 		EndIf
