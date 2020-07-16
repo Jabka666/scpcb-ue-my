@@ -153,9 +153,7 @@ Function UpdateEmitters()
 			
 			If InSmoke = False Then
 				If wi\GasMask = 0 And wi\HazmatSuit = 0 Then
-					Local Dist# = Distance(EntityX(me\Camera, True), EntityX(e\OBJ, True), EntityZ(me\Camera, True), EntityZ(e\OBJ, True))
-					
-					If Dist < 0.8 Then
+					If Distance(EntityX(me\Camera, True), EntityX(e\OBJ, True), EntityZ(me\Camera, True), EntityZ(e\OBJ, True)) < 0.8 Then
 						If Abs(EntityY(me\Camera, True) - EntityY(e\OBJ, True)) < 5.0 Then InSmoke = True
 					EndIf
 				EndIf					

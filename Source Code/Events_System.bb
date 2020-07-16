@@ -7622,12 +7622,11 @@ Function UpdateEvents()
 				EndIf
 				UpdateSoundOrigin(e\SoundCHN, me\Camera, e\room\Objects[1])
 				;[End Block]
-			Case "1048a" ; ~ Make an optimization for NoTarget mode
+			Case "1048a"
 				;[Block]
 				If e\room\Objects[0] = 0 Then
 					If PlayerRoom <> e\room Then
-						Dist = Distance(EntityX(me\Collider), EntityX(e\room\OBJ), EntityZ(me\Collider), EntityZ(e\room\OBJ))
-						If Dist < 16.0 Then
+						If Distance(EntityX(me\Collider), EntityX(e\room\OBJ), EntityZ(me\Collider), EntityZ(e\room\OBJ)) < 16.0 Then
 							e\room\Objects[0] =	CopyEntity(o\NPCModelID[17])
 							ScaleEntity(e\room\Objects[0], 0.05, 0.05, 0.05)
 							SetAnimTime(e\room\Objects[0], 2)
@@ -7642,7 +7641,7 @@ Function UpdateEvents()
 						EndIf
 					EndIf
 				Else
-					e\EventState3 = 1.0
+					e\EventState3 = e\EventState3 + fpst\FPSFactor[0]
 					If chs\NoTarget Then e\EventState = 1.0
 					
 					Select e\EventState
@@ -7743,22 +7742,25 @@ Function UpdateEvents()
 							
 							; ~ Remove event when player was cured by SCP-427
 							If e\EventState2 = 0.0 And I_427\Using > 0 Then
-								If e\room\Objects[0] <> 0 Then
-									FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
+								If (Not EntityInView(e\room\Objects[0], me\Camera)) Then
+									If e\room\Objects[0] <> 0 Then
+										FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
+									EndIf
+									RemoveEvent(e)
 								EndIf
-								RemoveEvent(e)
 							EndIf
 					End Select 
 					
 					If e <> Null Then
 						If PlayerRoom <> e\room Then
 							If e\EventState3 > 0.0 Then
-								e\EventState3 = e\EventState3 + fpst\FPSFactor[0]
-								If e\EventState3 > 70.0 * 25.0 Then
-									If e\room\Objects[0] <> 0 Then
-										FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
+								If e\EventState3 > 70.0 * 30.0 Then
+									If (Not EntityInView(e\room\Objects[0], me\Camera)) Then
+										If e\room\Objects[0] <> 0 Then
+											FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
+										EndIf
+										RemoveEvent(e)
 									EndIf
-									RemoveEvent(e)
 								EndIf
 							EndIf
 						EndIf
@@ -10307,5 +10309,5 @@ Function GenerateRandomIA()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11D2#1DF5
+;~B#11D2#1DF4
 ;~C#Blitz3D

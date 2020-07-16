@@ -448,7 +448,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			
 			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0)
 			
-			SetNPCFrame(n, 11)
+			SetNPCFrame(n, 11.0)
 			
 			n\Speed = GetINIFloat(NPCsFile, "SCP-008-1", "Speed") / 100.0
 			
@@ -2436,7 +2436,7 @@ Function UpdateNPCs()
 										MoveEntity(Pvt, 0.8 * 0.079, 10.75 * 0.079, 6.9 * 0.079)
 										
 										PointEntity(Pvt, me\Collider)
-										Shoot(EntityX(Pvt),EntityY(Pvt), EntityZ(Pvt),((25/Dist)*(1/Dist)), True, InstaKillPlayer)
+										Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((25.0 / Dist) * (1.0 / Dist)), True, InstaKillPlayer)
 										n\Reload = 7.0
 									Else
 										n\CurrSpeed = n\Speed
@@ -2596,7 +2596,7 @@ Function UpdateNPCs()
 								
 								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fpst\FPSFactor[0])
 								
-								If EntityDistance(n\Collider,n\Path[n\PathLocation]\OBJ) < 0.2 Then
+								If EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ) < 0.2 Then
 									n\PathLocation = n\PathLocation + 1
 								EndIf 
 							EndIf

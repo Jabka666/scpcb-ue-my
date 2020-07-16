@@ -43,7 +43,7 @@ Function AutoReleaseSounds()
 		If TryRelease Then
 			If snd\ReleaseTime < MilliSecs() Then
 				If snd\InternalHandle <> 0 Then
-					FreeSound_Strict(snd\InternalHandle)
+					FreeSound(snd\InternalHandle)
 					snd\InternalHandle = 0
 				EndIf
 			EndIf

@@ -587,14 +587,14 @@ Function UpdateMainMenu()
 										EndIf
 									Next
 									If snd\InternalHandle <> 0 Then
-										FreeSound_Strict(snd\InternalHandle)
+										FreeSound(snd\InternalHandle)
 										snd\InternalHandle = 0
 									EndIf
 									snd\ReleaseTime = 0
 								Next
 							Else
 								For snd.Sound = Each Sound
-									If snd\InternalHandle = 0 Then snd\InternalHandle = LoadSound_Strict(snd\Name)
+									If snd\InternalHandle = 0 Then snd\InternalHandle = LoadSound(snd\Name)
 								Next
 							EndIf
 							EnableSFXRelease_Prev = EnableSFXRelease
