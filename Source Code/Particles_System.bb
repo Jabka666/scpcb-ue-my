@@ -28,7 +28,7 @@ Function CreateParticle.Particles(x#, y#, z#, Image%, Size#, Gravity# = 1.0, Lif
 			;[End Block]
 		Case 1, 2, 3, 4, 7
 			;[Block]
-			EntityBlend(p\OBJ, BLEND_ADD)
+			EntityBlend(p\OBJ, 0)
 			;[End Block]
 	End Select
 	

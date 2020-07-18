@@ -120,6 +120,7 @@ Bug Fixes:
 - Fixed input boxes displaying too many characters for a frame, if too many characters are entered.
 - Fixed inventory single clicks being recognized as double clicks.
 - Fixed message being moved down if selecting a document, while a clipboard/wallet is open.
+- Fixed brightness of the buttons guarded by 4-digit pass code.
 
 - Small fixes for commands "disablenuke" and "enablecontrol/disablecontrol.
 - Small fixes for gateb and gateaentrance's walls.

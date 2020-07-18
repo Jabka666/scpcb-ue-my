@@ -150,12 +150,12 @@ InitLoadingScreens(LoadingScreensFile)
 ; ~ Don't match their "internal name" (i.e. their display name in applications like Word and such)
 ; ~ As a workaround, I moved the files and renamed them so they
 ; ~ Can load without FastText
-fo\FontID[0] = LoadFont_Strict("GFX\font\cour\Courier New.ttf", Int(16 * (GraphicHeight / 1024.0)))
-fo\FontID[1] = LoadFont_Strict("GFX\font\cour\Courier New.ttf", Int(52 * (GraphicHeight / 1024.0)))
-fo\FontID[2] = LoadFont_Strict("GFX\font\DS-DIGI\DS-Digital.ttf", Int(22 * (GraphicHeight / 1024.0)))
-fo\FontID[3] = LoadFont_Strict("GFX\font\DS-DIGI\DS-Digital.ttf", Int(60 * (GraphicHeight / 1024.0)))
-fo\FontID[4] = LoadFont_Strict("GFX\font\Journal\Journal.ttf", Int(58 * (GraphicHeight / 1024.0)))
-fo\ConsoleFont = LoadFont_Strict("GFX\font\Andale\Andale Mono.ttf", Int(16 * (GraphicHeight / 1024.0)))
+fo\FontID[0] = LoadFont_Strict("GFX\font\cour\Courier New.ttf", Int(16 * (GraphicHeight / 1024)))
+fo\FontID[1] = LoadFont_Strict("GFX\font\cour\Courier New.ttf", Int(52 * (GraphicHeight / 1024)))
+fo\FontID[2] = LoadFont_Strict("GFX\font\DS-DIGI\DS-Digital.ttf", Int(22 * (GraphicHeight / 1024)))
+fo\FontID[3] = LoadFont_Strict("GFX\font\DS-DIGI\DS-Digital.ttf", Int(60 * (GraphicHeight / 1024)))
+fo\FontID[4] = LoadFont_Strict("GFX\font\Journal\Journal.ttf", Int(58 * (GraphicHeight / 1024)))
+fo\ConsoleFont = LoadFont_Strict("GFX\font\Andale\Andale Mono.ttf", Int(16 * (GraphicHeight / 1024)))
 
 SetFont(fo\FontID[1])
 
@@ -922,7 +922,7 @@ Function UpdateConsole()
 					If I_427\Timer >= 70.0 * 360.0 Then I_427\Timer = 0.0
 					
 					For e.Events = Each Events
-						If e\EventName = "1048a" Then 
+						If e\EventName = "1048a" Then
 							If PlayerRoom = e\room Then me\BlinkTimer = -10.0
 							If e\room\Objects[0] <> 0 Then
 								FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
@@ -2017,7 +2017,7 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, B
 		
 		d\FrameOBJ = CopyEntity(o\DoorModelID[1])
 	ElseIf Big = 3 Then ; ~ Elevator Door
-		For d2 = Each Doors
+		For d2.Doors = Each Doors
 			If d2 <> d And d2\Dir = 3 Then
 				d\OBJ = CopyEntity(d2\OBJ)
 				d\OBJ2 = CopyEntity(d2\OBJ2)
@@ -2042,9 +2042,9 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, B
 		d\FrameOBJ = CopyEntity(o\DoorModelID[1])
 	Else
 		d\OBJ = CopyEntity(o\DoorModelID[0])
-		ScaleEntity(d\OBJ, (204.0 * RoomScale) / MeshWidth(d\OBJ), 313.0 * RoomScale / MeshHeight(d\OBJ), 16.0 * RoomScale / MeshDepth(d\OBJ))
+		ScaleEntity(d\OBJ, (203.0 * RoomScale) / MeshWidth(d\OBJ), 313.0 * RoomScale / MeshHeight(d\OBJ), 16.0 * RoomScale / MeshDepth(d\OBJ))
 		d\OBJ2 = CopyEntity(o\DoorModelID[0])
-		ScaleEntity(d\OBJ2, (204.0 * RoomScale) / MeshWidth(d\OBJ2), 313.0 * RoomScale / MeshHeight(d\OBJ2), 16.0 * RoomScale / MeshDepth(d\OBJ2))
+		ScaleEntity(d\OBJ2, (203.0 * RoomScale) / MeshWidth(d\OBJ2), 313.0 * RoomScale / MeshHeight(d\OBJ2), 16.0 * RoomScale / MeshDepth(d\OBJ2))
 		
 		d\FrameOBJ = CopyEntity(o\DoorModelID[1])
 	EndIf
@@ -2075,7 +2075,6 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, B
 	For i = 0 To 1
 		If Code <> "" Then 
 			d\Buttons[i] = CopyEntity(o\ButtonModelID[2])
-			EntityFX(d\Buttons[i], 1)
 		Else
 			If Keycard > 0 Then
 				d\Buttons[i] = CopyEntity(o\ButtonModelID[1])
@@ -3700,7 +3699,7 @@ Function DrawCredits()
 	EndLinesAmount = 0
 	LastCreditLine = Null
 	Color(255, 255, 255)
-	For cl = Each CreditsLine
+	For cl.CreditsLine = Each CreditsLine
 		cl\ID = ID
 		If Left(cl\Txt, 1) = "*"
 			SetFont(fo\CreditsFontID[1])
@@ -3735,7 +3734,7 @@ Function DrawCredits()
 		EndIf
 	EndIf
 	If me\CreditsTimer <> 0.0
-		For cl = Each CreditsLine
+		For cl.CreditsLine = Each CreditsLine
 			If cl\Stay
 				SetFont(fo\CreditsFontID[0])
 				If Left(cl\Txt, 1) = "/"
@@ -3767,7 +3766,7 @@ Function UpdateCredits()
     ID = 0
 	EndLinesAmount = 0
 	LastCreditLine = Null
-	For cl = Each CreditsLine
+	For cl.CreditsLine = Each CreditsLine
 		cl\ID = ID
 		If Left(cl\Txt, 1) = "/"
 			LastCreditLine = Before(cl)
@@ -6548,14 +6547,15 @@ Function UpdateGUI()
 						EndIf
 						
 						For e.Events = Each Events
-							If e\EventName = "1048a" Then 
+							If e\EventName = "1048a" Then
 								If e\EventState2 > 0.0 Then
+									msg\Msg = "You swallowed the pill. Ear-like organs are falling from your body."
+									msg\Timer = 70.0 * 6.0
+									
 									If PlayerRoom = e\room Then me\BlinkTimer = -10.0
 									If e\room\Objects[0] <> 0 Then
 										FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
 									EndIf
-									msg\Msg = "You swallowed the pill. Ear-like organs are falling from your body."
-									msg\Timer = 70.0 * 6.0
 									RemoveEvent(e)
 								EndIf
 							EndIf
@@ -12258,7 +12258,7 @@ Function PlayStartupVideos()
 	
 	HidePointer()
 	
-	fo\FontID[0] = LoadFont_Strict("GFX\font\cour\Courier New.ttf", Int(16 * (GraphicHeight / 1024.0)))
+	fo\FontID[0] = LoadFont_Strict("GFX\font\cour\Courier New.ttf", Int(16 * (GraphicHeight / 1024)))
 	
 	Local ScaledGraphicHeight%
 	Local Ratio# = Float(RealGraphicWidth) / Float(RealGraphicHeight)
@@ -12371,5 +12371,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1069#133F#1E08
+;~B#1068#133E#1E08
 ;~C#Blitz3D

@@ -7667,8 +7667,10 @@ Function UpdateEvents()
 							
 							Local Volume# = Max(1.0 - Abs(PrevFrame - 600.0) / 100.0, 0.0)
 							
-							me\BlurTimer = Volume * 1000.0
-							me\CameraShake = Volume * 10.0
+							If PlayerRoom = e\room Then
+								me\BlurTimer = Volume * 1000.0
+								me\CameraShake = Volume * 10.0
+							EndIf
 							
 							PointEntity(e\room\Objects[0], me\Collider)
 							RotateEntity(e\room\Objects[0], -90.0, EntityYaw(e\room\Objects[0]), 0.0)
@@ -7737,28 +7739,22 @@ Function UpdateEvents()
 								msg\DeathMsg = "A dead body covered in ears was found in [DATA REDACTED]. Subject was presumably attacked by an instance of SCP-1048-A and suffocated to death by the ears. "
 								msg\DeathMsg = msg\DeathMsg + "Body was sent for autopsy."
 								Kill()
-								RemoveEvent(e)
 							EndIf
 							
 							; ~ Remove event when player was cured by SCP-427
 							If e\EventState2 = 0.0 And I_427\Using > 0 Then
-								If (Not EntityInView(e\room\Objects[0], me\Camera)) Then
-									If e\room\Objects[0] <> 0 Then
-										FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
-									EndIf
-									RemoveEvent(e)
-								EndIf
+								e\EventState3 = 70.0 * 30.0
 							EndIf
 					End Select 
 					
 					If e <> Null Then
-						If PlayerRoom <> e\room Then
-							If e\EventState3 > 0.0 Then
-								If e\EventState3 > 70.0 * 30.0 Then
-									If (Not EntityInView(e\room\Objects[0], me\Camera)) Then
-										If e\room\Objects[0] <> 0 Then
-											FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
-										EndIf
+						If e\EventState3 > 0.0 Then
+							If e\EventState3 >= 70.0 * 30.0 Then
+								If (Not EntityInView(e\room\Objects[0], me\Camera)) Then
+									If e\room\Objects[0] <> 0 Then
+										FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
+									EndIf
+									If e\EventState2 = 0.0 Then
 										RemoveEvent(e)
 									EndIf
 								EndIf

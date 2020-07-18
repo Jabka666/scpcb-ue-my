@@ -1175,14 +1175,16 @@ Function LoadGame(File$)
 		itt\Found = ReadByte(f)
 	Next
 	
+	Local Dist#, Dist2#
+	
 	For do.Doors = Each Doors
 		If do\room <> Null Then
-			Dist# = 20.0
+			Dist = 20.0
 			
 			Local closestroom.Rooms
 			
 			For r.Rooms = Each Rooms
-				Dist2# = EntityDistance(r\OBJ, do\OBJ)
+				Dist2 = EntityDistance(r\OBJ, do\OBJ)
 				If Dist2 < Dist Then
 					Dist = Dist2
 					closestroom = r.Rooms
@@ -1216,18 +1218,18 @@ Function LoadGame(File$)
 		For r2.Rooms = Each Rooms
 			If r <> r2 Then
 				If r2\z = r\z Then
-					If (r2\x) = (r\x + 8.0) Then
+					If r2\x = r\x + 8.0 Then
 						r\Adjacent[0] = r2
 						If r\AdjDoor[0] = Null Then r\AdjDoor[0] = r2\AdjDoor[2]
-					ElseIf (r2\x) = (r\x - 8.0)
+					ElseIf r2\x = r\x - 8.0
 						r\Adjacent[2] = r2
 						If r\AdjDoor[2] = Null Then r\AdjDoor[2] = r2\AdjDoor[0]
 					EndIf
 				ElseIf r2\x = r\x Then
-					If (r2\z) = (r\z - 8.0) Then
+					If r2\z = r\z - 8.0 Then
 						r\Adjacent[1] = r2
 						If r\AdjDoor[1] = Null Then r\AdjDoor[1] = r2\AdjDoor[3]
-					ElseIf (r2\z) = (r\z + 8.0)
+					ElseIf r2\z = r\z + 8.0
 						r\Adjacent[3] = r2
 						If r\AdjDoor[3] = Null Then r\AdjDoor[3] = r2\AdjDoor[1]
 					EndIf
@@ -1878,14 +1880,16 @@ Function LoadGameQuick(File$)
 		itt\Found = ReadByte(f)
 	Next
 	
+	Local Dist#, Dist2#
+	
 	For do.Doors = Each Doors
 		If do\room <> Null Then
-			Dist# = 20.0
+			Dist = 20.0
 			
 			Local closestroom.Rooms
 			
 			For r.Rooms = Each Rooms
-				Dist2# = EntityDistance(r\OBJ, do\OBJ)
+				Dist2 = EntityDistance(r\OBJ, do\OBJ)
 				If Dist2 < Dist Then
 					Dist = Dist2
 					closestroom = r.Rooms

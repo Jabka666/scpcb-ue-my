@@ -3606,8 +3606,8 @@ Function FillRoom(r.Rooms)
 			;[Block]
 			w = CreateWaypoint(r\x - 32.0 * RoomScale, r\y + 66.0 * RoomScale, r\z + 288.0 * RoomScale, Null, r)
 			w2 = CreateWaypoint(r\x, r\y + 66.0 * RoomScale, r\z - 448.0 * RoomScale, Null, r)
-			w\Connected[0] = w2 : w\Dist[0] = EntityDistance(w\OBJ, w2\OBJ)
-			w2\Connected[0] = w : w2\Dist[0] = w\Dist[0]
+			w\connected[0] = w2 : w\Dist[0] = EntityDistance(w\OBJ, w2\OBJ)
+			w2\connected[0] = w : w2\Dist[0] = w\Dist[0]
 			
 			it = CreateItem("Document SCP-106", "paper", r\x + 404.0 * RoomScale, r\y + 145.0 * RoomScale, r\z + 559.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -4129,8 +4129,8 @@ Function FillRoom(r.Rooms)
 			
 			w = CreateWaypoint(r\x, r\y + 66.0 * RoomScale, r\z + 292.0 * RoomScale, Null, r)
 			w2 = CreateWaypoint(r\x, r\y + 66.0 * RoomScale, r\z - 284.0 * RoomScale, Null, r)
-			w\Connected[0] = w2 : w\Dist[0] = EntityDistance(w\OBJ, w2\OBJ)
-			w2\Connected[0] = w : w2\Dist[0] = w\Dist[0]
+			w\connected[0] = w2 : w\Dist[0] = EntityDistance(w\OBJ, w2\OBJ)
+			w2\connected[0] = w : w2\Dist[0] = w\Dist[0]
 			;[End Block]
 		Case "room2doors"
 			;[Block]
@@ -6085,7 +6085,7 @@ Function InitWayPoints(loadingstart = 45)
 		
 		Local CanCreateWayPoint% = False
 		
-		While (w2 <> Null)
+		While w2 <> Null
 			If (w\room = w2\room Lor w\door <> Null Lor w2\door <> Null) Then
 				Dist = EntityDistance(w\OBJ, w2\OBJ)
 				
@@ -6148,13 +6148,13 @@ Function RemoveWaypoint(w.WayPoints)
 	Delete(w)
 End Function
 
-Dim MapF(MapWidth + 1, MapHeight + 1), MapG(MapWidth + 1, MapHeight + 1), MapH(MapWidth + 1, MapHeight + 1)
-Dim MapState(MapWidth + 1, MapHeight + 1)
-Dim MapParent(MapWidth + 1, MapHeight + 1, 2)
+Dim MapF%(MapWidth + 1, MapHeight + 1), MapG%(MapWidth + 1, MapHeight + 1), MapH%(MapWidth + 1, MapHeight + 1)
+Dim MapState%(MapWidth + 1, MapHeight + 1)
+Dim MapParent%(MapWidth + 1, MapHeight + 1, 2)
 
 Function FindPath(n.NPCs, x#, y#, z#)
 	Local Temp%, Dist#, Dist2#
-	Local xTemp#, yTemp#, zTemp#
+	Local xTemp#, yTemp#, zTemp#, gTemp#
 	Local w.WayPoints, StartPoint.WayPoints, EndPoint.WayPoints   
 	Local StartX% = Floor(EntityX(n\Collider, True) / 8.0 + 0.5), StartZ% = Floor(EntityZ(n\Collider, True) / 8.0 + 0.5)
 	Local EndX% = Floor(x / 8.0 + 0.5), EndZ% = Floor(z / 8.0 + 0.5)
@@ -6178,8 +6178,8 @@ Function FindPath(n.NPCs, x#, y#, z#)
 		n\Path[i] = Null
 	Next
 	
-	
 	Local Pvt% = CreatePivot()
+	
 	PositionEntity(Pvt, x, y, z, True)   
 	
 	Temp = CreatePivot()
@@ -6193,7 +6193,7 @@ Function FindPath(n.NPCs, x#, y#, z#)
 		Dist2 = (xTemp * xTemp) + (yTemp * yTemp) + (zTemp * zTemp)
 		If Dist2 < Dist Then 
 			; ~ Prefer waypoints that are visible
-			If Not EntityVisible(w\OBJ, Temp) Then Dist2 = Dist2 * 3
+			If (Not EntityVisible(w\OBJ, Temp)) Then Dist2 = Dist2 * 3.0
 			If Dist2 < Dist Then 
 				Dist = Dist2
 				StartPoint = w
@@ -6252,7 +6252,7 @@ Function FindPath(n.NPCs, x#, y#, z#)
                 If w\connected[i] <> Null Then
 					If w\connected[i]\State < 2 Then
 						If w\connected[i]\State = 1 Then
-							gTemp# = w\Gcost + w\Dist[i]
+							gTemp = w\Gcost + w\Dist[i]
 							If n\NPCtype = NPCtypeMTF Then
 								If w\connected[i]\door = Null Then gTemp = gTemp + 0.5
 							EndIf
@@ -6263,7 +6263,7 @@ Function FindPath(n.NPCs, x#, y#, z#)
 							EndIf
 						Else
 							w\connected[i]\Hcost = Abs(EntityX(w\connected[i]\OBJ, True) - EntityX(EndPoint\OBJ, True)) + Abs(EntityZ(w\connected[i]\OBJ, True) - EntityZ(EndPoint\OBJ, True))
-							gTemp# = w\Gcost + w\Dist[i]
+							gTemp = w\Gcost + w\Dist[i]
 							If n\NPCtype = NPCtypeMTF Then
 								If w\connected[i]\door = Null Then gTemp = gTemp + 0.5
 							EndIf
@@ -6385,7 +6385,7 @@ Function UpdateScreens()
 						SelectedScreen = s
 						s\Img = LoadImage_Strict("GFX\screens\" + s\ImgPath)
 						s\Img = ResizeImage2(s\Img, ImageWidth(s\Img) * MenuScale, ImageHeight(s\Img) * MenuScale)
-						MaskImage(s\img, 255, 0, 255)
+						MaskImage(s\Img, 255, 0, 255)
 						PlaySound_Strict(ButtonSFX)
 						MouseUp1 = False
 					EndIf
@@ -6715,7 +6715,7 @@ Function UpdateMonitorSaving()
 	
 	If SelectedDifficulty\saveType <> SAVEONSCREENS Then Return
 	
-	For sc = Each SecurityCams
+	For sc.SecurityCams = Each SecurityCams
 		If sc\AllowSaving And sc\Screen Then
 			Close = False
 			If sc\room\Dist < 6.0 Lor PlayerRoom = sc\room Then 
@@ -7919,8 +7919,8 @@ Function LoadTerrain(HeightMap, yScale# = 0.7, t1%, t2%, Mask%)
 			AddVertex(Surf, lx, 0, ly, 1.0 / lx, 1.0 / ly)
 		Next
 	Next
-	RenderWorld
-			
+	RenderWorld()
+	
 	; ~ Connect the verts with faces
 	For ly = 0 To y - 1
 		For lx = 0 To x - 1
@@ -7928,7 +7928,7 @@ Function LoadTerrain(HeightMap, yScale# = 0.7, t1%, t2%, Mask%)
 			AddTriangle(Surf, (lx + 1) + ((x + 1) * ly), lx + ((x + 1) * ly) + (x + 1), (lx + 1) + ((x + 1) * ly) + (x + 1))
 		Next
 	Next
-			
+	
 	; ~ Position the terrain to center 0, 0, 0
 	Local Mesh2% = CopyMesh(Mesh, Mesh)
 	Local Surf2% = GetSurface(Mesh2, 1)
@@ -8247,7 +8247,7 @@ Function CreateChunkParts(r.Rooms)
 		
 		If Loc > 0 Then
 			StrTemp = GetINIString2(File, Loc, "count")
-			chp = New ChunkPart
+			chp.ChunkPart = New ChunkPart
 			chp\Amount = Int(StrTemp)
 			For j = 0 To Int(StrTemp)
 				Local OBJ_ID% = GetINIString2(File, Loc, "obj" + j)
@@ -8301,7 +8301,7 @@ Function CreateChunk.Chunk(OBJ%, x#, y#, z#, IsSpawnChunk% = False)
 	
 	If OBJ > -1 Then
 		ch\Amount = GetINIInt("Data\1499chunks.ini", "chunk" + OBJ, "count")
-		For chp = Each ChunkPart
+		For chp.ChunkPart = Each ChunkPart
 			If chp\ID = OBJ
 				For i = 0 To ch\Amount
 					ch\OBJ[i] = CopyEntity(chp\OBJ[i], ch\ChunkPivot)
@@ -8333,7 +8333,7 @@ Function UpdateChunks(r.Rooms, ChunkPartAmount%, SpawnNPCs% = True)
 	Repeat
 		Local ChunkFound% = False
 		
-		For ch = Each Chunk
+		For ch.Chunk = Each Chunk
 			If ch\x = x
 				If ch\z = z
 					ChunkFound = True
@@ -8341,7 +8341,7 @@ Function UpdateChunks(r.Rooms, ChunkPartAmount%, SpawnNPCs% = True)
 				EndIf
 			EndIf
 		Next
-		If (Not ChunkFound)
+		If (Not ChunkFound) Then
 			CurrChunkData = CHUNKDATA(Abs(((x + 32) / 40) Mod 64), Abs(((z + 32) / 40) Mod 64))
 			ch2 = CreateChunk(CurrChunkData, x, y, z)
 			ch2\IsSpawnChunk = False
@@ -8353,7 +8353,7 @@ Function UpdateChunks(r.Rooms, ChunkPartAmount%, SpawnNPCs% = True)
 		EndIf
 	Until z > ChunkMaxDistance + (ChunkZ * 40.0)
 	
-	For ch = Each Chunk
+	For ch.Chunk = Each Chunk
 		If (Not ch\IsSpawnChunk)
 			If Distance(EntityX(me\Collider), EntityX(ch\ChunkPivot), EntityZ(me\Collider), EntityZ(ch\ChunkPivot)) > ChunkMaxDistance
 				FreeEntity(ch\ChunkPivot)
@@ -8364,7 +8364,7 @@ Function UpdateChunks(r.Rooms, ChunkPartAmount%, SpawnNPCs% = True)
 	
 	Local CurrNPCNumber% = 0
 	
-	For n = Each NPCs
+	For n.NPCs = Each NPCs
 		If n\NPCtype = NPCtype1499_1
 			CurrNPCNumber = CurrNPCNumber + 1
 		EndIf
@@ -8437,7 +8437,7 @@ End Function
 Function HideChunks()
 	Local ch.Chunk, i%
 	
-	For ch = Each Chunk
+	For ch.Chunk = Each Chunk
 		If (Not ch\IsSpawnChunk)
 			For i = 0 To ch\Amount
 				FreeEntity(ch\OBJ[i])
@@ -8546,7 +8546,7 @@ Function PreventRoomOverlap(r.Rooms)
 		RotateEntity(r\OBJ, 0.0, r\Angle, 0.0)
 		CalculateRoomExtents(r)
 		
-		For r2 = Each Rooms
+		For r2.Rooms = Each Rooms
 			If r2 <> r And (Not r2\RoomTemplate\DisableOverlapCheck) Then
 				If CheckRoomOverlap(r, r2) Then
 					; ~ If didn't work then rotate the room back and move to the next step
@@ -8572,7 +8572,7 @@ Function PreventRoomOverlap(r.Rooms)
 	
 	Local x2%, y2%, Rot%, Rot2%
 	
-	For r2 = Each Rooms
+	For r2.Rooms = Each Rooms
 		If r2 <> r And (Not r2\RoomTemplate\DisableOverlapCheck) Then
 			If r\RoomTemplate\Shape = r2\RoomTemplate\Shape And r\Zone = r2\Zone And (r2\RoomTemplate\Name <> "checkpoint1" And r2\RoomTemplate\Name <> "checkpoint2" And r2\RoomTemplate\Name <> "room173") Then
 				x = r\x / 8.0
@@ -8600,7 +8600,7 @@ Function PreventRoomOverlap(r.Rooms)
 				CalculateRoomExtents(r2)
 				
 				; ~ Make sure neither room overlaps with anything after the swap
-				For r3 = Each Rooms
+				For r3.Rooms = Each Rooms
 					If (Not r3\RoomTemplate\DisableOverlapCheck) Then
 						If r3 <> r Then
 							If CheckRoomOverlap(r, r3) Then
