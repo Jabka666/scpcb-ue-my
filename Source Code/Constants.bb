@@ -102,8 +102,6 @@ Const HIT_DEAD% = 6
 
 ; ~ [TEXTURES]
 
-Const MaxDTextures% = 16
-
 Const MaxMiscTextureIDAmount% = 18
 
 Const MaxMonitorTextureIDAmount% = 5

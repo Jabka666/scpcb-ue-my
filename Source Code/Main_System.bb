@@ -14,9 +14,9 @@ Include "Source Code\Keys_System.bb"
 Include "Source Code\INI_System.bb"
 
 Type Fonts
-	Field FontID%[MaxFontIDAmount - 1]
+	Field FontID%[MaxFontIDAmount]
 	Field ConsoleFont%
-	Field CreditsFontID%[MaxCreditsFontIDAmount - 1]
+	Field CreditsFontID%[MaxCreditsFontIDAmount]
 End Type
 
 Global fo.Fonts = New Fonts
@@ -283,34 +283,34 @@ Include "Source Code\Difficulty.bb"
 
 Global MTFTimer#
 
-Global RadioState#[10]
-Global RadioState3%[10]
-Global RadioState4%[9]
-Global RadioCHN%[8]
+Global RadioState#[9]
+Global RadioState3%[9]
+Global RadioState4%[10]
+Global RadioCHN%[7]
 
 Type TextureTemplate
-	Field MiscTextureID%[MaxMiscTextureIDAmount - 1]
-	Field MonitorTextureID%[MaxMonitorTextureIDAmount - 1]
-	Field DecalTextureID%[MaxDecalTextureIDAmount - 1]
-	Field ParticleTextureID%[MaxParticleTextureIDAmount - 1]
-	Field LightSpriteID%[MaxLightSpriteIDAmount - 1]
-	Field IconID%[MaxIconIDAmount - 1]
-	Field ImageID%[MaxImageIDAmount - 1]
-	Field OverlayTextureID%[MaxOverlayTextureIDAmount - 1]
-	Field OverlayID%[MaxOverlayIDAmount - 1]
+	Field MiscTextureID%[MaxMiscTextureIDAmount]
+	Field MonitorTextureID%[MaxMonitorTextureIDAmount]
+	Field DecalTextureID%[MaxDecalTextureIDAmount]
+	Field ParticleTextureID%[MaxParticleTextureIDAmount]
+	Field LightSpriteID%[MaxLightSpriteIDAmount]
+	Field IconID%[MaxIconIDAmount]
+	Field ImageID%[MaxImageIDAmount]
+	Field OverlayTextureID%[MaxOverlayTextureIDAmount]
+	Field OverlayID%[MaxOverlayIDAmount]
 End Type
 
 Global tt.TextureTemplate = New TextureTemplate
 
 Type Objects
-	Field DoorModelID%[MaxDoorModelIDAmount - 1]
-	Field NPCModelID%[MaxNPCModelIDAmount - 1]
-	Field MTModelID%[MaxMTModelIDAmount - 1]
-	Field ButtonModelID%[MaxButtonModelIDAmount - 1]
-	Field LeverModelID%[MaxLeverModelIDAmount - 1]
-	Field CamModelID%[MaxCamModelIDAmount - 1]
-	Field MonitorModelID%[MaxMonitorModelIDAmount - 1]
-	Field MiscModelID%[MaxMiscModelIDAmount - 1]
+	Field DoorModelID%[MaxDoorModelIDAmount]
+	Field NPCModelID%[MaxNPCModelIDAmount]
+	Field MTModelID%[MaxMTModelIDAmount]
+	Field ButtonModelID%[MaxButtonModelIDAmount]
+	Field LeverModelID%[MaxLeverModelIDAmount]
+	Field CamModelID%[MaxCamModelIDAmount]
+	Field MonitorModelID%[MaxMonitorModelIDAmount]
+	Field MiscModelID%[MaxMiscModelIDAmount]
 End Type
 
 Global o.Objects = New Objects
@@ -1954,7 +1954,7 @@ Global room2gw_BrokenDoor% = False
 Global room2gw_x# = 0.0
 Global room2gw_z# = 0.0
 
-Global DTextures%[MaxDTextures]
+Global DTextures%[16]
 
 Global IntercomStreamCHN%
 
@@ -2364,11 +2364,11 @@ Function UpdateDoors()
 		
 		If d\Locked <> d\LockedUpdated Then
 			If d\Locked = True Then
-				For i = 0 To 2
+				For i = 0 To 1
 					If d\Buttons[i] <> 0 Then EntityTexture(d\Buttons[i], tt\MiscTextureID[17])
 				Next
 			Else
-				For i = 0 To 2
+				For i = 0 To 1
 					If d\Buttons[i] <> 0 Then EntityTexture(d\Buttons[i], tt\MiscTextureID[16])
 				Next
 			EndIf
@@ -2742,8 +2742,8 @@ Global I_409.SCP409 = New SCP409
 Type SCP427
 	Field Using%
 	Field Timer#
-	Field Sound%[1]
-	Field SoundCHN%[1]
+	Field Sound%[2]
+	Field SoundCHN%[2]
 End Type
 
 Global I_427.SCP427 = New SCP427
@@ -2771,7 +2771,7 @@ End Type
 Global I_1499.SCP1499 = New SCP1499
 
 Type MapZones
-	Field Transition%[1]
+	Field Transition%[2]
 	Field HasCustomForest%
 	Field HasCustomMT%
 End Type
@@ -2988,7 +2988,7 @@ Function MainLoop()
 			CameraFogMode(me\Camera, 1)
 			CameraRange(me\Camera, 0.01, Min(CameraFogFar * LightVolume * 1.5, 28.0))	
 			For r.Rooms = Each Rooms
-				For i = 0 To r\MaxLights
+				For i = 0 To r\MaxLights - 1
 					If r\Lights[i] <> 0 Then
 						EntityAutoFade(r\LightSprites[i], CameraFogNear * LightVolume, CameraFogFar * LightVolume)
 					EndIf
@@ -9106,7 +9106,7 @@ Function LoadEntities()
 			File = NextFile(Dir)
 			If File = "" Then Exit
 			If FileType("SFX\Radio\UserTracks\" + File) = 1 Then
-				Test = LoadSound_Strict("SFX\Radio\UserTracks\" + File)
+				Test = LoadSound("SFX\Radio\UserTracks\" + File)
 				If Test <> 0 Then
 					UserTrackName[UserTrackMusicAmount] = File
 					UserTrackMusicAmount = UserTrackMusicAmount + 1
@@ -9132,91 +9132,91 @@ Function LoadEntities()
 	SetChunkDataValues()
 	
 	; ~ NPCtypeD - different models with different textures (loaded using "CopyEntity") -- ENDSHN
-	For i = 1 To MaxDTextures
+	For i = 0 To 15
 		DTextures[i] = CopyEntity(o\NPCModelID[3])
 		HideEntity(DTextures[i])
 	Next
 	
 	; ~ Gonzales
 	Tex = LoadTexture_Strict("GFX\npcs\Gonzales.png")
-	EntityTexture(DTextures[1], Tex)
+	EntityTexture(DTextures[0], Tex)
 	FreeTexture(Tex)
 	
 	; ~ SCP-970's corpse
 	Tex = LoadTexture_Strict("GFX\npcs\D_9341(2).png")
-	EntityTexture(DTextures[2], Tex)
+	EntityTexture(DTextures[1], Tex)
 	FreeTexture(Tex)
 	
 	; ~ Scientist
 	Tex = LoadTexture_Strict("GFX\npcs\scientist.png")
-	EntityTexture(DTextures[3], Tex)
+	EntityTexture(DTextures[2], Tex)
 	FreeTexture(Tex)
 	
 	; ~ Franklin
 	Tex = LoadTexture_Strict("GFX\npcs\Franklin.png")
-	EntityTexture(DTextures[4], Tex)
+	EntityTexture(DTextures[3], Tex)
 	FreeTexture(Tex)
 	
 	; ~ Janitor # 1
 	Tex = LoadTexture_Strict("GFX\npcs\janitor.png")
-	EntityTexture(DTextures[5], Tex)
+	EntityTexture(DTextures[4], Tex)
 	FreeTexture(Tex)
 	
 	; ~ Maynard
 	Tex = LoadTexture_Strict("GFX\npcs\Maynard.png")
-	EntityTexture(DTextures[6], Tex)
+	EntityTexture(DTextures[5], Tex)
 	FreeTexture(Tex)
 	
 	; ~ Afro-American Class-D
 	Tex = LoadTexture_Strict("GFX\npcs\class_d(2).png")
-	EntityTexture(DTextures[7], Tex)
+	EntityTexture(DTextures[6], Tex)
 	FreeTexture(Tex)
 	
 	; ~ 035 victim
 	Tex = LoadTexture_Strict("GFX\npcs\scp_035_victim.png")
-	EntityTexture(DTextures[8], Tex)
+	EntityTexture(DTextures[7], Tex)
 	FreeTexture(Tex)
 	
 	If IntroEnabled Then
 		; ~ D-9341
 		Tex = LoadTexture_Strict("GFX\npcs\D_9341.png")
-		EntityTexture(DTextures[9], Tex)
+		EntityTexture(DTextures[8], Tex)
 		FreeTexture(Tex)
 	EndIf
 	
 	; ~ Body # 1
 	Tex = LoadTexture_Strict("GFX\npcs\body.png")
-	EntityTexture(DTextures[10], Tex)
+	EntityTexture(DTextures[9], Tex)
 	FreeTexture(Tex)
 	
 	; ~ Body # 2
 	Tex = LoadTexture_Strict("GFX\npcs\body(2).png")
-	EntityTexture(DTextures[11], Tex)
+	EntityTexture(DTextures[10], Tex)
 	FreeTexture(Tex)
 	
 	; ~ Janitor # 2
 	Tex = LoadTexture_Strict("GFX\npcs\janitor(2).png")
-	EntityTexture(DTextures[12], Tex)
+	EntityTexture(DTextures[11], Tex)
 	FreeTexture(Tex)
 	
 	; ~ SCP-008-1's victim
 	Tex = LoadTexture_Strict("GFX\npcs\scp_008_1_victim.png")
-	EntityTexture(DTextures[13], Tex)
+	EntityTexture(DTextures[12], Tex)
 	FreeTexture(Tex)
 	
 	; ~ SCP-409's victim
 	Tex = LoadTexture_Strict("GFX\npcs\body(3).png")
-	EntityTexture(DTextures[14], Tex)
+	EntityTexture(DTextures[13], Tex)
 	FreeTexture(Tex)
 	
 	; ~ SCP-939's victim # 2
 	Tex = LoadTexture_Strict("GFX\npcs\scp_939_victim.png")
-	EntityTexture(DTextures[15], Tex)
+	EntityTexture(DTextures[14], Tex)
 	FreeTexture(Tex)
 	
 	; ~ SCP-939's victim # 1
 	Tex = LoadTexture_Strict("GFX\npcs\scp_939_victim(2).png")
-	EntityTexture(DTextures[16], Tex)
+	EntityTexture(DTextures[15], Tex)
 	FreeTexture(Tex)
 	
 	LoadMaterials(MaterialsFile)
@@ -9308,7 +9308,7 @@ Function InitNewGame()
 	Next	
 	
 	For r.Rooms = Each Rooms
-		For i = 0 To MaxRoomLights
+		For i = 0 To MaxRoomLights - 1
 			If r\Lights[i] <> 0 Then EntityParent(r\Lights[i], 0)
 		Next
 		

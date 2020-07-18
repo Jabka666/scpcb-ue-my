@@ -2957,7 +2957,7 @@ Function DrawMapCreatorTooltip(x%, y%, Width%, Height%, MapName$)
 	SetFont(fo\FontID[0])
 	Color(255, 255, 255)
 	
-	Local Txt$[5]
+	Local Txt$[6]
 	
 	If Right(MapName, 6) = "cbmap2" Then
 		Txt[0] = Left(MapName, Len(MapName) - 7)

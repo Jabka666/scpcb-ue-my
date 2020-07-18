@@ -855,7 +855,7 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 	PositionEntity(fr\Forest_Pivot, x, y, z, True)
 	
 	; ~ Load assets
-	Local hMap%[ROOM4], Mask%[ROOM4]
+	Local hMap%[6], Mask%[6]
 	Local GroundTexture% = LoadTexture_Strict("GFX\map\forest\forestfloor.jpg")
 	Local PathTexture% = LoadTexture_Strict("GFX\map\forest\forestpath.jpg")
 	
@@ -1097,7 +1097,7 @@ Function PlaceForest_MapCreator(fr.Forest, x#, y#, z#, r.Rooms)
 	fr\Forest_Pivot = CreatePivot()
 	PositionEntity(fr\Forest_Pivot, x, y, z, True)
 	
-	Local hMap%[ROOM4], Mask%[ROOM4]
+	Local hMap%[6], Mask%[6]
 	; ~ Load assets
 	Local GroundTexture% = LoadTexture_Strict("GFX\map\forest\forestfloor.jpg")
 	Local PathTexture% = LoadTexture_Strict("GFX\map\forest\forestpath.jpg")
@@ -1442,7 +1442,7 @@ LoadRoomTemplates(RoomsFile)
 Dim MapTemp%(MapWidth + 1, MapHeight + 1)
 Dim MapFound%(MapWidth + 1, MapHeight + 1)
 
-Global RoomAmbience%[20]
+Global RoomAmbience%[10]
 
 Global Sky%
 
@@ -7993,7 +7993,7 @@ Function UpdateRoomLights(Cam%)
 	
 	For r.Rooms = Each Rooms
 		If r\Dist < HideDistance * 0.7 Lor r = PlayerRoom Then
-			For i = 0 To r\MaxLights
+			For i = 0 To r\MaxLights - 1
 				If r\Lights[i] <> 0 Then
 					If EnableRoomLights And (SecondaryLightOn > 0.5) And Cam = me\Camera Then
 						EntityOrder(r\LightSprites2[i], -1)

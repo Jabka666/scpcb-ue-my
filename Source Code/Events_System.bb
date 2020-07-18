@@ -3183,7 +3183,7 @@ Function UpdateEvents()
 				If PlayerRoom = e\room Then
 					TurnEntity(e\room\Objects[0], e\EventState3 * fpst\FPSFactor[0], 0.0, 0.0)
 					If e\EventState3 > 0.01 Then
-						e\room\SoundCHN = LoopSound2(RoomAmbience[9], e\room\SoundCHN, me\Camera, e\room\Objects[0], 5.0, (e\EventState3 / 4.0))
+						e\room\SoundCHN = LoopSound2(RoomAmbience[8], e\room\SoundCHN, me\Camera, e\room\Objects[0], 5.0, (e\EventState3 / 4.0))
 					EndIf
 					e\EventState3 = CurveValue(e\EventState2 * 5, e\EventState3, 150.0)			
 				EndIf
@@ -4706,7 +4706,7 @@ Function UpdateEvents()
 						e\EventState3 = Max(0.0, e\EventState3 - fpst\FPSFactor[0] / 450.0)
 					EndIf
 					
-					If e\EventState2 > 0.0 Then e\SoundCHN = LoopSound2(RoomAmbience[8], e\SoundCHN, me\Camera, e\room\Objects[3], 5.0, e\EventState2 * 0.8)
+					If e\EventState2 > 0.0 Then e\SoundCHN = LoopSound2(RoomAmbience[7], e\SoundCHN, me\Camera, e\room\Objects[3], 5.0, e\EventState2 * 0.8)
 					If e\EventState3 > 0.0 Then e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, me\Camera, e\room\Objects[5], 6.0, e\EventState3)
 					
 					If Temp = 0 And x And z Then
