@@ -130,3 +130,4 @@ Bug Fixes:
 - Small fixes for ending tunnel in the Gate A.
 - Small fixes for earphones' texture.
 - Small fixes for main menu.
+- Small fixes for room2offices4.

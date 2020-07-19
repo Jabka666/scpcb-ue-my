@@ -5147,7 +5147,7 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "room2offices4"
 			;[Block]
-			d = CreateDoor(r\Zone, r\x - 240.0 * RoomScale, r\y, r\z, 90.0, r)
+			d = CreateDoor(r\Zone, r\x - 240.0 * RoomScale, r\y - 0.1 * RoomScale, r\z, 90.0, r)
 			d\AutoClose = False
 			PositionEntity(d\Buttons[0], r\x - 230.0 * RoomScale, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], r\x - 250.0 * RoomScale, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
