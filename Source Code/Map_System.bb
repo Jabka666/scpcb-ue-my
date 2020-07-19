@@ -1409,7 +1409,7 @@ Function LoadRoomTemplates(File$)
 		EndIf
 	Wend
 	
-	i = 1
+	i = 0
 	Repeat
 		StrTemp = GetINIString(File, "room ambience", "Ambience" + i)
 		If StrTemp = "" Then Exit
@@ -5785,9 +5785,8 @@ Function UpdateRooms()
 		If x < 16 And z < 16 Then
 			For i = 0 To MaxRoomEmitters - 1
 				If r\SoundEmitter[i] <> 0 Then 
-					Dist = EntityDistance(r\SoundEmitterOBJ[i], me\Collider)
-					If Dist < r\SoundEmitterRange[i] Then
-						r\SoundEmitterCHN[i] = LoopSound2(RoomAmbience[r\SoundEmitter[i]], r\SoundEmitterCHN[i], me\Camera, r\SoundEmitterOBJ[i], r\SoundEmitterRange[i])
+					If EntityDistance(r\SoundEmitterOBJ[i], me\Collider) < r\SoundEmitterRange[i] Then
+						r\SoundEmitterCHN[i] = LoopSound2(RoomAmbience[r\SoundEmitter[i] - 1], r\SoundEmitterCHN[i], me\Camera, r\SoundEmitterOBJ[i], r\SoundEmitterRange[i])
 					EndIf
 				EndIf
 			Next
