@@ -7355,7 +7355,7 @@ Function FinishWalking(n.NPCs, StartFrame#, EndFrame#, Speed#)
 	Local CenterFrame#
 	
 	If n <> Null
-		CenterFrame = (EndFrame - StartFrame) / 2
+		CenterFrame = (EndFrame - StartFrame) / 2.0
 		If n\Frame >= CenterFrame
 			AnimateNPC(n, StartFrame, EndFrame, Speed, False)
 		Else
@@ -7375,7 +7375,7 @@ Function ChangeNPCTextureID(n.NPCs, TextureID%) ; ~ Works only for Class D model
 	
 	n\TextureID = TextureID + 1
 	FreeEntity(n\OBJ)
-	n\OBJ = CopyEntity(DTextures[TextureID + 1])
+	n\OBJ = CopyEntity(DTextures[TextureID])
 	
 	Temp = GetINIFloat(NPCsFile, "Class D", "Scale") / MeshWidth(n\OBJ)
 	ScaleEntity(n\OBJ, Temp, Temp, Temp)

@@ -2000,7 +2000,7 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 		Text(GraphicWidth / 2, GraphicHeight / 2 - 100, "LOADING - " + Percent + " %", True, True)
 		
 		If Percent = 100 Then 
-			If FirstLoop And SelectedLoadingScreen\Title <> "CWM" Then PlaySound_Strict LoadTempSound(("SFX\Horror\Horror8.ogg"))
+			If FirstLoop And SelectedLoadingScreen\Title <> "CWM" Then PlaySound_Strict(LoadTempSound(("SFX\Horror\Horror8.ogg")))
 			Text(GraphicWidth / 2, GraphicHeight - 50, "PRESS ANY KEY TO CONTINUE", True, True)
 		Else
 			FlushKeys()

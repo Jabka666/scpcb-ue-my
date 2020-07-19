@@ -8541,7 +8541,7 @@ Function PreventRoomOverlap(r.Rooms)
 	
 	If r\RoomTemplate\Shape = ROOM2 Then
 		; ~ Room is a ROOM2, let's check if turning it 180 degrees fixes the overlapping issue
-		r\Angle = r\Angle + 180
+		r\Angle = r\Angle + 180.0
 		RotateEntity(r\OBJ, 0.0, r\Angle, 0.0)
 		CalculateRoomExtents(r)
 		
@@ -8550,7 +8550,7 @@ Function PreventRoomOverlap(r.Rooms)
 				If CheckRoomOverlap(r, r2) Then
 					; ~ If didn't work then rotate the room back and move to the next step
 					IsIntersecting = True
-					r\Angle = r\Angle - 180
+					r\Angle = r\Angle - 180.0
 					RotateEntity(r\OBJ, 0.0, r\Angle, 0.0)
 					CalculateRoomExtents(r)
 					Exit

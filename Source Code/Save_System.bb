@@ -2118,10 +2118,10 @@ Function LoadSavedMaps()
 					If Right(File, 6) = "cbmap2" Then
 						Local f% = ReadFile("Map Creator\Maps\" + File)
 						
-						SavedMapsAuthor$(i) = ReadLine(f)
+						SavedMapsAuthor(i) = ReadLine(f)
 						CloseFile(f)
 					Else
-						SavedMapsAuthor$(i) = "[Unknown]"
+						SavedMapsAuthor(i) = "[Unknown]"
 					EndIf
 					i = i + 1
 				EndIf
