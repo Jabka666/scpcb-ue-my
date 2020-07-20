@@ -305,6 +305,7 @@ Function UpdateMainMenu()
 						RandomSeed = InputBox(x + 150 * MenuScale, y + 55 * MenuScale, 200 * MenuScale, 30 * MenuScale, RandomSeed, 3, 15)	
 					Else
 						If DrawButton(x + 370 * MenuScale, y + 55 * MenuScale, 120 * MenuScale, 30 * MenuScale, "Deselect", False) Then
+							ShouldDeleteGadgets = True
 							SelectedMap = ""
 						EndIf
 					EndIf	
@@ -1054,6 +1055,7 @@ Function RenderMainMenu()
 					EndIf
 				EndIf	
 				
+				Color(255, 255, 255)
 				Text(x + 20 * MenuScale, y + 110 * MenuScale, "Enable intro sequence:")
 				
 				Text(x + 20 * MenuScale, y + 150 * MenuScale, "Difficulty:")				
@@ -1551,8 +1553,6 @@ Function RenderMainMenu()
 				DrawFrame(x + 60 * MenuScale, y + 440 * MenuScale, Width - 120 * MenuScale, 50 * MenuScale)
 				
 				Text(x + (Width / 2.0), y + 465 * MenuScale, "Page " + Int(Max((CurrLoadGamePage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SavedMapsAmount) / 6.0))), 1)), True, True)
-				
-				SetFont(fo\FontID[0])
 				
 				SetFont(fo\FontID[0])
 				
