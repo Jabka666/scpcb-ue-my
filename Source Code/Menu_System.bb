@@ -628,11 +628,11 @@ Function UpdateMainMenu()
 									If File = "" Then Exit
 									If FileType("SFX\Radio\UserTracks\" + File$) = 1 Then
 										UserTrackCheck = UserTrackCheck + 1
-										Test = LoadSound_Strict("SFX\Radio\UserTracks\" + File$)
+										Test = LoadSound("SFX\Radio\UserTracks\" + File$)
 										If Test <> 0 Then
 											UserTrackCheck2 = UserTrackCheck2 + 1
 										EndIf
-										FreeSound_Strict(Test)
+										FreeSound(Test)
 									EndIf
 								Forever
 								CloseDir(Dir)
