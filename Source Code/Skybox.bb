@@ -29,11 +29,11 @@ Function sky_CreateSky(FileName$, Parent% = 0)
 End Function
 
 Function UpdateSky()
-	PositionEntity(Sky, EntityX(me\Camera), EntityY(me\Camera), EntityZ(me\Camera), True)
+	PositionEntity(Sky, EntityX(Camera), EntityY(Camera), EntityZ(Camera), True)
 End Function
 
 Function Update1499Sky()
-	PositionEntity(I_1499\Sky, EntityX(me\Camera), EntityY(me\Camera), EntityZ(me\Camera), True)
+	PositionEntity(I_1499\Sky, EntityX(Camera), EntityY(Camera), EntityZ(Camera), True)
 End Function
 
 .sky_SkyboxData

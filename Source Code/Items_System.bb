@@ -513,7 +513,7 @@ Function UpdateItems()
 		
 		If (Not i\Picked) Then
 			If i\DistTimer < MilliSecs() Then
-				i\Dist = EntityDistance(me\Camera, i\Collider)
+				i\Dist = EntityDistance(Camera, i\Collider)
 				i\DistTimer = MilliSecs() + 700
 				If i\Dist < HideDist Then ShowEntity(i\Collider)
 			EndIf
@@ -523,14 +523,14 @@ Function UpdateItems()
 				
 				If i\Dist < 1.2 Then
 					If ClosestItem = Null Then
-						If EntityInView(i\Model, me\Camera) Then
-							If EntityVisible(i\Collider, me\Camera) Then
+						If EntityInView(i\Model, Camera) Then
+							If EntityVisible(i\Collider, Camera) Then
 								ClosestItem = i
 							EndIf
 						EndIf
-					ElseIf ClosestItem = i Lor i\Dist < EntityDistance(me\Camera, ClosestItem\Collider) Then 
-						If EntityInView(i\Model, me\Camera) Then
-							If EntityVisible(i\Collider, me\Camera) Then
+					ElseIf ClosestItem = i Lor i\Dist < EntityDistance(Camera, ClosestItem\Collider) Then 
+						If EntityInView(i\Model, Camera) Then
+							If EntityVisible(i\Collider, Camera) Then
 								ClosestItem = i
 							EndIf
 						EndIf
@@ -817,10 +817,10 @@ Function DropItem(item.Items, PlayDropSound% = True)
 	item\Dropped = 1
 	
 	ShowEntity(item\Collider)
-	PositionEntity(item\Collider, EntityX(me\Camera), EntityY(me\Camera), EntityZ(me\Camera))
-	RotateEntity(item\Collider, EntityPitch(me\Camera), EntityYaw(me\Camera) + Rnd(-20.0, 20.0), 0.0)
+	PositionEntity(item\Collider, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
+	RotateEntity(item\Collider, EntityPitch(Camera), EntityYaw(Camera) + Rnd(-20.0, 20.0), 0.0)
 	MoveEntity(item\Collider, 0.0, -0.1, 0.1)
-	RotateEntity(item\Collider, 0.0, EntityYaw(me\Camera) + Rnd(-110.0, 110.0), 0.0)
+	RotateEntity(item\Collider, 0.0, EntityYaw(Camera) + Rnd(-110.0, 110.0), 0.0)
 	ResetEntity(item\Collider)
 	
 	item\Picked = False
@@ -927,7 +927,7 @@ Function Update294()
 			me\EyeIrritation = 70.0 * 9.0
 			
 			Pvt = CreatePivot()
-			PositionEntity(Pvt, EntityX(me\Camera), EntityY(me\Collider) - 0.05, EntityZ(me\Camera))
+			PositionEntity(Pvt, EntityX(Camera), EntityY(me\Collider) - 0.05, EntityZ(Camera))
 			TurnEntity(Pvt, 90.0, 0.0, 0.0)
 			EntityPick(Pvt, 0.3)
 			de.Decals = CreateDecal(5, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, 180.0, 0.0)

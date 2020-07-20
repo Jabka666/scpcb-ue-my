@@ -203,7 +203,7 @@ Type PlayerStats
 	Field Detected%
 	Field ExplosionTimer#
 	Field Zone%
-	Field Collider%, Camera%, Head%
+	Field Collider%, Head%
 End Type
 
 Global me.PlayerStats = New PlayerStats
@@ -970,13 +970,13 @@ Function UpdateConsole()
 						If Lower(itt\Name) = StrTemp Then
 							Temp = True
 							CreateConsoleMsg(itt\Name + " spawned.")
-							it.Items = CreateItem(itt\Name, itt\TempName, EntityX(me\Collider), EntityY(me\Camera, True), EntityZ(me\Collider))
+							it.Items = CreateItem(itt\Name, itt\TempName, EntityX(me\Collider), EntityY(Camera, True), EntityZ(me\Collider))
 							EntityType(it\Collider, HIT_ITEM)
 							Exit
 						ElseIf (Lower(itt\TempName) = StrTemp) Then
 							Temp = True
 							CreateConsoleMsg(itt\Name + " spawned.")
-							it.Items = CreateItem(itt\Name, itt\TempName, EntityX(me\Collider), EntityY(me\Camera, True), EntityZ(me\Collider))
+							it.Items = CreateItem(itt\Name, itt\TempName, EntityX(me\Collider), EntityY(Camera, True), EntityZ(me\Collider))
 							EntityType(it\Collider, HIT_ITEM)
 							Exit
 						EndIf
@@ -1155,9 +1155,9 @@ Function UpdateConsole()
 					;[Block]
 					For i = 1 To 20
 						If Rand(2) = 1 Then
-							it.Items = CreateItem("Some SCP-420-J", "scp420j", EntityX(me\Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(me\Camera, True), EntityZ(me\Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
+							it.Items = CreateItem("Some SCP-420-J", "scp420j", EntityX(me\Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(Camera, True), EntityZ(me\Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
 						Else
-							it.Items = CreateItem("Joint", "joint", EntityX(me\Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(me\Camera, True), EntityZ(me\Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
+							it.Items = CreateItem("Joint", "joint", EntityX(me\Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(Camera, True), EntityZ(me\Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
 						EndIf
 						EntityType(it\Collider, HIT_ITEM)
 					Next
@@ -1385,9 +1385,9 @@ Function UpdateConsole()
 					;[Block]
 					For i = 1 To 20
 					    If Rand(2) = 1 Then
-						    it.Items = CreateItem("Quarter", "25ct", EntityX(me\Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(me\Camera, True), EntityZ(me\Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
+						    it.Items = CreateItem("Quarter", "25ct", EntityX(me\Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(Camera, True), EntityZ(me\Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
 					    Else
-					        it.Items = CreateItem("Coin", "coin", EntityX(me\Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(me\Camera, True), EntityZ(me\Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
+					        it.Items = CreateItem("Coin", "coin", EntityX(me\Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(Camera, True), EntityZ(me\Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
 					    EndIf
 					    EntityType(it\Collider, HIT_ITEM)
 					Next
@@ -1549,9 +1549,9 @@ Function UpdateConsole()
 					StrTemp2 = Piece(Args, 2, " ")
 					StrTemp3 = Piece(Args, 3, " ")
 					PositionEntity(me\Collider, Float(StrTemp), Float(StrTemp2), Float(StrTemp3))
-					PositionEntity(me\Camera, Float(StrTemp), Float(StrTemp2), Float(StrTemp3))
+					PositionEntity(Camera, Float(StrTemp), Float(StrTemp2), Float(StrTemp3))
 					ResetEntity(me\Collider)
-					ResetEntity(me\Camera)
+					ResetEntity(Camera)
 					CreateConsoleMsg("Teleported to coordinates (X|Y|Z): " + EntityX(me\Collider) + "|" + EntityY(me\Collider) + "|" + EntityZ(me\Collider))
 					;[End Block]
 				Case "asd"
@@ -1759,6 +1759,8 @@ CreateConsoleMsg("  - 106retreat")
 CreateConsoleMsg("  - disable173 / enable173")
 CreateConsoleMsg("  - disable106 / enable106")
 CreateConsoleMsg("  - spawn [NPC type]")
+
+Global Camera%
 
 Global StoredCameraFogFar# = CameraFogFar
 
@@ -2193,7 +2195,7 @@ Function UpdateDoors()
 								If Dist < 0.7 Then
 									Local Temp% = CreatePivot()
 									
-									PositionEntity(Temp, EntityX(me\Camera), EntityY(me\Camera), EntityZ(me\Camera))
+									PositionEntity(Temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 									PointEntity(Temp, d\Buttons[i])
 									
 									If EntityPick(Temp, 0.6) = d\Buttons[i] Then
@@ -2258,21 +2260,21 @@ Function UpdateDoors()
 					If d\OBJ2 <> 0 Then ResetEntity(d\OBJ2)
 					If d\TimerState > 0.0 Then
 						d\TimerState = Max(0.0, d\TimerState - fpst\FPSFactor[0])
-						If d\TimerState + fpst\FPSFactor[0] > 110.0 And d\TimerState =< 110.0 Then d\SoundCHN = PlaySound2(CautionSFX, me\Camera, d\OBJ)
+						If d\TimerState + fpst\FPSFactor[0] > 110.0 And d\TimerState =< 110.0 Then d\SoundCHN = PlaySound2(CautionSFX, Camera, d\OBJ)
 						
 						If d\TimerState = 0.0 Then 
 							d\Open = (Not d\Open)
 							If d\Dir <> 0 And d\Dir <> 4 Then
-								d\SoundCHN = PlaySound2(CloseDoorSFX(d\Dir, Rand(0, 2)), me\Camera, d\OBJ)
+								d\SoundCHN = PlaySound2(CloseDoorSFX(d\Dir, Rand(0, 2)), Camera, d\OBJ)
 							Else
-								d\SoundCHN = PlaySound2(CloseDoorSFX(0, Rand(0, 2)), me\Camera, d\OBJ)
+								d\SoundCHN = PlaySound2(CloseDoorSFX(0, Rand(0, 2)), Camera, d\OBJ)
 							EndIf
 						EndIf
 					EndIf
 					If d\AutoClose And RemoteDoorOn = True Then
-						If EntityDistance(me\Camera, d\OBJ) < 2.1 Then
+						If EntityDistance(Camera, d\OBJ) < 2.1 Then
 							If I_714\Using = 0 And wi\GasMask < 3 And wi\HazmatSuit < 3 Then PlaySound_Strict(HorrorSFX[7])
-							d\Open = False : d\SoundCHN = PlaySound2(CloseDoorSFX(Min(d\Dir, 1), Rand(0, 2)), me\Camera, d\OBJ) : d\AutoClose = False
+							d\Open = False : d\SoundCHN = PlaySound2(CloseDoorSFX(Min(d\Dir, 1), Rand(0, 2)), Camera, d\OBJ) : d\AutoClose = False
 						EndIf
 					EndIf				
 				EndIf
@@ -2360,7 +2362,7 @@ Function UpdateDoors()
 				EndIf
 			EndIf
 		EndIf
-		UpdateSoundOrigin(d\SoundCHN, me\Camera, d\FrameOBJ)
+		UpdateSoundOrigin(d\SoundCHN, Camera, d\FrameOBJ)
 		
 		If d\Locked <> d\LockedUpdated Then
 			If d\Locked = True Then
@@ -2626,22 +2628,22 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 			If d\LinkedDoor <> Null Then d\LinkedDoor\TimerState = d\LinkedDoor\Timer
 			d\TimerState = d\Timer
 			If d\Dir = 1 And d\Locked = 2 Then
-				d\SoundCHN = PlaySound2(BigDoorErrorSFX[Rand(0, 2)], me\Camera, d\OBJ)
+				d\SoundCHN = PlaySound2(BigDoorErrorSFX[Rand(0, 2)], Camera, d\OBJ)
 			Else
 				If d\Dir <> 0 And d\Dir <> 4 Then
-					d\SoundCHN = PlaySound2(OpenDoorSFX(d\Dir, Rand(0, 2)), me\Camera, d\OBJ)
+					d\SoundCHN = PlaySound2(OpenDoorSFX(d\Dir, Rand(0, 2)), Camera, d\OBJ)
 				Else
-					d\SoundCHN = PlaySound2(OpenDoorSFX(0, Rand(0, 2)), me\Camera, d\OBJ)
+					d\SoundCHN = PlaySound2(OpenDoorSFX(0, Rand(0, 2)), Camera, d\OBJ)
 				EndIf
 			EndIf
 		Else
 			If d\Dir <> 0 And d\Dir <> 4 Then
-				d\SoundCHN = PlaySound2(CloseDoorSFX(d\Dir, Rand(0, 2)), me\Camera, d\OBJ)
+				d\SoundCHN = PlaySound2(CloseDoorSFX(d\Dir, Rand(0, 2)), Camera, d\OBJ)
 			Else
-				d\SoundCHN = PlaySound2(CloseDoorSFX(0, Rand(0, 2)), me\Camera, d\OBJ)
+				d\SoundCHN = PlaySound2(CloseDoorSFX(0, Rand(0, 2)), Camera, d\OBJ)
 			EndIf
 		EndIf
-		UpdateSoundOrigin(d\SoundCHN, me\Camera, d\OBJ)
+		UpdateSoundOrigin(d\SoundCHN, Camera, d\OBJ)
 	Else
 		If d\Open Then
 			If d\LinkedDoor <> Null Then d\LinkedDoor\TimerState = d\LinkedDoor\Timer
@@ -2926,7 +2928,7 @@ Function MainLoop()
 					EndIf			
 				Next
 				
-				PositionEntity(SoundEmitter, EntityX(me\Camera) + Rnd(-1.0, 1.0), 0.0, EntityZ(me\Camera) + Rnd(-1.0, 1.0))
+				PositionEntity(SoundEmitter, EntityX(Camera) + Rnd(-1.0, 1.0), 0.0, EntityZ(Camera) + Rnd(-1.0, 1.0))
 				
 				If Rand(3) = 1 Then me\Zone = 3
 				
@@ -2965,9 +2967,9 @@ Function MainLoop()
 						;[End Block]
 				End Select
 				
-				AmbientSFXCHN = PlaySound2(AmbientSFX(me\Zone, CurrAmbientSFX), me\Camera, SoundEmitter)
+				AmbientSFXCHN = PlaySound2(AmbientSFX(me\Zone, CurrAmbientSFX), Camera, SoundEmitter)
 			EndIf
-			UpdateSoundOrigin(AmbientSFXCHN, me\Camera, SoundEmitter)
+			UpdateSoundOrigin(AmbientSFXCHN, Camera, SoundEmitter)
 			
 			If Rand(50000) = 3 Then
 				Local RN$ = PlayerRoom\RoomTemplate\Name
@@ -2984,9 +2986,9 @@ Function MainLoop()
 		
 		If (Not MenuOpen) And (Not InvOpen) And (OtherOpen = Null) And (SelectedDoor = Null) And (ConsoleOpen = False) And (I_294\Using = False) And (SelectedScreen = Null) And me\EndingTimer >= 0.0 Then
 			LightVolume = CurveValue(TempLightVolume, LightVolume, 50.0)
-			CameraFogRange(me\Camera, CameraFogNear * LightVolume, CameraFogFar * LightVolume)
-			CameraFogMode(me\Camera, 1)
-			CameraRange(me\Camera, 0.01, Min(CameraFogFar * LightVolume * 1.5, 28.0))	
+			CameraFogRange(Camera, CameraFogNear * LightVolume, CameraFogFar * LightVolume)
+			CameraFogMode(Camera, 1)
+			CameraRange(Camera, 0.01, Min(CameraFogFar * LightVolume * 1.5, 28.0))	
 			For r.Rooms = Each Rooms
 				For i = 0 To r\MaxLights - 1
 					If r\Lights[i] <> 0 Then
@@ -3018,7 +3020,7 @@ Function MainLoop()
 					UpdateEndings()
 				EndIf
 				UpdateScreens()
-				UpdateRoomLights(me\Camera)
+				UpdateRoomLights(Camera)
 			Else
 				UpdateDoors()
 				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100
@@ -3027,7 +3029,7 @@ Function MainLoop()
 				UpdateScreens()
 				TimeCheckpointMonitors()
 				Update294()
-				UpdateRoomLights(me\Camera)
+				UpdateRoomLights(Camera)
 			EndIf
 			UpdateDecals()
 			UpdateMTF()
@@ -3093,8 +3095,8 @@ Function MainLoop()
 		Local FogColorG% = Mid(CurrFogColor, 4, 3)
 		Local FogColorB% = Right(CurrFogColor, 3)
 		
-		CameraFogColor(me\Camera, FogColorR, FogColorG, FogColorB)
-		CameraClsColor(me\Camera, FogColorR, FogColorG, FogColorB)
+		CameraFogColor(Camera, FogColorR, FogColorG, FogColorB)
+		CameraClsColor(Camera, FogColorR, FogColorG, FogColorB)
 		
 		If chs\InfiniteStamina Then me\Stamina = 100.0
 		If chs\NoBlink Then me\BlinkTimer = me\BLINKFREQ
@@ -3449,9 +3451,9 @@ Function Kill(IsBloody% = False)
 		
 		me\KillTimer = Min(-1.0, me\KillTimer)
 		ShowEntity(me\Head)
-		PositionEntity(me\Head, EntityX(me\Camera, True), EntityY(me\Camera, True), EntityZ(me\Camera, True), True)
+		PositionEntity(me\Head, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True), True)
 		ResetEntity(me\Head)
-		RotateEntity(me\Head, 0.0, EntityYaw(me\Camera), 0.0)		
+		RotateEntity(me\Head, 0.0, EntityYaw(Camera), 0.0)		
 	EndIf
 End Function
 
@@ -4001,7 +4003,7 @@ Function MovePlayer()
 		me\CrouchState = 0.0
 		me\Crouch = False
 		
-		RotateEntity(me\Collider, WrapAngle(EntityPitch(me\Camera)), WrapAngle(EntityYaw(me\Camera)), 0.0)
+		RotateEntity(me\Collider, WrapAngle(EntityPitch(Camera)), WrapAngle(EntityYaw(Camera)), 0.0)
 		
 		Temp2 = Temp2 * chs\NoClipSpeed
 		
@@ -4203,7 +4205,7 @@ Function MouseLook()
 	
 	me\CameraShake = Max(me\CameraShake - (fpst\FPSFactor[0] / 10.0), 0.0)
 	
-	CameraZoom(me\Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / (Tan((2.0 * ATan(Tan((FOV) / 2.0) * (Float(RealGraphicWidth) / Float(RealGraphicHeight)))) / 2.0)))
+	CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / (Tan((2.0 * ATan(Tan((FOV) / 2.0) * (Float(RealGraphicWidth) / Float(RealGraphicHeight)))) / 2.0)))
 	me\CurrCameraZoom = Max(me\CurrCameraZoom - fpst\FPSFactor[0], 0.0)
 	
 	If me\KillTimer >= 0.0 And me\FallTimer >= 0.0 Then
@@ -4212,8 +4214,8 @@ Function MouseLook()
 		Local Up# = (Sin(me\Shake) / (20.0 + me\CrouchState * 20.0)) * 0.6		
 		Local Roll# = Max(Min(Sin(me\Shake / 2.0) * 2.5 * Min(me\Injuries + 0.25, 3.0), 8.0), -8.0)
 		
-		PositionEntity(me\Camera, EntityX(me\Collider) + Side, EntityY(me\Collider) + Up + 0.6 + me\CrouchState * -0.3, EntityZ(me\Collider))
-		RotateEntity(me\Camera, 0.0, EntityYaw(me\Collider), Roll * 0.5)
+		PositionEntity(Camera, EntityX(me\Collider) + Side, EntityY(me\Collider) + Up + 0.6 + me\CrouchState * -0.3, EntityZ(me\Collider))
+		RotateEntity(Camera, 0.0, EntityYaw(me\Collider), Roll * 0.5)
 		
 		; ~ Update the smoothing que to smooth the movement of the mouse
 		Mouse_X_Speed_1 = CurveValue(MouseXSpeed() * (MouseSensitivity + 0.6) , Mouse_X_Speed_1, (6.0 / (MouseSensitivity + 1.0)) * MouseSmoothing) 
@@ -4241,16 +4243,16 @@ Function MouseLook()
 		If CameraPitch > 70.0 Then CameraPitch = 70.0
 		If CameraPitch < -70.0 Then CameraPitch = -70.0
 		
-		RotateEntity(me\Camera, WrapAngle(CameraPitch + Rnd(-me\CameraShake, me\CameraShake)), WrapAngle(EntityYaw(me\Collider) + Rnd(-me\CameraShake, me\CameraShake)), Roll) ; ~ Pitch the user's camera up and down
+		RotateEntity(Camera, WrapAngle(CameraPitch + Rnd(-me\CameraShake, me\CameraShake)), WrapAngle(EntityYaw(me\Collider) + Rnd(-me\CameraShake, me\CameraShake)), Roll) ; ~ Pitch the user's camera up and down
 		
 		If PlayerRoom\RoomTemplate\Name = "pocketdimension" Then
 			If EntityY(me\Collider) < 2000.0 * RoomScale Lor EntityY(me\Collider) > 2608.0 * RoomScale Then
-				RotateEntity(me\Camera, WrapAngle(EntityPitch(me\Camera)), WrapAngle(EntityYaw(me\Camera)), Roll + WrapAngle(Sin(MilliSecs() / 150.0) * 30.0)) ; ~ Pitch the user's camera up and down
+				RotateEntity(Camera, WrapAngle(EntityPitch(Camera)), WrapAngle(EntityYaw(Camera)), Roll + WrapAngle(Sin(MilliSecs() / 150.0) * 30.0)) ; ~ Pitch the user's camera up and down
 			EndIf
 		EndIf
 	Else
 		HideEntity(me\Collider)
-		PositionEntity(me\Camera, EntityX(me\Head), EntityY(me\Head), EntityZ(me\Head))
+		PositionEntity(Camera, EntityX(me\Head), EntityY(me\Head), EntityZ(me\Head))
 		
 		Local CollidedFloor% = False
 		
@@ -4264,20 +4266,20 @@ Function MouseLook()
 			If me\KillAnim = 0 Then 
 				MoveEntity(me\Head, 0.0, 0.0, me\HeadDropSpeed)
 				RotateEntity(me\Head, CurveAngle(-90.0, EntityPitch(me\Head), 20.0), EntityYaw(me\Head), EntityRoll(me\Head))
-				RotateEntity(me\Camera, CurveAngle(EntityPitch(me\Head) - 40.0, EntityPitch(me\Camera), 40.0), EntityYaw(me\Camera), EntityRoll(me\Camera))
+				RotateEntity(Camera, CurveAngle(EntityPitch(me\Head) - 40.0, EntityPitch(Camera), 40.0), EntityYaw(Camera), EntityRoll(Camera))
 			Else
 				MoveEntity(me\Head, 0.0, 0.0, -me\HeadDropSpeed)
 				RotateEntity(me\Head, CurveAngle(90.0, EntityPitch(me\Head), 20.0), EntityYaw(me\Head), EntityRoll(me\Head))
-				RotateEntity(me\Camera, CurveAngle(EntityPitch(me\Head) + 40.0, EntityPitch(me\Camera), 40.0), EntityYaw(me\Camera), EntityRoll(me\Camera))
+				RotateEntity(Camera, CurveAngle(EntityPitch(me\Head) + 40.0, EntityPitch(Camera), 40.0), EntityYaw(Camera), EntityRoll(Camera))
 			EndIf
 			
 			me\HeadDropSpeed = me\HeadDropSpeed - 0.002 * fpst\FPSFactor[0]
 		EndIf
 		
 		If InvertMouse Then
-			TurnEntity(me\Camera, (-MouseYSpeed()) * 0.05 * fpst\FPSFactor[0], (-MouseXSpeed()) * 0.15 * fpst\FPSFactor[0], 0.0)
+			TurnEntity(Camera, (-MouseYSpeed()) * 0.05 * fpst\FPSFactor[0], (-MouseXSpeed()) * 0.15 * fpst\FPSFactor[0], 0.0)
 		Else
-			TurnEntity(me\Camera, MouseYSpeed() * 0.05 * fpst\FPSFactor[0], (-MouseXSpeed()) * 0.15 * fpst\FPSFactor[0], 0.0)
+			TurnEntity(Camera, MouseYSpeed() * 0.05 * fpst\FPSFactor[0], (-MouseXSpeed()) * 0.15 * fpst\FPSFactor[0], 0.0)
 		EndIf
 	EndIf
 	
@@ -4285,7 +4287,7 @@ Function MouseLook()
 		If Rand(35) = 1 Then
 			Local Pvt% = CreatePivot()
 			
-			PositionEntity(Pvt, EntityX(me\Camera, True), EntityY(me\Camera, True), EntityZ(me\Camera, True))
+			PositionEntity(Pvt, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True))
 			RotateEntity(Pvt, 0.0, Rnd(360.0), 0.0)
 			If Rand(2) = 1 Then
 				MoveEntity(Pvt, 0.0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
@@ -4538,12 +4540,12 @@ Function DrawGUI()
 	
 	If ClosestButton <> 0 And SelectedDoor = Null And InvOpen = False And MenuOpen = False And OtherOpen = Null And ConsoleOpen = False Then
 		Temp = CreatePivot()
-		PositionEntity(Temp, EntityX(me\Camera), EntityY(me\Camera), EntityZ(me\Camera))
+		PositionEntity(Temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 		PointEntity(Temp, ClosestButton)
-		YawValue = WrapAngle(EntityYaw(me\Camera) - EntityYaw(Temp))
+		YawValue = WrapAngle(EntityYaw(Camera) - EntityYaw(Temp))
 		If YawValue > 90.0 And YawValue =< 180.0 Then YawValue = 90.0
 		If YawValue > 180.0 And YawValue < 270.0 Then YawValue = 270.0
-		PitchValue = WrapAngle(EntityPitch(me\Camera) - EntityPitch(Temp))
+		PitchValue = WrapAngle(EntityPitch(Camera) - EntityPitch(Temp))
 		If PitchValue > 90.0 And PitchValue =< 180.0 Then PitchValue = 90.0
 		If PitchValue > 180.0 And PitchValue < 270.0 Then PitchValue = 270.0
 		
@@ -4553,10 +4555,10 @@ Function DrawGUI()
 	EndIf
 	
 	If ClosestItem <> Null Then
-		YawValue = -DeltaYaw(me\Camera, ClosestItem\Collider)
+		YawValue = -DeltaYaw(Camera, ClosestItem\Collider)
 		If YawValue > 90.0 And YawValue =< 180.0 Then YawValue = 90.0
 		If YawValue > 180.0 And YawValue < 270.0 Then YawValue = 270.0
-		PitchValue = -DeltaPitch(me\Camera, ClosestItem\Collider)
+		PitchValue = -DeltaPitch(Camera, ClosestItem\Collider)
 		If PitchValue > 90.0 And PitchValue =< 180.0 Then PitchValue = 90.0
 		If PitchValue > 180.0 And PitchValue < 270.0 Then PitchValue = 270.0
 		
@@ -4757,9 +4759,9 @@ Function DrawGUI()
 			Text(x + 440, 80, "******************************")
 			
 			Text(x + 440, 120, "Player Position: (" + f2s(EntityX(me\Collider), 1) + ", " + f2s(EntityY(me\Collider), 1) + ", " + f2s(EntityZ(me\Collider), 1) + ")")
-			Text(x + 440, 140, "Camera Position: (" + f2s(EntityX(me\Camera), 1)+ ", " + f2s(EntityY(me\Camera), 1) +", " + f2s(EntityZ(me\Camera), 1) + ")")
+			Text(x + 440, 140, "Camera Position: (" + f2s(EntityX(Camera), 1)+ ", " + f2s(EntityY(Camera), 1) +", " + f2s(EntityZ(Camera), 1) + ")")
 			Text(x + 440, 160, "Player Rotation: (" + f2s(EntityPitch(me\Collider), 1) + ", " + f2s(EntityYaw(me\Collider), 1) + ", " + f2s(EntityRoll(me\Collider), 1) + ")")
-			Text(x + 440, 180, "Camera Rotation: (" + f2s(EntityPitch(me\Camera), 1) + ", " + f2s(EntityYaw(me\Camera), 1) +", " + f2s(EntityRoll(me\Camera), 1) + ")")
+			Text(x + 440, 180, "Camera Rotation: (" + f2s(EntityPitch(Camera), 1) + ", " + f2s(EntityYaw(Camera), 1) +", " + f2s(EntityRoll(Camera), 1) + ")")
 			
 			Text(x + 440, 220, "Playable: " + me\Playable)
 			If me\Zombie Then
@@ -4831,13 +4833,13 @@ Function DrawGUI()
 			PositionEntity(Pvt, EntityX(ClosestButton, True), EntityY(ClosestButton, True), EntityZ(ClosestButton, True))
 			RotateEntity(Pvt, 0.0, EntityYaw(ClosestButton, True) - 180.0, 0.0)
 			MoveEntity(Pvt, 0.0, 0.0, 0.22)
-			PositionEntity(me\Camera, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt))
-			PointEntity(me\Camera, ClosestButton)
+			PositionEntity(Camera, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt))
+			PointEntity(Camera, ClosestButton)
 			FreeEntity(Pvt)
 			
-			CameraProject(me\Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) + MeshHeight(o\ButtonModelID[0]) * 0.015, EntityZ(ClosestButton, True))
+			CameraProject(Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) + MeshHeight(o\ButtonModelID[0]) * 0.015, EntityZ(ClosestButton, True))
 			ProjY = ProjectedY()
-			CameraProject(me\Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) - MeshHeight(o\ButtonModelID[0]) * 0.015, EntityZ(ClosestButton, True))
+			CameraProject(Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) - MeshHeight(o\ButtonModelID[0]) * 0.015, EntityZ(ClosestButton, True))
 			Scale = (ProjectedY() - ProjY) / 462.0
 			
 			x = GraphicWidth / 2 - ImageWidth(tt\ImageID[4]) * Scale / 2
@@ -5477,7 +5479,7 @@ Function DrawGUI()
 							
 							If SelectedItem\ItemTemplate\Name = "S-NAV Navigator Ultimate" And (MilliSecs() Mod 600.0) < 400.0 Then
 								If Curr173 <> Null Then
-									Local Dist# = EntityDistance(me\Camera, Curr173\OBJ)
+									Local Dist# = EntityDistance(Camera, Curr173\OBJ)
 									
 									If Dist < 8.0 * 4.0 Then
 										Dist = Ceil(Dist / 8.0) * 8.0
@@ -5488,7 +5490,7 @@ Function DrawGUI()
 									EndIf
 								EndIf
 								If Curr106 <> Null Then
-									Dist = EntityDistance(me\Camera, Curr106\OBJ)
+									Dist = EntityDistance(Camera, Curr106\OBJ)
 									If Dist < 8.0 * 4.0 Then
 										Color(100, 0, 0)
 										Oval(x - Dist * 1.5, y - 7 - Dist * 1.5, Dist * 3, Dist * 3, False)
@@ -5497,7 +5499,7 @@ Function DrawGUI()
 									EndIf
 								EndIf
 								If Curr096 <> Null Then 
-									Dist = EntityDistance(me\Camera, Curr096\OBJ)
+									Dist = EntityDistance(Camera, Curr096\OBJ)
 									If Dist < 8.0 * 4.0 Then
 										Color(100, 0, 0)
 										Oval(x - Dist * 1.5, y - 7 - Dist * 1.5, Dist * 3, Dist * 3, False)
@@ -5507,7 +5509,7 @@ Function DrawGUI()
 								EndIf
 								For np.NPCs = Each NPCs
 									If np\NPCtype = NPCtype049
-										Dist = EntityDistance(me\Camera, np\OBJ)
+										Dist = EntityDistance(Camera, np\OBJ)
 										If Dist < 8.0 * 4.0 Then
 											If (Not np\HideFromNVG) Then
 												Color(100, 0, 0)
@@ -5653,7 +5655,7 @@ Function UpdateGUI()
 	
 	If ClosestButton <> 0 And SelectedDoor = Null And InvOpen = False And MenuOpen = False And OtherOpen = Null And ConsoleOpen = False Then
 		Temp = CreatePivot()
-		PositionEntity(Temp, EntityX(me\Camera), EntityY(me\Camera), EntityZ(me\Camera))
+		PositionEntity(Temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 		PointEntity(Temp, ClosestButton)
 		FreeEntity(Temp)
 		
@@ -5663,7 +5665,7 @@ Function UpdateGUI()
 				If ClosestDoor\Code <> "" Then
 					SelectedDoor = ClosestDoor
 				ElseIf me\Playable Then
-					PlaySound2(ButtonSFX, me\Camera, ClosestButton)
+					PlaySound2(ButtonSFX, Camera, ClosestButton)
 					UseDoor(ClosestDoor, True)				
 				EndIf
 			EndIf
@@ -5716,13 +5718,13 @@ Function UpdateGUI()
 			PositionEntity(Pvt, EntityX(ClosestButton, True), EntityY(ClosestButton, True), EntityZ(ClosestButton, True))
 			RotateEntity(Pvt, 0.0, EntityYaw(ClosestButton, True) - 180.0, 0.0)
 			MoveEntity(Pvt, 0.0, 0.0, 0.22)
-			PositionEntity(me\Camera, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt))
-			PointEntity(me\Camera, ClosestButton)
+			PositionEntity(Camera, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt))
+			PointEntity(Camera, ClosestButton)
 			FreeEntity(Pvt)
 			
-			CameraProject(me\Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) + MeshHeight(o\ButtonModelID[0]) * 0.015, EntityZ(ClosestButton, True))
+			CameraProject(Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) + MeshHeight(o\ButtonModelID[0]) * 0.015, EntityZ(ClosestButton, True))
 			ProjY = ProjectedY()
-			CameraProject(me\Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) - MeshHeight(o\ButtonModelID[0]) * 0.015, EntityZ(ClosestButton, True))
+			CameraProject(Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) - MeshHeight(o\ButtonModelID[0]) * 0.015, EntityZ(ClosestButton, True))
 			Scale = (ProjectedY() - ProjY) / 462.0
 			
 			x = GraphicWidth / 2 - ImageWidth(tt\ImageID[4]) * Scale / 2
@@ -5856,12 +5858,12 @@ Function UpdateGUI()
 	If OtherOpen <> Null Then
 		If (PlayerRoom\RoomTemplate\Name = "gatea") Then
 			HideEntity(tt\OverlayID[0])
-			CameraFogRange(me\Camera, 5.0, 30.0)
-			CameraRange(me\Camera, 0.01, 30.0)
+			CameraFogRange(Camera, 5.0, 30.0)
+			CameraRange(Camera, 0.01, 30.0)
 		ElseIf PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale
 			HideEntity(tt\OverlayID[0])
-			CameraFogRange(me\Camera, 5.0, 45.0)
-			CameraRange(me\Camera, 0.01, 60.0)
+			CameraFogRange(Camera, 5.0, 45.0)
+			CameraRange(Camera, 0.01, 60.0)
 		EndIf
 		
 		PrevOtherOpen = OtherOpen
@@ -5940,8 +5942,8 @@ Function UpdateGUI()
 				If MouseSlot = 66 Then
 					If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 					ShowEntity(SelectedItem\Collider)
-					PositionEntity(SelectedItem\Collider, EntityX(me\Camera), EntityY(me\Camera), EntityZ(me\Camera))
-					RotateEntity(SelectedItem\Collider, EntityPitch(me\Camera), EntityYaw(me\Camera), 0.0)
+					PositionEntity(SelectedItem\Collider, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
+					RotateEntity(SelectedItem\Collider, EntityPitch(Camera), EntityYaw(Camera), 0.0)
 					MoveEntity(SelectedItem\Collider, 0.0, -0.1, 0.1)
 					RotateEntity(SelectedItem\Collider, 0.0, Rnd(360.0), 0.0)
 					ResetEntity(SelectedItem\Collider)
@@ -6022,12 +6024,12 @@ Function UpdateGUI()
 	ElseIf InvOpen Then
 		If (PlayerRoom\RoomTemplate\Name = "gatea") Then
 			HideEntity(tt\OverlayID[0])
-			CameraFogRange(me\Camera, 5.0, 30.0)
-			CameraRange(me\Camera, 0.01, 30.0)
+			CameraFogRange(Camera, 5.0, 30.0)
+			CameraRange(Camera, 0.01, 30.0)
 		ElseIf PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale
 			HideEntity(tt\OverlayID[0])
-			CameraFogRange(me\Camera, 5.0, 45.0)
-			CameraRange(me\Camera, 0.01, 60.0)
+			CameraFogRange(Camera, 5.0, 45.0)
+			CameraRange(Camera, 0.01, 60.0)
 		EndIf
 		
 		SelectedDoor = Null
@@ -8226,7 +8228,7 @@ Function UpdateMenu()
 					
 					CurrFOV = (SlideBar(x + 270 * MenuScale, y, 100 * MenuScale, CurrFOV * 2.0) / 2.0)
 					FOV = CurrFOV + 40
-					CameraZoom(me\Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / Tan((2.0 * ATan(Tan((FOV) / 2.0) * RealGraphicWidth / RealGraphicHeight)) / 2.0))
+					CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / Tan((2.0 * ATan(Tan((FOV) / 2.0) * RealGraphicWidth / RealGraphicHeight)) / 2.0))
 					;[End Block]
 				Case 2 ; ~ Audio
 					;[Block]
@@ -8696,11 +8698,11 @@ Function LoadEntities()
 	
 	SoundEmitter = CreatePivot()
 	
-	me\Camera = CreateCamera()
-	CameraViewport(me\Camera, 0, 0, GraphicWidth, GraphicHeight)
-	CameraRange(me\Camera, 0.01, CameraFogFar)
-	CameraFogMode(me\Camera, 1)
-	CameraFogRange(me\Camera, CameraFogNear, CameraFogFar)
+	Camera = CreateCamera()
+	CameraViewport(Camera, 0, 0, GraphicWidth, GraphicHeight)
+	CameraRange(Camera, 0.01, CameraFogFar)
+	CameraFogMode(Camera, 1)
+	CameraFogRange(Camera, CameraFogNear, CameraFogFar)
 	AmbientLight(Brightness, Brightness, Brightness)
 	
 	ScreenTexs[0] = CreateTexture(512, 512, 1 + 256)
@@ -9767,7 +9769,7 @@ Function NullGame(PlayButtonSFX% = True) ; ~ CHECK WHAT IS WRONG HERE!
 	CurrAchvMSGID = 0
 	
 	ClearWorld()
-	me\Camera = 0
+	Camera = 0
 	ArkBlurCam = 0
 	me\Collider = 0
 	Sky = 0
@@ -9833,7 +9835,7 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					n.NPCs = CreateNPC(NPCtype1499_1, x, y, z)
 					n\State = 1.0
 					n\Sound = LoadSound_Strict("SFX\SCP\1499\Triggered.ogg")
-					n\SoundCHN = PlaySound2(n\Sound, me\Camera, n\Collider, 20.0)
+					n\SoundCHN = PlaySound2(n\Sound, Camera, n\Collider, 20.0)
 					n\State3 = 1.0
 					RemoveItem(item)
 					;[End Block]
@@ -11606,7 +11608,7 @@ Function Update008()
 					If I_008\Timer > 94.5 Then me\BlinkTimer = Max(Min((-50.0) * (I_008\Timer - 94.5), me\BlinkTimer), -10.0)
 					PointEntity(me\Collider, PlayerRoom\NPC[0]\Collider)
 					PointEntity(PlayerRoom\NPC[0]\Collider, me\Collider)
-					PointEntity(me\Camera, PlayerRoom\NPC[0]\Collider, EntityRoll(me\Camera))
+					PointEntity(Camera, PlayerRoom\NPC[0]\Collider, EntityRoll(Camera))
 					me\ForceMove = 0.75
 					me\Injuries = 2.5
 					me\Bloodloss = 0.0
@@ -11619,7 +11621,7 @@ Function Update008()
 					
 					me\ForceMove = 0.0
 					UnableToMove = True
-					PointEntity(me\Camera, PlayerRoom\NPC[0]\Collider)
+					PointEntity(Camera, PlayerRoom\NPC[0]\Collider)
 					
 					If PrevI008Timer < 94.7 Then 
 						PlayerRoom\NPC[0]\Sound = LoadSound_Strict("SFX\SCP\008\KillScientist2.ogg")
@@ -11795,7 +11797,7 @@ Function UpdateDecals()
 						Local d2.Decals = CreateDecal(1, EntityX(d\OBJ) + Cos(Angle) * Temp, EntityY(d\OBJ) - 0.0005, EntityZ(d\OBJ) + Sin(Angle) * Temp, EntityPitch(d\OBJ), Rnd(360.0), EntityRoll(d\OBJ))
 						
 						d2\Size = Rnd(0.1, 0.5) : ScaleSprite(d2\OBJ, d2\Size, d2\Size)
-						PlaySound2(DecaySFX[Rand(1, 3)], me\Camera, d2\OBJ, 10.0, Rnd(0.1, 0.5))
+						PlaySound2(DecaySFX[Rand(1, 3)], Camera, d2\OBJ, 10.0, Rnd(0.1, 0.5))
 						d\Timer = Rnd(50.0, 100.0)
 					Else
 						d\Timer = d\Timer - fpst\FPSFactor[0]
@@ -11851,7 +11853,7 @@ Function RenderWorld2(Tween#)
 	Local l%, k%, xValue#, yValue#, PitchValue#, YawValue#
 	
 	CameraProjMode(ArkBlurCam, 0)
-	CameraProjMode(me\Camera, 1)
+	CameraProjMode(Camera, 1)
 	
 	If wi\NightVision > 0 And wi\NightVision < 3 Then
 		AmbientLight(Min(Brightness * 2.0, 255.0), Min(Brightness * 2.0, 255.0), Min(Brightness * 2.0, 255.0))
@@ -11866,7 +11868,7 @@ Function RenderWorld2(Tween#)
 	wi\IsNVGBlinking = False
 	HideEntity(tt\OverlayID[5])
 	
-	CameraViewport(me\Camera, 0, 0, GraphicWidth, GraphicHeight)
+	CameraViewport(Camera, 0, 0, GraphicWidth, GraphicHeight)
 	
 	Local HasBattery% = 2
 	Local Power% = 0
@@ -11944,7 +11946,7 @@ Function RenderWorld2(Tween#)
 						Dist = EntityDistance(Temp2, me\Collider)
 						If Dist < 23.5 Then ; ~ Don't draw text if the NPC is too far away
 							PointEntity(Temp, Temp2)
-							YawValue = WrapAngle(EntityYaw(me\Camera) - EntityYaw(Temp))
+							YawValue = WrapAngle(EntityYaw(Camera) - EntityYaw(Temp))
 							xValue = 0.0
 							If YawValue > 90.0 And YawValue =< 180.0 Then
 								xValue = Sin(90.0) / 90.0 * YawValue
@@ -11953,7 +11955,7 @@ Function RenderWorld2(Tween#)
 							Else
 								xValue = Sin(YawValue)
 							EndIf
-							PitchValue = WrapAngle(EntityPitch(me\Camera) - EntityPitch(Temp))
+							PitchValue = WrapAngle(EntityPitch(Camera) - EntityPitch(Temp))
 							yValue = 0.0
 							If PitchValue > 90.0 And PitchValue =< 180.0 Then
 								yValue = Sin(90.0) / 90.0 * PitchValue
@@ -12003,13 +12005,13 @@ Function RenderWorld2(Tween#)
 	
 	; ~ Render sprites
 	CameraProjMode(ArkBlurCam, 2)
-	CameraProjMode(me\Camera, 0)
+	CameraProjMode(Camera, 0)
 	RenderWorld()
 	CameraProjMode(ArkBlurCam, 0)
 End Function
 
 Function ScaleRender(x#, y#, hScale# = 1.0, vScale# = 1.0)
-	If me\Camera <> 0 Then HideEntity(me\Camera)
+	If Camera <> 0 Then HideEntity(Camera)
 	WireFrame(0)
 	ShowEntity(Fresize_Image)
 	ScaleEntity(Fresize_Image, hScale, vScale, 1.0)
@@ -12019,7 +12021,7 @@ Function ScaleRender(x#, y#, hScale# = 1.0, vScale# = 1.0)
 	HideEntity(Fresize_Cam)
 	HideEntity(Fresize_Image)
 	WireFrame(WireFrameState)
-	If me\Camera <> 0 Then ShowEntity(me\Camera)
+	If Camera <> 0 Then ShowEntity(Camera)
 End Function
 
 Function InitFastResize()
@@ -12081,7 +12083,7 @@ Function GammaUpdate()
 	
 	; ~ Not by any means a perfect solution
 	; ~ Not even proper gamma correction but it's a nice looking alternative that works in windowed mode
-	If ScreenGamma > 1.0 Then ; ~ CHECK WHY WINDOWED MODE IS BROKEN
+	If ScreenGamma > 1.0 Then
 		CopyRect(0, 0, RealGraphicWidth, RealGraphicHeight, 1024 - RealGraphicWidth / 2, 1024 - RealGraphicHeight / 2, BackBuffer(), TextureBuffer(Fresize_Texture))
 		EntityBlend(Fresize_Image, 1)
 		ClsColor(0, 0, 0) : Cls()
@@ -12371,5 +12373,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1068#133E#1E08
+;~B#106A#1340#1E0A
 ;~C#Blitz3D

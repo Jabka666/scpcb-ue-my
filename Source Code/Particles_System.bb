@@ -149,12 +149,12 @@ Function UpdateEmitters()
 			
 			p\AChange = e\AChange
 			
-			e\SoundCHN = LoopSound2(HissSFX, e\SoundCHN, me\Camera, e\OBJ)
+			e\SoundCHN = LoopSound2(HissSFX, e\SoundCHN, Camera, e\OBJ)
 			
 			If InSmoke = False Then
 				If wi\GasMask = 0 And wi\HazmatSuit = 0 Then
-					If Distance(EntityX(me\Camera, True), EntityX(e\OBJ, True), EntityZ(me\Camera, True), EntityZ(e\OBJ, True)) < 0.8 Then
-						If Abs(EntityY(me\Camera, True) - EntityY(e\OBJ, True)) < 5.0 Then InSmoke = True
+					If Distance(EntityX(Camera, True), EntityX(e\OBJ, True), EntityZ(Camera, True), EntityZ(e\OBJ, True)) < 0.8 Then
+						If Abs(EntityY(Camera, True) - EntityY(e\OBJ, True)) < 5.0 Then InSmoke = True
 					EndIf
 				EndIf					
 			EndIf

@@ -2005,7 +2005,7 @@ Function LoadGameQuick(File$)
 		EndIf
 	Next
 	; ~ Resetting some stuff (those get changed when going to the endings)
-	CameraFogMode(me\Camera, 1)
+	CameraFogMode(Camera, 1)
 	HideDistance = 15.0
 	
 	CatchErrors("LoadGameQuick")
