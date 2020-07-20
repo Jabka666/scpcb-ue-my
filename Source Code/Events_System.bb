@@ -3567,7 +3567,7 @@ Function UpdateEvents()
 					EndIf
 					
 					If e\room\grid = Null Then
-						e\room\grid = New Grids
+						e\room\grid.Grids = New Grids
 						
 						OldSeed% = RndSeed()
 						SeedRnd(GenerateSeedNumber(RandomSeed))
@@ -9014,7 +9014,7 @@ Function UpdateDimension1499()
 						; ~ Zone 1
 						For x = 0 To 7
 							For y = 0 To 2
-								du = New Dummy1499_1
+								du.Dummy1499_1 = New Dummy1499_1
 								For n.NPCs = Each NPCs
 									If n\NPCtype = NPCtype1499_1 And n\PrevState <> 2 Then
 										du\OBJ = CopyEntity(n\OBJ)
@@ -9033,7 +9033,7 @@ Function UpdateDimension1499()
 						; ~ Zone 2
 						For x = 0 To 6
 							For y = 0 To 2
-								du = New Dummy1499_1
+								du.Dummy1499_1 = New Dummy1499_1
 								For n.NPCs = Each NPCs
 									If n\NPCtype = NPCtype1499_1 And n\PrevState <> 2 Then
 										du\OBJ = CopyEntity(n\OBJ)
@@ -9089,7 +9089,7 @@ Function UpdateDimension1499()
 							EndIf
 						EndIf
 					Next
-					For du = Each Dummy1499_1
+					For du.Dummy1499_1 = Each Dummy1499_1
 						If e\EventState3 < 70.0 * 30.0 Then
 							If du\Anim = 0 Then
 								If AnimTime(du\OBJ) =< 360.5 Then

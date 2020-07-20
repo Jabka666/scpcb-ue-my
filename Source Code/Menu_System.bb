@@ -1594,7 +1594,7 @@ Function UpdateLauncher(lnchr.Launcher)
 	
 	MenuScale = 1
 	
-	Graphics3DExt(LauncherWidth, LauncherHeight, 2)
+	Graphics3DExt(LauncherWidth, LauncherHeight)
 	
 	SetBuffer(BackBuffer())
 	
@@ -1617,12 +1617,12 @@ Function UpdateLauncher(lnchr.Launcher)
 		Local SameFound% = False
 		
 		For n = 0 To lnchr\TotalGFXModes - 1
-			If lnchr\GfxModeWidths[n] = GfxModeWidth(i) And lnchr\GfxModeHeights[n] = GfxModeHeight(i) Then SameFound = True : Exit
+			If lnchr\GFXModeWidths[n] = GfxModeWidth(i) And lnchr\GFXModeHeights[n] = GfxModeHeight(i) Then SameFound = True : Exit
 		Next
 		If SameFound = False Then
 			If GraphicWidth = GfxModeWidth(i) And GraphicHeight = GfxModeHeight(i) Then lnchr\SelectedGFXMode = lnchr\GFXModes
-			lnchr\GfxModeWidths[lnchr\GFXModes] = GfxModeWidth(i)
-			lnchr\GfxModeHeights[lnchr\GFXModes] = GfxModeHeight(i)
+			lnchr\GFXModeWidths[lnchr\GFXModes] = GfxModeWidth(i)
+			lnchr\GFXModeHeights[lnchr\GFXModes] = GfxModeHeight(i)
 			lnchr\GFXModes = lnchr\GFXModes + 1 
 		EndIf
 	Next
@@ -1645,13 +1645,13 @@ Function UpdateLauncher(lnchr.Launcher)
 		Text(20, 240 - 65, "Resolution: ")
 		
 		Local x% = 40
-		Local y% = 270 - 65
+		Local y% = 205
 		
-		For i = 0 To (lnchr\GFXModes - 1)
+		For i = 0 To lnchr\GFXModes - 1
 			Color(0, 0, 0)
 			If lnchr\SelectedGFXMode = i Then Rect(x - 1, y - 5, 100, 20, False)
 			
-			Text(x, y, (lnchr\GFXModeWidths[i] + "x" + lnchr\GfxModeHeights[i]))
+			Text(x, y, (lnchr\GFXModeWidths[i] + "x" + lnchr\GFXModeHeights[i]))
 			If MouseOn(x - 1, y - 5, 100, 20) Then
 				Color(100, 100, 100)
 				Rect(x - 1, y - 5, 100, 20, False)
@@ -1677,9 +1677,9 @@ Function UpdateLauncher(lnchr.Launcher)
 			Case 1
 				;[Block]
 				Txt = "Borderless"
-				If lnchr\GfxModeWidths[lnchr\SelectedGFXMode] < DesktopWidth() Then
+				If lnchr\GFXModeWidths[lnchr\SelectedGFXMode] < DesktopWidth() Then
 					Text(365, 412, "(upscaled to: " + DesktopWidth() + "x" + DesktopHeight() + ",32)")
-				ElseIf lnchr\GfxModeWidths[lnchr\SelectedGFXMode] > DesktopWidth() Then
+				ElseIf lnchr\GFXModeWidths[lnchr\SelectedGFXMode] > DesktopWidth() Then
 					Text(365, 412, "(downscaled to: " + DesktopWidth() + "x" + DesktopHeight() + ",32)")
 				EndIf
 				;[End Block]
@@ -1688,7 +1688,7 @@ Function UpdateLauncher(lnchr.Launcher)
 				Txt = "Windowed"
 				;[End Block]
 		End Select
-		Text(478, 262 - 55 + 140, "Current Resolution: " + lnchr\GfxModeWidths[lnchr\SelectedGFXMode] + "x" + lnchr\GfxModeHeights[lnchr\SelectedGFXMode] + ",32", True)
+		Text(478, 262 - 55 + 140, "Current Resolution: " + lnchr\GFXModeWidths[lnchr\SelectedGFXMode] + "x" + lnchr\GFXModeHeights[lnchr\SelectedGFXMode] + ",32", True)
 		DrawFrame(455, 254, 120, 30)
 		Text(515, 264, Txt, True)
 		If DrawLauncherButton(575, 254, 30, 30, "", False) Then

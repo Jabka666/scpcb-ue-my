@@ -3676,7 +3676,7 @@ Function InitCredits()
 	
 	Repeat
 		l = ReadLine(File)
-		cl = New CreditsLine
+		cl.CreditsLine = New CreditsLine
 		cl\Txt = l
 	Until Eof(File)
 	
