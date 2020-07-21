@@ -407,7 +407,7 @@ Repeat
 			MoveMouse(GraphicsWidth() / 2, GraphicsHeight() / 2)
 		EndIf
 		
-		For r = Each Rooms
+		For r.Rooms = Each Rooms
 			If r\ResetOverlayTex And r <> PickedRoom
 				SetBuffer(TextureBuffer(r\OverlayTex))
 				If CurrMapGrid <> 1 Then
@@ -478,7 +478,7 @@ Repeat
 			Local Picker% = EntityPick(Camera, CamRange / (2.5 - (CurrMapGrid = 1)))
 			
 			If Picker <> 0 Then
-				For r = Each Rooms
+				For r.Rooms = Each Rooms
 					If CurrMapGrid <> 1 Then
 						If PickedEntity() = GetChild(r\OBJ, 2)
 							SetBuffer(TextureBuffer(r\OverlayTex))
@@ -667,36 +667,36 @@ Function LoadRoomTemplateMeshes()
 	Local rt.RoomTemplates, i%
 	Local MT_Prefix$ = "maintenance tunnel "
 	
-	rt = New RoomTemplates
+	rt.RoomTemplates = New RoomTemplates
 	rt\OBJPath = "GFX\map\mt1.rmesh"
 	rt\Name = MT_Prefix + "endroom"
 	rt\Shape = ROOM1
-	rt = New RoomTemplates
+	rt.RoomTemplates = New RoomTemplates
 	rt\OBJPath = "GFX\map\mt2.rmesh"
 	rt\Name = MT_Prefix + "corridor"
 	rt\Shape = ROOM2
-	rt = New RoomTemplates
+	rt.RoomTemplates = New RoomTemplates
 	rt\OBJPath = "GFX\map\mt2c.rmesh"
 	rt\Name = MT_Prefix + "corner"
 	rt\Shape = ROOM2C
-	rt = New RoomTemplates
+	rt.RoomTemplates = New RoomTemplates
 	rt\OBJPath = "GFX\map\mt3.rmesh"
 	rt\Name = MT_Prefix + "t-shaped room"
 	rt\Shape = ROOM3
-	rt = New RoomTemplates
+	rt.RoomTemplates = New RoomTemplates
 	rt\OBJPath = "GFX\map\mt4.rmesh"
 	rt\Name = MT_Prefix + "4-way room"
 	rt\Shape = ROOM4
-	rt = New RoomTemplates
+	rt.RoomTemplates = New RoomTemplates
 	rt\OBJPath = "GFX\map\mt_elevator.rmesh"
 	rt\Name = MT_Prefix + "elevator"
 	rt\Shape = ROOM2
-	rt = New RoomTemplates
+	rt.RoomTemplates = New RoomTemplates
 	rt\OBJPath = "GFX\map\mt_generator.rmesh"
 	rt\Name = MT_Prefix + "generator room"
 	rt\Shape = ROOM1
 	
-	For rt = Each RoomTemplates
+	For rt.RoomTemplates = Each RoomTemplates
 		If rt\OBJPath <> "" Then
 			LoadRoomMesh(rt)
 		EndIf
@@ -719,33 +719,33 @@ Function LoadRoomTemplateMeshes()
 	
 	Local FR_Prefix$ = "scp-860-1 "
 	
-	rt = New RoomTemplates
+	rt.RoomTemplates = New RoomTemplates
 	rt\OBJ = LoadTerrain(hMap[ROOM2], 0.03, GroundTexture, PathTexture, Mask[ROOM2])
 	rt\Name = FR_Prefix + "door"
 	rt\Shape = ROOM2
 	ForestMeshWidth = MeshWidth(rt\OBJ)
 	HideEntity(rt\OBJ)
-	rt = New RoomTemplates
+	rt.RoomTemplates = New RoomTemplates
 	rt\OBJ = LoadTerrain(hMap[ROOM1], 0.03, GroundTexture, PathTexture, Mask[ROOM1])
 	rt\Name = FR_Prefix + "endroom"
 	rt\Shape = ROOM1
 	HideEntity(rt\OBJ)
-	rt = New RoomTemplates
+	rt.RoomTemplates = New RoomTemplates
 	rt\OBJ = LoadTerrain(hMap[ROOM2], 0.03, GroundTexture, PathTexture, Mask[ROOM2])
 	rt\Name = FR_Prefix + "path"
 	rt\Shape = ROOM2
 	HideEntity(rt\OBJ)
-	rt = New RoomTemplates
+	rt.RoomTemplates = New RoomTemplates
 	rt\OBJ = LoadTerrain(hMap[ROOM2C], 0.03, GroundTexture, PathTexture, Mask[ROOM2C])
 	rt\Name = FR_Prefix + "corner"
 	rt\Shape = ROOM2C
 	HideEntity(rt\OBJ)
-	rt = New RoomTemplates
+	rt.RoomTemplates = New RoomTemplates
 	rt\OBJ = LoadTerrain(hMap[ROOM3], 0.03, GroundTexture, PathTexture, Mask[ROOM3])
 	rt\Name = FR_Prefix + "t-shaped path"
 	rt\Shape = ROOM3
 	HideEntity(rt\OBJ)
-	rt = New RoomTemplates
+	rt.RoomTemplates = New RoomTemplates
 	rt\OBJ = LoadTerrain(hMap[ROOM4], 0.03, GroundTexture, PathTexture, Mask[ROOM4])
 	rt\Name = FR_Prefix + "4-way path"
 	rt\Shape = ROOM4
@@ -778,7 +778,7 @@ Function PlaceRoom.Rooms(Name$, x%, z%, Zone%, Shape%, Event$ = "", EventChance#
 			;[End Block]
 	End Select
 	
-	For rt = Each RoomTemplates
+	For rt.RoomTemplates = Each RoomTemplates
 		If rt\Name = Name
 			r = CreateRoom(Zone, Shape, x * Spacing, 0.0, z * Spacing, Name)
 			Exit
@@ -1296,7 +1296,7 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 			VertexColor(Surf, Vertex, Temp1i, Temp2i, Temp3i, 1.0)
 		Next
 		
-		Count2 = ReadInt(f) ; ~ Polygons
+		Count2 = ReadInt(f) ; ~ Polys
 		For j = 1 To Count2
 			Temp1i = ReadInt(f) : Temp2i = ReadInt(f) : Temp3i = ReadInt(f)
 			AddTriangle(Surf, Temp1i, Temp2i, Temp3i)
@@ -1335,7 +1335,7 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 			Vertex = AddVertex(Surf, x, y, z)
 		Next
 		
-		Count2 = ReadInt(f) ; ~ Polygons
+		Count2 = ReadInt(f) ; ~ Polys
 		For j = 1 To Count2
 			Temp1i = ReadInt(f) : Temp2i = ReadInt(f) : Temp3i = ReadInt(f)
 			AddTriangle(Surf, Temp1i, Temp2i, Temp3i)
@@ -1348,7 +1348,7 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 		Local Numb%, tb%
 		
 		Numb = ReadInt(f)
-		For tb = 0 To Numb-1
+		For tb = 0 To Numb - 1
 			Count = ReadInt(f)
 			For i = 1 To Count
 				Count2 = ReadInt(f)
@@ -1582,15 +1582,15 @@ Function PutINIValue%(INI_sAppName$, INI_sSection$, INI_sKey$, INI_sValue$)
 	
 	; ~ (Re)Create the INI file updating / adding the SECTION, KEY and VALUE
 	
-	INI_bWrittenKey% = False
-	INI_bSectionFound% = False
+	INI_bWrittenKey = False
+	INI_bSectionFound = False
 	INI_sCurrentSection$ = ""
 	
 	INI_lFileHandle = WriteFile(INI_sFilename)
 	If INI_lFileHandle = 0 Then Return(False) ; ~ Create file failed!
 	
-	INI_lOldPos% = 1
-	INI_lPos% = Instr(INI_sContents, Chr(0))
+	INI_lOldPos = 1
+	INI_lPos = Instr(INI_sContents, Chr(0))
 	
 	While INI_lPos <> 0
 		INI_sTemp$ = Trim(Mid(INI_sContents, INI_lOldPos, (INI_lPos - INI_lOldPos)))
@@ -1604,7 +1604,7 @@ Function PutINIValue%(INI_sAppName$, INI_sSection$, INI_sKey$, INI_sValue$)
 				INI_sCurrentSection = Upper(INI_CreateSection(INI_lFileHandle, INI_sTemp))
 				If INI_sCurrentSection = INI_sUpperSection Then INI_bSectionFound = True
 			Else
-				lEqualsPos% = Instr(INI_sTemp, "=")
+				lEqualsPos = Instr(INI_sTemp, "=")
 				If lEqualsPos <> 0 Then
 					If (INI_sCurrentSection = INI_sUpperSection) And (Upper(Trim(Left(INI_sTemp, (lEqualsPos - 1)))) = Upper(INI_sKey)) Then
 						If (INI_sValue <> "") Then INI_CreateKey(INI_lFileHandle, INI_sKey, INI_sValue)
@@ -1618,7 +1618,7 @@ Function PutINIValue%(INI_sAppName$, INI_sSection$, INI_sKey$, INI_sValue$)
 		
 		; ~ Move through the INI file...
 		INI_lOldPos = INI_lPos + 1
-		INI_lPos% = Instr(INI_sContents, Chr(0), INI_lOldPos)
+		INI_lPos = Instr(INI_sContents, Chr(0), INI_lOldPos)
 	Wend
 	
 	; ~ KEY wasn't found in the INI file - Append a new SECTION if required and create our KEY = VALUE line
@@ -1634,7 +1634,7 @@ End Function
 
 Function INI_FileToString$(INI_sFilename$)
 	INI_sString$ = ""
-	INI_lFileHandle% = ReadFile(INI_sFilename)
+	INI_lFileHandle = ReadFile(INI_sFilename)
 	If INI_lFileHandle <> 0 Then
 		While (Not(Eof(INI_lFileHandle)))
 			INI_sString = INI_sString + ReadLine(INI_lFileHandle) + Chr(0)

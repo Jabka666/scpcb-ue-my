@@ -9491,7 +9491,7 @@ Function InitLoadGame()
 				Local ch.Chunk
 				
 				For i = -2 To 2 Step 2
-					ch = CreateChunk(-1, x# * (i * 2.5), EntityY(e\room\OBJ), z#)
+					ch = CreateChunk(-1, x * (i * 2.5), EntityY(e\room\OBJ), z)
 				Next
 				DrawLoading(98)
 				UpdateChunks(e\room, 15, False)
@@ -12302,8 +12302,8 @@ Function PlayStartupVideos()
 		Repeat
 			Cls()
 			BlitzMovie_DrawD3D(0, (RealGraphicHeight / 2 - ScaledGraphicHeight / 2), RealGraphicWidth, ScaledGraphicHeight)
-			Color(255, 255, 255)
 			SetFont(fo\FontID[0])
+			Color(255, 255, 255)
 	        Text(GraphicWidth / 2, GraphicHeight - 50, "PRESS ANY KEY TO SKIP", True, True)
 			Flip()
 		Until (GetKey() Lor (Not IsStreamPlaying_Strict(SplashScreenAudio)))
@@ -12311,11 +12311,11 @@ Function PlayStartupVideos()
 		BlitzMovie_Stop()
 		BlitzMovie_Close()
 		
-		If i = 3 Then FreeFont(fo\FontID[0])
-		
 		Cls()
 		Flip()
 	Next
+	
+	FreeFont(fo\FontID[0])
 	
 	ShowPointer()
 End Function
