@@ -9264,12 +9264,6 @@ Function UpdateEndings()
 						If e\EventState = 0.0 Then
 							DrawLoading(0, True)
 							
-							For i = 0 To MaxRoomLights - 1
-								If e\room\LightSprites[i] <> 0 Then 
-									EntityFX(e\room\LightSprites[i], 1 + 8)
-								EndIf
-							Next
-							
 							For n.NPCs = Each NPCs
 								RemoveNPC(n)
 							Next

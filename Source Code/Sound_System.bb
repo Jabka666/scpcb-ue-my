@@ -474,7 +474,7 @@ Function UpdateStreamSounds()
 		Next
 	EndIf
 	
-	If (Not PlayerInReachableRoom()) Then
+	;If (Not PlayerInReachableRoom()) Then
 		If PlayerRoom\RoomTemplate\Name <> "gateb" And PlayerRoom\RoomTemplate\Name <> "gatea" Then
 			If IntercomStreamCHN <> 0 Then
 				StopStream_Strict(IntercomStreamCHN)
@@ -502,7 +502,7 @@ Function UpdateStreamSounds()
 				Next
 			EndIf
 		EndIf
-	EndIf
+	;EndIf
 End Function
 
 Function ControlSoundVolume()

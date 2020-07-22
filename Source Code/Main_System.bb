@@ -11453,9 +11453,9 @@ Function UpdateMTF()
 			If entrance <> Null Then 
 				If me\Zone = 2 Then
 					If Abs(EntityZ(entrance\OBJ) - EntityZ(me\Collider)) < 30.0 Then
-						If PlayerInReachableRoom()
+						;If PlayerInReachableRoom()
 							PlayAnnouncement("SFX\Character\MTF\Announc.ogg")
-						EndIf
+						;EndIf
 						
 						MTFTimer = fpst\FPSFactor[0]
 						
@@ -11480,21 +11480,21 @@ Function UpdateMTF()
 		If MTFTimer =< 70.0 * 120.0 Then
 			MTFTimer = MTFTimer + fpst\FPSFactor[0]
 		ElseIf MTFTimer > 70.0 * 120.0 And MTFTimer < 10000.0
-			If PlayerInReachableRoom()
+			;If PlayerInReachableRoom()
 				PlayAnnouncement("SFX\Character\MTF\AnnouncAfter1.ogg")
-			EndIf
+			;EndIf
 			MTFTimer = 10000.0
 		ElseIf MTFTimer >= 10000.0 And MTFTimer =< 10000.0 + (70.0 * 120.0)
 			MTFTimer = MTFTimer + fpst\FPSFactor[0]
 		ElseIf MTFTimer > 10000.0 + (70.0 * 120.0) And MTFTimer < 20000.0
-			If PlayerInReachableRoom()
+			;If PlayerInReachableRoom()
 				PlayAnnouncement("SFX\Character\MTF\AnnouncAfter2.ogg")
-			EndIf
+			;EndIf
 			MTFTimer = 20000.0
 		ElseIf MTFTimer >= 20000.0 And MTFTimer =< 20000.0 + (70.0 * 60.0)
 			MTFTimer = MTFTimer + fpst\FPSFactor[0]
 		ElseIf MTFTimer > 20000.0 + (70.0 * 60.0) And MTFTimer < 25000.0
-			If PlayerInReachableRoom()
+			;If PlayerInReachableRoom()
 				; ~ If the player has an SCP in their inventory play special voice line.
 				For i = 0 To MaxItemAmount - 1
 					If Inventory[i] <> Null Then
@@ -11507,14 +11507,14 @@ Function UpdateMTF()
 					EndIf
 				Next
 				PlayAnnouncement("SFX\Character\MTF\ThreatAnnounc" + Rand(1, 3) + ".ogg")
-			EndIf
+			;EndIf
 			MTFTimer = 25000.0
 		ElseIf MTFTimer >= 25000.0 And MTFTimer =< 25000.0 + (70.0 * 60.0)
 			MTFTimer = MTFTimer + fpst\FPSFactor[0]
 		ElseIf MTFTimer > 25000.0 + (70.0 * 60.0) And MTFTimer < 30000.0
-			If PlayerInReachableRoom()
+			;If PlayerInReachableRoom()
 				PlayAnnouncement("SFX\Character\MTF\ThreatAnnouncFinal.ogg")
-			EndIf
+			;EndIf
 			MTFTimer = 30000.0
 		EndIf
 	EndIf
