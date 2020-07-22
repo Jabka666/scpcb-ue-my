@@ -1871,7 +1871,7 @@ Global RadioBuzz%
 
 Global ElevatorBeepSFX%, ElevatorMoveSFX% 
 
-Global PickSFX%[10]
+Global PickSFX%[4]
 
 Global AmbientSFXCHN%, CurrAmbientSFX%
 Global AmbientSFXAmount%[6]
@@ -1891,7 +1891,7 @@ AmbientSFXAmount[5] = 10
 
 Dim AmbientSFX%(6, 15)
 
-Global OldManSFX%[8]
+Global OldManSFX%[9]
 
 Global Scp173SFX%[3]
 
