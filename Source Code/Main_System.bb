@@ -4687,123 +4687,58 @@ Function DrawGUI()
 			Color(255, 255, 255)
 			SetFont(fo\ConsoleFont)
 			
-			Text(x - 60, 40, "*****************************")
-			Text(x - 60, 60, "*********** STATS ***********")
-			Text(x - 60, 80, "*****************************")
-			
-			Text(x - 60, 120, "Room: " + PlayerRoom\RoomTemplate\Name)
-            Text(x - 60, 140, "Room Coordinates: (" + Floor(EntityX(PlayerRoom\OBJ) / 8.0 + 0.5) + ", " + Floor(EntityZ(PlayerRoom\OBJ) / 8.0 + 0.5) + ", Angle: " + PlayerRoom\Angle + ")")
-			If PlayerRoom <> Null Then
-				For ev.Events = Each Events
-					If ev\room = PlayerRoom Then
-						Text(x - 60, 160, "Room Event: " + ev\EventName) 
-						Text(x - 60, 180, "State: " + ev\EventState)
-						Text(x - 60, 200, "State2: " + ev\EventState2)   
-						Text(x - 60, 220, "State3: " + ev\EventState3)
-						Text(x - 60, 240, "State4: " + ev\EventState4)
-						Text(x - 60, 260, "Str: "+ ev\EventStr)
-						Exit
-					EndIf
-				Next
-			EndIf
-			Text(x - 60, 300, "Video memory: " + ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)) + " MB/" + (TotalVidMem() / 1024) + " MB" + Chr(10))
-			Text(x - 60, 320, "Global memory status: " + ((TotalPhys() / 1024) - (AvailPhys() / 1024)) + " MB/" + (TotalPhys() / 1024) + " MB")
-			Text(x - 60, 340, "Triangles Rendered: " + CurrTrisAmount)
-			Text(x - 60, 360, "Active Textures: " + ActiveTextures())	
-			
-			If Curr173 <> Null Then
-				Text(x - 60, 400, "SCP-173 Position (me\Collider): (" + f2s(EntityX(Curr173\Collider), 1) + ", " + f2s(EntityY(Curr173\Collider), 1) + ", " + f2s(EntityZ(Curr173\Collider), 1) + ")")
-				Text(x - 60, 420, "SCP-173 Position (Object): (" + f2s(EntityX(Curr173\OBJ), 1) + ", " + f2s(EntityY(Curr173\OBJ), 1) + ", " + f2s(EntityZ(Curr173\OBJ), 1) + ")")
-				Text(x - 60, 440, "SCP-173 State: " + Curr173\State)
-			EndIf
-			If Curr106 <> Null Then
-				Text(x - 60, 460, "SCP-106 Position: (" + f2s(EntityX(Curr106\OBJ), 1) + ", " + f2s(EntityY(Curr106\OBJ), 1) + ", " + f2s(EntityZ(Curr106\OBJ), 1) + ")")
-				Text(x - 60, 480, "SCP-106 Idle: " + Curr106\Idle)
-				Text(x - 60, 500, "SCP-106 State: " + Curr106\State)
-			EndIf
-			For npc.NPCs = Each NPCs
-				If npc\NPCtype = NPCtype096 Then
-					Text(x - 60, 520, "SCP-096 Position: (" + f2s(EntityX(npc\OBJ), 1) + ", " + f2s(EntityY(npc\OBJ), 1) + ", " + f2s(EntityZ(npc\OBJ), 1) + ")")
-					Text(x - 60, 540, "SCP-096 Idle: " + npc\Idle)
-					Text(x - 60, 560, "SCP-096 State: " + npc\State)
-					Text(x - 60, 580, "SCP-096 Speed: " + f2s(npc\CurrSpeed, 1))
-				EndIf
-				If npc\NPCtype = NPCtype049 Then
-					Text(x - 60, 600, "SCP-049 Position: (" + f2s(EntityX(npc\OBJ), 1) + ", " + f2s(EntityY(npc\OBJ), 1) + ", " + f2s(EntityZ(npc\OBJ), 1) + ")")
-					Text(x - 60, 620, "SCP-049 Idle: " + npc\Idle)
-					Text(x - 60, 640, "SCP-049 State: " + npc\State)
-					Text(x - 60, 660, "SCP-049 Speed: " + f2s(npc\CurrSpeed, 1))
+			Text(x - 60, 40, "Room: " + PlayerRoom\RoomTemplate\Name)
+            Text(x - 60, 60, "Room Coordinates: (" + Floor(EntityX(PlayerRoom\OBJ) / 8.0 + 0.5) + ", " + Floor(EntityZ(PlayerRoom\OBJ) / 8.0 + 0.5) + ", Angle: " + PlayerRoom\Angle + ")")
+			For ev.Events = Each Events
+				If ev\room = PlayerRoom Then
+					Text(x - 60, 80, "Room Event: " + ev\EventName) 
+					Text(x - 60, 100, "State: " + ev\EventState)
+					Text(x - 60, 120, "State2: " + ev\EventState2)   
+					Text(x - 60, 140, "State3: " + ev\EventState3)
+					Text(x - 60, 160, "State4: " + ev\EventState4)
+					Text(x - 60, 180, "Str: "+ ev\EventStr)
+					Exit
 				EndIf
 			Next
-			
 			If PlayerRoom\RoomTemplate\Name = "dimension1499"
-				Text(x - 60, 700, "Current Chunk X / Z: (" + (Int((EntityX(me\Collider) + 20) / 40)) + ", "+(Int((EntityZ(me\Collider) + 20) / 40)) + ")")
+				Text(x - 60, 220, "Current Chunk X / Z: (" + (Int((EntityX(me\Collider) + 20) / 40)) + ", "+(Int((EntityZ(me\Collider) + 20) / 40)) + ")")
 				
 				Local CH_Amount% = 0
 				
 				For ch.Chunk = Each Chunk
 					CH_Amount = CH_Amount + 1
 				Next
-				Text(x - 60, 720, "Current Chunk Amount: " + CH_Amount)
+				Text(x - 60, 240, "Current Chunk Amount: " + CH_Amount)
 			Else
-				Text(x - 60, 720, "Current Room Position: (" + PlayerRoom\x + ", " + PlayerRoom\y + ", " + PlayerRoom\z + ")")
+				Text(x - 60, 240, "Current Room Position: (" + PlayerRoom\x + ", " + PlayerRoom\y + ", " + PlayerRoom\z + ")")
 			EndIf
+			
 			If SelectedMonitor <> Null Then
-				Text(x - 60, 740, "Current Monitor: " + SelectedMonitor\ScrOBJ)
+				Text(x - 60, 280, "Current Monitor: " + SelectedMonitor\ScrOBJ)
 			Else
-				Text(x - 60, 740, "Current Monitor: Null")
+				Text(x - 60, 280, "Current Monitor: Null")
 			EndIf
 			
-			Text(x + 440, 40, "******************************")
-			Text(x + 440, 60, "******** PLAYER STATS ********")
-			Text(x + 440, 80, "******************************")
+			Text(x - 60, 320, "Video memory: " + ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)) + " MB/" + (TotalVidMem() / 1024) + " MB" + Chr(10))
+			Text(x - 60, 340, "Global memory status: " + ((TotalPhys() / 1024) - (AvailPhys() / 1024)) + " MB/" + (TotalPhys() / 1024) + " MB")
+			Text(x - 60, 360, "Triangles Rendered: " + CurrTrisAmount)
+			Text(x - 60, 380, "Active Textures: " + ActiveTextures())	
 			
-			Text(x + 440, 120, "Player Position: (" + f2s(EntityX(me\Collider), 1) + ", " + f2s(EntityY(me\Collider), 1) + ", " + f2s(EntityZ(me\Collider), 1) + ")")
-			Text(x + 440, 140, "Camera Position: (" + f2s(EntityX(Camera), 1)+ ", " + f2s(EntityY(Camera), 1) +", " + f2s(EntityZ(Camera), 1) + ")")
-			Text(x + 440, 160, "Player Rotation: (" + f2s(EntityPitch(me\Collider), 1) + ", " + f2s(EntityYaw(me\Collider), 1) + ", " + f2s(EntityRoll(me\Collider), 1) + ")")
-			Text(x + 440, 180, "Camera Rotation: (" + f2s(EntityPitch(Camera), 1) + ", " + f2s(EntityYaw(Camera), 1) +", " + f2s(EntityRoll(Camera), 1) + ")")
+			Text(x + 440, 40, "Player Position: (" + f2s(EntityX(me\Collider), 1) + ", " + f2s(EntityY(me\Collider), 1) + ", " + f2s(EntityZ(me\Collider), 1) + ")")
+			Text(x + 440, 60, "Player Rotation: (" + f2s(EntityPitch(me\Collider), 1) + ", " + f2s(EntityYaw(me\Collider), 1) + ", " + f2s(EntityRoll(me\Collider), 1) + ")")
 			
-			Text(x + 440, 220, "Playable: " + me\Playable)
-			If me\Zombie Then
-				Text(x + 440, 240, "Am I a zombie? - YES, YOU ARE!")
-			Else
-				Text(x + 440, 240, "Am I a zombie? - No, you aren't.")
-			EndIf
-			Text(x + 440, 260, "Death Timer: " + me\DeathTimer) 
-			Text(x + 440, 280, "Kill Timer: " + me\KillTimer)  
-			Text(x + 440, 300, "Fall Timer: " + me\FallTimer)   
-			Text(x + 440, 320, "Injuries: " + me\Injuries)
-			Text(x + 440, 340, "Bloodloss: " + me\Bloodloss)
-			Text(x + 440, 360, "Vomit Timer: " + me\VomitTimer)
-			Text(x + 440, 380, "Sanity: " + me\Sanity)
-			Text(x + 440, 400, "Deaf Timer: " + me\DeafTimer)
-			Text(x + 440, 420, "Blur Timer: " + me\BlurTimer)
-			Text(x + 440, 440, "Eye Stuck: " + me\EyeStuck)
-			Text(x + 440, 460, "Eye Irritation: " + me\EyeIrritation)
-			Text(x + 440, 480, "Blink Timer: " + me\BlinkTimer)
-			Text(x + 440, 500, "Blink Effect: " + me\BlinkEffect)
-			Text(x + 440, 520, "Blink Effect Timer: " + me\BlinkEffectTimer)
-			Text(x + 440, 540, "Stamina: " + me\Stamina)
-			Text(x + 440, 560, "Stamina Effect: " + me\StaminaEffect)
-			Text(x + 440, 580, "Stamina Effect Timer: " + me\StaminaEffectTimer)
+			Text(x + 440, 100, "Injuries: " + me\Injuries)
+			Text(x + 440, 120, "Bloodloss: " + me\Bloodloss)
+			Text(x + 440, 140, "Blur Timer: " + me\BlurTimer)
+			Text(x + 440, 160, "Blink Timer: " + me\BlinkTimer)
+			Text(x + 440, 180, "Stamina: " + me\Stamina)
 			
-			Text(x + 440, 620, "SCP-008 Infection: " + I_008\Timer)
-			Text(x + 440, 640, "SCP-409 Crystallization: " + I_409\Timer)
-			Text(x + 440, 660, "SCP-427 State (Secs): " + Int(I_427\Timer / 70.0))
+			Text(x + 440, 220, "SCP-008 Infection: " + I_008\Timer)
+			Text(x + 440, 240, "SCP-409 Crystallization: " + I_409\Timer)
+			Text(x + 440, 260, "SCP-427 State (Secs): " + Int(I_427\Timer / 70.0))
 			For i = 0 To 5
-				Text(x + 440, 680 + (20 * i), "SCP-1025 State " + i + ": " + I_1025\State[i])
+				Text(x + 440, 280 + (20 * i), "SCP-1025 State " + i + ": " + I_1025\State[i])
 			Next
-			
-			Text(x + 840, 40, "*****************************")
-			Text(x + 840, 60, "******** OTHER STATS ********")
-			Text(x + 840, 80, "*****************************")
-			
-			Text(x + 840, 120, "Light Blink: " + me\LightBlink)
-			Text(x + 840, 140, "Light Flash: " + me\LightFlash)
-			Text(x + 840, 160, "MTF Timer: " + MTFTimer)
-			Text(x + 840, 180, "Explosion Timer: " + me\ExplosionTimer)
-			Text(x + 840, 200, "Ending Timer: " + me\EndingTimer)
-			Text(x + 840, 220, "Gas Mask Fog Timer: " + wi\GasMaskFogTimer)
 			
 			SetFont(fo\FontID[0])
 		EndIf
@@ -11453,9 +11388,9 @@ Function UpdateMTF()
 			If entrance <> Null Then 
 				If me\Zone = 2 Then
 					If Abs(EntityZ(entrance\OBJ) - EntityZ(me\Collider)) < 30.0 Then
-						;If PlayerInReachableRoom()
+						If PlayerInReachableRoom()
 							PlayAnnouncement("SFX\Character\MTF\Announc.ogg")
-						;EndIf
+						EndIf
 						
 						MTFTimer = fpst\FPSFactor[0]
 						
@@ -11480,21 +11415,21 @@ Function UpdateMTF()
 		If MTFTimer =< 70.0 * 120.0 Then
 			MTFTimer = MTFTimer + fpst\FPSFactor[0]
 		ElseIf MTFTimer > 70.0 * 120.0 And MTFTimer < 10000.0
-			;If PlayerInReachableRoom()
+			If PlayerInReachableRoom()
 				PlayAnnouncement("SFX\Character\MTF\AnnouncAfter1.ogg")
-			;EndIf
+			EndIf
 			MTFTimer = 10000.0
 		ElseIf MTFTimer >= 10000.0 And MTFTimer =< 10000.0 + (70.0 * 120.0)
 			MTFTimer = MTFTimer + fpst\FPSFactor[0]
 		ElseIf MTFTimer > 10000.0 + (70.0 * 120.0) And MTFTimer < 20000.0
-			;If PlayerInReachableRoom()
+			If PlayerInReachableRoom()
 				PlayAnnouncement("SFX\Character\MTF\AnnouncAfter2.ogg")
-			;EndIf
+			EndIf
 			MTFTimer = 20000.0
 		ElseIf MTFTimer >= 20000.0 And MTFTimer =< 20000.0 + (70.0 * 60.0)
 			MTFTimer = MTFTimer + fpst\FPSFactor[0]
 		ElseIf MTFTimer > 20000.0 + (70.0 * 60.0) And MTFTimer < 25000.0
-			;If PlayerInReachableRoom()
+			If PlayerInReachableRoom()
 				; ~ If the player has an SCP in their inventory play special voice line.
 				For i = 0 To MaxItemAmount - 1
 					If Inventory[i] <> Null Then
@@ -11507,14 +11442,14 @@ Function UpdateMTF()
 					EndIf
 				Next
 				PlayAnnouncement("SFX\Character\MTF\ThreatAnnounc" + Rand(1, 3) + ".ogg")
-			;EndIf
+			EndIf
 			MTFTimer = 25000.0
 		ElseIf MTFTimer >= 25000.0 And MTFTimer =< 25000.0 + (70.0 * 60.0)
 			MTFTimer = MTFTimer + fpst\FPSFactor[0]
 		ElseIf MTFTimer > 25000.0 + (70.0 * 60.0) And MTFTimer < 30000.0
-			;If PlayerInReachableRoom()
+			If PlayerInReachableRoom()
 				PlayAnnouncement("SFX\Character\MTF\ThreatAnnouncFinal.ogg")
-			;EndIf
+			EndIf
 			MTFTimer = 30000.0
 		EndIf
 	EndIf
@@ -12373,5 +12308,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#106A#1340#1E0A
+;~B#106A#12FF#1DC9
 ;~C#Blitz3D

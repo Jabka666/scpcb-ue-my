@@ -1472,7 +1472,7 @@ Function UpdateNPCs()
 					PositionEntity(n\OBJ, 0.0, -500.0, 0.0)
 				Else
 					If n\Idle = 0.1 Then
-						;If PlayerInReachableRoom() Then
+						If PlayerInReachableRoom() Then
 							For i = 0 To 3
 								If PlayerRoom\Adjacent[i] <> Null Then
 									For j = 0 To 3
@@ -1485,7 +1485,7 @@ Function UpdateNPCs()
 								EndIf
 							Next
 							n\Idle = 0.0
-						;EndIf
+						EndIf
 					EndIf
 					
 					Select n\State
@@ -1504,7 +1504,7 @@ Function UpdateNPCs()
 							;[End Block]
 						Case 2.0 ; ~ Being active
 							;[Block]
-							If (Dist < HideDistance * 2.0) And (Not n\Idle); And PlayerInReachableRoom(True) Then
+							If (Dist < HideDistance * 2.0) And (Not n\Idle) And PlayerInReachableRoom(True) Then
 								n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider)
 								PlayerSeeAble = MeNPCSeesPlayer(n)
 								If PlayerSeeAble = True Lor n\State2 > 0 And (Not chs\NoTarget) Then ; ~ Attack
@@ -1787,7 +1787,7 @@ Function UpdateNPCs()
 								If ChannelPlaying(n\SoundCHN) = True Then
 									StopChannel(n\SoundCHN)
 								EndIf
-								If InFacility = 1 Then ;If PlayerInReachableRoom(True) And InFacility = 1 Then ; ~ Player is in a room where SCP-049 can teleport to
+								If PlayerInReachableRoom(True) And InFacility = 1 Then ; ~ Player is in a room where SCP-049 can teleport to
 									If Rand(1, 3 - SelectedDifficulty\OtherFactors) = 1 Then
 										TeleportCloser(n)
 									Else
@@ -4859,7 +4859,7 @@ Function UpdateNPCs()
 							If n\Idle > 0
 								n\Idle = Max(n\Idle - (1 + (1 * SelectedDifficulty\AggressiveNPCs)) * fpst\FPSFactor[0], 0.0)
 							Else
-								;If PlayerInReachableRoom() ; ~ Player is in a room where SCP-008-1 can teleport to
+								If PlayerInReachableRoom() ; ~ Player is in a room where SCP-008-1 can teleport to
 									If Rand(50 - (20 * SelectedDifficulty\AggressiveNPCs)) = 1
 										ShowEntity(n\Collider)
 										ShowEntity(n\OBJ)
@@ -4886,7 +4886,7 @@ Function UpdateNPCs()
 										n\State = 2.0
 										n\State3 = 0.0
 									EndIf
-								;EndIf
+								EndIf
 							EndIf
 							;[End Block]
 					End Select
@@ -7300,38 +7300,38 @@ Function NPCSpeedChange(n.NPCs)
 	End Select
 End Function
 
-;Function PlayerInReachableRoom(CanSpawnIn049Chamber% = False)
-;	Local RN$ = PlayerRoom\RoomTemplate\Name
-;	Local e.Events
-;	
-;	; ~ Player is in these rooms, returning false
-;	If RN = "pocketdimension" Lor RN = "gatea" Lor RN = "dimension1499" Lor RN = "room173intro" Then
-;		Return(False)
-;	EndIf
-;	; ~ Player is at Gate B and is at the surface, returning false
-;	If RN = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale Then
-;		Return(False)
-;	EndIf
-;	; ~ Player is in SCP-860-1's test room and inside the forest, returning false
-;	If RN = "room860" Then
-;		For e.Events = Each Events
-;			If e\EventName = "room860" And e\EventState = 1.0 Then
-;				Return(False)
-;				Exit
-;			EndIf
-;		Next
-;	EndIf
-;	
-;	If (Not CanSpawnIn049Chamber) Then
-;		If SelectedDifficulty\AggressiveNPCs = False Then
-;			If RN = "room049" And EntityY(me\Collider) =< -2848.0 * RoomScale Then
-;				Return(False)
-;			EndIf
-;		EndIf
-;	EndIf
-;	; ~ Return true, this means player is in reachable room
-;	Return(True)
-;End Function
+Function PlayerInReachableRoom(CanSpawnIn049Chamber% = False)
+	Local RN$ = PlayerRoom\RoomTemplate\Name
+	Local e.Events
+	
+	; ~ Player is in these rooms, returning false
+	If RN = "pocketdimension" Lor RN = "gatea" Lor RN = "dimension1499" Lor RN = "room173intro" Then
+		Return(False)
+	EndIf
+	; ~ Player is at Gate B and is at the surface, returning false
+	If RN = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale Then
+		Return(False)
+	EndIf
+	; ~ Player is in SCP-860-1's test room and inside the forest, returning false
+	If RN = "room860" Then
+		For e.Events = Each Events
+			If e\EventName = "room860" And e\EventState = 1.0 Then
+				Return(False)
+				Exit
+			EndIf
+		Next
+	EndIf
+	
+	If (Not CanSpawnIn049Chamber) Then
+		If SelectedDifficulty\AggressiveNPCs = False Then
+			If RN = "room049" And EntityY(me\Collider) =< -2848.0 * RoomScale Then
+				Return(False)
+			EndIf
+		EndIf
+	EndIf
+	; ~ Return true, this means player is in reachable room
+	Return(True)
+End Function
 
 Function CheckForNPCInFacility(n.NPCs)
 	; ~ False (= 0): NPC is not in facility (mostly meant for "dimension1499")
