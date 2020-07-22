@@ -307,11 +307,11 @@ Function LoadBrush_Strict(File$, Flags%, u# = 1.0, v# = 1.0)
 	Return(Tmp)
 End Function 
 
-Function LoadFont_Strict(File$ = "Tahoma", Height% = 13)
+Function LoadFont_Strict(File$ = "Tahoma", Height% = 13, IgnoreScaling% = 0)
 	Local Tmp%
 	
 	If FileType(File) <> 1 Then RuntimeError("Font " + File + " not found.")
-	Tmp = LoadFont(File, Height)  
+	Tmp = LoadFont(File, (Int(Height * (GraphicHeight / 1024.0))) * (Not IgnoreScaling) + IgnoreScaling * Height)
 	If Tmp = 0 Then RuntimeError("Failed to load Font: " + File)
 	Return(Tmp)
 End Function
