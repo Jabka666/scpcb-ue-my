@@ -1751,7 +1751,7 @@ Function UpdateNPCs()
 																		n\PathLocation = n\PathLocation + 1
 																	EndIf
 																	If n\Path[n\PathLocation] <> Null Then
-																		If Abs(DeltaYaw(n\Collider,n\Path[n\PathLocation]\OBJ)) > (45.0 - Abs(DeltaYaw(n\Collider, n\Path[1]\OBJ))) Then
+																		If Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation]\OBJ)) > (45.0 - Abs(DeltaYaw(n\Collider, n\Path[1]\OBJ))) Then
 																			n\State3 = 3.0
 																			Exit
 																		EndIf
@@ -2314,7 +2314,7 @@ Function UpdateNPCs()
 								
 								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fpst\FPSFactor[0])
 								
-								If EntityDistance(n\Collider,n\Path[n\PathLocation]\OBJ) < 0.2 Then
+								If EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ) < 0.2 Then
 									n\PathLocation = n\PathLocation + 1
 								EndIf 
 							EndIf
@@ -2342,7 +2342,7 @@ Function UpdateNPCs()
 						;[Block]
 						RotateEntity(n\Collider, 0.0, CurveAngle(VectorYaw(n\EnemyX - EntityX(n\Collider), 0.0, n\EnemyZ - EntityZ(n\Collider)) + n\Angle, EntityYaw(n\Collider), 20.0), 0.0)
 						
-						Dist# = Distance(EntityX(n\Collider), n\EnemyX, EntityZ(n\Collider), n\EnemyZ)
+						Dist = Distance(EntityX(n\Collider), n\EnemyX, EntityZ(n\Collider), n\EnemyZ)
 						
 						AnimateNPC(n, 1.0, 38.0, n\CurrSpeed * 40.0)
 						
@@ -2483,7 +2483,7 @@ Function UpdateNPCs()
 										
 										RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 20.0), 0.0)
 										
-										If EntityDistance(n\Collider,n\Path[n\PathLocation]\OBJ) < 0.2 Then
+										If EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ) < 0.2 Then
 											n\PathLocation = n\PathLocation + 1
 										EndIf
 									EndIf
@@ -3675,7 +3675,7 @@ Function UpdateNPCs()
 								Angle = VectorYaw(n\EnemyX - EntityX(n\Collider), 0.0, n\EnemyZ - EntityZ(n\Collider))
 								RotateEntity(n\Collider, 0.0, CurveAngle(Angle, EntityYaw(n\Collider), 15.0), 0.0)									
 								
-								MoveEntity(n\Collider, 0,0,n\CurrSpeed * fpst\FPSFactor[0])							
+								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fpst\FPSFactor[0])							
 								
 								n\LastSeen = n\LastSeen - fpst\FPSFactor[0]
 							Else
@@ -4144,7 +4144,7 @@ Function UpdateNPCs()
 													EndIf
 												EndIf
 												
-												n\CurrSpeed = CurveValue(n\Speed,n\CurrSpeed,10.0)
+												n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
 											ElseIf n\PathStatus = 0
 												n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 10.0)
 											EndIf
@@ -5564,7 +5564,7 @@ Function UpdateMTFUnit(n.NPCs)
 						EndIf
 					ElseIf n2\NPCtype = NPCtype008_1 And n2\IsDead = False
 						If OtherNPCSeesMeNPC(n2, n) Then
-							If EntityVisible(n\Collider,n2\Collider)
+							If EntityVisible(n\Collider, n2\Collider)
 								n\State = 9.0
 								n\EnemyX = EntityX(n2\Collider, True)
 								n\EnemyY = EntityY(n2\Collider, True)
@@ -5739,7 +5739,7 @@ Function UpdateMTFUnit(n.NPCs)
 								n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 								RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 								
-								n\CurrSpeed = CurveValue(n\Speed,n\CurrSpeed,20.0)
+								n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 								
 								TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fpst\FPSFactor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fpst\FPSFactor[0], True)
 								AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
@@ -6050,7 +6050,7 @@ Function UpdateMTFUnit(n.NPCs)
 										n\PathLocation = n\PathLocation + 1
 									EndIf
 								Else
-									PrevDist = EntityDistance(n\Collider,n\Path[n\PathLocation]\OBJ)
+									PrevDist = EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ)
 									
 									PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
 									RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
@@ -6266,7 +6266,7 @@ Function UpdateMTFUnit(n.NPCs)
 							Else
 								PrevDist = EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ)
 								
-								PointEntity(n\Collider ,n\Path[n\PathLocation]\OBJ)
+								PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
 								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 								n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 								RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
@@ -6451,7 +6451,7 @@ Function UpdateMTFUnit(n.NPCs)
 							TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fpst\FPSFactor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fpst\FPSFactor[0], True)
 							AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 							
-							NewDist = EntityDistance(n\Collider,n\Path[n\PathLocation]\OBJ)
+							NewDist = EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ)
 							
 							If (NewDist < 1.0 And n\Path[n\PathLocation]\door <> Null) Then
 								; ~ Open the door and make it automatically close after 5 seconds
@@ -6536,7 +6536,7 @@ Function UpdateMTFUnit(n.NPCs)
 							p\Achange = -0.15
 							TurnEntity(p\OBJ, 0.0, 0.0, Rnd(360.0))
 							
-							If n\Target\HP > 0
+							If n\Target\HP > 0 Then
 								n\Target\HP = Max(n\Target\HP - Rand(5, 10), 0.0)
 							Else
 								If (Not n\Target\IsDead) Then
@@ -6590,12 +6590,12 @@ Function UpdateMTFUnit(n.NPCs)
 							Else
 								PrevDist = EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ)
 								
-								PointEntity(n\Collider,n\Path[n\PathLocation]\OBJ)
+								PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
 								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 								n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 								RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 								
-								n\CurrSpeed = CurveValue(n\Speed,n\CurrSpeed, 20.0)
+								n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 								TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fpst\FPSFactor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fpst\FPSFactor[0], True)
 								AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 								
@@ -7169,7 +7169,7 @@ Function Console_SpawnNPC(C_Input$, C_State$ = "")
 			;[End Block]
 	End Select
 	
-	If n <> Null
+	If n <> Null Then
 		If C_State <> "" Then n\State = Float(C_State) : ConsoleMsg = ConsoleMsg + " (State = " + n\State + ")"
 	EndIf
 	
@@ -7182,7 +7182,7 @@ Function ManipulateNPCBones()
 	Local i%
 	Local ToValue#
 	
-	For n = Each NPCs
+	For n.NPCs = Each NPCs
 		If n\ManipulateBone
 			BoneName = GetNPCManipulationValue(n\NPCNameInSection, n\BoneToManipulate, "bonename", 0)
 			If BoneName <> ""
@@ -7212,8 +7212,8 @@ Function ManipulateNPCBones()
 								n\BonePitch = ChangeAngleValueForCorrectBoneAssigning(n\BonePitch)
 								n\BonePitch = Max(Min(n\BonePitch, MaxValue), MinValue)
 							ElseIf GetNPCManipulationValue(n\NPCNameInSection, n\BoneToManipulate, "controlleraxis1", 0) = "yaw"
-								MaxValue = GetNPCManipulationValue(n\NPCNameInSection,n\BoneToManipulate, "controlleraxis" + i + "_max", 2)
-								MinValue = GetNPCManipulationValue(n\NPCNameInSection,n\BoneToManipulate, "controlleraxis" + i + "_min", 2)
+								MaxValue = GetNPCManipulationValue(n\NPCNameInSection, n\BoneToManipulate, "controlleraxis" + i + "_max", 2)
+								MinValue = GetNPCManipulationValue(n\NPCNameInSection, n\BoneToManipulate, "controlleraxis" + i + "_min", 2)
 								Offset = GetNPCManipulationValue(n\NPCNameInSection, n\BoneToManipulate, "controlleraxis" + i + "_offset", 2)
 								If GetNPCManipulationValue(n\NPCNameInSection, n\BoneToManipulate, "controlleraxis" + i + "_inverse", 3)
 									ToValue = (-DeltaYaw(Bone, Camera)) + Offset
@@ -7302,7 +7302,7 @@ End Function
 
 Function PlayerInReachableRoom(CanSpawnIn049Chamber% = False)
 	Local RN$ = PlayerRoom\RoomTemplate\Name
-	Local e.Events, Temp%
+	Local e.Events
 	
 	; ~ Player is in these rooms, returning false
 	If RN = "pocketdimension" Lor RN = "gatea" Lor RN = "dimension1499" Lor RN = "room173intro" Then
@@ -7367,9 +7367,11 @@ End Function
 Function ChangeNPCTextureID(n.NPCs, TextureID%) ; ~ Works only for Class D model
 	Local Temp#
 	
-	If (n = Null) Then
+	If n = Null Then
 		CreateConsoleMsg("Tried to change the texture of an invalid NPC")
-		ConsoleOpen = True
+		If CanOpenConsole And ConsoleOpening Then
+			ConsoleOpen = True
+		EndIf
 		Return
 	EndIf
 	

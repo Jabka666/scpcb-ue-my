@@ -512,7 +512,6 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 						rt\TempSoundEmitterX[j] = ReadFloat(f) * RoomScale
 						rt\TempSoundEmitterY[j] = ReadFloat(f) * RoomScale
 						rt\TempSoundEmitterZ[j] = ReadFloat(f) * RoomScale
-						
 						rt\TempSoundEmitter[j] = ReadInt(f)
 						
 						rt\TempSoundEmitterRange[j] = ReadFloat(f)
@@ -8422,7 +8421,7 @@ Function UpdateChunks(r.Rooms, ChunkPartAmount%, SpawnNPCs% = True)
 		For n.NPCs = Each NPCs
 			If n\NPCtype = NPCtype1499_1 Then
 				If n\PrevState = 0 Then
-					If EntityDistance(n\Collider, me\Collider) > ChunkMaxDistance Lor EntityY(n\Collider) < EntityY(PlayerRoom\obj) - 5 Then
+					If EntityDistance(n\Collider, me\Collider) > ChunkMaxDistance Lor EntityY(n\Collider) < EntityY(PlayerRoom\OBJ) - 5.0 Then
 						; ~ This will be updated like this so that new NPCs can spawn for the player
 						RemoveNPC(n)
 					EndIf
@@ -8647,5 +8646,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11C7
+;~B#11C6
 ;~C#Blitz3D

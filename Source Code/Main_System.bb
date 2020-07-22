@@ -4475,7 +4475,7 @@ Function DrawGUI()
 	CatchErrors("Uncaught (DrawGUI)")
 	
 	Local Temp%, x%, y%, z%, i%, YawValue#, PitchValue#
-	Local x1#, x2#, x3#, y2#, z2#, ProjY#, Scale#, Pvt%
+	Local x1#, x2#, x3#, y1#, y2#, y3#, z2#, ProjY#, Scale#, Pvt%
 	Local n%, xTemp%, yTemp%, StrTemp$
 	Local Width%, Height%
 	Local e.Events, it.Items
@@ -7466,7 +7466,7 @@ Function UpdateGUI()
 										For e.Events = Each Events
 											If e\EventName = "dimension1499" Then
 												If EntityDistance(e\room\OBJ, me\Collider) > 8300.0 * RoomScale Then
-													If e\EventState2 < 5 Then
+													If e\EventState2 < 5.0 Then
 														e\EventState2 = e\EventState2 + 1.0
 													EndIf
 												EndIf
@@ -11313,7 +11313,7 @@ Function Use294()
 	Else ; ~ Playing a dispensing sound
 		If I_294\ToInput <> "OUT OF RANGE" Then I_294\ToInput = "DISPENSING..."
 		
-		If Not ChannelPlaying(PlayerRoom\SoundCHN) Then
+		If (Not ChannelPlaying(PlayerRoom\SoundCHN)) Then
 			If I_294\ToInput <> "OUT OF RANGE" Then
 				HidePointer()
 				I_294\Using = False
@@ -11323,7 +11323,7 @@ Function Use294()
 				
 				For e.Events = Each Events
 					If e\room = PlayerRoom
-						e\EventState2 = 0
+						e\EventState2 = 0.0
 						Exit
 					EndIf
 				Next
@@ -12119,7 +12119,7 @@ Function UpdateLeave1499()
 	Local r.Rooms, it.Items, r2.Rooms, i%
 	Local r1499.Rooms
 	
-	If (Not I_1499\Using) And PlayerRoom\RoomTemplate\Name = "dimension1499" Then
+	If I_1499\Using = 0 And PlayerRoom\RoomTemplate\Name = "dimension1499" Then
 		For r.Rooms = Each Rooms
 			If r = I_1499\PrevRoom Then
 				me\BlinkTimer = -1.0

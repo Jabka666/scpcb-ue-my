@@ -2569,7 +2569,7 @@ Function UpdateEvents()
 									e\EventStr = Float(e\EventStr) + (fpst\FPSFactor[0] / 1000.0)
 									
 									If Float(e\EventStr) > 1.0 And Float(e\EventStr) < 1000.0 Then
-										PlaySound_Strict LoadTempSound("SFX\Room\PocketDimension\Kneel.ogg")
+										PlaySound_Strict(LoadTempSound("SFX\Room\PocketDimension\Kneel.ogg"))
 										LoadEventSound(e, "SFX\Room\PocketDimension\Screech.ogg")
 										e\EventStr = Float(1000.0)
 									EndIf
@@ -6047,7 +6047,7 @@ Function UpdateEvents()
 							RemoveEvent(e)
 						Else
 							If e\SoundCHN = 0 Then
-								e\SoundCHN = PlaySound_Strict (e\Sound)
+								e\SoundCHN = PlaySound_Strict(e\Sound)
 							Else
 								If ChannelPlaying(e\SoundCHN) = False Then e\SoundCHN = PlaySound_Strict(e\Sound)
 							EndIf
@@ -8276,7 +8276,7 @@ Function UpdateEvents()
 								e\room\RoomDoors[0]\Locked = True
 								e\room\RoomDoors[1]\Locked = True
 								If e\room\NPC[0]\Reload = 0.0
-									If (Not e\room\RoomDoors[0]\Open) Then PlaySound_Strict LoadTempSound("SFX\Door\DoorOpen079.ogg")
+									If (Not e\room\RoomDoors[0]\Open) Then PlaySound_Strict(LoadTempSound("SFX\Door\DoorOpen079.ogg"))
 									e\room\NPC[0]\Reload = 1.0
 								EndIf
 								If (Not e\room\RoomDoors[0]\Open)
@@ -9493,7 +9493,7 @@ Function UpdateEndings()
 											ElseIf e\EventState3 > 500.0
 												ShouldPlay = 0
 												me\CurrSpeed = 0.0
-												PlaySound_Strict LoadTempSound("SFX\Ending\GateB\Gunshot.ogg")
+												PlaySound_Strict(LoadTempSound("SFX\Ending\GateB\Gunshot.ogg"))
 												ClearCheats(chs)
 												me\LightFlash = 20.0
 												me\KillTimer = -0.1
@@ -9554,7 +9554,7 @@ Function UpdateEndings()
 											EndIf
 										EndIf
 									Else
-										HideEntity e\room\Objects[12]
+										HideEntity(e\room\Objects[12])
 									EndIf
 								EndIf
 							EndIf
@@ -9576,8 +9576,8 @@ Function UpdateEndings()
 						
 						; ~ Start shooting
 						If e\room\NPC[1] <> Null Then
-							If e\room\NPC[1]\State <> 1 Then
-								If (EntityDistance(e\room\NPC[1]\Collider, me\Collider) < 15.0) Lor EntityVisible(e\room\NPC[0]\Collider, me\Collider) And (Not chs\Notarget) Then
+							If e\room\NPC[1]\State <> 1.0 Then
+								If EntityDistance(e\room\NPC[1]\Collider, me\Collider) < 15.0 Lor EntityVisible(e\room\NPC[0]\Collider, me\Collider) And (Not chs\Notarget) Then
 									e\room\NPC[1]\State = 1.0
 									e\room\NPC[1]\State3 = 1.0
 								Else
@@ -9587,7 +9587,7 @@ Function UpdateEndings()
 							EndIf
 							
 							; ~ Stop shooting
-							If (EntityDistance(e\room\NPC[1]\Collider, me\Collider) < 8.9) Lor (EntityDistance(e\room\Objects[5], me\Collider) < 16.9) Lor chs\Notarget Then
+							If EntityDistance(e\room\NPC[1]\Collider, me\Collider) < 8.9 Lor EntityDistance(e\room\Objects[5], me\Collider) < 16.9 Lor chs\Notarget Then
 								e\room\NPC[1]\State = 0.0
 								e\room\NPC[1]\State3 = 0.0
 							Else
@@ -9618,7 +9618,7 @@ Function UpdateEndings()
 						
 						DrawLoading(30)
 						
-						For i = 0 To e\room\MaxLights
+						For i = 0 To e\room\MaxLights - 1
 							If e\room\LightSprites[i] <> 0 Then 
 								EntityFX(e\room\LightSprites[i], 1 + 8)
 							EndIf
@@ -9709,7 +9709,7 @@ Function UpdateEndings()
 						
 						RotateEntity(me\Collider, 0.0, EntityYaw(me\Collider) + (e\room\Angle + 180.0), 0.0)
 						
-						If (Not Curr106\Contained) Then PlaySound_Strict LoadTempSound("SFX\Ending\GateA\106Escape.ogg") 
+						If (Not Curr106\Contained) Then PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\106Escape.ogg"))
 						
 						DrawLoading(100)
 					Else
@@ -9842,7 +9842,7 @@ Function UpdateEndings()
 										Else
 											If Dist < 8.5 Then 
 												If e\EventState2 = 0
-													e\SoundCHN2 = PlaySound_Strict (LoadTempSound("SFX\Ending\GateA\HIDTurret.ogg"))
+													e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\HIDTurret.ogg"))
 													e\EventState2 = 1.0
 												ElseIf e\EventState2 > 0.0
 													e\EventState2 = e\EventState2 + fpst\FPSFactor[0]
