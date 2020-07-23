@@ -1173,12 +1173,12 @@ Function LoadGame(File$)
 	
 	For do.Doors = Each Doors
 		If do\room <> Null Then
-			Dist = 20.0
+			Dist = 400.0
 			
 			Local closestroom.Rooms
 			
 			For r.Rooms = Each Rooms
-				Dist2 = EntityDistance(r\OBJ, do\OBJ)
+				Dist2 = EntityDistanceSquared(r\OBJ, do\OBJ)
 				If Dist2 < Dist Then
 					Dist = Dist2
 					closestroom = r.Rooms
@@ -1876,12 +1876,12 @@ Function LoadGameQuick(File$)
 	
 	For do.Doors = Each Doors
 		If do\room <> Null Then
-			Dist = 20.0
+			Dist = 400.0
 			
 			Local closestroom.Rooms
 			
 			For r.Rooms = Each Rooms
-				Dist2 = EntityDistance(r\OBJ, do\OBJ)
+				Dist2 = EntityDistanceSquared(r\OBJ, do\OBJ)
 				If Dist2 < Dist Then
 					Dist = Dist2
 					closestroom = r.Rooms
@@ -1897,9 +1897,9 @@ Function LoadGameQuick(File$)
 	
 	If 0 Then 
 		closestroom = Null
-		Dist = 30.0
+		Dist = 900.0
 		For r.Rooms = Each Rooms
-			Dist2# = EntityDistance(r\OBJ, me\Collider)
+			Dist2# = EntityDistanceSquared(r\OBJ, me\Collider)
 			If Dist2 < Dist Then
 				Dist = Dist2
 				closestroom = r

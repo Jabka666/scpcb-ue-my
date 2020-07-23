@@ -2215,8 +2215,8 @@ Function UpdateDoors()
 					If d\Buttons[i] <> 0 Then
 						If Abs(EntityX(me\Collider) - EntityX(d\Buttons[i], True)) < 1.0 Then 
 							If Abs(EntityZ(me\Collider) - EntityZ(d\Buttons[i], True)) < 1.0 Then 
-								Dist = Distance(EntityX(me\Collider, True), EntityX(d\Buttons[i], True), EntityZ(me\Collider, True), EntityZ(d\Buttons[i], True))
-								If Dist < 0.7 Then
+								Dist = DistanceSquared(EntityX(me\Collider, True), EntityX(d\Buttons[i], True), EntityZ(me\Collider, True), EntityZ(d\Buttons[i], True))
+								If Dist < 0.49 Then
 									Local Temp% = CreatePivot()
 									
 									PositionEntity(Temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
@@ -2227,7 +2227,7 @@ Function UpdateDoors()
 											ClosestButton = d\Buttons[i]
 											ClosestDoor = d
 										Else
-											If Dist < EntityDistance(me\Collider, ClosestButton) Then ClosestButton = d\Buttons[i] : ClosestDoor = d
+											If Dist < EntityDistanceSquared(me\Collider, ClosestButton) Then ClosestButton = d\Buttons[i] : ClosestDoor = d
 										EndIf							
 									EndIf
 									FreeEntity(Temp)
@@ -2296,7 +2296,7 @@ Function UpdateDoors()
 						EndIf
 					EndIf
 					If d\AutoClose And RemoteDoorOn = True Then
-						If EntityDistance(Camera, d\OBJ) < 2.1 Then
+						If EntityDistanceSquared(Camera, d\OBJ) < 4.41 Then
 							If I_714\Using = 0 And wi\GasMask < 3 And wi\HazmatSuit < 3 Then PlaySound_Strict(HorrorSFX[7])
 							d\Open = False : d\SoundCHN = PlaySound2(CloseDoorSFX(Min(d\Dir, 1), Rand(0, 2)), Camera, d\OBJ) : d\AutoClose = False
 						EndIf
@@ -5454,12 +5454,11 @@ Function DrawGUI()
 								Line(x2, y2, x3, y3)
 							EndIf
 							
-							Local SCPs_Found% = 0
+							Local SCPs_Found% = 0, Dist#
 							
 							If SelectedItem\ItemTemplate\Name = "S-NAV Navigator Ultimate" And (MilliSecs() Mod 600.0) < 400.0 Then
 								If Curr173 <> Null Then
-									Local Dist# = EntityDistance(Camera, Curr173\OBJ)
-									
+									Dist = EntityDistance(Camera, Curr173\OBJ)
 									If Dist < 8.0 * 4.0 Then
 										Dist = Ceil(Dist / 8.0) * 8.0
 										Color(100, 0, 0)
@@ -7444,7 +7443,7 @@ Function UpdateGUI()
 										EndIf
 										For e.Events = Each Events
 											If e\EventName = "dimension1499" Then
-												If EntityDistance(e\room\OBJ, me\Collider) > 8300.0 * RoomScale Then
+												If EntityDistanceSquared(e\room\OBJ, me\Collider) > PowTwo(8300.0 * RoomScale) Then
 													If e\EventState2 < 5.0 Then
 														e\EventState2 = e\EventState2 + 1.0
 													EndIf
@@ -8074,7 +8073,7 @@ Function UpdateMenu()
 		If (PlayerRoom\RoomTemplate\Name <> "gateb" And EntityY(me\Collider) =< 1040.0 * RoomScale) And PlayerRoom\RoomTemplate\Name <> "gatea"
 			If StopHidingTimer = 0.0 Then
 				If Curr173 <> Null And Curr106 <> Null Then
-					If EntityDistance(Curr173\Collider, me\Collider) < 4.0 Lor EntityDistance(Curr106\Collider, me\Collider) < 4.0 Then 
+					If EntityDistanceSquared(Curr173\Collider, me\Collider) < 16.0 Lor EntityDistanceSquared(Curr106\Collider, me\Collider) < 16.0 Then 
 						StopHidingTimer = 1.0
 					EndIf	
 				EndIf
@@ -9984,10 +9983,10 @@ Function Use914(item.Items, Setting$, x#, y#, z#)
 					it2 = Null
 					For it.Items = Each Items
 						If it <> item And it\Collider <> 0 And it\Picked = False Then
-							If Distance(EntityX(it\Collider, True), EntityX(item\Collider, True), EntityZ(it\Collider, True), EntityZ(item\Collider, True)) < (180.0 * RoomScale) Then
+							If DistanceSquared(EntityX(it\Collider, True), EntityX(item\Collider, True), EntityZ(it\Collider, True), EntityZ(item\Collider, True)) < PowTwo(180.0 * RoomScale) Then
 								it2 = it
 								Exit
-							ElseIf Distance(EntityX(it\Collider, True), x, EntityZ(it\Collider, True), z) < (180.0 * RoomScale)
+							ElseIf DistanceSquared(EntityX(it\Collider, True), x, EntityZ(it\Collider, True), z) < PowTwo(180.0 * RoomScale)
 								it2 = it
 								Exit
 							EndIf
@@ -12354,5 +12353,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1090#132B#1DF5
+;~B#1090#132B#1DF4
 ;~C#Blitz3D

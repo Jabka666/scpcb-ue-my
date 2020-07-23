@@ -1546,7 +1546,7 @@ Function UpdateGrid(grid.Grids)
 End Function
 
 Function PlaceGrid_MapCreator(r.Rooms)
-	Local x%, y%, i%
+	Local x%, y%, i%, Dist#
 	Local Meshes[6]
 	Local dr.Doors, it.Items
 	
@@ -5806,7 +5806,7 @@ Function UpdateRooms()
 		If x < 16 And z < 16 Then
 			For i = 0 To MaxRoomEmitters - 1
 				If r\SoundEmitter[i] <> 0 Then 
-					If EntityDistance(r\SoundEmitterOBJ[i], me\Collider) < r\SoundEmitterRange[i] Then
+					If EntityDistanceSquared(r\SoundEmitterOBJ[i], me\Collider) < PowTwo(r\SoundEmitterRange[i]) Then
 						r\SoundEmitterCHN[i] = LoopSound2(RoomAmbience[r\SoundEmitter[i] - 1], r\SoundEmitterCHN[i], Camera, r\SoundEmitterOBJ[i], r\SoundEmitterRange[i])
 					EndIf
 				EndIf
@@ -6258,7 +6258,7 @@ Function FindPath(n.NPCs, x#, y#, z#)
 		For w.WayPoints = Each WayPoints
 			If w\State = 1 Then
                 Temp = True
-                If (w\Fcost) < Dist Then
+                If w\Fcost < Dist Then
 					Dist = w\Fcost
 					smallest = w
                 EndIf
@@ -6397,7 +6397,7 @@ Function UpdateScreens()
 	
 	For s.Screens = Each Screens
 		If s\room = PlayerRoom Then
-			If EntityDistance(me\Collider, s\OBJ) < 1.2 Then
+			If EntityDistanceSquared(me\Collider, s\OBJ) < 1.44 Then
 				EntityPick(Camera, 1.2)
 				If PickedEntity() = s\OBJ And s\ImgPath <> "" Then
 					DrawHandIcon = True
@@ -6743,7 +6743,7 @@ Function UpdateMonitorSaving()
 			EndIf
 			
 			If Close And GrabbedEntity = 0 And ClosestButton = 0 Then
-				If EntityInView(sc\ScrOBJ, Camera) And EntityDistance(sc\ScrOBJ, Camera) < 1.0 Then
+				If EntityInView(sc\ScrOBJ, Camera) And EntityDistanceSquared(sc\ScrOBJ, Camera) < 1.21 Then
 					If EntityVisible(sc\ScrOBJ, Camera) Then
 						DrawHandIcon = True
 						If MouseHit1 Then SelectedMonitor = sc
@@ -6775,10 +6775,10 @@ Function UpdateMonitorSaving()
 End Function
 
 Function UpdateLever(OBJ%, Locked% = False)
-	Local Dist# = EntityDistance(Camera, OBJ)
+	Local Dist# = EntityDistanceSquared(Camera, OBJ)
 	
-	If Dist < 8.0 Then 
-		If Dist < 0.8 And (Not Locked) Then 
+	If Dist < 64.0 Then 
+		If Dist < 0.64 And (Not Locked) Then 
 			If EntityInView(OBJ, Camera) Then 
 				EntityPick(Camera, 0.65)
 				
@@ -6827,9 +6827,9 @@ Function UpdateLever(OBJ%, Locked% = False)
 End Function
 
 Function UpdateButton(OBJ%)
-	Local Dist# = EntityDistance(me\Collider, OBJ)
+	Local Dist# = EntityDistanceSquared(me\Collider, OBJ)
 	
-	If Dist < 0.8 Then
+	If Dist < 0.64 Then
 		Local Temp% = CreatePivot()
 		
 		PositionEntity(Temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
@@ -6839,7 +6839,7 @@ Function UpdateButton(OBJ%)
 			If ClosestButton = 0 Then 
 				ClosestButton = OBJ
 			Else
-				If Dist < EntityDistance(me\Collider, ClosestButton) Then ClosestButton = OBJ
+				If Dist < EntityDistanceSquared(me\Collider, ClosestButton) Then ClosestButton = OBJ
 			EndIf							
 		EndIf
 		FreeEntity(Temp)
@@ -8020,7 +8020,7 @@ Function UpdateRoomLights(Cam%)
 						If UpdateRoomLightsTimer = 0.0 Then
 							ShowEntity(r\LightSprites[i])
 							
-							If EntityDistance(Cam, r\Lights[i]) < 8.5 Then
+							If EntityDistanceSquared(Cam, r\Lights[i]) < 72.25 Then
 								If (Not r\LightHidden[i]) Then
 									ShowEntity(r\Lights[i])
 									r\LightHidden[i] = True
@@ -8032,7 +8032,7 @@ Function UpdateRoomLights(Cam%)
 								EndIf
 							EndIf
 							
-							If EntityDistance(Cam, r\LightSprites2[i]) < 8.5 Then
+							If EntityDistanceSquared(Cam, r\LightSprites2[i]) < 72.25 Then
 								If EntityVisible(Cam, r\LightSpritesPivot[i]) Then
 									If r\LightSpriteHidden[i] Then
 										ShowEntity(r\LightSprites2[i])
@@ -8075,7 +8075,7 @@ Function UpdateRoomLights(Cam%)
 								EndIf
 							EndIf
 						Else
-							If EntityDistance(Cam, r\LightSprites2[i]) < 8.5 Then
+							If EntityDistanceSquared(Cam, r\LightSprites2[i]) < 72.25 Then
 								If PlayerRoom\RoomTemplate\Name = "room173intro" Then
 									Random = Rnd(0.38, 0.42)
 								Else
@@ -8377,7 +8377,7 @@ Function UpdateChunks(r.Rooms, ChunkPartAmount%, SpawnNPCs% = True)
 	
 	For ch.Chunk = Each Chunk
 		If (Not ch\IsSpawnChunk)
-			If Distance(EntityX(me\Collider), EntityX(ch\ChunkPivot), EntityZ(me\Collider), EntityZ(ch\ChunkPivot)) > ChunkMaxDistance
+			If DistanceSquared(EntityX(me\Collider), EntityX(ch\ChunkPivot), EntityZ(me\Collider), EntityZ(ch\ChunkPivot)) > PowTwo(ChunkMaxDistance)
 				FreeEntity(ch\ChunkPivot)
 				Delete(ch)
 			EndIf
@@ -8445,7 +8445,7 @@ Function UpdateChunks(r.Rooms, ChunkPartAmount%, SpawnNPCs% = True)
 		For n.NPCs = Each NPCs
 			If n\NPCtype = NPCtype1499_1 Then
 				If n\PrevState = 0 Then
-					If EntityDistance(n\Collider, me\Collider) > ChunkMaxDistance Lor EntityY(n\Collider) < EntityY(PlayerRoom\OBJ) - 5.0 Then
+					If EntityDistanceSquared(n\Collider, me\Collider) > PowTwo(ChunkMaxDistance) Lor EntityY(n\Collider) < EntityY(PlayerRoom\OBJ) - 5.0 Then
 						; ~ This will be updated like this so that new NPCs can spawn for the player
 						RemoveNPC(n)
 					EndIf
