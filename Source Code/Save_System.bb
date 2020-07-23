@@ -128,17 +128,13 @@ Function SaveGame(File$)
 	Next
 	WriteInt(f, me\RefinedItems)
 	
-	WriteInt(f, MapWidth)
-	WriteInt(f, MapHeight)
-	For Lvl = 0 To 0
-		For x = 0 To MapWidth
-			For y = 0 To MapHeight
-				WriteInt(f, MapTemp(x, y))
-				WriteByte(f, MapFound(x, y))
-			Next
+	For x = 0 To MapWidth
+		For y = 0 To MapHeight
+			WriteInt(f, MapTemp(x, y))
+			WriteByte(f, MapFound(x, y))
 		Next
 	Next
-	
+		
 	WriteInt(f, 113)
 	
 	Temp = 0
@@ -598,8 +594,6 @@ Function LoadGame(File$)
 	Next
 	me\RefinedItems = ReadInt(f)
 	
-	MapWidth = ReadInt(f)
-	MapHeight = ReadInt(f)
 	For x = 0 To MapWidth 
 		For y = 0 To MapHeight
 			MapTemp(x, y) = ReadInt(f)
@@ -893,8 +887,8 @@ Function LoadGame(File$)
 								ShouldSpawnDoor = True
 								;[End Block]
 						End Select
-						If ShouldSpawnDoor
-							If (x + 1) < (MapWidth + 1)
+						If ShouldSpawnDoor Then
+							If x + 1 < MapWidth + 1
 								If MapTemp(x + 1, y) > 0 Then
 									do.Doors = CreateDoor(r\Zone, Float(x) * Spacing + Spacing / 2.0, 0.0, Float(y) * Spacing, 90.0, r, Max(Rand(-3, 1), 0), Temp)
 									r\AdjDoor[0] = do
@@ -1437,8 +1431,6 @@ Function LoadGameQuick(File$)
 	Next
 	me\RefinedItems = ReadInt(f)
 	
-	MapWidth = ReadInt(f)
-	MapHeight = ReadInt(f)
 	For x = 0 To MapWidth
 		For y = 0 To MapHeight
 			MapTemp(x, y) = ReadInt(f)

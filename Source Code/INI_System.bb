@@ -365,10 +365,6 @@ Global CameraFogNear# = GetINIFloat(OptionFile, "Global", "Camera Fog Near")
 
 Global CameraFogFar# = GetINIFloat(OptionFile, "Global", "Camera Fog Far")
 
-Global MapWidth% = GetINIInt(OptionFile, "Global", "Map Size")
-
-Global MapHeight% = GetINIInt(OptionFile, "Global", "Map Size")
-
 Global IntroEnabled% = GetINIInt(OptionFile, "Global", "Enable Intro")
 
 Function SaveOptionsINI(SaveGlobal% = False)
@@ -464,10 +460,6 @@ Function SaveOptionsINI(SaveGlobal% = False)
 		PutINIValue(OptionFile, "Global", "Camera Fog Near", CameraFogNear)
 		
 		PutINIValue(OptionFile, "Global", "Camera Fog Far", CameraFogFar)
-		
-		PutINIValue(OptionFile, "Global", "Map Size", MapWidth)
-		
-		PutINIValue(OptionFile, "Global", "Map Size", MapHeight)
 		
 		PutINIValue(OptionFile, "Global", "Enable Intro", IntroEnabled)
 	EndIf
@@ -568,10 +560,6 @@ Function ResetOptionsINI()
 	CameraFogNear = 0.1
 	
 	CameraFogFar = 6.0
-	
-	MapWidth = 18
-	
-	MapHeight = 18
 	
 	IntroEnabled = 1
 End Function

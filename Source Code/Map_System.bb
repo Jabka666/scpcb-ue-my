@@ -1452,6 +1452,8 @@ End Function
 
 LoadRoomTemplates("Data\rooms.ini")
 
+Const MapWidth% = 18, MapHeight% = 18
+
 Dim MapTemp%(MapWidth + 1, MapHeight + 1)
 Dim MapFound%(MapWidth + 1, MapHeight + 1)
 
@@ -8335,9 +8337,11 @@ Function CreateChunk.Chunk(OBJ%, x#, y#, z#, IsSpawnChunk% = False)
 	Return(ch)
 End Function
 
+Const ChunkMaxDistance# = 40.0 * 3.0
+
 Function UpdateChunks(r.Rooms, ChunkPartAmount%, SpawnNPCs% = True)
 	Local ch.Chunk, StrTemp$, i%, x#, z#, ch2.Chunk, y#, n.NPCs, j%
-	Local ChunkX#, ChunkZ#, ChunkMaxDistance# = 3.0 * 40.0
+	Local ChunkX#, ChunkZ#
 	
 	ChunkX = Int(EntityX(me\Collider) / 40.0)
 	ChunkZ = Int(EntityZ(me\Collider) / 40.0)
@@ -8666,5 +8670,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11DA
+;~B#11DC
 ;~C#Blitz3D
