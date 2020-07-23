@@ -24,7 +24,7 @@ Type NPCs
 	Field PrevX#, PrevY#, PrevZ#
 	Field Target.NPCs, TargetID%
 	Field EnemyX#, EnemyY#, EnemyZ#
-	Field Path.WayPoints[20], PathStatus%, PathTimer#, PathLocation%
+	Field Path.WayPoints[21], PathStatus%, PathTimer#, PathLocation%
 	Field NVX#, NVY#, NVZ#, NVName$
 	Field GravityMult# = 1.0
 	Field MaxGravity# = 0.2
