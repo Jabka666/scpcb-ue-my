@@ -64,7 +64,7 @@ Function GetINIString$(File$, Section$, Parameter$, DefaultValue$ = "")
 	Next
 	
 	If lfile = Null Then
-		lfile = New INIFile
+		lfile.INIFile = New INIFile
 		lfile\Name = Lower(File)
 		lfile\Bank = 0
 		UpdateINIFile(lfile\Name)
@@ -179,8 +179,8 @@ Function PutINIValue%(File$, INI_sSection$, INI_sKey$, INI_sValue$)
 	
 	Local INI_sUpperSection$ = Upper(INI_sSection)
 	
-	INI_sKey = Trim$(INI_sKey)
-	INI_sValue = Trim$(INI_sValue)
+	INI_sKey = Trim(INI_sKey)
+	INI_sValue = Trim(INI_sValue)
 	
 	Local INI_sFilename$ = File
 	; ~ Retrieve the INI data (if it exists)
@@ -196,7 +196,7 @@ Function PutINIValue%(File$, INI_sSection$, INI_sKey$, INI_sValue$)
 	Local INI_lOldPos% = 1
 	Local INI_lPos% = Instr(INI_sContents, Chr(0))
 	
-	While (INI_lPos <> 0)
+	While INI_lPos <> 0
 		Local INI_sTemp$ = Mid(INI_sContents, INI_lOldPos, (INI_lPos - INI_lOldPos))
 		
 		If INI_sTemp <> "" Then
@@ -262,6 +262,8 @@ Function INI_CreateKey%(INI_lFileHandle%, INI_sKey$, INI_sValue$)
 	WriteLine(INI_lFileHandle, INI_sKey + " = " + INI_sValue)
 	Return(True)
 End Function
+
+Const OptionFile$ = "Data\options.ini"
 
 ; ~ [GRAPHICS]
 

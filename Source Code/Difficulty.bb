@@ -15,6 +15,12 @@ Global difficulties.Difficulty[4]
 
 Global SelectedDifficulty.Difficulty
 
+Const SAFE% = 0, EUCLID% = 1, KETER% = 2, ESOTERIC% = 3
+
+Const SAVEANYWHERE% = 0, SAVEONQUIT% = 1, SAVEONSCREENS% = 2
+
+Const EASY% = 0, NORMAL% = 1, HARD% = 2
+
 difficulties[SAFE] = New Difficulty
 difficulties[SAFE]\Name = "Safe"
 difficulties[SAFE]\Description = "The game can be saved any time. However, as in the case of SCP Objects, a Safe classification does not mean that handling it does not pose a threat."

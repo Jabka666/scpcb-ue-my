@@ -148,6 +148,9 @@ Type Stream
 	Field CHN%
 End Type
 
+Const Mode% = 2
+Const TwoD% = 8192
+
 Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode% = Mode)
 	If FileType(File) <> 1 Then
 		CreateConsoleMsg("Sound " + Chr(34) + File + Chr(34) + " not found.")

@@ -1,6 +1,9 @@
 Global BurntNote%
 
 Global ItemAmount%
+
+Const MaxItemAmount% = 10
+
 Global Inventory.Items[MaxItemAmount + 1]
 Global InvSelect%, SelectedItem.Items
 
@@ -94,6 +97,8 @@ Function CreateItemTemplate.ItemTemplates(Name$, TempName$, OBJPath$, InvImgPath
 	
 	Return(it)
 End Function
+
+Const ItemsPath$ = "GFX\items\"
 
 Function InitItemTemplates()
 	Local it.ItemTemplates, it2.ItemTemplates

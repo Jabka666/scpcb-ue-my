@@ -13,6 +13,9 @@ Include "Source Code\StrictLoads.bb"
 Include "Source Code\Keys_System.bb"
 Include "Source Code\INI_System.bb"
 
+Const MaxFontIDAmount% = 5
+Const MaxCreditsFontIDAmount% = 2
+
 Type Fonts
 	Field FontID%[MaxFontIDAmount]
 	Field ConsoleFont%
@@ -144,7 +147,7 @@ Global CursorIMG% = LoadImage_Strict("GFX\cursor.png")
 
 Global SelectedLoadingScreen.LoadingScreens, LoadingScreenAmount%, LoadingScreenText%
 Global LoadingBack% = LoadImage_Strict("LoadingScreens\loading_back.png")
-InitLoadingScreens(LoadingScreensFile)
+InitLoadingScreens("LoadingScreens\loading_screens.ini")
 
 ; ~ For some reason, Blitz3D doesn't load fonts that have filenames that
 ; ~ Don't match their "internal name" (i.e. their display name in applications like Word and such)
@@ -265,6 +268,8 @@ Global SoundTransmission%
 Global MainMenuOpen%, MenuOpen%, StopHidingTimer#, InvOpen%
 Global OtherOpen.Items = Null
 
+Const SubjectName$ = "Subject D-9341"
+
 Type Messages
 	Field Msg$
 	Field Timer#
@@ -288,6 +293,16 @@ Global RadioState3%[9]
 Global RadioState4%[10]
 Global RadioCHN%[7]
 
+Const MaxMiscTextureIDAmount% = 18
+Const MaxMonitorTextureIDAmount% = 5
+Const MaxOverlayTextureIDAmount% = 12
+Const MaxOverlayIDAmount% = 12
+Const MaxDecalTextureIDAmount% = 20
+Const MaxParticleTextureIDAmount% = 9
+Const MaxLightSpriteIDAmount% = 3
+Const MaxIconIDAmount% = 6
+Const MaxImageIDAmount% = 13
+
 Type TextureTemplate
 	Field MiscTextureID%[MaxMiscTextureIDAmount]
 	Field MonitorTextureID%[MaxMonitorTextureIDAmount]
@@ -301,6 +316,15 @@ Type TextureTemplate
 End Type
 
 Global tt.TextureTemplate = New TextureTemplate
+
+Const MaxMTModelIDAmount% = 7
+Const MaxMonitorModelIDAmount% = 3
+Const MaxDoorModelIDAmount% = 11
+Const MaxButtonModelIDAmount% = 5
+Const MaxLeverModelIDAmount% = 2
+Const MaxCamModelIDAmount% = 2
+Const MaxMiscModelIDAmount% = 1
+Const MaxNPCModelIDAmount% = 34
 
 Type Objects
 	Field DoorModelID%[MaxDoorModelIDAmount]
@@ -2678,6 +2702,8 @@ Include "Source Code\NPCs_System.bb"
 
 Include "Source Code\Events_System.bb"
 
+Const HIT_MAP% = 1, HIT_PLAYER% = 2, HIT_ITEM% = 3, HIT_APACHE% = 4, HIT_178% = 5, HIT_DEAD% = 6
+
 Collisions(HIT_PLAYER, HIT_MAP, 2, 2)
 Collisions(HIT_PLAYER, HIT_PLAYER, 1, 3)
 Collisions(HIT_ITEM, HIT_MAP, 2, 2)
@@ -2874,6 +2900,18 @@ Repeat
 		Flip(1)
 	EndIf
 Forever
+
+Const FogColorLCZ$ = "010010010"
+Const FogColorHCZ$ = "010006006"
+Const FogColorEZ$ = "010010020"
+Const FogColorStorageTunnels$ = "005015003"
+Const FogColorOutside$ = "255255255"
+Const FogColorDimension1499$ = "096097104"
+Const FogColorPD$ = "000000000"
+Const FogColorPDTrench$ = "038055047"
+Const FogColorForest$ = "098133162"
+
+Const TICK_DURATION# = 70.0 / 60.0
 
 Function MainLoop()
 	Local e.Events, r.Rooms, i%
@@ -4470,6 +4508,12 @@ Function MouseLook()
 		EndIf
 	Next
 End Function
+
+Const NAV_WIDTH% = 287
+Const NAV_HEIGHT% = 256
+
+Const INVENTORY_GFX_SIZE% = 70
+Const INVENTORY_GFX_SPACING% = 35
 
 Function DrawGUI()
 	CatchErrors("Uncaught (DrawGUI)")
@@ -8568,6 +8612,8 @@ End Function
 
 Include "Source Code\Sound_System.bb"
 
+Const MaterialsFile$ = "Data\materials.ini"
+
 Function LoadEntities()
 	CatchErrors("Uncaught (LoadEntities)")
 	
@@ -12308,5 +12354,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#106A#12FF#1DC9
+;~B#1090#132B#1DF5
 ;~C#Blitz3D

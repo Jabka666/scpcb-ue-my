@@ -2,6 +2,8 @@ Include "Source Code\Materials_System.bb"
 
 Include "Source Code\Texture_Cache_System.bb"
 
+Const RoomScale# = 8.0 / 2048.0
+
 Function LoadWorld(File$, rt.RoomTemplates)
 	Local Map% = LoadAnimMesh_Strict(File)
 	
@@ -658,6 +660,8 @@ Function KeyValue$(Entity, Key$, DefaultValue$ = "")
 	Forever 
 End Function
 
+Const GridSize% = 10
+
 Type Forest
 	Field TileMesh%[6]
 	Field DetailMesh%[6]
@@ -669,6 +673,14 @@ Type Forest
 	Field DetailEntities%[2]
 	Field ID%
 End Type
+
+Const Deviation_Chance% = 40 ; ~ Out of 100
+Const Branch_Chance% = 65
+Const Branch_Max_Life% = 4
+Const Branch_Die_Chance% = 18
+Const Max_Deviation_Distance% = 3
+Const Return_Chance% = 27
+Const Center% = 5
 
 Function GenForestGrid(fr.Forest)
 	CatchErrors("Uncaught (GenForestGrid)")
@@ -828,6 +840,8 @@ Function GenForestGrid(fr.Forest)
 	
 	CatchErrors("GenForestGrid")
 End Function
+
+Const ROOM1% = 1, ROOM2% = 2, ROOM2C% = 3, ROOM3% = 4, ROOM4% = 5
 
 Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 	CatchErrors("Uncaught (PlaceForest)")
@@ -1436,7 +1450,7 @@ Function LoadRoomMesh(rt.RoomTemplates)
 	HideEntity(rt\OBJ)
 End Function
 
-LoadRoomTemplates(RoomsFile)
+LoadRoomTemplates("Data\rooms.ini")
 
 Dim MapTemp%(MapWidth + 1, MapHeight + 1)
 Dim MapFound%(MapWidth + 1, MapHeight + 1)
@@ -1450,6 +1464,10 @@ Global HideDistance# = 15.0
 Global SecondaryLightOn# = True
 Global PrevSecondaryLightOn# = True
 Global RemoteDoorOn% = True
+
+Const MaxRoomLights% = 32
+Const MaxRoomEmitters% = 8
+Const MaxRoomObjects% = 30
 
 Type Rooms
 	Field Zone%
@@ -1493,6 +1511,8 @@ Type Rooms
 	Field MinX#, MinY#, MinZ#
 	Field MaxX#, MaxY#, MaxZ#
 End Type 
+
+Const GridSZ% = 19 ; ~ Same size as the main map itself (better for the map creator)
 
 Type Grids
 	Field Grid%[GridSZ * GridSZ]
@@ -8646,5 +8666,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11C6
+;~B#11DA
 ;~C#Blitz3D

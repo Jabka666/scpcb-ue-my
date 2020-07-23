@@ -50,6 +50,17 @@ LoadSaveGames()
 
 Global CurrLoadGamePage% = 0
 
+Const VersionNumber$ = "1.0.0"
+
+Const MainMenuTab_Default% = 0
+Const MainMenuTab_New_Game% = 1
+Const MainMenuTab_Load_Game% = 2
+Const MainMenuTab_Options_Graphics% = 3
+Const MainMenuTab_Load_Map% = 4
+Const MainMenuTab_Options_Audio% = 5
+Const MainMenuTab_Options_Controls% = 6
+Const MainMenuTab_Options_Advanced% = 7
+
 Function UpdateMainMenu()
 	Local x%, y%, Width%, Height%, Temp%, i%, n%, j%
 	Local Dir%, File$, Test%
@@ -1588,6 +1599,9 @@ Function RenderMainMenu()
 	RenderMenuSlideBars()
 	RenderMenuSliders()
 End Function
+
+Const LauncherWidth% = 640
+Const LauncherHeight% = 480
 
 Function UpdateLauncher(lnchr.Launcher)
 	Local i%, n%

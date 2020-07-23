@@ -1,3 +1,5 @@
+Const MAXACHIEVEMENTS% = 41
+
 Global Achievements%[MAXACHIEVEMENTS]
 
 Global UsedConsole%
@@ -6,6 +8,16 @@ Global AchievementsMenu%
 Global AchievementStrings$[MAXACHIEVEMENTS]
 Global AchievementDescs$[MAXACHIEVEMENTS]
 Global AchvIMG%[MAXACHIEVEMENTS]
+
+Const Achv005% = 0, Achv008% = 1, Achv012% = 2, Achv035% = 3, Achv049% = 4, Achv055% = 5,  Achv079% = 6, Achv096% = 7, Achv106% = 8
+Const Achv148% = 9, Achv205% = 10, Achv294% = 11, Achv372% = 12, Achv409% = 13, Achv420J% = 14, Achv427% = 15, Achv500% = 16, Achv513% = 17
+Const Achv714% = 18, Achv789J% = 19, Achv860% = 20, Achv895% = 21, Achv914% = 22, Achv939% = 23, Achv966% = 24, Achv970% = 25
+Const Achv1025% = 26, Achv1048% = 27, Achv1123% = 28, Achv1162% = 29, Achv1499% = 30
+
+Const AchvConsole% = 31, AchvHarp% = 32, AchvKeter% = 33, AchvKeyCard6% = 34, AchvMaynard% = 35, AchvOmni% = 36
+Const AchvO5% = 37, AchvPD% = 38, AchvSNAV% = 39, AchvTesla% = 40
+
+Const AchievementsFile$ = "Data\achievements.ini"
 
 For i = 0 To MAXACHIEVEMENTS - 1
 	Local Loc2% = GetINISectionLocation(AchievementsFile, "s" + Str(i))
