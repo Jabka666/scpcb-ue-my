@@ -3911,24 +3911,26 @@ Function MovePlayer()
 	
 	Local Temp#
 	
-	If PlayerRoom\RoomTemplate\Name <> "pocketdimension" Then 
-		If KeyDown(key\SPRINT) And (Not chs\NoClip) Then
-			If me\Stamina < 5.0 Then
-				Temp = 0.0
-				If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp = 1
-				If ChannelPlaying(BreathCHN) = False Then BreathCHN = PlaySound_Strict(BreathSFX((Temp), 0))
-			ElseIf me\Stamina < 40.0
-				If BreathCHN = 0 Then
+	If me\KillTimer >= 0.0 Then
+		If PlayerRoom\RoomTemplate\Name <> "pocketdimension" Then 
+			If KeyDown(key\SPRINT) And (Not chs\NoClip) Then
+				If me\Stamina < 5.0 Then
 					Temp = 0.0
 					If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp = 1
-					BreathCHN = PlaySound_Strict(BreathSFX((Temp), Rand(1, 3)))
-					ChannelVolume(BreathCHN, Min((70.0 - me\Stamina) / 70.0, 1.0) * SFXVolume)
-				Else
-					If ChannelPlaying(BreathCHN) = False Then
+					If ChannelPlaying(BreathCHN) = False Then BreathCHN = PlaySound_Strict(BreathSFX((Temp), 0))
+				ElseIf me\Stamina < 40.0
+					If BreathCHN = 0 Then
 						Temp = 0.0
 						If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp = 1
 						BreathCHN = PlaySound_Strict(BreathSFX((Temp), Rand(1, 3)))
-						ChannelVolume(BreathCHN, Min((70.0 - me\Stamina) / 70.0, 1.0) * SFXVolume)		
+						ChannelVolume(BreathCHN, Min((70.0 - me\Stamina) / 70.0, 1.0) * SFXVolume)
+					Else
+						If ChannelPlaying(BreathCHN) = False Then
+							Temp = 0.0
+							If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp = 1
+							BreathCHN = PlaySound_Strict(BreathSFX((Temp), Rand(1, 3)))
+							ChannelVolume(BreathCHN, Min((70.0 - me\Stamina) / 70.0, 1.0) * SFXVolume)		
+						EndIf
 					EndIf
 				EndIf
 			EndIf
@@ -4352,10 +4354,12 @@ Function MouseLook()
 				me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fpst\FPSFactor[0])
 			EndIf
 		EndIf
-		If ChannelPlaying(BreathCHN) = False Then
-			If ChannelPlaying(BreathGasRelaxedCHN) = False Then BreathGasRelaxedCHN = PlaySound_Strict(BreathGasRelaxedSFX)
-		Else
-			If ChannelPlaying(BreathGasRelaxedCHN) = True Then StopChannel(BreathGasRelaxedCHN)
+		If me\KillTimer >= 0.0 Then
+			If ChannelPlaying(BreathCHN) = False Then
+				If ChannelPlaying(BreathGasRelaxedCHN) = False Then BreathGasRelaxedCHN = PlaySound_Strict(BreathGasRelaxedSFX)
+			Else
+				If ChannelPlaying(BreathGasRelaxedCHN) = True Then StopChannel(BreathGasRelaxedCHN)
+			EndIf
 		EndIf
 		
 		ShowEntity(tt\OverlayID[1])
@@ -9492,7 +9496,7 @@ Function InitLoadGame()
 	ResetInput()
 End Function
 
-Function NullGame(PlayButtonSFX% = True) ; ~ CHECK WHAT IS WRONG HERE!
+Function NullGame(PlayButtonSFX% = True)
 	CatchErrors("Uncaught (NullGame)")
 	
 	Local i%, x%, y%, Lvl%
@@ -9720,7 +9724,7 @@ Function NullGame(PlayButtonSFX% = True) ; ~ CHECK WHAT IS WRONG HERE!
 		rt\OBJ = 0
 	Next
 	
-	For i = 0 To 5
+	For i = 0 To 6
 		If ChannelPlaying(RadioCHN[i]) Then StopChannel(RadioCHN[i])
 	Next
 	
@@ -12353,5 +12357,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1090#132B#1DF4
+;~B#1092#132F#1DF8
 ;~C#Blitz3D
