@@ -11,7 +11,9 @@ Global ResHeight% = 560
 Global ResFactor# = ResHeight / 768.0
 
 Graphics3D(ResWidth, ResHeight, 0, 2)
-HHWND = api_GetActiveWindow() ; ~ User32.dll
+
+Local HHWND% = api_GetActiveWindow() ; ~ User32.dll
+
 api_ShowWindow(HHWND, 0) ; ~ User32.dll
 SetBuffer(BackBuffer())
 
@@ -65,26 +67,23 @@ Global MenuOpen% = True
 Const ROOM1% = 1, ROOM2% = 2, ROOM2C% = 3, ROOM3% = 4, ROOM4% = 5
 
 Global Font1% = LoadFont("..\GFX\font\cour\Courier New.ttf", 16)
+Global ConsoleFont% = LoadFont("..\GFX\font\Andale\Andale Mono.ttf", 16)
 
 Global RoomTempID%
 
-Const RoomsFile$ = "..\Data\rooms.ini"
+LoadRoomTemplates("..\Data\rooms.ini")
 
-LoadRoomTemplates(RoomsFile)
-
-Const MaterialsFile$ = "..\Data\materials.ini"
-
-LoadMaterials(MaterialsFile)
+LoadMaterials("..\Data\materials.ini")
 
 Const RoomScale# = 8.0 / 2048.0
 
-Global MapWidth% = GetINIInt(OptionFile, "Global", "Map Size"), MapHeight% = GetINIInt(OptionFile, "Global", "Map Size")
+Const MapWidth% = 18
+Const MapHeight% = 18
 
 Dim MapTemp%(MapWidth + 1, MapHeight + 1)
 Dim MapFound%(MapWidth, MapHeight)
 
 Dim MapName$(MapWidth, MapHeight)
-Dim MapRoomID%(ROOM4 + 1)
 Dim MapRoom$(ROOM4 + 1, 0)
 
 Global ZoneTransValue1% = 13, ZoneTransValue2% = 7
@@ -188,8 +187,9 @@ Repeat
 		Else
 			For d.Doors = Each Doors
 				FreeEntity(d\FrameOBJ)
-				FreeEntity(d\Buttons[0])
-				FreeEntity(d\Buttons[1])
+				For i = 0 To 1
+					FreeEntity(d\Buttons[i])
+				Next
 				FreeEntity(d\OBJ)
 				FreeEntity(d\OBJ2)
 				Delete(d)
@@ -257,8 +257,8 @@ Repeat
 							r\GridZ = y
 							
 							r\Angle = Angle
-							If r\Angle <> 90 And r\Angle <> 270 Then
-								r\Angle = r\Angle + 180
+							If r\Angle <> 90.0 And r\Angle <> 270.0 Then
+								r\Angle = r\Angle + 180.0
 							EndIf
 							r\Angle = WrapAngle(r\Angle)
 							
@@ -440,14 +440,16 @@ Repeat
 				HideEntity(d\FrameOBJ)
 				HideEntity(d\OBJ)
 				HideEntity(d\OBJ2)
-				HideEntity(d\Buttons[0])
-				HideEntity(d\Buttons[1])
+				For i = 0 To 1
+					HideEntity(d\Buttons[i])
+				Next
 			Else
 				ShowEntity(d\FrameOBJ)
 				ShowEntity(d\OBJ)
 				ShowEntity(d\OBJ2)
-				ShowEntity(d\Buttons[0])
-				ShowEntity(d\Buttons[1])
+				For i = 0 To 1
+					ShowEntity(d\Buttons[i])
+				Next
 			EndIf
 		Next
 		
@@ -524,7 +526,7 @@ Repeat
 	RenderWorld(1.0 - Max(Min(ElapsedTime, 0.0), -1.0))
 	
 	If (Not IsRemote) Then
-		SetFont(Font1)
+		SetFont(ConsoleFont)
 		If ShowFPS Then
 			Color(0, 0, 0)
 			Rect(2, 2, StringWidth("FPS: " + FPS), StringHeight("FPS: " + FPS))
@@ -702,7 +704,7 @@ Function LoadRoomTemplateMeshes()
 		EndIf
 	Next
 	
-	Local hMap%[ROOM4], Mask%[ROOM4]
+	Local hMap%[6], Mask%[6]
 	Local GroundTexture% = LoadTexture("GFX\map\forest\forestfloor.jpg")
 	Local PathTexture% = LoadTexture("GFX\map\forest\forestpath.jpg")
 	
@@ -1412,7 +1414,7 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 				;[Block]
 				File = ReadString(f)
 				If File <> "" Then
-					Local Model% = CreatePropObj("GFX\Map\Props\" + File)
+					Local Model% = CreatePropObj("GFX\map\Props\" + File)
 					
 					Temp1 = ReadFloat(f) : Temp2 = ReadFloat(f) : Temp3 = ReadFloat(f)
 					PositionEntity(Model, Temp1, Temp2, Temp3)
@@ -1571,46 +1573,51 @@ End Function
 Function PutINIValue%(INI_sAppName$, INI_sSection$, INI_sKey$, INI_sValue$)
 	; ~ Returns: True (Success) or False (Failed)
 	INI_sSection = "[" + Trim(INI_sSection) + "]"
-	INI_sUpperSection$ = Upper(INI_sSection)
+	
+	Local INI_sUpperSection$ = Upper(INI_sSection)
+	
 	INI_sKey = Trim(INI_sKey)
 	INI_sValue = Trim(INI_sValue)
-	INI_sFilename$ = CurrentDir() + "\" + INI_sAppName
 	
+	Local INI_sFilename$ = INI_sAppName
 	; ~ Retrieve the INI data (if it exists)
-	
-	INI_sContents$ = INI_FileToString(INI_sFilename)
-	
+	Local INI_sContents$ = INI_FileToString(INI_sFilename)
 	; ~ (Re)Create the INI file updating / adding the SECTION, KEY and VALUE
+	Local INI_bWrittenKey% = False
+	Local INI_bSectionFound% = False
+	Local INI_sCurrentSection$ = ""
+	Local INI_lFileHandle% = WriteFile(INI_sFilename)
 	
-	INI_bWrittenKey = False
-	INI_bSectionFound = False
-	INI_sCurrentSection$ = ""
-	
-	INI_lFileHandle = WriteFile(INI_sFilename)
 	If INI_lFileHandle = 0 Then Return(False) ; ~ Create file failed!
 	
-	INI_lOldPos = 1
-	INI_lPos = Instr(INI_sContents, Chr(0))
+	Local INI_lOldPos% = 1
+	Local INI_lPos% = Instr(INI_sContents, Chr(0))
 	
 	While INI_lPos <> 0
-		INI_sTemp$ = Trim(Mid(INI_sContents, INI_lOldPos, (INI_lPos - INI_lOldPos)))
+		Local INI_sTemp$ = Trim(Mid(INI_sContents, INI_lOldPos, (INI_lPos - INI_lOldPos)))
 		
 		If INI_sTemp <> "" Then
 			If Left(INI_sTemp, 1) = "[" And Right(INI_sTemp, 1) = "]" Then
 				; ~ Process SECTION
 				If INI_sCurrentSection = INI_sUpperSection And INI_bWrittenKey = False Then
 					INI_bWrittenKey = INI_CreateKey(INI_lFileHandle, INI_sKey, INI_sValue)
-				End If
+				EndIf
 				INI_sCurrentSection = Upper(INI_CreateSection(INI_lFileHandle, INI_sTemp))
 				If INI_sCurrentSection = INI_sUpperSection Then INI_bSectionFound = True
 			Else
-				lEqualsPos = Instr(INI_sTemp, "=")
-				If lEqualsPos <> 0 Then
-					If (INI_sCurrentSection = INI_sUpperSection) And (Upper(Trim(Left(INI_sTemp, (lEqualsPos - 1)))) = Upper(INI_sKey)) Then
-						If (INI_sValue <> "") Then INI_CreateKey(INI_lFileHandle, INI_sKey, INI_sValue)
-						INI_bWrittenKey = True
-					Else
-						WriteLine(INI_lFileHandle, INI_sTemp)
+				If Left(INI_sTemp, 1) = ":" Then
+					WriteLine(INI_lFileHandle, INI_sTemp)
+				Else
+					Local lEqualsPos% = Instr(INI_sTemp, "=")
+					
+					; ~ KEY = VALUE	
+					If lEqualsPos <> 0 Then
+						If (INI_sCurrentSection = INI_sUpperSection) And (Upper(Trim(Left(INI_sTemp, (lEqualsPos - 1)))) = Upper(INI_sKey)) Then
+							If (INI_sValue <> "") Then INI_CreateKey(INI_lFileHandle, INI_sKey, INI_sValue)
+							INI_bWrittenKey = True
+						Else
+							WriteLine(INI_lFileHandle, INI_sTemp)
+						EndIf
 					EndIf
 				EndIf
 			EndIf
@@ -1633,14 +1640,15 @@ Function PutINIValue%(INI_sAppName$, INI_sSection$, INI_sKey$, INI_sValue$)
 End Function
 
 Function INI_FileToString$(INI_sFilename$)
-	INI_sString$ = ""
-	INI_lFileHandle = ReadFile(INI_sFilename)
+	Local INI_sString$ = ""
+	Local INI_lFileHandle% = ReadFile(INI_sFilename)
+	
 	If INI_lFileHandle <> 0 Then
 		While (Not(Eof(INI_lFileHandle)))
 			INI_sString = INI_sString + ReadLine(INI_lFileHandle) + Chr(0)
 		Wend
 		CloseFile(INI_lFileHandle)
-	End If
+	EndIf
 	Return(INI_sString)
 End Function
 
@@ -1760,13 +1768,11 @@ Function rInput$(aString$)
 End Function
 
 Function WrapAngle#(Angle#)
-	While Angle < 0.0
-		Angle = Angle + 360.0
-	Wend 
-	While Angle >= 360.0
-		Angle = Angle - 360.0
-	Wend
-	Return(Angle)
+	If Angle < 0.0 Then
+		Return(360.0 + (Angle Mod 360.0))
+	Else
+		Return(Angle Mod 360.0)
+	EndIf
 End Function
 
 Type Doors
@@ -1791,12 +1797,12 @@ Function CreateDoor.Doors(x#, y#, z#, Angle#, room.Rooms, Big% = False)
 		d\FrameOBJ = CopyEntity(Door_Frame)
 	Else
 		d\OBJ = CopyEntity(Door_LCZ)
-		ScaleEntity(d\OBJ, (204.0 * RoomScale) / MeshWidth(d\OBJ), 313.0 * RoomScale / MeshHeight(d\OBJ), 16.0 * RoomScale / MeshDepth(d\OBJ))
+		ScaleEntity(d\OBJ, (203.0 * RoomScale) / MeshWidth(d\OBJ), 313.0 * RoomScale / MeshHeight(d\OBJ), 16.0 * RoomScale / MeshDepth(d\OBJ))
 		
 		d\FrameOBJ = CopyEntity(Door_Frame)
 		d\OBJ2 = CopyEntity(Door_LCZ)
 		
-		ScaleEntity(d\OBJ2, (204.0 * RoomScale) / MeshWidth(d\OBJ2), 313.0 * RoomScale / MeshHeight(d\OBJ2), 16.0 * RoomScale / MeshDepth(d\OBJ2))
+		ScaleEntity(d\OBJ2, (203.0 * RoomScale) / MeshWidth(d\OBJ2), 313.0 * RoomScale / MeshHeight(d\OBJ2), 16.0 * RoomScale / MeshDepth(d\OBJ2))
 	EndIf
 	
 	PositionEntity(d\FrameOBJ, x, y, z)
@@ -1832,7 +1838,7 @@ Function PlaceAdjacentDoors()
 	Local Temp% = 0, Zone%
 	Local Spacing# = 8.0
 	Local ShouldSpawnDoor% = False
-	Local x%, y%
+	Local x%, y%, i%
 	Local r.Rooms, d.Doors
 	
 	For y = MapHeight To 0 Step -1
@@ -1933,7 +1939,7 @@ Function PlaceAdjacentDoors()
 						Exit
 					EndIf
 				Next
-			End If
+			EndIf
 		Next
 	Next
 	
@@ -1941,8 +1947,9 @@ Function PlaceAdjacentDoors()
 		EntityParent(d\OBJ, 0)
 		If d\OBJ2 <> 0 Then EntityParent(d\OBJ2, 0)
 		If d\FrameOBJ <> 0 Then EntityParent(d\FrameOBJ, 0)
-		If d\Buttons[0] <> 0 Then EntityParent(d\Buttons[0], 0)
-		If d\Buttons[1] <> 0 Then EntityParent(d\Buttons[1], 0)
+		For i = 0 To 1
+			If d\Buttons[i] <> 0 Then EntityParent(d\Buttons[i], 0)
+		Next
 		
 		If d\OBJ2 <> 0 And d\Dir = 0 Then
 			MoveEntity(d\OBJ, 0.0, 0.0, 8.0 * RoomScale)
