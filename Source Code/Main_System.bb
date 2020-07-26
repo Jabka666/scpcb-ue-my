@@ -2877,8 +2877,10 @@ Repeat
 		FI_Unload(fiBuffer)
 		FreeBank(Bank)
 		ScreenshotCount = ScreenshotCount + 1
-		msg\Msg = "Screenshot Taken."
-		msg\Timer = 70.0 * 6
+		If (Not MainMenuOpen) Then
+			msg\Msg = "Screenshot Taken."
+			msg\Timer = 70.0 * 6.0
+		EndIf
 		PlaySound_Strict(LoadTempSound("SFX\General\Screenshot.ogg"))
 	EndIf
 	
@@ -3870,7 +3872,8 @@ End Function
 Function MovePlayer()
 	CatchErrors("Uncaught (MovePlayer)")
 	
-	Local Sprint# = 1.0, Speed# = 0.018, i%, Angle#
+	Local Sprint# = 1.0, Speed# = 0.018
+	Local Pvt%, i%, Angle#
 	
 	If chs\SuperMan Then
 		Speed = Speed * 3.0
@@ -4313,7 +4316,7 @@ Function MouseLook()
 				RotateEntity(Camera, CurveAngle(EntityPitch(me\Head) + 40.0, EntityPitch(Camera), 40.0), EntityYaw(Camera), EntityRoll(Camera))
 			EndIf
 			
-			me\HeadDropSpeed = me\HeadDropSpeed - 0.002 * fpst\FPSFactor[0]
+			me\HeadDropSpeed = me\HeadDropSpeed - (0.002 * fpst\FPSFactor[0])
 		EndIf
 		
 		If InvertMouse Then
@@ -8777,7 +8780,6 @@ Function LoadEntities()
 	EntityBlend(tt\OverlayID[7], 1)
 	EntityOrder(tt\OverlayID[7], -1002)
 	MoveEntity(tt\OverlayID[7], 0.0, 0.0, 1.0)
-	HideEntity(tt\OverlayID[7])
 	
 	tt\OverlayTextureID[8] = LoadTexture_Strict("GFX\scp_409_overlay.png", 1) ; ~ SCP-409
 	tt\OverlayID[8] = CreateSprite(ArkBlurCam)
@@ -8787,7 +8789,6 @@ Function LoadEntities()
 	EntityFX(tt\OverlayID[8], 1)
 	EntityOrder(tt\OverlayID[8], -1001)
 	MoveEntity(tt\OverlayID[8], 0.0, 0.0, 1.0)
-	HideEntity(tt\OverlayID[8])
 	
 	tt\OverlayTextureID[9] = LoadTexture_Strict("GFX\helmet_overlay.png", 1) ; ~ HELMET
 	tt\OverlayID[9] = CreateSprite(ArkBlurCam)
@@ -8797,7 +8798,6 @@ Function LoadEntities()
 	EntityFX(tt\OverlayID[9], 1)
 	EntityOrder(tt\OverlayID[9], -1003)
 	MoveEntity(tt\OverlayID[9], 0.0, 0.0, 1.0)
-	HideEntity(tt\OverlayID[9])
 	
 	tt\OverlayTextureID[10] = LoadTexture_Strict("GFX\bloody_overlay.png", 1) ; ~ BLOOD
 	tt\OverlayID[10] = CreateSprite(ArkBlurCam)
@@ -8807,7 +8807,6 @@ Function LoadEntities()
 	EntityFX(tt\OverlayID[10], 1)
 	EntityOrder(tt\OverlayID[10], -1003)
 	MoveEntity(tt\OverlayID[10], 0.0, 0.0, 1.0)
-	HideEntity(tt\OverlayID[10])
 	
 	tt\OverlayTextureID[11] = LoadTexture_Strict("GFX\fog_gas_mask.png", 1) ; ~ FOG IN GAS MASK
 	tt\OverlayID[11] = CreateSprite(ArkBlurCam)
@@ -8817,7 +8816,10 @@ Function LoadEntities()
 	EntityFX(tt\OverlayID[11], 1)
 	EntityOrder(tt\OverlayID[11], -1000)
 	MoveEntity(tt\OverlayID[11], 0.0, 0.0, 1.0)
-	HideEntity(tt\OverlayID[11])
+	
+	For i = 7 To 11
+		HideEntity(tt\OverlayID[11])
+	Next
 	
 	me\Collider = CreatePivot()
 	EntityRadius(me\Collider, 0.15, 0.30)
@@ -12357,5 +12359,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1092#132F#1DF8
+;~B#1095#1332#1DFB
 ;~C#Blitz3D

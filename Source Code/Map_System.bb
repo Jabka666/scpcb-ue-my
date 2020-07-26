@@ -4887,7 +4887,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(Terrain, r\x, r\y + 2944.0 * RoomScale, r\z + 32.0, True)			
 			
 			de = CreateDecal(18, r\x - (1536.0 * RoomScale), r\y + 0.02, r\z + 608.0 * RoomScale + 32.0, 90.0, 0.0, 0.0)
-			de\Size = Rnd(0.8, 0.8) : de\BlendMode = 2 : de\FX = 1 + 8
+			de\Size = Rnd(0.8, 0.8)
 			ScaleSprite(de\OBJ, de\Size, de\Size)
 			EntityParent(de\OBJ, r\OBJ)
 			
@@ -4908,8 +4908,9 @@ Function FillRoom(r.Rooms)
 				
 				If i < 6 Then 
 					de = CreateDecal(i + 7, r\x + Cos(Angle) * (512.0 * RoomScale) * 3.0, r\y + 0.02, r\z + Sin(Angle) * (512.0 * RoomScale) * 3.0, 90.0, Angle - 90.0, 0.0)
-					de\Size = Rnd(0.5, 0.5) : de\BlendMode = 2 : de\FX = 1 + 8
-					EntityBlend(de\OBJ, 2)
+					de\Size = 0.5
+					ScaleSprite(de\OBJ, de\Size, de\Size)
+					EntityParent(de\OBJ, r\OBJ)
 				EndIf				
 			Next
 			

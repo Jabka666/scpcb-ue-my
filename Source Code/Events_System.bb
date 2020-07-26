@@ -2494,7 +2494,7 @@ Function UpdateEvents()
 									
 									If Dist < 7.0 Then 
 										Pvt = CreatePivot()
-										PositionEntity Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera)
+										PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 										PointEntity(Pvt, e\room\Objects[20])
 										TurnEntity(Pvt, 90.0, 0.0, 0.0)
 										CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, 10.0)
@@ -2751,7 +2751,7 @@ Function UpdateEvents()
 									me\BlinkTimer = -10.0
 									
 									PositionEntity(me\Collider, EntityX(e\room\Objects[8], True) - 400.0 * RoomScale, -304.0 * RoomScale, EntityZ(e\room\Objects[8], True))
-									ResetEntity me\Collider
+									ResetEntity(me\Collider)
 									;[End Block]
 								Case 16, 17, 18, 19
 									;[Block]
@@ -4260,7 +4260,7 @@ Function UpdateEvents()
 						For iY = 0 To GridSZ - 1
 							For iX = 0 To GridSZ - 1
 								If e\room\grid\Entities[iX + (iY * GridSZ)] <> 0
-									HideEntity e\room\grid\Entities[iX + (iY * GridSZ)]
+									HideEntity(e\room\grid\Entities[iX + (iY * GridSZ)])
 								EndIf
 							Next
 						Next
@@ -5329,7 +5329,7 @@ Function UpdateEvents()
 								Else
 									If DistanceSquared(EntityX(me\Collider), EntityX(e\room\RoomDoors[0]\FrameOBJ), EntityZ(me\Collider), EntityZ(e\room\RoomDoors[0]\FrameOBJ)) < 20.25 And EntityY(me\Collider) < -2.5 Then
 										Pvt = CreatePivot()
-										PositionEntity Pvt, EntityX(Camera), EntityY(me\Collider), EntityZ(Camera)
+										PositionEntity(Pvt, EntityX(Camera), EntityY(me\Collider), EntityZ(Camera))
 										PointEntity(Pvt, e\room\RoomDoors[0]\FrameOBJ)
 										CameraPitch = CurveAngle(90.0, CameraPitch + 90.0, 100.0)
 										CameraPitch = CameraPitch - 90.0
@@ -5777,7 +5777,7 @@ Function UpdateEvents()
 						EndIf
 						
 						If e\room\NPC[1] <> Null Then 
-							PositionEntity e\room\NPC[1]\Collider, EntityX(e\room\OBJ, True), 0.13, EntityZ(e\room\OBJ, True)
+							PositionEntity(e\room\NPC[1]\Collider, EntityX(e\room\OBJ, True), 0.13, EntityZ(e\room\OBJ, True))
 							Angle = WrapAngle(EntityYaw(e\room\NPC[1]\Collider) - e\room\Angle)
 							
 							If Angle > 90.0 Then 
@@ -6269,11 +6269,11 @@ Function UpdateEvents()
 									    d\Timer = 90000.0 : d\Alpha = 0.01 : d\AlphaChange = 0.005 : d\Size = 0.1 : d\SizeChange = 0.003
 										
 										If e\SoundCHN2 <> 0 Then
-									    	If ChannelPlaying(e\SoundCHN2) Then StopChannel e\SoundCHN2
+									    	If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2)
 				    				    EndIf 
 									    LoadEventSound(e, "SFX\Character\LureSubject\106Bait.ogg", 1)
 									    e\SoundCHN2 = PlaySound_Strict(e\Sound2)
-								    ElseIf e\EventState3 - fpst\FPSFactor[0] < 2900.0 And e\EventState3 >= 2900.0 Then
+									ElseIf e\EventState3 - fpst\FPSFactor[0] < 2900.0 And e\EventState3 >= 2900.0 Then
 									    If FemurBreakerSFX <> 0 Then 
 											FreeSound_Strict(FemurBreakerSFX) : FemurBreakerSFX = 0
 										EndIf
@@ -6287,7 +6287,7 @@ Function UpdateEvents()
 									ElseIf e\EventState3 > 3200.0 Then
 										If e\EventState2 = True Then
 										    Curr106\Contained = True
-									    Else
+										Else
 										    PositionEntity(Curr106\Collider, EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True), EntityZ(e\room\Objects[6], True))
 											
 										    Curr106\Contained = False
@@ -6303,11 +6303,11 @@ Function UpdateEvents()
 						    EndIf
 							
 						    If e\EventState2 Then
-						        PositionEntity (e\room\Objects[6], EntityX(e\room\Objects[6], True), CurveValue(-8308.0 * RoomScale + Sin(Float(MilliSecs()) * 0.04) * 0.07, EntityY(e\room\Objects[6], True), 200.0), EntityZ(e\room\Objects[6], True), True)
+						        PositionEntity(e\room\Objects[6], EntityX(e\room\Objects[6], True), CurveValue(-8308.0 * RoomScale + Sin(Float(MilliSecs()) * 0.04) * 0.07, EntityY(e\room\Objects[6], True), 200.0), EntityZ(e\room\Objects[6], True), True)
 						        RotateEntity(e\room\Objects[6], Sin(Float(MilliSecs()) * 0.03), EntityYaw(e\room\Objects[6], True), -Sin(Float(MilliSecs()) * 0.025), True)
 					        Else
-						        PositionEntity (e\room\Objects[6], EntityX(e\room\Objects[6], True), CurveValue(-8608.0 * RoomScale, EntityY(e\room\Objects[6], True), 200.0), EntityZ(e\room\Objects[6], True), True)
-						        RotateEntity(e\room\Objects[6], 0, EntityYaw(e\room\Objects[6], True), 0, True)
+						        PositionEntity(e\room\Objects[6], EntityX(e\room\Objects[6], True), CurveValue(-8608.0 * RoomScale, EntityY(e\room\Objects[6], True), 200.0), EntityZ(e\room\Objects[6], True), True)
+						        RotateEntity(e\room\Objects[6], 0, EntityYaw(e\room\Objects[6], True), 0.0, True)
 					        EndIf
 					    EndIf
 					EndIf
