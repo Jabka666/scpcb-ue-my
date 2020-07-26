@@ -8362,12 +8362,20 @@ Function UpdateMenu()
 					y = y + 30 * MenuScale
 					
 					If CanOpenConsole Then
+						Local PrevConsoleVersion% = ConsoleVersion
+						
 						ConsoleVersion = DrawTick(x + 270 * MenuScale, y + MenuScale, ConsoleVersion)
+						
+						If PrevConsoleVersion Then
+							If PrevConsoleVersion <> ConsoleVersion Then
+								ShouldDeleteGadgets = True
+							EndIf
+						EndIf
 					EndIf
 					
 					y = y + 30 * MenuScale
 					
-					AchvMSGenabled = DrawTick(x + 270 * MenuScale, y, AchvMSGenabled)
+					AchvMSGEnabled = DrawTick(x + 270 * MenuScale, y, AchvMSGEnabled)
 					
 					y = y + 50 * MenuScale
 					
@@ -12307,11 +12315,11 @@ Function PlayStartupVideos()
 End Function
 
 Function CanUseItem(CanUseWithGasMask%, CanUseWithEyewear%)
-	If (CanUseWithGasMask = False And (wi\GasMask > 0 Lor I_1499\Using > 0)) Then
+	If CanUseWithGasMask = False And (wi\GasMask > 0 Lor I_1499\Using > 0) Then
 		msg\Msg = "You can't use that item while wearing a gas mask."
 		msg\Timer = 70.0 * 6.0
 		Return(False)
-	ElseIf (CanUseWithEyewear = False And (wi\NightVision > 0))
+	ElseIf CanUseWithEyewear = False And (wi\NightVision > 0)
 		msg\Msg = "You can't use that item while wearing headgear."
 		msg\Timer = 70.0 * 6.0
 		Return(False)
