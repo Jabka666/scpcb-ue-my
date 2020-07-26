@@ -8959,10 +8959,7 @@ Function LoadEntities()
 	; ~ [MISC]
 	
 	o\MiscModelID[0] = LoadMesh_Strict("GFX\items\cup_liquid.b3d") ; ~ Liquid for cups dispensed by SCP-294
-	
-	For i = 0 To MaxMiscModelIDAmount - 1
-		HideEntity(o\MiscModelID[i])
-	Next
+	HideEntity(o\MiscModelID[0])
 	
 	tt\LightSpriteID[0] = LoadTexture_Strict("GFX\light.png", 1)
 	tt\LightSpriteID[1] = LoadTexture_Strict("GFX\light(2).png", 1)
@@ -9527,12 +9524,10 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	HideDistance = 15.0
 	
-	For Lvl = 0 To 0
-		For x = 0 To MapWidth + 1
-			For y = 0 To MapHeight + 1
-				MapTemp(x, y) = 0
-				MapFound(x, y) = 0
-			Next
+	For x = 0 To MapWidth + 1
+		For y = 0 To MapHeight + 1
+			MapTemp(x, y) = 0
+			MapFound(x, y) = 0
 		Next
 	Next
 	
