@@ -3089,6 +3089,7 @@ Function MainLoop()
 						If e\EventState = 1.0 Then
 							CurrFogColor = FogColorForest
 						EndIf
+						Exit
 					EndIf
 				Next
 			ElseIf PlayerRoom\RoomTemplate\Name = "pocketdimension"
@@ -12356,5 +12357,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#108A#1327#1DF0
+;~B#108B#1328#1DF1
 ;~C#Blitz3D
