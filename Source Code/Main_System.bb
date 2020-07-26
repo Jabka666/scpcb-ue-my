@@ -2017,12 +2017,10 @@ Type Doors
 	Field NPCCalledElevator% = False
 End Type 
 
-Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, Big% = False, Keycard% = False, Code$ = "", CheckIfZeroCard% = False)
+Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, Open% = False, Big% = False, Keycard% = False, Code$ = "", CheckIfZeroCard% = False)
 	Local d.Doors, Parent%, i%
 	
 	If room <> Null Then Parent = room\OBJ
-	
-	Local d2.Doors
 	
 	d.Doors = New Doors
 	If Big = 1 Then ; ~ Big Door
@@ -2043,21 +2041,11 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, B
 		
 		d\FrameOBJ = CopyEntity(o\DoorModelID[1])
 	ElseIf Big = 3 Then ; ~ Elevator Door
-		For d2.Doors = Each Doors
-			If d2 <> d And d2\Dir = 3 Then
-				d\OBJ = CopyEntity(d2\OBJ)
-				d\OBJ2 = CopyEntity(d2\OBJ2)
-				ScaleEntity(d\OBJ, RoomScale, RoomScale, RoomScale)
-				ScaleEntity(d\OBJ2, RoomScale, RoomScale, RoomScale)
-				Exit
-			EndIf
-		Next
-		If d\OBJ = 0 Then
-			d\OBJ = CopyEntity(o\DoorModelID[7])
-			d\OBJ2 = CopyEntity(d\OBJ)
-			ScaleEntity(d\OBJ, RoomScale, RoomScale, RoomScale)
-			ScaleEntity(d\OBJ2, RoomScale, RoomScale, RoomScale)
-		EndIf
+		d\OBJ = CopyEntity(o\DoorModelID[7])
+		ScaleEntity(d\OBJ, RoomScale, RoomScale, RoomScale)
+		d\OBJ2 = CopyEntity(d\OBJ)
+		ScaleEntity(d\OBJ2, RoomScale, RoomScale, RoomScale)
+		
 		d\FrameOBJ = CopyEntity(o\DoorModelID[1])
 	ElseIf Big = 4 ; ~ One-sided Door
 		d\OBJ = CopyEntity(o\DoorModelID[10])
@@ -2068,15 +2056,15 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, B
 		d\FrameOBJ = CopyEntity(o\DoorModelID[1])
 	Else
 		d\OBJ = CopyEntity(o\DoorModelID[0])
-		ScaleEntity(d\OBJ, (203.0 * RoomScale) / MeshWidth(d\OBJ), 313.0 * RoomScale / MeshHeight(d\OBJ), 16.0 * RoomScale / MeshDepth(d\OBJ))
+		ScaleEntity(d\OBJ, (203.0 * RoomScale) / MeshWidth(d\OBJ), 313.0 * RoomScale / MeshHeight(d\OBJ), 15.0 * RoomScale / MeshDepth(d\OBJ))
 		d\OBJ2 = CopyEntity(o\DoorModelID[0])
-		ScaleEntity(d\OBJ2, (203.0 * RoomScale) / MeshWidth(d\OBJ2), 313.0 * RoomScale / MeshHeight(d\OBJ2), 16.0 * RoomScale / MeshDepth(d\OBJ2))
+		ScaleEntity(d\OBJ2, (203.0 * RoomScale) / MeshWidth(d\OBJ2), 313.0 * RoomScale / MeshHeight(d\OBJ2), 15.0 * RoomScale / MeshDepth(d\OBJ2))
 		
 		d\FrameOBJ = CopyEntity(o\DoorModelID[1])
 	EndIf
 	
 	PositionEntity(d\FrameOBJ, x, y, z)
-	ScaleEntity(d\FrameOBJ, (8.0 / 2048.0), (8.0 / 2048.0), (8.0 / 2048.0))
+	ScaleEntity(d\FrameOBJ, 8.0 / 2048.0, 8.0 / 2048.0, 8.0 / 2048.0)
 	EntityPickMode(d\FrameOBJ, 2)
 	EntityType(d\OBJ, HIT_MAP)
 	If d\OBJ2 <> 0 Then EntityType(d\OBJ2, HIT_MAP)
@@ -2112,17 +2100,20 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, B
 				d\Buttons[i] = CopyEntity(o\ButtonModelID[0])
 			EndIf
 		EndIf
-		ScaleEntity(d\Buttons[i], 0.03, 0.03, 0.03)
 		
-		If Big = 1 Then
-			PositionEntity(d\Buttons[i], x + (-432.0 + (i * 864.0)) * RoomScale, y + 0.7, z + (192.0 + (i * (-384.0))) * RoomScale)
-			RotateEntity(d\Buttons[i], 0.0, 90.0 + (i * 180.0), 0.0)
-		Else
-			PositionEntity(d\Buttons[i], x + 0.6 + (i * (-1.2)), y + 0.7, z - 0.1 + (i * 0.2))
-			RotateEntity(d\Buttons[i], 0.0, (i * 180.0), 0.0)
+		If d\Buttons[i] <> 0 Then
+			ScaleEntity(d\Buttons[i], 0.03, 0.03, 0.03)
+			
+			If Big = 1 Then
+				PositionEntity(d\Buttons[i], x + (-432.0 + (i * 864.0)) * RoomScale, y + 0.7, z + (192.0 + (i * (-384.0))) * RoomScale)
+				RotateEntity(d\Buttons[i], 0.0, 90.0 + (i * 180.0), 0.0)
+			Else
+				PositionEntity(d\Buttons[i], x + 0.6 + (i * (-1.2)), y + 0.7, z - 0.1 + (i * 0.2))
+				RotateEntity(d\Buttons[i], 0.0, (i * 180.0), 0.0)
+			EndIf
+			EntityParent(d\Buttons[i], d\FrameOBJ)
+			EntityPickMode(d\Buttons[i], 2)
 		EndIf
-		EntityParent(d\Buttons[i], d\FrameOBJ)
-		EntityPickMode(d\Buttons[i], 2)
 	Next
 	
 	PositionEntity(d\OBJ, x, y, z)
@@ -2144,7 +2135,7 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, dOpen% = False, B
 	EntityParent(d\OBJ, Parent)
 	
 	d\Angle = Angle
-	d\Open = dOpen		
+	d\Open = Open		
 	
 	EntityPickMode(d\OBJ, 2)
 	MakeCollBox(d\OBJ)
@@ -2199,7 +2190,6 @@ Function UpdateDoors()
 				If d\Buttons[1] <> 0 Then ShowEntity(d\Buttons[1])
 			EndIf
 		Next
-		
 		UpdateDoorsTimer = 30.0
 	Else
 		UpdateDoorsTimer = Max(UpdateDoorsTimer - fpst\FPSFactor[0], 0.0)
@@ -2234,7 +2224,6 @@ Function UpdateDoors()
 								EndIf							
 							EndIf
 						EndIf
-						
 					EndIf
 				Next
 			EndIf
@@ -2244,37 +2233,37 @@ Function UpdateDoors()
 					Select d\Dir
 						Case 0
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1))
+							d\OpenState = Min(180.0, d\OpenState + (fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fpst\FPSFactor[0] / 80.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * fpst\FPSFactor[0] / 80.0, 0.0, 0.0)	
 							;[End Block]
 						Case 1
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + fpst\FPSFactor[0] * 0.8)
+							d\OpenState = Min(180.0, d\OpenState + (fpst\FPSFactor[0] * 0.8))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * fpst\FPSFactor[0] / 180.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, (-Sin(d\OpenState)) * fpst\FPSFactor[0] / 180.0, 0.0, 0.0)
 							;[End Block]
 						Case 2
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1))
+							d\OpenState = Min(180.0, d\OpenState + (fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen + 1) * fpst\FPSFactor[0] / 85.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fpst\FPSFactor[0] / 120.0, 0.0, 0.0)
 							;[End Block]
 						Case 3
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1))
+							d\OpenState = Min(180.0, d\OpenState + (fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fpst\FPSFactor[0] / 162.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState)* (d\FastOpen * 2 + 1) * fpst\FPSFactor[0] / 162.0, 0.0, 0.0)
 							;[End Block]
 						Case 4
 						    ;[Block]
-							d\OpenState = Min(180.0, d\OpenState + fpst\FPSFactor[0] * 2 * (d\FastOpen + 1))
+							d\OpenState = Min(180.0, d\OpenState + (fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fpst\FPSFactor[0] / 80.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fpst\FPSFactor[0]) / 80.0, 0.0, 0.0)	
 							;[End Block]	
 						Case 5 ;Used for SCP-914 only
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + fpst\FPSFactor[0] * 1.4)
+							d\OpenState = Min(180.0, d\OpenState + (fpst\FPSFactor[0] * 1.4))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * fpst\FPSFactor[0] / 114.0, 0.0, 0.0)
 							;[End Block]
 					End Select
@@ -2307,13 +2296,13 @@ Function UpdateDoors()
 					Select d\Dir
 						Case 0
 							;[Block]
-							d\OpenState = Max(0.0, d\OpenState - fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1))
+							d\OpenState = Max(0.0, d\OpenState - (fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fpst\FPSFactor[0]) * (d\FastOpen + 1) / 80.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fpst\FPSFactor[0]) / 80.0, 0.0, 0.0)	
 							;[End Block]
 						Case 1
 							;[Block]
-							d\OpenState = Max(0.0, d\OpenState - fpst\FPSFactor[0] * 0.8)
+							d\OpenState = Max(0.0, d\OpenState - (fpst\FPSFactor[0] * 0.8))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fpst\FPSFactor[0]) / 180.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * fpst\FPSFactor[0] / 180.0, 0.0, 0.0)
 							If d\OpenState < 15.0 And d\OpenState + fpst\FPSFactor[0] >= 15.0
@@ -2337,25 +2326,25 @@ Function UpdateDoors()
 							;[End Block]
 						Case 2
 							;[Block]
-							d\OpenState = Max(0.0, d\OpenState - fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1))
+							d\OpenState = Max(0.0, d\OpenState - (fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fpst\FPSFactor[0]) * (d\FastOpen + 1) / 85.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fpst\FPSFactor[0]) / 120.0, 0.0, 0.0)
 							;[End Block]
 						Case 3
 							;[Block]
-							d\OpenState = Max(0.0, d\OpenState - fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1))
+							d\OpenState = Max(0.0, d\OpenState - (fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fpst\FPSFactor[0]) * (d\FastOpen + 1) / 162.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fpst\FPSFactor[0]) / 162.0, 0.0, 0.0)
 							;[End Block]
 						Case 4
 						    ;[Block]
-							d\OpenState = Max(0.0, d\OpenState - fpst\FPSFactor[0] * 2 * (d\FastOpen + 1))
+							d\OpenState = Max(0.0, d\OpenState - (fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fpst\FPSFactor[0]) * (d\FastOpen + 1) / 80.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * fpst\FPSFactor[0] / 80.0, 0.0, 0.0)
 							;[End Block]	
 						Case 5 ;Used for SCP-914 only
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState - fpst\FPSFactor[0] * 1.4)
+							d\OpenState = Min(180.0, d\OpenState - (fpst\FPSFactor[0] * 1.4))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fpst\FPSFactor[0]) / 114.0, 0.0, 0.0)
 							;[End Block]
 					End Select
@@ -12367,5 +12356,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1095#1332#1DFB
+;~B#108A#1327#1DF0
 ;~C#Blitz3D
