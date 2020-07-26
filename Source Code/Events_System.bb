@@ -384,7 +384,7 @@ Function QuickLoadEvents()
 					e\EventStr = "Load1"
 				ElseIf e\EventStr = "Load1"
 					QuickLoadPercent = 30
-					I_1499\Sky = sky_CreateSky("GFX\map\sky\1499sky")
+					I_1499\Sky = CreateSky("GFX\map\sky\1499sky")
 					e\EventStr = 1
 				Else
 					If Int(e\EventStr) < 16
@@ -8878,39 +8878,7 @@ Function UpdateEvents()
 		EndIf
 	Next
 	
-	; ~ This here is necessary because the SCP-294's drinks with explosion effect didn't worked anymore -- ENDSHN
-	If me\ExplosionTimer > 0.0 Then
-		me\ExplosionTimer = me\ExplosionTimer + fpst\FPSFactor[0]
-		If me\ExplosionTimer < 140.0 Then
-			If me\ExplosionTimer - fpst\FPSFactor[0] < 5.0 Then
-				ExplosionSFX = LoadSound_Strict("SFX\Ending\GateB\Nuke1.ogg")
-				PlaySound_Strict(ExplosionSFX)
-				me\CameraShake = 10.0
-				me\ExplosionTimer = 5.0
-			EndIf
-			me\CameraShake = CurveValue(me\ExplosionTimer / 60.0, me\CameraShake, 50.0)
-		Else
-			me\CameraShake = Min((me\ExplosionTimer / 20.0), 20.0)
-			If me\ExplosionTimer - fpst\FPSFactor[0] < 140.0 Then
-				me\BlinkTimer = 1.0
-				ExplosionSFX = LoadSound_Strict("SFX\Ending\GateB\Nuke2.ogg")
-				PlaySound_Strict(ExplosionSFX)				
-				For i = 0 To (10 + (10 * (ParticleAmount + 1)))
-					p.Particles = CreateParticle(EntityX(me\Collider) + Rnd(-0.5, 0.5), EntityY(me\Collider) - Rnd(0.2, 1.5), EntityZ(me\Collider) + Rnd(-0.5, 0.5), 0, Rnd(0.2, 0.6), 0.0, 350.0)	
-					RotateEntity(p\Pvt, -90.0, 0.0, 0.0, True)
-					p\Speed = Rnd(0.05, 0.07)
-				Next
-			EndIf
-			me\LightFlash = Min((me\ExplosionTimer - 140.0) / 10.0, 5.0)
-			
-			If me\ExplosionTimer > 160.0 Then me\KillTimer = Min(me\KillTimer, -0.1)
-			If me\ExplosionTimer > 500.0 Then me\ExplosionTimer = 0.0
-			
-			; ~ A dirty workaround to prevent the collider from falling down into the facility once the nuke goes off, causing the UpdateEvents() function to be called again and crashing the game
-			PositionEntity(me\Collider, EntityX(me\Collider), 200.0, EntityZ(me\Collider))
-		EndIf
-	EndIf
-	
+	UpdateExplosion()
 End Function
 
 Function UpdateDimension1499()
@@ -9243,7 +9211,7 @@ Function UpdateDimension1499()
 End Function
 
 Function UpdateEndings()
-	Local Dist#, i%, Pvt%, Temp%, xTemp#, zTemp#, Angle#
+	Local Dist#, i%, Pvt%, Temp%, xTemp#, zTemp#, Angle#, OBJ%
 	Local e.Events, n.NPCs, r.Rooms, p.Particles
 	
 	For e.Events = Each Events
@@ -9299,7 +9267,7 @@ Function UpdateEndings()
 							CreateConsoleMsg("WARNING! Teleporting away from this area may cause bugs or crashing.", 255, 0, 0)
 							CreateConsoleMsg("")
 							
-							Sky = sky_CreateSky("GFX\map\sky\sky")
+							Sky = CreateSky("GFX\map\sky\sky")
 							RotateEntity(Sky, 0.0, e\room\Angle - 90.0, 0.0)
 							
 							e\EventState = 1.0
@@ -9610,12 +9578,6 @@ Function UpdateEndings()
 						
 						DrawLoading(30)
 						
-						For i = 0 To e\room\MaxLights - 1
-							If e\room\LightSprites[i] <> 0 Then 
-								EntityFX(e\room\LightSprites[i], 1 + 8)
-							EndIf
-						Next
-						
 						For n.NPCs = Each NPCs
 							If n <> Curr106 And n <> Curr173 Then  
 								RemoveNPC(n)
@@ -9639,7 +9601,7 @@ Function UpdateEndings()
 						CreateConsoleMsg("WARNING! Teleporting away from this area may cause bugs or crashing.", 255, 0, 0)
 						CreateConsoleMsg("")
 						
-						Sky = sky_CreateSky("GFX\map\sky\sky")
+						Sky = CreateSky("GFX\map\sky\sky")
 						RotateEntity(Sky, 0.0, e\room\Angle, 0.0)
 						
 						DrawLoading(60)
@@ -10075,38 +10037,7 @@ Function UpdateEndings()
 		End Select
 	Next
 	
-	If me\ExplosionTimer > 0.0 Then
-		me\ExplosionTimer = me\ExplosionTimer + fpst\FPSFactor[0]
-		If me\ExplosionTimer < 140.0 Then
-			If me\ExplosionTimer - fpst\FPSFactor[0] < 5.0 Then
-				ExplosionSFX = LoadSound_Strict("SFX\Ending\GateB\Nuke1.ogg")
-				PlaySound_Strict(ExplosionSFX)
-				me\CameraShake = 10.0
-				me\ExplosionTimer = 5.0
-			EndIf
-			me\CameraShake = CurveValue(me\ExplosionTimer / 60.0, me\CameraShake, 50.0)
-		Else
-			me\CameraShake = Min((me\ExplosionTimer / 20.0),20.0)
-			If me\ExplosionTimer - fpst\FPSFactor[0] < 140.0 Then
-				me\BlinkTimer = 1.0
-				ExplosionSFX = LoadSound_Strict("SFX\Ending\GateB\Nuke2.ogg")
-				PlaySound_Strict(ExplosionSFX)			
-				For i = 0 To (10 + (10 * (ParticleAmount + 1)))
-					p.Particles = CreateParticle(EntityX(me\Collider) + Rnd(-0.5, 0.5), EntityY(me\Collider) - Rnd(0.2, 1.5), EntityZ(me\Collider) + Rnd(-0.5, 0.5), 0, Rnd(0.2, 0.6), 0.0, 350.0)
-					p\Speed = Rnd(0.05, 0.07)
-					RotateEntity(p\Pvt, -90.0, 0.0, 0.0, True)
-				Next
-			EndIf
-			me\LightFlash = Min((me\ExplosionTimer - 140.0) / 10.0, 5.0)
-			
-			If me\ExplosionTimer > 160.0 Then me\KillTimer = Min(me\KillTimer, -0.1)
-			If me\ExplosionTimer > 500.0 Then me\ExplosionTimer = 0.0
-			
-			; ~ A dirty workaround to prevent the collider from falling down into the facility once the nuke goes off,
-			; ~ Causing the UpdateEvent function to be called again and crashing the game
-			PositionEntity(me\Collider, EntityX(me\Collider), 200.0, EntityZ(me\Collider))
-		EndIf
-	EndIf
+	UpdateExplosion()
 End Function
 
 Function LoadEventSound(e.Events, File$, Number% = 0)
@@ -10201,7 +10132,7 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 						Curr096\State = 6.0
 						SetNPCFrame(Curr096, 0.0)
 						e\Sound = LoadSound_Strict("SFX\SCP\096\ElevatorSlam.ogg")
-						EventState = EventState + fpst\FPSFactor[0] * 1.4
+						EventState = EventState + (fpst\FPSFactor[0] * 1.4)
 					EndIf
 				EndIf
 			EndIf
@@ -10232,7 +10163,7 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 		If EventState =< 70.0 * 8.1 Then
 			d\OpenState = Min(d\OpenState, 20.0)
 		EndIf
-		EventState = EventState + fpst\FPSFactor[0] * 1.4
+		EventState = EventState + (fpst\FPSFactor[0] * 1.4)
 	EndIf
 	Return(EventState)
 End Function
@@ -10263,6 +10194,7 @@ Function GenerateRandomIA()
 					e\EventStr = e\EventStr + "|2\Security" + Rand(0, 5) + ".ogg"
 					;[End Block]
 			End Select
+			
 			If Rand(2) = 1 And StrTemp = "Scientist" Then
 				; ~ CALL ON LINE...
 				e\EventStr = e\EventStr + "|3\CallOnLine.ogg"

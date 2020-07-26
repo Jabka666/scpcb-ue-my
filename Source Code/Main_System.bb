@@ -9457,7 +9457,7 @@ Function InitLoadGame()
 				PositionEntity(e\room\Objects[0], 0.0, EntityY(e\room\OBJ), 0.0)
 				EntityType(e\room\Objects[0], HIT_MAP)
 				DrawLoading(92)
-				I_1499\Sky = sky_CreateSky("GFX\map\sky\1499sky")
+				I_1499\Sky = CreateSky("GFX\map\sky\1499sky")
 				DrawLoading(93)
 				For i = 1 To 15
 					e\room\Objects[i] = LoadMesh_Strict("GFX\map\dimension1499\1499object" + i + ".b3d")
@@ -11495,6 +11495,43 @@ Function UpdateMTF()
 				PlayAnnouncement("SFX\Character\MTF\ThreatAnnouncFinal.ogg")
 			EndIf
 			MTFTimer = 30000.0
+		EndIf
+	EndIf
+End Function
+
+Function UpdateExplosion()
+	Local i%, p.Particles
+	
+	; ~ This here is necessary because the SCP-294's drinks with explosion effect didn't worked anymore -- ENDSHN
+	If me\ExplosionTimer > 0.0 Then
+		me\ExplosionTimer = me\ExplosionTimer + fpst\FPSFactor[0]
+		If me\ExplosionTimer < 140.0 Then
+			If me\ExplosionTimer - fpst\FPSFactor[0] < 5.0 Then
+				ExplosionSFX = LoadSound_Strict("SFX\Ending\GateB\Nuke1.ogg")
+				PlaySound_Strict(ExplosionSFX)
+				me\CameraShake = 10.0
+				me\ExplosionTimer = 5.0
+			EndIf
+			me\CameraShake = CurveValue(me\ExplosionTimer / 60.0, me\CameraShake, 50.0)
+		Else
+			me\CameraShake = Min((me\ExplosionTimer / 20.0), 20.0)
+			If me\ExplosionTimer - fpst\FPSFactor[0] < 140.0 Then
+				me\BlinkTimer = 1.0
+				ExplosionSFX = LoadSound_Strict("SFX\Ending\GateB\Nuke2.ogg")
+				PlaySound_Strict(ExplosionSFX)				
+				For i = 0 To (10 + (10 * (ParticleAmount + 1)))
+					p.Particles = CreateParticle(EntityX(me\Collider) + Rnd(-0.5, 0.5), EntityY(me\Collider) - Rnd(0.2, 1.5), EntityZ(me\Collider) + Rnd(-0.5, 0.5), 0, Rnd(0.2, 0.6), 0.0, 350.0)	
+					RotateEntity(p\Pvt, -90.0, 0.0, 0.0, True)
+					p\Speed = Rnd(0.05, 0.07)
+				Next
+			EndIf
+			me\LightFlash = Min((me\ExplosionTimer - 140.0) / 10.0, 5.0)
+			
+			If me\ExplosionTimer > 160.0 Then me\KillTimer = Min(me\KillTimer, -0.1)
+			If me\ExplosionTimer > 500.0 Then me\ExplosionTimer = 0.0
+			
+			; ~ A dirty workaround to prevent the collider from falling down into the facility once the nuke goes off, causing the UpdateEvents() function to be called again and crashing the game
+			PositionEntity(me\Collider, EntityX(me\Collider), 200.0, EntityZ(me\Collider))
 		EndIf
 	EndIf
 End Function
