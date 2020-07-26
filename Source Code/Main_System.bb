@@ -155,7 +155,7 @@ InitLoadingScreens("LoadingScreens\loading_screens.ini")
 ; ~ Can load without FastText
 fo\FontID[0] = LoadFont_Strict("GFX\font\cour\Courier New.ttf", 16)
 fo\FontID[1] = LoadFont_Strict("GFX\font\cour\Courier New.ttf", 52)
-fo\FontID[2] = LoadFont_Strict("GFX\font\DS-DIGI\DS-Digital.ttf", 22)
+fo\FontID[2] = LoadFont_Strict("GFX\font\DS-DIGI\DS-Digital.ttf", 20)
 fo\FontID[3] = LoadFont_Strict("GFX\font\DS-DIGI\DS-Digital.ttf", 60)
 fo\FontID[4] = LoadFont_Strict("GFX\font\Journal\Journal.ttf", 58)
 fo\ConsoleFont = LoadFont_Strict("GFX\font\Andale\Andale Mono.ttf", 16)
@@ -3440,6 +3440,7 @@ Function RenderMessages()
 		
 		Local Temp2% = Min(msg\Timer / 2.0, 255.0)
 		
+		SetFont(fo\FontID[0])
 		If (Not Temp) Then
 			Color(0, 0, 0)
 			Text((GraphicWidth / 2) + 1, (GraphicHeight / 2) + 201, msg\Msg, True, False)
@@ -12389,5 +12390,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#108B#1328#1DF1
+;~B#108C#1329#1DF2
 ;~C#Blitz3D
