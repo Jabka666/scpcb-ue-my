@@ -4829,9 +4829,11 @@ Function FillRoom(r.Rooms)
 		Case "pocketdimension"
 			;[Block]
 			; ~ Doors inside fake tunnel
-			r\RoomDoors[0] = CreateDoor(r\Zone, r\x, r\y + 2048.0 * RoomScale, r\z + 32.0 - 1024.0 * RoomScale, 0.0, r)
+			r\RoomDoors[0] = CreateDoor(r\Zone, r\x, r\y + 2048.0 * RoomScale, r\z + 32.0 - 1024.0 * RoomScale, 0.0, r, False, 2)
+			r\RoomDoors[0]\AutoClose = False
 			
-			r\RoomDoors[1] = CreateDoor(r\Zone, r\x, r\y + 2048.0 * RoomScale, r\z + 32.0 + 1024.0 * RoomScale, 180.0, r)
+			r\RoomDoors[1] = CreateDoor(r\Zone, r\x, r\y + 2048.0 * RoomScale, r\z + 32.0 + 1024.0 * RoomScale, 180.0, r, False, 2)
+			r\RoomDoors[1]\AutoClose = False
 			
 			Local Entity%
 			Local Hallway% = LoadMesh_Strict("GFX\map\pocketdimension2.b3d") ; ~ The tunnels in the first room

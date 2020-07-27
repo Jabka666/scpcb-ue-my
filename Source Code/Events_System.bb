@@ -2350,12 +2350,6 @@ Function UpdateEvents()
 					InjurePlayer(fpst\FPSFactor[0] * 0.00005)
 					PrevSecondaryLightOn = SecondaryLightOn : SecondaryLightOn = True
 					
-					If EntityY(me\Collider) < 2000.0 * RoomScale Lor EntityY(me\Collider) > 2608.0 * RoomScale Then 
-						CurrStepSFX = 1
-					Else
-						CurrStepSFX = 3
-					EndIf
-					
 					If e\Sound = 0 Then LoadEventSound(e, "SFX\Room\PocketDimension\Rumble.ogg")
 					If e\Sound2 = 0 Then e\Sound2 = LoadEventSound(e, "SFX\Room\PocketDimension\PrisonVoices.ogg", 1)
 					
@@ -2365,8 +2359,14 @@ Function UpdateEvents()
 					
 					If EntityY(me\Collider) < 2000.0 * RoomScale Lor e\EventState3 = 0.0 Lor EntityY(me\Collider) > 2608.0 * RoomScale Then 
 						ShouldPlay = 3
+						CurrStepSFX = 1
+						
+						If Achievements[38] = True Then Achievements[38] = False
 					Else 
-						ShouldPlay = 0
+						ShouldPlay = 1
+						CurrStepSFX = 3
+						
+						GiveAchievement(AchvPD)
 					EndIf
 					
 					ScaleEntity(e\room\OBJ, RoomScale, RoomScale * (1.0 + Sin(e\EventState / 14.0) * 0.2), RoomScale)
