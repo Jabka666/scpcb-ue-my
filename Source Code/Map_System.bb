@@ -2869,7 +2869,7 @@ Function FillRoom(r.Rooms)
 				
 				For k = 0 To 1
 					ScaleEntity(r\Objects[i * 2 + k], 0.04, 0.04, 0.04)
-					PositionEntity (r\Objects[i * 2 + k], r\x + 210.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - (208.0 - i * 76.0) * RoomScale)
+					PositionEntity(r\Objects[i * 2 + k], r\x + 210.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - (208.0 - i * 76.0) * RoomScale)
 					EntityParent(r\Objects[i * 2 + k], r\OBJ)
 				Next
 				
@@ -3758,11 +3758,11 @@ Function FillRoom(r.Rooms)
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			
 			r\Objects[0] = LoadRMesh("GFX\map\IntroDesk_opt.rmesh", Null)
-			ScaleEntity(r\Objects[0], RoomScale, RoomScale ,RoomScale)
+			ScaleEntity(r\Objects[0], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[0], r\x + 272.0 * RoomScale, r\y, r\z + 400.0 * RoomScale)
 			
 			r\Objects[1] = LoadRMesh("GFX\map\IntroDrawer_opt.rmesh", Null)
-			ScaleEntity(r\Objects[1], RoomScale, RoomScale ,RoomScale)
+			ScaleEntity(r\Objects[1], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[1], r\x + 448.0 * RoomScale, r\y, r\z + 192.0 * RoomScale)
 			
 			r\Objects[2] = CreatePivot()
@@ -4413,8 +4413,8 @@ Function FillRoom(r.Rooms)
 			;[Block]
 			d = CreateDoor(r\Zone, r\x + 64.0 * RoomScale, r\y, r\z + 368.0 * RoomScale, 0.0, r, False, False, 3)
 			d\AutoClose = False
-			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0],True) + 0.061, True)
-			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1],True) - 0.061, True)
+			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.061, True)
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.061, True)
 			
 			For k = 0 To 2
 				r\Objects[k * 2] = CopyEntity(o\LeverModelID[0])
@@ -4778,34 +4778,34 @@ Function FillRoom(r.Rooms)
 			
 			r\Objects[8] = CopyEntity(o\DoorModelID[8])
 			PositionEntity(r\Objects[8], r\x - 272.0 * RoomScale, r\y + 512.0 * RoomScale, r\z + 288.0 * RoomScale)
-			RotateEntity(r\Objects[8], 0, 90, 0)
+			RotateEntity(r\Objects[8], 0.0, 90.0, 0.0)
 			ScaleEntity(r\Objects[8], 45.0 * RoomScale, 45.0 * RoomScale, 80.0 * RoomScale)	
 			
 			r\Objects[9] = CopyEntity(o\DoorModelID[9])
-			PositionEntity(r\Objects[9],r\x - 272.0 * RoomScale, r\y + 512.0 * RoomScale, r\z + (288.0 - 70.0) * RoomScale)
-			RotateEntity(r\Objects[9], 0, 10, 0)
+			PositionEntity(r\Objects[9], r\x - 272.0 * RoomScale, r\y + 512.0 * RoomScale, r\z + (288.0 - 70.0) * RoomScale)
+			RotateEntity(r\Objects[9], 0.0, 10.0, 0.0)
 			EntityType(r\Objects[9], HIT_MAP)
 			ScaleEntity(r\Objects[9], 46.0 * RoomScale, 45.0 * RoomScale, 46.0 * RoomScale)
 			
 			r\Objects[10] = CopyEntity(r\Objects[8])
 			PositionEntity(r\Objects[10], r\x - 272.0 * RoomScale, r\y + 512.0 * RoomScale, r\z + 736.0 * RoomScale)
-			RotateEntity(r\Objects[10], 0, 90, 0)
+			RotateEntity(r\Objects[10], 0.0, 90.0, 0.0)
 			ScaleEntity(r\Objects[10], 45.0 * RoomScale, 45.0 * RoomScale, 80.0 * RoomScale)
 			
 			r\Objects[11] =  CopyEntity(r\Objects[9])
-			PositionEntity(r\Objects[11],r\x - 272.0 * RoomScale, r\y + 512.0 * RoomScale, r\z + (736.0-70) * RoomScale)
-			RotateEntity(r\Objects[11], 0, 90, 0)
+			PositionEntity(r\Objects[11], r\x - 272.0 * RoomScale, r\y + 512.0 * RoomScale, r\z + (736.0-70) * RoomScale)
+			RotateEntity(r\Objects[11], 0.0, 90.0, 0.0)
 			EntityType(r\Objects[11], HIT_MAP)
 			ScaleEntity(r\Objects[11], 46.0 * RoomScale, 45.0 * RoomScale, 46.0 * RoomScale)
 			
 			r\Objects[12] = CopyEntity(r\Objects[8])
 			PositionEntity(r\Objects[12], r\x - 592.0 * RoomScale, r\y + 512.0 * RoomScale, r\z - 704.0 * RoomScale)
-			RotateEntity(r\Objects[12], 0, 0, 0)
+			RotateEntity(r\Objects[12], 0.0, 0.0, 0.0)
 			ScaleEntity(r\Objects[12], 45.0 * RoomScale, 45.0 * RoomScale, 80.0 * RoomScale)
 			
 			r\Objects[13] = CopyEntity(r\Objects[9])
 			PositionEntity(r\Objects[13], r\x - (592.0 + 70.0) * RoomScale, r\y + 512.0 * RoomScale, r\z - 704.0 * RoomScale)
-			RotateEntity(r\Objects[13], 0, 0, 0)
+			RotateEntity(r\Objects[13], 0.0, 0.0, 0.0)
 			EntityType(r\Objects[13], HIT_MAP)
 			ScaleEntity(r\Objects[13], 46.0 * RoomScale, 45.0 * RoomScale, 46.0 * RoomScale)
 			
@@ -7479,7 +7479,7 @@ Function CreateMap()
 	MapRoom(ROOM2, 0) = "room2closets" 
 	SetRoom("room2testroom", ROOM2, Floor(0.1 * Float(Room2Amount[0])), Min_Pos, Max_Pos)
 	SetRoom("room2scps", ROOM2, Floor(0.2 * Float(Room2Amount[0])), Min_Pos, Max_Pos)
-	SetRoom("room2storage", ROOM2, Floor(0.3 * Float(Room2Amount[0])),Min_Pos, Max_Pos)
+	SetRoom("room2storage", ROOM2, Floor(0.3 * Float(Room2Amount[0])), Min_Pos, Max_Pos)
 	SetRoom("room2gw_b", ROOM2, Floor(0.4 * Float(Room2Amount[0])), Min_Pos, Max_Pos)
 	SetRoom("room2sl", ROOM2, Floor(0.5 * Float(Room2Amount[0])), Min_Pos, Max_Pos)
 	SetRoom("room012", ROOM2, Floor(0.55 * Float(Room2Amount[0])), Min_Pos, Max_Pos)
@@ -7982,8 +7982,8 @@ Function LoadTerrain(HeightMap, yScale# = 0.7, t1%, t2%, Mask%)
 			Alpha = Sqr(Alpha)
 			
 			Index = lx + ((x + 1) * ly)
-			VertexCoords(Surf, Index , VertexX(Surf,Index), RED * yScale, VertexZ(Surf, Index))
-			VertexCoords(Surf2, Index , VertexX(Surf2,Index), RED * yScale, VertexZ(Surf2, Index))
+			VertexCoords(Surf, Index , VertexX(Surf, Index), RED * yScale, VertexZ(Surf, Index))
+			VertexCoords(Surf2, Index , VertexX(Surf2, Index), RED * yScale, VertexZ(Surf2, Index))
 			VertexColor(Surf2, Index, 255.0, 255.0, 255.0, Alpha)
 			; ~ Set the terrain texture coordinates
 			VertexTexCoords(Surf, Index, lx, -ly )

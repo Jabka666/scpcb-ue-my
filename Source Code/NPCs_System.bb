@@ -759,7 +759,7 @@ Function UpdateNPCs()
 										Else
 											PointEntity(n\Collider, me\Collider)
 											RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), EntityRoll(n\Collider))
-											TranslateEntity(n\Collider,Cos(EntityYaw(n\Collider) + 90.0) * n\Speed * fpst\FPSFactor[0], 0.0, Sin(EntityYaw(n\Collider) + 90.0) * n\Speed * fpst\FPSFactor[0])
+											TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider) + 90.0) * n\Speed * fpst\FPSFactor[0], 0.0, Sin(EntityYaw(n\Collider) + 90.0) * n\Speed * fpst\FPSFactor[0])
 										EndIf
 									Else ; ~ Move to the location where he was last seen							
 										If n\EnemyX <> 0.0 Then						
@@ -884,7 +884,7 @@ Function UpdateNPCs()
 								If n\Frame < 259.0 Then
 									PositionEntity(n\Collider, EntityX(n\Collider), n\PrevY - 0.15, EntityZ(n\Collider))
 									PointEntity(n\OBJ, me\Collider)
-									RotateEntity(n\Collider, 0.0, CurveValue(EntityYaw(n\OBJ),EntityYaw(n\Collider), 100.0), 0.0, True)
+									RotateEntity(n\Collider, 0.0, CurveValue(EntityYaw(n\OBJ), EntityYaw(n\Collider), 100.0), 0.0, True)
 									
 									AnimateNPC(n, 110.0, 259.0, 0.15, False)
 								Else
@@ -2251,7 +2251,7 @@ Function UpdateNPCs()
 										
 										RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
 										PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
-										MoveEntity (Pvt,0.8 * 0.079, 10.75 * 0.079, 6.9 * 0.079)
+										MoveEntity(Pvt,0.8 * 0.079, 10.75 * 0.079, 6.9 * 0.079)
 										
 										PointEntity(Pvt, me\Collider)
 										Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ShootAccuracy, True, InstaKillPlayer)
@@ -2512,7 +2512,7 @@ Function UpdateNPCs()
 									If wayPointCloseToPlayer <> Null
 										n\PathTimer = 1.0
 										If EntityVisible(wayPointCloseToPlayer\OBJ, n\Collider)
-											If Abs(DeltaYaw(n\Collider,wayPointCloseToPlayer\OBJ)) > 0
+											If Abs(DeltaYaw(n\Collider, wayPointCloseToPlayer\OBJ)) > 0
 												PointEntity(n\OBJ, wayPointCloseToPlayer\OBJ)
 												RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 20.0), 0.0)
 											EndIf
@@ -3006,8 +3006,8 @@ Function UpdateNPCs()
 										If n\Reload =< 0.0 Then
 											If Dist < 20.0 Then
 												Pvt = CreatePivot()
-												PositionEntity Pvt, EntityX(n\Collider),EntityY(n\Collider), EntityZ(n\Collider)
-												RotateEntity Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), EntityRoll(n\Collider)
+												PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
+												RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), EntityRoll(n\Collider))
 												MoveEntity(Pvt, 0.0, 8.87 * (0.21 / 9.0), 8.87 * (1.7 / 9.0))
 												PointEntity(Pvt, Target)
 												
@@ -3320,7 +3320,7 @@ Function UpdateNPCs()
 												ForestNPCData[0] = 2.0
 											EndIf
 											ForestNPCData[1] = 0.0
-											PositionEntity(ForestNPC, EntityX(n\Collider),EntityY(n\Collider) + 0.5, EntityZ(n\Collider))
+											PositionEntity(ForestNPC, EntityX(n\Collider), EntityY(n\Collider) + 0.5, EntityZ(n\Collider))
 											RotateEntity(ForestNPC, 0.0, EntityYaw(n\Collider), 0.0)
 											MoveEntity(ForestNPC, 0.75, 0.0, 0.0)
 											RotateEntity(ForestNPC, 0.0, 0.0, 0.0)
@@ -4182,7 +4182,7 @@ Function UpdateNPCs()
 										PlaySound2(StepSFX(5, 0, Rand(0, 3)), Camera, n\Collider, 7.0, Rnd(0.5, 0.7))
 									EndIf
 									
-									RotateEntity(n\Collider, 0.0, CurveAngle(n\Angle,EntityYaw(n\Collider), 10.0), 0.0)
+									RotateEntity(n\Collider, 0.0, CurveAngle(n\Angle, EntityYaw(n\Collider), 10.0), 0.0)
 									
 									MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fpst\FPSFactor[0])
 								EndIf
@@ -5378,7 +5378,7 @@ Function UpdateMTFUnit(n.NPCs)
 						n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 						RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 						
-						n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed,20.0)
+						n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 						TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fpst\FPSFactor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fpst\FPSFactor[0], True)
 						AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 						
@@ -5711,7 +5711,7 @@ Function UpdateMTFUnit(n.NPCs)
 					
 					If n\PathTimer =< 0.0 Then
 						n\PathStatus = FindPath(n, n\EnemyX, n\EnemyY + 0.1, n\EnemyZ)
-						n\PathTimer = 70.0 * Rnd(6.0,10.0)
+						n\PathTimer = 70.0 * Rnd(6.0, 10.0)
 					ElseIf n\PathTimer =< 70.0 * 2.5 Then
 						n\PathTimer = n\PathTimer - fpst\FPSFactor[0]
 						n\CurrSpeed = 0.0
@@ -5742,7 +5742,7 @@ Function UpdateMTFUnit(n.NPCs)
 								PrevDist = EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ)
 								
 								PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
-								RotateEntity(n\Collider, 0.0,EntityYaw(n\Collider, True), 0.0, True)
+								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 								n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 								RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 								
@@ -6338,7 +6338,7 @@ Function UpdateMTFUnit(n.NPCs)
 				
 				n\Angle = EntityYaw(n\Collider)
 				;[End Block]
-			Case 6.0 ; ~ Seeing the player as a SCP-049-2 instance
+			Case 6.0 ; ~ Seeing the player as SCP-049-2 instance
 				;[Block]
 				PointEntity(n\OBJ, me\Collider)
 				RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 20.0), 0.0)
@@ -6379,7 +6379,7 @@ Function UpdateMTFUnit(n.NPCs)
 					
 					RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
 					PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
-					MoveEntity (Pvt, 0.8 * 0.079, 10.75 * 0.079, 6.9 * 0.079)
+					MoveEntity(Pvt, 0.8 * 0.079, 10.75 * 0.079, 6.9 * 0.079)
 					
 					p.Particles = CreateParticle(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 1, Rnd(0.08, 0.1), 0.0, 5.0)
 					p\Achange = -0.15
@@ -6506,7 +6506,7 @@ Function UpdateMTFUnit(n.NPCs)
 				;[Block]
 				If EntityVisible(n\Collider, n\Target\Collider) Then
 					PointEntity(n\OBJ, n\Target\Collider)
-					RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ),EntityYaw(n\Collider), 20.0), 0.0)
+					RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 20.0), 0.0)
 					n\Angle = EntityYaw(n\Collider)
 					
 					If EntityDistanceSquared(n\Target\Collider, n\Collider) < 1.69 Then
@@ -6925,7 +6925,7 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 				p\Speed = 0.001 : p\SizeChange = 0.003 : p\A = 0.8 : p\Achange = -0.01
 				RotateEntity(p\Pvt, EntityPitch(Pvt) - 180.0, EntityYaw(Pvt), 0)
 				
-				For i = 0 To Rand(2,3)
+				For i = 0 To Rand(2, 3)
 					p.Particles = CreateParticle(PickedX(), PickedY(), PickedZ(), 0, 0.006, 0.003, 80.0)
 					p\Speed = 0.02 : p\A = 0.8 : p\Achange = -0.01
 					RotateEntity(p\Pvt, EntityPitch(Pvt) + Rnd(170.0, 190.0), EntityYaw(Pvt) + Rnd(-10.0, 10.0), 0)	
@@ -7194,7 +7194,7 @@ Function ManipulateNPCBones()
 			BoneName = GetNPCManipulationValue(n\NPCNameInSection, n\BoneToManipulate, "bonename", 0)
 			If BoneName <> ""
 				Pvt = CreatePivot()
-				Bone = FindChild(n\OBJ,BoneName$)
+				Bone = FindChild(n\OBJ, BoneName)
 				If Bone = 0 Then RuntimeError("ERROR: NPC bone " + Chr(34) + BoneName + Chr(34) + " does not exist.")
 				PositionEntity(Pvt, EntityX(Bone, True), EntityY(Bone, True), EntityZ(Bone, True))
 				Select n\ManipulationType

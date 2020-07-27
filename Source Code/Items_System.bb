@@ -266,7 +266,7 @@ Function InitItemTemplates()
 	
 	CreateItemTemplate("Empty Cup", "emptycup", ItemsPath + "cup.b3d", ItemsPath + "INV_cup.png", "", 0.04, 2)
 	
-	CreateItemTemplate("ReVision Eyedrops", "eyedrops",ItemsPath + "eye_drops.b3d", ItemsPath + "INV_eye_drops.png", "", 0.0012, 1)
+	CreateItemTemplate("ReVision Eyedrops", "eyedrops", ItemsPath + "eye_drops.b3d", ItemsPath + "INV_eye_drops.png", "", 0.0012, 1)
 	CreateItemTemplate("Eyedrops", "fineeyedrops", ItemsPath + "eye_drops.b3d", ItemsPath + "INV_eye_drops.png", "", 0.0012, 1)
 	CreateItemTemplate("Eyedrops", "supereyedrops", ItemsPath + "eye_drops.b3d", ItemsPath + "INV_eye_drops.png", "", 0.0012, 1)
 	CreateItemTemplate("RedVision Eyedrops", "eyedrops", ItemsPath + "eye_drops.b3d", ItemsPath + "INV_eye_drops_red.png", "", 0.0012, 1, ItemsPath + "eye_drops_red.png")
@@ -461,9 +461,9 @@ Function RemoveItem(i.Items)
 	Next
 	If SelectedItem = i Then
 		Select SelectedItem\ItemTemplate\TempName 
-			Case "nvg", "supernvg"
+			Case "nvg", "supernvg", "finenvg"
 				;[Block]
-				wi\NightVision = 0
+				CameraFogFar = StoredCameraFogFar : wi\NightVision = 0
 				;[End Block]
 			Case "gasmask", "supergasmask", "gasmask2", "gasmask3"
 				;[Block]
@@ -493,7 +493,7 @@ Function RemoveItem(i.Items)
 		
 		SelectedItem = Null
 	EndIf
-	If i\ItemTemplate\Img <> 0
+	If i\ItemTemplate\Img <> 0 Then
 		FreeImage(i\ItemTemplate\Img)
 		i\ItemTemplate\Img = 0
 	EndIf
@@ -846,17 +846,9 @@ Function DropItem(item.Items, PlayDropSound% = True)
 			;[Block]
 			wi\BallisticVest = 0
 			;[End Block]
-		Case "nvg"
+		Case "nvg", "supernvg", "finenvg"
 			;[Block]
-			If wi\NightVision = 1 Then CameraFogFar = StoredCameraFogFar : wi\NightVision = 0
-			;[End Block]
-		Case "supernvg"
-			;[Block]
-			If wi\NightVision = 2 Then CameraFogFar = StoredCameraFogFar : wi\NightVision = 0
-			;[End Block]
-		Case "finenvg"
-			;[Block]
-			If wi\NightVision = 3 Then CameraFogFar = StoredCameraFogFar : wi\NightVision = 0
+			CameraFogFar = StoredCameraFogFar : wi\NightVision = 0
 			;[End Block]
 		Case "scp714"
 			;[Block]

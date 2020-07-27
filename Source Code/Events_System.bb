@@ -659,7 +659,7 @@ Function UpdateEvents()
 						RotateEntity(e\room\Objects[0], -Max(e\EventState - 1320.0, 0.0) / 130.0, 0.0, -Max(e\EventState - 1300.0, 0.0) / 40.0, True)
 						
 						PositionEntity(e\room\Objects[1], EntityX(e\room\Objects[1], True), -Max(e\EventState - 1800.0, 0.0) / 5000.0, EntityZ(e\room\Objects[1], True), True)
-						RotateEntity(e\room\Objects[1], -Max(e\EventState - 2040.0, 0.0) / 135.0, 0.0, -Max(e\EventState - 2040.0,0) / 43.0, True)
+						RotateEntity(e\room\Objects[1], -Max(e\EventState - 2040.0, 0.0) / 135.0, 0.0, -Max(e\EventState - 2040.0, 0.0) / 43.0, True)
 						
 						If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 6.25 Then
 							If Rand(300) = 2 Then PlaySound2(DecaySFX[Rand(1, 3)], Camera, e\room\Objects[0], 3.0)
@@ -1526,7 +1526,7 @@ Function UpdateEvents()
 							If e\EventState >= 10440.0 And e\EventState - fpst\FPSFactor[0] < 11561.0 Then
 								If EntityX(me\Collider) < EntityX(e\room\RoomDoors[1]\FrameOBJ, True)
 									If e\room\NPC[0]\State <> 12.0
-										e\room\NPC[0]\Sound = LoadSound_Strict("SFX\Room\Intro\Guard\Balcony\Alert" + Rand(1,2 ) + ".ogg")
+										e\room\NPC[0]\Sound = LoadSound_Strict("SFX\Room\Intro\Guard\Balcony\Alert" + Rand(1, 2) + ".ogg")
 										e\room\NPC[0]\SoundCHN = PlaySound2(e\room\NPC[0]\Sound, Camera, e\room\NPC[0]\Collider, 20.0)
 										e\room\NPC[0]\State = 12.0
 										e\room\NPC[0]\State2 = 1.0
@@ -2070,7 +2070,7 @@ Function UpdateEvents()
 							EndIf
 						Next
 						If CoffinDistance < 4.0 And HasBatteryFor895 And I_714\Using = 0 And wi\GasMask < 3 And wi\HazmatSuit < 3 Then
-							TurnEntity(me\Collider, 0.0, AngleDist(PointDirection(EntityX(me\Collider, True), EntityZ(me\Collider, True), EntityX(e\room\Objects[1],True), EntityZ(e\room\Objects[1], True)) + 90.0 + Sin(WrapAngle(e\EventState3 / 10.0)), EntityYaw(me\Collider)) / 4.0, 0.0, True)
+							TurnEntity(me\Collider, 0.0, AngleDist(PointDirection(EntityX(me\Collider, True), EntityZ(me\Collider, True), EntityX(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True)) + 90.0 + Sin(WrapAngle(e\EventState3 / 10.0)), EntityYaw(me\Collider)) / 4.0, 0.0, True)
 							CameraPitch = (CameraPitch * 0.8) + (((-60.0) * Min(Max((2.0 - Distance(EntityX(me\Collider, True), EntityX(e\room\Objects[1], True), EntityZ(me\Collider, True), EntityZ(e\room\Objects[1], True))) / 2.0, 0.0), 1.0)) * 0.2)
 							
 							me\Sanity = me\Sanity - (fpst\FPSFactor[0] * 1.1 / wi\NightVision)
@@ -2659,7 +2659,7 @@ Function UpdateEvents()
 							If EntityDistanceSquared(me\Collider, e\room\Objects[8]) > PowTwo(4750.0 * RoomScale) Then
 								me\DropSpeed = 0.0
 								me\BlurTimer = 1500.0
-								PositionEntity(me\Collider, EntityX(e\room\OBJ,True), 0.4, EntityX(e\room\OBJ, True))
+								PositionEntity(me\Collider, EntityX(e\room\OBJ, True), 0.4, EntityX(e\room\OBJ, True))
 								For r.Rooms = Each Rooms
 									If r\RoomTemplate\Name = "room106" Then
 										e\EventState = 0.0
@@ -3465,7 +3465,7 @@ Function UpdateEvents()
 									p.Particles = CreateParticle(EntityX(e\room\NPC[0]\Collider), EntityY(e\room\NPC[0]\OBJ) + 0.05, EntityZ(e\room\NPC[0]\Collider), 0, 0.05, 0.0, 60.0)
 									p\Speed = 0.002
 									RotateEntity(p\Pvt, 0.0, EntityYaw(e\room\NPC[0]\Collider), 0.0)
-									MoveEntity(p\Pvt,Rnd(-0.1, 0.1), 0.0, 0.1 + Rnd(0.0, 0.5))
+									MoveEntity(p\Pvt, Rnd(-0.1, 0.1), 0.0, 0.1 + Rnd(0.0, 0.5))
 									RotateEntity(p\Pvt, -90.0, EntityYaw(e\room\NPC[0]\Collider), 0.0)
 									p\Achange = -0.02
 								EndIf
@@ -3521,7 +3521,7 @@ Function UpdateEvents()
 							PositionEntity(Pvt, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 							PointEntity(Pvt, e\room\OBJ)
 							RotateEntity(Pvt, 0.0, EntityYaw(Pvt), 0.0, True)
-							MoveEntity(Pvt, 0.0, 0.0, EntityDistance(Pvt,e\room\OBJ) * 2.0)
+							MoveEntity(Pvt, 0.0, 0.0, EntityDistance(Pvt, e\room\OBJ) * 2.0)
 							
 							me\BlinkTimer = -10.0
 							
@@ -3748,7 +3748,7 @@ Function UpdateEvents()
 												AddLight(Null, e\room\x + iX * 2.0, 8.0 + (368.0 * RoomScale), e\room\z + iY * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
 												
 												TempInt2 = Rand(0, 1)
-												RotateEntity(TempInt,0.0, TempInt2 * 180.0 + 90.0, 0.0)
+												RotateEntity(TempInt, 0.0, TempInt2 * 180.0 + 90.0, 0.0)
 												
 												e\room\grid\Angles[iX + (iY * GridSZ)] = (TempInt2 * 2) + 1
 											ElseIf e\room\grid\Grid[(iX) + ((iY + 1) * GridSZ)] > 0 And e\room\grid\Grid[(iX) + ((iY - 1) * GridSZ)] > 0 Then ; ~ Vertical
@@ -5251,7 +5251,7 @@ Function UpdateEvents()
 									CameraPitch = CurveAngle(EntityPitch(Pvt) + 25.0, CameraPitch + 90.0, 80.0 - (e\EventState3 / 200.0))
 									CameraPitch = CameraPitch - 90
 									
-									Dist = Distance(EntityX(me\Collider), EntityX(e\room\Objects[2],True), EntityZ(me\Collider), EntityZ(e\room\Objects[2], True))
+									Dist = Distance(EntityX(me\Collider), EntityX(e\room\Objects[2], True), EntityZ(me\Collider), EntityZ(e\room\Objects[2], True))
 									
 									me\HeartBeatRate = 150.0
 									me\HeartBeatVolume = Max(3.0 - Dist, 0.0) / 3.0
@@ -5703,7 +5703,7 @@ Function UpdateEvents()
 										UseDoor(e\room\RoomDoors[1], False)
 										For do.Doors = Each Doors
 											If do\Dir = 2 Then
-												If Abs(EntityX(e\room\OBJ) - EntityX(do\FrameOBJ,True)) < 4.5 Then 
+												If Abs(EntityX(e\room\OBJ) - EntityX(do\FrameOBJ, True)) < 4.5 Then 
 													If Abs(EntityZ(e\room\OBJ) - EntityZ(do\FrameOBJ, True)) < 4.5 Then 
 														UseDoor(do, False)
 														Exit
@@ -5915,7 +5915,7 @@ Function UpdateEvents()
 									i = 0
 									If EntityDistanceSquared(me\Collider, e\room\RoomDoors[1]\FrameOBJ) < 9.0
 										i = 1
-									ElseIf EntityDistanceSquared(me\Collider,e\room\RoomDoors[3]\FrameOBJ) < 9.0
+									ElseIf EntityDistanceSquared(me\Collider, e\room\RoomDoors[3]\FrameOBJ) < 9.0
 										i = 3
 									EndIf
 									If i > 0
@@ -6281,7 +6281,7 @@ Function UpdateEvents()
 									    d.Decals = CreateDecal(0, EntityX(e\room\Objects[7], True), EntityY(e\room\Objects[7], True), EntityZ(e\room\Objects[7], True), 0.0, 0.0, 0.0) 
 										d\Timer = 90000.0 : d\Alpha = 0.01 : d\AlphaChange = 0.005 : d\Size = 0.05 : d\SizeChange = 0.002
 									    RotateEntity(d\OBJ, EntityPitch(e\room\Objects[7], True) + Rnd(10.0, 20.0), EntityYaw(e\room\Objects[7], True) + 30.0, EntityRoll(d\OBJ))
-									    MoveEntity(d\OBJ, 0,0.05, 0.2) 
+									    MoveEntity(d\OBJ, 0.0, 0.05, 0.2) 
 									    RotateEntity(d\OBJ, EntityPitch(e\room\Objects[7], True), EntityYaw(e\room\Objects[7], True), EntityRoll(d\OBJ))
 										EntityParent(d\OBJ, e\room\Objects[7])
 									ElseIf e\EventState3 > 3200.0 Then
@@ -7260,7 +7260,7 @@ Function UpdateEvents()
 							    e\EventState = 2.0
 							    PlaySound_Strict(LeverSFX)
 						    Else
-							    p.Particles = CreateParticle(EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0],True), 6, 0.02, -0.12)
+							    p.Particles = CreateParticle(EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), 6, 0.02, -0.12)
 								p\SizeChange = 0.012 :  p\Achange = -0.015
 							    RotateEntity(p\Pvt, -90.0, 0.0, 0.0, True)
 							    TurnEntity(p\Pvt, Rnd(-26.0, 26.0), Rnd(-26.0, 26.0), Rnd(360.0))
@@ -7367,7 +7367,7 @@ Function UpdateEvents()
 								PlaySound_Strict(LoadTempSound("SFX\Room\SinkholeFall.ogg"))
 							EndIf
 							
-							me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, Max(Dist  * 50.0,1.0))
+							me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, Max(Dist  * 50.0, 1.0))
 							
 							x = CurveValue(EntityX(e\room\OBJ), EntityX(me\Collider), 10.0)
 							y = CurveValue(EntityY(e\room\OBJ) - e\EventState2, EntityY(me\Collider), 25.0)
@@ -7962,9 +7962,9 @@ Function UpdateEvents()
 											ShouldCreateItem = True
 										EndIf
 										;[End Block]
-									Case "key1", "key2", "key3"
+									Case "key0", "key1", "key2", "key3"
 										;[Block]
-										If itt\TempName = "key1" Lor itt\TempName = "key2" Lor itt\TempName = "key3" Lor itt\TempName = "misc" And Rand(6) = 1
+										If itt\TempName = "key0" Lor itt\TempName = "key1" Lor itt\TempName = "key2" Lor itt\TempName = "key3" Lor itt\TempName = "misc" And Rand(6) = 1
 											ShouldCreateItem = True
 										EndIf
 										;[End Block]
@@ -8143,11 +8143,11 @@ Function UpdateEvents()
 									RotateEntity(Pvt, 0.0, EntityYaw(d_Ent, True) + 90.0, 0.0)
 									MoveEntity(Pvt, 0.0, 0.0, 0.2)
 									
-									If ParticleAmount > 0
+									If ParticleAmount > 0 Then
 										For i = 0 To (1 + (2 * (ParticleAmount - 1)))
 											p.Particles = CreateParticle(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 7, 0.002, 0.0, 25.0)
-											p\Speed = Rnd(0.01,0.05) : p\Size = 0.0075 : p\Achange = -0.05
-											RotateEntity(p\Pvt, Rnd(-45.0, 0.0), EntityYaw(Pvt) + Rnd(-10.0,10.0), 0)
+											p\Speed = Rnd(0.01, 0.05) : p\Size = 0.0075 : p\Achange = -0.05
+											RotateEntity(p\Pvt, Rnd(-45.0, 0.0), EntityYaw(Pvt) + Rnd(-10.0, 10.0), 0)
 											ScaleSprite(p\OBJ, p\Size, p\Size)
 										Next
 									EndIf
@@ -9059,9 +9059,9 @@ Function UpdateDimension1499()
 						If e\EventState3 < 70.0 * 30.0 Then
 							If du\Anim = 0 Then
 								If AnimTime(du\OBJ) =< 360.5 Then
-									Animate2(du\OBJ, AnimTime(du\OBJ),321.0, 361.0, 0.2, False)
+									Animate2(du\OBJ, AnimTime(du\OBJ), 321.0, 361.0, 0.2, False)
 								ElseIf AnimTime(du\OBJ) > 361.5 And AnimTime(du\OBJ) =< 401.5 Then
-									Animate2(du\OBJ, AnimTime(du\OBJ),362.0, 402.0, 0.2, False)
+									Animate2(du\OBJ, AnimTime(du\OBJ), 362.0, 402.0, 0.2, False)
 								Else
 									Temp = Rand(0, 1)
 									If Temp = 0 Then
@@ -9101,7 +9101,7 @@ Function UpdateDimension1499()
 							
 							Local Pvt% = CreatePivot()
 							
-							PositionEntity(Pvt,EntityX(du\OBJ), EntityY(du\OBJ), EntityZ(du\OBJ), True)
+							PositionEntity(Pvt, EntityX(du\OBJ), EntityY(du\OBJ), EntityZ(du\OBJ), True)
 							PointEntity(Pvt, me\Collider)
 							RotateEntity(du\OBJ, 0.0, CurveAngle(EntityYaw(Pvt), EntityYaw(du\OBJ) - 180.0, 10.0) + 180.0, 0.0)
 							FreeEntity(Pvt)
@@ -9256,7 +9256,7 @@ Function UpdateEndings()
 							PositionEntity(Pvt, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
 							
 							e\room\Objects[0] = LoadMesh_Strict("GFX\map\exit1terrain.b3d", e\room\OBJ)
-							ScaleEntity(e\room\Objects[0], RoomScale, RoomScale, RoomScale,True)
+							ScaleEntity(e\room\Objects[0], RoomScale, RoomScale, RoomScale, True)
 							RotateEntity(e\room\Objects[0], 0.0, e\room\Angle, 0.0, True)
 							PositionEntity(e\room\Objects[0], EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), True)
 							FreeEntity(Pvt)
@@ -9295,9 +9295,9 @@ Function UpdateEndings()
 								If EntityDistanceSquared(me\Collider, e\room\Objects[10]) < PowTwo(320.0 * RoomScale) Then
 									e\EventState = 2.0
 									e\room\RoomDoors[2]\Open = False
-									e\room\RoomDoors[2]\Locked = 6
+									e\room\RoomDoors[2]\Locked = True
 									e\room\RoomDoors[3]\Open = False
-									e\room\RoomDoors[3]\Locked = 6
+									e\room\RoomDoors[3]\Locked = True
 									
 									e\room\NPC[2] = CreateNPC(NPCtypeApache, EntityX(e\room\Objects[9], True), EntityY(e\room\Objects[9], True) + 0.5, EntityZ(e\room\Objects[9], True))
 									e\room\NPC[2]\State = 3.0
@@ -9407,7 +9407,7 @@ Function UpdateEndings()
 												n.NPCs = CreateNPC(NPCtypeMTF, EntityX(e\room\Objects[18], True) + (i * 0.4), EntityY(e\room\Objects[18], True) + 0.29, EntityZ(e\room\Objects[18], True) + (i * 0.4))
 											Next
 											
-											n.NPCs = CreateNPC(NPCtypeMTF, EntityX(e\room\RoomDoors[2]\OBJ, True),EntityY(e\room\RoomDoors[2]\OBJ, True) + 0.29, (EntityZ(e\room\RoomDoors[2]\OBJ, True) + EntityZ(e\room\RoomDoors[3]\OBJ, True)) / 2.0)
+											n.NPCs = CreateNPC(NPCtypeMTF, EntityX(e\room\RoomDoors[2]\OBJ, True), EntityY(e\room\RoomDoors[2]\OBJ, True) + 0.29, (EntityZ(e\room\RoomDoors[2]\OBJ, True) + EntityZ(e\room\RoomDoors[3]\OBJ, True)) / 2.0)
 											
 											For n.NPCs = Each NPCs
 												If n\NPCtype = NPCtypeMTF Then
@@ -9529,7 +9529,7 @@ Function UpdateEndings()
 						If ParticleAmount > 0
 							If Rand(3) = 1 Then
 								p.Particles = CreateParticle(EntityX(Camera) + Rnd(-2.0, 2.0), EntityY(Camera) + Rnd(0.9, 2.0), EntityZ(Camera) + Rnd(-2.0, 2.0), 2, 0.006, 0.0, 300.0)
-								p\Speed = Rnd(0.002,0.003) : p\SizeChange = -0.00001
+								p\Speed = Rnd(0.002, 0.003) : p\SizeChange = -0.00001
 								RotateEntity(p\Pvt, Rnd(-20.0, 20.0), e\room\Angle - 90.0 + Rnd(-15.0, 15.0), 0.0, 0.0)
 							EndIf
 						EndIf
@@ -9571,7 +9571,7 @@ Function UpdateEndings()
 						
 						e\room\Objects[0] = LoadRMesh("GFX\map\gateatunnel_opt.rmesh", Null)
 						PositionEntity(e\room\Objects[0], EntityX(e\room\OBJ, True), EntityY(e\room\OBJ, True), EntityZ(e\room\OBJ, True))
-						ScaleEntity(e\room\Objects[0],RoomScale, RoomScale, RoomScale)
+						ScaleEntity(e\room\Objects[0], RoomScale, RoomScale, RoomScale)
 						EntityType(e\room\Objects[0], HIT_MAP)
 						EntityPickMode(e\room\Objects[0], 3)
 						EntityParent(e\room\Objects[0], e\room\OBJ)
@@ -9711,7 +9711,7 @@ Function UpdateEndings()
 											If Curr106\State =< -10.0 Then
 												Dist = EntityY(Curr106\Collider)
 												PositionEntity(Curr106\Collider, EntityX(Curr106\Collider), EntityY(e\room\Objects[3], True), EntityZ(Curr106\Collider), True)
-												Curr106\PathStatus = FindPath(Curr106, EntityX(e\room\NPC[5]\Collider, True), EntityY(e\room\NPC[5]\Collider, True), EntityZ(e\room\NPC[5]\Collider,True))
+												Curr106\PathStatus = FindPath(Curr106, EntityX(e\room\NPC[5]\Collider, True), EntityY(e\room\NPC[5]\Collider, True), EntityZ(e\room\NPC[5]\Collider, True))
 												Curr106\PathTimer = 70.0 * 200.0
 												PositionEntity(Curr106\Collider, EntityX(Curr106\Collider), Dist, EntityZ(Curr106\Collider), True)
 												ResetEntity(Curr106\Collider)
@@ -9742,7 +9742,7 @@ Function UpdateEndings()
 											
 											If fpst\FPSFactor[0] > 0.0 Then ; ~ Decals under 106
 												If ((e\EventState - fpst\FPSFactor[0]) Mod 100.0) =< 50.0 And (e\EventState Mod 100.0) > 50.0 Then
-													de.Decals = CreateDecal(0, EntityX(Curr106\Collider, True),EntityY(e\room\Objects[3], True) + 0.01, EntityZ(Curr106\Collider, True), 90.0, Rnd(360.0), 0.0)
+													de.Decals = CreateDecal(0, EntityX(Curr106\Collider, True), EntityY(e\room\Objects[3], True) + 0.01, EntityZ(Curr106\Collider, True), 90.0, Rnd(360.0), 0.0)
 													de\Size = 0.2 : de\SizeChange = 0.004 : de\Timer = 90000.0 : UpdateDecals() 
 													EntityAlpha(de\OBJ, 0.8)
 												EndIf
@@ -9806,7 +9806,7 @@ Function UpdateEndings()
 															p\Speed = 0.0 : p\A = 1.0
 															EntityParent(p\pvt, Curr106\Collider, True)
 															
-															p.Particles = CreateParticle(EntityX(e\room\Objects[10], True),EntityY(e\room\Objects[10], True), EntityZ(e\room\Objects[10], True), 4, 2.0, 0.0, (70.0 * 6.7))
+															p.Particles = CreateParticle(EntityX(e\room\Objects[10], True), EntityY(e\room\Objects[10], True), EntityZ(e\room\Objects[10], True), 4, 2.0, 0.0, (70.0 * 6.7))
 															p\Speed = 0.0 : p\A = 1.0
 															RotateEntity(p\Pvt, EntityPitch(e\room\Objects[10], True), EntityYaw(e\room\Objects[10], True), 0.0, True)
 															MoveEntity(p\Pvt, 0.0, 92.0 * RoomScale, 512.0 * RoomScale)
@@ -9886,13 +9886,13 @@ Function UpdateEndings()
 											
 											OBJ = CopyEntity(e\room\Objects[12])
 											PositionEntity(OBJ, EntityX(e\room\OBJ, True) - 4064.0 * RoomScale, EntityY(e\room\Objects[11], True), EntityZ(e\room\OBJ, True) - 2112.0 * RoomScale)
-											EntityParent(OBJ,e\room\Objects[17])
+											EntityParent(OBJ, e\room\Objects[17])
 											
 											e\SoundCHN = PlaySound2(LoadTempSound("SFX\Ending\GateA\Bell1.ogg"), Camera, e\room\Objects[12])
 											
-											p.Particles = CreateParticle(EntityX(e\room\Objects[11], True),EntityY(Camera,True), EntityZ(e\room\Objects[11],True), 4, 8.0, 0, 50)
+											p.Particles = CreateParticle(EntityX(e\room\Objects[11], True), EntityY(Camera, True), EntityZ(e\room\Objects[11], True), 4, 8.0, 0, 50)
 											p\Speed = 0.15 : p\A = 0.5
-											p.Particles = CreateParticle(EntityX(e\room\Objects[11], True),EntityY(Camera,True), EntityZ(e\room\Objects[11],True), 4, 8.0, 0, 50)
+											p.Particles = CreateParticle(EntityX(e\room\Objects[11], True), EntityY(Camera, True), EntityZ(e\room\Objects[11], True), 4, 8.0, 0, 50)
 											p\Speed = 0.25 : p\A = 0.5
 											PointEntity(p\Pvt, me\Collider)
 											
@@ -10057,17 +10057,15 @@ Function LoadEventSound(e.Events, File$, Number% = 0)
 End Function
 
 Function RemoveEvent(e.Events)
-	If e\Sound <> 0 Then FreeSound_Strict(e\Sound)
-	If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2)
-	If e\Sound3 <> 0 Then FreeSound_Strict(e\Sound3)
+	If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
+	If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
+	If e\Sound3 <> 0 Then FreeSound_Strict(e\Sound3) : e\Sound3 = 0
 	If e\Img <> 0 Then FreeImage(e\Img)
 	
 	Delete(e)
 End Function
 
 Function IsItemGoodFor1162(itt.ItemTemplates)
-	Local IN$ = itt\TempName
-	
 	Select itt\TempName
 		Case "key0", "key1", "key2", "key3"
 			;[Block]
