@@ -2280,7 +2280,7 @@ Function LoadMap(File$)
 		Local MTRoom.Rooms
 		
 		For r.Rooms = Each Rooms
-			If r\RoomTemplate\Name = "room2tunnel" Then
+			If r\RoomTemplate\Name = "room2mt" Then
 				MTRoom = r
 				Exit
 			EndIf

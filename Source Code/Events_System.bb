@@ -190,7 +190,7 @@ Function InitEvents()
 	CreateEvent("room2testroom2", "room2testroom2", 0)
 	CreateEvent("room2testroom173", "room2testroom", 0, 1.0)	
 	
-	CreateEvent("room2tunnel", "room2tunnel", 0)
+	CreateEvent("room2mt", "room2mt", 0)
 	
 	CreateEvent("room2ccont", "room2ccont", 0)
 	
@@ -3538,7 +3538,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room2tunnel"	
+			Case "room2mt"	
 				;[Block]
 				If EntityY(me\Collider, True) >= 8.0 And EntityY(me\Collider, True) =< 12.0 Then
 					If (EntityX(me\Collider, True) >= e\room\x - 6.0) And (EntityX(me\Collider, True) =< (e\room\x + 2.0 * GridSZ + 6.0)) Then
