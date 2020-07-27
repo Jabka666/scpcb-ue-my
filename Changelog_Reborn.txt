@@ -33,6 +33,7 @@
 - Changed SCP-1048's achievement icon.
 - Changed NVG, SCP-008, SCP-682 and SCP-1048's loading screens.
 - Changed chance to spawn SCP-005.
+- Changed idle animation for Class-D.
 
 - Replaced O5-14 Burnt Document by batteries in room2offices5.
 
@@ -121,6 +122,7 @@ Bug Fixes:
 - Fixed inventory single clicks being recognized as double clicks.
 - Fixed message being moved down if selecting a document, while a clipboard/wallet is open.
 - Fixed brightness of the buttons guarded by 4-digit pass code.
+- Fixed missing texture for MTF's P90.
 
 - Small fixes for commands "disablenuke" and "enablecontrol/disablecontrol.
 - Small fixes for gateb and gateaentrance's walls.
