@@ -66,8 +66,8 @@ Function InitEvents()
 	
 	CreateEvent("pocketdimension", "pocketdimension", 0)	
 	
-	; ~ There's a 7% chance that SCP-106 appears in the rooms named "tunnel"
-	CreateEvent("tunnel106", "tunnel", 0, 0.07 + (0.1 * SelectedDifficulty\AggressiveNPCs))
+	; ~ There's a 7% chance that SCP-106 appears in the rooms named "room2tunnel"
+	CreateEvent("room2tunnel106", "room2tunnel", 0, 0.07 + (0.1 * SelectedDifficulty\AggressiveNPCs))
 	
 	; ~ The chance for SCP-173 appearing in the first room2clockroom is about 66%
 	; ~ There's a 30% chance that it appears in the later room2clockrooms
@@ -95,7 +95,6 @@ Function InitEvents()
 	CreateEvent("room3storage", "room3storage", 0, 0.0)
 	
 	CreateEvent("tunnel2smoke", "tunnel2", 0, 0.2)
-	CreateEvent("tunnel2", "tunnel2", Rand(0, 2), 0.0)
 	CreateEvent("tunnel2", "tunnel2", 0, (0.2 * SelectedDifficulty\AggressiveNPCs))
 	
 	; ~ SCP-173 appears in half of the "room2doors"-rooms
@@ -128,7 +127,7 @@ Function InitEvents()
 		Select Rand(3)
 			Case 1
 				;[Block]
-				CreateEvent("682roar", "tunnel", Rand(0, 2), 0.0)
+				CreateEvent("682roar", "room2tunnel", Rand(0, 2), 0.0)
 				;[End Block]
 			Case 2
 				;[Block]
@@ -236,7 +235,7 @@ Function InitEvents()
 	CreateEvent("096spawn", "room2pit", 0, 0.5 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent("096spawn", "room3tunnel", 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent("096spawn", "room4tunnels", 0, 0.7 + (0.2 * SelectedDifficulty\AggressiveNPCs))
-	CreateEvent("096spawn", "tunnel", 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent("096spawn", "room2tunnel", 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent("096spawn", "tunnel2", 0, 0.4 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent("096spawn", "room3z2", 0, 0.7 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	
@@ -2757,7 +2756,7 @@ Function UpdateEvents()
 									;[Block]
 									me\BlurTimer = 1500.0
 									For r.Rooms = Each Rooms
-										If r\RoomTemplate\Name = "tunnel" Then
+										If r\RoomTemplate\Name = "room2tunnel" Then
 											GiveAchievement(AchvPD)
 											e\EventState = 0.0
 											e\EventState2 = 0.0
@@ -7025,7 +7024,7 @@ Function UpdateEvents()
 					RemoveEvent(e)
 				EndIf
 				;[End Block]
-			Case "tunnel106"
+			Case "room2tunnel106"
 				;[Block]
 				If e\EventState = 0.0 Then
 					If e\room\Dist < 5.0 And e\room\Dist > 0.0 Then
@@ -7043,8 +7042,8 @@ Function UpdateEvents()
 				ElseIf e\EventState = 1.0
 					If e\room\Dist < 3.0 Lor Rand(7000) = 1 Then
 						e\EventState = 2.0
-						d.Decals = CreateDecal(0, EntityX(e\room\OBJ), 445.0 * RoomScale, EntityZ(e\room\OBJ), -90.0, Rand(360.0), 0.0)
-						d\Size = Rnd(0.5, 0.7) : d\ID = 1
+						d.Decals = CreateDecal(1, EntityX(e\room\OBJ), 445.0 * RoomScale, EntityZ(e\room\OBJ), -90.0, Rand(360.0), 0.0)
+						d\Size = Rnd(0.5, 0.7)
 						EntityAlpha(d\OBJ, Rnd(0.7, 0.85))
 						ScaleSprite(d\OBJ, d\Size, d\Size)
 						
@@ -10227,5 +10226,5 @@ Function GenerateRandomIA()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11D0#1DF2
+;~B#11CF#1DF1
 ;~C#Blitz3D
