@@ -17,6 +17,7 @@
 - Added anisotropic filtering.
 - Added support for resolutions of up to 4k.
 - Added coloring of the fog.
+- Added room2tunnel3.
 
 - Now guard in "room2elevator" event can kill the player if he too close.
 - Now the pass code for O5 Council's office drops from falling guard in SCP-895's event.
@@ -53,6 +54,9 @@
 
 - Renamed room2testroom to room2testroom2.
 - Renamed room2testroom2 to room2testroom.
+- Renamed room2tunnel to room2mt.
+- Renamed tunnel to room2tunnel.
+- Renamed tunnel2 to room2tunnel2.
 
 - Combined "scp_1048_pen.b3d" and "scp_1048.b3d" models. 
 - Combined texture of SCP-173's cell.
