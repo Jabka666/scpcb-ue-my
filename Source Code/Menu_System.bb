@@ -446,6 +446,7 @@ Function UpdateMainMenu()
 											CurrSave = SaveGames(i - 1)
 											InitLoadGame()
 											MainMenuOpen = False
+											ShouldDeleteGadgest = True
 										EndIf
 									EndIf
 										
@@ -476,6 +477,7 @@ Function UpdateMainMenu()
 								DeleteDir(CurrentDir() + SavePath + SaveMSG)
 								SaveMSG = ""
 								LoadSaveGames()
+								ShouldDeleteGadgets = True
 							EndIf
 							If DrawButton(x + 250 * MenuScale, y + 150 * MenuScale, 100 * MenuScale, 30 * MenuScale, "No", False) Then
 								SaveMSG = ""

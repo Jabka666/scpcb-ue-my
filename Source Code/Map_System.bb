@@ -394,12 +394,12 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 	If HasTriggerBox
 		Local TB%
 		
-		rt\TempTriggerboxAmount = ReadInt(f)
-		For TB = 0 To rt\TempTriggerboxAmount - 1
-			rt\TempTriggerbox[TB] = CreateMesh(rt\OBJ)
+		rt\TempTriggerBoxAmount = ReadInt(f)
+		For TB = 0 To rt\TempTriggerBoxAmount - 1
+			rt\TempTriggerBox[TB] = CreateMesh(rt\OBJ)
 			Count = ReadInt(f)
 			For i = 1 To Count
-				Surf = CreateSurface(rt\TempTriggerbox[TB])
+				Surf = CreateSurface(rt\TempTriggerBox[TB])
 				Count2 = ReadInt(f)
 				For j = 1 To Count2
 					x = ReadFloat(f) : y = ReadFloat(f) : z = ReadFloat(f)
@@ -412,7 +412,7 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 					AddTriangle(Surf, Temp1i, Temp3i, Temp2i)
 				Next
 			Next
-			rt\TempTriggerboxName[TB] = ReadString(f)
+			rt\TempTriggerBoxName[TB] = ReadString(f)
 		Next
 	EndIf
 	
@@ -655,7 +655,7 @@ End Function
 Const GridSize% = 10
 
 Type Forest
-	Field TileMesh%[6]
+	Field TileMesh%[5]
 	Field DetailMesh%[5]
 	Field Grid%[(GridSize * GridSize) + 11]
 	Field TileEntities%[(GridSize * GridSize) + 1]
@@ -833,7 +833,7 @@ Function GenForestGrid(fr.Forest)
 	CatchErrors("GenForestGrid")
 End Function
 
-Const ROOM1% = 1, ROOM2% = 2, ROOM2C% = 3, ROOM3% = 4, ROOM4% = 5
+Const ROOM1% = 0, ROOM2% = 1, ROOM2C% = 2, ROOM3% = 3, ROOM4% = 4
 
 Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 	CatchErrors("Uncaught (PlaceForest)")
@@ -857,7 +857,7 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 	PositionEntity(fr\Forest_Pivot, x, y, z, True)
 	
 	; ~ Load assets
-	Local hMap%[6], Mask%[6]
+	Local hMap%[5], Mask%[5]
 	Local GroundTexture% = LoadTexture_Strict("GFX\map\forest\forestfloor.jpg")
 	Local PathTexture% = LoadTexture_Strict("GFX\map\forest\forestpath.jpg")
 	
@@ -968,7 +968,7 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 						;[End Block]
 				End Select
 				
-				If Tile_Type > 0 Then 
+				If Tile_Type >= 0 Then 
 					Local ItemPlaced%[4]
 					Local it.Items = Null
 					
@@ -1096,7 +1096,7 @@ Function PlaceForest_MapCreator(fr.Forest, x#, y#, z#, r.Rooms)
 	fr\Forest_Pivot = CreatePivot()
 	PositionEntity(fr\Forest_Pivot, x, y, z, True)
 	
-	Local hMap%[6], Mask%[6]
+	Local hMap%[5], Mask%[5]
 	; ~ Load assets
 	Local GroundTexture% = LoadTexture_Strict("GFX\map\forest\forestfloor.jpg")
 	Local PathTexture% = LoadTexture_Strict("GFX\map\forest\forestpath.jpg")
@@ -1148,15 +1148,15 @@ Function PlaceForest_MapCreator(fr.Forest, x#, y#, z#, r.Rooms)
 				If Tile_Type = 6 Then
 					Tile_Type = 2
 				EndIf
-				Angle = (fr\Grid[(tY * GridSize) + tX] Mod 4) * 90.0
+				Angle = (fr\Grid[(tY * GridSize) + tX] Mod 4.0) * 90.0
 				
-				Tile_Entity = CopyEntity(fr\TileMesh[Tile_Type])
+				Tile_Entity = CopyEntity(fr\TileMesh[Tile_Type - 1])
 				
-				If Tile_Type > 0 Then 
+				If Tile_Type >= 0 Then 
 					Local ItemPlaced%[4]
 					Local it.Items = Null
 					
-					If (tY Mod 3) = 2 And ItemPlaced[Floor(tY / 3)] = False Then
+					If tY Mod 3 = 2 And ItemPlaced[Floor(tY / 3)] = False Then
 						ItemPlaced[Floor(tY / 3)] = True
 						it.Items = CreateItem("Log #" + Int(Floor(tY / 3) + 1), "paper", 0.0, 0.5, 0.0)
 						EntityType(it\Collider, HIT_ITEM)
@@ -1165,12 +1165,12 @@ Function PlaceForest_MapCreator(fr.Forest, x#, y#, z#, r.Rooms)
 					
 					; ~ Place trees and other details
 					; ~ Only placed on spots where the value of the heightmap is above 100
-					SetBuffer(ImageBuffer(hMap[Tile_Type]))
-					Width = ImageWidth(hMap[Tile_Type])
+					SetBuffer(ImageBuffer(hMap[Tile_Type - 1]))
+					Width = ImageWidth(hMap[Tile_Type - 1])
 					Tempf4 = (Tempf3 / Float(Width))
 					For lX = 3 To Width - 2
 						For lY = 3 To Width - 2
-							GetColor lX, Width - lY
+							GetColor(lX, Width - lY)
 							If ColorRed() > Rand(100, 260) Then
 								Detail_Entity = 0
 								Select Rand(0, 7)
@@ -1268,8 +1268,8 @@ Function DestroyForest(fr.Forest)
 	
 	Local tX%, tY%, i%
 	
-	For tX% = 0 To GridSize - 1
-		For tY% = 0 To GridSize - 1
+	For tX = 0 To GridSize - 1
+		For tY = 0 To GridSize - 1
 			If fr\TileEntities[tX + (tY * GridSize)] <> 0 Then
 				FreeEntity(fr\TileEntities[tX + (tY * GridSize)])
 				fr\TileEntities[tX + (tY * GridSize)] = 0
@@ -1277,11 +1277,10 @@ Function DestroyForest(fr.Forest)
 			EndIf
 		Next
 	Next
-	If fr\Door[0] <> 0 Then FreeEntity(fr\Door[0]) : fr\Door[0] = 0
-	If fr\Door[1] <> 0 Then FreeEntity(fr\Door[1]) : fr\Door[0] = 1
-	If fr\DetailEntities[0] <> 0 Then FreeEntity(fr\DetailEntities[0]) : fr\DetailEntities[0] = 0
-	If fr\DetailEntities[1] <> 0 Then FreeEntity(fr\DetailEntities[1]) : fr\DetailEntities[1] = 0
-	
+	For i = 0 To 1
+		If fr\Door[i] <> 0 Then FreeEntity(fr\Door[i]) : fr\Door[i] = 0
+		If fr\DetailEntities[i] <> 0 Then FreeEntity(fr\DetailEntities[i]) : fr\DetailEntities[i] = 0
+	Next
 	If fr\Forest_Pivot <> 0 Then FreeEntity(fr\Forest_Pivot) : fr\Forest_Pivot = 0
 	For i = ROOM1 To ROOM4
 		If fr\TileMesh[i] <> 0 Then FreeEntity(fr\TileMesh[i]) : fr\TileMesh[i] = 0
@@ -1331,9 +1330,9 @@ Type RoomTemplates
 	Field Shape%, Name$
 	Field Commonness%, Large%
 	Field DisableDecals%
-	Field TempTriggerboxAmount
-	Field TempTriggerbox[128]
-	Field TempTriggerboxName$[128]
+	Field TempTriggerBoxAmount%
+	Field TempTriggerBox%[128]
+	Field TempTriggerBoxName$[128]
 	Field DisableOverlapCheck% = True
 	Field MinX#, MinY#, MinZ#
 	Field MaxX#, MaxY#, MaxZ#
@@ -1487,9 +1486,9 @@ Type Rooms
 	Field LightFlicker%[MaxRoomLights]
 	Field AlarmRotor%[1]
 	Field AlarmRotorLight%[1]
-	Field TriggerboxAmount
-	Field Triggerbox[128]
-	Field TriggerboxName$[128]
+	Field TriggerBoxAmount%
+	Field TriggerBox%[128]
+	Field TriggerBoxName$[128]
 	Field MaxWayPointY#
 	Field LightR#[MaxRoomLights], LightG#[MaxRoomLights], LightB#[MaxRoomLights]
 	Field MinX#, MinY#, MinZ#
@@ -1537,14 +1536,14 @@ Function PlaceGrid_MapCreator(r.Rooms)
 		HideEntity(Meshes[i])
 	Next
 	
-	For y = 0 To (GridSZ - 1)
-		For x = 0 To (GridSZ - 1)
+	For y = 0 To GridSZ - 1
+		For x = 0 To GridSZ - 1
 			If r\grid\Grid[x + (y * GridSZ)] > 0 Then
 				Local Tile_Type% = 0
 				Local Angle# = 0.0
 				
 				Tile_Type = r\grid\Grid[x + (y * GridSZ)]
-				Angle = r\grid\Angles[x +(y * GridSZ)] * 90.0
+				Angle = r\grid\Angles[x + (y * GridSZ)] * 90.0
 				
 				Local Tile_Entity% = CopyEntity(Meshes[Tile_Type - 1])
 				
@@ -1553,23 +1552,19 @@ Function PlaceGrid_MapCreator(r.Rooms)
 				PositionEntity(Tile_Entity, r\x + x * 2.0, 8.0, r\z + y * 2.0, True)
 				
 				Select r\grid\Grid[x + (y * GridSZ)]
-					Case ROOM1
+					Case ROOM1 + 1
 						;[Block]
-						AddLight(Null, r\x + x * 2.0, 8.0 + (368.0 * RoomScale), r\z + y * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
+						AddLight(Null, r\x + x * 2.0, 8.0 + (372.0 * RoomScale), r\z + y * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
 						;[End Block]
-					Case ROOM2, ROOM2C
+					Case ROOM2 + 1
 						;[Block]
-						AddLight(Null, r\x + x * 2.0, 8.0 + (368.0 * RoomScale), r\z + y * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
+						AddLight(Null, r\x + x * 2.0, 8.0 + (372.0 * RoomScale), r\z + y * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
 						;[End Block]
-					Case ROOM2C
+					Case ROOM2C + 1, ROOM3 + 1, ROOM4 + 1
 						;[Block]
-						AddLight(Null, r\x + x * 2.0, 8.0 + (412.0 * RoomScale), r\z + y * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
+						AddLight(Null, r\x + x * 2.0, 8.0 + (416.0 * RoomScale), r\z + y * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
 						;[End Block]
-					Case ROOM3, ROOM4
-						;[Block]
-						AddLight(Null, r\x + x * 2.0, 8.0 + (412.0 * RoomScale), r\z + y * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
-						;[End Block]
-					Case ROOM4 + 1
+					Case ROOM4 + 2
 						;[Block]
 						dr = CreateDoor(r\Zone, r\x + (x * 2.0) + (Cos(EntityYaw(Tile_Entity, True)) * 240.0 * RoomScale), 8.0, r\z + (y * 2.0) + (Sin(EntityYaw(Tile_Entity, True)) * 240.0 * RoomScale), EntityYaw(Tile_Entity, True) - 90.0, Null, False, 3)
 						PositionEntity(dr\Buttons[0], EntityX(dr\Buttons[0], True) + (Cos(EntityYaw(Tile_Entity, True)) * 0.05), EntityY(dr\Buttons[0], True), EntityZ(dr\Buttons[0], True) + (Sin(EntityYaw(Tile_Entity, True)) * 0.05), True)
@@ -1591,7 +1586,7 @@ Function PlaceGrid_MapCreator(r.Rooms)
 							PositionEntity(r\Objects[1], r\x + x * 2.0, 8.0, r\z + y * 2.0, True)
 						EndIf
 						;[End Block]
-					Case ROOM4 + 2
+					Case ROOM4 + 3
 						;[Block]
 						AddLight(Null, r\x + x * 2.0 - (Sin(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale), 8.0 + (396.0 * RoomScale), r\z + y * 2.0 + (Cos(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale), 2, 500.0 * RoomScale, 255, 200, 200)
 						it = CreateItem("SCP-500-01", "scp500pill", r\x + x * 2.0 + (Cos(EntityYaw(Tile_Entity, True)) * (-208.0) * RoomScale) - (Sin(EntityYaw(Tile_Entity, True)) * 1226.0 * RoomScale), 8.0 + (80.0 * RoomScale), r\z + y * 2.0 + (Sin(EntityYaw(Tile_Entity, True)) * (-208.0) * RoomScale) + (Cos(EntityYaw(Tile_Entity, True)) * 1226.0 * RoomScale))
@@ -1604,7 +1599,7 @@ Function PlaceGrid_MapCreator(r.Rooms)
 				
 				r\grid\Entities[x + (y * GridSZ)] = Tile_Entity
 				wayp.WayPoints = CreateWaypoint(r\x + (x * 2.0), 8.2, r\z + (y * 2.0), Null, r)
-				r\grid\waypoints[x + (y * GridSZ)] = Wayp
+				r\grid\waypoints[x + (y * GridSZ)] = wayp
 				
 				If y < GridSZ - 1 Then
 					If r\grid\waypoints[x + ((y + 1) * GridSZ)] <> Null Then
@@ -5689,10 +5684,11 @@ Function FillRoom(r.Rooms)
 	
 	For lt.LightTemplates = Each LightTemplates
 		If lt\RoomTemplate = r\RoomTemplate Then
-			Newlt = AddLight(r, r\x + lt\x, r\y + lt\y, r\z + lt\z, lt\lType, lt\Range, lt\R, lt\G, lt\B)
-			If Newlt <> 0 Then 
-				If lt\ltype = 3 Then
-					RotateEntity(Newlt, lt\Pitch, lt\Yaw, 0.0)
+			Local NewLight% = AddLight(r, r\x + lt\x, r\y + lt\y, r\z + lt\z, lt\lType, lt\Range, lt\R, lt\G, lt\B)
+			
+			If NewLight <> 0 Then 
+				If lt\lType = 3 Then
+					RotateEntity(NewLight, lt\Pitch, lt\Yaw, 0.0)
 				EndIf
 			EndIf
 		EndIf
@@ -5710,11 +5706,11 @@ Function FillRoom(r.Rooms)
 		EndIf
 	Next
 	
-	If r\RoomTemplate\TempTriggerboxAmount > 0
-		r\TriggerboxAmount = r\RoomTemplate\TempTriggerboxAmount
-		For i = 0 To r\TriggerboxAmount - 1
-			r\Triggerbox[i] = CopyEntity(r\RoomTemplate\TempTriggerbox[i], r\OBJ)
-			r\TriggerboxName[i] = r\RoomTemplate\TempTriggerboxName[i]
+	If r\RoomTemplate\TempTriggerBoxAmount > 0
+		r\TriggerBoxAmount = r\RoomTemplate\TempTriggerBoxAmount
+		For i = 0 To r\TriggerBoxAmount - 1
+			r\TriggerBox[i] = CopyEntity(r\RoomTemplate\TempTriggerBox[i], r\OBJ)
+			r\TriggerBoxName[i] = r\RoomTemplate\TempTriggerBoxName[i]
 		Next
 	EndIf
 	
@@ -5834,17 +5830,17 @@ Function UpdateRooms()
 				EndIf
 			Next
 			If chs\DebugHUD Then
-				If r\TriggerboxAmount > 0
-					For i = 0 To r\TriggerboxAmount - 1
-						EntityColor(r\Triggerbox[i], 255, 255, 0)
-						EntityAlpha(r\Triggerbox[i], 0.2)
+				If r\TriggerBoxAmount > 0
+					For i = 0 To r\TriggerBoxAmount - 1
+						EntityColor(r\TriggerBox[i], 255, 255, 0)
+						EntityAlpha(r\TriggerBox[i], 0.2)
 					Next
 				EndIf
 			Else
-				If r\TriggerboxAmount > 0
-					For i = 0 To r\TriggerboxAmount - 1
-						EntityColor(r\Triggerbox[i], 255, 255, 255)
-						EntityAlpha(r\Triggerbox[i], 0.0)
+				If r\TriggerBoxAmount > 0
+					For i = 0 To r\TriggerBoxAmount - 1
+						EntityColor(r\TriggerBox[i], 255, 255, 255)
+						EntityAlpha(r\TriggerBox[i], 0.0)
 					Next
 				EndIf
  			EndIf
@@ -5952,7 +5948,7 @@ Function AddLight%(room.Rooms, x#, y#, z#, lType%, Range#, R%, G%, B%)
 			EndIf
 		Next
 	Else
-		Local Light%, Sprite%
+		Local Light%, Sprite%, Pivot%, Sprite2%
 		
 		Light = CreateLight(lType)
 		LightRange(Light, Range)
@@ -5960,11 +5956,12 @@ Function AddLight%(room.Rooms, x#, y#, z#, lType%, Range#, R%, G%, B%)
 		PositionEntity(Light, x, y, z, True)
 		
 		Sprite = CreateSprite()
-		EntityFX(Sprite, 1 + 8)
 		PositionEntity(Sprite, x, y, z)
 		ScaleSprite(Sprite, 0.13 , 0.13)
 		EntityTexture(Sprite, tt\LightSpriteID[0])
+		EntityFX(Sprite, 1 + 8)
 		EntityBlend(Sprite, 3)
+		EntityColor(Sprite, R, G, B)
 		Return(Light)
 	EndIf
 End Function
@@ -7217,7 +7214,7 @@ Function CreateMap()
 						;[End Block[
 					Case 4
 						;[Block]
-						Room4Amount[Zone] = Room4Amount[Zone]+1
+						Room4Amount[Zone] = Room4Amount[Zone] + 1
 						;[End Block]
 				End Select
 			EndIf
@@ -8655,5 +8652,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11CA
+;~B#11C5
 ;~C#Blitz3D

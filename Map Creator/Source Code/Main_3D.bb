@@ -64,7 +64,7 @@ HideEntity(Door_Button)
 
 Global MenuOpen% = True
 
-Const ROOM1% = 1, ROOM2% = 2, ROOM2C% = 3, ROOM3% = 4, ROOM4% = 5
+Const ROOM1% = 0, ROOM2% = 1, ROOM2C% = 2, ROOM3% = 3, ROOM4% = 4
 
 Global Font1% = LoadFont("..\GFX\font\cour\Courier New.ttf", 16)
 Global ConsoleFont% = LoadFont("..\GFX\font\Andale\Andale Mono.ttf", 16)
@@ -81,18 +81,12 @@ Const MapWidth% = 18
 Const MapHeight% = 18
 
 Dim MapTemp%(MapWidth + 1, MapHeight + 1)
-Dim MapFound%(MapWidth, MapHeight)
-
-Dim MapName$(MapWidth, MapHeight)
-Dim MapRoom$(ROOM4 + 1, 0)
 
 Global ZoneTransValue1% = 13, ZoneTransValue2% = 7
 
 Global MT_GridSize% = 19
-Dim MTName$(MT_GridSize, MT_GridSize)
 
 Global ForestGridSize% = 10
-Dim ForestName$(ForestGridSize, ForestGridSize)
 Global ForestMeshWidth#
 
 Global CurrMapGrid% = 0
@@ -211,8 +205,9 @@ Repeat
 		Next
 		For d.Doors = Each Doors
 			FreeEntity(d\FrameOBJ)
-			FreeEntity(d\Buttons[0])
-			FreeEntity(d\Buttons[1])
+			For i = 0 To 1
+				FreeEntity(d\Buttons[i])
+			Next
 			FreeEntity(d\OBJ)
 			FreeEntity(d\OBJ2)
 			Delete(d)
@@ -704,7 +699,7 @@ Function LoadRoomTemplateMeshes()
 		EndIf
 	Next
 	
-	Local hMap%[6], Mask%[6]
+	Local hMap%[5], Mask%[5]
 	Local GroundTexture% = LoadTexture("GFX\map\forest\forestfloor.jpg")
 	Local PathTexture% = LoadTexture("GFX\map\forest\forestpath.jpg")
 	
@@ -832,31 +827,6 @@ Function GetMeshExtents2(Mesh%)
 	Mesh_MagX = xMax - xMin
 	Mesh_MagY = yMax - yMin
 	Mesh_MagZ = zMax - zMin
-End Function
-
-Function SetRoom(Room_Name$, Room_Type%, Pos%, Min_Pos%, Max_Pos%) ; ~ Place a room without overwriting others
-	Local Looped%, Can_Place%
-	
-	Looped = False
-	Can_Place = True
-	While MapRoom(Room_Type, Pos) <> ""
-		Pos = Pos + 1
-		If Pos > Max_Pos Then
-			If Looped = False Then
-				Pos = Min_Pos + 1 : Looped = True
-			Else
-				Can_Place = False
-				Exit
-			EndIf
-		EndIf
-	Wend
-	
-	If Can_Place = True Then
-		MapRoom(Room_Type, Pos) = Room_Name
-		Return(True)
-	Else
-		Return(False)
-	EndIf
 End Function
 
 Function GetZone(y%)
@@ -1482,49 +1452,6 @@ Function StripPath$(File$)
 	Return(Name) 
 End Function
 
-Function Piece$(s$, Entry%, Char$ = " ")
-	Local n%, p%, a$
-	
-	While Instr(s, Char + Char)
-		s = Replace(s, Char + Char, Char)
-	Wend
-	For n = 1 To Entry - 1
-		p = Instr(s, Char)
-		s = Right(s, Len(s) - p)
-	Next
-	p = Instr(s, Char)
-	If p < 1 Then
-		a = s
-	Else
-		a = Left(s, p - 1)
-	EndIf
-	Return(a)
-End Function
-
-Function KeyValue$(Entity%, Key$, DefaultValue$ = "")
-	Local Properties$, p%, TestKey$, Value$, Test$
-	
-	Properties = EntityName(Entity)
-	Properties = Replace(Properties$, Chr(13), "")
-	Key = Lower(Key)
-	Repeat
-		p = Instr(Properties, Chr(10))
-		If p Then Test = (Left(Properties, p - 1)) Else Test = Properties
-		TestKey = Piece(Test, 1, "=")
-		TestKey = Trim(TestKey)
-		TestKey = Replace(TestKey, Chr(34), "")
-		TestKey = Lower(TestKey)
-		If TestKey = Key Then
-			Value = Piece(Test, 2, "=")
-			Value = Trim(Value)
-			Value = Replace(Value, Chr(34), "")
-			Return(Value)
-		EndIf
-		If (Not p) Then Return(DefaultValue)
-		Properties = Right(Properties, Len(Properties) - p)
-	Forever 
-End Function
-
 Function GetINIString$(File$, Section$, Parameter$)
 	Local TemporaryString$ = ""
 	Local f% = ReadFile(File)
@@ -1568,203 +1495,6 @@ End Function
 
 Function GetINIFloat#(File$, Section$, Parameter$)
 	Return(GetINIString(File, Section, Parameter))
-End Function
-
-Function PutINIValue%(INI_sAppName$, INI_sSection$, INI_sKey$, INI_sValue$)
-	; ~ Returns: True (Success) or False (Failed)
-	INI_sSection = "[" + Trim(INI_sSection) + "]"
-	
-	Local INI_sUpperSection$ = Upper(INI_sSection)
-	
-	INI_sKey = Trim(INI_sKey)
-	INI_sValue = Trim(INI_sValue)
-	
-	Local INI_sFilename$ = INI_sAppName
-	; ~ Retrieve the INI data (if it exists)
-	Local INI_sContents$ = INI_FileToString(INI_sFilename)
-	; ~ (Re)Create the INI file updating / adding the SECTION, KEY and VALUE
-	Local INI_bWrittenKey% = False
-	Local INI_bSectionFound% = False
-	Local INI_sCurrentSection$ = ""
-	Local INI_lFileHandle% = WriteFile(INI_sFilename)
-	
-	If INI_lFileHandle = 0 Then Return(False) ; ~ Create file failed!
-	
-	Local INI_lOldPos% = 1
-	Local INI_lPos% = Instr(INI_sContents, Chr(0))
-	
-	While INI_lPos <> 0
-		Local INI_sTemp$ = Trim(Mid(INI_sContents, INI_lOldPos, (INI_lPos - INI_lOldPos)))
-		
-		If INI_sTemp <> "" Then
-			If Left(INI_sTemp, 1) = "[" And Right(INI_sTemp, 1) = "]" Then
-				; ~ Process SECTION
-				If INI_sCurrentSection = INI_sUpperSection And INI_bWrittenKey = False Then
-					INI_bWrittenKey = INI_CreateKey(INI_lFileHandle, INI_sKey, INI_sValue)
-				EndIf
-				INI_sCurrentSection = Upper(INI_CreateSection(INI_lFileHandle, INI_sTemp))
-				If INI_sCurrentSection = INI_sUpperSection Then INI_bSectionFound = True
-			Else
-				If Left(INI_sTemp, 1) = ":" Then
-					WriteLine(INI_lFileHandle, INI_sTemp)
-				Else
-					Local lEqualsPos% = Instr(INI_sTemp, "=")
-					
-					; ~ KEY = VALUE	
-					If lEqualsPos <> 0 Then
-						If (INI_sCurrentSection = INI_sUpperSection) And (Upper(Trim(Left(INI_sTemp, (lEqualsPos - 1)))) = Upper(INI_sKey)) Then
-							If (INI_sValue <> "") Then INI_CreateKey(INI_lFileHandle, INI_sKey, INI_sValue)
-							INI_bWrittenKey = True
-						Else
-							WriteLine(INI_lFileHandle, INI_sTemp)
-						EndIf
-					EndIf
-				EndIf
-			EndIf
-		EndIf
-		
-		; ~ Move through the INI file...
-		INI_lOldPos = INI_lPos + 1
-		INI_lPos = Instr(INI_sContents, Chr(0), INI_lOldPos)
-	Wend
-	
-	; ~ KEY wasn't found in the INI file - Append a new SECTION if required and create our KEY = VALUE line
-	If INI_bWrittenKey = False Then
-		If INI_bSectionFound = False Then INI_CreateSection(INI_lFileHandle, INI_sSection)
-		INI_CreateKey(INI_lFileHandle, INI_sKey, INI_sValue)
-	EndIf
-	
-	CloseFile(INI_lFileHandle)
-	
-	Return(True) ; ~ Success
-End Function
-
-Function INI_FileToString$(INI_sFilename$)
-	Local INI_sString$ = ""
-	Local INI_lFileHandle% = ReadFile(INI_sFilename)
-	
-	If INI_lFileHandle <> 0 Then
-		While (Not(Eof(INI_lFileHandle)))
-			INI_sString = INI_sString + ReadLine(INI_lFileHandle) + Chr(0)
-		Wend
-		CloseFile(INI_lFileHandle)
-	EndIf
-	Return(INI_sString)
-End Function
-
-Function INI_CreateSection$(INI_lFileHandle%, INI_sNewSection$)
-	If FilePos(INI_lFileHandle) <> 0 Then WriteLine(INI_lFileHandle, "") ; ~ Blank line between sections
-	WriteLine(INI_lFileHandle, INI_sNewSection)
-	Return(INI_sNewSection)
-End Function
-
-Function INI_CreateKey%(INI_lFileHandle%, INI_sKey$, INI_sValue$)
-	WriteLine(INI_lFileHandle, INI_sKey + "=" + INI_sValue)
-	Return(True)
-End Function
-
-Function Button%(x%, y%, Width%, Height%, Txt$, Disabled% = False)
-	Local Pushed% = False
-	
-	Color(ClrR, ClrG, ClrB)
-	If (Not Disabled) Then 
-		If MouseX() > x * ResFactor And MouseX() < (x + Width) * ResFactor Then
-			If MouseY() > y * ResFactor And MouseY() < (y + Height) * ResFactor Then
-				If MouseDown1 Then
-					Pushed = True
-					Color(ClrR * 0.6, ClrG * 0.6, ClrB * 0.6)
-				Else
-					Color(Min(ClrR * 1.2, 255.0), Min(ClrR * 1.2, 255.0), Min(ClrR * 1.2, 255.0))
-				EndIf
-			EndIf
-		EndIf
-	EndIf
-	
-	If Pushed Then 
-		Rect(x * ResFactor, y * ResFactor, Width * ResFactor, Height * ResFactor)
-		Color(133, 130, 125)
-		Rect((x + 1) * ResFactor, (y + 1) * ResFactor, (Width - 1) * ResFactor, (Height - 1) * ResFactor, False)	
-		Color(10, 10, 10)
-		Rect(x * ResFactor, y * ResFactor, Width * ResFactor, Height * ResFactor, False)
-		Color(250, 250, 250)
-		Line(x * ResFactor, (y + Height - 1) * ResFactor, (x + Width - 1) * ResFactor, (y + Height - 1) * ResFactor)
-		Line((x + Width - 1) * ResFactor, y * ResFactor, (x + Width - 1) * ResFactor, (y + Height - 1) * ResFactor)
-	Else
-		Rect(x * ResFactor, y * ResFactor, Width * ResFactor, Height * ResFactor)
-		Color(133, 130, 125)
-		Rect(x * ResFactor, y * ResFactor, (Width - 1) * ResFactor, (Height - 1) * ResFactor, False)	
-		Color(250, 250, 250)
-		Rect(x * ResFactor, y * ResFactor, Width * ResFactor, Height * ResFactor, False)
-		Color(10, 10, 10)
-		Line(x * ResFactor, (y + Height - 1) * ResFactor, (x + Width - 1) * ResFactor, (y + Height - 1) * ResFactor)
-		Line((x + Width - 1) * ResFactor, y * ResFactor, (x + Width - 1) * ResFactor, (y + Height - 1) * ResFactor	)	
-	EndIf
-	
-	Color(255, 255, 255)
-	If Disabled Then Color(70, 70, 70)
-	SetFont(Font1)
-	Text((x + Width / 2) * ResFactor, (y + Height / 2 - 1) * ResFactor, Txt, True, True)
-	
-	Color(0, 0, 0)
-	
-	If Pushed And MouseHit1 Then PlaySound(ButtonSFX) : Return(True)
-End Function
-
-Function InputBox$(x%, y%, Width%, Height%, Txt$, ID% = 0)
-	TextBox(x, y, Width, Height, Txt$)
-	
-	Local MouseOnBox% = False
-	
-	If MouseX() > x * ResFactor And MouseX() < (x + Width) * ResFactor Then
-		If MouseY() > y * ResFactor And MouseY() < (y + Height) * ResFactor Then
-			MouseOnBox = True
-			If MouseHit1 Then SelectedTextBox = ID : FlushKeys()
-		EndIf
-	EndIf	
-	
-	If MouseOnBox = False And MouseHit1 And SelectedTextBox = ID Then SelectedTextBox = 0
-	
-	If SelectedTextBox = ID Then
-		Txt = rInput(Txt)
-		Color(0, 0, 0)
-		If (MilliSecs() Mod 800) < 400 Then  Rect(((x + Width / 2 + StringWidth(Txt) / 2 + 2)) * ResFactor, (y + Height / 2 - 5) * ResFactor, 2 * ResFactor, 12 * ResFactor)
-	EndIf
-	
-	Return(Txt)
-End Function
-
-Function TextBox(x%, y%, Width%, Height%, Txt$)
-	Color(255, 255, 255)
-	Rect(x * ResFactor, y * ResFactor, Width * ResFactor, Height * ResFactor)
-	
-	Color(128, 128, 128)
-	Rect(x * ResFactor, y * ResFactor, Width * ResFactor, Height * ResFactor, False)
-	Color(64, 64, 64)
-	Rect((x + 1) * ResFactor, (y + 1) * ResFactor, (Width - 2) * ResFactor, (Height - 2) * ResFactor, False)	
-	Color(255, 255, 255)
-	Line((x + Width - 1) * ResFactor, y * ResFactor, (x + Width - 1) * ResFactor, (y + Height - 1) * ResFactor)
-	Line(x * ResFactor, (y + Height - 1) * ResFactor, (x + Width - 1) * ResFactor, (y + Height - 1) * ResFactor)
-	Color(212, 208, 199)
-	Line((x + Width - 2) * ResFactor, (y + 1) * ResFactor, (x + Width - 2) * ResFactor, (y + Height - 2) * ResFactor)
-	Line((x + 1) * ResFactor, (y + Height - 2) * ResFactor, (x + Width - 2) * ResFactor, (y + Height - 2) * ResFactor)
-	
-	Color(0, 0, 0)
-	SetFont(Font1)
-	Text((x + Width / 2) * ResFactor, (y + Height / 2) * ResFactor, Txt, True, True)
-End Function
-
-Function rInput$(aString$)
-	Local Value%, Length%
-	
-	Value = GetKey()
-	Length = Len(aString)
-	If Value = 8 Then Value = 0 : If Length > 0 Then aString = Left(aString, Length - 1)
-	If Value = 13 Then Goto ende
-	If Value = 0 Then Goto ende
-	If Value > 0 And Value < 7 Lor Value > 26 And Value < 32 Lor Value = 9 Then Goto ende
-	aString = aString + Chr(Value)
-	.ende
-	Return(aString)
 End Function
 
 Function WrapAngle#(Angle#)

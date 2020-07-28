@@ -3743,7 +3743,7 @@ Function UpdateEvents()
 											If e\room\grid\Grid[(iX + 1) + ((iY) * GridSZ)] > 0 And e\room\grid\Grid[(iX - 1) + ((iY) * GridSZ)] > 0 Then ; ~ Horizontal
 												TempInt = CopyEntity(Meshes[e\room\grid\Grid[iX + (iY * GridSZ)] - 1])
 												
-												AddLight(Null, e\room\x + iX * 2.0, 8.0 + (368.0 * RoomScale), e\room\z + iY * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
+												AddLight(Null, e\room\x + iX * 2.0, 8.0 + (372.0 * RoomScale), e\room\z + iY * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
 												
 												TempInt2 = Rand(0, 1)
 												RotateEntity(TempInt, 0.0, TempInt2 * 180.0 + 90.0, 0.0)
@@ -3752,7 +3752,7 @@ Function UpdateEvents()
 											ElseIf e\room\grid\Grid[(iX) + ((iY + 1) * GridSZ)] > 0 And e\room\grid\Grid[(iX) + ((iY - 1) * GridSZ)] > 0 Then ; ~ Vertical
 												TempInt = CopyEntity(Meshes[e\room\grid\Grid[iX + (iY * GridSZ)] - 1])
 												
-												AddLight(Null, e\room\x + iX * 2.0, 8.0 + (368.0 * RoomScale), e\room\z + iY * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
+												AddLight(Null, e\room\x + iX * 2.0, 8.0 + (372.0 * RoomScale), e\room\z + iY * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
 												
 												TempInt2 = Rand(0, 1)
 												RotateEntity(TempInt, 0.0, TempInt2 * 180.0, 0.0)
@@ -3760,7 +3760,7 @@ Function UpdateEvents()
 											Else
 												TempInt = CopyEntity(Meshes[e\room\grid\Grid[iX + (iY * GridSZ)]])
 												
-												AddLight(Null, e\room\x + iX * 2.0, 8.0 + (412.0 * RoomScale), e\room\z + iY * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
+												AddLight(Null, e\room\x + iX * 2.0, 8.0 + (416.0 * RoomScale), e\room\z + iY * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
 												
 												ia = e\room\grid\Grid[(iX) + ((iY + 1) * GridSZ)]
 												ib = e\room\grid\Grid[(iX) + ((iY - 1) * GridSZ)]
@@ -3825,11 +3825,11 @@ Function UpdateEvents()
 									Select e\room\grid\Grid[iX + (iY * GridSZ)]
 										Case 1
 											;[Block]
-											AddLight(Null, e\room\x + iX * 2.0, 8.0 + (368.0 * RoomScale), e\room\z + iY * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
+											AddLight(Null, e\room\x + iX * 2.0, 8.0 + (372.0 * RoomScale), e\room\z + iY * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
 											;[End Block]
 										Case 3, 4
 											;[Block]
-											AddLight(Null, e\room\x + iX * 2.0, 8.0 + (412.0 * RoomScale), e\room\z + iY * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
+											AddLight(Null, e\room\x + iX * 2.0, 8.0 + (416.0 * RoomScale), e\room\z + iY * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
 											;[End Block]
 										Case 7
 											;[Block]
@@ -4010,13 +4010,13 @@ Function UpdateEvents()
 										Case 2
 											If e\room\grid\Grid[(iX + 1) + ((iY) * GridSZ)] > 0 And e\room\grid\Grid[(iX - 1) + ((iY) * GridSZ)] > 0 Then ; ~ Horizontal
 												TempInt = CopyEntity(Meshes[e\room\grid\Grid[iX + (iY * GridSZ)] - 1])
-												AddLight(Null, e\room\x + iX * 2.0, 8.0 + (368.0 * RoomScale), e\room\z + iY * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
+												AddLight(Null, e\room\x + iX * 2.0, 8.0 + (372.0 * RoomScale), e\room\z + iY * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
 											ElseIf e\room\grid\Grid[(iX) + ((iY + 1) * GridSZ)] > 0 And e\room\grid\Grid[(iX) + ((iY - 1) * GridSZ)] > 0 Then ; ~ Vertical
 												TempInt = CopyEntity(Meshes[e\room\grid\grid[iX + (iY * GridSZ)] - 1])
-												AddLight(Null, e\room\x + iX * 2.0, 8.0 + (368.0 * RoomScale), e\room\z + iY * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
+												AddLight(Null, e\room\x + iX * 2.0, 8.0 + (372.0 * RoomScale), e\room\z + iY * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
 											Else
 												TempInt = CopyEntity(Meshes[e\room\grid\grid[iX + (iY * GridSZ)]])
-												AddLight(Null, e\room\x + iX * 2.0, 8.0 + (412.0 * RoomScale), e\room\z + iY * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
+												AddLight(Null, e\room\x + iX * 2.0, 8.0 + (416.0 * RoomScale), e\room\z + iY * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
 											EndIf
 											;[End Block]
 										Case 3, 4
@@ -4037,11 +4037,11 @@ Function UpdateEvents()
 									Select e\room\grid\Grid[iX + (iY * GridSZ)]
 										Case 1, 5, 6
 											;[Block]
-											AddLight(Null, e\room\x + iX * 2.0, 8.0 + (368.0 * RoomScale), e\room\z + iY * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
+											AddLight(Null, e\room\x + iX * 2.0, 8.0 + (372.0 * RoomScale), e\room\z + iY * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
 											;[End Block]
 										Case 3, 4
 											;[Block]
-											AddLight(Null, e\room\x + iX * 2.0, 8.0 + (412.0 * RoomScale), e\room\z + iY * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
+											AddLight(Null, e\room\x + iX * 2.0, 8.0 + (416.0 * RoomScale), e\room\z + iY * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
 											;[End Block]
 										Case 7
 											;[Block]
@@ -5045,13 +5045,9 @@ Function UpdateEvents()
 						ShouldPlay = 7
 						
 						If e\room\NPC[0] = Null Lor e\room\NPC[1] = Null Lor e\room\NPC[2] = Null Lor e\room\NPC[3] = Null Lor e\room\NPC[4] = Null Lor e\room\NPC[5] = Null Then
-							e\room\NPC[0] = CreateNPC(NPCtype939, 0.0, 0.0, 0.0)
-							
-							e\room\NPC[1] = CreateNPC(NPCtype939, 0.0, 0.0, 0.0)
-							
-							e\room\NPC[2] = CreateNPC(NPCtype939, 0.0, 0.0, 0.0)
-							
-							e\room\NPC[3] = CreateNPC(NPCtype939, 0.0, 0.0, 0.0)
+							For i = 0 To 3
+								e\room\NPC[i] = CreateNPC(NPCtype939, 0.0, 0.0, 0.0)
+							Next
 							
 							e\room\NPC[4] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[17], True), EntityY(e\room\Objects[17], True), EntityZ(e\room\Objects[17], True))
 							e\room\NPC[4]\State = 3.0
@@ -10219,5 +10215,5 @@ Function GenerateRandomIA()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11CE#1DEA
+;~B#11CE#1DE6
 ;~C#Blitz3D

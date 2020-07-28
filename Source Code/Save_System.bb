@@ -458,7 +458,7 @@ Function SaveGame(File$)
 	
 	CloseFile(f)
 	
-	If Not MenuOpen Then
+	If (Not MenuOpen) Then
 		If SelectedDifficulty\SaveType = SAVEONSCREENS Then
 			PlaySound_Strict(LoadTempSound("SFX\General\Save2.ogg"))
 		Else
@@ -2248,27 +2248,27 @@ Function LoadMap(File$)
 					; ~ 21, 22, 23, 24 = DOORROOM
 					Case "scp-860-1 endroom"
 						;[Block]
-						fr\grid[(y * GridSize) + x] = Angle + 1
+						fr\grid[(y * GridSize) + x] = Angle + 1.0
 						;[End Block]
 					Case "scp-860-1 path"
 						;[Block]
-						fr\grid[(y * GridSize) + x] = Angle + 5
+						fr\grid[(y * GridSize) + x] = Angle + 5.0
 						;[End Block]
 					Case "scp-860-1 corner"
 						;[Block]
-						fr\grid[(y * GridSize) + x] = Angle + 9
+						fr\grid[(y * GridSize) + x] = Angle + 9.0
 						;[End Block]
 					Case "scp-860-1 t-shaped path"
 						;[Block]
-						fr\grid[(y * GridSize) + x] = Angle + 13
+						fr\grid[(y * GridSize) + x] = Angle + 13.0
 						;[End Block]
 					Case "scp-860-1 4-way path"
 						;[Block]
-						fr\grid[(y * GridSize) + x] = Angle + 17
+						fr\grid[(y * GridSize) + x] = Angle + 17.0
 						;[End Block]
 					Case "scp-860-1 door"
 						;[Block]
-						fr\grid[(y * GridSize) + x] = Angle + 21
+						fr\grid[(y * GridSize) + x] = Angle + 21.0
 						;[End Block]
 				End Select
 			EndIf
@@ -2300,13 +2300,13 @@ Function LoadMap(File$)
 			
 			Angle = ReadByte(f)
 			
-			If Angle <> 1 And Angle <> 3 Then
-				Angle = Angle + 2
+			If Angle <> 1.0 And Angle <> 3.0 Then
+				Angle = Angle + 2.0
 			EndIf
 			If Name = "maintenance tunnel corner" Lor Name = "maintenance tunnel t-shaped room" Then
-				Angle = Angle + 3
+				Angle = Angle + 3.0
 			EndIf
-			If Angle > 3 Then
+			If Angle > 3.0 Then
 				Angle = (Angle Mod 4)
 			EndIf
 			
@@ -2316,31 +2316,31 @@ Function LoadMap(File$)
 				Select Name
 					Case "maintenance tunnel endroom"
 						;[Block]
-						MTRoom\grid\Grid[x + (y * GridSZ)] = ROOM1
+						MTRoom\grid\Grid[x + (y * GridSZ)] = ROOM1 + 1
 						;[End Block]
 					Case "maintenance tunnel corridor"
 						;[Block]
-						MTRoom\grid\Grid[x + (y * GridSZ)] = ROOM2
+						MTRoom\grid\Grid[x + (y * GridSZ)] = ROOM2 + 1
 						;[End Block]
 					Case "maintenance tunnel corner"
 						;[Block]
-						MTRoom\grid\Grid[x + (y * GridSZ)] = ROOM2C
+						MTRoom\grid\Grid[x + (y * GridSZ)] = ROOM2C + 1
 						;[End Block]
 					Case "maintenance tunnel t-shaped room"
 						;[Block]
-						MTRoom\grid\Grid[x + (y * GridSZ)] = ROOM3
+						MTRoom\grid\Grid[x + (y * GridSZ)] = ROOM3 + 1
 						;[End Block]
 					Case "maintenance tunnel 4-way room"
 						;[Block]
-						MTRoom\grid\Grid[x + (y * GridSZ)] = ROOM4
+						MTRoom\grid\Grid[x + (y * GridSZ)] = ROOM4 + 1
 						;[End Block]
 					Case "maintenance tunnel elevator"
 						;[Block]
-						MTRoom\grid\Grid[x + (y * GridSZ)] = ROOM4 + 1
+						MTRoom\grid\Grid[x + (y * GridSZ)] = ROOM4 + 2
 						;[End Block]
 					Case "maintenance tunnel generator room"
 						;[Block]
-						MTRoom\grid\Grid[x + (y * GridSZ)] = ROOM4 + 2
+						MTRoom\grid\Grid[x + (y * GridSZ)] = ROOM4 + 3
 						;[End Block]
 				End Select
 				MTRoom\grid\Angles[x + (y * GridSZ)] = Angle
@@ -2356,7 +2356,7 @@ Function LoadMap(File$)
 			y = ReadByte(f)
 			Name = Lower(ReadString(f))
 			
-			Angle = ReadByte(f) * 90
+			Angle = ReadByte(f) * 90.0
 			
 			For rt.RoomTemplates = Each RoomTemplates
 				If Lower(rt\Name) = Name Then
