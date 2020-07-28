@@ -5363,18 +5363,42 @@ Function UpdateEvents()
 					
 					If e\EventState = 0.0 Then
 						If EntityDistanceSquared(me\Collider, e\room\Objects[3]) < 4.0 Then
-							e\room\NPC[0] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[4], True), 0.5, EntityZ(e\room\Objects[4], True))
-							FreeEntity(e\room\NPC[0]\OBJ)
-							e\room\NPC[0]\OBJ = CopyEntity(o\NPCModelID[26])
-							Scale = GetINIFloat(NPCsFile, "Class D", "Scale") / MeshWidth(e\room\NPC[0]\OBJ)
-							ScaleEntity(e\room\NPC[0]\OBJ, Scale, Scale, Scale)
-							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
-							e\room\NPC[0]\State = 6.0
-							SetNPCFrame(e\room\NPC[0], 501.0)
+							n.NPCs = CreateNPC(NPCtypeD, EntityX(e\room\Objects[4], True), 0.5, EntityZ(e\room\Objects[4], True))
+							
+							n\Texture = "GFX\npcs\scp_035_victim.png"
+							n\Model = "GFX\npcs\scp_035.b3d"
+							HideEntity(n\OBJ)
+							
+							SetNPCFrame(n, 501.0)
+							n\State = 6.0
 							
 							e\EventState = 1.0
 						EndIf
 					ElseIf e\EventState > 0.0
+						If e\room\NPC[0] = Null Then
+							For n.NPCs = Each NPCs
+								If n\Texture = "GFX\npcs\scp_035_victim.png" Then
+									e\room\NPC[0] = n
+									
+									Temp = e\room\NPC[0]\Frame
+									
+									FreeEntity(e\room\NPC[0]\OBJ)
+									e\room\NPC[0]\OBJ = CopyEntity(o\NPCModelID[26])
+									x = GetINIFloat(NPCsFile, "Class D", "Scale") / MeshWidth(e\room\NPC[0]\OBJ)
+									e\room\NPC[0]\ModelScaleX = x
+									e\room\NPC[0]\ModelScaleY = x
+									e\room\NPC[0]\ModelScaleZ = x
+									ScaleEntity(e\room\NPC[0]\OBJ, x, x, x)
+									SetAnimTime(e\room\NPC[0]\OBJ, Temp)
+									ShowEntity(e\room\NPC[0]\OBJ)
+									
+									RotateEntity(n\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
+									
+									Exit
+								EndIf
+							Next
+						EndIf
+						
 						ShouldPlay = 27
 						
 						If e\room\NPC[0]\SoundCHN <> 0 Then
@@ -10195,5 +10219,5 @@ Function GenerateRandomIA()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11CE#1DD2
+;~B#11CE#1DEA
 ;~C#Blitz3D
