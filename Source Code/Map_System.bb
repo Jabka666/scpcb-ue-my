@@ -664,8 +664,7 @@ Const GridSize% = 10
 
 Type Forest
 	Field TileMesh%[6]
-	Field DetailMesh%[6]
-	Field TileTexture%[10]
+	Field DetailMesh%[5]
 	Field Grid%[(GridSize * GridSize) + 11]
 	Field TileEntities%[(GridSize * GridSize) + 1]
 	Field Forest_Pivot%
@@ -681,6 +680,7 @@ Const Branch_Die_Chance% = 18
 Const Max_Deviation_Distance% = 3
 Const Return_Chance% = 27
 Const Center% = 5
+Const Cobble_Chance% = 0
 
 Function GenForestGrid(fr.Forest)
 	CatchErrors("Uncaught (GenForestGrid)")
@@ -854,14 +854,11 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 	Local i%, Width%, Frame%, lX%, lY%, d%
 	
 	If fr\Forest_Pivot <> 0 Then FreeEntity(fr\Forest_Pivot) : fr\Forest_Pivot = 0
-	For i = 0 To 3
+	For i = ROOM1 To ROOM4 ; ~ Temp fix -> FIX WRONG ARRAY STARTING AT 1!
 		If fr\TileMesh[i] <> 0 Then FreeEntity(fr\TileMesh[i]) : fr\TileMesh[i] = 0
 	Next
 	For i = 0 To 4
 		If fr\DetailMesh[i] <> 0 Then FreeEntity(fr\DetailMesh[i]) : fr\DetailMesh[i] = 0
-	Next
-	For i = 0 To 9
-		If fr\TileTexture[i] <> 0 Then FreeEntity(fr\TileTexture[i]) : fr\TileTexture[i] = 0
 	Next
 	
 	fr\Forest_Pivot = CreatePivot()
@@ -892,16 +889,16 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 	Next
 	
 	; ~ Detail meshes
-	fr\DetailMesh[1] = LoadMesh_Strict("GFX\map\forest\detail\treetest4.b3d")
-	fr\DetailMesh[2] = LoadMesh_Strict("GFX\map\forest\detail\rock.b3d")
-	fr\DetailMesh[3] = LoadMesh_Strict("GFX\map\forest\detail\rock2.b3d")
-	fr\DetailMesh[4] = LoadMesh_Strict("GFX\map\forest\detail\treetest5.b3d")
-	fr\DetailMesh[5] = LoadRMesh("GFX\map\forest\wall_opt.rmesh", Null)
+	fr\DetailMesh[0] = LoadMesh_Strict("GFX\map\forest\detail\treetest4.b3d")
+	fr\DetailMesh[1] = LoadMesh_Strict("GFX\map\forest\detail\rock.b3d")
+	fr\DetailMesh[2] = LoadMesh_Strict("GFX\map\forest\detail\rock2.b3d")
+	fr\DetailMesh[3] = LoadMesh_Strict("GFX\map\forest\detail\treetest5.b3d")
+	fr\DetailMesh[4] = LoadRMesh("GFX\map\forest\wall_opt.rmesh", Null)
 	
 	For i = ROOM1 To ROOM4
 		HideEntity(fr\TileMesh[i])
 	Next
-	For i = 1 To 5
+	For i = 0 To 4
 		HideEntity(fr\DetailMesh[i])
 	Next
 	
@@ -918,7 +915,7 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 				If tY + 1 < GridSize Then Tile_Type = Tile_Type + (fr\Grid[((tY + 1) * GridSize) + tX] > 0)
 				If tY - 1 >= 0 Then Tile_Type = Tile_Type + (fr\Grid[((tY - 1) * GridSize) + tX] > 0)
 				
-				Local Angle% = 0
+				Local Angle# = 0.0
 				
 				Select Tile_Type
 					Case 1
@@ -1002,11 +999,11 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 								Select Rand(0, 7)
 									Case 0, 1, 2, 3, 4, 5, 6 ; ~ Create a tree
 										;[Block]
-										Detail_Entity = CopyEntity(fr\DetailMesh[1])
+										Detail_Entity = CopyEntity(fr\DetailMesh[0])
 										Tempf2 = Rnd(0.25, 0.4)
 										
 										For i = 0 To 3
-											d = CopyEntity(fr\DetailMesh[4])
+											d = CopyEntity(fr\DetailMesh[3])
 											RotateEntity(d, 0.0, 90.0 * i + Rnd(-20.0, 20.0), 0.0)
 											EntityParent(d, Detail_Entity)
 											EntityFX(d, 1)
@@ -1018,7 +1015,7 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 										;[End Block]
 									Case 7 ; ~ Add a rock
 										;[Block]
-										Detail_Entity = CopyEntity(fr\DetailMesh[2])
+										Detail_Entity = CopyEntity(fr\DetailMesh[1])
 										Tempf2 = Rnd(0.01, 0.012)
 										PositionEntity(Detail_Entity, lX * Tempf4 - (Tempf3 / 2.0), ColorRed() * 0.03 - 1.3, lY * Tempf4 - (Tempf3 / 2.0), True)
 										EntityFX(Detail_Entity, 1)
@@ -1026,7 +1023,7 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 										;[End Block]
 									Case 6 ; ~ Add a stump
 										;[Block]
-										Detail_Entity = CopyEntity(fr\DetailMesh[4])
+										Detail_Entity = CopyEntity(fr\DetailMesh[3])
 										Tempf2 = Rnd(0.1, 0.12)
 										ScaleEntity(Detail_Entity, Tempf2, Tempf2, Tempf2, True)
 										PositionEntity(Detail_Entity, lX * Tempf4 - (Tempf3 / 2.0), ColorRed() * 0.03 - 1.3, lY * Tempf4 - (Tempf3 / 2.0), True)
@@ -1060,7 +1057,7 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 		tY = (GridSize - 1) * i
 		For tX = 1 To GridSize - 1
 			If fr\Grid[(tY * GridSize) + tX] = 3 Then
-				fr\DetailEntities[i] = CopyEntity(fr\DetailMesh[5])
+				fr\DetailEntities[i] = CopyEntity(fr\DetailMesh[4])
 				ScaleEntity(fr\DetailEntities[i], RoomScale, RoomScale, RoomScale)
 				
 				fr\Door[i] = CopyEntity(r\Objects[3])
@@ -1097,14 +1094,11 @@ Function PlaceForest_MapCreator(fr.Forest, x#, y#, z#, r.Rooms)
 	Local i%, Width%, Frame%, lX%, lY%, d%
 	
 	If fr\Forest_Pivot <> 0 Then FreeEntity(fr\Forest_Pivot) : fr\Forest_Pivot = 0
-	For i = 0 To 3
+	For i = ROOM1 To ROOM4
 		If fr\TileMesh[i] <> 0 Then FreeEntity(fr\TileMesh[i]) : fr\TileMesh[i] = 0
 	Next
 	For i = 0 To 4
 		If fr\DetailMesh[i] <> 0 Then FreeEntity(fr\DetailMesh[i]) : fr\DetailMesh[i] = 0
-	Next
-	For i = 0 To 9
-		If fr\TileTexture[i] <> 0 Then FreeEntity(fr\TileTexture[i]) : fr\TileTexture[i] = 0
 	Next
 	
 	fr\Forest_Pivot = CreatePivot()
@@ -1135,16 +1129,16 @@ Function PlaceForest_MapCreator(fr.Forest, x#, y#, z#, r.Rooms)
 	Next
 	
 	; ~ Detail meshes
-	fr\DetailMesh[1] = LoadMesh_Strict("GFX\map\forest\detail\treetest4.b3d")
-	fr\DetailMesh[2] = LoadMesh_Strict("GFX\map\forest\detail\rock.b3d")
-	fr\DetailMesh[3] = LoadMesh_Strict("GFX\map\forest\detail\rock2.b3d")
-	fr\DetailMesh[4] = LoadMesh_Strict("GFX\map\forest\detail\treetest5.b3d")
-	fr\DetailMesh[5] = LoadRMesh("GFX\map\forest\wall_opt.rmesh", Null)
+	fr\DetailMesh[0] = LoadMesh_Strict("GFX\map\forest\detail\treetest4.b3d")
+	fr\DetailMesh[1] = LoadMesh_Strict("GFX\map\forest\detail\rock.b3d")
+	fr\DetailMesh[2] = LoadMesh_Strict("GFX\map\forest\detail\rock2.b3d")
+	fr\DetailMesh[3] = LoadMesh_Strict("GFX\map\forest\detail\treetest5.b3d")
+	fr\DetailMesh[4] = LoadRMesh("GFX\map\forest\wall_opt.rmesh", Null)
 	
 	For i = ROOM1 To ROOM4
 		HideEntity(fr\TileMesh[i])
 	Next
-	For i = 1 To 5
+	For i = 0 To 4
 		HideEntity(fr\DetailMesh[i])
 	Next
 	
@@ -1154,10 +1148,9 @@ Function PlaceForest_MapCreator(fr.Forest, x#, y#, z#, r.Rooms)
 	For tX = 0 To GridSize - 1
 		For tY = 0 To GridSize - 1
 			If fr\Grid[(tY * GridSize) + tX] > 0 Then 
-				
 				Tile_Type = 0
 				
-				Local Angle% = 0
+				Local Angle# = 0.0
 				
 				Tile_Type = Ceil(Float(fr\Grid[(tY * GridSize) + tX]) / 4.0)
 				If Tile_Type = 6 Then
@@ -1191,11 +1184,11 @@ Function PlaceForest_MapCreator(fr.Forest, x#, y#, z#, r.Rooms)
 								Select Rand(0, 7)
 									Case 0, 1, 2, 3, 4, 5, 6 ; ~ Create a tree
 										;[Block]
-										Detail_Entity = CopyEntity(fr\DetailMesh[1])
+										Detail_Entity = CopyEntity(fr\DetailMesh[0])
 										Tempf2 = Rnd(0.25, 0.4)
 										
 										For i = 0 To 3
-											d = CopyEntity(fr\DetailMesh[4])
+											d = CopyEntity(fr\DetailMesh[3])
 											RotateEntity(d, 0.0, 90.0 * i + Rnd(-20.0, 20.0), 0.0)
 											EntityParent(d, Detail_Entity)
 											EntityFX(d, 1)
@@ -1207,7 +1200,7 @@ Function PlaceForest_MapCreator(fr.Forest, x#, y#, z#, r.Rooms)
 										;[End Block]
 									Case 7 ; ~ Add a rock
 										;[Block]
-										Detail_Entity = CopyEntity(fr\DetailMesh[2])
+										Detail_Entity = CopyEntity(fr\DetailMesh[1])
 										Tempf2 = Rnd(0.01, 0.012)
 										PositionEntity(Detail_Entity, lX * Tempf4 - (Tempf3 / 2.0), ColorRed() * 0.03 - 1.3, lY * Tempf4 - (Tempf3 / 2.0), True)
 										EntityFX(Detail_Entity, 1)
@@ -1215,7 +1208,7 @@ Function PlaceForest_MapCreator(fr.Forest, x#, y#, z#, r.Rooms)
 										;[End Block]
 									Case 6 ; ~ Add a stump
 										;[Block]
-										Detail_Entity = CopyEntity(fr\DetailMesh[4])
+										Detail_Entity = CopyEntity(fr\DetailMesh[3])
 										Tempf2 = Rnd(0.1, 0.12)
 										ScaleEntity(Detail_Entity, Tempf2, Tempf2, Tempf2, True)
 										PositionEntity(Detail_Entity, lX * Tempf4 - (Tempf3 / 2.0), ColorRed() * 0.03 - 1.3, lY * Tempf4 - (Tempf3 / 2.0), True)
@@ -1247,7 +1240,7 @@ Function PlaceForest_MapCreator(fr.Forest, x#, y#, z#, r.Rooms)
 				If Ceil(fr\Grid[(tY * GridSize) + tX] / 4.0) = 6 Then
 					For i = 0 To 1
 						If fr\Door[i] = 0 Then
-							fr\DetailEntities[i] = CopyEntity(fr\DetailMesh[5])
+							fr\DetailEntities[i] = CopyEntity(fr\DetailMesh[4])
 							ScaleEntity(fr\DetailEntities[i], RoomScale, RoomScale, RoomScale)
 							
 							fr\Door[i] = CopyEntity(r\Objects[3])
@@ -1303,9 +1296,6 @@ Function DestroyForest(fr.Forest)
 	Next
 	For i = 0 To 4
 		If fr\DetailMesh[i] <> 0 Then FreeEntity(fr\DetailMesh[i]) : fr\DetailMesh[i] = 0
-	Next
-	For i = 0 To 9
-		If fr\TileTexture[i] <> 0 Then FreeEntity(fr\TileTexture[i]) : fr\TileTexture[i] = 0
 	Next
 	
 	CatchErrors("DestroyForest")
@@ -8673,5 +8663,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11DC
+;~B#11D2
 ;~C#Blitz3D

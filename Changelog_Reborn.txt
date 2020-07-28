@@ -129,6 +129,7 @@ Bug Fixes:
 - Fixed message being moved down if selecting a document, while a clipboard/wallet is open.
 - Fixed brightness of the buttons guarded by 4-digit pass code.
 - Fixed missing texture for MTF's P90.
+- Fixed fake tunnel inside pocket dimension.
 
 - Small fixes for commands "disablenuke" and "enablecontrol/disablecontrol.
 - Small fixes for gateb and gateaentrance's walls.

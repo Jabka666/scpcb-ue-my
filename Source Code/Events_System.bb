@@ -2382,7 +2382,7 @@ Function UpdateEvents()
 						e\room\RoomDoors[1]\Open = False
 						
 						If Curr106\State > 0.0 Then ; ~ SCP-106 circles around the starting room
-							Angle = (e\EventState / 10.0 Mod 360.0)
+							Angle = e\EventState / 10.0 Mod 360.0
 							PositionEntity(Curr106\Collider, EntityX(e\room\OBJ), 0.2 + 0.35 + Sin(e\EventState / 14.0 + i * 20.0) * 0.4, EntityX(e\room\OBJ))
 							RotateEntity(Curr106\Collider, 0.0, Angle, 0.0)
 							MoveEntity(Curr106\Collider, 0.0, 0.0, 6.0 - Sin(e\EventState / 10.0))
