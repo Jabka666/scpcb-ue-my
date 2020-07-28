@@ -3160,7 +3160,7 @@ Function UpdateEvents()
 					
 					e\room\NPC[0] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[0], True), 0.5, EntityZ(e\room\Objects[0], True))
 					ChangeNPCTextureID(e\room\NPC[0], 0)
-					RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 80.0, 0.0, True)	
+					RotateEntity(e\room\NPC[0]\Collider, 0.0, EntityYaw(e\room\OBJ) - 80.0, 0.0, True)	
 					SetNPCFrame(e\room\NPC[0], 19.0)
 					e\room\NPC[0]\State = 8.0
 					
