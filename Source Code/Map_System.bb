@@ -5948,7 +5948,7 @@ Function AddLight%(room.Rooms, x#, y#, z#, lType%, Range#, R%, G%, B%)
 			EndIf
 		Next
 	Else
-		Local Light%, Sprite%, Pivot%, Sprite2%
+		Local Light%, Sprite%
 		
 		Light = CreateLight(lType)
 		LightRange(Light, Range)
