@@ -479,7 +479,7 @@ Function LoadGame(File$)
 	
 	GameSaved = True
 	
-	Local x#, y#, z#, i%, Temp%, StrTemp$, r.Rooms, ID%, n.NPCs, do.Doors
+	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, r.Rooms, ID%, n.NPCs, do.Doors
 	Local f% = ReadFile(File + "Save.txt")
 	
 	StrTemp = ReadString(f)
@@ -727,11 +727,9 @@ Function LoadGame(File$)
 		y = ReadFloat(f)
 		z = ReadFloat(f)
 		
-		Found = ReadByte(f)
-		
-		Level = ReadInt(f)
-		
-		Temp2 = ReadByte(f)		
+		Local Found% = ReadByte(f)
+		Local Level% = ReadInt(f)
+		Local Temp2% = ReadByte(f)		
 		
 		Angle = WrapAngle(Angle)
 		
@@ -815,13 +813,15 @@ Function LoadGame(File$)
 					sssss = sssss + Str(r\fr\Grid[x + (y * GridSize)])
 				Next
 			Next
-			lx# = ReadFloat(f)
-			ly# = ReadFloat(f)
-			lz# = ReadFloat(f)
+			
+			Local lX# = ReadFloat(f)
+			Local lY# = ReadFloat(f)
+			Local lZ# = ReadFloat(f)
+			
 			If HasForest = 1 Then
-				PlaceForest(r\fr, lx, ly, lz, r)
+				PlaceForest(r\fr, lX, lY, lZ, r)
 			Else
-				PlaceForest_MapCreator(r\fr, lx, ly, lz, r)
+				PlaceForest_MapCreator(r\fr, lX, lY, lZ, r)
 			EndIf
 		ElseIf r\fr <> Null Then ; ~ Remove the old forest
 			DestroyForest(r\fr)
@@ -840,6 +840,7 @@ Function LoadGame(File$)
 	
 	Local Spacing# = 8.0
 	Local Zone%, ShouldSpawnDoor%
+	
 	For y = MapHeight To 0 Step -1
 		If y < I_Zone\Transition[1] - (SelectedMap = "") Then
 			Zone = 3
@@ -860,25 +861,25 @@ Function LoadGame(File$)
 						Select r\RoomTemplate\Shape
 							Case ROOM1
 								;[Block]
-								If r\Angle = 90
+								If r\Angle = 90.0
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM2
 								;[Block]
-								If r\Angle = 90 Lor r\Angle = 270
+								If r\Angle = 90.0 Lor r\Angle = 270.0
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM2C
 								;[Block]
-								If r\Angle = 0 Lor r\Angle = 90
+								If r\Angle = 0.0 Lor r\Angle = 90.0
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM3
 								;[Block]
-								If r\Angle = 0 Lor r\Angle = 180 Lor r\Angle = 90
+								If r\Angle = 0.0 Lor r\Angle = 180.0 Lor r\Angle = 90.0
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
@@ -900,25 +901,25 @@ Function LoadGame(File$)
 						Select r\RoomTemplate\Shape
 							Case ROOM1
 								;[Block]
-								If r\Angle = 180
+								If r\Angle = 180.0
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM2
 								;[Block]
-								If r\Angle = 0 Lor r\Angle = 180
+								If r\Angle = 0.0 Lor r\Angle = 180.0
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM2C
 								;[Block]
-								If r\Angle = 180 Lor r\Angle = 90
+								If r\Angle = 180.0 Lor r\Angle = 90.0
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
 							Case ROOM3
 								;[Block]
-								If r\Angle = 180 Lor r\Angle = 90 Lor r\Angle = 270
+								If r\Angle = 180.0 Lor r\Angle = 90.0 Lor r\Angle = 270.0
 									ShouldSpawnDoor = True
 								EndIf
 								;[End Block]
@@ -1097,10 +1098,10 @@ Function LoadGame(File$)
 		y = ReadFloat(f)
 		z = ReadFloat(f)
 		
-		Red = ReadByte(f)
-		Green = ReadByte(f)
-		Blue = ReadByte(f)		
-		A = ReadFloat(f)
+		Local Red% = ReadByte(f)
+		Local Green% = ReadByte(f)
+		Local Blue% = ReadByte(f)		
+		Local A% = ReadFloat(f)
 		
 		it.Items = CreateItem(IttName, TempName, x, y, z, Red, Green, Blue, A)
 		it\Name = Name
@@ -1117,11 +1118,12 @@ Function LoadGame(File$)
 		it\Picked = ReadByte(f)
 		If it\Picked Then HideEntity(it\Collider)
 		
-		nt = ReadByte(f)
+		Local nt% = ReadByte(f)
+		
 		If nt = True Then SelectedItem = it
 		
 		nt = ReadByte(f)
-		If nt < 66
+		If nt < 66 Then
 			Inventory[nt] = it
 			ItemAmount = ItemAmount + 1
 		EndIf
@@ -1152,7 +1154,7 @@ Function LoadGame(File$)
 		For ij.Items = Each Items
 			If ij\ID = o_i Then it.Items = ij : Exit
 		Next
-		For j% = 0 To it\InvSlots - 1
+		For j = 0 To it\InvSlots - 1
 			o_i = ReadInt(f)
 			If o_i <> -1 Then
 				For ij.Items = Each Items
@@ -1292,7 +1294,7 @@ Function LoadGameQuick(File$)
 	PositionEntity(me\Collider, 0.0, 1000.0, 0.0, True)
 	ResetEntity(me\Collider)
 	
-	Local x#, y#, z#, i%, Temp%, StrTemp$, ID%
+	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, ID%
 	Local Player_X#, Player_Y#, Player_Z#, r.Rooms, n.NPCs, do.Doors
 	Local f% = ReadFile(File + "Save.txt")
 	
@@ -1568,11 +1570,9 @@ Function LoadGameQuick(File$)
 		y = ReadFloat(f)
 		z = ReadFloat(f)
 		
-		Found = ReadByte(f)
-		
-		Level = ReadInt(f)
-		
-		Temp2 = ReadByte(f)	
+		Local Found% = ReadByte(f)
+		Local Level% = ReadInt(f)
+		Local Temp2% = ReadByte(f)	
 		
 		If Angle >= 360
             Angle = Angle - 360
@@ -1641,9 +1641,10 @@ Function LoadGameQuick(File$)
 					ReadByte(f)
 				Next
 			Next
-			lx# = ReadFloat(f)
-			ly# = ReadFloat(f)
-			lz# = ReadFloat(f)
+			
+			Local lX# = ReadFloat(f)
+			Local lY# = ReadFloat(f)
+			Local lZ# = ReadFloat(f)
 		ElseIf r\fr <> Null Then ; ~ Remove the old forest
 			DestroyForest(r\fr)
 			Delete(r\fr)
@@ -1661,7 +1662,7 @@ Function LoadGameQuick(File$)
 	
 	If ReadInt(f) <> 954 Then RuntimeError("Couldn't load the game, save file may be corrupted (error 2)")
 	
-	Temp = ReadInt (f)
+	Temp = ReadInt(f)
 	
 	For i = 1 To Temp
 		x = ReadFloat(f)
@@ -1801,10 +1802,10 @@ Function LoadGameQuick(File$)
 		y = ReadFloat(f)
 		z = ReadFloat(f)
 		
-		Red = ReadByte(f)
-		Green = ReadByte(f)
-		Blue = ReadByte(f)		
-		A = ReadFloat(f)
+		Local Red% = ReadByte(f)
+		Local Green% = ReadByte(f)
+		Local Blue% = ReadByte(f)		
+		Local A% = ReadFloat(f)
 		
 		it.Items = CreateItem(IttName, TempName, x, y, z, Red, Green, Blue, A)
 		it\Name = Name
@@ -1821,7 +1822,8 @@ Function LoadGameQuick(File$)
 		it\Picked = ReadByte(f)
 		If it\Picked Then HideEntity(it\Collider)
 		
-		nt = ReadByte(f)
+		Local nt% = ReadByte(f)
+		
 		If nt = True Then SelectedItem = it
 		
 		nt = ReadByte(f)
@@ -1856,7 +1858,7 @@ Function LoadGameQuick(File$)
 		For ij.Items = Each Items
 			If ij\ID = o_i Then it.Items = ij : Exit
 		Next
-		For j% = 0 To it\InvSlots - 1
+		For j = 0 To it\InvSlots - 1
 			o_i = ReadInt(f)
 			If o_i <> -1 Then
 				For ij.Items = Each Items

@@ -846,7 +846,7 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 	Local i%, Width%, Frame%, lX%, lY%, d%
 	
 	If fr\Forest_Pivot <> 0 Then FreeEntity(fr\Forest_Pivot) : fr\Forest_Pivot = 0
-	For i = ROOM1 To ROOM4 ; ~ Temp fix -> FIX WRONG ARRAY STARTING AT 1!
+	For i = ROOM1 To ROOM4
 		If fr\TileMesh[i] <> 0 Then FreeEntity(fr\TileMesh[i]) : fr\TileMesh[i] = 0
 	Next
 	For i = 0 To 4
@@ -897,8 +897,8 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 	Tempf3 = MeshWidth(fr\TileMesh[ROOM1])
 	Tempf1 = Tile_Size / Tempf3
 	
-	For tX = 1 To GridSize - 1
-		For tY = 1 To GridSize - 1
+	For tX = 0 To GridSize - 1
+		For tY = 0 To GridSize - 1
 			If fr\Grid[(tY * GridSize) + tX] = 1 Then 
 				Tile_Type = 0
 				If tX + 1 < GridSize Then Tile_Type = (fr\Grid[(tY * GridSize) + tX + 1] > 0)
@@ -969,10 +969,10 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 				End Select
 				
 				If Tile_Type > 0 Then 
-					Local ItemPlaced[4]
+					Local ItemPlaced%[4]
 					Local it.Items = Null
 					
-					If (tY Mod 3) = 2 And ItemPlaced[Floor(tY / 3)] = False Then
+					If tY Mod 3 = 2 And ItemPlaced[Floor(tY / 3)] = False Then
 						ItemPlaced[Floor(tY / 3)] = True
 						it.Items = CreateItem("Log #" + Int(Floor(tY / 3) + 1), "paper", 0.0, 0.5, 0.0)
 						EntityType(it\Collider, HIT_ITEM)
@@ -1047,7 +1047,7 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 	; ~ Place the wall		
 	For i = 0 To 1
 		tY = (GridSize - 1) * i
-		For tX = 1 To GridSize - 1
+		For tX = 0 To GridSize - 1
 			If fr\Grid[(tY * GridSize) + tX] = 3 Then
 				fr\DetailEntities[i] = CopyEntity(fr\DetailMesh[4])
 				ScaleEntity(fr\DetailEntities[i], RoomScale, RoomScale, RoomScale)
@@ -1148,12 +1148,12 @@ Function PlaceForest_MapCreator(fr.Forest, x#, y#, z#, r.Rooms)
 				If Tile_Type = 6 Then
 					Tile_Type = 2
 				EndIf
-				Angle = (fr\Grid[(tY * GridSize) + tX] Mod 4) * 90
+				Angle = (fr\Grid[(tY * GridSize) + tX] Mod 4) * 90.0
 				
 				Tile_Entity = CopyEntity(fr\TileMesh[Tile_Type])
 				
 				If Tile_Type > 0 Then 
-					Local ItemPlaced[4]
+					Local ItemPlaced%[4]
 					Local it.Items = Null
 					
 					If (tY Mod 3) = 2 And ItemPlaced[Floor(tY / 3)] = False Then
@@ -1238,7 +1238,7 @@ Function PlaceForest_MapCreator(fr.Forest, x#, y#, z#, r.Rooms)
 							fr\Door[i] = CopyEntity(r\Objects[3])
 							PositionEntity(fr\Door[i], 72.0 * RoomScale, 32.0 * RoomScale, 0.0, True)
 							RotateEntity(fr\Door[i], 0.0, 180.0, 0.0)
-							ScaleEntity(fr\Door[i], 48.0 * RoomScale, 45.0 * RoomScale, 48.0 * RoomScale, True)
+							ScaleEntity(fr\Door[i], 49.0 * RoomScale, 45.0 * RoomScale, 48.0 * RoomScale, True)
 							EntityParent(fr\Door[i], fr\DetailEntities[i])
 							
 							Frame = CopyEntity(r\Objects[2], fr\Door[i])
@@ -1283,7 +1283,7 @@ Function DestroyForest(fr.Forest)
 	If fr\DetailEntities[1] <> 0 Then FreeEntity(fr\DetailEntities[1]) : fr\DetailEntities[1] = 0
 	
 	If fr\Forest_Pivot <> 0 Then FreeEntity(fr\Forest_Pivot) : fr\Forest_Pivot = 0
-	For i = 0 To 3
+	For i = ROOM1 To ROOM4
 		If fr\TileMesh[i] <> 0 Then FreeEntity(fr\TileMesh[i]) : fr\TileMesh[i] = 0
 	Next
 	For i = 0 To 4
@@ -1529,7 +1529,7 @@ End Function
 
 Function PlaceGrid_MapCreator(r.Rooms)
 	Local x%, y%, i%, Dist#
-	Local Meshes[6]
+	Local Meshes%[7]
 	Local dr.Doors, it.Items
 	
 	For i = 0 To 6
@@ -1541,10 +1541,10 @@ Function PlaceGrid_MapCreator(r.Rooms)
 		For x = 0 To (GridSZ - 1)
 			If r\grid\Grid[x + (y * GridSZ)] > 0 Then
 				Local Tile_Type% = 0
-				Local Angle% = 0
+				Local Angle# = 0.0
 				
 				Tile_Type = r\grid\Grid[x + (y * GridSZ)]
-				Angle = r\grid\Angles[x +(y * GridSZ)] * 90
+				Angle = r\grid\Angles[x +(y * GridSZ)] * 90.0
 				
 				Local Tile_Entity% = CopyEntity(Meshes[Tile_Type - 1])
 				
