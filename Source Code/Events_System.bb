@@ -424,7 +424,7 @@ Function UpdateEvents()
 	
 	Local Dist#, i%, Temp%, Pvt%, StrTemp$, j%, k%
 	Local p.Particles, n.NPCs, r.Rooms, e.Events, e2.Events, it.Items, it2.Items, em.Emitters, sc.SecurityCams, sc2.SecurityCams
-	Local CurrTrigger$ = "", fDir#
+	Local CurrTrigger$ = "", fDir#, Scale#
 	Local x#, y#, z#, xTemp#, yTemp#
 	Local Angle#, GroupDesignation$
 	
@@ -3130,7 +3130,7 @@ Function UpdateEvents()
 						ElseIf e\EventState > 70.0 * 12.6
 							me\CameraShake = 0.0
 							If e\EventState - fpst\FPSFactor[0] < 70.0 * 12.6 Then
-								de.Decals = CreateDecal(3, EntityX(e\room\Objects[0], True), 0.0005, EntityZ(e\room\Objects[0], True), 90.0, Rnd(360.0), 0.0)
+								de.Decals = CreateDecal(3, EntityX(e\room\Objects[0], True), 0.005, EntityZ(e\room\Objects[0], True), 90.0, Rnd(360.0), 0.0)
 								
 								de.Decals = CreateDecal(7, EntityX(e\room\Objects[0], True), 0.002, EntityZ(e\room\Objects[0], True), 90.0, Rnd(360.0), 0.0)
 								de\Size = 0.5
@@ -3155,14 +3155,12 @@ Function UpdateEvents()
 				;[End Block]
 			Case "room2elevator2"
 				;[Block]
-				If e\room\Dist < 8.0 And e\room\Dist > 0.0 Then
-					de.Decals = CreateDecal(3, EntityX(e\room\Objects[0], True), 0.0005, EntityZ(e\room\Objects[0], True), 90.0, Rnd(360.0), 0.0)
+				If PlayerRoom = e\room Then
+					de.Decals = CreateDecal(3, EntityX(e\room\Objects[0], True), 0.005, EntityZ(e\room\Objects[0], True), 90.0, Rnd(360.0), 0.0)
 					
 					e\room\NPC[0] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[0], True), 0.5, EntityZ(e\room\Objects[0], True))
 					ChangeNPCTextureID(e\room\NPC[0], 0)
-					
-					RotateEntity(e\room\NPC[0]\Collider, 0.0, EntityYaw(e\room\OBJ) - 80.0, 0.0, True)	
-					
+					RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 80.0, 0.0, True)	
 					SetNPCFrame(e\room\NPC[0], 19.0)
 					e\room\NPC[0]\State = 8.0
 					
@@ -3566,7 +3564,8 @@ Function UpdateEvents()
 					If e\room\grid = Null Then
 						e\room\grid.Grids = New Grids
 						
-						OldSeed% = RndSeed()
+						Local OldSeed% = RndSeed()
+						
 						SeedRnd(GenerateSeedNumber(RandomSeed))
 						
 						Local Dir%
@@ -4810,7 +4809,7 @@ Function UpdateEvents()
 						e\EventState = e\EventState + 1.0
 						For it.Items = Each Items
 							If EntityDistanceSquared(it\Collider, me\Collider) < 25.0 Then
-								TFormPoint(EntityX(it\Collider), EntityY(it\Collider), EntityZ(it\Collider), 0, e\room\OBJ)
+								TFormPoint(EntityX(it\Collider), EntityY(it\Collider), EntityZ(it\Collider), 0.0, e\room\OBJ)
 								x = TFormedX() : y = TFormedY() : z = TFormedZ()
 								If TFormedX() > 264.0 Then
 									TFormPoint(x - 1024.0, y, z, e\room\OBJ, 0)
@@ -4836,7 +4835,7 @@ Function UpdateEvents()
 								;[End Block]
 							Case 10.0
 								;[Block]
-								de.Decals = CreateDecal(3, EntityX(e\room\OBJ) + Cos(e\room\Angle - 90.0) * 760.0 * RoomScale, 0.0005, EntityZ(e\room\OBJ) + Sin(e\room\Angle - 90.0) * 760.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
+								de.Decals = CreateDecal(3, EntityX(e\room\OBJ) + Cos(e\room\Angle - 90.0) * 760.0 * RoomScale, 0.005, EntityZ(e\room\OBJ) + Sin(e\room\Angle - 90.0) * 760.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
 								;[End Block]
 							Case 14.0
 								;[Block]
@@ -4883,7 +4882,7 @@ Function UpdateEvents()
 								;[Block]
 								For i = 0 To 3
 									de.Decals = CreateDecal(7, e\room\x + Rnd(-2.0, 2.0), 700.0 * RoomScale, e\room\z + Rnd(-2.0, 2.0), 270.0, Rnd(360.0), 0.0)
-									de\Size = 0.05 : de\SizeChange = 0.0005  : UpdateDecals()
+									de\Size = 0.05 : de\SizeChange = 0.0005 : UpdateDecals()
 									EntityAlpha(de\obj, 0.8)
 								Next
 								;[End Block]
@@ -5148,16 +5147,14 @@ Function UpdateEvents()
 						EndIf
 					Else
 						e\EventState = 0.0
-						If e\room\NPC[0] <> Null Then e\room\NPC[0]\State = 66
-						If e\room\NPC[1] <> Null Then e\room\NPC[1]\State = 66
-						If e\room\NPC[2] <> Null Then e\room\NPC[2]\State = 66
-						If e\room\NPC[3] <> Null Then e\room\NPC[3]\State = 66
+						For i = 0 To 3
+							If e\room\NPC[i] <> Null Then e\room\NPC[i]\State = 66
+						Next
 					EndIf
 				Else
-					If e\room\NPC[0] <> Null Then e\room\NPC[0]\State = 66
-					If e\room\NPC[1] <> Null Then e\room\NPC[1]\State = 66
-					If e\room\NPC[2] <> Null Then e\room\NPC[2]\State = 66
-					If e\room\NPC[3] <> Null Then e\room\NPC[3]\State = 66
+					For i = 0 To 3
+						If e\room\NPC[i] <> Null Then e\room\NPC[i]\State = 66
+					Next
 				EndIf 
 				;[End Block]
 			Case "room3tunnel"
@@ -5366,42 +5363,18 @@ Function UpdateEvents()
 					
 					If e\EventState = 0.0 Then
 						If EntityDistanceSquared(me\Collider, e\room\Objects[3]) < 4.0 Then
-							n.NPCs = CreateNPC(NPCtypeD, EntityX(e\room\Objects[4], True), 0.5, EntityZ(e\room\Objects[4], True))
-							n\Texture = "GFX\NPCs\scp_035_victim.png"
-							n\Model = "GFX\NPCs\035.b3d"
-							HideEntity(n\OBJ)
-							
-							SetAnimTime(n\OBJ, 501.0)
-							n\Frame = 501.0
-							
-							n\State = 6.0
+							e\room\NPC[0] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[4], True), 0.5, EntityZ(e\room\Objects[4], True))
+							FreeEntity(e\room\NPC[0]\OBJ)
+							e\room\NPC[0]\OBJ = CopyEntity(o\NPCModelID[26])
+							Scale = GetINIFloat(NPCsFile, "Class D", "Scale") / MeshWidth(e\room\NPC[0]\OBJ)
+							ScaleEntity(e\room\NPC[0]\OBJ, Scale, Scale, Scale)
+							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
+							e\room\NPC[0]\State = 6.0
+							SetNPCFrame(e\room\NPC[0], 501.0)
 							
 							e\EventState = 1.0
 						EndIf
 					ElseIf e\EventState > 0.0
-						If e\room\NPC[0] = Null Then
-							For n.NPCs = Each NPCs
-								If n\Texture = "GFX\NPCs\scp_035_victim.png" Then
-									e\room\NPC[0] = n
-									
-									Temp = e\room\NPC[0]\Frame
-									
-									FreeEntity(e\room\NPC[0]\OBJ)
-									e\room\NPC[0]\OBJ = CopyEntity(o\NPCModelID[26])
-									x = GetINIFloat(NPCsFile, "Class D", "Scale") / MeshWidth(e\room\NPC[0]\OBJ)
-									e\room\NPC[0]\ModelScaleX = x
-									e\room\NPC[0]\ModelScaleY = x
-									e\room\NPC[0]\ModelScaleZ = x
-									ScaleEntity(e\room\NPC[0]\OBJ, x, x, x)
-									SetAnimTime(e\room\NPC[0]\OBJ, Temp)
-									ShowEntity(e\room\NPC[0]\OBJ)
-									
-									RotateEntity(n\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
-									Exit
-								EndIf
-							Next
-						EndIf
-						
 						ShouldPlay = 27
 						
 						If e\room\NPC[0]\SoundCHN <> 0 Then
@@ -6747,15 +6720,11 @@ Function UpdateEvents()
 						SecondaryLightOn = True
 						
 						e\room\NPC[0] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True), EntityZ(e\room\Objects[6], True))
-						
-						Nazi% = CopyEntity(o\NPCModelID[22])
-						Scale# = GetINIFloat(NPCsFile, "Class D", "Scale") / MeshWidth(Nazi)
-						
 						FreeEntity(e\room\NPC[0]\OBJ)
-						e\room\NPC[0]\OBJ = CopyEntity(Nazi)
+						e\room\NPC[0]\OBJ = CopyEntity(o\NPCModelID[22])
+						Scale = GetINIFloat(NPCsFile, "Class D", "Scale") / MeshWidth(e\room\NPC[0]\OBJ)
 						ScaleEntity(e\room\NPC[0]\OBJ, Scale, Scale, Scale)
 						
-						FreeEntity(Nazi)
 						PositionEntity(me\Collider, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True), True)
 						ResetEntity(me\Collider)
 						
@@ -6862,7 +6831,7 @@ Function UpdateEvents()
 							me\Bloodloss = 70.0
 							me\BlinkTimer = -10.0
 							
-							de.Decals = CreateDecal(3, EntityX(me\Collider), 512.0 * RoomScale + 0.0005, EntityZ(me\Collider), 90.0, Rnd(360.0), 0.0)
+							de.Decals = CreateDecal(3, EntityX(me\Collider), 512.0 * RoomScale + 0.005, EntityZ(me\Collider), 90.0, Rnd(360.0), 0.0)
 							de\Size = 0.5
 							ScaleSprite(de\OBJ, de\Size, de\Size)
 							
@@ -7763,9 +7732,9 @@ Function UpdateEvents()
 			Case "room4tunnels"
 				;[Block]
 				If e\room\Dist < 10.0 And e\room\Dist > 0.0 Then
-					e\room\NPC[0] = CreateNPC(NPCtypeD, EntityX(e\room\OBJ, True) + 1.0, 0.5, EntityZ(e\room\OBJ, True) + 1.0)
+					e\room\NPC[0] = CreateNPC(NPCtypeD, EntityX(e\room\OBJ, True), 0.5, EntityZ(e\room\OBJ, True))
 					ChangeNPCTextureID(e\room\NPC[0], 10)
-					RotateEntity(e\room\NPC[0]\Collider, 0.0, EntityYaw(e\room\OBJ) - Rand(20.0, 60.0), 0.0, True)	
+					RotateEntity(e\room\NPC[0]\Collider, 0.0, Rnd(360.0), 0.0, True)	
 					SetNPCFrame(e\room\NPC[0], 19.0)
 					e\room\NPC[0]\State = 8.0
 					
@@ -10226,5 +10195,5 @@ Function GenerateRandomIA()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11CF#1DF1
+;~B#11CE#1DD2
 ;~C#Blitz3D

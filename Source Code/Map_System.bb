@@ -151,10 +151,6 @@ Function LoadWorld(File$, rt.RoomTemplates)
 				Pitch = Piece(Angles, 1, " ")
 				Yaw = Piece(Angles, 2, " ")
 				Roll = Piece(Angles, 3, " ")
-				If Cam Then
-					PositionEntity(Cam, EntityX(Node), EntityY(Node), EntityZ(Node))
-					RotateEntity(Cam, Pitch, Yaw, Roll)
-				EndIf
 				;[End Block]
 		End Select
 	Next
@@ -538,10 +534,6 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 				Pitch = Piece(Angles, 1, " ")
 				Yaw = Piece(Angles, 2, " ")
 				Roll = Piece(Angles, 3, " ")
-				If Cam Then
-					PositionEntity(Cam, Temp1, Temp2, Temp3)
-					RotateEntity(Cam, Pitch, Yaw, Roll)
-				EndIf
 				;[End Block]
 			Case "model"
 				;[Block]
@@ -8663,5 +8655,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11D2
+;~B#11CA
 ;~C#Blitz3D
