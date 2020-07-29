@@ -424,7 +424,7 @@ Function UpdateEvents()
 	
 	Local Dist#, i%, Temp%, Pvt%, StrTemp$, j%, k%
 	Local p.Particles, n.NPCs, r.Rooms, e.Events, e2.Events, it.Items, it2.Items, em.Emitters, sc.SecurityCams, sc2.SecurityCams
-	Local CurrTrigger$ = "", fDir#, Scale#
+	Local CurrTrigger$ = "", fDir#, Scale#, Tex%
 	Local x#, y#, z#, xTemp#, yTemp#
 	Local Angle#, GroupDesignation$
 	
@@ -4617,6 +4617,10 @@ Function UpdateEvents()
 							EndIf
 							e\Sound = LoadSound_Strict("SFX\Character\Guard\096ServerRoom2.ogg")
 							e\SoundCHN = PlaySound_Strict(e\Sound)
+							
+							Tex = LoadTexture_Strict("GFX\npcs\scp_096_bloody.png")
+							EntityTexture(Curr096\OBJ, Tex)
+							FreeTexture(Tex)
 							
 							Curr096\CurrSpeed = 0.0
 							
@@ -10215,5 +10219,5 @@ Function GenerateRandomIA()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11CE#1DE6
+;~B#11CE#1DEA
 ;~C#Blitz3D
