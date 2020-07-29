@@ -565,7 +565,7 @@ Repeat
 													Exit
 												EndIf
 											Next
-											If Map(x, y)\Name = "room173" Or Map(x, y)\Name = "checkpoint1" Or Map(x, y)\Name = "checkpoint2" Then
+											If Map(x, y)\Name = "room173" Or Map(x, y)\Name = "room2checkpoint" Or Map(x, y)\Name = "room2checkpoint2" Then
 												MapAngle(x, y) = 180
 											EndIf
 											Item2 = SelectedGadgetItem(ComboBox)

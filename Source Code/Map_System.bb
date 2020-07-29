@@ -2216,7 +2216,7 @@ Function FillRoom(r.Rooms)
 			ScaleSprite(de\OBJ, de\Size, de\Size)
 			EntityParent(de\OBJ, r\OBJ)
 			;[End Block]
-		Case "checkpoint1"
+		Case "room2checkpoint"
 			;[Block]
 			r\RoomDoors[0] = CreateDoor(r\Zone, r\x + 48.0 * RoomScale, r\y, r\z - 128.0 * RoomScale, 0.0, r, False, False, 3)
 			r\RoomDoors[0]\AutoClose = False : r\RoomDoors[0]\Timer = 70.0 * 5.0
@@ -2260,7 +2260,7 @@ Function FillRoom(r.Rooms)
 				FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			EndIf
 			;[End Block]
-		Case "checkpoint2"
+		Case "room2checkpoint2"
 			;[Block]
 			r\RoomDoors[0] = CreateDoor(r\Zone, r\x - 48.0 * RoomScale, r\y, r\z + 128.0 * RoomScale, 0.0, r, False, False, 5)
 			r\RoomDoors[0]\AutoClose = False : r\RoomDoors[0]\Timer = 70.0 * 5.0
@@ -7552,9 +7552,9 @@ Function CreateMap()
 		For x = 1 To MapWidth - 2
 			If MapTemp(x, y) = 255 Then
 				If y > MapHeight / 2 Then
-					r = CreateRoom(Zone, ROOM2, x * 8.0, 0.0, y * 8.0, "checkpoint1")
+					r = CreateRoom(Zone, ROOM2, x * 8.0, 0.0, y * 8.0, "room2checkpoint")
 				Else
-					r = CreateRoom(Zone, ROOM2, x * 8.0, 0.0, y * 8.0, "checkpoint2")
+					r = CreateRoom(Zone, ROOM2, x * 8.0, 0.0, y * 8.0, "room2checkpoint2")
 				EndIf
 			ElseIf MapTemp(x, y) > 0				
 				Temp = Min(MapTemp(x + 1, y), 1) + Min(MapTemp(x - 1, y), 1) + Min(MapTemp(x, y + 1), 1) + Min(MapTemp(x, y - 1), 1)
@@ -8521,7 +8521,7 @@ Function PreventRoomOverlap(r.Rooms)
 	Local IsIntersecting% = False
 	
 	; ~ Just skip it when it would try to check for the checkpoints
-	If r\RoomTemplate\Name = "checkpoint1" Lor r\RoomTemplate\Name = "checkpoint2" Lor r\RoomTemplate\Name = "room173" Then Return(True)
+	If r\RoomTemplate\Name = "room2checkpoint" Lor r\RoomTemplate\Name = "room2checkpoint2" Lor r\RoomTemplate\Name = "room173" Then Return(True)
 	
 	; ~ First, check if the room is actually intersecting at all
 	For r2 = Each Rooms
@@ -8578,7 +8578,7 @@ Function PreventRoomOverlap(r.Rooms)
 	
 	For r2.Rooms = Each Rooms
 		If r2 <> r And (Not r2\RoomTemplate\DisableOverlapCheck) Then
-			If r\RoomTemplate\Shape = r2\RoomTemplate\Shape And r\Zone = r2\Zone And (r2\RoomTemplate\Name <> "checkpoint1" And r2\RoomTemplate\Name <> "checkpoint2" And r2\RoomTemplate\Name <> "room173") Then
+			If r\RoomTemplate\Shape = r2\RoomTemplate\Shape And r\Zone = r2\Zone And (r2\RoomTemplate\Name <> "room2checkpoint" And r2\RoomTemplate\Name <> "room2checkpoint2" And r2\RoomTemplate\Name <> "room173") Then
 				x = r\x / 8.0
 				y = r\z / 8.0
 				Rot = r\Angle

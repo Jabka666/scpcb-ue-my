@@ -148,8 +148,8 @@ Function InitEvents()
 		CreateEvent("room895", "room895", 0, 0)
 	EndIf 
 	
-	CreateEvent("checkpoint", "checkpoint1", 0, 1.0)
-	CreateEvent("checkpoint", "checkpoint2", 0, 1.0)
+	CreateEvent("room2checkpoint", "room2checkpoint", 0, 1.0)
+	CreateEvent("room2checkpoint", "room2checkpoint2", 0, 1.0)
 	
 	CreateEvent("room3door", "room3", 0, 0.1)
 	CreateEvent("room3door", "room3tunnel", 0, 0.1)	
@@ -1832,7 +1832,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "checkpoint"
+			Case "room2checkpoint"
 				;[Block]
 				If PlayerRoom = e\room Then
 					; ~ Play a sound clip when the player passes through the gate
@@ -1882,7 +1882,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				
-				If e\room\RoomTemplate\Name = "checkpoint2" Then
+				If e\room\RoomTemplate\Name = "room2checkpoint2" Then
 					For e2.Events = Each Events
 						If e2\EventName = "room008"
 							If e2\EventState = 2.0 Then
@@ -8509,7 +8509,7 @@ Function UpdateEvents()
 							Next
 							
 							For r.Rooms = Each Rooms
-   								If r\RoomTemplate\Name = "checkpoint1"
+   								If r\RoomTemplate\Name = "room2checkpoint"
 									If r\Dist < 10.0
 										e\EventState = 2.0
 										Exit
