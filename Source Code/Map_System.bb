@@ -3338,7 +3338,7 @@ Function FillRoom(r.Rooms)
 			ScaleSprite(de\OBJ, de\Size, de\Size)
 			EntityParent(de\OBJ, r\OBJ)
 			;[End Block]
-		Case "tunnel2"
+		Case "room2tunnel2"
 			;[Block]
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x, 544.0 * RoomScale, r\z + 512.0 * RoomScale)

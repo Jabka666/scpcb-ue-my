@@ -94,8 +94,8 @@ Function InitEvents()
 	
 	CreateEvent("room3storage", "room3storage", 0, 0.0)
 	
-	CreateEvent("tunnel2smoke", "tunnel2", 0, 0.2)
-	CreateEvent("tunnel2", "tunnel2", 0, (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent("room2tunnel2smoke", "room2tunnel2", 0, 0.2)
+	CreateEvent("room2tunnel2", "room2tunnel2", 0, (0.2 * SelectedDifficulty\AggressiveNPCs))
 	
 	; ~ SCP-173 appears in half of the "room2doors"-rooms
 	CreateEvent("room2doors173", "room2doors", 0, 0.5 + (0.4 * SelectedDifficulty\AggressiveNPCs))
@@ -236,7 +236,7 @@ Function InitEvents()
 	CreateEvent("096spawn", "room3tunnel", 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent("096spawn", "room4tunnels", 0, 0.7 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent("096spawn", "room2tunnel", 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
-	CreateEvent("096spawn", "tunnel2", 0, 0.4 + (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent("096spawn", "room2tunnel2", 0, 0.4 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent("096spawn", "room3z2", 0, 0.7 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	
 	CreateEvent("room2pit", "room2_4", 0, 0.4 + (0.4 * SelectedDifficulty\AggressiveNPCs))
@@ -6952,7 +6952,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "tunnel2smoke"
+			Case "room2tunnel2smoke"
 				;[Block]
 				If PlayerRoom = e\room Then
 					If e\room\Dist < 3.5 Then
@@ -6972,7 +6972,7 @@ Function UpdateEvents()
 					EndIf					
 				EndIf
 				;[End Block]
-			Case "tunnel2"
+			Case "room2tunnel2"
 				;[Block]
 				If PlayerRoom = e\room Then
 					If Curr173\Idle > 1 Then
