@@ -2840,7 +2840,7 @@ Function DrawOptionsTooltip(x%, y%, Width%, Height%, Option$, Value# = 0.0, InGa
 			R = 255
 			G = 255
 			B = 255
-			Txt2 = "Current value: " + Int(Value * 100.0) + "% (default is 100%)"
+			Txt2 = "Current value: " + Int(Value * 100.0) + "% (default is 50%)"
 			;[End Block]
 		Case "sfxautorelease"
 			;[Block]
