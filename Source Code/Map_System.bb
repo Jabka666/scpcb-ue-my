@@ -922,17 +922,17 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 							Angle = 90.0
 						EndIf
 						
-						Tile_Type = ROOM1
+						Tile_Type = ROOM1 + 1
 						;[End Block]
 					Case 2
 						;[Block]
 						If fr\Grid[((tY - 1) * GridSize) + tX] > 0 And fr\Grid[((tY + 1) * GridSize) + tX] > 0 Then
 							Tile_Entity = CopyEntity(fr\TileMesh[ROOM2])
-							Tile_Type = ROOM2
+							Tile_Type = ROOM2 + 1
 						ElseIf fr\Grid[(tY * GridSize) + tX + 1] > 0 And fr\Grid[(tY * GridSize) + tX - 1] > 0
 							Tile_Entity = CopyEntity(fr\TileMesh[ROOM2])
 							Angle = 90.0
-							Tile_Type = ROOM2
+							Tile_Type = ROOM2 + 1
 						Else
 							Tile_Entity = CopyEntity(fr\TileMesh[ROOM2C])
 							If fr\Grid[(tY * GridSize) + tX - 1] > 0 And fr\Grid[((tY + 1) * GridSize) + tX] > 0 Then
@@ -944,7 +944,7 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 							Else
 								Angle = 90.0
 							EndIf
-							Tile_Type = ROOM2C
+							Tile_Type = ROOM2C + 1
 						EndIf
 						;[End Block]
 					Case 3
@@ -959,16 +959,16 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 							Angle = 270.0
 						EndIf
 						
-						Tile_Type = ROOM3
+						Tile_Type = ROOM3 + 1
 						;[End Block]
 					Case 4
 						;[Block]
 						Tile_Entity = CopyEntity(fr\TileMesh[ROOM4])	
-						Tile_Type = ROOM4
+						Tile_Type = ROOM4 + 1
 						;[End Block]
 				End Select
 				
-				If Tile_Type >= 0 Then 
+				If Tile_Type > 0 Then 
 					Local ItemPlaced%[4]
 					Local it.Items = Null
 					
@@ -981,8 +981,8 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 					
 					; ~ Place trees and other details
 					; ~ Only placed on spots where the value of the heightmap is above 100
-					SetBuffer(ImageBuffer(hMap[Tile_Type]))
-					Width = ImageWidth(hMap[Tile_Type])
+					SetBuffer(ImageBuffer(hMap[Tile_Type - 1]))
+					Width = ImageWidth(hMap[Tile_Type - 1])
 					Tempf4 = (Tempf3 / Float(Width))
 					For lX = 3 To Width - 2
 						For lY = 3 To Width - 2
@@ -1152,7 +1152,7 @@ Function PlaceForest_MapCreator(fr.Forest, x#, y#, z#, r.Rooms)
 				
 				Tile_Entity = CopyEntity(fr\TileMesh[Tile_Type - 1])
 				
-				If Tile_Type >= 0 Then 
+				If Tile_Type > 0 Then 
 					Local ItemPlaced%[4]
 					Local it.Items = Null
 					
