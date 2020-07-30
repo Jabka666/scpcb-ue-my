@@ -1857,22 +1857,14 @@ Function FillRoom(r.Rooms)
 			d2\LinkedDoor = d
 			
 			; ~ Security camera inside
-			sc = CreateSecurityCam(r\x - 688.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 688.0 * RoomScale, r, True)
-			sc\Angle = 45.0 + 180.0 : sc\Turn = 45.0 : sc\ScrTexture = 1
-			EntityTexture(sc\ScrOBJ, ScreenTexs[sc\ScrTexture])
+			sc = CreateSecurityCam(r\x - 688.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 688.0 * RoomScale, r, True, r\x + 668.0 * RoomScale, r\y + 1.1, r\z - 96.0 * RoomScale)
+			sc\Angle = 45.0 + 180.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 40.0, 0.0, 0.0)
-			EntityParent(sc\OBJ, r\OBJ)
-			PositionEntity(sc\ScrOBJ, r\x + 668.0 * RoomScale, r\y + 1.1, r\z - 96.0 * RoomScale)
 			TurnEntity(sc\ScrOBJ, 0.0, 90.0, 0.0)
-			EntityParent(sc\ScrOBJ, r\OBJ)
 			
-			sc = CreateSecurityCam(r\x - 112.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 112.0 * RoomScale, r, True)
-			sc\Angle = 45.0 : sc\Turn = 45.0 : sc\ScrTexture = 1
-			EntityTexture(sc\ScrOBJ, ScreenTexs[sc\ScrTexture])
+			sc = CreateSecurityCam(r\x - 112.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 112.0 * RoomScale, r, True, r\x + 96.0 * RoomScale, r\y + 1.1, r\z - 668.0 * RoomScale)
+			sc\Angle = 45.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 40.0, 0.0, 0.0)
-			EntityParent(sc\OBJ, r\OBJ)				
-			PositionEntity(sc\ScrOBJ, r\x + 96.0 * RoomScale, r\y + 1.1, r\z - 668.0 * RoomScale)
-			EntityParent(sc\ScrOBJ, r\OBJ)
 			
 			; ~ Smoke
 			em = CreateEmitter(r\x - 175.0 * RoomScale, r\y + 370.0 * RoomScale, r\z + 656.0 * RoomScale, 0)
@@ -1888,20 +1880,14 @@ Function FillRoom(r.Rooms)
 		Case "room2clockroom3"
 			;[Block]
 			; ~ Security cameras inside
-			sc = CreateSecurityCam(r\x + 512.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 384.0 * RoomScale, r, True)
+			sc = CreateSecurityCam(r\x + 512.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 384.0 * RoomScale, r, True, r\x + 668.0 * RoomScale, r\y + 1.1, r\z - 96.0 * RoomScale)
 			sc\Angle = 45.0 + 90.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 40.0, 0.0, 0.0)
-			EntityParent(sc\OBJ, r\OBJ)
-			PositionEntity(sc\ScrOBJ, r\x + 668.0 * RoomScale, r\y + 1.1, r\z - 96.0 * RoomScale)
 			TurnEntity(sc\ScrOBJ, 0.0, 90.0, 0.0)
-			EntityParent(sc\ScrOBJ, r\OBJ)
 			
-			sc = CreateSecurityCam(r\x - 384.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 512.0 * RoomScale, r, True)
+			sc = CreateSecurityCam(r\x - 384.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 512.0 * RoomScale, r, True, r\x + 96.0 * RoomScale, r\y + 1.1, r\z - 668.0 * RoomScale)
 			sc\Angle = 45.0 + 90.0 + 180.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 40.0, 0.0, 0.0)
-			EntityParent(sc\OBJ, r\OBJ)				
-			PositionEntity(sc\ScrOBJ, r\x + 96.0 * RoomScale, r\y + 1.1, r\z - 668.0 * RoomScale)
-			EntityParent(sc\ScrOBJ, r\OBJ)
 			
 			; ~ Create blood decals inside
 			For i = 0 To 5
@@ -3764,13 +3750,10 @@ Function FillRoom(r.Rooms)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
-			sc = CreateSecurityCam(r\x - 336.0 * RoomScale, r\y + 352.0 * RoomScale, r\z + 48.0 * RoomScale, r, True)
-			sc\Angle = 270.0 : sc\Turn = 45.0 : sc\room = r
+			sc = CreateSecurityCam(r\x - 336.0 * RoomScale, r\y + 352.0 * RoomScale, r\z + 48.0 * RoomScale, r, True, r\x + 1456.0 * RoomScale, r\y + 608.0 * RoomScale, r\z + 352.0 * RoomScale)
+			sc\Angle = 270.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
-			EntityParent(sc\OBJ, r\OBJ)
-			PositionEntity(sc\ScrOBJ, r\x + 1456.0 * RoomScale, r\y + 608.0 * RoomScale, r\z + 352.0 * RoomScale)
 			TurnEntity(sc\ScrOBJ, 0.0, 90.0, 0.0)
-			EntityParent(sc\ScrOBJ, r\OBJ)
 			
 			de = CreateDecal(0, r\x + 272.0 * RoomScale, r\y + 0.005, r\z + 262.0 * RoomScale, 90.0, Rand(360.0), 0.0)
 			EntityParent(de\OBJ, r\OBJ)
@@ -3878,7 +3861,6 @@ Function FillRoom(r.Rooms)
 				EndIf
 				sc\Turn = 30.0
 				TurnEntity(sc\CameraOBJ, 30.0, 0.0, 0.0)
-				EntityParent(sc\OBJ, r\OBJ)
 			Next
 			
 			For i = 0 To 14
@@ -3996,13 +3978,10 @@ Function FillRoom(r.Rooms)
 				FreeEntity(r\RoomDoors[0]\Buttons[i]) : r\RoomDoors[0]\Buttons[i] = 0
 			Next
 			
-			sc = CreateSecurityCam(r\x - 1152.0 * RoomScale, r\y + 900.0 * RoomScale, r\z + 176.0 * RoomScale, r, True)
+			sc = CreateSecurityCam(r\x - 1152.0 * RoomScale, r\y + 900.0 * RoomScale, r\z + 176.0 * RoomScale, r, True, r\x - 1716.0 * RoomScale, r\y + 160.0 * RoomScale, r\z + 176.0 * RoomScale)
 			sc\Angle = 90.0 : sc\Turn = 0.0 : sc\AllowSaving = False : sc\RenderInterval = 0.0
-			EntityParent(sc\OBJ, r\OBJ)
-			PositionEntity(sc\ScrOBJ, r\x - 1716.0 * RoomScale, r\y + 160.0 * RoomScale, r\z + 176.0 * RoomScale, True)
 			TurnEntity(sc\ScrOBJ, 0.0, 90.0, 0.0)
 			ScaleSprite(sc\ScrOBJ, 896.0 * 0.5 * RoomScale, 896.0 * 0.5 * RoomScale)
-			EntityParent(sc\ScrOBJ, r\OBJ)
 			CameraZoom(sc\Cam, 1.5)
 			HideEntity(sc\OBJ)
 			HideEntity(sc\CameraOBJ)
@@ -4061,12 +4040,9 @@ Function FillRoom(r.Rooms)
 			EntityPickMode(r\Objects[3], 1, False)
 			EntityRadius(r\Objects[3], 0.1)
 			
-			sc = CreateSecurityCam(r\x - 320.0 * RoomScale, r\y + 704.0 * RoomScale, r\z + 288.0 * RoomScale, r, True)
+			sc = CreateSecurityCam(r\x - 320.0 * RoomScale, r\y + 704.0 * RoomScale, r\z + 288.0 * RoomScale, r, True, r\x - 800.0 * RoomScale, r\y + 288.0 * RoomScale, r\z - 340.0 * RoomScale)
 			sc\Angle = 45.0 + 180.0 : sc\Turn = 45.0 : sc\CoffinEffect = True : CoffinCam = sc
 			TurnEntity(sc\CameraOBJ, 120.0, 0.0, 0.0)
-			EntityParent(sc\OBJ, r\OBJ)
-			PositionEntity(sc\ScrOBJ, r\x - 800.0 * RoomScale, r\y + 288.0 * RoomScale, r\z - 340.0 * RoomScale)
-			EntityParent(sc\ScrOBJ, r\OBJ)
 			TurnEntity(sc\ScrOBJ, 0.0, 180.0, 0.0)
 			
 			it = CreateItem("Document SCP-895", "paper", r\x - 688.0 * RoomScale, r\y + 133.0 * RoomScale, r\z - 304.0 * RoomScale)
@@ -4375,13 +4351,10 @@ Function FillRoom(r.Rooms)
 			    ScaleSprite(de\OBJ, de\Size, de\Size)
 			Next
 			
-			sc = CreateSecurityCam(r\x - 4048.0 * RoomScale, r\y - 32.0 * RoomScale, r\z - 1232.0 * RoomScale, r, True)
-			sc\Angle = 270.0 : sc\Turn = 45.0 : sc\room = r
+			sc = CreateSecurityCam(r\x - 4048.0 * RoomScale, r\y - 32.0 * RoomScale, r\z - 1232.0 * RoomScale, r, True, r\x - 2256.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 928.0 * RoomScale)
+			sc\Angle = 270.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
-			EntityParent(sc\OBJ, r\OBJ)
-			PositionEntity(sc\ScrOBJ, r\x - 2256.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 928.0 * RoomScale)
 			TurnEntity(sc\ScrOBJ, 0.0, 90.0, 0.0)
-			EntityParent(sc\ScrOBJ, r\OBJ)
 			
 			it = CreateItem("Class D Orientation Leaflet", "paper", r\x - (2914.0 + 1024.0) * RoomScale, r\y + 170.0 * RoomScale, r\z + 40.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -4493,22 +4466,17 @@ Function FillRoom(r.Rooms)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
-			sc = CreateSecurityCam(r\x + 768.0 * RoomScale, r\y - 5936.0 * RoomScale, r\z + 1632.0 * RoomScale, r, True)
+			sc = CreateSecurityCam(r\x + 768.0 * RoomScale, r\y - 5936.0 * RoomScale, r\z + 1632.0 * RoomScale, r, True, r\x - 272.0 * RoomScale, r\y - 7872.0 * RoomScale, r\z + 2956.0 * RoomScale)
 			sc\Angle = 45.0 + 90.0 + 180.0 : sc\Turn = 20.0 : sc\CoffinEffect = 0
 			TurnEntity(sc\CameraOBJ, 45.0, 0.0, 0.0)
-			EntityParent(sc\OBJ, r\OBJ)
+			TurnEntity(sc\ScrOBJ, 0.0, -10.0, 0.0)
 			
 			r\Objects[7] = sc\CameraOBJ
 			r\Objects[8] = sc\OBJ
 			
-			PositionEntity(sc\ScrOBJ, r\x - 272.0 * RoomScale, r\y - 7872.0 * RoomScale, r\z + 2956.0 * RoomScale)
-			TurnEntity(sc\ScrOBJ, 0.0, -10.0, 0.0)
-			EntityParent(sc\ScrOBJ, r\OBJ)
-			
-			sc = CreateSecurityCam(r\x - 1216.0 * RoomScale, r\y - 7664.0 * RoomScale, r\z + 1404.0 * RoomScale, r, True)
-			sc\Angle = 315.0 : sc\Turn = 30.0 : sc\room = r
+			sc = CreateSecurityCam(r\x - 1216.0 * RoomScale, r\y - 7664.0 * RoomScale, r\z + 1404.0 * RoomScale, r)
+			sc\Angle = 315.0 : sc\Turn = 30.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
-			EntityParent(sc\OBJ, r\OBJ)
 			
 			r\Objects[9] = CreatePivot()
 			PositionEntity(r\Objects[9], r\x - 272.0 * RoomScale, r\y - 8000.0 * RoomScale, r\z + 2672.0 * RoomScale)
@@ -4965,10 +4933,9 @@ Function FillRoom(r.Rooms)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
-			sc = CreateSecurityCam(r\x + 384.0 * RoomScale, r\y + (448.0 - 64.0) * RoomScale, r\z - 960.0 * RoomScale, r, True)
-			sc\Angle = 45.0 : sc\Turn = 45.0 : sc\room = r
+			sc = CreateSecurityCam(r\x + 384.0 * RoomScale, r\y + (448.0 - 64.0) * RoomScale, r\z - 960.0 * RoomScale, r)
+			sc\Angle = 45.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
-			EntityParent(sc\OBJ, r\OBJ)
 			
 			w.WayPoints = CreateWaypoint(r\x, r\y + 66.0 * RoomScale, r\z, Null, r)
 			;[End Block]
@@ -5119,7 +5086,6 @@ Function FillRoom(r.Rooms)
 				EndIf
 				sc\Turn = 30.0
 				TurnEntity(sc\CameraOBJ, 30.0, 0.0, 0.0)
-				EntityParent(sc\OBJ, r\OBJ)
 			Next
 			
 			it = CreateItem("SCP-1499", "scp1499", r\x + 600.0 * RoomScale, r\y + 176.0 * RoomScale, r\z - 228.0 * RoomScale)
@@ -5314,13 +5280,10 @@ Function FillRoom(r.Rooms)
 			EntityRadius(r\Objects[9 * 2 + 1], 0.1)
 			
 			; ~ Camera in the room itself
-			sc = CreateSecurityCam(r\x - 159.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 929.0 * RoomScale, r, True)
-			sc\Angle = 315.0 : sc\room = r
+			sc = CreateSecurityCam(r\x - 159.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 929.0 * RoomScale, r, True, r\x - 231.489 * RoomScale, r\y + 760.0 * RoomScale, r\z + 255.744 * RoomScale)
+			sc\Angle = 315.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
-			EntityParent(sc\OBJ, r\OBJ)
-			PositionEntity(sc\ScrOBJ, r\x - 231.489 * RoomScale, r\y + 760.0 * RoomScale, r\z + 255.744 * RoomScale)
 			TurnEntity(sc\ScrOBJ, 0.0, 90.0, 0.0)
-			EntityParent(sc\ScrOBJ, r\OBJ)
 			;[End Block]
 		Case "room2_4"
 			;[Block]
@@ -5565,7 +5528,6 @@ Function FillRoom(r.Rooms)
 			sc = CreateSecurityCam(r\x - 3624.0 * RoomScale, r\y - 4112.0 * RoomScale, r\z + 2248.0 * RoomScale, r)
 			sc\Angle = 100.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
-			EntityParent(sc\OBJ, r\OBJ)
 			
 			it = CreateItem("Document SCP-409", "paper", r\x - 3595.0 * RoomScale, r\y - 4608.0 * RoomScale, r\z + 2234.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
@@ -5583,10 +5545,9 @@ Function FillRoom(r.Rooms)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) + 0.061, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
             PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) - 0.061, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			
-			sc = CreateSecurityCam(r\x + 980.0 * RoomScale, r\y + 515.0 * RoomScale, r\z + 100.0 * RoomScale, r, True)
+			sc = CreateSecurityCam(r\x + 980.0 * RoomScale, r\y + 515.0 * RoomScale, r\z + 100.0 * RoomScale, r)
 			sc\Angle = 30.0 : sc\Turn = 30.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
-			EntityParent(sc\OBJ, r\OBJ)
 			
             it = CreateItem("Level 1 Key Card", "key1", r\x + 468.0 * RoomScale, r\y + 160.0 * RoomScale, r\z + 980.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -5667,7 +5628,6 @@ Function FillRoom(r.Rooms)
 			sc = CreateSecurityCam(r\x, r\y + 415.0 * RoomScale, r\z - 572.0 * RoomScale, r)
 			sc\Angle = 0.0 : sc\Turn = 30.0
 			TurnEntity(sc\CameraOBJ, 30.0, 0.0, 0.0)
-			EntityParent(sc\OBJ, r\OBJ)
 			
 			it = CreateItem("Document SCP-005", "paper", r\x + 338.0 * RoomScale, r\y + 152.0 * RoomScale, r\z - 500.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -6423,11 +6383,12 @@ End Type
 
 Global ScreenTexs%[2]
 
-Function CreateSecurityCam.SecurityCams(x#, y#, z#, r.Rooms, Screen% = False)
+Function CreateSecurityCam.SecurityCams(x1#, y1#, z1#, r.Rooms, Screen% = False, x2# = 0.0, y2# = 0.0, z2# = 0.0)
 	Local sc.SecurityCams = New SecurityCams
 	
 	sc\OBJ = CopyEntity(o\CamModelID[0])
 	ScaleEntity(sc\OBJ, 0.0015, 0.0015, 0.0015)
+	PositionEntity(sc\OBJ, x1, y1, z1)
 	sc\CameraOBJ = CopyEntity(o\CamModelID[1])
 	ScaleEntity(sc\CameraOBJ, 0.01, 0.01, 0.01)
 	
@@ -6447,17 +6408,17 @@ Function CreateSecurityCam.SecurityCams(x#, y#, z#, r.Rooms, Screen% = False)
 		sc\ScrTexture = 0
 		EntityTexture(sc\ScrOBJ, ScreenTexs[sc\ScrTexture])
 		ScaleSprite(sc\ScrOBJ, MeshWidth(o\MonitorModelID[0]) * Scale * 0.95 * 0.5, MeshHeight(o\MonitorModelID[0]) * Scale * 0.95 * 0.5)
+		PositionEntity(sc\ScrOBJ, x2, y2, z2)
 		
 		sc\ScrOverlay = CreateSprite(sc\ScrOBJ)
 		ScaleSprite(sc\ScrOverlay, MeshWidth(o\MonitorModelID[0]) * Scale * 0.95 * 0.5, MeshHeight(o\MonitorModelID[0]) * Scale * 0.95 * 0.5)
-		MoveEntity(sc\ScrOverlay, 0.0, 0.0, -0.0005)
+		MoveEntity(sc\ScrOverlay, 0.0, 0.0, -0.005)
 		EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
 		SpriteViewMode(sc\ScrOverlay, 2)
 		EntityFX(sc\ScrOverlay, 1)
 		EntityBlend(sc\ScrOverlay, 3)
 		
 		sc\MonitorOBJ = CopyEntity(o\MonitorModelID[0], sc\ScrOBJ)
-		
 		ScaleEntity(sc\MonitorOBJ, Scale, Scale, Scale)
 		
 		sc\Cam = CreateCamera()
@@ -6467,10 +6428,12 @@ Function CreateSecurityCam.SecurityCams(x#, y#, z#, r.Rooms, Screen% = False)
 		HideEntity(sc\Cam)	
 	EndIf
 	
-	PositionEntity(sc\OBJ, x, y, z)
-	
-	If r <> Null Then EntityParent(sc\OBJ, r\OBJ)
-	
+	If r <> Null Then 
+		EntityParent(sc\OBJ, r\OBJ)
+		If Screen Then
+			If sc\ScrOBJ <> 0 Then EntityParent(sc\ScrOBJ, r\OBJ)
+		EndIf
+	EndIf
 	Return(sc)
 End Function
 
@@ -8652,5 +8615,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11C5
+;~B#11A5
 ;~C#Blitz3D

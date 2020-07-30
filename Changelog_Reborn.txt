@@ -132,6 +132,8 @@ Bug Fixes:
 - Fixed missing texture for MTF's P90.
 - Fixed fake tunnel inside pocket dimension.
 - Fixed waypoints in SCP-205's containment chamber.
+- Fixed flickering of the monitor overlay.
+- Fixed flying monitor after endings or "kill" command.
 
 - Small fixes for commands "disablenuke" and "enablecontrol/disablecontrol.
 - Small fixes for gateb and gateaentrance's walls.
