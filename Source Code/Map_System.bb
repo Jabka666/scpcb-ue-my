@@ -1424,7 +1424,7 @@ Function LoadRoomMesh(rt.RoomTemplates)
 		If rt\OBJPath <> "" Then rt\OBJ = LoadWorld(rt\OBJPath, rt) Else rt\OBJ = CreatePivot()
 	EndIf
 	
-	If (Not rt\OBJ) Then RuntimeError("Failed to load map file " + Chr(34) + MapFile + Chr(34) + ".")
+	If (Not rt\OBJ) Then RuntimeError("Failed to load map file.")
 	
 	CalculateRoomTemplateExtents(rt)
 	
@@ -1470,7 +1470,7 @@ Type Rooms
 	Field LightIntensity#[MaxRoomLights]
 	Field LightSprites%[MaxRoomLights]	
 	Field Objects%[MaxRoomObjects]
-	Field Levers%[11]
+	Field Levers%[10]
 	Field RoomDoors.Doors[7]
 	Field NPC.NPCs[12]
 	Field grid.Grids
@@ -1484,8 +1484,6 @@ Type Rooms
 	Field LightSprites2%[MaxRoomLights]
 	Field LightHidden%[MaxRoomLights]
 	Field LightFlicker%[MaxRoomLights]
-	Field AlarmRotor%[1]
-	Field AlarmRotorLight%[1]
 	Field TriggerBoxAmount%
 	Field TriggerBox%[128]
 	Field TriggerBoxName$[128]
@@ -8615,5 +8613,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11A5
+;~B#11A3
 ;~C#Blitz3D
