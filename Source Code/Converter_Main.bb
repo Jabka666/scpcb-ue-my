@@ -377,139 +377,6 @@ Function SaveRoomMesh(BaseMesh%, FileName$) ; ~ Base mesh should be a 3D World S
 	FreeEntity(HiddenMesh)
 End Function
 
-Function GetINIString$(File$, Section$, Parameter$)
-	Local TemporaryString$ = ""
-	Local f% = ReadFile(File)
-	
-	While (Not Eof(f))
-		If ReadLine(f) = "[" + Section + "]" Then
-			Repeat 
-				TemporaryString = ReadLine(f)
-				If Trim(Left(TemporaryString, Max(Instr(TemporaryString, "=") - 1, 0))) = Parameter Then
-					CloseFile(f)
-					Return(Trim(Right(TemporaryString, Len(TemporaryString) - Instr(TemporaryString, "="))))
-				EndIf
-			Until Left(TemporaryString, 1) = "[" Lor Eof(f)
-			CloseFile(f)
-			Return("")
-		EndIf
-	Wend
-	
-	CloseFile(f)
-End Function
-
-Function GetINIInt%(File$, Section$, Parameter$)
-	Local Strtemp$ = Lower(GetINIString(File, Section, Parameter))
-	
-	Select Strtemp
-		Case "true"
-			;[Block]
-			Return(1)
-			;[End Block]
-		Case "false"
-			;[Block]
-			Return(0)
-			;[End Block]
-		Default
-			;[Block]
-			Return(Int(Strtemp))
-			;[End Block]
-	End Select
-	Return 
-End Function
-
-Function GetINIFloat#(File$, Section$, Parameter$)
-	Return(GetINIString(File, Section, Parameter))
-End Function
-
-Function PutINIValue%(INI_sAppName$, INI_sSection$, INI_sKey$, INI_sValue$)
-	; ~ Returns: True (Success) or False (Failed)
-	INI_sSection = "[" + Trim(INI_sSection) + "]"
-	
-	Local INI_sUpperSection$ = Upper(INI_sSection)
-	
-	INI_sKey = Trim(INI_sKey)
-	INI_sValue = Trim(INI_sValue)
-	
-	Local INI_sFilename$ = CurrentDir() + "\"  + INI_sAppName
-	; ~ Retrieve the INI data (if it exists)
-	Local INI_sContents$ = INI_FileToString(INI_sFilename)
-	; ~ (Re)Create the INI file updating / adding the SECTION, KEY and VALUE
-	Local INI_bWrittenKey% = False
-	Local INI_bSectionFound% = False
-	Local INI_sCurrentSection$ = ""
-	Local INI_lFileHandle% = WriteFile(INI_sFilename)
-	
-	If INI_lFileHandle = 0 Then Return(False) ; ~ Create file failed!
-	
-	Local INI_lOldPos% = 1
-	Local INI_lPos% = Instr(INI_sContents, Chr(0))
-	
-	While INI_lPos <> 0
-		Local INI_sTemp$ = Trim(Mid(INI_sContents, INI_lOldPos, (INI_lPos - INI_lOldPos)))
-		
-		If INI_sTemp <> "" Then
-			If Left(INI_sTemp, 1) = "[" And Right(INI_sTemp, 1) = "]" Then
-				; ~ Process SECTION
-				If INI_sCurrentSection = INI_sUpperSection And INI_bWrittenKey = False Then
-					INI_bWrittenKey = INI_CreateKey(INI_lFileHandle, INI_sKey, INI_sValue)
-				EndIf
-				INI_sCurrentSection = Upper(INI_CreateSection(INI_lFileHandle, INI_sTemp))
-				If INI_sCurrentSection = INI_sUpperSection Then INI_bSectionFound = True
-			Else
-				Local lEqualsPos% = Instr(INI_sTemp, "=")
-				
-				If lEqualsPos <> 0 Then
-					If INI_sCurrentSection = INI_sUpperSection And Upper(Trim(Left(INI_sTemp, (lEqualsPos - 1)))) = Upper(INI_sKey) Then
-						If INI_sValue <> "" Then INI_CreateKey(INI_lFileHandle, INI_sKey, INI_sValue)
-						INI_bWrittenKey = True
-					Else
-						WriteLine(INI_lFileHandle, INI_sTemp)
-					EndIf
-				EndIf
-			EndIf
-		EndIf
-		
-		; ~ Move through the INI file...
-		INI_lOldPos = INI_lPos + 1
-		INI_lPos = Instr(INI_sContents, Chr(0), INI_lOldPos)
-	Wend
-	
-	; ~ KEY wasn't found in the INI file - Append a new SECTION if required and create our KEY = VALUE line
-	If INI_bWrittenKey = False Then
-		If INI_bSectionFound = False Then INI_CreateSection(INI_lFileHandle, INI_sSection)
-		INI_CreateKey(INI_lFileHandle, INI_sKey, INI_sValue)
-	EndIf
-	
-	CloseFile(INI_lFileHandle)
-	
-	Return(True) ; ~ Success
-End Function
-
-Function INI_FileToString$(INI_sFilename$)
-	Local INI_sString$ = ""
-	Local INI_lFileHandle = ReadFile(INI_sFilename)
-	
-	If INI_lFileHandle <> 0 Then
-		While (Not(Eof(INI_lFileHandle)))
-			INI_sString = INI_sString + ReadLine(INI_lFileHandle) + Chr(0)
-		Wend
-		CloseFile(INI_lFileHandle)
-	EndIf
-	Return(INI_sString)
-End Function
-
-Function INI_CreateSection$(INI_lFileHandle%, INI_sNewSection$)
-	If FilePos(INI_lFileHandle) <> 0 Then WriteLine(INI_lFileHandle, "") ; ~ Blank line between sections
-	WriteLine(INI_lFileHandle, INI_sNewSection)
-	Return(INI_sNewSection)
-End Function
-
-Function INI_CreateKey%(INI_lFileHandle%, INI_sKey$, INI_sValue$)
-	WriteLine(INI_lFileHandle, INI_sKey + "=" + INI_sValue)
-	Return(True)
-End Function
-
 Const FIF_UNKNOWN% = -1
 Const FIF_BMP% = 0
 Const FIF_ICO% = 1
@@ -557,7 +424,7 @@ Function LoadRMesh(File$)
 	Local f% = ReadFile(File)
 	Local fw% = WriteFile(Replace(File, ".rmesh", "_opt.rmesh"))
 	Local i%, j%, k%, x#, y#, z#, Yaw#
-	Local Vertex%
+	Local Vertex%, r.Converted
 	Local Temp1i%, Temp2i%, Temp3i%
 	Local Temp1#, Temp2#, Temp3#
 	Local Temp1s$, Temp2s$
@@ -658,7 +525,7 @@ Cls()
 Text(5, 5, "Conversion of " + Stri + " complete!")
 Flip()
 Delay(1000)
-End
+End()
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D

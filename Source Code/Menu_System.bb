@@ -234,7 +234,7 @@ Function UpdateMainMenu()
 						Txt = "QUIT"
 						If Temp Then
 							StopChannel(CurrMusicStream)
-							End
+							End()
 						EndIf
 						;[End Block]
 				End Select
@@ -1739,7 +1739,7 @@ Function UpdateLauncher(lnchr.Launcher)
 	PutINIValue(OptionFile, "Advanced", "Launcher Enabled", LauncherEnabled)
 	PutINIValue(OptionFile, "Global", "Display Mode", DisplayMode)
 	
-	If Quit Then End
+	If Quit Then End()
 	
 	FreeImage(LauncherArrowIMG)
 	FreeImage(LauncherIMG)
