@@ -3217,7 +3217,7 @@ Function MainLoop()
 			EndIf
 			
 			me\LightBlink = Max(me\LightBlink - (fpst\FPSFactor[0] / 35.0), 0.0)
-			If me\LightBlink > 0.0 And wi\NightVision = 0 And (Not chs\NoBlink) Then DarkA = Min(Max(DarkA, me\LightBlink * Rnd(0.3, 0.8)), 1.0)
+			If me\LightBlink > 0.0 And wi\NightVision = 0 Then DarkA = Min(Max(DarkA, me\LightBlink * Rnd(0.3, 0.8)), 1.0)
 			
 			If I_294\Using Then DarkA = 1.0
 			

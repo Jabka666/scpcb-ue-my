@@ -144,3 +144,4 @@ Bug Fixes:
 - Small fixes for earphones' texture.
 - Small fixes for main menu.
 - Small fixes for room2offices4.
+- Small fixes for SCP-173's AI.

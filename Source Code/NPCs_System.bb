@@ -609,7 +609,7 @@ Function UpdateNPCs()
 								n\PrevX = EntityX(n\Collider)
 								n\PrevZ = EntityZ(n\Collider)				
 								
-								If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And (wi\IsNVGBlinking = False) Then
+								If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And (wi\IsNVGBlinking = False) And me\LightBlink =< 0.0 Then
 									If EntityInView(n\OBJ, Camera) Then Move = False
 								EndIf
 							EndIf
