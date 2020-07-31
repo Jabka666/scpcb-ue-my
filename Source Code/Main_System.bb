@@ -2405,7 +2405,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 	If d\KeyCard > 0 Then
 		If SelectedItem = Null Then
 			If ShowMsg = True Then
-				If (Instr(msg\Msg, "The keycard") = 0 And Instr(msg\Msg, "A keycard with") = 0 And Instr(msg\Msg, "You hold the") = 0) Lor (msg\Timer < 70.0 * 3.0) Then
+				If (msg\Timer < 70.0 * 3.0) Lor (Not (Instr(msg\Msg, "The keycard") Lor Instr(msg\Msg, "A keycard with") Lor Instr(msg\Msg, "You hold the"))) Then
 					msg\Msg = "A keycard is required to operate this door."
 					msg\Timer = 70.0 * 6.0
 				EndIf
@@ -2457,7 +2457,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 			
 			If Temp = -1 Then 
 				If ShowMsg = True Then
-					If (Instr(msg\Msg, "The keycard") = 0 And Instr(msg\Msg, "A keycard with") = 0 And Instr(msg\Msg, "You hold the") = 0) Lor (msg\Timer < 70.0 * 3.0) Then
+					If (msg\Timer < 70.0 * 3.0) Lor (Not (Instr(msg\Msg, "The keycard") Lor Instr(msg\Msg, "A keycard with") Lor Instr(msg\Msg, "You hold the"))) Then
 						msg\Msg = "A keycard is required to operate this door."
 						msg\Timer = 70.0 * 6.0
 					EndIf
@@ -2542,12 +2542,12 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 				If Temp >= 3 Then
 					PlaySound_Strict(ButtonSFX)
 					If Temp = 4 Then
-						If (Instr(msg\Msg, "You placed your") = 0 And Instr(msg\Msg, "You place") = 0 And Instr(msg\Msg, "You hold the") = 0 And Instr(msg\Msg, "The type of") = 0) Lor (msg\Timer < 70.0 * 3.0) Then
+						If (msg\Timer < 70.0 * 3.0) Lor (Not (Instr(msg\Msg, "You placed your") Lor Instr(msg\Msg, "You place") Lor Instr(msg\Msg, "You hold the") Lor Instr(msg\Msg, "The type of"))) Then
 							msg\Msg = "There is no place to insert the key."
 							msg\Timer = 70 * 6.0
 						EndIf
 					Else
-						If (Instr(msg\Msg, "You placed your") = 0 And Instr(msg\Msg, "You place") = 0 And Instr(msg\Msg, "You hold the") = 0 And Instr(msg\Msg, "There is") = 0) Lor (msg\Timer < 70.0 * 3.0) Then
+						If (msg\Timer < 70.0 * 3.0) Lor (Not (Instr(msg\Msg, "You placed your") Lor Instr(msg\Msg, "You place") Lor Instr(msg\Msg, "You hold the") Lor Instr(msg\Msg, "There is"))) Then
 							msg\Msg = "The type of this slot doesn't require keycards."
 							msg\Timer = 70 * 6.0
 						EndIf
@@ -2556,12 +2556,12 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 				Else
 					PlaySound_Strict(ScannerSFX1)
 					If Temp = 2 Then
-						If (Instr(msg\Msg, "You placed your") = 0 And Instr(msg\Msg, "You place") = 0 And Instr(msg\Msg, "The type of") = 0 And Instr(msg\Msg, "There is") = 0) Lor (msg\Timer < 70.0 * 3.0) Then
+						If (msg\Timer < 70.0 * 3.0) Lor (Not (Instr(msg\Msg, "You placed your") Lor Instr(msg\Msg, "You place") Lor Instr(msg\Msg, "The type of") Lor Instr(msg\Msg, "There is"))) Then
 							msg\Msg = "You hold the key onto the scanner. The scanner reads: " + Chr(34) + "Unknown DNA verified. ERROR! Access granted." + Chr(34)
 							msg\Timer = 70.0 * 8.0
 						EndIf
 					Else
-						If (Instr(msg\Msg, "You place") = 0 And Instr(msg\Msg, "You hold the") = 0 And Instr(msg\Msg, "The type of") = 0 And Instr(msg\Msg, "There is") = 0) Lor (msg\Timer < 70.0 * 3.0) Then
+						If (msg\Timer < 70.0 * 3.0) Lor (Not (Instr(msg\Msg, "You place") Lor Instr(msg\Msg, "You hold the") Lor Instr(msg\Msg, "The type of") Lor Instr(msg\Msg, "There is"))) Then
 							msg\Msg = "You place the palm of the hand onto the scanner. The scanner reads: " + Chr(34) + "DNA verified. Access granted." + Chr(34)
 							msg\Timer = 70.0 * 8.0
 						EndIf
@@ -2569,7 +2569,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 				EndIf
 			Else
 				PlaySound_Strict(ScannerSFX2)
-				If (Instr(msg\Msg, "You place") = 0 And Instr(msg\Msg, "You hold the") = 0 And Instr(msg\Msg, "The type of") = 0 And Instr(msg\Msg, "There is") = 0) Lor (msg\Timer < 70.0 * 3.0) Then
+				If (msg\Timer < 70.0 * 3.0) Lor (Not (Instr(msg\Msg, "You place") Lor Instr(msg\Msg, "You hold the") Lor Instr(msg\Msg, "The type of") Lor Instr(msg\Msg, "There is"))) Then
 					msg\Msg = "You placed your palm onto the scanner. The scanner reads: " + Chr(34) + "DNA does not match known sample. Access denied." + Chr(34)
 					msg\Timer = 70.0 * 8.0
 				EndIf
@@ -2599,7 +2599,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 						msg\Msg = "The elevator is already on this floor."
 						msg\Timer = 70.0 * 6.0
 					ElseIf msg\Msg <> "You called the elevator."
-						If msg\Msg = "You already called the elevator." Lor msg\Timer < 70.0 * 3.0
+						If msg\Timer < 70.0 * 3.0 Lor msg\Msg = "You already called the elevator."
 							Select Rand(10)
 								Case 1
 									;[Block]
