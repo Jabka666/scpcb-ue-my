@@ -9411,6 +9411,8 @@ Function InitLoadGame()
 	
 	DrawLoading(80)
 	
+	me\Playable = True
+	
 	For d.Doors = Each Doors
 		EntityParent(d\OBJ, 0)
 		If d\OBJ2 <> 0 Then EntityParent(d\OBJ2, 0)
@@ -9433,9 +9435,6 @@ Function InitLoadGame()
 	SetFont(fo\FontID[0])
 	
 	HidePointer()
-	
-	me\BlinkTimer = me\BLINKFREQ
-	me\Stamina = 100.0
 	
 	For rt.RoomTemplates = Each RoomTemplates
 		If rt\OBJ <> 0 Then FreeEntity(rt\OBJ) : rt\OBJ = 0

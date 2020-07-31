@@ -446,7 +446,7 @@ Function UpdateMainMenu()
 											CurrSave = SaveGames(i - 1)
 											InitLoadGame()
 											MainMenuOpen = False
-											ShouldDeleteGadgest = True
+											ShouldDeleteGadgets = True
 										EndIf
 									EndIf
 										
