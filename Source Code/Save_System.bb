@@ -239,7 +239,7 @@ Function SaveGame(File$)
 			EndIf
 		Next
 		
-		For i = 0 To 10
+		For i = 0 To 9
 			If r\Levers[i] <> 0 Then
 				If EntityPitch(r\Levers[i], True) > 0 Then
 					WriteByte(f, 1)
@@ -754,7 +754,7 @@ Function LoadGame(File$)
 			EndIf
 		Next
 		
-		For x = 0 To 11
+		For x = 0 To 9
 			ID = ReadByte(f)
 			If ID = 2 Then
 				Exit
@@ -1593,7 +1593,7 @@ Function LoadGameQuick(File$)
 			EndIf
 		Next
 		
-		For x = 0 To 11
+		For x = 0 To 9
 			ID = ReadByte(f)
 			If ID = 2 Then
 				Exit
