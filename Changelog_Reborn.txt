@@ -134,6 +134,7 @@ Bug Fixes:
 - Fixed waypoints in SCP-205's containment chamber.
 - Fixed flickering of the monitor overlay.
 - Fixed flying monitor after endings or "kill" command.
+- Fixed SCP-860-1's generation.
 
 - Small fixes for commands "disablenuke" and "enablecontrol/disablecontrol.
 - Small fixes for gateb and gateaentrance's walls.
@@ -145,3 +146,4 @@ Bug Fixes:
 - Small fixes for main menu.
 - Small fixes for room2offices4.
 - Small fixes for SCP-173's AI.
+- Small fixes for SCP-860-1.

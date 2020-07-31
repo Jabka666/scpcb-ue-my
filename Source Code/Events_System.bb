@@ -6579,7 +6579,7 @@ Function UpdateEvents()
 						EndIf
 						
 						; ~ The player fell
-						If (Not NoClip)
+						If (Not chs\NoClip)
 							If EntityY(me\Collider) =< 28.5 Then 
 								Kill() 
 								me\BlinkTimer = -2.0
@@ -6592,10 +6592,10 @@ Function UpdateEvents()
 							If e\room\NPC[0]\State = 0.0 Lor EntityDistanceSquared(me\Collider, e\room\NPC[0]\Collider) > 400.0 Then
 								e\EventState3 = e\EventState3 + (1.0 + me\CurrSpeed) * fpst\FPSFactor[0]
 								If (e\EventState3 Mod 500.0) < 10.0 And ((e\EventState3 - fpst\FPSFactor[0]) Mod 500.0) > 490.0 Then
-									If e\EventState3 > 3000.0 - (500.0 * SelectedDifficulty\aggressiveNPCs) And Rnd(10000 + (500.0 * SelectedDifficulty\aggressiveNPCs)) < e\EventState3
+									If e\EventState3 > 3000.0 - (500.0 * SelectedDifficulty\AggressiveNPCs) And Rnd(10000 + (500.0 * SelectedDifficulty\AggressiveNPCs)) < e\EventState3
 										e\room\NPC[0]\State = 2.0
 										PositionEntity(e\room\NPC[0]\Collider, 0.0, -110.0, 0.0)
-										e\EventState3 = e\EventState3 - Rnd(1000.0, 2000.0 - (500.0 * SelectedDifficulty\aggressiveNPCs))
+										e\EventState3 = e\EventState3 - Rnd(1000.0, 2000.0 - (500.0 * SelectedDifficulty\AggressiveNPCs))
 									Else
 										e\room\NPC[0]\State = 1.0
 										PositionEntity(e\room\NPC[0]\Collider, 0.0, -110.0, 0.0)
@@ -6605,7 +6605,7 @@ Function UpdateEvents()
 						EndIf
 						
 						For i = 0 To 1
-							If EntityDistanceSquared(fr\Door[i], me\Collider) < 0.25 Then
+							If EntityDistanceSquared(fr\Door[i], me\Collider) < 0.64 Then
 								If EntityInView(fr\Door[i], Camera) Then
 									DrawHandIcon = True
 									If MouseHit1 Then
@@ -6649,7 +6649,6 @@ Function UpdateEvents()
 							HideEntity(fr.Forest\Forest_Pivot)
 							If Abs(DistanceSquared(EntityX(e\room\Objects[3], True), EntityX(me\Collider, True), EntityZ(e\room\Objects[3], True), EntityZ(me\Collider, True))) < 1.21 Then
 								DrawHandIcon = True
-								
 								If SelectedItem = Null Then
 									If MouseHit1 Then
 										PlaySound_Strict(LoadTempSound("SFX\Door\WoodenDoorBudge.ogg"))
@@ -6680,8 +6679,8 @@ Function UpdateEvents()
 										Pvt = CreatePivot()
 										PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 										PointEntity(Pvt, e\room\OBJ)
-										Ang# = WrapAngle(EntityYaw(Pvt) - EntityYaw(e\room\OBJ, True))
-										If Ang > 90.0 And Ang < 270.0 Then
+										Angle = WrapAngle(EntityYaw(Pvt) - EntityYaw(e\room\OBJ, True))
+										If Angle > 90.0 And Angle < 270.0 Then
 											PositionEntity(me\Collider, EntityX(fr\Door[0], True), EntityY(fr\Door[0], True) + EntityY(me\Collider, True) + 0.5, EntityZ(fr\Door[0], True), True)
 											RotateEntity(me\Collider, 0.0, EntityYaw(fr\Door[0], True) - 180.0, 0.0, True)
 											MoveEntity(me\Collider, -0.5, 0.0, 0.5)
@@ -10219,5 +10218,5 @@ Function GenerateRandomIA()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11CE#1DEA
+;~B#11CE#1DE9
 ;~C#Blitz3D
