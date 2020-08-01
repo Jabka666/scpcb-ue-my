@@ -63,6 +63,7 @@ FI_SetChannel%( FIBITMAP%, FIBITMAP8%, Channel% ) : "_FreeImage_SetChannel@12"
 FI_Copy%( FIBITMAP%,XA%,XB%,YA%,YB% ) : "_FreeImage_Copy@20"
 FI_Paste%( FIBITMAP%,X%,Y%,Alpha% ) : "_FreeImage_Paste@16"
 FI_GetVersion$() : "_FreeImage_GetVersion@0"
+FI_GetLastMessage$() : "_FreeImage_GetLastMessage@0"
 
 .lib "kernel32.dll"
 RtlMoveMemory_To%(Destination%,Source*,Length%) : "RtlMoveMemory"
