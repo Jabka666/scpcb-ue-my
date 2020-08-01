@@ -7478,28 +7478,28 @@ Function UpdateEvents()
 						GrabbedEntity = 0
 					EndIf
 					
-					Local Setting$ = ""
+					Local Setting%
 					
 					If GrabbedEntity <> e\room\Objects[1] Then
 						Angle = WrapAngle(EntityRoll(e\room\Objects[1]))
 						If Angle < 22.5 Then
 							Angle = 0.0
-							Setting = "1:1"
+							Setting = ONETOONE
 						ElseIf Angle < 67.5
 							Angle = 40.0
-							Setting = "Coarse"
+							Setting = COARSE
 						ElseIf Angle < 180.0
 							Angle = 90.0
-							Setting = "Rough"
+							Setting = ROUGH
 						ElseIf Angle > 337.5
 							Angle = 359.0 - 360.0
-							Setting = "1:1"
+							Setting = ONETOONE
 						ElseIf Angle > 292.5
 							Angle = 320.0 - 360.0
-							Setting = "Fine"
+							Setting = FINE
 						Else
 							Angle = 270.0 - 360.0
-							Setting = "Very Fine"
+							Setting = VERYFINE
 						EndIf
 						RotateEntity(e\room\Objects[1], 0.0, 0.0, CurveValue(Angle, EntityRoll(e\room\Objects[1]), 20.0))
 					EndIf
@@ -7526,13 +7526,13 @@ Function UpdateEvents()
 						EndIf
 						
 						If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[2], True), EntityZ(me\Collider), EntityZ(e\room\Objects[2], True)) < PowTwo(170.0 * RoomScale) Then
-							If Setting = "Rough" Lor Setting = "Coarse" Then
+							If Setting = ROUGH Lor Setting = COARSE Then
 								If e\EventState > 70.0 * 2.6 And e\EventState - fpst\FPSFactor[1] < 70.0 * 2.6 Then PlaySound_Strict(Death914SFX)
 							EndIf
 							
 							If e\EventState > 70.0 * 3.0 Then
 								Select Setting
-									Case "Rough"
+									Case ROUGH
 										;[Block]
 										me\KillTimer = Min(-1.0, me\KillTimer)
 										me\BlinkTimer = -10.0
@@ -7541,17 +7541,17 @@ Function UpdateEvents()
 										msg\DeathMsg = msg\DeathMsg + "The subject had obviously been " + Chr(34) + "refined" + Chr(34) + " by SCP-914 on the " + Chr(34) + "Rough" + Chr(34) + " setting, but we are still confused as to how he "
 										msg\DeathMsg = msg\DeathMsg + "ended up inside the intake booth and who or what wound the key." + Chr(34)
 										;[End Block]
-									Case "Coarse"
+									Case COARSE
 										;[Block]
 										me\BlinkTimer = -10.0
 										If e\EventState - fpst\FPSFactor[1] < 70.0 * 3.0 Then PlaySound_Strict(Use914SFX)
 										;[End Block]
-									Case "1:1"
+									Case ONETOONE
 										;[Block]
 										me\BlinkTimer = -10.0
 										If e\EventState - fpst\FPSFactor[1] < 70.0 * 3.0 Then PlaySound_Strict(Use914SFX)
 										;[End Block]
-									Case "Fine", "Very Fine"
+									Case FINE, VERYFINE
 										;[Block]
 										me\BlinkTimer = -10.0
 										If e\EventState - fpst\FPSFactor[1] < 70.0 * 3.0 Then PlaySound_Strict(Use914SFX)
@@ -7577,17 +7577,17 @@ Function UpdateEvents()
 							
 							If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[2], True), EntityZ(me\Collider), EntityZ(e\room\Objects[2], True)) < PowTwo(160.0 * RoomScale) Then
 								Select Setting
-									Case "Coarse"
+									Case COARSE
 										;[Block]
 										me\Injuries = 4.0
 										msg\Msg = "You notice countless small incisions all around your body. They are bleeding heavily."
 										msg\Timer = 70.0 * 6.0
 										;[End Block]
-									Case "1:1"
+									Case ONETOONE
 										;[Block]
 										InvertMouse = (Not InvertMouse)
 										;[End Block]
-									Case "Fine", "Very Fine"
+									Case FINE, VERYFINE
 										;[Block]
 										chs\SuperMan = True
 										;[End Block]

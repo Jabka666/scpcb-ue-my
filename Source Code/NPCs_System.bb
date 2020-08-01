@@ -41,7 +41,6 @@ Type NPCs
 	Field BoneRoll#
 	Field NPCNameInSection$
 	Field InFacility% = True
-	Field CanUseElevator% = False
 	Field HP%
 	Field PathX#, PathZ#
 	Field Model$
@@ -250,8 +249,6 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			n\Sound = LoadSound_Strict("SFX\Horror\Horror12.ogg")
 			
 			If HorrorSFX[13] = 0 Then HorrorSFX[13] = LoadSound_Strict("SFX\Horror\Horror13.ogg")
-			
-			n\CanUseElevator = True
 			;[End Block]
 		Case NPCtype049_2
 			;[Block]
@@ -267,7 +264,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			
 			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0)
 			
-			SetAnimTime(n\OBJ, 107)
+			SetAnimTime(n\OBJ, 107.0)
 			
 			n\Speed = GetINIFloat(NPCsFile, "SCP-049-2", "Speed") / 100.0
 			
@@ -435,9 +432,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			Temp = GetINIFloat(NPCsFile, "SCP-1499-1", "Scale") / 4.0 * Rnd(0.8, 1.0)
 			
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
-			
 			EntityFX(n\OBJ, 1)
-			
 			EntityAutoFade(n\OBJ, HideDistance * 2.5, HideDistance * 2.95)
 			
 			n\Speed = GetINIFloat(NPCsFile, "SCP-1499-1", "Speed") / 100.0 * Rnd(0.9, 1.1)
@@ -4963,9 +4958,7 @@ Function UpdateNPCs()
 				;[End Block]
 		End Select
 		
-		If n\IsDead Then
-			EntityType(n\Collider, HIT_DEAD)
-		EndIf
+		If n\IsDead Then EntityType(n\Collider, HIT_DEAD)
 		
 		Local GravityDist# = Distance(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider))
 		
@@ -7038,7 +7031,6 @@ Function Find860Angle(n.NPCs, fr.Forest)
 		For x2 = Max(xt - 1, 0) To Min(xt + 1, GridSize - 1)
 			For z2 = Max(zt - 1, 0) To Min(zt + 1, GridSize - 1)
 				If fr\grid[(z2 * GridSize) + x2] > 0 And (x2 <> xt Lor z2 <> zt) And (x2 = xt Lor z2 = zt) Then
-					
 					; ~ Tile (x2, z2) is closer to the player than the monsters current tile
 					If (Abs(PlayerX - x2) + Abs(PlayerZ - z2)) < (Abs(PlayerX - xt) + Abs(PlayerZ - zt)) Then
 						; ~ Calculate the position of the tile in world coordinates
@@ -7388,7 +7380,7 @@ Function ChangeNPCTextureID(n.NPCs, TextureID%) ; ~ Works only for Class D model
 	
 	Temp = GetINIFloat(NPCsFile, "Class D", "Scale") / MeshWidth(n\OBJ)
 	ScaleEntity(n\OBJ, Temp, Temp, Temp)
-	MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2, MeshHeight(n\OBJ) * 2, MeshDepth(n\OBJ) * 2)
+	MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0)
 	
 	SetNPCFrame(n, n\Frame)
 End Function
@@ -7466,5 +7458,5 @@ Function Animate2#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = True
 End Function 
 
 ;~IDEal Editor Parameters:
-;~B#172#121D#1363#13B3#151A#1637#1807#1862
+;~B#16F#1218#135E#13AC#1513#1630#1800#185B
 ;~C#Blitz3D
