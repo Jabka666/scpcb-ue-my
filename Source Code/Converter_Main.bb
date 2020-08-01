@@ -25,7 +25,7 @@ Function StripPath$(File$)
 	Return(Name)
 End Function 
 
-Function StripFilename$(File$)
+Function StripFileName$(File$)
 	Local mi$ = "", LastSlash% = 0, i%
 	
 	If Len(File) > 0 Then
@@ -463,8 +463,8 @@ Function LoadRMesh(File$)
 					Temp1s = Replace(Temp1s, ".bmp", ".png")
 					If (Not Done) Then
 						Success = FI_Save(FIF_PNG, LoadTex, File + Temp1s, 0)
-						If Not Success Then
-							RuntimeError FI_GetLastMessage()
+						If (Not Success) Then
+							RuntimeError(FI_GetLastMessage())
 						EndIf
 						FI_Unload(LoadTex)
 					EndIf
