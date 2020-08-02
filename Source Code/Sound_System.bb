@@ -157,6 +157,10 @@ Function PauseSounds()
 		If ChannelPlaying(CoughCHN) = True Then PauseChannel(CoughCHN)
 	EndIf
 	
+	If SCRAMBLECHN <> 0 Then
+		If ChannelPlaying(SCRAMBLECHN) = True Then PauseChannel(SCRAMBLECHN)
+	EndIf
+	
 	If IntercomStreamCHN <> 0 Then
 		SetStreamPaused_Strict(IntercomStreamCHN, True)
 	EndIf
@@ -235,6 +239,10 @@ Function ResumeSounds()
 	
 	If CoughCHN <> 0 Then
 		If ChannelPlaying(CoughCHN) = True Then ResumeChannel(CoughCHN)
+	EndIf
+	
+	If SCRAMBLECHN <> 0 Then
+		If ChannelPlaying(SCRAMBLECHN) = True Then ResumeChannel(SCRAMBLECHN)
 	EndIf
 	
 	If IntercomStreamCHN <> 0 Then
@@ -317,6 +325,10 @@ Function KillSounds()
 	
 	If CoughCHN <> 0 Then
 		If ChannelPlaying(CoughCHN) = True Then StopChannel(CoughCHN)
+	EndIf
+	
+	If SCRAMBLECHN <> 0 Then
+		If ChannelPlaying(SCRAMBLECHN) = True Then StopChannel(SCRAMBLECHN)
 	EndIf
 	
 	If IntercomStreamCHN <> 0 Then
@@ -696,6 +708,8 @@ Function LoadAllSounds()
 	BreathGasRelaxedSFX = LoadSound_Strict("SFX\Character\D9341\BreathGasRelaxed.ogg")
 	
 	CrouchSFX = LoadSound_Strict("SFX\Character\D9341\Crouch.ogg")
+	
+	SCRAMBLESFX = LoadSound_Strict("SFX\General\SCRAMBLE.ogg")
 End Function
 
 ;~IDEal Editor Parameters:

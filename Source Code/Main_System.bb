@@ -217,6 +217,7 @@ Type WearableItems
 	Field BallisticVest%
 	Field BallisticHelmet%
 	Field NightVision%, NVGTimer#, IsNVGBlinking%
+	Field SCRAMBLE%
 End Type
 
 Global wi.WearableItems = New WearableItems
@@ -1892,6 +1893,9 @@ Global RadioSquelch%
 Global RadioStatic% 
 Global RadioStatic895%
 Global RadioBuzz% 
+
+Global SCRAMBLESFX%
+Global SCRAMBLECHN%
 
 Global ElevatorBeepSFX%, ElevatorMoveSFX% 
 
@@ -4399,17 +4403,19 @@ Function MouseLook()
         HideEntity(tt\OverlayID[9])
     EndIf
 	
-	If wi\NightVision > 0 Then
+	If wi\NightVision > 0 Lor wi\SCRAMBLE > 0 Then
 		ShowEntity(tt\OverlayID[4])
 		If wi\NightVision = 2 Then
 			EntityColor(tt\OverlayID[4], 0.0, 100.0, 255.0)
 			AmbientLightRooms(15)
-		ElseIf wi\NightVision = 3 Then
+		ElseIf wi\NightVision = 3
 			EntityColor(tt\OverlayID[4], 255.0, 0.0, 0.0)
 			AmbientLightRooms(15)
-		Else
+		ElseIf wi\NightVision = 1
 			EntityColor(tt\OverlayID[4], 0.0, 255.0, 0.0)
 			AmbientLightRooms(15)
+		Else
+			EntityColor(tt\OverlayID[4], 128.0, 128.0, 128.0)
 		EndIf
 		EntityTexture(tt\OverlayID[0], tt\OverlayTextureID[5])
 	Else
@@ -4967,6 +4973,14 @@ Function DrawGUI()
 						;[Block]
 						If wi\NightVision = 2 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
 						;[End Block]
+					Case "finenvg"
+						;[Block]
+						If wi\NightVision = 3 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
+					Case "scramble"
+						;[Block]
+						If wi\SCRAMBLE = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
 					Case "scp1499"
 						;[Block]
 						If I_1499\Using = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
@@ -4974,10 +4988,6 @@ Function DrawGUI()
 					Case "super1499"
 						;[Block]
 						If I_1499\Using = 2 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
-						;[End Block]
-					Case "finenvg"
-						;[Block]
-						If wi\NightVision = 3 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
 						;[End Block]
 					Case "scp427"
 						;[Block]
@@ -5036,7 +5046,7 @@ Function DrawGUI()
 			Select SelectedItem\ItemTemplate\TempName
 				Case "nvg"
 					;[Block]
-					If PreventItemOverlapping(False, True, False, False) Then
+					If PreventItemOverlapping(False, True, False, False, False) Then
 						If wi\NightVision > 0 And wi\NightVision <> 1 Then
 							Return
 						Else
@@ -5060,7 +5070,7 @@ Function DrawGUI()
 					;[End Block]
 				Case "supernvg"
 					;[Block]
-					If PreventItemOverlapping(False, True, False, False) Then
+					If PreventItemOverlapping(False, True, False, False, False) Then
 						If wi\NightVision > 0 And wi\NightVision <> 2 Then
 							Return
 						Else
@@ -5084,7 +5094,7 @@ Function DrawGUI()
 					;[End Block]
 				Case "finenvg"
 					;[Block]
-					If PreventItemOverlapping(False, True, False, False) Then
+					If PreventItemOverlapping(False, True, False, False, False) Then
 						If wi\NightVision > 0 And wi\NightVision <> 3 Then
 							Return
 						Else
@@ -5312,7 +5322,7 @@ Function DrawGUI()
 					;[End Block]
 				Case "gasmask", "supergasmask", "gasmask3"
 					;[Block]
-					If PreventItemOverlapping(True, False, False, False) Then
+					If PreventItemOverlapping(True, False, False, False, False) Then
 						DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
 						Width = 300
@@ -5521,7 +5531,7 @@ Function DrawGUI()
 					;[End Block]
 				Case "scp1499", "super1499"
 					;[Block]
-					If PreventItemOverlapping(False, False, True, False) Then
+					If PreventItemOverlapping(False, False, True, False, False) Then
 						DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
 						Width = 300.0
@@ -5562,7 +5572,7 @@ Function DrawGUI()
 					;[End Block]
 				Case "helmet"
 					;[Block]
-					If PreventItemOverlapping(False, False, False, True) Then
+					If PreventItemOverlapping(False, False, False, True, False) Then
 						DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
 					    Width = 300
@@ -5575,6 +5585,26 @@ Function DrawGUI()
 					        Rect(x + 3, y + 3, Float(SelectedItem\State * (Width - 6.0) / 100.0), 14)	
 						Else
 							For i = 1 To Int((Width - 2) * (SelectedItem\State / 100.0) / 10.0)
+								DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
+							Next
+						EndIf
+					EndIf
+					;[End Block]
+				Case "scramble"
+					;[Block]
+					If PreventItemOverlapping(False, False, False, False, True) Then
+						DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						
+						Width = 300
+						Height = 20
+						x = GraphicWidth / 2 - Width / 2
+						y = GraphicHeight / 2 + 80
+						Rect(x, y, Width + 4, Height, False)
+						If BarStyle = 1 Then
+							Color(100, 100, 100)	
+							Rect(x + 3, y + 3, Float(SelectedItem\State3 * (Width - 6.0) / 100.0), 14)	
+						Else
+							For i = 1 To Int((Width - 2) * (SelectedItem\State3 / 100.0) / 10.0)
 								DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
 							Next
 						EndIf
@@ -6117,6 +6147,17 @@ Function UpdateGUI()
 								InvOpen = False
 							EndIf
 						    ;[End Block]
+						Case "scramble"
+                            ;[Block]
+							If wi\SCRAMBLE > 0 Then
+								msg\Msg = "Double click on this item to take it off."
+								msg\Timer = 70.0 * 6.0
+							Else
+								DropItem(SelectedItem)
+								SelectedItem = Null
+								InvOpen = False
+							EndIf
+						    ;[End Block]
 						Default
 							;[Block]
 							DropItem(SelectedItem)
@@ -6280,6 +6321,15 @@ Function UpdateGUI()
 											msg\Timer = 70.0 * 6.0
 										EndIf
 										;[End Block]
+									Case "SCRAMBLE Gear"
+										;[Block]
+										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
+										RemoveItem(SelectedItem)
+										SelectedItem = Null
+										Inventory[MouseSlot]\State = 1000.0
+										msg\Msg = "You replaced the gear's battery."
+										msg\Timer = 70.0 * 6.0
+										;[End Block]
 									Default
 										;[Block]
 										msg\Msg = "You cannot combine these two items."
@@ -6347,7 +6397,7 @@ Function UpdateGUI()
 			Select SelectedItem\ItemTemplate\TempName
 				Case "nvg"
 					;[Block]
-					If PreventItemOverlapping(False, True, False, False) Then
+					If PreventItemOverlapping(False, True, False, False, False) Then
 						; ~ A hacky fix for a fog
 						If wi\NightVision > 0 And wi\NightVision <> 1 Then
 							msg\Msg = "You can't use two pairs of the goggles at the same time."
@@ -6381,7 +6431,7 @@ Function UpdateGUI()
 					;[End Block]
 				Case "supernvg"
 					;[Block]
-					If PreventItemOverlapping(False, True, False, False) Then
+					If PreventItemOverlapping(False, True, False, False, False) Then
 						If wi\NightVision > 0 And wi\NightVision <> 2 Then
 							msg\Msg = "You can't use two pairs of the goggles at the same time."
 							msg\Timer = 70 * 5.0
@@ -6414,7 +6464,7 @@ Function UpdateGUI()
 					;[End Block]
 				Case "finenvg"
 					;[Block]
-					If PreventItemOverlapping(False, True, False, False) Then
+					If PreventItemOverlapping(False, True, False, False, False) Then
 						If wi\NightVision > 0 And wi\NightVision <> 3 Then
 							msg\Msg = "You can't use two pairs of the goggles at the same time."
 							msg\Timer = 70 * 5.0
@@ -7315,6 +7365,7 @@ Function UpdateGUI()
 								wi\GasMask = 0
 								wi\NightVision = 0
 								wi\BallisticHelmet = 0
+								wi\SCRAMBLE = 0
 							EndIf
 							SelectedItem\State = 0.0
 							msg\Timer = 70.0 * 6.0
@@ -7350,7 +7401,7 @@ Function UpdateGUI()
 					;[End Block]
 				Case "gasmask", "supergasmask", "gasmask3"
 					;[Block]
-					If PreventItemOverlapping(True, False, False, False) Then
+					If PreventItemOverlapping(True, False, False, False, False) Then
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
 						SelectedItem\State = Min(SelectedItem\State + (fpst\FPSFactor[0]) / 1.6, 100.0)
@@ -7386,7 +7437,7 @@ Function UpdateGUI()
 					;[End Block]
 				Case "scp1499", "super1499"
 					;[Block]
-					If PreventItemOverlapping(False, False, True, False) Then
+					If PreventItemOverlapping(False, False, True, False, False) Then
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
 						SelectedItem\State = Min(SelectedItem\State + fpst\FPSFactor[0] / 1.6, 100.0)
@@ -7556,7 +7607,7 @@ Function UpdateGUI()
 					;[End Block]
 				Case "helmet"
 					;[Block]
-					If PreventItemOverlapping(False, False, False, True) Then
+					If PreventItemOverlapping(False, False, False, True, False) Then
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
 						SelectedItem\State = Min(SelectedItem\State + fpst\FPSFactor[0], 100.0)
@@ -7575,6 +7626,29 @@ Function UpdateGUI()
 						    msg\Timer = 70.0 * 6.0
 						    SelectedItem = Null
 					    EndIf
+					EndIf
+					;[End Block]
+				Case "scramble"
+					;[Block]
+					If PreventItemOverlapping(False, False, False, False, True) Then
+						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
+							
+						SelectedItem\State3 = Min(SelectedItem\State3 + (fpst\FPSFactor[0] / 1.6), 100.0)
+							
+						If SelectedItem\State3 = 100.0 Then
+							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
+								
+							If wi\SCRAMBLE > 0 Then
+								msg\Msg = "You removed the gear."
+								wi\SCRAMBLE = 0
+							Else
+								msg\Msg = "You put on the gear."
+								wi\SCRAMBLE = 1
+							EndIf
+							SelectedItem\State3 = 0.0
+							msg\Timer = 70.0 * 6.0
+							SelectedItem = Null
+						EndIf
 					EndIf
 					;[End Block]
 				Default
@@ -7611,6 +7685,7 @@ Function UpdateGUI()
 				ElseIf IN = "scp1499" Lor IN = "super1499" Lor IN = "gasmask" Lor IN = "supergasmask" Lor IN = "gasmask3" Lor IN = "helmet"
 					SelectedItem\State = 0.0
 				ElseIf IN = "nvg" Lor IN = "supernvg" Lor IN = "finenvg"
+				ElseIf IN = "nvg" Lor IN = "supernvg" Lor IN = "finenvg" Lor IN = "scramble"
 					SelectedItem\State3 = 0.0
 				EndIf
 				
@@ -7635,7 +7710,7 @@ Function UpdateGUI()
 					;[Block]
 					it\State = 0.0
 					;[End Block]
-				Case "nvg", "supernvg", "finenvg"
+				Case "nvg", "supernvg", "finenvg", "scramble"
 					;[Block]
 					it\State3 = 0.0
 					;[End Block]
@@ -9576,6 +9651,7 @@ Function NullGame(PlayButtonSFX% = True)
 		CameraFogFar = StoredCameraFogFar
 		wi\NightVision = 0
 	EndIf
+	wi\SCRAMBLE = 0
 	
 	I_714\Using = 0
 	
@@ -9587,8 +9663,6 @@ Function NullGame(PlayButtonSFX% = True)
 	me\Playable = True
 	
 	CoffinDistance = 100.0
-	
-	If Curr173 <> Null Then Curr173\Idle = False
 	
 	MTFTimer = 0.0
 	
@@ -11888,15 +11962,19 @@ Function RenderWorld2(Tween#)
 	Local HasBattery% = 2
 	Local Power% = 0
 	
-	If wi\NightVision = 1 Lor wi\NightVision = 2 Then
+	If wi\NightVision = 1 Lor wi\NightVision = 2 Lor wi\SCRAMBLE > 0 Then
 		For i = 0 To MaxItemAmount - 1
 			If Inventory[i] <> Null Then
-				If (wi\NightVision = 1 And Inventory[i]\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory[i]\ItemTemplate\TempName = "supernvg") Then
-					Inventory[i]\State = Inventory[i]\State - (fpst\FPSFactor[0] * (0.02 * wi\NightVision))
+				If (wi\NightVision = 1 And Inventory[i]\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory[i]\ItemTemplate\TempName = "supernvg") Lor (wi\SCRAMBLE > 0 And Inventory[i]\ItemTemplate\TempName = "scramble") Then
+					Inventory[i]\State = Inventory[i]\State - (fpst\FPSFactor[0] * (0.02 * wi\NightVision) + (0.25 * (wi\SCRAMBLE > 0)))
 					Power = Int(Inventory[i]\State)
 					If Power =< 0.0 Then ; ~ This NVG can't be used
 						HasBattery = 0
-						msg\Msg = "The batteries in these night vision goggles died."
+						If wi\SCRAMBLE > 0 Then
+							msg\Msg = "The batteries in this gear died."
+						Else
+							msg\Msg = "The batteries in these night vision goggles died."
+						EndIf	
 						msg\Timer = 70 * 5.0
 						me\BlinkTimer = -1.0
 						Exit
@@ -11920,8 +11998,18 @@ Function RenderWorld2(Tween#)
 		ShowEntity(tt\OverlayID[5])
 	EndIf
 	
+	If wi\SCRAMBLE > 0 Then
+		If HasBattery = 0 
+			If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN)
+		Else
+			SCRAMBLECHN = LoopSound2(SCRAMBLESFX, SCRAMBLECHN, Camera, Camera)
+		EndIf
+	Else
+		If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN)
+	EndIf
+	
 	If me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0 Then
-		If HasBattery <> 0 And (wi\NightVision > 0 And wi\NightVision < 3) Then
+		If HasBattery <> 0 And (wi\NightVision = 1 Lor wi\NightVision = 2 Lor wi\SCRAMBLE > 0) Then
 			If wi\NightVision = 2 Then ; ~ Show a HUD
 				wi\NVGTimer = wi\NVGTimer - fpst\FPSFactor[0]
 				If wi\NVGTimer =< 0.0 Then
@@ -11992,6 +12080,8 @@ Function RenderWorld2(Tween#)
 				Color(0, 0, 55)
 			ElseIf wi\NightVision = 1
 				Color(0, 55, 0)
+			Else
+				Color(55, 55, 55)
 			EndIf
 			For k = 0 To 10
 				Rect(45, GraphicHeight * 0.5 - (k * 20), 54, 10, True)
@@ -12000,6 +12090,8 @@ Function RenderWorld2(Tween#)
 				Color(0, 0, 255)
 			ElseIf wi\NightVision = 1
 				Color(0, 255, 0)
+			Else
+				Color(255, 255, 255)
 			EndIf
 			For l = 0 To Floor((Power + 50) * 0.01)
 				Rect(45, GraphicHeight * 0.5 - (l * 20), 54, 10, True)
@@ -12009,7 +12101,7 @@ Function RenderWorld2(Tween#)
 	EndIf
 	
 	If me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0 Then
-		If (wi\NightVision = 1 Lor wi\NightVision = 2) And (HasBattery = 1) And ((MilliSecs() Mod 800) < 400) Then
+		If (wi\NightVision = 1 Lor wi\NightVision = 2 Lor wi\SCRAMBLE > 0) And (HasBattery = 1) And ((MilliSecs() Mod 800) < 400) Then
 			Color(255, 0, 0)
 			SetFont(fo\FontID[2])
 			
@@ -12340,7 +12432,7 @@ Function CanUseItem(CanUseWithGasMask%, CanUseWithEyewear%)
 		msg\Msg = "You can't use that item while wearing a gas mask."
 		msg\Timer = 70.0 * 6.0
 		Return(False)
-	ElseIf CanUseWithEyewear = False And (wi\NightVision > 0)
+	ElseIf CanUseWithEyewear = False And (wi\NightVision > 0 Lor wi\SCRAMBLE > 0)
 		msg\Msg = "You can't use that item while wearing headgear."
 		msg\Timer = 70.0 * 6.0
 		Return(False)
@@ -12348,7 +12440,7 @@ Function CanUseItem(CanUseWithGasMask%, CanUseWithEyewear%)
 	Return(True)
 End Function
 
-Function PreventItemOverlapping(GasMask%, NVG%, SCP1499%, Helmet%)
+Function PreventItemOverlapping(GasMask%, NVG%, SCP1499%, Helmet%, SCRAMBLE%)
 	If GasMask = False And wi\GasMask > 0 Then
 		msg\Msg = "You need to take off the gas mask in order to use that item."
 		msg\Timer = 70.0 * 6.0
@@ -12366,6 +12458,11 @@ Function PreventItemOverlapping(GasMask%, NVG%, SCP1499%, Helmet%)
 		Return(False)
 	ElseIf Helmet = False And wi\BallisticHelmet > 0
 		msg\Msg = "You need to take off the helmet in order to use that item."
+		msg\Timer = 70.0 * 6.0
+		SelectedItem = Null
+		Return(False)
+	ElseIf SCRAMBLE = False And wi\SCRAMBLE > 0
+		msg\Msg = "You need to take off the gear in order to use that item."
 		msg\Timer = 70.0 * 6.0
 		SelectedItem = Null
 		Return(False)
@@ -12388,5 +12485,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1089#1326#1DEF
+;~B#108D#132C#1E39
 ;~C#Blitz3D

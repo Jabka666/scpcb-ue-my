@@ -230,6 +230,12 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			
 			MeshCullBox(n\OBJ, (-MeshWidth(n\OBJ)) * 2.0, (-MeshHeight(n\OBJ)) * 2.0, (-MeshDepth(n\OBJ)) * 2.0, MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 4.0, MeshDepth(n\OBJ) * 4.0)
 			
+			n\OBJ2 = CreateSprite(FindChild(n\OBJ, "Reyelid"))
+			ScaleSprite(n\OBJ2, 0.07, 0.08)
+			EntityOrder(n\OBJ2, -5)
+			EntityTexture(n\OBJ2, tt\OverlayTextureID[6])
+			HideEntity(n\OBJ2)
+			
 			n\CollRadius = 0.26
 			;[End Block]
 		Case NPCtype049
@@ -1101,6 +1107,15 @@ Function UpdateNPCs()
 			Case NPCtype096
 				;[Block]
 				Dist = EntityDistance(me\Collider, n\Collider)
+				Angle = WrapAngle(DeltaYaw(n\Collider, me\Collider))
+				
+				If wi\SCRAMBLE > 0 And Dist < 16.0 And (Angle < 135.0 Lor Angle > 225.0) And EntityVisible(Camera, n\OBJ2) Then
+					ShowEntity(n\OBJ2)
+					ScaleSprite(n\OBJ2, Rnd(0.06, 0.08), Rnd(0.07, 0.09))
+					PositionEntity(n\OBJ2, Rnd(0.1) - 0.05, Rnd(0.1) - 0.05, Rnd(0.1) - 0.05)
+				Else
+					HideEntity(n\OBJ2)
+				EndIf
 				
 				Select n\State
 					Case 0.0
@@ -1134,29 +1149,29 @@ Function UpdateNPCs()
 								EndIf
 							EndIf
 							
-							Angle = WrapAngle(DeltaYaw(n\Collider, me\Collider))
-							
-							If (Not chs\NoTarget) Then
-								If Angle < 90.0 Lor Angle > 270.0 Then
-									CameraProject(Camera, EntityX(n\Collider), EntityY(n\Collider) + 0.25, EntityZ(n\Collider))
-									If ProjectedX() > 0.0 And ProjectedX() < GraphicWidth Then
-										If ProjectedY() > 0.0 And ProjectedY() < GraphicHeight Then
-											If EntityVisible(me\Collider, n\Collider) Then
-												If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0)
-													PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"))
-													
-													me\CurrCameraZoom = 10.0
-													
-													SetNPCFrame(n, 194.0)
-													
-													StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0
-													n\Sound = 0
-													n\State = 1.0
-													n\State3 = 0.0
-												EndIf
-											EndIf									
-										EndIf
-									EndIf								
+							If (Not chs\NoTarget)
+								If WearingScramble = 0 And (Angle < 90.0 Lor Angle > 270.0) Then
+									If Angle < 90.0 Lor Angle > 270.0 Then
+										CameraProject(Camera, EntityX(n\Collider), EntityY(n\Collider) + 0.25, EntityZ(n\Collider))
+										If ProjectedX() > 0.0 And ProjectedX() < GraphicWidth Then
+											If ProjectedY() > 0.0 And ProjectedY() < GraphicHeight Then
+												If EntityVisible(me\Collider, n\Collider) Then
+													If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0)
+														PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"))
+														
+														me\CurrCameraZoom = 10.0
+														
+														SetNPCFrame(n, 194.0)
+														
+														StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0
+														n\Sound = 0
+														n\State = 1.0
+														n\State3 = 0.0
+													EndIf
+												EndIf									
+											EndIf
+										EndIf								
+									EndIf
 								EndIf
 							EndIf
 						EndIf
@@ -1418,26 +1433,28 @@ Function UpdateNPCs()
 							
 							Angle = WrapAngle(DeltaYaw(n\Collider, Camera))
 							
-							If (Not chs\NoTarget) Then
-								If Angle < 55.0 Lor Angle > 360.0 - 55.0 Then
-									CameraProject(Camera, EntityX(n\Collider), EntityY(me\Collider) + 5.8 * 0.2 - 0.25, EntityZ(n\Collider))
-									
-									If ProjectedX() > 0.0 And ProjectedX() < GraphicWidth Then
-										If ProjectedY() > 0.0 And ProjectedY() < GraphicHeight Then
-											If EntityVisible(me\Collider, n\Collider) Then
-												If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0)
-													PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"))
-													
-													me\CurrCameraZoom = 10.0
-													
-													If n\Frame >= 422.0 Then
-														SetNPCFrame(n, 677.0)
+							If (Not chs\NoTarget)
+								If wi\SCRAMBLE = 0 And (Angle < 55.0 Lor Angle > 360.0 - 55.0) Then
+									If Angle < 55.0 Lor Angle > 360.0 - 55.0 Then
+										CameraProject(Camera, EntityX(n\Collider), EntityY(me\Collider) + 5.8 * 0.2 - 0.25, EntityZ(n\Collider))
+										
+										If ProjectedX() > 0.0 And ProjectedX() < GraphicWidth Then
+											If ProjectedY() > 0.0 And ProjectedY() < GraphicHeight Then
+												If EntityVisible(me\Collider, n\Collider) Then
+													If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0)
+														PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"))
+														
+														me\CurrCameraZoom = 10.0
+														
+														If n\Frame >= 422.0 Then
+															SetNPCFrame(n, 677.0)
+														EndIf
+														StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0
+														n\Sound = 0
+														n\State = 2.0
 													EndIf
-													StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0
-													n\Sound = 0
-													n\State = 2.0
-												EndIf
-											EndIf									
+												EndIf									
+											EndIf
 										EndIf
 									EndIf
 								EndIf
@@ -7458,5 +7475,5 @@ Function Animate2#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = True
 End Function 
 
 ;~IDEal Editor Parameters:
-;~B#16F#1218#135E#13AC#1513#1630#1800#185B
+;~B#175#1229#136F#13BD#1524#1641#1811#186C
 ;~C#Blitz3D
