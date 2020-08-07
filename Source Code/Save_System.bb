@@ -781,7 +781,7 @@ Function LoadGame(File$)
 						EndIf
 					Next
 				Next
-				For x = 0 To 5
+				For x = 0 To 6
 					If r\grid\Meshes[x] <> 0 Then
 						FreeEntity(r\grid\Meshes[x])
 						r\grid\Meshes[x] = 0
@@ -1627,7 +1627,7 @@ Function LoadGameQuick(File$)
 						EndIf
 					Next
 				Next
-				For x = 0 To 5
+				For x = 0 To 6
 					If r\grid\Meshes[x] <> 0 Then
 						FreeEntity(r\grid\Meshes[x])
 						r\grid\Meshes[x] = 0
