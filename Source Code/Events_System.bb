@@ -6986,7 +6986,7 @@ Function UpdateEvents()
 							If DistanceSquared(EntityX(me\Collider), EntityX(e\room\OBJ), EntityZ(me\Collider), EntityZ(e\room\OBJ)) < 12.25 Then
 								PlaySound_Strict(LightSFX)
 								
-								me\LightBlink = Rnd(0.0, 1.0) * (e\EventState / 200.0)
+								me\LightBlink = 5.0
 								e\EventState = 1.0
 							EndIf
 						EndIf	
@@ -6994,24 +6994,18 @@ Function UpdateEvents()
 				EndIf
 				
 				If e\EventState > 0.0 And e\EventState < 200.0 Then
-					me\BlinkTimer = -10.0
-					If e\EventState > 30.0 Then 
-						me\LightBlink = 1.0 
-						If e\EventState - fpst\FPSFactor[0] =< 30.0 Then 
-							PlaySound_Strict(LoadTempSound("SFX\Ambient\General\Ambient3.ogg"))
-						EndIf
+					If e\EventState > 30.0 And e\EventState - fpst\FPSFactor[0] =< 30.0 Then 
+						PlaySound_Strict(LoadTempSound("SFX\Ambient\General\Ambient3.ogg"))
 					EndIf
 					If e\EventState - fpst\FPSFactor[0] =< 100.0 And e\EventState > 100.0 Then
 						PlaySound_Strict(LoadTempSound("SFX\Ambient\General\Ambient6.ogg"))
 						PositionEntity(Curr173\Collider, EntityX(e\room\OBJ), 0.6, EntityZ(e\room\OBJ))
 						ResetEntity(Curr173\Collider)					
-						Curr173\Idle = True		
+						Curr173\Idle = True
+						If wi\NightVision > 0 Then me\BlinkTimer = -10.0
 					EndIf
-					me\LightBlink = 1.0
 					e\EventState = e\EventState + fpst\FPSFactor[0]
-				ElseIf e\EventState <> 0.0 Then
-					me\BlinkTimer = me\BLINKFREQ
-					
+				ElseIf e\EventState > 0.0 And me\LightBlink = 0.0
 					Curr173\Idle = False
 					RemoveEvent(e)
 				EndIf
@@ -10219,5 +10213,5 @@ Function GenerateRandomIA()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11CE#1DE9
+;~B#11CE#1DE3
 ;~C#Blitz3D
