@@ -271,7 +271,7 @@ Function QuickLoadEvents()
 	Select e\EventName
 		Case "room2sl"
 			;[Block]
-			If e\EventState = 0 And e\EventStr <> ""
+			If e\EventState = 0.0 And e\EventStr <> ""
 				If e\EventStr <> "" And Left(e\EventStr, 4) <> "Load"
 					QuickLoadPercent = QuickLoadPercent + 5
 					If Int(e\EventStr) > 9
@@ -312,7 +312,7 @@ Function QuickLoadEvents()
 			;[End Block]
 		Case "room205"
 			;[Block]
-			If e\EventState = 0 Lor e\EventStr <> "LoadDone" Then
+			If e\EventState = 0.0 Lor e\EventStr <> "LoadDone" Then
 				If e\EventStr = "Load0"
 					e\room\Objects[3] = CopyEntity(o\NPCModelID[29])
 					QuickLoadPercent = 10

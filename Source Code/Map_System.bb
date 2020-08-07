@@ -2522,7 +2522,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) - 0.061, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)			
 			
 			r\RoomDoors[0] = CreateDoor(r\Zone, r\x - 432.0 * RoomScale, r\y, r\z, 90.0, r, False, False, False, "1234")
-			r\RoomDoors[0]\AutoClose = False : r\RoomDoors[0]\Locked = True	
+			r\RoomDoors[0]\AutoClose = False : r\RoomDoors[0]\Locked = True	: r\RoomDoors[0]\MTFClose = False : r\RoomDoors[0]\DisableWayPoint = True
 			PositionEntity(r\RoomDoors[0]\Buttons[0], EntityX(r\RoomDoors[0]\Buttons[0], True) - 0.061, EntityY(r\RoomDoors[0]\Buttons[0], True), EntityZ(r\RoomDoors[0]\buttons[0], True), True)
 			FreeEntity(r\RoomDoors[0]\Buttons[1]) : r\RoomDoors[0]\Buttons[1] = 0
 			
