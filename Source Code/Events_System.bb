@@ -3085,69 +3085,53 @@ Function UpdateEvents()
 			Case "room2elevator"
 				;[Block]
 				If e\EventState = 0.0 Then
-					If e\room\Dist < 5.0 And e\room\Dist > 0.0 Then
+					If e\room\Dist < 8.0 And e\room\Dist > 0.0 Then
 						e\room\NPC[0] = CreateNPC(NPCtypeGuard, EntityX(e\room\OBJ, True), 0.5, EntityZ(e\room\OBJ, True))
+						PointEntity(e\room\NPC[0]\Collider, me\Collider)
+						RotateEntity(e\room\NPC[0]\Collider, 0.0, EntityYaw(e\room\NPC[0]\Collider), 0.0, True)
+						
 						e\EventState = 1.0
 					EndIf
 				Else
-					If e\room\NPC[0] <> Null Then
-						; ~ Attack the player, if he too close
-						If EntityDistanceSquared(e\room\NPC[0]\Collider, me\Collider) < 4.0 And (Not chs\NoTarget) Then
-							e\room\NPC[0]\State = 1.0
-							e\room\NPC[0]\State3 = 1.0
-						Else
-							If e\EventState = 1.0 Then
-								PointEntity(e\room\NPC[0]\Collider, e\room\Objects[1])
-								RotateEntity(e\room\NPC[0]\Collider, 0.0, EntityYaw(e\room\NPC[0]\Collider), 0.0, True)	
-								e\room\NPC[0]\State = 10.0
-								
-								If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\Objects[1]) =< 6.25 Then
-									e\room\RoomDoors[0]\Locked = False
-									UseDoor(e\room\RoomDoors[0]) 
-									e\room\RoomDoors[0]\Locked = True
-									
-									PlaySound_Strict(LoadTempSound("SFX\Room\Room2ElevatorDeath.ogg"))
-									
-									e\EventState = 1.5
-								EndIf
-							Else
-								If e\room\RoomDoors[0]\OpenState =< 0.0 Then 
-									RemoveNPC(e\room\NPC[0]) : e\room\NPC[0] = Null
-									e\EventState = 2.0
-								EndIf
-							EndIf
+					If e\EventState = 1.0 Then
+						If e\room\Dist < 5.0 Lor Rand(700) = 1 Then 
+							e\EventState = 2.0
+							
+							e\room\NPC[0]\State = 5.0
+							e\room\NPC[0]\EnemyX = EntityX(e\room\Objects[1], True)
+							e\room\NPC[0]\EnemyY = EntityY(e\room\Objects[1], True)
+							e\room\NPC[0]\EnemyZ = EntityZ(e\room\Objects[1], True)
 						EndIf
-					EndIf
-					
-					If e\EventState >= 2.0 And e\EventState < 70.0 * 13.0 Then
+					ElseIf e\EventState = 2.0
+						If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\Objects[1]) < 4.0 Then
+							e\room\RoomDoors[0]\Open = False
+							PlaySound2(CloseDoorSFX(3, 0), Camera, e\room\RoomDoors[0]\OBJ, 8.0)			
+							
+							PlaySound_Strict(LoadTempSound("SFX\Room\Room2ElevatorDeath.ogg"))
+							
+							e\EventState = 2.05
+						EndIf
+					ElseIf e\EventState < 70.0 * 13.0
 						e\EventState = e\EventState + fpst\FPSFactor[0]
 						If e\EventState > 70.0 * 6.7 And e\EventState < 70.0 * 7.4 Then
 							me\CameraShake = 7.4 - (e\EventState / 70.0)
-						ElseIf e\EventState > 70.0 * 8.6 And e\EventState < 70.0 * 10.6 
+						ElseIf e\EventState > 70.0 * 8.6 And e\EventState < 70.0 * 10.6
 							me\CameraShake = 10.6 - (e\EventState / 70.0)
 						ElseIf e\EventState > 70.0 * 12.6
 							me\CameraShake = 0.0
-							If e\EventState - fpst\FPSFactor[0] < 70.0 * 12.6 Then
+							If e\EventState - fpst\FPSFactor[0] < 70.0 * 12.6 And e\room\NPC[0] <> Null Then
+								RemoveNPC(e\room\NPC[0])
+								e\room\NPC[0] = Null
+								
 								de.Decals = CreateDecal(3, EntityX(e\room\Objects[0], True), 0.005, EntityZ(e\room\Objects[0], True), 90.0, Rnd(360.0), 0.0)
 								
-								de.Decals = CreateDecal(7, EntityX(e\room\Objects[0], True), 0.002, EntityZ(e\room\Objects[0], True), 90.0, Rnd(360.0), 0.0)
+								de.Decals = CreateDecal(7, EntityX(e\room\Objects[0], True), 0.005, EntityZ(e\room\Objects[0], True), 90.0, Rnd(360.0), 0.0)
 								de\Size = 0.5
-								
-								de.Decals = CreateDecal(3, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True), 0.0, e\room\Angle + 270.0, 0.0)
-								de\Size = 0.9
-								
-								e\room\RoomDoors[0]\Locked = False
-								
-								e\EventState2 = 1.0
 							EndIf
+							e\room\RoomDoors[0]\Locked = False
 						EndIf
-					EndIf
-					
-					If e\EventState2 = 1.0 Then
-						If e\room\RoomDoors[0]\Open Then 
-							e\room\RoomDoors[0]\Locked = True
-							RemoveEvent(e)
-						EndIf
+					Else
+						If e\room\RoomDoors[0]\Open Then e\room\RoomDoors[0]\Locked = True : RemoveEvent(e)
 					EndIf
 				EndIf
 				;[End Block]
@@ -10220,5 +10204,5 @@ Function GenerateRandomIA()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11CC#1DE1
+;~B#11BC#1DD1
 ;~C#Blitz3D
