@@ -954,9 +954,7 @@ Function UpdateEvents()
 									If EntityZ(e\room\NPC[6]\Collider) > EntityZ(e\room\OBJ, True) - 64.0 * RoomScale Then
 										RotateEntity(e\room\NPC[6]\Collider, 0.0, CurveAngle(90.0, EntityYaw(e\room\NPC[6]\Collider), 15.0), 0.0)
 										If e\room\RoomDoors[6]\Open Then 
-											e\room\RoomDoors[6]\Locked = False
 											UseDoor(e\room\RoomDoors[6], False)
-											e\room\RoomDoors[6]\Locked = True
 										EndIf
 										If e\room\RoomDoors[6]\OpenState < 1.0 Then e\room\NPC[6]\State = 0.0
 									EndIf
@@ -10213,5 +10211,5 @@ Function GenerateRandomIA()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11CE#1DE3
+;~B#11CC#1DE1
 ;~C#Blitz3D

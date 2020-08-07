@@ -3714,7 +3714,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(d\Buttons[0], r\x + 1120.0 * RoomScale, EntityY(d\Buttons[0], True), r\z + 322.0 * RoomScale, True)
 			PositionEntity(d\Buttons[1], r\x + 1120.0 * RoomScale, EntityY(d\Buttons[1], True), r\z + 302.0 * RoomScale, True)
 			
-			d = CreateDoor(r\Zone, r\x, r\y, r\z + 1184.0 * RoomScale, 0.0, r)
+			d = CreateDoor(r\Zone, r\x, r\y, r\z + 1184.0 * RoomScale, 0.0, r, False, False, 6)
 			d\Locked = True : d\MTFClose = False
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			
@@ -4256,12 +4256,12 @@ Function FillRoom(r.Rooms)
 			Next
 			
 			; ~ The door in the office below the walkway
-			r\RoomDoors[6] = CreateDoor(r\Zone, r\x - 3712.0 * RoomScale, r\y - 385.0 * RoomScale, r\z - 128.0 * RoomScale, 0.0, r, True)
-			r\RoomDoors[6]\AutoClose = False : r\RoomDoors[6]\MTFClose = False : r\RoomDoors[6]\Locked = True
+			r\RoomDoors[6] = CreateDoor(r\Zone, r\x - 3712.0 * RoomScale, r\y - 385.0 * RoomScale, r\z - 128.0 * RoomScale, 0.0, r, True, False, 6)
+			r\RoomDoors[6]\AutoClose = False : r\RoomDoors[6]\MTFClose = False
 			FreeEntity(r\RoomDoors[6]\Buttons[1]) : r\RoomDoors[6]\Buttons[1] = 0
 			
-			d = CreateDoor(r\Zone, r\x - 3712 * RoomScale, r\y - 385.0 * RoomScale, r\z - 2336.0 * RoomScale, 0.0, r)
-			d\AutoClose = False : d\Locked = True : d\DisableWaypoint = True : d\MTFClose = False
+			d = CreateDoor(r\Zone, r\x - 3712.0 * RoomScale, r\y - 385.0 * RoomScale, r\z - 2336.0 * RoomScale, 0.0, r)
+			d\AutoClose = False : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			
 			; ~ The door from the concrete tunnel to the large hall
