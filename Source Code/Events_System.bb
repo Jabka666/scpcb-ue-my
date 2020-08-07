@@ -7664,6 +7664,7 @@ Function UpdateEvents()
 									msg\Msg = "Something is growing all around your body."
 									msg\Timer = 70.0 * 6.0
 								Else
+									e\EventState = 4.0
 									e\EventState3 = 70.0 * 30.0
 								EndIf
 							EndIf
@@ -7726,6 +7727,14 @@ Function UpdateEvents()
 							If e\EventState2 = 0.0 And I_427\Using > 0 Then
 								e\EventState3 = 70.0 * 30.0
 							EndIf
+							;[End Block]
+						Case 4.0
+							;[Block]
+							Animate2(e\room\Objects[0], AnimTime(e\room\Objects[0]), 2.0, 395.0, 1.0)
+							
+							PointEntity(e\room\Objects[0], me\Collider)
+							RotateEntity(e\room\Objects[0], -90.0, EntityYaw(e\room\Objects[0]), 0.0)
+							;[End Block]
 					End Select 
 					
 					If e <> Null Then
