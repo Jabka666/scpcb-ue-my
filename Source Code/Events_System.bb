@@ -9426,6 +9426,7 @@ Function UpdateEndings()
 											e\room\NPC[2]\EnemyZ = EntityZ(e\room\Objects[11], True) + Cos(MilliSecs() / 23.0) * 3.0
 											
 											e\room\RoomDoors[5]\Open = True
+											e\room\RoomDoors[5]\Locked = False
 											
 											If e\EventState3 > 0.0 And e\EventState3 =< 500.0
 												e\EventState3 = e\EventState3 + fpst\FPSFactor[0]
