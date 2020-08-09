@@ -5654,7 +5654,7 @@ Function UpdateGUI()
 	Local Temp%, x%, y%, z%, i%
 	Local x2#, ProjY#, Scale#, Pvt%
 	Local n%, xTemp%, yTemp%, StrTemp$, GroupDesignation$
-	Local e.Events, it.Items
+	Local e.Events, it.Items, r.Rooms
 	
 	If ClosestButton <> 0 And SelectedDoor = Null And InvOpen = False And MenuOpen = False And OtherOpen = Null And ConsoleOpen = False Then
 		Temp = CreatePivot()
@@ -5859,7 +5859,7 @@ Function UpdateGUI()
 	Local ClosedInv%
 	
 	If OtherOpen <> Null Then
-		If (PlayerRoom\RoomTemplate\Name = "gatea") Then
+		If PlayerRoom\RoomTemplate\Name = "gatea" Then
 			HideEntity(tt\OverlayID[0])
 			CameraFogRange(Camera, 5.0, 30.0)
 			CameraRange(Camera, 0.01, 30.0)
@@ -6025,7 +6025,7 @@ Function UpdateGUI()
 			MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : Mouse_X_Speed_1 = 0.0 : Mouse_Y_Speed_1 = 0.0
 		EndIf
 	ElseIf InvOpen Then
-		If (PlayerRoom\RoomTemplate\Name = "gatea") Then
+		If PlayerRoom\RoomTemplate\Name = "gatea" Then
 			HideEntity(tt\OverlayID[0])
 			CameraFogRange(Camera, 5.0, 30.0)
 			CameraRange(Camera, 0.01, 30.0)
@@ -8132,7 +8132,7 @@ End Function
 Function UpdateMenu()
 	CatchErrors("Uncaught (UpdateMenu)")
 	
-	Local x%, y%, Width%, Height%, i%
+	Local x%, y%, z%, Width%, Height%, i%
 	
 	If MenuOpen Then
 		If ShouldDeleteGadgets Then
@@ -8173,10 +8173,8 @@ Function UpdateMenu()
 		x = x + 132.0 * MenuScale
 		y = y + 122.0 * MenuScale	
 		
-		If (Not MouseDown1)
-			OnSliderID = 0
-		EndIf
-		
+		If (Not MouseDown1) Then OnSliderID = 0
+			
 		Local AchvXIMG% = (x + (22.0 * MenuScale))
 		Local Scale# = GraphicHeight / 768.0
 		Local SeparationConst% = 76.0 * Scale
