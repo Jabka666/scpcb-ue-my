@@ -3731,7 +3731,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\Objects[1], r\x + 448.0 * RoomScale, r\y, r\z + 192.0 * RoomScale)
 			
 			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], EntityX(r\OBJ) - 40.0 * RoomScale, r\y + 460.0 * RoomScale, EntityZ(r\OBJ) + 1072.0 * RoomScale)
+			PositionEntity(r\Objects[2], EntityX(r\OBJ) - 200.0 * RoomScale, r\y + 460.0 * RoomScale, EntityZ(r\OBJ) + 1072.0 * RoomScale)
 			
 			r\Objects[3] = CreatePivot()
 			PositionEntity(r\Objects[3], EntityX(r\OBJ) - 80.0 * RoomScale, r\y + 100.0 * RoomScale, EntityZ(r\OBJ) + 526.0 * RoomScale)
@@ -3739,16 +3739,7 @@ Function FillRoom(r.Rooms)
 			r\Objects[4] = CreatePivot()
 			PositionEntity(r\Objects[4], EntityX(r\OBJ) - 128.0 * RoomScale, r\y + 100.0 * RoomScale, EntityZ(r\OBJ) + 320.0 * RoomScale)
 			
-			r\Objects[5] = CreatePivot()
-			PositionEntity(r\Objects[5], EntityX(r\OBJ) + 660.0 * RoomScale, r\y + 100.0 * RoomScale, EntityZ(r\OBJ) + 526.0 * RoomScale)
-			
-			r\Objects[6] = CreatePivot()
-			PositionEntity(r\Objects[6], EntityX(r\OBJ) + 700 * RoomScale, r\y + 100.0 * RoomScale, EntityZ(r\OBJ) + 320.0 * RoomScale)
-			
-			r\Objects[7] = CreatePivot()
-			PositionEntity(r\Objects[7], EntityX(r\OBJ) + 1472.0 * RoomScale, r\y + 100.0 * RoomScale, EntityZ(r\OBJ) + 912.0 * RoomScale)
-			
-			For i = 0 To 7
+			For i = 0 To 4
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
@@ -8617,5 +8608,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11A7
+;~B#119E
 ;~C#Blitz3D

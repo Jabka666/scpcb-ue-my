@@ -2640,10 +2640,13 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 	d\Open = (Not d\Open)
 	If d\LinkedDoor <> Null Then d\LinkedDoor\Open = (Not d\LinkedDoor\Open)
 	
+	If d\Open Then
+		If d\LinkedDoor <> Null Then d\LinkedDoor\TimerState = d\LinkedDoor\Timer
+		d\TimerState = d\Timer
+	EndIf
+	
 	If PlaySFX = True Then
 		If d\Open Then
-			If d\LinkedDoor <> Null Then d\LinkedDoor\TimerState = d\LinkedDoor\Timer
-			d\TimerState = d\Timer
 			If d\Dir = 1 And d\Locked = 2 Then
 				d\SoundCHN = PlaySound2(BigDoorErrorSFX[Rand(0, 2)], Camera, d\OBJ)
 			Else
@@ -2661,11 +2664,6 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 			EndIf
 		EndIf
 		UpdateSoundOrigin(d\SoundCHN, Camera, d\OBJ)
-	Else
-		If d\Open Then
-			If d\LinkedDoor <> Null Then d\LinkedDoor\TimerState = d\LinkedDoor\Timer
-			d\TimerState = d\Timer
-		EndIf
 	EndIf
 End Function
 
@@ -12483,5 +12481,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#108D#132C#1E39
+;~B#108B#132A#1E37
 ;~C#Blitz3D
