@@ -9221,7 +9221,6 @@ Function UpdateEndings()
 							e\room\NPC[1]\State = 0.0
 							e\room\NPC[1]\State2 = 10.0
 							
-							
 							Pvt = CreatePivot()
 							PositionEntity(Pvt, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
 							
@@ -9454,7 +9453,7 @@ Function UpdateEndings()
 									TurnEntity(e\room\Objects[12], 0.0, 0.0, 180.0)
 								Else
 									If WrapAngle(EntityRoll(e\room\Objects[12])) < 340.0 Then 
-										Angle# = WrapAngle(EntityRoll(e\room\Objects[12]))
+										Angle = WrapAngle(EntityRoll(e\room\Objects[12]))
 										TurnEntity(e\room\Objects[12], 0.0, 0.0, (5.0 + Abs(Sin(Angle)) * 2.0) * fpst\FPSFactor[0])
 										If Angle < 270.0 And WrapAngle(EntityRoll(e\room\Objects[12])) >= 270.0 Then
 											PlaySound_Strict(LoadTempSound("SFX\Character\Apache\Crash1.ogg"))
@@ -9508,7 +9507,7 @@ Function UpdateEndings()
 						; ~ Start shooting
 						If e\room\NPC[1] <> Null Then
 							If e\room\NPC[1]\State <> 1.0 Then
-								If EntityDistanceSquared(e\room\NPC[1]\Collider, me\Collider) < 225.0 Lor EntityVisible(e\room\NPC[0]\Collider, me\Collider) And (Not chs\Notarget) Then
+								If (EntityDistanceSquared(e\room\NPC[1]\Collider, me\Collider) < 225.0 Lor EntityVisible(e\room\NPC[0]\Collider, me\Collider)) And (Not chs\Notarget) Then
 									e\room\NPC[1]\State = 1.0
 									e\room\NPC[1]\State3 = 1.0
 								Else
@@ -9518,7 +9517,7 @@ Function UpdateEndings()
 							EndIf
 							
 							; ~ Stop shooting
-							If EntityDistanceSquared(e\room\NPC[1]\Collider, me\Collider) < 79.21 Lor EntityDistanceSquared(e\room\Objects[5], me\Collider) < 285.61 Lor chs\Notarget Then
+							If (EntityDistanceSquared(e\room\NPC[1]\Collider, me\Collider) < 79.21 Lor EntityDistanceSquared(e\room\Objects[5], me\Collider) < 285.61) Lor chs\Notarget Then
 								e\room\NPC[1]\State = 0.0
 								e\room\NPC[1]\State3 = 0.0
 							Else

@@ -2259,7 +2259,7 @@ Function UpdateNPCs()
 											msg\DeathMsg = ""
 										EndIf
 										
-										PlaySound2(GunshotSFX, Camera, n\Collider, 15.0)
+										PlaySound2(GunshotSFX, Camera, n\Collider, 35.0)
 										
 										RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
 										PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
