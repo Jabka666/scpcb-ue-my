@@ -5479,6 +5479,10 @@ Function FillRoom(r.Rooms)
 			it = CreateItem("Document SCP-096", "paper", r\x - 500.0 * RoomScale, r\y + 220.0 * RoomScale, r\z + 63.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
+			
+			it = CreateItem("SCRAMBLE Gear", "scramble", r\x - 860.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 80.0 * RoomScale)
+			it\State = 450.0
+			EntityParent(it\Collider, r\OBJ)
 		    ;[End Block]
 		Case "room409"
 			;[Block]
