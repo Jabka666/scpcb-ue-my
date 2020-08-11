@@ -195,7 +195,7 @@ Type PlayerStats
 	Field DropSpeed#, HeadDropSpeed#, CurrSpeed#
 	Field Crouch%, CrouchState#
 	Field SndVolume#
-	Field SelectedEnding$, EndingScreen%, EndingTimer#
+	Field EndingScreen%, EndingTimer#
 	Field CreditsScreen%, CreditsTimer#
 	Field BlurVolume#, BlurTimer#
 	Field LightBlink#, LightFlash#
@@ -284,6 +284,8 @@ Global AccessCode%
 
 Global DrawHandIcon%
 Global DrawArrowIcon%[4]
+
+Global SelectedEnding$
 
 Include "Source Code\Difficulty.bb"
 
@@ -898,7 +900,7 @@ Function UpdateConsole()
 					;[End Block]
 				Case "ending"
 					;[Block]
-					me\SelectedEnding = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+					SelectedEnding = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 					me\KillTimer = -0.1
 					;[End Block]
 				Case "noclipspeed"
@@ -2955,7 +2957,7 @@ Function MainLoop()
 			If Rand(1500) = 1 Then
 				For i = 0 To 5
 					If AmbientSFX(i, CurrAmbientSFX) <> 0 Then
-						If ChannelPlaying(AmbientSFXCHN) = False Then FreeSound_Strict(AmbientSFX(i, CurrAmbientSFX)) : AmbientSFX(i, CurrAmbientSFX) = 0
+						If (Not ChannelPlaying(AmbientSFXCHN)) Then FreeSound_Strict(AmbientSFX(i, CurrAmbientSFX)) : AmbientSFX(i, CurrAmbientSFX) = 0
 					EndIf			
 				Next
 				
@@ -3232,7 +3234,7 @@ Function MainLoop()
 				me\KillTimer = me\KillTimer - (fpst\FPSFactor[0] * 0.8)
 				If me\KillTimer < -360.0 Then 
 					MenuOpen = True 
-					If me\SelectedEnding <> "" Then me\EndingTimer = Min(me\KillTimer, -0.1)
+					If SelectedEnding <> "" Then me\EndingTimer = Min(me\KillTimer, -0.1)
 				EndIf
 				DarkA = Max(DarkA, Min(Abs(me\KillTimer / 400.0), 1.0))
 			Else
@@ -3388,7 +3390,7 @@ Function MainLoop()
 		EndIf
 		
 		If me\EndingTimer < 0.0 Then
-			If me\SelectedEnding <> "" Then UpdateEnding()
+			If SelectedEnding <> "" Then UpdateEnding()
 		Else
 			UpdateMenu()			
 		EndIf
@@ -3412,7 +3414,7 @@ Function MainLoop()
 	RenderMessages()
 	
 	If me\EndingTimer < 0.0 Then
-		If me\SelectedEnding <> "" Then DrawEnding()
+		If SelectedEnding <> "" Then DrawEnding()
 	Else
 		DrawMenu()			
 	EndIf
@@ -3462,11 +3464,11 @@ Function Kill(IsBloody% = False)
 	If chs\GodMode Then Return
 	
 	If BreathCHN <> 0 Then
-		If ChannelPlaying(BreathCHN) = True Then StopChannel(BreathCHN)
+		If ChannelPlaying(BreathCHN) Then StopChannel(BreathCHN)
 	EndIf
 	
 	If BreathGasRelaxedCHN <> 0 Then
-		If ChannelPlaying(BreathGasRelaxedCHN) = True Then StopChannel(BreathGasRelaxedCHN)
+		If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN)
 	EndIf
 	
 	If me\KillTimer >= 0.0 Then
@@ -3494,8 +3496,8 @@ Function DrawEnding()
 	Local x%, y%, Width%, Height%, i%
 	Local itt.ItemTemplates, r.Rooms
 	
-	Select Lower(me\SelectedEnding)
-		Case "b2", "a1"
+	Select Lower(SelectedEnding)
+		Case "B2", "A1"
 			;[Block]
 			ClsColor(Max(255.0 + (me\EndingTimer) * 2.8, 0.0), Max(255.0 + (me\EndingTimer) * 2.8, 0.0), Max(255.0 + (me\EndingTimer) * 2.8, 0.0))
 			;[End Block]
@@ -3628,14 +3630,14 @@ Function UpdateEnding()
 		
 		If me\EndingTimer > -700.0 Then 
 			If me\EndingTimer + fpst\FPSFactor[1] > -450.0 And me\EndingTimer =< -450.0 Then
-				Select Lower(me\SelectedEnding)
-					Case "a1", "a2"
+				Select Lower(SelectedEnding)
+					Case "A1", "A2"
 						;[Block]
-						PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\Ending" + me\SelectedEnding + ".ogg"))
+						PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\Ending" + SelectedEnding + ".ogg"))
 						;[End Block]
-					Case "b1", "b2", "b3"
+					Case "B1", "B2", "B3"
 						;[Block]
-						PlaySound_Strict(LoadTempSound("SFX\Ending\GateB\Ending" + me\SelectedEnding + ".ogg"))
+						PlaySound_Strict(LoadTempSound("SFX\Ending\GateB\Ending" + SelectedEnding + ".ogg"))
 						;[End Block]
 				End Select
 			EndIf			
@@ -3911,7 +3913,7 @@ Function MovePlayer()
 				If me\Stamina < 5.0 Then
 					Temp = 0.0
 					If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp = 1
-					If ChannelPlaying(BreathCHN) = False Then BreathCHN = PlaySound_Strict(BreathSFX((Temp), 0))
+					If (Not ChannelPlaying(BreathCHN)) Then BreathCHN = PlaySound_Strict(BreathSFX((Temp), 0))
 				ElseIf me\Stamina < 40.0
 					If BreathCHN = 0 Then
 						Temp = 0.0
@@ -3919,7 +3921,7 @@ Function MovePlayer()
 						BreathCHN = PlaySound_Strict(BreathSFX((Temp), Rand(1, 3)))
 						ChannelVolume(BreathCHN, Min((70.0 - me\Stamina) / 70.0, 1.0) * SFXVolume)
 					Else
-						If ChannelPlaying(BreathCHN) = False Then
+						If (Not ChannelPlaying(BreathCHN)) Then
 							Temp = 0.0
 							If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp = 1
 							BreathCHN = PlaySound_Strict(BreathSFX((Temp), Rand(1, 3)))
@@ -4348,17 +4350,17 @@ Function MouseLook()
 			EndIf
 		EndIf
 		If me\KillTimer >= 0.0 Then
-			If ChannelPlaying(BreathCHN) = False Then
-				If ChannelPlaying(BreathGasRelaxedCHN) = False Then BreathGasRelaxedCHN = PlaySound_Strict(BreathGasRelaxedSFX)
+			If (Not ChannelPlaying(BreathCHN)) Then
+				If (Not ChannelPlaying(BreathGasRelaxedCHN)) Then BreathGasRelaxedCHN = PlaySound_Strict(BreathGasRelaxedSFX)
 			Else
-				If ChannelPlaying(BreathGasRelaxedCHN) = True Then StopChannel(BreathGasRelaxedCHN)
+				If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN)
 			EndIf
 		EndIf
 		
 		ShowEntity(tt\OverlayID[1])
 		ShowEntity(tt\OverlayID[11])
 		
-		If ChannelPlaying(BreathCHN) = True Then
+		If ChannelPlaying(BreathCHN) Then
 			wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + fpst\FPSFactor[0] * 2.0, 100.0)
 		Else
 			If wi\GasMask = 2 Lor I_1499\Using = 2 Then
@@ -4374,7 +4376,7 @@ Function MouseLook()
 		
 		EntityAlpha(tt\OverlayID[11], Min(((wi\GasMaskFogTimer * 0.2) ^ 2.0) / 1000.0, 0.45))
 	Else
-		If ChannelPlaying(BreathGasRelaxedCHN) = True Then StopChannel(BreathGasRelaxedCHN)
+		If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN)
 		wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fpst\FPSFactor[0] * 0.15))
 		HideEntity(tt\OverlayID[1])
 		HideEntity(tt\OverlayID[11])
@@ -4432,7 +4434,7 @@ Function MouseLook()
 							If CoughCHN = 0 Then
 								CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
 							Else
-								If ChannelPlaying(CoughCHN) = False Then CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
+								If (Not ChannelPlaying(CoughCHN)) Then CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
 							EndIf
 						EndIf
 					EndIf
@@ -4452,7 +4454,7 @@ Function MouseLook()
 							If CoughCHN = 0 Then
 								CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
 							Else
-								If ChannelPlaying(CoughCHN) = False Then CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
+								If (Not ChannelPlaying(CoughCHN)) Then CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
 							EndIf
 						EndIf
 					EndIf
@@ -4473,11 +4475,11 @@ Function MouseLook()
 				Case 4 ; ~ Asthma
 					;[Block]
 					If me\Stamina < 35.0 Then
-						If Rand(Int(140 + me\Stamina * 8)) = 1 Then
+						If Rand(Int(140.0 + me\Stamina * 8.0)) = 1 Then
 							If CoughCHN = 0 Then
 								CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
 							Else
-								If ChannelPlaying(CoughCHN) = False Then CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
+								If (Not ChannelPlaying(CoughCHN)) Then CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
 							EndIf
 						EndIf
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0 + me\Stamina * 15.0)
@@ -4554,9 +4556,7 @@ Function DrawGUI()
 							If me\BlinkTimer > -5.0 Then
 								If e\Img = 0 Then
 									e\Img = LoadImage_Strict("GFX\kneel_mortal.png")
-									If (ChannelPlaying(e\SoundCHN)) Then
-										StopChannel(e\SoundCHN)
-									EndIf
+									If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN)
 									e\SoundCHN = PlaySound_Strict(e\Sound)
 								EndIf
 							EndIf
@@ -4566,13 +4566,9 @@ Function DrawGUI()
 					Else
 						If e\Img <> 0 Then FreeImage(e\Img) : e\Img = 0
 						If me\BlinkTimer < -3.0 Then
-							If (Not ChannelPlaying(e\SoundCHN)) Then
-								e\SoundCHN = PlaySound_Strict(e\Sound)
-							EndIf
+							If (Not ChannelPlaying(e\SoundCHN)) Then e\SoundCHN = PlaySound_Strict(e\Sound)
 						Else
-							If (ChannelPlaying(e\SoundCHN)) Then
-								StopChannel(e\SoundCHN)
-							EndIf
+							If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN)
 						EndIf
 					EndIf
 					Exit
@@ -4730,6 +4726,7 @@ Function DrawGUI()
 			Color(255, 255, 255)
 			SetFont(fo\ConsoleFont)
 			
+			Text(x - 60, 30, "Current ending: " + SelectedEnding)
 			Text(x - 60, 40, "Room: " + PlayerRoom\RoomTemplate\Name)
             Text(x - 60, 60, "Room Coordinates: (" + Floor(EntityX(PlayerRoom\OBJ) / 8.0 + 0.5) + ", " + Floor(EntityZ(PlayerRoom\OBJ) / 8.0 + 0.5) + ", Angle: " + PlayerRoom\Angle + ")")
 			For ev.Events = Each Events
@@ -5225,9 +5222,7 @@ Function DrawGUI()
 									ElseIf UserTrackMusicAmount < 1
 										StrTemp = StrTemp + "NO TRACKS FOUND     "
 									Else
-										If ChannelPlaying(RadioCHN[0]) = True Then
-											StrTemp = StrTemp + Upper(UserTrackName[RadioState[0]]) + "          "
-										EndIf
+										If ChannelPlaying(RadioCHN[0]) Then StrTemp = StrTemp + Upper(UserTrackName[RadioState[0]]) + "          "
 									EndIf
 									;[End Block]
 								Case 1
@@ -6953,20 +6948,20 @@ Function UpdateGUI()
 					If SelectedItem\State > 0.0 Then
 						If PlayerRoom\RoomTemplate\Name = "pocketdimension" Then
 							ResumeChannel(RadioCHN[5])
-							If ChannelPlaying(RadioCHN[5]) = False Then RadioCHN[5] = PlaySound_Strict(RadioStatic)	
+							If (Not ChannelPlaying(RadioCHN[5])) Then RadioCHN[5] = PlaySound_Strict(RadioStatic)	
 						ElseIf CoffinDistance < 8.0
-							If ChannelPlaying(RadioCHN[5]) = False Then RadioCHN[5] = PlaySound_Strict(RadioStatic895)	
+							If (Not ChannelPlaying(RadioCHN[5])) Then RadioCHN[5] = PlaySound_Strict(RadioStatic895)	
 						Else
 							Select Int(SelectedItem\State2)
 								Case 0
 									;[Block]
 									ResumeChannel(RadioCHN[0])
 									If (Not EnableUserTracks) Then
-										If ChannelPlaying(RadioCHN[0]) = False Then RadioCHN[0] = PlaySound_Strict(RadioStatic)
+										If (Not ChannelPlaying(RadioCHN[0])) Then RadioCHN[0] = PlaySound_Strict(RadioStatic)
 									ElseIf UserTrackMusicAmount < 1
-										If ChannelPlaying(RadioCHN[0]) = False Then RadioCHN[0] = PlaySound_Strict(RadioStatic)
+										If (Not ChannelPlaying(RadioCHN[0])) Then RadioCHN[0] = PlaySound_Strict(RadioStatic)
 									Else
-										If ChannelPlaying(RadioCHN[0]) = False Then
+										If (Not ChannelPlaying(RadioCHN[0])) Then
 											If (Not UserTrackFlag) Then
 												If UserTrackMode
 													If RadioState[0] < (UserTrackMusicAmount - 1)
@@ -7009,7 +7004,7 @@ Function UpdateGUI()
 								Case 1
 									;[Block]
 									ResumeChannel(RadioCHN[1])
-									If ChannelPlaying(RadioCHN[1]) = False Then
+									If (Not ChannelPlaying(RadioCHN[1])) Then
 										If RadioState[1] >= 5.0 Then
 											RadioCHN[1] = PlaySound_Strict(RadioSFX(1, 1))	
 											RadioState[1] = 0.0
@@ -7022,7 +7017,7 @@ Function UpdateGUI()
 								Case 2
 									;[Block]
 									ResumeChannel(RadioCHN[2])
-									If ChannelPlaying(RadioCHN[2]) = False Then
+									If (Not ChannelPlaying(RadioCHN[2])) Then
 										RadioState[2] = RadioState[2] + 1.0
 										If RadioState[2] = 17.0 Then RadioState[2] = 1.0
 										If Floor(RadioState[2] / 2.0) = Ceil(RadioState[2] / 2.0) Then
@@ -7035,7 +7030,7 @@ Function UpdateGUI()
 								Case 3
 									;[Block]
 									ResumeChannel(RadioCHN[3])
-									If ChannelPlaying(RadioCHN[3]) = False Then RadioCHN[3] = PlaySound_Strict(RadioStatic)
+									If (Not ChannelPlaying(RadioCHN[3])) Then RadioCHN[3] = PlaySound_Strict(RadioStatic)
 									
 									If MTFTimer > 0.0 Then 
 										RadioState[3] = RadioState[3] + Max(Rand(-10, 1), 0.0)
@@ -7102,10 +7097,10 @@ Function UpdateGUI()
 								Case 4
 									;[Block]
 									ResumeChannel(RadioCHN[6])
-									If ChannelPlaying(RadioCHN[6]) = False Then RadioCHN[6] = PlaySound_Strict(RadioStatic)									
+									If (Not ChannelPlaying(RadioCHN[6])) Then RadioCHN[6] = PlaySound_Strict(RadioStatic)									
 									
 									ResumeChannel(RadioCHN[4])
-									If ChannelPlaying(RadioCHN[4]) = False Then 
+									If (Not ChannelPlaying(RadioCHN[4])) Then 
 										If RemoteDoorOn = False And RadioState[8] = False Then
 											RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\Radio\Chatter3.ogg"))	
 											RadioState[8] = True
@@ -7202,7 +7197,7 @@ Function UpdateGUI()
 								Case 5
 									;[Block]
 									ResumeChannel(RadioCHN[5])
-									If ChannelPlaying(RadioCHN[5]) = False Then RadioCHN[5] = PlaySound_Strict(RadioStatic)
+									If (Not ChannelPlaying(RadioCHN[5])) Then RadioCHN[5] = PlaySound_Strict(RadioStatic)
 									;[End Block]
 							End Select 
 							
@@ -7211,7 +7206,7 @@ Function UpdateGUI()
 							
 							If SelectedItem\ItemTemplate\TempName = "veryfineradio" Then
 								ResumeChannel(RadioCHN[0])
-								If ChannelPlaying(RadioCHN[0]) = False Then RadioCHN[0] = PlaySound_Strict(RadioStatic)
+								If (Not ChannelPlaying(RadioCHN[0])) Then RadioCHN[0] = PlaySound_Strict(RadioStatic)
 								RadioState[6] = RadioState[6] + fpst\FPSFactor[0]
 								Temp = Mid(Str(AccessCode), RadioState[8] + 1.0, 1)
 								If RadioState[6] - fpst\FPSFactor[0] =< RadioState[7] * 50.0 And RadioState[6] > RadioState[7] * 50.0 Then
@@ -9626,7 +9621,7 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	I_005\ChanceToSpawn = 0
 	
-	me\SelectedEnding = ""
+	SelectedEnding = ""
 	me\EndingTimer = 0.0
 	me\ExplosionTimer = 0.0
 	
@@ -11416,16 +11411,12 @@ Function Use427()
 			If I_427\Sound[0] = 0 Then
 				I_427\Sound[0] = LoadSound_Strict("SFX\SCP\427\Effect.ogg")
 			EndIf
-			If ChannelPlaying(I_427\SoundCHN[0]) = False Then
+			If (Not ChannelPlaying(I_427\SoundCHN[0])) Then
 				I_427\SoundCHN[0] = PlaySound_Strict(I_427\Sound[0])
 			EndIf
 			If I_427\Timer >= 70.0 * 180.0 Then
-				If I_427\Sound[1] = 0 Then
-					I_427\Sound[1] = LoadSound_Strict("SFX\SCP\427\Transform.ogg")
-				EndIf
-				If ChannelPlaying(I_427\SoundCHN[1]) = False Then
-					I_427\SoundCHN[1] = PlaySound_Strict(I_427\Sound[1])
-				EndIf
+				If I_427\Sound[1] = 0 Then I_427\Sound[1] = LoadSound_Strict("SFX\SCP\427\Transform.ogg")
+				If (Not ChannelPlaying(I_427\SoundCHN[1])) Then I_427\SoundCHN[1] = PlaySound_Strict(I_427\Sound[1])
 			EndIf
 			If PrevI427Timer < 70.0 * 60.0 And I_427\Timer >= 70.0 * 60.0 Then
 				msg\Msg = "You feel refreshed and energetic."
@@ -11436,9 +11427,7 @@ Function Use427()
 			EndIf
 		Else
 			For i = 0 To 1
-				If I_427\SoundCHN[i] <> 0 Then
-					If ChannelPlaying(I_427\SoundCHN[i]) = True Then StopChannel(I_427\SoundCHN[i])
-				EndIf
+				If I_427\SoundCHN[i] <> 0 Then If ChannelPlaying(I_427\SoundCHN[i]) Then StopChannel(I_427\SoundCHN[i])
 			Next
 		EndIf
 	Else
@@ -11457,7 +11446,7 @@ Function Use427()
 			I_427\Sound[1] = LoadSound_Strict("SFX\SCP\427\Transform.ogg")
 		EndIf
 		For i = 0 To 1
-			If ChannelPlaying(I_427\SoundCHN[i]) = False Then I_427\SoundCHN[i] = PlaySound_Strict(I_427\Sound[i])
+			If (Not ChannelPlaying(I_427\SoundCHN[i])) Then I_427\SoundCHN[i] = PlaySound_Strict(I_427\Sound[i])
 		Next
 		If Rnd(200) < 2.0 Then
 			Pvt = CreatePivot()
@@ -12481,5 +12470,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#108B#132A#1E37
+;~B#108D#1327#1E32
 ;~C#Blitz3D

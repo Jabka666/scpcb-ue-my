@@ -666,12 +666,12 @@ Function UpdateEvents()
 						If e\SoundCHN = 0 Then
 							e\SoundCHN = PlaySound_Strict(AlarmSFX[0])
 						Else
-							If ChannelPlaying(e\SoundCHN) = False Then e\SoundCHN = PlaySound_Strict(AlarmSFX[0])
+							If (Not ChannelPlaying(e\SoundCHN)) Then e\SoundCHN = PlaySound_Strict(AlarmSFX[0])
 						EndIf
 					EndIf
 					
 					If e\EventState3 < 11.0 Then
-						If ChannelPlaying(e\SoundCHN2) = False Then
+						If (Not ChannelPlaying(e\SoundCHN2)) Then
 							e\EventState3 = e\EventState3 + 1.0
 							
 							If e\Sound2 <> 0 Then
@@ -820,7 +820,7 @@ Function UpdateEvents()
 								EndIf
 								UpdateSoundOrigin(e\room\NPC[3]\SoundCHN2, Camera, e\room\NPC[3]\Collider)
 								
-								If ChannelPlaying(e\room\NPC[3]\SoundCHN2) = False Then
+								If (Not ChannelPlaying(e\room\NPC[3]\SoundCHN2)) Then
 									e\room\NPC[3]\Sound = LoadSound_Strict("SFX\Room\Intro\Guard\Ulgrin\ExitCell.ogg")
 									e\room\NPC[3]\SoundCHN = PlaySound2(e\room\NPC[3]\Sound, Camera, e\room\NPC[3]\Collider)
 									
@@ -843,7 +843,7 @@ Function UpdateEvents()
 								If DistanceSquared(EntityX(me\Collider), PlayerRoom\x - (3072.0 + 1024.0) * RoomScale, EntityZ(me\Collider), PlayerRoom\z + 192.0 * RoomScale) > 2.25 Then
 									If e\EventState3 > 250.0 Then
 										If e\room\NPC[3]\SoundCHN <> 0 Then
-											If ChannelPlaying(e\room\NPC[3]\SoundCHN) = True Then StopChannel(e\room\NPC[3]\SoundCHN)
+											If ChannelPlaying(e\room\NPC[3]\SoundCHN) Then StopChannel(e\room\NPC[3]\SoundCHN)
 										EndIf
 										If e\room\NPC[3]\Sound <> 0 Then
 											FreeSound_Strict(e\room\NPC[3]\Sound) : e\room\NPC[3]\Sound = 0
@@ -995,7 +995,7 @@ Function UpdateEvents()
 								If e\SoundCHN = 0 Then 
 									e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Room\Intro\IA\On.ogg"))
 								EndIf
-								If ChannelPlaying(e\SoundCHN) = False Then
+								If (Not ChannelPlaying(e\SoundCHN)) Then
 									StrTemp = Left(e\EventStr, Instr(e\EventStr, "|", 1) - 1)
 									e\Sound = LoadSound_Strict("SFX\Room\Intro\IA\" + StrTemp)
 									e\SoundCHN = PlaySound_Strict(e\Sound)
@@ -1024,12 +1024,12 @@ Function UpdateEvents()
 								e\room\NPC[3]\State3 = Max(e\room\NPC[3]\State3 + fpst\FPSFactor[0], 50.0)
 								If e\room\NPC[3]\State3 >= 70.0 * 8.0 And e\room\NPC[3]\State3 - fpst\FPSFactor[0] < 70.0 * 8.0 And e\room\NPC[3]\State = 7.0 Then
 									If e\room\NPC[4]\SoundCHN <> 0 Then
-										If ChannelPlaying(e\room\NPC[4]\SoundCHN) = True Then StopChannel(e\room\NPC[4]\SoundCHN)
+										If ChannelPlaying(e\room\NPC[4]\SoundCHN) Then StopChannel(e\room\NPC[4]\SoundCHN)
 									EndIf
 									
 									If e\room\NPC[3]\State2 < 2.0 Then
 										For i = 3 To 4
-											If ChannelPlaying(e\room\NPC[i]\SoundCHN) = True Then StopChannel(e\room\NPC[i]\SoundCHN)
+											If ChannelPlaying(e\room\NPC[i]\SoundCHN) Then StopChannel(e\room\NPC[i]\SoundCHN)
 											If e\room\NPC[i]\Sound <> 0 Then
 												FreeSound_Strict(e\room\NPC[i]\Sound) : e\room\NPC[i]\Sound = 0
 											EndIf
@@ -1041,7 +1041,7 @@ Function UpdateEvents()
 										e\room\NPC[3]\State2 = 3.0
 									ElseIf e\room\NPC[3]\State2 = 3.0
 										For i = 3 To 4
-											If ChannelPlaying(e\room\NPC[i]\SoundCHN) = True Then StopChannel(e\room\NPC[i]\SoundCHN)
+											If ChannelPlaying(e\room\NPC[i]\SoundCHN) Then StopChannel(e\room\NPC[i]\SoundCHN)
 											If e\room\NPC[i]\Sound <> 0 Then
 												FreeSound_Strict(e\room\NPC[i]\Sound) : e\room\NPC[i]\Sound = 0
 											EndIf
@@ -1053,7 +1053,7 @@ Function UpdateEvents()
 										e\room\NPC[3]\State2 = 4.0
 									ElseIf e\room\NPC[3]\State2 = 4.0
 										For i = 3 To 4
-											If ChannelPlaying(e\room\NPC[i]\SoundCHN) = True Then StopChannel(e\room\NPC[i]\SoundCHN)
+											If ChannelPlaying(e\room\NPC[i]\SoundCHN) Then StopChannel(e\room\NPC[i]\SoundCHN)
 											If e\room\NPC[i]\Sound <> 0 Then
 												FreeSound_Strict(e\room\NPC[i]\Sound) : e\room\NPC[i]\Sound = 0
 											EndIf
@@ -1086,7 +1086,7 @@ Function UpdateEvents()
 											e\room\NPC[5]\Reload = 70.0 * 3.0
 											
 											For i = 3 To 4
-												If ChannelPlaying(e\room\NPC[i]\SoundCHN) = True  Then StopChannel(e\room\NPC[i]\SoundCHN)
+												If ChannelPlaying(e\room\NPC[i]\SoundCHN) Then StopChannel(e\room\NPC[i]\SoundCHN)
 												If e\room\NPC[i]\Sound <> 0 Then
 													FreeSound_Strict(e\room\NPC[i]\Sound) : e\room\NPC[i]\Sound = 0
 												EndIf
@@ -1125,7 +1125,7 @@ Function UpdateEvents()
 										e\room\NPC[3]\PathStatus = 2
 										If e\room\NPC[3]\State2 = 0.0 Then
 											For i = 3 To 4
-												If ChannelPlaying(e\room\NPC[i]\SoundCHN) = True Then StopChannel(e\room\NPC[i]\SoundCHN)
+												If ChannelPlaying(e\room\NPC[i]\SoundCHN) Then StopChannel(e\room\NPC[i]\SoundCHN)
 												If e\room\NPC[i]\Sound <> 0 Then
 													FreeSound_Strict(e\room\NPC[i]\Sound) : e\room\NPC[i]\Sound = 0
 												EndIf
@@ -1163,7 +1163,7 @@ Function UpdateEvents()
 								e\room\NPC[0] = CreateNPC(NPCtypeGuard, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
 								e\room\NPC[0]\Angle = 180.0
 								
-								If ChannelPlaying(e\room\NPC[7]\SoundCHN) = True Then StopChannel(e\room\NPC[7]\SoundCHN)
+								If ChannelPlaying(e\room\NPC[7]\SoundCHN) Then StopChannel(e\room\NPC[7]\SoundCHN)
 								If e\room\NPC[7]\Sound <> 0 Then
 									FreeSound_Strict(e\room\NPC[7]\Sound) : e\room\NPC[7]\Sound = 0	
 								EndIf
@@ -1181,7 +1181,7 @@ Function UpdateEvents()
 								Next
 								
 								For i = 3 To 4
-									If ChannelPlaying(e\room\NPC[i]\SoundCHN) = True Then StopChannel(e\room\NPC[i]\SoundCHN)
+									If ChannelPlaying(e\room\NPC[i]\SoundCHN) Then StopChannel(e\room\NPC[i]\SoundCHN)
 									If e\room\NPC[i]\Sound <> 0 Then
 										FreeSound_Strict(e\room\NPC[i]\Sound) : e\room\NPC[i]\Sound = 0
 									EndIf
@@ -1216,7 +1216,7 @@ Function UpdateEvents()
 								e\room\NPC[4]\State = 9.0
 							EndIf
 						ElseIf e\EventState3 =< 905.0
-							If ChannelPlaying(e\room\NPC[3]\SoundCHN) = False And e\room\NPC[3]\Frame < 358.0 Then
+							If (Not ChannelPlaying(e\room\NPC[3]\SoundCHN)) And e\room\NPC[3]\Frame < 358.0 Then
 								e\room\NPC[3]\State = 8.0
 								If e\room\NPC[3]\Sound <> 0 Then
 									FreeSound_Strict(e\room\NPC[3]\Sound) : e\room\NPC[3]\Sound = 0
@@ -1284,7 +1284,7 @@ Function UpdateEvents()
 							SetNPCFrame(e\room\NPC[7], 182.0)
 							
 							If e\room\NPC[6]\State = 1.0 And e\room\NPC[7]\Sound <> 0 Then 
-								If ChannelPlaying(e\room\NPC[7]\SoundCHN) = False Then StopChannel(e\room\NPC[7]\SoundCHN)
+								If (Not ChannelPlaying(e\room\NPC[7]\SoundCHN)) Then StopChannel(e\room\NPC[7]\SoundCHN)
 								If e\room\NPC[7]\Sound <> 0 Then 
 									FreeSound_Strict(e\room\NPC[7]\Sound) : e\room\NPC[7]\Sound = 0	
 								EndIf
@@ -1366,7 +1366,7 @@ Function UpdateEvents()
 							EndIf
 						ElseIf e\EventState < 10000.0
 							If e\SoundCHN <> 0 Then 
-								If ChannelPlaying(e\SoundCHN) = True Then
+								If ChannelPlaying(e\SoundCHN) Then
 									e\room\NPC[6]\State = 6.0
 									If AnimTime(e\room\NPC[6]\OBJ) >= 325.0 Then
 										Animate2(e\room\NPC[6]\OBJ, AnimTime(e\room\NPC[6]\OBJ), 326.0, 328.0, 0.02, False)
@@ -1598,7 +1598,7 @@ Function UpdateEvents()
 									
 									e\room\NPC[0]\State = 12.0
 									
-									If ChannelPlaying(e\room\NPC[0]\SoundCHN) = True Then StopChannel(e\room\NPC[0]\SoundCHN)
+									If ChannelPlaying(e\room\NPC[0]\SoundCHN) Then StopChannel(e\room\NPC[0]\SoundCHN)
 									If e\room\NPC[0]\Sound <> 0
 										FreeSound_Strict(e\room\NPC[0]\Sound) : e\room\NPC[0]\Sound = 0
 									EndIf
@@ -1669,7 +1669,7 @@ Function UpdateEvents()
 										PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\OBJ) - 160.0 * RoomScale, EntityY(e\room\NPC[0]\Collider) + 0.1, EntityZ(e\room\OBJ) + 1280.0 * RoomScale)
 										ResetEntity(e\room\NPC[0]\Collider)										
 										
-										If ChannelPlaying(e\room\NPC[0]\SoundCHN) = True Then StopChannel(e\room\NPC[0]\SoundCHN)
+										If ChannelPlaying(e\room\NPC[0]\SoundCHN) Then StopChannel(e\room\NPC[0]\SoundCHN)
 										If e\room\NPC[0]\Sound <> 0 Then
 											FreeSound_Strict(e\room\NPC[0]\Sound) : e\room\NPC[0]\Sound = 0
 										EndIf
@@ -1817,7 +1817,7 @@ Function UpdateEvents()
 							e\SoundCHN = PlaySound2(ButtGhostSFX, Camera, e\room\Objects[0])
 							e\EventState = 1.0
 						Else
-							If ChannelPlaying(e\SoundCHN) = False Then
+							If (Not ChannelPlaying(e\SoundCHN)) Then
 								RemoveEvent(e)
 							EndIf
 						EndIf
@@ -1919,12 +1919,8 @@ Function UpdateEvents()
 				EndIf
 				e\EventState = e\room\RoomDoors[0]\Open
 				
-				If ChannelPlaying(e\SoundCHN)
-					UpdateSoundOrigin(e\SoundCHN, Camera, e\room\RoomDoors[0]\OBJ)
-				EndIf
-				If ChannelPlaying(e\SoundCHN2)
-					UpdateSoundOrigin(e\SoundCHN2, Camera, e\room\RoomDoors[1]\OBJ)
-				EndIf
+				If ChannelPlaying(e\SoundCHN) Then UpdateSoundOrigin(e\SoundCHN, Camera, e\room\RoomDoors[0]\OBJ)
+				If ChannelPlaying(e\SoundCHN2) Then UpdateSoundOrigin(e\SoundCHN2, Camera, e\room\RoomDoors[1]\OBJ)
 				;[End Block]
 			Case "room895", "room895_106"
 				;[Block]
@@ -2032,11 +2028,11 @@ Function UpdateEvents()
 								e\room\NPC[0]\SoundCHN2 = LoopSound2(e\room\NPC[0]\Sound2, e\room\NPC[0]\SoundCHN2, Camera, e\room\NPC[0]\Collider, 5)
 							EndIf
 						ElseIf e\room\NPC[0]\PrevState = 2 Then
-							If ChannelPlaying(e\SoundCHN) = False And e\Sound <> 0 Then
+							If (Not ChannelPlaying(e\SoundCHN)) And e\Sound <> 0 Then
 								FreeSound_Strict(e\Sound) : e\Sound = 0
 								e\SoundCHN = 0
 							EndIf
-							If ChannelPlaying(e\room\NPC[0]\SoundCHN) = False And e\room\NPC[0]\Sound <> 0 Then
+							If (Not ChannelPlaying(e\room\NPC[0]\SoundCHN)) And e\room\NPC[0]\Sound <> 0 Then
 								FreeSound_Strict(e\room\NPC[0]\Sound) : e\room\NPC[0]\Sound = 0
 								e\room\NPC[0]\SoundCHN = 0
 							EndIf
@@ -3237,7 +3233,7 @@ Function UpdateEvents()
 							If e\SoundCHN = 0 Then ; ~ Humming when the player isn't close
 								e\SoundCHN = PlaySound2(TeslaIdleSFX, Camera, e\room\Objects[3], 4.0, 0.5)
 							Else
-								If ChannelPlaying(e\SoundCHN) = False Then e\SoundCHN = PlaySound2(TeslaIdleSFX, Camera, e\room\Objects[3], 4.0, 0.5)
+								If (Not ChannelPlaying(e\SoundCHN)) Then e\SoundCHN = PlaySound2(TeslaIdleSFX, Camera, e\room\Objects[3], 4.0, 0.5)
 							EndIf
 							
 							For i = 0 To 2
@@ -4373,7 +4369,7 @@ Function UpdateEvents()
 							EndIf
 						Else
 							If e\SoundCHN <> 0 Then
-								If ChannelPlaying(e\SoundCHN) = True Then StopChannel(e\SoundCHN)
+								If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN)
 							EndIf
 						EndIf						
 					EndIf
@@ -4639,7 +4635,7 @@ Function UpdateEvents()
 						
 						If PlayerRoom = e\room Then
 							If e\SoundCHN <> 0 Then
-								If ChannelPlaying(e\SoundCHN) = True Then 
+								If ChannelPlaying(e\SoundCHN) Then 
 									me\LightBlink = Rnd(0.5, 6.0)
 									If Rand(50) = 1 Then PlaySound2(IntroSFX[Rand(8, 10)], Camera, e\room\OBJ, 8.0, Rnd(0.1, 0.3))
 								EndIf
@@ -4658,7 +4654,7 @@ Function UpdateEvents()
 							EndIf	
 						EndIf
 					EndIf
-					If ChannelPlaying(e\SoundCHN) = True Then
+					If ChannelPlaying(e\SoundCHN) Then
 						UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[10], 10.0, 20.0)
 					EndIf
 				ElseIf PlayerRoom = e\room
@@ -5110,7 +5106,7 @@ Function UpdateEvents()
 									;[End Block]
 							End Select
 							
-							If ChannelPlaying(e\SoundCHN2) = True Then
+							If ChannelPlaying(e\SoundCHN2) Then
 								UpdateSoundOrigin(e\SoundCHN2, Camera, e\room\RoomDoors[4]\OBJ, 400.0)
 							EndIf
 							
@@ -5231,11 +5227,11 @@ Function UpdateEvents()
 									me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs()) / 20.0) + 1.0) * 8.0 * Max((3.0 - Dist), 0.0))
 									
 									If BreathCHN <> 0 Then
-										If ChannelPlaying(BreathCHN) = True Then StopChannel(BreathCHN)
+										If ChannelPlaying(BreathCHN) Then StopChannel(BreathCHN)
 									EndIf
 									
 									If BreathGasRelaxedCHN <> 0 Then
-										If ChannelPlaying(BreathGasRelaxedCHN) = True Then StopChannel(BreathGasRelaxedCHN)
+										If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN)
 									EndIf
 									
 									If Dist < 0.6 Then
@@ -5320,11 +5316,11 @@ Function UpdateEvents()
 						EndIf
 					Else
 						If e\Sound <> 0 Then
-							If ChannelPlaying(e\SoundCHN) = True Then StopChannel(e\SoundCHN)
+							If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN)
 							FreeSound_Strict(e\Sound) : e\Sound = 0
 						EndIf
 						If e\Sound2 <> 0 Then
-							If ChannelPlaying(e\SoundCHN2) = True Then StopChannel(e\SoundCHN2)
+							If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2)
 							FreeSound_Strict(e\Sound2) : e\Sound2 = 0
 						EndIf
 					EndIf
@@ -5378,7 +5374,7 @@ Function UpdateEvents()
 						ShouldPlay = 27
 						
 						If e\room\NPC[0]\SoundCHN <> 0 Then
-							If ChannelPlaying(e\room\NPC[0]\SoundCHN) = True Then
+							If ChannelPlaying(e\room\NPC[0]\SoundCHN) Then
 								e\room\NPC[0]\SoundCHN = LoopSound2(e\room\NPC[0]\Sound, e\room\NPC[0]\SoundCHN, Camera, e\room\OBJ, 6.0)
 							EndIf
 						EndIf
@@ -5656,7 +5652,7 @@ Function UpdateEvents()
 										PointEntity(e\room\NPC[0]\OBJ, e\room\RoomDoors[1]\FrameOBJ)
 										RotateEntity(e\room\NPC[0]\Collider, 0.0, CurveAngle(EntityYaw(e\room\NPC[0]\OBJ), EntityYaw(e\room\NPC[0]\Collider), 15.0), 0)
 									ElseIf Dist > 0.49
-										If ChannelPlaying(e\room\NPC[0]\SoundCHN) = True Then
+										If ChannelPlaying(e\room\NPC[0]\SoundCHN) Then
 											e\room\NPC[0]\State = 0.0
 											PointEntity(e\room\NPC[0]\OBJ, me\Collider)
 											RotateEntity(e\room\NPC[0]\Collider, 0, CurveAngle(EntityYaw(e\room\NPC[0]\OBJ), EntityYaw(e\room\NPC[0]\Collider), 15.0), 0.0)
@@ -6019,7 +6015,7 @@ Function UpdateEvents()
 							If e\SoundCHN = 0 Then
 								e\SoundCHN = PlaySound_Strict(e\Sound)
 							Else
-								If ChannelPlaying(e\SoundCHN) = False Then e\SoundCHN = PlaySound_Strict(e\Sound)
+								If (Not ChannelPlaying(e\SoundCHN)) Then e\SoundCHN = PlaySound_Strict(e\Sound)
 							EndIf
 						EndIf
 					EndIf
@@ -6124,7 +6120,7 @@ Function UpdateEvents()
 					If e\EventState = 1.0 Then
 						e\EventState3 = Min(e\EventState3 + fpst\FPSFactor[0], 4000.0)
     				EndIf
-					If ChannelPlaying(e\SoundCHN3) = False Then e\SoundCHN3 = PlaySound_Strict(RadioStatic)   
+					If (Not ChannelPlaying(e\SoundCHN3)) Then e\SoundCHN3 = PlaySound_Strict(RadioStatic)   
 				EndIf
 				
 				If e\room\NPC[0] = Null Then
@@ -6171,10 +6167,10 @@ Function UpdateEvents()
 						    EndIf
 						    If (Not SoundTransmission) Then
 							    If e\SoundCHN2 <> 0 Then
-							    	If ChannelPlaying(e\SoundCHN2) = True Then StopChannel(e\SoundCHN2)
+							    	If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2)
 							    EndIf
 							    If e\SoundCHN3 <> 0 Then
-							        If ChannelPlaying(e\SoundCHN3) = True Then StopChannel(e\SoundCHN3)
+							        If ChannelPlaying(e\SoundCHN3) Then StopChannel(e\SoundCHN3)
 		               	        EndIf
 						    EndIf
 							
@@ -6184,7 +6180,7 @@ Function UpdateEvents()
 									    LoadEventSound(e, "SFX\Character\LureSubject\Idle" + Rand(1, 6) + ".ogg", 1)
 									    e\SoundCHN2 = PlaySound_Strict(e\Sound2)								
 								    EndIf
-								    If ChannelPlaying(e\SoundCHN2) = False Then
+								    If (Not ChannelPlaying(e\SoundCHN2)) Then
 									    LoadEventSound(e, "SFX\Character\LureSubject\Idle" + Rand(1, 6) + ".ogg", 1)
 									    e\SoundCHN2 = PlaySound_Strict(e\Sound2)
 								    EndIf
@@ -6196,7 +6192,7 @@ Function UpdateEvents()
 									    e\EventState = 1.0 ; ~ Start the femur breaker
 									    If SoundTransmission = True Then ; ~ Only play sounds if transmission is on
 										    If e\SoundCHN2 <> 0 Then
-											    If ChannelPlaying(e\SoundCHN2) = True Then StopChannel(e\SoundCHN2)
+											    If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2)
 										    EndIf 
 										    FemurBreakerSFX = LoadSound_Strict("SFX\Room\106Chamber\FemurBreaker.ogg")
 										    e\SoundCHN2 = PlaySound_Strict(FemurBreakerSFX)
@@ -6209,7 +6205,7 @@ Function UpdateEvents()
 									    LoadEventSound(e, "SFX\Character\LureSubject\Sniffling.ogg", 1)
 									    e\SoundCHN2 = PlaySound_Strict(e\Sound2)								
 								    EndIf
-								    If ChannelPlaying(e\SoundCHN2) = False Then
+								    If (Not ChannelPlaying(e\SoundCHN2)) Then
 									    LoadEventSound(e, "SFX\Character\LureSubject\Sniffling.ogg", 1)
 									    e\SoundCHN2 = PlaySound_Strict(e\Sound2)
 								    EndIf
@@ -6287,20 +6283,20 @@ Function UpdateEvents()
 				Else
 					If PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor PlayerRoom\RoomTemplate\Name = "dimension1499" Then
 						If e\SoundCHN2 <> 0 Then
-							If ChannelPlaying(e\SoundCHN2) = True Then StopChannel(e\SoundCHN2)
+							If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2)
 						EndIf
 						If e\SoundCHN3 <> 0 Then
-							If ChannelPlaying(e\SoundCHN3) = True Then StopChannel(e\SoundCHN3)
+							If ChannelPlaying(e\SoundCHN3) Then StopChannel(e\SoundCHN3)
 						EndIf
 			        ElseIf PlayerRoom\RoomTemplate\Name = "room860" Then
 						For e2.Events = Each Events
 							If e2\EventName = "room860" Then
 								If e2\EventState = 1.0 Then
 									If e\SoundCHN2 <> 0 Then
-										If ChannelPlaying(e\SoundCHN2) = True Then StopChannel(e\SoundCHN2)
+										If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2)
 									EndIf
 									If e\SoundCHN3 <> 0 Then
-										If ChannelPlaying(e\SoundCHN3) = True Then StopChannel(e\SoundCHN3)
+										If ChannelPlaying(e\SoundCHN3) Then StopChannel(e\SoundCHN3)
 									EndIf
 								EndIf
 								Exit
@@ -6843,7 +6839,7 @@ Function UpdateEvents()
 						AnimateNPC(e\room\NPC[0], 75.0, 128.0, 0.04, True)	
 						If e\room\NPC[0]\Sound <> 0 Then 
 							If e\room\NPC[0]\SoundCHN <> 0 Then
-								If ChannelPlaying(e\room\NPC[0]\SoundChn) = False Then 
+								If (Not ChannelPlaying(e\room\NPC[0]\SoundCHN)) Then 
 									PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Gunshot.ogg"))
 									e\EventState = 7.0
 									FreeSound_Strict(e\room\NPC[0]\Sound) : e\room\NPC[0]\Sound = 0	
@@ -6877,7 +6873,7 @@ Function UpdateEvents()
 						GiveAchievement(Achv1123)
 						
 						If e\SoundCHN3 <> 0 Then
-							If ChannelPlaying(e\SoundCHN3) = True Then StopChannel(e\SoundCHN3)
+							If ChannelPlaying(e\SoundCHN3) Then StopChannel(e\SoundCHN3)
 							If e\Sound3 <> 0 Then
 								FreeSound_Strict(e\Sound3) : e\Sound3 = 0
 							EndIf
@@ -7148,7 +7144,7 @@ Function UpdateEvents()
 							e\SoundCHN2 = PlaySound2(e\room\NPC[0]\Sound, Camera, e\room\NPC[0]\Collider, 15.0)
 						EndIf
 						UpdateSoundOrigin(e\SoundCHN2, Camera, e\room\NPC[0]\Collider, 15.0)
-						If ChannelPlaying(e\SoundCHN2) = False Then RemoveEvent(e)
+						If (Not ChannelPlaying(e\SoundCHN2)) Then RemoveEvent(e)
 					EndIf
 				EndIf
 				;[End Block]
@@ -7266,7 +7262,7 @@ Function UpdateEvents()
 								PlaySound_Strict(DecaySFX[2])
 							EndIf
 							
-							If ChannelPlaying(e\SoundCHN) = True Then
+							If ChannelPlaying(e\SoundCHN) Then
 								UpdateSoundOrigin(e\SoundCHN, Camera, e\room\OBJ)
 							EndIf
 							
@@ -7620,7 +7616,7 @@ Function UpdateEvents()
 								e\SoundCHN = PlaySound_Strict(e\Sound)
 							EndIf
 							
-							If ChannelPlaying(e\SoundCHN) = True Then
+							If ChannelPlaying(e\SoundCHN) Then
 								UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[0], 6.0)
 							EndIf
 							
@@ -7778,7 +7774,7 @@ Function UpdateEvents()
 							EntityFX(de\OBJ, 1)
 							e\EventState = 1.0
 						ElseIf e\EventState = 1.0
-							If ChannelPlaying(e\SoundCHN) = False
+							If (Not ChannelPlaying(e\SoundCHN)) Then
 								e\EventState = 2.0
 								e\room\RoomDoors[0]\Locked = False
 							Else
@@ -8152,13 +8148,9 @@ Function UpdateEvents()
 					EndIf
 					
 					If BrokenDoor Then
-						If ChannelPlaying(e\SoundCHN2)
-							UpdateSoundOrigin(e\SoundCHN2, Camera, e\room\Objects[1], 5.0)
-						EndIf
+						If ChannelPlaying(e\SoundCHN2) Then UpdateSoundOrigin(e\SoundCHN2, Camera, e\room\Objects[1], 5.0)
 					EndIf
-					If ChannelPlaying(e\SoundCHN)
-						UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[0], 5.0)
-					EndIf
+					If ChannelPlaying(e\SoundCHN) Then UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[0], 5.0)
 				Else
 					e\EventState3 = 0.0
 				EndIf
@@ -8282,18 +8274,18 @@ Function UpdateEvents()
 										e\room\NPC[0]\Sound2 = LoadSound_Strict("SFX\SCP\049\Room2SL1.ogg")
 										e\room\NPC[0]\SoundCHN2 = PlaySound2(e\room\NPC[0]\Sound2, Camera, e\room\NPC[0]\Collider)
 									Else
-										If ChannelPlaying(e\room\NPC[0]\SoundCHN2) = False
+										If (Not ChannelPlaying(e\room\NPC[0]\SoundCHN2))
 											e\room\NPC[0]\PathTimer = 1.0
 											e\room\NPC[0]\SoundCHN2 = 0
 										EndIf
 									EndIf
 								ElseIf e\room\NPC[0]\PrevState = 2
 									If e\room\NPC[0]\State3 = 3.0 Then
-										If (e\room\NPC[0]\SoundCHN2 = 0) Then
+										If e\room\NPC[0]\SoundCHN2 = 0 Then
 											e\room\NPC[0]\Sound2 = LoadSound_Strict("SFX\SCP\049\Room2SL2.ogg")
 											e\room\NPC[0]\SoundCHN2 = PlaySound2(e\room\NPC[0]\Sound2, Camera, e\room\NPC[0]\Collider)
 										Else
-											If ChannelPlaying(e\room\NPC[0]\SoundCHN2) = False
+											If (Not ChannelPlaying(e\room\NPC[0]\SoundCHN2))
 												e\room\NPC[0]\PathTimer = 1.0
 												e\room\NPC[0]\SoundCHN2 = 0
 											EndIf
@@ -9251,7 +9243,7 @@ Function UpdateEndings()
 						Else
 							UpdateSky()
 							
-							If e\EventState < 2.0 And me\SelectedEnding = "" Then 
+							If e\EventState < 2.0 And SelectedEnding = "" Then 
 								If e\room\NPC[0]\State = 2.0 Then
 									ShouldPlay = 6
 								Else
@@ -9352,7 +9344,7 @@ Function UpdateEndings()
 										e\SoundCHN2_IsStream = True
 									EndIf
 								Else
-									If me\SelectedEnding = "" Then
+									If SelectedEnding = "" Then
 									    ShouldPlay = 66
 										
 										StopStream_Strict(e\SoundCHN)
@@ -9368,7 +9360,7 @@ Function UpdateEndings()
 										
 										If Temp = 1 Then ; ~ Explode
 											me\ExplosionTimer = Max(me\ExplosionTimer, 0.1)
-											me\SelectedEnding = "B2"
+											SelectedEnding = "B2"
 										Else
 											PlayAnnouncement("SFX\Ending\GateB\AlphaWarheadsFail.ogg")
 											
@@ -9391,10 +9383,10 @@ Function UpdateEndings()
 											
 											e\EventState = 70.0 * 85.0
 											
-											me\SelectedEnding = "B3"
+											SelectedEnding = "B3"
 										EndIf
 									Else
-										If me\SelectedEnding = "B3" Then
+										If SelectedEnding = "B3" Then
 											e\room\NPC[0]\EnemyX = EntityX(e\room\Objects[11], True) + Sin(MilliSecs() / 25.0) * 3.0
 											e\room\NPC[0]\EnemyY = EntityY(e\room\Objects[11], True) + Cos(MilliSecs() / 85.0) + 9.0
 											e\room\NPC[0]\EnemyZ = EntityZ(e\room\Objects[11], True) + Cos(MilliSecs() / 25.0) * 3.0
@@ -9428,7 +9420,6 @@ Function UpdateEndings()
 												me\LightFlash = 20.0
 												me\KillTimer = -0.1
 												msg\DeathMsg = ""
-												Kill(True)
 												me\BlinkTimer = -10.0
 												For n.NPCs = Each NPCs
 													If n\NPCtype = NPCtypeMTF
@@ -9911,7 +9902,7 @@ Function UpdateEndings()
 											MoveEntity(e\room\Objects[12], 0.0, 0.0, 0.01 * fpst\FPSFactor[0])
 										EndIf
 										
-										If ChannelPlaying(e\SoundCHN) = False And me\SelectedEnding = "" Then
+										If (Not ChannelPlaying(e\SoundCHN)) And SelectedEnding = "" Then
 											PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\Bell2.ogg"))
 											
 											p.Particles = CreateParticle(EntityX(e\room\Objects[11], True), EntityY(Camera, True), EntityZ(e\room\Objects[11], True), 4, 8.0, 0.0, 50.0)
@@ -9919,15 +9910,13 @@ Function UpdateEndings()
 											p.Particles = CreateParticle(EntityX(e\room\Objects[11], True), EntityY(Camera, True), EntityZ(e\room\Objects[11], True), 4, 8.0, 0.0, 50.0)
 											p\Speed = 0.25 : p\A = 0.5
 											
-											me\SelectedEnding = "A1"
-											chs\GodMode = 0
+											SelectedEnding = "A1"
 											ClearCheats(chs)
 											me\KillTimer = -0.1
 											msg\DeathMsg = ""
-											Kill()
 										EndIf
 										
-										If me\SelectedEnding <> "" Then
+										If SelectedEnding <> "" Then
 											me\CameraShake = CurveValue(2.0, me\CameraShake, 10.0)
 											me\LightFlash = CurveValue(2.0, me\LightFlash, 8.0)
 										EndIf
@@ -9983,14 +9972,13 @@ Function UpdateEndings()
 									Else
 										ShouldPlay = 0.0
 										me\CurrSpeed = 0.0
-										If ChannelPlaying(e\SoundCHN) = False Then
+										If (Not ChannelPlaying(e\SoundCHN)) Then
 											PlaySound_Strict(IntroSFX[7])
-											me\SelectedEnding = "A2"
+											SelectedEnding = "A2"
 											ClearCheats(chs)
 											me\LightFlash = 20.0
 											me\KillTimer = -0.1
 											msg\DeathMsg = ""
-											Kill()
 											me\BlinkTimer = -10.0
 											RemoveEvent(e)
 											Exit
@@ -10197,5 +10185,5 @@ Function GenerateRandomIA()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11B6#1DCB
+;~B#11B2#1DC7
 ;~C#Blitz3D

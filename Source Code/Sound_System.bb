@@ -51,7 +51,7 @@ End Function
 
 Function UpdateMusic()
 	If ConsoleFlush Then
-		If ChannelPlaying(ConsoleMusPlay) = False Then ConsoleMusPlay = PlaySound_Strict(ConsoleMusFlush)
+		If (Not ChannelPlaying(ConsoleMusPlay)) Then ConsoleMusPlay = PlaySound_Strict(ConsoleMusFlush)
 	ElseIf (Not PlayCustomMusic)
 		If NowPlaying <> ShouldPlay Then ; ~ Playing the wrong clip, fade out
 			CurrMusicVolume = Max(CurrMusicVolume - (fpst\FPSFactor[0] / 250.0), 0.0)
@@ -76,7 +76,7 @@ Function UpdateMusic()
 		EndIf
 	Else
 		If fpst\FPSFactor[0] > 0.0 Lor OptionsMenu = 2 Then
-			If ChannelPlaying(MusicCHN) = False Then MusicCHN = PlaySound_Strict(CustomMusic)
+			If (Not ChannelPlaying(MusicCHN)) Then MusicCHN = PlaySound_Strict(CustomMusic)
 			ChannelVolume(MusicCHN, 1.0 * MusicVolume)
 		EndIf
 	EndIf
@@ -86,7 +86,7 @@ Function PauseSounds()
 	For e.Events = Each Events
 		If e\SoundCHN <> 0 Then
 			If (Not e\SoundCHN_IsStream) Then
-				If ChannelPlaying(e\SoundCHN) = True Then PauseChannel(e\SoundCHN)
+				If ChannelPlaying(e\SoundCHN) Then PauseChannel(e\SoundCHN)
 			Else
 				SetStreamPaused_Strict(e\SoundCHN, True)
 			EndIf
@@ -94,7 +94,7 @@ Function PauseSounds()
 		
 		If e\SoundCHN2 <> 0 Then
 			If (Not e\SoundCHN2_IsStream) Then
-				If ChannelPlaying(e\SoundCHN2) = True Then PauseChannel(e\SoundCHN2)
+				If ChannelPlaying(e\SoundCHN2) Then PauseChannel(e\SoundCHN2)
 			Else
 				SetStreamPaused_Strict(e\SoundCHN2, True)
 			EndIf
@@ -102,7 +102,7 @@ Function PauseSounds()
 		
 		If e\SoundCHN3 <> 0 Then
 			If (Not e\SoundCHN3_IsStream) Then
-				If ChannelPlaying(e\SoundCHN3) = True Then PauseChannel(e\SoundCHN3)
+				If ChannelPlaying(e\SoundCHN3) Then PauseChannel(e\SoundCHN3)
 			Else
 				SetStreamPaused_Strict(e\SoundCHN3, True)
 			EndIf
@@ -112,7 +112,7 @@ Function PauseSounds()
 	For n.NPCs = Each NPCs
 		If n\SoundCHN <> 0 Then
 			If (Not n\SoundCHN_IsStream)
-				If ChannelPlaying(n\SoundCHN) = True Then PauseChannel(n\SoundCHN)
+				If ChannelPlaying(n\SoundCHN) Then PauseChannel(n\SoundCHN)
 			Else
 				If n\SoundCHN_IsStream = True
 					SetStreamPaused_Strict(n\SoundCHN, True)
@@ -122,7 +122,7 @@ Function PauseSounds()
 		
 		If n\SoundCHN2 <> 0 Then
 			If (Not n\SoundCHN2_IsStream)
-				If ChannelPlaying(n\SoundCHN2) = True Then PauseChannel(n\SoundCHN2)
+				If ChannelPlaying(n\SoundCHN2) Then PauseChannel(n\SoundCHN2)
 			Else
 				If n\SoundCHN2_IsStream = True
 					SetStreamPaused_Strict(n\SoundCHN2, True)
@@ -133,32 +133,32 @@ Function PauseSounds()
 	
 	For d.Doors = Each Doors
 		If d\SoundCHN <> 0 Then
-			If ChannelPlaying(d\SoundCHN) = True Then PauseChannel(d\SoundCHN)
+			If ChannelPlaying(d\SoundCHN) Then PauseChannel(d\SoundCHN)
 		EndIf
 	Next
 	
 	If AmbientSFXCHN <> 0 Then
-		If ChannelPlaying(AmbientSFXCHN) = True Then PauseChannel(AmbientSFXCHN)
+		If ChannelPlaying(AmbientSFXCHN) Then PauseChannel(AmbientSFXCHN)
 	EndIf
 	
 	If BreathCHN <> 0 Then
-		If ChannelPlaying(BreathCHN) = True Then PauseChannel(BreathCHN)
+		If ChannelPlaying(BreathCHN) Then PauseChannel(BreathCHN)
 	EndIf
 	
 	If BreathGasRelaxedCHN <> 0 Then
-		If ChannelPlaying(BreathGasRelaxedCHN) = True Then PauseChannel(BreathGasRelaxedCHN)
+		If ChannelPlaying(BreathGasRelaxedCHN) Then PauseChannel(BreathGasRelaxedCHN)
 	EndIf
 	
 	If VomitCHN <> 0 Then
-		If ChannelPlaying(VomitCHN) = True Then PauseChannel(VomitCHN)
+		If ChannelPlaying(VomitCHN) Then PauseChannel(VomitCHN)
 	EndIf
 	
 	If CoughCHN <> 0 Then
-		If ChannelPlaying(CoughCHN) = True Then PauseChannel(CoughCHN)
+		If ChannelPlaying(CoughCHN) Then PauseChannel(CoughCHN)
 	EndIf
 	
 	If SCRAMBLECHN <> 0 Then
-		If ChannelPlaying(SCRAMBLECHN) = True Then PauseChannel(SCRAMBLECHN)
+		If ChannelPlaying(SCRAMBLECHN) Then PauseChannel(SCRAMBLECHN)
 	EndIf
 	
 	If IntercomStreamCHN <> 0 Then
@@ -170,7 +170,7 @@ Function ResumeSounds()
 	For e.Events = Each Events
 		If e\SoundCHN <> 0 Then
 			If (Not e\SoundCHN_IsStream) Then
-				If ChannelPlaying(e\SoundCHN) = True Then ResumeChannel(e\SoundCHN)
+				If ChannelPlaying(e\SoundCHN) Then ResumeChannel(e\SoundCHN)
 			Else
 				SetStreamPaused_Strict(e\SoundCHN, False)
 			EndIf
@@ -178,7 +178,7 @@ Function ResumeSounds()
 		
 		If e\SoundCHN2 <> 0 Then
 			If (Not e\SoundCHN2_IsStream) Then
-				If ChannelPlaying(e\SoundCHN2) = True Then ResumeChannel(e\SoundCHN2)
+				If ChannelPlaying(e\SoundCHN2) Then ResumeChannel(e\SoundCHN2)
 			Else
 				SetStreamPaused_Strict(e\SoundCHN2, False)
 			EndIf
@@ -186,7 +186,7 @@ Function ResumeSounds()
 		
 		If e\SoundCHN3 <> 0 Then
 			If (Not e\SoundCHN3_IsStream) Then
-				If ChannelPlaying(e\SoundCHN3) = True Then ResumeChannel(e\SoundCHN3)
+				If ChannelPlaying(e\SoundCHN3) Then ResumeChannel(e\SoundCHN3)
 			Else
 				SetStreamPaused_Strict(e\SoundCHN3, False)
 			EndIf
@@ -196,7 +196,7 @@ Function ResumeSounds()
 	For n.NPCs = Each NPCs
 		If n\SoundCHN <> 0 Then
 			If (Not n\SoundCHN_IsStream)
-				If ChannelPlaying(n\SoundCHN) = True Then ResumeChannel(n\SoundCHN)
+				If ChannelPlaying(n\SoundCHN) Then ResumeChannel(n\SoundCHN)
 			Else
 				If n\SoundCHN_IsStream = True
 					SetStreamPaused_Strict(n\SoundCHN, False)
@@ -206,7 +206,7 @@ Function ResumeSounds()
 		
 		If n\SoundCHN2 <> 0 Then
 			If (Not n\SoundCHN2_IsStream)
-				If ChannelPlaying(n\SoundCHN2) = True Then ResumeChannel(n\SoundCHN2)
+				If ChannelPlaying(n\SoundCHN2) Then ResumeChannel(n\SoundCHN2)
 			Else
 				If n\SoundCHN2_IsStream = True
 					SetStreamPaused_Strict(n\SoundCHN2, False)
@@ -217,32 +217,32 @@ Function ResumeSounds()
 	
 	For d.Doors = Each Doors
 		If d\SoundCHN <> 0 Then
-			If ChannelPlaying(d\SoundCHN) = True Then ResumeChannel(d\SoundCHN)
+			If ChannelPlaying(d\SoundCHN) Then ResumeChannel(d\SoundCHN)
 		EndIf
 	Next
 	
 	If AmbientSFXCHN <> 0 Then
-		If ChannelPlaying(AmbientSFXCHN) = True Then ResumeChannel(AmbientSFXCHN)
+		If ChannelPlaying(AmbientSFXCHN) Then ResumeChannel(AmbientSFXCHN)
 	EndIf	
 	
 	If BreathCHN <> 0 Then
-		If ChannelPlaying(BreathCHN) = True Then ResumeChannel(BreathCHN)
+		If ChannelPlaying(BreathCHN) Then ResumeChannel(BreathCHN)
 	EndIf
 	
 	If BreathGasRelaxedCHN <> 0 Then
-		If ChannelPlaying(BreathGasRelaxedCHN) = True Then ResumeChannel(BreathGasRelaxedCHN)
+		If ChannelPlaying(BreathGasRelaxedCHN) Then ResumeChannel(BreathGasRelaxedCHN)
 	EndIf
 	
 	If VomitCHN <> 0 Then
-		If ChannelPlaying(VomitCHN) = True Then ResumeChannel(VomitCHN)
+		If ChannelPlaying(VomitCHN) Then ResumeChannel(VomitCHN)
 	EndIf
 	
 	If CoughCHN <> 0 Then
-		If ChannelPlaying(CoughCHN) = True Then ResumeChannel(CoughCHN)
+		If ChannelPlaying(CoughCHN) Then ResumeChannel(CoughCHN)
 	EndIf
 	
 	If SCRAMBLECHN <> 0 Then
-		If ChannelPlaying(SCRAMBLECHN) = True Then ResumeChannel(SCRAMBLECHN)
+		If ChannelPlaying(SCRAMBLECHN) Then ResumeChannel(SCRAMBLECHN)
 	EndIf
 	
 	If IntercomStreamCHN <> 0 Then
@@ -260,7 +260,7 @@ Function KillSounds()
 	For e.Events = Each Events
 		If e\SoundCHN <> 0 Then
 			If (Not e\SoundCHN_IsStream) Then
-				If ChannelPlaying(e\SoundCHN) = True Then StopChannel(e\SoundCHN)
+				If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN)
 			Else
 				StopStream_Strict(e\SoundCHN)
 			EndIf
@@ -268,7 +268,7 @@ Function KillSounds()
 		
 		If e\SoundCHN2 <> 0 Then
 			If (Not e\SoundCHN2_IsStream) Then
-				If ChannelPlaying(e\SoundCHN2) = True Then StopChannel(e\SoundCHN2)
+				If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2)
 			Else
 				StopStream_Strict(e\SoundCHN2)
 			EndIf
@@ -276,7 +276,7 @@ Function KillSounds()
 		
 		If e\SoundCHN3 <> 0 Then
 			If (Not e\SoundCHN3_IsStream) Then
-				If ChannelPlaying(e\SoundCHN3) = True Then StopChannel(e\SoundCHN3)
+				If ChannelPlaying(e\SoundCHN3) Then StopChannel(e\SoundCHN3)
 			Else
 				StopStream_Strict(e\SoundCHN3)
 			EndIf
@@ -286,7 +286,7 @@ Function KillSounds()
 	For n.NPCs = Each NPCs
 		If n\SoundCHN <> 0 Then
 			If (Not n\SoundCHN_IsStream)
-				If ChannelPlaying(n\SoundCHN) = True Then StopChannel(n\SoundCHN)
+				If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN)
 			Else
 				StopStream_Strict(n\SoundCHN)
 			EndIf
@@ -294,7 +294,7 @@ Function KillSounds()
 		
 		If n\SoundCHN2 <> 0 Then
 			If (Not n\SoundCHN2_IsStream)
-				If ChannelPlaying(n\SoundCHN2) = True Then StopChannel(n\SoundCHN2)
+				If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2)
 			Else
 				StopStream_Strict(n\SoundCHN2)
 			EndIf
@@ -303,32 +303,32 @@ Function KillSounds()
 	
 	For d.Doors = Each Doors
 		If d\SoundCHN <> 0 Then
-			If ChannelPlaying(d\SoundCHN) = True Then StopChannel(d\SoundCHN)
+			If ChannelPlaying(d\SoundCHN) Then StopChannel(d\SoundCHN)
 		EndIf
 	Next
 	
 	If AmbientSFXCHN <> 0 Then
-		If ChannelPlaying(AmbientSFXCHN) = True Then StopChannel(AmbientSFXCHN)
+		If ChannelPlaying(AmbientSFXCHN) Then StopChannel(AmbientSFXCHN)
 	EndIf
 	
 	If BreathCHN <> 0 Then
-		If ChannelPlaying(BreathCHN) = True Then StopChannel(BreathCHN)
+		If ChannelPlaying(BreathCHN) Then StopChannel(BreathCHN)
 	EndIf
 	
 	If BreathGasRelaxedCHN <> 0 Then
-		If ChannelPlaying(BreathGasRelaxedCHN) = True Then StopChannel(BreathGasRelaxedCHN)
+		If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN)
 	EndIf
 	
 	If VomitCHN <> 0 Then
-		If ChannelPlaying(VomitCHN) = True Then StopChannel(VomitCHN)
+		If ChannelPlaying(VomitCHN) Then StopChannel(VomitCHN)
 	EndIf
 	
 	If CoughCHN <> 0 Then
-		If ChannelPlaying(CoughCHN) = True Then StopChannel(CoughCHN)
+		If ChannelPlaying(CoughCHN) Then StopChannel(CoughCHN)
 	EndIf
 	
 	If SCRAMBLECHN <> 0 Then
-		If ChannelPlaying(SCRAMBLECHN) = True Then StopChannel(SCRAMBLECHN)
+		If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN)
 	EndIf
 	
 	If IntercomStreamCHN <> 0 Then

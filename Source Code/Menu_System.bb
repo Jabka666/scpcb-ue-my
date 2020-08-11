@@ -97,7 +97,7 @@ Function UpdateMainMenu()
 			EndBreathCHN = PlaySound_Strict(EndBreathSFX)
 			ShouldPlay = 66
 		ElseIf ShouldPlay = 66
-			If ChannelPlaying(EndBreathCHN) = False Then
+			If (Not ChannelPlaying(EndBreathCHN)) Then
 				FreeSound_Strict(EndBreathSFX)
 				ShouldPlay = 11
 			EndIf
