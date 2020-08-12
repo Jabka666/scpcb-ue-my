@@ -5826,8 +5826,8 @@ Function UpdateRooms()
 				EndIf
 				
 				For j = 0 To 3
-					If (PlayerRoom\Adjacent[i]\Adjacent[j] <> Null) Then
-						If (PlayerRoom\Adjacent[i]\Adjacent[j] <> PlayerRoom) Then EntityAlpha(GetChild(PlayerRoom\Adjacent[i]\Adjacent[j]\OBJ, 2), 0.0)
+					If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null Then
+						If PlayerRoom\Adjacent[i]\Adjacent[j] <> PlayerRoom Then EntityAlpha(GetChild(PlayerRoom\Adjacent[i]\Adjacent[j]\OBJ, 2), 0.0)
 					EndIf
 				Next
 			EndIf
@@ -6120,9 +6120,9 @@ Function FindPath(n.NPCs, x#, y#, z#)
 	Local CurrX#, CurrZ#
 	Local i%
 
-   ; ~ Pathstatus = 0, route hasn't been searched for yet
-   ; ~ Pathstatus = 1, route found
-   ; ~ Pathstatus = 2, route not found (target unreachable)
+   ; ~ PathStatus = 0, route hasn't been searched for yet
+   ; ~ PathStatus = 1, route found
+   ; ~ PathStatus = 2, route not found (target unreachable)
 	
 	For w.WayPoints = Each WayPoints
 		w\State = 0
@@ -6171,7 +6171,6 @@ Function FindPath(n.NPCs, x#, y#, z#)
 		zTemp = EntityZ(Pvt, True) - EntityZ(w\OBJ, True)
 		yTemp = EntityY(Pvt, True) - EntityY(w\OBJ, True)
 		Dist2 = (xTemp * xTemp) + (yTemp * yTemp) + (zTemp * zTemp)
-		
 		If Dist2 < Dist Then
 			Dist = Dist2
 			EndPoint = w
@@ -6524,9 +6523,7 @@ Function UpdateSecurityCams()
 						msg\DeathMsg = Chr(34) + "What we know is that he died of cardiac arrest. My guess is that it was caused by SCP-895, although it has never been observed affecting video equipment from this far before. "
 						msg\DeathMsg = msg\DeathMsg + "Further testing is needed to determine whether SCP-895's " + Chr(34) + "Red Zone" + Chr(34) + " is increasing." + Chr(34)
 						
-						If me\VomitTimer < -10.0 Then
-							Kill()
-						EndIf
+						If me\VomitTimer < -10.0 Then Kill()
 					EndIf
 					
 					If me\VomitTimer < 0.0 And me\Sanity < -800.0 Then
@@ -7045,7 +7042,7 @@ Type Props
 	Field OBJ%
 End Type
 
-Function CreatePropObj(File$)
+Function CreatePropOBJ(File$)
 	Local p.Props
 	
 	For p.Props = Each Props
@@ -7306,7 +7303,6 @@ Function CreateMap()
 		
 		If Room2CAmount[i] < 1 Then ; ~ We want at least one ROOM2C
 			Temp = 0
-			
 			Zone = Zone + 1
 			Temp2 = Temp2 - 1
 			
@@ -7498,7 +7494,7 @@ Function CreateMap()
 	
 	Temp = 0
 	
-	Local r.Rooms, Spacing# = 8.0
+	Local r.Rooms, r2.Rooms, Spacing# = 8.0
 	
 	For y = MapHeight - 1 To 1 Step - 1
 		If y < MapHeight / 3 + 1 Then
@@ -8069,7 +8065,7 @@ Function UpdateCheckpointMonitors(Number%)
 	Local i%, SF%, b%, t1%
 	Local Entity%, Name$
 	
-	If Number = 0
+	If Number = 0 Then
 		Entity = o\MonitorModelID[1]
 		UpdateCheckpoint1 = True
 	Else
@@ -8282,7 +8278,7 @@ End Function
 Const ChunkMaxDistance# = 40.0 * 3.0
 
 Function UpdateChunks(r.Rooms, ChunkPartAmount%, SpawnNPCs% = True)
-	Local ch.Chunk, StrTemp$, i%, x#, z#, ch2.Chunk, y#, n.NPCs, j%
+	Local ch.Chunk, StrTemp$, i%, j%, x#, z#, ch2.Chunk, y#, n.NPCs
 	Local ChunkX#, ChunkZ#
 	
 	ChunkX = Int(EntityX(me\Collider) / 40.0)

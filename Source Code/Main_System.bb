@@ -3017,7 +3017,7 @@ Function MainLoop()
 		UpdateCheckpoint1 = False
 		UpdateCheckpoint2 = False
 		
-		If (Not MenuOpen) And (Not InvOpen) And (OtherOpen = Null) And (SelectedDoor = Null) And (ConsoleOpen = False) And (I_294\Using = False) And (SelectedScreen = Null) And me\EndingTimer >= 0.0 Then
+		If (Not MenuOpen) And (Not InvOpen) And OtherOpen = Null And SelectedDoor = Null And (Not ConsoleOpen) And (Not I_294\Using) And SelectedScreen = Null And me\EndingTimer >= 0.0 Then
 			LightVolume = CurveValue(TempLightVolume, LightVolume, 50.0)
 			CameraFogRange(Camera, CameraFogNear * LightVolume, CameraFogFar * LightVolume)
 			CameraFogMode(Camera, 1)
@@ -4577,7 +4577,7 @@ Function DrawGUI()
 		Next
 	EndIf
 	
-	If ClosestButton <> 0 And SelectedDoor = Null And InvOpen = False And MenuOpen = False And OtherOpen = Null And ConsoleOpen = False Then
+	If ClosestButton <> 0 And SelectedDoor = Null And (Not InvOpen) And (Not MenuOpen) And OtherOpen = Null And (Not ConsoleOpen) Then
 		Temp = CreatePivot()
 		PositionEntity(Temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 		PointEntity(Temp, ClosestButton)
@@ -5649,7 +5649,7 @@ Function UpdateGUI()
 	Local n%, xTemp%, yTemp%, StrTemp$, GroupDesignation$
 	Local e.Events, it.Items, r.Rooms
 	
-	If ClosestButton <> 0 And SelectedDoor = Null And InvOpen = False And MenuOpen = False And OtherOpen = Null And ConsoleOpen = False Then
+	If ClosestButton <> 0 And SelectedDoor = Null And (Not InvOpen) And (Not MenuOpen) And OtherOpen = Null And (Not ConsoleOpen) Then
 		Temp = CreatePivot()
 		PositionEntity(Temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 		PointEntity(Temp, ClosestButton)
@@ -6381,7 +6381,7 @@ Function UpdateGUI()
 			EndIf
 		EndIf
 		
-		If InvOpen = False Then 
+		If (Not InvOpen) Then 
 			ResumeSounds() 
 			MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : Mouse_X_Speed_1 = 0.0 : Mouse_Y_Speed_1 = 0.0
 		EndIf
