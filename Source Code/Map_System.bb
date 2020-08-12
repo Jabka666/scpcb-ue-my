@@ -365,7 +365,6 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 			AddMesh(FlipChild, ChildMesh)
 			FreeEntity(FlipChild)			
 		EndIf
-		HideEntity(ChildMesh)
 	Next
 	
 	Local HiddenMesh%
@@ -8608,5 +8607,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#119E
+;~B#119D
 ;~C#Blitz3D
