@@ -3164,9 +3164,9 @@ Function UpdateEvents()
 							e\EventState3 = e\EventState2 * 5.0
 						Else
 							If Temp = 0 And e\EventState2 = 1.0 Then ; ~ Turn on the fan
-								PlaySound2 (LoadTempSound("SFX\Ambient\Room ambience\FanOn.ogg"), Camera, e\room\Objects[0], 8.0)
+								PlaySound2 (LoadTempSound("SFX\Ambient\Room Ambience\FanOn.ogg"), Camera, e\room\Objects[0], 8.0)
 							ElseIf Temp = 1 And e\EventState2 = 0.0 ; ~ Turn off the fan
-								PlaySound2 (LoadTempSound("SFX\Ambient\Room ambience\FanOff.ogg"), Camera, e\room\Objects[0], 8.0)
+								PlaySound2 (LoadTempSound("SFX\Ambient\Room Ambience\FanOff.ogg"), Camera, e\room\Objects[0], 8.0)
 							EndIf
 						EndIf
 					Else
@@ -9243,7 +9243,7 @@ Function UpdateEndings()
 						Else
 							UpdateSky()
 							
-							If e\EventState < 2.0 And SelectedEnding = "" Then 
+							If e\EventState < 2.0 And me\SelectedEnding = "" Then 
 								If e\room\NPC[0]\State = 2.0 Then
 									ShouldPlay = 6
 								Else
@@ -9344,7 +9344,7 @@ Function UpdateEndings()
 										e\SoundCHN2_IsStream = True
 									EndIf
 								Else
-									If SelectedEnding = "" Then
+									If me\SelectedEnding = "" Then
 									    ShouldPlay = 66
 										
 										StopStream_Strict(e\SoundCHN)
@@ -9360,7 +9360,7 @@ Function UpdateEndings()
 										
 										If Temp = 1 Then ; ~ Explode
 											me\ExplosionTimer = Max(me\ExplosionTimer, 0.1)
-											SelectedEnding = "B2"
+											me\SelectedEnding = "B2"
 										Else
 											PlayAnnouncement("SFX\Ending\GateB\AlphaWarheadsFail.ogg")
 											
@@ -9383,10 +9383,10 @@ Function UpdateEndings()
 											
 											e\EventState = 70.0 * 85.0
 											
-											SelectedEnding = "B3"
+											me\SelectedEnding = "B3"
 										EndIf
 									Else
-										If SelectedEnding = "B3" Then
+										If me\SelectedEnding = "B3" Then
 											e\room\NPC[0]\EnemyX = EntityX(e\room\Objects[11], True) + Sin(MilliSecs() / 25.0) * 3.0
 											e\room\NPC[0]\EnemyY = EntityY(e\room\Objects[11], True) + Cos(MilliSecs() / 85.0) + 9.0
 											e\room\NPC[0]\EnemyZ = EntityZ(e\room\Objects[11], True) + Cos(MilliSecs() / 25.0) * 3.0
@@ -9456,7 +9456,7 @@ Function UpdateEndings()
 											
 											em.Emitters = CreateEmitter(EntityX(e\room\NPC[3]\Collider), EntityY(e\room\NPC[3]\Collider), EntityZ(e\room\NPC[3]\Collider), 0)
 											em\Room = PlayerRoom : em\RandAngle = 45.0 : em\Gravity = -0.18 : em\LifeTime = 400.0 : em\SizeChange = Rnd(0.005, 0.007) : em\Achange = -0.004
-											TurnEntity(em\OBJ, (-80) + 20.0 * i, 0.0, 0.0)
+											TurnEntity(em\OBJ, (-80.0) + 20.0 * i, 0.0, 0.0)
 											EntityParent(em\OBJ, e\room\NPC[3]\Collider)
 											
 											If ParticleAmount > 0
@@ -9487,7 +9487,7 @@ Function UpdateEndings()
 						CameraRange(Camera, 0.01, 60.0)
 						AmbientLight(140.0, 140.0, 140.0)
 						
-						If ParticleAmount > 0
+						If ParticleAmount > 0 Then
 							If Rand(3) = 1 Then
 								p.Particles = CreateParticle(EntityX(Camera) + Rnd(-2.0, 2.0), EntityY(Camera) + Rnd(0.9, 2.0), EntityZ(Camera) + Rnd(-2.0, 2.0), 2, 0.006, 0.0, 300.0)
 								p\Speed = Rnd(0.002, 0.003) : p\SizeChange = -0.00001
@@ -9902,7 +9902,7 @@ Function UpdateEndings()
 											MoveEntity(e\room\Objects[12], 0.0, 0.0, 0.01 * fpst\FPSFactor[0])
 										EndIf
 										
-										If (Not ChannelPlaying(e\SoundCHN)) And SelectedEnding = "" Then
+										If (Not ChannelPlaying(e\SoundCHN)) And me\SelectedEnding = "" Then
 											PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\Bell2.ogg"))
 											
 											p.Particles = CreateParticle(EntityX(e\room\Objects[11], True), EntityY(Camera, True), EntityZ(e\room\Objects[11], True), 4, 8.0, 0.0, 50.0)
@@ -9910,13 +9910,13 @@ Function UpdateEndings()
 											p.Particles = CreateParticle(EntityX(e\room\Objects[11], True), EntityY(Camera, True), EntityZ(e\room\Objects[11], True), 4, 8.0, 0.0, 50.0)
 											p\Speed = 0.25 : p\A = 0.5
 											
-											SelectedEnding = "A1"
+											me\SelectedEnding = "A1"
 											ClearCheats(chs)
 											me\KillTimer = -0.1
 											msg\DeathMsg = ""
 										EndIf
 										
-										If SelectedEnding <> "" Then
+										If me\SelectedEnding <> "" Then
 											me\CameraShake = CurveValue(2.0, me\CameraShake, 10.0)
 											me\LightFlash = CurveValue(2.0, me\LightFlash, 8.0)
 										EndIf
@@ -9974,7 +9974,7 @@ Function UpdateEndings()
 										me\CurrSpeed = 0.0
 										If (Not ChannelPlaying(e\SoundCHN)) Then
 											PlaySound_Strict(IntroSFX[7])
-											SelectedEnding = "A2"
+											me\SelectedEnding = "A2"
 											ClearCheats(chs)
 											me\LightFlash = 20.0
 											me\KillTimer = -0.1

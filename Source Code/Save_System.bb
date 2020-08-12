@@ -1291,7 +1291,7 @@ Function LoadGameQuick(File$)
 	me\DeafTimer = 0.0
 	UnableToMove = False
 	msg\Msg = ""
-	SelectedEnding = ""
+	me\SelectedEnding = ""
 	
 	PositionEntity(me\Collider, 0.0, 1000.0, 0.0, True)
 	ResetEntity(me\Collider)

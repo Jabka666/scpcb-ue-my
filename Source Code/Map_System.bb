@@ -1910,7 +1910,7 @@ Function FillRoom(r.Rooms)
 			FreeEntity(d2\Buttons[0]) : d2\Buttons[0] = 0
 			
 			d2 = CreateDoor(r\Zone, r\x - 1440.0 * RoomScale, r\y - 480.0 * RoomScale, r\z + 2328.0 * RoomScale, 0.0, r, False, False, 2)
-			If SelectedEnding = "A2" Then 
+			If me\SelectedEnding = "A2" Then 
 				d2\AutoClose = False : d2\Open = True : d2\Locked = True	
 			Else
 				d2\AutoClose = False : d2\Open = False : d2\Locked = False	
@@ -1920,7 +1920,7 @@ Function FillRoom(r.Rooms)
 			RotateEntity(d2\Buttons[1], 0.0, 90.0, 0.0, True)
 			
 			d2 = CreateDoor(r\Zone, r\x - 1440 * RoomScale, r\y - 480.0 * RoomScale, r\z + 4352.0 * RoomScale, 0.0, r, False, False, 2)
-			If SelectedEnding = "A2" Then 
+			If me\SelectedEnding = "A2" Then 
 				d2\AutoClose = False : d2\Open = True : d2\Locked = True	
 			Else
 				d2\AutoClose = False : d2\Open = False : d2\Locked = False
@@ -3961,15 +3961,15 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "room205"
 			;[Block]
-			r\RoomDoors[1] = CreateDoor(r\Zone, r\x + 128.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 90.0, r, False, False, 3)
-			r\RoomDoors[1]\AutoClose = False
-			
-			r\RoomDoors[0] = CreateDoor(r\Zone, r\x - 1392.0 * RoomScale, r\y - 128.0 * RoomScale, r\z - 384.0 * RoomScale, 0.0, r, False, False, 3)
+			r\RoomDoors[0] = CreateDoor(r\Zone, r\x - 1398.0 * RoomScale, r\y - 128.0 * RoomScale, r\z - 384.0 * RoomScale, 0.0, r, False, False, 3)
 			r\RoomDoors[0]\AutoClose = False
 			
 			For i = 0 To 1
 				FreeEntity(r\RoomDoors[0]\Buttons[i]) : r\RoomDoors[0]\Buttons[i] = 0
 			Next
+			
+			r\RoomDoors[1] = CreateDoor(r\Zone, r\x + 128.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 90.0, r, False, False, 3)
+			r\RoomDoors[1]\AutoClose = False
 			
 			sc = CreateSecurityCam(r\x - 1152.0 * RoomScale, r\y + 900.0 * RoomScale, r\z + 176.0 * RoomScale, r, True, r\x - 1716.0 * RoomScale, r\y + 160.0 * RoomScale, r\z + 176.0 * RoomScale)
 			sc\Angle = 90.0 : sc\Turn = 0.0 : sc\AllowSaving = False : sc\RenderInterval = 0.0

@@ -195,7 +195,7 @@ Type PlayerStats
 	Field DropSpeed#, HeadDropSpeed#, CurrSpeed#
 	Field Crouch%, CrouchState#
 	Field SndVolume#
-	Field EndingScreen%, EndingTimer#
+	Field SelectedEnding$, EndingScreen%, EndingTimer#
 	Field CreditsScreen%, CreditsTimer#
 	Field BlurVolume#, BlurTimer#
 	Field LightBlink#, LightFlash#
@@ -284,8 +284,6 @@ Global AccessCode%
 
 Global DrawHandIcon%
 Global DrawArrowIcon%[4]
-
-Global SelectedEnding$
 
 Include "Source Code\Difficulty.bb"
 
@@ -900,7 +898,7 @@ Function UpdateConsole()
 					;[End Block]
 				Case "ending"
 					;[Block]
-					SelectedEnding = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+					me\SelectedEnding = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 					me\KillTimer = -0.1
 					;[End Block]
 				Case "noclipspeed"
@@ -3234,7 +3232,7 @@ Function MainLoop()
 				me\KillTimer = me\KillTimer - (fpst\FPSFactor[0] * 0.8)
 				If me\KillTimer < -360.0 Then 
 					MenuOpen = True 
-					If SelectedEnding <> "" Then me\EndingTimer = Min(me\KillTimer, -0.1)
+					If me\SelectedEnding <> "" Then me\EndingTimer = Min(me\KillTimer, -0.1)
 				EndIf
 				DarkA = Max(DarkA, Min(Abs(me\KillTimer / 400.0), 1.0))
 			Else
@@ -3390,7 +3388,7 @@ Function MainLoop()
 		EndIf
 		
 		If me\EndingTimer < 0.0 Then
-			If SelectedEnding <> "" Then UpdateEnding()
+			If me\SelectedEnding <> "" Then UpdateEnding()
 		Else
 			UpdateMenu()			
 		EndIf
@@ -3414,7 +3412,7 @@ Function MainLoop()
 	RenderMessages()
 	
 	If me\EndingTimer < 0.0 Then
-		If SelectedEnding <> "" Then DrawEnding()
+		If me\SelectedEnding <> "" Then DrawEnding()
 	Else
 		DrawMenu()			
 	EndIf
@@ -3496,7 +3494,7 @@ Function DrawEnding()
 	Local x%, y%, Width%, Height%, i%
 	Local itt.ItemTemplates, r.Rooms
 	
-	Select Lower(SelectedEnding)
+	Select me\SelectedEnding
 		Case "B2", "A1"
 			;[Block]
 			ClsColor(Max(255.0 + (me\EndingTimer) * 2.8, 0.0), Max(255.0 + (me\EndingTimer) * 2.8, 0.0), Max(255.0 + (me\EndingTimer) * 2.8, 0.0))
@@ -3630,14 +3628,14 @@ Function UpdateEnding()
 		
 		If me\EndingTimer > -700.0 Then 
 			If me\EndingTimer + fpst\FPSFactor[1] > -450.0 And me\EndingTimer =< -450.0 Then
-				Select Lower(SelectedEnding)
+				Select me\SelectedEnding
 					Case "A1", "A2"
 						;[Block]
-						PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\Ending" + SelectedEnding + ".ogg"))
+						PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\Ending" + me\SelectedEnding + ".ogg"))
 						;[End Block]
 					Case "B1", "B2", "B3"
 						;[Block]
-						PlaySound_Strict(LoadTempSound("SFX\Ending\GateB\Ending" + SelectedEnding + ".ogg"))
+						PlaySound_Strict(LoadTempSound("SFX\Ending\GateB\Ending" + me\SelectedEnding + ".ogg"))
 						;[End Block]
 				End Select
 			EndIf			
@@ -4726,7 +4724,6 @@ Function DrawGUI()
 			Color(255, 255, 255)
 			SetFont(fo\ConsoleFont)
 			
-			Text(x - 60, 30, "Current ending: " + SelectedEnding)
 			Text(x - 60, 40, "Room: " + PlayerRoom\RoomTemplate\Name)
             Text(x - 60, 60, "Room Coordinates: (" + Floor(EntityX(PlayerRoom\OBJ) / 8.0 + 0.5) + ", " + Floor(EntityZ(PlayerRoom\OBJ) / 8.0 + 0.5) + ", Angle: " + PlayerRoom\Angle + ")")
 			For ev.Events = Each Events
@@ -9621,7 +9618,7 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	I_005\ChanceToSpawn = 0
 	
-	SelectedEnding = ""
+	me\SelectedEnding = ""
 	me\EndingTimer = 0.0
 	me\ExplosionTimer = 0.0
 	
@@ -12470,5 +12467,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#108D#1327#1E32
+;~B#108B#1324#1E2F
 ;~C#Blitz3D
