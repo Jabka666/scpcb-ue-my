@@ -2349,7 +2349,7 @@ Function UpdateEvents()
 						ShouldPlay = 3
 						CurrStepSFX = 1
 						
-						If Achievements[38] = True Then Achievements[38] = False
+						If Achievements[38] = True And (Not AchvPDDone) Then Achievements[38] = False
 					Else 
 						ShouldPlay = 1
 						CurrStepSFX = 3
@@ -2598,6 +2598,7 @@ Function UpdateEvents()
 											For r.Rooms = Each Rooms
 												If r\RoomTemplate\Name = "room2shaft" Then
 													GiveAchievement(AchvPD)
+													AchvPDDone = True
 													e\EventState = 0.0
 													e\EventState2 = 0.0
 													
@@ -2655,6 +2656,7 @@ Function UpdateEvents()
 										TeleportEntity(me\Collider, EntityX(r\Objects[10], True), 0.4, EntityZ(r\Objects[10], True), 0.3, True)
 										
 										GiveAchievement(AchvPD)
+										AchvPDDone = True
 										SecondaryLightOn = PrevSecondaryLightOn
 										PrevSecondaryLightOn = 0.0
 										
@@ -2746,6 +2748,8 @@ Function UpdateEvents()
 									For r.Rooms = Each Rooms
 										If r\RoomTemplate\Name = "room2tunnel" Then
 											GiveAchievement(AchvPD)
+											AchvPDDone = True
+											
 											e\EventState = 0.0
 											e\EventState2 = 0.0
 											
@@ -10185,5 +10189,5 @@ Function GenerateRandomIA()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11B2#1DC7
+;~B#11B6#1DCB
 ;~C#Blitz3D

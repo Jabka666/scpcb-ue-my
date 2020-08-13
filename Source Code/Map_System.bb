@@ -3960,7 +3960,7 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "room205"
 			;[Block]
-			r\RoomDoors[0] = CreateDoor(r\Zone, r\x - 1398.0 * RoomScale, r\y - 128.0 * RoomScale, r\z - 384.0 * RoomScale, 0.0, r, False, False, 3)
+			r\RoomDoors[0] = CreateDoor(r\Zone, r\x - 1400.0 * RoomScale, r\y - 128.0 * RoomScale, r\z - 384.0 * RoomScale, 0.0, r, False, False, 3)
 			r\RoomDoors[0]\AutoClose = False
 			
 			For i = 0 To 1
@@ -3987,8 +3987,7 @@ Function FillRoom(r.Rooms)
 			
 			r\Objects[1] = sc\ScrOBJ
 			
-			it = CreateItem("Document SCP-205", "paper", r\x + 56.0 * RoomScale, r\y + 320.0 * RoomScale, r\z - 286.0 * RoomScale)
-			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
+			it = CreateItem("Document SCP-205", "paper", r\x - 357.0 * RoomScale, r\y + 120.0 * RoomScale, r\z + 50.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case "room1endroom"
@@ -6739,7 +6738,7 @@ Function UpdateLever(OBJ%, Locked% = False)
 					EndIf
 				EndIf 
 				
-				If EntityPitch(OBJ, True) > 75 Then
+				If EntityPitch(OBJ, True) > 75.0 Then
 					If PrevPitch =< 75.0 Then PlaySound2(LeverSFX, Camera, OBJ, 1.0)
 				ElseIf EntityPitch(OBJ, True) < -75.0
 					If PrevPitch >= -75.0 Then PlaySound2(LeverSFX, Camera, OBJ, 1.0)	
@@ -8607,5 +8606,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#119D
+;~B#119C
 ;~C#Blitz3D

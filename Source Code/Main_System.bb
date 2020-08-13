@@ -8164,11 +8164,12 @@ Function UpdateMenu()
 		y = y + 122.0 * MenuScale	
 		
 		If (Not MouseDown1) Then OnSliderID = 0
-			
+		
 		Local AchvXIMG% = (x + (22.0 * MenuScale))
 		Local Scale# = GraphicHeight / 768.0
 		Local SeparationConst% = 76.0 * Scale
 		Local ImgSize% = 64.0
+		Local r.Rooms
 		
 		If AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg =< 0 Then
 			; ~ Just save this line, ok?
@@ -9648,7 +9649,7 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	me\ForceMove = 0.0
 	me\ForceAngle = 0.0	
-	me\Playable = True
+	me\Playable = False
 	
 	CoffinDistance = 100.0
 	
@@ -9662,6 +9663,7 @@ Function NullGame(PlayButtonSFX% = True)
 	For i = 0 To MAXACHIEVEMENTS - 1
 		Achievements[i] = 0
 	Next
+	AchvPDDone = False
 	me\RefinedItems = 0
 	
 	ConsoleInput = ""

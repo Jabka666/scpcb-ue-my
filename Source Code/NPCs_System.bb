@@ -561,7 +561,7 @@ End Function
 Function UpdateNPCs()
 	CatchErrors("Uncaught (UpdateNPCs)")
 	
-	Local n.NPCs, n2.NPCs, d.Doors, de.Decals, r.Rooms
+	Local n.NPCs, n2.NPCs, d.Doors, de.Decals, r.Rooms, e.Events
 	Local i%, j%, Dist#, Dist2#, Angle#, x#, y#, z#, PrevFrame#, PlayerSeeAble%, RN$
 	Local Target%, Pvt%, Pick%, GroupDesignation$
 	
@@ -1624,8 +1624,9 @@ Function UpdateNPCs()
 								Else ; ~ Finding a path to the player
 									If n\PathStatus = 1 ; ~ Path to player found
 										While n\Path[n\PathLocation] = Null
-											If n\PathLocation > 19
-												n\PathLocation = 0 : n\PathStatus = 0 : Exit
+											If n\PathLocation > 19 Then 
+												n\PathLocation = 0 : n\PathStatus = 0
+												Exit
 											Else
 												n\PathLocation = n\PathLocation + 1
 											EndIf
@@ -7475,5 +7476,5 @@ Function Animate2#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = True
 End Function 
 
 ;~IDEal Editor Parameters:
-;~B#175#1229#136F#13BD#1524#1641#1811#186C
+;~B#175#122A#1370#13BE#1525#1642#1812#186D
 ;~C#Blitz3D

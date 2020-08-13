@@ -9,6 +9,8 @@ Global AchievementStrings$[MAXACHIEVEMENTS]
 Global AchievementDescs$[MAXACHIEVEMENTS]
 Global AchvIMG%[MAXACHIEVEMENTS]
 
+Global AchvPDDone%
+
 Const Achv005% = 0, Achv008% = 1, Achv012% = 2, Achv035% = 3, Achv049% = 4, Achv055% = 5,  Achv079% = 6, Achv096% = 7, Achv106% = 8
 Const Achv148% = 9, Achv205% = 10, Achv294% = 11, Achv372% = 12, Achv409% = 13, Achv420J% = 14, Achv427% = 15, Achv500% = 16, Achv513% = 17
 Const Achv714% = 18, Achv789J% = 19, Achv860% = 20, Achv895% = 21, Achv914% = 22, Achv939% = 23, Achv966% = 24, Achv970% = 25

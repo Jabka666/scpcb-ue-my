@@ -19,6 +19,7 @@
 - Added coloring of the fog.
 - Added room2tunnel3.
 - Added bloody texture for SCP-096.
+- Added SCRAMBLE Gear.
 
 - Now guard in "room2elevator" event can kill the player if he too close.
 - Now the pass code for O5 Council's office drops from falling guard in SCP-895's event.

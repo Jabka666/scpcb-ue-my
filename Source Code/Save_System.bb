@@ -127,6 +127,7 @@ Function SaveGame(File$)
 	For i = 0 To MAXACHIEVEMENTS - 1
 		WriteByte(f, Achievements[i])
 	Next
+	WriteByte(f, AchvPDDone)
 	WriteInt(f, me\RefinedItems)
 	
 	For x = 0 To MapWidth
@@ -594,6 +595,7 @@ Function LoadGame(File$)
 	For i = 0 To MAXACHIEVEMENTS - 1
 		Achievements[i] = ReadByte(f)
 	Next
+	AchvPDDone = ReadByte(f)
 	me\RefinedItems = ReadInt(f)
 	
 	For x = 0 To MapWidth 
@@ -1434,6 +1436,7 @@ Function LoadGameQuick(File$)
 	For i = 0 To MAXACHIEVEMENTS - 1
 		Achievements[i] = ReadByte(f)
 	Next
+	AchvPDDone = ReadByte(f)
 	me\RefinedItems = ReadInt(f)
 	
 	For x = 0 To MapWidth
