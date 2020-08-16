@@ -3845,10 +3845,10 @@ Function UpdateCredits()
 End Function
 
 Function SetCrouch(NewCrouch%)
-	If me\Stamina > 5.0 Then 
+	If me\Stamina > 0.0 Then 
 		If NewCrouch <> me\Crouch Then 
 			PlaySound_Strict(CrouchSFX)
-			me\Stamina = me\Stamina - Rnd(15.0, 25.0)
+			me\Stamina = me\Stamina - Rnd(8.0, 16.0)
 		EndIf
 		me\Crouch = NewCrouch
 	EndIf
