@@ -797,12 +797,6 @@ Function UpdateMainMenu()
 							
 							y = y + 30 * MenuScale
 							
-							If CanOpenConsole Then
-								ConsoleVersion = DrawTick(x + 310 * MenuScale, y + MenuScale, ConsoleVersion)
-							EndIf
-							
-							y = y + 30 * MenuScale
-							
 							AchvMSGenabled = DrawTick(x + 310 * MenuScale, y + MenuScale, AchvMSGenabled)
 							
 							y = y + 50 * MenuScale
@@ -1450,21 +1444,6 @@ Function RenderMainMenu()
 							Text(x + 20 * MenuScale, y + 4 * MenuScale, "Open console on error:")
 							If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
 								DrawOptionsTooltip(tX, tY, tW, tH, "consoleerror")
-							EndIf
-						EndIf
-						
-						y = y + 30 * MenuScale
-						
-						If CanOpenConsole Then
-							Color(255, 255, 255)
-							Text(x + 20 * MenuScale, y + 4 * MenuScale, "Console Version:")
-							If ConsoleVersion = 1 Then
-								Text(x + 350 * MenuScale, y + 4 * MenuScale, "Advanced")
-							Else
-								Text(x + 350 * MenuScale, y + 4 * MenuScale, "Classic")
-							EndIf    
-							If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
-								DrawOptionsTooltip(tX, tY, tW, tH, "consoleversion")
 							EndIf
 						EndIf
 						
@@ -2931,10 +2910,6 @@ Function DrawOptionsTooltip(x%, y%, Width%, Height%, Option$, Value# = 0.0, InGa
 			Txt = Chr(34) + "Use launcher" + Chr(34) + " is self-explanatory."
 			R = 255
 			Txt2 = "This option cannot be changed in-game."
-			;[End Block]
-		Case "consoleversion"
-			;[Block]
-		    Txt = Chr(34) + "Console version" + Chr(34) + " is self-explanatory."
 			;[End Block]
 		Case "fov"
 			;[Block]

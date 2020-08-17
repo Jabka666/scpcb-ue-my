@@ -389,17 +389,10 @@ Function UpdateConsole()
 		
 		ConsoleR = 255 : ConsoleG = 255 : ConsoleB = 255
 		
-		If ConsoleVersion = 1 Then
-			x = 0
-			y = GraphicHeight - 300 * MenuScale
-			Width = GraphicWidth
-			Height = 300 * MenuScale - 30 * MenuScale
-		Else
-			x = 20
-		    y = 40
-		    Width = 400
-		    Height = 500
-		EndIf
+		x = 0
+		y = GraphicHeight - 300 * MenuScale
+		Width = GraphicWidth
+		Height = 300 * MenuScale - 30 * MenuScale
 		
 		Local Temp%, i%
 		Local Args$, StrTemp$, StrTemp2$, StrTemp3$, StrTemp4$
@@ -8009,21 +8002,6 @@ Function DrawMenu()
 					
 					y = y + 30 * MenuScale
 					
-					If CanOpenConsole Then
-					    Color(255, 255, 255)
-					    Text(x, y + 4 * MenuScale, "Console Version:")
-						If ConsoleVersion = 1 Then
-					        Text(x + 310 * MenuScale, y + 4 * MenuScale, "New")
-					    Else
-					        Text(x + 310 * MenuScale, y + 4 * MenuScale, "Classic")
-					    EndIf    
-					    If MouseOn(x + 270 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
-						    DrawOptionsTooltip(tX, tY, tW, tH, "consoleversion")
-					    EndIf
-					EndIf
-					
-					y = y + 30 * MenuScale
-					
 					Color(255, 255, 255)
 					Text(x, y + 4 * MenuScale, "Achievement popups:")
 					If MouseOn(x + 270 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
@@ -8409,20 +8387,6 @@ Function UpdateMenu()
 					
 					If CanOpenConsole Then
 						ConsoleOpening = DrawTick(x + 270 * MenuScale, y + MenuScale, ConsoleOpening)
-					EndIf
-					
-					y = y + 30 * MenuScale
-					
-					If CanOpenConsole Then
-						Local PrevConsoleVersion% = ConsoleVersion
-						
-						ConsoleVersion = DrawTick(x + 270 * MenuScale, y + MenuScale, ConsoleVersion)
-						
-						If PrevConsoleVersion Then
-							If PrevConsoleVersion <> ConsoleVersion Then
-								ShouldDeleteGadgets = True
-							EndIf
-						EndIf
 					EndIf
 					
 					y = y + 30 * MenuScale
@@ -12469,5 +12433,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#108B#1324#1E2F
+;~B#1084#131D#1E28
 ;~C#Blitz3D

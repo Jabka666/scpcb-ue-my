@@ -313,8 +313,6 @@ Global ConsoleOpening% = GetINIInt(OptionFile, "Advanced", "Console Auto Opening
 
 Global FrameLimit% = GetINIInt(OptionFile, "Advanced", "Frame Limit")
 
-Global ConsoleVersion% = GetINIInt(OptionFile, "Advanced", "Console Version")
-
 Global PlayStartup% = GetINIInt(OptionFile, "Advanced", "Play Startup Videos")
 
 Global LauncherEnabled% = GetINIInt(OptionFile, "Advanced", "Launcher Enabled")
@@ -401,8 +399,6 @@ Function SaveOptionsINI(SaveGlobal% = False)
 	PutINIValue(OptionFile, "Advanced", "Enable Console", CanOpenConsole)
 	
 	PutINIValue(OptionFile, "Advanced", "Console Auto Opening", ConsoleOpening)
-	
-	PutINIValue(OptionFile, "Advanced", "Console Version", ConsoleVersion)
 	
 	PutINIValue(OptionFile, "Advanced", "Play Startup Videos", PlayStartup)
 	
@@ -501,8 +497,6 @@ Function ResetOptionsINI()
 	CanOpenConsole = 0
 	
 	ConsoleOpening = 0
-	
-	ConsoleVersion = 1
 	
 	PlayStartup = 1
 	
