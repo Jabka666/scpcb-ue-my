@@ -711,7 +711,7 @@ Function UpdateEvents()
 				If me\KillTimer >= 0.0 And e\EventState2 = 0.0 Then
 					me\Zone = 0
 					
-					If e\EventState3 > 0 Then
+					If e\EventState3 > 0.0 Then
 						ShouldPlay = 13
 						
 						; ~ Slow the player down to match his speed to the guards
@@ -952,7 +952,7 @@ Function UpdateEvents()
 									If EntityZ(e\room\NPC[6]\Collider) > EntityZ(e\room\OBJ, True) - 64.0 * RoomScale Then
 										RotateEntity(e\room\NPC[6]\Collider, 0.0, CurveAngle(90.0, EntityYaw(e\room\NPC[6]\Collider), 15.0), 0.0)
 										If e\room\RoomDoors[6]\Open Then 
-											UseDoor(e\room\RoomDoors[6], False)
+											UseDoor(e\room\RoomDoors[6], False, True, True)
 										EndIf
 										If e\room\RoomDoors[6]\OpenState < 1.0 Then e\room\NPC[6]\State = 0.0
 									EndIf

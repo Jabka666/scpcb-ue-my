@@ -2406,7 +2406,7 @@ Function UpdateDoors()
 	Next
 End Function
 
-Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
+Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True, Scripted% = False)
 	Local Temp% = 0
 	
 	If d\KeyCard > 0 Then
@@ -2417,7 +2417,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True)
 					msg\Timer = 70.0 * 6.0
 				EndIf
 			EndIf
-			Return
+			If (Not Scripted) Then Return
 		Else
 			Select SelectedItem\ItemTemplate\TempName
 				Case "key6"
