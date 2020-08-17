@@ -502,7 +502,7 @@ Function ResetOptionsINI()
 	
 	LauncherEnabled = 1
 	
-	BarStyle = 1
+	BarStyle = 0
 	
 	; ~ [CONTROLS]
 	
