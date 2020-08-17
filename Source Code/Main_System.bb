@@ -908,10 +908,7 @@ Function UpdateConsole()
 					;[End Block]
 				Case "cls", "clear"
 					;[Block]
-					For c.ConsoleMsg = Each ConsoleMsg
-						Delete(c)
-					Next
-					PrintDefaultConsoleMessages()
+					ClearConsole()
 					;[End Block]
 				Case "infect"
 					;[Block]
@@ -1761,7 +1758,11 @@ Function UpdateConsole()
 	SetFont(fo\FontID[0])
 End Function
 
-Function PrintDefaultConsoleMessages()
+Function ClearConsole()
+	For c.ConsoleMsg = Each ConsoleMsg
+		Delete(c)
+	Next
+	
 	ConsoleR = 0 : ConsoleG = 255 : ConsoleB = 255
 	
 	CreateConsoleMsg("Console commands: ")
@@ -1785,8 +1786,6 @@ Function PrintDefaultConsoleMessages()
 	CreateConsoleMsg("  - disable106 / enable106")
 	CreateConsoleMsg("  - spawn [NPC type]")
 End Function
-
-PrintDefaultConsoleMessages()
 
 Global Camera%
 
@@ -9296,6 +9295,8 @@ Function InitNewGame()
 	EndIf
 	InitWayPoints()
 	
+	ClearConsole()
+	
 	DrawLoading(79)
 	
 	Curr173 = CreateNPC(NPCtype173, 0.0, -30.0, 0.0)
@@ -9462,6 +9463,8 @@ Function InitLoadGame()
 	Next
 	
 	ResetEntity(me\Collider)
+	
+	ClearConsole()
 	
 	DrawLoading(90)
 	
@@ -9718,6 +9721,10 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	For n.NPCs = Each NPCs
 		Delete(n)
+	Next
+	
+	For c.ConsoleMsg = Each ConsoleMsg
+		Delete(c)
 	Next
 	
 	Curr173 = Null
@@ -12443,5 +12450,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#108E#1327#1E32
+;~B#108D#1326#1E31
 ;~C#Blitz3D

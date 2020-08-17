@@ -767,7 +767,7 @@ Function UpdateEvents()
 									x = x + (EntityX(e\room\OBJ) - (3048.0 + 1024.0) * RoomScale - x) * Max((e\EventState3 - 10.0) / 4.0, 0.0) 
 									
 									If e\EventState3 < 10.0 Then
-										y = y + (0.2) * Min(Max((e\EventState3 - 3.0) / 5.0, 0.0), 1.0)
+										y = y + (0.2 * Min(Max((e\EventState3 - 3.0) / 5.0, 0.0), 1.0))
 									Else
 										y = (y + 0.2) + (0.302 + 0.6 - (y + 0.2)) * Max((e\EventState3 - 10.0) / 4.0, 0.0) 
 									EndIf
@@ -776,7 +776,6 @@ Function UpdateEvents()
 									
 									; ~ I'm sorry you have to see this
 									RotateEntity(Camera, (-70.0) + 70.0 * Min(Max((e\EventState3 - 3.0) / 5.0, 0.0), 1.0) + Sin(e\EventState3 * 12.857) * 5.0, (-60.0) * Max((e\EventState3 - 10.0) / 4.0, 0.0), Sin(e\EventState3 * 25.7) * 8.0)
-									
 									PositionEntity(Camera, x, y, z)
 									HideEntity(me\Collider)
 									PositionEntity(me\Collider, x, 0.302, z)	
@@ -811,7 +810,6 @@ Function UpdateEvents()
 							If SelectedItem <> Null Then
 								e\EventState3 = e\EventState3 + fpst\FPSFactor[0] / 5.0
 							EndIf							
-							
 						ElseIf e\EventState3 >= 150.0 And e\EventState3 < 700.0
 							If e\room\NPC[3]\State = 7.0 Then
 								If e\room\NPC[3]\Sound2 = 0
@@ -1760,10 +1758,7 @@ Function UpdateEvents()
 													If sc\room = e\room Then Delete(sc)
 												Next
 												
-												For c.ConsoleMsg = Each ConsoleMsg
-													Delete(c)
-												Next
-												PrintDefaultConsoleMessages()
+												ClearConsole()
 												
 												ShowEntity(tt\OverlayID[0])
 												AmbientLight(Brightness, Brightness, Brightness)
@@ -10194,5 +10189,5 @@ Function GenerateRandomIA()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11BB#1DD0
+;~B#11B6#1DCB
 ;~C#Blitz3D
