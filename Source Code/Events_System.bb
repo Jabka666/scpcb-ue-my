@@ -1760,6 +1760,11 @@ Function UpdateEvents()
 													If sc\room = e\room Then Delete(sc)
 												Next
 												
+												For c.ConsoleMsg = Each ConsoleMsg
+													Delete(c)
+												Next
+												PrintDefaultConsoleMessages()
+												
 												ShowEntity(tt\OverlayID[0])
 												AmbientLight(Brightness, Brightness, Brightness)
 												CameraFogRange(Camera, CameraFogNear, CameraFogFar)
@@ -10189,5 +10194,5 @@ Function GenerateRandomIA()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11B6#1DCB
+;~B#11BB#1DD0
 ;~C#Blitz3D

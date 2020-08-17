@@ -906,6 +906,13 @@ Function UpdateConsole()
 					
 					me\Injuries = Float(StrTemp)
 					;[End Block]
+				Case "cls", "clear"
+					;[Block]
+					For c.ConsoleMsg = Each ConsoleMsg
+						Delete(c)
+					Next
+					PrintDefaultConsoleMessages()
+					;[End Block]
 				Case "infect"
 					;[Block]
 					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
@@ -1754,29 +1761,32 @@ Function UpdateConsole()
 	SetFont(fo\FontID[0])
 End Function
 
-ConsoleR = 0 : ConsoleG = 255 : ConsoleB = 255
-CreateConsoleMsg("Console commands: ")
-CreateConsoleMsg("  - teleport [room name]")
-CreateConsoleMsg("  - godmode [on / off]")
-CreateConsoleMsg("  - noclip [on / off]")
-CreateConsoleMsg("  - infinitestamina [on / off]")
-CreateConsoleMsg("  - noblink [on / off]")
-CreateConsoleMsg("  - notarget [on / off]")
-CreateConsoleMsg("  - noclipspeed [x] (default = 2.0)")
-CreateConsoleMsg("  - wireframe [on / off]")
-CreateConsoleMsg("  - debughud [on / off]")
-CreateConsoleMsg("  - camerafog [near] [far]")
-CreateConsoleMsg(" ")
-CreateConsoleMsg("  - heal")
-CreateConsoleMsg("  - revive")
-CreateConsoleMsg("  - asd")
-CreateConsoleMsg(" ")
-CreateConsoleMsg("  - spawnitem [item name]")
-CreateConsoleMsg(" ")
-CreateConsoleMsg("  - 106retreat")
-CreateConsoleMsg("  - disable173 / enable173")
-CreateConsoleMsg("  - disable106 / enable106")
-CreateConsoleMsg("  - spawn [NPC type]")
+Function PrintDefaultConsoleMessages()
+	ConsoleR = 0 : ConsoleG = 255 : ConsoleB = 255
+	
+	CreateConsoleMsg("Console commands: ")
+	CreateConsoleMsg("  - help [page]")
+	CreateConsoleMsg("  - teleport [room name]")
+	CreateConsoleMsg("  - godmode [on / off]")
+	CreateConsoleMsg("  - noclip [on / off]")
+	CreateConsoleMsg("  - infinitestamina [on / off]")
+	CreateConsoleMsg("  - noblink [on / off]")
+	CreateConsoleMsg("  - notarget [on / off]")
+	CreateConsoleMsg("  - noclipspeed [x] (default = 2.0)")
+	CreateConsoleMsg("  - wireframe [on / off]")
+	CreateConsoleMsg("  - debughud [on / off]")
+	CreateConsoleMsg("  - camerafog [near] [far]")
+	CreateConsoleMsg("  - heal")
+	CreateConsoleMsg("  - revive")
+	CreateConsoleMsg("  - asd")
+	CreateConsoleMsg("  - spawnitem [item name]")
+	CreateConsoleMsg("  - 106retreat")
+	CreateConsoleMsg("  - disable173 / enable173")
+	CreateConsoleMsg("  - disable106 / enable106")
+	CreateConsoleMsg("  - spawn [NPC type]")
+End Function
+
+PrintDefaultConsoleMessages()
 
 Global Camera%
 
@@ -12433,5 +12443,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1084#131D#1E28
+;~B#108E#1327#1E32
 ;~C#Blitz3D
