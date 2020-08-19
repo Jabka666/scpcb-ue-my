@@ -34,7 +34,7 @@ Function CreateBlurImage()
 	ArkBlurImage = SPR
 	
 	; ~ Create blur texture
-	ArkBlurTexture = CreateTexture(2048, 2048, 256)
+	ArkBlurTexture = CreateTextureUsingCacheSystem(2048, 2048, 0)
 	EntityTexture(SPR, ArkBlurTexture)
 End Function
 

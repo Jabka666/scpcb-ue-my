@@ -474,7 +474,7 @@ Function ResetOptionsINI()
 	
 	ParticleAmount = 2
 	
-	SaveTexturesInVRAM = 0
+	SaveTexturesInVRAM = 1
 	
 	EnableRoomLights = 1
 	

@@ -83,7 +83,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 				tt\MiscTextureID[14] = True
 				TexFestive = LoadTexture_Strict("GFX\npcs\scp_173_H.png", 1)
 				EntityTexture(n\OBJ, TexFestive, 0, 0)
-				FreeTexture(TexFestive)
+				DeleteSingleTextureEntryFromCache(TexFestive)
 			EndIf
 			
 			; ~ On New Year set cookie texture
@@ -91,7 +91,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 				tt\MiscTextureID[15] = True
 				TexFestive = LoadTexture_Strict("GFX\npcs\scp_173_NY.png", 1)
 				EntityTexture(n\OBJ, TexFestive, 0, 0)
-				FreeTexture(TexFestive)
+				DeleteSingleTextureEntryFromCache(TexFestive)
 			EndIf
 			
 			Temp = GetINIFloat(NPCsFile, "SCP-173", "Scale") / MeshDepth(n\OBJ)			
@@ -129,8 +129,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			EntityBlend(n\OBJ2, 3)
 			EntityFX(n\OBJ2, 1 + 8)
 			SpriteViewMode(n\OBJ2, 2)
-			
-			FreeTexture(OldManEyes)
+			DeleteSingleTextureEntryFromCache(OldManEyes)
 			;[End Block]
 		Case NPCtypeGuard
 			;[Block]
@@ -354,7 +353,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			n\OBJ2 = CreateSprite()
 			ScaleSprite(n\OBJ2, 0.1, 0.1)
 			EntityTexture(n\OBJ2, Tex)
-			FreeTexture(Tex)
+			DeleteSingleTextureEntryFromCache(Tex)
 			
 			EntityFX(n\OBJ2, 1 + 8)
 			EntityBlend(n\OBJ2, BLEND_ADD)
@@ -7476,5 +7475,5 @@ Function Animate2#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = True
 End Function 
 
 ;~IDEal Editor Parameters:
-;~B#175#122A#1370#13BE#1525#1642#1812#186D
+;~B#174#1229#136F#13BD#1524#1641#1811#186C
 ;~C#Blitz3D

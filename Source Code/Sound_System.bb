@@ -367,7 +367,7 @@ Function GetStepSound(Entity%)
             Texture = GetBrushTexture(Brush, 3)
             If Texture <> 0 Then
                 Name = StripPath(TextureName(Texture))
-                If Name <> "" Then FreeTexture(Texture)
+                If Name <> "" Then DeleteSingleTextureEntryFromCache(Texture)
 				For mat.Materials = Each Materials
 					If mat\Name = Name Then
 						If mat\StepSound > 0 Then
@@ -381,7 +381,7 @@ Function GetStepSound(Entity%)
 			Texture = GetBrushTexture(Brush, 2)
 			If Texture <> 0 Then
 				Name = StripPath(TextureName(Texture))
-				If Name <> "" Then FreeTexture(Texture)
+				If Name <> "" Then DeleteSingleTextureEntryFromCache(Texture)
 				For mat.Materials = Each Materials
 					If mat\Name = Name Then
 						If mat\StepSound > 0 Then
@@ -395,7 +395,7 @@ Function GetStepSound(Entity%)
 			Texture = GetBrushTexture(Brush, 1)
 			If Texture <> 0 Then
 				Name = StripPath(TextureName(Texture))
-				If Name <> "" Then FreeTexture(Texture)
+				If Name <> "" Then DeleteSingleTextureEntryFromCache(Texture)
 				FreeBrush(Brush)
 				For mat.Materials = Each Materials
 					If mat\Name = Name Then
@@ -693,9 +693,6 @@ Function LoadAllSounds()
 		If i < 3 Then
 			StepSFX(2, 0, i) = LoadSound_Strict("SFX\Step\StepPD" + (i + 1) + ".ogg")
 			StepSFX(3, 0, i) = LoadSound_Strict("SFX\Step\StepForest" + (i + 1) + ".ogg")
-		EndIf
-		
-		If i < 3
 			StepSFX(4, 0, i) = LoadSound_Strict("SFX\Character\MTF\Step" + (i + 1) + ".ogg")
 		EndIf
 		If i < 7 Then

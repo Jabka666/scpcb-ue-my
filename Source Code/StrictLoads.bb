@@ -5,17 +5,6 @@
 ; ~ Likely to cause more crashes than 'clean' CB, as this prevents anyone from loading any assets that don't exist, regardless if they are ever used
 ; ~ Added zero checks since blitz load functions return zero sometimes even if the filetype exists
 
-Function LoadImage_Strict(File$)
-	Local Tmp%, Tmp2%
-	
-	If FileType(File) <> 1 Then RuntimeError("Image " + Chr(34) + File + Chr(34) + " missing. ")
-	Tmp = LoadImage(File)
-	Return(Tmp)
-	; ~ Attempt to load the image again
-	If Tmp = 0 Then Tmp2 = LoadImage(File)
-	Return(Tmp2)
-End Function
-
 Type Sound
 	Field InternalHandle%
 	Field Name$
@@ -274,49 +263,193 @@ Function UpdateStreamSoundOrigin(StreamHandle%, Cam%, Entity%, Range# = 10.0, Vo
 End Function
 
 Function LoadMesh_Strict(File$, Parent% = 0)
-	Local Tmp%
+	Local Tmp%, i%, SF%, b%, t1%, Name$, Texture%, t2%
+	Local TexAlpha% = 0
+	Local BumpTex%, Temp$
+	Local mat.Materials
 	
-	If FileType(File) <> 1 Then RuntimeError("3D Mesh " + File + " not found.")
-	Tmp = LoadMesh(File, Parent)
-	If Tmp = 0 Then RuntimeError("Failed to load 3D Mesh: " + File)
-	Return(Tmp) 
+	If Tmp = 0 Then
+		If FileType(File) <> 1 Then RuntimeError("3D Mesh " + File + " not found.")
+		Tmp = LoadMesh(File, Parent)
+		If Tmp = 0 Then RuntimeError("Failed to load 3D Mesh: " + File)
+	EndIf
+	
+	For i = 1 To CountSurfaces(Tmp)
+		SF = GetSurface(Tmp, i)
+		b = GetSurfaceBrush(SF)
+		If b <> 0 Then
+			Texture = 0
+			Name = ""
+			t1 = 0 : t2 = 0
+			t1 = GetBrushTexture(b, 0) ; ~ Diffuse or Lightmap
+			If t1 <> 0 Then
+				TexAlpha = IsTexAlpha(t1)
+				If TexAlpha <> 2 Then
+					If BumpEnabled Then
+						BumpTex = 0
+					Else
+						BumpTex = 0
+					EndIf
+					If BumpTex = 0
+						Texture = CheckForTexture(t1, TexAlpha)
+						If Texture <> 0 Then
+							TextureBlend(Texture, 5)
+							BrushTexture(b, Texture, 0, 0)
+						Else
+							; ~ Sometimes that error is intentional - such as if the mesh doesn't has a texture applied or an invalid one which gets fixed by something like EntityTexture
+							BrushTexture(b, MissingTexture, 0, 0)
+						EndIf
+					Else
+						Texture = CheckForTexture(t1, TexAlpha)
+						If Texture <> 0 Then
+							TextureBlend(Texture, 5)
+							BrushTexture(b, Texture, 0, 1)
+						Else
+							; ~ Sometimes that error is intentional - such as if the mesh doesn't has a texture applied or an invalid one which gets fixed by something like EntityTexture
+							BrushTexture(b, MissingTexture, 0, 1)
+						EndIf
+						BrushTexture(b, BumpTex, 0, 0)
+					EndIf
+				Else
+					t2 = GetBrushTexture(b, 1) ; ~ Diffuse (if lightmap is existing)
+					If BumpEnabled Then
+						BumpTex = 0
+					Else
+						BumpTex = 0
+					EndIf
+					If BumpTex = 0 Then
+						Texture = CheckForTexture(t1, TexAlpha)
+						If Texture <> 0 Then
+							TextureCoords(Texture, 1)
+							TextureBlend(Texture, 2)
+							BrushTexture(b, Texture, 0, 0)
+						Else
+							BrushTexture(b, MissingTexture, 0, 0)
+						EndIf
+						
+						Texture = CheckForTexture(t2, TexAlpha)
+						If Texture <> 0 Then
+							TextureCoords(Texture, 0)
+							TextureBlend(Texture, 5)
+							BrushTexture(b, Texture, 0, 1)
+						Else
+							BrushTexture(b, MissingTexture, 0, 1)
+						EndIf
+					Else
+						Texture = CheckForTexture(t1, TexAlpha)
+						If Texture <> 0 Then
+							TextureCoords(Texture, 1)
+							TextureBlend(Texture, 2)
+							BrushTexture(b, Texture, 0, 0)
+						Else
+							BrushTexture(b, MissingTexture, 0, 0)
+						EndIf
+						
+						Texture = CheckForTexture(t2, TexAlpha)
+						If Texture <> 0 Then
+							TextureCoords(Texture, 0)
+							TextureBlend(Texture, 5)
+							BrushTexture(b, Texture, 0, 2)
+						Else
+							BrushTexture(b, MissingTexture, 0, 2)
+						EndIf
+						BrushTexture(b, BumpTex, 0, 1)
+					EndIf
+					FreeTexture(t2)
+				EndIf
+				PaintSurface(SF, b)
+				FreeTexture(t1)
+			EndIf
+			FreeBrush(b)
+		EndIf
+	Next
+	Return(Tmp)
 End Function   
 
 Function LoadAnimMesh_Strict(File$, Parent% = 0)
-	Local Tmp%
+	Local Tmp%, i%, SF%, b%, t1%, Name$, Texture%
+	Local TexAlpha% = 0
+	Local mat.Materials
 	
-	If FileType(File) <> 1 Then RuntimeError("3D Animated Mesh " + File + " not found.")
-	Tmp = LoadAnimMesh(File, Parent)
-	If Tmp = 0 Then RuntimeError("Failed to load 3D Animated Mesh: " + File)
+	If Tmp = 0 Then
+		If FileType(File) <> 1 Then RuntimeError("3D Animated Mesh " + File + " not found.")
+		Tmp = LoadAnimMesh(File, Parent)
+		If Tmp = 0 Then RuntimeError("Failed to load 3D Animated Mesh: " + File)
+	EndIf
+	
+	For i = 1 To CountSurfaces(Tmp)
+		SF = GetSurface(Tmp,i)
+		b = GetSurfaceBrush(SF)
+		If b <> 0 Then
+			Texture = 0
+			Name = ""
+			t1 = 0
+			t1 = GetBrushTexture(b, 0) ; ~ Diffuse or Lightmap
+			If t1 <> 0 Then
+				TexAlpha = IsTexAlpha(t1)
+				
+				Texture = CheckForTexture(t1, TexAlpha)
+				If Texture <> 0 Then
+					BrushTexture(b, Texture, 0, 0)
+				Else
+					; ~ Sometimes that error is intentional - such as if the mesh doesn't has a texture applied or an invalid one which gets fixed by something like EntityTexture
+					BrushTexture(b, MissingTexture, 0, 0)
+				EndIf
+				
+				PaintSurface(SF, b)
+				FreeTexture(t1)
+			EndIf
+			FreeBrush(b)
+		EndIf
+	Next
 	Return(Tmp)
 End Function   
 
 ; ~ Don't use in LoadRMesh, as Reg does this manually there. If you wanna fuck around with the logic in that function, be my guest 
-Function LoadTexture_Strict(File$, Flags% = 1)
+Function LoadTexture_Strict(File$, Flags% = 1, TexDeleTetype% = DeleteMapTextures)
+	If FileType(File) <> 1 Then RuntimeError("Texture " + File + " not found.")
+	
 	Local Tmp%
 	
-	If FileType(File) <> 1 Then RuntimeError("Texture " + File + " not found.")
-	Tmp = LoadTexture(File, Flags + (256 * (SaveTexturesInVRAM)))
-	If Tmp = 0 Then RuntimeError("Failed to load Texture: " + File)
-	Return(Tmp)
+	If Tmp = 0 Then
+		If FileType(File) <> 1 Then RuntimeError("Texture " + File + " not found.")
+		Tmp = LoadTextureCheckingIfInCache(File, TexDeleTetype, Flags)
+		If Tmp = 0 Then RuntimeError("Failed to load Texture: " + File)
+	EndIf
+	Return(Tmp) 
 End Function   
 
 Function LoadBrush_Strict(File$, Flags%, u# = 1.0, v# = 1.0)
 	Local Tmp%
 	
-	If FileType(File) <> 1 Then RuntimeError("Brush Texture " + File + "not found.")
-	Tmp = LoadBrush(File, Flags, u, v)
-	If Tmp = 0 Then RuntimeError("Failed to load Brush: " + File)
+	If Tmp = 0 Then
+		If FileType(File) <> 1 Then RuntimeError("Brush Texture " + File + "not found.")
+		Tmp = LoadBrush(File, Flags, u, v)
+		If Tmp = 0 Then RuntimeError("Failed to load Brush: " + File)
+	EndIf
 	Return(Tmp)
 End Function 
 
 Function LoadFont_Strict(File$ = "Tahoma", Height% = 13, IgnoreScaling% = 0)
 	Local Tmp%
 	
-	If FileType(File) <> 1 Then RuntimeError("Font " + File + " not found.")
-	Tmp = LoadFont(File, (Int(Height * (GraphicHeight / 1024.0))) * (Not IgnoreScaling) + IgnoreScaling * Height)
-	If Tmp = 0 Then RuntimeError("Failed to load Font: " + File)
+	If Tmp = 0 Then
+		If FileType(File) <> 1 Then RuntimeError("Font " + File + " not found.")
+		Tmp = LoadFont(File, (Int(Height * (GraphicHeight / 1024.0))) * (Not IgnoreScaling) + IgnoreScaling * Height)
+		If Tmp = 0 Then RuntimeError("Failed to load Font: " + File)
+	EndIf
 	Return(Tmp)
+End Function
+
+Function LoadImage_Strict(File$)
+	Local Tmp%, Tmp2%
+	
+	If FileType(File) <> 1 Then RuntimeError("Image " + Chr(34) + File + Chr(34) + " missing. ")
+	Tmp = LoadImage(File)
+	Return(Tmp)
+	; ~ Attempt to load the image again
+	If Tmp = 0 Then Tmp2 = LoadImage(File)
+	Return(Tmp2)
 End Function
 
 ;~IDEal Editor Parameters:

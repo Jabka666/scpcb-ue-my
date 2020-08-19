@@ -37,13 +37,13 @@
 - Changed NVG, SCP-008, SCP-682 and SCP-1048's loading screens.
 - Changed chance to spawn SCP-005.
 - Changed idle animation for Class-D.
+- Changed chair's model.
 
 - Replaced O5-14 Burnt Document by batteries in room2offices5.
 
 - Removed light cones.
 - Removed unnecessary variables and functions in the code.
 - Removed unnecessary room1archive event.
-- Removed NPCs' bumps.
 - Removed all stuff from other mods, except SCP-409, SCP-005, FOV and some files from Box of Horrors.
 - Removed event of SCP-096's containment chamber.
 - Removed some unnecessary files.
@@ -71,8 +71,9 @@
 - Optimized items.
 - Optimized startup videos.
 - Optimized event of SCP-012's containment chamber.
-- Optimized game by converting some .x files to .b3d.
-- Optimized game by reworking FPS system.
+- Optimized game by converting a lot of .x files to .b3d.
+- Optimized game by reworking of time steps system.
+- Optimized game by reworking of texture cache system.
 
 Bug Fixes:
 
@@ -136,6 +137,7 @@ Bug Fixes:
 - Fixed flickering of the monitor overlay.
 - Fixed flying monitor after endings or "kill" command.
 - Fixed SCP-860-1's generation.
+- Fixed step sounds in Dr. L.'s office.
 
 - Small fixes for commands "disablenuke" and "enablecontrol/disablecontrol.
 - Small fixes for gateb and gateaentrance's walls.

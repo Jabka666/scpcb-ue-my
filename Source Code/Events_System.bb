@@ -471,7 +471,6 @@ Function UpdateEvents()
 						e\room\RoomDoors[2]\Open = True
 						
 						ShowEntity(tt\OverlayID[0])
-						AmbientLight(Brightness, Brightness, Brightness)
 						CameraFogRange(Camera, CameraFogNear, CameraFogFar)
 						CameraFogMode(Camera, 1)
 						
@@ -1761,7 +1760,6 @@ Function UpdateEvents()
 												ClearConsole()
 												
 												ShowEntity(tt\OverlayID[0])
-												AmbientLight(Brightness, Brightness, Brightness)
 												CameraFogRange(Camera, CameraFogNear, CameraFogFar)
 												CameraFogMode(Camera, 1)
 												
@@ -1799,8 +1797,7 @@ Function UpdateEvents()
 						CameraRange(Camera, 0.01, 40.0)
 					EndIf	
 					CameraFogMode(Camera, 0)
-	 	            AmbientLight(140.0, 140.0, 140.0)
-	   				HideEntity(tt\OverlayID[0])
+	 	            HideEntity(tt\OverlayID[0])
 					
 					LightVolume = 4.0
 					TempLightVolume = 4.0			
@@ -2352,7 +2349,6 @@ Function UpdateEvents()
 						If Achievements[38] = True And (Not AchvPDDone) Then Achievements[38] = False
 					Else 
 						ShouldPlay = 1
-						CurrStepSFX = 3
 						
 						GiveAchievement(AchvPD)
 					EndIf
@@ -3684,7 +3680,7 @@ Function UpdateEvents()
 							Meshes[i] = CopyEntity(o\MTModelID[i])
 							HideEntity(Meshes[i])
 						Next
-						FreeTextureCache()
+						;FreeTextureCache()
 						
 						TempInt = 0
 						
@@ -3972,7 +3968,7 @@ Function UpdateEvents()
 							HideEntity(Meshes[i])
 						Next
 						
-						FreeTextureCache()
+						;FreeTextureCache()
 						
 						TempInt = 0
 						
@@ -4321,11 +4317,11 @@ Function UpdateEvents()
                         If PlayerRoom = e\room Then e\EventState = 1.0
                     Else
                         e\EventState = e\EventState + 1.0
-                        PositionEntity(Curr106\Collider, EntityX(e\room\Objects[7], True), EntityY(e\room\Objects[7], True), EntityZ(e\room\Objects[7], True))
+                        PositionEntity(Curr106\Collider, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
                         ResetEntity(Curr106\Collider)
                         
                         PointEntity(Curr106\Collider, Camera)
-                        TurnEntity(Curr106\Collider, 0.0, Sin(MilliSecs() / 20) * 6.0, 0, True)
+                        TurnEntity(Curr106\Collider, 0.0, Sin(MilliSecs() / 20) * 6.0, 0.0, True)
                         MoveEntity(Curr106\Collider, 0.0, 0.0, Sin(MilliSecs() / 15) * 0.06)
                         PositionEntity(Curr106\OBJ, EntityX(Curr106\Collider), EntityY(Curr106\Collider) - 0.15, EntityZ(Curr106\Collider))
                         
@@ -4342,8 +4338,8 @@ Function UpdateEvents()
 				;[Block]
 				If Curr173\Idle = 0 Then 
 					If e\room\Dist < 8.0  And e\room\Dist > 0.0 Then			
-						If (Not EntityVisible(Curr173\Collider, Camera)) And (Not EntityVisible(e\room\Objects[6], Camera)) Then 
-							PositionEntity(Curr173\Collider, EntityX(e\room\Objects[6], True), 0.5, EntityZ(e\room\Objects[6], True))
+						If (Not EntityVisible(Curr173\Collider, Camera)) And (Not EntityVisible(e\room\Objects[0], Camera)) Then 
+							PositionEntity(Curr173\Collider, EntityX(e\room\Objects[0], True), 0.5, EntityZ(e\room\Objects[0], True))
 							ResetEntity(Curr173\Collider)
 							RemoveEvent(e)
 						EndIf
@@ -4356,9 +4352,9 @@ Function UpdateEvents()
 					If e\room\Objects[2] = 0 Then
 						e\room\Objects[2] =	CopyEntity(o\NPCModelID[24])
 						ScaleEntity(e\room\Objects[2], 0.07, 0.07, 0.07)
-						Tex = LoadTexture_Strict("GFX\npcs\duck(3).png")
+						Tex = LoadTexture_Strict("GFX\npcs\duck(3).png", 1, 0)
 						EntityTexture(e\room\Objects[2], Tex)
-						FreeTexture(Tex)
+						DeleteSingleTextureEntryFromCache(Tex)
 						PositionEntity(e\room\Objects[2], EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
 						PointEntity(e\room\Objects[2], e\room\OBJ)
 						RotateEntity(e\room\Objects[2], 0.0, EntityYaw(e\room\Objects[2], True), 0.0, True)
@@ -4400,7 +4396,7 @@ Function UpdateEvents()
 							EndIf
 						Next
 						
-						Tex% = LoadTexture_Strict(ImgPath)
+						Tex% = LoadTexture_Strict(ImgPath, 1, 0)
 						
 						Local Brush% = LoadBrush_Strict(ImgPath, 1)
 						
@@ -4415,7 +4411,7 @@ Function UpdateEvents()
 							EndIf
 							FreeBrush(b)
 						Next
-						FreeTexture(Tex)
+						DeleteSingleTextureEntryFromCache(Tex)
 						FreeBrush(Brush)
 						
 						PositionEntity(e\room\Objects[2], EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
@@ -4594,9 +4590,9 @@ Function UpdateEvents()
 							e\Sound = LoadSound_Strict("SFX\Character\Guard\096ServerRoom2.ogg")
 							e\SoundCHN = PlaySound_Strict(e\Sound)
 							
-							Tex = LoadTexture_Strict("GFX\npcs\scp_096_bloody.png")
+							Tex = LoadTexture_Strict("GFX\npcs\scp_096_bloody.png", 1, 0)
 							EntityTexture(Curr096\OBJ, Tex)
-							FreeTexture(Tex)
+							DeleteSingleTextureEntryFromCache(Tex)
 							
 							Curr096\CurrSpeed = 0.0
 							
@@ -4885,10 +4881,10 @@ Function UpdateEvents()
 							Case 60.0
 								;[Block]
 								If (Not tt\MiscTextureID[14]) Then
-									Local Tex970% = LoadTexture_Strict("GFX\npcs\scp_173_H.png", 1)
+									Local Tex970% = LoadTexture_Strict("GFX\npcs\scp_173_H.png", 1, 0)
 									
 									EntityTexture(Curr173\OBJ, Tex970, 0, 0)
-									FreeTexture(Tex970)
+									DeleteSingleTextureEntryFromCache(Tex970)
 								EndIf
 								;[End Block]
 						End Select
@@ -5248,9 +5244,9 @@ Function UpdateEvents()
 											InjurePlayer(0.5)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech2.ogg"))
 										ElseIf e\EventState3 > 70.0 * 31.0 And e\EventState3 - fpst\FPSFactor[0] =< 70.0 * 31.0
-											Tex = LoadTexture_Strict("GFX\map\scp-012_1.png")
+											Tex = LoadTexture_Strict("GFX\map\scp-012_1.png", 1, 0)
 											EntityTexture(e\room\Objects[4], Tex, 0, 1)
-											FreeTexture(Tex)
+											DeleteSingleTextureEntryFromCache(Tex)
 											
 											msg\Msg = "You tear open your left wrist and start writing on the composition with your blood."
 											msg\Timer = 70.0 * 6.0
@@ -5262,16 +5258,16 @@ Function UpdateEvents()
 											InjurePlayer(0.3)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech5.ogg"))
 										ElseIf e\EventState3 > 70.0 * 63.0 And e\EventState3 - fpst\FPSFactor[0] =< 70.0 * 63.0
-											Tex = LoadTexture_Strict("GFX\map\scp-012_2.png")
+											Tex = LoadTexture_Strict("GFX\map\scp-012_2.png", 1, 0)
 											EntityTexture(e\room\Objects[4], Tex, 0, 1)	
-											FreeTexture(Tex)
+											DeleteSingleTextureEntryFromCache(Tex)
 											
 											InjurePlayer(0.5)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech6.ogg"))
 										ElseIf e\EventState3 > 70.0 * 74.0 And e\EventState3 - fpst\FPSFactor[0] =< 70.0 * 74.0
-											Tex = LoadTexture_Strict("GFX\map\scp-012_3.png")
+											Tex = LoadTexture_Strict("GFX\map\scp-012_3.png", 1, 0)
 											EntityTexture(e\room\Objects[4], Tex, 0, 1)
-											FreeTexture(Tex)
+											DeleteSingleTextureEntryFromCache(Tex)
 											
 											msg\Msg = "You rip the wound wide open. Grabbing scoops of blood pouring out."
 											msg\Timer = 70.0 * 6.0
@@ -7073,7 +7069,7 @@ Function UpdateEvents()
 							EndIf
 						Else
 							If e\room\Objects[2] = 0
-								Local GlassTex% = LoadTexture_Strict("GFX\map\glass.png", 1 + 2)
+								Local GlassTex% = LoadTexture_Strict("GFX\map\textures\glass.png", 1 + 2, 0)
 								
 								e\room\Objects[2] = CreateSprite()
 								EntityTexture(e\room\Objects[2], GlassTex)
@@ -7086,7 +7082,7 @@ Function UpdateEvents()
 								RotateEntity(e\room\Objects[2], 0.0, e\room\Angle, 0.0)
 								TurnEntity(e\room\Objects[2], 0.0, 180.0, 0.0)
 								EntityParent(e\room\Objects[2], e\room\OBJ)
-								FreeTexture(GlassTex)
+								DeleteSingleTextureEntryFromCache(GlassTex)
 							EndIf
 							
 							ShowEntity(e\room\Objects[2])
@@ -8932,9 +8928,9 @@ Function UpdateDimension1499()
 						n\PrevState = 2
 						n\Angle = 270.0
 						RotateEntity(n\Collider, 0.0, n\Angle, 0.0)
-						Tex = LoadTexture_Strict("GFX\npcs\scp_1499_1_king.png")
+						Tex = LoadTexture_Strict("GFX\npcs\scp_1499_1_king.png", 1, 0)
 						EntityTexture(n\OBJ, Tex)
-						FreeTexture(Tex)
+						DeleteSingleTextureEntryFromCache(Tex)
 						e\room\NPC[0] = n
 						; ~ Guard next to king
 						n.NPCs = CreateNPC(NPCtype1499_1, e\room\x - 1917.0 * RoomScale, e\room\y + 1904.0 * RoomScale, e\room\z + 2052.0 * RoomScale)
@@ -9489,7 +9485,6 @@ Function UpdateEndings()
 						
 						Angle = Max(Sin(EntityYaw(me\Collider)), 0.0)
 						CameraRange(Camera, 0.01, 60.0)
-						AmbientLight(140.0, 140.0, 140.0)
 						
 						If ParticleAmount > 0 Then
 							If Rand(3) = 1 Then
@@ -9640,7 +9635,6 @@ Function UpdateEndings()
 						
 						Angle = Max(Sin(EntityYaw(me\Collider) + 90.0), 0.0)
 						CameraRange(Camera, 0.01, 30.0)
-						AmbientLight(140.0, 140.0, 140.0)
 						
 						For i = 2 To 4
 							If e\room\NPC[i] <> Null Then 
@@ -10189,5 +10183,5 @@ Function GenerateRandomIA()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11B6#1DCB
+;~B#11B2#1DC7
 ;~C#Blitz3D

@@ -2,7 +2,11 @@ Type Materials
 	Field Name$
 	Field Diff%
 	Field Bump%
+	Field IsDiffuseAlpha%
+	Field UseMask%
 	Field StepSound%
+	Field UScale#
+	Field VScale#
 End Type
 
 Function ApplyBumpMap(Texture%)
@@ -31,15 +35,20 @@ Function LoadMaterials(File$)
 			mat.Materials = New Materials
 			
 			mat\Name = Lower(TemporaryString)
+			
 			If BumpEnabled Then
 				StrTemp = GetINIString(File, TemporaryString, "bump")
 				If StrTemp <> "" Then 
 					mat\Bump =  LoadTexture_Strict(StrTemp)
-					ApplyBumpMap(mat\Bump)					
+					ApplyBumpMap(mat\Bump)
 				EndIf
 			EndIf
 			
 			mat\StepSound = (GetINIInt(File, TemporaryString, "stepsound") + 1)
+			mat\IsDiffuseAlpha = GetINIInt(File, TemporaryString, "transparent")
+			mat\UseMask = GetINIInt(File, TemporaryString, "masked")
+			mat\UScale = GetINIFloat(File, TemporaryString, "u_scale", 1.0)
+			mat\VScale = GetINIFloat(File, TemporaryString, "v_scale", 1.0)
 		EndIf
 	Wend
 	

@@ -346,7 +346,7 @@ Function InitItemTemplates()
 					EndIf
 				Next
 			EndIf
-			FreeTexture(it\Tex) : it\Tex = 0
+			DeleteSingleTextureEntryFromCache(it\Tex) : it\Tex = 0
 		EndIf
 	Next
 End Function 

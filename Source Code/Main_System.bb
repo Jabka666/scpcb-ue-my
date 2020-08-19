@@ -1138,13 +1138,13 @@ Function UpdateConsole()
 					If tt\MiscTextureID[14] Then
 						Tex = LoadTexture_Strict("GFX\npcs\scp_173_H.png", 1)
 						EntityTexture(Curr173\OBJ, Tex, 0, 0)
-						FreeTexture(Tex)
+						DeleteSingleTextureEntryFromCache(Tex)
 						CreateConsoleMsg("173 JACK-O-LANTERN ON")
 					Else
 						If tt\MiscTextureID[15] Then tt\MiscTextureID[15] = (Not tt\MiscTextureID[15])
 						Tex2 = LoadTexture_Strict("GFX\npcs\scp_173.png", 1)
 						EntityTexture(Curr173\OBJ, Tex2, 0, 0)
-						FreeTexture(Tex2)
+						DeleteSingleTextureEntryFromCache(Tex2)
 						CreateConsoleMsg("173 JACK-O-LANTERN OFF")
 					EndIf
 					;[End Block]
@@ -1154,13 +1154,13 @@ Function UpdateConsole()
 					If tt\MiscTextureID[15] Then
 						Tex = LoadTexture_Strict("GFX\npcs\scp_173_NY.png", 1)
 						EntityTexture(Curr173\OBJ, Tex, 0, 0)
-						FreeTexture(Tex)
+						DeleteSingleTextureEntryFromCache(Tex)
 						CreateConsoleMsg("173 COOKIE ON")
 					Else
 						If tt\MiscTextureID[14] Then tt\MiscTextureID[14] = (Not tt\MiscTextureID[14])
 						Tex2 = LoadTexture_Strict("GFX\npcs\scp_173.png", 1)
 						EntityTexture(Curr173\OBJ, Tex2, 0, 0)
-						FreeTexture(Tex2)
+						DeleteSingleTextureEntryFromCache(Tex2)
 						CreateConsoleMsg("173 COOKIE OFF")
 					EndIf
 					;[End Block]
@@ -3905,7 +3905,7 @@ Function MovePlayer()
 		If me\StaminaEffect <> 1.0 Then me\StaminaEffect = 1.0
 	EndIf
 	
-	Local Temp#
+	Local Temp#, Temp3%
 	
 	If me\KillTimer >= 0.0 Then
 		If PlayerRoom\RoomTemplate\Name <> "pocketdimension" Then 
@@ -3991,13 +3991,19 @@ Function MovePlayer()
 				If CurrStepSFX = 0 Then
 					Temp = GetStepSound(me\Collider)
 					
+					If PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor PlayerRoom\RoomTemplate\Name = "room2poffices2" Then
+						Temp3 = 5
+					Else
+						Temp3 = 0
+					EndIf
+					
 					If Sprint = 1.0 Then
 						me\SndVolume = Max(4.0, me\SndVolume)
-						TempCHN = PlaySound_Strict(StepSFX(Temp, 0, Rand(0, 7)))
+						TempCHN = PlaySound_Strict(StepSFX(Temp, 0, Rand(0, 7 - Temp3)))
 						ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.6)) * SFXVolume)
 					Else
 						me\SndVolume = Max(2.5 - (me\Crouch * 0.6), me\SndVolume)
-						TempCHN = PlaySound_Strict(StepSFX(Temp, 1, Rand(0, 7)))
+						TempCHN = PlaySound_Strict(StepSFX(Temp, 1 - (Temp3 / 5), Rand(0, 7 - Temp3)))
 						ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.6)) * SFXVolume)
 					EndIf
 				ElseIf CurrStepSFX = 1
@@ -4006,16 +4012,6 @@ Function MovePlayer()
 				ElseIf CurrStepSFX = 2
 					TempCHN = PlaySound_Strict(StepSFX(3, 0, Rand(0, 2)))
 					ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.4)) * SFXVolume)
-				ElseIf CurrStepSFX = 3
-					If Sprint = 1.0 Then
-						me\SndVolume = Max(4.0, me\SndVolume)
-						TempCHN = PlaySound_Strict(StepSFX(1, 0, Rand(0, 7)))
-						ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.6)) * SFXVolume)
-					Else
-						me\SndVolume = Max(2.5 - (me\Crouch * 0.6), me\SndVolume)
-						TempCHN = PlaySound_Strict(StepSFX(1, 1, Rand(0, 7)))
-						ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.6)) * SFXVolume)
-					EndIf
 				EndIf
 			EndIf	
 		EndIf
@@ -4126,9 +4122,15 @@ Function MovePlayer()
 		Next
 		
 		If CollidedFloor = True Then
+			If PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor PlayerRoom\RoomTemplate\Name = "room2poffices2" Then
+				Temp3 = 5
+			Else
+				Temp3 = 0
+			EndIf
+			
 			If me\DropSpeed < -0.07 Then 
 				If CurrStepSFX = 0 Then
-					PlaySound_Strict(StepSFX(GetStepSound(me\Collider), 0, Rand(0, 7)))
+					PlaySound_Strict(StepSFX(GetStepSound(me\Collider), 0, Rand(0, 7 - Temp3)))
 				ElseIf CurrStepSFX = 1
 					PlaySound_Strict(StepSFX(2, 0, Rand(0, 2)))
 				ElseIf CurrStepSFX = 2
@@ -4391,7 +4393,6 @@ Function MouseLook()
 				me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fpst\FPSFactor[0])
 			EndIf
 		EndIf
-		
 		ShowEntity(tt\OverlayID[2])
 	Else
 		HideEntity(tt\OverlayID[2])
@@ -4416,6 +4417,7 @@ Function MouseLook()
 			AmbientLightRooms(15)
 		Else
 			EntityColor(tt\OverlayID[4], 128.0, 128.0, 128.0)
+			AmbientLightRooms(0)
 		EndIf
 		EntityTexture(tt\OverlayID[0], tt\OverlayTextureID[5])
 	Else
@@ -8662,6 +8664,31 @@ Function LoadEntities()
 	Local b%, t1%, SF%
 	Local Name$, Test%, File$
 	
+	ConsoleR = 0 : ConsoleG = 255 : ConsoleB = 255
+	
+	CreateConsoleMsg("Console commands: ")
+	CreateConsoleMsg("  - help [page]")
+	CreateConsoleMsg("  - teleport [room name]")
+	CreateConsoleMsg("  - godmode [on / off]")
+	CreateConsoleMsg("  - noclip [on / off]")
+	CreateConsoleMsg("  - infinitestamina [on / off]")
+	CreateConsoleMsg("  - noblink [on / off]")
+	CreateConsoleMsg("  - notarget [on / off]")
+	CreateConsoleMsg("  - noclipspeed [x] (default = 2.0)")
+	CreateConsoleMsg("  - wireframe [on / off]")
+	CreateConsoleMsg("  - debughud [on / off]")
+	CreateConsoleMsg("  - camerafog [near] [far]")
+	CreateConsoleMsg("  - heal")
+	CreateConsoleMsg("  - revive")
+	CreateConsoleMsg("  - asd")
+	CreateConsoleMsg("  - spawnitem [item name]")
+	CreateConsoleMsg("  - 106retreat")
+	CreateConsoleMsg("  - disable173 / enable173")
+	CreateConsoleMsg("  - disable106 / enable106")
+	CreateConsoleMsg("  - spawn [NPC type]")
+	
+	LoadMissingTexture()
+	
 	For i = 0 To 9
 		TempSounds[i] = 0
 	Next
@@ -8697,7 +8724,7 @@ Function LoadEntities()
 	tt\ImageID[12] = CreateImage(GraphicWidth, GraphicHeight)
 	
 	tt\IconID[0] = LoadImage_Strict("GFX\walk_icon.png")
-	tt\IconID[1]= LoadImage_Strict("GFX\sprint_icon.png")
+	tt\IconID[1] = LoadImage_Strict("GFX\sprint_icon.png")
 	tt\IconID[2] = LoadImage_Strict("GFX\crouch_icon.png")
 	tt\IconID[3] = LoadImage_Strict("GFX\blink_icon.png")
 	tt\IconID[4] = LoadImage_Strict("GFX\hand_symbol.png")
@@ -8708,8 +8735,8 @@ Function LoadEntities()
 	CameraFogFar = GetINIFloat(OptionFile, "Global", "Camera Fog Far")
 	StoredCameraFogFar = CameraFogFar
 	
-	AmbientLightRoomTex = CreateTexture(2, 2, 257)
-	TextureBlend(AmbientLightRoomTex, 5)
+	AmbientLightRoomTex = CreateTextureUsingCacheSystem(2, 2, 1)
+	TextureBlend(AmbientLightRoomTex, 3)
 	SetBuffer(TextureBuffer(AmbientLightRoomTex))
 	ClsColor(0, 0, 0)
 	Cls()
@@ -8725,13 +8752,13 @@ Function LoadEntities()
 	CameraFogRange(Camera, CameraFogNear, CameraFogFar)
 	AmbientLight(Brightness, Brightness, Brightness)
 	
-	ScreenTexs[0] = CreateTexture(512, 512, 1 + 256)
-	ScreenTexs[1] = CreateTexture(512, 512, 1 + 256)
+	ScreenTexs[0] = CreateTextureUsingCacheSystem(512, 512, 1)
+	ScreenTexs[1] = CreateTextureUsingCacheSystem(512, 512, 1)
 	
 	CreateBlurImage()
 	CameraProjMode(ArkBlurCam, 0)
 	
-	tt\OverlayTextureID[0] = LoadTexture_Strict("GFX\fog.png", 1) ; ~ FOG
+	tt\OverlayTextureID[0] = LoadTexture_Strict("GFX\fog.png", 1, 2) ; ~ FOG
 	tt\OverlayID[0] = CreateSprite(ArkBlurCam)
 	ScaleSprite(tt\OverlayID[0], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityTexture(tt\OverlayID[0], tt\OverlayTextureID[0])
@@ -8739,7 +8766,7 @@ Function LoadEntities()
 	EntityOrder(tt\OverlayID[0], -1000)
 	MoveEntity(tt\OverlayID[0], 0.0, 0.0, 1.0)
 	
-	tt\OverlayTextureID[1] = LoadTexture_Strict("GFX\gas_mask_overlay.png", 1) ; ~ GAS MASK
+	tt\OverlayTextureID[1] = LoadTexture_Strict("GFX\gas_mask_overlay.png", 1, 2) ; ~ GAS MASK
 	tt\OverlayID[1] = CreateSprite(ArkBlurCam)
 	ScaleSprite(tt\OverlayID[1], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityTexture(tt\OverlayID[1], tt\OverlayTextureID[1])
@@ -8748,7 +8775,7 @@ Function LoadEntities()
 	EntityOrder(tt\OverlayID[1], -1003)
 	MoveEntity(tt\OverlayID[1], 0.0, 0.0, 1.0)
 	
-	tt\OverlayTextureID[2] = LoadTexture_Strict("GFX\hazmat_suit_overlay.png", 1) ; ~ HAZMAT SUIT
+	tt\OverlayTextureID[2] = LoadTexture_Strict("GFX\hazmat_suit_overlay.png", 1, 2) ; ~ HAZMAT SUIT
 	tt\OverlayID[2] = CreateSprite(ArkBlurCam)
 	ScaleSprite(tt\OverlayID[2], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityTexture(tt\OverlayID[2], tt\OverlayTextureID[2])
@@ -8757,7 +8784,7 @@ Function LoadEntities()
 	EntityOrder(tt\OverlayID[2], -1003)
 	MoveEntity(tt\OverlayID[2], 0, 0, 1.0)
 	
-	tt\OverlayTextureID[3] = LoadTexture_Strict("GFX\scp_008_overlay.png", 1) ; ~ SCP-008
+	tt\OverlayTextureID[3] = LoadTexture_Strict("GFX\scp_008_overlay.png", 1, 2) ; ~ SCP-008
 	tt\OverlayID[3] = CreateSprite(ArkBlurCam)
 	ScaleSprite(tt\OverlayID[3], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityTexture(tt\OverlayID[3], tt\OverlayTextureID[3])
@@ -8766,7 +8793,7 @@ Function LoadEntities()
 	EntityOrder(tt\OverlayID[3], -1003)
 	MoveEntity(tt\OverlayID[3], 0.0, 0.0, 1.0)
 	
-	tt\OverlayTextureID[4] = LoadTexture_Strict("GFX\night_vision_goggles_overlay.png", 1) ; ~ NIGHT VISION GOGGLES
+	tt\OverlayTextureID[4] = LoadTexture_Strict("GFX\night_vision_goggles_overlay.png", 1, 2) ; ~ NIGHT VISION GOGGLES
 	tt\OverlayID[4] = CreateSprite(ArkBlurCam)
 	ScaleSprite(tt\OverlayID[4], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
@@ -8775,7 +8802,7 @@ Function LoadEntities()
 	EntityOrder(tt\OverlayID[4], -1003)
 	MoveEntity(tt\OverlayID[4], 0.0, 0.0, 1.0)
 	
-	tt\OverlayTextureID[5] = LoadTexture_Strict("GFX\fog_night_vision_goggles.png", 1) ; ~ FOG IN NIGHT VISION GOGGLES
+	tt\OverlayTextureID[5] = LoadTexture_Strict("GFX\fog_night_vision_goggles.png", 1, 2) ; ~ FOG IN NIGHT VISION GOGGLES
 	tt\OverlayID[5] = CreateSprite(ArkBlurCam)
 	ScaleSprite(tt\OverlayID[5], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityColor(tt\OverlayID[5], 0.0, 0.0, 0.0)
@@ -8789,7 +8816,7 @@ Function LoadEntities()
 	
 	DrawLoading(5)
 	
-	tt\OverlayTextureID[6] = CreateTexture(1024, 1024, 1 + 2) ; ~ DARK
+	tt\OverlayTextureID[6] = CreateTextureUsingCacheSystem(1024, 1024, 1 + 2) ; ~ DARK
 	SetBuffer(TextureBuffer(tt\OverlayTextureID[6]))
 	Cls()
 	SetBuffer(BackBuffer())
@@ -8801,7 +8828,7 @@ Function LoadEntities()
 	MoveEntity(tt\OverlayID[6], 0.0, 0.0, 1.0)
 	EntityAlpha(tt\OverlayID[6], 0.0)
 	
-	tt\OverlayTextureID[7] = CreateTexture(1024, 1024, 1 + 2 + 256) ; ~ LIGHT
+	tt\OverlayTextureID[7] = CreateTextureUsingCacheSystem(1024, 1024, 1 + 2) ; ~ LIGHT
 	SetBuffer(TextureBuffer(tt\OverlayTextureID[7]))
 	ClsColor(255, 255, 255)
 	Cls()
@@ -8814,7 +8841,7 @@ Function LoadEntities()
 	EntityOrder(tt\OverlayID[7], -1002)
 	MoveEntity(tt\OverlayID[7], 0.0, 0.0, 1.0)
 	
-	tt\OverlayTextureID[8] = LoadTexture_Strict("GFX\scp_409_overlay.png", 1) ; ~ SCP-409
+	tt\OverlayTextureID[8] = LoadTexture_Strict("GFX\scp_409_overlay.png", 1, 2) ; ~ SCP-409
 	tt\OverlayID[8] = CreateSprite(ArkBlurCam)
 	ScaleSprite(tt\OverlayID[8], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityTexture(tt\OverlayID[8], tt\OverlayTextureID[8])
@@ -8823,7 +8850,7 @@ Function LoadEntities()
 	EntityOrder(tt\OverlayID[8], -1001)
 	MoveEntity(tt\OverlayID[8], 0.0, 0.0, 1.0)
 	
-	tt\OverlayTextureID[9] = LoadTexture_Strict("GFX\helmet_overlay.png", 1) ; ~ HELMET
+	tt\OverlayTextureID[9] = LoadTexture_Strict("GFX\helmet_overlay.png", 1, 2) ; ~ HELMET
 	tt\OverlayID[9] = CreateSprite(ArkBlurCam)
 	ScaleSprite(tt\OverlayID[9], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityTexture(tt\OverlayID[9], tt\OverlayTextureID[9])
@@ -8832,7 +8859,7 @@ Function LoadEntities()
 	EntityOrder(tt\OverlayID[9], -1003)
 	MoveEntity(tt\OverlayID[9], 0.0, 0.0, 1.0)
 	
-	tt\OverlayTextureID[10] = LoadTexture_Strict("GFX\bloody_overlay.png", 1) ; ~ BLOOD
+	tt\OverlayTextureID[10] = LoadTexture_Strict("GFX\bloody_overlay.png", 1, 2) ; ~ BLOOD
 	tt\OverlayID[10] = CreateSprite(ArkBlurCam)
 	ScaleSprite(tt\OverlayID[10], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityTexture(tt\OverlayID[10], tt\OverlayTextureID[10])
@@ -8841,7 +8868,7 @@ Function LoadEntities()
 	EntityOrder(tt\OverlayID[10], -1003)
 	MoveEntity(tt\OverlayID[10], 0.0, 0.0, 1.0)
 	
-	tt\OverlayTextureID[11] = LoadTexture_Strict("GFX\fog_gas_mask.png", 1) ; ~ FOG IN GAS MASK
+	tt\OverlayTextureID[11] = LoadTexture_Strict("GFX\fog_gas_mask.png", 1, 2) ; ~ FOG IN GAS MASK
 	tt\OverlayID[11] = CreateSprite(ArkBlurCam)
 	ScaleSprite(tt\OverlayID[11], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
 	EntityTexture(tt\OverlayID[11], tt\OverlayTextureID[11])
@@ -8996,52 +9023,52 @@ Function LoadEntities()
 	o\MiscModelID[0] = LoadMesh_Strict("GFX\items\cup_liquid.b3d") ; ~ Liquid for cups dispensed by SCP-294
 	HideEntity(o\MiscModelID[0])
 	
-	tt\LightSpriteID[0] = LoadTexture_Strict("GFX\light.png", 1)
-	tt\LightSpriteID[1] = LoadTexture_Strict("GFX\light(2).png", 1)
-	tt\LightSpriteID[2] = LoadTexture_Strict("GFX\light_sprite.png", 1)
+	tt\LightSpriteID[0] = LoadTexture_Strict("GFX\light.png", 1, 2)
+	tt\LightSpriteID[1] = LoadTexture_Strict("GFX\light(2).png", 1, 2)
+	tt\LightSpriteID[2] = LoadTexture_Strict("GFX\light_sprite.png", 1, 2)
 	
 	DrawLoading(15)
 	
-	tt\MiscTextureID[0] = LoadTexture_Strict("GFX\scp_079_overlay.png")
+	tt\MiscTextureID[0] = LoadTexture_Strict("GFX\scp_079_overlay.png", 1, 2)
 	
 	For i = 1 To 6
-		tt\MiscTextureID[i] = LoadTexture_Strict("GFX\scp_079_overlay(" + (i + 1) + ").png")
+		tt\MiscTextureID[i] = LoadTexture_Strict("GFX\scp_079_overlay(" + (i + 1) + ").png", 1, 2)
 	Next
 	
-	tt\MiscTextureID[7] = LoadTexture_Strict("GFX\scp_895_overlay.png")
+	tt\MiscTextureID[7] = LoadTexture_Strict("GFX\scp_895_overlay.png", 1, 2)
 	
 	For i = 8 To 12
-		tt\MiscTextureID[i] = LoadTexture_Strict("GFX\scp_895_overlay(" + (i - 6) + ").png")
+		tt\MiscTextureID[i] = LoadTexture_Strict("GFX\scp_895_overlay(" + (i - 6) + ").png", 1, 2)
 	Next
 	
-	tt\MiscTextureID[13] = LoadTexture_Strict("GFX\map\tesla.png", 1 + 2)
+	tt\MiscTextureID[13] = LoadTexture_Strict("GFX\tesla_overlay.png", 1 + 2, 2)
 	
-	tt\MiscTextureID[16] = LoadTexture_Strict("GFX\map\keypad.jpg")
-	tt\MiscTextureID[17] = LoadTexture_Strict("GFX\map\keypad_locked.png")
+	tt\MiscTextureID[16] = LoadTexture_Strict("GFX\map\textures\keypad.jpg", 1, 2)
+	tt\MiscTextureID[17] = LoadTexture_Strict("GFX\map\textures\keypad_locked.png", 1, 2)
 	
 	DrawLoading(20)
 	
-	tt\DecalTextureID[0] = LoadTexture_Strict("GFX\decal.png", 1 + 2)
+	tt\DecalTextureID[0] = LoadTexture_Strict("GFX\decal.png", 1 + 2, 2)
 	For i = 1 To 7
-		tt\DecalTextureID[i] = LoadTexture_Strict("GFX\decal(" + (i + 1) + ").png", 1 + 2)
+		tt\DecalTextureID[i] = LoadTexture_Strict("GFX\decal(" + (i + 1) + ").png", 1 + 2, 2)
 	Next
 	
-	tt\DecalTextureID[8] = LoadTexture_Strict("GFX\decal_pd.png", 1 + 2)	
+	tt\DecalTextureID[8] = LoadTexture_Strict("GFX\decal_pd.png", 1 + 2, 2)	
 	For i = 9 To 12
-		tt\DecalTextureID[i] = LoadTexture_Strict("GFX\decal_pd(" + (i - 7) + ").png", 1 + 2)	
+		tt\DecalTextureID[i] = LoadTexture_Strict("GFX\decal_pd(" + (i - 7) + ").png", 1 + 2, 2)	
 	Next
 	
-	tt\DecalTextureID[13] = LoadTexture_Strict("GFX\bullet_hole.png", 1 + 2)	
-	tt\DecalTextureID[14] = LoadTexture_Strict("GFX\bullet_hole(2).png", 1 + 2)	
+	tt\DecalTextureID[13] = LoadTexture_Strict("GFX\bullet_hole.png", 1 + 2, 2)	
+	tt\DecalTextureID[14] = LoadTexture_Strict("GFX\bullet_hole(2).png", 1 + 2, 2)	
 	
-	tt\DecalTextureID[15] = LoadTexture_Strict("GFX\blood_drop.png", 1 + 2)
-	tt\DecalTextureID[16] = LoadTexture_Strict("GFX\blood_drop(2).png", 1 + 2)
+	tt\DecalTextureID[15] = LoadTexture_Strict("GFX\blood_drop.png", 1 + 2, 2)
+	tt\DecalTextureID[16] = LoadTexture_Strict("GFX\blood_drop(2).png", 1 + 2, 2)
 	
-	tt\DecalTextureID[17] = LoadTexture_Strict("GFX\decal_scp_427.png", 1 + 2)
+	tt\DecalTextureID[17] = LoadTexture_Strict("GFX\decal_scp_427.png", 1 + 2, 2)
 	
-	tt\DecalTextureID[18] = LoadTexture_Strict("GFX\decal_pd(6).png", 1 + 2)	
+	tt\DecalTextureID[18] = LoadTexture_Strict("GFX\decal_pd(6).png", 1 + 2, 2)	
 	
-	tt\DecalTextureID[19] = LoadTexture_Strict("GFX\decal_scp_409.png", 1 + 2)
+	tt\DecalTextureID[19] = LoadTexture_Strict("GFX\decal_scp_409.png", 1 + 2, 2)
 	
 	DrawLoading(25)
 	
@@ -9067,11 +9094,11 @@ Function LoadEntities()
         HideEntity(o\MonitorModelID[i])
     Next
 	
-	tt\MonitorTextureID[0] = LoadTexture_Strict("GFX\monitor_overlay.png")
-	tt\MonitorTextureID[1] = LoadTexture_Strict("GFX\map\lockdown_screen(2).png")
-	tt\MonitorTextureID[2] = LoadTexture_Strict("GFX\map\lockdown_screen.png")
-	tt\MonitorTextureID[3] = LoadTexture_Strict("GFX\map\lockdown_screen(3).png")
-	tt\MonitorTextureID[4] = CreateTexture(1, 1)
+	tt\MonitorTextureID[0] = LoadTexture_Strict("GFX\monitor_overlay.png", 1, 2)
+	tt\MonitorTextureID[1] = LoadTexture_Strict("GFX\map\textures\lockdown_screen(2).png", 1, 2)
+	tt\MonitorTextureID[2] = LoadTexture_Strict("GFX\map\textures\lockdown_screen.png", 1, 2)
+	tt\MonitorTextureID[3] = LoadTexture_Strict("GFX\map\textures\lockdown_screen(3).png", 1, 2)
+	tt\MonitorTextureID[4] = CreateTextureUsingCacheSystem(1, 1)
 	SetBuffer(TextureBuffer(tt\MonitorTextureID[4]))
 	ClsColor(0, 0, 0)
 	Cls()
@@ -9088,7 +9115,7 @@ Function LoadEntities()
 					BrushTexture(b, tt\MonitorTextureID[4], 0, 0)
 					PaintSurface(SF, b)
 				EndIf
-				If Name <> "" Then FreeTexture(t1)
+				If Name <> "" Then DeleteSingleTextureEntryFromCache(t1)
 			EndIf
 			FreeBrush(b)
 		EndIf
@@ -9104,7 +9131,7 @@ Function LoadEntities()
 					BrushTexture(b, tt\MonitorTextureID[4], 0, 0)
 					PaintSurface(SF, b)
 				EndIf
-				If Name <> "" Then FreeTexture(t1)
+				If Name <> "" Then DeleteSingleTextureEntryFromCache(t1)
 			EndIf
 			FreeBrush(b)
 		EndIf
@@ -9137,15 +9164,15 @@ Function LoadEntities()
 	
 	InitItemTemplates()
 	
-	tt\ParticleTextureID[0] = LoadTexture_Strict("GFX\smoke.png", 1 + 2)
-	tt\ParticleTextureID[1] = LoadTexture_Strict("GFX\flash.png", 1 + 2)
-	tt\ParticleTextureID[2] = LoadTexture_Strict("GFX\dust.png", 1 + 2)
-	tt\ParticleTextureID[3] = LoadTexture_Strict("GFX\npcs\hg.pt", 1 + 2)
-	tt\ParticleTextureID[4] = LoadTexture_Strict("GFX\map\sun.png", 1 + 2)
-	tt\ParticleTextureID[5] = LoadTexture_Strict("GFX\blood_sprite.png", 1 + 2)
-	tt\ParticleTextureID[6] = LoadTexture_Strict("GFX\smoke(2).png", 1 + 2)
-	tt\ParticleTextureID[7] = LoadTexture_Strict("GFX\spark.png", 1 + 2)
-	tt\ParticleTextureID[8] = LoadTexture_Strict("GFX\particle.png", 1 + 2)
+	tt\ParticleTextureID[0] = LoadTexture_Strict("GFX\smoke.png", 1 + 2, 2)
+	tt\ParticleTextureID[1] = LoadTexture_Strict("GFX\flash.png", 1 + 2, 2)
+	tt\ParticleTextureID[2] = LoadTexture_Strict("GFX\dust.png", 1 + 2, 2)
+	tt\ParticleTextureID[3] = LoadTexture_Strict("GFX\npcs\hg.pt", 1 + 2, 2)
+	tt\ParticleTextureID[4] = LoadTexture_Strict("GFX\map\textures\sun.png", 1 + 2, 2)
+	tt\ParticleTextureID[5] = LoadTexture_Strict("GFX\blood_sprite.png", 1 + 2, 2)
+	tt\ParticleTextureID[6] = LoadTexture_Strict("GFX\smoke(2).png", 1 + 2, 2)
+	tt\ParticleTextureID[7] = LoadTexture_Strict("GFX\spark.png", 1 + 2, 2)
+	tt\ParticleTextureID[8] = LoadTexture_Strict("GFX\particle.png", 1 + 2, 2)
 	
 	SetChunkDataValues()
 	
@@ -9158,84 +9185,84 @@ Function LoadEntities()
 	; ~ Gonzales
 	Tex = LoadTexture_Strict("GFX\npcs\Gonzales.png")
 	EntityTexture(DTextures[0], Tex)
-	FreeTexture(Tex)
+	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ SCP-970's corpse
 	Tex = LoadTexture_Strict("GFX\npcs\D_9341(2).png")
 	EntityTexture(DTextures[1], Tex)
-	FreeTexture(Tex)
+	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ Scientist
 	Tex = LoadTexture_Strict("GFX\npcs\scientist.png")
 	EntityTexture(DTextures[2], Tex)
-	FreeTexture(Tex)
+	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ Franklin
 	Tex = LoadTexture_Strict("GFX\npcs\Franklin.png")
 	EntityTexture(DTextures[3], Tex)
-	FreeTexture(Tex)
+	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ Janitor # 1
 	Tex = LoadTexture_Strict("GFX\npcs\janitor.png")
 	EntityTexture(DTextures[4], Tex)
-	FreeTexture(Tex)
+	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ Maynard
 	Tex = LoadTexture_Strict("GFX\npcs\Maynard.png")
 	EntityTexture(DTextures[5], Tex)
-	FreeTexture(Tex)
+	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ Afro-American Class-D
 	Tex = LoadTexture_Strict("GFX\npcs\class_d(2).png")
 	EntityTexture(DTextures[6], Tex)
-	FreeTexture(Tex)
+	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ 035 victim
 	Tex = LoadTexture_Strict("GFX\npcs\scp_035_victim.png")
 	EntityTexture(DTextures[7], Tex)
-	FreeTexture(Tex)
+	DeleteSingleTextureEntryFromCache(Tex)
 	
 	If IntroEnabled Then
 		; ~ D-9341
 		Tex = LoadTexture_Strict("GFX\npcs\D_9341.png")
 		EntityTexture(DTextures[8], Tex)
-		FreeTexture(Tex)
+		DeleteSingleTextureEntryFromCache(Tex)
 	EndIf
 	
 	; ~ Body # 1
 	Tex = LoadTexture_Strict("GFX\npcs\body.png")
 	EntityTexture(DTextures[9], Tex)
-	FreeTexture(Tex)
+	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ Body # 2
 	Tex = LoadTexture_Strict("GFX\npcs\body(2).png")
 	EntityTexture(DTextures[10], Tex)
-	FreeTexture(Tex)
+	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ Janitor # 2
 	Tex = LoadTexture_Strict("GFX\npcs\janitor(2).png")
 	EntityTexture(DTextures[11], Tex)
-	FreeTexture(Tex)
+	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ SCP-008-1's victim
 	Tex = LoadTexture_Strict("GFX\npcs\scp_008_1_victim.png")
 	EntityTexture(DTextures[12], Tex)
-	FreeTexture(Tex)
+	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ SCP-409's victim
 	Tex = LoadTexture_Strict("GFX\npcs\body(3).png")
 	EntityTexture(DTextures[13], Tex)
-	FreeTexture(Tex)
+	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ SCP-939's victim # 2
 	Tex = LoadTexture_Strict("GFX\npcs\scp_939_victim.png")
 	EntityTexture(DTextures[14], Tex)
-	FreeTexture(Tex)
+	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ SCP-939's victim # 1
 	Tex = LoadTexture_Strict("GFX\npcs\scp_939_victim(2).png")
 	EntityTexture(DTextures[15], Tex)
-	FreeTexture(Tex)
+	DeleteSingleTextureEntryFromCache(Tex)
 	
 	LoadMaterials(MaterialsFile)
 	
@@ -9294,8 +9321,6 @@ Function InitNewGame()
 		LoadMap("Map Creator\Maps\" + SelectedMap)
 	EndIf
 	InitWayPoints()
-	
-	ClearConsole()
 	
 	DrawLoading(79)
 	
@@ -9427,7 +9452,7 @@ Function InitNewGame()
 		EndIf
 	Next
 	
-	FreeTextureCache()
+	DeleteTextureEntriesFromCache(0)
 	DrawLoading(100)
 	
 	FlushKeys()
@@ -9464,8 +9489,6 @@ Function InitLoadGame()
 	
 	ResetEntity(me\Collider)
 	
-	ClearConsole()
-	
 	DrawLoading(90)
 	
 	MoveMouse(Viewport_Center_X, Viewport_Center_Y)
@@ -9491,7 +9514,7 @@ Function InitLoadGame()
 				Local PlaneTex% = LoadTexture_Strict("GFX\map\dimension1499\grit3.jpg")
 				
 				EntityTexture(e\room\Objects[0], PlaneTex)
-				FreeTexture(PlaneTex)
+				DeleteSingleTextureEntryFromCache(PlaneTex)
 				PositionEntity(e\room\Objects[0], 0.0, EntityY(e\room\OBJ), 0.0)
 				EntityType(e\room\Objects[0], HIT_MAP)
 				DrawLoading(92)
@@ -9520,7 +9543,7 @@ Function InitLoadGame()
 		EndIf
 	Next
 	
-	FreeTextureCache()
+	DeleteTextureEntriesFromCache(0)
 	
 	CatchErrors("InitLoadGame")
 	
@@ -9541,7 +9564,7 @@ Function NullGame(PlayButtonSFX% = True)
 	KillSounds()
 	If PlayButtonSFX Then PlaySound_Strict(ButtonSFX)
 	
-	ClearTextureCache()
+	DeleteTextureEntriesFromCache(2)
 	
 	UnableToMove = False
 	
@@ -11914,9 +11937,7 @@ Function RenderWorld2(Tween#)
 	ElseIf wi\NightVision = 3
 		AmbientLight(255.0, 255.0, 255.0)
 	ElseIf PlayerRoom <> Null
-		If (PlayerRoom\RoomTemplate\Name <> "room173intro") And (PlayerRoom\RoomTemplate\Name <> "gateb" And EntityY(me\Collider) =< 1040.0 * RoomScale) And (PlayerRoom\RoomTemplate\Name <> "gatea") Then
-			AmbientLight(Brightness, Brightness, Brightness)
-		EndIf
+		AmbientLight(Brightness, Brightness, Brightness)
 	EndIf
 	
 	wi\IsNVGBlinking = False
@@ -12450,5 +12471,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#108D#1326#1E31
+;~B#108F#1328#1E33
 ;~C#Blitz3D

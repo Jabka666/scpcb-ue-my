@@ -178,29 +178,13 @@ End Function
 Function LoadRMesh(File$, rt.RoomTemplates)
 	CatchErrors("Uncaught (LoadRMesh)")
 	
-	; ~ Generate a texture made of white
-	Local BlankTexture%, BumpTex%
+	Local mat.Materials
 	
-	BlankTexture = CreateTexture(4, 4, 1, 1)
-	ClsColor(255, 255, 255)
-	SetBuffer(TextureBuffer(BlankTexture))
-	Cls()
-	SetBuffer(BackBuffer())
-	
-	Local PinkTexture%
-	
-	PinkTexture = CreateTexture(4, 4, 1, 1)
-	ClsColor(255, 255, 255)
-	SetBuffer(TextureBuffer(PinkTexture))
-	Cls()
-	SetBuffer(BackBuffer())
-	
-	ClsColor(0, 0, 0) 
+	ClsColor(0, 0, 0)
 	
 	; ~ Read the file
 	Local f% = ReadFile(File)
-	Local i%, j%, k%, x#, y#, z#
-	Local Yaw#, Pitch#, Roll#
+	Local i%, j%, k%, x#, y#, z#, Yaw#, Pitch#, Roll#
 	Local Vertex%
 	Local Temp1i%, Temp2i%, Temp3i%
 	Local Temp1#, Temp2#, Temp3#
@@ -220,7 +204,7 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 	Local IsRMesh$ = ReadString(f)
 	
 	If IsRMesh = "RoomMesh"
-		;~ Continue
+		; ~ Continue
 	ElseIf IsRMesh = "RoomMesh.HasTriggerBox"
 		HasTriggerBox = True
 	Else
@@ -230,18 +214,19 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 	File = StripFilename(File)
 	
 	Local Count%, Count2%
+	
 	; ~ Drawn meshes
 	Local Opaque%, Alpha%
 	
 	Opaque = CreateMesh()
 	Alpha = CreateMesh()
 	
-	Count = ReadInt(f)
-	
 	Local ChildMesh%
 	Local Surf%, Tex%[2], Brush%
 	Local IsAlpha%
 	Local u#, v#
+	
+	Count = ReadInt(f)
 	
 	For i = 1 To Count ; ~ Drawn mesh
 		ChildMesh = CreateMesh()
@@ -253,35 +238,31 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 		Tex[0] = 0 : Tex[1] = 0
 		
 		IsAlpha = 0
+		
 		For j = 0 To 1
 			Temp1i = ReadByte(f)
 			If Temp1i <> 0 Then
 				Temp1s = ReadString(f)
-				Tex[j] = GetTextureFromCache(Temp1s)
-				If Tex[j] = 0 Then ; ~ Texture is not in cache
-					Select True
-						Case Temp1i < 3
-							;[Block]
-							Tex[j] = LoadTexture(File + Temp1s, 1)
-							;[End Block]
-						Default
-							;[Block]
-							Tex[j] = LoadTexture(File + Temp1s, 3)
-							;[End Block]
-					End Select
-					
-					If Tex[j] <> 0 Then
-						If Temp1i = 1 Then TextureBlend(Tex[j], 5)
-						If Instr(Lower(Temp1s), "_lm") <> 0 Then
-							TextureBlend(Tex[j], 3)
-						EndIf
-						AddTextureToCache(Tex[j])
+				If FileType(File + Temp1s) = 1 ; ~ Check if texture is existing in original path
+					If Temp1i < 3 Then
+						Tex[j] = LoadTextureCheckingIfInCache(File + Temp1s, 0, 1)
+					Else
+						Tex[j] = LoadTextureCheckingIfInCache(File + Temp1s, 0, 3)
+					EndIf
+				ElseIf FileType(MapTexturesFolder + Temp1s) = 1 ; ~ If not, check the MapTexturesFolder
+					If Temp1i < 3 Then
+						Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 0, 1)
+					Else
+						Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 0, 3)
 					EndIf
 				EndIf
-				If Tex[j] <> 0 Then
+				If Tex[j] <> 0
+					If Temp1i = 1 Then TextureBlend(Tex[j], 5)
+					If Instr(Lower(Temp1s), "_lm") <> 0
+						TextureBlend(Tex[j], 2)
+					EndIf
 					IsAlpha = 2
 					If Temp1i = 3 Then IsAlpha = 1
-					
 					TextureCoords(Tex[j], 1 - j)
 				EndIf
 			EndIf
@@ -292,27 +273,69 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 				TextureBlend(Tex[1], 2)
 				BrushTexture(Brush, Tex[1], 0, 0)
 			Else
-				BrushTexture(Brush, BlankTexture, 0, 0)
+				BrushTexture(Brush, MissingTexture, 0, 0)
 			EndIf
 		Else
+			Local BumpTex% = 0
+			
 			If Tex[0] <> 0 And Tex[1] <> 0 Then
-				BumpTex = GetBumpFromCache(StripPath(TextureName(Tex[1])))
-				For j = 0 To 1
-					BrushTexture(Brush, Tex[j], 0, j + 1 + (BumpTex <> 0))
-				Next
-				
-				BrushTexture(Brush, AmbientLightRoomTex, 0)
-				If BumpTex <> 0 Then
+				If BumpEnabled Then
+					Local Temp$ = StripPath(TextureName(Tex[1]))
+					
+					For mat.Materials = Each Materials
+						If mat\Name = Temp Then
+							BumpTex = mat\Bump
+							Exit
+						EndIf
+					Next
+				Else
+					BumpTex = 0
+				EndIf
+				If BumpTex = 0
+					For j = 0 To 1
+						BrushTexture(Brush, Tex[j], 0, j + 1)
+					Next
+				Else
+					TextureCoords(BumpTex, 0)
+					For j = 0 To 1
+						BrushTexture(Brush, Tex[j], 0, j + 2)
+					Next
 					BrushTexture(Brush, BumpTex, 0, 1)
 				EndIf
+				BrushTexture(Brush, AmbientLightRoomTex, 0)
 			Else
-				For j = 0 To 1
-					If Tex[j] <> 0 Then
-						BrushTexture(Brush, Tex[j], 0, j)
-					Else
-						BrushTexture(Brush, BlankTexture, 0, j)
+				If BumpEnabled Then
+					If Tex[1] <> 0 Then
+						Temp = StripPath(TextureName(Tex[1]))
+						For mat.Materials = Each Materials
+							If mat\Name = Temp Then
+								BumpTex = mat\Bump
+								Exit
+							EndIf
+						Next
 					EndIf
-				Next
+				Else
+					BumpTex = 0
+				EndIf
+				If BumpTex = 0
+					For j = 0 To 1
+						If Tex[j] <> 0 Then
+							BrushTexture(Brush, Tex[j], 0, j)
+						Else
+							BrushTexture(Brush, MissingTexture, 0, j)
+						EndIf
+					Next
+				Else
+					TextureCoords(BumpTex, 0)
+					For j = 0 To 1
+						If Tex[j] <> 0 Then
+							BrushTexture(Brush, Tex[j], 0, j + 1)
+						Else
+							BrushTexture(Brush, MissingTexture, 0, j + 1)
+						EndIf
+					Next
+					BrushTexture(Brush, BumpTex, 0, 0)
+				EndIf
 			EndIf
 		EndIf
 		
@@ -325,8 +348,9 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 		Count2 = ReadInt(f) ; ~ Vertices
 		
 		For j = 1 To Count2
-			; ~ World coordinatess
+			; ~ World coords
 			x = ReadFloat(f) : y = ReadFloat(f) : z = ReadFloat(f)
+			
 			Vertex = AddVertex(Surf, x, y, z)
 			
 			; ~ Texture coords
@@ -363,7 +387,7 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 			
 			FlipMesh(FlipChild)
 			AddMesh(FlipChild, ChildMesh)
-			FreeEntity(FlipChild)			
+			FreeEntity(FlipChild)
 		EndIf
 	Next
 	
@@ -376,7 +400,7 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 		Surf = CreateSurface(HiddenMesh)
 		Count2 = ReadInt(f) ; ~ Vertices
 		For j = 1 To Count2
-			; ~ World coordinates
+			; ~ World coords
 			x = ReadFloat(f) : y = ReadFloat(f) : z = ReadFloat(f)
 			Vertex = AddVertex(Surf, x, y, z)
 		Next
@@ -390,10 +414,11 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 	Next
 	
 	; ~ Trigger boxes
-	If HasTriggerBox
+	If HasTriggerBox Then
+		rt\TempTriggerBoxAmount = ReadInt(f)
+		
 		Local TB%
 		
-		rt\TempTriggerBoxAmount = ReadInt(f)
 		For TB = 0 To rt\TempTriggerBoxAmount - 1
 			rt\TempTriggerBox[TB] = CreateMesh(rt\OBJ)
 			Count = ReadInt(f)
@@ -415,10 +440,12 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 		Next
 	EndIf
 	
-	Local Range#, lColor$, Intensity#, Angles$
-	Local R%, G%, B%
-	
 	Count = ReadInt(f) ; ~ Point entities
+	
+	Local Range#, lColor$, Intensity#
+	Local R%, G%, B%
+	Local Angles$
+	
 	For i = 1 To Count
 		Temp1s = ReadString(f)
 		Select Temp1s
@@ -501,21 +528,22 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 				EndIf
 				;[End Block]
 			Case "soundemitter"
-				;[Block]
 				Temp1i = 0
-				
-				For j = 0 To MaxRoomEmitters - 1
-					If rt\TempSoundEmitter[j] = 0 Then
-						rt\TempSoundEmitterX[j] = ReadFloat(f) * RoomScale
-						rt\TempSoundEmitterY[j] = ReadFloat(f) * RoomScale
-						rt\TempSoundEmitterZ[j] = ReadFloat(f) * RoomScale
-						rt\TempSoundEmitter[j] = ReadInt(f)
-						
-						rt\TempSoundEmitterRange[j] = ReadFloat(f)
-						Temp1i = 1
-						Exit
-					EndIf
-				Next
+				;[Block]
+				If rt <> Null Then
+					For j = 0 To MaxRoomEmitters - 1
+						If rt\TempSoundEmitter[j] = 0 Then
+							rt\TempSoundEmitterX[j] = ReadFloat(f) * RoomScale
+							rt\TempSoundEmitterY[j] = ReadFloat(f) * RoomScale
+							rt\TempSoundEmitterZ[j] = ReadFloat(f) * RoomScale
+							rt\TempSoundEmitter[j] = ReadInt(f)
+							
+							rt\TempSoundEmitterRange[j] = ReadFloat(f)
+							Temp1i = 1
+							Exit
+						EndIf
+					Next
+				EndIf
 				
 				If Temp1i = 0 Then
 					ReadFloat(f)
@@ -537,8 +565,9 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 			Case "model"
 				;[Block]
 				File = ReadString(f)
-				If File <> ""
-					Local Model% = CreatePropObj("GFX\Map\Props\" + File)
+				If File <> "" Then
+					If Right(File, 1) = "x" Then File = Left(File, Len(File) - 1) + "b3d"
+					Local Model% = CreatePropOBJ("GFX\Map\Props\" + File)
 					
 					Temp1 = ReadFloat(f) : Temp2 = ReadFloat(f) : Temp3 = ReadFloat(f)
 					PositionEntity(Model, Temp1, Temp2, Temp3)
@@ -573,10 +602,9 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 	EntityFX(Opaque, 3)
 	
 	EntityAlpha(HiddenMesh, 0.0)
-	EntityAlpha(Opaque, 1.0)
-	
 	EntityType(HiddenMesh, HIT_MAP)
-	FreeTexture(BlankTexture)
+	
+	EntityAlpha(Opaque, 1.0)
 	
 	OBJ = CreatePivot()
 	CreatePivot(OBJ) ; ~ Skip "meshes" object
@@ -588,9 +616,9 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 	
 	CloseFile(f)
 	
-	CatchErrors("LoadRMesh")
-	
 	Return(OBJ)
+	
+	CatchErrors("LoadRMesh")
 End Function
 
 Function StripPath$(File$) 
@@ -857,8 +885,8 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 	
 	; ~ Load assets
 	Local hMap%[5], Mask%[5]
-	Local GroundTexture% = LoadTexture_Strict("GFX\map\forest\forestfloor.jpg")
-	Local PathTexture% = LoadTexture_Strict("GFX\map\forest\forestpath.jpg")
+	Local GroundTexture% = LoadTexture_Strict("GFX\map\textures\forestfloor.jpg")
+	Local PathTexture% = LoadTexture_Strict("GFX\map\textures\forestpath.jpg")
 	
 	hMap[ROOM1] = LoadImage_Strict("GFX\map\forest\forest1h.png")
 	Mask[ROOM1] = LoadTexture_Strict("GFX\map\forest\forest1h_mask.png", 1 + 2)
@@ -919,6 +947,8 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 							Angle = 270.0
 						ElseIf fr\Grid[(tY * GridSize) + tX + 1] > 0
 							Angle = 90.0
+						Else
+							Angle = 0.0
 						EndIf
 						
 						Tile_Type = ROOM1 + 1
@@ -956,6 +986,8 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 							Angle = 90.0
 						ElseIf fr\Grid[(tY * GridSize) + tX + 1] = 0
 							Angle = 270.0
+						Else
+							Angle = 0.0
 						EndIf
 						
 						Tile_Type = ROOM3 + 1
@@ -1097,8 +1129,8 @@ Function PlaceForest_MapCreator(fr.Forest, x#, y#, z#, r.Rooms)
 	
 	Local hMap%[5], Mask%[5]
 	; ~ Load assets
-	Local GroundTexture% = LoadTexture_Strict("GFX\map\forest\forestfloor.jpg")
-	Local PathTexture% = LoadTexture_Strict("GFX\map\forest\forestpath.jpg")
+	Local GroundTexture% = LoadTexture_Strict("GFX\map\textures\forestfloor.jpg")
+	Local PathTexture% = LoadTexture_Strict("GFX\map\textures\forestpath.jpg")
 	
 	hMap[ROOM1] = LoadImage_Strict("GFX\map\forest\forest1h.png")
 	Mask[ROOM1] = LoadTexture_Strict("GFX\map\forest\forest1h_mask.png", 1 + 2)
@@ -2238,7 +2270,7 @@ Function FillRoom(r.Rooms)
 			EntityFX(r\Objects[3], 1)
 			
 			If MapTemp(Floor(r\x / 8.0), Floor(r\z / 8.0) - 1) = 0 Then
-				d = CreateDoor(r\Zone, r\x, r\y, r\z  - 4.0, 0.0, r, False, 2, False, "GEAR")
+				d = CreateDoor(r\Zone, r\x, r\y, r\z - 4.0, 0.0, r, False, 2, False, "GEAR")
 				d\AutoClose = False : d\Locked = True : d\DisableWayPoint = True : d\MTFClose = False
 				FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			EndIf
@@ -2278,7 +2310,7 @@ Function FillRoom(r.Rooms)
 			EntityFX(r\Objects[3], 1)
 			
 			If MapTemp(Floor(r\x / 8.0), Floor(r\z / 8.0) - 1) = 0 Then
-				d = CreateDoor(r\Zone, r\x, r\y, r\z  - 4.0, 0.0, r, False, False, False, "GEAR")
+				d = CreateDoor(r\Zone, r\x, r\y, r\z - 4.0, 0.0, r, False, False, False, "GEAR")
 				d\AutoClose = False : d\Locked = True : d\DisableWayPoint = True : d\MTFClose = False
 				FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			EndIf
@@ -2291,7 +2323,6 @@ Function FillRoom(r.Rooms)
 				For zTemp = -1 To 1
 					em = CreateEmitter(r\x + 202.0 * RoomScale * xTemp, 8.0 * RoomScale, r\z + 256.0 * RoomScale * zTemp, 0)
 					em\RandAngle = 30.0 : em\Speed = 0.0045 : em\SizeChange = 0.007 : em\Achange = -0.016
-					r\Objects[i] = em\OBJ
 					If i < 3 Then 
 						TurnEntity(em\OBJ, 0.0, -90.0, 0.0) 
 					Else 
@@ -2303,13 +2334,13 @@ Function FillRoom(r.Rooms)
 				Next
 			Next
 			
-			r\Objects[6] = CreatePivot()
-			PositionEntity(r\Objects[6], r\x + 640.0 * RoomScale, r\y + 8.0 * RoomScale, r\z - 896.0 * RoomScale)
+			r\Objects[0] = CreatePivot()
+			PositionEntity(r\Objects[0], r\x + 640.0 * RoomScale, r\y + 8.0 * RoomScale, r\z - 896.0 * RoomScale)
 			
-			r\Objects[7] = CreatePivot()
-			PositionEntity(r\Objects[7], r\x - 864.0 * RoomScale, r\y - 400.0 * RoomScale, r\z - 632.0 * RoomScale)
+			r\Objects[1] = CreatePivot()
+			PositionEntity(r\Objects[1], r\x - 864.0 * RoomScale, r\y - 400.0 * RoomScale, r\z - 632.0 * RoomScale)
 			
-			For i = 6 To 7
+			For i = 0 To 1
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			;[End Block]
@@ -2330,7 +2361,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\Objects[1], r\x - 669.0 * RoomScale, r\y + 0.5, r\z - 16.0 * RoomScale)
 			
 			; ~ Glass panel
-			GlassTex = LoadTexture_Strict("GFX\map\glass.png", 1 + 2)
+			GlassTex = LoadTexture_Strict("GFX\map\textures\glass.png", 1 + 2)
 			r\Objects[2] = CreateSprite()
 			EntityTexture(r\Objects[2], GlassTex)
 			SpriteViewMode(r\Objects[2], 2)
@@ -2338,7 +2369,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\Objects[2], r\x - 632.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 208.0 * RoomScale)
 			TurnEntity(r\Objects[2], 0.0, 180.0, 0.0)			
 			HideEntity(r\Objects[2])
-			FreeTexture(GlassTex)
+			DeleteSingleTextureEntryFromCache(GlassTex)
 			
 			For i = 0 To 2
 				EntityParent(r\Objects[i], r\OBJ)
@@ -2501,7 +2532,7 @@ Function FillRoom(r.Rooms)
 			it = CreateItem("Incident Report SCP-106-0204", "paper", r\x + 704.0 * RoomScale, r\y + 183.0 * RoomScale, r\z - 576.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it = CreateItem("Journal Page", "paper", r\x + 912 * RoomScale, r\y + 176.0 * RoomScale, r\z - 160.0 * RoomScale)
+			it = CreateItem("Journal Page", "paper", r\x + 912.0 * RoomScale, r\y + 176.0 * RoomScale, r\z - 160.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it = CreateItem("First Aid Kit", "firstaid", r\x + 912.0 * RoomScale, r\y + 112.0 * RoomScale, r\z - 336.0 * RoomScale)
@@ -2521,7 +2552,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) - 0.061, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)			
 			
 			r\RoomDoors[0] = CreateDoor(r\Zone, r\x - 432.0 * RoomScale, r\y, r\z, 90.0, r, False, False, False, "1234")
-			r\RoomDoors[0]\AutoClose = False : r\RoomDoors[0]\Locked = True	: r\RoomDoors[0]\MTFClose = False : r\RoomDoors[0]\DisableWayPoint = True
+			r\RoomDoors[0]\AutoClose = False : r\RoomDoors[0]\MTFClose = False : r\RoomDoors[0]\DisableWayPoint = True
 			PositionEntity(r\RoomDoors[0]\Buttons[0], EntityX(r\RoomDoors[0]\Buttons[0], True) - 0.061, EntityY(r\RoomDoors[0]\Buttons[0], True), EntityZ(r\RoomDoors[0]\buttons[0], True), True)
 			FreeEntity(r\RoomDoors[0]\Buttons[1]) : r\RoomDoors[0]\Buttons[1] = 0
 			
@@ -2744,14 +2775,14 @@ Function FillRoom(r.Rooms)
 			
 			r\Levers[0] = r\Objects[1]
 			
-			GlassTex = LoadTexture_Strict("GFX\map\glass.png", 1 + 2)
+			GlassTex = LoadTexture_Strict("GFX\map\textures\glass.png", 1 + 2)
 			r\Objects[2] = CreateSprite()
 			EntityTexture(r\Objects[2], GlassTex)
 			SpriteViewMode(r\Objects[2], 2)
 			ScaleSprite(r\Objects[2], 256.0 * RoomScale * 0.5, 194.0 * RoomScale * 0.5)
 			PositionEntity(r\Objects[2], r\x - 176.0 * RoomScale, r\y - 4881.0 * RoomScale, r\z + 448.0 * RoomScale)
 			TurnEntity(r\Objects[2], 0, 90, 0)			
-        	FreeTexture(GlassTex)
+        	DeleteSingleTextureEntryFromCache(GlassTex)
 			
 			; ~ SCP-173's spawnpoint
 			r\Objects[3] = CreatePivot()
@@ -3307,9 +3338,9 @@ Function FillRoom(r.Rooms)
 			Next
 			
 			r\Objects[4] = LoadMesh_Strict("GFX\map\room012_3.b3d")
-			Tex = LoadTexture_Strict("GFX\map\scp-012_0.png")
+			Tex = LoadTexture_Strict("GFX\map\textures\scp-012_0.png")
 			EntityTexture(r\Objects[4], Tex, 0, 1)
-			FreeTexture(Tex)
+			DeleteSingleTextureEntryFromCache(Tex)
 			ScaleEntity(r\Objects[4], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[4], r\x - 360.0 * RoomScale, r\y - 130.0 * RoomScale, r\z + 456.0 * RoomScale)
 			EntityParent(r\Objects[4], r\Objects[2])
@@ -4204,7 +4235,7 @@ Function FillRoom(r.Rooms)
 			r\RoomDoors[4] = CreateDoor(r\Zone, r\x - 4352.0 * RoomScale, r\y, r\z - 1248.0 * RoomScale, 90.0, r, True)
 			r\RoomDoors[4]\AutoClose = False : r\RoomDoors[4]\Locked = True : r\RoomDoors[4]\MTFClose = False	
 			
-			Tex = LoadTexture_Strict("GFX\map\Door02.jpg")
+			Tex = LoadTexture_Strict("GFX\map\textures\Door02.jpg")
 			For zTemp = 0 To 1
 				d = CreateDoor(r\Zone, r\x - 5760.0 * RoomScale, r\y, r\z + (320.0 + 896.0 * zTemp) * RoomScale, 0.0, r)
 				d\Locked = True : d\DisableWaypoint = True
@@ -4289,12 +4320,16 @@ Function FillRoom(r.Rooms)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
-			r\Objects[9] = LoadMesh_Strict("GFX\map\173_2.b3d", r\OBJ)
+			r\Objects[9] = LoadRMesh("GFX\map\173_2_opt.rmesh", Null)
 			EntityType(r\Objects[9], HIT_MAP)
 			EntityPickMode(r\Objects[9], 2)
 			
-			r\Objects[10] = LoadMesh_Strict("GFX\map\intro_labels.b3d", r\OBJ)
-			PositionEntity(r\Objects[10], EntityX(r\Objects[10], True), EntityY(r\Objects[10], True) - 10.0 * RoomScale, EntityZ(r\Objects[10], True), True)
+			r\Objects[10] = LoadRMesh("GFX\map\intro_labels_opt.rmesh", Null)
+			PositionEntity(r\Objects[10], EntityX(r\Objects[10], True), EntityY(r\Objects[10], True) - 10.0 * RoomScale, EntityZ(r\Objects[10], True))
+			
+			For i = 9 To 10
+				EntityParent(r\Objects[i], r\OBJ)
+			Next
 			
 			For i = 0 To 4
 			    Select i
@@ -4772,15 +4807,15 @@ Function FillRoom(r.Rooms)
 			r\RoomDoors[1]\AutoClose = False
 			
 			Local Entity%
-			Local Hallway% = LoadMesh_Strict("GFX\map\pocketdimension2.b3d") ; ~ The tunnels in the first room
+			Local Hallway% = LoadRMesh("GFX\map\pocketdimension2_opt.rmesh", Null) ; ~ The tunnels in the first room
 			
-			r\Objects[8] = LoadMesh_Strict("GFX\map\pocketdimension3.b3d")	; ~ The room with the throne, moving pillars etc 
+			r\Objects[8] = LoadRMesh("GFX\map\pocketdimension3_opt.rmesh", Null) ; ~ The room with the throne, moving pillars etc 
 			
-			r\Objects[9] = LoadMesh_Strict("GFX\map\pocketdimension4.b3d") ; ~ The flying pillar
+			r\Objects[9] = LoadRMesh("GFX\map\pocketdimension4_opt.rmesh", Null) ; ~ The flying pillar
 			
 			r\Objects[10] = CopyEntity(r\Objects[9])
 			
-			r\Objects[11] = LoadMesh_Strict("GFX\map\pocketdimension5.b3d") ; ~ The pillar room
+			r\Objects[11] = LoadRMesh("GFX\map\pocketdimension5_opt.rmesh", Null) ; ~ The pillar room
 			
 			Local Terrain% = LoadMesh_Strict("GFX\map\pocketdimensionterrain.b3d")
 			
@@ -4885,7 +4920,7 @@ Function FillRoom(r.Rooms)
 			EntityBlend(r\Objects[17], 3)
 			EntityFX(r\Objects[17], 1 + 8)
 			SpriteViewMode(r\Objects[17], 2)
-			FreeTexture(OldManEyesTex)
+			DeleteSingleTextureEntryFromCache(OldManEyesTex)
 			
 			r\Objects[18] = LoadTexture_Strict("GFX\npcs\pd_plane.png", 1 + 2)
 			
@@ -5042,7 +5077,7 @@ Function FillRoom(r.Rooms)
 			r\RoomDoors[0] = CreateDoor(r\Zone, r\x + 288.0 * RoomScale, r\y, r\z + 576.0 * RoomScale, 90.0, r, False, False, 3)
 			r\RoomDoors[0]\Locked = True
 			
-			d = CreateDoor(r\Zone, r\x + 777.0 * RoomScale, r\y, r\z + 671.0 * RoomScale, 90.0, r, False, False, 4)
+			d = CreateDoor(r\Zone, r\x + 778.5 * RoomScale, r\y, r\z + 671.0 * RoomScale, 90.0, r, False, False, 4)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.02, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.02, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			
@@ -5571,7 +5606,7 @@ Function FillRoom(r.Rooms)
 			If r\Objects[1] = 0 Then r\Objects[1] = CopyEntity(o\NPCModelID[24])
 			Tex = LoadTexture_Strict("GFX\npcs\duck(4).png")
 			EntityTexture(r\Objects[1], Tex)
-			FreeTexture(Tex)
+			DeleteSingleTextureEntryFromCache(Tex)
 			ScaleEntity(r\Objects[1], 0.07, 0.07, 0.07)
 			PositionEntity(r\Objects[1], r\x - 910.0 * RoomScale, r\y + 144.0 * RoomScale, r\z - 778.0 * RoomScale, True)				
 			TurnEntity(r\Objects[1], 6.0, 180.0, 0.0)
@@ -8094,7 +8129,7 @@ Function UpdateCheckpointMonitors(Number%)
 					EndIf
 					PaintSurface(SF, b)
 				EndIf
-				If Name <> "" Then FreeTexture(t1)
+				If Name <> "" Then DeleteSingleTextureEntryFromCache(t1)
 			EndIf
 			FreeBrush(b)
 		EndIf
@@ -8126,7 +8161,7 @@ Function TurnCheckpointMonitorsOff(Number%)
 					BrushTexture(b, tt\MonitorTextureID[4], 0, 0)
 					PaintSurface(SF, b)
 				EndIf
-				If Name <> "" Then FreeTexture(t1)
+				If Name <> "" Then DeleteSingleTextureEntryFromCache(t1)
 			EndIf
 			FreeBrush(b)
 		EndIf
@@ -8154,7 +8189,7 @@ Function AmbientLightRooms(Value% = 0)
 	If Value = AmbientLightRoomVal Then Return
 	AmbientLightRoomVal = Value
 	
-	Local OldBuffer% = BackBuffer() ; ~ Probably shouldn't make assumptions here but who cares, why wouldn't it use the Backbuffer(GetBuffer())
+	Local OldBuffer% = BackBuffer() ; ~ Probably shouldn't make assumptions here but who cares, why wouldn't it use the BackBuffer()
 	
 	SetBuffer(TextureBuffer(AmbientLightRoomTex))
 	
@@ -8606,5 +8641,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#119C
+;~B#11BF
 ;~C#Blitz3D
