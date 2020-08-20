@@ -207,6 +207,7 @@ Type PlayerStats
 	Field ExplosionTimer#
 	Field Zone%
 	Field Collider%, Head%
+	Field StopHidingTimer#
 End Type
 
 Global me.PlayerStats = New PlayerStats
@@ -266,7 +267,7 @@ Global LightsOn% = True
 
 Global SoundTransmission%
 
-Global MainMenuOpen%, MenuOpen%, StopHidingTimer#, InvOpen%
+Global MainMenuOpen%, MenuOpen%, InvOpen%
 Global OtherOpen.Items = Null
 
 Const SubjectName$ = "Subject D-9341"
@@ -8120,17 +8121,17 @@ Function UpdateMenu()
 		ShouldDeleteGadgets = False
 		
 		If (PlayerRoom\RoomTemplate\Name <> "gateb" And EntityY(me\Collider) =< 1040.0 * RoomScale) And PlayerRoom\RoomTemplate\Name <> "gatea"
-			If StopHidingTimer = 0.0 Then
+			If me\StopHidingTimer = 0.0 Then
 				If Curr173 <> Null And Curr106 <> Null Then
 					If EntityDistanceSquared(Curr173\Collider, me\Collider) < 16.0 Lor EntityDistanceSquared(Curr106\Collider, me\Collider) < 16.0 Then 
-						StopHidingTimer = 1.0
+						me\StopHidingTimer = 1.0
 					EndIf	
 				EndIf
-			ElseIf StopHidingTimer < 40.0
+			ElseIf me\StopHidingTimer < 40.0
 				If me\KillTimer >= 0.0 Then 
-					StopHidingTimer = StopHidingTimer + fpst\FPSFactor[0]
+					me\StopHidingTimer = me\StopHidingTimer + fpst\FPSFactor[0]
 					
-					If StopHidingTimer >= 40.0 Then
+					If me\StopHidingTimer >= 40.0 Then
 						PlaySound_Strict(HorrorSFX[15])
 						msg\Msg = "STOP HIDING"
 						msg\Timer = 70.0 * 6.0
@@ -12471,5 +12472,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#108F#1328#1E33
+;~B#1090#1329#1E34
 ;~C#Blitz3D
