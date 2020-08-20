@@ -101,7 +101,7 @@ Function IsAlpha%(Tex%) ; ~ Detect transparency in textures
 		Next
 		UnlockBuffer(TextureBuffer(Tex))
 		Return(1) ; ~ Texture is opaque
-	ElseIf Instr(Temp1s, "_lm") <> 0 Then ; ~ Texture is a lightmap
+	ElseIf Instr(Temp1s, "_lm") <> 0 ; ~ Texture is a lightmap
 		Return(2)
 	EndIf
 	Return(1) ; ~ Texture is opaque
