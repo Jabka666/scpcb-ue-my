@@ -584,6 +584,7 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 				Else
 					Temp1 = ReadFloat(f) : Temp2 = ReadFloat(f) : Temp3 = ReadFloat(f)
 				EndIf
+				;[End Block]
 		End Select
 	Next
 	
@@ -908,10 +909,10 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 	Next
 	
 	; ~ Detail meshes
-	fr\DetailMesh[0] = LoadMesh_Strict("GFX\map\forest\detail\treetest4.b3d")
-	fr\DetailMesh[1] = LoadMesh_Strict("GFX\map\forest\detail\rock.b3d")
+	fr\DetailMesh[0] = LoadMesh_Strict("GFX\map\forest\detail\tree1.b3d")
+	fr\DetailMesh[1] = LoadMesh_Strict("GFX\map\forest\detail\rock1.b3d")
 	fr\DetailMesh[2] = LoadMesh_Strict("GFX\map\forest\detail\rock2.b3d")
-	fr\DetailMesh[3] = LoadMesh_Strict("GFX\map\forest\detail\treetest5.b3d")
+	fr\DetailMesh[3] = LoadMesh_Strict("GFX\map\forest\detail\tree2.b3d")
 	fr\DetailMesh[4] = LoadRMesh("GFX\map\forest\wall_opt.rmesh", Null)
 	
 	For i = ROOM1 To ROOM4
@@ -1152,10 +1153,10 @@ Function PlaceForest_MapCreator(fr.Forest, x#, y#, z#, r.Rooms)
 	Next
 	
 	; ~ Detail meshes
-	fr\DetailMesh[0] = LoadMesh_Strict("GFX\map\forest\detail\treetest4.b3d")
-	fr\DetailMesh[1] = LoadMesh_Strict("GFX\map\forest\detail\rock.b3d")
+	fr\DetailMesh[0] = LoadMesh_Strict("GFX\map\forest\detail\tree1.b3d")
+	fr\DetailMesh[1] = LoadMesh_Strict("GFX\map\forest\detail\rock1.b3d")
 	fr\DetailMesh[2] = LoadMesh_Strict("GFX\map\forest\detail\rock2.b3d")
-	fr\DetailMesh[3] = LoadMesh_Strict("GFX\map\forest\detail\treetest5.b3d")
+	fr\DetailMesh[3] = LoadMesh_Strict("GFX\map\forest\detail\tree2.b3d")
 	fr\DetailMesh[4] = LoadRMesh("GFX\map\forest\wall_opt.rmesh", Null)
 	
 	For i = ROOM1 To ROOM4
@@ -8641,5 +8642,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11BF
+;~B#11C0
 ;~C#Blitz3D

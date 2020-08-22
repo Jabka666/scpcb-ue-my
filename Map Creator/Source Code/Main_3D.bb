@@ -700,8 +700,8 @@ Function LoadRoomTemplateMeshes()
 	Next
 	
 	Local hMap%[5], Mask%[5]
-	Local GroundTexture% = LoadTexture("GFX\map\forest\forestfloor.jpg")
-	Local PathTexture% = LoadTexture("GFX\map\forest\forestpath.jpg")
+	Local GroundTexture% = LoadTexture("GFX\map\textures\forestfloor.jpg")
+	Local PathTexture% = LoadTexture("GFX\map\textures\forestpath.jpg")
 	
 	hMap[ROOM1] = LoadImage("GFX\map\forest\forest1h.png")
 	Mask[ROOM1] = LoadTexture("GFX\map\forest\forest1h_mask.png", 1 + 2)
@@ -944,11 +944,9 @@ Function CreateOverLapBox(r.Rooms)
 	If r\RoomTemplate\Name = "room049" Then Return
 	If r\RoomTemplate\Name = "room008" Then Return
 	If r\RoomTemplate\Name = "room3storage" Then Return
-	If r\RoomTemplate\Name = "room966" Then Return
 	If r\RoomTemplate\Name = "room106" Then Return
 	If r\RoomTemplate\Name = "room079" Then Return
 	If r\RoomTemplate\Name = "gateaentrance" Then Return
-	If r\RoomTemplate\Name = "room1office" Then Return
 	
 	r\OverlapCheckBox = CreateMesh()
 	GetMeshExtents2(GetChild(r\OBJ, 2))
@@ -1279,16 +1277,9 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 			EntityParent(ChildMesh, CollisionMeshes)
 			EntityAlpha(ChildMesh, 0.0)
 		Else
-			AddMesh(ChildMesh,Opaque)
+			AddMesh(ChildMesh, Opaque)
 			EntityParent(ChildMesh, CollisionMeshes)
 			EntityAlpha(ChildMesh, 0.0)
-			
-			; ~ Make collision double-sided
-			Local FlipChild% = CopyMesh(ChildMesh)
-			
-			FlipMesh(FlipChild)
-			AddMesh(FlipChild, ChildMesh)
-			FreeEntity(FlipChild)	
 		EndIf
 		HideEntity(ChildMesh)
 	Next
@@ -1317,10 +1308,10 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 	
 	; ~ Trigger boxes
 	If HasTriggerBox Then
-		Local Numb%, tb%
+		Local Numb%, TB%
 		
 		Numb = ReadInt(f)
-		For tb = 0 To Numb - 1
+		For TB = 0 To Numb - 1
 			Count = ReadInt(f)
 			For i = 1 To Count
 				Count2 = ReadInt(f)
