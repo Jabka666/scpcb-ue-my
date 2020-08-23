@@ -1262,7 +1262,7 @@ Function PlaceForest_MapCreator(fr.Forest, x#, y#, z#, r.Rooms)
 					fr\TileEntities[tX + (tY * GridSize)] = Tile_Entity
 				EndIf
 				
-				If Tile_Type = 6 Then
+				If Ceil(Float(fr\Grid[(tY * GridSize) + tX]) / 4.0) = 6 Then
 					For i = 0 To 1
 						If fr\Door[i] = 0 Then
 							fr\DetailEntities[i] = CopyEntity(fr\DetailMesh[4])
@@ -1620,10 +1620,10 @@ Function PlaceGrid_MapCreator(r.Rooms)
 					Case ROOM4 + 3
 						;[Block]
 						AddLight(Null, r\x + x * 2.0 - (Sin(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale), 8.0 + (396.0 * RoomScale), r\z + y * 2.0 + (Cos(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale), 2, 500.0 * RoomScale, 255, 200, 200)
-						it = CreateItem("SCP-500-01", "scp500pill", r\x + x * 2.0 + (Cos(EntityYaw(Tile_Entity, True)) * (-208.0) * RoomScale) - (Sin(EntityYaw(Tile_Entity, True)) * 1226.0 * RoomScale), 8.0 + (80.0 * RoomScale), r\z + y * 2.0 + (Sin(EntityYaw(Tile_Entity, True)) * (-208.0) * RoomScale) + (Cos(EntityYaw(Tile_Entity, True)) * 1226.0 * RoomScale))
+						it = CreateItem("SCP-500-01", "scp500pill", r\x + x * 2.0 + (Cos(EntityYaw(Tile_Entity, True)) * (-208.0) * RoomScale) - (Sin(EntityYaw(Tile_Entity, True)) * 1226.0 * RoomScale), 8.0 + (90.0 * RoomScale), r\z + y * 2.0 + (Sin(EntityYaw(Tile_Entity, True)) * (-208.0) * RoomScale) + (Cos(EntityYaw(Tile_Entity, True)) * 1226.0 * RoomScale))
 						EntityType(it\Collider, HIT_ITEM)
 						
-						it = CreateItem("Night Vision Goggles", "nvg", r\x + x * 2.0 - (Sin(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale), 8.0 + (80.0 * RoomScale),  r\z + y * 2.0 + (Cos(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale))
+						it = CreateItem("Night Vision Goggles", "nvg", r\x + x * 2.0 - (Sin(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale), 8.0 + (90.0 * RoomScale),  r\z + y * 2.0 + (Cos(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale))
 						EntityType(it\Collider, HIT_ITEM)
 						;[End Block]
 				End Select

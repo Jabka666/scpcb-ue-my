@@ -3806,10 +3806,10 @@ Function UpdateEvents()
 										Case 7
 											;[Block]
 											AddLight(Null, e\room\x + iX * 2.0 - (Sin(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 16.0 * RoomScale), 8.0 + (396.0 * RoomScale), e\room\z + iY * 2.0 + (Cos(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(TempInt, True)) * 16.0 * RoomScale), 2, 500.0 * RoomScale, 255, 200, 200)
-											it = CreateItem("SCP-500-01", "scp500pill", e\room\x + iX * 2.0 + (Cos(EntityYaw(TempInt, True)) * (-208.0) * RoomScale) - (Sin(EntityYaw(TempInt, True)) * 1226.0 * RoomScale), 8.0 + (80.0 * RoomScale), e\room\z + iY * 2.0 + (Sin(EntityYaw(TempInt, True)) * (-208.0) * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 1226.0 * RoomScale))
+											it = CreateItem("SCP-500-01", "scp500pill", e\room\x + iX * 2.0 + (Cos(EntityYaw(TempInt, True)) * (-208.0) * RoomScale) - (Sin(EntityYaw(TempInt, True)) * 1226.0 * RoomScale), 8.0 + (90.0 * RoomScale), e\room\z + iY * 2.0 + (Sin(EntityYaw(TempInt, True)) * (-208.0) * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 1226.0 * RoomScale))
 											EntityType(it\Collider, HIT_ITEM)
 											
-											it = CreateItem("Night Vision Goggles", "nvg", e\room\x + iX * 2.0 - (Sin(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 16.0 * RoomScale), 8.0 + (80.0 * RoomScale), e\room\z + iY * 2.0 + (Cos(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(TempInt, True)) * 16.0 * RoomScale))
+											it = CreateItem("Night Vision Goggles", "nvg", e\room\x + iX * 2.0 - (Sin(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 16.0 * RoomScale), 8.0 + (90.0 * RoomScale), e\room\z + iY * 2.0 + (Cos(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(TempInt, True)) * 16.0 * RoomScale))
 											EntityType(it\Collider, HIT_ITEM)
 											;[End Block]
 									End Select
