@@ -1,16 +1,11 @@
 Const ClrR% = 50, ClrG% = 50, ClrB% = 50
 
-Global MouseDown1%, MouseHit1%, MouseDown2%, MouseSpeedX#, MouseSpeedY#, MouseSpeedZ#
-Global SelectedTextBox% = 0
-Global PrevSelectedTextBox% = 0
+Global MouseHit1%
 
-Const AspectRatio# = 16.0 / 9.0
+Const ResWidth% = 895
+Const ResHeight% = 560
 
-Global ResWidth% = 895
-Global ResHeight% = 560
-Global ResFactor# = ResHeight / 768.0
-
-Graphics3D(ResWidth, ResHeight, 0, 2)
+Graphics3D(ResWidth, ResHeight, 0, 4)
 
 Local HHWND% = api_GetActiveWindow() ; ~ User32.dll
 
@@ -35,7 +30,7 @@ CameraClsColor(Camera, CamColorR, CamColorG, CamColorB)
 
 Global CamRange# = GetINIFloat(OptionFileMC, "3D Scene", "Camera Range")
 
-CameraRange(Camera, 0.05, CamRange)
+CameraRange(Camera, 0.01, CamRange)
 PositionEntity(Camera, 0.0, 1.0, 0.0)
 
 Global AmbientLightRoomTex% = CreateTexture(2, 2, 257)
@@ -84,9 +79,9 @@ Dim MapTemp%(MapWidth + 1, MapHeight + 1)
 
 Global ZoneTransValue1% = 13, ZoneTransValue2% = 7
 
-Global MT_GridSize% = 19
+Const MT_GridSize% = 19
 
-Global ForestGridSize% = 10
+Const ForestGridSize% = 10
 Global ForestMeshWidth#
 
 Global CurrMapGrid% = 0
@@ -125,9 +120,7 @@ PositionEntity(Camera, (MapWidth / 2.0) * 8.0, 1.0, MapHeight * 8.0)
 RotateEntity(Camera, 0.0, 180.0, 0.0)
 MXS = 180.0
 
-Const GameUPS% = 60 ; ~ Updates per second
-
-Global Period# = 1000.0 / GameUPS
+Const Period# = 1000.0 / 60
 
 Global PrevTime% = MilliSecs()
 Global ElapsedTime#
@@ -167,7 +160,7 @@ Repeat
 		CamRange = Max(CamRange, 20.0)
 		
 		CameraClsColor(Camera, CamColorR, CamColorG, CamColorB)
-		CameraRange(Camera, 0.05, CamRange * 2.0)
+		CameraRange(Camera, 0.01, CamRange * 2.0)
 		
 		CloseFile(f)
 		DeleteFile("CONFIG_OPTINIT.SI")
@@ -591,8 +584,6 @@ Type RoomTemplates
 	Field OBJPath$
 	Field Zone%[5]
 	Field Shape%, Name$
-	Field Commonness%, Large%
-	Field DisableDecals%
 End Type
 
 Function CreateRoomTemplate.RoomTemplates(MeshPath$)
@@ -650,10 +641,6 @@ Function LoadRoomTemplates(File$)
 			For i = 0 To 4
 				rt\Zone[i] = GetINIInt(File, TemporaryString, "Zone" + (i + 1))
 			Next
-			
-			rt\Commonness = Max(Min(GetINIInt(File, TemporaryString, "Commonness"), 100.0), 0.0)
-			rt\Large = GetINIInt(File, TemporaryString, "Large")
-			rt\DisableDecals = GetINIInt(File, TemporaryString, "Disabledecals")
 		EndIf
 	Wend
 	
@@ -840,7 +827,7 @@ Type Props
 	Field OBJ%
 End Type
 
-Function CreatePropObj(File$)
+Function CreatePropOBJ(File$)
 	Local p.Props
 	
 	For p.Props = Each Props
@@ -1012,7 +999,6 @@ Type Materials
 	Field Name$
 	Field Diff%
 	Field Bump%
-	Field StepSound%
 End Type
 
 Function LoadMaterials(File$)
@@ -1030,8 +1016,6 @@ Function LoadMaterials(File$)
 			mat.Materials = New Materials
 			
 			mat\Name = Lower(TemporaryString)
-			
-			mat\StepSound = (GetINIInt(File, TemporaryString, "stepsound") + 1)
 		EndIf
 	Wend
 	
@@ -1375,7 +1359,9 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 				;[Block]
 				File = ReadString(f)
 				If File <> "" Then
-					Local Model% = CreatePropObj("GFX\map\Props\" + File)
+					If Right(File, 1) = "x" Then File = Left(File, Len(File) - 1) + "b3d"
+					
+					Local Model% = CreatePropOBJ("GFX\map\Props\" + File)
 					
 					Temp1 = ReadFloat(f) : Temp2 = ReadFloat(f) : Temp3 = ReadFloat(f)
 					PositionEntity(Model, Temp1, Temp2, Temp3)
@@ -1443,7 +1429,7 @@ Function StripPath$(File$)
 	Return(Name) 
 End Function
 
-Function GetINIString$(File$, Section$, Parameter$)
+Function GetINIString$(File$, Section$, Parameter$, DefaultValue$ = "")
 	Local TemporaryString$ = ""
 	Local f% = ReadFile(File)
 	
@@ -1457,35 +1443,27 @@ Function GetINIString$(File$, Section$, Parameter$)
 				EndIf
 			Until Left(TemporaryString, 1) = "[" Lor Eof(f)
 			CloseFile(f)
-			Return("")
+			Return(DefaultValue)
 		EndIf
 	Wend
 	
 	CloseFile(f)
 End Function
 
-Function GetINIInt%(File$, Section$, Parameter$)
-	Local StrTemp$ = Lower(GetINIString(File, Section, Parameter))
+Function GetINIInt%(File$, Section$, Parameter$, DefaultValue% = 0)
+	Local Txt$ = Lower(GetINIString(File, Section, Parameter, DefaultValue))
 	
-	Select StrTemp
-		Case "true"
-			;[Block]
-			Return(1)
-			;[End Block]
-		Case "false"
-			;[Block]
-			Return(0)
-			;[End Block]
-		Default
-			;[Block]
-			Return(Int(StrTemp))
-			;[End Block]
-	End Select
-	Return 
+	If Lower(Txt) = "true" Then
+		Return(1)
+	ElseIf Lower(Txt) = "false"
+		Return(0)
+	Else
+		Return(Int(Txt))
+	EndIf
 End Function
 
-Function GetINIFloat#(File$, Section$, Parameter$)
-	Return(GetINIString(File, Section, Parameter))
+Function GetINIFloat#(File$, Section$, Parameter$, DefaultValue# = 0.0)
+	Return(GetINIString(File, Section, Parameter, DefaultValue))
 End Function
 
 Function WrapAngle#(Angle#)

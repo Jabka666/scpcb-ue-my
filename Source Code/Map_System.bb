@@ -567,6 +567,7 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 				File = ReadString(f)
 				If File <> "" Then
 					If Right(File, 1) = "x" Then File = Left(File, Len(File) - 1) + "b3d"
+					
 					Local Model% = CreatePropOBJ("GFX\Map\Props\" + File)
 					
 					Temp1 = ReadFloat(f) : Temp2 = ReadFloat(f) : Temp3 = ReadFloat(f)
@@ -1261,7 +1262,7 @@ Function PlaceForest_MapCreator(fr.Forest, x#, y#, z#, r.Rooms)
 					fr\TileEntities[tX + (tY * GridSize)] = Tile_Entity
 				EndIf
 				
-				If Ceil(fr\Grid[(tY * GridSize) + tX] / 4.0) = 6 Then
+				If Tile_Type = 6 Then
 					For i = 0 To 1
 						If fr\Door[i] = 0 Then
 							fr\DetailEntities[i] = CopyEntity(fr\DetailMesh[4])
@@ -1581,7 +1582,7 @@ Function PlaceGrid_MapCreator(r.Rooms)
 				ScaleEntity(Tile_Entity, RoomScale, RoomScale, RoomScale, True)
 				PositionEntity(Tile_Entity, r\x + x * 2.0, 8.0, r\z + y * 2.0, True)
 				
-				Select r\grid\Grid[x + (y * GridSZ)]
+				Select Tile_Type
 					Case ROOM1 + 1
 						;[Block]
 						AddLight(Null, r\x + x * 2.0, 8.0 + (372.0 * RoomScale), r\z + y * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
@@ -5697,7 +5698,7 @@ Function FillRoom(r.Rooms)
 		EndIf
 	Next
 	
-	If r\RoomTemplate\TempTriggerBoxAmount > 0
+	If r\RoomTemplate\TempTriggerBoxAmount > 0 Then
 		r\TriggerBoxAmount = r\RoomTemplate\TempTriggerBoxAmount
 		For i = 0 To r\TriggerBoxAmount - 1
 			r\TriggerBox[i] = CopyEntity(r\RoomTemplate\TempTriggerBox[i], r\OBJ)
@@ -5968,8 +5969,9 @@ Type LightTemplates
 End Type 
 
 Function AddTempLight.LightTemplates(rt.RoomTemplates, x#, y#, z#, lType%, Range#, R%, G%, B%)
-	lt.Lighttemplates = New LightTemplates
-	lt\RoomTemplate = rt
+	Local lt.LightTemplates = New LightTemplates
+	
+	lt\roomtemplate = rt
 	lt\x = x
 	lt\y = y
 	lt\z = z
@@ -5999,7 +6001,7 @@ Type WayPoints
 End Type
 
 Function CreateWaypoint.WayPoints(x#, y#, z#, door.Doors, room.Rooms)
-	w.Waypoints = New WayPoints
+	Local w.WayPoints = New WayPoints
 	
 	If 1 Then
 		w\OBJ = CreatePivot()
@@ -6167,8 +6169,8 @@ Function FindPath(n.NPCs, x#, y#, z#)
 	
 	n\PathStatus = 0
 	n\PathLocation = 0
-	For i = 0 To 19
-		n\Path[i] = Null
+	For i = 0 To 20
+		If n\Path[i] <> Null Then n\Path[i] = Null
 	Next
 	
 	Local Pvt% = CreatePivot()
@@ -6350,7 +6352,8 @@ Type TempScreens
 End Type
 
 Function CreateScreen.Screens(x#, y#, z#, ImgPath$, r.Rooms)
-	s.Screens = New Screens
+	Local s.Screens = New Screens
+	
 	s\OBJ = CreatePivot()
 	EntityPickMode(s\OBJ, 1)	
 	EntityRadius(s\OBJ, 0.1)
@@ -6366,6 +6369,8 @@ End Function
 Function UpdateScreens()
 	If SelectedScreen <> Null Then Return
 	If SelectedDoor <> Null Then Return
+	
+	Local s.Screens
 	
 	For s.Screens = Each Screens
 		If s\room = PlayerRoom Then
@@ -8642,5 +8647,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11C0
+;~B#11C1
 ;~C#Blitz3D
