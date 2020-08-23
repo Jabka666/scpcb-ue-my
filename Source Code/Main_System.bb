@@ -8969,23 +8969,23 @@ Function LoadEntities()
 	
 	o\DoorModelID[0] = LoadMesh_Strict("GFX\map\Door01.x") ; ~ Default Door
 	
-	o\DoorModelID[1] = LoadMesh_Strict("GFX\map\DoorFrame.x") ; ~ Frame #1
+	o\DoorModelID[1] = LoadMesh_Strict("GFX\map\DoorFrame.x") ; ~ Door Frame
 	
-	o\DoorModelID[2] = LoadMesh_Strict("GFX\map\HeavyDoor1.x") ; ~ Heavy door #1
+	o\DoorModelID[2] = LoadMesh_Strict("GFX\map\HeavyDoor1.x") ; ~ Heavy Door #1
 	
-	o\DoorModelID[3] = LoadMesh_Strict("GFX\map\HeavyDoor2.x") ; ~ Heavy door #2
+	o\DoorModelID[3] = LoadMesh_Strict("GFX\map\HeavyDoor2.x") ; ~ Heavy Door #2
 	
-	o\DoorModelID[4] = LoadMesh_Strict("GFX\map\DoorColl.x") ; ~ Collider
+	o\DoorModelID[4] = LoadMesh_Strict("GFX\map\DoorColl.x") ; ~ Door Collider
 	
-	o\DoorModelID[5] = LoadMesh_Strict("GFX\map\ContDoorLeft.x") ; ~ Big Door #1
+	o\DoorModelID[5] = LoadMesh_Strict("GFX\map\ContDoorLeft.x") ; ~ Big Door Left
 	
-	o\DoorModelID[6] = LoadMesh_Strict("GFX\map\ContDoorRight.x") ; ~ Big Door #2
+	o\DoorModelID[6] = LoadMesh_Strict("GFX\map\ContDoorRight.x") ; ~ Big Door Right
 	
 	o\DoorModelID[7] = LoadMesh_Strict("GFX\map\ElevatorDoor.b3d") ; ~ Elevator Door
 	
-	o\DoorModelID[8] = LoadMesh_Strict("GFX\map\forest\Door_Frame.b3d") ; ~ Frame #2
+	o\DoorModelID[8] = LoadMesh_Strict("GFX\map\forest\DoorWoodenFrame.b3d") ; ~ Wooden Door Frame
 	
-	o\DoorModelID[9] = LoadMesh_Strict("GFX\map\forest\Door.b3d") ; ~ Wooden Door
+	o\DoorModelID[9] = LoadMesh_Strict("GFX\map\forest\DoorWooden.b3d") ; ~ Wooden Door
 	
 	o\DoorModelID[10] = LoadMesh_Strict("GFX\map\Door02.x") ; ~ One-sided Door
 	
@@ -9559,8 +9559,9 @@ Function NullGame(PlayButtonSFX% = True)
 	CatchErrors("Uncaught (NullGame)")
 	
 	Local i%, x%, y%, Lvl%
-	Local itt.ItemTemplates, s.Screens, lt.LightTemplates, d.Doors, m.Materials
-	Local wp.WayPoints, twp.TempWayPoints, r.Rooms, it.Items
+	Local itt.ItemTemplates, s.Screens, lt.LightTemplates, d.Doors, m.Materials, de.Decals, sc.SecurityCams
+	Local wp.WayPoints, twp.TempWayPoints, r.Rooms, it.Items, pr.Props, c.ConsoleMsg, n.NPCs, em.Emitters
+	Local rt.RoomTemplates, p.Particles, e.Events
 	
 	KillSounds()
 	If PlayButtonSFX Then PlaySound_Strict(ButtonSFX)
@@ -9759,8 +9760,6 @@ Function NullGame(PlayButtonSFX% = True)
 	ForestNPC = 0
 	ForestNPCTex = 0
 	
-	Local e.Events
-	
 	For e.Events = Each Events
 		If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
 		If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
@@ -9832,7 +9831,7 @@ Const ROUGH% = 0, COARSE% = 1, ONETOONE% = 2, FINE% = 3, VERYFINE% = 4
 Function Use914(item.Items, Setting%, x#, y#, z#)
 	me\RefinedItems = me\RefinedItems + 1
 	
-	Local it.Items, it2.Items, i%
+	Local it.Items, it2.Items, d.Decals, n.NPCs, i%
 	
 	Select item\ItemTemplate\Name
 		Case "Gas Mask", "Heavy Gas Mask"
@@ -11382,7 +11381,7 @@ Function Use294()
 End Function
 
 Function Use427()
-	Local i%, Pvt%, de.Decals, TempCHN%
+	Local i%, Pvt%, de.Decals, e.Events, TempCHN%
 	Local PrevI427Timer# = I_427\Timer
 	
 	If I_427\Timer < 70.0 * 360.0
@@ -11599,7 +11598,7 @@ Function UpdateExplosion()
 End Function
 
 Function Update008()
-	Local PrevI008Timer#, i%, r.Rooms, e.Events
+	Local PrevI008Timer#, i%, r.Rooms, e.Events, p.Particles
 	Local TeleportForInfect% = True
 	Local GroupDesignation$
 	
@@ -11927,7 +11926,7 @@ Function ResizeImage2(Image%, Width%, Height%)
 End Function
 
 Function RenderWorld2(Tween#)
-	Local i%, Dist#, Temp%, Temp2%
+	Local i%, Dist#, Temp%, Temp2%, np.NPCs
 	Local l%, k%, xValue#, yValue#, PitchValue#, YawValue#
 	
 	CameraProjMode(ArkBlurCam, 0)
