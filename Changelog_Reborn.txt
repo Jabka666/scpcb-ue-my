@@ -11,11 +11,11 @@
 - Added rusty coin texture.
 - Added blank paper.
 - Added SCP-205's document.
-- Added option to (re)enable/disable the launcher in-game.
+- Added option to (re)enable/disable the launcher and startup videos in-game.
 - Added command "106retreat".
 - Added new key card loading screen.
 - Added anisotropic filtering.
-- Added support for resolutions of up to 4k.
+- Added support for resolutions of up to 4k. ;
 - Added coloring of the fog.
 - Added room2tunnel3.
 - Added bloody texture for SCP-096.
@@ -28,7 +28,7 @@
 
 - Changed one bump texture to the better one.
 - Changed text when player is using Level 6 Key Card.
-- Changed level 6 key card's achievement name.
+- Changed Level 6 Key Card's achievement name.
 - Changed bloody textures in fake SCP-1123's containment chamber.
 - Changed the name of the custom difficulty to "Esoteric".
 - Changed design of SCP-1025's pages.
@@ -77,9 +77,9 @@
 
 Bug Fixes:
 
-- Fixed appearing of the gas from SCP-035's containment chamber in maintenance tunnels.
+- Fixed appearing of the gas from SCP-035's containment chamber in Maintenance Tunnels.
 - Fixed sounds for big doors locked by SCP-079.
-- Fixed light in SCP-012's containment chamber.
+- Fixed lights in SCP-012's containment chamber.
 - Fixed SCP-1048-A's scream being able to be heard anywhere.
 - Fixed SCP-049 spam-closing the door behind it, if the player tries to open it.
 - Fixed SCP-106's eyes glowing in the dark and flying in midair while he is emerging.
@@ -96,7 +96,7 @@ Bug Fixes:
 - Fixed breath sound in noclip mode.
 - Fixed weird balcony guard's moving in the intro scene.
 - Fixed step sounds for big containment doors.
-- Fixed red and green frames for the HUD when player wearing a hazmat suit.
+- Fixed red and green frames for the HUD when player is wearing a hazmat suit.
 - Fixed annoying secondary lighting lever in room2ccont.
 - Fixed button sound not working when not using launcher.
 - Fixed using of the items while wearing night vision.
@@ -119,20 +119,20 @@ Bug Fixes:
 - Fixed grammatical mistake for one of the SCP-1048's drawings.
 - Fixed SCP-1123 for SCP-714.
 - Fixed some buttons' positions.
-- Fixed room lights not working most of the time.
+- Fixed room lights not working most of the time. ;
 - Fixed launcher options not saving when quitting.
 - Fixed security camera bases rotating with the cameras.
 - Fixed fog while wearing night vision.
 - Fixed inventory not being fully centered.
 - Fixed SCP-173 not breaking the glass in the testroom event if the player looked away.
 - Fixed Right and Down movement always overriding Left and Up movement.
-- Fixed steps sound inside the fake tunnel in pocket dimension.
+- Fixed steps sound inside the fake tunnel in Pocket Dimension.
 - Fixed input boxes displaying too many characters for a frame, if too many characters are entered.
 - Fixed inventory single clicks being recognized as double clicks.
 - Fixed message being moved down if selecting a document, while a clipboard/wallet is open.
 - Fixed brightness of the buttons guarded by 4-digit pass code.
 - Fixed missing texture for MTF's P90.
-- Fixed fake tunnel inside pocket dimension.
+- Fixed structure of the fake tunnel inside Pocket Dimension.
 - Fixed waypoints in SCP-205's containment chamber.
 - Fixed flickering of the monitor overlay.
 - Fixed flying monitor after endings or "kill" command.

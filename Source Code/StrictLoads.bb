@@ -406,7 +406,7 @@ Function LoadAnimMesh_Strict(File$, Parent% = 0)
 End Function   
 
 ; ~ Don't use in LoadRMesh, as Reg does this manually there. If you wanna fuck around with the logic in that function, be my guest 
-Function LoadTexture_Strict(File$, Flags% = 1, TexDeleTetype% = DeleteMapTextures)
+Function LoadTexture_Strict(File$, Flags% = 1, TexDeleteType% = DeleteMapTextures)
 	If FileType(File) <> 1 Then RuntimeError("Texture " + File + " not found.")
 	
 	Local Tmp%

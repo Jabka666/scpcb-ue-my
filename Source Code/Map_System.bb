@@ -605,7 +605,6 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 	
 	EntityAlpha(HiddenMesh, 0.0)
 	EntityType(HiddenMesh, HIT_MAP)
-	
 	EntityAlpha(Opaque, 1.0)
 	
 	OBJ = CreatePivot()
@@ -8647,5 +8646,5 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11C1
+;~B#11C0
 ;~C#Blitz3D
