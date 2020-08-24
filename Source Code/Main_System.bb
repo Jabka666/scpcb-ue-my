@@ -397,7 +397,7 @@ Function UpdateConsole()
 		
 		Local Temp%, i%
 		Local Args$, StrTemp$, StrTemp2$, StrTemp3$, StrTemp4$
-		Local ev.Events, r.Rooms, it.Items
+		Local ev.Events, e2.Events, r.Rooms, it.Items, n.NPCs, snd.Sound
 		
 		DrawFrame(x, y, Width, Height + 30 * MenuScale)
 		
@@ -1760,6 +1760,8 @@ Function UpdateConsole()
 End Function
 
 Function ClearConsole()
+	Local c.ConsoleMsg
+	
 	For c.ConsoleMsg = Each ConsoleMsg
 		Delete(c)
 	Next
@@ -3602,7 +3604,6 @@ Function UpdateEnding()
 	If SelectedDifficulty\Name = "Keter" Then GiveAchievement(AchvKeter)
 	
 	Local x%, y%, Width%, Height%, i%
-	Local itt.ItemTemplates, r.Rooms
 	
 	ShouldPlay = 66
 	
@@ -3704,9 +3705,7 @@ Function InitCredits()
 	fo\CreditsFontID[0] = LoadFont_Strict("GFX\font\cour\Courier New.ttf", 21)
 	fo\CreditsFontID[1] = LoadFont_Strict("GFX\font\cour\Courier New.ttf", 35)
 	
-	If me\CreditsScreen = 0
-		me\CreditsScreen = LoadImage_Strict("GFX\credits_screen.png")
-	EndIf
+	If me\CreditsScreen = 0 Then me\CreditsScreen = LoadImage_Strict("GFX\credits_screen.png")
 	
 	Repeat
 		l = ReadLine(File)
@@ -3822,13 +3821,9 @@ Function UpdateCredits()
 		If me\CreditsTimer >= 0.0 And me\CreditsTimer < 255.0
 			; ~ Just save this line, ok?
 		ElseIf me\CreditsTimer >= 255.0
-			If me\CreditsTimer > 500.0 Then
-				me\CreditsTimer = -255.0
-			EndIf
+			If me\CreditsTimer > 500.0 Then me\CreditsTimer = -255.0
 		Else
-			If me\CreditsTimer >= -1.0 Then
-				me\CreditsTimer = -1.0
-			EndIf
+			If me\CreditsTimer >= -1.0 Then me\CreditsTimer = -1.0
 		EndIf
 	EndIf
 	
@@ -4524,9 +4519,9 @@ Function DrawGUI()
 	
 	Local Temp%, x%, y%, z%, i%, YawValue#, PitchValue#
 	Local x1#, x2#, x3#, y1#, y2#, y3#, z2#, ProjY#, Scale#, Pvt%
+	Local e.Events, it.Items, ev.Events, np.NPCs, ch.Chunk, a_it.Items
 	Local n%, xTemp%, yTemp%, StrTemp$
 	Local Width%, Height%
-	Local e.Events, it.Items
 	
 	If MenuOpen Lor ConsoleOpen Lor SelectedDoor <> Null Lor InvOpen Lor OtherOpen <> Null Lor me\EndingTimer < 0.0 Then
 		ShowPointer()
@@ -12471,5 +12466,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1090#1329#1E34
+;~B#108B#1324#1E2F
 ;~C#Blitz3D

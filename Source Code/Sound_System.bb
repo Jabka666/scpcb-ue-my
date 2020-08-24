@@ -83,6 +83,8 @@ Function UpdateMusic()
 End Function 
 
 Function PauseSounds()
+	Local e.Events, n.NPCs, d.Doors
+	
 	For e.Events = Each Events
 		If e\SoundCHN <> 0 Then
 			If (Not e\SoundCHN_IsStream) Then
@@ -167,6 +169,8 @@ Function PauseSounds()
 End Function
 
 Function ResumeSounds()
+	Local e.Events, n.NPCs, d.Doors
+	
 	For e.Events = Each Events
 		If e\SoundCHN <> 0 Then
 			If (Not e\SoundCHN_IsStream) Then

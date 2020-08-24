@@ -26,6 +26,7 @@ End Type
 
 Function CreateItemTemplate.ItemTemplates(Name$, TempName$, OBJPath$, InvImgPath$, ImgPath$, Scale#, SoundID%, TexturePath$ = "", InvImgPath2$ = "", Anim% = 0, TexFlags% = 9)
 	Local it.ItemTemplates = New ItemTemplates
+	Local it2.ItemTemplates
 	
 	; ~ If another item shares the same object, copy it
 	For it2.ItemTemplates = Each ItemTemplates
@@ -466,7 +467,7 @@ Function RemoveItem(i.Items)
 				;[Block]
 				CameraFogFar = StoredCameraFogFar : wi\NightVision = 0
 				;[End Block]
-			Case "gasmask", "supergasmask", "gasmask2", "gasmask3"
+			Case "gasmask", "supergasmask", "gasmask3"
 				;[Block]
 				wi\GasMask = 0
 				;[End Block]
@@ -880,7 +881,7 @@ End Function
 Function Update294()
 	CatchErrors("Uncaught (Update294)")
 	
-	Local Pvt%
+	Local Pvt%, de.Decals
 	
 	If me\CameraShakeTimer > 0.0 Then
 		me\CameraShakeTimer = me\CameraShakeTimer - (fpst\FPSfactor[0] / 70.0)

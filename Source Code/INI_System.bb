@@ -28,6 +28,7 @@ End Function
 
 Function UpdateINIFile$(FileName$)
 	Local file.INIFile = Null
+	Local k.INIFile
 	
 	For k.INIFile = Each INIFile
 		If k\Name = Lower(FileName) Then
@@ -56,6 +57,7 @@ End Function
 Function GetINIString$(File$, Section$, Parameter$, DefaultValue$ = "")
 	Local TemporaryString$ = ""
 	Local lfile.INIFile = Null
+	Local k.INIFile
 	
 	For k.INIFile = Each INIFile
 		If k\Name = Lower(File) Then

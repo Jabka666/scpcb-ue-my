@@ -365,6 +365,8 @@ Function SaveGame(File$)
 		WriteString(f, e\EventStr)
 	Next
 	
+	Local it.Items
+	
 	Temp = 0
 	For it.Items = Each Items	
 		Temp = Temp + 1
@@ -441,6 +443,8 @@ Function SaveGame(File$)
 			Next
 		EndIf
 	Next
+	
+	Local itt.ItemTemplates
 	
 	For itt.ItemTemplates = Each ItemTemplates
 		WriteByte(f, itt\Found)
@@ -701,6 +705,8 @@ Function LoadGame(File$)
 	
 	For n.NPCs = Each NPCs
 		If n\TargetID <> 0 Then
+			Local n2.NPCs
+			
 			For n2.NPCs = Each NPCs
 				If n2 <> n Then
 					If n2\ID = n\TargetID Then n\Target = n2
@@ -1132,6 +1138,8 @@ Function LoadGame(File$)
 			ItemAmount = ItemAmount + 1
 		EndIf
 		
+		Local itt.ItemTemplates
+		
 		For itt.ItemTemplates = Each ItemTemplates
 			If (itt\TempName = TempName) And (itt\Name = IttName) Then
 				If itt\IsAnim <> 0 Then SetAnimTime(it\Model, ReadFloat(f)) : Exit
@@ -1154,6 +1162,8 @@ Function LoadGame(File$)
 	Temp = ReadInt(f)
 	For i = 1 To Temp
 		o_i = ReadInt(f)
+		
+		Local ij.Items
 		
 		For ij.Items = Each Items
 			If ij\ID = o_i Then it.Items = ij : Exit
@@ -1211,10 +1221,12 @@ Function LoadGame(File$)
 	CloseFile(f)
 	
 	For r.Rooms = Each Rooms
-		r\Adjacent[0] = Null
-		r\Adjacent[1] = Null
-		r\Adjacent[2] = Null
-		r\Adjacent[3] = Null
+		For i = 0 To 3
+			r\Adjacent[i] = Null
+		Next
+		
+		Local r2.Rooms
+		
 		For r2.Rooms = Each Rooms
 			If r <> r2 Then
 				If r2\z = r\z Then
@@ -1235,7 +1247,7 @@ Function LoadGame(File$)
 					EndIf
 				EndIf
 			EndIf
-			If (r\Adjacent[0] <> Null) And (r\Adjacent[1] <> Null) And (r\Adjacent[2] <> Null) And (r\Adjacent[3] <> Null) Then Exit
+			If r\Adjacent[0] <> Null And r\Adjacent[1] <> Null And r\Adjacent[2] <> Null And r\Adjacent[3] <> Null Then Exit
 		Next
 		
 		For do.Doors = Each Doors
@@ -1546,6 +1558,8 @@ Function LoadGameQuick(File$)
 	
 	For n.NPCs = Each NPCs
 		If n\TargetID <> 0 Then
+			Local n2.NPCs
+			
 			For n2.NPCs = Each NPCs
 				If n2 <> n Then
 					If n2\ID = n\TargetID Then n\Target = n2
@@ -1838,6 +1852,8 @@ Function LoadGameQuick(File$)
 			ItemAmount = ItemAmount + 1
 		EndIf
 		
+		Local itt.ItemTemplates
+		
 		For itt.ItemTemplates = Each ItemTemplates
 			If itt\TempName = TempName Then
 				If itt\IsAnim <> 0 Then SetAnimTime(it\Model, ReadFloat(f)) : Exit
@@ -1860,6 +1876,8 @@ Function LoadGameQuick(File$)
 	Temp = ReadInt(f)
 	For i = 1 To Temp
 		o_i = ReadInt(f)
+		
+		Local ij.Items
 		
 		For ij.Items = Each Items
 			If ij\ID = o_i Then it.Items = ij : Exit
@@ -1918,6 +1936,8 @@ Function LoadGameQuick(File$)
 	EndIf
 	
 	; ~ This will hopefully fix the SCP-895 crash bug after the player died by it's sanity effect and then quickloaded the game -- ENDSHN
+	Local sc.SecurityCams
+	
 	For sc.SecurityCams = Each SecurityCams
 		sc\PlayerState = 0
 	Next
@@ -2520,31 +2540,33 @@ Function LoadMap(File$)
 	CreateEvent("dimension1499", "dimension1499", 0)
 	
 	For r.Rooms = Each Rooms
-		r\Adjacent[0] = Null
-		r\Adjacent[1] = Null
-		r\Adjacent[2] = Null
-		r\Adjacent[3] = Null
+		For i = 0 To 3
+			r\Adjacent[i] = Null
+		Next
+		
+		Local r2.Rooms
+		
 		For r2.Rooms = Each Rooms
 			If r <> r2 Then
 				If r2\z = r\z Then
-					If (r2\x) = (r\x + 8.0) Then
+					If r2\x = r\x + 8.0 Then
 						r\Adjacent[0] = r2
 						If r\AdjDoor[0] = Null Then r\AdjDoor[0] = r2\AdjDoor[2]
-					ElseIf (r2\x) = (r\x - 8.0)
+					ElseIf r2\x = r\x - 8.0
 						r\Adjacent[2] = r2
 						If r\AdjDoor[2] = Null Then r\AdjDoor[2] = r2\AdjDoor[0]
 					EndIf
 				ElseIf r2\x = r\x Then
-					If (r2\z) = (r\z - 8.0) Then
+					If r2\z = r\z - 8.0 Then
 						r\Adjacent[1] = r2
 						If r\AdjDoor[1] = Null Then r\AdjDoor[1] = r2\AdjDoor[3]
-					ElseIf (r2\z) = (r\z + 8.0)
+					ElseIf r2\z = r\z + 8.0
 						r\Adjacent[3] = r2
 						If r\AdjDoor[3] = Null Then r\AdjDoor[3] = r2\AdjDoor[1]
 					EndIf
 				EndIf
 			EndIf
-			If (r\Adjacent[0] <> Null) And (r\Adjacent[1] <> Null) And (r\Adjacent[2] <> Null) And (r\Adjacent[3] <> Null) Then Exit
+			If r\Adjacent[0] <> Null And r\Adjacent[1] <> Null And r\Adjacent[2] <> Null And r\Adjacent[3] <> Null Then Exit
 		Next
 	Next
 	

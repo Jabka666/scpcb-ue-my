@@ -1809,8 +1809,8 @@ End Function
 Function FillRoom(r.Rooms)
 	CatchErrors("Uncaught (FillRoom)")
 	
-	Local d.Doors, d2.Doors, sc.SecurityCams, de.Decals, r2.Rooms, sc2.SecurityCams
-	Local it.Items, it2.Items, em.Emitters, w.WayPoints, w2.WayPoints
+	Local d.Doors, d2.Doors, sc.SecurityCams, de.Decals, r2.Rooms, sc2.SecurityCams, tw.TempWayPoints
+	Local it.Items, it2.Items, em.Emitters, w.WayPoints, w2.WayPoints, lt.LightTemplates, ts.TempScreens
 	Local xTemp#, yTemp#, zTemp#, xTemp2%, yTemp2%, zTemp2%
 	Local t1%, Tex%, GlassTex%, OldManEyesTex%
 	Local i%, k%, Temp%, Temp3%, Angle#
@@ -5674,7 +5674,7 @@ Function FillRoom(r.Rooms)
 	End Select
 	
 	For lt.LightTemplates = Each LightTemplates
-		If lt\RoomTemplate = r\RoomTemplate Then
+		If lt\roomtemplate = r\RoomTemplate Then
 			Local NewLight% = AddLight(r, r\x + lt\x, r\y + lt\y, r\z + lt\z, lt\lType, lt\Range, lt\R, lt\G, lt\B)
 			
 			If NewLight <> 0 Then 
@@ -5686,7 +5686,7 @@ Function FillRoom(r.Rooms)
 	Next
 	
 	For ts.TempScreens = Each TempScreens
-		If ts\RoomTemplate = r\RoomTemplate Then
+		If ts\roomtemplate = r\RoomTemplate Then
 			CreateScreen(r\x + ts\x, r\y + ts\y, r\z + ts\z, ts\ImgPath, r)
 		EndIf
 	Next
@@ -8518,7 +8518,7 @@ Function PreventRoomOverlap(r.Rooms)
 	If r\RoomTemplate\Name = "room2checkpoint" Lor r\RoomTemplate\Name = "room2checkpoint2" Lor r\RoomTemplate\Name = "room173" Then Return(True)
 	
 	; ~ First, check if the room is actually intersecting at all
-	For r2 = Each Rooms
+	For r2.Rooms = Each Rooms
 		If r2 <> r And (Not r2\RoomTemplate\DisableOverlapCheck) Then
 			If CheckRoomOverlap(r, r2) Then
 				IsIntersecting = True
@@ -8528,9 +8528,7 @@ Function PreventRoomOverlap(r.Rooms)
 	Next
 	
 	; ~ If not, then simply return it as True
-	If (Not IsIntersecting) Then
-		Return(True)
-	EndIf
+	If (Not IsIntersecting) Then Return(True)
 	
 	; ~ Room is interseting: First, check if the given room is a ROOM2, so we could potentially just turn it by 180 degrees
 	IsIntersecting = False
@@ -8561,10 +8559,8 @@ Function PreventRoomOverlap(r.Rooms)
 	EndIf
 	
 	; ~ Room is ROOM2 and was able to be turned by 180 degrees
-	If (Not IsIntersecting)
-		Return(True)
-	EndIf
-	
+	If (Not IsIntersecting) Then Return(True)
+		
 	; ~ Room is either not a ROOM2 or the ROOM2 is still intersecting, now trying to swap the room with another of the same type
 	IsIntersecting = True
 	
@@ -8638,9 +8634,7 @@ Function PreventRoomOverlap(r.Rooms)
 	Next
 	
 	; ~ Room was able to the placed in a different spot
-	If (Not IsIntersecting) Then
-		Return(True)
-	EndIf
+	If (Not IsIntersecting) Then Return(True)
 	
 	Return(False)
 End Function

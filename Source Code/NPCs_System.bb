@@ -560,8 +560,8 @@ End Function
 Function UpdateNPCs()
 	CatchErrors("Uncaught (UpdateNPCs)")
 	
-	Local n.NPCs, n2.NPCs, d.Doors, de.Decals, r.Rooms, e.Events
-	Local i%, j%, Dist#, Dist2#, Angle#, x#, y#, z#, PrevFrame#, PlayerSeeAble%, RN$
+	Local n.NPCs, n2.NPCs, d.Doors, de.Decals, r.Rooms, e.Events, w.Waypoints
+	Local i%, j%, Dist#, Dist2#, Angle#, x#, x2#, y#, z#, PrevFrame#, PlayerSeeAble%, RN$
 	Local Target%, Pvt%, Pick%, GroupDesignation$
 	
 	For n.NPCs = Each NPCs
@@ -1724,7 +1724,7 @@ Function UpdateNPCs()
 												; ~ Breaking up the path if no "real" path has been found (only 1 waypoint and it is too close)
 												If n\PathStatus = 1 Then
 													If n\Path[1] <> Null Then
-														If n\Path[2] = Null And EntityDistance(n\Path[1]\OBJ, n\Collider) < 0.4 Then
+														If n\Path[2] = Null And EntityDistanceSquared(n\Path[1]\OBJ, n\Collider) < 0.16 Then
 															n\PathLocation = 0
 															n\PathStatus = 0
 														EndIf
@@ -5185,10 +5185,10 @@ End Function
 
 Function UpdateMTFUnit(n.NPCs)
 	Local x#, y#, z#
-	Local r.Rooms
+	Local r.Rooms, p.Particles, wp.Waypoints
 	Local PrevDist#, NewDist#
 	Local n2.NPCs
-	Local p.Particles, Target%, Dist#, Dist2#
+	Local Target%, Dist#, Dist2#
 	
 	If n\IsDead Then
 		n\BlinkTimer = -1.0
@@ -7001,6 +7001,7 @@ Function MoveToPocketDimension()
 End Function
 
 Function FindFreeNPCID%()
+	Local n2.NPCs
 	Local ID% = 1
 	
 	While True
@@ -7020,6 +7021,8 @@ Function FindFreeNPCID%()
 End Function
 
 Function ForceSetNPCID(n.NPCs, NewID%)
+	Local n2.NPCs
+	
 	n\ID = NewID
 	
 	For n2.NPCs = Each NPCs

@@ -263,7 +263,8 @@ Function QuickLoadEvents()
 	EndIf
 	
 	Local e.Events = QuickLoad_CurrEvent
-	Local r.Rooms, sc.SecurityCams, sc2.SecurityCams, Scale#, Pvt%, n.NPCs, Tex%, i%, x#, z#
+	Local r.Rooms, sc.SecurityCams, sc2.SecurityCams, n.NPCs
+	Local Scale#, Pvt%, Tex%, i%, x#, z#
 	
 	; ~ Might be a good idea to use QuickLoadPercent to determine the "steps" of the loading process 
 	; ~ Instead of magic values in e\eventState and e\eventStr
@@ -423,7 +424,8 @@ Function UpdateEvents()
 	CatchErrors("Uncaught (UpdateEvents)")
 	
 	Local Dist#, i%, Temp%, Pvt%, StrTemp$, j%, k%
-	Local p.Particles, n.NPCs, r.Rooms, e.Events, e2.Events, it.Items, it2.Items, em.Emitters, sc.SecurityCams, sc2.SecurityCams
+	Local p.Particles, n.NPCs, r.Rooms, e.Events, e2.Events
+	Local it.Items, it2.Items, em.Emitters, sc.SecurityCams, sc2.SecurityCams
 	Local CurrTrigger$ = "", fDir#, Scale#, Tex%
 	Local x#, y#, z#, xTemp#, yTemp#
 	Local Angle#, GroupDesignation$
@@ -9173,8 +9175,8 @@ Function UpdateDimension1499()
 End Function
 
 Function UpdateEndings()
+	Local e.Events, e2.Events, n.NPCs, r.Rooms, p.Particles, de.Decals, em.Emitters
 	Local Dist#, i%, Pvt%, Temp%, xTemp#, zTemp#, Angle#, OBJ%
-	Local e.Events, n.NPCs, r.Rooms, p.Particles
 	
 	For e.Events = Each Events
 		Select e\EventName
@@ -10098,13 +10100,13 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 			e\SoundCHN = PlaySound_Strict(e\Sound)
 		EndIf
 		
-		If EventState > 70.0 * 1.9 And EventState < 70.0 * 2 + fpst\FPSFactor[0]
+		If EventState > 70.0 * 1.9 And EventState < (70.0 * 2.0) + fpst\FPSFactor[0]
 			me\CameraShake = 7.0
-		ElseIf EventState > 70.0 * 4.2 And EventState < 70.0 * 4.25 + fpst\FPSFactor[0]
+		ElseIf EventState > 70.0 * 4.2 And EventState < (70.0 * 4.25) + fpst\FPSFactor[0]
 			me\CameraShake = 1.0
-		ElseIf EventState > 70.0 * 5.9 And EventState < 70.0 * 5.95 + fpst\FPSFactor[0]
+		ElseIf EventState > 70.0 * 5.9 And EventState < (70.0 * 5.95) + fpst\FPSFactor[0]
 			me\CameraShake = 1.0
-		ElseIf EventState > 70.0 * 7.25 And EventState < 70.0 * 7.3 + fpst\FPSFactor[0]
+		ElseIf EventState > 70.0 * 7.25 And EventState < (70.0 * 7.3) + fpst\FPSFactor[0]
 			me\CameraShake = 1.0
 			d\FastOpen = True
 			d\Open = True
@@ -10183,5 +10185,5 @@ Function GenerateRandomIA()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11B2#1DC7
+;~B#11B4#1DC9
 ;~C#Blitz3D

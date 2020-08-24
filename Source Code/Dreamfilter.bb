@@ -40,7 +40,7 @@ End Function
 
 Function UpdateBlur(Power#)
 	EntityAlpha(ArkBlurImage, Power#)
-	CopyRect(0, 0, GraphicWidth, GraphicHeight, 1024 - GraphicWidth / 2, 1024 - GraphicHeight / 2, BackBuffer(), TextureBuffer(ArkBlurTexture))
+	CopyRect(0, 0, ArkSw, ArkSh, 1024 - ArkSw / 2, 1024 - ArkSh / 2, BackBuffer(), TextureBuffer(ArkBlurTexture))
 End Function
 
 ;~IDEal Editor Parameters:
