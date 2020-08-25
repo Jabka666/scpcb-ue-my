@@ -22,7 +22,7 @@ Const AchvO5% = 37, AchvPD% = 38, AchvSNAV% = 39, AchvTesla% = 40
 Const AchievementsFile$ = "Data\achievements.ini"
 
 For i = 0 To MAXACHIEVEMENTS - 1
-	Local Loc2% = GetINISectionLocation(AchievementsFile, "s" + Str(i))
+	Local Loc2% = GetINISectionLocation(AchievementsFile, "a" + Str(i))
 	
 	AchievementStrings[i] = GetINIString2(AchievementsFile, Loc2, "AchvName")
 	AchievementDescs[i] = GetINIString2(AchievementsFile, Loc2, "AchvDesc")
@@ -43,7 +43,7 @@ Function GiveAchievement(AchvName%, ShowMessage% = True)
 	If Achievements[AchvName] <> True Then
 		Achievements[AchvName] = True
 		If AchvMsgEnabled And ShowMessage Then
-			Local Loc2% = GetINISectionLocation(AchievementsFile, "s" + AchvName)
+			Local Loc2% = GetINISectionLocation(AchievementsFile, "a" + AchvName)
 			Local AchievementName$ = GetINIString2(AchievementsFile, Loc2, "AchvName")
 			
 			CreateAchievementMsg(AchvName, AchievementName)
