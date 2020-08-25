@@ -5849,16 +5849,6 @@ Function UpdateGUI()
 	Local ClosedInv%
 	
 	If OtherOpen <> Null Then
-		If PlayerRoom\RoomTemplate\Name = "gatea" Then
-			HideEntity(tt\OverlayID[0])
-			CameraFogRange(Camera, 5.0, 30.0)
-			CameraRange(Camera, 0.01, 30.0)
-		ElseIf PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale
-			HideEntity(tt\OverlayID[0])
-			CameraFogRange(Camera, 5.0, 45.0)
-			CameraRange(Camera, 0.01, 60.0)
-		EndIf
-		
 		PrevOtherOpen = OtherOpen
 		OtherSize = OtherOpen\InvSlots
 		
@@ -6015,16 +6005,6 @@ Function UpdateGUI()
 			MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : Mouse_X_Speed_1 = 0.0 : Mouse_Y_Speed_1 = 0.0
 		EndIf
 	ElseIf InvOpen Then
-		If PlayerRoom\RoomTemplate\Name = "gatea" Then
-			HideEntity(tt\OverlayID[0])
-			CameraFogRange(Camera, 5.0, 30.0)
-			CameraRange(Camera, 0.01, 30.0)
-		ElseIf PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale
-			HideEntity(tt\OverlayID[0])
-			CameraFogRange(Camera, 5.0, 45.0)
-			CameraRange(Camera, 0.01, 60.0)
-		EndIf
-		
 		SelectedDoor = Null
 		
 		x = GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
@@ -12487,5 +12467,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#108B#1324#1E2E
+;~B#108B#1324#1E1A
 ;~C#Blitz3D

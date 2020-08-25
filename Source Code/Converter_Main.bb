@@ -151,6 +151,7 @@ Function SaveRoomMesh(BaseMesh%, FileName$) ; ~ Base mesh should be a 3D World S
 				AddMesh(Node, TriggerBox[TriggerBoxAmount])
 				TriggerBoxName[TriggerBoxAmount] = String(KeyValue(Node, "event", "event"), 1)
 				TriggerBoxAmount = TriggerBoxAmount + 1
+				;[End Block]
 		End Select
 	Next
 	
@@ -434,7 +435,7 @@ Function LoadRMesh(File$)
 	Temp2s = ReadString(f)
 	WriteString(fw, Temp2s)
 
-	File = StripFilename(File)
+	File = StripFileName(File)
 	
 	Local Count%, Count2%
 	

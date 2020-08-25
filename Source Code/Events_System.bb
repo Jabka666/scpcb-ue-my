@@ -9636,7 +9636,7 @@ Function UpdateEndings()
 						CameraFogRange(Camera, 5.0, 30.0)
 						
 						Angle = Max(Sin(EntityYaw(me\Collider) + 90.0), 0.0)
-						CameraRange(Camera, 0.01, 30.0)
+						CameraRange(Camera, 0.01, 60.0)
 						
 						For i = 2 To 4
 							If e\room\NPC[i] <> Null Then 
