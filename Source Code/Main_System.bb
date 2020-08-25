@@ -85,14 +85,14 @@ EndIf
 
 ; ~ New "fake fullscreen" - ENDSHN Psst, it's called borderless windowed mode -- Love Mark
 If DisplayMode = 1 Then
-	Graphics3DExt(DesktopWidth(), DesktopHeight(), 4)
+	Graphics3DExt(DesktopWidth(), DesktopHeight(), 32, 4)
 	
 	RealGraphicWidth = DesktopWidth()
 	RealGraphicHeight = DesktopHeight()
 	
 	AspectRatioRatio = (Float(GraphicWidth) / Float(GraphicHeight)) / (Float(RealGraphicWidth) / Float(RealGraphicHeight))
 Else
-	Graphics3DExt(GraphicWidth, GraphicHeight, (DisplayMode = 2) + 1)
+	Graphics3DExt(GraphicWidth, GraphicHeight, 32, (DisplayMode = 2) + 1)
 	
 	RealGraphicWidth = GraphicWidth
 	RealGraphicHeight = GraphicHeight
@@ -11593,7 +11593,8 @@ Function UpdateExplosion()
 End Function
 
 Function Update008()
-	Local PrevI008Timer#, i%, r.Rooms, e.Events, p.Particles
+	Local r.Rooms, e.Events, p.Particles, de.Decals
+	Local PrevI008Timer#, i%
 	Local TeleportForInfect% = True
 	Local GroupDesignation$
 	
@@ -11897,8 +11898,8 @@ Function UpdateDecals()
 	Next
 End Function
 
-Function Graphics3DExt%(Width%, Height%, Mode% = 2)
-	Graphics3D(Width, Height, 32, Mode)
+Function Graphics3DExt%(Width%, Height%, Depth% = 32, Mode% = 2)
+	Graphics3D(Width, Height, Depth, Mode)
 	TextureFilter("", 8192) ; ~ This turns on Anisotropic filtering for textures
 	TextureAnisotropic(16)
 	InitFastResize()
