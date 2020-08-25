@@ -5736,7 +5736,7 @@ Function UpdateRooms()
 		me\Zone = 0
 	EndIf
 	
-	TempLightVolume = 0
+	TempLightVolume = 0.0
 	
 	Local FoundNewPlayerRoom% = False
 	

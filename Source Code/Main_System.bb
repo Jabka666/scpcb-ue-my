@@ -7674,7 +7674,6 @@ Function UpdateGUI()
 					EndIf
 				ElseIf IN = "scp1499" Lor IN = "super1499" Lor IN = "gasmask" Lor IN = "supergasmask" Lor IN = "gasmask3" Lor IN = "helmet"
 					SelectedItem\State = 0.0
-				ElseIf IN = "nvg" Lor IN = "supernvg" Lor IN = "finenvg"
 				ElseIf IN = "nvg" Lor IN = "supernvg" Lor IN = "finenvg" Lor IN = "scramble"
 					SelectedItem\State3 = 0.0
 				EndIf
@@ -12467,5 +12466,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#108B#1324#1E2F
+;~B#108B#1324#1E2E
 ;~C#Blitz3D
