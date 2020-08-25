@@ -665,7 +665,7 @@ Function UpdateNPCs()
 								; ~ Teleport to a room closer to the player
 								If Dist > 50.0 Then
 									If Rand(70) = 1 Then
-										If PlayerRoom\RoomTemplate\Name <> "gateb" And PlayerRoom\RoomTemplate\Name <> "gatea" And PlayerRoom\RoomTemplate\Name <> "pocketdimension" Then
+										If (PlayerRoom\RoomTemplate\Name <> "gateb" And EntityY(me\Collider) =< 1040.0 * RoomScale) And PlayerRoom\RoomTemplate\Name <> "gatea" And PlayerRoom\RoomTemplate\Name <> "pocketdimension" Then
 											For w.Waypoints = Each WayPoints
 												If w\door = Null And Rand(5) = 1 Then
 													x = Abs(EntityX(me\Collider) - EntityX(w\OBJ, True))
@@ -1038,7 +1038,7 @@ Function UpdateNPCs()
 							EndIf
 							
 							If n\Reload = 0.0 Then
-                                If Dist > 10.0 And (PlayerRoom\RoomTemplate\Name <> "gateb" And EntityY(Collider) =< 1040.0 * RoomScale) And PlayerRoom\RoomTemplate\Name <> "pocketdimension" And PlayerRoom\RoomTemplate\Name <> "gatea" And n\State < -5.0 Then ; ~ Timer idea -- Juanjpro
+                                If Dist > 10.0 And (PlayerRoom\RoomTemplate\Name <> "gateb" And EntityY(me\Collider) =< 1040.0 * RoomScale) And PlayerRoom\RoomTemplate\Name <> "pocketdimension" And PlayerRoom\RoomTemplate\Name <> "gatea" And n\State < -5.0 Then ; ~ Timer idea -- Juanjpro
                                     If (Not EntityInView(n\OBJ, Camera)) Then
                                         TurnEntity(me\Collider, 0.0, 180.0, 0.0)
                                         Pick = EntityPick(me\Collider, 5.0)
@@ -1086,7 +1086,7 @@ Function UpdateNPCs()
 						RotateEntity(n\OBJ2, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
 						MoveEntity(n\OBJ2, 0.0, 8.6 * 0.11, -1.5 * 0.11)
 						
-						If PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor PlayerRoom\RoomTemplate\Name = "gatea" Lor (PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(Collider) > 1040.0 * RoomScale) Then
+						If PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor PlayerRoom\RoomTemplate\Name = "gatea" Lor (PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale) Then
 							HideEntity(n\OBJ2)
 						Else
 							If Dist < CameraFogFar * LightVolume * 0.6 Then
