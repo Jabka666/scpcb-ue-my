@@ -1665,7 +1665,7 @@ Function UpdateConsole()
 						CreateConsoleMsg("Too few parameters. This command requires 4.", 255, 150, 0)
 					Else
 						For e.Events = Each Events
-							If e\room = PlayerRoom
+							If PlayerRoom = e\room
 								If Lower(StrTemp) <> "keep" Then
 									e\EventState = Float(StrTemp)
 								EndIf
@@ -4531,7 +4531,7 @@ Function DrawGUI()
 	
 	If PlayerRoom\RoomTemplate\Name = "pocketdimension" Then
 		For e.Events = Each Events
-			If e\room = PlayerRoom Then
+			If PlayerRoom = e\room Then
 				If Float(e\EventStr) < 1000.0 Then
 					If e\EventState > 600.0 Then
 						If me\BlinkTimer < -3.0 And me\BlinkTimer > -10.0 Then
@@ -9776,7 +9776,7 @@ Function NullGame(PlayButtonSFX% = True)
 	Next
 	
 	For rt.RoomTemplates = Each RoomTemplates
-		rt\OBJ = 0
+		If rt\OBJ <> 0 Then rt\OBJ = 0
 	Next
 	
 	For i = 0 To 6
@@ -11363,7 +11363,7 @@ Function Use294()
 				Local e.Events
 				
 				For e.Events = Each Events
-					If e\room = PlayerRoom
+					If PlayerRoom = e\room
 						e\EventState2 = 0.0
 						Exit
 					EndIf
