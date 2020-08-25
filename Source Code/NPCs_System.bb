@@ -825,7 +825,7 @@ Function UpdateNPCs()
 					Local Spawn106% = True
 					
 					; ~ Checking if SCP-106 is allowed to spawn
-					If PlayerRoom\RoomTemplate\Name$ = "dimension1499" Then Spawn106 = False
+					If PlayerRoom\RoomTemplate\Name = "dimension1499" Then Spawn106 = False
 					For e.Events = Each Events
 						If e\EventName = "room860"
 							If e\EventState = 1.0
@@ -834,7 +834,7 @@ Function UpdateNPCs()
 							Exit
 						EndIf
 					Next
-					If PlayerRoom\RoomTemplate\Name$ = "room049" And EntityY(me\Collider) =< -2848.0 * RoomScale Then
+					If PlayerRoom\RoomTemplate\Name = "room049" And EntityY(me\Collider) =< -2848.0 * RoomScale Then
 						Spawn106 = False
 					EndIf
 					; ~ GateA event has been triggered. Don't make SCP-106 disappear!
@@ -1038,7 +1038,7 @@ Function UpdateNPCs()
 							EndIf
 							
 							If n\Reload = 0.0 Then
-                                If Dist > 10.0 And PlayerRoom\RoomTemplate\Name <> "pocketdimension" And PlayerRoom\RoomTemplate\Name <> "gatea" And n\State < -5.0 Then ; ~ Timer idea -- Juanjpro
+                                If Dist > 10.0 And (PlayerRoom\RoomTemplate\Name <> "gateb" And EntityY(Collider) =< 1040.0 * RoomScale) And PlayerRoom\RoomTemplate\Name <> "pocketdimension" And PlayerRoom\RoomTemplate\Name <> "gatea" And n\State < -5.0 Then ; ~ Timer idea -- Juanjpro
                                     If (Not EntityInView(n\OBJ, Camera)) Then
                                         TurnEntity(me\Collider, 0.0, 180.0, 0.0)
                                         Pick = EntityPick(me\Collider, 5.0)
@@ -1067,7 +1067,7 @@ Function UpdateNPCs()
 							
 							If (Not PlayerRoom\RoomTemplate\DisableDecals) Then
 								If PlayerRoom\RoomTemplate\Name <> "gatea" Then
-									If (SelectedDifficulty\AggressiveNPCs) Then
+									If SelectedDifficulty\AggressiveNPCs Then
 										n\State = n\State - (fpst\FPSFactor[0] * 2.0)
 									Else
 										n\State = n\State - fpst\FPSFactor[0]
@@ -1086,7 +1086,7 @@ Function UpdateNPCs()
 						RotateEntity(n\OBJ2, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
 						MoveEntity(n\OBJ2, 0.0, 8.6 * 0.11, -1.5 * 0.11)
 						
-						If PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor PlayerRoom\RoomTemplate\Name = "gatea" Then
+						If PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor PlayerRoom\RoomTemplate\Name = "gatea" Lor (PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(Collider) > 1040.0 * RoomScale) Then
 							HideEntity(n\OBJ2)
 						Else
 							If Dist < CameraFogFar * LightVolume * 0.6 Then
@@ -5067,24 +5067,7 @@ Function UpdateNPCs()
 		CatchErrors(Chr(34) + n\NVName + Chr(34) + " NPC")
 	Next
 	
-	If MTFCameraCheckTimer > 0.0 And MTFCameraCheckTimer < 70.0 * 90.0 Then
-		MTFCameraCheckTimer = MTFCameraCheckTimer + fpst\FPSFactor[0]
-	ElseIf MTFCameraCheckTimer >= 70.0 * 90.0
-		MTFCameraCheckTimer = 0.0
-		If (Not me\Detected) Then
-			If MTFCameraCheckDetected Then
-				PlayAnnouncement("SFX\Character\MTF\AnnouncCameraFound" + Rand(1, 2) + ".ogg")
-				me\Detected = True
-				MTFCameraCheckTimer = 70.0 * 60.0
-			Else
-				PlayAnnouncement("SFX\Character\MTF\AnnouncCameraNoFound.ogg")
-			EndIf
-		EndIf
-		MTFCameraCheckDetected = False
-		If MTFCameraCheckTimer = 0.0 Then
-			me\Detected = False
-		EndIf
-	EndIf
+	UpdateCameraCheck()
 End Function
 
 Function TeleportCloser(n.NPCs)
@@ -7478,5 +7461,5 @@ Function Animate2#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = True
 End Function 
 
 ;~IDEal Editor Parameters:
-;~B#174#1229#136F#13BD#1524#1641#1811#186C
+;~B#174#1229#136F#13BD#1513#1630#1800#185B
 ;~C#Blitz3D

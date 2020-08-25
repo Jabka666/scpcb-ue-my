@@ -3095,8 +3095,8 @@ Function MainLoop()
 					If e\EventName = "room860" Then
 						If e\EventState = 1.0 Then
 							CurrFogColor = FogColorForest
+							Exit
 						EndIf
-						Exit
 					EndIf
 				Next
 			ElseIf PlayerRoom\RoomTemplate\Name = "pocketdimension"
@@ -11550,6 +11550,27 @@ Function UpdateMTF()
 				PlayAnnouncement("SFX\Character\MTF\ThreatAnnouncFinal.ogg")
 			EndIf
 			MTFTimer = 30000.0
+		EndIf
+	EndIf
+End Function
+
+Function UpdateCameraCheck()
+	If MTFCameraCheckTimer > 0.0 And MTFCameraCheckTimer < 70.0 * 90.0 Then
+		MTFCameraCheckTimer = MTFCameraCheckTimer + fpst\FPSFactor[0]
+	ElseIf MTFCameraCheckTimer >= 70.0 * 90.0
+		MTFCameraCheckTimer = 0.0
+		If (Not me\Detected) Then
+			If MTFCameraCheckDetected Then
+				PlayAnnouncement("SFX\Character\MTF\AnnouncCameraFound" + Rand(1, 2) + ".ogg")
+				me\Detected = True
+				MTFCameraCheckTimer = 70.0 * 60.0
+			Else
+				PlayAnnouncement("SFX\Character\MTF\AnnouncCameraNoFound.ogg")
+			EndIf
+		EndIf
+		MTFCameraCheckDetected = False
+		If MTFCameraCheckTimer = 0.0 Then
+			me\Detected = False
 		EndIf
 	EndIf
 End Function
