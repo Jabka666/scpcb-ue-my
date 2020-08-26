@@ -732,10 +732,8 @@ Function UpdateEvents()
 								NowPlaying = ShouldPlay
 								
 								PlaySound_Strict(IntroSFX[Rand(8, 10)])
-								me\BlurTimer = 900.0
-								ShowEntity(tt\OverlayID[7])
+								me\BlurTimer = 1000.0
 								me\LightFlash = 1.0
-								EntityAlpha(tt\OverlayID[7], 0.5)
 								
 								CreateConsoleMsg("")
 								CreateConsoleMsg("WARNING! Using the console commands or teleporting away from the intro scene may cause bugs or crashing.", 255, 0, 0)
@@ -762,9 +760,6 @@ Function UpdateEvents()
 									
 									If e\EventState3 - fpst\FPSFactor[0] / 30.0 < 12.0 And e\EventState3 > 12.0 Then PlaySound2(StepSFX(0, 0, 0), Camera, me\Collider, 8.0, 0.3)
 									
-									ShowEntity(tt\OverlayID[7])
-									EntityAlpha(tt\OverlayID[7], 0.9 - (e\EventState3 / 2.0))
-									
 									x = x + (EntityX(e\room\OBJ) - (3048.0 + 1024.0) * RoomScale - x) * Max((e\EventState3 - 10.0) / 4.0, 0.0) 
 									
 									If e\EventState3 < 10.0 Then
@@ -783,8 +778,6 @@ Function UpdateEvents()
 									me\DropSpeed = 0.0
 									me\Playable = False
 								Else
-									HideEntity(tt\OverlayID[7])
-									
 									PositionEntity(me\Collider, EntityX(me\Collider), 0.302, EntityZ(me\Collider))
 									ResetEntity(me\Collider)
 									ShowEntity(me\Collider)
@@ -3338,7 +3331,6 @@ Function UpdateEvents()
 								If me\KillTimer >= 0.0 Then 
 									For i = 0 To 2
 										If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[i], True), EntityZ(me\Collider), EntityZ(e\room\Objects[i], True)) < PowTwo(250.0 * RoomScale) Then
-											ShowEntity(tt\OverlayID[7])
 											me\LightFlash = 0.4
 											me\CameraShake = 1.0
 											Kill()
@@ -3354,7 +3346,6 @@ Function UpdateEvents()
 								If Curr106\State < -10.0 Then
 									For i = 0 To 2
 										If DistanceSquared(EntityX(Curr106\Collider), EntityX(e\room\Objects[i], True), EntityZ(Curr106\Collider), EntityZ(e\room\Objects[i], True)) < PowTwo(250.0 * RoomScale) Then
-											ShowEntity(tt\OverlayID[7])
 											If PlayerRoom = e\room Then me\LightFlash = 0.3
 											If ParticleAmount > 0
 												For i = 0 To 5 + (5 * (ParticleAmount - 1))
@@ -3373,7 +3364,6 @@ Function UpdateEvents()
 									If (n\NPCtype = NPCtype049_2 Lor n\NPCtype = NPCtype008_1) And (Not n\IsDead) Then
 										For i = 0 To 2
 											If DistanceSquared(EntityX(n\Collider), EntityX(e\room\Objects[i], True), EntityZ(n\Collider), EntityZ(e\room\Objects[i], True)) < PowTwo(250.0 * RoomScale) Then
-												ShowEntity(tt\OverlayID[7])
 												If PlayerRoom = e\room Then me\LightFlash = 0.3
 												n\IsDead = True
 											EndIf
@@ -6853,7 +6843,6 @@ Function UpdateEvents()
 						PositionEntity(me\Collider, EntityX(e\room\OBJ, True), 0.3, EntityZ(e\room\OBJ, True), True)
 						ResetEntity(me\Collider)
 						CanSave = True
-						ShowEntity(tt\OverlayID[7])
 						me\LightFlash = 6.0
 						me\BlurTimer = 500.0
 						me\Injuries = me\PrevInjuries
@@ -10185,5 +10174,5 @@ Function GenerateRandomIA()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11B4#1DC9
+;~B#11AA#1DBE
 ;~C#Blitz3D
