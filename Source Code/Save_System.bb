@@ -140,7 +140,7 @@ Function SaveGame(File$)
 	WriteInt(f, 113)
 	
 	Temp = 0
-	For  n.NPCs = Each NPCs
+	For n.NPCs = Each NPCs
 		Temp = Temp + 1
 	Next	
 	
@@ -485,7 +485,7 @@ Function LoadGame(File$)
 	
 	GameSaved = True
 	
-	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, r.Rooms, ID%, n.NPCs, do.Doors
+	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, r.Rooms, ID%, n.NPCs, do.Doors, rt.RoomTemplates
 	Local f% = ReadFile(File + "Save.txt")
 	
 	StrTemp = ReadString(f)
@@ -512,7 +512,7 @@ Function LoadGame(File$)
 	RotateEntity(me\Collider, x, y, 0.0)
 	
 	StrTemp = ReadString(f)
-	If (StrTemp <> VersionNumber) Then RuntimeError("The save files of v" + StrTemp + " aren't compatible with SCP - Containment Breach Ultimate Edition v" + VersionNumber + ".")
+	If StrTemp <> VersionNumber Then RuntimeError("The save files of v" + StrTemp + " aren't compatible with SCP - Containment Breach Ultimate Edition v" + VersionNumber + ".")
 	
 	me\BlinkTimer = ReadFloat(f)
 	me\BlinkEffect = ReadFloat(f)	
@@ -1333,6 +1333,7 @@ Function LoadGameQuick(File$)
 	me\FallTimer = 0.0
 	MenuOpen = False
 	
+	ClearConsole()
 	ClearCheats(chs)
 	WireFrameState = 0
 	WireFrame(0)
@@ -1361,7 +1362,7 @@ Function LoadGameQuick(File$)
 	RotateEntity(me\Collider, x, y, 0.0)
 	
 	StrTemp = ReadString(f)
-	If (StrTemp <> VersionNumber) Then RuntimeError("The save files of v" + StrTemp + " aren't compatible with SCP - Containment Breach Ultimate Edition v" + VersionNumber + ".")
+	If StrTemp <> VersionNumber Then RuntimeError("The save files of v" + StrTemp + " aren't compatible with SCP - Containment Breach Ultimate Edition v" + VersionNumber + ".")
 	
 	me\BlinkTimer = ReadFloat(f)
 	me\BlinkEffect = ReadFloat(f)	
@@ -1400,7 +1401,7 @@ Function LoadGameQuick(File$)
 	I_008\Timer = ReadFloat(f)
 	I_409\Timer = ReadFloat(f)
 	
-	Local DifficultyIndex = ReadByte(f)
+	Local DifficultyIndex% = ReadByte(f)
 	
 	SelectedDifficulty = difficulties[DifficultyIndex]
 	If (DifficultyIndex = ESOTERIC) Then
@@ -1543,7 +1544,7 @@ Function LoadGameQuick(File$)
 		n\ModelScaleX = ReadFloat(f)
 		n\ModelScaleY = ReadFloat(f)
 		n\ModelScaleZ = ReadFloat(f)
-		If n\Model <> ""
+		If n\Model <> "" Then
 			FreeEntity(n\OBJ)
 			n\OBJ = LoadAnimMesh_Strict(n\Model)
 			ScaleEntity(n\OBJ, n\ModelScaleX, n\ModelScaleY, n\ModelScaleZ)
@@ -1594,8 +1595,8 @@ Function LoadGameQuick(File$)
 		Local Level% = ReadInt(f)
 		Local Temp2% = ReadByte(f)	
 		
-		If Angle >= 360
-            Angle = Angle - 360
+		If Angle >= 360.0
+            Angle = Angle - 360.0
         EndIf
 		
 		For r.Rooms = Each Rooms
@@ -2202,8 +2203,8 @@ Function LoadMap(File$)
 					r.Rooms = CreateRoom(0, rt\Shape, (MapWidth - x) * 8.0, 0.0, y * 8.0, Name)
 					
 					r\Angle = Angle
-					If r\Angle <> 90 And r\Angle <> 270
-						r\Angle = r\Angle + 180
+					If r\Angle <> 90.0 And r\Angle <> 270.0
+						r\Angle = r\Angle + 180.0
 					EndIf
 					r\Angle = WrapAngle(r\Angle)
 					
@@ -2254,12 +2255,12 @@ Function LoadMap(File$)
 			
 			Angle = ReadByte(f)
 			
-			If Angle <> 0 And Angle <> 2 Then
-				Angle = Angle + 2
+			If Angle <> 0.0 And Angle <> 2.0 Then
+				Angle = Angle + 2.0
 			EndIf
-			Angle = Angle + 1
-			If Angle > 3 Then
-				Angle = (Angle Mod 4)
+			Angle = Angle + 1.0
+			If Angle > 3.0 Then
+				Angle = (Angle Mod 4.0)
 			EndIf
 			
 			x = (GridSize - 1) - x
@@ -2333,7 +2334,7 @@ Function LoadMap(File$)
 				Angle = Angle + 3.0
 			EndIf
 			If Angle > 3.0 Then
-				Angle = (Angle Mod 4)
+				Angle = (Angle Mod 4.0)
 			EndIf
 			
 			x = (GridSZ - 1) - x
@@ -2389,8 +2390,8 @@ Function LoadMap(File$)
 					r.Rooms = CreateRoom(0, rt\Shape, (MapWidth - x) * 8.0, 0.0, y * 8.0, Name)
 					
 					r\Angle = Angle
-					If r\Angle <> 90 And r\Angle <> 270
-						r\Angle = r\Angle + 180
+					If r\Angle <> 90.0 And r\Angle <> 270.0
+						r\Angle = r\Angle + 180.0
 					EndIf
 					r\Angle = WrapAngle(r\Angle)
 					

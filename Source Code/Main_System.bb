@@ -2018,12 +2018,10 @@ Type Doors
 	Field Code$
 	Field ID%
 	Field Level%
-	Field LevelDest%
 	Field AutoClose%
 	Field LinkedDoor.Doors
 	Field IsElevatorDoor% = False
 	Field MTFClose% = True
-	Field NPCCalledElevator% = False
 End Type 
 
 Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, Open% = False, Big% = False, Keycard% = False, Code$ = "", CheckIfZeroCard% = False)
@@ -2093,7 +2091,6 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, Open% = False, Bi
 	
 	d\Code = Code
 	d\Level = Lvl
-	d\LevelDest = 66
 	
 	For i = 0 To 1
 		If Code <> "" Then 
@@ -12467,5 +12464,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#108B#1324#1E1A
+;~B#1088#1321#1E17
 ;~C#Blitz3D

@@ -6662,7 +6662,7 @@ Function UpdateMTFUnit(n.NPCs)
 End Function
 
 Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False)  
-    Local p.Particles, de.Decals
+    Local p.Particles, de.Decals, n.NPCs
 	Local Pvt%, ShotMessageUpdate$, i%
 	
 	p.Particles = CreateParticle(x, y, z, 1, Rnd(0.08, 0.1), 0.0, 5.0)
@@ -7363,7 +7363,7 @@ Function ChangeNPCTextureID(n.NPCs, TextureID%) ; ~ Works only for Class D model
 	EndIf
 	
 	n\TextureID = TextureID + 1
-	FreeEntity(n\OBJ)
+	If n\OBJ <> 0 Then FreeEntity(n\OBJ)
 	n\OBJ = CopyEntity(DTextures[TextureID])
 	
 	Temp = GetINIFloat(NPCsFile, "Class D", "Scale") / MeshWidth(n\OBJ)

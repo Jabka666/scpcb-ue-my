@@ -1557,9 +1557,9 @@ Function UpdateGrid(grid.Grids)
 End Function
 
 Function PlaceGrid_MapCreator(r.Rooms)
+	Local dr.Doors, it.Items, wayp.WayPoints
 	Local x%, y%, i%, Dist#
 	Local Meshes%[7]
-	Local dr.Doors, it.Items
 	
 	For i = 0 To 6
 		Meshes[i] = CopyEntity(o\MTModelID[i])
@@ -1628,7 +1628,7 @@ Function PlaceGrid_MapCreator(r.Rooms)
 				End Select
 				
 				r\grid\Entities[x + (y * GridSZ)] = Tile_Entity
-				wayp.WayPoints = CreateWaypoint(r\x + (x * 2.0), 8.2, r\z + (y * 2.0), Null, r)
+				wayp = CreateWaypoint(r\x + (x * 2.0), 8.2, r\z + (y * 2.0), Null, r)
 				r\grid\waypoints[x + (y * GridSZ)] = wayp
 				
 				If y < GridSZ - 1 Then
@@ -4948,7 +4948,7 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "room2_3", "room3_3"
 			;[Block]
-			w.WayPoints = CreateWaypoint(r\x, r\y + 66.0 * RoomScale, r\z, Null, r)
+			w = CreateWaypoint(r\x, r\y + 66.0 * RoomScale, r\z, Null, r)
 			;[End Block]
 		Case "room1lifts"
 			;[Block]
@@ -4964,7 +4964,7 @@ Function FillRoom(r.Rooms)
 			sc\Angle = 45.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			
-			w.WayPoints = CreateWaypoint(r\x, r\y + 66.0 * RoomScale, r\z, Null, r)
+			w = CreateWaypoint(r\x, r\y + 66.0 * RoomScale, r\z, Null, r)
 			;[End Block]
 		Case "room2servers2"
 			;[Block]
@@ -6055,7 +6055,7 @@ Function InitWayPoints(loadingstart = 45)
 		Else
 			ClosestRoom = d\room
 		EndIf
-		If (Not d\DisableWaypoint) Then CreateWaypoint(EntityX(d\frameOBJ, True), EntityY(d\frameOBJ, True) + 0.18, EntityZ(d\frameOBJ, True), d, ClosestRoom)
+		If (Not d\DisableWaypoint) Then CreateWaypoint(EntityX(d\FrameOBJ, True), EntityY(d\FrameOBJ, True) + 0.18, EntityZ(d\FrameOBJ, True), d, ClosestRoom)
 	Next
 	
 	Amount = 0
@@ -6642,9 +6642,7 @@ Function UpdateSecurityCams()
 										If sc\CoffinEffect = 3 And Rand(200) = 1 Then sc\CoffinEffect = 2 : sc\PlayerState = Rand(10000, 20000)
 									EndIf	
 									me\BlurTimer = 1000.0
-									If me\VomitTimer = 0.0 Then
-										me\VomitTimer = 1.0
-									EndIf
+									If me\VomitTimer = 0.0 Then me\VomitTimer = 1.0
 								ElseIf me\Sanity < -500.0
 									If Rand(7) = 1 Then EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
 									If Rand(50) = 1 Then
@@ -8530,14 +8528,14 @@ Function PreventRoomOverlap(r.Rooms)
 	; ~ If not, then simply return it as True
 	If (Not IsIntersecting) Then Return(True)
 	
-	; ~ Room is interseting: First, check if the given room is a ROOM2, so we could potentially just turn it by 180 degrees
+	; ~ Room is interseting: First, check if the given room is a ROOM2, so we could potentially just turn it by 180.0 degrees
 	IsIntersecting = False
 	
 	Local x% = r\x / 8.0
 	Local y% = r\z / 8.0
 	
 	If r\RoomTemplate\Shape = ROOM2 Then
-		; ~ Room is a ROOM2, let's check if turning it 180 degrees fixes the overlapping issue
+		; ~ Room is a ROOM2, let's check if turning it 180.0 degrees fixes the overlapping issue
 		r\Angle = r\Angle + 180.0
 		RotateEntity(r\OBJ, 0.0, r\Angle, 0.0)
 		CalculateRoomExtents(r)
@@ -8558,7 +8556,7 @@ Function PreventRoomOverlap(r.Rooms)
 		IsIntersecting = True
 	EndIf
 	
-	; ~ Room is ROOM2 and was able to be turned by 180 degrees
+	; ~ Room is ROOM2 and was able to be turned by 180.0 degrees
 	If (Not IsIntersecting) Then Return(True)
 		
 	; ~ Room is either not a ROOM2 or the ROOM2 is still intersecting, now trying to swap the room with another of the same type
