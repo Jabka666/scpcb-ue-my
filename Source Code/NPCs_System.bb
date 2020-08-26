@@ -518,41 +518,28 @@ End Function
 Function RemoveNPC(n.NPCs)
 	If n = Null Then Return
 	
-	If n\OBJ2 <> 0 Then 
-		FreeEntity(n\OBJ2) : n\OBJ2 = 0
-	EndIf
-	If n\OBJ3 <> 0 Then 
-		FreeEntity(n\OBJ3) : n\OBJ3 = 0
-	EndIf
-	If n\OBJ4 <> 0 Then 
-		FreeEntity(n\OBJ4) : n\OBJ4 = 0
-	EndIf
+	If n\Collider <> 0 Then FreeEntity(n\Collider) : n\Collider = 0	
+	If n\OBJ <> 0 Then FreeEntity(n\OBJ) : n\OBJ = 0
+	If n\OBJ2 <> 0 Then FreeEntity(n\OBJ2) : n\OBJ2 = 0
+	If n\OBJ3 <> 0 Then FreeEntity(n\OBJ3) : n\OBJ3 = 0
+	If n\OBJ4 <> 0 Then FreeEntity(n\OBJ4) : n\OBJ4 = 0
 	
 	If (Not n\SoundCHN_IsStream)
 		If n\SoundCHN <> 0 And ChannelPlaying(n\SoundCHN) Then
 			StopChannel(n\SoundCHN)
 		EndIf
 	Else
-		If (n\SoundCHN <> 0)
-			StopStream_Strict(n\SoundCHN)
-		EndIf
+		If n\SoundCHN <> 0 Then StopStream_Strict(n\SoundCHN)
 	EndIf
 	
-	If (Not n\SoundCHN2_IsStream)
-		If (n\SoundCHN2 <> 0 And ChannelPlaying(n\SoundCHN2)) Then
-			StopChannel(n\SoundCHN2)
-		EndIf
+	If (Not n\SoundCHN2_IsStream) Then
+		If (n\SoundCHN2 <> 0 And ChannelPlaying(n\SoundCHN2)) Then StopChannel(n\SoundCHN2)
 	Else
-		If (n\SoundCHN2 <> 0)
-			StopStream_Strict(n\SoundCHN2)
-		EndIf
+		If n\SoundCHN2 <> 0 Then StopStream_Strict(n\SoundCHN2)
 	EndIf
 	
 	If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 	If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2) : n\Sound2 = 0
-	
-	FreeEntity(n\OBJ) : n\OBJ = 0
-	FreeEntity(n\Collider) : n\Collider = 0	
 	
 	Delete(n)
 End Function
@@ -560,8 +547,8 @@ End Function
 Function UpdateNPCs()
 	CatchErrors("Uncaught (UpdateNPCs)")
 	
-	Local n.NPCs, n2.NPCs, d.Doors, de.Decals, r.Rooms, e.Events, w.Waypoints
-	Local i%, j%, Dist#, Dist2#, Angle#, x#, x2#, y#, z#, PrevFrame#, PlayerSeeAble%, RN$
+	Local n.NPCs, n2.NPCs, d.Doors, de.Decals, r.Rooms, e.Events, w.Waypoints, p.Particles
+	Local i%, j%, Dist#, Dist2#, Angle#, x#, x2#, y#, z#, z2#, PrevFrame#, PlayerSeeAble%, RN$
 	Local Target%, Pvt%, Pick%, GroupDesignation$
 	
 	For n.NPCs = Each NPCs
@@ -1440,14 +1427,12 @@ Function UpdateNPCs()
 										If ProjectedX() > 0.0 And ProjectedX() < GraphicWidth Then
 											If ProjectedY() > 0.0 And ProjectedY() < GraphicHeight Then
 												If EntityVisible(me\Collider, n\Collider) Then
-													If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0)
+													If me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0 Then
 														PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"))
 														
 														me\CurrCameraZoom = 10.0
 														
-														If n\Frame >= 422.0 Then
-															SetNPCFrame(n, 677.0)
-														EndIf
+														If n\Frame >= 422.0 Then SetNPCFrame(n, 677.0)
 														StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0
 														n\Sound = 0
 														n\State = 2.0
@@ -2276,9 +2261,7 @@ Function UpdateNPCs()
 								If n\Reload > 0.0 And n\Reload =< 7.0
 									AnimateNPC(n, 245, 248, 0.35)
 								Else
-									If n\Frame < 302.0
-										AnimateNPC(n, 302.0, 344.0, 0.35)
-									EndIf
+									If n\Frame < 302.0 Then AnimateNPC(n, 302.0, 344.0, 0.35)
 								EndIf
 								
 								FreeEntity(Pvt)
@@ -3438,9 +3421,11 @@ Function UpdateNPCs()
 								If n\State2 = 0.0 Then
 									If Dist < 8.0 Then
 										If EntityInView(n\Collider, Camera) Then
-											PlaySound_Strict(LoadTempSound("SFX\SCP\860\Chase" + Rand(1, 2) + ".ogg"))
-											
-											PlaySound2(LoadTempSound("SFX\SCP\860\Cancer" + Rand(0, 2) + ".ogg"), Camera, n\Collider)	
+											If Rand(8) = 1 Then
+												PlaySound_Strict(LoadTempSound("SFX\SCP\860\Chase" + Rand(1, 2) + ".ogg"))
+												
+												PlaySound2(LoadTempSound("SFX\SCP\860\Cancer" + Rand(0, 2) + ".ogg"), Camera, n\Collider)
+											EndIf
 											n\State2 = 1.0
 										EndIf										
 									EndIf
@@ -7461,5 +7446,5 @@ Function Animate2#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = True
 End Function 
 
 ;~IDEal Editor Parameters:
-;~B#174#1229#136F#13BD#1513#1630#1800#185B
+;~B#174#121A#1360#13AE#1504#1621#17F1#184C
 ;~C#Blitz3D
