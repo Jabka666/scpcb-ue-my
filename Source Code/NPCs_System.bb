@@ -2251,9 +2251,9 @@ Function UpdateNPCs()
 										Local InstaKillPlayer% = False
 										
 										If PlayerRoom\RoomTemplate\Name = "room173" Then 
-											msg\DeathMsg = SubjetName + ". Cause of death: Gunshot wound to the head. The surveillance tapes confirm that the subject was terminated by Agent Ulgrin shortly after the site lockdown was initiated."
+											msg\DeathMsg = SubjectName + ". Cause of death: Gunshot wound to the head. The surveillance tapes confirm that the subject was terminated by Agent Ulgrin shortly after the site lockdown was initiated."
 											InstaKillPlayer = True
-										ElseIf PlayerRoom\RoomTemplate\Name = "gateb" Then
+										ElseIf PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale
 											msg\DeathMsg = Chr(34) + "Agent G. to control. Eliminated a Class D escapee in Gate B's courtyard." + Chr(34)
 										Else
 											msg\DeathMsg = ""
