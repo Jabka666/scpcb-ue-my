@@ -3269,12 +3269,11 @@ Function MainLoop()
 		If me\LightFlash > 0.0 Then
 			ShowEntity(tt\OverlayID[7])
 			EntityAlpha(tt\OverlayID[7], Max(Min(me\LightFlash + Rnd(-0.2, 0.2), 1.0), 0.0))
+			EntityColor(tt\OverlayID[7], 255.0, 255.0, 255.0)
 			me\LightFlash = Max(me\LightFlash - (fpst\FPSFactor[0] / 70.0), 0.0)
 		Else
 			HideEntity(tt\OverlayID[7])
 		EndIf
-		
-		EntityColor(tt\OverlayID[7], 255.0, 255.0, 255.0)
 		
 		UpdateGUI()
 		
@@ -6466,7 +6465,6 @@ Function UpdateGUI()
 					;[Block]
 					If I_714\Using = 0 And wi\GasMask < 3 And wi\HazmatSuit < 3 Then
 						If PlayerRoom\RoomTemplate\Name <> "room1123" Then
-							ShowEntity(tt\OverlayID[7])
 							me\LightFlash = 7.0
 							PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))	
 							
@@ -6485,7 +6483,6 @@ Function UpdateGUI()
 						For e.Events = Each Events
 							If e\EventName = "room1123" Then 
 								If e\EventState = 0.0 Then
-									ShowEntity(tt\OverlayID[7])
 									me\LightFlash = 3.0
 									PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))		
 								EndIf
@@ -12464,5 +12461,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1088#1321#1E17
+;~B#1087#1320#1E14
 ;~C#Blitz3D
