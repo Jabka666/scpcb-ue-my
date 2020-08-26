@@ -5666,7 +5666,7 @@ Function FillRoom(r.Rooms)
 			If I_005\ChanceToSpawn = 1 Then
 				it = CreateItem("SCP-005", "scp005", r\x, r\y + 254.0 * RoomScale, r\z - 260.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
-			ElseIf I_005\ChanceToSpawn >= 2
+			ElseIf I_005\ChanceToSpawn = 2 Lor I_005\ChanceToSpawn > 3
 				it = CreateItem("Note from Maynard", "paper", r\x, r\y + 254.0 * RoomScale, r\z - 260.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)	
 			EndIf
