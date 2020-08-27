@@ -358,7 +358,7 @@ Function QuickLoadEvents()
 				ScaleSprite(ForestNPC, 0.75 * (140.0 / 410.0), 0.75)
 				SpriteViewMode(ForestNPC, 4)
 				EntityFX(ForestNPC, 1 + 8)
-				ForestNPCTex = LoadAnimTexture("GFX\npcs\AgentIJ.AIJ", 1 + 2, 140, 410, 0, 4)
+				ForestNPCTex = LoadAnimTexture_Strict("GFX\npcs\AgentIJ.AIJ", 1 + 2, 140, 410, 0, 4, 0)
 				ForestNPCData[0] = 0.0
 				EntityTexture(ForestNPC, ForestNPCTex, ForestNPCData[0])
 				ForestNPCData[1] = 0.0
@@ -427,7 +427,7 @@ Function UpdateEvents()
 	Local p.Particles, n.NPCs, r.Rooms, e.Events, e2.Events
 	Local it.Items, it2.Items, em.Emitters, sc.SecurityCams, sc2.SecurityCams
 	Local CurrTrigger$ = "", fDir#, Scale#, Tex%
-	Local x#, y#, z#, xTemp#, yTemp#
+	Local x#, y#, z#, xTemp#, yTemp#, b%, t%, SF%, TexName$
 	Local Angle#, GroupDesignation$
 	
 	CurrStepSFX = 0
@@ -4344,7 +4344,7 @@ Function UpdateEvents()
 					If e\room\Objects[2] = 0 Then
 						e\room\Objects[2] =	CopyEntity(o\NPCModelID[24])
 						ScaleEntity(e\room\Objects[2], 0.07, 0.07, 0.07)
-						Tex = LoadTexture_Strict("GFX\npcs\duck(3).png", 1, 0)
+						Tex = LoadTexture_Strict("GFX\npcs\duck(3).png")
 						EntityTexture(e\room\Objects[2], Tex)
 						DeleteSingleTextureEntryFromCache(Tex)
 						PositionEntity(e\room\Objects[2], EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
@@ -4388,17 +4388,17 @@ Function UpdateEvents()
 							EndIf
 						Next
 						
-						Tex% = LoadTexture_Strict(ImgPath, 1, 0)
+						Tex = LoadTexture_Strict(ImgPath)
 						
 						Local Brush% = LoadBrush_Strict(ImgPath, 1)
 						
 						For i = 1 To CountSurfaces(e\room\Objects[2])
-							SF% = GetSurface(e\room\Objects[2], i)
-							b% = GetSurfaceBrush(SF)
-							t% = GetBrushTexture(b, 0)
-							TexName$ = StripPath(TextureName(t))
+							SF = GetSurface(e\room\Objects[2], i)
+							b = GetSurfaceBrush(SF)
+							t = GetBrushTexture(b, 0)
+							TexName = StripPath(TextureName(t))
 							
-							If Lower(TexName) = "1048(1).png" Then
+							If Lower(TexName) = "1048(0).png" Then
 								PaintSurface(SF, Brush)
 							EndIf
 							FreeBrush(b)
@@ -4582,7 +4582,7 @@ Function UpdateEvents()
 							e\Sound = LoadSound_Strict("SFX\Character\Guard\096ServerRoom2.ogg")
 							e\SoundCHN = PlaySound_Strict(e\Sound)
 							
-							Tex = LoadTexture_Strict("GFX\npcs\scp_096_bloody.png", 1, 0)
+							Tex = LoadTexture_Strict("GFX\npcs\scp_096_bloody.png")
 							EntityTexture(Curr096\OBJ, Tex)
 							DeleteSingleTextureEntryFromCache(Tex)
 							
@@ -4873,7 +4873,7 @@ Function UpdateEvents()
 							Case 60.0
 								;[Block]
 								If (Not tt\MiscTextureID[14]) Then
-									Local Tex970% = LoadTexture_Strict("GFX\npcs\scp_173_H.png", 1, 0)
+									Local Tex970% = LoadTexture_Strict("GFX\npcs\scp_173_H.png")
 									
 									EntityTexture(Curr173\OBJ, Tex970, 0, 0)
 									DeleteSingleTextureEntryFromCache(Tex970)
@@ -5236,7 +5236,7 @@ Function UpdateEvents()
 											InjurePlayer(0.5)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech2.ogg"))
 										ElseIf e\EventState3 > 70.0 * 31.0 And e\EventState3 - fpst\FPSFactor[0] =< 70.0 * 31.0
-											Tex = LoadTexture_Strict("GFX\map\scp-012_1.png", 1, 0)
+											Tex = LoadTexture_Strict("GFX\map\scp-012_1.png")
 											EntityTexture(e\room\Objects[4], Tex, 0, 1)
 											DeleteSingleTextureEntryFromCache(Tex)
 											
@@ -5250,14 +5250,14 @@ Function UpdateEvents()
 											InjurePlayer(0.3)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech5.ogg"))
 										ElseIf e\EventState3 > 70.0 * 63.0 And e\EventState3 - fpst\FPSFactor[0] =< 70.0 * 63.0
-											Tex = LoadTexture_Strict("GFX\map\scp-012_2.png", 1, 0)
+											Tex = LoadTexture_Strict("GFX\map\scp-012_2.png")
 											EntityTexture(e\room\Objects[4], Tex, 0, 1)	
 											DeleteSingleTextureEntryFromCache(Tex)
 											
 											InjurePlayer(0.5)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech6.ogg"))
 										ElseIf e\EventState3 > 70.0 * 74.0 And e\EventState3 - fpst\FPSFactor[0] =< 70.0 * 74.0
-											Tex = LoadTexture_Strict("GFX\map\scp-012_3.png", 1, 0)
+											Tex = LoadTexture_Strict("GFX\map\scp-012_3.png")
 											EntityTexture(e\room\Objects[4], Tex, 0, 1)
 											DeleteSingleTextureEntryFromCache(Tex)
 											
@@ -7060,7 +7060,7 @@ Function UpdateEvents()
 							EndIf
 						Else
 							If e\room\Objects[2] = 0
-								Local GlassTex% = LoadTexture_Strict("GFX\map\textures\glass.png", 1 + 2, 0)
+								Local GlassTex% = LoadTexture_Strict("GFX\map\textures\glass.png", 1 + 2)
 								
 								e\room\Objects[2] = CreateSprite()
 								EntityTexture(e\room\Objects[2], GlassTex)
@@ -8179,7 +8179,7 @@ Function UpdateEvents()
 							e\EventState2 = Min(e\EventState2 + fpst\FPSFactor[0], 0.0)
 						EndIf
 					ElseIf e\EventState2 = 0.0
-						If e\room\NPC[0] <> Null
+						If e\room\NPC[0] <> Null Then
 							Local AdjDist1# = 0.0
 							Local AdjDist2# = 0.0
 							Local Adj1% = -1
@@ -8212,7 +8212,7 @@ Function UpdateEvents()
 							e\EventState2 = 1.0
 						EndIf
 					ElseIf e\EventState2 = 1.0
-						If e\room\NPC[0]\PathStatus <> 1
+						If e\room\NPC[0]\PathStatus <> 1 Then
 							e\room\NPC[0]\PathStatus = FindPath(e\room\NPC[0], EntityX(e\room\Objects[15], True), EntityY(e\room\Objects[15], True), EntityZ(e\room\Objects[15], True))
 						Else
 							e\EventState2 = 2.0
@@ -8232,13 +8232,11 @@ Function UpdateEvents()
 								EndIf
 								If (Not e\room\RoomDoors[0]\Open)
 									e\room\RoomDoors[0]\Open = True
-									Sound = Rand(0, 2)
-									PlaySound2(OpenDoorSFX(0, Sound), Camera, e\room\RoomDoors[0]\OBJ)
+									PlaySound2(OpenDoorSFX(0, Rand(0, 2)), Camera, e\room\RoomDoors[0]\OBJ)
 								EndIf
 								If (Not e\room\RoomDoors[1]\Open)
 									e\room\RoomDoors[1]\Open = True
-									Sound = Rand(0, 2)
-									PlaySound2(OpenDoorSFX(0, Sound), Camera, e\room\RoomDoors[1]\OBJ)
+									PlaySound2(OpenDoorSFX(0, Rand(0, 2)), Camera, e\room\RoomDoors[1]\OBJ)
 								EndIf
 							EndIf
 							If e\room\NPC[0]\Reload = 1.0
@@ -8341,7 +8339,7 @@ Function UpdateEvents()
 							If PlayerRoom = e\room Then
 								ShouldPlay = 20
 							EndIf
-							If e\room\NPC[0]\PathStatus <> 1
+							If e\room\NPC[0]\PathStatus <> 1 Then
 								e\room\NPC[0]\Idle = 70.0 * 60.0 ; ~ Making SCP-049 idle for one minute (twice as fast for AggressiveNPCs = True)
 								PositionEntity(e\room\NPC[0]\Collider, 0.0, 500.0, 0.0)
 								ResetEntity(e\room\NPC[0]\Collider)
@@ -8366,8 +8364,7 @@ Function UpdateEvents()
 									If e\room\RoomDoors[0]\Open = False
 										e\room\RoomDoors[0]\FastOpen = 0
 										e\room\RoomDoors[0]\Open = True
-										Sound = Rand(0, 2)
-										PlaySound2(OpenDoorSFX(0, Sound), Camera, e\room\RoomDoors[0]\OBJ)
+										PlaySound2(OpenDoorSFX(0, Rand(0, 2)), Camera, e\room\RoomDoors[0]\OBJ)
 										PlaySound_Strict(LoadTempSound("SFX\Door\DoorOpen079.ogg"))
 									EndIf
 								EndIf
@@ -8376,8 +8373,7 @@ Function UpdateEvents()
 							If e\room\RoomDoors[0]\Open = False
 								e\room\RoomDoors[0]\FastOpen = 0
 								e\room\RoomDoors[0]\Open = True
-								Sound = Rand(0, 2)
-								PlaySound2(OpenDoorSFX(0, Sound), Camera, e\room\RoomDoors[0]\OBJ)
+								PlaySound2(OpenDoorSFX(0, Rand(0, 2)), Camera, e\room\RoomDoors[0]\OBJ)
 								PlaySound_Strict(LoadTempSound("SFX\Door\DoorOpen079.ogg"))
 							EndIf
 						EndIf
@@ -8919,7 +8915,7 @@ Function UpdateDimension1499()
 						n\PrevState = 2
 						n\Angle = 270.0
 						RotateEntity(n\Collider, 0.0, n\Angle, 0.0)
-						Tex = LoadTexture_Strict("GFX\npcs\scp_1499_1_king.png", 1, 0)
+						Tex = LoadTexture_Strict("GFX\npcs\scp_1499_1_king.png")
 						EntityTexture(n\OBJ, Tex)
 						DeleteSingleTextureEntryFromCache(Tex)
 						e\room\NPC[0] = n

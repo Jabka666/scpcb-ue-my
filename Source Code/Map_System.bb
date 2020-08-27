@@ -245,15 +245,15 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 				Temp1s = ReadString(f)
 				If FileType(File + Temp1s) = 1 ; ~ Check if texture is existing in original path
 					If Temp1i < 3 Then
-						Tex[j] = LoadTextureCheckingIfInCache(File + Temp1s, 0, 1)
+						Tex[j] = LoadTextureCheckingIfInCache(File + Temp1s, 1, 0)
 					Else
-						Tex[j] = LoadTextureCheckingIfInCache(File + Temp1s, 0, 3)
+						Tex[j] = LoadTextureCheckingIfInCache(File + Temp1s, 3, 0)
 					EndIf
 				ElseIf FileType(MapTexturesFolder + Temp1s) = 1 ; ~ If not, check the MapTexturesFolder
 					If Temp1i < 3 Then
-						Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 0, 1)
+						Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 1, 0)
 					Else
-						Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 0, 3)
+						Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 3, 0)
 					EndIf
 				EndIf
 				If Tex[j] <> 0
@@ -5167,8 +5167,8 @@ Function FillRoom(r.Rooms)
 			Local Scale# = RoomScale * 4.5 * 0.4
 			Local Screen%
 			
-			r\Textures[0] = LoadAnimTexture("GFX\SL_monitors_checkpoint.png", 1, 512, 512, 0, 4)
-			r\Textures[1] = LoadAnimTexture("GFX\Sl_monitors.png", 1, 256, 256, 0, 10)
+			r\Textures[0] = LoadAnimTexture_Strict("GFX\SL_monitors_checkpoint.png", 1, 512, 512, 0, 4)
+			r\Textures[1] = LoadAnimTexture_Strict("GFX\Sl_monitors.png", 1, 256, 256, 0, 10)
 			
 			; ~ Monitor Objects
 			For i = 0 To 14

@@ -8,7 +8,7 @@ Type TextureInCache
 	Field TexDeleteType%
 End Type
 
-Function LoadTextureCheckingIfInCache(TexName$, DeleteType% = DeleteMapTextures, TexFlags% = 1)
+Function LoadTextureCheckingIfInCache(TexName$, TexFlags% = 1, DeleteType% = DeleteMapTextures)
 	Local tic.TextureInCache, Texture%, CurrPath$
 	Local mat.Materials
 	
@@ -29,6 +29,37 @@ Function LoadTextureCheckingIfInCache(TexName$, DeleteType% = DeleteMapTextures,
 	tic\TexDeleteType = DeleteType
 	If tic\Tex = 0 Then
 		tic\Tex = LoadTexture(CurrPath, TexFlags + (256 * (SaveTexturesInVRAM <> 0)))
+	EndIf
+	For mat.Materials = Each Materials
+		If mat\Name = tic\TexName Then
+			ScaleTexture(tic\Tex, mat\UScale, mat\VScale)
+			Exit
+		EndIf
+	Next
+	Return(tic\Tex)
+End Function
+
+Function LoadAnimTextureCheckingIfInCache(TexName$, TexFlags% = 1, Width%, Height%, FirstFrame%, Count%, DeleteType = DeleteMapTextures)
+	Local tic.TextureInCache, Texture%, CurrPath$
+	Local mat.Materials
+	
+	For tic.TextureInCache = Each TextureInCache
+		If tic\TexName <> "CreateTexture" Then
+			If StripPath(TexName) = tic\TexName Then
+				If tic\TexDeleteType < DeleteType Then
+					tic\TexDeleteType = DeleteType
+				EndIf
+				Return(tic\Tex)
+			EndIf
+		EndIf
+	Next
+	
+	CurrPath = TexName
+	tic.TextureInCache = New TextureInCache
+	tic\TexName = StripPath(TexName)
+	tic\TexDeleteType = DeleteType
+	If tic\Tex = 0 Then
+		tic\Tex = LoadAnimTexture(CurrPath, TexFlags + (256 * (SaveTexturesInVRAM <> 0)), Width, Height, FirstFrame, Count)
 	EndIf
 	For mat.Materials = Each Materials
 		If mat\Name = tic\TexName Then
@@ -121,7 +152,7 @@ Function CheckForTexture(Tex%, TexFlags% = 1)
 	ElseIf FileType(MapTexturesFolder + StripPath(TextureName(Tex))) = 1 Then ; ~ If not, check the MapTexturesFolder
 		Name = MapTexturesFolder + StripPath(TextureName(Tex))
 	EndIf
-	Texture = LoadTextureCheckingIfInCache(Name, 0, TexFlags)
+	Texture = LoadTextureCheckingIfInCache(Name, TexFlags, 0)
 	If Texture <> 0 Then
 		If ((TexFlags Shr 1) Mod 2) = 0 Then
 			TextureBlend(Texture, 5)

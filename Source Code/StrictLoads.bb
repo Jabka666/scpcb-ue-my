@@ -407,14 +407,23 @@ End Function
 
 ; ~ Don't use in LoadRMesh, as Reg does this manually there. If you wanna fuck around with the logic in that function, be my guest 
 Function LoadTexture_Strict(File$, Flags% = 1, TexDeleteType% = DeleteMapTextures)
-	If FileType(File) <> 1 Then RuntimeError("Texture " + File + " not found.")
-	
 	Local Tmp%
 	
 	If Tmp = 0 Then
 		If FileType(File) <> 1 Then RuntimeError("Texture " + File + " not found.")
-		Tmp = LoadTextureCheckingIfInCache(File, TexDeleTetype, Flags)
+		Tmp = LoadTextureCheckingIfInCache(File, Flags, TexDeleteType)
 		If Tmp = 0 Then RuntimeError("Failed to load Texture: " + File)
+	EndIf
+	Return(Tmp) 
+End Function
+
+Function LoadAnimTexture_Strict(File$, Flags%, Width%, Height%, FirstFrame%, Count%, TexDeleteType% = DeleteMapTextures)
+	Local Tmp%
+	
+	If Tmp = 0 Then
+		If FileType(File) <> 1 Then RuntimeError("Animated Texture " + File + " not found.")
+		Tmp = LoadAnimTextureCheckingIfInCache(File, Flags, Width, Height, FirstFrame, Count, TexDeleteType)
+		If Tmp = 0 Then RuntimeError("Failed to load Animated Texture: " + File)
 	EndIf
 	Return(Tmp) 
 End Function   
