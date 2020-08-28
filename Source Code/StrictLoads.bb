@@ -453,12 +453,11 @@ End Function
 Function LoadImage_Strict(File$)
 	Local Tmp%, Tmp2%
 	
-	If FileType(File) <> 1 Then RuntimeError("Image " + Chr(34) + File + Chr(34) + " missing. ")
-	Tmp = LoadImage(File)
-	Return(Tmp)
-	; ~ Attempt to load the image again
-	If Tmp = 0 Then Tmp2 = LoadImage(File)
-	Return(Tmp2)
+	If Tmp = 0 Then
+		If FileType(File) <> 1 Then RuntimeError("Image " + Chr(34) + File + Chr(34) + " missing. ")
+		Tmp = LoadImage(File)
+		Return(Tmp)
+	EndIf
 End Function
 
 ;~IDEal Editor Parameters:

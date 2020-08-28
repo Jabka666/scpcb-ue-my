@@ -2123,7 +2123,7 @@ Function LoadSavedMaps()
 	Forever 
 	CloseDir(Dir)
 	
-	Dim SavedMaps(SavedMapsAmount + 1)
+	Dim SavedMaps$(SavedMapsAmount + 1)
 	Dim SavedMapsAuthor$(SavedMapsAmount + 1)
 	
 	i = 0
@@ -2535,7 +2535,7 @@ Function LoadMap(File$)
 	r = CreateRoom(0, ROOM1, 0.0, 500.0, -16.0, "gatea")
 	r = CreateRoom(0, ROOM1, -16.0, 800.0, 0.0, "dimension1499")
 	
-	CreateEvent("room173intro", "room173intro", 0)
+	If IntroEnabled Then CreateEvent("room173intro", "room173intro", 0)
 	CreateEvent("pocketdimension", "pocketdimension", 0)   
 	CreateEvent("gatea", "gatea", 0)
 	CreateEvent("dimension1499", "dimension1499", 0)

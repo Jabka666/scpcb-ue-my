@@ -61,7 +61,7 @@ End Function
 Function InitEvents()
 	Local e.Events
 	
-	CreateEvent("room173intro", "room173intro", 0)
+	If IntroEnabled Then CreateEvent("room173intro", "room173intro", 0)
 	CreateEvent("room173", "room173", 0)
 	
 	CreateEvent("pocketdimension", "pocketdimension", 0)	
@@ -358,7 +358,7 @@ Function QuickLoadEvents()
 				ScaleSprite(ForestNPC, 0.75 * (140.0 / 410.0), 0.75)
 				SpriteViewMode(ForestNPC, 4)
 				EntityFX(ForestNPC, 1 + 8)
-				ForestNPCTex = LoadAnimTexture_Strict("GFX\npcs\AgentIJ.AIJ", 1 + 2, 140, 410, 0, 4, 0)
+				ForestNPCTex = LoadAnimTexture_Strict("GFX\npcs\AgentIJ.AIJ", 1 + 2, 140, 410, 0, 4, 2)
 				ForestNPCData[0] = 0.0
 				EntityTexture(ForestNPC, ForestNPCTex, ForestNPCData[0])
 				ForestNPCData[1] = 0.0
@@ -424,7 +424,7 @@ Function UpdateEvents()
 	CatchErrors("Uncaught (UpdateEvents)")
 	
 	Local Dist#, i%, Temp%, Pvt%, StrTemp$, j%, k%
-	Local p.Particles, n.NPCs, r.Rooms, e.Events, e2.Events
+	Local p.Particles, n.NPCs, r.Rooms, e.Events, e2.Events, de.Decals
 	Local it.Items, it2.Items, em.Emitters, sc.SecurityCams, sc2.SecurityCams
 	Local CurrTrigger$ = "", fDir#, Scale#, Tex%
 	Local x#, y#, z#, xTemp#, yTemp#, b%, t%, SF%, TexName$
@@ -2415,19 +2415,19 @@ Function UpdateEvents()
 							If EntityY(me\Collider) > 6.0 Then
 								ShouldPlay = 15
 								
-								If EntityX(e\room\Objects[20], True) < EntityX(e\room\Objects[8], True) - 4000.0 * RoomScale Then
+								If EntityX(e\room\Objects[18], True) < EntityX(e\room\Objects[8], True) - 4000.0 * RoomScale Then
 									e\SoundCHN2 = PlaySound_Strict(e\Sound2)
 									
-									PositionEntity(e\room\Objects[20], EntityX(me\Collider, True) + 4000.0 * RoomScale, 12.0, EntityZ(me\Collider, True))
+									PositionEntity(e\room\Objects[18], EntityX(me\Collider, True) + 4000.0 * RoomScale, 12.0, EntityZ(me\Collider, True))
 								EndIf
 								
 								MoveEntity(me\Collider, 0.0, Min((12.0 - EntityY(me\Collider)), 0.0) * fpst\FPSFactor[0], 0.0)
 								
 								x = (-fpst\FPSFactor[0]) * RoomScale * 4.0
-								y = (17.0 - Abs(EntityX(me\Collider) - EntityX(e\room\Objects[20])) * 0.5) - EntityY(e\room\Objects[20])
-								z = EntityZ(me\Collider, True) - EntityZ(e\room\Objects[20])
-								TranslateEntity(e\room\Objects[20], x, y, z, True)
-								RotateEntity(e\room\Objects[20], -90.0 - (EntityX(me\Collider) - EntityX(e\room\Objects[20])) * 1.5, -90.0, 0.0, True)
+								y = (17.0 - Abs(EntityX(me\Collider) - EntityX(e\room\Objects[18])) * 0.5) - EntityY(e\room\Objects[18])
+								z = EntityZ(me\Collider, True) - EntityZ(e\room\Objects[18])
+								TranslateEntity(e\room\Objects[18], x, y, z, True)
+								RotateEntity(e\room\Objects[18], -90.0 - (EntityX(me\Collider) - EntityX(e\room\Objects[18])) * 1.5, -90.0, 0.0, True)
 								
 								; ~ Check if the plane can see the player
 								Local Safe% = False
@@ -2457,23 +2457,23 @@ Function UpdateEvents()
 									If DistanceSquared(EntityX(me\Collider), x, EntityZ(me\Collider), z) < PowTwo(200.0 * RoomScale) Then Safe = True : Exit
 								Next
 								
-								Dist = EntityDistance(me\Collider, e\room\Objects[20])
+								Dist = EntityDistance(me\Collider, e\room\Objects[18])
 								
 								If e\SoundCHN2 <> 0 And ChannelPlaying(e\SoundCHN2)
 									e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, Camera, 10.0, 0.3 + (Not Safe) * 0.6)
 								EndIf	
 								
 								If Safe Then
-									EntityTexture(e\room\Objects[20], e\room\Objects[18])
+									EntityTexture(e\room\Objects[18], e\room\Textures[0])
 								ElseIf Dist < 8.0
-									e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\Objects[20], 8.0)
-									EntityTexture(e\room\Objects[20], e\room\Objects[19])
+									e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\Objects[18], 8.0)
+									EntityTexture(e\room\Objects[18], e\room\Textures[1])
 									InjurePlayer((8.0 - Dist) * (fpst\FPSFactor[0] * 0.0003))
 									
 									If Dist < 7.0 Then 
 										Pvt = CreatePivot()
 										PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
-										PointEntity(Pvt, e\room\Objects[20])
+										PointEntity(Pvt, e\room\Objects[18])
 										TurnEntity(Pvt, 90.0, 0.0, 0.0)
 										CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, 10.0)
 										CameraPitch = CameraPitch - 90.0
@@ -2572,7 +2572,7 @@ Function UpdateEvents()
 										
 										LoadEventSound(e, "SFX\Room\PocketDimension\Explosion.ogg")
 										LoadEventSound(e, "SFX\Room\PocketDimension\TrenchPlane.ogg", 1)
-										PositionEntity(e\room\Objects[20], EntityX(e\room\Objects[8], True) - 1000, 0, 0, True)
+										PositionEntity(e\room\Objects[18], EntityX(e\room\Objects[8], True) - 1000.0, 0.0, 0.0, True)
 										
 										e\EventStr = Float(0.0)
 									EndIf
@@ -8831,7 +8831,8 @@ Function UpdateEvents()
 End Function
 
 Function UpdateDimension1499()
-	Local e.Events, n.NPCs, n2.NPCs, r.Rooms, it.Items, i%, j%, du.Dummy1499_1, Temp%, Scale#, x%, y%
+	Local e.Events, n.NPCs, n2.NPCs, r.Rooms, it.Items, du.Dummy1499_1
+	Local Tex%, Temp%, Scale#, x%, y%, i%, j%
 	
 	For e.Events = Each Events
 		If e\EventName = "dimension1499"
@@ -10170,5 +10171,4 @@ Function GenerateRandomIA()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11AA#1DBE
 ;~C#Blitz3D

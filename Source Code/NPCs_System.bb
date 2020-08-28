@@ -81,7 +81,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			; ~ On Halloween set Jack-o'-lantern texture
 			If (Left(CurrentDate(), 7) = "31 Oct ") Then
 				tt\MiscTextureID[14] = True
-				TexFestive = LoadTexture_Strict("GFX\npcs\scp_173_H.png", 1)
+				TexFestive = LoadTexture_Strict("GFX\npcs\scp_173_H.png")
 				EntityTexture(n\OBJ, TexFestive, 0, 0)
 				DeleteSingleTextureEntryFromCache(TexFestive)
 			EndIf
@@ -89,7 +89,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			; ~ On New Year set cookie texture
 			If (Left(CurrentDate(), 7) = "01 Jan ") Then
 				tt\MiscTextureID[15] = True
-				TexFestive = LoadTexture_Strict("GFX\npcs\scp_173_NY.png", 1)
+				TexFestive = LoadTexture_Strict("GFX\npcs\scp_173_NY.png")
 				EntityTexture(n\OBJ, TexFestive, 0, 0)
 				DeleteSingleTextureEntryFromCache(TexFestive)
 			EndIf
@@ -119,17 +119,16 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			Temp = GetINIFloat(NPCsFile, "SCP-106", "Scale") / 2.2
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			
-			Local OldManEyes% = LoadTexture_Strict("GFX\npcs\scp_106_eyes.png")
-			
 			n\Speed = GetINIFloat(NPCsFile, "SCP-106", "Speed") / 100.0
 			
+			Tex = LoadTexture_Strict("GFX\npcs\scp_106_eyes.png", 1, 2)
 			n\OBJ2 = CreateSprite()
 			ScaleSprite(n\OBJ2, 0.03, 0.03)
-			EntityTexture(n\OBJ2, OldManEyes)
+			EntityTexture(n\OBJ2, Tex)
 			EntityBlend(n\OBJ2, 3)
 			EntityFX(n\OBJ2, 1 + 8)
 			SpriteViewMode(n\OBJ2, 2)
-			DeleteSingleTextureEntryFromCache(OldManEyes)
+			DeleteSingleTextureEntryFromCache(Tex)
 			;[End Block]
 		Case NPCtypeGuard
 			;[Block]
@@ -348,8 +347,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			
 			EntityFX(n\OBJ, 1)
 			
-			Tex = LoadTexture_Strict("GFX\npcs\scp_860_2_eyes.png", 1 + 2)
-			
+			Tex = LoadTexture_Strict("GFX\npcs\scp_860_2_eyes.png", 1 + 2, 2)
 			n\OBJ2 = CreateSprite()
 			ScaleSprite(n\OBJ2, 0.1, 0.1)
 			EntityTexture(n\OBJ2, Tex)
@@ -7446,5 +7444,5 @@ Function Animate2#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = True
 End Function 
 
 ;~IDEal Editor Parameters:
-;~B#174#121A#1360#13AE#1504#1621#17F1#184C
+;~B#172#1218#135E#13AC#1502#161F#17EF#184A
 ;~C#Blitz3D

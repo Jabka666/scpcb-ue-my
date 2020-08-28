@@ -61,12 +61,6 @@ Function LoadAnimTextureCheckingIfInCache(TexName$, TexFlags% = 1, Width%, Heigh
 	If tic\Tex = 0 Then
 		tic\Tex = LoadAnimTexture(CurrPath, TexFlags + (256 * (SaveTexturesInVRAM <> 0)), Width, Height, FirstFrame, Count)
 	EndIf
-	For mat.Materials = Each Materials
-		If mat\Name = tic\TexName Then
-			ScaleTexture(tic\Tex, mat\UScale, mat\VScale)
-			Exit
-		EndIf
-	Next
 	Return(tic\Tex)
 End Function
 

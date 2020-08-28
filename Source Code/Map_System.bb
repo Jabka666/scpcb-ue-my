@@ -1812,7 +1812,7 @@ Function FillRoom(r.Rooms)
 	Local d.Doors, d2.Doors, sc.SecurityCams, de.Decals, r2.Rooms, sc2.SecurityCams, tw.TempWayPoints
 	Local it.Items, it2.Items, em.Emitters, w.WayPoints, w2.WayPoints, lt.LightTemplates, ts.TempScreens
 	Local xTemp#, yTemp#, zTemp#, xTemp2%, yTemp2%, zTemp2%
-	Local t1%, Tex%, GlassTex%, OldManEyesTex%
+	Local t1%, Tex%
 	Local i%, k%, Temp%, Temp3%, Angle#
 	Local TempStr$, TempStr2$, TempStr3$
 	
@@ -2362,15 +2362,15 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\Objects[1], r\x - 669.0 * RoomScale, r\y + 0.5, r\z - 16.0 * RoomScale)
 			
 			; ~ Glass panel
-			GlassTex = LoadTexture_Strict("GFX\map\textures\glass.png", 1 + 2)
+			Tex = LoadTexture_Strict("GFX\map\textures\glass.png", 1 + 2)
 			r\Objects[2] = CreateSprite()
-			EntityTexture(r\Objects[2], GlassTex)
+			EntityTexture(r\Objects[2], Tex)
 			SpriteViewMode(r\Objects[2], 2)
 			ScaleSprite(r\Objects[2], 182.0 * RoomScale * 0.5, 192.0 * RoomScale * 0.5)
 			PositionEntity(r\Objects[2], r\x - 632.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 208.0 * RoomScale)
 			TurnEntity(r\Objects[2], 0.0, 180.0, 0.0)			
 			HideEntity(r\Objects[2])
-			DeleteSingleTextureEntryFromCache(GlassTex)
+			DeleteSingleTextureEntryFromCache(Tex)
 			
 			For i = 0 To 2
 				EntityParent(r\Objects[i], r\OBJ)
@@ -4914,26 +4914,26 @@ Function FillRoom(r.Rooms)
 				End Select 
 			Next
 			
-			OldManEyesTex = LoadTexture_Strict("GFX\npcs\scp_106_eyes.png")
+			r\Textures[0] = LoadTexture_Strict("GFX\npcs\pd_plane.png", 1 + 2, 2)
+			
+			r\Textures[1] = LoadTexture_Strict("GFX\npcs\pd_plane_eye.png", 1 + 2, 2)
+			
+			Tex = LoadTexture_Strict("GFX\npcs\scp_106_eyes.png", 1, 2)
 			r\Objects[17] = CreateSprite()
 			ScaleSprite(r\Objects[17], 0.03, 0.03)
-			EntityTexture(r\Objects[17], OldManEyesTex)
+			EntityTexture(r\Objects[17], Tex)
 			EntityBlend(r\Objects[17], 3)
 			EntityFX(r\Objects[17], 1 + 8)
 			SpriteViewMode(r\Objects[17], 2)
-			DeleteSingleTextureEntryFromCache(OldManEyesTex)
+			DeleteSingleTextureEntryFromCache(Tex)
 			
-			r\Objects[18] = LoadTexture_Strict("GFX\npcs\pd_plane.png", 1 + 2)
-			
-			r\Objects[19] = LoadTexture_Strict("GFX\npcs\pd_plane_eye.png", 1 + 2)
-			
-			r\Objects[20] = CreateSprite()
-			ScaleSprite(r\Objects[20], 8.0, 8.0)
-			EntityTexture(r\Objects[20], r\Objects[18])
-			EntityOrder(r\Objects[20], 100)
-			EntityBlend(r\Objects[20], 2)
-			EntityFX(r\Objects[20], 1 + 8)
-			SpriteViewMode(r\Objects[20], 2)
+			r\Objects[18] = CreateSprite()
+			ScaleSprite(r\Objects[18], 8.0, 8.0)
+			EntityTexture(r\Objects[18], r\Textures[0])
+			EntityOrder(r\Objects[18], 100)
+			EntityBlend(r\Objects[18], 2)
+			EntityFX(r\Objects[18], 1 + 8)
+			SpriteViewMode(r\Objects[18], 2)
 			
 			FreeEntity(Hallway)
 			
@@ -5167,8 +5167,8 @@ Function FillRoom(r.Rooms)
 			Local Scale# = RoomScale * 4.5 * 0.4
 			Local Screen%
 			
-			r\Textures[0] = LoadAnimTexture_Strict("GFX\SL_monitors_checkpoint.png", 1, 512, 512, 0, 4)
-			r\Textures[1] = LoadAnimTexture_Strict("GFX\Sl_monitors.png", 1, 256, 256, 0, 10)
+			r\Textures[0] = LoadAnimTexture_Strict("GFX\SL_monitors_checkpoint.png", 1, 512, 512, 0, 4, 2)
+			r\Textures[1] = LoadAnimTexture_Strict("GFX\Sl_monitors.png", 1, 256, 256, 0, 10, 2)
 			
 			; ~ Monitor Objects
 			For i = 0 To 14
@@ -8638,5 +8638,4 @@ Function PreventRoomOverlap(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11C0
 ;~C#Blitz3D
