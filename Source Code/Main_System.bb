@@ -3092,8 +3092,8 @@ Function MainLoop()
 					If e\EventName = "room860" Then
 						If e\EventState = 1.0 Then
 							CurrFogColor = FogColorForest
-							Exit
 						EndIf
+						Exit
 					EndIf
 				Next
 			ElseIf PlayerRoom\RoomTemplate\Name = "pocketdimension"
@@ -4994,7 +4994,7 @@ Function DrawGUI()
 			DrawFrame(x, y, INVENTORY_GFX_SIZE, INVENTORY_GFX_SIZE, (x Mod 64), (x Mod 64))
 			
 			If Inventory[n] <> Null Then
-				If (SelectedItem <> Inventory[n] Lor IsMouseOn = n) Then 
+				If SelectedItem <> Inventory[n] Lor IsMouseOn = n Then 
 					DrawImage(Inventory[n]\InvImg, x + INVENTORY_GFX_SIZE / 2 - 32, y + INVENTORY_GFX_SIZE / 2 - 32)
 				EndIf
 			EndIf
@@ -7382,7 +7382,7 @@ Function UpdateGUI()
 									wi\GasMask = 2
 								Else
 									msg\Msg = "You put on the gas mask."
-									If SelectedItem\Itemtemplate\TempName = "gasmask3"
+									If SelectedItem\ItemTemplate\TempName = "gasmask3"
 										wi\GasMask = 3
 									Else
 										wi\GasMask = 1
@@ -11096,6 +11096,7 @@ Function Use294()
 	Local x#, y#, xTemp%, yTemp%, StrTemp$, Temp%
 	Local Sep1%, Sep2%, Alpha#, Glow%
 	Local R%, G%, B%
+	Local it.Items
 	
 	ShowPointer()
 	
@@ -11307,7 +11308,7 @@ Function Use294()
 					Glow = GetINIInt2("Data\SCP-294.ini", Loc, "glow")
 					If Glow Then Alpha = -Alpha
 					
-					it.Items = CreateItem("Cup", "cup", EntityX(PlayerRoom\Objects[1], True), EntityY(PlayerRoom\Objects[1], True), EntityZ(PlayerRoom\Objects[1], True), R, G, B, Alpha)
+					it = CreateItem("Cup", "cup", EntityX(PlayerRoom\Objects[1], True), EntityY(PlayerRoom\Objects[1], True), EntityZ(PlayerRoom\Objects[1], True), R, G, B, Alpha)
 					it\Name = "Cup of " + I_294\ToInput
 					EntityType(it\Collider, HIT_ITEM)
 				Else

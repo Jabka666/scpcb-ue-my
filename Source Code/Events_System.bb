@@ -423,9 +423,9 @@ End Function
 Function UpdateEvents()
 	CatchErrors("Uncaught (UpdateEvents)")
 	
+	Local p.Particles, n.NPCs, r.Rooms, e.Events, e2.Events, de.Decals, du.Dummy1499_1, w.Waypoints
+	Local it.Items, it2.Items, em.Emitters, sc.SecurityCams, sc2.SecurityCams, wayp.Waypoints, do.Doors
 	Local Dist#, i%, Temp%, Pvt%, StrTemp$, j%, k%
-	Local p.Particles, n.NPCs, r.Rooms, e.Events, e2.Events, de.Decals
-	Local it.Items, it2.Items, em.Emitters, sc.SecurityCams, sc2.SecurityCams
 	Local CurrTrigger$ = "", fDir#, Scale#, Tex%
 	Local x#, y#, z#, xTemp#, yTemp#, b%, t%, SF%, TexName$
 	Local Angle#, GroupDesignation$
@@ -1400,7 +1400,7 @@ Function UpdateEvents()
 								For i = 1 To 2
 									If DistanceSquared(EntityX(e\room\NPC[i]\Collider), EntityX(e\room\Objects[i + 2], True), EntityZ(e\room\NPC[i]\Collider), EntityZ(e\room\Objects[i + 2], True)) > 0.09 Then
 										PointEntity(e\room\NPC[i]\OBJ, e\room\Objects[i + 2])
-										RotateEntity(e\room\NPC[i]\Collider, 0.0, CurveValue(EntityYaw(e\room\NPC[i]\obj), EntityYaw(e\room\NPC[i]\Collider), 15.0), 0.0)
+										RotateEntity(e\room\NPC[i]\Collider, 0.0, CurveValue(EntityYaw(e\room\NPC[i]\OBJ), EntityYaw(e\room\NPC[i]\Collider), 15.0), 0.0)
 										If e\EventState > (200.0 + i * 30.0) Then e\room\NPC[i]\State = 1.0
 										Temp = False
 									Else
@@ -1953,7 +1953,7 @@ Function UpdateEvents()
 					ElseIf CoffinDistance < 3.0 Then
 						If e\room\NPC[0] = Null Then
 							e\room\NPC[0] = CreateNPC(NPCtypeGuard, e\room\x, e\room\y, e\room\z)
-							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\angle + 90.0, 0.0)
+							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0)
 							e\room\NPC[0]\State = 8.0
 							SetNPCFrame(e\room\NPC[0], 270.0)
 							e\room\NPC[0]\GravityMult = 0.0
@@ -2006,7 +2006,7 @@ Function UpdateEvents()
 									
 									de.Decals = CreateDecal(3, EntityX(e\room\OBJ), -1534.0 * RoomScale, EntityZ(e\room\OBJ), 90.0, Rand(360.0), 0.0)
 									de\Size = 0.4 : UpdateDecals()
-									ScaleSprite(de\obj, de\Size, de\Size)
+									ScaleSprite(de\OBJ, de\Size, de\Size)
 									
 									it = CreateItem("Unknown Note", "paper", EntityX(e\room\NPC[0]\Collider, True), EntityY(e\room\NPC[0]\Collider, True) + 0.04, EntityZ(e\room\NPC[0]\Collider))
 									EntityType(it\Collider, HIT_ITEM)
@@ -2031,7 +2031,7 @@ Function UpdateEvents()
 							If e\room\NPC[0]\Sound2 = 0 Then
 								e\room\NPC[0]\Sound2 = LoadSound_Strict("SFX\Room\895Chamber\GuardRadio.ogg")
 							EndIf
-							e\room\NPC[0]\SoundChn2 = LoopSound2(e\room\NPC[0]\Sound2, e\room\NPC[0]\SoundCHN2, Camera, e\room\NPC[0]\Collider, 5.0)
+							e\room\NPC[0]\SoundCHN2 = LoopSound2(e\room\NPC[0]\Sound2, e\room\NPC[0]\SoundCHN2, Camera, e\room\NPC[0]\Collider, 5.0)
 						EndIf
 					EndIf
 					
@@ -2315,12 +2315,12 @@ Function UpdateEvents()
 				; ~ 0 if the player is in the starting room
 				; ~ 1 if in the room with the throne, moving pillars, plane etc
 				; ~ 12-15 if player is in the room with the tall pillars 
-				; ~ (goes down from 15 to 12 and SCP-106 teleports from pillar to another, pillars being room\Objects[12 to 15])
+				; ~ (Goes down from 15 to 12 and SCP-106 teleports from pillar to another, pillars being r\Objects[12 to 15])
 				
 				; ~ EventState3:
 				; ~ 1 when appearing in the tunnel that looks like the tunnels in HCZ
 				; ~ 2 after opening the door in the tunnel
-				; ~ otherwise 0
+				; ~ Otherwise 0
 				
 				If PlayerRoom = e\room Then
 					ShowEntity(e\room\OBJ)
@@ -3366,6 +3366,7 @@ Function UpdateEvents()
 											If DistanceSquared(EntityX(n\Collider), EntityX(e\room\Objects[i], True), EntityZ(n\Collider), EntityZ(e\room\Objects[i], True)) < PowTwo(250.0 * RoomScale) Then
 												If PlayerRoom = e\room Then me\LightFlash = 0.3
 												n\IsDead = True
+												Exit
 											EndIf
 										Next	
 									EndIf
@@ -4290,13 +4291,13 @@ Function UpdateEvents()
 						If (e\EventState / 250.0) > 0.3 And ((e\EventState - fpst\FPSFactor[0] * 0.7) / 250.0) =< 0.3 Then
 							e\SoundCHN = PlaySound_Strict(HorrorSFX[6])
 							me\BlurTimer = 800.0
-							d.Decals = CreateDecal(0, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True), 0.0, e\room\Angle - 90.0, Rnd(360.0))
-							d\Timer = 90000.0 : d\Alpha = 0.01 : d\AlphaChange = 0.005 : d\Size = 0.1 : d\SizeChange = 0.003
+							de.Decals = CreateDecal(0, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True), 0.0, e\room\Angle - 90.0, Rnd(360.0))
+							de\Timer = 90000.0 : de\Alpha = 0.01 : de\AlphaChange = 0.005 : de\Size = 0.1 : de\SizeChange = 0.003
 						EndIf
 						
 						If (e\EventState / 250.0) > 0.65 And ((e\EventState - fpst\FPSFactor[0] * 0.7) / 250.0) =< 0.65 Then
-							d.Decals = CreateDecal(0, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True), EntityZ(e\room\Objects[3], True), 0.0, e\room\Angle + 90.0, Rnd(360.0))
-							d\Timer = 90000.0 : d\Alpha = 0.01 : d\AlphaChange = 0.005 : d\Size = 0.1 : d\SizeChange = 0.003
+							de.Decals = CreateDecal(0, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True), EntityZ(e\room\Objects[3], True), 0.0, e\room\Angle + 90.0, Rnd(360.0))
+							de\Timer = 90000.0 : de\Alpha = 0.01 : de\AlphaChange = 0.005 : de\Size = 0.1 : de\SizeChange = 0.003
 						EndIf						
 						If e\EventState > 250.0 Then Curr106\Idle = 0 : RemoveEvent(e)
 					EndIf
@@ -4851,7 +4852,7 @@ Function UpdateEvents()
 								For i = 0 To 3
 									de.Decals = CreateDecal(7, e\room\x + Rnd(-2.0, 2.0), 700.0 * RoomScale, e\room\z + Rnd(-2.0, 2.0), 270.0, Rnd(360.0), 0.0)
 									de\Size = 0.05 : de\SizeChange = 0.0005 : UpdateDecals()
-									EntityAlpha(de\obj, 0.8)
+									EntityAlpha(de\OBJ, 0.8)
 								Next
 								;[End Block]
 							Case 40.0
@@ -6225,8 +6226,8 @@ Function UpdateEvents()
 								    Curr106\Idle = True	
 									
 								    If e\EventState3 - fpst\FPSFactor[0] < 2500.0 Then 
-									    d.Decals = CreateDecal(0, EntityX(e\room\Objects[5], True), -6392.0 * RoomScale, EntityZ(e\room\Objects[5], True), 90.0, 0.0, Rnd(360.0)) 
-									    d\Timer = 90000.0 : d\Alpha = 0.01 : d\AlphaChange = 0.005 : d\Size = 0.1 : d\SizeChange = 0.003
+									    de.Decals = CreateDecal(0, EntityX(e\room\Objects[5], True), -6392.0 * RoomScale, EntityZ(e\room\Objects[5], True), 90.0, 0.0, Rnd(360.0)) 
+									    de\Timer = 90000.0 : de\Alpha = 0.01 : de\AlphaChange = 0.005 : de\Size = 0.1 : de\SizeChange = 0.003
 										
 										If e\SoundCHN2 <> 0 Then
 									    	If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2)
@@ -6238,12 +6239,12 @@ Function UpdateEvents()
 											FreeSound_Strict(FemurBreakerSFX) : FemurBreakerSFX = 0
 										EndIf
 										
-									    d.Decals = CreateDecal(0, EntityX(e\room\Objects[7], True), EntityY(e\room\Objects[7], True), EntityZ(e\room\Objects[7], True), 0.0, 0.0, 0.0) 
-										d\Timer = 90000.0 : d\Alpha = 0.01 : d\AlphaChange = 0.005 : d\Size = 0.05 : d\SizeChange = 0.002
-									    RotateEntity(d\OBJ, EntityPitch(e\room\Objects[7], True) + Rnd(10.0, 20.0), EntityYaw(e\room\Objects[7], True) + 30.0, EntityRoll(d\OBJ))
-									    MoveEntity(d\OBJ, 0.0, 0.05, 0.2) 
-									    RotateEntity(d\OBJ, EntityPitch(e\room\Objects[7], True), EntityYaw(e\room\Objects[7], True), EntityRoll(d\OBJ))
-										EntityParent(d\OBJ, e\room\Objects[7])
+									    de.Decals = CreateDecal(0, EntityX(e\room\Objects[7], True), EntityY(e\room\Objects[7], True), EntityZ(e\room\Objects[7], True), 0.0, 0.0, 0.0) 
+										de\Timer = 90000.0 : de\Alpha = 0.01 : de\AlphaChange = 0.005 : de\Size = 0.05 : de\SizeChange = 0.002
+									    RotateEntity(de\OBJ, EntityPitch(e\room\Objects[7], True) + Rnd(10.0, 20.0), EntityYaw(e\room\Objects[7], True) + 30.0, EntityRoll(de\OBJ))
+									    MoveEntity(de\OBJ, 0.0, 0.05, 0.2) 
+									    RotateEntity(de\OBJ, EntityPitch(e\room\Objects[7], True), EntityYaw(e\room\Objects[7], True), EntityRoll(de\OBJ))
+										EntityParent(de\OBJ, e\room\Objects[7])
 									ElseIf e\EventState3 > 3200.0 Then
 										If e\EventState2 = True Then
 										    Curr106\Contained = True
@@ -6300,7 +6301,7 @@ Function UpdateEvents()
 			Case "room205"
 				;[Block]
 				If PlayerRoom = e\room Then
-					If e\EventState = 0 Lor e\EventStr <> "LoadDone" Then
+					If e\EventState = 0.0 Lor e\EventStr <> "LoadDone" Then
 						If e\EventStr = "" And QuickLoadPercent = -1
 							QuickLoadPercent = 0
 							QuickLoad_CurrEvent = e
@@ -6991,10 +6992,10 @@ Function UpdateEvents()
 				ElseIf e\EventState = 1.0
 					If e\room\Dist < 3.0 Lor Rand(7000) = 1 Then
 						e\EventState = 2.0
-						d.Decals = CreateDecal(1, EntityX(e\room\OBJ), 445.0 * RoomScale, EntityZ(e\room\OBJ), -90.0, Rand(360.0), 0.0)
-						d\Size = Rnd(0.5, 0.7)
-						EntityAlpha(d\OBJ, Rnd(0.7, 0.85))
-						ScaleSprite(d\OBJ, d\Size, d\Size)
+						de.Decals = CreateDecal(1, EntityX(e\room\OBJ), 445.0 * RoomScale, EntityZ(e\room\OBJ), -90.0, Rand(360.0), 0.0)
+						de\Size = Rnd(0.5, 0.7)
+						EntityAlpha(de\OBJ, Rnd(0.7, 0.85))
+						ScaleSprite(de\OBJ, de\Size, de\Size)
 						
 						PlaySound_Strict(HorrorSFX[10])
 					ElseIf e\room\Dist > 8.0
@@ -8404,12 +8405,8 @@ Function UpdateEvents()
 						Next
 						For sc.SecurityCams = Each SecurityCams
 							If sc\room = e\room Then
-								If sc\ScrObj <> 0
-									ShowEntity(sc\ScrOBJ)
-								EndIf
-								If sc\ScrOverlay <> 0
-									ShowEntity(sc\ScrOverlay)
-								EndIf
+								If sc\ScrOBJ <> 0 Then ShowEntity(sc\ScrOBJ)
+								If sc\ScrOverlay <> 0 Then ShowEntity(sc\ScrOverlay)
 								Exit
 							EndIf
 						Next
@@ -8426,12 +8423,8 @@ Function UpdateEvents()
 						Next
 						For sc.SecurityCams = Each SecurityCams
 							If sc\room = e\room Then
-								If sc\ScrObj <> 0
-									HideEntity(sc\ScrOBJ)
-								EndIf
-								If sc\ScrOverlay <> 0
-									HideEntity(sc\ScrOverlay)
-								EndIf
+								If sc\ScrOBJ <> 0 Then HideEntity(sc\ScrOBJ)
+								If sc\ScrOverlay <> 0 Then HideEntity(sc\ScrOverlay)
 								Exit
 							EndIf
 						Next
@@ -8801,9 +8794,9 @@ Function UpdateEvents()
 				            If e\EventState = 0.0 And I_005\ChanceToSpawn =< 3 Then
 				                PlaySound_Strict(HorrorSFX[10])
 								
-							    d.Decals = CreateDecal(0, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True), 0.0, e\room\Angle + 360.0, Rnd(360.0))
-						        d\Size = 0.1 : d\SizeChange = 0.003 : d\Alpha = 0.01 : d\AlphaChange = 0.005 : d\ID = 1
-								ScaleSprite(d\OBJ, d\Size, d\Size)
+							    de.Decals = CreateDecal(0, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True), 0.0, e\room\Angle + 360.0, Rnd(360.0))
+						        de\Size = 0.1 : de\SizeChange = 0.003 : de\Alpha = 0.01 : de\AlphaChange = 0.005 : de\ID = 1
+								ScaleSprite(de\OBJ, de\Size, de\Size)
 								
 						        PositionEntity(Curr106\Collider, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True))
 							    Curr106\State = -11.0
