@@ -452,7 +452,7 @@ Function UpdateConsole()
 		
 		If KeyHit(200) Then
 			ReissuePos = 0
-			If (ConsoleReissue = Null) Then
+			If ConsoleReissue = Null Then
 				ConsoleReissue = First ConsoleMsg
 				
 				While (ConsoleReissue <> Null)
@@ -3104,6 +3104,7 @@ Function MainLoop()
 						Else
 							CurrFogColor = FogColorPD
 						EndIf
+						Exit
 					EndIf
 				Next
 			EndIf
@@ -12462,5 +12463,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1087#1320#1E14
+;~B#1088#1321#1E15
 ;~C#Blitz3D

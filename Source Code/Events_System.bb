@@ -645,7 +645,6 @@ Function UpdateEvents()
 									If e\room\RoomDoors[5]\OpenState = 0.0 Then 
 										If e\room\NPC[1] <> Null Then RemoveNPC(e\room\NPC[1])
 										If e\room\NPC[2] <> Null Then RemoveNPC(e\room\NPC[2])
-										
 										e\EventState2 = 1.0
 									EndIf
 								EndIf
@@ -711,13 +710,10 @@ Function UpdateEvents()
 				;[Block]
 				If me\KillTimer >= 0.0 And e\EventState2 = 0.0 Then
 					me\Zone = 0
-					
 					If e\EventState3 > 0.0 Then
 						ShouldPlay = 13
-						
 						; ~ Slow the player down to match his speed to the guards
 						me\CurrSpeed = Min(me\CurrSpeed - (me\CurrSpeed * (0.008 / EntityDistance(e\room\NPC[3]\Collider, me\Collider)) * fpst\FPSFactor[0]), me\CurrSpeed)
-						
 						If e\EventState3 < 170.0 Then
 							If e\EventState3 = 1.0 Then
 								PositionEntity(Camera, x, y, z)
@@ -789,7 +785,6 @@ Function UpdateEvents()
 									
 									e\EventState3 = 15.0
 								EndIf
-								
 								CameraPitch = 0.0
 								RotateEntity(me\Collider, 0.0, EntityYaw(Camera), 0.0)
 							ElseIf e\EventState3 < 40.0
@@ -800,7 +795,6 @@ Function UpdateEvents()
 									Exit
 								EndIf
 							EndIf
-							
 							If SelectedItem <> Null Then
 								e\EventState3 = e\EventState3 + fpst\FPSFactor[0] / 5.0
 							EndIf							
@@ -1159,9 +1153,6 @@ Function UpdateEvents()
 								If e\room\NPC[7]\Sound <> 0 Then
 									FreeSound_Strict(e\room\NPC[7]\Sound) : e\room\NPC[7]\Sound = 0	
 								EndIf
-								
-								FreeEntity(e\room\Objects[9]) : e\room\Objects[9] = 0
-								FreeEntity(e\room\Objects[10]) : e\room\Objects[10] = 0
 								
 								If e\room\NPC[5] <> Null Then
 									RemoveNPC(e\room\NPC[5])
@@ -2463,7 +2454,7 @@ Function UpdateEvents()
 									e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, Camera, 10.0, 0.3 + (Not Safe) * 0.6)
 								EndIf	
 								
-								If Safe Then
+								If Safe Lor chs\NoTarget Then
 									EntityTexture(e\room\Objects[18], e\room\Textures[0])
 								ElseIf Dist < 8.0
 									e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\Objects[18], 8.0)
@@ -2579,13 +2570,12 @@ Function UpdateEvents()
 								ElseIf EntityY(me\Collider) < -180.0 * RoomScale ; ~ The "exit room"
 									Temp = Distance(EntityX(me\Collider), EntityX(e\room\Objects[8], True) + 1024.0 * RoomScale, EntityZ(me\Collider), EntityZ(e\room\Objects[8], True))
 									If Temp < 640.0 * RoomScale
-										me\BlurTimer = (640.0 * RoomScale - Temp) * 3000.0
+										me\BlurTimer = ((640.0 * RoomScale) - Temp) * 3000.0
 										
 										e\SoundCHN2 = LoopSound2(DecaySFX[Rand(1, 3)], e\SoundCHN2, Camera, me\Collider, 2.0, (640.0 * RoomScale - Temp) * Abs(me\CurrSpeed) * 100)
 										me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, Temp * 10.0)
 										
 										If Temp < 130.0 * RoomScale Then
-											
 											For r.Rooms = Each Rooms
 												If r\RoomTemplate\Name = "room2shaft" Then
 													GiveAchievement(AchvPD)
@@ -2807,8 +2797,8 @@ Function UpdateEvents()
 							PositionEntity(Curr106\Collider, EntityX(e\room\Objects[e\EventState2], True), 0.27, EntityZ(e\room\Objects[e\EventState2], True))
 							
 							PointEntity(Curr106\Collider, Camera)
-							TurnEntity(Curr106\Collider, 0, Sin(MilliSecs() / 20) * 6.0, 0, True)
-							MoveEntity(Curr106\Collider, 0, 0, Sin(MilliSecs() / 15) * 0.06)
+							TurnEntity(Curr106\Collider, 0.0, Sin(MilliSecs() / 20.0) * 6.0, 0, True)
+							MoveEntity(Curr106\Collider, 0.0, 0.0, Sin(MilliSecs() / 15.0) * 0.06)
 							
 							ShowEntity(Curr106\OBJ)
 							ShowEntity(Curr106\Collider)
@@ -3203,7 +3193,7 @@ Function UpdateEvents()
 					e\EventState = e\EventState + fpst\FPSFactor[0]
 					If e\EventState > 700.0 Then
 						If EntityDistanceSquared(e\room\RoomDoors[0]\OBJ, me\Collider) > 0.25 Then 
-							If EntityInView(e\room\RoomDoors[0]\OBJ, Camera) = False Then
+							If (Not EntityInView(e\room\RoomDoors[0]\OBJ, Camera)) Then
 								e\room\RoomDoors[0]\Open = False
 								RemoveEvent(e)
 							EndIf
@@ -4214,7 +4204,7 @@ Function UpdateEvents()
 										x = GridSZ * GridSZ
 									EndIf
 								Next 
-								If (spawnPoint <> Null) Then
+								If spawnPoint <> Null Then
 									e\room\NPC[i] = CreateNPC(NPCtype966, EntityX(spawnPoint\OBJ, True), EntityY(spawnPoint\OBJ, True), EntityZ(spawnPoint\OBJ, True))
 								EndIf
 							Next
@@ -4258,7 +4248,7 @@ Function UpdateEvents()
 							PointEntity(Curr106\Collider, e\room\Objects[1])
 							MoveEntity(Curr106\Collider, 0.0, 0.0, EntityDistance(e\room\Objects[0], e\room\Objects[1]) * 0.5 * (e\EventState / 50.0))
 							AnimateNPC(Curr106, 284.0, 333.0, 0.02 * 35.0)
-						ElseIf e\EventState < 200
+						ElseIf e\EventState < 200.0
 							Curr106\Idle = True
 							AnimateNPC(Curr106, 334.0, 494.0, 0.2)
 							
@@ -4354,7 +4344,7 @@ Function UpdateEvents()
 						
 						LoadEventSound(e, "SFX\SCP\Joke\Saxophone.ogg")
 					Else
-						If EntityInView(e\room\Objects[2], Camera) = False Then
+						If (Not EntityInView(e\room\Objects[2], Camera)) Then
 							e\EventState = e\EventState + fpst\FPSFactor[0]
 							If Rand(200) = 1 And e\EventState > 300.0 Then
 								e\EventState = 0.0
@@ -5837,7 +5827,7 @@ Function UpdateEvents()
 							e\room\RoomDoors[1]\IsElevatorDoor = 0
 							e\room\RoomDoors[3]\IsElevatorDoor = 0
 							
-							If (PrevGenLever <> x) Then
+							If PrevGenLever <> x Then
 								If x = False Then
 									PlaySound_Strict(LightSFX)
 								Else
@@ -7068,7 +7058,7 @@ Function UpdateEvents()
 								SpriteViewMode(e\room\Objects[2], 2)
 								ScaleSprite(e\room\Objects[2], 182.0 * RoomScale * 0.5, 192.0 * RoomScale * 0.5)
 								Pvt = CreatePivot(e\room\OBJ)
-								PositionEntity(Pvt, -632.0, 224.0, -208.0, False)
+								PositionEntity(Pvt, -632.0, 224.0, -208.0)
 								PositionEntity(e\room\Objects[2], EntityX(Pvt, True), EntityY(Pvt, True), EntityZ(Pvt, True))
 								FreeEntity(Pvt)
 								RotateEntity(e\room\Objects[2], 0.0, e\room\Angle, 0.0)
@@ -8309,7 +8299,9 @@ Function UpdateEvents()
 										e\room\NPC[0]\PrevState = 2
 										;[End Block]
 									Case 5.0
+										;[Block]
 										e\EventState2 = 5.0
+										;[End Block]
 								End Select
 								e\room\NPC[0]\PathTimer = 0.0
 								e\room\NPC[0]\State3 = e\room\NPC[0]\State3 + 1.0
@@ -9217,6 +9209,7 @@ Function UpdateEndings()
 							For n.NPCs = Each NPCs
 								If n\NPCtype = NPCtypeMTF
 									RemoveNPC(n)
+									Exit
 								EndIf
 							Next
 							
@@ -9510,7 +9503,7 @@ Function UpdateEndings()
 					If e\EventState = 0.0 Then
 						DrawLoading(0)
 						
-						e\room\Objects[0] = LoadRMesh("GFX\map\gateatunnel_opt.rmesh", Null)
+						e\room\Objects[0] = LoadRMesh("GFX\map\gatea_tunnel_opt.rmesh", Null)
 						PositionEntity(e\room\Objects[0], EntityX(e\room\OBJ, True), EntityY(e\room\OBJ, True), EntityZ(e\room\OBJ, True))
 						ScaleEntity(e\room\Objects[0], RoomScale, RoomScale, RoomScale)
 						EntityType(e\room\Objects[0], HIT_MAP)
@@ -9522,6 +9515,7 @@ Function UpdateEndings()
 						For n.NPCs = Each NPCs
 							If n <> Curr106 And n <> Curr173 Then  
 								RemoveNPC(n)
+								Exit
 							EndIf
 						Next
 						Curr173\Idle = 1

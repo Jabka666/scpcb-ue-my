@@ -1934,7 +1934,7 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "gatea"
 			;[Block]
-			r\RoomDoors[2] = CreateDoor(r\Zone, r\x - 4064.0 * RoomScale, r\y - 1280.0 * RoomScale, r\z + 3952.0 * RoomScale, 0.0, r)
+			r\RoomDoors[2] = CreateDoor(r\Zone, r\x - 4064.0 * RoomScale, r\y - 1248.0 * RoomScale, r\z + 3952.0 * RoomScale, 0.0, r)
 			r\RoomDoors[2]\AutoClose = False
 			
 			d2 = CreateDoor(r\Zone, r\x, r\y, r\z - 1024.0 * RoomScale, 0.0, r)
@@ -2028,6 +2028,11 @@ Function FillRoom(r.Rooms)
 			EntityPickMode(r\Objects[16], 2)
 			EntityType(r\Objects[16], HIT_MAP)
 			EntityAlpha(r\Objects[16], 0.0)
+			
+			w = CreateWaypoint(r\x, r\y + 66.0 * RoomScale, r\z + 3112.0 * RoomScale, Null, r)
+			w2 = CreateWaypoint(r\x, r\y + 66.0 * RoomScale, r\z + 2112.0 * RoomScale, Null, r)
+			w\connected[0] = w2 : w\Dist[0] = EntityDistance(w\OBJ, w2\OBJ)
+			w2\connected[0] = w : w2\Dist[0] = w\Dist[0]
 			;[End Block]
 		Case "gateaentrance"
 			;[Block]
@@ -2040,9 +2045,9 @@ Function FillRoom(r.Rooms)
 			r\RoomDoors[1] = CreateDoor(r\Zone, r\x, r\y, r\z - 360.0 * RoomScale, 0.0, r, False, True, 5)
 			r\RoomDoors[1]\AutoClose = False
 			PositionEntity(r\RoomDoors[1]\Buttons[1], r\x + 422.0 * RoomScale, EntityY(r\RoomDoors[0]\Buttons[1], True), r\z - 576.0 * RoomScale, True)
-			RotateEntity(r\RoomDoors[1]\Buttons[1], 0.0, r\Angle - 90, 0.0, True)
+			RotateEntity(r\RoomDoors[1]\Buttons[1], 0.0, r\Angle - 90.0, 0.0, True)
 			PositionEntity(r\RoomDoors[1]\Buttons[0], r\x - 522.0 * RoomScale, EntityY(r\RoomDoors[1]\Buttons[0], True), EntityZ(r\RoomDoors[1]\Buttons[0], True), True)
-			RotateEntity(r\RoomDoors[1]\Buttons[0], 0.0, r\Angle - 225, 0.0, True)
+			RotateEntity(r\RoomDoors[1]\Buttons[0], 0.0, r\Angle - 225.0, 0.0, True)
 			
 			; ~ Elevator's pivot
 			r\Objects[0] = CreatePivot()
@@ -2072,9 +2077,9 @@ Function FillRoom(r.Rooms)
 			r\RoomDoors[4] = CreateDoor(r\Zone, r\x, r\y, r\z - 320.0 * RoomScale, 0.0, r, False, True, 5)
 			r\RoomDoors[4]\AutoClose = False
 			PositionEntity(r\RoomDoors[4]\Buttons[1], r\x + 358.0 * RoomScale, EntityY(r\RoomDoors[4]\Buttons[1], True), r\z - 528.0 * RoomScale, True)
-			RotateEntity(r\RoomDoors[4]\Buttons[1], 0.0, r\Angle - 90, 0.0, True)
+			RotateEntity(r\RoomDoors[4]\Buttons[1], 0.0, r\Angle - 90.0, 0.0, True)
 			PositionEntity(r\RoomDoors[4]\Buttons[0], EntityX(r\RoomDoors[4]\Buttons[0], True), EntityY(r\RoomDoors[4]\Buttons[0], True), r\z - 198.0 * RoomScale, True)
-			RotateEntity(r\RoomDoors[4]\Buttons[0], 0.0, r\Angle - 180, 0.0, True)
+			RotateEntity(r\RoomDoors[4]\Buttons[0], 0.0, r\Angle - 180.0, 0.0, True)
 			
 			r\RoomDoors[5] = CreateDoor(r\Zone, r\x + 3248.0 * RoomScale, r\y + 9856.0 * RoomScale, r\z + 6400.0 * RoomScale, 0.0, r, False, False, False, "GEAR")
 			r\RoomDoors[5]\AutoClose = False : r\RoomDoors[5]\Locked = True
@@ -4321,17 +4326,6 @@ Function FillRoom(r.Rooms)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
-			r\Objects[9] = LoadRMesh("GFX\map\173_2_opt.rmesh", Null)
-			EntityType(r\Objects[9], HIT_MAP)
-			EntityPickMode(r\Objects[9], 2)
-			
-			r\Objects[10] = LoadRMesh("GFX\map\intro_labels_opt.rmesh", Null)
-			PositionEntity(r\Objects[10], EntityX(r\Objects[10], True), EntityY(r\Objects[10], True) - 10.0 * RoomScale, EntityZ(r\Objects[10], True))
-			
-			For i = 9 To 10
-				EntityParent(r\Objects[i], r\OBJ)
-			Next
-			
 			For i = 0 To 4
 			    Select i
 			        Case 0
@@ -5986,10 +5980,10 @@ End Function
 Type TempWayPoints
 	Field x#, y#, z#
 	Field roomtemplate.RoomTemplates
-End Type 
+End Type
 
 Type WayPoints
-	Field OBJ
+	Field OBJ%
 	Field door.Doors
 	Field room.Rooms
 	Field State%
@@ -6002,16 +5996,8 @@ End Type
 Function CreateWaypoint.WayPoints(x#, y#, z#, door.Doors, room.Rooms)
 	Local w.WayPoints = New WayPoints
 	
-	If 1 Then
-		w\OBJ = CreatePivot()
-		PositionEntity(w\OBJ, x, y, z)	
-	Else
-		w\OBJ = CreateSprite()
-		PositionEntity(w\OBJ, x, y, z)
-		ScaleSprite(w\OBJ, 0.15 , 0.15)
-		EntityTexture(w\OBJ, tt\LightSpriteID[0])
-		EntityBlend(w\OBJ, 3)	
-	EndIf
+	w\OBJ = CreatePivot()
+	PositionEntity(w\OBJ, x, y, z)	
 	
 	EntityParent(w\OBJ, room\OBJ)
 	
@@ -6021,22 +6007,18 @@ Function CreateWaypoint.WayPoints(x#, y#, z#, door.Doors, room.Rooms)
 	Return(w)
 End Function
 
-Function InitWayPoints(loadingstart = 45)
+Function InitWayPoints(LoadingStart% = 45)
 	Local d.Doors, w.WayPoints, w2.WayPoints, r.Rooms, ClosestRoom.Rooms
-	Local x#, y#, z#, tLine%
-	Local i%, n%, Temper%
-	Local Amount%, Number%, Iter%
-	
-	Temper = MilliSecs()
-	
+	Local x#, y#, z#
+	Local Temper% = MilliSecs()
 	Local Dist#, Dist2#
 	
 	For d.Doors = Each Doors
 		If d\OBJ <> 0 Then HideEntity(d\OBJ)
-		If d\OBJ2 <> 0 Then HideEntity(d\OBJ2)	
+		If d\OBJ2 <> 0 Then HideEntity(d\OBJ2)
 		If d\FrameOBJ <> 0 Then HideEntity(d\FrameOBJ)
 		
-		If d\room = Null Then 
+		If d\room = Null Then
 			ClosestRoom.Rooms = Null
 			Dist = 30.0
 			For r.Rooms = Each Rooms
@@ -6058,20 +6040,23 @@ Function InitWayPoints(loadingstart = 45)
 		If (Not d\DisableWaypoint) Then CreateWaypoint(EntityX(d\FrameOBJ, True), EntityY(d\FrameOBJ, True) + 0.18, EntityZ(d\FrameOBJ, True), d, ClosestRoom)
 	Next
 	
-	Amount = 0
+	Local Amount% = 0
+	
 	For w.WayPoints = Each WayPoints
 		EntityPickMode(w\OBJ, 1, True)
 		EntityRadius(w\OBJ, 0.2)
 		Amount = Amount + 1
 	Next
 	
-	Number = 0
-	Iter = 0
+	Local Number% = 0
+	Local Iter% = 0
+	Local i%, n%
+	
 	For w.WayPoints = Each WayPoints
 		Number = Number + 1
 		Iter = Iter + 1
 		If Iter = 20 Then 
-			DrawLoading(loadingstart + Floor((35.0 / Amount) * Number)) 
+			DrawLoading(LoadingStart + Floor((35.0 / Amount) * Number)) 
 			Iter = 0
 		EndIf
 		
@@ -6080,7 +6065,7 @@ Function InitWayPoints(loadingstart = 45)
 		Local CanCreateWayPoint% = False
 		
 		While w2 <> Null
-			If (w\room = w2\room Lor w\door <> Null Lor w2\door <> Null) Then
+			If w\room = w2\room Lor w\door <> Null Lor w2\door <> Null
 				Dist = EntityDistance(w\OBJ, w2\OBJ)
 				
 				If w\room\MaxWayPointY = 0.0 Lor w2\room\MaxWayPointY = 0.0
@@ -6119,7 +6104,7 @@ Function InitWayPoints(loadingstart = 45)
 	
 	For d.Doors = Each Doors
 		If d\OBJ <> 0 Then ShowEntity(d\OBJ)
-		If d\OBJ2 <> 0 Then ShowEntity(d\OBJ2)	
+		If d\OBJ2 <> 0 Then ShowEntity(d\OBJ2)
 		If d\FrameOBJ <> 0 Then ShowEntity(d\FrameOBJ)		
 	Next
 	
@@ -6129,8 +6114,9 @@ Function InitWayPoints(loadingstart = 45)
 		
 		For i = 0 To 4
 			If w\connected[i] <> Null Then 
-				tLine = CreateLine(EntityX(w\OBJ, True), EntityY(w\OBJ, True), EntityZ(w\OBJ, True), EntityX(w\connected[i]\OBJ, True), EntityY(w\connected[i]\OBJ, True), EntityZ(w\connected[i]\OBJ, True))
-				EntityColor(tLine, 255, 0, 0)
+				Local tLine% = CreateLine(EntityX(w\OBJ, True), EntityY(w\OBJ, True), EntityZ(w\OBJ, True), EntityX(w\connected[i]\OBJ, True), EntityY(w\connected[i]\OBJ, True), EntityZ(w\connected[i]\OBJ, True))
+				
+				EntityColor(tLine, 255.0, 0.0, 0.0)
 				EntityParent(tLine, w\OBJ)
 			EndIf
 		Next
@@ -6148,13 +6134,12 @@ Dim MapParent%(MapWidth + 1, MapHeight + 1, 2)
 
 Function FindPath(n.NPCs, x#, y#, z#)
 	Local Temp%, Dist#, Dist2#
-	Local xTemp#, yTemp#, zTemp#, gTemp#
-	Local w.WayPoints, StartPoint.WayPoints, EndPoint.WayPoints   
+	Local xTemp#, yTemp#, zTemp#
+	Local w.WayPoints, StartPoint.WayPoints, EndPoint.WayPoints, smallest.WayPoints
 	Local StartX% = Floor(EntityX(n\Collider, True) / 8.0 + 0.5), StartZ% = Floor(EntityZ(n\Collider, True) / 8.0 + 0.5)
 	Local EndX% = Floor(x / 8.0 + 0.5), EndZ% = Floor(z / 8.0 + 0.5)
-	Local CurrX#, CurrZ#
-	Local i%
-
+	Local CurrX%, CurrZ%
+	
    ; ~ PathStatus = 0, route hasn't been searched for yet
    ; ~ PathStatus = 1, route found
    ; ~ PathStatus = 2, route not found (target unreachable)
@@ -6165,6 +6150,8 @@ Function FindPath(n.NPCs, x#, y#, z#)
 		w\Gcost = 0
 		w\Hcost = 0
 	Next
+	
+	Local i%
 	
 	n\PathStatus = 0
 	n\PathLocation = 0
@@ -6194,10 +6181,11 @@ Function FindPath(n.NPCs, x#, y#, z#)
 			EndIf
 		EndIf
 	Next
+	
 	FreeEntity(Temp)
 	
 	If StartPoint = Null Then Return(2)
-	StartPoint\State = 1      
+	StartPoint\State = 1	  
 	
 	EndPoint = Null
 	Dist = 400.0
@@ -6206,10 +6194,11 @@ Function FindPath(n.NPCs, x#, y#, z#)
 		zTemp = EntityZ(Pvt, True) - EntityZ(w\OBJ, True)
 		yTemp = EntityY(Pvt, True) - EntityY(w\OBJ, True)
 		Dist2 = (xTemp * xTemp) + (yTemp * yTemp) + (zTemp * zTemp)
+		
 		If Dist2 < Dist Then
 			Dist = Dist2
 			EndPoint = w
-		EndIf            
+		EndIf			
 	Next
 	
 	FreeEntity(Pvt)
@@ -6219,7 +6208,7 @@ Function FindPath(n.NPCs, x#, y#, z#)
 			Return(0)
 		Else
 			n\Path[0] = EndPoint
-			Return(1)               
+			Return(1)   
 		EndIf
 	EndIf
 	If EndPoint = Null Then Return(2)
@@ -6230,20 +6219,23 @@ Function FindPath(n.NPCs, x#, y#, z#)
 		Dist = 10000.0
 		For w.WayPoints = Each WayPoints
 			If w\State = 1 Then
-                Temp = True
-                If w\Fcost < Dist Then
+				Temp = True
+				If w\Fcost < Dist Then
 					Dist = w\Fcost
 					smallest = w
-                EndIf
+				EndIf
 			EndIf
 		Next
 		
 		If smallest <> Null Then
 			w = smallest
 			w\State = 2
+			
 			For i = 0 To 4
-                If w\connected[i] <> Null Then
+				If w\connected[i] <> Null Then
 					If w\connected[i]\State < 2 Then
+						Local gTemp#
+						
 						If w\connected[i]\State = 1 Then
 							gTemp = w\Gcost + w\Dist[i]
 							If n\NPCtype = NPCtypeMTF Then
@@ -6264,16 +6256,15 @@ Function FindPath(n.NPCs, x#, y#, z#)
 							w\connected[i]\Fcost = w\Gcost + w\Hcost
 							w\connected[i]\parent = w
 							w\connected[i]\State = 1
-						EndIf            
+						EndIf			
 					EndIf
-					
-                EndIf
+				EndIf
 			Next
-			Else
+		Else
 			If EndPoint\State > 0 Then
-                StartPoint\parent = Null
-                EndPoint\State = 2
-                Exit
+				StartPoint\parent = Null
+				EndPoint\State = 2
+				Exit
 			EndIf
 		EndIf
 		
@@ -6293,7 +6284,7 @@ Function FindPath(n.NPCs, x#, y#, z#)
 			Length = Length + 1
 			currpoint = currpoint\parent
 			If Length > 20 Then
-                twentiethpoint = twentiethpoint\parent
+				twentiethpoint = twentiethpoint\parent
 			EndIf
 		Until currpoint = Null
 		
@@ -6316,9 +6307,9 @@ Function CreateLine(x1#, y1#, z1#, x2#, y2#, z2#, Mesh% = 0)
 		Mesh = CreateMesh()
 		EntityFX(Mesh, 16)
 		Surf = CreateSurface(Mesh)	
-		Verts = 0	
+		Verts = 0
 		
-		AddVertex(Surf, x1, y1, z1, 0, 0)
+		AddVertex(Surf, x1, y1, z1, 0.0, 0.0)
 	Else
 		Surf = GetSurface(Mesh, 1)
 		Verts = CountVertices(Surf) - 1

@@ -516,8 +516,6 @@ End Function
 Function RemoveNPC(n.NPCs)
 	If n = Null Then Return
 	
-	If n\Collider <> 0 Then FreeEntity(n\Collider) : n\Collider = 0	
-	If n\OBJ <> 0 Then FreeEntity(n\OBJ) : n\OBJ = 0
 	If n\OBJ2 <> 0 Then FreeEntity(n\OBJ2) : n\OBJ2 = 0
 	If n\OBJ3 <> 0 Then FreeEntity(n\OBJ3) : n\OBJ3 = 0
 	If n\OBJ4 <> 0 Then FreeEntity(n\OBJ4) : n\OBJ4 = 0
@@ -536,6 +534,8 @@ Function RemoveNPC(n.NPCs)
 		If n\SoundCHN2 <> 0 Then StopStream_Strict(n\SoundCHN2)
 	EndIf
 	
+	If n\Collider <> 0 Then FreeEntity(n\Collider) : n\Collider = 0	
+	If n\OBJ <> 0 Then FreeEntity(n\OBJ) : n\OBJ = 0
 	If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 	If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2) : n\Sound2 = 0
 	
