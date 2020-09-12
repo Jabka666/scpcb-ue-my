@@ -254,6 +254,39 @@ Function InitEvents()
 	CreateEvent("room005", "room005", 0)
 End Function
 
+Global QuickLoadIcon% = LoadImage_Strict("GFX\menu\QuickLoading.png")
+
+Global QuickLoadPercent% = -1
+Global QuickLoadPercent_DisplayTimer# = 0.0
+Global QuickLoad_CurrEvent.Events
+
+Function DrawQuickLoading()
+	If QuickLoadPercent > -1 Then
+		MidHandle(QuickLoadIcon)
+		DrawImage(QuickLoadIcon, GraphicWidth - 90, GraphicHeight - 150)
+		Color(255, 255, 255)
+		SetFont(fo\FontID[0])
+		Text(GraphicWidth - 100, GraphicHeight - 90, "LOADING: " + QuickLoadPercent + "%", 1)
+	EndIf
+End Function
+
+Function UpdateQuickLoading()
+	If QuickLoadPercent > -1 Then
+		If QuickLoadPercent > 99 Then
+			If QuickLoadPercent_DisplayTimer < 70.0
+				QuickLoadPercent_DisplayTimer = Min(QuickLoadPercent_DisplayTimer + fpst\FPSFactor[0], 70.0)
+			Else
+				QuickLoadPercent = -1
+			EndIf
+		EndIf
+		QuickLoadEvents()
+	Else
+		QuickLoadPercent = -1
+		QuickLoadPercent_DisplayTimer = 0.0
+		QuickLoad_CurrEvent = Null
+	EndIf
+End Function
+
 Function QuickLoadEvents()
 	CatchErrors("Uncaught (QuickLoadEvents)")
 	
@@ -438,7 +471,7 @@ Function UpdateEvents()
 		Select e\EventName
 			Case "gateb"
 				;[Block]
-				If RemoteDoorOn = False Then
+				If (Not RemoteDoorOn) Then
 					e\room\RoomDoors[4]\Locked = True
 				ElseIf RemoteDoorOn And e\EventState3 = 0.0
 					e\room\RoomDoors[4]\Locked = 2
@@ -2220,7 +2253,7 @@ Function UpdateEvents()
 			Case "gateaentrance"
 				;[Block]
 				If PlayerRoom = e\room Then 
-					If RemoteDoorOn = False Then
+					If (Not RemoteDoorOn) Then
 						e\room\RoomDoors[1]\Locked = True
 					ElseIf RemoteDoorOn And e\EventState3 = 0.0
 						e\room\RoomDoors[1]\Locked = 2
@@ -2245,7 +2278,7 @@ Function UpdateEvents()
 						Else
 							e\EventState = UpdateElevators(e\EventState, e\room\RoomDoors[0], gatea\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 						EndIf
-						If Curr106\Contained = False Then 
+						If (Not Curr106\Contained) Then 
 							If e\EventState < -1.5 And e\EventState + fpst\FPSFactor[0] >= -1.5 Then
 								PlaySound_Strict(OldManSFX[3])
 							EndIf
@@ -2862,7 +2895,7 @@ Function UpdateEvents()
 								If MouseHit1 Then
 									Temp = True
 									For it.Items = Each Items
-										If it\Picked = False Then
+										If (Not it\Picked) Then
 											If EntityX(it\Collider) - EntityX(e\room\Objects[1], True) = 0 Then
 												If EntityZ(it\Collider) - EntityZ(e\room\Objects[1], True) = 0 Then
 													Temp = False
@@ -3430,8 +3463,8 @@ Function UpdateEvents()
 				EndIf
 				
 				If PlayerRoom\RoomTemplate\Name <> "pocketdimension" And PlayerRoom\RoomTemplate\Name <> "room860" Then
-					If e\EventState2 = 0 Then
-						If e\EventState3 =< 0 Then 
+					If e\EventState2 = 0.0 Then
+						If e\EventState3 =< 0.0 Then 
 							Temp = False
 							For n.NPCs = Each NPCs
 								If n\NPCtype = NPCtypeMTF Then
@@ -7390,7 +7423,7 @@ Function UpdateEvents()
 									
 									If Angle < 181.0 And Angle > 90.0 Then
 										For it.Items = Each Items
-											If it\Collider <> 0 And it\Picked = False Then
+											If it\Collider <> 0 And (Not it\Picked) Then
 												If Abs(EntityX(it\Collider) - (e\room\x - 712.0 * RoomScale)) < 200.0 Then
 													If Abs(EntityY(it\Collider) - (e\room\y + 648.0 * RoomScale)) < 104.0 Then
 														e\EventState = 1.0
@@ -7516,7 +7549,7 @@ Function UpdateEvents()
 						
 						If e\EventState > 70.0 * 12.0 Then							
 							For it.Items = Each Items
-								If it\Collider <> 0 And it\Picked = False Then
+								If it\Collider <> 0 And (Not it\Picked) Then
 									If DistanceSquared(EntityX(it\Collider), EntityX(e\room\Objects[2], True), EntityZ(it\Collider), EntityZ(e\room\Objects[2], True)) < PowTwo(180.0 * RoomScale) Then
 										Use914(it, Setting, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True), EntityZ(e\room\Objects[3], True))
 									EndIf
@@ -9623,7 +9656,7 @@ Function UpdateEndings()
 						UpdateSky()
 						
 						If e\EventState >= 350.0 Then
-							If Curr106\Contained = False Then
+							If (Not Curr106\Contained) Then
 								If e\EventState - fpst\FPSFactor[0] < 350.0
 									Curr106\State = -0.1
 									SetNPCFrame(Curr106, 110.0)
@@ -10047,7 +10080,7 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 		PrevEventState = 0.0
 	EndIf
 	
-	If d\OpenState = 0.0 And d\Open = False Then
+	If d\OpenState = 0.0 And (Not d\Open) Then
 		If Abs(EntityX(me\Collider) - EntityX(ElevatorOBJ, True)) =< 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
 			If Abs(EntityZ(me\Collider) - EntityZ(ElevatorOBJ, True)) =< 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
 				If Abs(EntityY(me\Collider) - EntityY(ElevatorOBJ, True)) =< 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then

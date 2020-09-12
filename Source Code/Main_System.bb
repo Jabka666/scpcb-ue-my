@@ -378,7 +378,7 @@ Function UpdateConsole()
 	Local e.Events
 	Local x%, y%, Width%, Height%
 	
-	If CanOpenConsole = False Then
+	If (Not CanOpenConsole) Then
 		ConsoleOpen = False
 		Return
 	EndIf
@@ -455,8 +455,8 @@ Function UpdateConsole()
 			If ConsoleReissue = Null Then
 				ConsoleReissue = First ConsoleMsg
 				
-				While (ConsoleReissue <> Null)
-					If (ConsoleReissue\IsCommand) Then
+				While ConsoleReissue <> Null
+					If ConsoleReissue\IsCommand Then
 						Exit
 					EndIf
 					ReissuePos = ReissuePos - 15 * MenuScale
@@ -473,12 +473,12 @@ Function UpdateConsole()
 				ReissuePos = ReissuePos - 15 * MenuScale
 				
 				While True
-					If (ConsoleReissue = Null) Then
+					If ConsoleReissue = Null Then
 						ConsoleReissue = First ConsoleMsg
 						ReissuePos = 0
 					EndIf
 					
-					If (ConsoleReissue\IsCommand) Then
+					If ConsoleReissue\IsCommand Then
 						Exit
 					EndIf
 					ReissuePos = ReissuePos - 15 * MenuScale
@@ -497,8 +497,8 @@ Function UpdateConsole()
 			If (ConsoleReissue = Null) Then
 				ConsoleReissue = Last ConsoleMsg
 				
-				While (ConsoleReissue <> Null)
-					If (ConsoleReissue\IsCommand) Then
+				While ConsoleReissue <> Null
+					If ConsoleReissue\IsCommand Then
 						Exit
 					EndIf
 					ReissuePos = ReissuePos + 15 * MenuScale
@@ -515,12 +515,12 @@ Function UpdateConsole()
 				ReissuePos = ReissuePos + 15 * MenuScale
 				
 				While True
-					If (ConsoleReissue = Null) Then
+					If ConsoleReissue = Null Then
 						ConsoleReissue = Last ConsoleMsg
 						ReissuePos = (-ConsoleHeight) + 15 * MenuScale
 					EndIf
 					
-					If (ConsoleReissue\IsCommand) Then
+					If ConsoleReissue\IsCommand Then
 						Exit
 					EndIf
 					ReissuePos = ReissuePos + 15 * MenuScale
@@ -2930,7 +2930,7 @@ Function MainLoop()
 			Local PrevMouseDown1% = MouseDown1
 			
 			MouseDown1 = MouseDown(1)
-			If PrevMouseDown1 = True And MouseDown1 = False Then MouseUp1 = True Else MouseUp1 = False
+			If PrevMouseDown1 = True And (Not MouseDown1) Then MouseUp1 = True Else MouseUp1 = False
 			
 			MouseHit2 = MouseHit(2)
 		EndIf
@@ -2949,7 +2949,7 @@ Function MainLoop()
 		
 		If fpst\FPSFactor[0] > 0.0 And PlayerRoom\RoomTemplate\Name <> "dimension1499" Then UpdateSecurityCams()
 		
-		If (Not MenuOpen) And (Not InvOpen) And (OtherOpen = Null) And (SelectedDoor = Null) And (ConsoleOpen = False) And (I_294\Using = False) And (SelectedScreen = Null) And me\EndingTimer >= 0.0 Then
+		If (Not MenuOpen) And (Not InvOpen) And OtherOpen = Null And SelectedDoor = Null And (Not ConsoleOpen) And (Not I_294\Using) And SelectedScreen = Null And me\EndingTimer >= 0.0 Then
 			ShouldPlay = Min(me\Zone, 2.0)
 		EndIf
 		
@@ -3275,6 +3275,8 @@ Function MainLoop()
 		Else
 			HideEntity(tt\OverlayID[7])
 		EndIf
+		
+		UpdateWorld2()
 		
 		UpdateGUI()
 		
@@ -3953,7 +3955,7 @@ Function MovePlayer()
 	
 	If (Not chs\NoClip) Then 
 		If (me\Playable And (KeyDown(key\MOVEMENT_DOWN) Xor KeyDown(key\MOVEMENT_UP)) Lor (KeyDown(key\MOVEMENT_RIGHT) Xor KeyDown(key\MOVEMENT_LEFT))) Lor me\ForceMove > 0 Then
-			If me\Crouch = False And (KeyDown(key\SPRINT)) And me\Stamina > 0.0 And (Not me\Zombie) Then
+			If (Not me\Crouch) And (KeyDown(key\SPRINT)) And me\Stamina > 0.0 And (Not me\Zombie) Then
 				Sprint = 2.5
 				me\Stamina = me\Stamina - fpst\FPSFactor[0] * 0.4 * me\StaminaEffect
 				If me\Stamina =< 0.0 Then me\Stamina = -20.0
@@ -9343,7 +9345,7 @@ Function InitNewGame()
 			EndIf
 		EndIf
 		
-		If r\RoomTemplate\Name = "room173" And IntroEnabled = False Then 
+		If r\RoomTemplate\Name = "room173" And (Not IntroEnabled) Then 
 			PositionEntity(me\Collider, EntityX(r\OBJ) + 3584.0 * RoomScale, 704.0 * RoomScale, EntityZ(r\OBJ) + 1024.0 * RoomScale)
 			PlayerRoom = r
 			it = CreateItem("Class D Orientation Leaflet", "paper", 1, 1, 1)
@@ -10017,7 +10019,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 					;[Block]
 					it2 = Null
 					For it.Items = Each Items
-						If it <> item And it\Collider <> 0 And it\Picked = False Then
+						If it <> item And it\Collider <> 0 And (Not it\Picked) Then
 							If DistanceSquared(EntityX(it\Collider, True), EntityX(item\Collider, True), EntityZ(it\Collider, True), EntityZ(item\Collider, True)) < PowTwo(180.0 * RoomScale) Then
 								it2 = it
 								Exit
@@ -11917,25 +11919,11 @@ Function ResizeImage2(Image%, Width%, Height%)
 	Return(Img)
 End Function
 
-Function RenderWorld2(Tween#)
-	Local i%, Dist#, Temp%, Temp2%, np.NPCs
-	Local l%, k%, xValue#, yValue#, PitchValue#, YawValue#
-	
-	CameraProjMode(ArkBlurCam, 0)
-	CameraProjMode(Camera, 1)
-	
-	If wi\NightVision > 0 And wi\NightVision < 3 Then
-		AmbientLight(Min(Brightness * 2.0, 255.0), Min(Brightness * 2.0, 255.0), Min(Brightness * 2.0, 255.0))
-	ElseIf wi\NightVision = 3
-		AmbientLight(255.0, 255.0, 255.0)
-	ElseIf PlayerRoom <> Null
-		AmbientLight(Brightness, Brightness, Brightness)
-	EndIf
+Function UpdateWorld2()
+	Local i%, np.NPCs
 	
 	wi\IsNVGBlinking = False
 	HideEntity(tt\OverlayID[5])
-	
-	CameraViewport(Camera, 0, 0, GraphicWidth, GraphicHeight)
 	
 	Local HasBattery% = 2
 	Local Power% = 0
@@ -11962,26 +11950,17 @@ Function RenderWorld2(Tween#)
 				EndIf
 			EndIf
 		Next
-		If HasBattery Then
-			RenderWorld()
-		EndIf
-	Else
-		RenderWorld(Tween)
 	EndIf
 	
 	CurrTrisAmount = TrisRendered()
-
+	
 	If HasBattery = 0 And wi\NightVision <> 3 Then
 		wi\IsNVGBlinking = True
 		ShowEntity(tt\OverlayID[5])
 	EndIf
 	
-	If wi\SCRAMBLE > 0 Then
-		If HasBattery = 0 
-			If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN)
-		Else
-			SCRAMBLECHN = LoopSound2(SCRAMBLESFX, SCRAMBLECHN, Camera, Camera)
-		EndIf
+	If wi\SCRAMBLE > 0 And HasBattery <> 0 Then
+		SCRAMBLECHN = LoopSound2(SCRAMBLESFX, SCRAMBLECHN, Camera, Camera)
 	Else
 		If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN)
 	EndIf
@@ -12002,7 +11981,55 @@ Function RenderWorld2(Tween#)
 						wi\NVGTimer = 600.0
 					EndIf
 				EndIf
-				
+			EndIf
+		EndIf
+	EndIf
+End Function
+
+Function RenderWorld2(Tween#)
+	Local i%, Dist#, Temp%, Temp2%, np.NPCs
+	Local l%, k%, xValue#, yValue#, PitchValue#, YawValue#
+	
+	CameraProjMode(ArkBlurCam, 0)
+	CameraProjMode(Camera, 1)
+	
+	If wi\NightVision > 0 And wi\NightVision < 3 Then
+		AmbientLight(Min(Brightness * 2.0, 255.0), Min(Brightness * 2.0, 255.0), Min(Brightness * 2.0, 255.0))
+	ElseIf wi\NightVision = 3
+		AmbientLight(255.0, 255.0, 255.0)
+	ElseIf PlayerRoom <> Null
+		AmbientLight(Brightness, Brightness, Brightness)
+	EndIf
+	
+	CameraViewport(Camera, 0, 0, GraphicWidth, GraphicHeight)
+	
+	Local HasBattery% = 2
+	Local Power% = 0
+	
+	If wi\NightVision = 1 Lor wi\NightVision = 2 Lor wi\SCRAMBLE > 0 Then
+		For i = 0 To MaxItemAmount - 1
+			If Inventory[i] <> Null Then
+				If (wi\NightVision = 1 And Inventory[i]\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory[i]\ItemTemplate\TempName = "supernvg") Lor (wi\SCRAMBLE > 0 And Inventory[i]\ItemTemplate\TempName = "scramble") Then
+					Power = Int(Inventory[i]\State)
+					If Power =< 0.0 Then ; ~ This NVG can't be used
+						HasBattery = 0
+						Exit
+					ElseIf Power =< 100.0 Then
+						HasBattery = 1
+					EndIf
+				EndIf
+			EndIf
+		Next
+		If HasBattery Then
+			RenderWorld()
+		EndIf
+	Else
+		RenderWorld(Tween)
+	EndIf
+	
+	If me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0 Then
+		If HasBattery <> 0 And (wi\NightVision = 1 Lor wi\NightVision = 2 Lor wi\SCRAMBLE > 0) Then
+			If wi\NightVision = 2 Then ; ~ Show a HUD
 				Color(255, 255, 255)
 				
 				SetFont(fo\FontID[2])
@@ -12406,11 +12433,11 @@ Function PlayStartupVideos()
 End Function
 
 Function CanUseItem(CanUseWithGasMask%, CanUseWithEyewear%)
-	If CanUseWithGasMask = False And (wi\GasMask > 0 Lor I_1499\Using > 0) Then
+	If (Not CanUseWithGasMask) And (wi\GasMask > 0 Lor I_1499\Using > 0) Then
 		msg\Msg = "You can't use that item while wearing a gas mask."
 		msg\Timer = 70.0 * 6.0
 		Return(False)
-	ElseIf CanUseWithEyewear = False And (wi\NightVision > 0 Lor wi\SCRAMBLE > 0)
+	ElseIf (Not CanUseWithEyewear) And (wi\NightVision > 0 Lor wi\SCRAMBLE > 0)
 		msg\Msg = "You can't use that item while wearing headgear."
 		msg\Timer = 70.0 * 6.0
 		Return(False)
@@ -12419,27 +12446,27 @@ Function CanUseItem(CanUseWithGasMask%, CanUseWithEyewear%)
 End Function
 
 Function PreventItemOverlapping(GasMask%, NVG%, SCP1499%, Helmet%, SCRAMBLE%)
-	If GasMask = False And wi\GasMask > 0 Then
+	If (Not GasMask) And wi\GasMask > 0 Then
 		msg\Msg = "You need to take off the gas mask in order to use that item."
 		msg\Timer = 70.0 * 6.0
 		SelectedItem = Null
 		Return(False)
-	ElseIf SCP1499 = False And I_1499\Using > 0
+	ElseIf (Not SCP1499) And I_1499\Using > 0
 		msg\Msg = "You need to take off SCP-1499 in order to use that item."
 		msg\Timer = 70.0 * 6.0
 		SelectedItem = Null
 		Return(False)
-	ElseIf NVG = False And wi\NightVision > 0 Then
+	ElseIf (Not NVG) And wi\NightVision > 0 Then
 		msg\Msg = "You need to take off the goggles in order to use that item."
 		msg\Timer = 70.0 * 6.0
 		SelectedItem = Null
 		Return(False)
-	ElseIf Helmet = False And wi\BallisticHelmet > 0
+	ElseIf (Not Helmet) And wi\BallisticHelmet > 0
 		msg\Msg = "You need to take off the helmet in order to use that item."
 		msg\Timer = 70.0 * 6.0
 		SelectedItem = Null
 		Return(False)
-	ElseIf SCRAMBLE = False And wi\SCRAMBLE > 0
+	ElseIf (Not SCRAMBLE) And wi\SCRAMBLE > 0
 		msg\Msg = "You need to take off the gear in order to use that item."
 		msg\Timer = 70.0 * 6.0
 		SelectedItem = Null
@@ -12463,5 +12490,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1088#1321#1E15
+;~B#108A#1323#1E17
 ;~C#Blitz3D

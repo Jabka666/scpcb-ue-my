@@ -87,7 +87,7 @@ Type Emitters
 	Field Gravity#
 	Field LifeTime#
 	Field Disable%
-	Field Room.Rooms
+	Field room.Rooms
 	Field SoundCHN%
 	Field Speed#, RandAngle#
 	Field SizeChange#, AChange#
@@ -95,6 +95,7 @@ End Type
 
 Function CreateEmitter.Emitters(x#, y#, z#, EmitterType%) 
 	Local e.Emitters = New Emitters
+	Local r.Rooms
 	
 	e\OBJ = CreatePivot()
 	NameEntity(e\OBJ, "Emitter1")
@@ -126,7 +127,7 @@ Function CreateEmitter.Emitters(x#, y#, z#, EmitterType%)
 	
 	For r.Rooms = Each Rooms
 		If Abs(EntityX(e\OBJ) - EntityX(r\OBJ)) < 4.0 And Abs(EntityZ(e\OBJ) - EntityZ(r\OBJ)) < 4.0 Then
-			e\Room = r
+			e\room = r
 		EndIf
 	Next
 	
@@ -134,12 +135,14 @@ Function CreateEmitter.Emitters(x#, y#, z#, EmitterType%)
 End Function
 
 Function UpdateEmitters()
+	Local e.Emitters
+	
 	InSmoke = False
 	For e.Emitters = Each Emitters
 		If fpst\FPSFactor[0] > 0.0 And (PlayerRoom = e\room Lor e\room\Dist < 8.0) Then
 			Local p.Particles = CreateParticle(EntityX(e\OBJ, True), EntityY(e\OBJ, True), EntityZ(e\OBJ, True), Rand(e\MinImage, e\MaxImage), e\Size, e\Gravity, e\LifeTime)
 			
-			p\Speed = e\speed
+			p\Speed = e\Speed
 			RotateEntity(p\Pvt, EntityPitch(e\OBJ, True), EntityYaw(e\OBJ, True), EntityRoll(e\OBJ, True), True)
 			TurnEntity(p\Pvt, Rnd(-e\RandAngle, e\RandAngle), Rnd(-e\RandAngle, e\RandAngle), 0)
 			
@@ -151,7 +154,7 @@ Function UpdateEmitters()
 			
 			e\SoundCHN = LoopSound2(HissSFX, e\SoundCHN, Camera, e\OBJ)
 			
-			If InSmoke = False Then
+			If (Not InSmoke) Then
 				If wi\GasMask = 0 And wi\HazmatSuit = 0 Then
 					If DistanceSquared(EntityX(Camera, True), EntityX(e\OBJ, True), EntityZ(Camera, True), EntityZ(e\OBJ, True)) < 0.64 Then
 						If Abs(EntityY(Camera, True) - EntityY(e\OBJ, True)) < 5.0 Then InSmoke = True
@@ -173,7 +176,7 @@ Function UpdateEmitters()
 				If CoughCHN = 0 Then
 					CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
 				Else
-					If ChannelPlaying(CoughCHN) = False Then CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
+					If (Not ChannelPlaying(CoughCHN)) Then CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
 				EndIf
 			EndIf
 		EndIf

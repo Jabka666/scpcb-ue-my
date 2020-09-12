@@ -66,7 +66,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 	n\GravityMult = 1.0
 	n\MaxGravity = 0.2
 	n\CollRadius = 0.2
-	n\FallingPickDistance = 10
+	n\FallingPickDistance = 10.0
 	Select NPCtype
 		Case NPCtype173
 			;[Block]
@@ -594,7 +594,7 @@ Function UpdateNPCs()
 								n\PrevX = EntityX(n\Collider)
 								n\PrevZ = EntityZ(n\Collider)				
 								
-								If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And (wi\IsNVGBlinking = False) And me\LightBlink =< 0.0 Then
+								If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And (Not wi\IsNVGBlinking) And me\LightBlink =< 0.0 Then
 									If EntityInView(n\OBJ, Camera) Then Move = False
 								EndIf
 							EndIf
@@ -602,7 +602,7 @@ Function UpdateNPCs()
 							If chs\NoTarget Then Move = True
 							
 							; ~ Doesn't move
-							If Move = False Then
+							If (Not Move) Then
 								me\BlurVolume = Max(Max(Min((4.0 - Dist) / 6.0, 0.9), 0.1), me\BlurVolume)
 								me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs()) / 20.0) + 1.0) * 15.0 * Max((3.5 - Dist) / 3.5, 0.0))								
 								
@@ -674,7 +674,7 @@ Function UpdateNPCs()
 									; ~ Tries to open doors
 									If Rand(20) = 1 Then
 										For d.Doors = Each Doors
-											If (Not d\Locked) And d\Open = False And d\Code = "" And d\KeyCard = 0 Then
+											If d\Locked = False And (Not d\Open) And d\Code = "" And d\KeyCard = 0 Then
 												For i = 0 To 1
 													If d\Buttons[i] <> 0 Then
 														If Abs(EntityX(n\Collider) - EntityX(d\Buttons[i])) < 0.5 Then
@@ -769,7 +769,7 @@ Function UpdateNPCs()
 							Local Tmp% = False
 							
 							If Dist > HideDistance * 0.7 Then
-								If EntityVisible(n\OBJ, me\Collider) = False
+								If (Not EntityVisible(n\OBJ, me\Collider)) Then
 									Tmp = True
 								EndIf
 							EndIf
@@ -1284,7 +1284,7 @@ Function UpdateNPCs()
 										Dist2 = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 										If Dist2 < 0.64 Then
 											If n\Path[n\PathLocation]\door <> Null Then
-												If n\Path[n\PathLocation]\door\Open = False Then
+												If (Not n\Path[n\PathLocation]\door\Open) Then
 													n\Path[n\PathLocation]\door\Open = True
 													n\Path[n\PathLocation]\door\FastOpen = 1
 													PlaySound2(OpenDoorFastSFX, Camera, n\Path[n\PathLocation]\door\OBJ)
@@ -1509,11 +1509,11 @@ Function UpdateNPCs()
 							If (Dist < HideDistance * 2.0) And (Not n\Idle) And PlayerInReachableRoom(True) Then
 								n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider)
 								PlayerSeeAble = MeNPCSeesPlayer(n)
-								If PlayerSeeAble = True Lor n\State2 > 0 And (Not chs\NoTarget) Then ; ~ Attack
+								If PlayerSeeAble = True Lor n\State2 > 0.0 And (Not chs\NoTarget) Then ; ~ Attack
 									GiveAchievement(Achv049)
 									
 									; ~ Playing a sound after detecting the player
-									If n\PrevState =< 1 And ChannelPlaying(n\SoundCHN2) = False Then
+									If n\PrevState =< 1 And (Not ChannelPlaying(n\SoundCHN2)) Then
 										If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2)
 										n\Sound2 = LoadSound_Strict("SFX\SCP\049\Spotted" + Rand(1, 7) + ".ogg")
 										n\SoundCHN2 = LoopSound2(n\Sound2, n\SoundCHN2, Camera, n\OBJ)
@@ -1643,7 +1643,7 @@ Function UpdateNPCs()
 														If (n\Path[n\PathLocation]\door\Locked Lor n\Path[n\PathLocation]\door\KeyCard <> 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open) Then
 															Temp = False
 														Else
-															If n\Path[n\PathLocation]\door\Open = False And (n\Path[n\PathLocation]\door\Buttons[0] <> 0 Lor n\Path[n\PathLocation]\door\Buttons[1] <> 0) Then
+															If (Not n\Path[n\PathLocation]\door\Open) And (n\Path[n\PathLocation]\door\Buttons[0] <> 0 Lor n\Path[n\PathLocation]\door\Buttons[1] <> 0) Then
 																UseDoor(n\Path[n\PathLocation]\door, False)
 															EndIf
 														EndIf
@@ -1661,7 +1661,7 @@ Function UpdateNPCs()
 											AnimateNPC(n, Max(Min(AnimTime(n\OBJ), 358.0), 346), 393.0, n\CurrSpeed * 38.0)
 											
 											; ~ Playing a sound if he hears the player
-											If n\PrevState = 0 And ChannelPlaying(n\SoundCHN2) = False Then
+											If n\PrevState = 0 And (Not ChannelPlaying(n\SoundCHN2)) Then
 												If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2)
 												If Rand(30) = 1
 													n\Sound2 = LoadSound_Strict("SFX\SCP\049\Searching7.ogg")
@@ -1673,7 +1673,7 @@ Function UpdateNPCs()
 											EndIf
 											
 											; ~ Resetting the "PrevState" value randomly, to make SCP-049 talking randomly 
-											If Rand(600) = 1 And ChannelPlaying(n\SoundCHN2) = False Then n\PrevState = 0
+											If Rand(600) = 1 And (Not ChannelPlaying(n\SoundCHN2)) Then n\PrevState = 0
 											
 											If n\PrevState > 1 Then n\PrevState = 1
 										EndIf
@@ -1885,7 +1885,7 @@ Function UpdateNPCs()
 										Dist2 = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 										If Dist2 < 0.36 Then
 											If n\Path[n\PathLocation]\door <> Null Then
-												If n\Path[n\PathLocation]\door\Open = False Then UseDoor(n\Path[n\PathLocation]\Door, False)
+												If (Not n\Path[n\PathLocation]\door\Open) Then UseDoor(n\Path[n\PathLocation]\Door, False)
 											EndIf
 										EndIf
 										
@@ -2038,10 +2038,10 @@ Function UpdateNPCs()
 										Temp = True
 										If n\Path[n\PathLocation]\door <> Null
 											If (Not n\Path[n\PathLocation]\door\IsElevatorDoor)
-												If ((n\Path[n\PathLocation]\door\Locked Lor n\Path[n\PathLocation]\door\KeyCard > 0 Lor n\Path[n\PathLocation]\door\Code <> "") And n\Path[n\PathLocation]\door\Open = False) Then
+												If ((n\Path[n\PathLocation]\door\Locked Lor n\Path[n\PathLocation]\door\KeyCard > 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open)) Then
 													Temp = False
 												Else
-													If n\Path[n\PathLocation]\door\Open = False Then UseDoor(n\Path[n\PathLocation]\Door, False)
+													If (Not n\Path[n\PathLocation]\door\Open) Then UseDoor(n\Path[n\PathLocation]\Door, False)
 												EndIf
 											EndIf
 											If n\Path[n\PathLocation]\door\OpenState >= 180.0
@@ -2426,7 +2426,7 @@ Function UpdateNPCs()
 								If n\Reload = 0.0
 									EntityPick(Pvt, Dist)
 									If PickedEntity() = me\Collider Lor n\State3 = 1.0 Then
-										InstaKillPlayer% = False
+										InstaKillPlayer = False
 										
 										msg\DeathMsg = ""
 										
@@ -2896,7 +2896,7 @@ Function UpdateNPCs()
 							GiveAchievement(Achv372)
 							
 							If Rand(30) = 1 Then 
-								If ChannelPlaying(n\SoundCHN) = False Then
+								If (Not ChannelPlaying(n\SoundCHN)) Then
 									If EntityVisible(Camera, n\OBJ) Then 
 										n\SoundCHN = PlaySound2(RustleSFX[Rand(0, 5)], Camera, n\OBJ, 8.0, 0.3)
 									EndIf
@@ -3434,7 +3434,7 @@ Function UpdateNPCs()
 									If Rnd(5000.0) < n\State3 Then
 										Temp = True
 										If n\SoundCHN <> 0 Then
-											If ChannelPlaying(n\SoundCHN) = True Then Temp = False
+											If ChannelPlaying(n\SoundCHN) Then Temp = False
 										EndIf
 										If Temp Then
 											n\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\860\Cancer" + Rand(0, 2) + ".ogg"), Camera, n\Collider)
@@ -3595,7 +3595,7 @@ Function UpdateNPCs()
 									Temp = False
 									If n\SoundCHN = 0 Then 
 										Temp = True
-									ElseIf ChannelPlaying(n\SoundCHN) = False
+									ElseIf (Not ChannelPlaying(n\SoundCHN))
 										Temp = True
 									EndIf
 									If Temp Then
@@ -3829,7 +3829,7 @@ Function UpdateNPCs()
 												;[End Block]
 											Case 4
 												;[Block]
-												If PlayerRoom\RoomTemplate\DisableDecals = False Then
+												If (Not PlayerRoom\RoomTemplate\DisableDecals) Then
 													me\CameraShake = 5.0
 													de.Decals = CreateDecal(1, EntityX(n\Collider), 0.01, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0)
 													de\Size = 0.3 : UpdateDecals()
@@ -4130,7 +4130,7 @@ Function UpdateNPCs()
 																If (n\Path[n\PathLocation]\door\Locked Lor n\Path[n\PathLocation]\door\KeyCard <> 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open) Then
 																	Temp = False
 																Else
-																	If n\Path[n\PathLocation]\door\Open = False And (n\Path[n\PathLocation]\door\Buttons[0] <> 0 Lor n\Path[n\PathLocation]\door\Buttons[1] <> 0) Then
+																	If (Not n\Path[n\PathLocation]\door\Open) And (n\Path[n\PathLocation]\door\Buttons[0] <> 0 Lor n\Path[n\PathLocation]\door\Buttons[1] <> 0) Then
 																		UseDoor(n\Path[n\PathLocation]\door, False)
 																	EndIf
 																EndIf
@@ -4444,7 +4444,7 @@ Function UpdateNPCs()
 									n\State = 2.0
 									n\State2 = 0.0
 									
-									If ChannelPlaying(n\SoundCHN) = False Then
+									If (Not ChannelPlaying(n\SoundCHN)) Then
 										Dist = EntityDistanceSquared(n\Collider, me\Collider)
 										If Dist < 400.0 Then
 											If n\Sound <> 0 Then 
@@ -4735,10 +4735,10 @@ Function UpdateNPCs()
 										Temp = True
 										If n\Path[n\PathLocation]\door <> Null
 											If (Not n\Path[n\PathLocation]\door\IsElevatorDoor)
-												If ((n\Path[n\PathLocation]\door\Locked Lor n\Path[n\PathLocation]\door\KeyCard > 0 Lor n\Path[n\PathLocation]\door\Code <> "") And n\Path[n\PathLocation]\door\Open = False) Then
+												If ((n\Path[n\PathLocation]\door\Locked Lor n\Path[n\PathLocation]\door\KeyCard > 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open)) Then
 													Temp = False
 												Else
-													If n\Path[n\PathLocation]\door\Open = False Then UseDoor(n\Path[n\PathLocation]\Door, False)
+													If (Not n\Path[n\PathLocation]\door\Open) Then UseDoor(n\Path[n\PathLocation]\Door, False)
 												EndIf
 											EndIf
 											If n\Path[n\PathLocation]\door\OpenState >= 180.0
@@ -5523,7 +5523,7 @@ Function UpdateMTFUnit(n.NPCs)
 								Exit
 							EndIf
 						EndIf
-					ElseIf n2\NPCtype = NPCtype049_2 And n2\IsDead = False
+					ElseIf n2\NPCtype = NPCtype049_2 And (Not n2\IsDead)
 						If OtherNPCSeesMeNPC(n2, n) Then
 							If EntityVisible(n\Collider, n2\Collider)
 								n\State = 9.0
@@ -5545,7 +5545,7 @@ Function UpdateMTFUnit(n.NPCs)
 								Exit
 							EndIf
 						EndIf
-					ElseIf n2\NPCtype = NPCtype008_1 And n2\IsDead = False
+					ElseIf n2\NPCtype = NPCtype008_1 And (Not n2\IsDead)
 						If OtherNPCSeesMeNPC(n2, n) Then
 							If EntityVisible(n\Collider, n2\Collider)
 								n\State = 9.0
@@ -5561,7 +5561,7 @@ Function UpdateMTFUnit(n.NPCs)
 								Exit
 							EndIf
 						EndIf
-					ElseIf n2\NPCtype = NPCtype035_Tentacle And n2\IsDead = False
+					ElseIf n2\NPCtype = NPCtype035_Tentacle And (Not n2\IsDead)
 						If OtherNPCSeesMeNPC(n2, n) Then
 							If EntityVisible(n\Collider, n2\Collider)
 								n\State = 9.0
@@ -5890,7 +5890,7 @@ Function UpdateMTFUnit(n.NPCs)
 								Exit
 							EndIf
 						EndIf
-					ElseIf n2\NPCtype = NPCtype049_2 And n2\IsDead = False
+					ElseIf n2\NPCtype = NPCtype049_2 And (Not n2\IsDead)
 						If OtherNPCSeesMeNPC(n2, n) Then
 							If EntityVisible(n\Collider, n2\Collider)
 								n\State = 9.0
@@ -5912,7 +5912,7 @@ Function UpdateMTFUnit(n.NPCs)
 								Exit
 							EndIf
 						EndIf
-					ElseIf n2\NPCtype = NPCtype008_1 And n2\IsDead = False
+					ElseIf n2\NPCtype = NPCtype008_1 And (Not n2\IsDead)
 						If OtherNPCSeesMeNPC(n2, n) Then
 							If EntityVisible(n\Collider, n2\Collider)
 								n\State = 9.0
@@ -5928,7 +5928,7 @@ Function UpdateMTFUnit(n.NPCs)
 								Exit
 							EndIf
 						EndIf
-					ElseIf n2\NPCtype = NPCtype035_Tentacle And n2\IsDead = False
+					ElseIf n2\NPCtype = NPCtype035_Tentacle And (Not n2\IsDead)
 						If OtherNPCSeesMeNPC(n2, n) Then
 							If EntityVisible(n\Collider, n2\Collider)
 								n\State = 9.0
@@ -6096,7 +6096,7 @@ Function UpdateMTFUnit(n.NPCs)
 						EndIf
 					Else
 						If n\Path[n\PathLocation]\door <> Null Then
-							If n\Path[n\PathLocation]\door\Open = False Then
+							If (Not n\Path[n\PathLocation]\door\Open) Then
 								n\Path[n\PathLocation]\door\Open = True
 								n\Path[n\PathLocation]\door\TimerState = 70.0 * 8.0
 								PlayMTFSound(MTFSFX[0], n)
@@ -6503,7 +6503,7 @@ Function UpdateMTFUnit(n.NPCs)
 					Else
 						n\State3 = 0.0
 					EndIf
-					If n\Reload =< 0.0 And n\Target\IsDead = False Then
+					If n\Reload =< 0.0 And (Not n\Target\IsDead) Then
 						If (Abs(DeltaYaw(n\Collider, n\Target\Collider)) < 50.0)
 							AnimateNPC(n, 346.0, 351.0, 0.6)
 							
@@ -6635,7 +6635,7 @@ Function UpdateMTFUnit(n.NPCs)
 				EndIf
 			Else
 				For n2.NPCs = Each NPCs
-					If n2 <> n And n2\IsDead = False Then
+					If n2 <> n And (Not n2\IsDead) Then
 						If Abs(DeltaYaw(n\Collider, n2\Collider)) < 80.0 Then
 							If EntityDistanceSquared(n\Collider, n2\Collider) < 0.49 Then							
 								TranslateEntity(n2\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * 0.01 * fpst\FPSFactor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * 0.01 * fpst\FPSFactor[0], True)
@@ -6930,7 +6930,7 @@ Function PlayMTFSound(Sound%, n.NPCs)
 			Select SelectedItem\ItemTemplate\TempName 
 				Case "radio", "fineradio", "18vradio"
 					;[Block]
-					If Sound <> MTFSFX[0] Lor ChannelPlaying(RadioCHN[3]) = False Then
+					If Sound <> MTFSFX[0] Lor (Not ChannelPlaying(RadioCHN[3])) Then
 						If RadioCHN[3] <> 0 Then StopChannel(RadioCHN[3])
 						RadioCHN[3] = PlaySound_Strict(Sound)
 					EndIf
@@ -7308,7 +7308,7 @@ Function PlayerInReachableRoom(CanSpawnIn049Chamber% = False)
 	EndIf
 	
 	If (Not CanSpawnIn049Chamber) Then
-		If SelectedDifficulty\AggressiveNPCs = False Then
+		If (Not SelectedDifficulty\AggressiveNPCs) Then
 			If RN = "room049" And EntityY(me\Collider) =< -2848.0 * RoomScale Then
 				Return(False)
 			EndIf

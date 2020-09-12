@@ -1853,7 +1853,7 @@ Function FillRoom(r.Rooms)
 			Next
 			
 			; ~ The forest
-			If I_Zone\HasCustomForest = False Then
+			If (Not I_Zone\HasCustomForest) Then
 				Local fr.Forest = New Forest
 				
 				r\fr = fr
@@ -4929,6 +4929,13 @@ Function FillRoom(r.Rooms)
 			EntityFX(r\Objects[18], 1 + 8)
 			SpriteViewMode(r\Objects[18], 2)
 			
+			;r\Objects[19] = LoadMesh_Strict("GFX\map\throne_wall.b3d")
+			;PositionEntity(r\Objects[19], r\x + EntityX(r\Objects[8], True), r\y, r\y + EntityZ(r\Objects[8], True) - 960.0 * RoomScale)
+			;ScaleEntity(r\Objects[19], RoomScale, RoomScale, RoomScale)
+			;EntityPickMode(r\Objects[19], 2)
+			;EntityType(r\Objects[19], HIT_MAP)
+			;EntityParent(r\Objects[19], r\OBJ)
+			
 			FreeEntity(Hallway)
 			
 			it = CreateItem("Burnt Note", "paper", EntityX(r\OBJ), r\y + 0.5, EntityZ(r\OBJ) + 3.5)
@@ -6628,7 +6635,7 @@ Function UpdateSecurityCams()
 										If sc\SoundCHN = 0 Then
 											sc\SoundCHN = PlaySound_Strict(HorrorSFX[4])
 										Else
-											If ChannelPlaying(sc\SoundCHN) = False Then sc\SoundCHN = PlaySound_Strict(HorrorSFX[4])
+											If (Not ChannelPlaying(sc\SoundCHN)) Then sc\SoundCHN = PlaySound_Strict(HorrorSFX[4])
 										EndIf
 										If sc\CoffinEffect = 3 And Rand(200) = 1 Then sc\CoffinEffect = 2 : sc\PlayerState = Rand(10000, 20000)
 									EndIf	
@@ -6699,7 +6706,7 @@ Function UpdateMonitorSaving()
 	Local sc.SecurityCams
 	Local Close% = False
 	
-	If SelectedDifficulty\saveType <> SAVEONSCREENS Then Return
+	If SelectedDifficulty\SaveType <> SAVEONSCREENS Then Return
 	
 	For sc.SecurityCams = Each SecurityCams
 		If sc\AllowSaving And sc\Screen Then
@@ -6775,7 +6782,7 @@ Function UpdateLever(OBJ%, Locked% = False)
 			EndIf
 		EndIf
 		
-		If MouseDown1 = False And MouseHit1 = False Then 
+		If (Not MouseDown1) And (Not MouseHit1) Then 
 			If EntityPitch(OBJ, True) > 0.0 Then
 				RotateEntity(OBJ, CurveValue(80.0, EntityPitch(OBJ), 10.0), EntityYaw(OBJ), 0.0)
 			Else
@@ -6818,13 +6825,13 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 	
 	door1\IsElevatorDoor = 1
 	door2\IsElevatorDoor = 1
-	If door1\Open = True And door2\Open = False And door1\OpenState = 180.0 Then 
+	If door1\Open = True And (Not door2\Open) And door1\OpenState = 180.0 Then 
 		State = -1.0
 		door1\Locked = False
 		If (ClosestButton = door2\Buttons[0] Lor ClosestButton = door2\Buttons[1]) And MouseHit1 Then
 			UseDoor(door1, False)
 		EndIf
-	ElseIf door2\Open = True And door1\Open = False And door2\OpenState = 180.0 Then
+	ElseIf door2\Open = True And (Not door1\Open) And door2\OpenState = 180.0 Then
 		State = 1.0
 		door2\Locked = False
 		If (ClosestButton = door1\Buttons[0] Lor ClosestButton = door1\Buttons[1]) And MouseHit1 Then
@@ -6862,7 +6869,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 	
 	Local Inside% = False
 	
-	If door1\Open = False And door2\Open = False Then
+	If (Not door1\Open) And (Not door2\Open) Then
 		door1\Locked = True
 		door2\Locked = True
 		If door1\OpenState = 0.0 And door2\OpenState = 0.0 Then

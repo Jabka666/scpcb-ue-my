@@ -204,7 +204,7 @@ Function PutINIValue%(File$, INI_sSection$, INI_sKey$, INI_sValue$)
 		If INI_sTemp <> "" Then
 			If Left(INI_sTemp, 1) = "[" And Right(INI_sTemp, 1) = "]" Then
 				; ~ Process SECTION
-				If (INI_sCurrentSection = INI_sUpperSection) And (INI_bWrittenKey = False) Then
+				If INI_sCurrentSection = INI_sUpperSection And (Not INI_bWrittenKey) Then
 					INI_bWrittenKey = INI_CreateKey(INI_lFileHandle, INI_sKey, INI_sValue)
 				EndIf
 				INI_sCurrentSection = Upper(INI_CreateSection(INI_lFileHandle, INI_sTemp))
@@ -233,8 +233,8 @@ Function PutINIValue%(File$, INI_sSection$, INI_sKey$, INI_sValue$)
 	Wend
 	
 	; ~ KEY wasn't found in the INI file - Append a new SECTION If required and create our KEY = VALUE line
-	If (INI_bWrittenKey = False) Then
-		If INI_bSectionFound = False Then INI_CreateSection(INI_lFileHandle, INI_sSection)
+	If (Not INI_bWrittenKey) Then
+		If (Not INI_bSectionFound) Then INI_CreateSection(INI_lFileHandle, INI_sSection)
 		INI_CreateKey(INI_lFileHandle, INI_sKey, INI_sValue)
 	EndIf
 	CloseFile(INI_lFileHandle)

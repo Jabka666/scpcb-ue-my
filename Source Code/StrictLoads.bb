@@ -49,7 +49,7 @@ Function PlaySound_Strict%(SNDHandle%)
 		
 		For i = 0 To 31
 			If snd\Channels[i] <> 0 Then
-				If ChannelPlaying(snd\Channels[i]) = False Then
+				If (Not ChannelPlaying(snd\Channels[i])) Then
 					If snd\InternalHandle = 0 Then
 						If FileType(snd\Name) <> 1 Then
 							CreateConsoleMsg("Sound " + Chr(34) + snd\Name + Chr(34) + " not found.")

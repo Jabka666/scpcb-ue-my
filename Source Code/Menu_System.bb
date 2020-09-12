@@ -4,7 +4,6 @@ Global Menu173% = LoadImage_Strict("GFX\menu\scp_173_back.png")
 MenuWhite = LoadImage_Strict("GFX\menu\menu_white.png")
 MenuBlack = LoadImage_Strict("GFX\menu\menu_black.png")
 MaskImage(MenuBlack, 255, 255, 0)
-Global QuickLoadIcon% = LoadImage_Strict("GFX\menu\QuickLoading.png")
 
 ResizeImage(MenuBack, ImageWidth(MenuBack) * MenuScale, ImageHeight(MenuBack) * MenuScale)
 ResizeImage(MenuText, ImageWidth(MenuText) * MenuScale, ImageHeight(MenuText) * MenuScale)
@@ -82,7 +81,7 @@ Function UpdateMainMenu()
 			Local PrevMouseDown1% = MouseDown1
 			
 			MouseDown1 = MouseDown(1)
-			If PrevMouseDown1 = True And MouseDown1 = False Then MouseUp1 = True Else MouseUp1 = False
+			If PrevMouseDown1 = True And (Not MouseDown1) Then MouseUp1 = True Else MouseUp1 = False
 			
 			MouseHit2 = MouseHit(2)
 		EndIf
@@ -1614,7 +1613,7 @@ Function UpdateLauncher(lnchr.Launcher)
 		For n = 0 To lnchr\TotalGFXModes - 1
 			If lnchr\GFXModeWidths[n] = GfxModeWidth(i) And lnchr\GFXModeHeights[n] = GfxModeHeight(i) Then SameFound = True : Exit
 		Next
-		If SameFound = False Then
+		If (Not SameFound) Then
 			If GraphicWidth = GfxModeWidth(i) And GraphicHeight = GfxModeHeight(i) Then lnchr\SelectedGFXMode = lnchr\GFXModes
 			lnchr\GFXModeWidths[lnchr\GFXModes] = GfxModeWidth(i)
 			lnchr\GFXModeHeights[lnchr\GFXModes] = GfxModeHeight(i)
@@ -1811,6 +1810,7 @@ End Function
 
 Function DrawLoading(Percent%, ShortLoading% = False)
 	Local x%, y%, Temp%, FirstLoop%
+	Local ls.LoadingScreens
 	
 	If Percent = 0 Then
 		LoadingScreenText = 0
@@ -1835,7 +1835,7 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 			UpdateMusic()
 		EndIf
 		
-		If ShortLoading = False Then
+		If (Not ShortLoading) Then
 			If Percent > (100.0 / SelectedLoadingScreen\TxtAmount) * (LoadingScreenText + 1) Then
 				LoadingScreenText = LoadingScreenText + 1
 			EndIf
@@ -2698,37 +2698,6 @@ Function GetLineAmount(A$, W%, H%, Leading# = 1.0)
 	Wend
 	
 	Return(LinesShown + 1)
-End Function
-
-Global QuickLoadPercent% = -1
-Global QuickLoadPercent_DisplayTimer# = 0.0
-Global QuickLoad_CurrEvent.Events
-
-Function DrawQuickLoading()
-	If QuickLoadPercent > -1 Then
-		MidHandle(QuickLoadIcon)
-		DrawImage(QuickLoadIcon, GraphicWidth - 90, GraphicHeight - 150)
-		Color(255, 255, 255)
-		SetFont(fo\FontID[0])
-		Text(GraphicWidth - 100, GraphicHeight - 90, "LOADING: " + QuickLoadPercent + "%", 1)
-	EndIf
-End Function
-
-Function UpdateQuickLoading()
-	If QuickLoadPercent > -1 Then
-		If QuickLoadPercent > 99 Then
-			If QuickLoadPercent_DisplayTimer < 70.0
-				QuickLoadPercent_DisplayTimer = Min(QuickLoadPercent_DisplayTimer + fpst\FPSFactor[0], 70.0)
-			Else
-				QuickLoadPercent = -1
-			EndIf
-		EndIf
-		QuickLoadEvents()
-	Else
-		QuickLoadPercent = -1
-		QuickLoadPercent_DisplayTimer = 0.0
-		QuickLoad_CurrEvent = Null
-	EndIf
 End Function
 
 Function DrawOptionsTooltip(x%, y%, Width%, Height%, Option$, Value# = 0.0, InGame% = False)

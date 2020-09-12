@@ -749,7 +749,7 @@ Function PickItem(item.Items)
 							EndIf
 						Next
 						
-						If CanPickItem = False Then
+						If (Not CanPickItem) Then
 							msg\Msg = "You are not able to wear two hazmat suits at the same time."
 							msg\Timer = 70.0 * 6.0
 							Return
@@ -776,7 +776,7 @@ Function PickItem(item.Items)
 							EndIf
 						Next
 						
-						If CanPickItem = False Then
+						If (Not CanPickItem) Then
 							msg\Msg = "You are not able to wear two vests at the same time."
 							msg\Timer = 70.0 * 6.0
 							Return
@@ -900,7 +900,7 @@ Function Update294()
 		
 		; ~ Regurgitate when timer is below 10 seconds.
 		If me\VomitTimer < 10.0 And Rnd(0.0, 500.0 * me\VomitTimer) < 2.0 Then
-			If ChannelPlaying(VomitCHN) = False And (Not me\Regurgitate) Then
+			If (Not ChannelPlaying(VomitCHN)) And (Not me\Regurgitate) Then
 				VomitCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Retch" + Rand(1, 2) + ".ogg"))
 				me\Regurgitate = MilliSecs() + 50
 			EndIf
