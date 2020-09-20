@@ -637,6 +637,10 @@ Function LoadGame(File$)
 				;[Block]
 				Curr513_1 = n
 				;[End Block]
+			Case NPCtype049
+				;[Block]
+				Curr049 = n
+				;[End Block]
 		End Select
 		
 		x = ReadFloat(f)
@@ -1055,12 +1059,8 @@ Function LoadGame(File$)
 	Next
 	
 	For e.Events = Each Events
-		; ~ Reset for the monitor loading and stuff for room2sl
-		If e\EventName = "room2sl"
-			e\EventState = 0.0
-			e\EventStr = ""
 		; ~ Reset dimension1499
-		ElseIf e\EventName = "dimension1499"
+		If e\EventName = "dimension1499"
 			If e\EventState > 0.0
 				e\EventState = 0.0
 				e\EventStr = ""
@@ -1490,6 +1490,10 @@ Function LoadGameQuick(File$)
 			Case NPCtype513_1
 				;[Block]
 				Curr513_1 = n
+				;[End Block]
+			Case NPCtype049
+				;[Block]
+				Curr049 = n
 				;[End Block]
 		End Select
 		

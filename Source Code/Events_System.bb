@@ -303,47 +303,6 @@ Function QuickLoadEvents()
 	; ~ Instead of magic values in e\eventState and e\eventStr
 	
 	Select e\EventName
-		Case "room2sl"
-			;[Block]
-			If e\EventState = 0.0 And e\EventStr <> ""
-				If e\EventStr <> "" And Left(e\EventStr, 4) <> "Load"
-					QuickLoadPercent = QuickLoadPercent + 5
-					If Int(e\EventStr) > 9
-						e\EventStr = "Load2"
-					Else
-						e\EventStr = Int(e\EventStr) + 1
-					EndIf
-				ElseIf e\EventStr = "Load2"
-					Local Skip% = False
-					
-					If e\room\NPC[0] = Null Then
-						For n.NPCs = Each NPCs
-							If n\NPCtype = NPCtype049
-								Skip = True
-								Exit
-							EndIf
-						Next
-						
-						If (Not Skip) Then
-							e\room\NPC[0] = CreateNPC(NPCtype049, EntityX(e\room\Objects[7], True), EntityY(e\room\Objects[7], True) + 5.0, EntityZ(e\room\Objects[7], True))
-							e\room\NPC[0]\HideFromNVG = True
-							PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[7], True), EntityY(e\room\Objects[7], True) + 5.0, EntityZ(e\room\Objects[7], True))
-							ResetEntity(e\room\NPC[0]\Collider)
-							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 180.0, 0.0)
-							e\room\NPC[0]\State = 0.0
-							e\room\NPC[0]\PrevState = 2
-						EndIf
-					EndIf
-					QuickLoadPercent = 80
-					e\EventStr = "Load3"
-				ElseIf e\EventStr = "Load3"
-					e\EventState = 1.0
-					If e\EventState2 = 0.0 Then e\EventState2 = (-70.0) * 5.0
-					
-					QuickLoadPercent = 100
-				EndIf
-			EndIf
-			;[End Block]
 		Case "room205"
 			;[Block]
 			If e\EventState = 0.0 Lor e\EventStr <> "LoadDone" Then
@@ -2640,7 +2599,7 @@ Function UpdateEvents()
 													
 													For e2.Events = Each Events
 														If e2\EventName = "room2sl"
-															e2\EventState3 = 0
+															e2\EventState3 = 0.0
 															UpdateLever(e2\room\Levers[0])
 															RotateEntity(e2\room\Levers[0], 0.0, EntityYaw(e2\room\Levers[0]), 0.0)
 															TurnCheckpointMonitorsOff(0)
@@ -5163,21 +5122,17 @@ Function UpdateEvents()
 				If e\EventState < MilliSecs() Then
 					If PlayerRoom <> e\room Then
 						If DistanceSquared(EntityX(me\Collider), EntityX(e\room\OBJ), EntityZ(me\Collider), EntityZ(e\room\OBJ)) < 256.0 Then
-							For n.NPCs = Each NPCs
-								If n\NPCtype = NPCtype049 Then
-									If n\State = 2.0 And EntityDistanceSquared(me\Collider, n\Collider) > 256.0 Then
-										TFormVector(368.0, 528.0, 176.0, e\room\OBJ, 0)
-										PositionEntity(n\Collider, EntityX(e\room\OBJ) + TFormedX(), TFormedY(), EntityZ(e\room\OBJ) + TFormedZ())
-										ResetEntity(n\Collider)
-										n\PathStatus = 0
-										n\State = 4.0
-										n\State2 = 0.0
-										n\State3 = 0.0
-										RemoveEvent(e)
-									EndIf
-									Exit
+							If Curr049 <> Null Then
+								If Curr049\State = 2.0 And EntityDistanceSquared(me\Collider, Curr049\Collider) > 256.0 Then
+									Curr049\PathStatus = 0 : Curr049\State = 4.0 : Curr049\State2 = 0.0 : Curr049\State3 = 0.0
+									TFormVector(368.0, 528.0, 176.0, e\room\OBJ, 0)
+									PositionEntity(Curr049\Collider, EntityX(e\room\OBJ) + TFormedX(), TFormedY(), EntityZ(e\room\OBJ) + TFormedZ())
+									ResetEntity(Curr049\Collider)
+									RemoveEvent(e)
 								EndIf
-							Next
+							Else
+								RemoveEvent(e)
+							EndIf
 						EndIf
 					EndIf
 					If e <> Null Then e\EventState = MilliSecs() + 5000
@@ -5818,20 +5773,17 @@ Function UpdateEvents()
 							PointEntity(n\Collider, e\room\OBJ)
 							TurnEntity(n\Collider, 0.0, 20.0, 0.0)
 							
-							For n.NPCs = Each NPCs
-								If n\NPCtype = NPCtype049
-									e\room\NPC[0] = n
-									e\room\NPC[0]\State = 2.0 : e\room\NPC[0]\Idle = 1 : e\room\NPC[0]\HideFromNVG = True
-									PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True) + 3.0, EntityZ(e\room\Objects[4], True))
-									ResetEntity(e\room\NPC[0]\Collider)
-									Exit
-								EndIf
-							Next
-							If e\room\NPC[0] = Null
-								n.NPCs = CreateNPC(NPCtype049, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True) + 3, EntityZ(e\room\Objects[4], True))
-								PointEntity(n\Collider, e\room\OBJ)
-								n\State = 2.0 : n\Idle = 1 : n\HideFromNVG = True
-								e\room\NPC[0] = n
+							If Curr049 <> Null Then
+								e\room\NPC[0] = Curr049
+								e\room\NPC[0]\State = 2.0 : e\room\NPC[0]\Idle = 1 : e\room\NPC[0]\HideFromNVG = True
+								PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True) + 3.0, EntityZ(e\room\Objects[4], True))
+								ResetEntity(e\room\NPC[0]\Collider)
+								PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
+							Else
+								Curr049 = CreateNPC(NPCtype049, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True) + 3.0, EntityZ(e\room\Objects[4], True))
+								Curr049\State = 2.0 : Curr049\Idle = 1 : Curr049\HideFromNVG = True
+								PointEntity(Curr049\Collider, e\room\OBJ)
+								e\room\NPC[0] = Curr049
 							EndIf
 							
 							PlaySound_Strict(LoadTempSound("SFX\Room\Blackout.ogg"))
@@ -8179,10 +8131,15 @@ Function UpdateEvents()
 				; ~ e\EventState3: Checks if Lever is activated or not
 				
 				If PlayerRoom = e\room
-					If e\EventStr = "" And QuickLoadPercent = -1
-						QuickLoadPercent = 0
-						QuickLoad_CurrEvent = e
-						e\EventStr = 0
+					If e\EventState = 0.0 Then
+						If Curr049 = Null Then
+							Curr049 = CreateNPC(NPCtype049, EntityX(e\room\Objects[7], True), EntityY(e\room\Objects[7], True) + 5.0, EntityZ(e\room\Objects[7], True))
+							Curr049\State = 0.0 : Curr049\PrevState = 2 : Curr049\HideFromNVG = True
+							RotateEntity(Curr049\Collider, 0.0, e\room\Angle + 180.0, 0.0)
+							e\room\NPC[0] = Curr049
+						EndIf
+						e\EventState = 1.0
+						If e\EventState2 = 0.0 Then e\EventState2 = (-70.0) * 5.0
 					EndIf
 				EndIf
 				
@@ -8229,8 +8186,9 @@ Function UpdateEvents()
 							MoveEntity(e\room\NPC[0]\Collider, 0.0, 0.0, -1.0)
 							ResetEntity(e\room\NPC[0]\Collider)
 							e\room\NPC[0]\HideFromNVG = False
-							e\room\NPC[0]\PathX = EntityX(e\room\NPC[0]\Collider)
-							e\room\NPC[0]\PathZ = EntityZ(e\room\NPC[0]\Collider)
+							e\room\NPC[0]\EnemyX = EntityX(me\Collider)
+							e\room\NPC[0]\EnemyY = EntityZ(me\Collider)
+							e\room\NPC[0]\EnemyZ = EntityZ(me\Collider)
 							e\room\NPC[0]\State = 5.0
 							
 							e\EventState2 = 1.0
@@ -8263,9 +8221,7 @@ Function UpdateEvents()
 									PlaySound2(OpenDoorSFX(0, Rand(0, 2)), Camera, e\room\RoomDoors[1]\OBJ)
 								EndIf
 							EndIf
-							If e\room\NPC[0]\Reload = 1.0
-								e\room\NPC[0]\DropSpeed = 0.0
-							EndIf
+							If e\room\NPC[0]\Reload = 1.0 Then e\room\NPC[0]\DropSpeed = 0.0
 						EndIf
 						
 						If e\room\NPC[0]\State <> 5.0
@@ -8328,7 +8284,7 @@ Function UpdateEvents()
 										;[End Block]
 									Case 4.0
 										;[Block]
-										e\room\NPC[0]\PathStatus = FindPath(e\room\NPC[0], e\room\NPC[0]\PathX, 0.1, e\room\NPC[0]\PathZ)
+										e\room\NPC[0]\PathStatus = FindPath(e\room\NPC[0], e\room\NPC[0]\EnemyX, e\room\NPC[0]\EnemyY, e\room\NPC[0]\EnemyZ)
 										e\room\NPC[0]\PrevState = 2
 										;[End Block]
 									Case 5.0
@@ -9242,7 +9198,6 @@ Function UpdateEndings()
 							For n.NPCs = Each NPCs
 								If n\NPCtype = NPCtypeMTF
 									RemoveNPC(n)
-									Exit
 								EndIf
 							Next
 							
@@ -9548,7 +9503,6 @@ Function UpdateEndings()
 						For n.NPCs = Each NPCs
 							If n <> Curr106 And n <> Curr173 Then  
 								RemoveNPC(n)
-								Exit
 							EndIf
 						Next
 						Curr173\Idle = 1

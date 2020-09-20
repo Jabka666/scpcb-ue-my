@@ -374,17 +374,16 @@ Function CreateConsoleMsg(Txt$, R% = -1, G% = -1, B% = -1, IsCommand% = False)
 End Function
 
 Function UpdateConsole()
-	Local Tex%, Tex2%, InBar%, InBox%, MouseScroll#
-	Local e.Events
-	Local x%, y%, Width%, Height%
-	
 	If (Not CanOpenConsole) Then
 		ConsoleOpen = False
 		Return
 	EndIf
 	
 	If ConsoleOpen Then
-		Local cm.ConsoleMsg
+		Local ev.Events, e.Events, e2.Events, r.Rooms, it.Items, n.NPCs, snd.Sound, cm.ConsoleMsg, itt.ItemTemplates
+		Local Tex%, Tex2%, InBar%, InBox%, MouseScroll#, Temp%, i%
+		Local Args$, StrTemp$, StrTemp2$, StrTemp3$, StrTemp4$
+		Local x%, y%, Width%, Height%
 		
 		SetFont(fo\ConsoleFont)
 		
@@ -394,10 +393,6 @@ Function UpdateConsole()
 		y = GraphicHeight - 300 * MenuScale
 		Width = GraphicWidth
 		Height = 300 * MenuScale - 30 * MenuScale
-		
-		Local Temp%, i%
-		Local Args$, StrTemp$, StrTemp2$, StrTemp3$, StrTemp4$
-		Local ev.Events, e2.Events, r.Rooms, it.Items, n.NPCs, snd.Sound
 		
 		DrawFrame(x, y, Width, Height + 30 * MenuScale)
 		
@@ -478,9 +473,7 @@ Function UpdateConsole()
 						ReissuePos = 0
 					EndIf
 					
-					If ConsoleReissue\IsCommand Then
-						Exit
-					EndIf
+					If ConsoleReissue\IsCommand Then Exit
 					ReissuePos = ReissuePos - 15 * MenuScale
 					ConsoleReissue = After ConsoleReissue
 				Wend
@@ -494,13 +487,11 @@ Function UpdateConsole()
 		
 		If KeyHit(208) Then
 			ReissuePos = (-ConsoleHeight) + 15 * MenuScale
-			If (ConsoleReissue = Null) Then
+			If ConsoleReissue = Null Then
 				ConsoleReissue = Last ConsoleMsg
 				
 				While ConsoleReissue <> Null
-					If ConsoleReissue\IsCommand Then
-						Exit
-					EndIf
+					If ConsoleReissue\IsCommand Then Exit
 					ReissuePos = ReissuePos + 15 * MenuScale
 					ConsoleReissue = Before ConsoleReissue
 				Wend
@@ -520,9 +511,7 @@ Function UpdateConsole()
 						ReissuePos = (-ConsoleHeight) + 15 * MenuScale
 					EndIf
 					
-					If ConsoleReissue\IsCommand Then
-						Exit
-					EndIf
+					If ConsoleReissue\IsCommand Then Exit
 					ReissuePos = ReissuePos + 15 * MenuScale
 					ConsoleReissue = Before ConsoleReissue
 				Wend
@@ -544,9 +533,7 @@ Function UpdateConsole()
 		Local OldConsoleInput$ = ConsoleInput
 		
 		ConsoleInput = InputBox(x, y + Height, Width, 30 * MenuScale, ConsoleInput, 2)
-		If OldConsoleInput <> ConsoleInput Then
-			ConsoleReissue = Null
-		EndIf
+		If OldConsoleInput <> ConsoleInput Then ConsoleReissue = Null
 		ConsoleInput = Left(ConsoleInput, 100)
 		
 		If KeyHit(28) And ConsoleInput <> "" Then
@@ -989,7 +976,7 @@ Function UpdateConsole()
 					;[Block]
 					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 					Temp = False 
-					For itt.Itemtemplates = Each ItemTemplates
+					For itt.ItemTemplates = Each ItemTemplates
 						If Lower(itt\Name) = StrTemp Then
 							Temp = True
 							CreateConsoleMsg(itt\Name + " spawned.")
@@ -1104,25 +1091,15 @@ Function UpdateConsole()
 					;[End Block]
 				Case "disable049" 
 			        ;[Block]
-			        For n.NPCs = Each NPCs
-			            If n\NPCtype = NPCtype049
-							n\Idle = True
-			                n\State = 0.0
-			                HideEntity(n\Collider)
-			                HideEntity(n\OBJ)
-			            EndIf
-			        Next
-			        ;[End Block]
+					Curr049\Idle = True
+			        HideEntity(Curr049\Collider)
+			        HideEntity(Curr049\OBJ)
+					;[End Block]
 			    Case "enable049"
 			        ;[Block]
-			        For n.NPCs = Each NPCs
-			            If n\NPCtype = NPCtype049
-			                n\State = 2.0
-			                ShowEntity(n\Collider)
-			                ShowEntity(n\OBJ)
-							n\Idle = False
-			            EndIf
-			        Next
+					Curr049\Idle = False
+			        ShowEntity(Curr049\Collider)
+			        ShowEntity(Curr049\OBJ)
 					;[End Block]
 				Case "106retreat"
 					;[Block]
@@ -4518,7 +4495,7 @@ Function DrawGUI()
 	
 	Local Temp%, x%, y%, z%, i%, YawValue#, PitchValue#
 	Local x1#, x2#, x3#, y1#, y2#, y3#, z2#, ProjY#, Scale#, Pvt%
-	Local e.Events, it.Items, ev.Events, np.NPCs, ch.Chunk, a_it.Items
+	Local e.Events, it.Items, ev.Events, ch.Chunk, a_it.Items
 	Local n%, xTemp%, yTemp%, StrTemp$
 	Local Width%, Height%
 	
@@ -5479,20 +5456,17 @@ Function DrawGUI()
 										SCPs_Found = SCPs_Found + 1
 									EndIf
 								EndIf
-								For np.NPCs = Each NPCs
-									If np\NPCtype = NPCtype049
-										Dist = EntityDistance(Camera, np\OBJ)
-										If Dist < 8.0 * 4.0 Then
-											If (Not np\HideFromNVG) Then
-												Color(100, 0, 0)
-												Oval(x - Dist * 1.5, y - 7 - Dist * 1.5, Dist * 3, Dist * 3, False)
-												Text(x - NAV_WIDTH / 2 + 10, y - NAV_HEIGHT / 2 + 30 + (20 * SCPs_Found), "SCP-049")
-												SCPs_Found = SCPs_Found + 1
-											EndIf
+								If Curr049 <> Null Then
+									Dist = EntityDistance(Camera, Curr049\OBJ)
+									If Dist < 8.0 * 4.0 Then
+										If (Not Curr049\HideFromNVG) Then
+											Color(100, 0, 0)
+											Oval(x - Dist * 1.5, y - 7 - Dist * 1.5, Dist * 3, Dist * 3, False)
+											Text(x - NAV_WIDTH / 2 + 10, y - NAV_HEIGHT / 2 + 30 + (20 * SCPs_Found), "SCP-049")
+											SCPs_Found = SCPs_Found + 1
 										EndIf
-										Exit
 									EndIf
-								Next
+								EndIf
 								If PlayerRoom\RoomTemplate\Name = "room895" Then
 									If CoffinDistance < 8.0 Then
 										Dist = Rnd(4.0, 8.0)
@@ -9723,11 +9697,12 @@ Function NullGame(PlayButtonSFX% = True)
 		Delete(c)
 	Next
 	
-	Curr173 = Null
-	Curr106 = Null
-	Curr096 = Null
-	Curr513_1 = Null
-	
+	If Curr173 <> Null Then Curr173 = Null
+	If Curr106 <> Null Then Curr106 = Null
+	If Curr096 <> Null Then Curr096 = Null
+	If Curr513_1 <> Null Then Curr513_1 = Null
+	If Curr049 <> Null Then Curr049 = Null
+		
 	ForestNPC = 0
 	ForestNPCTex = 0
 	
@@ -12490,5 +12465,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#108A#1323#1E17
+;~B#1073#130C#1DFD
 ;~C#Blitz3D

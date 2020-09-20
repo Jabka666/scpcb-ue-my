@@ -1,4 +1,4 @@
-Global Curr173.NPCs, Curr106.NPCs, Curr096.NPCs, Curr513_1.NPCs
+Global Curr173.NPCs, Curr106.NPCs, Curr096.NPCs, Curr513_1.NPCs, Curr049.NPCs
 
 Const NPCtype008_1% = 1, NPCtype035_Tentacle% = 2, NPCtype049% = 3, NPCtype049_2% = 4, NPCtype066% = 5, NPCtype096% = 6
 Const NPCtype106% = 7, NPCtype173% = 8, NPCtype372% = 9, NPCtype513_1% = 10, NPCtype860_2% = 11, NPCtype939% = 12
@@ -5499,31 +5499,30 @@ Function UpdateMTFUnit(n.NPCs)
 							PlayMTFSound(n\Sound, n)
 						EndIf
 					EndIf
+				ElseIf Curr049 <> Null
+					If OtherNPCSeesMeNPC(Curr049, n) Then
+						If EntityVisible(n\Collider, Curr049\Collider)
+							n\State = 4.0
+							n\EnemyX = EntityX(Curr049\Collider, True)
+							n\EnemyY = EntityY(Curr049\Collider, True)
+							n\EnemyZ = EntityZ(Curr049\Collider, True)
+							n\State2 = 70.0 * 15.0
+							n\State3 = 0.0
+							n\PathTimer = 0.0
+							n\PathStatus = 0
+							n\Target = Curr049
+							
+							If n\Sound <> 0 Then 
+								FreeSound_Strict(n\Sound) : n\Sound = 0
+							EndIf
+							n\Sound = LoadSound_Strict("SFX\Character\MTF\049\Spotted" + Rand(1, 5) + ".ogg")
+							PlayMTFSound(n\Sound, n)
+						EndIf
+					EndIf
 				EndIf
 				
 				For n2.NPCs = Each NPCs
-					If n2\NPCtype = NPCtype049 Then
-						If OtherNPCSeesMeNPC(n2, n) Then
-							If EntityVisible(n\Collider, n2\Collider)
-								n\State = 4.0
-								n\EnemyX = EntityX(n2\Collider, True)
-								n\EnemyY = EntityY(n2\Collider, True)
-								n\EnemyZ = EntityZ(n2\Collider, True)
-								n\State2 = 70 * 15.0
-								n\State3 = 0.0
-								n\PathTimer = 0.0
-								n\PathStatus = 0
-								n\Target = n2
-								
-								If n\Sound <> 0 Then 
-									FreeSound_Strict(n\Sound) : n\Sound = 0
-								EndIf
-								n\Sound = LoadSound_Strict("SFX\Character\MTF\049\Spotted" + Rand(1, 5) + ".ogg")
-								PlayMTFSound(n\Sound, n)
-								Exit
-							EndIf
-						EndIf
-					ElseIf n2\NPCtype = NPCtype049_2 And (Not n2\IsDead)
+					If n2\NPCtype = NPCtype049_2 And (Not n2\IsDead)
 						If OtherNPCSeesMeNPC(n2, n) Then
 							If EntityVisible(n\Collider, n2\Collider)
 								n\State = 9.0
@@ -5866,31 +5865,30 @@ Function UpdateMTFUnit(n.NPCs)
 							EndIf
 						EndIf
 					EndIf
+				ElseIf Curr049 <> Null
+					If OtherNPCSeesMeNPC(Curr049, n) Then
+						If EntityVisible(n\Collider, Curr049\Collider)
+							n\State = 4.0
+							n\EnemyX = EntityX(Curr049\Collider, True)
+							n\EnemyY = EntityY(Curr049\Collider, True)
+							n\EnemyZ = EntityZ(Curr049\Collider, True)
+							n\State2 = 70.0 * 15.0
+							n\State3 = 0.0
+							n\PathTimer = 0.0
+							n\PathStatus = 0
+							n\Target = Curr049
+							
+							If n\Sound <> 0 Then
+								FreeSound_Strict(n\Sound) : n\Sound = 0
+							EndIf
+							n\Sound = LoadSound_Strict("SFX\Character\MTF\049\Spotted" + Rand(1, 5) + ".ogg")
+							PlayMTFSound(n\Sound, n)
+						EndIf
+					EndIf
 				EndIf
 				
 				For n2.NPCs = Each NPCs
-					If n2\NPCtype = NPCtype049
-						If OtherNPCSeesMeNPC(n2, n) Then
-							If EntityVisible(n\Collider, n2\Collider)
-								n\State = 4.0
-								n\EnemyX = EntityX(n2\Collider, True)
-								n\EnemyY = EntityY(n2\Collider, True)
-								n\EnemyZ = EntityZ(n2\Collider, True)
-								n\State2 = 70.0 * 15.0
-								n\State3 = 0.0
-								n\PathTimer = 0.0
-								n\PathStatus = 0
-								n\Target = n2
-								
-								If n\Sound <> 0 Then
-									FreeSound_Strict(n\Sound) : n\Sound = 0
-								EndIf
-								n\Sound = LoadSound_Strict("SFX\Character\MTF\049\Spotted" + Rand(1, 5) + ".ogg")
-								PlayMTFSound(n\Sound, n)
-								Exit
-							EndIf
-						EndIf
-					ElseIf n2\NPCtype = NPCtype049_2 And (Not n2\IsDead)
+					If n2\NPCtype = NPCtype049_2 And (Not n2\IsDead)
 						If OtherNPCSeesMeNPC(n2, n) Then
 							If EntityVisible(n\Collider, n2\Collider)
 								n\State = 9.0
@@ -7046,6 +7044,7 @@ Function Console_SpawnNPC(C_Input$, C_State$ = "")
 			;[Block]
 			n.NPCs = CreateNPC(NPCtype049, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			n\State = 1.0
+			If Curr049 = Null Then Curr049 = n
 			ConsoleMsg = "SCP-049 spawned."
 			;[End Block]
 		Case "049-2", "0492", "scp-049-2", "scp049-2", "049zombie", "curedhuman", "scp0492", "scp-0492"
@@ -7063,7 +7062,7 @@ Function Console_SpawnNPC(C_Input$, C_State$ = "")
 			;[Block]
 			n.NPCs = CreateNPC(NPCtype096, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			n\State = 5.0
-			If (Curr096 = Null) Then Curr096 = n
+			If Curr096 = Null Then Curr096 = n
 			ConsoleMsg = "SCP-096 spawned."
 			;[End Block]
 		Case "106", "scp106", "scp-106", "larry", "oldman"
@@ -7444,5 +7443,5 @@ Function Animate2#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = True
 End Function 
 
 ;~IDEal Editor Parameters:
-;~B#172#1218#135E#13AC#1502#161F#17EF#184A
+;~B#172#1218#135E#13AC#1502#161E#17ED#1848
 ;~C#Blitz3D
