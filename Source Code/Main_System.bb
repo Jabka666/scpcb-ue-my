@@ -141,7 +141,7 @@ Global CanSave% = True
 
 AppTitle("SCP - Containment Breach Ultimate Edition v" + VersionNumber)
 
-PlayStartupVideos()
+If PlayStartup Then PlayStartupVideos()
 
 Global CursorIMG% = LoadImage_Strict("GFX\cursor.png")
 
@@ -2649,16 +2649,12 @@ End Function
 Function RemoveDoor(d.Doors)
 	Local i%
 	
-	For i = 0 To 1
-		If d\Buttons[i] <> 0 Then EntityParent(d\Buttons[i], 0)
-	Next
 	If d\OBJ <> 0 Then FreeEntity(d\OBJ) : d\OBJ = 0
 	If d\OBJ2 <> 0 Then FreeEntity(d\OBJ2) : d\OBJ2 = 0
 	If d\FrameOBJ <> 0 Then FreeEntity(d\FrameOBJ) : d\FrameOBJ = 0
 	For i = 0 To 1
 		If d\Buttons[i] <> 0 Then FreeEntity(d\Buttons[i]) : d\Buttons[0] = 0
 	Next
-	
 	Delete(d)
 End Function
 
@@ -2866,7 +2862,7 @@ Repeat
 	
 	CatchErrors("Main Loop / Uncaught")
 	
-	If VSync = 0 Then
+	If (Not VSync) Then
 		Flip(0)
 	Else 
 		Flip(1)
@@ -3535,7 +3531,7 @@ Function DrawEnding()
 					
 					Local SCPsEncountered% = 1
 					
-					For i = 0 To 24
+					For i = 0 To 30
 						SCPsEncountered = SCPsEncountered + Achievements[i]
 					Next
 					
@@ -3714,25 +3710,17 @@ Function DrawCredits()
 		cl\ID = ID
 		If Left(cl\Txt, 1) = "*"
 			SetFont(fo\CreditsFontID[1])
-			If cl\Stay = False
-				Text(GraphicWidth / 2, Credits_Y + (24 * cl\ID * MenuScale), Right(cl\Txt, Len(cl\Txt) - 1), True)
-			EndIf
+			If (Not cl\Stay) Then Text(GraphicWidth / 2, Credits_Y + (24 * cl\ID * MenuScale), Right(cl\Txt, Len(cl\Txt) - 1), True)
 		ElseIf Left(cl\Txt, 1) = "/"
 			LastCreditLine = Before(cl)
 		Else
 			SetFont(fo\CreditsFontID[0])
-			If cl\Stay = False
-				Text(GraphicWidth / 2, Credits_Y + (24 * cl\ID * MenuScale), cl\Txt, True)
-			EndIf
+			If (Not cl\Stay) Then Text(GraphicWidth / 2, Credits_Y + (24 * cl\ID * MenuScale), cl\Txt, True)
 		EndIf
-		If LastCreditLine <> Null
-			If cl\ID > LastCreditLine\ID
-				cl\Stay = True
-			EndIf
+		If LastCreditLine <> Null Then
+			If cl\ID > LastCreditLine\ID Then cl\Stay = True
 		EndIf
-		If cl\Stay
-			EndLinesAmount = EndLinesAmount + 1
-		EndIf
+		If cl\Stay Then EndLinesAmount = EndLinesAmount + 1
 		ID = ID + 1
 	Next
 	If (Credits_Y + (24 * LastCreditLine\ID * MenuScale)) < -StringHeight(LastCreditLine\Txt)
@@ -3779,17 +3767,11 @@ Function UpdateCredits()
 	LastCreditLine = Null
 	For cl.CreditsLine = Each CreditsLine
 		cl\ID = ID
-		If Left(cl\Txt, 1) = "/"
-			LastCreditLine = Before(cl)
+		If Left(cl\Txt, 1) = "/" Then LastCreditLine = Before(cl)
+		If LastCreditLine <> Null Then
+			If cl\ID > LastCreditLine\ID Then cl\Stay = True
 		EndIf
-		If LastCreditLine <> Null
-			If cl\ID > LastCreditLine\ID
-				cl\Stay = True
-			EndIf
-		EndIf
-		If cl\Stay
-			EndLinesAmount = EndLinesAmount + 1
-		EndIf
+		If cl\Stay Then EndLinesAmount = EndLinesAmount + 1
 		ID = ID + 1
 	Next
 	If (Credits_Y + (24 * LastCreditLine\ID * MenuScale)) < -StringHeight(LastCreditLine\Txt)
@@ -3837,6 +3819,7 @@ End Function
 Function MovePlayer()
 	CatchErrors("Uncaught (MovePlayer)")
 	
+	Local de.Decals
 	Local Sprint# = 1.0, Speed# = 0.018
 	Local Pvt%, i%, Angle#
 	
@@ -4020,10 +4003,7 @@ Function MovePlayer()
 		ResetEntity(me\Collider)
 	Else
 		Temp2 = Temp2 / Max((me\Injuries + 3.0) / 3.0, 1.0)
-		If me\Injuries > 0.5 Then 
-			Temp2 = Temp2 * Min((Sin(me\Shake / 2.0) + 1.2), 1.0)
-		EndIf
-		
+		If me\Injuries > 0.5 Then Temp2 = Temp2 * Min((Sin(me\Shake / 2.0) + 1.2), 1.0)
 		Temp = False
 		If (Not me\Zombie) Then
 			If KeyDown(key\MOVEMENT_DOWN) And me\Playable Then
@@ -4031,9 +4011,7 @@ Function MovePlayer()
 					Temp = True
 					Angle = 180.0
 					If KeyDown(key\MOVEMENT_LEFT) Then
-						If (Not KeyDown(key\MOVEMENT_RIGHT)) Then
-							Angle = 135.0
-						EndIf
+						If (Not KeyDown(key\MOVEMENT_RIGHT)) Then Angle = 135.0
 					ElseIf KeyDown(key\MOVEMENT_RIGHT)
 						Angle = -135.0
 					EndIf
@@ -4052,9 +4030,7 @@ Function MovePlayer()
 				Temp = True
 				Angle = 0.0
 				If KeyDown(key\MOVEMENT_LEFT) Then
-					If (Not KeyDown(key\MOVEMENT_RIGHT)) Then
-						Angle = 45.0
-					EndIf
+					If (Not KeyDown(key\MOVEMENT_RIGHT)) Then Angle = 45.0
 				ElseIf KeyDown(key\MOVEMENT_RIGHT)
 					Angle = -45.0
 				EndIf
@@ -4319,9 +4295,7 @@ Function MouseLook()
 	
 	If wi\GasMask > 0 Lor I_1499\Using > 0 Then
 		If I_714\Using = 0 Then
-			If wi\GasMask = 2 Lor I_1499\Using = 2 Then
-				me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fpst\FPSFactor[0])
-			EndIf
+			If wi\GasMask = 2 Lor I_1499\Using = 2 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fpst\FPSFactor[0])
 		EndIf
 		If me\KillTimer >= 0.0 Then
 			If (Not ChannelPlaying(BreathCHN)) Then
@@ -4347,7 +4321,6 @@ Function MouseLook()
 				wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - fpst\FPSFactor[0] * 0.15)
 			EndIf
 		EndIf
-		
 		EntityAlpha(tt\OverlayID[11], Min(((wi\GasMaskFogTimer * 0.2) ^ 2.0) / 1000.0, 0.45))
 	Else
 		If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN)
@@ -4361,9 +4334,7 @@ Function MouseLook()
             me\Stamina = Min(60.0, me\Stamina)
         EndIf
 		If I_714\Using = 0 Then
-			If wi\HazmatSuit = 2 Then
-				me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fpst\FPSFactor[0])
-			EndIf
+			If wi\HazmatSuit = 2 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fpst\FPSFactor[0])
 		EndIf
 		ShowEntity(tt\OverlayID[2])
 	Else
@@ -9640,12 +9611,10 @@ Function NullGame(PlayButtonSFX% = True)
 	msg\Msg = ""
 	msg\Timer = 0.0
 	
-	SelectedItem = Null
-	
 	For i = 0 To MaxItemAmount - 1
-		Inventory[i] = Null
+		If Inventory[i] <> Null Then Inventory[i] = Null
 	Next
-	SelectedItem = Null
+	If SelectedItem <> Null Then SelectedItem = Null
 	
 	ClosestButton = 0
 	
@@ -9702,7 +9671,7 @@ Function NullGame(PlayButtonSFX% = True)
 	If Curr096 <> Null Then Curr096 = Null
 	If Curr513_1 <> Null Then Curr513_1 = Null
 	If Curr049 <> Null Then Curr049 = Null
-		
+	
 	ForestNPC = 0
 	ForestNPCTex = 0
 	
@@ -9731,13 +9700,15 @@ Function NullGame(PlayButtonSFX% = True)
 	Next
 	
 	For i = 0 To 6
-		If ChannelPlaying(RadioCHN[i]) Then StopChannel(RadioCHN[i])
+		If RadioCHN[i] <> 0 Then 
+			If ChannelPlaying(RadioCHN[i]) Then PauseChannel(RadioCHN[i])
+		EndIf
 	Next
 	
 	I_1499\PrevX = 0.0
 	I_1499\PrevY = 0.0
 	I_1499\PrevZ = 0.0
-	I_1499\PrevRoom = Null
+	If I_1499\PrevRoom <> Null Then I_1499\PrevRoom = Null
 	I_1499\x = 0.0
 	I_1499\y = 0.0
 	I_1499\z = 0.0
@@ -9759,10 +9730,10 @@ Function NullGame(PlayButtonSFX% = True)
 	CurrAchvMSGID = 0
 	
 	ClearWorld()
-	Camera = 0
-	ArkBlurCam = 0
-	me\Collider = 0
-	Sky = 0
+	If Camera <> 0 Then Camera = 0
+	If ArkBlurCam <> 0 Then ArkBlurCam = 0
+	If me\Collider <> 0 Then me\Collider = 0
+	If Sky <> 0 Then Sky = 0
 	InitFastResize()
 	
 	DeleteMenuGadgets()
@@ -12343,7 +12314,7 @@ Function TeleportEntity(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = Fa
 End Function
 
 Function PlayStartupVideos()
-	If PlayStartup = 0 Then Return
+	If (Not PlayStartup) Then Return
 	
 	HidePointer()
 	
@@ -12376,27 +12347,26 @@ Function PlayStartupVideos()
 				;[End Block]
 		End Select
 		
-		Local SplashScreenVideo% = BlitzMovie_OpenD3D(MovieFile + ".avi", SystemProperty("Direct3DDevice7"), SystemProperty("DirectDraw7"))
+		Local Movie% = OpenMovie(MovieFile + ".avi")
 		
-		If SplashScreenVideo = 0 Then
+		If (Not Movie) Then
 			PutINIValue(OptionFile, "Advanced", "Play Startup Videos", 0)
 			Return
 		EndIf
-		SplashScreenVideo = BlitzMovie_Play()
+		Movie = OpenMovie(MovieFile + ".avi")
 		
 		Local SplashScreenAudio% = StreamSound_Strict(MovieFile + ".ogg", SFXVolume, 0)
 		
 		Repeat
 			Cls()
-			BlitzMovie_DrawD3D(0, (RealGraphicHeight / 2 - ScaledGraphicHeight / 2), RealGraphicWidth, ScaledGraphicHeight)
+			DrawMovie(Movie, 0, (RealGraphicHeight / 2 - ScaledGraphicHeight / 2), RealGraphicWidth, ScaledGraphicHeight)
 			SetFont(fo\FontID[0])
 			Color(255, 255, 255)
 	        Text(GraphicWidth / 2, GraphicHeight - 50, "PRESS ANY KEY TO SKIP", True, True)
 			Flip()
 		Until (GetKey() Lor (Not IsStreamPlaying_Strict(SplashScreenAudio)))
 		StopStream_Strict(SplashScreenAudio)
-		BlitzMovie_Stop()
-		BlitzMovie_Close()
+		CloseMovie(Movie)
 		
 		Cls()
 		Flip()
@@ -12465,5 +12435,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1073#130C#1DFD
+;~B#105B#12EF#1DE0
 ;~C#Blitz3D

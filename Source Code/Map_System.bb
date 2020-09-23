@@ -6499,9 +6499,7 @@ Function UpdateSecurityCams()
 				If sc\FollowPlayer Then
 					If sc <> CoffinCam
 						If EntityVisible(sc\CameraOBJ, Camera)
-							If MTFCameraCheckTimer > 0.0
-								MTFCameraCheckDetected = True
-							EndIf
+							If MTFCameraCheckTimer > 0.0 Then MTFCameraCheckDetected = True
 						EndIf
 					EndIf
 					If sc\Pvt = 0 Then sc\Pvt = CreatePivot(sc\OBJ) : EntityParent(sc\Pvt, 0) ; ~ Sets position and rotation of the pivot to the cam object
@@ -6530,11 +6528,9 @@ Function UpdateSecurityCams()
 					EndIf
 					
 					If sc <> CoffinCam Then
-						If (Abs(DeltaYaw(sc\CameraOBJ, Camera)) < 60.0)
+						If Abs(DeltaYaw(sc\CameraOBJ, Camera)) < 60.0
 							If EntityVisible(sc\CameraOBJ, Camera)
-								If MTFCameraCheckTimer > 0.0
-									MTFCameraCheckDetected = True
-								EndIf
+								If MTFCameraCheckTimer > 0.0 Then MTFCameraCheckDetected = True
 							EndIf
 						EndIf
 					EndIf
@@ -6656,9 +6652,7 @@ Function UpdateSecurityCams()
 						EndIf
 					Else
 						If sc\InSight Then
-							If I_714\Using = 1 Lor wi\HazmatSuit = 3 Lor wi\GasMask = 3 Then
-								EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
-							EndIf
+							If I_714\Using = 1 Lor wi\HazmatSuit = 3 Lor wi\GasMask = 3 Then EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
 						EndIf
 					EndIf
 					
@@ -6667,9 +6661,7 @@ Function UpdateSecurityCams()
 							sc\PlayerState = Rand(60000, 65000)
 						EndIf
 						
-						If Rand(500) = 1 Then
-							EntityTexture(sc\ScrOverlay, tt\MiscTextureID[Rand(1, 6)])
-						EndIf
+						If Rand(500) = 1 Then EntityTexture(sc\ScrOverlay, tt\MiscTextureID[Rand(1, 6)])
 						
 						If (MilliSecs() Mod sc\PlayerState) >= Rand(600) Then
 							EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
@@ -8261,9 +8253,7 @@ Function CreateChunkParts(r.Rooms)
 				HideEntity(chp\OBJ[j])
 			Next
 			chp2 = Before(chp)
-			If chp2 <> Null
-				chp\ID = chp2\ID + 1
-			EndIf
+			If chp2 <> Null Then chp\ID = chp2\ID + 1
 		EndIf
 	Next
 	
@@ -8359,9 +8349,7 @@ Function UpdateChunks(r.Rooms, ChunkPartAmount%, SpawnNPCs% = True)
 	Local CurrNPCNumber% = 0
 	
 	For n.NPCs = Each NPCs
-		If n\NPCtype = NPCtype1499_1
-			CurrNPCNumber = CurrNPCNumber + 1
-		EndIf
+		If n\NPCtype = NPCtype1499_1 Then CurrNPCNumber = CurrNPCNumber + 1
 	Next
 	
 	Local MaxNPCs% = 64 ; ~ The maximum amount of NPCs in dimension1499
@@ -8498,8 +8486,8 @@ Function CalculateRoomExtents(r.Rooms)
 End Function
 
 Function CheckRoomOverlap(r1.Rooms, r2.Rooms)
-	If (r1\MaxX	=< r2\MinX Lor r1\MaxY =< r2\MinY Lor r1\MaxZ =< r2\MinZ) Then Return(False)
-	If (r1\MinX	>= r2\MaxX Lor r1\MinY >= r2\MaxY Lor r1\MinZ >= r2\MaxZ) Then Return(False)
+	If r1\MaxX	=< r2\MinX Lor r1\MaxY =< r2\MinY Lor r1\MaxZ =< r2\MinZ Then Return(False)
+	If r1\MinX	>= r2\MaxX Lor r1\MinY >= r2\MaxY Lor r1\MinZ >= r2\MaxZ Then Return(False)
 	
 	Return(True)
 End Function
