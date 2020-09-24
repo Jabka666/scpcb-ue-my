@@ -115,19 +115,55 @@ End Type
 Global fpst.FramesPerSecondsTemplate = New FramesPerSecondsTemplate
 
 Type FixedTimesteps
+	Field TickDuration#
 	Field Accumulator#
 	Field PrevTime%
 	Field CurrTime%
-	Field FPS%
-	Field TempFPS%
-	Field FPSGoal%
+	Field FPS#
 End Type
 
 Global ft.FixedTimesteps = New FixedTimesteps
 
+Function SetTickrate(Tickrate%)
+	ft\TickDuration = 70.0 / Float(Tickrate)
+End Function
+
+Function AddToTimingAccumulator(Milliseconds%)
+	If Milliseconds < 1 Lor Milliseconds > 500 Then Return
+	ft\Accumulator = ft\Accumulator + Max(0.0, Float(Milliseconds) * 70.0 / 1000.0)
+End Function
+
 Function ResetTimingAccumulator()
 	ft\Accumulator = 0.0
 End Function
+
+Function SetCurrTime(Time%)
+	ft\CurrTime = Time
+End Function
+
+Function SetPrevTime(Time%)
+	ft\PrevTime = Time
+End Function
+
+Function SetFPS(ElapsedMilliseconds%)
+	Local InstantFramerate# = 1000.0 / Max(1.0, ElapsedMilliseconds)
+	
+	ft\FPS = Max(0.0, ft\FPS * 0.99 + InstantFramerate * 0.01)
+End Function
+
+Function GetCurrTime%()
+	Return(ft\CurrTime)
+End Function
+
+Function GetPrevTime%()
+	Return(ft\PrevTime)
+End Function
+
+Function GetTickDuration#()
+	Return(ft\TickDuration)
+End Function
+
+SetTickrate(60)
 	
 Global CurrFrameLimit# = (FrameLimit - 19.0) / 100.0
 
@@ -2351,10 +2387,12 @@ Function UpdateDoors()
 				Else
 					d\FastOpen = 0
 					PositionEntity(d\OBJ, EntityX(d\FrameOBJ, True), EntityY(d\FrameOBJ, True), EntityZ(d\FrameOBJ, True))
-					If d\OBJ2 <> 0 Then PositionEntity(d\OBJ2, EntityX(d\FrameOBJ, True), EntityY(d\FrameOBJ, True), EntityZ(d\FrameOBJ, True))
-					If d\OBJ2 <> 0 And (d\Dir = 0 Lor d\Dir = 4) Then
-						MoveEntity(d\OBJ, 0.0, 0.0, 8.0 * RoomScale)
-						MoveEntity(d\OBJ2, 0.0, 0.0, 8.0 * RoomScale)
+					If d\OBJ2 <> 0 Then
+						PositionEntity(d\OBJ2, EntityX(d\FrameOBJ, True), EntityY(d\FrameOBJ, True), EntityZ(d\FrameOBJ, True))
+						If d\Dir = 0 Lor d\Dir = 4 Then
+							MoveEntity(d\OBJ, 0.0, 0.0, 8.0 * RoomScale)
+							MoveEntity(d\OBJ2, 0.0, 0.0, 8.0 * RoomScale)
+						EndIf
 					EndIf
 				EndIf
 			EndIf
@@ -2788,26 +2826,26 @@ End Function
 Repeat
 	Cls()
 	
-	Local ElapsedMilliSeconds%
+	Local ElapsedMilliseconds%
 	
-	ft\CurrTime = MilliSecs()
-	ElapsedMilliSeconds = ft\CurrTime - ft\PrevTime
-	If ElapsedMilliSeconds > 0 And ElapsedMilliSeconds < 500 Then
-		ft\Accumulator = ft\Accumulator + Max(0.0, Float(ElapsedMilliSeconds) * 70.0 / 1000.0)
-	EndIf
-	ft\PrevTime = ft\CurrTime
+	SetCurrTime(MilliSecs2())
+	ElapsedMilliseconds = GetCurrTime() - GetPrevTime()
+	AddToTimingAccumulator(ElapsedMilliseconds)
+	SetPrevTime(GetCurrTime())
 	
-	If Framelimit > 0.0 Then
-		; ~ Framelimit
-		Local WaitingTime% = (1000.0 / Framelimit) - (MilliSecs() - fpst\LoopDelay)
+	If Framelimit > 0 Then
+	    ; ~ Framelimit
+		Local WaitingTime% = (1000.0 / Framelimit) - (MilliSecs2() - fpst\LoopDelay)
 		
 		Delay(WaitingTime)
 		
-		fpst\LoopDelay = MilliSecs()
+		fpst\LoopDelay = MilliSecs2()
 	EndIf
 	
-	fpst\FPSFactor[0] = TICK_DURATION
+	fpst\FPSFactor[0] = GetTickDuration()
 	fpst\FPSFactor[1] = fpst\FPSFactor[0]
+	
+	SetFPS(ElapsedMilliseconds)
 	
 	If MainMenuOpen Then
 		UpdateMainMenu()
@@ -2851,16 +2889,6 @@ Repeat
 		PlaySound_Strict(LoadTempSound("SFX\General\Screenshot.ogg"))
 	EndIf
 	
-	If ShowFPS Then
-		If ft\FPSGoal < MilliSecs() Then
-			ft\FPS = ft\TempFPS
-			ft\TempFPS = 0
-			ft\FPSGoal = MilliSecs() + 1000
-		Else
-			ft\TempFPS = ft\TempFPS + 1
-		EndIf
-	EndIf
-	
 	CatchErrors("Main Loop / Uncaught")
 	
 	If (Not VSync) Then
@@ -2880,13 +2908,11 @@ Const FogColorPD$ = "000000000"
 Const FogColorPDTrench$ = "038055047"
 Const FogColorForest$ = "098133162"
 
-Const TICK_DURATION# = 70.0 / 60.0
-
 Function MainLoop()
 	Local e.Events, r.Rooms, i%
 	
 	While ft\Accumulator > 0.0
-		ft\Accumulator = ft\Accumulator - TICK_DURATION
+		ft\Accumulator = ft\Accumulator - GetTickDuration()
 		If ft\Accumulator =< 0.0 Then CaptureWorld()
 		
 		If MenuOpen Lor InvOpen Lor OtherOpen <> Null Lor ConsoleOpen Lor SelectedDoor <> Null Lor SelectedScreen <> Null Lor I_294\Using Then fpst\FPSFactor[0] = 0.0
@@ -2897,8 +2923,8 @@ Function MainLoop()
 			DoubleClick = False
 			MouseHit1 = MouseHit(1)
 			If MouseHit1 Then
-				If MilliSecs() - LastMouseHit1 < 800 Then DoubleClick = True
-				LastMouseHit1 = MilliSecs()
+				If MilliSecs2() - LastMouseHit1 < 800 Then DoubleClick = True
+				LastMouseHit1 = MilliSecs2()
 			EndIf
 			
 			Local PrevMouseDown1% = MouseDown1
@@ -3377,7 +3403,7 @@ Function MainLoop()
 	; ~ Go out of function immediately if the game has been quit
 	If MainMenuOpen Then Return
 	
-	RenderWorld2(Max(0.0, 1.0 + (ft\Accumulator / TICK_DURATION)))
+	RenderWorld2(Max(0.0, 1.0 + (ft\Accumulator / ft\TickDuration)))
 	
 	UpdateBlur(me\BlurVolume)
 	
@@ -4104,7 +4130,7 @@ Function MovePlayer()
 	
 	If me\Injuries > 1.0 Then
 		Temp2 = me\Bloodloss
-		me\BlurTimer = Max(Max(Sin(MilliSecs() / 100.0) * me\Bloodloss * 30.0, me\Bloodloss * 2.0 * (2.0 - me\CrouchState)), me\BlurTimer)
+		me\BlurTimer = Max(Max(Sin(MilliSecs2() / 100.0) * me\Bloodloss * 30.0, me\Bloodloss * 2.0 * (2.0 - me\CrouchState)), me\BlurTimer)
 		If I_427\Using = 0 And I_427\Timer < 70.0 * 360.0 Then
 			me\Bloodloss = Min(me\Bloodloss + (Min(me\Injuries, 3.5) / 300.0) * fpst\FPSFactor[0], 100.0)
 		EndIf
@@ -4137,7 +4163,7 @@ Function MovePlayer()
 			FreeEntity(Pvt)
 		EndIf
 		
-		me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs()) / 20.0) + 1.0) * me\Bloodloss * 0.2)
+		me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs2()) / 20.0) + 1.0) * me\Bloodloss * 0.2)
 		
 		If me\Bloodloss > 60.0 Then 
 			If (Not me\Crouch) Then SetCrouch(True)
@@ -4227,7 +4253,7 @@ Function MouseLook()
 		
 		If PlayerRoom\RoomTemplate\Name = "pocketdimension" Then
 			If EntityY(me\Collider) < 2000.0 * RoomScale Lor EntityY(me\Collider) > 2608.0 * RoomScale Then
-				RotateEntity(Camera, WrapAngle(EntityPitch(Camera)), WrapAngle(EntityYaw(Camera)), Roll + WrapAngle(Sin(MilliSecs() / 150.0) * 30.0)) ; ~ Pitch the user's camera up and down
+				RotateEntity(Camera, WrapAngle(EntityPitch(Camera)), WrapAngle(EntityYaw(Camera)), Roll + WrapAngle(Sin(MilliSecs2() / 150.0) * 30.0)) ; ~ Pitch the user's camera up and down
 			EndIf
 		EndIf
 	Else
@@ -5205,7 +5231,7 @@ Function DrawGUI()
 							
 							SetFont(fo\FontID[2])
 							If StrTemp <> "" Then
-								StrTemp = Right(Left(StrTemp, (Int(MilliSecs() / 300) Mod Len(StrTemp))), 10)
+								StrTemp = Right(Left(StrTemp, (Int(MilliSecs2() / 300) Mod Len(StrTemp))), 10)
 								Text(x + 32, y + 33, StrTemp)
 							EndIf
 							SetFont(fo\FontID[0])
@@ -5302,7 +5328,7 @@ Function DrawGUI()
 					EndIf
 					
 					If (Not NavWorks) Then
-						If (MilliSecs() Mod 1000) > 300 Then
+						If (MilliSecs2() Mod 1000) > 300 Then
 							Color(200, 0, 0)
 							Text(x, y + NAV_HEIGHT / 2 - 80, "ERROR 06", True)
 							Text(x, y + NAV_HEIGHT / 2 - 60, "LOCATION UNKNOWN", True)						
@@ -5374,7 +5400,7 @@ Function DrawGUI()
 							Else
 								Color(30, 30, 30)
 							EndIf
-							If (MilliSecs() Mod 1000.0) > 300.0 Then
+							If (MilliSecs2() Mod 1000.0) > 300.0 Then
 								If SelectedItem\ItemTemplate\Name <> "S-NAV 310 Navigator" And SelectedItem\ItemTemplate\Name <> "S-NAV Navigator Ultimate" Then
 									Text(x - NAV_WIDTH / 2 + 10, y - NAV_HEIGHT / 2 + 10, "MAP DATABASE OFFLINE")
 								EndIf
@@ -5391,7 +5417,7 @@ Function DrawGUI()
 							
 							Local SCPs_Found% = 0, Dist#
 							
-							If SelectedItem\ItemTemplate\Name = "S-NAV Navigator Ultimate" And (MilliSecs() Mod 600.0) < 400.0 Then
+							If SelectedItem\ItemTemplate\Name = "S-NAV Navigator Ultimate" And (MilliSecs2() Mod 600.0) < 400.0 Then
 								If Curr173 <> Null Then
 									Dist = EntityDistance(Camera, Curr173\OBJ)
 									If Dist < 8.0 * 4.0 Then
@@ -9371,8 +9397,6 @@ Function InitNewGame()
 	
 	me\DropSpeed = 0.0
 	
-	fpst\PrevTime = MilliSecs()
-	
 	CatchErrors("InitNewGame")
 End Function
 
@@ -11564,7 +11588,7 @@ Function Update008()
 			me\HeartBeatRate = Max(me\HeartBeatRate, 100.0)
 			me\HeartBeatVolume = Max(me\HeartBeatVolume, I_008\Timer / 120.0)
 			
-			EntityAlpha(tt\OverlayID[3], Min(((I_008\Timer * 0.2) ^ 2.0) / 1000.0, 0.5) * (Sin(MilliSecs() / 8.0) + 2.0))
+			EntityAlpha(tt\OverlayID[3], Min(((I_008\Timer * 0.2) ^ 2.0) / 1000.0, 0.5) * (Sin(MilliSecs2() / 8.0) + 2.0))
 			
 			For i = 0 To 6
 				If I_008\Timer > i * 15.0 + 10.0 And PrevI008Timer =< i * 15.0 + 10.0 Then
@@ -11613,7 +11637,7 @@ Function Update008()
 			
 			If TeleportForInfect Then
 				If I_008\Timer < 94.7 Then
-					EntityAlpha(tt\OverlayID[3], 0.5 * (Sin(MilliSecs() / 8.0) + 2.0))
+					EntityAlpha(tt\OverlayID[3], 0.5 * (Sin(MilliSecs2() / 8.0) + 2.0))
 					me\BlurTimer = 900.0
 					
 					If I_008\Timer > 94.5 Then me\BlinkTimer = Max(Min((-50.0) * (I_008\Timer - 94.5), me\BlinkTimer), -10.0)
@@ -11627,7 +11651,7 @@ Function Update008()
 					
 					Animate2(PlayerRoom\NPC[0]\OBJ, AnimTime(PlayerRoom\NPC[0]\OBJ), 357.0, 381.0, 0.3)
 				ElseIf I_008\Timer < 98.5
-					EntityAlpha(tt\OverlayID[3], 0.5 * (Sin(MilliSecs() / 5.0) + 2.0))
+					EntityAlpha(tt\OverlayID[3], 0.5 * (Sin(MilliSecs2() / 5.0) + 2.0))
 					me\BlurTimer = 950.0
 					
 					me\ForceMove = 0.0
@@ -11672,9 +11696,9 @@ Function Update008()
 					EndIf
 					
 					PositionEntity(me\Head, EntityX(PlayerRoom\NPC[0]\Collider, True), EntityY(PlayerRoom\NPC[0]\Collider, True) + 0.65, EntityZ(PlayerRoom\NPC[0]\Collider, True), True)
-					RotateEntity(me\Head, (1.0 + Sin(MilliSecs() / 5.0)) * 15.0, PlayerRoom\Angle - 180.0, 0.0, True)
+					RotateEntity(me\Head, (1.0 + Sin(MilliSecs2() / 5.0)) * 15.0, PlayerRoom\Angle - 180.0, 0.0, True)
 					MoveEntity(me\Head, 0.0, 0.0, -0.4)
-					TurnEntity(me\Head, 80.0 + (Sin(MilliSecs() / 5.0)) * 30.0, (Sin(MilliSecs() / 5.0)) * 40.0, 0.0)
+					TurnEntity(me\Head, 80.0 + (Sin(MilliSecs2() / 5.0)) * 30.0, (Sin(MilliSecs2() / 5.0)) * 40.0, 0.0)
 				EndIf
 			Else
 				Kill()
@@ -12046,7 +12070,7 @@ Function RenderWorld2(Tween#)
 	EndIf
 	
 	If me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0 Then
-		If (wi\NightVision = 1 Lor wi\NightVision = 2 Lor wi\SCRAMBLE > 0) And (HasBattery = 1) And ((MilliSecs() Mod 800) < 400) Then
+		If (wi\NightVision = 1 Lor wi\NightVision = 2 Lor wi\SCRAMBLE > 0) And (HasBattery = 1) And ((MilliSecs2() Mod 800) < 400) Then
 			Color(255, 0, 0)
 			SetFont(fo\FontID[2])
 			
@@ -12429,5 +12453,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1056#12E8#1DDA
+;~B#1070#1302#1DF4
 ;~C#Blitz3D

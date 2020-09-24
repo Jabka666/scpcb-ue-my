@@ -38,6 +38,7 @@
 - Changed chance to spawn SCP-005.
 - Changed idle animation for Class-D.
 - Changed chair's model.
+- Changed SCP-035's containment chamber.
 
 - Replaced O5-14 Burnt Document by batteries in room2offices5.
 
@@ -150,3 +151,4 @@ Bug Fixes:
 - Small fixes for room2offices4.
 - Small fixes for SCP-173's AI.
 - Small fixes for SCP-860-1.
+- Small fixes for paper texture.

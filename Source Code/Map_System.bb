@@ -5363,43 +5363,6 @@ Function FillRoom(r.Rooms)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			;[End Block]
-		Case "room2medibay2"
-			;[Block]
-			d = CreateDoor(r\Zone, r\x - 264.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 90.0, r, False, False, 3)
-			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.031, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
-			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.031, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
-			
-			r\Objects[0] = LoadMesh_Strict("GFX\map\medibay_props.b3d", r\OBJ)
-			EntityType(r\Objects[0], HIT_MAP)
-			EntityPickMode(r\Objects[0], 2)
-			
-			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x - 820.0 * RoomScale, r\y, r\z - 318.399 * RoomScale)
-			EntityParent(r\Objects[1], r\OBJ)
-			
-			it = CreateItem("First Aid Kit", "firstaid", r\x - 506.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 322.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
-			
-			If Rand(2) = 1 Then
-				it = CreateItem("Syringe", "syringe", r\x - 340.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 52.3 * RoomScale)
-				RotateEntity(it\Collider, 0.0, Rnd(100.0, 110.0), 0.0)
-				EntityParent(it\Collider, r\OBJ)
-			Else
-				it = CreateItem("Syringe", "syringeinf", r\x - 340.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 52.3 * RoomScale)
-				RotateEntity(it\Collider, 0.0, Rnd(100.0, 110.0), 0.0)
-				EntityParent(it\Collider, r\OBJ)
-			EndIf
-			
-			If Rand(2) = 1 Then
-				it = CreateItem("Syringe", "syringe", r\x - 340.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 97.3 * RoomScale)
-				RotateEntity(it\Collider, 0.0, Rnd(250.0, 260.0), 0.0)
-				EntityParent(it\Collider, r\OBJ)
-			Else
-				it = CreateItem("Syringe", "syringeinf", r\x - 340.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 97.3 * RoomScale)
-				RotateEntity(it\Collider, 0.0, Rnd(250.0, 260.0), 0.0)
-				EntityParent(it\Collider, r\OBJ)
-			EndIf
-			;[End Block]
 		Case "room2cpit"
 			;[Block]
 			d = CreateDoor(r\Zone, r\x - 256.0 * RoomScale, r\y, r\z - 752.0 * RoomScale, 90.0, r, False, 2, 3)
@@ -5594,24 +5557,37 @@ Function FillRoom(r.Rooms)
 			it = CreateItem("Ballistic Helmet", "helmet", r\x + 980.0 * RoomScale, r\y + 250.0 * RoomScale, r\z + 300.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "room2medibay"
+		Case "room2medibay", "room2medibay2"
 			;[Block]
 			d = CreateDoor(r\Zone, r\x - 264.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 90.0, r, False, False, 3)
 			d\AutoClose = False
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.031, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.031, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			
+			For r2.Rooms = Each Rooms
+				If r2 <> r Then
+					If r2\RoomTemplate\Name = "room2medibay" Lor r2\RoomTemplate\Name = "room2medibay2" Then
+						r\Objects[0] = CopyEntity(r2\Objects[0], r\OBJ) ; ~ Don't load the mesh again
+						Exit
+					EndIf
+				EndIf
+			Next
 			If r\Objects[0] = 0 Then r\Objects[0] = LoadMesh_Strict("GFX\map\medibay_props.b3d", r\OBJ)
 			EntityType(r\Objects[0], HIT_MAP)
 			EntityPickMode(r\Objects[0], 2)
 			
-			If r\Objects[1] = 0 Then r\Objects[1] = CopyEntity(o\NPCModelID[24])
-			Tex = LoadTexture_Strict("GFX\npcs\duck(4).png")
-			EntityTexture(r\Objects[1], Tex)
-			DeleteSingleTextureEntryFromCache(Tex)
-			ScaleEntity(r\Objects[1], 0.07, 0.07, 0.07)
-			PositionEntity(r\Objects[1], r\x - 910.0 * RoomScale, r\y + 144.0 * RoomScale, r\z - 778.0 * RoomScale, True)				
-			TurnEntity(r\Objects[1], 6.0, 180.0, 0.0)
+			If r\RoomTemplate\Name = "room2medibay" Then
+				r\Objects[1] = CopyEntity(o\NPCModelID[24])
+				Tex = LoadTexture_Strict("GFX\npcs\duck(4).png")
+				EntityTexture(r\Objects[1], Tex)
+				DeleteSingleTextureEntryFromCache(Tex)
+				ScaleEntity(r\Objects[1], 0.07, 0.07, 0.07)
+				PositionEntity(r\Objects[1], r\x - 910.0 * RoomScale, r\y + 144.0 * RoomScale, r\z - 778.0 * RoomScale)				
+				TurnEntity(r\Objects[1], 6.0, 180.0, 0.0)
+			Else
+				r\Objects[1] = CreatePivot()
+				PositionEntity(r\Objects[1], r\x - 820.0 * RoomScale, r\y, r\z - 318.399 * RoomScale)
+			EndIf
 			EntityParent(r\Objects[1], r\OBJ)
 			
 			If Rand(2) = 1 Then
@@ -6663,7 +6639,7 @@ Function UpdateSecurityCams()
 						
 						If Rand(500) = 1 Then EntityTexture(sc\ScrOverlay, tt\MiscTextureID[Rand(1, 6)])
 						
-						If (MilliSecs() Mod sc\PlayerState) >= Rand(600) Then
+						If (MilliSecs2() Mod sc\PlayerState) >= Rand(600) Then
 							EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
 						Else
 							If sc\SoundCHN = 0 Then
@@ -8207,7 +8183,7 @@ Function SetChunkDataValues()
 		Next
 	Next
 	
-	SeedRnd(MilliSecs())
+	SeedRnd(MilliSecs2())
 End Function
 
 Type ChunkPart
@@ -8257,7 +8233,7 @@ Function CreateChunkParts(r.Rooms)
 		EndIf
 	Next
 	
-	SeedRnd(MilliSecs())
+	SeedRnd(MilliSecs2())
 End Function
 
 Type Chunk

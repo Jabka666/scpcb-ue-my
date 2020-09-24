@@ -65,7 +65,7 @@ Function UpdateMainMenu()
 	Local Dir%, File$, Test%
 	
 	While ft\Accumulator > 0.0
-		ft\Accumulator = ft\Accumulator - TICK_DURATION
+		ft\Accumulator = ft\Accumulator - GetTickDuration()
 		If ft\Accumulator =< 0.0 Then CaptureWorld()
 		
 		If Input_ResetTime > 0.0 Then
@@ -74,8 +74,8 @@ Function UpdateMainMenu()
 			DoubleClick = False
 			MouseHit1 = MouseHit(1)
 			If MouseHit1 Then
-				If MilliSecs() - LastMouseHit1 < 800 Then DoubleClick = True
-				LastMouseHit1 = MilliSecs()
+				If MilliSecs2() - LastMouseHit1 < 800 Then DoubleClick = True
+				LastMouseHit1 = MilliSecs2()
 			EndIf
 			
 			Local PrevMouseDown1% = MouseDown1
@@ -925,7 +925,7 @@ Function RenderMainMenu()
 	
 	DrawImage(MenuBack, 0, 0)
 	
-	If (MilliSecs() Mod MenuBlinkTimer[0]) >= Rand(MenuBlinkDuration[0]) Then
+	If (MilliSecs2() Mod MenuBlinkTimer[0]) >= Rand(MenuBlinkDuration[0]) Then
 		DrawImage(Menu173, GraphicWidth - ImageWidth(Menu173), GraphicHeight - ImageHeight(Menu173))
 	EndIf
 	
@@ -2312,7 +2312,7 @@ Function RenderMenuInputBoxes()
 		Color(255, 255, 255)	
 		
 		If SelectedInputBox = mib\ID Then
-			If (MilliSecs() Mod 800) < 400 Then Rect(mib\x + mib\Width / 2 - (StringWidth(mib\Txt)) / 2 + StringWidth(Left(mib\Txt, CursorPos)), mib\y + mib\Height / 2 - 5, 2, 12)
+			If (MilliSecs2() Mod 800) < 400 Then Rect(mib\x + mib\Width / 2 - (StringWidth(mib\Txt)) / 2 + StringWidth(Left(mib\Txt, CursorPos)), mib\y + mib\Height / 2 - 5, 2, 12)
 		EndIf	
 		
 		Text(mib\x + mib\Width / 2, mib\y + mib\Height / 2, mib\Txt, True, True)

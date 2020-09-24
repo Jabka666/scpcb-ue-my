@@ -31,7 +31,7 @@ Function CurveAngle#(Value#, Old#, Smooth#)
 End Function
 
 Function WrapAngle#(Angle#)
-	If Angle = INFINITY Then Return(0.0)
+	If Angle = Infinity Then Return(0.0)
 	If Angle < 0.0 Then
 		Return(360.0 + (Angle Mod 360.0))
 	Else
@@ -107,12 +107,12 @@ End Function
 ; ~ Find mesh extents
 Function GetMeshExtents(Mesh%)
 	Local s%, Surf%, Surfs%, v%, Verts%, x#, y#, z#
-	Local MinX# = INFINITY
-	Local MinY# = INFINITY
-	Local MinZ# = INFINITY
-	Local MaxX# = -INFINITY
-	Local MaxY# = -INFINITY
-	Local MaxZ# = -INFINITY
+	Local MinX# = Infinity
+	Local MinY# = Infinity
+	Local MinZ# = Infinity
+	Local MaxX# = -Infinity
+	Local MaxY# = -Infinity
+	Local MaxZ# = -Infinity
 	
 	Surfs = CountSurfaces(Mesh)
 	
@@ -152,6 +152,13 @@ Function MakeCollBox(Mesh%)
 	
 	GetMeshExtents(Mesh)
 	EntityBox(Mesh, Mesh_MinX * sX, Mesh_MinY * sY, Mesh_MinZ * sZ, Mesh_MagX * sX, Mesh_MagY * sY, Mesh_MagZ * sZ)
+End Function
+
+Function MilliSecs2()
+	Local ReturnValue% = MilliSecs()
+	
+	If ReturnValue < 0 Then ReturnValue = ReturnValue + 2147483648
+	Return(ReturnValue)
 End Function
 
 ;~IDEal Editor Parameters:
