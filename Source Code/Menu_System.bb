@@ -28,7 +28,7 @@ Global MainMenuTab%, PrevMainMenuTab%, ShouldDeleteGadgets%
 
 Global SelectedInputBox%, CursorPos% = -1
 
-Global SavePath$ = "Saves\"
+Const SavePath$ = "Saves\"
 Global SaveMSG$
 
 Global CurrSave$
@@ -380,8 +380,6 @@ Function UpdateMainMenu()
 							
 						If SameFound > 0 Then CurrSave = CurrSave + " (" + (SameFound + 1) + ")"
 						
-						LoadEntities()
-						LoadAllSounds()
 						InitNewGame()
 						MainMenuOpen = False
 						FlushKeys()
@@ -472,7 +470,7 @@ Function UpdateMainMenu()
 							y = 376 * MenuScale
 							
 							If DrawButton(x + 50 * MenuScale, y + 150 * MenuScale, 100 * MenuScale, 30 * MenuScale, "Yes", False) Then
-								DeleteFile(CurrentDir() + SavePath + SaveMSG + "\Save.txt")
+								DeleteFile(CurrentDir() + SavePath + SaveMSG + "\save.cb")
 								DeleteDir(CurrentDir() + SavePath + SaveMSG)
 								SaveMSG = ""
 								LoadSaveGames()

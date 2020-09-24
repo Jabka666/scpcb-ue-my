@@ -3473,7 +3473,7 @@ Function Kill(IsBloody% = False)
 		me\KillAnim = Rand(0, 1)
 		PlaySound_Strict(DamageSFX[0])
 		If SelectedDifficulty\PermaDeath Then
-			DeleteFile(CurrentDir() + SavePath + CurrSave + "\Save.txt") 
+			DeleteFile(CurrentDir() + SavePath + CurrSave + "\save.cb") 
 			DeleteDir(SavePath + CurrSave) 
 			LoadSaveGames()
 		EndIf
@@ -9234,6 +9234,9 @@ Function InitNewGame()
 	CatchErrors("Uncaught (InitNewGame)")
 	
 	Local i%, de.Decals, d.Doors, it.Items, r.Rooms, sc.SecurityCams, e.Events
+	
+	LoadEntities()
+	LoadAllSounds()
 	
 	DrawLoading(45)
 	
