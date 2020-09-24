@@ -938,6 +938,7 @@ Function UpdateConsole()
 								FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
 							EndIf
 							RemoveEvent(e)
+							Exit
 						EndIf
 					Next
 					
@@ -3046,9 +3047,7 @@ Function MainLoop()
 			UpdateMonitorSaving()
 			; ~ Added a simple code for updating the Particles function depending on the fpst\FPSFactor[0] (still WIP, might not be the final version of it) -- ENDSHN
 			UpdateParticles_Time = Min(1.0, UpdateParticles_Time + fpst\FPSFactor[0])
-			If UpdateParticles_Time = 1.0
-				UpdateParticles_Time = 0.0
-			EndIf
+			If UpdateParticles_Time = 1.0 Then UpdateParticles_Time = 0.0
 		EndIf
 		
 		Local CurrFogColor$ = ""
@@ -3218,9 +3217,7 @@ Function MainLoop()
 			If me\FallTimer < 0.0 Then
 				If SelectedItem <> Null Then
 					If Instr(SelectedItem\ItemTemplate\TempName, "hazmatsuit") Lor Instr(SelectedItem\ItemTemplate\TempName, "vest") Then
-						If wi\HazmatSuit = 0 And wi\BallisticVest = 0 Then
-							DropItem(SelectedItem)
-						EndIf
+						If wi\HazmatSuit = 0 And wi\BallisticVest = 0 Then DropItem(SelectedItem)
 					EndIf
 				EndIf
 				InvOpen = False
@@ -3402,9 +3399,7 @@ Function MainLoop()
 End Function
 
 Function UpdateMessages()
-	If msg\Timer > 0.0 Then
-		msg\Timer = msg\Timer - fpst\FPSFactor[0] 
-	EndIf
+	If msg\Timer > 0.0 Then msg\Timer = msg\Timer - fpst\FPSFactor[0] 
 End Function
 
 Function RenderMessages()
@@ -4741,9 +4736,7 @@ Function DrawGUI()
 	
 	If SelectedDoor <> Null Then
 		If SelectedItem <> Null Then
-			If SelectedItem\ItemTemplate\TempName = "scp005" Then 
-				ShouldDrawHUD = False
-			EndIf
+			If SelectedItem\ItemTemplate\TempName = "scp005" Then ShouldDrawHUD = False
 		EndIf
 		
 		SelectedItem = Null
@@ -6495,6 +6488,7 @@ Function UpdateGUI()
 									EndIf
 									RemoveEvent(e)
 								EndIf
+								Exit
 							EndIf
 						Next
 						
@@ -12435,5 +12429,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#105B#12EF#1DE0
+;~B#1056#12E8#1DDA
 ;~C#Blitz3D

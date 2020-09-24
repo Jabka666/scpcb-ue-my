@@ -5039,7 +5039,7 @@ Function FillRoom(r.Rooms)
 					EndIf
 				EndIf
 				
-				If (room2gw_BrokenDoor = 0 And Rand(2) = 1) Lor BD_Temp Then
+				If ((Not room2gw_BrokenDoor) And Rand(2) = 1) Lor BD_Temp Then
 					r\Objects[1] = CopyEntity(o\DoorModelID[0])
 					ScaleEntity(r\Objects[1], (204.0 * RoomScale) / MeshWidth(r\Objects[1]), 313.0 * RoomScale / MeshHeight(r\Objects[1]), 16.0 * RoomScale / MeshDepth(r\Objects[1]))
 					EntityType(r\Objects[1], HIT_MAP)
@@ -5842,7 +5842,7 @@ Function UpdateRooms()
 	MapFound(Floor(EntityX(PlayerRoom\OBJ) / 8.0), Floor(EntityZ(PlayerRoom\OBJ) / 8.0)) = 1
 	PlayerRoom\Found = True
 	
-	TempLightVolume = Max(TempLightVolume / 4.5, 1.0)
+	TempLightVolume = Max(TempLightVolume / 5.0, 0.8)
 	
 	If PlayerRoom <> Null Then
 		EntityAlpha(GetChild(PlayerRoom\OBJ, 2), 1.0)
