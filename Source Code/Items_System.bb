@@ -428,11 +428,11 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 	EndIf
 	
 	i\InvImg = i\ItemTemplate\InvImg
-	If (TempName = "clipboard") And (InvSlots = 0) Then
+	If TempName = "clipboard" And InvSlots = 0 Then
 		InvSlots = 10
 		SetAnimTime(i\Model, 17.0)
 		i\InvImg = i\ItemTemplate\InvImg2
-	ElseIf (TempName = "wallet") And (InvSlots = 0) Then
+	ElseIf TempName = "wallet" And InvSlots = 0 Then
 		InvSlots = 10
 		SetAnimTime(i\Model, 0.0)
 	EndIf
@@ -749,7 +749,7 @@ Function PickItem(item.Items)
 							EndIf
 						Next
 						
-						If (Not CanPickItem) Then
+						If CanPickItem = 0 Then
 							msg\Msg = "You are not able to wear two hazmat suits at the same time."
 							msg\Timer = 70.0 * 6.0
 							Return
@@ -776,7 +776,7 @@ Function PickItem(item.Items)
 							EndIf
 						Next
 						
-						If (Not CanPickItem) Then
+						If CanPickItem = 0 Then
 							msg\Msg = "You are not able to wear two vests at the same time."
 							msg\Timer = 70.0 * 6.0
 							Return
@@ -953,9 +953,7 @@ Function Update294()
 		If me\VomitTimer < -15.0 Then
 			FreeSound_Strict(VomitSFX)
 			me\VomitTimer = 0.0
-			If me\KillTimer >= 0.0 Then
-				PlaySound_Strict(BreathSFX(0, 0))
-			EndIf
+			If me\KillTimer >= 0.0 Then PlaySound_Strict(BreathSFX(0, 0))
 			me\Injuries = me\PrevInjuries
 			me\Bloodloss = me\PrevBloodloss
 			me\Vomit = False
