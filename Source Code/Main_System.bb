@@ -209,8 +209,8 @@ Global Viewport_Center_X% = GraphicWidth / 2, Viewport_Center_Y% = GraphicHeight
 Global Mouselook_X_Inc# = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the X axis
 Global Mouselook_Y_Inc# = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the Y axis
 ; ~ Used to limit the mouse movement to within a certain number of pixels (250 is used here) from the center of the screen. This produces smoother mouse movement than continuously moving the mouse back to the center each loop
-Global Mouse_Left_Limit% = 250, Mouse_Right_Limit% = GraphicsWidth() - 250
-Global Mouse_Top_Limit% = 150, Mouse_Bottom_Limit% = GraphicsHeight() - 150 ; ~ As above
+Global Mouse_Left_Limit% = 250, Mouse_Right_Limit% = GraphicWidth - 250
+Global Mouse_Top_Limit% = 150, Mouse_Bottom_Limit% = GraphicHeight - 150 ; ~ As above
 Global Mouse_X_Speed_1#, Mouse_Y_Speed_1#
 
 Global Mesh_MinX#, Mesh_MinY#, Mesh_MinZ#
