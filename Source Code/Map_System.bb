@@ -968,7 +968,7 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 							If fr\Grid[(tY * GridSize) + tX - 1] > 0 And fr\Grid[((tY + 1) * GridSize) + tX] > 0 Then
 								Angle = 180.0
 							ElseIf fr\Grid[(tY * GridSize) + tX + 1] > 0 And fr\Grid[((tY - 1) * GridSize) + tX] > 0
-								
+								Angle = 0.0
 							ElseIf fr\Grid[(tY * GridSize) + tX - 1] > 0 And fr\Grid[((tY - 1) * GridSize) + tX] > 0
 								Angle = 270.0
 							Else
@@ -1004,7 +1004,7 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 					Local ItemPlaced%[4]
 					Local it.Items = Null
 					
-					If tY Mod 3 = 2 And ItemPlaced[Floor(tY / 3)] = False Then
+					If tY Mod 3 = 2 And (Not ItemPlaced[Floor(tY / 3)]) Then
 						ItemPlaced[Floor(tY / 3)] = True
 						it.Items = CreateItem("Log #" + Int(Floor(tY / 3) + 1), "paper", 0.0, 0.5, 0.0)
 						EntityType(it\Collider, HIT_ITEM)
@@ -1053,8 +1053,10 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 										PositionEntity(Detail_Entity, lX * Tempf4 - (Tempf3 / 2.0), ColorRed() * 0.03 - 1.3, lY * Tempf4 - (Tempf3 / 2.0), True)
 										;[End Block]
 								End Select
-								EntityFX(Detail_Entity, 1)
-								EntityParent(Detail_Entity, Tile_Entity)
+								If Detail_Entity <> 0 Then
+									EntityFX(Detail_Entity, 1)
+									EntityParent(Detail_Entity, Tile_Entity)
+								EndIf
 							EndIf
 						Next
 					Next
@@ -1188,9 +1190,9 @@ Function PlaceForest_MapCreator(fr.Forest, x#, y#, z#, r.Rooms)
 					Local ItemPlaced%[4]
 					Local it.Items = Null
 					
-					If tY Mod 3 = 2 And ItemPlaced[Floor(tY / 3)] = False Then
+					If tY Mod 3 = 2 And (Not ItemPlaced[Floor(tY / 3)]) Then
 						ItemPlaced[Floor(tY / 3)] = True
-						it.Items = CreateItem("Log #" + Int(Floor(tY / 3) + 1), "paper", 0.0, 0.5, 0.0)
+						it = CreateItem("Log #" + Int(Floor(tY / 3) + 1), "paper", 0.0, 0.5, 0.0)
 						EntityType(it\Collider, HIT_ITEM)
 						EntityParent(it\Collider, Tile_Entity)
 					EndIf
@@ -5584,11 +5586,12 @@ Function FillRoom(r.Rooms)
 				ScaleEntity(r\Objects[1], 0.07, 0.07, 0.07)
 				PositionEntity(r\Objects[1], r\x - 910.0 * RoomScale, r\y + 144.0 * RoomScale, r\z - 778.0 * RoomScale)				
 				TurnEntity(r\Objects[1], 6.0, 180.0, 0.0)
-			Else
+				EntityParent(r\Objects[1], r\OBJ)
+			ElseIf r\RoomTemplate\Name = "room2medibay2"
 				r\Objects[1] = CreatePivot()
 				PositionEntity(r\Objects[1], r\x - 820.0 * RoomScale, r\y, r\z - 318.399 * RoomScale)
+				EntityParent(r\Objects[1], r\OBJ)
 			EndIf
-			EntityParent(r\Objects[1], r\OBJ)
 			
 			If Rand(2) = 1 Then
 				it = CreateItem("Syringe", "syringe", r\x - 340.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 52.3 * RoomScale)
