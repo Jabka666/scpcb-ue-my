@@ -1818,8 +1818,11 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 		Temp = Rand(1, LoadingScreenAmount)
 		For ls.LoadingScreens = Each LoadingScreens
 			If ls\ID = Temp Then
-				If ls\Img = 0 Then ls\Img = LoadImage_Strict("LoadingScreens\" + ls\ImgPath + ".png")
-				SelectedLoadingScreen = ls 
+				If ls\Img = 0 Then 
+					ls\Img = LoadImage_Strict("LoadingScreens\" + ls\ImgPath + ".png")
+					ls\Img = ResizeImage2(ls\Img, ImageWidth(ls\Img) * MenuScale, ImageHeight(ls\Img) * MenuScale)
+					SelectedLoadingScreen = ls
+				EndIf
 				Exit
 			EndIf
 		Next
