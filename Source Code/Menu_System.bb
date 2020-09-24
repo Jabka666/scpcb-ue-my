@@ -919,7 +919,6 @@ Function RenderMainMenu()
 	Local x%, y%, Width%, Height%, Temp%, i%
 	
 	Color(0, 0, 0)
-	Rect(0, 0, GraphicWidth, GraphicHeight, True)
 	
 	ShowPointer()
 	
@@ -1884,7 +1883,6 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 		Color(255, 255, 255)
 		
 		If SelectedLoadingScreen\Title = "CWM" Then
-			
 			If (Not ShortLoading) Then 
 				If FirstLoop Then 
 					If Percent = 0 Then
@@ -2007,7 +2005,7 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 		
 		GammaUpdate()
 		
-		Flip(True)
+		Flip(False)
 		
 		FirstLoop = False
 		If Percent <> 100 Then Exit
