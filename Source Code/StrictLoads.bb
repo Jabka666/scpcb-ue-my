@@ -21,7 +21,7 @@ Function AutoReleaseSounds()
 		
 		For i = 0 To 31
 			If snd\Channels[i] <> 0 Then
-				If ChannelPlaying(snd\Channels[i]) = True Then
+				If ChannelPlaying(snd\Channels[i]) Then
 					TryRelease = False
 					snd\ReleaseTime = MilliSecs2() + 5000
 					Exit

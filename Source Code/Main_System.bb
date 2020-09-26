@@ -742,9 +742,9 @@ Function UpdateConsole()
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("Spawns an NPC at the player's location.")
 							CreateConsoleMsg("Valid parameters are:")
-							CreateConsoleMsg("008zombie / 049 / 049-2 / 066 / 096 / 106 / 173 / 860")
-							CreateConsoleMsg("/ 178-1 / 372 / 513-1 / 966 / 1499-1 / class-d / 939")
-							CreateConsoleMsg("/ guard / mtf / apache / tentacle")
+							CreateConsoleMsg("008-1 / 049 / 049-2 / 066 / 096 / 106 / 173 / 860")
+							CreateConsoleMsg("/ 372 / 513-1 / 966 / 1499-1 / class-d / 939")
+							CreateConsoleMsg("/ guard / mtf / apache / tentacle / 1048a/ 1048")
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "reset372" 
@@ -3029,7 +3029,6 @@ Function MainLoop()
 					EndIf
 				Next
 			Next
-			
 			AmbientLight(Brightness, Brightness, Brightness)
 			me\SndVolume = CurveValue(0.0, me\SndVolume, 5.0)
 			
@@ -4245,7 +4244,7 @@ Function MouseLook()
 		
 		TurnEntity(me\Collider, 0.0, -The_Yaw, 0.0) ; ~ Turn the user on the Y (Yaw) axis
 		CameraPitch = CameraPitch + The_Pitch
-		; ~ Limit the user's camera To within 180.0 degrees of pitch rotation. Returns useless values so we need to use a variable to keep track of the camera pitch
+		; ~ Limit the user's camera to within 180.0 degrees of pitch rotation. Returns useless values so we need to use a variable to keep track of the camera pitch
 		If CameraPitch > 70.0 Then CameraPitch = 70.0
 		If CameraPitch < -70.0 Then CameraPitch = -70.0
 		
@@ -12309,7 +12308,7 @@ Function CheckTriggers$()
 End Function
 
 Function ScaledMouseX%()
-	Return(Float(MouseX() - (RealGraphicWidth * 0.5 * (1.0 - AspectRatioRatio))) * Float(GraphicWidth) / Float(RealGraphicWidth*AspectRatioRatio))
+	Return(Float(MouseX() - (RealGraphicWidth * 0.5 * (1.0 - AspectRatioRatio))) * Float(GraphicWidth) / Float(RealGraphicWidth * AspectRatioRatio))
 End Function
 
 Function ScaledMouseY%()
@@ -12464,5 +12463,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1070#1302#1DF4
+;~B#106F#1301#1DF3
 ;~C#Blitz3D

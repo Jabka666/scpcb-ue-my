@@ -62,7 +62,7 @@ Const MainMenuTab_Options_Advanced% = 7
 
 Function UpdateMainMenu()
 	Local x%, y%, Width%, Height%, Temp%, i%, n%, j%
-	Local Dir%, File$, Test%
+	Local Dir%, File$, Test%, snd.Sound
 	
 	While ft\Accumulator > 0.0
 		ft\Accumulator = ft\Accumulator - GetTickDuration()
@@ -404,7 +404,7 @@ Function UpdateMainMenu()
 					Width = 580 * MenuScale
 					Height = 296 * MenuScale
 					
-					If CurrLoadGamePage < Ceil(Float(SaveGameAmount) / 6.0) - 1 And SaveMSG = "" Then 
+					If CurrLoadGamePage < Ceil(Float(SaveGameAmount) / 5.0) - 1 And SaveMSG = "" Then 
 						If DrawButton(x + Width - 50 * MenuScale, y + 440 * MenuScale, 50 * MenuScale, 50 * MenuScale, ">") Then
 							CurrLoadGamePage = CurrLoadGamePage + 1
 							ShouldDeleteGadgets = True
@@ -421,7 +421,7 @@ Function UpdateMainMenu()
 						DrawButton(x, y + 440 * MenuScale, 50 * MenuScale, 50 * MenuScale, "<", True, False, True)
 					EndIf
 					
-					If CurrLoadGamePage > Ceil(Float(SaveGameAmount) / 6.0) - 1 Then
+					If CurrLoadGamePage > Ceil(Float(SaveGameAmount) / 5.0) - 1 Then
 						CurrLoadGamePage = CurrLoadGamePage - 1
 						ShouldDeleteGadgets = True
 					EndIf
@@ -430,7 +430,7 @@ Function UpdateMainMenu()
 						x = x + 20 * MenuScale
 						y = y + 20 * MenuScale
 						
-						For i = (1 + (6 * CurrLoadGamePage)) To 6 + (6 * CurrLoadGamePage)
+						For i = (1 + (5 * CurrLoadGamePage)) To 5 + (5 * CurrLoadGamePage)
 							If i =< SaveGameAmount Then
 								If SaveMSG = "" Then
 									If SaveGameVersion(i - 1) <> VersionNumber Then
@@ -772,7 +772,7 @@ Function UpdateMainMenu()
 						If CurrLoadGamePage = 0 Then
 							y = y + 20 * MenuScale
 							
-							HUDenabled = DrawTick(x + 310 * MenuScale, y + MenuScale, HUDenabled)
+							HUDEnabled = DrawTick(x + 310 * MenuScale, y + MenuScale, HUDenabled)
 							
 							y = y + 30 * MenuScale
 							
@@ -794,7 +794,7 @@ Function UpdateMainMenu()
 							
 							y = y + 30 * MenuScale
 							
-							AchvMSGenabled = DrawTick(x + 310 * MenuScale, y + MenuScale, AchvMSGenabled)
+							AchvMsgEnabled = DrawTick(x + 310 * MenuScale, y + MenuScale, AchvMSGenabled)
 							
 							y = y + 50 * MenuScale
 							
@@ -821,7 +821,9 @@ Function UpdateMainMenu()
 						Else
 							y = y + 20 * MenuScale
 							
-							BarStyle = DrawTick(x + 310 * MenuScale, y + MenuScale, BarStyle)
+							If HUDEnabled Then
+								BarStyle = DrawTick(x + 310 * MenuScale, y + MenuScale, BarStyle)
+							EndIf
 							
 							y = y + 30 * MenuScale
 							
@@ -858,7 +860,7 @@ Function UpdateMainMenu()
 					Width = 580 * MenuScale
 					Height = 350 * MenuScale
 					
-					If CurrLoadGamePage < Ceil(Float(SavedMapsAmount) / 6.0) - 1 Then 
+					If CurrLoadGamePage < Ceil(Float(SavedMapsAmount) / 5.0) - 1 Then 
 						If DrawButton(x + Width - 50 * MenuScale, y + 440 * MenuScale, 50 * MenuScale, 50 * MenuScale, ">") Then
 							CurrLoadGamePage = CurrLoadGamePage + 1
 							ShouldDeleteGadgets = True
@@ -875,7 +877,7 @@ Function UpdateMainMenu()
 						DrawButton(x, y + 440 * MenuScale, 50 * MenuScale, 50 * MenuScale, "<", True, False, True)
 					EndIf
 					
-					If CurrLoadGamePage > Ceil(Float(SavedMapsAmount) / 6.0) - 1 Then
+					If CurrLoadGamePage > Ceil(Float(SavedMapsAmount) / 5.0) - 1 Then
 						CurrLoadGamePage = CurrLoadGamePage - 1
 						ShouldDeleteGadgets = True
 					EndIf
@@ -883,7 +885,7 @@ Function UpdateMainMenu()
 					If SavedMaps(0) <> "" Then 
 						x = x + 20 * MenuScale
 						y = y + 20 * MenuScale
-						For i = (1 + (6 * CurrLoadGamePage)) To 6 + (6 * CurrLoadGamePage)
+						For i = (1 + (5 * CurrLoadGamePage)) To 5 + (5 * CurrLoadGamePage)
 							If i =< SavedMapsAmount Then
 								If DrawButton(x + 400 * MenuScale, y + 20 * MenuScale, 100 * MenuScale, 30 * MenuScale, "Load", False) Then
 									SelectedMap = SavedMaps(i - 1)
@@ -1128,7 +1130,7 @@ Function RenderMainMenu()
 				
 				DrawFrame(x + 60 * MenuScale, y + 440 * MenuScale, Width - 120 * MenuScale, 50 * MenuScale)
 				
-				Text(x + (Width / 2.0), y + 465 * MenuScale, "Page " + Int(Max((CurrLoadGamePage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SaveGameAmount) / 6.0))), 1)), True, True)
+				Text(x + (Width / 2.0), y + 465 * MenuScale, "Page " + Int(Max((CurrLoadGamePage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SaveGameAmount) / 5.0))), 1)), True, True)
 				
 				SetFont(fo\FontID[0])
 				
@@ -1138,7 +1140,7 @@ Function RenderMainMenu()
 					x = x + 20 * MenuScale
 					y = y + 20 * MenuScale
 					
-					For i = (1 + (6 * CurrLoadGamePage)) To 6 + (6 * CurrLoadGamePage)
+					For i = (1 + (5 * CurrLoadGamePage)) To 5 + (5 * CurrLoadGamePage)
 						If i =< SaveGameAmount Then
 							DrawFrame(x, y, 540 * MenuScale, 70 * MenuScale)
 							
@@ -1377,7 +1379,9 @@ Function RenderMainMenu()
 					Color(255, 255, 255)
 					
 					y = y + 30 * MenuScale
+					
 					Text(x + 20 * MenuScale, y + 4 * MenuScale, "Control configuration:")
+					
 					y = y + 10 * MenuScale
 					
 					Text(x + 20 * MenuScale, y + 24 * MenuScale, "Move Forward")
@@ -1540,7 +1544,7 @@ Function RenderMainMenu()
 				
 				DrawFrame(x + 60 * MenuScale, y + 440 * MenuScale, Width - 120 * MenuScale, 50 * MenuScale)
 				
-				Text(x + (Width / 2.0), y + 465 * MenuScale, "Page " + Int(Max((CurrLoadGamePage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SavedMapsAmount) / 6.0))), 1)), True, True)
+				Text(x + (Width / 2.0), y + 465 * MenuScale, "Page " + Int(Max((CurrLoadGamePage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SavedMapsAmount) / 5.0))), 1)), True, True)
 				
 				SetFont(fo\FontID[0])
 				
@@ -1549,7 +1553,7 @@ Function RenderMainMenu()
 				Else
 					x = x + 20 * MenuScale
 					y = y + 20 * MenuScale
-					For i = (1 + (6 * CurrLoadGamePage)) To 6 + (6 * CurrLoadGamePage)
+					For i = (1 + (5 * CurrLoadGamePage)) To 5 + (5 * CurrLoadGamePage)
 						If i =< SavedMapsAmount Then
 							DrawFrame(x, y, 540 * MenuScale, 70 * MenuScale)
 							
