@@ -6588,7 +6588,7 @@ Function UpdateGUI()
 				Case "firstaid", "finefirstaid", "firstaid2"
 					;[Block]
 					If me\Bloodloss = 0.0 And me\Injuries = 0.0 Then
-						msg\Msg = "You do not need to use a first aid right now."
+						msg\Msg = "You do not need to use a first aid kit right now."
 						msg\Timer = 70.0 * 6.0
 						SelectedItem = Null
 						Return
