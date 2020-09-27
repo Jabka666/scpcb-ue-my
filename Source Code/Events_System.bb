@@ -8795,9 +8795,9 @@ Function UpdateEvents()
 		End Select
 		
 		If e <> Null Then
-			CatchErrors(Chr(34) + e\EventName + Chr(34) + " event")
+			CatchErrors("Error located in: " + Chr(34) + e\EventName + Chr(34) + " event!")
 		Else
-			CatchErrors("Deleted event")
+			CatchErrors("Detected removed event!")
 		EndIf
 	Next
 	
