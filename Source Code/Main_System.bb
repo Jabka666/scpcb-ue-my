@@ -331,8 +331,6 @@ Global RadioState3%[9]
 Global RadioState4%[10]
 Global RadioCHN%[7]
 
-; ~ Textures Constants
-;[Block]
 Const MaxMiscTextureIDAmount% = 18
 Const MaxMonitorTextureIDAmount% = 5
 Const MaxOverlayTextureIDAmount% = 12
@@ -342,7 +340,6 @@ Const MaxParticleTextureIDAmount% = 9
 Const MaxLightSpriteIDAmount% = 3
 Const MaxIconIDAmount% = 6
 Const MaxImageIDAmount% = 13
-;[End Block]
 
 Type TextureTemplate
 	Field MiscTextureID%[MaxMiscTextureIDAmount]
@@ -358,8 +355,6 @@ End Type
 
 Global tt.TextureTemplate = New TextureTemplate
 
-; ~ Objects Constants
-;[Block]
 Const MaxMTModelIDAmount% = 7
 Const MaxMonitorModelIDAmount% = 3
 Const MaxDoorModelIDAmount% = 11
@@ -368,7 +363,6 @@ Const MaxLeverModelIDAmount% = 2
 Const MaxCamModelIDAmount% = 2
 Const MaxMiscModelIDAmount% = 1
 Const MaxNPCModelIDAmount% = 34
-;[End Block]
 
 Type Objects
 	Field DoorModelID%[MaxDoorModelIDAmount]
@@ -2713,15 +2707,7 @@ Include "Source Code\NPCs_System.bb"
 
 Include "Source Code\Events_System.bb"
 
-; ~ Collisions Constants
-;[Block]
-Const HIT_MAP% = 1
-Const HIT_PLAYER% = 2
-Const HIT_ITEM% = 3
-Const HIT_APACHE% = 4
-Const HIT_178% = 5
-Const HIT_DEAD% = 6
-;[End Block]
+Const HIT_MAP% = 1, HIT_PLAYER% = 2, HIT_ITEM% = 3, HIT_APACHE% = 4, HIT_178% = 5, HIT_DEAD% = 6
 
 Collisions(HIT_PLAYER, HIT_MAP, 2, 2)
 Collisions(HIT_PLAYER, HIT_PLAYER, 1, 3)
@@ -2912,8 +2898,6 @@ Repeat
 	EndIf
 Forever
 
-; ~ Fog Constants
-;[Block]
 Const FogColorLCZ$ = "010010010"
 Const FogColorHCZ$ = "010006006"
 Const FogColorEZ$ = "010010020"
@@ -2923,7 +2907,6 @@ Const FogColorDimension1499$ = "096097104"
 Const FogColorPD$ = "000000000"
 Const FogColorPDTrench$ = "038055047"
 Const FogColorForest$ = "098133162"
-;[End Block]
 
 Function MainLoop()
 	Local e.Events, r.Rooms, i%
@@ -12480,5 +12463,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1080#1312#1E04
+;~B#106F#1301#1DF3
 ;~C#Blitz3D

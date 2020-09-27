@@ -51,8 +51,6 @@ Global CurrLoadGamePage% = 0
 
 Const VersionNumber$ = "1.0.0"
 
-; ~ Menu Tabs Constants
-;[Block]
 Const MainMenuTab_Default% = 0
 Const MainMenuTab_New_Game% = 1
 Const MainMenuTab_Load_Game% = 2
@@ -61,7 +59,6 @@ Const MainMenuTab_Load_Map% = 4
 Const MainMenuTab_Options_Audio% = 5
 Const MainMenuTab_Options_Controls% = 6
 Const MainMenuTab_Options_Advanced% = 7
-;[End Block]
 
 Function UpdateMainMenu()
 	Local x%, y%, Width%, Height%, Temp%, i%, n%, j%

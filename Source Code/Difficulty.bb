@@ -15,21 +15,11 @@ Global difficulties.Difficulty[4]
 
 Global SelectedDifficulty.Difficulty
 
-; ~ Difficulty Settings Constants
-;[Block]
-Const SAFE% = 0
-Const EUCLID% = 1
-Const KETER% = 2
-Const ESOTERIC% = 3
+Const SAFE% = 0, EUCLID% = 1, KETER% = 2, ESOTERIC% = 3
 
-Const SAVEANYWHERE% = 0
-Const SAVEONQUIT% = 1
-Const SAVEONSCREENS% = 2
+Const SAVEANYWHERE% = 0, SAVEONQUIT% = 1, SAVEONSCREENS% = 2
 
-Const EASY% = 0
-Const NORMAL% = 1
-Const HARD% = 2
-;[End Block]
+Const EASY% = 0, NORMAL% = 1, HARD% = 2
 
 difficulties[SAFE] = New Difficulty
 difficulties[SAFE]\Name = "Safe"

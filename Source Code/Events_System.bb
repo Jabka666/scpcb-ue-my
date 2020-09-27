@@ -427,44 +427,6 @@ Function UpdateEvents()
 	UpdateRooms()
 	
 	For e.Events = Each Events
-		If fpst\FPSFactor[0] > 0.0 Then
-			If e\SoundCHN <> 0 Then
-				If e\SoundCHN_IsStream Then
-					SetStreamVolume_Strict(e\SoundCHN, SFXVolume)
-				EndIf
-			EndIf
-			If e\SoundCHN2 <> 0 Then
-				If e\SoundCHN2_IsStream Then
-					SetStreamVolume_Strict(e\SoundCHN2, SFXVolume)
-				EndIf
-			EndIf
-			If e\SoundCHN3 <> 0 Then
-				If e\SoundCHN3_IsStream Then
-					SetStreamVolume_Strict(e\SoundCHN3, SFXVolume)
-				EndIf
-			EndIf
-		EndIf
-		If (Not PlayerInReachableRoom()) Then
-			If (PlayerRoom\RoomTemplate\Name <> "gateb" And EntityY(me\Collider) =< 1040.0 * RoomScale) And PlayerRoom\RoomTemplate\Name <> "gatea" Then
-				If PlayerRoom\RoomTemplate\Name <> "dimension1499" Then
-					If e\SoundCHN <> 0 And e\SoundCHN_IsStream Then
-						StopStream_Strict(e\SoundCHN)
-						e\SoundCHN = 0
-						e\SoundCHN_IsStream = 0
-					EndIf
-					If e\SoundCHN2 <> 0 And e\SoundCHN2_IsStream Then
-						StopStream_Strict(e\SoundCHN2)
-						e\SoundCHN2 = 0
-						e\SoundCHN2_IsStream = 0
-					EndIf
-					If e\SoundCHN3 <> 0 And e\SoundCHN3_IsStream Then
-						StopStream_Strict(e\SoundCHN3)
-						e\SoundCHN3 = 0
-						e\SoundCHN3_IsStream = 0
-					EndIf
-				EndIf
-			EndIf
-		EndIf
 		Select e\EventName
 			Case "gateb"
 				;[Block]
@@ -8833,9 +8795,9 @@ Function UpdateEvents()
 		End Select
 		
 		If e <> Null Then
-			CatchErrors("Error located in: " + Chr(34) + e\EventName + Chr(34) + "event!")
+			CatchErrors(Chr(34) + e\EventName + Chr(34) + " event")
 		Else
-			CatchErrors("Deleted event: " + e\EventName)
+			CatchErrors("Deleted event")
 		EndIf
 	Next
 	
@@ -8858,7 +8820,7 @@ Function UpdateDimension1499()
 			; ~ e\EventState3: Variable used for the SCP-1499's church event
 			
 			If PlayerRoom = e\room Then
-				If e\EventState < 2.0 Then
+				If e\EventState < 2.0
 					; ~ SCP-1499's random generator
 					If e\EventState = 0.0
 						If e\EventStr = "" And QuickLoadPercent = -1

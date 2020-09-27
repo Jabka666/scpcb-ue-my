@@ -469,6 +469,25 @@ Function UpdateStreamSounds()
 		If IntercomStreamCHN <> 0 Then
 			SetStreamVolume_Strict(IntercomStreamCHN, SFXVolume)
 		EndIf
+		For e = Each Events
+			If e\SoundCHN <> 0 Then
+				If e\SoundCHN_IsStream Then
+					SetStreamVolume_Strict(e\SoundCHN, SFXVolume)
+				EndIf
+			EndIf
+			
+			If e\SoundCHN2 <> 0 Then
+				If e\SoundCHN2_IsStream Then
+					SetStreamVolume_Strict(e\SoundCHN2, SFXVolume)
+				EndIf
+			EndIf
+			
+			If e\SoundCHN3 <> 0 Then
+				If e\SoundCHN3_IsStream Then
+					SetStreamVolume_Strict(e\SoundCHN3, SFXVolume)
+				EndIf
+			EndIf
+		Next
 	EndIf
 	
 	If (Not PlayerInReachableRoom()) Then
@@ -476,6 +495,27 @@ Function UpdateStreamSounds()
 			If IntercomStreamCHN <> 0 Then
 				StopStream_Strict(IntercomStreamCHN)
 				IntercomStreamCHN = 0
+			EndIf
+			If PlayerRoom\RoomTemplate\Name <> "dimension1499" Then
+				For e.Events = Each Events
+					If e\SoundCHN <> 0 And e\SoundCHN_IsStream Then
+						StopStream_Strict(e\SoundCHN)
+						e\SoundCHN = 0
+						e\SoundCHN_IsStream = 0
+					EndIf
+					
+					If e\SoundCHN2 <> 0 And e\SoundCHN2_IsStream Then
+						StopStream_Strict(e\SoundCHN2)
+						e\SoundCHN2 = 0
+						e\SoundCHN2_IsStream = 0
+					EndIf
+					
+					If e\SoundCHN3 <> 0 And e\SoundCHN3_IsStream Then
+						StopStream_Strict(e\SoundCHN3)
+						e\SoundCHN3 = 0
+						e\SoundCHN3_IsStream = 0
+					EndIf
+				Next
 			EndIf
 		EndIf
 	EndIf

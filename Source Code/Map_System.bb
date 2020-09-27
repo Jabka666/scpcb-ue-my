@@ -693,8 +693,6 @@ Type Forest
 	Field ID%
 End Type
 
-; ~ Forest Constants
-;[Block]
 Const Deviation_Chance% = 40 ; ~ Out of 100
 Const Branch_Chance% = 65
 Const Branch_Max_Life% = 4
@@ -703,7 +701,6 @@ Const Max_Deviation_Distance% = 3
 Const Return_Chance% = 27
 Const Center% = 5
 Const Cobble_Chance% = 0
-;[End Block]
 
 Function GenForestGrid(fr.Forest)
 	CatchErrors("Uncaught (GenForestGrid)")
@@ -864,14 +861,7 @@ Function GenForestGrid(fr.Forest)
 	CatchErrors("GenForestGrid")
 End Function
 
-; ~ Shape IDs Constants
-;[Block]
-Const ROOM1% = 0
-Const ROOM2% = 1
-Const ROOM2C% = 2
-Const ROOM3% = 3
-Const ROOM4% = 4
-;[End Block]
+Const ROOM1% = 0, ROOM2% = 1, ROOM2C% = 2, ROOM3% = 3, ROOM4% = 4
 
 Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 	CatchErrors("Uncaught (PlaceForest)")

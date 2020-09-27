@@ -78,7 +78,7 @@ Function CreateItemTemplate.ItemTemplates(Name$, TempName$, OBJPath$, InvImgPath
 		MaskImage(it\InvImg, 255, 0, 255)
 	EndIf
 	
-	If InvImgPath2 <> "" Then
+	If (InvImgPath2 <> "") Then
 		If it\InvImg2 = 0 Then
 			it\InvImg2 = LoadImage_Strict(InvImgPath2)
 			MaskImage(it\InvImg2, 255, 0, 255)
@@ -338,11 +338,11 @@ Function InitItemTemplates()
 	
 	CreateItemTemplate("Quarter", "25ct", ItemsPath + "coin.b3d", ItemsPath + "INV_coin.png", "", 0.0005, 3)
 	
-	For it.ItemTemplates = Each ItemTemplates
-		If it\Tex <> 0 Then
-			If it\TexPath <> "" Then
+	For it = Each ItemTemplates
+		If (it\Tex <> 0) Then
+			If (it\TexPath <> "") Then
 				For it2 = Each ItemTemplates
-					If it2 <> it And it2\Tex = it\Tex Then
+					If (it2 <> it) And (it2\Tex = it\Tex) Then
 						it2\Tex = 0
 					EndIf
 				Next
@@ -528,8 +528,10 @@ Function UpdateItems()
 				i\DistTimer = MilliSecs2() + 700
 				If i\Dist < HideDist Then ShowEntity(i\Collider)
 			EndIf
+			
 			If i\Dist < HideDist Then
 				ShowEntity(i\Collider)
+				
 				If i\Dist < 1.2 Then
 					If ClosestItem = Null Then
 						If EntityInView(i\Model, Camera) Then
@@ -572,9 +574,9 @@ Function UpdateItems()
  				If i\Dist < HideDist * 0.2 Then
 					For i2.Items = Each Items
 						If i <> i2 And (Not i2\Picked) And i2\Dist < HideDist * 0.2 Then
-							xTemp = EntityX(i2\Collider, True) - EntityX(i\Collider, True)
-							yTemp = EntityY(i2\Collider, True) - EntityY(i\Collider, True)
-							zTemp = EntityZ(i2\Collider, True) - EntityZ(i\Collider, True)
+							xTemp# = EntityX(i2\Collider, True) - EntityX(i\Collider, True)
+							yTemp# = EntityY(i2\Collider, True) - EntityY(i\Collider, True)
+							zTemp# = EntityZ(i2\Collider, True) - EntityZ(i\Collider, True)
 							
 							ed = (xTemp * xTemp + zTemp * zTemp)
 							If ed < 0.07 And Abs(yTemp) < 0.25 Then
