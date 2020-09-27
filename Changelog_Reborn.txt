@@ -16,7 +16,6 @@
 - Added new key card loading screen.
 - Added anisotropic filtering.
 - Added support for resolutions of up to 4k.
-- Added rescaling of loading screens.
 - Added coloring of the fog.
 - Added room2tunnel3.
 - Added bloody texture for SCP-096.

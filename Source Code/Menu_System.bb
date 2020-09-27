@@ -1824,7 +1824,6 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 			If ls\ID = Temp Then
 				If ls\Img = 0 Then 
 					ls\Img = LoadImage_Strict("LoadingScreens\" + ls\ImgPath + ".png")
-					ls\Img = ResizeImage2(ls\Img, ImageWidth(ls\Img) * MenuScale, ImageHeight(ls\Img) * MenuScale)
 					SelectedLoadingScreen = ls
 				EndIf
 				Exit
@@ -1838,10 +1837,8 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 		ClsColor(0, 0, 0)
 		Cls()
 		
-		If Percent > 20 Then
-			UpdateMusic()
-		EndIf
-		
+		If Percent > 20 Then UpdateMusic()
+			
 		If (Not ShortLoading) Then
 			If Percent > (100.0 / SelectedLoadingScreen\TxtAmount) * (LoadingScreenText + 1) Then
 				LoadingScreenText = LoadingScreenText + 1

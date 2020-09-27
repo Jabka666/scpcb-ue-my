@@ -350,7 +350,6 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 		For j = 1 To Count2
 			; ~ World coords
 			x = ReadFloat(f) : y = ReadFloat(f) : z = ReadFloat(f)
-			
 			Vertex = AddVertex(Surf, x, y, z)
 			
 			; ~ Texture coords
@@ -375,6 +374,7 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 		If IsAlpha = 1 Then
 			AddMesh(ChildMesh, Alpha)
 			EntityAlpha(ChildMesh, 0.0)
+			EntityParent(ChildMesh, CollisionMeshes)
 		Else
 			AddMesh(ChildMesh, Opaque)
 			EntityParent(ChildMesh, CollisionMeshes)

@@ -265,8 +265,7 @@ End Function
 Function LoadMesh_Strict(File$, Parent% = 0)
 	Local Tmp%, i%, SF%, b%, t1%, Name$, Texture%, t2%
 	Local TexAlpha% = 0
-	Local BumpTex%, Temp$
-	Local mat.Materials
+	Local Temp$
 	
 	If Tmp = 0 Then
 		If FileType(File) <> 1 Then RuntimeError("3D Mesh " + File + " not found.")
@@ -285,75 +284,32 @@ Function LoadMesh_Strict(File$, Parent% = 0)
 			If t1 <> 0 Then
 				TexAlpha = IsTexAlpha(t1)
 				If TexAlpha <> 2 Then
-					If BumpEnabled Then
-						BumpTex = 0
+					Texture = CheckForTexture(t1, TexAlpha)
+					If Texture <> 0 Then 
+						TextureBlend(Texture, 5)
+						BrushTexture(b, Texture, 0, 0)
 					Else
-						BumpTex = 0
-					EndIf
-					If BumpTex = 0
-						Texture = CheckForTexture(t1, TexAlpha)
-						If Texture <> 0 Then
-							TextureBlend(Texture, 5)
-							BrushTexture(b, Texture, 0, 0)
-						Else
-							; ~ Sometimes that error is intentional - such as if the mesh doesn't has a texture applied or an invalid one which gets fixed by something like EntityTexture
-							BrushTexture(b, MissingTexture, 0, 0)
-						EndIf
-					Else
-						Texture = CheckForTexture(t1, TexAlpha)
-						If Texture <> 0 Then
-							TextureBlend(Texture, 5)
-							BrushTexture(b, Texture, 0, 1)
-						Else
-							; ~ Sometimes that error is intentional - such as if the mesh doesn't has a texture applied or an invalid one which gets fixed by something like EntityTexture
-							BrushTexture(b, MissingTexture, 0, 1)
-						EndIf
-						BrushTexture(b, BumpTex, 0, 0)
+						; ~ Sometimes that error is intentional - such as if the mesh doesn't has a texture applied or an invalid one which gets fixed by something like EntityTexture
+						BrushTexture(b, MissingTexture, 0, 0)
 					EndIf
 				Else
 					t2 = GetBrushTexture(b, 1) ; ~ Diffuse (if lightmap is existing)
-					If BumpEnabled Then
-						BumpTex = 0
+					Texture = CheckForTexture(t1, TexAlpha)
+					If Texture <> 0 Then
+						TextureCoords(Texture, 1)
+						TextureBlend(Texture, 2)
+						BrushTexture(b, Texture, 0, 0)
 					Else
-						BumpTex = 0
+						BrushTexture(b, MissingTexture, 0, 0)
 					EndIf
-					If BumpTex = 0 Then
-						Texture = CheckForTexture(t1, TexAlpha)
-						If Texture <> 0 Then
-							TextureCoords(Texture, 1)
-							TextureBlend(Texture, 2)
-							BrushTexture(b, Texture, 0, 0)
-						Else
-							BrushTexture(b, MissingTexture, 0, 0)
-						EndIf
-						
-						Texture = CheckForTexture(t2, TexAlpha)
-						If Texture <> 0 Then
-							TextureCoords(Texture, 0)
-							TextureBlend(Texture, 5)
-							BrushTexture(b, Texture, 0, 1)
-						Else
-							BrushTexture(b, MissingTexture, 0, 1)
-						EndIf
+					
+					Texture = CheckForTexture(t2, TexAlpha)
+					If Texture <> 0 Then
+						TextureCoords(Texture, 0)
+						TextureBlend(Texture, 5)
+						BrushTexture(b, Texture, 0, 1)
 					Else
-						Texture = CheckForTexture(t1, TexAlpha)
-						If Texture <> 0 Then
-							TextureCoords(Texture, 1)
-							TextureBlend(Texture, 2)
-							BrushTexture(b, Texture, 0, 0)
-						Else
-							BrushTexture(b, MissingTexture, 0, 0)
-						EndIf
-						
-						Texture = CheckForTexture(t2, TexAlpha)
-						If Texture <> 0 Then
-							TextureCoords(Texture, 0)
-							TextureBlend(Texture, 5)
-							BrushTexture(b, Texture, 0, 2)
-						Else
-							BrushTexture(b, MissingTexture, 0, 2)
-						EndIf
-						BrushTexture(b, BumpTex, 0, 1)
+						BrushTexture(b, MissingTexture, 0, 1)
 					EndIf
 					FreeTexture(t2)
 				EndIf
@@ -369,7 +325,6 @@ End Function
 Function LoadAnimMesh_Strict(File$, Parent% = 0)
 	Local Tmp%, i%, SF%, b%, t1%, Name$, Texture%
 	Local TexAlpha% = 0
-	Local mat.Materials
 	
 	If Tmp = 0 Then
 		If FileType(File) <> 1 Then RuntimeError("3D Animated Mesh " + File + " not found.")
@@ -387,7 +342,6 @@ Function LoadAnimMesh_Strict(File$, Parent% = 0)
 			t1 = GetBrushTexture(b, 0) ; ~ Diffuse or Lightmap
 			If t1 <> 0 Then
 				TexAlpha = IsTexAlpha(t1)
-				
 				Texture = CheckForTexture(t1, TexAlpha)
 				If Texture <> 0 Then
 					BrushTexture(b, Texture, 0, 0)
@@ -395,7 +349,6 @@ Function LoadAnimMesh_Strict(File$, Parent% = 0)
 					; ~ Sometimes that error is intentional - such as if the mesh doesn't has a texture applied or an invalid one which gets fixed by something like EntityTexture
 					BrushTexture(b, MissingTexture, 0, 0)
 				EndIf
-				
 				PaintSurface(SF, b)
 				FreeTexture(t1)
 			EndIf
