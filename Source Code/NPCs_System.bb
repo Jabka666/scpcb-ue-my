@@ -674,7 +674,7 @@ Function UpdateNPCs()
 									; ~ Tries to open doors
 									If Rand(20) = 1 Then
 										For d.Doors = Each Doors
-											If d\Locked = False And (Not d\Open) And d\Code = "" And d\KeyCard = 0 Then
+											If d\Locked = 0 And (Not d\Open) And d\Code = "" And d\KeyCard = 0 Then
 												For i = 0 To 1
 													If d\Buttons[i] <> 0 Then
 														If Abs(EntityX(n\Collider) - EntityX(d\Buttons[i])) < 0.5 Then
@@ -811,32 +811,27 @@ Function UpdateNPCs()
 					
 					; ~ Checking if SCP-106 is allowed to spawn
 					If PlayerRoom\RoomTemplate\Name = "dimension1499" Then Spawn106 = False
-					For e.Events = Each Events
-						If e\EventName = "room860"
-							If e\EventState = 1.0
-								Spawn106 = False
-							EndIf
-							Exit
+					If PlayerRoom\RoomTemplate\Name = "room860" Then
+						If ev_room860\EventState = 1.0
+							Spawn106 = False
 						EndIf
-					Next
+					EndIf
 					If PlayerRoom\RoomTemplate\Name = "room049" And EntityY(me\Collider) =< -2848.0 * RoomScale Then
 						Spawn106 = False
 					EndIf
 					; ~ GateA event has been triggered. Don't make SCP-106 disappear!
 					; ~ The reason why this is a seperate for loop is because we need to make sure that room860 would not be able to overwrite the "Spawn106" variable
-					For e.Events = Each Events
-						If e\EventName = "gatea"
-							If e\EventState <> 0.0
-								Spawn106 = True
-								If PlayerRoom\RoomTemplate\Name = "dimension1499" Then
-									n\Idle = True
-								Else
-									n\Idle = False
-								EndIf
+					If PlayerRoom\RoomTemplate\Name = "gatea"
+						If ev_gatea\EventState <> 0.0 Then
+							Spawn106 = True
+							If PlayerRoom\RoomTemplate\Name = "dimension1499" Then
+								n\Idle = True
+							Else
+								n\Idle = False
 							EndIf
-							Exit
 						EndIf
-					Next
+					EndIf
+					
 					If (Not Spawn106) And n\State =< 0.0 Then
 						n\State = Rnd(22000.0, 27000.0)
 						PositionEntity(n\Collider, 0.0, 500.0, 0.0)
@@ -1568,7 +1563,7 @@ Function UpdateNPCs()
 												If PlayerRoom\RoomTemplate\Name = "room049"
 													msg\DeathMsg = "Three (3) active instances of SCP-049-2 discovered in the tunnel outside SCP-049's containment chamber. Terminated by Nine-Tailed Fox."
 													For e.Events = Each Events
-														If e\EventName = "room049" Then e\EventState = -1.0 : Exit
+														If e\EventID = e_room049 Then e\EventState = -1.0 : Exit
 													Next
 												Else
 													If Rand(2) = 1 Then
@@ -3818,7 +3813,7 @@ Function UpdateNPCs()
 											Case 3
 												;[Block]
 												For d.Doors = Each Doors
-													If d\Locked = False And d\KeyCard = 0 And d\Code = "" Then
+													If d\Locked = 0 And d\KeyCard = 0 And d\Code = "" Then
 														If Abs(EntityX(d\FrameOBJ) - EntityX(n\Collider)) < 16.0 Then
 															If Abs(EntityZ(d\FrameOBJ) - EntityZ(n\Collider)) < 16.0 Then
 																UseDoor(d, False)
@@ -4981,14 +4976,11 @@ Function UpdateNPCs()
 						
 						If n\InFacility = 1 Then
 							If PlayerRoom\RoomTemplate\Name <> "room173intro" Then
-								For e.Events = Each Events
-									If e\EventName = "room860" Then
-										If e\EventState = 1.0
-											UpdateGravity = True
-											Exit
-										EndIf
+								If PlayerRoom\RoomTemplate\Name = "room860" Then
+									If ev_room860\EventState = 1.0
+										UpdateGravity = True
 									EndIf
-								Next
+								EndIf
 							Else
 								UpdateGravity = True
 							EndIf
@@ -7298,12 +7290,9 @@ Function PlayerInReachableRoom(CanSpawnIn049Chamber% = False)
 	EndIf
 	; ~ Player is in SCP-860-1's test room and inside the forest, returning false
 	If RN = "room860" Then
-		For e.Events = Each Events
-			If e\EventName = "room860" And e\EventState = 1.0 Then
-				Return(False)
-				Exit
-			EndIf
-		Next
+		If ev_room860\EventState = 1.0 Then
+			Return(False)
+		EndIf	
 	EndIf
 	
 	If (Not CanSpawnIn049Chamber) Then
@@ -7443,5 +7432,5 @@ Function Animate2#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = True
 End Function 
 
 ;~IDEal Editor Parameters:
-;~B#172#1218#135E#13AC#1502#161E#17ED#1848
+;~B#172#1213#1359#13A4#14FA#1616#17E5#1840
 ;~C#Blitz3D

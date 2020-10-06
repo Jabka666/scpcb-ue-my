@@ -143,7 +143,7 @@ Function CheckForTexture(Tex%, TexFlags% = 1)
 	
 	If FileType(TextureName(Tex)) = 1 Then ; ~ Check if texture is existing in original path
 		Name = TextureName(Tex)
-	ElseIf FileType(MapTexturesFolder + StripPath(TextureName(Tex))) = 1 Then ; ~ If not, check the MapTexturesFolder
+	ElseIf FileType(MapTexturesFolder + StripPath(TextureName(Tex))) = 1 ; ~ If not, check the MapTexturesFolder
 		Name = MapTexturesFolder + StripPath(TextureName(Tex))
 	EndIf
 	Texture = LoadTextureCheckingIfInCache(Name, TexFlags, 0)

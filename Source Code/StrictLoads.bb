@@ -333,7 +333,7 @@ Function LoadAnimMesh_Strict(File$, Parent% = 0)
 	EndIf
 	
 	For i = 1 To CountSurfaces(Tmp)
-		SF = GetSurface(Tmp,i)
+		SF = GetSurface(Tmp, i)
 		b = GetSurfaceBrush(SF)
 		If b <> 0 Then
 			Texture = 0

@@ -31,11 +31,8 @@ Function LoadMaterials(File$)
 		TemporaryString = Trim(ReadLine(f))
 		If Left(TemporaryString, 1) = "[" Then
 			TemporaryString = Mid(TemporaryString, 2, Len(TemporaryString) - 2)
-			
 			mat.Materials = New Materials
-			
 			mat\Name = Lower(TemporaryString)
-			
 			If BumpEnabled Then
 				StrTemp = GetINIString(File, TemporaryString, "bump")
 				If StrTemp <> "" Then 
@@ -43,7 +40,6 @@ Function LoadMaterials(File$)
 					ApplyBumpMap(mat\Bump)
 				EndIf
 			EndIf
-			
 			mat\StepSound = (GetINIInt(File, TemporaryString, "stepsound") + 1)
 			mat\IsDiffuseAlpha = GetINIInt(File, TemporaryString, "transparent")
 			mat\UseMask = GetINIInt(File, TemporaryString, "masked")

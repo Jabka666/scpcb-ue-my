@@ -1,5 +1,6 @@
 Type Events
-	Field EventName$
+	Field EventName$ ; ~ Used for debugs and Map Creator
+	Field EventID%
 	Field room.Rooms
 	Field EventState#, EventState2#, EventState3#, EventState4#
 	Field SoundCHN%, SoundCHN2%, SoundCHN3%
@@ -9,7 +10,80 @@ Type Events
 	Field Img%
 End Type 
 
-Function CreateEvent.Events(Eventname$, RoomName$, ID%, Prob# = 0.0)
+Global ev_room860.Events
+Global ev_gatea.Events
+
+; ~ Event IDs
+;[Block]
+Const e_gateb% = 0
+Const e_room173% = 1, e_room173intro% = 2
+Const e_buttghost% = 3
+Const e_room2checkpoint% = 4
+Const e_room895% = 5, e_room895_106% = 6
+Const e_room1endroom106% = 7
+Const e_gateaentrance% = 8
+Const e_room2clockroom173% = 9, e_room2clockroom096% = 10
+Const e_room372% = 11
+Const e_pocketdimension% = 12
+Const e_room2cafeteria% = 13
+Const e_room2ccont% = 14
+Const e_room2closets% = 15
+Const e_room2doors173% = 16
+Const e_room2elevator% = 17, e_room2elevator2% = 18
+Const e_room2fan% = 19
+Const e_room2nuke% = 20
+Const e_room2offices2% = 21, e_room2offices3% = 22, e_room2offices035% = 23
+Const e_room2tesla% = 24
+Const e_room2trick% = 25
+Const e_room2mt% = 26
+Const e_room2pipes106% = 27
+Const e_room2pit106% = 28, e_room2pit% = 29
+Const e_room3pitduck% = 30, e_room3pit1048% = 31
+Const e_room2poffices2% = 32
+Const e_room2servers% = 33
+Const e_room2storage% = 34
+Const e_room3door% = 35
+Const e_room3servers% = 36
+Const e_room3storage% = 37
+Const e_room3tunnel% = 38
+Const e_room4% = 39
+Const e_room012% = 40
+Const e_room035% = 41
+Const e_room049% = 42
+Const e_room079% = 43
+Const e_room106% = 44
+Const e_room205% = 45
+Const e_room860% = 46
+Const e_room966% = 47
+Const e_room1123% = 48
+Const e_room2testroom2% = 49, e_room2testroom173% = 50
+Const e_room2tunnel2smoke% = 51, e_room2tunnel2% = 52
+Const e_room2tunnel106% = 53
+Const e_toiletguard% = 54
+Const e_room008% = 55
+Const e_106victim% = 56
+Const e_106sinkhole% = 57
+Const e_682roar% = 58
+Const e_room914% = 59
+Const e_1048a% = 60
+Const e_room4tunnels% = 61
+Const e_room2gw_b% = 62, e_room2gw% = 63
+Const e_room2scps2% = 64
+Const e_room1162% = 65
+Const e_room2sl% = 66
+Const e_096spawn% = 67
+Const e_room2medibay% = 68, e_room2medibay2% = 69
+Const e_dimension1499% = 70
+Const e_room2shaft% = 71
+Const e_room1lifts% = 72
+Const e_room4info% = 73
+Const e_room2bio% = 74
+Const e_room409% = 75
+Const e_room005% = 76
+Const e_gatea% = 77
+;[End Block]
+
+Function CreateEvent.Events(EventName$, RoomName$, ID%, Prob# = 0.0)
 	; ~ RoomName = the name of the room(s) you want the event to be assigned to
 	
 	; ~ The ID-variable determines which of the rooms the event is assigned to,
@@ -33,8 +107,10 @@ Function CreateEvent.Events(Eventname$, RoomName$, ID%, Prob# = 0.0)
 				i = i + 1
 				If i >= ID And Temp = False Then
 					e.Events = New Events
-					e\EventName = Eventname					
+					e\EventName = EventName					
 					e\room = r
+					e\EventID = FindEventID(EventName)
+					SetEventVar(e)
 					Return(e)
 				EndIf
 			EndIf
@@ -49,13 +125,348 @@ Function CreateEvent.Events(Eventname$, RoomName$, ID%, Prob# = 0.0)
 				
 				If Rnd(0.0, 1.0) < Prob And Temp = False Then
 					e.Events = New Events
-					e\EventName = Eventname					
+					e\EventName = EventName					
 					e\room = r
+					e\EventID = FindEventID(EventName)
+					SetEventVar(e)
 				EndIf
 			EndIf
 		Next		
 	EndIf
 	Return(Null)
+End Function
+
+Function SetEventVar%(e.Events)
+	Select e\EventName
+		Case "room860"
+			;[Block]
+			ev_room860 = e
+			Return(e_room860)
+			;[End Block]
+		Case "gatea"
+			;[Block]
+			ev_gatea = e
+			Return(e_gatea)
+			;[End Block]
+	End Select
+End Function
+
+Function FindEventID%(EventName$)
+	Select EventName
+		Case "gateb"
+			;[Block]
+			Return(e_gateb)
+			;[End Block]
+		Case "room173"
+			;[Block]
+			Return(e_room173)
+			;[End Block]
+		Case "room173intro"
+			;[Block]
+			Return(e_room173intro)
+			;[End Block]
+		Case "buttghost"
+			;[Block]
+			Return(e_buttghost)
+			;[End Block]
+		Case "room2checkpoint"
+			;[Block]
+			Return(e_room2checkpoint)
+			;[End Block]
+		Case "room895"
+			;[Block]
+			Return(e_room895)
+			;[End Block]
+		Case "room895_106"
+			;[Block]
+			Return(e_room895_106)
+			;[End Block]
+		Case "room1endroom106"
+			;[Block]
+			Return(e_room1endroom106)
+			;[End Block]
+		Case "gateaentrance"
+			;[Block]
+			Return(e_gateaentrance)
+			;[End Block]
+		Case "room2clockroom173"
+			;[Block]
+			Return(e_room2clockroom173)
+			;[End Block]
+		Case "room2clockroom096"
+			;[Block]
+			Return(e_room2clockroom096)
+			;[End Block]
+		Case "room372"
+			;[Block]
+			Return(e_room372)
+			;[End Block]
+		Case "pocketdimension"
+			;[Block]
+			Return(e_pocketdimension)
+			;[End Block]
+		Case "room2cafeteria"
+			;[Block]
+			Return(e_room2cafeteria)
+			;[End Block]
+		Case "room2ccont"
+			;[Block]
+			Return(e_room2ccont)
+			;[End Block]
+		Case "room2closets"
+			;[Block]
+			Return(e_room2closets)
+			;[End Block]
+		Case "room2doors173"
+			;[Block]
+			Return(e_room2doors173)
+			;[End Block]
+		Case "room2elevator"
+			;[Block]
+			Return(e_room2elevator)
+			;[End Block]
+		Case "room2elevator2"
+			;[Block]
+			Return(e_room2elevator2)
+			;[End Block]
+		Case "room2fan"
+			;[Block]
+			Return(e_room2fan)
+			;[End Block]
+		Case "room2nuke"
+			;[Block]
+			Return(e_room2nuke)
+			;[End Block]
+		Case "room2offices2"
+			;[Block]
+			Return(e_room2offices2)
+			;[End Block]
+		Case "room2offices3"
+			;[Block]
+			Return(e_room2offices3)
+			;[End Block]
+		Case "room2offices035"
+			;[Block]
+			Return(e_room2offices035)
+			;[End Block]
+		Case "room2tesla"
+			;[Block]
+			Return(e_room2tesla)
+			;[End Block]
+		Case "room2trick"
+			;[Block]
+			Return(e_room2trick)
+			;[End Block]
+		Case "room2mt"
+			;[Block]
+			Return(e_room2mt)
+			;[End Block]
+		Case "room2pipes106"
+			;[Block]
+			Return(e_room2pipes106)
+			;[End Block]
+		Case "room2pit106"
+			;[Block]
+			Return(e_room2pit106)
+			;[End Block]
+		Case "room2pit"
+			;[Block]
+			Return(e_room2pit)
+			;[End Block]
+		Case "room3pitduck"
+			;[Block]
+			Return(e_room3pitduck)
+			;[End Block]
+		Case "room3pit1048"
+			;[Block]
+			Return(e_room3pit1048)
+			;[End Block]
+		Case "room2poffices2"
+			;[Block]
+			Return(e_room2poffices2)
+			;[End Block]
+		Case "room2servers"
+			;[Block]
+			Return(e_room2servers)
+			;[End Block]
+		Case "room2storage"
+			;[Block]
+			Return(e_room2storage)
+			;[End Block]
+		Case "room3door"
+			;[Block]
+			Return(e_room3door)
+			;[End Block]
+		Case "room3servers"
+			;[Block]
+			Return(e_room3servers)
+			;[End Block]
+		Case "room3storage"
+			;[Block]
+			Return(e_room3storage)
+			;[End Block]
+		Case "room3tunnel"
+			;[Block]
+			Return(e_room3tunnel)
+			;[End Block]
+		Case "room4"
+			;[Block]
+			Return(e_room4)
+			;[End Block]
+		Case "room012"
+			;[Block]
+			Return(e_room012)
+			;[End Block]
+		Case "room035"
+			;[Block]
+			Return(e_room035)
+			;[End Block]
+		Case "room049"
+			;[Block]
+			Return(e_room049)
+			;[End Block]
+		Case "room079"
+			;[Block]
+			Return(e_room079)
+			;[End Block]
+		Case "room106"
+			;[Block]
+			Return(e_room106)
+			;[End Block]
+		Case "room205"
+			;[Block]
+			Return(e_room205)
+			;[End Block]
+		Case "room860"
+			;[Block]
+			Return(e_room860)
+			;[End Block]
+		Case "room966"
+			;[Block]
+			Return(e_room966)
+			;[End Block]
+		Case "room1123"
+			;[Block]
+			Return(e_room1123)
+			;[End Block]
+		Case "room2testroom2"
+			;[Block]
+			Return(e_room2testroom2)
+			;[End Block]
+		Case "room2testroom173"
+			;[Block]
+			Return(e_room2testroom173)
+			;[End Block]
+		Case "room2tunnel2smoke"
+			;[Block]
+			Return(e_room2tunnel2smoke)
+			;[End Block]
+		Case "room2tunnel2"
+			;[Block]
+			Return(e_room2tunnel2)
+			;[End Block]
+		Case "room2tunnel106"
+			;[Block]
+			Return(e_room2tunnel106)
+			;[End Block]
+		Case "toiletguard"
+			;[Block]
+			Return(e_toiletguard)
+			;[End Block]
+		Case "room008"
+			;[Block]
+			Return(e_room008)
+			;[End Block]
+		Case "106victim"
+			;[Block]
+			Return(e_106victim)
+			;[End Block]
+		Case "106sinkhole"
+			;[Block]
+			Return(e_106sinkhole)
+			;[End Block]
+		Case "682roar"
+			;[Block]
+			Return(e_682roar)
+			;[End Block]
+		Case "room914"
+			;[Block]
+			Return(e_room914)
+			;[End Block]
+		Case "1048a"
+			;[Block]
+			Return(e_1048a)
+			;[End Block]
+		Case "room4tunnels"
+			;[Block]
+			Return(e_room4tunnels)
+			;[End Block]
+		Case "room2gw_b"
+			;[Block]
+			Return(e_room2gw_b)
+			;[End Block]
+		Case "room2gw"
+			;[Block]
+			Return(e_room2gw)
+			;[End Block]
+		Case "room2scps2"
+			;[Block]
+			Return(e_room2scps2)
+			;[End Block]
+		Case "room1162"
+			;[Block]
+			Return(e_room1162)
+			;[End Block]
+		Case "room2sl"
+			;[Block]
+			Return(e_room2sl)
+			;[End Block]
+		Case "096spawn"
+			;[Block]
+			Return(e_096spawn)
+			;[End Block]
+		Case "room2medibay"
+			;[Block]
+			Return(e_room2medibay)
+			;[End Block]
+		Case "room2medibay2"
+			;[Block]
+			Return(e_room2medibay2)
+			;[End Block]
+		Case "dimension1499"
+			;[Block]
+			Return(e_dimension1499)
+			;[End Block]
+		Case "room2shaft"
+			;[Block]
+			Return(e_room2shaft)
+			;[End Block]
+		Case "room1lifts"
+			;[Block]
+			Return(e_room1lifts)
+			;[End Block]
+		Case "room4info"
+			;[Block]
+			Return(e_room4info)
+			;[End Block]
+		Case "room2bio"
+			;[Block]
+			Return(e_room2bio)
+			;[End Block]
+		Case "room409"
+			;[Block]
+			Return(e_room409)
+			;[End Block]
+		Case "room005"
+			;[Block]
+			Return(e_room005)
+			;[End Block]
+		Case "gatea"
+			;[Block]
+			Return(e_gatea)
+			;[End Block]
+	End Select
+	Return(0)
 End Function
 
 Function InitEvents()
@@ -302,8 +713,8 @@ Function QuickLoadEvents()
 	; ~ Might be a good idea to use QuickLoadPercent to determine the "steps" of the loading process 
 	; ~ Instead of magic values in e\eventState and e\eventStr
 	
-	Select e\EventName
-		Case "room205"
+	Select e\EventID
+		Case e_room205
 			;[Block]
 			If e\EventState = 0.0 Lor e\EventStr <> "LoadDone" Then
 				If e\EventStr = "Load0"
@@ -342,7 +753,7 @@ Function QuickLoadEvents()
 				EndIf
 			EndIf
 			;[End Block]
-		Case "room860"
+		Case e_room860
 			;[Block]
 			If e\EventStr = "Load0"
 				QuickLoadPercent = 15
@@ -366,7 +777,7 @@ Function QuickLoadEvents()
 				e\EventStr = "LoadDone"
 			EndIf
 			;[End Block]
-		Case "dimension1499"
+		Case e_dimension1499
 			;[Block]
 			If e\EventState = 0.0
 				If e\EventStr = "Load0"
@@ -409,7 +820,7 @@ Function QuickLoadEvents()
 			;[End Block]
 	End Select
 	
-	CatchErrors("QuickLoadEvents " + e\EventName)
+	CatchErrors("QuickLoadEvents " + e\EventID)
 End Function
 
 Function UpdateEvents()
@@ -427,15 +838,58 @@ Function UpdateEvents()
 	UpdateRooms()
 	
 	For e.Events = Each Events
-		Select e\EventName
-			Case "gateb"
+		If fpst\FPSFactor[0] > 0.0 Then
+			If e\SoundCHN <> 0 Then
+				If e\SoundCHN_IsStream Then
+					SetStreamVolume_Strict(e\SoundCHN, SFXVolume)
+				EndIf
+			EndIf
+			
+			If e\SoundCHN2 <> 0 Then
+				If e\SoundCHN2_IsStream Then
+					SetStreamVolume_Strict(e\SoundCHN2, SFXVolume)
+				EndIf
+			EndIf
+			
+			If e\SoundCHN3 <> 0 Then
+				If e\SoundCHN3_IsStream Then
+					SetStreamVolume_Strict(e\SoundCHN3, SFXVolume)
+				EndIf
+			EndIf
+		EndIf
+		If (Not PlayerInReachableRoom()) Then
+			If (PlayerRoom\RoomTemplate\Name <> "gateb" And EntityY(me\Collider) =< 1040.0 * RoomScale) And PlayerRoom\RoomTemplate\Name <> "gatea" Then
+				If PlayerRoom\RoomTemplate\Name <> "dimension1499" Then
+					If e\SoundCHN <> 0 And e\SoundCHN_IsStream Then
+						StopStream_Strict(e\SoundCHN)
+						e\SoundCHN = 0
+						e\SoundCHN_IsStream = 0
+					EndIf
+					
+					If e\SoundCHN2 <> 0 And e\SoundCHN2_IsStream Then
+						StopStream_Strict(e\SoundCHN2)
+						e\SoundCHN2 = 0
+						e\SoundCHN2_IsStream = 0
+					EndIf
+					
+					If e\SoundCHN3 <> 0 And e\SoundCHN3_IsStream Then
+						StopStream_Strict(e\SoundCHN3)
+						e\SoundCHN3 = 0
+						e\SoundCHN3_IsStream = 0
+					EndIf
+				EndIf
+			EndIf
+		EndIf
+		
+		Select e\EventID
+			Case e_gateb
 				;[Block]
 				If (Not RemoteDoorOn) Then
-					e\room\RoomDoors[4]\Locked = True
+					e\room\RoomDoors[4]\Locked = 1
 				ElseIf RemoteDoorOn And e\EventState3 = 0.0
 					e\room\RoomDoors[4]\Locked = 2
 				Else
-					e\room\RoomDoors[4]\Locked = False
+					e\room\RoomDoors[4]\Locked = 0
 					
 					If Curr096 <> Null Then
 						If Curr096\State = 0.0 Lor Curr096\State = 5.0 Then
@@ -449,7 +903,7 @@ Function UpdateEvents()
 					EntityAlpha(tt\OverlayID[0], 1.0)						
 				EndIf
 				;[End Block]
-			Case "room173"
+			Case e_room173
 				;[Block]
 				If e\room\RoomDoors[5] = Null Then
 					For i = 0 To 3
@@ -698,7 +1152,7 @@ Function UpdateEvents()
 					EndIf					
 				EndIf
 				;[End Block]
-			Case "room173intro"
+			Case e_room173intro
 				;[Block]
 				If me\KillTimer >= 0.0 And e\EventState2 = 0.0 Then
 					me\Zone = 0
@@ -806,9 +1260,9 @@ Function UpdateEvents()
 									e\room\NPC[4]\State = 9.0
 									e\room\NPC[5]\State = 9.0
 									
-									e\room\RoomDoors[5]\Locked = False		
+									e\room\RoomDoors[5]\Locked = 0		
 									UseDoor(e\room\RoomDoors[5], False)
-									e\room\RoomDoors[5]\Locked = True
+									e\room\RoomDoors[5]\Locked = 1
 								EndIf
 							Else
 								If e\room\NPC[3]\Sound2 <> 0 Then
@@ -833,9 +1287,9 @@ Function UpdateEvents()
 										e\room\NPC[3]\PathStatus = FindPath(e\room\NPC[3], PlayerRoom\x - 320.0 * RoomScale, 0.3, PlayerRoom\z - 704.0 * RoomScale)
 										e\room\NPC[4]\PathStatus = FindPath(e\room\NPC[4], PlayerRoom\x - 320.0 * RoomScale, 0.3, PlayerRoom\z - 704.0 * RoomScale)
 										
-										e\room\RoomDoors[5]\Locked = False		
+										e\room\RoomDoors[5]\Locked = 0		
 									    UseDoor(e\room\RoomDoors[5], False)
-									    e\room\RoomDoors[5]\Locked = True
+									    e\room\RoomDoors[5]\Locked = 1
 										
 										e\EventState3 = 710.0
 									EndIf
@@ -859,9 +1313,9 @@ Function UpdateEvents()
 									ElseIf e\EventState3 > 630.0
 										PositionEntity(me\Collider, EntityX(me\Collider), EntityY(me\Collider), Min(EntityZ(me\Collider), EntityZ(e\room\OBJ, True) + 490.0 * RoomScale))
 										If e\room\RoomDoors[5]\Open = True Then 
-											e\room\RoomDoors[5]\Locked = False		
+											e\room\RoomDoors[5]\Locked = 0		
 											UseDoor(e\room\RoomDoors[5], False)
-											e\room\RoomDoors[5]\Locked = True
+											e\room\RoomDoors[5]\Locked = 1
 											
 											em.Emitters = CreateEmitter(PlayerRoom\x - (2976.0 + 1024.0) * RoomScale, PlayerRoom\y + 373.0 * RoomScale, PlayerRoom\z + 204.0 * RoomScale, 0)
 											em\RandAngle = 7.0 : em\Speed = 0.03 : em\SizeChange = 0.003 : em\Room = PlayerRoom
@@ -1173,9 +1627,9 @@ Function UpdateEvents()
 								
 								e\EventState3 = 905.0
 								
-								e\room\RoomDoors[3]\Locked = False
+								e\room\RoomDoors[3]\Locked = 0
 								UseDoor(e\room\RoomDoors[3], False)
-								e\room\RoomDoors[3]\Locked = True
+								e\room\RoomDoors[3]\Locked = 1
 								
 								e\room\NPC[1] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[1], True), 0.5, EntityZ(e\room\Objects[1], True))
 								PointEntity(e\room\NPC[1]\Collider, e\room\Objects[5])
@@ -1220,9 +1674,9 @@ Function UpdateEvents()
 												
 												PickItem(SelectedItem)
 												
-												e\room\RoomDoors[2]\Locked = False
+												e\room\RoomDoors[2]\Locked = 0
 												UseDoor(e\room\RoomDoors[2], False)
-												e\room\RoomDoors[2]\Locked = True
+												e\room\RoomDoors[2]\Locked = 1
 												e\EventState3 = 910.0
 												SetNPCFrame(e\room\NPC[3], 608.0)
 											EndIf
@@ -1238,9 +1692,9 @@ Function UpdateEvents()
 								e\room\NPC[3]\State = 9.0
 								e\room\NPC[4]\State = 9.0
 								If DistanceSquared(EntityX(me\Collider), EntityX(e\room\OBJ), EntityZ(me\Collider), EntityZ(e\room\OBJ)) < 16.0 Then
-									e\room\RoomDoors[2]\Locked = False
+									e\room\RoomDoors[2]\Locked = 0
 									UseDoor(e\room\RoomDoors[2], False)
-									e\room\RoomDoors[2]\Locked = True
+									e\room\RoomDoors[2]\Locked = 1
 									e\EventState3 = 0.0
 									e\room\NPC[3]\State = 0.0
 									e\room\NPC[4]\State = 0.0
@@ -1423,9 +1877,9 @@ Function UpdateEvents()
 										e\room\NPC[0]\State2 = 10.0
 										e\room\NPC[0]\State3 = 1.0
 										e\room\NPC[3]\State = 11.0
-										e\room\RoomDoors[2]\Locked = False
+										e\room\RoomDoors[2]\Locked = 0
 										UseDoor(e\room\RoomDoors[2], False)
-										e\room\RoomDoors[2]\Locked = True
+										e\room\RoomDoors[2]\Locked = 1
 										e\EventState2 = 1.0
 										Exit
 									EndIf
@@ -1783,7 +2237,7 @@ Function UpdateEvents()
 					RemoveEvent(e)		
 				EndIf	
 				;[End Block]
-			Case "buttghost"
+			Case e_buttghost
 				;[Block]
 				If PlayerRoom = e\room Then
 					If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 3.24 Then
@@ -1799,7 +2253,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room2checkpoint"
+			Case e_room2checkpoint
 				;[Block]
 				If PlayerRoom = e\room Then
 					; ~ Play a sound clip when the player passes through the gate
@@ -1851,36 +2305,36 @@ Function UpdateEvents()
 				
 				If e\room\RoomTemplate\Name = "room2checkpoint2" Then
 					For e2.Events = Each Events
-						If e2\EventName = "room008"
+						If e2\EventID = e_room008
 							If e2\EventState = 2.0 Then
 								If e\room\RoomDoors[0]\Locked Then
 									TurnCheckpointMonitorsOff(1)
-									e\room\RoomDoors[0]\Locked = False
-									e\room\RoomDoors[1]\Locked = False
+									e\room\RoomDoors[0]\Locked = 0
+									e\room\RoomDoors[1]\Locked = 0
 								EndIf
 							Else
 								If e\room\Dist < 12.0 Then
 									UpdateCheckpointMonitors(1)
-									e\room\RoomDoors[0]\Locked = True
-									e\room\RoomDoors[1]\Locked = True
+									e\room\RoomDoors[0]\Locked = 1
+									e\room\RoomDoors[1]\Locked = 1
 								EndIf
 							EndIf
 						EndIf
 					Next
 				Else
 					For e2.Events = Each Events
-						If e2\EventName = "room2sl" Then
+						If e2\EventID = e_room2sl Then
 							If e2\EventState3 = 0.0 Then
 								If e\room\Dist < 12.0 Then
 									TurnCheckpointMonitorsOff(0)
-									e\room\RoomDoors[0]\Locked = False
-									e\room\RoomDoors[1]\Locked = False
+									e\room\RoomDoors[0]\Locked = 0
+									e\room\RoomDoors[1]\Locked = 0
 								EndIf
 							Else
 								If e\room\Dist < 12.0 Then
 									UpdateCheckpointMonitors(0)
-									e\room\RoomDoors[0]\Locked = True
-									e\room\RoomDoors[1]\Locked = True
+									e\room\RoomDoors[0]\Locked = 1
+									e\room\RoomDoors[1]\Locked = 1
 								EndIf
 							EndIf
 						EndIf
@@ -1897,7 +2351,7 @@ Function UpdateEvents()
 				If ChannelPlaying(e\SoundCHN) Then UpdateSoundOrigin(e\SoundCHN, Camera, e\room\RoomDoors[0]\OBJ)
 				If ChannelPlaying(e\SoundCHN2) Then UpdateSoundOrigin(e\SoundCHN2, Camera, e\room\RoomDoors[1]\OBJ)
 				;[End Block]
-			Case "room895", "room895_106"
+			Case e_room895, e_room895_106
 				;[Block]
 				If e\EventState < MilliSecs2() Then
 					; ~ SCP-079 starts broadcasting SCP-895's camera feed on monitors after leaving the first zone
@@ -1921,7 +2375,7 @@ Function UpdateEvents()
 					CoffinDistance = EntityDistance(me\Collider, e\room\Objects[1])
 					If CoffinDistance < 1.5 Then 
 						GiveAchievement(Achv895)
-						If (Not Curr106\Contained) And e\EventName = "room895_106" And e\EventState2 = 0.0 Then
+						If (Not Curr106\Contained) And e\EventID = e_room895_106 And e\EventState2 = 0.0 Then
 							de.Decals = CreateDecal(0, EntityX(e\room\Objects[1], True), -1531.0 * RoomScale, EntityZ(e\room\Objects[1], True), 90.0, Rand(360.0), 0.0)
 							de\Size = 0.05 : de\SizeChange = 0.001 : UpdateDecals()
 							EntityAlpha(de\OBJ, 0.8)
@@ -2130,7 +2584,7 @@ Function UpdateEvents()
 					CoffinDistance = e\room\Dist
 				EndIf
 				;[End Block]
-			Case "room1endroom106"
+			Case e_room1endroom106
 				;[Block]
 				If (Not Curr106\Contained) Then
 					If e\EventState = 0.0 Then
@@ -2209,15 +2663,15 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "gateaentrance"
+			Case e_gateaentrance
 				;[Block]
 				If PlayerRoom = e\room Then 
 					If (Not RemoteDoorOn) Then
-						e\room\RoomDoors[1]\Locked = True
+						e\room\RoomDoors[1]\Locked = 1
 					ElseIf RemoteDoorOn And e\EventState3 = 0.0
 						e\room\RoomDoors[1]\Locked = 2
 					Else
-						e\room\RoomDoors[1]\Locked = False
+						e\room\RoomDoors[1]\Locked = 0
 						
 						Local gatea.Rooms = Null
 						
@@ -2244,14 +2698,14 @@ Function UpdateEvents()
 						EndIf
 						
 						If EntityDistanceSquared(me\Collider, e\room\Objects[1]) < 16.0 Then
-							gatea\RoomDoors[1]\Locked = True
+							gatea\RoomDoors[1]\Locked = 1
 							PlayerRoom = gatea
 							RemoveEvent(e)
 						EndIf						
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room2clockroom173"
+			Case e_room2clockroom173
 				;[Block]
 				If e\room\Dist < 6.0  And e\room\Dist > 0.0 Then
 					If Curr173\Idle > 1 Then
@@ -2265,7 +2719,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room2clockroom096"
+			Case e_room2clockroom096
 				;[Block]
 				If PlayerRoom = e\room Then
 					If Curr096 = Null Then
@@ -2275,7 +2729,7 @@ Function UpdateEvents()
 					RemoveEvent(e)
 				EndIf
 				;[End Block]
-			Case "room372"
+			Case e_room372
 				;[Block]
 				If PlayerRoom = e\room Then
 					If e\EventState = 0.0 Then
@@ -2289,7 +2743,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "pocketdimension"
+			Case e_pocketdimension
 				;[Block]
 				; ~ EventState: A timer for scaling the tunnels in the starting room
 				
@@ -2598,7 +3052,7 @@ Function UpdateEvents()
 													TeleportEntity(de\OBJ, EntityX(r\Objects[0], True), EntityY(r\Objects[0], True) + 0.6, EntityZ(r\Objects[0], True), 0.0, True, 4.0, 1)
 													
 													For e2.Events = Each Events
-														If e2\EventName = "room2sl"
+														If e2\EventID = e_room2sl
 															e2\EventState3 = 0.0
 															UpdateLever(e2\room\Levers[0])
 															RotateEntity(e2\room\Levers[0], 0.0, EntityYaw(e2\room\Levers[0]), 0.0)
@@ -2637,7 +3091,7 @@ Function UpdateEvents()
 										Curr106\Idle = False
 										
 										For e2.Events = Each Events
-											If e2\EventName = "room2sl"
+											If e2\EventID = e_room2sl
 												e2\EventState3 = 0.0
 												UpdateLever(e2\room\Levers[0])
 												RotateEntity(e2\room\Levers[0], 0.0, EntityYaw(e2\room\Levers[0]), 0.0)
@@ -2733,7 +3187,7 @@ Function UpdateEvents()
 											Curr106\Idle = False
 											
 											For e2.Events = Each Events
-												If e2\EventName = "room2sl"
+												If e2\EventID = e_room2sl
 													e2\EventState3 = 0.0
 													UpdateLever(e2\room\Levers[0])
 													RotateEntity(e2\room\Levers[0], 0.0, EntityYaw(e2\room\Levers[0]), 0.0)
@@ -2843,7 +3297,7 @@ Function UpdateEvents()
 					e\EventStr = Float(0.0)
 				EndIf
 				;[End Block]
-			Case "room2cafeteria"
+			Case e_room2cafeteria
 				;[Block]
 				If PlayerRoom = e\room Then
 					If (Not I_294\Using) Then
@@ -2896,11 +3350,11 @@ Function UpdateEvents()
 				EndIf
 				
 				If e\EventState = 0.0 Then
-					CreateNPC(NPCtype066, EntityX(e\room\OBJ), 0.5, EntityZ(e\room\obj))
+					CreateNPC(NPCtype066, EntityX(e\room\OBJ), 0.5, EntityZ(e\room\OBJ))
 					e\EventState = 1.0
 				EndIf
 				;[End Block]
-			Case "room2ccont"
+			Case e_room2ccont
 				;[Block]
 				If PlayerRoom = e\room Then
 					EntityPick(Camera, 1.5)
@@ -2936,7 +3390,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room2closets"
+			Case e_room2closets
 				;[Block]
 				If e\EventState = 0.0 Then
 					If PlayerRoom = e\room And Curr173\Idle < 2 Then
@@ -3036,7 +3490,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room2doors173"
+			Case e_room2doors173
 				;[Block]
 				If PlayerRoom = e\room Then
 					If e\EventState = 0.0 And Curr173\Idle = 0 Then
@@ -3049,7 +3503,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room2elevator"
+			Case e_room2elevator
 				;[Block]
 				If e\EventState = 0.0 Then
 					If e\room\Dist < 8.0 And e\room\Dist > 0.0 Then
@@ -3095,14 +3549,14 @@ Function UpdateEvents()
 								de.Decals = CreateDecal(7, EntityX(e\room\Objects[0], True), 0.005, EntityZ(e\room\Objects[0], True), 90.0, Rnd(360.0), 0.0)
 								de\Size = 0.5
 							EndIf
-							e\room\RoomDoors[0]\Locked = False
+							e\room\RoomDoors[0]\Locked = 0
 						EndIf
 					Else
-						If e\room\RoomDoors[0]\Open Then e\room\RoomDoors[0]\Locked = True : RemoveEvent(e)
+						If e\room\RoomDoors[0]\Open Then e\room\RoomDoors[0]\Locked = 1 : RemoveEvent(e)
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room2elevator2"
+			Case e_room2elevator2
 				;[Block]
 				If PlayerRoom = e\room Then
 					de.Decals = CreateDecal(3, EntityX(e\room\Objects[0], True), 0.005, EntityZ(e\room\Objects[0], True), 90.0, Rnd(360.0), 0.0)
@@ -3116,13 +3570,13 @@ Function UpdateEvents()
 					RemoveEvent(e)
 				EndIf
 				;[End Block]
-			Case "room2fan"
+			Case e_room2fan
 				;[Block]
-				; ~ EventState1 = Timer for turning the fan on / off
+				; ~ EventState: Timer for turning the fan on / off
 				
-				; ~ EventState2 = Fan on / off
+				; ~ EventState2: Fan on / off
 				
-				; ~ EventState3 = The speed of the fan
+				; ~ EventState3: The speed of the fan
 				
 				If PlayerRoom = e\room Then
 					TurnEntity(e\room\Objects[0], e\EventState3 * fpst\FPSFactor[0], 0.0, 0.0)
@@ -3151,7 +3605,7 @@ Function UpdateEvents()
 					EndIf					
 				EndIf
 				;[End Block]
-			Case "room2nuke"
+			Case e_room2nuke
 				;[Block]
 				If PlayerRoom = e\room Then
 					e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[4], e\room\Objects[5], e)
@@ -3169,7 +3623,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room2offices2"
+			Case e_room2offices2
 				;[Block]
 				If PlayerRoom = e\room Then
 					If me\BlinkTimer < -8.0 And me\BlinkTimer > -12.0 Then
@@ -3179,7 +3633,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room2offices3"
+			Case e_room2offices3
 				;[Block]
 				If PlayerRoom = e\room Then
 					e\EventState = e\EventState + fpst\FPSFactor[0]
@@ -3193,7 +3647,50 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room2tesla"
+			Case e_room2offices035
+				;[Block]
+				Local Is035Released% = False
+				
+				For e2.Events = Each Events
+					If e2 <> e And e2\EventID = e_room035 Then
+						If e2\EventState < 0.0 Then
+							Is035Released = True
+							Exit
+						EndIf
+					EndIf
+				Next
+				
+				If Is035Released Then
+					If e\room\Dist < 8.0 Then
+						If e\room\NPC[0] = Null Then
+							e\room\NPC[0] = CreateNPC(NPCtypeD, e\room\x, 0.5, e\room\z)
+							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 180.0, 0.0)
+							MoveEntity(e\room\NPC[0]\Collider, 0.0, 0.0, -0.5)
+							e\room\NPC[0]\State = 3.0
+							ChangeNPCTextureID(e\room\NPC[0], 7)
+							SetNPCFrame(e\room\NPC[0], 19.0)
+						EndIf
+						If e\room\NPC[1] = Null Then
+							If EntityDistanceSquared(e\room\NPC[0]\Collider, me\Collider) < 6.25 Then
+								e\room\NPC[1] = CreateNPC(NPCtype035_Tentacle, EntityX(e\room\NPC[0]\Collider), 0.13, EntityZ(e\room\NPC[0]\Collider))
+								RotateEntity(e\room\NPC[1]\Collider, 0.0, e\room\Angle, 0.0)
+								MoveEntity(e\room\NPC[1]\Collider, 0.0, 0.0, 0.6)
+							EndIf
+						EndIf
+					Else
+						If e\room\Dist > HideDistance Then
+							If e\room\NPC[1] <> Null
+								RemoveNPC(e\room\NPC[1]) : e\room\NPC[1] = Null
+							EndIf
+						EndIf
+					EndIf
+				EndIf
+				
+				If e\room\NPC[1] <> Null Then
+					If e\room\NPC[1]\IsDead = True Then RemoveEvent(e)
+				EndIf
+				;[End Block]
+			Case e_room2tesla
 				;[Block]
 				Temp = True
 				If e\EventState2 > 70.0 * 3.5 And e\EventState2 < 70.0 * 90.0 Then Temp = False
@@ -3229,7 +3726,7 @@ Function UpdateEvents()
 							Local Temp2% = True
 							
 							For e2.Events = Each Events
-								If e2\EventName = e\EventName And e2 <> e
+								If e2\EventID = e\EventID And e2 <> e
 									If e2\EventStr <> ""
 										Temp2 = False
 										e\EventStr = "Done"
@@ -3321,10 +3818,8 @@ Function UpdateEvents()
 									Next
 								EndIf
 								
-								If e\EventStr = "Step1"
-									e\room\NPC[0]\State = 3.0
-								EndIf
-								
+								If e\EventStr = "Step1" Then e\room\NPC[0]\State = 3.0
+									
 								If Curr106\State < -10.0 Then
 									For i = 0 To 2
 										If DistanceSquared(EntityX(Curr106\Collider), EntityX(e\room\Objects[i], True), EntityZ(Curr106\Collider), EntityZ(e\room\Objects[i], True)) < PowTwo(250.0 * RoomScale) Then
@@ -3346,7 +3841,6 @@ Function UpdateEvents()
 									If (n\NPCtype = NPCtype049_2 Lor n\NPCtype = NPCtype008_1) And (Not n\IsDead) Then
 										For i = 0 To 2
 											If DistanceSquared(EntityX(n\Collider), EntityX(e\room\Objects[i], True), EntityZ(n\Collider), EntityZ(e\room\Objects[i], True)) < PowTwo(250.0 * RoomScale) Then
-												If PlayerRoom = e\room Then me\LightFlash = 0.3
 												n\IsDead = True
 												Exit
 											EndIf
@@ -3449,12 +3943,11 @@ Function UpdateEvents()
 						If e\EventState2 >= 70.0 * 92.0 And e\EventState2 - fpst\FPSFactor[0] < 70.0 * 92.0
 							PlayAnnouncement("SFX\Character\MTF\Tesla" + Rand(1, 3) + ".ogg")
 						EndIf
-						
 						e\EventState2 = Max(e\EventState2 - fpst\FPSFactor[0], 0.0)
 					EndIf					
 				EndIf
 				;[End Block]
-			Case "room2trick"
+			Case e_room2trick
 				;[Block]
 				If PlayerRoom = e\room Then
 					If EntityDistanceSquared(e\room\OBJ, me\Collider) < 4.0 Then
@@ -3482,7 +3975,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room2mt"	
+			Case e_room2mt
 				;[Block]
 				If EntityY(me\Collider, True) >= 8.0 And EntityY(me\Collider, True) =< 12.0 Then
 					If (EntityX(me\Collider, True) >= e\room\x - 6.0) And (EntityX(me\Collider, True) =< (e\room\x + 2.0 * GridSZ + 6.0)) Then
@@ -3495,10 +3988,8 @@ Function UpdateEvents()
 				If PlayerRoom = e\room Then
 					Local Meshes%[7]
 					Local TempStr$
-					
 					Local ia%, ib%, ic%, id%
 					Local dr.Doors
-					
 					Local TempInt%, TempInt2%
 					Local iX%, iY%
 					
@@ -4227,7 +4718,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf 
 				;[End Block]
-			Case "room2pipes106"
+			Case e_room2pipes106
 				;[Block]
 				If (Not Curr106\Contained) Then 
 					If e\EventState = 0.0 Then
@@ -4285,7 +4776,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room2pit106"
+			Case e_room2pit106
                 ;[Block]
                 If (Not Curr106\Contained) And Curr106\State > 0.0 Then 
                     If e\EventState = 0.0 Then
@@ -4309,7 +4800,7 @@ Function UpdateEvents()
                     EndIf
                 EndIf
                 ;[End Block]
-			Case "room2pit"
+			Case e_room2pit
 				;[Block]
 				If Curr173\Idle = 0 Then 
 					If e\room\Dist < 8.0  And e\room\Dist > 0.0 Then			
@@ -4321,7 +4812,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room3pitduck"
+			Case e_room3pitduck
 				;[Block]
 				If PlayerRoom = e\room Then
 					If e\room\Objects[2] = 0 Then
@@ -4350,7 +4841,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room3pit1048"
+			Case e_room3pit1048
 				;[Block]
 				If PlayerRoom = e\room Then
 					If e\room\Objects[2] = 0 Then
@@ -4430,7 +4921,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room2poffices2"
+			Case e_room2poffices2
 				;[Block]
 				If PlayerRoom = e\room Then
 					If e\EventState = 0.0 Then
@@ -4454,15 +4945,15 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room2servers"
+			Case e_room2servers
 				;[Block]
 				If e\EventState = 0.0 Then
 					If PlayerRoom = e\room Then
 						; ~ Close the doors when the player enters the room
 						UseDoor(e\room\RoomDoors[0], False)
-						e\room\RoomDoors[0]\Locked = True
+						e\room\RoomDoors[0]\Locked = 1
 						UseDoor(e\room\RoomDoors[1], False)
-						e\room\RoomDoors[1]\Locked = True
+						e\room\RoomDoors[1]\Locked = 1
 						
 						If Curr096 = Null Then
 							Curr096 = CreateNPC(NPCtype096, EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True) + 0.1, EntityZ(e\room\Objects[6], True))
@@ -4597,15 +5088,15 @@ Function UpdateEvents()
 						EndIf
 					Else
 						If e\EventState >= 70.0 * 40.0 And e\EventState - fpst\FPSFactor[0] < 70.0 * 40.0 Then ; ~ Open them again to let the player in
-							e\room\RoomDoors[0]\Locked = False
-							e\room\RoomDoors[1]\Locked = False
+							e\room\RoomDoors[0]\Locked = 0
+							e\room\RoomDoors[1]\Locked = 0
 							UseDoor(e\room\RoomDoors[0], False)
 							UseDoor(e\room\RoomDoors[1], False)
 							If e\Sound <> 0 Then
 								FreeSound_Strict(e\Sound) : e\Sound = 0
 							EndIf
-							e\room\RoomDoors[0]\Locked = True
-							e\room\RoomDoors[1]\Locked = True
+							e\room\RoomDoors[0]\Locked = 1
+							e\room\RoomDoors[1]\Locked = 1
 						EndIf
 						
 						If PlayerRoom = e\room Then
@@ -4657,40 +5148,40 @@ Function UpdateEvents()
 					If e\EventState3 > 0.0 Then e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\Objects[5], 6.0, e\EventState3)
 					
 					If Temp = 0 And x And z Then
-						e\room\RoomDoors[0]\Locked = False
-						e\room\RoomDoors[1]\Locked = False
+						e\room\RoomDoors[0]\Locked = 0
+						e\room\RoomDoors[1]\Locked = 0
 					Else
 						If Rand(200) < 5 Then me\LightBlink = Rnd(0.5, 1.0)
 						
 						If e\room\RoomDoors[0]\Open Then 
-							e\room\RoomDoors[0]\Locked = False
+							e\room\RoomDoors[0]\Locked = 0
 							UseDoor(e\room\RoomDoors[0], False) 
 						EndIf
 						If e\room\RoomDoors[1]\Open Then 
-							e\room\RoomDoors[1]\Locked = False
+							e\room\RoomDoors[1]\Locked = 0
 							UseDoor(e\room\RoomDoors[1], False)
 						EndIf
-						e\room\RoomDoors[0]\Locked = True
-						e\room\RoomDoors[1]\Locked = True							
+						e\room\RoomDoors[0]\Locked = 1
+						e\room\RoomDoors[1]\Locked = 1							
 					EndIf 
 				EndIf
 				;[End Block]
-			Case "room2storage"
+			Case e_room2storage
 				;[Block]
 				If PlayerRoom = e\room Then
 					If e\EventState2 =< 0.0 Then
-						e\room\RoomDoors[1]\Locked = False
-						e\room\RoomDoors[4]\Locked = False
+						e\room\RoomDoors[1]\Locked = 0
+						e\room\RoomDoors[4]\Locked = 0
 						
 						If EntityDistanceSquared(me\Collider, Curr173\OBJ) < 64.0 Lor EntityDistanceSquared(me\Collider, Curr106\OBJ) < 64.0 Then
-							e\room\RoomDoors[1]\Locked = True
-							e\room\RoomDoors[4]\Locked = True
+							e\room\RoomDoors[1]\Locked = 1
+							e\room\RoomDoors[4]\Locked = 1
 						Else
 							For n.NPCs = Each NPCs
 								If n\NPCtype = NPCtypeMTF Then 
 									If EntityDistanceSquared(me\Collider, Curr173\OBJ) < 64.0 Then 
-										e\room\RoomDoors[1]\Locked = True
-										e\room\RoomDoors[4]\Locked = True
+										e\room\RoomDoors[1]\Locked = 1
+										e\room\RoomDoors[4]\Locked = 1
 										Exit
 									EndIf
 								EndIf
@@ -4929,7 +5420,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf					
 				;[End Block]
-			Case "room3door"
+			Case e_room3door
 				;[Block]
 				If PlayerRoom = e\room Then
 					If EntityDistanceSquared(e\room\OBJ, me\Collider) < 6.25 Then
@@ -4952,7 +5443,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room3servers"
+			Case e_room3servers
 				;[Block]
 				If PlayerRoom = e\room Then
 					If e\EventState3 = 0.0 And Curr173\Idle = 0 Then
@@ -4982,7 +5473,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room3storage"
+			Case e_room3storage
 				;[Block]
 				If PlayerRoom = e\room Then
 					e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
@@ -5104,7 +5595,7 @@ Function UpdateEvents()
 					Next
 				EndIf 
 				;[End Block]
-			Case "room3tunnel"
+			Case e_room3tunnel
 				;[Block]
 				If e\EventState = 0.0 Then
 					e\room\NPC[0] = CreateNPC(NPCtypeGuard, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True) + 0.5, EntityZ(e\room\Objects[0], True))
@@ -5117,7 +5608,7 @@ Function UpdateEvents()
 					RemoveEvent(e)
 				EndIf
 				;[End Block]
-			Case "room4"
+			Case e_room4
 				;[Block]
 				If e\EventState < MilliSecs2() Then
 					If PlayerRoom <> e\room Then
@@ -5138,7 +5629,7 @@ Function UpdateEvents()
 					If e <> Null Then e\EventState = MilliSecs2() + 5000
 				EndIf
 				;[End Block]
-			Case "room012"
+			Case e_room012
 				;[Block]
 				If PlayerRoom = e\room Then
 					If EntityY(me\Collider) < 0.0 Then
@@ -5149,9 +5640,9 @@ Function UpdateEvents()
 								PlaySound_Strict(HorrorSFX[7])
 								PlaySound2(LeverSFX, Camera, e\room\RoomDoors[0]\OBJ)
 								
-								e\room\RoomDoors[0]\Locked = False
+								e\room\RoomDoors[0]\Locked = 0
 								UseDoor(e\room\RoomDoors[0], False)
-								e\room\RoomDoors[0]\Locked = True
+								e\room\RoomDoors[0]\Locked = 1
 								
 								e\EventState = 1.0
 							EndIf
@@ -5297,12 +5788,12 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room035"
+			Case e_room035
 				;[Block]
 				If PlayerRoom = e\room Then
-					; ~ EventState2 = has SCP-035 told the code to the storage room (true / false)
+					; ~ EventState2: has SCP-035 told the code to the storage room (true / false)
 					
-					; ~ EventState3 = has the player opened the gas valves (0 = no, 0 < x < 70.0 * 35.0 yes, x > 70.0 * 35.0 the host has died)
+					; ~ EventState3: has the player opened the gas valves (0 = no, 0 < x < 70.0 * 35.0 yes, x > 70.0 * 35.0 the host has died)
 					
 					If e\EventState = 0.0 Then
 						If EntityDistanceSquared(me\Collider, e\room\Objects[3]) < 4.0 Then
@@ -5584,14 +6075,14 @@ Function UpdateEvents()
 							Else ; ~ The player has opened the door
 								If e\EventState2 < 10.0 Then
 									e\room\RoomDoors[2]\Open = False
-									e\room\RoomDoors[2]\Locked = True
+									e\room\RoomDoors[2]\Locked = 1
 									
 									If e\room\RoomDoors[1]\Open = False Then 
-										e\room\RoomDoors[0]\Locked = False
-										e\room\RoomDoors[1]\Locked = False
+										e\room\RoomDoors[0]\Locked = 0
+										e\room\RoomDoors[1]\Locked = 0
 										UseDoor(e\room\RoomDoors[1])
-										e\room\RoomDoors[0]\Locked = True
-										e\room\RoomDoors[1]\Locked = True
+										e\room\RoomDoors[0]\Locked = 1
+										e\room\RoomDoors[1]\Locked = 1
 									EndIf
 									
 									If e\EventState3 = 0.0 Then
@@ -5636,9 +6127,9 @@ Function UpdateEvents()
 										e\EventState = -1.0
 										e\EventState2 = 0.0
 										e\EventState3 = 0.0
-										e\room\RoomDoors[0]\Locked = False										
-										e\room\RoomDoors[1]\Locked = False
-										e\room\RoomDoors[2]\Locked = False
+										e\room\RoomDoors[0]\Locked = 0										
+										e\room\RoomDoors[1]\Locked = 0
+										e\room\RoomDoors[2]\Locked = 0
 										UseDoor(e\room\RoomDoors[1], False)
 										For do.Doors = Each Doors
 											If do\Dir = 2 Then
@@ -5755,7 +6246,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room049"
+			Case e_room049
 				;[Block]
 				If PlayerRoom = e\room Then
 					If EntityY(me\Collider) > -2848.0 * RoomScale Then
@@ -5807,8 +6298,8 @@ Function UpdateEvents()
 							Temp = (Not UpdateLever(e\room\Objects[7])) ; ~ Power feed
 							x = UpdateLever(e\room\Objects[9]) ; ~ Generator
 							
-							e\room\RoomDoors[1]\Locked = True
-							e\room\RoomDoors[3]\Locked = True
+							e\room\RoomDoors[1]\Locked = 1
+							e\room\RoomDoors[3]\Locked = 1
 							e\room\RoomDoors[1]\IsElevatorDoor = 0
 							e\room\RoomDoors[3]\IsElevatorDoor = 0
 							
@@ -5828,13 +6319,13 @@ Function UpdateEvents()
 									If e\Sound2 = 0 Then LoadEventSound(e, "SFX\Ambient\Room Ambience\FuelPump.ogg", 1)
 									e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\Objects[10], 6.0)
 									For i = 4 To 6
-										e\room\RoomDoors[i]\Locked = False
+										e\room\RoomDoors[i]\Locked = 0
 									Next
 								Else
 									SecondaryLightOn = CurveValue(0.0, SecondaryLightOn, 10.0)
 									If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2)
 									For i = 4 To 6
-										e\room\RoomDoors[i]\Locked = True
+										e\room\RoomDoors[i]\Locked = 1
 									Next
 								EndIf
 							Else
@@ -5842,8 +6333,8 @@ Function UpdateEvents()
 							EndIf
 							
 							If Temp And x Then
-								e\room\RoomDoors[1]\Locked = False
-								e\room\RoomDoors[3]\Locked = False
+								e\room\RoomDoors[1]\Locked = 0
+								e\room\RoomDoors[3]\Locked = 0
 								e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 								e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[2], e\room\RoomDoors[3], e\room\Objects[2], e\room\Objects[3], e)
 								
@@ -5858,7 +6349,7 @@ Function UpdateEvents()
 										PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True))
 										ResetEntity(e\room\NPC[0]\Collider)
 										PlaySound2(ElevatorBeepSFX, Camera, e\room\Objects[i], 4.0)
-										e\room\RoomDoors[i]\Locked = False
+										e\room\RoomDoors[i]\Locked = 0
 										UseDoor(e\room\RoomDoors[i], False, True)
 										e\room\RoomDoors[i - 1]\Open = False
 										e\room\RoomDoors[i]\Open = True
@@ -5989,7 +6480,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room079"
+			Case e_room079
 				;[Block]
 				If PlayerRoom = e\room Then
 					If EntityY(me\Collider) < -9500.0 * RoomScale Then
@@ -6007,7 +6498,7 @@ Function UpdateEvents()
 						If RemoteDoorOn Then 
 							e\room\RoomDoors[0]\Locked = 2
 						ElseIf e\EventState < 10000.0
-							e\room\RoomDoors[0]\Locked = False
+							e\room\RoomDoors[0]\Locked = 0
 							If e\EventState = 1.0 Then 
 								e\EventState = 2.0
 							ElseIf e\EventState = 2.0
@@ -6073,14 +6564,14 @@ Function UpdateEvents()
 						e\EventState2 = 2.0
 						
 						For e2.Events = Each Events
-							If e2\EventName = "gateb" Lor e2\EventName = "gateaentrance" Then
+							If e2\EventID = e_gateb Lor e2\EventID = e_gateaentrance Then
 								e2\EventState3 = 1.0
 							EndIf
 						Next
 					EndIf	
 				EndIf
 				;[End Block]
-			Case "room106"
+			Case e_room106
 				;[Block]
 				; ~ EventState2: Are the magnets on
 				
@@ -6257,23 +6748,18 @@ Function UpdateEvents()
 							If ChannelPlaying(e\SoundCHN3) Then StopChannel(e\SoundCHN3)
 						EndIf
 			        ElseIf PlayerRoom\RoomTemplate\Name = "room860" Then
-						For e2.Events = Each Events
-							If e2\EventName = "room860" Then
-								If e2\EventState = 1.0 Then
-									If e\SoundCHN2 <> 0 Then
-										If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2)
-									EndIf
-									If e\SoundCHN3 <> 0 Then
-										If ChannelPlaying(e\SoundCHN3) Then StopChannel(e\SoundCHN3)
-									EndIf
-								EndIf
-								Exit
+						If ev_room860\EventState = 1.0 Then
+							If e\SoundCHN2 <> 0 Then
+								If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2)
 							EndIf
-						Next
+							If e\SoundCHN3 <> 0 Then
+								If ChannelPlaying(e\SoundCHN3) Then StopChannel(e\SoundCHN3)
+							EndIf
+						EndIf
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room205"
+			Case e_room205
 				;[Block]
 				If PlayerRoom = e\room Then
 					If e\EventState = 0.0 Lor e\EventStr <> "LoadDone" Then
@@ -6486,7 +6972,7 @@ Function UpdateEvents()
 					e\EventStr = ""
 				EndIf
 				;[End block]
-			Case "room860"
+			Case e_room860
 				;[Block]
 				; ~ e\EventState: Is the player in the forest
 				
@@ -6646,7 +7132,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room966"
+			Case e_room966
 				;[Block]
 				If PlayerRoom = e\room Then
 					If e\EventState = 0.0 Then
@@ -6660,7 +7146,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room1123"
+			Case e_room1123
 				;[Block]
 				If PlayerRoom = e\room Then
 					If I_714\Using = 0 And wi\HazmatSuit < 3 And wi\GasMask < 3 Then
@@ -6851,7 +7337,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room2testroom2"
+			Case e_room2testroom2
 			    ;[Block]
                 If e\EventState = 0.0
                     If PlayerRoom = e\room Then
@@ -6894,7 +7380,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room2tunnel2smoke"
+			Case e_room2tunnel2smoke
 				;[Block]
 				If PlayerRoom = e\room Then
 					If e\room\Dist < 3.5 Then
@@ -6914,7 +7400,7 @@ Function UpdateEvents()
 					EndIf					
 				EndIf
 				;[End Block]
-			Case "room2tunnel2"
+			Case e_room2tunnel2
 				;[Block]
 				If PlayerRoom = e\room Then
 					If Curr173\Idle > 1 Then
@@ -6949,7 +7435,7 @@ Function UpdateEvents()
 					RemoveEvent(e)
 				EndIf
 				;[End Block]
-			Case "room2tunnel106"
+			Case e_room2tunnel106
 				;[Block]
 				If e\EventState = 0.0 Then
 					If e\room\Dist < 5.0 And e\room\Dist > 0.0 Then
@@ -7024,7 +7510,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room2testroom173"
+			Case e_room2testroom173
 				;[Block]
 				If PlayerRoom = e\room	
 					If Curr173\Idle = 0 Then 
@@ -7079,7 +7565,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf	
 				;[End Block]
-			Case "toiletguard"
+			Case e_toiletguard
 				;[Block]
 				If e\EventState = 0.0 Then
 					If e\room\Dist < 8.0 And e\room\Dist > 0.0 Then e\EventState = 1.0
@@ -7115,7 +7601,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room008"
+			Case e_room008
 				;[Block]
 				If PlayerRoom = e\room Then	
 				    If EntityY(me\Collider) < - 4496.0 * RoomScale Then
@@ -7139,8 +7625,8 @@ Function UpdateEvents()
 						    
 						    Dist = EntityDistanceSquared(me\Collider, e\room\Objects[0])
 						    If Dist < 4.0 Then 
-							    e\room\RoomDoors[0]\Locked = True
-							    e\room\RoomDoors[1]\Locked = True
+							    e\room\RoomDoors[0]\Locked = 1
+							    e\room\RoomDoors[1]\Locked = 1
 							    
 							    If e\EventState2 = 0.0 Then
 								    ShowEntity(e\room\Objects[2])
@@ -7191,9 +7677,9 @@ Function UpdateEvents()
 							EndIf		
 					    Else
 						    HideEntity(e\room\Objects[5])
-						    e\room\RoomDoors[0]\Locked = False
-						    e\room\RoomDoors[1]\Locked = False
-						    e\room\RoomDoors[2]\Locked = False
+						    e\room\RoomDoors[0]\Locked = 0
+						    e\room\RoomDoors[1]\Locked = 0
+						    e\room\RoomDoors[2]\Locked = 0
 							
 						    RotateEntity(e\room\Levers[0], CurveAngle(1.0, EntityPitch(e\room\Levers[0], True), 15.0), EntityYaw(e\room\Levers[0], True), 0.0, True)
 					    EndIf
@@ -7201,7 +7687,7 @@ Function UpdateEvents()
 				    e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[3], e\room\RoomDoors[4], e\room\Objects[8], e\room\Objects[9], e)
 				EndIf
 				;[End Block]
-			Case "106victim"
+			Case e_106victim
 				;[Block]
 				If (Not Curr106\Contained) Then
 					If PlayerRoom = e\room Then
@@ -7266,7 +7752,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "106sinkhole"
+			Case e_106sinkhole
 				;[Block]
 				If e\EventState = 0.0 Then
 					de.Decals = CreateDecal(0, EntityX(e\room\OBJ) + Rnd(-0.5, 0.5), 0.01, EntityZ(e\room\OBJ) + Rnd(-0.5, 0.5), 90.0, Rnd(360.0), 0.0)
@@ -7317,7 +7803,7 @@ Function UpdateEvents()
 					e\EventState2 = 0.0
 				EndIf
 				;[End Block]
-			Case "682roar"
+			Case e_682roar
 				;[Block]
 				If e\EventState = 0.0 Then
 					If PlayerRoom = e\room Then e\EventState = 70.0 * Rnd(300.0, 1000.0)
@@ -7335,7 +7821,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room914"
+			Case e_room914
 				;[Block]
 				If PlayerRoom = e\room Then
 					If e\room\RoomDoors[2]\Open Lor e\room\RoomDoors[3]\Open Then
@@ -7544,7 +8030,7 @@ Function UpdateEvents()
 				EndIf
 				UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[1])
 				;[End Block]
-			Case "1048a"
+			Case e_1048a
 				;[Block]
 				If e\room\Objects[0] = 0 Then
 					If PlayerRoom <> e\room Then
@@ -7694,7 +8180,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room4tunnels"
+			Case e_room4tunnels
 				;[Block]
 				If e\room\Dist < 10.0 And e\room\Dist > 0.0 Then
 					e\room\NPC[0] = CreateNPC(NPCtypeD, EntityX(e\room\OBJ, True), 0.5, EntityZ(e\room\OBJ, True))
@@ -7706,7 +8192,7 @@ Function UpdateEvents()
 					RemoveEvent(e)
 				EndIf
 				;[End Block]
-			Case "room2gw_b"
+			Case e_room2gw_b
 				;[Block]
 				If e\room\Dist < 8.0
 					If e\EventState = 0.0 Then
@@ -7726,7 +8212,107 @@ Function UpdateEvents()
 					e\SoundCHN = LoopSound2(AlarmSFX[3], e\SoundCHN, Camera, e\room\Objects[1], 5.0)
 				EndIf
 				;[End Block]
-			Case "room2scps2"
+			Case e_room2gw
+				;[Block]
+				; ~ e\EventState: Determines if the airlock is in operation or not
+				
+				; ~ e\EventState2: The timer for the airlocks
+				
+				; ~ e\EventState3: Checks if the player had left the airlock or not
+				
+				e\room\RoomDoors[0]\Locked = 1
+				e\room\RoomDoors[1]\Locked = 1
+				
+				Local BrokenDoor% = False
+				
+				If e\room\Objects[1] <> 0 Then BrokenDoor = True
+				
+				If PlayerRoom = e\room
+					If e\EventState = 0.0
+						If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 1.96 And e\EventState3 = 0.0
+							e\EventState = 1.0
+							If BrokenDoor Then
+								If e\Sound2 <> 0 Then 
+									FreeSound_Strict(e\Sound2) : e\Sound2 = 0
+								EndIf
+								e\Sound2 = LoadSound_Strict("SFX\Door\DoorSparks.ogg")
+								e\SoundCHN2 = PlaySound2(e\Sound2, Camera, e\room\Objects[1], 5.0)
+							EndIf
+							StopChannel(e\SoundCHN)
+							e\SoundCHN = 0
+							If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
+							e\Sound = LoadSound_Strict("SFX\Door\Airlock.ogg")
+							e\room\RoomDoors[0]\Locked = 0
+							e\room\RoomDoors[1]\Locked = 0
+							UseDoor(e\room\RoomDoors[0])
+							UseDoor(e\room\RoomDoors[1])
+							PlaySound_Strict(AlarmSFX[4])
+						ElseIf EntityDistanceSquared(e\room\Objects[0], me\Collider) > 5.76
+							e\EventState3 = 0.0
+						EndIf
+					Else
+						If e\EventState2 < 70.0 * 7.0
+							e\EventState2 = e\EventState2 + fpst\FPSFactor[0]
+							e\room\RoomDoors[0]\Open = False
+							e\room\RoomDoors[1]\Open = False
+							If e\EventState2 < 70.0 * 1.0
+								
+								If BrokenDoor Then
+									Pvt = CreatePivot()
+									
+									Local d_Ent% = e\room\Objects[1]
+									
+									PositionEntity(Pvt, EntityX(d_Ent, True), EntityY(d_Ent, True) + Rnd(0.0, 0.05), EntityZ(d_Ent, True))
+									RotateEntity(Pvt, 0.0, EntityYaw(d_Ent, True) + 90.0, 0.0)
+									MoveEntity(Pvt, 0.0, 0.0, 0.2)
+									
+									If ParticleAmount > 0 Then
+										For i = 0 To (1 + (2 * (ParticleAmount - 1)))
+											p.Particles = CreateParticle(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 7, 0.002, 0.0, 25.0)
+											p\Speed = Rnd(0.01, 0.05) : p\Size = 0.0075 : p\Achange = -0.05
+											RotateEntity(p\Pvt, Rnd(-45.0, 0.0), EntityYaw(Pvt) + Rnd(-10.0, 10.0), 0)
+											ScaleSprite(p\OBJ, p\Size, p\Size)
+										Next
+									EndIf
+									FreeEntity(Pvt)
+								EndIf
+							ElseIf e\EventState2 > 70.0 * 3.0 And e\EventState < 70.0 * 5.5
+								Pvt = CreatePivot(e\room\OBJ)								
+								For i = 0 To 1
+									If i = 0
+										PositionEntity(Pvt, 312.0, 416.0, -128.0, False)
+									Else
+										PositionEntity(Pvt, 312.0, 416.0, 224.0, False)
+									EndIf
+									p.Particles = CreateParticle(EntityX(Pvt, True), EntityY(Pvt, True), EntityZ(Pvt, True), 6, 0.8, 0.0, 50.0)
+									p\Speed = 0.025 : p\Achange = -0.02
+									RotateEntity(p\Pvt, 90.0, 0.0, 0.0)
+								Next
+								FreeEntity(Pvt)
+								If e\SoundCHN = 0 Then e\SoundCHN = PlaySound2(e\Sound, Camera, e\room\Objects[0], 5.0)
+							EndIf
+						Else
+							e\EventState = 0.0
+							e\EventState2 = 0.0
+							e\EventState3 = 1.0
+							If e\room\RoomDoors[0]\Open = False
+								e\room\RoomDoors[0]\Locked = 0
+								e\room\RoomDoors[1]\Locked = 0
+								UseDoor(e\room\RoomDoors[0])
+								UseDoor(e\room\RoomDoors[1])
+							EndIf
+						EndIf
+					EndIf
+					
+					If BrokenDoor Then
+						If ChannelPlaying(e\SoundCHN2) Then UpdateSoundOrigin(e\SoundCHN2, Camera, e\room\Objects[1], 5.0)
+					EndIf
+					If ChannelPlaying(e\SoundCHN) Then UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[0], 5.0)
+				Else
+					e\EventState3 = 0.0
+				EndIf
+				;[End Block]
+			Case e_room2scps2
 				;[Block]
 				If e\room\Dist < 15.0
 					If Curr106\Contained Then e\EventState = 2.0
@@ -7743,18 +8329,18 @@ Function UpdateEvents()
 						ElseIf e\EventState = 1.0
 							If (Not ChannelPlaying(e\SoundCHN)) Then
 								e\EventState = 2.0
-								e\room\RoomDoors[0]\Locked = False
+								e\room\RoomDoors[0]\Locked = 0
 							Else
 								UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[0], 100.0, 1.0)
 							EndIf
 						EndIf
 					Else
-						e\room\RoomDoors[0]\Locked = False
+						e\room\RoomDoors[0]\Locked = 0
 						RemoveEvent(e)
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room1162"
+			Case e_room1162
 				;[Block]
 				; ~ e\EventState: A variable to determine the "nostalgia" items
 				; ~ 0.0 = No nostalgia item
@@ -8022,107 +8608,7 @@ Function UpdateEvents()
 					FreeEntity(pp)
 				EndIf
 				;[End Block]
-			Case "room2gw"
-				;[Block]
-				; ~ e\EventState: Determines if the airlock is in operation or not
-				
-				; ~ e\EventState2: The timer for the airlocks
-				
-				; ~ e\EventState3: Checks if the player had left the airlock or not
-				
-				e\room\RoomDoors[0]\Locked = True
-				e\room\RoomDoors[1]\Locked = True
-				
-				Local BrokenDoor% = False
-				
-				If e\room\Objects[1] <> 0 Then BrokenDoor = True
-				
-				If PlayerRoom = e\room
-					If e\EventState = 0.0
-						If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 1.96 And e\EventState3 = 0.0
-							e\EventState = 1.0
-							If BrokenDoor Then
-								If e\Sound2 <> 0 Then 
-									FreeSound_Strict(e\Sound2) : e\Sound2 = 0
-								EndIf
-								e\Sound2 = LoadSound_Strict("SFX\Door\DoorSparks.ogg")
-								e\SoundCHN2 = PlaySound2(e\Sound2, Camera, e\room\Objects[1], 5.0)
-							EndIf
-							StopChannel(e\SoundCHN)
-							e\SoundCHN = 0
-							If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
-							e\Sound = LoadSound_Strict("SFX\Door\Airlock.ogg")
-							e\room\RoomDoors[0]\Locked = False
-							e\room\RoomDoors[1]\Locked = False
-							UseDoor(e\room\RoomDoors[0])
-							UseDoor(e\room\RoomDoors[1])
-							PlaySound_Strict(AlarmSFX[4])
-						ElseIf EntityDistanceSquared(e\room\Objects[0], me\Collider) > 5.76
-							e\EventState3 = 0.0
-						EndIf
-					Else
-						If e\EventState2 < 70.0 * 7.0
-							e\EventState2 = e\EventState2 + fpst\FPSFactor[0]
-							e\room\RoomDoors[0]\Open = False
-							e\room\RoomDoors[1]\Open = False
-							If e\EventState2 < 70.0 * 1.0
-								
-								If BrokenDoor Then
-									Pvt = CreatePivot()
-									
-									Local d_Ent% = e\room\Objects[1]
-									
-									PositionEntity(Pvt, EntityX(d_Ent, True), EntityY(d_Ent, True) + Rnd(0.0, 0.05), EntityZ(d_Ent, True))
-									RotateEntity(Pvt, 0.0, EntityYaw(d_Ent, True) + 90.0, 0.0)
-									MoveEntity(Pvt, 0.0, 0.0, 0.2)
-									
-									If ParticleAmount > 0 Then
-										For i = 0 To (1 + (2 * (ParticleAmount - 1)))
-											p.Particles = CreateParticle(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 7, 0.002, 0.0, 25.0)
-											p\Speed = Rnd(0.01, 0.05) : p\Size = 0.0075 : p\Achange = -0.05
-											RotateEntity(p\Pvt, Rnd(-45.0, 0.0), EntityYaw(Pvt) + Rnd(-10.0, 10.0), 0)
-											ScaleSprite(p\OBJ, p\Size, p\Size)
-										Next
-									EndIf
-									FreeEntity(Pvt)
-								EndIf
-							ElseIf e\EventState2 > 70.0 * 3.0 And e\EventState < 70.0 * 5.5
-								Pvt = CreatePivot(e\room\OBJ)								
-								For i = 0 To 1
-									If i = 0
-										PositionEntity(Pvt, 312.0, 416.0, -128.0, False)
-									Else
-										PositionEntity(Pvt, 312.0, 416.0, 224.0, False)
-									EndIf
-									p.Particles = CreateParticle(EntityX(Pvt, True), EntityY(Pvt, True), EntityZ(Pvt, True), 6, 0.8, 0.0, 50.0)
-									p\Speed = 0.025 : p\Achange = -0.02
-									RotateEntity(p\Pvt, 90.0, 0.0, 0.0)
-								Next
-								FreeEntity(Pvt)
-								If e\SoundCHN = 0 Then e\SoundCHN = PlaySound2(e\Sound, Camera, e\room\Objects[0], 5.0)
-							EndIf
-						Else
-							e\EventState = 0.0
-							e\EventState2 = 0.0
-							e\EventState3 = 1.0
-							If e\room\RoomDoors[0]\Open = False
-								e\room\RoomDoors[0]\Locked = False
-								e\room\RoomDoors[1]\Locked = False
-								UseDoor(e\room\RoomDoors[0])
-								UseDoor(e\room\RoomDoors[1])
-							EndIf
-						EndIf
-					EndIf
-					
-					If BrokenDoor Then
-						If ChannelPlaying(e\SoundCHN2) Then UpdateSoundOrigin(e\SoundCHN2, Camera, e\room\Objects[1], 5.0)
-					EndIf
-					If ChannelPlaying(e\SoundCHN) Then UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[0], 5.0)
-				Else
-					e\EventState3 = 0.0
-				EndIf
-				;[End Block]
-			Case "room2sl"
+			Case e_room2sl
 				;[Block]
 				; ~ e\EventState: Determines if the player already entered the room or not (0 = No, 1 = Yes)
 				
@@ -8206,8 +8692,8 @@ Function UpdateEvents()
 							e\room\NPC[0]\PathTimer = 0.0
 						Else
 							If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\RoomDoors[0]\FrameOBJ) < 25.0
-								e\room\RoomDoors[0]\Locked = True
-								e\room\RoomDoors[1]\Locked = True
+								e\room\RoomDoors[0]\Locked = 1
+								e\room\RoomDoors[1]\Locked = 1
 								If e\room\NPC[0]\Reload = 0.0
 									If (Not e\room\RoomDoors[0]\Open) Then PlaySound_Strict(LoadTempSound("SFX\Door\DoorOpen079.ogg"))
 									e\room\NPC[0]\Reload = 1.0
@@ -8413,7 +8899,7 @@ Function UpdateEvents()
 				EndIf
 				
 				For e2.Events = Each Events
-					If e2\EventName = "room008" Then
+					If e2\EventID = e_room008 Then
 						If e2\EventState = 2.0 Then
 							EntityTexture(e\room\Objects[21], e\room\Textures[0], 3)
 						Else
@@ -8422,7 +8908,7 @@ Function UpdateEvents()
 					EndIf
 				Next
 				;[End Block]
-			Case "096spawn"
+			Case e_096spawn
 				;[Block]
 				Local xSpawn#, zSpawn#, Place%
 				
@@ -8435,7 +8921,7 @@ Function UpdateEvents()
 							EndIf
 							
 							For e2.Events = Each Events
-								If e2\EventName = "room2servers"
+								If e2\EventID = e_room2servers
 									If e2\EventState > 0.0 And e2\room\NPC[0] <> Null
 										e\EventState = 2.0
 										Exit
@@ -8462,7 +8948,7 @@ Function UpdateEvents()
 						EndIf
 						
 						For e2.Events = Each Events
-							If e2\EventName = "room2servers"
+							If e2\EventID = e_room2servers
 								If e2\EventState = 0.0
 									e\EventState = 2.0
 									Exit
@@ -8540,7 +9026,27 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room2medibay2"
+			Case e_room2medibay
+				;[Block]
+				; ~ Hiding / Showing the props in this room
+				If PlayerRoom <> e\room Then
+					HideEntity(e\room\Objects[0])
+				Else
+					ShowEntity(e\room\Objects[0])
+					
+					If EntityDistanceSquared(e\room\Objects[1], me\Collider) < 0.49 Then
+						DrawHandIcon = True
+						If MouseHit1 Then
+							msg\Msg = "You feel a cold breeze next to your body."
+							msg\Timer = 70.0 * 6.0
+							InjurePlayer(Rnd(-0.5, 0.3))
+							me\Bloodloss = 0.0
+							PlaySound_Strict(LoadTempSound("SFX\SCP\Joke\Quack.ogg"))
+						EndIf
+					EndIf
+				EndIf
+				;[End Block]
+			Case e_room2medibay2
 				;[Block]
 				; ~ Hiding / Showing the props in this room
 				If PlayerRoom <> e\room Then
@@ -8563,7 +9069,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "dimension1499"
+			Case e_dimension1499
 				;[Block]
 				If PlayerRoom <> e\room Then
 					If e\room\Objects[0] <> 0 Then
@@ -8602,50 +9108,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "room2offices035"
-				;[Block]
-				Local Is035Released% = False
-				
-				For e2.Events = Each Events
-					If e2 <> e And e2\EventName = "room035" Then
-						If e2\EventState < 0.0 Then
-							Is035Released = True
-							Exit
-						EndIf
-					EndIf
-				Next
-				
-				If Is035Released Then
-					If e\room\Dist < 8.0 Then
-						If e\room\NPC[0] = Null Then
-							e\room\NPC[0] = CreateNPC(NPCtypeD, e\room\x, 0.5, e\room\z)
-							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 180.0, 0.0)
-							MoveEntity(e\room\NPC[0]\Collider, 0.0, 0.0, -0.5)
-							e\room\NPC[0]\State = 3.0
-							ChangeNPCTextureID(e\room\NPC[0], 7)
-							SetNPCFrame(e\room\NPC[0], 19.0)
-						EndIf
-						If e\room\NPC[1] = Null Then
-							If EntityDistanceSquared(e\room\NPC[0]\Collider, me\Collider) < 6.25 Then
-								e\room\NPC[1] = CreateNPC(NPCtype035_Tentacle, EntityX(e\room\NPC[0]\Collider), 0.13, EntityZ(e\room\NPC[0]\Collider))
-								RotateEntity(e\room\NPC[1]\Collider, 0.0, e\room\Angle, 0.0)
-								MoveEntity(e\room\NPC[1]\Collider, 0.0, 0.0, 0.6)
-							EndIf
-						EndIf
-					Else
-						If e\room\Dist > HideDistance
-							If e\room\NPC[1] <> Null
-								RemoveNPC(e\room\NPC[1]) : e\room\NPC[1] = Null
-							EndIf
-						EndIf
-					EndIf
-				EndIf
-				
-				If e\room\NPC[1] <> Null Then
-					If e\room\NPC[1]\IsDead = True Then RemoveEvent(e)
-				EndIf
-				;[End Block]
-			Case "room2shaft"
+			Case e_room2shaft
                 ;[Block]
                 If e\EventState = 0.0 Then
                     e\room\NPC[0] = CreateNPC(NPCtypeGuard, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True) + 0.5, EntityZ(e\room\Objects[1], True))
@@ -8666,7 +9129,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
                 ;[End Block]
-			Case "room1lifts"
+			Case e_room1lifts
 				;[Block]
 				If PlayerRoom = e\room Then
 					For i = 0 To 1
@@ -8680,10 +9143,10 @@ Function UpdateEvents()
 					Next
 				EndIf
 				;[End Block]
-			Case "room4info"
+			Case e_room4info
 				;[Block]
 				For e2.Events = Each Events
-					If e2\EventName = "room2sl" Then
+					If e2\EventID = e_room2sl Then
 						If e2\EventState3 = 0.0 Then
 							If e\room\Dist < 12.0 Then
 								TurnCheckpointMonitorsOff(0)
@@ -8696,7 +9159,7 @@ Function UpdateEvents()
 					EndIf
 				Next
 				;[End Block]
-			Case "room2bio"
+			Case e_room2bio
 				;[Block]
 				; ~ Hiding / Showing the terrain in this room
 				If e\room\Dist < HideDistance Then
@@ -8705,7 +9168,7 @@ Function UpdateEvents()
 					HideEntity(e\room\Objects[0])
 				EndIf
 				;[End Block]
-			Case "room409"
+			Case e_room409
 				;[Block]
 				If PlayerRoom = e\room Then
 					If EntityY(me\Collider) < -4000.0 * RoomScale Then
@@ -8747,27 +9210,7 @@ Function UpdateEvents()
                     e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[1], e\room\Objects[3], e)
 				EndIf
 				;[End Block]
-			Case "room2medibay"
-				;[Block]
-				; ~ Hiding / Showing the props in this room
-				If PlayerRoom <> e\room Then
-					HideEntity(e\room\Objects[0])
-				Else
-					ShowEntity(e\room\Objects[0])
-					
-					If EntityDistanceSquared(e\room\Objects[1], me\Collider) < 0.49 Then
-						DrawHandIcon = True
-						If MouseHit1 Then
-							msg\Msg = "You feel a cold breeze next to your body."
-							msg\Timer = 70.0 * 6.0
-							InjurePlayer(Rnd(-0.5, 0.3))
-							me\Bloodloss = 0.0
-							PlaySound_Strict(LoadTempSound("SFX\SCP\Joke\Quack.ogg"))
-						EndIf
-					EndIf
-				EndIf
-				;[End Block]
-			Case "room005"
+			Case e_room005
 			    ;[Block]
 			    If (Not Curr106\Contained) Then 
 			        If PlayerRoom = e\room Then
@@ -8795,7 +9238,7 @@ Function UpdateEvents()
 		End Select
 		
 		If e <> Null Then
-			CatchErrors("Error located in: " + Chr(34) + e\EventName + Chr(34) + " event!")
+			CatchErrors("Error located in: " + Chr(34) + e\EventName + Chr(34) + " event (ID: " + e\EventID + ")!")
 		Else
 			CatchErrors("Detected removed event!")
 		EndIf
@@ -8809,7 +9252,7 @@ Function UpdateDimension1499()
 	Local Tex%, Temp%, Scale#, x%, y%, i%, j%
 	
 	For e.Events = Each Events
-		If e\EventName = "dimension1499"
+		If e\EventID = e_dimension1499
 			; ~ e\EventState: If player entered dimension (will be resetted after the player leaves it)
 			; ~ 0: The player never entered SCP-1499
 			; ~ 1: The player had already entered the dimension at least once
@@ -9139,12 +9582,12 @@ Function UpdateEndings()
 	Local Dist#, i%, Pvt%, Temp%, xTemp#, zTemp#, Angle#, OBJ%
 	
 	For e.Events = Each Events
-		Select e\EventName
-			Case "gateb"
+		Select e\EventID
+			Case e_gateb
 				;[Block]
 				If PlayerRoom = e\room Then
 					If EntityY(me\Collider) > 1040.0 * RoomScale Then
-						e\room\RoomDoors[1]\Locked = True
+						e\room\RoomDoors[1]\Locked = 1
 						
 						For r.Rooms = Each Rooms
 							HideEntity(r\OBJ)
@@ -9218,9 +9661,9 @@ Function UpdateEndings()
 								If EntityDistanceSquared(me\Collider, e\room\Objects[10]) < PowTwo(320.0 * RoomScale) Then
 									e\EventState = 2.0
 									e\room\RoomDoors[2]\Open = False
-									e\room\RoomDoors[2]\Locked = True
+									e\room\RoomDoors[2]\Locked = 1
 									e\room\RoomDoors[3]\Open = False
-									e\room\RoomDoors[3]\Locked = True
+									e\room\RoomDoors[3]\Locked = 1
 									
 									e\room\NPC[2] = CreateNPC(NPCtypeApache, EntityX(e\room\Objects[9], True), EntityY(e\room\Objects[9], True) + 0.5, EntityZ(e\room\Objects[9], True))
 									e\room\NPC[2]\State = 3.0
@@ -9314,7 +9757,7 @@ Function UpdateEndings()
 										
 										Temp = True
 										For e2.Events = Each Events
-											If e2\EventName = "room2nuke" Then
+											If e2\EventID = e_room2nuke Then
 												Temp = e2\EventState
 												Exit
 											EndIf
@@ -9358,7 +9801,7 @@ Function UpdateEndings()
 											e\room\NPC[2]\EnemyZ = EntityZ(e\room\Objects[11], True) + Cos(MilliSecs() / 23.0) * 3.0
 											
 											e\room\RoomDoors[5]\Open = True
-											e\room\RoomDoors[5]\Locked = False
+											e\room\RoomDoors[5]\Locked = 0
 											
 											If e\EventState3 > 0.0 And e\EventState3 =< 500.0
 												e\EventState3 = e\EventState3 + fpst\FPSFactor[0]
@@ -9480,7 +9923,7 @@ Function UpdateEndings()
 					EndIf
 				EndIf
 				;[End Block]
-			Case "gatea"
+			Case e_gatea
 				;[Block]
 				If PlayerRoom = e\room Then 
 					For r.Rooms = Each Rooms
@@ -9549,7 +9992,7 @@ Function UpdateEndings()
 						Next		
 						
 						If Curr106\Contained Then
-							e\room\RoomDoors[2]\Locked = True
+							e\room\RoomDoors[2]\Locked = 1
 							
 							PositionEntity(e\room\NPC[5]\Collider, EntityX(e\room\Objects[15], True) + (i - 6) * 0.2, EntityY(e\room\Objects[15], True), EntityZ(e\room\Objects[15], True) + (i - 6) * 0.2, True)
 							ResetEntity(e\room\NPC[5]\Collider)
@@ -10038,7 +10481,7 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 		If Abs(EntityX(me\Collider) - EntityX(ElevatorOBJ, True)) =< 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
 			If Abs(EntityZ(me\Collider) - EntityZ(ElevatorOBJ, True)) =< 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
 				If Abs(EntityY(me\Collider) - EntityY(ElevatorOBJ, True)) =< 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
-					d\Locked = True
+					d\Locked = 1
 					If EventState = 0.0 Then
 						TeleportEntity(Curr096\Collider, EntityX(d\FrameOBJ), EntityY(d\FrameOBJ) + 1.0, EntityZ(d\FrameOBJ), Curr096\CollRadius)
 						PointEntity(Curr096\Collider, ElevatorOBJ)
@@ -10089,7 +10532,7 @@ Function GenerateRandomIA()
 	Local StrTemp$
 	
 	For e.Events = Each Events
-		If e\EventName = "room173intro" Then
+		If e\EventID = e_room173intro Then
 			; ~ GENERATE THE IA...
 			; ~ ATTENTION...
 			e\EventStr = "1\Attention" + Rand(0, 1) + ".ogg"

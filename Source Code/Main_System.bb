@@ -974,7 +974,7 @@ Function UpdateConsole()
 					If I_427\Timer >= 70.0 * 360.0 Then I_427\Timer = 0.0
 					
 					For e.Events = Each Events
-						If e\EventName = "1048a" Then
+						If e\EventID = e_1048a Then
 							If PlayerRoom = e\room Then me\BlinkTimer = -10.0
 							If e\room\Objects[0] <> 0 Then
 								FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
@@ -1363,10 +1363,10 @@ Function UpdateConsole()
 					EndIf
 					
 					For e.Events = Each Events
-						If e\EventName = "room173" Then 
-							If e\room\NPC[0] <> Null Then RemoveNPC(e\room\NPC[0])
-							If e\room\NPC[1] <> Null Then RemoveNPC(e\room\NPC[1])
-							If e\room\NPC[2] <> Null Then RemoveNPC(e\room\NPC[2])
+						If e\EventID = e_room173 Then
+							For i = 0 To 2
+								If e\room\NPC[i] <> Null Then RemoveNPC(e\room\NPC[i])
+							Next
 							
 							FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
 							FreeEntity(e\room\Objects[1]) : e\room\Objects[1] = 0
@@ -1438,7 +1438,7 @@ Function UpdateConsole()
 				Case "disablecontrol"
 				    ;[Block]
 				    For e2.Events = Each Events
-				        If e2\EventName = "room2ccont"
+				        If e2\EventID = e_room2ccont
 							UpdateLever(e2\room\Objects[5])
 							RotateEntity(e2\room\Objects[5], 0.0, EntityYaw(e2\room\Objects[5]), 0.0)
 							RemoteDoorOn = False
@@ -1449,7 +1449,7 @@ Function UpdateConsole()
 				Case "enablecontrol"
 				    ;[Block]
 				    For e2.Events = Each Events
-				        If e2\EventName = "room2ccont"
+				        If e2\EventID = e_room2ccont
 							UpdateLever(e2\room\Objects[5])
 							RotateEntity(e2\room\Objects[5], 0.0, EntityYaw(e2\room\Objects[5]), 30.0)
 							RemoteDoorOn = True
@@ -1460,7 +1460,7 @@ Function UpdateConsole()
 			    Case "unlockcheckpoints"
 			        ;[Block]
 			        For e2.Events = Each Events
-				        If e2\EventName = "room2sl"
+				        If e2\EventID = e_room2sl
 							e2\EventState3 = 0.0
 							UpdateLever(e2\room\Levers[0])
 							RotateEntity(e2\room\Levers[0], 0.0, EntityYaw(e2\room\Levers[0]), 0.0)
@@ -1469,7 +1469,7 @@ Function UpdateConsole()
 					Next
 					
 					For e2.Events = Each Events
-				        If e2\EventName = "room008"
+				        If e2\EventID = e_room008
 							e2\EventState = 2.0
 							UpdateLever(e2\room\Levers[0])
 							RotateEntity(e2\room\Levers[0], 0.0, EntityYaw(e2\room\Levers[0]), 30.0)
@@ -1483,7 +1483,7 @@ Function UpdateConsole()
 				Case "disablenuke"
 					;[Block]
 					For e2.Events = Each Events
-				        If e2\EventName = "room2nuke"
+				        If e2\EventID = e_room2nuke
 							e2\EventState = 0.0
 							UpdateLever(e2\room\Objects[1])
 							UpdateLever(e2\room\Objects[3])
@@ -1501,7 +1501,7 @@ Function UpdateConsole()
 						Case "a"
 							;[Block]
 							For e.Events = Each Events
-								If e\EventName = "gateaentrance" Then
+								If e\EventID = e_gateaentrance Then
 									e\EventState3 = 1.0
 									e\room\RoomDoors[1]\Open = True
 									Exit
@@ -1512,7 +1512,7 @@ Function UpdateConsole()
 						Case "b"
 							;[Block]
 							For e.Events = Each Events
-								If e\EventName = "gateb" Then
+								If e\EventID = e_gateb Then
 									e\EventState3 = 1.0
 									e\room\RoomDoors[4]\Open = True
 									Exit
@@ -1523,10 +1523,10 @@ Function UpdateConsole()
 						Default
 							;[Block]
 							For e.Events = Each Events
-								If e\EventName = "gateaentrance" Then
+								If e\EventID = e_gateaentrance Then
 									e\EventState3 = 1.0
 									e\room\RoomDoors[1]\Open = True
-								ElseIf e\EventName = "gateb" Then
+								ElseIf e\EventID = e_gateb Then
 									e\EventState3 = 1.0
 									e\room\RoomDoors[4]\Open = True
 								EndIf
@@ -1621,10 +1621,10 @@ Function UpdateConsole()
 					EndIf
 					
 					For e.Events = Each Events
-						If e\EventName = "room173" Then 
-							If e\room\NPC[0] <> Null Then RemoveNPC(e\room\NPC[0])
-							If e\room\NPC[1] <> Null Then RemoveNPC(e\room\NPC[1])
-							If e\room\NPC[2] <> Null Then RemoveNPC(e\room\NPC[2])
+						If e\EventID = e_room173 Then
+							For i = 0 To 2
+								If e\room\NPC[i] <> Null Then RemoveNPC(e\room\NPC[i])
+							Next
 							
 							FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
 							FreeEntity(e\room\Objects[1]) : e\room\Objects[1] = 0
@@ -2406,7 +2406,7 @@ Function UpdateDoors()
 		UpdateSoundOrigin(d\SoundCHN, Camera, d\FrameOBJ)
 		
 		If d\Locked <> d\LockedUpdated Then
-			If d\Locked = True Then
+			If d\Locked = 1 Then
 				For i = 0 To 1
 					If d\Buttons[i] <> 0 Then EntityTexture(d\Buttons[i], tt\MiscTextureID[17])
 				Next
@@ -2494,7 +2494,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True, Scripted% = False)
 			ElseIf Temp >= d\KeyCard 
 				SelectedItem = Null
 				If ShowMsg = True Then
-					If d\Locked = True Then
+					If d\Locked = 1 Then
 						PlaySound_Strict(KeyCardSFX2)
 						If Temp = 1 Then 
 							msg\Msg = "The keycard was inserted into the slot. UNKNOWN ERROR! " Chr(34) + "Do" + Chr(Rand(48, 122)) + "s th" + Chr(Rand(48, 122)) + " B" + Chr(Rand(48, 122)) + "ack " + Chr(Rand(48, 122)) + "oon howl? " + Chr(Rand(48, 122)) + "es. N" + Chr(Rand(48, 122)) + ". Ye" + Chr(Rand(48, 122)) + ". " + Chr(Rand(48, 122)) + "o." + Chr(34)
@@ -2522,7 +2522,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True, Scripted% = False)
 				SelectedItem = Null
 				If ShowMsg = True Then 
 					PlaySound_Strict(KeyCardSFX2)					
-					If d\Locked = True Then
+					If d\Locked = 1 Then
 						If Temp = 1 Then 
 							msg\Msg = "The keycard was inserted into the slot. UNKNOWN ERROR! " +  Chr(34) + "Do" + Chr(Rand(48, 122)) + "s th" + Chr(Rand(48, 122)) + " B" + Chr(Rand(48, 122)) + "ack " + Chr(Rand(48, 122)) + "oon howl? " + Chr(Rand(48, 122)) + "es. N" + Chr(Rand(48, 122)) + ". Ye" + Chr(Rand(48, 122)) + ". " + Chr(Rand(48, 122)) + "o." + Chr(34)
 							msg\Timer = 70.0 * 8.0
@@ -2605,7 +2605,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True, Scripted% = False)
 			EndIf
 		EndIf
 	Else
-		If d\Locked = True Then
+		If d\Locked = 1 Then
 			If ShowMsg = True Then 
 				If (Not (d\IsElevatorDoor > 0)) Then
 					PlaySound_Strict(ButtonSFX2)
@@ -2985,15 +2985,10 @@ Function MainLoop()
 				If PlayerRoom\RoomTemplate\Name = "room173intro" Then 
 					me\Zone = 4
 				ElseIf PlayerRoom\RoomTemplate\Name = "room860"
-					For e.Events = Each Events
-						If e\EventName = "room860" Then
-							If e\EventState = 1.0 Then
-								me\Zone = 5
-								PositionEntity(SoundEmitter, EntityX(SoundEmitter), 30.0, EntityZ(SoundEmitter))
-							EndIf
-							Exit
-						EndIf
-					Next
+					If ev_room860\EventState = 1.0 Then
+						me\Zone = 5
+						PositionEntity(SoundEmitter, EntityX(SoundEmitter), 30.0, EntityZ(SoundEmitter))
+					EndIf
 				EndIf
 				
 				CurrAmbientSFX = Rand(0, AmbientSFXAmount[me\Zone] - 1)
@@ -3102,17 +3097,12 @@ Function MainLoop()
 			ElseIf PlayerRoom\RoomTemplate\Name = "dimension1499"
 				CurrFogColor = FogColorDimension1499
 			ElseIf PlayerRoom\RoomTemplate\Name = "room860"
-				For e.Events = Each Events
-					If e\EventName = "room860" Then
-						If e\EventState = 1.0 Then
-							CurrFogColor = FogColorForest
-						EndIf
-						Exit
-					EndIf
-				Next
+				If ev_room860\EventState = 1.0 Then
+					CurrFogColor = FogColorForest
+				EndIf
 			ElseIf PlayerRoom\RoomTemplate\Name = "pocketdimension"
 				For e.Events = Each Events
-					If e\EventName = "pocketdimension"
+					If e\EventID = e_pocketdimension
 						If EntityY(me\Collider) > 2608.0 * RoomScale Lor e\EventState2 > 1.0 Then
 							CurrFogColor = FogColorPDTrench
 						Else
@@ -3324,7 +3314,7 @@ Function MainLoop()
 		If PlayerRoom <> Null Then
 			If PlayerRoom\RoomTemplate\Name = "room173intro" Then
 				For e.Events = Each Events
-					If e\EventName = "room173intro" Then
+					If e\EventID = e_room173intro Then
 						If e\EventState3 >= 40.0 And e\EventState3 < 50.0 Then
 							If InvOpen Then
 								msg\Msg = "Double click on the document to view it."
@@ -4712,7 +4702,7 @@ Function DrawGUI()
             Text(x - 60, 60, "Room Coordinates: (" + Floor(EntityX(PlayerRoom\OBJ) / 8.0 + 0.5) + ", " + Floor(EntityZ(PlayerRoom\OBJ) / 8.0 + 0.5) + ", Angle: " + PlayerRoom\Angle + ")")
 			For ev.Events = Each Events
 				If ev\room = PlayerRoom Then
-					Text(x - 60, 80, "Room Event: " + ev\EventName) 
+					Text(x - 60, 80, "Room Event: " + ev\EventName + ", ID: " + ev\EventID) 
 					Text(x - 60, 100, "State: " + ev\EventState)
 					Text(x - 60, 120, "State2: " + ev\EventState2)   
 					Text(x - 60, 140, "State3: " + ev\EventState3)
@@ -5333,14 +5323,9 @@ Function DrawGUI()
 					If PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor PlayerRoom\RoomTemplate\Name = "dimension1499" Then
 						NavWorks = False
 					ElseIf PlayerRoom\RoomTemplate\Name = "room860" Then
-						For e.Events = Each Events
-							If e\EventName = "room860" Then
-								If e\EventState = 1.0 Then
-									NavWorks = False
-								EndIf
-								Exit
-							EndIf
-						Next
+						If ev_room860\EventState = 1.0 Then
+							NavWorks = False
+						EndIf
 					EndIf
 					
 					If (Not NavWorks) Then
@@ -6464,7 +6449,7 @@ Function UpdateGUI()
 							Return
 						EndIf
 						For e.Events = Each Events
-							If e\EventName = "room1123" Then 
+							If e\EventID = e_room1123 Then 
 								If e\EventState = 0.0 Then
 									me\LightFlash = 3.0
 									PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))		
@@ -6519,7 +6504,7 @@ Function UpdateGUI()
 						EndIf
 						
 						For e.Events = Each Events
-							If e\EventName = "1048a" Then
+							If e\EventID = e_1048a Then
 								If e\EventState2 > 0.0 Then
 									msg\Msg = "You swallowed the pill. Ear-like organs are falling from your body."
 									msg\Timer = 70.0 * 6.0
@@ -7436,7 +7421,7 @@ Function UpdateGUI()
 											EndIf
 										EndIf
 										For e.Events = Each Events
-											If e\EventName = "dimension1499" Then
+											If e\EventID = e_dimension1499 Then
 												If EntityDistanceSquared(e\room\OBJ, me\Collider) > PowTwo(8300.0 * RoomScale) Then
 													If e\EventState2 < 5.0 Then
 														e\EventState2 = e\EventState2 + 1.0
@@ -9375,13 +9360,13 @@ Function InitNewGame()
 	If SelectedMap = "" Then InitEvents()
 	
 	For e.Events = Each Events
-		If e\EventName = "room2nuke"
+		If e\EventID = e_room2nuke
 			e\EventState = 1.0
 		EndIf
-		If e\EventName = "room106"
+		If e\EventID = e_room106
 			e\EventState2 = 1.0
 		EndIf	
-		If e\EventName = "room2sl"
+		If e\EventID = e_room2sl
 			e\EventState3 = 1.0
 		EndIf
 	Next
@@ -9459,7 +9444,7 @@ Function InitLoadGame()
 	
 	For e.Events = Each Events
 		; ~ Loading the necessary stuff for dimension1499, but this will only be done if the player is in this dimension already
-		If e\EventName = "dimension1499"
+		If e\EventID = e_dimension1499
 			If e\EventState = 2.0
 				;[Block]
 				DrawLoading(91)
@@ -11350,7 +11335,7 @@ Function Use427()
 		If I_427\Using = 1 Then
 			I_427\Timer = I_427\Timer + fpst\FPSFactor[0]
 			For e.Events = Each Events
-				If e\EventName = "1048a" Then
+				If e\EventID = e_1048a Then
 					If e\EventState2 > 0.0 Then
 						e\EventState2 = Max(e\EventState2 - (fpst\FPSFactor[0] * 0.5), 0.0)
 					EndIf
@@ -11588,14 +11573,9 @@ Function Update008()
 	Local GroupDesignation$
 	
 	If PlayerRoom\RoomTemplate\Name = "room860"
-		For e.Events = Each Events
-			If e\EventName = "room860"
-				If e\EventState = 1.0
-					TeleportForInfect = False
-				EndIf
-				Exit
-			EndIf
-		Next
+		If ev_room860\EventState = 1.0
+			TeleportForInfect = False
+		EndIf
 	ElseIf PlayerRoom\RoomTemplate\Name = "dimension1499" Lor PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor PlayerRoom\RoomTemplate\Name = "gatea"
 		TeleportForInfect = False
 	ElseIf PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale
@@ -12488,5 +12468,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1080#1312#1E04
+;~B#1076#1308#1DF5
 ;~C#Blitz3D

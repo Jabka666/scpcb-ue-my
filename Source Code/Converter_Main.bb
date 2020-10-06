@@ -10,21 +10,6 @@ Const HIT_PLAYER% = 2
 
 Collisions(HIT_PLAYER, HIT_MAP, 2, 2)
 
-Function StripPath$(File$) 
-	Local Name$ = "", i%, mi$
-	
-	If Len(File) > 0 
-		For i = Len(File) To 1 Step - 1 
-			
-			mi = Mid(File, i, 1) 
-			If mi = "\" Lor mi = "/" Then Return(Name)
-			
-			Name = mi + Name
-		Next 
-	EndIf 
-	Return(Name)
-End Function 
-
 Function StripFileName$(File$)
 	Local mi$ = "", LastSlash% = 0, i%
 	
@@ -39,11 +24,24 @@ Function StripFileName$(File$)
 	Return(Left(File, LastSlash))
 End Function
 
+Function StripPath$(File$) 
+	Local Name$ = "", i%, mi$
+	
+	If Len(File) > 0 Then
+		For i = Len(File) To 1 Step -1 
+			mi = Mid(File, i, 1) 
+			If mi = "\" Lor mi = "/" Then Return(Name)
+			Name = mi + Name 
+		Next 
+	EndIf 
+	Return(Name) 
+End Function
+
 Function Piece$(s$, Entry%, Char$ = " ")
 	Local n%, p%, a$
 	
 	While Instr(s, Char + Char)
-		s = Replace(s, Char + Char,Char)
+		s = Replace(s, Char + Char, Char)
 	Wend
 	For n = 1 To Entry - 1
 		p = Instr(s, Char)

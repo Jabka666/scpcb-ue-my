@@ -1,3 +1,73 @@
+Function StripFileName$(File$)
+	Local mi$ = "", LastSlash% = 0, i%
+	
+	If Len(File) > 0 Then
+		For i = 1 To Len(File)
+			mi = Mid(File, i, 1)
+			If mi = "\" Lor mi = "/" Then
+				LastSlash = i
+			EndIf
+		Next
+	EndIf
+	Return(Left(File, LastSlash))
+End Function
+
+Function StripPath$(File$) 
+	Local Name$ = "", i%, mi$
+	
+	If Len(File) > 0 Then
+		For i = Len(File) To 1 Step -1 
+			mi = Mid(File, i, 1) 
+			If mi = "\" Lor mi = "/" Then Return(Name)
+			Name = mi + Name 
+		Next 
+	EndIf 
+	Return(Name) 
+End Function
+
+Function Piece$(s$, Entry%, Char$ = " ")
+	Local n%, p%, a$
+	
+	While Instr(s, Char + Char)
+		s = Replace(s, Char + Char, Char)
+	Wend
+	For n = 1 To Entry - 1
+		p = Instr(s, Char)
+		s = Right(s, Len(s) - p)
+	Next
+	p = Instr(s, Char)
+	If p < 1 Then
+		a = s
+	Else
+		a = Left(s, p - 1)
+	EndIf
+	Return(a)
+End Function
+
+Function KeyValue$(Entity%, Key$, DefaultValue$ = "")
+	Local p%, Value$, Properties$, TestKey$, Test$
+	
+	Properties = EntityName(Entity)
+	Properties = Replace(Properties, Chr(13), "")
+	Key = Lower(Key)
+	Repeat
+		p = Instr(Properties, Chr(10))
+		If p Then Test = (Left(Properties, p - 1)) Else Test = Properties
+		TestKey = Piece(Test, 1, "=")
+		TestKey = Trim(TestKey)
+		TestKey = Replace(TestKey, Chr(34), "")
+		TestKey = Lower(TestKey)
+		If TestKey = Key Then
+			Value = Piece(Test, 2, "=")
+			Value = Trim(Value)
+			Value = Replace(Value, Chr(34), "")
+			Return(Value)
+		EndIf
+		If (Not p) Then Return(DefaultValue)
+		Properties = Right(Properties, Len(Properties) - p)
+	Forever 
+End Function
+
 Type INIFile
 	Field Name$
 	Field Bank%
