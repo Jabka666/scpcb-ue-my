@@ -5,8 +5,6 @@ Type Materials
 	Field IsDiffuseAlpha%
 	Field UseMask%
 	Field StepSound%
-	Field UScale#
-	Field VScale#
 End Type
 
 Function ApplyBumpMap(Texture%)
@@ -43,8 +41,6 @@ Function LoadMaterials(File$)
 			mat\StepSound = (GetINIInt(File, TemporaryString, "stepsound") + 1)
 			mat\IsDiffuseAlpha = GetINIInt(File, TemporaryString, "transparent")
 			mat\UseMask = GetINIInt(File, TemporaryString, "masked")
-			mat\UScale = GetINIFloat(File, TemporaryString, "u_scale", 1.0)
-			mat\VScale = GetINIFloat(File, TemporaryString, "v_scale", 1.0)
 		EndIf
 	Wend
 	

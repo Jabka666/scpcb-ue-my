@@ -11956,10 +11956,8 @@ Function UpdateWorld2()
 					Next
 					wi\IsNVGBlinking = True
 					ShowEntity(tt\OverlayID[5])
-					If wi\NVGTimer =< -10.0 Then
-						wi\NVGTimer = 600.0
+					If wi\NVGTimer =< -10.0 Then wi\NVGTimer = 600.0
 					EndIf
-				EndIf
 			EndIf
 		EndIf
 	EndIf
@@ -11999,9 +11997,7 @@ Function RenderWorld2(Tween#)
 				EndIf
 			EndIf
 		Next
-		If HasBattery Then
-			RenderWorld()
-		EndIf
+		If HasBattery Then RenderWorld()
 	Else
 		RenderWorld(Tween)
 	EndIf

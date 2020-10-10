@@ -545,7 +545,7 @@ End Function
 Function UpdateNPCs()
 	CatchErrors("Uncaught (UpdateNPCs)")
 	
-	Local n.NPCs, n2.NPCs, d.Doors, de.Decals, r.Rooms, e.Events, w.Waypoints, p.Particles
+	Local n.NPCs, n2.NPCs, d.Doors, de.Decals, r.Rooms, e.Events, w.Waypoints, p.Particles, wp.WayPoints
 	Local i%, j%, Dist#, Dist2#, Angle#, x#, x2#, y#, z#, z2#, PrevFrame#, PlayerSeeAble%, RN$
 	Local Target%, Pvt%, Pick%, GroupDesignation$
 	
@@ -2491,7 +2491,7 @@ Function UpdateNPCs()
 									wayPointCloseToPlayer = Null
 									
 									For wp.WayPoints = Each WayPoints
-										If EntityDistanceSquared(wp\OBJ, me\Collider) < 4.0
+										If EntityDistanceSquared(wp\OBJ, me\Collider) < 4.0 Then
 											wayPointCloseToPlayer = wp
 											Exit
 										EndIf
@@ -6998,9 +6998,7 @@ Function Find860Angle(n.NPCs, fr.Forest)
 	
 	Local x# = (TFormedX() + 6.0) / 12.0
 	Local z# = (TFormedZ() + 6.0) / 12.0
-	
 	Local xt% = Floor(x), zt% = Floor(z)
-	
 	Local x2%, z2%
 	
 	If xt <> PlayerX Lor zt <> PlayerZ Then ; ~ The monster is not on the same tile as the player

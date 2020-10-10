@@ -30,12 +30,6 @@ Function LoadTextureCheckingIfInCache(TexName$, TexFlags% = 1, DeleteType% = Del
 	If tic\Tex = 0 Then
 		tic\Tex = LoadTexture(CurrPath, TexFlags + (256 * (SaveTexturesInVRAM <> 0)))
 	EndIf
-	For mat.Materials = Each Materials
-		If mat\Name = tic\TexName Then
-			ScaleTexture(tic\Tex, mat\UScale, mat\VScale)
-			Exit
-		EndIf
-	Next
 	Return(tic\Tex)
 End Function
 
