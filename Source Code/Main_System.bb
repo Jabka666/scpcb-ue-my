@@ -2755,8 +2755,6 @@ DrawLoading(100, True)
 
 fpst\LoopDelay = MilliSecs()
 
-Global UpdateParticles_Time# = 0.0
-
 Global CurrTrisAmount%
 
 Global Input_ResetTime# = 0.0
@@ -3087,9 +3085,6 @@ Function MainLoop()
 			UpdateParticles()
 			Use427()
 			UpdateMonitorSaving()
-			; ~ Added a simple code for updating the Particles function depending on the fpst\FPSFactor[0] (still WIP, might not be the final version of it) -- ENDSHN
-			UpdateParticles_Time = Min(1.0, UpdateParticles_Time + fpst\FPSFactor[0])
-			If UpdateParticles_Time = 1.0 Then UpdateParticles_Time = 0.0
 		EndIf
 		
 		Local CurrFogColor$ = ""
@@ -12484,5 +12479,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1080#1312#1E04
+;~B#107B#130D#1DFF
 ;~C#Blitz3D

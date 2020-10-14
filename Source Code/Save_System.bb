@@ -758,7 +758,7 @@ Function LoadGame(File$)
 			EndIf
 		Next
 		
-		If Temp2 = 1 Then PlayerRoom = r.Rooms
+		If Temp2 = 1 Then PlayerRoom = r
 		
 		For x = 0 To 11
 			ID = ReadInt(f)
