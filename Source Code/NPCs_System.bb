@@ -1181,7 +1181,7 @@ Function UpdateNPCs()
 								n\SoundCHN2 = StreamSound_Strict("SFX\Music\096Chase.ogg", 0)
 								n\SoundCHN2_IsStream = 2
 							Else
-								SetStreamVolume_Strict(n\SoundCHN2, Min(Max(8.0 - Dist, 0.6), 1.0) * SFXVolume#)
+								SetStreamVolume_Strict(n\SoundCHN2, Min(Max(8.0 - Dist, 0.6), 1.0) * SFXVolume)
 							EndIf
 						EndIf
 						
@@ -1645,7 +1645,7 @@ Function UpdateNPCs()
 												Temp = True
 												If n\Path[n\PathLocation]\door <> Null Then
 													If (Not n\Path[n\PathLocation]\door\IsElevatorDoor)
-														If (n\Path[n\PathLocation]\door\Locked Lor n\Path[n\PathLocation]\door\KeyCard <> 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open) Then
+														If (n\Path[n\PathLocation]\door\Locked = 1 Lor n\Path[n\PathLocation]\door\KeyCard <> 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open) Then
 															Temp = False
 														Else
 															If (Not n\Path[n\PathLocation]\door\Open) And (n\Path[n\PathLocation]\door\Buttons[0] <> 0 Lor n\Path[n\PathLocation]\door\Buttons[1] <> 0) Then
@@ -1751,9 +1751,9 @@ Function UpdateNPCs()
 												If n\PathStatus = 1 Then
 													If n\Path[1] <> Null Then
 														If n\Path[1]\door <> Null Then
-															If (n\Path[1]\door\Locked Lor n\Path[1]\door\KeyCard <> 0 Lor n\Path[1]\door\Code <> "") And (Not n\Path[1]\door\Open) Then
+															If (n\Path[1]\door\Locked = 1 Lor n\Path[1]\door\KeyCard <> 0 Lor n\Path[1]\door\Code <> "") And (Not n\Path[1]\door\Open) Then
 																Repeat
-																	If n\PathLocation > 19
+																	If n\PathLocation > 19 Then
 																		n\PathLocation = 0 : n\PathStatus = 0 : Exit
 																	Else
 																		n\PathLocation = n\PathLocation + 1
@@ -2043,7 +2043,7 @@ Function UpdateNPCs()
 										Temp = True
 										If n\Path[n\PathLocation]\door <> Null
 											If (Not n\Path[n\PathLocation]\door\IsElevatorDoor)
-												If ((n\Path[n\PathLocation]\door\Locked Lor n\Path[n\PathLocation]\door\KeyCard > 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open)) Then
+												If ((n\Path[n\PathLocation]\door\Locked = 1 Lor n\Path[n\PathLocation]\door\KeyCard > 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open)) Then
 													Temp = False
 												Else
 													If (Not n\Path[n\PathLocation]\door\Open) Then UseDoor(n\Path[n\PathLocation]\Door, False)
@@ -4132,7 +4132,7 @@ Function UpdateNPCs()
 													If Dist2 < 0.64 Then 
 														If n\Path[n\PathLocation]\door <> Null Then
 															If (Not n\Path[n\PathLocation]\door\IsElevatorDoor)
-																If (n\Path[n\PathLocation]\door\Locked Lor n\Path[n\PathLocation]\door\KeyCard <> 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open) Then
+																If (n\Path[n\PathLocation]\door\Locked = 1 Lor n\Path[n\PathLocation]\door\KeyCard <> 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open) Then
 																	Temp = False
 																Else
 																	If (Not n\Path[n\PathLocation]\door\Open) And (n\Path[n\PathLocation]\door\Buttons[0] <> 0 Lor n\Path[n\PathLocation]\door\Buttons[1] <> 0) Then
@@ -4740,7 +4740,7 @@ Function UpdateNPCs()
 										Temp = True
 										If n\Path[n\PathLocation]\door <> Null
 											If (Not n\Path[n\PathLocation]\door\IsElevatorDoor)
-												If ((n\Path[n\PathLocation]\door\Locked Lor n\Path[n\PathLocation]\door\KeyCard > 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open)) Then
+												If ((n\Path[n\PathLocation]\door\Locked = 1 Lor n\Path[n\PathLocation]\door\KeyCard > 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open)) Then
 													Temp = False
 												Else
 													If (Not n\Path[n\PathLocation]\door\Open) Then UseDoor(n\Path[n\PathLocation]\Door, False)

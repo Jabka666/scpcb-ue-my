@@ -7081,7 +7081,6 @@ Function CreateMap()
 		y = y - Height
 	Until y < 2
 	
-	Local ZoneAmount% = 3
 	Local Room1Amount%[3], Room2Amount%[3], Room2CAmount%[3], Room3Amount%[3], Room4Amount%[3]
 	
 	; ~ Count the amount of rooms
@@ -7128,7 +7127,7 @@ Function CreateMap()
 		Temp = (-Room1Amount[i]) + 5
 		
 		If Temp > 0 Then
-			For y = (MapHeight / ZoneAmount) * (2 - i) + 1 To ((MapHeight / ZoneAmount) * ((2 - i) + 1.0)) - 2			
+			For y = (MapHeight / ZONEAMOUNT) * (2 - i) + 1 To ((MapHeight / ZONEAMOUNT) * ((2 - i) + 1.0)) - 2			
 				For x = 2 To MapWidth - 2
 					If MapTemp(x, y) = 0 Then
 						If (Min(MapTemp(x + 1, y), 1) + Min(MapTemp(x - 1, y), 1) + Min(MapTemp(x, y + 1), 1) + Min(MapTemp(x, y - 1), 1)) = 1 Then
@@ -7737,10 +7736,10 @@ Function SetRoom(Room_Name$, Room_Type%, Pos%, Min_Pos%, Max_Pos%) ; ~ Place a r
 	EndIf
 End Function
 
+Const ZONEAMOUNT% = 3
+
 Function GetZone(y%)
-	Local ZoneAmount% = 3
-	
-	Return(Min(Floor((Float(MapWidth - y) / MapWidth * ZoneAmount)), ZoneAmount - 1))
+	Return(Min(Floor((Float(MapWidth - y) / MapWidth * ZONEAMOUNT)), ZONEAMOUNT - 1))
 End Function
 
 Function LoadTerrain(HeightMap, yScale# = 0.7, t1%, t2%, Mask%)

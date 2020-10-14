@@ -446,7 +446,6 @@ Function FindEventID%(EventName$)
 			Return(e_gatea)
 			;[End Block]
 	End Select
-	Return(0)
 End Function
 
 Function InitEvents()

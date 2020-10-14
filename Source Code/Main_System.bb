@@ -3108,7 +3108,7 @@ Function MainLoop()
 			ElseIf PlayerRoom\RoomTemplate\Name = "pocketdimension"
 				For e.Events = Each Events
 					If e\EventID = e_pocketdimension Then
-						If EntityY(me\Collider) > 2608.0 * RoomScale Lor e\EventState2 > 1.0 Then ; CHECK
+						If EntityY(me\Collider) > 2608.0 * RoomScale Lor e\EventState2 > 1.0 Then
 							CurrFogColor = FogColorPDTrench
 						Else
 							CurrFogColor = FogColorPD
@@ -3327,6 +3327,7 @@ Function MainLoop()
 								e\EventState3 = 50.0
 							EndIf
 						EndIf
+						Exit
 					EndIf
 				Next
 			EndIf
@@ -12479,5 +12480,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#107B#130D#1DFF
+;~B#107C#130E#1E00
 ;~C#Blitz3D
