@@ -812,24 +812,34 @@ Function UpdateNPCs()
 					; ~ Checking if SCP-106 is allowed to spawn
 					If PlayerRoom\RoomTemplate\Name = "dimension1499" Then Spawn106 = False
 					If PlayerRoom\RoomTemplate\Name = "room860" Then
-						If ev_room860\EventState = 1.0
-							Spawn106 = False
-						EndIf
+						For e.Events = Each Events
+							If e\EventID = e_room860 Then
+								If e\EventState = 1.0 Then 
+									Spawn106 = False
+								EndIf
+								Exit
+							EndIf
+						Next
 					EndIf
 					If PlayerRoom\RoomTemplate\Name = "room049" And EntityY(me\Collider) =< -2848.0 * RoomScale Then
 						Spawn106 = False
 					EndIf
 					; ~ GateA event has been triggered. Don't make SCP-106 disappear!
 					; ~ The reason why this is a seperate for loop is because we need to make sure that room860 would not be able to overwrite the "Spawn106" variable
-					If PlayerRoom\RoomTemplate\Name = "gatea"
-						If ev_gatea\EventState <> 0.0 Then
-							Spawn106 = True
-							If PlayerRoom\RoomTemplate\Name = "dimension1499" Then
-								n\Idle = True
-							Else
-								n\Idle = False
+					If PlayerRoom\RoomTemplate\Name = "gatea" Then
+						For e.Events = Each Events
+							If e\EventID = e_gatea Then
+								If e\EventState <> 0.0 Then
+									Spawn106 = True
+									If PlayerRoom\RoomTemplate\Name = "dimension1499" Then
+										n\Idle = True
+									Else
+										n\Idle = False
+									EndIf
+								EndIf
+								Exit
 							EndIf
-						EndIf
+						Next
 					EndIf
 					
 					If (Not Spawn106) And n\State =< 0.0 Then
@@ -4977,9 +4987,14 @@ Function UpdateNPCs()
 						If n\InFacility = 1 Then
 							If PlayerRoom\RoomTemplate\Name <> "room173intro" Then
 								If PlayerRoom\RoomTemplate\Name = "room860" Then
-									If ev_room860\EventState = 1.0
-										UpdateGravity = True
-									EndIf
+									For e.Events = Each Events
+										If e\EventID = e_room860 Then
+											If e\EventState = 1.0
+												UpdateGravity = True
+											EndIf
+											Exit
+										EndIf
+									Next
 								EndIf
 							Else
 								UpdateGravity = True
@@ -7288,9 +7303,14 @@ Function PlayerInReachableRoom(CanSpawnIn049Chamber% = False)
 	EndIf
 	; ~ Player is in SCP-860-1's test room and inside the forest, returning false
 	If RN = "room860" Then
-		If ev_room860\EventState = 1.0 Then
-			Return(False)
-		EndIf	
+		For e.Events = Each Events
+			If e\EventID = e_room860 Then
+				If e\EventState = 1.0 Then
+					Return(False)
+				EndIf
+				Exit
+			EndIf
+		Next	
 	EndIf
 	
 	If (Not CanSpawnIn049Chamber) Then
@@ -7430,5 +7450,5 @@ Function Animate2#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = True
 End Function 
 
 ;~IDEal Editor Parameters:
-;~B#172#1213#1359#13A4#14FA#1616#17E5#1840
+;~B#172#121D#1363#13B3#1509#1625#17F4#184F
 ;~C#Blitz3D

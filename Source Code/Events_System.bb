@@ -10,9 +10,6 @@ Type Events
 	Field Img%
 End Type 
 
-Global ev_room860.Events
-Global ev_gatea.Events
-
 ; ~ Event IDs
 ;[Block]
 Const e_gateb% = 0
@@ -110,7 +107,6 @@ Function CreateEvent.Events(EventName$, RoomName$, ID%, Prob# = 0.0)
 					e\EventName = EventName					
 					e\room = r
 					e\EventID = FindEventID(EventName)
-					SetEventVar(e)
 					Return(e)
 				EndIf
 			EndIf
@@ -128,27 +124,11 @@ Function CreateEvent.Events(EventName$, RoomName$, ID%, Prob# = 0.0)
 					e\EventName = EventName					
 					e\room = r
 					e\EventID = FindEventID(EventName)
-					SetEventVar(e)
 				EndIf
 			EndIf
 		Next		
 	EndIf
 	Return(Null)
-End Function
-
-Function SetEventVar%(e.Events)
-	Select e\EventName
-		Case "room860"
-			;[Block]
-			ev_room860 = e
-			Return(e_room860)
-			;[End Block]
-		Case "gatea"
-			;[Block]
-			ev_gatea = e
-			Return(e_gatea)
-			;[End Block]
-	End Select
 End Function
 
 Function FindEventID%(EventName$)
@@ -6748,14 +6728,19 @@ Function UpdateEvents()
 							If ChannelPlaying(e\SoundCHN3) Then StopChannel(e\SoundCHN3)
 						EndIf
 			        ElseIf PlayerRoom\RoomTemplate\Name = "room860" Then
-						If ev_room860\EventState = 1.0 Then
-							If e\SoundCHN2 <> 0 Then
-								If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2)
+						For e2.Events = Each Events
+							If e2\EventID = e_room860 Then
+								If e2\EventState = 1.0 Then
+									If e\SoundCHN2 <> 0 Then
+										If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2)
+									EndIf
+									If e\SoundCHN3 <> 0 Then
+										If ChannelPlaying(e\SoundCHN3) Then StopChannel(e\SoundCHN3)
+									EndIf
+								EndIf
+								Exit
 							EndIf
-							If e\SoundCHN3 <> 0 Then
-								If ChannelPlaying(e\SoundCHN3) Then StopChannel(e\SoundCHN3)
-							EndIf
-						EndIf
+						Next
 					EndIf
 				EndIf
 				;[End Block]

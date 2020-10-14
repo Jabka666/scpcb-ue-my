@@ -1057,7 +1057,6 @@ Function LoadGame(File$)
 			EndIf
 		Next
 		e\EventStr = ReadString(f)
-		SetEventVar(e)
 	Next
 	
 	For e.Events = Each Events
@@ -1811,7 +1810,6 @@ Function LoadGameQuick(File$)
 				ShowEntity(e\room\fr\Forest_Pivot)
 			EndIf
 		EndIf
-		SetEventVar(e)
 	Next
 	
 	Local it.Items

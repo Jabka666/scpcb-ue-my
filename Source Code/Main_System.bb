@@ -2985,10 +2985,15 @@ Function MainLoop()
 				If PlayerRoom\RoomTemplate\Name = "room173intro" Then 
 					me\Zone = 4
 				ElseIf PlayerRoom\RoomTemplate\Name = "room860"
-					If ev_room860\EventState = 1.0 Then
-						me\Zone = 5
-						PositionEntity(SoundEmitter, EntityX(SoundEmitter), 30.0, EntityZ(SoundEmitter))
-					EndIf
+					For e.Events = Each Events
+						If e\EventID = e_room860 Then
+							If e\EventState = 1.0 Then
+								me\Zone = 5
+								PositionEntity(SoundEmitter, EntityX(SoundEmitter), 30.0, EntityZ(SoundEmitter))
+							EndIf
+							Exit
+						EndIf
+					Next
 				EndIf
 				
 				CurrAmbientSFX = Rand(0, AmbientSFXAmount[me\Zone] - 1)
@@ -3097,13 +3102,18 @@ Function MainLoop()
 			ElseIf PlayerRoom\RoomTemplate\Name = "dimension1499"
 				CurrFogColor = FogColorDimension1499
 			ElseIf PlayerRoom\RoomTemplate\Name = "room860"
-				If ev_room860\EventState = 1.0 Then
-					CurrFogColor = FogColorForest
-				EndIf
+				For e.Events = Each Events
+					If e\EventID = e_room860 Then
+						If e\EventState = 1.0 Then
+							CurrFogColor = FogColorForest
+						EndIf
+						Exit
+					EndIf
+				Next
 			ElseIf PlayerRoom\RoomTemplate\Name = "pocketdimension"
 				For e.Events = Each Events
-					If e\EventID = e_pocketdimension
-						If EntityY(me\Collider) > 2608.0 * RoomScale Lor e\EventState2 > 1.0 Then
+					If e\EventID = e_pocketdimension Then
+						If EntityY(me\Collider) > 2608.0 * RoomScale Lor e\EventState2 > 1.0 Then ; CHECK
 							CurrFogColor = FogColorPDTrench
 						Else
 							CurrFogColor = FogColorPD
@@ -5323,9 +5333,14 @@ Function DrawGUI()
 					If PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor PlayerRoom\RoomTemplate\Name = "dimension1499" Then
 						NavWorks = False
 					ElseIf PlayerRoom\RoomTemplate\Name = "room860" Then
-						If ev_room860\EventState = 1.0 Then
-							NavWorks = False
-						EndIf
+						For e.Events = Each Events
+							If e\EventID = e_room860 Then
+								If e\EventState = 1.0 Then
+									NavWorks = False
+								EndIf
+								Exit
+							EndIf
+						Next
 					EndIf
 					
 					If (Not NavWorks) Then
@@ -11573,9 +11588,14 @@ Function Update008()
 	Local GroupDesignation$
 	
 	If PlayerRoom\RoomTemplate\Name = "room860"
-		If ev_room860\EventState = 1.0
-			TeleportForInfect = False
-		EndIf
+		For e.Events = Each Events
+			If e\EventID = e_room860 Then
+				If e\EventState = 1.0 Then
+					TeleportForInfect = False
+				EndIf
+				Exit
+			EndIf
+		Next
 	ElseIf PlayerRoom\RoomTemplate\Name = "dimension1499" Lor PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor PlayerRoom\RoomTemplate\Name = "gatea"
 		TeleportForInfect = False
 	ElseIf PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale
@@ -12464,5 +12484,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1076#1308#1DF5
+;~B#1080#1312#1E04
 ;~C#Blitz3D
