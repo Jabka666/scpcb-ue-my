@@ -2021,8 +2021,10 @@ Include "Source Code\Items_System.bb"
 
 Include "Source Code\Particles_System.bb"
 
+Global UpdateTimer#
+
 Global ClosestButton%, ClosestDoor.Doors
-Global SelectedDoor.Doors, UpdateDoorsTimer#
+Global SelectedDoor.Doors
 Global DoorTempID%
 
 Type Doors
@@ -2195,7 +2197,7 @@ End Function
 Function UpdateDoors()
 	Local i%, d.Doors, x#, z#, Dist#
 	
-	If UpdateDoorsTimer =< 0.0 Then
+	If UpdateTimer =< 0.0 Then
 		For d.Doors = Each Doors
 			Local xDist# = Abs(EntityX(me\Collider) - EntityX(d\OBJ, True))
 			Local zDist# = Abs(EntityZ(me\Collider) - EntityZ(d\OBJ, True))
@@ -2216,9 +2218,6 @@ Function UpdateDoors()
 				If d\Buttons[1] <> 0 Then ShowEntity(d\Buttons[1])
 			EndIf
 		Next
-		UpdateDoorsTimer = 30.0
-	Else
-		UpdateDoorsTimer = Max(UpdateDoorsTimer - fpst\FPSFactor[0], 0.0)
 	EndIf
 	
 	ClosestButton = 0
@@ -3033,6 +3032,11 @@ Function MainLoop()
 		UpdateCheckpoint2 = False
 		
 		If (Not MenuOpen) And (Not InvOpen) And OtherOpen = Null And SelectedDoor = Null And (Not ConsoleOpen) And (Not I_294\Using) And SelectedScreen = Null And me\EndingTimer >= 0.0 Then
+			If UpdateTimer =< 0.0 Then
+				UpdateTimer = 30.0
+			Else
+				UpdateTimer = Max(UpdateTimer - fpst\FPSFactor[0], 0.0)
+			EndIf
 			LightVolume = CurveValue(TempLightVolume, LightVolume, 50.0)
 			CameraFogRange(Camera, CameraFogNear * LightVolume, CameraFogFar * LightVolume)
 			CameraFogMode(Camera, 1)
@@ -11796,7 +11800,7 @@ Function Update409()
 End Function
 
 Type Decals
-	Field OBJ%
+	Field OBJ%, Dist#
 	Field SizeChange#, Size#, MaxSize#
 	Field AlphaChange#, Alpha#
 	Field BlendMode%
@@ -11841,44 +11845,61 @@ End Function
 Function UpdateDecals()
 	Local d.Decals
 	
+	If UpdateTimer =< 0.0 Then
+		For d.Decals = Each Decals
+			Local xDist# = Abs(EntityX(me\Collider) - EntityX(d\OBJ, True))
+			Local zDist# = Abs(EntityZ(me\Collider) - EntityZ(d\OBJ, True))
+			
+			d\Dist = xDist + zDist
+			
+			If d\Dist > HideDistance * 2.0 Then
+				If d\OBJ <> 0 Then HideEntity(d\OBJ)
+			Else
+				If d\OBJ <> 0 Then ShowEntity(d\OBJ)
+			EndIf
+		Next
+	EndIf
+	
 	For d.Decals = Each Decals
-		If d\SizeChange <> 0.0 Then
-			d\Size = d\Size + d\SizeChange * fpst\FPSFactor[0]
-			ScaleSprite(d\OBJ, d\Size, d\Size)
+		If d\Dist < HideDistance * 2.0 Then
+			If d\SizeChange <> 0.0 Then
+				d\Size = d\Size + d\SizeChange * fpst\FPSFactor[0]
+				ScaleSprite(d\OBJ, d\Size, d\Size)
+				
+				Select d\ID
+					Case 0
+						;[Block]
+						If d\Timer =< 0.0 Then
+							Local Angle# = Rnd(360.0)
+							Local Temp# = Rnd(d\Size)
+							Local d2.Decals = CreateDecal(1, EntityX(d\OBJ) + Cos(Angle) * Temp, EntityY(d\OBJ) - 0.0005, EntityZ(d\OBJ) + Sin(Angle) * Temp, EntityPitch(d\OBJ), Rnd(360.0), EntityRoll(d\OBJ))
+							
+							d2\Size = Rnd(0.1, 0.5) : ScaleSprite(d2\OBJ, d2\Size, d2\Size)
+							PlaySound2(DecaySFX[Rand(1, 3)], Camera, d2\OBJ, 10.0, Rnd(0.1, 0.5))
+							d\Timer = Rnd(50.0, 100.0)
+						Else
+							d\Timer = d\Timer - fpst\FPSFactor[0]
+						EndIf
+						;[End Block]
+				End Select
+				
+				If d\Size >= d\MaxSize Then d\SizeChange = 0.0 : d\Size = d\MaxSize
+			EndIf
 			
-			Select d\ID
-				Case 0
-					;[Block]
-					If d\Timer =< 0.0 Then
-						Local Angle# = Rnd(360.0)
-						Local Temp# = Rnd(d\Size)
-						Local d2.Decals = CreateDecal(1, EntityX(d\OBJ) + Cos(Angle) * Temp, EntityY(d\OBJ) - 0.0005, EntityZ(d\OBJ) + Sin(Angle) * Temp, EntityPitch(d\OBJ), Rnd(360.0), EntityRoll(d\OBJ))
-						
-						d2\Size = Rnd(0.1, 0.5) : ScaleSprite(d2\OBJ, d2\Size, d2\Size)
-						PlaySound2(DecaySFX[Rand(1, 3)], Camera, d2\OBJ, 10.0, Rnd(0.1, 0.5))
-						d\Timer = Rnd(50.0, 100.0)
-					Else
-						d\Timer = d\Timer - fpst\FPSFactor[0]
-					EndIf
-					;[End Block]
-			End Select
+			If d\AlphaChange <> 0.0 Then
+				d\Alpha = Min(d\Alpha + fpst\FPSFactor[0] * d\AlphaChange, 1.0)
+				EntityAlpha(d\OBJ, d\Alpha)
+			EndIf
 			
-			If d\Size >= d\MaxSize Then d\SizeChange = 0.0 : d\Size = d\MaxSize
-		EndIf
-		
-		If d\AlphaChange <> 0.0 Then
-			d\Alpha = Min(d\Alpha + fpst\FPSFactor[0] * d\AlphaChange, 1.0)
-			EntityAlpha(d\OBJ, d\Alpha)
-		EndIf
-		
-		If d\LifeTime > 0.0 Then
-			d\LifeTime = Max(d\LifeTime - fpst\FPSFactor[0], 5.0)
-		EndIf
-		
-		If d\Size =< 0.0 Lor d\Alpha =< 0.0 Lor d\LifeTime = 5.0  Then
-			FreeEntity(d\OBJ)
+			If d\LifeTime > 0.0 Then
+				d\LifeTime = Max(d\LifeTime - fpst\FPSFactor[0], 5.0)
+			EndIf
 			
-			Delete(d)
+			If d\Size =< 0.0 Lor d\Alpha =< 0.0 Lor d\LifeTime = 5.0  Then
+				FreeEntity(d\OBJ)
+				
+				Delete(d)
+			EndIf
 		EndIf
 	Next
 End Function
@@ -12480,5 +12501,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#107C#130E#1E00
+;~B#1080#1312#1E04
 ;~C#Blitz3D

@@ -8,8 +8,6 @@ Type Particles
 	Field LifeTime#
 End Type 
 
-Global UpdateParticles_Time#
-
 Function CreateParticle.Particles(x#, y#, z#, Image%, Size#, Gravity# = 1.0, LifeTime# = 200.0)
 	Local p.Particles = New Particles
 	
@@ -48,7 +46,7 @@ End Function
 Function UpdateParticles()
 	Local p.Particles
 	
-	If UpdateParticles_Time =< 0.0 Then
+	If UpdateTimer =< 0.0 Then
 		For p.Particles = Each Particles
 			Local xDist# = Abs(EntityX(me\Collider) - EntityX(p\OBJ, True))
 			Local zDist# = Abs(EntityZ(me\Collider) - EntityZ(p\OBJ, True))
@@ -61,9 +59,6 @@ Function UpdateParticles()
 				If p\OBJ <> 0 Then ShowEntity(p\OBJ)
 			EndIf
 		Next
-		UpdateParticles_Time = 30.0
-	Else
-		UpdateParticles_Time = Max(UpdateParticles_Time - fpst\FPSFactor[0], 0.0)
 	EndIf
 	
 	For p.Particles = Each Particles
@@ -159,7 +154,7 @@ End Function
 Function UpdateEmitters()
 	Local e.Emitters
 	
-	If UpdateParticles_Time =< 0.0 Then
+	If UpdateTimer =< 0.0 Then
 		For e.Emitters = Each Emitters
 			Local xDist# = Abs(EntityX(me\Collider) - EntityX(e\OBJ, True))
 			Local zDist# = Abs(EntityZ(me\Collider) - EntityZ(e\OBJ, True))
