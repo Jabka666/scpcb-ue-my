@@ -1863,12 +1863,15 @@ Function FillRoom(r.Rooms)
 				de = CreateDecal(Rand(2, 3), r\x + Rnd(-392.0, 520.0) * RoomScale, r\y + 3.0 * RoomScale + Rnd(0, 0.001), r\z + Rnd(-392.0, 520.0) * RoomScale, 90.0, Rnd(360.0), 0.0)
 				de\Size = Rnd(0.3, 0.6)
 				ScaleSprite(de\OBJ, de\Size, de\Size)
+				EntityParent(de\OBJ, r\OBJ)
 				de = CreateDecal(Rand(15, 16), r\x + Rnd(-392.0, 520.0) * RoomScale, r\y + 3.0 * RoomScale + Rnd(0, 0.001), r\z + Rnd(-392.0, 520.0) * RoomScale, 90.0, Rnd(360.0), 0.0)
 				de\Size = Rnd(0.1, 0.6)
 				ScaleSprite(de\OBJ, de\Size, de\Size)
+				EntityParent(de\OBJ, r\OBJ)
 				de = CreateDecal(Rand(15, 16), r\x + Rnd(-0.5, 0.5), r\y + 3.0 * RoomScale + Rnd(0, 0.001), r\z + Rnd(-0.5, 0.5), 90.0, Rnd(360.0), 0.0)
 				de\Size = Rnd(0.1, 0.6)
 				ScaleSprite(de\OBJ, de\Size, de\Size)
+				EntityParent(de\OBJ, r\OBJ)
 			Next
 			;[End Block]
 		Case "gatea"
@@ -3772,6 +3775,7 @@ Function FillRoom(r.Rooms)
 				EndIf
 			    de\Alpha = Rnd(0.8, 1.0)
 			    ScaleSprite(de\OBJ, de\Size, de\Size)
+				EntityParent(de\OBJ, r\OBJ)
 			Next
 			;[End Block]
 		Case "room2scps"
@@ -4309,6 +4313,7 @@ Function FillRoom(r.Rooms)
 			    de\Size = dSize
 				de\Alpha = Rnd(0.8, 1.0)
 			    ScaleSprite(de\OBJ, de\Size, de\Size)
+				EntityParent(de\OBJ, r\OBJ)
 			Next
 			
 			sc = CreateSecurityCam(r\x - 4048.0 * RoomScale, r\y - 32.0 * RoomScale, r\z - 1232.0 * RoomScale, r, True, r\x - 2256.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 928.0 * RoomScale)
