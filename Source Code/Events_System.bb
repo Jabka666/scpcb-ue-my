@@ -5461,7 +5461,7 @@ Function UpdateEvents()
 					If EntityY(me\Collider) < -4600.0 * RoomScale Then
 						GiveAchievement(Achv939)
 						
-						me\BlurTimer = Min(me\BlurTimer + (fpst\FPSFactor[0] * 1.05), 1000.0)
+						If WearingGasMask = 0 Then me\BlurTimer = Min(me\BlurTimer + (fpst\FPSFactor[0] * 1.05), 1000.0)
 						
 						ShouldPlay = 7
 						

@@ -4397,11 +4397,11 @@ Function MouseLook()
 			AmbientLightRooms(15)
 		Else
 			EntityColor(tt\OverlayID[4], 128.0, 128.0, 128.0)
-			AmbientLightRooms(0)
+			AmbientLightRooms(15)
 		EndIf
 		EntityTexture(tt\OverlayID[0], tt\OverlayTextureID[5])
 	Else
-		AmbientLightRooms(0)
+		AmbientLightRooms(15)
 		HideEntity(tt\OverlayID[4])
 		EntityTexture(tt\OverlayID[0], tt\OverlayTextureID[0])
 	EndIf
@@ -8694,7 +8694,7 @@ Function LoadEntities()
 	ClsColor(0, 0, 0)
 	Cls()
 	SetBuffer(BackBuffer())
-	AmbientLightRoomVal = 0
+	AmbientLightRoomVal = 255
 	
 	SoundEmitter = CreatePivot()
 	

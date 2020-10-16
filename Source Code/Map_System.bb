@@ -4310,8 +4310,7 @@ Function FillRoom(r.Rooms)
 				Else
 					de\Size = 0.54
 				EndIf
-			    de\Size = dSize
-				de\Alpha = Rnd(0.8, 1.0)
+			    de\Alpha = Rnd(0.8, 1.0)
 			    ScaleSprite(de\OBJ, de\Size, de\Size)
 				EntityParent(de\OBJ, r\OBJ)
 			Next
