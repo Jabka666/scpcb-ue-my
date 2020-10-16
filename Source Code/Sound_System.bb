@@ -463,8 +463,6 @@ Function PlayAnnouncement(File$) ; ~ This function streams the announcement curr
 End Function
 
 Function UpdateStreamSounds()
-	Local e.Events
-	
 	If fpst\FPSFactor[0] > 0.0 Then
 		If IntercomStreamCHN <> 0 Then
 			SetStreamVolume_Strict(IntercomStreamCHN, SFXVolume)

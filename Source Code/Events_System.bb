@@ -1313,20 +1313,16 @@ Function UpdateEvents()
 							If e\room\NPC[5]\State <> 11.0
 								If EntityDistanceSquared(e\room\NPC[3]\Collider, e\room\NPC[5]\Collider) > 25.0 And EntityDistanceSquared(e\room\NPC[4]\Collider, e\room\NPC[5]\Collider)
 									If EntityDistanceSquared(e\room\NPC[5]\Collider, me\Collider) < 12.25
-										e\room\NPC[3]\State = 11.0
-										e\room\NPC[4]\State = 11.0
-										e\room\NPC[5]\State = 11.0
-										e\room\NPC[3]\State3 = 1.0
-										e\room\NPC[4]\State3 = 1.0
-										e\room\NPC[5]\State3 = 1.0
-										e\room\NPC[3]\Reload = 70.0 * 3.0
-										e\room\NPC[4]\Reload = 70.0 * 3.0
-										e\room\NPC[5]\Reload = 70.0 * 3.0
-										
-										For i = 3 To 4
-											If ChannelPlaying(e\room\NPC[i]\SoundCHN) Then StopChannel(e\room\NPC[i]\SoundCHN)
-											If e\room\NPC[i]\Sound <> 0 Then
-												FreeSound_Strict(e\room\NPC[i]\Sound) : e\room\NPC[i]\Sound = 0
+										For i = 3 To 5
+											e\room\NPC[i]\State = 11.0
+											e\room\NPC[i]\State3 = 1.0
+											e\room\NPC[i]\Reload = 70.0 * 3.0
+											
+											If i < 5 Then
+												If ChannelPlaying(e\room\NPC[i]\SoundCHN) Then StopChannel(e\room\NPC[i]\SoundCHN)
+												If e\room\NPC[i]\Sound <> 0 Then
+													FreeSound_Strict(e\room\NPC[i]\Sound) : e\room\NPC[i]\Sound = 0
+												EndIf
 											EndIf
 										Next
 										e\room\NPC[5]\SoundCHN2 = PlaySound2(e\room\NPC[5]\Sound2, Camera, e\room\NPC[5]\Collider)
@@ -1475,31 +1471,25 @@ Function UpdateEvents()
 										e\room\NPC[3]\State3 = 50.0 + 70.0 * 2.5
 										e\room\NPC[3]\State2 = 5.0
 									ElseIf e\room\NPC[3]\State2 = 5.0
-										e\room\NPC[3]\State = 11.0
-										e\room\NPC[4]\State = 11.0
-										e\room\NPC[5]\State = 11.0
-										e\room\NPC[3]\State3 = 1.0
-										e\room\NPC[4]\State3 = 1.0
-										e\room\NPC[5]\State3 = 1.0
+										For i = 3 To 5
+											e\room\NPC[i]\State = 11.0
+											e\room\NPC[i]\State3 = 1.0
+										Next
 									EndIf
 								EndIf
 								If e\room\NPC[5]\State <> 11.0 Then
 									If EntityDistanceSquared(e\room\NPC[3]\Collider, e\room\NPC[5]\Collider) > 25.0 And EntityDistanceSquared(e\room\NPC[4]\Collider, e\room\NPC[5]\Collider)
 										If EntityDistanceSquared(e\room\NPC[5]\Collider, me\Collider) < 12.25
-											e\room\NPC[3]\State = 11.0
-											e\room\NPC[4]\State = 11.0
-											e\room\NPC[5]\State = 11.0
-											e\room\NPC[3]\State3 = 1.0
-											e\room\NPC[4]\State3 = 1.0
-											e\room\NPC[5]\State3 = 1.0
-											e\room\NPC[3]\Reload = 70.0 * 3.0
-											e\room\NPC[4]\Reload = 70.0 * 3.0
-											e\room\NPC[5]\Reload = 70.0 * 3.0
-											
-											For i = 3 To 4
-												If ChannelPlaying(e\room\NPC[i]\SoundCHN) Then StopChannel(e\room\NPC[i]\SoundCHN)
-												If e\room\NPC[i]\Sound <> 0 Then
-													FreeSound_Strict(e\room\NPC[i]\Sound) : e\room\NPC[i]\Sound = 0
+											For i = 3 To 5
+												e\room\NPC[i]\State = 11.0
+												e\room\NPC[i]\State3 = 1.0
+												e\room\NPC[i]\Reload = 70.0 * 3.0
+												
+												If i < 5 Then
+													If ChannelPlaying(e\room\NPC[i]\SoundCHN) Then StopChannel(e\room\NPC[i]\SoundCHN)
+													If e\room\NPC[i]\Sound <> 0 Then
+														FreeSound_Strict(e\room\NPC[i]\Sound) : e\room\NPC[i]\Sound = 0
+													EndIf
 												EndIf
 											Next
 											e\room\NPC[5]\SoundCHN2 = PlaySound2(e\room\NPC[5]\Sound2, Camera, e\room\NPC[5]\Collider)
@@ -2485,9 +2475,7 @@ Function UpdateEvents()
 									msg\DeathMsg = Chr(34) + "Class D viewed SCP-895 through a pair of digital night vision goggles, killing him." + Chr(34)
 								EndIf
 								EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
-								If me\VomitTimer < -10.0 Then
-									Kill()
-								EndIf
+								If me\VomitTimer < -10.0 Then Kill()
 							ElseIf me\Sanity < -800.0 Then
 								If Rand(3) = 1 Then EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
 								If Rand(6) < 5 Then
@@ -2503,9 +2491,7 @@ Function UpdateEvents()
 									Next
 								EndIf
 								me\BlurTimer = 1000.0
-								If me\VomitTimer = 0.0 Then
-									me\VomitTimer = 1.0
-								EndIf
+								If me\VomitTimer = 0.0 Then me\VomitTimer = 1.0
 							ElseIf me\Sanity < -500.0 Then
 								If Rand(7) = 1 Then EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
 								If Rand(50) = 1 Then
@@ -2875,10 +2861,7 @@ Function UpdateEvents()
 								
 								Dist = EntityDistance(me\Collider, e\room\Objects[18])
 								
-								If e\SoundCHN2 <> 0 And ChannelPlaying(e\SoundCHN2)
-									e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, Camera, 10.0, 0.3 + (Not Safe) * 0.6)
-								EndIf	
-								
+								If e\SoundCHN2 <> 0 And ChannelPlaying(e\SoundCHN2) Then e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, Camera, 10.0, 0.3 + (Not Safe) * 0.6)
 								If Safe Lor chs\NoTarget Then
 									EntityTexture(e\room\Objects[18], e\room\Textures[0])
 								ElseIf Dist < 8.0
@@ -2936,17 +2919,13 @@ Function UpdateEvents()
 												me\KillTimer = -1.0
 											EndIf
 										EndIf
-										If Float(e\EventStr) < 1000.0 Then
-											e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\Objects[i], 6.0)
-										EndIf
+										If Float(e\EventStr) < 1000.0 Then e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\Objects[i], 6.0)
 									EndIf
 								Next
 								
 								Pvt = CreatePivot()
 								PositionEntity(Pvt, EntityX(e\room\Objects[8], True) - 1536.0 * RoomScale, 500.0 * RoomScale, EntityZ(e\room\Objects[8], True) + 608.0 * RoomScale)
-								If EntityDistanceSquared(Pvt, me\Collider) < 25.0 Then 
-									e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, Pvt, 3.0)
-								EndIf
+								If EntityDistanceSquared(Pvt, me\Collider) < 25.0 Then e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, Pvt, 3.0)
 								FreeEntity(Pvt)
 								
 								; ~ SCP-106's eyes
@@ -3593,11 +3572,11 @@ Function UpdateEvents()
 					UpdateLever(e\room\Objects[3])
 					
 					If e\EventState3 = 0.0 Then
-						n.NPCs = CreateNPC(NPCtypeD, EntityX(e\room\Objects[6], True), 0.55, EntityZ(e\room\Objects[6], True))
-						RotateEntity(n\Collider, 0.0, e\room\Angle + 90.0, 0.0)
-						n\State = 3.0
-						ChangeNPCTextureID(n, 9)
-						SetNPCFrame(n, 40.0)
+						e\room\NPC[0] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[6], True), 0.55, EntityZ(e\room\Objects[6], True))
+						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0)
+						e\room\NPC[0]\State = 3.0
+						ChangeNPCTextureID(e\room\NPC[0], 9)
+						SetNPCFrame(e\room\NPC[0], 40.0)
 						e\EventState3 = 1.0
 					EndIf
 				EndIf
@@ -3908,6 +3887,7 @@ Function UpdateEvents()
 												PlayMTFSound(n\Sound, n)
 												n\Idle = 70.0 * 10.0
 												e\EventState2 = 70.0 * 100.0
+												Exit
 											EndIf
 										EndIf
 									EndIf
@@ -9010,7 +8990,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_room2medibay
+			Case e_room2medibay, e_room2medibay2
 				;[Block]
 				; ~ Hiding / Showing the props in this room
 				If PlayerRoom <> e\room Then
@@ -9018,37 +8998,31 @@ Function UpdateEvents()
 				Else
 					ShowEntity(e\room\Objects[0])
 					
-					If EntityDistanceSquared(e\room\Objects[1], me\Collider) < 0.49 Then
-						DrawHandIcon = True
-						If MouseHit1 Then
-							msg\Msg = "You feel a cold breeze next to your body."
-							msg\Timer = 70.0 * 6.0
-							InjurePlayer(Rnd(-0.5, 0.3))
-							me\Bloodloss = 0.0
-							PlaySound_Strict(LoadTempSound("SFX\SCP\Joke\Quack.ogg"))
+					If e\EventID = e_room2medibay2 Then
+						If e\EventState = 0.0 Then
+							e\room\NPC[0] = CreateNPC(NPCtype008_1, EntityX(e\room\Objects[1], True), 0.5, EntityZ(e\room\Objects[1], True))
+							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle - 90.0, 0.0)
+							e\EventState = 1.0
 						EndIf
-					EndIf
-				EndIf
-				;[End Block]
-			Case e_room2medibay2
-				;[Block]
-				; ~ Hiding / Showing the props in this room
-				If PlayerRoom <> e\room Then
-					HideEntity(e\room\Objects[0])
-				Else
-					ShowEntity(e\room\Objects[0])
-					If e\EventState = 0.0 Then
-						e\room\NPC[0] = CreateNPC(NPCtype008_1, EntityX(e\room\Objects[1], True), 0.5, EntityZ(e\room\Objects[1], True))
-						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle - 90.0, 0.0)
-						e\EventState = 1.0
-					EndIf
-					
-					If EntityDistanceSquared(e\room\NPC[0]\Collider, me\Collider) < 1.44 Then
-						If e\EventState2 = 0.0 Then
-							me\LightBlink = 10.0
-							PlaySound_Strict(LightSFX)
-							e\room\NPC[0]\State = 1.0
-							e\EventState2 = 1.0
+						
+						If EntityDistanceSquared(e\room\NPC[0]\Collider, me\Collider) < 1.44 Then
+							If e\EventState2 = 0.0 Then
+								me\LightBlink = 10.0
+								PlaySound_Strict(LightSFX)
+								e\room\NPC[0]\State = 1.0
+								e\EventState2 = 1.0
+							EndIf
+						EndIf
+					ElseIf e\EventID = e_room2medibay
+						If EntityDistanceSquared(e\room\Objects[1], me\Collider) < 0.49 Then
+							DrawHandIcon = True
+							If MouseHit1 Then
+								msg\Msg = "You feel a cold breeze next to your body."
+								msg\Timer = 70.0 * 6.0
+								InjurePlayer(Rnd(-0.5, 0.3))
+								me\Bloodloss = 0.0
+								PlaySound_Strict(LoadTempSound("SFX\SCP\Joke\Quack.ogg"))
+							EndIf
 						EndIf
 					EndIf
 				EndIf

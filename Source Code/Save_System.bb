@@ -1023,7 +1023,7 @@ Function LoadGame(File$)
 		Local Roll# = ReadFloat(f)
 		
 		d.Decals = CreateDecal(ID, x, y, z, Pitch, Yaw, Roll)
-		d\BlendMode = ReadByte (f)
+		d\BlendMode = ReadByte(f)
 		d\FX = ReadInt(f)
 		
 		d\Size = ReadFloat(f)
@@ -1756,7 +1756,7 @@ Function LoadGameQuick(File$)
 		Local Roll# = ReadFloat(f)
 		
 		d.Decals = CreateDecal(ID, x, y, z, Pitch, Yaw, Roll)
-		d\BlendMode = ReadByte (f)
+		d\BlendMode = ReadByte(f)
 		d\FX = ReadInt(f)
 		
 		d\Size = ReadFloat(f)
