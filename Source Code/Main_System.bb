@@ -1366,10 +1366,8 @@ Function UpdateConsole()
 						If e\EventID = e_room173 Then
 							For i = 0 To 2
 								If e\room\NPC[i] <> Null Then RemoveNPC(e\room\NPC[i])
+								If i < 2 Then FreeEntity(e\room\Objects[i]) : e\room\Objects[i] = 0
 							Next
-							
-							FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
-							FreeEntity(e\room\Objects[1]) : e\room\Objects[1] = 0
 							PositionEntity(Curr173\Collider, 0.0, 0.0, 0.0)
 							ResetEntity(Curr173\Collider)
 							ShowEntity(Curr173\OBJ)
@@ -1624,10 +1622,8 @@ Function UpdateConsole()
 						If e\EventID = e_room173 Then
 							For i = 0 To 2
 								If e\room\NPC[i] <> Null Then RemoveNPC(e\room\NPC[i])
+								If i < 2 Then FreeEntity(e\room\Objects[i]) : e\room\Objects[i] = 0
 							Next
-							
-							FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
-							FreeEntity(e\room\Objects[1]) : e\room\Objects[1] = 0
 							PositionEntity(Curr173\Collider, 0.0, 0.0, 0.0)
 							ResetEntity(Curr173\Collider)
 							ShowEntity(Curr173\OBJ)
@@ -2656,7 +2652,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True, Scripted% = False)
 					EndIf
 				EndIf
 			EndIf
-			Return
+			If (Not Scripted) Then Return
 		EndIf	
 	EndIf
 	
@@ -2870,43 +2866,49 @@ Repeat
 	Local x%, y%, ScreenshotCount%
 	
 	If KeyHit(key\SCREENSHOT) Then
-		If FileType("Screenshots\") <> 2 Then
-			CreateDir("Screenshots")
-		EndIf
-		
-		Local Bank% = CreateBank(RealGraphicWidth * RealGraphicHeight * 3)
-		
-		LockBuffer(BackBuffer())
-		For x = 0 To RealGraphicWidth - 1
-			For y = 0 To RealGraphicHeight - 1
-				Local Pixel% = ReadPixelFast(x, y, BackBuffer())
+		While True
+			If FileSize("Screenshots\Screenshot" + ScreenshotCount + ".png") = 0 Then
+				If FileType("Screenshots\") <> 2 Then
+					CreateDir("Screenshots")
+				EndIf
 				
-				PokeByte(Bank, (y * (RealGraphicWidth * 3)) + (x * 3), (Pixel Shr 0) And $FF)
-				PokeByte(Bank, (y * (RealGraphicWidth * 3)) + (x * 3) + 1, (Pixel Shr 8) And $FF)
-				PokeByte(Bank, (y * (RealGraphicWidth * 3)) + (x * 3) + 2, (Pixel Shr 16) And $FF)
-			Next
-		Next
-		UnlockBuffer(BackBuffer())
-		
-		Local fiBuffer% = FI_ConvertFromRawBits(Bank, RealGraphicWidth, RealGraphicHeight, RealGraphicWidth * 3, 24, $FF0000, $00FF00, $0000FF, True)
-		
-		FI_Save(13, fiBuffer, "Screenshots\Screenshot" + ScreenshotCount + ".png", 0)
-		FI_Unload(fiBuffer)
-		FreeBank(Bank)
-		ScreenshotCount = ScreenshotCount + 1
-		If (Not MainMenuOpen) Then
-			msg\Msg = "Screenshot Taken."
-			msg\Timer = 70.0 * 6.0
-		EndIf
-		PlaySound_Strict(LoadTempSound("SFX\General\Screenshot.ogg"))
+				Local Bank% = CreateBank(RealGraphicWidth * RealGraphicHeight * 3)
+				
+				LockBuffer(BackBuffer())
+				For x = 0 To RealGraphicWidth - 1
+					For y = 0 To RealGraphicHeight - 1
+						Local Pixel% = ReadPixelFast(x, y, BackBuffer())
+						
+						PokeByte(Bank, (y * (RealGraphicWidth * 3)) + (x * 3), (Pixel Shr 0) And $FF)
+						PokeByte(Bank, (y * (RealGraphicWidth * 3)) + (x * 3) + 1, (Pixel Shr 8) And $FF)
+						PokeByte(Bank, (y * (RealGraphicWidth * 3)) + (x * 3) + 2, (Pixel Shr 16) And $FF)
+					Next
+				Next
+				UnlockBuffer(BackBuffer())
+				
+				Local fiBuffer% = FI_ConvertFromRawBits(Bank, RealGraphicWidth, RealGraphicHeight, RealGraphicWidth * 3, 24, $FF0000, $00FF00, $0000FF, True)
+				
+				FI_Save(13, fiBuffer, "Screenshots\Screenshot" + ScreenshotCount + ".png", 0)
+				FI_Unload(fiBuffer)
+				FreeBank(Bank)
+				If (Not MainMenuOpen) Then
+					msg\Msg = "Screenshot Taken."
+					msg\Timer = 70.0 * 6.0
+				EndIf
+				PlaySound_Strict(LoadTempSound("SFX\General\Screenshot.ogg"))
+				Exit
+			Else
+				ScreenshotCount = ScreenshotCount + 1
+			EndIf
+		Wend
 	EndIf
 	
 	CatchErrors("Main Loop / Uncaught")
 	
 	If (Not VSync) Then
-		Flip(0)
+		Flip(False)
 	Else 
-		Flip(1)
+		Flip(True)
 	EndIf
 Forever
 
@@ -12502,5 +12504,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1081#1313#1E05
+;~B#1083#1315#1E07
 ;~C#Blitz3D

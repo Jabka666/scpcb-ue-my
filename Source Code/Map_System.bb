@@ -2269,14 +2269,13 @@ Function FillRoom(r.Rooms)
 			i = 0
 			For xTemp = -1 To 1 Step 2
 				For zTemp = -1 To 1
-					em = CreateEmitter(r\x + 202.0 * RoomScale * xTemp, 8.0 * RoomScale, r\z + 256.0 * RoomScale * zTemp, 0)
+					em = CreateEmitter(r\x + 202.0 * RoomScale * xTemp, r\y + 8.0 * RoomScale, r\z + 256.0 * RoomScale * zTemp, 0)
 					em\RandAngle = 30.0 : em\Speed = 0.0045 : em\SizeChange = 0.007 : em\Achange = -0.016
 					If i < 3 Then 
-						TurnEntity(em\OBJ, 0.0, -90.0, 0.0) 
+						TurnEntity(em\OBJ, -45.0, -90.0, 0.0) 
 					Else 
-						TurnEntity(em\OBJ, 0.0, 90.0, 0.0)
+						TurnEntity(em\OBJ, -45.0, 90.0, 0.0)
 					EndIf
-					TurnEntity(em\OBJ, -45.0, 0.0, 0.0)
 					EntityParent(em\OBJ, r\OBJ)
 					i = i + 1
 				Next
@@ -5258,9 +5257,9 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "room2_4"
 			;[Block]
-			r\Objects[6] = CreatePivot()
-			PositionEntity(r\Objects[6], r\x + 640.0 * RoomScale, r\y + 8.0 * RoomScale, r\z - 896.0 * RoomScale)
-			EntityParent(r\Objects[6], r\OBJ)
+			r\Objects[0] = CreatePivot()
+			PositionEntity(r\Objects[0], r\x + 640.0 * RoomScale, r\y + 8.0 * RoomScale, r\z - 896.0 * RoomScale)
+			EntityParent(r\Objects[0], r\OBJ)
 			;[End Block]
 		Case "room3z2"
 			;[Block]

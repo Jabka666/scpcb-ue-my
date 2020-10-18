@@ -4752,7 +4752,7 @@ Function UpdateEvents()
                         
                         RotateEntity(Curr106\OBJ, 0.0, EntityYaw(Curr106\Collider), 0.0)
                         Curr106\Idle = True
-                        AnimateNPC(Curr106, 334.0, 49.04, 0.3)
+                        AnimateNPC(Curr106, 334.0, 494.0, 0.3)
                         If e\EventState > 800.0 Then
                             If me\BlinkTimer < -5.0 Then Curr106\Idle = False : RemoveEvent(e)
                         EndIf
@@ -8876,13 +8876,11 @@ Function UpdateEvents()
 				;[Block]
 				Local xSpawn#, zSpawn#, Place%
 				
-				If e\room\Dist < HideDistance
+				If e\room\Dist < HideDistance Then
 					; ~ Checking some statements in order to determine if SCP-096 can spawn in this room
 					If e\EventState <> 2.0
 						If Curr096 <> Null
-							If EntityDistanceSquared(Curr096\Collider, me\Collider) < 1600.0 Then
-								e\EventState = 2.0
-							EndIf
+							If EntityDistanceSquared(Curr096\Collider, me\Collider) < 1600.0 Then e\EventState = 2.0
 							
 							For e2.Events = Each Events
 								If e2\EventID = e_room2servers
@@ -8902,13 +8900,8 @@ Function UpdateEvents()
 								EndIf
 							Next
 							
-							If Curr096\State <> 5.0
-								e\EventState = 2.0
-							EndIf
-							
-							If EntityDistanceSquared(Curr096\Collider, e\room\OBJ) > EntityDistanceSquared(Curr096\Collider, me\Collider)
-								e\EventState = 2.0
-							EndIf
+							If Curr096\State <> 5.0 Then e\EventState = 2.0
+							If EntityDistanceSquared(Curr096\Collider, e\room\OBJ) > EntityDistanceSquared(Curr096\Collider, me\Collider) Then e\EventState = 2.0
 						EndIf
 						
 						For e2.Events = Each Events
