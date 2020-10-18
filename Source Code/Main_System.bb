@@ -8922,27 +8922,27 @@ Function LoadEntities()
 	
 	; ~ [DOORS]
 	
-	o\DoorModelID[0] = LoadMesh_Strict("GFX\map\Door01.x") ; ~ Default Door
+	o\DoorModelID[0] = LoadMesh_Strict("GFX\map\Props\Door01.x") ; ~ Default Door
 	
-	o\DoorModelID[1] = LoadMesh_Strict("GFX\map\DoorFrame.x") ; ~ Door Frame
+	o\DoorModelID[1] = LoadMesh_Strict("GFX\map\Props\DoorFrame.x") ; ~ Door Frame
 	
-	o\DoorModelID[2] = LoadMesh_Strict("GFX\map\HeavyDoor1.x") ; ~ Heavy Door #1
+	o\DoorModelID[2] = LoadMesh_Strict("GFX\map\Props\HeavyDoor1.x") ; ~ Heavy Door #1
 	
-	o\DoorModelID[3] = LoadMesh_Strict("GFX\map\HeavyDoor2.x") ; ~ Heavy Door #2
+	o\DoorModelID[3] = LoadMesh_Strict("GFX\map\Props\HeavyDoor2.x") ; ~ Heavy Door #2
 	
-	o\DoorModelID[4] = LoadMesh_Strict("GFX\map\DoorColl.x") ; ~ Door Collider
+	o\DoorModelID[4] = LoadMesh_Strict("GFX\map\Props\DoorColl.x") ; ~ Door Collider
 	
-	o\DoorModelID[5] = LoadMesh_Strict("GFX\map\ContDoorLeft.x") ; ~ Big Door Left
+	o\DoorModelID[5] = LoadMesh_Strict("GFX\map\Props\ContDoorLeft.x") ; ~ Big Door Left
 	
-	o\DoorModelID[6] = LoadMesh_Strict("GFX\map\ContDoorRight.x") ; ~ Big Door Right
+	o\DoorModelID[6] = LoadMesh_Strict("GFX\map\Props\ContDoorRight.x") ; ~ Big Door Right
 	
-	o\DoorModelID[7] = LoadMesh_Strict("GFX\map\ElevatorDoor.b3d") ; ~ Elevator Door
+	o\DoorModelID[7] = LoadMesh_Strict("GFX\map\Props\ElevatorDoor.b3d") ; ~ Elevator Door
 	
-	o\DoorModelID[8] = LoadMesh_Strict("GFX\map\forest\DoorWoodenFrame.b3d") ; ~ Wooden Door Frame
+	o\DoorModelID[8] = LoadMesh_Strict("GFX\map\Props\DoorWoodenFrame.b3d") ; ~ Wooden Door Frame
 	
-	o\DoorModelID[9] = LoadMesh_Strict("GFX\map\forest\DoorWooden.b3d") ; ~ Wooden Door
+	o\DoorModelID[9] = LoadMesh_Strict("GFX\map\Props\DoorWooden.b3d") ; ~ Wooden Door
 	
-	o\DoorModelID[10] = LoadMesh_Strict("GFX\map\Door02.x") ; ~ One-sided Door
+	o\DoorModelID[10] = LoadMesh_Strict("GFX\map\Props\Door02.x") ; ~ One-sided Door
 	
 	For i = 0 To MaxDoorModelIDAmount - 1
 	    HideEntity(o\DoorModelID[i])
@@ -8950,9 +8950,9 @@ Function LoadEntities()
 	
 	; ~ [LEVERS]
 	
-	o\LeverModelID[0] = LoadMesh_Strict("GFX\map\leverbase.x") ; ~ Lever Base
+	o\LeverModelID[0] = LoadMesh_Strict("GFX\map\Props\LeverBase.b3d") ; ~ Lever Base
 	
-	o\LeverModelID[1] = LoadMesh_Strict("GFX\map\leverhandle.x") ; ~ Lever Handle
+	o\LeverModelID[1] = LoadMesh_Strict("GFX\map\Props\LeverHandle.b3d") ; ~ Lever Handle
 	
 	For i = 0 To MaxLeverModelIDAmount - 1
 	    HideEntity(o\LeverModelID[i])
@@ -8960,15 +8960,15 @@ Function LoadEntities()
 	
 	; ~ [BUTTONS]
 	
-	o\ButtonModelID[0] = LoadMesh_Strict("GFX\map\Button.b3d") ; ~ Button
+	o\ButtonModelID[0] = LoadMesh_Strict("GFX\map\Props\Button.b3d") ; ~ Button
 	
-	o\ButtonModelID[1] = LoadMesh_Strict("GFX\map\ButtonKeycard.b3d") ; ~ Keycard Button
+	o\ButtonModelID[1] = LoadMesh_Strict("GFX\map\Props\ButtonKeycard.b3d") ; ~ Keycard Button
 	
-	o\ButtonModelID[2] = LoadMesh_Strict("GFX\map\ButtonCode.b3d") ; ~ Code Button
+	o\ButtonModelID[2] = LoadMesh_Strict("GFX\map\Props\ButtonCode.b3d") ; ~ Code Button
 	
-	o\ButtonModelID[3] = LoadMesh_Strict("GFX\map\ButtonScanner.b3d") ; ~ Scanner Button
+	o\ButtonModelID[3] = LoadMesh_Strict("GFX\map\Props\ButtonScanner.b3d") ; ~ Scanner Button
 	
-	o\ButtonModelID[4] = LoadMesh_Strict("GFX\map\ButtonElevator.b3d") ; ~ Elevator Button
+	o\ButtonModelID[4] = LoadMesh_Strict("GFX\map\Props\ButtonElevator.b3d") ; ~ Elevator Button
 	
 	For i = 0 To MaxButtonModelIDAmount - 1
         HideEntity(o\ButtonModelID[i])
@@ -9030,9 +9030,9 @@ Function LoadEntities()
 	
 	; ~ [CAMS]
 	
-	o\CamModelID[0] = LoadMesh_Strict("GFX\map\cambase.x") ; ~ Cam Base
+	o\CamModelID[0] = LoadMesh_Strict("GFX\map\Props\CamBase.b3d") ; ~ Cam Base
 	
-	o\CamModelID[1] = LoadMesh_Strict("GFX\map\CamHead.b3d") ; ~ Cam Head
+	o\CamModelID[1] = LoadMesh_Strict("GFX\map\Props\CamHead.b3d") ; ~ Cam Head
 	
 	For i = 0 To MaxCamModelIDAmount - 1
         HideEntity(o\CamModelID[i])
@@ -9040,11 +9040,12 @@ Function LoadEntities()
 	
 	; ~ [MONITORS]
 	
-	o\MonitorModelID[0] = LoadMesh_Strict("GFX\map\monitor.b3d") ; ~ Monitor
+	o\MonitorModelID[0] = LoadMesh_Strict("GFX\map\Props\monitor2.b3d") ; ~ Monitor
 	
-	o\MonitorModelID[1] = LoadMesh_Strict("GFX\map\monitor_checkpoint.b3d") ; ~ Checkpoint Monitor LCZ
-	
-	o\MonitorModelID[2] = LoadMesh_Strict("GFX\map\monitor_checkpoint.b3d") ; ~ Checkpoint Monitor HCZ
+	; ~ FIND A WAY TO USE ONE MODEL
+	For i = 1 To 2
+		o\MonitorModelID[i] = LoadMesh_Strict("GFX\map\Props\monitor_checkpoint.b3d") ; ~ Checkpoint Monitor LCZ / HCZ
+	Next
 	
     For i = 0 To MaxMonitorModelIDAmount - 1
         HideEntity(o\MonitorModelID[i])
@@ -9060,6 +9061,7 @@ Function LoadEntities()
 	Cls()
 	SetBuffer(BackBuffer())
 	
+	; ~ FIND A WAY TO USE ONE MODEL
 	For i = 2 To CountSurfaces(o\MonitorModelID[1])
 		SF = GetSurface(o\MonitorModelID[1], i)
 		b = GetSurfaceBrush(SF)

@@ -2145,7 +2145,7 @@ Function FillRoom(r.Rooms)
 			r\RoomDoors[2] = CreateDoor(r\Zone, r\x + 512.0 * RoomScale, r\y - 10240.0 * RoomScale, r\z - 256.0 * RoomScale, -90.0, r, False, 3)
 			r\RoomDoors[2]\AutoClose = False
 			
-			If r\Objects[0] = 0 Then r\Objects[0] = LoadAnimMesh_Strict("GFX\map\079.b3d")
+			If r\Objects[0] = 0 Then r\Objects[0] = LoadAnimMesh_Strict("GFX\map\Props\079.b3d")
 			ScaleEntity(r\Objects[0], 1.3, 1.3, 1.3)
 			PositionEntity(r\Objects[0], r\x + 166.0 * RoomScale, r\y - 10800.0 * RoomScale, r\z + 1606.0 * RoomScale)
 			TurnEntity(r\Objects[0], 0.0, -90.0, 0.0)
@@ -4052,7 +4052,7 @@ Function FillRoom(r.Rooms)
 			HideEntity(r\Objects[4])
 			
 			r\Objects[5] = CreatePivot()
-			PositionEntity(r\Objects[5], r\x, r\y, r\z-800.0 * RoomScale)
+			PositionEntity(r\Objects[5], r\x, r\y, r\z - 800.0 * RoomScale)
 			
 			r\Objects[6] = CreatePivot()
 			PositionEntity(r\Objects[6], r\x, r\y, r\z + 800.0 * RoomScale)
@@ -4128,10 +4128,10 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\RoomDoors[3]\Buttons[0], EntityX(r\RoomDoors[3]\Buttons[0], True) - 0.061, EntityY(r\RoomDoors[3]\Buttons[0], True), EntityZ(r\RoomDoors[3]\Buttons[0], True), True)
 			PositionEntity(r\RoomDoors[3]\Buttons[1], EntityX(r\RoomDoors[3]\Buttons[1], True) + 0.061, EntityY(r\RoomDoors[3]\Buttons[1], True), EntityZ(r\RoomDoors[3]\Buttons[1], True), True)
 			
-			r\Objects[0] = LoadMesh_Strict("GFX\map\914key.b3d")
+			r\Objects[0] = LoadMesh_Strict("GFX\map\Props\914key.b3d")
 			PositionEntity(r\Objects[0], r\x - 416.0 * RoomScale, r\y + 190.0 * RoomScale, r\z + 374.0 * RoomScale, True)
 			
-			r\Objects[1] = LoadMesh_Strict("GFX\map\914knob.b3d")
+			r\Objects[1] = LoadMesh_Strict("GFX\map\Props\914knob.b3d")
 			PositionEntity(r\Objects[1], r\x - 416.0 * RoomScale, r\y + 230.0 * RoomScale, r\z + 374.0 * RoomScale, True)
 			
 			For i = 0 To 1

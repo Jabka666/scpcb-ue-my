@@ -42,19 +42,19 @@ Cls()
 SetBuffer(BackBuffer())
 
 ; ~ Loading door-relevant meshes (for adjacent doors)
-Global Door_LCZ% = LoadMesh("..\GFX\map\Door01.x")
+Global Door_LCZ% = LoadMesh("..\GFX\map\Props\Door01.x")
 HideEntity(Door_LCZ)
 
-Global Door_HCZ_1% = LoadMesh("..\GFX\map\heavydoor1.x")
+Global Door_HCZ_1% = LoadMesh("..\GFX\map\Props\HeavyDoor1.x")
 HideEntity(Door_HCZ_1)
 
-Global Door_HCZ_2% = LoadMesh("..\GFX\map\heavydoor2.x")
+Global Door_HCZ_2% = LoadMesh("..\GFX\map\Props\HeavyDoor2.x")
 HideEntity(Door_HCZ_2)
 
-Global Door_Frame% = LoadMesh("..\GFX\map\DoorFrame.x")
+Global Door_Frame% = LoadMesh("..\GFX\map\Props\DoorFrame.x")
 HideEntity(Door_Frame)
 
-Global Door_Button% = LoadMesh("..\GFX\map\Button.b3d")
+Global Door_Button% = LoadMesh("..\GFX\map\Props\Button.b3d")
 HideEntity(Door_Button)
 
 Global MenuOpen% = True
