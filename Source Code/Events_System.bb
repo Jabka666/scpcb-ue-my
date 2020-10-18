@@ -1176,8 +1176,8 @@ Function UpdateEvents()
 								If e\EventState3 - fpst\FPSFactor[0] / 30.0 < 9.3 And e\EventState3 > 9.3 Then PlaySound_Strict(IntroSFX[1])
 								
 								If e\EventState3 < 14.0 Then
-									Mouse_X_Speed_1 = 0.0
-									Mouse_Y_Speed_1 = 0.0
+									mo\Mouse_X_Speed_1 = 0.0
+									mo\Mouse_Y_Speed_1 = 0.0
 									
 									If e\EventState3 - fpst\FPSFactor[0] / 30.0 < 12.0 And e\EventState3 > 12.0 Then PlaySound2(StepSFX(0, 0, 0), Camera, me\Collider, 8.0, 0.3)
 									
@@ -1637,7 +1637,7 @@ Function UpdateEvents()
 										If EntityInView(e\room\NPC[3]\OBJ, Camera) Then
 											DrawHandIcon = True
 											
-											If MouseHit1 Then
+											If mo\MouseHit1 Then
 												SelectedItem = CreateItem("Document SCP-173", "paper", 0.0, 0.0, 0.0)
 												EntityType(SelectedItem\Collider, HIT_ITEM)
 												
@@ -3263,7 +3263,7 @@ Function UpdateEvents()
 							GiveAchievement(Achv294)
 							If EntityInView(e\room\Objects[0], Camera) Then
 								DrawHandIcon = True
-								If MouseHit1 Then
+								If mo\MouseHit1 Then
 									Temp = True
 									For it.Items = Each Items
 										If (Not it\Picked) Then
@@ -3291,7 +3291,7 @@ Function UpdateEvents()
 									EndIf
 									If e\EventState2 = 2.0 Then
 										I_294\Using = Temp
-										If I_294\Using Then MouseHit1 = False
+										If I_294\Using Then mo\MouseHit1 = False
 									ElseIf e\EventState2 = 1.0 And (Not Inserted) Then
 										I_294\Using = False
 										msg\Msg = "You need to insert another Quarter in order to use this machine."
@@ -4858,7 +4858,7 @@ Function UpdateEvents()
 							Animate2(e\room\Objects[2], AnimTime(e\room\Objects[2]), 339.0, 487.0, 1.0)
 							If EntityDistanceSquared(me\Collider, e\room\Objects[2]) < 2.25 Then
 								DrawHandIcon = True
-								If MouseHit1 Then
+								If mo\MouseHit1 Then
 									If ItemAmount >= MaxItemAmount Then
 										msg\Msg = "You cannot carry any more items."
 										msg\Timer = 70.0 * 6.0
@@ -6606,7 +6606,7 @@ Function UpdateEvents()
 								
 							    If SoundTransmission Then
 							    	UpdateButton(e\room\Objects[4])
-								    If ClosestButton = e\room\Objects[4] And MouseHit1 Then
+								    If ClosestButton = e\room\Objects[4] And mo\MouseHit1 Then
 									    e\EventState = 1.0 ; ~ Start the femur breaker
 									    If SoundTransmission = True Then ; ~ Only play sounds if transmission is on
 										    If e\SoundCHN2 <> 0 Then
@@ -6998,7 +6998,7 @@ Function UpdateEvents()
 							If EntityDistanceSquared(fr\Door[i], me\Collider) < 0.64 Then
 								If EntityInView(fr\Door[i], Camera) Then
 									DrawHandIcon = True
-									If MouseHit1 Then
+									If mo\MouseHit1 Then
 										If i = e\EventState2 Then
 											me\BlinkTimer = -10.0
 											
@@ -7040,13 +7040,13 @@ Function UpdateEvents()
 							If Abs(DistanceSquared(EntityX(e\room\Objects[3], True), EntityX(me\Collider, True), EntityZ(e\room\Objects[3], True), EntityZ(me\Collider, True))) < 1.21 Then
 								DrawHandIcon = True
 								If SelectedItem = Null Then
-									If MouseHit1 Then
+									If mo\MouseHit1 Then
 										PlaySound_Strict(LoadTempSound("SFX\Door\WoodenDoorBudge.ogg"))
 										msg\Msg = "The door will not budge."
 										msg\Timer = 70.0 * 6.0
 									EndIf
 								ElseIf SelectedItem\ItemTemplate\TempName = "scp860" Lor SelectedItem\ItemTemplate\TempName = "scp005" 
-									If MouseHit1 Then
+									If mo\MouseHit1 Then
 										PlaySound_Strict(LoadTempSound("SFX\Door\WoodenDoorOpen.ogg"))
 										ShowEntity(fr.Forest\Forest_Pivot)
 										SelectedItem = Null
@@ -7198,7 +7198,7 @@ Function UpdateEvents()
 						If EntityYaw(e\room\Objects[13], False) = 0 Then
 							If EntityDistanceSquared(me\Collider, e\room\Objects[12]) < 1.21 Then
 								DrawHandIcon = True
-								If MouseHit1 Then
+								If mo\MouseHit1 Then
 									RotateEntity(e\room\Objects[13], 0.0, 1.0, 0.0, False)
 									RotateEntity(e\room\Objects[11], 0.0, 90.0, 0.0, False)
 									PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Horror.ogg"))
@@ -7616,9 +7616,9 @@ Function UpdateEvents()
 							    If Dist < 1.21 Then
 								    If EntityInView(e\room\Objects[0], Camera) Then
 									    DrawHandIcon = True
-										If MouseDown1 Then
+										If mo\MouseDown1 Then
 										    DrawArrowIcon[2] = True
-										    RotateEntity(e\room\Levers[0], Max(Min(EntityPitch(e\room\Levers[0]) + Max(Min(-Mouse_Y_Speed_1, 10.0), -10.0), 89.0), 35.0), EntityYaw(e\room\Levers[0]), 0.0)
+										    RotateEntity(e\room\Levers[0], Max(Min(EntityPitch(e\room\Levers[0]) + Max(Min(-mo\Mouse_Y_Speed_1, 10.0), -10.0), 89.0), 35.0), EntityYaw(e\room\Levers[0]), 0.0)
 									    EndIf
 								    EndIf
 							    EndIf
@@ -7800,18 +7800,18 @@ Function UpdateEvents()
 					EntityPick(Camera, 1.0)
 					If PickedEntity() = e\room\Objects[0] Then
 						DrawHandIcon = True
-						If MouseHit1 Then GrabbedEntity = e\room\Objects[0]
+						If mo\MouseHit1 Then GrabbedEntity = e\room\Objects[0]
 					ElseIf PickedEntity() = e\room\Objects[1]
 						DrawHandIcon = True
-						If MouseHit1 Then GrabbedEntity = e\room\Objects[1]
+						If mo\MouseHit1 Then GrabbedEntity = e\room\Objects[1]
 					EndIf
 					
-					If MouseDown1 Lor MouseHit1 Then
+					If mo\MouseDown1 Lor mo\MouseHit1 Then
 						If GrabbedEntity <> 0 Then ; ~ Avain
 							If GrabbedEntity = e\room\Objects[0] Then
 								If e\EventState = 0.0 Then
 									DrawHandIcon = True
-									TurnEntity(GrabbedEntity, 0.0, 0.0, -Mouse_X_Speed_1 * 2.5)
+									TurnEntity(GrabbedEntity, 0.0, 0.0, -mo\Mouse_X_Speed_1 * 2.5)
 									
 									Angle = WrapAngle(EntityRoll(e\room\Objects[0]))
 									If Angle > 181.0 Then DrawArrowIcon[3] = True
@@ -7841,7 +7841,7 @@ Function UpdateEvents()
 							ElseIf GrabbedEntity = e\room\Objects[1]
 								If e\EventState = 0.0 Then
 									DrawHandIcon = True
-									TurnEntity(GrabbedEntity, 0.0, 0.0, -Mouse_X_Speed_1 * 2.5)
+									TurnEntity(GrabbedEntity, 0.0, 0.0, -mo\Mouse_X_Speed_1 * 2.5)
 									
 									Angle = WrapAngle(EntityRoll(e\room\Objects[1]))
 									DrawArrowIcon[3] = True
@@ -8343,7 +8343,7 @@ Function UpdateEvents()
 					
 					If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 0.5625 And Pick1162
 						DrawHandIcon = True
-						If MouseHit1 Then GrabbedEntity = e\room\Objects[0]
+						If mo\MouseHit1 Then GrabbedEntity = e\room\Objects[0]
 					EndIf
 					
 					If GrabbedEntity <> 0
@@ -8474,7 +8474,7 @@ Function UpdateEvents()
 								e\EventState3 = 0.0
 								
 								GiveAchievement(Achv1162)
-								MouseHit1 = False
+								mo\MouseHit1 = False
 								Exit
 							EndIf
 						Next
@@ -8494,7 +8494,7 @@ Function UpdateEvents()
 								it = CreateItem(itt\Name, itt\TempName, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
 								EntityType(it\Collider, HIT_ITEM)
 								GiveAchievement(Achv1162)
-								MouseHit1 = False
+								mo\MouseHit1 = False
 								e\EventState3 = 0.0
 								If me\Injuries > 15.0
 									msg\DeathMsg = "A dead Class D subject was discovered within the containment chamber of SCP-1162."
@@ -8566,7 +8566,7 @@ Function UpdateEvents()
 						End Select
 						EntityType(it\Collider, HIT_ITEM)
 						GiveAchievement(Achv1162)
-						MouseHit1 = False
+						mo\MouseHit1 = False
 						e\EventState3 = 0.0
 					EndIf
 					FreeEntity(pp)
@@ -9009,7 +9009,7 @@ Function UpdateEvents()
 					ElseIf e\EventID = e_room2medibay
 						If EntityDistanceSquared(e\room\Objects[1], me\Collider) < 0.49 Then
 							DrawHandIcon = True
-							If MouseHit1 Then
+							If mo\MouseHit1 Then
 								msg\Msg = "You feel a cold breeze next to your body."
 								msg\Timer = 70.0 * 6.0
 								InjurePlayer(Rnd(-0.5, 0.3))
@@ -9072,11 +9072,11 @@ Function UpdateEvents()
 				
 				If PlayerRoom = e\room Then
 					UpdateButton(e\room\Objects[2])
-					If ClosestButton = e\room\Objects[2] And MouseHit1 Then
+					If ClosestButton = e\room\Objects[2] And mo\MouseHit1 Then
 						msg\Msg = "The elevator appears to be broken."
 						msg\Timer = 70.0 * 6.0
 						PlaySound2(ButtonSFX2, Camera, e\room\Objects[2])
-						MouseHit1 = 0
+						mo\MouseHit1 = 0
 					EndIf
 				EndIf
                 ;[End Block]
@@ -9085,11 +9085,11 @@ Function UpdateEvents()
 				If PlayerRoom = e\room Then
 					For i = 0 To 1
 						UpdateButton(e\room\Objects[i])
-						If ClosestButton = e\room\Objects[i] And MouseHit1 Then
+						If ClosestButton = e\room\Objects[i] And mo\MouseHit1 Then
 							msg\Msg = "The elevator appears to be broken."
 							msg\Timer = 70.0 * 6.0
 							PlaySound2(ButtonSFX2, Camera, e\room\Objects[i])
-							MouseHit1 = 0
+							mo\MouseHit1 = 0
 						EndIf
 					Next
 				EndIf
@@ -9147,7 +9147,7 @@ Function UpdateEvents()
 					        If EntityDistanceSquared(e\room\Objects[4], me\Collider) < 0.49 Then
 					            If I_409\Timer < 1.0 Then
 						            DrawHandIcon = True
-						            If MouseHit1 Then
+						            If mo\MouseHit1 Then
 						                msg\Msg = "You touched SCP-409."
 						                msg\Timer = 70.0 * 6.0
 						                me\BlurTimer = 2000.0

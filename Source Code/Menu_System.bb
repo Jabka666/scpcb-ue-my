@@ -74,22 +74,22 @@ Function UpdateMainMenu()
 		If Input_ResetTime > 0.0 Then
 			Input_ResetTime = Max(Input_ResetTime - fpst\FPSFactor[0], 0.0)
 		Else
-			DoubleClick = False
-			MouseHit1 = MouseHit(1)
-			If MouseHit1 Then
-				If MilliSecs2() - LastMouseHit1 < 800 Then DoubleClick = True
-				LastMouseHit1 = MilliSecs2()
+			mo\DoubleClick = False
+			mo\MouseHit1 = MouseHit(1)
+			If mo\MouseHit1 Then
+				If MilliSecs2() - mo\LastMouseHit1 < 800 Then mo\DoubleClick = True
+				mo\LastMouseHit1 = MilliSecs2()
 			EndIf
 			
-			Local PrevMouseDown1% = MouseDown1
+			Local PrevMouseDown1% = mo\MouseDown1
 			
-			MouseDown1 = MouseDown(1)
-			If PrevMouseDown1 = True And (Not MouseDown1) Then MouseUp1 = True Else MouseUp1 = False
+			mo\MouseDown1 = MouseDown(1)
+			If PrevMouseDown1 = True And (Not mo\MouseDown1) Then mo\MouseUp1 = True Else mo\MouseUp1 = False
 			
-			MouseHit2 = MouseHit(2)
+			mo\MouseHit2 = MouseHit(2)
 		EndIf
 		
-		If (Not MouseDown1) And (Not MouseHit1) Then GrabbedEntity = 0
+		If (Not mo\MouseDown1) And (Not mo\MouseHit1) Then GrabbedEntity = 0
 		
 		UpdateMusic()
 		If EnableSFXRelease Then AutoReleaseSounds()
@@ -120,7 +120,7 @@ Function UpdateMainMenu()
 			EndIf
 		EndIf
 		
-		If (Not MouseDown1) Then OnSliderID = 0
+		If (Not mo\MouseDown1) Then OnSliderID = 0
 		
 		If PrevMainMenuTab <> MainMenuTab Then
 			DeleteMenuGadgets()
@@ -140,7 +140,7 @@ Function UpdateMainMenu()
 				Width = 400 * MenuScale
 				Height = 70 * MenuScale
 				
-				Temp = (MouseHit1 And MouseOn(x, y, Width, Height))
+				Temp = (mo\MouseHit1 And MouseOn(x, y, Width, Height))
 				
 				Local Txt$
 				
@@ -277,7 +277,7 @@ Function UpdateMainMenu()
 						;[Block]
 						MainMenuTab = MainMenuTab_New_Game
 						CurrLoadGamePage = 0
-						MouseHit1 = False
+						mo\MouseHit1 = False
 						;[End Block]
 					Default
 						;[Block]
@@ -349,7 +349,7 @@ Function UpdateMainMenu()
 						SelectedDifficulty\AggressiveNPCs =  DrawTick(x + 160 * MenuScale, y + 225 * MenuScale, SelectedDifficulty\AggressiveNPCs)
 						
 						; ~ Other factor's difficulty
-						If MouseHit1 Then
+						If mo\MouseHit1 Then
 							If ImageRectOverlap(ArrowIMG[1], x + 155 * MenuScale, y + 251 * MenuScale, ScaledMouseX(), ScaledMouseY(), 0, 0)
 								If SelectedDifficulty\OtherFactors < HARD
 									SelectedDifficulty\OtherFactors = SelectedDifficulty\OtherFactors + 1
@@ -1635,7 +1635,7 @@ Function UpdateLauncher(lnchr.Launcher)
 		Color(0, 0, 0)
 		Rect(0, 0, LauncherWidth, LauncherHeight, True)
 		
-		MouseHit1 = MouseHit(1)
+		mo\MouseHit1 = MouseHit(1)
 		
 		Color(255, 255, 255)
 		DrawImage(LauncherIMG, 0, 0)
@@ -1653,7 +1653,7 @@ Function UpdateLauncher(lnchr.Launcher)
 			If MouseOn(x - 1, y - 5, 100, 20) Then
 				Color(100, 100, 100)
 				Rect(x - 1, y - 5, 100, 20, False)
-				If MouseHit1 Then lnchr\SelectedGFXMode = i
+				If mo\MouseHit1 Then lnchr\SelectedGFXMode = i
 			EndIf
 			
 			y = y + 20
@@ -2099,7 +2099,7 @@ Function DrawButton%(x%, y%, Width%, Height%, Txt$, BigFont% = True, WaitForMous
 	EndIf
 	
 	If MouseOn(x, y, Width, Height) Then
-		If (MouseHit1 And (Not WaitForMouseUp)) Lor (MouseUp1 And WaitForMouseUp) Then
+		If (mo\MouseHit1 And (Not WaitForMouseUp)) Lor (mo\MouseUp1 And WaitForMouseUp) Then
 			If Locked Then
 				PlaySound_Strict(ButtonSFX2)
 			Else
@@ -2118,7 +2118,7 @@ Function DrawLauncherButton%(x%, y%, Width%, Height%, Txt$, BigFont% = True, Wai
 	DrawFrame(x, y, Width, Height)
 	If MouseOn(x, y, Width, Height) Then
 		Color(30, 30, 30)
-		If (MouseHit1 And (Not WaitForMouseUp)) Lor (MouseUp1 And WaitForMouseUp) Then 
+		If (mo\MouseHit1 And (Not WaitForMouseUp)) Lor (mo\MouseUp1 And WaitForMouseUp) Then 
 			If Locked Then
 				PlaySound_Strict(ButtonSFX2)
 			Else
@@ -2216,7 +2216,7 @@ Function DrawTick%(x%, y%, Selected%, Locked% = False)
 	Local Highlight% = MouseOn(x, y, Width, Height)
 	
 	If Highlight Then
-		If MouseHit1 Then 
+		If mo\MouseHit1 Then 
 			If Locked Then
 				PlaySound_Strict(ButtonSFX2)
 			Else
@@ -2239,10 +2239,10 @@ Function DrawLauncherTick%(x%, y%, Selected%, Locked% = False)
 	If Highlight Then
 		If Locked Then
 			Color(0, 0, 0)
-			If MouseHit1 Then PlaySound_Strict(ButtonSFX2)
+			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX2)
 		Else
 			Color(50, 50, 50)
-			If MouseHit1 Then Selected = (Not Selected) : PlaySound_Strict(ButtonSFX)
+			If mo\MouseHit1 Then Selected = (Not Selected) : PlaySound_Strict(ButtonSFX)
 		EndIf
 	Else
 		Color(0, 0, 0)		
@@ -2349,10 +2349,10 @@ Function InputBox$(x%, y%, Width%, Height%, Txt$, ID% = 0, MaxChr% = 0)
 	
 	If MouseOn(x, y, Width, Height) Then
 		MouseOnBox = True
-		If MouseHit1 Then SelectedInputBox = ID : FlushKeys() : CursorPos = -1
+		If mo\MouseHit1 Then SelectedInputBox = ID : FlushKeys() : CursorPos = -1
 	EndIf
 	
-	If (Not MouseOnBox) And MouseHit1 And SelectedInputBox = ID Then SelectedInputBox = 0 : CursorPos = -1
+	If (Not MouseOnBox) And mo\MouseHit1 And SelectedInputBox = ID Then SelectedInputBox = 0 : CursorPos = -1
 	
 	If SelectedInputBox = ID Then
 		Txt = rInput(Txt, MaxChr)
@@ -2406,7 +2406,7 @@ Function SlideBar#(x%, y%, Width%, Value#, TextLeft$ = "LOW", TextRight$ = "HIGH
 		currSlideBar\Value = Value
 	EndIf
 	
-	If MouseDown1 And OnSliderID = 0 Then
+	If mo\MouseDown1 And OnSliderID = 0 Then
 		If ScaledMouseX() >= x And ScaledMouseX() =< x + Width + 14 And ScaledMouseY() >= y And ScaledMouseY() =< y + 20 Then
 			Value = Min(Max((ScaledMouseX() - x) * 100 / Width, 0), 100)
 		EndIf
@@ -2535,7 +2535,7 @@ Function Slider3(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$)
 		currSlider\Value = Value
 	EndIf
 	
-	If MouseDown1 Then
+	If mo\MouseDown1 Then
 		If ScaledMouseX() >= x And ScaledMouseX() =< x + Width + 14 And ScaledMouseY() >= y - 8 And ScaledMouseY() =< y + 10
 			OnSliderID = ID
 		EndIf
@@ -2582,7 +2582,7 @@ Function Slider5(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$, Val4$, Val5$)
 		currSlider\Value = Value
 	EndIf
 	
-	If MouseDown1 Then
+	If mo\MouseDown1 Then
 		If ScaledMouseX() >= x And ScaledMouseX() =< x + Width + 14 And ScaledMouseY() >= y - 8 And ScaledMouseY() =< y + 10
 			OnSliderID = ID
 		EndIf

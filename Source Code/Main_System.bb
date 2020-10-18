@@ -64,6 +64,27 @@ Select TextureDetails
 		;[End Block]
 End Select
 
+Type Mouse
+	Field MouseHit1%, MouseHit2%
+	Field MouseDown1%
+	Field DoubleClick%, DoubleClickSlot%
+	Field LastMouseHit1%
+	Field MouseUp1%
+	Field Mouselook_X_Inc#, Mouselook_y_Inc#
+	Field Mouse_Left_Limit%, Mouse_Right_Limit%
+	Field Mouse_Top_Limit%, Mouse_Bottom_Limit%
+	Field Mouse_x_Speed_1#, Mouse_Y_Speed_1#
+End Type
+
+Global mo.Mouse = New Mouse
+
+mo\Mouselook_X_Inc = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the X axis
+mo\Mouselook_y_Inc = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the Y axis
+mo\Mouse_Left_Limit = 250
+mo\Mouse_Right_Limit = GraphicWidth - 250
+mo\Mouse_Top_Limit = 150
+mo\Mouse_Bottom_Limit = GraphicHeight - 150 ; ~ As above
+
 Type Launcher
 	Field TotalGFXModes%
 	Field GFXModes%
@@ -205,14 +226,6 @@ DrawLoading(0, True)
 ; ~ Viewport
 Global Viewport_Center_X% = GraphicWidth / 2, Viewport_Center_Y% = GraphicHeight / 2
 
-; ~ Mouselook
-Global Mouselook_X_Inc# = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the X axis
-Global Mouselook_Y_Inc# = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the Y axis
-; ~ Used to limit the mouse movement to within a certain number of pixels (250 is used here) from the center of the screen. This produces smoother mouse movement than continuously moving the mouse back to the center each loop
-Global Mouse_Left_Limit% = 250, Mouse_Right_Limit% = GraphicWidth - 250
-Global Mouse_Top_Limit% = 150, Mouse_Bottom_Limit% = GraphicHeight - 150 ; ~ As above
-Global Mouse_X_Speed_1#, Mouse_Y_Speed_1#
-
 Global Mesh_MinX#, Mesh_MinY#, Mesh_MinZ#
 Global Mesh_MaxX#, Mesh_MaxY#, Mesh_MaxZ#
 Global Mesh_MagX#, Mesh_MagY#, Mesh_MagZ#
@@ -266,8 +279,6 @@ Global CameraPitch#, Side#
 Global PlayerRoom.Rooms
 
 Global GrabbedEntity%
-
-Global MouseHit1%, MouseDown1%, MouseHit2%, DoubleClick%, LastMouseHit1%, MouseUp1%, DoubleClickSlot%
 
 Type Cheats
 	Field GodMode%
@@ -467,7 +478,7 @@ Function UpdateConsole()
 		EndIf
 		
 		If (Not ConsoleScrollDragging) Then
-			If MouseHit1 Then
+			If mo\MouseHit1 Then
 				If InBox Then
 					ConsoleScrollDragging = True
 					ConsoleMouseMem = ScaledMouseY()
@@ -2937,22 +2948,22 @@ Function MainLoop()
 		If Input_ResetTime > 0.0 Then
 			Input_ResetTime = Max(Input_ResetTime - fpst\FPSFactor[0], 0.0)
 		Else
-			DoubleClick = False
-			MouseHit1 = MouseHit(1)
-			If MouseHit1 Then
-				If MilliSecs2() - LastMouseHit1 < 800 Then DoubleClick = True
-				LastMouseHit1 = MilliSecs2()
+			mo\DoubleClick = False
+			mo\MouseHit1 = MouseHit(1)
+			If mo\MouseHit1 Then
+				If MilliSecs2() - mo\LastMouseHit1 < 800 Then mo\DoubleClick = True
+				mo\LastMouseHit1 = MilliSecs2()
 			EndIf
 			
-			Local PrevMouseDown1% = MouseDown1
+			Local PrevMouseDown1% = mo\MouseDown1
 			
-			MouseDown1 = MouseDown(1)
-			If PrevMouseDown1 = True And (Not MouseDown1) Then MouseUp1 = True Else MouseUp1 = False
+			mo\MouseDown1 = MouseDown(1)
+			If PrevMouseDown1 = True And (Not mo\MouseDown1) Then mo\MouseUp1 = True Else mo\MouseUp1 = False
 			
-			MouseHit2 = MouseHit(2)
+			mo\MouseHit2 = MouseHit(2)
 		EndIf
 		
-		If (Not MouseDown1) And (Not MouseHit1) Then GrabbedEntity = 0
+		If (Not mo\MouseDown1) And (Not mo\MouseHit1) Then GrabbedEntity = 0
 		
 		UpdateMusic()
 		If EnableSFXRelease Then AutoReleaseSounds()
@@ -3311,9 +3322,9 @@ Function MainLoop()
 				If (W <> "vest" And W <> "finevest" And W <> "hazmatsuit" And W <> "hazmatsuit2" And W <> "hazmatsuit3") Lor V = 0 Lor V = 100
 					If InvOpen Then
 						ResumeSounds()
-						MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : Mouse_X_Speed_1 = 0.0 : Mouse_Y_Speed_1 = 0.0
+						MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_X_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
 					Else
-						DoubleClickSlot = -1
+						mo\DoubleClickSlot = -1
 						PauseSounds()
 					EndIf
 					InvOpen = (Not InvOpen)
@@ -3388,7 +3399,7 @@ Function MainLoop()
 				msg\Msg = "Press " + key\Name[key\SAVE] + " to save."
 				msg\Timer = 70.0 * 6.0
 			EndIf
-			If MouseHit2 Then SelectedMonitor = Null
+			If mo\MouseHit2 Then SelectedMonitor = Null
 		EndIf
 		
 		If KeyHit(key\CONSOLE) Then
@@ -3396,7 +3407,7 @@ Function MainLoop()
 				If ConsoleOpen Then
 					UsedConsole = True
 					ResumeSounds()
-					MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : Mouse_X_Speed_1 = 0.0 : Mouse_Y_Speed_1 = 0.0
+					MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_X_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
 					DeleteMenuGadgets()
 				Else
 					PauseSounds()
@@ -4243,24 +4254,24 @@ Function MouseLook()
 		RotateEntity(Camera, 0.0, EntityYaw(me\Collider), Roll * 0.5)
 		
 		; ~ Update the smoothing que to smooth the movement of the mouse
-		Mouse_X_Speed_1 = CurveValue(MouseXSpeed() * (MouseSensitivity + 0.6) , Mouse_X_Speed_1, (6.0 / (MouseSensitivity + 1.0)) * MouseSmoothing) 
-		If IsNaN(Mouse_X_Speed_1) Then Mouse_X_Speed_1 = 0.0
+		mo\Mouse_X_Speed_1 = CurveValue(MouseXSpeed() * (MouseSensitivity + 0.6) , mo\Mouse_X_Speed_1, (6.0 / (MouseSensitivity + 1.0)) * MouseSmoothing) 
+		If IsNaN(mo\Mouse_X_Speed_1) Then mo\Mouse_X_Speed_1 = 0.0
 		If fpst\PrevFPSFactor > 0.0 Then
 			If Abs(fpst\FPSFactor[0] / fpst\PrevFPSFactor - 1.0) > 1.0 Then
 				; ~ Stop all camera movement
-				Mouse_X_Speed_1 = 0.0
-				Mouse_Y_Speed_1 = 0.0
+				mo\Mouse_X_Speed_1 = 0.0
+				mo\Mouse_Y_Speed_1 = 0.0
 			EndIf
 		EndIf
 		If InvertMouse Then
-			Mouse_Y_Speed_1 = CurveValue(-MouseYSpeed() * (MouseSensitivity + 0.6), Mouse_Y_Speed_1, (6.0 / (MouseSensitivity + 1.0)) * MouseSmoothing)
+			mo\Mouse_Y_Speed_1 = CurveValue(-MouseYSpeed() * (MouseSensitivity + 0.6), mo\Mouse_Y_Speed_1, (6.0 / (MouseSensitivity + 1.0)) * MouseSmoothing)
 		Else
-			Mouse_Y_Speed_1 = CurveValue(MouseYSpeed () * (MouseSensitivity + 0.6), Mouse_Y_Speed_1, (6.0 / (MouseSensitivity + 1.0)) * MouseSmoothing)
+			mo\Mouse_Y_Speed_1 = CurveValue(MouseYSpeed () * (MouseSensitivity + 0.6), mo\Mouse_Y_Speed_1, (6.0 / (MouseSensitivity + 1.0)) * MouseSmoothing)
 		EndIf
-		If IsNaN(Mouse_Y_Speed_1) Then Mouse_Y_Speed_1 = 0.0
+		If IsNaN(mo\Mouse_Y_Speed_1) Then mo\Mouse_Y_Speed_1 = 0.0
 		
-		Local The_Yaw# = ((Mouse_X_Speed_1)) * Mouselook_X_Inc / (1.0 + wi\BallisticVest)
-		Local The_Pitch# = ((Mouse_Y_Speed_1)) * Mouselook_Y_Inc / (1.0 + wi\BallisticVest)
+		Local The_Yaw# = ((mo\Mouse_X_Speed_1)) * mo\Mouselook_X_Inc / (1.0 + wi\BallisticVest)
+		Local The_Pitch# = ((mo\Mouse_Y_Speed_1)) * mo\Mouselook_y_Inc / (1.0 + wi\BallisticVest)
 		
 		TurnEntity(me\Collider, 0.0, -The_Yaw, 0.0) ; ~ Turn the user on the Y (Yaw) axis
 		CameraPitch = CameraPitch + The_Pitch
@@ -4329,7 +4340,7 @@ Function MouseLook()
 	EndIf
 	
 	; ~ Limit the mouse's movement. Using this method produces smoother mouselook movement than centering the mouse each loop.
-	If (MouseX() > Mouse_Right_Limit) Lor (MouseX() < Mouse_Left_Limit) Lor (MouseY() > Mouse_Bottom_Limit) Lor (MouseY() < Mouse_Top_Limit)
+	If (MouseX() > mo\Mouse_Right_Limit) Lor (MouseX() < mo\Mouse_Left_Limit) Lor (MouseY() > mo\Mouse_Bottom_Limit) Lor (MouseY() < mo\Mouse_Top_Limit)
 		MoveMouse(Viewport_Center_X, Viewport_Center_Y)
 	EndIf
 	
@@ -4771,7 +4782,7 @@ Function DrawGUI()
 	If SelectedScreen <> Null Then
 		DrawImage(SelectedScreen\Img, GraphicWidth / 2 - ImageWidth(SelectedScreen\Img) / 2, GraphicHeight / 2 - ImageHeight(SelectedScreen\Img) / 2)
 		
-		If MouseUp1 Lor MouseHit2 Then
+		If mo\MouseUp1 Lor mo\MouseHit2 Then
 			FreeImage(SelectedScreen\Img) : SelectedScreen\Img = 0
 		EndIf
 	EndIf
@@ -4877,7 +4888,7 @@ Function DrawGUI()
 		Next
 		
 		If SelectedItem <> Null Then
-			If MouseDown1 Then
+			If mo\MouseDown1 Then
 				If MouseSlot = 66 Then
 					DrawImage(SelectedItem\InvImg, ScaledMouseX() - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, ScaledMouseY() - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 				ElseIf SelectedItem <> PrevOtherOpen\SecondInv[MouseSlot]
@@ -5008,7 +5019,7 @@ Function DrawGUI()
 		Next
 		
 		If SelectedItem <> Null Then
-			If MouseDown1 Then
+			If mo\MouseDown1 Then
 				If MouseSlot = 66 Then
 					DrawImage(SelectedItem\InvImg, ScaledMouseX() - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, ScaledMouseY() - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 				ElseIf SelectedItem <> Inventory[MouseSlot]
@@ -5607,7 +5618,7 @@ Function DrawGUI()
 				EndIf			
 			EndIf
 			
-			If MouseHit2 Then
+			If mo\MouseHit2 Then
 				IN = SelectedItem\ItemTemplate\TempName
 				If IN = "scp1025" Then
 					If SelectedItem\ItemTemplate\Img <> 0 Then FreeImage(SelectedItem\ItemTemplate\Img)
@@ -5634,8 +5645,8 @@ Function UpdateGUI()
 		PointEntity(Temp, ClosestButton)
 		FreeEntity(Temp)
 		
-		If MouseUp1 Then
-			MouseUp1 = False
+		If mo\MouseUp1 Then
+			mo\MouseUp1 = False
 			If ClosestDoor <> Null Then 
 				If ClosestDoor\Code <> "" Then
 					SelectedDoor = ClosestDoor
@@ -5648,9 +5659,9 @@ Function UpdateGUI()
 	EndIf
 	
 	If SelectedScreen <> Null Then
-		If MouseUp1 Lor MouseHit2 Then
+		If mo\MouseUp1 Lor mo\MouseHit2 Then
 			SelectedScreen = Null
-			MouseUp1 = False
+			mo\MouseUp1 = False
 		EndIf
 	EndIf
 	
@@ -5713,7 +5724,7 @@ Function UpdateGUI()
 				If msg\KeypadTimer =< 0.0 Then
 					msg\KeypadMsg = ""
 					SelectedDoor = Null
-					MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : Mouse_X_Speed_1 = 0.0 : Mouse_Y_Speed_1 = 0.0
+					MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_X_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
 				EndIf
 			EndIf
 			
@@ -5727,7 +5738,7 @@ Function UpdateGUI()
 					
 					Temp = False
 					If MouseOn(xTemp, yTemp, 54 * Scale, 65 * Scale) And msg\KeypadMsg = "" Then
-						If MouseUp1 Then 
+						If mo\MouseUp1 Then 
 							PlaySound_Strict(ButtonSFX)
 							
 							Select (n + 1) + (i * 4)
@@ -5758,7 +5769,7 @@ Function UpdateGUI()
 										SelectedDoor\Locked = 0
 										UseDoor(SelectedDoor, True)
 										SelectedDoor = Null
-										MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : Mouse_X_Speed_1 = 0.0 : Mouse_Y_Speed_1 = 0.0
+										MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_X_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
 									Else
 										PlaySound_Strict(ScannerSFX2)
 										msg\KeypadMsg = "ACCESS DENIED"
@@ -5783,9 +5794,9 @@ Function UpdateGUI()
 				Next
 			Next
 			
-			If MouseHit2 Then
+			If mo\MouseHit2 Then
 				SelectedDoor = Null
-				MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : Mouse_X_Speed_1 = 0.0 : Mouse_Y_Speed_1 = 0.0
+				MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_X_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
 			EndIf
 		Else
 			SelectedDoor = Null
@@ -5800,7 +5811,7 @@ Function UpdateGUI()
 		If MenuOpen Lor InvOpen Then
 			ResumeSounds()
 			If OptionsMenu <> 0 Then SaveOptionsINI()
-			MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : Mouse_X_Speed_1 = 0.0 : Mouse_Y_Speed_1 = 0.0
+			MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_X_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
 			DeleteMenuGadgets()
 		Else
 			PauseSounds()
@@ -5866,22 +5877,22 @@ Function UpdateGUI()
 			If OtherOpen\SecondInv[n] <> Null And SelectedItem <> OtherOpen\SecondInv[n] Then
 				If IsMouseOn = n Then
 					If SelectedItem = Null Then
-						If MouseHit1 Then
+						If mo\MouseHit1 Then
 							SelectedItem = OtherOpen\SecondInv[n]
 							
-							If DoubleClick And DoubleClickSlot = n Then
+							If mo\DoubleClick And mo\DoubleClickSlot = n Then
 								If OtherOpen\SecondInv[n]\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[OtherOpen\SecondInv[n]\ItemTemplate\Sound])
 								OtherOpen = Null
 								ClosedInv = True
 								InvOpen = False
-								DoubleClick = False
+								mo\DoubleClick = False
 							EndIf
 						EndIf
 					EndIf
 				EndIf
 				ItemAmount = ItemAmount + 1
 			Else
-				If IsMouseOn = n And MouseHit1 Then
+				If IsMouseOn = n And mo\MouseHit1 Then
 					For z = 0 To OtherSize - 1
 						If OtherOpen\SecondInv[z] = SelectedItem Then OtherOpen\SecondInv[z] = Null
 					Next
@@ -5898,12 +5909,12 @@ Function UpdateGUI()
 			EndIf
 		Next
 		
-		If MouseHit1 Then
-			DoubleClickSlot = IsMouseOn
+		If mo\MouseHit1 Then
+			mo\DoubleClickSlot = IsMouseOn
 		EndIf
 		
 		If SelectedItem <> Null Then
-			If (Not MouseDown1) Then
+			If (Not mo\MouseDown1) Then
 				If MouseSlot = 66 Then
 					If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 					ShowEntity(SelectedItem\Collider)
@@ -5984,7 +5995,7 @@ Function UpdateGUI()
 		If ClosedInv And (Not InvOpen) Then 
 			ResumeSounds() 
 			OtherOpen = Null
-			MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : Mouse_X_Speed_1 = 0.0 : Mouse_Y_Speed_1 = 0.0
+			MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_X_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
 		EndIf
 	ElseIf InvOpen Then
 		SelectedDoor = Null
@@ -6008,10 +6019,10 @@ Function UpdateGUI()
 			If Inventory[n] <> Null And SelectedItem <> Inventory[n] Then
 				If IsMouseOn = n Then
 					If SelectedItem = Null Then
-						If MouseHit1 Then
+						If mo\MouseHit1 Then
 							SelectedItem = Inventory[n]
 							
-							If DoubleClick And DoubleClickSlot = n Then
+							If mo\DoubleClick And mo\DoubleClickSlot = n Then
 								If wi\HazmatSuit > 0 And Instr(SelectedItem\ItemTemplate\TempName, "hazmatsuit") = 0 Then
 									msg\Msg = "You cannot use any items while wearing a hazmat suit."
 									msg\Timer = 70.0 * 6.0
@@ -6020,14 +6031,14 @@ Function UpdateGUI()
 								EndIf
 								If Inventory[n]\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[Inventory[n]\ItemTemplate\Sound])
 								InvOpen = False
-								DoubleClick = False
+								mo\DoubleClick = False
 							EndIf
 						EndIf
 					EndIf
 				EndIf
 				ItemAmount = ItemAmount + 1
 			Else
-				If IsMouseOn = n And MouseHit1 Then
+				If IsMouseOn = n And mo\MouseHit1 Then
 					For z = 0 To MaxItemAmount - 1
 						If Inventory[z] = SelectedItem Then Inventory[z] = Null
 					Next
@@ -6042,12 +6053,12 @@ Function UpdateGUI()
 			EndIf
 		Next
 		
-		If MouseHit1 Then
-			DoubleClickSlot = IsMouseOn
+		If mo\MouseHit1 Then
+			mo\DoubleClickSlot = IsMouseOn
 		EndIf
 		
 		If SelectedItem <> Null Then
-			If (Not MouseDown1) Then
+			If (Not mo\MouseDown1) Then
 				If MouseSlot = 66 Then
 					Select SelectedItem\ItemTemplate\TempName
 						Case "vest", "finevest", "hazmatsuit", "hazmatsuit2", "hazmatsuit3"
@@ -6342,7 +6353,7 @@ Function UpdateGUI()
 		
 		If (Not InvOpen) Then 
 			ResumeSounds() 
-			MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : Mouse_X_Speed_1 = 0.0 : Mouse_Y_Speed_1 = 0.0
+			MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_X_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
 		EndIf
 	Else
 		If SelectedItem <> Null Then
@@ -7606,17 +7617,17 @@ Function UpdateGUI()
 					;[Block]
 					; ~ Check if the item is an inventory-type object
 					If SelectedItem\InvSlots > 0 Then
-						DoubleClick = 0
-						MouseHit1 = 0
-						MouseDown1 = 0
-						LastMouseHit1 = 0
+						mo\DoubleClick = 0
+						mo\MouseHit1 = 0
+						mo\MouseDown1 = 0
+						mo\LastMouseHit1 = 0
 						OtherOpen = SelectedItem
 						SelectedItem = Null
 					EndIf
 					;[End Block]
 			End Select
 			
-			If MouseHit2 Then
+			If mo\MouseHit2 Then
 				EntityAlpha(tt\OverlayID[6], 0.0)
 				
 				Local IN$ = SelectedItem\ItemTemplate\TempName
@@ -8108,7 +8119,7 @@ Function UpdateMenu()
 		x = x + 132.0 * MenuScale
 		y = y + 122.0 * MenuScale	
 		
-		If (Not MouseDown1) Then OnSliderID = 0
+		If (Not mo\MouseDown1) Then OnSliderID = 0
 		
 		Local AchvXIMG% = (x + (22.0 * MenuScale))
 		Local Scale# = GraphicHeight / 768.0
@@ -8123,7 +8134,7 @@ Function UpdateMenu()
 				AchievementsMenu = 0
 				OptionsMenu = 0
 				QuitMsg = 0
-				MouseHit1 = False
+				mo\MouseHit1 = False
 				SaveOptionsINI()
 				
 				AntiAlias(Opt_AntiAlias)
@@ -8423,7 +8434,7 @@ Function UpdateMenu()
 				AchievementsMenu = 0
 				OptionsMenu = 0
 				QuitMsg = 0
-				MouseHit1 = False
+				mo\MouseHit1 = False
 				ShouldDeleteGadgets = True
 			EndIf
 		Else
@@ -8431,7 +8442,7 @@ Function UpdateMenu()
 				AchievementsMenu = 0
 				OptionsMenu = 0
 				QuitMsg = 0
-				MouseHit1 = False
+				mo\MouseHit1 = False
 				ShouldDeleteGadgets = True
 			EndIf
 			
@@ -8460,7 +8471,7 @@ Function UpdateMenu()
 				If DrawButton(x, y, 430 * MenuScale, 60 * MenuScale, "Resume", True, True) Then
 					MenuOpen = False
 					ResumeSounds()
-					MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : Mouse_X_Speed_1 = 0.0 : Mouse_Y_Speed_1 = 0.0
+					MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_X_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
 					DeleteMenuGadgets()
 					Return
 				EndIf
@@ -11109,7 +11120,7 @@ Function Use294()
 	Text(x + 907, y + 185, I_294\ToInput, True, True)
 	
 	If Temp Then
-		If MouseHit1 Then
+		If mo\MouseHit1 Then
 			xTemp = Floor((ScaledMouseX() - x - 228) / 35.5)
 			yTemp = Floor((ScaledMouseY() - y - 342) / 36.5)
 			
@@ -11317,11 +11328,11 @@ Function Use294()
 			EndIf	
 		EndIf
 		
-		If MouseHit2 Lor (Not I_294\Using) Then 
+		If mo\MouseHit2 Lor (Not I_294\Using) Then 
 			HidePointer()
 			I_294\Using = False
 			I_294\ToInput = ""
-			MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : Mouse_X_Speed_1 = 0.0 : Mouse_Y_Speed_1 = 0.0
+			MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_X_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
 		EndIf
 	Else ; ~ Playing a dispensing sound
 		If I_294\ToInput <> "OUT OF RANGE" Then I_294\ToInput = "DISPENSING..."
@@ -11330,7 +11341,7 @@ Function Use294()
 			If I_294\ToInput <> "OUT OF RANGE" Then
 				HidePointer()
 				I_294\Using = False
-				MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : Mouse_X_Speed_1 = 0.0 : Mouse_Y_Speed_1 = 0.0
+				MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_X_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
 				
 				Local e.Events
 				
@@ -12494,10 +12505,10 @@ End Function
 Function ResetInput()
 	FlushKeys()
 	FlushMouse()
-	MouseHit1 = 0
-	MouseHit2 = 0
-	MouseDown1 = 0
-	MouseUp1 = 0
+	mo\MouseHit1 = 0
+	mo\MouseHit2 = 0
+	mo\MouseDown1 = 0
+	mo\MouseUp1 = 0
 	MouseHit(1)
 	MouseHit(2)
 	MouseDown(1)
@@ -12506,5 +12517,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1083#1315#1E07
+;~B#108E#1320#1E12
 ;~C#Blitz3D

@@ -6294,13 +6294,13 @@ Function UpdateScreens()
 				EntityPick(Camera, 1.2)
 				If PickedEntity() = s\OBJ And s\ImgPath <> "" Then
 					DrawHandIcon = True
-					If MouseUp1 Then 
+					If mo\MouseUp1 Then 
 						SelectedScreen = s
 						s\Img = LoadImage_Strict("GFX\screens\" + s\ImgPath)
 						s\Img = ResizeImage2(s\Img, ImageWidth(s\Img) * MenuScale, ImageHeight(s\Img) * MenuScale)
 						MaskImage(s\Img, 255, 0, 255)
 						PlaySound_Strict(ButtonSFX)
-						MouseUp1 = False
+						mo\MouseUp1 = False
 					EndIf
 				EndIf
 			EndIf
@@ -6630,7 +6630,7 @@ Function UpdateMonitorSaving()
 				If EntityInView(sc\ScrOBJ, Camera) And EntityDistanceSquared(sc\ScrOBJ, Camera) < 1.21 Then
 					If EntityVisible(sc\ScrOBJ, Camera) Then
 						DrawHandIcon = True
-						If MouseHit1 Then SelectedMonitor = sc
+						If mo\MouseHit1 Then SelectedMonitor = sc
 					Else
 						If SelectedMonitor = sc Then SelectedMonitor = Null
 					EndIf
@@ -6668,16 +6668,16 @@ Function UpdateLever(OBJ%, Locked% = False)
 				
 				If PickedEntity() = OBJ Then
 					DrawHandIcon = True
-					If MouseHit1 Then GrabbedEntity = OBJ
+					If mo\MouseHit1 Then GrabbedEntity = OBJ
 				EndIf
 				
 				Local PrevPitch# = EntityPitch(OBJ)
 				
-				If MouseDown1 Lor MouseHit1 Then
+				If mo\MouseDown1 Lor mo\MouseHit1 Then
 					If GrabbedEntity <> 0 Then
 						If GrabbedEntity = OBJ Then
 							DrawHandIcon = True 
-							RotateEntity(GrabbedEntity, Max(Min(EntityPitch(OBJ) + Max(Min(Mouse_Y_Speed_1 * 8.0, 30.0), -30.0), 80.0), -80.0), EntityYaw(OBJ), 0.0)
+							RotateEntity(GrabbedEntity, Max(Min(EntityPitch(OBJ) + Max(Min(mo\Mouse_Y_Speed_1 * 8.0, 30.0), -30.0), 80.0), -80.0), EntityYaw(OBJ), 0.0)
 							
 							DrawArrowIcon[0] = True
 							DrawArrowIcon[2] = True
@@ -6693,7 +6693,7 @@ Function UpdateLever(OBJ%, Locked% = False)
 			EndIf
 		EndIf
 		
-		If (Not MouseDown1) And (Not MouseHit1) Then 
+		If (Not mo\MouseDown1) And (Not mo\MouseHit1) Then 
 			If EntityPitch(OBJ, True) > 0.0 Then
 				RotateEntity(OBJ, CurveValue(80.0, EntityPitch(OBJ), 10.0), EntityYaw(OBJ), 0.0)
 			Else
@@ -6739,13 +6739,13 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 	If door1\Open = True And (Not door2\Open) And door1\OpenState = 180.0 Then 
 		State = -1.0
 		door1\Locked = 0
-		If (ClosestButton = door2\Buttons[0] Lor ClosestButton = door2\Buttons[1]) And MouseHit1 Then
+		If (ClosestButton = door2\Buttons[0] Lor ClosestButton = door2\Buttons[1]) And mo\MouseHit1 Then
 			UseDoor(door1, False)
 		EndIf
 	ElseIf door2\Open = True And (Not door1\Open) And door2\OpenState = 180.0 Then
 		State = 1.0
 		door2\Locked = 0
-		If (ClosestButton = door1\Buttons[0] Lor ClosestButton = door1\Buttons[1]) And MouseHit1 Then
+		If (ClosestButton = door1\Buttons[0] Lor ClosestButton = door1\Buttons[1]) And mo\MouseHit1 Then
 			UseDoor(door2, False)
 		EndIf
 	ElseIf Abs(door1\OpenState - door2\OpenState) < 0.2 Then

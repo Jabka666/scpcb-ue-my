@@ -614,7 +614,7 @@ Function UpdateItems()
 	Next
 	
 	If ClosestItem <> Null Then
-		If MouseHit1 Then PickItem(ClosestItem)
+		If mo\MouseHit1 Then PickItem(ClosestItem)
 	EndIf
 End Function
 
@@ -906,7 +906,7 @@ Function Update294()
 		EndIf
 		
 		If me\Regurgitate > MilliSecs2() And me\Regurgitate <> 0 Then
-			Mouse_Y_Speed_1 = Mouse_Y_Speed_1 + 1.0
+			mo\Mouse_Y_Speed_1 = mo\Mouse_Y_Speed_1 + 1.0
 		Else
 			me\Regurgitate = 0
 		EndIf
@@ -915,7 +915,7 @@ Function Update294()
 		
 		If me\VomitTimer > -5.0 Then
 			If (MilliSecs2() Mod 400) < 50 Then me\CameraShake = 4.0 
-			Mouse_X_Speed_1 = 0.0
+			mo\Mouse_X_Speed_1 = 0.0
 			me\Playable = False
 		Else
 			me\Playable = True
@@ -947,7 +947,7 @@ Function Update294()
 		
 		UpdateDecals()
 		
-		Mouse_Y_Speed_1 = Mouse_Y_Speed_1 + Max((1.0 + me\VomitTimer / 10.0), 0.0)
+		mo\Mouse_Y_Speed_1 = mo\Mouse_Y_Speed_1 + Max((1.0 + me\VomitTimer / 10.0), 0.0)
 		
 		If me\VomitTimer < -15.0 Then
 			FreeSound_Strict(VomitSFX)
