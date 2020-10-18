@@ -549,9 +549,7 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 				;[Block]
 				File = ReadString(f)
 				If File <> "" Then
-					If Right(File, 1) = "x" Then File = Left(File, Len(File) - 1) + "b3d"
-					
-					Local Model% = CreatePropOBJ("GFX\Map\Props\" + File)
+					Local Model% = CreatePropOBJ("GFX\map\Props\" + File)
 					
 					Temp1 = ReadFloat(f) : Temp2 = ReadFloat(f) : Temp3 = ReadFloat(f)
 					PositionEntity(Model, Temp1, Temp2, Temp3)
@@ -6987,8 +6985,11 @@ Type Props
 	Field OBJ%
 End Type
 
-Function CreatePropOBJ(File$)
+Function CreatePropOBJ%(File$)
 	Local p.Props
+	
+	; ~ A hacky way to use .b3d format
+	If Right(File, 1) = "x" Then File = Left(File, Len(File) - 1) + "b3d"
 	
 	For p.Props = Each Props
 		If p\File = File Then
@@ -6998,8 +6999,24 @@ Function CreatePropOBJ(File$)
 	
 	p.Props = New Props
 	p\File = File
+	; ~ A hacky optimization (just copy models that loaded as variable)
+	p\OBJ = CheckModel(File)
 	p\OBJ = LoadMesh_Strict(File)
 	Return(p\OBJ)
+End Function
+
+Function CheckModel%(File$)
+	Local p.Props
+	
+	For p.Props = Each Props
+		If Instr(File, "leverbase") <> 0 Then
+			Return(CopyEntity(o\LeverModelID[0]))
+		ElseIf Instr(File, "leverhandle") <> 0
+			Return(CopyEntity(o\LeverModelID[1]))
+		Else
+			Return(LoadMesh_Strict(File))
+		EndIf
+	Next
 End Function
 
 Function CreateMap()

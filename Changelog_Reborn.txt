@@ -152,3 +152,4 @@ Bug Fixes:
 - Small fixes for SCP-173's AI.
 - Small fixes for SCP-860-1.
 - Small fixes for paper texture.
+- Small fixes for room3servers2.
