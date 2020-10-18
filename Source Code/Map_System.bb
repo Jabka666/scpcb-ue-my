@@ -7001,7 +7001,6 @@ Function CreatePropOBJ%(File$)
 	p\File = File
 	; ~ A hacky optimization (just copy models that loaded as variable)
 	p\OBJ = CheckModel(File)
-	p\OBJ = LoadMesh_Strict(File)
 	Return(p\OBJ)
 End Function
 
