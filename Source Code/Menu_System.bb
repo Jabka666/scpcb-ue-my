@@ -1599,7 +1599,7 @@ Function UpdateLauncher(lnchr.Launcher)
 	RealGraphicWidth = GraphicWidth
 	RealGraphicHeight = GraphicHeight
 	
-	fo\FontID[0] = LoadFont_Strict("GFX\font\cour\Courier New.ttf", 16, 1)
+	fo\FontID[0] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 16, 1)
 	SetFont(fo\FontID[0])
 	MenuWhite = LoadImage_Strict("GFX\menu\menu_white.png")
 	MenuBlack = LoadImage_Strict("GFX\menu\menu_black.png")	

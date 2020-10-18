@@ -189,12 +189,12 @@ InitLoadingScreens("LoadingScreens\loading_screens.ini")
 ; ~ Don't match their "internal name" (i.e. their display name in applications like Word and such)
 ; ~ As a workaround, I moved the files and renamed them so they
 ; ~ Can load without FastText
-fo\FontID[0] = LoadFont_Strict("GFX\font\cour\Courier New.ttf", 16)
-fo\FontID[1] = LoadFont_Strict("GFX\font\cour\Courier New.ttf", 52)
-fo\FontID[2] = LoadFont_Strict("GFX\font\DS-DIGI\DS-Digital.ttf", 20)
-fo\FontID[3] = LoadFont_Strict("GFX\font\DS-DIGI\DS-Digital.ttf", 60)
-fo\FontID[4] = LoadFont_Strict("GFX\font\Journal\Journal.ttf", 58)
-fo\ConsoleFont = LoadFont_Strict("GFX\font\Andale\Andale Mono.ttf", 16)
+fo\FontID[0] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 16)
+fo\FontID[1] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 52)
+fo\FontID[2] = LoadFont_Strict("GFX\fonts\DS-DIGI\DS-Digital.ttf", 20)
+fo\FontID[3] = LoadFont_Strict("GFX\fonts\DS-DIGI\DS-Digital.ttf", 60)
+fo\FontID[4] = LoadFont_Strict("GFX\fonts\Journal\Journal.ttf", 58)
+fo\ConsoleFont = LoadFont_Strict("GFX\fonts\Andale\Andale Mono.ttf", 16)
 
 SetFont(fo\FontID[1])
 
@@ -3714,8 +3714,8 @@ Function InitCredits()
 	Local File% = OpenFile("Credits.txt")
 	Local l$
 	
-	fo\CreditsFontID[0] = LoadFont_Strict("GFX\font\cour\Courier New.ttf", 21)
-	fo\CreditsFontID[1] = LoadFont_Strict("GFX\font\cour\Courier New.ttf", 35)
+	fo\CreditsFontID[0] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 21)
+	fo\CreditsFontID[1] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 35)
 	
 	If me\CreditsScreen = 0 Then me\CreditsScreen = LoadImage_Strict("GFX\credits_screen.png")
 	
@@ -12389,7 +12389,7 @@ Function PlayStartupVideos()
 	
 	HidePointer()
 	
-	fo\FontID[0] = LoadFont_Strict("GFX\font\cour\Courier New.ttf", 16)
+	fo\FontID[0] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 16)
 	
 	Local ScaledGraphicHeight%
 	Local Ratio# = Float(RealGraphicWidth) / Float(RealGraphicHeight)
