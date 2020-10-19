@@ -337,16 +337,18 @@ Function SaveGame(File$)
 		WriteFloat(f, EntityYaw(d\OBJ, True))
 		WriteFloat(f, EntityRoll(d\OBJ, True))
 		
-		WriteByte(f, d\BlendMode)
-		WriteInt(f, d\FX)
-		
 		WriteFloat(f, d\Size)
 		WriteFloat(f, d\Alpha)
-		WriteFloat(f, d\AlphaChange)
+		WriteInt(f, d\FX)
+		WriteByte(f, d\BlendMode)
+		WriteByte(f, d\R) : WriteByte(f, d\G) : WriteByte(f, d\B)
+		
 		WriteFloat(f, d\Timer)
 		WriteFloat(f, d\LifeTime)
+		WriteFloat(f, d\SizeChange)
+		WriteFloat(f, d\AlphaChange)
 	Next
-	
+    
 	Local e.Events
 	
 	Temp = 0
@@ -976,7 +978,7 @@ Function LoadGame(File$)
 		Local OBJ2X# = ReadFloat(f)
 		Local OBJ2Z# = ReadFloat(f)
 		
-		Local Timer% = ReadFloat(f)
+		Local Timer# = ReadFloat(f)
 		Local TimerState# = ReadFloat(f)
 		
 		Local IsElevDoor = ReadByte(f)
@@ -1023,18 +1025,34 @@ Function LoadGame(File$)
 		Local Roll# = ReadFloat(f)
 		
 		d.Decals = CreateDecal(ID, x, y, z, Pitch, Yaw, Roll)
-		d\BlendMode = ReadByte(f)
-		d\FX = ReadInt(f)
 		
-		d\Size = ReadFloat(f)
-		d\Alpha = ReadFloat(f)
-		d\AlphaChange = ReadFloat(f)
+		Local Size# = ReadFloat(f)
+		Local Alpha# = ReadFloat(f)
+		Local FX% = ReadInt(f)
+		Local BlendMode% = ReadByte(f)
+		Local Red% = ReadByte(f), Green% = ReadByte(f), Blue% = ReadByte(f)
+		
 		d\Timer = ReadFloat(f)
 		d\LifeTime = ReadFloat(f)
+		d\SizeChange = ReadFloat(f)
+		d\AlphaChange = ReadFloat(f)
 		
-		ScaleSprite(d\OBJ, d\Size, d\Size)
-		EntityBlend(d\OBJ, d\BlendMode)
-		EntityFX(d\OBJ, d\FX)
+		For d.Decals = Each Decals
+			If EntityX(d\OBJ, True) = x And EntityY(d\OBJ, True) = y And EntityZ(d\OBJ, True) = z Then
+				d\Size = Size
+				d\Alpha = Alpha
+				d\FX = FX
+				d\BlendMode = BlendMode
+				d\R = Red : d\G = Green : d\B = Blue
+				
+				ScaleSprite(d\OBJ, Size, Size)
+				EntityAlpha(d\OBJ, Alpha)
+				EntityFX(d\OBJ, FX)
+				EntityBlend(d\OBJ, BlendMode)
+				If Red <> 0 Lor Green <> 0 Lor Blue <> 0 Then EntityColor(d\OBJ, Red, Green, Blue)
+				Exit
+			EndIf
+		Next
 	Next
 	UpdateDecals()
 	
@@ -1109,9 +1127,10 @@ Function LoadGame(File$)
 		y = ReadFloat(f)
 		z = ReadFloat(f)
 		
-		Local Red% = ReadByte(f)
-		Local Green% = ReadByte(f)
-		Local Blue% = ReadByte(f)		
+		Red = ReadByte(f)
+		Green = ReadByte(f)
+		Blue = ReadByte(f)	
+		
 		Local A% = ReadFloat(f)
 		
 		it.Items = CreateItem(IttName, TempName, x, y, z, Red, Green, Blue, A)
@@ -1706,31 +1725,26 @@ Function LoadGameQuick(File$)
 		Local OBJ2X# = ReadFloat(f)
 		Local OBJ2Z# = ReadFloat(f)
 		
-		Local Timer% = ReadFloat(f)
+		Local Timer# = ReadFloat(f)
 		Local TimerState# = ReadFloat(f)
 		
 		Local IsElevDoor% = ReadByte(f)
 		Local MTFClose% = ReadByte(f)
 		
 		For do.Doors = Each Doors
-			If EntityX(do\FrameOBJ, True) = x Then 
-				If EntityZ(do\FrameOBJ, True) = z Then	
-					If EntityY(do\FrameOBJ, True) = y 
-						do\Open = Open
-						do\OpenState = OpenState
-						do\Locked = Locked
-						do\AutoClose = AutoClose
-						do\Timer = Timer
-						do\TimerState = TimerState
-						do\IsElevatorDoor = IsElevDoor
-						do\MTFClose = MTFClose
-						
-						PositionEntity(do\OBJ, OBJX, EntityY(do\OBJ), OBJZ, True)
-						If do\OBJ2 <> 0 Then PositionEntity(do\OBJ2, OBJ2X, EntityY(do\OBJ2), OBJ2Z, True)
-						
-						Exit
-					EndIf
-				EndIf
+			If EntityX(do\FrameOBJ, True) = x And EntityY(do\FrameOBJ, True) = y And EntityZ(do\FrameOBJ, True) = z Then
+				do\Open = Open
+				do\OpenState = OpenState
+				do\Locked = Locked
+				do\AutoClose = AutoClose
+				do\Timer = Timer
+				do\TimerState = TimerState
+				do\IsElevatorDoor = IsElevDoor
+				do\MTFClose = MTFClose
+				
+				PositionEntity(do\OBJ, OBJX, EntityY(do\OBJ), OBJZ, True)
+				If do\OBJ2 <> 0 Then PositionEntity(do\OBJ2, OBJ2X, EntityY(do\OBJ2), OBJ2Z, True)
+				Exit
 			EndIf
 		Next		
 	Next
@@ -1756,18 +1770,34 @@ Function LoadGameQuick(File$)
 		Local Roll# = ReadFloat(f)
 		
 		d.Decals = CreateDecal(ID, x, y, z, Pitch, Yaw, Roll)
-		d\BlendMode = ReadByte(f)
-		d\FX = ReadInt(f)
 		
-		d\Size = ReadFloat(f)
-		d\Alpha = ReadFloat(f)
-		d\AlphaChange = ReadFloat(f)
+		Local Size# = ReadFloat(f)
+		Local Alpha# = ReadFloat(f)
+		Local FX% = ReadInt(f)
+		Local BlendMode% = ReadByte(f)
+		Local Red% = ReadByte(f), Green% = ReadByte(f), Blue% = ReadByte(f)
+		
 		d\Timer = ReadFloat(f)
 		d\LifeTime = ReadFloat(f)
+		d\SizeChange = ReadFloat(f)
+		d\AlphaChange = ReadFloat(f)
 		
-		ScaleSprite(d\OBJ, d\Size, d\Size)
-		EntityBlend(d\OBJ, d\BlendMode)
-		EntityFX(d\OBJ, d\FX)
+		For d.Decals = Each Decals
+			If EntityX(d\OBJ, True) = x And EntityY(d\OBJ, True) = y And EntityZ(d\OBJ, True) = z Then
+				d\Size = Size
+				d\Alpha = Alpha
+				d\FX = FX
+				d\BlendMode = BlendMode
+				d\R = Red : d\G = Green : d\B = Blue
+				
+				ScaleSprite(d\OBJ, Size, Size)
+				EntityAlpha(d\OBJ, Alpha)
+				EntityFX(d\OBJ, FX)
+				EntityBlend(d\OBJ, BlendMode)
+				If Red <> 0 Lor Green <> 0 Lor Blue <> 0 Then EntityColor(d\OBJ, Red, Green, Blue)
+				Exit
+			EndIf
+		Next
 	Next
 	UpdateDecals()
 	
@@ -1828,9 +1858,10 @@ Function LoadGameQuick(File$)
 		y = ReadFloat(f)
 		z = ReadFloat(f)
 		
-		Local Red% = ReadByte(f)
-		Local Green% = ReadByte(f)
-		Local Blue% = ReadByte(f)		
+		Red = ReadByte(f)
+		Green = ReadByte(f)
+		Blue = ReadByte(f)	
+		
 		Local A% = ReadFloat(f)
 		
 		it.Items = CreateItem(IttName, TempName, x, y, z, Red, Green, Blue, A)

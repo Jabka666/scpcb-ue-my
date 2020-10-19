@@ -851,8 +851,8 @@ Function UpdateNPCs()
 						If n\State =< 0.0 Then
 							If EntityY(n\Collider) < EntityY(me\Collider) - 20.0 - 0.55 Then
 								If Not PlayerRoom\RoomTemplate\DisableDecals Then
-									de.Decals = CreateDecal(0, EntityX(me\Collider), 0.01, EntityZ(me\Collider), 90.0, Rnd(360.0), 0.0)
-									de\Size = 0.05 : de\SizeChange = 0.001 : EntityAlpha(de\OBJ, 0.8) : UpdateDecals()
+									de.Decals = CreateDecal(0, EntityX(me\Collider), 0.01, EntityZ(me\Collider), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
+									de\SizeChange = 0.001 : UpdateDecals()
 								EndIf
 								
 								n\PrevY = EntityY(me\Collider)
@@ -1229,10 +1229,7 @@ Function UpdateNPCs()
 													TurnEntity(Pvt, 90.0, 0.0, 0.0)
 													EntityPick(Pvt, 0.3)
 													
-													de.Decals = CreateDecal(Rand(15, 16), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rand(360.0), 0.0)
-													de\Size = Rnd(0.2, 0.6)
-													EntityAlpha(de\OBJ, 1.0)
-													ScaleSprite(de\OBJ, de\Size, de\Size)
+													de.Decals = CreateDecal(Rand(15, 16), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rand(360.0), 0.0, Rnd(0.2, 0.6))
 												Next
 												FreeEntity(Pvt)
 											EndIf
@@ -3836,8 +3833,8 @@ Function UpdateNPCs()
 												;[Block]
 												If (Not PlayerRoom\RoomTemplate\DisableDecals) Then
 													me\CameraShake = 5.0
-													de.Decals = CreateDecal(1, EntityX(n\Collider), 0.01, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0)
-													de\Size = 0.3 : UpdateDecals()
+													de.Decals = CreateDecal(1, EntityX(n\Collider), 0.01, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, 0.3)
+													UpdateDecals()
 													PlaySound_Strict(LoadTempSound("SFX\General\BodyFall.ogg"))
 													If DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider)) < 0.64 Then
 														InjurePlayer(Rnd(0.3, 0.5), 0.0, 200.0)
@@ -6912,13 +6909,10 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 					RotateEntity(p\Pvt, EntityPitch(Pvt) + Rnd(170.0, 190.0), EntityYaw(Pvt) + Rnd(-10.0, 10.0), 0)	
 				Next
 				
-				de.Decals = CreateDecal(Rand(13, 14), PickedX(), PickedY() + Rnd(-0.05, 0.05), PickedZ(), Rnd(-4.0, 4.0), Rnd(-4.0, 4.0), Rnd(-4.0, 4.0))
-				de\Size = Rnd(0.028, 0.034) : de\LifeTime = 70.0 * 20.0
+				de.Decals = CreateDecal(Rand(13, 14), PickedX(), PickedY() + Rnd(-0.05, 0.05), PickedZ(), Rnd(-4.0, 4.0), Rnd(-4.0, 4.0), Rnd(-4.0, 4.0), Rnd(0.028, 0.034), 1.0, 1, 2)
+				de\LifeTime = 70.0 * 20.0
 				AlignToVector(de\OBJ, -PickedNX(), -PickedNY(), -PickedNZ(), 3)
 				MoveEntity(de\OBJ, 0.0, 0.0, -0.001)
-				EntityFX(de\OBJ, 1)
-				EntityBlend(de\OBJ, 2)
-				ScaleSprite(de\OBJ, de\Size, de\Size)
 			EndIf				
 		EndIf	
 		FreeEntity(Pvt)
@@ -7450,5 +7444,5 @@ Function Animate2#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = True
 End Function 
 
 ;~IDEal Editor Parameters:
-;~B#172#121D#1363#13B3#1509#1625#17F4#184F
+;~B#172#121A#1360#13B0#1506#1622#17F1#184C
 ;~C#Blitz3D

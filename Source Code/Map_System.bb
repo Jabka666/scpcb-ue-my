@@ -1858,17 +1858,11 @@ Function FillRoom(r.Rooms)
 			
 			; ~ Create blood decals inside
 			For i = 0 To 5
-				de = CreateDecal(Rand(2, 3), r\x + Rnd(-392.0, 520.0) * RoomScale, r\y + 3.0 * RoomScale + Rnd(0, 0.001), r\z + Rnd(-392.0, 520.0) * RoomScale, 90.0, Rnd(360.0), 0.0)
-				de\Size = Rnd(0.3, 0.6)
-				ScaleSprite(de\OBJ, de\Size, de\Size)
+				de = CreateDecal(Rand(2, 3), r\x + Rnd(-392.0, 520.0) * RoomScale, r\y + 3.0 * RoomScale + Rnd(0, 0.001), r\z + Rnd(-392.0, 520.0) * RoomScale, 90.0, Rnd(360.0), 0.0, Rnd(0.3, 0.6))
 				EntityParent(de\OBJ, r\OBJ)
-				de = CreateDecal(Rand(15, 16), r\x + Rnd(-392.0, 520.0) * RoomScale, r\y + 3.0 * RoomScale + Rnd(0, 0.001), r\z + Rnd(-392.0, 520.0) * RoomScale, 90.0, Rnd(360.0), 0.0)
-				de\Size = Rnd(0.1, 0.6)
-				ScaleSprite(de\OBJ, de\Size, de\Size)
+				de = CreateDecal(Rand(15, 16), r\x + Rnd(-392.0, 520.0) * RoomScale, r\y + 3.0 * RoomScale + Rnd(0, 0.001), r\z + Rnd(-392.0, 520.0) * RoomScale, 90.0, Rnd(360.0), 0.0, Rnd(0.1, 0.6))
 				EntityParent(de\OBJ, r\OBJ)
-				de = CreateDecal(Rand(15, 16), r\x + Rnd(-0.5, 0.5), r\y + 3.0 * RoomScale + Rnd(0, 0.001), r\z + Rnd(-0.5, 0.5), 90.0, Rnd(360.0), 0.0)
-				de\Size = Rnd(0.1, 0.6)
-				ScaleSprite(de\OBJ, de\Size, de\Size)
+				de = CreateDecal(Rand(15, 16), r\x + Rnd(-0.5, 0.5), r\y + 3.0 * RoomScale + Rnd(0, 0.001), r\z + Rnd(-0.5, 0.5), 90.0, Rnd(360.0), 0.0, Rnd(0.1, 0.6))
 				EntityParent(de\OBJ, r\OBJ)
 			Next
 			;[End Block]
@@ -2172,9 +2166,7 @@ Function FillRoom(r.Rooms)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
-			de = CreateDecal(3, r\x - 2200.0 * RoomScale, r\y - 10688.0 * RoomScale + 0.01, r\z + 1000.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
-			de\Size = 0.5
-			ScaleSprite(de\OBJ, de\Size, de\Size)
+			de = CreateDecal(3, r\x - 2200.0 * RoomScale, r\y - 10688.0 * RoomScale + 0.01, r\z + 1000.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.5)
 			EntityParent(de\OBJ, r\OBJ)
 			;[End Block]
 		Case "room2checkpoint"
@@ -2429,10 +2421,8 @@ Function FillRoom(r.Rooms)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
-			de = CreateDecal(3, r\x + 1334.0 * RoomScale, r\y - 796.0 * RoomScale + 0.01, r\z - 220.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
-            de\Size = 0.25
-            ScaleSprite(de\OBJ, de\Size, de\Size)
-            EntityParent(de\OBJ, r\OBJ)
+			de = CreateDecal(3, r\x + 1334.0 * RoomScale, r\y - 796.0 * RoomScale + 0.01, r\z - 220.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.25)
+			EntityParent(de\OBJ, r\OBJ)
 			
 			it = CreateItem("Level 3 Key Card", "key3", r\x + 1119.0 * RoomScale, r\y + 233.0 * RoomScale, r\z + 494.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -2504,9 +2494,7 @@ Function FillRoom(r.Rooms)
 			de = CreateDecal(0, r\x - 808.0 * RoomScale, r\y + 0.005, r\z - 72.0 * RoomScale, 90.0, Rand(360.0), 0.0)
 			EntityParent(de\OBJ, r\OBJ)
 			
-			de = CreateDecal(2, r\x - 808.0 * RoomScale, r\y + 0.01, r\z - 72.0 * RoomScale, 90.0, Rand(360.0), 0.0)
-			de\Size = 0.3
-			ScaleSprite(de\OBJ, de\Size, de\Size)
+			de = CreateDecal(2, r\x - 808.0 * RoomScale, r\y + 0.01, r\z - 72.0 * RoomScale, 90.0, Rand(360.0), 0.0, 0.3)
 			EntityParent(de\OBJ, r\OBJ)
 			
 			de = CreateDecal(0, r\x - 432.0 * RoomScale, r\y + 0.01, r\z, 90.0, Rand(360.0), 0.0)
@@ -3080,19 +3068,13 @@ Function FillRoom(r.Rooms)
 			it\State = 450.0
 			EntityParent(it\Collider, r\OBJ)
 			
-			de = CreateDecal(3, r\x + xTemp * RoomScale, r\y - 5632.0 * RoomScale + 0.01, r\z + zTemp * RoomScale, 90.0, Rnd(360.0), 0.0)
-			de\Size = 0.5
-			ScaleSprite(de\OBJ, de\Size, de\Size)
+			de = CreateDecal(3, r\x + xTemp * RoomScale, r\y - 5632.0 * RoomScale + 0.01, r\z + zTemp * RoomScale, 90.0, Rnd(360.0), 0.0, 0.5)
 			EntityParent(de\OBJ, r\OBJ)
 			
-			de = CreateDecal(3, r\x + 2268.0 * RoomScale, r\y - 5510.0 * RoomScale, r\z + 2932.0 * RoomScale, 0.0, r\Angle + 270.0, 0.0)
-			de\Size = 0.3
-			ScaleSprite(de\OBJ, de\Size, de\Size)
+			de = CreateDecal(3, r\x + 2268.0 * RoomScale, r\y - 5510.0 * RoomScale, r\z + 2932.0 * RoomScale, 0.0, r\Angle + 270.0, 0.0, 0.3)
 			EntityParent(de\OBJ, r\OBJ)
 			
-			de = CreateDecal(7, r\x + 1215.5 * RoomScale, r\y - 5632.0 * RoomScale + 0.01, r\z + 2964.0 * RoomScale, 90.0, r\Angle + 180.0, 0.0)
-			de\Size = 0.4
-			ScaleSprite(de\OBJ, de\Size, de\Size)
+			de = CreateDecal(7, r\x + 1215.5 * RoomScale, r\y - 5632.0 * RoomScale + 0.01, r\z + 2964.0 * RoomScale, 90.0, r\Angle + 180.0, 0.0, 0.4)
 			EntityParent(de\OBJ, r\OBJ)
 			;[End Block]
 		Case "room049"
@@ -3296,9 +3278,7 @@ Function FillRoom(r.Rooms)
 			it = CreateItem("Severed Hand", "hand", r\x - 784.0 * RoomScale, r\y - 576.0 * RoomScale + 0.3, r\z + 640.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			de = CreateDecal(3, r\x - 784.0 * RoomScale, r\y - 768.0 * RoomScale + 0.01, r\z + 640.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
-			de\Size = 0.5
-			ScaleSprite(de\OBJ, de\Size, de\Size)
+			de = CreateDecal(3, r\x - 784.0 * RoomScale, r\y - 768.0 * RoomScale + 0.01, r\z + 640.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.5)
 			EntityParent(de\OBJ, r\OBJ)
 			;[End Block]
 		Case "room2tunnel2"
@@ -3762,16 +3742,7 @@ Function FillRoom(r.Rooms)
 						Temp = 6
 						;[End Block]
 			    End Select
-			    de = CreateDecal(Temp, r\x + xTemp * RoomScale, r\y + 386.0 * RoomScale, r\z + zTemp * RoomScale, 90.0, 45.0, 0.0)
-				If i = 0 Then
-					de\Size = 0.44
-				ElseIf i = 1
-					de\Size = 1.2
-				Else
-					de\Size = 0.54
-				EndIf
-			    de\Alpha = Rnd(0.8, 1.0)
-			    ScaleSprite(de\OBJ, de\Size, de\Size)
+			    de = CreateDecal(Temp, r\x + xTemp * RoomScale, r\y + 386.0 * RoomScale, r\z + zTemp * RoomScale, 90.0, 45.0, 0.0, ((i = 0) * 0.44) + ((i = 1) * 1.2) + ((i > 1) * 0.54), Rnd(0.8, 1.0))
 				EntityParent(de\OBJ, r\OBJ)
 			Next
 			;[End Block]
@@ -3910,13 +3881,7 @@ Function FillRoom(r.Rooms)
 						zTemp = 636.0
 						;[End Block]
 				End Select
-				de = CreateDecal(Rand(15, 16), r\x + xTemp * RoomScale, r\y + 0.005, r\z + zTemp * RoomScale, 90.0, Rand(360.0), 0.0)
-				If i > 10 Then
-					de\Size = Rnd(0.2, 0.25)
-				Else
-					de\Size = Rnd(0.1, 0.17)
-				EndIf
-				EntityAlpha(de\OBJ, 1.0) : ScaleSprite(de\OBJ, de\Size, de\Size)
+				de = CreateDecal(Rand(15, 16), r\x + xTemp * RoomScale, r\y + 0.005, r\z + zTemp * RoomScale, 90.0, Rand(360.0), 0.0, ((i =< 10) * Rnd(0.2, 0.25)) + ((i > 10) * Rnd(0.1, 0.17)))
 				EntityParent(de\OBJ, r\OBJ)
 			Next
 			
@@ -4299,16 +4264,7 @@ Function FillRoom(r.Rooms)
 			            Temp = 6
 						;[End Block]
 			    End Select
-			    de = CreateDecal(Temp, r\x + xTemp * RoomScale, r\y + 2.0 * RoomScale, r\z + zTemp * RoomScale, 90.0, 45.0, 0.0)
-				If i = 0 Then
-					de\Size = 0.44
-				ElseIf i = 1
-					de\Size = 1.2
-				Else
-					de\Size = 0.54
-				EndIf
-			    de\Alpha = Rnd(0.8, 1.0)
-			    ScaleSprite(de\OBJ, de\Size, de\Size)
+			    de = CreateDecal(Temp, r\x + xTemp * RoomScale, r\y + 2.0 * RoomScale, r\z + zTemp * RoomScale, 90.0, 45.0, 0.0, ((i = 0) * 0.44) + ((i = 1) * 1.2) + ((i > 1) * 0.54), Rnd(0.8, 1.0))
 				EntityParent(de\OBJ, r\OBJ)
 			Next
 			
@@ -4794,9 +4750,7 @@ Function FillRoom(r.Rooms)
 			EntityPickMode(Terrain, 3)
 			PositionEntity(Terrain, r\x, r\y + 2944.0 * RoomScale, r\z + 32.0, True)			
 			
-			de = CreateDecal(18, r\x - (1536.0 * RoomScale), r\y + 0.02, r\z + 608.0 * RoomScale + 32.0, 90.0, 0.0, 0.0)
-			de\Size = Rnd(0.8, 0.8)
-			ScaleSprite(de\OBJ, de\Size, de\Size)
+			de = CreateDecal(18, r\x - (1536.0 * RoomScale), r\y + 0.02, r\z + 608.0 * RoomScale + 32.0, 90.0, 0.0, 0.0, 0.8)
 			EntityParent(de\OBJ, r\OBJ)
 			
 			ScaleEntity(r\Objects[10], RoomScale * 1.5, RoomScale * 2.0, RoomScale * 1.5, True)			
@@ -4815,9 +4769,7 @@ Function FillRoom(r.Rooms)
 				EntityParent(r\Objects[i - 1], r\OBJ)
 				
 				If i < 6 Then 
-					de = CreateDecal(i + 7, r\x + Cos(Angle) * (512.0 * RoomScale) * 3.0, r\y + 0.02, r\z + Sin(Angle) * (512.0 * RoomScale) * 3.0, 90.0, Angle - 90.0, 0.0)
-					de\Size = 0.5
-					ScaleSprite(de\OBJ, de\Size, de\Size)
+					de = CreateDecal(i + 7, r\x + Cos(Angle) * (512.0 * RoomScale) * 3.0, r\y + 0.02, r\z + Sin(Angle) * (512.0 * RoomScale) * 3.0, 90.0, Angle - 90.0, 0.0, 0.5)
 					EntityParent(de\OBJ, r\OBJ)
 				EndIf				
 			Next
@@ -5402,9 +5354,7 @@ Function FillRoom(r.Rooms)
 		    PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			
-			de.Decals = CreateDecal(3, r\x - 477.0 * RoomScale, r\y + 0.005, r\z - 710.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
-			de\Size = 0.5
-			ScaleSprite(de\OBJ, de\Size, de\Size)
+			de = CreateDecal(3, r\x - 477.0 * RoomScale, r\y + 0.005, r\z - 710.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.5)
 			EntityParent(de\OBJ, r\OBJ)
 			
 			it = CreateItem("Data Report", "paper", r\x - 477.0 * RoomScale, r\y + 90.0 * RoomScale, r\z - 710.0 * RoomScale)

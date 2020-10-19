@@ -936,11 +936,8 @@ Function Update294()
 			PositionEntity(Pvt, EntityX(Camera), EntityY(me\Collider) - 0.05, EntityZ(Camera))
 			TurnEntity(Pvt, 90.0, 0.0, 0.0)
 			EntityPick(Pvt, 0.3)
-			de.Decals = CreateDecal(5, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, 180.0, 0.0)
-			de\Size = 0.001 : de\SizeChange = 0.001 : de\MaxSize = 0.6
-			EntityAlpha(de\OBJ, 1.0)
-			EntityColor(de\OBJ, 0.0, Rnd(200.0, 255.0), 0.0)
-			ScaleSprite(de\OBJ, de\Size, de\Size)
+			de.Decals = CreateDecal(5, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, 180.0, 0.0, 0.001, 1.0, 0, 1, 0, Rnd(200.0, 255.0), 0.0)
+			de\SizeChange = 0.001 : de\MaxSize = 0.6
 			FreeEntity(Pvt)
 			me\Vomit = True
 		EndIf

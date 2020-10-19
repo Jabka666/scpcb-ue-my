@@ -4183,9 +4183,8 @@ Function MovePlayer()
 			TurnEntity(Pvt, 90.0, 0.0, 0.0)
 			EntityPick(Pvt, 0.3)
 			
-			de.Decals = CreateDecal(Rand(15, 16), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rand(360.0), 0.0)
-			de\Size = Rnd(0.03, 0.08) * Min(me\Injuries, 3.0) : EntityAlpha(de\OBJ, 1.0)
-			ScaleSprite(de\OBJ, de\Size, de\Size)
+			de.Decals = CreateDecal(Rand(15, 16), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rand(360.0), 0.0, Rnd(0.03, 0.08) * Min(me\Injuries, 3.0))
+			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + 0.009 : UpdateDecals()  
 			TempCHN = PlaySound_Strict(DripSFX[Rand(0, 2)])
 			ChannelVolume(TempCHN, Rnd(0.0, 0.8) * SFXVolume)
 			ChannelPitch(TempCHN, Rand(20000, 30000))
@@ -9330,19 +9329,8 @@ Function InitNewGame()
 		Next
 		
 		If (Not r\RoomTemplate\DisableDecals) Then
-			If Rand(4) = 1 Then
-				de.Decals = CreateDecal(Rand(2, 3), EntityX(r\OBJ) + Rnd(- 2.0, 2.0), 0.003, EntityZ(r\OBJ) + Rnd(-2.0, 2.0), 90.0, Rand(360.0), 0.0)
-				de\Size = Rnd(0.1, 0.4)
-				EntityAlpha(de\OBJ, Rnd(0.85, 0.95))
-				ScaleSprite(de\OBJ, de\Size, de\Size)
-			EndIf
-			
-			If Rand(4) = 1 Then
-				de.Decals = CreateDecal(0, EntityX(r\OBJ) + Rnd(- 2.0, 2.0), 0.003, EntityZ(r\OBJ) + Rnd(-2.0, 2.0), 90.0, Rand(360.0), 0.0)
-				de\Size = Rnd(0.5, 0.7) : EntityAlpha(de\OBJ, 0.7) : de\ID = 1
-				EntityAlpha(de\OBJ, Rnd(0.7, 0.85))
-				ScaleSprite(de\OBJ, de\Size, de\Size)
-			EndIf
+			If Rand(4) = 1 Then de.Decals = CreateDecal(Rand(2, 3), EntityX(r\OBJ) + Rnd(- 2.0, 2.0), 0.003, EntityZ(r\OBJ) + Rnd(-2.0, 2.0), 90.0, Rand(360.0), 0.0, Rnd(0.1, 0.4), Rnd(0.85, 0.95))
+			If Rand(4) = 1 Then de.Decals = CreateDecal(0, EntityX(r\OBJ) + Rnd(-2.0, 2.0), 0.003, EntityZ(r\OBJ) + Rnd(-2.0, 2.0), 90.0, Rand(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.7, 0.85))
 		EndIf
 		
 		If r\RoomTemplate\Name = "room173" And (Not IntroEnabled) Then 
@@ -9816,9 +9804,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					d.Decals = CreateDecal(0, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0)
-					d\Size = 0.12
-					ScaleSprite(d\OBJ, d\Size, d\Size)
+					d.Decals = CreateDecal(0, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
 					RemoveItem(item)
 					;[End Block]
 				Case ONETOONE
@@ -9838,9 +9824,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					d.Decals = CreateDecal(0, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0)
-					d\Size = 0.12
-					ScaleSprite(d\OBJ, d\Size, d\Size)
+					d.Decals = CreateDecal(0, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
 					RemoveItem(item)
 					;[End Block]
 				Case ONETOONE
@@ -9869,9 +9853,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH
 					;[Block]
-					d.Decals = CreateDecal(0, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0)
-					d\Size = 0.12
-					ScaleSprite(d\OBJ, d\Size, d\Size)
+					d.Decals = CreateDecal(0, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
 					RemoveItem(item)
 					;[End Block]
 				Case COARSE
@@ -9901,9 +9883,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 				    ;[Block]
-					d.Decals = CreateDecal(0, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0)
-					d\Size = 0.07
-					ScaleSprite(d\OBJ, d\Size, d\Size)
+					d.Decals = CreateDecal(0, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
 					;[End Block]
 				Case ONETOONE
 				    ;[Block]
@@ -9921,10 +9901,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0)
-					d\Size = 0.2
-					EntityAlpha(d\OBJ, 0.8)
-					ScaleSprite(d\OBJ, d\Size, d\Size)
+					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
 					
 					For i = 0 To 19
 						If item\SecondInv[i] <> Null Then RemoveItem(item\SecondInv[i])
@@ -9955,10 +9932,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0)
-					d\Size = 0.2
-					EntityAlpha(d\OBJ, 0.8)
-					ScaleSprite(d\OBJ, d\Size, d\Size)
+					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
 					
 					For i = 0 To 19
 						If item\SecondInv[i] <> Null Then RemoveItem(item\SecondInv[i])
@@ -9990,9 +9964,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					d.Decals = CreateDecal(0, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0)
-					d\Size = 0.12
-					ScaleSprite(d\OBJ, d\Size, d\Size)
+					d.Decals = CreateDecal(0, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
 					RemoveItem(item)
 					;[End Block]
 				Case ONETOONE
@@ -10077,9 +10049,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					d.Decals = CreateDecal(3, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0)
-					d\Size = 0.12
-					ScaleSprite(d\OBJ, d\Size, d\Size)
+					d.Decals = CreateDecal(3, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
 					;[End Block]
 				Case ONETOONE, FINE, VERYFINE
 					;[Block]
@@ -10097,9 +10067,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0)
-					d\Size = 0.12
-					ScaleSprite(d\OBJ, d\Size, d\Size)
+					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -10126,9 +10094,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0)
-					d\Size = 0.07
-					ScaleSprite(d\OBJ, d\Size, d\Size)
+					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -10402,9 +10368,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0)
-					d\Size = 0.07
-					ScaleSprite(d\OBJ, d\Size, d\Size)
+					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -10451,9 +10415,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0)
-					d\Size = 0.07
-					ScaleSprite(d\OBJ, d\Size, d\Size)
+					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -10475,9 +10437,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH
 					;[Block]
-					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0)
-					d\Size = 0.07
-					ScaleSprite(d\OBJ, d\Size, d\Size)
+					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
 					;[End Block]
 				Case COARSE
 					;[Block]
@@ -10568,10 +10528,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 					For n.NPCs = Each NPCs
 						If n\NPCtype = NPCtype513_1 Then RemoveNPC(n)
 					Next
-					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0)
-					d\Size = 0.2
-					EntityAlpha(d\OBJ, 0.8)
-					ScaleSprite(d\OBJ, d\Size, d\Size)
+					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
 					;[End Block]
 				Case ONETOONE, FINE, VERYFINE
 					;[Block]
@@ -10585,10 +10542,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0)
-					d\Size = 0.2
-					EntityAlpha(d\OBJ, 0.8)
-					ScaleSprite(d\OBJ, d\Size, d\Size)
+					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -10610,10 +10564,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0)
-					d\Size = 0.2
-					EntityAlpha(d\OBJ, 0.8)
-					ScaleSprite(d\OBJ, d\Size, d\Size)
+					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -10635,10 +10586,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0)
-					d\Size = 0.2
-					EntityAlpha(d\OBJ, 0.8)
-					ScaleSprite(d\OBJ, d\Size, d\Size)
+					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -10660,10 +10608,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0)
-					d\Size = 0.2
-					EntityAlpha(d\OBJ, 0.8)
-					ScaleSprite(d\OBJ, d\Size, d\Size)
+					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -10688,9 +10633,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 					Select Setting
 						Case ROUGH, COARSE
 							;[Block]
-							d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0)
-							d\Size = 0.07
-							ScaleSprite(d\OBJ, d\Size, d\Size)
+							d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
 							;[End Block]
 						Case ONETOONE
 							;[Block]
@@ -10715,9 +10658,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 					Select Setting
 						Case ROUGH
 							;[Block]
-							d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0)
-							d\Size = 0.07
-							ScaleSprite(d\OBJ, d\Size, d\Size)
+							d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
 							;[End Block]
 						Case COARSE
 							;[Block]
@@ -10761,8 +10702,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 			        Select Setting
 					    Case ROUGH, COARSE
 					        ;[Block]
-					        d.Decals = CreateDecal(0, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0)
-							d\Size = 0.07 : ScaleSprite(d\OBJ, d\Size, d\Size)
+					        d.Decals = CreateDecal(0, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
 							;[End Block]
 						Case ONETOONE
 						    ;[Block]
@@ -10790,10 +10730,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0)
-					d\Size = 0.2
-					EntityAlpha(d\OBJ, 0.8)
-					ScaleSprite(d\OBJ, d\Size, d\Size)
+					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -10828,10 +10765,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH
 					;[Block]
-					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0)
-					d\Size = 0.2
-					EntityAlpha(d\OBJ, 0.8)
-					ScaleSprite(d\OBJ, d\Size, d\Size)
+					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
 					;[End Block]
 				Case COARSE
 					;[Block]
@@ -10939,10 +10873,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 					Select Setting
 						Case ROUGH, COARSE
 							;[Block]
-							d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0)
-							d\Size = 0.2
-							EntityAlpha(d\OBJ, 0.8)
-							ScaleSprite(d\OBJ, d\Size, d\Size)
+							d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
 							;[End Block]
 						Case ONETOONE
 							;[Block]
@@ -10981,10 +10912,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 					Select Setting
 						Case ROUGH
 							;[Block]
-							d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0)
-							d\Size = 0.2
-							EntityAlpha(d\OBJ, 0.8)
-							ScaleSprite(d\OBJ, d\Size, d\Size)
+							d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
 							;[End Block]
 						Case COARSE
 							;[Block]
@@ -11332,7 +11260,7 @@ Function Use294()
 			HidePointer()
 			I_294\Using = False
 			I_294\ToInput = ""
-			MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_X_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
+			MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_x_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
 		EndIf
 	Else ; ~ Playing a dispensing sound
 		If I_294\ToInput <> "OUT OF RANGE" Then I_294\ToInput = "DISPENSING..."
@@ -11341,7 +11269,7 @@ Function Use294()
 			If I_294\ToInput <> "OUT OF RANGE" Then
 				HidePointer()
 				I_294\Using = False
-				MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_X_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
+				MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_x_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
 				
 				Local e.Events
 				
@@ -11435,10 +11363,8 @@ Function Use427()
 			PositionEntity(Pvt, EntityX(me\Collider) + Rnd(-0.05, 0.05), EntityY(me\Collider) - 0.05, EntityZ(me\Collider) + Rnd(-0.05, 0.05))
 			TurnEntity(Pvt, 90.0, 0.0, 0.0)
 			EntityPick(Pvt, 0.3)
-			de.Decals = CreateDecal(17, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rand(360.0), 0.0)
-			de\Size = Rnd(0.03, 0.08) * 2.0
-			EntityAlpha(de\OBJ, 1.0)
-			ScaleSprite(de\OBJ, de\Size, de\Size)
+			de.Decals = CreateDecal(17, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rand(360.0), 0.0, Rnd(0.03, 0.08) * 2.0)
+			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + 0.009 : UpdateDecals()  
 			TempCHN = PlaySound_Strict(DripSFX[Rand(0, 2)])
 			ChannelVolume(TempCHN, Rnd(0.0, 0.8) * SFXVolume)
 			ChannelPitch(TempCHN, Rand(20000, 30000))
@@ -11713,9 +11639,7 @@ Function Update008()
 						msg\DeathMsg = SubjectName + " found ingesting Dr. [DATA REDACTED] at Sector [DATA REDACTED]. Subject was immediately terminated by " + GroupDesignation + " and sent for autopsy. "
 						msg\DeathMsg = msg\DeathMsg + "SCP-008 infection was confirmed, after which the body was incinerated."
 						Kill()
-						de.Decals = CreateDecal(3, EntityX(PlayerRoom\NPC[0]\Collider), 544.0 * RoomScale + 0.01, EntityZ(PlayerRoom\NPC[0]\Collider), 90.0, Rnd(360.0), 0.0)
-						de\Size = 0.8
-						ScaleSprite(de\OBJ, de\Size, de\Size)
+						de.Decals = CreateDecal(3, EntityX(PlayerRoom\NPC[0]\Collider), 544.0 * RoomScale + 0.01, EntityZ(PlayerRoom\NPC[0]\Collider), 90.0, Rnd(360.0), 0.0, 0.8)
 					ElseIf I_008\Timer > 96.0
 						me\BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 96.0), me\BlinkTimer), -10.0)
 					Else
@@ -11816,42 +11740,34 @@ Function Update409()
 End Function
 
 Type Decals
-	Field OBJ%, Dist#
-	Field SizeChange#, Size#, MaxSize#
-	Field AlphaChange#, Alpha#
-	Field BlendMode%
-	Field FX%
-	Field ID%
-	Field Timer#
-	Field LifeTime#
-	Field x#, y#, z#
-	Field Pitch#, Yaw#, Roll#
+	Field OBJ%, ID%, Dist#
+	Field Size#, SizeChange#, MaxSize#
+	Field Alpha#, AlphaChange#
+	Field BlendMode%, FX%
+	Field R%, G%, B%
+	Field Timer#, LifeTime#
 End Type
 
-Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#)
+Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#, Size# = 1.0, Alpha# = 1.0, FX% = 0, BlendMode% = 1, R% = 0, G% = 0, B% = 0)
 	Local d.Decals = New Decals
 	
-	d\x = x
-	d\y = y
-	d\z = z
-	d\Pitch = Pitch
-	d\Yaw = Yaw
-	d\Roll = Roll
-	
+	d\ID = ID
+	d\Size = Size
+	d\Alpha = Alpha
+	d\FX = FX : d\BlendMode = BlendMode
+	d\R = R : d\G = G : d\B = B
 	d\MaxSize = 1.0
 	
-	d\Alpha = 1.0
-	d\Size = 1.0
 	d\OBJ = CreateSprite()
-	d\BlendMode = 1
-	
-	EntityTexture(d\OBJ, tt\DecalTextureID[ID])
-	EntityFX(d\OBJ, 0)
-	SpriteViewMode(d\OBJ, 2)
 	PositionEntity(d\OBJ, x, y, z)
+	ScaleSprite(d\OBJ, Size, Size)
 	RotateEntity(d\OBJ, Pitch, Yaw, Roll)
-	
-	d\ID = ID
+	EntityTexture(d\OBJ, tt\DecalTextureID[ID])
+	EntityAlpha(d\OBJ, Alpha)
+	EntityFX(d\OBJ, FX)
+	EntityBlend(d\OBJ, BlendMode)
+	SpriteViewMode(d\OBJ, 2)
+	If R <> 0 Lor G <> 0 Lor B <> 0 Then EntityColor(d\OBJ, R, G, B)
 	
 	If tt\DecalTextureID[ID] = 0 Lor d\OBJ = 0 Then Return(Null)
 	
@@ -11888,9 +11804,8 @@ Function UpdateDecals()
 						If d\Timer =< 0.0 Then
 							Local Angle# = Rnd(360.0)
 							Local Temp# = Rnd(d\Size)
-							Local d2.Decals = CreateDecal(1, EntityX(d\OBJ) + Cos(Angle) * Temp, EntityY(d\OBJ) - 0.0005, EntityZ(d\OBJ) + Sin(Angle) * Temp, EntityPitch(d\OBJ), Rnd(360.0), EntityRoll(d\OBJ))
+							Local d2.Decals = CreateDecal(1, EntityX(d\OBJ) + Cos(Angle) * Temp, EntityY(d\OBJ) - 0.0005, EntityZ(d\OBJ) + Sin(Angle) * Temp, EntityPitch(d\OBJ), Rnd(360.0), EntityRoll(d\OBJ), Rnd(0.1, 0.5))
 							
-							d2\Size = Rnd(0.1, 0.5) : ScaleSprite(d2\OBJ, d2\Size, d2\Size)
 							PlaySound2(DecaySFX[Rand(1, 3)], Camera, d2\OBJ, 10.0, Rnd(0.1, 0.5))
 							d\Timer = Rnd(50.0, 100.0)
 						Else
@@ -11911,7 +11826,7 @@ Function UpdateDecals()
 				d\LifeTime = Max(d\LifeTime - fpst\FPSFactor[0], 5.0)
 			EndIf
 			
-			If d\Size =< 0.0 Lor d\Alpha =< 0.0 Lor d\LifeTime = 5.0  Then
+			If d\Size =< 0.0 Lor d\Alpha =< 0.0 Lor d\LifeTime = 5.0 Then
 				FreeEntity(d\OBJ)
 				
 				Delete(d)
@@ -12517,5 +12432,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#108E#1320#1E12
+;~B#108D#131F#1E11
 ;~C#Blitz3D
