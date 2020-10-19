@@ -7000,22 +7000,18 @@ Function CreatePropOBJ%(File$)
 	p.Props = New Props
 	p\File = File
 	; ~ A hacky optimization (just copy models that loaded as variable)
-	p\OBJ = CheckModel(File)
+	p\OBJ = CheckPropModel(File)
 	Return(p\OBJ)
 End Function
 
-Function CheckModel%(File$)
-	Local p.Props
-	
-	For p.Props = Each Props
-		If Instr(File, "leverbase") <> 0 Then
-			Return(CopyEntity(o\LeverModelID[0]))
-		ElseIf Instr(File, "leverhandle") <> 0
-			Return(CopyEntity(o\LeverModelID[1]))
-		Else
-			Return(LoadMesh_Strict(File))
-		EndIf
-	Next
+Function CheckPropModel%(File$)
+	If Instr(File, "leverbase") <> 0 Then
+		Return(CopyEntity(o\LeverModelID[0]))
+	ElseIf Instr(File, "leverhandle") <> 0
+		Return(CopyEntity(o\LeverModelID[1]))
+	Else
+		Return(LoadMesh_Strict(File))
+	EndIf
 End Function
 
 Function CreateMap()

@@ -944,7 +944,7 @@ Function LoadGame(File$)
 								;[End Block]
 						End Select
 						If ShouldSpawnDoor
-							If (y + 1) < (MapHeight + 1)
+							If y + 1 < MapHeight + 1
 								If MapTemp(x, y + 1) > 0 Then
 									do.Doors = CreateDoor(r\Zone, Float(x) * Spacing, 0.0, Float(y) * Spacing + Spacing / 2.0, 0.0, r, Max(Rand(-3, 1), 0), Temp)
 									r\AdjDoor[3] = do
