@@ -461,44 +461,43 @@ Function RemoveItem(i.Items)
 			Exit
 		EndIf
 	Next
-	If SelectedItem = i Then
-		Select SelectedItem\ItemTemplate\TempName 
-			Case "nvg", "supernvg", "finenvg"
-				;[Block]
-				CameraFogFar = StoredCameraFogFar : wi\NightVision = 0
-				;[End Block]
-			Case "gasmask", "supergasmask", "gasmask3"
-				;[Block]
-				wi\GasMask = 0
-				;[End Block]
-			Case "vest", "finevest", "veryfinevest"
-				;[Block]
-				wi\BallisticVest = 0
-				;[End Block]
-			Case "hazmatsuit", "hazmatsuit2", "hazmatsuit3"
-				;[Block]
-				wi\HazmatSuit = 0
-				;[End Block]
-			Case "scp714"
-				;[Block]
-				I_714\Using = 0
-				;[End Block]
-			Case "scp1499", "super1499"
-				;[Block]
-				I_1499\Using = 0
-				;[End Block]
-			Case "scp427"
-				;[Block]
-				I_427\Using = 0
-				;[End Block]
-			Case "scramble"
-				;[Block]
-				wi\SCRAMBLE = 0
-				;[End Block]
-		End Select
-		
-		SelectedItem = Null
-	EndIf
+	Select i\ItemTemplate\TempName 
+		Case "gasmask", "supergasmask", "gasmask3"
+			;[Block]
+			wi\GasMask = 0
+			;[End Block]
+		Case "hazmatsuit",  "hazmatsuit2", "hazmatsuit3"
+			;[Block]
+			wi\HazmatSuit = 0
+			;[End Block]
+		Case "vest", "finevest"
+			;[Block]
+			wi\BallisticVest = 0
+			;[End Block]
+		Case "nvg", "supernvg", "finenvg"
+			;[Block]
+			CameraFogFar = StoredCameraFogFar : wi\NightVision = 0
+			;[End Block]
+		Case "scp714"
+			;[Block]
+			I_714\Using = 0
+			;[End Block]
+		Case "scp1499", "super1499"
+			;[Block]
+			I_1499\Using = 0
+			;[End Block]
+		Case "scp427"
+			;[Block]
+			I_427\Using = 0
+			;[End Block]
+		Case "scramble"
+			;[Block]
+			wi\SCRAMBLE = 0
+			;[End Block]
+	End Select
+	
+	If SelectedItem = i Then SelectedItem = Null
+	
 	If i\ItemTemplate\Img <> 0 Then
 		FreeImage(i\ItemTemplate\Img)
 		i\ItemTemplate\Img = 0
@@ -927,7 +926,7 @@ Function Update294()
 			VomitCHN = PlaySound_Strict(VomitSFX)
 			me\PrevInjuries = me\Injuries
 			me\PrevBloodloss = me\Bloodloss
-			SetCrouch(True)
+			If me\Crouch Then SetCrouch(True)
 			me\Injuries = 1.5
 			me\Bloodloss = 70.0
 			me\EyeIrritation = 70.0 * 9.0
@@ -936,13 +935,11 @@ Function Update294()
 			PositionEntity(Pvt, EntityX(Camera), EntityY(me\Collider) - 0.05, EntityZ(Camera))
 			TurnEntity(Pvt, 90.0, 0.0, 0.0)
 			EntityPick(Pvt, 0.3)
-			de.Decals = CreateDecal(5, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, 180.0, 0.0, 0.001, 1.0, 0, 1, 0, Rnd(200.0, 255.0), 0.0)
-			de\SizeChange = 0.001 : de\MaxSize = 0.6
+			de.Decals = CreateDecal(5, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, 180.0, 0.0, 0.001, 1.0, 0, 1, 0, Rand(200, 255), 0)
+			de\SizeChange = 0.001 : de\MaxSize = 0.6 : UpdateDecals()
 			FreeEntity(Pvt)
 			me\Vomit = True
 		EndIf
-		
-		UpdateDecals()
 		
 		mo\Mouse_Y_Speed_1 = mo\Mouse_Y_Speed_1 + Max((1.0 + me\VomitTimer / 10.0), 0.0)
 		
