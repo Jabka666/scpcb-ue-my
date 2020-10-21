@@ -941,7 +941,7 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 					
 					If tY Mod 3 = 2 And (Not ItemPlaced[Floor(tY / 3)]) Then
 						ItemPlaced[Floor(tY / 3)] = True
-						it.Items = CreateItem("Log #" + Int(Floor(tY / 3) + 1), "paper", 0.0, 0.5, 0.0)
+						it = CreateItem("Log #" + Int(Floor(tY / 3) + 1), "paper", 0.0, 0.5, 0.0)
 						EntityType(it\Collider, HIT_ITEM)
 						EntityParent(it\Collider, Tile_Entity)
 					EndIf
@@ -1022,9 +1022,10 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 				ScaleEntity(fr\DetailEntities[i], RoomScale, RoomScale, RoomScale)
 				
 				fr\Door[i] = CopyEntity(r\Objects[3])
+				ScaleEntity(fr\Door[i], 49.0 * RoomScale, 45.0 * RoomScale, 48.0 * RoomScale, True)
+				EntityPickMode(fr\Door[i], 2)
 				PositionEntity(fr\Door[i], 72.0 * RoomScale, 32.0 * RoomScale, 0.0, True)
 				RotateEntity(fr\Door[i], 0.0, 180.0, 0.0)
-				ScaleEntity(fr\Door[i], 49.0 * RoomScale, 45.0 * RoomScale, 48.0 * RoomScale, True)
 				EntityParent(fr\Door[i], fr\DetailEntities[i])
 				
 				Frame = CopyEntity(r\Objects[2], fr\Door[i])
@@ -1037,6 +1038,7 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 				PositionEntity(fr\DetailEntities[i], x + (tX * Tile_Size), y, z + (tY * Tile_Size) + (Tile_Size / 2) - (Tile_Size * i), True)
 				RotateEntity(fr\DetailEntities[i], 0.0, 180.0 * i, 0.0)
 				EntityParent(fr\DetailEntities[i], fr\Forest_Pivot)
+				Exit
 			EndIf		
 		Next		
 	Next
@@ -1205,9 +1207,10 @@ Function PlaceForest_MapCreator(fr.Forest, x#, y#, z#, r.Rooms)
 							ScaleEntity(fr\DetailEntities[i], RoomScale, RoomScale, RoomScale)
 							
 							fr\Door[i] = CopyEntity(r\Objects[3])
+							ScaleEntity(fr\Door[i], 49.0 * RoomScale, 45.0 * RoomScale, 48.0 * RoomScale, True)
+							EntityPickMode(fr\Door[i], 2)
 							PositionEntity(fr\Door[i], 72.0 * RoomScale, 32.0 * RoomScale, 0.0, True)
 							RotateEntity(fr\Door[i], 0.0, 180.0, 0.0)
-							ScaleEntity(fr\Door[i], 49.0 * RoomScale, 45.0 * RoomScale, 48.0 * RoomScale, True)
 							EntityParent(fr\Door[i], fr\DetailEntities[i])
 							
 							Frame = CopyEntity(r\Objects[2], fr\Door[i])
@@ -1772,18 +1775,19 @@ Function FillRoom(r.Rooms)
 			
 			; ~ The wooden doors
 			r\Objects[2] = CopyEntity(o\DoorModelID[8])
-			PositionEntity(r\Objects[2], r\x + 184.0 * RoomScale, r\y, r\z)
 			ScaleEntity(r\Objects[2], 46.0 * RoomScale, 45.0 * RoomScale, 80.0 * RoomScale)
+			PositionEntity(r\Objects[2], r\x + 184.0 * RoomScale, r\y, r\z)
 			
 			r\Objects[3] = CopyEntity(o\DoorModelID[9])
+			ScaleEntity(r\Objects[3], 49.0 * RoomScale, 45.0 * RoomScale, 46.0 * RoomScale)
 			PositionEntity(r\Objects[3], r\x + 112.0 * RoomScale, r\y, r\z + 0.05)
 			EntityType(r\Objects[3], HIT_MAP)
-			ScaleEntity(r\Objects[3], 49.0 * RoomScale, 45.0 * RoomScale, 46.0 * RoomScale)
+			EntityPickMode(r\Objects[3], 2)
 			
 			r\Objects[4] = CopyEntity(r\Objects[3])
+			ScaleEntity(r\Objects[4], 49.0 * RoomScale, 45.0 * RoomScale, 46.0 * RoomScale)
 			PositionEntity(r\Objects[4], r\x + 256.0 * RoomScale, r\y, r\z - 0.05)
 			RotateEntity(r\Objects[4], 0.0, 180.0, 0.0)
-			ScaleEntity(r\Objects[4], 49.0 * RoomScale, 45.0 * RoomScale, 46.0 * RoomScale)
 			
 			For i = 2 To 4
 				EntityParent(r\Objects[i], r\OBJ)
@@ -4644,10 +4648,11 @@ Function FillRoom(r.Rooms)
 			ScaleEntity(r\Objects[8], 45.0 * RoomScale, 45.0 * RoomScale, 80.0 * RoomScale)	
 			
 			r\Objects[9] = CopyEntity(o\DoorModelID[9])
+			ScaleEntity(r\Objects[9], 46.0 * RoomScale, 45.0 * RoomScale, 46.0 * RoomScale)
 			PositionEntity(r\Objects[9], r\x - 272.0 * RoomScale, r\y + 512.0 * RoomScale, r\z + (288.0 - 70.0) * RoomScale)
 			RotateEntity(r\Objects[9], 0.0, 10.0, 0.0)
 			EntityType(r\Objects[9], HIT_MAP)
-			ScaleEntity(r\Objects[9], 46.0 * RoomScale, 45.0 * RoomScale, 46.0 * RoomScale)
+			EntityPickMode(r\Objects[9], 2)
 			
 			r\Objects[10] = CopyEntity(r\Objects[8])
 			PositionEntity(r\Objects[10], r\x - 272.0 * RoomScale, r\y + 512.0 * RoomScale, r\z + 736.0 * RoomScale)
@@ -4655,10 +4660,11 @@ Function FillRoom(r.Rooms)
 			ScaleEntity(r\Objects[10], 45.0 * RoomScale, 45.0 * RoomScale, 80.0 * RoomScale)
 			
 			r\Objects[11] =  CopyEntity(r\Objects[9])
+			ScaleEntity(r\Objects[11], 46.0 * RoomScale, 45.0 * RoomScale, 46.0 * RoomScale)
 			PositionEntity(r\Objects[11], r\x - 272.0 * RoomScale, r\y + 512.0 * RoomScale, r\z + (736.0-70) * RoomScale)
 			RotateEntity(r\Objects[11], 0.0, 90.0, 0.0)
 			EntityType(r\Objects[11], HIT_MAP)
-			ScaleEntity(r\Objects[11], 46.0 * RoomScale, 45.0 * RoomScale, 46.0 * RoomScale)
+			EntityPickMode(r\Objects[11], 2)
 			
 			r\Objects[12] = CopyEntity(r\Objects[8])
 			PositionEntity(r\Objects[12], r\x - 592.0 * RoomScale, r\y + 512.0 * RoomScale, r\z - 704.0 * RoomScale)
@@ -4666,10 +4672,11 @@ Function FillRoom(r.Rooms)
 			ScaleEntity(r\Objects[12], 45.0 * RoomScale, 45.0 * RoomScale, 80.0 * RoomScale)
 			
 			r\Objects[13] = CopyEntity(r\Objects[9])
+			ScaleEntity(r\Objects[13], 46.0 * RoomScale, 45.0 * RoomScale, 46.0 * RoomScale)
 			PositionEntity(r\Objects[13], r\x - (592.0 + 70.0) * RoomScale, r\y + 512.0 * RoomScale, r\z - 704.0 * RoomScale)
 			RotateEntity(r\Objects[13], 0.0, 0.0, 0.0)
 			EntityType(r\Objects[13], HIT_MAP)
-			ScaleEntity(r\Objects[13], 46.0 * RoomScale, 45.0 * RoomScale, 46.0 * RoomScale)
+			EntityPickMode(r\Objects[13], 2)
 			
 			For i = 3 To 13
 				EntityParent(r\Objects[i], r\OBJ)
@@ -7811,6 +7818,7 @@ Function UpdateRoomLights(Cam%)
 		If r\Dist < HideDistance * 0.7 Lor r = PlayerRoom Then
 			For i = 0 To r\MaxLights - 1
 				If r\Lights[i] <> 0 Then
+					TempCamera = Cam
 					If EnableRoomLights And SecondaryLightOn > 0.5 And Cam = Camera Then
 						EntityOrder(r\LightSprites2[i], -1)
 						If UpdateRoomLightsTimer = 0.0 Then
@@ -7883,16 +7891,10 @@ Function UpdateRoomLights(Cam%)
 										Random = Rnd(0.3, 0.5)
 									EndIf
 								EndIf
-								
 								If (Not r\LightSpriteHidden[i]) Then
 									ScaleSprite(r\LightSprites2[i], Random, Random)
 								EndIf
 							EndIf
-						EndIf
-						
-						UpdateRoomLightsTimer = UpdateRoomLightsTimer + fpst\FPSFactor[0]
-						If UpdateRoomLightsTimer >= 8.0 Then
-							UpdateRoomLightsTimer = 0.0
 						EndIf
 					ElseIf Cam = Camera Then
 						If SecondaryLightOn =< 0.5 Then

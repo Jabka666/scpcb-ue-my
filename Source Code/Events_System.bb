@@ -3856,11 +3856,10 @@ Function UpdateEvents()
 							If ParticleAmount > 0 Then
 								If Rand(20 - (10 * (ParticleAmount - 1))) = 1 Then
 									p.Particles = CreateParticle(EntityX(e\room\NPC[0]\Collider), EntityY(e\room\NPC[0]\OBJ) + 0.05, EntityZ(e\room\NPC[0]\Collider), 0, 0.05, 0.0, 60.0)
-									p\Speed = 0.002
+									p\Speed = 0.002 : p\Achange = -0.02
 									RotateEntity(p\Pvt, 0.0, EntityYaw(e\room\NPC[0]\Collider), 0.0)
 									MoveEntity(p\Pvt, Rnd(-0.1, 0.1), 0.0, 0.1 + Rnd(0.0, 0.5))
 									RotateEntity(p\Pvt, -90.0, EntityYaw(e\room\NPC[0]\Collider), 0.0)
-									p\Achange = -0.02
 								EndIf
 							EndIf
 							e\EventStr = Float(e\EventStr) + fpst\FPSFactor[0]
@@ -7167,7 +7166,7 @@ Function UpdateEvents()
 								me\BlinkTimer = -10.0
 								me\BlurTimer = 500.0
 								PositionEntity(me\Collider, EntityX(e\room\Objects[5], True), EntityY(e\room\Objects[5], True), EntityZ(e\room\Objects[5], True), True)
-								RotateEntity(me\Collider, 0.0, EntityYaw(e\room\OBJ, True) + 90.0, 0.0)
+								RotateEntity(me\Collider, 0.0, EntityYaw(e\room\OBJ, True), 0.0)
 								ResetEntity(me\Collider)
 								e\EventState = 3.0
 							EndIf

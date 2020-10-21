@@ -73,7 +73,7 @@ Type Mouse
 	Field Mouselook_X_Inc#, Mouselook_y_Inc#
 	Field Mouse_Left_Limit%, Mouse_Right_Limit%
 	Field Mouse_Top_Limit%, Mouse_Bottom_Limit%
-	Field Mouse_x_Speed_1#, Mouse_Y_Speed_1#
+	Field Mouse_X_Speed_1#, Mouse_Y_Speed_1#
 End Type
 
 Global mo.Mouse = New Mouse
@@ -1817,7 +1817,7 @@ Function ClearConsole()
 	CreateConsoleMsg("  - spawn [NPC type]")
 End Function
 
-Global Camera%
+Global Camera%, TempCamera%
 
 Global StoredCameraFogFar# = CameraFogFar
 
@@ -2028,7 +2028,7 @@ Include "Source Code\Items_System.bb"
 
 Include "Source Code\Particles_System.bb"
 
-Global UpdateTimer#
+Global UpdateObjectsTimer#
 
 Global ClosestButton%, ClosestDoor.Doors
 Global SelectedDoor.Doors
@@ -2042,7 +2042,6 @@ Type Doors
 	Field KeyCard%
 	Field room.Rooms
 	Field DisableWaypoint%
-	Field Dist#
 	Field SoundCHN%
 	Field Code$
 	Field ID%
@@ -2204,14 +2203,13 @@ End Function
 Function UpdateDoors()
 	Local i%, d.Doors, x#, z#, Dist#
 	
-	If UpdateTimer =< 0.0 Then
+	If UpdateObjectsTimer =< 0.0 Then
 		For d.Doors = Each Doors
 			Local xDist# = Abs(EntityX(me\Collider) - EntityX(d\OBJ, True))
 			Local zDist# = Abs(EntityZ(me\Collider) - EntityZ(d\OBJ, True))
+			Local Dist2# = xDist + zDist
 			
-			d\Dist = xDist + zDist
-			
-			If d\Dist > HideDistance * 2.0 Then
+			If Dist2 > HideDistance * 2.0 Then
 				If d\OBJ <> 0 Then HideEntity(d\OBJ)
 				If d\FrameOBJ <> 0 Then HideEntity(d\FrameOBJ)
 				If d\OBJ2 <> 0 Then HideEntity(d\OBJ2)
@@ -2231,7 +2229,7 @@ Function UpdateDoors()
 	ClosestDoor = Null
 	
 	For d.Doors = Each Doors
-		If d\Dist < HideDistance * 2.0 Lor d\IsElevatorDoor > 0 Then ; ~ Make elevator doors update everytime because if not, this can cause a bug where the elevators suddenly won't work, most noticeable in room2tunnel -- ENDSHN
+		If Dist2 < HideDistance * 2.0 Lor d\IsElevatorDoor > 0 Then ; ~ Make elevator doors update everytime because if not, this can cause a bug where the elevators suddenly won't work, most noticeable in room2tunnel -- ENDSHN
 			If (d\OpenState >= 180.0 Lor d\OpenState =< 0.0) And GrabbedEntity = 0 Then
 				For i = 0 To 1
 					If d\Buttons[i] <> 0 Then
@@ -3046,10 +3044,18 @@ Function MainLoop()
 		UpdateCheckpoint2 = False
 		
 		If (Not MenuOpen) And (Not InvOpen) And OtherOpen = Null And SelectedDoor = Null And (Not ConsoleOpen) And (Not I_294\Using) And SelectedScreen = Null And me\EndingTimer >= 0.0 Then
-			If UpdateTimer =< 0.0 Then
-				UpdateTimer = 30.0
+			If UpdateObjectsTimer =< 0.0 Then
+				UpdateObjectsTimer = 30.0
 			Else
-				UpdateTimer = Max(UpdateTimer - fpst\FPSFactor[0], 0.0)
+				UpdateObjectsTimer = Max(UpdateObjectsTimer - fpst\FPSFactor[0], 0.0)
+			EndIf
+			If fpst\FPSFactor[0] > 0.0 And PlayerRoom\RoomTemplate\Name <> "dimension1499" Then
+				If EnableRoomLights And SecondaryLightOn > 0.5 And TempCamera = Camera Then
+					UpdateRoomLightsTimer = UpdateRoomLightsTimer + fpst\FPSFactor[0]
+					If UpdateRoomLightsTimer >= 8.0 Then
+						UpdateRoomLightsTimer = 0.0
+					EndIf
+				EndIf
 			EndIf
 			LightVolume = CurveValue(TempLightVolume, LightVolume, 50.0)
 			CameraFogRange(Camera, CameraFogNear * LightVolume, CameraFogFar * LightVolume)
@@ -3163,8 +3169,8 @@ Function MainLoop()
 		If chs\InfiniteStamina Then me\Stamina = 100.0
 		If chs\NoBlink Then me\BlinkTimer = me\BLINKFREQ
 		
-		If fpst\FPSFactor[0] = 0.0
-			UpdateWorld(0)
+		If fpst\FPSFactor[0] = 0.0 Then
+			UpdateWorld(0.0)
 		Else
 			UpdateWorld()
 			ManipulateNPCBones()
@@ -6457,37 +6463,6 @@ Function UpdateGUI()
 						EndIf
 					EndIf
 					;[End Block]
-				Case "scp1123"
-					;[Block]
-					If I_714\Using = 0 And wi\GasMask < 3 And wi\HazmatSuit < 3 Then
-						If PlayerRoom\RoomTemplate\Name <> "room1123" Then
-							me\LightFlash = 7.0
-							PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))	
-							
-							If Rand(2) = 1 Then
-								GroupDesignation = "Nine-Tailed Fox"
-							Else
-								GroupDesignation = "See No Evil"
-							EndIf
-							msg\DeathMsg = SubjectName + " was shot dead after attempting to attack a member of " + GroupDesignation + ". Surveillance tapes show that the subject had been "
-							msg\DeathMsg = msg\DeathMsg + "wandering around the site approximately 9 (nine) minutes prior, shouting the phrase " + Chr(34) + "get rid of the four pests" + Chr(34)
-							msg\DeathMsg = msg\DeathMsg + " in chinese. SCP-1123 was found in [DATA REDACTED] nearby, suggesting the subject had come into physical contact with it. How "
-							msg\DeathMsg = msg\DeathMsg + "exactly SCP-1123 was removed from its containment chamber is still unknown."
-							Kill()
-							Return
-						EndIf
-						For e.Events = Each Events
-							If e\EventID = e_room1123 Then 
-								If e\EventState = 0.0 Then
-									me\LightFlash = 3.0
-									PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))		
-								EndIf
-								e\EventState = Max(1.0, e\EventState)
-								Exit
-							EndIf
-						Next
-					EndIf
-					;[End Block]
 				Case "scp513"
 					;[Block]
 					PlaySound_Strict(LoadTempSound("SFX\SCP\513\Bell.ogg"))
@@ -9772,6 +9747,7 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	ClearWorld()
 	If Camera <> 0 Then Camera = 0
+	If TempCamera <> 0 Then TempCamera = 0
 	If ArkBlurCam <> 0 Then ArkBlurCam = 0
 	If me\Collider <> 0 Then me\Collider = 0
 	If Sky <> 0 Then Sky = 0
@@ -11740,7 +11716,7 @@ Function Update409()
 End Function
 
 Type Decals
-	Field OBJ%, ID%, Dist#
+	Field OBJ%, ID%
 	Field Size#, SizeChange#, MaxSize#
 	Field Alpha#, AlphaChange#
 	Field BlendMode%, FX%
@@ -11777,14 +11753,13 @@ End Function
 Function UpdateDecals()
 	Local d.Decals
 	
-	If UpdateTimer =< 0.0 Then
+	If UpdateObjectsTimer =< 0.0 Then
 		For d.Decals = Each Decals
 			Local xDist# = Abs(EntityX(me\Collider) - EntityX(d\OBJ, True))
 			Local zDist# = Abs(EntityZ(me\Collider) - EntityZ(d\OBJ, True))
+			Local Dist# = xDist + zDist
 			
-			d\Dist = xDist + zDist
-			
-			If d\Dist > HideDistance * 2.0 Then
+			If Dist > HideDistance * 2.0 Then
 				If d\OBJ <> 0 Then HideEntity(d\OBJ)
 			Else
 				If d\OBJ <> 0 Then ShowEntity(d\OBJ)
@@ -11793,7 +11768,7 @@ Function UpdateDecals()
 	EndIf
 	
 	For d.Decals = Each Decals
-		If d\Dist < HideDistance * 2.0 Then
+		If Dist < HideDistance * 2.0 Then
 			If d\SizeChange <> 0.0 Then
 				d\Size = d\Size + d\SizeChange * fpst\FPSFactor[0]
 				ScaleSprite(d\OBJ, d\Size, d\Size)
@@ -11804,7 +11779,7 @@ Function UpdateDecals()
 						If d\Timer =< 0.0 Then
 							Local Angle# = Rnd(360.0)
 							Local Temp# = Rnd(d\Size)
-							Local d2.Decals = CreateDecal(1, EntityX(d\OBJ) + Cos(Angle) * Temp, EntityY(d\OBJ) - 0.0005, EntityZ(d\OBJ) + Sin(Angle) * Temp, EntityPitch(d\OBJ), Rnd(360.0), EntityRoll(d\OBJ), Rnd(0.1, 0.5))
+							Local d2.Decals = CreateDecal(1, EntityX(d\OBJ) + Cos(Angle) * Temp, EntityY(d\OBJ) - 0.0005, EntityZ(d\OBJ) + Sin(Angle) * Temp, EntityPitch(d\OBJ), EntityYaw(d\OBJ), EntityRoll(d\OBJ), Rnd(0.1, 0.5))
 							
 							PlaySound2(DecaySFX[Rand(1, 3)], Camera, d2\OBJ, 10.0, Rnd(0.1, 0.5))
 							d\Timer = Rnd(50.0, 100.0)
@@ -12432,5 +12407,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#108D#131F#1E11
+;~B#1093#1325#1DF8
 ;~C#Blitz3D

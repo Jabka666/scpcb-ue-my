@@ -140,7 +140,8 @@ Bug Fixes:
 - Fixed flying monitor after endings or "kill" command.
 - Fixed SCP-860-1's generation.
 - Fixed step sounds in Dr. L.'s office.
-- Fixed SCP-1162 not removing overlays.
+- Fixed SCP-1162 doesn't remove overlays.
+- Fixed light rendering through wooden doors.
 
 - Small fixes for commands "disablenuke" and "enablecontrol/disablecontrol.
 - Small fixes for gateb and gateaentrance's walls.

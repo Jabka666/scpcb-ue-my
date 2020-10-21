@@ -1,5 +1,5 @@
 Type Particles
-	Field OBJ%, Pvt%, Dist#
+	Field OBJ%, Pvt%
 	Field Image%
 	Field R#, G#, B#, A#, Size#
 	Field Speed#, ySpeed#, Gravity#
@@ -46,23 +46,14 @@ End Function
 Function UpdateParticles()
 	Local p.Particles
 	
-	If UpdateTimer =< 0.0 Then
-		For p.Particles = Each Particles
-			Local xDist# = Abs(EntityX(me\Collider) - EntityX(p\OBJ, True))
-			Local zDist# = Abs(EntityZ(me\Collider) - EntityZ(p\OBJ, True))
-			
-			p\Dist = xDist + zDist
-			
-			If p\Dist > HideDistance * 2.0 Then
-				If p\OBJ <> 0 Then HideEntity(p\OBJ)
-			Else
-				If p\OBJ <> 0 Then ShowEntity(p\OBJ)
-			EndIf
-		Next
-	EndIf
-	
 	For p.Particles = Each Particles
-		If p\Dist < HideDistance * 2.0 Then
+		Local xDist# = Abs(EntityX(me\Collider) - EntityX(p\OBJ, True))
+		Local zDist# = Abs(EntityZ(me\Collider) - EntityZ(p\OBJ, True))
+		Local Dist# = xDist + zDist
+		
+		If Dist > HideDistance * 2.0 Then
+			RemoveParticle(p)
+		Else
 			MoveEntity(p\Pvt, 0.0, 0.0, p\Speed * fpst\FPSFactor[0])
 			If p\Gravity <> 0 Then p\ySpeed = p\ySpeed - p\Gravity * fpst\FPSFactor[0]
 			TranslateEntity(p\Pvt, 0.0, p\ySpeed * fpst\FPSFactor[0], 0.0, True)
@@ -98,7 +89,7 @@ Global HissSFX% = LoadSound_Strict("SFX\General\Hiss.ogg")
 Global SmokeDelay# = 0.0
 
 Type Emitters
-	Field OBJ%, Dist#
+	Field OBJ%
 	Field Size#
 	Field MinImage%, MaxImage%
 	Field Gravity#
@@ -154,14 +145,13 @@ End Function
 Function UpdateEmitters()
 	Local e.Emitters
 	
-	If UpdateTimer =< 0.0 Then
+	If UpdateObjectsTimer =< 0.0 Then
 		For e.Emitters = Each Emitters
 			Local xDist# = Abs(EntityX(me\Collider) - EntityX(e\OBJ, True))
 			Local zDist# = Abs(EntityZ(me\Collider) - EntityZ(e\OBJ, True))
+			Local Dist# = xDist + zDist
 			
-			e\Dist = xDist + zDist
-			
-			If e\Dist > HideDistance * 2.0 Then
+			If Dist > HideDistance * 2.0 Then
 				If e\OBJ <> 0 Then HideEntity(e\OBJ)
 			Else
 				If e\OBJ <> 0 Then ShowEntity(e\OBJ)
@@ -171,7 +161,7 @@ Function UpdateEmitters()
 	
 	InSmoke = False
 	For e.Emitters = Each Emitters
-		If e\Dist < HideDistance * 2.0 Then
+		If Dist < HideDistance * 2.0 Then
 			If fpst\FPSFactor[0] > 0.0 And (PlayerRoom = e\room Lor e\room\Dist < 8.0) Then
 				Local p.Particles = CreateParticle(EntityX(e\OBJ, True), EntityY(e\OBJ, True), EntityZ(e\OBJ, True), Rand(e\MinImage, e\MaxImage), e\Size, e\Gravity, e\LifeTime)
 				

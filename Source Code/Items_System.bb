@@ -621,7 +621,6 @@ Function PickItem(item.Items)
 	Local n% = 0
 	Local CanPickItem = True
 	Local FullINV% = True
-	Local GroupDesignation$
 	Local e.Events
 	
 	For n = 0 To MaxItemAmount - 1
@@ -648,31 +647,14 @@ Function PickItem(item.Items)
 					Case "scp1123"
 						;[Block]
 						If I_714\Using = 0 And wi\GasMask < 3 And wi\HazmatSuit < 3 Then
-							If PlayerRoom\RoomTemplate\Name <> "room1123" Then
-								ShowEntity(tt\OverlayID[7])
-								me\LightFlash = 7.0
-								PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))	
-								
-								If Rand(2) = 1 Then
-									GroupDesignation = "Nine-Tailed Fox"
-								Else
-									GroupDesignation = "See No Evil"
-								EndIf
-								msg\DeathMsg = SubjectName + " was shot dead after attempting to attack a member of " + GroupDesignation + ". Surveillance tapes show that the subject had been "
-								msg\DeathMsg = msg\DeathMsg + "wandering around the site approximately 9 (nine) minutes prior, shouting the phrase " + Chr(34) + "get rid of the four pests" + Chr(34)
-								msg\DeathMsg = msg\DeathMsg + " in chinese. SCP-1123 was found in [DATA REDACTED] nearby, suggesting the subject had come into physical contact with it. How "
-								msg\DeathMsg = msg\DeathMsg + "exactly SCP-1123 was removed from its containment chamber is still unknown."
-								Kill()
-							EndIf
-							
 							For e.Events = Each Events
 								If e\EventName = "room1123" Then 
 									If e\EventState = 0.0 Then
 										ShowEntity(tt\OverlayID[7])
 										me\LightFlash = 3.0
-										PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))		
+										PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))
 									EndIf
-									e\EventState = Max(1.0, e\EventState)
+									e\EventState = 1.0
 									Exit
 								EndIf
 							Next
@@ -681,7 +663,6 @@ Function PickItem(item.Items)
 						;[End Block]
 					Case "killbat"
 						;[Block]
-						ShowEntity(tt\OverlayID[7])
 						me\LightFlash = 1.0
 						PlaySound_Strict(IntroSFX[Rand(8, 10)])
 						msg\DeathMsg = SubjectName + " found dead inside SCP-914's output booth next to what appears to be an ordinary nine-volt battery. The subject is covered in severe "
