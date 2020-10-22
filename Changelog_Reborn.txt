@@ -147,12 +147,10 @@ Bug Fixes:
 - Small fixes for gateb and gateaentrance's walls.
 - Small fixes for syringes' positions in room2medibay and room2medibay2.
 - Small fixes for room2medibay2 and room2medibay's walls.
-- Small fixes for room2pipes and room2pipes2.
 - Small fixes for ending tunnel in the Gate A.
 - Small fixes for earphones' texture.
 - Small fixes for main menu.
-- Small fixes for room2offices4.
+- Small fixes for room2offices4, room3servers2, room2pipes, room2clockroom and room2pipes2
 - Small fixes for SCP-173's AI.
 - Small fixes for SCP-860-1.
 - Small fixes for paper texture.
-- Small fixes for room3servers2.

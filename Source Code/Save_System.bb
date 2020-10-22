@@ -2193,7 +2193,7 @@ End Function
 Function LoadMap(File$)
 	CatchErrors("Uncaught (LoadMap)")
 	
-	Local f%, x%, y%, Name$, Angle%, Prob#, ID%
+	Local f%, x%, y%, Name$, Angle%, Prob#
 	Local r.Rooms, rt.RoomTemplates, e.Events
 	Local RoomAmount%, ForestPieceAmount%, MTPieceAmount%, i%
 	
@@ -2253,7 +2253,6 @@ Function LoadMap(File$)
 			Next
 			
 			Name = ReadString(f)
-			ID = ReadInt(f)
 			Prob = ReadFloat(f)
 			
 			If r <> Null Then
@@ -2261,13 +2260,13 @@ Function LoadMap(File$)
 					If Rnd(0.0, 1.0) =< Prob Then
 						e.Events = New Events
 						e\EventName = Name
-						e\EventID = ID
+						e\EventID = FindEventID(Name)
 						e\room = r   
 					EndIf
 				ElseIf Prob = 0.0 And Name <> "" Then
 					e.Events = New Events
 					e\EventName = Name
-					e\EventID = ID
+					e\EventID = FindEventID(Name)
 					e\room = r  
 				EndIf
 			EndIf
@@ -2443,7 +2442,6 @@ Function LoadMap(File$)
 			Next
 			
 			Name = ReadString(f)
-			ID = ReadInt(f)
 			Prob = ReadFloat(f)
 			
 			If r <> Null Then
@@ -2451,13 +2449,13 @@ Function LoadMap(File$)
 					If Rnd(0.0, 1.0) =< Prob Then
 						e.Events = New Events
 						e\EventName = Name
-						e\EventID = ID
+						e\EventID = FindEventID(Name)
 						e\room = r   
 					EndIf
 				ElseIf Prob = 0.0 And Name <> "" Then
 					e.Events = New Events
 					e\EventName = Name
-					e\EventID = ID
+					e\EventID = FindEventID(Name)
 					e\room = r
 				EndIf
 			EndIf
@@ -2558,7 +2556,7 @@ Function LoadMap(File$)
 								;[End Block]
 						End Select
 						If ShouldSpawnDoor
-							If (y + 1) < (MapHeight + 1)
+							If y + 1 < MapHeight + 1
 								If MapTemp(x, y + 1) > 0 Then
 									d.Doors = CreateDoor(r\zone, Float(x) * Spacing, 0.0, Float(y) * Spacing + Spacing / 2.0, 0.0, r, Max(Rand(-3, 1), 0), Temp)
 									r\AdjDoor[3] = d

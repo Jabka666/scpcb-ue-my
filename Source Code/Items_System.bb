@@ -907,7 +907,7 @@ Function Update294()
 			VomitCHN = PlaySound_Strict(VomitSFX)
 			me\PrevInjuries = me\Injuries
 			me\PrevBloodloss = me\Bloodloss
-			If me\Crouch Then SetCrouch(True)
+			If (Not me\Crouch) Then SetCrouch(True)
 			me\Injuries = 1.5
 			me\Bloodloss = 70.0
 			me\EyeIrritation = 70.0 * 9.0

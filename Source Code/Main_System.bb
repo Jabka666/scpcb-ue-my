@@ -3869,8 +3869,8 @@ End Function
 
 Function InjurePlayer(Injuries_#, Infection# = 0.0, BlurTimer_# = 0.0, VestFactor# = 0.0, HelmetFactor# = 0.0)
 	me\Injuries = me\Injuries + Injuries_ - (wi\BallisticVest * VestFactor) - (me\Crouch * wi\BallisticHelmet * HelmetFactor)
-	me\BlurTimer = BlurTimer_
-	I_008\Timer = I_008\Timer + Infection
+	If BlurTimer_ <> 0.0 Then me\BlurTimer = BlurTimer_
+	If Infection <> 0.0 Then I_008\Timer = I_008\Timer + Infection
 End Function
 
 Function MovePlayer()
@@ -4044,8 +4044,6 @@ Function MovePlayer()
 	If chs\NoClip Then 
 		me\Shake = 0.0
 		me\CurrSpeed = 0.0
-		me\CrouchState = 0.0
-		me\Crouch = False
 		
 		RotateEntity(me\Collider, WrapAngle(EntityPitch(Camera)), WrapAngle(EntityYaw(Camera)), 0.0)
 		
@@ -12407,5 +12405,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1093#1325#1DF8
+;~B#1091#1323#1DF6
 ;~C#Blitz3D
