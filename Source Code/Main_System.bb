@@ -372,7 +372,7 @@ Global tt.TextureTemplate = New TextureTemplate
 ; ~ Objects Constants
 ;[Block]
 Const MaxMTModelIDAmount% = 7
-Const MaxMonitorModelIDAmount% = 3
+Const MaxMonitorModelIDAmount% = 2
 Const MaxDoorModelIDAmount% = 11
 Const MaxButtonModelIDAmount% = 5
 Const MaxLeverModelIDAmount% = 2
@@ -9025,10 +9025,7 @@ Function LoadEntities()
 	
 	o\MonitorModelID[0] = LoadMesh_Strict("GFX\map\Props\monitor2.b3d") ; ~ Monitor
 	
-	; ~ FIND A WAY TO USE ONE MODEL
-	For i = 1 To 2
-		o\MonitorModelID[i] = LoadMesh_Strict("GFX\map\Props\monitor_checkpoint.b3d") ; ~ Checkpoint Monitor LCZ / HCZ
-	Next
+	o\MonitorModelID[1] = LoadMesh_Strict("GFX\map\Props\monitor_checkpoint.b3d") ; ~ Checkpoint Monitor LCZ / HCZ
 	
     For i = 0 To MaxMonitorModelIDAmount - 1
         HideEntity(o\MonitorModelID[i])
@@ -9044,25 +9041,8 @@ Function LoadEntities()
 	Cls()
 	SetBuffer(BackBuffer())
 	
-	; ~ FIND A WAY TO USE ONE MODEL
 	For i = 2 To CountSurfaces(o\MonitorModelID[1])
 		SF = GetSurface(o\MonitorModelID[1], i)
-		b = GetSurfaceBrush(SF)
-		If b <> 0 Then
-			t1 = GetBrushTexture(b, 0)
-			If t1 <> 0 Then
-				Name = StripPath(TextureName(t1))
-				If Lower(Name) <> "monitor_overlay.png"
-					BrushTexture(b, tt\MonitorTextureID[4], 0, 0)
-					PaintSurface(SF, b)
-				EndIf
-				If Name <> "" Then DeleteSingleTextureEntryFromCache(t1)
-			EndIf
-			FreeBrush(b)
-		EndIf
-	Next
-	For i = 2 To CountSurfaces(o\MonitorModelID[2])
-		SF = GetSurface(o\MonitorModelID[2], i)
 		b = GetSurfaceBrush(SF)
 		If b <> 0 Then
 			t1 = GetBrushTexture(b, 0)

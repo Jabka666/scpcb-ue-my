@@ -2239,13 +2239,13 @@ Function FillRoom(r.Rooms)
 			EntityParent(r\Objects[0], r\OBJ)
 			
 			; ~ Monitors at the both sides
-			r\Objects[2] = CopyEntity(o\MonitorModelID[2], r\OBJ)
+			r\Objects[2] = CopyEntity(o\MonitorModelID[1], r\OBJ)
 			PositionEntity(r\Objects[2], r\x + 152.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 380.0 * RoomScale, True)
 			ScaleEntity(r\Objects[2], 2.0, 2.0, 2.0)
 			RotateEntity(r\Objects[2], 0.0, 180.0, 0.0)
 			EntityFX(r\Objects[2], 1)
 			
-			r\Objects[3] = CopyEntity(o\MonitorModelID[2], r\OBJ)
+			r\Objects[3] = CopyEntity(o\MonitorModelID[1], r\OBJ)
 			PositionEntity(r\Objects[3], r\x + 152.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 124.0 * RoomScale, True)
 			ScaleEntity(r\Objects[3], 2.0, 2.0, 2.0)
 			RotateEntity(r\Objects[3], 0.0, 0.0, 0.0)
@@ -7925,11 +7925,11 @@ Function UpdateCheckpointMonitors(Number%)
 	Local i%, SF%, b%, t1%
 	Local Entity%, Name$
 	
+	Entity = o\MonitorModelID[1]
+	
 	If Number = 0 Then
-		Entity = o\MonitorModelID[1]
 		UpdateCheckpoint1 = True
 	Else
-		Entity = o\MonitorModelID[2]
 		UpdateCheckpoint2 = True
 	EndIf
 	
@@ -7967,12 +7967,12 @@ Function TurnCheckpointMonitorsOff(Number%)
 	Local i%, SF%, b%, t1%
 	Local Entity%, Name$
 	
+	Entity = o\MonitorModelID[1]
+	
 	If Number = 0 Then
-		Entity = o\MonitorModelID[1]
 		UpdateCheckpoint1 = False
 		MonitorTimer = 0.0
 	Else
-		Entity = o\MonitorModelID[2]
 		UpdateCheckpoint2 = False
 		MonitorTimer2 = 0.0
 	EndIf
