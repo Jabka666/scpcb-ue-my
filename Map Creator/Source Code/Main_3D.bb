@@ -1,3 +1,6 @@
+Include "Source Code\StrictLoads.bb"
+Include "Source Code\INI_System.bb"
+
 Const ClrR% = 50, ClrG% = 50, ClrB% = 50
 
 Global MouseHit1%
@@ -41,28 +44,30 @@ ClsColor(0, 0, 0)
 Cls()
 SetBuffer(BackBuffer())
 
+LoadMissingTexture()
+
 ; ~ Loading door-relevant meshes (for adjacent doors)
-Global Door_LCZ% = LoadMesh("..\GFX\map\Props\Door01.x")
+Global Door_LCZ% = LoadMesh_Strict("Assets\Door01.x")
 HideEntity(Door_LCZ)
 
-Global Door_HCZ_1% = LoadMesh("..\GFX\map\Props\HeavyDoor1.x")
+Global Door_HCZ_1% = LoadMesh_Strict("Assets\HeavyDoor1.x")
 HideEntity(Door_HCZ_1)
 
-Global Door_HCZ_2% = LoadMesh("..\GFX\map\Props\HeavyDoor2.x")
+Global Door_HCZ_2% = LoadMesh_Strict("Assets\HeavyDoor2.x")
 HideEntity(Door_HCZ_2)
 
-Global Door_Frame% = LoadMesh("..\GFX\map\Props\DoorFrame.x")
+Global Door_Frame% = LoadMesh_Strict("Assets\DoorFrame.x")
 HideEntity(Door_Frame)
 
-Global Door_Button% = LoadMesh("..\GFX\map\Props\Button.b3d")
+Global Door_Button% = LoadMesh_Strict("Assets\Button.b3d")
 HideEntity(Door_Button)
 
 Global MenuOpen% = True
 
 Const ROOM1% = 0, ROOM2% = 1, ROOM2C% = 2, ROOM3% = 3, ROOM4% = 4
 
-Global Font1% = LoadFont("..\GFX\fonts\cour\Courier New.ttf", 16)
-Global ConsoleFont% = LoadFont("..\GFX\fonts\Andale\Andale Mono.ttf", 16)
+Global Font1% = LoadFont_Strict("..\GFX\fonts\cour\Courier New.ttf", 16)
+Global ConsoleFont% = LoadFont_Strict("..\GFX\fonts\Andale\Andale Mono.ttf", 16)
 
 Global RoomTempID%
 
@@ -124,6 +129,17 @@ Const Period# = 1000.0 / 60
 
 Global PrevTime% = MilliSecs()
 Global ElapsedTime#
+
+Function CatchErrors(Location$)
+	InitErrorMsgs(7)
+	SetErrorMsg(0, "An error occured in SCP:CB Ultimate Edition Map Creator" + ". Engine version: " + SystemProperty("blitzversion") + Chr(10))
+	SetErrorMsg(1, "Date and time: " + CurrentDate() + " at " + CurrentTime() + Chr(10) + "OS: " + SystemProperty("os") + " " + (32 + (GetEnv("ProgramFiles(X86)") <> 0) * 32) + " bit (Build: " + SystemProperty("osbuild") + ")" + Chr(10))
+	SetErrorMsg(2, "CPU: " + GetEnv("PROCESSOR_IDENTIFIER") + " (Arch: " + GetEnv("PROCESSOR_ARCHITECTURE") + ", " + GetEnv("NUMBER_OF_PROCESSORS") + " Threads)" + Chr(10))
+	SetErrorMsg(3, "GPU: " + GfxDriverName(CountGfxDrivers()) + " (" + ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)) + " MB/" + (TotalVidMem() / 1024) + " MB)" + Chr(10))
+	SetErrorMsg(4, "Video memory: " + ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)) + " MB/" + (TotalVidMem() / 1024) + " MB" + Chr(10))
+	SetErrorMsg(5, "Global memory status: " + ((TotalPhys() / 1024) - (AvailPhys() / 1024)) + " MB/" + (TotalPhys() / 1024) + " MB" + Chr(10))
+	SetErrorMsg(6, "Error located in: " + Location + Chr(10) + Chr(10) + "Please take a screenshot of this error and send it to us!") 
+End Function
 
 Repeat
 	Cls()
@@ -233,7 +249,7 @@ Repeat
 					y = ReadByte(f)
 					Name = Lower(ReadString(f))
 					
-					Angle = ReadByte(f) * 90
+					Angle = ReadByte(f) * 90.0
 					
 					eName = ReadString(f)
 					eProb = ReadFloat(f)
@@ -572,12 +588,12 @@ Repeat
 	EndIf
 	
 	If VSync Then
-		Flip(1)
+		Flip(True)
 	Else
-		Flip(0)
+		Flip(False)
 	EndIf
 Until api_FindWindow("BlitzMax_Window_Class", "SCP-CB Ultimate Edition Map Creator") = 0
-End
+End()
 
 Type RoomTemplates
 	Field OBJ%, ID%
@@ -598,6 +614,8 @@ Function CreateRoomTemplate.RoomTemplates(MeshPath$)
 End Function
 
 Function LoadRoomTemplates(File$)
+	CatchErrors("Uncaught (LoadRoomTemplates)")
+	
 	Local TemporaryString$, i%
 	Local rt.RoomTemplates = Null
 	Local StrTemp$ = ""
@@ -645,9 +663,13 @@ Function LoadRoomTemplates(File$)
 	Wend
 	
 	CloseFile(f)
+	
+	CatchErrors("LoadRoomTemplates")
 End Function
 
 Function LoadRoomTemplateMeshes()
+	CatchErrors("Uncaught (LoadRoomTemplatesMeshes)")
+	
 	Local rt.RoomTemplates, i%
 	Local MT_Prefix$ = "maintenance tunnel "
 	
@@ -687,19 +709,19 @@ Function LoadRoomTemplateMeshes()
 	Next
 	
 	Local hMap%[5], Mask%[5]
-	Local GroundTexture% = LoadTexture("GFX\map\textures\forestfloor.jpg")
-	Local PathTexture% = LoadTexture("GFX\map\textures\forestpath.jpg")
+	Local GroundTexture% = LoadTexture_Strict("GFX\map\textures\forestfloor.jpg")
+	Local PathTexture% = LoadTexture_Strict("GFX\map\textures\forestpath.jpg")
 	
-	hMap[ROOM1] = LoadImage("GFX\map\forest\forest1h.png")
-	Mask[ROOM1] = LoadTexture("GFX\map\forest\forest1h_mask.png", 1 + 2)
-	hMap[ROOM2] = LoadImage("GFX\map\forest\forest2h.png")
-	Mask[ROOM2] = LoadTexture("GFX\map\forest\forest2h_mask.png", 1 + 2)
-	hMap[ROOM2C] = LoadImage("GFX\map\forest\forest2Ch.png")
-	Mask[ROOM2C] = LoadTexture("GFX\map\forest\forest2Ch_mask.png", 1 + 2)
-	hMap[ROOM3] = LoadImage("GFX\map\forest\forest3h.png")
-	Mask[ROOM3] = LoadTexture("GFX\map\forest\forest3h_mask.png", 1 + 2)
-	hMap[ROOM4] = LoadImage("GFX\map\forest\forest4h.png")
-	Mask[ROOM4] = LoadTexture("GFX\map\forest\forest4h_mask.png", 1 + 2)
+	hMap[ROOM1] = LoadImage_Strict("GFX\map\forest\forest1h.png")
+	Mask[ROOM1] = LoadTexture_Strict("GFX\map\forest\forest1h_mask.png", 1 + 2)
+	hMap[ROOM2] = LoadImage_Strict("GFX\map\forest\forest2h.png")
+	Mask[ROOM2] = LoadTexture_Strict("GFX\map\forest\forest2h_mask.png", 1 + 2)
+	hMap[ROOM2C] = LoadImage_Strict("GFX\map\forest\forest2Ch.png")
+	Mask[ROOM2C] = LoadTexture_Strict("GFX\map\forest\forest2Ch_mask.png", 1 + 2)
+	hMap[ROOM3] = LoadImage_Strict("GFX\map\forest\forest3h.png")
+	Mask[ROOM3] = LoadTexture_Strict("GFX\map\forest\forest3h_mask.png", 1 + 2)
+	hMap[ROOM4] = LoadImage_Strict("GFX\map\forest\forest4h.png")
+	Mask[ROOM4] = LoadTexture_Strict("GFX\map\forest\forest4h_mask.png", 1 + 2)
 	
 	Local FR_Prefix$ = "scp-860-1 "
 	
@@ -741,9 +763,13 @@ Function LoadRoomTemplateMeshes()
 		FreeImage(hMap[i])
 		FreeTexture(Mask[i])
 	Next
+	
+	CatchErrors("LoadRoomTemplatesMeshes")
 End Function
 
 Function PlaceRoom.Rooms(Name$, x%, z%, Zone%, Shape%, Event$ = "", EventChance# = 1.0, MapGrid% = 0)
+	CatchErrors("Uncaught (PlaceRoom)")
+	
 	Local rt.RoomTemplates, r.Rooms
 	Local Spacing#
 	
@@ -773,6 +799,8 @@ Function PlaceRoom.Rooms(Name$, x%, z%, Zone%, Shape%, Event$ = "", EventChance#
 	If r\Event <> "" Then r\EventChance = EventChance
 	
 	Return(r)
+	
+	CatchErrors("PlaceRoom")
 End Function
 
 Global Mesh_MinX#, Mesh_MinY#, Mesh_MinZ#, Mesh_MaxX#, Mesh_MaxY#, Mesh_MaxZ#, Mesh_MagX#, Mesh_MagY#, Mesh_MagZ#
@@ -816,10 +844,10 @@ Function GetMeshExtents2(Mesh%)
 	Mesh_MagZ = zMax - zMin
 End Function
 
+Const ZONEAMOUNT% = 3
+
 Function GetZone(y%)
-	Local ZoneAmount% = 3
-	
-	Return(Min(Floor((Float(MapWidth - y) / MapWidth * ZoneAmount)), ZoneAmount - 1))
+	Return(Min(Floor((Float(MapWidth - y) / MapWidth * ZONEAMOUNT)), ZONEAMOUNT - 1))
 End Function
 
 Type Props
@@ -830,6 +858,8 @@ End Type
 Function CreatePropOBJ(File$)
 	Local p.Props
 	
+	If Right(File, 1) = "x" Then File = Left(File, Len(File) - 1) + "b3d"
+	
 	For p.Props = Each Props
 		If p\File = File Then
 			Return(CopyEntity(p\OBJ))
@@ -838,7 +868,7 @@ Function CreatePropOBJ(File$)
 	
 	p.Props = New Props
 	p\File = File
-	p\OBJ = LoadMesh(File)
+	p\OBJ = LoadMesh_Strict(File)
 	Return(p\OBJ)
 End Function
 
@@ -863,6 +893,8 @@ Type Rooms
 End Type 
 
 Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
+	CatchErrors("Uncaught (CreateRoom)")
+	
 	Local r.Rooms = New Rooms
 	Local rt.RoomTemplates
 	Local Tempf1#, Tempf2#, Tempf3#
@@ -920,6 +952,8 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 			EndIf
 		Next
 	EndIf
+	
+	CatchErrors("CreateRoom")
 End Function
 
 Function CreateOverLapBox(r.Rooms)
@@ -978,135 +1012,11 @@ Function LoadRoomMesh(rt.RoomTemplates)
 	HideEntity(rt\OBJ)
 End Function
 
-Function StripFilename$(File$)
-	Local mi$ = ""
-	Local LastSlash% = 0
-	Local i%
-	
-	If Len(File) > 0 Then
-		For i = 1 To Len(File)
-			mi = Mid(File, i, 1)
-			If mi = "\" Lor mi = "/" Then
-				LastSlash = i
-			EndIf
-		Next
-	EndIf
-	
-	Return(Left(File, LastSlash))
-End Function
-
-Type Materials
-	Field Name$
-	Field Diff%
-	Field Bump%
-End Type
-
-Function LoadMaterials(File$)
-	Local TemporaryString$
-	Local mat.Materials = Null
-	Local StrTemp$ = ""
-	
-	Local f% = OpenFile(File)
-	
-	While (Not Eof(f))
-		TemporaryString = Trim(ReadLine(f))
-		If Left(TemporaryString, 1) = "[" Then
-			TemporaryString = Mid(TemporaryString, 2, Len(TemporaryString) - 2)
-			
-			mat.Materials = New Materials
-			
-			mat\Name = Lower(TemporaryString)
-		EndIf
-	Wend
-	
-	CloseFile(f)
-End Function
-
-Function ApplyBumpMap(Texture%)
-	TextureBlend(Texture, 6)
-	TextureBumpEnvMat(Texture, 0, 0, -0.012)
-	TextureBumpEnvMat(Texture, 0, 1, -0.012)
-	TextureBumpEnvMat(Texture, 1, 0, 0.012)
-	TextureBumpEnvMat(Texture, 1, 1, 0.012)
-	TextureBumpEnvOffset(Texture, 0.5)
-	TextureBumpEnvScale(Texture, 1.0)
-End Function
-
-Function GetTextureFromCache%(Name$)
-	For tc.Materials = Each Materials
-		If tc\Name = Name Then Return(tc\Diff)
-	Next
-	Return(0)
-End Function
-
-Function GetBumpFromCache%(Name$)
-	For tc.Materials = Each Materials
-		If tc\Name = Name Then Return(tc\Bump)
-	Next
-	Return(0)
-End Function
-
-Function GetCache.Materials(Name$)
-	For tc.Materials = Each Materials
-		If tc\Name = Name Then Return(tc)
-	Next
-	Return(Null)
-End Function
-
-Function AddTextureToCache(Texture%)
-	Local tc.Materials = GetCache(StripPath(TextureName(Texture)))
-	
-	If tc.Materials = Null Then
-		tc.Materials = New Materials
-		tc\Name = StripPath(TextureName(Texture))
-		If BumpEnabled Then
-			Local Temp$ = GetINIString("Data\materials.ini", tc\Name, "bump")
-			
-			If Temp <> "" Then
-				tc\Bump = LoadTexture(Temp)
-				ApplyBumpMap(tc\Bump)
-			Else
-				tc\Bump = 0
-			EndIf
-		EndIf
-		tc\Diff = 0
-	EndIf
-	If tc\Diff = 0 Then tc\Diff = Texture
-End Function
-
-Function ClearTextureCache()
-	For tc.Materials = Each Materials
-		If tc\Diff <> 0 Then FreeTexture(tc\Diff)
-		If tc\Bump <> 0 Then FreeTexture(tc\Bump)
-		Delete(tc)
-	Next
-End Function
-
-Function FreeTextureCache()
-	For tc.Materials = Each Materials
-		If tc\Diff <> 0 Then FreeTexture(tc\Diff)
-		If tc\Bump <> 0 Then FreeTexture(tc\Bump)
-		tc\Diff = 0 : tc\Bump = 0
-	Next
-End Function
+Include "Source Code\Materials.bb"
+Include "Source Code\Texture_Cache_System.bb"
 
 Function LoadRMesh(File$, rt.RoomTemplates)
-	; ~ Generate a texture made of white
-	Local BlankTexture%
-	
-	BlankTexture = CreateTexture(4, 4, 1, 1)
-	ClsColor(255, 255, 255)
-	SetBuffer(TextureBuffer(BlankTexture))
-	Cls()
-	SetBuffer(BackBuffer())
-	
-	Local PinkTexture%
-	
-	PinkTexture = CreateTexture(4, 4, 1, 1)
-	ClsColor(255, 255, 255)
-	SetBuffer(TextureBuffer(PinkTexture))
-	Cls()
-	SetBuffer(BackBuffer())
+	CatchErrors("Uncaught (LoadRMesh)")
 	
 	ClsColor(0, 0, 0)
 	
@@ -1166,22 +1076,26 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 		Tex[0] = 0 : Tex[1] = 0
 		
 		IsAlpha = 0
+		
 		For j = 0 To 1
 			Temp1i = ReadByte(f)
 			If Temp1i <> 0 Then
 				Temp1s = ReadString(f)
 				Tex[j] = GetTextureFromCache(Temp1s)
 				If Tex[j] = 0 Then ; ~ Texture is not in cache
-					Select True
-						Case Temp1i < 3
-							;[Block]
+					If FileType(File + Temp1s) = 1 ; ~ Check if texture is existing in original path
+						If Temp1i < 3 Then
 							Tex[j] = LoadTexture(File + Temp1s, 1)
-							;[End Block]
-						Default
-							;[Block]
+						Else
 							Tex[j] = LoadTexture(File + Temp1s, 3)
-							;[End Block]
-					End Select
+						EndIf
+					ElseIf FileType(MapTexturesFolder + Temp1s) = 1 ; ~ If not, check the MapTexturesFolder
+						If Temp1i < 3 Then
+							Tex[j] = LoadTexture(MapTexturesFolder + Temp1s, 1)
+						Else
+							Tex[j] = LoadTexture(MapTexturesFolder + Temp1s, 3)
+						EndIf
+					EndIf
 					
 					If Tex[j] <> 0 Then
 						If Temp1i = 1 Then TextureBlend(Tex[j], 5)
@@ -1205,7 +1119,7 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 				TextureBlend(Tex[1], 2)
 				BrushTexture(Brush, Tex[1], 0, 1)
 			Else
-				BrushTexture(Brush, BlankTexture, 0, 1)
+				BrushTexture(Brush, MissingTexture, 0, 1)
 			EndIf
 		Else
 			If Tex[0] <> 0 And Tex[1] <> 0 Then
@@ -1218,7 +1132,7 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 					If Tex[j] <> 0 Then
 						BrushTexture(Brush, Tex[j], 0, j + 1)
 					Else
-						BrushTexture(Brush, BlankTexture, 0, j + 1)
+						BrushTexture(Brush, MissingTexture, 0, j + 1)
 					EndIf
 				Next
 			EndIf
@@ -1359,8 +1273,6 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 				;[Block]
 				File = ReadString(f)
 				If File <> "" Then
-					If Right(File, 1) = "x" Then File = Left(File, Len(File) - 1) + "b3d"
-					
 					Local Model% = CreatePropOBJ("GFX\map\Props\" + File)
 					
 					Temp1 = ReadFloat(f) : Temp2 = ReadFloat(f) : Temp3 = ReadFloat(f)
@@ -1373,7 +1285,6 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 					ScaleEntity(Model, Temp1, Temp2, Temp3)
 					
 					EntityParent(Model, Opaque)
-					EntityType(Model, HIT_MAP)
 				Else
 					Temp1 = ReadFloat(f) : Temp2 = ReadFloat(f) : Temp3 = ReadFloat(f)
 				EndIf
@@ -1398,8 +1309,6 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 	EntityAlpha(HiddenMesh, 0.0)
 	EntityAlpha(Opaque, 1.0)
 	
-	FreeTexture(BlankTexture)
-	
 	OBJ = CreatePivot()
 	CreatePivot(OBJ) ; ~ Skip "meshes" object
 	EntityParent(Opaque, OBJ)
@@ -1412,58 +1321,8 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 	CloseFile(f)
 	
 	Return(OBJ)
-End Function
-
-Function StripPath$(File$) 
-	Local Name$ = "", i%, mi$ = ""
 	
-	If Len(File) > 0 Then 
-		For i = Len(File) To 1 Step -1 
-			mi = Mid(File, i, 1) 
-			If mi = "\" Lor mi = "/" Then Return(Name)
-			
-			Name = mi + Name
-		Next 
-	EndIf 
-	
-	Return(Name) 
-End Function
-
-Function GetINIString$(File$, Section$, Parameter$, DefaultValue$ = "")
-	Local TemporaryString$ = ""
-	Local f% = ReadFile(File)
-	
-	While (Not Eof(f))
-		If ReadLine(f) = "[" + Section + "]" Then
-			Repeat 
-				TemporaryString = ReadLine(f)
-				If Trim(Left(TemporaryString, Max(Instr(TemporaryString, "=") - 1.0, 0.0)) ) = Parameter Then
-					CloseFile(f)
-					Return(Trim(Right(TemporaryString, Len(TemporaryString) - Instr(TemporaryString, "="))))
-				EndIf
-			Until Left(TemporaryString, 1) = "[" Lor Eof(f)
-			CloseFile(f)
-			Return(DefaultValue)
-		EndIf
-	Wend
-	
-	CloseFile(f)
-End Function
-
-Function GetINIInt%(File$, Section$, Parameter$, DefaultValue% = 0)
-	Local Txt$ = Lower(GetINIString(File, Section, Parameter, DefaultValue))
-	
-	If Lower(Txt) = "true" Then
-		Return(1)
-	ElseIf Lower(Txt) = "false"
-		Return(0)
-	Else
-		Return(Int(Txt))
-	EndIf
-End Function
-
-Function GetINIFloat#(File$, Section$, Parameter$, DefaultValue# = 0.0)
-	Return(GetINIString(File, Section, Parameter, DefaultValue))
+	CatchErrors("LoadRMesh")
 End Function
 
 Function WrapAngle#(Angle#)

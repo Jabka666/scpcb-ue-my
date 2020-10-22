@@ -1422,7 +1422,7 @@ Repeat
 		EndIf
 	EndIf
 Forever
-End
+End()
 
 Function StripPath$(File$) 
 	Local Name$ = "", i%, mi$ = ""
@@ -1546,19 +1546,19 @@ Function PutINIValue%(INI_sAppName$, INI_sSection$, INI_sKey$, INI_sValue$)
 						INI_bWrittenKey = True
 					Else
 						WriteLine(INI_lFileHandle, INI_sTemp)
-					End If
-				End If
-			End If
-		End If
+					EndIf
+				EndIf
+			EndIf
+		EndIf
 		
 		; ~ Move through the INI file...
 		INI_lOldPos = INI_lPos + 1
-		INI_lPos% = Instr(INI_sContents, Chr(0), INI_lOldPos)
+		INI_lPos = Instr(INI_sContents, Chr(0), INI_lOldPos)
 	Wend
 	
 	; ~ KEY wasn't found in the INI file - Append a new SECTION if required and create our KEY = VALUE line
 	If INI_bWrittenKey = False Then
-		If (INI_bSectionFound = False) Then INI_CreateSection(INI_lFileHandle, INI_sSection)
+		If INI_bSectionFound = False Then INI_CreateSection(INI_lFileHandle, INI_sSection)
 		INI_CreateKey(INI_lFileHandle, INI_sKey, INI_sValue)
 	End If
 	
@@ -1931,7 +1931,7 @@ Function LoadMap(File$)
 				EndIf
 			Next
 			
-			MapAngle(x, y) = ReadByte(f) * 90
+			MapAngle(x, y) = ReadByte(f) * 90.0
 			MapEvent(x, y) = ReadString(f)
 			If MapEvent(x, y) = ""
 				MapEvent(x, y) = "[none]"
@@ -1953,7 +1953,7 @@ Function LoadMap(File$)
 					Exit
 				EndIf
 			Next
-			ForestPlaceAngle(x, y) = ReadByte(f) * 90
+			ForestPlaceAngle(x, y) = ReadByte(f) * 90.0
 		Next
 		; ~ Maintenance tunnel pieces
 		For i = 0 To MTRoomAmount - 1
@@ -1967,7 +1967,7 @@ Function LoadMap(File$)
 					Exit
 				EndIf
 			Next
-			MTRoomAngle(x, y) = ReadByte(f) * 90
+			MTRoomAngle(x, y) = ReadByte(f) * 90.0
 		Next
 	Else
 		While (Not Eof(f))
@@ -1981,7 +1981,7 @@ Function LoadMap(File$)
 					Exit
 				EndIf
 			Next
-			MapAngle(x, y) = ReadByte(f) * 90
+			MapAngle(x, y) = ReadByte(f) * 90.0
 			MapEvent(x, y) = ReadString(f)
 			If MapEvent(x, y) = ""
 				MapEvent(x, y) = "[none]"
