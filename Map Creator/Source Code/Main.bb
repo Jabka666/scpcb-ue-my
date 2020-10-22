@@ -197,8 +197,6 @@ CreateMenu("Quit", 10001, File) ; ~ Another child menu
 Local Options% = CreateMenu("Options", 0, Menu)
 Local Event_Default% = CreateMenu("Set the event for the rooms by default", 15, Options)
 
-Global Adjdoor_Place% = CreateMenu("Place adjacent doors in 3D view", 16, Options)
-
 CreateMenu("", 1000, Options)
 
 Local Zone_Trans% = CreateMenu("Map Settings", 18, Options)
@@ -225,15 +223,7 @@ Else
 	CheckMenu(Event_Default)
 EndIf
 
-Local Option_Adjdoors% = GetINIInt(OptionFile, "3D Scene", "Adjdoors_Place")
-
-If (Not Option_Adjdoors) Then
-	UncheckMenu(Adjdoor_Place)
-Else
-	CheckMenu(Adjdoor_Place)
-EndIf
-
-; ~ Now the Edit menu
+; ~ Now the Edit Menu
 Local Edit% = CreateMenu("&Help", 0, Menu) ; ~ Main menu with Alt Shortcut - Use & to specify the shortcut key
 
 CreateMenu("Manual" + Chr(8) + "F1", 6, Edit) ; ~ Another Child menu with Alt Shortcut
@@ -1147,14 +1137,6 @@ Repeat
 			If Value = 1 Then UncheckMenu(Event_Default)
 			UpdateWindowMenu(WinHandle)
 			PutINIValue(OptionFile, "General", "Events_Default", (Not Value))
-		EndIf
-		If EID = 16 Then
-			Value = MenuChecked(Adjdoor_Place)
-			If Value = 0 Then CheckMenu(Adjdoor_Place)
-			If Value = 1 Then UncheckMenu(Adjdoor_Place)
-			UpdateWindowMenu(WinHandle)
-			PutINIValue(OptionFile, "3D Scene", "Adjdoors_Place", (Not Value))
-			WriteOptions()
 		EndIf
 		If EID = 18 Then
 			ShowGadget(Map_Settings)
@@ -2135,7 +2117,6 @@ Function WriteOptions()
 	WriteInt(f, TextFieldText(CameraRangeOpt))
 	WriteByte(f, ButtonState(VSync))
 	WriteByte(f, ButtonState(ShowFPS))
-	WriteByte(f, MenuChecked(Adjdoor_Place))
 	
 	CloseFile(f)
 End Function

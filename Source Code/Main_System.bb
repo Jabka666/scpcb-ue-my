@@ -81,9 +81,9 @@ Global mo.Mouse = New Mouse
 mo\Mouselook_X_Inc = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the X axis
 mo\Mouselook_y_Inc = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the Y axis
 mo\Mouse_Left_Limit = 250
-mo\Mouse_Right_Limit = GraphicWidth - 250
+mo\Mouse_Right_Limit = GraphicsWidth() - 250
 mo\Mouse_Top_Limit = 150
-mo\Mouse_Bottom_Limit = GraphicHeight - 150 ; ~ As above
+mo\Mouse_Bottom_Limit = GraphicsHeight() - 150 ; ~ As above
 
 Type Launcher
 	Field TotalGFXModes%

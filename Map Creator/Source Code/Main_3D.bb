@@ -8,7 +8,7 @@ Global MouseHit1%
 Const ResWidth% = 895
 Const ResHeight% = 560
 
-Graphics3D(ResWidth, ResHeight, 0, 4)
+Graphics3D(ResWidth, ResHeight, 32, 4)
 
 Local HHWND% = api_GetActiveWindow() ; ~ User32.dll
 
@@ -45,22 +45,6 @@ Cls()
 SetBuffer(BackBuffer())
 
 LoadMissingTexture()
-
-; ~ Loading door-relevant meshes (for adjacent doors)
-Global Door_LCZ% = LoadMesh_Strict("Assets\Door01.x")
-HideEntity(Door_LCZ)
-
-Global Door_HCZ_1% = LoadMesh_Strict("Assets\HeavyDoor1.x")
-HideEntity(Door_HCZ_1)
-
-Global Door_HCZ_2% = LoadMesh_Strict("Assets\HeavyDoor2.x")
-HideEntity(Door_HCZ_2)
-
-Global Door_Frame% = LoadMesh_Strict("Assets\DoorFrame.x")
-HideEntity(Door_Frame)
-
-Global Door_Button% = LoadMesh_Strict("Assets\Button.b3d")
-HideEntity(Door_Button)
 
 Global MenuOpen% = True
 
@@ -108,7 +92,6 @@ ChangeDir("Map Creator")
 Global ShowFPS% = GetINIInt(OptionFileMC, "3D Scene", "Show FPS")
 Global CheckFPS%, ElapsedLoops%, FPS%
 Global VSync% = GetINIInt(OptionFileMC, "3D Scene", "VSync")
-Global AdjDoorPlace% = GetINIInt(OptionFileMC, "3D Scene", "Adjdoors_Place")
 
 Global MXS# = 0.0, MYS# = 0.0
 
@@ -157,7 +140,6 @@ Repeat
 	PrevTime = MilliSecs()
 	
 	Local f%, i%
-	Local PrevAdjDoorPlace = AdjDoorPlace
 	
 	If FileType("CONFIG_OPTINIT.SI") = 1 Then
 		f = ReadFile("CONFIG_OPTINIT.SI")
@@ -171,7 +153,6 @@ Repeat
 		CamRange = ReadInt(f)
 		VSync = ReadByte(f)
 		ShowFPS = ReadByte(f)
-		AdjDoorPlace = ReadByte(f)
 		
 		CamRange = Max(CamRange, 20.0)
 		
@@ -180,24 +161,6 @@ Repeat
 		
 		CloseFile(f)
 		DeleteFile("CONFIG_OPTINIT.SI")
-	EndIf
-	
-	Local d.Doors
-	
-	If PrevAdjDoorPlace <> AdjDoorPlace Then
-		If AdjDoorPlace Then
-			PlaceAdjacentDoors()
-		Else
-			For d.Doors = Each Doors
-				FreeEntity(d\FrameOBJ)
-				For i = 0 To 1
-					FreeEntity(d\Buttons[i])
-				Next
-				FreeEntity(d\OBJ)
-				FreeEntity(d\OBJ2)
-				Delete(d)
-			Next
-		EndIf
 	EndIf
 	
 	Local x%, y%
@@ -211,15 +174,6 @@ Repeat
 			FreeEntity(r\OBJ)
 			FreeTexture(r\OverlayTex)
 			Delete(r)
-		Next
-		For d.Doors = Each Doors
-			FreeEntity(d\FrameOBJ)
-			For i = 0 To 1
-				FreeEntity(d\Buttons[i])
-			Next
-			FreeEntity(d\OBJ)
-			FreeEntity(d\OBJ2)
-			Delete(d)
 		Next
 		For x = 0 To MapWidth
 			For y = 0 To MapHeight
@@ -396,10 +350,6 @@ Repeat
 		
 		CloseFile(f)
 		
-		If AdjDoorPlace And CurrMapGrid = 0 Then
-			PlaceAdjacentDoors()
-		EndIf
-		
 		DeleteFile("CONFIG_MAPINIT.SI")
 	EndIf
 	
@@ -436,24 +386,6 @@ Repeat
 				Else
 					ShowEntity(r\OBJ)
 				EndIf
-			EndIf
-		Next
-		
-		For d.Doors = Each Doors
-			If EntityDistance(Camera, d\FrameOBJ) > CamRange Lor (Not EntityInView(d\FrameOBJ, Camera))
-				HideEntity(d\FrameOBJ)
-				HideEntity(d\OBJ)
-				HideEntity(d\OBJ2)
-				For i = 0 To 1
-					HideEntity(d\Buttons[i])
-				Next
-			Else
-				ShowEntity(d\FrameOBJ)
-				ShowEntity(d\OBJ)
-				ShowEntity(d\OBJ2)
-				For i = 0 To 1
-					ShowEntity(d\Buttons[i])
-				Next
 			EndIf
 		Next
 		
@@ -886,8 +818,6 @@ Type Rooms
 	Field ResetOverlayTex%
 	Field Event$
 	Field EventChance#
-	Field Adjacent.Rooms[4]
-	Field AdjDoor.Doors[4]
 	Field GridX%, GridZ%
 	Field ForestWallOBJ%
 End Type 
@@ -1331,189 +1261,6 @@ Function WrapAngle#(Angle#)
 	Else
 		Return(Angle Mod 360.0)
 	EndIf
-End Function
-
-Type Doors
-	Field OBJ%, OBJ2%, FrameOBJ%, Buttons%[2]
-	Field Dir%
-	Field Angle%
-End Type
-
-Function CreateDoor.Doors(x#, y#, z#, Angle#, room.Rooms, Big% = False)
-	Local d.Doors, i%
-	Local Parent%
-	
-	If room <> Null Then Parent = room\OBJ
-	
-	d.Doors = New Doors
-	If Big = 2 Then 
-		d\OBJ = CopyEntity(Door_HCZ_1)
-		ScaleEntity(d\OBJ, RoomScale, RoomScale, RoomScale)
-		d\OBJ2 = CopyEntity(Door_HCZ_2)
-		ScaleEntity(d\OBJ2, RoomScale, RoomScale, RoomScale)
-		
-		d\FrameOBJ = CopyEntity(Door_Frame)
-	Else
-		d\OBJ = CopyEntity(Door_LCZ)
-		ScaleEntity(d\OBJ, (203.0 * RoomScale) / MeshWidth(d\OBJ), 313.0 * RoomScale / MeshHeight(d\OBJ), 16.0 * RoomScale / MeshDepth(d\OBJ))
-		
-		d\FrameOBJ = CopyEntity(Door_Frame)
-		d\OBJ2 = CopyEntity(Door_LCZ)
-		
-		ScaleEntity(d\OBJ2, (203.0 * RoomScale) / MeshWidth(d\OBJ2), 313.0 * RoomScale / MeshHeight(d\OBJ2), 16.0 * RoomScale / MeshDepth(d\OBJ2))
-	EndIf
-	
-	PositionEntity(d\FrameOBJ, x, y, z)
-	ScaleEntity(d\FrameOBJ, RoomScale, RoomScale, RoomScale)
-	
-	For i = 0 To 1
-		d\Buttons[i] = CopyEntity(Door_Button)
-		ScaleEntity(d\Buttons[i], 0.03, 0.03, 0.03)
-		
-		PositionEntity(d\Buttons[i], x + 0.6 + (i * (-1.2)), y + 0.7, z - 0.1 + (i * 0.2))
-		RotateEntity(d\Buttons[i], 0.0, (i * 180.0), 0.0)
-		EntityParent(d\Buttons[i], d\FrameOBJ)
-	Next
-	
-	PositionEntity(d\OBJ, x, y, z)
-	
-	RotateEntity(d\OBJ, 0.0, Angle, 0.0)
-	RotateEntity(d\FrameOBJ, 0.0, Angle, 0.0)
-	
-	If d\OBJ2 <> 0 Then
-		PositionEntity(d\OBJ2, x, y, z)
-		RotateEntity(d\OBJ2, 0.0, Angle + 180.0, 0.0)
-	EndIf
-	
-	d\Angle = Angle
-	
-	d\Dir = Big
-	
-	Return(d)
-End Function
-
-Function PlaceAdjacentDoors()
-	Local Temp% = 0, Zone%
-	Local Spacing# = 8.0
-	Local ShouldSpawnDoor% = False
-	Local x%, y%, i%
-	Local r.Rooms, d.Doors
-	
-	For y = MapHeight To 0 Step -1
-		If y < ZoneTransValue2 Then
-			Zone = 3
-		ElseIf y >= ZoneTransValue2 And y < ZoneTransValue1 Then
-			Zone = 2
-		Else
-			Zone = 1
-		EndIf
-		
-		For x = MapWidth To 0 Step -1
-			If MapTemp(x, y) > 0 Then
-				If Zone = 2 Then Temp = 2 Else Temp = 0
-				
-				For r.Rooms = Each Rooms
-					If Int(r\x / 8.0) = x And Int(r\z / 8.0) = y Then
-						ShouldSpawnDoor = False
-						Select r\RoomTemplate\Shape
-							Case ROOM1
-								;[Block]
-								If r\Angle = 90.0 Then
-									ShouldSpawnDoor = True
-								EndIf
-								;[End Block]
-							Case ROOM2
-								;[Block]
-								If r\Angle = 90.0 Lor r\Angle = 270.0 Then 
-									ShouldSpawnDoor = True
-								EndIf
-								;[End Block]
-							Case ROOM2C
-								;[Block]
-								If r\Angle = 0.0 Lor r\Angle = 90.0 Then
-									ShouldSpawnDoor = True
-								EndIf
-								;[End Block]
-							Case ROOM3
-								;[Block]
-								If r\Angle = 0.0 Lor r\Angle = 180.0 Lor r\Angle = 90.0 Then
-									ShouldSpawnDoor = True
-								EndIf
-								;[End Block]
-							Default
-								;[Block]
-								ShouldSpawnDoor = True
-								;[End Block]
-						End Select
-						If ShouldSpawnDoor Then
-							If x + 1 < MapWidth + 1
-								If MapTemp(x + 1, y) > 0 Then
-									d.Doors = CreateDoor(Float(x) * Spacing + Spacing / 2.0, 0.0, Float(y) * Spacing, 90.0, r, Temp)
-									r\AdjDoor[0] = d
-								EndIf
-							EndIf
-						EndIf
-						
-						ShouldSpawnDoor = False
-						Select r\RoomTemplate\Shape
-							Case ROOM1
-								;[Block]
-								If r\Angle = 180.0 Then
-									ShouldSpawnDoor = True
-								EndIf
-								;[End Block]
-							Case ROOM2
-								;[Block]
-								If r\Angle = 0.0 Lor r\Angle = 180.0 Then
-									ShouldSpawnDoor = True
-								EndIf
-								;[End Block]
-							Case ROOM2C
-								;[Block]
-								If r\Angle = 180.0 Lor r\Angle = 90.0 Then
-									ShouldSpawnDoor = True
-								EndIf
-								;[End Block]
-							Case ROOM3
-								;[Block]
-								If r\Angle = 180.0 Lor r\Angle = 90.0 Lor r\Angle = 270.0 Then
-									ShouldSpawnDoor = True
-								EndIf
-								;[End Block]
-							Default
-								;[Block]
-								ShouldSpawnDoor = True
-								;[End Block]
-						End Select
-						
-						If ShouldSpawnDoor Then
-							If y + 1 < MapHeight + 1 Then
-								If MapTemp(x, y + 1) > 0 Then
-									d.Doors = CreateDoor(Float(x) * Spacing, 0.0, Float(y) * Spacing + Spacing / 2.0, 0.0, r, Temp)
-									r\AdjDoor[3] = d
-								EndIf
-							EndIf
-						EndIf
-						Exit
-					EndIf
-				Next
-			EndIf
-		Next
-	Next
-	
-	For d.Doors = Each Doors
-		EntityParent(d\OBJ, 0)
-		If d\OBJ2 <> 0 Then EntityParent(d\OBJ2, 0)
-		If d\FrameOBJ <> 0 Then EntityParent(d\FrameOBJ, 0)
-		For i = 0 To 1
-			If d\Buttons[i] <> 0 Then EntityParent(d\Buttons[i], 0)
-		Next
-		
-		If d\OBJ2 <> 0 And d\Dir = 0 Then
-			MoveEntity(d\OBJ, 0.0, 0.0, 8.0 * RoomScale)
-			MoveEntity(d\OBJ2, 0.0, 0.0, 8.0 * RoomScale)
-		EndIf	
-	Next
 End Function
 
 Function LoadTerrain(hMap%, yScale# = 0.7, t1%, t2%, Mask%)
