@@ -11,7 +11,7 @@ Function PlaySound2%(SoundHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0)
 			
 			SoundCHN = PlaySound_Strict(SoundHandle)
 			
-			ChannelVolume(SoundCHN, Volume * (1.0 - Dist) * SFXVolume)
+			ChannelVolume(SoundCHN, Volume * (1.0 - Dist) * opt\SFXVolume)
 			ChannelPan(SoundCHN, PanValue)			
 		EndIf
 	EndIf
@@ -31,7 +31,7 @@ Function LoopSound2%(SoundHandle%, CHN%, Cam%, Entity%, Range# = 10.0, Volume# =
 			If (Not ChannelPlaying(CHN)) Then CHN = PlaySound_Strict(SoundHandle)
 		EndIf
 		
-		ChannelVolume(CHN, Volume * (1.0 - Dist) * SFXVolume)
+		ChannelVolume(CHN, Volume * (1.0 - Dist) * opt\SFXVolume)
 		ChannelPan(CHN, PanValue)
 	Else
 		If CHN <> 0 Then
@@ -54,8 +54,8 @@ Function UpdateMusic()
 		If (Not ChannelPlaying(ConsoleMusPlay)) Then ConsoleMusPlay = PlaySound_Strict(ConsoleMusFlush)
 	ElseIf (Not PlayCustomMusic)
 		If NowPlaying <> ShouldPlay Then ; ~ Playing the wrong clip, fade out
-			CurrMusicVolume = Max(CurrMusicVolume - (fpst\FPSFactor[0] / 250.0), 0.0)
-			If CurrMusicVolume = 0
+			opt\CurrMusicVolume = Max(opt\CurrMusicVolume - (fpst\FPSFactor[0] / 250.0), 0.0)
+			If opt\CurrMusicVolume = 0.0 Then
 				If NowPlaying < 66 Then
 					StopStream_Strict(MusicCHN)
 				EndIf
@@ -64,7 +64,7 @@ Function UpdateMusic()
 				CurrMusic = 0
 			EndIf
 		Else ; ~ Playing the right clip
-			CurrMusicVolume = CurrMusicVolume + (MusicVolume - CurrMusicVolume) * (0.1 * fpst\FPSFactor[0])
+			opt\CurrMusicVolume = opt\CurrMusicVolume + (opt\MusicVolume - opt\CurrMusicVolume) * (0.1 * fpst\FPSFactor[0])
 		EndIf
 		
 		If NowPlaying < 66 Then
@@ -72,12 +72,12 @@ Function UpdateMusic()
 				MusicCHN = StreamSound_Strict("SFX\Music\" + Music[NowPlaying] + ".ogg", 0.0, Mode)
 				CurrMusic = 1
 			EndIf
-			SetStreamVolume_Strict(MusicCHN, CurrMusicVolume)
+			SetStreamVolume_Strict(MusicCHN, opt\CurrMusicVolume)
 		EndIf
 	Else
 		If fpst\FPSFactor[0] > 0.0 Lor OptionsMenu = 2 Then
 			If (Not ChannelPlaying(MusicCHN)) Then MusicCHN = PlaySound_Strict(CustomMusic)
-			ChannelVolume(MusicCHN, 1.0 * MusicVolume)
+			ChannelVolume(MusicCHN, 1.0 * opt\MusicVolume)
 		EndIf
 	EndIf
 End Function 
@@ -340,7 +340,7 @@ Function KillSounds()
 		IntercomStreamCHN = 0
 	EndIf
 	
-	If EnableSFXRelease Then
+	If opt\EnableSFXRelease Then
 		For snd.Sound = Each Sound
 			If snd\InternalHandle <> 0 Then
 				FreeSound_Strict(snd\InternalHandle)
@@ -424,7 +424,7 @@ Function UpdateSoundOrigin(CHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0)
 		If 1.0 - Dist > 0.0 And 1.0 - Dist < 1.0 Then
 			Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 			
-			ChannelVolume(CHN, Volume * (1.0 - Dist) * SFXVolume)
+			ChannelVolume(CHN, Volume * (1.0 - Dist) * opt\SFXVolume)
 			ChannelPan(CHN, PanValue)
 		EndIf
 	Else
@@ -459,13 +459,13 @@ Function PlayAnnouncement(File$) ; ~ This function streams the announcement curr
 		IntercomStreamCHN = 0
 	EndIf
 	
-	IntercomStreamCHN = StreamSound_Strict(File, SFXVolume, 0)
+	IntercomStreamCHN = StreamSound_Strict(File, opt\SFXVolume, 0)
 End Function
 
 Function UpdateStreamSounds()
 	If fpst\FPSFactor[0] > 0.0 Then
 		If IntercomStreamCHN <> 0 Then
-			SetStreamVolume_Strict(IntercomStreamCHN, SFXVolume)
+			SetStreamVolume_Strict(IntercomStreamCHN, opt\SFXVolume)
 		EndIf
 	EndIf
 	
@@ -484,7 +484,7 @@ Function ControlSoundVolume()
 	
 	For snd.Sound = Each Sound
 		For i = 0 To 31
-			ChannelVolume(snd\Channels[i], SFXVolume)
+			ChannelVolume(snd\Channels[i], opt\SFXVolume)
 		Next
 	Next
 End Function
@@ -492,13 +492,13 @@ End Function
 Function UpdateDeaf()
 	If me\DeafTimer > 0.0
 		me\DeafTimer = me\DeafTimer - fpst\FPSFactor[0]
-		SFXVolume = 0.0
-		If SFXVolume > 0.0 Then
+		opt\SFXVolume = 0.0
+		If opt\SFXVolume > 0.0 Then
 			ControlSoundVolume()
 		EndIf
 	Else
 		me\DeafTimer = 0.0
-		SFXVolume = PrevSFXVolume
+		opt\SFXVolume = opt\PrevSFXVolume
 		If me\Deaf Then ControlSoundVolume()
 		me\Deaf = False
 	EndIf

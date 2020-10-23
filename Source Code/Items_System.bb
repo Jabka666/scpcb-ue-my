@@ -476,7 +476,7 @@ Function RemoveItem(i.Items)
 			;[End Block]
 		Case "nvg", "supernvg", "finenvg"
 			;[Block]
-			CameraFogFar = StoredCameraFogFar : wi\NightVision = 0
+			opt\CameraFogFar = opt\StoredCameraFogFar : wi\NightVision = 0
 			;[End Block]
 		Case "scp714"
 			;[Block]
@@ -833,7 +833,7 @@ Function DropItem(item.Items, PlayDropSound% = True)
 			;[End Block]
 		Case "nvg", "supernvg", "finenvg"
 			;[Block]
-			CameraFogFar = StoredCameraFogFar : wi\NightVision = 0
+			opt\CameraFogFar = opt\StoredCameraFogFar : wi\NightVision = 0
 			;[End Block]
 		Case "scp714"
 			;[Block]

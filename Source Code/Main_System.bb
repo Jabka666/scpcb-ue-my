@@ -28,8 +28,6 @@ Global MenuWhite%, MenuBlack%
 Global ButtonSFX% = LoadSound_Strict("SFX\Interact\Button.ogg")
 Global ButtonSFX2% = LoadSound_Strict("SFX\Interact\Button2.ogg")
 
-Global EnableSFXRelease_Prev% = EnableSFXRelease
-
 Global ArrowIMG%[4]
 
 Global Fresize_Image%, Fresize_Texture%, Fresize_Texture2%
@@ -37,30 +35,28 @@ Global Fresize_Cam%
 
 Global WireFrameState%
 
-Global RealGraphicWidth%, RealGraphicHeight%
-Global AspectRatioRatio#
+LoadOptionsINI()
 
-Global TextureFloat#
-Select TextureDetails
+Select opt\TextureDetails
 	Case 0
 		;[Block]
-		TextureFloat = 0.8
+		opt\TextureFloat = 0.8
 		;[End Block]
 	Case 1
 		;[Block]
-		TextureFloat = 0.4
+		opt\TextureFloat = 0.4
 		;[End Block]
 	Case 2
 		;[Block]
-		TextureFloat = 0.0
+		opt\TextureFloat = 0.0
 		;[End Block]
 	Case 3
 		;[Block]
-		TextureFloat = -0.4
+		opt\TextureFloat = -0.4
 		;[End Block]
 	Case 4
 		;[Block]
-		TextureFloat = -0.8
+		opt\TextureFloat = -0.8
 		;[End Block]
 End Select
 
@@ -92,12 +88,12 @@ Type Launcher
 	Field GFXModeWidths%[64], GFXModeHeights%[64]
 End Type
 
-If LauncherEnabled Then
+If opt\LauncherEnabled Then
 	Local lnchr.Launcher = New Launcher
 	
 	lnchr\TotalGFXModes = CountGfxModes3D()
 	
-	AspectRatioRatio = 1.0
+	opt\AspectRatio = 1.0
 	
 	UpdateLauncher(lnchr)
 	
@@ -105,23 +101,23 @@ If LauncherEnabled Then
 EndIf
 
 ; ~ New "fake fullscreen" - ENDSHN Psst, it's called borderless windowed mode -- Love Mark
-If DisplayMode = 1 Then
+If opt\DisplayMode = 1 Then
 	Graphics3DExt(DesktopWidth(), DesktopHeight(), 32, 4)
 	
-	RealGraphicWidth = DesktopWidth()
-	RealGraphicHeight = DesktopHeight()
+	opt\RealGraphicWidth = DesktopWidth()
+	opt\RealGraphicHeight = DesktopHeight()
 	
-	AspectRatioRatio = (Float(GraphicWidth) / Float(GraphicHeight)) / (Float(RealGraphicWidth) / Float(RealGraphicHeight))
+	opt\AspectRatio = (Float(opt\GraphicWidth) / Float(opt\GraphicHeight)) / (Float(opt\RealGraphicWidth) / Float(opt\RealGraphicHeight))
 Else
-	Graphics3DExt(GraphicWidth, GraphicHeight, 32, (DisplayMode = 2) + 1)
+	Graphics3DExt(opt\GraphicWidth, opt\GraphicHeight, 32, (opt\DisplayMode = 2) + 1)
 	
-	RealGraphicWidth = GraphicWidth
-	RealGraphicHeight = GraphicHeight
+	opt\RealGraphicWidth = opt\GraphicWidth
+	opt\RealGraphicHeight = opt\GraphicHeight
 	
-	AspectRatioRatio = 1.0
+	opt\AspectRatio = 1.0
 EndIf
 
-Global MenuScale# = GraphicHeight / 1024.0
+Global MenuScale# = opt\GraphicHeight / 1024.0
 
 SetBuffer(BackBuffer())
 
@@ -186,10 +182,6 @@ End Function
 
 SetTickrate(60)
 	
-Global CurrFrameLimit# = (FrameLimit - 19.0) / 100.0
-
-Global CurrFOV# = FOV - 40
-
 SeedRnd(MilliSecs())
 
 Global GameSaved%
@@ -198,7 +190,7 @@ Global CanSave% = True
 
 AppTitle("SCP - Containment Breach Ultimate Edition v" + VersionNumber)
 
-If PlayStartup Then PlayStartupVideos()
+If opt\PlayStartup Then PlayStartupVideos()
 
 Global CursorIMG% = LoadImage_Strict("GFX\cursor.png")
 
@@ -224,7 +216,7 @@ Global BlinkMeterIMG% = LoadImage_Strict("GFX\blink_meter.png")
 DrawLoading(0, True)
 
 ; ~ Viewport
-Global Viewport_Center_X% = GraphicWidth / 2, Viewport_Center_Y% = GraphicHeight / 2
+Global Viewport_Center_X% = opt\GraphicWidth / 2, Viewport_Center_Y% = opt\GraphicHeight / 2
 
 Global Mesh_MinX#, Mesh_MinY#, Mesh_MinZ#
 Global Mesh_MaxX#, Mesh_MaxY#, Mesh_MaxZ#
@@ -427,7 +419,7 @@ Function CreateConsoleMsg(Txt$, R% = -1, G% = -1, B% = -1, IsCommand% = False)
 End Function
 
 Function UpdateConsole()
-	If (Not CanOpenConsole) Then
+	If (Not opt\CanOpenConsole) Then
 		ConsoleOpen = False
 		Return
 	EndIf
@@ -443,8 +435,8 @@ Function UpdateConsole()
 		ConsoleR = 255 : ConsoleG = 255 : ConsoleB = 255
 		
 		x = 0
-		y = GraphicHeight - 300 * MenuScale
-		Width = GraphicWidth
+		y = opt\GraphicHeight - 300 * MenuScale
+		Width = opt\GraphicWidth
 		Height = 300 * MenuScale - 30 * MenuScale
 		
 		DrawFrame(x, y, Width, Height + 30 * MenuScale)
@@ -1391,9 +1383,9 @@ Function UpdateConsole()
 				Case "camerafog"
 					;[Block]
 					Args = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
-					CameraFogNear = Float(Left(Args, Len(Args) - Instr(Args, " ")))
-					CameraFogFar = Float(Right(Args, Len(Args) - Instr(Args, " ")))
-					CreateConsoleMsg("Near set to: " + CameraFogNear + ", far set to: " + CameraFogFar)
+					opt\CameraFogNear = Float(Left(Args, Len(Args) - Instr(Args, " ")))
+					opt\CameraFogFar = Float(Right(Args, Len(Args) - Instr(Args, " ")))
+					CreateConsoleMsg("Near set to: " + opt\CameraFogNear + ", far set to: " + opt\CameraFogFar)
 					;[End Block]
 				Case "spawn"
 					;[Block]
@@ -1614,7 +1606,7 @@ Function UpdateConsole()
 					chs\GodMode = True
 					chs\InfiniteStamina = True
 					
-					CameraFogFar = 50.0
+					opt\CameraFogFar = 50.0
 					
 					For snd.Sound = Each Sound
 						For i = 0 To 31
@@ -1780,7 +1772,7 @@ Function UpdateConsole()
 		
 		RenderMenuInputBoxes()
 		
-		If DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+		If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	EndIf
 	
 	SetFont(fo\FontID[0])
@@ -1818,8 +1810,6 @@ Function ClearConsole()
 End Function
 
 Global Camera%, TempCamera%
-
-Global StoredCameraFogFar# = CameraFogFar
 
 Include "Source Code\Dreamfilter.bb"
 
@@ -1862,9 +1852,9 @@ Music[27] = "Room035"
 Music[28] = "Room409" 
 
 Global MusicCHN%
-MusicCHN = StreamSound_Strict("SFX\Music\" + Music[2] + ".ogg", MusicVolume, Mode)
+MusicCHN = StreamSound_Strict("SFX\Music\" + Music[2] + ".ogg", opt\MusicVolume, Mode)
 
-Global CurrMusicVolume# = 1.0, NowPlaying% = 2, ShouldPlay% = 11
+Global NowPlaying% = 2, ShouldPlay% = 11
 Global CurrMusic% = 1
 
 DrawLoading(10, True)
@@ -2008,9 +1998,6 @@ Global OptionsMenu% = 0
 Global QuitMsg% = 0
 
 Global InFacility% = True
-
-Global PrevMusicVolume# = MusicVolume
-Global PrevSFXVolume# = SFXVolume
 
 Global room2gw_BrokenDoor% = False
 Global room2gw_x# = 0.0
@@ -2336,7 +2323,7 @@ Function UpdateDoors()
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fpst\FPSFactor[0]) / 180.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * fpst\FPSFactor[0] / 180.0, 0.0, 0.0)
 							If d\OpenState < 15.0 And d\OpenState + fpst\FPSFactor[0] >= 15.0
-								If ParticleAmount = 2
+								If opt\ParticleAmount = 2
 									For i = 0 To Rand(75, 99)
 										Local Pvt% = CreatePivot()
 										
@@ -2850,9 +2837,9 @@ Repeat
 	AddToTimingAccumulator(ElapsedMilliseconds)
 	SetPrevTime(GetCurrTime())
 	
-	If Framelimit > 0 Then
-	    ; ~ Framelimit
-		Local WaitingTime% = (1000.0 / Framelimit) - (MilliSecs2() - fpst\LoopDelay)
+	If opt\FrameLimit > 0 Then
+	    ; ~ FrameLimit
+		Local WaitingTime% = (1000.0 / opt\FrameLimit) - (MilliSecs2() - fpst\LoopDelay)
 		
 		Delay(WaitingTime)
 		
@@ -2881,21 +2868,21 @@ Repeat
 					CreateDir("Screenshots")
 				EndIf
 				
-				Local Bank% = CreateBank(RealGraphicWidth * RealGraphicHeight * 3)
+				Local Bank% = CreateBank(opt\RealGraphicWidth * opt\RealGraphicHeight * 3)
 				
 				LockBuffer(BackBuffer())
-				For x = 0 To RealGraphicWidth - 1
-					For y = 0 To RealGraphicHeight - 1
+				For x = 0 To opt\RealGraphicWidth - 1
+					For y = 0 To opt\RealGraphicHeight - 1
 						Local Pixel% = ReadPixelFast(x, y, BackBuffer())
 						
-						PokeByte(Bank, (y * (RealGraphicWidth * 3)) + (x * 3), (Pixel Shr 0) And $FF)
-						PokeByte(Bank, (y * (RealGraphicWidth * 3)) + (x * 3) + 1, (Pixel Shr 8) And $FF)
-						PokeByte(Bank, (y * (RealGraphicWidth * 3)) + (x * 3) + 2, (Pixel Shr 16) And $FF)
+						PokeByte(Bank, (y * (opt\RealGraphicWidth * 3)) + (x * 3), (Pixel Shr 0) And $FF)
+						PokeByte(Bank, (y * (opt\RealGraphicWidth * 3)) + (x * 3) + 1, (Pixel Shr 8) And $FF)
+						PokeByte(Bank, (y * (opt\RealGraphicWidth * 3)) + (x * 3) + 2, (Pixel Shr 16) And $FF)
 					Next
 				Next
 				UnlockBuffer(BackBuffer())
 				
-				Local fiBuffer% = FI_ConvertFromRawBits(Bank, RealGraphicWidth, RealGraphicHeight, RealGraphicWidth * 3, 24, $FF0000, $00FF00, $0000FF, True)
+				Local fiBuffer% = FI_ConvertFromRawBits(Bank, opt\RealGraphicWidth, opt\RealGraphicHeight, opt\RealGraphicWidth * 3, 24, $FF0000, $00FF00, $0000FF, True)
 				
 				FI_Save(13, fiBuffer, "Screenshots\Screenshot" + ScreenshotCount + ".png", 0)
 				FI_Unload(fiBuffer)
@@ -2914,7 +2901,7 @@ Repeat
 	
 	CatchErrors("Main Loop / Uncaught")
 	
-	If (Not VSync) Then
+	If (Not opt\VSync) Then
 		Flip(False)
 	Else 
 		Flip(True)
@@ -2964,7 +2951,7 @@ Function MainLoop()
 		If (Not mo\MouseDown1) And (Not mo\MouseHit1) Then GrabbedEntity = 0
 		
 		UpdateMusic()
-		If EnableSFXRelease Then AutoReleaseSounds()
+		If opt\EnableSFXRelease Then AutoReleaseSounds()
 		
 		UpdateStreamSounds()
 		
@@ -3050,7 +3037,7 @@ Function MainLoop()
 				UpdateObjectsTimer = Max(UpdateObjectsTimer - fpst\FPSFactor[0], 0.0)
 			EndIf
 			If fpst\FPSFactor[0] > 0.0 And PlayerRoom\RoomTemplate\Name <> "dimension1499" Then
-				If EnableRoomLights And SecondaryLightOn > 0.5 And TempCamera = Camera Then
+				If opt\EnableRoomLights And SecondaryLightOn > 0.5 And TempCamera = Camera Then
 					UpdateRoomLightsTimer = UpdateRoomLightsTimer + fpst\FPSFactor[0]
 					If UpdateRoomLightsTimer >= 8.0 Then
 						UpdateRoomLightsTimer = 0.0
@@ -3058,17 +3045,17 @@ Function MainLoop()
 				EndIf
 			EndIf
 			LightVolume = CurveValue(TempLightVolume, LightVolume, 50.0)
-			CameraFogRange(Camera, CameraFogNear * LightVolume, CameraFogFar * LightVolume)
+			CameraFogRange(Camera, opt\CameraFogNear * LightVolume, opt\CameraFogFar * LightVolume)
 			CameraFogMode(Camera, 1)
-			CameraRange(Camera, 0.01, Min(CameraFogFar * LightVolume * 1.5, 28.0))	
+			CameraRange(Camera, 0.01, Min(opt\CameraFogFar * LightVolume * 1.5, 28.0))	
 			For r.Rooms = Each Rooms
 				For i = 0 To r\MaxLights - 1
 					If r\Lights[i] <> 0 Then
-						EntityAutoFade(r\LightSprites[i], CameraFogNear * LightVolume, CameraFogFar * LightVolume)
+						EntityAutoFade(r\LightSprites[i], opt\CameraFogNear * LightVolume, opt\CameraFogFar * LightVolume)
 					EndIf
 				Next
 			Next
-			AmbientLight(Brightness, Brightness, Brightness)
+			AmbientLight(opt\Brightness, opt\Brightness, opt\Brightness)
 			me\SndVolume = CurveValue(0.0, me\SndVolume, 5.0)
 			
 			CanSave = True
@@ -3409,7 +3396,7 @@ Function MainLoop()
 		EndIf
 		
 		If KeyHit(key\CONSOLE) Then
-			If CanOpenConsole Then
+			If opt\CanOpenConsole Then
 				If ConsoleOpen Then
 					UsedConsole = True
 					ResumeSounds()
@@ -3477,19 +3464,19 @@ Function RenderMessages()
 		SetFont(fo\FontID[0])
 		If (Not Temp) Then
 			Color(0, 0, 0)
-			Text((GraphicWidth / 2) + 1, (GraphicHeight / 2) + 201, msg\Msg, True, False)
+			Text((opt\GraphicWidth / 2) + 1, (opt\GraphicHeight / 2) + 201, msg\Msg, True, False)
 			Color(Temp2, Temp2, Temp2)
-			Text((GraphicWidth / 2), (GraphicHeight / 2) + 200, msg\Msg, True, False)
+			Text((opt\GraphicWidth / 2), (opt\GraphicHeight / 2) + 200, msg\Msg, True, False)
 		Else
 			Color(0, 0, 0)
-			Text((GraphicWidth / 2) + 1, (GraphicHeight * 0.94) + 1, msg\Msg, True, False)
+			Text((opt\GraphicWidth / 2) + 1, (opt\GraphicHeight * 0.94) + 1, msg\Msg, True, False)
 			Color(Temp2, Temp2, Temp2)
-			Text((GraphicWidth / 2), (GraphicHeight * 0.94), msg\Msg, True, False)
+			Text((opt\GraphicWidth / 2), (opt\GraphicHeight * 0.94), msg\Msg, True, False)
 		EndIf
 	EndIf
 	
 	Color(255, 255, 255)
-	If ShowFPS Then SetFont(fo\ConsoleFont) : Text(20, 20, "FPS: " + ft\FPS) : SetFont(fo\FontID[0])
+	If opt\ShowFPS Then SetFont(fo\ConsoleFont) : Text(20, 20, "FPS: " + ft\FPS) : SetFont(fo\FontID[0])
 End Function
 
 Function Kill(IsBloody% = False)
@@ -3544,20 +3531,20 @@ Function DrawEnding()
 	If me\EndingTimer < -200.0 Then
 		If me\EndingTimer > -700.0 Then 
 			If Rand(1, 150) < Min((Abs(me\EndingTimer) - 200.0), 155.0) Then
-				DrawImage(me\EndingScreen, GraphicWidth / 2 - 400, GraphicHeight / 2 - 400)
+				DrawImage(me\EndingScreen, opt\GraphicWidth / 2 - 400, opt\GraphicHeight / 2 - 400)
 			Else
 				Color(0, 0, 0)
-				Rect(100, 100, GraphicWidth - 200, GraphicHeight - 200)
+				Rect(100, 100, opt\GraphicWidth - 200, opt\GraphicHeight - 200)
 				Color(255, 255, 255)
 			EndIf
 		Else
-			DrawImage(me\EndingScreen, GraphicWidth / 2 - 400, GraphicHeight / 2 - 400)
+			DrawImage(me\EndingScreen, opt\GraphicWidth / 2 - 400, opt\GraphicHeight / 2 - 400)
 			
 			If me\EndingTimer < -1000.0 And me\EndingTimer > -2000.0 Then
 				Width = ImageWidth(tt\ImageID[0])
 				Height = ImageHeight(tt\ImageID[0])
-				x = GraphicWidth / 2 - Width / 2
-				y = GraphicHeight / 2 - Height / 2
+				x = opt\GraphicWidth / 2 - Width / 2
+				y = opt\GraphicHeight / 2 - Height / 2
 				
 				DrawImage(tt\ImageID[0], x, y)
 				
@@ -3615,7 +3602,7 @@ Function DrawEnding()
 	
 	RenderMenuButtons()
 	
-	If DisplayMode = 0 Then DrawImage(CursorIMG), ScaledMouseX(), ScaledMouseY()
+	If opt\DisplayMode = 0 Then DrawImage(CursorIMG), ScaledMouseX(), ScaledMouseY()
 	
 	SetFont(fo\FontID[0])
 End Function
@@ -3649,11 +3636,11 @@ Function UpdateEnding()
 			me\EndingScreen = LoadImage_Strict("GFX\ending_screen.png")
 			
 			ShouldPlay = 23
-			CurrMusicVolume = MusicVolume
+			opt\CurrMusicVolume = opt\MusicVolume
 			
-			CurrMusicVolume = MusicVolume
+			opt\CurrMusicVolume = opt\MusicVolume
 			StopStream_Strict(MusicCHN)
-			MusicCHN = StreamSound_Strict("SFX\Music\" + Music[23] + ".ogg", CurrMusicVolume, 0)
+			MusicCHN = StreamSound_Strict("SFX\Music\" + Music[23] + ".ogg", opt\CurrMusicVolume, 0)
 			NowPlaying = ShouldPlay
 			
 			PlaySound_Strict(LightSFX)
@@ -3676,15 +3663,15 @@ Function UpdateEnding()
 			If me\EndingTimer < -1000.0 And me\EndingTimer > -2000.0 Then
 				Width = ImageWidth(tt\ImageID[0])
 				Height = ImageHeight(tt\ImageID[0])
-				x = GraphicWidth / 2 - Width / 2
-				y = GraphicHeight / 2 - Height / 2
+				x = opt\GraphicWidth / 2 - Width / 2
+				y = opt\GraphicHeight / 2 - Height / 2
 				
 				If AchievementsMenu = 0 Then 
 					x = x + 132 * MenuScale
 					y = y + 122 * MenuScale
 					
-					x = GraphicWidth / 2 - Width / 2
-					y = GraphicHeight / 2 - Height / 2
+					x = opt\GraphicWidth / 2 - Width / 2
+					y = opt\GraphicHeight / 2 - Height / 2
 					x = x + Width / 2
 					y = y + Height - 100 * MenuScale
 					
@@ -3701,7 +3688,7 @@ Function UpdateEnding()
 						Next
 						StopStream_Strict(MusicCHN)
 						MusicCHN = StreamSound_Strict("SFX\Music\" + Music[NowPlaying] + ".ogg", 0.0, Mode)
-						SetStreamVolume_Strict(MusicCHN, 1.0 * MusicVolume)
+						SetStreamVolume_Strict(MusicCHN, 1.0 * opt\MusicVolume)
 						FlushKeys()
 						me\EndingTimer = -2000.0
 						DeleteMenuGadgets()
@@ -3747,7 +3734,7 @@ Function InitCredits()
 End Function
 
 Function DrawCredits()
-    Local Credits_Y# = (me\EndingTimer + 2000.0) / 2 + (GraphicHeight + 10.0)
+    Local Credits_Y# = (me\EndingTimer + 2000.0) / 2 + (opt\GraphicHeight + 10.0)
     Local cl.CreditsLine
     Local ID%
     Local EndLinesAmount%
@@ -3756,7 +3743,7 @@ Function DrawCredits()
     Cls()
 	
 	If Rand(1, 300) > 1 Then
-		DrawImage(me\CreditsScreen, GraphicWidth / 2 - 400, GraphicHeight / 2 - 400)
+		DrawImage(me\CreditsScreen, opt\GraphicWidth / 2 - 400, opt\GraphicHeight / 2 - 400)
 	EndIf
 	
 	ID = 0
@@ -3767,12 +3754,12 @@ Function DrawCredits()
 		cl\ID = ID
 		If Left(cl\Txt, 1) = "*"
 			SetFont(fo\CreditsFontID[1])
-			If (Not cl\Stay) Then Text(GraphicWidth / 2, Credits_Y + (24 * cl\ID * MenuScale), Right(cl\Txt, Len(cl\Txt) - 1), True)
+			If (Not cl\Stay) Then Text(opt\GraphicWidth / 2, Credits_Y + (24 * cl\ID * MenuScale), Right(cl\Txt, Len(cl\Txt) - 1), True)
 		ElseIf Left(cl\Txt, 1) = "/"
 			LastCreditLine = Before(cl)
 		Else
 			SetFont(fo\CreditsFontID[0])
-			If (Not cl\Stay) Then Text(GraphicWidth / 2, Credits_Y + (24 * cl\ID * MenuScale), cl\Txt, True)
+			If (Not cl\Stay) Then Text(opt\GraphicWidth / 2, Credits_Y + (24 * cl\ID * MenuScale), cl\Txt, True)
 		EndIf
 		If LastCreditLine <> Null Then
 			If cl\ID > LastCreditLine\ID Then cl\Stay = True
@@ -3794,9 +3781,9 @@ Function DrawCredits()
 			If cl\Stay
 				SetFont(fo\CreditsFontID[0])
 				If Left(cl\Txt, 1) = "/"
-					Text(GraphicWidth / 2, (GraphicHeight / 2) + (EndLinesAmount / 2) + (24 * cl\ID * MenuScale), Right(cl\Txt, Len(cl\Txt) - 1), True)
+					Text(opt\GraphicWidth / 2, (opt\GraphicHeight / 2) + (EndLinesAmount / 2) + (24 * cl\ID * MenuScale), Right(cl\Txt, Len(cl\Txt) - 1), True)
 				Else
-					Text(GraphicWidth / 2, (GraphicHeight / 2) + (24 * (cl\ID - LastCreditLine\ID) * MenuScale) - ((EndLinesAmount / 2) * 24 * MenuScale), cl\Txt, True)
+					Text(opt\GraphicWidth / 2, (opt\GraphicHeight / 2) + (24 * (cl\ID - LastCreditLine\ID) * MenuScale) - ((EndLinesAmount / 2) * 24 * MenuScale), cl\Txt, True)
 				EndIf
 			EndIf
 		Next
@@ -3813,7 +3800,7 @@ Function DrawCredits()
 End Function
 
 Function UpdateCredits()
-    Local Credits_Y# = (me\EndingTimer + 2000.0) / 2 + (GraphicHeight + 10.0)
+    Local Credits_Y# = (me\EndingTimer + 2000.0) / 2 + (opt\GraphicHeight + 10.0)
     Local cl.CreditsLine
     Local ID%
     Local EndLinesAmount%
@@ -3931,13 +3918,13 @@ Function MovePlayer()
 						Temp = 0.0
 						If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp = 1
 						BreathCHN = PlaySound_Strict(BreathSFX((Temp), Rand(1, 3)))
-						ChannelVolume(BreathCHN, Min((70.0 - me\Stamina) / 70.0, 1.0) * SFXVolume)
+						ChannelVolume(BreathCHN, Min((70.0 - me\Stamina) / 70.0, 1.0) * opt\SFXVolume)
 					Else
 						If (Not ChannelPlaying(BreathCHN)) Then
 							Temp = 0.0
 							If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp = 1
 							BreathCHN = PlaySound_Strict(BreathSFX((Temp), Rand(1, 3)))
-							ChannelVolume(BreathCHN, Min((70.0 - me\Stamina) / 70.0, 1.0) * SFXVolume)		
+							ChannelVolume(BreathCHN, Min((70.0 - me\Stamina) / 70.0, 1.0) * opt\SFXVolume)		
 						EndIf
 					EndIf
 				EndIf
@@ -4012,18 +3999,18 @@ Function MovePlayer()
 					If Sprint = 1.0 Then
 						me\SndVolume = Max(4.0, me\SndVolume)
 						TempCHN = PlaySound_Strict(StepSFX(Temp, 0, Rand(0, 7 - Temp3)))
-						ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.6)) * SFXVolume)
+						ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume)
 					Else
 						me\SndVolume = Max(2.5 - (me\Crouch * 0.6), me\SndVolume)
 						TempCHN = PlaySound_Strict(StepSFX(Temp, 1 - (Temp3 / 5), Rand(0, 7 - Temp3)))
-						ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.6)) * SFXVolume)
+						ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume)
 					EndIf
 				ElseIf CurrStepSFX = 1
 					TempCHN = PlaySound_Strict(StepSFX(2, 0, Rand(0, 2)))
-					ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.4)) * SFXVolume)
+					ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.4)) * opt\SFXVolume)
 				ElseIf CurrStepSFX = 2
 					TempCHN = PlaySound_Strict(StepSFX(3, 0, Rand(0, 2)))
-					ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.4)) * SFXVolume)
+					ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.4)) * opt\SFXVolume)
 				EndIf
 			EndIf	
 		EndIf
@@ -4190,7 +4177,7 @@ Function MovePlayer()
 			de.Decals = CreateDecal(Rand(15, 16), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rand(360.0), 0.0, Rnd(0.03, 0.08) * Min(me\Injuries, 3.0))
 			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + 0.009 : UpdateDecals()  
 			TempCHN = PlaySound_Strict(DripSFX[Rand(0, 2)])
-			ChannelVolume(TempCHN, Rnd(0.0, 0.8) * SFXVolume)
+			ChannelVolume(TempCHN, Rnd(0.0, 0.8) * opt\SFXVolume)
 			ChannelPitch(TempCHN, Rand(20000, 30000))
 			
 			FreeEntity(Pvt)
@@ -4227,7 +4214,7 @@ Function MovePlayer()
 	If me\HeartBeatVolume > 0.0 Then
 		If me\HeartBeatTimer =< 0.0 Then
 			TempCHN = PlaySound_Strict(HeartBeatSFX)
-			ChannelVolume(TempCHN, me\HeartBeatVolume * SFXVolume)
+			ChannelVolume(TempCHN, me\HeartBeatVolume * opt\SFXVolume)
 			
 			me\HeartBeatTimer = 70.0 * (60.0 / Max(me\HeartBeatRate, 1.0))
 		Else
@@ -4244,7 +4231,7 @@ Function MouseLook()
 	
 	me\CameraShake = Max(me\CameraShake - (fpst\FPSFactor[0] / 10.0), 0.0)
 	
-	CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / (Tan((2.0 * ATan(Tan((FOV) / 2.0) * (Float(RealGraphicWidth) / Float(RealGraphicHeight)))) / 2.0)))
+	CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / (Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * (Float(opt\RealGraphicWidth) / Float(opt\RealGraphicHeight)))) / 2.0)))
 	me\CurrCameraZoom = Max(me\CurrCameraZoom - fpst\FPSFactor[0], 0.0)
 	
 	If me\KillTimer >= 0.0 And me\FallTimer >= 0.0 Then
@@ -4257,7 +4244,7 @@ Function MouseLook()
 		RotateEntity(Camera, 0.0, EntityYaw(me\Collider), Roll * 0.5)
 		
 		; ~ Update the smoothing que to smooth the movement of the mouse
-		mo\Mouse_X_Speed_1 = CurveValue(MouseXSpeed() * (MouseSensitivity + 0.6) , mo\Mouse_X_Speed_1, (6.0 / (MouseSensitivity + 1.0)) * MouseSmoothing) 
+		mo\Mouse_X_Speed_1 = CurveValue(MouseXSpeed() * (opt\MouseSensitivity + 0.6) , mo\Mouse_X_Speed_1, (6.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing) 
 		If IsNaN(mo\Mouse_X_Speed_1) Then mo\Mouse_X_Speed_1 = 0.0
 		If fpst\PrevFPSFactor > 0.0 Then
 			If Abs(fpst\FPSFactor[0] / fpst\PrevFPSFactor - 1.0) > 1.0 Then
@@ -4266,10 +4253,10 @@ Function MouseLook()
 				mo\Mouse_Y_Speed_1 = 0.0
 			EndIf
 		EndIf
-		If InvertMouse Then
-			mo\Mouse_Y_Speed_1 = CurveValue(-MouseYSpeed() * (MouseSensitivity + 0.6), mo\Mouse_Y_Speed_1, (6.0 / (MouseSensitivity + 1.0)) * MouseSmoothing)
+		If opt\InvertMouse Then
+			mo\Mouse_Y_Speed_1 = CurveValue(-MouseYSpeed() * (opt\MouseSensitivity + 0.6), mo\Mouse_Y_Speed_1, (6.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing)
 		Else
-			mo\Mouse_Y_Speed_1 = CurveValue(MouseYSpeed () * (MouseSensitivity + 0.6), mo\Mouse_Y_Speed_1, (6.0 / (MouseSensitivity + 1.0)) * MouseSmoothing)
+			mo\Mouse_Y_Speed_1 = CurveValue(MouseYSpeed () * (opt\MouseSensitivity + 0.6), mo\Mouse_Y_Speed_1, (6.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing)
 		EndIf
 		If IsNaN(mo\Mouse_Y_Speed_1) Then mo\Mouse_Y_Speed_1 = 0.0
 		
@@ -4315,14 +4302,14 @@ Function MouseLook()
 			me\HeadDropSpeed = me\HeadDropSpeed - (0.002 * fpst\FPSFactor[0])
 		EndIf
 		
-		If InvertMouse Then
+		If opt\InvertMouse Then
 			TurnEntity(Camera, (-MouseYSpeed()) * 0.05 * fpst\FPSFactor[0], (-MouseXSpeed()) * 0.15 * fpst\FPSFactor[0], 0.0)
 		Else
 			TurnEntity(Camera, MouseYSpeed() * 0.05 * fpst\FPSFactor[0], (-MouseXSpeed()) * 0.15 * fpst\FPSFactor[0], 0.0)
 		EndIf
 	EndIf
 	
-	If ParticleAmount = 2 Then
+	If opt\ParticleAmount = 2 Then
 		If Rand(35) = 1 Then
 			Local Pvt% = CreatePivot()
 			
@@ -4542,7 +4529,7 @@ Function DrawGUI()
 									If e\Img = 0 Then e\Img = LoadImage_Strict("GFX\npcs\scp_106_face.png")
 								EndIf
 							Else
-								DrawImage(e\Img, GraphicWidth / 2 - Rand(390, 310), GraphicHeight / 2 - Rand(290, 310))
+								DrawImage(e\Img, opt\GraphicWidth / 2 - Rand(390, 310), opt\GraphicHeight / 2 - Rand(290, 310))
 							EndIf
 						Else
 							If e\Img <> 0 Then FreeImage(e\Img) : e\Img = 0
@@ -4560,7 +4547,7 @@ Function DrawGUI()
 								EndIf
 							EndIf
 						Else
-							DrawImage(e\Img, GraphicWidth / 2 - Rand(390, 310), GraphicHeight / 2 - Rand(290, 310))
+							DrawImage(e\Img, opt\GraphicWidth / 2 - Rand(390, 310), opt\GraphicHeight / 2 - Rand(290, 310))
 						EndIf
 					Else
 						If e\Img <> 0 Then FreeImage(e\Img) : e\Img = 0
@@ -4589,7 +4576,7 @@ Function DrawGUI()
 		
 		FreeEntity(Temp)
 		
-		DrawImage(tt\IconID[4], GraphicWidth / 2 + Sin(YawValue) * (GraphicWidth / 3) - 32, GraphicHeight / 2 - Sin(PitchValue) * (GraphicHeight / 3) - 32)
+		DrawImage(tt\IconID[4], opt\GraphicWidth / 2 + Sin(YawValue) * (opt\GraphicWidth / 3) - 32, opt\GraphicHeight / 2 - Sin(PitchValue) * (opt\GraphicHeight / 3) - 32)
 	EndIf
 	
 	If ClosestItem <> Null Then
@@ -4600,14 +4587,14 @@ Function DrawGUI()
 		If PitchValue > 90.0 And PitchValue =< 180.0 Then PitchValue = 90.0
 		If PitchValue > 180.0 And PitchValue < 270.0 Then PitchValue = 270.0
 		
-		DrawImage(tt\IconID[5], GraphicWidth / 2 + Sin(YawValue) * (GraphicWidth / 3) - 32, GraphicHeight / 2 - Sin(PitchValue) * (GraphicHeight / 3) - 32)
+		DrawImage(tt\IconID[5], opt\GraphicWidth / 2 + Sin(YawValue) * (opt\GraphicWidth / 3) - 32, opt\GraphicHeight / 2 - Sin(PitchValue) * (opt\GraphicHeight / 3) - 32)
 	EndIf
 	
-	If DrawHandIcon Then DrawImage(tt\IconID[4], GraphicWidth / 2 - 32, GraphicHeight / 2 - 32)
+	If DrawHandIcon Then DrawImage(tt\IconID[4], opt\GraphicWidth / 2 - 32, opt\GraphicHeight / 2 - 32)
 	For i = 0 To 3
 		If DrawArrowIcon[i] Then
-			x = GraphicWidth / 2 - 32
-			y = GraphicHeight / 2 - 32		
+			x = opt\GraphicWidth / 2 - 32
+			y = opt\GraphicHeight / 2 - 32		
 			Select i
 				Case 0
 					;[Block]
@@ -4636,15 +4623,15 @@ Function DrawGUI()
 	
 	If I_294\Using Then Use294()
 	
-	If HUDEnabled Then 
+	If opt\HUDEnabled Then 
 		Width = 204
 		Height = 20
 		x = 80
-		y = GraphicHeight - 95
+		y = opt\GraphicHeight - 95
 		
 		Color(255, 255, 255)
 		Rect(x, y, Width, Height, False)
-		If BarStyle = 1 Then
+		If opt\BarStyle = 1 Then
 			If me\BlinkTimer < 160.0 Then
 		    	Color(100, 0, 0)
 	    	Else
@@ -4678,11 +4665,11 @@ Function DrawGUI()
 		
 		DrawImage(tt\IconID[3], x - 50, y)
 		
-		y = GraphicHeight - 55.0
+		y = opt\GraphicHeight - 55.0
 		
 		Color(255, 255, 255)
 		Rect(x, y, Width, Height, False)
-		If BarStyle = 1 Then
+		If opt\BarStyle = 1 Then
 			If me\Stamina < 27.0 Then
 		  	    Color(50, 0, 0)
 	    	Else
@@ -4783,7 +4770,7 @@ Function DrawGUI()
 	EndIf
 	
 	If SelectedScreen <> Null Then
-		DrawImage(SelectedScreen\Img, GraphicWidth / 2 - ImageWidth(SelectedScreen\Img) / 2, GraphicHeight / 2 - ImageHeight(SelectedScreen\Img) / 2)
+		DrawImage(SelectedScreen\Img, opt\GraphicWidth / 2 - ImageWidth(SelectedScreen\Img) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedScreen\Img) / 2)
 		
 		If mo\MouseUp1 Lor mo\MouseHit2 Then
 			FreeImage(SelectedScreen\Img) : SelectedScreen\Img = 0
@@ -4813,22 +4800,22 @@ Function DrawGUI()
 			CameraProject(Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) - MeshHeight(o\ButtonModelID[0]) * 0.015, EntityZ(ClosestButton, True))
 			Scale = (ProjectedY() - ProjY) / 462.0
 			
-			x = GraphicWidth / 2 - ImageWidth(tt\ImageID[4]) * Scale / 2
-			y = GraphicHeight / 2 - ImageHeight(tt\ImageID[4]) * Scale / 2		
+			x = opt\GraphicWidth / 2 - ImageWidth(tt\ImageID[4]) * Scale / 2
+			y = opt\GraphicHeight / 2 - ImageHeight(tt\ImageID[4]) * Scale / 2		
 			
 			SetFont(fo\FontID[2])
 			If msg\KeypadMsg <> "" Then 
-				If (msg\KeypadTimer Mod 70.0) < 35.0 Then Text(GraphicWidth / 2, y + 124 * Scale, msg\KeypadMsg, True, True)
+				If (msg\KeypadTimer Mod 70.0) < 35.0 Then Text(opt\GraphicWidth / 2, y + 124 * Scale, msg\KeypadMsg, True, True)
 			Else
-				Text(GraphicWidth / 2, y + 70 * Scale, "ACCESS CODE: ", True, True)	
+				Text(opt\GraphicWidth / 2, y + 70 * Scale, "ACCESS CODE: ", True, True)	
 				SetFont(fo\FontID[3])
-				Text(GraphicWidth / 2, y + 124 * Scale, msg\KeypadInput, True, True)
+				Text(opt\GraphicWidth / 2, y + 124 * Scale, msg\KeypadInput, True, True)
 			EndIf
 			
 			x = x + 44 * Scale
 			y = y + 249 * Scale
 			
-			If DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+			If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 		EndIf
 	EndIf
 	
@@ -4850,8 +4837,8 @@ Function DrawGUI()
 		
 		Local TempX% = 0
 		
-		x = GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
-		y = GraphicHeight / 2 - INVENTORY_GFX_SIZE * (Float(OtherSize) / MaxItemAmount * 2 - 1) - INVENTORY_GFX_SPACING
+		x = opt\GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
+		y = opt\GraphicHeight / 2 - INVENTORY_GFX_SIZE * (Float(OtherSize) / MaxItemAmount * 2 - 1) - INVENTORY_GFX_SPACING
 		
 		IsMouseOn = -1
 		For n = 0 To OtherSize - 1
@@ -4886,7 +4873,7 @@ Function DrawGUI()
 			If TempX = 5 Then 
 				TempX = 0
 				y = y + INVENTORY_GFX_SIZE * 2 
-				x = GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1.0)) / 2
+				x = opt\GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1.0)) / 2
 			EndIf
 		Next
 		
@@ -4900,10 +4887,10 @@ Function DrawGUI()
 			EndIf
 		EndIf
 		
-		If DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+		If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	ElseIf InvOpen Then
-		x = GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
-		y = GraphicHeight / 2 - INVENTORY_GFX_SIZE - INVENTORY_GFX_SPACING
+		x = opt\GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
+		y = opt\GraphicHeight / 2 - INVENTORY_GFX_SIZE - INVENTORY_GFX_SPACING
 		
 		IsMouseOn = -1
 		For n = 0 To MaxItemAmount - 1
@@ -5017,7 +5004,7 @@ Function DrawGUI()
 			x = x + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING
 			If n = 4 Then 
 				y = y + INVENTORY_GFX_SIZE * 2 
-				x = GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
+				x = opt\GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
 			EndIf
 		Next
 		
@@ -5031,7 +5018,7 @@ Function DrawGUI()
 			EndIf
 		EndIf
 		
-		If DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+		If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	Else
 		If SelectedItem <> Null Then
 			Select SelectedItem\ItemTemplate\TempName
@@ -5041,14 +5028,14 @@ Function DrawGUI()
 						If wi\NightVision > 0 And wi\NightVision <> 1 Then
 							Return
 						Else
-							DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+							DrawImage(SelectedItem\ItemTemplate\InvImg, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 							
 							Width = 300
 							Height = 20
-							x = GraphicWidth / 2 - Width / 2
-							y = GraphicHeight / 2 + 80
+							x = opt\GraphicWidth / 2 - Width / 2
+							y = opt\GraphicHeight / 2 + 80
 							Rect(x, y, Width + 4, Height, False)
-							If BarStyle = 1 Then
+							If opt\BarStyle = 1 Then
 								Color(100, 100, 100)	
 								Rect(x + 3, y + 3, Float(SelectedItem\State3 * (Width - 6.0) / 100.0), 14)	
 							Else
@@ -5065,14 +5052,14 @@ Function DrawGUI()
 						If wi\NightVision > 0 And wi\NightVision <> 2 Then
 							Return
 						Else
-							DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+							DrawImage(SelectedItem\ItemTemplate\InvImg, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 							
 							Width = 300
 							Height = 20
-							x = GraphicWidth / 2 - Width / 2
-							y = GraphicHeight / 2 + 80
+							x = opt\GraphicWidth / 2 - Width / 2
+							y = opt\GraphicHeight / 2 + 80
 							Rect(x, y, Width + 4, Height, False)
-							If BarStyle = 1 Then
+							If opt\BarStyle = 1 Then
 								Color(100, 100, 100)	
 								Rect(x + 3, y + 3, Float(SelectedItem\State3 * (Width - 6.0) / 100.0), 14)	
 							Else
@@ -5089,14 +5076,14 @@ Function DrawGUI()
 						If wi\NightVision > 0 And wi\NightVision <> 3 Then
 							Return
 						Else
-							DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+							DrawImage(SelectedItem\ItemTemplate\InvImg, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 							
 							Width = 300
 							Height = 20
-							x = GraphicWidth / 2 - Width / 2
-							y = GraphicHeight / 2 + 80
+							x = opt\GraphicWidth / 2 - Width / 2
+							y = opt\GraphicHeight / 2 + 80
 							Rect(x, y, Width + 4, Height, False)
-							If BarStyle = 1 Then
+							If opt\BarStyle = 1 Then
 								Color(100, 100, 100)	
 								Rect(x + 3, y + 3, Float(SelectedItem\State3 * (Width - 6.0) / 100.0), 14)	
 							Else
@@ -5109,21 +5096,21 @@ Function DrawGUI()
 					;[End Block]
 				Case "key0", "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "scp860", "hand", "hand2", "25ct", "scp005", "key", "coin"
 					;[Block]
-					DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+					DrawImage(SelectedItem\ItemTemplate\InvImg, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 					;[End Block]
 				Case "firstaid", "finefirstaid", "firstaid2"
 					;[Block]
 					If me\Bloodloss = 0.0 And me\Injuries = 0.0 Then
 						Return
 					Else
-						DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						DrawImage(SelectedItem\ItemTemplate\InvImg, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
 						Width = 300.0
 						Height = 20.0
-						x = GraphicWidth / 2 - Width / 2
-						y = GraphicHeight / 2 + 80
+						x = opt\GraphicWidth / 2 - Width / 2
+						y = opt\GraphicHeight / 2 + 80
 						Rect(x, y, Width + 4, Height, False)
-						If BarStyle = 1 Then
+						If opt\BarStyle = 1 Then
 							Color(100, 100, 100)	
 							Rect(x + 3, y + 3, Float(SelectedItem\State * (Width - 6.0) / 100.0), 14)	
 						Else
@@ -5175,7 +5162,7 @@ Function DrawGUI()
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
-					DrawImage(SelectedItem\ItemTemplate\Img, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\Img) / 2)
+					DrawImage(SelectedItem\ItemTemplate\Img, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\Img) / 2)
 					;[End Block]
 				Case "scp1025"
 					;[Block]
@@ -5187,7 +5174,7 @@ Function DrawGUI()
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
-					DrawImage(SelectedItem\ItemTemplate\Img, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\Img) / 2)
+					DrawImage(SelectedItem\ItemTemplate\Img, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\Img) / 2)
 					;[End Block]
 				Case "radio", "18vradio", "fineradio", "veryfineradio"
 					;[Block]
@@ -5202,8 +5189,8 @@ Function DrawGUI()
 					
 					StrTemp = ""
 					
-					x = GraphicWidth - ImageWidth(SelectedItem\ItemTemplate\Img)
-					y = GraphicHeight - ImageHeight(SelectedItem\ItemTemplate\Img)
+					x = opt\GraphicWidth - ImageWidth(SelectedItem\ItemTemplate\Img)
+					y = opt\GraphicHeight - ImageHeight(SelectedItem\ItemTemplate\Img)
 					
 					DrawImage(SelectedItem\ItemTemplate\Img, x, y)
 					
@@ -5213,7 +5200,7 @@ Function DrawGUI()
 								Case 0
 									;[Block]
 									StrTemp = "        USER TRACK PLAYER - "
-									If (Not EnableUserTracks) Then
+									If (Not opt\EnableUserTracks) Then
 										StrTemp = StrTemp + "NOT ENABLED     "
 									ElseIf UserTrackMusicAmount < 1
 										StrTemp = StrTemp + "NO TRACKS FOUND     "
@@ -5274,14 +5261,14 @@ Function DrawGUI()
 				Case "hazmatsuit", "hazmatsuit2", "hazmatsuit3"
 					;[Block]
 					If wi\BallisticVest = 0 Then
-						DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						DrawImage(SelectedItem\ItemTemplate\InvImg, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
 						Width = 300
 						Height = 20
-						x = GraphicWidth / 2 - Width / 2
-						y = GraphicHeight / 2 + 80.0
+						x = opt\GraphicWidth / 2 - Width / 2
+						y = opt\GraphicHeight / 2 + 80.0
 						Rect(x, y, Width + 4, Height, False)
-						If BarStyle = 1 Then
+						If opt\BarStyle = 1 Then
 							Color(100, 100, 100)	
 					        Rect(x + 3, y + 3, Float(SelectedItem\State * (Width - 6.0) / 100.0), 14)	
 						Else
@@ -5293,14 +5280,14 @@ Function DrawGUI()
 					;[End Block]
 				Case "vest", "finevest"
 					;[Block]
-					DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+					DrawImage(SelectedItem\ItemTemplate\InvImg, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 					
 					Width = 300
 					Height = 20
-					x = GraphicWidth / 2 - Width / 2
-					y = GraphicHeight / 2 + 80.0
+					x = opt\GraphicWidth / 2 - Width / 2
+					y = opt\GraphicHeight / 2 + 80.0
 					Rect(x, y, Width + 4, Height, False)
-					If BarStyle = 1 Then
+					If opt\BarStyle = 1 Then
 						Color(100, 100, 100)	
 						Rect(x + 3, y + 3, Float(SelectedItem\State * (Width - 6.0) / 100.0), 14)	
 					Else
@@ -5312,14 +5299,14 @@ Function DrawGUI()
 				Case "gasmask", "supergasmask", "gasmask3"
 					;[Block]
 					If PreventItemOverlapping(True, False, False, False, False) Then
-						DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						DrawImage(SelectedItem\ItemTemplate\InvImg, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
 						Width = 300
 						Height = 20
-						x = GraphicWidth / 2 - Width / 2
-						y = GraphicHeight / 2 + 80
+						x = opt\GraphicWidth / 2 - Width / 2
+						y = opt\GraphicHeight / 2 + 80
 						Rect(x, y, Width + 4, Height, False)
-						If BarStyle = 1 Then
+						If opt\BarStyle = 1 Then
 							Color(100, 100, 100)	
 					        Rect(x + 3, y + 3, Float(SelectedItem\State * (Width - 6.0) / 100.0), 14)	
 						Else
@@ -5336,8 +5323,8 @@ Function DrawGUI()
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
-					x = GraphicWidth - ImageWidth(SelectedItem\ItemTemplate\Img) * 0.5 + 20.0
-					y = GraphicHeight - ImageHeight(SelectedItem\ItemTemplate\Img) * 0.4 - 85.0
+					x = opt\GraphicWidth - ImageWidth(SelectedItem\ItemTemplate\Img) * 0.5 + 20.0
+					y = opt\GraphicHeight - ImageHeight(SelectedItem\ItemTemplate\Img) * 0.4 - 85.0
 					
 					Local PlayerX%, PlayerZ%
 					
@@ -5425,8 +5412,8 @@ Function DrawGUI()
 							If SelectedItem\ItemTemplate\Name = "S-NAV Navigator" Then Color(100, 0, 0)
 							Rect(xx + 80, yy + 70, 270, 230, False)
 							
-							x = GraphicWidth - ImageWidth(SelectedItem\ItemTemplate\Img) * 0.5 + 20.0
-							y = GraphicHeight - ImageHeight(SelectedItem\ItemTemplate\Img) * 0.4 - 85.0
+							x = opt\GraphicWidth - ImageWidth(SelectedItem\ItemTemplate\Img) * 0.5 + 20.0
+							y = opt\GraphicHeight - ImageHeight(SelectedItem\ItemTemplate\Img) * 0.4 - 85.0
 							
 							If SelectedItem\ItemTemplate\Name = "S-NAV Navigator" Then 
 								Color(100, 0, 0)
@@ -5518,14 +5505,14 @@ Function DrawGUI()
 				Case "scp1499", "super1499"
 					;[Block]
 					If PreventItemOverlapping(False, False, True, False, False) Then
-						DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						DrawImage(SelectedItem\ItemTemplate\InvImg, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
 						Width = 300.0
 						Height = 20.0
-						x = GraphicWidth / 2 - Width / 2
-						y = GraphicHeight / 2 + 80
+						x = opt\GraphicWidth / 2 - Width / 2
+						y = opt\GraphicHeight / 2 + 80
 						Rect(x, y, Width + 4, Height, False)
-						If BarStyle = 1 Then
+						If opt\BarStyle = 1 Then
 							Color(100, 100, 100)	
 					        Rect(x + 3, y + 3, Float(SelectedItem\State * (Width - 6.0) / 100.0), 14)	
 						Else
@@ -5543,7 +5530,7 @@ Function DrawGUI()
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
-					DrawImage(SelectedItem\ItemTemplate\Img, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\Img) / 2)
+					DrawImage(SelectedItem\ItemTemplate\Img, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\Img) / 2)
 					;[End Block]
 				Case "oldpaper"
 					;[Block]
@@ -5554,19 +5541,19 @@ Function DrawGUI()
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
-					DrawImage(SelectedItem\ItemTemplate\Img, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\Img) / 2)
+					DrawImage(SelectedItem\ItemTemplate\Img, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\Img) / 2)
 					;[End Block]
 				Case "helmet"
 					;[Block]
 					If PreventItemOverlapping(False, False, False, True, False) Then
-						DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						DrawImage(SelectedItem\ItemTemplate\InvImg, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
 					    Width = 300
 					    Height = 20
-					    x = GraphicWidth / 2 - Width / 2
-					    y = GraphicHeight / 2 + 80
+					    x = opt\GraphicWidth / 2 - Width / 2
+					    y = opt\GraphicHeight / 2 + 80
 					    Rect(x, y, Width + 4, Height, False)
-						If BarStyle = 1 Then
+						If opt\BarStyle = 1 Then
 							Color(100, 100, 100)	
 					        Rect(x + 3, y + 3, Float(SelectedItem\State * (Width - 6.0) / 100.0), 14)	
 						Else
@@ -5579,14 +5566,14 @@ Function DrawGUI()
 				Case "scramble"
 					;[Block]
 					If PreventItemOverlapping(False, False, False, False, True) Then
-						DrawImage(SelectedItem\ItemTemplate\InvImg, GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						DrawImage(SelectedItem\ItemTemplate\InvImg, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
 						Width = 300
 						Height = 20
-						x = GraphicWidth / 2 - Width / 2
-						y = GraphicHeight / 2 + 80
+						x = opt\GraphicWidth / 2 - Width / 2
+						y = opt\GraphicHeight / 2 + 80
 						Rect(x, y, Width + 4, Height, False)
-						If BarStyle = 1 Then
+						If opt\BarStyle = 1 Then
 							Color(100, 100, 100)	
 							Rect(x + 3, y + 3, Float(SelectedItem\State3 * (Width - 6.0) / 100.0), 14)	
 						Else
@@ -5716,8 +5703,8 @@ Function UpdateGUI()
 			CameraProject(Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) - MeshHeight(o\ButtonModelID[0]) * 0.015, EntityZ(ClosestButton, True))
 			Scale = (ProjectedY() - ProjY) / 462.0
 			
-			x = GraphicWidth / 2 - ImageWidth(tt\ImageID[4]) * Scale / 2
-			y = GraphicHeight / 2 - ImageHeight(tt\ImageID[4]) * Scale / 2		
+			x = opt\GraphicWidth / 2 - ImageWidth(tt\ImageID[4]) * Scale / 2
+			y = opt\GraphicHeight / 2 - ImageHeight(tt\ImageID[4]) * Scale / 2		
 			
 			msg\Msg = ""
 			msg\Timer = 0.0
@@ -5859,8 +5846,8 @@ Function UpdateGUI()
 		
 		Local TempX% = 0
 		
-		x = GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
-		y = GraphicHeight / 2 - INVENTORY_GFX_SIZE * (Float(OtherSize) / MaxItemAmount * 2 - 1) - INVENTORY_GFX_SPACING
+		x = opt\GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
+		y = opt\GraphicHeight / 2 - INVENTORY_GFX_SIZE * (Float(OtherSize) / MaxItemAmount * 2 - 1) - INVENTORY_GFX_SPACING
 		
 		ItemAmount = 0
 		IsMouseOn = -1
@@ -5908,7 +5895,7 @@ Function UpdateGUI()
 			If TempX = 5 Then 
 				TempX = 0
 				y = y + INVENTORY_GFX_SIZE * 2 
-				x = GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1.0)) / 2
+				x = opt\GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1.0)) / 2
 			EndIf
 		Next
 		
@@ -6003,8 +5990,8 @@ Function UpdateGUI()
 	ElseIf InvOpen Then
 		SelectedDoor = Null
 		
-		x = GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
-		y = GraphicHeight / 2 - INVENTORY_GFX_SIZE - INVENTORY_GFX_SPACING
+		x = opt\GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
+		y = opt\GraphicHeight / 2 - INVENTORY_GFX_SIZE - INVENTORY_GFX_SPACING
 		
 		ItemAmount = 0
 		IsMouseOn = -1
@@ -6052,7 +6039,7 @@ Function UpdateGUI()
 			x = x + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING
 			If n = 4 Then 
 				y = y + INVENTORY_GFX_SIZE * 2 
-				x = GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
+				x = opt\GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
 			EndIf
 		Next
 		
@@ -6380,12 +6367,12 @@ Function UpdateGUI()
 								
 								If wi\NightVision = 1 Then
 									msg\Msg = "You removed the goggles."
-									CameraFogFar = StoredCameraFogFar
+									opt\CameraFogFar = opt\StoredCameraFogFar
 								Else
 									msg\Msg = "You put on the goggles."
 									wi\NightVision = 0
-									StoredCameraFogFar = CameraFogFar
-									CameraFogFar = 30.0
+									opt\StoredCameraFogFar = opt\CameraFogFar
+									opt\CameraFogFar = 30.0
 								EndIf
 								wi\NightVision = (Not wi\NightVision)
 								SelectedItem\State3 = 0.0
@@ -6413,12 +6400,12 @@ Function UpdateGUI()
 								
 								If wi\NightVision = 2 Then
 									msg\Msg = "You removed the goggles."
-									CameraFogFar = StoredCameraFogFar
+									opt\CameraFogFar = opt\StoredCameraFogFar
 								Else
 									msg\Msg = "You put on the goggles."
 									wi\NightVision = 0
-									StoredCameraFogFar = CameraFogFar
-									CameraFogFar = 30.0
+									opt\StoredCameraFogFar = opt\CameraFogFar
+									opt\CameraFogFar = 30.0
 								EndIf
 								wi\NightVision = (Not wi\NightVision) * 2
 								SelectedItem\State3 = 0.0
@@ -6446,12 +6433,12 @@ Function UpdateGUI()
 								
 								If wi\NightVision = 3 Then
 									msg\Msg = "You removed the goggles."
-									CameraFogFar = StoredCameraFogFar
+									opt\CameraFogFar = opt\StoredCameraFogFar
 								Else
 									msg\Msg = "You put on the goggles."
 									wi\NightVision = 0
-									StoredCameraFogFar = CameraFogFar
-									CameraFogFar = 30.0
+									opt\StoredCameraFogFar = opt\CameraFogFar
+									opt\CameraFogFar = 30.0
 								EndIf
 								wi\NightVision = (Not wi\NightVision) * 3
 								SelectedItem\State3 = 0.0
@@ -6646,7 +6633,7 @@ Function UpdateGUI()
 											;[End Block]
 										Case 2
 											;[Block]
-											InvertMouse = (Not InvertMouse)
+											opt\InvertMouse = (Not opt\InvertMouse)
 											msg\Msg = "You suddenly find it very difficult to turn your head."
 											;[End Block]
 										Case 3
@@ -6883,8 +6870,8 @@ Function UpdateGUI()
 						RadioState[0] = -1.0
 					EndIf
 					
-					x = GraphicWidth - ImageWidth(SelectedItem\ItemTemplate\Img)
-					y = GraphicHeight - ImageHeight(SelectedItem\ItemTemplate\Img)
+					x = opt\GraphicWidth - ImageWidth(SelectedItem\ItemTemplate\Img)
+					y = opt\GraphicHeight - ImageHeight(SelectedItem\ItemTemplate\Img)
 					
 					If SelectedItem\State > 0.0 Then
 						If PlayerRoom\RoomTemplate\Name = "pocketdimension" Then
@@ -6897,14 +6884,14 @@ Function UpdateGUI()
 								Case 0
 									;[Block]
 									ResumeChannel(RadioCHN[0])
-									If (Not EnableUserTracks) Then
+									If (Not opt\EnableUserTracks) Then
 										If (Not ChannelPlaying(RadioCHN[0])) Then RadioCHN[0] = PlaySound_Strict(RadioStatic)
 									ElseIf UserTrackMusicAmount < 1
 										If (Not ChannelPlaying(RadioCHN[0])) Then RadioCHN[0] = PlaySound_Strict(RadioStatic)
 									Else
 										If (Not ChannelPlaying(RadioCHN[0])) Then
 											If (Not UserTrackFlag) Then
-												If UserTrackMode
+												If opt\UserTrackMode Then
 													If RadioState[0] < (UserTrackMusicAmount - 1)
 														RadioState[0] = RadioState[0] + 1.0
 													Else
@@ -6925,7 +6912,7 @@ Function UpdateGUI()
 										If KeyHit(2) Then
 											PlaySound_Strict(RadioSquelch)
 											If (Not UserTrackFlag) Then
-												If UserTrackMode Then
+												If opt\UserTrackMode Then
 													If RadioState[0] < (UserTrackMusicAmount - 1)
 														RadioState[0] = RadioState[0] + 1.0
 													Else
@@ -7295,7 +7282,7 @@ Function UpdateGUI()
 								Else
 									wi\HazmatSuit = 3
 								EndIf
-								If wi\NightVision Then CameraFogFar = StoredCameraFogFar
+								If wi\NightVision Then opt\CameraFogFar = opt\StoredCameraFogFar
 								wi\GasMask = 0
 								wi\NightVision = 0
 								wi\BallisticHelmet = 0
@@ -7669,8 +7656,8 @@ Function DrawMenu()
 	If MenuOpen Then
 		Width = ImageWidth(tt\ImageID[0])
 		Height = ImageHeight(tt\ImageID[0])
-		x = GraphicWidth / 2.0 - Width / 2.0
-		y = GraphicHeight / 2.0 - Height / 2.0
+		x = opt\GraphicWidth / 2.0 - Width / 2.0
+		y = opt\GraphicHeight / 2.0 - Height / 2.0
 		
 		DrawImage(tt\ImageID[0], x, y)
 		
@@ -7702,7 +7689,7 @@ Function DrawMenu()
 		EndIf		
 		
 		Local AchvXIMG% = (x + (22.0 * MenuScale))
-		Local Scale# = GraphicHeight / 768.0
+		Local Scale# = opt\GraphicHeight / 768.0
 		Local SeparationConst% = 76.0 * Scale
 		Local ImgSize% = 64.0
 		
@@ -7723,7 +7710,7 @@ Function DrawMenu()
 				Rect(x + 320 * MenuScale, y - 5 * MenuScale, 110 * MenuScale, 40 * MenuScale, True)
 			EndIf
 			
-			Local tX# = (GraphicWidth / 2.0) + (Width / 2.0)
+			Local tX# = (opt\GraphicWidth / 2.0) + (Width / 2.0)
 			Local tY# = y
 			Local tW# = 400.0 * MenuScale
 			Local tH# = 150.0 * MenuScale
@@ -7771,7 +7758,7 @@ Function DrawMenu()
 					Color(255, 255, 255)
 					Text(x, y + 4 * MenuScale, "Screen gamma:")
 					If MouseOn(x + 270 * MenuScale, y + 6 * MenuScale, 100 * MenuScale + 14, 20) And OnSliderID = 0
-						DrawOptionsTooltip(tX, tY, tW, tH, "gamma", ScreenGamma)
+						DrawOptionsTooltip(tX, tY, tW, tH, "gamma", opt\ScreenGamma)
 					EndIf
 					
 					y = y + 50 * MenuScale
@@ -7779,7 +7766,7 @@ Function DrawMenu()
 					Color(255, 255, 255)
 					Text(x, y + 4 * MenuScale, "Particle amount:")
 					If (MouseOn(x + 270 * MenuScale, y - 6 * MenuScale, 100 * MenuScale + 14, 20) And OnSliderID = 0) Lor OnSliderID = 2
-						DrawOptionsTooltip(tX, tY, tW, tH, "particleamount", ParticleAmount)
+						DrawOptionsTooltip(tX, tY, tW, tH, "particleamount", opt\ParticleAmount)
 					EndIf
 					
 					y = y + 50 * MenuScale
@@ -7803,7 +7790,7 @@ Function DrawMenu()
 					Color(255, 255, 255)
 					Text(x, y + 4 * MenuScale, "Field of view:")
 					Color(255, 255, 0)
-					Text(x + 5 * MenuScale, y + 29 * MenuScale, Int(FOV) + "°")
+					Text(x + 5 * MenuScale, y + 29 * MenuScale, Int(opt\FOV) + "°")
 					If MouseOn(x + 270 * MenuScale, y + 6 * MenuScale, 100 * MenuScale + 14, 20)
 						DrawOptionsTooltip(tX, tY, tW, tH, "fov")
 					EndIf
@@ -7817,7 +7804,7 @@ Function DrawMenu()
 					Color(255, 255, 255)
 					Text(x, y + 4 * MenuScale, "Music volume:")
 					If MouseOn(x + 250 * MenuScale, y - 4 * MenuScale, 100 * MenuScale + 14, 20)
-						DrawOptionsTooltip(tX, tY, tW, tH, "musicvol", MusicVolume)
+						DrawOptionsTooltip(tX, tY, tW, tH, "musicvol", opt\MusicVolume)
 					EndIf
 					
 					y = y + 30 * MenuScale
@@ -7825,7 +7812,7 @@ Function DrawMenu()
 					Color(255, 255, 255)
 					Text(x, y + 4 * MenuScale, "Sound volume:")
 					If MouseOn(x + 250 * MenuScale, y - 4 * MenuScale, 100 * MenuScale + 14, 20)
-						DrawOptionsTooltip(tX, tY, tW, tH, "soundvol", PrevSFXVolume)
+						DrawOptionsTooltip(tX, tY, tW, tH, "soundvol", opt\PrevSFXVolume)
 					EndIf
 					
 					y = y + 40 * MenuScale
@@ -7844,12 +7831,12 @@ Function DrawMenu()
 						DrawOptionsTooltip(tX, tY, tW, tH, "usertrack")
 					EndIf
 					
-					If EnableUserTracks Then
+					If opt\EnableUserTracks Then
 						y = y + 30 * MenuScale
 						
 						Color(255, 255, 255)
 						Text(x, y + 4 * MenuScale, "User track mode:")
-						If UserTrackMode Then
+						If opt\UserTrackMode Then
 							Text(x, y + 20 * MenuScale, "Repeat")
 						Else
 							Text(x, y + 20 * MenuScale, "Random")
@@ -7867,7 +7854,7 @@ Function DrawMenu()
 					Color(255, 255, 255)
 					Text(x, y + 4 * MenuScale, "Mouse sensitivity:")
 					If MouseOn(x + 270 * MenuScale, y - 4 * MenuScale, 100 * MenuScale + 14, 20)
-						DrawOptionsTooltip(tX, tY, tW, tH, "mousesensitivity", MouseSensitivity)
+						DrawOptionsTooltip(tX, tY, tW, tH, "mousesensitivity", opt\MouseSensitivity)
 					EndIf
 					
 					y = y + 30 * MenuScale
@@ -7883,7 +7870,7 @@ Function DrawMenu()
 					Color(255, 255, 255)
 					Text(x, y + 4 * MenuScale, "Mouse smoothing:")
 					If MouseOn(x + 270 * MenuScale, y - 4 * MenuScale, 100 * MenuScale + 14, 20)
-						DrawOptionsTooltip(tX, tY, tW, tH, "mousesmoothing", MouseSmoothing)
+						DrawOptionsTooltip(tX, tY, tW, tH, "mousesmoothing", opt\MouseSmoothing)
 					EndIf
 					
 					Color(255, 255, 255)
@@ -7942,7 +7929,7 @@ Function DrawMenu()
 					
 					y = y + 30 * MenuScale
 					
-					If CanOpenConsole Then
+					If opt\CanOpenConsole Then
 						Color(255, 255, 255)
 						Text(x, y + 4 * MenuScale, "Open console on error:")
 						If MouseOn(x + 270 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
@@ -7969,18 +7956,18 @@ Function DrawMenu()
 					y = y + 30 * MenuScale
 					
 					Color(255, 255, 255)
-					Text(x, y + 4 * MenuScale, "Framelimit:")
+					Text(x, y + 4 * MenuScale, "Frame limit:")
 					
 					Color(255, 255, 255)
-					If CurrFrameLimit > 0.0 Then
+					If opt\CurrFrameLimit > 0.0 Then
 						Color(255, 255, 0)
-						Text(x + 5 * MenuScale, y + 34 * MenuScale, FrameLimit + " FPS")
+						Text(x + 5 * MenuScale, y + 34 * MenuScale, opt\FrameLimit + " FPS")
 					EndIf
 					If MouseOn(x + 270 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
-						DrawOptionsTooltip(tX, tY, tW, tH, "framelimit", FrameLimit)
+						DrawOptionsTooltip(tX, tY, tW, tH, "framelimit", opt\FrameLimit)
 					EndIf
 					If MouseOn(x + 150 * MenuScale, y + 30 * MenuScale, 100 * MenuScale + 14, 20)
-						DrawOptionsTooltip(tX, tY, tW, tH, "framelimit", FrameLimit)
+						DrawOptionsTooltip(tX, tY, tW, tH, "framelimit", opt\FrameLimit)
 					EndIf
 					;[End Block]
 			End Select
@@ -8039,7 +8026,7 @@ Function DrawMenu()
 		RenderMenuSlideBars()
 		RenderMenuSliders()
 		
-		If DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+		If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	EndIf
 	
 	SetFont(fo\FontID[0])
@@ -8085,8 +8072,8 @@ Function UpdateMenu()
 		
 		Width = ImageWidth(tt\ImageID[0])
 		Height = ImageHeight(tt\ImageID[0])
-		x = GraphicWidth / 2.0 - Width / 2.0
-		y = GraphicHeight / 2.0 - Height / 2.0
+		x = opt\GraphicWidth / 2.0 - Width / 2.0
+		y = opt\GraphicHeight / 2.0 - Height / 2.0
 		
 		x = x + 132.0 * MenuScale
 		y = y + 122.0 * MenuScale	
@@ -8094,7 +8081,7 @@ Function UpdateMenu()
 		If (Not mo\MouseDown1) Then OnSliderID = 0
 		
 		Local AchvXIMG% = (x + (22.0 * MenuScale))
-		Local Scale# = GraphicHeight / 768.0
+		Local Scale# = opt\GraphicHeight / 768.0
 		Local SeparationConst% = 76.0 * Scale
 		Local ImgSize% = 64.0
 		Local r.Rooms
@@ -8109,8 +8096,8 @@ Function UpdateMenu()
 				mo\MouseHit1 = False
 				SaveOptionsINI()
 				
-				AntiAlias(Opt_AntiAlias)
-				TextureLodBias(TextureFloat)
+				AntiAlias(opt\AntiAliasing)
+				TextureLodBias(opt\TextureFloat)
 				ShouldDeleteGadgets = True
 			EndIf
 			
@@ -8136,103 +8123,103 @@ Function UpdateMenu()
 					;[Block]
 					y = y + 50 * MenuScale
 					
-					BumpEnabled = DrawTick(x + 270 * MenuScale, y + MenuScale, BumpEnabled, True)
+					opt\BumpEnabled = DrawTick(x + 270 * MenuScale, y + MenuScale, opt\BumpEnabled, True)
 					
 					y = y + 30 * MenuScale
 					
-					VSync = DrawTick(x + 270 * MenuScale, y + MenuScale, VSync)
+					opt\VSync = DrawTick(x + 270 * MenuScale, y + MenuScale, opt\VSync)
 					
 					y = y + 30 * MenuScale
 					
-					Opt_AntiAlias = DrawTick(x + 270 * MenuScale, y + MenuScale, Opt_AntiAlias)
+					opt\AntiAliasing = DrawTick(x + 270 * MenuScale, y + MenuScale, opt\AntiAliasing)
 					
 					y = y + 30 * MenuScale
 					
-					EnableRoomLights = DrawTick(x + 270 * MenuScale, y + MenuScale, EnableRoomLights)
+					opt\EnableRoomLights = DrawTick(x + 270 * MenuScale, y + MenuScale, opt\EnableRoomLights)
 					
 					y = y + 40 * MenuScale
 					
-					ScreenGamma = (SlideBar(x + 270 * MenuScale, y, 100 * MenuScale, ScreenGamma * 50.0) / 50.0)
+					opt\ScreenGamma = (SlideBar(x + 270 * MenuScale, y, 100 * MenuScale, opt\ScreenGamma * 50.0) / 50.0)
 					
 					y = y + 50 * MenuScale
 					
-					ParticleAmount = Slider3(x + 270 * MenuScale, y, 100 * MenuScale, ParticleAmount, 2, "MINIMAL", "REDUCED", "FULL")
+					opt\ParticleAmount = Slider3(x + 270 * MenuScale, y, 100 * MenuScale, opt\ParticleAmount, 2, "MINIMAL", "REDUCED", "FULL")
 					
 					y = y + 50 * MenuScale
 					
-					TextureDetails = Slider5(x + 270 * MenuScale, y, 100 * MenuScale, TextureDetails, 3, "0.8", "0.4", "0.0", "-0.4", "-0.8")
-					Select TextureDetails
+					opt\TextureDetails = Slider5(x + 270 * MenuScale, y, 100 * MenuScale, opt\TextureDetails, 3, "0.8", "0.4", "0.0", "-0.4", "-0.8")
+					Select opt\TextureDetails
 						Case 0
 							;[Block]
-							TextureFloat = 0.8
+							opt\TextureFloat = 0.8
 							;[End Block]
 						Case 1
 							;[Block]
-							TextureFloat = 0.4
+							opt\TextureFloat = 0.4
 							;[End Block]
 						Case 2
 							;[Block]
-							TextureFloat = 0.0
+							opt\TextureFloat = 0.0
 							;[End Block]
 						Case 3
 							;[Block]
-							TextureFloat = -0.4
+							opt\TextureFloat = -0.4
 							;[End Block]
 						Case 4
 							;[Block]
-							TextureFloat = -0.8
+							opt\TextureFloat = -0.8
 							;[End Block]
 					End Select
-					TextureLodBias(TextureFloat)
+					TextureLodBias(opt\TextureFloat)
 					
 					y = y + 50 * MenuScale
 					
-					SaveTexturesInVRAM = DrawTick(x + 270 * MenuScale, y + MenuScale, SaveTexturesInVRAM, True)
+					opt\SaveTexturesInVRAM = DrawTick(x + 270 * MenuScale, y + MenuScale, opt\SaveTexturesInVRAM, True)
 					
 					y = y + 40 * MenuScale
 					
-					CurrFOV = (SlideBar(x + 270 * MenuScale, y, 100 * MenuScale, CurrFOV * 2.0) / 2.0)
-					FOV = CurrFOV + 40
-					CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / Tan((2.0 * ATan(Tan((FOV) / 2.0) * RealGraphicWidth / RealGraphicHeight)) / 2.0))
+					opt\CurrFOV = (SlideBar(x + 270 * MenuScale, y, 100 * MenuScale, opt\CurrFOV * 2.0) / 2.0)
+					opt\FOV = opt\CurrFOV + 40
+					CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * opt\RealGraphicWidth / opt\RealGraphicHeight)) / 2.0))
 					;[End Block]
 				Case 2 ; ~ Audio
 					;[Block]
 					y = y + 50 * MenuScale
 					
-					MusicVolume = (SlideBar(x + 250 * MenuScale, y, 100 * MenuScale, MusicVolume * 100.0) / 100.0)
+					opt\MusicVolume = (SlideBar(x + 250 * MenuScale, y, 100 * MenuScale, opt\MusicVolume * 100.0) / 100.0)
 					
 					y = y + 30 * MenuScale
 					
-					PrevSFXVolume = (SlideBar(x + 250 * MenuScale, y, 100 * MenuScale, SFXVolume * 100.0) / 100.0)
-					If (Not me\Deaf) Then SFXVolume = PrevSFXVolume
+					opt\PrevSFXVolume = (SlideBar(x + 250 * MenuScale, y, 100 * MenuScale, opt\SFXVolume * 100.0) / 100.0)
+					If (Not me\Deaf) Then opt\SFXVolume = opt\PrevSFXVolume
 					
 					y = y + 40 * MenuScale
 					
-					EnableSFXRelease = DrawTick(x + 270 * MenuScale, y + MenuScale, EnableSFXRelease, True)
+					opt\EnableSFXRelease = DrawTick(x + 270 * MenuScale, y + MenuScale, opt\EnableSFXRelease, True)
 					
 					y = y + 30 * MenuScale
 					
-					EnableUserTracks = DrawTick(x + 270 * MenuScale, y + MenuScale, EnableUserTracks, True)
+					opt\EnableUserTracks = DrawTick(x + 270 * MenuScale, y + MenuScale, opt\EnableUserTracks, True)
 					
-					If EnableUserTracks
+					If opt\EnableUserTracks
 						y = y + 30 * MenuScale
 						
-						UserTrackMode = DrawTick(x + 270 * MenuScale, y + MenuScale, UserTrackMode)
+						opt\UserTrackMode = DrawTick(x + 270 * MenuScale, y + MenuScale, opt\UserTrackMode)
 					EndIf
 					;[End Block]
 				Case 3 ; ~ Controls
 					;[Block]
 					y = y + 50 * MenuScale
 					
-					MouseSensitivity = (SlideBar(x + 270 * MenuScale, y, 100 * MenuScale, (MouseSensitivity + 0.5) * 100.0) / 100.0) - 0.5
+					opt\MouseSensitivity = (SlideBar(x + 270 * MenuScale, y, 100 * MenuScale, (opt\MouseSensitivity + 0.5) * 100.0) / 100.0) - 0.5
 					
 					y = y + 30 * MenuScale
 					
-					InvertMouse = DrawTick(x + 270 * MenuScale, y + MenuScale, InvertMouse)
+					opt\InvertMouse = DrawTick(x + 270 * MenuScale, y + MenuScale, opt\InvertMouse)
 					
 					y = y + 40 * MenuScale
 					
-					MouseSmoothing = (SlideBar(x + 270 * MenuScale, y, 100 * MenuScale, (MouseSmoothing) * 50.0) / 50.0)
+					opt\MouseSmoothing = (SlideBar(x + 270 * MenuScale, y, 100 * MenuScale, (opt\MouseSmoothing) * 50.0) / 50.0)
 					
 					y = y + 30 * MenuScale
 					
@@ -8319,49 +8306,49 @@ Function UpdateMenu()
 					;[Block]
 					y = y + 50 * MenuScale
 					
-					HUDEnabled = DrawTick(x + 270 * MenuScale, y + MenuScale, HUDEnabled)
+					opt\HUDEnabled = DrawTick(x + 270 * MenuScale, y + MenuScale, opt\HUDEnabled)
 					
 					y = y + 30 * MenuScale
 					
-					Local PrevCanOpenConsole% = CanOpenConsole
+					Local PrevCanOpenConsole% = opt\CanOpenConsole
 					
-					CanOpenConsole = DrawTick(x + 270 * MenuScale, y + MenuScale, CanOpenConsole)
+					opt\CanOpenConsole = DrawTick(x + 270 * MenuScale, y + MenuScale, opt\CanOpenConsole)
 					
 					If PrevCanOpenConsole Then
-						If PrevCanOpenConsole <> CanOpenConsole Then
+						If PrevCanOpenConsole <> opt\CanOpenConsole Then
 							ShouldDeleteGadgets = True
 						EndIf
 					EndIf
 					
 					y = y + 30 * MenuScale
 					
-					If CanOpenConsole Then
-						ConsoleOpening = DrawTick(x + 270 * MenuScale, y + MenuScale, ConsoleOpening)
+					If opt\CanOpenConsole Then
+						opt\ConsoleOpening = DrawTick(x + 270 * MenuScale, y + MenuScale, opt\ConsoleOpening)
 					EndIf
 					
 					y = y + 30 * MenuScale
 					
-					AchvMSGEnabled = DrawTick(x + 270 * MenuScale, y, AchvMSGEnabled)
+					opt\AchvMsgEnabled = DrawTick(x + 270 * MenuScale, y, opt\AchvMsgEnabled)
 					
 					y = y + 50 * MenuScale
 					
-					ShowFPS = DrawTick(x + 270 * MenuScale, y, ShowFPS)
+					opt\ShowFPS = DrawTick(x + 270 * MenuScale, y, opt\ShowFPS)
 					
 					y = y + 30 * MenuScale
 					
-					Local PrevCurrFrameLimit% = CurrFrameLimit > 0.0
+					Local PrevCurrFrameLimit% = opt\CurrFrameLimit > 0.0
 					
-					If DrawTick(x + 270 * MenuScale, y, CurrFrameLimit > 0.0) Then
-						CurrFrameLimit = (SlideBar(x + 150 * MenuScale, y + 30 * MenuScale, 100 * MenuScale, CurrFrameLimit# * 99.0) / 99.0)
-						CurrFrameLimit = Max(CurrFrameLimit, 0.01)
-						FrameLimit = 19 + (CurrFrameLimit * 100.0)
+					If DrawTick(x + 270 * MenuScale, y, opt\CurrFrameLimit > 0.0) Then
+						opt\CurrFrameLimit = (SlideBar(x + 150 * MenuScale, y + 30 * MenuScale, 100 * MenuScale, opt\CurrFrameLimit# * 99.0) / 99.0)
+						opt\CurrFrameLimit = Max(opt\CurrFrameLimit, 0.01)
+						opt\FrameLimit = 19 + (opt\CurrFrameLimit * 100.0)
 					Else
-						CurrFrameLimit = 0.0
-						FrameLimit = 0
+						opt\CurrFrameLimit = 0.0
+						opt\FrameLimit = 0
 					EndIf
 					
 					If PrevCurrFrameLimit Then
-						If PrevCurrFrameLimit <> CurrFrameLimit Then
+						If PrevCurrFrameLimit <> opt\CurrFrameLimit Then
 							ShouldDeleteGadgets = True
 						EndIf
 					EndIf
@@ -8636,7 +8623,7 @@ Function LoadEntities()
 	MaskImage(tt\ImageID[0], 255, 255, 0)
 	ScaleImage(tt\ImageID[0], MenuScale, MenuScale)
 	
-	If BarStyle = 0 Then
+	If opt\BarStyle = 0 Then
 		tt\ImageID[1] = LoadImage_Strict("GFX\blink_meter_red.png")
 		
 		tt\ImageID[2] = LoadImage_Strict("GFX\stamina_meter.png")
@@ -8660,7 +8647,7 @@ Function LoadEntities()
 	Next
 	tt\ImageID[11] = LoadImage_Strict("GFX\items\navigator_battery_meter.png")
 	
-	tt\ImageID[12] = CreateImage(GraphicWidth, GraphicHeight)
+	tt\ImageID[12] = CreateImage(opt\GraphicWidth, opt\GraphicHeight)
 	
 	tt\IconID[0] = LoadImage_Strict("GFX\walk_icon.png")
 	tt\IconID[1] = LoadImage_Strict("GFX\sprint_icon.png")
@@ -8669,10 +8656,10 @@ Function LoadEntities()
 	tt\IconID[4] = LoadImage_Strict("GFX\hand_symbol.png")
 	tt\IconID[5] = LoadImage_Strict("GFX\hand_symbol(2).png")
 	
-	Brightness = GetINIFloat(OptionFile, "Global", "Brightness")
-	CameraFogNear = GetINIFloat(OptionFile, "Global", "Camera Fog Near")
-	CameraFogFar = GetINIFloat(OptionFile, "Global", "Camera Fog Far")
-	StoredCameraFogFar = CameraFogFar
+	opt\Brightness = GetINIFloat(OptionFile, "Global", "Brightness")
+	opt\CameraFogNear = GetINIFloat(OptionFile, "Global", "Camera Fog Near")
+	opt\CameraFogFar = GetINIFloat(OptionFile, "Global", "Camera Fog Far")
+	opt\StoredCameraFogFar = opt\CameraFogFar
 	
 	AmbientLightRoomTex = CreateTextureUsingCacheSystem(2, 2, 1)
 	TextureBlend(AmbientLightRoomTex, 3)
@@ -8685,11 +8672,11 @@ Function LoadEntities()
 	SoundEmitter = CreatePivot()
 	
 	Camera = CreateCamera()
-	CameraViewport(Camera, 0, 0, GraphicWidth, GraphicHeight)
-	CameraRange(Camera, 0.01, CameraFogFar)
+	CameraViewport(Camera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)
+	CameraRange(Camera, 0.01, opt\CameraFogFar)
 	CameraFogMode(Camera, 1)
-	CameraFogRange(Camera, CameraFogNear, CameraFogFar)
-	AmbientLight(Brightness, Brightness, Brightness)
+	CameraFogRange(Camera, opt\CameraFogNear, opt\CameraFogFar)
+	AmbientLight(opt\Brightness, opt\Brightness, opt\Brightness)
 	
 	ScreenTexs[0] = CreateTextureUsingCacheSystem(512, 512, 1)
 	ScreenTexs[1] = CreateTextureUsingCacheSystem(512, 512, 1)
@@ -8699,7 +8686,7 @@ Function LoadEntities()
 	
 	tt\OverlayTextureID[0] = LoadTexture_Strict("GFX\fog.png", 1, 2) ; ~ FOG
 	tt\OverlayID[0] = CreateSprite(ArkBlurCam)
-	ScaleSprite(tt\OverlayID[0], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
+	ScaleSprite(tt\OverlayID[0], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
 	EntityTexture(tt\OverlayID[0], tt\OverlayTextureID[0])
 	EntityBlend(tt\OverlayID[0], 2)
 	EntityOrder(tt\OverlayID[0], -1000)
@@ -8707,7 +8694,7 @@ Function LoadEntities()
 	
 	tt\OverlayTextureID[1] = LoadTexture_Strict("GFX\gas_mask_overlay.png", 1, 2) ; ~ GAS MASK
 	tt\OverlayID[1] = CreateSprite(ArkBlurCam)
-	ScaleSprite(tt\OverlayID[1], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
+	ScaleSprite(tt\OverlayID[1], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
 	EntityTexture(tt\OverlayID[1], tt\OverlayTextureID[1])
 	EntityBlend(tt\OverlayID[1], 2)
 	EntityFX(tt\OverlayID[1], 1)
@@ -8716,7 +8703,7 @@ Function LoadEntities()
 	
 	tt\OverlayTextureID[2] = LoadTexture_Strict("GFX\hazmat_suit_overlay.png", 1, 2) ; ~ HAZMAT SUIT
 	tt\OverlayID[2] = CreateSprite(ArkBlurCam)
-	ScaleSprite(tt\OverlayID[2], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
+	ScaleSprite(tt\OverlayID[2], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
 	EntityTexture(tt\OverlayID[2], tt\OverlayTextureID[2])
 	EntityBlend(tt\OverlayID[2], 2)
 	EntityFX(tt\OverlayID[2], 1)
@@ -8725,7 +8712,7 @@ Function LoadEntities()
 	
 	tt\OverlayTextureID[3] = LoadTexture_Strict("GFX\scp_008_overlay.png", 1, 2) ; ~ SCP-008
 	tt\OverlayID[3] = CreateSprite(ArkBlurCam)
-	ScaleSprite(tt\OverlayID[3], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
+	ScaleSprite(tt\OverlayID[3], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
 	EntityTexture(tt\OverlayID[3], tt\OverlayTextureID[3])
 	EntityBlend(tt\OverlayID[3], 3)
 	EntityFX(tt\OverlayID[3], 1)
@@ -8734,7 +8721,7 @@ Function LoadEntities()
 	
 	tt\OverlayTextureID[4] = LoadTexture_Strict("GFX\night_vision_goggles_overlay.png", 1, 2) ; ~ NIGHT VISION GOGGLES
 	tt\OverlayID[4] = CreateSprite(ArkBlurCam)
-	ScaleSprite(tt\OverlayID[4], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
+	ScaleSprite(tt\OverlayID[4], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
 	EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
 	EntityBlend(tt\OverlayID[4], 2)
 	EntityFX(tt\OverlayID[4], 1)
@@ -8743,7 +8730,7 @@ Function LoadEntities()
 	
 	tt\OverlayTextureID[5] = LoadTexture_Strict("GFX\fog_night_vision_goggles.png", 1, 2) ; ~ FOG IN NIGHT VISION GOGGLES
 	tt\OverlayID[5] = CreateSprite(ArkBlurCam)
-	ScaleSprite(tt\OverlayID[5], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
+	ScaleSprite(tt\OverlayID[5], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
 	EntityColor(tt\OverlayID[5], 0.0, 0.0, 0.0)
 	EntityFX(tt\OverlayID[5], 1)
 	EntityOrder(tt\OverlayID[5], -1005)
@@ -8760,7 +8747,7 @@ Function LoadEntities()
 	Cls()
 	SetBuffer(BackBuffer())
 	tt\OverlayID[6] = CreateSprite(ArkBlurCam)
-	ScaleSprite(tt\OverlayID[6], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
+	ScaleSprite(tt\OverlayID[6], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
 	EntityTexture(tt\OverlayID[6], tt\OverlayTextureID[6])
 	EntityBlend(tt\OverlayID[6], 1)
 	EntityOrder(tt\OverlayID[6], -1002)
@@ -8774,7 +8761,7 @@ Function LoadEntities()
 	ClsColor(0, 0, 0)
 	SetBuffer(BackBuffer())
 	tt\OverlayID[7] = CreateSprite(ArkBlurCam)
-	ScaleSprite(tt\OverlayID[7], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
+	ScaleSprite(tt\OverlayID[7], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
 	EntityTexture(tt\OverlayID[7], tt\OverlayTextureID[7])
 	EntityBlend(tt\OverlayID[7], 1)
 	EntityOrder(tt\OverlayID[7], -1002)
@@ -8782,7 +8769,7 @@ Function LoadEntities()
 	
 	tt\OverlayTextureID[8] = LoadTexture_Strict("GFX\scp_409_overlay.png", 1, 2) ; ~ SCP-409
 	tt\OverlayID[8] = CreateSprite(ArkBlurCam)
-	ScaleSprite(tt\OverlayID[8], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
+	ScaleSprite(tt\OverlayID[8], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
 	EntityTexture(tt\OverlayID[8], tt\OverlayTextureID[8])
 	EntityBlend(tt\OverlayID[8], 3)
 	EntityFX(tt\OverlayID[8], 1)
@@ -8791,7 +8778,7 @@ Function LoadEntities()
 	
 	tt\OverlayTextureID[9] = LoadTexture_Strict("GFX\helmet_overlay.png", 1, 2) ; ~ HELMET
 	tt\OverlayID[9] = CreateSprite(ArkBlurCam)
-	ScaleSprite(tt\OverlayID[9], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
+	ScaleSprite(tt\OverlayID[9], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
 	EntityTexture(tt\OverlayID[9], tt\OverlayTextureID[9])
 	EntityBlend(tt\OverlayID[9], 2)
 	EntityFX(tt\OverlayID[9], 1)
@@ -8800,7 +8787,7 @@ Function LoadEntities()
 	
 	tt\OverlayTextureID[10] = LoadTexture_Strict("GFX\bloody_overlay.png", 1, 2) ; ~ BLOOD
 	tt\OverlayID[10] = CreateSprite(ArkBlurCam)
-	ScaleSprite(tt\OverlayID[10], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
+	ScaleSprite(tt\OverlayID[10], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
 	EntityTexture(tt\OverlayID[10], tt\OverlayTextureID[10])
 	EntityBlend(tt\OverlayID[10], 2)
 	EntityFX(tt\OverlayID[10], 1)
@@ -8809,7 +8796,7 @@ Function LoadEntities()
 	
 	tt\OverlayTextureID[11] = LoadTexture_Strict("GFX\fog_gas_mask.png", 1, 2) ; ~ FOG IN GAS MASK
 	tt\OverlayID[11] = CreateSprite(ArkBlurCam)
-	ScaleSprite(tt\OverlayID[11], 1.0, Float(GraphicHeight) / Float(GraphicWidth))
+	ScaleSprite(tt\OverlayID[11], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
 	EntityTexture(tt\OverlayID[11], tt\OverlayTextureID[11])
 	EntityBlend(tt\OverlayID[11], 3)
 	EntityFX(tt\OverlayID[11], 1)
@@ -9059,7 +9046,7 @@ Function LoadEntities()
 	Next
 	
 	UserTrackMusicAmount = 0
-	If EnableUserTracks Then
+	If opt\EnableUserTracks Then
 		Local DirPath$ = "SFX\Radio\UserTracks\"
 		
 		If FileType(DirPath) <> 2 Then
@@ -9143,7 +9130,7 @@ Function LoadEntities()
 	EntityTexture(DTextures[7], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
-	If IntroEnabled Then
+	If opt\IntroEnabled Then
 		; ~ D-9341
 		Tex = LoadTexture_Strict("GFX\npcs\D_9341.png")
 		EntityTexture(DTextures[8], Tex)
@@ -9207,7 +9194,7 @@ Function LoadEntities()
         HideEntity(o\MTModelID[i])
     Next
 	
-	TextureLodBias(TextureFloat)
+	TextureLodBias(opt\TextureFloat)
 	
 	DrawLoading(30)
 	
@@ -9286,7 +9273,7 @@ Function InitNewGame()
 			If Rand(4) = 1 Then de.Decals = CreateDecal(0, EntityX(r\OBJ) + Rnd(-2.0, 2.0), 0.003, EntityZ(r\OBJ) + Rnd(-2.0, 2.0), 90.0, Rand(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.7, 0.85))
 		EndIf
 		
-		If r\RoomTemplate\Name = "room173" And (Not IntroEnabled) Then 
+		If r\RoomTemplate\Name = "room173" And (Not opt\IntroEnabled) Then 
 			PositionEntity(me\Collider, EntityX(r\OBJ) + 3584.0 * RoomScale, 704.0 * RoomScale, EntityZ(r\OBJ) + 1024.0 * RoomScale)
 			PlayerRoom = r
 			it = CreateItem("Class D Orientation Leaflet", "paper", 1, 1, 1)
@@ -9307,7 +9294,7 @@ Function InitNewGame()
 			EntityType(it\Collider, HIT_ITEM)
 			EntityParent(it\Collider, 0)
 			ItemAmount = ItemAmount + 1
-		ElseIf r\RoomTemplate\Name = "room173intro" And IntroEnabled Then
+		ElseIf r\RoomTemplate\Name = "room173intro" And opt\IntroEnabled Then
 			PositionEntity(me\Collider, EntityX(r\OBJ), 1.0, EntityZ(r\OBJ))
 			PlayerRoom = r
 		EndIf
@@ -9549,7 +9536,7 @@ Function NullGame(PlayButtonSFX% = True)
 	wi\BallisticVest = 0
 	wi\BallisticHelmet = 0
 	If wi\NightVision Then
-		CameraFogFar = StoredCameraFogFar
+		opt\CameraFogFar = opt\StoredCameraFogFar
 		wi\NightVision = 0
 	EndIf
 	wi\SCRAMBLE = 0
@@ -9713,8 +9700,8 @@ Function NullGame(PlayButtonSFX% = True)
 	QuitMsg = -1
 	AchievementsMenu = -1
 	
-	MusicVolume = PrevMusicVolume
-	SFXVolume = PrevSFXVolume
+	opt\MusicVolume = opt\PrevMusicVolume
+	opt\SFXVolume = opt\PrevSFXVolume
 	me\Deaf = False
 	me\DeafTimer = 0.0
 	
@@ -10991,10 +10978,10 @@ Function Use294()
 	
 	ShowPointer()
 	
-	x = GraphicWidth / 2 - (ImageWidth(tt\ImageID[5]) / 2)
-	y = GraphicHeight / 2 - (ImageHeight(tt\ImageID[5]) / 2)
+	x = opt\GraphicWidth / 2 - (ImageWidth(tt\ImageID[5]) / 2)
+	y = opt\GraphicHeight / 2 - (ImageHeight(tt\ImageID[5]) / 2)
 	DrawImage(tt\ImageID[5], x, y)
-	If DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+	If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	
 	Temp = True
 	If PlayerRoom\SoundCHN <> 0 Then Temp = False
@@ -11320,7 +11307,7 @@ Function Use427()
 			de.Decals = CreateDecal(17, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rand(360.0), 0.0, Rnd(0.03, 0.08) * 2.0)
 			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + 0.009 : UpdateDecals()  
 			TempCHN = PlaySound_Strict(DripSFX[Rand(0, 2)])
-			ChannelVolume(TempCHN, Rnd(0.0, 0.8) * SFXVolume)
+			ChannelVolume(TempCHN, Rnd(0.0, 0.8) * opt\SFXVolume)
 			ChannelPitch(TempCHN, Rand(20000, 30000))
 			FreeEntity(Pvt)
 			me\BlurTimer = 800.0
@@ -11460,7 +11447,7 @@ Function UpdateExplosion()
 				me\BlinkTimer = 1.0
 				ExplosionSFX = LoadSound_Strict("SFX\Ending\GateB\Nuke2.ogg")
 				PlaySound_Strict(ExplosionSFX)				
-				For i = 0 To (10 + (10 * (ParticleAmount + 1)))
+				For i = 0 To (10 + (10 * (opt\ParticleAmount + 1)))
 					p.Particles = CreateParticle(EntityX(me\Collider) + Rnd(-0.5, 0.5), EntityY(me\Collider) - Rnd(0.2, 1.5), EntityZ(me\Collider) + Rnd(-0.5, 0.5), 0, Rnd(0.2, 0.6), 0.0, 350.0)	
 					RotateEntity(p\Pvt, -90.0, 0.0, 0.0, True)
 					p\Speed = Rnd(0.05, 0.07)
@@ -11608,7 +11595,7 @@ Function Update008()
 						If AnimTime(PlayerRoom\NPC[0]\OBJ) =< 13.0 Then PlayerRoom\NPC[0]\State2 = 0.0
 					EndIf
 					
-					If ParticleAmount > 0 Then
+					If opt\ParticleAmount > 0 Then
 						If Rand(50) = 1 Then
 							p.Particles = CreateParticle(EntityX(PlayerRoom\NPC[0]\Collider), EntityY(PlayerRoom\NPC[0]\Collider), EntityZ(PlayerRoom\NPC[0]\Collider), 5, Rnd(0.05, 0.1), 0.15, 200)
 							p\Speed = 0.01 : p\SizeChange = 0.01 : p\A = 0.5 : p\Achange = -0.01
@@ -11801,7 +11788,7 @@ Function Graphics3DExt%(Width%, Height%, Depth% = 32, Mode% = 2)
 	Wend
 	SMALLEST_POWER_TWO_HALF = SMALLEST_POWER_TWO / 2
 	InitFastResize()
-	AntiAlias(Opt_AntiAlias)
+	AntiAlias(opt\AntiAliasing)
 End Function
 
 Function ResizeImage2(Image%, Width%, Height%)
@@ -11811,10 +11798,10 @@ Function ResizeImage2(Image%, Width%, Height%)
 	
 	CopyRect(0, 0, OldWidth, OldHeight, SMALLEST_POWER_TWO_HALF - OldWidth / 2, SMALLEST_POWER_TWO_HALF - OldHeight / 2, ImageBuffer(Image), TextureBuffer(Fresize_Texture))
 	SetBuffer(BackBuffer())
-	ScaleRender(0.0, 0.0, SMALLEST_POWER_TWO / Float(RealGraphicWidth) * Float(Width) / Float(OldWidth), SMALLEST_POWER_TWO / Float(RealGraphicWidth) * Float(Height) / Float(OldHeight))
-	; ~ Might want to replace Float(GraphicWidth) with Max(GraphicWidth, GraphicHeight) if portrait sizes cause issues
+	ScaleRender(0.0, 0.0, SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth) * Float(Width) / Float(OldWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth) * Float(Height) / Float(OldHeight))
+	; ~ Might want to replace Float(opt\GraphicWidth) with Max(opt\GraphicWidth, opt\GraphicHeight) if portrait sizes cause issues
 	; ~ Everyone uses landscape so it's probably a non-issue
-	CopyRect(RealGraphicWidth / 2 - Width / 2, RealGraphicHeight / 2 - Height / 2, Width, Height, 0, 0, BackBuffer(), ImageBuffer(Img))
+	CopyRect(opt\RealGraphicWidth / 2 - Width / 2, opt\RealGraphicHeight / 2 - Height / 2, Width, Height, 0, 0, BackBuffer(), ImageBuffer(Img))
 	FreeImage(Image)
 	Return(Img)
 End Function
@@ -11892,14 +11879,14 @@ Function RenderWorld2(Tween#)
 	CameraProjMode(Camera, 1)
 	
 	If wi\NightVision > 0 And wi\NightVision < 3 Then
-		AmbientLight(Min(Brightness * 2.0, 255.0), Min(Brightness * 2.0, 255.0), Min(Brightness * 2.0, 255.0))
+		AmbientLight(Min(opt\Brightness * 2.0, 255.0), Min(opt\Brightness * 2.0, 255.0), Min(opt\Brightness * 2.0, 255.0))
 	ElseIf wi\NightVision = 3
 		AmbientLight(255.0, 255.0, 255.0)
 	ElseIf PlayerRoom <> Null
-		AmbientLight(Brightness, Brightness, Brightness)
+		AmbientLight(opt\Brightness, opt\Brightness, opt\Brightness)
 	EndIf
 	
-	CameraViewport(Camera, 0, 0, GraphicWidth, GraphicHeight)
+	CameraViewport(Camera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)
 	
 	Local HasBattery% = 2
 	Local Power% = 0
@@ -11934,10 +11921,10 @@ Function RenderWorld2(Tween#)
 				
 				If HasBattery = 1 Then PlusY% = 40
 				
-				Text(GraphicWidth / 2, (20 + PlusY) * MenuScale, "REFRESHING DATA IN", True, False)
+				Text(opt\GraphicWidth / 2, (20 + PlusY) * MenuScale, "REFRESHING DATA IN", True, False)
 				
-				Text(GraphicWidth / 2, (60 + PlusY) * MenuScale, Max(f2s(wi\NVGTimer / 60.0, 1), 0.0), True, False)
-				Text(GraphicWidth / 2, (100 + PlusY) * MenuScale, "SECONDS", True, False)
+				Text(opt\GraphicWidth / 2, (60 + PlusY) * MenuScale, Max(f2s(wi\NVGTimer / 60.0, 1), 0.0), True, False)
+				Text(opt\GraphicWidth / 2, (100 + PlusY) * MenuScale, "SECONDS", True, False)
 				
 				Temp = CreatePivot() : Temp2 = CreatePivot()
 				PositionEntity(Temp, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
@@ -11970,8 +11957,8 @@ Function RenderWorld2(Tween#)
 							EndIf
 							
 							If (Not wi\IsNVGBlinking) Then
-								Text(GraphicWidth / 2 + xValue * (GraphicWidth / 2), GraphicHeight / 2 - yValue * (GraphicHeight / 2), np\NVName, True, True)
-								Text(GraphicWidth / 2 + xValue * (GraphicWidth / 2), GraphicHeight / 2 - yValue * (GraphicHeight / 2) + 30 * MenuScale, f2s(Dist, 1) + " m", True, True)
+								Text(opt\GraphicWidth / 2 + xValue * (opt\GraphicWidth / 2), opt\GraphicHeight / 2 - yValue * (opt\GraphicHeight / 2), np\NVName, True, True)
+								Text(opt\GraphicWidth / 2 + xValue * (opt\GraphicWidth / 2), opt\GraphicHeight / 2 - yValue * (opt\GraphicHeight / 2) + 30 * MenuScale, f2s(Dist, 1) + " m", True, True)
 							EndIf
 						EndIf
 					EndIf
@@ -11985,7 +11972,7 @@ Function RenderWorld2(Tween#)
 				Color(55, 55, 55)
 			EndIf
 			For k = 0 To 10
-				Rect(45, GraphicHeight * 0.5 - (k * 20), 54, 10, True)
+				Rect(45, opt\GraphicHeight * 0.5 - (k * 20), 54, 10, True)
 			Next
 			If wi\NightVision = 2 Then
 				Color(0, 0, 255)
@@ -11995,9 +11982,9 @@ Function RenderWorld2(Tween#)
 				Color(255, 255, 255)
 			EndIf
 			For l = 0 To Floor((Power + 50) * 0.01)
-				Rect(45, GraphicHeight * 0.5 - (l * 20), 54, 10, True)
+				Rect(45, opt\GraphicHeight * 0.5 - (l * 20), 54, 10, True)
 			Next
-			DrawImage(tt\ImageID[6], 40, GraphicHeight * 0.5 + 30)
+			DrawImage(tt\ImageID[6], 40, opt\GraphicHeight * 0.5 + 30)
 		EndIf
 	EndIf
 	
@@ -12006,7 +11993,7 @@ Function RenderWorld2(Tween#)
 			Color(255, 0, 0)
 			SetFont(fo\FontID[2])
 			
-			Text(GraphicWidth / 2, 20 * MenuScale, "WARNING: LOW BATTERY", True, False)
+			Text(opt\GraphicWidth / 2, 20 * MenuScale, "WARNING: LOW BATTERY", True, False)
 			Color(255, 255, 255)
 		EndIf
 	EndIf
@@ -12055,7 +12042,7 @@ Function InitFastResize()
 	AddTriangle(SF, 0, 1, 2)
 	AddTriangle(SF, 3, 2, 1)
 	EntityFX(SPR, 17)
-	ScaleEntity(SPR, SMALLEST_POWER_TWO / Float(RealGraphicWidth), SMALLEST_POWER_TWO / Float(RealGraphicHeight), 1.0)
+	ScaleEntity(SPR, SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicHeight), 1.0)
 	PositionEntity(SPR, 0, 0, 1.0001)
 	EntityOrder(SPR, -100001)
 	EntityBlend(SPR, 1)
@@ -12076,43 +12063,43 @@ Function InitFastResize()
 End Function
 
 Function GammaUpdate()
-	If DisplayMode = 1 Then
-		If RealGraphicWidth <> GraphicWidth Lor RealGraphicHeight <> GraphicHeight Then
+	If opt\DisplayMode = 1 Then
+		If opt\RealGraphicWidth <> opt\GraphicWidth Lor opt\RealGraphicHeight <> opt\GraphicHeight Then
 			SetBuffer(TextureBuffer(Fresize_Texture))
 			ClsColor(0, 0, 0) : Cls()
-			CopyRect(0, 0, GraphicWidth, GraphicHeight, SMALLEST_POWER_TWO_HALF - GraphicWidth / 2, SMALLEST_POWER_TWO_HALF - GraphicHeight / 2, BackBuffer(), TextureBuffer(Fresize_Texture))
+			CopyRect(0, 0, opt\GraphicWidth, opt\GraphicHeight, SMALLEST_POWER_TWO_HALF - opt\GraphicWidth / 2, SMALLEST_POWER_TWO_HALF - opt\GraphicHeight / 2, BackBuffer(), TextureBuffer(Fresize_Texture))
 			SetBuffer(BackBuffer())
 			ClsColor(0, 0, 0) : Cls()
-			ScaleRender(0, 0, SMALLEST_POWER_TWO / Float(GraphicWidth) * AspectRatioRatio, SMALLEST_POWER_TWO / Float(GraphicWidth) * AspectRatioRatio)
-			; ~ Might want to replace Float(GraphicWidth) with Max(GraphicWidth, GraphicHeight) if portrait sizes cause issues
+			ScaleRender(0, 0, SMALLEST_POWER_TWO / Float(opt\GraphicWidth) * opt\AspectRatio, SMALLEST_POWER_TWO / Float(opt\GraphicWidth) * opt\AspectRatio)
+			; ~ Might want to replace Float(opt\GraphicWidth) with Max(opt\GraphicWidth, opt\GraphicHeight) if portrait sizes cause issues
 			; ~ Everyone uses landscape so it's probably a non-issue
 		EndIf
 	EndIf
 	
 	; ~ Not by any means a perfect solution
 	; ~ Not even proper gamma correction but it's a nice looking alternative that works in windowed mode
-	If ScreenGamma > 1.0 Then
-		CopyRect(0, 0, RealGraphicWidth, RealGraphicHeight, SMALLEST_POWER_TWO_HALF - RealGraphicWidth / 2, SMALLEST_POWER_TWO_HALF - RealGraphicHeight / 2, BackBuffer(), TextureBuffer(Fresize_Texture))
+	If opt\ScreenGamma > 1.0 Then
+		CopyRect(0, 0, opt\RealGraphicWidth, opt\RealGraphicHeight, SMALLEST_POWER_TWO_HALF - opt\RealGraphicWidth / 2, SMALLEST_POWER_TWO_HALF - opt\RealGraphicHeight / 2, BackBuffer(), TextureBuffer(Fresize_Texture))
 		EntityBlend(Fresize_Image, 1)
 		ClsColor(0, 0, 0) : Cls()
-		ScaleRender((-1.0) / Float(RealGraphicWidth), 1.0 / Float(RealGraphicWidth), SMALLEST_POWER_TWO / Float(RealGraphicWidth), SMALLEST_POWER_TWO / Float(RealGraphicWidth))
+		ScaleRender((-1.0) / Float(opt\RealGraphicWidth), 1.0 / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth))
 		EntityFX(Fresize_Image, 1 + 32)
 		EntityBlend(Fresize_Image, 3)
-		EntityAlpha(Fresize_Image, ScreenGamma - 1.0)
-		ScaleRender((-1.0) / Float(RealGraphicWidth), 1.0 / Float(RealGraphicWidth), SMALLEST_POWER_TWO / Float(RealGraphicWidth), SMALLEST_POWER_TWO / Float(RealGraphicWidth))
-	ElseIf ScreenGamma < 1.0 Then ; ~ Maybe optimize this if it's too slow, alternatively give players the option to disable gamma
-		CopyRect(0, 0, RealGraphicWidth, RealGraphicHeight, SMALLEST_POWER_TWO_HALF - RealGraphicWidth / 2, SMALLEST_POWER_TWO_HALF - RealGraphicHeight / 2, BackBuffer(), TextureBuffer(Fresize_Texture))
+		EntityAlpha(Fresize_Image, opt\ScreenGamma - 1.0)
+		ScaleRender((-1.0) / Float(opt\RealGraphicWidth), 1.0 / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth))
+	ElseIf opt\ScreenGamma < 1.0 Then ; ~ Maybe optimize this if it's too slow, alternatively give players the option to disable gamma
+		CopyRect(0, 0, opt\RealGraphicWidth, opt\RealGraphicHeight, SMALLEST_POWER_TWO_HALF - opt\RealGraphicWidth / 2, SMALLEST_POWER_TWO_HALF - opt\RealGraphicHeight / 2, BackBuffer(), TextureBuffer(Fresize_Texture))
 		EntityBlend(Fresize_Image, 1)
 		ClsColor(0, 0, 0) : Cls()
-		ScaleRender((-1.0) / Float(RealGraphicWidth), 1.0 / Float(RealGraphicWidth), SMALLEST_POWER_TWO / Float(RealGraphicWidth), SMALLEST_POWER_TWO / Float(RealGraphicWidth))
+		ScaleRender((-1.0) / Float(opt\RealGraphicWidth), 1.0 / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth))
 		EntityFX(Fresize_Image, 1 + 32)
 		EntityBlend(Fresize_Image, 2)
 		EntityAlpha(Fresize_Image, 1.0)
 		SetBuffer(TextureBuffer(Fresize_Texture2))
-		ClsColor(255 * ScreenGamma, 255 * ScreenGamma, 255 * ScreenGamma)
+		ClsColor(255 * opt\ScreenGamma, 255 * opt\ScreenGamma, 255 * opt\ScreenGamma)
 		Cls()
 		SetBuffer(BackBuffer())
-		ScaleRender((-1.0) / Float(RealGraphicWidth), 1.0 / Float(RealGraphicWidth), SMALLEST_POWER_TWO / Float(RealGraphicWidth), SMALLEST_POWER_TWO / Float(RealGraphicWidth))
+		ScaleRender((-1.0) / Float(opt\RealGraphicWidth), 1.0 / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth))
 		SetBuffer(TextureBuffer(Fresize_Texture2))
 		ClsColor(0, 0, 0)
 		Cls()
@@ -12230,11 +12217,11 @@ Function CheckTriggers$()
 End Function
 
 Function ScaledMouseX%()
-	Return(Float(MouseX() - (RealGraphicWidth * 0.5 * (1.0 - AspectRatioRatio))) * Float(GraphicWidth) / Float(RealGraphicWidth * AspectRatioRatio))
+	Return(Float(MouseX() - (opt\RealGraphicWidth * 0.5 * (1.0 - opt\AspectRatio))) * Float(opt\GraphicWidth) / Float(opt\RealGraphicWidth * opt\AspectRatio))
 End Function
 
 Function ScaledMouseY%()
-	Return(Float(MouseY()) * Float(GraphicHeight) / Float(RealGraphicHeight))
+	Return(Float(MouseY()) * Float(opt\GraphicHeight) / Float(opt\RealGraphicHeight))
 End Function
 
 Function TeleportEntity(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = False, PickRange# = 2.0, Dir% = 0)
@@ -12264,19 +12251,19 @@ Function TeleportEntity(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = Fa
 End Function
 
 Function PlayStartupVideos()
-	If (Not PlayStartup) Then Return
+	If (Not opt\PlayStartup) Then Return
 	
 	HidePointer()
 	
 	fo\FontID[0] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 16)
 	
 	Local ScaledGraphicHeight%
-	Local Ratio# = Float(RealGraphicWidth) / Float(RealGraphicHeight)
+	Local Ratio# = Float(opt\RealGraphicWidth) / Float(opt\RealGraphicHeight)
 	
 	If Ratio > 1.76 And Ratio < 1.78 Then
-		ScaledGraphicHeight = RealGraphicHeight
+		ScaledGraphicHeight = opt\RealGraphicHeight
 	Else
-		ScaledGraphicHeight = Float(RealGraphicWidth) / (16.0 / 9.0)
+		ScaledGraphicHeight = Float(opt\RealGraphicWidth) / (16.0 / 9.0)
 	EndIf
 	
 	Local MovieFile$, i%
@@ -12305,14 +12292,14 @@ Function PlayStartupVideos()
 		EndIf
 		Movie = OpenMovie(MovieFile + ".avi")
 		
-		Local SplashScreenAudio% = StreamSound_Strict(MovieFile + ".ogg", SFXVolume, 0)
+		Local SplashScreenAudio% = StreamSound_Strict(MovieFile + ".ogg", opt\SFXVolume, 0)
 		
 		Repeat
 			Cls()
-			DrawMovie(Movie, 0, (RealGraphicHeight / 2 - ScaledGraphicHeight / 2), RealGraphicWidth, ScaledGraphicHeight)
+			DrawMovie(Movie, 0, (opt\RealGraphicHeight / 2 - ScaledGraphicHeight / 2), opt\RealGraphicWidth, ScaledGraphicHeight)
 			SetFont(fo\FontID[0])
 			Color(255, 255, 255)
-	        Text(RealGraphicWidth / 2, RealGraphicHeight - 50, "PRESS ANY KEY TO SKIP", True, True)
+	        Text(opt\RealGraphicWidth / 2, opt\RealGraphicHeight - 50, "PRESS ANY KEY TO SKIP", True, True)
 			Flip()
 		Until (GetKey() Lor (Not IsStreamPlaying_Strict(SplashScreenAudio)))
 		StopStream_Strict(SplashScreenAudio)
@@ -12385,5 +12372,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1091#1323#1DF6
+;~B#1084#1316#1DE9
 ;~C#Blitz3D

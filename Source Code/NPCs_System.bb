@@ -1079,12 +1079,12 @@ Function UpdateNPCs()
 						If PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor PlayerRoom\RoomTemplate\Name = "gatea" Lor (PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale) Then
 							HideEntity(n\OBJ2)
 						Else
-							If Dist < CameraFogFar * LightVolume * 0.6 Then
+							If Dist < opt\CameraFogFar * LightVolume * 0.6 Then
 								HideEntity(n\OBJ2)
 							Else
 								If n\State =< -10.0 Then
 									ShowEntity(n\OBJ2)
-									EntityAlpha(n\OBJ2, Min(Dist - CameraFogFar * LightVolume * 0.6, 1.0))
+									EntityAlpha(n\OBJ2, Min(Dist - opt\CameraFogFar * LightVolume * 0.6, 1.0))
 								EndIf
 							EndIf
 						EndIf						
@@ -1142,8 +1142,8 @@ Function UpdateNPCs()
 								If WearingScramble = 0 And (Angle < 90.0 Lor Angle > 270.0) Then
 									If Angle < 90.0 Lor Angle > 270.0 Then
 										CameraProject(Camera, EntityX(n\Collider), EntityY(n\Collider) + 0.25, EntityZ(n\Collider))
-										If ProjectedX() > 0.0 And ProjectedX() < GraphicWidth Then
-											If ProjectedY() > 0.0 And ProjectedY() < GraphicHeight Then
+										If ProjectedX() > 0.0 And ProjectedX() < opt\GraphicWidth Then
+											If ProjectedY() > 0.0 And ProjectedY() < opt\GraphicHeight Then
 												If EntityVisible(me\Collider, n\Collider) Then
 													If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0)
 														PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"))
@@ -1181,7 +1181,7 @@ Function UpdateNPCs()
 								n\SoundCHN2 = StreamSound_Strict("SFX\Music\096Chase.ogg", 0)
 								n\SoundCHN2_IsStream = 2
 							Else
-								SetStreamVolume_Strict(n\SoundCHN2, Min(Max(8.0 - Dist, 0.6), 1.0) * SFXVolume)
+								SetStreamVolume_Strict(n\SoundCHN2, Min(Max(8.0 - Dist, 0.6), 1.0) * opt\SFXVolume)
 							EndIf
 						EndIf
 						
@@ -1424,8 +1424,8 @@ Function UpdateNPCs()
 									If Angle < 55.0 Lor Angle > 360.0 - 55.0 Then
 										CameraProject(Camera, EntityX(n\Collider), EntityY(me\Collider) + 5.8 * 0.2 - 0.25, EntityZ(n\Collider))
 										
-										If ProjectedX() > 0.0 And ProjectedX() < GraphicWidth Then
-											If ProjectedY() > 0.0 And ProjectedY() < GraphicHeight Then
+										If ProjectedX() > 0.0 And ProjectedX() < opt\GraphicWidth Then
+											If ProjectedY() > 0.0 And ProjectedY() < opt\GraphicHeight Then
 												If EntityVisible(me\Collider, n\Collider) Then
 													If me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0 Then
 														PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"))
@@ -6887,7 +6887,7 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 		If me\Injuries >= 10.0 Then Kill(True)
 		
 		PlaySound_Strict(BullethitSFX)
-	ElseIf Particles And ParticleAmount > 0
+	ElseIf Particles And opt\ParticleAmount > 0
 		Pvt = CreatePivot()
 		PositionEntity(Pvt, EntityX(me\Collider), (EntityY(me\Collider) + EntityY(Camera)) / 2.0, EntityZ(me\Collider))
 		PointEntity(Pvt, p\OBJ)
@@ -7354,7 +7354,7 @@ Function ChangeNPCTextureID(n.NPCs, TextureID%) ; ~ Works only for Class D model
 	
 	If n = Null Then
 		CreateConsoleMsg("Tried to change the texture of an invalid NPC")
-		If CanOpenConsole And ConsoleOpening Then
+		If opt\CanOpenConsole And opt\ConsoleOpening Then
 			ConsoleOpen = True
 		EndIf
 		Return

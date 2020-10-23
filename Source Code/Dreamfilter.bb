@@ -12,8 +12,8 @@ Function CreateBlurImage()
 	MoveEntity(Cam, 0, 0, 10000)
 	ArkBlurCam = Cam
 	
-	ArkSw = GraphicWidth
-	ArkSh = GraphicHeight
+	ArkSw = opt\GraphicWidth
+	ArkSh = opt\GraphicHeight
 	CameraViewport(Cam, 0, 0, ArkSw, ArkSh)
 	
 	; ~ Create sprite

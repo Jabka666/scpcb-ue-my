@@ -451,7 +451,7 @@ End Function
 Function InitEvents()
 	Local e.Events
 	
-	If IntroEnabled Then CreateEvent("room173intro", "room173intro", 0)
+	If opt\IntroEnabled Then CreateEvent("room173intro", "room173intro", 0)
 	CreateEvent("room173", "room173", 0)
 	
 	CreateEvent("pocketdimension", "pocketdimension", 0)	
@@ -653,10 +653,10 @@ Global QuickLoad_CurrEvent.Events
 Function DrawQuickLoading()
 	If QuickLoadPercent > -1 Then
 		MidHandle(QuickLoadIcon)
-		DrawImage(QuickLoadIcon, GraphicWidth - 90, GraphicHeight - 150)
+		DrawImage(QuickLoadIcon, opt\GraphicWidth - 90, opt\GraphicHeight - 150)
 		Color(255, 255, 255)
 		SetFont(fo\FontID[0])
-		Text(GraphicWidth - 100, GraphicHeight - 90, "LOADING: " + QuickLoadPercent + "%", 1)
+		Text(opt\GraphicWidth - 100, opt\GraphicHeight - 90, "LOADING: " + QuickLoadPercent + "%", 1)
 	EndIf
 End Function
 
@@ -820,19 +820,19 @@ Function UpdateEvents()
 		If fpst\FPSFactor[0] > 0.0 Then
 			If e\SoundCHN <> 0 Then
 				If e\SoundCHN_IsStream Then
-					SetStreamVolume_Strict(e\SoundCHN, SFXVolume)
+					SetStreamVolume_Strict(e\SoundCHN, opt\SFXVolume)
 				EndIf
 			EndIf
 			
 			If e\SoundCHN2 <> 0 Then
 				If e\SoundCHN2_IsStream Then
-					SetStreamVolume_Strict(e\SoundCHN2, SFXVolume)
+					SetStreamVolume_Strict(e\SoundCHN2, opt\SFXVolume)
 				EndIf
 			EndIf
 			
 			If e\SoundCHN3 <> 0 Then
 				If e\SoundCHN3_IsStream Then
-					SetStreamVolume_Strict(e\SoundCHN3, SFXVolume)
+					SetStreamVolume_Strict(e\SoundCHN3, opt\SFXVolume)
 				EndIf
 			EndIf
 		EndIf
@@ -898,7 +898,7 @@ Function UpdateEvents()
 						e\room\RoomDoors[2]\Open = True
 						
 						ShowEntity(tt\OverlayID[0])
-						CameraFogRange(Camera, CameraFogNear, CameraFogFar)
+						CameraFogRange(Camera, opt\CameraFogNear, opt\CameraFogFar)
 						CameraFogMode(Camera, 1)
 						
 						If SelectedDifficulty\SaveType = SAVEANYWHERE Then
@@ -1146,10 +1146,10 @@ Function UpdateEvents()
 								PositionEntity(me\Collider, x, 0.302, z)
 								RotateEntity(Camera, -70.0, 0.0, 0.0)								
 								
-								CurrMusicVolume = MusicVolume
+								opt\CurrMusicVolume = opt\MusicVolume
 								
 								StopStream_Strict(MusicCHN)
-								MusicCHN = StreamSound_Strict("SFX\Music\" + Music[13] + ".ogg", CurrMusicVolume, Mode)
+								MusicCHN = StreamSound_Strict("SFX\Music\" + Music[13] + ".ogg", opt\CurrMusicVolume, Mode)
 								NowPlaying = ShouldPlay
 								
 								PlaySound_Strict(IntroSFX[Rand(8, 10)])
@@ -2161,7 +2161,7 @@ Function UpdateEvents()
 												ClearConsole()
 												
 												ShowEntity(tt\OverlayID[0])
-												CameraFogRange(Camera, CameraFogNear, CameraFogFar)
+												CameraFogRange(Camera, opt\CameraFogNear, opt\CameraFogFar)
 												CameraFogMode(Camera, 1)
 												
 												e\EventState2 = 1.0
@@ -3182,7 +3182,7 @@ Function UpdateEvents()
 							UpdateRooms()
 						EndIf					
 					Else ; ~ Pillar room
-						If ParticleAmount > 0
+						If opt\ParticleAmount > 0
 							If Rand(800) = 1 Then 
 								Angle = EntityYaw(Camera, True) + Rnd(150, 210)
 								p.Particles = CreateParticle(EntityX(me\Collider) + Cos(Angle) * 7.5, 0.0, EntityZ(me\Collider) + Sin(Angle) * 7.5, 3, 4.0, 0.0, 2500.0)
@@ -3779,8 +3779,8 @@ Function UpdateEvents()
 									For i = 0 To 2
 										If DistanceSquared(EntityX(Curr106\Collider), EntityX(e\room\Objects[i], True), EntityZ(Curr106\Collider), EntityZ(e\room\Objects[i], True)) < PowTwo(250.0 * RoomScale) Then
 											If PlayerRoom = e\room Then me\LightFlash = 0.3
-											If ParticleAmount > 0
-												For i = 0 To 5 + (5 * (ParticleAmount - 1))
+											If opt\ParticleAmount > 0
+												For i = 0 To 5 + (5 * (opt\ParticleAmount - 1))
 													p.Particles = CreateParticle(EntityX(Curr106\Collider, True), EntityY(Curr106\Collider, True), EntityZ(Curr106\Collider, True), 0, 0.015, -0.2, 250.0)
 													p\Size = 0.03 : p\Gravity = -0.2 : p\LifeTime = 200.0 : p\SizeChange = 0.005 : p\Speed = 0.001
 													RotateEntity(p\Pvt, Rnd(360.0), Rnd(360.0), 0.0, True)
@@ -3853,8 +3853,8 @@ Function UpdateEvents()
 						EndIf
 					ElseIf e\EventStr <> "" And e\EventStr <> "Step1" And e\EventStr <> "Done"
 						If Float(e\EventStr) < 70.0 * 10.0 Then
-							If ParticleAmount > 0 Then
-								If Rand(20 - (10 * (ParticleAmount - 1))) = 1 Then
+							If opt\ParticleAmount > 0 Then
+								If Rand(20 - (10 * (opt\ParticleAmount - 1))) = 1 Then
 									p.Particles = CreateParticle(EntityX(e\room\NPC[0]\Collider), EntityY(e\room\NPC[0]\OBJ) + 0.05, EntityZ(e\room\NPC[0]\Collider), 0, 0.05, 0.0, 60.0)
 									p\Speed = 0.002 : p\Achange = -0.02
 									RotateEntity(p\Pvt, 0.0, EntityYaw(e\room\NPC[0]\Collider), 0.0)
@@ -6458,7 +6458,7 @@ Function UpdateEvents()
 									GiveAchievement(Achv079)
 									e\EventState = 3.0
 									e\EventState2 = 1.0
-									e\SoundCHN3 = StreamSound_Strict("SFX\SCP\079\Speech.ogg", SFXVolume, 0.0)
+									e\SoundCHN3 = StreamSound_Strict("SFX\SCP\079\Speech.ogg", opt\SFXVolume, 0.0)
 									e\SoundCHN3_IsStream = True
 								EndIf							
 							ElseIf e\EventState < 2000.0 Then
@@ -6483,7 +6483,7 @@ Function UpdateEvents()
 									If e\SoundCHN3 <> 0 Then
 										StopStream_Strict(e\SoundCHN3) : e\SoundCHN3 = 0 
 									EndIf
-									e\SoundCHN3 = StreamSound_Strict("SFX\SCP\079\Refuse.ogg", SFXVolume, 0.0)
+									e\SoundCHN3 = StreamSound_Strict("SFX\SCP\079\Refuse.ogg", opt\SFXVolume, 0.0)
 								EndIf
 							EndIf
 						Else
@@ -6511,7 +6511,7 @@ Function UpdateEvents()
 						If e\SoundCHN3 <> 0
 							StopStream_Strict(e\SoundCHN3) : e\SoundCHN3 = 0
 						EndIf
-						e\SoundCHN3 = StreamSound_Strict("SFX\SCP\079\GateB.ogg", SFXVolume, 0.0)
+						e\SoundCHN3 = StreamSound_Strict("SFX\SCP\079\GateB.ogg", opt\SFXVolume, 0.0)
 						e\SoundCHN3_IsStream = True
 						e\EventState2 = 2.0
 						
@@ -7345,7 +7345,7 @@ Function UpdateEvents()
 							TurnEntity(em\OBJ, 90.0, 0.0, 0.0, True)
 							EntityParent(em\OBJ, e\room\OBJ)
 							em\Size = 0.05 : em\RandAngle = 10 : em\Speed = 0.06 : em\SizeChange = 0.007
-							For z = 0 To Ceil(3.3333 * (ParticleAmount + 1))
+							For z = 0 To Ceil(3.3333 * (opt\ParticleAmount + 1))
 								p.Particles = CreateParticle(EntityX(em\OBJ, True), 448.0 * RoomScale, EntityZ(em\OBJ, True), Rand(em\MinImage, em\MaxImage), em\Size, em\Gravity, em\LifeTime)
 								p\Speed = em\Speed : p\size = 0.05 : p\SizeChange = 0.008
 								RotateEntity(p\Pvt, Rnd(360.0), Rnd(360.0), 0.0, True)
@@ -7949,7 +7949,7 @@ Function UpdateEvents()
 										;[End Block]
 									Case ONETOONE
 										;[Block]
-										InvertMouse = (Not InvertMouse)
+										opt\InvertMouse = (Not opt\InvertMouse)
 										;[End Block]
 									Case FINE, VERYFINE
 										;[Block]
@@ -8211,8 +8211,8 @@ Function UpdateEvents()
 									RotateEntity(Pvt, 0.0, EntityYaw(d_Ent, True) + 90.0, 0.0)
 									MoveEntity(Pvt, 0.0, 0.0, 0.2)
 									
-									If ParticleAmount > 0 Then
-										For i = 0 To (1 + (2 * (ParticleAmount - 1)))
+									If opt\ParticleAmount > 0 Then
+										For i = 0 To (1 + (2 * (opt\ParticleAmount - 1)))
 											p.Particles = CreateParticle(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 7, 0.002, 0.0, 25.0)
 											p\Speed = Rnd(0.01, 0.05) : p\Size = 0.0075 : p\Achange = -0.05
 											RotateEntity(p\Pvt, Rnd(-45.0, 0.0), EntityYaw(Pvt) + Rnd(-10.0, 10.0), 0)
@@ -9433,12 +9433,12 @@ Function UpdateDimension1499()
 							If NowPlaying = 66 Then
 								If e\SoundCHN = 0 Then
 									e\Sound2 = LoadSound_Strict("SFX\Music\HaveMercyOnMe(Choir).ogg")
-									e\SoundCHN = StreamSound_Strict("SFX\Music\HaveMercyOnMe(NoChoir).ogg", MusicVolume)
+									e\SoundCHN = StreamSound_Strict("SFX\Music\HaveMercyOnMe(NoChoir).ogg", opt\MusicVolume)
 									e\SoundCHN_IsStream = True
 								EndIf
 							EndIf
 							If e\Sound2 <> 0 Then
-								e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\Levers[0], 10.0, MusicVolume)
+								e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\Levers[0], 10.0, opt\MusicVolume)
 							EndIf
 						Else
 							ShouldPlay = 19
@@ -9646,7 +9646,7 @@ Function UpdateEndings()
 								ElseIf e\EventState > 70.0 * 35.0 And e\EventState < 70.0 * 36.5	
 									me\CameraShake = 1.5		
 									If e\EventState - fpst\FPSFactor[0] =< 70.0 * 35.0 Then
-										e\SoundCHN = StreamSound_Strict("SFX\Ending\GateB\DetonatingAlphaWarheads.ogg", SFXVolume, 0.0)
+										e\SoundCHN = StreamSound_Strict("SFX\Ending\GateB\DetonatingAlphaWarheads.ogg", opt\SFXVolume, 0.0)
 										e\SoundCHN_IsStream = True
 									EndIf									
 								ElseIf e\EventState > 70.0 * 39.5 And e\EventState < 70.0 * 39.8		
@@ -9668,7 +9668,7 @@ Function UpdateEndings()
 							If e\EventState >= 70.0 * 45.0 Then
 								If e\EventState < 70.0 * 75.0 Then
 									If e\SoundCHN2 = 0
-										e\SoundCHN2 = StreamSound_Strict("SFX\Ending\GateB\Siren.ogg", SFXVolume, Mode)
+										e\SoundCHN2 = StreamSound_Strict("SFX\Ending\GateB\Siren.ogg", opt\SFXVolume, Mode)
 										e\SoundCHN2_IsStream = True
 									EndIf
 								Else
@@ -9787,15 +9787,15 @@ Function UpdateEndings()
 											TurnEntity(em\OBJ, (-80.0) + 20.0 * i, 0.0, 0.0)
 											EntityParent(em\OBJ, e\room\NPC[3]\Collider)
 											
-											If ParticleAmount > 0
-												For i = 0 To (3 + (4 * (ParticleAmount - 1)))
+											If opt\ParticleAmount > 0
+												For i = 0 To (3 + (4 * (opt\ParticleAmount - 1)))
 													p.Particles = CreateParticle(EntityX(e\room\NPC[3]\Collider), EntityY(e\room\NPC[3]\Collider), EntityZ(e\room\NPC[3]\Collider), 0, Rnd(0.5, 1.0), -0.1, 200.0)
 													p\Speed = 0.01 : p\SizeChange = 0.01 : p\A = 1.0 : p\Achange = -0.005
 													RotateEntity(p\Pvt, Rnd(360.0), Rnd(360.0), 0.0)
 													MoveEntity(p\Pvt, 0.0, 0.0, 0.3)
 												Next
 												
-												For i = 0 To (6 + (6 * (ParticleAmount - 1)))
+												For i = 0 To (6 + (6 * (opt\ParticleAmount - 1)))
 													p.Particles = CreateParticle(EntityX(e\room\NPC[3]\Collider), EntityY(e\room\NPC[3]\Collider), EntityZ(e\room\NPC[3]\Collider), 0, 0.02, 0.003, 200.0)
 													p\Speed = 0.04 : p\A = 1.0 : p\Achange = -0.005
 													RotateEntity(p\Pvt, Rnd(360.0), Rnd(360.0), 0.0)
@@ -9814,7 +9814,7 @@ Function UpdateEndings()
 						Angle = Max(Sin(EntityYaw(me\Collider)), 0.0)
 						CameraRange(Camera, 0.01, 60.0)
 						
-						If ParticleAmount > 0 Then
+						If opt\ParticleAmount > 0 Then
 							If Rand(3) = 1 Then
 								p.Particles = CreateParticle(EntityX(Camera) + Rnd(-2.0, 2.0), EntityY(Camera) + Rnd(0.9, 2.0), EntityZ(Camera) + Rnd(-2.0, 2.0), 2, 0.006, 0.0, 300.0)
 								p\Speed = Rnd(0.002, 0.003) : p\SizeChange = -0.00001
@@ -10103,8 +10103,8 @@ Function UpdateEndings()
 													EndIf
 												EndIf
 												
-												If ParticleAmount > 0
-													For i = 0 To Rand(2, 2 + (6 * (ParticleAmount - 1))) - Int(Dist)
+												If opt\ParticleAmount > 0
+													For i = 0 To Rand(2, 2 + (6 * (opt\ParticleAmount - 1))) - Int(Dist)
 														p.Particles = CreateParticle(EntityX(Curr106\OBJ, True), EntityY(Curr106\OBJ, True) + Rnd(0.4, 0.9), EntityZ(Curr106\OBJ), 0, 0.006, -0.002, 40.0)
 														p\Speed = 0.005 : p\A = 0.8 : p\Achange = -0.01
 														RotateEntity(p\Pvt, -Rnd(70.0, 110.0), Rnd(360.0), 0.0) 	

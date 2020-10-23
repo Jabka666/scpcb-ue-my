@@ -31,7 +31,7 @@ Function LoadMaterials(File$)
 			TemporaryString = Mid(TemporaryString, 2, Len(TemporaryString) - 2)
 			mat.Materials = New Materials
 			mat\Name = Lower(TemporaryString)
-			If BumpEnabled Then
+			If opt\BumpEnabled Then
 				StrTemp = GetINIString(File, TemporaryString, "bump")
 				If StrTemp <> "" Then 
 					mat\Bump =  LoadTexture_Strict(StrTemp)

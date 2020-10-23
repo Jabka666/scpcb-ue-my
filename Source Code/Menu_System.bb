@@ -92,7 +92,7 @@ Function UpdateMainMenu()
 		If (Not mo\MouseDown1) And (Not mo\MouseHit1) Then GrabbedEntity = 0
 		
 		UpdateMusic()
-		If EnableSFXRelease Then AutoReleaseSounds()
+		If opt\EnableSFXRelease Then AutoReleaseSounds()
 		
 		If ShouldPlay = 21 Then
 			EndBreathSFX = LoadSound_Strict("SFX\Ending\MenuBreath.ogg")
@@ -254,7 +254,7 @@ Function UpdateMainMenu()
 				Select MainMenuTab
 					Case MainMenuTab_New_Game
 						;[Block]
-						PutINIValue(OptionFile, "Global", "Enable Intro", IntroEnabled)
+						PutINIValue(OptionFile, "Global", "Enable Intro", opt\IntroEnabled)
 						MainMenuTab = MainMenuTab_Default
 						;[End Block]
 					Case MainMenuTab_Load_Game
@@ -270,7 +270,7 @@ Function UpdateMainMenu()
 						UserTrackCheck2 = 0
 						
 						CurrLoadGamePage = 0
-						AntiAlias(Opt_AntiAlias)
+						AntiAlias(opt\AntiAliasing)
 						MainMenuTab = MainMenuTab_Default
 						;[End Block]
 					Case MainMenuTab_Load_Map ; ~ Move back to the "New Game" tab
@@ -323,7 +323,7 @@ Function UpdateMainMenu()
 						EndIf
 					EndIf	
 					
-					IntroEnabled = DrawTick(x + 280 * MenuScale, y + 110 * MenuScale, IntroEnabled)	
+					opt\IntroEnabled = DrawTick(x + 280 * MenuScale, y + 110 * MenuScale, opt\IntroEnabled)	
 					
 					For i = SAFE To ESOTERIC
 						Local PrevSelectedDifficulty.Difficulty = SelectedDifficulty
@@ -388,7 +388,7 @@ Function UpdateMainMenu()
 						FlushKeys()
 						FlushMouse()
 						
-						PutINIValue(OptionFile, "Global", "Enable Intro", IntroEnabled)
+						PutINIValue(OptionFile, "Global", "Enable Intro", opt\IntroEnabled)
 					EndIf
 					;[End Block]
 				Case MainMenuTab_Load_Game
@@ -516,63 +516,63 @@ Function UpdateMainMenu()
 						
 						y = y + 20 * MenuScale
 						
-						BumpEnabled = DrawTick(x + 310 * MenuScale, y + MenuScale, BumpEnabled)
+						opt\BumpEnabled = DrawTick(x + 310 * MenuScale, y + MenuScale, opt\BumpEnabled)
 						
 						y = y + 30 * MenuScale
 						
-						VSync = DrawTick(x + 310 * MenuScale, y + MenuScale, VSync)
+						opt\VSync = DrawTick(x + 310 * MenuScale, y + MenuScale, opt\VSync)
 						
 						y = y + 30 * MenuScale
 						
-						Opt_AntiAlias = DrawTick(x + 310 * MenuScale, y + MenuScale, Opt_AntiAlias)
+						opt\AntiAliasing = DrawTick(x + 310 * MenuScale, y + MenuScale, opt\AntiAliasing)
 						
 						y = y + 30 * MenuScale
 						
-						EnableRoomLights = DrawTick(x + 310 * MenuScale, y + MenuScale, EnableRoomLights)
+						opt\EnableRoomLights = DrawTick(x + 310 * MenuScale, y + MenuScale, opt\EnableRoomLights)
 						
 						y = y + 40 * MenuScale
 						
-						ScreenGamma = (SlideBar(x + 310 * MenuScale, y, 150 * MenuScale, ScreenGamma * 50.0) / 50.0)
+						opt\ScreenGamma = (SlideBar(x + 310 * MenuScale, y, 150 * MenuScale, opt\ScreenGamma * 50.0) / 50.0)
 						
 						y = y + 50 * MenuScale
 						
-						ParticleAmount = Slider3(x + 310  * MenuScale, y, 150 * MenuScale, ParticleAmount, 2, "MINIMAL", "REDUCED", "FULL")
+						opt\ParticleAmount = Slider3(x + 310  * MenuScale, y, 150 * MenuScale, opt\ParticleAmount, 2, "MINIMAL", "REDUCED", "FULL")
 						
 						y = y + 50 * MenuScale
 						
-						TextureDetails = Slider5(x + 310 * MenuScale, y, 150 * MenuScale, TextureDetails, 3, "0.8", "0.4", "0.0", "-0.4", "-0.8")
-						Select TextureDetails
+						opt\TextureDetails = Slider5(x + 310 * MenuScale, y, 150 * MenuScale, opt\TextureDetails, 3, "0.8", "0.4", "0.0", "-0.4", "-0.8")
+						Select opt\TextureDetails
 							Case 0
 								;[Block]
-								TextureFloat = 0.8
+								opt\TextureFloat = 0.8
 								;[End Block]
 							Case 1
 								;[Block]
-								TextureFloat = 0.4
+								opt\TextureFloat = 0.4
 								;[End Block]
 							Case 2
 								;[Block]
-								TextureFloat = 0.0
+								opt\TextureFloat = 0.0
 								;[End Block]
 							Case 3
 								;[Block]
-								TextureFloat = -0.4
+								opt\TextureFloat = -0.4
 								;[End Block]
 							Case 4
 								;[Block]
-								TextureFloat = -0.8
+								opt\TextureFloat = -0.8
 								;[End Block]
 						End Select
-						TextureLodBias(TextureFloat)
+						TextureLodBias(opt\TextureFloat)
 						
 						y = y + 50 * MenuScale
 						
-						SaveTexturesInVRAM = DrawTick(x + 310 * MenuScale, y + MenuScale, SaveTexturesInVRAM)
+						opt\SaveTexturesInVRAM = DrawTick(x + 310 * MenuScale, y + MenuScale, opt\SaveTexturesInVRAM)
 						
 						y = y + 50 * MenuScale
 						
-						CurrFOV = (SlideBar(x + 310 * MenuScale, y, 150 * MenuScale, CurrFOV * 2.0) / 2.0)
-						FOV = CurrFOV + 40
+						opt\CurrFOV = (SlideBar(x + 310 * MenuScale, y, 150 * MenuScale, opt\CurrFOV * 2.0) / 2.0)
+						opt\FOV = opt\CurrFOV + 40
 						;[End Block]
 					ElseIf MainMenuTab = MainMenuTab_Options_Audio
 						;[Block]
@@ -580,18 +580,18 @@ Function UpdateMainMenu()
 						
 						y = y + 20 * MenuScale
 						
-						MusicVolume = (SlideBar(x + 310 * MenuScale, y, 150 * MenuScale, MusicVolume * 100.0) / 100.0)
+						opt\MusicVolume = (SlideBar(x + 310 * MenuScale, y, 150 * MenuScale, opt\MusicVolume * 100.0) / 100.0)
 						
 						y = y + 40 * MenuScale
 						
-						PrevSFXVolume = (SlideBar(x + 310 * MenuScale, y, 150 * MenuScale, SFXVolume * 100.0) / 100.0)
-						SFXVolume = PrevSFXVolume
+						opt\PrevSFXVolume = (SlideBar(x + 310 * MenuScale, y, 150 * MenuScale, opt\SFXVolume * 100.0) / 100.0)
+						opt\SFXVolume = opt\PrevSFXVolume
 						
 						y = y + 40 * MenuScale
 						
-						EnableSFXRelease = DrawTick(x + 310 * MenuScale, y + MenuScale, EnableSFXRelease)
-						If EnableSFXRelease_Prev <> EnableSFXRelease
-							If EnableSFXRelease Then
+						opt\EnableSFXRelease = DrawTick(x + 310 * MenuScale, y + MenuScale, opt\EnableSFXRelease)
+						If opt\PrevEnableSFXRelease <> opt\EnableSFXRelease
+							If opt\EnableSFXRelease Then
 								For snd.Sound = Each Sound
 									For i = 0 To 31
 										If snd\Channels[i] <> 0 Then
@@ -611,25 +611,25 @@ Function UpdateMainMenu()
 									If snd\InternalHandle = 0 Then snd\InternalHandle = LoadSound(snd\Name)
 								Next
 							EndIf
-							EnableSFXRelease_Prev = EnableSFXRelease
+							opt\PrevEnableSFXRelease = opt\EnableSFXRelease
 						EndIf
 						
 						y = y + 30 * MenuScale
 						
-						Local PrevEnableUserTracks% = EnableUserTracks
+						Local PrevEnableUserTracks% = opt\EnableUserTracks
 						
-						EnableUserTracks = DrawTick(x + 310 * MenuScale, y + MenuScale, EnableUserTracks)
+						opt\EnableUserTracks = DrawTick(x + 310 * MenuScale, y + MenuScale, opt\EnableUserTracks)
 						
 						If PrevEnableUserTracks Then
-							If PrevEnableUserTracks <> EnableUserTracks Then
+							If PrevEnableUserTracks <> opt\EnableUserTracks Then
 								ShouldDeleteGadgets = True
 							EndIf
 						EndIf
 						
-						If EnableUserTracks Then
+						If opt\EnableUserTracks Then
 							y = y + 30 * MenuScale
 							
-							UserTrackMode = DrawTick(x + 310 * MenuScale, y + MenuScale, UserTrackMode)
+							opt\UserTrackMode = DrawTick(x + 310 * MenuScale, y + MenuScale, opt\UserTrackMode)
 							
 							If DrawButton(x + 20 * MenuScale, y + 30 * MenuScale, 210 * MenuScale, 25 * MenuScale, "Scan for User Tracks", False)
 								UserTrackCheck = 0
@@ -660,15 +660,15 @@ Function UpdateMainMenu()
 						
 						y = y + 20 * MenuScale
 						
-						MouseSensitivity = (SlideBar(x + 310 * MenuScale, y, 150 * MenuScale, (MouseSensitivity + 0.5) * 100.0) / 100.0) - 0.5
+						opt\MouseSensitivity = (SlideBar(x + 310 * MenuScale, y, 150 * MenuScale, (opt\MouseSensitivity + 0.5) * 100.0) / 100.0) - 0.5
 						
 						y = y + 40 * MenuScale
 						
-						InvertMouse = DrawTick(x + 310 * MenuScale, y + MenuScale, InvertMouse)
+						opt\InvertMouse = DrawTick(x + 310 * MenuScale, y + MenuScale, opt\InvertMouse)
 						
 						y = y + 40 * MenuScale
 						
-						MouseSmoothing = (SlideBar(x + 310 * MenuScale, y, 150 * MenuScale, (MouseSmoothing) * 50.0) / 50.0)
+						opt\MouseSmoothing = (SlideBar(x + 310 * MenuScale, y, 150 * MenuScale, (opt\MouseSmoothing) * 50.0) / 50.0)
 						
 						y = y + 30 * MenuScale
 						
@@ -775,66 +775,66 @@ Function UpdateMainMenu()
 						If CurrLoadGamePage = 0 Then
 							y = y + 20 * MenuScale
 							
-							HUDEnabled = DrawTick(x + 310 * MenuScale, y + MenuScale, HUDenabled)
+							opt\HUDEnabled = DrawTick(x + 310 * MenuScale, y + MenuScale, opt\HUDEnabled)
 							
 							y = y + 30 * MenuScale
 							
-							Local PrevCanOpenConsole% = CanOpenConsole
+							Local PrevCanOpenConsole% = opt\CanOpenConsole
 							
-							CanOpenConsole = DrawTick(x + 310 * MenuScale, y + MenuScale, CanOpenConsole)
+							opt\CanOpenConsole = DrawTick(x + 310 * MenuScale, y + MenuScale, opt\CanOpenConsole)
 							
 							If PrevCanOpenConsole Then
-								If PrevCanOpenConsole <> CanOpenConsole
+								If PrevCanOpenConsole <> opt\CanOpenConsole
 									ShouldDeleteGadgets = True
 								EndIf
 							EndIf
 							
 							y = y + 30 * MenuScale
 							
-							If CanOpenConsole Then
-								ConsoleOpening = DrawTick(x + 310 * MenuScale, y + MenuScale, ConsoleOpening)
+							If opt\CanOpenConsole Then
+								opt\ConsoleOpening = DrawTick(x + 310 * MenuScale, y + MenuScale, opt\ConsoleOpening)
 							EndIf
 							
 							y = y + 30 * MenuScale
 							
-							AchvMsgEnabled = DrawTick(x + 310 * MenuScale, y + MenuScale, AchvMSGenabled)
+							opt\AchvMsgEnabled = DrawTick(x + 310 * MenuScale, y + MenuScale, opt\AchvMsgEnabled)
 							
 							y = y + 50 * MenuScale
 							
-							ShowFPS = DrawTick(x + 310 * MenuScale, y + MenuScale, ShowFPS)
+							opt\ShowFPS = DrawTick(x + 310 * MenuScale, y + MenuScale, opt\ShowFPS)
 							
 							y = y + 30 * MenuScale
 							
-							Local PrevCurrFrameLimit% = CurrFrameLimit > 0.0
+							Local PrevCurrFrameLimit% = opt\CurrFrameLimit > 0.0
 							
-							If DrawTick(x + 310 * MenuScale, y, CurrFrameLimit > 0.0) Then
-								CurrFrameLimit = (SlideBar(x + 150 * MenuScale, y + 30 * MenuScale, 100 * MenuScale, CurrFrameLimit * 99.0) / 99.0)
-								CurrFrameLimit = Max(CurrFrameLimit, 0.01)
-								FrameLimit = 19 + (CurrFrameLimit * 100.0)
+							If DrawTick(x + 310 * MenuScale, y, opt\CurrFrameLimit > 0.0) Then
+								opt\CurrFrameLimit = (SlideBar(x + 150 * MenuScale, y + 30 * MenuScale, 100 * MenuScale, opt\CurrFrameLimit * 99.0) / 99.0)
+								opt\CurrFrameLimit = Max(opt\CurrFrameLimit, 0.01)
+								opt\FrameLimit = 19 + (opt\CurrFrameLimit * 100.0)
 							Else
-								CurrFrameLimit = 0.0
-								FrameLimit = 0
+								opt\CurrFrameLimit = 0.0
+								opt\FrameLimit = 0
 							EndIf
 							
 							If PrevCurrFrameLimit Then
-								If PrevCurrFrameLimit <> CurrFrameLimit Then
+								If PrevCurrFrameLimit <> opt\CurrFrameLimit Then
 									ShouldDeleteGadgets = True
 								EndIf
 							EndIf
 						Else
 							y = y + 20 * MenuScale
 							
-							If HUDEnabled Then
-								BarStyle = DrawTick(x + 310 * MenuScale, y + MenuScale, BarStyle)
+							If opt\HUDEnabled Then
+								opt\BarStyle = DrawTick(x + 310 * MenuScale, y + MenuScale, opt\BarStyle)
 							EndIf
 							
 							y = y + 30 * MenuScale
 							
-							PlayStartup = DrawTick(x + 310 * MenuScale, y + MenuScale, PlayStartup)
+							opt\PlayStartup = DrawTick(x + 310 * MenuScale, y + MenuScale, opt\PlayStartup)
 							
 							y = y + 30 * MenuScale
 							
-							LauncherEnabled = DrawTick(x + 310 * MenuScale, y + MenuScale, LauncherEnabled)
+							opt\LauncherEnabled = DrawTick(x + 310 * MenuScale, y + MenuScale, opt\LauncherEnabled)
 							
 							y = y + 30 * MenuScale
 							
@@ -910,10 +910,10 @@ Function UpdateMainMenu()
 	
 	Color(255, 255, 255)
 	SetFont(fo\ConsoleFont)
-	Text(20, GraphicHeight - 50, "v" + VersionNumber)
-	If ShowFPS Then SetFont(fo\ConsoleFont) : Text(20, GraphicHeight - 30, "FPS: " + ft\fps) : SetFont(fo\FontID[0])
+	Text(20, opt\GraphicHeight - 50, "v" + VersionNumber)
+	If opt\ShowFPS Then SetFont(fo\ConsoleFont) : Text(20, opt\GraphicHeight - 30, "FPS: " + ft\fps) : SetFont(fo\FontID[0])
 	
-	If DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+	If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	
 	SetFont(fo\FontID[0])
 End Function
@@ -928,7 +928,7 @@ Function RenderMainMenu()
 	DrawImage(MenuBack, 0, 0)
 	
 	If (MilliSecs2() Mod MenuBlinkTimer[0]) >= Rand(MenuBlinkDuration[0]) Then
-		DrawImage(Menu173, GraphicWidth - ImageWidth(Menu173), GraphicHeight - ImageHeight(Menu173))
+		DrawImage(Menu173, opt\GraphicWidth - ImageWidth(Menu173), opt\GraphicHeight - ImageHeight(Menu173))
 	EndIf
 	
 	SetFont(fo\FontID[0])
@@ -1007,10 +1007,10 @@ Function RenderMainMenu()
 	
 	SetFont(fo\FontID[1])
 	
-	DrawImage(MenuText, GraphicWidth / 2 - ImageWidth(MenuText) / 2, GraphicHeight - 20 * MenuScale - ImageHeight(MenuText))
+	DrawImage(MenuText, opt\GraphicWidth / 2 - ImageWidth(MenuText) / 2, opt\GraphicHeight - 20 * MenuScale - ImageHeight(MenuText))
 	
-	If GraphicWidth > 1240 * MenuScale Then
-		DrawTiledImageRect(MenuWhite, 0, 5, 512, 7 * MenuScale, 985.0 * MenuScale, 407.0 * MenuScale, (GraphicWidth - 1240 * MenuScale) + 300, 7 * MenuScale)
+	If opt\GraphicWidth > 1240 * MenuScale Then
+		DrawTiledImageRect(MenuWhite, 0, 5, 512, 7 * MenuScale, 985.0 * MenuScale, 407.0 * MenuScale, (opt\GraphicWidth - 1240 * MenuScale) + 300, 7 * MenuScale)
 	EndIf
 	
 	If MainMenuTab <> MainMenuTab_Default Then
@@ -1252,7 +1252,7 @@ Function RenderMainMenu()
 					Color(255, 255, 255)
 					Text(x + 20 * MenuScale, y + 4 * MenuScale, "Screen gamma:")
 					If MouseOn(x + 310 * MenuScale, y + 6 * MenuScale, 150 * MenuScale + 14, 20) And OnSliderID = 0
-						DrawOptionsTooltip(tX, tY, tW, tH, "gamma", ScreenGamma)
+						DrawOptionsTooltip(tX, tY, tW, tH, "gamma", opt\ScreenGamma)
 					EndIf
 					
 					y = y + 50 * MenuScale
@@ -1260,7 +1260,7 @@ Function RenderMainMenu()
 					Color(255, 255, 255)
 					Text(x + 20 * MenuScale, y + 4 * MenuScale, "Particle amount:")
 					If (MouseOn(x + 310 * MenuScale, y - 6 * MenuScale, 150 * MenuScale + 14, 20) And OnSliderID = 0) Lor OnSliderID = 2
-						DrawOptionsTooltip(tX, tY, tW, tH, "particleamount", ParticleAmount)
+						DrawOptionsTooltip(tX, tY, tW, tH, "particleamount", opt\ParticleAmount)
 					EndIf
 					
 					y = y + 50 * MenuScale
@@ -1284,14 +1284,14 @@ Function RenderMainMenu()
 					Color(255, 255, 255)
 					Text(x + 20 * MenuScale, y + 4 * MenuScale, "Field of view:")
 					Color(255, 255, 0)
-					Text(x + 25 * MenuScale, y + 30 * MenuScale, Int(FOV) + "°")
+					Text(x + 25 * MenuScale, y + 30 * MenuScale, Int(opt\FOV) + "°")
 					If MouseOn(x + 310 * MenuScale, y + 6 * MenuScale, 150 * MenuScale + 14, 20)
 						DrawOptionsTooltip(tX, tY, tW, tH, "fov")
 					EndIf
 					;[End Block]
 				ElseIf MainMenuTab = MainMenuTab_Options_Audio
 					;[Block]
-					If EnableUserTracks Then
+					If opt\EnableUserTracks Then
 						Height = 230 * MenuScale
 					Else
 						Height = 170 * MenuScale
@@ -1303,7 +1303,7 @@ Function RenderMainMenu()
 					Color(255, 255, 255)
 					Text(x + 20 * MenuScale, y + 4 * MenuScale, "Music volume:")
 					If MouseOn(x + 310 * MenuScale, y - 4 * MenuScale, 150 * MenuScale + 14, 20)
-						DrawOptionsTooltip(tX, tY, tW, tH, "musicvol", MusicVolume)
+						DrawOptionsTooltip(tX, tY, tW, tH, "musicvol", opt\MusicVolume)
 					EndIf
 					
 					y = y + 40 * MenuScale
@@ -1311,7 +1311,7 @@ Function RenderMainMenu()
 					Color(255, 255, 255)
 					Text(x + 20 * MenuScale, y + 4 * MenuScale, "Sound volume:")
 					If MouseOn(x + 310 * MenuScale, y - 4 * MenuScale, 150 * MenuScale + 14, 20)
-						DrawOptionsTooltip(tX, tY, tW, tH, "soundvol", PrevSFXVolume)
+						DrawOptionsTooltip(tX, tY, tW, tH, "soundvol", opt\PrevSFXVolume)
 					EndIf
 					
 					y = y + 40 * MenuScale
@@ -1331,10 +1331,10 @@ Function RenderMainMenu()
 					
 					y = y + 30 * MenuScale
 					
-					If EnableUserTracks Then
+					If opt\EnableUserTracks Then
 						Color(255, 255, 255)
 						Text(x + 20 * MenuScale, y + 4 * MenuScale, "User track mode:")
-						If UserTrackMode
+						If opt\UserTrackMode
 							Text(x + 350 * MenuScale, y + 4 * MenuScale, "Repeat")
 						Else
 							Text(x + 350 * MenuScale, y + 4 * MenuScale, "Random")
@@ -1360,7 +1360,7 @@ Function RenderMainMenu()
 					Color(255, 255, 255)
 					Text(x + 20 * MenuScale, y + 4 * MenuScale, "Mouse sensitivity:")
 					If MouseOn(x + 310 * MenuScale, y - 4 * MenuScale, 150 * MenuScale + 14, 20)
-						DrawOptionsTooltip(tX, tY, tW, tH, "mousesensitivity", MouseSensitivity)
+						DrawOptionsTooltip(tX, tY, tW, tH, "mousesensitivity", opt\MouseSensitivity)
 					EndIf
 					
 					y = y + 40 * MenuScale
@@ -1376,7 +1376,7 @@ Function RenderMainMenu()
 					Color(255, 255, 255)
 					Text(x + 20 * MenuScale, y + 4 * MenuScale, "Mouse smoothing:")
 					If MouseOn(x + 310 * MenuScale, y - 4 * MenuScale, 150 * MenuScale + 14, 20)
-						DrawOptionsTooltip(tX, tY, tW, tH, "mousesmoothing", MouseSmoothing)
+						DrawOptionsTooltip(tX, tY, tW, tH, "mousesmoothing", opt\MouseSmoothing)
 					EndIf
 					
 					Color(255, 255, 255)
@@ -1442,7 +1442,7 @@ Function RenderMainMenu()
 						
 						y = y + 30 * MenuScale
 						
-						If CanOpenConsole Then
+						If opt\CanOpenConsole Then
 							Color(255, 255, 255)
 							Text(x + 20 * MenuScale, y + 4 * MenuScale, "Open console on error:")
 							If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
@@ -1469,25 +1469,25 @@ Function RenderMainMenu()
 						y = y + 30 * MenuScale
 						
 						Color(255, 255, 255)
-						Text(x + 20 * MenuScale, y + 4 * MenuScale, "Framelimit:")
+						Text(x + 20 * MenuScale, y + 4 * MenuScale, "Frame limit:")
 						Color(255, 255, 255)
-						If CurrFrameLimit > 0.0 Then
+						If opt\CurrFrameLimit > 0.0 Then
 							Color(255, 255, 0)
-							Text(x + 25 * MenuScale, y + 34 * MenuScale, FrameLimit + " FPS")
+							Text(x + 25 * MenuScale, y + 34 * MenuScale, opt\FrameLimit + " FPS")
 						EndIf
 						If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
-							DrawOptionsTooltip(tX, tY, tW, tH, "framelimit", FrameLimit)
+							DrawOptionsTooltip(tX, tY, tW, tH, "framelimit", opt\FrameLimit)
 						EndIf
 						If MouseOn(x + 150 * MenuScale, y + 30 * MenuScale, 100 * MenuScale + 14, 20)
-							DrawOptionsTooltip(tX, tY, tW, tH, "framelimit", FrameLimit)
+							DrawOptionsTooltip(tX, tY, tW, tH, "framelimit", opt\FrameLimit)
 						EndIf
 					Else
 						y = y + 20 * MenuScale
 						
-						If HUDenabled Then
+						If opt\HUDEnabled Then
 							Color(255, 255, 255)
 							Text(x + 20 * MenuScale, y + 4 * MenuScale, "Bar style:")
-							If BarStyle = 1 Then
+							If opt\BarStyle = 1 Then
 								Text(x + 350 * MenuScale, y + 4 * MenuScale, "Dymanic")
 							Else
 								Text(x + 350 * MenuScale, y + 4 * MenuScale, "Classic")
@@ -1596,8 +1596,8 @@ Function UpdateLauncher(lnchr.Launcher)
 	
 	SetBuffer(BackBuffer())
 	
-	RealGraphicWidth = GraphicWidth
-	RealGraphicHeight = GraphicHeight
+	opt\RealGraphicWidth = opt\GraphicWidth
+	opt\RealGraphicHeight = opt\GraphicHeight
 	
 	fo\FontID[0] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 16, 1)
 	SetFont(fo\FontID[0])
@@ -1618,7 +1618,7 @@ Function UpdateLauncher(lnchr.Launcher)
 			If lnchr\GFXModeWidths[n] = GfxModeWidth(i) And lnchr\GFXModeHeights[n] = GfxModeHeight(i) Then SameFound = True : Exit
 		Next
 		If (Not SameFound) Then
-			If GraphicWidth = GfxModeWidth(i) And GraphicHeight = GfxModeHeight(i) Then lnchr\SelectedGFXMode = lnchr\GFXModes
+			If opt\GraphicWidth = GfxModeWidth(i) And opt\GraphicHeight = GfxModeHeight(i) Then lnchr\SelectedGFXMode = lnchr\GFXModes
 			lnchr\GFXModeWidths[lnchr\GFXModes] = GfxModeWidth(i)
 			lnchr\GFXModeHeights[lnchr\GFXModes] = GfxModeHeight(i)
 			lnchr\GFXModes = lnchr\GFXModes + 1 
@@ -1660,14 +1660,14 @@ Function UpdateLauncher(lnchr.Launcher)
 			If y >= 250 - 65 + (LauncherHeight - 340) Then y = 270 - 65 : x = x + 100
 		Next
 		
-		LauncherEnabled = DrawLauncherTick(455, 202, LauncherEnabled)
+		opt\LauncherEnabled = DrawLauncherTick(455, 202, opt\LauncherEnabled)
 		Text(485, 206, "Use launcher")
 		
 		Text(455, 234, "Display Mode:")
 		
 		Local Txt$
 		
-		Select DisplayMode
+		Select opt\DisplayMode
 			Case 0
 				;[Block]
 				Txt = "Fullscreen"
@@ -1690,7 +1690,7 @@ Function UpdateLauncher(lnchr.Launcher)
 		DrawFrame(455, 254, 120, 30)
 		Text(515, 264, Txt, True)
 		If DrawLauncherButton(575, 254, 30, 30, "", False) Then
-			DisplayMode = (DisplayMode + 1) Mod 3
+			opt\DisplayMode = (opt\DisplayMode + 1) Mod 3
 		EndIf
 		DrawImage(LauncherArrowIMG, 589, 268)
 		
@@ -1705,10 +1705,10 @@ Function UpdateLauncher(lnchr.Launcher)
 		EndIf
 		
 		If DrawLauncherButton(LauncherWidth - 30 - 90, LauncherHeight - 105, 100, 30, "LAUNCH", False, False) Then
-			GraphicWidth = lnchr\GFXModeWidths[lnchr\SelectedGFXMode]
-			GraphicHeight = lnchr\GFXModeHeights[lnchr\SelectedGFXMode]
-			RealGraphicWidth = GraphicWidth
-			RealGraphicHeight = GraphicHeight
+			opt\GraphicWidth = lnchr\GFXModeWidths[lnchr\SelectedGFXMode]
+			opt\GraphicHeight = lnchr\GFXModeHeights[lnchr\SelectedGFXMode]
+			opt\RealGraphicWidth = opt\GraphicWidth
+			opt\RealGraphicHeight = opt\GraphicHeight
 			Exit
 		EndIf
 		
@@ -1718,8 +1718,8 @@ Function UpdateLauncher(lnchr.Launcher)
 	
 	PutINIValue(OptionFile, "Global", "Width", lnchr\GFXModeWidths[lnchr\SelectedGFXMode])
 	PutINIValue(OptionFile, "Global", "Height", lnchr\GFXModeHeights[lnchr\SelectedGFXMode])
-	PutINIValue(OptionFile, "Advanced", "Launcher Enabled", LauncherEnabled)
-	PutINIValue(OptionFile, "Global", "Display Mode", DisplayMode)
+	PutINIValue(OptionFile, "Advanced", "Launcher Enabled", opt\LauncherEnabled)
+	PutINIValue(OptionFile, "Global", "Display Mode", opt\DisplayMode)
 	
 	If Quit Then End()
 	
@@ -1846,21 +1846,21 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 		EndIf
 		
 		If (Not SelectedLoadingScreen\DisableBackground) Then
-			DrawImage(LoadingBack, GraphicWidth / 2 - ImageWidth(LoadingBack) / 2, GraphicHeight / 2 - ImageHeight(LoadingBack) / 2)
+			DrawImage(LoadingBack, opt\GraphicWidth / 2 - ImageWidth(LoadingBack) / 2, opt\GraphicHeight / 2 - ImageHeight(LoadingBack) / 2)
 		EndIf	
 		
 		If SelectedLoadingScreen\AlignX = 0 Then
-			x = GraphicWidth / 2 - ImageWidth(SelectedLoadingScreen\Img) / 2 
+			x = opt\GraphicWidth / 2 - ImageWidth(SelectedLoadingScreen\Img) / 2 
 		ElseIf  SelectedLoadingScreen\AlignX = 1
-			x = GraphicWidth - ImageWidth(SelectedLoadingScreen\Img)
+			x = opt\GraphicWidth - ImageWidth(SelectedLoadingScreen\Img)
 		Else
 			x = 0
 		EndIf
 		
 		If SelectedLoadingScreen\AlignY = 0 Then
-			y = GraphicHeight / 2 - ImageHeight(SelectedLoadingScreen\Img) / 2 
+			y = opt\GraphicHeight / 2 - ImageHeight(SelectedLoadingScreen\Img) / 2 
 		ElseIf  SelectedLoadingScreen\AlignY = 1
-			y = GraphicHeight - ImageHeight(SelectedLoadingScreen\Img)
+			y = opt\GraphicHeight - ImageHeight(SelectedLoadingScreen\Img)
 		Else
 			y = 0
 		EndIf	
@@ -1869,11 +1869,11 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 		
 		Local Width% = 300, Height% = 20, i%
 		
-		x = GraphicWidth / 2 - Width / 2
-		y = GraphicHeight / 2 + 30 - 100
+		x = opt\GraphicWidth / 2 - Width / 2
+		y = opt\GraphicHeight / 2 + 30 - 100
 		
 		Rect(x, y, Width + 4, Height, False)
-		If BarStyle = 1 Then
+		If opt\BarStyle = 1 Then
 		    Color(100, 100, 100)
 		    Rect(x + 3, y + 3, Float(Percent * 2.98), 14)
 		Else
@@ -1903,7 +1903,7 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 			For i = 0 To Temp
 				Strtemp = Strtemp + Chr(Rand(48, 122))
 			Next
-			Text(GraphicWidth / 2, GraphicHeight / 2 + 80, Strtemp, True, True)
+			Text(opt\GraphicWidth / 2, opt\GraphicHeight / 2 + 80, Strtemp, True, True)
 			
 			If Percent = 0 Then 
 				If Rand(5) = 1 Then
@@ -1976,30 +1976,30 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 				Strtemp = Replace(SelectedLoadingScreen\Txt[0], Mid(SelectedLoadingScreen\Txt[0], Rand(1, Len(Strtemp) - 1), 1), Chr(Rand(130, 250)))
 			Next		
 			SetFont(fo\FontID[0])
-			RowText(Strtemp, GraphicWidth / 2 - 200, GraphicHeight / 2 + 120, 400, 300, True)		
+			RowText(Strtemp, opt\GraphicWidth / 2 - 200, opt\GraphicHeight / 2 + 120, 400, 300, True)		
 		Else
 			
 			Color(0, 0, 0)
 			SetFont(fo\FontID[1])
-			Text(GraphicWidth / 2 + 1, GraphicHeight / 2 + 80 + 1, SelectedLoadingScreen\Title, True, True)
+			Text(opt\GraphicWidth / 2 + 1, opt\GraphicHeight / 2 + 80 + 1, SelectedLoadingScreen\Title, True, True)
 			SetFont(fo\FontID[0])
-			RowText(SelectedLoadingScreen\Txt[LoadingScreenText], GraphicWidth / 2 - 200 + 1, GraphicHeight / 2 + 120 + 1, 400, 300, True)
+			RowText(SelectedLoadingScreen\Txt[LoadingScreenText], opt\GraphicWidth / 2 - 200 + 1, opt\GraphicHeight / 2 + 120 + 1, 400, 300, True)
 			
 			Color(255, 255, 255)
 			SetFont(fo\FontID[1])
-			Text(GraphicWidth / 2, GraphicHeight / 2 + 80, SelectedLoadingScreen\Title, True, True)
+			Text(opt\GraphicWidth / 2, opt\GraphicHeight / 2 + 80, SelectedLoadingScreen\Title, True, True)
 			SetFont(fo\FontID[0])
-			RowText(SelectedLoadingScreen\Txt[LoadingScreenText], GraphicWidth / 2 - 200, GraphicHeight / 2 + 120, 400, 300, True)
+			RowText(SelectedLoadingScreen\Txt[LoadingScreenText], opt\GraphicWidth / 2 - 200, opt\GraphicHeight / 2 + 120, 400, 300, True)
 		EndIf
 		
 		Color(0, 0, 0)
-		Text(GraphicWidth / 2 + 1, GraphicHeight / 2 - 100 + 1, "LOADING - " + Percent + " %", True, True)
+		Text(opt\GraphicWidth / 2 + 1, opt\GraphicHeight / 2 - 100 + 1, "LOADING - " + Percent + " %", True, True)
 		Color(255, 255, 255)
-		Text(GraphicWidth / 2, GraphicHeight / 2 - 100, "LOADING - " + Percent + " %", True, True)
+		Text(opt\GraphicWidth / 2, opt\GraphicHeight / 2 - 100, "LOADING - " + Percent + " %", True, True)
 		
 		If Percent = 100 Then 
 			If FirstLoop And SelectedLoadingScreen\Title <> "CWM" Then PlaySound_Strict(LoadTempSound(("SFX\Horror\Horror8.ogg")))
-			Text(GraphicWidth / 2, GraphicHeight - 50, "PRESS ANY KEY TO CONTINUE", True, True)
+			Text(opt\GraphicWidth / 2, opt\GraphicHeight - 50, "PRESS ANY KEY TO CONTINUE", True, True)
 		Else
 			FlushKeys()
 			FlushMouse()
@@ -2886,7 +2886,7 @@ Function DrawOptionsTooltip(x%, y%, Width%, Height%, Option$, Value# = 0.0, InGa
 		Case "fov"
 			;[Block]
 			Txt = Chr(34) + "Field of view" + Chr(34) + " is the amount of game view that is on display during a game."
-			Txt2 = "Current value: " + Int(FOV) + "° (default is 74°)"
+			Txt2 = "Current value: " + Int(opt\FOV) + "° (default is 74°)"
 			;[End Block]
 		Case "barstyle"
 			;[Block]

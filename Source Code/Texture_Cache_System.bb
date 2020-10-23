@@ -28,7 +28,7 @@ Function LoadTextureCheckingIfInCache(TexName$, TexFlags% = 1, DeleteType% = Del
 	tic\TexName = StripPath(TexName)
 	tic\TexDeleteType = DeleteType
 	If tic\Tex = 0 Then
-		tic\Tex = LoadTexture(CurrPath, TexFlags + (256 * (SaveTexturesInVRAM <> 0)))
+		tic\Tex = LoadTexture(CurrPath, TexFlags + (256 * (opt\SaveTexturesInVRAM <> 0)))
 	EndIf
 	Return(tic\Tex)
 End Function
@@ -53,7 +53,7 @@ Function LoadAnimTextureCheckingIfInCache(TexName$, TexFlags% = 1, Width%, Heigh
 	tic\TexName = StripPath(TexName)
 	tic\TexDeleteType = DeleteType
 	If tic\Tex = 0 Then
-		tic\Tex = LoadAnimTexture(CurrPath, TexFlags + (256 * (SaveTexturesInVRAM <> 0)), Width, Height, FirstFrame, Count)
+		tic\Tex = LoadAnimTexture(CurrPath, TexFlags + (256 * (opt\SaveTexturesInVRAM <> 0)), Width, Height, FirstFrame, Count)
 	EndIf
 	Return(tic\Tex)
 End Function
@@ -90,7 +90,7 @@ Function CreateTextureUsingCacheSystem(Width%, Height%, TexFlags% = 1, Frames% =
 	tic.TextureInCache = New TextureInCache
 	tic\TexName = "CreateTexture"
 	tic\TexDeleteType = DeleteType
-	tic\Tex = CreateTexture(Width, Height, TexFlags + (256 * (SaveTexturesInVRAM <> 0)), Frames)
+	tic\Tex = CreateTexture(Width, Height, TexFlags + (256 * (opt\SaveTexturesInVRAM <> 0)), Frames)
 	Return(tic\Tex)
 End Function
 

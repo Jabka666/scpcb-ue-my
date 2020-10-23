@@ -263,7 +263,7 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 			Local BumpTex% = 0
 			
 			If Tex[0] <> 0 And Tex[1] <> 0 Then
-				If BumpEnabled Then
+				If opt\BumpEnabled Then
 					Local Temp$ = StripPath(TextureName(Tex[1]))
 					
 					For mat.Materials = Each Materials
@@ -288,7 +288,7 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 				EndIf
 				BrushTexture(Brush, AmbientLightRoomTex, 0)
 			Else
-				If BumpEnabled Then
+				If opt\BumpEnabled Then
 					If Tex[1] <> 0 Then
 						Temp = StripPath(TextureName(Tex[1]))
 						For mat.Materials = Each Materials
@@ -7530,7 +7530,7 @@ Function CreateMap()
 	r = CreateRoom(0, ROOM1, (MapWidth - 1) * 8.0, 0.0, (MapHeight - 1) * 8.0, "pocketdimension")
 	MapRoomID(ROOM1) = MapRoomID(ROOM1) + 1	
 	
-	If IntroEnabled Then
+	If opt\IntroEnabled Then
 		r = CreateRoom(0, ROOM1, 8.0, 0.0, (MapHeight - 1) * 8.0, "room173intro")
 		MapRoomID(ROOM1) = MapRoomID(ROOM1) + 1
 	EndIf
@@ -7819,7 +7819,7 @@ Function UpdateRoomLights(Cam%)
 			For i = 0 To r\MaxLights - 1
 				If r\Lights[i] <> 0 Then
 					TempCamera = Cam
-					If EnableRoomLights And SecondaryLightOn > 0.5 And Cam = Camera Then
+					If opt\EnableRoomLights And SecondaryLightOn > 0.5 And Cam = Camera Then
 						EntityOrder(r\LightSprites2[i], -1)
 						If UpdateRoomLightsTimer = 0.0 Then
 							ShowEntity(r\LightSprites[i])
@@ -7858,7 +7858,7 @@ Function UpdateRoomLights(Cam%)
 									Alpha = 1.0 - Max(Min(((EntityDistance(Cam, r\LightSpritesPivot[i]) + 0.5) / 7.5), 1.0), 0.0)
 									
 									If Alpha > 0.0 Then
-										EntityAlpha(r\LightSprites2[i], Max(3.0 * (Brightness / 255.0) * (r\LightIntensity[i] / 2.0), 1.0) * Alpha)
+										EntityAlpha(r\LightSprites2[i], Max(3.0 * (opt\Brightness / 255.0) * (r\LightIntensity[i] / 2.0), 1.0) * Alpha)
 									Else
 										; ~ Instead of rendering the sprite invisible, just hiding it if the player is far away from it
 										If (Not r\LightSpriteHidden[i]) Then

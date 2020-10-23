@@ -458,8 +458,8 @@ Function SaveGame(File$)
 	Else
 		WriteInt(f, 994)
 	EndIf
-	WriteFloat(f, CameraFogFar)
-	WriteFloat(f, StoredCameraFogFar)
+	WriteFloat(f, opt\CameraFogFar)
+	WriteFloat(f, opt\StoredCameraFogFar)
 	WriteByte(f, I_427\Using)
 	WriteFloat(f, I_427\Timer)
 	
@@ -1228,10 +1228,10 @@ Function LoadGame(File$)
 		UsedConsole = True
 	EndIf
 	
-	CameraFogFar = ReadFloat(f)
-    StoredCameraFogFar = ReadFloat(f)
-	If CameraFogFar = 0.0 Then
-		CameraFogFar = 6.0
+	opt\CameraFogFar = ReadFloat(f)
+    opt\StoredCameraFogFar = ReadFloat(f)
+	If opt\CameraFogFar = 0.0 Then
+		opt\CameraFogFar = 6.0
 	EndIf
 	I_427\Using = ReadByte(f)
 	I_427\Timer = ReadFloat(f)
@@ -1981,10 +1981,10 @@ Function LoadGameQuick(File$)
 	EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
 	me\RestoreSanity = True
 	
-	CameraFogFar = ReadFloat(f)
-    StoredCameraFogFar = ReadFloat(f)
-	If CameraFogFar = 0.0 Then
-		CameraFogFar = 6.0
+	opt\CameraFogFar = ReadFloat(f)
+    opt\StoredCameraFogFar = ReadFloat(f)
+	If opt\CameraFogFar = 0.0 Then
+		opt\CameraFogFar = 6.0
 	EndIf
 	I_427\Using = ReadByte(f)
 	I_427\Timer = ReadFloat(f)
@@ -2570,12 +2570,12 @@ Function LoadMap(File$)
 		Next
 	Next
 	
-	If IntroEnabled Then r = CreateRoom(0, ROOM1, 8.0, 0.0, (MapHeight + 2) * 8.0, "room173intro")
+	If opt\IntroEnabled Then r = CreateRoom(0, ROOM1, 8.0, 0.0, (MapHeight + 2) * 8.0, "room173intro")
 	r = CreateRoom(0, ROOM1, (MapWidth + 2) * 8.0, 0.0, (MapHeight + 2) * 8.0, "pocketdimension")
 	r = CreateRoom(0, ROOM1, 0.0, 500.0, -16.0, "gatea")
 	r = CreateRoom(0, ROOM1, -16.0, 800.0, 0.0, "dimension1499")
 	
-	If IntroEnabled Then CreateEvent("room173intro", "room173intro", 0)
+	If opt\IntroEnabled Then CreateEvent("room173intro", "room173intro", 0)
 	CreateEvent("pocketdimension", "pocketdimension", 0)   
 	CreateEvent("gatea", "gatea", 0)
 	CreateEvent("dimension1499", "dimension1499", 0)

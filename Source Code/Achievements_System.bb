@@ -30,19 +30,19 @@ For i = 0 To MAXACHIEVEMENTS - 1
 	Local Image$ = GetINIString2(AchievementsFile, Loc2, "AchvImage") 
 	
 	AchvIMG[i] = LoadImage_Strict("GFX\menu\achievements\" + Image + ".png")
-	AchvIMG[i] = ResizeImage2(AchvIMG[i], ImageWidth(AchvIMG[i]) * GraphicHeight / 768.0, ImageHeight(AchvIMG[i]) * GraphicHeight / 768.0)
+	AchvIMG[i] = ResizeImage2(AchvIMG[i], ImageWidth(AchvIMG[i]) * opt\GraphicHeight / 768.0, ImageHeight(AchvIMG[i]) * opt\GraphicHeight / 768.0)
 	BufferDirty(ImageBuffer(AchvIMG[i]))
 Next
 
 Global AchvLocked% = LoadImage_Strict("GFX\menu\achievements\AchvLocked.png")
 
-AchvLocked = ResizeImage2(AchvLocked, ImageWidth(AchvLocked) * GraphicHeight / 768.0, ImageHeight(AchvLocked) * GraphicHeight / 768.0)
+AchvLocked = ResizeImage2(AchvLocked, ImageWidth(AchvLocked) * opt\GraphicHeight / 768.0, ImageHeight(AchvLocked) * opt\GraphicHeight / 768.0)
 BufferDirty(ImageBuffer(AchvLocked))
 
 Function GiveAchievement(AchvName%, ShowMessage% = True)
 	If Achievements[AchvName] <> True Then
 		Achievements[AchvName] = True
-		If AchvMsgEnabled And ShowMessage Then
+		If opt\AchvMsgEnabled And ShowMessage Then
 			Local Loc2% = GetINISectionLocation(AchievementsFile, "a" + AchvName)
 			Local AchievementName$ = GetINIString2(AchievementsFile, Loc2, "AchvName")
 			
@@ -52,7 +52,7 @@ Function GiveAchievement(AchvName%, ShowMessage% = True)
 End Function
 
 Function AchievementTooltip(AchvNo%)
-    Local Scale# = GraphicHeight / 768.0
+    Local Scale# = opt\GraphicHeight / 768.0
 
     SetFont(fo\FontID[2])
 	
@@ -78,7 +78,7 @@ End Function
 
 Function DrawAchvIMG(x%, y%, AchvNo%)
 	Local Row%
-	Local Scale# = GraphicHeight / 768.0
+	Local Scale# = opt\GraphicHeight / 768.0
 	Local SeparationConst2# = 76.0 * Scale
 	
 	Row = AchvNo Mod 4
@@ -119,7 +119,7 @@ End Function
 
 Function UpdateAchievementMsg()
 	Local amsg.AchievementMsg, amsg2.AchievementMsg
-	Local Scale# = GraphicHeight / 768.0
+	Local Scale# = opt\GraphicHeight / 768.0
 	Local Width% = 264.0 * Scale
 	Local Height% = 84.0 * Scale
 	Local x%, y%
@@ -148,14 +148,14 @@ End Function
 
 Function RenderAchievementMsg()
 	Local amsg.AchievementMsg, amsg2.AchievementMsg
-	Local Scale# = GraphicHeight / 768.0
+	Local Scale# = opt\GraphicHeight / 768.0
 	Local Width% = 264.0 * Scale
 	Local Height% = 84.0 * Scale
 	Local x%, y%
 	
 	For amsg.AchievementMsg = Each AchievementMsg
 		If amsg\MsgTime <> 0.0
-            x = GraphicWidth + amsg\MsgX
+            x = opt\GraphicWidth + amsg\MsgX
 			y = 0
 			For amsg2.AchievementMsg = Each AchievementMsg
 				If amsg2 <> amsg

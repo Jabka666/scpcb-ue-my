@@ -53,15 +53,15 @@ Function PlaySound_Strict%(SNDHandle%)
 					If snd\InternalHandle = 0 Then
 						If FileType(snd\Name) <> 1 Then
 							CreateConsoleMsg("Sound " + Chr(34) + snd\Name + Chr(34) + " not found.")
-							If ConsoleOpening And CanOpenConsole Then
+							If opt\ConsoleOpening And opt\CanOpenConsole Then
 								ConsoleOpen = True
 							EndIf
 						Else
-							If EnableSFXRelease Then snd\InternalHandle = LoadSound(snd\Name)
+							If opt\EnableSFXRelease Then snd\InternalHandle = LoadSound(snd\Name)
 						EndIf
 						If snd\InternalHandle = 0 Then
 							CreateConsoleMsg("Failed to load Sound: " + Chr(34) + snd\Name + Chr(34))
-							If ConsoleOpening And CanOpenConsole Then
+							If opt\ConsoleOpening And opt\CanOpenConsole Then
 								ConsoleOpen = True
 							EndIf
 						EndIf
@@ -71,7 +71,7 @@ Function PlaySound_Strict%(SNDHandle%)
 					Else
 						snd\Channels[i] = PlaySound(snd\InternalHandle)
 					EndIf
-					ChannelVolume(snd\Channels[i], SFXVolume)
+					ChannelVolume(snd\Channels[i], opt\SFXVolume)
 					snd\ReleaseTime = MilliSecs2() + 5000 ; ~ Release after 5 seconds
 					Return(snd\Channels[i])
 				EndIf
@@ -79,16 +79,16 @@ Function PlaySound_Strict%(SNDHandle%)
 				If snd\InternalHandle = 0 Then
 					If FileType(snd\Name) <> 1 Then
 						CreateConsoleMsg("Sound " + Chr(34) + snd\Name + Chr(34) + " not found.")
-						If ConsoleOpening And CanOpenConsole Then
+						If opt\ConsoleOpening And opt\CanOpenConsole Then
 							ConsoleOpen = True
 						EndIf
 					Else
-						If EnableSFXRelease Then snd\InternalHandle = LoadSound(snd\Name)
+						If opt\EnableSFXRelease Then snd\InternalHandle = LoadSound(snd\Name)
 					EndIf
 						
 					If snd\InternalHandle = 0 Then
 						CreateConsoleMsg("Failed to load Sound: " + Chr(34) + snd\Name + Chr(34))
-						If ConsoleOpening And CanOpenConsole Then
+						If opt\ConsoleOpening And opt\CanOpenConsole Then
 							ConsoleOpen = True
 						EndIf
 					EndIf
@@ -98,7 +98,7 @@ Function PlaySound_Strict%(SNDHandle%)
 				Else
 					snd\Channels[i] = PlaySound(snd\InternalHandle)
 				EndIf
-				ChannelVolume(snd\Channels[i], SFXVolume)
+				ChannelVolume(snd\Channels[i], opt\SFXVolume)
 				snd\ReleaseTime = MilliSecs2() + 5000 ; ~ Release after 5 seconds
 				Return(snd\Channels[i])
 			EndIf
@@ -113,7 +113,7 @@ Function LoadSound_Strict(File$)
 	snd\Name = File
 	snd\InternalHandle = 0
 	snd\ReleaseTime = 0
-	If (Not EnableSFXRelease) Then
+	If (Not opt\EnableSFXRelease) Then
 		If snd\InternalHandle = 0 Then 
 			snd\InternalHandle = LoadSound(snd\Name)
 		EndIf
@@ -143,7 +143,7 @@ Const TwoD% = 8192
 Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode% = Mode)
 	If FileType(File) <> 1 Then
 		CreateConsoleMsg("Sound " + Chr(34) + File + Chr(34) + " not found.")
-		If ConsoleOpening And CanOpenConsole Then
+		If opt\ConsoleOpening And opt\CanOpenConsole Then
 			ConsoleOpen = True
 		EndIf
 		Return(0)
@@ -155,7 +155,7 @@ Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode% = Mode)
 	
 	If st\CHN = -1 Then
 		CreateConsoleMsg("Failed to stream Sound (returned -1): " + Chr(34) + File + Chr(34))
-		If ConsoleOpening And CanOpenConsole Then
+		If opt\ConsoleOpening And opt\CanOpenConsole Then
 			ConsoleOpen = True
 		EndIf
 		Return(-1)
@@ -250,7 +250,7 @@ Function UpdateStreamSoundOrigin(StreamHandle%, Cam%, Entity%, Range# = 10.0, Vo
 		If 1.0 - Dist > 0.0 And 1.0 - Dist < 1.0 Then
 			Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 			
-			SetStreamVolume_Strict(StreamHandle, Volume * (1.0 - Dist) * SFXVolume)
+			SetStreamVolume_Strict(StreamHandle, Volume * (1.0 - Dist) * opt\SFXVolume)
 			SetStreamPan_Strict(StreamHandle, PanValue)
 		Else
 			SetStreamVolume_Strict(StreamHandle, 0.0)
@@ -397,7 +397,7 @@ Function LoadFont_Strict(File$ = "Tahoma", Height% = 13, IgnoreScaling% = 0)
 	
 	If Tmp = 0 Then
 		If FileType(File) <> 1 Then RuntimeError("Font " + File + " not found.")
-		Tmp = LoadFont(File, (Int(Height * (GraphicHeight / 1024.0))) * (Not IgnoreScaling) + IgnoreScaling * Height)
+		Tmp = LoadFont(File, (Int(Height * (opt\GraphicHeight / 1024.0))) * (Not IgnoreScaling) + IgnoreScaling * Height)
 		If Tmp = 0 Then RuntimeError("Failed to load Font: " + File)
 	EndIf
 	Return(Tmp)

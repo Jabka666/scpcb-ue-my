@@ -337,154 +337,199 @@ End Function
 
 Const OptionFile$ = "Data\options.ini"
 
-; ~ [GRAPHICS]
+Type Options
+	; ~ [GRAPHICS]
+	Field ParticleAmount%
+	Field AntiAliasing%
+	Field BumpEnabled%
+	Field SaveTexturesInVRAM%
+	Field EnableRoomLights%
+	Field VSync%
+	Field ScreenGamma#
+	Field TextureDetails%, TextureFloat#
+	Field FOV#, CurrFOV#
+	; ~ [AUDIO]
+	Field MusicVolume#, PrevMusicVolume#, CurrMusicVolume#
+	Field EnableUserTracks%
+	Field UserTrackMode%
+	Field SFXVolume#, PrevSFXVolume#
+	Field EnableSFXRelease%, PrevEnableSFXRelease%
+	; ~ [ADVANCED]
+	Field AchvMsgEnabled%
+	Field CanOpenConsole%
+	Field HUDEnabled%
+	Field ShowFPS%
+	Field ConsoleOpening%
+	Field FrameLimit%, CurrFrameLimit#
+	Field PlayStartup%
+	Field LauncherEnabled%
+	Field BarStyle%
+	; ~ [CONTROLS]
+	Field MouseSmoothing#
+	Field InvertMouse%
+	Field MouseSensitivity#
+	; ~ [GLOBAL]
+	Field AspectRatio#
+	Field GraphicWidth%, RealGraphicWidth%
+	Field GraphicHeight%, RealGraphicHeight%
+	Field DisplayMode%
+	Field Brightness%
+	Field CameraFogNear#
+	Field CameraFogFar#, StoredCameraFogFar#
+	Field IntroEnabled%
+End Type
 
-Global ParticleAmount% = GetINIInt(OptionFile, "Graphics", "Particle Amount")
+Global opt.Options = New Options
 
-Global Opt_AntiAlias% = GetINIInt(OptionFile, "Graphics", "Antialias")
-
-Global BumpEnabled% = GetINIInt(OptionFile, "Graphics", "Enable Bump Mapping")
-
-Global SaveTexturesInVRAM% = GetINIInt(OptionFile, "Graphics", "Save Textures In VRAM")
-
-Global EnableRoomLights% = GetINIInt(OptionFile, "Graphics", "Enable Room Lights")
-
-Global VSync% = GetINIInt(OptionFile, "Graphics", "VSync")
-
-Global ScreenGamma# = GetINIFloat(OptionFile, "Graphics", "Screen gamma")
-
-Global TextureDetails% = GetINIInt(OptionFile, "Graphics", "Texture details")
-
-Global FOV# = GetINIFloat(OptionFile, "Graphics", "FOV")
-
-; ~ [AUDIO]
-
-Global MusicVolume# = GetINIFloat(OptionFile, "Audio", "Music Volume")
-
-Global EnableUserTracks% = GetINIInt(OptionFile, "Audio", "Enable User Tracks")
-
-Global UserTrackMode% = GetINIInt(OptionFile, "Audio", "User Track Setting")
-
-Global SFXVolume# = GetINIFloat(OptionFile, "Audio", "Sound Volume")
-
-Global EnableSFXRelease% = GetINIInt(OptionFile, "Audio", "SFX Release")
-
-; ~ [ADVANCED]
-
-Global AATextEnable% = GetINIInt(OptionFile, "Advanced", "Antialiased Text")
-
-Global AchvMsgEnabled% = GetINIInt(OptionFile, "Advanced", "Enable Achievement Popup")
-
-Global CanOpenConsole% = GetINIInt(OptionFile, "Advanced", "Enable Console")
-
-Global HUDEnabled% = GetINIInt(OptionFile, "Advanced", "Enable HUD")
-
-Global ShowFPS% = GetINIInt(OptionFile, "Advanced", "Show FPS")
-
-Global ConsoleOpening% = GetINIInt(OptionFile, "Advanced", "Console Auto Opening")
-
-Global FrameLimit% = GetINIInt(OptionFile, "Advanced", "Frame Limit")
-
-Global PlayStartup% = GetINIInt(OptionFile, "Advanced", "Play Startup Videos")
-
-Global LauncherEnabled% = GetINIInt(OptionFile, "Advanced", "Launcher Enabled")
-
-Global BarStyle% = GetINIInt(OptionFile, "Advanced", "Bar Style")
-
-; ~ [CONTROLS]
-
-key\MOVEMENT_RIGHT = GetINIInt(OptionFile, "Controls", "Right Key")
-
-key\MOVEMENT_LEFT = GetINIInt(OptionFile, "Controls", "Left Key")
-
-key\MOVEMENT_UP = GetINIInt(OptionFile, "Controls", "Up Key")
-
-key\MOVEMENT_DOWN = GetINIInt(OptionFile, "Controls", "Down Key")
-
-key\BLINK = GetINIInt(OptionFile, "Controls", "Blink Key")
-
-key\SPRINT = GetINIInt(OptionFile, "Controls", "Sprint Key")
-
-key\INVENTORY = GetINIInt(OptionFile, "Controls", "Inventory Key")
-
-key\CROUCH = GetINIInt(OptionFile, "Controls", "Crouch Key")
-
-key\SAVE = GetINIInt(OptionFile, "Controls", "Save Key")
-
-key\CONSOLE = GetINIInt(OptionFile, "Controls", "Console Key")
-
-key\SCREENSHOT = GetINIInt(OptionFile, "Controls", "Screenshot Key")
-
-Global MouseSmoothing# = GetINIFloat(OptionFile, "Controls", "Mouse Smoothing", 1.0)
-
-Global InvertMouse% = GetINIInt(OptionFile, "Controls", "Invert Mouse By Y")
-
-Global MouseSensitivity# = GetINIFloat(OptionFile, "Controls", "Mouse Sensitivity")
-
-; ~ [GLOBAL]
-
-Global GraphicWidth% = GetINIInt(OptionFile, "Global", "Width")
-
-Global GraphicHeight% = GetINIInt(OptionFile, "Global", "Height")
-
-Global DisplayMode% = GetINIInt(OptionFile, "Global", "Display Mode")
-
-Global Brightness% = GetINIFloat(OptionFile, "Global", "Brightness")
-
-Global CameraFogNear# = GetINIFloat(OptionFile, "Global", "Camera Fog Near")
-
-Global CameraFogFar# = GetINIFloat(OptionFile, "Global", "Camera Fog Far")
-
-Global IntroEnabled% = GetINIInt(OptionFile, "Global", "Enable Intro")
+Function LoadOptionsINI()
+	; ~ [GRAPHICS]
+	
+	opt\ParticleAmount = GetINIInt(OptionFile, "Graphics", "Particle Amount")
+	
+	opt\AntiAliasing = GetINIInt(OptionFile, "Graphics", "Antialias")
+	
+	opt\BumpEnabled = GetINIInt(OptionFile, "Graphics", "Enable Bump Mapping")
+	
+	opt\SaveTexturesInVRAM = GetINIInt(OptionFile, "Graphics", "Save Textures In VRAM")
+	
+	opt\EnableRoomLights = GetINIInt(OptionFile, "Graphics", "Enable Room Lights")
+	
+	opt\VSync = GetINIInt(OptionFile, "Graphics", "VSync")
+	
+	opt\ScreenGamma = GetINIFloat(OptionFile, "Graphics", "Screen Gamma")
+	
+	opt\TextureDetails = GetINIInt(OptionFile, "Graphics", "Texture Details")
+	
+	opt\FOV = GetINIFloat(OptionFile, "Graphics", "FOV")
+	opt\CurrFOV = opt\FOV - 40.0
+	
+	; ~ [AUDIO]
+	
+	opt\MusicVolume = GetINIFloat(OptionFile, "Audio", "Music Volume")
+	opt\PrevMusicVolume = opt\MusicVolume
+	opt\CurrMusicVolume = 1.0
+	
+	opt\EnableUserTracks = GetINIInt(OptionFile, "Audio", "Enable User Tracks")
+	
+	opt\UserTrackMode = GetINIInt(OptionFile, "Audio", "User Track Setting")
+	
+	opt\SFXVolume = GetINIFloat(OptionFile, "Audio", "Sound Volume")
+	opt\PrevSFXVolume = opt\SFXVolume
+	
+	opt\EnableSFXRelease = GetINIInt(OptionFile, "Audio", "SFX Release")
+	opt\PrevEnableSFXRelease = opt\EnableSFXRelease
+	
+	; ~ [ADVANCED]
+	
+	opt\AchvMsgEnabled = GetINIInt(OptionFile, "Advanced", "Enable Achievement Popup")
+	
+	opt\CanOpenConsole = GetINIInt(OptionFile, "Advanced", "Enable Console")
+	
+	opt\HUDEnabled = GetINIInt(OptionFile, "Advanced", "Enable HUD")
+	
+	opt\ShowFPS = GetINIInt(OptionFile, "Advanced", "Show FPS")
+	
+	opt\ConsoleOpening = GetINIInt(OptionFile, "Advanced", "Console Auto Opening")
+	
+	opt\FrameLimit = GetINIInt(OptionFile, "Advanced", "Frame Limit")
+	opt\CurrFrameLimit = (opt\FrameLimit - 19.0) / 100.0
+	
+	opt\PlayStartup = GetINIInt(OptionFile, "Advanced", "Play Startup Videos")
+	
+	opt\LauncherEnabled = GetINIInt(OptionFile, "Advanced", "Launcher Enabled")
+	
+	opt\BarStyle = GetINIInt(OptionFile, "Advanced", "Bar Style")
+	
+	; ~ [CONTROLS]
+	
+	key\MOVEMENT_RIGHT = GetINIInt(OptionFile, "Controls", "Right Key")
+	
+	key\MOVEMENT_LEFT = GetINIInt(OptionFile, "Controls", "Left Key")
+	
+	key\MOVEMENT_UP = GetINIInt(OptionFile, "Controls", "Up Key")
+	
+	key\MOVEMENT_DOWN = GetINIInt(OptionFile, "Controls", "Down Key")
+	
+	key\BLINK = GetINIInt(OptionFile, "Controls", "Blink Key")
+	
+	key\SPRINT = GetINIInt(OptionFile, "Controls", "Sprint Key")
+	
+	key\INVENTORY = GetINIInt(OptionFile, "Controls", "Inventory Key")
+	
+	key\CROUCH = GetINIInt(OptionFile, "Controls", "Crouch Key")
+	
+	key\SAVE = GetINIInt(OptionFile, "Controls", "Save Key")
+	
+	key\CONSOLE = GetINIInt(OptionFile, "Controls", "Console Key")
+	
+	key\SCREENSHOT = GetINIInt(OptionFile, "Controls", "Screenshot Key")
+	
+	opt\MouseSmoothing = GetINIFloat(OptionFile, "Controls", "Mouse Smoothing", 1.0)
+	
+	opt\InvertMouse = GetINIInt(OptionFile, "Controls", "Invert Mouse By Y")
+	
+	opt\MouseSensitivity = GetINIFloat(OptionFile, "Controls", "Mouse Sensitivity")
+	
+	; ~ [GLOBAL]
+	
+	opt\GraphicWidth = GetINIInt(OptionFile, "Global", "Width")
+	
+	opt\GraphicHeight = GetINIInt(OptionFile, "Global", "Height")
+	
+	opt\DisplayMode = GetINIInt(OptionFile, "Global", "Display Mode")
+	
+	opt\Brightness = GetINIFloat(OptionFile, "Global", "Brightness")
+	
+	opt\CameraFogNear = GetINIFloat(OptionFile, "Global", "Camera Fog Near")
+	
+	opt\CameraFogFar = GetINIFloat(OptionFile, "Global", "Camera Fog Far")
+	opt\StoredCameraFogFar = opt\CameraFogFar
+	
+	opt\IntroEnabled = GetINIInt(OptionFile, "Global", "Enable Intro")
+End Function
 
 Function SaveOptionsINI(SaveGlobal% = False)
 	; ~ [GRAPHICS]
 	
-	PutINIValue(OptionFile, "Graphics", "Enable Bump Mapping", BumpEnabled)
+	PutINIValue(OptionFile, "Graphics", "Enable Bump Mapping", opt\BumpEnabled)
 	
-	PutINIValue(OptionFile, "Graphics", "Screen Gamma", ScreenGamma)
+	PutINIValue(OptionFile, "Graphics", "Screen Gamma", opt\ScreenGamma)
 	
-	PutINIValue(OptionFile, "Graphics", "Antialias", Opt_AntiAlias)
+	PutINIValue(OptionFile, "Graphics", "Antialias", opt\AntiAliasing)
 	
-	PutINIValue(OptionFile, "Graphics", "VSync", VSync)
+	PutINIValue(OptionFile, "Graphics", "VSync", opt\VSync)
 	
-	PutINIValue(OptionFile, "Graphics", "Particle Amount", ParticleAmount)
+	PutINIValue(OptionFile, "Graphics", "Particle Amount", opt\ParticleAmount)
 	
-	PutINIValue(OptionFile, "Graphics", "Save Textures In VRAM", SaveTexturesInVRAM)
+	PutINIValue(OptionFile, "Graphics", "Save Textures In VRAM", opt\SaveTexturesInVRAM)
 	
-	PutINIValue(OptionFile, "Graphics", "Enable Room Lights", EnableRoomLights)
+	PutINIValue(OptionFile, "Graphics", "Enable Room Lights", opt\EnableRoomLights)
 	
-	PutINIValue(OptionFile, "Graphics", "Texture Details", TextureDetails)
+	PutINIValue(OptionFile, "Graphics", "Texture Details", opt\TextureDetails)
 	
-	PutINIValue(OptionFile, "Graphics", "FOV", Int(FOV))
+	PutINIValue(OptionFile, "Graphics", "FOV", Int(opt\FOV))
 	
 	; ~ [ADVANCED]
 	
-	PutINIValue(OptionFile, "Advanced", "Enable HUD", HUDEnabled)
+	PutINIValue(OptionFile, "Advanced", "Enable HUD", opt\HUDEnabled)
 	
-	PutINIValue(OptionFile, "Advanced", "Show FPS", ShowFPS)
+	PutINIValue(OptionFile, "Advanced", "Show FPS", opt\ShowFPS)
 	
-	PutINIValue(OptionFile, "Advanced", "Frame Limit", FrameLimit)
+	PutINIValue(OptionFile, "Advanced", "Frame Limit", opt\FrameLimit)
 	
-	PutINIValue(OptionFile, "Advanced", "Enable Achievement Popup", AchvMsgEnabled)
+	PutINIValue(OptionFile, "Advanced", "Enable Achievement Popup", opt\AchvMsgEnabled)
 	
-	PutINIValue(OptionFile, "Advanced", "Enable Console", CanOpenConsole)
+	PutINIValue(OptionFile, "Advanced", "Enable Console", opt\CanOpenConsole)
 	
-	PutINIValue(OptionFile, "Advanced", "Console Auto Opening", ConsoleOpening)
+	PutINIValue(OptionFile, "Advanced", "Console Auto Opening", opt\ConsoleOpening)
 	
-	PutINIValue(OptionFile, "Advanced", "Play Startup Videos", PlayStartup)
+	PutINIValue(OptionFile, "Advanced", "Play Startup Videos", opt\PlayStartup)
 	
-	PutINIValue(OptionFile, "Advanced", "Launcher Enabled", LauncherEnabled)
+	PutINIValue(OptionFile, "Advanced", "Launcher Enabled", opt\LauncherEnabled)
 	
-	PutINIValue(OptionFile, "Advanced", "Bar Style", BarStyle)
+	PutINIValue(OptionFile, "Advanced", "Bar Style", opt\BarStyle)
 	
 	; ~ [CONTROLS]
-	
-	PutINIValue(OptionFile, "Controls", "Mouse Sensitivity", MouseSensitivity)
-	
-	PutINIValue(OptionFile, "Controls", "Invert Mouse By Y", InvertMouse)
-	
-	PutINIValue(OptionFile, "Controls", "Mouse Smoothing", MouseSmoothing)
 	
 	PutINIValue(OptionFile, "Controls", "Right Key", key\MOVEMENT_RIGHT)
 	
@@ -508,81 +553,87 @@ Function SaveOptionsINI(SaveGlobal% = False)
 	
 	PutINIValue(OptionFile, "Controls", "Screenshot Key", key\SCREENSHOT)
 	
+	PutINIValue(OptionFile, "Controls", "Mouse Sensitivity", opt\MouseSensitivity)
+	
+	PutINIValue(OptionFile, "Controls", "Invert Mouse By Y", opt\InvertMouse)
+	
+	PutINIValue(OptionFile, "Controls", "Mouse Smoothing", opt\MouseSmoothing)
+	
 	; ~ [AUDIO]
 	
-	PutINIValue(OptionFile, "Audio", "Music Volume", MusicVolume)
+	PutINIValue(OptionFile, "Audio", "Music Volume", opt\MusicVolume)
 	
-	PutINIValue(OptionFile, "Audio", "Sound Volume", PrevSFXVolume)
+	PutINIValue(OptionFile, "Audio", "Sound Volume", opt\PrevSFXVolume)
 	
-	PutINIValue(OptionFile, "Audio", "SFX Release", EnableSFXRelease)
+	PutINIValue(OptionFile, "Audio", "SFX Release", opt\EnableSFXRelease)
 	
-	PutINIValue(OptionFile, "Audio", "Enable User Tracks", EnableUserTracks)
+	PutINIValue(OptionFile, "Audio", "Enable User Tracks", opt\EnableUserTracks)
 	
-	PutINIValue(OptionFile, "Audio", "User Track Setting", UserTrackMode)
+	PutINIValue(OptionFile, "Audio", "User Track Setting", opt\UserTrackMode)
 	
 	If SaveGlobal Then
 		; ~ [GLOBAL]
 		
-		PutINIValue(OptionFile, "Global", "Brightness", Brightness)
+		PutINIValue(OptionFile, "Global", "Brightness", opt\Brightness)
 		
-		PutINIValue(OptionFile, "Global", "Camera Fog Near", CameraFogNear)
+		PutINIValue(OptionFile, "Global", "Camera Fog Near", opt\CameraFogNear)
 		
-		PutINIValue(OptionFile, "Global", "Camera Fog Far", CameraFogFar)
+		PutINIValue(OptionFile, "Global", "Camera Fog Far", opt\CameraFogFar)
 		
-		PutINIValue(OptionFile, "Global", "Enable Intro", IntroEnabled)
+		PutINIValue(OptionFile, "Global", "Enable Intro", opt\IntroEnabled)
 	EndIf
 End Function
 
 Function ResetOptionsINI()
 	; ~ [GRAPHICS]
 	
-	BumpEnabled = 1
+	opt\BumpEnabled = 1
 	
-	ScreenGamma = 1.0
+	opt\ScreenGamma = 1.0
 	
-	Opt_AntiAlias = 1
+	opt\AntiAliasing = 1
 	
-	VSync = 1
+	opt\VSync = 1
 	
-	ParticleAmount = 2
+	opt\ParticleAmount = 2
 	
-	SaveTexturesInVRAM = 1
+	opt\SaveTexturesInVRAM = 1
 	
-	EnableRoomLights = 1
+	opt\EnableRoomLights = 1
 	
-	TextureDetails = 3
+	opt\TextureDetails = 3
 	
-	CurrFOV = 34.0 ; ~ Don't forget to decrease by "40.0"
-	FOV = 74.0
+	opt\CurrFOV = 34.0 ; ~ Don't forget to decrease by "40.0"
+	opt\FOV = 74.0
 	
 	; ~ [ADVANCED]
 	
-	HUDEnabled = 1
+	opt\HUDEnabled = 1
 	
-	ShowFPS = 0
+	opt\ShowFPS = 0
 	
-	CurrFrameLimit = 0.0
-	FrameLimit = 0
+	opt\CurrFrameLimit = 0.0
+	opt\FrameLimit = 0
 	
-	AchvMsgEnabled = 1
+	opt\AchvMsgEnabled = 1
 	
-	CanOpenConsole = 0
+	opt\CanOpenConsole = 0
 	
-	ConsoleOpening = 0
+	opt\ConsoleOpening = 0
 	
-	PlayStartup = 1
+	opt\PlayStartup = 1
 	
-	LauncherEnabled = 1
+	opt\LauncherEnabled = 1
 	
-	BarStyle = 0
+	opt\BarStyle = 0
 	
 	; ~ [CONTROLS]
 	
-	MouseSensitivity = 0.0
+	opt\MouseSensitivity = 0.0
 	
-	InvertMouse = 0
+	opt\InvertMouse = 0
 	
-	MouseSmoothing = 1.0
+	opt\MouseSmoothing = 1.0
 	
 	key\MOVEMENT_RIGHT = 32
 	
@@ -608,26 +659,27 @@ Function ResetOptionsINI()
 	
 	; ~ [AUDIO]
 	
-	MusicVolume = 0.5
+	opt\MusicVolume = 0.5
+	opt\PrevMusicVolume = 0.5
 	
-	PrevSFXVolume = 0.5
-	SFXVolume = 0.5
+	opt\SFXVolume = 0.5
+	opt\PrevSFXVolume = 0.5
 	
-	EnableSFXRelease = 1
+	opt\EnableSFXRelease = 1
 	
-	EnableUserTracks = 0
+	opt\EnableUserTracks = 0
 	
-	UserTrackMode = 0
+	opt\UserTrackMode = 0
 	
 	; ~ [GLOBAL]
 	
-	Brightness = 50
+	opt\Brightness = 50
 	
-	CameraFogNear = 0.1
+	opt\CameraFogNear = 0.1
 	
-	CameraFogFar = 6.0
+	opt\CameraFogFar = 6.0
 	
-	IntroEnabled = 1
+	opt\IntroEnabled = 1
 End Function
 
 ;~IDEal Editor Parameters:
