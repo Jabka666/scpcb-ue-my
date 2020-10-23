@@ -74,12 +74,16 @@ End Type
 
 Global mo.Mouse = New Mouse
 
-mo\Mouselook_X_Inc = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the X axis
-mo\Mouselook_y_Inc = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the Y axis
-mo\Mouse_Left_Limit = 250
-mo\Mouse_Right_Limit = GraphicsWidth() - 250
-mo\Mouse_Top_Limit = 150
-mo\Mouse_Bottom_Limit = GraphicsHeight() - 150 ; ~ As above
+Function InitMouseLook()
+	mo\Mouselook_X_Inc = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the X axis
+	mo\Mouselook_y_Inc = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the Y axis
+	mo\Mouse_Left_Limit = 250
+	mo\Mouse_Right_Limit = GraphicsWidth() - 250
+	mo\Mouse_Top_Limit = 150
+	mo\Mouse_Bottom_Limit = GraphicsHeight() - 150 ; ~ As above
+End Function
+
+InitMouseLook()
 
 Type Launcher
 	Field TotalGFXModes%
@@ -371,6 +375,7 @@ Const MaxLeverModelIDAmount% = 2
 Const MaxCamModelIDAmount% = 2
 Const MaxMiscModelIDAmount% = 1
 Const MaxNPCModelIDAmount% = 34
+Const MaxDTextures% = 16
 ;[End Block]
 
 Type Objects
@@ -382,6 +387,7 @@ Type Objects
 	Field CamModelID%[MaxCamModelIDAmount]
 	Field MonitorModelID%[MaxMonitorModelIDAmount]
 	Field MiscModelID%[MaxMiscModelIDAmount]
+	Field DTextures%[MaxDTextures]
 End Type
 
 Global o.Objects = New Objects
@@ -2003,8 +2009,6 @@ Global room2gw_BrokenDoor% = False
 Global room2gw_x# = 0.0
 Global room2gw_z# = 0.0
 
-Global DTextures%[16]
-
 Global IntercomStreamCHN%
 
 Global ForestNPC%, ForestNPCTex%, ForestNPCData#[3]
@@ -3619,6 +3623,11 @@ Function UpdateEnding()
 	If (Not UsedConsole) Then GiveAchievement(AchvConsole)
 	If SelectedDifficulty\Name = "Keter" Then GiveAchievement(AchvKeter)
 	
+	If ShouldDeleteGadgets Then
+		DeleteMenuGadgets()
+	EndIf
+	ShouldDeleteGadgets = False
+	
 	Local x%, y%, Width%, Height%, i%
 	
 	ShouldPlay = 66
@@ -3677,7 +3686,7 @@ Function UpdateEnding()
 					
 					If DrawButton(x - 170 * MenuScale, y - 200 * MenuScale, 430 * MenuScale, 60 * MenuScale, "ACHIEVEMENTS", True) Then
 						AchievementsMenu = 1
-						DeleteMenuGadgets()
+						ShouldDeleteGadgets = True
 					EndIf
 					
 					If DrawButton(x - 170 * MenuScale, y - 100 * MenuScale, 430 * MenuScale, 60 * MenuScale, "MAIN MENU", True)
@@ -3691,7 +3700,7 @@ Function UpdateEnding()
 						SetStreamVolume_Strict(MusicCHN, 1.0 * opt\MusicVolume)
 						FlushKeys()
 						me\EndingTimer = -2000.0
-						DeleteMenuGadgets()
+						ShouldDeleteGadgets = True
 						InitCredits()
 					EndIf
 				Else
@@ -8061,7 +8070,7 @@ Function UpdateMenu()
 						msg\Msg = "STOP HIDING"
 						msg\Timer = 70.0 * 6.0
 						MenuOpen = False
-						DeleteMenuGadgets()
+						ShouldDeleteGadgets = True
 						Return
 					EndIf
 				EndIf
@@ -9086,90 +9095,93 @@ Function LoadEntities()
 	
 	; ~ NPCtypeD - different models with different textures (loaded using "CopyEntity") -- ENDSHN
 	For i = 0 To 15
-		DTextures[i] = CopyEntity(o\NPCModelID[3])
-		HideEntity(DTextures[i])
+		o\DTextures[i] = CopyEntity(o\NPCModelID[3])
+		HideEntity(o\DTextures[i])
 	Next
 	
 	; ~ Gonzales
 	Tex = LoadTexture_Strict("GFX\npcs\Gonzales.png")
-	EntityTexture(DTextures[0], Tex)
+	EntityTexture(o\DTextures[0], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ SCP-970's corpse
 	Tex = LoadTexture_Strict("GFX\npcs\D_9341(2).png")
-	EntityTexture(DTextures[1], Tex)
+	EntityTexture(o\DTextures[1], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ Scientist
 	Tex = LoadTexture_Strict("GFX\npcs\scientist.png")
-	EntityTexture(DTextures[2], Tex)
+	EntityTexture(o\DTextures[2], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ Franklin
 	Tex = LoadTexture_Strict("GFX\npcs\Franklin.png")
-	EntityTexture(DTextures[3], Tex)
+	EntityTexture(o\DTextures[3], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ Janitor # 1
 	Tex = LoadTexture_Strict("GFX\npcs\janitor.png")
-	EntityTexture(DTextures[4], Tex)
+	EntityTexture(o\DTextures[4], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ Maynard
 	Tex = LoadTexture_Strict("GFX\npcs\Maynard.png")
-	EntityTexture(DTextures[5], Tex)
+	EntityTexture(o\DTextures[5], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ Afro-American Class-D
 	Tex = LoadTexture_Strict("GFX\npcs\class_d(2).png")
-	EntityTexture(DTextures[6], Tex)
+	EntityTexture(o\DTextures[6], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ 035 victim
 	Tex = LoadTexture_Strict("GFX\npcs\scp_035_victim.png")
-	EntityTexture(DTextures[7], Tex)
+	EntityTexture(o\DTextures[7], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	If opt\IntroEnabled Then
 		; ~ D-9341
 		Tex = LoadTexture_Strict("GFX\npcs\D_9341.png")
-		EntityTexture(DTextures[8], Tex)
+		EntityTexture(o\DTextures[8], Tex)
 		DeleteSingleTextureEntryFromCache(Tex)
+	Else
+		; ~ Remove the model because intro scene is disabled
+		If o\DTextures[8] <> 0 Then FreeEntity(o\DTextures[8]) : o\DTextures[8] = 0
 	EndIf
 	
 	; ~ Body # 1
 	Tex = LoadTexture_Strict("GFX\npcs\body.png")
-	EntityTexture(DTextures[9], Tex)
+	EntityTexture(o\DTextures[9], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ Body # 2
 	Tex = LoadTexture_Strict("GFX\npcs\body(2).png")
-	EntityTexture(DTextures[10], Tex)
+	EntityTexture(o\DTextures[10], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ Janitor # 2
 	Tex = LoadTexture_Strict("GFX\npcs\janitor(2).png")
-	EntityTexture(DTextures[11], Tex)
+	EntityTexture(o\DTextures[11], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ SCP-008-1's victim
 	Tex = LoadTexture_Strict("GFX\npcs\scp_008_1_victim.png")
-	EntityTexture(DTextures[12], Tex)
+	EntityTexture(o\DTextures[12], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ SCP-409's victim
 	Tex = LoadTexture_Strict("GFX\npcs\body(3).png")
-	EntityTexture(DTextures[13], Tex)
+	EntityTexture(o\DTextures[13], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ SCP-939's victim # 2
 	Tex = LoadTexture_Strict("GFX\npcs\scp_939_victim.png")
-	EntityTexture(DTextures[14], Tex)
+	EntityTexture(o\DTextures[14], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ SCP-939's victim # 1
 	Tex = LoadTexture_Strict("GFX\npcs\scp_939_victim(2).png")
-	EntityTexture(DTextures[15], Tex)
+	EntityTexture(o\DTextures[15], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	LoadMaterials(MaterialsFile)
@@ -12372,5 +12384,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1084#1316#1DE9
+;~B#108D#131F#1DF2
 ;~C#Blitz3D

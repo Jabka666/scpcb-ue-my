@@ -7362,7 +7362,7 @@ Function ChangeNPCTextureID(n.NPCs, TextureID%) ; ~ Works only for Class D model
 	
 	n\TextureID = TextureID + 1
 	If n\OBJ <> 0 Then FreeEntity(n\OBJ)
-	n\OBJ = CopyEntity(DTextures[TextureID])
+	n\OBJ = CopyEntity(o\DTextures[TextureID])
 	
 	Temp = GetINIFloat(NPCsFile, "Class D", "Scale") / MeshWidth(n\OBJ)
 	ScaleEntity(n\OBJ, Temp, Temp, Temp)
