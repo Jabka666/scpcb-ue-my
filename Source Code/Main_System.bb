@@ -11877,7 +11877,7 @@ Function UpdateWorld2()
 					wi\IsNVGBlinking = True
 					ShowEntity(tt\OverlayID[5])
 					If wi\NVGTimer =< -10.0 Then wi\NVGTimer = 600.0
-					EndIf
+				EndIf
 			EndIf
 		EndIf
 	EndIf
@@ -11908,7 +11908,7 @@ Function RenderWorld2(Tween#)
 			If Inventory[i] <> Null Then
 				If (wi\NightVision = 1 And Inventory[i]\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory[i]\ItemTemplate\TempName = "supernvg") Lor (wi\SCRAMBLE > 0 And Inventory[i]\ItemTemplate\TempName = "scramble") Then
 					Power = Int(Inventory[i]\State)
-					If Power =< 0.0 Then ; ~ This NVG can't be used
+					If Power =< 0.0 Then ; ~ This NVG or SCRAMBLE can't be used
 						HasBattery = 0
 						Exit
 					ElseIf Power =< 100.0 Then
@@ -12000,6 +12000,12 @@ Function RenderWorld2(Tween#)
 		EndIf
 	EndIf
 	
+	; ~ Render sprites
+	CameraProjMode(ArkBlurCam, 2)
+	CameraProjMode(Camera, 0)
+	RenderWorld()
+	CameraProjMode(ArkBlurCam, 0)
+	
 	If me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0 Then
 		If (wi\NightVision = 1 Lor wi\NightVision = 2 Lor wi\SCRAMBLE > 0) And (HasBattery = 1) And ((MilliSecs2() Mod 800) < 400) Then
 			Color(255, 0, 0)
@@ -12009,12 +12015,6 @@ Function RenderWorld2(Tween#)
 			Color(255, 255, 255)
 		EndIf
 	EndIf
-	
-	; ~ Render sprites
-	CameraProjMode(ArkBlurCam, 2)
-	CameraProjMode(Camera, 0)
-	RenderWorld()
-	CameraProjMode(ArkBlurCam, 0)
 End Function
 
 Function ScaleRender(x#, y#, hScale# = 1.0, vScale# = 1.0)
