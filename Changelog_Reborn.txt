@@ -151,7 +151,7 @@ Bug Fixes:
 - Small fixes for ending tunnel in the Gate A.
 - Small fixes for earphones' texture.
 - Small fixes for main menu.
-- Small fixes for room2offices4, room3servers2, room2pipes, room2clockroom and room2pipes2
+- Small fixes for room2offices4, room3servers2, room2pipes, room2clockroom, room2clockroom2 and room2pipes2.
 - Small fixes for SCP-173's AI.
 - Small fixes for SCP-860-1.
 - Small fixes for paper texture.
