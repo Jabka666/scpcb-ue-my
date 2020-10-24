@@ -9315,7 +9315,7 @@ Function InitNewGame()
 	Local rt.RoomTemplates
 	
 	For rt.RoomTemplates = Each RoomTemplates
-		FreeEntity(rt\OBJ)
+		If rt\OBJ <> 0 Then FreeEntity(rt\OBJ) : rt\OBJ = 0
 	Next	
 	
 	Local tw.TempWayPoints
@@ -9689,7 +9689,7 @@ Function NullGame(PlayButtonSFX% = True)
 	Next
 	
 	For rt.RoomTemplates = Each RoomTemplates
-		If rt\OBJ <> 0 Then rt\OBJ = 0
+		If rt\OBJ <> 0 Then FreeEntity(rt\OBJ) : rt\OBJ = 0
 	Next
 	
 	For i = 0 To 6
