@@ -11213,7 +11213,7 @@ Function Use294()
 			HidePointer()
 			I_294\Using = False
 			I_294\ToInput = ""
-			MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_x_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
+			MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_X_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
 		EndIf
 	Else ; ~ Playing a dispensing sound
 		If I_294\ToInput <> "OUT OF RANGE" Then I_294\ToInput = "DISPENSING..."
@@ -11222,7 +11222,7 @@ Function Use294()
 			If I_294\ToInput <> "OUT OF RANGE" Then
 				HidePointer()
 				I_294\Using = False
-				MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_x_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
+				MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_X_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
 				
 				Local e.Events
 				
@@ -12263,8 +12263,6 @@ Function TeleportEntity(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = Fa
 End Function
 
 Function PlayStartupVideos()
-	If (Not opt\PlayStartup) Then Return
-	
 	HidePointer()
 	
 	fo\FontID[0] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 16)

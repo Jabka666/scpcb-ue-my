@@ -4235,6 +4235,9 @@ Function FillRoom(r.Rooms)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
+			r\Objects[9] = LoadMesh_Strict("GFX\map\intro_labels.b3d", r\OBJ)
+			PositionEntity(r\Objects[9], EntityX(r\Objects[9], True), EntityY(r\Objects[9], True) - 16.0 * RoomScale, EntityZ(r\Objects[9], True), True)
+			
 			For i = 0 To 4
 			    Select i
 			        Case 0
@@ -6957,11 +6960,11 @@ Function CreatePropOBJ%(File$)
 	p.Props = New Props
 	p\File = File
 	; ~ A hacky optimization (just copy models that loaded as variable)
-	p\OBJ = CheckPropModel(File)
+	p\OBJ = CheckForPropModel(File)
 	Return(p\OBJ)
 End Function
 
-Function CheckPropModel%(File$)
+Function CheckForPropModel%(File$)
 	If Instr(File, "leverbase") <> 0 Then
 		Return(CopyEntity(o\LeverModelID[0]))
 	ElseIf Instr(File, "leverhandle") <> 0

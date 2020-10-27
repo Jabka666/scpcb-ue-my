@@ -284,8 +284,14 @@ Function LoadMesh_Strict(File$, Parent% = 0)
 			If t1 <> 0 Then
 				TexAlpha = IsTexAlpha(t1)
 				If TexAlpha <> 2 Then
-					Texture = CheckForTexture(t1, TexAlpha)
-					If Texture <> 0 Then 
+					If FileType(TextureName(t1)) = 1 ; ~ Check if texture is existing in original path
+						Name = TextureName(t1)
+						Texture = LoadTextureCheckingIfInCache(Name, TexAlpha, 0)
+					ElseIf FileType(MapTexturesFolder + StripPath(TextureName(t1))) = 1 ; ~ If not, check the MapTexturesFolder
+						Name = MapTexturesFolder + StripPath(TextureName(t1))
+						Texture = LoadTextureCheckingIfInCache(Name, TexAlpha, 0)
+					EndIf
+					If Texture <> 0 Then
 						TextureBlend(Texture, 5)
 						BrushTexture(b, Texture, 0, 0)
 					Else
@@ -294,7 +300,13 @@ Function LoadMesh_Strict(File$, Parent% = 0)
 					EndIf
 				Else
 					t2 = GetBrushTexture(b, 1) ; ~ Diffuse (if lightmap is existing)
-					Texture = CheckForTexture(t1, TexAlpha)
+					If FileType(TextureName(t1)) = 1 ; ~ Check if texture is existing in original path
+						Name = TextureName(t1)
+						Texture = LoadTextureCheckingIfInCache(Name, 1, 0)
+					ElseIf FileType(MapTexturesFolder + StripPath(TextureName(t1))) = 1 ; ~ If not, check the MapTexturesFolder
+						Name = MapTexturesFolder + StripPath(TextureName(t1))
+						Texture = LoadTextureCheckingIfInCache(Name, 1, 0)
+					EndIf
 					If Texture <> 0 Then
 						TextureCoords(Texture, 1)
 						TextureBlend(Texture, 2)
@@ -303,7 +315,13 @@ Function LoadMesh_Strict(File$, Parent% = 0)
 						BrushTexture(b, MissingTexture, 0, 0)
 					EndIf
 					
-					Texture = CheckForTexture(t2, TexAlpha)
+					If FileType(TextureName(t2)) = 1 ; ~ Check if texture is existing in original path
+						Name = TextureName(t2)
+						Texture = LoadTextureCheckingIfInCache(Name, TexAlpha, 0)
+					ElseIf FileType(MapTexturesFolder + StripPath(TextureName(t2))) = 1 ; ~ If not, check the MapTexturesFolder
+						Name = MapTexturesFolder + StripPath(TextureName(t2))
+						Texture = LoadTextureCheckingIfInCache(Name, TexAlpha, 0)
+					EndIf
 					If Texture <> 0 Then
 						TextureCoords(Texture, 0)
 						TextureBlend(Texture, 5)

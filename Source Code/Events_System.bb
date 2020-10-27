@@ -9872,8 +9872,9 @@ Function UpdateEndings()
 							EndIf
 						Next
 						Curr173\Idle = 1
-						Curr096 = Null
-						Curr513_1 = Null
+						If Curr096 <> Null Then Curr096 = Null
+						If Curr513_1 <> Null Then Curr513_1 = Null
+						If Curr049 <> Null Then Curr049 = Null
 						
 						CameraFogMode(Camera, 0)
 						SecondaryLightOn = True
@@ -10027,7 +10028,7 @@ Function UpdateEndings()
 											RotateEntity(e\room\Objects[10], CurveAngle(EntityPitch(Pvt), EntityPitch(e\room\Objects[10], True), 200.0), EntityYaw(e\room\Objects[9], True), 0.0, True)
 											FreeEntity(Pvt)
 											
-											If fpst\FPSFactor[0] > 0.0 Then ; ~ Decals under 106
+											If fpst\FPSFactor[0] > 0.0 Then ; ~ Decals under SCP-106
 												If ((e\EventState - fpst\FPSFactor[0]) Mod 100.0) =< 50.0 And (e\EventState Mod 100.0) > 50.0 Then
 													de.Decals = CreateDecal(0, EntityX(Curr106\Collider, True), EntityY(e\room\Objects[3], True) + 0.01, EntityZ(Curr106\Collider, True), 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
 													de\SizeChange = 0.004 : de\Timer = 90000.0 : UpdateDecals() 
@@ -10089,7 +10090,7 @@ Function UpdateEndings()
 														If e\EventState2 - fpst\FPSFactor[0] < 70.0 * 7.5 Then
 															p.Particles = CreateParticle(EntityX(Curr106\OBJ, True), EntityY(Curr106\OBJ, True) + 0.4, EntityZ(Curr106\OBJ, True), 4, 7.0, 0.0, (70.0 * 6.7))
 															p\Speed = 0.0 : p\A = 1.0
-															EntityParent(p\pvt, Curr106\Collider, True)
+															EntityParent(p\Pvt, Curr106\Collider, True)
 															
 															p.Particles = CreateParticle(EntityX(e\room\Objects[10], True), EntityY(e\room\Objects[10], True), EntityZ(e\room\Objects[10], True), 4, 2.0, 0.0, (70.0 * 6.7))
 															p\Speed = 0.0 : p\A = 1.0
@@ -10103,7 +10104,7 @@ Function UpdateEndings()
 													EndIf
 												EndIf
 												
-												If opt\ParticleAmount > 0
+												If opt\ParticleAmount > 0 Then
 													For i = 0 To Rand(2, 2 + (6 * (opt\ParticleAmount - 1))) - Int(Dist)
 														p.Particles = CreateParticle(EntityX(Curr106\OBJ, True), EntityY(Curr106\OBJ, True) + Rnd(0.4, 0.9), EntityZ(Curr106\OBJ), 0, 0.006, -0.002, 40.0)
 														p\Speed = 0.005 : p\A = 0.8 : p\Achange = -0.01
