@@ -1,10 +1,13 @@
 Global Curr173.NPCs, Curr106.NPCs, Curr096.NPCs, Curr513_1.NPCs, Curr049.NPCs
 
+; ~ NPC IDs Constants
+;[Block]
 Const NPCtype008_1% = 1, NPCtype035_Tentacle% = 2, NPCtype049% = 3, NPCtype049_2% = 4, NPCtype066% = 5, NPCtype096% = 6
 Const NPCtype106% = 7, NPCtype173% = 8, NPCtype372% = 9, NPCtype513_1% = 10, NPCtype860_2% = 11, NPCtype939% = 12
 Const NPCtype966% = 13, NPCtype1499_1% = 14
 
 Const NPCtypeApache% = 15, NPCtypeClerk% = 16, NPCtypeD% = 17, NPCtypeGuard% = 18, NPCtypeMTF% = 19, NPCtypeVehicle% = 20
+;[End Block]
 
 Type NPCs
 	Field OBJ%, OBJ2%, OBJ3%, OBJ4%, Collider%
@@ -573,7 +576,7 @@ Function UpdateNPCs()
 						PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.32, EntityZ(n\Collider))
 						RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
 						
-						If n\Idle = False Then
+						If n\Idle = 0 Then
 							Local Temp% = False
 							Local Move% = True
 							
@@ -731,7 +734,7 @@ Function UpdateNPCs()
 														;[End Block]
 												End Select
 												
-												If (Not chs\GodMode) Then n\Idle = True
+												If (Not chs\GodMode) Then n\Idle = 1
 												
 												PlaySound_Strict(NeckSnapSFX[Rand(0, 2)])
 												If Rand(2) = 1 Then 
@@ -800,7 +803,7 @@ Function UpdateNPCs()
 			Case NPCtype106
 				;[Block]
 				If n\Contained Then
-					n\Idle = True
+					n\Idle = 1
 					HideEntity(n\OBJ)
 					HideEntity(n\OBJ2)
 					PositionEntity(n\OBJ, 0.0, 500.0, 0.0, True)
@@ -832,9 +835,9 @@ Function UpdateNPCs()
 								If e\EventState <> 0.0 Then
 									Spawn106 = True
 									If PlayerRoom\RoomTemplate\Name = "dimension1499" Then
-										n\Idle = True
+										n\Idle = 1
 									Else
-										n\Idle = False
+										n\Idle = 0
 									EndIf
 								EndIf
 								Exit
@@ -1546,7 +1549,7 @@ Function UpdateNPCs()
 																me\CameraShake = 2.0
 															Else
 																RemoveItem(Inventory[i])
-																wi\HazmatSuit = False
+																wi\HazmatSuit = 0
 															EndIf
 															Exit
 														EndIf
@@ -2729,7 +2732,7 @@ Function UpdateNPCs()
 											
 											n\Path[0] = w
 											
-											n\Idle = False
+											n\Idle = 0
 											n\State2 = 70.0 * Rnd(15.0, 20.0)
 											n\State = Max(Rand(-1.0, 2.0), 0.0)
 											n\PrevState = Rand(0, 1)
@@ -2802,7 +2805,7 @@ Function UpdateNPCs()
 								
 								; ~ SCP-513-1 simply disappears
 								If n\Path[0] = Null Then
-									n\Idle = True
+									n\Idle = 1
 									n\State2 = 0.0
 								EndIf
 							Else
@@ -2862,7 +2865,7 @@ Function UpdateNPCs()
 							n\State2 = n\State2 - fpst\FPSFactor[0]
 						Else
 							n\Path[0] = Null
-							n\Idle = True
+							n\Idle = 1
 							n\State2 = 0.0
 						EndIf
 					EndIf
@@ -2883,7 +2886,7 @@ Function UpdateNPCs()
 							
 							Dist = Rnd(1.5, 2.0)
 							PositionEntity(n\Collider, EntityX(me\Collider) + Sin(Angle) * Dist, EntityY(me\Collider) + 0.2, EntityZ(me\Collider) + Cos(Angle) * Dist)
-							n\Idle = False
+							n\Idle = 0
 							n\State = Rnd(20.0, 60.0)
 							
 							If Rand(300) = 1 Then PlaySound2(RustleSFX[Rand(0, 5)], Camera, n\OBJ, 8.0, Rnd(0.0, 0.2))
@@ -2920,7 +2923,7 @@ Function UpdateNPCs()
 							MoveEntity(n\Collider, 0.0, 0.0, 0.03 * fpst\FPSFactor[0])
 						EndIf
 						n\State = n\State - (fpst\FPSFactor[0] * 0.8)
-						If n\State =< 0.0 Then n\Idle = True	
+						If n\State =< 0.0 Then n\Idle = 1	
 					EndIf
 				EndIf
 				
@@ -4411,7 +4414,7 @@ Function UpdateNPCs()
 									EndIf
 								EndIf
 							Else
-								If (n\ID Mod 2 = 0) Then
+								If (n\ID Mod 2) = 0 Then
 									AnimateNPC(n, 1.0, 62.0, n\CurrSpeed * 28.0)
 								Else
 									AnimateNPC(n, 100.0, 167.0, n\CurrSpeed * 28.0)
@@ -4458,7 +4461,7 @@ Function UpdateNPCs()
 									EndIf
 								EndIf
 								
-								If (n\ID Mod 2 = 0) And (Not chs\NoTarget) Then
+								If (n\ID Mod 2) = 0 And (Not chs\NoTarget) Then
 									Dist = EntityDistanceSquared(n\Collider, me\Collider)
 									If Dist < 100.0 Then
 										If EntityVisible(n\Collider, me\Collider) Then
@@ -4530,7 +4533,7 @@ Function UpdateNPCs()
 									n\CurrSpeed = CurveValue(n\Speed * 1.75, n\CurrSpeed, 10.0)
 								EndIf
 								
-								If (n\ID Mod 2 = 0) Then
+								If (n\ID Mod 2) = 0 Then
 									AnimateNPC(n, 1.0, 62.0, n\CurrSpeed * 28.0)
 								Else
 									AnimateNPC(n, 100.0, 167.0, n\CurrSpeed * 28.0)
@@ -4538,7 +4541,7 @@ Function UpdateNPCs()
 							EndIf
 							
 							If Dist < 0.5625 Then
-								If (n\ID Mod 2 = 0) Lor n\State3 = 1.0 Lor n\PrevState = 1 Lor n\PrevState = 3 Lor n\PrevState = 4 Then
+								If (n\ID Mod 2) = 0 Lor n\State3 = 1.0 Lor n\PrevState = 1 Lor n\PrevState = 3 Lor n\PrevState = 4 Then
 									n\State2 = Rand(1.0, 2.0)
 									n\State = 3.0
 									If n\State2 = 1.0
@@ -5965,7 +5968,7 @@ Function UpdateMTFUnit(n.NPCs)
 					Local Curr173Dist# = Distance(EntityX(n\Collider, True), EntityX(Curr173\Collider, True), EntityZ(n\Collider, True), EntityZ(Curr173\Collider, True))
 					
 					If Curr173Dist < 5.0 Then
-						If Curr173\Idle <> 2 Then Curr173\Idle = True
+						If Curr173\Idle <> 2 Then Curr173\Idle = 1
 						n\State2 = 70.0 * 15.0
 						n\PathTimer = 0.0
 						
@@ -6004,7 +6007,7 @@ Function UpdateMTFUnit(n.NPCs)
 							AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 						EndIf
 					Else
-						If Curr173\Idle <> 2 Then Curr173\Idle = False
+						If Curr173\Idle <> 2 Then Curr173\Idle = 0
 						If n\PathTimer =< 0.0 Then
 							n\PathStatus = FindPath(n, EntityX(Curr173\Collider, True), EntityY(Curr173\Collider, True) + 0.1, EntityZ(Curr173\Collider, True))
 							n\PathTimer = 70.0 * Rnd(6.0, 10.0)
@@ -7074,7 +7077,7 @@ Function Console_SpawnNPC(C_Input$, C_State$ = "")
 			;[Block]
 			n.NPCs = CreateNPC(NPCtype173, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			Curr173 = n
-			If Curr173\Idle = 3 Then Curr173\Idle = False
+			If Curr173\Idle = 3 Then Curr173\Idle = 0
 			ConsoleMsg = "SCP-173 spawned."
 			;[End Block]
 		Case "372", "scp372", "scp-372", "pj", "jumper"
@@ -7353,10 +7356,8 @@ Function ChangeNPCTextureID(n.NPCs, TextureID%) ; ~ Works only for Class D model
 	Local Temp#
 	
 	If n = Null Then
-		CreateConsoleMsg("Tried to change the texture of an invalid NPC")
-		If opt\CanOpenConsole And opt\ConsoleOpening Then
-			ConsoleOpen = True
-		EndIf
+		CreateConsoleMsg("Tried to change the texture of an invalid NPC!")
+		If opt\CanOpenConsole And opt\ConsoleOpening Then ConsoleOpen = True
 		Return
 	EndIf
 	
@@ -7444,5 +7445,5 @@ Function Animate2#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = True
 End Function 
 
 ;~IDEal Editor Parameters:
-;~B#172#121A#1360#13B0#1506#1622#17F1#184C
+;~B#175#121D#1363#13B3#1509#1625#17F4#184F
 ;~C#Blitz3D

@@ -5,7 +5,7 @@ Function GenerateSeedNumber(Seed$)
 	
  	For i = 1 To Len(Seed)
  		Temp = Temp Xor (Asc(Mid(Seed, i, 1)) Shl Shift)
- 		Shift = (Shift + 1) Mod 24
+ 		Shift = ((Shift + 1) Mod 24)
 	Next
 	Return(Temp)
 End Function
@@ -94,7 +94,7 @@ Function TurnIfDeviating%(Max_Deviation_Distance_%, Pathx%, Center_%, Dir%, RetV
 	Local Deviated% = False
 	
 	If (Dir = 0 And Current_Deviation >= Max_Deviation_Distance_) Lor (Dir = 2 And Current_Deviation =< -Max_Deviation_Distance_) Then
-		Dir = (Dir + 2) Mod 4
+		Dir = ((Dir + 2) Mod 4)
 		Deviated = True
 	EndIf
 	If RetVal = 0 Then 

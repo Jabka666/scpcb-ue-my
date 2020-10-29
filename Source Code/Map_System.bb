@@ -939,7 +939,7 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 					Local ItemPlaced%[4]
 					Local it.Items = Null
 					
-					If tY Mod 3 = 2 And (Not ItemPlaced[Floor(tY / 3)]) Then
+					If (tY Mod 3) = 2 And (Not ItemPlaced[Floor(tY / 3)]) Then
 						ItemPlaced[Floor(tY / 3)] = True
 						it = CreateItem("Log #" + Int(Floor(tY / 3) + 1), "paper", 0.0, 0.5, 0.0)
 						EntityType(it\Collider, HIT_ITEM)
@@ -1127,7 +1127,7 @@ Function PlaceForest_MapCreator(fr.Forest, x#, y#, z#, r.Rooms)
 					Local ItemPlaced%[4]
 					Local it.Items = Null
 					
-					If tY Mod 3 = 2 And (Not ItemPlaced[Floor(tY / 3)]) Then
+					If (tY Mod 3) = 2 And (Not ItemPlaced[Floor(tY / 3)]) Then
 						ItemPlaced[Floor(tY / 3)] = True
 						it = CreateItem("Log #" + Int(Floor(tY / 3) + 1), "paper", 0.0, 0.5, 0.0)
 						EntityType(it\Collider, HIT_ITEM)
@@ -4272,7 +4272,7 @@ Function FillRoom(r.Rooms)
 						;[End Block]
 			    End Select
 			    de = CreateDecal(Temp, r\x + xTemp * RoomScale, r\y + 2.0 * RoomScale, r\z + zTemp * RoomScale, 90.0, 45.0, 0.0, ((i = 0) * 0.44) + ((i = 1) * 1.2) + ((i > 1) * 0.54), Rnd(0.8, 1.0))
-				EntityParent(de\OBJ, r\OBJ)
+				;EntityParent(de\OBJ, r\OBJ)
 			Next
 			
 			sc = CreateSecurityCam(r\x - 4048.0 * RoomScale, r\y - 32.0 * RoomScale, r\z - 1232.0 * RoomScale, r, True, r\x - 2256.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 928.0 * RoomScale)
@@ -6959,7 +6959,7 @@ Function CreatePropOBJ%(File$)
 	
 	p.Props = New Props
 	p\File = File
-	; ~ A hacky optimization (just copy models that loaded as variable)
+	; ~ A hacky optimization (just copy models that loaded as variable). Also fixes CBRE
 	p\OBJ = CheckForPropModel(File)
 	Return(p\OBJ)
 End Function
@@ -6969,6 +6969,10 @@ Function CheckForPropModel%(File$)
 		Return(CopyEntity(o\LeverModelID[0]))
 	ElseIf Instr(File, "leverhandle") <> 0
 		Return(CopyEntity(o\LeverModelID[1]))
+	ElseIf Instr(File, "Button.") <> 0
+		Return(CopyEntity(o\ButtonModelID[0]))
+	ElseIf Instr(File, "Door01") <> 0
+		Return(CopyEntity(o\DoorModelID[0]))
 	Else
 		Return(LoadMesh_Strict(File))
 	EndIf
@@ -7695,7 +7699,7 @@ Function SetRoom(Room_Name$, Room_Type%, Pos%, Min_Pos%, Max_Pos%) ; ~ Place a r
 	While MapRoom(Room_Type, Pos) <> ""
 		Pos = Pos + 1
 		If Pos > Max_Pos Then
-			If Looped = False Then
+			If (Not Looped) Then
 				Pos = Min_Pos + 1 : Looped = True
 			Else
 				Can_Place = False

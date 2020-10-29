@@ -719,7 +719,7 @@ Function PickItem(item.Items)
 						For z = 0 To MaxItemAmount - 1
 							If Inventory[z] <> Null Then
 								If Inventory[z]\ItemTemplate\TempName = "hazmatsuit" Lor Inventory[z]\ItemTemplate\TempName = "hazmatsuit2" Lor Inventory[z]\ItemTemplate\TempName = "hazmatsuit3" Then
-									CanPickItem = False
+									CanPickItem = 0
 									Exit
 								ElseIf Inventory[z]\ItemTemplate\TempName = "vest" Lor Inventory[z]\ItemTemplate\TempName = "finevest"
 									CanPickItem = 2
@@ -746,7 +746,7 @@ Function PickItem(item.Items)
 						For z = 0 To MaxItemAmount - 1
 							If Inventory[z] <> Null Then
 								If Inventory[z]\ItemTemplate\TempName = "vest" Lor Inventory[z]\ItemTemplate\TempName = "finevest" Then
-									CanPickItem = False
+									CanPickItem = 0
 									Exit
 								ElseIf Inventory[z]\ItemTemplate\TempName = "hazmatsuit" Lor Inventory[z]\ItemTemplate\TempName = "hazmatsuit2" Lor Inventory[z]\ItemTemplate\TempName = "hazmatsuit3"
 									CanPickItem = 2

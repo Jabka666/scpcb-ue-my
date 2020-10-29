@@ -1044,7 +1044,7 @@ Function UpdateConsole()
 						EndIf
 					Next
 					
-					If Temp = False Then CreateConsoleMsg("Item not found.", 255, 150, 0)
+					If (Not Temp) Then CreateConsoleMsg("Item not found.", 255, 150, 0)
 					;[End Block]
 				Case "wireframe", "wf"
 					;[Block]
@@ -1104,19 +1104,19 @@ Function UpdateConsole()
 					;[End Block]
 				Case "enable173"
 					;[Block]
-					Curr173\Idle = False
+					Curr173\Idle = 0
 					ShowEntity(Curr173\OBJ)
 					ShowEntity(Curr173\Collider)
 					;[End Block]
 				Case "disable106"
 					;[Block]
-					Curr106\Idle = True
+					Curr106\Idle = 1
 					Curr106\State = 200000.0
 					Curr106\Contained = True
 					;[End Block]
 				Case "enable106"
 					;[Block]
-					Curr106\Idle = False
+					Curr106\Idle = 0
 					Curr106\Contained = False
 					ShowEntity(Curr106\Collider)
 					ShowEntity(Curr106\OBJ)
@@ -1143,13 +1143,13 @@ Function UpdateConsole()
 					;[End Block]
 				Case "disable049" 
 			        ;[Block]
-					Curr049\Idle = True
+					Curr049\Idle = 1
 			        HideEntity(Curr049\Collider)
 			        HideEntity(Curr049\OBJ)
 					;[End Block]
 			    Case "enable049"
 			        ;[Block]
-					Curr049\Idle = False
+					Curr049\Idle = 0
 			        ShowEntity(Curr049\Collider)
 			        ShowEntity(Curr049\OBJ)
 					;[End Block]
@@ -1262,7 +1262,7 @@ Function UpdateConsole()
 					If Curr173\Idle Then
 						CreateConsoleMsg("Death by SCP-173 causes GodMode to be enabled!")
 						chs\GodMode = True
-						Curr173\Idle = False
+						Curr173\Idle = 0
 					Else
 						chs\GodMode = False
 					EndIf
@@ -1291,7 +1291,7 @@ Function UpdateConsole()
 						Default
 							;[Block]
 							chs\NoClip = (Not chs\NoClip)
-							If chs\NoClip = False Then		
+							If (Not chs\NoClip) Then		
 								RotateEntity(me\Collider, 0.0, EntityYaw(me\Collider), 0.0)
 							Else
 								me\Playable = True
@@ -1661,7 +1661,7 @@ Function UpdateConsole()
 							;[End Block]
 					End Select
 					
-					If chs\NoTarget = False Then
+					If (Not chs\NoTarget) Then
 						CreateConsoleMsg("NOTARGET OFF")
 					Else
 						CreateConsoleMsg("NOTARGET ON")	
@@ -1732,12 +1732,12 @@ Function UpdateConsole()
 					;[Block]
 					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 					
-					I_427\Timer = Float(StrTemp) * 70.0
+					I_427\Timer = 70.0 * Float(StrTemp)
 					;[End Block]
 				Case "teleport106"
 					;[Block]
 					Curr106\State = 0.0
-					Curr106\Idle = False
+					Curr106\Idle = 0
 					;[End Block]
 				Case "jorge"
 					;[Block]	
@@ -2019,10 +2019,8 @@ Include "Source Code\Items_System.bb"
 
 Include "Source Code\Particles_System.bb"
 
-Global UpdateObjectsTimer#
-
 Global ClosestButton%, ClosestDoor.Doors
-Global SelectedDoor.Doors
+Global SelectedDoor.Doors, UpdateDoorsTimer#
 Global DoorTempID%
 
 Type Doors
@@ -2171,7 +2169,7 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, Open% = False, Bi
 	
 	EntityPickMode(d\FrameOBJ, 2)
 	
-	If d\Open And Big = False And Rand(8) = 1 Then d\AutoClose = True
+	If d\Open And Big = 0 And Rand(8) = 1 Then d\AutoClose = True
 	d\Dir = Big
 	d\room = room
 	
@@ -2194,7 +2192,7 @@ End Function
 Function UpdateDoors()
 	Local i%, d.Doors, x#, z#, Dist#
 	
-	If UpdateObjectsTimer =< 0.0 Then
+	If UpdateDoorsTimer =< 0.0 Then
 		For d.Doors = Each Doors
 			Local xDist# = Abs(EntityX(me\Collider) - EntityX(d\OBJ, True))
 			Local zDist# = Abs(EntityZ(me\Collider) - EntityZ(d\OBJ, True))
@@ -2214,6 +2212,9 @@ Function UpdateDoors()
 				If d\Buttons[1] <> 0 Then ShowEntity(d\Buttons[1])
 			EndIf
 		Next
+		UpdateDoorsTimer = 30.0
+	Else
+		UpdateDoorsTimer = Max(UpdateDoorsTimer - fpst\FPSFactor[0], 0.0)
 	EndIf
 	
 	ClosestButton = 0
@@ -2947,7 +2948,11 @@ Function MainLoop()
 			Local PrevMouseDown1% = mo\MouseDown1
 			
 			mo\MouseDown1 = MouseDown(1)
-			If PrevMouseDown1 = True And (Not mo\MouseDown1) Then mo\MouseUp1 = True Else mo\MouseUp1 = False
+			If PrevMouseDown1 = True And (Not mo\MouseDown1) Then 
+				mo\MouseUp1 = True 
+			Else 
+				mo\MouseUp1 = False
+			EndIf
 			
 			mo\MouseHit2 = MouseHit(2)
 		EndIf
@@ -3035,11 +3040,6 @@ Function MainLoop()
 		UpdateCheckpoint2 = False
 		
 		If (Not MenuOpen) And (Not InvOpen) And OtherOpen = Null And SelectedDoor = Null And (Not ConsoleOpen) And (Not I_294\Using) And SelectedScreen = Null And me\EndingTimer >= 0.0 Then
-			If UpdateObjectsTimer =< 0.0 Then
-				UpdateObjectsTimer = 30.0
-			Else
-				UpdateObjectsTimer = Max(UpdateObjectsTimer - fpst\FPSFactor[0], 0.0)
-			EndIf
 			If fpst\FPSFactor[0] > 0.0 And PlayerRoom\RoomTemplate\Name <> "dimension1499" Then
 				If opt\EnableRoomLights And SecondaryLightOn > 0.5 And TempCamera = Camera Then
 					UpdateRoomLightsTimer = UpdateRoomLightsTimer + fpst\FPSFactor[0]
@@ -3066,9 +3066,7 @@ Function MainLoop()
 			UpdateDeaf()
 			UpdateEmitters()
 			MouseLook()
-			If PlayerRoom\RoomTemplate\Name = "dimension1499" And QuickLoadPercent > 0 And QuickLoadPercent < 100
-				ShouldEntitiesFall = False
-			EndIf
+			If PlayerRoom\RoomTemplate\Name = "dimension1499" And QuickLoadPercent > 0 And QuickLoadPercent < 100 Then ShouldEntitiesFall = False
 			MovePlayer()
 			InFacility = CheckForPlayerInFacility()
 			If PlayerRoom\RoomTemplate\Name = "dimension1499"
@@ -3994,7 +3992,7 @@ Function MovePlayer()
 			
 			Local TempCHN%
 			
-			If (Not UnableToMove) Then me\Shake = (me\Shake + fpst\FPSFactor[0] * Min(Sprint, 1.5) * 7.0) Mod 720.0
+			If (Not UnableToMove) Then me\Shake = ((me\Shake + fpst\FPSFactor[0] * Min(Sprint, 1.5) * 7.0) Mod 720.0)
 			If Temp < 180.0 And (me\Shake Mod 360.0) >= 180.0 And me\KillTimer >= 0.0 Then
 				If CurrStepSFX = 0 Then
 					Temp = GetStepSound(me\Collider)
@@ -4505,11 +4503,14 @@ Function MouseLook()
 	Next
 End Function
 
+; ~ Iventory Constants
+;[Block]
 Const NAV_WIDTH% = 287
 Const NAV_HEIGHT% = 256
 
 Const INVENTORY_GFX_SIZE% = 70
 Const INVENTORY_GFX_SPACING% = 35
+;[End Block]
 
 Function DrawGUI()
 	CatchErrors("Uncaught (DrawGUI)")
@@ -5383,28 +5384,28 @@ Function DrawGUI()
 											Local DrawX% = x + (PlayerX - 1 - x2) * 24 , DrawY% = y - (PlayerZ - 1 - z2) * 24
 											
 											If x2 + 1.0 =< MapWidth Then
-												If MapTemp(x2 + 1, z2) = False
+												If MapTemp(x2 + 1, z2) = 0
 													DrawImage(tt\ImageID[10], DrawX - 12, DrawY - 12)
 												EndIf
 											Else
 												DrawImage(tt\ImageID[10], DrawX - 12, DrawY - 12)
 											EndIf
 											If x2 - 1.0 >= 0.0 Then
-												If MapTemp(x2 - 1, z2) = False
+												If MapTemp(x2 - 1, z2) = 0
 													DrawImage(tt\ImageID[8], DrawX - 12, DrawY - 12)
 												EndIf
 											Else
 												DrawImage(tt\ImageID[8], DrawX - 12, DrawY - 12)
 											EndIf
 											If z2 - 1.0 >= 0.0 Then
-												If MapTemp(x2, z2 - 1) = False
+												If MapTemp(x2, z2 - 1) = 0
 													DrawImage(tt\ImageID[7], DrawX - 12, DrawY - 12)
 												EndIf
 											Else
 												DrawImage(tt\ImageID[7], DrawX - 12, DrawY - 12)
 											EndIf
 											If z2 + 1.0 =< MapHeight Then
-												If MapTemp(x2, z2 + 1) = False
+												If MapTemp(x2, z2 + 1) = 0
 													DrawImage(tt\ImageID[9], DrawX - 12, DrawY - 12)
 												EndIf
 											Else
@@ -6396,7 +6397,7 @@ Function UpdateGUI()
 					If PreventItemOverlapping(False, True, False, False, False) Then
 						If wi\NightVision > 0 And wi\NightVision <> 2 Then
 							msg\Msg = "You can't use two pairs of the goggles at the same time."
-							msg\Timer = 70 * 5.0
+							msg\Timer = 70.0 * 5.0
 							SelectedItem = Null
 							Return
 						Else
@@ -6429,7 +6430,7 @@ Function UpdateGUI()
 					If PreventItemOverlapping(False, True, False, False, False) Then
 						If wi\NightVision > 0 And wi\NightVision <> 3 Then
 							msg\Msg = "You can't use two pairs of the goggles at the same time."
-							msg\Timer = 70 * 5.0
+							msg\Timer = 70.0 * 5.0
 							SelectedItem = Null
 							Return
 						Else
@@ -7038,7 +7039,7 @@ Function UpdateGUI()
 									
 									ResumeChannel(RadioCHN[4])
 									If (Not ChannelPlaying(RadioCHN[4])) Then 
-										If RemoteDoorOn = False And RadioState[8] = False Then
+										If (Not RemoteDoorOn) And RadioState[8] = False Then
 											RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\Radio\Chatter3.ogg"))	
 											RadioState[8] = True
 										Else
@@ -7531,7 +7532,7 @@ Function UpdateGUI()
 					
 					me\VomitTimer = 70.0 * 1.0
 					
-				    I_008\Timer = I_008\Timer + (1 + (1 * SelectedDifficulty\AggressiveNPCs))
+				    I_008\Timer = I_008\Timer + (1.0 + (1.0 * SelectedDifficulty\AggressiveNPCs))
 					RemoveItem(SelectedItem)
 					SelectedItem = Null
 					;[End Block]
@@ -9094,8 +9095,10 @@ Function LoadEntities()
 	SetChunkDataValues()
 	
 	; ~ NPCtypeD - different models with different textures (loaded using "CopyEntity") -- ENDSHN
-	For i = 0 To 15
+	For i = 0 To MaxDTextures - 1
 		o\DTextures[i] = CopyEntity(o\NPCModelID[3])
+		; ~ Temporary fix for wrong blend (TODO:) -- Jabka
+		EntityFX(o\DTextures[i], 2)
 		HideEntity(o\DTextures[i])
 	Next
 	
@@ -9464,7 +9467,7 @@ Function InitLoadGame()
 	ResetInput()
 End Function
 
-Function NullGame(PlayButtonSFX% = True)
+Function NullGame(PlayButtonSFX% = True) ; ~ CHECK FOR ERRORS
 	CatchErrors("Uncaught (NullGame)")
 	
 	Local i%, x%, y%, Lvl%
@@ -11730,59 +11733,43 @@ End Function
 Function UpdateDecals()
 	Local d.Decals
 	
-	If UpdateObjectsTimer =< 0.0 Then
-		For d.Decals = Each Decals
-			Local xDist# = Abs(EntityX(me\Collider) - EntityX(d\OBJ, True))
-			Local zDist# = Abs(EntityZ(me\Collider) - EntityZ(d\OBJ, True))
-			Local Dist# = xDist + zDist
-			
-			If Dist > HideDistance * 2.0 Then
-				If d\OBJ <> 0 Then HideEntity(d\OBJ)
-			Else
-				If d\OBJ <> 0 Then ShowEntity(d\OBJ)
-			EndIf
-		Next
-	EndIf
-	
 	For d.Decals = Each Decals
-		If Dist < HideDistance * 2.0 Then
-			If d\SizeChange <> 0.0 Then
-				d\Size = d\Size + d\SizeChange * fpst\FPSFactor[0]
-				ScaleSprite(d\OBJ, d\Size, d\Size)
-				
-				Select d\ID
-					Case 0
-						;[Block]
-						If d\Timer =< 0.0 Then
-							Local Angle# = Rnd(360.0)
-							Local Temp# = Rnd(d\Size)
-							Local d2.Decals = CreateDecal(1, EntityX(d\OBJ) + Cos(Angle) * Temp, EntityY(d\OBJ) - 0.0005, EntityZ(d\OBJ) + Sin(Angle) * Temp, EntityPitch(d\OBJ), EntityYaw(d\OBJ), EntityRoll(d\OBJ), Rnd(0.1, 0.5))
-							
-							PlaySound2(DecaySFX[Rand(1, 3)], Camera, d2\OBJ, 10.0, Rnd(0.1, 0.5))
-							d\Timer = Rnd(50.0, 100.0)
-						Else
-							d\Timer = d\Timer - fpst\FPSFactor[0]
-						EndIf
-						;[End Block]
-				End Select
-				
-				If d\Size >= d\MaxSize Then d\SizeChange = 0.0 : d\Size = d\MaxSize
-			EndIf
+		If d\SizeChange <> 0.0 Then
+			d\Size = d\Size + d\SizeChange * fpst\FPSFactor[0]
+			ScaleSprite(d\OBJ, d\Size, d\Size)
 			
-			If d\AlphaChange <> 0.0 Then
-				d\Alpha = Min(d\Alpha + fpst\FPSFactor[0] * d\AlphaChange, 1.0)
-				EntityAlpha(d\OBJ, d\Alpha)
-			EndIf
+			Select d\ID
+				Case 0
+					;[Block]
+					If d\Timer =< 0.0 Then
+						Local Angle# = Rnd(360.0)
+						Local Temp# = Rnd(d\Size)
+						Local d2.Decals = CreateDecal(1, EntityX(d\OBJ) + Cos(Angle) * Temp, EntityY(d\OBJ) - 0.0005, EntityZ(d\OBJ) + Sin(Angle) * Temp, EntityPitch(d\OBJ), EntityYaw(d\OBJ), EntityRoll(d\OBJ), Rnd(0.1, 0.5))
+						
+						PlaySound2(DecaySFX[Rand(1, 3)], Camera, d2\OBJ, 10.0, Rnd(0.1, 0.5))
+						d\Timer = Rnd(50.0, 100.0)
+					Else
+						d\Timer = d\Timer - fpst\FPSFactor[0]
+					EndIf
+					;[End Block]
+			End Select
 			
-			If d\LifeTime > 0.0 Then
-				d\LifeTime = Max(d\LifeTime - fpst\FPSFactor[0], 5.0)
-			EndIf
+			If d\Size >= d\MaxSize Then d\SizeChange = 0.0 : d\Size = d\MaxSize
+		EndIf
+		
+		If d\AlphaChange <> 0.0 Then
+			d\Alpha = Min(d\Alpha + fpst\FPSFactor[0] * d\AlphaChange, 1.0)
+			EntityAlpha(d\OBJ, d\Alpha)
+		EndIf
+		
+		If d\LifeTime > 0.0 Then
+			d\LifeTime = Max(d\LifeTime - fpst\FPSFactor[0], 5.0)
+		EndIf
+		
+		If d\Size =< 0.0 Lor d\Alpha =< 0.0 Lor d\LifeTime = 5.0 Then
+			FreeEntity(d\OBJ)
 			
-			If d\Size =< 0.0 Lor d\Alpha =< 0.0 Lor d\LifeTime = 5.0 Then
-				FreeEntity(d\OBJ)
-				
-				Delete(d)
-			EndIf
+			Delete(d)
 		EndIf
 	Next
 End Function
@@ -12382,5 +12369,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#108D#131F#1DF2
+;~B#108B#1320#1DF3
 ;~C#Blitz3D

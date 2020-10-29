@@ -81,7 +81,7 @@ Function DrawAchvIMG(x%, y%, AchvNo%)
 	Local Scale# = opt\GraphicHeight / 768.0
 	Local SeparationConst2# = 76.0 * Scale
 	
-	Row = AchvNo Mod 4
+	Row = (AchvNo Mod 4)
 	Color(0, 0, 0)
 	Rect((x + ((Row) * SeparationConst2)), y, 64 * Scale, 64 * Scale, True)
 	If Achievements[AchvNo] = True Then

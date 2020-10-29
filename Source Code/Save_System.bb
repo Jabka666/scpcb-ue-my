@@ -488,7 +488,8 @@ Function LoadGame(File$)
 	
 	GameSaved = True
 	
-	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, r.Rooms, ID%, n.NPCs, do.Doors, rt.RoomTemplates
+	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, Tex%
+	Local r.Rooms, ID%, n.NPCs, do.Doors, rt.RoomTemplates
 	Local f% = ReadFile(File + "save.cb")
 	
 	StrTemp = ReadString(f)
@@ -498,7 +499,7 @@ Function LoadGame(File$)
 	
 	x = ReadFloat(f)
 	y = ReadFloat(f)
-	z = ReadFloat(f)	
+	z = ReadFloat(f)
 	PositionEntity(me\Collider, x, y + 0.05, z)
 	ResetEntity(me\Collider)
 	
@@ -554,10 +555,10 @@ Function LoadGame(File$)
 	I_008\Timer = ReadFloat(f)
 	I_409\Timer = ReadFloat(f)
 	
-	Local DifficultyIndex = ReadByte(f)
+	Local DifficultyIndex% = ReadByte(f)
 	
 	SelectedDifficulty = difficulties[DifficultyIndex]
-	If (DifficultyIndex = ESOTERIC) Then
+	If DifficultyIndex = ESOTERIC Then
 		SelectedDifficulty\AggressiveNPCs = ReadByte(f)
 		SelectedDifficulty\PermaDeath = ReadByte(f)
 		SelectedDifficulty\SaveType	= ReadByte(f)
@@ -697,14 +698,14 @@ Function LoadGame(File$)
 		n\ModelScaleX = ReadFloat(f)
 		n\ModelScaleY = ReadFloat(f)
 		n\ModelScaleZ = ReadFloat(f)
-		If n\Model <> ""
+		If n\Model <> "" Then
 			FreeEntity(n\OBJ)
 			n\OBJ = LoadAnimMesh_Strict(n\Model)
 			ScaleEntity(n\OBJ, n\ModelScaleX, n\ModelScaleY, n\ModelScaleZ)
 			SetAnimTime(n\OBJ, Frame)
 		EndIf
 		n\TextureID = ReadInt(f)
-		If n\TextureID > 0
+		If n\TextureID > 0 Then
 			ChangeNPCTextureID(n.NPCs, n\TextureID - 1)
 			SetAnimTime(n\OBJ, Frame)
 		EndIf
@@ -814,7 +815,7 @@ Function LoadGame(File$)
 			Next
 		EndIf
 		
-		Local HasForest = ReadByte(f)
+		Local HasForest% = ReadByte(f)
 		
 		If HasForest > 0 Then ; ~ This room has a forest
 			If r\fr <> Null Then ; ~ Remove the old forest
@@ -1079,8 +1080,8 @@ Function LoadGame(File$)
 	
 	For e.Events = Each Events
 		; ~ Reset e_dimension1499
-		If e\EventID = e_dimension1499
-			If e\EventState > 0.0
+		If e\EventID = e_dimension1499 Then
+			If e\EventState > 0.0 Then
 				e\EventState = 0.0
 				e\EventStr = ""
 				HideChunks()
@@ -1105,7 +1106,7 @@ Function LoadGame(File$)
 		ElseIf e\EventID = e_room205
 			e\EventStr = ""
 		ElseIf e\EventID = e_room106
-			If e\EventState2 = False Then
+			If e\EventState2 = 0.0 Then
 				PositionEntity(e\room\Objects[6], EntityX(e\room\Objects[6], True), -1280.0 * RoomScale, EntityZ(e\room\Objects[6], True), True)
 			EndIf
 		EndIf
@@ -1161,7 +1162,7 @@ Function LoadGame(File$)
 		Local itt.ItemTemplates
 		
 		For itt.ItemTemplates = Each ItemTemplates
-			If (itt\TempName = TempName) And (itt\Name = IttName) Then
+			If itt\TempName = TempName And itt\Name = IttName Then
 				If itt\IsAnim <> 0 Then SetAnimTime(it\Model, ReadFloat(f)) : Exit
 			EndIf
 		Next
@@ -1424,7 +1425,7 @@ Function LoadGameQuick(File$)
 	Local DifficultyIndex% = ReadByte(f)
 	
 	SelectedDifficulty = difficulties[DifficultyIndex]
-	If (DifficultyIndex = ESOTERIC) Then
+	If DifficultyIndex = ESOTERIC Then
 		SelectedDifficulty\AggressiveNPCs = ReadByte(f)
 		SelectedDifficulty\PermaDeath = ReadByte(f)
 		SelectedDifficulty\SaveType	= ReadByte(f)
@@ -1575,7 +1576,7 @@ Function LoadGameQuick(File$)
 			SetAnimTime(n\OBJ, Frame)
 		EndIf
 		n\TextureID = ReadInt(f)
-		If n\TextureID > 0
+		If n\TextureID > 0 Then
 			ChangeNPCTextureID(n.NPCs, n\TextureID - 1)
 			SetAnimTime(n\OBJ, Frame)
 		EndIf
@@ -2205,8 +2206,8 @@ Function LoadMap(File$)
 	
 	For x = 0 To MapWidth + 1
 		For y = 0 To MapHeight + 1
-			MapTemp(x, y) = False
-			MapFound(x, y) = False
+			MapTemp(x, y) = 0
+			MapFound(x, y) = 0
 		Next
 	Next
 	

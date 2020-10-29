@@ -84,7 +84,11 @@ Function UpdateMainMenu()
 			Local PrevMouseDown1% = mo\MouseDown1
 			
 			mo\MouseDown1 = MouseDown(1)
-			If PrevMouseDown1 = True And (Not mo\MouseDown1) Then mo\MouseUp1 = True Else mo\MouseUp1 = False
+			If PrevMouseDown1 = True And (Not mo\MouseDown1) Then 
+				mo\MouseUp1 = True 
+			Else 
+				mo\MouseUp1 = False
+			EndIf
 			
 			mo\MouseHit2 = MouseHit(2)
 		EndIf
@@ -380,7 +384,7 @@ Function UpdateMainMenu()
 						For i = 1 To SaveGameAmount
 							If SaveGames(i - 1) = CurrSave Then SameFound = SameFound + 1
 						Next
-							
+						
 						If SameFound > 0 Then CurrSave = CurrSave + " (" + (SameFound + 1) + ")"
 						
 						InitNewGame()
@@ -1690,7 +1694,7 @@ Function UpdateLauncher(lnchr.Launcher)
 		DrawFrame(455, 254, 120, 30)
 		Text(515, 264, Txt, True)
 		If DrawLauncherButton(575, 254, 30, 30, "", False) Then
-			opt\DisplayMode = (opt\DisplayMode + 1) Mod 3
+			opt\DisplayMode = ((opt\DisplayMode + 1) Mod 3)
 		EndIf
 		DrawImage(LauncherArrowIMG, 589, 268)
 		

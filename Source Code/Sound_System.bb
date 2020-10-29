@@ -45,7 +45,7 @@ Function LoadTempSound(File$)
 	If TempSounds[TempSoundIndex] <> 0 Then FreeSound_Strict(TempSounds[TempSoundIndex])
 	TempSound = LoadSound_Strict(File)
 	TempSounds[TempSoundIndex] = TempSound
-	TempSoundIndex = (TempSoundIndex + 1) Mod 10
+	TempSoundIndex = ((TempSoundIndex + 1) Mod 10)
 	Return(TempSound)
 End Function
 

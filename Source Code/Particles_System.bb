@@ -47,33 +47,26 @@ Function UpdateParticles()
 	Local p.Particles
 	
 	For p.Particles = Each Particles
-		Local xDist# = Abs(EntityX(me\Collider) - EntityX(p\OBJ, True))
-		Local zDist# = Abs(EntityZ(me\Collider) - EntityZ(p\OBJ, True))
-		Local Dist# = xDist + zDist
 		
-		If Dist > HideDistance * 2.0 Then
+		MoveEntity(p\Pvt, 0.0, 0.0, p\Speed * fpst\FPSFactor[0])
+		If p\Gravity <> 0 Then p\ySpeed = p\ySpeed - p\Gravity * fpst\FPSFactor[0]
+		TranslateEntity(p\Pvt, 0.0, p\ySpeed * fpst\FPSFactor[0], 0.0, True)
+		
+		PositionEntity(p\OBJ, EntityX(p\Pvt, True), EntityY(p\Pvt, True), EntityZ(p\Pvt, True), True)
+		
+		If p\AChange <> 0.0 Then
+			p\A = Min(Max(p\A + p\AChange * fpst\FPSFactor[0], 0.0), 1.0)
+			EntityAlpha(p\OBJ, p\A)		
+		EndIf
+		
+		If p\SizeChange <> 0.0 Then 
+			p\Size = p\Size + p\SizeChange * fpst\FPSFactor[0]
+			ScaleSprite(p\OBJ, p\Size, p\Size)
+		EndIf
+		
+		p\LifeTime = p\LifeTime - fpst\FPSFactor[0]
+		If p\LifeTime =< 0.0 Lor p\Size < 0.00001 Lor p\A =< 0.0 Then
 			RemoveParticle(p)
-		Else
-			MoveEntity(p\Pvt, 0.0, 0.0, p\Speed * fpst\FPSFactor[0])
-			If p\Gravity <> 0 Then p\ySpeed = p\ySpeed - p\Gravity * fpst\FPSFactor[0]
-			TranslateEntity(p\Pvt, 0.0, p\ySpeed * fpst\FPSFactor[0], 0.0, True)
-			
-			PositionEntity(p\OBJ, EntityX(p\Pvt, True), EntityY(p\Pvt, True), EntityZ(p\Pvt, True), True)
-			
-			If p\AChange <> 0.0 Then
-				p\A = Min(Max(p\A + p\AChange * fpst\FPSFactor[0], 0.0), 1.0)
-				EntityAlpha(p\OBJ, p\A)		
-			EndIf
-			
-			If p\SizeChange <> 0.0 Then 
-				p\Size = p\Size + p\SizeChange * fpst\FPSFactor[0]
-				ScaleSprite(p\OBJ, p\Size, p\Size)
-			EndIf
-			
-			p\LifeTime = p\LifeTime - fpst\FPSFactor[0]
-			If p\LifeTime =< 0.0 Lor p\Size < 0.00001 Lor p\A =< 0.0 Then
-				RemoveParticle(p)
-			EndIf
 		EndIf
 	Next
 End Function
@@ -145,45 +138,29 @@ End Function
 Function UpdateEmitters()
 	Local e.Emitters
 	
-	If UpdateObjectsTimer =< 0.0 Then
-		For e.Emitters = Each Emitters
-			Local xDist# = Abs(EntityX(me\Collider) - EntityX(e\OBJ, True))
-			Local zDist# = Abs(EntityZ(me\Collider) - EntityZ(e\OBJ, True))
-			Local Dist# = xDist + zDist
-			
-			If Dist > HideDistance * 2.0 Then
-				If e\OBJ <> 0 Then HideEntity(e\OBJ)
-			Else
-				If e\OBJ <> 0 Then ShowEntity(e\OBJ)
-			EndIf
-		Next
-	EndIf
-	
 	InSmoke = False
 	For e.Emitters = Each Emitters
-		If Dist < HideDistance * 2.0 Then
-			If fpst\FPSFactor[0] > 0.0 And (PlayerRoom = e\room Lor e\room\Dist < 8.0) Then
-				Local p.Particles = CreateParticle(EntityX(e\OBJ, True), EntityY(e\OBJ, True), EntityZ(e\OBJ, True), Rand(e\MinImage, e\MaxImage), e\Size, e\Gravity, e\LifeTime)
-				
-				p\Speed = e\Speed
-				RotateEntity(p\Pvt, EntityPitch(e\OBJ, True), EntityYaw(e\OBJ, True), EntityRoll(e\OBJ, True), True)
-				TurnEntity(p\Pvt, Rnd(-e\RandAngle, e\RandAngle), Rnd(-e\RandAngle, e\RandAngle), 0)
-				
-				TurnEntity(p\OBJ, 0.0, 0.0, Rnd(360.0))
-				
-				p\SizeChange = e\SizeChange
-				
-				p\AChange = e\AChange
-				
-				e\SoundCHN = LoopSound2(HissSFX, e\SoundCHN, Camera, e\OBJ)
-				
-				If (Not InSmoke) Then
-					If wi\GasMask = 0 And wi\HazmatSuit = 0 Then
-						If DistanceSquared(EntityX(Camera, True), EntityX(e\OBJ, True), EntityZ(Camera, True), EntityZ(e\OBJ, True)) < 0.64 Then
-							If Abs(EntityY(Camera, True) - EntityY(e\OBJ, True)) < 5.0 Then InSmoke = True
-						EndIf
-					EndIf					
-				EndIf
+		If fpst\FPSFactor[0] > 0.0 And (PlayerRoom = e\room Lor e\room\Dist < 8.0) Then
+			Local p.Particles = CreateParticle(EntityX(e\OBJ, True), EntityY(e\OBJ, True), EntityZ(e\OBJ, True), Rand(e\MinImage, e\MaxImage), e\Size, e\Gravity, e\LifeTime)
+			
+			p\Speed = e\Speed
+			RotateEntity(p\Pvt, EntityPitch(e\OBJ, True), EntityYaw(e\OBJ, True), EntityRoll(e\OBJ, True), True)
+			TurnEntity(p\Pvt, Rnd(-e\RandAngle, e\RandAngle), Rnd(-e\RandAngle, e\RandAngle), 0)
+			
+			TurnEntity(p\OBJ, 0.0, 0.0, Rnd(360.0))
+			
+			p\SizeChange = e\SizeChange
+			
+			p\AChange = e\AChange
+			
+			e\SoundCHN = LoopSound2(HissSFX, e\SoundCHN, Camera, e\OBJ)
+			
+			If (Not InSmoke) Then
+				If wi\GasMask = 0 And wi\HazmatSuit = 0 Then
+					If DistanceSquared(EntityX(Camera, True), EntityX(e\OBJ, True), EntityZ(Camera, True), EntityZ(e\OBJ, True)) < 0.64 Then
+						If Abs(EntityY(Camera, True) - EntityY(e\OBJ, True)) < 5.0 Then InSmoke = True
+					EndIf
+				EndIf					
 			EndIf
 		EndIf
 	Next
