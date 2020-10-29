@@ -655,7 +655,7 @@ Function DrawQuickLoading()
 		MidHandle(QuickLoadIcon)
 		DrawImage(QuickLoadIcon, opt\GraphicWidth - 90, opt\GraphicHeight - 150)
 		Color(255, 255, 255)
-		SetFont(fo\FontID[0])
+		SetFont(fo\FontID[Font_Default])
 		Text(opt\GraphicWidth - 100, opt\GraphicHeight - 90, "LOADING: " + QuickLoadPercent + "%", 1)
 	EndIf
 End Function

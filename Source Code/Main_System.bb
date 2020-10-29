@@ -13,13 +13,22 @@ Include "Source Code\StrictLoads.bb"
 Include "Source Code\Keys_System.bb"
 Include "Source Code\INI_System.bb"
 
-Const MaxFontIDAmount% = 5
-Const MaxCreditsFontIDAmount% = 2
+; ~ Font IDs Constants
+;[Block]
+Const MaxFontIDAmount% = 8
+
+Const Font_Default% = 0
+Const Font_Default_Big% = 1
+Const Font_Digital% = 2
+Const Font_Digital_Big% = 3
+Const Font_Journal% = 4
+Const Font_Console% = 5
+Const Font_Credits% = 6
+Const Font_Credits_Big% = 7
+;[End Block]
 
 Type Fonts
 	Field FontID%[MaxFontIDAmount]
-	Field ConsoleFont%
-	Field CreditsFontID%[MaxCreditsFontIDAmount]
 End Type
 
 Global fo.Fonts = New Fonts
@@ -206,14 +215,14 @@ InitLoadingScreens("LoadingScreens\loading_screens.ini")
 ; ~ Don't match their "internal name" (i.e. their display name in applications like Word and such)
 ; ~ As a workaround, I moved the files and renamed them so they
 ; ~ Can load without FastText
-fo\FontID[0] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 16)
-fo\FontID[1] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 52)
-fo\FontID[2] = LoadFont_Strict("GFX\fonts\DS-DIGI\DS-Digital.ttf", 20)
-fo\FontID[3] = LoadFont_Strict("GFX\fonts\DS-DIGI\DS-Digital.ttf", 60)
-fo\FontID[4] = LoadFont_Strict("GFX\fonts\Journal\Journal.ttf", 58)
-fo\ConsoleFont = LoadFont_Strict("GFX\fonts\Andale\Andale Mono.ttf", 16)
+fo\FontID[Font_Default] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 16)
+fo\FontID[Font_Default_Big] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 52)
+fo\FontID[Font_Digital] = LoadFont_Strict("GFX\fonts\DS-DIGI\DS-Digital.ttf", 20)
+fo\FontID[Font_Digital_Big] = LoadFont_Strict("GFX\fonts\DS-DIGI\DS-Digital.ttf", 60)
+fo\FontID[Font_Journal] = LoadFont_Strict("GFX\fonts\Journal\Journal.ttf", 58)
+fo\FontID[Font_Console] = LoadFont_Strict("GFX\fonts\Andale\Andale Mono.ttf", 16)
 
-SetFont(fo\FontID[1])
+SetFont(fo\FontID[Font_Default_Big])
 
 Global BlinkMeterIMG% = LoadImage_Strict("GFX\blink_meter.png")
 
@@ -436,7 +445,7 @@ Function UpdateConsole()
 		Local Args$, StrTemp$, StrTemp2$, StrTemp3$, StrTemp4$
 		Local x%, y%, Width%, Height%
 		
-		SetFont(fo\ConsoleFont)
+		SetFont(fo\FontID[Font_Console])
 		
 		ConsoleR = 255 : ConsoleG = 255 : ConsoleB = 255
 		
@@ -1781,7 +1790,7 @@ Function UpdateConsole()
 		If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	EndIf
 	
-	SetFont(fo\FontID[0])
+	SetFont(fo\FontID[Font_Default])
 End Function
 
 Function ClearConsole()
@@ -3463,7 +3472,7 @@ Function RenderMessages()
 		
 		Local Temp2% = Min(msg\Timer / 2.0, 255.0)
 		
-		SetFont(fo\FontID[0])
+		SetFont(fo\FontID[Font_Default])
 		If (Not Temp) Then
 			Color(0, 0, 0)
 			Text((opt\GraphicWidth / 2) + 1, (opt\GraphicHeight / 2) + 201, msg\Msg, True, False)
@@ -3478,7 +3487,7 @@ Function RenderMessages()
 	EndIf
 	
 	Color(255, 255, 255)
-	If opt\ShowFPS Then SetFont(fo\ConsoleFont) : Text(20, 20, "FPS: " + ft\FPS) : SetFont(fo\FontID[0])
+	If opt\ShowFPS Then SetFont(fo\FontID[Font_Console]) : Text(20, 20, "FPS: " + ft\FPS) : SetFont(fo\FontID[Font_Default])
 End Function
 
 Function Kill(IsBloody% = False)
@@ -3551,9 +3560,9 @@ Function DrawEnding()
 				DrawImage(tt\ImageID[0], x, y)
 				
 				Color(255, 255, 255)
-				SetFont(fo\FontID[1])
+				SetFont(fo\FontID[Font_Default_Big])
 				Text(x + Width / 2 + 40 * MenuScale, y + 20 * MenuScale, "THE END", True)
-				SetFont(fo\FontID[0])
+				SetFont(fo\FontID[Font_Default])
 				
 				If AchievementsMenu = 0 Then 
 					x = x + 132 * MenuScale
@@ -3606,7 +3615,7 @@ Function DrawEnding()
 	
 	If opt\DisplayMode = 0 Then DrawImage(CursorIMG), ScaledMouseX(), ScaledMouseY()
 	
-	SetFont(fo\FontID[0])
+	SetFont(fo\FontID[Font_Default])
 End Function
 
 Function UpdateEnding()
@@ -3725,8 +3734,8 @@ Function InitCredits()
 	Local File% = OpenFile("Credits.txt")
 	Local l$
 	
-	fo\CreditsFontID[0] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 21)
-	fo\CreditsFontID[1] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 35)
+	fo\FontID[Font_Credits] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 21)
+	fo\FontID[Font_Credits_Big] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 35)
 	
 	If me\CreditsScreen = 0 Then me\CreditsScreen = LoadImage_Strict("GFX\credits_screen.png")
 	
@@ -3760,12 +3769,12 @@ Function DrawCredits()
 	For cl.CreditsLine = Each CreditsLine
 		cl\ID = ID
 		If Left(cl\Txt, 1) = "*"
-			SetFont(fo\CreditsFontID[1])
+			SetFont(fo\FontID[Font_Credits_Big])
 			If (Not cl\Stay) Then Text(opt\GraphicWidth / 2, Credits_Y + (24 * cl\ID * MenuScale), Right(cl\Txt, Len(cl\Txt) - 1), True)
 		ElseIf Left(cl\Txt, 1) = "/"
 			LastCreditLine = Before(cl)
 		Else
-			SetFont(fo\CreditsFontID[0])
+			SetFont(fo\FontID[Font_Credits])
 			If (Not cl\Stay) Then Text(opt\GraphicWidth / 2, Credits_Y + (24 * cl\ID * MenuScale), cl\Txt, True)
 		EndIf
 		If LastCreditLine <> Null Then
@@ -3786,7 +3795,7 @@ Function DrawCredits()
 	If me\CreditsTimer <> 0.0
 		For cl.CreditsLine = Each CreditsLine
 			If cl\Stay
-				SetFont(fo\CreditsFontID[0])
+				SetFont(fo\FontID[Font_Credits])
 				If Left(cl\Txt, 1) = "/"
 					Text(opt\GraphicWidth / 2, (opt\GraphicHeight / 2) + (EndLinesAmount / 2) + (24 * cl\ID * MenuScale), Right(cl\Txt, Len(cl\Txt) - 1), True)
 				Else
@@ -3797,8 +3806,8 @@ Function DrawCredits()
 	EndIf
 	
 	If me\CreditsTimer = -1.0 Then
-		FreeFont(fo\CreditsFontID[0])
-		FreeFont(fo\CreditsFontID[1])
+		FreeFont(fo\FontID[Font_Credits])
+		FreeFont(fo\FontID[Font_Credits_Big])
 		FreeImage(me\CreditsScreen)
 		me\CreditsScreen = 0
 		FreeImage(me\EndingScreen)
@@ -4720,7 +4729,7 @@ Function DrawGUI()
 		
 		If chs\DebugHUD Then
 			Color(255, 255, 255)
-			SetFont(fo\ConsoleFont)
+			SetFont(fo\FontID[Font_Console])
 			
 			Text(x - 60, 40, "Room: " + PlayerRoom\RoomTemplate\Name)
             Text(x - 60, 60, "Room Coordinates: (" + Floor(EntityX(PlayerRoom\OBJ) / 8.0 + 0.5) + ", " + Floor(EntityZ(PlayerRoom\OBJ) / 8.0 + 0.5) + ", Angle: " + PlayerRoom\Angle + ")")
@@ -4775,7 +4784,7 @@ Function DrawGUI()
 				Text(x + 440, 280 + (20 * i), "SCP-1025 State " + i + ": " + I_1025\State[i])
 			Next
 			
-			SetFont(fo\FontID[0])
+			SetFont(fo\FontID[Font_Default])
 		EndIf
 	EndIf
 	
@@ -4813,12 +4822,12 @@ Function DrawGUI()
 			x = opt\GraphicWidth / 2 - ImageWidth(tt\ImageID[4]) * Scale / 2
 			y = opt\GraphicHeight / 2 - ImageHeight(tt\ImageID[4]) * Scale / 2		
 			
-			SetFont(fo\FontID[2])
+			SetFont(fo\FontID[Font_Digital])
 			If msg\KeypadMsg <> "" Then 
 				If (msg\KeypadTimer Mod 70.0) < 35.0 Then Text(opt\GraphicWidth / 2, y + 124 * Scale, msg\KeypadMsg, True, True)
 			Else
 				Text(opt\GraphicWidth / 2, y + 70 * Scale, "ACCESS CODE: ", True, True)	
-				SetFont(fo\FontID[3])
+				SetFont(fo\FontID[Font_Digital_Big])
 				Text(opt\GraphicWidth / 2, y + 124 * Scale, msg\KeypadInput, True, True)
 			EndIf
 			
@@ -5002,7 +5011,7 @@ Function DrawGUI()
 			If Inventory[n] <> Null And SelectedItem <> Inventory[n] Then
 				If IsMouseOn = n Then
 					If SelectedItem = Null Then
-						SetFont(fo\FontID[0])
+						SetFont(fo\FontID[Font_Default])
 						Color(0, 0, 0)
 						Text(x + INVENTORY_GFX_SIZE / 2 + 1, y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - 15 + 1, Inventory[n]\Name, True)							
 						Color(255, 255, 255)	
@@ -5139,7 +5148,7 @@ Function DrawGUI()
 								SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\items\note_Maynard.png")
 								SetBuffer(ImageBuffer(SelectedItem\ItemTemplate\Img))
 								Color(0, 0, 0)
-								SetFont(fo\FontID[0])
+								SetFont(fo\FontID[Font_Default])
 								Text(277, 469, AccessCode, True, True)
 								Color(255, 255, 255)
 								SetBuffer(BackBuffer())
@@ -5151,7 +5160,7 @@ Function DrawGUI()
 								
 								SetBuffer(ImageBuffer(SelectedItem\ItemTemplate\Img))
 								Color(37, 45, 137)
-								SetFont(fo\FontID[4])
+								SetFont(fo\FontID[Font_Journal])
 								Temp = ((Int(AccessCode) * 3) Mod 10000)
 								If Temp < 1000 Then Temp = Temp + 1000
 								Text(383 * MenuScale, 734 * MenuScale, Temp, True, True)
@@ -5243,7 +5252,7 @@ Function DrawGUI()
 								Next
 							EndIf	
 							
-							SetFont(fo\FontID[2])
+							SetFont(fo\FontID[Font_Digital])
 							Text(x + 60, y, "CHN")	
 							
 							If SelectedItem\ItemTemplate\TempName = "veryfineradio" Then
@@ -5252,19 +5261,19 @@ Function DrawGUI()
 									StrTemp = StrTemp + Chr(Rand(1, 100))
 								Next
 								
-								SetFont(fo\FontID[3])
+								SetFont(fo\FontID[Font_Digital_Big])
 								Text(x + 97, y + 16.0, Rand(0, 9), True, True)
 							Else
-								SetFont(fo\FontID[3])
+								SetFont(fo\FontID[Font_Digital_Big])
 								Text(x + 97, y + 16, Int(SelectedItem\State2 + 1.0), True, True)
 							EndIf
 							
-							SetFont(fo\FontID[2])
+							SetFont(fo\FontID[Font_Digital])
 							If StrTemp <> "" Then
 								StrTemp = Right(Left(StrTemp, (Int(MilliSecs2() / 300) Mod Len(StrTemp))), 10)
 								Text(x + 32, y + 33, StrTemp)
 							EndIf
-							SetFont(fo\FontID[0])
+							SetFont(fo\FontID[Font_Default])
 						EndIf
 					EndIf
 					;[End Block]
@@ -5340,7 +5349,7 @@ Function DrawGUI()
 					
 					DrawImage(SelectedItem\ItemTemplate\Img, x - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, y - ImageHeight(SelectedItem\ItemTemplate\Img) / 2 + 85)
 					
-					SetFont(fo\FontID[2])
+					SetFont(fo\FontID[Font_Digital])
 					
 					Local NavWorks% = True
 					
@@ -5507,7 +5516,7 @@ Function DrawGUI()
 								For i = 1 To Ceil(SelectedItem\State / 10.0)
 									DrawImage(tt\ImageID[11], xTemp + i * 8 - 6, yTemp + 4)
 								Next
-								SetFont(fo\FontID[2])
+								SetFont(fo\FontID[Font_Digital])
 							EndIf
 						EndIf
 					EndIf
@@ -7677,25 +7686,25 @@ Function DrawMenu()
 		y = y + 122.0 * MenuScale	
 		
 		If AchievementsMenu > 0 Then
-			SetFont(fo\FontID[1])
+			SetFont(fo\FontID[Font_Default_Big])
 			Text(x, y - (122 - 45) * MenuScale, "ACHIEVEMENTS", False, True)
-			SetFont(fo\FontID[0])
+			SetFont(fo\FontID[Font_Default])
 		ElseIf OptionsMenu > 0 Then
-			SetFont(fo\FontID[1])
+			SetFont(fo\FontID[Font_Default_Big])
 			Text(x, y - (122 - 45) * MenuScale, "OPTIONS", False, True)
-			SetFont(fo\FontID[0])
+			SetFont(fo\FontID[Font_Default])
 		ElseIf QuitMsg > 0 Then
-			SetFont(fo\FontID[1])
+			SetFont(fo\FontID[Font_Default_Big])
 			Text(x, y - (122 - 45) * MenuScale, "QUIT?", False, True)
-			SetFont(fo\FontID[0])
+			SetFont(fo\FontID[Font_Default])
 		ElseIf me\KillTimer >= 0.0 Then
-			SetFont(fo\FontID[1])
+			SetFont(fo\FontID[Font_Default_Big])
 			Text(x, y - (122 - 45) * MenuScale, "PAUSED", False, True)
-			SetFont(fo\FontID[0])
+			SetFont(fo\FontID[Font_Default])
 		Else
-			SetFont(fo\FontID[1])
+			SetFont(fo\FontID[Font_Default_Big])
 			Text(x, y - (122 - 45) * MenuScale, "YOU DIED", False, True)
-			SetFont(fo\FontID[0])
+			SetFont(fo\FontID[Font_Default])
 		EndIf		
 		
 		Local AchvXIMG% = (x + (22.0 * MenuScale))
@@ -7704,7 +7713,7 @@ Function DrawMenu()
 		Local ImgSize% = 64.0
 		
 		If AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg =< 0
-			SetFont(fo\FontID[0])
+			SetFont(fo\FontID[Font_Default])
 			Text(x, y, "Difficulty: " + SelectedDifficulty\Name)
 			Text(x, y + 20 * MenuScale, "Save: " + CurrSave)
 			Text(x, y + 40 * MenuScale, "Map seed: " + RandomSeed)
@@ -7729,7 +7738,7 @@ Function DrawMenu()
 			Select OptionsMenu
 				Case 1 ; ~ Graphics
 					;[Block]
-					SetFont(fo\FontID[0])
+					SetFont(fo\FontID[Font_Default])
 					
 					y = y + 50 * MenuScale
 					
@@ -7807,7 +7816,7 @@ Function DrawMenu()
 					;[End Block]
 				Case 2 ; ~ Audio
 					;[Block]
-					SetFont(fo\FontID[0])
+					SetFont(fo\FontID[Font_Default])
 					
 					y = y + 50 * MenuScale
 					
@@ -7858,7 +7867,7 @@ Function DrawMenu()
 					;[End Block]
 				Case 3 ; ~ Controls
 					;[Block]
-					SetFont(fo\FontID[0])
+					SetFont(fo\FontID[Font_Default])
 					y = y + 50 * MenuScale
 					
 					Color(255, 255, 255)
@@ -7919,7 +7928,7 @@ Function DrawMenu()
 					;[End Block]
 				Case 4 ; ~ Advanced
 					;[Block]
-					SetFont(fo\FontID[0])
+					SetFont(fo\FontID[Font_Default])
 					
 					y = y + 50 * MenuScale
 					
@@ -8026,7 +8035,7 @@ Function DrawMenu()
 				y = y + 80 * MenuScale
 			EndIf
 			
-			SetFont(fo\FontID[0])
+			SetFont(fo\FontID[Font_Default])
 			If me\KillTimer < 0.0 Then RowText(msg\DeathMsg, x, y + 80 * MenuScale, 430 * MenuScale, 600 * MenuScale)
 		EndIf
 		
@@ -8039,7 +8048,7 @@ Function DrawMenu()
 		If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	EndIf
 	
-	SetFont(fo\FontID[0])
+	SetFont(fo\FontID[Font_Default])
 	
 	CatchErrors("DrawMenu")
 End Function
@@ -9347,7 +9356,7 @@ Function InitNewGame()
 	
 	MoveMouse(Viewport_Center_X, Viewport_Center_Y)
 	
-	SetFont(fo\FontID[0])
+	SetFont(fo\FontID[Font_Default])
 	
 	HidePointer()
 	
@@ -9406,7 +9415,7 @@ Function InitLoadGame()
 	
 	MoveMouse(Viewport_Center_X, Viewport_Center_Y)
 	
-	SetFont(fo\FontID[0])
+	SetFont(fo\FontID[Font_Default])
 	
 	HidePointer()
 	
@@ -11914,7 +11923,7 @@ Function RenderWorld2(Tween#)
 			If wi\NightVision = 2 Then ; ~ Show a HUD
 				Color(255, 255, 255)
 				
-				SetFont(fo\FontID[2])
+				SetFont(fo\FontID[Font_Digital])
 				
 				Local PlusY% = 0
 				
@@ -11996,7 +12005,7 @@ Function RenderWorld2(Tween#)
 	If me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0 Then
 		If (wi\NightVision = 1 Lor wi\NightVision = 2 Lor wi\SCRAMBLE > 0) And (HasBattery = 1) And ((MilliSecs2() Mod 800) < 400) Then
 			Color(255, 0, 0)
-			SetFont(fo\FontID[2])
+			SetFont(fo\FontID[Font_Digital])
 			
 			Text(opt\GraphicWidth / 2, 20 * MenuScale, "WARNING: LOW BATTERY", True, False)
 			Color(255, 255, 255)
@@ -12252,7 +12261,7 @@ End Function
 Function PlayStartupVideos()
 	HidePointer()
 	
-	fo\FontID[0] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 16)
+	fo\FontID[Font_Default] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 16)
 	
 	Local ScaledGraphicHeight%
 	Local Ratio# = Float(opt\RealGraphicWidth) / Float(opt\RealGraphicHeight)
@@ -12294,7 +12303,7 @@ Function PlayStartupVideos()
 		Repeat
 			Cls()
 			DrawMovie(Movie, 0, (opt\RealGraphicHeight / 2 - ScaledGraphicHeight / 2), opt\RealGraphicWidth, ScaledGraphicHeight)
-			SetFont(fo\FontID[0])
+			SetFont(fo\FontID[Font_Default])
 			Color(255, 255, 255)
 	        Text(opt\RealGraphicWidth / 2, opt\RealGraphicHeight - 50, "PRESS ANY KEY TO SKIP", True, True)
 			Flip()
@@ -12306,7 +12315,7 @@ Function PlayStartupVideos()
 		Flip()
 	Next
 	
-	FreeFont(fo\FontID[0])
+	FreeFont(fo\FontID[Font_Default])
 	
 	ShowPointer()
 End Function
@@ -12369,5 +12378,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#108B#1320#1DF3
+;~B#1094#1329#1DFC
 ;~C#Blitz3D

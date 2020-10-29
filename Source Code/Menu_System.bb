@@ -913,13 +913,13 @@ Function UpdateMainMenu()
 	RenderMainMenu()
 	
 	Color(255, 255, 255)
-	SetFont(fo\ConsoleFont)
+	SetFont(fo\FontID[Font_Console])
 	Text(20, opt\GraphicHeight - 50, "v" + VersionNumber)
-	If opt\ShowFPS Then SetFont(fo\ConsoleFont) : Text(20, opt\GraphicHeight - 30, "FPS: " + ft\fps) : SetFont(fo\FontID[0])
+	If opt\ShowFPS Then SetFont(fo\FontID[Font_Console]) : Text(20, opt\GraphicHeight - 30, "FPS: " + ft\fps) : SetFont(fo\FontID[Font_Default])
 	
 	If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	
-	SetFont(fo\FontID[0])
+	SetFont(fo\FontID[Font_Default])
 End Function
 
 Function RenderMainMenu()
@@ -935,7 +935,7 @@ Function RenderMainMenu()
 		DrawImage(Menu173, opt\GraphicWidth - ImageWidth(Menu173), opt\GraphicHeight - ImageHeight(Menu173))
 	EndIf
 	
-	SetFont(fo\FontID[0])
+	SetFont(fo\FontID[Font_Default])
 	
 	If MenuBlinkTimer[1] < MenuBlinkDuration[1] Then
 		Color(50, 50, 50)
@@ -1009,7 +1009,7 @@ Function RenderMainMenu()
 		EndIf
 	EndIf
 	
-	SetFont(fo\FontID[1])
+	SetFont(fo\FontID[Font_Default_Big])
 	
 	DrawImage(MenuText, opt\GraphicWidth / 2 - ImageWidth(MenuText) / 2, opt\GraphicHeight - 20 * MenuScale - ImageHeight(MenuText))
 	
@@ -1036,7 +1036,7 @@ Function RenderMainMenu()
 				Height = 70 * MenuScale
 				
 				Color(255, 255, 255)
-				SetFont(fo\FontID[1])
+				SetFont(fo\FontID[Font_Default_Big])
 				Text(x + Width / 2, y + Height / 2, "NEW GAME", True, True)
 				
 				y = y + Height + 20 * MenuScale
@@ -1045,7 +1045,7 @@ Function RenderMainMenu()
 				
 				DrawFrame(x, y, Width, Height)				
 				
-				SetFont(fo\FontID[0])
+				SetFont(fo\FontID[Font_Default])
 				
 				Text(x + 20 * MenuScale, y + 20 * MenuScale, "Name:")
 				
@@ -1109,7 +1109,7 @@ Function RenderMainMenu()
 					RowText(SelectedDifficulty\Description, x + 160 * MenuScale, y + 160 * MenuScale, (410 - 20) * MenuScale, 200)					
 				EndIf
 				
-				SetFont(fo\FontID[1])
+				SetFont(fo\FontID[Font_Default_Big])
 				;[End Block]
 			Case MainMenuTab_Load_Game
 				;[Block]
@@ -1126,20 +1126,20 @@ Function RenderMainMenu()
 				Height = 70 * MenuScale
 				
 				Color(255, 255, 255)
-				SetFont(fo\FontID[1])
+				SetFont(fo\FontID[Font_Default_Big])
 				Text(x + Width / 2, y + Height / 2, "LOAD GAME", True, True)
 				
 				y = y + Height + 20 * MenuScale
 				Width = 580 * MenuScale
 				Height = 296 * MenuScale
 				
-				SetFont(fo\FontID[1])
+				SetFont(fo\FontID[Font_Default_Big])
 				
 				DrawFrame(x + 60 * MenuScale, y + 440 * MenuScale, Width - 120 * MenuScale, 50 * MenuScale)
 				
 				Text(x + (Width / 2.0), y + 465 * MenuScale, "Page " + Int(Max((CurrLoadGamePage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SaveGameAmount) / 5.0))), 1)), True, True)
 				
-				SetFont(fo\FontID[0])
+				SetFont(fo\FontID[Font_Default])
 				
 				If SaveGameAmount = 0 Then
 					Text(x + 20 * MenuScale, y + 20 * MenuScale, "No saved games.")
@@ -1185,7 +1185,7 @@ Function RenderMainMenu()
 				Height = 70 * MenuScale
 				
 				Color(255, 255, 255)
-				SetFont(fo\FontID[1])
+				SetFont(fo\FontID[Font_Default_Big])
 				Text(x + Width / 2, y + Height / 2, "OPTIONS", True, True)
 				
 				y = y + Height + 20 * MenuScale
@@ -1206,7 +1206,7 @@ Function RenderMainMenu()
 				
 				Color(255, 255, 255)
 				
-				SetFont(fo\FontID[0])
+				SetFont(fo\FontID[Font_Default])
 				y = y + 70 * MenuScale
 				
 				Local tX# = x + Width
@@ -1535,14 +1535,14 @@ Function RenderMainMenu()
 				Height = 70 * MenuScale
 				
 				Color(255, 255, 255)
-				SetFont(fo\FontID[1])
+				SetFont(fo\FontID[Font_Default_Big])
 				Text(x + Width / 2, y + Height / 2, "LOAD MAP", True, True)
 				
 				y = y + Height + 20 * MenuScale
 				Width = 580 * MenuScale
 				Height = 350 * MenuScale
 				
-				SetFont(fo\FontID[1])
+				SetFont(fo\FontID[Font_Default_Big])
 				
 				tX = x + Width
 				tY = y
@@ -1553,7 +1553,7 @@ Function RenderMainMenu()
 				
 				Text(x + (Width / 2.0), y + 465 * MenuScale, "Page " + Int(Max((CurrLoadGamePage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SavedMapsAmount) / 5.0))), 1)), True, True)
 				
-				SetFont(fo\FontID[0])
+				SetFont(fo\FontID[Font_Default])
 				
 				If SavedMaps(0) = "" Then 
 					Text(x + 20 * MenuScale, y + 20 * MenuScale, "No saved maps. Use the Map Creator to create new maps.")
@@ -1603,8 +1603,8 @@ Function UpdateLauncher(lnchr.Launcher)
 	opt\RealGraphicWidth = opt\GraphicWidth
 	opt\RealGraphicHeight = opt\GraphicHeight
 	
-	fo\FontID[0] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 16, 1)
-	SetFont(fo\FontID[0])
+	fo\FontID[Font_Default] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 16, 1)
+	SetFont(fo\FontID[Font_Default])
 	MenuWhite = LoadImage_Strict("GFX\menu\menu_white.png")
 	MenuBlack = LoadImage_Strict("GFX\menu\menu_black.png")	
 	MaskImage(MenuBlack, 255, 255, 0)
@@ -1899,7 +1899,7 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 				EndIf
 			EndIf
 			
-			SetFont(fo\FontID[1])
+			SetFont(fo\FontID[Font_Default_Big])
 			
 			Local Strtemp$ = ""
 			
@@ -1979,20 +1979,20 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 			For i = 0 To Rand(10, 15)
 				Strtemp = Replace(SelectedLoadingScreen\Txt[0], Mid(SelectedLoadingScreen\Txt[0], Rand(1, Len(Strtemp) - 1), 1), Chr(Rand(130, 250)))
 			Next		
-			SetFont(fo\FontID[0])
+			SetFont(fo\FontID[Font_Default])
 			RowText(Strtemp, opt\GraphicWidth / 2 - 200, opt\GraphicHeight / 2 + 120, 400, 300, True)		
 		Else
 			
 			Color(0, 0, 0)
-			SetFont(fo\FontID[1])
+			SetFont(fo\FontID[Font_Default_Big])
 			Text(opt\GraphicWidth / 2 + 1, opt\GraphicHeight / 2 + 80 + 1, SelectedLoadingScreen\Title, True, True)
-			SetFont(fo\FontID[0])
+			SetFont(fo\FontID[Font_Default])
 			RowText(SelectedLoadingScreen\Txt[LoadingScreenText], opt\GraphicWidth / 2 - 200 + 1, opt\GraphicHeight / 2 + 120 + 1, 400, 300, True)
 			
 			Color(255, 255, 255)
-			SetFont(fo\FontID[1])
+			SetFont(fo\FontID[Font_Default_Big])
 			Text(opt\GraphicWidth / 2, opt\GraphicHeight / 2 + 80, SelectedLoadingScreen\Title, True, True)
-			SetFont(fo\FontID[0])
+			SetFont(fo\FontID[Font_Default])
 			RowText(SelectedLoadingScreen\Txt[LoadingScreenText], opt\GraphicWidth / 2 - 200, opt\GraphicHeight / 2 + 120, 400, 300, True)
 		EndIf
 		
@@ -2065,9 +2065,9 @@ Function RenderMenuButtons()
 			Color(mb\R, mb\G, mb\B)
 		EndIf
 		If mb\BigFont Then 
-			SetFont(fo\FontID[1])
+			SetFont(fo\FontID[Font_Default_Big])
 		Else 
-			SetFont(fo\FontID[0])
+			SetFont(fo\FontID[Font_Default])
 		EndIf
 		Text(mb\x + mb\Width / 2, mb\y + mb\Height / 2, mb\Txt, True, True)
 	Next
@@ -2145,9 +2145,9 @@ Function DrawLauncherButton%(x%, y%, Width%, Height%, Txt$, BigFont% = True, Wai
 		Color(R, G, B)
 	EndIf
 	If BigFont Then
-		SetFont(fo\FontID[1])
+		SetFont(fo\FontID[Font_Default_Big])
 	Else
-		SetFont(fo\FontID[0])
+		SetFont(fo\FontID[Font_Default])
 	EndIf
 	Text(x + Width / 2, y + Height / 2, Txt, True, True)
 	
@@ -2716,7 +2716,7 @@ Function DrawOptionsTooltip(x%, y%, Width%, Height%, Option$, Value# = 0.0, InGa
 	Local Txt$ = ""
 	Local Txt2$ = "", R% = 0, G% = 0, B% = 0
 	
-	SetFont(fo\FontID[0])
+	SetFont(fo\FontID[Font_Default])
 	Color(255, 255, 255)
 	Select Lower(Option)
 		Case "bump"
@@ -2921,7 +2921,7 @@ Function DrawMapCreatorTooltip(x%, y%, Width%, Height%, MapName$)
 	Local fH# = Height - 12.0 * MenuScale
 	Local Lines% = 0
 	
-	SetFont(fo\FontID[0])
+	SetFont(fo\FontID[Font_Default])
 	Color(255, 255, 255)
 	
 	Local Txt$[6]
