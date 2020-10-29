@@ -1959,20 +1959,6 @@ Function LoadGameQuick(File$)
 		UsedConsole = True
 	EndIf
 	
-	If 0 Then 
-		closestroom = Null
-		Dist = 900.0
-		For r.Rooms = Each Rooms
-			Dist2# = EntityDistanceSquared(r\OBJ, me\Collider)
-			If Dist2 < Dist Then
-				Dist = Dist2
-				closestroom = r
-			EndIf
-		Next
-		
-		If closestroom <> Null Then PlayerRoom = closestroom
-	EndIf
-	
 	; ~ This will hopefully fix the SCP-895 crash bug after the player died by it's sanity effect and then quickloaded the game -- ENDSHN
 	Local sc.SecurityCams
 	
@@ -2011,10 +1997,7 @@ Function LoadGameQuick(File$)
 	; ~ This is only required for the LoadGameQuick function, as the other one is from the menu where everything is already deleted anyways
 	Local xTemp#, zTemp#
 	
-	If Sky <> 0 Then
-		FreeEntity(Sky)
-		Sky = 0
-	EndIf
+	If Sky <> 0 Then FreeEntity(Sky) : Sky = 0
 	For r.Rooms = Each Rooms
 		If r\RoomTemplate\Name = "gatea" Then
 			If r\Objects[0] <> 0 Then
