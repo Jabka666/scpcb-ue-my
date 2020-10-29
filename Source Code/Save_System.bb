@@ -39,8 +39,8 @@ Function SaveGame(File$)
 	WriteFloat(f, me\BlinkEffect)
 	WriteFloat(f, me\BlinkEffectTimer)
 	
-	WriteInt(f, me\DeathTimer)
-	WriteInt(f, me\BlurTimer)
+	WriteFloat(f, me\DeathTimer)
+	WriteFloat(f, me\BlurTimer)
 	WriteFloat(f, me\HealTimer)
 	
 	WriteByte(f, me\Crouch)
@@ -105,7 +105,7 @@ Function SaveGame(File$)
 	WriteFloat(f, I_1499\x)
 	WriteFloat(f, I_1499\y)
 	WriteFloat(f, I_1499\z)
-	If I_1499\PrevRoom <> Null
+	If I_1499\PrevRoom <> Null Then
 		WriteFloat(f, I_1499\PrevRoom\x)
 		WriteFloat(f, I_1499\PrevRoom\z)
 	Else
@@ -136,7 +136,7 @@ Function SaveGame(File$)
 			WriteByte(f, MapFound(x, y))
 		Next
 	Next
-		
+	
 	WriteInt(f, 113)
 	
 	Temp = 0
@@ -339,7 +339,7 @@ Function SaveGame(File$)
 		
 		WriteFloat(f, d\Size)
 		WriteFloat(f, d\Alpha)
-		WriteInt(f, d\FX)
+		WriteByte(f, d\FX)
 		WriteByte(f, d\BlendMode)
 		WriteByte(f, d\R) : WriteByte(f, d\G) : WriteByte(f, d\B)
 		
@@ -358,7 +358,7 @@ Function SaveGame(File$)
 	WriteInt(f, Temp)
 	For e.Events = Each Events
 		WriteString(f, e\EventName)
-		WriteInt(f, e\EventID)
+		WriteByte(f, e\EventID)
 		WriteFloat(f, e\EventState)
 		WriteFloat(f, e\EventState2)	
 		WriteFloat(f, e\EventState3)
@@ -522,8 +522,8 @@ Function LoadGame(File$)
 	me\BlinkEffect = ReadFloat(f)	
 	me\BlinkEffectTimer = ReadFloat(f)
 	
-	me\DeathTimer = ReadInt(f)	
-	me\BlurTimer = ReadInt(f)	
+	me\DeathTimer = ReadFloat(f)	
+	me\BlurTimer = ReadFloat(f)	
 	me\HealTimer = ReadFloat(f)
 	
 	me\Crouch = ReadByte(f)
@@ -1029,7 +1029,7 @@ Function LoadGame(File$)
 		
 		Local Size# = ReadFloat(f)
 		Local Alpha# = ReadFloat(f)
-		Local FX% = ReadInt(f)
+		Local FX% = ReadByte(f)
 		Local BlendMode% = ReadByte(f)
 		Local Red% = ReadByte(f), Green% = ReadByte(f), Blue% = ReadByte(f)
 		
@@ -1062,7 +1062,7 @@ Function LoadGame(File$)
 		Local e.Events = New Events
 		
 		e\EventName = ReadString(f)
-		e\EventID = ReadInt(f)
+		e\EventID = ReadByte(f)
 		e\EventState = ReadFloat(f)
 		e\EventState2 = ReadFloat(f)		
 		e\EventState3 = ReadFloat(f)
@@ -1389,8 +1389,8 @@ Function LoadGameQuick(File$)
 	me\BlinkEffect = ReadFloat(f)	
 	me\BlinkEffectTimer = ReadFloat(f)	
 	
-	me\DeathTimer = ReadInt(f)	
-	me\BlurTimer = ReadInt(f)	
+	me\DeathTimer = ReadFloat(f)	
+	me\BlurTimer = ReadFloat(f)	
 	me\HealTimer = ReadFloat(f)
 	
 	me\Crouch = ReadByte(f)
@@ -1774,7 +1774,7 @@ Function LoadGameQuick(File$)
 		
 		Local Size# = ReadFloat(f)
 		Local Alpha# = ReadFloat(f)
-		Local FX% = ReadInt(f)
+		Local FX% = ReadByte(f)
 		Local BlendMode% = ReadByte(f)
 		Local Red% = ReadByte(f), Green% = ReadByte(f), Blue% = ReadByte(f)
 		
@@ -1815,7 +1815,7 @@ Function LoadGameQuick(File$)
 	For i = 1 To Temp
 		e.Events = New Events
 		e\EventName = ReadString(f)
-		e\EventID = ReadInt(f)
+		e\EventID = ReadByte(f)
 		e\EventState = ReadFloat(f)
 		e\EventState2 = ReadFloat(f)
 		e\EventState3 = ReadFloat(f)	
@@ -2499,10 +2499,10 @@ Function LoadMap(File$)
 								ShouldSpawnDoor = True
 								;[End Block]
 						End Select
-						If ShouldSpawnDoor
-							If (x + 1) < (MapWidth + 1)
+						If ShouldSpawnDoor Then
+							If x + 1 < MapWidth + 1 Then
 								If MapTemp(x + 1, y) > 0 Then
-									d.Doors = CreateDoor(r\zone, Float(x) * Spacing + Spacing / 2.0, 0.0, Float(y) * Spacing, 90.0, r, Max(Rand(-3, 1), 0), Temp)
+									d.Doors = CreateDoor(r\Zone, Float(x) * Spacing + Spacing / 2.0, 0.0, Float(y) * Spacing, 90.0, r, Max(Rand(-3, 1), 0), Temp)
 									r\AdjDoor[0] = d
 								EndIf
 							EndIf
@@ -2539,10 +2539,10 @@ Function LoadMap(File$)
 								ShouldSpawnDoor = True
 								;[End Block]
 						End Select
-						If ShouldSpawnDoor
-							If y + 1 < MapHeight + 1
+						If ShouldSpawnDoor Then
+							If y + 1 < MapHeight + 1 Then
 								If MapTemp(x, y + 1) > 0 Then
-									d.Doors = CreateDoor(r\zone, Float(x) * Spacing, 0.0, Float(y) * Spacing + Spacing / 2.0, 0.0, r, Max(Rand(-3, 1), 0), Temp)
+									d.Doors = CreateDoor(r\Zone, Float(x) * Spacing, 0.0, Float(y) * Spacing + Spacing / 2.0, 0.0, r, Max(Rand(-3, 1), 0), Temp)
 									r\AdjDoor[3] = d
 								EndIf
 							EndIf
@@ -2581,7 +2581,7 @@ Function LoadMap(File$)
 						r\Adjacent[2] = r2
 						If r\AdjDoor[2] = Null Then r\AdjDoor[2] = r2\AdjDoor[0]
 					EndIf
-				ElseIf r2\x = r\x Then
+				ElseIf r2\x = r\x
 					If r2\z = r\z - 8.0 Then
 						r\Adjacent[1] = r2
 						If r\AdjDoor[1] = Null Then r\AdjDoor[1] = r2\AdjDoor[3]
