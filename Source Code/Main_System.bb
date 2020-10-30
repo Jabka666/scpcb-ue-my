@@ -235,11 +235,11 @@ Global Mesh_MinX#, Mesh_MinY#, Mesh_MinZ#
 Global Mesh_MaxX#, Mesh_MaxY#, Mesh_MaxZ#
 Global Mesh_MagX#, Mesh_MagY#, Mesh_MagZ#
 
-Type PlayerStats
+Type Player
 	Field KillTimer#, KillAnim%, FallTimer#, DeathTimer#
 	Field Sanity#, RestoreSanity%
 	Field ForceMove#, ForceAngle#
-	Field Playable%
+	Field Playable%, PlayTime%
 	Field BlinkTimer#, BLINKFREQ#, BlinkEffect#, BlinkEffectTimer#, EyeIrritation#, EyeStuck#
 	Field Stamina#, StaminaEffect#, StaminaEffectTimer#
 	Field CameraShakeTimer#, Shake#, CameraShake#
@@ -264,7 +264,7 @@ Type PlayerStats
 	Field StopHidingTimer#
 End Type
 
-Global me.PlayerStats = New PlayerStats
+Global me.Player = New Player
 
 Type WearableItems
 	Field GasMask%, GasMaskFogTimer#
@@ -3869,7 +3869,7 @@ End Function
 Function InjurePlayer(Injuries_#, Infection# = 0.0, BlurTimer_# = 0.0, VestFactor# = 0.0, HelmetFactor# = 0.0)
 	me\Injuries = me\Injuries + Injuries_ - (wi\BallisticVest * VestFactor) - (me\Crouch * wi\BallisticHelmet * HelmetFactor)
 	If BlurTimer_ <> 0.0 Then me\BlurTimer = BlurTimer_
-	If Infection <> 0.0 Then I_008\Timer = I_008\Timer + Infection
+	If Infection <> 0.0 Then I_008\Timer = I_008\Timer + (Infection * (wi\HazmatSuit = 0))
 End Function
 
 Function MovePlayer()

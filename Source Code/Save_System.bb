@@ -19,6 +19,8 @@ Function SaveGame(File$)
 	WriteString(f, CurrentTime())
 	WriteString(f, CurrentDate())
 	
+	WriteInt(f, me\PlayTime)
+	
 	WriteFloat(f, EntityX(me\Collider))
 	WriteFloat(f, EntityY(me\Collider))
 	WriteFloat(f, EntityZ(me\Collider))
@@ -493,6 +495,8 @@ Function LoadGame(File$)
 	
 	StrTemp = ReadString(f)
 	StrTemp = ReadString(f)
+	
+	me\PlayTime = ReadInt(f)
 	
 	x = ReadFloat(f)
 	y = ReadFloat(f)
@@ -1357,6 +1361,8 @@ Function LoadGameQuick(File$)
 	WireFrame(0)
 	
 	HideEntity(me\Collider)
+	
+	me\PlayTime = ReadInt(f)
 	
 	x = ReadFloat(f)
 	y = ReadFloat(f)

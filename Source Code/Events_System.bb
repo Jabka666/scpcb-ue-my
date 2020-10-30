@@ -7557,7 +7557,7 @@ Function UpdateEvents()
 			Case e_room008
 				;[Block]
 				If PlayerRoom = e\room Then	
-				    If EntityY(me\Collider) < - 4496.0 * RoomScale Then
+				    If EntityY(me\Collider) < -4496.0 * RoomScale Then
 					    GiveAchievement(Achv008)
 					    If e\EventState = 0.0 Then					
 						    If Curr173\Idle < 2 And EntityDistanceSquared(Curr173\Collider, me\Collider) > PowTwo(HideDistance) ; ~ Just making sure that SCP-173 is far away enough to spawn him to this room
@@ -7583,7 +7583,7 @@ Function UpdateEvents()
 							    
 							    If e\EventState2 = 0.0 Then
 								    ShowEntity(e\room\Objects[2])
-								    If EntityDistanceSquared(Curr173\Collider, e\room\Objects[4]) < 9.0
+								    If EntityDistanceSquared(Curr173\Collider, e\room\Objects[4]) < 9.0 Then
 									    If me\BlinkTimer < -10.0 Lor (Not EntityInView(Curr173\OBJ, Camera)) And Curr173\Idle = 0 Then
 										    PositionEntity(Curr173\Collider, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True), True)
 										    ResetEntity(Curr173\Collider)
@@ -7591,7 +7591,7 @@ Function UpdateEvents()
 										    HideEntity(e\room\Objects[2])
 											
 										    If wi\HazmatSuit = 0 Then
-												InjurePlayer(0.1, 1.0, 400.0)
+												InjurePlayer(0.3, 1.0, 400.0)
 												msg\Msg = "The window shattered and a piece of glass cut your arm."
 												msg\Timer = 70.0 * 6.0
 											EndIf
@@ -7612,11 +7612,9 @@ Function UpdateEvents()
 								    EndIf
 							    EndIf
 								
-							    If wi\HazmatSuit = 0 And me\Bloodloss > 0.0
-								    If I_008\Timer = 0.0
-									    I_008\Timer = 1.0
-								    EndIf
-							    EndIf
+							    If wi\HazmatSuit = 0 And me\Bloodloss > 0.0 Then
+								    If I_008\Timer = 0.0 Then I_008\Timer = 1.0
+								EndIf
 						    EndIf
 							
 						    If EntityPitch(e\room\Levers[0], True) < 40.0 Then 
