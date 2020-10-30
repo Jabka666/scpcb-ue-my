@@ -6346,7 +6346,7 @@ Function CreateSecurityCam.SecurityCams(x1#, y1#, z1#, r.Rooms, Screen% = False,
 	Return(sc)
 End Function
 
-Function UpdateSecurityCams()
+Function UpdateSecurityCams() ; ~ SHOULD BE SEPARATED!
 	CatchErrors("Uncaught (UpdateSecurityCams)")
 	
 	Local sc.SecurityCams
@@ -7818,7 +7818,7 @@ Include "Source Code\Skybox.bb"
 
 Global UpdateRoomLightsTimer# = 0.0
 
-Function UpdateRoomLights(Cam%)
+Function UpdateRoomLights(Cam%) ; ~ SHOULD BE SEPARATED!
 	Local r.Rooms, i%, Random#, Alpha#, Dist#
 	
 	For r.Rooms = Each Rooms

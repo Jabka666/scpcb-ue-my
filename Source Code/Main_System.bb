@@ -239,7 +239,7 @@ Type PlayerStats
 	Field KillTimer#, KillAnim%, FallTimer#, DeathTimer#
 	Field Sanity#, RestoreSanity%
 	Field ForceMove#, ForceAngle#
-	Field Playable%, PlayTime%
+	Field Playable%
 	Field BlinkTimer#, BLINKFREQ#, BlinkEffect#, BlinkEffectTimer#, EyeIrritation#, EyeStuck#
 	Field Stamina#, StaminaEffect#, StaminaEffectTimer#
 	Field CameraShakeTimer#, Shake#, CameraShake#
@@ -2495,7 +2495,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True, Scripted% = False)
 						msg\Timer = 70.0 * 6.0
 					EndIf
 				EndIf
-				Return				
+				If (Not Scripted) Then Return				
 			ElseIf Temp >= d\KeyCard 
 				SelectedItem = Null
 				If ShowMsg = True Then
@@ -2512,7 +2512,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True, Scripted% = False)
 							EndIf
 							msg\Timer = 70.0 * 6.0
 						EndIf
-						Return
+						If (Not Scripted) Then Return
 					Else
 						PlaySound_Strict(KeyCardSFX1)
 						If Temp = 9 Then
@@ -2553,7 +2553,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True, Scripted% = False)
 						EndIf
 					EndIf
 				EndIf
-				Return
+				If (Not Scripted) Then Return
 			EndIf
 		EndIf	
 	ElseIf d\KeyCard < 0
@@ -2585,7 +2585,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True, Scripted% = False)
 							msg\Timer = 70 * 6.0
 						EndIf
 					EndIf
-					Return
+					If (Not Scripted) Then Return
 				Else
 					PlaySound_Strict(ScannerSFX1)
 					If Temp = 2 Then
@@ -2606,7 +2606,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True, Scripted% = False)
 					msg\Msg = "You placed your palm onto the scanner. The scanner reads: " + Chr(34) + "DNA does not match known sample. Access denied." + Chr(34)
 					msg\Timer = 70.0 * 8.0
 				EndIf
-				Return			
+				If (Not Scripted) Then Return			
 			EndIf
 		EndIf
 	Else
@@ -2741,10 +2741,6 @@ DrawLoading(90, True)
 Global UnableToMove% = False
 Global ShouldEntitiesFall% = True
 Global PlayerFallingPickDistance# = 10.0
-
-Global Save_Msg$ = ""
-Global Save_Msg_Timer# = 0.0
-Global Save_Msg_Y# = 0.0
 
 Global MTFCameraCheckTimer# = 0.0
 Global MTFCameraCheckDetected% = False
@@ -2967,6 +2963,11 @@ Function MainLoop()
 		EndIf
 		
 		If (Not mo\MouseDown1) And (Not mo\MouseHit1) Then GrabbedEntity = 0
+		
+		If ShouldDeleteGadgets Then
+			DeleteMenuGadgets()
+		EndIf
+		ShouldDeleteGadgets = False
 		
 		UpdateMusic()
 		If opt\EnableSFXRelease Then AutoReleaseSounds()
@@ -3412,7 +3413,7 @@ Function MainLoop()
 					UsedConsole = True
 					ResumeSounds()
 					MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_X_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
-					DeleteMenuGadgets()
+					ShouldDeleteGadgets = True
 				Else
 					PauseSounds()
 				EndIf
@@ -3629,11 +3630,6 @@ Function UpdateEnding()
 	GiveAchievement(Achv055)
 	If (Not UsedConsole) Then GiveAchievement(AchvConsole)
 	If SelectedDifficulty\Name = "Keter" Then GiveAchievement(AchvKeter)
-	
-	If ShouldDeleteGadgets Then
-		DeleteMenuGadgets()
-	EndIf
-	ShouldDeleteGadgets = False
 	
 	Local x%, y%, Width%, Height%, i%
 	
@@ -5821,10 +5817,10 @@ Function UpdateGUI()
 			ResumeSounds()
 			If OptionsMenu <> 0 Then SaveOptionsINI()
 			MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_X_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
-			DeleteMenuGadgets()
 		Else
 			PauseSounds()
 		EndIf
+		ShouldDeleteGadgets = True
 		MenuOpen = (Not MenuOpen)
 		
 		AchievementsMenu = 0
@@ -8059,11 +8055,6 @@ Function UpdateMenu()
 	Local x%, y%, z%, Width%, Height%, i%
 	
 	If MenuOpen Then
-		If ShouldDeleteGadgets Then
-			DeleteMenuGadgets()
-		EndIf
-		ShouldDeleteGadgets = False
-		
 		If (PlayerRoom\RoomTemplate\Name <> "gateb" And EntityY(me\Collider) =< 1040.0 * RoomScale) And PlayerRoom\RoomTemplate\Name <> "gatea"
 			If me\StopHidingTimer = 0.0 Then
 				If Curr173 <> Null And Curr106 <> Null Then
@@ -8088,6 +8079,7 @@ Function UpdateMenu()
 		EndIf
 		
 		InvOpen = False
+		ConsoleOpen = False
 		
 		Width = ImageWidth(tt\ImageID[0])
 		Height = ImageHeight(tt\ImageID[0])
@@ -12378,5 +12370,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1094#1329#1DFC
+;~B#1090#1325#1DF8
 ;~C#Blitz3D

@@ -95,6 +95,11 @@ Function UpdateMainMenu()
 		
 		If (Not mo\MouseDown1) And (Not mo\MouseHit1) Then GrabbedEntity = 0
 		
+		If ShouldDeleteGadgets Then
+			DeleteMenuGadgets()
+		EndIf
+		ShouldDeleteGadgets = False
+		
 		UpdateMusic()
 		If opt\EnableSFXRelease Then AutoReleaseSounds()
 		
@@ -129,11 +134,7 @@ Function UpdateMainMenu()
 		If PrevMainMenuTab <> MainMenuTab Then
 			DeleteMenuGadgets()
 		EndIf
-		If ShouldDeleteGadgets Then
-			DeleteMenuGadgets()
-		EndIf
 		PrevMainMenuTab = MainMenuTab
-		ShouldDeleteGadgets = False
 		
 		If MainMenuTab = MainMenuTab_Default Then
 			For i = 0 To 3
