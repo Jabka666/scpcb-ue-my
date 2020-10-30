@@ -54,7 +54,7 @@ Type NPCs
 	Field IdleTimer#
 	Field SoundCHN_IsStream%, SoundCHN2_IsStream%
 	Field FallingPickDistance#
-	Field UseHeadphones% = False
+	Field UseEarphones% = False
 	Field Contained% = False
 End Type
 
@@ -2362,7 +2362,7 @@ Function UpdateNPCs()
 						;[End Block]
 					Case 7.0 ; ~ Just walking
 						;[Block]
-						If n\UseHeadphones = True Then
+						If n\UseEarphones Then
 						    AnimateNPC(n, 623.0, 747.0, 0.2)
 						Else
 						    AnimateNPC(n, 77.0, 201.0, 0.2)
@@ -2373,7 +2373,7 @@ Function UpdateNPCs()
 						;[End Block]
 					Case 9.0 ; ~ Looks at the player
 						;[Block]
-						If n\UseHeadphones = True Then
+						If n\UseEarphones Then
 						    AnimateNPC(n, 623.0, 747.0, 0.2)
 						Else
 						    AnimateNPC(n, 77.0, 201.0, 0.2)
@@ -2393,7 +2393,7 @@ Function UpdateNPCs()
 						;[End Block]
 					Case 11.0 ; ~ Trying to find the player and kill
 						;[Block]
-						If n\UseHeadphones = True Then
+						If n\UseEarphones Then
 							If n\Frame < 787.0 Lor (n\Frame > 824.0 And n\Frame < 867.0) Lor (n\Frame > 870.0 And n\Frame < 884.0) Lor n\Frame > 939.0
 							    AnimateNPC(n, 927.0, 939.0, 0.2, False)
 							    If n\Frame >= 883.0 Then SetNPCFrame(n, 884.0)
@@ -2450,14 +2450,14 @@ Function UpdateNPCs()
 								EndIf
 								
 								If n\Reload > 0.0 And n\Reload =< 7.0
-								    If n\UseHeadphones = True Then
+								    If n\UseEarphones Then
 								        AnimateNPC(n, 867.0, 870.0, 0.35, True)
 								    Else
 									    AnimateNPC(n, 245.0, 248.0, 0.35, True)
 									EndIf
 								Else
-								    If n\UseHeadphones = True Then
-								        If n\Frame < 884.0
+								    If n\UseEarphones Then
+								        If n\Frame < 884.0 Then
 										    AnimateNPC(n, 884.0, 926.0, 0.35, True)
 									    EndIf
 									Else
@@ -2477,7 +2477,7 @@ Function UpdateNPCs()
 											n\PathLocation = n\PathLocation + 1
 										EndIf
 									Else
-										If n\UseHeadphones = True Then
+										If n\UseEarphones Then
 									        AnimateNPC(n, 787.0, 823.0, n\CurrSpeed * 40.0)
 									    Else
 										    AnimateNPC(n, 39.0, 76.0, n\CurrSpeed * 40.0)
@@ -2509,8 +2509,8 @@ Function UpdateNPCs()
 									
 									If wayPointCloseToPlayer <> Null
 										n\PathTimer = 1.0
-										If EntityVisible(wayPointCloseToPlayer\OBJ, n\Collider)
-											If Abs(DeltaYaw(n\Collider, wayPointCloseToPlayer\OBJ)) > 0
+										If EntityVisible(wayPointCloseToPlayer\OBJ, n\Collider) Then
+											If Abs(DeltaYaw(n\Collider, wayPointCloseToPlayer\OBJ)) > 0.0 Then
 												PointEntity(n\OBJ, wayPointCloseToPlayer\OBJ)
 												RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 20.0), 0.0)
 											EndIf
@@ -2519,8 +2519,8 @@ Function UpdateNPCs()
 										n\PathTimer = 0.0
 									EndIf
 									
-									If n\PathTimer = 1.0
-										If n\UseHeadphones = True Then
+									If n\PathTimer = 1.0 Then
+										If n\UseEarphones Then
 									        AnimateNPC(n, 787.0, 823.0, n\CurrSpeed * 40.0)
 									    Else
 										    AnimateNPC(n, 39.0, 76.0, n\CurrSpeed * 40.0)

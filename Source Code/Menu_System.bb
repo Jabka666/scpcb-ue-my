@@ -697,7 +697,7 @@ Function UpdateMainMenu()
 						
 						InputBox(x + 470 * MenuScale, y + 80 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\CROUCH, 210.0)], 10)	
 						
-						InputBox(x + 470 * MenuScale, y + 100 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210.0)], 12)
+						If opt\CanOpenConsole Then InputBox(x + 470 * MenuScale, y + 100 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210.0)], 12)
 						
 						InputBox(x + 470 * MenuScale, y + 120 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, 210.0)], 13)
 						
@@ -796,9 +796,7 @@ Function UpdateMainMenu()
 							
 							y = y + 30 * MenuScale
 							
-							If opt\CanOpenConsole Then
-								opt\ConsoleOpening = DrawTick(x + 310 * MenuScale, y + MenuScale, opt\ConsoleOpening)
-							EndIf
+							If opt\CanOpenConsole Then opt\ConsoleOpening = DrawTick(x + 310 * MenuScale, y + MenuScale, opt\ConsoleOpening)
 							
 							y = y + 30 * MenuScale
 							
@@ -829,9 +827,7 @@ Function UpdateMainMenu()
 						Else
 							y = y + 20 * MenuScale
 							
-							If opt\HUDEnabled Then
-								opt\BarStyle = DrawTick(x + 310 * MenuScale, y + MenuScale, opt\BarStyle)
-							EndIf
+							If opt\HUDEnabled Then opt\BarStyle = DrawTick(x + 310 * MenuScale, y + MenuScale, opt\BarStyle)
 							
 							y = y + 30 * MenuScale
 							
@@ -1410,7 +1406,7 @@ Function RenderMainMenu()
 					
 					Text(x + 280 * MenuScale, y + 84 * MenuScale, "Crouch")
 					
-					Text(x + 280 * MenuScale, y + 104 * MenuScale, "Open/Close Console")
+					If opt\CanOpenConsole Then Text(x + 280 * MenuScale, y + 104 * MenuScale, "Open/Close Console")
 					
 					Text(x + 280 * MenuScale, y + 124 * MenuScale, "Take Screenshot")
 					

@@ -7914,7 +7914,7 @@ Function DrawMenu()
 					
 					Text(x, y + 184 * MenuScale, "Quick Save")
 					
-					Text(x, y + 204 * MenuScale, "Open/Close Console")
+					If opt\CanOpenConsole Then Text(x, y + 204 * MenuScale, "Open/Close Console")
 					
 					Text(x, y + 224 * MenuScale, "Take Screenshot")
 					
@@ -8254,7 +8254,7 @@ Function UpdateMenu()
 					
 					InputBox(x + 200 * MenuScale, y + 180 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\SAVE, 210.0)], 11)	
 					
-					InputBox(x + 200 * MenuScale, y + 200 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210.0)], 12)
+					If opt\CanOpenConsole Then InputBox(x + 200 * MenuScale, y + 200 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210.0)], 12)
 					
 					InputBox(x + 200 * MenuScale, y + 220 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, 210.0)], 13)
 					
@@ -8333,9 +8333,7 @@ Function UpdateMenu()
 					
 					y = y + 30 * MenuScale
 					
-					If opt\CanOpenConsole Then
-						opt\ConsoleOpening = DrawTick(x + 270 * MenuScale, y + MenuScale, opt\ConsoleOpening)
-					EndIf
+					If opt\CanOpenConsole Then opt\ConsoleOpening = DrawTick(x + 270 * MenuScale, y + MenuScale, opt\ConsoleOpening)
 					
 					y = y + 30 * MenuScale
 					

@@ -184,7 +184,7 @@ Function SaveGame(File$)
 		
 		WriteFloat(f, AnimTime(n\OBJ))
 		
-		WriteByte(f, n\UseHeadphones)
+		WriteByte(f, n\UseEarphones)
 		WriteByte(f, n\Contained)
 		WriteInt(f, n\IsDead)
 		WriteFloat(f, n\PathX)
@@ -685,7 +685,7 @@ Function LoadGame(File$)
 		End Select
 		
 		n\Frame = Frame
-		n\UseHeadphones = ReadByte(f)
+		n\UseEarphones = ReadByte(f)
 		n\Contained = ReadByte(f)
 		n\IsDead = ReadInt(f)
 		n\PathX = ReadFloat(f)
@@ -1554,7 +1554,7 @@ Function LoadGameQuick(File$)
 		End Select		
 		
 		n\Frame = Frame
-		n\UseHeadphones = ReadByte(f)
+		n\UseEarphones = ReadByte(f)
 		n\Contained = ReadByte(f)
 		n\IsDead = ReadInt(f)
 		n\PathX = ReadFloat(f)
