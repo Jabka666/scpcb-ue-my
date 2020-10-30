@@ -4926,7 +4926,7 @@ Function UpdateEvents()
 						Curr096\State2 = 70.0 * 10.0
 						
 						LoadEventSound(e, "SFX\Character\Guard\096ServerRoom1.ogg")
-						e\SoundCHN = PlaySound_Strict(e\Sound)
+						e\SoundCHN = PlaySound2(e\Sound, Camera, Curr096\OBJ)
 						
 						e\room\NPC[0] = CreateNPC(NPCtypeGuard, EntityX(e\room\Objects[7], True), EntityY(e\room\Objects[7], True), EntityZ(e\room\Objects[7], True))
 						
@@ -5013,7 +5013,7 @@ Function UpdateEvents()
 								FreeSound_Strict(e\Sound) : e\Sound = 0
 							EndIf
 							e\Sound = LoadSound_Strict("SFX\Character\Guard\096ServerRoom2.ogg")
-							e\SoundCHN = PlaySound_Strict(e\Sound)
+							e\SoundCHN = PlaySound2(e\Sound, Camera, Curr096\OBJ)
 							
 							Tex = LoadTexture_Strict("GFX\npcs\scp_096_bloody.png")
 							EntityTexture(Curr096\OBJ, Tex)
@@ -5078,7 +5078,7 @@ Function UpdateEvents()
 						EndIf
 					EndIf
 					If ChannelPlaying(e\SoundCHN) Then
-						UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[10], 10.0, 20.0)
+						UpdateSoundOrigin(e\SoundCHN, Camera, Curr096\OBJ)
 					EndIf
 				ElseIf PlayerRoom = e\room
 					Temp = UpdateLever(e\room\Objects[1]) ; ~ Power switch
@@ -5120,7 +5120,7 @@ Function UpdateEvents()
 						EndIf
 						e\room\RoomDoors[0]\Locked = 1
 						e\room\RoomDoors[1]\Locked = 1							
-					EndIf 
+					EndIf
 				EndIf
 				;[End Block]
 			Case e_room2storage

@@ -3394,10 +3394,7 @@ Function FillRoom(r.Rooms)
 			r\Objects[9] = CreatePivot()
 			PositionEntity(r\Objects[9], r\x - 848.0 * RoomScale, r\y + 0.5, r\z + 576.0 * RoomScale)
 			
-			r\Objects[10] = CreatePivot()
-			PositionEntity(r\Objects[10], r\x - 700.0 * RoomScale, r\y + 0.5, r\z)
-			
-			For i = 6 To 10
+			For i = 6 To 9
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			;[End Block]
