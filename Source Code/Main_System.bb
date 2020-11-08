@@ -6467,9 +6467,7 @@ Function UpdateGUI()
 					;[Block]
 					PlaySound_Strict(LoadTempSound("SFX\SCP\513\Bell.ogg"))
 					
-					If Curr513_1 = Null Then
-						Curr513_1 = CreateNPC(NPCtype513_1, 0.0, 0.0, 0.0)
-					EndIf	
+					If Curr513_1 = Null Then Curr513_1 = CreateNPC(NPCtype513_1, 0.0, 0.0, 0.0)
 					SelectedItem = Null
 					;[End Block]
 				Case "scp500pill"
@@ -8053,6 +8051,7 @@ Function UpdateMenu()
 	CatchErrors("Uncaught (UpdateMenu)")
 	
 	Local x%, y%, z%, Width%, Height%, i%
+	Local r.Rooms
 	
 	If MenuOpen Then
 		If (PlayerRoom\RoomTemplate\Name <> "gateb" And EntityY(me\Collider) =< 1040.0 * RoomScale) And PlayerRoom\RoomTemplate\Name <> "gatea"
@@ -8068,7 +8067,7 @@ Function UpdateMenu()
 					
 					If me\StopHidingTimer >= 40.0 Then
 						PlaySound_Strict(HorrorSFX[15])
-						msg\Msg = "STOP HIDING"
+						msg\Msg = "STOP HIDING!"
 						msg\Timer = 70.0 * 6.0
 						MenuOpen = False
 						ShouldDeleteGadgets = True
@@ -8095,7 +8094,6 @@ Function UpdateMenu()
 		Local Scale# = opt\GraphicHeight / 768.0
 		Local SeparationConst% = 76.0 * Scale
 		Local ImgSize% = 64.0
-		Local r.Rooms
 		
 		If AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg =< 0 Then
 			; ~ Just save this line, ok?
@@ -11435,9 +11433,7 @@ Function UpdateCameraCheck()
 			EndIf
 		EndIf
 		MTFCameraCheckDetected = False
-		If MTFCameraCheckTimer = 0.0 Then
-			me\Detected = False
-		EndIf
+		If MTFCameraCheckTimer = 0.0 Then me\Detected = False
 	EndIf
 End Function
 
@@ -11782,9 +11778,9 @@ Function Graphics3DExt%(Width%, Height%, Depth% = 32, Mode% = 2)
 	TextureAnisotropic(16)
 	SMALLEST_POWER_TWO = 512.0
 	While SMALLEST_POWER_TWO < Width Lor SMALLEST_POWER_TWO < Height
-		SMALLEST_POWER_TWO = SMALLEST_POWER_TWO * 2
+		SMALLEST_POWER_TWO = SMALLEST_POWER_TWO * 2.0
 	Wend
-	SMALLEST_POWER_TWO_HALF = SMALLEST_POWER_TWO / 2
+	SMALLEST_POWER_TWO_HALF = SMALLEST_POWER_TWO / 2.0
 	InitFastResize()
 	AntiAlias(opt\AntiAliasing)
 End Function
@@ -12368,5 +12364,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1090#1325#1DF8
+;~B#1090#1325#1DF6
 ;~C#Blitz3D

@@ -2215,7 +2215,7 @@ Function UpdateEvents()
 				;[Block]
 				If PlayerRoom = e\room Then
 					If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 3.24 Then
-						If e\EventState = 0.0
+						If e\EventState = 0.0 Then
 							GiveAchievement(Achv789J)
 							e\SoundCHN = PlaySound2(ButtGhostSFX, Camera, e\room\Objects[0])
 							e\EventState = 1.0
@@ -2711,7 +2711,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_pocketdimension
+			Case e_pocketdimension ; ~ TODO: Fix throne room
 				;[Block]
 				; ~ EventState: A timer for scaling the tunnels in the starting room
 				
@@ -2738,9 +2738,7 @@ Function UpdateEvents()
 					If e\Sound = 0 Then LoadEventSound(e, "SFX\Room\PocketDimension\Rumble.ogg")
 					If e\Sound2 = 0 Then e\Sound2 = LoadEventSound(e, "SFX\Room\PocketDimension\PrisonVoices.ogg", 1)
 					
-					If e\EventState = 0.0 Then
-						e\EventState = 0.1
-					EndIf
+					If e\EventState = 0.0 Then e\EventState = 0.1
 					
 					If EntityY(me\Collider) < 2000.0 * RoomScale Lor e\EventState3 = 0.0 Lor EntityY(me\Collider) > 2608.0 * RoomScale Then 
 						ShouldPlay = 3
@@ -3187,7 +3185,7 @@ Function UpdateEvents()
 							UpdateRooms()
 						EndIf					
 					Else ; ~ Pillar room
-						If opt\ParticleAmount > 0
+						If opt\ParticleAmount > 0 Then
 							If Rand(800) = 1 Then 
 								Angle = EntityYaw(Camera, True) + Rnd(150, 210)
 								p.Particles = CreateParticle(EntityX(me\Collider) + Cos(Angle) * 7.5, 0.0, EntityZ(me\Collider) + Sin(Angle) * 7.5, 3, 4.0, 0.0, 2500.0)
@@ -3335,8 +3333,8 @@ Function UpdateEvents()
 					Local PrevState2# = e\EventState2
 					
 					e\EventState2 = UpdateLever(e\room\Objects[3])
-					If (PrevState2 <> e\EventState2) And e\EventState > 0 Then PlaySound2(LightSFX, Camera, e\room\Objects[3])
-					If e\EventState2
+					If (PrevState2 <> e\EventState2) And e\EventState > 0.0 Then PlaySound2(LightSFX, Camera, e\room\Objects[3])
+					If e\EventState2 Then
 						SecondaryLightOn = CurveValue(1.0, SecondaryLightOn, 10.0)
 					Else
 						SecondaryLightOn = CurveValue(0.0, SecondaryLightOn, 10.0)
@@ -5781,8 +5779,7 @@ Function UpdateEvents()
 									ScaleEntity(e\room\NPC[0]\OBJ, x, x, x)
 									SetAnimTime(e\room\NPC[0]\OBJ, Temp)
 									ShowEntity(e\room\NPC[0]\OBJ)
-									
-									RotateEntity(n\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
+									RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
 									
 									Exit
 								EndIf
@@ -6730,7 +6727,7 @@ Function UpdateEvents()
 							e\EventStr = "Load0"
 						EndIf
 						
-						If e\room\Objects[3] <> 0
+						If e\room\Objects[3] <> 0 Then
 							HideEntity(e\room\Objects[3])
 							HideEntity(e\room\Objects[4])
 							HideEntity(e\room\Objects[5])
