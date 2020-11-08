@@ -209,13 +209,17 @@ End Function
 Function GetINIInt2%(File$, Start%, Parameter$, DefaultValue$ = "")
 	Local Txt$ = GetINIString2(File, Start, Parameter, DefaultValue)
 	
-	If Lower(Txt) = "True" Then
+	If Lower(Txt) = "true" Then
 		Return(1)
-	ElseIf Lower(Txt) = "False"
+	ElseIf Lower(Txt) = "false"
 		Return(0)
 	Else
 		Return(Int(Txt))
 	EndIf
+End Function
+
+Function GetINIFloat2#(File$, Section$, Parameter$, DefaultValue# = 0.0)
+	Return(Float(GetINIString2(File, Section, Parameter, DefaultValue)))
 End Function
 
 Function GetINISectionLocation%(File$, Section$)
@@ -364,6 +368,8 @@ Type Options
 	Field PlayStartup%
 	Field LauncherEnabled%
 	Field BarStyle%
+	Field EnableSubtitles%
+	Field SubColorR%, SubColorG%, SubColorB%
 	; ~ [CONTROLS]
 	Field MouseSmoothing#
 	Field InvertMouse%
@@ -439,6 +445,14 @@ Function LoadOptionsINI()
 	opt\LauncherEnabled = GetINIInt(OptionFile, "Advanced", "Launcher Enabled")
 	
 	opt\BarStyle = GetINIInt(OptionFile, "Advanced", "Bar Style")
+	
+	opt\EnableSubtitles = GetINIInt(OptionFile, "Advanced", "Enable Subtitles")
+	
+	opt\SubColorR = GetINIInt(OptionFile, "Advanced", "Subtitles Color R")
+	
+	opt\SubColorG = GetINIInt(OptionFile, "Advanced", "Subtitles Color G")
+	
+	opt\SubColorB = GetINIInt(OptionFile, "Advanced", "Subtitles Color B")
 	
 	; ~ [CONTROLS]
 	
@@ -528,6 +542,14 @@ Function SaveOptionsINI(SaveGlobal% = False)
 	PutINIValue(OptionFile, "Advanced", "Launcher Enabled", opt\LauncherEnabled)
 	
 	PutINIValue(OptionFile, "Advanced", "Bar Style", opt\BarStyle)
+	
+	PutINIValue(OptionFile, "Advanced", "Enable Subtitles", opt\EnableSubtitles)
+	
+	PutINIValue(OptionFile, "Advanced", "Subtitles Color R", opt\SubColorR)
+	
+	PutINIValue(OptionFile, "Advanced", "Subtitles Color G", opt\SubColorG)
+	
+	PutINIValue(OptionFile, "Advanced", "Subtitles Color B", opt\SubColorB)
 	
 	; ~ [CONTROLS]
 	
@@ -626,6 +648,14 @@ Function ResetOptionsINI()
 	opt\LauncherEnabled = 1
 	
 	opt\BarStyle = 0
+	
+	opt\EnableSubtitles = 1
+	
+	opt\SubColorR = 255
+	
+	opt\SubColorG = 255
+	
+	opt\SubColorB = 255
 	
 	; ~ [CONTROLS]
 	

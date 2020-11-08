@@ -839,6 +839,45 @@ Function UpdateMainMenu()
 							
 							y = y + 30 * MenuScale
 							
+							Local PrevEnableSubtitles% = opt\EnableSubtitles
+							
+							opt\EnableSubtitles = DrawTick(x + 310 * MenuScale, y + MenuScale, opt\EnableSubtitles)
+							
+							If PrevEnableSubtitles Then
+								If PrevEnableSubtitles <> opt\EnableSubtitles
+									ShouldDeleteGadgets = True
+								EndIf
+							EndIf
+							
+							y = y + 30 * MenuScale
+							
+							If opt\EnableSubtitles Then
+								Local CurrSubColorR% = opt\SubColorR / 2.55
+								
+								CurrSubColorR = SlideBar(x + 310 * MenuScale, y + 25 * MenuScale, 100 * MenuScale, CurrSubColorR)
+								opt\SubColorR = CurrSubColorR * 2.55
+							EndIf
+							
+							y = y + 30 * MenuScale
+							
+							If opt\EnableSubtitles Then
+								Local CurrSubColorG% = opt\SubColorG / 2.55
+								
+								CurrSubColorG = SlideBar(x + 310 * MenuScale, y + 25 * MenuScale, 100 * MenuScale, CurrSubColorG)
+								opt\SubColorG = CurrSubColorG * 2.55
+							EndIf
+							
+							y = y + 30 * MenuScale
+							
+							If opt\EnableSubtitles Then
+								Local CurrSubColorB% = opt\SubColorB / 2.55
+								
+								CurrSubColorB = SlideBar(x + 310 * MenuScale, y + 25 * MenuScale, 100 * MenuScale, CurrSubColorB)
+								opt\SubColorB = CurrSubColorB * 2.55
+							EndIf
+							
+							y = y + 60 * MenuScale
+							
 							If DrawButton(x + 20 * MenuScale, y, 220, 30, "RESET OPTIONS", False) Then
 								Delay(200)
 								ResetOptionsINI()
@@ -1512,6 +1551,43 @@ Function RenderMainMenu()
 						Text(x + 20 * MenuScale, y + 4 * MenuScale, "Use launcher:")
 						If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
 							DrawOptionsTooltip(tX, tY, tW, tH, "uselauncher")
+						EndIf
+						
+						y = y + 30 * MenuScale
+						
+						Color(255, 255, 255)
+						Text(x + 20 * MenuScale, y, "Enable Subtitles:")
+						If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
+							DrawOptionsTooltip(tX, tY, tW, tH, "subtitles")
+						EndIf
+						
+						y = y + 30 * MenuScale
+						
+						If opt\EnableSubtitles Then     
+							Color(255, 255, 255)
+							Text(x + 20 * MenuScale, y, "Subtitles Color:")  
+							Color(255, 0, 0)
+							Text(x + 20 * MenuScale, y + 30 * MenuScale, "RED COLOR: " + Int(opt\SubColorR))
+						EndIf
+						
+						y = y + 30 * MenuScale
+						
+						If opt\EnableSubtitles Then
+							Color(0, 255, 0)
+							Text(x + 20 * MenuScale, y + 30 * MenuScale, "GREEN COLOR: " + Int(opt\SubColorG))
+						EndIf
+						
+						y = y + 30 * MenuScale
+						
+						If opt\EnableSubtitles Then
+							Color(0, 0, 255)
+							Text(x + 20 * MenuScale, y + 30 * MenuScale, "BLUE COLOR: " + Int(opt\SubColorB))
+							
+							Color(opt\SubColorR, opt\SubColorG, opt\SubColorB)
+							Text(x + (Width / 2), y + 180, "[JORGE HAS BEEN EXPECTING YOU]", True)
+							Text(x + (Width / 2), y + 200, Chr(34) + "- Oh, and by the way." + Chr(34), True)
+							Text(x + (Width / 2), y + 220, Chr(34) + "- You, stop!" + Chr(34), True)
+							Text(x + (Width / 2), y + 240, Chr(34) + "- Please, approach SCP-1-7-3 for testing." + Chr(34), True)
 						EndIf
 					EndIf
 					;[End Block]
@@ -2894,6 +2970,12 @@ Function DrawOptionsTooltip(x%, y%, Width%, Height%, Option$, Value# = 0.0, InGa
 		    Txt = "Changes the Bar's style to Dynamic or Classic one."
 			R = 255
 		    Txt2 = "This option cannot be changed in-game."
+			;[End Block]
+		Case "subtitles"
+			;[Block]
+		    Txt = "Displays current dialogs in the text form. "
+		    Txt2 = "This option cannot be changed in-game. Can work very unstable on the weak PCs because of wrong timings. (CURRENTLY UNFINISHED)"
+			R = 255
 			;[End Block]
 	End Select
 	

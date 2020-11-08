@@ -8,6 +8,7 @@ If FileSize("FreeImage.dll") = 0 Then InitErrorStr = InitErrorStr + "FreeImage.d
 
 If Len(InitErrorStr) > 0 Then RuntimeError("The following DLLs were not found in the game directory:" + Chr(13) + Chr(10) + Chr(13) + Chr(10) + InitErrorStr)
 
+Include "Source Code\Subtitles_System.bb"
 Include "Source Code\Math_System.bb"
 Include "Source Code\StrictLoads.bb"
 Include "Source Code\Keys_System.bb"
@@ -3429,6 +3430,7 @@ Function MainLoop()
 		EndIf
 		
 		UpdateMessages()
+		If opt\EnableSubtitles Then UpdateSubtitles()
 		
 		UpdateQuickLoading()
 		
@@ -3445,6 +3447,7 @@ Function MainLoop()
 	DrawGUI()
 	
 	RenderMessages()
+	If opt\EnableSubtitles Then RenderSubtitles()
 	
 	If me\EndingTimer < 0.0 Then
 		If me\SelectedEnding <> "" Then DrawEnding()
@@ -9470,7 +9473,7 @@ Function NullGame(PlayButtonSFX% = True) ; ~ CHECK FOR ERRORS
 	Local i%, x%, y%, Lvl%
 	Local itt.ItemTemplates, s.Screens, lt.LightTemplates, d.Doors, m.Materials, de.Decals, sc.SecurityCams
 	Local wp.WayPoints, twp.TempWayPoints, r.Rooms, it.Items, pr.Props, c.ConsoleMsg, n.NPCs, em.Emitters
-	Local rt.RoomTemplates, p.Particles, e.Events
+	Local rt.RoomTemplates, p.Particles, e.Events, sub.Subtitles
 	
 	KillSounds()
 	If PlayButtonSFX Then PlaySound_Strict(ButtonSFX)
@@ -9603,6 +9606,10 @@ Function NullGame(PlayButtonSFX% = True) ; ~ CHECK FOR ERRORS
 	
 	msg\Msg = ""
 	msg\Timer = 0.0
+	
+	For sub.Subtitles = Each Subtitles
+		Delete(sub)
+	Next
 	
 	For i = 0 To MaxItemAmount - 1
 		If Inventory[i] <> Null Then Inventory[i] = Null
@@ -12364,5 +12371,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1090#1325#1DF6
+;~B#1093#1328#1DF9
 ;~C#Blitz3D
