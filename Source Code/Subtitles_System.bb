@@ -54,6 +54,7 @@ Function ShowSubtitles(Name$, SubID%) ; ~ Check why the second one renders only 
 	Local i%, sub.Subtitles
 	
 	For i = 1 To LinesAmount
+		sub.Subtitles = New sub.Subtitles
 		sub\Txt[SubID] = GetINIString2(SubtitlesFile, Loc, "Txt" + i)
 		sub\Timer[SubID] = 70.0 * GetINIFloat2(SubtitlesFile, Loc, "Timer" + i)
 	Next
