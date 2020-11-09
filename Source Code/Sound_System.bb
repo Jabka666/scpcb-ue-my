@@ -1,4 +1,4 @@
-Function PlaySound2%(SoundHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, HasSubtitles% = False)
+Function PlaySound2%(SoundHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, HasSubtitles% = False, SubID% = ANNOUNCEMENT)
 	Range = Max(Range, 1.0)
 	
 	Local SoundCHN% = 0
@@ -9,7 +9,7 @@ Function PlaySound2%(SoundHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, 
 		If 1.0 - Dist > 0.0 And 1.0 - Dist < 1.0 Then
 			Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 			
-			SoundCHN = PlaySound_Strict(SoundHandle, HasSubtitles)
+			SoundCHN = PlaySound_Strict(SoundHandle, HasSubtitles, SubID)
 			
 			ChannelVolume(SoundCHN, Volume * (1.0 - Dist) * opt\SFXVolume)
 			ChannelPan(SoundCHN, PanValue)			
@@ -18,7 +18,7 @@ Function PlaySound2%(SoundHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, 
 	Return(SoundCHN)
 End Function
 
-Function LoopSound2%(SoundHandle%, CHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, HasSubtitles% = False)
+Function LoopSound2%(SoundHandle%, CHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, HasSubtitles% = False, SubID% = ANNOUNCEMENT)
 	Range = Max(Range, 1.0)
 	
 	If Volume > 0.0 Then
@@ -26,9 +26,9 @@ Function LoopSound2%(SoundHandle%, CHN%, Cam%, Entity%, Range# = 10.0, Volume# =
 		Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 		
 		If CHN = 0 Then
-			CHN = PlaySound_Strict(SoundHandle)
+			CHN = PlaySound_Strict(SoundHandle, HasSubtitles, SubID)
 		Else
-			If (Not ChannelPlaying(CHN)) Then CHN = PlaySound_Strict(SoundHandle, HasSubtitles)
+			If (Not ChannelPlaying(CHN)) Then CHN = PlaySound_Strict(SoundHandle, HasSubtitles, SubID)
 		EndIf
 		
 		ChannelVolume(CHN, Volume * (1.0 - Dist) * opt\SFXVolume)
