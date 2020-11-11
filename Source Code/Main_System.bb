@@ -2036,7 +2036,7 @@ Global DoorTempID%
 Type Doors
 	Field OBJ%, OBJ2%, FrameOBJ%, Buttons%[2]
 	Field Locked%, LockedUpdated%, Open%, Angle%, OpenState#, FastOpen%
-	Field Dir%
+	Field Dir%, Dist#
 	Field Timer%, TimerState#
 	Field KeyCard%
 	Field room.Rooms
@@ -2188,7 +2188,7 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, Open% = False, Bi
 	Return(d)
 End Function
 
-Function CreateButton(x#, y#, z#, Pitch#, Yaw#, Roll# = 0.0, ButtonID% = 0, Locked% = False)
+Function CreateButton(ButtonID%, x#, y#, z#, Pitch#, Yaw#, Roll# = 0.0, Locked% = False)
 	Local OBJ% = CopyEntity(o\ButtonModelID[ButtonID])	
 	
 	If Locked Then EntityTexture(OBJ, tt\MiscTextureID[17])
@@ -2206,9 +2206,10 @@ Function UpdateDoors()
 		For d.Doors = Each Doors
 			Local xDist# = Abs(EntityX(me\Collider) - EntityX(d\OBJ, True))
 			Local zDist# = Abs(EntityZ(me\Collider) - EntityZ(d\OBJ, True))
-			Local Dist2# = xDist + zDist
 			
-			If Dist2 > HideDistance * 2.0 Then
+			d\Dist = xDist + zDist
+			
+			If d\Dist > HideDistance * 2.0 Then
 				If d\OBJ <> 0 Then HideEntity(d\OBJ)
 				If d\FrameOBJ <> 0 Then HideEntity(d\FrameOBJ)
 				If d\OBJ2 <> 0 Then HideEntity(d\OBJ2)
@@ -2231,7 +2232,7 @@ Function UpdateDoors()
 	ClosestDoor = Null
 	
 	For d.Doors = Each Doors
-		If Dist2 < HideDistance * 2.0 Lor d\IsElevatorDoor > 0 Then ; ~ Make elevator doors update everytime because if not, this can cause a bug where the elevators suddenly won't work, most noticeable in room2tunnel -- ENDSHN
+		If d\Dist < HideDistance * 2.0 Lor d\IsElevatorDoor > 0 Then ; ~ Make elevator doors update everytime because if not, this can cause a bug where the elevators suddenly won't work, most noticeable in room2tunnel -- ENDSHN
 			If (d\OpenState >= 180.0 Lor d\OpenState =< 0.0) And GrabbedEntity = 0 Then
 				For i = 0 To 1
 					If d\Buttons[i] <> 0 Then
@@ -3134,6 +3135,8 @@ Function MainLoop()
 					If e\EventID = e_pocketdimension Then
 						If EntityY(me\Collider) > 2608.0 * RoomScale Lor e\EventState2 > 1.0 Then
 							CurrFogColor = FogColorPDTrench
+						ElseIf EntityY(me\Collider) >= 2000.0 * RoomScale And EntityY(me\Collider) =< 2608.0 * RoomScale
+							CurrFogColor = FogColorHCZ
 						Else
 							CurrFogColor = FogColorPD
 						EndIf
@@ -12371,5 +12374,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1093#1328#1DF9
+;~B#1096#132B#1DFC
 ;~C#Blitz3D

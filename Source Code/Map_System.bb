@@ -2419,7 +2419,7 @@ Function FillRoom(r.Rooms)
 			r\Objects[1] = CreatePivot()
             PositionEntity(r\Objects[1], r\x + 1344.0 * RoomScale, r\y - 752.0 * RoomScale, r\z - 384.0 * RoomScale)
             
-			r\Objects[2] = CreateButton(r\x + 1180.0 * RoomScale, r\y + 180.0 * RoomScale, r\z - 552.0 * RoomScale, 0.0, 270.0, 0.0, 0, True)
+			r\Objects[2] = CreateButton(0, r\x + 1180.0 * RoomScale, r\y + 180.0 * RoomScale, r\z - 552.0 * RoomScale, 0.0, 270.0, 0.0, True)
 			
 			For i = 0 To 2
 				EntityParent(r\Objects[i], r\OBJ)
@@ -4370,7 +4370,7 @@ Function FillRoom(r.Rooms)
 			RotateEntity(r\Objects[1], 81.0, -180.0, 0.0)
 			RotateEntity(r\Objects[3], -81.0, -180.0, 0.0)			
 			
-			r\Objects[4] = CreateButton(r\x - 146.0 * RoomScale, r\y - 7904.0 * RoomScale, r\z + 2989.0 * RoomScale, 0.0, 0.0, 0.0)
+			r\Objects[4] = CreateButton(0, r\x - 146.0 * RoomScale, r\y - 7904.0 * RoomScale, r\z + 2989.0 * RoomScale, 0.0, 0.0, 0.0)
 			
 			r\Objects[5] = CreatePivot()
 			TurnEntity(r\Objects[5], 0.0, 180.0, 0.0)
@@ -4698,7 +4698,7 @@ Function FillRoom(r.Rooms)
 		Case "pocketdimension"
 			;[Block]
 			; ~ Doors inside fake tunnel
-			r\RoomDoors[0] = CreateDoor(r\Zone, r\x, r\y + 2048.0 * RoomScale, r\z + 32.0 - 1024.0 * RoomScale, 0.0, r, False, 2)
+			r\RoomDoors[0] = CreateDoor(r\Zone, r\x, r\y + 2060.0 * RoomScale, r\z + 32.0 - 1024.0 * RoomScale, 0.0, r, False, 2)
 			r\RoomDoors[0]\AutoClose = False
 			
 			r\RoomDoors[1] = CreateDoor(r\Zone, r\x, r\y + 2048.0 * RoomScale, r\z + 32.0 + 1024.0 * RoomScale, 180.0, r, False, 2)
@@ -4757,7 +4757,7 @@ Function FillRoom(r.Rooms)
 			EntityPickMode(Terrain, 3)
 			PositionEntity(Terrain, r\x, r\y + 2944.0 * RoomScale, r\z + 32.0, True)			
 			
-			de = CreateDecal(18, r\x - (1536.0 * RoomScale), r\y + 0.02, r\z + 608.0 * RoomScale + 32.0, 90.0, 0.0, 0.0, 0.8)
+			de = CreateDecal(18, r\x - (1536.0 * RoomScale), r\y + 0.02, r\z + 608.0 * RoomScale + 32.0, 90.0, 0.0, 0.0, 0.8, 1.0, 1 + 8, 2)
 			EntityParent(de\OBJ, r\OBJ)
 			
 			ScaleEntity(r\Objects[10], RoomScale * 1.5, RoomScale * 2.0, RoomScale * 1.5, True)			
@@ -4776,7 +4776,7 @@ Function FillRoom(r.Rooms)
 				EntityParent(r\Objects[i - 1], r\OBJ)
 				
 				If i < 6 Then 
-					de = CreateDecal(i + 7, r\x + Cos(Angle) * (512.0 * RoomScale) * 3.0, r\y + 0.02, r\z + Sin(Angle) * (512.0 * RoomScale) * 3.0, 90.0, Angle - 90.0, 0.0, 0.5)
+					de = CreateDecal(i + 7, r\x + Cos(Angle) * (512.0 * RoomScale) * 3.0, r\y + 0.02, r\z + Sin(Angle) * (512.0 * RoomScale) * 3.0, 90.0, Angle - 90.0, 0.0, 0.5, 1.0, 1 + 8, 2)
 					EntityParent(de\OBJ, r\OBJ)
 				EndIf				
 			Next
@@ -4813,6 +4813,7 @@ Function FillRoom(r.Rooms)
 			
 			Tex = LoadTexture_Strict("GFX\npcs\scp_106_eyes.png", 1, 2)
 			r\Objects[17] = CreateSprite()
+			PositionEntity(r\Objects[17], EntityX(r\Objects[8], True), r\y + 1376.0 * RoomScale, EntityZ(r\Objects[8], True) - 2848.0 * RoomScale)
 			ScaleSprite(r\Objects[17], 0.03, 0.03)
 			EntityTexture(r\Objects[17], Tex)
 			EntityBlend(r\Objects[17], 3)
@@ -4827,13 +4828,15 @@ Function FillRoom(r.Rooms)
 			EntityBlend(r\Objects[18], 2)
 			EntityFX(r\Objects[18], 1 + 8)
 			SpriteViewMode(r\Objects[18], 2)
+			HideEntity(r\Objects[18])
 			
-			;r\Objects[19] = LoadMesh_Strict("GFX\map\throne_wall.b3d")
-			;PositionEntity(r\Objects[19], r\x + EntityX(r\Objects[8], True), r\y, r\y + EntityZ(r\Objects[8], True) - 960.0 * RoomScale)
-			;ScaleEntity(r\Objects[19], RoomScale, RoomScale, RoomScale)
-			;EntityPickMode(r\Objects[19], 2)
-			;EntityType(r\Objects[19], HIT_MAP)
-			;EntityParent(r\Objects[19], r\OBJ)
+			r\Objects[19] = LoadMesh_Strict("GFX\map\throne_wall.b3d")
+			PositionEntity(r\Objects[19], EntityX(r\Objects[8], True), r\y, EntityZ(r\Objects[8], True) - 864.5 * RoomScale)
+			ScaleEntity(r\Objects[19], RoomScale / 2.04, RoomScale, RoomScale)
+			EntityPickMode(r\Objects[19], 2)
+			EntityType(r\Objects[19], HIT_MAP)
+			EntityParent(r\Objects[19], r\OBJ)
+			HideEntity(r\Objects[19])
 			
 			FreeEntity(Hallway)
 			
@@ -4852,11 +4855,8 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "room1lifts"
 			;[Block]
-			r\Objects[0] = CreateButton(r\x + 96.0 * RoomScale, r\y + 160.0 * RoomScale, r\z + 71.0 * RoomScale, 0.0, 0.0, 0.0, 0, True)
-			
-			r\Objects[1] = CreateButton(r\x - 96.0 * RoomScale, r\y + 160.0 * RoomScale, r\z + 71.0 * RoomScale, 0.0, 0.0, 0.0, 0, True)
-			
 			For i = 0 To 1
+				r\Objects[i] = CreateButton(0, r\x + (96.0 + (i * -192.0)) * RoomScale, r\y + 160.0 * RoomScale, r\z + 71.0 * RoomScale, 0.0, 0.0, 0.0, True)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
@@ -7009,9 +7009,9 @@ Function CheckForPropModel%(File$)
 		Return(CopyEntity(o\LeverModelID[0]))
 	ElseIf Instr(File, "leverhandle") <> 0
 		Return(CopyEntity(o\LeverModelID[1]))
-	ElseIf Instr(File, "Button.") <> 0
+	ElseIf Instr(File, "tton.") <> 0
 		Return(CopyEntity(o\ButtonModelID[0]))
-	ElseIf Instr(File, "Door01") <> 0
+	ElseIf Instr(File, "oor01") <> 0
 		Return(CopyEntity(o\DoorModelID[0]))
 	Else
 		Return(LoadMesh_Strict(File))

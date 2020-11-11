@@ -2711,7 +2711,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_pocketdimension ; ~ TODO: Fix throne room
+			Case e_pocketdimension
 				;[Block]
 				; ~ EventState: A timer for scaling the tunnels in the starting room
 				
@@ -2749,6 +2749,12 @@ Function UpdateEvents()
 						ShouldPlay = 1
 						
 						GiveAchievement(AchvPD)
+					EndIf
+					
+					If e\EventState4 = 1.0 Then
+						ShowEntity(e\room\Objects[19])
+					Else
+						HideEntity(e\room\Objects[19])
 					EndIf
 					
 					ScaleEntity(e\room\OBJ, RoomScale, RoomScale * (1.0 + Sin(e\EventState / 14.0) * 0.2), RoomScale)
@@ -2812,11 +2818,17 @@ Function UpdateEvents()
 								me\BlurTimer = 800.0
 								e\EventState3 = 2.0
 							EndIf
-							If EntityY(me\Collider) < 5.0 Then e\EventState3 = 0.0
+							If EntityY(me\Collider) < 5.0 Then 
+								e\EventState3 = 0.0
+								PositionEntity(me\Collider, EntityX(me\Collider, True), EntityY(me\Collider, True) - 500.0 * RoomScale, EntityZ(me\Collider, True))
+								ResetEntity(me\Collider)
+							EndIf
 						Else
 							; ~ The trenches
 							If EntityY(me\Collider) > 6.0 Then
 								ShouldPlay = 15
+								
+								ShowEntity(e\room\Objects[18])
 								
 								If EntityX(e\room\Objects[18], True) < EntityX(e\room\Objects[8], True) - 4000.0 * RoomScale Then
 									e\SoundCHN2 = PlaySound_Strict(e\Sound2)
@@ -2898,6 +2910,8 @@ Function UpdateEvents()
 									ResetEntity(me\Collider)
 								EndIf
 							Else
+								HideEntity(e\room\Objects[18])
+								
 								e\EventState3 = 0.0
 								
 								For i = 9 To 10
@@ -2931,7 +2945,6 @@ Function UpdateEvents()
 								
 								; ~ SCP-106's eyes
 								ShowEntity(e\room\Objects[17])
-								PositionEntity(e\room\Objects[17], EntityX(e\room\Objects[8], True), 1376.0 * RoomScale, EntityZ(e\room\Objects[8], True) - 2848.0 * RoomScale)
 								PointEntity(e\room\Objects[17], me\Collider)
 								TurnEntity(e\room\Objects[17], 0.0, 180.0, 0.0)
 								
@@ -2945,6 +2958,8 @@ Function UpdateEvents()
 										LoadEventSound(e, "SFX\Room\PocketDimension\Screech.ogg")
 										e\EventStr = Float(1000.0)
 									EndIf
+									
+									If EntityInView(e\room\Objects[17], Camera) Then e\EventState4 = 1.0
 									
 									me\Sanity = Max(me\Sanity - fpst\FPSFactor[0] / Temp / 8.0, -1000.0)
 									
@@ -2965,6 +2980,8 @@ Function UpdateEvents()
 										PositionEntity(me\Collider, EntityX(e\room\Objects[8], True) - 1344.0 * RoomScale, 2944.0 * RoomScale, EntityZ(e\room\Objects[8], True) - 1184.0 * RoomScale)
 										ResetEntity(me\Collider)
 										me\Crouch = False
+										
+										e\EventState4 = 0.0
 										
 										LoadEventSound(e, "SFX\Room\PocketDimension\Explosion.ogg")
 										LoadEventSound(e, "SFX\Room\PocketDimension\TrenchPlane.ogg", 1)
@@ -3175,7 +3192,7 @@ Function UpdateEvents()
 									
 									PlaySound_Strict(OldManSFX[3])
 									
-									PositionEntity(me\Collider, EntityX(e\room\Objects[8], True), 2288.0 * RoomScale, EntityZ(e\room\Objects[8], True))
+									PositionEntity(me\Collider, EntityX(e\room\Objects[8], True), e\room\y + 2288.0 * RoomScale, EntityZ(e\room\Objects[8], True))
 									ResetEntity(me\Collider)
 									;[End Block]
 							End Select 
@@ -3253,6 +3270,7 @@ Function UpdateEvents()
 					e\EventState = 0.0
 					e\EventState2 = 0.0
 					e\EventState3 = 0.0
+					e\EventState4 = 0.0
 					e\EventStr = Float(0.0)
 				EndIf
 				;[End Block]
@@ -3885,7 +3903,6 @@ Function UpdateEvents()
 												PlayMTFSound(n\Sound, n)
 												n\Idle = 70.0 * 10.0
 												e\EventState2 = 70.0 * 100.0
-												Exit
 											EndIf
 										EndIf
 									EndIf
