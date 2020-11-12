@@ -4820,6 +4820,7 @@ Function FillRoom(r.Rooms)
 			EntityFX(r\Objects[17], 1 + 8)
 			SpriteViewMode(r\Objects[17], 2)
 			DeleteSingleTextureEntryFromCache(Tex)
+			HideEntity(r\Objects[17])
 			
 			r\Objects[18] = CreateSprite()
 			ScaleSprite(r\Objects[18], 8.0, 8.0)

@@ -2713,19 +2713,24 @@ Function UpdateEvents()
 				;[End Block]
 			Case e_pocketdimension
 				;[Block]
-				; ~ EventState: A timer for scaling the tunnels in the starting room
+				; ~ e\EventState: A timer for scaling the tunnels in the starting room
 				
-				; ~ EventState2:
+				; ~ e\EventState2:
 				
-				; ~ 0 if the player is in the starting room
-				; ~ 1 if in the room with the throne, moving pillars, plane etc
-				; ~ 12-15 if player is in the room with the tall pillars 
-				; ~ (Goes down from 15 to 12 and SCP-106 teleports from pillar to another, pillars being r\Objects[12 to 15])
+				; ~ 0.0: if the player is in the starting room
+				; ~ 1.0: if in the room with the throne, moving pillars, plane etc
+				; ~ 12.0-15.0: if player is in the room with the tall pillars 
+				; ~ (Goes down from 15.0 to 12.0 and SCP-106 teleports from pillar to another, pillars being r\Objects[12 to 15])
 				
 				; ~ EventState3:
-				; ~ 1 when appearing in the tunnel that looks like the tunnels in HCZ
-				; ~ 2 after opening the door in the tunnel
-				; ~ Otherwise 0
+				; ~ 1.0: when appearing in the tunnel that looks like the tunnels in HCZ
+				; ~ 2.0: after opening the door in the tunnel
+				; ~ Otherwise 0.0
+				
+				; ~ e\EventState4:
+				; ~ 1.0: SCP-106's eyes should be spawned
+				; ~ 2.0: The wall should be spawned
+				; ~ Otherwise 0.0
 				
 				If PlayerRoom = e\room Then
 					ShowEntity(e\room\OBJ)
@@ -2749,12 +2754,6 @@ Function UpdateEvents()
 						ShouldPlay = 1
 						
 						GiveAchievement(AchvPD)
-					EndIf
-					
-					If e\EventState4 = 1.0 Then
-						ShowEntity(e\room\Objects[19])
-					Else
-						HideEntity(e\room\Objects[19])
 					EndIf
 					
 					ScaleEntity(e\room\OBJ, RoomScale, RoomScale * (1.0 + Sin(e\EventState / 14.0) * 0.2), RoomScale)
@@ -2911,6 +2910,16 @@ Function UpdateEvents()
 								EndIf
 							Else
 								HideEntity(e\room\Objects[18])
+								If e\EventState4 = 1.0 Then
+									ShowEntity(e\room\Objects[17])
+									PointEntity(e\room\Objects[17], me\Collider)
+									TurnEntity(e\room\Objects[17], 0.0, 180.0, 0.0)
+								ElseIf e\EventState4 = 2.0
+									ShowEntity(e\room\Objects[19])
+								Else
+									HideEntity(e\room\Objects[17])
+									HideEntity(e\room\Objects[19])
+								EndIf
 								
 								e\EventState3 = 0.0
 								
@@ -2939,14 +2948,11 @@ Function UpdateEvents()
 								Next
 								
 								Pvt = CreatePivot()
-								PositionEntity(Pvt, EntityX(e\room\Objects[8], True) - 1536.0 * RoomScale, 500.0 * RoomScale, EntityZ(e\room\Objects[8], True) + 608.0 * RoomScale)
+								PositionEntity(Pvt, EntityX(e\room\Objects[8], True) - 1536.0 * RoomScale, e\room\y + 500.0 * RoomScale, EntityZ(e\room\Objects[8], True) + 608.0 * RoomScale)
 								If EntityDistanceSquared(Pvt, me\Collider) < 25.0 Then e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, Pvt, 3.0)
 								FreeEntity(Pvt)
 								
-								; ~ SCP-106's eyes
-								ShowEntity(e\room\Objects[17])
-								PointEntity(e\room\Objects[17], me\Collider)
-								TurnEntity(e\room\Objects[17], 0.0, 180.0, 0.0)
+								e\EventState4 = 1.0
 								
 								Temp = EntityDistance(me\Collider, e\room\Objects[17])
 								If Temp < 2000.0 * RoomScale Then
@@ -2959,7 +2965,7 @@ Function UpdateEvents()
 										e\EventStr = Float(1000.0)
 									EndIf
 									
-									If EntityInView(e\room\Objects[17], Camera) Then e\EventState4 = 1.0
+									If EntityInView(e\room\Objects[17], Camera) Then e\EventState4 = 2.0
 									
 									me\Sanity = Max(me\Sanity - fpst\FPSFactor[0] / Temp / 8.0, -1000.0)
 									
