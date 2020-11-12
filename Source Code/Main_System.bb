@@ -2051,7 +2051,7 @@ Type Doors
 	Field MTFClose% = True
 End Type 
 
-Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, Open% = False, Big% = False, Keycard% = False, Code$ = "", CheckIfZeroCard% = False)
+Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, Open% = False, Big% = 0, Keycard% = 0, Code$ = "", CheckIfZeroCard% = False)
 	Local d.Doors, Parent%, i%
 	
 	If room <> Null Then Parent = room\OBJ
