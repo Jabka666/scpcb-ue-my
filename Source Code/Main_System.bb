@@ -1825,7 +1825,7 @@ Function ClearConsole()
 	CreateConsoleMsg("  - spawn [NPC type]")
 End Function
 
-Global Camera%, TempCamera%
+Global Camera%
 
 Include "Source Code\Dreamfilter.bb"
 
@@ -3052,14 +3052,6 @@ Function MainLoop()
 		UpdateCheckpoint2 = False
 		
 		If (Not MenuOpen) And (Not InvOpen) And OtherOpen = Null And SelectedDoor = Null And (Not ConsoleOpen) And (Not I_294\Using) And SelectedScreen = Null And me\EndingTimer >= 0.0 Then
-			If fpst\FPSFactor[0] > 0.0 And PlayerRoom\RoomTemplate\Name <> "dimension1499" Then
-				If opt\EnableRoomLights And SecondaryLightOn > 0.5 And TempCamera = Camera Then
-					UpdateRoomLightsTimer = UpdateRoomLightsTimer + fpst\FPSFactor[0]
-					If UpdateRoomLightsTimer >= 8.0 Then
-						UpdateRoomLightsTimer = 0.0
-					EndIf
-				EndIf
-			EndIf
 			LightVolume = CurveValue(TempLightVolume, LightVolume, 50.0)
 			CameraFogRange(Camera, opt\CameraFogNear * LightVolume, opt\CameraFogFar * LightVolume)
 			CameraFogMode(Camera, 1)
@@ -3086,22 +3078,22 @@ Function MainLoop()
 					UpdateDimension1499()
 				EndIf
 				UpdateLeave1499()
-			ElseIf PlayerRoom\RoomTemplate\Name = "gatea" Lor (PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale)
-				UpdateDoors()
-				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100
-					UpdateEndings()
-				EndIf
-				UpdateScreens()
-				UpdateRoomLights(Camera)
 			Else
 				UpdateDoors()
-				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100
-					UpdateEvents()
-				EndIf
 				UpdateScreens()
-				TimeCheckpointMonitors()
-				Update294()
 				UpdateRoomLights(Camera)
+				RenderRoomLights(Camera)
+				If PlayerRoom\RoomTemplate\Name = "gatea" Lor (PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale) Then
+					If QuickLoadPercent = -1 Lor QuickLoadPercent = 100
+						UpdateEndings()
+					EndIf
+				Else
+					If QuickLoadPercent = -1 Lor QuickLoadPercent = 100
+						UpdateEvents()
+					EndIf
+					TimeCheckpointMonitors()
+					Update294()
+				EndIf
 			EndIf
 			UpdateDecals()
 			UpdateMTF()
@@ -9734,7 +9726,6 @@ Function NullGame(PlayButtonSFX% = True) ; ~ CHECK FOR ERRORS
 	
 	ClearWorld()
 	If Camera <> 0 Then Camera = 0
-	If TempCamera <> 0 Then TempCamera = 0
 	If ArkBlurCam <> 0 Then ArkBlurCam = 0
 	If me\Collider <> 0 Then me\Collider = 0
 	If Sky <> 0 Then Sky = 0
@@ -12374,5 +12365,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1096#132B#1DFC
+;~B#108E#1323#1DF4
 ;~C#Blitz3D

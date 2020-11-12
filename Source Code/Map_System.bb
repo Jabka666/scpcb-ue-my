@@ -3669,7 +3669,7 @@ Function FillRoom(r.Rooms)
 			d\Locked = 1 : d\AutoClose = False : d\MTFClose = False
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			
-			d = CreateDoor(r\Zone, r\x + 1280.0 * RoomScale, r\y + 383.9 * RoomScale, r\z + 312.0 * RoomScale, 180.0, r, True, 4)
+			d = CreateDoor(r\Zone, r\x + 1264.0 * RoomScale, r\y + 383.9 * RoomScale, r\z + 312.0 * RoomScale, 180.0, r, True, 4)
 			d\Locked = 1 : d\AutoClose = False : d\MTFClose = False
 			PositionEntity(d\Buttons[0], r\x + 1120.0 * RoomScale, EntityY(d\Buttons[0], True), r\z + 322.0 * RoomScale, True)
 			PositionEntity(d\Buttons[1], r\x + 1120.0 * RoomScale, EntityY(d\Buttons[1], True), r\z + 302.0 * RoomScale, True)
@@ -5829,12 +5829,13 @@ Function AddLight%(room.Rooms, x#, y#, z#, lType%, Range#, R%, G%, B%)
 		EntityFX(Sprite, 1 + 8)
 		EntityBlend(Sprite, 3)
 		EntityColor(Sprite, R, G, B)
+		
 		Return(Light)
 	EndIf
 End Function
 
 Type LightTemplates
-	Field roomtemplate.RoomTemplates
+	Field RoomTemplate.RoomTemplates
 	Field lType%
 	Field x#, y#, z#
 	Field Range#
@@ -5846,7 +5847,7 @@ End Type
 Function AddTempLight.LightTemplates(rt.RoomTemplates, x#, y#, z#, lType%, Range#, R%, G%, B%)
 	Local lt.LightTemplates = New LightTemplates
 	
-	lt\roomtemplate = rt
+	lt\RoomTemplate = rt
 	lt\x = x
 	lt\y = y
 	lt\z = z
@@ -6452,7 +6453,7 @@ Function UpdateSecurityCams() ; ~ SHOULD BE SEPARATED!
 									ShowEntity(sc\Cam)
 									Cls()
 									
-									UpdateRoomLights(sc\Cam)
+									RenderRoomLights(sc\Cam)
 									
 									SetBuffer(BackBuffer())
 									RenderWorld()
@@ -6467,7 +6468,7 @@ Function UpdateSecurityCams() ; ~ SHOULD BE SEPARATED!
 									ShowEntity(CoffinCam\Cam)
 									Cls()
 									
-									UpdateRoomLights(CoffinCam\Cam)
+									RenderRoomLights(CoffinCam\Cam)
 									
 									SetBuffer(BackBuffer())
 									RenderWorld()
@@ -7859,14 +7860,22 @@ Include "Source Code\Skybox.bb"
 
 Global UpdateRoomLightsTimer# = 0.0
 
-Function UpdateRoomLights(Cam%) ; ~ SHOULD BE SEPARATED!
+Function UpdateRoomLights(Cam%)
+	If opt\EnableRoomLights And SecondaryLightOn > 0.5 And Cam = Camera Then
+		UpdateRoomLightsTimer = UpdateRoomLightsTimer + fpst\FPSFactor[0]
+		If UpdateRoomLightsTimer >= 8.0 Then
+			UpdateRoomLightsTimer = 0.0
+		EndIf
+	EndIf
+End Function
+
+Function RenderRoomLights(Cam%)
 	Local r.Rooms, i%, Random#, Alpha#, Dist#
 	
 	For r.Rooms = Each Rooms
 		If r\Dist < HideDistance * 0.7 Lor r = PlayerRoom Then
 			For i = 0 To r\MaxLights - 1
 				If r\Lights[i] <> 0 Then
-					TempCamera = Cam
 					If opt\EnableRoomLights And SecondaryLightOn > 0.5 And Cam = Camera Then
 						EntityOrder(r\LightSprites2[i], -1)
 						If UpdateRoomLightsTimer = 0.0 Then
