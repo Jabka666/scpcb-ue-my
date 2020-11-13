@@ -1647,6 +1647,13 @@ Function UpdateNPCs()
 													If (Not n\Path[n\PathLocation]\door\IsElevatorDoor)
 														If (n\Path[n\PathLocation]\door\Locked = 1 Lor n\Path[n\PathLocation]\door\KeyCard <> 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open) Then
 															Temp = False
+														ElseIf Temp = True
+															For r.Rooms = Each Rooms
+																If EntityDistanceSquared(n\Collider, r\RoomDoors[0]\FrameOBJ) < 0.04 Lor EntityDistanceSquared(n\Collider, r\RoomDoors[1]\FrameOBJ) < 0.04 Then 
+																	Temp = False
+																EndIf
+																Exit
+															Next
 														Else
 															If (Not n\Path[n\PathLocation]\door\Open) And (n\Path[n\PathLocation]\door\Buttons[0] <> 0 Lor n\Path[n\PathLocation]\door\Buttons[1] <> 0) Then
 																UseDoor(n\Path[n\PathLocation]\door, False)
@@ -4134,6 +4141,15 @@ Function UpdateNPCs()
 															If (Not n\Path[n\PathLocation]\door\IsElevatorDoor)
 																If (n\Path[n\PathLocation]\door\Locked = 1 Lor n\Path[n\PathLocation]\door\KeyCard <> 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open) Then
 																	Temp = False
+																ElseIf Temp = True
+																	For r.Rooms = Each Rooms
+																		If r\RoomTemplate\Name = "room2clockroom" Then
+																			If EntityDistanceSquared(n\Collider, r\RoomDoors[0]\FrameOBJ) < 0.04 Lor EntityDistanceSquared(n\Collider, r\RoomDoors[1]\FrameOBJ) < 0.04 Then 
+																				Temp = False
+																			EndIf
+																			Exit
+																		EndIf
+																	Next
 																Else
 																	If (Not n\Path[n\PathLocation]\door\Open) And (n\Path[n\PathLocation]\door\Buttons[0] <> 0 Lor n\Path[n\PathLocation]\door\Buttons[1] <> 0) Then
 																		UseDoor(n\Path[n\PathLocation]\door, False)
@@ -7445,5 +7461,5 @@ Function Animate2#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = True
 End Function 
 
 ;~IDEal Editor Parameters:
-;~B#175#121D#1363#13B3#1509#1625#17F4#184F
+;~B#175#122D#1373#13C3#1519#1635#1804#185F
 ;~C#Blitz3D
