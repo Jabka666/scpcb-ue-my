@@ -8213,6 +8213,8 @@ Function UpdateEvents()
 							e\room\RoomDoors[1]\Locked = 0
 							UseDoor(e\room\RoomDoors[0])
 							UseDoor(e\room\RoomDoors[1])
+							e\room\RoomDoors[0]\Locked = 1
+							e\room\RoomDoors[1]\Locked = 1
 							PlaySound_Strict(AlarmSFX[4])
 						ElseIf EntityDistanceSquared(e\room\Objects[0], me\Collider) > 5.76
 							e\EventState3 = 0.0
@@ -8267,6 +8269,8 @@ Function UpdateEvents()
 								e\room\RoomDoors[1]\Locked = 0
 								UseDoor(e\room\RoomDoors[0])
 								UseDoor(e\room\RoomDoors[1])
+								e\room\RoomDoors[0]\Locked = 1
+								e\room\RoomDoors[1]\Locked = 1
 							EndIf
 						EndIf
 					EndIf
