@@ -2419,7 +2419,7 @@ Function FillRoom(r.Rooms)
 			r\Objects[1] = CreatePivot()
             PositionEntity(r\Objects[1], r\x + 1344.0 * RoomScale, r\y - 752.0 * RoomScale, r\z - 384.0 * RoomScale)
             
-			r\Objects[2] = CreateButton(0, r\x + 1180.0 * RoomScale, r\y + 180.0 * RoomScale, r\z - 552.0 * RoomScale, 0.0, 270.0, 0.0, True)
+			r\Objects[2] = CreateButton(0, r\x + 1180.0 * RoomScale, r\y + 180.0 * RoomScale, r\z - 552.0 * RoomScale, 0.0, 270.0, 0.0, 0, True)
 			
 			For i = 0 To 2
 				EntityParent(r\Objects[i], r\OBJ)
@@ -4368,7 +4368,7 @@ Function FillRoom(r.Rooms)
 			RotateEntity(r\Objects[1], 81.0, -180.0, 0.0)
 			RotateEntity(r\Objects[3], -81.0, -180.0, 0.0)			
 			
-			r\Objects[4] = CreateButton(0, r\x - 146.0 * RoomScale, r\y - 7904.0 * RoomScale, r\z + 2989.0 * RoomScale, 0.0, 0.0, 0.0)
+			r\Objects[4] = CreateButton(0, r\x - 146.0 * RoomScale, r\y - 7904.0 * RoomScale, r\z + 2989.0 * RoomScale)
 			
 			r\Objects[5] = CreatePivot()
 			TurnEntity(r\Objects[5], 0.0, 180.0, 0.0)
@@ -4855,7 +4855,7 @@ Function FillRoom(r.Rooms)
 		Case "room1lifts"
 			;[Block]
 			For i = 0 To 1
-				r\Objects[i] = CreateButton(0, r\x + (96.0 + (i * -192.0)) * RoomScale, r\y + 160.0 * RoomScale, r\z + 71.0 * RoomScale, 0.0, 0.0, 0.0, True)
+				r\Objects[i] = CreateButton(0, r\x + (96.0 + (i * -192.0)) * RoomScale, r\y + 160.0 * RoomScale, r\z + 71.0 * RoomScale, 0.0, 0.0, 0.0, 0, True)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			

@@ -2098,10 +2098,47 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, Open% = False, Bi
 	EndIf
 	
 	PositionEntity(d\FrameOBJ, x, y, z)
-	ScaleEntity(d\FrameOBJ, 8.0 / 2048.0, 8.0 / 2048.0, 8.0 / 2048.0)
+	ScaleEntity(d\FrameOBJ, RoomScale, RoomScale, RoomScale)
 	EntityPickMode(d\FrameOBJ, 2)
+	
+	PositionEntity(d\OBJ, x, y, z)
+	RotateEntity(d\OBJ, 0.0, Angle, 0.0)
 	EntityType(d\OBJ, HIT_MAP)
-	If d\OBJ2 <> 0 Then EntityType(d\OBJ2, HIT_MAP)
+	EntityPickMode(d\OBJ, 2)
+	MakeCollBox(d\OBJ)
+	EntityParent(d\OBJ, Parent)
+	
+	If d\OBJ2 <> 0 Then
+		PositionEntity(d\OBJ2, x, y, z)
+		If Big = 1 Then
+			RotateEntity(d\OBJ2, 0.0, Angle, 0.0)
+		Else
+			RotateEntity(d\OBJ2, 0.0, Angle + 180.0, 0.0)
+		EndIf
+		EntityType(d\OBJ2, HIT_MAP)
+		EntityPickMode(d\OBJ2, 2)
+		MakeCollBox(d\OBJ2)
+		EntityParent(d\OBJ2, Parent)
+	EndIf
+	
+	For i = 0 To 1
+		If Code <> "" Then 
+			d\Buttons[i] = CreateButton(2, x + ((Big <> 1) * (0.6 + (i * (-1.2)))) + ((Big = 1) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((Big <> 1) * ((-0.1) + (i * 0.2))) + ((Big = 1) * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((Big <> 1) * (i * 180.0)) + ((Big = 1) * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ)
+		Else
+			If Keycard > 0 Then
+				d\Buttons[i] = CreateButton(1, x + ((Big <> 1) * (0.6 + (i * (-1.2)))) + ((Big = 1) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((Big <> 1) * ((-0.1) + (i * 0.2))) + ((Big = 1) * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((Big <> 1) * (i * 180.0)) + ((Big = 1) * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ)
+			ElseIf Keycard < 0
+				d\Buttons[i] = CreateButton(3, x + ((Big <> 1) * (0.6 + (i * (-1.2)))) + ((Big = 1) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((Big <> 1) * ((-0.1) + (i * 0.2))) + ((Big = 1) * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((Big <> 1) * (i * 180.0)) + ((Big = 1) * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ)
+			ElseIf Big = 3
+				d\Buttons[i] = CreateButton(i * 4, x + ((Big <> 1) * (0.6 + (i * (-1.2)))) + ((Big = 1) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((Big <> 1) * ((-0.1) + (i * 0.2))) + ((Big = 1) * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((Big <> 1) * (i * 180.0)) + ((Big = 1) * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ)
+			Else
+				d\Buttons[i] = CreateButton(0, x + ((Big <> 1) * (0.6 + (i * (-1.2)))) + ((Big = 1) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((Big <> 1) * ((-0.1) + (i * 0.2))) + ((Big = 1) * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((Big <> 1) * (i * 180.0)) + ((Big = 1) * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ)
+			EndIf
+		EndIf
+	Next
+	
+	RotateEntity(d\FrameOBJ, 0.0, Angle, 0.0)
+	EntityParent(d\FrameOBJ, Parent)
 	
 	d\ID = DoorTempID
 	DoorTempID = DoorTempID + 1
@@ -2119,65 +2156,8 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, Open% = False, Bi
 	d\Code = Code
 	d\Level = Lvl
 	
-	For i = 0 To 1
-		If Code <> "" Then 
-			d\Buttons[i] = CopyEntity(o\ButtonModelID[2])
-		Else
-			If Keycard > 0 Then
-				d\Buttons[i] = CopyEntity(o\ButtonModelID[1])
-			ElseIf Keycard < 0
-				d\Buttons[i] = CopyEntity(o\ButtonModelID[3])	
-			ElseIf Big = 3
-				d\Buttons[i] = CopyEntity(o\ButtonModelID[(i * 4)])
-			Else
-				d\Buttons[i] = CopyEntity(o\ButtonModelID[0])
-			EndIf
-		EndIf
-		
-		If d\Buttons[i] <> 0 Then
-			ScaleEntity(d\Buttons[i], 0.03, 0.03, 0.03)
-			
-			If Big = 1 Then
-				PositionEntity(d\Buttons[i], x + (-432.0 + (i * 864.0)) * RoomScale, y + 0.7, z + (192.0 + (i * (-384.0))) * RoomScale)
-				RotateEntity(d\Buttons[i], 0.0, 90.0 + (i * 180.0), 0.0)
-			Else
-				PositionEntity(d\Buttons[i], x + 0.6 + (i * (-1.2)), y + 0.7, z - 0.1 + (i * 0.2))
-				RotateEntity(d\Buttons[i], 0.0, (i * 180.0), 0.0)
-			EndIf
-			EntityParent(d\Buttons[i], d\FrameOBJ)
-			EntityPickMode(d\Buttons[i], 2)
-		EndIf
-	Next
-	
-	PositionEntity(d\OBJ, x, y, z)
-	
-	RotateEntity(d\OBJ, 0.0, Angle, 0.0)
-	RotateEntity(d\FrameOBJ, 0.0, Angle, 0.0)
-	
-	If d\OBJ2 <> 0 Then
-		PositionEntity(d\OBJ2, x, y, z)
-		If Big = 1 Then
-			RotateEntity(d\OBJ2, 0.0, Angle, 0.0)
-		Else
-			RotateEntity(d\OBJ2, 0.0, Angle + 180.0, 0.0)
-		EndIf
-		EntityParent(d\OBJ2, Parent)
-	EndIf
-	
-	EntityParent(d\FrameOBJ, Parent)
-	EntityParent(d\OBJ, Parent)
-	
 	d\Angle = Angle
 	d\Open = Open		
-	
-	EntityPickMode(d\OBJ, 2)
-	MakeCollBox(d\OBJ)
-	If d\OBJ2 <> 0 Then
-		EntityPickMode(d\OBJ2, 3)
-		MakeCollBox(d\OBJ2)
-	EndIf
-	
-	EntityPickMode(d\FrameOBJ, 2)
 	
 	If d\Open And Big = 0 And Rand(8) = 1 Then d\AutoClose = True
 	d\Dir = Big
@@ -2188,14 +2168,16 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, Open% = False, Bi
 	Return(d)
 End Function
 
-Function CreateButton(ButtonID%, x#, y#, z#, Pitch#, Yaw#, Roll# = 0.0, Locked% = False)
+Function CreateButton(ButtonID%, x#, y#, z#, Pitch# = 0.0, Yaw# = 0.0, Roll# = 0.0, Parent% = 0, Locked% = False)
 	Local OBJ% = CopyEntity(o\ButtonModelID[ButtonID])	
 	
-	If Locked Then EntityTexture(OBJ, tt\MiscTextureID[17])
-	ScaleEntity(OBJ, 0.03, 0.03, 0.03)
 	PositionEntity(OBJ, x, y, z)
+	ScaleEntity(OBJ, 0.03, 0.03, 0.03)
 	RotateEntity(OBJ, Pitch, Yaw, Roll)
 	EntityPickMode(OBJ, 2)
+	If Locked Then EntityTexture(OBJ, tt\MiscTextureID[17])
+	If Parent <> 0 Then EntityParent(OBJ, Parent)
+	
 	Return(OBJ)
 End Function
 
@@ -12367,5 +12349,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1095#132A#1DFB
+;~B#1083#1318#1DE9
 ;~C#Blitz3D
