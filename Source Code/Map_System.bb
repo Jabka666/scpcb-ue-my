@@ -6634,8 +6634,8 @@ Function UpdateLever(OBJ%, Locked% = False)
 							DrawHandIcon = True 
 							RotateEntity(GrabbedEntity, Max(Min(EntityPitch(OBJ) + Max(Min(mo\Mouse_Y_Speed_1 * 8.0, 30.0), -30.0), 80.0), -80.0), EntityYaw(OBJ), 0.0)
 							
-							DrawArrowIcon[0] = True
-							DrawArrowIcon[2] = True
+							ga\DrawArrowIcon[0] = True
+							ga\DrawArrowIcon[2] = True
 						EndIf
 					EndIf
 				EndIf 

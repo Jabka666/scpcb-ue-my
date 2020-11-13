@@ -1,3 +1,5 @@
+Const SavePath$ = "Saves\"
+
 Function SaveGame(File$)
 	CatchErrors("Uncaught (SaveGame)")
 	

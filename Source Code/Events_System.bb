@@ -645,6 +645,7 @@ Function InitEvents()
 End Function
 
 Global QuickLoadIcon% = LoadImage_Strict("GFX\menu\QuickLoading.png")
+ResizeImage(QuickLoadIcon, ImageWidth(QuickLoadIcon) * MenuScale, ImageHeight(QuickLoadIcon) * MenuScale)
 
 Global QuickLoadPercent% = -1
 Global QuickLoadPercent_DisplayTimer# = 0.0
@@ -1635,7 +1636,7 @@ Function UpdateEvents()
 									AnimateNPC(e\room\NPC[3], 483.0, 607.0, 0.2, True)
 									If EntityDistanceSquared(me\Collider, e\room\NPC[3]\Collider) < 2.25 Then
 										If EntityInView(e\room\NPC[3]\OBJ, Camera) Then
-											DrawHandIcon = True
+											ga\DrawHandIcon = True
 											
 											If mo\MouseHit1 Then
 												SelectedItem = CreateItem("Document SCP-173", "paper", 0.0, 0.0, 0.0)
@@ -3267,7 +3268,7 @@ Function UpdateEvents()
 						If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 2.25 Then
 							GiveAchievement(Achv294)
 							If EntityInView(e\room\Objects[0], Camera) Then
-								DrawHandIcon = True
+								ga\DrawHandIcon = True
 								If mo\MouseHit1 Then
 									Temp = True
 									For it.Items = Each Items
@@ -4858,7 +4859,7 @@ Function UpdateEvents()
 						ElseIf e\EventState = 2.0
 							Animate2(e\room\Objects[2], AnimTime(e\room\Objects[2]), 339.0, 487.0, 1.0)
 							If EntityDistanceSquared(me\Collider, e\room\Objects[2]) < 2.25 Then
-								DrawHandIcon = True
+								ga\DrawHandIcon = True
 								If mo\MouseHit1 Then
 									If ItemAmount >= MaxItemAmount Then
 										msg\Msg = "You cannot carry any more items."
@@ -6567,7 +6568,7 @@ Function UpdateEvents()
 							
 						    Local LeverState# = UpdateLever(e\room\Objects[1], ((EntityY(e\room\Objects[6], True) < -8318.0 * RoomScale) And (EntityY(e\room\Objects[6], True) > -8603.0 * RoomScale)))
 							
-						    If GrabbedEntity = e\room\Objects[1] And DrawHandIcon = True Then e\EventState2 = LeverState
+						    If GrabbedEntity = e\room\Objects[1] And ga\DrawHandIcon = True Then e\EventState2 = LeverState
 							
 						    If e\EventState2 <> Temp Then 
 							    If e\EventState2 = 0.0 Then
@@ -6994,7 +6995,7 @@ Function UpdateEvents()
 						For i = 0 To 1
 							If EntityDistanceSquared(fr\Door[i], me\Collider) < 0.64 Then
 								If EntityInView(fr\Door[i], Camera) Then
-									DrawHandIcon = True
+									ga\DrawHandIcon = True
 									If mo\MouseHit1 Then
 										If i = e\EventState2 Then
 											me\BlinkTimer = -10.0
@@ -7035,7 +7036,7 @@ Function UpdateEvents()
 						If EntityYaw(e\room\Objects[3]) = 0.0 Then
 							HideEntity(fr.Forest\Forest_Pivot)
 							If Abs(DistanceSquared(EntityX(e\room\Objects[3], True), EntityX(me\Collider, True), EntityZ(e\room\Objects[3], True), EntityZ(me\Collider, True))) < 1.21 Then
-								DrawHandIcon = True
+								ga\DrawHandIcon = True
 								If SelectedItem = Null Then
 									If mo\MouseHit1 Then
 										PlaySound_Strict(LoadTempSound("SFX\Door\WoodenDoorBudge.ogg"))
@@ -7194,7 +7195,7 @@ Function UpdateEvents()
 						
 						If EntityYaw(e\room\Objects[13], False) = 0 Then
 							If EntityDistanceSquared(me\Collider, e\room\Objects[12]) < 1.21 Then
-								DrawHandIcon = True
+								ga\DrawHandIcon = True
 								If mo\MouseHit1 Then
 									RotateEntity(e\room\Objects[13], 0.0, 1.0, 0.0, False)
 									RotateEntity(e\room\Objects[11], 0.0, 90.0, 0.0, False)
@@ -7604,9 +7605,9 @@ Function UpdateEvents()
 								
 							    If Dist < 1.21 Then
 								    If EntityInView(e\room\Objects[0], Camera) Then
-									    DrawHandIcon = True
+									    ga\DrawHandIcon = True
 										If mo\MouseDown1 Then
-										    DrawArrowIcon[2] = True
+										    ga\DrawArrowIcon[2] = True
 										    RotateEntity(e\room\Levers[0], Max(Min(EntityPitch(e\room\Levers[0]) + Max(Min(-mo\Mouse_Y_Speed_1, 10.0), -10.0), 89.0), 35.0), EntityYaw(e\room\Levers[0]), 0.0)
 									    EndIf
 								    EndIf
@@ -7782,10 +7783,10 @@ Function UpdateEvents()
 					
 					EntityPick(Camera, 1.0)
 					If PickedEntity() = e\room\Objects[0] Then
-						DrawHandIcon = True
+						ga\DrawHandIcon = True
 						If mo\MouseHit1 Then GrabbedEntity = e\room\Objects[0]
 					ElseIf PickedEntity() = e\room\Objects[1]
-						DrawHandIcon = True
+						ga\DrawHandIcon = True
 						If mo\MouseHit1 Then GrabbedEntity = e\room\Objects[1]
 					EndIf
 					
@@ -7793,12 +7794,12 @@ Function UpdateEvents()
 						If GrabbedEntity <> 0 Then ; ~ Avain
 							If GrabbedEntity = e\room\Objects[0] Then
 								If e\EventState = 0.0 Then
-									DrawHandIcon = True
+									ga\DrawHandIcon = True
 									TurnEntity(GrabbedEntity, 0.0, 0.0, -mo\Mouse_X_Speed_1 * 2.5)
 									
 									Angle = WrapAngle(EntityRoll(e\room\Objects[0]))
-									If Angle > 181.0 Then DrawArrowIcon[3] = True
-									DrawArrowIcon[1] = True
+									If Angle > 181.0 Then ga\DrawArrowIcon[3] = True
+									ga\DrawArrowIcon[1] = True
 									
 									If Angle < 90.0 Then
 										RotateEntity(GrabbedEntity, 0.0, 0.0, 361.0)
@@ -7823,12 +7824,12 @@ Function UpdateEvents()
 								EndIf
 							ElseIf GrabbedEntity = e\room\Objects[1]
 								If e\EventState = 0.0 Then
-									DrawHandIcon = True
+									ga\DrawHandIcon = True
 									TurnEntity(GrabbedEntity, 0.0, 0.0, -mo\Mouse_X_Speed_1 * 2.5)
 									
 									Angle = WrapAngle(EntityRoll(e\room\Objects[1]))
-									DrawArrowIcon[3] = True
-									DrawArrowIcon[1] = True
+									ga\DrawArrowIcon[3] = True
+									ga\DrawArrowIcon[1] = True
 									
 									If Angle > 90.0 Then
 										If Angle < 180.0 Then
@@ -8325,7 +8326,7 @@ Function UpdateEvents()
 					Next
 					
 					If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 0.5625 And Pick1162
-						DrawHandIcon = True
+						ga\DrawHandIcon = True
 						If mo\MouseHit1 Then GrabbedEntity = e\room\Objects[0]
 					EndIf
 					
@@ -8987,7 +8988,7 @@ Function UpdateEvents()
 						EndIf
 					ElseIf e\EventID = e_room2medibay
 						If EntityDistanceSquared(e\room\Objects[1], me\Collider) < 0.49 Then
-							DrawHandIcon = True
+							ga\DrawHandIcon = True
 							If mo\MouseHit1 Then
 								msg\Msg = "You feel a cold breeze next to your body."
 								msg\Timer = 70.0 * 6.0
@@ -9123,7 +9124,7 @@ Function UpdateEvents()
 					        ; ~ Touching the SCP-409
 					        If EntityDistanceSquared(e\room\Objects[4], me\Collider) < 0.49 Then
 					            If I_409\Timer < 1.0 Then
-						            DrawHandIcon = True
+						            ga\DrawHandIcon = True
 						            If mo\MouseHit1 Then
 						                msg\Msg = "You touched SCP-409."
 						                msg\Timer = 70.0 * 6.0

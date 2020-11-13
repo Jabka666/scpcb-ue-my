@@ -1,34 +1,68 @@
-Global MenuBack% = LoadImage_Strict("GFX\menu\back.png")
-Global MenuText% = LoadImage_Strict("GFX\menu\SCP_text.png")
-Global Menu173% = LoadImage_Strict("GFX\menu\scp_173_back.png")
+Type MainMenu
+	Field MainMenuBack%
+	Field MainMenuText%
+	Field MainMenu173%
+	Field MainMenuBlinkTimer#[2]
+	Field MainMenuBlinkDuration#[2]
+	Field MainMenuStr$, MainMenuStrX%, MainMenuStrY%
+	Field MainMenuTab%, PrevMainMenuTab%
+	Field ShouldDeleteGadgets%
+	Field CurrLoadGamePage%
+End Type
+
+Global mm.MainMenu = New MainMenu
+
 MenuWhite = LoadImage_Strict("GFX\menu\menu_white.png")
 MenuBlack = LoadImage_Strict("GFX\menu\menu_black.png")
 MaskImage(MenuBlack, 255, 255, 0)
 
-ResizeImage(MenuBack, ImageWidth(MenuBack) * MenuScale, ImageHeight(MenuBack) * MenuScale)
-ResizeImage(MenuText, ImageWidth(MenuText) * MenuScale, ImageHeight(MenuText) * MenuScale)
-ResizeImage(Menu173, ImageWidth(Menu173) * MenuScale, ImageHeight(Menu173) * MenuScale)
-ResizeImage(QuickLoadIcon, ImageWidth(QuickLoadIcon) * MenuScale, ImageHeight(QuickLoadIcon) * MenuScale)
+Function InitMenuAssets()
+	mm\MainMenuBack = LoadImage_Strict("GFX\menu\back.png")
+	ResizeImage(mm\MainMenuBack, ImageWidth(mm\MainMenuBack) * MenuScale, ImageHeight(mm\MainMenuBack) * MenuScale)
+	
+	mm\MainMenuText = LoadImage_Strict("GFX\menu\SCP_text.png")
+	ResizeImage(mm\MainMenuText, ImageWidth(mm\MainMenuText) * MenuScale, ImageHeight(mm\MainMenuText) * MenuScale)
+	
+	mm\MainMenu173 = LoadImage_Strict("GFX\menu\scp_173_back.png")
+	ResizeImage(mm\MainMenu173, ImageWidth(mm\MainMenu173) * MenuScale, ImageHeight(mm\MainMenu173) * MenuScale)
+	
+	mm\MainMenuBlinkTimer[0] = 1.0
+	mm\MainMenuBlinkTimer[1] = 1.0
+End Function
 
-For i = 0 To 3
-	ArrowIMG[i] = LoadImage_Strict("GFX\menu\arrow.png")
-	RotateImage(ArrowIMG[i], 90.0 * i)
-	HandleImage(ArrowIMG[i], 0, 0)
-Next
+Function DeInitMenuAssets()
+	If mm\MainMenuBack <> 0 Then FreeImage(mm\MainMenuBack) : mm\MainMenuBack = 0
+	If mm\MainMenuText <> 0 Then FreeImage(mm\MainMenuText) : mm\MainMenuText = 0
+	If mm\MainMenu173 <> 0 Then FreeImage(mm\MainMenu173) : mm\MainMenu173 = 0
+	
+	mm\MainMenuBlinkTimer[0] = 0.0
+	mm\MainMenuBlinkTimer[1] = 0.0
+End Function
+
+Type GameAssets
+	Field ArrowIMG%[4]
+	Field DrawHandIcon%
+	Field DrawArrowIcon%[4]
+End Type
+
+Global ga.GameAssets = New GameAssets
+
+Function LoadGameAssets()
+	Local i%
+	
+	For i = 0 To 3
+		ga\ArrowIMG[i] = LoadImage_Strict("GFX\menu\arrow.png")
+		RotateImage(ga\ArrowIMG[i], i * 90.0)
+		HandleImage(ga\ArrowIMG[i], 0, 0)
+	Next
+End Function
+
+LoadGameAssets()
 
 Global RandomSeed$
 
-Global MenuBlinkTimer%[2], MenuBlinkDuration%[2]
-MenuBlinkTimer[0] = 1
-MenuBlinkTimer[1] = 1
-
-Global MenuStr$, MenuStrX%, MenuStrY%
-
-Global MainMenuTab%, PrevMainMenuTab%, ShouldDeleteGadgets%
-
 Global SelectedInputBox%, CursorPos% = -1
 
-Const SavePath$ = "Saves\"
 Global SaveMSG$
 
 Global CurrSave$
@@ -47,8 +81,6 @@ Global SelectedMap$
 
 LoadSaveGames()
 
-Global CurrLoadGamePage% = 0
-
 Const VersionNumber$ = "1.0.0"
 
 ; ~ Main Menu Tabs Constants
@@ -64,6 +96,9 @@ Const MainMenuTab_Options_Advanced% = 7
 ;[End Block]
 
 Function UpdateMainMenu()
+	; ~ Go out of function immediately if the game has been start
+	If (Not MainMenuOpen) Then Return
+	
 	Local x%, y%, Width%, Height%, Temp%, i%, n%, j%
 	Local Dir%, File$, Test%, snd.Sound
 	
@@ -95,10 +130,11 @@ Function UpdateMainMenu()
 		
 		If (Not mo\MouseDown1) And (Not mo\MouseHit1) Then GrabbedEntity = 0
 		
-		If ShouldDeleteGadgets Then
+		If mm\ShouldDeleteGadgets Lor mm\PrevMainMenuTab <> mm\MainMenuTab Then
 			DeleteMenuGadgets()
 		EndIf
-		ShouldDeleteGadgets = False
+		mm\PrevMainMenuTab = mm\MainMenuTab
+		mm\ShouldDeleteGadgets = False
 		
 		UpdateMusic()
 		If opt\EnableSFXRelease Then AutoReleaseSounds()
@@ -117,26 +153,21 @@ Function UpdateMainMenu()
 		EndIf
 		
 		If Rand(300) = 1 Then
-			MenuBlinkTimer[0] = Rand(4000, 8000)
-			MenuBlinkDuration[0] = Rand(200, 500)
+			mm\MainMenuBlinkTimer[0] = Rnd(4000.0, 8000.0)
+			mm\MainMenuBlinkDuration[0] = Rand(200, 500)
 		EndIf
 		
-		MenuBlinkTimer[1] = MenuBlinkTimer[1] - fpst\FPSFactor[0]
-		If MenuBlinkTimer[1] < MenuBlinkDuration[1] Then
-			If MenuBlinkTimer[1] < 0 Then
-				MenuBlinkTimer[1] = Rand(700, 800)
-				MenuBlinkDuration[1] = Rand(10, 35)
+		mm\MainMenuBlinkTimer[1] = mm\MainMenuBlinkTimer[1] - fpst\FPSFactor[0]
+		If mm\MainMenuBlinkTimer[1] < mm\MainMenuBlinkDuration[1] Then
+			If mm\MainMenuBlinkTimer[1] < 0.0 Then
+				mm\MainMenuBlinkTimer[1] = Rnd(700.0, 800.0)
+				mm\MainMenuBlinkDuration[1] = Rand(10, 35)
 			EndIf
 		EndIf
 		
 		If (Not mo\MouseDown1) Then OnSliderID = 0
 		
-		If PrevMainMenuTab <> MainMenuTab Then
-			DeleteMenuGadgets()
-		EndIf
-		PrevMainMenuTab = MainMenuTab
-		
-		If MainMenuTab = MainMenuTab_Default Then
+		If mm\MainMenuTab = MainMenuTab_Default Then
 			For i = 0 To 3
 				Temp = False
 				x = 159 * MenuScale
@@ -220,7 +251,7 @@ Function UpdateMainMenu()
 									EndIf
 								Next							
 							EndIf
-							MainMenuTab = MainMenuTab_New_Game
+							mm\MainMenuTab = MainMenuTab_New_Game
 						EndIf
 						;[End Block]
 					Case 1
@@ -228,13 +259,13 @@ Function UpdateMainMenu()
 						Txt = "LOAD GAME"
 						If Temp Then
 							LoadSaveGames()
-							MainMenuTab = MainMenuTab_Load_Game
+							mm\MainMenuTab = MainMenuTab_Load_Game
 						EndIf
 						;[End Block]
 					Case 2
 						;[Block]
 						Txt = "OPTIONS"
-						If Temp Then MainMenuTab = MainMenuTab_Options_Graphics
+						If Temp Then mm\MainMenuTab = MainMenuTab_Options_Graphics
 						;[End Block]
 					Case 3
 						;[Block]
@@ -256,16 +287,16 @@ Function UpdateMainMenu()
 			Height = 70 * MenuScale
 			
 			If DrawButton(x + Width + 20 * MenuScale, y, 580 * MenuScale - Width - 20 * MenuScale, Height, "BACK", False) Then 
-				Select MainMenuTab
+				Select mm\MainMenuTab
 					Case MainMenuTab_New_Game
 						;[Block]
 						PutINIValue(OptionFile, "Global", "Enable Intro", opt\IntroEnabled)
-						MainMenuTab = MainMenuTab_Default
+						mm\MainMenuTab = MainMenuTab_Default
 						;[End Block]
 					Case MainMenuTab_Load_Game
 						;[Block]
-						CurrLoadGamePage = 0
-						MainMenuTab = MainMenuTab_Default
+						mm\CurrLoadGamePage = 0
+						mm\MainMenuTab = MainMenuTab_Default
 						;[End Block]
 					Case MainMenuTab_Options_Graphics, MainMenuTab_Options_Audio, MainMenuTab_Options_Controls, MainMenuTab_Options_Advanced ; ~ Save the options
 						;[Block]
@@ -274,24 +305,24 @@ Function UpdateMainMenu()
 						UserTrackCheck = 0
 						UserTrackCheck2 = 0
 						
-						CurrLoadGamePage = 0
+						mm\CurrLoadGamePage = 0
 						AntiAlias(opt\AntiAliasing)
-						MainMenuTab = MainMenuTab_Default
+						mm\MainMenuTab = MainMenuTab_Default
 						;[End Block]
 					Case MainMenuTab_Load_Map ; ~ Move back to the "New Game" tab
 						;[Block]
-						MainMenuTab = MainMenuTab_New_Game
-						CurrLoadGamePage = 0
+						mm\MainMenuTab = MainMenuTab_New_Game
+						mm\CurrLoadGamePage = 0
 						mo\MouseHit1 = False
 						;[End Block]
 					Default
 						;[Block]
-						MainMenuTab = MainMenuTab_Default
+						mm\MainMenuTab = MainMenuTab_Default
 						;[End Block]
 				End Select
 			EndIf
 			
-			Select MainMenuTab
+			Select mm\MainMenuTab
 				Case MainMenuTab_New_Game
 					;[Block]
 					x = 159 * MenuScale
@@ -323,7 +354,7 @@ Function UpdateMainMenu()
 						RandomSeed = InputBox(x + 150 * MenuScale, y + 55 * MenuScale, 200 * MenuScale, 30 * MenuScale, RandomSeed, 3, 15)	
 					Else
 						If DrawButton(x + 370 * MenuScale, y + 55 * MenuScale, 120 * MenuScale, 30 * MenuScale, "Deselect", False) Then
-							ShouldDeleteGadgets = True
+							mm\ShouldDeleteGadgets = True
 							SelectedMap = ""
 						EndIf
 					EndIf	
@@ -337,7 +368,7 @@ Function UpdateMainMenu()
 						
 						If PrevSelectedDifficulty <> SelectedDifficulty Then
 							If PrevSelectedDifficulty = difficulties[ESOTERIC] Then
-								ShouldDeleteGadgets = True
+								mm\ShouldDeleteGadgets = True
 							EndIf
 						EndIf
 					Next
@@ -355,7 +386,7 @@ Function UpdateMainMenu()
 						
 						; ~ Other factor's difficulty
 						If mo\MouseHit1 Then
-							If ImageRectOverlap(ArrowIMG[1], x + 155 * MenuScale, y + 251 * MenuScale, ScaledMouseX(), ScaledMouseY(), 0, 0)
+							If ImageRectOverlap(ga\ArrowIMG[1], x + 155 * MenuScale, y + 251 * MenuScale, ScaledMouseX(), ScaledMouseY(), 0, 0)
 								If SelectedDifficulty\OtherFactors < HARD
 									SelectedDifficulty\OtherFactors = SelectedDifficulty\OtherFactors + 1
 								Else
@@ -367,7 +398,7 @@ Function UpdateMainMenu()
 					EndIf
 					
 					If DrawButton(x, y + Height + 10 * MenuScale, 160 * MenuScale, 70 * MenuScale, "Load map", False) Then
-						MainMenuTab = MainMenuTab_Load_Map
+						mm\MainMenuTab = MainMenuTab_Load_Map
 						LoadSavedMaps()
 					EndIf
 					
@@ -388,6 +419,7 @@ Function UpdateMainMenu()
 						
 						If SameFound > 0 Then CurrSave = CurrSave + " (" + (SameFound + 1) + ")"
 						
+						DeInitMenuAssets()
 						InitNewGame()
 						MainMenuOpen = False
 						FlushKeys()
@@ -412,46 +444,45 @@ Function UpdateMainMenu()
 					Width = 580 * MenuScale
 					Height = 296 * MenuScale
 					
-					If CurrLoadGamePage < Ceil(Float(SaveGameAmount) / 5.0) - 1 And SaveMSG = "" Then 
+					If mm\CurrLoadGamePage < Ceil(Float(SaveGameAmount) / 5.0) - 1 And SaveMSG = "" Then 
 						If DrawButton(x + Width - 50 * MenuScale, y + 440 * MenuScale, 50 * MenuScale, 50 * MenuScale, ">") Then
-							CurrLoadGamePage = CurrLoadGamePage + 1
-							ShouldDeleteGadgets = True
+							mm\CurrLoadGamePage = mm\CurrLoadGamePage + 1
+							mm\ShouldDeleteGadgets = True
 						EndIf
 					Else
 						DrawButton(x + Width - 50 * MenuScale, y + 440 * MenuScale, 50 * MenuScale, 50 * MenuScale, ">", True, False, True)
 					EndIf
-					If CurrLoadGamePage > 0 And SaveMSG = "" Then
+					If mm\CurrLoadGamePage > 0 And SaveMSG = "" Then
 						If DrawButton(x, y + 440 * MenuScale, 50 * MenuScale, 50 * MenuScale, "<") Then
-							CurrLoadGamePage = CurrLoadGamePage - 1
-							ShouldDeleteGadgets = True
+							mm\CurrLoadGamePage = mm\CurrLoadGamePage - 1
+							mm\ShouldDeleteGadgets = True
 						EndIf
 					Else
 						DrawButton(x, y + 440 * MenuScale, 50 * MenuScale, 50 * MenuScale, "<", True, False, True)
 					EndIf
 					
-					If CurrLoadGamePage > Ceil(Float(SaveGameAmount) / 5.0) - 1 Then
-						CurrLoadGamePage = CurrLoadGamePage - 1
-						ShouldDeleteGadgets = True
+					If mm\CurrLoadGamePage > Ceil(Float(SaveGameAmount) / 5.0) - 1 Then
+						mm\CurrLoadGamePage = mm\CurrLoadGamePage - 1
+						mm\ShouldDeleteGadgets = True
 					EndIf
 					
 					If SaveGameAmount <> 0 Then
 						x = x + 20 * MenuScale
 						y = y + 20 * MenuScale
 						
-						For i = (1 + (5 * CurrLoadGamePage)) To 5 + (5 * CurrLoadGamePage)
+						For i = (1 + (5 * mm\CurrLoadGamePage)) To 5 + (5 * mm\CurrLoadGamePage)
 							If i =< SaveGameAmount Then
 								If SaveMSG = "" Then
 									If SaveGameVersion(i - 1) <> VersionNumber Then
 										DrawButton(x + 280 * MenuScale, y + 20 * MenuScale, 100 * MenuScale, 30 * MenuScale, "Load", False, False, True, 255, 0, 0)
 									Else
 										If DrawButton(x + 280 * MenuScale, y + 20 * MenuScale, 100 * MenuScale, 30 * MenuScale, "Load", False) Then
-											LoadEntities()
-											LoadAllSounds()
+											DeInitMenuAssets()
+											InitLoadGame()
 											LoadGame(SavePath + SaveGames(i - 1) + "\")
 											CurrSave = SaveGames(i - 1)
-											InitLoadGame()
 											MainMenuOpen = False
-											ShouldDeleteGadgets = True
+											mm\ShouldDeleteGadgets = True
 										EndIf
 									EndIf
 										
@@ -482,11 +513,11 @@ Function UpdateMainMenu()
 								DeleteDir(CurrentDir() + SavePath + SaveMSG)
 								SaveMSG = ""
 								LoadSaveGames()
-								ShouldDeleteGadgets = True
+								mm\ShouldDeleteGadgets = True
 							EndIf
 							If DrawButton(x + 250 * MenuScale, y + 150 * MenuScale, 100 * MenuScale, 30 * MenuScale, "No", False) Then
 								SaveMSG = ""
-								ShouldDeleteGadgets = True
+								mm\ShouldDeleteGadgets = True
 							EndIf
 						EndIf
 					EndIf
@@ -503,19 +534,19 @@ Function UpdateMainMenu()
 					Width = 580 * MenuScale
 					Height = 60 * MenuScale
 					
-					If DrawButton(x + 20 * MenuScale, y + 15 * MenuScale, Width / 5, Height / 2, "GRAPHICS", False) Then MainMenuTab = MainMenuTab_Options_Graphics
-					If DrawButton(x + 160 * MenuScale, y + 15 * MenuScale, Width / 5, Height / 2, "AUDIO", False) Then MainMenuTab = MainMenuTab_Options_Audio
-					If DrawButton(x + 300 * MenuScale, y + 15 * MenuScale, Width / 5, Height / 2, "CONTROLS", False) Then MainMenuTab = MainMenuTab_Options_Controls
-					If DrawButton(x + 440 * MenuScale, y + 15 * MenuScale, Width / 5, Height / 2, "ADVANCED", False) Then MainMenuTab = MainMenuTab_Options_Advanced
+					If DrawButton(x + 20 * MenuScale, y + 15 * MenuScale, Width / 5, Height / 2, "GRAPHICS", False) Then mm\MainMenuTab = MainMenuTab_Options_Graphics
+					If DrawButton(x + 160 * MenuScale, y + 15 * MenuScale, Width / 5, Height / 2, "AUDIO", False) Then mm\MainMenuTab = MainMenuTab_Options_Audio
+					If DrawButton(x + 300 * MenuScale, y + 15 * MenuScale, Width / 5, Height / 2, "CONTROLS", False) Then mm\MainMenuTab = MainMenuTab_Options_Controls
+					If DrawButton(x + 440 * MenuScale, y + 15 * MenuScale, Width / 5, Height / 2, "ADVANCED", False) Then mm\MainMenuTab = MainMenuTab_Options_Advanced
 					
 					y = y + 70 * MenuScale
 					
-					If MainMenuTab <> MainMenuTab_Options_Audio Then
+					If mm\MainMenuTab <> MainMenuTab_Options_Audio Then
 						UserTrackCheck = 0
 						UserTrackCheck2 = 0
 					EndIf
 					
-					If MainMenuTab = MainMenuTab_Options_Graphics
+					If mm\MainMenuTab = MainMenuTab_Options_Graphics
 						;[Block]
 						Height = 410 * MenuScale
 						
@@ -579,7 +610,7 @@ Function UpdateMainMenu()
 						opt\CurrFOV = (SlideBar(x + 310 * MenuScale, y, 150 * MenuScale, opt\CurrFOV * 2.0) / 2.0)
 						opt\FOV = opt\CurrFOV + 40
 						;[End Block]
-					ElseIf MainMenuTab = MainMenuTab_Options_Audio
+					ElseIf mm\MainMenuTab = MainMenuTab_Options_Audio
 						;[Block]
 						Height = 220 * MenuScale
 						
@@ -627,7 +658,7 @@ Function UpdateMainMenu()
 						
 						If PrevEnableUserTracks Then
 							If PrevEnableUserTracks <> opt\EnableUserTracks Then
-								ShouldDeleteGadgets = True
+								mm\ShouldDeleteGadgets = True
 							EndIf
 						EndIf
 						
@@ -659,7 +690,7 @@ Function UpdateMainMenu()
 							UserTrackCheck = 0
 						EndIf
 						;[End Block]
-					ElseIf MainMenuTab = MainMenuTab_Options_Controls
+					ElseIf mm\MainMenuTab = MainMenuTab_Options_Controls
 						;[Block]
 						Height = 300 * MenuScale
 						
@@ -756,28 +787,28 @@ Function UpdateMainMenu()
 							SelectedInputBox = 0
 						EndIf
 						;[End Block]
-					ElseIf MainMenuTab = MainMenuTab_Options_Advanced
+					ElseIf mm\MainMenuTab = MainMenuTab_Options_Advanced
 						;[Block]
 						Height = 330 * MenuScale
 						
-						If CurrLoadGamePage = 0 Then 
+						If mm\CurrLoadGamePage = 0 Then 
 							If DrawButton(x + Width - 30 * MenuScale, y + Height + 5 * MenuScale, 30 * MenuScale, 30 * MenuScale, ">", False) Then
-								CurrLoadGamePage = CurrLoadGamePage + 1
-								ShouldDeleteGadgets = True
+								mm\CurrLoadGamePage = mm\CurrLoadGamePage + 1
+								mm\ShouldDeleteGadgets = True
 							EndIf
 						Else
 							DrawButton(x + Width - 30 * MenuScale, y + Height + 5 * MenuScale, 30 * MenuScale, 30 * MenuScale, ">", False, False, True)
 						EndIf
-						If CurrLoadGamePage = 1 Then
+						If mm\CurrLoadGamePage = 1 Then
 							If DrawButton(x, y + Height + 5 * MenuScale, 30 * MenuScale, 30 * MenuScale, "<", False) Then
-								CurrLoadGamePage = CurrLoadGamePage - 1
-								ShouldDeleteGadgets = True
+								mm\CurrLoadGamePage = mm\CurrLoadGamePage - 1
+								mm\ShouldDeleteGadgets = True
 							EndIf
 						Else
 							DrawButton(x, y + Height + 5 * MenuScale, 30 * MenuScale, 30 * MenuScale, "<", False, False, True)
 						EndIf
 						
-						If CurrLoadGamePage = 0 Then
+						If mm\CurrLoadGamePage = 0 Then
 							y = y + 20 * MenuScale
 							
 							opt\HUDEnabled = DrawTick(x + 310 * MenuScale, y + MenuScale, opt\HUDEnabled)
@@ -790,7 +821,7 @@ Function UpdateMainMenu()
 							
 							If PrevCanOpenConsole Then
 								If PrevCanOpenConsole <> opt\CanOpenConsole
-									ShouldDeleteGadgets = True
+									mm\ShouldDeleteGadgets = True
 								EndIf
 							EndIf
 							
@@ -821,7 +852,7 @@ Function UpdateMainMenu()
 							
 							If PrevCurrFrameLimit Then
 								If PrevCurrFrameLimit <> opt\CurrFrameLimit Then
-									ShouldDeleteGadgets = True
+									mm\ShouldDeleteGadgets = True
 								EndIf
 							EndIf
 						Else
@@ -845,7 +876,7 @@ Function UpdateMainMenu()
 							
 							If PrevEnableSubtitles Then
 								If PrevEnableSubtitles <> opt\EnableSubtitles
-									ShouldDeleteGadgets = True
+									mm\ShouldDeleteGadgets = True
 								EndIf
 							EndIf
 							
@@ -903,37 +934,37 @@ Function UpdateMainMenu()
 					Width = 580 * MenuScale
 					Height = 350 * MenuScale
 					
-					If CurrLoadGamePage < Ceil(Float(SavedMapsAmount) / 5.0) - 1 Then 
+					If mm\CurrLoadGamePage < Ceil(Float(SavedMapsAmount) / 5.0) - 1 Then 
 						If DrawButton(x + Width - 50 * MenuScale, y + 440 * MenuScale, 50 * MenuScale, 50 * MenuScale, ">") Then
-							CurrLoadGamePage = CurrLoadGamePage + 1
-							ShouldDeleteGadgets = True
+							mm\CurrLoadGamePage = mm\CurrLoadGamePage + 1
+							mm\ShouldDeleteGadgets = True
 						EndIf
 					Else
 						DrawButton(x + Width - 50 * MenuScale, y + 440 * MenuScale, 50 * MenuScale, 50 * MenuScale, ">", True, False, True)
 					EndIf
-					If CurrLoadGamePage > 0 Then
+					If mm\CurrLoadGamePage > 0 Then
 						If DrawButton(x, y + 440 * MenuScale, 50 * MenuScale, 50 * MenuScale, "<") Then
-							CurrLoadGamePage = CurrLoadGamePage - 1
-							ShouldDeleteGadgets = True
+							mm\CurrLoadGamePage = mm\CurrLoadGamePage - 1
+							mm\ShouldDeleteGadgets = True
 						EndIf
 					Else
 						DrawButton(x, y + 440 * MenuScale, 50 * MenuScale, 50 * MenuScale, "<", True, False, True)
 					EndIf
 					
-					If CurrLoadGamePage > Ceil(Float(SavedMapsAmount) / 5.0) - 1 Then
-						CurrLoadGamePage = CurrLoadGamePage - 1
-						ShouldDeleteGadgets = True
+					If mm\CurrLoadGamePage > Ceil(Float(SavedMapsAmount) / 5.0) - 1 Then
+						mm\CurrLoadGamePage = mm\CurrLoadGamePage - 1
+						mm\ShouldDeleteGadgets = True
 					EndIf
 					
 					If SavedMaps(0) <> "" Then 
 						x = x + 20 * MenuScale
 						y = y + 20 * MenuScale
-						For i = (1 + (5 * CurrLoadGamePage)) To 5 + (5 * CurrLoadGamePage)
+						For i = (1 + (5 * mm\CurrLoadGamePage)) To 5 + (5 * mm\CurrLoadGamePage)
 							If i =< SavedMapsAmount Then
 								If DrawButton(x + 400 * MenuScale, y + 20 * MenuScale, 100 * MenuScale, 30 * MenuScale, "Load", False) Then
 									SelectedMap = SavedMaps(i - 1)
-									MainMenuTab = MainMenuTab_New_Game
-									ShouldDeleteGadgets = True
+									mm\MainMenuTab = MainMenuTab_New_Game
+									mm\ShouldDeleteGadgets = True
 								EndIf
 								y = y + 80 * MenuScale
 							Else
@@ -959,87 +990,90 @@ Function UpdateMainMenu()
 End Function
 
 Function RenderMainMenu()
+	; ~ Go out of function immediately if the game has been start
+	If (Not MainMenuOpen) Then Return
+	
 	Local x%, y%, Width%, Height%, Temp%, i%
 	
 	Color(0, 0, 0)
 	
 	ShowPointer()
 	
-	DrawImage(MenuBack, 0, 0)
+	DrawImage(mm\MainMenuBack, 0, 0)
 	
-	If (MilliSecs2() Mod MenuBlinkTimer[0]) >= Rand(MenuBlinkDuration[0]) Then
-		DrawImage(Menu173, opt\GraphicWidth - ImageWidth(Menu173), opt\GraphicHeight - ImageHeight(Menu173))
+	If (MilliSecs2() Mod mm\MainMenuBlinkTimer[0]) >= Rand(mm\MainMenuBlinkDuration[0]) Then
+		DrawImage(mm\MainMenu173, opt\GraphicWidth - ImageWidth(mm\MainMenu173), opt\GraphicHeight - ImageHeight(mm\MainMenu173))
 	EndIf
 	
 	SetFont(fo\FontID[Font_Default])
 	
-	If MenuBlinkTimer[1] < MenuBlinkDuration[1] Then
+	If mm\MainMenuBlinkTimer[1] < mm\MainMenuBlinkDuration[1] Then
 		Color(50, 50, 50)
-		Text(MenuStrX + Rand(-5, 5), MenuStrY + Rand(-5, 5), MenuStr, True)
-		If MenuBlinkTimer[1] < 0 Then
-			MenuStrX = Rand(700, 1000) * MenuScale
-			MenuStrY = Rand(100, 600) * MenuScale
+		Text(mm\MainMenuStrX + Rand(-5, 5), mm\MainMenuStrY + Rand(-5, 5), mm\MainMenuStr, True)
+		If mm\MainMenuBlinkTimer[1] < 0.0 Then
+			mm\MainMenuStrX = Rand(700, 1000) * MenuScale
+			mm\MainMenuStrY = Rand(100, 600) * MenuScale
 			
 			Select Rand(0, 23)
 				Case 0, 2, 3
 					;[Block]
-					MenuStr = "DON'T BLINK"
+					mm\MainMenuStr = "DON'T BLINK"
 					;[End Block]
 				Case 4, 5
 					;[Block]
-					MenuStr = "Secure. Contain. Protect."
+					mm\MainMenuStr = "Secure. Contain. Protect."
 					;[End Block]
 				Case 6, 7, 8
 					;[Block]
-					MenuStr = "You want happy endings? Fuck you."
+					mm\MainMenuStr = "You want happy endings? Fuck you."
 					;[End Block]
 				Case 9, 10, 11
 					;[Block]
-					MenuStr = "Sometimes we would have had time to scream."
+					mm\MainMenuStr = "Sometimes we would have had time to scream."
 					;[End Block]
 				Case 12, 19
 					;[Block]
-					MenuStr = "NIL"
+					mm\MainMenuStr = "NIL"
 					;[End Block]
 				Case 13
 					;[Block]
-					MenuStr = "NO"
+					mm\MainMenuStr = "NO"
 					;[End Block]
 				Case 14
 					;[Block]
-					MenuStr = "black white black white black white gray"
+					mm\MainMenuStr = "black white black white black white gray"
 					;[End Block]
 				Case 15
 					;[Block]
-					MenuStr = "Stone does not care"
+					mm\MainMenuStr = "Stone does not care"
 					;[End Block]
 				Case 16
 					;[Block]
-					MenuStr = "9341"
+					mm\MainMenuStr = "9341"
 					;[End Block]
 				Case 17
 					;[Block]
-					MenuStr = "It controls the doors"
+					mm\MainMenuStr = "It controls the doors"
 					;[End Block]
 				Case 18
 					;[Block]
-					MenuStr = "e8m106]af173o+079m895w914"
+					mm\MainMenuStr = "e8m106]af173o+079m895w914"
 					;[End Block]
 				Case 20
 					;[Block]
-					MenuStr = "It has taken over everything"
+					mm\MainMenuStr = "It has taken over everything"
 					;[End Block]
 				Case 21
 					;[Block]
-					MenuStr = "The spiral is growing"
+					mm\MainMenuStr = "The spiral is growing"
 					;[End Block]
 				Case 22
 					;[Block]
-					MenuStr = Chr(34) + "Some kind of gestalt effect due to massive reality damage." + Chr(34)
+					mm\MainMenuStr = Chr(34) + "Some kind of gestalt effect due to massive reality damage." + Chr(34)
 					;[End Block]
 				Case 23
 					;[Block]
-					MenuStr = "Does the Black Moon howl? Yes. No. Yes. No."
+					mm\MainMenuStr = "Does the Black Moon howl? Yes. No. Yes. No."
 					;[End Block]
 			End Select
 		EndIf
@@ -1047,13 +1081,13 @@ Function RenderMainMenu()
 	
 	SetFont(fo\FontID[Font_Default_Big])
 	
-	DrawImage(MenuText, opt\GraphicWidth / 2 - ImageWidth(MenuText) / 2, opt\GraphicHeight - 20 * MenuScale - ImageHeight(MenuText))
+	DrawImage(mm\MainMenuText, opt\GraphicWidth / 2 - ImageWidth(mm\MainMenuText) / 2, opt\GraphicHeight - 20 * MenuScale - ImageHeight(mm\MainMenuText))
 	
 	If opt\GraphicWidth > 1240 * MenuScale Then
 		DrawTiledImageRect(MenuWhite, 0, 5, 512, 7 * MenuScale, 985.0 * MenuScale, 407.0 * MenuScale, (opt\GraphicWidth - 1240 * MenuScale) + 300, 7 * MenuScale)
 	EndIf
 	
-	If MainMenuTab <> MainMenuTab_Default Then
+	If mm\MainMenuTab <> MainMenuTab_Default Then
 		x = 159 * MenuScale
 		y = 286 * MenuScale
 		
@@ -1062,7 +1096,7 @@ Function RenderMainMenu()
 		
 		DrawFrame(x, y, Width, Height)
 		
-		Select MainMenuTab
+		Select mm\MainMenuTab
 			Case MainMenuTab_New_Game
 				;[Block]
 				x = 159 * MenuScale
@@ -1124,7 +1158,7 @@ Function RenderMainMenu()
 					
 					; ~ Other factor's difficulty
 					Color(255, 255, 255)
-					DrawImage(ArrowIMG[1], x + 155 * MenuScale, y + 251 * MenuScale)
+					DrawImage(ga\ArrowIMG[1], x + 155 * MenuScale, y + 251 * MenuScale)
 					
 					Color(255, 255, 255)
 					Select SelectedDifficulty\OtherFactors
@@ -1173,7 +1207,7 @@ Function RenderMainMenu()
 				
 				DrawFrame(x + 60 * MenuScale, y + 440 * MenuScale, Width - 120 * MenuScale, 50 * MenuScale)
 				
-				Text(x + (Width / 2.0), y + 465 * MenuScale, "Page " + Int(Max((CurrLoadGamePage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SaveGameAmount) / 5.0))), 1)), True, True)
+				Text(x + (Width / 2.0), y + 465 * MenuScale, "Page " + Int(Max((mm\CurrLoadGamePage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SaveGameAmount) / 5.0))), 1)), True, True)
 				
 				SetFont(fo\FontID[Font_Default])
 				
@@ -1183,7 +1217,7 @@ Function RenderMainMenu()
 					x = x + 20 * MenuScale
 					y = y + 20 * MenuScale
 					
-					For i = (1 + (5 * CurrLoadGamePage)) To 5 + (5 * CurrLoadGamePage)
+					For i = (1 + (5 * mm\CurrLoadGamePage)) To 5 + (5 * mm\CurrLoadGamePage)
 						If i =< SaveGameAmount Then
 							DrawFrame(x, y, 540 * MenuScale, 70 * MenuScale)
 							
@@ -1230,13 +1264,13 @@ Function RenderMainMenu()
 				DrawFrame(x, y, Width, Height)
 				
 				Color(0, 255, 0)
-				If MainMenuTab = MainMenuTab_Options_Graphics
+				If mm\MainMenuTab = MainMenuTab_Options_Graphics
 					Rect(x + 15 * MenuScale, y + 10 * MenuScale, (Width / 5) + 10 * MenuScale, (Height / 2) + 10 * MenuScale, True)
-				ElseIf MainMenuTab = MainMenuTab_Options_Audio
+				ElseIf mm\MainMenuTab = MainMenuTab_Options_Audio
 					Rect(x + 155 * MenuScale, y + 10 * MenuScale, (Width / 5) + 10 * MenuScale, (Height / 2) + 10 * MenuScale, True)
-				ElseIf MainMenuTab = MainMenuTab_Options_Controls
+				ElseIf mm\MainMenuTab = MainMenuTab_Options_Controls
 					Rect(x + 295 * MenuScale, y + 10 * MenuScale, (Width / 5) + 10 * MenuScale, (Height / 2) + 10 * MenuScale, True)
-				ElseIf MainMenuTab = MainMenuTab_Options_Advanced
+				ElseIf mm\MainMenuTab = MainMenuTab_Options_Advanced
 					Rect(x + 435 * MenuScale, y + 10 * MenuScale, (Width / 5) + 10 * MenuScale, (Height / 2) + 10 * MenuScale, True)
 				EndIf
 				
@@ -1250,7 +1284,7 @@ Function RenderMainMenu()
 				Local tW# = 400.0 * MenuScale
 				Local tH# = 150.0 * MenuScale
 				
-				If MainMenuTab = MainMenuTab_Options_Graphics
+				If mm\MainMenuTab = MainMenuTab_Options_Graphics
 					;[Block]
 					Height = 410 * MenuScale
 					DrawFrame(x, y, Width, Height)
@@ -1329,7 +1363,7 @@ Function RenderMainMenu()
 						DrawOptionsTooltip(tX, tY, tW, tH, "fov")
 					EndIf
 					;[End Block]
-				ElseIf MainMenuTab = MainMenuTab_Options_Audio
+				ElseIf mm\MainMenuTab = MainMenuTab_Options_Audio
 					;[Block]
 					If opt\EnableUserTracks Then
 						Height = 230 * MenuScale
@@ -1390,7 +1424,7 @@ Function RenderMainMenu()
 						EndIf
 					EndIf
 					;[End Block]
-				ElseIf MainMenuTab = MainMenuTab_Options_Controls
+				ElseIf mm\MainMenuTab = MainMenuTab_Options_Controls
 					;[Block]
 					Height = 300 * MenuScale
 					DrawFrame(x, y, Width, Height)	
@@ -1453,7 +1487,7 @@ Function RenderMainMenu()
 						DrawOptionsTooltip(tX, tY, tW, tH, "controls")
 					EndIf
 					;[End Block]
-				ElseIf MainMenuTab = MainMenuTab_Options_Advanced
+				ElseIf mm\MainMenuTab = MainMenuTab_Options_Advanced
 					;[Block]
 					Height = 330 * MenuScale
 					
@@ -1461,9 +1495,9 @@ Function RenderMainMenu()
 					
 					DrawFrame(x + 35 * MenuScale, y + Height + 5 * MenuScale, Width - 70 * MenuScale, 30 * MenuScale)	
 					
-					Text(x + (Width / 2), y + Height + 20 * MenuScale, "Page " + Int(Max((CurrLoadGamePage + 1), 1)) + "/2", True, True)
+					Text(x + (Width / 2), y + Height + 20 * MenuScale, "Page " + Int(Max((mm\CurrLoadGamePage + 1), 1)) + "/2", True, True)
 					
-					If CurrLoadGamePage = 0 Then
+					If mm\CurrLoadGamePage = 0 Then
 						y = y + 20 * MenuScale
 						
 						Color(255, 255, 255)				
@@ -1624,7 +1658,7 @@ Function RenderMainMenu()
 				
 				DrawFrame(x + 60 * MenuScale, y + 440 * MenuScale, Width - 120 * MenuScale, 50 * MenuScale)
 				
-				Text(x + (Width / 2.0), y + 465 * MenuScale, "Page " + Int(Max((CurrLoadGamePage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SavedMapsAmount) / 5.0))), 1)), True, True)
+				Text(x + (Width / 2.0), y + 465 * MenuScale, "Page " + Int(Max((mm\CurrLoadGamePage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SavedMapsAmount) / 5.0))), 1)), True, True)
 				
 				SetFont(fo\FontID[Font_Default])
 				
@@ -1633,7 +1667,7 @@ Function RenderMainMenu()
 				Else
 					x = x + 20 * MenuScale
 					y = y + 20 * MenuScale
-					For i = (1 + (5 * CurrLoadGamePage)) To 5 + (5 * CurrLoadGamePage)
+					For i = (1 + (5 * mm\CurrLoadGamePage)) To 5 + (5 * mm\CurrLoadGamePage)
 						If i =< SavedMapsAmount Then
 							DrawFrame(x, y, 540 * MenuScale, 70 * MenuScale)
 							

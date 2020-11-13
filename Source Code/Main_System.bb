@@ -35,10 +35,9 @@ End Type
 Global fo.Fonts = New Fonts
 
 Global MenuWhite%, MenuBlack%
+
 Global ButtonSFX% = LoadSound_Strict("SFX\Interact\Button.ogg")
 Global ButtonSFX2% = LoadSound_Strict("SFX\Interact\Button2.ogg")
-
-Global ArrowIMG%[4]
 
 Global Fresize_Image%, Fresize_Texture%, Fresize_Texture2%
 Global Fresize_Cam%
@@ -335,9 +334,6 @@ End Type
 Global msg.Messages = New Messages
 
 Global AccessCode%
-
-Global DrawHandIcon%
-Global DrawArrowIcon%[4]
 
 Include "Source Code\Difficulty.bb"
 
@@ -2730,7 +2726,7 @@ Global MTFCameraCheckTimer# = 0.0
 Global MTFCameraCheckDetected% = False
 
 Include "Source Code\Menu_System.bb"
-
+InitMenuAssets()
 MainMenuOpen = True
 
 FlushKeys()
@@ -2948,17 +2944,17 @@ Function MainLoop()
 		
 		If (Not mo\MouseDown1) And (Not mo\MouseHit1) Then GrabbedEntity = 0
 		
-		If ShouldDeleteGadgets Then
+		If mm\ShouldDeleteGadgets Then
 			DeleteMenuGadgets()
 		EndIf
-		ShouldDeleteGadgets = False
+		mm\ShouldDeleteGadgets = False
 		
 		UpdateMusic()
 		If opt\EnableSFXRelease Then AutoReleaseSounds()
 		
 		UpdateStreamSounds()
 		
-		DrawHandIcon = False
+		ga\DrawHandIcon = False
 		
 		me\RestoreSanity = True
 		ShouldEntitiesFall = True
@@ -3398,7 +3394,7 @@ Function MainLoop()
 					UsedConsole = True
 					ResumeSounds()
 					MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_X_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
-					ShouldDeleteGadgets = True
+					mm\ShouldDeleteGadgets = True
 				Else
 					PauseSounds()
 				EndIf
@@ -3676,7 +3672,7 @@ Function UpdateEnding()
 					
 					If DrawButton(x - 170 * MenuScale, y - 200 * MenuScale, 430 * MenuScale, 60 * MenuScale, "ACHIEVEMENTS", True) Then
 						AchievementsMenu = 1
-						ShouldDeleteGadgets = True
+						mm\ShouldDeleteGadgets = True
 					EndIf
 					
 					If DrawButton(x - 170 * MenuScale, y - 100 * MenuScale, 430 * MenuScale, 60 * MenuScale, "MAIN MENU", True)
@@ -3690,7 +3686,7 @@ Function UpdateEnding()
 						SetStreamVolume_Strict(MusicCHN, 1.0 * opt\MusicVolume)
 						FlushKeys()
 						me\EndingTimer = -2000.0
-						ShouldDeleteGadgets = True
+						mm\ShouldDeleteGadgets = True
 						InitCredits()
 					EndIf
 				Else
@@ -3832,14 +3828,11 @@ Function UpdateCredits()
 	
 	If me\CreditsTimer = -1.0 Then
 		Delete Each CreditsLine
-        NullGame(False)
-        StopStream_Strict(MusicCHN)
-        ShouldPlay = 21
-        MenuOpen = False
-        MainMenuOpen = True
-        MainMenuTab = MainMenuTab_Default
-        CurrSave = ""
-        FlushKeys()
+		NullGame(False)
+		StopStream_Strict(MusicCHN)
+		ShouldPlay = 21
+		CurrSave = ""
+		FlushKeys()
 	EndIf
 End Function
 
@@ -4592,9 +4585,9 @@ Function DrawGUI()
 		DrawImage(tt\IconID[5], opt\GraphicWidth / 2 + Sin(YawValue) * (opt\GraphicWidth / 3) - 32, opt\GraphicHeight / 2 - Sin(PitchValue) * (opt\GraphicHeight / 3) - 32)
 	EndIf
 	
-	If DrawHandIcon Then DrawImage(tt\IconID[4], opt\GraphicWidth / 2 - 32, opt\GraphicHeight / 2 - 32)
+	If ga\DrawHandIcon Then DrawImage(tt\IconID[4], opt\GraphicWidth / 2 - 32, opt\GraphicHeight / 2 - 32)
 	For i = 0 To 3
-		If DrawArrowIcon[i] Then
+		If ga\DrawArrowIcon[i] Then
 			x = opt\GraphicWidth / 2 - 32
 			y = opt\GraphicHeight / 2 - 32		
 			Select i
@@ -4618,8 +4611,8 @@ Function DrawGUI()
 			DrawImage(tt\IconID[4], x, y)
 			Color(0, 0, 0)
 			Rect(x + 4, y + 4, 64 - 8, 64 - 8)
-			DrawImage(ArrowIMG[i], x + 21, y + 21)
-			DrawArrowIcon[i] = False
+			DrawImage(ga\ArrowIMG[i], x + 21, y + 21)
+			ga\DrawArrowIcon[i] = False
 		EndIf
 	Next
 	
@@ -5807,7 +5800,7 @@ Function UpdateGUI()
 		Else
 			PauseSounds()
 		EndIf
-		ShouldDeleteGadgets = True
+		mm\ShouldDeleteGadgets = True
 		MenuOpen = (Not MenuOpen)
 		
 		AchievementsMenu = 0
@@ -8057,7 +8050,7 @@ Function UpdateMenu()
 						msg\Msg = "STOP HIDING!"
 						msg\Timer = 70.0 * 6.0
 						MenuOpen = False
-						ShouldDeleteGadgets = True
+						mm\ShouldDeleteGadgets = True
 						Return
 					EndIf
 				EndIf
@@ -8094,24 +8087,24 @@ Function UpdateMenu()
 				
 				AntiAlias(opt\AntiAliasing)
 				TextureLodBias(opt\TextureFloat)
-				ShouldDeleteGadgets = True
+				mm\ShouldDeleteGadgets = True
 			EndIf
 			
 			If DrawButton(x - 5 * MenuScale, y, 100 * MenuScale, 30 * MenuScale, "GRAPHICS", False) Then
 				OptionsMenu = 1
-				ShouldDeleteGadgets = True
+				mm\ShouldDeleteGadgets = True
 			EndIf
 			If DrawButton(x + 105 * MenuScale, y, 100 * MenuScale, 30 * MenuScale, "AUDIO", False) Then
 				OptionsMenu = 2
-				ShouldDeleteGadgets = True
+				mm\ShouldDeleteGadgets = True
 			EndIf
 			If DrawButton(x + 215 * MenuScale, y, 100 * MenuScale, 30 * MenuScale, "CONTROLS", False) Then
 				OptionsMenu = 3
-				ShouldDeleteGadgets = True
+				mm\ShouldDeleteGadgets = True
 			EndIf
 			If DrawButton(x + 325 * MenuScale, y, 100 * MenuScale, 30 * MenuScale, "ADVANCED", False) Then
 				OptionsMenu = 4
-				ShouldDeleteGadgets = True
+				mm\ShouldDeleteGadgets = True
 			EndIf
 			
 			Select OptionsMenu
@@ -8312,7 +8305,7 @@ Function UpdateMenu()
 					
 					If PrevCanOpenConsole Then
 						If PrevCanOpenConsole <> opt\CanOpenConsole Then
-							ShouldDeleteGadgets = True
+							mm\ShouldDeleteGadgets = True
 						EndIf
 					EndIf
 					
@@ -8343,7 +8336,7 @@ Function UpdateMenu()
 					
 					If PrevCurrFrameLimit Then
 						If PrevCurrFrameLimit <> opt\CurrFrameLimit Then
-							ShouldDeleteGadgets = True
+							mm\ShouldDeleteGadgets = True
 						EndIf
 					EndIf
 					;[End Block]
@@ -8363,9 +8356,6 @@ Function UpdateMenu()
 						me\DropSpeed = 0.0
 						SaveGame(SavePath + CurrSave + "\")
 						NullGame()
-						MenuOpen = False
-						MainMenuOpen = True
-						MainMenuTab = MainMenuTab_Default
 						CurrSave = ""
 						ResetInput()
 						Return
@@ -8375,9 +8365,6 @@ Function UpdateMenu()
 			
 			If DrawButton(x, y + QuitButton * MenuScale, 430 * MenuScale, 60 * MenuScale, "Quit") Then
 				NullGame()
-				MenuOpen = False
-				MainMenuOpen = True
-				MainMenuTab = MainMenuTab_Default
 				CurrSave = ""
 				ResetInput()
 				Return
@@ -8388,7 +8375,7 @@ Function UpdateMenu()
 				OptionsMenu = 0
 				QuitMsg = 0
 				mo\MouseHit1 = False
-				ShouldDeleteGadgets = True
+				mm\ShouldDeleteGadgets = True
 			EndIf
 		Else
 			If DrawButton(x + 101 * MenuScale, y + 344 * MenuScale, 230 * MenuScale, 60 * MenuScale, "Back") Then
@@ -8396,20 +8383,20 @@ Function UpdateMenu()
 				OptionsMenu = 0
 				QuitMsg = 0
 				mo\MouseHit1 = False
-				ShouldDeleteGadgets = True
+				mm\ShouldDeleteGadgets = True
 			EndIf
 			
 			If AchievementsMenu > 0 Then
 				If AchievementsMenu =< Floor(Float(MAXACHIEVEMENTS - 1) / 12.0) Then 
 					If DrawButton(x + 341 * MenuScale, y + 344 * MenuScale, 50 * MenuScale, 60 * MenuScale, ">") Then
 						AchievementsMenu = AchievementsMenu + 1
-						ShouldDeleteGadgets = True
+						mm\ShouldDeleteGadgets = True
 					EndIf
 				EndIf
 				If AchievementsMenu > 1 Then
 					If DrawButton(x + 41 * MenuScale, y + 344 * MenuScale, 50 * MenuScale, 60 * MenuScale, "<") Then
 						AchievementsMenu = AchievementsMenu - 1
-						ShouldDeleteGadgets = True
+						mm\ShouldDeleteGadgets = True
 					EndIf
 				EndIf
 			EndIf
@@ -8481,14 +8468,14 @@ Function UpdateMenu()
 				
 				If DrawButton(x, y, 430 * MenuScale, 60 * MenuScale, "Achievements") Then 
 					AchievementsMenu = 1
-					ShouldDeleteGadgets = True
+					mm\ShouldDeleteGadgets = True
 				EndIf
 				
 				y = y + 75 * MenuScale
 				
 				If DrawButton(x, y, 430 * MenuScale, 60 * MenuScale, "Options") Then 
 					OptionsMenu = 1
-					ShouldDeleteGadgets = True
+					mm\ShouldDeleteGadgets = True
 				EndIf
 				
 				y = y + 75 * MenuScale
@@ -8540,11 +8527,8 @@ Function UpdateMenu()
 				EndIf
 				If DrawButton(x, y + 80 * MenuScale, 430 * MenuScale, 60 * MenuScale, "Quit to Menu") Then
 					NullGame()
-					MenuOpen = False
-					MainMenuOpen = True
-					MainMenuTab = MainMenuTab_Default
 					CurrSave = ""
-					FlushKeys()
+					ResetInput()
 					Return
 				EndIf
 				y = y + 80 * MenuScale
@@ -8553,7 +8537,7 @@ Function UpdateMenu()
 			If me\KillTimer >= 0.0 And (Not MainMenuOpen) Then
 				If DrawButton(x, y, 430 * MenuScale, 60 * MenuScale, "Quit") Then
 					QuitMsg = 1
-					ShouldDeleteGadgets = True
+					mm\ShouldDeleteGadgets = True
 				EndIf
 			EndIf
 		EndIf
@@ -9362,6 +9346,9 @@ Function InitLoadGame()
 	
 	Local d.Doors, sc.SecurityCams, rt.RoomTemplates, e.Events, i%, x#, z#
 	
+	LoadEntities()
+	LoadAllSounds()
+	
 	DrawLoading(80)
 	
 	me\Playable = True
@@ -9715,7 +9702,12 @@ Function NullGame(PlayButtonSFX% = True) ; ~ CHECK FOR ERRORS
 	If Sky <> 0 Then Sky = 0
 	InitFastResize()
 	
-	DeleteMenuGadgets()
+	mm\ShouldDeleteGadgets = True
+	
+	InitMenuAssets()
+	MenuOpen = False
+	MainMenuOpen = True
+	mm\MainMenuTab = MainMenuTab_Default
 	
 	CatchErrors("NullGame")
 End Function
@@ -12349,5 +12341,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1083#1318#1DE9
+;~B#107C#1311#1DE2
 ;~C#Blitz3D
