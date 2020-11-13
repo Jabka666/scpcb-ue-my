@@ -879,7 +879,6 @@ Function UpdateEvents()
 					Else
 						e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[8], e\room\Objects[9], e)
 					EndIf
-					EntityAlpha(tt\OverlayID[0], 1.0)						
 				EndIf
 				;[End Block]
 			Case e_room173
@@ -896,10 +895,6 @@ Function UpdateEvents()
 				If e\EventState = 0.0 Then
 					If PlayerRoom = e\room Then
 						e\room\RoomDoors[2]\Open = True
-						
-						ShowEntity(tt\OverlayID[0])
-						CameraFogRange(Camera, opt\CameraFogNear, opt\CameraFogFar)
-						CameraFogMode(Camera, 1)
 						
 						If SelectedDifficulty\SaveType = SAVEANYWHERE Then
 							msg\Msg = "Press " + key\Name[key\SAVE] + " to save."
@@ -2165,10 +2160,6 @@ Function UpdateEvents()
 												
 												ClearConsole()
 												
-												ShowEntity(tt\OverlayID[0])
-												CameraFogRange(Camera, opt\CameraFogNear, opt\CameraFogFar)
-												CameraFogMode(Camera, 1)
-												
 												e\EventState2 = 1.0
 												
 												Exit
@@ -2196,18 +2187,7 @@ Function UpdateEvents()
 					e\EventState2 = 1.0
 				EndIf
 				
-				If PlayerRoom = e\room Then
-					If e\EventState >= 10.0 Then
-						CameraRange(Camera, 0.01, 15.0)
-					Else															
-						CameraRange(Camera, 0.01, 40.0)
-					EndIf	
-					CameraFogMode(Camera, 0)
-	 	            HideEntity(tt\OverlayID[0])
-					
-					LightVolume = 4.0
-					TempLightVolume = 4.0			
-				Else
+				If PlayerRoom <> e\room Then
 					RemoveEvent(e)		
 				EndIf	
 				;[End Block]
@@ -9552,7 +9532,6 @@ Function UpdateEndings()
 							Curr096 = Null
 							Curr513_1 = Null
 							
-							CameraFogMode(Camera, 0)
 							SecondaryLightOn = True
 							
 							DrawLoading(60, True)
@@ -9832,11 +9811,8 @@ Function UpdateEndings()
 								EndIf
 							EndIf
 						EndIf
-						HideEntity(tt\OverlayID[0])
-						CameraFogRange(Camera, 5.0, 45.0)
 						
 						Angle = Max(Sin(EntityYaw(me\Collider)), 0.0)
-						CameraRange(Camera, 0.01, 60.0)
 						
 						If opt\ParticleAmount > 0 Then
 							If Rand(3) = 1 Then
@@ -9900,7 +9876,6 @@ Function UpdateEndings()
 						If Curr513_1 <> Null Then Curr513_1 = Null
 						If Curr049 <> Null Then Curr049 = Null
 						
-						CameraFogMode(Camera, 0)
 						SecondaryLightOn = True
 						
 						HideDistance = 35.0
@@ -9983,11 +9958,8 @@ Function UpdateEndings()
 						ShouldPlay = 17
 						
 						e\EventState = e\EventState + fpst\FPSFactor[0]
-						HideEntity(tt\OverlayID[0])
-						CameraFogRange(Camera, 5.0, 30.0)
 						
 						Angle = Max(Sin(EntityYaw(me\Collider) + 90.0), 0.0)
-						CameraRange(Camera, 0.01, 60.0)
 						
 						For i = 2 To 4
 							If e\room\NPC[i] <> Null Then 

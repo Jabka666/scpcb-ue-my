@@ -5624,7 +5624,7 @@ Function UpdateRooms()
 				EndIf
 			EndIf
 			
-			If FoundNewPlayerRoom = False Then ; ~ It's likely that an adjacent room is the new player room, check for that
+			If (Not FoundNewPlayerRoom) Then ; ~ It's likely that an adjacent room is the new player room, check for that
 				For i = 0 To 3
 					If PlayerRoom\Adjacent[i] <> Null Then
 						x = Abs(PlayerRoom\Adjacent[i]\x - EntityX(me\Collider, True))

@@ -48,13 +48,24 @@ End Function
 
 Const SubtitlesFile$ = "Data\subtitles.ini"
 
-Function ShowSubtitles(Name$, SubID%) ; ~ Check why the second one renders only after first one
+Function ShowSubtitles(Name$, SubID%)
 	Local Loc% = GetINISectionLocation(SubtitlesFile, Name)
 	Local LinesAmount% = GetINIInt2(SubtitlesFile, Loc, "LinesAmount")
-	Local i%, sub.Subtitles
+	Local i%, sub.Subtitles, currentSub.Subtitles
+	
+	For sub.Subtitles = Each Subtitles
+		If sub\Txt[SubID] = "" And sub\Timer[SubID] =< 0.0 Then
+			currentSub = sub
+			Exit
+		EndIf
+	Next
 	
 	For i = 1 To LinesAmount
-		sub.Subtitles = New Subtitles
+		If currentSub = Null Then
+			sub.Subtitles = New Subtitles
+		Else
+			sub = currentSub
+		EndIf
 		sub\Txt[SubID] = GetINIString2(SubtitlesFile, Loc, "Txt" + i)
 		sub\Timer[SubID] = 70.0 * GetINIFloat2(SubtitlesFile, Loc, "Timer" + i)
 	Next

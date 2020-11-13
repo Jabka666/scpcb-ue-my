@@ -3053,9 +3053,17 @@ Function MainLoop()
 		
 		If (Not MenuOpen) And (Not InvOpen) And OtherOpen = Null And SelectedDoor = Null And (Not ConsoleOpen) And (Not I_294\Using) And SelectedScreen = Null And me\EndingTimer >= 0.0 Then
 			LightVolume = CurveValue(TempLightVolume, LightVolume, 50.0)
-			CameraFogRange(Camera, opt\CameraFogNear * LightVolume, opt\CameraFogFar * LightVolume)
-			CameraFogMode(Camera, 1)
-			CameraRange(Camera, 0.01, Min(opt\CameraFogFar * LightVolume * 1.5, 28.0))	
+			If PlayerRoom\RoomTemplate\Name = "room173intro" Lor PlayerRoom\RoomTemplate\Name = "gatea" Lor (PlayerRoom\RoomTempLate\Name = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale) Then
+				CameraFogMode(Camera, 0)
+				CameraFogRange(Camera, 5.0, 30.0)
+				CameraRange(Camera, 0.01, 60.0)
+				HideEntity(tt\OverlayID[0])
+			Else
+				CameraFogMode(Camera, 1)
+				CameraFogRange(Camera, opt\CameraFogNear * LightVolume, opt\CameraFogFar * LightVolume)
+				CameraRange(Camera, 0.01, Min(opt\CameraFogFar * LightVolume * 1.5, 28.0))
+				ShowEntity(tt\OverlayID[0])
+			EndIf
 			For r.Rooms = Each Rooms
 				For i = 0 To r\MaxLights - 1
 					If r\Lights[i] <> 0 Then
@@ -3063,7 +3071,6 @@ Function MainLoop()
 					EndIf
 				Next
 			Next
-			AmbientLight(opt\Brightness, opt\Brightness, opt\Brightness)
 			me\SndVolume = CurveValue(0.0, me\SndVolume, 5.0)
 			
 			CanSave = True
@@ -8661,11 +8668,6 @@ Function LoadEntities()
 	tt\IconID[4] = LoadImage_Strict("GFX\hand_symbol.png")
 	tt\IconID[5] = LoadImage_Strict("GFX\hand_symbol(2).png")
 	
-	opt\Brightness = GetINIFloat(OptionFile, "Global", "Brightness")
-	opt\CameraFogNear = GetINIFloat(OptionFile, "Global", "Camera Fog Near")
-	opt\CameraFogFar = GetINIFloat(OptionFile, "Global", "Camera Fog Far")
-	opt\StoredCameraFogFar = opt\CameraFogFar
-	
 	AmbientLightRoomTex = CreateTextureUsingCacheSystem(2, 2, 1)
 	TextureBlend(AmbientLightRoomTex, 3)
 	SetBuffer(TextureBuffer(AmbientLightRoomTex))
@@ -12365,5 +12367,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#108E#1323#1DF4
+;~B#1095#132A#1DFB
 ;~C#Blitz3D
