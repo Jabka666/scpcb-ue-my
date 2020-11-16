@@ -157,10 +157,6 @@ End Type
 
 Global ft.FixedTimesteps = New FixedTimesteps
 
-Function ResetTimingAccumulator()
-	ft\Accumulator = 0.0
-End Function
-
 SeedRnd(MilliSecs())
 
 Global GameSaved%
@@ -2792,7 +2788,7 @@ Repeat
 	
 	Local ElapsedMilliseconds%
 	
-	ft\CurrTime = MilliSecs2()
+	ft\CurrTime = MilliSecs()
 	
 	ElapsedMilliseconds = ft\CurrTime - ft\PrevTime
 	If (ElapsedMilliseconds > 0 And ElapsedMilliseconds < 500) Then
@@ -2802,11 +2798,11 @@ Repeat
 	
 	If opt\Framelimit > 0.0 Then
 		; ~ Framelimit
-		Local WaitingTime% = (1000.0 / opt\Framelimit) - (MilliSecs2() - fpst\LoopDelay)
+		Local WaitingTime% = (1000.0 / opt\Framelimit) - (MilliSecs() - fpst\LoopDelay)
 		
 		Delay(WaitingTime)
 		
-		fpst\LoopDelay = MilliSecs2()
+		fpst\LoopDelay = MilliSecs()
 	EndIf
 	
 	fpst\FPSFactor[0] = TICK_DURATION
@@ -2861,10 +2857,10 @@ Repeat
 	EndIf
 	
 	If opt\ShowFPS Then
-		If ft\FPSGoal < MilliSecs2() Then
+		If ft\FPSGoal < MilliSecs() Then
 			ft\FPS = ft\TempFPS
 			ft\TempFPS = 0
-			ft\FPSGoal = MilliSecs2() + 1000
+			ft\FPSGoal = MilliSecs() + 1000
 		Else
 			ft\TempFPS = ft\TempFPS + 1
 		EndIf
@@ -2907,8 +2903,8 @@ Function MainLoop()
 			mo\DoubleClick = False
 			mo\MouseHit1 = MouseHit(1)
 			If mo\MouseHit1 Then
-				If MilliSecs2() - mo\LastMouseHit1 < 800 Then mo\DoubleClick = True
-				mo\LastMouseHit1 = MilliSecs2()
+				If MilliSecs() - mo\LastMouseHit1 < 800 Then mo\DoubleClick = True
+				mo\LastMouseHit1 = MilliSecs()
 			EndIf
 			
 			Local PrevMouseDown1% = mo\MouseDown1
@@ -3818,10 +3814,17 @@ Function UpdateCredits()
 End Function
 
 Function SetCrouch(NewCrouch%)
+	Local Temp%
+	
 	If me\Stamina > 0.0 Then 
 		If NewCrouch <> me\Crouch Then 
 			PlaySound_Strict(CrouchSFX)
 			me\Stamina = me\Stamina - Rnd(8.0, 16.0)
+		EndIf
+		If me\Stamina < 10.0 Then
+			Temp = 0
+			If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp = 1
+			If (Not ChannelPlaying(BreathCHN)) Then BreathCHN = PlaySound_Strict(BreathSFX((Temp), 0))
 		EndIf
 		me\Crouch = NewCrouch
 	EndIf
@@ -3883,7 +3886,7 @@ Function MovePlayer()
 		If PlayerRoom\RoomTemplate\Name <> "pocketdimension" Then 
 			If KeyDown(key\SPRINT) And (Not chs\NoClip) Then
 				If me\Stamina < 5.0 Then
-					Temp = 0.0
+					Temp = 0
 					If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp = 1
 					If (Not ChannelPlaying(BreathCHN)) Then BreathCHN = PlaySound_Strict(BreathSFX((Temp), 0))
 				ElseIf me\Stamina < 40.0
@@ -4124,7 +4127,7 @@ Function MovePlayer()
 	
 	If me\Injuries > 1.0 Then
 		Temp2 = me\Bloodloss
-		me\BlurTimer = Max(Max(Sin(MilliSecs2() / 100.0) * me\Bloodloss * 30.0, me\Bloodloss * 2.0 * (2.0 - me\CrouchState)), me\BlurTimer)
+		me\BlurTimer = Max(Max(Sin(MilliSecs() / 100.0) * me\Bloodloss * 30.0, me\Bloodloss * 2.0 * (2.0 - me\CrouchState)), me\BlurTimer)
 		If I_427\Using = 0 And I_427\Timer < 70.0 * 360.0 Then
 			me\Bloodloss = Min(me\Bloodloss + (Min(me\Injuries, 3.5) / 300.0) * fpst\FPSFactor[0], 100.0)
 		EndIf
@@ -4156,7 +4159,7 @@ Function MovePlayer()
 			FreeEntity(Pvt)
 		EndIf
 		
-		me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs2()) / 20.0) + 1.0) * me\Bloodloss * 0.2)
+		me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs()) / 20.0) + 1.0) * me\Bloodloss * 0.2)
 		
 		If me\Bloodloss > 60.0 Then 
 			If (Not me\Crouch) Then SetCrouch(True)
@@ -4246,7 +4249,7 @@ Function MouseLook()
 		
 		If PlayerRoom\RoomTemplate\Name = "pocketdimension" Then
 			If EntityY(me\Collider) < 2000.0 * RoomScale Lor EntityY(me\Collider) > 2608.0 * RoomScale Then
-				RotateEntity(Camera, WrapAngle(EntityPitch(Camera)), WrapAngle(EntityYaw(Camera)), Roll + WrapAngle(Sin(MilliSecs2() / 150.0) * 30.0)) ; ~ Pitch the user's camera up and down
+				RotateEntity(Camera, WrapAngle(EntityPitch(Camera)), WrapAngle(EntityYaw(Camera)), Roll + WrapAngle(Sin(MilliSecs() / 150.0) * 30.0)) ; ~ Pitch the user's camera up and down
 			EndIf
 		EndIf
 	Else
@@ -5227,7 +5230,7 @@ Function DrawGUI()
 							
 							SetFont(fo\FontID[Font_Digital])
 							If StrTemp <> "" Then
-								StrTemp = Right(Left(StrTemp, (Int(MilliSecs2() / 300) Mod Len(StrTemp))), 10)
+								StrTemp = Right(Left(StrTemp, (Int(MilliSecs() / 300) Mod Len(StrTemp))), 10)
 								Text(x + 32, y + 33, StrTemp)
 							EndIf
 							SetFont(fo\FontID[Font_Default])
@@ -5324,7 +5327,7 @@ Function DrawGUI()
 					EndIf
 					
 					If (Not NavWorks) Then
-						If (MilliSecs2() Mod 1000) > 300 Then
+						If (MilliSecs() Mod 1000) > 300 Then
 							Color(200, 0, 0)
 							Text(x, y + NAV_HEIGHT / 2 - 80, "ERROR 06", True)
 							Text(x, y + NAV_HEIGHT / 2 - 60, "LOCATION UNKNOWN", True)						
@@ -5396,7 +5399,7 @@ Function DrawGUI()
 							Else
 								Color(30, 30, 30)
 							EndIf
-							If (MilliSecs2() Mod 1000.0) > 300.0 Then
+							If (MilliSecs() Mod 1000.0) > 300.0 Then
 								If SelectedItem\ItemTemplate\Name <> "S-NAV 310 Navigator" And SelectedItem\ItemTemplate\Name <> "S-NAV Navigator Ultimate" Then
 									Text(x - NAV_WIDTH / 2 + 10, y - NAV_HEIGHT / 2 + 10, "MAP DATABASE OFFLINE")
 								EndIf
@@ -5413,7 +5416,7 @@ Function DrawGUI()
 							
 							Local SCPs_Found% = 0, Dist#
 							
-							If SelectedItem\ItemTemplate\Name = "S-NAV Navigator Ultimate" And (MilliSecs2() Mod 600.0) < 400.0 Then
+							If SelectedItem\ItemTemplate\Name = "S-NAV Navigator Ultimate" And (MilliSecs() Mod 600.0) < 400.0 Then
 								If Curr173 <> Null Then
 									Dist = EntityDistance(Camera, Curr173\OBJ)
 									If Dist < 8.0 * 4.0 Then
@@ -11463,7 +11466,7 @@ Function Update008()
 			me\HeartBeatRate = Max(me\HeartBeatRate, 100.0)
 			me\HeartBeatVolume = Max(me\HeartBeatVolume, I_008\Timer / 120.0)
 			
-			EntityAlpha(tt\OverlayID[3], Min(((I_008\Timer * 0.2) ^ 2.0) / 1000.0, 0.5) * (Sin(MilliSecs2() / 8.0) + 2.0))
+			EntityAlpha(tt\OverlayID[3], Min(((I_008\Timer * 0.2) ^ 2.0) / 1000.0, 0.5) * (Sin(MilliSecs() / 8.0) + 2.0))
 			
 			For i = 0 To 6
 				If I_008\Timer > i * 15.0 + 10.0 And PrevI008Timer =< i * 15.0 + 10.0 Then
@@ -11512,7 +11515,7 @@ Function Update008()
 			
 			If TeleportForInfect Then
 				If I_008\Timer < 94.7 Then
-					EntityAlpha(tt\OverlayID[3], 0.5 * (Sin(MilliSecs2() / 8.0) + 2.0))
+					EntityAlpha(tt\OverlayID[3], 0.5 * (Sin(MilliSecs() / 8.0) + 2.0))
 					me\BlurTimer = 900.0
 					
 					If I_008\Timer > 94.5 Then me\BlinkTimer = Max(Min((-50.0) * (I_008\Timer - 94.5), me\BlinkTimer), -10.0)
@@ -11526,7 +11529,7 @@ Function Update008()
 					
 					Animate2(PlayerRoom\NPC[0]\OBJ, AnimTime(PlayerRoom\NPC[0]\OBJ), 357.0, 381.0, 0.3)
 				ElseIf I_008\Timer < 98.5
-					EntityAlpha(tt\OverlayID[3], 0.5 * (Sin(MilliSecs2() / 5.0) + 2.0))
+					EntityAlpha(tt\OverlayID[3], 0.5 * (Sin(MilliSecs() / 5.0) + 2.0))
 					me\BlurTimer = 950.0
 					
 					me\ForceMove = 0.0
@@ -11569,9 +11572,9 @@ Function Update008()
 					EndIf
 					
 					PositionEntity(me\Head, EntityX(PlayerRoom\NPC[0]\Collider, True), EntityY(PlayerRoom\NPC[0]\Collider, True) + 0.65, EntityZ(PlayerRoom\NPC[0]\Collider, True), True)
-					RotateEntity(me\Head, (1.0 + Sin(MilliSecs2() / 5.0)) * 15.0, PlayerRoom\Angle - 180.0, 0.0, True)
+					RotateEntity(me\Head, (1.0 + Sin(MilliSecs() / 5.0)) * 15.0, PlayerRoom\Angle - 180.0, 0.0, True)
 					MoveEntity(me\Head, 0.0, 0.0, -0.4)
-					TurnEntity(me\Head, 80.0 + (Sin(MilliSecs2() / 5.0)) * 30.0, (Sin(MilliSecs2() / 5.0)) * 40.0, 0.0)
+					TurnEntity(me\Head, 80.0 + (Sin(MilliSecs() / 5.0)) * 30.0, (Sin(MilliSecs() / 5.0)) * 40.0, 0.0)
 				EndIf
 			Else
 				Kill()
@@ -11944,7 +11947,7 @@ Function RenderWorld2(Tween#)
 	CameraProjMode(ArkBlurCam, 0)
 	
 	If me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0 Then
-		If (wi\NightVision = 1 Lor wi\NightVision = 2 Lor wi\SCRAMBLE > 0) And (HasBattery = 1) And ((MilliSecs2() Mod 800) < 400) Then
+		If (wi\NightVision = 1 Lor wi\NightVision = 2 Lor wi\SCRAMBLE > 0) And (HasBattery = 1) And ((MilliSecs() Mod 800) < 400) Then
 			Color(255, 0, 0)
 			SetFont(fo\FontID[Font_Digital])
 			
@@ -12319,5 +12322,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#1069#12FE#1DCF
+;~B#106C#1301#1DD2
 ;~C#Blitz3D

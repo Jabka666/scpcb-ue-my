@@ -112,8 +112,8 @@ Function UpdateMainMenu()
 			mo\DoubleClick = False
 			mo\MouseHit1 = MouseHit(1)
 			If mo\MouseHit1 Then
-				If MilliSecs2() - mo\LastMouseHit1 < 800 Then mo\DoubleClick = True
-				mo\LastMouseHit1 = MilliSecs2()
+				If MilliSecs() - mo\LastMouseHit1 < 800 Then mo\DoubleClick = True
+				mo\LastMouseHit1 = MilliSecs()
 			EndIf
 			
 			Local PrevMouseDown1% = mo\MouseDown1
@@ -1003,7 +1003,7 @@ Function RenderMainMenu()
 	
 	DrawImage(mm\MainMenuBack, 0, 0)
 	
-	If (MilliSecs2() Mod mm\MainMenuBlinkTimer[0]) >= Rand(mm\MainMenuBlinkDuration[0]) Then
+	If (MilliSecs() Mod mm\MainMenuBlinkTimer[0]) >= Rand(mm\MainMenuBlinkDuration[0]) Then
 		DrawImage(mm\MainMenu173, opt\GraphicWidth - ImageWidth(mm\MainMenu173), opt\GraphicHeight - ImageHeight(mm\MainMenu173))
 	EndIf
 	
@@ -2124,16 +2124,7 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 		
 		FirstLoop = False
 		If Percent <> 100 Then Exit
-		
-		Local Close% = False
-		
-		If GetKey() <> 0 Lor MouseHit(1)
-			FlushKeys()
-			FlushMouse()
-			ResetTimingAccumulator()
-			Close = True
-		EndIf
-	Until Close
+	Until GetKey() <> 0 Lor MouseHit(1)
 	
 	DeleteMenuGadgets()
 End Function
@@ -2428,7 +2419,7 @@ Function RenderMenuInputBoxes()
 		Color(255, 255, 255)	
 		
 		If SelectedInputBox = mib\ID Then
-			If (MilliSecs2() Mod 800) < 400 Then Rect(mib\x + mib\Width / 2 - (StringWidth(mib\Txt)) / 2 + StringWidth(Left(mib\Txt, CursorPos)), mib\y + mib\Height / 2 - 5, 2, 12)
+			If (MilliSecs() Mod 800) < 400 Then Rect(mib\x + mib\Width / 2 - (StringWidth(mib\Txt)) / 2 + StringWidth(Left(mib\Txt, CursorPos)), mib\y + mib\Height / 2 - 5, 2, 12)
 		EndIf	
 		
 		Text(mib\x + mib\Width / 2, mib\y + mib\Height / 2, mib\Txt, True, True)

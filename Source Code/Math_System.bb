@@ -154,12 +154,5 @@ Function MakeCollBox(Mesh%)
 	EntityBox(Mesh, Mesh_MinX * sX, Mesh_MinY * sY, Mesh_MinZ * sZ, Mesh_MagX * sX, Mesh_MagY * sY, Mesh_MagZ * sZ)
 End Function
 
-Function MilliSecs2()
-	Local ReturnValue% = MilliSecs()
-	
-	If ReturnValue < 0 Then ReturnValue = ReturnValue + 2147483648
-	Return(ReturnValue)
-End Function
-
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D
