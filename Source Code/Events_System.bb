@@ -2331,10 +2331,10 @@ Function UpdateEvents()
 					If CoffinDistance < 1.5 Then 
 						GiveAchievement(Achv895)
 						If (Not Curr106\Contained) And e\EventID = e_room895_106 And e\EventState2 = 0.0 Then
-							de.Decals = CreateDecal(0, EntityX(e\room\Objects[1], True), -1531.0 * RoomScale, EntityZ(e\room\Objects[1], True), 90.0, Rand(360.0), 0.0, 0.05, 0.8)
+							de.Decals = CreateDecal(0, EntityX(e\room\Objects[1], True), e\room\y - 1531.0 * RoomScale, EntityZ(e\room\Objects[1], True), 90.0, Rand(360.0), 0.0, 0.05, 0.8)
 							de\SizeChange = 0.001 : UpdateDecals()
 							
-							PositionEntity(Curr106\Collider, EntityX(e\room\Objects[1], True), -1541.0 * RoomScale, EntityZ(e\room\Objects[1], True))
+							PositionEntity(Curr106\Collider, EntityX(e\room\Objects[1], True), e\room\y - 1541.0 * RoomScale, EntityZ(e\room\Objects[1], True))
 							SetAnimTime(Curr106\OBJ, 110.0)
 							Curr106\State = -0.1
 							Curr106\PrevY = EntityY(me\Collider)
@@ -4621,7 +4621,7 @@ Function UpdateEvents()
 						
 						ShouldPlay = 7
 						
-						If e\EventState = 0 Then
+						If e\EventState = 0.0 Then
 							If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < EntityDistanceSquared(me\Collider, e\room\Objects[1]) Then
 								Temp = 0
 							Else
@@ -9526,12 +9526,13 @@ Function UpdateEndings()
 							DrawLoading(0, True)
 							
 							For n.NPCs = Each NPCs
-								RemoveNPC(n)
+								If n <> Curr106 And n <> Curr173 Then  
+									RemoveNPC(n)
+								EndIf
 							Next
-							Curr173 = Null
-							Curr106 = Null
 							Curr096 = Null
 							Curr513_1 = Null
+							Curr049 = Null
 							
 							SecondaryLightOn = True
 							
@@ -9564,12 +9565,6 @@ Function UpdateEndings()
 							RotateEntity(Sky, 0.0, e\room\Angle - 90.0, 0.0)
 							
 							e\EventState = 1.0
-							
-							For n.NPCs = Each NPCs
-								If n\NPCtype = NPCtypeMTF
-									RemoveNPC(n)
-								EndIf
-							Next
 							
 							DrawLoading(100, True)
 						Else
@@ -9872,10 +9867,9 @@ Function UpdateEndings()
 								RemoveNPC(n)
 							EndIf
 						Next
-						Curr173\Idle = 1
-						If Curr096 <> Null Then Curr096 = Null
-						If Curr513_1 <> Null Then Curr513_1 = Null
-						If Curr049 <> Null Then Curr049 = Null
+						Curr096 = Null
+						Curr513_1 = Null
+						Curr049 = Null
 						
 						SecondaryLightOn = True
 						
@@ -9927,16 +9921,16 @@ Function UpdateEndings()
 						FreeEntity(e\room\Objects[9])
 						
 						e\room\Objects[9] = LoadMesh_Strict("GFX\map\Props\lightgunbase.b3d")
-						ScaleEntity(e\room\Objects[9], RoomScale, RoomScale, RoomScale)
-						EntityFX(e\room\Objects[9], 0)
 						PositionEntity(e\room\Objects[9], xTemp, e\room\y + 992.0 * RoomScale, zTemp)
+						ScaleEntity(e\room\Objects[9], RoomScale, RoomScale, RoomScale)
+						RotateEntity(e\room\Objects[9], 0.0, 48.0, 0.0)
+						EntityFX(e\room\Objects[9], 0)
 						e\room\Objects[10] = LoadMesh_Strict("GFX\map\Props\lightgun.b3d")
+						PositionEntity(e\room\Objects[10], xTemp, e\room\y + (992.0 + 288.0) * RoomScale, zTemp - 176.0 * RoomScale, True)
 						EntityFX(e\room\Objects[10], 0)
 						ScaleEntity(e\room\Objects[10], RoomScale, RoomScale, RoomScale)
-						PositionEntity(e\room\Objects[10], xTemp, e\room\y + (992.0 + 288.0) * RoomScale, zTemp - 176.0 * RoomScale, True)
-						EntityParent(e\room\Objects[10], e\room\Objects[9])
-						RotateEntity(e\room\Objects[9], 0.0, 48.0, 0.0)
 						RotateEntity(e\room\Objects[10], 40.0, 0.0, 0.0)
+						EntityParent(e\room\Objects[10], e\room\Objects[9])
 						
 						For Temp = 0 To 20
 							For i = 0 To 1
@@ -9976,13 +9970,13 @@ Function UpdateEndings()
 						If e\EventState >= 350.0 Then
 							If (Not Curr106\Contained) Then
 								If e\EventState - fpst\FPSFactor[0] < 350.0
-									Curr106\State = -0.1
-									SetNPCFrame(Curr106, 110.0)
-									PositionEntity(Curr106\Collider, EntityX(e\room\Objects[3], True), EntityY(me\Collider) - 50.0, EntityZ(e\room\Objects[3], True), True)
-									PositionEntity(Curr106\OBJ, EntityX(e\room\Objects[3], True), EntityY(me\Collider) - 50.0, EntityZ(e\room\Objects[3], True), True)
-									
 									de.Decals = CreateDecal(0, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True) + 0.01, EntityZ(e\room\Objects[3], True), 90.0, Rand(360.0), 0.0, 0.05, 0.8)
 									de\SizeChange = 0.001 : UpdateDecals() 
+									
+									PositionEntity(Curr106\Collider, EntityX(e\room\Objects[3], True), EntityY(me\Collider) - 3.0, EntityZ(e\room\Objects[3], True), True)
+									SetAnimTime(Curr106\OBJ, 110.0)
+									Curr106\State = -0.1
+									Curr106\PrevY = EntityY(me\Collider)
 									
 									PlaySound_Strict(HorrorSFX[5])
 									PlaySound_Strict(DecaySFX[0])

@@ -559,7 +559,7 @@ Function UpdateNPCs()
 		Select n\NPCtype
 			Case NPCtype173
 				;[Block]
-				If Curr173\Idle <> 3 Then
+				If Curr173\Idle <> 3 And (PlayerRoom\RoomTemplate\Name <> "gateb" And EntityY(me\Collider) =< 1040.0 * RoomScale) Then
 					Dist = EntityDistance(n\Collider, me\Collider)		
 					
 					n\State3 = 1.0
@@ -802,7 +802,7 @@ Function UpdateNPCs()
 				;[End Block]
 			Case NPCtype106
 				;[Block]
-				If n\Contained Then
+				If n\Contained Lor (PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale) Then
 					n\Idle = 1
 					HideEntity(n\OBJ)
 					HideEntity(n\OBJ2)

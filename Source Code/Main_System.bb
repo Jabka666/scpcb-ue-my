@@ -144,57 +144,23 @@ End Type
 
 Global fpst.FramesPerSecondsTemplate = New FramesPerSecondsTemplate
 
+Const TICK_DURATION# = 70.0 / 60.0
+
 Type FixedTimesteps
-	Field TickDuration#
 	Field Accumulator#
 	Field PrevTime%
 	Field CurrTime%
-	Field FPS#
+	Field FPS%
+	Field TempFPS%
+	Field FPSGoal%
 End Type
 
 Global ft.FixedTimesteps = New FixedTimesteps
-
-Function SetTickrate(Tickrate%)
-	ft\TickDuration = 70.0 / Float(Tickrate)
-End Function
-
-Function AddToTimingAccumulator(Milliseconds%)
-	If Milliseconds < 1 Lor Milliseconds > 500 Then Return
-	ft\Accumulator = ft\Accumulator + Max(0.0, Float(Milliseconds) * 70.0 / 1000.0)
-End Function
 
 Function ResetTimingAccumulator()
 	ft\Accumulator = 0.0
 End Function
 
-Function SetCurrTime(Time%)
-	ft\CurrTime = Time
-End Function
-
-Function SetPrevTime(Time%)
-	ft\PrevTime = Time
-End Function
-
-Function SetFPS(ElapsedMilliseconds%)
-	Local InstantFramerate# = 1000.0 / Max(1.0, ElapsedMilliseconds)
-	
-	ft\FPS = Max(0.0, ft\FPS * 0.99 + InstantFramerate * 0.01)
-End Function
-
-Function GetCurrTime%()
-	Return(ft\CurrTime)
-End Function
-
-Function GetPrevTime%()
-	Return(ft\PrevTime)
-End Function
-
-Function GetTickDuration#()
-	Return(ft\TickDuration)
-End Function
-
-SetTickrate(60)
-	
 SeedRnd(MilliSecs())
 
 Global GameSaved%
@@ -1015,7 +981,11 @@ Function UpdateConsole()
 					
 					For r.Rooms = Each Rooms
 						If r\RoomTemplate\Name = StrTemp Then
-							PositionEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.7, EntityZ(r\OBJ))
+							If StrTemp = "room106" Then
+								PositionEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.7, EntityZ(r\OBJ) - 704.0 * RoomScale)
+							Else
+								PositionEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.7, EntityZ(r\OBJ))
+							EndIf
 							ResetEntity(me\Collider)
 							UpdateDoors()
 							UpdateRooms()
@@ -2822,24 +2792,25 @@ Repeat
 	
 	Local ElapsedMilliseconds%
 	
-	SetCurrTime(MilliSecs2())
-	ElapsedMilliseconds = GetCurrTime() - GetPrevTime()
-	AddToTimingAccumulator(ElapsedMilliseconds)
-	SetPrevTime(GetCurrTime())
+	ft\CurrTime = MilliSecs2()
 	
-	If opt\FrameLimit > 0 Then
-	    ; ~ FrameLimit
-		Local WaitingTime% = (1000.0 / opt\FrameLimit) - (MilliSecs2() - fpst\LoopDelay)
+	ElapsedMilliseconds = ft\CurrTime - ft\PrevTime
+	If (ElapsedMilliseconds > 0 And ElapsedMilliseconds < 500) Then
+		ft\Accumulator = ft\Accumulator + Max(0.0, Float(ElapsedMilliseconds) * 70.0 / 1000.0)
+	EndIf
+	ft\PrevTime = ft\CurrTime
+	
+	If opt\Framelimit > 0.0 Then
+		; ~ Framelimit
+		Local WaitingTime% = (1000.0 / opt\Framelimit) - (MilliSecs2() - fpst\LoopDelay)
 		
 		Delay(WaitingTime)
 		
 		fpst\LoopDelay = MilliSecs2()
 	EndIf
 	
-	fpst\FPSFactor[0] = GetTickDuration()
+	fpst\FPSFactor[0] = TICK_DURATION
 	fpst\FPSFactor[1] = fpst\FPSFactor[0]
-	
-	SetFPS(ElapsedMilliseconds)
 	
 	If MainMenuOpen Then
 		UpdateMainMenu()
@@ -2889,13 +2860,23 @@ Repeat
 		Wend
 	EndIf
 	
-	CatchErrors("Main Loop / Uncaught")
+	If opt\ShowFPS Then
+		If ft\FPSGoal < MilliSecs2() Then
+			ft\FPS = ft\TempFPS
+			ft\TempFPS = 0
+			ft\FPSGoal = MilliSecs2() + 1000
+		Else
+			ft\TempFPS = ft\TempFPS + 1
+		EndIf
+	EndIf
 	
 	If (Not opt\VSync) Then
 		Flip(False)
 	Else 
 		Flip(True)
 	EndIf
+	
+	CatchErrors("Main Loop / Uncaught")
 Forever
 
 ; ~ Fog Constants
@@ -2915,7 +2896,7 @@ Function MainLoop()
 	Local e.Events, r.Rooms, i%
 	
 	While ft\Accumulator > 0.0
-		ft\Accumulator = ft\Accumulator - GetTickDuration()
+		ft\Accumulator = ft\Accumulator - TICK_DURATION
 		If ft\Accumulator =< 0.0 Then CaptureWorld()
 		
 		If MenuOpen Lor InvOpen Lor OtherOpen <> Null Lor ConsoleOpen Lor SelectedDoor <> Null Lor SelectedScreen <> Null Lor I_294\Using Then fpst\FPSFactor[0] = 0.0
@@ -3291,7 +3272,7 @@ Function MainLoop()
 		
 		UpdateGUI()
 		
-		If KeyHit(key\INVENTORY) And me\VomitTimer >= 0.0 Then
+		If KeyHit(key\INVENTORY) And me\VomitTimer >= 0.0 And me\KillTimer >= 0.0 And me\SelectedEnding = "" Then
 			If (Not UnableToMove) And (Not me\Zombie) And (Not I_294\Using) Then
 				Local W$ = ""
 				Local V# = 0
@@ -3305,7 +3286,7 @@ Function MainLoop()
 						SelectedItem\ItemTemplate\Img = 0
 					EndIf
 				EndIf
-				If (W <> "vest" And W <> "finevest" And W <> "hazmatsuit" And W <> "hazmatsuit2" And W <> "hazmatsuit3") Lor V = 0 Lor V = 100
+				If (W <> "vest" And W <> "finevest" And W <> "hazmatsuit" And W <> "hazmatsuit2" And W <> "hazmatsuit3") Lor V = 0.0 Lor V = 100.0
 					If InvOpen Then
 						ResumeSounds()
 						MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_X_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
@@ -3406,7 +3387,7 @@ Function MainLoop()
 		If me\EndingTimer < 0.0 Then
 			If me\SelectedEnding <> "" Then UpdateEnding()
 		Else
-			UpdateMenu()			
+			If me\SelectedEnding = "" Then UpdateMenu()			
 		EndIf
 		
 		UpdateMessages()
@@ -3420,7 +3401,7 @@ Function MainLoop()
 	; ~ Go out of function immediately if the game has been quit
 	If MainMenuOpen Then Return
 	
-	RenderWorld2(Max(0.0, 1.0 + (ft\Accumulator / ft\TickDuration)))
+	RenderWorld2(Max(0.0, 1.0 + (ft\Accumulator / TICK_DURATION)))
 	
 	UpdateBlur(me\BlurVolume)
 	
@@ -3432,7 +3413,7 @@ Function MainLoop()
 	If me\EndingTimer < 0.0 Then
 		If me\SelectedEnding <> "" Then DrawEnding()
 	Else
-		DrawMenu()			
+		If me\SelectedEnding = "" Then DrawMenu()			
 	EndIf
 	
 	UpdateConsole()
@@ -5792,7 +5773,7 @@ Function UpdateGUI()
 		msg\KeypadMsg = ""
 	EndIf
 	
-	If KeyHit(1) And me\EndingTimer = 0.0 Then
+	If KeyHit(1) And me\EndingTimer = 0.0 And me\SelectedEnding = "" Then
 		If MenuOpen Lor InvOpen Then
 			ResumeSounds()
 			If OptionsMenu <> 0 Then SaveOptionsINI()
@@ -9424,13 +9405,13 @@ Function InitLoadGame()
 	
 	DeleteTextureEntriesFromCache(0)
 	
-	CatchErrors("InitLoadGame")
-	
 	DrawLoading(100)
 	
 	fpst\PrevTime = MilliSecs()
 	fpst\FPSFactor[0] = 0.0
 	ResetInput()
+	
+	CatchErrors("InitLoadGame")
 End Function
 
 Function NullGame(PlayButtonSFX% = True) ; ~ CHECK FOR ERRORS
@@ -12341,5 +12322,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#107C#1311#1DE2
+;~B#1069#12FE#1DCF
 ;~C#Blitz3D

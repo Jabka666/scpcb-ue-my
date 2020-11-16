@@ -122,7 +122,7 @@ Bug Fixes:
 - Fixed grammatical mistake for one of the SCP-1048's drawings.
 - Fixed SCP-1123 for SCP-714.
 - Fixed some buttons' positions.
-- Fixed room lights not working most of the time. ;
+- Fixed room lights not working most of the time.
 - Fixed launcher options not saving when quitting.
 - Fixed security camera bases rotating with the cameras.
 - Fixed fog while wearing night vision.
@@ -144,6 +144,8 @@ Bug Fixes:
 - Fixed SCP-1162 doesn't remove overlays.
 - Fixed light rendering through wooden doors.
 - Fixed elevators don't move any decals.
+- Fixed the Gate A bug where SCP-106 spawns constantly.
+- Fixed menu and inventory opening during the endings.
 
 - Small fixes for commands "disablenuke" and "enablecontrol/disablecontrol.
 - Small fixes for gateb and gateaentrance's walls.

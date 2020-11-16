@@ -103,7 +103,7 @@ Function UpdateMainMenu()
 	Local Dir%, File$, Test%, snd.Sound
 	
 	While ft\Accumulator > 0.0
-		ft\Accumulator = ft\Accumulator - GetTickDuration()
+		ft\Accumulator = ft\Accumulator - TICK_DURATION
 		If ft\Accumulator =< 0.0 Then CaptureWorld()
 		
 		If Input_ResetTime > 0.0 Then
