@@ -478,8 +478,10 @@ Function UpdateMainMenu()
 									Else
 										If DrawButton(x + 280 * MenuScale, y + 20 * MenuScale, 100 * MenuScale, 30 * MenuScale, "Load", False) Then
 											DeInitMenuAssets()
-											InitLoadGame()
+											LoadEntities()
+											LoadAllSounds()
 											LoadGame(SavePath + SaveGames(i - 1) + "\")
+											InitLoadGame()
 											CurrSave = SaveGames(i - 1)
 											MainMenuOpen = False
 											mm\ShouldDeleteGadgets = True

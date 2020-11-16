@@ -9327,9 +9327,6 @@ Function InitLoadGame()
 	
 	Local d.Doors, sc.SecurityCams, rt.RoomTemplates, e.Events, i%, x#, z#
 	
-	LoadEntities()
-	LoadAllSounds()
-	
 	DrawLoading(80)
 	
 	me\Playable = True
