@@ -2561,12 +2561,12 @@ Function UpdateEvents()
 							e\EventState = 2.0
 							
 							e\Sound = LoadSound_Strict("SFX\Character\Janitor\106Abduct.ogg")
-							PlaySound_Strict(e\Sound)		
+							PlaySound_Strict(e\Sound, True, FIRST_PERSON)		
 							
 							If e\SoundCHN <> 0 Then StopChannel(e\SoundCHN)
 						ElseIf e\room\Dist < 8.0
 							If e\Sound = 0 Then e\Sound = LoadSound_Strict("SFX\Character\Janitor\Idle.ogg")
-							e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\NPC[0]\OBJ, 15.0)
+							e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\NPC[0]\OBJ, 15.0, 1.0, True, FIRST_PERSON)
 						EndIf
 					ElseIf e\EventState = 2.0
 						If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\OBJ) < 2.25 Then
@@ -3382,7 +3382,7 @@ Function UpdateEvents()
 						If e\EventState - fpst\FPSFactor[0] < 70.0 * 3.0 Then
 							e\room\NPC[0]\State = 0.0
 							e\room\NPC[1]\Sound = LoadSound_Strict("SFX\Room\Storeroom\Escape2.ogg")
-							e\room\NPC[1]\SoundCHN = PlaySound2(e\room\NPC[1]\Sound, Camera, e\room\NPC[1]\Collider, 12.0)
+							e\room\NPC[1]\SoundCHN = PlaySound2(e\room\NPC[1]\Sound, Camera, e\room\NPC[1]\Collider, 12.0, 1.0, True, SECOND_PERSON)
 						EndIf
 						
 						If e\EventState > 70.0 * 4.5 Then
@@ -4928,7 +4928,7 @@ Function UpdateEvents()
 						Curr096\State2 = 70.0 * 10.0
 						
 						LoadEventSound(e, "SFX\Character\Guard\096ServerRoom1.ogg")
-						e\SoundCHN = PlaySound2(e\Sound, Camera, Curr096\OBJ)
+						e\SoundCHN = PlaySound2(e\Sound, Camera, Curr096\OBJ, 10.0, 1.0, True, FIRST_PERSON)
 						
 						e\room\NPC[0] = CreateNPC(NPCtypeGuard, EntityX(e\room\Objects[7], True), EntityY(e\room\Objects[7], True), EntityZ(e\room\Objects[7], True))
 						
@@ -5080,7 +5080,7 @@ Function UpdateEvents()
 						EndIf
 					EndIf
 					If ChannelPlaying(e\SoundCHN) Then
-						UpdateSoundOrigin(e\SoundCHN, Camera, Curr096\OBJ)
+						UpdateSoundOrigin(e\SoundCHN, Camera, Curr096\OBJ, 10.0, 1.0, True, FIRST_PERSON)
 					EndIf
 				ElseIf PlayerRoom = e\room
 					Temp = UpdateLever(e\room\Objects[1]) ; ~ Power switch
@@ -7537,7 +7537,7 @@ Function UpdateEvents()
 				Else
 					If e\Sound = 0 Then e\Sound = LoadSound_Strict("SFX\Character\Guard\SuicideGuard1.ogg")
 					If e\room\Dist < 15.0 And e\room\Dist >= 4.0 Then 
-						e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\NPC[0]\Collider, 15.0)
+						e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\NPC[0]\Collider, 15.0, 1.0, True, FIRST_PERSON)
 					ElseIf e\room\Dist < 4.0 And me\SndVolume > 1.0
 						If e\EventState2 = 0.0 Then
 							de.Decals = CreateDecal(3, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True), 0.0, e\room\Angle + 270.0, 0.0, 0.3)
@@ -7548,7 +7548,7 @@ Function UpdateEvents()
 							StopChannel(e\SoundCHN)
 							FreeSound_Strict(e\Sound)
 							e\room\NPC[0]\Sound = LoadSound_Strict("SFX\Character\Guard\SuicideGuard2.ogg")
-							e\SoundCHN2 = PlaySound2(e\room\NPC[0]\Sound, Camera, e\room\NPC[0]\Collider, 15.0)
+							e\SoundCHN2 = PlaySound2(e\room\NPC[0]\Sound, Camera, e\room\NPC[0]\Collider, 15.0, 1.0, True, FIRST_PERSON)
 						EndIf
 						UpdateSoundOrigin(e\SoundCHN2, Camera, e\room\NPC[0]\Collider, 15.0)
 						If (Not ChannelPlaying(e\SoundCHN2)) Then RemoveEvent(e)

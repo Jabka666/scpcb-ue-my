@@ -8761,7 +8761,7 @@ Function LoadEntities()
 	MoveEntity(tt\OverlayID[11], 0.0, 0.0, 1.0)
 	
 	For i = 7 To 11
-		HideEntity(tt\OverlayID[11])
+		HideEntity(tt\OverlayID[i])
 	Next
 	
 	me\Collider = CreatePivot()
@@ -9487,6 +9487,7 @@ Function NullGame(PlayButtonSFX% = True) ; ~ CHECK FOR ERRORS
 	me\CameraShake = 0.0
 	me\Shake = 0.0
 	me\LightFlash = 0.0
+	me\LightBlink = 0.0
 	
 	ClearCheats(chs)
 	WireFrameState = 0

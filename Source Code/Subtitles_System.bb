@@ -9,6 +9,7 @@ Const THIRD_PERSON% = 3
 Type Subtitles
 	Field Txt$[4]
 	Field Timer#[4]
+	Field Dist#[4]
 End Type
 
 Function UpdateSubtitles()
@@ -35,11 +36,13 @@ Function RenderSubtitles()
 		If sub.Subtitles = First Subtitles Then
 			For i = ANNOUNCEMENT To THIRD_PERSON
 				If sub\Timer[i] > 0.0 Then
-					SetFont(fo\FontID[Font_Default])
-					Color(0, 0, 0)
-					Text((opt\GraphicWidth / 2) + 1, (opt\GraphicHeight / 2) + 291 - (i * 20), sub\Txt[i], True, False)
-					Color(opt\SubColorR, opt\SubColorG, opt\SubColorB)
-					Text((opt\GraphicWidth / 2), (opt\GraphicHeight / 2) + 290 - (i * 20), sub\Txt[i], True, False)
+					If sub\Dist[i] =< 255.0 Then
+						SetFont(fo\FontID[Font_Default])
+						Color(0, 0, 0)
+						Text((opt\GraphicWidth / 2) + 1, (opt\GraphicHeight / 2) + 291 - (i * 20), sub\Txt[i], True, False)
+						Color(Max(opt\SubColorR - sub\Dist[i], 0.0), Max(opt\SubColorG - sub\Dist[i], 0.0), Max(opt\SubColorB - sub\Dist[i], 0.0))
+						Text((opt\GraphicWidth / 2), (opt\GraphicHeight / 2) + 290 - (i * 20), sub\Txt[i], True, False)
+					EndIf
 				EndIf
 			Next
 		EndIf
@@ -49,6 +52,8 @@ End Function
 Const SubtitlesFile$ = "Data\subtitles.ini"
 
 Function ShowSubtitles(Name$, SubID%)
+	CatchErrors("Uncaught (ShowSubtitles)")
+	
 	Local Loc% = GetINISectionLocation(SubtitlesFile, Name)
 	Local LinesAmount% = GetINIInt2(SubtitlesFile, Loc, "LinesAmount")
 	Local i%, sub.Subtitles, currentSub.Subtitles
@@ -57,6 +62,9 @@ Function ShowSubtitles(Name$, SubID%)
 		If sub\Txt[SubID] = "" And sub\Timer[SubID] =< 0.0 Then
 			currentSub = sub
 			Exit
+		Else
+			If sub\Txt[SubID] <> "" Then sub\Txt[SubID] = ""
+			If sub\Timer[SubID] > 0.0 Then sub\Timer[SubID] = 0.0
 		EndIf
 	Next
 	
@@ -69,6 +77,8 @@ Function ShowSubtitles(Name$, SubID%)
 		sub\Txt[SubID] = GetINIString2(SubtitlesFile, Loc, "Txt" + i)
 		sub\Timer[SubID] = 70.0 * GetINIFloat2(SubtitlesFile, Loc, "Timer" + i)
 	Next
+	
+	CatchErrors("ShowSubtitles")
 End Function
 
 ;~IDEal Editor Parameters:

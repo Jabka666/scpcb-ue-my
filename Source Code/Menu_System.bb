@@ -130,10 +130,9 @@ Function UpdateMainMenu()
 		
 		If (Not mo\MouseDown1) And (Not mo\MouseHit1) Then GrabbedEntity = 0
 		
-		If mm\ShouldDeleteGadgets Lor mm\PrevMainMenuTab <> mm\MainMenuTab Then
+		If mm\ShouldDeleteGadgets
 			DeleteMenuGadgets()
 		EndIf
-		mm\PrevMainMenuTab = mm\MainMenuTab
 		mm\ShouldDeleteGadgets = False
 		
 		UpdateMusic()
@@ -166,6 +165,11 @@ Function UpdateMainMenu()
 		EndIf
 		
 		If (Not mo\MouseDown1) Then OnSliderID = 0
+		
+		If mm\PrevMainMenuTab <> mm\MainMenuTab Then
+			DeleteMenuGadgets()
+		EndIf
+		mm\PrevMainMenuTab = mm\MainMenuTab
 		
 		If mm\MainMenuTab = MainMenuTab_Default Then
 			For i = 0 To 3
