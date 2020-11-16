@@ -6248,7 +6248,7 @@ Function UpdateScreens()
 			If EntityDistanceSquared(me\Collider, s\OBJ) < 1.44 Then
 				EntityPick(Camera, 1.2)
 				If PickedEntity() = s\OBJ And s\ImgPath <> "" Then
-					DrawHandIcon = True
+					ga\DrawHandIcon = True
 					If mo\MouseUp1 Then 
 						SelectedScreen = s
 						s\Img = LoadImage_Strict("GFX\screens\" + s\ImgPath)
@@ -6584,7 +6584,7 @@ Function UpdateMonitorSaving()
 			If Close And GrabbedEntity = 0 And ClosestButton = 0 Then
 				If EntityInView(sc\ScrOBJ, Camera) And EntityDistanceSquared(sc\ScrOBJ, Camera) < 1.21 Then
 					If EntityVisible(sc\ScrOBJ, Camera) Then
-						DrawHandIcon = True
+						ga\DrawHandIcon = True
 						If mo\MouseHit1 Then SelectedMonitor = sc
 					Else
 						If SelectedMonitor = sc Then SelectedMonitor = Null
@@ -6622,7 +6622,7 @@ Function UpdateLever(OBJ%, Locked% = False)
 				EntityPick(Camera, 0.65)
 				
 				If PickedEntity() = OBJ Then
-					DrawHandIcon = True
+					ga\DrawHandIcon = True
 					If mo\MouseHit1 Then GrabbedEntity = OBJ
 				EndIf
 				
@@ -6631,7 +6631,7 @@ Function UpdateLever(OBJ%, Locked% = False)
 				If mo\MouseDown1 Lor mo\MouseHit1 Then
 					If GrabbedEntity <> 0 Then
 						If GrabbedEntity = OBJ Then
-							DrawHandIcon = True 
+							ga\DrawHandIcon = True 
 							RotateEntity(GrabbedEntity, Max(Min(EntityPitch(OBJ) + Max(Min(mo\Mouse_Y_Speed_1 * 8.0, 30.0), -30.0), 80.0), -80.0), EntityYaw(OBJ), 0.0)
 							
 							ga\DrawArrowIcon[0] = True
