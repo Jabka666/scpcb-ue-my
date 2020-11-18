@@ -79,6 +79,117 @@ Function LoopSound2%(SoundHandle%, CHN%, Cam%, Entity%, Range# = 10.0, Volume# =
 	Return(CHN)
 End Function
 
+Function UpdateSoundOrigin(CHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, HasSubtitles% = False, SubID% = ANNOUNCEMENT)
+	Local sub.Subtitles
+	
+	Range = Max(Range, 1.0)
+	
+	If Volume > 0.0 Then
+		Local Dist# = EntityDistance(Cam, Entity) / Range
+		
+		If 1.0 - Dist > 0.0 And 1.0 - Dist < 1.0 Then
+			Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
+			
+			If HasSubtitles Then
+				For sub.Subtitles = Each Subtitles
+					sub\Dist[SubID] = EntityDistanceSquared(Cam, Entity) / Range * 25.5
+				Next
+			EndIf
+			
+			ChannelVolume(CHN, Volume * (1.0 - Dist) * opt\SFXVolume)
+			ChannelPan(CHN, PanValue)
+		Else
+			If HasSubtitles Then
+				For sub.Subtitles = Each Subtitles
+					sub\Dist[SubID] = 256.0
+				Next
+			EndIf
+		EndIf
+	Else
+		If HasSubtitles Then
+			For sub.Subtitles = Each Subtitles
+				If sub\Txt[SubID] <> "" Then sub\Txt[SubID] = ""
+			Next
+		EndIf
+		If CHN <> 0 Then
+			ChannelVolume(CHN, 0.0)
+		EndIf 
+	EndIf
+End Function
+
+Function UpdateSoundOrigin2(CHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, HasSubtitles% = False, SubID% = ANNOUNCEMENT)
+	Local sub.Subtitles
+	
+	Range = Max(Range, 1.0)
+	
+	If Volume > 0.0 Then
+		Local Dist# = EntityDistance(Cam, Entity) / Range
+		
+		If 1.0 - Dist > 0.0 And 1.0 - Dist < 1.0 Then
+			Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
+			
+			If HasSubtitles Then
+				For sub.Subtitles = Each Subtitles
+					sub\Dist[SubID] = EntityDistanceSquared(Cam, Entity) / Range * 25.5
+				Next
+			EndIf
+			ChannelVolume(CHN, Volume * (1.0 - Dist))
+			ChannelPan(CHN, PanValue)
+		Else
+			If HasSubtitles Then
+				For sub.Subtitles = Each Subtitles
+					sub\Dist[SubID] = 256.0
+				Next
+			EndIf
+		EndIf
+	Else
+		If HasSubtitles Then
+			For sub.Subtitles = Each Subtitles
+				If sub\Txt[SubID] <> "" Then sub\Txt[SubID] = ""
+			Next
+		EndIf
+		If CHN <> 0 Then
+			ChannelVolume(CHN, 0.0)
+		EndIf 
+	EndIf
+End Function
+
+Function PlayMTFSound(Sound%, n.NPCs)
+	If n <> Null Then
+		n\SoundCHN = PlaySound2(Sound, Camera, n\Collider, 8.0)	
+	EndIf
+	
+	If SelectedItem <> Null Then
+		If SelectedItem\State2 = 3.0 And SelectedItem\State > 0.0 Then 
+			Select SelectedItem\ItemTemplate\TempName 
+				Case "radio", "fineradio", "18vradio"
+					;[Block]
+					If Sound <> MTFSFX[0] Lor (Not ChannelPlaying(RadioCHN[3])) Then
+						If RadioCHN[3] <> 0 Then StopChannel(RadioCHN[3])
+						RadioCHN[3] = PlaySound_Strict(Sound)
+					EndIf
+					;[End Block]
+			End Select
+		EndIf
+	EndIf 
+End Function
+
+Function LoadEventSound(e.Events, File$, Number% = 0)
+	If Number = 0 Then
+		If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
+		e\Sound = LoadSound_Strict(File)
+		Return(e\Sound)
+	ElseIf Number = 1 Then
+		If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
+		e\Sound2 = LoadSound_Strict(File)
+		Return(e\Sound2)
+	ElseIf Number = 2 Then
+		If e\Sound3 <> 0 Then FreeSound_Strict(e\Sound3) : e\Sound3 = 0
+		e\Sound3 = LoadSound_Strict(File)
+		Return(e\Sound3)
+	EndIf
+End Function
+
 Function LoadTempSound(File$)
 	If TempSounds[TempSoundIndex] <> 0 Then FreeSound_Strict(TempSounds[TempSoundIndex])
 	TempSound = LoadSound_Strict(File)
@@ -451,81 +562,6 @@ Function GetStepSound(Entity%)
 		EndIf
 	EndIf
 	Return(0)
-End Function
-
-Function UpdateSoundOrigin(CHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, HasSubtitles% = False, SubID% = ANNOUNCEMENT)
-	Local sub.Subtitles
-	
-	Range = Max(Range, 1.0)
-	
-	If Volume > 0.0 Then
-		Local Dist# = EntityDistance(Cam, Entity) / Range
-		
-		If 1.0 - Dist > 0.0 And 1.0 - Dist < 1.0 Then
-			Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
-			
-			If HasSubtitles Then
-				For sub.Subtitles = Each Subtitles
-					sub\Dist[SubID] = EntityDistanceSquared(Cam, Entity) / Range * 25.5
-				Next
-			EndIf
-			
-			ChannelVolume(CHN, Volume * (1.0 - Dist) * opt\SFXVolume)
-			ChannelPan(CHN, PanValue)
-		Else
-			If HasSubtitles Then
-				For sub.Subtitles = Each Subtitles
-					sub\Dist[SubID] = 256.0
-				Next
-			EndIf
-		EndIf
-	Else
-		If HasSubtitles Then
-			For sub.Subtitles = Each Subtitles
-				If sub\Txt[SubID] <> "" Then sub\Txt[SubID] = ""
-			Next
-		EndIf
-		If CHN <> 0 Then
-			ChannelVolume(CHN, 0.0)
-		EndIf 
-	EndIf
-End Function
-
-Function UpdateSoundOrigin2(CHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, HasSubtitles% = False, SubID% = ANNOUNCEMENT)
-	Local sub.Subtitles
-	
-	Range = Max(Range, 1.0)
-	
-	If Volume > 0.0 Then
-		Local Dist# = EntityDistance(Cam, Entity) / Range
-		
-		If 1.0 - Dist > 0.0 And 1.0 - Dist < 1.0 Then
-			Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
-			
-			If HasSubtitles Then
-				For sub.Subtitles = Each Subtitles
-					sub\Dist[SubID] = EntityDistanceSquared(Cam, Entity) / Range * 25.5
-				Next
-			EndIf
-			ChannelVolume(CHN, Volume * (1.0 - Dist))
-			ChannelPan(CHN, PanValue)
-		Else
-			If HasSubtitles Then
-				For sub.Subtitles = Each Subtitles
-					sub\Dist[SubID] = 256.0
-				Next
-			EndIf
-		EndIf
-	Else
-		If HasSubtitles Then
-			For sub.Subtitles = Each Subtitles
-				If sub\Txt[SubID] <> "" Then sub\Txt[SubID] = ""
-			Next
-		EndIf
-		If CHN <> 0 Then
-			ChannelVolume(CHN, 0.0)
-		EndIf 
-	EndIf
 End Function
 
 Function PlayAnnouncement(File$, HasSubtitles% = False) ; ~ This function streams the announcement currently playing

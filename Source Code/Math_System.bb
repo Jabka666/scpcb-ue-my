@@ -63,13 +63,21 @@ Function AngleDist#(a0#, a1#)
 	Return(bb)
 End Function
 
+Function ScaledMouseX%()
+	Return(Float(MouseX() - (opt\RealGraphicWidth * 0.5 * (1.0 - opt\AspectRatio))) * Float(opt\GraphicWidth) / Float(opt\RealGraphicWidth * opt\AspectRatio))
+End Function
+
+Function ScaledMouseY%()
+	Return(Float(MouseY()) * Float(opt\GraphicHeight) / Float(opt\RealGraphicHeight))
+End Function
+
 Function f2s$(n#, Count%)
 	Return(Left(n, Len(Int(n)) + Count + 1))
 End Function
 
-Function Chance%(Chanc%)
+Function Chance%(Percent%)
 	; ~ Perform a chance given a probability
-	Return(Rand(0, 100) =< Chanc)
+	Return(Rand(0, 100) =< Percent)
 End Function
 
 Function MoveForward%(Dir%, PathX%, PathY%, RetVal% = 0)
@@ -102,6 +110,48 @@ Function TurnIfDeviating%(Max_Deviation_Distance_%, Pathx%, Center_%, Dir%, RetV
 	Else 
 		Return(Deviated)
 	EndIf
+End Function
+
+Function ChangeAngleValueForCorrectBoneAssigning(Value#)
+	Local Number#
+	
+	If Value =< 180.0
+		Number = Value
+	Else
+		Number = (-360.0) + Value
+	EndIf
+	Return(Number)
+End Function
+
+Function Find860Angle(n.NPCs, fr.Forest)
+	TFormPoint(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0, fr\Forest_Pivot)
+	
+	Local PlayerX# = Floor((TFormedX() + 6.0) / 12.0)
+	Local PlayerZ# = Floor((TFormedZ() + 6.0) / 12.0)
+	
+	TFormPoint(EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider), 0, fr\Forest_Pivot)
+	
+	Local x# = (TFormedX() + 6.0) / 12.0
+	Local z# = (TFormedZ() + 6.0) / 12.0
+	Local xt% = Floor(x), zt% = Floor(z)
+	Local x2%, z2%
+	
+	If xt <> PlayerX Lor zt <> PlayerZ Then ; ~ The monster is not on the same tile as the player
+		For x2 = Max(xt - 1, 0) To Min(xt + 1, GridSize - 1)
+			For z2 = Max(zt - 1, 0) To Min(zt + 1, GridSize - 1)
+				If fr\grid[(z2 * GridSize) + x2] > 0 And (x2 <> xt Lor z2 <> zt) And (x2 = xt Lor z2 = zt) Then
+					; ~ Tile (x2, z2) is closer to the player than the monsters current tile
+					If (Abs(PlayerX - x2) + Abs(PlayerZ - z2)) < (Abs(PlayerX - xt) + Abs(PlayerZ - zt)) Then
+						; ~ Calculate the position of the tile in world coordinates
+						TFormPoint(x2 * 12.0, 0.0, z2 * 12.0, fr\Forest_Pivot, 0)
+						Return(PointDirection(EntityX(n\Collider), EntityZ(n\Collider), TFormedX(), TFormedZ()) + 180.0)
+					EndIf
+				EndIf
+			Next
+		Next
+	Else
+		Return(PointDirection(EntityX(n\Collider), EntityZ(n\Collider), EntityX(me\Collider), EntityZ(me\Collider)) + 180.0)
+	EndIf		
 End Function
 
 ; ~ Find mesh extents
@@ -152,6 +202,63 @@ Function MakeCollBox(Mesh%)
 	
 	GetMeshExtents(Mesh)
 	EntityBox(Mesh, Mesh_MinX * sX, Mesh_MinY * sY, Mesh_MinZ * sZ, Mesh_MagX * sX, Mesh_MagY * sY, Mesh_MagZ * sZ)
+End Function
+
+Const ZONEAMOUNT% = 3
+
+Function GetZone(y%)
+	Return(Min(Floor((Float(MapWidth - y) / MapWidth * ZONEAMOUNT)), ZONEAMOUNT - 1))
+End Function
+
+Function CalculateRoomTemplateExtents(r.RoomTemplates)
+	If r\DisableOverlapCheck Then Return
+	
+	GetMeshExtents(GetChild(r\OBJ, 2))
+	r\MinX = Mesh_MinX
+	r\MinY = Mesh_MinY
+	r\MinZ = Mesh_MinZ
+	r\MaxX = Mesh_MaxX
+	r\MaxY = Mesh_MaxY
+	r\MaxZ = Mesh_MaxZ
+End Function
+
+; ~ Shrink the extents slightly - we don't care if the overlap is smaller than the thickness of the walls
+Const ShrinkAmount# = 0.05
+
+Function CalculateRoomExtents(r.Rooms)
+	If r\RoomTemplate\DisableOverlapCheck Then Return
+	
+	; ~ Convert from the rooms local space to world space
+	TFormVector(r\RoomTemplate\MinX, r\RoomTemplate\MinY, r\RoomTemplate\MinZ, r\OBJ, 0)
+	r\MinX = TFormedX() + ShrinkAmount + r\x
+	r\MinY = TFormedY() + ShrinkAmount
+	r\MinZ = TFormedZ() + ShrinkAmount + r\z
+	
+	; ~ Convert from the rooms local space to world space
+	TFormVector(r\RoomTemplate\MaxX, r\RoomTemplate\MaxY, r\RoomTemplate\MaxZ, r\OBJ, 0)
+	r\MaxX = TFormedX() - ShrinkAmount + r\x
+	r\MaxY = TFormedY() - ShrinkAmount
+	r\MaxZ = TFormedZ() - ShrinkAmount + r\z
+	
+	If r\MinX > r\MaxX Then
+		Local TempX# = r\MaxX
+		
+		r\MaxX = r\MinX
+		r\MinX = TempX
+	EndIf
+	If r\MinZ > r\MaxZ Then
+		Local TempZ# = r\MaxZ
+		
+		r\MaxZ = r\MinZ
+		r\MinZ = TempZ
+	EndIf
+End Function
+
+Function CheckRoomOverlap(r1.Rooms, r2.Rooms)
+	If r1\MaxX =< r2\MinX Lor r1\MaxY =< r2\MinY Lor r1\MaxZ =< r2\MinZ Then Return(False)
+	If r1\MinX >= r2\MaxX Lor r1\MinY >= r2\MaxY Lor r1\MinZ >= r2\MaxZ Then Return(False)
+	
+	Return(True)
 End Function
 
 ;~IDEal Editor Parameters:

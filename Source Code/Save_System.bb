@@ -1006,8 +1006,6 @@ Function LoadGame(File$)
 		Next		
 	Next
 	
-	InitWayPoints()
-	
 	If ReadInt(f) <> 1845 Then RuntimeError("Couldn't load the game, save file corrupted (error 3)")
 	
 	Local d.Decals
@@ -1058,7 +1056,6 @@ Function LoadGame(File$)
 			EndIf
 		Next
 	Next
-	UpdateDecals()
 	
 	Temp = ReadInt(f)
 	For i = 1 To Temp
@@ -1343,7 +1340,6 @@ Function LoadGameQuick(File$)
 	
 	me\DropSpeed = -0.1
 	me\HeadDropSpeed = 0.0
-	me\Shake = 0.0
 	me\CurrSpeed = 0.0
 	
 	me\HeartBeatVolume = 0.0
@@ -1803,7 +1799,6 @@ Function LoadGameQuick(File$)
 			EndIf
 		Next
 	Next
-	UpdateDecals()
 	
 	Local e.Events
 	

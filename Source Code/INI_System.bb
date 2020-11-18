@@ -75,89 +75,91 @@ Type INIFile
 	Field Size%
 End Type
 
-Function ReadINILine$(file.INIFile)
-	Local RdByte%
+Function ReadINILine$(ini.INIFile)
+	Local ReadByte_%
 	Local FirstByte% = True
-	Local Offset% = file\BankOffset
-	Local Bank% = file\Bank
+	Local Offset% = ini\BankOffset
+	Local Bank% = ini\Bank
 	Local RetStr$ = ""
 	
-	RdByte = PeekByte(Bank, Offset)
-	While ((FirstByte) Lor ((RdByte <> 13) And (RdByte <> 10))) And (Offset < file\Size)
-		RdByte = PeekByte(Bank, Offset)
-		If RdByte <> 13 And RdByte <> 10 Then
+	ReadByte_ = PeekByte(Bank, Offset)
+	While ((FirstByte) Lor ((ReadByte_ <> 13) And (ReadByte_ <> 10))) And (Offset < ini\Size)
+		ReadByte_ = PeekByte(Bank, Offset)
+		If ReadByte_ <> 13 And ReadByte_ <> 10 Then
 			FirstByte = False
-			RetStr = RetStr + Chr(RdByte)
+			RetStr = RetStr + Chr(ReadByte_)
 		EndIf
 		Offset = Offset + 1
 	Wend
-	file\BankOffset = Offset
+	ini\BankOffset = Offset
 	
 	Return(RetStr)
 End Function
 
-Function UpdateINIFile$(FileName$)
-	Local file.INIFile = Null
+Function UpdateINIFile$(File$)
+	Local ini.INIFile = Null
 	Local k.INIFile
 	
 	For k.INIFile = Each INIFile
-		If k\Name = Lower(FileName) Then
-			file = k
+		If k\Name = Lower(File) Then
+			ini = k
+			Exit
 		EndIf
 	Next
 	
-	If file = Null Then Return
-	If file\Bank <> 0 Then FreeBank(file\Bank)
+	If ini = Null Then Return
+	If ini\Bank <> 0 Then FreeBank(ini\Bank)
 	
-	Local f% = ReadFile(file\Name)
-	Local FleSize% = 1
+	Local f% = ReadFile(ini\Name)
+	Local FileSize_% = 1
 	
-	While FleSize < FileSize(file\Name)
-		FleSize = FleSize * 2
+	While FileSize_ < FileSize(ini\Name)
+		FileSize_ = FileSize_ * 2
 	Wend
-	file\Bank = CreateBank(FleSize)
-	file\Size = 0
+	ini\Bank = CreateBank(FileSize_)
+	ini\Size = 0
 	While (Not Eof(f))
-		PokeByte(file\Bank, file\Size, ReadByte(f))
-		file\Size = file\Size + 1
+		PokeByte(ini\Bank, ini\Size, ReadByte(f))
+		ini\Size = ini\Size + 1
 	Wend
 	CloseFile(f)
 End Function
 
 Function GetINIString$(File$, Section$, Parameter$, DefaultValue$ = "")
 	Local TemporaryString$ = ""
-	Local lfile.INIFile = Null
+	Local ini.INIFile = Null
 	Local k.INIFile
 	
 	For k.INIFile = Each INIFile
 		If k\Name = Lower(File) Then
-			lfile = k
+			ini = k
+			Exit
 		EndIf
 	Next
 	
-	If lfile = Null Then
-		lfile.INIFile = New INIFile
-		lfile\Name = Lower(File)
-		lfile\Bank = 0
-		UpdateINIFile(lfile\Name)
+	If ini = Null Then
+		ini.INIFile = New INIFile
+		ini\Name = Lower(File)
+		ini\Bank = 0
+		UpdateINIFile(ini\Name)
 	EndIf
 	
-	lfile\BankOffset = 0
+	ini\BankOffset = 0
 	
 	Section = Lower(Section)
 	
-	While lfile\BankOffset < lfile\Size
-		Local StrTemp$ = ReadINILine(lfile)
+	While ini\BankOffset < ini\Size
+		Local StrTemp$ = ReadINILine(ini)
 		
 		If Left(StrTemp, 1) = "[" Then
 			StrTemp = Lower(StrTemp)
 			If Mid(StrTemp, 2, Len(StrTemp) - 2) = Section Then
 				Repeat
-					TemporaryString = ReadINILine(lfile)
+					TemporaryString = ReadINILine(ini)
 					If Lower(Trim(Left(TemporaryString, Max(Instr(TemporaryString, "=") - 1, 0)))) = Lower(Parameter) Then
 						Return(Trim(Right(TemporaryString, Len(TemporaryString) - Instr(TemporaryString, "="))))
 					EndIf
-				Until (Left(TemporaryString, 1) = "[") Lor (lfile\BankOffset >= lfile\Size)
+				Until (Left(TemporaryString, 1) = "[") Lor (ini\BankOffset >= ini\Size)
 				Return(DefaultValue)
 			EndIf
 		EndIf
@@ -306,7 +308,7 @@ Function PutINIValue%(File$, INI_sSection$, INI_sKey$, INI_sValue$)
 		INI_lPos = Instr(INI_sContents, Chr(0), INI_lOldPos)
 	Wend
 	
-	; ~ KEY wasn't found in the INI file - Append a new SECTION If required and create our KEY = VALUE line
+	; ~ KEY wasn't found in the INI file - Append a new SECTION if required and create our KEY = VALUE line
 	If (Not INI_bWrittenKey) Then
 		If (Not INI_bSectionFound) Then INI_CreateSection(INI_lFileHandle, INI_sSection)
 		INI_CreateKey(INI_lFileHandle, INI_sKey, INI_sValue)
@@ -320,7 +322,7 @@ Function INI_FileToString$(INI_sFilename$)
 	Local INI_lFileHandle% = ReadFile(INI_sFilename)
 	
 	If INI_lFileHandle <> 0 Then
-		While Not(Eof(INI_lFileHandle))
+		While (Not Eof(INI_lFileHandle))
 			INI_sString = INI_sString + ReadLine(INI_lFileHandle) + Chr(0)
 		Wend
 		CloseFile(INI_lFileHandle)

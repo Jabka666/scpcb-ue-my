@@ -855,7 +855,7 @@ Function UpdateNPCs()
 							If EntityY(n\Collider) < EntityY(me\Collider) - 20.0 - 0.55 Then
 								If Not PlayerRoom\RoomTemplate\DisableDecals Then
 									de.Decals = CreateDecal(0, EntityX(me\Collider), 0.01, EntityZ(me\Collider), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
-									de\SizeChange = 0.001 : UpdateDecals()
+									de\SizeChange = 0.001
 								EndIf
 								
 								n\PrevY = EntityY(me\Collider)
@@ -3844,7 +3844,6 @@ Function UpdateNPCs()
 												If (Not PlayerRoom\RoomTemplate\DisableDecals) Then
 													me\CameraShake = 5.0
 													de.Decals = CreateDecal(1, EntityX(n\Collider), 0.01, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, 0.3)
-													UpdateDecals()
 													PlaySound_Strict(LoadTempSound("SFX\General\BodyFall.ogg"))
 													If DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider)) < 0.64 Then
 														InjurePlayer(Rnd(0.3, 0.5), 0.0, 200.0)
@@ -6070,12 +6069,12 @@ Function UpdateMTFUnit(n.NPCs)
 									
 									If NewDist < 1.0 And n\Path[n\PathLocation]\door <> Null Then
 										; ~ Open the door and make it automatically close after 5 seconds
-										If (Not n\Path[n\PathLocation]\door\Open)
+										If (Not n\Path[n\PathLocation]\door\Open) Then
 											PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\Dir, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
 											PlayMTFSound(MTFSFX[0], n)
 										EndIf
 										n\Path[n\PathLocation]\door\Open = True
-										If n\Path[n\PathLocation]\door\MTFClose
+										If n\Path[n\PathLocation]\door\MTFClose Then
 											n\Path[n\PathLocation]\door\TimerState = 70.0 * 5.0
 										EndIf
 									EndIf
@@ -6938,26 +6937,6 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 	EndIf
 End Function
 
-Function PlayMTFSound(Sound%, n.NPCs)
-	If n <> Null Then
-		n\SoundCHN = PlaySound2(Sound, Camera, n\Collider, 8.0)	
-	EndIf
-	
-	If SelectedItem <> Null Then
-		If SelectedItem\State2 = 3.0 And SelectedItem\State > 0.0 Then 
-			Select SelectedItem\ItemTemplate\TempName 
-				Case "radio", "fineradio", "18vradio"
-					;[Block]
-					If Sound <> MTFSFX[0] Lor (Not ChannelPlaying(RadioCHN[3])) Then
-						If RadioCHN[3] <> 0 Then StopChannel(RadioCHN[3])
-						RadioCHN[3] = PlaySound_Strict(Sound)
-					EndIf
-					;[End Block]
-			End Select
-		EndIf
-	EndIf 
-End Function
-
 Function MoveToPocketDimension()
 	Local r.Rooms
 	
@@ -7016,42 +6995,11 @@ Function ForceSetNPCID(n.NPCs, NewID%)
 	Next
 End Function
 
-Function Find860Angle(n.NPCs, fr.Forest)
-	TFormPoint(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0, fr\Forest_Pivot)
-	
-	Local PlayerX# = Floor((TFormedX() + 6.0) / 12.0)
-	Local PlayerZ# = Floor((TFormedZ() + 6.0) / 12.0)
-	
-	TFormPoint(EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider), 0, fr\Forest_Pivot)
-	
-	Local x# = (TFormedX() + 6.0) / 12.0
-	Local z# = (TFormedZ() + 6.0) / 12.0
-	Local xt% = Floor(x), zt% = Floor(z)
-	Local x2%, z2%
-	
-	If xt <> PlayerX Lor zt <> PlayerZ Then ; ~ The monster is not on the same tile as the player
-		For x2 = Max(xt - 1, 0) To Min(xt + 1, GridSize - 1)
-			For z2 = Max(zt - 1, 0) To Min(zt + 1, GridSize - 1)
-				If fr\grid[(z2 * GridSize) + x2] > 0 And (x2 <> xt Lor z2 <> zt) And (x2 = xt Lor z2 = zt) Then
-					; ~ Tile (x2, z2) is closer to the player than the monsters current tile
-					If (Abs(PlayerX - x2) + Abs(PlayerZ - z2)) < (Abs(PlayerX - xt) + Abs(PlayerZ - zt)) Then
-						; ~ Calculate the position of the tile in world coordinates
-						TFormPoint(x2 * 12.0, 0.0, z2 * 12.0, fr\Forest_Pivot, 0)
-						Return(PointDirection(EntityX(n\Collider), EntityZ(n\Collider), TFormedX(), TFormedZ()) + 180.0)
-					EndIf
-				EndIf
-			Next
-		Next
-	Else
-		Return(PointDirection(EntityX(n\Collider), EntityZ(n\Collider), EntityX(me\Collider), EntityZ(me\Collider)) + 180.0)
-	EndIf		
-End Function
-
-Function Console_SpawnNPC(C_Input$, C_State$ = "")
+Function ConsoleSpawnNPC(Name$, NPCState$ = "")
 	Local n.NPCs
 	Local ConsoleMsg$
 	
-	Select C_Input$ 
+	Select Name 
 		Case "008", "008zombie", "008-1", "infectedhuman", "humaninfected", "scp008-1", "scp-008-1", "scp0081", "0081", "scp-0081"
 			;[Block]
 			n.NPCs = CreateNPC(NPCtype008_1, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
@@ -7172,7 +7120,7 @@ Function Console_SpawnNPC(C_Input$, C_State$ = "")
 	End Select
 	
 	If n <> Null Then
-		If C_State <> "" Then n\State = Float(C_State) : ConsoleMsg = ConsoleMsg + " (State = " + n\State + ")"
+		If NPCState <> "" Then n\State = Float(NPCState) : ConsoleMsg = ConsoleMsg + " (State = " + n\State + ")"
 	EndIf
 	
 	CreateConsoleMsg(ConsoleMsg)
@@ -7274,18 +7222,6 @@ Function GetNPCManipulationValue$(NPC$, Bone$, Section$, ValueType% = 0)
 	End Select
 End Function
 
-Function ChangeAngleValueForCorrectBoneAssigning(Value#)
-	Local Numb#
-	
-	If Value =< 180.0
-		Numb = Value
-	Else
-		Numb = (-360.0) + Value
-	EndIf
-	
-	Return(Numb)
-End Function
-
 Function NPCSpeedChange(n.NPCs)
 	Select n\NPCtype
 		Case NPCtype173, NPCtype106, NPCtype096, NPCtype049, NPCtype939, NPCtypeMTF
@@ -7355,37 +7291,12 @@ Function CheckForNPCInFacility(n.NPCs)
 	Return(True)
 End Function
 
-Function FinishWalking(n.NPCs, StartFrame#, EndFrame#, Speed#)
-	Local CenterFrame#
+Function SetNPCFrame(n.NPCs, Frame#)
+	If Abs(n\Frame - Frame) < 0.001 Then Return
 	
-	If n <> Null
-		CenterFrame = (EndFrame - StartFrame) / 2.0
-		If n\Frame >= CenterFrame
-			AnimateNPC(n, StartFrame, EndFrame, Speed, False)
-		Else
-			AnimateNPC(n, EndFrame, StartFrame, -Speed, False)
-		EndIf
-	EndIf
-End Function
-
-Function ChangeNPCTextureID(n.NPCs, TextureID%) ; ~ Works only for Class D model
-	Local Temp#
+	SetAnimTime(n\OBJ, Frame)
 	
-	If n = Null Then
-		CreateConsoleMsg("Tried to change the texture of an invalid NPC!")
-		If opt\CanOpenConsole And opt\ConsoleOpening Then ConsoleOpen = True
-		Return
-	EndIf
-	
-	n\TextureID = TextureID + 1
-	If n\OBJ <> 0 Then FreeEntity(n\OBJ)
-	n\OBJ = CopyEntity(o\DTextures[TextureID])
-	
-	Temp = GetINIFloat(NPCsFile, "Class D", "Scale") / MeshWidth(n\OBJ)
-	ScaleEntity(n\OBJ, Temp, Temp, Temp)
-	MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0)
-	
-	SetNPCFrame(n, n\Frame)
+	n\Frame = Frame
 End Function
 
 Function AnimateNPC(n.NPCs, FirstFrame#, LastFrame#, Speed#, Loop% = True)
@@ -7417,14 +7328,6 @@ Function AnimateNPC(n.NPCs, FirstFrame#, LastFrame#, Speed#, Loop% = True)
 		EndIf
 	EndIf
 	SetNPCFrame(n, NewTime)
-End Function
-
-Function SetNPCFrame(n.NPCs, Frame#)
-	If Abs(n\Frame - Frame) < 0.001 Then Return
-	
-	SetAnimTime(n\OBJ, Frame)
-	
-	n\Frame = Frame
 End Function
 
 Function Animate2#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = True)
@@ -7460,6 +7363,39 @@ Function Animate2#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = True
 	Return(NewTime)
 End Function 
 
+Function FinishWalking(n.NPCs, StartFrame#, EndFrame#, Speed#)
+	Local CenterFrame#
+	
+	If n <> Null
+		CenterFrame = (EndFrame - StartFrame) / 2.0
+		If n\Frame >= CenterFrame
+			AnimateNPC(n, StartFrame, EndFrame, Speed, False)
+		Else
+			AnimateNPC(n, EndFrame, StartFrame, -Speed, False)
+		EndIf
+	EndIf
+End Function
+
+Function ChangeNPCTextureID(n.NPCs, TextureID%) ; ~ Works only for Class D model
+	Local Temp#
+	
+	If n = Null Then
+		CreateConsoleMsg("Tried to change the texture of an invalid NPC!")
+		If opt\CanOpenConsole And opt\ConsoleOpening Then ConsoleOpen = True
+		Return
+	EndIf
+	
+	n\TextureID = TextureID + 1
+	If n\OBJ <> 0 Then FreeEntity(n\OBJ)
+	n\OBJ = CopyEntity(o\DTextures[TextureID])
+	
+	Temp = GetINIFloat(NPCsFile, "Class D", "Scale") / MeshWidth(n\OBJ)
+	ScaleEntity(n\OBJ, Temp, Temp, Temp)
+	MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0)
+	
+	SetNPCFrame(n, n\Frame)
+End Function
+
 ;~IDEal Editor Parameters:
-;~B#175#122D#1373#13C3#1519#1635#1804#185F
+;~B#175#122C#1372#13C2#1518#1634#1803#185E
 ;~C#Blitz3D

@@ -381,17 +381,16 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 	TempName = Lower (TempName)
 	
 	For it.ItemTemplates = Each ItemTemplates
-		If Lower(it\Name) = Name Then
-			If Lower(it\TempName) = TempName Then
-				i\ItemTemplate = it
-				i\Collider = CreatePivot()			
-				EntityRadius(i\Collider, 0.01)
-				EntityPickMode(i\Collider, 1, False)
-				i\Model = CopyEntity(it\OBJ, i\Collider)
-				i\Name = it\Name
-				ShowEntity(i\Collider)
-				ShowEntity(i\Model)
-			EndIf
+		If Lower(it\Name) = Name And Lower(it\TempName) = TempName Then
+			i\ItemTemplate = it
+			i\Collider = CreatePivot()			
+			EntityRadius(i\Collider, 0.01)
+			EntityPickMode(i\Collider, 1, False)
+			i\Model = CopyEntity(it\OBJ, i\Collider)
+			i\Name = it\Name
+			ShowEntity(i\Collider)
+			ShowEntity(i\Model)
+			Exit
 		EndIf
 	Next 
 	
@@ -476,7 +475,7 @@ Function RemoveItem(i.Items)
 			;[End Block]
 		Case "nvg", "supernvg", "finenvg"
 			;[Block]
-			opt\CameraFogFar = opt\StoredCameraFogFar : wi\NightVision = 0
+			If wi\NightVision > 0 Then opt\CameraFogFar = opt\StoredCameraFogFar : wi\NightVision = 0
 			;[End Block]
 		Case "scp714"
 			;[Block]
@@ -833,7 +832,7 @@ Function DropItem(item.Items, PlayDropSound% = True)
 			;[End Block]
 		Case "nvg", "supernvg", "finenvg"
 			;[Block]
-			opt\CameraFogFar = opt\StoredCameraFogFar : wi\NightVision = 0
+			If wi\NightVision > 0 Then opt\CameraFogFar = opt\StoredCameraFogFar : wi\NightVision = 0
 			;[End Block]
 		Case "scp714"
 			;[Block]
@@ -917,7 +916,7 @@ Function Update294()
 			TurnEntity(Pvt, 90.0, 0.0, 0.0)
 			EntityPick(Pvt, 0.3)
 			de.Decals = CreateDecal(5, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, 180.0, 0.0, 0.001, 1.0, 0, 1, 0, Rand(200, 255), 0)
-			de\SizeChange = 0.001 : de\MaxSize = 0.6 : UpdateDecals()
+			de\SizeChange = 0.001 : de\MaxSize = 0.6
 			FreeEntity(Pvt)
 			me\Vomit = True
 		EndIf
