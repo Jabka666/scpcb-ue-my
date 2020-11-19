@@ -1342,6 +1342,10 @@ Function UpdateConsole()
 						IntercomStreamCHN = 0
 					EndIf
 					
+					For i = ANNOUNCEMENT To THIRD_PERSON
+						ClearSubtitles(i)
+					Next
+					
 					For e.Events = Each Events
 						If e\EventID = e_room173 Then
 							For i = 0 To 2
@@ -1594,6 +1598,10 @@ Function UpdateConsole()
 						StopStream_Strict(IntercomStreamCHN)
 						IntercomStreamCHN = 0
 					EndIf
+					
+					For i = ANNOUNCEMENT To THIRD_PERSON
+						ClearSubtitles(i)
+					Next
 					
 					For e.Events = Each Events
 						If e\EventID = e_room173 Then
@@ -12633,5 +12641,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11A5#143D#1F0E
+;~B#11AD#1445#1F16
 ;~C#Blitz3D

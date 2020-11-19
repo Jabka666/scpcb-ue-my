@@ -56,29 +56,26 @@ Function ShowSubtitles(Name$, SubID%)
 	
 	Local Loc% = GetINISectionLocation(SubtitlesFile, Name)
 	Local LinesAmount% = GetINIInt2(SubtitlesFile, Loc, "LinesAmount")
-	Local i%, sub.Subtitles, currentSub.Subtitles
+	Local i%, sub.Subtitles
 	
-	For sub.Subtitles = Each Subtitles
-		If sub\Txt[SubID] <> "" Then sub\Txt[SubID] = ""
-		If sub\Timer[SubID] > 0.0 Then sub\Timer[SubID] = 0.0
-		
-		If sub\Txt[SubID] = "" And sub\Timer[SubID] =< 0.0 Then
-			currentSub = sub
-			Exit
-		EndIf
-	Next
+	ClearSubtitles(SubID)
 	
 	For i = 1 To LinesAmount
-		If currentSub = Null Then
-			sub.Subtitles = New Subtitles
-		Else
-			sub = currentSub
-		EndIf
+		sub.Subtitles = New Subtitles
 		sub\Txt[SubID] = GetINIString2(SubtitlesFile, Loc, "Txt" + i)
 		sub\Timer[SubID] = 70.0 * GetINIFloat2(SubtitlesFile, Loc, "Timer" + i)
 	Next
 	
 	CatchErrors("ShowSubtitles")
+End Function
+
+Function ClearSubtitles(SubID%)
+	Local sub.Subtitles
+	
+	For sub.Subtitles = Each Subtitles
+		If sub\Txt[SubID] <> "" Then sub\Txt[SubID] = ""
+		If sub\Timer[SubID] <> 0.0 Then sub\Timer[SubID] = 0.0
+	Next
 End Function
 
 ;~IDEal Editor Parameters:
