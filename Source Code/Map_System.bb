@@ -6254,6 +6254,7 @@ Function UpdateScreens()
 						MaskImage(s\Img, 255, 0, 255)
 						PlaySound_Strict(ButtonSFX)
 						mo\MouseUp1 = False
+						Exit
 					EndIf
 				EndIf
 			EndIf

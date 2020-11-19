@@ -4785,11 +4785,14 @@ Function MouseLook()
 	Next
 End Function
 
-; ~ Iventory Constants
+; ~ Navigator Constants
 ;[Block]
 Const NAV_WIDTH% = 287
 Const NAV_HEIGHT% = 256
+;[End Block]
 
+; ~ Iventory Constants
+;[Block]
 Const INVENTORY_GFX_SIZE% = 70
 Const INVENTORY_GFX_SPACING% = 35
 ;[End Block]
@@ -9929,11 +9932,11 @@ Function NullGame(PlayButtonSFX% = True) ; ~ CHECK FOR ERRORS
 		Delete(c)
 	Next
 	
-	If Curr173 <> Null Then Curr173 = Null
-	If Curr106 <> Null Then Curr106 = Null
-	If Curr096 <> Null Then Curr096 = Null
-	If Curr513_1 <> Null Then Curr513_1 = Null
-	If Curr049 <> Null Then Curr049 = Null
+	Curr173 = Null
+	Curr106 = Null
+	Curr096 = Null
+	Curr513_1 = Null
+	Curr049 = Null
 	
 	ForestNPC = 0
 	ForestNPCTex = 0
@@ -11619,7 +11622,7 @@ Function UpdateMTF()
 			Local entrance.Rooms = Null
 			
 			For r.Rooms = Each Rooms
-				If Lower(r\RoomTemplate\Name) = "gateaentrance" Then entrance = r : Exit
+				If r\RoomTemplate\Name = "gateaentrance" Then entrance = r : Exit
 			Next
 			
 			If entrance <> Null Then 
@@ -12630,5 +12633,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11A5#143A#1F0B
+;~B#11A5#143D#1F0E
 ;~C#Blitz3D

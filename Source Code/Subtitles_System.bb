@@ -59,12 +59,12 @@ Function ShowSubtitles(Name$, SubID%)
 	Local i%, sub.Subtitles, currentSub.Subtitles
 	
 	For sub.Subtitles = Each Subtitles
+		If sub\Txt[SubID] <> "" Then sub\Txt[SubID] = ""
+		If sub\Timer[SubID] > 0.0 Then sub\Timer[SubID] = 0.0
+		
 		If sub\Txt[SubID] = "" And sub\Timer[SubID] =< 0.0 Then
 			currentSub = sub
 			Exit
-		Else
-			If sub\Txt[SubID] <> "" Then sub\Txt[SubID] = ""
-			If sub\Timer[SubID] > 0.0 Then sub\Timer[SubID] = 0.0
 		EndIf
 	Next
 	
