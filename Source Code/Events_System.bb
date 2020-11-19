@@ -10482,6 +10482,7 @@ Function GenerateRandomIA()
 				End Select
 			EndIf
 			e\EventStr = e\EventStr + "|Off.ogg|"
+			Exit
 		EndIf
 	Next
 End Function
