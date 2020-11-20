@@ -977,11 +977,7 @@ Function UpdateConsole()
 					
 					For r.Rooms = Each Rooms
 						If r\RoomTemplate\Name = StrTemp Then
-							If StrTemp = "room106" Then
-								PositionEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.7, EntityZ(r\OBJ) - 704.0 * RoomScale)
-							Else
-								PositionEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.7, EntityZ(r\OBJ))
-							EndIf
+							PositionEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.7, EntityZ(r\OBJ))
 							ResetEntity(me\Collider)
 							UpdateDoors()
 							UpdateRooms()
@@ -2125,7 +2121,7 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, Open% = False, Bi
 	d\Angle = Angle
 	d\Open = Open		
 	
-	If d\Open And Big = 0 And Rand(8) = 1 Then d\AutoClose = True
+	If d\Open And Big = 0 And d\Locked = 0 And Rand(8) = 1 Then d\AutoClose = True
 	d\Dir = Big
 	d\room = room
 	
@@ -12637,5 +12633,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#11AD#1445#1F16
+;~B#11A9#1441#1F12
 ;~C#Blitz3D

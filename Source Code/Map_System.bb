@@ -4150,7 +4150,7 @@ Function FillRoom(r.Rooms)
 			Tex = LoadTexture_Strict("GFX\map\textures\Door02.jpg")
 			For zTemp = 0 To 1
 				d = CreateDoor(r\Zone, r\x - 5760.0 * RoomScale, r\y, r\z + (320.0 + 896.0 * zTemp) * RoomScale, 0.0, r)
-				d\Locked = 1 : d\DisableWaypoint = True
+				d\Locked = 1 : d\DisableWaypoint = True : d\AutoClose = False
 				
 				If zTemp = 0 Then
 				    FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
@@ -4159,7 +4159,7 @@ Function FillRoom(r.Rooms)
 				EndIf
 				
 				d = CreateDoor(r\Zone, r\x - 8288.0 * RoomScale, r\y, r\z + (320.0 + 896.0 * zTemp) * RoomScale, 0.0, r, zTemp = 0)
-				d\Locked = 1 : d\MTFClose = False
+				d\Locked = 1 : d\MTFClose = False : d\AutoClose = False
 				If zTemp <> 0 Then 
 				    d\DisableWaypoint = True
 				    FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
@@ -4167,7 +4167,7 @@ Function FillRoom(r.Rooms)
 				
 				For xTemp = 0 To 2
 					d = CreateDoor(r\Zone, r\x - (7424.0 - 512.0 * xTemp) * RoomScale, r\y, r\z + (1008.0 - 480.0 * zTemp) * RoomScale, 180.0 * (Not zTemp), r)
-					d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+					d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False : d\AutoClose = False
 					EntityTexture(d\OBJ, Tex)
 					FreeEntity(d\OBJ2) : d\OBJ2 = 0
 					
@@ -4177,7 +4177,7 @@ Function FillRoom(r.Rooms)
 				Next					
 				For xTemp = 0 To 4
 					d = CreateDoor(r\Zone, r\x - (5120.0 - 512.0 * xTemp) * RoomScale, r\y, r\z + (1008.0 - 480.0 * zTemp) * RoomScale, 180.0 * (Not zTemp), r)
-					d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+					d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False : d\AutoClose = False
 					EntityTexture(d\OBJ, Tex)
 					FreeEntity(d\OBJ2) : d\OBJ2 = 0
 					
@@ -4267,7 +4267,6 @@ Function FillRoom(r.Rooms)
 						;[End Block]
 			    End Select
 			    de = CreateDecal(Temp, r\x + xTemp * RoomScale, r\y + 2.0 * RoomScale, r\z + zTemp * RoomScale, 90.0, 45.0, 0.0, ((i = 0) * 0.44) + ((i = 1) * 1.2) + ((i > 1) * 0.54), Rnd(0.8, 1.0))
-				;EntityParent(de\OBJ, r\OBJ)
 			Next
 			
 			sc = CreateSecurityCam(r\x - 4048.0 * RoomScale, r\y - 32.0 * RoomScale, r\z - 1232.0 * RoomScale, r, True, r\x - 2256.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 928.0 * RoomScale)
