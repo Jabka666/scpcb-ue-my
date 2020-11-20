@@ -2712,14 +2712,14 @@ Function FillRoom(r.Rooms)
 			
 			r\Levers[0] = r\Objects[1]
 			
-			GlassTex = LoadTexture_Strict("GFX\map\textures\glass.png", 1 + 2)
+			Tex = LoadTexture_Strict("GFX\map\textures\glass.png", 1 + 2)
 			r\Objects[2] = CreateSprite()
-			EntityTexture(r\Objects[2], GlassTex)
+			EntityTexture(r\Objects[2], Tex)
 			SpriteViewMode(r\Objects[2], 2)
 			ScaleSprite(r\Objects[2], 256.0 * RoomScale * 0.5, 194.0 * RoomScale * 0.5)
 			PositionEntity(r\Objects[2], r\x - 176.0 * RoomScale, r\y - 4881.0 * RoomScale, r\z + 448.0 * RoomScale)
 			TurnEntity(r\Objects[2], 0, 90, 0)			
-        	DeleteSingleTextureEntryFromCache(GlassTex)
+        	DeleteSingleTextureEntryFromCache(Tex)
 			
 			; ~ SCP-173's spawnpoint
 			r\Objects[3] = CreatePivot()
@@ -5546,7 +5546,7 @@ Function FillRoom(r.Rooms)
 	End Select
 	
 	For lt.LightTemplates = Each LightTemplates
-		If lt\roomtemplate = r\RoomTemplate Then
+		If lt\RoomTemplate = r\RoomTemplate Then
 			Local NewLight% = AddLight(r, r\x + lt\x, r\y + lt\y, r\z + lt\z, lt\lType, lt\Range, lt\R, lt\G, lt\B)
 			
 			If NewLight <> 0 Then 

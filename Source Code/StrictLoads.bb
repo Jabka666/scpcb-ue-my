@@ -142,7 +142,7 @@ End Type
 Const Mode% = 2
 Const TwoD% = 8192
 
-Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode% = Mode, HasSubtitles% = False)
+Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode% = Mode, HasSubtitles% = False, SubID% = ANNOUNCEMENT)
 	If FileType(File) <> 1 Then
 		CreateConsoleMsg("Sound " + Chr(34) + File + Chr(34) + " not found.")
 		If opt\ConsoleOpening And opt\CanOpenConsole Then
@@ -155,7 +155,7 @@ Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode% = Mode, HasSubtitl
 	
 	st\CHN = PlayMusic(File, CustomMode + TwoD)
 	
-	If HasSubtitles Then ShowSubtitles(File, ANNOUNCEMENT)
+	If HasSubtitles Then ShowSubtitles(File, SubID)
 	If st\CHN = -1 Then
 		CreateConsoleMsg("Failed to stream Sound (returned -1): " + Chr(34) + File + Chr(34))
 		If opt\ConsoleOpening And opt\CanOpenConsole Then

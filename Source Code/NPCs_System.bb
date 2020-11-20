@@ -3917,7 +3917,7 @@ Function UpdateNPCs()
 				EndIf
 				
 				If ChannelPlaying(n\SoundCHN2) = True Then
-					UpdateSoundOrigin2(n\SoundCHN2, Camera, n\Collider, 20.0)
+					UpdateSoundOrigin(n\SoundCHN2, Camera, n\Collider, 20.0, 1.0, False)
 					me\BlurTimer = Max((5.0 - Dist) * 300.0, 0.0)
 				EndIf
 				

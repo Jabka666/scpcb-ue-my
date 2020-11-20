@@ -2136,6 +2136,7 @@ End Function
 
 Function UpdateDoors()
 	Local i%, d.Doors, x#, z#, Dist#
+	Local p.Particles
 	
 	If UpdateDoorsTimer =< 0.0 Then
 		For d.Doors = Each Doors
@@ -2229,7 +2230,7 @@ Function UpdateDoors()
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fpst\FPSFactor[0] / 80.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fpst\FPSFactor[0]) / 80.0, 0.0, 0.0)	
 							;[End Block]	
-						Case 5 ;Used for SCP-914 only
+						Case 5 ; ~ Used for SCP-914 only
 							;[Block]
 							d\OpenState = Min(180.0, d\OpenState + (fpst\FPSFactor[0] * 1.4))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * fpst\FPSFactor[0] / 114.0, 0.0, 0.0)
@@ -2281,8 +2282,7 @@ Function UpdateDoors()
 										PositionEntity(Pvt, EntityX(d\FrameOBJ, True) + Rnd(-0.2, 0.2), EntityY(d\FrameOBJ, True) + Rnd(0.0, 1.2), EntityZ(d\FrameOBJ, True) + Rnd(-0.2, 0.2))
 										RotateEntity(Pvt, 0.0, Rnd(360.0), 0.0)
 										
-										Local p.Particles = CreateParticle(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 2, 0.002, 0.0, 300.0)
-										
+										p.Particles = CreateParticle(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 2, 0.002, 0.0, 300.0)
 										p\Speed = 0.005 : p\SizeChange = -0.00001 : p\Size = 0.01 : p\Achange = -0.01
 										RotateEntity(p\Pvt, Rnd(-20.0, 20.0), Rnd(360.0), 0.0)
 										ScaleSprite(p\OBJ, p\Size, p\Size)
@@ -11630,7 +11630,10 @@ Function UpdateMTF()
 			Local entrance.Rooms = Null
 			
 			For r.Rooms = Each Rooms
-				If r\RoomTemplate\Name = "gateaentrance" Then entrance = r : Exit
+				If r\RoomTemplate\Name = "gateaentrance" Then 
+					entrance = r
+					Exit
+				EndIf
 			Next
 			
 			If entrance <> Null Then 
@@ -12508,8 +12511,8 @@ Function TeleportEntity(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = Fa
 		RotateEntity(Pvt, -90.0, 0.0, 0.0)
 	EndIf
 	Pick = EntityPick(Pvt, PickRange)
-	If Pick <> 0
-		If Dir = 0
+	If Pick <> 0 Then
+		If Dir = 0 Then
 			PositionEntity(Entity, x, PickedY() + CustomRadius + 0.02, z, IsGlobal)
 		Else
 			PositionEntity(Entity, x, PickedY() + CustomRadius - 0.02, z, IsGlobal)
@@ -12523,8 +12526,6 @@ End Function
 
 Function PlayStartupVideos()
 	HidePointer()
-	
-	fo\FontID[Font_Default] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 16)
 	
 	Local ScaledGraphicHeight%
 	Local Ratio# = Float(opt\RealGraphicWidth) / Float(opt\RealGraphicHeight)
@@ -12566,9 +12567,6 @@ Function PlayStartupVideos()
 		Repeat
 			Cls()
 			DrawMovie(Movie, 0, (opt\RealGraphicHeight / 2 - ScaledGraphicHeight / 2), opt\RealGraphicWidth, ScaledGraphicHeight)
-			SetFont(fo\FontID[Font_Default])
-			Color(255, 255, 255)
-	        Text(opt\RealGraphicWidth / 2, opt\RealGraphicHeight - 50, "PRESS ANY KEY TO SKIP", True, True)
 			Flip()
 		Until (GetKey() Lor (Not IsStreamPlaying_Strict(SplashScreenAudio)))
 		StopStream_Strict(SplashScreenAudio)
@@ -12577,8 +12575,6 @@ Function PlayStartupVideos()
 		Cls()
 		Flip()
 	Next
-	
-	FreeFont(fo\FontID[Font_Default])
 	
 	ShowPointer()
 End Function

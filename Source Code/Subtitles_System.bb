@@ -13,6 +13,8 @@ Type Subtitles
 End Type
 
 Function UpdateSubtitles()
+	If (Not opt\EnableSubtitles) Then Return
+	
 	Local sub.Subtitles, i%
 	Local ShouldDeleteSubtitles% = True
 	
@@ -30,6 +32,8 @@ Function UpdateSubtitles()
 End Function
 
 Function RenderSubtitles()
+	If (Not opt\EnableSubtitles) Then Return
+	
 	Local sub.Subtitles, i%
 	
 	For sub.Subtitles = Each Subtitles
@@ -52,6 +56,8 @@ End Function
 Const SubtitlesFile$ = "Data\subtitles.ini"
 
 Function ShowSubtitles(Name$, SubID%)
+	If (Not opt\EnableSubtitles) Then Return
+	
 	CatchErrors("Uncaught (ShowSubtitles)")
 	
 	Local Loc% = GetINISectionLocation(SubtitlesFile, Name)
@@ -70,6 +76,8 @@ Function ShowSubtitles(Name$, SubID%)
 End Function
 
 Function ClearSubtitles(SubID%)
+	If (Not opt\EnableSubtitles) Then Return
+	
 	Local sub.Subtitles
 	
 	For sub.Subtitles = Each Subtitles

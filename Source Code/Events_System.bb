@@ -5081,7 +5081,7 @@ Function UpdateEvents()
 						EndIf
 					EndIf
 					If ChannelPlaying(e\SoundCHN) Then
-						UpdateSoundOrigin(e\SoundCHN, Camera, Curr096\OBJ, 10.0, 1.0, True, FIRST_PERSON)
+						UpdateSoundOrigin(e\SoundCHN, Camera, Curr096\OBJ, 10.0, 1.0, True, True, FIRST_PERSON)
 					EndIf
 				ElseIf PlayerRoom = e\room
 					Temp = UpdateLever(e\room\Objects[1]) ; ~ Power switch

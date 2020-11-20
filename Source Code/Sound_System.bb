@@ -13,22 +13,12 @@ Function PlaySound2%(SoundHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, 
 			
 			SoundCHN = PlaySound_Strict(SoundHandle, HasSubtitles, SubID)
 			
-			If HasSubtitles Then
-				If HasSubtitles Then
-					For sub.Subtitles = Each Subtitles
-						sub\Dist[SubID] = EntityDistanceSquared(Cam, Entity) / Range * 25.5
-					Next
-				EndIf
-			EndIf
+			If HasSubtitles Then CalculateSubtitlesDistance(SubID, EntityDistanceSquared(Cam, Entity) / Range * 25.5)
 			
 			ChannelVolume(SoundCHN, Volume * (1.0 - Dist) * opt\SFXVolume)
 			ChannelPan(SoundCHN, PanValue)
 		Else
-			If HasSubtitles Then
-				For sub.Subtitles = Each Subtitles
-					sub\Dist[SubID] = 256.0
-				Next
-			EndIf
+			If HasSubtitles Then CalculateSubtitlesDistance(SubID, 256.0)
 		EndIf
 	EndIf
 	Return(SoundCHN)
@@ -51,27 +41,15 @@ Function LoopSound2%(SoundHandle%, CHN%, Cam%, Entity%, Range# = 10.0, Volume# =
 				If (Not ChannelPlaying(CHN)) Then CHN = PlaySound_Strict(SoundHandle, HasSubtitles, SubID)
 			EndIf
 			
-			If HasSubtitles Then
-				For sub.Subtitles = Each Subtitles
-					sub\Dist[SubID] = EntityDistanceSquared(Cam, Entity) / Range * 25.5
-				Next
-			EndIf
+			If HasSubtitles Then CalculateSubtitlesDistance(SubID, EntityDistanceSquared(Cam, Entity) / Range * 25.5)
 			
 			ChannelVolume(CHN, Volume * (1.0 - Dist) * opt\SFXVolume)
 			ChannelPan(CHN, PanValue)
 		Else
-			If HasSubtitles Then
-				For sub.Subtitles = Each Subtitles
-					sub\Dist[SubID] = 256.0
-				Next
-			EndIf
+			If HasSubtitles Then CalculateSubtitlesDistance(SubID, 256.0)
 		EndIf
 	Else
-		If HasSubtitles Then
-			For sub.Subtitles = Each Subtitles
-				If sub\Txt[SubID] <> "" Then sub\Txt[SubID] = ""
-			Next
-		EndIf
+		If HasSubtitles Then ClearSubtitles(SubID)
 		If CHN <> 0 Then
 			ChannelVolume(CHN, 0.0)
 		EndIf 
@@ -79,7 +57,7 @@ Function LoopSound2%(SoundHandle%, CHN%, Cam%, Entity%, Range# = 10.0, Volume# =
 	Return(CHN)
 End Function
 
-Function UpdateSoundOrigin(CHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, HasSubtitles% = False, SubID% = ANNOUNCEMENT)
+Function UpdateSoundOrigin(CHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, SFXVolume% = True, HasSubtitles% = False, SubID% = ANNOUNCEMENT)
 	Local sub.Subtitles
 	
 	Range = Max(Range, 1.0)
@@ -90,64 +68,15 @@ Function UpdateSoundOrigin(CHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, Ha
 		If 1.0 - Dist > 0.0 And 1.0 - Dist < 1.0 Then
 			Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 			
-			If HasSubtitles Then
-				For sub.Subtitles = Each Subtitles
-					sub\Dist[SubID] = EntityDistanceSquared(Cam, Entity) / Range * 25.5
-				Next
-			EndIf
+			If HasSubtitles Then CalculateSubtitlesDistance(SubID, EntityDistanceSquared(Cam, Entity) / Range * 25.5)
 			
-			ChannelVolume(CHN, Volume * (1.0 - Dist) * opt\SFXVolume)
+			ChannelVolume(CHN, Volume * (1.0 - Dist) * ((Not SFXVolume) + (SFXVolume * opt\SFXVolume)))
 			ChannelPan(CHN, PanValue)
 		Else
-			If HasSubtitles Then
-				For sub.Subtitles = Each Subtitles
-					sub\Dist[SubID] = 256.0
-				Next
-			EndIf
+			If HasSubtitles Then CalculateSubtitlesDistance(SubID, 256.0)
 		EndIf
 	Else
-		If HasSubtitles Then
-			For sub.Subtitles = Each Subtitles
-				If sub\Txt[SubID] <> "" Then sub\Txt[SubID] = ""
-			Next
-		EndIf
-		If CHN <> 0 Then
-			ChannelVolume(CHN, 0.0)
-		EndIf 
-	EndIf
-End Function
-
-Function UpdateSoundOrigin2(CHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, HasSubtitles% = False, SubID% = ANNOUNCEMENT)
-	Local sub.Subtitles
-	
-	Range = Max(Range, 1.0)
-	
-	If Volume > 0.0 Then
-		Local Dist# = EntityDistance(Cam, Entity) / Range
-		
-		If 1.0 - Dist > 0.0 And 1.0 - Dist < 1.0 Then
-			Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
-			
-			If HasSubtitles Then
-				For sub.Subtitles = Each Subtitles
-					sub\Dist[SubID] = EntityDistanceSquared(Cam, Entity) / Range * 25.5
-				Next
-			EndIf
-			ChannelVolume(CHN, Volume * (1.0 - Dist))
-			ChannelPan(CHN, PanValue)
-		Else
-			If HasSubtitles Then
-				For sub.Subtitles = Each Subtitles
-					sub\Dist[SubID] = 256.0
-				Next
-			EndIf
-		EndIf
-	Else
-		If HasSubtitles Then
-			For sub.Subtitles = Each Subtitles
-				If sub\Txt[SubID] <> "" Then sub\Txt[SubID] = ""
-			Next
-		EndIf
+		If HasSubtitles Then ClearSubtitles(SubID)
 		If CHN <> 0 Then
 			ChannelVolume(CHN, 0.0)
 		EndIf 

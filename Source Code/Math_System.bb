@@ -261,5 +261,19 @@ Function CheckRoomOverlap(r1.Rooms, r2.Rooms)
 	Return(True)
 End Function
 
+Function CalculateSubtitlesDistance(SubID%, Dist#)
+	If (Not opt\EnableSubtitles) Then Return
+	
+	Local sub.Subtitles
+	
+	For sub.Subtitles = Each Subtitles
+		If sub\Dist[SubID] <> Dist Then
+			sub\Dist[SubID] = Dist
+		Else
+			Exit
+		EndIf
+	Next
+End Function
+
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D
