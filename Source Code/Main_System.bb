@@ -9551,8 +9551,8 @@ Function InitNewGame()
 		Next
 		
 		If (Not r\RoomTemplate\DisableDecals) Then
-			If Rand(4) = 1 Then de.Decals = CreateDecal(Rand(2, 3), EntityX(r\OBJ) + Rnd(- 2.0, 2.0), 0.003, EntityZ(r\OBJ) + Rnd(-2.0, 2.0), 90.0, Rand(360.0), 0.0, Rnd(0.1, 0.4), Rnd(0.85, 0.95))
-			If Rand(4) = 1 Then de.Decals = CreateDecal(0, EntityX(r\OBJ) + Rnd(-2.0, 2.0), 0.003, EntityZ(r\OBJ) + Rnd(-2.0, 2.0), 90.0, Rand(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.7, 0.85))
+			If Rand(4) = 1 Then de.Decals = CreateDecal(Rand(2, 3), EntityX(r\OBJ) + Rnd(- 2.0, 2.0), r\y + 0.005, EntityZ(r\OBJ) + Rnd(-2.0, 2.0), 90.0, Rand(360.0), 0.0, Rnd(0.1, 0.4), Rnd(0.85, 0.95))
+			If Rand(4) = 1 Then de.Decals = CreateDecal(0, EntityX(r\OBJ) + Rnd(-2.0, 2.0), r\y + 0.005, EntityZ(r\OBJ) + Rnd(-2.0, 2.0), 90.0, Rand(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.7, 0.85))
 		EndIf
 		
 		If r\RoomTemplate\Name = "room173" And (Not opt\IntroEnabled) Then 
@@ -9619,7 +9619,6 @@ Function InitNewGame()
 	HidePointer()
 	
 	me\BlinkTimer = -10.0
-	me\BlurTimer = 100.0
 	me\Stamina = 100.0
 	
 	For i = 0 To 70

@@ -6974,7 +6974,7 @@ Function MoveToPocketDimension()
 			
 			me\BlinkTimer = -10.0
 			
-			InjurePlayer(0.5)
+			InjurePlayer(0.5, 0.0, 1600.0)
 			
 			PlayerRoom = r
 			
