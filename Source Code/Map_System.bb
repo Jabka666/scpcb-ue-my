@@ -6696,7 +6696,7 @@ Function CheckForPropModel%(File$)
 		Return(CopyEntity(o\ButtonModelID[0]))
 	ElseIf Instr(File, "oor01") <> 0 ; ~ Check for "Door01"
 		Return(CopyEntity(o\DoorModelID[0]))
-	ElseIf Instr(File, "oorFrame") <> 0 ; ~ Check for "DoorFrame"
+	ElseIf Instr(File, "\DoorFrame") <> 0 ; ~ Check for "DoorFrame"
 		Return(CopyEntity(o\DoorModelID[1]))
 	ElseIf Instr(File, "oorLef") <> 0 ; ~ Check for "ContDoorLeft"
 		Return(CopyEntity(o\DoorModelID[5]))
