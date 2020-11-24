@@ -3962,31 +3962,30 @@ Function UpdateNPCs()
 									Select Rand(6)
 										Case 1
 											;[Block]
-											msg\Msg = "You feel something breathing right next to you."
+											CreateMsg("You feel something breathing right next to you.", 6.0)
 											;[End Block]
 										Case 2
 											;[Block]
-											msg\Msg = Chr(34) + "It feels like something's in this room with me." + Chr(34)
+											CreateMsg(Chr(34) + "It feels like something's in this room with me." + Chr(34), 6.0)
 											;[End Block]
 										Case 3
 											;[Block]
-											msg\Msg = "You feel like something is here with you, but you do not see anything."
+											CreateMsg("You feel like something is here with you, but you do not see anything.", 6.0)
 											;[End Block]
 										Case 4
 											;[Block]
-											msg\Msg = Chr(34) + "Is my mind playing tricks on me or is there someone else here?" + Chr(34)
+											CreateMsg(Chr(34) + "Is my mind playing tricks on me or is there someone else here?" + Chr(34), 6.0)
 											;[End Block]
 										Case 5
 											;[Block]
-											msg\Msg = "You feel like something is following you."
+											CreateMsg("You feel like something is following you.", 6.0)
 											;[End Block]
 										Case 6
 											;[Block]
-											msg\Msg = "You can feel something near you, but you are unable to see it. Perhaps its time is now."
+											CreateMsg("You can feel something near you, but you are unable to see it. Perhaps its time is now.", 6.0)
 											;[End Block]
 									End Select
 									n\Reload = 70.0 * 20.0
-									msg\Timer = 70.0 * 8.0
 								EndIf
 								n\Reload = n\Reload - fpst\FPSFactor[0]
 							EndIf
@@ -4069,22 +4068,21 @@ Function UpdateNPCs()
 												Select Rand(4)
 													Case 1
 														;[Block]
-														msg\Msg = "You feel exhausted."
+														CreateMsg("You feel exhausted.", 6.0)
 														;[End Block]
 													Case 2
 														;[Block]
-														msg\Msg = Chr(34) + "Could really go for a nap now..." + Chr(34)
+														CreateMsg(Chr(34) + "Could really go for a nap now..." + Chr(34), 6.0)
 														;[End Block]
 													Case 3
 														;[Block]
-														msg\Msg = Chr(34) + "If I wasn't in this situation I would take a nap somewhere." + Chr(34)
+														CreateMsg(Chr(34) + "If I wasn't in this situation I would take a nap somewhere." + Chr(34), 6.0)
 														;[End Block]
 													Case 4
 														;[Block]
-														msg\Msg = "You feel restless."
+														CreateMsg("You feel restless.", 6.0)
 														;[End Block]
 												End Select
-												msg\Timer = 70.0 * 7.0
 											EndIf
 										EndIf							
 									EndIf
@@ -6918,8 +6916,7 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 		EndIf
 		
 		If msg\Timer < 70.0 * 5.0 Then
-			msg\Msg = ShotMessageUpdate
-			msg\Timer = 70.0 * 6.0
+			CreateMsg(ShotMessageUpdate, 6.0)
 		EndIf
 		
 		If me\Injuries >= 10.0 Then Kill(True)
@@ -7417,5 +7414,5 @@ Function ChangeNPCTextureID(n.NPCs, TextureID%) ; ~ Works only for Class D model
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#175#1237#1386#13D6#152C#1648#1817#1872
+;~B#175#1235#1384#13D4#152A#1646#1815#1870
 ;~C#Blitz3D

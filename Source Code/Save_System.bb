@@ -470,15 +470,14 @@ Function SaveGame(File$)
 	
 	CloseFile(f)
 	
-	If (Not MenuOpen) Then
+	If (Not MenuOpen) And (Not MainMenuOpen) Then
 		If SelectedDifficulty\SaveType = SAVEONSCREENS Then
 			PlaySound_Strict(LoadTempSound("SFX\General\Save2.ogg"))
 		Else
 			PlaySound_Strict(LoadTempSound("SFX\General\Save1.ogg"))
 		EndIf
 		
-		msg\Msg = "Game progress saved."
-		msg\Timer = 70.0 * 4.0
+		CreateMsg("Game progress saved.", 6.0)
 	EndIf
 	
 	CatchErrors("SaveGame")
@@ -1325,7 +1324,7 @@ Function LoadGameQuick(File$)
 	me\Deaf = False
 	me\DeafTimer = 0.0
 	UnableToMove = False
-	msg\Msg = ""
+	msg\Txt = ""
 	me\SelectedEnding = ""
 	
 	PositionEntity(me\Collider, 0.0, 1000.0, 0.0, True)

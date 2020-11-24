@@ -630,8 +630,7 @@ Function PickItem(item.Items)
 	Next
 	
 	If wi\HazmatSuit > 0 Then
-		msg\Msg = "You cannot pick up any items while wearing a hazmat suit."
-		msg\Timer = 70.0 * 6.0
+		CreateMsg("You cannot pick up any items while wearing a hazmat suit.", 6.0)
 		Return
 	EndIf
 	
@@ -694,15 +693,13 @@ Function PickItem(item.Items)
 						;[End Block]
 					Case "veryfinevest"
 						;[Block]
-						msg\Msg = "The vest is too heavy to pick up."
-						msg\Timer = 70.0 * 6.0
-						Exit
+						CreateMsg("The vest is too heavy to pick up.", 6.0)
+						Return
 						;[End Block]
 					Case "corrvest"
 						;[Block]
-						msg\Msg = Chr(34) + "I won't pick up that!" + Chr(34)
-						msg\Timer = 70.0 * 6.0
-						Exit
+						CreateMsg(Chr(34) + "I won't pick up that!" + Chr(34), 6.0)
+						Return
 						;[End Block]
 					Case "firstaid", "finefirstaid", "veryfinefirstaid", "firstaid2"
 						;[Block]
@@ -728,12 +725,10 @@ Function PickItem(item.Items)
 						Next
 						
 						If CanPickItem = 0 Then
-							msg\Msg = "You are not able to wear two hazmat suits at the same time."
-							msg\Timer = 70.0 * 6.0
+							CreateMsg("You are not able to wear two hazmat suits at the same time.", 6.0)
 							Return
 						ElseIf CanPickItem = 2 Then
-							msg\Msg = "You are not able to wear a vest and a hazmat suit at the same time."
-							msg\Timer = 70.0 * 6.0
+							CreateMsg("You are not able to wear a vest and a hazmat suit at the same time.", 6.0)
 							Return
 						Else
 							SelectedItem = item
@@ -755,12 +750,10 @@ Function PickItem(item.Items)
 						Next
 						
 						If CanPickItem = 0 Then
-							msg\Msg = "You are not able to wear two vests at the same time."
-							msg\Timer = 70.0 * 6.0
+							CreateMsg("You are not able to wear two vests at the same time.", 6.0)
 							Return
 						ElseIf CanPickItem = 2 Then
-							msg\Msg = "You are not able to wear a vest and a hazmat suit at the same time."
-							msg\Timer = 70.0 * 6.0
+							CreateMsg("You are not able to wear a vest and a hazmat suit at the same time.", 6.0)
 							Return
 						Else
 							SelectedItem = item
@@ -781,8 +774,7 @@ Function PickItem(item.Items)
 			EndIf
 		Next
 	Else
-		msg\Msg = "You cannot carry any more items."
-		msg\Timer = 70.0 * 6.0
+		CreateMsg("You cannot carry any more items.", 6.0)
 	EndIf
 	
 	CatchErrors("PickItem")
@@ -790,8 +782,7 @@ End Function
 
 Function DropItem(item.Items, PlayDropSound% = True)
 	If wi\HazmatSuit > 0 Then
-		msg\Msg = "You cannot drop any items while wearing a hazmat suit."
-		msg\Timer = 70.0 * 6.0
+		CreateMsg("You cannot drop any items while wearing a hazmat suit.", 6.0)
 		Return
 	EndIf
 	
