@@ -4838,7 +4838,6 @@ Function FillRoom(r.Rooms)
 			FreeEntity(Hallway)
 			
 			it = CreateItem("Burnt Note", "paper", EntityX(r\OBJ), r\y + 0.5, EntityZ(r\OBJ) + 3.5)
-			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case "room3z3"
 			;[Block]
