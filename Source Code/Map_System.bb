@@ -4834,6 +4834,7 @@ Function FillRoom(r.Rooms)
 			EntityParent(r\Objects[19], r\OBJ)
 			HideEntity(r\Objects[19])
 			
+			FreeEntity(Entity)
 			FreeEntity(Hallway)
 			
 			it = CreateItem("Burnt Note", "paper", EntityX(r\OBJ), r\y + 0.5, EntityZ(r\OBJ) + 3.5)

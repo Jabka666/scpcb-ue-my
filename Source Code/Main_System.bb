@@ -14,10 +14,9 @@ Include "Source Code\StrictLoads.bb"
 Include "Source Code\Keys_System.bb"
 Include "Source Code\INI_System.bb"
 
+Const MaxFontIDAmount% = 8
 ; ~ Font IDs Constants
 ;[Block]
-Const MaxFontIDAmount% = 8
-
 Const Font_Default% = 0
 Const Font_Default_Big% = 1
 Const Font_Digital% = 2
@@ -12508,5 +12507,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#118F#1426#1EAD
+;~B#118E#1425#1EAC
 ;~C#Blitz3D
