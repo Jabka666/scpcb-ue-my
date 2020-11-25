@@ -7056,6 +7056,7 @@ Function CreateMap()
 	SetRoom("room914", ROOM1, Floor(0.35 * Float(Room1Amount[0])), Min_Pos, Max_Pos)
 	SetRoom("room205", ROOM1, Floor(0.5 * Float(Room1Amount[0])), Min_Pos, Max_Pos)
 	SetRoom("room1archive", ROOM1, Floor(0.6 * Float(Room1Amount[0])), Min_Pos, Max_Pos)
+	SetRoom("room2servers3", ROOM2, Floor(0.25 * Float(Room2Amount[0])), Min_Pos, Max_Pos)
 	
 	MapRoom(ROOM2C, 0) = "room2clockroom"
 	
