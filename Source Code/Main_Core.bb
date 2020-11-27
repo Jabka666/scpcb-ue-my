@@ -3704,38 +3704,40 @@ End Function
 Function GetScreenshot()
 	Local ScreenshotCount%, x%, y%
 	
-	If FileSize("Screenshots\Screenshot" + ScreenshotCount + ".png") = 0 Then
-		If FileType("Screenshots\") <> 2 Then
-			CreateDir("Screenshots")
-		EndIf
-		
-		Local Bank% = CreateBank(opt\RealGraphicWidth * opt\RealGraphicHeight * 3)
-		
-		LockBuffer(BackBuffer())
-		For x = 0 To opt\RealGraphicWidth - 1
-			For y = 0 To opt\RealGraphicHeight - 1
-				Local Pixel% = ReadPixelFast(x, y, BackBuffer())
-				
-				PokeByte(Bank, (y * (opt\RealGraphicWidth * 3)) + (x * 3), (Pixel Shr 0) And $FF)
-				PokeByte(Bank, (y * (opt\RealGraphicWidth * 3)) + (x * 3) + 1, (Pixel Shr 8) And $FF)
-				PokeByte(Bank, (y * (opt\RealGraphicWidth * 3)) + (x * 3) + 2, (Pixel Shr 16) And $FF)
+	While True
+		If FileSize("Screenshots\Screenshot" + ScreenshotCount + ".png") = 0 Then
+			If FileType("Screenshots\") <> 2 Then
+				CreateDir("Screenshots")
+			EndIf
+			
+			Local Bank% = CreateBank(opt\RealGraphicWidth * opt\RealGraphicHeight * 3)
+			
+			LockBuffer(BackBuffer())
+			For x = 0 To opt\RealGraphicWidth - 1
+				For y = 0 To opt\RealGraphicHeight - 1
+					Local Pixel% = ReadPixelFast(x, y, BackBuffer())
+					
+					PokeByte(Bank, (y * (opt\RealGraphicWidth * 3)) + (x * 3), (Pixel Shr 0) And $FF)
+					PokeByte(Bank, (y * (opt\RealGraphicWidth * 3)) + (x * 3) + 1, (Pixel Shr 8) And $FF)
+					PokeByte(Bank, (y * (opt\RealGraphicWidth * 3)) + (x * 3) + 2, (Pixel Shr 16) And $FF)
+				Next
 			Next
-		Next
-		UnlockBuffer(BackBuffer())
-		
-		Local fiBuffer% = FI_ConvertFromRawBits(Bank, opt\RealGraphicWidth, opt\RealGraphicHeight, opt\RealGraphicWidth * 3, 24, $FF0000, $00FF00, $0000FF, True)
-		
-		FI_Save(13, fiBuffer, "Screenshots\Screenshot" + ScreenshotCount + ".png", 0)
-		FI_Unload(fiBuffer)
-		FreeBank(Bank)
-		If (Not MainMenuOpen) Then
-			CreateMsg("Screenshot Taken.", 6.0)
+			UnlockBuffer(BackBuffer())
+			
+			Local fiBuffer% = FI_ConvertFromRawBits(Bank, opt\RealGraphicWidth, opt\RealGraphicHeight, opt\RealGraphicWidth * 3, 24, $FF0000, $00FF00, $0000FF, True)
+			
+			FI_Save(13, fiBuffer, "Screenshots\Screenshot" + ScreenshotCount + ".png", 0)
+			FI_Unload(fiBuffer)
+			FreeBank(Bank)
+			If (Not MainMenuOpen) Then
+				CreateMsg("Screenshot Taken.", 6.0)
+			EndIf
+			PlaySound_Strict(LoadTempSound("SFX\General\Screenshot.ogg"))
+			Exit
+		Else
+			ScreenshotCount = ScreenshotCount + 1
 		EndIf
-		PlaySound_Strict(LoadTempSound("SFX\General\Screenshot.ogg"))
-		Return
-	Else
-		ScreenshotCount = ScreenshotCount + 1
-	EndIf
+	Wend
 End Function
 
 Function Kill(IsBloody% = False)
