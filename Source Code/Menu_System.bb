@@ -99,6 +99,8 @@ Function UpdateMainMenu()
 	; ~ Go out of function immediately if the game has been start
 	If (Not MainMenuOpen) Then Return
 	
+	CatchErrors("Uncaught (UpdateMainMenu")
+	
 	Local x%, y%, Width%, Height%, Temp%, i%, n%, j%
 	Local Dir%, File$, Test%, snd.Sound
 	
@@ -993,6 +995,8 @@ Function UpdateMainMenu()
 	If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	
 	SetFont(fo\FontID[Font_Default])
+	
+	CatchErrors("UpdateMainMenu")
 End Function
 
 Function RenderMainMenu()
@@ -2122,7 +2126,7 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 			FlushMouse()
 		EndIf
 		
-		GammaUpdate()
+		UpdateGamma2()
 		
 		Flip(False)
 		

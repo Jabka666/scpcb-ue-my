@@ -8,11 +8,10 @@ If FileSize("FreeImage.dll") = 0 Then InitErrorStr = InitErrorStr + "FreeImage.d
 
 If Len(InitErrorStr) > 0 Then RuntimeError("The following DLLs were not found in the game directory:" + Chr(13) + Chr(10) + Chr(13) + Chr(10) + InitErrorStr)
 
-Include "Source Code\Subtitles_System.bb"
-Include "Source Code\Math_System.bb"
-Include "Source Code\StrictLoads.bb"
 Include "Source Code\Keys_System.bb"
 Include "Source Code\INI_System.bb"
+Include "Source Code\Math_System.bb"
+Include "Source Code\StrictLoads.bb"
 
 Const MaxFontIDAmount% = 8
 ; ~ Font IDs Constants
@@ -3146,46 +3145,9 @@ Repeat
 		MainLoop()
 	EndIf
 	
-	GammaUpdate()
+	UpdateGamma2()
 	
-	Local x%, y%, ScreenshotCount%
-	
-	If KeyHit(key\SCREENSHOT) Then
-		While True
-			If FileSize("Screenshots\Screenshot" + ScreenshotCount + ".png") = 0 Then
-				If FileType("Screenshots\") <> 2 Then
-					CreateDir("Screenshots")
-				EndIf
-				
-				Local Bank% = CreateBank(opt\RealGraphicWidth * opt\RealGraphicHeight * 3)
-				
-				LockBuffer(BackBuffer())
-				For x = 0 To opt\RealGraphicWidth - 1
-					For y = 0 To opt\RealGraphicHeight - 1
-						Local Pixel% = ReadPixelFast(x, y, BackBuffer())
-						
-						PokeByte(Bank, (y * (opt\RealGraphicWidth * 3)) + (x * 3), (Pixel Shr 0) And $FF)
-						PokeByte(Bank, (y * (opt\RealGraphicWidth * 3)) + (x * 3) + 1, (Pixel Shr 8) And $FF)
-						PokeByte(Bank, (y * (opt\RealGraphicWidth * 3)) + (x * 3) + 2, (Pixel Shr 16) And $FF)
-					Next
-				Next
-				UnlockBuffer(BackBuffer())
-				
-				Local fiBuffer% = FI_ConvertFromRawBits(Bank, opt\RealGraphicWidth, opt\RealGraphicHeight, opt\RealGraphicWidth * 3, 24, $FF0000, $00FF00, $0000FF, True)
-				
-				FI_Save(13, fiBuffer, "Screenshots\Screenshot" + ScreenshotCount + ".png", 0)
-				FI_Unload(fiBuffer)
-				FreeBank(Bank)
-				If (Not MainMenuOpen) Then
-					CreateMsg("Screenshot Taken.", 6.0)
-				EndIf
-				PlaySound_Strict(LoadTempSound("SFX\General\Screenshot.ogg"))
-				Exit
-			Else
-				ScreenshotCount = ScreenshotCount + 1
-			EndIf
-		Wend
-	EndIf
+	If KeyHit(key\SCREENSHOT) Then GetScreenshot()
 	
 	If opt\ShowFPS Then
 		If ft\FPSGoal < MilliSecs() Then
@@ -3202,8 +3164,6 @@ Repeat
 	Else 
 		Flip(True)
 	EndIf
-	
-	CatchErrors("Main Loop / Uncaught")
 Forever
 
 ; ~ Fog Constants
@@ -3220,6 +3180,8 @@ Const FogColorForest$ = "098133162"
 ;[End Block]
 
 Function MainLoop()
+	CatchErrors("Uncaught (MainLoop)")
+	
 	Local e.Events, r.Rooms, i%
 	
 	While ft\Accumulator > 0.0
@@ -3739,6 +3701,45 @@ Function MainLoop()
 	DrawQuickLoading()
 	
 	RenderAchievementMsg()
+	
+	CatchErrors("MainLoop")
+End Function
+
+Function GetScreenshot()
+	Local ScreenshotCount%, x%, y%
+	
+	If FileSize("Screenshots\Screenshot" + ScreenshotCount + ".png") = 0 Then
+		If FileType("Screenshots\") <> 2 Then
+			CreateDir("Screenshots")
+		EndIf
+		
+		Local Bank% = CreateBank(opt\RealGraphicWidth * opt\RealGraphicHeight * 3)
+		
+		LockBuffer(BackBuffer())
+		For x = 0 To opt\RealGraphicWidth - 1
+			For y = 0 To opt\RealGraphicHeight - 1
+				Local Pixel% = ReadPixelFast(x, y, BackBuffer())
+				
+				PokeByte(Bank, (y * (opt\RealGraphicWidth * 3)) + (x * 3), (Pixel Shr 0) And $FF)
+				PokeByte(Bank, (y * (opt\RealGraphicWidth * 3)) + (x * 3) + 1, (Pixel Shr 8) And $FF)
+				PokeByte(Bank, (y * (opt\RealGraphicWidth * 3)) + (x * 3) + 2, (Pixel Shr 16) And $FF)
+			Next
+		Next
+		UnlockBuffer(BackBuffer())
+		
+		Local fiBuffer% = FI_ConvertFromRawBits(Bank, opt\RealGraphicWidth, opt\RealGraphicHeight, opt\RealGraphicWidth * 3, 24, $FF0000, $00FF00, $0000FF, True)
+		
+		FI_Save(13, fiBuffer, "Screenshots\Screenshot" + ScreenshotCount + ".png", 0)
+		FI_Unload(fiBuffer)
+		FreeBank(Bank)
+		If (Not MainMenuOpen) Then
+			CreateMsg("Screenshot Taken.", 6.0)
+		EndIf
+		PlaySound_Strict(LoadTempSound("SFX\General\Screenshot.ogg"))
+		Return
+	Else
+		ScreenshotCount = ScreenshotCount + 1
+	EndIf
 End Function
 
 Function Kill(IsBloody% = False)
@@ -4613,7 +4614,7 @@ Function MouseLook()
 		EndIf
 		
 		ShowEntity(tt\OverlayID[1])
-		ShowEntity(tt\OverlayID[11])
+		If wi\GasMaskFogTimer > 0.0 Then ShowEntity(tt\OverlayID[11])
 		
 		If ChannelPlaying(BreathCHN) Then
 			wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + fpst\FPSFactor[0] * 2.0, 100.0)
@@ -5738,9 +5739,9 @@ Function DrawGUI()
 									EndIf
 								EndIf
 								If Curr049 <> Null Then
-									Dist = EntityDistance(Camera, Curr049\OBJ)
-									If Dist < 8.0 * 4.0 Then
-										If (Not Curr049\HideFromNVG) Then
+									If (Not Curr049\HideFromNVG) Then
+										Dist = EntityDistance(Camera, Curr049\OBJ)
+										If Dist < 8.0 * 4.0 Then
 											Color(100, 0, 0)
 											Oval(x - Dist * 1.5, y - 7 - Dist * 1.5, Dist * 3, Dist * 3, False)
 											Text(x - NAV_WIDTH / 2 + 10, y - NAV_HEIGHT / 2 + 30 + (20 * SCPs_Found), "SCP-049")
@@ -8747,14 +8748,7 @@ Function UpdateMenu()
 	CatchErrors("UpdateMenu")
 End Function
 
-Function MouseOn%(x%, y%, Width%, Height%)
-	If ScaledMouseX() > x And ScaledMouseX() < x + Width Then
-		If ScaledMouseY() > y And ScaledMouseY() < y + Height Then
-			Return(True)
-		EndIf
-	EndIf
-	Return(False)
-End Function
+Include "Source Code\Subtitles_System.bb"
 
 Include "Source Code\Sound_System.bb"
 
@@ -12221,7 +12215,7 @@ Function InitFastResize()
 	HideEntity(Fresize_Cam)
 End Function
 
-Function GammaUpdate()
+Function UpdateGamma2()
 	If opt\DisplayMode = 1 Then
 		If opt\RealGraphicWidth <> opt\GraphicWidth Lor opt\RealGraphicHeight <> opt\GraphicHeight Then
 			SetBuffer(TextureBuffer(Fresize_Texture))
@@ -12507,5 +12501,5 @@ Function ResetInput()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#118E#1425#1EAC
+;~B#118F#1426#1EAD
 ;~C#Blitz3D

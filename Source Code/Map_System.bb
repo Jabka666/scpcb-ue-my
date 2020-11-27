@@ -4928,8 +4928,8 @@ Function FillRoom(r.Rooms)
 				
 				Local BD_Temp% = False
 				
-				If room2gw_BrokenDoor
-					If room2gw_x = r\x And room2gw_z = r\z
+				If room2gw_BrokenDoor Then
+					If room2gw_x = r\x And room2gw_z = r\z Then
 						BD_Temp = True
 					EndIf
 				EndIf
@@ -7056,7 +7056,7 @@ Function CreateMap()
 	SetRoom("room914", ROOM1, Floor(0.35 * Float(Room1Amount[0])), Min_Pos, Max_Pos)
 	SetRoom("room205", ROOM1, Floor(0.5 * Float(Room1Amount[0])), Min_Pos, Max_Pos)
 	SetRoom("room1archive", ROOM1, Floor(0.6 * Float(Room1Amount[0])), Min_Pos, Max_Pos)
-	SetRoom("room2servers3", ROOM2, Floor(0.25 * Float(Room2Amount[0])), Min_Pos, Max_Pos)
+	;SetRoom("room2servers3", ROOM2, Floor(0.25 * Float(Room2Amount[0])), Min_Pos, Max_Pos)
 	
 	MapRoom(ROOM2C, 0) = "room2clockroom"
 	

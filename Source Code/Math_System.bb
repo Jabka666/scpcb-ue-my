@@ -71,6 +71,15 @@ Function ScaledMouseY%()
 	Return(Float(MouseY()) * Float(opt\GraphicHeight) / Float(opt\RealGraphicHeight))
 End Function
 
+Function MouseOn%(x%, y%, Width%, Height%)
+	If ScaledMouseX() > x And ScaledMouseX() < x + Width Then
+		If ScaledMouseY() > y And ScaledMouseY() < y + Height Then
+			Return(True)
+		EndIf
+	EndIf
+	Return(False)
+End Function
+
 Function f2s$(n#, Count%)
 	Return(Left(n, Len(Int(n)) + Count + 1))
 End Function
@@ -112,7 +121,7 @@ Function TurnIfDeviating%(Max_Deviation_Distance_%, Pathx%, Center_%, Dir%, RetV
 	EndIf
 End Function
 
-Function ChangeAngleValueForCorrectBoneAssigning(Value#)
+Function ChangeAngleValueForCorrectBoneAssigning%(Value#)
 	Local Number#
 	
 	If Value =< 180.0
@@ -267,10 +276,10 @@ Function CalculateSubtitlesDistance(SubID%, Dist#)
 	Local sub.Subtitles
 	
 	For sub.Subtitles = Each Subtitles
-		If sub\Dist[SubID] <> Dist Then
-			sub\Dist[SubID] = Dist
-		Else
+		If sub\Dist[SubID] = Dist Then
 			Exit
+		Else
+			sub\Dist[SubID] = Dist
 		EndIf
 	Next
 End Function

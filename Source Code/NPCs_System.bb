@@ -2116,6 +2116,7 @@ Function UpdateNPCs()
 													n\EnemyX = EntityX(w\OBJ)
 													n\EnemyY = EntityY(w\OBJ)
 													n\EnemyZ = EntityZ(w\OBJ)
+													Exit
 												EndIf
 											Next
 										EndIf
@@ -2195,7 +2196,7 @@ Function UpdateNPCs()
 				Else
 					; ~ The NPC was killed
 					If n\SoundCHN <> 0 Then
-						If ChannelPlaying(n\SoundCHN) = True Then StopChannel(n\SoundCHN)
+						If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN)
 						If n\Sound <> 0 Then
 							FreeSound_Strict(n\Sound) : n\Sound = 0
 						EndIf
@@ -2479,7 +2480,7 @@ Function UpdateNPCs()
 										    AnimateNPC(n, 884.0, 926.0, 0.35, True)
 									    EndIf
 									Else
-									    If n\Frame < 302.0
+									    If n\Frame < 302.0 Then
 									        AnimateNPC(n, 302.0, 344.0, 0.35, True)
 									    EndIf
 									EndIf
@@ -4828,6 +4829,7 @@ Function UpdateNPCs()
 													n\EnemyX = EntityX(w\OBJ)
 													n\EnemyY = EntityY(w\OBJ)
 													n\EnemyZ = EntityZ(w\OBJ)
+													Exit
 												EndIf
 											Next
 										EndIf
@@ -4945,7 +4947,7 @@ Function UpdateNPCs()
 				Else
 					; ~ The NPC was killed
 					If n\SoundCHN <> 0 Then
-						If ChannelPlaying(n\SoundCHN) = True Then StopChannel(n\SoundCHN)
+						If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN)
 						If n\Sound <> 0 Then
 							FreeSound_Strict(n\Sound) : n\Sound = 0
 						EndIf
@@ -7414,5 +7416,5 @@ Function ChangeNPCTextureID(n.NPCs, TextureID%) ; ~ Works only for Class D model
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#175#1235#1384#13D4#152A#1646#1815#1870
+;~B#175#1236#1386#138A#152C#1648#1817#1872
 ;~C#Blitz3D
