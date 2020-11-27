@@ -9,7 +9,7 @@
 ; ~ Contact us: https://discord.gg/n7KdW4u
 ;----------------------------------------------------------------------------------------------------------------------------------------------------
 
-Include "Source Code\Main_System.bb"
+Include "Source Code\Main_Core.bb"
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D
