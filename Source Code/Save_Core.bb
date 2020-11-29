@@ -205,9 +205,9 @@ Function SaveGame(File$)
 	
 	WriteInt(f, 632)
 	
-	WriteInt(f, room2gw_BrokenDoor)
-	WriteFloat(f, room2gw_x)
-	WriteFloat(f, room2gw_z)
+	WriteByte(f, bk\IsBroken)
+	WriteFloat(f, bk\x)
+	WriteFloat(f, bk\z)
 	
 	WriteByte(f, I_Zone\Transition[0])
 	WriteByte(f, I_Zone\Transition[1])
@@ -729,9 +729,9 @@ Function LoadGame(File$)
 	
 	If ReadInt(f) <> 632 Then RuntimeError("Couldn't load the game, save file corrupted (error 1)")
 	
-	room2gw_BrokenDoor = ReadInt(f)
-	room2gw_x = ReadFloat(f)
-	room2gw_z = ReadFloat(f)
+	bk\IsBroken = ReadByte(f)
+	bk\x = ReadFloat(f)
+	bk\z = ReadFloat(f)
 	
 	I_Zone\Transition[0] = ReadByte(f)
 	I_Zone\Transition[1] = ReadByte(f)
@@ -1596,9 +1596,9 @@ Function LoadGameQuick(File$)
 	
 	If ReadInt(f) <> 632 Then RuntimeError("Couldn't load the game, save file corrupted (error 1)")
 	
-	room2gw_BrokenDoor = ReadInt(f)
-	room2gw_x = ReadFloat(f)
-	room2gw_z = ReadFloat(f)
+	bk\IsBroken = ReadByte(f)
+	bk\x = ReadFloat(f)
+	bk\z = ReadFloat(f)
 	
 	I_Zone\Transition[0] = ReadByte(f)
 	I_Zone\Transition[1] = ReadByte(f)

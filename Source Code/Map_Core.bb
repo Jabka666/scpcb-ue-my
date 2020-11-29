@@ -4928,13 +4928,13 @@ Function FillRoom(r.Rooms)
 				
 				Local BD_Temp% = False
 				
-				If room2gw_BrokenDoor Then
-					If room2gw_x = r\x And room2gw_z = r\z Then
+				If bk\IsBroken Then
+					If bk\x = r\x And bk\z = r\z Then
 						BD_Temp = True
 					EndIf
 				EndIf
 				
-				If ((Not room2gw_BrokenDoor) And Rand(2) = 1) Lor BD_Temp Then
+				If ((Not bk\IsBroken) And Rand(2) = 1) Lor BD_Temp Then
 					r\Objects[1] = CopyEntity(o\DoorModelID[0])
 					ScaleEntity(r\Objects[1], (204.0 * RoomScale) / MeshWidth(r\Objects[1]), 313.0 * RoomScale / MeshHeight(r\Objects[1]), 16.0 * RoomScale / MeshDepth(r\Objects[1]))
 					EntityType(r\Objects[1], HIT_MAP)
@@ -4943,9 +4943,9 @@ Function FillRoom(r.Rooms)
 					EntityParent(r\Objects[1], r\OBJ)
 					MoveEntity(r\Objects[1], 120.0, 0.0, 5.0)
 					
-					room2gw_BrokenDoor = True
-					room2gw_x = r\x
-					room2gw_z = r\z
+					bk\IsBroken = True
+					bk\x = r\x
+					bk\z = r\z
 					
 					FreeEntity(r\RoomDoors[1]\OBJ2) : r\RoomDoors[1]\OBJ2 = 0
 				EndIf

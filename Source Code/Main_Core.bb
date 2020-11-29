@@ -2010,10 +2010,6 @@ Global QuitMsg% = 0
 
 Global InFacility% = True
 
-Global room2gw_BrokenDoor% = False
-Global room2gw_x# = 0.0
-Global room2gw_z# = 0.0
-
 Global IntercomStreamCHN%
 
 Global ForestNPC%, ForestNPCTex%, ForestNPCData#[3]
@@ -2027,6 +2023,14 @@ Include "Source Code\Particles_Core.bb"
 Global ClosestButton%, ClosestDoor.Doors
 Global SelectedDoor.Doors, UpdateDoorsTimer#
 Global DoorTempID%
+
+Type BrokenDoor
+	Field IsBroken%
+	Field x#
+	Field z#
+End Type
+
+Global bk.BrokenDoor = New BrokenDoor
 
 Type Doors
 	Field OBJ%, OBJ2%, FrameOBJ%, Buttons%[2]
@@ -9773,6 +9777,9 @@ Function NullGame(PlayButtonSFX% = True) ; ~ CHECK FOR ERRORS
 	If SelectedItem <> Null Then SelectedItem = Null
 	
 	ClosestButton = 0
+	
+	Delete(bk)
+	bk.BrokenDoor = New BrokenDoor
 	
 	For d.Doors = Each Doors
 		Delete(d)
