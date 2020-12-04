@@ -2035,7 +2035,7 @@ Global bk.BrokenDoor = New BrokenDoor
 Type Doors
 	Field OBJ%, OBJ2%, FrameOBJ%, Buttons%[2]
 	Field Locked%, LockedUpdated%, Open%, Angle%, OpenState#, FastOpen%
-	Field Dir%, Dist#
+	Field DoorType%, Dist#
 	Field Timer%, TimerState#
 	Field KeyCard%
 	Field room.Rooms
@@ -2050,13 +2050,23 @@ Type Doors
 	Field MTFClose% = True
 End Type 
 
-Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, Open% = False, Big% = 0, Keycard% = 0, Code$ = "", CheckIfZeroCard% = False)
+; ~ Doors IDs Constants
+;[Block]
+Const Default_Door% = 0
+Const Big_Door% = 1
+Const Heavy_Door% = 2
+Const Elevator_Door% = 3
+Const One_Sided_Door% = 4
+Const SCP_914_Door% = 5
+;[End Block]
+
+Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, Open% = False, DoorType% = Default_Door, Keycard% = 0, Code$ = "", CheckIfZeroCard% = False)
 	Local d.Doors, Parent%, i%
 	
 	If room <> Null Then Parent = room\OBJ
 	
 	d.Doors = New Doors
-	If Big = 1 Then ; ~ Big Door
+	If DoorType = Big_Door Then
 		d\OBJ = CopyEntity(o\DoorModelID[5])
 		ScaleEntity(d\OBJ, 55.0 * RoomScale, 55.0 * RoomScale, 55.0 * RoomScale)
 		d\OBJ2 = CopyEntity(o\DoorModelID[6])
@@ -2066,21 +2076,21 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, Open% = False, Bi
 		ScaleEntity(d\FrameOBJ, RoomScale, RoomScale, RoomScale)
 		EntityType(d\FrameOBJ, HIT_MAP)
 		EntityAlpha(d\FrameOBJ, 0.0)
-	ElseIf Big = 2 Then ; ~ Heavy Door
+	ElseIf DoorType = Heavy_Door Then
 		d\OBJ = CopyEntity(o\DoorModelID[2])
 		ScaleEntity(d\OBJ, RoomScale, RoomScale, RoomScale)
 		d\OBJ2 = CopyEntity(o\DoorModelID[3])
 		ScaleEntity(d\OBJ2, RoomScale, RoomScale, RoomScale)
 		
 		d\FrameOBJ = CopyEntity(o\DoorModelID[1])
-	ElseIf Big = 3 Then ; ~ Elevator Door
+	ElseIf DoorType = Elevator_Door
 		d\OBJ = CopyEntity(o\DoorModelID[7])
 		ScaleEntity(d\OBJ, RoomScale, RoomScale, RoomScale)
 		d\OBJ2 = CopyEntity(d\OBJ)
 		ScaleEntity(d\OBJ2, RoomScale, RoomScale, RoomScale)
 		
 		d\FrameOBJ = CopyEntity(o\DoorModelID[1])
-	ElseIf Big = 4 ; ~ One-sided Door
+	ElseIf DoorType = One_Sided_Door
 		d\OBJ = CopyEntity(o\DoorModelID[10])
 		ScaleEntity(d\OBJ, (203.0 * RoomScale) / MeshWidth(d\OBJ), 313.0 * RoomScale / MeshHeight(d\OBJ), 15.0 * RoomScale / MeshDepth(d\OBJ))
 		d\OBJ2 = CopyEntity(o\DoorModelID[10])
@@ -2109,11 +2119,7 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, Open% = False, Bi
 	
 	If d\OBJ2 <> 0 Then
 		PositionEntity(d\OBJ2, x, y, z)
-		If Big = 1 Then
-			RotateEntity(d\OBJ2, 0.0, Angle, 0.0)
-		Else
-			RotateEntity(d\OBJ2, 0.0, Angle + 180.0, 0.0)
-		EndIf
+		RotateEntity(d\OBJ2, 0.0, Angle + ((DoorType <> Big_Door) * 180.0), 0.0)
 		EntityType(d\OBJ2, HIT_MAP)
 		EntityPickMode(d\OBJ2, 2)
 		MakeCollBox(d\OBJ2)
@@ -2122,16 +2128,16 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, Open% = False, Bi
 	
 	For i = 0 To 1
 		If Code <> "" Then 
-			d\Buttons[i] = CreateButton(2, x + ((Big <> 1) * (0.6 + (i * (-1.2)))) + ((Big = 1) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((Big <> 1) * ((-0.1) + (i * 0.2))) + ((Big = 1) * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((Big <> 1) * (i * 180.0)) + ((Big = 1) * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ)
-		ElseIf Big = 3
-			d\Buttons[i] = CreateButton(i * 4, x + ((Big <> 1) * (0.6 + (i * (-1.2)))) + ((Big = 1) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((Big <> 1) * ((-0.1) + (i * 0.2))) + ((Big = 1) * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((Big <> 1) * (i * 180.0)) + ((Big = 1) * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ)
+			d\Buttons[i] = CreateButton(2, x + ((DoorType <> Big_Door) * (0.6 + (i * (-1.2)))) + ((DoorType = Big_Door) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((DoorType <> Big_Door) * ((-0.1) + (i * 0.2))) + ((DoorType = Big_Door) * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((DoorType <> Big_Door) * (i * 180.0)) + ((DoorType = Big_Door) * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ)
+		ElseIf DoorType = Elevator_Door
+			d\Buttons[i] = CreateButton(i * 4, x + ((DoorType <> Big_Door) * (0.6 + (i * (-1.2)))) + ((DoorType = Big_Door) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((DoorType <> Big_Door) * ((-0.1) + (i * 0.2))) + ((DoorType = Big_Door) * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((DoorType <> Big_Door) * (i * 180.0)) + ((DoorType = Big_Door) * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ)
 		Else
 			If Keycard > 0 Then
-				d\Buttons[i] = CreateButton(1, x + ((Big <> 1) * (0.6 + (i * (-1.2)))) + ((Big = 1) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((Big <> 1) * ((-0.1) + (i * 0.2))) + ((Big = 1) * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((Big <> 1) * (i * 180.0)) + ((Big = 1) * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ)
+				d\Buttons[i] = CreateButton(1, x + ((DoorType <> Big_Door) * (0.6 + (i * (-1.2)))) + ((DoorType = Big_Door) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((DoorType <> Big_Door) * ((-0.1) + (i * 0.2))) + ((DoorType = Big_Door) * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((DoorType <> Big_Door) * (i * 180.0)) + ((DoorType = Big_Door) * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ)
 			ElseIf Keycard < 0
-				d\Buttons[i] = CreateButton(3, x + ((Big <> 1) * (0.6 + (i * (-1.2)))) + ((Big = 1) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((Big <> 1) * ((-0.1) + (i * 0.2))) + ((Big = 1) * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((Big <> 1) * (i * 180.0)) + ((Big = 1) * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ)
+				d\Buttons[i] = CreateButton(3, x + ((DoorType <> Big_Door) * (0.6 + (i * (-1.2)))) + ((DoorType = Big_Door) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((DoorType <> Big_Door) * ((-0.1) + (i * 0.2))) + ((DoorType = Big_Door) * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((DoorType <> Big_Door) * (i * 180.0)) + ((DoorType = Big_Door) * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ)
 			Else
-				d\Buttons[i] = CreateButton(0, x + ((Big <> 1) * (0.6 + (i * (-1.2)))) + ((Big = 1) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((Big <> 1) * ((-0.1) + (i * 0.2))) + ((Big = 1) * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((Big <> 1) * (i * 180.0)) + ((Big = 1) * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ)
+				d\Buttons[i] = CreateButton(0, x + ((DoorType <> Big_Door) * (0.6 + (i * (-1.2)))) + ((DoorType = Big_Door) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((DoorType <> Big_Door) * ((-0.1) + (i * 0.2))) + ((DoorType = Big_Door) * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((DoorType <> Big_Door) * (i * 180.0)) + ((DoorType = Big_Door) * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ)
 			EndIf
 		EndIf
 	Next
@@ -2158,8 +2164,8 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, Open% = False, Bi
 	d\Angle = Angle
 	d\Open = Open		
 	
-	If d\Open And Big = 0 And d\Locked = 0 And Rand(8) = 1 Then d\AutoClose = True
-	d\Dir = Big
+	If d\Open And DoorType = Default_Door And d\Locked = 0 And Rand(8) = 1 Then d\AutoClose = True
+	d\DoorType = DoorType
 	d\room = room
 	
 	d\MTFClose = True
@@ -2232,38 +2238,38 @@ Function UpdateDoors()
 			
 			If d\Open Then
 				If d\OpenState < 180.0 Then
-					Select d\Dir
-						Case 0
+					Select d\DoorType
+						Case Default_Door
 							;[Block]
 							d\OpenState = Min(180.0, d\OpenState + (fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fpst\FPSFactor[0] / 80.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * fpst\FPSFactor[0] / 80.0, 0.0, 0.0)	
 							;[End Block]
-						Case 1
+						Case Big_Door
 							;[Block]
 							d\OpenState = Min(180.0, d\OpenState + (fpst\FPSFactor[0] * 0.8))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * fpst\FPSFactor[0] / 180.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, (-Sin(d\OpenState)) * fpst\FPSFactor[0] / 180.0, 0.0, 0.0)
 							;[End Block]
-						Case 2
+						Case Heavy_Door
 							;[Block]
 							d\OpenState = Min(180.0, d\OpenState + (fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen + 1) * fpst\FPSFactor[0] / 85.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fpst\FPSFactor[0] / 120.0, 0.0, 0.0)
 							;[End Block]
-						Case 3
+						Case Elevator_Door
 							;[Block]
 							d\OpenState = Min(180.0, d\OpenState + (fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fpst\FPSFactor[0] / 162.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState)* (d\FastOpen * 2 + 1) * fpst\FPSFactor[0] / 162.0, 0.0, 0.0)
 							;[End Block]
-						Case 4
+						Case One_Sided_Door
 						    ;[Block]
 							d\OpenState = Min(180.0, d\OpenState + (fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fpst\FPSFactor[0] / 80.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fpst\FPSFactor[0]) / 80.0, 0.0, 0.0)	
 							;[End Block]	
-						Case 5 ; ~ Used for SCP-914 only
+						Case SCP_914_Door ; ~ Used for SCP-914 only
 							;[Block]
 							d\OpenState = Min(180.0, d\OpenState + (fpst\FPSFactor[0] * 1.4))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * fpst\FPSFactor[0] / 114.0, 0.0, 0.0)
@@ -2279,30 +2285,30 @@ Function UpdateDoors()
 						
 						If d\TimerState = 0.0 Then 
 							d\Open = (Not d\Open)
-							If d\Dir <> 0 And d\Dir <> 4 Then
-								d\SoundCHN = PlaySound2(CloseDoorSFX(d\Dir, Rand(0, 2)), Camera, d\OBJ)
+							If d\DoorType <> Default_Door And d\DoorType <> One_Sided_Door Then
+								d\SoundCHN = PlaySound2(CloseDoorSFX(d\DoorType, Rand(0, 2)), Camera, d\OBJ)
 							Else
 								d\SoundCHN = PlaySound2(CloseDoorSFX(0, Rand(0, 2)), Camera, d\OBJ)
 							EndIf
 						EndIf
 					EndIf
-					If d\AutoClose And RemoteDoorOn = True Then
+					If d\AutoClose And RemoteDoorOn Then
 						If EntityDistanceSquared(Camera, d\OBJ) < 4.41 Then
 							If I_714\Using = 0 And wi\GasMask < 3 And wi\HazmatSuit < 3 Then PlaySound_Strict(HorrorSFX[7])
-							d\Open = False : d\SoundCHN = PlaySound2(CloseDoorSFX(Min(d\Dir, 1), Rand(0, 2)), Camera, d\OBJ) : d\AutoClose = False
+							d\Open = False : d\SoundCHN = PlaySound2(CloseDoorSFX(Min(d\DoorType, 1), Rand(0, 2)), Camera, d\OBJ) : d\AutoClose = False
 						EndIf
 					EndIf				
 				EndIf
 			Else
 				If d\OpenState > 0.0 Then
-					Select d\Dir
-						Case 0
+					Select d\DoorType
+						Case Default_Door
 							;[Block]
 							d\OpenState = Max(0.0, d\OpenState - (fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fpst\FPSFactor[0]) * (d\FastOpen + 1) / 80.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fpst\FPSFactor[0]) / 80.0, 0.0, 0.0)	
 							;[End Block]
-						Case 1
+						Case Big_Door
 							;[Block]
 							d\OpenState = Max(0.0, d\OpenState - (fpst\FPSFactor[0] * 0.8))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fpst\FPSFactor[0]) / 180.0, 0.0, 0.0)
@@ -2325,25 +2331,25 @@ Function UpdateDoors()
 								EndIf
 							EndIf
 							;[End Block]
-						Case 2
+						Case Heavy_Door
 							;[Block]
 							d\OpenState = Max(0.0, d\OpenState - (fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fpst\FPSFactor[0]) * (d\FastOpen + 1) / 85.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fpst\FPSFactor[0]) / 120.0, 0.0, 0.0)
 							;[End Block]
-						Case 3
+						Case Elevator_Door
 							;[Block]
 							d\OpenState = Max(0.0, d\OpenState - (fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fpst\FPSFactor[0]) * (d\FastOpen + 1) / 162.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fpst\FPSFactor[0]) / 162.0, 0.0, 0.0)
 							;[End Block]
-						Case 4
+						Case One_Sided_Door
 						    ;[Block]
 							d\OpenState = Max(0.0, d\OpenState - (fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fpst\FPSFactor[0]) * (d\FastOpen + 1) / 80.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * fpst\FPSFactor[0] / 80.0, 0.0, 0.0)
 							;[End Block]	
-						Case 5 ; ~ Used for SCP-914 only
+						Case SCP_914_Door ; ~ Used for SCP-914 only
 							;[Block]
 							d\OpenState = Min(180.0, d\OpenState - (fpst\FPSFactor[0] * 1.4))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fpst\FPSFactor[0]) / 114.0, 0.0, 0.0)
@@ -2352,14 +2358,14 @@ Function UpdateDoors()
 					
 					If d\Angle = 0.0 Lor d\Angle = 180.0 Then
 						If Abs(EntityZ(d\FrameOBJ, True) - EntityZ(me\Collider)) < 0.15 Then
-							If Abs(EntityX(d\FrameOBJ, True) - EntityX(me\Collider)) < 0.7 * (d\Dir * 2 + 1) Then
+							If Abs(EntityX(d\FrameOBJ, True) - EntityX(me\Collider)) < 0.7 * (d\DoorType * 2 + 1) Then
 								z = CurveValue(EntityZ(d\FrameOBJ, True) + 0.15 * Sgn(EntityZ(me\Collider) - EntityZ(d\FrameOBJ, True)), EntityZ(me\Collider), 5)
 								PositionEntity(me\Collider, EntityX(me\Collider), EntityY(me\Collider), z)
 							EndIf
 						EndIf
 					Else
 						If Abs(EntityX(d\FrameOBJ, True) - EntityX(me\Collider)) < 0.15 Then	
-							If Abs(EntityZ(d\FrameOBJ, True) - EntityZ(me\Collider)) < 0.7 * (d\Dir * 2 + 1) Then
+							If Abs(EntityZ(d\FrameOBJ, True) - EntityZ(me\Collider)) < 0.7 * (d\DoorType * 2 + 1) Then
 								x = CurveValue(EntityX(d\FrameOBJ, True) + 0.15 * Sgn(EntityX(me\Collider) - EntityX(d\FrameOBJ, True)), EntityX(me\Collider), 5)
 								PositionEntity(me\Collider, x, EntityY(me\Collider), EntityZ(me\Collider))
 							EndIf
@@ -2370,7 +2376,7 @@ Function UpdateDoors()
 					PositionEntity(d\OBJ, EntityX(d\FrameOBJ, True), EntityY(d\FrameOBJ, True), EntityZ(d\FrameOBJ, True))
 					If d\OBJ2 <> 0 Then
 						PositionEntity(d\OBJ2, EntityX(d\FrameOBJ, True), EntityY(d\FrameOBJ, True), EntityZ(d\FrameOBJ, True))
-						If d\Dir = 0 Lor d\Dir = 4 Then
+						If d\DoorType = Default_Door Lor d\DoorType = One_Sided_Door Then
 							MoveEntity(d\OBJ, 0.0, 0.0, 8.0 * RoomScale)
 							MoveEntity(d\OBJ2, 0.0, 0.0, 8.0 * RoomScale)
 						EndIf
@@ -2393,11 +2399,13 @@ Function UpdateDoors()
 			d\LockedUpdated = d\Locked
 		EndIf
 		
-		If d\Locked = 2 Then
-			If d\OpenState > 48.0 Then
-				d\Open = False
-				d\OpenState = Min(d\OpenState, 48.0)
-			EndIf	
+		If d\DoorType = Big_Door Then
+			If d\Locked = 2 Then
+				If d\OpenState > 48.0 Then
+					d\Open = False
+					d\OpenState = Min(d\OpenState, 48.0)
+				EndIf	
+			EndIf
 		EndIf
 	Next
 End Function
@@ -2952,18 +2960,18 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True, Scripted% = False)
 	
 	If PlaySFX Then
 		If d\Open Then
-			If d\Dir = 1 And d\Locked = 2 Then
+			If d\DoorType = Big_Door And d\Locked = 2 Then
 				d\SoundCHN = PlaySound2(BigDoorErrorSFX[Rand(0, 2)], Camera, d\OBJ)
 			Else
-				If d\Dir <> 0 And d\Dir <> 4 Then
-					d\SoundCHN = PlaySound2(OpenDoorSFX(d\Dir, Rand(0, 2)), Camera, d\OBJ)
+				If d\DoorType <> Default_Door And d\DoorType <> One_Sided_Door Then
+					d\SoundCHN = PlaySound2(OpenDoorSFX(d\DoorType, Rand(0, 2)), Camera, d\OBJ)
 				Else
 					d\SoundCHN = PlaySound2(OpenDoorSFX(0, Rand(0, 2)), Camera, d\OBJ)
 				EndIf
 			EndIf
 		Else
-			If d\Dir <> 0 And d\Dir <> 4 Then
-				d\SoundCHN = PlaySound2(CloseDoorSFX(d\Dir, Rand(0, 2)), Camera, d\OBJ)
+			If d\DoorType <> Default_Door And d\DoorType <> One_Sided_Door Then
+				d\SoundCHN = PlaySound2(CloseDoorSFX(d\DoorType, Rand(0, 2)), Camera, d\OBJ)
 			Else
 				d\SoundCHN = PlaySound2(CloseDoorSFX(0, Rand(0, 2)), Camera, d\OBJ)
 			EndIf
@@ -3032,8 +3040,6 @@ FlushMouse()
 DrawLoading(100, True)
 
 fpst\LoopDelay = MilliSecs()
-
-Global CurrTrisAmount%
 
 Global Input_ResetTime# = 0.0
 
@@ -8988,75 +8994,75 @@ Function LoadEntities()
 	
 	; ~ [NPCs]
 	
-	o\NPCModelID[0] = LoadMesh_Strict("GFX\npcs\scp_173.b3d") ; ~ SCP-173
+	o\NPCModelID[NPCtype008_1] = LoadAnimMesh_Strict("GFX\npcs\scp_008_1.b3d") ; ~ SCP-008-1
 	
-    o\NPCModelID[1] = LoadAnimMesh_Strict("GFX\npcs\scp_106.b3d") ; ~ SCP-106
+	o\NPCModelID[NPCtype035] = LoadAnimMesh_Strict("GFX\npcs\scp_035.b3d") ; ~ SCP-035
 	
-	o\NPCModelID[2] = LoadAnimMesh_Strict("GFX\npcs\guard.b3d") ; ~ Guard
+	o\NPCModelID[NPCtype035_Tentacle] = LoadAnimMesh_Strict("GFX\npcs\scp_035_tentacle.b3d") ; ~ SCP-035's Tentacle
 	
-    o\NPCModelID[3] = LoadAnimMesh_Strict("GFX\npcs\class_d.b3d") ; ~ Class-D
+	o\NPCModelID[NPCtype049] = LoadAnimMesh_Strict("GFX\npcs\scp_049.b3d") ; ~ SCP-049
 	
-	o\NPCModelID[4] = LoadAnimMesh_Strict("GFX\npcs\scp_372.b3d") ; ~ SCP-372
+	o\NPCModelID[NPCtype049_2] = LoadAnimMesh_Strict("GFX\npcs\scp_049_2.b3d") ; ~ SCP-049-2
 	
-	o\NPCModelID[5] = LoadAnimMesh_Strict("GFX\npcs\apache.b3d") ; ~ Apache Helicopter
+	o\NPCModelID[NPCtype066] = LoadAnimMesh_Strict("GFX\npcs\scp_066.b3d") ; ~ SCP-066
 	
-	o\NPCModelID[6] = LoadAnimMesh_Strict("GFX\npcs\apache_rotor.b3d") ; ~ Helicopter's Rotor #1
+	o\NPCModelID[NPCtype096] = LoadAnimMesh_Strict("GFX\npcs\scp_096.b3d") ; ~ SCP-096
 	
-	o\NPCModelID[7] = LoadAnimMesh_Strict("GFX\npcs\MTF.b3d") ; ~ MTF
+	o\NPCModelID[NPCtype106] = LoadAnimMesh_Strict("GFX\npcs\scp_106.b3d") ; ~ SCP-106
 	
-	o\NPCModelID[8] = LoadAnimMesh_Strict("GFX\npcs\scp_096.b3d") ; ~ SCP-096
+	o\NPCModelID[NPCtype173] = LoadMesh_Strict("GFX\npcs\scp_173.b3d") ; ~ SCP-173
 	
-	o\NPCModelID[9] = LoadAnimMesh_Strict("GFX\npcs\scp_049.b3d") ; ~ SCP-049
+	o\NPCModelID[NPCtype173_Box] = LoadMesh_Strict("GFX\npcs\scp_173_box.b3d") ; ~ SCP-173's Box
 	
-	o\NPCModelID[10] = LoadAnimMesh_Strict("GFX\npcs\scp_049_2.b3d") ; ~ SCP-049-2
+	o\NPCModelID[NPCtype205_Demon] = LoadAnimMesh_Strict("GFX\npcs\scp_205_demon.b3d") ; ~ SCP-205's Demon #1
 	
-	o\NPCModelID[11] = LoadAnimMesh_Strict("GFX\npcs\scp_513_1.b3d") ; ~ SCP-513-1
+	o\NPCModelID[NPCtype205_Demon2] = LoadAnimMesh_Strict("GFX\npcs\scp_205_demon(2).b3d") ; ~ SCP-205's Demon #2
 	
-	o\NPCModelID[12] = LoadAnimMesh_Strict("GFX\npcs\scp_035_tentacle.b3d") ; ~ SCP-035's Tentacle
+	o\NPCModelID[NPCtype205_Demon3] = LoadAnimMesh_Strict("GFX\npcs\scp_205_demon(3).b3d") ; ~ SCP-205's Demon #3
 	
-	o\NPCModelID[13] = LoadAnimMesh_Strict("GFX\npcs\scp_860_2.b3d") ; ~ SCP-860-2
+	o\NPCModelID[NPCtype205_Woman] = LoadAnimMesh_Strict("GFX\npcs\scp_205_woman.b3d") ; ~ SCP-205's Woman
 	
-	o\NPCModelID[14] = LoadAnimMesh_Strict("GFX\npcs\scp_939.b3d") ; ~ SCP-939
+	o\NPCModelID[NPCtype372] = LoadAnimMesh_Strict("GFX\npcs\scp_372.b3d") ; ~ SCP-372
 	
-	o\NPCModelID[15] = LoadAnimMesh_Strict("GFX\npcs\scp_066.b3d") ; ~ SCP-066
+	o\NPCModelID[NPCtype513_1] = LoadAnimMesh_Strict("GFX\npcs\scp_513_1.b3d") ; ~ SCP-513-1
 	
-	o\NPCModelID[16] = LoadAnimMesh_Strict("GFX\npcs\scp_966.b3d") ; ~ SCP-966
+	o\NPCModelID[NPCtype682_Arm] = LoadMesh_Strict("GFX\npcs\scp_682_arm.b3d") ; ~ SCP-682's Arm
 	
-	o\NPCModelID[17] = LoadAnimMesh_Strict("GFX\npcs\scp_1048_a.b3d") ; ~ SCP-1048-A
+	o\NPCModelID[NPCtype860_2] = LoadAnimMesh_Strict("GFX\npcs\scp_860_2.b3d") ; ~ SCP-860-2
 	
-	o\NPCModelID[18] = LoadAnimMesh_Strict("GFX\npcs\scp_1499_1.b3d") ; ~ SCP-1499-1
+	o\NPCModelID[NPCtype939] = LoadAnimMesh_Strict("GFX\npcs\scp_939.b3d") ; ~ SCP-939
 	
-	o\NPCModelID[19] = LoadAnimMesh_Strict("GFX\npcs\scp_008_1.b3d") ; ~ SCP-008-1
+	o\NPCModelID[NPCtype966] = LoadAnimMesh_Strict("GFX\npcs\scp_966.b3d") ; ~ SCP-966
 	
-	o\NPCModelID[20] = LoadAnimMesh_Strict("GFX\npcs\clerk.b3d") ; ~ Clerk
+	o\NPCModelID[NPCtype1048] = LoadAnimMesh_Strict("GFX\npcs\scp_1048.b3d") ; ~ SCP-1048
 	
-	o\NPCModelID[21] = LoadAnimMesh_Strict("GFX\npcs\apache_rotor(2).b3d") ; ~ Helicopter's Rotor #2
+	o\NPCModelID[NPCtype1048_A] = LoadAnimMesh_Strict("GFX\npcs\scp_1048_a.b3d") ; ~ SCP-1048-A
 	
-	o\NPCModelID[22] = LoadAnimMesh_Strict("GFX\npcs\nazi_officer.b3d") ; ~ Nazi Officer
+	o\NPCModelID[NPCtype1499_1] = LoadAnimMesh_Strict("GFX\npcs\scp_1499_1.b3d") ; ~ SCP-1499-1
 	
-	o\NPCModelID[23] = LoadAnimMesh_Strict("GFX\npcs\scp_1048.b3d") ; ~ SCP-1048
+	o\NPCModelID[NPCtypeApache] = LoadAnimMesh_Strict("GFX\npcs\apache.b3d") ; ~ Apache Helicopter
 	
-	o\NPCModelID[24] = LoadAnimMesh_Strict("GFX\npcs\duck.b3d") ; ~ Anomalous Duck
+	o\NPCModelID[NPCtypeApache_Rotor] = LoadAnimMesh_Strict("GFX\npcs\apache_rotor.b3d") ; ~ Helicopter's Rotor #1
 	
-	o\NPCModelID[25] = LoadAnimMesh_Strict("GFX\npcs\CI.b3d") ; ~ CI
+	o\NPCModelID[NPCtypeApache_Rotor2] = LoadAnimMesh_Strict("GFX\npcs\apache_rotor(2).b3d") ; ~ Helicopter's Rotor #2
 	
-	o\NPCModelID[26] = LoadAnimMesh_Strict("GFX\npcs\scp_035.b3d") ; ~ SCP-035
+	o\NPCModelID[NPCtypeCI] = LoadAnimMesh_Strict("GFX\npcs\CI.b3d") ; ~ CI
 	
-	o\NPCModelID[27] = LoadMesh_Strict("GFX\npcs\scp_682_arm.b3d") ; ~ SCP-682's Arm
+	o\NPCModelID[NPCtypeClerk] = LoadAnimMesh_Strict("GFX\npcs\clerk.b3d") ; ~ Clerk
 	
-	o\NPCModelID[28] = LoadMesh_Strict("GFX\npcs\scp_173_box.b3d") ; ~ SCP-173's Box
+	o\NPCModelID[NPCtypeD] = LoadAnimMesh_Strict("GFX\npcs\class_d.b3d") ; ~ Class-D
 	
-	o\NPCModelID[29] = LoadAnimMesh_Strict("GFX\npcs\scp_205_demon.b3d") ; ~ SCP-205's Demon #1
+	o\NPCModelID[NPCtypeDuck] = LoadAnimMesh_Strict("GFX\npcs\duck.b3d") ; ~ Anomalous Duck
 	
-	o\NPCModelID[30] = LoadAnimMesh_Strict("GFX\npcs\scp_205_demon(2).b3d") ; ~ SCP-205's Demon #2
+	o\NPCModelID[NPCtypeGuard] = LoadAnimMesh_Strict("GFX\npcs\guard.b3d") ; ~ Guard
 	
-	o\NPCModelID[31] = LoadAnimMesh_Strict("GFX\npcs\scp_205_demon(3).b3d") ; ~ SCP-205's Demon #3
+	o\NPCModelID[NPCtypeMTF] = LoadAnimMesh_Strict("GFX\npcs\MTF.b3d") ; ~ MTF
 	
-	o\NPCModelID[32] = LoadAnimMesh_Strict("GFX\npcs\scp_205_woman.b3d") ; ~ SCP-205's Woman
+	o\NPCModelID[NPCtypeNazi] = LoadAnimMesh_Strict("GFX\npcs\nazi_officer.b3d") ; ~ Nazi Officer
 	
-	o\NPCModelID[33] = LoadAnimMesh_Strict("GFX\npcs\vehicle.b3d") ; ~ Vehicle
+	o\NPCModelID[NPCtypeVehicle] = LoadAnimMesh_Strict("GFX\npcs\vehicle.b3d") ; ~ Vehicle
 	
-    For i = 0 To MaxNPCModelIDAmount - 1
+	For i = 0 To MaxNPCModelIDAmount - 1
         HideEntity(o\NPCModelID[i])
     Next
 	
@@ -9256,7 +9262,7 @@ Function LoadEntities()
 	
 	; ~ NPCtypeD - different models with different textures (loaded using "CopyEntity") -- ENDSHN
 	For i = 0 To MaxDTextures - 1
-		o\DTextures[i] = CopyEntity(o\NPCModelID[3])
+		o\DTextures[i] = CopyEntity(o\NPCModelID[NPCtypeD])
 		; ~ Temporary fix for wrong blend (TODO:) -- Jabka
 		EntityFX(o\DTextures[i], 2)
 		HideEntity(o\DTextures[i])
@@ -9421,7 +9427,7 @@ Function InitNewGame()
 		If d\Buttons[0] <> 0 Then EntityParent(d\Buttons[0], 0)
 		If d\Buttons[1] <> 0 Then EntityParent(d\Buttons[1], 0)
 		
-		If d\OBJ2 <> 0 And (d\Dir = 0 Lor d\Dir = 4) Then
+		If d\OBJ2 <> 0 And (d\DoorType = Default_Door Lor d\DoorType = One_Sided_Door) Then
 			MoveEntity(d\OBJ, 0.0, 0.0, 8.0 * RoomScale)
 			MoveEntity(d\OBJ2, 0.0, 0.0, 8.0 * RoomScale)
 		EndIf	

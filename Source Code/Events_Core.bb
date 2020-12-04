@@ -698,19 +698,19 @@ Function QuickLoadEvents()
 			;[Block]
 			If e\EventState = 0.0 Lor e\EventStr <> "LoadDone" Then
 				If e\EventStr = "Load0"
-					e\room\Objects[3] = CopyEntity(o\NPCModelID[29])
+					e\room\Objects[3] = CopyEntity(o\NPCModelID[NPCtype205_Demon])
 					QuickLoadPercent = 10
 					e\EventStr = "Load1"
 				ElseIf e\EventStr = "Load1"
-					e\room\Objects[4] = CopyEntity(o\NPCModelID[30])
+					e\room\Objects[4] = CopyEntity(o\NPCModelID[NPCtype205_Demon2])
 					QuickLoadPercent = 20
 					e\EventStr = "Load2"
 				ElseIf e\EventStr = "Load2"
-					e\room\Objects[5] = CopyEntity(o\NPCModelID[31])
+					e\room\Objects[5] = CopyEntity(o\NPCModelID[NPCtype205_Demon3])
 					QuickLoadPercent = 30
 					e\EventStr = "Load3"
 				ElseIf e\EventStr = "Load3"
-					e\room\Objects[6] = CopyEntity(o\NPCModelID[32])
+					e\room\Objects[6] = CopyEntity(o\NPCModelID[NPCtype205_Woman])
 					QuickLoadPercent = 40
 					e\EventStr = "Load4"
 				ElseIf e\EventStr = "Load4"
@@ -2220,7 +2220,7 @@ Function UpdateEvents()
 					If e\EventState3 = 0.0 Then
 						If Rand(2) = 1 Then
 							GiveAchievement(Achv1048)
-							e\room\Objects[1] = CopyEntity(o\NPCModelID[23])
+							e\room\Objects[1] = CopyEntity(o\NPCModelID[NPCtype1048])
 							ScaleEntity(e\room\Objects[1], 0.05, 0.05, 0.05)
 							PositionEntity(e\room\Objects[1], EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
 							SetAnimTime(e\room\Objects[1], 267.0)	
@@ -4235,7 +4235,7 @@ Function UpdateEvents()
 									End Select
 									
 									If e\room\grid\Grid[iX + (iY * GridSZ)] = 6 Lor e\room\grid\Grid[iX + (iY * GridSZ)] = 5 Then
-										dr = CreateDoor(e\room\Zone, e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 240.0 * RoomScale), 8.0, e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 240.0 * RoomScale), EntityYaw(TempInt, True) - 90.0, Null, False, 3)
+										dr = CreateDoor(e\room\Zone, e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 240.0 * RoomScale), 8.0, e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 240.0 * RoomScale), EntityYaw(TempInt, True) - 90.0, Null, False, Elevator_Door)
 										PositionEntity(dr\Buttons[0], EntityX(dr\Buttons[0], True) + (Cos(EntityYaw(TempInt, True)) * 0.05), EntityY(dr\Buttons[0], True), EntityZ(dr\Buttons[0], True) + (Sin(EntityYaw(TempInt, True)) * 0.05), True)
 										PositionEntity(dr\Buttons[1], EntityX(dr\Buttons[1], True) + (Cos(EntityYaw(TempInt, True)) * 0.05), EntityY(dr\Buttons[1], True), EntityZ(dr\Buttons[1], True) + (Sin(EntityYaw(TempInt, True)) * 0.031), True)
 										
@@ -4442,7 +4442,7 @@ Function UpdateEvents()
 									End Select
 									
 									If e\room\grid\Grid[iX + (iY * GridSZ)] = 6 Lor e\room\grid\Grid[iX + (iY * GridSZ)] = 5 Then
-										dr = CreateDoor(e\room\Zone, e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 240.0 * RoomScale), 8.0, e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 240.0 * RoomScale), EntityYaw(TempInt, True) - 90.0, Null, False, 3)
+										dr = CreateDoor(e\room\Zone, e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 240.0 * RoomScale), 8.0, e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 240.0 * RoomScale), EntityYaw(TempInt, True) - 90.0, Null, False, Elevator_Door)
 										PositionEntity(dr\Buttons[0], EntityX(dr\Buttons[0], True) + (Cos(EntityYaw(TempInt, True)) * 0.05), EntityY(dr\Buttons[0], True), EntityZ(dr\Buttons[0], True) + (Sin(EntityYaw(TempInt, True)) * 0.05), True)
 										PositionEntity(dr\Buttons[1], EntityX(dr\Buttons[1], True) + (Cos(EntityYaw(TempInt, True)) * 0.05), EntityY(dr\Buttons[1], True), EntityZ(dr\Buttons[1], True) + (Sin(EntityYaw(TempInt, True)) * 0.031), True)
 										
@@ -4770,7 +4770,7 @@ Function UpdateEvents()
 				;[Block]
 				If PlayerRoom = e\room Then
 					If e\room\Objects[2] = 0 Then
-						e\room\Objects[2] =	CopyEntity(o\NPCModelID[24])
+						e\room\Objects[2] =	CopyEntity(o\NPCModelID[NPCtypeDuck])
 						ScaleEntity(e\room\Objects[2], 0.07, 0.07, 0.07)
 						Tex = LoadTexture_Strict("GFX\npcs\duck(3).png")
 						EntityTexture(e\room\Objects[2], Tex)
@@ -4799,7 +4799,7 @@ Function UpdateEvents()
 				;[Block]
 				If PlayerRoom = e\room Then
 					If e\room\Objects[2] = 0 Then
-						e\room\Objects[2] =	CopyEntity(o\NPCModelID[23])
+						e\room\Objects[2] =	CopyEntity(o\NPCModelID[NPCtype1048])
 						ScaleEntity(e\room\Objects[2], 0.05, 0.05, 0.05)
 						SetAnimTime(e\room\Objects[2], 488.0)
 						
@@ -5763,7 +5763,7 @@ Function UpdateEvents()
 									Temp = e\room\NPC[0]\Frame
 									
 									FreeEntity(e\room\NPC[0]\OBJ)
-									e\room\NPC[0]\OBJ = CopyEntity(o\NPCModelID[26])
+									e\room\NPC[0]\OBJ = CopyEntity(o\NPCModelID[NPCtype035])
 									x = GetINIFloat(NPCsFile, "Class D", "Scale") / MeshWidth(e\room\NPC[0]\OBJ)
 									e\room\NPC[0]\ModelScaleX = x
 									e\room\NPC[0]\ModelScaleY = x
@@ -6076,7 +6076,7 @@ Function UpdateEvents()
 										e\room\RoomDoors[2]\Locked = 0
 										UseDoor(e\room\RoomDoors[1], False)
 										For do.Doors = Each Doors
-											If do\Dir = 2 Then
+											If do\DoorType = Heavy_Door Then
 												If Abs(EntityX(e\room\OBJ) - EntityX(do\FrameOBJ, True)) < 4.5 Then 
 													If Abs(EntityZ(e\room\OBJ) - EntityZ(do\FrameOBJ, True)) < 4.5 Then 
 														UseDoor(do, False)
@@ -7118,7 +7118,7 @@ Function UpdateEvents()
 						
 						e\room\NPC[0] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True), EntityZ(e\room\Objects[6], True))
 						FreeEntity(e\room\NPC[0]\OBJ)
-						e\room\NPC[0]\OBJ = CopyEntity(o\NPCModelID[22])
+						e\room\NPC[0]\OBJ = CopyEntity(o\NPCModelID[NPCtypeNazi])
 						Scale = GetINIFloat(NPCsFile, "Class D", "Scale") / MeshWidth(e\room\NPC[0]\OBJ)
 						ScaleEntity(e\room\NPC[0]\OBJ, Scale, Scale, Scale)
 						
@@ -7287,7 +7287,7 @@ Function UpdateEvents()
 			    ;[Block]
                 If e\EventState = 0.0
                     If PlayerRoom = e\room Then
-                        e\room\Objects[7] = CopyEntity(o\NPCModelID[23])
+                        e\room\Objects[7] = CopyEntity(o\NPCModelID[NPCtype1048])
 					    ScaleEntity(e\room\Objects[7], 0.05, 0.05, 0.05)
 						
 						TFormPoint(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0.0, e\room\OBJ)
@@ -7966,7 +7966,7 @@ Function UpdateEvents()
 				If e\room\Objects[0] = 0 Then
 					If PlayerRoom <> e\room Then
 						If DistanceSquared(EntityX(me\Collider), EntityX(e\room\OBJ), EntityZ(me\Collider), EntityZ(e\room\OBJ)) < 256.0 Then
-							e\room\Objects[0] =	CopyEntity(o\NPCModelID[17])
+							e\room\Objects[0] =	CopyEntity(o\NPCModelID[NPCtype1048_A])
 							ScaleEntity(e\room\Objects[0], 0.05, 0.05, 0.05)
 							SetAnimTime(e\room\Objects[0], 2)
 							PositionEntity(e\room\Objects[0], EntityX(e\room\OBJ), 0.0, EntityZ(e\room\OBJ))
@@ -9739,7 +9739,7 @@ Function UpdateEndings()
 							
 							If e\EventState > 70.0 * 26.5 Then
 								If e\room\Objects[12] = 0 Then
-									e\room\Objects[12] = CopyEntity(o\NPCModelID[27])
+									e\room\Objects[12] = CopyEntity(o\NPCModelID[NPCtype682_Arm])
 									ScaleEntity(e\room\Objects[12], 0.15, 0.15, 0.15)
 									Temp = (Min(((EntityDistance(e\room\NPC[3]\Collider, me\Collider) / RoomScale) - 3000.0) / 4.0, 1000.0) + 12192.0) * RoomScale
 									PositionEntity(e\room\Objects[12], EntityX(e\room\NPC[3]\Collider), 12192.0 * RoomScale, EntityZ(e\room\NPC[3]\Collider))
@@ -10123,7 +10123,7 @@ Function UpdateEndings()
 									
 									If Abs(EntityY(me\Collider) - EntityY(e\room\Objects[11], True)) < 1.0 Then
 										If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[11], True), EntityZ(me\Collider), EntityZ(e\room\Objects[11], True)) < 49.0 Then
-											e\room\Objects[12] = CopyEntity(o\NPCModelID[25])
+											e\room\Objects[12] = CopyEntity(o\NPCModelID[NPCtypeCI])
 											
 											Local Temp2# = 0.55 / MeshWidth(e\room\Objects[12])
 											

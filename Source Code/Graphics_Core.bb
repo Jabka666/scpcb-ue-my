@@ -137,6 +137,8 @@ Function UpdateGamma2()
 	EntityAlpha(FresizeImage, 1.0)
 End Function
 
+Global CurrTrisAmount%
+
 Function UpdateWorld2()
 	Local i%, np.NPCs
 	

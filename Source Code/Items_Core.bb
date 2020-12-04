@@ -344,6 +344,7 @@ Function InitItemTemplates()
 				For it2.ItemTemplates = Each ItemTemplates
 					If it2 <> it And it2\Tex = it\Tex Then
 						it2\Tex = 0
+						Exit
 					EndIf
 				Next
 			EndIf
@@ -580,12 +581,12 @@ Function UpdateItems()
 								; ~ Items are too close together, push away
 								xTemp = xTemp * (0.07 - ed)
 								zTemp = zTemp * (0.07 - ed)
-									
+								
 								While Abs(xTemp) + Abs(zTemp) < 0.001
 									xTemp = xTemp + Rnd(-0.002, 0.002)
 									zTemp = zTemp + Rnd(-0.002, 0.002)
 								Wend
-									
+								
 								TranslateEntity(i2\Collider, xTemp, 0.0, zTemp)
 								TranslateEntity(i\Collider, -xTemp, 0.0, -zTemp)
 							EndIf
@@ -606,7 +607,9 @@ Function UpdateItems()
 		EndIf
 		
 		If (Not DeletedItem) Then
-			CatchErrors(Chr(34) + i\ItemTemplate\Name + Chr(34) + " item")
+			CatchErrors("Detected error for:" + Chr(34) + i\ItemTemplate\Name + Chr(34) + " item!")
+		Else
+			CatchErrors("Detected error for deleted item!")
 		EndIf
 		DeletedItem = False
 	Next
@@ -617,6 +620,13 @@ Function UpdateItems()
 End Function
 
 Function PickItem(item.Items)
+	If wi\HazmatSuit > 0 Then
+		CreateMsg("You cannot pick up any items while wearing a hazmat suit.", 6.0)
+		Return
+	EndIf
+	
+	CatchErrors("Uncaught (PickItem)")
+	
 	Local n% = 0
 	Local CanPickItem = True
 	Local FullINV% = True
@@ -628,13 +638,6 @@ Function PickItem(item.Items)
 			Exit
 		EndIf
 	Next
-	
-	If wi\HazmatSuit > 0 Then
-		CreateMsg("You cannot pick up any items while wearing a hazmat suit.", 6.0)
-		Return
-	EndIf
-	
-	CatchErrors("Uncaught (PickItem)")
 	
 	Local z%
 	
@@ -716,10 +719,10 @@ Function PickItem(item.Items)
 							If Inventory[z] <> Null Then
 								If Inventory[z]\ItemTemplate\TempName = "hazmatsuit" Lor Inventory[z]\ItemTemplate\TempName = "hazmatsuit2" Lor Inventory[z]\ItemTemplate\TempName = "hazmatsuit3" Then
 									CanPickItem = 0
-									Exit
+									Return
 								ElseIf Inventory[z]\ItemTemplate\TempName = "vest" Lor Inventory[z]\ItemTemplate\TempName = "finevest"
 									CanPickItem = 2
-									Exit
+									Return
 								EndIf
 							EndIf
 						Next
@@ -741,10 +744,10 @@ Function PickItem(item.Items)
 							If Inventory[z] <> Null Then
 								If Inventory[z]\ItemTemplate\TempName = "vest" Lor Inventory[z]\ItemTemplate\TempName = "finevest" Then
 									CanPickItem = 0
-									Exit
+									Return
 								ElseIf Inventory[z]\ItemTemplate\TempName = "hazmatsuit" Lor Inventory[z]\ItemTemplate\TempName = "hazmatsuit2" Lor Inventory[z]\ItemTemplate\TempName = "hazmatsuit3"
 									CanPickItem = 2
-									Exit
+									Return
 								EndIf
 							EndIf
 						Next

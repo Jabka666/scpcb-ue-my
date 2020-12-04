@@ -2,11 +2,21 @@ Global Curr173.NPCs, Curr106.NPCs, Curr096.NPCs, Curr513_1.NPCs, Curr049.NPCs
 
 ; ~ NPC IDs Constants
 ;[Block]
-Const NPCtype008_1% = 1, NPCtype035_Tentacle% = 2, NPCtype049% = 3, NPCtype049_2% = 4, NPCtype066% = 5, NPCtype096% = 6
-Const NPCtype106% = 7, NPCtype173% = 8, NPCtype372% = 9, NPCtype513_1% = 10, NPCtype860_2% = 11, NPCtype939% = 12
-Const NPCtype966% = 13, NPCtype1499_1% = 14
+; ~ Main
+Const NPCtype008_1% = 0, NPCtype035_Tentacle% = 1, NPCtype049% = 2, NPCtype049_2% = 3, NPCtype066% = 4, NPCtype096% = 5
+Const NPCtype106% = 6, NPCtype173% = 7, NPCtype372% = 8, NPCtype513_1% = 9, NPCtype860_2% = 10, NPCtype939% = 11
+Const NPCtype966% = 12, NPCtype1499_1% = 13
 
-Const NPCtypeApache% = 15, NPCtypeClerk% = 16, NPCtypeD% = 17, NPCtypeGuard% = 18, NPCtypeMTF% = 19, NPCtypeVehicle% = 20
+Const NPCtypeApache% = 14, NPCtypeClerk% = 15, NPCtypeD% = 16, NPCtypeGuard% = 17, NPCtypeMTF% = 18, NPCtypeVehicle% = 19
+
+; ~ Placeholder
+Const NPCtype035% = 20, NPCtype205_Demon% = 21, NPCtype205_Demon2% = 22, NPCtype205_Demon3% = 23, NPCtype205_Woman% = 24
+Const NPCtype1048% = 25, NPCtype1048_A% = 26
+
+Const NPCtypeDuck% = 27, NPCtypeCI% = 28, NPCtypeNazi% = 29
+
+; ~ Objects
+Const NPCtypeApache_Rotor% = 30, NPCtypeApache_Rotor2% = 31, NPCtype173_Box% = 32, NPCtype682_Arm% = 33
 ;[End Block]
 
 Type NPCs
@@ -79,7 +89,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			EntityType(n\Collider, HIT_PLAYER)
 			n\Gravity = True
 			
-			n\OBJ = CopyEntity(o\NPCModelID[0])
+			n\OBJ = CopyEntity(o\NPCModelID[NPCtype173])
 			
 			; ~ On Halloween set Jack-o'-lantern texture
 			If (Left(CurrentDate(), 7) = "31 Oct ") Then
@@ -102,7 +112,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			
 			n\Speed = GetINIFloat(NPCsFile, "SCP-173", "Speed") / 100.0
 			
-			n\OBJ2 = CopyEntity(o\NPCModelID[28])
+			n\OBJ2 = CopyEntity(o\NPCModelID[NPCtype173_Box])
 			ScaleEntity(n\OBJ2, RoomScale, RoomScale, RoomScale)
 			HideEntity(n\OBJ2)
 			
@@ -117,7 +127,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			EntityRadius(n\Collider, 0.2)
 			EntityType(n\Collider, HIT_PLAYER)
 			
-			n\OBJ = CopyEntity(o\NPCModelID[1])
+			n\OBJ = CopyEntity(o\NPCModelID[NPCtype106])
 			
 			Temp = GetINIFloat(NPCsFile, "SCP-106", "Scale") / 2.2
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
@@ -140,7 +150,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			EntityRadius(n\Collider, 0.2)
 			EntityType(n\Collider, HIT_PLAYER)
 			
-			n\OBJ = CopyEntity(o\NPCModelID[2])
+			n\OBJ = CopyEntity(o\NPCModelID[NPCtypeGuard])
 			
 			Temp = GetINIFloat(NPCsFile, "Guard", "Scale") / 2.5
 			
@@ -157,7 +167,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			EntityRadius(n\Collider, 0.2)
 			EntityType(n\Collider, HIT_PLAYER)
 			
-			n\OBJ = CopyEntity(o\NPCModelID[7])
+			n\OBJ = CopyEntity(o\NPCModelID[NPCtypeMTF])
 			
 			Temp = GetINIFloat(NPCsFile, "MTF", "Scale") / 2.5
 			
@@ -179,7 +189,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			EntityRadius(n\Collider, 0.32)
 			EntityType(n\Collider, HIT_PLAYER)
 			
-			n\OBJ = CopyEntity(o\NPCModelID[3])
+			n\OBJ = CopyEntity(o\NPCModelID[NPCtypeD])
 			
 			Temp = GetINIFloat(NPCsFile, "Class D", "Scale") / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
@@ -196,7 +206,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.2)
 			
-			n\OBJ = CopyEntity(o\NPCModelID[4])
+			n\OBJ = CopyEntity(o\NPCModelID[NPCtype372])
 			
 			Temp = GetINIFloat(NPCsFile, "SCP-372", "Scale") / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
@@ -206,7 +216,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			n\NVName = "SCP-513-1"
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.2)
-			n\OBJ = CopyEntity(o\NPCModelID[11])
+			n\OBJ = CopyEntity(o\NPCModelID[NPCtype513_1])
 			
 			n\OBJ2 = CopyEntity(n\OBJ)
 			EntityAlpha(n\OBJ2, 0.6)
@@ -222,7 +232,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			EntityRadius(n\Collider, 0.26)
 			EntityType(n\Collider, HIT_PLAYER)
 			
-			n\OBJ = CopyEntity(o\NPCModelID[8])
+			n\OBJ = CopyEntity(o\NPCModelID[NPCtype096])
 			
 			n\Speed = GetINIFloat(NPCsFile, "SCP-096", "Speed") / 100.0
 			
@@ -246,7 +256,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			EntityRadius(n\Collider, 0.2)
 			EntityType(n\Collider, HIT_PLAYER)
 			
-			n\OBJ = CopyEntity(o\NPCModelID[9])
+			n\OBJ = CopyEntity(o\NPCModelID[NPCtype049])
 			
 			n\Speed = GetINIFloat(NPCsFile, "SCP-049", "Speed") / 100.0
 			
@@ -264,7 +274,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			EntityRadius(n\Collider, 0.2)
 			EntityType(n\Collider, HIT_PLAYER)
 			
-			n\OBJ = CopyEntity(o\NPCModelID[10])
+			n\OBJ = CopyEntity(o\NPCModelID[NPCtype049_2])
 			
 			Temp = GetINIFloat(NPCsFile, "SCP-049-2", "Scale") / 2.5
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
@@ -287,9 +297,9 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.2)
 			
-			n\OBJ = CopyEntity(o\NPCModelID[5])
+			n\OBJ = CopyEntity(o\NPCModelID[NPCtypeApache])
 			
-			n\OBJ2 = CopyEntity(o\NPCModelID[6])
+			n\OBJ2 = CopyEntity(o\NPCModelID[NPCtypeApache_Rotor])
 			EntityParent(n\OBJ2, n\OBJ)
 			
 			For i = -1 To 1 Step 2
@@ -299,7 +309,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 				EntityAlpha(Rotor2, 0.5)
 			Next
 			
-			n\OBJ3 = CopyEntity(o\NPCModelID[21])
+			n\OBJ3 = CopyEntity(o\NPCModelID[NPCtypeApache_Rotor2])
 			EntityParent(n\OBJ3, n\OBJ)
 			PositionEntity(n\OBJ3, 0.0, 2.15, -5.48)
 			
@@ -331,7 +341,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			
 			n\Collider = CreatePivot()
 			
-			n\OBJ = CopyEntity(o\NPCModelID[12])
+			n\OBJ = CopyEntity(o\NPCModelID[NPCtype035_Tentacle])
 			
 			Temp = GetINIFloat(NPCsFile, "SCP-035's Tentacle", "Scale") / 10.0
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
@@ -346,7 +356,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.25)
 			EntityType(n\Collider, HIT_PLAYER)
-			n\OBJ = CopyEntity(o\NPCModelID[13])
+			n\OBJ = CopyEntity(o\NPCModelID[NPCtype860_2])
 			
 			EntityFX(n\OBJ, 1)
 			
@@ -381,7 +391,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			EntityRadius(n\Collider, 0.3)
 			EntityType(n\Collider, HIT_PLAYER)
 			
-			n\OBJ = CopyEntity(o\NPCModelID[14])
+			n\OBJ = CopyEntity(o\NPCModelID[NPCtype939])
 			Temp = GetINIFloat(NPCsFile, "SCP-939", "Scale") / 2.5
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)	
 			
@@ -396,7 +406,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			EntityRadius(n\Collider, 0.2)
 			EntityType(n\Collider, HIT_PLAYER)
 			
-			n\OBJ = CopyEntity(o\NPCModelID[15])
+			n\OBJ = CopyEntity(o\NPCModelID[NPCtype066])
 			
 			Temp = GetINIFloat(NPCsFile, "SCP-066", "Scale") / 2.5
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
@@ -414,7 +424,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			n\Collider = CreatePivot()
 			EntityRadius n\Collider,0.2
 			
-			n\OBJ = CopyEntity(o\NPCModelID[16])
+			n\OBJ = CopyEntity(o\NPCModelID[NPCtype966])
 			EntityFX(n\OBJ, 1)
 			
 			Temp = GetINIFloat(NPCsFile, "SCP-966", "Scale") / 40.0
@@ -433,7 +443,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			EntityRadius(n\Collider, 0.2)
 			EntityType(n\Collider, HIT_PLAYER)
 			
-			n\OBJ = CopyEntity(o\NPCModelID[18])
+			n\OBJ = CopyEntity(o\NPCModelID[NPCtype1499_1])
 			
 			Temp = GetINIFloat(NPCsFile, "SCP-1499-1", "Scale") / 4.0 * Rnd(0.8, 1.0)
 			
@@ -450,7 +460,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			EntityRadius(n\Collider, 0.2)
 			EntityType(n\Collider, HIT_PLAYER)
 			
-			n\OBJ = CopyEntity(o\NPCModelID[19])
+			n\OBJ = CopyEntity(o\NPCModelID[NPCtype008_1])
 			
 			Temp = GetINIFloat(NPCsFile, "SCP-008-1", "Scale") / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
@@ -472,7 +482,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			EntityRadius(n\Collider, 0.32)
 			EntityType(n\Collider, HIT_PLAYER)
 			
-			n\OBJ = CopyEntity(o\NPCModelID[20])
+			n\OBJ = CopyEntity(o\NPCModelID[NPCtypeClerk])
 			
 			Temp = GetINIFloat(NPCsFile, "Clerk", "Scale") / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
@@ -490,7 +500,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			EntityRadius(n\Collider, 0.32)
 			EntityType(n\Collider, HIT_PLAYER)
 			
-            n\OBJ = CopyEntity(o\NPCModelID[33])
+            n\OBJ = CopyEntity(o\NPCModelID[NPCtypeVehicle])
 			
 			Temp = GetINIFloat(NPCsFile, "Vehicle", "Scale") / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
@@ -5373,7 +5383,7 @@ Function UpdateMTFUnit(n.NPCs)
 							If NewDist < 1.0 And n\Path[n\PathLocation]\door <> Null Then
 								; ~ Open the door and make it automatically close after 5 seconds
 								If (Not n\Path[n\PathLocation]\door\Open)
-									PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\Dir, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
+									PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\DoorType, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
 									PlayMTFSound(MTFSFX[0], n)
 								EndIf
 								n\Path[n\PathLocation]\door\Open = True
@@ -5773,7 +5783,7 @@ Function UpdateMTFUnit(n.NPCs)
 								If NewDist < 1.0 And n\Path[n\PathLocation]\door <> Null Then
 									; ~ Open the door and make it automatically close after 5 seconds
 									If (Not n\Path[n\PathLocation]\door\Open)
-										PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\Dir, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
+										PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\DoorType, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
 										PlayMTFSound(MTFSFX[0], n)
 									EndIf
 									n\Path[n\PathLocation]\door\Open = True
@@ -6090,7 +6100,7 @@ Function UpdateMTFUnit(n.NPCs)
 									If NewDist < 1.0 And n\Path[n\PathLocation]\door <> Null Then
 										; ~ Open the door and make it automatically close after 5 seconds
 										If (Not n\Path[n\PathLocation]\door\Open) Then
-											PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\Dir, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
+											PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\DoorType, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
 											PlayMTFSound(MTFSFX[0], n)
 										EndIf
 										n\Path[n\PathLocation]\door\Open = True
@@ -6302,7 +6312,7 @@ Function UpdateMTFUnit(n.NPCs)
 								
 								If NewDist < 2.0 And n\Path[n\PathLocation]\door <> Null Then
 									If (Not n\Path[n\PathLocation]\door\Open)
-										PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\Dir, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
+										PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\DoorType, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
 										PlayMTFSound(MTFSFX[0], n)
 									EndIf
 									n\Path[n\PathLocation]\door\Open = True
@@ -6479,7 +6489,7 @@ Function UpdateMTFUnit(n.NPCs)
 							If (NewDist < 1.0 And n\Path[n\PathLocation]\door <> Null) Then
 								; ~ Open the door and make it automatically close after 5 seconds
 								If (Not n\Path[n\PathLocation]\door\Open) Then
-									PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\Dir, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
+									PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\DoorType, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
 									PlayMTFSound(MTFSFX[0], n)
 								EndIf
 								n\Path[n\PathLocation]\door\Open = True
@@ -6627,7 +6637,7 @@ Function UpdateMTFUnit(n.NPCs)
 								; ~ Open the door and make it automatically close after 5 seconds
 								If NewDist < 1.0 And n\Path[n\PathLocation]\door <> Null Then
 									If (Not n\Path[n\PathLocation]\door\Open)
-										PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\Dir, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
+										PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\DoorType, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
 										PlayMTFSound(MTFSFX[0], n)
 									EndIf
 									n\Path[n\PathLocation]\door\Open = True
@@ -7416,5 +7426,5 @@ Function ChangeNPCTextureID(n.NPCs, TextureID%) ; ~ Works only for Class D model
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#175#1236#1386#138A#152C#1648#1817#1872
+;~B#17F#1240#1390#1394#1536#1652#1821#187C
 ;~C#Blitz3D

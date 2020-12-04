@@ -548,14 +548,14 @@ Function LoadAllSounds()
 	Local i%
 	
 	For i = 0 To 2
-		OpenDoorSFX(0, i) = LoadSound_Strict("SFX\Door\DoorOpen" + (i + 1) + ".ogg")
-		CloseDoorSFX(0, i) = LoadSound_Strict("SFX\Door\DoorClose" + (i + 1) + ".ogg")
-		OpenDoorSFX(2, i) = LoadSound_Strict("SFX\Door\Door2Open" + (i + 1) + ".ogg")
-		CloseDoorSFX(2, i) = LoadSound_Strict("SFX\Door\Door2Close" + (i + 1) + ".ogg")
-		OpenDoorSFX(3, i) = LoadSound_Strict("SFX\Door\ElevatorOpen" + (i + 1) + ".ogg")
-		CloseDoorSFX(3, i) = LoadSound_Strict("SFX\Door\ElevatorClose" + (i + 1) + ".ogg")
-		OpenDoorSFX(1, i) = LoadSound_Strict("SFX\Door\BigDoorOpen" + (i + 1) + ".ogg")
-		CloseDoorSFX(1, i) = LoadSound_Strict("SFX\Door\BigDoorClose" + (i + 1) + ".ogg")
+		OpenDoorSFX(Default_Door, i) = LoadSound_Strict("SFX\Door\DoorOpen" + (i + 1) + ".ogg") ; ~ Also one-sided door
+		CloseDoorSFX(Default_Door, i) = LoadSound_Strict("SFX\Door\DoorClose" + (i + 1) + ".ogg") ; ~ Also one-sided door
+		OpenDoorSFX(Big_Door, i) = LoadSound_Strict("SFX\Door\BigDoorOpen" + (i + 1) + ".ogg")
+		CloseDoorSFX(Big_Door, i) = LoadSound_Strict("SFX\Door\BigDoorClose" + (i + 1) + ".ogg")
+		OpenDoorSFX(Heavy_Door, i) = LoadSound_Strict("SFX\Door\Door2Open" + (i + 1) + ".ogg")
+		CloseDoorSFX(Heavy_Door, i) = LoadSound_Strict("SFX\Door\Door2Close" + (i + 1) + ".ogg")
+		OpenDoorSFX(Elevator_Door, i) = LoadSound_Strict("SFX\Door\ElevatorOpen" + (i + 1) + ".ogg")
+		CloseDoorSFX(Elevator_Door, i) = LoadSound_Strict("SFX\Door\ElevatorClose" + (i + 1) + ".ogg")
 		BigDoorErrorSFX[i] = LoadSound_Strict("SFX\Door\BigDoorError" + (i + 1) + ".ogg")
 	Next
 	

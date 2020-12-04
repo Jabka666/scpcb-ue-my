@@ -872,7 +872,11 @@ Function LoadGame(File$)
 		
 		For x = MapWidth To 0 Step -1
 			If MapTemp(x, y) > 0 Then
-				If Zone = 2 Then Temp = 2 Else Temp = 0
+				If Zone = 2 Then
+					Temp = Heavy_Door
+				Else
+					Temp = Default_Door
+				EndIf
                 
                 For r.Rooms = Each Rooms
 					r\Angle = WrapAngle(r\Angle)
@@ -911,7 +915,7 @@ Function LoadGame(File$)
 						If ShouldSpawnDoor Then
 							If x + 1 < MapWidth + 1
 								If MapTemp(x + 1, y) > 0 Then
-									do.Doors = CreateDoor(r\Zone, Float(x) * Spacing + Spacing / 2.0, 0.0, Float(y) * Spacing, 90.0, r, Max(Rand(-3, 1), 0), Temp)
+									do.Doors = CreateDoor(r\Zone, Float(x) * Spacing + Spacing / 2.0, 0.0, Float(y) * Spacing, 90.0, r, Max(Rand(-3, 1), 0.0), Temp)
 									r\AdjDoor[0] = do
 								EndIf
 							EndIf
@@ -2460,7 +2464,11 @@ Function LoadMap(File$)
 		
 		For x = MapWidth To 0 Step -1
 			If MapTemp(x, y) > 0 Then
-				If Zone = 2 Then Temp = 2 Else Temp = 0
+				If Zone = 2 Then 
+					Temp = Heavy_Door
+				Else 
+					Temp = Default_Door
+				EndIf
                 
                 For r.Rooms = Each Rooms
 					r\Angle = WrapAngle(r\Angle)
