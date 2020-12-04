@@ -5151,6 +5151,7 @@ Function UpdateEvents()
 					If TFormedX() > 730.0 Then
 						GiveAchievement(Achv970)
 						
+						me\LightBlink = 2.0
 						UpdateWorld()
 						TFormPoint(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0.0, e\room\OBJ)
 						
@@ -5167,14 +5168,14 @@ Function UpdateEvents()
 						Next	
 						
 						TFormPoint(TFormedX() - 1024.0, TFormedY(), TFormedZ(), e\room\OBJ, 0)
-						HideEntity(me\Collider)
 						PositionEntity(me\Collider, TFormedX(), EntityY(me\Collider), TFormedZ(), True)
-						ShowEntity(me\Collider)
+						ResetEntity(me\Collider)
 						
 						Temp = True
 					ElseIf TFormedX() < -730.0
 						GiveAchievement(Achv970)
 						
+						me\LightBlink = 2.0
 						UpdateWorld()
 						TFormPoint(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0, e\room\OBJ)
 						
@@ -5191,9 +5192,8 @@ Function UpdateEvents()
 						Next
 						
 						TFormPoint(TFormedX() + 1024.0, TFormedY(), TFormedZ(), e\room\OBJ, 0)
-						HideEntity(me\Collider)
 						PositionEntity(me\Collider, TFormedX(), EntityY(me\Collider), TFormedZ(), True)
-						ShowEntity(me\Collider)
+						ResetEntity(me\Collider)
 						
 						Temp = True
 					EndIf
