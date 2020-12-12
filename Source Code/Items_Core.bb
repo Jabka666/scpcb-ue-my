@@ -554,8 +554,8 @@ Function UpdateItems()
 					If ShouldEntitiesFall
 						Pick = LinePick(EntityX(i\Collider), EntityY(i\Collider), EntityZ(i\Collider), 0.0, -10.0, 0.0)
 						If Pick Then
-							i\DropSpeed = i\DropSpeed - 0.0004 * fpst\FPSfactor[0]
-							TranslateEntity(i\Collider, i\xSpeed * fpst\FPSfactor[0], i\DropSpeed * fpst\FPSfactor[0], i\zSpeed * fpst\FPSfactor[0])
+							i\DropSpeed = i\DropSpeed - 0.0004 * fps\FPSfactor[0]
+							TranslateEntity(i\Collider, i\xSpeed * fps\FPSfactor[0], i\DropSpeed * fps\FPSfactor[0], i\zSpeed * fps\FPSfactor[0])
 							If i\WontColl Then ResetEntity(i\Collider)
 						Else
 							i\DropSpeed = 0.0
@@ -856,12 +856,12 @@ Function Update294()
 	Local Pvt%, de.Decals
 	
 	If me\CameraShakeTimer > 0.0 Then
-		me\CameraShakeTimer = me\CameraShakeTimer - (fpst\FPSfactor[0] / 70.0)
+		me\CameraShakeTimer = me\CameraShakeTimer - (fps\FPSfactor[0] / 70.0)
 		me\CameraShake = 2.0
 	EndIf
 	
 	If me\VomitTimer > 0.0 Then
-		me\VomitTimer = me\VomitTimer - (fpst\FPSfactor[0] / 70.0)
+		me\VomitTimer = me\VomitTimer - (fps\FPSfactor[0] / 70.0)
 		
 		If (MilliSecs() Mod 1600) < Rand(200, 400) Then
 			If me\BlurTimer = 0.0 Then me\BlurTimer = 70.0 * Rnd(10.0, 20.0)
@@ -884,7 +884,7 @@ Function Update294()
 			me\Regurgitate = 0
 		EndIf
 	ElseIf me\VomitTimer < 0.0 Then ; ~ Vomit
-		me\VomitTimer = me\VomitTimer - (fpst\FPSfactor[0] / 70.0)
+		me\VomitTimer = me\VomitTimer - (fps\FPSfactor[0] / 70.0)
 		
 		If me\VomitTimer > -5.0 Then
 			If (MilliSecs() Mod 400) < 50 Then me\CameraShake = 4.0 

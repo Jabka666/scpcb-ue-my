@@ -130,30 +130,21 @@ Global MenuScale# = opt\GraphicHeight / 1024.0
 
 SetBuffer(BackBuffer())
 
-Type FramesPerSecondsTemplate
-	Field CurTime%
-	Field PrevTime%
-	Field LoopDelay%
-	Field FPSFactor#[2]
-	Field PrevFPSFactor#
-End Type
-
-Global fpst.FramesPerSecondsTemplate = New FramesPerSecondsTemplate
+SeedRnd(MilliSecs())
 
 Const TICK_DURATION# = 70.0 / 60.0
 
-Type FixedTimesteps
+Type FramesPerSeconds
 	Field Accumulator#
 	Field PrevTime%
 	Field CurrTime%
 	Field FPS%
 	Field TempFPS%
 	Field FPSGoal%
+	Field FPSFactor#[2]
 End Type
 
-Global ft.FixedTimesteps = New FixedTimesteps
-
-SeedRnd(MilliSecs())
+Global fps.FramesPerSeconds = New FramesPerSeconds
 
 Global GameSaved%
 
@@ -1791,7 +1782,7 @@ Function CreateMsg(Txt$, Sec#)
 End Function
 
 Function UpdateMessages()
-	If msg\Timer > 0.0 Then msg\Timer = msg\Timer - fpst\FPSFactor[0]
+	If msg\Timer > 0.0 Then msg\Timer = msg\Timer - fps\FPSFactor[0]
 End Function
 
 Function RenderMessages()
@@ -1819,7 +1810,7 @@ Function RenderMessages()
 	EndIf
 	
 	Color(255, 255, 255)
-	If opt\ShowFPS Then SetFont(fo\FontID[Font_Console]) : Text(20, 20, "FPS: " + ft\FPS) : SetFont(fo\FontID[Font_Default])
+	If opt\ShowFPS Then SetFont(fo\FontID[Font_Console]) : Text(20, 20, "FPS: " + fps\FPS) : SetFont(fo\FontID[Font_Default])
 End Function
 
 Global Camera%
@@ -2200,7 +2191,7 @@ Function UpdateDoors()
 		Next
 		UpdateDoorsTimer = 30.0
 	Else
-		UpdateDoorsTimer = Max(UpdateDoorsTimer - fpst\FPSFactor[0], 0.0)
+		UpdateDoorsTimer = Max(UpdateDoorsTimer - fps\FPSFactor[0], 0.0)
 	EndIf
 	
 	ClosestButton = 0
@@ -2241,38 +2232,38 @@ Function UpdateDoors()
 					Select d\DoorType
 						Case Default_Door
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + (fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fpst\FPSFactor[0] / 80.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * fpst\FPSFactor[0] / 80.0, 0.0, 0.0)	
+							d\OpenState = Min(180.0, d\OpenState + (fps\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fps\FPSFactor[0] / 80.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * fps\FPSFactor[0] / 80.0, 0.0, 0.0)	
 							;[End Block]
 						Case Big_Door
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + (fpst\FPSFactor[0] * 0.8))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * fpst\FPSFactor[0] / 180.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, (-Sin(d\OpenState)) * fpst\FPSFactor[0] / 180.0, 0.0, 0.0)
+							d\OpenState = Min(180.0, d\OpenState + (fps\FPSFactor[0] * 0.8))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * fps\FPSFactor[0] / 180.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, (-Sin(d\OpenState)) * fps\FPSFactor[0] / 180.0, 0.0, 0.0)
 							;[End Block]
 						Case Heavy_Door
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + (fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen + 1) * fpst\FPSFactor[0] / 85.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fpst\FPSFactor[0] / 120.0, 0.0, 0.0)
+							d\OpenState = Min(180.0, d\OpenState + (fps\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen + 1) * fps\FPSFactor[0] / 85.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fps\FPSFactor[0] / 120.0, 0.0, 0.0)
 							;[End Block]
 						Case Elevator_Door
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + (fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fpst\FPSFactor[0] / 162.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState)* (d\FastOpen * 2 + 1) * fpst\FPSFactor[0] / 162.0, 0.0, 0.0)
+							d\OpenState = Min(180.0, d\OpenState + (fps\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fps\FPSFactor[0] / 162.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState)* (d\FastOpen * 2 + 1) * fps\FPSFactor[0] / 162.0, 0.0, 0.0)
 							;[End Block]
 						Case One_Sided_Door
 						    ;[Block]
-							d\OpenState = Min(180.0, d\OpenState + (fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fpst\FPSFactor[0] / 80.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fpst\FPSFactor[0]) / 80.0, 0.0, 0.0)	
+							d\OpenState = Min(180.0, d\OpenState + (fps\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fps\FPSFactor[0] / 80.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fps\FPSFactor[0]) / 80.0, 0.0, 0.0)	
 							;[End Block]	
 						Case SCP_914_Door ; ~ Used for SCP-914 only
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + (fpst\FPSFactor[0] * 1.4))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * fpst\FPSFactor[0] / 114.0, 0.0, 0.0)
+							d\OpenState = Min(180.0, d\OpenState + (fps\FPSFactor[0] * 1.4))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * fps\FPSFactor[0] / 114.0, 0.0, 0.0)
 							;[End Block]
 					End Select
 				Else
@@ -2280,8 +2271,8 @@ Function UpdateDoors()
 					ResetEntity(d\OBJ)
 					If d\OBJ2 <> 0 Then ResetEntity(d\OBJ2)
 					If d\TimerState > 0.0 Then
-						d\TimerState = Max(0.0, d\TimerState - fpst\FPSFactor[0])
-						If d\TimerState + fpst\FPSFactor[0] > 110.0 And d\TimerState =< 110.0 Then d\SoundCHN = PlaySound2(CautionSFX, Camera, d\OBJ)
+						d\TimerState = Max(0.0, d\TimerState - fps\FPSFactor[0])
+						If d\TimerState + fps\FPSFactor[0] > 110.0 And d\TimerState =< 110.0 Then d\SoundCHN = PlaySound2(CautionSFX, Camera, d\OBJ)
 						
 						If d\TimerState = 0.0 Then 
 							d\Open = (Not d\Open)
@@ -2304,16 +2295,16 @@ Function UpdateDoors()
 					Select d\DoorType
 						Case Default_Door
 							;[Block]
-							d\OpenState = Max(0.0, d\OpenState - (fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fpst\FPSFactor[0]) * (d\FastOpen + 1) / 80.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fpst\FPSFactor[0]) / 80.0, 0.0, 0.0)	
+							d\OpenState = Max(0.0, d\OpenState - (fps\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fps\FPSFactor[0]) * (d\FastOpen + 1) / 80.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fps\FPSFactor[0]) / 80.0, 0.0, 0.0)	
 							;[End Block]
 						Case Big_Door
 							;[Block]
-							d\OpenState = Max(0.0, d\OpenState - (fpst\FPSFactor[0] * 0.8))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fpst\FPSFactor[0]) / 180.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * fpst\FPSFactor[0] / 180.0, 0.0, 0.0)
-							If d\OpenState < 15.0 And d\OpenState + fpst\FPSFactor[0] >= 15.0
+							d\OpenState = Max(0.0, d\OpenState - (fps\FPSFactor[0] * 0.8))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fps\FPSFactor[0]) / 180.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * fps\FPSFactor[0] / 180.0, 0.0, 0.0)
+							If d\OpenState < 15.0 And d\OpenState + fps\FPSFactor[0] >= 15.0
 								If opt\ParticleAmount = 2
 									For i = 0 To Rand(75, 99)
 										Local Pvt% = CreatePivot()
@@ -2333,26 +2324,26 @@ Function UpdateDoors()
 							;[End Block]
 						Case Heavy_Door
 							;[Block]
-							d\OpenState = Max(0.0, d\OpenState - (fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fpst\FPSFactor[0]) * (d\FastOpen + 1) / 85.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fpst\FPSFactor[0]) / 120.0, 0.0, 0.0)
+							d\OpenState = Max(0.0, d\OpenState - (fps\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fps\FPSFactor[0]) * (d\FastOpen + 1) / 85.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fps\FPSFactor[0]) / 120.0, 0.0, 0.0)
 							;[End Block]
 						Case Elevator_Door
 							;[Block]
-							d\OpenState = Max(0.0, d\OpenState - (fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fpst\FPSFactor[0]) * (d\FastOpen + 1) / 162.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fpst\FPSFactor[0]) / 162.0, 0.0, 0.0)
+							d\OpenState = Max(0.0, d\OpenState - (fps\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fps\FPSFactor[0]) * (d\FastOpen + 1) / 162.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fps\FPSFactor[0]) / 162.0, 0.0, 0.0)
 							;[End Block]
 						Case One_Sided_Door
 						    ;[Block]
-							d\OpenState = Max(0.0, d\OpenState - (fpst\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fpst\FPSFactor[0]) * (d\FastOpen + 1) / 80.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * fpst\FPSFactor[0] / 80.0, 0.0, 0.0)
+							d\OpenState = Max(0.0, d\OpenState - (fps\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fps\FPSFactor[0]) * (d\FastOpen + 1) / 80.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * fps\FPSFactor[0] / 80.0, 0.0, 0.0)
 							;[End Block]	
 						Case SCP_914_Door ; ~ Used for SCP-914 only
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState - (fpst\FPSFactor[0] * 1.4))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fpst\FPSFactor[0]) / 114.0, 0.0, 0.0)
+							d\OpenState = Min(180.0, d\OpenState - (fps\FPSFactor[0] * 1.4))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fps\FPSFactor[0]) / 114.0, 0.0, 0.0)
 							;[End Block]
 					End Select
 					
@@ -2470,9 +2461,9 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 	door2\Locked = 1
 	If door1\Open Then
 		door1\IsElevatorDoor = 3
-		If Abs(EntityX(me\Collider) - EntityX(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
-			If Abs(EntityZ(me\Collider) - EntityZ(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then	
-				If Abs(EntityY(me\Collider) - EntityY(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then	
+		If Abs(EntityX(me\Collider) - EntityX(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then
+			If Abs(EntityZ(me\Collider) - EntityZ(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then	
+				If Abs(EntityY(me\Collider) - EntityY(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then	
 					door1\Locked = 0
 					door1\IsElevatorDoor = 1
 				EndIf
@@ -2481,9 +2472,9 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 	EndIf
 	If door2\Open Then
 		door2\IsElevatorDoor = 3
-		If Abs(EntityX(me\Collider) - EntityX(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
-			If Abs(EntityZ(me\Collider) - EntityZ(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then	
-				If Abs(EntityY(me\Collider) - EntityY(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
+		If Abs(EntityX(me\Collider) - EntityX(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then
+			If Abs(EntityZ(me\Collider) - EntityZ(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then	
+				If Abs(EntityY(me\Collider) - EntityY(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then
 					door2\Locked = 0
 					door2\IsElevatorDoor = 1
 				EndIf
@@ -2498,10 +2489,10 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 		door2\Locked = 1
 		If door1\OpenState = 0.0 And door2\OpenState = 0.0 Then
 			If State < 0.0 Then
-				State = State - fpst\FPSFactor[0]
-				If Abs(EntityX(me\Collider) - EntityX(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
-					If Abs(EntityZ(me\Collider) - EntityZ(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then	
-						If Abs(EntityY(me\Collider) - EntityY(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then	
+				State = State - fps\FPSFactor[0]
+				If Abs(EntityX(me\Collider) - EntityX(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then
+					If Abs(EntityZ(me\Collider) - EntityZ(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then	
+						If Abs(EntityY(me\Collider) - EntityY(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then	
 							Inside = True
 							
 							If event\SoundCHN = 0 Then
@@ -2534,7 +2525,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 							z = Max(Min((EntityZ(me\Collider) - EntityZ(FirstPivot, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
 						EndIf
 						
-						TeleportEntity(me\Collider, EntityX(SecondPivot, True) + x, (0.1 * fpst\FPSFactor[0]) + EntityY(SecondPivot, True) + (EntityY(me\Collider) - EntityY(FirstPivot, True)), EntityZ(SecondPivot, True) + z, 0.3, True)
+						TeleportEntity(me\Collider, EntityX(SecondPivot, True) + x, (0.1 * fps\FPSFactor[0]) + EntityY(SecondPivot, True) + (EntityY(me\Collider) - EntityY(FirstPivot, True)), EntityZ(SecondPivot, True) + z, 0.3, True)
 						UpdateDoorsTimer = 0.0
 						me\DropSpeed = 0.0
 						UpdateDoors()
@@ -2544,9 +2535,9 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 					EndIf
 					
 					For n.NPCs = Each NPCs
-						If Abs(EntityX(n\Collider) - EntityX(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
-							If Abs(EntityZ(n\Collider) - EntityZ(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
-								If Abs(EntityY(n\Collider) - EntityY(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
+						If Abs(EntityX(n\Collider) - EntityX(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then
+							If Abs(EntityZ(n\Collider) - EntityZ(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then
+								If Abs(EntityY(n\Collider) - EntityY(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then
 									If (Not IgnoreRotation) Then
 										Dist = Distance(EntityX(n\Collider, True), EntityX(FirstPivot, True), EntityZ(n\Collider, True), EntityZ(FirstPivot, True))
 										Dir = PointDirection(EntityX(n\Collider, True), EntityZ(n\Collider, True), EntityX(FirstPivot, True), EntityZ(FirstPivot, True))
@@ -2560,7 +2551,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 										z = Max(Min((EntityZ(n\Collider) - EntityZ(FirstPivot, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
 									EndIf
 									
-									TeleportEntity(n\Collider, EntityX(SecondPivot, True) + x, (0.1 * fpst\FPSFactor[0]) + EntityY(SecondPivot, True) + (EntityY(n\Collider) - EntityY(FirstPivot, True)), EntityZ(SecondPivot, True) + z, n\CollRadius, True)
+									TeleportEntity(n\Collider, EntityX(SecondPivot, True) + x, (0.1 * fps\FPSFactor[0]) + EntityY(SecondPivot, True) + (EntityY(n\Collider) - EntityY(FirstPivot, True)), EntityZ(SecondPivot, True) + z, n\CollRadius, True)
 									If n = Curr173 Then
 										Curr173\IdleTimer = 10.0
 									EndIf
@@ -2570,9 +2561,9 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 					Next
 					
 					For it.Items = Each Items
-						If Abs(EntityX(it\Collider) - EntityX(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
-							If Abs(EntityZ(it\Collider) - EntityZ(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
-								If Abs(EntityY(it\Collider) - EntityY(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
+						If Abs(EntityX(it\Collider) - EntityX(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then
+							If Abs(EntityZ(it\Collider) - EntityZ(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then
+								If Abs(EntityY(it\Collider) - EntityY(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then
 									If (Not IgnoreRotation) Then
 										Dist = Distance(EntityX(it\Collider, True), EntityX(FirstPivot, True), EntityZ(it\Collider, True), EntityZ(FirstPivot, True))
 										Dir = PointDirection(EntityX(it\Collider, True), EntityZ(it\Collider, True), EntityX(FirstPivot, True), EntityZ(FirstPivot, True))
@@ -2585,16 +2576,16 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 										x = Max(Min((EntityX(it\Collider) - EntityX(FirstPivot, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
 										z = Max(Min((EntityZ(it\Collider) - EntityZ(FirstPivot, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
 									EndIf
-									TeleportEntity(it\Collider, EntityX(SecondPivot, True) + x, (0.1 * fpst\FPSFactor[0]) + EntityY(SecondPivot, True) + (EntityY(it\Collider) - EntityY(FirstPivot, True)), EntityZ(SecondPivot, True) + z, 0.01, True)
+									TeleportEntity(it\Collider, EntityX(SecondPivot, True) + x, (0.1 * fps\FPSFactor[0]) + EntityY(SecondPivot, True) + (EntityY(it\Collider) - EntityY(FirstPivot, True)), EntityZ(SecondPivot, True) + z, 0.01, True)
 								EndIf
 							EndIf
 						EndIf
 					Next
 					
 					For de.Decals = Each Decals
-						If Abs(EntityX(de\OBJ) - EntityX(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
-							If Abs(EntityZ(de\OBJ) - EntityZ(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
-								If Abs(EntityY(de\OBJ) - EntityY(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
+						If Abs(EntityX(de\OBJ) - EntityX(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then
+							If Abs(EntityZ(de\OBJ) - EntityZ(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then
+								If Abs(EntityY(de\OBJ) - EntityY(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then
 									If (Not IgnoreRotation) Then
 										Dist = Distance(EntityX(de\OBJ, True), EntityX(FirstPivot, True), EntityZ(de\OBJ, True), EntityZ(FirstPivot, True))
 										Dir = PointDirection(EntityX(de\OBJ, True), EntityZ(de\OBJ, True), EntityX(FirstPivot, True), EntityZ(FirstPivot, True))
@@ -2607,7 +2598,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 										x = Max(Min((EntityX(de\OBJ) - EntityX(FirstPivot, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
 										z = Max(Min((EntityZ(de\OBJ) - EntityZ(FirstPivot, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
 									EndIf
-									TeleportEntity(de\OBJ, EntityX(SecondPivot, True) + x, (0.1 * fpst\FPSFactor[0]) + EntityY(SecondPivot, True) + (EntityY(de\OBJ) - EntityY(FirstPivot, True)), EntityZ(SecondPivot, True) + z, 0.01, True)
+									TeleportEntity(de\OBJ, EntityX(SecondPivot, True) + x, (0.1 * fps\FPSFactor[0]) + EntityY(SecondPivot, True) + (EntityY(de\OBJ) - EntityY(FirstPivot, True)), EntityZ(SecondPivot, True) + z, 0.01, True)
 								EndIf
 							EndIf
 						EndIf
@@ -2618,10 +2609,10 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 					PlaySound2(ElevatorBeepSFX, Camera, FirstPivot, 4.0)
 				EndIf
 			Else
-				State = State + fpst\FPSFactor[0]
-				If Abs(EntityX(me\Collider) - EntityX(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
-					If Abs(EntityZ(me\Collider) - EntityZ(SecondPivot, True)) <  280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then	
-						If Abs(EntityY(me\Collider) - EntityY(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
+				State = State + fps\FPSFactor[0]
+				If Abs(EntityX(me\Collider) - EntityX(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then
+					If Abs(EntityZ(me\Collider) - EntityZ(SecondPivot, True)) <  280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then	
+						If Abs(EntityY(me\Collider) - EntityY(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then
 							Inside = True
 							
 							If event\SoundCHN = 0 Then
@@ -2652,7 +2643,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 							x = Max(Min((EntityX(me\Collider) - EntityX(SecondPivot, True)), 280 * RoomScale - 0.22), (-280) * RoomScale + 0.22)
 							z = Max(Min((EntityZ(me\Collider) - EntityZ(SecondPivot, True)), 280 * RoomScale - 0.22), (-280) * RoomScale + 0.22)
 						EndIf
-						TeleportEntity(me\Collider, EntityX(FirstPivot, True) + x, (0.1 * fpst\FPSFactor[0]) + EntityY(FirstPivot, True) + (EntityY(me\Collider) - EntityY(SecondPivot, True)), EntityZ(FirstPivot, True) + z, 0.3, True)
+						TeleportEntity(me\Collider, EntityX(FirstPivot, True) + x, (0.1 * fps\FPSFactor[0]) + EntityY(FirstPivot, True) + (EntityY(me\Collider) - EntityY(SecondPivot, True)), EntityZ(FirstPivot, True) + z, 0.3, True)
 						UpdateDoorsTimer = 0.0
 						me\DropSpeed = 0.0
 						UpdateDoors()
@@ -2662,9 +2653,9 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 					EndIf
 					
 					For n.NPCs = Each NPCs
-						If Abs(EntityX(n\Collider) - EntityX(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
-							If Abs(EntityZ(n\Collider) - EntityZ(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
-								If Abs(EntityY(n\Collider) - EntityY(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
+						If Abs(EntityX(n\Collider) - EntityX(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then
+							If Abs(EntityZ(n\Collider) - EntityZ(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then
+								If Abs(EntityY(n\Collider) - EntityY(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then
 									If (Not IgnoreRotation) Then
 										Dist = Distance(EntityX(n\Collider, True), EntityX(SecondPivot, True), EntityZ(n\Collider, True), EntityZ(SecondPivot, True))
 										Dir = PointDirection(EntityX(n\Collider, True), EntityZ(n\Collider, True), EntityX(SecondPivot, True), EntityZ(SecondPivot, True))
@@ -2676,7 +2667,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 										x = Max(Min((EntityX(n\Collider) - EntityX(SecondPivot, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
 										z = Max(Min((EntityZ(n\Collider) - EntityZ(SecondPivot, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
 									EndIf
-									TeleportEntity(n\Collider, EntityX(FirstPivot, True) + x, (0.1 * fpst\FPSFactor[0]) + EntityY(FirstPivot, True) + (EntityY(n\Collider) - EntityY(SecondPivot, True)), EntityZ(FirstPivot, True) + z, n\CollRadius, True)
+									TeleportEntity(n\Collider, EntityX(FirstPivot, True) + x, (0.1 * fps\FPSFactor[0]) + EntityY(FirstPivot, True) + (EntityY(n\Collider) - EntityY(SecondPivot, True)), EntityZ(FirstPivot, True) + z, n\CollRadius, True)
 									If n = Curr173
 										Curr173\IdleTimer = 10.0
 									EndIf
@@ -2686,9 +2677,9 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 					Next
 					
 					For it.Items = Each Items
-						If Abs(EntityX(it\Collider) - EntityX(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
-							If Abs(EntityZ(it\Collider) - EntityZ(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
-								If Abs(EntityY(it\Collider) - EntityY(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
+						If Abs(EntityX(it\Collider) - EntityX(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then
+							If Abs(EntityZ(it\Collider) - EntityZ(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then
+								If Abs(EntityY(it\Collider) - EntityY(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then
 									If (Not IgnoreRotation) Then
 										Dist = Distance(EntityX(it\Collider, True), EntityX(SecondPivot, True), EntityZ(it\Collider, True), EntityZ(SecondPivot, True))
 										Dir = PointDirection(EntityX(it\Collider, True), EntityZ(it\Collider, True), EntityX(SecondPivot, True), EntityZ(SecondPivot, True))
@@ -2700,16 +2691,16 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 										x = Max(Min((EntityX(it\Collider) - EntityX(SecondPivot, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
 										z = Max(Min((EntityZ(it\Collider) - EntityZ(SecondPivot, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
 									EndIf
-									TeleportEntity(it\Collider, EntityX(FirstPivot, True) + x, (0.1 * fpst\FPSFactor[0]) + EntityY(FirstPivot, True) + (EntityY(it\Collider) - EntityY(SecondPivot, True)), EntityZ(FirstPivot, True) + z, 0.01, True)
+									TeleportEntity(it\Collider, EntityX(FirstPivot, True) + x, (0.1 * fps\FPSFactor[0]) + EntityY(FirstPivot, True) + (EntityY(it\Collider) - EntityY(SecondPivot, True)), EntityZ(FirstPivot, True) + z, 0.01, True)
 								EndIf
 							EndIf
 						EndIf
 					Next
 					
 					For de.Decals = Each Decals
-						If Abs(EntityX(de\OBJ) - EntityX(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
-							If Abs(EntityZ(de\OBJ) - EntityZ(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
-								If Abs(EntityY(de\OBJ) - EntityY(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fpst\FPSFactor[0]) Then
+						If Abs(EntityX(de\OBJ) - EntityX(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then
+							If Abs(EntityZ(de\OBJ) - EntityZ(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then
+								If Abs(EntityY(de\OBJ) - EntityY(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then
 									If (Not IgnoreRotation) Then
 										Dist = Distance(EntityX(de\OBJ, True), EntityX(SecondPivot, True), EntityZ(de\OBJ, True), EntityZ(SecondPivot, True))
 										Dir = PointDirection(EntityX(de\OBJ, True), EntityZ(de\OBJ, True), EntityX(SecondPivot, True), EntityZ(SecondPivot, True))
@@ -2721,7 +2712,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 										x = Max(Min((EntityX(de\OBJ) - EntityX(SecondPivot, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
 										z = Max(Min((EntityZ(de\OBJ) - EntityZ(SecondPivot, True)), 280.0 * RoomScale - 0.22), (-280.0) * RoomScale + 0.22)
 									EndIf
-									TeleportEntity(de\OBJ, EntityX(FirstPivot, True) + x, (0.1 * fpst\FPSFactor[0]) + EntityY(FirstPivot, True) + (EntityY(de\OBJ) - EntityY(SecondPivot, True)), EntityZ(FirstPivot, True) + z, 0.01, True)
+									TeleportEntity(de\OBJ, EntityX(FirstPivot, True) + x, (0.1 * fps\FPSFactor[0]) + EntityY(FirstPivot, True) + (EntityY(de\OBJ) - EntityY(SecondPivot, True)), EntityZ(FirstPivot, True) + z, 0.01, True)
 								EndIf
 							EndIf
 						EndIf
@@ -3039,8 +3030,6 @@ FlushMouse()
 
 DrawLoading(100, True)
 
-fpst\LoopDelay = MilliSecs()
-
 Global Input_ResetTime# = 0.0
 
 Type SCP005
@@ -3125,25 +3114,24 @@ Repeat
 	
 	Local ElapsedMilliseconds%
 	
-	ft\CurrTime = MilliSecs()
+	fps\CurrTime = MilliSecs()
 	
-	ElapsedMilliseconds = ft\CurrTime - ft\PrevTime
+	ElapsedMilliseconds = fps\CurrTime - fps\PrevTime
 	If (ElapsedMilliseconds > 0 And ElapsedMilliseconds < 500) Then
-		ft\Accumulator = ft\Accumulator + Max(0.0, Float(ElapsedMilliseconds) * 70.0 / 1000.0)
+		fps\Accumulator = fps\Accumulator + Max(0.0, Float(ElapsedMilliseconds) * 70.0 / 1000.0)
 	EndIf
-	ft\PrevTime = ft\CurrTime
+	fps\PrevTime = fps\CurrTime
 	
 	If opt\Framelimit > 0.0 Then
+		Local LoopDelay% = MilliSecs()
 		; ~ Framelimit
-		Local WaitingTime% = (1000.0 / opt\Framelimit) - (MilliSecs() - fpst\LoopDelay)
+		Local WaitingTime% = (1000.0 / opt\Framelimit) - (MilliSecs() - LoopDelay)
 		
 		Delay(WaitingTime)
-		
-		fpst\LoopDelay = MilliSecs()
 	EndIf
 	
-	fpst\FPSFactor[0] = TICK_DURATION
-	fpst\FPSFactor[1] = fpst\FPSFactor[0]
+	fps\FPSFactor[0] = TICK_DURATION
+	fps\FPSFactor[1] = fps\FPSFactor[0]
 	
 	If MainMenuOpen Then
 		UpdateMainMenu()
@@ -3156,12 +3144,12 @@ Repeat
 	If KeyHit(key\SCREENSHOT) Then GetScreenshot()
 	
 	If opt\ShowFPS Then
-		If ft\FPSGoal < MilliSecs() Then
-			ft\FPS = ft\TempFPS
-			ft\TempFPS = 0
-			ft\FPSGoal = MilliSecs() + 1000
+		If fps\FPSGoal < MilliSecs() Then
+			fps\FPS = fps\TempFPS
+			fps\TempFPS = 0
+			fps\FPSGoal = MilliSecs() + 1000
 		Else
-			ft\TempFPS = ft\TempFPS + 1
+			fps\TempFPS = fps\TempFPS + 1
 		EndIf
 	EndIf
 	
@@ -3190,14 +3178,14 @@ Function MainLoop()
 	
 	Local e.Events, r.Rooms, i%
 	
-	While ft\Accumulator > 0.0
-		ft\Accumulator = ft\Accumulator - TICK_DURATION
-		If ft\Accumulator =< 0.0 Then CaptureWorld()
+	While fps\Accumulator > 0.0
+		fps\Accumulator = fps\Accumulator - TICK_DURATION
+		If fps\Accumulator =< 0.0 Then CaptureWorld()
 		
-		If MenuOpen Lor InvOpen Lor OtherOpen <> Null Lor ConsoleOpen Lor SelectedDoor <> Null Lor SelectedScreen <> Null Lor I_294\Using Then fpst\FPSFactor[0] = 0.0
+		If MenuOpen Lor InvOpen Lor OtherOpen <> Null Lor ConsoleOpen Lor SelectedDoor <> Null Lor SelectedScreen <> Null Lor I_294\Using Then fps\FPSFactor[0] = 0.0
 		
 		If Input_ResetTime > 0.0 Then
-			Input_ResetTime = Max(Input_ResetTime - fpst\FPSFactor[0], 0.0)
+			Input_ResetTime = Max(Input_ResetTime - fps\FPSFactor[0], 0.0)
 		Else
 			mo\DoubleClick = False
 			mo\MouseHit1 = MouseHit(1)
@@ -3235,7 +3223,7 @@ Function MainLoop()
 		me\RestoreSanity = True
 		ShouldEntitiesFall = True
 		
-		If fpst\FPSFactor[0] > 0.0 And PlayerRoom\RoomTemplate\Name <> "dimension1499" Then UpdateSecurityCams()
+		If fps\FPSFactor[0] > 0.0 And PlayerRoom\RoomTemplate\Name <> "dimension1499" Then UpdateSecurityCams()
 		
 		If (Not MenuOpen) And (Not InvOpen) And OtherOpen = Null And SelectedDoor = Null And (Not ConsoleOpen) And (Not I_294\Using) And SelectedScreen = Null And me\EndingTimer >= 0.0 Then
 			ShouldPlay = Min(me\Zone, 2.0)
@@ -3296,7 +3284,7 @@ Function MainLoop()
 				Local RN$ = PlayerRoom\RoomTemplate\Name
 				
 				If RN <> "room860" And RN <> "room1123" And RN <> "room173intro" And RN <> "dimension1499" And RN <> "pocketdimension" Then
-					If fpst\FPSFactor[0] > 0.0 Then me\LightBlink = Rnd(1.0, 2.0)
+					If fps\FPSFactor[0] > 0.0 Then me\LightBlink = Rnd(1.0, 2.0)
 					PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(1, 8) + ".ogg"))
 				EndIf 
 			EndIf
@@ -3425,7 +3413,7 @@ Function MainLoop()
 		If chs\InfiniteStamina Then me\Stamina = 100.0
 		If chs\NoBlink Then me\BlinkTimer = me\BLINKFREQ
 		
-		If fpst\FPSFactor[0] = 0.0 Then
+		If fps\FPSFactor[0] = 0.0 Then
 			UpdateWorld(0.0)
 		Else
 			UpdateWorld()
@@ -3435,14 +3423,14 @@ Function MainLoop()
 		me\BlurVolume = Min(CurveValue(0.0, me\BlurVolume, 20.0), 0.95)
 		If me\BlurTimer > 0.0 Then
 			me\BlurVolume = Max(Min(0.95, me\BlurTimer / 1000.0), me\BlurVolume)
-			me\BlurTimer = Max(me\BlurTimer - fpst\FPSFactor[0], 0.0)
+			me\BlurTimer = Max(me\BlurTimer - fps\FPSFactor[0], 0.0)
 		EndIf
 		
 		Local DarkA# = 0.0
 		
 		If (Not MenuOpen)  Then
 			If me\Sanity < 0.0 Then
-				If me\RestoreSanity Then me\Sanity = Min(me\Sanity + fpst\FPSFactor[0], 0.0)
+				If me\RestoreSanity Then me\Sanity = Min(me\Sanity + fps\FPSFactor[0], 0.0)
 				If me\Sanity < -200.0 Then 
 					DarkA = Max(Min((-me\Sanity - 200.0) / 700.0, 0.6), DarkA)
 					If me\KillTimer >= 0.0 Then 
@@ -3454,11 +3442,11 @@ Function MainLoop()
 			
 			If me\EyeStuck > 0.0 Then 
 				me\BlinkTimer = me\BLINKFREQ
-				me\EyeStuck = Max(me\EyeStuck - fpst\FPSFactor[0], 0.0)
+				me\EyeStuck = Max(me\EyeStuck - fps\FPSFactor[0], 0.0)
 				
 				If me\EyeStuck < 9000.0 Then me\BlurTimer = Max(me\BlurTimer, (9000.0 - me\EyeStuck) * 0.5)
 				If me\EyeStuck < 6000.0 Then DarkA = Min(Max(DarkA, (6000.0 - me\EyeStuck) / 5000.0), 1.0)
-				If me\EyeStuck < 9000.0 And me\EyeStuck + fpst\FPSFactor[0] >= 9000.0 Then 
+				If me\EyeStuck < 9000.0 And me\EyeStuck + fps\FPSFactor[0] >= 9000.0 Then 
 					CreateMsg("The eyedrops are causing your eyes to tear up.", 6.0)
 				EndIf
 			EndIf
@@ -3490,24 +3478,24 @@ Function MainLoop()
 					End Select 
 					me\BlinkTimer = me\BLINKFREQ
 				EndIf
-				me\BlinkTimer = me\BlinkTimer - fpst\FPSFactor[0]
+				me\BlinkTimer = me\BlinkTimer - fps\FPSFactor[0]
 			Else
-				me\BlinkTimer = me\BlinkTimer - fpst\FPSFactor[0] * 0.6 * me\BlinkEffect
+				me\BlinkTimer = me\BlinkTimer - fps\FPSFactor[0] * 0.6 * me\BlinkEffect
 				If wi\NightVision = 0 Then
-					If me\EyeIrritation > 0.0 Then me\BlinkTimer = me\BlinkTimer - Min(me\EyeIrritation / 100.0 + 1.0, 4.0) * fpst\FPSFactor[0]
+					If me\EyeIrritation > 0.0 Then me\BlinkTimer = me\BlinkTimer - Min(me\EyeIrritation / 100.0 + 1.0, 4.0) * fps\FPSFactor[0]
 				EndIf
 				DarkA = Max(DarkA, 0.0)
 			EndIf
 			
-			me\EyeIrritation = Max(0.0, me\EyeIrritation - fpst\FPSFactor[0])
+			me\EyeIrritation = Max(0.0, me\EyeIrritation - fps\FPSFactor[0])
 			
 			If me\BlinkEffectTimer > 0.0 Then
-				me\BlinkEffectTimer = me\BlinkEffectTimer - (fpst\FPSFactor[0] / 70.0)
+				me\BlinkEffectTimer = me\BlinkEffectTimer - (fps\FPSFactor[0] / 70.0)
 			Else
 				If me\BlinkEffect <> 1.0 Then me\BlinkEffect = 1.0
 			EndIf
 			
-			me\LightBlink = Max(me\LightBlink - (fpst\FPSFactor[0] / 35.0), 0.0)
+			me\LightBlink = Max(me\LightBlink - (fps\FPSFactor[0] / 35.0), 0.0)
 			If me\LightBlink > 0.0 And wi\NightVision = 0 Then DarkA = Min(Max(DarkA, me\LightBlink * Rnd(0.3, 0.8)), 1.0)
 			
 			If I_294\Using Then DarkA = 1.0
@@ -3520,7 +3508,7 @@ Function MainLoop()
 				SelectedScreen = Null
 				SelectedMonitor = Null
 				me\BlurTimer = Abs(me\KillTimer * 5.0)
-				me\KillTimer = me\KillTimer - (fpst\FPSFactor[0] * 0.8)
+				me\KillTimer = me\KillTimer - (fps\FPSFactor[0] * 0.8)
 				If me\KillTimer < -360.0 Then 
 					MenuOpen = True 
 					If me\SelectedEnding <> "" Then me\EndingTimer = Min(me\KillTimer, -0.1)
@@ -3541,7 +3529,7 @@ Function MainLoop()
 				SelectedScreen = Null
 				SelectedMonitor = Null
 				me\BlurTimer = Abs(me\FallTimer * 10.0)
-				me\FallTimer = me\FallTimer - fpst\FPSFactor[0]
+				me\FallTimer = me\FallTimer - fps\FPSFactor[0]
 				DarkA = Max(DarkA, Min(Abs(me\FallTimer / 400.0), 1.0))				
 			EndIf
 			
@@ -3557,7 +3545,7 @@ Function MainLoop()
 			ShowEntity(tt\OverlayID[7])
 			EntityAlpha(tt\OverlayID[7], Max(Min(me\LightFlash + Rnd(-0.2, 0.2), 1.0), 0.0))
 			EntityColor(tt\OverlayID[7], 255.0, 255.0, 255.0)
-			me\LightFlash = Max(me\LightFlash - (fpst\FPSFactor[0] / 70.0), 0.0)
+			me\LightFlash = Max(me\LightFlash - (fps\FPSFactor[0] / 70.0), 0.0)
 		Else
 			HideEntity(tt\OverlayID[7])
 		EndIf
@@ -3687,7 +3675,7 @@ Function MainLoop()
 	; ~ Go out of function immediately if the game has been quit
 	If MainMenuOpen Then Return
 	
-	RenderWorld2(Max(0.0, 1.0 + (ft\Accumulator / TICK_DURATION)))
+	RenderWorld2(Max(0.0, 1.0 + (fps\Accumulator / TICK_DURATION)))
 	
 	UpdateBlur(me\BlurVolume)
 	
@@ -3879,11 +3867,11 @@ Function DrawEnding()
 End Function
 
 Function UpdateEnding()
-	fpst\FPSFactor[0] = 0.0
+	fps\FPSFactor[0] = 0.0
 	If me\EndingTimer > -2000.0 Then
-		me\EndingTimer = Max(me\EndingTimer - fpst\FPSFactor[1], -1111.0)
+		me\EndingTimer = Max(me\EndingTimer - fps\FPSFactor[1], -1111.0)
 	Else
-		me\EndingTimer = me\EndingTimer - fpst\FPSFactor[1]
+		me\EndingTimer = me\EndingTimer - fps\FPSFactor[1]
 	EndIf
 	
 	GiveAchievement(Achv055)
@@ -3916,7 +3904,7 @@ Function UpdateEnding()
 		EndIf
 		
 		If me\EndingTimer > -700.0 Then 
-			If me\EndingTimer + fpst\FPSFactor[1] > -450.0 And me\EndingTimer =< -450.0 Then
+			If me\EndingTimer + fps\FPSFactor[1] > -450.0 And me\EndingTimer =< -450.0 Then
 				Select me\SelectedEnding
 					Case "A1", "A2"
 						;[Block]
@@ -4091,7 +4079,7 @@ Function UpdateCredits()
 		ID = ID + 1
 	Next
 	If (Credits_Y + (24 * LastCreditLine\ID * MenuScale)) < -StringHeight(LastCreditLine\Txt)
-		me\CreditsTimer = me\CreditsTimer + (0.5 * fpst\FPSFactor[1])
+		me\CreditsTimer = me\CreditsTimer + (0.5 * fps\FPSFactor[1])
 		If me\CreditsTimer >= 0.0 And me\CreditsTimer < 255.0
 			; ~ Just save this line, ok?
 		ElseIf me\CreditsTimer >= 255.0
@@ -4146,7 +4134,7 @@ Function MovePlayer()
 	If chs\SuperMan Then
 		Speed = Speed * 3.0
 		
-		chs\SuperManTimer = chs\SuperManTimer + fpst\FPSFactor[0]
+		chs\SuperManTimer = chs\SuperManTimer + fps\FPSFactor[0]
 		
 		me\CameraShake = Sin(chs\SuperManTimer / 5.0) * (chs\SuperManTimer / 1500.0)
 		
@@ -4162,20 +4150,20 @@ Function MovePlayer()
 	EndIf
 	
 	If me\DeathTimer > 0.0 Then
-		me\DeathTimer = me\DeathTimer - fpst\FPSFactor[0]
+		me\DeathTimer = me\DeathTimer - fps\FPSFactor[0]
 		If me\DeathTimer < 1.0 Then me\DeathTimer = -1.0
 	ElseIf me\DeathTimer < 0.0 
 		Kill()
 	EndIf
 	
 	If me\CurrSpeed > 0.0 Then
-        me\Stamina = Min(me\Stamina + 0.15 * fpst\FPSFactor[0] / 1.25, 100.0)
+        me\Stamina = Min(me\Stamina + 0.15 * fps\FPSFactor[0] / 1.25, 100.0)
     Else
-        me\Stamina = Min(me\Stamina + 0.15 * fpst\FPSFactor[0] * 1.25, 100.0)
+        me\Stamina = Min(me\Stamina + 0.15 * fps\FPSFactor[0] * 1.25, 100.0)
     EndIf
 	
 	If me\StaminaEffectTimer > 0.0 Then
-		me\StaminaEffectTimer = me\StaminaEffectTimer - (fpst\FPSFactor[0] / 70.0)
+		me\StaminaEffectTimer = me\StaminaEffectTimer - (fps\FPSFactor[0] / 70.0)
 	Else
 		If me\StaminaEffect <> 1.0 Then me\StaminaEffect = 1.0
 	EndIf
@@ -4237,7 +4225,7 @@ Function MovePlayer()
 		If (me\Playable And (KeyDown(key\MOVEMENT_DOWN) Xor KeyDown(key\MOVEMENT_UP)) Lor (KeyDown(key\MOVEMENT_RIGHT) Xor KeyDown(key\MOVEMENT_LEFT))) Lor me\ForceMove > 0 Then
 			If (Not me\Crouch) And (KeyDown(key\SPRINT)) And me\Stamina > 0.0 And (Not me\Zombie) Then
 				Sprint = 2.5
-				me\Stamina = me\Stamina - fpst\FPSFactor[0] * 0.4 * me\StaminaEffect
+				me\Stamina = me\Stamina - fps\FPSFactor[0] * 0.4 * me\StaminaEffect
 				If me\Stamina =< 0.0 Then me\Stamina = -20.0
 			EndIf
 			
@@ -4261,7 +4249,7 @@ Function MovePlayer()
 			
 			Local TempCHN%
 			
-			If (Not UnableToMove) Then me\Shake = ((me\Shake + fpst\FPSFactor[0] * Min(Sprint, 1.5) * 7.0) Mod 720.0)
+			If (Not UnableToMove) Then me\Shake = ((me\Shake + fps\FPSFactor[0] * Min(Sprint, 1.5) * 7.0) Mod 720.0)
 			If Temp < 180.0 And (me\Shake Mod 360.0) >= 180.0 And me\KillTimer >= 0.0 Then
 				If CurrStepSFX = 0 Then
 					Temp = GetStepSound(me\Collider)
@@ -4312,11 +4300,11 @@ Function MovePlayer()
 		
 		Temp2 = Temp2 * chs\NoClipSpeed
 		
-		If KeyDown(key\MOVEMENT_DOWN) Then MoveEntity(me\Collider, 0.0, 0.0, (-Temp2) * fpst\FPSFactor[0])
-		If KeyDown(key\MOVEMENT_UP) Then MoveEntity(me\Collider, 0.0, 0.0, Temp2 * fpst\FPSFactor[0])
+		If KeyDown(key\MOVEMENT_DOWN) Then MoveEntity(me\Collider, 0.0, 0.0, (-Temp2) * fps\FPSFactor[0])
+		If KeyDown(key\MOVEMENT_UP) Then MoveEntity(me\Collider, 0.0, 0.0, Temp2 * fps\FPSFactor[0])
 		
-		If KeyDown(key\MOVEMENT_LEFT) Then MoveEntity(me\Collider, (-Temp2) * fpst\FPSFactor[0], 0.0, 0.0)
-		If KeyDown(key\MOVEMENT_RIGHT) Then MoveEntity(me\Collider, Temp2 * fpst\FPSFactor[0], 0.0, 0.0)
+		If KeyDown(key\MOVEMENT_LEFT) Then MoveEntity(me\Collider, (-Temp2) * fps\FPSFactor[0], 0.0, 0.0)
+		If KeyDown(key\MOVEMENT_RIGHT) Then MoveEntity(me\Collider, Temp2 * fps\FPSFactor[0], 0.0, 0.0)
 		
 		ResetEntity(me\Collider)
 	Else
@@ -4379,7 +4367,7 @@ Function MovePlayer()
 			me\CurrSpeed = Max(CurveValue(0.0, me\CurrSpeed - 0.1, 1.0), 0.0)
 		EndIf
 		
-		If (Not UnableToMove) Then TranslateEntity(me\Collider, Cos(Angle) * me\CurrSpeed * fpst\FPSFactor[0], 0.0, Sin(Angle) * me\CurrSpeed * fpst\FPSFactor[0], True)
+		If (Not UnableToMove) Then TranslateEntity(me\Collider, Cos(Angle) * me\CurrSpeed * fps\FPSFactor[0], 0.0, Sin(Angle) * me\CurrSpeed * fps\FPSFactor[0], True)
 		
 		Local CollidedFloor% = False
 		
@@ -4410,17 +4398,17 @@ Function MovePlayer()
 				Local Pick# = LinePick(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0.0, -PlayerFallingPickDistance, 0.0)
 				
 				If Pick Then
-					me\DropSpeed = Min(Max(me\DropSpeed - 0.006 * fpst\FPSFactor[0], -2.0), 0.0)
+					me\DropSpeed = Min(Max(me\DropSpeed - 0.006 * fps\FPSFactor[0], -2.0), 0.0)
 				Else
 					me\DropSpeed = 0.0
 				EndIf
 			Else
-				me\DropSpeed = Min(Max(me\DropSpeed - 0.006 * fpst\FPSFactor[0], -2.0), 0.0)
+				me\DropSpeed = Min(Max(me\DropSpeed - 0.006 * fps\FPSFactor[0], -2.0), 0.0)
 			EndIf
 		EndIf
 		PlayerFallingPickDistance = 10.0
 		
-		If (Not UnableToMove) And ShouldEntitiesFall Then TranslateEntity(me\Collider, 0.0, me\DropSpeed * fpst\FPSFactor[0], 0.0)
+		If (Not UnableToMove) And ShouldEntitiesFall Then TranslateEntity(me\Collider, 0.0, me\DropSpeed * fps\FPSFactor[0], 0.0)
 	EndIf
 	
 	me\ForceMove = False
@@ -4429,7 +4417,7 @@ Function MovePlayer()
 		Temp2 = me\Bloodloss
 		me\BlurTimer = Max(Max(Sin(MilliSecs() / 100.0) * me\Bloodloss * 30.0, me\Bloodloss * 2.0 * (2.0 - me\CrouchState)), me\BlurTimer)
 		If I_427\Using = 0 And I_427\Timer < 70.0 * 360.0 Then
-			me\Bloodloss = Min(me\Bloodloss + (Min(me\Injuries, 3.5) / 300.0) * fpst\FPSFactor[0], 100.0)
+			me\Bloodloss = Min(me\Bloodloss + (Min(me\Injuries, 3.5) / 300.0) * fps\FPSFactor[0], 100.0)
 		EndIf
 		
 		If Temp2 =< 60.0 And me\Bloodloss > 60.0 Then
@@ -4476,9 +4464,9 @@ Function MovePlayer()
 	EndIf
 	
 	If me\HealTimer > 0.0 Then
-		me\HealTimer = me\HealTimer - (fpst\FPSFactor[0] / 70.0)
-		me\Bloodloss = Min(me\Bloodloss + (2.0 / 400.0) * fpst\FPSFactor[0], 100.0)
-		me\Injuries = Max(me\Injuries - (fpst\FPSFactor[0] / 70.0) / 30.0, 0.0)
+		me\HealTimer = me\HealTimer - (fps\FPSFactor[0] / 70.0)
+		me\Bloodloss = Min(me\Bloodloss + (2.0 / 400.0) * fps\FPSFactor[0], 100.0)
+		me\Injuries = Max(me\Injuries - (fps\FPSFactor[0] / 70.0) / 30.0, 0.0)
 	EndIf
 		
 	If me\Playable Then
@@ -4493,9 +4481,9 @@ Function MovePlayer()
 			
 			me\HeartBeatTimer = 70.0 * (60.0 / Max(me\HeartBeatRate, 1.0))
 		Else
-			me\HeartBeatTimer = me\HeartBeatTimer - fpst\FPSFactor[0]
+			me\HeartBeatTimer = me\HeartBeatTimer - fps\FPSFactor[0]
 		EndIf
-		me\HeartBeatVolume = Max(me\HeartBeatVolume - fpst\FPSFactor[0] * 0.05, 0.0)
+		me\HeartBeatVolume = Max(me\HeartBeatVolume - fps\FPSFactor[0] * 0.05, 0.0)
 	EndIf
 	
 	CatchErrors("MovePlayer")
@@ -4504,10 +4492,10 @@ End Function
 Function MouseLook()
 	Local i%
 	
-	me\CameraShake = Max(me\CameraShake - (fpst\FPSFactor[0] / 10.0), 0.0)
+	me\CameraShake = Max(me\CameraShake - (fps\FPSFactor[0] / 10.0), 0.0)
 	
 	CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / (Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * (Float(opt\RealGraphicWidth) / Float(opt\RealGraphicHeight)))) / 2.0)))
-	me\CurrCameraZoom = Max(me\CurrCameraZoom - fpst\FPSFactor[0], 0.0)
+	me\CurrCameraZoom = Max(me\CurrCameraZoom - fps\FPSFactor[0], 0.0)
 	
 	If me\KillTimer >= 0.0 And me\FallTimer >= 0.0 Then
 		me\HeadDropSpeed = 0.0
@@ -4520,13 +4508,9 @@ Function MouseLook()
 		
 		; ~ Update the smoothing que to smooth the movement of the mouse
 		mo\Mouse_X_Speed_1 = CurveValue(MouseXSpeed() * (opt\MouseSensitivity + 0.6) , mo\Mouse_X_Speed_1, (6.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing) 
-		If IsNaN(mo\Mouse_X_Speed_1) Then mo\Mouse_X_Speed_1 = 0.0
-		If fpst\PrevFPSFactor > 0.0 Then
-			If Abs(fpst\FPSFactor[0] / fpst\PrevFPSFactor - 1.0) > 1.0 Then
-				; ~ Stop all camera movement
-				mo\Mouse_X_Speed_1 = 0.0
-				mo\Mouse_Y_Speed_1 = 0.0
-			EndIf
+		If IsNaN(mo\Mouse_X_Speed_1) Then
+			mo\Mouse_X_Speed_1 = 0.0
+			mo\Mouse_Y_Speed_1 = 0.0
 		EndIf
 		If opt\InvertMouse Then
 			mo\Mouse_Y_Speed_1 = CurveValue(-MouseYSpeed() * (opt\MouseSensitivity + 0.6), mo\Mouse_Y_Speed_1, (6.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing)
@@ -4574,13 +4558,13 @@ Function MouseLook()
 				RotateEntity(Camera, CurveAngle(EntityPitch(me\Head) + 40.0, EntityPitch(Camera), 40.0), EntityYaw(Camera), EntityRoll(Camera))
 			EndIf
 			
-			me\HeadDropSpeed = me\HeadDropSpeed - (0.002 * fpst\FPSFactor[0])
+			me\HeadDropSpeed = me\HeadDropSpeed - (0.002 * fps\FPSFactor[0])
 		EndIf
 		
 		If opt\InvertMouse Then
-			TurnEntity(Camera, (-MouseYSpeed()) * 0.05 * fpst\FPSFactor[0], (-MouseXSpeed()) * 0.15 * fpst\FPSFactor[0], 0.0)
+			TurnEntity(Camera, (-MouseYSpeed()) * 0.05 * fps\FPSFactor[0], (-MouseXSpeed()) * 0.15 * fps\FPSFactor[0], 0.0)
 		Else
-			TurnEntity(Camera, MouseYSpeed() * 0.05 * fpst\FPSFactor[0], (-MouseXSpeed()) * 0.15 * fpst\FPSFactor[0], 0.0)
+			TurnEntity(Camera, MouseYSpeed() * 0.05 * fps\FPSFactor[0], (-MouseXSpeed()) * 0.15 * fps\FPSFactor[0], 0.0)
 		EndIf
 	EndIf
 	
@@ -4611,7 +4595,7 @@ Function MouseLook()
 	
 	If wi\GasMask > 0 Lor I_1499\Using > 0 Then
 		If I_714\Using = 0 Then
-			If wi\GasMask = 2 Lor I_1499\Using = 2 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fpst\FPSFactor[0])
+			If wi\GasMask = 2 Lor I_1499\Using = 2 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fps\FPSFactor[0])
 		EndIf
 		If me\KillTimer >= 0.0 Then
 			If (Not ChannelPlaying(BreathCHN)) Then
@@ -4625,22 +4609,22 @@ Function MouseLook()
 		If wi\GasMaskFogTimer > 0.0 Then ShowEntity(tt\OverlayID[11])
 		
 		If ChannelPlaying(BreathCHN) Then
-			wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + fpst\FPSFactor[0] * 2.0, 100.0)
+			wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + fps\FPSFactor[0] * 2.0, 100.0)
 		Else
 			If wi\GasMask = 2 Lor I_1499\Using = 2 Then
 				If me\CurrSpeed > 0.0 And KeyDown(key\SPRINT) Then
-					wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + fpst\FPSFactor[0] * 0.2, 100.0)
+					wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + fps\FPSFactor[0] * 0.2, 100.0)
 				Else
-					wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - fpst\FPSFactor[0] * 0.15)
+					wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - fps\FPSFactor[0] * 0.15)
 				EndIf
 			Else
-				wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - fpst\FPSFactor[0] * 0.15)
+				wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - fps\FPSFactor[0] * 0.15)
 			EndIf
 		EndIf
 		EntityAlpha(tt\OverlayID[11], Min(((wi\GasMaskFogTimer * 0.2) ^ 2.0) / 1000.0, 0.45))
 	Else
 		If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN)
-		wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fpst\FPSFactor[0] * 0.15))
+		wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\FPSFactor[0] * 0.15))
 		HideEntity(tt\OverlayID[1])
 		HideEntity(tt\OverlayID[11])
 	EndIf
@@ -4650,7 +4634,7 @@ Function MouseLook()
             me\Stamina = Min(60.0, me\Stamina)
         EndIf
 		If I_714\Using = 0 Then
-			If wi\HazmatSuit = 2 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fpst\FPSFactor[0])
+			If wi\HazmatSuit = 2 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fps\FPSFactor[0])
 		EndIf
 		ShowEntity(tt\OverlayID[2])
 	Else
@@ -4690,7 +4674,7 @@ Function MouseLook()
 			Select i
 				Case 0 ; ~ Common cold
 					;[Block]
-					If fpst\FPSFactor[0] > 0.0 Then 
+					If fps\FPSFactor[0] > 0.0 Then 
 						If Rand(1000) = 1 Then
 							If CoughCHN = 0 Then
 								CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
@@ -4699,7 +4683,7 @@ Function MouseLook()
 							EndIf
 						EndIf
 					EndIf
-					me\Stamina = me\Stamina - (fpst\FPSFactor[0] * 0.3)
+					me\Stamina = me\Stamina - (fps\FPSFactor[0] * 0.3)
 					;[End Block]
 				Case 1 ; ~ Chicken pox
 					;[Block]
@@ -4709,7 +4693,7 @@ Function MouseLook()
 					;[End Block]
 				Case 2 ; ~ Cancer of the lungs
 					;[Block]
-					If fpst\FPSFactor[0] > 0.0 Then 
+					If fps\FPSFactor[0] > 0.0 Then 
 						If Rand(800) = 1 Then
 							If CoughCHN = 0 Then
 								CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
@@ -4718,18 +4702,18 @@ Function MouseLook()
 							EndIf
 						EndIf
 					EndIf
-					me\Stamina = me\Stamina - (fpst\FPSFactor[0] * 0.1)
+					me\Stamina = me\Stamina - (fps\FPSFactor[0] * 0.1)
 					;[End Block]
 				Case 3 ; ~ Appendicitis
 					; ~ 0.035 / sec = 2.1 / min
 					If I_427\Using = 0 And I_427\Timer < 70.0 * 360.0 Then
-						I_1025\State[i] = I_1025\State[i] + (fpst\FPSFactor[0] * 0.0005)
+						I_1025\State[i] = I_1025\State[i] + (fps\FPSFactor[0] * 0.0005)
 					EndIf
 					If I_1025\State[i] > 20.0 Then
-						If I_1025\State[i] - fpst\FPSFactor[0] =< 20.0 Then CreateMsg("The pain in your stomach is becoming unbearable.", 6.0)
-						me\Stamina = me\Stamina - (fpst\FPSFactor[0] * 0.3)
+						If I_1025\State[i] - fps\FPSFactor[0] =< 20.0 Then CreateMsg("The pain in your stomach is becoming unbearable.", 6.0)
+						me\Stamina = me\Stamina - (fps\FPSFactor[0] * 0.3)
 					ElseIf I_1025\State[i] > 10.0
-						If I_1025\State[i] - fpst\FPSFactor[0] =< 10.0 Then CreateMsg("Your stomach is aching.", 6.0)
+						If I_1025\State[i] - fps\FPSFactor[0] =< 10.0 Then CreateMsg("Your stomach is aching.", 6.0)
 					EndIf
 					;[End Block]
 				Case 4 ; ~ Asthma
@@ -4748,7 +4732,7 @@ Function MouseLook()
 				Case 5 ; ~ Cardiac arrest
 					;[Block]
 					If I_427\Using = 0 And I_427\Timer < 70.0 * 360.0 Then
-						I_1025\State[i] = I_1025\State[i] + (fpst\FPSFactor[0] * 0.35)
+						I_1025\State[i] = I_1025\State[i] + (fps\FPSFactor[0] * 0.35)
 					EndIf
 					
 					; ~ 35 / sec
@@ -5988,7 +5972,7 @@ Function UpdateGUI()
 			msg\Timer = 0.0
 			
 			If msg\KeyPadMsg <> "" Then 
-				msg\KeyPadTimer = msg\KeyPadTimer - fpst\FPSFactor[1]
+				msg\KeyPadTimer = msg\KeyPadTimer - fps\FPSFactor[1]
 				If msg\KeyPadTimer =< 0.0 Then
 					msg\KeyPadMsg = ""
 					SelectedDoor = Null
@@ -6609,7 +6593,7 @@ Function UpdateGUI()
 						Else
 							me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 							
-							SelectedItem\State3 = Min(SelectedItem\State3 + (fpst\FPSFactor[0] / 1.6), 100.0)
+							SelectedItem\State3 = Min(SelectedItem\State3 + (fps\FPSFactor[0] / 1.6), 100.0)
 							
 							If SelectedItem\State3 = 100.0 Then
 								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
@@ -6640,7 +6624,7 @@ Function UpdateGUI()
 						Else
 							me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 							
-							SelectedItem\State3 = Min(SelectedItem\State3 + (fpst\FPSFactor[0] / 1.6), 100.0)
+							SelectedItem\State3 = Min(SelectedItem\State3 + (fps\FPSFactor[0] / 1.6), 100.0)
 							
 							If SelectedItem\State3 = 100.0 Then
 								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
@@ -6671,7 +6655,7 @@ Function UpdateGUI()
 						Else
 							me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 							
-							SelectedItem\State3 = Min(SelectedItem\State3 + (fpst\FPSFactor[0] / 1.6), 100.0)
+							SelectedItem\State3 = Min(SelectedItem\State3 + (fps\FPSFactor[0] / 1.6), 100.0)
 							
 							If SelectedItem\State3 = 100.0 Then
 								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
@@ -6819,7 +6803,7 @@ Function UpdateGUI()
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						If (Not me\Crouch) Then SetCrouch(True)
 						
-						SelectedItem\State = Min(SelectedItem\State + (fpst\FPSFactor[0] / 5.0), 100.0)			
+						SelectedItem\State = Min(SelectedItem\State + (fps\FPSFactor[0] / 5.0), 100.0)			
 						
 						If SelectedItem\State = 100.0 Then
 							If SelectedItem\ItemTemplate\TempName = "finefirstaid" Then
@@ -7080,7 +7064,7 @@ Function UpdateGUI()
 					;[End Block]
 				Case "radio", "18vradio", "fineradio", "veryfineradio"
 					;[Block]
-					If SelectedItem\State =< 100.0 Then SelectedItem\State = Max(0.0, SelectedItem\State - fpst\FPSFactor[0] * 0.004)
+					If SelectedItem\State =< 100.0 Then SelectedItem\State = Max(0.0, SelectedItem\State - fps\FPSFactor[0] * 0.004)
 					
 					; ~ RadioState(5) = Has the "use the number keys" -message been shown yet (True / False)
 					; ~ RadioState(6) = A timer for the "code channel"
@@ -7357,9 +7341,9 @@ Function UpdateGUI()
 							If SelectedItem\ItemTemplate\TempName = "veryfineradio" Then
 								ResumeChannel(RadioCHN[0])
 								If (Not ChannelPlaying(RadioCHN[0])) Then RadioCHN[0] = PlaySound_Strict(RadioStatic)
-								RadioState[6] = RadioState[6] + fpst\FPSFactor[0]
+								RadioState[6] = RadioState[6] + fps\FPSFactor[0]
 								Temp = Mid(Str(AccessCode), RadioState[8] + 1.0, 1)
-								If RadioState[6] - fpst\FPSFactor[0] =< RadioState[7] * 50.0 And RadioState[6] > RadioState[7] * 50.0 Then
+								If RadioState[6] - fps\FPSFactor[0] =< RadioState[7] * 50.0 And RadioState[6] > RadioState[7] * 50.0 Then
 									PlaySound_Strict(RadioBuzz)
 									RadioState[7] = RadioState[7] + 1.0
 									If RadioState[7] >= Temp Then
@@ -7482,7 +7466,7 @@ Function UpdateGUI()
 					If wi\BallisticVest = 0 Then
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
-						SelectedItem\State = Min(SelectedItem\State + (fpst\FPSFactor[0] / 4.0), 100.0)
+						SelectedItem\State = Min(SelectedItem\State + (fps\FPSFactor[0] / 4.0), 100.0)
 						
 						If SelectedItem\State = 100.0 Then
 							If wi\HazmatSuit > 0 Then
@@ -7514,7 +7498,7 @@ Function UpdateGUI()
 					;[Block]
 					me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 					
-					SelectedItem\State = Min(SelectedItem\State + (fpst\FPSFactor[0] / (2.0 + (0.5 * (SelectedItem\ItemTemplate\TempName = "finevest")))), 100)
+					SelectedItem\State = Min(SelectedItem\State + (fps\FPSFactor[0] / (2.0 + (0.5 * (SelectedItem\ItemTemplate\TempName = "finevest")))), 100)
 					
 					If SelectedItem\State = 100.0 Then
 						If wi\BallisticVest > 0 Then
@@ -7540,7 +7524,7 @@ Function UpdateGUI()
 					If PreventItemOverlapping(True, False, False, False, False) Then
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
-						SelectedItem\State = Min(SelectedItem\State + (fpst\FPSFactor[0]) / 1.6, 100.0)
+						SelectedItem\State = Min(SelectedItem\State + (fps\FPSFactor[0]) / 1.6, 100.0)
 						
 						If SelectedItem\State = 100.0 Then
 							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
@@ -7568,14 +7552,14 @@ Function UpdateGUI()
 					;[End Block]
 				Case "navigator", "nav"
 					;[Block]
-					If SelectedItem\State =< 100.0 Then SelectedItem\State = Max(0.0, SelectedItem\State - fpst\FPSFactor[0] * 0.005)
+					If SelectedItem\State =< 100.0 Then SelectedItem\State = Max(0.0, SelectedItem\State - fps\FPSFactor[0] * 0.005)
 					;[End Block]
 				Case "scp1499", "super1499"
 					;[Block]
 					If PreventItemOverlapping(False, False, True, False, False) Then
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
-						SelectedItem\State = Min(SelectedItem\State + fpst\FPSFactor[0] / 1.6, 100.0)
+						SelectedItem\State = Min(SelectedItem\State + fps\FPSFactor[0] / 1.6, 100.0)
 						
 						If SelectedItem\State = 100.0 Then
 							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
@@ -7737,7 +7721,7 @@ Function UpdateGUI()
 					If PreventItemOverlapping(False, False, False, True, False) Then
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
-						SelectedItem\State = Min(SelectedItem\State + fpst\FPSFactor[0], 100.0)
+						SelectedItem\State = Min(SelectedItem\State + fps\FPSFactor[0], 100.0)
 						
 					    If SelectedItem\State = 100.0 Then
 							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
@@ -7759,7 +7743,7 @@ Function UpdateGUI()
 					If PreventItemOverlapping(False, False, False, False, True) Then
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 							
-						SelectedItem\State3 = Min(SelectedItem\State3 + (fpst\FPSFactor[0] / 1.6), 100.0)
+						SelectedItem\State3 = Min(SelectedItem\State3 + (fps\FPSFactor[0] / 1.6), 100.0)
 							
 						If SelectedItem\State3 = 100.0 Then
 							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
@@ -8254,7 +8238,7 @@ Function UpdateMenu()
 				EndIf
 			ElseIf me\StopHidingTimer < 40.0
 				If me\KillTimer >= 0.0 Then 
-					me\StopHidingTimer = me\StopHidingTimer + fpst\FPSFactor[0]
+					me\StopHidingTimer = me\StopHidingTimer + fps\FPSFactor[0]
 					
 					If me\StopHidingTimer >= 40.0 Then
 						PlaySound_Strict(HorrorSFX[15])
@@ -8664,8 +8648,7 @@ Function UpdateMenu()
 							
 							UpdateWorld(0.0)
 							
-							fpst\PrevTime = MilliSecs()
-							fpst\FPSFactor[0] = 0.0
+							fps\FPSFactor[0] = 0.0
 							
 							ResetInput()
 							Return
@@ -8726,8 +8709,7 @@ Function UpdateMenu()
 						
 						UpdateWorld(0.0)
 						
-						fpst\PrevTime = MilliSecs()
-						fpst\FPSFactor[0] = 0.0
+						fps\FPSFactor[0] = 0.0
 						
 						ResetInput()
 						Return
@@ -9521,7 +9503,7 @@ Function InitNewGame()
 	me\Stamina = 100.0
 	
 	For i = 0 To 70
-		fpst\FPSFactor[0] = 1.0
+		fps\FPSFactor[0] = 1.0
 		FlushKeys()
 		MovePlayer()
 		UpdateDoors()
@@ -9627,8 +9609,7 @@ Function InitLoadGame()
 	
 	DrawLoading(100)
 	
-	fpst\PrevTime = MilliSecs()
-	fpst\FPSFactor[0] = 0.0
+	fps\FPSFactor[0] = 0.0
 	ResetInput()
 	
 	CatchErrors("InitLoadGame")
@@ -11425,30 +11406,30 @@ Function Use427()
 	
 	If I_427\Timer < 70.0 * 360.0
 		If I_427\Using = 1 Then
-			I_427\Timer = I_427\Timer + fpst\FPSFactor[0]
+			I_427\Timer = I_427\Timer + fps\FPSFactor[0]
 			For e.Events = Each Events
 				If e\EventID = e_1048a Then
 					If e\EventState2 > 0.0 Then
-						e\EventState2 = Max(e\EventState2 - (fpst\FPSFactor[0] * 0.5), 0.0)
+						e\EventState2 = Max(e\EventState2 - (fps\FPSFactor[0] * 0.5), 0.0)
 					EndIf
 					Exit
 				EndIf
 			Next
 			If me\Injuries > 0.0 Then
-				me\Injuries = Max(me\Injuries - (fpst\FPSFactor[0] * 0.0005), 0.0)
+				me\Injuries = Max(me\Injuries - (fps\FPSFactor[0] * 0.0005), 0.0)
 			EndIf
 			If me\Bloodloss > 0.0 And me\Injuries =< 1.0 Then
-				me\Bloodloss = Max(me\Bloodloss - (fpst\FPSFactor[0] * 0.001), 0.0)
+				me\Bloodloss = Max(me\Bloodloss - (fps\FPSFactor[0] * 0.001), 0.0)
 			EndIf
 			If I_008\Timer > 0.0 Then
-				I_008\Timer = Max(I_008\Timer - (fpst\FPSFactor[0] * 0.001), 0.0)
+				I_008\Timer = Max(I_008\Timer - (fps\FPSFactor[0] * 0.001), 0.0)
 			EndIf
 			If I_409\Timer > 0.0 Then
-				I_409\Timer = Max(I_409\Timer - (fpst\FPSFactor[0] * 0.003), 0.0)
+				I_409\Timer = Max(I_409\Timer - (fps\FPSFactor[0] * 0.003), 0.0)
 			EndIf
 			For i = 0 To 5
 				If I_1025\State[i] > 0.0 Then
-					I_1025\State[i] = Max(I_1025\State[i] - (fpst\FPSFactor[0] * 0.001), 0.0)
+					I_1025\State[i] = Max(I_1025\State[i] - (fps\FPSFactor[0] * 0.001), 0.0)
 				EndIf
 			Next
 			If I_427\Sound[0] = 0 Then
@@ -11472,12 +11453,12 @@ Function Use427()
 			Next
 		EndIf
 	Else
-		If PrevI427Timer - fpst\FPSFactor[0] < 70.0 * 360.0 And I_427\Timer >= 70.0 * 360.0 Then
+		If PrevI427Timer - fps\FPSFactor[0] < 70.0 * 360.0 And I_427\Timer >= 70.0 * 360.0 Then
 			CreateMsg("Your muscles are swelling. You feel more powerful than ever.", 6.0)
-		ElseIf PrevI427Timer - fpst\FPSFactor[0] < 70.0 * 390.0 And I_427\Timer >= 70.0 * 390.0 Then
+		ElseIf PrevI427Timer - fps\FPSFactor[0] < 70.0 * 390.0 And I_427\Timer >= 70.0 * 390.0 Then
 			CreateMsg("You can't feel your legs. But you don't need legs anymore.", 6.0)
 		EndIf
-		I_427\Timer = I_427\Timer + fpst\FPSFactor[0]
+		I_427\Timer = I_427\Timer + fps\FPSFactor[0]
 		If I_427\Sound[0] = 0 Then
 			I_427\Sound[0] = LoadSound_Strict("SFX\SCP\427\Effect.ogg")
 		EndIf
@@ -11534,7 +11515,7 @@ Function UpdateMTF()
 							PlayAnnouncement("SFX\Character\MTF\Announc.ogg")
 						EndIf
 						
-						MTFTimer = fpst\FPSFactor[0]
+						MTFTimer = fps\FPSFactor[0]
 						
 						Local leader.NPCs
 						
@@ -11555,21 +11536,21 @@ Function UpdateMTF()
 		EndIf
 	Else
 		If MTFTimer =< 70.0 * 120.0 Then
-			MTFTimer = MTFTimer + fpst\FPSFactor[0]
+			MTFTimer = MTFTimer + fps\FPSFactor[0]
 		ElseIf MTFTimer > 70.0 * 120.0 And MTFTimer < 10000.0
 			If PlayerInReachableRoom()
 				PlayAnnouncement("SFX\Character\MTF\AnnouncAfter1.ogg")
 			EndIf
 			MTFTimer = 10000.0
 		ElseIf MTFTimer >= 10000.0 And MTFTimer =< 10000.0 + (70.0 * 120.0)
-			MTFTimer = MTFTimer + fpst\FPSFactor[0]
+			MTFTimer = MTFTimer + fps\FPSFactor[0]
 		ElseIf MTFTimer > 10000.0 + (70.0 * 120.0) And MTFTimer < 20000.0
 			If PlayerInReachableRoom()
 				PlayAnnouncement("SFX\Character\MTF\AnnouncAfter2.ogg")
 			EndIf
 			MTFTimer = 20000.0
 		ElseIf MTFTimer >= 20000.0 And MTFTimer =< 20000.0 + (70.0 * 60.0)
-			MTFTimer = MTFTimer + fpst\FPSFactor[0]
+			MTFTimer = MTFTimer + fps\FPSFactor[0]
 		ElseIf MTFTimer > 20000.0 + (70.0 * 60.0) And MTFTimer < 25000.0
 			If PlayerInReachableRoom()
 				; ~ If the player has an SCP in their inventory play special voice line.
@@ -11587,7 +11568,7 @@ Function UpdateMTF()
 			EndIf
 			MTFTimer = 25000.0
 		ElseIf MTFTimer >= 25000.0 And MTFTimer =< 25000.0 + (70.0 * 60.0)
-			MTFTimer = MTFTimer + fpst\FPSFactor[0]
+			MTFTimer = MTFTimer + fps\FPSFactor[0]
 		ElseIf MTFTimer > 25000.0 + (70.0 * 60.0) And MTFTimer < 30000.0
 			If PlayerInReachableRoom()
 				PlayAnnouncement("SFX\Character\MTF\ThreatAnnouncFinal.ogg")
@@ -11599,7 +11580,7 @@ End Function
 
 Function UpdateCameraCheck()
 	If MTFCameraCheckTimer > 0.0 And MTFCameraCheckTimer < 70.0 * 90.0 Then
-		MTFCameraCheckTimer = MTFCameraCheckTimer + fpst\FPSFactor[0]
+		MTFCameraCheckTimer = MTFCameraCheckTimer + fps\FPSFactor[0]
 	ElseIf MTFCameraCheckTimer >= 70.0 * 90.0
 		MTFCameraCheckTimer = 0.0
 		If (Not me\Detected) Then
@@ -11621,9 +11602,9 @@ Function UpdateExplosion()
 	
 	; ~ This here is necessary because the SCP-294's drinks with explosion effect didn't worked anymore -- ENDSHN
 	If me\ExplosionTimer > 0.0 Then
-		me\ExplosionTimer = me\ExplosionTimer + fpst\FPSFactor[0]
+		me\ExplosionTimer = me\ExplosionTimer + fps\FPSFactor[0]
 		If me\ExplosionTimer < 140.0 Then
-			If me\ExplosionTimer - fpst\FPSFactor[0] < 5.0 Then
+			If me\ExplosionTimer - fps\FPSFactor[0] < 5.0 Then
 				ExplosionSFX = LoadSound_Strict("SFX\Ending\GateB\Nuke1.ogg")
 				PlaySound_Strict(ExplosionSFX)
 				me\CameraShake = 10.0
@@ -11632,7 +11613,7 @@ Function UpdateExplosion()
 			me\CameraShake = CurveValue(me\ExplosionTimer / 60.0, me\CameraShake, 50.0)
 		Else
 			me\CameraShake = Min((me\ExplosionTimer / 20.0), 20.0)
-			If me\ExplosionTimer - fpst\FPSFactor[0] < 140.0 Then
+			If me\ExplosionTimer - fps\FPSFactor[0] < 140.0 Then
 				me\BlinkTimer = 1.0
 				ExplosionSFX = LoadSound_Strict("SFX\Ending\GateB\Nuke2.ogg")
 				PlaySound_Strict(ExplosionSFX)				
@@ -11679,7 +11660,7 @@ Function Update008()
 		If I_008\Timer < 93.0 Then
 			PrevI008Timer = I_008\Timer
 			If I_427\Using = 0 And I_427\Timer < 70.0 * 360.0 Then
-				I_008\Timer = Min(I_008\Timer + (fpst\FPSFactor[0] * 0.002), 100.0)
+				I_008\Timer = Min(I_008\Timer + (fps\FPSFactor[0] * 0.002), 100.0)
 			EndIf
 			
 			me\BlurTimer = Max(I_008\Timer * 3.0 * (2.0 - me\CrouchState), me\BlurTimer)
@@ -11728,7 +11709,7 @@ Function Update008()
 			EndIf
 		Else
 			PrevI008Timer = I_008\Timer
-			I_008\Timer = Min(I_008\Timer + (fpst\FPSFactor[0] * 0.004), 100.0)
+			I_008\Timer = Min(I_008\Timer + (fps\FPSFactor[0] * 0.004), 100.0)
 			
 			If TeleportForInfect Then
 				If I_008\Timer < 94.7 Then
@@ -11829,7 +11810,7 @@ Function Update409()
 		ShowEntity(tt\OverlayID[8])
 		
 		If I_427\Using = 0 And I_427\Timer < 70.0 * 360.0 Then
-			I_409\Timer = Min(I_409\Timer + (fpst\FPSFactor[0] * 0.004), 100.0)
+			I_409\Timer = Min(I_409\Timer + (fps\FPSFactor[0] * 0.004), 100.0)
 		EndIf	
 		EntityAlpha(tt\OverlayID[8], Min(((I_409\Timer * 0.2) ^ 2.0) / 1000.0, 0.5))
 	    me\BlurTimer = Max(I_409\Timer * 3.0 * (2.0 - me\CrouchState), me\BlurTimer)
@@ -11846,7 +11827,7 @@ Function Update409()
 			PlaySound_Strict(DamageSFX[13])
 			me\Injuries = Max(me\Injuries, 2.0)
 		ElseIf I_409\Timer > 94.0 Then
-			I_409\Timer = Min(I_409\Timer + fpst\FPSFactor[0] * 0.004, 100.0)
+			I_409\Timer = Min(I_409\Timer + fps\FPSFactor[0] * 0.004, 100.0)
 			me\Playable = False
 			me\BlurTimer = 4.0
 			me\CameraShake = 3.0
@@ -11901,7 +11882,7 @@ Function UpdateDecals()
 	
 	For d.Decals = Each Decals
 		If d\SizeChange <> 0.0 Then
-			d\Size = d\Size + d\SizeChange * fpst\FPSFactor[0]
+			d\Size = d\Size + d\SizeChange * fps\FPSFactor[0]
 			ScaleSprite(d\OBJ, d\Size, d\Size)
 			
 			Select d\ID
@@ -11915,7 +11896,7 @@ Function UpdateDecals()
 						PlaySound2(DecaySFX[Rand(1, 3)], Camera, d2\OBJ, 10.0, Rnd(0.1, 0.5))
 						d\Timer = Rnd(50.0, 100.0)
 					Else
-						d\Timer = d\Timer - fpst\FPSFactor[0]
+						d\Timer = d\Timer - fps\FPSFactor[0]
 					EndIf
 					;[End Block]
 			End Select
@@ -11924,12 +11905,12 @@ Function UpdateDecals()
 		EndIf
 		
 		If d\AlphaChange <> 0.0 Then
-			d\Alpha = Min(d\Alpha + fpst\FPSFactor[0] * d\AlphaChange, 1.0)
+			d\Alpha = Min(d\Alpha + fps\FPSFactor[0] * d\AlphaChange, 1.0)
 			EntityAlpha(d\OBJ, d\Alpha)
 		EndIf
 		
 		If d\LifeTime > 0.0 Then
-			d\LifeTime = Max(d\LifeTime - fpst\FPSFactor[0], 5.0)
+			d\LifeTime = Max(d\LifeTime - fps\FPSFactor[0], 5.0)
 		EndIf
 		
 		If d\Size =< 0.0 Lor d\Alpha =< 0.0 Lor d\LifeTime = 5.0 Then

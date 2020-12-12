@@ -152,7 +152,7 @@ Function UpdateWorld2()
 		For i = 0 To MaxItemAmount - 1
 			If Inventory[i] <> Null Then
 				If (wi\NightVision = 1 And Inventory[i]\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory[i]\ItemTemplate\TempName = "supernvg") Lor (wi\SCRAMBLE > 0 And Inventory[i]\ItemTemplate\TempName = "scramble") Then
-					Inventory[i]\State = Inventory[i]\State - (fpst\FPSFactor[0] * (0.02 * wi\NightVision) + (0.25 * (wi\SCRAMBLE > 0)))
+					Inventory[i]\State = Inventory[i]\State - (fps\FPSFactor[0] * (0.02 * wi\NightVision) + (0.25 * (wi\SCRAMBLE > 0)))
 					Power = Int(Inventory[i]\State)
 					If Power =< 0.0 Then ; ~ This NVG can't be used
 						HasBattery = 0
@@ -187,7 +187,7 @@ Function UpdateWorld2()
 	If me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0 Then
 		If HasBattery <> 0 And (wi\NightVision = 1 Lor wi\NightVision = 2 Lor wi\SCRAMBLE > 0) Then
 			If wi\NightVision = 2 Then ; ~ Show a HUD
-				wi\NVGTimer = wi\NVGTimer - fpst\FPSFactor[0]
+				wi\NVGTimer = wi\NVGTimer - fps\FPSFactor[0]
 				If wi\NVGTimer =< 0.0 Then
 					For np.NPCs = Each NPCs
 						np\NVX = EntityX(np\Collider, True)

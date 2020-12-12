@@ -104,12 +104,12 @@ Function UpdateMainMenu()
 	Local x%, y%, Width%, Height%, Temp%, i%, n%, j%
 	Local Dir%, File$, Test%, snd.Sound
 	
-	While ft\Accumulator > 0.0
-		ft\Accumulator = ft\Accumulator - TICK_DURATION
-		If ft\Accumulator =< 0.0 Then CaptureWorld()
+	While fps\Accumulator > 0.0
+		fps\Accumulator = fps\Accumulator - TICK_DURATION
+		If fps\Accumulator =< 0.0 Then CaptureWorld()
 		
 		If Input_ResetTime > 0.0 Then
-			Input_ResetTime = Max(Input_ResetTime - fpst\FPSFactor[0], 0.0)
+			Input_ResetTime = Max(Input_ResetTime - fps\FPSFactor[0], 0.0)
 		Else
 			mo\DoubleClick = False
 			mo\MouseHit1 = MouseHit(1)
@@ -158,7 +158,7 @@ Function UpdateMainMenu()
 			mm\MainMenuBlinkDuration[0] = Rand(200, 500)
 		EndIf
 		
-		mm\MainMenuBlinkTimer[1] = mm\MainMenuBlinkTimer[1] - fpst\FPSFactor[0]
+		mm\MainMenuBlinkTimer[1] = mm\MainMenuBlinkTimer[1] - fps\FPSFactor[0]
 		If mm\MainMenuBlinkTimer[1] < mm\MainMenuBlinkDuration[1] Then
 			If mm\MainMenuBlinkTimer[1] < 0.0 Then
 				mm\MainMenuBlinkTimer[1] = Rnd(700.0, 800.0)
@@ -990,7 +990,7 @@ Function UpdateMainMenu()
 	Color(255, 255, 255)
 	SetFont(fo\FontID[Font_Console])
 	Text(20, opt\GraphicHeight - 50, "v" + VersionNumber)
-	If opt\ShowFPS Then SetFont(fo\FontID[Font_Console]) : Text(20, opt\GraphicHeight - 30, "FPS: " + ft\fps) : SetFont(fo\FontID[Font_Default])
+	If opt\ShowFPS Then SetFont(fo\FontID[Font_Console]) : Text(20, opt\GraphicHeight - 30, "FPS: " + fps\fps) : SetFont(fo\FontID[Font_Default])
 	
 	If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	
@@ -1720,7 +1720,7 @@ Function UpdateLauncher(lnchr.Launcher)
 	opt\RealGraphicWidth = opt\GraphicWidth
 	opt\RealGraphicHeight = opt\GraphicHeight
 	
-	fo\FontID[Font_Default] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 16, 1)
+	fo\FontID[Font_Default] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 16, True)
 	SetFont(fo\FontID[Font_Default])
 	MenuWhite = LoadImage_Strict("GFX\menu\menu_white.png")
 	MenuBlack = LoadImage_Strict("GFX\menu\menu_black.png")	
@@ -1833,7 +1833,10 @@ Function UpdateLauncher(lnchr.Launcher)
 			Exit
 		EndIf
 		
-		If DrawLauncherButton(LauncherWidth - 30 - 90, LauncherHeight - 50, 100, 30, "EXIT", False, False) Then Quit = True : Exit
+		If DrawLauncherButton(LauncherWidth - 30 - 90, LauncherHeight - 50, 100, 30, "EXIT", False, False) Then 
+			Quit = True
+			Exit
+		EndIf
 		Flip()
 	Forever
 	
@@ -1846,22 +1849,7 @@ Function UpdateLauncher(lnchr.Launcher)
 	
 	FreeImage(LauncherArrowIMG)
 	FreeImage(LauncherIMG)
-End Function
-
-Function DrawTiledImageRect(Img%, SrcX%, SrcY%, SrcWidth#, SrcHeight#, x%, y%, Width%, Height%)
-	Local x2% = x
-	
-	While x2 < x + Width
-		Local y2% = y
-		
-		While y2 < y + Height
-			If x2 + SrcWidth > x + Width Then SrcWidth = SrcWidth - Max((x2 + SrcWidth) - (x + Width), 1)
-			If y2 + SrcHeight > y + Height Then SrcHeight = SrcHeight - Max((y2 + SrcHeight) - (y + Height), 1)
-			DrawImageRect(Img, x2, y2, SrcX, SrcY, SrcWidth, SrcHeight)
-			y2 = y2 + SrcHeight
-		Wend
-		x2 = x2 + SrcWidth
-	Wend
+	FreeFont(fo\FontID[Font_Default])
 End Function
 
 Type LoadingScreens
@@ -2018,13 +2006,13 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 			
 			SetFont(fo\FontID[Font_Default_Big])
 			
-			Local Strtemp$ = ""
+			Local StrTemp$ = ""
 			
 			Temp = Rand(2, 9)
 			For i = 0 To Temp
-				Strtemp = Strtemp + Chr(Rand(48, 122))
+				StrTemp = StrTemp + Chr(Rand(48, 122))
 			Next
-			Text(opt\GraphicWidth / 2, opt\GraphicHeight / 2 + 80, Strtemp, True, True)
+			Text(opt\GraphicWidth / 2, opt\GraphicHeight / 2 + 80, StrTemp, True, True)
 			
 			If Percent = 0 Then 
 				If Rand(5) = 1 Then
@@ -2091,20 +2079,19 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 				EndIf
 			EndIf
 			
-			Strtemp = SelectedLoadingScreen\Txt[0]
+			StrTemp = SelectedLoadingScreen\Txt[0]
 			Temp = Int(Len(SelectedLoadingScreen\Txt[0]) - Rand(5))
 			For i = 0 To Rand(10, 15)
-				Strtemp = Replace(SelectedLoadingScreen\Txt[0], Mid(SelectedLoadingScreen\Txt[0], Rand(1, Len(Strtemp) - 1), 1), Chr(Rand(130, 250)))
+				StrTemp = Replace(SelectedLoadingScreen\Txt[0], Mid(SelectedLoadingScreen\Txt[0], Rand(1, Len(StrTemp) - 1), 1), Chr(Rand(130, 250)))
 			Next		
 			SetFont(fo\FontID[Font_Default])
-			RowText(Strtemp, opt\GraphicWidth / 2 - 200, opt\GraphicHeight / 2 + 120, 400, 300, True)		
+			RowText(StrTemp, opt\GraphicWidth / 2 - 200, opt\GraphicHeight / 2 + 120, 400, 300, True)		
 		Else
-			
 			Color(0, 0, 0)
 			SetFont(fo\FontID[Font_Default_Big])
-			Text(opt\GraphicWidth / 2 + 1, opt\GraphicHeight / 2 + 80 + 1, SelectedLoadingScreen\Title, True, True)
+			Text(opt\GraphicWidth / 2 + 1, opt\GraphicHeight / 2 + 81, SelectedLoadingScreen\Title, True, True)
 			SetFont(fo\FontID[Font_Default])
-			RowText(SelectedLoadingScreen\Txt[LoadingScreenText], opt\GraphicWidth / 2 - 200 + 1, opt\GraphicHeight / 2 + 120 + 1, 400, 300, True)
+			RowText(SelectedLoadingScreen\Txt[LoadingScreenText], opt\GraphicWidth / 2 - 201, opt\GraphicHeight / 2 + 121, 400, 300, True)
 			
 			Color(255, 255, 255)
 			SetFont(fo\FontID[Font_Default_Big])
@@ -2114,7 +2101,7 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 		EndIf
 		
 		Color(0, 0, 0)
-		Text(opt\GraphicWidth / 2 + 1, opt\GraphicHeight / 2 - 100 + 1, "LOADING - " + Percent + " %", True, True)
+		Text(opt\GraphicWidth / 2 + 1, opt\GraphicHeight / 2 - 101, "LOADING - " + Percent + " %", True, True)
 		Color(255, 255, 255)
 		Text(opt\GraphicWidth / 2, opt\GraphicHeight / 2 - 100, "LOADING - " + Percent + " %", True, True)
 		
@@ -2135,6 +2122,22 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 	Until GetKey() <> 0 Lor MouseHit(1)
 	
 	DeleteMenuGadgets()
+End Function
+
+Function DrawTiledImageRect(Img%, SrcX%, SrcY%, SrcWidth#, SrcHeight#, x%, y%, Width%, Height%)
+	Local x2% = x
+	
+	While x2 < x + Width
+		Local y2% = y
+		
+		While y2 < y + Height
+			If x2 + SrcWidth > x + Width Then SrcWidth = SrcWidth - Max((x2 + SrcWidth) - (x + Width), 1)
+			If y2 + SrcHeight > y + Height Then SrcHeight = SrcHeight - Max((y2 + SrcHeight) - (y + Height), 1)
+			DrawImageRect(Img, x2, y2, SrcX, SrcY, SrcWidth, SrcHeight)
+			y2 = y2 + SrcHeight
+		Wend
+		x2 = x2 + SrcWidth
+	Wend
 End Function
 
 Function DrawFrame(x%, y%, Width%, Height%, xOffset% = 0, yOffset% = 0)

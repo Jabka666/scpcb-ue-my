@@ -6383,10 +6383,10 @@ Function UpdateSecurityCams() ; ~ SHOULD BE SEPARATED!
 				Else
 					If sc\Turn > 0.0 Then
 						If sc\Dir = 0 Then
-							sc\CurrAngle = sc\CurrAngle + 0.2 * fpst\FPSFactor[0]
+							sc\CurrAngle = sc\CurrAngle + 0.2 * fps\FPSFactor[0]
 							If sc\CurrAngle > sc\Turn * 1.3 Then sc\Dir = 1
 						Else
-							sc\CurrAngle = sc\CurrAngle - 0.2 * fpst\FPSFactor[0]
+							sc\CurrAngle = sc\CurrAngle - 0.2 * fps\FPSFactor[0]
 							If sc\CurrAngle < (-sc\Turn) * 1.3 Then sc\Dir = 0
 						EndIf
 					EndIf
@@ -6411,12 +6411,12 @@ Function UpdateSecurityCams() ; ~ SHOULD BE SEPARATED!
 			
 			If Close = True Then
 				If sc\Screen Then
-					sc\State = sc\State + fpst\FPSFactor[0]
+					sc\State = sc\State + fps\FPSFactor[0]
 					If me\BlinkTimer > -5.0 And EntityInView(sc\ScrOBJ, Camera) Then
 						If EntityVisible(Camera, sc\ScrOBJ) Then
 							If (sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3) And I_714\Using = 0 And wi\HazmatSuit < 3 And wi\GasMask < 3 Then
 								If me\BlinkTimer > -5.0 Then
-									me\Sanity = me\Sanity - fpst\FPSFactor[0]
+									me\Sanity = me\Sanity - fps\FPSFactor[0]
 									me\RestoreSanity = False
 								EndIf
 							EndIf
@@ -7548,7 +7548,7 @@ Global UpdateRoomLightsTimer# = 0.0
 
 Function UpdateRoomLights(Cam%)
 	If opt\EnableRoomLights And SecondaryLightOn > 0.5 And Cam = Camera Then
-		UpdateRoomLightsTimer = UpdateRoomLightsTimer + fpst\FPSFactor[0]
+		UpdateRoomLightsTimer = UpdateRoomLightsTimer + fps\FPSFactor[0]
 		If UpdateRoomLightsTimer >= 8.0 Then
 			UpdateRoomLightsTimer = 0.0
 		EndIf
@@ -7741,14 +7741,14 @@ End Function
 Function TimeCheckpointMonitors()
 	If UpdateCheckpoint1 Then
 		If MonitorTimer < 100.0
-			MonitorTimer = Min(MonitorTimer + fpst\FPSFactor[0], 100.0)
+			MonitorTimer = Min(MonitorTimer + fps\FPSFactor[0], 100.0)
 		Else
 			MonitorTimer = 0.0
 		EndIf
 	EndIf
 	If UpdateCheckpoint2 Then
 		If MonitorTimer2 < 100.0
-			MonitorTimer2 = Min(MonitorTimer2 + fpst\FPSFactor[0], 100.0)
+			MonitorTimer2 = Min(MonitorTimer2 + fps\FPSFactor[0], 100.0)
 		Else
 			MonitorTimer2 = 0.0
 		EndIf

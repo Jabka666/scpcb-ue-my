@@ -5,7 +5,7 @@ Function SaveGame(File$)
 	
 	If (Not me\Playable) Then Return ; ~ Don't save if the player can't move at all
 	
-	If me\DropSpeed > 0.02 * fpst\FPSFactor[0] Lor me\DropSpeed < (-0.02) * fpst\FPSFactor[0] Then Return
+	If me\DropSpeed > 0.02 * fps\FPSFactor[0] Lor me\DropSpeed < (-0.02) * fps\FPSFactor[0] Then Return
 	
 	If me\KillTimer < 0.0 Then Return
 	
@@ -1275,7 +1275,7 @@ Function LoadGame(File$)
 		Next
 		
 		For do.Doors = Each Doors
-			If (do\KeyCard = 0) And (do\Code = "") Then
+			If do\KeyCard = 0 And do\Code = "" Then
 				If EntityZ(do\FrameOBJ, True) = r\z Then
 					If EntityX(do\FrameOBJ, True) = r\x + 4.0 Then
 						r\AdjDoor[0] = do
@@ -1334,7 +1334,7 @@ Function LoadGameQuick(File$)
 	PositionEntity(me\Collider, 0.0, 1000.0, 0.0, True)
 	ResetEntity(me\Collider)
 	
-	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, ID%
+	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, ID%, Tex%
 	Local Player_X#, Player_Y#, Player_Z#, r.Rooms, n.NPCs, do.Doors
 	Local f% = ReadFile(File + "save.cb")
 	
@@ -2066,7 +2066,7 @@ Function LoadSaveGames()
 		If File = "" Then Exit 
 		If FileType(SavePath + "\" + File) = 2 Then 
 			If File <> "." And File <> ".." Then 
-				If (FileType(SavePath + File + "\save.cb") > 0) Then
+				If FileType(SavePath + File + "\save.cb") > 0 Then
 					SaveGameAmount = SaveGameAmount + 1
 				EndIf
 			EndIf
@@ -2083,7 +2083,7 @@ Function LoadSaveGames()
 		If File = "" Then Exit 
 		If FileType(SavePath + "\" + File) = 2 Then 
 			If File <> "." And File <> ".." Then 
-				If (FileType(SavePath + File + "\save.cb") > 0) Then
+				If FileType(SavePath + File + "\save.cb") > 0 Then
 					SaveGames(i) = File
 					i = i + 1
 				EndIf

@@ -40,8 +40,8 @@ Function AutoReleaseSounds()
 	Next
 End Function
 
-Function PlaySound_Strict%(SNDHandle%, HasSubtitles% = False, SubID% = ANNOUNCEMENT)
-	Local snd.Sound = Object.Sound(SNDHandle)
+Function PlaySound_Strict%(SoundHandle%, HasSubtitles% = False, SubID% = ANNOUNCEMENT)
+	Local snd.Sound = Object.Sound(SoundHandle)
 	
 	If snd <> Null Then
 		Local ShouldPlay% = True
@@ -123,8 +123,8 @@ Function LoadSound_Strict(File$)
 	Return(Handle(snd))
 End Function
 
-Function FreeSound_Strict(SNDHandle%)
-	Local snd.Sound = Object.Sound(SNDHandle)
+Function FreeSound_Strict(SoundHandle%)
+	Local snd.Sound = Object.Sound(SoundHandle)
 	
 	If snd <> Null Then
 		If snd\InternalHandle <> 0 Then
@@ -155,7 +155,7 @@ Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode% = Mode, HasSubtitl
 	
 	st\CHN = PlayMusic(File, CustomMode + TwoD)
 	
-	If HasSubtitles Then ShowSubtitles(File, SubID)
+	If HasSubtitles And opt\EnableSubtitles Then ShowSubtitles(File, SubID)
 	If st\CHN = -1 Then
 		CreateConsoleMsg("Failed to stream Sound (returned -1): " + Chr(34) + File + Chr(34))
 		If opt\ConsoleOpening And opt\CanOpenConsole Then
@@ -413,12 +413,12 @@ Function LoadBrush_Strict(File$, Flags%, u# = 1.0, v# = 1.0)
 	Return(Tmp)
 End Function 
 
-Function LoadFont_Strict(File$ = "Tahoma", Height% = 13, IgnoreScaling% = 0)
+Function LoadFont_Strict(File$ = "Tahoma", Height% = 13, IgnoreScaling% = False)
 	Local Tmp%
 	
 	If Tmp = 0 Then
 		If FileType(File) <> 1 Then RuntimeError("Font " + File + " not found.")
-		Tmp = LoadFont(File, (Int(Height * (opt\GraphicHeight / 1024.0))) * (Not IgnoreScaling) + IgnoreScaling * Height)
+		Tmp = LoadFont(File, (Int(Height * (opt\GraphicHeight / 1024))) * (Not IgnoreScaling) + IgnoreScaling * Height)
 		If Tmp = 0 Then RuntimeError("Failed to load Font: " + File)
 	EndIf
 	Return(Tmp)

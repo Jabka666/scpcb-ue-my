@@ -110,7 +110,7 @@ Function CreateAchievementMsg.AchievementMsg(ID%, Txt$)
 	amsg\AchvID = ID
 	amsg\Txt = Txt
 	amsg\MsgX = 0.0
-	amsg\MsgTime = fpst\FPSFactor[1]
+	amsg\MsgTime = fps\FPSFactor[1]
 	amsg\MsgID = CurrAchvMSGID
 	CurrAchvMSGID = CurrAchvMSGID + 1
 	
@@ -127,15 +127,15 @@ Function UpdateAchievementMsg()
 	For amsg.AchievementMsg = Each AchievementMsg
 		If amsg\MsgTime <> 0.0
 			If amsg\MsgTime > 0.0 And amsg\MsgTime < 70.0 * 7.0
-				amsg\MsgTime = amsg\MsgTime + fpst\FPSFactor[1]
+				amsg\MsgTime = amsg\MsgTime + fps\FPSFactor[1]
 				If amsg\MsgX > -Width
-					amsg\MsgX = Max(amsg\MsgX - 4.0 * fpst\FPSFactor[1], -Width)
+					amsg\MsgX = Max(amsg\MsgX - 4.0 * fps\FPSFactor[1], -Width)
 				EndIf
 			ElseIf amsg\MsgTime >= 70.0 * 7.0
 				amsg\MsgTime = -1.0
 			ElseIf amsg\MsgTime = -1.0
 				If amsg\MsgX < 0.0
-					amsg\MsgX = Min(amsg\MsgX + 4.0 * fpst\FPSFactor[1], 0.0)
+					amsg\MsgX = Min(amsg\MsgX + 4.0 * fps\FPSFactor[1], 0.0)
 				Else
 					amsg\MsgTime = 0.0
 				EndIf

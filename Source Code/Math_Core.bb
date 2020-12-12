@@ -11,23 +11,23 @@ Function GenerateSeedNumber(Seed$)
 End Function
 
 Function CurveValue#(Number#, Old#, Smooth#)
-	If fpst\FPSFactor[0] = 0.0 Then Return(Old)
+	If fps\FPSFactor[0] = 0.0 Then Return(Old)
 	
 	If Number < Old Then
-		Return(Max(Old + (Number - Old) * (1.0 / Smooth * fpst\FPSFactor[0]), Number))
+		Return(Max(Old + (Number - Old) * (1.0 / Smooth * fps\FPSFactor[0]), Number))
 	Else
-		Return(Min(Old + (Number - Old) * (1.0 / Smooth * fpst\FPSFactor[0]), Number))
+		Return(Min(Old + (Number - Old) * (1.0 / Smooth * fps\FPSFactor[0]), Number))
 	EndIf
 End Function
 
 Function CurveAngle#(Value#, Old#, Smooth#)
-	If fpst\FPSFactor[0] = 0.0 Then Return(Old)
+	If fps\FPSFactor[0] = 0.0 Then Return(Old)
 	
 	Local Diff# = WrapAngle(Value) - WrapAngle(Old)
 	
 	If Diff > 180.0 Then Diff = Diff - 360.0
 	If Diff < -180.0 Then Diff = Diff + 360.0
-	Return(WrapAngle(Old + Diff * (1.0 / Smooth * fpst\FPSFactor[0])))
+	Return(WrapAngle(Old + Diff * (1.0 / Smooth * fps\FPSFactor[0])))
 End Function
 
 Function WrapAngle#(Angle#)

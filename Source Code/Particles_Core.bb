@@ -48,23 +48,23 @@ Function UpdateParticles()
 	
 	For p.Particles = Each Particles
 		
-		MoveEntity(p\Pvt, 0.0, 0.0, p\Speed * fpst\FPSFactor[0])
-		If p\Gravity <> 0 Then p\ySpeed = p\ySpeed - p\Gravity * fpst\FPSFactor[0]
-		TranslateEntity(p\Pvt, 0.0, p\ySpeed * fpst\FPSFactor[0], 0.0, True)
+		MoveEntity(p\Pvt, 0.0, 0.0, p\Speed * fps\FPSFactor[0])
+		If p\Gravity <> 0 Then p\ySpeed = p\ySpeed - p\Gravity * fps\FPSFactor[0]
+		TranslateEntity(p\Pvt, 0.0, p\ySpeed * fps\FPSFactor[0], 0.0, True)
 		
 		PositionEntity(p\OBJ, EntityX(p\Pvt, True), EntityY(p\Pvt, True), EntityZ(p\Pvt, True), True)
 		
 		If p\AChange <> 0.0 Then
-			p\A = Min(Max(p\A + p\AChange * fpst\FPSFactor[0], 0.0), 1.0)
+			p\A = Min(Max(p\A + p\AChange * fps\FPSFactor[0], 0.0), 1.0)
 			EntityAlpha(p\OBJ, p\A)		
 		EndIf
 		
 		If p\SizeChange <> 0.0 Then 
-			p\Size = p\Size + p\SizeChange * fpst\FPSFactor[0]
+			p\Size = p\Size + p\SizeChange * fps\FPSFactor[0]
 			ScaleSprite(p\OBJ, p\Size, p\Size)
 		EndIf
 		
-		p\LifeTime = p\LifeTime - fpst\FPSFactor[0]
+		p\LifeTime = p\LifeTime - fps\FPSFactor[0]
 		If p\LifeTime =< 0.0 Lor p\Size < 0.00001 Lor p\A =< 0.0 Then
 			RemoveParticle(p)
 		EndIf
@@ -140,7 +140,7 @@ Function UpdateEmitters()
 	
 	InSmoke = False
 	For e.Emitters = Each Emitters
-		If fpst\FPSFactor[0] > 0.0 And (PlayerRoom = e\room Lor e\room\Dist < 8.0) Then
+		If fps\FPSFactor[0] > 0.0 And (PlayerRoom = e\room Lor e\room\Dist < 8.0) Then
 			Local p.Particles = CreateParticle(EntityX(e\OBJ, True), EntityY(e\OBJ, True), EntityZ(e\OBJ, True), Rand(e\MinImage, e\MaxImage), e\Size, e\Gravity, e\LifeTime)
 			
 			p\Speed = e\Speed
@@ -181,7 +181,7 @@ Function UpdateEmitters()
 				EndIf
 			EndIf
 		EndIf
-		me\EyeIrritation = me\EyeIrritation + (fpst\FPSFactor[0] * 4.0)
+		me\EyeIrritation = me\EyeIrritation + (fps\FPSFactor[0] * 4.0)
 	EndIf	
 End Function
 
