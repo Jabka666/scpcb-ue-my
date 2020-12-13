@@ -50,7 +50,7 @@ End Function
 Function Graphics3DExt%(Width%, Height%, Depth% = 32, Mode% = 2)
 	Graphics3D(Width, Height, Depth, Mode)
 	TextureFilter("", 8192) ; ~ This turns on Anisotropic filtering for textures
-	TextureAnisotropic(16)
+	TextureAnisotropic(opt\AnisotropicLevel)
 	SMALLEST_POWER_TWO = 512.0
 	While SMALLEST_POWER_TWO < Width Lor SMALLEST_POWER_TWO < Height
 		SMALLEST_POWER_TWO = SMALLEST_POWER_TWO * 2.0
@@ -203,6 +203,8 @@ Function UpdateWorld2()
 	EndIf
 End Function
 
+Const BRIGHTNESS% = 50
+
 Function RenderWorld2(Tween#)
 	Local i%, Dist#, Temp%, Temp2%, np.NPCs
 	Local l%, k%, xValue#, yValue#, PitchValue#, YawValue#
@@ -211,11 +213,11 @@ Function RenderWorld2(Tween#)
 	CameraProjMode(Camera, 1)
 	
 	If wi\NightVision > 0 And wi\NightVision < 3 Then
-		AmbientLight(Min(opt\Brightness * 2.0, 255.0), Min(opt\Brightness * 2.0, 255.0), Min(opt\Brightness * 2.0, 255.0))
+		AmbientLight(Min(BRIGHTNESS * 2.0, 255.0), Min(BRIGHTNESS * 2.0, 255.0), Min(BRIGHTNESS * 2.0, 255.0))
 	ElseIf wi\NightVision = 3
 		AmbientLight(255.0, 255.0, 255.0)
 	ElseIf PlayerRoom <> Null
-		AmbientLight(opt\Brightness, opt\Brightness, opt\Brightness)
+		AmbientLight(BRIGHTNESS, BRIGHTNESS, BRIGHTNESS)
 	EndIf
 	
 	CameraViewport(Camera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)

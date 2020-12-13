@@ -170,10 +170,10 @@ End Function
 Function GetINIInt%(File$, Section$, Parameter$, DefaultValue% = 0)
 	Local Txt$ = GetINIString(File, Section, Parameter, DefaultValue)
 	
-	If Lower(Txt) = "true" Then
-		Return(1)
-	ElseIf Lower(Txt) = "false"
-		Return(0)
+	If Txt = "True" Then
+		Return(True)
+	ElseIf Txt = "False"
+		Return(False)
 	Else
 		Return(Int(Txt))
 	EndIf
@@ -211,10 +211,10 @@ End Function
 Function GetINIInt2%(File$, Start%, Parameter$, DefaultValue$ = "")
 	Local Txt$ = GetINIString2(File, Start, Parameter, DefaultValue)
 	
-	If Lower(Txt) = "true" Then
-		Return(1)
-	ElseIf Lower(Txt) = "false"
-		Return(0)
+	If Txt = "True" Then
+		Return(True)
+	ElseIf Txt = "False"
+		Return(False)
 	Else
 		Return(Int(Txt))
 	EndIf
@@ -352,8 +352,9 @@ Type Options
 	Field EnableRoomLights%
 	Field VSync%
 	Field ScreenGamma#
-	Field TextureDetails%, TextureFloat#
+	Field TextureDetails%, TextureDetailsLevel#
 	Field FOV#, CurrFOV#
+	Field Anisotropic%, AnisotropicLevel%
 	; ~ [AUDIO]
 	Field MusicVolume#, PrevMusicVolume#, CurrMusicVolume#
 	Field EnableUserTracks%
@@ -381,7 +382,6 @@ Type Options
 	Field GraphicWidth%, RealGraphicWidth%
 	Field GraphicHeight%, RealGraphicHeight%
 	Field DisplayMode%
-	Field Brightness%
 	Field CameraFogNear#
 	Field CameraFogFar#, StoredCameraFogFar#
 	Field IntroEnabled%
@@ -394,7 +394,7 @@ Function LoadOptionsINI()
 	
 	opt\ParticleAmount = GetINIInt(OptionFile, "Graphics", "Particle Amount")
 	
-	opt\AntiAliasing = GetINIInt(OptionFile, "Graphics", "Antialias")
+	opt\AntiAliasing = GetINIInt(OptionFile, "Graphics", "Anti Aliasing")
 	
 	opt\BumpEnabled = GetINIInt(OptionFile, "Graphics", "Enable Bump Mapping")
 	
@@ -410,6 +410,8 @@ Function LoadOptionsINI()
 	
 	opt\FOV = GetINIFloat(OptionFile, "Graphics", "FOV")
 	opt\CurrFOV = opt\FOV - 40.0
+	
+	opt\Anisotropic = GetINIInt(OptionFile, "Graphics", "Anisotropic Filtering")
 	
 	; ~ [AUDIO]
 	
@@ -482,7 +484,7 @@ Function LoadOptionsINI()
 	
 	opt\MouseSmoothing = GetINIFloat(OptionFile, "Controls", "Mouse Smoothing", 1.0)
 	
-	opt\InvertMouse = GetINIInt(OptionFile, "Controls", "Invert Mouse By Y")
+	opt\InvertMouse = GetINIInt(OptionFile, "Controls", "Invert Mouse By Y Axis")
 	
 	opt\MouseSensitivity = GetINIFloat(OptionFile, "Controls", "Mouse Sensitivity")
 	
@@ -493,8 +495,6 @@ Function LoadOptionsINI()
 	opt\GraphicHeight = GetINIInt(OptionFile, "Global", "Height")
 	
 	opt\DisplayMode = GetINIInt(OptionFile, "Global", "Display Mode")
-	
-	opt\Brightness = GetINIFloat(OptionFile, "Global", "Brightness")
 	
 	opt\CameraFogNear = GetINIFloat(OptionFile, "Global", "Camera Fog Near")
 	
@@ -511,7 +511,7 @@ Function SaveOptionsINI(SaveGlobal% = False)
 	
 	PutINIValue(OptionFile, "Graphics", "Screen Gamma", opt\ScreenGamma)
 	
-	PutINIValue(OptionFile, "Graphics", "Antialias", opt\AntiAliasing)
+	PutINIValue(OptionFile, "Graphics", "Anti Aliasing", opt\AntiAliasing)
 	
 	PutINIValue(OptionFile, "Graphics", "VSync", opt\VSync)
 	
@@ -524,6 +524,8 @@ Function SaveOptionsINI(SaveGlobal% = False)
 	PutINIValue(OptionFile, "Graphics", "Texture Details", opt\TextureDetails)
 	
 	PutINIValue(OptionFile, "Graphics", "FOV", Int(opt\FOV))
+	
+	PutINIValue(OptionFile, "Graphics", "Anisotropic Filtering", opt\Anisotropic)
 	
 	; ~ [ADVANCED]
 	
@@ -579,7 +581,7 @@ Function SaveOptionsINI(SaveGlobal% = False)
 	
 	PutINIValue(OptionFile, "Controls", "Mouse Sensitivity", opt\MouseSensitivity)
 	
-	PutINIValue(OptionFile, "Controls", "Invert Mouse By Y", opt\InvertMouse)
+	PutINIValue(OptionFile, "Controls", "Invert Mouse By Y Axis", opt\InvertMouse)
 	
 	PutINIValue(OptionFile, "Controls", "Mouse Smoothing", opt\MouseSmoothing)
 	
@@ -598,8 +600,6 @@ Function SaveOptionsINI(SaveGlobal% = False)
 	If SaveGlobal Then
 		; ~ [GLOBAL]
 		
-		PutINIValue(OptionFile, "Global", "Brightness", opt\Brightness)
-		
 		PutINIValue(OptionFile, "Global", "Camera Fog Near", opt\CameraFogNear)
 		
 		PutINIValue(OptionFile, "Global", "Camera Fog Far", opt\CameraFogFar)
@@ -611,47 +611,49 @@ End Function
 Function ResetOptionsINI()
 	; ~ [GRAPHICS]
 	
-	opt\BumpEnabled = 1
+	opt\BumpEnabled = True
 	
 	opt\ScreenGamma = 1.0
 	
-	opt\AntiAliasing = 1
+	opt\AntiAliasing = True
 	
-	opt\VSync = 1
+	opt\VSync = True
 	
 	opt\ParticleAmount = 2
 	
-	opt\SaveTexturesInVRAM = 1
+	opt\SaveTexturesInVRAM = True
 	
-	opt\EnableRoomLights = 1
+	opt\EnableRoomLights = True
 	
-	opt\TextureDetails = 3
+	opt\TextureDetails = 4
 	
 	opt\CurrFOV = 34.0 ; ~ Don't forget to decrease by "40.0"
 	opt\FOV = 74.0
 	
+	opt\Anisotropic = 4
+	
 	; ~ [ADVANCED]
 	
-	opt\HUDEnabled = 1
+	opt\HUDEnabled = True
 	
-	opt\SmoothHUD = 1
+	opt\SmoothHUD = True
 	
-	opt\ShowFPS = 0
+	opt\ShowFPS = False
 	
 	opt\CurrFrameLimit = 0.0
 	opt\FrameLimit = 0
 	
-	opt\AchvMsgEnabled = 1
+	opt\AchvMsgEnabled = True
 	
-	opt\CanOpenConsole = 0
+	opt\CanOpenConsole = False
 	
-	opt\ConsoleOpening = 0
+	opt\ConsoleOpening = False
 	
-	opt\PlayStartup = 1
+	opt\PlayStartup = True
 	
-	opt\LauncherEnabled = 1
+	opt\LauncherEnabled = True
 	
-	opt\EnableSubtitles = 1
+	opt\EnableSubtitles = True
 	
 	opt\SubColorR = 255
 	
@@ -663,7 +665,7 @@ Function ResetOptionsINI()
 	
 	opt\MouseSensitivity = 0.0
 	
-	opt\InvertMouse = 0
+	opt\InvertMouse = False
 	
 	opt\MouseSmoothing = 1.0
 	
@@ -697,21 +699,19 @@ Function ResetOptionsINI()
 	opt\SFXVolume = 0.5
 	opt\PrevSFXVolume = 0.5
 	
-	opt\EnableSFXRelease = 1
+	opt\EnableSFXRelease = True
 	
-	opt\EnableUserTracks = 0
+	opt\EnableUserTracks = False
 	
-	opt\UserTrackMode = 0
+	opt\UserTrackMode = False
 	
 	; ~ [GLOBAL]
-	
-	opt\Brightness = 50
 	
 	opt\CameraFogNear = 0.1
 	
 	opt\CameraFogFar = 6.0
 	
-	opt\IntroEnabled = 1
+	opt\IntroEnabled = True
 End Function
 
 ;~IDEal Editor Parameters:

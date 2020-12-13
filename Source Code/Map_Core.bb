@@ -7601,7 +7601,7 @@ Function RenderRoomLights(Cam%)
 									Alpha = 1.0 - Max(Min(((EntityDistance(Cam, r\LightSpritesPivot[i]) + 0.5) / 7.5), 1.0), 0.0)
 									
 									If Alpha > 0.0 Then
-										EntityAlpha(r\LightSprites2[i], Max(3.0 * (opt\Brightness / 255.0) * (r\LightIntensity[i] / 2.0), 1.0) * Alpha)
+										EntityAlpha(r\LightSprites2[i], Max(3.0 * (BRIGHTNESS / 255.0) * (r\LightIntensity[i] / 2.0), 1.0) * Alpha)
 									Else
 										; ~ Instead of rendering the sprite invisible, just hiding it if the player is far away from it
 										If (Not r\LightSpriteHidden[i]) Then

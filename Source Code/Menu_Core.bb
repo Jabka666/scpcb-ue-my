@@ -586,26 +586,26 @@ Function UpdateMainMenu()
 						Select opt\TextureDetails
 							Case 0
 								;[Block]
-								opt\TextureFloat = 0.8
+								opt\TextureDetailsLevel = 0.8
 								;[End Block]
 							Case 1
 								;[Block]
-								opt\TextureFloat = 0.4
+								opt\TextureDetailsLevel = 0.4
 								;[End Block]
 							Case 2
 								;[Block]
-								opt\TextureFloat = 0.0
+								opt\TextureDetailsLevel = 0.0
 								;[End Block]
 							Case 3
 								;[Block]
-								opt\TextureFloat = -0.4
+								opt\TextureDetailsLevel = -0.4
 								;[End Block]
 							Case 4
 								;[Block]
-								opt\TextureFloat = -0.8
+								opt\TextureDetailsLevel = -0.8
 								;[End Block]
 						End Select
-						TextureLodBias(opt\TextureFloat)
+						TextureLodBias(opt\TextureDetailsLevel)
 						
 						y = y + 50 * MenuScale
 						
@@ -615,6 +615,34 @@ Function UpdateMainMenu()
 						
 						opt\CurrFOV = (SlideBar(x + 310 * MenuScale, y, 150 * MenuScale, opt\CurrFOV * 2.0) / 2.0)
 						opt\FOV = opt\CurrFOV + 40
+						
+						y = y + 50 * MenuScale
+						
+						opt\Anisotropic = Slider5(x + 310 * MenuScale, y, 150 * MenuScale, opt\Anisotropic, 4, "Trilinear", "2x", "4x", "8x", "16x")
+						Select opt\Anisotropic
+							Case 0
+								;[Block]
+								opt\AnisotropicLevel = 0
+								;[End Block]
+							Case 1
+								;[Block]
+								opt\AnisotropicLevel = 2
+								;[End Block]
+							Case 2
+								;[Block]
+								opt\AnisotropicLevel = 4
+								;[End Block]
+							Case 3
+								;[Block]
+								opt\AnisotropicLevel = 8
+								;[End Block]
+							Case 4
+								;[Block]
+								opt\AnisotropicLevel = 16
+								;[End Block]
+						End Select
+						TextureFilter("", 8192)
+						TextureAnisotropic(opt\AnisotropicLevel)
 						;[End Block]
 					ElseIf mm\MainMenuTab = MainMenuTab_Options_Audio
 						;[Block]
@@ -1288,7 +1316,7 @@ Function RenderMainMenu()
 				
 				If mm\MainMenuTab = MainMenuTab_Options_Graphics
 					;[Block]
-					Height = 410 * MenuScale
+					Height = 440 * MenuScale
 					DrawFrame(x, y, Width, Height)
 					
 					y = y + 20 * MenuScale
@@ -1351,7 +1379,7 @@ Function RenderMainMenu()
 					
 					Color(255, 255, 255)
 					Text(x + 20 * MenuScale, y + 4 * MenuScale, "Save textures in the VRAM:")
-					If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
+					If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
 						DrawOptionsTooltip(tX, tY, tW, tH, "vram")
 					EndIf
 					
@@ -1365,6 +1393,14 @@ Function RenderMainMenu()
 						DrawOptionsTooltip(tX, tY, tW, tH, "fov")
 					EndIf
 					;[End Block]
+					
+					y = y + 50 * MenuScale
+					
+					Color(255, 255, 255)
+					Text(x + 20 * MenuScale, y + 4 * MenuScale, "Anisotropic filtering:")
+					If (MouseOn(x + 310 * MenuScale, y - 6 * MenuScale, 150 * MenuScale + 14, 20) And OnSliderID = 0) Lor OnSliderID = 4
+						DrawOptionsTooltip(tX, tY, tW, tH, "anisotropic")
+					EndIf
 				ElseIf mm\MainMenuTab = MainMenuTab_Options_Audio
 					;[Block]
 					If opt\EnableUserTracks Then
@@ -2817,6 +2853,7 @@ Function DrawOptionsTooltip(x%, y%, Width%, Height%, Option$, Value# = 0.0, InGa
 	SetFont(fo\FontID[Font_Default])
 	Color(255, 255, 255)
 	Select Lower(Option)
+			; ~ [GRAPHICS]
 		Case "bump"
 			;[Block]
 			Txt = Chr(34) + "Bump mapping" + Chr(34) + " is used to simulate bumps and dents by distorting the lightmaps."
@@ -2879,6 +2916,16 @@ Function DrawOptionsTooltip(x%, y%, Width%, Height%, Option$, Value# = 0.0, InGa
 			Txt2 = "This option cannot be changed in-game."
 			R = 255
 			;[End Block]
+		Case "fov"
+			;[Block]
+			Txt = Chr(34) + "Field of view" + Chr(34) + " is the amount of game view that is on display during a game."
+			Txt2 = "Current value: " + Int(opt\FOV) + "° (default is 74°)"
+			;[End Block]
+		Case "anisotropic"
+			;[Block]
+			Txt = Chr(34) + "Anisotropic filtering" + Chr(34) + " enhances the image quality of textures on surfaces that are at oblique viewing angles with respect To the camera where the projection of the texture."
+			;[End Block]
+			; ~ [AUDIO]
 		Case "musicvol"
 			;[Block]
 			Txt = "Adjusts the volume of background music. Sliding the bar fully to the left will mute all music."
@@ -2920,6 +2967,7 @@ Function DrawOptionsTooltip(x%, y%, Width%, Height%, Option$, Value# = 0.0, InGa
 			;[Block]
 			Txt = "Re-checks the user tracks directory for any new or removed sound files."
 			;[End Block]
+			; ~ [CONTROLS]
 		Case "mousesensitivity"
 			;[Block]
 			Txt = "Adjusts the speed of the mouse pointer."
@@ -2944,9 +2992,16 @@ Function DrawOptionsTooltip(x%, y%, Width%, Height%, Option$, Value# = 0.0, InGa
 			;[Block]
 			Txt = "Configure the in-game control scheme."
 			;[End Block]
+			; ~ [ADVANCED]
 		Case "hud"
 			;[Block]
-			Txt = "Display the blink and stamina meters."
+			Txt = "Displays the blink and stamina meters."
+			;[End Block]
+		Case "smoothhud"
+			;[Block]
+		    Txt = "Changes the HUD style to Dynamic or Classic one."
+			R = 255
+		    Txt2 = "This option cannot be changed in-game."
 			;[End Block]
 		Case "consoleenable"
 			;[Block]
@@ -2984,17 +3039,6 @@ Function DrawOptionsTooltip(x%, y%, Width%, Height%, Option$, Value# = 0.0, InGa
 			Txt = Chr(34) + "Use launcher" + Chr(34) + " is self-explanatory."
 			R = 255
 			Txt2 = "This option cannot be changed in-game."
-			;[End Block]
-		Case "fov"
-			;[Block]
-			Txt = Chr(34) + "Field of view" + Chr(34) + " is the amount of game view that is on display during a game."
-			Txt2 = "Current value: " + Int(opt\FOV) + "° (default is 74°)"
-			;[End Block]
-		Case "smoothhud"
-			;[Block]
-		    Txt = "Changes the HUD style to Dynamic or Classic one."
-			R = 255
-		    Txt2 = "This option cannot be changed in-game."
 			;[End Block]
 		Case "subtitles"
 			;[Block]

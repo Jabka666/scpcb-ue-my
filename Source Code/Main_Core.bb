@@ -45,23 +45,46 @@ LoadOptionsINI()
 Select opt\TextureDetails
 	Case 0
 		;[Block]
-		opt\TextureFloat = 0.8
+		opt\TextureDetailsLevel = 0.8
 		;[End Block]
 	Case 1
 		;[Block]
-		opt\TextureFloat = 0.4
+		opt\TextureDetailsLevel = 0.4
 		;[End Block]
 	Case 2
 		;[Block]
-		opt\TextureFloat = 0.0
+		opt\TextureDetailsLevel = 0.0
 		;[End Block]
 	Case 3
 		;[Block]
-		opt\TextureFloat = -0.4
+		opt\TextureDetailsLevel = -0.4
 		;[End Block]
 	Case 4
 		;[Block]
-		opt\TextureFloat = -0.8
+		opt\TextureDetailsLevel = -0.8
+		;[End Block]
+End Select
+
+Select opt\Anisotropic
+	Case 0
+		;[Block]
+		opt\AnisotropicLevel = 0
+		;[End Block]
+	Case 1
+		;[Block]
+		opt\AnisotropicLevel = 2
+		;[End Block]
+	Case 2
+		;[Block]
+		opt\AnisotropicLevel = 4
+		;[End Block]
+	Case 3
+		;[Block]
+		opt\AnisotropicLevel = 8
+		;[End Block]
+	Case 4
+		;[Block]
+		opt\AnisotropicLevel = 16
 		;[End Block]
 End Select
 
@@ -7969,11 +7992,11 @@ Function DrawMenu()
 					
 					Color(100, 100, 100)
 					Text(x, y + 4 * MenuScale, "Save textures in the VRAM:")	
-					If MouseOn(x + 270 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
+					If MouseOn(x + 270 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
 						DrawOptionsTooltip(tX, tY, tW, tH, "vram")
 					EndIf
 					
-					y = y + 40 * MenuScale
+					y = y + 50 * MenuScale
 					
 					Color(255, 255, 255)
 					Text(x, y + 4 * MenuScale, "Field of view:")
@@ -7981,6 +8004,14 @@ Function DrawMenu()
 					Text(x + 5 * MenuScale, y + 29 * MenuScale, Int(opt\FOV) + "°")
 					If MouseOn(x + 270 * MenuScale, y + 6 * MenuScale, 100 * MenuScale + 14, 20)
 						DrawOptionsTooltip(tX, tY, tW, tH, "fov")
+					EndIf
+					
+					y = y + 50 * MenuScale
+					
+					Color(255, 255, 255)
+					Text(x, y + 4 * MenuScale, "Anisotropic filtering:")
+					If (MouseOn(x + 270 * MenuScale, y - 6 * MenuScale, 100 * MenuScale + 14, 20) And OnSliderID = 0) Lor OnSliderID = 4
+						DrawOptionsTooltip(tX, tY, tW, tH, "anisotropic")
 					EndIf
 					;[End Block]
 				Case 2 ; ~ Audio
@@ -8272,7 +8303,7 @@ Function UpdateMenu()
 		If AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg =< 0 Then
 			; ~ Just save this line, ok?
 		ElseIf AchievementsMenu =< 0 And OptionsMenu > 0 And QuitMsg =< 0 And me\KillTimer >= 0.0
-			If DrawButton(x + 101 * MenuScale, y + 410 * MenuScale, 230 * MenuScale, 60 * MenuScale, "Back") Then
+			If DrawButton(x + 101 * MenuScale, y + 450 * MenuScale, 230 * MenuScale, 60 * MenuScale, "Back") Then
 				AchievementsMenu = 0
 				OptionsMenu = 0
 				QuitMsg = 0
@@ -8280,7 +8311,9 @@ Function UpdateMenu()
 				SaveOptionsINI()
 				
 				AntiAlias(opt\AntiAliasing)
-				TextureLodBias(opt\TextureFloat)
+				TextureLodBias(opt\TextureDetailsLevel)
+				TextureFilter("", 8192)
+				TextureAnisotropic(opt\AnisotropicLevel)
 				mm\ShouldDeleteGadgets = True
 			EndIf
 			
@@ -8334,36 +8367,64 @@ Function UpdateMenu()
 					Select opt\TextureDetails
 						Case 0
 							;[Block]
-							opt\TextureFloat = 0.8
+							opt\TextureDetailsLevel = 0.8
 							;[End Block]
 						Case 1
 							;[Block]
-							opt\TextureFloat = 0.4
+							opt\TextureDetailsLevel = 0.4
 							;[End Block]
 						Case 2
 							;[Block]
-							opt\TextureFloat = 0.0
+							opt\TextureDetailsLevel = 0.0
 							;[End Block]
 						Case 3
 							;[Block]
-							opt\TextureFloat = -0.4
+							opt\TextureDetailsLevel = -0.4
 							;[End Block]
 						Case 4
 							;[Block]
-							opt\TextureFloat = -0.8
+							opt\TextureDetailsLevel = -0.8
 							;[End Block]
 					End Select
-					TextureLodBias(opt\TextureFloat)
+					TextureLodBias(opt\TextureDetailsLevel)
 					
 					y = y + 50 * MenuScale
 					
 					opt\SaveTexturesInVRAM = DrawTick(x + 270 * MenuScale, y + MenuScale, opt\SaveTexturesInVRAM, True)
 					
-					y = y + 40 * MenuScale
+					y = y + 50 * MenuScale
 					
 					opt\CurrFOV = (SlideBar(x + 270 * MenuScale, y, 100 * MenuScale, opt\CurrFOV * 2.0) / 2.0)
 					opt\FOV = opt\CurrFOV + 40
 					CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * opt\RealGraphicWidth / opt\RealGraphicHeight)) / 2.0))
+					
+					y = y + 50 * MenuScale
+					
+					opt\Anisotropic = Slider5(x + 270 * MenuScale, y, 100 * MenuScale, opt\Anisotropic, 4, "Trilinear", "2x", "4x", "8x", "16x")
+					Select opt\Anisotropic
+						Case 0
+							;[Block]
+							opt\AnisotropicLevel = 0
+							;[End Block]
+						Case 1
+							;[Block]
+							opt\AnisotropicLevel = 2
+							;[End Block]
+						Case 2
+							;[Block]
+							opt\AnisotropicLevel = 4
+							;[End Block]
+						Case 3
+							;[Block]
+							opt\AnisotropicLevel = 8
+							;[End Block]
+						Case 4
+							;[Block]
+							opt\AnisotropicLevel = 16
+							;[End Block]
+					End Select
+					TextureFilter("", 8192)
+					TextureAnisotropic(opt\AnisotropicLevel)
 					;[End Block]
 				Case 2 ; ~ Audio
 					;[Block]
@@ -8834,7 +8895,7 @@ Function LoadEntities()
 	CameraRange(Camera, 0.01, opt\CameraFogFar)
 	CameraFogMode(Camera, 1)
 	CameraFogRange(Camera, opt\CameraFogNear, opt\CameraFogFar)
-	AmbientLight(opt\Brightness, opt\Brightness, opt\Brightness)
+	AmbientLight(BRIGHTNESS, BRIGHTNESS, BRIGHTNESS)
 	
 	ScreenTexs[0] = CreateTextureUsingCacheSystem(512, 512, 1)
 	ScreenTexs[1] = CreateTextureUsingCacheSystem(512, 512, 1)
@@ -9357,7 +9418,9 @@ Function LoadEntities()
         HideEntity(o\MTModelID[i])
     Next
 	
-	TextureLodBias(opt\TextureFloat)
+	TextureLodBias(opt\TextureDetailsLevel)
+	TextureFilter("", 8192)
+	TextureAnisotropic(opt\AnisotropicLevel)
 	
 	DrawLoading(30)
 	

@@ -6,9 +6,7 @@ Type Difficulty
 	Field SaveType%
 	Field OtherFactors%
 	Field Customizable%
-	Field R%
-	Field G%
-	Field B%
+	Field R%, G%, B%
 End Type
 
 Global difficulties.Difficulty[4]
