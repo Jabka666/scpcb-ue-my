@@ -364,12 +364,12 @@ Type Options
 	Field AchvMsgEnabled%
 	Field CanOpenConsole%
 	Field HUDEnabled%
+	Field SmoothHUD%
 	Field ShowFPS%
 	Field ConsoleOpening%
 	Field FrameLimit%, CurrFrameLimit#
 	Field PlayStartup%
 	Field LauncherEnabled%
-	Field BarStyle%
 	Field EnableSubtitles%
 	Field SubColorR%, SubColorG%, SubColorB%
 	; ~ [CONTROLS]
@@ -435,6 +435,8 @@ Function LoadOptionsINI()
 	
 	opt\HUDEnabled = GetINIInt(OptionFile, "Advanced", "Enable HUD")
 	
+	opt\SmoothHUD = GetINIInt(OptionFile, "Advanced", "Smooth HUD")
+	
 	opt\ShowFPS = GetINIInt(OptionFile, "Advanced", "Show FPS")
 	
 	opt\ConsoleOpening = GetINIInt(OptionFile, "Advanced", "Console Auto Opening")
@@ -445,8 +447,6 @@ Function LoadOptionsINI()
 	opt\PlayStartup = GetINIInt(OptionFile, "Advanced", "Play Startup Videos")
 	
 	opt\LauncherEnabled = GetINIInt(OptionFile, "Advanced", "Launcher Enabled")
-	
-	opt\BarStyle = GetINIInt(OptionFile, "Advanced", "Bar Style")
 	
 	opt\EnableSubtitles = GetINIInt(OptionFile, "Advanced", "Enable Subtitles")
 	
@@ -529,6 +529,8 @@ Function SaveOptionsINI(SaveGlobal% = False)
 	
 	PutINIValue(OptionFile, "Advanced", "Enable HUD", opt\HUDEnabled)
 	
+	PutINIValue(OptionFile, "Advanced", "Smooth HUD", opt\SmoothHUD)
+	
 	PutINIValue(OptionFile, "Advanced", "Show FPS", opt\ShowFPS)
 	
 	PutINIValue(OptionFile, "Advanced", "Frame Limit", opt\FrameLimit)
@@ -542,8 +544,6 @@ Function SaveOptionsINI(SaveGlobal% = False)
 	PutINIValue(OptionFile, "Advanced", "Play Startup Videos", opt\PlayStartup)
 	
 	PutINIValue(OptionFile, "Advanced", "Launcher Enabled", opt\LauncherEnabled)
-	
-	PutINIValue(OptionFile, "Advanced", "Bar Style", opt\BarStyle)
 	
 	PutINIValue(OptionFile, "Advanced", "Enable Subtitles", opt\EnableSubtitles)
 	
@@ -634,6 +634,8 @@ Function ResetOptionsINI()
 	
 	opt\HUDEnabled = 1
 	
+	opt\SmoothHUD = 1
+	
 	opt\ShowFPS = 0
 	
 	opt\CurrFrameLimit = 0.0
@@ -648,8 +650,6 @@ Function ResetOptionsINI()
 	opt\PlayStartup = 1
 	
 	opt\LauncherEnabled = 1
-	
-	opt\BarStyle = 0
 	
 	opt\EnableSubtitles = 1
 	

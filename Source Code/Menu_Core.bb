@@ -556,8 +556,6 @@ Function UpdateMainMenu()
 					
 					If mm\MainMenuTab = MainMenuTab_Options_Graphics
 						;[Block]
-						Height = 410 * MenuScale
-						
 						y = y + 20 * MenuScale
 						
 						opt\BumpEnabled = DrawTick(x + 310 * MenuScale, y + MenuScale, opt\BumpEnabled)
@@ -620,8 +618,6 @@ Function UpdateMainMenu()
 						;[End Block]
 					ElseIf mm\MainMenuTab = MainMenuTab_Options_Audio
 						;[Block]
-						Height = 220 * MenuScale
-						
 						y = y + 20 * MenuScale
 						
 						opt\MusicVolume = (SlideBar(x + 310 * MenuScale, y, 150 * MenuScale, opt\MusicVolume * 100.0) / 100.0)
@@ -700,8 +696,6 @@ Function UpdateMainMenu()
 						;[End Block]
 					ElseIf mm\MainMenuTab = MainMenuTab_Options_Controls
 						;[Block]
-						Height = 300 * MenuScale
-						
 						y = y + 20 * MenuScale
 						
 						opt\MouseSensitivity = (SlideBar(x + 310 * MenuScale, y, 150 * MenuScale, (opt\MouseSensitivity + 0.5) * 100.0) / 100.0) - 0.5
@@ -866,7 +860,7 @@ Function UpdateMainMenu()
 						Else
 							y = y + 20 * MenuScale
 							
-							If opt\HUDEnabled Then opt\BarStyle = DrawTick(x + 310 * MenuScale, y + MenuScale, opt\BarStyle)
+							If opt\HUDEnabled Then opt\SmoothHUD = DrawTick(x + 310 * MenuScale, y + MenuScale, opt\SmoothHUD)
 							
 							y = y + 30 * MenuScale
 							
@@ -917,7 +911,7 @@ Function UpdateMainMenu()
 							
 							y = y + 60 * MenuScale
 							
-							If DrawButton(x + 20 * MenuScale, y, 220, 30, "RESET OPTIONS", False) Then
+							If DrawButton(x + 20 * MenuScale, y, 220 * MenuScale, 30 * MenuScale, "RESET OPTIONS", False) Then
 								Delay(200)
 								ResetOptionsINI()
 								SaveOptionsINI(True)
@@ -928,19 +922,13 @@ Function UpdateMainMenu()
 					;[End Block]
 				Case MainMenuTab_Load_Map
 					;[Block]
-					y = y + Height + 20 * MenuScale
-					Width = 580 * MenuScale
-					Height = 430 * MenuScale
-					
 					x = 159 * MenuScale
 					y = 286 * MenuScale
 					
-					Width = 400 * MenuScale
+					Width = 580 * MenuScale
 					Height = 70 * MenuScale
 					
 					y = y + Height + 20 * MenuScale
-					Width = 580 * MenuScale
-					Height = 350 * MenuScale
 					
 					If mm\CurrLoadGamePage < Ceil(Float(SavedMapsAmount) / 5.0) - 1 Then 
 						If DrawButton(x + Width - 50 * MenuScale, y + 440 * MenuScale, 50 * MenuScale, 50 * MenuScale, ">") Then
@@ -990,7 +978,11 @@ Function UpdateMainMenu()
 	Color(255, 255, 255)
 	SetFont(fo\FontID[Font_Console])
 	Text(20, opt\GraphicHeight - 50, "v" + VersionNumber)
-	If opt\ShowFPS Then SetFont(fo\FontID[Font_Console]) : Text(20, opt\GraphicHeight - 30, "FPS: " + fps\fps) : SetFont(fo\FontID[Font_Default])
+	If opt\ShowFPS Then
+		SetFont(fo\FontID[Font_Console])
+		Text(20, opt\GraphicHeight - 30, "FPS: " + fps\fps)
+		SetFont(fo\FontID[Font_Default])
+	EndIf
 	
 	If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	
@@ -1570,14 +1562,9 @@ Function RenderMainMenu()
 						
 						If opt\HUDEnabled Then
 							Color(255, 255, 255)
-							Text(x + 20 * MenuScale, y + 4 * MenuScale, "Bar style:")
-							If opt\BarStyle = 1 Then
-								Text(x + 350 * MenuScale, y + 4 * MenuScale, "Dymanic")
-							Else
-								Text(x + 350 * MenuScale, y + 4 * MenuScale, "Classic")
-							EndIf 
+							Text(x + 20 * MenuScale, y + 4 * MenuScale, "Smooth HUD:")
 							If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
-								DrawOptionsTooltip(tX, tY, tW, tH, "barstyle")
+								DrawOptionsTooltip(tX, tY, tW, tH, "smoothhud")
 							EndIf
 						EndIf
 						
@@ -1982,7 +1969,7 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 		y = opt\GraphicHeight / 2 + 30 - 100
 		
 		Rect(x, y, Width + 4, Height, False)
-		If opt\BarStyle = 1 Then
+		If opt\SmoothHUD Then
 		    Color(100, 100, 100)
 		    Rect(x + 3, y + 3, Float(Percent * 2.98), 14)
 		Else
@@ -3003,9 +2990,9 @@ Function DrawOptionsTooltip(x%, y%, Width%, Height%, Option$, Value# = 0.0, InGa
 			Txt = Chr(34) + "Field of view" + Chr(34) + " is the amount of game view that is on display during a game."
 			Txt2 = "Current value: " + Int(opt\FOV) + "° (default is 74°)"
 			;[End Block]
-		Case "barstyle"
+		Case "smoothhud"
 			;[Block]
-		    Txt = "Changes the Bar's style to Dynamic or Classic one."
+		    Txt = "Changes the HUD style to Dynamic or Classic one."
 			R = 255
 		    Txt2 = "This option cannot be changed in-game."
 			;[End Block]

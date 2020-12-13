@@ -4895,7 +4895,7 @@ Function DrawGUI()
 		
 		Color(255, 255, 255)
 		Rect(x, y, Width, Height, False)
-		If opt\BarStyle = 1 Then
+		If opt\SmoothHUD Then
 			If me\BlinkTimer < 160.0 Then
 		    	Color(100, 0, 0)
 	    	Else
@@ -4933,7 +4933,7 @@ Function DrawGUI()
 		
 		Color(255, 255, 255)
 		Rect(x, y, Width, Height, False)
-		If opt\BarStyle = 1 Then
+		If opt\SmoothHUD Then
 			If me\Stamina < 27.0 Then
 		  	    Color(50, 0, 0)
 	    	Else
@@ -5299,7 +5299,7 @@ Function DrawGUI()
 							x = opt\GraphicWidth / 2 - Width / 2
 							y = opt\GraphicHeight / 2 + 80
 							Rect(x, y, Width + 4, Height, False)
-							If opt\BarStyle = 1 Then
+							If opt\SmoothHUD Then
 								Color(100, 100, 100)	
 								Rect(x + 3, y + 3, Float(SelectedItem\State3 * (Width - 6.0) / 100.0), 14)	
 							Else
@@ -5323,7 +5323,7 @@ Function DrawGUI()
 							x = opt\GraphicWidth / 2 - Width / 2
 							y = opt\GraphicHeight / 2 + 80
 							Rect(x, y, Width + 4, Height, False)
-							If opt\BarStyle = 1 Then
+							If opt\SmoothHUD Then
 								Color(100, 100, 100)	
 								Rect(x + 3, y + 3, Float(SelectedItem\State3 * (Width - 6.0) / 100.0), 14)	
 							Else
@@ -5347,7 +5347,7 @@ Function DrawGUI()
 							x = opt\GraphicWidth / 2 - Width / 2
 							y = opt\GraphicHeight / 2 + 80
 							Rect(x, y, Width + 4, Height, False)
-							If opt\BarStyle = 1 Then
+							If opt\SmoothHUD Then
 								Color(100, 100, 100)	
 								Rect(x + 3, y + 3, Float(SelectedItem\State3 * (Width - 6.0) / 100.0), 14)	
 							Else
@@ -5374,7 +5374,7 @@ Function DrawGUI()
 						x = opt\GraphicWidth / 2 - Width / 2
 						y = opt\GraphicHeight / 2 + 80
 						Rect(x, y, Width + 4, Height, False)
-						If opt\BarStyle = 1 Then
+						If opt\SmoothHUD Then
 							Color(100, 100, 100)	
 							Rect(x + 3, y + 3, Float(SelectedItem\State * (Width - 6.0) / 100.0), 14)	
 						Else
@@ -5532,7 +5532,7 @@ Function DrawGUI()
 						x = opt\GraphicWidth / 2 - Width / 2
 						y = opt\GraphicHeight / 2 + 80.0
 						Rect(x, y, Width + 4, Height, False)
-						If opt\BarStyle = 1 Then
+						If opt\SmoothHUD Then
 							Color(100, 100, 100)	
 					        Rect(x + 3, y + 3, Float(SelectedItem\State * (Width - 6.0) / 100.0), 14)	
 						Else
@@ -5551,7 +5551,7 @@ Function DrawGUI()
 					x = opt\GraphicWidth / 2 - Width / 2
 					y = opt\GraphicHeight / 2 + 80.0
 					Rect(x, y, Width + 4, Height, False)
-					If opt\BarStyle = 1 Then
+					If opt\SmoothHUD Then
 						Color(100, 100, 100)	
 						Rect(x + 3, y + 3, Float(SelectedItem\State * (Width - 6.0) / 100.0), 14)	
 					Else
@@ -5570,7 +5570,7 @@ Function DrawGUI()
 						x = opt\GraphicWidth / 2 - Width / 2
 						y = opt\GraphicHeight / 2 + 80
 						Rect(x, y, Width + 4, Height, False)
-						If opt\BarStyle = 1 Then
+						If opt\SmoothHUD Then
 							Color(100, 100, 100)	
 					        Rect(x + 3, y + 3, Float(SelectedItem\State * (Width - 6.0) / 100.0), 14)	
 						Else
@@ -5776,7 +5776,7 @@ Function DrawGUI()
 						x = opt\GraphicWidth / 2 - Width / 2
 						y = opt\GraphicHeight / 2 + 80
 						Rect(x, y, Width + 4, Height, False)
-						If opt\BarStyle = 1 Then
+						If opt\SmoothHUD Then
 							Color(100, 100, 100)	
 					        Rect(x + 3, y + 3, Float(SelectedItem\State * (Width - 6.0) / 100.0), 14)	
 						Else
@@ -5817,7 +5817,7 @@ Function DrawGUI()
 					    x = opt\GraphicWidth / 2 - Width / 2
 					    y = opt\GraphicHeight / 2 + 80
 					    Rect(x, y, Width + 4, Height, False)
-						If opt\BarStyle = 1 Then
+						If opt\SmoothHUD Then
 							Color(100, 100, 100)	
 					        Rect(x + 3, y + 3, Float(SelectedItem\State * (Width - 6.0) / 100.0), 14)	
 						Else
@@ -5837,7 +5837,7 @@ Function DrawGUI()
 						x = opt\GraphicWidth / 2 - Width / 2
 						y = opt\GraphicHeight / 2 + 80
 						Rect(x, y, Width + 4, Height, False)
-						If opt\BarStyle = 1 Then
+						If opt\SmoothHUD Then
 							Color(100, 100, 100)	
 							Rect(x + 3, y + 3, Float(SelectedItem\State3 * (Width - 6.0) / 100.0), 14)	
 						Else
@@ -8786,7 +8786,7 @@ Function LoadEntities()
 	MaskImage(tt\ImageID[0], 255, 255, 0)
 	ScaleImage(tt\ImageID[0], MenuScale, MenuScale)
 	
-	If opt\BarStyle = 0 Then
+	If (Not opt\SmoothHUD) Then
 		tt\ImageID[1] = LoadImage_Strict("GFX\blink_meter_red.png")
 		
 		tt\ImageID[2] = LoadImage_Strict("GFX\stamina_meter.png")
