@@ -153,8 +153,6 @@ Global MenuScale# = opt\GraphicHeight / 1024.0
 
 SetBuffer(BackBuffer())
 
-SeedRnd(MilliSecs())
-
 Const TICK_DURATION# = 70.0 / 60.0
 
 Type FramesPerSeconds
@@ -168,6 +166,8 @@ Type FramesPerSeconds
 End Type
 
 Global fps.FramesPerSeconds = New FramesPerSeconds
+
+SeedRnd(MilliSecs())
 
 Global GameSaved%
 
@@ -4531,16 +4531,15 @@ Function MouseLook()
 		
 		; ~ Update the smoothing que to smooth the movement of the mouse
 		mo\Mouse_X_Speed_1 = CurveValue(MouseXSpeed() * (opt\MouseSensitivity + 0.6) , mo\Mouse_X_Speed_1, (6.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing) 
-		If IsNaN(mo\Mouse_X_Speed_1) Then
-			mo\Mouse_X_Speed_1 = 0.0
-			mo\Mouse_Y_Speed_1 = 0.0
-		EndIf
 		If opt\InvertMouse Then
 			mo\Mouse_Y_Speed_1 = CurveValue(-MouseYSpeed() * (opt\MouseSensitivity + 0.6), mo\Mouse_Y_Speed_1, (6.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing)
 		Else
 			mo\Mouse_Y_Speed_1 = CurveValue(MouseYSpeed () * (opt\MouseSensitivity + 0.6), mo\Mouse_Y_Speed_1, (6.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing)
 		EndIf
-		If IsNaN(mo\Mouse_Y_Speed_1) Then mo\Mouse_Y_Speed_1 = 0.0
+		If IsNaN(mo\Mouse_Y_Speed_1) Then
+			mo\Mouse_X_Speed_1 = 0.0
+			mo\Mouse_Y_Speed_1 = 0.0
+		EndIf
 		
 		Local The_Yaw# = ((mo\Mouse_X_Speed_1)) * mo\Mouselook_X_Inc / (1.0 + wi\BallisticVest)
 		Local The_Pitch# = ((mo\Mouse_Y_Speed_1)) * mo\Mouselook_y_Inc / (1.0 + wi\BallisticVest)
@@ -7992,7 +7991,7 @@ Function DrawMenu()
 					
 					Color(100, 100, 100)
 					Text(x, y + 4 * MenuScale, "Save textures in the VRAM:")	
-					If MouseOn(x + 270 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
+					If MouseOn(x + 270 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
 						DrawOptionsTooltip(tX, tY, tW, tH, "vram")
 					EndIf
 					
@@ -8002,7 +8001,7 @@ Function DrawMenu()
 					Text(x, y + 4 * MenuScale, "Field of view:")
 					Color(255, 255, 0)
 					Text(x + 5 * MenuScale, y + 29 * MenuScale, Int(opt\FOV) + "°")
-					If MouseOn(x + 270 * MenuScale, y + 6 * MenuScale, 100 * MenuScale + 14, 20)
+					If MouseOn(x + 270 * MenuScale, y + 6 * MenuScale, 100 * MenuScale + 14, 20) And OnSliderID = 0
 						DrawOptionsTooltip(tX, tY, tW, tH, "fov")
 					EndIf
 					

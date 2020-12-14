@@ -418,7 +418,7 @@ Function LoadFont_Strict(File$ = "Tahoma", Height% = 13, IgnoreScaling% = False)
 	
 	If Tmp = 0 Then
 		If FileType(File) <> 1 Then RuntimeError("Font " + File + " not found.")
-		Tmp = LoadFont(File, (Int(Height * (opt\GraphicHeight / 1024))) * (Not IgnoreScaling) + IgnoreScaling * Height)
+		Tmp = LoadFont(File, (Int(Height * (opt\GraphicHeight / 1024.0))) * (Not IgnoreScaling) + IgnoreScaling * Height)
 		If Tmp = 0 Then RuntimeError("Failed to load Font: " + File)
 	EndIf
 	Return(Tmp)

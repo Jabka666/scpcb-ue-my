@@ -332,12 +332,8 @@ Function UpdateMainMenu()
 				Case MainMenuTab_New_Game
 					;[Block]
 					x = 159 * MenuScale
-					y = 286 * MenuScale
+					y = 376 * MenuScale
 					
-					Width = 400 * MenuScale
-					Height = 70 * MenuScale
-					
-					y = y + Height + 20 * MenuScale
 					Width = 580 * MenuScale
 					Height = 330 * MenuScale
 					
@@ -436,17 +432,9 @@ Function UpdateMainMenu()
 					;[End Block]
 				Case MainMenuTab_Load_Game
 					;[Block]
-					y = y + Height + 20 * MenuScale
-					Width = 580 * MenuScale
-					Height = 430 * MenuScale
-					
 					x = 159 * MenuScale
-					y = 286 * MenuScale
+					y = 376 * MenuScale
 					
-					Width = 400 * MenuScale
-					Height = 70 * MenuScale
-					
-					y = y + Height + 20 * MenuScale
 					Width = 580 * MenuScale
 					Height = 296 * MenuScale
 					
@@ -533,12 +521,8 @@ Function UpdateMainMenu()
 				Case MainMenuTab_Options_Graphics, MainMenuTab_Options_Audio, MainMenuTab_Options_Controls, MainMenuTab_Options_Advanced
 					;[Block]
 					x = 159 * MenuScale
-					y = 286 * MenuScale
+					y = 376 * MenuScale
 					
-					Width = 400 * MenuScale
-					Height = 70 * MenuScale
-					
-					y = y + Height + 20 * MenuScale
 					Width = 580 * MenuScale
 					Height = 60 * MenuScale
 					
@@ -951,12 +935,10 @@ Function UpdateMainMenu()
 				Case MainMenuTab_Load_Map
 					;[Block]
 					x = 159 * MenuScale
-					y = 286 * MenuScale
+					y = 376 * MenuScale
 					
 					Width = 580 * MenuScale
-					Height = 70 * MenuScale
-					
-					y = y + Height + 20 * MenuScale
+					Height = 350 * MenuScale
 					
 					If mm\CurrLoadGamePage < Ceil(Float(SavedMapsAmount) / 5.0) - 1 Then 
 						If DrawButton(x + Width - 50 * MenuScale, y + 440 * MenuScale, 50 * MenuScale, 50 * MenuScale, ">") Then
@@ -1008,7 +990,7 @@ Function UpdateMainMenu()
 	Text(20, opt\GraphicHeight - 50, "v" + VersionNumber)
 	If opt\ShowFPS Then
 		SetFont(fo\FontID[Font_Console])
-		Text(20, opt\GraphicHeight - 30, "FPS: " + fps\fps)
+		Text(20, opt\GraphicHeight - 30, "FPS: " + fps\FPS)
 		SetFont(fo\FontID[Font_Default])
 	EndIf
 	
@@ -1379,7 +1361,7 @@ Function RenderMainMenu()
 					
 					Color(255, 255, 255)
 					Text(x + 20 * MenuScale, y + 4 * MenuScale, "Save textures in the VRAM:")
-					If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale)
+					If MouseOn(x + 310 * MenuScale, y + MenuScale, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
 						DrawOptionsTooltip(tX, tY, tW, tH, "vram")
 					EndIf
 					
@@ -1389,10 +1371,9 @@ Function RenderMainMenu()
 					Text(x + 20 * MenuScale, y + 4 * MenuScale, "Field of view:")
 					Color(255, 255, 0)
 					Text(x + 25 * MenuScale, y + 30 * MenuScale, Int(opt\FOV) + "°")
-					If MouseOn(x + 310 * MenuScale, y + 6 * MenuScale, 150 * MenuScale + 14, 20)
+					If MouseOn(x + 310 * MenuScale, y + 6 * MenuScale, 150 * MenuScale + 14, 20) And OnSliderID = 0
 						DrawOptionsTooltip(tX, tY, tW, tH, "fov")
 					EndIf
-					;[End Block]
 					
 					y = y + 50 * MenuScale
 					
@@ -1401,6 +1382,7 @@ Function RenderMainMenu()
 					If (MouseOn(x + 310 * MenuScale, y - 6 * MenuScale, 150 * MenuScale + 14, 20) And OnSliderID = 0) Lor OnSliderID = 4
 						DrawOptionsTooltip(tX, tY, tW, tH, "anisotropic")
 					EndIf
+					;[End Block]
 				ElseIf mm\MainMenuTab = MainMenuTab_Options_Audio
 					;[Block]
 					If opt\EnableUserTracks Then
@@ -1856,7 +1838,7 @@ Function UpdateLauncher(lnchr.Launcher)
 			Exit
 		EndIf
 		
-		If DrawLauncherButton(LauncherWidth - 30 - 90, LauncherHeight - 50, 100, 30, "EXIT", False, False) Then 
+		If DrawLauncherButton(LauncherWidth - 30 - 90, LauncherHeight - 50, 100, 30, "EXIT", False, False) Then
 			Quit = True
 			Exit
 		EndIf
@@ -1872,7 +1854,6 @@ Function UpdateLauncher(lnchr.Launcher)
 	
 	FreeImage(LauncherArrowIMG)
 	FreeImage(LauncherIMG)
-	FreeFont(fo\FontID[Font_Default])
 End Function
 
 Type LoadingScreens
