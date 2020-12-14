@@ -9686,10 +9686,10 @@ Function UpdateEndings()
 											
 											e\EventState = 70.0 * 85.0
 											
-											me\SelectedEnding = "B3"
+											me\SelectedEnding = "B1"
 										EndIf
 									Else
-										If me\SelectedEnding = "B3" Then
+										If me\SelectedEnding = "B1" Then
 											e\room\NPC[0]\EnemyX = EntityX(e\room\Objects[11], True) + Sin(MilliSecs() / 25.0) * 3.0
 											e\room\NPC[0]\EnemyY = EntityY(e\room\Objects[11], True) + Cos(MilliSecs() / 85.0) + 9.0
 											e\room\NPC[0]\EnemyZ = EntityZ(e\room\Objects[11], True) + Cos(MilliSecs() / 25.0) * 3.0
