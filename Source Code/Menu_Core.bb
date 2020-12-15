@@ -1099,7 +1099,7 @@ Function RenderMainMenu()
 	
 	If opt\AntiAliasing And opt\DisplayMode <> 0 Then
 		opt\AntiAliasing = False
-		PutINIValue(OptionFile, "Graphics", "Anti Aliasing", opt\AntiAliasing)
+		PutINIValue(OptionFile, "Graphics", "Anti-Aliasing", opt\AntiAliasing)
 	EndIf
 	
 	If mm\MainMenuTab <> MainMenuTab_Default Then

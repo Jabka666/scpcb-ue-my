@@ -394,7 +394,7 @@ Function LoadOptionsINI()
 	
 	opt\ParticleAmount = GetINIInt(OptionFile, "Graphics", "Particle Amount")
 	
-	opt\AntiAliasing = GetINIInt(OptionFile, "Graphics", "Anti Aliasing")
+	opt\AntiAliasing = GetINIInt(OptionFile, "Graphics", "Anti-Aliasing")
 	
 	opt\BumpEnabled = GetINIInt(OptionFile, "Graphics", "Enable Bump Mapping")
 	
@@ -484,7 +484,7 @@ Function LoadOptionsINI()
 	
 	opt\MouseSmoothing = GetINIFloat(OptionFile, "Controls", "Mouse Smoothing", 1.0)
 	
-	opt\InvertMouse = GetINIInt(OptionFile, "Controls", "Invert Mouse By Y Axis")
+	opt\InvertMouse = GetINIInt(OptionFile, "Controls", "Invert Mouse By Y-Axis")
 	
 	opt\MouseSensitivity = GetINIFloat(OptionFile, "Controls", "Mouse Sensitivity")
 	
@@ -511,7 +511,7 @@ Function SaveOptionsINI(SaveGlobal% = False)
 	
 	PutINIValue(OptionFile, "Graphics", "Screen Gamma", opt\ScreenGamma)
 	
-	PutINIValue(OptionFile, "Graphics", "Anti Aliasing", opt\AntiAliasing)
+	PutINIValue(OptionFile, "Graphics", "Anti-Aliasing", opt\AntiAliasing)
 	
 	PutINIValue(OptionFile, "Graphics", "VSync", opt\VSync)
 	
@@ -581,7 +581,7 @@ Function SaveOptionsINI(SaveGlobal% = False)
 	
 	PutINIValue(OptionFile, "Controls", "Mouse Sensitivity", opt\MouseSensitivity)
 	
-	PutINIValue(OptionFile, "Controls", "Invert Mouse By Y Axis", opt\InvertMouse)
+	PutINIValue(OptionFile, "Controls", "Invert Mouse By Y-Axis", opt\InvertMouse)
 	
 	PutINIValue(OptionFile, "Controls", "Mouse Smoothing", opt\MouseSmoothing)
 	
