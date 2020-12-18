@@ -176,11 +176,11 @@ Function UpdateMainMenu()
 		If mm\MainMenuTab = MainMenuTab_Default Then
 			For i = 0 To 3
 				Temp = False
-				x = 159 * MenuScale
-				y = (286 + 100 * i) * MenuScale
+				x = 159
+				y = (286 + 100 * i)
 				
-				Width = 400 * MenuScale
-				Height = 70 * MenuScale
+				Width = 400
+				Height = 70
 				
 				Temp = (mo\MouseHit1 And MouseOn(x, y, Width, Height))
 				
@@ -2142,6 +2142,22 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 	DeleteMenuGadgets()
 End Function
 
+Function Rect2(x%, y%, Width%, Height%, Solid% = True)
+	x = x * MenuScale
+	y = y * MenuScale
+	Width = Width * MenuScale
+	Height = Height * MenuScale
+	
+	Rect(x, y, Width, Height, Solid)
+End Function
+
+Function Text2(x%, y%, Txt$, AlignX% = False, AlignY% = False)
+	x = x * MenuScale
+	y = y * MenuScale
+	
+	Text(x, y, Txt, AlignX, AlignY)
+End Function
+
 Function DrawTiledImageRect(Img%, SrcX%, SrcY%, SrcWidth#, SrcHeight#, x%, y%, Width%, Height%)
 	Local x2% = x
 	
@@ -2149,8 +2165,8 @@ Function DrawTiledImageRect(Img%, SrcX%, SrcY%, SrcWidth#, SrcHeight#, x%, y%, W
 		Local y2% = y
 		
 		While y2 < y + Height
-			If x2 + SrcWidth > x + Width Then SrcWidth = SrcWidth - Max((x2 + SrcWidth) - (x + Width), 1.0)
-			If y2 + SrcHeight > y + Height Then SrcHeight = SrcHeight - Max((y2 + SrcHeight) - (y + Height), 1.0)
+			If x2 + SrcWidth > x + Width Then SrcWidth = SrcWidth - Max((x2 + SrcWidth) - (x + Width), MenuScale)
+			If y2 + SrcHeight > y + Height Then SrcHeight = SrcHeight - Max((y2 + SrcHeight) - (y + Height), MenuScale)
 			DrawImageRect(Img, x2, y2, SrcX, SrcY, SrcWidth, SrcHeight)
 			y2 = y2 + SrcHeight
 		Wend
@@ -2159,6 +2175,11 @@ Function DrawTiledImageRect(Img%, SrcX%, SrcY%, SrcWidth#, SrcHeight#, x%, y%, W
 End Function
 
 Function DrawFrame(x%, y%, Width%, Height%, xOffset% = 0, yOffset% = 0)
+	x = x * MenuScale
+	y = y * MenuScale
+	Width = Width * MenuScale
+	Height = Height * MenuScale
+	
 	Color(255, 255, 255)
 	DrawTiledImageRect(MenuWhite, xOffset, (y Mod (256 * MenuScale)), 512 * MenuScale, 512 * MenuScale, x, y, Width, Height)
 	DrawTiledImageRect(MenuBlack, yOffset, (y Mod (256 * MenuScale)), 512 * MenuScale, 512 * MenuScale, x + (3 * MenuScale), y + (3 * MenuScale), Width - (6 * MenuScale), Height - (6 * MenuScale))	
@@ -2193,7 +2214,7 @@ Function RenderMenuButtons()
 		DrawFrame(mb\x, mb\y, mb\Width, mb\Height)
 		If MouseOn(mb\x, mb\y, mb\Width, mb\Height) Then
 			Color(30, 30, 30)
-			Rect(mb\x + (3 * MenuScale), mb\y + (3 * MenuScale), mb\Width - (6 * MenuScale), mb\Height - (6 * MenuScale))	
+			Rect2(mb\x + 3, mb\y + 3, mb\Width - 6, mb\Height - 6)	
 		Else
 			Color(0, 0, 0)
 		EndIf
@@ -2212,7 +2233,7 @@ Function RenderMenuButtons()
 		Else 
 			SetFont(fo\FontID[Font_Default])
 		EndIf
-		Text(mb\x + mb\Width / 2, mb\y + mb\Height / 2, mb\Txt, True, True)
+		Text2(mb\x + mb\Width / 2, mb\y + mb\Height / 2, mb\Txt, True, True)
 	Next
 End Function
 
@@ -2273,7 +2294,7 @@ Function DrawLauncherButton%(x%, y%, Width%, Height%, Txt$, BigFont% = True, Wai
 				PlaySound_Strict(ButtonSFX)
 			EndIf
 		EndIf
-		Rect(x + (3 * MenuScale), y + (3 * MenuScale), Width - (6 * MenuScale), Height - (6 * MenuScale))	
+		Rect2(x + 3, y + 3, Width - 6, Height - 6)	
 	Else
 		Color(0, 0, 0)
 	EndIf
@@ -2292,7 +2313,7 @@ Function DrawLauncherButton%(x%, y%, Width%, Height%, Txt$, BigFont% = True, Wai
 	Else
 		SetFont(fo\FontID[Font_Default])
 	EndIf
-	Text(x + Width / 2, y + Height / 2, Txt, True, True)
+	Text2(x + Width / 2, y + Height / 2, Txt, True, True)
 	
 	Return(Clicked)
 End Function
