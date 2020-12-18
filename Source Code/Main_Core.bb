@@ -4920,28 +4920,16 @@ Function DrawGUI()
 	If I_294\Using Then Use294()
 	
 	If opt\HUDEnabled Then 
-		Width = 204
+		Width = 200
 		Height = 20
 		x = 80
 		y = opt\GraphicHeight - 95
 		
 		Color(255, 255, 255)
-		Rect(x, y, Width, Height, False)
-		If opt\SmoothHUD Then
-			If me\BlinkTimer < 160.0 Then
-		    	Color(100, 0, 0)
-	    	Else
-	        	Color(100, 100, 100)
-	    	EndIf		
-			Rect(x + 3, y + 3, Float(me\BlinkTimer * ((Width - 6.0) / me\BLINKFREQ)), 14)
+		If me\BlinkTimer < 150.0 Then
+			DrawBar(tt\ImageID[1], x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ, 100, 0, 0)
 		Else
-			For i = 1 To Int(((Width - 2) * (me\BlinkTimer / (me\BLINKFREQ))) / 10.0)
-				If me\BlinkTimer < 160.0 Then
-					DrawImage(tt\ImageID[1], x + 3 + 10 * (i - 1), y + 3)
-				Else
-					DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
-				EndIf
-			Next	
+			DrawBar(BlinkMeterIMG, x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ)
 		EndIf
 		Color(0, 0, 0)
 		Rect(x - 50, y, 30, 30)
@@ -4963,23 +4951,10 @@ Function DrawGUI()
 		
 		y = opt\GraphicHeight - 55.0
 		
-		Color(255, 255, 255)
-		Rect(x, y, Width, Height, False)
-		If opt\SmoothHUD Then
-			If me\Stamina < 27.0 Then
-		  	    Color(50, 0, 0)
-	    	Else
-	     	    Color(50, 50, 50)
-	    	EndIf		
-			Rect(x + 3, y + 3, Float(me\Stamina * (Width - 6.0) / 100.0), 14)	
+		If me\Stamina =< 25.0 Then
+			DrawBar(tt\ImageID[3], x, y, Width, Height, me\Stamina, 100.0, 50, 0, 0)
 		Else
-			For i = 1 To Int(((Width - 2) * (me\Stamina / 100.0)) / 10.0)
-				If me\Stamina < 27.0 Then
-					DrawImage(tt\ImageID[3], x + 3 + 10 * (i - 1), y + 3)
-				Else
-					DrawImage(tt\ImageID[2], x + 3 + 10 * (i - 1), y + 3)
-				EndIf
-			Next
+			DrawBar(tt\ImageID[2], x, y, Width, Height, me\Stamina, 100.0, 50, 50, 50)
 		EndIf
 		Color(0, 0, 0)
 		Rect(x - 50, y, 30, 30)
@@ -5330,15 +5305,8 @@ Function DrawGUI()
 							Height = 20
 							x = opt\GraphicWidth / 2 - Width / 2
 							y = opt\GraphicHeight / 2 + 80
-							Rect(x, y, Width + 4, Height, False)
-							If opt\SmoothHUD Then
-								Color(100, 100, 100)	
-								Rect(x + 3, y + 3, Float(SelectedItem\State3 * (Width - 6.0) / 100.0), 14)	
-							Else
-								For i = 1 To Int((Width - 2) * (SelectedItem\State3 / 100.0) / 10.0)
-									DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
-								Next
-							EndIf
+							
+							DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State3)
 						EndIf
 					EndIf
 					;[End Block]
@@ -5354,15 +5322,8 @@ Function DrawGUI()
 							Height = 20
 							x = opt\GraphicWidth / 2 - Width / 2
 							y = opt\GraphicHeight / 2 + 80
-							Rect(x, y, Width + 4, Height, False)
-							If opt\SmoothHUD Then
-								Color(100, 100, 100)	
-								Rect(x + 3, y + 3, Float(SelectedItem\State3 * (Width - 6.0) / 100.0), 14)	
-							Else
-								For i = 1 To Int((Width - 2) * (SelectedItem\State3 / 100.0) / 10.0)
-									DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
-								Next
-							EndIf
+							
+							DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State3)
 						EndIf
 					EndIf
 					;[End Block]
@@ -5378,15 +5339,8 @@ Function DrawGUI()
 							Height = 20
 							x = opt\GraphicWidth / 2 - Width / 2
 							y = opt\GraphicHeight / 2 + 80
-							Rect(x, y, Width + 4, Height, False)
-							If opt\SmoothHUD Then
-								Color(100, 100, 100)	
-								Rect(x + 3, y + 3, Float(SelectedItem\State3 * (Width - 6.0) / 100.0), 14)	
-							Else
-								For i = 1 To Int((Width - 2) * (SelectedItem\State3 / 100.0) / 10.0)
-									DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
-								Next
-							EndIf
+							
+							DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State3)
 						EndIf
 					EndIf
 					;[End Block]
@@ -5405,15 +5359,8 @@ Function DrawGUI()
 						Height = 20.0
 						x = opt\GraphicWidth / 2 - Width / 2
 						y = opt\GraphicHeight / 2 + 80
-						Rect(x, y, Width + 4, Height, False)
-						If opt\SmoothHUD Then
-							Color(100, 100, 100)	
-							Rect(x + 3, y + 3, Float(SelectedItem\State * (Width - 6.0) / 100.0), 14)	
-						Else
-							For i = 1 To Int((Width - 2) * (SelectedItem\State / 100.0) / 10)
-								DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
-							Next
-						EndIf
+						
+						DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					EndIf
 					;[End Block]
 				Case "paper", "ticket"
@@ -5563,15 +5510,8 @@ Function DrawGUI()
 						Height = 20
 						x = opt\GraphicWidth / 2 - Width / 2
 						y = opt\GraphicHeight / 2 + 80.0
-						Rect(x, y, Width + 4, Height, False)
-						If opt\SmoothHUD Then
-							Color(100, 100, 100)	
-					        Rect(x + 3, y + 3, Float(SelectedItem\State * (Width - 6.0) / 100.0), 14)	
-						Else
-							For i = 1 To Int((Width - 2) * (SelectedItem\State / 100.0) / 10.0)
-								DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
-							Next
-						EndIf
+						
+						DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					EndIf
 					;[End Block]
 				Case "vest", "finevest"
@@ -5582,15 +5522,8 @@ Function DrawGUI()
 					Height = 20
 					x = opt\GraphicWidth / 2 - Width / 2
 					y = opt\GraphicHeight / 2 + 80.0
-					Rect(x, y, Width + 4, Height, False)
-					If opt\SmoothHUD Then
-						Color(100, 100, 100)	
-						Rect(x + 3, y + 3, Float(SelectedItem\State * (Width - 6.0) / 100.0), 14)	
-					Else
-						For i = 1 To Int((Width - 2.0) * (SelectedItem\State / 100.0) / 10.0)
-							DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
-						Next
-					EndIf
+					
+					DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					;[End Block]
 				Case "gasmask", "supergasmask", "gasmask3"
 					;[Block]
@@ -5601,15 +5534,8 @@ Function DrawGUI()
 						Height = 20
 						x = opt\GraphicWidth / 2 - Width / 2
 						y = opt\GraphicHeight / 2 + 80
-						Rect(x, y, Width + 4, Height, False)
-						If opt\SmoothHUD Then
-							Color(100, 100, 100)	
-					        Rect(x + 3, y + 3, Float(SelectedItem\State * (Width - 6.0) / 100.0), 14)	
-						Else
-							For i = 1 To Int((Width - 2) * (SelectedItem\State / 100.0) / 10.0)
-								DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
-							Next
-						EndIf
+						
+						DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					EndIf
 					;[End Block]
 				Case "navigator", "nav"
@@ -5807,15 +5733,8 @@ Function DrawGUI()
 						Height = 20.0
 						x = opt\GraphicWidth / 2 - Width / 2
 						y = opt\GraphicHeight / 2 + 80
-						Rect(x, y, Width + 4, Height, False)
-						If opt\SmoothHUD Then
-							Color(100, 100, 100)	
-					        Rect(x + 3, y + 3, Float(SelectedItem\State * (Width - 6.0) / 100.0), 14)	
-						Else
-							For i = 1 To Int((Width - 2) * (SelectedItem\State / 100.0) / 10.0)
-								DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
-							Next
-						EndIf
+						
+						DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					EndIf
 					;[End Block]
 				Case "badge"
@@ -5848,15 +5767,8 @@ Function DrawGUI()
 					    Height = 20
 					    x = opt\GraphicWidth / 2 - Width / 2
 					    y = opt\GraphicHeight / 2 + 80
-					    Rect(x, y, Width + 4, Height, False)
-						If opt\SmoothHUD Then
-							Color(100, 100, 100)	
-					        Rect(x + 3, y + 3, Float(SelectedItem\State * (Width - 6.0) / 100.0), 14)	
-						Else
-							For i = 1 To Int((Width - 2) * (SelectedItem\State / 100.0) / 10.0)
-								DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
-							Next
-						EndIf
+						
+					    DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					EndIf
 					;[End Block]
 				Case "scramble"
@@ -5868,15 +5780,8 @@ Function DrawGUI()
 						Height = 20
 						x = opt\GraphicWidth / 2 - Width / 2
 						y = opt\GraphicHeight / 2 + 80
-						Rect(x, y, Width + 4, Height, False)
-						If opt\SmoothHUD Then
-							Color(100, 100, 100)	
-							Rect(x + 3, y + 3, Float(SelectedItem\State3 * (Width - 6.0) / 100.0), 14)	
-						Else
-							For i = 1 To Int((Width - 2) * (SelectedItem\State3 / 100.0) / 10.0)
-								DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
-							Next
-						EndIf
+						
+						DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State3)
 					EndIf
 					;[End Block]
 			End Select

@@ -7629,7 +7629,7 @@ Function UpdateEvents()
 				If (Not Curr106\Contained) Then
 					If PlayerRoom = e\room Then
 						If e\EventState = 0.0 Then
-							de.Decals = CreateDecal(0, EntityX(e\room\OBJ), e\room\y + 799.0 * RoomScale, EntityZ(e\room\OBJ), -90.0, Rnd(360.0), 0.0, 0.5, 0.8)
+							de.Decals = CreateDecal(0, EntityX(e\room\OBJ), e\room\y + 798.0 * RoomScale, EntityZ(e\room\OBJ), -90.0, Rnd(360.0), 0.0, 0.5, 0.8)
 							de\SizeChange = 0.0015
 							PlaySound_Strict(DecaySFX[3])
 							e\EventState = 1.0

@@ -2007,15 +2007,7 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 		x = opt\GraphicWidth / 2 - Width / 2
 		y = opt\GraphicHeight / 2 + 30 - 100
 		
-		Rect(x, y, Width + 4, Height, False)
-		If opt\SmoothHUD Then
-		    Color(100, 100, 100)
-		    Rect(x + 3, y + 3, Float(Percent * 2.98), 14)
-		Else
-			For i = 1 To Int((Width - 2) * (Percent / 100.0) / 10)
-				DrawImage(BlinkMeterIMG, x + 3 + 10 * (i - 1), y + 3)
-			Next
-		EndIf
+		DrawBar(BlinkMeterIMG, x, y, Width, Height, Percent)
 		
 		Color(255, 255, 255)
 		
@@ -2157,8 +2149,8 @@ Function DrawTiledImageRect(Img%, SrcX%, SrcY%, SrcWidth#, SrcHeight#, x%, y%, W
 		Local y2% = y
 		
 		While y2 < y + Height
-			If x2 + SrcWidth > x + Width Then SrcWidth = SrcWidth - Max((x2 + SrcWidth) - (x + Width), 1)
-			If y2 + SrcHeight > y + Height Then SrcHeight = SrcHeight - Max((y2 + SrcHeight) - (y + Height), 1)
+			If x2 + SrcWidth > x + Width Then SrcWidth = SrcWidth - Max((x2 + SrcWidth) - (x + Width), 1.0)
+			If y2 + SrcHeight > y + Height Then SrcHeight = SrcHeight - Max((y2 + SrcHeight) - (y + Height), 1.0)
 			DrawImageRect(Img, x2, y2, SrcX, SrcY, SrcWidth, SrcHeight)
 			y2 = y2 + SrcHeight
 		Wend
@@ -2168,8 +2160,22 @@ End Function
 
 Function DrawFrame(x%, y%, Width%, Height%, xOffset% = 0, yOffset% = 0)
 	Color(255, 255, 255)
-	DrawTiledImageRect(MenuWhite, xOffset, (y Mod 256), 512, 512, x, y, Width, Height)
-	DrawTiledImageRect(MenuBlack, yOffset, (y Mod 256), 512, 512, x + 3 * MenuScale, y + 3 * MenuScale, Width - 6 * MenuScale, Height - 6 * MenuScale)	
+	DrawTiledImageRect(MenuWhite, xOffset, (y Mod (256 * MenuScale)), 512 * MenuScale, 512 * MenuScale, x, y, Width, Height)
+	DrawTiledImageRect(MenuBlack, yOffset, (y Mod (256 * MenuScale)), 512 * MenuScale, 512 * MenuScale, x + (3 * MenuScale), y + (3 * MenuScale), Width - (6 * MenuScale), Height - (6 * MenuScale))	
+End Function
+
+Function DrawBar(Img%, x%, y%, Width%, Height%, Value1#, Value2# = 100.0, R% = 100, G% = 100, B% = 100)
+	Local i%
+	
+	Rect(x, y, Width + 4, Height, False)
+	If opt\SmoothHUD Then
+		Color(R, G, B)	
+		Rect(x + 3, y + 3, Float((Width - 2) * (Value1 / Value2)), 14)	
+	Else
+		For i = 1 To Int(((Width - 2) * ((Value1 / Value2) / 10.0)))
+			DrawImage(Img, x + 3 + 10 * (i - 1), y + 3)
+		Next
+	EndIf
 End Function
 
 Type MenuButton
@@ -2187,7 +2193,7 @@ Function RenderMenuButtons()
 		DrawFrame(mb\x, mb\y, mb\Width, mb\Height)
 		If MouseOn(mb\x, mb\y, mb\Width, mb\Height) Then
 			Color(30, 30, 30)
-			Rect(mb\x + 4, mb\y + 4, mb\Width - 8, mb\Height - 8)	
+			Rect(mb\x + (3 * MenuScale), mb\y + (3 * MenuScale), mb\Width - (6 * MenuScale), mb\Height - (6 * MenuScale))	
 		Else
 			Color(0, 0, 0)
 		EndIf
@@ -2267,7 +2273,7 @@ Function DrawLauncherButton%(x%, y%, Width%, Height%, Txt$, BigFont% = True, Wai
 				PlaySound_Strict(ButtonSFX)
 			EndIf
 		EndIf
-		Rect(x + 4, y + 4, Width - 8, Height - 8)	
+		Rect(x + (3 * MenuScale), y + (3 * MenuScale), Width - (6 * MenuScale), Height - (6 * MenuScale))	
 	Else
 		Color(0, 0, 0)
 	EndIf
