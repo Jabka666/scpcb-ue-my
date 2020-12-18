@@ -32,25 +32,20 @@ Function LoopSound2%(SoundHandle%, SoundCHN%, Cam%, Entity%, Range# = 10.0, Volu
 	
 	If Volume > 0.0 Then
 		Local Dist# = EntityDistance(Cam, Entity) / Range
+		Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 		
-		If 1.0 - Dist > 0.0 And 1.0 - Dist < 1.0 Then
-			Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
-			
-			If SoundCHN = 0 Then
-				SoundCHN = PlaySound_Strict(SoundHandle, HasSubtitles, SubID)
-			Else
-				If (Not ChannelPlaying(SoundCHN)) Then SoundCHN = PlaySound_Strict(SoundHandle, HasSubtitles, SubID)
-			EndIf
-			
-			If HasSubtitles And opt\EnableSubtitles Then CalculateSubtitlesDistance(SubID, EntityDistanceSquared(Cam, Entity) / Range * 25.5)
-			
-			ChannelVolume(SoundCHN, Volume * (1.0 - Dist) * opt\SFXVolume)
-			ChannelPan(SoundCHN, PanValue)
+		If SoundCHN = 0 Then
+			SoundCHN = PlaySound_Strict(SoundHandle, HasSubtitles, SubID)
 		Else
-			If HasSubtitles And opt\EnableSubtitles Then CalculateSubtitlesDistance(SubID, 256.0)
+			If (Not ChannelPlaying(SoundCHN)) Then SoundCHN = PlaySound_Strict(SoundHandle, HasSubtitles, SubID)
 		EndIf
+		
+		If HasSubtitles And opt\EnableSubtitles Then CalculateSubtitlesDistance(SubID, EntityDistanceSquared(Cam, Entity) / Range * 25.5)
+		
+		ChannelVolume(SoundCHN, Volume * (1.0 - Dist) * opt\SFXVolume)
+		ChannelPan(SoundCHN, PanValue)
 	Else
-		If HasSubtitles And opt\EnableSubtitles Then ClearSubtitles(SubID)
+		If HasSubtitles And opt\EnableSubtitles Then CalculateSubtitlesDistance(SubID, 256.0)
 		If SoundCHN <> 0 Then
 			ChannelVolume(SoundCHN, 0.0)
 		EndIf 

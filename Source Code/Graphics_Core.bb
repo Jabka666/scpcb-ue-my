@@ -154,7 +154,7 @@ Function UpdateWorld2()
 				If (wi\NightVision = 1 And Inventory[i]\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory[i]\ItemTemplate\TempName = "supernvg") Lor (wi\SCRAMBLE > 0 And Inventory[i]\ItemTemplate\TempName = "scramble") Then
 					Inventory[i]\State = Inventory[i]\State - (fps\FPSFactor[0] * (0.02 * wi\NightVision) + (0.25 * (wi\SCRAMBLE > 0)))
 					Power = Int(Inventory[i]\State)
-					If Power =< 0.0 Then ; ~ This NVG can't be used
+					If Power =< 0 Then ; ~ This NVG can't be used
 						HasBattery = 0
 						If wi\SCRAMBLE > 0 Then
 							CreateMsg("The batteries in this gear died.", 6.0)
@@ -163,7 +163,7 @@ Function UpdateWorld2()
 						EndIf	
 						me\BlinkTimer = -1.0
 						Exit
-					ElseIf Power =< 100.0 Then
+					ElseIf Power =< 100 Then
 						HasBattery = 1
 					EndIf
 				EndIf
@@ -230,10 +230,10 @@ Function RenderWorld2(Tween#)
 			If Inventory[i] <> Null Then
 				If (wi\NightVision = 1 And Inventory[i]\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory[i]\ItemTemplate\TempName = "supernvg") Lor (wi\SCRAMBLE > 0 And Inventory[i]\ItemTemplate\TempName = "scramble") Then
 					Power = Int(Inventory[i]\State)
-					If Power =< 0.0 Then ; ~ This NVG or SCRAMBLE can't be used
+					If Power =< 0 Then ; ~ This NVG or SCRAMBLE can't be used
 						HasBattery = 0
 						Exit
-					ElseIf Power =< 100.0 Then
+					ElseIf Power =< 100 Then
 						HasBattery = 1
 					EndIf
 				EndIf
@@ -253,7 +253,7 @@ Function RenderWorld2(Tween#)
 				
 				Local PlusY% = 0
 				
-				If HasBattery = 1 Then PlusY% = 40
+				If HasBattery = 1 Then PlusY = 40
 				
 				Text(opt\GraphicWidth / 2, (20 + PlusY) * MenuScale, "REFRESHING DATA IN", True, False)
 				
