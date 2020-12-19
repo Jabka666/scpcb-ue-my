@@ -905,12 +905,12 @@ Function UpdateMainMenu()
 							y = y + 35 * MenuScale
 							
 							If opt\EnableSubtitles Then
-								DrawPalette(mma\Palette, x + 270 * MenuScale, y)
+								DrawPalette(mma\Palette, x + 245 * MenuScale, y)
 							EndIf
 							
 							y = y + 25 * MenuScale
 							
-							If DrawButton(x + 20 * MenuScale, y, 220 * MenuScale, 30 * MenuScale, "RESET OPTIONS", False) Then
+							If DrawButton(x + 20 * MenuScale, y, 170 * MenuScale, 30 * MenuScale, "RESET OPTIONS", False) Then
 								Delay(200)
 								ResetOptionsINI()
 								SaveOptionsINI(True)
