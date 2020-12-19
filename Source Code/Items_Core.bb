@@ -24,7 +24,7 @@ Type ItemTemplates
 	Field Tex%, TexPath$
 End Type 
 
-Function CreateItemTemplate.ItemTemplates(Name$, TempName$, OBJPath$, InvImgPath$, ImgPath$, Scale#, SoundID%, TexturePath$ = "", InvImgPath2$ = "", Anim% = 0, TexFlags% = 9)
+Function CreateItemTemplate.ItemTemplates(Name$, TempName$, OBJPath$, InvImgPath$, ImgPath$, Scale#, SoundID%, TexturePath$ = "", InvImgPath2$ = "", HasAnim% = False, TexFlags% = 9)
 	Local it.ItemTemplates = New ItemTemplates
 	Local it2.ItemTemplates
 	
@@ -33,8 +33,8 @@ Function CreateItemTemplate.ItemTemplates(Name$, TempName$, OBJPath$, InvImgPath
 		If it2\OBJPath = OBJPath And it2\OBJ <> 0 Then it\OBJ = CopyEntity(it2\OBJ) : it\ParentOBJPath = it2\OBJPath : Exit
 	Next
 	
-	If it\OBJ = 0 Then
-		If Anim <> 0 Then
+	If (Not it\OBJ) Then
+		If HasAnim Then
 			it\OBJ = LoadAnimMesh_Strict(OBJPath)
 			it\IsAnim = True
 		Else
@@ -54,7 +54,7 @@ Function CreateItemTemplate.ItemTemplates(Name$, TempName$, OBJPath$, InvImgPath
 				Exit
 			EndIf
 		Next
-		If Texture = 0 Then Texture = LoadTexture_Strict(TexturePath, TexFlags) : it\TexPath = TexturePath
+		If (Not Texture) Then Texture = LoadTexture_Strict(TexturePath, TexFlags) : it\TexPath = TexturePath
 		EntityTexture(it\OBJ, Texture)
 		it\Tex = Texture
 	EndIf  
@@ -72,14 +72,14 @@ Function CreateItemTemplate.ItemTemplates(Name$, TempName$, OBJPath$, InvImgPath
 			Exit
 		EndIf
 	Next
-	If it\InvImg = 0 Then
+	If (Not it\InvImg) Then
 		it\InvImg = LoadImage_Strict(InvImgPath)
 		it\InvImgPath = InvImgPath
 		MaskImage(it\InvImg, 255, 0, 255)
 	EndIf
 	
 	If InvImgPath2 <> "" Then
-		If it\InvImg2 = 0 Then
+		If (Not it\InvImg2) Then
 			it\InvImg2 = LoadImage_Strict(InvImgPath2)
 			MaskImage(it\InvImg2, 255, 0, 255)
 		EndIf
@@ -452,7 +452,8 @@ Function RemoveItem(i.Items)
 	
 	Local n%
 	
-	FreeEntity(i\Model) : FreeEntity(i\Collider) : i\Collider = 0
+	FreeEntity(i\Model) : i\Model = 0
+	FreeEntity(i\Collider) : i\Collider = 0
 	
 	For n = 0 To MaxItemAmount - 1
 		If Inventory[n] = i
@@ -499,8 +500,7 @@ Function RemoveItem(i.Items)
 	If SelectedItem = i Then SelectedItem = Null
 	
 	If i\ItemTemplate\Img <> 0 Then
-		FreeImage(i\ItemTemplate\Img)
-		i\ItemTemplate\Img = 0
+		FreeImage(i\ItemTemplate\Img) : i\ItemTemplate\Img = 0
 	EndIf
 	Delete(i)
 	
@@ -551,7 +551,7 @@ Function UpdateItems()
 					i\xSpeed = 0.0
 					i\zSpeed = 0.0
 				Else
-					If ShouldEntitiesFall
+					If ShouldEntitiesFall Then
 						Pick = LinePick(EntityX(i\Collider), EntityY(i\Collider), EntityZ(i\Collider), 0.0, -10.0, 0.0)
 						If Pick Then
 							i\DropSpeed = i\DropSpeed - 0.0004 * fps\FPSfactor[0]

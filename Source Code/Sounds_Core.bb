@@ -34,7 +34,7 @@ Function LoopSound2%(SoundHandle%, SoundCHN%, Cam%, Entity%, Range# = 10.0, Volu
 		Local Dist# = EntityDistance(Cam, Entity) / Range
 		Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 		
-		If SoundCHN = 0 Then
+		If (Not SoundCHN) Then
 			SoundCHN = PlaySound_Strict(SoundHandle, HasSubtitles, SubID)
 		Else
 			If (Not ChannelPlaying(SoundCHN)) Then SoundCHN = PlaySound_Strict(SoundHandle, HasSubtitles, SubID)
@@ -133,16 +133,16 @@ Function UpdateMusic()
 				EndIf
 				NowPlaying = ShouldPlay
 				MusicCHN = 0
-				CurrMusic = 0
+				CurrMusic = False
 			EndIf
 		Else ; ~ Playing the right clip
 			opt\CurrMusicVolume = opt\CurrMusicVolume + (opt\MusicVolume - opt\CurrMusicVolume) * (0.1 * fps\FPSFactor[0])
 		EndIf
 		
 		If NowPlaying < 66 Then
-			If CurrMusic = 0
+			If (Not CurrMusic) Then
 				MusicCHN = StreamSound_Strict("SFX\Music\" + Music[NowPlaying] + ".ogg", 0.0, Mode)
-				CurrMusic = 1
+				CurrMusic = True
 			EndIf
 			SetStreamVolume_Strict(MusicCHN, opt\CurrMusicVolume)
 		EndIf
@@ -415,8 +415,7 @@ Function KillSounds()
 	If opt\EnableSFXRelease Then
 		For snd.Sound = Each Sound
 			If snd\InternalHandle <> 0 Then
-				FreeSound_Strict(snd\InternalHandle)
-				snd\InternalHandle = 0
+				FreeSound_Strict(snd\InternalHandle) : snd\InternalHandle = 0
 				snd\ReleaseTime = 0
 			EndIf
 		Next

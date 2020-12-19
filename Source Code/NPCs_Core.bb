@@ -177,7 +177,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			
 			n\Speed = GetINIFloat(NPCsFile, "MTF", "Speed") / 100.0
 			
-			If MTFSFX[0] = 0 Then
+			If (Not MTFSFX[0]) Then
 				MTFSFX[0] = LoadSound_Strict("SFX\Character\MTF\Beep.ogg")
 				MTFSFX[1] = LoadSound_Strict("SFX\Character\MTF\Breath.ogg")
 			EndIf
@@ -265,7 +265,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			
 			n\Sound = LoadSound_Strict("SFX\Horror\Horror12.ogg")
 			
-			If HorrorSFX[13] = 0 Then HorrorSFX[13] = LoadSound_Strict("SFX\Horror\Horror13.ogg")
+			If (Not HorrorSFX[13]) Then HorrorSFX[13] = LoadSound_Strict("SFX\Horror\Horror13.ogg")
 			;[End Block]
 		Case NPCtype049_2
 			;[Block]
@@ -1124,7 +1124,7 @@ Function UpdateNPCs()
 						;[Block]
 						If Dist < 8.0 Then
 							GiveAchievement(Achv096)
-							If n\SoundCHN = 0
+							If (Not n\SoundCHN) Then
 								n\SoundCHN = StreamSound_Strict("SFX\Music\096.ogg", 0)
 								n\SoundCHN_IsStream = True
 							Else
@@ -1183,14 +1183,14 @@ Function UpdateNPCs()
 						me\CurrCameraZoom = CurveValue(Max(me\CurrCameraZoom, (Sin(Float(MilliSecs()) / 20.0) + 1.0) * 10.0), me\CurrCameraZoom, 8.0)
 						
 						If n\Target = Null Then 
-							If n\SoundCHN = 0 Then
+							If (Not n\SoundCHN) Then
 								n\SoundCHN = StreamSound_Strict("SFX\SCP\096\Scream.ogg", 0)
 								n\SoundCHN_IsStream = True
 							Else
 								UpdateStreamSoundOrigin(n\SoundCHN, Camera, n\Collider, 7.5, 1.0)
 							EndIf
 							
-							If n\SoundCHN2 = 0 Then
+							If (Not n\SoundCHN2) Then
 								n\SoundCHN2 = StreamSound_Strict("SFX\Music\096Chase.ogg", 0)
 								n\SoundCHN2_IsStream = 2
 							Else
@@ -1332,7 +1332,7 @@ Function UpdateNPCs()
 						;[End Block]
 					Case 1.0, 2.0, 3.0
 						;[Block]
-						If n\SoundCHN = 0 Then
+						If (Not n\SoundCHN) Then
 							n\SoundCHN = StreamSound_Strict("SFX\Music\096Angered.ogg", 0)
 							n\SoundCHN_IsStream = True
 						Else
@@ -1373,7 +1373,7 @@ Function UpdateNPCs()
 								GiveAchievement(Achv096)
 							EndIf
 							
-							If n\SoundCHN = 0
+							If (Not n\SoundCHN) Then
 								n\SoundCHN = StreamSound_Strict("SFX\Music\096.ogg", 0)
 								n\SoundCHN_IsStream = True
 							Else
@@ -1841,7 +1841,7 @@ Function UpdateNPCs()
 								n\State3 = 1.0
 							ElseIf Dist > HideDistance * 0.8 And n\State3 > 0.0 Then
 								n\State = 2.0
-								n\State3 = 0
+								n\State3 = 0.0
 								For r.Rooms = Each Rooms
 									If EntityDistanceSquared(r\OBJ, n\Collider) < 16.0 Then
 										TeleportEntity(n\Collider, EntityX(r\OBJ), 0.1, EntityZ(r\OBJ), n\CollRadius, True)
@@ -3128,7 +3128,7 @@ Function UpdateNPCs()
 								;[End Block]
 						    Case 1.0 ; ~ Idles
 								;[Block]
-							    If n\Sound = 0 Then
+							    If (Not n\Sound) Then
 								    FreeSound_Strict(n\Sound) : n\Sound = 0
 								    n\Sound = LoadSound_Strict("SFX\SCP\035_Tentacle\TentacleIdle.ogg")
 							    EndIf
@@ -3627,7 +3627,7 @@ Function UpdateNPCs()
 								PlaySound2(StepSFX(5, 0, Rand(0, 3)), Camera, n\Collider, 12.0)
 								If Rand(10) = 1 Then
 									Temp = False
-									If n\SoundCHN = 0 Then 
+									If (Not n\SoundCHN) Then 
 										Temp = True
 									ElseIf (Not ChannelPlaying(n\SoundCHN))
 										Temp = True
@@ -3839,7 +3839,7 @@ Function UpdateNPCs()
 										Select Rand(1, 6)
 											Case 1
 												;[Block]
-												If n\Sound2 = 0 Then n\Sound2 = LoadSound_Strict("SFX\SCP\066\Beethoven.ogg")
+												If (Not n\Sound2) Then n\Sound2 = LoadSound_Strict("SFX\SCP\066\Beethoven.ogg")
 												n\SoundCHN2 = PlaySound2(n\Sound2, Camera, n\Collider)
 												me\DeafTimer = 70.0 * (45.0 + (15.0 * SelectedDifficulty\AggressiveNPCs))
 												me\Deaf = True
@@ -3921,7 +3921,7 @@ Function UpdateNPCs()
 				End Select
 				
 				If n\State > 1.0 Then
-					If n\Sound = 0 Then n\Sound = LoadSound_Strict("SFX\SCP\066\Rolling.ogg")
+					If (Not n\Sound) Then n\Sound = LoadSound_Strict("SFX\SCP\066\Rolling.ogg")
 					If n\SoundCHN <> 0 Then
 						If ChannelPlaying(n\SoundCHN) = True Then
 							n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider, 20.0)
@@ -4983,7 +4983,7 @@ Function UpdateNPCs()
 				End Select
 				
 				If n\State = 0.0 Then
-					If n\Sound = 0 Then
+					If (Not n\Sound) Then
 						n\Sound = LoadSound_Strict("SFX\Character\Vehicle\Idle.ogg")
 					EndIf
 					If n\Sound2 <> 0 Then
@@ -4991,7 +4991,7 @@ Function UpdateNPCs()
 					EndIf
 					n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider, 11.5, 1.0)
 				Else
-					If n\Sound2 = 0 Then
+					If (Not n\Sound2) Then
 						n\Sound2 = LoadSound_Strict("SFX\Character\Vehicle\Move.ogg")
 					EndIf
 					If n\Sound <> 0 Then
@@ -5022,7 +5022,7 @@ Function UpdateNPCs()
 					If CollisionY(n\Collider, i) < EntityY(n\Collider) - 0.01 Then CollidedFloor = True : Exit
 				Next
 				
-				If CollidedFloor = True Then
+				If CollidedFloor Then
 					n\DropSpeed = 0.0
 				Else
 					If ShouldEntitiesFall Then
@@ -6657,7 +6657,7 @@ Function UpdateMTFUnit(n.NPCs)
 					EndIf
 				EndIf
 				
-				If n\Target\IsDead = True Then
+				If n\Target\IsDead Then
 					n\Target = Null
 					n\State = 0.0
 				EndIf

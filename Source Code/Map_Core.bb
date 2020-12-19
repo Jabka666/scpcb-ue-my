@@ -126,7 +126,7 @@ Function LoadWorld(File$, rt.RoomTemplates)
 			Case "soundemitter"
 				;[Block]
 				For i = 0 To 3
-					If rt\TempSoundEmitter[i] = 0 Then
+					If (Not rt\TempSoundEmitter[i]) Then
 						rt\TempSoundEmitterX[i] = EntityX(Node) * RoomScale
 						rt\TempSoundEmitterY[i] = EntityY(Node) * RoomScale
 						rt\TempSoundEmitterZ[i] = EntityZ(Node) * RoomScale
@@ -183,7 +183,7 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 			Exit
 		EndIf
 	Next
-	If f = 0 Then RuntimeError("Error reading file " + Chr(34) + File + Chr(34))
+	If (Not f) Then RuntimeError("Error reading file " + Chr(34) + File + Chr(34))
 	
 	Local IsRMesh$ = ReadString(f)
 	
@@ -275,7 +275,7 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 				Else
 					BumpTex = 0
 				EndIf
-				If BumpTex = 0
+				If (Not BumpTex) Then
 					For j = 0 To 1
 						BrushTexture(Brush, Tex[j], 0, j + 1)
 					Next
@@ -301,7 +301,7 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 				Else
 					BumpTex = 0
 				EndIf
-				If BumpTex = 0
+				If (Not BumpTex) Then
 					For j = 0 To 1
 						If Tex[j] <> 0 Then
 							BrushTexture(Brush, Tex[j], 0, j)
@@ -511,11 +511,11 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 				EndIf
 				;[End Block]
 			Case "soundemitter"
-				Temp1i = 0
 				;[Block]
+				Temp1i = 0
 				If rt <> Null Then
 					For j = 0 To MaxRoomEmitters - 1
-						If rt\TempSoundEmitter[j] = 0 Then
+						If (Not rt\TempSoundEmitter[j]) Then
 							rt\TempSoundEmitterX[j] = ReadFloat(f) * RoomScale
 							rt\TempSoundEmitterY[j] = ReadFloat(f) * RoomScale
 							rt\TempSoundEmitterZ[j] = ReadFloat(f) * RoomScale
@@ -1202,7 +1202,7 @@ Function PlaceForest_MapCreator(fr.Forest, x#, y#, z#, r.Rooms)
 				
 				If Ceil(Float(fr\Grid[(tY * GridSize) + tX]) / 4.0) = 6 Then
 					For i = 0 To 1
-						If fr\Door[i] = 0 Then
+						If (Not fr\Door[i]) Then
 							fr\DetailEntities[i] = CopyEntity(fr\DetailMesh[4])
 							ScaleEntity(fr\DetailEntities[i], RoomScale, RoomScale, RoomScale)
 							
@@ -1243,8 +1243,7 @@ Function DestroyForest(fr.Forest)
 	For tX = 0 To GridSize - 1
 		For tY = 0 To GridSize - 1
 			If fr\TileEntities[tX + (tY * GridSize)] <> 0 Then
-				FreeEntity(fr\TileEntities[tX + (tY * GridSize)])
-				fr\TileEntities[tX + (tY * GridSize)] = 0
+				FreeEntity(fr\TileEntities[tX + (tY * GridSize)]) : fr\TileEntities[tX + (tY * GridSize)] = 0
 				fr\Grid[tX + (tY * GridSize)] = 0
 			EndIf
 		Next
@@ -1688,7 +1687,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 			If rt\Name = Name Then
 				r\RoomTemplate = rt
 				
-				If rt\OBJ = 0 Then LoadRoomMesh(rt)
+				If (Not rt\OBJ) Then LoadRoomMesh(rt)
 				
 				r\OBJ = CopyEntity(rt\OBJ)
 				ScaleEntity(r\OBJ, RoomScale, RoomScale, RoomScale)
@@ -1726,7 +1725,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 				If RandomRoom > Temp - rt\Commonness And RandomRoom =< Temp Then
 					r\RoomTemplate = rt
 					
-					If rt\OBJ = 0 Then LoadRoomMesh(rt)
+					If (Not rt\OBJ) Then LoadRoomMesh(rt)
 					
 					r\OBJ = CopyEntity(rt\OBJ)
 					ScaleEntity(r\OBJ, RoomScale, RoomScale, RoomScale)
@@ -2141,7 +2140,7 @@ Function FillRoom(r.Rooms)
 			r\RoomDoors[2] = CreateDoor(r\Zone, r\x + 512.0 * RoomScale, r\y - 10240.0 * RoomScale, r\z - 256.0 * RoomScale, -90.0, r, False, Elevator_Door)
 			r\RoomDoors[2]\AutoClose = False
 			
-			If r\Objects[0] = 0 Then r\Objects[0] = LoadAnimMesh_Strict("GFX\map\Props\079.b3d")
+			r\Objects[0] = LoadAnimMesh_Strict("GFX\map\Props\079.b3d")
 			ScaleEntity(r\Objects[0], 1.3, 1.3, 1.3)
 			PositionEntity(r\Objects[0], r\x + 166.0 * RoomScale, r\y - 10800.0 * RoomScale, r\z + 1606.0 * RoomScale)
 			TurnEntity(r\Objects[0], 0.0, -90.0, 0.0)
@@ -3223,7 +3222,7 @@ Function FillRoom(r.Rooms)
 					EndIf
 				EndIf
 			Next
-			If r\Objects[0] = 0 Then r\Objects[0] = LoadRMesh("GFX\map\fan_opt.rmesh", Null)
+			If (Not r\Objects[0]) Then r\Objects[0] = LoadRMesh("GFX\map\fan_opt.rmesh", Null)
 			ScaleEntity(r\Objects[0], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[0], r\x - 248.0 * RoomScale, r\y + 528.0 * RoomScale, r\z)
 			EntityParent(r\Objects[0], r\OBJ)
@@ -4033,7 +4032,7 @@ Function FillRoom(r.Rooms)
 					EndIf
 				EndIf
 			Next
-			If r\Objects[7] = 0 Then r\Objects[7] = LoadMesh_Strict("GFX\map\room2tesla_caution.b3d", r\OBJ)
+			If (Not r\Objects[7])Then r\Objects[7] = LoadMesh_Strict("GFX\map\room2tesla_caution.b3d", r\OBJ)
 			
 			w = CreateWaypoint(r\x, r\y + 66.0 * RoomScale, r\z + 292.0 * RoomScale, Null, r)
 			w2 = CreateWaypoint(r\x, r\y + 66.0 * RoomScale, r\z - 284.0 * RoomScale, Null, r)
@@ -4371,7 +4370,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\Objects[5], r\x + 1088.0 * RoomScale, r\y - 6224.0 * RoomScale, r\z + 1824.0 * RoomScale) 
 			
 			; ~ Chamber		
-			If r\Objects[6] = 0 Then r\Objects[6] = LoadRMesh("GFX\map\room1062_opt.rmesh", Null)
+			r\Objects[6] = LoadRMesh("GFX\map\room1062_opt.rmesh", Null)
 			ScaleEntity(r\Objects[6], RoomScale, RoomScale, RoomScale)
 			EntityType(r\Objects[6], HIT_MAP)
 			EntityPickMode(r\Objects[6], 3)
@@ -4915,7 +4914,7 @@ Function FillRoom(r.Rooms)
 					EndIf
 				EndIf
 			Next
-			If r\Objects[2] = 0 Then r\Objects[2] = LoadMesh_Strict("GFX\map\room2gw_pipes.b3d", r\OBJ)
+			If (Not r\Objects[2]) Then r\Objects[2] = LoadMesh_Strict("GFX\map\room2gw_pipes.b3d", r\OBJ)
 			EntityPickMode(r\Objects[2], 2)
 			
 			If r\RoomTemplate\Name = "room2gw" Then
@@ -5219,7 +5218,7 @@ Function FillRoom(r.Rooms)
 					Exit
 				EndIf
 			Next
-			If r\Objects[0] = 0 Then r\Objects[0] = LoadMesh_Strict("GFX\map\room3z2_hb.b3d", r\OBJ)
+			If (Not r\Objects[0]) Then r\Objects[0] = LoadMesh_Strict("GFX\map\room3z2_hb.b3d", r\OBJ)
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
 			EntityAlpha(r\Objects[0], 0.0)
@@ -5462,7 +5461,7 @@ Function FillRoom(r.Rooms)
 					EndIf
 				EndIf
 			Next
-			If r\Objects[0] = 0 Then r\Objects[0] = LoadMesh_Strict("GFX\map\medibay_props.b3d", r\OBJ)
+			If (Not r\Objects[0]) Then r\Objects[0] = LoadMesh_Strict("GFX\map\medibay_props.b3d", r\OBJ)
 			EntityType(r\Objects[0], HIT_MAP)
 			EntityPickMode(r\Objects[0], 2)
 			
@@ -5757,7 +5756,7 @@ Function AddLight%(room.Rooms, x#, y#, z#, lType%, Range#, R%, G%, B%)
 	
 	If room <> Null Then
 		For i = 0 To MaxRoomLights - 1
-			If room\Lights[i] = 0 Then
+			If (Not room\Lights[i]) Then
 				room\Lights[i] = CreateLight(lType)
 				LightRange(room\Lights[i], Range)
 				LightColor(room\Lights[i], R, G, B)
@@ -6178,7 +6177,7 @@ End Function
 Function CreateLine(x1#, y1#, z1#, x2#, y2#, z2#, Mesh% = 0)
 	Local Surf%, Verts%
 	
-	If Mesh = 0 Then 
+	If (Not Mesh) Then 
 		Mesh = CreateMesh()
 		EntityFX(Mesh, 16)
 		Surf = CreateSurface(Mesh)	
@@ -6371,7 +6370,7 @@ Function UpdateSecurityCams() ; ~ SHOULD BE SEPARATED!
 							If MTFCameraCheckTimer > 0.0 Then MTFCameraCheckDetected = True
 						EndIf
 					EndIf
-					If sc\Pvt = 0 Then sc\Pvt = CreatePivot(sc\OBJ) : EntityParent(sc\Pvt, 0) ; ~ Sets position and rotation of the pivot to the cam object
+					If (Not sc\Pvt) Then sc\Pvt = CreatePivot(sc\OBJ) : EntityParent(sc\Pvt, 0) ; ~ Sets position and rotation of the pivot to the cam object
 					PointEntity(sc\Pvt, Camera)
 					
 					RotateEntity(sc\CameraOBJ, CurveAngle(EntityPitch(sc\Pvt), EntityPitch(sc\CameraOBJ), 75.0), CurveAngle(EntityYaw(sc\Pvt), EntityYaw(sc\CameraOBJ), 75.0), 0.0)
@@ -6379,12 +6378,12 @@ Function UpdateSecurityCams() ; ~ SHOULD BE SEPARATED!
 					PositionEntity(sc\CameraOBJ, EntityX(sc\OBJ, True), EntityY(sc\OBJ, True) - 0.083, EntityZ(sc\OBJ, True))
 				Else
 					If sc\Turn > 0.0 Then
-						If sc\Dir = 0 Then
+						If (Not sc\Dir) Then
 							sc\CurrAngle = sc\CurrAngle + 0.2 * fps\FPSFactor[0]
-							If sc\CurrAngle > sc\Turn * 1.3 Then sc\Dir = 1
+							If sc\CurrAngle > sc\Turn * 1.3 Then sc\Dir = True
 						Else
 							sc\CurrAngle = sc\CurrAngle - 0.2 * fps\FPSFactor[0]
-							If sc\CurrAngle < (-sc\Turn) * 1.3 Then sc\Dir = 0
+							If sc\CurrAngle < (-sc\Turn) * 1.3 Then sc\Dir = False
 						EndIf
 					EndIf
 					PositionEntity(sc\CameraOBJ, EntityX(sc\OBJ, True), EntityY(sc\OBJ, True) - 0.083, EntityZ(sc\OBJ, True))
@@ -6497,7 +6496,7 @@ Function UpdateSecurityCams() ; ~ SHOULD BE SEPARATED!
 										EntityTexture(sc\ScrOverlay, tt\MiscTextureID[Rand(7, 12)])
 										If sc\PlayerState = 1 Then PlaySound_Strict(HorrorSFX[1])
 										sc\PlayerState = 2
-										If sc\SoundCHN = 0 Then
+										If (Not sc\SoundCHN) Then
 											sc\SoundCHN = PlaySound_Strict(HorrorSFX[4])
 										Else
 											If (Not ChannelPlaying(sc\SoundCHN)) Then sc\SoundCHN = PlaySound_Strict(HorrorSFX[4])
@@ -6535,7 +6534,7 @@ Function UpdateSecurityCams() ; ~ SHOULD BE SEPARATED!
 						If (MilliSecs() Mod sc\PlayerState) >= Rand(600) Then
 							EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
 						Else
-							If sc\SoundCHN = 0 Then
+							If (Not sc\SoundCHN) Then
 								sc\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(1, 3) + ".ogg"))
 								If sc\CoffinEffect = 2 Then sc\CoffinEffect = 3 : sc\PlayerState = 0
 							ElseIf (Not ChannelPlaying(sc\SoundCHN))
@@ -6576,7 +6575,7 @@ Function UpdateMonitorSaving()
 				Close = True
 			EndIf
 			
-			If Close And GrabbedEntity = 0 And ClosestButton = 0 Then
+			If Close And (Not GrabbedEntity) And (Not ClosestButton) Then
 				If EntityInView(sc\ScrOBJ, Camera) And EntityDistanceSquared(sc\ScrOBJ, Camera) < 1.21 Then
 					If EntityVisible(sc\ScrOBJ, Camera) Then
 						ga\DrawHandIcon = True
@@ -7448,16 +7447,16 @@ End Function
 
 Function LoadTerrain(HeightMap, yScale# = 0.7, t1%, t2%, Mask%)
 	; ~ Load the HeightMap
-	If HeightMap = 0 Then RuntimeError("HeightMap image " + HeightMap + " does not exist.")
+	If (Not HeightMap) Then RuntimeError("HeightMap image " + HeightMap + " does not exist.")
 	
 	; ~ Store HeightMap dimensions
 	Local x% = ImageWidth(HeightMap) - 1, y = ImageHeight(HeightMap) - 1
 	Local lx%, ly%, Index%
 	
 	; ~ Load texture and lightmaps
-	If t1 = 0 Then RuntimeError("Invalid texture 1")
-	If t2 = 0 Then RuntimeError("Invalid texture 2")
-	If Mask = 0 Then RuntimeError("Invalid texture mask")
+	If (Not t1) Then RuntimeError("Texture 1 " + t1 + " does not exist.")
+	If (Not t2) Then RuntimeError("Texture 2 " + t2 + " does not exist.")
+	If (Not Mask) Then RuntimeError("Mas image " + Mask + " does not exist.")
 	
 	; ~ Auto scale the textures to the right size
 	If t1 Then ScaleTexture(t1, x / 4, y / 4)
@@ -7667,7 +7666,7 @@ Function UpdateCheckpointMonitors(Number%)
 	
 	Entity = o\MonitorModelID[1]
 	
-	If Number = 0 Then
+	If (Not Number) Then
 		UpdateCheckpoint1 = True
 	Else
 		UpdateCheckpoint2 = True
@@ -7681,8 +7680,8 @@ Function UpdateCheckpointMonitors(Number%)
 			If t1 <> 0 Then
 				Name = StripPath(TextureName(t1))
 				If Lower(Name) <> "monitor_overlay.png"
-					If Number = 0 Then
-						If MonitorTimer < 50.0
+					If (Not Number) Then
+						If MonitorTimer < 50.0 Then
 							BrushTexture(b, tt\MonitorTextureID[1], 0, 0)
 						Else
 							BrushTexture(b, tt\MonitorTextureID[3], 0, 0)
@@ -7709,7 +7708,7 @@ Function TurnCheckpointMonitorsOff(Number%)
 	
 	Entity = o\MonitorModelID[1]
 	
-	If Number = 0 Then
+	If (Not Number) Then
 		UpdateCheckpoint1 = False
 		MonitorTimer = 0.0
 	Else

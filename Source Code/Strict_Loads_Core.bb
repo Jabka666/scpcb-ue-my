@@ -32,8 +32,7 @@ Function AutoReleaseSounds()
 		If TryRelease Then
 			If snd\ReleaseTime < MilliSecs() Then
 				If snd\InternalHandle <> 0 Then
-					FreeSound(snd\InternalHandle)
-					snd\InternalHandle = 0
+					FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
 				EndIf
 			EndIf
 		EndIf
@@ -50,7 +49,7 @@ Function PlaySound_Strict%(SoundHandle%, HasSubtitles% = False, SubID% = ANNOUNC
 		For i = 0 To 31
 			If snd\Channels[i] <> 0 Then
 				If (Not ChannelPlaying(snd\Channels[i])) Then
-					If snd\InternalHandle = 0 Then
+					If (Not snd\InternalHandle) Then
 						If FileType(snd\Name) <> 1 Then
 							CreateConsoleMsg("Sound " + Chr(34) + snd\Name + Chr(34) + " not found.")
 							If opt\ConsoleOpening And opt\CanOpenConsole Then
@@ -59,7 +58,7 @@ Function PlaySound_Strict%(SoundHandle%, HasSubtitles% = False, SubID% = ANNOUNC
 						Else
 							If opt\EnableSFXRelease Then snd\InternalHandle = LoadSound(snd\Name)
 						EndIf
-						If snd\InternalHandle = 0 Then
+						If (Not snd\InternalHandle) Then
 							CreateConsoleMsg("Failed to load Sound: " + Chr(34) + snd\Name + Chr(34))
 							If opt\ConsoleOpening And opt\CanOpenConsole Then
 								ConsoleOpen = True
@@ -77,7 +76,7 @@ Function PlaySound_Strict%(SoundHandle%, HasSubtitles% = False, SubID% = ANNOUNC
 					Return(snd\Channels[i])
 				EndIf
 			Else
-				If snd\InternalHandle = 0 Then
+				If (Not snd\InternalHandle) Then
 					If FileType(snd\Name) <> 1 Then
 						CreateConsoleMsg("Sound " + Chr(34) + snd\Name + Chr(34) + " not found.")
 						If opt\ConsoleOpening And opt\CanOpenConsole Then
@@ -87,7 +86,7 @@ Function PlaySound_Strict%(SoundHandle%, HasSubtitles% = False, SubID% = ANNOUNC
 						If opt\EnableSFXRelease Then snd\InternalHandle = LoadSound(snd\Name)
 					EndIf
 						
-					If snd\InternalHandle = 0 Then
+					If (Not snd\InternalHandle) Then
 						CreateConsoleMsg("Failed to load Sound: " + Chr(34) + snd\Name + Chr(34))
 						If opt\ConsoleOpening And opt\CanOpenConsole Then
 							ConsoleOpen = True
@@ -116,7 +115,7 @@ Function LoadSound_Strict(File$)
 	snd\InternalHandle = 0
 	snd\ReleaseTime = 0
 	If (Not opt\EnableSFXRelease) Then
-		If snd\InternalHandle = 0 Then 
+		If (Not snd\InternalHandle) Then 
 			snd\InternalHandle = LoadSound(snd\Name)
 		EndIf
 	EndIf
@@ -128,8 +127,7 @@ Function FreeSound_Strict(SoundHandle%)
 	
 	If snd <> Null Then
 		If snd\InternalHandle <> 0 Then
-			FreeSound(snd\InternalHandle)
-			snd\InternalHandle = 0
+			FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
 		EndIf
 		Delete(snd)
 	EndIf
@@ -270,10 +268,10 @@ Function LoadMesh_Strict(File$, Parent% = 0)
 	Local TexAlpha% = 0
 	Local Temp$
 	
-	If Tmp = 0 Then
+	If (Not Tmp) Then
 		If FileType(File) <> 1 Then RuntimeError("3D Mesh " + File + " not found.")
 		Tmp = LoadMesh(File, Parent)
-		If Tmp = 0 Then RuntimeError("Failed to load 3D Mesh: " + File)
+		If (Not Tmp) Then RuntimeError("Failed to load 3D Mesh: " + File)
 	EndIf
 	
 	For i = 1 To CountSurfaces(Tmp)
@@ -347,10 +345,10 @@ Function LoadAnimMesh_Strict(File$, Parent% = 0)
 	Local Tmp%, i%, SF%, b%, t1%, Name$, Texture%
 	Local TexAlpha% = 0
 	
-	If Tmp = 0 Then
+	If (Not Tmp) Then
 		If FileType(File) <> 1 Then RuntimeError("3D Animated Mesh " + File + " not found.")
 		Tmp = LoadAnimMesh(File, Parent)
-		If Tmp = 0 Then RuntimeError("Failed to load 3D Animated Mesh: " + File)
+		If (Not Tmp) Then RuntimeError("Failed to load 3D Animated Mesh: " + File)
 	EndIf
 	
 	For i = 1 To CountSurfaces(Tmp)
@@ -383,10 +381,10 @@ End Function
 Function LoadTexture_Strict(File$, Flags% = 1, TexDeleteType% = DeleteMapTextures)
 	Local Tmp%
 	
-	If Tmp = 0 Then
+	If (Not Tmp) Then
 		If FileType(File) <> 1 Then RuntimeError("Texture " + File + " not found.")
 		Tmp = LoadTextureCheckingIfInCache(File, Flags, TexDeleteType)
-		If Tmp = 0 Then RuntimeError("Failed to load Texture: " + File)
+		If (Not Tmp) Then RuntimeError("Failed to load Texture: " + File)
 	EndIf
 	Return(Tmp) 
 End Function
@@ -394,10 +392,10 @@ End Function
 Function LoadAnimTexture_Strict(File$, Flags%, Width%, Height%, FirstFrame%, Count%, TexDeleteType% = DeleteMapTextures)
 	Local Tmp%
 	
-	If Tmp = 0 Then
+	If (Not Tmp) Then
 		If FileType(File) <> 1 Then RuntimeError("Animated Texture " + File + " not found.")
 		Tmp = LoadAnimTextureCheckingIfInCache(File, Flags, Width, Height, FirstFrame, Count, TexDeleteType)
-		If Tmp = 0 Then RuntimeError("Failed to load Animated Texture: " + File)
+		If (Not Tmp) Then RuntimeError("Failed to load Animated Texture: " + File)
 	EndIf
 	Return(Tmp) 
 End Function   
@@ -405,10 +403,10 @@ End Function
 Function LoadBrush_Strict(File$, Flags%, u# = 1.0, v# = 1.0)
 	Local Tmp%
 	
-	If Tmp = 0 Then
+	If (Not Tmp) Then
 		If FileType(File) <> 1 Then RuntimeError("Brush Texture " + File + "not found.")
 		Tmp = LoadBrush(File, Flags, u, v)
-		If Tmp = 0 Then RuntimeError("Failed to load Brush: " + File)
+		If (Not Tmp) Then RuntimeError("Failed to load Brush: " + File)
 	EndIf
 	Return(Tmp)
 End Function 
@@ -416,22 +414,23 @@ End Function
 Function LoadFont_Strict(File$ = "Tahoma", Height% = 13, IgnoreScaling% = False)
 	Local Tmp%
 	
-	If Tmp = 0 Then
+	If (Not Tmp) Then
 		If FileType(File) <> 1 Then RuntimeError("Font " + File + " not found.")
 		Tmp = LoadFont(File, (Int(Height * (opt\GraphicHeight / 1024.0))) * (Not IgnoreScaling) + IgnoreScaling * Height)
-		If Tmp = 0 Then RuntimeError("Failed to load Font: " + File)
+		If (Not Tmp) Then RuntimeError("Failed to load Font: " + File)
 	EndIf
 	Return(Tmp)
 End Function
 
 Function LoadImage_Strict(File$)
-	Local Tmp%, Tmp2%
+	Local Tmp%
 	
-	If Tmp = 0 Then
-		If FileType(File) <> 1 Then RuntimeError("Image " + Chr(34) + File + Chr(34) + " missing. ")
+	If (Not Tmp) Then
+		If FileType(File) <> 1 Then RuntimeError("Image " + Chr(34) + File + Chr(34) + " not found. ")
 		Tmp = LoadImage(File)
-		Return(Tmp)
+		If (Not Tmp) Then RuntimeError("Failed to load image: " + File)
 	EndIf
+	Return(Tmp)
 End Function
 
 ;~IDEal Editor Parameters:

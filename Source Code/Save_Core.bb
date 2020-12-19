@@ -790,8 +790,7 @@ Function LoadGame(File$)
 				For x = 0 To GridSZ - 1
 					For y = 0 To GridSZ - 1
 						If r\grid\Entities[x + (y * GridSZ)] <> 0 Then
-							FreeEntity(r\grid\Entities[x + (y * GridSZ)])
-							r\grid\Entities[x + (y * GridSZ)] = 0
+							FreeEntity(r\grid\Entities[x + (y * GridSZ)]) : r\grid\Entities[x + (y * GridSZ)] = 0
 						EndIf
 						If r\grid\waypoints[x + (y * Gridsz)] <> Null Then
 							RemoveWaypoint(r\grid\waypoints[x + (y * GridSZ)])
@@ -801,8 +800,7 @@ Function LoadGame(File$)
 				Next
 				For x = 0 To 6
 					If r\grid\Meshes[x] <> 0 Then
-						FreeEntity(r\grid\Meshes[x])
-						r\grid\Meshes[x] = 0
+						FreeEntity(r\grid\Meshes[x]) : r\grid\Meshes[x] = 0
 					EndIf
 				Next
 				Delete(r\grid)
@@ -1663,8 +1661,7 @@ Function LoadGameQuick(File$)
 				For x = 0 To GridSZ - 1
 					For y = 0 To GridSZ - 1
 						If r\grid\Entities[x + (y * GridSZ)] <> 0 Then
-							FreeEntity(r\grid\Entities[x + (y * GridSZ)])
-							r\grid\Entities[x + (y * GridSZ)] = 0
+							FreeEntity(r\grid\Entities[x + (y * GridSZ)]) : r\grid\Entities[x + (y * GridSZ)] = 0
 						EndIf
 						If r\grid\waypoints[x + (y * GridSZ)] <> Null Then
 							RemoveWaypoint(r\grid\waypoints[x + (y * GridSZ)])
@@ -1674,8 +1671,7 @@ Function LoadGameQuick(File$)
 				Next
 				For x = 0 To 6
 					If r\grid\Meshes[x] <> 0 Then
-						FreeEntity(r\grid\Meshes[x])
-						r\grid\Meshes[x] = 0
+						FreeEntity(r\grid\Meshes[x]) : r\grid\Meshes[x] = 0
 					EndIf
 				Next
 				Delete(r\grid)
@@ -1833,7 +1829,7 @@ Function LoadGameQuick(File$)
 		If e\EventID = e_room173
 			; ~ A hacky fix for the case that the intro objects aren't loaded when they should
 			; ~ Altough I'm too lazy to add those objects there because at the time where you can save, those objects are already in the ground anyway -- ENDSHN
-			If e\room\Objects[0] = 0 Then
+			If (Not e\room\Objects[0]) Then
 				e\room\Objects[0] = CreatePivot()
 				e\room\Objects[1] = CreatePivot()
 			EndIf

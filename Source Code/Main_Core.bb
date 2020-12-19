@@ -1560,7 +1560,7 @@ Function UpdateConsole()
 						If CustomMusic <> 0 Then FreeSound_Strict(CustomMusic) : CustomMusic = 0
 						If MusicCHN <> 0 Then StopChannel(MusicCHN)
 						CustomMusic = LoadSound_Strict("SFX\Music\Custom\" + StrTemp)
-						If CustomMusic = 0 Then
+						If (Not CustomMusic) Then
 							PlayCustomMusic = False
 						EndIf
 					Else
@@ -1890,7 +1890,7 @@ Global MusicCHN%
 MusicCHN = StreamSound_Strict("SFX\Music\" + Music[2] + ".ogg", opt\MusicVolume, Mode)
 
 Global NowPlaying% = 2, ShouldPlay% = 11
-Global CurrMusic% = 1
+Global CurrMusic% = True
 
 DrawLoading(10, True)
 
@@ -2232,7 +2232,7 @@ Function UpdateDoors()
 	
 	For d.Doors = Each Doors
 		If d\Dist < HideDistance * 2.0 Lor d\IsElevatorDoor > 0 Then ; ~ Make elevator doors update everytime because if not, this can cause a bug where the elevators suddenly won't work, most noticeable in room2tunnel -- ENDSHN
-			If (d\OpenState >= 180.0 Lor d\OpenState =< 0.0) And GrabbedEntity = 0 Then
+			If (d\OpenState >= 180.0 Lor d\OpenState =< 0.0) And (Not GrabbedEntity) Then
 				For i = 0 To 1
 					If d\Buttons[i] <> 0 Then
 						If Abs(EntityX(me\Collider) - EntityX(d\Buttons[i], True)) < 1.0 Then 
@@ -2245,7 +2245,7 @@ Function UpdateDoors()
 									PointEntity(Temp, d\Buttons[i])
 									
 									If EntityPick(Temp, 0.6) = d\Buttons[i] Then
-										If ClosestButton = 0 Then
+										If (Not ClosestButton) Then
 											ClosestButton = d\Buttons[i]
 											ClosestDoor = d
 										Else
@@ -2457,7 +2457,7 @@ Function UpdateButton(OBJ%)
 		PointEntity(Temp, OBJ)
 		
 		If EntityPick(Temp, 0.65) = OBJ Then
-			If ClosestButton = 0 Then 
+			If (Not ClosestButton) Then 
 				ClosestButton = OBJ
 			Else
 				If Dist < EntityDistanceSquared(me\Collider, ClosestButton) Then ClosestButton = OBJ
@@ -2479,7 +2479,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 		If (ClosestButton = door2\Buttons[0] Lor ClosestButton = door2\Buttons[1]) And mo\MouseHit1 Then
 			UseDoor(door1, False)
 		EndIf
-	ElseIf door2\Open = True And (Not door1\Open) And door2\OpenState = 180.0 Then
+	ElseIf door2\Open And (Not door1\Open) And door2\OpenState = 180.0 Then
 		State = 1.0
 		door2\Locked = 0
 		If (ClosestButton = door1\Buttons[0] Lor ClosestButton = door1\Buttons[1]) And mo\MouseHit1 Then
@@ -2528,7 +2528,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 						If Abs(EntityY(me\Collider) - EntityY(FirstPivot, True)) < 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then	
 							Inside = True
 							
-							If event\SoundCHN = 0 Then
+							If (Not event\SoundCHN) Then
 								event\SoundCHN = PlaySound_Strict(ElevatorMoveSFX)
 							Else
 								If (Not ChannelPlaying(event\SoundCHN)) Then event\SoundCHN = PlaySound_Strict(ElevatorMoveSFX)
@@ -2648,7 +2648,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 						If Abs(EntityY(me\Collider) - EntityY(SecondPivot, True)) < 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then
 							Inside = True
 							
-							If event\SoundCHN = 0 Then
+							If (Not event\SoundCHN) Then
 								event\SoundCHN = PlaySound_Strict(ElevatorMoveSFX)
 							Else
 								If (Not ChannelPlaying(event\SoundCHN)) Then event\SoundCHN = PlaySound_Strict(ElevatorMoveSFX)
@@ -3293,19 +3293,19 @@ Function MainLoop()
 				Select me\Zone
 					Case 0, 1, 2
 						;[Block]
-						If AmbientSFX(me\Zone, CurrAmbientSFX) = 0 Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Zone" + (me\Zone + 1) + "\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
+						If (Not AmbientSFX(me\Zone, CurrAmbientSFX)) Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Zone" + (me\Zone + 1) + "\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
 						;[End Block]
 					Case 3
 						;[Block]
-						If AmbientSFX(me\Zone, CurrAmbientSFX) = 0 Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\General\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
+						If (Not AmbientSFX(me\Zone, CurrAmbientSFX)) Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\General\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
 						;[End Block]
 					Case 4
 						;[Block]
-						If AmbientSFX(me\Zone, CurrAmbientSFX) = 0 Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Pre-breach\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
+						If (Not AmbientSFX(me\Zone, CurrAmbientSFX)) Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Pre-breach\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
 						;[End Block]
 					Case 5
 						;[Block]
-						If AmbientSFX(me\Zone, CurrAmbientSFX) = 0 Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Forest\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
+						If (Not AmbientSFX(me\Zone, CurrAmbientSFX)) Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Forest\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
 						;[End Block]
 				End Select
 				
@@ -3514,7 +3514,7 @@ Function MainLoop()
 				me\BlinkTimer = me\BlinkTimer - fps\FPSFactor[0]
 			Else
 				me\BlinkTimer = me\BlinkTimer - fps\FPSFactor[0] * 0.6 * me\BlinkEffect
-				If wi\NightVision = 0 Then
+				If wi\NightVision = 0 And wi\SCRAMBLE Then
 					If me\EyeIrritation > 0.0 Then me\BlinkTimer = me\BlinkTimer - Min(me\EyeIrritation / 100.0 + 1.0, 4.0) * fps\FPSFactor[0]
 				EndIf
 				DarkA = Max(DarkA, 0.0)
@@ -3590,15 +3590,16 @@ Function MainLoop()
 		If KeyHit(key\INVENTORY) And me\VomitTimer >= 0.0 And me\KillTimer >= 0.0 And me\SelectedEnding = "" Then
 			If (Not UnableToMove) And (Not me\Zombie) And (Not I_294\Using) Then
 				Local W$ = ""
-				Local V# = 0
+				Local V# = 0.0
 				
 				If SelectedItem <> Null
 					W = SelectedItem\ItemTemplate\TempName
 					V = SelectedItem\State
 					; ~ Reset SCP-1025
 					If SelectedItem\ItemTemplate\TempName = "scp1025" Then
-						If SelectedItem\ItemTemplate\Img <> 0 Then FreeImage(SelectedItem\ItemTemplate\Img)
-						SelectedItem\ItemTemplate\Img = 0
+						If SelectedItem\ItemTemplate\Img <> 0 Then
+							FreeImage(SelectedItem\ItemTemplate\Img) : SelectedItem\ItemTemplate\Img = 0
+						EndIf
 					EndIf
 				EndIf
 				If (W <> "vest" And W <> "finevest" And W <> "hazmatsuit" And W <> "hazmatsuit2" And W <> "hazmatsuit3") Lor V = 0.0 Lor V = 100.0
@@ -3924,7 +3925,7 @@ Function UpdateEnding()
 			If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN)
 		EndIf
 		
-		If me\EndingScreen = 0 Then
+		If (Not me\EndingScreen) Then
 			me\EndingScreen = LoadImage_Strict("GFX\ending_screen.png")
 			
 			ShouldPlay = 23
@@ -4011,7 +4012,7 @@ Function InitCredits()
 	fo\FontID[Font_Credits] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 21)
 	fo\FontID[Font_Credits_Big] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 35)
 	
-	If me\CreditsScreen = 0 Then me\CreditsScreen = LoadImage_Strict("GFX\credits_screen.png")
+	If (Not me\CreditsScreen) Then me\CreditsScreen = LoadImage_Strict("GFX\credits_screen.png")
 	
 	Repeat
 		l = ReadLine(File)
@@ -4085,10 +4086,12 @@ Function DrawCredits()
 	If me\CreditsTimer = -1.0 Then
 		FreeFont(fo\FontID[Font_Credits])
 		FreeFont(fo\FontID[Font_Credits_Big])
-		FreeImage(me\CreditsScreen)
-		me\CreditsScreen = 0
-		FreeImage(me\EndingScreen)
-		me\EndingScreen = 0
+		If me\CreditsScreen <> 0 Then
+			FreeImage(me\CreditsScreen) : me\CreditsScreen = 0
+		EndIf
+		If me\EndingScreen <> 0 Then
+			FreeImage(me\EndingScreen) : me\EndingScreen = 0
+		EndIf
 	EndIf
 End Function
 
@@ -4211,7 +4214,7 @@ Function MovePlayer()
 					If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp = 1
 					If (Not ChannelPlaying(BreathCHN)) Then BreathCHN = PlaySound_Strict(BreathSFX((Temp), 0))
 				ElseIf me\Stamina < 40.0
-					If BreathCHN = 0 Then
+					If (Not BreathCHN) Then
 						Temp = 0.0
 						If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp = 1
 						BreathCHN = PlaySound_Strict(BreathSFX((Temp), Rand(1, 3)))
@@ -4577,10 +4580,10 @@ Function MouseLook()
 			If CollisionY(me\Head, i) < EntityY(me\Head) - 0.01 Then CollidedFloor = True
 		Next
 		
-		If CollidedFloor = True Then
+		If CollidedFloor Then
 			me\HeadDropSpeed = 0.0
 		Else
-			If me\KillAnim = 0 Then 
+			If (Not me\KillAnim) Then 
 				MoveEntity(me\Head, 0.0, 0.0, me\HeadDropSpeed)
 				RotateEntity(me\Head, CurveAngle(-90.0, EntityPitch(me\Head), 20.0), EntityYaw(me\Head), EntityRoll(me\Head))
 				RotateEntity(Camera, CurveAngle(EntityPitch(me\Head) - 40.0, EntityPitch(Camera), 40.0), EntityYaw(Camera), EntityRoll(Camera))
@@ -4708,7 +4711,7 @@ Function MouseLook()
 					;[Block]
 					If fps\FPSFactor[0] > 0.0 Then 
 						If Rand(1000) = 1 Then
-							If CoughCHN = 0 Then
+							If (Not CoughCHN) Then
 								CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
 							Else
 								If (Not ChannelPlaying(CoughCHN)) Then CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
@@ -4727,7 +4730,7 @@ Function MouseLook()
 					;[Block]
 					If fps\FPSFactor[0] > 0.0 Then 
 						If Rand(800) = 1 Then
-							If CoughCHN = 0 Then
+							If (Not CoughCHN) Then
 								CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
 							Else
 								If (Not ChannelPlaying(CoughCHN)) Then CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
@@ -4752,7 +4755,7 @@ Function MouseLook()
 					;[Block]
 					If me\Stamina < 35.0 Then
 						If Rand(Int(140.0 + me\Stamina * 8.0)) = 1 Then
-							If CoughCHN = 0 Then
+							If (Not CoughCHN) Then
 								CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
 							Else
 								If (Not ChannelPlaying(CoughCHN)) Then CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
@@ -4819,24 +4822,26 @@ Function DrawGUI()
 				If Float(e\EventStr) < 1000.0 Then
 					If e\EventState > 600.0 Then
 						If me\BlinkTimer < -3.0 And me\BlinkTimer > -10.0 Then
-							If e\Img = 0 Then
+							If (Not e\Img) Then
 								If me\BlinkTimer > -5.0 And Rand(30) = 1 Then
 									PlaySound_Strict(DripSFX[Rand(0, 5)])
-									If e\Img = 0 Then e\Img = LoadImage_Strict("GFX\npcs\scp_106_face.png")
+									If (Not e\Img) Then e\Img = LoadImage_Strict("GFX\npcs\scp_106_face.png")
 								EndIf
 							Else
 								DrawImage(e\Img, opt\GraphicWidth / 2 - Rand(390, 310), opt\GraphicHeight / 2 - Rand(290, 310))
 							EndIf
 						Else
-							If e\Img <> 0 Then FreeImage(e\Img) : e\Img = 0
+							If e\Img <> 0 Then
+								FreeImage(e\Img) : e\Img = 0
+							EndIf
 						EndIf
 						Exit
 					EndIf
 				Else
 					If me\BlinkTimer < -3.0 And me\BlinkTimer > -10.0 Then
-						If e\Img = 0 Then
+						If (Not e\Img) Then
 							If me\BlinkTimer > -5.0 Then
-								If e\Img = 0 Then
+								If (Not e\Img) Then
 									e\Img = LoadImage_Strict("GFX\kneel_mortal.png")
 									If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN)
 									e\SoundCHN = PlaySound_Strict(e\Sound)
@@ -4846,7 +4851,9 @@ Function DrawGUI()
 							DrawImage(e\Img, opt\GraphicWidth / 2 - Rand(390, 310), opt\GraphicHeight / 2 - Rand(290, 310))
 						EndIf
 					Else
-						If e\Img <> 0 Then FreeImage(e\Img) : e\Img = 0
+						If e\Img <> 0 Then
+							FreeImage(e\Img) : e\Img = 0
+						EndIf
 						If me\BlinkTimer < -3.0 Then
 							If (Not ChannelPlaying(e\SoundCHN)) Then e\SoundCHN = PlaySound_Strict(e\Sound)
 						Else
@@ -5365,7 +5372,7 @@ Function DrawGUI()
 					;[End Block]
 				Case "paper", "ticket"
 					;[Block]
-					If SelectedItem\ItemTemplate\Img = 0 Then
+					If (Not SelectedItem\ItemTemplate\Img) Then
 						Select SelectedItem\ItemTemplate\Name
 							Case "Burnt Note" 
 								;[Block]
@@ -5410,7 +5417,7 @@ Function DrawGUI()
 				Case "scp1025"
 					;[Block]
 					GiveAchievement(Achv1025) 
-					If SelectedItem\ItemTemplate\Img = 0 Then
+					If (Not SelectedItem\ItemTemplate\Img) Then
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\items\1025\1025(" + Int(SelectedItem\State) + ").png")	
 						SelectedItem\ItemTemplate\Img = ResizeImage2(SelectedItem\ItemTemplate\Img, ImageWidth(SelectedItem\ItemTemplate\Img) * MenuScale, ImageHeight(SelectedItem\ItemTemplate\Img) * MenuScale)
 						
@@ -5421,7 +5428,7 @@ Function DrawGUI()
 					;[End Block]
 				Case "radio", "18vradio", "fineradio", "veryfineradio"
 					;[Block]
-					If SelectedItem\ItemTemplate\Img = 0 Then
+					If (Not SelectedItem\ItemTemplate\Img) Then
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
@@ -5540,7 +5547,7 @@ Function DrawGUI()
 					;[End Block]
 				Case "navigator", "nav"
 					;[Block]
-					If SelectedItem\ItemTemplate\Img = 0 Then
+					If (Not SelectedItem\ItemTemplate\Img) Then
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
@@ -5739,7 +5746,7 @@ Function DrawGUI()
 					;[End Block]
 				Case "badge"
 					;[Block]
-					If SelectedItem\ItemTemplate\Img = 0 Then
+					If (Not SelectedItem\ItemTemplate\Img) Then
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
 						
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
@@ -5749,7 +5756,7 @@ Function DrawGUI()
 					;[End Block]
 				Case "oldpaper"
 					;[Block]
-					If SelectedItem\ItemTemplate\Img = 0 Then
+					If (Not SelectedItem\ItemTemplate\Img) Then
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
 						SelectedItem\ItemTemplate\Img = ResizeImage2(SelectedItem\ItemTemplate\Img, ImageWidth(SelectedItem\ItemTemplate\Img) * MenuScale, ImageHeight(SelectedItem\ItemTemplate\Img) * MenuScale)
 						
@@ -5798,8 +5805,7 @@ Function DrawGUI()
 								If IN2 = "paper" Lor IN2 = "badge" Lor IN2 = "oldpaper" Lor IN2 = "ticket" Then
 									If a_it\ItemTemplate\Img <> 0
 										If a_it\ItemTemplate\Img <> SelectedItem\ItemTemplate\Img
-											FreeImage(a_it\ItemTemplate\Img)
-											a_it\ItemTemplate\Img = 0
+											FreeImage(a_it\ItemTemplate\Img) : a_it\ItemTemplate\Img = 0
 										EndIf
 									EndIf
 								EndIf
@@ -5812,8 +5818,9 @@ Function DrawGUI()
 			If mo\MouseHit2 Then
 				IN = SelectedItem\ItemTemplate\TempName
 				If IN = "scp1025" Then
-					If SelectedItem\ItemTemplate\Img <> 0 Then FreeImage(SelectedItem\ItemTemplate\Img)
-					SelectedItem\ItemTemplate\Img = 0
+					If SelectedItem\ItemTemplate\Img <> 0 Then
+						FreeImage(SelectedItem\ItemTemplate\Img) : SelectedItem\ItemTemplate\Img = 0
+					EndIf
 				EndIf
 			EndIf
 		EndIf		
@@ -6211,7 +6218,7 @@ Function UpdateGUI()
 							SelectedItem = Inventory[n]
 							
 							If mo\DoubleClick And mo\DoubleClickSlot = n Then
-								If wi\HazmatSuit > 0 And Instr(SelectedItem\ItemTemplate\TempName, "hazmatsuit") = 0 Then
+								If wi\HazmatSuit > 0 And (Not Instr(SelectedItem\ItemTemplate\TempName, "hazmatsuit")) Then
 									CreateMsg("You cannot use any items while wearing a hazmat suit.", 6.0)
 									SelectedItem = Null
 									Return
@@ -6859,13 +6866,13 @@ Function UpdateGUI()
 						SelectedItem = Null
 					EndIf
 					;[End Block]
-				Case "paper", "ticket"
+				Case "ticket"
 					;[Block]
-					If SelectedItem\ItemTemplate\Img = 0 Then
+					If (Not SelectedItem\ItemTemplate\Img) Then
 						Select SelectedItem\ItemTemplate\Name
 							Case "Movie Ticket"
 								;[Block]
-								If (SelectedItem\State = 0.0) Then
+								If SelectedItem\State = 0.0 Then
 									CreateMsg(Chr(34) + "Hey, I remember this movie!" + Chr(34), 6.0)
 									PlaySound_Strict(LoadTempSound("SFX\SCP\1162\NostalgiaCancer" + Rand(1, 5) + ".ogg"))
 									SelectedItem\State = 1.0
@@ -6877,7 +6884,7 @@ Function UpdateGUI()
 				Case "scp1025"
 					;[Block]
 					GiveAchievement(Achv1025) 
-					If SelectedItem\ItemTemplate\Img = 0 Then
+					If (Not SelectedItem\ItemTemplate\Img) Then
 						SelectedItem\State = Rand(0.0, 5.0)
 					EndIf
 					
@@ -7045,7 +7052,9 @@ Function UpdateGUI()
 													RadioState[0] = Rand(0.0, UserTrackMusicAmount - 1)
 												EndIf
 											EndIf
-											If CurrUserTrack <> 0 Then FreeSound_Strict(CurrUserTrack) : CurrUserTrack = 0
+											If CurrUserTrack <> 0 Then
+												FreeSound_Strict(CurrUserTrack) : CurrUserTrack = 0
+											EndIf
 											CurrUserTrack = LoadSound_Strict("SFX\Radio\UserTracks\" + UserTrackName[RadioState[0]])
 											RadioCHN[0] = PlaySound_Strict(CurrUserTrack)
 										Else
@@ -7066,7 +7075,9 @@ Function UpdateGUI()
 													RadioState[0] = Rand(0.0, UserTrackMusicAmount - 1)
 												EndIf
 											EndIf
-											If CurrUserTrack <> 0 Then FreeSound_Strict(CurrUserTrack) : CurrUserTrack = 0
+											If CurrUserTrack <> 0 Then
+												FreeSound_Strict(CurrUserTrack) : CurrUserTrack = 0
+											EndIf
 											CurrUserTrack = LoadSound_Strict("SFX\Radio\UserTracks\" + UserTrackName[RadioState[0]])
 											RadioCHN[0] = PlaySound_Strict(CurrUserTrack)
 										EndIf
@@ -11409,14 +11420,14 @@ Function Use427()
 					I_1025\State[i] = Max(I_1025\State[i] - (fps\FPSFactor[0] * 0.001), 0.0)
 				EndIf
 			Next
-			If I_427\Sound[0] = 0 Then
+			If (Not I_427\Sound[0]) Then
 				I_427\Sound[0] = LoadSound_Strict("SFX\SCP\427\Effect.ogg")
 			EndIf
 			If (Not ChannelPlaying(I_427\SoundCHN[0])) Then
 				I_427\SoundCHN[0] = PlaySound_Strict(I_427\Sound[0])
 			EndIf
 			If I_427\Timer >= 70.0 * 180.0 Then
-				If I_427\Sound[1] = 0 Then I_427\Sound[1] = LoadSound_Strict("SFX\SCP\427\Transform.ogg")
+				If (Not I_427\Sound[1]) Then I_427\Sound[1] = LoadSound_Strict("SFX\SCP\427\Transform.ogg")
 				If (Not ChannelPlaying(I_427\SoundCHN[1])) Then I_427\SoundCHN[1] = PlaySound_Strict(I_427\Sound[1])
 			EndIf
 			If PrevI427Timer < 70.0 * 60.0 And I_427\Timer >= 70.0 * 60.0 Then
@@ -11436,10 +11447,10 @@ Function Use427()
 			CreateMsg("You can't feel your legs. But you don't need legs anymore.", 6.0)
 		EndIf
 		I_427\Timer = I_427\Timer + fps\FPSFactor[0]
-		If I_427\Sound[0] = 0 Then
+		If (Not I_427\Sound[0]) Then
 			I_427\Sound[0] = LoadSound_Strict("SFX\SCP\427\Effect.ogg")
 		EndIf
-		If I_427\Sound[1] = 0 Then
+		If (Not I_427\Sound[1]) Then
 			I_427\Sound[1] = LoadSound_Strict("SFX\SCP\427\Transform.ogg")
 		EndIf
 		For i = 0 To 1
@@ -11849,7 +11860,7 @@ Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#, Size# = 1.0, A
 	SpriteViewMode(d\OBJ, 2)
 	If R <> 0 Lor G <> 0 Lor B <> 0 Then EntityColor(d\OBJ, R, G, B)
 	
-	If tt\DecalTextureID[ID] = 0 Lor d\OBJ = 0 Then Return(Null)
+	If (Not tt\DecalTextureID[ID]) Lor (Not d\OBJ) Then Return(Null)
 	
 	Return(d)
 End Function
