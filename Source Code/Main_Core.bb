@@ -3055,7 +3055,7 @@ Global MTFCameraCheckDetected% = False
 
 Include "Source Code\Menu_Core.bb"
 
-InitMenuAssets()
+InitMainMenuAssets()
 MainMenuOpen = True
 
 FlushKeys()
@@ -9865,7 +9865,7 @@ Function NullGame(PlayButtonSFX% = True) ; ~ CHECK FOR ERRORS
 	
 	mm\ShouldDeleteGadgets = True
 	
-	InitMenuAssets()
+	InitMainMenuAssets()
 	MenuOpen = False
 	MainMenuOpen = True
 	mm\MainMenuTab = MainMenuTab_Default

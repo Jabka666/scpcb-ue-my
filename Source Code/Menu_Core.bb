@@ -1,7 +1,4 @@
 Type MainMenu
-	Field MainMenuBack%
-	Field MainMenuText%
-	Field MainMenu173%
 	Field MainMenuBlinkTimer#[2]
 	Field MainMenuBlinkDuration#[2]
 	Field MainMenuStr$, MainMenuStrX%, MainMenuStrY%
@@ -12,28 +9,41 @@ End Type
 
 Global mm.MainMenu = New MainMenu
 
+Type MainMenuAssets
+	Field BackGround%
+	Field SECURE_CONTAIN_PROTECT%
+	Field SCP173%
+	Field Palette%
+End Type
+
+Global mma.MainMenuAssets = New MainMenuAssets
+
 MenuWhite = LoadImage_Strict("GFX\menu\menu_white.png")
 MenuBlack = LoadImage_Strict("GFX\menu\menu_black.png")
 MaskImage(MenuBlack, 255, 255, 0)
 
-Function InitMenuAssets()
-	mm\MainMenuBack = LoadImage_Strict("GFX\menu\back.png")
-	ResizeImage(mm\MainMenuBack, ImageWidth(mm\MainMenuBack) * MenuScale, ImageHeight(mm\MainMenuBack) * MenuScale)
+Function InitMainMenuAssets()
+	mma\BackGround = LoadImage_Strict("GFX\menu\back.png")
+	ResizeImage(mma\BackGround, ImageWidth(mma\BackGround) * MenuScale, ImageHeight(mma\BackGround) * MenuScale)
 	
-	mm\MainMenuText = LoadImage_Strict("GFX\menu\SCP_text.png")
-	ResizeImage(mm\MainMenuText, ImageWidth(mm\MainMenuText) * MenuScale, ImageHeight(mm\MainMenuText) * MenuScale)
+	mma\SECURE_CONTAIN_PROTECT = LoadImage_Strict("GFX\menu\SCP_text.png")
+	ResizeImage(mma\SECURE_CONTAIN_PROTECT, ImageWidth(mma\SECURE_CONTAIN_PROTECT) * MenuScale, ImageHeight(mma\SECURE_CONTAIN_PROTECT) * MenuScale)
 	
-	mm\MainMenu173 = LoadImage_Strict("GFX\menu\scp_173_back.png")
-	ResizeImage(mm\MainMenu173, ImageWidth(mm\MainMenu173) * MenuScale, ImageHeight(mm\MainMenu173) * MenuScale)
+	mma\SCP173 = LoadImage_Strict("GFX\menu\scp_173_back.png")
+	ResizeImage(mma\SCP173, ImageWidth(mma\SCP173) * MenuScale, ImageHeight(mma\SCP173) * MenuScale)
+	
+	mma\Palette = LoadImage_Strict("GFX\menu\palette.png")
+	ResizeImage(mma\Palette, ImageWidth(mma\Palette) * MenuScale, ImageHeight(mma\Palette) * MenuScale)
 	
 	mm\MainMenuBlinkTimer[0] = 1.0
 	mm\MainMenuBlinkTimer[1] = 1.0
 End Function
 
-Function DeInitMenuAssets()
-	If mm\MainMenuBack <> 0 Then FreeImage(mm\MainMenuBack) : mm\MainMenuBack = 0
-	If mm\MainMenuText <> 0 Then FreeImage(mm\MainMenuText) : mm\MainMenuText = 0
-	If mm\MainMenu173 <> 0 Then FreeImage(mm\MainMenu173) : mm\MainMenu173 = 0
+Function DeInitMainMenuAssets()
+	If mma\BackGround <> 0 Then FreeImage(mma\BackGround) : mma\BackGround = 0
+	If mma\SECURE_CONTAIN_PROTECT <> 0 Then FreeImage(mma\SECURE_CONTAIN_PROTECT) : mma\SECURE_CONTAIN_PROTECT = 0
+	If mma\SCP173 <> 0 Then FreeImage(mma\SCP173) : mma\SCP173 = 0
+	If mma\Palette <> 0 Then FreeImage(mma\Palette) : mma\Palette = 0
 	
 	mm\MainMenuBlinkTimer[0] = 0.0
 	mm\MainMenuBlinkTimer[1] = 0.0
@@ -421,7 +431,7 @@ Function UpdateMainMenu()
 						
 						If SameFound > 0 Then CurrSave = CurrSave + " (" + (SameFound + 1) + ")"
 						
-						DeInitMenuAssets()
+						DeInitMainMenuAssets()
 						InitNewGame()
 						MainMenuOpen = False
 						FlushKeys()
@@ -471,7 +481,7 @@ Function UpdateMainMenu()
 										DrawButton(x + 280 * MenuScale, y + 20 * MenuScale, 100 * MenuScale, 30 * MenuScale, "Load", False, False, True, 255, 0, 0)
 									Else
 										If DrawButton(x + 280 * MenuScale, y + 20 * MenuScale, 100 * MenuScale, 30 * MenuScale, "Load", False) Then
-											DeInitMenuAssets()
+											DeInitMainMenuAssets()
 											LoadEntities()
 											LoadAllSounds()
 											LoadGame(SavePath + SaveGames(i - 1) + "\")
@@ -892,34 +902,13 @@ Function UpdateMainMenu()
 								EndIf
 							EndIf
 							
-							y = y + 60 * MenuScale
+							y = y + 35 * MenuScale
 							
 							If opt\EnableSubtitles Then
-								Local CurrSubColorR% = opt\SubColorR / 2.55
-								
-								CurrSubColorR = SlideBar(x + 310 * MenuScale, y, 150 * MenuScale, CurrSubColorR)
-								opt\SubColorR = CurrSubColorR * 2.55
+								DrawPalette(mma\Palette, x + 270 * MenuScale, y)
 							EndIf
 							
-							y = y + 40 * MenuScale
-							
-							If opt\EnableSubtitles Then
-								Local CurrSubColorG% = opt\SubColorG / 2.55
-								
-								CurrSubColorG = SlideBar(x + 310 * MenuScale, y, 150 * MenuScale, CurrSubColorG)
-								opt\SubColorG = CurrSubColorG * 2.55
-							EndIf
-							
-							y = y + 40 * MenuScale
-							
-							If opt\EnableSubtitles Then
-								Local CurrSubColorB% = opt\SubColorB / 2.55
-								
-								CurrSubColorB = SlideBar(x + 310 * MenuScale, y, 150 * MenuScale, CurrSubColorB)
-								opt\SubColorB = CurrSubColorB * 2.55
-							EndIf
-							
-							y = y + 40 * MenuScale
+							y = y + 25 * MenuScale
 							
 							If DrawButton(x + 20 * MenuScale, y, 220 * MenuScale, 30 * MenuScale, "RESET OPTIONS", False) Then
 								Delay(200)
@@ -996,10 +985,10 @@ Function RenderMainMenu()
 	
 	ShowPointer()
 	
-	DrawImage(mm\MainMenuBack, 0, 0)
+	DrawImage(mma\BackGround, 0, 0)
 	
 	If (MilliSecs() Mod mm\MainMenuBlinkTimer[0]) >= Rand(mm\MainMenuBlinkDuration[0]) Then
-		DrawImage(mm\MainMenu173, opt\GraphicWidth - ImageWidth(mm\MainMenu173), opt\GraphicHeight - ImageHeight(mm\MainMenu173))
+		DrawImage(mma\SCP173, opt\GraphicWidth - ImageWidth(mma\SCP173), opt\GraphicHeight - ImageHeight(mma\SCP173))
 	EndIf
 	
 	SetFont(fo\FontID[Font_Default])
@@ -1078,7 +1067,7 @@ Function RenderMainMenu()
 	
 	SetFont(fo\FontID[Font_Default_Big])
 	
-	DrawImage(mm\MainMenuText, opt\GraphicWidth / 2 - ImageWidth(mm\MainMenuText) / 2, opt\GraphicHeight - 20 * MenuScale - ImageHeight(mm\MainMenuText))
+	DrawImage(mma\SECURE_CONTAIN_PROTECT, opt\GraphicWidth / 2 - ImageWidth(mma\SECURE_CONTAIN_PROTECT) / 2, opt\GraphicHeight - 20 * MenuScale - ImageHeight(mma\SECURE_CONTAIN_PROTECT))
 	
 	If opt\GraphicWidth > 1240 * MenuScale Then
 		DrawTiledImageRect(MenuWhite, 0, 5, 512, 7 * MenuScale, 985.0 * MenuScale, 407.0 * MenuScale, (opt\GraphicWidth - 1240 * MenuScale) + 300, 7 * MenuScale)
@@ -1605,47 +1594,26 @@ Function RenderMainMenu()
 							Text(x + 20 * MenuScale, y + 5 * MenuScale, "Subtitles Color:")  
 						EndIf
 						
+						y = y + 5 * MenuScale
+						
+						If opt\EnableSubtitles Then
+							If MouseOn(x + 270 * MenuScale, y, 147 * MenuScale, 147 * MenuScale)
+								DrawOptionsTooltip(tX, tY, tW, tH, "subtitlescolor")
+							EndIf
+						EndIf
+						
 						y = y + 30 * MenuScale
-						If opt\EnableSubtitles Then  
-							Color(255, 0, 0)
-							Text(x + 20 * MenuScale, y + 5 * MenuScale, "RED COLOR:")
-							If MouseOn(x + 310 * MenuScale, y, 164 * MenuScale, 20)
-								DrawOptionsTooltip(tX, tY, tW, tH, "subcolor", opt\SubColorR)
-							EndIf
-						EndIf
 						
-						y = y + 40 * MenuScale
-						
-						If opt\EnableSubtitles Then
-							Color(0, 255, 0)
-							Text(x + 20 * MenuScale, y + 5 * MenuScale, "GREEN COLOR:")
-							If MouseOn(x + 310 * MenuScale, y, 164 * MenuScale, 20)
-								DrawOptionsTooltip(tX, tY, tW, tH, "subcolor", opt\SubColorG)
-							EndIf
-						EndIf
-						
-						y = y + 40 * MenuScale
-						
-						If opt\EnableSubtitles Then
-							Color(0, 0, 255)
-							Text(x + 20 * MenuScale, y + 5 * MenuScale, "BLUE COLOR:")
-							If MouseOn(x + 310 * MenuScale, y, 164 * MenuScale, 20)
-								DrawOptionsTooltip(tX, tY, tW, tH, "subcolor", opt\SubColorB)
-							EndIf
+						If MouseOn(x + 20 * MenuScale, y, 220 * MenuScale, 30 * MenuScale)
+							DrawOptionsTooltip(tX, tY, tW, tH, "resetoptions")
 						EndIf
 						
 						If opt\EnableSubtitles Then
 							Color(opt\SubColorR, opt\SubColorG, opt\SubColorB)
-							Text(x + (Width / 2), y + (140 * MenuScale), Chr(34) + "- Please, approach SCP-1-7-3 for testing." + Chr(34), True)
-							Text(x + (Width / 2), y + (160 * MenuScale), Chr(34) + "- Oh, and by the way." + Chr(34), True)
-							Text(x + (Width / 2), y + (180 * MenuScale), Chr(34) + "- You, stop!" + Chr(34), True)
-							Text(x + (Width / 2), y + (200 * MenuScale), "[JORGE HAS BEEN EXPECTING YOU]", True)
-						EndIf
-						
-						y = y + 40 * MenuScale
-						
-						If MouseOn(x + 20 * MenuScale, y, 220 * MenuScale, 30 * MenuScale)
-							DrawOptionsTooltip(tX, tY, tW, tH, "resetoptions")
+							Text(x + (Width / 2), y + (215 * MenuScale), Chr(34) + "- Please, approach SCP-1-7-3 for testing." + Chr(34), True)
+							Text(x + (Width / 2), y + (235 * MenuScale), Chr(34) + "- Oh, and by the way." + Chr(34), True)
+							Text(x + (Width / 2), y + (255 * MenuScale), Chr(34) + "- You, stop!" + Chr(34), True)
+							Text(x + (Width / 2), y + (275 * MenuScale), "[JORGE HAS BEEN EXPECTING YOU]", True)
 						EndIf
 					EndIf
 					;[End Block]
@@ -1713,6 +1681,7 @@ Function RenderMainMenu()
 	EndIf
 	
 	RenderMenuButtons()
+	RenderMenuPalettes()
 	RenderMenuTicks()
 	RenderMenuInputBoxes()
 	RenderMenuSlideBars()
@@ -2413,6 +2382,50 @@ Function DrawLauncherTick%(x%, y%, Selected%, Locked% = False)
 	Return(Selected)
 End Function
 
+Type MenuPalette
+	Field Img%
+	Field x%, y%, Width%, Height%
+	Field Pixel%
+End Type
+
+Function RenderMenuPalettes()
+	Local mp.MenuPalette
+	
+	For mp.MenuPalette = Each MenuPalette
+		DrawImage(mp\Img, mp\x, mp\y)
+		If MouseOn(mp\x, mp\y, mp\Width, mp\Height) Then
+			If mo\MouseDown1 Then
+				LockBuffer(BackBuffer())
+				mp\Pixel = ReadPixelFast(ScaledMouseX(), ScaledMouseY(), BackBuffer())
+				UnlockBuffer(BackBuffer())
+				opt\SubColorR = ReadPixelColor(mp\Pixel, 16)
+				opt\SubColorG = ReadPixelColor(mp\Pixel, 8)
+				opt\SubColorB = ReadPixelColor(mp\Pixel, 0)
+			EndIf
+		EndIf
+	Next
+End Function
+
+Function DrawPalette(Img%, x%, y%)
+	Local mp.MenuPalette, currPalette.MenuPalette
+	Local PaletteExists% = False
+	
+	For mp.MenuPalette = Each MenuPalette
+		If mp\x = x And mp\y = y Then
+			PaletteExists = True
+			Exit
+		EndIf
+	Next
+	If (Not PaletteExists) Then
+		mp.MenuPalette = New MenuPalette
+		mp\Img = Img
+		mp\x = x
+		mp\y = y
+		mp\Width = ImageWidth(Img)
+		mp\Height = ImageHeight(Img)
+	EndIf
+End Function
+
 Function rInput$(aString$, MaxChr%)
 	Local Value% = GetKey()
 	Local Length% = Len(aString)
@@ -2766,6 +2779,7 @@ End Function
 
 Function DeleteMenuGadgets()
 	Delete Each MenuButton
+	Delete Each MenuPalette
 	Delete Each MenuTick
 	Delete Each MenuInputBox
 	Delete Each MenuSlideBar
@@ -3058,7 +3072,7 @@ Function DrawOptionsTooltip(x%, y%, Width%, Height%, Option$, Value# = 0.0, InGa
 			R = 255
 		    Txt2 = "This option cannot be changed in-game."
 			;[End Block]
-		Case "subcolor"
+		Case "subtitlescolor"
 			;[Block]
 			Txt = Chr(34) + "Subtitles color" + Chr(34) + " is self-explanatory."
 			R = opt\SubColorR : G = opt\SubColorG : B = opt\SubColorB
