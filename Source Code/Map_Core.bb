@@ -4230,9 +4230,6 @@ Function FillRoom(r.Rooms)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
-			r\Objects[9] = LoadMesh_Strict("GFX\map\intro_labels.b3d", r\OBJ)
-			PositionEntity(r\Objects[9], EntityX(r\Objects[9], True), EntityY(r\Objects[9], True) - 16.0 * RoomScale, EntityZ(r\Objects[9], True), True)
-			
 			For i = 0 To 4
 			    Select i
 			        Case 0
