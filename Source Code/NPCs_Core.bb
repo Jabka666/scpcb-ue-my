@@ -7242,7 +7242,7 @@ Function GetNPCManipulationValue$(NPC$, Bone$, Section$, ValueType% = 0)
 			;[End Block]
 		Case 3
 			;[Block]
-			If Value = "true" Lor Value = "1"
+			If Value = "True" Lor Value = "1"
 				Return(True)
 			Else
 				Return(False)
