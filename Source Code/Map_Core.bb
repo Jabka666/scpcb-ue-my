@@ -4202,7 +4202,7 @@ Function FillRoom(r.Rooms)
 			d\AutoClose = False : d\Locked = 1 : d\MTFClose = False
 			
 			; ~ The door to the staircase in the office room
-			d = CreateDoor(r\Zone, r\x - 2432.0 * RoomScale, r\y, r\z - 1000.0 * RoomScale, 0.0, r, False, One_Sided_Door)
+			d = CreateDoor(r\Zone, r\x - 2448.0 * RoomScale, r\y, r\z - 1000.0 * RoomScale, 0.0, r, False, One_Sided_Door)
 			d\AutoClose = False : d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			PositionEntity(d\Buttons[0], r\x - 2592.0 * RoomScale, EntityY(d\Buttons[0], True), r\z - 1010.0 * RoomScale, True)
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
