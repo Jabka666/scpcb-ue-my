@@ -983,19 +983,6 @@ Function UpdateMainMenu()
 	
 	RenderMainMenu()
 	
-	Color(255, 255, 255)
-	SetFont(fo\FontID[Font_Console])
-	Text(20, opt\GraphicHeight - 50, "v" + VersionNumber)
-	If opt\ShowFPS Then
-		SetFont(fo\FontID[Font_Console])
-		Text(20, opt\GraphicHeight - 30, "FPS: " + fps\FPS)
-		SetFont(fo\FontID[Font_Default])
-	EndIf
-	
-	If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
-	
-	SetFont(fo\FontID[Font_Default])
-	
 	CatchErrors("UpdateMainMenu")
 End Function
 
@@ -1649,10 +1636,10 @@ Function RenderMainMenu()
 						
 						If opt\EnableSubtitles Then
 							Color(opt\SubColorR, opt\SubColorG, opt\SubColorB)
-							Text(x + (Width / 2), y + 140, Chr(34) + "- Please, approach SCP-1-7-3 for testing." + Chr(34), True)
-							Text(x + (Width / 2), y + 160, Chr(34) + "- Oh, and by the way." + Chr(34), True)
-							Text(x + (Width / 2), y + 180, Chr(34) + "- You, stop!" + Chr(34), True)
-							Text(x + (Width / 2), y + 200, "[JORGE HAS BEEN EXPECTING YOU]", True)
+							Text(x + (Width / 2), y + (140 * MenuScale), Chr(34) + "- Please, approach SCP-1-7-3 for testing." + Chr(34), True)
+							Text(x + (Width / 2), y + (160 * MenuScale), Chr(34) + "- Oh, and by the way." + Chr(34), True)
+							Text(x + (Width / 2), y + (180 * MenuScale), Chr(34) + "- You, stop!" + Chr(34), True)
+							Text(x + (Width / 2), y + (200 * MenuScale), "[JORGE HAS BEEN EXPECTING YOU]", True)
 						EndIf
 						
 						y = y + 40 * MenuScale
@@ -1730,6 +1717,19 @@ Function RenderMainMenu()
 	RenderMenuInputBoxes()
 	RenderMenuSlideBars()
 	RenderMenuSliders()
+	
+	Color(255, 255, 255)
+	SetFont(fo\FontID[Font_Console])
+	Text(20 * MenuScale, opt\GraphicHeight - (50 * MenuScale), "v" + VersionNumber)
+	If opt\ShowFPS Then
+		SetFont(fo\FontID[Font_Console])
+		Text(20 * MenuScale, opt\GraphicHeight - (30 * MenuScale), "FPS: " + fps\FPS)
+		SetFont(fo\FontID[Font_Default])
+	EndIf
+	
+	If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+	
+	SetFont(fo\FontID[Font_Default])
 End Function
 
 Const LauncherWidth% = 640
