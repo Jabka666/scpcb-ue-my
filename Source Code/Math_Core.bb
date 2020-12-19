@@ -72,11 +72,6 @@ Function ScaledMouseY%()
 End Function
 
 Function MouseOn%(x%, y%, Width%, Height%)
-	x = x * MenuScale
-	y = y * MenuScale
-	Width = Width  * MenuScale
-	Height = Height * MenuScale
-	
 	If ScaledMouseX() > x And ScaledMouseX() < x + Width Then
 		If ScaledMouseY() > y And ScaledMouseY() < y + Height Then
 			Return(True)
