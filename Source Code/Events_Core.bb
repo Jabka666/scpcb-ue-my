@@ -1116,8 +1116,9 @@ Function UpdateEvents()
 						If i > 26 Then
 							If e\room\NPC[0] <> Null Then RemoveNPC(e\room\NPC[0])
 							
-							FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
-							FreeEntity(e\room\Objects[1]) : e\room\Objects[1] = 0
+							For j = 0 To 1
+								FreeEntity(e\room\Objects[i]) : e\room\Objects[i] = 0
+							Next
 							
 							RemoveEvent(e)							
 						EndIf
@@ -1777,7 +1778,7 @@ Function UpdateEvents()
 									If EntityInView(Curr173\OBJ, Camera) Then
 										CreateMsg("Press " + key\Name[key\BLINK] + " to blink.", 6.0)
 										PlaySound_Strict(IntroSFX[3])
-										IntroSFX[3] = 0
+										FreeSound_Strict(IntroSFX[3]) : IntroSFX[3] = 0
 									EndIf
 								EndIf
 							EndIf
@@ -2244,8 +2245,7 @@ Function UpdateEvents()
 						ElseIf e\EventState3 = 4.0
 							Angle = WrapAngle(DeltaYaw(me\Collider, e\room\Objects[1]))
 							If Angle > 90.0 And Angle < 270.0 Then 
-								FreeEntity(e\room\Objects[1])
-								e\room\Objects[1] = 0
+								FreeEntity(e\room\Objects[1]) : e\room\Objects[1] = 0
 								e\EventState3 = 5.0
 							EndIf
 						EndIf
@@ -2421,13 +2421,13 @@ Function UpdateEvents()
 					EndIf
 					
 					If wi\NightVision > 0 Then
-						Local HasBatteryFor895% = 0
+						Local HasBatteryFor895% = False
 						
 						For i = 0 To MaxItemAmount - 1
 							If Inventory[i] <> Null Then
 								If (wi\NightVision = 1 And Inventory[i]\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory[i]\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory[i]\ItemTemplate\TempName = "finenvg") Then
 									If Inventory[i]\State > 0.0 Lor wi\NightVision = 3 Then
-										HasBatteryFor895 = 1
+										HasBatteryFor895 = True
 										Exit
 									EndIf
 								EndIf
@@ -3268,8 +3268,8 @@ Function UpdateEvents()
 									Temp = True
 									For it.Items = Each Items
 										If (Not it\Picked) Then
-											If EntityX(it\Collider) - EntityX(e\room\Objects[1], True) = 0 Then
-												If EntityZ(it\Collider) - EntityZ(e\room\Objects[1], True) = 0 Then
+											If EntityX(it\Collider) - EntityX(e\room\Objects[1], True) = 0.0 Then
+												If EntityZ(it\Collider) - EntityZ(e\room\Objects[1], True) = 0.0 Then
 													Temp = False
 													Exit
 												EndIf
@@ -3549,9 +3549,9 @@ Function UpdateEvents()
 						If PlayerRoom <> e\room Then
 							e\EventState3 = e\EventState2 * 5.0
 						Else
-							If Temp = 0 And e\EventState2 = 1.0 Then ; ~ Turn on the fan
+							If Temp = 0.0 And e\EventState2 = 1.0 Then ; ~ Turn on the fan
 								PlaySound2 (LoadTempSound("SFX\Ambient\Room Ambience\FanOn.ogg"), Camera, e\room\Objects[0], 8.0)
-							ElseIf Temp = 1 And e\EventState2 = 0.0 ; ~ Turn off the fan
+							ElseIf Temp = 1.0 And e\EventState2 = 0.0 ; ~ Turn off the fan
 								PlaySound2 (LoadTempSound("SFX\Ambient\Room Ambience\FanOff.ogg"), Camera, e\room\Objects[0], 8.0)
 							EndIf
 						EndIf
@@ -4029,18 +4029,18 @@ Function UpdateEvents()
 						Next
 						
 						Local MaxX% = GridSZ - 1
-						Local CanRetry% = 0
+						Local CanRetry% = False
 						
 						For iX = 0 To MaxX
 							For iY = 0 To GridSZ - 1
 								If e\room\grid\Grid[iX + 1 + (iY * GridSZ)] > 0 Then
 									MaxX = iX
 									If (e\room\grid\Grid[iX + 1 + ((iY + 1) * GridSZ)] < 3) And (e\room\grid\Grid[iX + 1 + ((iY - 1) * GridSZ)] < 3) Then
-										CanRetry = 1
+										CanRetry = True
 										If Rand(0, 1) = 1 Then
 											e\room\grid\Grid[iX + 1 + ((iY) * GridSZ)] = e\room\grid\Grid[iX + 1 + ((iY) * GridSZ)] + 1
 											e\room\grid\Grid[iX + ((iY) * GridSZ)] = 7 ; ~ Generator room
-											CanRetry = 0
+											CanRetry = False
 											Exit
 										EndIf
 									EndIf
@@ -4862,8 +4862,7 @@ Function UpdateEvents()
 										
 										PickItem(SelectedItem)
 										
-										FreeEntity(e\room\Objects[2])
-										e\room\Objects[2] = 0
+										FreeEntity(e\room\Objects[2]) : e\room\Objects[2] = 0
 										
 										e\EventState = 3.0
 										RemoveEvent(e)
@@ -4878,7 +4877,7 @@ Function UpdateEvents()
 				;[Block]
 				If PlayerRoom = e\room Then
 					If e\EventState = 0.0 Then
-						If e\room\RoomDoors[0]\Open = True Then 
+						If e\room\RoomDoors[0]\Open Then 
 							If e\room\RoomDoors[0]\OpenState = 180.0 Then 
 								e\EventState = 1.0
 								PlaySound_Strict(HorrorSFX[5])
@@ -5061,12 +5060,16 @@ Function UpdateEvents()
 							If e\room\Angle = 0.0 Lor e\room\Angle = 180.0 Then ; ~ Lock the player inside
 								If Abs(EntityX(me\Collider) - EntityX(e\room\OBJ, True)) > 1.3 Then 
 									e\EventState = 70.0 * 50.0
-									e\Sound = 0
+									If e\Sound <> 0 Then
+										FreeSound_Strict(e\Sound) : e\Sound = 0
+									EndIf
 								EndIf
 							Else
 								If Abs(EntityZ(me\Collider) - EntityZ(e\room\OBJ, True)) > 1.3 Then 
 									e\EventState = 70.0 * 50.0
-									e\Sound = 0
+									If e\Sound <> 0 Then
+										FreeSound_Strict(e\Sound) : e\Sound = 0
+									EndIf
 								EndIf
 							EndIf	
 						EndIf
@@ -5098,7 +5101,7 @@ Function UpdateEvents()
 					If e\EventState2 > 0.0 Then e\SoundCHN = LoopSound2(RoomAmbience[7], e\SoundCHN, Camera, e\room\Objects[3], 5.0, e\EventState2 * 0.8)
 					If e\EventState3 > 0.0 Then e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\Objects[5], 6.0, e\EventState3)
 					
-					If Temp = 0 And x And z Then
+					If (Not Temp) And x And z Then
 						e\room\RoomDoors[0]\Locked = 0
 						e\room\RoomDoors[1]\Locked = 0
 					Else
@@ -5796,7 +5799,7 @@ Function UpdateEvents()
 						Else
 							If e\room\RoomDoors[3]\Open Then e\EventState2 = Max(e\EventState2, 1.0)
 							; ~ The door is closed
-							If UpdateLever(e\room\Levers[0], (e\EventState2 = 20.0)) = 0 Then
+							If (Not UpdateLever(e\room\Levers[0], (e\EventState2 = 20.0))) Then
 								; ~ The gas valves are open
 								Temp = UpdateLever(e\room\Levers[1], False)
 								If Temp Lor (e\EventState3 > 70.0 * 25.0 And e\EventState3 < 70.0 * 50.0) Then 
@@ -5949,7 +5952,7 @@ Function UpdateEvents()
 													EndIf
 													e\room\NPC[0]\Sound = LoadSound_Strict("SFX\SCP\035\GasedCloset.ogg")
 													e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True, FIRST_PERSON)
-												ElseIf e\EventState3 = 0 ; ~ The gas valves haven't been opened
+												ElseIf e\EventState3 = 0.0 ; ~ The gas valves haven't been opened
 													If e\room\NPC[0]\Sound <> 0 Then 
 														FreeSound_Strict(e\room\NPC[0]\Sound) : e\room\NPC[0]\Sound = 0
 													EndIf
@@ -6289,7 +6292,7 @@ Function UpdateEvents()
 									ElseIf EntityDistanceSquared(me\Collider, e\room\RoomDoors[3]\FrameOBJ) < 9.0
 										i = 3
 									EndIf
-									If i > 0
+									If i > 0 Then
 										PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True))
 										ResetEntity(e\room\NPC[0]\Collider)
 										PlaySound2(ElevatorBeepSFX, Camera, e\room\Objects[i], 4.0)
@@ -6301,10 +6304,7 @@ Function UpdateEvents()
 										If e\room\NPC[0]\Sound2 <> 0 Then FreeSound_Strict(e\room\NPC[0]\Sound2)
 										e\room\NPC[0]\Sound2 = LoadSound_Strict("SFX\SCP\049\DetectedInChamber.ogg")
 										e\room\NPC[0]\SoundCHN2 = LoopSound2(e\room\NPC[0]\Sound2, e\room\NPC[0]\SoundCHN2, Camera, e\room\NPC[0]\OBJ)
-										e\room\NPC[0]\Idle = 0
-										e\room\NPC[0]\HideFromNVG = False
-										e\room\NPC[0]\PrevState = 2
-										e\room\NPC[0]\State = 2.0
+										e\room\NPC[0]\Idle = 0 : e\room\NPC[0]\HideFromNVG = False : e\room\NPC[0]\PrevState = 2 : e\room\NPC[0]\State = 2.0
 									EndIf
 								EndIf
 							EndIf
@@ -7179,7 +7179,7 @@ Function UpdateEvents()
 							e\room\RoomDoors[0]\Open = False
 						EndIf
 						
-						If EntityYaw(e\room\Objects[13], False) = 0 Then
+						If EntityYaw(e\room\Objects[13], False) = 0.0 Then
 							If EntityDistanceSquared(me\Collider, e\room\Objects[12]) < 1.21 Then
 								ga\DrawHandIcon = True
 								If mo\MouseHit1 Then
@@ -7318,7 +7318,7 @@ Function UpdateEvents()
 							PlaySound_Strict(LoadTempSound("SFX\SCP\079\TestroomWarning.ogg"))
 							For i = 0 To 5
 								em.Emitters = CreateEmitter(EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True), 0)
-								em\RandAngle = 5 : em\Speed = 0.042 : em\SizeChange = 0.0025	
+								em\RandAngle = 5.0 : em\Speed = 0.042 : em\SizeChange = 0.0025	
 								TurnEntity(em\OBJ, 90.0, 0.0, 0.0, True)
 							Next
 							RemoveEvent(e)
@@ -7335,10 +7335,10 @@ Function UpdateEvents()
 							em.Emitters = CreateEmitter(EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True), 0)
 							TurnEntity(em\OBJ, 90.0, 0.0, 0.0, True)
 							EntityParent(em\OBJ, e\room\OBJ)
-							em\Size = 0.05 : em\RandAngle = 10 : em\Speed = 0.06 : em\SizeChange = 0.007
+							em\Size = 0.05 : em\RandAngle = 10.0 : em\Speed = 0.06 : em\SizeChange = 0.007
 							For z = 0 To Ceil(3.3333 * (opt\ParticleAmount + 1))
 								p.Particles = CreateParticle(EntityX(em\OBJ, True), 448.0 * RoomScale, EntityZ(em\OBJ, True), Rand(em\MinImage, em\MaxImage), em\Size, em\Gravity, em\LifeTime)
-								p\Speed = em\Speed : p\size = 0.05 : p\SizeChange = 0.008
+								p\Speed = em\Speed : p\Size = 0.05 : p\SizeChange = 0.008
 								RotateEntity(p\Pvt, Rnd(360.0), Rnd(360.0), 0.0, True)
 							Next
 						Next
@@ -7463,7 +7463,7 @@ Function UpdateEvents()
 								e\EventState = 1.0
 							EndIf
 						Else
-							If e\room\Objects[2] = 0
+							If e\room\Objects[2] = 0 Then
 								Local GlassTex% = LoadTexture_Strict("GFX\map\textures\glass.png", 1 + 2)
 								
 								e\room\Objects[2] = CreateSprite()
@@ -7495,8 +7495,7 @@ Function UpdateEvents()
 										RemoveEvent(e)
 									Else
 										PlaySound2(LoadTempSound("SFX\General\GlassBreak.ogg"), Camera, Curr173\OBJ) 
-										FreeEntity(e\room\Objects[2])
-										e\room\Objects[2] = 0
+										FreeEntity(e\room\Objects[2]) : e\room\Objects[2] = 0
 										PositionEntity(Curr173\Collider, EntityX(e\room\Objects[1], True), 0.5, EntityZ(e\room\Objects[1], True))
 										ResetEntity(Curr173\Collider)
 										RemoveEvent(e)
@@ -8166,9 +8165,11 @@ Function UpdateEvents()
 								e\Sound2 = LoadSound_Strict("SFX\Door\DoorSparks.ogg")
 								e\SoundCHN2 = PlaySound2(e\Sound2, Camera, e\room\Objects[1], 5.0)
 							EndIf
-							StopChannel(e\SoundCHN)
-							e\SoundCHN = 0
-							If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
+							If e\Sound <> 0 Then
+								FreeSound_Strict(e\Sound) : e\Sound = 0
+								StopChannel(e\SoundCHN)
+								e\SoundCHN = 0
+							EndIf
 							e\Sound = LoadSound_Strict("SFX\Door\Airlock.ogg")
 							e\room\RoomDoors[0]\Locked = 0
 							e\room\RoomDoors[1]\Locked = 0
@@ -9033,7 +9034,7 @@ Function UpdateEvents()
 					If ClosestButton = e\room\Objects[2] And mo\MouseHit1 Then
 						CreateMsg("The elevator appears to be broken.", 6.0)
 						PlaySound2(ButtonSFX2, Camera, e\room\Objects[2])
-						mo\MouseHit1 = 0
+						mo\MouseHit1 = False
 					EndIf
 				EndIf
                 ;[End Block]
@@ -9045,7 +9046,7 @@ Function UpdateEvents()
 						If ClosestButton = e\room\Objects[i] And mo\MouseHit1 Then
 							CreateMsg("The elevator appears to be broken.", 6.0)
 							PlaySound2(ButtonSFX2, Camera, e\room\Objects[i])
-							mo\MouseHit1 = 0
+							mo\MouseHit1 = False
 						EndIf
 					Next
 				EndIf
@@ -9334,8 +9335,8 @@ Function UpdateDimension1499()
 								ElseIf AnimTime(du\OBJ) > 361.5 And AnimTime(du\OBJ) =< 401.5 Then
 									Animate2(du\OBJ, AnimTime(du\OBJ), 362.0, 402.0, 0.2, False)
 								Else
-									Temp = Rand(0, 1)
-									If Temp = 0 Then
+									Temp = Rand(False, True)
+									If (Not Temp) Then
 										SetAnimTime(du\OBJ, 321.0)
 									Else
 										SetAnimTime(du\OBJ, 362.0)
@@ -9347,8 +9348,8 @@ Function UpdateDimension1499()
 								ElseIf AnimTime(du\OBJ) > 453.5 And AnimTime(du\OBJ) =< 497.5 Then
 									Animate2(du\OBJ, AnimTime(du\OBJ), 454.0, 498.0, 0.2, False)
 								Else
-									Temp = Rand(0, 1)
-									If Temp = 0 Then
+									Temp = Rand(False, True)
+									If (Not Temp) Then
 										SetAnimTime(du\OBJ, 413.0)
 									Else
 										SetAnimTime(du\OBJ, 454.0)

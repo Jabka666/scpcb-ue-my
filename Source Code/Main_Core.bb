@@ -268,15 +268,15 @@ Type Cheats
 End Type
 
 Function ClearCheats(chs.Cheats)
-	chs\GodMode = 0
-	chs\NoBlink = 0
-	chs\NoTarget = 0
-	chs\NoClip = 0
+	chs\GodMode = False
+	chs\NoBlink = False
+	chs\NoTarget = False
+	chs\NoClip = False
 	chs\NoClipSpeed = 2.0
-	chs\InfiniteStamina = 0
-	chs\SuperMan = 0
+	chs\InfiniteStamina = False
+	chs\SuperMan = False
 	chs\SuperManTimer = 0.0
-	chs\DebugHUD = 0
+	chs\DebugHUD = False
 End Function
 
 Global chs.Cheats = New Cheats
@@ -4963,7 +4963,7 @@ Function DrawGUI()
 			Color(200, 0, 0)
 			Rect(x - 50 - 3, y - 3, 30 + 6, 30 + 6)
 		Else
-		    If chs\InfiniteStamina = True Lor me\StaminaEffect < 1.0 Lor wi\GasMask = 2 Lor I_1499\Using = 2 Lor wi\HazmatSuit = 2 Then
+		    If chs\InfiniteStamina Lor me\StaminaEffect < 1.0 Lor wi\GasMask = 2 Lor I_1499\Using = 2 Lor wi\HazmatSuit = 2 Then
                 Color(0, 200, 0)
 			    Rect(x - 50 - 3, y - 3, 30 + 6, 30 + 6)
             EndIf 
@@ -7701,10 +7701,10 @@ Function UpdateGUI()
 					;[Block]
 					; ~ Check if the item is an inventory-type object
 					If SelectedItem\InvSlots > 0 Then
-						mo\DoubleClick = 0
-						mo\MouseHit1 = 0
-						mo\MouseDown1 = 0
-						mo\LastMouseHit1 = 0
+						mo\DoubleClick = False
+						mo\MouseHit1 = False
+						mo\MouseDown1 = False
+						mo\LastMouseHit1 = False
 						OtherOpen = SelectedItem
 						SelectedItem = Null
 					EndIf
@@ -12069,10 +12069,10 @@ End Function
 Function ResetInput()
 	FlushKeys()
 	FlushMouse()
-	mo\MouseHit1 = 0
-	mo\MouseHit2 = 0
-	mo\MouseDown1 = 0
-	mo\MouseUp1 = 0
+	mo\MouseHit1 = False
+	mo\MouseHit2 = False
+	mo\MouseDown1 = False
+	mo\MouseUp1 = False
 	MouseHit(1)
 	MouseHit(2)
 	MouseDown(1)

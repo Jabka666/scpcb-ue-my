@@ -3975,7 +3975,7 @@ Function FillRoom(r.Rooms)
 			EntityRadius(r\Objects[3], 0.1)
 			
 			sc = CreateSecurityCam(r\x - 320.0 * RoomScale, r\y + 704.0 * RoomScale, r\z + 288.0 * RoomScale, r, True, r\x - 800.0 * RoomScale, r\y + 288.0 * RoomScale, r\z - 340.0 * RoomScale)
-			sc\Angle = 45.0 + 180.0 : sc\Turn = 45.0 : sc\CoffinEffect = True : CoffinCam = sc
+			sc\Angle = 45.0 + 180.0 : sc\Turn = 45.0 : sc\CoffinEffect = 1 : CoffinCam = sc
 			TurnEntity(sc\CameraOBJ, 120.0, 0.0, 0.0)
 			TurnEntity(sc\ScrOBJ, 0.0, 180.0, 0.0)
 			

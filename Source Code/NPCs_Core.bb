@@ -3370,7 +3370,7 @@ Function UpdateNPCs()
 									EndIf
 								EndIf
 								
-								If n\State2 = 0 Then ; ~ Don't start moving until the player is looking
+								If n\State2 = 0.0 Then ; ~ Don't start moving until the player is looking
 									If EntityInView(n\Collider, Camera) Then 
 										n\State2 = 1.0
 										If Rand(8) = 1 Then
@@ -4179,7 +4179,7 @@ Function UpdateNPCs()
 														If Dist2 < 0.09 Then n\PathLocation = n\PathLocation + 1
 													EndIf
 													
-													If Temp = False Then
+													If (Not Temp) Then
 														n\PathStatus = 0
 														n\PathLocation = 0
 														n\PathTimer = 40 * 10.0
@@ -7162,12 +7162,12 @@ Function ManipulateNPCBones()
 	Local ToValue#
 	
 	For n.NPCs = Each NPCs
-		If n\ManipulateBone
+		If n\ManipulateBone Then
 			BoneName = GetNPCManipulationValue(n\NPCNameInSection, n\BoneToManipulate, "bonename", 0)
 			If BoneName <> ""
 				Pvt = CreatePivot()
 				Bone = FindChild(n\OBJ, BoneName)
-				If Bone = 0 Then RuntimeError("ERROR: NPC bone " + Chr(34) + BoneName + Chr(34) + " does not exist.")
+				If (Not Bone) Then RuntimeError("ERROR: NPC bone " + Chr(34) + BoneName + Chr(34) + " does not exist.")
 				PositionEntity(Pvt, EntityX(Bone, True), EntityY(Bone, True), EntityZ(Bone, True))
 				Select n\ManipulationType
 					Case 0 ; ~ Looking at player
