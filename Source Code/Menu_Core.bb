@@ -1766,10 +1766,12 @@ Function UpdateLauncher(lnchr.Launcher)
 			If lnchr\GFXModeWidths[n] = GfxModeWidth(i) And lnchr\GFXModeHeights[n] = GfxModeHeight(i) Then SameFound = True : Exit
 		Next
 		If (Not SameFound) Then
-			If opt\GraphicWidth = GfxModeWidth(i) And opt\GraphicHeight = GfxModeHeight(i) Then lnchr\SelectedGFXMode = lnchr\GFXModes
-			lnchr\GFXModeWidths[lnchr\GFXModes] = GfxModeWidth(i)
-			lnchr\GFXModeHeights[lnchr\GFXModes] = GfxModeHeight(i)
-			lnchr\GFXModes = lnchr\GFXModes + 1 
+			If GfxModeWidth(i) >= 800 And GfxModeHeight(i) >= 600 Then
+				If opt\GraphicWidth = GfxModeWidth(i) And opt\GraphicHeight = GfxModeHeight(i) Then lnchr\SelectedGFXMode = lnchr\GFXModes
+				lnchr\GFXModeWidths[lnchr\GFXModes] = GfxModeWidth(i)
+				lnchr\GFXModeHeights[lnchr\GFXModes] = GfxModeHeight(i)
+				lnchr\GFXModes = lnchr\GFXModes + 1
+			EndIf
 		EndIf
 	Next
 	
