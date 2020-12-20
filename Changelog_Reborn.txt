@@ -147,6 +147,7 @@ Bug Fixes:
 - Fixed elevators don't move any decals.
 - Fixed the Gate A bug where SCP-106 spawns constantly.
 - Fixed menu and inventory opening during the endings.
+- Fixed SCP-096 can't be triggered through the glass.
 
 - Small fixes for commands "disablenuke" and "enablecontrol/disablecontrol.
 - Small fixes for gateb and gateaentrance's walls.
