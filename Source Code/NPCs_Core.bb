@@ -1657,15 +1657,6 @@ Function UpdateNPCs()
 													If (Not n\Path[n\PathLocation]\door\IsElevatorDoor)
 														If (n\Path[n\PathLocation]\door\Locked = 1 Lor n\Path[n\PathLocation]\door\KeyCard <> 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open) Then
 															Temp = False
-														ElseIf Temp = True
-															For r.Rooms = Each Rooms
-																If r\RoomTemplate\Name = "room2clockroom" Then
-																	If EntityDistanceSquared(n\Collider, r\RoomDoors[0]\FrameOBJ) < 0.04 Lor EntityDistanceSquared(n\Collider, r\RoomDoors[1]\FrameOBJ) < 0.04 Then 
-																		Temp = False
-																	EndIf
-																	Exit
-																EndIf
-															Next
 														Else
 															If (Not n\Path[n\PathLocation]\door\Open) And (n\Path[n\PathLocation]\door\Buttons[0] <> 0 Lor n\Path[n\PathLocation]\door\Buttons[1] <> 0) Then
 																UseDoor(n\Path[n\PathLocation]\door, False)
@@ -2064,15 +2055,6 @@ Function UpdateNPCs()
 											If (Not n\Path[n\PathLocation]\door\IsElevatorDoor)
 												If ((n\Path[n\PathLocation]\door\Locked = 1 Lor n\Path[n\PathLocation]\door\KeyCard > 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open)) Then
 													Temp = False
-												ElseIf Temp = True
-													For r.Rooms = Each Rooms
-														If r\RoomTemplate\Name = "room2clockroom" Then
-															If EntityDistanceSquared(n\Collider, r\RoomDoors[0]\FrameOBJ) < 0.04 Lor EntityDistanceSquared(n\Collider, r\RoomDoors[1]\FrameOBJ) < 0.04 Then 
-																Temp = False
-															EndIf
-															Exit
-														EndIf
-													Next
 												Else
 													If (Not n\Path[n\PathLocation]\door\Open) Then UseDoor(n\Path[n\PathLocation]\Door, False)
 												EndIf
@@ -4160,15 +4142,6 @@ Function UpdateNPCs()
 															If (Not n\Path[n\PathLocation]\door\IsElevatorDoor)
 																If (n\Path[n\PathLocation]\door\Locked = 1 Lor n\Path[n\PathLocation]\door\KeyCard <> 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open) Then
 																	Temp = False
-																ElseIf Temp = True
-																	For r.Rooms = Each Rooms
-																		If r\RoomTemplate\Name = "room2clockroom" Then
-																			If EntityDistanceSquared(n\Collider, r\RoomDoors[0]\FrameOBJ) < 0.04 Lor EntityDistanceSquared(n\Collider, r\RoomDoors[1]\FrameOBJ) < 0.04 Then 
-																				Temp = False
-																			EndIf
-																			Exit
-																		EndIf
-																	Next
 																Else
 																	If (Not n\Path[n\PathLocation]\door\Open) And (n\Path[n\PathLocation]\door\Buttons[0] <> 0 Lor n\Path[n\PathLocation]\door\Buttons[1] <> 0) Then
 																		UseDoor(n\Path[n\PathLocation]\door, False)
@@ -4777,15 +4750,6 @@ Function UpdateNPCs()
 											If (Not n\Path[n\PathLocation]\door\IsElevatorDoor)
 												If ((n\Path[n\PathLocation]\door\Locked = 1 Lor n\Path[n\PathLocation]\door\KeyCard > 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open)) Then
 													Temp = False
-												ElseIf Temp = True
-													For r.Rooms = Each Rooms
-														If r\RoomTemplate\Name = "room2clockroom" Then
-															If EntityDistanceSquared(n\Collider, r\RoomDoors[0]\FrameOBJ) < 0.04 Lor EntityDistanceSquared(n\Collider, r\RoomDoors[1]\FrameOBJ) < 0.04 Then 
-																Temp = False
-															EndIf
-															Exit
-														EndIf
-													Next
 												Else
 													If (Not n\Path[n\PathLocation]\door\Open) Then UseDoor(n\Path[n\PathLocation]\Door, False)
 												EndIf
@@ -7426,5 +7390,5 @@ Function ChangeNPCTextureID(n.NPCs, TextureID%) ; ~ Works only for Class D model
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#17F#1240#1390#1394#1536#1652#1821#187C
+;~B#17F#1225#136C#1370#1512#162E#17FD#1858
 ;~C#Blitz3D
