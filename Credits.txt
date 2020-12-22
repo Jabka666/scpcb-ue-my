@@ -151,36 +151,8 @@
 		Alexey Krasnov("TaskeWSH")
 		LoneWolf
 		[dataexpunded]
-	
-*Some Content Taken From:
-
-		Box of Horrors
-		Field Of View (FOV) Mod
-
-
-*Developers of Included Mods:
-
-		
-*Box of Horrors
-		
-		Prune
-		Sam Lynch ("InnocentSam")
-		Juan Pablo Arce ("Juanjpro")
-		Skin_
-		Tobop
-		Reilly Grindle ("Mirocaine")
-		FireFox
-		Niborius
-
-*Field of View Mod
-
-		TheHappyJammer
-		Shaun Gaylard ("ENDSHN")
-		Inclination
-		Vladislav Borisevich ("Vane Brain")
-		Earok
-		Sswift
-		RadReed
+		ALeKS GM
+		rus_hunter
 
 *Some Materials Taken From:
 
