@@ -5300,33 +5300,7 @@ Function DrawGUI()
 	Else
 		If SelectedItem <> Null Then
 			Select SelectedItem\ItemTemplate\TempName
-				Case "nvg"
-					;[Block]
-					If PreventItemOverlapping(False, True, False, False, False) Then
-						DrawImage(SelectedItem\ItemTemplate\InvImg, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
-						
-						Width = 300
-						Height = 20
-						x = opt\GraphicWidth / 2 - Width / 2
-						y = opt\GraphicHeight / 2 + 80
-						
-						DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State3)
-					EndIf
-					;[End Block]
-				Case "supernvg"
-					;[Block]
-					If PreventItemOverlapping(False, True, False, False, False) Then
-						DrawImage(SelectedItem\ItemTemplate\InvImg, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
-						
-						Width = 300
-						Height = 20
-						x = opt\GraphicWidth / 2 - Width / 2
-						y = opt\GraphicHeight / 2 + 80
-						
-						DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State3)
-					EndIf
-					;[End Block]
-				Case "finenvg"
+				Case "nvg", "supernvg", "finenvg"
 					;[Block]
 					If PreventItemOverlapping(False, True, False, False, False) Then
 						DrawImage(SelectedItem\ItemTemplate\InvImg, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
@@ -6405,7 +6379,6 @@ Function UpdateGUI()
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
-										SelectedItem = Null
 										Inventory[MouseSlot]\State = 100.0
 										CreateMsg("You replaced the navigator's battery.", 6.0)
 										;[End Block]
@@ -6428,7 +6401,6 @@ Function UpdateGUI()
 												;[Block]
 												If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 												RemoveItem(SelectedItem)
-												SelectedItem = Null
 												Inventory[MouseSlot]\State = 100.0
 												CreateMsg("You replaced the radio's battery.", 6.0)
 												;[End Block]
@@ -6441,7 +6413,6 @@ Function UpdateGUI()
 										If NVName = "nvg" Lor NVName = "supernvg" Then
 											If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 											RemoveItem(SelectedItem)
-											SelectedItem = Null
 											Inventory[MouseSlot]\State = 1000.0
 											CreateMsg("You replaced the goggles' battery.", 6.0)
 										Else
@@ -6452,7 +6423,6 @@ Function UpdateGUI()
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
-										SelectedItem = Null
 										Inventory[MouseSlot]\State = 1000.0
 										CreateMsg("You replaced the gear's battery.", 6.0)
 										;[End Block]
@@ -6484,7 +6454,6 @@ Function UpdateGUI()
 												;[Block]
 												If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 												RemoveItem(SelectedItem)
-												SelectedItem = Null
 												Inventory[MouseSlot]\State = 100.0
 												CreateMsg("You replaced the radio's battery.", 6.0)
 												;[End Block]
@@ -6514,7 +6483,7 @@ Function UpdateGUI()
 	Else
 		If SelectedItem <> Null Then
 			Select SelectedItem\ItemTemplate\TempName
-				Case "nvg"
+				Case "nvg", "supernvg", "finenvg"
 					;[Block]
 					If PreventItemOverlapping(False, True, False, False, False) Then
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
@@ -6530,57 +6499,13 @@ Function UpdateGUI()
 								opt\CameraFogFar = opt\StoredCameraFogFar
 							Else
 								CreateMsg("You put on the goggles.", 6.0)
-								wi\NightVision = 1
-								opt\StoredCameraFogFar = opt\CameraFogFar
-								opt\CameraFogFar = 30.0
-							EndIf
-							SelectedItem\State3 = 0.0
-							SelectedItem = Null
-						EndIf
-					EndIf
-					;[End Block]
-				Case "supernvg"
-					;[Block]
-					If PreventItemOverlapping(False, True, False, False, False) Then
-						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
-						
-						SelectedItem\State3 = Min(SelectedItem\State3 + (fps\FPSFactor[0] / 1.6), 100.0)
-						
-						If SelectedItem\State3 = 100.0 Then
-							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
-							
-							If wi\NightVision > 0 Then
-								CreateMsg("You removed the goggles.", 6.0)
-								wi\NightVision = 0
-								opt\CameraFogFar = opt\StoredCameraFogFar
-							Else
-								CreateMsg("You put on the goggles.", 6.0)
-								wi\NightVision = 2
-								opt\StoredCameraFogFar = opt\CameraFogFar
-								opt\CameraFogFar = 30.0
-							EndIf
-							SelectedItem\State3 = 0.0
-							SelectedItem = Null
-						EndIf
-					EndIf
-					;[End Block]
-				Case "finenvg"
-					;[Block]
-					If PreventItemOverlapping(False, True, False, False, False) Then
-						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
-						
-						SelectedItem\State3 = Min(SelectedItem\State3 + (fps\FPSFactor[0] / 1.6), 100.0)
-						
-						If SelectedItem\State3 = 100.0 Then
-							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
-							
-							If wi\NightVision > 0 Then
-								CreateMsg("You removed the goggles.", 6.0)
-								wi\NightVision = 0
-								opt\CameraFogFar = opt\StoredCameraFogFar
-							Else
-								CreateMsg("You put on the goggles.", 6.0)
-								wi\NightVision = 3
+								If SelectedItem\ItemTemplate\TempName = "nvg" Then
+									wi\NightVision = 1
+								ElseIf SelectedItem\ItemTemplate\TempName = "supernvg"
+									wi\NightVision = 2
+								Else
+									wi\NightVision = 3
+								EndIf
 								opt\StoredCameraFogFar = opt\CameraFogFar
 								opt\CameraFogFar = 30.0
 							EndIf
@@ -6643,9 +6568,7 @@ Function UpdateGUI()
 								Exit
 							EndIf
 						Next
-						
 						RemoveItem(SelectedItem)
-						SelectedItem = Null
 					EndIf	
 					;[End Block]
 				Case "veryfinefirstaid"
@@ -6701,9 +6624,7 @@ Function UpdateGUI()
 								EndIf
 								;[End Block]
 						End Select
-						
 						RemoveItem(SelectedItem)
-						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "firstaid", "finefirstaid", "firstaid2"
@@ -6730,7 +6651,6 @@ Function UpdateGUI()
 									CreateMsg("You bandaged the wounds and took a painkiller, but you still feel sore.", 6.0)
 								EndIf
 								RemoveItem(SelectedItem)
-								SelectedItem = Null
 							Else
 								me\Bloodloss = Max(0.0, me\Bloodloss - Rnd(10.0, 20.0))
 								If me\Injuries >= 2.5 Then
@@ -6789,7 +6709,6 @@ Function UpdateGUI()
 									End Select
 								EndIf
 								RemoveItem(SelectedItem)
-								SelectedItem = Null
 							EndIf
 						EndIf
 					EndIf
@@ -6804,7 +6723,6 @@ Function UpdateGUI()
 						CreateMsg("You used the eyedrops. Your eyes feel moisturized.", 6.0)
 						
 						RemoveItem(SelectedItem)
-						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "fineeyedrops"
@@ -6818,7 +6736,6 @@ Function UpdateGUI()
 						CreateMsg("You used the eyedrops. Your eyes feel very moisturized.", 6.0)
 						
 						RemoveItem(SelectedItem)
-						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "supereyedrops"
@@ -6832,7 +6749,6 @@ Function UpdateGUI()
 						CreateMsg("You used the eyedrops. Your eyes feel very moisturized.", 6.0)
 						
 						RemoveItem(SelectedItem)
-						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "ticket"
@@ -6917,7 +6833,6 @@ Function UpdateGUI()
 							EntityType(it\Collider, HIT_ITEM)
 							
 							RemoveItem(SelectedItem)
-							SelectedItem = Null
 						EndIf
 						
 						SelectedItem = Null
@@ -6937,7 +6852,6 @@ Function UpdateGUI()
 					CreateMsg("You injected yourself with the syringe and feel a slight adrenaline rush.", 6.0)
 					
 					RemoveItem(SelectedItem)
-					SelectedItem = Null
 					;[End Block]
 				Case "finesyringe"
 					;[Block]
@@ -6948,7 +6862,6 @@ Function UpdateGUI()
 					CreateMsg("You injected yourself with the syringe and feel an adrenaline rush.", 6.0)
 					
 					RemoveItem(SelectedItem)
-					SelectedItem = Null
 					;[End Block]
 				Case "veryfinesyringe"
 					;[Block]
@@ -6973,7 +6886,6 @@ Function UpdateGUI()
 					End Select
 					
 					RemoveItem(SelectedItem)
-					SelectedItem = Null
 					;[End Block]
 				Case "radio", "18vradio", "fineradio", "veryfineradio"
 					;[Block]
@@ -7315,7 +7227,6 @@ Function UpdateGUI()
 								;[End Block]
 						End Select
 						RemoveItem(SelectedItem)
-						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "scp420j"
@@ -7331,7 +7242,6 @@ Function UpdateGUI()
 							PlaySound_Strict(LoadTempSound("SFX\Music\Using420J.ogg"))
 						EndIf
 						RemoveItem(SelectedItem)
-						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "joint"
@@ -7347,7 +7257,6 @@ Function UpdateGUI()
 							Kill()						
 						EndIf
 						RemoveItem(SelectedItem)
-						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "scp420s"
@@ -7363,7 +7272,6 @@ Function UpdateGUI()
 							Kill()						
 						EndIf
 						RemoveItem(SelectedItem)
-						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "scp714"
@@ -7395,7 +7303,7 @@ Function UpdateGUI()
 								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 								If SelectedItem\ItemTemplate\TempName = "hazmatsuit" Then
 									wi\HazmatSuit = 1
-								ElseIf SelectedItem\ItemTemplate\TempName = "hazmatsuit2" Then
+								ElseIf SelectedItem\ItemTemplate\TempName = "hazmatsuit2"
 									wi\HazmatSuit = 2
 								Else
 									wi\HazmatSuit = 3
@@ -7607,7 +7515,6 @@ Function UpdateGUI()
 						CreateMsg("You swallowed the pill.", 6.0)
 						
 						RemoveItem(SelectedItem)
-						SelectedItem = Null
 					EndIf	
 					;[End Block]
 				Case "scp500pilldeath"
@@ -7620,7 +7527,6 @@ Function UpdateGUI()
 						EndIf
 						
 						RemoveItem(SelectedItem)
-						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "syringeinf"
@@ -7631,7 +7537,6 @@ Function UpdateGUI()
 					
 				    I_008\Timer = I_008\Timer + (1.0 + (1.0 * SelectedDifficulty\AggressiveNPCs))
 					RemoveItem(SelectedItem)
-					SelectedItem = Null
 					;[End Block]
 				Case "helmet"
 					;[Block]
@@ -12008,42 +11913,6 @@ Function TeleportEntity(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = Fa
 	EndIf
 	FreeEntity(Pvt)
 	ResetEntity(Entity)
-End Function
-
-Function CanUseItem(CanUseWithGasMask%, CanUseWithEyewear%)
-	If (Not CanUseWithGasMask) And (wi\GasMask > 0 Lor I_1499\Using > 0) Then
-		CreateMsg("You can't use that item while wearing a gas mask.", 6.0)
-		Return(False)
-	ElseIf (Not CanUseWithEyewear) And (wi\NightVision > 0 Lor wi\SCRAMBLE > 0)
-		CreateMsg("You can't use that item while wearing headgear.", 6.0)
-		Return(False)
-	EndIf
-	Return(True)
-End Function
-
-Function PreventItemOverlapping(GasMask%, NVG%, SCP1499%, Helmet%, SCRAMBLE%)
-	If (Not GasMask) And wi\GasMask > 0 Then
-		CreateMsg("You need to take off the gas mask in order to use that item.", 6.0)
-		SelectedItem = Null
-		Return(False)
-	ElseIf (Not SCP1499) And I_1499\Using > 0
-		CreateMsg("You need to take off SCP-1499 in order to use that item.", 6.0)
-		SelectedItem = Null
-		Return(False)
-	ElseIf (Not NVG) And wi\NightVision > 0 Then
-		CreateMsg("You need to take off the goggles in order to use that item.", 6.0)
-		SelectedItem = Null
-		Return(False)
-	ElseIf (Not Helmet) And wi\BallisticHelmet > 0
-		CreateMsg("You need to take off the helmet in order to use that item.", 6.0)
-		SelectedItem = Null
-		Return(False)
-	ElseIf (Not SCRAMBLE) And wi\SCRAMBLE > 0
-		CreateMsg("You need to take off the gear in order to use that item.", 6.0)
-		SelectedItem = Null
-		Return(False)
-	EndIf
-	Return(True)
 End Function
 
 Function ResetInput()

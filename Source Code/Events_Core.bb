@@ -3286,7 +3286,6 @@ Function UpdateEvents()
 										If SelectedItem <> Null Then
 											If SelectedItem\ItemTemplate\TempName = "25ct" Lor SelectedItem\ItemTemplate\TempName = "coin" Then
 												RemoveItem(SelectedItem)
-												SelectedItem = Null
 												e\EventState2 = e\EventState2 + 1.0
 												PlaySound_Strict(LoadTempSound("SFX\SCP\294\coin_drop.ogg"))
 												Inserted = True
@@ -5226,7 +5225,10 @@ Function UpdateEvents()
 							Case 2.0
 								;[Block]
 								i = Rand(MaxItemAmount)
-								If Inventory[i] <> Null Then RemoveItem(Inventory[i])		
+								If Inventory[i] <> Null Then
+									RemoveWearableItems(Inventory[e\EventState2])
+									RemoveItem(Inventory[i])
+								EndIf
 								;[End Block]
 							Case 5.0
 								;[Block]
@@ -5272,7 +5274,10 @@ Function UpdateEvents()
 							Case 30.0
 								;[Block]
 								i = Rand(0, MaxItemAmount - 1)
-								If Inventory[i] <> Null Then RemoveItem(Inventory[i])
+								If Inventory[i] <> Null Then
+									RemoveWearableItems(Inventory[e\EventState2])
+									RemoveItem(Inventory[i])
+								EndIf
 								Inventory[i] = CreateItem("Strange Note", "paper", 1.0, 1.0, 1.0)
 								HideEntity(Inventory[i]\Collider)
 								Inventory[i]\Picked = True
@@ -8438,6 +8443,7 @@ Function UpdateEvents()
 							EndIf
 							
 							If ShouldCreateItem Then
+								RemoveWearableItems(Inventory[e\EventState2])
 								RemoveItem(Inventory[e\EventState2])
 								it = CreateItem(itt\Name, itt\TempName, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
 								EntityType(it\Collider, HIT_ITEM)
@@ -8484,6 +8490,7 @@ Function UpdateEvents()
 					ElseIf e\EventState3 >= 3.0
 						If e\EventState3 < 3.1
 							PlaySound_Strict(LoadTempSound("SFX\SCP\1162\Exchange" + Rand(0, 4) + ".ogg"))
+							RemoveWearableItems(Inventory[e\EventState2])
 							RemoveItem(Inventory[e\EventState2])
 						Else
 							InjurePlayer(5.0)

@@ -473,6 +473,51 @@ Function RemoveItem(i.Items)
 	CatchErrors("RemoveItem")
 End Function
 
+Function RemoveWearableItems(item.Items)
+	CatchErrors("Uncaught (RemoveWearableItems)")
+	
+	Select item\ItemTemplate\TempName
+		Case "gasmask", "supergasmask", "gasmask3"
+			;[Block]
+			wi\GasMask = 0
+			;[End Block]
+		Case "hazmatsuit",  "hazmatsuit2", "hazmatsuit3"
+			;[Block]
+			wi\HazmatSuit = 0
+			;[End Block]
+		Case "vest", "finevest"
+			;[Block]
+			wi\BallisticVest = 0
+			;[End Block]
+		Case "helmet"
+			;[Block]
+			wi\BallisticHelmet = 0
+			;[End Block]
+		Case "nvg", "supernvg", "finenvg"
+			;[Block]
+			If wi\NightVision > 0 Then opt\CameraFogFar = opt\StoredCameraFogFar : wi\NightVision = 0
+			;[End Block]
+		Case "scp714"
+			;[Block]
+			I_714\Using = 0
+			;[End Block]
+		Case "scp1499", "super1499"
+			;[Block]
+			I_1499\Using = 0
+			;[End Block]
+		Case "scp427"
+			;[Block]
+			I_427\Using = 0
+			;[End Block]
+		Case "scramble"
+			;[Block]
+			wi\SCRAMBLE = 0
+			;[End Block]
+	End Select
+	
+	CatchErrors("RemoveWearableItems")
+End Function
+
 Function UpdateItems()
 	CatchErrors("Uncaught (UpdateItems)")
 	
@@ -790,6 +835,10 @@ Function DropItem(item.Items, PlayDropSound% = True)
 			;[Block]
 			wi\BallisticVest = 0
 			;[End Block]
+		Case "helmet"
+			;[Block]
+			wi\BallisticHelmet = 0
+			;[End Block]
 		Case "nvg", "supernvg", "finenvg"
 			;[Block]
 			If wi\NightVision > 0 Then opt\CameraFogFar = opt\StoredCameraFogFar : wi\NightVision = 0
@@ -894,6 +943,42 @@ Function Update294()
 	EndIf
 	
 	CatchErrors("Update294")
+End Function
+
+Function CanUseItem(CanUseWithGasMask%, CanUseWithEyewear%)
+	If (Not CanUseWithGasMask) And (wi\GasMask > 0 Lor I_1499\Using > 0) Then
+		CreateMsg("You can't use that item while wearing a gas mask.", 6.0)
+		Return(False)
+	ElseIf (Not CanUseWithEyewear) And (wi\NightVision > 0 Lor wi\SCRAMBLE > 0)
+		CreateMsg("You can't use that item while wearing headgear.", 6.0)
+		Return(False)
+	EndIf
+	Return(True)
+End Function
+
+Function PreventItemOverlapping(GasMask%, NVG%, SCP1499%, Helmet%, SCRAMBLE%)
+	If (Not GasMask) And wi\GasMask > 0 Then
+		CreateMsg("You need to take off the gas mask in order to use that item.", 6.0)
+		SelectedItem = Null
+		Return(False)
+	ElseIf (Not SCP1499) And I_1499\Using > 0
+		CreateMsg("You need to take off SCP-1499 in order to use that item.", 6.0)
+		SelectedItem = Null
+		Return(False)
+	ElseIf (Not NVG) And wi\NightVision > 0 Then
+		CreateMsg("You need to take off the goggles in order to use that item.", 6.0)
+		SelectedItem = Null
+		Return(False)
+	ElseIf (Not Helmet) And wi\BallisticHelmet > 0
+		CreateMsg("You need to take off the helmet in order to use that item.", 6.0)
+		SelectedItem = Null
+		Return(False)
+	ElseIf (Not SCRAMBLE) And wi\SCRAMBLE > 0
+		CreateMsg("You need to take off the gear in order to use that item.", 6.0)
+		SelectedItem = Null
+		Return(False)
+	EndIf
+	Return(True)
 End Function
 
 ;~IDEal Editor Parameters:
