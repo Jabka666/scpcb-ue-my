@@ -1231,7 +1231,7 @@ Function LoadGame(File$)
 	EndIf
 	
 	opt\CameraFogFar = ReadFloat(f)
-    opt\StoredCameraFogFar = ReadFloat(f)
+	opt\StoredCameraFogFar = ReadFloat(f)
 	If opt\CameraFogFar = 0.0 Then
 		opt\CameraFogFar = 6.0
 	EndIf
@@ -1966,7 +1966,7 @@ Function LoadGameQuick(File$)
 	me\RestoreSanity = True
 	
 	opt\CameraFogFar = ReadFloat(f)
-    opt\StoredCameraFogFar = ReadFloat(f)
+	opt\StoredCameraFogFar = ReadFloat(f)
 	If opt\CameraFogFar = 0.0 Then
 		opt\CameraFogFar = 6.0
 	EndIf

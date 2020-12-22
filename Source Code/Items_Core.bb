@@ -462,40 +462,6 @@ Function RemoveItem(i.Items)
 			Exit
 		EndIf
 	Next
-	Select i\ItemTemplate\TempName 
-		Case "gasmask", "supergasmask", "gasmask3"
-			;[Block]
-			wi\GasMask = 0
-			;[End Block]
-		Case "hazmatsuit",  "hazmatsuit2", "hazmatsuit3"
-			;[Block]
-			wi\HazmatSuit = 0
-			;[End Block]
-		Case "vest", "finevest"
-			;[Block]
-			wi\BallisticVest = 0
-			;[End Block]
-		Case "nvg", "supernvg", "finenvg"
-			;[Block]
-			If wi\NightVision > 0 Then opt\CameraFogFar = opt\StoredCameraFogFar : wi\NightVision = 0
-			;[End Block]
-		Case "scp714"
-			;[Block]
-			I_714\Using = 0
-			;[End Block]
-		Case "scp1499", "super1499"
-			;[Block]
-			I_1499\Using = 0
-			;[End Block]
-		Case "scp427"
-			;[Block]
-			I_427\Using = 0
-			;[End Block]
-		Case "scramble"
-			;[Block]
-			wi\SCRAMBLE = 0
-			;[End Block]
-	End Select
 	
 	If SelectedItem = i Then SelectedItem = Null
 	

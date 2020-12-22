@@ -3514,7 +3514,7 @@ Function MainLoop()
 				me\BlinkTimer = me\BlinkTimer - fps\FPSFactor[0]
 			Else
 				me\BlinkTimer = me\BlinkTimer - fps\FPSFactor[0] * 0.6 * me\BlinkEffect
-				If wi\NightVision = 0 And wi\SCRAMBLE Then
+				If wi\NightVision = 0 And wi\SCRAMBLE = 0 Then
 					If me\EyeIrritation > 0.0 Then me\BlinkTimer = me\BlinkTimer - Min(me\EyeIrritation / 100.0 + 1.0, 4.0) * fps\FPSFactor[0]
 				EndIf
 				DarkA = Max(DarkA, 0.0)
@@ -5303,52 +5303,40 @@ Function DrawGUI()
 				Case "nvg"
 					;[Block]
 					If PreventItemOverlapping(False, True, False, False, False) Then
-						If wi\NightVision > 0 And wi\NightVision <> 1 Then
-							Return
-						Else
-							DrawImage(SelectedItem\ItemTemplate\InvImg, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
-							
-							Width = 300
-							Height = 20
-							x = opt\GraphicWidth / 2 - Width / 2
-							y = opt\GraphicHeight / 2 + 80
-							
-							DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State3)
-						EndIf
+						DrawImage(SelectedItem\ItemTemplate\InvImg, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						
+						Width = 300
+						Height = 20
+						x = opt\GraphicWidth / 2 - Width / 2
+						y = opt\GraphicHeight / 2 + 80
+						
+						DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State3)
 					EndIf
 					;[End Block]
 				Case "supernvg"
 					;[Block]
 					If PreventItemOverlapping(False, True, False, False, False) Then
-						If wi\NightVision > 0 And wi\NightVision <> 2 Then
-							Return
-						Else
-							DrawImage(SelectedItem\ItemTemplate\InvImg, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
-							
-							Width = 300
-							Height = 20
-							x = opt\GraphicWidth / 2 - Width / 2
-							y = opt\GraphicHeight / 2 + 80
-							
-							DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State3)
-						EndIf
+						DrawImage(SelectedItem\ItemTemplate\InvImg, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						
+						Width = 300
+						Height = 20
+						x = opt\GraphicWidth / 2 - Width / 2
+						y = opt\GraphicHeight / 2 + 80
+						
+						DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State3)
 					EndIf
 					;[End Block]
 				Case "finenvg"
 					;[Block]
 					If PreventItemOverlapping(False, True, False, False, False) Then
-						If wi\NightVision > 0 And wi\NightVision <> 3 Then
-							Return
-						Else
-							DrawImage(SelectedItem\ItemTemplate\InvImg, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
-							
-							Width = 300
-							Height = 20
-							x = opt\GraphicWidth / 2 - Width / 2
-							y = opt\GraphicHeight / 2 + 80
-							
-							DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State3)
-						EndIf
+						DrawImage(SelectedItem\ItemTemplate\InvImg, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						
+						Width = 300
+						Height = 20
+						x = opt\GraphicWidth / 2 - Width / 2
+						y = opt\GraphicHeight / 2 + 80
+						
+						DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State3)
 					EndIf
 					;[End Block]
 				Case "key0", "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "scp860", "hand", "hand2", "25ct", "scp005", "key", "coin"
@@ -6529,94 +6517,75 @@ Function UpdateGUI()
 				Case "nvg"
 					;[Block]
 					If PreventItemOverlapping(False, True, False, False, False) Then
-						; ~ A hacky fix for a fog
-						If wi\NightVision > 0 And wi\NightVision <> 1 Then
-							CreateMsg("You can't use two pairs of the goggles at the same time.", 6.0)
-							SelectedItem = Null
-							Return
-						Else
-							me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
+						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
+						
+						SelectedItem\State3 = Min(SelectedItem\State3 + (fps\FPSFactor[0] / 1.6), 100.0)
+						
+						If SelectedItem\State3 = 100.0 Then
+							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 							
-							SelectedItem\State3 = Min(SelectedItem\State3 + (fps\FPSFactor[0] / 1.6), 100.0)
-							
-							If SelectedItem\State3 = 100.0 Then
-								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
-								
-								If wi\NightVision = 1 Then
-									CreateMsg("You removed the goggles.", 6.0)
-									opt\CameraFogFar = opt\StoredCameraFogFar
-								Else
-									CreateMsg("You put on the goggles.", 6.0)
-									wi\NightVision = 0
-									opt\StoredCameraFogFar = opt\CameraFogFar
-									opt\CameraFogFar = 30.0
-								EndIf
-								wi\NightVision = (Not wi\NightVision)
-								SelectedItem\State3 = 0.0
-								SelectedItem = Null
+							If wi\NightVision > 0 Then
+								CreateMsg("You removed the goggles.", 6.0)
+								wi\NightVision = 0
+								opt\CameraFogFar = opt\StoredCameraFogFar
+							Else
+								CreateMsg("You put on the goggles.", 6.0)
+								wi\NightVision = 1
+								opt\StoredCameraFogFar = opt\CameraFogFar
+								opt\CameraFogFar = 30.0
 							EndIf
+							SelectedItem\State3 = 0.0
+							SelectedItem = Null
 						EndIf
 					EndIf
 					;[End Block]
 				Case "supernvg"
 					;[Block]
 					If PreventItemOverlapping(False, True, False, False, False) Then
-						If wi\NightVision > 0 And wi\NightVision <> 2 Then
-							CreateMsg("You can't use two pairs of the goggles at the same time.", 6.0)
-							SelectedItem = Null
-							Return
-						Else
-							me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
+						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
+						
+						SelectedItem\State3 = Min(SelectedItem\State3 + (fps\FPSFactor[0] / 1.6), 100.0)
+						
+						If SelectedItem\State3 = 100.0 Then
+							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 							
-							SelectedItem\State3 = Min(SelectedItem\State3 + (fps\FPSFactor[0] / 1.6), 100.0)
-							
-							If SelectedItem\State3 = 100.0 Then
-								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
-								
-								If wi\NightVision = 2 Then
-									CreateMsg("You removed the goggles.", 6.0)
-									opt\CameraFogFar = opt\StoredCameraFogFar
-								Else
-									CreateMsg("You put on the goggles.", 6.0)
-									wi\NightVision = 0
-									opt\StoredCameraFogFar = opt\CameraFogFar
-									opt\CameraFogFar = 30.0
-								EndIf
-								wi\NightVision = (Not wi\NightVision) * 2
-								SelectedItem\State3 = 0.0
-								SelectedItem = Null
+							If wi\NightVision > 0 Then
+								CreateMsg("You removed the goggles.", 6.0)
+								wi\NightVision = 0
+								opt\CameraFogFar = opt\StoredCameraFogFar
+							Else
+								CreateMsg("You put on the goggles.", 6.0)
+								wi\NightVision = 2
+								opt\StoredCameraFogFar = opt\CameraFogFar
+								opt\CameraFogFar = 30.0
 							EndIf
+							SelectedItem\State3 = 0.0
+							SelectedItem = Null
 						EndIf
 					EndIf
 					;[End Block]
 				Case "finenvg"
 					;[Block]
 					If PreventItemOverlapping(False, True, False, False, False) Then
-						If wi\NightVision > 0 And wi\NightVision <> 3 Then
-							CreateMsg("You can't use two pairs of the goggles at the same time.", 6.0)
-							SelectedItem = Null
-							Return
-						Else
-							me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
+						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
+						
+						SelectedItem\State3 = Min(SelectedItem\State3 + (fps\FPSFactor[0] / 1.6), 100.0)
+						
+						If SelectedItem\State3 = 100.0 Then
+							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 							
-							SelectedItem\State3 = Min(SelectedItem\State3 + (fps\FPSFactor[0] / 1.6), 100.0)
-							
-							If SelectedItem\State3 = 100.0 Then
-								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
-								
-								If wi\NightVision = 3 Then
-									CreateMsg("You removed the goggles.", 6.0)
-									opt\CameraFogFar = opt\StoredCameraFogFar
-								Else
-									CreateMsg("You put on the goggles.", 6.0)
-									wi\NightVision = 0
-									opt\StoredCameraFogFar = opt\CameraFogFar
-									opt\CameraFogFar = 30.0
-								EndIf
-								wi\NightVision = (Not wi\NightVision) * 3
-								SelectedItem\State3 = 0.0
-								SelectedItem = Null
+							If wi\NightVision > 0 Then
+								CreateMsg("You removed the goggles.", 6.0)
+								wi\NightVision = 0
+								opt\CameraFogFar = opt\StoredCameraFogFar
+							Else
+								CreateMsg("You put on the goggles.", 6.0)
+								wi\NightVision = 3
+								opt\StoredCameraFogFar = opt\CameraFogFar
+								opt\CameraFogFar = 30.0
 							EndIf
+							SelectedItem\State3 = 0.0
+							SelectedItem = Null
 						EndIf
 					EndIf
 					;[End Block]
@@ -7431,7 +7400,7 @@ Function UpdateGUI()
 								Else
 									wi\HazmatSuit = 3
 								EndIf
-								If wi\NightVision Then opt\CameraFogFar = opt\StoredCameraFogFar
+								If wi\NightVision > 0 Then opt\CameraFogFar = opt\StoredCameraFogFar
 								wi\GasMask = 0
 								wi\NightVision = 0
 								wi\BallisticHelmet = 0
@@ -9685,7 +9654,7 @@ Function NullGame(PlayButtonSFX% = True) ; ~ CHECK FOR ERRORS
 	wi\HazmatSuit = 0
 	wi\BallisticVest = 0
 	wi\BallisticHelmet = 0
-	If wi\NightVision Then
+	If wi\NightVision > 0 Then
 		opt\CameraFogFar = opt\StoredCameraFogFar
 		wi\NightVision = 0
 	EndIf

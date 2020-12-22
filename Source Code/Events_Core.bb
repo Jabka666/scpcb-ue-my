@@ -2425,8 +2425,8 @@ Function UpdateEvents()
 						
 						For i = 0 To MaxItemAmount - 1
 							If Inventory[i] <> Null Then
-								If (wi\NightVision = 1 And Inventory[i]\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory[i]\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory[i]\ItemTemplate\TempName = "finenvg") Then
-									If Inventory[i]\State > 0.0 Lor wi\NightVision = 3 Then
+								If (wi\NightVision = 1 And Inventory[i]\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory[i]\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory[i]\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE > 0 And Inventory[i]\ItemTemplate\TempName = "scramble") Then
+									If Inventory[i]\State > 0.0 Then
 										HasBatteryFor895 = True
 										Exit
 									EndIf
@@ -2447,7 +2447,7 @@ Function UpdateEvents()
 							EndIf
 							
 							If me\Sanity < -1000.0 Then
-								If wi\NightVision > 0
+								If wi\NightVision > 0 Then ; ~ TODO: Add for SCRAMBLE GEAR
 									msg\DeathMsg = Chr(34) + "Class D viewed SCP-895 through a pair of digital night vision goggles, presumably enhanced by SCP-914. It might be possible that the subject "
 									msg\DeathMsg = msg\DeathMsg + "was able to resist the memetic effects partially through these goggles. The goggles have been stored for further study." + Chr(34)
 								Else
@@ -2461,7 +2461,7 @@ Function UpdateEvents()
 									EntityTexture(tt\OverlayID[4], tt\MiscTextureID[Rand(7, 12)])
 									For i = 0 To MaxItemAmount - 1
 										If Inventory[i] <> Null Then
-											If (wi\NightVision = 1 And Inventory[i]\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory[i]\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory[i]\ItemTemplate\TempName = "finenvg") Then
+											If (wi\NightVision = 1 And Inventory[i]\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory[i]\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory[i]\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE > 0 And Inventory[i]\ItemTemplate\TempName = "scramble") Then
 												If Inventory[i]\State2 = 1.0 Then PlaySound_Strict(HorrorSFX[1])
 												Inventory[i]\State2 = 2.0
 												Exit
@@ -2477,7 +2477,7 @@ Function UpdateEvents()
 									EntityTexture(tt\OverlayID[4], tt\MiscTextureID[Rand(7, 12)])
 									For i = 0 To MaxItemAmount - 1
 										If Inventory[i] <> Null Then
-											If (wi\NightVision = 1 And Inventory[i]\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory[i]\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory[i]\ItemTemplate\TempName = "finenvg") Then
+											If (wi\NightVision = 1 And Inventory[i]\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory[i]\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory[i]\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE > 0 And Inventory[i]\ItemTemplate\TempName = "scramble") Then
 												If Inventory[i]\State2 = 0.0 Then PlaySound_Strict(HorrorSFX[0])
 												Inventory[i]\State2 = 1.0
 												Exit
@@ -2489,7 +2489,7 @@ Function UpdateEvents()
 								EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
 								For i = 0 To MaxItemAmount - 1
 									If Inventory[i] <> Null Then
-										If (wi\NightVision = 1 And Inventory[i]\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory[i]\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory[i]\ItemTemplate\TempName = "finenvg") Then
+										If (wi\NightVision = 1 And Inventory[i]\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory[i]\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory[i]\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE > 0 And Inventory[i]\ItemTemplate\TempName = "scramble") Then
 											Inventory[i]\State2 = 0.0
 										EndIf
 									EndIf
