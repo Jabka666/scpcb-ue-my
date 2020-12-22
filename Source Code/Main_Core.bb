@@ -5657,7 +5657,7 @@ Function DrawGUI()
 							If SelectedItem\ItemTemplate\Name = "S-NAV Navigator Ultimate" And (MilliSecs() Mod 600.0) < 400.0 Then
 								If Curr173 <> Null Then
 									Dist = EntityDistance(Camera, Curr173\OBJ)
-									If Dist < 8.0 * 4.0 Then
+									If Dist < 30.0 Then
 										Dist = Ceil(Dist / 8.0) * 8.0
 										Color(100, 0, 0)
 										Oval(x - Dist * 3, y - 7 - Dist * 3, Dist * 3 * 2, Dist * 3 * 2, False)
@@ -5667,7 +5667,7 @@ Function DrawGUI()
 								EndIf
 								If Curr106 <> Null Then
 									Dist = EntityDistance(Camera, Curr106\OBJ)
-									If Dist < 8.0 * 4.0 Then
+									If Dist < 30.0 Then
 										Color(100, 0, 0)
 										Oval(x - Dist * 1.5, y - 7 - Dist * 1.5, Dist * 3, Dist * 3, False)
 										Text(x - NAV_WIDTH / 2 + 10, y - NAV_HEIGHT / 2 + 30 + (20 * SCPs_Found), "SCP-106")
@@ -5676,7 +5676,7 @@ Function DrawGUI()
 								EndIf
 								If Curr096 <> Null Then 
 									Dist = EntityDistance(Camera, Curr096\OBJ)
-									If Dist < 8.0 * 4.0 Then
+									If Dist < 30.0 Then
 										Color(100, 0, 0)
 										Oval(x - Dist * 1.5, y - 7 - Dist * 1.5, Dist * 3, Dist * 3, False)
 										Text(x - NAV_WIDTH / 2 + 10, y - NAV_HEIGHT / 2 + 30 + (20 * SCPs_Found), "SCP-096")
@@ -5686,7 +5686,7 @@ Function DrawGUI()
 								If Curr049 <> Null Then
 									If (Not Curr049\HideFromNVG) Then
 										Dist = EntityDistance(Camera, Curr049\OBJ)
-										If Dist < 8.0 * 4.0 Then
+										If Dist < 30.0 Then
 											Color(100, 0, 0)
 											Oval(x - Dist * 1.5, y - 7 - Dist * 1.5, Dist * 3, Dist * 3, False)
 											Text(x - NAV_WIDTH / 2 + 10, y - NAV_HEIGHT / 2 + 30 + (20 * SCPs_Found), "SCP-049")
