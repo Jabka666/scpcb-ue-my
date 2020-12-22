@@ -911,7 +911,7 @@ Function UpdateMainMenu()
 							y = y + 30 * MenuScale
 							
 							If opt\EnableSubtitles Then
-								opt\SubColorR = InputBox(x + 180 * MenuScale, y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorR), 14, 3)
+								opt\SubColorR = InputBox(x + 145 * MenuScale, y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorR), 14, 3)
 								If SelectedInputBox = 14 Then
 									If opt\SubColorR > 255 Then opt\SubColorR = 255
 								EndIf
@@ -920,7 +920,7 @@ Function UpdateMainMenu()
 							y = y + 30 * MenuScale
 							
 							If opt\EnableSubtitles Then
-								opt\SubColorG = InputBox(x + 180 * MenuScale, y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorG), 15, 3)
+								opt\SubColorG = InputBox(x + 145 * MenuScale, y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorG), 15, 3)
 								If SelectedInputBox = 15 Then
 									If opt\SubColorG > 255 Then opt\SubColorG = 255
 								EndIf
@@ -929,7 +929,7 @@ Function UpdateMainMenu()
 							y = y + 30 * MenuScale
 							
 							If opt\EnableSubtitles Then
-								opt\SubColorB = InputBox(x + 180 * MenuScale, y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorB), 16, 3)
+								opt\SubColorB = InputBox(x + 145 * MenuScale, y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorB), 16, 3)
 								If SelectedInputBox = 16 Then
 									If opt\SubColorB > 255 Then opt\SubColorB = 255
 								EndIf
@@ -1634,7 +1634,7 @@ Function RenderMainMenu()
 						If opt\EnableSubtitles Then
 							Color(255, 255, 255)
 							Text(x + 20 * MenuScale, y + 5 * MenuScale, "RED COLOR:")
-							If MouseOn(x + 180 * MenuScale, y, 40 * MenuScale, 20 * MenuScale)
+							If MouseOn(x + 145 * MenuScale, y, 40 * MenuScale, 20 * MenuScale)
 								DrawOptionsTooltip(tX, tY, tW, tH, "subtitlescolor")
 							EndIf
 						EndIf
@@ -1644,7 +1644,7 @@ Function RenderMainMenu()
 						If opt\EnableSubtitles Then
 							Color(255, 255, 255)
 							Text(x + 20 * MenuScale, y + 5 * MenuScale, "GREEN COLOR:")
-							If MouseOn(x + 180 * MenuScale, y, 40 * MenuScale, 20 * MenuScale)
+							If MouseOn(x + 145 * MenuScale, y, 40 * MenuScale, 20 * MenuScale)
 								DrawOptionsTooltip(tX, tY, tW, tH, "subtitlescolor")
 							EndIf
 						EndIf
@@ -1654,7 +1654,7 @@ Function RenderMainMenu()
 						If opt\EnableSubtitles Then
 							Color(255, 255, 255)
 							Text(x + 20 * MenuScale, y + 5 * MenuScale, "BLUE COLOR:")
-							If MouseOn(x + 180 * MenuScale, y, 40 * MenuScale, 20 * MenuScale)
+							If MouseOn(x + 145 * MenuScale, y, 40 * MenuScale, 20 * MenuScale)
 								DrawOptionsTooltip(tX, tY, tW, tH, "subtitlescolor")
 							EndIf
 						EndIf
