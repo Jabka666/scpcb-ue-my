@@ -39,6 +39,7 @@ Function SaveGame(File$)
 	WriteString(f, VersionNumber)
 	
 	WriteFloat(f, me\BlinkTimer)
+	WriteFloat(f, me\BLINKFREQ)
 	WriteFloat(f, me\BlinkEffect)
 	WriteFloat(f, me\BlinkEffectTimer)
 	
@@ -521,6 +522,7 @@ Function LoadGame(File$)
 	If StrTemp <> VersionNumber Then RuntimeError("The save files of v" + StrTemp + " aren't compatible with SCP - Containment Breach Ultimate Edition v" + VersionNumber + ".")
 	
 	me\BlinkTimer = ReadFloat(f)
+	me\BLINKFREQ = ReadFloat(f)
 	me\BlinkEffect = ReadFloat(f)	
 	me\BlinkEffectTimer = ReadFloat(f)
 	
@@ -1386,6 +1388,7 @@ Function LoadGameQuick(File$)
 	If StrTemp <> VersionNumber Then RuntimeError("The save files of v" + StrTemp + " aren't compatible with SCP - Containment Breach Ultimate Edition v" + VersionNumber + ".")
 	
 	me\BlinkTimer = ReadFloat(f)
+	me\BLINKFREQ = ReadFloat(f)
 	me\BlinkEffect = ReadFloat(f)	
 	me\BlinkEffectTimer = ReadFloat(f)	
 	
