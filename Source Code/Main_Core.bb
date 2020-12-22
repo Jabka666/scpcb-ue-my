@@ -8035,13 +8035,13 @@ Function DrawMenu()
 					
 					Text(x, y + 65 * MenuScale, "Strafe Right:")
 					
-					Text(x, y + 85 * MenuScale, "Manual Blink:")
+					Text(x, y + 85 * MenuScale, "Sprint:")
 					
-					Text(x, y + 105 * MenuScale, "Sprint:")
+					Text(x, y + 105 * MenuScale, "Crouch:")
 					
-					Text(x, y + 125 * MenuScale, "Inventory:")
+					Text(x, y + 125 * MenuScale, "Manual Blink:")
 					
-					Text(x, y + 145 * MenuScale, "Crouch:")
+					Text(x, y + 145 * MenuScale, "Inventory:")
 					
 					Text(x, y + 165 * MenuScale, "Quick Save:")
 					
@@ -8049,7 +8049,7 @@ Function DrawMenu()
 					
 					Text(x, y + 205 * MenuScale, "Take Screenshot:")
 					
-					If MouseOn(x, y, 300 * MenuScale, 220 * MenuScale)
+					If MouseOn(x, y, 310 * MenuScale, 220 * MenuScale)
 						DrawOptionsTooltip(tX, tY, tW, tH, "controls")
 					EndIf
 					;[End Block]
@@ -8394,27 +8394,27 @@ Function UpdateMenu()
 					
 					y = y + 70 * MenuScale
 					
-					InputBox(x + 200 * MenuScale, y, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_UP, 210.0)], 5)		
+					InputBox(x + 200 * MenuScale, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_UP, 210.0)], 3)		
 					
-					InputBox(x + 200 * MenuScale, y + 20 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_LEFT, 210.0)], 3)	
+					InputBox(x + 200 * MenuScale, y + 20 * MenuScale, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_LEFT, 210.0)], 4)	
 					
-					InputBox(x + 200 * MenuScale, y + 40 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_DOWN, 210.0)], 6)				
+					InputBox(x + 200 * MenuScale, y + 40 * MenuScale, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_DOWN, 210.0)], 5)				
 					
-					InputBox(x + 200 * MenuScale, y + 60 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_RIGHT, 210.0)], 4)
+					InputBox(x + 200 * MenuScale, y + 60 * MenuScale, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_RIGHT, 210.0)], 6)
 					
-					InputBox(x + 200 * MenuScale, y + 80 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\BLINK, 210.0)], 7)				
+					InputBox(x + 200 * MenuScale, y + 80 * MenuScale, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SPRINT, 210.0)], 7)
 					
-					InputBox(x + 200 * MenuScale, y + 100 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\SPRINT, 210.0)], 8)
+					InputBox(x + 200 * MenuScale, y + 100 * MenuScale, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CROUCH, 210.0)], 8)
 					
-					InputBox(x + 200 * MenuScale, y + 120 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\INVENTORY, 210.0)], 9)
+					InputBox(x + 200 * MenuScale, y + 120 * MenuScale, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\BLINK, 210.0)], 9)				
 					
-					InputBox(x + 200 * MenuScale, y + 140 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\CROUCH, 210.0)], 10)
+					InputBox(x + 200 * MenuScale, y + 140 * MenuScale, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\INVENTORY, 210.0)], 10)
 					
-					InputBox(x + 200 * MenuScale, y + 160 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\SAVE, 210.0)], 11)	
+					InputBox(x + 200 * MenuScale, y + 160 * MenuScale, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SAVE, 210.0)], 11)	
 					
-					If opt\CanOpenConsole Then InputBox(x + 200 * MenuScale, y + 180 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210.0)], 12)
+					If opt\CanOpenConsole Then InputBox(x + 200 * MenuScale, y + 180 * MenuScale, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210.0)], 12)
 					
-					InputBox(x + 200 * MenuScale, y + 200 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, 210.0)], 13)
+					InputBox(x + 200 * MenuScale, y + 200 * MenuScale, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, 210.0)], 13)
 					
 					Local TempKey%
 					
@@ -8425,35 +8425,35 @@ Function UpdateMenu()
 						Select SelectedInputBox
 							Case 3
 								;[Block]
-								Key\MOVEMENT_LEFT = TempKey
+								key\MOVEMENT_UP = TempKey
 								;[End Block]
 							Case 4
 								;[Block]
-								Key\MOVEMENT_RIGHT = TempKey
+								key\MOVEMENT_LEFT = TempKey
 								;[End Block]
 							Case 5
 								;[Block]
-								Key\MOVEMENT_UP = TempKey
+								key\MOVEMENT_DOWN = TempKey
 								;[End Block]
 							Case 6
 								;[Block]
-								Key\MOVEMENT_DOWN = TempKey
+								key\MOVEMENT_RIGHT = TempKey
 								;[End Block]
 							Case 7
 								;[Block]
-								key\BLINK = TempKey
+								key\SPRINT = TempKey
 								;[End Block]
 							Case 8
 								;[Block]
-								key\SPRINT = TempKey
+								key\CROUCH = TempKey
 								;[End Block]
 							Case 9
 								;[Block]
-								key\INVENTORY = TempKey
+								key\BLINK = TempKey
 								;[End Block]
 							Case 10
 								;[Block]
-								key\CROUCH = TempKey
+								key\INVENTORY = TempKey
 								;[End Block]
 							Case 11
 								;[Block]

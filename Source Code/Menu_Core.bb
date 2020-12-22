@@ -363,7 +363,7 @@ Function UpdateMainMenu()
 					EndIf
 					
 					If SelectedMap = "" Then
-						RandomSeed = InputBox(x + 150 * MenuScale, y + 55 * MenuScale, 200 * MenuScale, 30 * MenuScale, RandomSeed, 3, 15)	
+						RandomSeed = InputBox(x + 150 * MenuScale, y + 55 * MenuScale, 200 * MenuScale, 30 * MenuScale, RandomSeed, 2, 15)	
 					Else
 						If DrawButton(x + 370 * MenuScale, y + 55 * MenuScale, 120 * MenuScale, 30 * MenuScale, "Deselect", False) Then
 							mm\ShouldDeleteGadgets = True
@@ -732,27 +732,27 @@ Function UpdateMainMenu()
 						
 						y = y + 70 * MenuScale
 						
-						InputBox(x + 160 * MenuScale, y, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_UP, 210.0)], 5)		
+						InputBox(x + 160 * MenuScale, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_UP, 210.0)], 3)		
 						
-						InputBox(x + 160 * MenuScale, y + 20 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_LEFT, 210.0)], 3)	
+						InputBox(x + 160 * MenuScale, y + 20 * MenuScale, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_LEFT, 210.0)], 4)	
 						
-						InputBox(x + 160 * MenuScale, y + 40 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_DOWN, 210.0)], 6)				
+						InputBox(x + 160 * MenuScale, y + 40 * MenuScale, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_DOWN, 210.0)], 5)				
 						
-						InputBox(x + 160 * MenuScale, y + 60 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_RIGHT, 210.0)], 4)	
+						InputBox(x + 160 * MenuScale, y + 60 * MenuScale, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_RIGHT, 210.0)], 6)	
 						
-						InputBox(x + 160 * MenuScale, y + 80 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\SAVE, 210.0)], 11)
+						InputBox(x + 160 * MenuScale, y + 80 * MenuScale, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SPRINT, 210.0)], 7)
 						
-						InputBox(x + 460 * MenuScale, y, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\BLINK, 210.0)], 7)				
+						InputBox(x + 450 * MenuScale, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CROUCH, 210.0)], 8)
 						
-						InputBox(x + 460 * MenuScale, y + 20 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\SPRINT, 210.0)], 8)
+						InputBox(x + 450 * MenuScale, y + 20 * MenuScale, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\BLINK, 210.0)], 9)
 						
-						InputBox(x + 460 * MenuScale, y + 40 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\INVENTORY, 210.0)], 9)
+						InputBox(x + 450 * MenuScale, y + 40 * MenuScale, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\INVENTORY, 210.0)], 10)
 						
-						InputBox(x + 460 * MenuScale, y + 60 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\CROUCH, 210.0)], 10)	
+						InputBox(x + 450 * MenuScale, y + 60 * MenuScale, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SAVE, 210.0)], 11)
 						
-						If opt\CanOpenConsole Then InputBox(x + 460 * MenuScale, y + 80 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210.0)], 12)
+						If opt\CanOpenConsole Then InputBox(x + 450 * MenuScale, y + 80 * MenuScale, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210.0)], 12)
 						
-						InputBox(x + 460 * MenuScale, y + 100 * MenuScale, 100 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, 210.0)], 13)
+						InputBox(x + 450 * MenuScale, y + 100 * MenuScale, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, 210.0)], 13)
 						
 						Local TempKey%
 						
@@ -763,35 +763,35 @@ Function UpdateMainMenu()
 							Select SelectedInputBox
 								Case 3
 									;[Block]
-									key\MOVEMENT_LEFT = TempKey
+									key\MOVEMENT_UP = TempKey
 									;[End Block]
 								Case 4
 									;[Block]
-									key\MOVEMENT_RIGHT = TempKey
+									key\MOVEMENT_LEFT = TempKey
 									;[End Block]
 								Case 5
 									;[Block]
-									key\MOVEMENT_UP = TempKey
+									key\MOVEMENT_DOWN = TempKey
 									;[End Block]
 								Case 6
 									;[Block]
-									key\MOVEMENT_DOWN = TempKey
+									key\MOVEMENT_RIGHT = TempKey
 									;[End Block]
 								Case 7
 									;[Block]
-									key\BLINK = TempKey
+									key\SPRINT = TempKey
 									;[End Block]
 								Case 8
 									;[Block]
-									key\SPRINT = TempKey
+									key\CROUCH = TempKey
 									;[End Block]
 								Case 9
 									;[Block]
-									key\INVENTORY = TempKey
+									key\BLINK = TempKey
 									;[End Block]
 								Case 10
 									;[Block]
-									key\CROUCH = TempKey
+									key\INVENTORY = TempKey
 									;[End Block]
 								Case 11
 									;[Block]
@@ -905,10 +905,37 @@ Function UpdateMainMenu()
 							y = y + 35 * MenuScale
 							
 							If opt\EnableSubtitles Then
-								DrawPalette(mma\Palette, x + 245 * MenuScale, y)
+								DrawPalette(mma\Palette, x + 250 * MenuScale, y)
 							EndIf
 							
-							y = y + 25 * MenuScale
+							y = y + 30 * MenuScale
+							
+							If opt\EnableSubtitles Then
+								opt\SubColorR = InputBox(x + 180 * MenuScale, y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorR), 14, 3)
+								If SelectedInputBox = 14 Then
+									If opt\SubColorR > 255 Then opt\SubColorR = 255
+								EndIf
+							EndIf
+							
+							y = y + 30 * MenuScale
+							
+							If opt\EnableSubtitles Then
+								opt\SubColorG = InputBox(x + 180 * MenuScale, y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorG), 15, 3)
+								If SelectedInputBox = 15 Then
+									If opt\SubColorG > 255 Then opt\SubColorG = 255
+								EndIf
+							EndIf
+							
+							y = y + 30 * MenuScale
+							
+							If opt\EnableSubtitles Then
+								opt\SubColorB = InputBox(x + 180 * MenuScale, y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorB), 16, 3)
+								If SelectedInputBox = 16 Then
+									If opt\SubColorB > 255 Then opt\SubColorB = 255
+								EndIf
+							EndIf
+							
+							y = y + 40 * MenuScale
 							
 							If DrawButton(x + 20 * MenuScale, y, 170 * MenuScale, 30 * MenuScale, "RESET OPTIONS", False) Then
 								Delay(200)
@@ -1466,15 +1493,15 @@ Function RenderMainMenu()
 					
 					Text(x + 20 * MenuScale, y + 65 * MenuScale, "Strafe Right:")
 					
-					Text(x + 20 * MenuScale, y + 85 * MenuScale, "Quick Save:")
+					Text(x + 20 * MenuScale, y + 85 * MenuScale, "Sprint:")
 					
-					Text(x + 280 * MenuScale, y + 5 * MenuScale, "Manual Blink:")
+					Text(x + 280 * MenuScale, y + 5 * MenuScale, "Crouch:")
 					
-					Text(x + 280 * MenuScale, y + 25 * MenuScale, "Sprint:")
+					Text(x + 280 * MenuScale, y + 25 * MenuScale, "Manual Blink:")
 					
 					Text(x + 280 * MenuScale, y + 45 * MenuScale, "Inventory:")
 					
-					Text(x + 280 * MenuScale, y + 65 * MenuScale, "Crouch:")
+					Text(x + 280 * MenuScale, y + 65 * MenuScale, "Quick Save:")
 					
 					If opt\CanOpenConsole Then Text(x + 280 * MenuScale, y + 85 * MenuScale, "Console:")
 					
@@ -1597,23 +1624,53 @@ Function RenderMainMenu()
 						y = y + 5 * MenuScale
 						
 						If opt\EnableSubtitles Then
-							If MouseOn(x + 270 * MenuScale, y, 147 * MenuScale, 147 * MenuScale)
+							If MouseOn(x + 250 * MenuScale, y, 147 * MenuScale, 147 * MenuScale)
 								DrawOptionsTooltip(tX, tY, tW, tH, "subtitlescolor")
 							EndIf
 						EndIf
 						
 						y = y + 30 * MenuScale
 						
-						If MouseOn(x + 20 * MenuScale, y, 220 * MenuScale, 30 * MenuScale)
+						If opt\EnableSubtitles Then
+							Color(255, 255, 255)
+							Text(x + 20 * MenuScale, y + 5 * MenuScale, "RED COLOR:")
+							If MouseOn(x + 180 * MenuScale, y, 40 * MenuScale, 20 * MenuScale)
+								DrawOptionsTooltip(tX, tY, tW, tH, "subtitlescolor")
+							EndIf
+						EndIf
+						
+						y = y + 30 * MenuScale
+						
+						If opt\EnableSubtitles Then
+							Color(255, 255, 255)
+							Text(x + 20 * MenuScale, y + 5 * MenuScale, "GREEN COLOR:")
+							If MouseOn(x + 180 * MenuScale, y, 40 * MenuScale, 20 * MenuScale)
+								DrawOptionsTooltip(tX, tY, tW, tH, "subtitlescolor")
+							EndIf
+						EndIf
+						
+						y = y + 30 * MenuScale
+						
+						If opt\EnableSubtitles Then
+							Color(255, 255, 255)
+							Text(x + 20 * MenuScale, y + 5 * MenuScale, "BLUE COLOR:")
+							If MouseOn(x + 180 * MenuScale, y, 40 * MenuScale, 20 * MenuScale)
+								DrawOptionsTooltip(tX, tY, tW, tH, "subtitlescolor")
+							EndIf
+						EndIf
+						
+						y = y + 40 * MenuScale
+						
+						If MouseOn(x + 20 * MenuScale, y, 170 * MenuScale, 30 * MenuScale)
 							DrawOptionsTooltip(tX, tY, tW, tH, "resetoptions")
 						EndIf
 						
 						If opt\EnableSubtitles Then
 							Color(opt\SubColorR, opt\SubColorG, opt\SubColorB)
-							Text(x + (Width / 2), y + (215 * MenuScale), Chr(34) + "- Please, approach SCP-1-7-3 for testing." + Chr(34), True)
-							Text(x + (Width / 2), y + (235 * MenuScale), Chr(34) + "- Oh, and by the way." + Chr(34), True)
-							Text(x + (Width / 2), y + (255 * MenuScale), Chr(34) + "- You, stop!" + Chr(34), True)
-							Text(x + (Width / 2), y + (275 * MenuScale), "[JORGE HAS BEEN EXPECTING YOU]", True)
+							Text(x + (Width / 2), y + (120 * MenuScale), Chr(34) + "- Please, approach SCP-1-7-3 for testing." + Chr(34), True)
+							Text(x + (Width / 2), y + (140 * MenuScale), Chr(34) + "- Oh, and by the way." + Chr(34), True)
+							Text(x + (Width / 2), y + (160 * MenuScale), Chr(34) + "- You, stop!" + Chr(34), True)
+							Text(x + (Width / 2), y + (180 * MenuScale), "[JORGE HAS BEEN EXPECTING YOU]", True)
 						EndIf
 					EndIf
 					;[End Block]
@@ -3075,8 +3132,6 @@ Function DrawOptionsTooltip(x%, y%, Width%, Height%, Option$, Value# = 0.0, InGa
 		Case "subtitlescolor"
 			;[Block]
 			Txt = Chr(34) + "Subtitles color" + Chr(34) + " is self-explanatory."
-			R = opt\SubColorR : G = opt\SubColorG : B = opt\SubColorB
-			Txt2 = "R: " + opt\SubColorR + " G: " + opt\SubColorG + " B: " + opt\SubColorB
 			;[End Block]
 		Case "resetoptions"
 			;[Block]
