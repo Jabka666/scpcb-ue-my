@@ -9996,10 +9996,14 @@ Function UpdateEndings()
 											Next
 											
 											For i = 5 To 8
-												e\room\NPC[i]\State = 5.0
-												e\room\NPC[i]\EnemyX = EntityX(Curr106\OBJ, True)
-												e\room\NPC[i]\EnemyY = EntityY(Curr106\OBJ, True) + 0.4
-												e\room\NPC[i]\EnemyZ = EntityZ(Curr106\OBJ, True)											
+												If EntityDistanceSquared(e\room\NPC[i]\Collider, me\Collider) < 25.0 Then
+													e\room\NPC[i]\State = 6.0
+												Else
+													e\room\NPC[i]\State = 5.0
+													e\room\NPC[i]\EnemyX = EntityX(Curr106\OBJ, True)
+													e\room\NPC[i]\EnemyY = EntityY(Curr106\OBJ, True) + 0.4
+													e\room\NPC[i]\EnemyZ = EntityZ(Curr106\OBJ, True)
+												EndIf
 											Next
 											
 											Pvt = CreatePivot()

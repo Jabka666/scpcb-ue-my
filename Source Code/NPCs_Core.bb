@@ -997,30 +997,32 @@ Function UpdateNPCs()
 											EndIf
 										EndIf
 									EndIf
-								ElseIf PlayerRoom\RoomTemplate\Name <> "gatea" And (Not chs\NoTarget) Then
-									If Dist > 0.5 Then 
-										n\CurrSpeed = CurveValue(n\Speed * 2.5, n\CurrSpeed, 10.0)
-									Else
-										n\CurrSpeed = 0.0
-									EndIf
-									AnimateNPC(n, 105.0, 110.0, 0.15, False)
-									
-									If me\KillTimer >= 0.0 And me\FallTimer >= 0.0 Then
-										PointEntity(n\OBJ, me\Collider)
-										RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0.0)									
+								Else
+									If (Not chs\NoTarget) Then
+										If Dist > 0.5 Then 
+											n\CurrSpeed = CurveValue(n\Speed * 2.5, n\CurrSpeed, 10.0)
+										Else
+											n\CurrSpeed = 0.0
+										EndIf
+										AnimateNPC(n, 105.0, 110.0, 0.15, False)
 										
-										If Ceil(n\Frame) = 110.0 And (Not chs\GodMode) Then
-											PlaySound_Strict(DamageSFX[1])
-											PlaySound_Strict(HorrorSFX[5])											
-											If PlayerRoom\RoomTemplate\Name = "pocketdimension" Then
-												msg\DeathMsg = SubjectName + ". Body partially decomposed by what is assumed to be SCP-106's " + Chr(34) + "corrosion" + Chr(34) + " effect. Body disposed of via incineration."
-												Kill(True)
-											Else
-												PlaySound_Strict(OldManSFX[3])
-												me\FallTimer = Min(-1.0, me\FallTimer)
-												PositionEntity(me\Head, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True), True)
-												ResetEntity(me\Head)
-												RotateEntity(me\Head, 0.0, EntityYaw(Camera) + Rnd(-45.0, 45.0), 0.0)
+										If me\KillTimer >= 0.0 And me\FallTimer >= 0.0 Then
+											PointEntity(n\OBJ, me\Collider)
+											RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0.0)									
+											
+											If Ceil(n\Frame) = 110.0 And (Not chs\GodMode) Then
+												PlaySound_Strict(DamageSFX[1])
+												PlaySound_Strict(HorrorSFX[5])											
+												If PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor PlayerRoom\RoomTemplate\Name = "gatea" Then
+													msg\DeathMsg = SubjectName + ". Body partially decomposed by what is assumed to be SCP-106's " + Chr(34) + "corrosion" + Chr(34) + " effect. Body disposed of via incineration."
+													Kill(True)
+												Else
+													PlaySound_Strict(OldManSFX[3])
+													me\FallTimer = Min(-1.0, me\FallTimer)
+													PositionEntity(me\Head, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True), True)
+													ResetEntity(me\Head)
+													RotateEntity(me\Head, 0.0, EntityYaw(Camera) + Rnd(-45.0, 45.0), 0.0)
+												EndIf
 											EndIf
 										EndIf
 									EndIf
@@ -7369,5 +7371,5 @@ Function ChangeNPCTextureID(n.NPCs, TextureID%) ; ~ Works only for Class D model
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#17F#1210#1357#135B#14FD#1619#17E8#1843
+;~B#17F#1212#1359#135D#14FF#161B#17EA#1845
 ;~C#Blitz3D
