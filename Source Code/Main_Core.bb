@@ -3749,9 +3749,9 @@ Function GetScreenshot()
 				For y = 0 To opt\RealGraphicHeight - 1
 					Local Pixel% = ReadPixelFast(x, y, BackBuffer())
 					
-					PokeByte(Bank, (y * (opt\RealGraphicWidth * 3)) + (x * 3), (Pixel Shr 0) And $FF)
-					PokeByte(Bank, (y * (opt\RealGraphicWidth * 3)) + (x * 3) + 1, (Pixel Shr 8) And $FF)
-					PokeByte(Bank, (y * (opt\RealGraphicWidth * 3)) + (x * 3) + 2, (Pixel Shr 16) And $FF)
+					PokeByte(Bank, (y * (opt\RealGraphicWidth * 3)) + (x * 3), ReadPixelColor(Pixel, 0))
+					PokeByte(Bank, (y * (opt\RealGraphicWidth * 3)) + (x * 3) + 1, ReadPixelColor(Pixel, 8))
+					PokeByte(Bank, (y * (opt\RealGraphicWidth * 3)) + (x * 3) + 2, ReadPixelColor(Pixel, 16))
 				Next
 			Next
 			UnlockBuffer(BackBuffer())

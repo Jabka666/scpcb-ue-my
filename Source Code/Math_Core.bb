@@ -71,7 +71,7 @@ Function ScaledMouseY%()
 	Return(Float(MouseY()) * Float(opt\GraphicHeight) / Float(opt\RealGraphicHeight))
 End Function
 
-Function ReadPixelColor(Pixel%, Shrid%)
+Function ReadPixelColor%(Pixel%, Shrid%)
 	Return(Pixel Shr Shrid) And $FF
 End Function
 
