@@ -2147,7 +2147,7 @@ Function UpdateEvents()
 												
 												r\NPC[1] = e\room\NPC[6]
 												
-												FreeEntity(e\room\OBJ)
+												FreeEntity(e\room\OBJ) : e\room\OBJ = 0
 												Delete(e\room)
 												
 												For sc.SecurityCams = Each SecurityCams
@@ -6946,6 +6946,11 @@ Function UpdateEvents()
 						
 						Curr106\Idle = 1
 						
+						For r.Rooms = Each Rooms
+							HideEntity(r\OBJ)
+						Next
+						ShowEntity(e\room\OBJ)
+						
 						UpdateForest(fr, me\Collider)
 						
 						If e\EventStr = "" And QuickLoadPercent = -1
@@ -9019,7 +9024,7 @@ Function UpdateEvents()
 						EndIf
 					Next
 					For du.Dummy1499_1 = Each Dummy1499_1
-						FreeEntity(du\OBJ)
+						FreeEntity(du\OBJ) : du\OBJ = 0
 						Delete(du)
 					Next
 					If e\EventState3 < 70.0 * 30.0 Then
@@ -9029,6 +9034,7 @@ Function UpdateEvents()
 					If e\Sound2 <> 0 Then
 						FreeSound_Strict(e\Sound2) : e\Sound2 = 0
 					EndIf
+					HideEntity(e\room\OBJ)
 				EndIf
 				;[End Block]
 			Case e_room2shaft
@@ -9479,7 +9485,7 @@ Function UpdateDimension1499()
 						EndIf
 					Next
 					For du.Dummy1499_1 = Each Dummy1499_1
-						FreeEntity(du\OBJ)
+						FreeEntity(du\OBJ) : du\OBJ = 0
 						Delete(du)
 					Next
 					If e\EventState3 < 70.0 * 30.0 Then
@@ -9489,6 +9495,7 @@ Function UpdateDimension1499()
 					If e\Sound2 <> 0 Then
 						FreeSound_Strict(e\Sound2) : e\Sound2 = 0
 					EndIf
+					HideEntity(e\room\OBJ)
 				EndIf
 			EndIf
 		EndIf
