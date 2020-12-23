@@ -240,10 +240,10 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 						Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 3, 0)
 					EndIf
 				EndIf
-				If Tex[j] <> 0
+				If Tex[j] <> 0 Then
 					If Temp1i = 1 Then TextureBlend(Tex[j], 5)
-					If Instr(Lower(Temp1s), "_lm") <> 0
-						TextureBlend(Tex[j], 2)
+					If Instr(Lower(Temp1s), "_lm") <> 0 Then
+						TextureBlend(Tex[j], 3)
 					EndIf
 					IsAlpha = 2
 					If Temp1i = 3 Then IsAlpha = 1

@@ -4695,11 +4695,11 @@ Function MouseLook()
 			AmbientLightRooms(15)
 		Else
 			EntityColor(tt\OverlayID[4], 128.0, 128.0, 128.0)
-			AmbientLightRooms(15)
+			AmbientLightRooms(0)
 		EndIf
 		EntityTexture(tt\OverlayID[0], tt\OverlayTextureID[5])
 	Else
-		AmbientLightRooms(15)
+		AmbientLightRooms(0)
 		HideEntity(tt\OverlayID[4])
 		EntityTexture(tt\OverlayID[0], tt\OverlayTextureID[0])
 	EndIf
@@ -7977,7 +7977,6 @@ Function DrawMenu()
 					
 					Color(255, 255, 255)
 					Text(x, y + 5 * MenuScale, "Frame limit:")
-					
 					Color(255, 255, 255)
 					If opt\CurrFrameLimit > 0.0 Then
 						Color(255, 255, 0)
@@ -8680,12 +8679,12 @@ Function LoadEntities()
 	tt\IconID[5] = LoadImage_Strict("GFX\hand_symbol(2).png")
 	
 	AmbientLightRoomTex = CreateTextureUsingCacheSystem(2, 2, 1)
-	TextureBlend(AmbientLightRoomTex, 3)
+	TextureBlend(AmbientLightRoomTex, 5)
 	SetBuffer(TextureBuffer(AmbientLightRoomTex))
 	ClsColor(0, 0, 0)
 	Cls()
 	SetBuffer(BackBuffer())
-	AmbientLightRoomVal = 255
+	AmbientLightRoomVal = 0
 	
 	SoundEmitter = CreatePivot()
 	
@@ -8694,7 +8693,6 @@ Function LoadEntities()
 	CameraRange(Camera, 0.01, opt\CameraFogFar)
 	CameraFogMode(Camera, 1)
 	CameraFogRange(Camera, opt\CameraFogNear, opt\CameraFogFar)
-	AmbientLight(BRIGHTNESS, BRIGHTNESS, BRIGHTNESS)
 	
 	ScreenTexs[0] = CreateTextureUsingCacheSystem(512, 512, 1)
 	ScreenTexs[1] = CreateTextureUsingCacheSystem(512, 512, 1)
@@ -9105,8 +9103,6 @@ Function LoadEntities()
 	; ~ NPCtypeD - different models with different textures (loaded using "CopyEntity") -- ENDSHN
 	For i = 0 To MaxDTextures - 1
 		o\DTextures[i] = CopyEntity(o\NPCModelID[NPCtypeD])
-		; ~ Temporary fix for wrong blend (TODO:) -- Jabka
-		EntityFX(o\DTextures[i], 2)
 		HideEntity(o\DTextures[i])
 	Next
 	
