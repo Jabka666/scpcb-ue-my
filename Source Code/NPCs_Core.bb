@@ -5156,7 +5156,7 @@ Function UpdateMTFUnit(n.NPCs)
 	If n\IsDead Then
 		n\BlinkTimer = -1.0
 		SetNPCFrame(n, 532.0)
-		If ChannelPlaying(n\SoundCHN2) = True Then
+		If ChannelPlaying(n\SoundCHN2) Then
 			StopChannel(n\SoundCHN2)
 		EndIf
 		Return
@@ -6205,7 +6205,7 @@ Function UpdateMTFUnit(n.NPCs)
 						If n\MTFLeader <> Null Then
 							n\PathStatus = FindPath(n, EntityX(n\MTFLeader\Collider, True), EntityY(n\MTFLeader\Collider, True) + 0.1, EntityZ(n\MTFLeader\Collider, True))
 						Else
-							For r = Each Rooms
+							For r.Rooms = Each Rooms
 								If ((Abs(r\x - EntityX(n\Collider, True)) > 12.0) Lor (Abs(r\z - EntityZ(n\Collider, True)) > 12.0)) And (Rand(1, Max(4 - Int(Abs(r\z - EntityZ(n\Collider, True) / 8.0)), 2)) = 1) Then
 									If EntityDistanceSquared(r\OBJ, n\Target\Collider) > 36.0
 										x = r\x
@@ -6289,7 +6289,6 @@ Function UpdateMTFUnit(n.NPCs)
 				EndIf
 				
 				If Abs(EntityX(Target) - EntityX(n\Collider)) < 55.0 And Abs(EntityZ(Target) - EntityZ(n\Collider)) < 55.0 And Abs(EntityY(Target) - EntityY(n\Collider)) < 20.0 Then
-					
 					PointEntity(n\OBJ, Target)
 					RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 30.0), 0.0, True)
 					

@@ -8001,7 +8001,6 @@ Function DrawMenu()
 						Exit
 					EndIf
 				Next
-				
 				For i = 0 To 11
 					If i + ((AchievementsMenu - 1) * 12) < MAXACHIEVEMENTS Then
 						If MouseOn(AchvXIMG + ((i Mod 4) * SeparationConst), y + ((i / 4) * 120 * MenuScale), 64 * Scale, 64 * Scale) Then

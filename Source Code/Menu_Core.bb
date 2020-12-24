@@ -106,9 +106,6 @@ Const MainMenuTab_Options_Advanced% = 7
 ;[End Block]
 
 Function UpdateMainMenu()
-	; ~ Go out of function immediately if the game has been start
-	If (Not MainMenuOpen) Then Return
-	
 	CatchErrors("Uncaught (UpdateMainMenu")
 	
 	Local x%, y%, Width%, Height%, Temp%, i%, n%, j%
@@ -996,6 +993,9 @@ Function UpdateMainMenu()
 			End Select
 		EndIf
 	Wend
+	
+	; ~ Go out of function immediately if the game has been start
+	If (Not MainMenuOpen) Then Return
 	
 	RenderMainMenu()
 	
