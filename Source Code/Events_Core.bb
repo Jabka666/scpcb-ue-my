@@ -2712,6 +2712,9 @@ Function UpdateEvents()
 				; ~ Otherwise 0.0
 				
 				If PlayerRoom = e\room Then
+					For r.Rooms = Each Rooms
+						HideEntity(r\OBJ)
+					Next
 					ShowEntity(e\room\OBJ)
 					
 					PlayerFallingPickDistance = 0.0
@@ -3098,11 +3101,11 @@ Function UpdateEvents()
 									PositionEntity(Pvt, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 									PointEntity(Pvt, e\room\OBJ)
 									MoveEntity(Pvt, 0.0, 0.0, Dist * 1.9)
-									PositionEntity(me\Collider, EntityX(Pvt), EntityY(me\Collider), EntityZ(Pvt))
+									PositionEntity(me\Collider, EntityX(Pvt), EntityY(me\Collider) + 0.1, EntityZ(Pvt))
 									ResetEntity(me\Collider)
 									
 									MoveEntity(Pvt, 0.0, 0.0, 0.8)
-									PositionEntity(e\room\Objects[10], EntityX(Pvt), 0.0, EntityZ(Pvt))
+									PositionEntity(e\room\Objects[10], EntityX(Pvt), 0.1, EntityZ(Pvt))
 									RotateEntity(e\room\Objects[10], 0.0, EntityYaw(Pvt), 0.0, True)	
 									
 									FreeEntity(Pvt)
@@ -3113,13 +3116,13 @@ Function UpdateEvents()
 									me\BlinkTimer = -10.0
 									PlaySound_Strict(OldManSFX[3])
 									
-									PositionEntity(me\Collider, EntityX(e\room\Objects[8], True), 0.5, EntityZ(e\room\Objects[8], True))
+									PositionEntity(me\Collider, EntityX(e\room\Objects[8], True), 0.6, EntityZ(e\room\Objects[8], True))
 									ResetEntity(me\Collider)
 									;[End Block]
 								Case 11, 12 ; ~ Middle of the large starting room
 									;[Block]
 									me\BlurTimer = 500.0
-									PositionEntity(me\Collider, EntityX(e\room\OBJ), 0.5, EntityZ(e\room\OBJ))
+									PositionEntity(me\Collider, EntityX(e\room\OBJ), 0.6, EntityZ(e\room\OBJ))
 									;[End Block]
 								Case 13, 14, 15 ; ~ The exit room"
 									;[Block]
@@ -3127,7 +3130,7 @@ Function UpdateEvents()
 									e\EventState2 = 1.0
 									me\BlinkTimer = -10.0
 									
-									PositionEntity(me\Collider, EntityX(e\room\Objects[8], True) - 400.0 * RoomScale, -304.0 * RoomScale, EntityZ(e\room\Objects[8], True))
+									PositionEntity(me\Collider, EntityX(e\room\Objects[8], True) - 400.0 * RoomScale, e\room\y - 300.0 * RoomScale, EntityZ(e\room\Objects[8], True))
 									ResetEntity(me\Collider)
 									;[End Block]
 								Case 16, 17, 18, 19
