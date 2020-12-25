@@ -134,8 +134,8 @@ Function SaveGame(File$)
 	WriteByte(f, AchvPDDone)
 	WriteInt(f, me\RefinedItems)
 	
-	For x = 0 To MapWidth
-		For y = 0 To MapHeight
+	For x = 0 To MapSize
+		For y = 0 To MapSize
 			WriteInt(f, MapTemp(x, y))
 			WriteByte(f, MapFound(x, y))
 		Next
@@ -610,8 +610,8 @@ Function LoadGame(File$)
 	AchvPDDone = ReadByte(f)
 	me\RefinedItems = ReadInt(f)
 	
-	For x = 0 To MapWidth 
-		For y = 0 To MapHeight
+	For x = 0 To MapSize 
+		For y = 0 To MapSize
 			MapTemp(x, y) = ReadInt(f)
 			MapFound(x, y) = ReadByte(f)
 		Next
@@ -861,7 +861,7 @@ Function LoadGame(File$)
 	Local Spacing# = 8.0
 	Local Zone%, ShouldSpawnDoor%
 	
-	For y = MapHeight To 0 Step -1
+	For y = MapSize To 0 Step -1
 		If y < I_Zone\Transition[1] - (SelectedMap = "") Then
 			Zone = 3
 		ElseIf y >= I_Zone\Transition[1] - (SelectedMap = "") And y < I_Zone\Transition[0] - (SelectedMap = "") Then
@@ -870,7 +870,7 @@ Function LoadGame(File$)
 			Zone = 1
 		EndIf
 		
-		For x = MapWidth To 0 Step -1
+		For x = MapSize To 0 Step -1
 			If MapTemp(x, y) > 0 Then
 				If Zone = 2 Then
 					Temp = Heavy_Door
@@ -913,7 +913,7 @@ Function LoadGame(File$)
 								;[End Block]
 						End Select
 						If ShouldSpawnDoor Then
-							If x + 1 < MapWidth + 1
+							If x + 1 < MapSize + 1
 								If MapTemp(x + 1, y) > 0 Then
 									do.Doors = CreateDoor(r\Zone, Float(x) * Spacing + Spacing / 2.0, 0.0, Float(y) * Spacing, 90.0, r, Max(Rand(-3, 1), 0.0), Temp)
 									r\AdjDoor[0] = do
@@ -953,7 +953,7 @@ Function LoadGame(File$)
 								;[End Block]
 						End Select
 						If ShouldSpawnDoor
-							If y + 1 < MapHeight + 1
+							If y + 1 < MapSize + 1
 								If MapTemp(x, y + 1) > 0 Then
 									do.Doors = CreateDoor(r\Zone, Float(x) * Spacing, 0.0, Float(y) * Spacing + Spacing / 2.0, 0.0, r, Max(Rand(-3, 1), 0), Temp)
 									r\AdjDoor[3] = do
@@ -1476,8 +1476,8 @@ Function LoadGameQuick(File$)
 	AchvPDDone = ReadByte(f)
 	me\RefinedItems = ReadInt(f)
 	
-	For x = 0 To MapWidth
-		For y = 0 To MapHeight
+	For x = 0 To MapSize
+		For y = 0 To MapSize
 			MapTemp(x, y) = ReadInt(f)
 			MapFound(x, y) = ReadByte(f)
 		Next
@@ -2182,12 +2182,12 @@ Function LoadMap(File$)
 	
 	f = ReadFile(File)
 	
-	Dim MapTemp%(MapWidth + 1, MapHeight + 1)
-	Dim MapFound%(MapWidth + 1, MapHeight + 1)
+	Dim MapTemp%(MapSize + 1, MapSize + 1)
+	Dim MapFound%(MapSize + 1, MapSize + 1)
 	CoffinDistance = 100.0
 	
-	For x = 0 To MapWidth + 1
-		For y = 0 To MapHeight + 1
+	For x = 0 To MapSize + 1
+		For y = 0 To MapSize + 1
 			MapTemp(x, y) = 0
 			MapFound(x, y) = 0
 		Next
@@ -2219,7 +2219,7 @@ Function LoadMap(File$)
 			
 			For rt.RoomTemplates = Each RoomTemplates
 				If Lower(rt\Name) = Name Then
-					r.Rooms = CreateRoom(0, rt\Shape, (MapWidth - x) * 8.0, 0.0, y * 8.0, Name)
+					r.Rooms = CreateRoom(0, rt\Shape, (MapSize - x) * 8.0, 0.0, y * 8.0, Name)
 					
 					r\Angle = Angle
 					If r\Angle <> 90.0 And r\Angle <> 270.0
@@ -2229,7 +2229,7 @@ Function LoadMap(File$)
 					
 					TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 					
-					MapTemp(MapWidth - x, y) = True
+					MapTemp(MapSize - x, y) = True
 					
 					Exit
 				EndIf
@@ -2408,7 +2408,7 @@ Function LoadMap(File$)
 			
 			For rt.RoomTemplates = Each RoomTemplates
 				If Lower(rt\Name) = Name Then
-					r.Rooms = CreateRoom(0, rt\Shape, (MapWidth - x) * 8.0, 0.0, y * 8.0, Name)
+					r.Rooms = CreateRoom(0, rt\Shape, (MapSize - x) * 8.0, 0.0, y * 8.0, Name)
 					
 					r\Angle = Angle
 					If r\Angle <> 90.0 And r\Angle <> 270.0
@@ -2418,7 +2418,7 @@ Function LoadMap(File$)
 					
 					TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 					
-					MapTemp(MapWidth - x, y) = True
+					MapTemp(MapSize - x, y) = True
 					
 					Exit
 				EndIf
@@ -2452,7 +2452,7 @@ Function LoadMap(File$)
 	Local ShouldSpawnDoor% = False
 	Local d.Doors
 	
-	For y = MapHeight To 0 Step -1
+	For y = MapSize To 0 Step -1
 		If y < I_Zone\Transition[1] Then
 			Zone = 3
 		ElseIf y >= I_Zone\Transition[1] And y < I_Zone\Transition[0] Then
@@ -2461,7 +2461,7 @@ Function LoadMap(File$)
 			Zone = 1
 		EndIf
 		
-		For x = MapWidth To 0 Step -1
+		For x = MapSize To 0 Step -1
 			If MapTemp(x, y) > 0 Then
 				If Zone = 2 Then 
 					Temp = Heavy_Door
@@ -2503,7 +2503,7 @@ Function LoadMap(File$)
 								;[End Block]
 						End Select
 						If ShouldSpawnDoor Then
-							If x + 1 < MapWidth + 1 Then
+							If x + 1 < MapSize + 1 Then
 								If MapTemp(x + 1, y) > 0 Then
 									d.Doors = CreateDoor(r\Zone, Float(x) * Spacing + Spacing / 2.0, 0.0, Float(y) * Spacing, 90.0, r, Max(Rand(-3, 1), 0), Temp)
 									r\AdjDoor[0] = d
@@ -2543,7 +2543,7 @@ Function LoadMap(File$)
 								;[End Block]
 						End Select
 						If ShouldSpawnDoor Then
-							If y + 1 < MapHeight + 1 Then
+							If y + 1 < MapSize + 1 Then
 								If MapTemp(x, y + 1) > 0 Then
 									d.Doors = CreateDoor(r\Zone, Float(x) * Spacing, 0.0, Float(y) * Spacing + Spacing / 2.0, 0.0, r, Max(Rand(-3, 1), 0), Temp)
 									r\AdjDoor[3] = d
@@ -2557,8 +2557,8 @@ Function LoadMap(File$)
 		Next
 	Next
 	
-	If opt\IntroEnabled Then r = CreateRoom(0, ROOM1, 8.0, 0.0, (MapHeight + 2) * 8.0, "room173intro")
-	r = CreateRoom(0, ROOM1, (MapWidth + 2) * 8.0, 0.0, (MapHeight + 2) * 8.0, "pocketdimension")
+	If opt\IntroEnabled Then r = CreateRoom(0, ROOM1, 8.0, 0.0, (MapSize + 2) * 8.0, "room173intro")
+	r = CreateRoom(0, ROOM1, (MapSize + 2) * 8.0, 0.0, (MapSize + 2) * 8.0, "pocketdimension")
 	r = CreateRoom(0, ROOM1, 0.0, 500.0, -16.0, "gatea")
 	r = CreateRoom(0, ROOM1, -16.0, 800.0, 0.0, "dimension1499")
 	

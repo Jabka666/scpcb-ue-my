@@ -1404,10 +1404,10 @@ End Function
 
 LoadRoomTemplates("Data\rooms.ini")
 
-Const MapWidth% = 18, MapHeight% = 18
+Const MapSize% = 18
 
-Dim MapTemp%(MapWidth + 1, MapHeight + 1)
-Dim MapFound%(MapWidth + 1, MapHeight + 1)
+Dim MapTemp%(MapSize + 1, MapSize + 1)
+Dim MapFound%(MapSize + 1, MapSize + 1)
 
 Global RoomAmbience%[10]
 
@@ -6007,9 +6007,9 @@ Function RemoveWaypoint(w.WayPoints)
 	Delete(w)
 End Function
 
-Dim MapF%(MapWidth + 1, MapHeight + 1), MapG%(MapWidth + 1, MapHeight + 1), MapH%(MapWidth + 1, MapHeight + 1)
-Dim MapState%(MapWidth + 1, MapHeight + 1)
-Dim MapParent%(MapWidth + 1, MapHeight + 1, 2)
+Dim MapF%(MapSize + 1, MapSize + 1), MapG%(MapSize + 1, MapSize + 1), MapH%(MapSize + 1, MapSize + 1)
+Dim MapState%(MapSize + 1, MapSize + 1)
+Dim MapParent%(MapSize + 1, MapSize + 1, 2)
 
 Function FindPath(n.NPCs, x#, y#, z#)
 	Local Temp%, Dist#, Dist2#
@@ -6262,7 +6262,7 @@ Function UpdateScreens()
 	Next
 End Function
 
-Dim MapName$(MapWidth, MapHeight)
+Dim MapName$(MapSize, MapSize)
 Dim MapRoomID%(ROOM4 + 1)
 Dim MapRoom$(ROOM4 + 1, 0)
 
@@ -6721,29 +6721,29 @@ Function CreateMap()
 	
 	SeedRnd(GenerateSeedNumber(RandomSeed))
 	
-	Dim MapName$(MapWidth, MapHeight)
+	Dim MapName$(MapSize, MapSize)
 	
 	Dim MapRoomID%(ROOM4 + 1)
 	
-	x = Floor(MapWidth / 2)
-	y = MapHeight - 2
+	x = Floor(MapSize / 2)
+	y = MapSize - 2
 	
-	For i = y To MapHeight - 1
+	For i = y To MapSize - 1
 		MapTemp(x, i) = True
 	Next
 	
 	Repeat
 		Width = Rand(10, 15)
 		
-		If x > MapWidth * 0.6 Then
+		If x > MapSize * 0.6 Then
 			Width = -Width
-		ElseIf x > MapWidth * 0.4
+		ElseIf x > MapSize * 0.4
 			x = x - Width / 2 
 		EndIf
 		
 		; ~ Make sure the hallway doesn't go outside the array
-		If x + Width > MapWidth - 3 Then
-			Width = MapWidth - 3 - x
+		If x + Width > MapSize - 3 Then
+			Width = MapSize - 3 - x
 		ElseIf x + Width < 2
 			Width = (-x) + 2
 		EndIf
@@ -6751,7 +6751,7 @@ Function CreateMap()
 		x = Min(x, x + Width)
 		Width = Abs(Width)
 		For i = x To x + Width
-			MapTemp(Min(i, MapWidth), y) = True
+			MapTemp(Min(i, MapSize), y) = True
 		Next
 		
 		Height = Rand(3, 4)
@@ -6762,7 +6762,7 @@ Function CreateMap()
 		If GetZone(y - Height) <> GetZone(y - Height + 1) Then Height = Height - 1
 		
 		For i = 1 To yHallways
-			x2 = Max(Min(Rand(x, x + Width - 1), MapWidth - 2), 2)
+			x2 = Max(Min(Rand(x, x + Width - 1), MapSize - 2), 2)
 			While MapTemp(x2, y - 1) Lor MapTemp(x2 - 1, y - 1) Lor MapTemp(x2 + 1, y - 1)
 				x2 = x2 + 1
 			Wend
@@ -6793,9 +6793,9 @@ Function CreateMap()
 	Local Room1Amount%[3], Room2Amount%[3], Room2CAmount%[3], Room3Amount%[3], Room4Amount%[3]
 	
 	; ~ Count the amount of rooms
-	For y = 1 To MapHeight - 1
+	For y = 1 To MapSize - 1
 		Zone = GetZone(y)
-		For x = 1 To MapWidth - 1
+		For x = 1 To MapSize - 1
 			If MapTemp(x, y) > 0 Then
 				Temp = Min(MapTemp(x + 1, y), 1) + Min(MapTemp(x - 1, y), 1)
 				Temp = Temp + Min(MapTemp(x, y + 1), 1) + Min(MapTemp(x, y - 1), 1)			
@@ -6836,8 +6836,8 @@ Function CreateMap()
 		Temp = (-Room1Amount[i]) + 5
 		
 		If Temp > 0 Then
-			For y = (MapHeight / ZONEAMOUNT) * (2 - i) + 1 To ((MapHeight / ZONEAMOUNT) * ((2 - i) + 1.0)) - 2			
-				For x = 2 To MapWidth - 2
+			For y = (MapSize / ZONEAMOUNT) * (2 - i) + 1 To ((MapSize / ZONEAMOUNT) * ((2 - i) + 1.0)) - 2			
+				For x = 2 To MapSize - 2
 					If MapTemp(x, y) = 0 Then
 						If (Min(MapTemp(x + 1, y), 1) + Min(MapTemp(x - 1, y), 1) + Min(MapTemp(x, y + 1), 1) + Min(MapTemp(x, y - 1), 1)) = 1 Then
 							If MapTemp(x + 1, y) Then
@@ -6897,24 +6897,24 @@ Function CreateMap()
 			Case 2
 				;[Block]
 				Zone = 2
-				Temp2 = MapHeight / 3
+				Temp2 = MapSize / 3
 				;[End Block]
 			Case 1
 				;[Block]
-				Zone = MapHeight / 3 + 1
-				Temp2 = MapHeight * (2.0 / 3.0) - 1
+				Zone = MapSize / 3 + 1
+				Temp2 = MapSize * (2.0 / 3.0) - 1
 				;[End Block]
 			Case 0
 				;[Block]
-				Zone = MapHeight * (2.0 / 3.0) + 1
-				Temp2 = MapHeight - 2
+				Zone = MapSize * (2.0 / 3.0) + 1
+				Temp2 = MapSize - 2
 				;[End Block]
 		End Select
 		
 		If Room4Amount[i] < 1 Then ; ~ We want at least one ROOM4
 			Temp = 0
 			For y = Zone To Temp2
-				For x = 2 To MapWidth - 2
+				For x = 2 To MapSize - 2
 					If MapTemp(x, y) = 3 Then
 						Select 0 ; ~ See if adding a ROOM1 is possible
 							Case (MapTemp(x + 1, y) Lor MapTemp(x + 1, y + 1) Lor MapTemp(x + 1, y - 1) Lor MapTemp(x + 2, y))
@@ -6957,7 +6957,7 @@ Function CreateMap()
 			Temp2 = Temp2 - 1
 			
 			For y = Zone To Temp2
-				For x = 3 To MapWidth - 3
+				For x = 3 To MapSize - 3
 					If MapTemp(x, y) = 1 Then
 						Select True ; ~ See if adding some rooms is possible
 							Case MapTemp(x - 1, y) > 0
@@ -7037,7 +7037,7 @@ Function CreateMap()
 		EndIf
 	Next
 	
-	Local MaxRooms% = 55 * MapWidth / 20
+	Local MaxRooms% = 55 * MapSize / 20
 	
 	MaxRooms = Max(MaxRooms, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] + 1)
 	MaxRooms = Max(MaxRooms, Room2Amount[0] + Room2Amount[1] + Room2Amount[2] + 1)
@@ -7147,18 +7147,18 @@ Function CreateMap()
 	
 	Local r.Rooms, r2.Rooms, Spacing# = 8.0
 	
-	For y = MapHeight - 1 To 1 Step - 1
-		If y < MapHeight / 3 + 1 Then
+	For y = MapSize - 1 To 1 Step - 1
+		If y < MapSize / 3 + 1 Then
 			Zone = 3
-		ElseIf y < MapHeight * (2.0 / 3.0)
+		ElseIf y < MapSize * (2.0 / 3.0)
 			Zone = 2
 		Else
 			Zone = 1
 		EndIf
 		
-		For x = 1 To MapWidth - 2
+		For x = 1 To MapSize - 2
 			If MapTemp(x, y) = 255 Then
-				If y > MapHeight / 2 Then
+				If y > MapSize / 2 Then
 					r = CreateRoom(Zone, ROOM2, x * 8.0, 0.0, y * 8.0, "room2checkpoint")
 				Else
 					r = CreateRoom(Zone, ROOM2, x * 8.0, 0.0, y * 8.0, "room2checkpoint2")
@@ -7262,14 +7262,14 @@ Function CreateMap()
 	Next		
 	
 	; ~ Rooms out of map
-	r = CreateRoom(0, ROOM1, (MapWidth - 1) * 8.0, 500.0, 8.0, "gatea")
+	r = CreateRoom(0, ROOM1, (MapSize - 1) * 8.0, 500.0, 8.0, "gatea")
 	MapRoomID(ROOM1) = MapRoomID(ROOM1) + 1
 	
-	r = CreateRoom(0, ROOM1, (MapWidth - 1) * 8.0, 0.0, (MapHeight - 1) * 8.0, "pocketdimension")
+	r = CreateRoom(0, ROOM1, (MapSize - 1) * 8.0, 0.0, (MapSize - 1) * 8.0, "pocketdimension")
 	MapRoomID(ROOM1) = MapRoomID(ROOM1) + 1	
 	
 	If opt\IntroEnabled Then
-		r = CreateRoom(0, ROOM1, 8.0, 0.0, (MapHeight - 1) * 8.0, "room173intro")
+		r = CreateRoom(0, ROOM1, 8.0, 0.0, (MapSize - 1) * 8.0, "room173intro")
 		MapRoomID(ROOM1) = MapRoomID(ROOM1) + 1
 	EndIf
 	
@@ -7280,8 +7280,8 @@ Function CreateMap()
 		PreventRoomOverlap(r)
 	Next
 	
-	For y = 0 To MapHeight
-		For x = 0 To MapWidth
+	For y = 0 To MapSize
+		For x = 0 To MapSize
 			MapTemp(x, y) = Min(MapTemp(x, y), 1)
 		Next
 	Next
@@ -7289,7 +7289,7 @@ Function CreateMap()
 	Local d.Doors
 	Local ShouldSpawnDoor%
 	
-	For y = MapHeight To 0 Step -1
+	For y = MapSize To 0 Step -1
 		If y < I_Zone\Transition[1] - 1 Then
 			Zone = 3
 		ElseIf y >= I_Zone\Transition[1] - 1 And y < I_Zone\Transition[0] - 1 Then
@@ -7298,7 +7298,7 @@ Function CreateMap()
 			Zone = 1
 		EndIf
 		
-		For x = MapWidth To 0 Step -1
+		For x = MapSize To 0 Step -1
 			If MapTemp(x, y) > 0 Then
 				If Zone = 2 Then
 					Temp = Heavy_Door
@@ -7341,7 +7341,7 @@ Function CreateMap()
 						End Select
 						
 						If ShouldSpawnDoor
-							If x + 1 < MapWidth + 1
+							If x + 1 < MapSize + 1
 								If MapTemp(x + 1, y) > 0 Then
 									d = CreateDoor(r\Zone, Float(x) * Spacing + Spacing / 2.0, 0, Float(y) * Spacing, 90.0, r, Max(Rand(-3, 1), 0), Temp)
 									r\AdjDoor[0] = d
@@ -7381,7 +7381,7 @@ Function CreateMap()
 								;[End Block]
 						End Select
 						If ShouldSpawnDoor
-							If y + 1 < MapHeight + 1
+							If y + 1 < MapSize + 1
 								If MapTemp(x, y + 1) > 0 Then
 									d = CreateDoor(r\Zone, Float(x) * Spacing, 0.0, Float(y) * Spacing + Spacing / 2.0, 0.0, r, Max(Rand(-3, 1), 0), Temp)
 									r\AdjDoor[3] = d

@@ -71,10 +71,6 @@ Function ScaledMouseY%()
 	Return(Float(MouseY()) * Float(opt\GraphicHeight) / Float(opt\RealGraphicHeight))
 End Function
 
-Function ReadPixelColor%(Pixel%, Shrid%)
-	Return(Pixel Shr Shrid) And $FF
-End Function
-
 Function MouseOn%(x%, y%, Width%, Height%)
 	If ScaledMouseX() > x And ScaledMouseX() < x + Width Then
 		If ScaledMouseY() > y And ScaledMouseY() < y + Height Then
@@ -123,6 +119,10 @@ Function TurnIfDeviating%(Max_Deviation_Distance_%, Pathx%, Center_%, Dir%, RetV
 	Else 
 		Return(Deviated)
 	EndIf
+End Function
+
+Function ReadPixelColor%(Pixel%, Shrid%)
+	Return(Pixel Shr Shrid) And $FF
 End Function
 
 Function ChangeAngleValueForCorrectBoneAssigning%(Value#)
@@ -220,7 +220,7 @@ End Function
 Const ZONEAMOUNT% = 3
 
 Function GetZone(y%)
-	Return(Min(Floor((Float(MapWidth - y) / MapWidth * ZONEAMOUNT)), ZONEAMOUNT - 1))
+	Return(Min(Floor((Float(MapSize - y) / MapSize * ZONEAMOUNT)), ZONEAMOUNT - 1))
 End Function
 
 Function CalculateRoomTemplateExtents(r.RoomTemplates)

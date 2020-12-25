@@ -4455,7 +4455,6 @@ Function MovePlayer()
 		If I_427\Using = 0 And I_427\Timer < 70.0 * 360.0 Then
 			me\Bloodloss = Min(me\Bloodloss + (Min(me\Injuries, 3.5) / 300.0) * fps\FPSFactor[0], 100.0)
 		EndIf
-		
 		If Temp2 =< 60.0 And me\Bloodloss > 60.0 Then
 			CreateMsg("You are feeling faint from the amount of blood you have lost.", 6.0)
 		EndIf
@@ -5558,13 +5557,13 @@ Function DrawGUI()
 							
 							x = x - 12.0 + (((EntityX(me\Collider) - 4.0) + 8.0) Mod 8.0) * 3.0
 							y = y + 12.0 - (((EntityZ(me\Collider) - 4.0) + 8.0) Mod 8.0) * 3.0
-							For x2 = Max(0.0, PlayerX - 6.0) To Min(MapWidth, PlayerX + 6.0)
-								For z2 = Max(0.0, PlayerZ - 6.0) To Min(MapHeight, PlayerZ + 6.0)
+							For x2 = Max(0.0, PlayerX - 6.0) To Min(MapSize, PlayerX + 6.0)
+								For z2 = Max(0.0, PlayerZ - 6.0) To Min(MapSize, PlayerZ + 6.0)
 									If CoffinDistance > 16.0 Lor Rnd(16.0) < CoffinDistance Then 
 										If MapTemp(x2, z2) > 0 And (MapFound(x2, z2) > 0 Lor SelectedItem\ItemTemplate\Name = "S-NAV 310 Navigator" Lor SelectedItem\ItemTemplate\Name = "S-NAV Navigator Ultimate") Then
 											Local DrawX% = x + (PlayerX - 1 - x2) * 24 , DrawY% = y - (PlayerZ - 1 - z2) * 24
 											
-											If x2 + 1.0 =< MapWidth Then
+											If x2 + 1.0 =< MapSize Then
 												If MapTemp(x2 + 1, z2) = 0
 													DrawImage(tt\ImageID[10], DrawX - 12, DrawY - 12)
 												EndIf
@@ -5585,7 +5584,7 @@ Function DrawGUI()
 											Else
 												DrawImage(tt\ImageID[7], DrawX - 12, DrawY - 12)
 											EndIf
-											If z2 + 1.0 =< MapHeight Then
+											If z2 + 1.0 =< MapSize Then
 												If MapTemp(x2, z2 + 1) = 0
 													DrawImage(tt\ImageID[9], DrawX - 12, DrawY - 12)
 												EndIf
@@ -9502,8 +9501,8 @@ Function NullGame(PlayButtonSFX% = True) ; ~ CHECK FOR ERRORS
 	
 	HideDistance = 15.0
 	
-	For x = 0 To MapWidth + 1
-		For y = 0 To MapHeight + 1
+	For x = 0 To MapSize + 1
+		For y = 0 To MapSize + 1
 			MapTemp(x, y) = 0
 			MapFound(x, y) = 0
 		Next
