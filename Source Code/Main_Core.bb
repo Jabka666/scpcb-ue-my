@@ -2114,7 +2114,7 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, Open% = False, Do
 		ScaleEntity(d\OBJ2, RoomScale, RoomScale, RoomScale)
 		
 		d\FrameOBJ = CopyEntity(o\DoorModelID[1])
-	ElseIf DoorType = One_Sided_Door
+	ElseIf DoorType = One_Sided_Door Lor DoorType = SCP_914_Door
 		d\OBJ = CopyEntity(o\DoorModelID[10])
 		ScaleEntity(d\OBJ, (203.0 * RoomScale) / MeshWidth(d\OBJ), 313.0 * RoomScale / MeshHeight(d\OBJ), 15.0 * RoomScale / MeshDepth(d\OBJ))
 		d\OBJ2 = CopyEntity(o\DoorModelID[10])
@@ -2297,6 +2297,7 @@ Function UpdateDoors()
 							;[Block]
 							d\OpenState = Min(180.0, d\OpenState + (fps\FPSFactor[0] * 1.4))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * fps\FPSFactor[0] / 114.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (-fps\FPSFactor[0]) / 114.0, 0.0, 0.0)
 							;[End Block]
 					End Select
 				Else
@@ -2377,6 +2378,7 @@ Function UpdateDoors()
 							;[Block]
 							d\OpenState = Min(180.0, d\OpenState - (fps\FPSFactor[0] * 1.4))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fps\FPSFactor[0]) / 114.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * fps\FPSFactor[0] / 114.0, 0.0, 0.0)
 							;[End Block]
 					End Select
 					
@@ -2398,10 +2400,12 @@ Function UpdateDoors()
 				Else
 					d\FastOpen = 0
 					PositionEntity(d\OBJ, EntityX(d\FrameOBJ, True), EntityY(d\FrameOBJ, True), EntityZ(d\FrameOBJ, True))
+					If d\DoorType = Default_Door Lor d\DoorType = One_Sided_Door Lor d\DoorType = SCP_914_Door Then
+						MoveEntity(d\OBJ, 0.0, 0.0, 8.0 * RoomScale)
+					EndIf
 					If d\OBJ2 <> 0 Then
 						PositionEntity(d\OBJ2, EntityX(d\FrameOBJ, True), EntityY(d\FrameOBJ, True), EntityZ(d\FrameOBJ, True))
-						If d\DoorType = Default_Door Lor d\DoorType = One_Sided_Door Then
-							MoveEntity(d\OBJ, 0.0, 0.0, 8.0 * RoomScale)
+						If d\DoorType = Default_Door Lor d\DoorType = One_Sided_Door Lor d\DoorType = SCP_914_Door Then
 							MoveEntity(d\OBJ2, 0.0, 0.0, 8.0 * RoomScale)
 						EndIf
 					EndIf
@@ -9260,15 +9264,16 @@ Function InitNewGame()
 	
 	For d.Doors = Each Doors
 		EntityParent(d\OBJ, 0)
+		If d\DoorType = Default_Door Lor d\DoorType = One_Sided_Door Lor d\DoorType = SCP_914_Door Then
+			MoveEntity(d\OBJ, 0.0, 0.0, 8.0 * RoomScale)
+		EndIf
 		If d\OBJ2 <> 0 Then EntityParent(d\OBJ2, 0)
+		If d\OBJ2 <> 0 And (d\DoorType = Default_Door Lor d\DoorType = One_Sided_Door) Then
+			MoveEntity(d\OBJ2, 0.0, 0.0, 8.0 * RoomScale)
+		EndIf
 		If d\FrameOBJ <> 0 Then EntityParent(d\FrameOBJ, 0)
 		If d\Buttons[0] <> 0 Then EntityParent(d\Buttons[0], 0)
 		If d\Buttons[1] <> 0 Then EntityParent(d\Buttons[1], 0)
-		
-		If d\OBJ2 <> 0 And (d\DoorType = Default_Door Lor d\DoorType = One_Sided_Door) Then
-			MoveEntity(d\OBJ, 0.0, 0.0, 8.0 * RoomScale)
-			MoveEntity(d\OBJ2, 0.0, 0.0, 8.0 * RoomScale)
-		EndIf	
 	Next
 	
 	For it.Items = Each Items
