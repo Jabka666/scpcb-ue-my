@@ -1013,8 +1013,13 @@ Function UpdateNPCs()
 											If Ceil(n\Frame) = 110.0 And (Not chs\GodMode) Then
 												PlaySound_Strict(DamageSFX[1])
 												PlaySound_Strict(HorrorSFX[5])											
-												If PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor PlayerRoom\RoomTemplate\Name = "gatea" Then
+												If PlayerRoom\RoomTemplate\Name = "pocketdimension" Then
 													msg\DeathMsg = SubjectName + ". Body partially decomposed by what is assumed to be SCP-106's " + Chr(34) + "corrosion" + Chr(34) + " effect. Body disposed of via incineration."
+													Kill(True)
+												ElseIf PlayerRoom\RoomTemplate\Name = "gatea"
+													msg\DeathMsg = Chr(34) + "SCP-106 was spotted in Gate A area, finally breaching the containment. After using the High-Intensity Discharge turret by personnel, object went into a pocket dimension. "
+													msg\DeathMsg = msg\DeathMsg + "Casualty is 1 (one) D-class personnel, identified by viewers as " + SubjectName + ", who also escaped from facility and encounters with object. "
+													msg\DeathMsg = msg\DeathMsg + "Incident needs an investigation, containment procedures are restoring." + Chr(34)
 													Kill(True)
 												Else
 													PlaySound_Strict(OldManSFX[3])
@@ -3004,17 +3009,18 @@ Function UpdateNPCs()
 												If WrapAngle(EntityYaw(Pvt) - EntityYaw(n\Collider)) < 10.0 Then
 													PlaySound2(Gunshot2SFX, Camera, n\Collider, 20.0)
 													
-													If PlayerRoom\RoomTemplate\Name = "gateb" Then
-														msg\DeathMsg = Chr(34) + "CH-2 to control. Shot down a runaway Class D at Gate B." + Chr(34)
-													Else
-														msg\DeathMsg = Chr(34) + "CH-2 to control. Shot down a runaway Class D at Gate A." + Chr(34)
-													EndIf
-													
 													Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((10.0 / Dist) * (1.0 / Dist)) * (n\State = 2.0), (n\State = 2.0))
 													
 													n\Reload = 5.0
+													
+													If me\KillTimer < 0.0 And n\State <> 3 Then
+														If PlayerRoom\RoomTemplate\Name = "gateb" Then
+															msg\DeathMsg = Chr(34) + "CH-2 to control. Shot down a runaway Class D at Gate B." + Chr(34)
+														Else
+															msg\DeathMsg = Chr(34) + "CH-2 to control. Shot down a runaway Class D at Gate A." + Chr(34)
+														EndIf
+													EndIf
 												EndIf
-												
 												FreeEntity(Pvt)
 											EndIf
 										EndIf
@@ -3027,7 +3033,6 @@ Function UpdateNPCs()
 								EndIf
 							EndIf
 						EndIf		
-						
 						If n\State = 3 Then FreeEntity(Target)
 						;[End Block]
 					Case 4.0 ; ~ Crashes
@@ -6308,7 +6313,7 @@ Function UpdateMTFUnit(n.NPCs)
 				
 				n\Angle = EntityYaw(n\Collider)
 				;[End Block]
-			Case 6.0 ; ~ Seeing the player as SCP-049-2 instance
+			Case 6.0 ; ~ Seeing the player as SCP-049-2 instance / Shooting at player
 				;[Block]
 				PointEntity(n\OBJ, me\Collider)
 				RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 20.0), 0.0)
@@ -6332,6 +6337,12 @@ Function UpdateMTFUnit(n.NPCs)
 							
 							FreeEntity(Pvt)
 						EndIf	
+					EndIf
+				EndIf
+				
+				If me\KillTimer < 0.0 Then
+					If PlayerRoom\RoomTemplate\Name = "gatea" Then
+						msg\DeathMsg = Chr(34) + SubjectName + " was spotted in Gate A area and terminated. Incident needs an investigation." + Chr(34)
 					EndIf
 				EndIf
 				;[End Block]
@@ -7370,5 +7381,5 @@ Function ChangeNPCTextureID(n.NPCs, TextureID%) ; ~ Works only for Class D model
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#17F#1212#1359#135D#14FF#161B#17EA#1845
+;~B#17F#1217#135E#1362#1504#1620#17EF#184A
 ;~C#Blitz3D
