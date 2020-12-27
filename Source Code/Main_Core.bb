@@ -307,7 +307,7 @@ Global RadioCHN%[7]
 
 ; ~ Textures Constants
 ;[Block]
-Const MaxMiscTextureIDAmount% = 18
+Const MaxMiscTextureIDAmount% = 20
 Const MaxMonitorTextureIDAmount% = 5
 Const MaxOverlayTextureIDAmount% = 12
 Const MaxOverlayIDAmount% = 12
@@ -8989,6 +8989,9 @@ Function LoadEntities()
 	
 	tt\MiscTextureID[16] = LoadTexture_Strict("GFX\map\textures\keypad.jpg", 1, 2)
 	tt\MiscTextureID[17] = LoadTexture_Strict("GFX\map\textures\keypad_locked.png", 1, 2)
+	
+	tt\MiscTextureID[18] = LoadTexture_Strict("GFX\map\textures\camera.png", 1, 2)
+	tt\MiscTextureID[19] = LoadTexture_Strict("GFX\map\textures\camera_red.png", 1, 2)
 	
 	DrawLoading(20)
 	

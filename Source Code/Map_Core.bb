@@ -6393,6 +6393,13 @@ Function UpdateSecurityCams() ; ~ SHOULD BE SEPARATED!
 					RotateEntity(sc\CameraOBJ, EntityPitch(sc\CameraOBJ), sc\room\Angle + sc\Angle + Max(Min(sc\CurrAngle, sc\Turn), -sc\Turn), 0)
 					
 					If sc\Cam <> 0 Then 
+						If EntityInView(sc\CameraOBJ, Camera) And EntityVisible(sc\CameraOBJ, Camera) Then
+							If (MilliSecs() Mod 1200) < 800 Then
+								EntityTexture(sc\CameraOBJ, tt\MiscTextureID[19])
+							Else
+								EntityTexture(sc\CameraOBJ, tt\MiscTextureID[18])
+		                    EndIf
+						EndIf
 						PositionEntity(sc\Cam, EntityX(sc\CameraOBJ, True), EntityY(sc\CameraOBJ, True), EntityZ(sc\CameraOBJ, True))
 						RotateEntity(sc\Cam, EntityPitch(sc\CameraOBJ), EntityYaw(sc\CameraOBJ), 0.0)
 						MoveEntity(sc\Cam, 0.0, 0.0, 0.1)

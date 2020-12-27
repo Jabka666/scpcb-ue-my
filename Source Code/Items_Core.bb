@@ -16,7 +16,7 @@ Type ItemTemplates
 	Field TempName$
 	Field Sound%
 	Field Found%
-	Field OBJ%, OBJPath$, ParentOBJPath$
+	Field OBJ%, OBJPath$
 	Field InvImg%, InvImg2%, InvImgPath$
 	Field ImgPath$, Img%
 	Field IsAnim%
@@ -30,7 +30,10 @@ Function CreateItemTemplate.ItemTemplates(Name$, TempName$, OBJPath$, InvImgPath
 	
 	; ~ If another item shares the same object, copy it
 	For it2.ItemTemplates = Each ItemTemplates
-		If it2\OBJPath = OBJPath And it2\OBJ <> 0 Then it\OBJ = CopyEntity(it2\OBJ) : it\ParentOBJPath = it2\OBJPath : Exit
+		If it2\OBJPath = OBJPath And it2\OBJ <> 0 Then
+			it\OBJ = CopyEntity(it2\OBJ)
+			Exit
+		EndIf
 	Next
 	
 	If (Not it\OBJ) Then
