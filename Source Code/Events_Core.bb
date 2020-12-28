@@ -2393,7 +2393,7 @@ Function UpdateEvents()
 									
 									de.Decals = CreateDecal(3, EntityX(e\room\OBJ), e\room\y - 1534.0 * RoomScale, EntityZ(e\room\OBJ), 90.0, Rand(360.0), 0.0, 0.4)
 									
-									it = CreateItem("Unknown Note", "paper", EntityX(e\room\NPC[0]\Collider, True), EntityY(e\room\NPC[0]\Collider, True) + 0.04, EntityZ(e\room\NPC[0]\Collider))
+									it = CreateItem("Unknown Note", "paper", EntityX(e\room\NPC[0]\Collider, True), EntityY(e\room\NPC[0]\Collider, True), EntityZ(e\room\NPC[0]\Collider))
 									EntityType(it\Collider, HIT_ITEM)
 								EndIf
 								If e\room\NPC[0]\Frame = 286.0 Then
@@ -2420,13 +2420,13 @@ Function UpdateEvents()
 						EndIf
 					EndIf
 					
-					If wi\NightVision > 0 Then
+					If wi\NightVision > 0 Lor wi\SCRAMBLE > 0 Then
 						Local HasBatteryFor895% = False
 						
 						For i = 0 To MaxItemAmount - 1
 							If Inventory[i] <> Null Then
 								If (wi\NightVision = 1 And Inventory[i]\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory[i]\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory[i]\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE > 0 And Inventory[i]\ItemTemplate\TempName = "scramble") Then
-									If Inventory[i]\State > 0.0 Then
+									If Inventory[i]\State > 0.0 Lor (wi\NightVision = 3 And Inventory[i]\ItemTemplate\TempName = "finenvg") Then
 										HasBatteryFor895 = True
 										Exit
 									EndIf
@@ -2437,7 +2437,7 @@ Function UpdateEvents()
 							TurnEntity(me\Collider, 0.0, AngleDist(PointDirection(EntityX(me\Collider, True), EntityZ(me\Collider, True), EntityX(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True)) + 90.0 + Sin(WrapAngle(e\EventState3 / 10.0)), EntityYaw(me\Collider)) / 4.0, 0.0, True)
 							CameraPitch = (CameraPitch * 0.8) + (((-60.0) * Min(Max((2.0 - Distance(EntityX(me\Collider, True), EntityX(e\room\Objects[1], True), EntityZ(me\Collider, True), EntityZ(e\room\Objects[1], True))) / 2.0, 0.0), 1.0)) * 0.2)
 							
-							me\Sanity = me\Sanity - (fps\FPSFactor[0] * 1.1 / wi\NightVision)
+							me\Sanity = me\Sanity - (fps\FPSFactor[0] * 1.1 * wi\NightVision + wi\SCRAMBLE)
 							me\RestoreSanity = False
 							me\BlurTimer = Sin(MilliSecs() / 10) * Abs(me\Sanity)
 							
@@ -2447,9 +2447,11 @@ Function UpdateEvents()
 							EndIf
 							
 							If me\Sanity < -1000.0 Then
-								If wi\NightVision > 0 Then ; ~ TODO: Add for SCRAMBLE GEAR
+								If wi\NightVision > 1 Then
 									msg\DeathMsg = Chr(34) + "Class D viewed SCP-895 through a pair of digital night vision goggles, presumably enhanced by SCP-914. It might be possible that the subject "
 									msg\DeathMsg = msg\DeathMsg + "was able to resist the memetic effects partially through these goggles. The goggles have been stored for further study." + Chr(34)
+								ElseIf wi\SCRAMBLE > 0
+									msg\DeathMsg = Chr(34) + "Class D viewed SCP-895 through an apparatus called " + Chr(34) + "SCRAMBLE Gear" + Chr(34) + ", killing him." + Chr(34)
 								Else
 									msg\DeathMsg = Chr(34) + "Class D viewed SCP-895 through a pair of digital night vision goggles, killing him." + Chr(34)
 								EndIf
@@ -2502,11 +2504,6 @@ Function UpdateEvents()
 					If e\EventState3 = 0.0 Then
 						e\EventState3 = -1.0
 						EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
-						If wi\NightVision = 1 Then
-							EntityColor(tt\OverlayID[4], 0.0, 255.0, 0.0)
-						ElseIf wi\NightVision = 2 Then
-							EntityColor(tt\OverlayID[4], 0.0, 100.0, 255.0)
-						EndIf
 					EndIf
 					
 					ShouldPlay = 66
