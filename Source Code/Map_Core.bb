@@ -5213,19 +5213,6 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\Objects[0], r\x + 640.0 * RoomScale, r\y + 8.0 * RoomScale, r\z - 896.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
 			;[End Block]
-		Case "room3z2"
-			;[Block]
-			For r2.Rooms = Each Rooms
-				If r2\RoomTemplate\Name = r\RoomTemplate\Name And r2 <> r Then
-					r\Objects[0] = CopyEntity(r2\Objects[0], r\OBJ) ; ~ Don't load the mesh again
-					Exit
-				EndIf
-			Next
-			If (Not r\Objects[0]) Then r\Objects[0] = LoadMesh_Strict("GFX\map\room3z2_hb.b3d", r\OBJ)
-			EntityPickMode(r\Objects[0], 2)
-			EntityType(r\Objects[0], HIT_MAP)
-			EntityAlpha(r\Objects[0], 0.0)
-			;[End Block]
 		Case "room2clockroom2"
 			;[Block]
 			d = CreateDoor(r\Zone, r\x - 736.0 * RoomScale, r\y, r\z - 104.0 * RoomScale, 0.0, r)
