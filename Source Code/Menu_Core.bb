@@ -934,7 +934,7 @@ Function UpdateMainMenu()
 							
 							y = y + 40 * MenuScale
 							
-							If DrawButton(x + 20 * MenuScale, y, 170 * MenuScale, 30 * MenuScale, "RESET OPTIONS", False) Then
+							If DrawButton(x + 20 * MenuScale, y, 165 * MenuScale, 30 * MenuScale, "RESET OPTIONS", False) Then
 								Delay(200)
 								ResetOptionsINI()
 								SaveOptionsINI(True)
@@ -1667,10 +1667,10 @@ Function RenderMainMenu()
 						
 						If opt\EnableSubtitles Then
 							Color(opt\SubColorR, opt\SubColorG, opt\SubColorB)
-							Text(x + (Width / 2), y + (120 * MenuScale), Chr(34) + "- Please, approach SCP-1-7-3 for testing." + Chr(34), True)
-							Text(x + (Width / 2), y + (140 * MenuScale), Chr(34) + "- Oh, and by the way." + Chr(34), True)
-							Text(x + (Width / 2), y + (160 * MenuScale), Chr(34) + "- You, stop!" + Chr(34), True)
-							Text(x + (Width / 2), y + (180 * MenuScale), "[JORGE HAS BEEN EXPECTING YOU]", True)
+							Text(x + (Width / 2), y + (115 * MenuScale), Chr(34) + "- Please, approach SCP-1-7-3 for testing." + Chr(34), True)
+							Text(x + (Width / 2), y + (135 * MenuScale), Chr(34) + "- Oh, and by the way." + Chr(34), True)
+							Text(x + (Width / 2), y + (155 * MenuScale), Chr(34) + "- You, stop!" + Chr(34), True)
+							Text(x + (Width / 2), y + (175 * MenuScale), "[JORGE HAS BEEN EXPECTING YOU]", True)
 						EndIf
 					EndIf
 					;[End Block]
