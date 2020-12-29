@@ -98,6 +98,7 @@ Type Mouse
 	Field Mouse_Left_Limit%, Mouse_Right_Limit%
 	Field Mouse_Top_Limit%, Mouse_Bottom_Limit%
 	Field Mouse_X_Speed_1#, Mouse_Y_Speed_1#
+	Field Viewport_Center_X%, Viewport_Center_Y%
 End Type
 
 Global mo.Mouse = New Mouse
@@ -109,6 +110,9 @@ Function InitMouseLook()
 	mo\Mouse_Right_Limit = GraphicsWidth() - 250
 	mo\Mouse_Top_Limit = 150
 	mo\Mouse_Bottom_Limit = GraphicsHeight() - 150 ; ~ As above
+	; ~ Viewport
+	mo\Viewport_Center_X = opt\GraphicWidth / 2
+	mo\Viewport_Center_Y = opt\GraphicHeight / 2
 End Function
 
 InitMouseLook()
@@ -199,9 +203,6 @@ SetFont(fo\FontID[Font_Default_Big])
 Global BlinkMeterIMG% = LoadImage_Strict("GFX\blink_meter.png")
 
 DrawLoading(0, True)
-
-; ~ Viewport
-Global Viewport_Center_X% = opt\GraphicWidth / 2, Viewport_Center_Y% = opt\GraphicHeight / 2
 
 Global Mesh_MinX#, Mesh_MinY#, Mesh_MinZ#
 Global Mesh_MaxX#, Mesh_MaxY#, Mesh_MaxZ#
@@ -1822,8 +1823,12 @@ Function RenderMessages()
 	If msg\Timer > 0.0 Then
 		Local Temp% = False
 		
-		If (Not (InvOpen Lor OtherOpen <> Null)) And SelectedItem <> Null And (SelectedItem\ItemTemplate\TempName = "paper" Lor SelectedItem\ItemTemplate\TempName = "oldpaper") Then
-			Temp = True
+		If (Not (InvOpen Lor OtherOpen <> Null)) Then
+			If SelectedItem <> Null Then
+				If SelectedItem\ItemTemplate\TempName = "paper" Lor SelectedItem\ItemTemplate\TempName = "oldpaper" Then
+					Temp = True
+				EndIf
+			EndIf
 		EndIf
 		
 		Local Temp2% = Min(msg\Timer / 2.0, 255.0)
@@ -1831,14 +1836,14 @@ Function RenderMessages()
 		SetFont(fo\FontID[Font_Default])
 		If (Not Temp) Then
 			Color(0, 0, 0)
-			Text((opt\GraphicWidth / 2) + 1, (opt\GraphicHeight / 2) + 201, msg\Txt, True, False)
+			Text(mo\Viewport_Center_X + 1, mo\Viewport_Center_Y + 201, msg\Txt, True, False)
 			Color(Temp2, Temp2, Temp2)
-			Text((opt\GraphicWidth / 2), (opt\GraphicHeight / 2) + 200, msg\Txt, True, False)
+			Text(mo\Viewport_Center_X, mo\Viewport_Center_Y + 200, msg\Txt, True, False)
 		Else
 			Color(0, 0, 0)
-			Text((opt\GraphicWidth / 2) + 1, (opt\GraphicHeight * 0.94) + 1, msg\Txt, True, False)
+			Text(mo\Viewport_Center_X + 1, (opt\GraphicHeight * 0.94) + 1, msg\Txt, True, False)
 			Color(Temp2, Temp2, Temp2)
-			Text((opt\GraphicWidth / 2), (opt\GraphicHeight * 0.94), msg\Txt, True, False)
+			Text(mo\Viewport_Center_X, (opt\GraphicHeight * 0.94), msg\Txt, True, False)
 		EndIf
 	EndIf
 	
@@ -3828,20 +3833,20 @@ Function DrawEnding()
 	If me\EndingTimer < -200.0 Then
 		If me\EndingTimer > -700.0 Then 
 			If Rand(1, 150) < Min((Abs(me\EndingTimer) - 200.0), 155.0) Then
-				DrawImage(me\EndingScreen, opt\GraphicWidth / 2 - 400, opt\GraphicHeight / 2 - 400)
+				DrawImage(me\EndingScreen, mo\Viewport_Center_X - 400, mo\Viewport_Center_Y - 400)
 			Else
 				Color(0, 0, 0)
 				Rect(100, 100, opt\GraphicWidth - 200, opt\GraphicHeight - 200)
 				Color(255, 255, 255)
 			EndIf
 		Else
-			DrawImage(me\EndingScreen, opt\GraphicWidth / 2 - 400, opt\GraphicHeight / 2 - 400)
+			DrawImage(me\EndingScreen, mo\Viewport_Center_X - 400, mo\Viewport_Center_Y - 400)
 			
 			If me\EndingTimer < -1000.0 And me\EndingTimer > -2000.0 Then
 				Width = ImageWidth(tt\ImageID[0])
 				Height = ImageHeight(tt\ImageID[0])
-				x = opt\GraphicWidth / 2 - Width / 2
-				y = opt\GraphicHeight / 2 - Height / 2
+				x = mo\Viewport_Center_X - Width / 2
+				y = mo\Viewport_Center_Y - Height / 2
 				
 				DrawImage(tt\ImageID[0], x, y)
 				
@@ -3958,15 +3963,15 @@ Function UpdateEnding()
 			If me\EndingTimer < -1000.0 And me\EndingTimer > -2000.0 Then
 				Width = ImageWidth(tt\ImageID[0])
 				Height = ImageHeight(tt\ImageID[0])
-				x = opt\GraphicWidth / 2 - Width / 2
-				y = opt\GraphicHeight / 2 - Height / 2
+				x = mo\Viewport_Center_X - Width / 2
+				y = mo\Viewport_Center_Y - Height / 2
 				
 				If AchievementsMenu = 0 Then 
 					x = x + 132 * MenuScale
 					y = y + 122 * MenuScale
 					
-					x = opt\GraphicWidth / 2 - Width / 2
-					y = opt\GraphicHeight / 2 - Height / 2
+					x = mo\Viewport_Center_X - Width / 2
+					y = mo\Viewport_Center_Y - Height / 2
 					x = x + Width / 2
 					y = y + Height - 100 * MenuScale
 					
@@ -4038,7 +4043,7 @@ Function DrawCredits()
     Cls()
 	
 	If Rand(1, 300) > 1 Then
-		DrawImage(me\CreditsScreen, opt\GraphicWidth / 2 - 400, opt\GraphicHeight / 2 - 400)
+		DrawImage(me\CreditsScreen, mo\Viewport_Center_X - 400, mo\Viewport_Center_Y - 400)
 	EndIf
 	
 	ID = 0
@@ -4049,12 +4054,12 @@ Function DrawCredits()
 		cl\ID = ID
 		If Left(cl\Txt, 1) = "*"
 			SetFont(fo\FontID[Font_Credits_Big])
-			If (Not cl\Stay) Then Text(opt\GraphicWidth / 2, Credits_Y + (24 * cl\ID * MenuScale), Right(cl\Txt, Len(cl\Txt) - 1), True)
+			If (Not cl\Stay) Then Text(mo\Viewport_Center_X, Credits_Y + (24 * cl\ID * MenuScale), Right(cl\Txt, Len(cl\Txt) - 1), True)
 		ElseIf Left(cl\Txt, 1) = "/"
 			LastCreditLine = Before(cl)
 		Else
 			SetFont(fo\FontID[Font_Credits])
-			If (Not cl\Stay) Then Text(opt\GraphicWidth / 2, Credits_Y + (24 * cl\ID * MenuScale), cl\Txt, True)
+			If (Not cl\Stay) Then Text(mo\Viewport_Center_X, Credits_Y + (24 * cl\ID * MenuScale), cl\Txt, True)
 		EndIf
 		If LastCreditLine <> Null Then
 			If cl\ID > LastCreditLine\ID Then cl\Stay = True
@@ -4076,9 +4081,9 @@ Function DrawCredits()
 			If cl\Stay Then
 				SetFont(fo\FontID[Font_Credits])
 				If Left(cl\Txt, 1) = "/" Then
-					Text(opt\GraphicWidth / 2, (opt\GraphicHeight / 2) + (EndLinesAmount / 2) + (24 * cl\ID * MenuScale), Right(cl\Txt, Len(cl\Txt) - 1), True)
+					Text(mo\Viewport_Center_X, mo\Viewport_Center_Y + (EndLinesAmount / 2) + (24 * cl\ID * MenuScale), Right(cl\Txt, Len(cl\Txt) - 1), True)
 				Else
-					Text(opt\GraphicWidth / 2, (opt\GraphicHeight / 2) + (24 * (cl\ID - LastCreditLine\ID) * MenuScale) - ((EndLinesAmount / 2) * 24 * MenuScale), cl\Txt, True)
+					Text(mo\Viewport_Center_X, mo\Viewport_Center_Y + (24 * (cl\ID - LastCreditLine\ID) * MenuScale) - ((EndLinesAmount / 2) * 24 * MenuScale), cl\Txt, True)
 				EndIf
 			EndIf
 		Next
@@ -4628,7 +4633,7 @@ Function MouseLook()
 	
 	; ~ Limit the mouse's movement. Using this method produces smoother mouselook movement than centering the mouse each loop.
 	If (MouseX() > mo\Mouse_Right_Limit) Lor (MouseX() < mo\Mouse_Left_Limit) Lor (MouseY() > mo\Mouse_Bottom_Limit) Lor (MouseY() < mo\Mouse_Top_Limit)
-		MoveMouse(Viewport_Center_X, Viewport_Center_Y)
+		MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 	EndIf
 	
 	If wi\GasMask > 0 Lor I_1499\Using > 0 Then
@@ -4831,7 +4836,7 @@ Function DrawGUI()
 									If (Not e\Img) Then e\Img = LoadImage_Strict("GFX\npcs\scp_106_face.png")
 								EndIf
 							Else
-								DrawImage(e\Img, opt\GraphicWidth / 2 - Rand(390, 310), opt\GraphicHeight / 2 - Rand(290, 310))
+								DrawImage(e\Img, mo\Viewport_Center_X - Rand(390, 310), mo\Viewport_Center_Y - Rand(290, 310))
 							EndIf
 						Else
 							If e\Img <> 0 Then
@@ -4851,7 +4856,7 @@ Function DrawGUI()
 								EndIf
 							EndIf
 						Else
-							DrawImage(e\Img, opt\GraphicWidth / 2 - Rand(390, 310), opt\GraphicHeight / 2 - Rand(290, 310))
+							DrawImage(e\Img, mo\Viewport_Center_X - Rand(390, 310), mo\Viewport_Center_Y - Rand(290, 310))
 						EndIf
 					Else
 						If e\Img <> 0 Then
@@ -4882,7 +4887,7 @@ Function DrawGUI()
 		
 		FreeEntity(Temp)
 		
-		DrawImage(tt\IconID[4], opt\GraphicWidth / 2 + Sin(YawValue) * (opt\GraphicWidth / 3) - 32, opt\GraphicHeight / 2 - Sin(PitchValue) * (opt\GraphicHeight / 3) - 32)
+		DrawImage(tt\IconID[4], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - 32, mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - 32)
 	EndIf
 	
 	If ClosestItem <> Null Then
@@ -4893,14 +4898,14 @@ Function DrawGUI()
 		If PitchValue > 90.0 And PitchValue =< 180.0 Then PitchValue = 90.0
 		If PitchValue > 180.0 And PitchValue < 270.0 Then PitchValue = 270.0
 		
-		DrawImage(tt\IconID[5], opt\GraphicWidth / 2 + Sin(YawValue) * (opt\GraphicWidth / 3) - 32, opt\GraphicHeight / 2 - Sin(PitchValue) * (opt\GraphicHeight / 3) - 32)
+		DrawImage(tt\IconID[5], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - 32, mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - 32)
 	EndIf
 	
-	If ga\DrawHandIcon Then DrawImage(tt\IconID[4], opt\GraphicWidth / 2 - 32, opt\GraphicHeight / 2 - 32)
+	If ga\DrawHandIcon Then DrawImage(tt\IconID[4], mo\Viewport_Center_X - 32, mo\Viewport_Center_Y - 32)
 	For i = 0 To 3
 		If ga\DrawArrowIcon[i] Then
-			x = opt\GraphicWidth / 2 - 32
-			y = opt\GraphicHeight / 2 - 32		
+			x = mo\Viewport_Center_X - 32
+			y = mo\Viewport_Center_Y - 32		
 			Select i
 				Case 0
 					;[Block]
@@ -5051,7 +5056,7 @@ Function DrawGUI()
 	EndIf
 	
 	If SelectedScreen <> Null Then
-		DrawImage(SelectedScreen\Img, opt\GraphicWidth / 2 - ImageWidth(SelectedScreen\Img) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedScreen\Img) / 2)
+		DrawImage(SelectedScreen\Img, mo\Viewport_Center_X - ImageWidth(SelectedScreen\Img) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedScreen\Img) / 2)
 		
 		If mo\MouseUp1 Lor mo\MouseHit2 Then
 			FreeImage(SelectedScreen\Img) : SelectedScreen\Img = 0
@@ -5081,16 +5086,16 @@ Function DrawGUI()
 			CameraProject(Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) - MeshHeight(o\ButtonModelID[0]) * 0.015, EntityZ(ClosestButton, True))
 			Scale = (ProjectedY() - ProjY) / 462.0
 			
-			x = opt\GraphicWidth / 2 - ImageWidth(tt\ImageID[4]) * Scale / 2
-			y = opt\GraphicHeight / 2 - ImageHeight(tt\ImageID[4]) * Scale / 2		
+			x = mo\Viewport_Center_X - ImageWidth(tt\ImageID[4]) * Scale / 2
+			y = mo\Viewport_Center_Y - ImageHeight(tt\ImageID[4]) * Scale / 2		
 			
 			SetFont(fo\FontID[Font_Digital])
 			If msg\KeyPadMsg <> "" Then 
-				If (msg\KeyPadTimer Mod 70.0) < 35.0 Then Text(opt\GraphicWidth / 2, y + 124 * Scale, msg\KeyPadMsg, True, True)
+				If (msg\KeyPadTimer Mod 70.0) < 35.0 Then Text(mo\Viewport_Center_X, y + 124 * Scale, msg\KeyPadMsg, True, True)
 			Else
-				Text(opt\GraphicWidth / 2, y + 70 * Scale, "ACCESS CODE: ", True, True)	
+				Text(mo\Viewport_Center_X, y + 70 * Scale, "ACCESS CODE: ", True, True)	
 				SetFont(fo\FontID[Font_Digital_Big])
-				Text(opt\GraphicWidth / 2, y + 124 * Scale, msg\KeyPadInput, True, True)
+				Text(mo\Viewport_Center_X, y + 124 * Scale, msg\KeyPadInput, True, True)
 			EndIf
 			
 			x = x + 44 * Scale
@@ -5118,8 +5123,8 @@ Function DrawGUI()
 		
 		Local TempX% = 0
 		
-		x = opt\GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
-		y = opt\GraphicHeight / 2 - INVENTORY_GFX_SIZE * (Float(OtherSize) / MaxItemAmount * 2 - 1) - INVENTORY_GFX_SPACING
+		x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
+		y = mo\Viewport_Center_Y - INVENTORY_GFX_SIZE * (Float(OtherSize) / MaxItemAmount * 2 - 1) - INVENTORY_GFX_SPACING
 		
 		IsMouseOn = -1
 		For n = 0 To OtherSize - 1
@@ -5154,7 +5159,7 @@ Function DrawGUI()
 			If TempX = 5 Then 
 				TempX = 0
 				y = y + INVENTORY_GFX_SIZE * 2 
-				x = opt\GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1.0)) / 2
+				x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1.0)) / 2
 			EndIf
 		Next
 		
@@ -5170,8 +5175,8 @@ Function DrawGUI()
 		
 		If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	ElseIf InvOpen Then
-		x = opt\GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
-		y = opt\GraphicHeight / 2 - INVENTORY_GFX_SIZE - INVENTORY_GFX_SPACING
+		x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
+		y = mo\Viewport_Center_Y - INVENTORY_GFX_SIZE - INVENTORY_GFX_SPACING
 		
 		IsMouseOn = -1
 		For n = 0 To MaxItemAmount - 1
@@ -5285,7 +5290,7 @@ Function DrawGUI()
 			x = x + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING
 			If n = 4 Then 
 				y = y + INVENTORY_GFX_SIZE * 2 
-				x = opt\GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
+				x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
 			EndIf
 		Next
 		
@@ -5306,31 +5311,31 @@ Function DrawGUI()
 				Case "nvg", "supernvg", "finenvg"
 					;[Block]
 					If PreventItemOverlapping(False, True, False, False, False) Then
-						DrawImage(SelectedItem\ItemTemplate\InvImg, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
 						Width = 300
 						Height = 20
-						x = opt\GraphicWidth / 2 - Width / 2
-						y = opt\GraphicHeight / 2 + 80
+						x = mo\Viewport_Center_X - Width / 2
+						y = mo\Viewport_Center_Y + 80
 						
 						DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State3)
 					EndIf
 					;[End Block]
 				Case "key0", "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "scp860", "hand", "hand2", "25ct", "scp005", "key", "coin"
 					;[Block]
-					DrawImage(SelectedItem\ItemTemplate\InvImg, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+					DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 					;[End Block]
 				Case "firstaid", "finefirstaid", "firstaid2"
 					;[Block]
 					If me\Bloodloss = 0.0 And me\Injuries = 0.0 Then
 						Return
 					Else
-						DrawImage(SelectedItem\ItemTemplate\InvImg, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
 						Width = 300.0
 						Height = 20.0
-						x = opt\GraphicWidth / 2 - Width / 2
-						y = opt\GraphicHeight / 2 + 80
+						x = mo\Viewport_Center_X - Width / 2
+						y = mo\Viewport_Center_Y + 80
 						
 						DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					EndIf
@@ -5377,7 +5382,7 @@ Function DrawGUI()
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
-					DrawImage(SelectedItem\ItemTemplate\Img, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\Img) / 2)
+					DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\Img) / 2)
 					;[End Block]
 				Case "scp1025"
 					;[Block]
@@ -5389,7 +5394,7 @@ Function DrawGUI()
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
-					DrawImage(SelectedItem\ItemTemplate\Img, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\Img) / 2)
+					DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\Img) / 2)
 					;[End Block]
 				Case "radio", "18vradio", "fineradio", "veryfineradio"
 					;[Block]
@@ -5476,36 +5481,36 @@ Function DrawGUI()
 				Case "hazmatsuit", "hazmatsuit2", "hazmatsuit3"
 					;[Block]
 					If wi\BallisticVest = 0 Then
-						DrawImage(SelectedItem\ItemTemplate\InvImg, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
 						Width = 300
 						Height = 20
-						x = opt\GraphicWidth / 2 - Width / 2
-						y = opt\GraphicHeight / 2 + 80.0
+						x = mo\Viewport_Center_X - Width / 2
+						y = mo\Viewport_Center_Y + 80.0
 						
 						DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					EndIf
 					;[End Block]
 				Case "vest", "finevest"
 					;[Block]
-					DrawImage(SelectedItem\ItemTemplate\InvImg, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+					DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 					
 					Width = 300
 					Height = 20
-					x = opt\GraphicWidth / 2 - Width / 2
-					y = opt\GraphicHeight / 2 + 80.0
+					x = mo\Viewport_Center_X - Width / 2
+					y = mo\Viewport_Center_Y + 80.0
 					
 					DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					;[End Block]
 				Case "gasmask", "supergasmask", "gasmask3"
 					;[Block]
 					If PreventItemOverlapping(True, False, False, False, False) Then
-						DrawImage(SelectedItem\ItemTemplate\InvImg, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
 						Width = 300
 						Height = 20
-						x = opt\GraphicWidth / 2 - Width / 2
-						y = opt\GraphicHeight / 2 + 80
+						x = mo\Viewport_Center_X - Width / 2
+						y = mo\Viewport_Center_Y + 80
 						
 						DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					EndIf
@@ -5699,12 +5704,12 @@ Function DrawGUI()
 				Case "scp1499", "super1499"
 					;[Block]
 					If PreventItemOverlapping(False, False, True, False, False) Then
-						DrawImage(SelectedItem\ItemTemplate\InvImg, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
 						Width = 300.0
 						Height = 20.0
-						x = opt\GraphicWidth / 2 - Width / 2
-						y = opt\GraphicHeight / 2 + 80
+						x = mo\Viewport_Center_X - Width / 2
+						y = mo\Viewport_Center_Y + 80
 						
 						DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					EndIf
@@ -5717,7 +5722,7 @@ Function DrawGUI()
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
-					DrawImage(SelectedItem\ItemTemplate\Img, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\Img) / 2)
+					DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\Img) / 2)
 					;[End Block]
 				Case "oldpaper"
 					;[Block]
@@ -5728,17 +5733,17 @@ Function DrawGUI()
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
-					DrawImage(SelectedItem\ItemTemplate\Img, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\Img) / 2)
+					DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\Img) / 2)
 					;[End Block]
 				Case "helmet"
 					;[Block]
 					If PreventItemOverlapping(False, False, False, True, False) Then
-						DrawImage(SelectedItem\ItemTemplate\InvImg, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
 					    Width = 300
 					    Height = 20
-					    x = opt\GraphicWidth / 2 - Width / 2
-					    y = opt\GraphicHeight / 2 + 80
+					    x = mo\Viewport_Center_X - Width / 2
+					    y = mo\Viewport_Center_Y + 80
 						
 					    DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					EndIf
@@ -5746,12 +5751,12 @@ Function DrawGUI()
 				Case "scramble"
 					;[Block]
 					If PreventItemOverlapping(False, False, False, False, True) Then
-						DrawImage(SelectedItem\ItemTemplate\InvImg, opt\GraphicWidth / 2 - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, opt\GraphicHeight / 2 - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
 						Width = 300
 						Height = 20
-						x = opt\GraphicWidth / 2 - Width / 2
-						y = opt\GraphicHeight / 2 + 80
+						x = mo\Viewport_Center_X - Width / 2
+						y = mo\Viewport_Center_Y + 80
 						
 						DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State3)
 					EndIf
@@ -5874,8 +5879,8 @@ Function UpdateGUI()
 			CameraProject(Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) - MeshHeight(o\ButtonModelID[0]) * 0.015, EntityZ(ClosestButton, True))
 			Scale = (ProjectedY() - ProjY) / 462.0
 			
-			x = opt\GraphicWidth / 2 - ImageWidth(tt\ImageID[4]) * Scale / 2
-			y = opt\GraphicHeight / 2 - ImageHeight(tt\ImageID[4]) * Scale / 2		
+			x = mo\Viewport_Center_X - ImageWidth(tt\ImageID[4]) * Scale / 2
+			y = mo\Viewport_Center_Y - ImageHeight(tt\ImageID[4]) * Scale / 2		
 			
 			msg\Txt = ""
 			msg\Timer = 0.0
@@ -6017,8 +6022,8 @@ Function UpdateGUI()
 		
 		Local TempX% = 0
 		
-		x = opt\GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
-		y = opt\GraphicHeight / 2 - INVENTORY_GFX_SIZE * (Float(OtherSize) / MaxItemAmount * 2 - 1) - INVENTORY_GFX_SPACING
+		x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
+		y = mo\Viewport_Center_Y - INVENTORY_GFX_SIZE * (Float(OtherSize) / MaxItemAmount * 2 - 1) - INVENTORY_GFX_SPACING
 		
 		ItemAmount = 0
 		IsMouseOn = -1
@@ -6066,7 +6071,7 @@ Function UpdateGUI()
 			If TempX = 5 Then 
 				TempX = 0
 				y = y + INVENTORY_GFX_SIZE * 2 
-				x = opt\GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1.0)) / 2
+				x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1.0)) / 2
 			EndIf
 		Next
 		
@@ -6131,7 +6136,7 @@ Function UpdateGUI()
 					OtherOpen = Null
 					ClosedInv = True
 					
-					MoveMouse(Viewport_Center_X, Viewport_Center_Y)
+					MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 				Else
 					If PrevOtherOpen\SecondInv[MouseSlot] = Null Then
 						For z = 0 To OtherSize - 1
@@ -6160,8 +6165,8 @@ Function UpdateGUI()
 	ElseIf InvOpen Then
 		SelectedDoor = Null
 		
-		x = opt\GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
-		y = opt\GraphicHeight / 2 - INVENTORY_GFX_SIZE - INVENTORY_GFX_SPACING
+		x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
+		y = mo\Viewport_Center_Y - INVENTORY_GFX_SIZE - INVENTORY_GFX_SPACING
 		
 		ItemAmount = 0
 		IsMouseOn = -1
@@ -6208,7 +6213,7 @@ Function UpdateGUI()
 			x = x + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING
 			If n = 4 Then 
 				y = y + INVENTORY_GFX_SIZE * 2 
-				x = opt\GraphicWidth / 2 - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
+				x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
 			EndIf
 		Next
 		
@@ -6282,7 +6287,7 @@ Function UpdateGUI()
 							;[End Block]
 					End Select
 					
-					MoveMouse(Viewport_Center_X, Viewport_Center_Y)
+					MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 				Else
 					If Inventory[MouseSlot] = Null Then
 						For z = 0 To MaxItemAmount - 1
@@ -7651,7 +7656,7 @@ Function UpdateGUI()
 		EndIf
 	Next
 	
-	If PrevInvOpen And (Not InvOpen) Then MoveMouse(Viewport_Center_X, Viewport_Center_Y)
+	If PrevInvOpen And (Not InvOpen) Then MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 	
 	CatchErrors("UpdateGUI")
 End Function
@@ -7669,8 +7674,8 @@ Function DrawMenu()
 	If MenuOpen Then
 		Width = ImageWidth(tt\ImageID[0])
 		Height = ImageHeight(tt\ImageID[0])
-		x = opt\GraphicWidth / 2.0 - Width / 2.0
-		y = opt\GraphicHeight / 2.0 - Height / 2.0
+		x = mo\Viewport_Center_X - Width / 2.0
+		y = mo\Viewport_Center_Y - Height / 2.0
 		
 		DrawImage(tt\ImageID[0], x, y)
 		
@@ -7723,7 +7728,7 @@ Function DrawMenu()
 				Rect(x + 320 * MenuScale, y - 5 * MenuScale, 110 * MenuScale, 40 * MenuScale, True)
 			EndIf
 			
-			Local tX# = (opt\GraphicWidth / 2.0) + (Width / 2.0)
+			Local tX# = mo\Viewport_Center_X + (Width / 2.0)
 			Local tY# = y
 			Local tW# = 400.0 * MenuScale
 			Local tH# = 150.0 * MenuScale
@@ -8089,8 +8094,8 @@ Function UpdateMenu()
 		
 		Width = ImageWidth(tt\ImageID[0])
 		Height = ImageHeight(tt\ImageID[0])
-		x = opt\GraphicWidth / 2.0 - Width / 2.0
-		y = opt\GraphicHeight / 2.0 - Height / 2.0
+		x = mo\Viewport_Center_X - Width / 2.0
+		y = mo\Viewport_Center_Y - Height / 2.0
 		
 		x = x + 132 * MenuScale
 		y = y + 122 * MenuScale	
@@ -8481,7 +8486,7 @@ Function UpdateMenu()
 							MenuOpen = False
 							LoadGameQuick(SavePath + CurrSave + "\")
 							
-							MoveMouse(Viewport_Center_X, Viewport_Center_Y)
+							MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 							HidePointer()
 							
 							FlushKeys()
@@ -8542,7 +8547,7 @@ Function UpdateMenu()
 						MenuOpen = False
 						LoadGameQuick(SavePath + CurrSave + "\")
 						
-						MoveMouse(Viewport_Center_X, Viewport_Center_Y)
+						MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 						HidePointer()
 						
 						FlushKeys()
@@ -9357,7 +9362,7 @@ Function InitNewGame()
 		EndIf
 	Next
 	
-	MoveMouse(Viewport_Center_X, Viewport_Center_Y)
+	MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 	
 	SetFont(fo\FontID[Font_Default])
 	
@@ -9417,7 +9422,7 @@ Function InitLoadGame()
 	
 	DrawLoading(90)
 	
-	MoveMouse(Viewport_Center_X, Viewport_Center_Y)
+	MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 	
 	SetFont(fo\FontID[Font_Default])
 	
@@ -11015,8 +11020,8 @@ Function Use294()
 	
 	ShowPointer()
 	
-	x = opt\GraphicWidth / 2 - (ImageWidth(tt\ImageID[5]) / 2)
-	y = opt\GraphicHeight / 2 - (ImageHeight(tt\ImageID[5]) / 2)
+	x = mo\Viewport_Center_X - (ImageWidth(tt\ImageID[5]) / 2)
+	y = mo\Viewport_Center_Y - (ImageHeight(tt\ImageID[5]) / 2)
 	DrawImage(tt\ImageID[5], x, y)
 	If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	

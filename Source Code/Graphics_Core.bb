@@ -94,7 +94,7 @@ Function UpdateGamma2()
 		If opt\RealGraphicWidth <> opt\GraphicWidth Lor opt\RealGraphicHeight <> opt\GraphicHeight Then
 			SetBuffer(TextureBuffer(FresizeTexture))
 			ClsColor(0, 0, 0) : Cls()
-			CopyRect(0, 0, opt\GraphicWidth, opt\GraphicHeight, SMALLEST_POWER_TWO_HALF - opt\GraphicWidth / 2, SMALLEST_POWER_TWO_HALF - opt\GraphicHeight / 2, BackBuffer(), TextureBuffer(FresizeTexture))
+			CopyRect(0, 0, opt\GraphicWidth, opt\GraphicHeight, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_X, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_Y, BackBuffer(), TextureBuffer(FresizeTexture))
 			SetBuffer(BackBuffer())
 			ClsColor(0, 0, 0) : Cls()
 			ScaleRender(0, 0, SMALLEST_POWER_TWO / Float(opt\GraphicWidth) * opt\AspectRatio, SMALLEST_POWER_TWO / Float(opt\GraphicWidth) * opt\AspectRatio)
@@ -257,10 +257,9 @@ Function RenderWorld2(Tween#)
 				
 				If HasBattery = 1 Then PlusY = 40
 				
-				Text(opt\GraphicWidth / 2, (20 + PlusY) * MenuScale, "REFRESHING DATA IN", True, False)
-				
-				Text(opt\GraphicWidth / 2, (60 + PlusY) * MenuScale, Max(f2s(wi\NVGTimer / 60.0, 1), 0.0), True, False)
-				Text(opt\GraphicWidth / 2, (100 + PlusY) * MenuScale, "SECONDS", True, False)
+				Text(mo\Viewport_Center_X, (20 + PlusY) * MenuScale, "REFRESHING DATA IN", True, False)
+				Text(mo\Viewport_Center_X, (60 + PlusY) * MenuScale, Max(f2s(wi\NVGTimer / 60.0, 1), 0.0), True, False)
+				Text(mo\Viewport_Center_X, (100 + PlusY) * MenuScale, "SECONDS", True, False)
 				
 				Temp = CreatePivot() : Temp2 = CreatePivot()
 				PositionEntity(Temp, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
@@ -293,8 +292,8 @@ Function RenderWorld2(Tween#)
 							EndIf
 							
 							If (Not wi\IsNVGBlinking) Then
-								Text(opt\GraphicWidth / 2 + xValue * (opt\GraphicWidth / 2), opt\GraphicHeight / 2 - yValue * (opt\GraphicHeight / 2), np\NVName, True, True)
-								Text(opt\GraphicWidth / 2 + xValue * (opt\GraphicWidth / 2), opt\GraphicHeight / 2 - yValue * (opt\GraphicHeight / 2) + 30 * MenuScale, f2s(Dist, 1) + " m", True, True)
+								Text(mo\Viewport_Center_X + xValue * mo\Viewport_Center_X, mo\Viewport_Center_Y - yValue * mo\Viewport_Center_Y, np\NVName, True, True)
+								Text(mo\Viewport_Center_X + xValue * mo\Viewport_Center_X, mo\Viewport_Center_Y - yValue * mo\Viewport_Center_Y + (30 * MenuScale), f2s(Dist, 1) + " m", True, True)
 							EndIf
 						EndIf
 					EndIf
@@ -335,7 +334,7 @@ Function RenderWorld2(Tween#)
 			Color(255, 0, 0)
 			SetFont(fo\FontID[Font_Digital])
 			
-			Text(opt\GraphicWidth / 2, 20 * MenuScale, "WARNING: LOW BATTERY", True, False)
+			Text(mo\Viewport_Center_X, 20 * MenuScale, "WARNING: LOW BATTERY", True, False)
 			Color(255, 255, 255)
 		EndIf
 	EndIf

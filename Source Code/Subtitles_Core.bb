@@ -43,9 +43,9 @@ Function RenderSubtitles()
 					If sub\Dist[i] =< 255.0 Then
 						SetFont(fo\FontID[Font_Default])
 						Color(0, 0, 0)
-						Text((opt\GraphicWidth / 2) + 1, (opt\GraphicHeight / 2) + 291 - (i * 20), sub\Txt[i], True, False)
+						Text(mo\Viewport_Center_X + 1, mo\Viewport_Center_Y + 291 - (i * 20), sub\Txt[i], True, False)
 						Color(Max(opt\SubColorR - sub\Dist[i], 0.0), Max(opt\SubColorG - sub\Dist[i], 0.0), Max(opt\SubColorB - sub\Dist[i], 0.0))
-						Text((opt\GraphicWidth / 2), (opt\GraphicHeight / 2) + 290 - (i * 20), sub\Txt[i], True, False)
+						Text(mo\Viewport_Center_X, mo\Viewport_Center_Y + 290 - (i * 20), sub\Txt[i], True, False)
 					EndIf
 				EndIf
 			Next

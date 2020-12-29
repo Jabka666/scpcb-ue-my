@@ -1094,7 +1094,7 @@ Function RenderMainMenu()
 	
 	SetFont(fo\FontID[Font_Default_Big])
 	
-	DrawImage(mma\SECURE_CONTAIN_PROTECT, opt\GraphicWidth / 2 - ImageWidth(mma\SECURE_CONTAIN_PROTECT) / 2, opt\GraphicHeight - 20 * MenuScale - ImageHeight(mma\SECURE_CONTAIN_PROTECT))
+	DrawImage(mma\SECURE_CONTAIN_PROTECT, mo\Viewport_Center_X - ImageWidth(mma\SECURE_CONTAIN_PROTECT) / 2, opt\GraphicHeight - 20 * MenuScale - ImageHeight(mma\SECURE_CONTAIN_PROTECT))
 	
 	If opt\GraphicWidth > 1240 * MenuScale Then
 		DrawTiledImageRect(MenuWhite, 0, 5, 512, 7 * MenuScale, 985.0 * MenuScale, 407.0 * MenuScale, (opt\GraphicWidth - 1240 * MenuScale) + 300, 7 * MenuScale)
@@ -2009,11 +2009,11 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 		EndIf
 		
 		If (Not SelectedLoadingScreen\DisableBackground) Then
-			DrawImage(LoadingBack, opt\GraphicWidth / 2 - ImageWidth(LoadingBack) / 2, opt\GraphicHeight / 2 - ImageHeight(LoadingBack) / 2)
+			DrawImage(LoadingBack, mo\Viewport_Center_X - ImageWidth(LoadingBack) / 2, mo\Viewport_Center_Y - ImageHeight(LoadingBack) / 2)
 		EndIf	
 		
 		If SelectedLoadingScreen\AlignX = 0 Then
-			x = opt\GraphicWidth / 2 - ImageWidth(SelectedLoadingScreen\Img) / 2 
+			x = mo\Viewport_Center_X - ImageWidth(SelectedLoadingScreen\Img) / 2 
 		ElseIf  SelectedLoadingScreen\AlignX = 1
 			x = opt\GraphicWidth - ImageWidth(SelectedLoadingScreen\Img)
 		Else
@@ -2021,7 +2021,7 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 		EndIf
 		
 		If SelectedLoadingScreen\AlignY = 0 Then
-			y = opt\GraphicHeight / 2 - ImageHeight(SelectedLoadingScreen\Img) / 2 
+			y = mo\Viewport_Center_Y - ImageHeight(SelectedLoadingScreen\Img) / 2 
 		ElseIf  SelectedLoadingScreen\AlignY = 1
 			y = opt\GraphicHeight - ImageHeight(SelectedLoadingScreen\Img)
 		Else
@@ -2032,8 +2032,8 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 		
 		Local Width% = 300, Height% = 20, i%
 		
-		x = opt\GraphicWidth / 2 - Width / 2
-		y = opt\GraphicHeight / 2 + 30 - 100
+		x = mo\Viewport_Center_X - Width / 2
+		y = mo\Viewport_Center_Y - 70
 		
 		DrawBar(BlinkMeterIMG, x, y, Width, Height, Percent)
 		
@@ -2058,7 +2058,7 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 			For i = 0 To Temp
 				StrTemp = StrTemp + Chr(Rand(48, 122))
 			Next
-			Text(opt\GraphicWidth / 2, opt\GraphicHeight / 2 + 80, StrTemp, True, True)
+			Text(mo\Viewport_Center_X, mo\Viewport_Center_Y + 80, StrTemp, True, True)
 			
 			If Percent = 0 Then 
 				If Rand(5) = 1 Then
@@ -2131,29 +2131,29 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 				StrTemp = Replace(SelectedLoadingScreen\Txt[0], Mid(SelectedLoadingScreen\Txt[0], Rand(1, Len(StrTemp) - 1), 1), Chr(Rand(130, 250)))
 			Next		
 			SetFont(fo\FontID[Font_Default])
-			RowText(StrTemp, opt\GraphicWidth / 2 - 200, opt\GraphicHeight / 2 + 120, 400, 300, True)		
+			RowText(StrTemp, mo\Viewport_Center_X - 200, mo\Viewport_Center_Y + 120, 400, 300, True)		
 		Else
 			Color(0, 0, 0)
 			SetFont(fo\FontID[Font_Default_Big])
-			Text(opt\GraphicWidth / 2 + 1, opt\GraphicHeight / 2 + 81, SelectedLoadingScreen\Title, True, True)
+			Text(mo\Viewport_Center_X + 1, mo\Viewport_Center_Y + 81, SelectedLoadingScreen\Title, True, True)
 			SetFont(fo\FontID[Font_Default])
-			RowText(SelectedLoadingScreen\Txt[LoadingScreenText], opt\GraphicWidth / 2 - 201, opt\GraphicHeight / 2 + 121, 400, 300, True)
+			RowText(SelectedLoadingScreen\Txt[LoadingScreenText], mo\Viewport_Center_X - 201, mo\Viewport_Center_Y + 121, 400, 300, True)
 			
 			Color(255, 255, 255)
 			SetFont(fo\FontID[Font_Default_Big])
-			Text(opt\GraphicWidth / 2, opt\GraphicHeight / 2 + 80, SelectedLoadingScreen\Title, True, True)
+			Text(mo\Viewport_Center_X, mo\Viewport_Center_Y + 80, SelectedLoadingScreen\Title, True, True)
 			SetFont(fo\FontID[Font_Default])
-			RowText(SelectedLoadingScreen\Txt[LoadingScreenText], opt\GraphicWidth / 2 - 200, opt\GraphicHeight / 2 + 120, 400, 300, True)
+			RowText(SelectedLoadingScreen\Txt[LoadingScreenText], mo\Viewport_Center_X - 200, mo\Viewport_Center_Y + 120, 400, 300, True)
 		EndIf
 		
 		Color(0, 0, 0)
-		Text(opt\GraphicWidth / 2 + 1, opt\GraphicHeight / 2 - 101, "LOADING - " + Percent + " %", True, True)
+		Text(mo\Viewport_Center_X + 1, mo\Viewport_Center_Y - 101, "LOADING - " + Percent + " %", True, True)
 		Color(255, 255, 255)
-		Text(opt\GraphicWidth / 2, opt\GraphicHeight / 2 - 100, "LOADING - " + Percent + " %", True, True)
+		Text(mo\Viewport_Center_X, mo\Viewport_Center_Y - 100, "LOADING - " + Percent + " %", True, True)
 		
 		If Percent = 100 Then 
 			If FirstLoop And SelectedLoadingScreen\Title <> "CWM" Then PlaySound_Strict(LoadTempSound(("SFX\Horror\Horror8.ogg")))
-			Text(opt\GraphicWidth / 2, opt\GraphicHeight - 50, "PRESS ANY KEY TO CONTINUE", True, True)
+			Text(mo\Viewport_Center_X, opt\GraphicHeight - 50, "PRESS ANY KEY TO CONTINUE", True, True)
 		Else
 			FlushKeys()
 			FlushMouse()
