@@ -3023,7 +3023,7 @@ Function DrawOptionsTooltip(x%, y%, Width%, Height%, Option$, Value# = 0.0, InGa
 			;[End Block]
 		Case "anisotropic"
 			;[Block]
-			Txt = Chr(34) + "Anisotropic filtering" + Chr(34) + " enhances the image quality of textures on surfaces that are at oblique viewing angles with respect To the camera where the projection of the texture."
+			Txt = Chr(34) + "Anisotropic filtering" + Chr(34) + " enhances the image quality of textures on surfaces that are at oblique viewing angles with respect to the camera."
 			;[End Block]
 			; ~ [AUDIO]
 		Case "musicvol"
