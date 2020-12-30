@@ -115,8 +115,6 @@ Function InitMouseLook()
 	mo\Viewport_Center_Y = opt\GraphicHeight / 2
 End Function
 
-InitMouseLook()
-
 Type Launcher
 	Field TotalGFXModes%
 	Field GFXModes%
@@ -140,18 +138,24 @@ EndIf
 If opt\DisplayMode = 1 Then
 	Graphics3DExt(DesktopWidth(), DesktopHeight(), 32, 4)
 	
-	opt\RealGraphicWidth = DesktopWidth()
-	opt\RealGraphicHeight = DesktopHeight()
+	If (Not opt\LauncherEnabled) Then
+		opt\RealGraphicWidth = DesktopWidth() : opt\GraphicWidth = DesktopWidth()
+		opt\RealGraphicHeight = DesktopHeight() : opt\GraphicHeight = DesktopHeight()
+	EndIf
 	
 	opt\AspectRatio = (Float(opt\GraphicWidth) / Float(opt\GraphicHeight)) / (Float(opt\RealGraphicWidth) / Float(opt\RealGraphicHeight))
 Else
 	Graphics3DExt(opt\GraphicWidth, opt\GraphicHeight, 32, (opt\DisplayMode = 2) + 1)
 	
-	opt\RealGraphicWidth = opt\GraphicWidth
-	opt\RealGraphicHeight = opt\GraphicHeight
+	If (Not opt\LauncherEnabled) Then
+		opt\RealGraphicWidth = opt\GraphicWidth
+		opt\RealGraphicHeight = opt\GraphicHeight
+	EndIf
 	
 	opt\AspectRatio = 1.0
 EndIf
+
+InitMouseLook()
 
 Global MenuScale# = opt\GraphicHeight / 1024.0
 
