@@ -2174,7 +2174,7 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 		
 		FirstLoop = False
 		If Percent <> 100 Then Exit
-	Until GetKey() <> 0 Lor MouseHit(1)
+	Until GetKey() Lor MouseHit(1)
 	
 	DeleteMenuGadgets()
 End Function
@@ -2249,7 +2249,7 @@ Function RenderMenuButtons()
 		Else 
 			SetFont(fo\FontID[Font_Default])
 		EndIf
-		Text(mb\x + mb\Width / 2, mb\y + mb\Height / 2, mb\Txt, True, True)
+		Text(mb\x + (mb\Width / 2), mb\y + (mb\Height / 2), mb\Txt, True, True)
 	Next
 End Function
 
@@ -2310,7 +2310,7 @@ Function DrawLauncherButton%(x%, y%, Width%, Height%, Txt$, BigFont% = True, Wai
 				PlaySound_Strict(ButtonSFX)
 			EndIf
 		EndIf
-		Rect(x + (3 * MenuScale), y + (3 * MenuScale), Width - (6 * MenuScale), Height - (6 * MenuScale))	
+		Rect(x + 3, y + 3, Width - 6, Height - 6)	
 	Else
 		Color(0, 0, 0)
 	EndIf
@@ -2329,7 +2329,7 @@ Function DrawLauncherButton%(x%, y%, Width%, Height%, Txt$, BigFont% = True, Wai
 	Else
 		SetFont(fo\FontID[Font_Default])
 	EndIf
-	Text(x + Width / 2, y + Height / 2, Txt, True, True)
+	Text(x + (Width / 2), y + (Height / 2), Txt, True, True)
 	
 	Return(Clicked)
 End Function
@@ -2349,7 +2349,7 @@ Function RenderMenuTicks()
 		Height = 20 * MenuScale
 		
 		Color(255, 255, 255)
-		DrawTiledImageRect(MenuWhite, (mt\x Mod 256), (mt\y Mod 256), 512, 512, mt\x, mt\y, Width, Height)
+		DrawTiledImageRect(MenuWhite, (mt\x Mod (256 * MenuScale)), (mt\y Mod (256 * MenuScale)), 512 * MenuScale, 512 * MenuScale, mt\x, mt\y, Width, Height)
 		
 		Local Highlight% = MouseOn(mt\x, mt\y, Width, Height)
 		
@@ -2367,7 +2367,7 @@ Function RenderMenuTicks()
 			Else
 				Color(200, 200, 200)
 			EndIf
-			DrawTiledImageRect(MenuWhite, (mt\x Mod 256), (mt\y Mod 256), 512, 512, mt\x + 4, mt\y + 4, Width - 8, Height - 8)
+			DrawTiledImageRect(MenuWhite, (mt\x Mod (256 * MenuScale)), (mt\y Mod (256 * MenuScale)), 512 * MenuScale, 512 * MenuScale, mt\x + 4, mt\y + 4, Width - 8, Height - 8)
 		EndIf
 		
 		Color(255, 255, 255)
@@ -2414,7 +2414,7 @@ Function DrawTick%(x%, y%, Selected%, Locked% = False)
 End Function
 
 Function DrawLauncherTick%(x%, y%, Selected%, Locked% = False)
-	Local Width% = 20 * MenuScale, Height% = 20 * MenuScale
+	Local Width% = 20, Height% = 20
 	Local Highlight% = MouseOn(x, y, Width, Height)
 	
 	Color(255, 255, 255)
@@ -2532,21 +2532,21 @@ Function RenderMenuInputBoxes()
 	
 	For mib.MenuInputBox = Each MenuInputBox
 		Color(255, 255, 255)
-		DrawTiledImageRect(MenuWhite, (mib\x Mod 256), (mib\y Mod 256), 512, 512, mib\x, mib\y, mib\Width, mib\Height)
+		DrawTiledImageRect(MenuWhite, (mib\x Mod (256 * MenuScale)), (mib\y Mod (256 * MenuScale)), 512 * MenuScale, 512 * MenuScale, mib\x, mib\y, mib\Width, mib\Height)
 		Color(0, 0, 0)
 		
 		If MouseOn(mib\x, mib\y, mib\Width, mib\Height) Then
 			Color(50, 50, 50)
 		EndIf
 		
-		Rect(mib\x + 2, mib\y + 2, mib\Width - 4, mib\Height - 4)
+		Rect(mib\x + (2 * MenuScale), mib\y + (2 * MenuScale), mib\Width - (4 * MenuScale), mib\Height - (4 * MenuScale))
 		Color(255, 255, 255)	
 		
 		If SelectedInputBox = mib\ID Then
-			If (MilliSecs() Mod 800) < 400 Then Rect(mib\x + mib\Width / 2 - (StringWidth(mib\Txt)) / 2 + StringWidth(Left(mib\Txt, CursorPos)), mib\y + mib\Height / 2 - 5, 2, 12)
+			If (MilliSecs() Mod 800) < 400 Then Rect(mib\x + (mib\Width / 2) - (StringWidth(mib\Txt) / 2) + StringWidth(Left(mib\Txt, CursorPos)), mib\y + (mib\Height / 2) - (5 * MenuScale), 2 * MenuScale, 12 * MenuScale)
 		EndIf	
 		
-		Text(mib\x + mib\Width / 2, mib\y + mib\Height / 2, mib\Txt, True, True)
+		Text(mib\x + (mib\Width / 2), mib\y + (mib\Height / 2), mib\Txt, True, True)
 	Next
 End Function
 
@@ -2584,7 +2584,7 @@ Function InputBox$(x%, y%, Width%, Height%, Txt$, ID% = 0, MaxChr% = 0)
 	
 	If SelectedInputBox = ID Then
 		Txt = rInput(Txt, MaxChr)
-	EndIf	
+	EndIf
 	
 	Return(Txt)
 End Function
@@ -2606,8 +2606,8 @@ Function RenderMenuSlideBars()
 		DrawImage(BlinkMeterIMG, msb\x + msb\Width * msb\Value / 100.0 + 3, msb\y + 3)
 		
 		Color(170, 170, 170)
-		Text(msb\x - 50 * MenuScale, msb\y + 4 * MenuScale, msb\TextLeft)					
-		Text(msb\x + msb\Width + 38 * MenuScale, msb\y + 4 * MenuScale, msb\TextRight)	
+		Text(msb\x - (50 * MenuScale), msb\y + (4 * MenuScale), msb\TextLeft)					
+		Text(msb\x + msb\Width + (38 * MenuScale), msb\y + (4 * MenuScale), msb\TextRight)	
 	Next
 End Function
 
@@ -2663,10 +2663,10 @@ Function RenderMenuSliders()
 			Else
 				Color(200, 200, 200)
 			EndIf
-			Rect(ms\x, ms\y, ms\Width + 14, 10, True)
+			Rect(ms\x, ms\y, ms\Width + 14, 10)
 			Rect(ms\x, ms\y - 8, 4, 9, True)
-			Rect(ms\x + (ms\Width / 2) + 5, ms\y - 8, 4, 9, True)
-			Rect(ms\x + ms\Width + 10, ms\y - 8, 4, 9, True)
+			Rect(ms\x + (ms\Width / 2) + 5, ms\y - 8, 4, 9)
+			Rect(ms\x + ms\Width + 10, ms\y - 8, 4, 9)
 			
 			If ms\ID <> OnSliderID Then
 				If ScaledMouseX() >= ms\x And ScaledMouseX() =< ms\x + ms\Width + 14 And ScaledMouseY() >= ms\y - 8 And ScaledMouseY() =< ms\y + 10
@@ -2688,11 +2688,11 @@ Function RenderMenuSliders()
 			
 			Color(170, 170, 170)
 			If ms\Value = 0 Then
-				Text(ms\x + 2, ms\y + 10 + MenuScale, ms\Val1, True)
+				Text(ms\x + 2, ms\y + 12, ms\Val1, True)
 			ElseIf ms\Value = 1
-				Text(ms\x + (ms\Width / 2) + 7, ms\y + 10 + MenuScale, ms\Val2, True)
+				Text(ms\x + (ms\Width / 2) + 7, ms\y + 12, ms\Val2, True)
 			Else
-				Text(ms\x + ms\Width + 12, ms\y + 10 + MenuScale, ms\Val3, True)
+				Text(ms\x + ms\Width + 12, ms\y + 12, ms\Val3, True)
 			EndIf
 		ElseIf ms\Amount = 5
 			If ms\ID = OnSliderID Then
@@ -2700,12 +2700,12 @@ Function RenderMenuSliders()
 			Else
 				Color(200, 200, 200)
 			EndIf
-			Rect(ms\x, ms\y, ms\Width + 14, 10, True)
-			Rect(ms\x, ms\y - 8, 4, 9, True)
-			Rect(ms\x + (ms\Width / 4) + 2.5, ms\y - 8, 4, 9, True)
-			Rect(ms\x + (ms\Width / 2) + 5, ms\y - 8, 4, 9, True)
-			Rect(ms\x + (ms\Width * 0.75) + 7.5, ms\y - 8, 4, 9, True)
-			Rect(ms\x + ms\Width + 10, ms\y - 8, 4, 9, True)
+			Rect(ms\x, ms\y, ms\Width + 14, 10)
+			Rect(ms\x, ms\y - 8, 4, 9)
+			Rect(ms\x + (ms\Width / 4) + 2.5, ms\y - 8, 4, 9)
+			Rect(ms\x + (ms\Width / 2) + 5, ms\y - 8, 4, 9)
+			Rect(ms\x + (ms\Width * 0.75) + 7.5, ms\y - 8, 4, 9)
+			Rect(ms\x + ms\Width + 10, ms\y - 8, 4, 9)
 			
 			If ms\ID <> OnSliderID Then
 				If (ScaledMouseX() >= ms\x) And (ScaledMouseX() =< ms\x + ms\Width + 14) And (ScaledMouseY() >= ms\y - 8) And (ScaledMouseY() =< ms\y + 10)
@@ -2733,15 +2733,15 @@ Function RenderMenuSliders()
 			
 			Color(170, 170, 170)
 			If ms\Value = 0 Then
-				Text(ms\x + 2, ms\y + 10 + MenuScale, ms\Val1, True)
+				Text(ms\x + 2, ms\y + 12, ms\Val1, True)
 			ElseIf ms\Value = 1
-				Text(ms\x + (ms\Width / 4) + 4.5, ms\y + 10 + MenuScale, ms\Val2, True)
+				Text(ms\x + (ms\Width / 4) + 4.5, ms\y + 12, ms\Val2, True)
 			ElseIf ms\Value = 2
-				Text(ms\x + (ms\Width / 2) + 7, ms\y + 10 + MenuScale, ms\Val3, True)
+				Text(ms\x + (ms\Width / 2) + 7, ms\y + 12, ms\Val3, True)
 			ElseIf ms\Value = 3
-				Text(ms\x + (ms\Width * 0.75) + 9.5, ms\y + 10 + MenuScale, ms\Val4, True)
+				Text(ms\x + (ms\Width * 0.75) + 9.5, ms\y + 12, ms\Val4, True)
 			Else
-				Text(ms\x + ms\Width + 12, ms\y + 10 + MenuScale, ms\Val5, True)
+				Text(ms\x + ms\Width + 12, ms\y + 12, ms\Val5, True)
 			EndIf
 		EndIf
 	Next
@@ -2782,7 +2782,7 @@ Function Slider3(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$)
 	If ID = OnSliderID Then
 		If ScaledMouseX() =< x + 8
 			Value = 0
-		ElseIf ScaledMouseX() >= x + Width / 2 And ScaledMouseX() =< x + (Width / 2) + 8
+		ElseIf ScaledMouseX() >= x + (Width / 2) And ScaledMouseX() =< x + (Width / 2) + 8
 			Value = 1
 		ElseIf ScaledMouseX() >= x + Width
 			Value = 2
@@ -2829,11 +2829,11 @@ Function Slider5(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$, Val4$, Val5$)
 	If ID = OnSliderID Then
 		If (ScaledMouseX() =< x + 8)
 			Value = 0
-		ElseIf ScaledMouseX() >= x + Width / 4 And ScaledMouseX() =< x + (Width / 4) + 8
+		ElseIf ScaledMouseX() >= x + (Width / 4) And ScaledMouseX() =< x + (Width / 4) + 8
 			Value = 1
-		ElseIf ScaledMouseX() >= x + Width / 2 And ScaledMouseX() =< x + (Width / 2) + 8
+		ElseIf ScaledMouseX() >= x + (Width / 2) And ScaledMouseX() =< x + (Width / 2) + 8
 			Value = 2
-		ElseIf ScaledMouseX() >= x + Width * 0.75 And ScaledMouseX() =< x + (Width * 0.75) + 8
+		ElseIf ScaledMouseX() >= x + (Width * 0.75) And ScaledMouseX() =< x + (Width * 0.75) + 8
 			Value = 3
 		ElseIf ScaledMouseX() >= x + Width
 			Value = 4
@@ -2943,10 +2943,10 @@ Function GetLineAmount(A$, W%, H%, Leading# = 1.0)
 End Function
 
 Function DrawOptionsTooltip(x%, y%, Width%, Height%, Option$, Value# = 0.0, InGame% = False)
-	Local fX# = x + 6.0 * MenuScale
-	Local fY# = y + 6.0 * MenuScale
-	Local fW# = Width - 12.0 * MenuScale
-	Local fH# = Height - 12.0 * MenuScale
+	Local fX# = x + (6.0 * MenuScale)
+	Local fY# = y + (6.0 * MenuScale)
+	Local fW# = Width - (12.0 * MenuScale)
+	Local fH# = Height - (12.0 * MenuScale)
 	Local Lines% = 0, Lines2% = 0
 	Local Txt$ = "", Txt2$ = ""
 	Local R% = 0, G% = 0, B% = 0
@@ -3163,10 +3163,10 @@ Function DrawOptionsTooltip(x%, y%, Width%, Height%, Option$, Value# = 0.0, InGa
 End Function
 
 Function DrawMapCreatorTooltip(x%, y%, Width%, Height%, MapName$)
-	Local fX# = x + 6.0 * MenuScale
-	Local fY# = y + 6.0 * MenuScale
-	Local fW# = Width - 12.0 * MenuScale
-	Local fH# = Height - 12.0 * MenuScale
+	Local fX# = x + (6.0 * MenuScale)
+	Local fY# = y + (6.0 * MenuScale)
+	Local fW# = Width - (12.0 * MenuScale)
+	Local fH# = Height - (12.0 * MenuScale)
 	Local Lines% = 0
 	
 	SetFont(fo\FontID[Font_Default])
@@ -3226,15 +3226,15 @@ Function DrawMapCreatorTooltip(x%, y%, Width%, Height%, MapName$)
 	EndIf
 	
 	Lines = GetLineAmount(Txt[2], fW, fH)
-	DrawFrame(x, y, Width, (StringHeight(Txt[0]) * 6) + StringHeight(Txt[2]) * Lines + 5 * MenuScale)
+	DrawFrame(x, y, Width, (StringHeight(Txt[0]) * 6) + StringHeight(Txt[2]) * Lines + (5 * MenuScale))
 	
 	Color(255, 255, 255)
 	Text(fX, fY,Txt[0])
 	Text(fX, fY + StringHeight(Txt[0]), Txt[1])
 	RowText(Txt[2], fX, fY + (StringHeight(Txt[0]) * 2), fW, fH)
-	Text(fX, fY + ((StringHeight(Txt[0]) * 2) + StringHeight(Txt[2]) * Lines + 5 * MenuScale), Txt[3])
-	Text(fX, fY + ((StringHeight(Txt[0]) * 3) + StringHeight(Txt[2]) * Lines + 5 * MenuScale), Txt[4])
-	Text(fX, fY + ((StringHeight(Txt[0]) * 4) + StringHeight(Txt[2]) * Lines + 5 * MenuScale), Txt[5])
+	Text(fX, fY + ((StringHeight(Txt[0]) * 2) + StringHeight(Txt[2]) * Lines + (5 * MenuScale)), Txt[3])
+	Text(fX, fY + ((StringHeight(Txt[0]) * 3) + StringHeight(Txt[2]) * Lines + (5 * MenuScale)), Txt[4])
+	Text(fX, fY + ((StringHeight(Txt[0]) * 4) + StringHeight(Txt[2]) * Lines + (5 * MenuScale)), Txt[5])
 End Function
 
 ;~IDEal Editor Parameters:
