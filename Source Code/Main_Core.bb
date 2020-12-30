@@ -1846,9 +1846,12 @@ Function RenderMessages()
 			Text(mo\Viewport_Center_X, (opt\GraphicHeight * 0.94), msg\Txt, True, False)
 		EndIf
 	EndIf
-	
 	Color(255, 255, 255)
-	If opt\ShowFPS Then SetFont(fo\FontID[Font_Console]) : Text(20, 20, "FPS: " + fps\FPS) : SetFont(fo\FontID[Font_Default])
+	If opt\ShowFPS Then
+		SetFont(fo\FontID[Font_Console])
+		Text(20, 20, "FPS: " + fps\FPS)
+		SetFont(fo\FontID[Font_Default])
+	EndIf
 End Function
 
 Global Camera%
@@ -2482,7 +2485,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 	
 	door1\IsElevatorDoor = 1
 	door2\IsElevatorDoor = 1
-	If door1\Open = True And (Not door2\Open) And door1\OpenState = 180.0 Then 
+	If door1\Open And (Not door2\Open) And door1\OpenState = 180.0 Then 
 		State = -1.0
 		door1\Locked = 0
 		If (ClosestButton = door2\Buttons[0] Lor ClosestButton = door2\Buttons[1]) And mo\MouseHit1 Then
@@ -2552,7 +2555,6 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 					door1\Locked = 1
 					door2\Locked = 0
 					State = 0.0
-					
 					If Inside Then
 						If (Not IgnoreRotation) Then
 							Dist = Distance(EntityX(me\Collider, True), EntityX(FirstPivot, True), EntityZ(me\Collider, True), EntityZ(FirstPivot, True))
@@ -2672,7 +2674,6 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 					door1\Locked = 0
 					door2\Locked = 1				
 					State = 0.0
-					
 					If Inside Then	
 						If (Not IgnoreRotation) Then
 							Dist = Distance(EntityX(me\Collider, True), EntityX(SecondPivot, True), EntityZ(me\Collider, True), EntityZ(SecondPivot, True))
@@ -2767,7 +2768,6 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 			EndIf
 		EndIf
 	EndIf
-	
 	Return(State)
 End Function
 

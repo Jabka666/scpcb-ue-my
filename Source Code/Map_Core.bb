@@ -5860,9 +5860,16 @@ End Type
 Function CreateWaypoint.WayPoints(x#, y#, z#, door.Doors, room.Rooms)
 	Local w.WayPoints = New WayPoints
 	
-	w\OBJ = CreatePivot()
-	PositionEntity(w\OBJ, x, y, z)	
-	
+	If opt\DebugMode Then
+		w\OBJ = CreateSprite()
+		PositionEntity(w\OBJ, x, y, z)
+		ScaleSprite(w\OBJ, 0.15 , 0.15)
+		EntityTexture(w\OBJ, tt\LightSpriteID[0])
+		EntityBlend(w\OBJ, 3)	
+	Else
+		w\OBJ = CreatePivot()
+		PositionEntity(w\OBJ, x, y, z)
+	EndIf
 	EntityParent(w\OBJ, room\OBJ)
 	
 	w\room = room
@@ -7272,6 +7279,55 @@ Function CreateMap()
 	For r.Rooms = Each Rooms
 		PreventRoomOverlap(r)
 	Next
+	
+	If opt\DebugMode Then
+		Repeat
+			Cls()
+			For x = 0 To MapSize - 1
+				For y = 0 To MapSize - 1
+					If MapTemp(x, y) = 0 Then
+						Zone = GetZone(y)
+						
+						Color(50 * Zone + 50, 50 * Zone + 50, 50 * Zone + 50)
+						Rect(x * 32, y * 32, 30, 30)
+					Else
+						If MapTemp(x, y) = 255 Then
+							Color(0, 200, 0)
+						ElseIf MapTemp(x, y) = 4
+							Color(50, 50, 255)
+						ElseIf MapTemp(x, y) = 3
+							Color(50, 255, 255)
+						ElseIf MapTemp(x, y) = 2
+							Color(255, 255, 50)
+						Else
+							Color(255, 255, 255)
+						EndIf
+						Rect(x * 32, y * 32, 30, 30)
+					EndIf
+				Next
+			Next	
+			
+			For x = 0 To MapSize - 1
+				For y = 0 To MapSize - 1
+					If MouseX() > x * 32 And MouseX() < x * 32 + 32 Then
+						If MouseY() > y * 32 And MouseY() < y * 32 + 32 Then
+							Color(255, 0, 0)
+						Else
+							Color(200, 200, 200)
+						EndIf
+					Else
+						Color(200, 200, 200)
+					EndIf
+					
+					If MapTemp(x, y) > 0 Then
+						Text((x * 32) + 2, (y * 32) + 2, MapTemp(x, y) + " " + Replace(MapName(x, y), "room", ""))
+					EndIf
+				Next
+			Next
+			Text(mo\Viewport_Center_X, opt\GraphicHeight - 50, "PRESS ANY KEY TO CONTINUE", True, True)
+			Flip()
+		Until GetKey() Lor MouseHit(1)	
+	EndIf
 	
 	For y = 0 To MapSize
 		For x = 0 To MapSize
