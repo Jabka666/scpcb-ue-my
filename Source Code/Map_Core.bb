@@ -608,8 +608,8 @@ Const GridSize% = 10
 Type Forest
 	Field TileMesh%[5]
 	Field DetailMesh%[5]
-	Field Grid%[(GridSize * GridSize) + 11]
-	Field TileEntities%[(GridSize * GridSize) + 1]
+	Field Grid%[(GridSize^2) + 11]
+	Field TileEntities%[(GridSize^2) + 1]
 	Field Forest_Pivot%
 	Field Door%[2]
 	Field DetailEntities%[2]
@@ -1467,11 +1467,11 @@ End Type
 Const GridSZ% = 19 ; ~ Same size as the main map itself (better for the map creator)
 
 Type Grids
-	Field Grid%[GridSZ * GridSZ]
-	Field Angles%[GridSZ * GridSZ]
+	Field Grid%[GridSZ^2]
+	Field Angles%[GridSZ^2]
 	Field Meshes%[7]
-	Field Entities%[GridSZ * GridSZ]
-	Field waypoints.WayPoints[GridSZ * GridSZ]
+	Field Entities%[GridSZ^2]
+	Field waypoints.WayPoints[GridSZ^2]
 End Type
 
 Function UpdateGrid(grid.Grids)
@@ -7813,7 +7813,7 @@ Function AmbientLightRooms(Value% = 0)
 	SetBuffer(OldBuffer)
 End Function
 
-Global CHUNKDATA%[64 * 64]
+Global CHUNKDATA%[64^2]
 
 Function SetChunkDataValues()
 	Local StrTemp$, i%, j%
