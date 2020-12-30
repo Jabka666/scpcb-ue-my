@@ -5999,10 +5999,6 @@ Function RemoveWaypoint(w.WayPoints)
 	Delete(w)
 End Function
 
-Dim MapF%(MapSize + 1, MapSize + 1), MapG%(MapSize + 1, MapSize + 1), MapH%(MapSize + 1, MapSize + 1)
-Dim MapState%(MapSize + 1, MapSize + 1)
-Dim MapParent%(MapSize + 1, MapSize + 1, 2)
-
 Function FindPath(n.NPCs, x#, y#, z#)
 	Local Temp%, Dist#, Dist2#
 	Local xTemp#, yTemp#, zTemp#
@@ -6722,7 +6718,6 @@ Function CreateMap()
 	SeedRnd(GenerateSeedNumber(RandomSeed))
 	
 	Dim MapName$(MapSize, MapSize)
-	
 	Dim MapRoomID%(ROOM4 + 1)
 	
 	x = Floor(MapSize / 2)
