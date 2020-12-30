@@ -8123,7 +8123,6 @@ Function UpdateMenu()
 				
 				AntiAlias(opt\AntiAliasing)
 				TextureLodBias(opt\TextureDetailsLevel)
-				TextureFilter("", 8192)
 				TextureAnisotropic(opt\AnisotropicLevel)
 				mm\ShouldDeleteGadgets = True
 			EndIf
@@ -8233,7 +8232,6 @@ Function UpdateMenu()
 							opt\AnisotropicLevel = 16
 							;[End Block]
 					End Select
-					TextureFilter("", 8192)
 					TextureAnisotropic(opt\AnisotropicLevel)
 				Case 2 ; ~ Audio
 					;[Block]
@@ -9228,7 +9226,6 @@ Function LoadEntities()
     Next
 	
 	TextureLodBias(opt\TextureDetailsLevel)
-	TextureFilter("", 8192)
 	TextureAnisotropic(opt\AnisotropicLevel)
 	
 	DrawLoading(30)

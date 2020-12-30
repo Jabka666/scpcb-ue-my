@@ -633,7 +633,6 @@ Function UpdateMainMenu()
 								opt\AnisotropicLevel = 16
 								;[End Block]
 						End Select
-						TextureFilter("", 8192)
 						TextureAnisotropic(opt\AnisotropicLevel)
 						;[End Block]
 					ElseIf mm\MainMenuTab = MainMenuTab_Options_Audio
