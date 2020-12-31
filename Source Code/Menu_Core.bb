@@ -846,9 +846,7 @@ Function UpdateMainMenu()
 							
 							y = y + (30 * MenuScale)
 							
-							If opt\CanOpenConsole Then
-								opt\ConsoleOpening = DrawTick(x, y, opt\ConsoleOpening)
-							EndIf
+							If opt\CanOpenConsole Then opt\ConsoleOpening = DrawTick(x, y, opt\ConsoleOpening)
 							
 							y = y + (30 * MenuScale)
 							
@@ -879,9 +877,7 @@ Function UpdateMainMenu()
 						Else
 							y = y + (20 * MenuScale)
 							
-							If opt\HUDEnabled Then
-								opt\SmoothHUD = DrawTick(x, y, opt\SmoothHUD)
-							EndIf
+							If opt\HUDEnabled Then opt\SmoothHUD = DrawTick(x, y, opt\SmoothHUD)
 							
 							y = y + (30 * MenuScale)
 							
@@ -905,9 +901,7 @@ Function UpdateMainMenu()
 							
 							y = y + (35 * MenuScale)
 							
-							If opt\EnableSubtitles Then
-								DrawPalette(mma\Palette, x - (63 * MenuScale), y)
-							EndIf
+							If opt\EnableSubtitles Then DrawPalette(mma\Palette, x - (63 * MenuScale), y)
 							
 							y = y + (30 * MenuScale)
 							

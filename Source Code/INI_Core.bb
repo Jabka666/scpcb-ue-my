@@ -331,7 +331,7 @@ Function INI_FileToString$(INI_sFilename$)
 End Function
 
 Function INI_CreateSection$(INI_lFileHandle%, INI_sNewSection$)
-	If FilePos(INI_lFileHandle) <> 0 Then WriteLine(INI_lFileHandle, "") ; ~ Blank Line between sections
+	If FilePos(INI_lFileHandle) <> 0 Then WriteLine(INI_lFileHandle, "") ; ~ Blank line between sections
 	WriteLine(INI_lFileHandle, INI_sNewSection)
 	Return(INI_sNewSection)
 End Function
