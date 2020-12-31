@@ -386,6 +386,7 @@ Type Options
 	Field CameraFogFar#, StoredCameraFogFar#
 	Field IntroEnabled%
 	Field DebugMode%
+	Field DifficultiesLocked%
 End Type
 
 Global opt.Options = New Options
@@ -505,6 +506,8 @@ Function LoadOptionsINI()
 	opt\IntroEnabled = GetINIInt(OptionFile, "Global", "Enable Intro")
 	
 	opt\DebugMode = GetINIInt(OptionFile, "Global", "Debug Mode")
+	
+	opt\DifficultiesLocked = GetINIInt(OptionFile, "Global", "Difficulties Locked")
 End Function
 
 Function SaveOptionsINI(SaveGlobal% = False)

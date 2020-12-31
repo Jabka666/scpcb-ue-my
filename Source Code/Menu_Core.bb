@@ -373,7 +373,7 @@ Function UpdateMainMenu()
 					For i = SAFE To ESOTERIC
 						Local PrevSelectedDifficulty.Difficulty = SelectedDifficulty
 						
-						If DrawTick(x + (20 * MenuScale), y + ((180 + 30 * i) * MenuScale), (SelectedDifficulty = difficulties[i])) Then SelectedDifficulty = difficulties[i]
+						If DrawTick(x + (20 * MenuScale), y + ((180 + 30 * i) * MenuScale), (SelectedDifficulty = difficulties[i]), difficulties[i]\Locked) Then SelectedDifficulty = difficulties[i]
 						
 						If PrevSelectedDifficulty <> SelectedDifficulty Then
 							If PrevSelectedDifficulty = difficulties[ESOTERIC] Then
@@ -2941,7 +2941,7 @@ Function GetLineAmount(A$, W%, H%, Leading# = 1.0)
 	Return(LinesShown + 1)
 End Function
 
-Function DrawOptionsTooltip(x%, y%, Width%, Height%, Option$, Value# = 0.0, InGame% = False)
+Function DrawOptionsTooltip(x%, y%, Width%, Height%, Option$, Value# = 0.0)
 	Local fX# = x + (6.0 * MenuScale)
 	Local fY# = y + (6.0 * MenuScale)
 	Local fW# = Width - (12.0 * MenuScale)

@@ -103,17 +103,12 @@ End Type
 
 Global mo.Mouse = New Mouse
 
-Function InitMouseLook()
-	mo\Mouselook_X_Inc = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the X axis
-	mo\Mouselook_y_Inc = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the Y axis
-	mo\Mouse_Left_Limit = 250
-	mo\Mouse_Right_Limit = GraphicsWidth() - 250
-	mo\Mouse_Top_Limit = 150
-	mo\Mouse_Bottom_Limit = GraphicsHeight() - 150 ; ~ As above
-	; ~ Viewport
-	mo\Viewport_Center_X = opt\GraphicWidth / 2
-	mo\Viewport_Center_Y = opt\GraphicHeight / 2
-End Function
+mo\Mouselook_X_Inc = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the X axis
+mo\Mouselook_y_Inc = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the Y axis
+mo\Mouse_Left_Limit = 250
+mo\Mouse_Right_Limit = GraphicsWidth() - 250
+mo\Mouse_Top_Limit = 150
+mo\Mouse_Bottom_Limit = GraphicsHeight() - 150 ; ~ As above
 
 Type Launcher
 	Field TotalGFXModes%
@@ -155,8 +150,10 @@ Else
 	opt\AspectRatio = 1.0
 EndIf
 
-InitMouseLook()
-
+; ~ Viewport
+mo\Viewport_Center_X = opt\GraphicWidth / 2
+mo\Viewport_Center_Y = opt\GraphicHeight / 2
+	
 Global MenuScale# = opt\GraphicHeight / 1024.0
 
 SetBuffer(BackBuffer())
@@ -3914,6 +3911,8 @@ Function DrawEnding()
 End Function
 
 Function UpdateEnding()
+	Local x%, y%, Width%, Height%, i%
+	
 	fps\FPSFactor[0] = 0.0
 	If me\EndingTimer > -2000.0 Then
 		me\EndingTimer = Max(me\EndingTimer - fps\FPSFactor[1], -1111.0)
@@ -3922,10 +3921,11 @@ Function UpdateEnding()
 	EndIf
 	
 	GiveAchievement(Achv055)
-	If (Not UsedConsole) Then GiveAchievement(AchvConsole)
+	If (Not UsedConsole) Then
+		GiveAchievement(AchvConsole)
+		UnlockDifficulties()
+	EndIf
 	If SelectedDifficulty\Name = "Keter" Then GiveAchievement(AchvKeter)
-	
-	Local x%, y%, Width%, Height%, i%
 	
 	ShouldPlay = 66
 	

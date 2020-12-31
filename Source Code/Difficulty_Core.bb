@@ -7,6 +7,7 @@ Type Difficulty
 	Field OtherFactors%
 	Field Customizable%
 	Field R%, G%, B%
+	Field Locked%
 End Type
 
 Global difficulties.Difficulty[4]
@@ -29,6 +30,42 @@ Const NORMAL% = 1
 Const HARD% = 2
 ;[End Block]
 
+Function SetDifficultyColor(ID%, R%, G%, B%)
+	difficulties[ID]\R = R
+	difficulties[ID]\G = G
+	difficulties[ID]\B = B
+End Function
+
+Function UnlockDifficulties()
+	Select SelectedDifficulty\Name
+		Case "Safe"
+			;[Block]
+			If difficulties[EUCLID]\Locked Then
+				difficulties[EUCLID]\Locked = False
+				opt\DifficultiesLocked = 2
+				SetDifficultyColor(EUCLID, 200, 200, 0)
+			EndIf
+			;[End Block]
+		Case "Euclid"
+			;[Block]
+			If difficulties[KETER]\Locked Then
+				difficulties[KETER]\Locked = False
+				opt\DifficultiesLocked = 1
+				SetDifficultyColor(KETER, 200, 0, 0)
+			EndIf
+			;[End Block]
+		Case "Keter"
+			;[Block]
+			If difficulties[ESOTERIC]\Locked Then
+				difficulties[ESOTERIC]\Locked = False
+				opt\DifficultiesLocked = 0
+				SetDifficultyColor(ESOTERIC, 255, 255, 255)
+			EndIf
+			;[End Block]
+	End Select
+	PutINIValue(OptionFile, "Global", "Difficulties Locked", opt\DifficultiesLocked)
+End Function
+
 difficulties[SAFE] = New Difficulty
 difficulties[SAFE]\Name = "Safe"
 difficulties[SAFE]\Description = "The game can be saved any time. However, as in the case of SCP Objects, a Safe classification does not mean that handling it does not pose a threat."
@@ -36,9 +73,8 @@ difficulties[SAFE]\PermaDeath = False
 difficulties[SAFE]\AggressiveNPCs = False
 difficulties[SAFE]\SaveType = SAVEANYWHERE
 difficulties[SAFE]\OtherFactors = EASY
-difficulties[SAFE]\R = 120
-difficulties[SAFE]\G = 150
-difficulties[SAFE]\B = 50
+difficulties[SAFE]\Locked = False
+SetDifficultyColor(SAFE, 120, 150, 50)
 
 difficulties[EUCLID] = New Difficulty
 difficulties[EUCLID]\Name = "Euclid"
@@ -48,9 +84,8 @@ difficulties[EUCLID]\PermaDeath = False
 difficulties[EUCLID]\AggressiveNPCs = False
 difficulties[EUCLID]\SaveType = SAVEONSCREENS
 difficulties[EUCLID]\OtherFactors = NORMAL
-difficulties[EUCLID]\R = 200
-difficulties[EUCLID]\G = 200
-difficulties[EUCLID]\B = 0
+If opt\DifficultiesLocked > 2 Then difficulties[EUCLID]\Locked = True
+SetDifficultyColor(EUCLID, 200 - (100 * difficulties[EUCLID]\Locked), 200 - (100 * difficulties[EUCLID]\Locked), 0)
 
 difficulties[KETER] = New Difficulty
 difficulties[KETER]\Name = "Keter"
@@ -60,20 +95,18 @@ difficulties[KETER]\PermaDeath = True
 difficulties[KETER]\AggressiveNPCs = True
 difficulties[KETER]\SaveType = SAVEONQUIT
 difficulties[KETER]\OtherFactors = HARD
-difficulties[KETER]\R = 200
-difficulties[KETER]\G = 0
-difficulties[KETER]\B = 0
+If opt\DifficultiesLocked > 1 Then difficulties[KETER]\Locked = True
+SetDifficultyColor(KETER, 200 - (100 * difficulties[EUCLID]\Locked), 0, 0)
 
 difficulties[ESOTERIC] = New Difficulty
 difficulties[ESOTERIC]\Name = "Esoteric"
 difficulties[ESOTERIC]\PermaDeath = False
 difficulties[ESOTERIC]\AggressiveNPCs = True
-difficulties[ESOTERIC]\SaveType = SAVEANYWHERE
 difficulties[ESOTERIC]\Customizable = True
+difficulties[ESOTERIC]\SaveType = SAVEANYWHERE
 difficulties[ESOTERIC]\OtherFactors = EASY
-difficulties[ESOTERIC]\R = 255
-difficulties[ESOTERIC]\G = 255
-difficulties[ESOTERIC]\B = 255
+If opt\DifficultiesLocked > 0 Then difficulties[ESOTERIC]\Locked = True
+SetDifficultyColor(ESOTERIC, 255 - (155 * difficulties[ESOTERIC]\Locked), 255 - (155 * difficulties[ESOTERIC]\Locked), 255 - (155 * difficulties[ESOTERIC]\Locked))
 
 SelectedDifficulty = difficulties[SAFE]
 
