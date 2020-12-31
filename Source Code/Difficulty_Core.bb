@@ -42,24 +42,24 @@ Function UnlockDifficulties()
 			;[Block]
 			If difficulties[EUCLID]\Locked Then
 				difficulties[EUCLID]\Locked = False
-				opt\DifficultiesLocked = 2
 				SetDifficultyColor(EUCLID, 200, 200, 0)
+				opt\DifficultiesLocked = 2
 			EndIf
 			;[End Block]
 		Case "Euclid"
 			;[Block]
 			If difficulties[KETER]\Locked Then
 				difficulties[KETER]\Locked = False
-				opt\DifficultiesLocked = 1
 				SetDifficultyColor(KETER, 200, 0, 0)
+				opt\DifficultiesLocked = 1
 			EndIf
 			;[End Block]
 		Case "Keter"
 			;[Block]
 			If difficulties[ESOTERIC]\Locked Then
 				difficulties[ESOTERIC]\Locked = False
-				opt\DifficultiesLocked = 0
 				SetDifficultyColor(ESOTERIC, 255, 255, 255)
+				opt\DifficultiesLocked = 0
 			EndIf
 			;[End Block]
 	End Select
