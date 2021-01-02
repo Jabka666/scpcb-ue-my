@@ -2191,6 +2191,9 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, Open% = False, Do
 		d\KeyCard = Keycard 
 	EndIf
 	
+	; ~ Set "d\Locked = 1" for elevator doors to fix buttons color. Anyway the door will be unlocked by "UpdateElevators" function. -- Jabka
+	If DoorType = Elevator_Door Then d\Locked = 1
+	
 	d\Code = Code
 	d\Level = Lvl
 	
@@ -2447,7 +2450,7 @@ Function UpdateDoors()
 	Next
 End Function
 
-Function CreateButton(ButtonID%, x#, y#, z#, Pitch# = 0.0, Yaw# = 0.0, Roll# = 0.0, Parent% = 0, Locked% = False)
+Function CreateButton%(ButtonID%, x#, y#, z#, Pitch# = 0.0, Yaw# = 0.0, Roll# = 0.0, Parent% = 0, Locked% = False)
 	Local OBJ% = CopyEntity(o\ButtonModelID[ButtonID])	
 	
 	PositionEntity(OBJ, x, y, z)

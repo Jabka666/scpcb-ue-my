@@ -2518,7 +2518,7 @@ Function FillRoom(r.Rooms)
 		Case "room2elevator"
 			;[Block]
 			r\RoomDoors[0] = CreateDoor(r\Zone, r\x + 448.0 * RoomScale, r\y, r\z, -90.0, r, True, Elevator_Door)
-			r\RoomDoors[0]\AutoClose = False : r\RoomDoors[0]\Locked = 1 : r\RoomDoors[0]\MTFClose = False
+			r\RoomDoors[0]\AutoClose = False : r\RoomDoors[0]\MTFClose = False
 			
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x + 888.0 * RoomScale, r\y + 240.0 * RoomScale, r\z, True)
