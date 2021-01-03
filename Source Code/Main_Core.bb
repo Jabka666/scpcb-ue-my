@@ -5317,7 +5317,7 @@ Function DrawGUI()
 			Select SelectedItem\ItemTemplate\TempName
 				Case "nvg", "supernvg", "finenvg"
 					;[Block]
-					If PreventItemOverlapping(False, True, False, False, False) Then
+					If (Not PreventItemOverlapping(False, True)) Then
 						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
 						Width = 300
@@ -5511,7 +5511,7 @@ Function DrawGUI()
 					;[End Block]
 				Case "gasmask", "supergasmask", "gasmask3"
 					;[Block]
-					If PreventItemOverlapping(True, False, False, False, False) Then
+					If (Not PreventItemOverlapping(True)) Then
 						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
 						Width = 300
@@ -5710,11 +5710,11 @@ Function DrawGUI()
 					;[End Block]
 				Case "scp1499", "super1499"
 					;[Block]
-					If PreventItemOverlapping(False, False, True, False, False) Then
+					If (Not PreventItemOverlapping(False, False, True))
 						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
-						Width = 300.0
-						Height = 20.0
+						Width = 300
+						Height = 20
 						x = mo\Viewport_Center_X - (Width / 2)
 						y = mo\Viewport_Center_Y + 80
 						
@@ -5744,7 +5744,7 @@ Function DrawGUI()
 					;[End Block]
 				Case "helmet"
 					;[Block]
-					If PreventItemOverlapping(False, False, False, True, False) Then
+					If (Not PreventItemOverlapping(False, False, False, True)) Then
 						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
 					    Width = 300
@@ -5757,7 +5757,7 @@ Function DrawGUI()
 					;[End Block]
 				Case "scramble"
 					;[Block]
-					If PreventItemOverlapping(False, False, False, False, True) Then
+					If (Not PreventItemOverlapping(False, False, False, False, True)) Then
 						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
 						Width = 300
@@ -6500,7 +6500,7 @@ Function UpdateGUI()
 			Select SelectedItem\ItemTemplate\TempName
 				Case "nvg", "supernvg", "finenvg"
 					;[Block]
-					If PreventItemOverlapping(False, True, False, False, False) Then
+					If (Not PreventItemOverlapping(False, True)) Then
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
 						SelectedItem\State3 = Min(SelectedItem\State3 + (fps\FPSFactor[0] / 1.6), 100.0)
@@ -6514,13 +6514,20 @@ Function UpdateGUI()
 								opt\CameraFogFar = opt\StoredCameraFogFar
 							Else
 								CreateMsg("You put on the goggles.", 6.0)
-								If SelectedItem\ItemTemplate\TempName = "nvg" Then
-									wi\NightVision = 1
-								ElseIf SelectedItem\ItemTemplate\TempName = "supernvg"
-									wi\NightVision = 2
-								Else
-									wi\NightVision = 3
-								EndIf
+								Select SelectedItem\ItemTemplate\TempName
+									Case "nvg"
+										;[Block]
+										wi\NightVision = 1
+										;[End Block]
+									Case "supernvg"
+										;[Block]
+										wi\NightVision = 2
+										;[End Block]
+									Case "finenvg"
+										;[Block]
+										wi\NightVision = 3
+										;[End Block]
+								End Select
 								opt\StoredCameraFogFar = opt\CameraFogFar
 								opt\CameraFogFar = 30.0
 							EndIf
@@ -7323,9 +7330,8 @@ Function UpdateGUI()
 								Else
 									wi\HazmatSuit = 3
 								EndIf
-								If wi\NightVision > 0 Then opt\CameraFogFar = opt\StoredCameraFogFar
+								If wi\NightVision > 0 Then opt\CameraFogFar = opt\StoredCameraFogFar : wi\NightVision = 0
 								wi\GasMask = 0
-								wi\NightVision = 0
 								wi\BallisticHelmet = 0
 								wi\SCRAMBLE = 0
 							EndIf
@@ -7347,13 +7353,18 @@ Function UpdateGUI()
 							DropItem(SelectedItem)
 						Else
 							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
-							If SelectedItem\ItemTemplate\TempName = "vest" Then
-								CreateMsg("You put on the vest and feel slightly encumbered.", 6.0)
-								wi\BallisticVest = 1
-							Else
-								CreateMsg("You put on the vest and feel heavily encumbered.", 6.0)
-								wi\BallisticVest = 2
-							EndIf
+							Select SelectedItem\ItemTemplate\TempName
+								Case "vest"
+									;[Block]
+									CreateMsg("You put on the vest and feel slightly encumbered.", 6.0)
+									wi\BallisticVest = 1
+									;[End Block]
+								Case "finevest"
+									;[Block]
+									CreateMsg("You put on the vest and feel heavily encumbered.", 6.0)
+									wi\BallisticVest = 2
+									;[End Block]
+							End Select
 						EndIf
 						SelectedItem\State = 0.0
 						SelectedItem = Null
@@ -7361,7 +7372,7 @@ Function UpdateGUI()
 					;[End Block]
 				Case "gasmask", "supergasmask", "gasmask3"
 					;[Block]
-					If PreventItemOverlapping(True, False, False, False, False) Then
+					If (Not PreventItemOverlapping(True)) Then
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
 						SelectedItem\State = Min(SelectedItem\State + (fps\FPSFactor[0]) / 1.6, 100.0)
@@ -7373,17 +7384,23 @@ Function UpdateGUI()
 								CreateMsg("You removed the gas mask.", 6.0)
 								wi\GasMask = 0
 							Else
-								If SelectedItem\ItemTemplate\TempName = "supergasmask"
-									CreateMsg("You put on the gas mask and you can breathe easier.", 6.0)
-									wi\GasMask = 2
-								Else
-									CreateMsg("You put on the gas mask.", 6.0)
-									If SelectedItem\ItemTemplate\TempName = "gasmask3"
-										wi\GasMask = 3
-									Else
+								Select SelectedItem\ItemTemplate\TempName
+									Case "gasmask"
+										;[Block]
+										CreateMsg("You put on the gas mask.", 6.0)
 										wi\GasMask = 1
-									EndIf
-								EndIf
+										;[End Block]
+									Case "supergasmask"
+										;[Block]
+										CreateMsg("You put on the gas mask and you can breathe easier.", 6.0)
+										wi\GasMask = 2
+										;[End Block]
+									Case "gasmask3"
+										;[Block]
+										CreateMsg("You put on the gas mask.", 6.0)
+										wi\GasMask = 3
+										;[End Block]
+								End Select
 							EndIf
 							SelectedItem\State = 0.0
 							SelectedItem = Null
@@ -7396,7 +7413,7 @@ Function UpdateGUI()
 					;[End Block]
 				Case "scp1499", "super1499"
 					;[Block]
-					If PreventItemOverlapping(False, False, True, False, False) Then
+					If (Not PreventItemOverlapping(False, False, True))
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
 						SelectedItem\State = Min(SelectedItem\State + fps\FPSFactor[0] / 1.6, 100.0)
@@ -7408,13 +7425,18 @@ Function UpdateGUI()
 								CreateMsg("You removed the gas mask.", 6.0)
 								I_1499\Using = 0
 							Else
-								If SelectedItem\ItemTemplate\TempName = "scp1499" Then
-									CreateMsg("You put on the gas mask.", 6.0)
-									I_1499\Using = 1
-								Else
-									CreateMsg("You put on the gas mask and you can breathe easier.", 6.0)
-									I_1499\Using = 2
-								EndIf
+								Select SelectedItem\ItemTemplate\TempName
+									Case "scp1499"
+										;[Block]
+										CreateMsg("You put on the gas mask.", 6.0)
+										I_1499\Using = 1
+										;[End Block]
+									Case "super1499"
+										;[Block]
+										CreateMsg("You put on the gas mask and you can breathe easier.", 6.0)
+										I_1499\Using = 2
+										;[End Block]
+								End Select
 								GiveAchievement(Achv1499)
 								For r.Rooms = Each Rooms
 									If r\RoomTemplate\Name = "dimension1499" Then
@@ -7555,7 +7577,7 @@ Function UpdateGUI()
 					;[End Block]
 				Case "helmet"
 					;[Block]
-					If PreventItemOverlapping(False, False, False, True, False) Then
+					If (Not PreventItemOverlapping(False, False, False, True)) Then
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
 						SelectedItem\State = Min(SelectedItem\State + fps\FPSFactor[0], 100.0)
@@ -7577,7 +7599,7 @@ Function UpdateGUI()
 					;[End Block]
 				Case "scramble"
 					;[Block]
-					If PreventItemOverlapping(False, False, False, False, True) Then
+					If (Not PreventItemOverlapping(False, False, False, False, True)) Then
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 							
 						SelectedItem\State3 = Min(SelectedItem\State3 + (fps\FPSFactor[0] / 1.6), 100.0)

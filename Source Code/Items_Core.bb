@@ -948,7 +948,7 @@ Function Update294()
 	CatchErrors("Update294")
 End Function
 
-Function CanUseItem(CanUseWithGasMask%, CanUseWithEyewear%)
+Function CanUseItem%(CanUseWithGasMask%, CanUseWithEyewear%)
 	If (Not CanUseWithGasMask) And (wi\GasMask > 0 Lor I_1499\Using > 0) Then
 		CreateMsg("You can't use that item while wearing a gas mask.", 6.0)
 		Return(False)
@@ -959,30 +959,32 @@ Function CanUseItem(CanUseWithGasMask%, CanUseWithEyewear%)
 	Return(True)
 End Function
 
-Function PreventItemOverlapping(GasMask%, NVG%, SCP1499%, Helmet%, SCRAMBLE%)
+Function PreventItemOverlapping%(GasMask% = False, NVG% = False, SCP1499% = False, Helmet% = False, SCRAMBLE% = False)
 	If (Not GasMask) And wi\GasMask > 0 Then
 		CreateMsg("You need to take off the gas mask in order to use that item.", 6.0)
 		SelectedItem = Null
-		Return(False)
+		Return(True)
 	ElseIf (Not SCP1499) And I_1499\Using > 0
 		CreateMsg("You need to take off SCP-1499 in order to use that item.", 6.0)
 		SelectedItem = Null
-		Return(False)
+		Return(True)
 	ElseIf (Not NVG) And wi\NightVision > 0 Then
 		CreateMsg("You need to take off the goggles in order to use that item.", 6.0)
 		SelectedItem = Null
-		Return(False)
+		Return(True)
 	ElseIf (Not Helmet) And wi\BallisticHelmet > 0
 		CreateMsg("You need to take off the helmet in order to use that item.", 6.0)
 		SelectedItem = Null
-		Return(False)
+		Return(True)
 	ElseIf (Not SCRAMBLE) And wi\SCRAMBLE > 0
 		CreateMsg("You need to take off the gear in order to use that item.", 6.0)
 		SelectedItem = Null
-		Return(False)
+		Return(True)
 	EndIf
-	Return(True)
+	Return(False)
 End Function
+
+;TODO: IsDoubleItem function
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D
