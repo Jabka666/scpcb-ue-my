@@ -1,5 +1,6 @@
 Const MapTexturesFolder$ = "GFX\map\textures\"
 
+; ~ TODO: Port normal texture caching
 Function GetTextureFromCache%(Name$)
 	Local tc.Materials
 	
@@ -109,13 +110,6 @@ Function CheckForTexture(Tex%, TexFlags% = 1)
 		Name = MapTexturesFolder + StripPath(TextureName(Tex))
 	EndIf
 	Texture = LoadTexture(Name, TexFlags)
-	If Texture <> 0 Then
-		If ((TexFlags Shr 1) Mod 2) = 0 Then
-			TextureBlend(Texture, 5)
-		Else
-			TextureBlend(Texture, 1)
-		EndIf
-	EndIf
 	Return(Texture)
 End Function
 

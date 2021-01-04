@@ -205,10 +205,6 @@ Global BlinkMeterIMG% = LoadImage_Strict("GFX\blink_meter.png")
 
 DrawLoading(0, True)
 
-Global Mesh_MinX#, Mesh_MinY#, Mesh_MinZ#
-Global Mesh_MaxX#, Mesh_MaxY#, Mesh_MaxZ#
-Global Mesh_MagX#, Mesh_MagY#, Mesh_MagZ#
-
 Type Player
 	Field KillTimer#, KillAnim%, FallTimer#, DeathTimer#
 	Field Sanity#, RestoreSanity%

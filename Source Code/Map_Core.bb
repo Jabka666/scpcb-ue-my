@@ -7494,7 +7494,7 @@ Function SetRoom(Room_Name$, Room_Type%, Pos%, Min_Pos%, Max_Pos%) ; ~ Place a r
 	EndIf
 End Function
 
-Function LoadTerrain(HeightMap, yScale# = 0.7, t1%, t2%, Mask%)
+Function LoadTerrain(HeightMap%, yScale# = 0.7, t1%, t2%, Mask%)
 	; ~ Load the HeightMap
 	If (Not HeightMap) Then RuntimeError("HeightMap image " + HeightMap + " does not exist.")
 	
@@ -7505,7 +7505,7 @@ Function LoadTerrain(HeightMap, yScale# = 0.7, t1%, t2%, Mask%)
 	; ~ Load texture and lightmaps
 	If (Not t1) Then RuntimeError("Texture 1 " + t1 + " does not exist.")
 	If (Not t2) Then RuntimeError("Texture 2 " + t2 + " does not exist.")
-	If (Not Mask) Then RuntimeError("Mas image " + Mask + " does not exist.")
+	If (Not Mask) Then RuntimeError("Mask image " + Mask + " does not exist.")
 	
 	; ~ Auto scale the textures to the right size
 	If t1 Then ScaleTexture(t1, x / 4, y / 4)

@@ -1,5 +1,6 @@
-Include "Source Code\StrictLoads.bb"
-Include "Source Code\INI_System.bb"
+Include "Source Code\Strict_Loads_Core_3D.bb"
+Include "Source Code\INI_Core_3D.bb"
+Include "Source Code\Math_Core_3D.bb"
 
 Const ClrR% = 50, ClrG% = 50, ClrB% = 50
 
@@ -15,29 +16,20 @@ Local HHWND% = api_GetActiveWindow() ; ~ User32.dll
 api_ShowWindow(HHWND, 0) ; ~ User32.dll
 SetBuffer(BackBuffer())
 
-AppTitle("MapCreator 3D View")
-
-Const OptionFileMC$ = "..\Data\options_MC.ini"
-Const OptionFile$ = "..\Data\options.ini"
+AppTitle("MapCreator 3-D View")
 
 Global Camera% = CreateCamera()
 
-Global CamColorR% = GetINIInt(OptionFileMC, "3D Scene", "BG Color R")
-Global CamColorG% = GetINIInt(OptionFileMC, "3D Scene", "BG Color G")
-Global CamColorB% = GetINIInt(OptionFileMC, "3D Scene", "BG Color B")
-Global CursorColorR% = GetINIInt(OptionFileMC, "3D Scene", "Cursor Color R")
-Global CursorColorG% = GetINIInt(OptionFileMC, "3D Scene", "Cursor Color G")
-Global CursorColorB% = GetINIInt(OptionFileMC, "3D Scene", "Cursor Color B")
+LoadOptionsINI()
 
-CameraClsColor(Camera, CamColorR, CamColorG, CamColorB)
+CameraClsColor(Camera, opt\FogR, opt\FogG, opt\FogB)
 
-Global CamRange# = GetINIFloat(OptionFileMC, "3D Scene", "Camera Range")
-
-CameraRange(Camera, 0.01, CamRange)
+CameraRange(Camera, 0.01, opt\CamRange)
 PositionEntity(Camera, 0.0, 1.0, 0.0)
 
-Global AmbientLightRoomTex% = CreateTexture(2, 2, 257)
+Global AmbientLightRoomTex%
 
+AmbientLightRoomTex = CreateTexture(2, 2, 257)
 TextureBlend(AmbientLightRoomTex, 5)
 SetBuffer(TextureBuffer(AmbientLightRoomTex))
 ClsColor(0, 0, 0)
@@ -61,10 +53,9 @@ LoadMaterials("..\Data\materials.ini")
 
 Const RoomScale# = 8.0 / 2048.0
 
-Const MapWidth% = 18
-Const MapHeight% = 18
+Const MapSize% = 18
 
-Dim MapTemp%(MapWidth + 1, MapHeight + 1)
+Dim MapTemp%(MapSize + 1, MapSize + 1)
 
 Global ZoneTransValue1% = 13, ZoneTransValue2% = 7
 
@@ -89,22 +80,37 @@ FreeTextureCache()
 
 ChangeDir("Map Creator")
 
-Global ShowFPS% = GetINIInt(OptionFileMC, "3D Scene", "Show FPS")
 Global CheckFPS%, ElapsedLoops%, FPS%
-Global VSync% = GetINIInt(OptionFileMC, "3D Scene", "VSync")
 
 Global MXS# = 0.0, MYS# = 0.0
 
-MoveMouse(GraphicsWidth() / 2, GraphicsHeight() / 2)
+Type Mouse
+	Field Mouse_Left_Limit%
+	Field Mouse_Right_Limit%
+	Field Mouse_Top_Limit%
+	Field Mouse_Bottom_Limit%
+	Field Viewport_Center_X%
+	Field Viewport_Center_Y%
+End Type
 
-Global Mouse_Left_Limit% = 250, Mouse_Right_Limit% = GraphicsWidth () - 250
-Global Mouse_Top_Limit% = 150, Mouse_Bottom_Limit% = GraphicsHeight () - 150
+Global mo.Mouse = New Mouse
+
+mo\Mouse_Left_Limit% = 250
+mo\Mouse_Right_Limit% = GraphicsWidth() - 250
+mo\Mouse_Top_Limit% = 150
+mo\Mouse_Bottom_Limit% = GraphicsHeight() - 150
+
+; ~ Viewport
+mo\Viewport_Center_X = GraphicsWidth() / 2
+mo\Viewport_Center_Y = GraphicsHeight() / 2
+
+MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 
 Global Faster% = False
 Global Slower% = False
 Global IsRemote% = True
 
-PositionEntity(Camera, (MapWidth / 2.0) * 8.0, 1.0, MapHeight * 8.0)
+PositionEntity(Camera, (MapSize / 2.0) * 8.0, 1.0, MapSize * 8.0)
 RotateEntity(Camera, 0.0, 180.0, 0.0)
 MXS = 180.0
 
@@ -127,7 +133,7 @@ End Function
 Repeat
 	Cls()
 	
-	If ShowFPS
+	If opt\ShowFPS Then
 		If CheckFPS < MilliSecs() Then
 			FPS = ElapsedLoops
 			ElapsedLoops = 0
@@ -144,20 +150,16 @@ Repeat
 	If FileType("CONFIG_OPTINIT.SI") = 1 Then
 		f = ReadFile("CONFIG_OPTINIT.SI")
 		
-		CamColorR = ReadInt(f)
-		CamColorG = ReadInt(f)
-		CamColorB = ReadInt(f)
-		CursorColorR = ReadInt(f)
-		CursorColorG = ReadInt(f)
-		CursorColorB = ReadInt(f)
-		CamRange = ReadInt(f)
-		VSync = ReadByte(f)
-		ShowFPS = ReadByte(f)
+		opt\FogR = ReadInt(f) : opt\FogG = ReadInt(f) : opt\FogB = ReadInt(f)
+		opt\CursorR = ReadInt(f) : opt\CursorG = ReadInt(f) : opt\CursorB = ReadInt(f)
+		opt\VSync = ReadByte(f)
+		opt\ShowFPS = ReadByte(f)
+		opt\CamRange = ReadFloat(f)
 		
-		CamRange = Max(CamRange, 20.0)
+		opt\CamRange = Max(opt\CamRange, 20.0)
 		
-		CameraClsColor(Camera, CamColorR, CamColorG, CamColorB)
-		CameraRange(Camera, 0.01, CamRange * 2.0)
+		CameraClsColor(Camera, opt\FogR, opt\FogG, opt\FogB)
+		CameraRange(Camera, 0.01, opt\CamRange * 2.0)
 		
 		CloseFile(f)
 		DeleteFile("CONFIG_OPTINIT.SI")
@@ -175,8 +177,8 @@ Repeat
 			FreeTexture(r\OverlayTex)
 			Delete(r)
 		Next
-		For x = 0 To MapWidth
-			For y = 0 To MapHeight
+		For x = 0 To MapSize
+			For y = 0 To MapSize
 				MapTemp(x, y) = 0
 			Next
 		Next
@@ -210,7 +212,7 @@ Repeat
 					
 					For rt.RoomTemplates = Each RoomTemplates
 						If Lower(rt\Name) = Name Then
-							r = PlaceRoom(Name, MapWidth - x, y, GetZone(y), rt\Shape, eName, eProb)
+							r = PlaceRoom(Name, MapSize - x, y, GetZone(y), rt\Shape, eName, eProb)
 							r\GridX = x
 							r\GridZ = y
 							
@@ -222,7 +224,7 @@ Repeat
 							
 							TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 							
-							MapTemp(MapWidth - x, y) = 1
+							MapTemp(MapSize - x, y) = 1
 							
 							Exit
 						EndIf
@@ -231,7 +233,7 @@ Repeat
 					Local IsSelRoom% = ReadByte(f)
 					
 					If IsSelRoom Then
-						PositionEntity(Camera, (MapWidth - x) * 8.0, 1.0, y * 8.0)
+						PositionEntity(Camera, (MapSize - x) * 8.0, 1.0, y * 8.0)
 						RotateEntity(Camera, 0.0, Angle, 0.0)
 						MXS = -Angle
 						MYS = 0.0
@@ -358,7 +360,7 @@ Repeat
 		
 		If MouseHit(2) Then
 			IsRemote = (Not IsRemote)
-			MoveMouse(GraphicsWidth() / 2, GraphicsHeight() / 2)
+			MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 		EndIf
 		
 		For r.Rooms = Each Rooms
@@ -375,13 +377,13 @@ Repeat
 			EndIf
 			PickedRoom = Null
 			If CurrMapGrid <> 1 Then
-				If EntityDistance(Camera, r\OBJ) > CamRange Lor (Not EntityInView(GetChild(r\OBJ, 2), Camera))
+				If EntityDistanceSquared(Camera, r\OBJ) > PowTwo(opt\CamRange) Lor (Not EntityInView(GetChild(r\OBJ, 2), Camera))
 					HideEntity(r\OBJ)
 				Else
 					ShowEntity(r\OBJ)
 				EndIf
 			Else
-				If EntityDistance(Camera, r\OBJ) > CamRange Lor (Not EntityInView(r\OBJ, Camera))
+				If EntityDistanceSquared(Camera, r\OBJ) > PowTwo(opt\CamRange) Lor (Not EntityInView(r\OBJ, Camera))
 					HideEntity(r\OBJ)
 				Else
 					ShowEntity(r\OBJ)
@@ -392,8 +394,8 @@ Repeat
 		If (Not IsRemote) Then
 			HidePointer()
 			
-			If (MouseX() > Mouse_Right_Limit) Lor (MouseX() < Mouse_Left_Limit) Lor (MouseY() > Mouse_Bottom_Limit) Lor (MouseY() < Mouse_Top_Limit)
-				MoveMouse(GraphicsWidth() / 2, GraphicsHeight() / 2)
+			If (MouseX() > mo\Mouse_Right_Limit) Lor (MouseX() < mo\Mouse_Left_Limit) Lor (MouseY() > mo\Mouse_Bottom_Limit) Lor (MouseY() < mo\Mouse_Top_Limit)
+				MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 			EndIf
 			
 			MXS = MXS + MouseXSpeed() * 0.25
@@ -413,7 +415,7 @@ Repeat
 			If KeyDown(31) Then MoveEntity(Camera, 0.0, 0.0, (-0.05 - (0.05 * Faster)) / (1.0 + Slower))
 			If KeyDown(32) Then MoveEntity(Camera, (0.05 + (0.05 * Faster)) / (1.0 + Slower), 0.0, 0.0)
 			
-			Local Picker% = EntityPick(Camera, CamRange / (2.5 - (CurrMapGrid = 1)))
+			Local Picker% = EntityPick(Camera, opt\CamRange / (2.5 - (CurrMapGrid = 1)))
 			
 			If Picker <> 0 Then
 				For r.Rooms = Each Rooms
@@ -463,7 +465,7 @@ Repeat
 	
 	If (Not IsRemote) Then
 		SetFont(ConsoleFont)
-		If ShowFPS Then
+		If opt\ShowFPS Then
 			Color(0, 0, 0)
 			Rect(2, 2, StringWidth("FPS: " + FPS), StringHeight("FPS: " + FPS))
 			
@@ -512,19 +514,19 @@ Repeat
 			Text((ResWidth - 2) - StringWidth("Selected room: " + rName), 2, "Selected room: " + rName)
 		EndIf
 		
-		Color(CursorColorR, CursorColorG, CursorColorB)
+		Color(opt\CursorR, opt\CursorG, opt\CursorB)
 		Rect((ResWidth / 2) - 25, (ResHeight / 2) - 2.5, 20, 5, True)
 		Rect((ResWidth / 2) + 5, (ResHeight / 2) - 2.5, 20, 5, True)
 		Rect((ResWidth / 2) - 2.5, (ResHeight / 2) - 25, 5, 20, True)
 		Rect((ResWidth / 2) - 2.5, (ResHeight / 2) + 5, 5, 20, True)
 	EndIf
 	
-	If VSync Then
+	If opt\VSync Then
 		Flip(True)
 	Else
 		Flip(False)
 	EndIf
-Until api_FindWindow("BlitzMax_Window_Class", "SCP-CB Ultimate Edition Map Creator") = 0
+Until (Not api_FindWindow("BlitzMax_Window_Class", "SCP-CB Ultimate Edition Map Creator"))
 End()
 
 Type RoomTemplates
@@ -735,61 +737,15 @@ Function PlaceRoom.Rooms(Name$, x%, z%, Zone%, Shape%, Event$ = "", EventChance#
 	CatchErrors("PlaceRoom")
 End Function
 
-Global Mesh_MinX#, Mesh_MinY#, Mesh_MinZ#, Mesh_MaxX#, Mesh_MaxY#, Mesh_MaxZ#, Mesh_MagX#, Mesh_MagY#, Mesh_MagZ#
-
-Function GetMeshExtents2(Mesh%)
-	Local xMax# = -1000000
-	Local xMin# = 1000000
-	Local yMax# = -1000000
-	Local yMin# = 1000000
-	Local zMax# = -1000000
-	Local zMin# = 1000000
-	Local su%, s%, i%, x#, y#, z#
-	
-	For su = 1 To CountSurfaces(Mesh)
-		s = GetSurface(Mesh, su)
-		For i = 0 To CountVertices(s) - 1
-			x = VertexX(s, i)
-			y = VertexY(s, i)
-			z = VertexZ(s, i)
-			TFormPoint(x, y, z, Mesh, 0)
-			x = TFormedX()
-			y = TFormedY()
-			z = TFormedZ()
-			If x > xMax Then xMax = x
-			If x < xMin Then xMin = x
-			If y > yMax Then yMax = y
-			If y < yMin Then yMin = y
-			If z > zMax Then zMax = z
-			If z < zMin Then zMin = z
-		Next
-	Next
-	
-	Mesh_MinX = xMin
-	Mesh_MinY = yMin
-	Mesh_MinZ = zMin
-	Mesh_MaxX = xMax
-	Mesh_MaxY = yMax
-	Mesh_MaxZ = zMax
-	Mesh_MagX = xMax - xMin
-	Mesh_MagY = yMax - yMin
-	Mesh_MagZ = zMax - zMin
-End Function
-
-Const ZONEAMOUNT% = 3
-
-Function GetZone(y%)
-	Return(Min(Floor((Float(MapWidth - y) / MapWidth * ZONEAMOUNT)), ZONEAMOUNT - 1))
-End Function
-
 Type Props
 	Field File$
 	Field OBJ%
 End Type
 
-Function CreatePropOBJ(File$)
+Function CreatePropOBJ%(File$)
 	Local p.Props
 	
+	; ~ A hacky way to use .b3d format
 	If Right(File, 1) = "x" Then File = Left(File, Len(File) - 1) + "b3d"
 	
 	For p.Props = Each Props
@@ -900,7 +856,7 @@ Function CreateOverLapBox(r.Rooms)
 	If r\RoomTemplate\Name = "gateaentrance" Then Return
 	
 	r\OverlapCheckBox = CreateMesh()
-	GetMeshExtents2(GetChild(r\OBJ, 2))
+	GetMeshExtents(GetChild(r\OBJ, 2))
 	s = CreateSurface(r\OverlapCheckBox)
 	AddVertex(s, Mesh_MinX + SizeAdd, Mesh_MaxY - SizeAdd, Mesh_MinZ + SizeAdd)
 	AddVertex(s, Mesh_MaxX - SizeAdd, Mesh_MaxY - SizeAdd, Mesh_MinZ + SizeAdd)
@@ -942,8 +898,8 @@ Function LoadRoomMesh(rt.RoomTemplates)
 	HideEntity(rt\OBJ)
 End Function
 
-Include "Source Code\Materials.bb"
-Include "Source Code\Texture_Cache_System.bb"
+Include "Source Code\Materials_Core_3D.bb"
+Include "Source Code\Texture_Cache_Core_3D.bb"
 
 Function LoadRMesh(File$, rt.RoomTemplates)
 	CatchErrors("Uncaught (LoadRMesh)")
@@ -979,7 +935,7 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 		RuntimeError(Chr(34) + File + Chr(34) + " is Not RMESH (" + IsRMesh + ")")
 	EndIf
 	
-	File = StripFilename(File)
+	File = StripFileName(File)
 	
 	Local Count%, Count2%
 	
@@ -1255,26 +1211,18 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 	CatchErrors("LoadRMesh")
 End Function
 
-Function WrapAngle#(Angle#)
-	If Angle < 0.0 Then
-		Return(360.0 + (Angle Mod 360.0))
-	Else
-		Return(Angle Mod 360.0)
-	EndIf
-End Function
-
-Function LoadTerrain(hMap%, yScale# = 0.7, t1%, t2%, Mask%)
-	; ~ Load the heightmap
-	If hMap = 0 Then RuntimeError("Heightmap image " + hMap + " does not exist.")
+Function LoadTerrain(HeightMap%, yScale# = 0.7, t1%, t2%, Mask%)
+	; ~ Load the HeightMap
+	If (Not HeightMap) Then RuntimeError("HeightMap image " + HeightMap + " does not exist.")
 	
 	; ~ Store heightmap dimensions
-	Local x% = ImageWidth(hMap) - 1, y% = ImageHeight(hMap) - 1
+	Local x% = ImageWidth(HeightMap) - 1, y% = ImageHeight(HeightMap) - 1
 	Local lX%, lY%, Index%
 	
 	; ~ Load texture and lightmaps
-	If t1 = 0 Then RuntimeError("LoadTerrain error: invalid texture 1")
-	If t2 = 0 Then RuntimeError("LoadTerrain error: invalid texture 2")
-	If Mask = 0 Then RuntimeError("LoadTerrain error: invalid texture mask")
+	If (Not t1) Then RuntimeError("Texture 1 " + t1 + " does not exist.")
+	If (Not t2) Then RuntimeError("Texture 2 " + t2 + " does not exist.")
+	If (Not Mask) Then RuntimeError("Mask image " + Mask + " does not exist.")
 	
 	; ~ Auto scale the textures to the right size
 	If t1 Then ScaleTexture(t1, x / 4.0, y / 4.0)
@@ -1309,7 +1257,7 @@ Function LoadTerrain(hMap%, yScale# = 0.7, t1%, t2%, Mask%)
 	PositionMesh(Mesh2, (-x) / 2.0, 0.01, (-y) / 2.0)
 	
 	; ~ Alter vertice height to match the heightmap red channel
-	LockBuffer(ImageBuffer(hMap))
+	LockBuffer(ImageBuffer(HeightMap))
 	LockBuffer(TextureBuffer(Mask))
 	
 	For lX = 0 To x
@@ -1317,11 +1265,11 @@ Function LoadTerrain(hMap%, yScale# = 0.7, t1%, t2%, Mask%)
 			; ~ Ising vertex alpha and two meshes instead of FE_ALPHAWHATEVER
 			; ~ It doesn't look perfect but it does the job
 			; ~ You might get better results by downscaling the mask to the same size as the heightmap
-			Local MaskX# = Min(lX * Float(TextureWidth(Mask)) / Float(ImageWidth(hMap)), TextureWidth(Mask) - 1.0)
-			Local MaskY# = TextureHeight(Mask) - Min(lY * Float(TextureHeight(Mask)) / Float(ImageHeight(hMap)), TextureHeight(Mask) - 1.0)
+			Local MaskX# = Min(lX * Float(TextureWidth(Mask)) / Float(ImageWidth(HeightMap)), TextureWidth(Mask) - 1.0)
+			Local MaskY# = TextureHeight(Mask) - Min(lY * Float(TextureHeight(Mask)) / Float(ImageHeight(HeightMap)), TextureHeight(Mask) - 1.0)
 			Local RGB%, RED%
 			
-			RGB = ReadPixelFast(Min(lX, x - 1.0), y - Min(lY, y - 1.0), ImageBuffer(hMap))
+			RGB = ReadPixelFast(Min(lX, x - 1.0), y - Min(lY, y - 1.0), ImageBuffer(HeightMap))
 			RED = (RGB And $FF0000) Shr 16 ; ~ Separate out the red
 			
 			Local Alpha# = (((ReadPixelFast(Max(MaskX - 5.0, 5.0), Max(MaskY - 5.0, 5.0), TextureBuffer(Mask)) And $FF000000) Shr 24) / $FF)
@@ -1342,7 +1290,7 @@ Function LoadTerrain(hMap%, yScale# = 0.7, t1%, t2%, Mask%)
 		Next
 	Next
 	UnlockBuffer(TextureBuffer(Mask))
-	UnlockBuffer(ImageBuffer(hMap))
+	UnlockBuffer(ImageBuffer(HeightMap))
 	
 	UpdateNormals(Mesh)
 	UpdateNormals(Mesh2)

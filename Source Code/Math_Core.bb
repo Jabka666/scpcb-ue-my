@@ -167,9 +167,13 @@ Function Find860Angle(n.NPCs, fr.Forest)
 	EndIf		
 End Function
 
+Global Mesh_MinX#, Mesh_MinY#, Mesh_MinZ#
+Global Mesh_MaxX#, Mesh_MaxY#, Mesh_MaxZ#
+Global Mesh_MagX#, Mesh_MagY#, Mesh_MagZ#
+
 ; ~ Find mesh extents
 Function GetMeshExtents(Mesh%)
-	Local s%, Surf%, Surfs%, v%, Verts%, x#, y#, z#
+	Local su%, s%, i%, x#, y#, z#
 	Local MinX# = Infinity
 	Local MinY# = Infinity
 	Local MinZ# = Infinity
@@ -177,22 +181,22 @@ Function GetMeshExtents(Mesh%)
 	Local MaxY# = -Infinity
 	Local MaxZ# = -Infinity
 	
-	Surfs = CountSurfaces(Mesh)
-	
-	For s = 1 To Surfs
-		Surf = GetSurface(Mesh, s)
-		Verts = CountVertices(Surf)
-		For v = 0 To Verts - 1
-			x = VertexX(Surf, v)
-			y = VertexY(Surf, v)
-			z = VertexZ(Surf, v)
-			
-			If x < MinX Then MinX = x
+	For su = 1 To CountSurfaces(Mesh)
+		s = GetSurface(Mesh, su)
+		For i = 0 To CountVertices(s) - 1
+			x = VertexX(s, i)
+			y = VertexY(s, i)
+			z = VertexZ(s, i)
+			TFormPoint(x, y, z, Mesh, 0)
+			x = TFormedX()
+			y = TFormedY()
+			z = TFormedZ()
 			If x > MaxX Then MaxX = x
-			If y < MinY Then MinY = y
+			If x < MinX Then MinX = x
 			If y > MaxY Then MaxY = y
-			If z < MinZ Then MinZ = z
+			If y < MinY Then MinY = y
 			If z > MaxZ Then MaxZ = z
+			If z < MinZ Then MinZ = z
 		Next
 	Next
 	
@@ -219,7 +223,7 @@ End Function
 
 Const ZONEAMOUNT% = 3
 
-Function GetZone(y%)
+Function GetZone%(y%)
 	Return(Min(Floor((Float(MapSize - y) / MapSize * ZONEAMOUNT)), ZONEAMOUNT - 1))
 End Function
 

@@ -29,7 +29,6 @@ Function LoadMesh_Strict(File$, Parent% = 0)
 				If TexAlpha <> 2 Then
 					Texture = CheckForTexture(t1, TexAlpha)
 					If Texture <> 0 Then 
-						TextureBlend(Texture, 5)
 						BrushTexture(b, Texture, 0, 0)
 					Else
 						; ~ Sometimes that error is intentional - such as if the mesh doesn't has a texture applied or an invalid one which gets fixed by something like EntityTexture
@@ -40,7 +39,6 @@ Function LoadMesh_Strict(File$, Parent% = 0)
 					Texture = CheckForTexture(t1, TexAlpha)
 					If Texture <> 0 Then
 						TextureCoords(Texture, 1)
-						TextureBlend(Texture, 2)
 						BrushTexture(b, Texture, 0, 0)
 					Else
 						BrushTexture(b, MissingTexture, 0, 0)
@@ -49,7 +47,6 @@ Function LoadMesh_Strict(File$, Parent% = 0)
 					Texture = CheckForTexture(t2, TexAlpha)
 					If Texture <> 0 Then
 						TextureCoords(Texture, 0)
-						TextureBlend(Texture, 5)
 						BrushTexture(b, Texture, 0, 1)
 					Else
 						BrushTexture(b, MissingTexture, 0, 1)

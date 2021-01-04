@@ -168,15 +168,22 @@ Function GetINIString$(File$, Section$, Parameter$, DefaultValue$ = "")
 End Function
 
 Function GetINIInt%(File$, Section$, Parameter$, DefaultValue% = 0)
-	Local Txt$ = GetINIString(File, Section, Parameter, DefaultValue)
+	Local StrTemp$ = GetINIString(File, Section, Parameter, DefaultValue)
 	
-	If Txt = "True" Then
-		Return(True)
-	ElseIf Txt = "False"
-		Return(False)
-	Else
-		Return(Int(Txt))
-	EndIf
+	Select StrTemp
+		Case "True"
+			;[Block]
+			Return(True)
+			;[End Block]
+		Case "False"
+			;[Block]
+			Return(False)
+			;[End Block]
+		Default
+			;[Block]
+			Return(Int(StrTemp))
+			;[End Block]
+	End Select
 End Function
 
 Function GetINIFloat#(File$, Section$, Parameter$, DefaultValue# = 0.0)
@@ -209,15 +216,22 @@ Function GetINIString2$(File$, Start%, Parameter$, DefaultValue$ = "")
 End Function
 
 Function GetINIInt2%(File$, Start%, Parameter$, DefaultValue$ = "")
-	Local Txt$ = GetINIString2(File, Start, Parameter, DefaultValue)
+	Local StrTemp$ = GetINIString2(File, Start, Parameter, DefaultValue)
 	
-	If Txt = "True" Then
-		Return(True)
-	ElseIf Txt = "False"
-		Return(False)
-	Else
-		Return(Int(Txt))
-	EndIf
+	Select StrTemp
+		Case "True"
+			;[Block]
+			Return(True)
+			;[End Block]
+		Case "False"
+			;[Block]
+			Return(False)
+			;[End Block]
+		Default
+			;[Block]
+			Return(Int(StrTemp))
+			;[End Block]
+	End Select
 End Function
 
 Function GetINIFloat2#(File$, Section$, Parameter$, DefaultValue# = 0.0)
@@ -249,6 +263,30 @@ Function GetINISectionLocation%(File$, Section$)
 	Wend
 	
 	CloseFile(f)
+End Function
+
+Function INI_FileToString$(INI_sFilename$)
+	Local INI_sString$ = ""
+	Local INI_lFileHandle% = ReadFile(INI_sFilename)
+	
+	If INI_lFileHandle <> 0 Then
+		While (Not Eof(INI_lFileHandle))
+			INI_sString = INI_sString + ReadLine(INI_lFileHandle) + Chr(0)
+		Wend
+		CloseFile(INI_lFileHandle)
+	EndIf
+	Return(INI_sString)
+End Function
+
+Function INI_CreateSection$(INI_lFileHandle%, INI_sNewSection$)
+	If FilePos(INI_lFileHandle) <> 0 Then WriteLine(INI_lFileHandle, "") ; ~ Blank line between sections
+	WriteLine(INI_lFileHandle, INI_sNewSection)
+	Return(INI_sNewSection)
+End Function
+
+Function INI_CreateKey%(INI_lFileHandle%, INI_sKey$, INI_sValue$)
+	WriteLine(INI_lFileHandle, INI_sKey + " = " + INI_sValue)
+	Return(True)
 End Function
 
 Function PutINIValue%(File$, INI_sSection$, INI_sKey$, INI_sValue$)
@@ -317,31 +355,7 @@ Function PutINIValue%(File$, INI_sSection$, INI_sKey$, INI_sValue$)
 	Return(True) ; ~ Success
 End Function
 
-Function INI_FileToString$(INI_sFilename$)
-	Local INI_sString$ = ""
-	Local INI_lFileHandle% = ReadFile(INI_sFilename)
-	
-	If INI_lFileHandle <> 0 Then
-		While (Not Eof(INI_lFileHandle))
-			INI_sString = INI_sString + ReadLine(INI_lFileHandle) + Chr(0)
-		Wend
-		CloseFile(INI_lFileHandle)
-	EndIf
-	Return(INI_sString)
-End Function
-
-Function INI_CreateSection$(INI_lFileHandle%, INI_sNewSection$)
-	If FilePos(INI_lFileHandle) <> 0 Then WriteLine(INI_lFileHandle, "") ; ~ Blank line between sections
-	WriteLine(INI_lFileHandle, INI_sNewSection)
-	Return(INI_sNewSection)
-End Function
-
-Function INI_CreateKey%(INI_lFileHandle%, INI_sKey$, INI_sValue$)
-	WriteLine(INI_lFileHandle, INI_sKey + " = " + INI_sValue)
-	Return(True)
-End Function
-
-Const OptionFile$ = "Data\options.ini"
+Global OptionFile$ = GetEnv("AppData") + "\scpcb-ue\Data\options.ini"
 
 Type Options
 	; ~ [GRAPHICS]
@@ -394,120 +408,120 @@ Global opt.Options = New Options
 Function LoadOptionsINI()
 	; ~ [GRAPHICS]
 	
-	opt\ParticleAmount = GetINIInt(OptionFile, "Graphics", "Particle Amount")
+	opt\ParticleAmount = GetINIInt(OptionFile, "Graphics", "Particle Amount", 2)
 	
-	opt\AntiAliasing = GetINIInt(OptionFile, "Graphics", "Anti-Aliasing")
+	opt\AntiAliasing = GetINIInt(OptionFile, "Graphics", "Anti-Aliasing", True)
 	
-	opt\BumpEnabled = GetINIInt(OptionFile, "Graphics", "Enable Bump Mapping")
+	opt\BumpEnabled = GetINIInt(OptionFile, "Graphics", "Enable Bump Mapping", True)
 	
-	opt\SaveTexturesInVRAM = GetINIInt(OptionFile, "Graphics", "Save Textures In VRAM")
+	opt\SaveTexturesInVRAM = GetINIInt(OptionFile, "Graphics", "Save Textures In VRAM", True)
 	
-	opt\EnableRoomLights = GetINIInt(OptionFile, "Graphics", "Enable Room Lights")
+	opt\EnableRoomLights = GetINIInt(OptionFile, "Graphics", "Enable Room Lights", True)
 	
-	opt\VSync = GetINIInt(OptionFile, "Graphics", "VSync")
+	opt\VSync = GetINIInt(OptionFile, "Graphics", "VSync", True)
 	
-	opt\ScreenGamma = GetINIFloat(OptionFile, "Graphics", "Screen Gamma")
+	opt\ScreenGamma = GetINIFloat(OptionFile, "Graphics", "Screen Gamma", 1.0)
 	
-	opt\TextureDetails = GetINIInt(OptionFile, "Graphics", "Texture Details")
+	opt\TextureDetails = GetINIInt(OptionFile, "Graphics", "Texture Details", 4)
 	
-	opt\FOV = GetINIFloat(OptionFile, "Graphics", "FOV")
+	opt\FOV = GetINIFloat(OptionFile, "Graphics", "FOV", 74.0)
 	opt\CurrFOV = opt\FOV - 40.0
 	
-	opt\Anisotropic = GetINIInt(OptionFile, "Graphics", "Anisotropic Filtering")
+	opt\Anisotropic = GetINIInt(OptionFile, "Graphics", "Anisotropic Filtering", 4)
 	
 	; ~ [AUDIO]
 	
-	opt\MusicVolume = GetINIFloat(OptionFile, "Audio", "Music Volume")
+	opt\MusicVolume = GetINIFloat(OptionFile, "Audio", "Music Volume", 0.5)
 	opt\PrevMusicVolume = opt\MusicVolume
 	opt\CurrMusicVolume = 1.0
 	
-	opt\EnableUserTracks = GetINIInt(OptionFile, "Audio", "Enable User Tracks")
+	opt\EnableUserTracks = GetINIInt(OptionFile, "Audio", "Enable User Tracks", False)
 	
-	opt\UserTrackMode = GetINIInt(OptionFile, "Audio", "User Track Setting")
+	opt\UserTrackMode = GetINIInt(OptionFile, "Audio", "User Track Setting", False)
 	
-	opt\SFXVolume = GetINIFloat(OptionFile, "Audio", "Sound Volume")
+	opt\SFXVolume = GetINIFloat(OptionFile, "Audio", "Sound Volume", 0.5)
 	opt\PrevSFXVolume = opt\SFXVolume
 	
-	opt\EnableSFXRelease = GetINIInt(OptionFile, "Audio", "SFX Release")
+	opt\EnableSFXRelease = GetINIInt(OptionFile, "Audio", "SFX Release", True)
 	opt\PrevEnableSFXRelease = opt\EnableSFXRelease
 	
 	; ~ [ADVANCED]
 	
-	opt\AchvMsgEnabled = GetINIInt(OptionFile, "Advanced", "Enable Achievement Popup")
+	opt\AchvMsgEnabled = GetINIInt(OptionFile, "Advanced", "Enable Achievement Popup", True)
 	
-	opt\CanOpenConsole = GetINIInt(OptionFile, "Advanced", "Enable Console")
+	opt\CanOpenConsole = GetINIInt(OptionFile, "Advanced", "Enable Console", False)
 	
-	opt\HUDEnabled = GetINIInt(OptionFile, "Advanced", "Enable HUD")
+	opt\HUDEnabled = GetINIInt(OptionFile, "Advanced", "Enable HUD", True)
 	
-	opt\SmoothHUD = GetINIInt(OptionFile, "Advanced", "Smooth HUD")
+	opt\SmoothHUD = GetINIInt(OptionFile, "Advanced", "Smooth HUD", True)
 	
-	opt\ShowFPS = GetINIInt(OptionFile, "Advanced", "Show FPS")
+	opt\ShowFPS = GetINIInt(OptionFile, "Advanced", "Show FPS", False)
 	
-	opt\ConsoleOpening = GetINIInt(OptionFile, "Advanced", "Console Auto Opening")
+	opt\ConsoleOpening = GetINIInt(OptionFile, "Advanced", "Console Auto Opening", False)
 	
-	opt\FrameLimit = GetINIInt(OptionFile, "Advanced", "Frame Limit")
+	opt\FrameLimit = GetINIInt(OptionFile, "Advanced", "Frame Limit", 0.0)
 	opt\CurrFrameLimit = (opt\FrameLimit - 19.0) / 100.0
 	
-	opt\PlayStartup = GetINIInt(OptionFile, "Advanced", "Play Startup Videos")
+	opt\PlayStartup = GetINIInt(OptionFile, "Advanced", "Play Startup Videos", True)
 	
-	opt\LauncherEnabled = GetINIInt(OptionFile, "Advanced", "Launcher Enabled")
+	opt\LauncherEnabled = GetINIInt(OptionFile, "Advanced", "Launcher Enabled", True)
 	
-	opt\EnableSubtitles = GetINIInt(OptionFile, "Advanced", "Enable Subtitles")
+	opt\EnableSubtitles = GetINIInt(OptionFile, "Advanced", "Enable Subtitles", True)
 	
-	opt\SubColorR = GetINIInt(OptionFile, "Advanced", "Subtitles Color R")
+	opt\SubColorR = GetINIInt(OptionFile, "Advanced", "Subtitles Color R", 255)
 	
-	opt\SubColorG = GetINIInt(OptionFile, "Advanced", "Subtitles Color G")
+	opt\SubColorG = GetINIInt(OptionFile, "Advanced", "Subtitles Color G", 255)
 	
-	opt\SubColorB = GetINIInt(OptionFile, "Advanced", "Subtitles Color B")
+	opt\SubColorB = GetINIInt(OptionFile, "Advanced", "Subtitles Color B", 255)
 	
 	; ~ [CONTROLS]
 	
-	key\MOVEMENT_RIGHT = GetINIInt(OptionFile, "Controls", "Right Key")
+	key\MOVEMENT_RIGHT = GetINIInt(OptionFile, "Controls", "Right Key", 32)
 	
-	key\MOVEMENT_LEFT = GetINIInt(OptionFile, "Controls", "Left Key")
+	key\MOVEMENT_LEFT = GetINIInt(OptionFile, "Controls", "Left Key", 30)
 	
-	key\MOVEMENT_UP = GetINIInt(OptionFile, "Controls", "Up Key")
+	key\MOVEMENT_UP = GetINIInt(OptionFile, "Controls", "Up Key", 17)
 	
-	key\MOVEMENT_DOWN = GetINIInt(OptionFile, "Controls", "Down Key")
+	key\MOVEMENT_DOWN = GetINIInt(OptionFile, "Controls", "Down Key", 31)
 	
-	key\BLINK = GetINIInt(OptionFile, "Controls", "Blink Key")
+	key\BLINK = GetINIInt(OptionFile, "Controls", "Blink Key", 57)
 	
-	key\SPRINT = GetINIInt(OptionFile, "Controls", "Sprint Key")
+	key\SPRINT = GetINIInt(OptionFile, "Controls", "Sprint Key", 42)
 	
-	key\INVENTORY = GetINIInt(OptionFile, "Controls", "Inventory Key")
+	key\INVENTORY = GetINIInt(OptionFile, "Controls", "Inventory Key", 15)
 	
-	key\CROUCH = GetINIInt(OptionFile, "Controls", "Crouch Key")
+	key\CROUCH = GetINIInt(OptionFile, "Controls", "Crouch Key", 29)
 	
-	key\SAVE = GetINIInt(OptionFile, "Controls", "Save Key")
+	key\SAVE = GetINIInt(OptionFile, "Controls", "Save Key", 63)
 	
-	key\CONSOLE = GetINIInt(OptionFile, "Controls", "Console Key")
+	key\CONSOLE = GetINIInt(OptionFile, "Controls", "Console Key", 61)
 	
-	key\SCREENSHOT = GetINIInt(OptionFile, "Controls", "Screenshot Key")
+	key\SCREENSHOT = GetINIInt(OptionFile, "Controls", "Screenshot Key", 59)
 	
 	opt\MouseSmoothing = GetINIFloat(OptionFile, "Controls", "Mouse Smoothing", 1.0)
 	
-	opt\InvertMouse = GetINIInt(OptionFile, "Controls", "Invert Mouse By Y-Axis")
+	opt\InvertMouse = GetINIInt(OptionFile, "Controls", "Invert Mouse By Y-Axis", False)
 	
-	opt\MouseSensitivity = GetINIFloat(OptionFile, "Controls", "Mouse Sensitivity")
+	opt\MouseSensitivity = GetINIFloat(OptionFile, "Controls", "Mouse Sensitivity", 0.0)
 	
 	; ~ [GLOBAL]
 	
-	opt\GraphicWidth = GetINIInt(OptionFile, "Global", "Width")
+	opt\GraphicWidth = GetINIInt(OptionFile, "Global", "Width", 1280)
 	
-	opt\GraphicHeight = GetINIInt(OptionFile, "Global", "Height")
+	opt\GraphicHeight = GetINIInt(OptionFile, "Global", "Height", 1024)
 	
-	opt\DisplayMode = GetINIInt(OptionFile, "Global", "Display Mode")
+	opt\DisplayMode = GetINIInt(OptionFile, "Global", "Display Mode", 0)
 	
-	opt\CameraFogNear = GetINIFloat(OptionFile, "Global", "Camera Fog Near")
+	opt\CameraFogNear = GetINIFloat(OptionFile, "Global", "Camera Fog Near", 0.1)
 	
-	opt\CameraFogFar = GetINIFloat(OptionFile, "Global", "Camera Fog Far")
+	opt\CameraFogFar = GetINIFloat(OptionFile, "Global", "Camera Fog Far", 6.0)
 	opt\StoredCameraFogFar = opt\CameraFogFar
 	
-	opt\IntroEnabled = GetINIInt(OptionFile, "Global", "Enable Intro")
+	opt\IntroEnabled = GetINIInt(OptionFile, "Global", "Enable Intro", True)
 	
-	opt\DebugMode = GetINIInt(OptionFile, "Global", "Debug Mode")
+	opt\DebugMode = GetINIInt(OptionFile, "Global", "Debug Mode", False)
 	
-	opt\DifficultiesLocked = GetINIInt(OptionFile, "Global", "Difficulties Locked")
+	opt\DifficultiesLocked = GetINIInt(OptionFile, "Global", "Difficulties Locked", 3)
 End Function
 
 Function SaveOptionsINI(SaveGlobal% = False)

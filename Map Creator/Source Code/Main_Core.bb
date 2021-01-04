@@ -1,3 +1,6 @@
+Include "Source Code\INI_Core.bb"
+Include "Source Code\Math_Core.bb"
+
 Const ResWidth% = 910
 Const ResHeight% = 660
 
@@ -22,7 +25,7 @@ Global ListBox% = CreateListBox(5, 60, ResWidth / 4, ResHeight / 2 - 20, WinHand
 Local rt.RoomTemplates
 
 For rt.RoomTemplates = Each RoomTemplates
-	If rt\MapGrid = 0
+	If rt\MapGrid = 0 Then
 		AddGadgetItem(ListBox, rt\Name)
 	EndIf
 Next
@@ -133,12 +136,12 @@ For i = 1 To 2
 	Next
 Next
 
-Const MapWidth% = 18, MapHeight% = 18
+Const MapSize% = 18
 
-Dim Map.RoomTemplates(MapWidth, MapHeight)
-Dim MapAngle%(MapWidth, MapHeight)
-Dim MapEvent$(MapWidth, MapHeight)
-Dim MapEventProb#(MapWidth, MapHeight)
+Dim Map.RoomTemplates(MapSize, MapSize)
+Dim MapAngle%(MapSize, MapSize)
+Dim MapEvent$(MapSize, MapSize)
+Dim MapEventProb#(MapSize, MapSize)
 
 Const ForestGridSize% = 9
 Dim ForestPlace.RoomTemplates(ForestGridSize, ForestGridSize)
@@ -170,8 +173,8 @@ SetGadgetLayout(Clean_Txt, 3, 3, 3, 3)
 
 Local Tab% = CreateTabber(0, 5, ResWidth / 4 + 20, ResHeight - 60, WinHandle)
 
-InsertGadgetItem(Tab, 0, "2D/Map Creator")
-InsertGadgetItem(Tab, 1, "3D/Map Viewer")
+InsertGadgetItem(Tab, 0, "2-D/Map Creator")
+InsertGadgetItem(Tab, 1, "3-D/Map Viewer")
 SetGadgetLayout(Tab, 3, 3, 2, 2)
 
 Local Tab2% = CreateTabber(300, 5, ResWidth / 4 + 20, ResHeight - 100, WinHandle)
@@ -205,19 +208,9 @@ Local Author_Descr% = CreateMenu("Edit Author and Description", 19, Options)
 CreateMenu("", 1000, Options)
 CreateMenu("Edit Camera", 17, Options)
 
-Const OptionFile$ = "..\Data\options_MC.ini"
+LoadOptionsINI()
 
-Global RedFog% = GetINIInt(OptionFile, "3D Scene", "BG Color R")
-Global GreenFog% = GetINIInt(OptionFile, "3D Scene", "BG Color G")
-Global BlueFog% = GetINIInt(OptionFile, "3D Scene", "BG Color B")
-
-Global RedCursor% = GetINIInt(OptionFile, "3D Scene", "Cursor Color R")
-Global GreenCursor% = GetINIInt(OptionFile, "3D Scene", "Cursor Color G")
-Global BlueCursor% = GetINIInt(OptionFile, "3D Scene", "Cursor Color B")
-
-Local Option_Event% = GetINIInt(OptionFile, "General", "Events_Default")
-
-If (Not Option_Event) Then
+If (Not opt\Events) Then
 	UncheckMenu(Event_Default)
 Else
 	CheckMenu(Event_Default)
@@ -246,26 +239,26 @@ Local LabelColor2% = CreateLabel("", 5, 70, 285, 60, OptionWin, 1)
 Local LabelRange% = CreateLabel("", 5, 135, 285, 60, OptionWin, 1)
 Local Color_Button% = CreateButton("Change CameraFog Color", 25, 20, 150, 30, OptionWin)
 Local Color_Button2% = CreateButton("Change Cursor Color", 25, 85, 150, 30, OptionWin)
-Local LabelFogR% = CreateLabel("R " + RedFog, 225, 15, 40, 15, OptionWin)
-Local LabelFogG% = CreateLabel("G " + GreenFog, 225, 30, 40, 15, OptionWin)
-Local LabelFogB% = CreateLabel("B " + BlueFog, 225, 45, 40, 15, OptionWin)
-Local LabelCursorR% = CreateLabel("R " + RedCursor, 225, 75, 40, 15, OptionWin)
-Local LabelCursorG% = CreateLabel("G " + GreenCursor, 225, 90, 40, 15, OptionWin)
-Local LabelCursorB% = CreateLabel("B " + BlueCursor, 225, 105, 40, 15, OptionWin)
+Local LabelFogR% = CreateLabel("R " + opt\FogR, 225, 15, 40, 15, OptionWin)
+Local LabelFogG% = CreateLabel("G " + opt\FogG, 225, 30, 40, 15, OptionWin)
+Local LabelFogB% = CreateLabel("B " + opt\FogB, 225, 45, 40, 15, OptionWin)
+Local LabelCursorR% = CreateLabel("R " + opt\CursorR, 225, 75, 40, 15, OptionWin)
+Local LabelCursorG% = CreateLabel("G " + opt\CursorG, 225, 90, 40, 15, OptionWin)
+Local LabelCursorB% = CreateLabel("B " + opt\CursorG, 225, 105, 40, 15, OptionWin)
 
 LabelRange = CreateLabel("Culling Range", 10, 170, 80, 20, OptionWin)
 
 Global CameraRangeOpt% = CreateTextField(25, 150, 40, 20, OptionWin)
 
-SetGadgetText(CameraRangeOpt, GetINIInt(OptionFile, "3D Scene", "Camera Range"))
+SetGadgetText(CameraRangeOpt, opt\CamRange)
 
 Global VSync% = CreateButton("Vsync", 123, 145, 50, 30, OptionWin, 2)
 
-SetButtonState(VSync, GetINIInt(OptionFile, "3D Scene", "VSync"))
+SetButtonState(VSync, opt\VSync)
 
 Global ShowFPS% = CreateButton("Show FPS", 210, 145, 70, 30, OptionWin, 2)
 
-SetButtonState(ShowFPS, GetINIInt(OptionFile, "3D Scene", "Show FPS"))
+SetButtonState(ShowFPS, opt\ShowFPS)
 
 Local CancelOpt_Button% = CreateButton("Cancel", 10, 210, 100,30, OptionWin)
 Local SaveOpt_Button% = CreateButton("Save", 185, 210, 100, 30, OptionWin)
@@ -305,15 +298,15 @@ Global Descr_Text% = CreateTextArea(20, 80, 350, 80, AuthorDescr_Settings, 1)
 
 Local Descr_Label% = CreateLabel("Description:", 140, 60, 160, 20, AuthorDescr_Settings)
 
-SetStatusText(LoadingWindow, "Executing 3D viewer...")
+SetStatusText(LoadingWindow, "Executing 3-D viewer...")
 ExecFile("Window3D.exe")
 
 Repeat
-	Local VWPRT% = FindWindow("Blitz Runtime Class", "MapCreator 3D View") ; ~ User32.dll
+	Local VWPRT% = FindWindow("Blitz Runtime Class", "MapCreator 3-D View") ; ~ User32.dll
 	
 	ShowGadget(LoadingWindow)
 Until VWPRT <> 0
-SetStatusText(LoadingWindow, "Creating 3D scene...")
+SetStatusText(LoadingWindow, "Creating 3-D scene...")
 
 SetParent(VWPRT, MainHwnd) ; ~ User32.dll				
 api_SetWindowPos(VWPRT, 0, 5, 30, 895, 560, 1) ; ~ User32.dll
@@ -463,8 +456,8 @@ Repeat
 		
 		; ~ Facility grid
 		If CurrMapGrid = 0 Then
-			For x = 0 To MapWidth
-				For y = 0 To MapHeight
+			For x = 0 To MapSize
+				For y = 0 To MapSize
 					If y < ZoneTransValue2 Then
 						Color(255, 255, 125)
 					ElseIf y = ZoneTransValue2
@@ -477,19 +470,19 @@ Repeat
 						Color(255, 255, 255)
 					EndIf
 					
-					Rect(Float(Width) / Float(MapWidth + 1) * x, Float(Height) / Float(MapHeight + 1) * y, (Float(Width) / Float(MapWidth + 1)), (Float(Height) / Float(MapHeight + 1)), True)
+					Rect(Float(Width) / Float(MapSize + 1) * x, Float(Height) / Float(MapSize + 1) * y, (Float(Width) / Float(MapSize + 1)), (Float(Height) / Float(MapSize + 1)), True)
 					
 					Local PrevSelectedX% = Grid_SelectedX, PrevSelectedY% = Grid_SelectedY
 					
-					If (MouseX() - GadgetX(Map_2D)) > (Float(Width) / Float(MapWidth + 1) * x + GadgetX(WinHandle)) And (MouseX() - GadgetX(Map_2D)) < ((Float(Width) / Float(MapWidth + 1) * x) + (Float(Width) / Float(MapWidth + 1)) + GadgetX(WinHandle))
+					If (MouseX() - GadgetX(Map_2D)) > (Float(Width) / Float(MapSize + 1) * x + GadgetX(WinHandle)) And (MouseX() - GadgetX(Map_2D)) < ((Float(Width) / Float(MapSize + 1) * x) + (Float(Width) / Float(MapSize + 1)) + GadgetX(WinHandle))
 						Local Offset% = 45
 						
-						If (MouseY() - GadgetY(Map_2D)) > (Float(Height) / Float(MapHeight + 1) * y + GadgetY(WinHandle) + Offset) And (MouseY() - GadgetY(Map_2D)) < ((Float(Height) / Float(MapHeight + 1) * y) + (Float(Height) / Float(MapHeight + 1)) + GadgetY(WinHandle) + Offset)
+						If (MouseY() - GadgetY(Map_2D)) > (Float(Height) / Float(MapSize + 1) * y + GadgetY(WinHandle) + Offset) And (MouseY() - GadgetY(Map_2D)) < ((Float(Height) / Float(MapSize + 1) * y) + (Float(Height) / Float(MapSize + 1)) + GadgetY(WinHandle) + Offset)
 							Color(200, 200, 200)
-							Rect(Float(Width) / Float(MapWidth + 1) * x, Float(Height) / Float(MapHeight + 1) * y, (Float(Width) / Float(MapWidth + 1)), (Float(Height) / Float(MapHeight + 1)), True)
+							Rect(Float(Width) / Float(MapSize + 1) * x, Float(Height) / Float(MapSize + 1) * y, (Float(Width) / Float(MapSize + 1)), (Float(Height) / Float(MapSize + 1)), True)
 							If Map(x, y) = Null And SelectedGadgetItem(ListBox) > -1
-								x2 = Float(Width) / Float(MapWidth + 1)
-								y2 = Float(Height) / Float(MapHeight + 1)
+								x2 = Float(Width) / Float(MapSize + 1)
+								y2 = Float(Height) / Float(MapSize + 1)
 								DrawImage(PlusIcon, (x2 * x) + (x2 / 2.0) + 0.5, (y2 * y) + (y2 / 2.0) + 0.5)
 							EndIf
 							If MouseHit1 Then
@@ -629,15 +622,15 @@ Repeat
 						
 					If Grid_SelectedX = x And Grid_SelectedY = y Then
 						Color(150, 150, 150)
-						Rect(Float(Width) / Float(MapWidth + 1) * x, Float(Height) / Float(MapHeight + 1) * y, (Float(Width) / Float(MapWidth + 1)), (Float(Height) / Float(MapHeight + 1)), True)
+						Rect(Float(Width) / Float(MapSize + 1) * x, Float(Height) / Float(MapSize + 1) * y, (Float(Width) / Float(MapSize + 1)), (Float(Height) / Float(MapSize + 1)), True)
 					EndIf
 					
 					If Map(x, y) = Null Then
 						Color(90, 90, 90)
-						Rect(Float(Width) / Float(MapWidth + 1) * x + 1, Float(Height) / Float(MapHeight + 1) * y + 1, (Float(Width) / Float(MapWidth + 1)) - 1, (Float(Height) / Float(MapHeight + 1)) - 1, False)
+						Rect(Float(Width) / Float(MapSize + 1) * x + 1, Float(Height) / Float(MapSize + 1) * y + 1, (Float(Width) / Float(MapSize + 1)) - 1, (Float(Height) / Float(MapSize + 1)) - 1, False)
 					Else
-						x2 = Float(Width) / Float(MapWidth + 1)
-						y2 = Float(Height) / Float(MapHeight + 1)
+						x2 = Float(Width) / Float(MapSize + 1)
+						y2 = Float(Height) / Float(MapSize + 1)
 						DrawImage(MapIcons(Map(x, y)\Shape, Floor(MapAngle(x, y) / 90.0)), (x2 * x) + (x2 / 2.0) + 0.5, (y2 * y) + (y2 / 2.0) + 0.5)
 						
 						If Grid_SelectedX = x And Grid_SelectedY = y Then
@@ -667,27 +660,27 @@ Repeat
 								Local PrevAngle% = MapAngle(Grid_SelectedX, Grid_SelectedY)
 								
 								; ~ Left
-								If (MouseX() - GadgetX(Map_2D)) < (Float(Width) / Float(MapWidth + 1) * Grid_SelectedX + GadgetX(WinHandle))
+								If (MouseX() - GadgetX(Map_2D)) < (Float(Width) / Float(MapSize + 1) * Grid_SelectedX + GadgetX(WinHandle))
 									MapAngle(Grid_SelectedX, Grid_SelectedY) = 90
 								EndIf
 								; ~ Right
-								If (MouseX() - GadgetX(Map_2D)) > ((Float(Width) / Float(MapWidth + 1) * Grid_SelectedX) + (Float(Width) / Float(MapWidth + 1)) + GadgetX(WinHandle))
+								If (MouseX() - GadgetX(Map_2D)) > ((Float(Width) / Float(MapSize + 1) * Grid_SelectedX) + (Float(Width) / Float(MapSize + 1)) + GadgetX(WinHandle))
 									MapAngle(Grid_SelectedX, Grid_SelectedY) = 270
 								EndIf
 								; ~ Up
 								Offset = 45
-								If (MouseY() - GadgetY(Map_2D)) < (Float(Height) / Float(MapHeight + 1) * Grid_SelectedY + GadgetY(WinHandle) + Offset)
+								If (MouseY() - GadgetY(Map_2D)) < (Float(Height) / Float(MapSize + 1) * Grid_SelectedY + GadgetY(WinHandle) + Offset)
 									MapAngle(Grid_SelectedX, Grid_SelectedY) = 180
 								EndIf
 								; ~ Down
-								If (MouseY() - GadgetY(Map_2D)) > ((Float(Height) / Float(MapHeight + 1) * Grid_SelectedY) + (Float(Height) / Float(MapHeight + 1)) + GadgetY(WinHandle) + Offset)
+								If (MouseY() - GadgetY(Map_2D)) > ((Float(Height) / Float(MapSize + 1) * Grid_SelectedY) + (Float(Height) / Float(MapSize + 1)) + GadgetY(WinHandle) + Offset)
 									MapAngle(Grid_SelectedX, Grid_SelectedY) = 0
 								EndIf
 								
-								Local Width2% = Float(Width) / Float(MapWidth + 1) / 2.0
-								Local Height2% = Float(Height) / Float(MapHeight + 1) / 2.0
+								Local Width2% = Float(Width) / Float(MapSize + 1) / 2.0
+								Local Height2% = Float(Height) / Float(MapSize + 1) / 2.0
 								
-								DrawImage(Arrows[Floor(MapAngle(Grid_SelectedX, Grid_SelectedY) / 90)], Float(Width) / Float(MapWidth + 1) * Grid_SelectedX + Width2, Float(Height) / Float(MapHeight + 1) * Grid_SelectedY + Height2)
+								DrawImage(Arrows[Floor(MapAngle(Grid_SelectedX, Grid_SelectedY) / 90)], Float(Width) / Float(MapSize + 1) * Grid_SelectedX + Width2, Float(Height) / Float(MapSize + 1) * Grid_SelectedY + Height2)
 								If PrevAngle <> MapAngle(Grid_SelectedX, Grid_SelectedY) Then
 									ChangeGridGadget = True
 									If MapEvent(Grid_SelectedX, Grid_SelectedY) <> "" And MapEvent(Grid_SelectedX, Grid_SelectedY) <> "[none]" Then
@@ -1054,7 +1047,7 @@ Repeat
 	Local ID% = WaitEvent()
 	
 	If ID = $803 And EventSource() = WinHandle Then Exit ; ~ Handle the close gadget on the window being hit
-	If ID = $803 And EventSource() = OptioWwin Then HideGadget(OptionWin)
+	If ID = $803 And EventSource() = OptionWin Then HideGadget(OptionWin)
 	If ID = $803 And EventSource() = Map_Settings Then HideGadget(Map_Settings)
 	If ID = $803 And EventSource() = AuthorDescr_Settings Then HideGadget(AuthorDescr_Settings)
 	If ID = $1001 Then ; ~ Handle any menu item hit events
@@ -1136,7 +1129,7 @@ Repeat
 			If Value = 0 Then CheckMenu(Event_Default)
 			If Value = 1 Then UncheckMenu(Event_Default)
 			UpdateWindowMenu(WinHandle)
-			PutINIValue(OptionFile, "General", "Events_Default", (Not Value))
+			PutINIValue(OptionFileMC, "General", "Events_Default", (Not Value))
 		EndIf
 		If EID = 18 Then
 			ShowGadget(Map_Settings)
@@ -1210,68 +1203,68 @@ Repeat
 		EndIf
 		
 		If EventSource() = Color_Button Then 
-			If RequestColor(RedFog, GreenFog, BlueFog) = 1 Then
-				RedFog = RequestedRed()
-				GreenFog = RequestedGreen()
-				BlueFog = RequestedBlue()
-				SetGadgetText(LabelFogR, "R " + RedFog)
-				SetGadgetText(LabelFogG, "G " + GreenFog)
-				SetGadgetText(LabelFogB, "B " + BlueFog)
+			If RequestColor(opt\FogR, opt\FogG, opt\FogB) = 1 Then
+				opt\FogR = RequestedRed()
+				opt\FogG = RequestedGreen()
+				opt\FogB = RequestedBlue()
+				SetGadgetText(LabelFogR, "R " + opt\FogR)
+				SetGadgetText(LabelFogG, "G " + opt\FogG)
+				SetGadgetText(LabelFogB, "B " + opt\FogB)
 			EndIf	
 		EndIf
 		If EventSource() = Color_Button2 Then
-			If RequestColor(RedCursor, GreenCursor, BlueCursor) = 1 Then
-				RedCursor = RequestedRed()
-				GreenCursor = RequestedGreen()
-				BlueCursor = RequestedBlue()
-				SetGadgetText(LabelCursorR, "R " + RedCursor)
-				SetGadgetText(LabelCursorG, "G " + GreenCursor)
-				SetGadgetText(LabelCursorB, "B " + BlueCursor)
+			If RequestColor(opt\CursorR, opt\CursorG, opt\CursorB) = 1 Then
+				opt\CursorR = RequestedRed()
+				opt\CursorG = RequestedGreen()
+				opt\CursorB = RequestedBlue()
+				SetGadgetText(LabelCursorR, "R " + opt\CursorR)
+				SetGadgetText(LabelCursorG, "G " + opt\CursorG)
+				SetGadgetText(LabelCursorB, "B " + opt\CursorB)
 			EndIf
 		EndIf
 		If EventSource() = CancelOpt_Button Then
-			SetGadgetText(LabelFogR, "R " + RedFog)
-			SetGadgetText(LabelFogG, "G " + GreenFog)
-			SetGadgetText(LabelFogB, "B " + BlueFog)
-			SetGadgetText(LabelCursorR, "R " + RedCursor)
-			SetGadgetText(LabelCursorG, "G " + GreenCursor)
-			SetGadgetText(LabelCursorB, "B " + BlueCursor)
-			SetGadgetText(CameraRangeOpt, GetINIInt(OptionFile, "3D Scene", "Camera Range"))
-			SetButtonState(VSync, GetINIInt(OptionFile, "3D Scene", "VSync"))
-			SetButtonState(ShowFPS, GetINIInt(OptionFile, "3D Scene", "Show FPS"))
+			SetGadgetText(LabelFogR, "R " + opt\FogR)
+			SetGadgetText(LabelFogG, "G " + opt\FogG)
+			SetGadgetText(LabelFogB, "B " + opt\FogB)
+			SetGadgetText(LabelCursorR, "R " + opt\CursorR)
+			SetGadgetText(LabelCursorG, "G " + opt\CursorG)
+			SetGadgetText(LabelCursorB, "B " + opt\CursorB)
+			SetGadgetText(CameraRangeOpt, opt\CamRange)
+			SetButtonState(VSync, opt\VSync)
+			SetButtonState(ShowFPS, opt\ShowFPS)
 			HideGadget(OptionWin)
 		EndIf	
 		If EventSource() = SaveOpt_Button Then
 			HideGadget(OptionWin)
 			SetStatusText(WinHandle, "New settings are saved")
-			PutINIValue(OptionFile, "3D Scene", "BG Color R", RedFog)
-			PutINIValue(OptionFile, "3D Scene", "BG Color G", GreenFog)
-			PutINIValue(OptionFile, "3D Scene", "BG Color B", BlueFog)
-			PutINIValue(OptionFile, "3D Scene", "Cursor Color R", RedCursor)
-			PutINIValue(OptionFile, "3D Scene", "Cursor Color G", GreenCursor)
-			PutINIValue(OptionFile, "3D Scene", "Cursor Color B", BlueCursor)
-			PutINIValue(OptionFile, "3D Scene", "Camera Range", TextFieldText(CameraRangeOpt))
-			PutINIValue(OptionFile, "3D Scene", "VSync", ButtonState(VSync))
-			PutINIValue(OptionFile, "3D Scene", "Show FPS", ButtonState(ShowFPS))
+			PutINIValue(OptionFileMC, "3-D Scene", "BG Color R", opt\FogR)
+			PutINIValue(OptionFileMC, "3-D Scene", "BG Color G", opt\FogG)
+			PutINIValue(OptionFileMC, "3-D Scene", "BG Color B", opt\FogB)
+			PutINIValue(OptionFileMC, "3-D Scene", "Cursor Color R", opt\CursorR)
+			PutINIValue(OptionFileMC, "3-D Scene", "Cursor Color G", opt\CursorG)
+			PutINIValue(OptionFileMC, "3-D Scene", "Cursor Color B", opt\CursorB)
+			PutINIValue(OptionFileMC, "3-D Scene", "Camera Range", TextFieldText(CameraRangeOpt))
+			PutINIValue(OptionFileMC, "3-D Scene", "VSync", ButtonState(VSync))
+			PutINIValue(OptionFileMC, "3-D Scene", "Show FPS", ButtonState(ShowFPS))
 			WriteOptions()
 		EndIf
 		If EventSource() = ResetZoneTrans Then
 			SetGadgetText(ZoneTrans1, 5)
 			SetGadgetText(ZoneTrans2, 11)
-			ZoneTransValue1 = (MapHeight) - Int(TextFieldText(ZoneTrans1))
-			ZoneTransValue2 = (MapHeight) - Int(TextFieldText(ZoneTrans2))
+			ZoneTransValue1 = (MapSize) - Int(TextFieldText(ZoneTrans1))
+			ZoneTransValue2 = (MapSize) - Int(TextFieldText(ZoneTrans2))
 		EndIf
 		If EventSource() = ZoneTrans1 Then
 			SetGadgetText(ZoneTrans1, Int(TextFieldText(ZoneTrans1)))
 		EndIf
 		If EventSource() = ZoneTrans2 Then
-			SetGadgetText(ZoneTrans2, Int(TextFieldText$(ZoneTrans2)))
+			SetGadgetText(ZoneTrans2, Int(TextFieldText(ZoneTrans2)))
 		EndIf
 		If EventSource() = ApplyZoneTrans Then
-			SetGadgetText(ZoneTrans2, Int(Min(Max(Int(TextFieldText(ZoneTrans2)), Int(TextFieldText(ZoneTrans1)) + 2), MapHeight - 1)))
+			SetGadgetText(ZoneTrans2, Int(Min(Max(Int(TextFieldText(ZoneTrans2)), Int(TextFieldText(ZoneTrans1)) + 2), MapSize - 1)))
 			SetGadgetText(ZoneTrans1, Int(Min(Max(Int(TextFieldText(ZoneTrans1)), 1), Int(TextFieldText(ZoneTrans2)) - 2)))
-			ZoneTransValue1 = (MapHeight) - Int(TextFieldText(ZoneTrans1))
-			ZoneTransValue2 = (MapHeight) - Int(TextFieldText(ZoneTrans2))
+			ZoneTransValue1 = MapSize - Int(TextFieldText(ZoneTrans1))
+			ZoneTransValue2 = MapSize - Int(TextFieldText(ZoneTrans2))
 		EndIf
 		If EventSource() = OK Then ; ~ When "OK" is pressed
 			ClearGadgetItems(ListBox)
@@ -1299,7 +1292,7 @@ Repeat
 				
 				If Item > 0 Then
 					For ev.Event = Each Event
-						If ev\Name = Name
+						If ev\Name = Name Then
 							SetGadgetText(Event_Desc, "Event description:" + Chr(13) + ev\Description)
 							Exit
 						EndIf
@@ -1405,189 +1398,6 @@ Repeat
 	EndIf
 Forever
 End()
-
-Function StripPath$(File$) 
-	Local Name$ = "", i%, mi$ = ""
-	
-	If Len(File) > 0 
-		For i = Len(File) To 1 Step -1 
-			mi = Mid(File, i, 1) 
-			If mi = "\" Or mi = "/" Then Return(Name)
-			
-			Name = mi + Name 
-		Next 
-	EndIf 
-	
-	Return(Name) 
-End Function
-
-Function Piece$(s$, Entry%, Char$ = " ")
-	Local n%, p%, a$
-	
-	While Instr(s, Char + Char)
-		s = Replace(s, Char + Char, Char)
-	Wend
-	For n = 1 To Entry - 1
-		p = Instr(s, Char)
-		s = Right(s, Len(s) - p)
-	Next
-	p = Instr(s, Char)
-	If p < 1 Then
-		a = s
-	Else
-		a = Left(s, p - 1)
-	EndIf
-	Return(a)
-End Function
-
-Function GetINIString$(File$, Section$, Parameter$)
-	Local TemporaryString$ = ""
-	Local f% = ReadFile(File)
-	
-	While (Not Eof(f))
-		If ReadLine(f) = "[" + Section + "]" Then
-			Repeat 
-				TemporaryString = ReadLine(f)
-				If Trim(Left(TemporaryString, Max(Instr(TemporaryString, "=") - 1, 0))) = Parameter Then
-					CloseFile(f)
-					Return(Trim(Right(TemporaryString, Len(TemporaryString) - Instr(TemporaryString, "="))))
-				EndIf
-			Until Left(TemporaryString, 1) = "[" Or Eof(f)
-			CloseFile(f)
-			Return("")
-		EndIf
-	Wend
-	
-	CloseFile(f)
-End Function
-
-Function GetINIInt%(File$, Section$, Parameter$)
-	Local StrTemp$ = Lower(GetINIString(File, Section, Parameter))
-	
-	Select StrTemp
-		Case "true"
-			;[Block]
-			Return(1)
-			;[End Block]
-		Case "false"
-			;[Block] 
-			Return(0)
-			;[End Block]
-		Default
-			;[Block]
-			Return(Int(StrTemp))
-			;[End Block]
-	End Select
-	Return 
-End Function
-
-Function GetINIFloat#(File$, Section$, Parameter$)
-	Return(GetINIString(File, Section, Parameter))
-End Function
-
-Function PutINIValue%(INI_sAppName$, INI_sSection$, INI_sKey$, INI_sValue$)
-	; ~ Returns: True (Success) or False (Failed)
-	INI_sSection = "[" + Trim(INI_sSection) + "]"
-	
-	Local INI_sUpperSection$ = Upper(INI_sSection)
-	
-	INI_sKey = Trim$(INI_sKey)
-	INI_sValue = Trim(INI_sValue)
-	
-	Local INI_sFilename$ = CurrentDir() + "\" + INI_sAppName
-	; ~ Retrieve the INI data (if it exists)
-	Local INI_sContents$ = INI_FileToString(INI_sFilename)
-	; ~ (Re)Create the INI file updating / adding the SECTION, KEY and VALUE
-	Local INI_bWrittenKey% = False
-	Local INI_bSectionFound% = False
-	Local INI_sCurrentSection$ = ""
-	Local INI_lFileHandle% = WriteFile(INI_sFilename)
-	
-	If INI_lFileHandle = 0 Then Return(False) ; ~ Create file failed!
-	
-	Local INI_lOldPos% = 1
-	Local INI_lPos% = Instr(INI_sContents, Chr(0))
-	
-	While INI_lPos <> 0
-		Local INI_sTemp$ = Trim(Mid(INI_sContents, INI_lOldPos, (INI_lPos - INI_lOldPos)))
-		
-		If INI_sTemp <> "" Then
-			If Left(INI_sTemp, 1) = "[" And Right(INI_sTemp, 1) = "]" Then
-				; ~ Process SECTION
-				If INI_sCurrentSection = INI_sUpperSection And INI_bWrittenKey = False Then
-					INI_bWrittenKey = INI_CreateKey(INI_lFileHandle, INI_sKey, INI_sValue)
-				End If
-				INI_sCurrentSection = Upper(INI_CreateSection(INI_lFileHandle, INI_sTemp))
-				If INI_sCurrentSection = INI_sUpperSection Then INI_bSectionFound = True
-			Else
-				Local lEqualsPos% = Instr(INI_sTemp, "=")
-				
-				If lEqualsPos <> 0 Then
-					If INI_sCurrentSection = INI_sUpperSection And Upper(Trim(Left(INI_sTemp, (lEqualsPos - 1)))) = Upper(INI_sKey) Then
-						If INI_sValue <> "" Then INI_CreateKey(INI_lFileHandle, INI_sKey, INI_sValue)
-						INI_bWrittenKey = True
-					Else
-						WriteLine(INI_lFileHandle, INI_sTemp)
-					EndIf
-				EndIf
-			EndIf
-		EndIf
-		
-		; ~ Move through the INI file...
-		INI_lOldPos = INI_lPos + 1
-		INI_lPos = Instr(INI_sContents, Chr(0), INI_lOldPos)
-	Wend
-	
-	; ~ KEY wasn't found in the INI file - Append a new SECTION if required and create our KEY = VALUE line
-	If INI_bWrittenKey = False Then
-		If INI_bSectionFound = False Then INI_CreateSection(INI_lFileHandle, INI_sSection)
-		INI_CreateKey(INI_lFileHandle, INI_sKey, INI_sValue)
-	End If
-	
-	CloseFile(INI_lFileHandle)
-	
-	Return(True) ; ~ Success
-End Function
-
-Function INI_FileToString$(INI_sFilename$)
-	Local INI_sString$ = ""
-	Local INI_lFileHandle% = ReadFile(INI_sFilename)
-	
-	If INI_lFileHandle <> 0 Then
-		While (Not Eof(INI_lFileHandle))
-			INI_sString = INI_sString + ReadLine(INI_lFileHandle) + Chr(0)
-		Wend
-		CloseFile(INI_lFileHandle)
-	End If
-	Return(INI_sString)
-End Function
-
-Function INI_CreateSection$(INI_lFileHandle%, INI_sNewSection$)
-	If FilePos(INI_lFileHandle) <> 0 Then WriteLine(INI_lFileHandle, "") ; ~ Blank line between sections
-	WriteLine(INI_lFileHandle, INI_sNewSection)
-	Return(INI_sNewSection)
-End Function
-
-Function INI_CreateKey%(INI_lFileHandle%, INI_sKey$, INI_sValue$)
-	WriteLine(INI_lFileHandle, INI_sKey + "=" + INI_sValue)
-	Return(True)
-End Function
-
-Function Min#(a#, b#)
-	If a < b Then 
-		Return(a)
-	Else
-		Return(b)
-	EndIf
-End Function
-
-Function Max#(a#, b#)
-	If a > b Then 
-		Return(a)
-	Else
-		Return(b)
-	EndIf
-End Function
 
 Const ROOM1% = 0, ROOM2% = 1, ROOM2C% = 2, ROOM3% = 3, ROOM4% = 4
 
@@ -1761,7 +1571,7 @@ Function InitEvents(File$)
 		If Left(TemporaryString, 1) = "["
 			TemporaryString = Mid(TemporaryString, 2, Len(TemporaryString) - 2)
 			
-			e = New Event
+			e.Event = New Event
 			e\Name = TemporaryString
 			
 			e\Description = GetINIString(File, TemporaryString, "Descr")
@@ -1794,17 +1604,11 @@ Function AssignEventToRoomTemplate(rt.RoomTemplates, e.Event)
 	Local i%
 	
 	For i = 0 To 5
-		If rt\Events[i] = ""
+		If rt\Events[i] = "" Then
 			rt\Events[i] = e\Name
 			Exit
 		EndIf
 	Next
-End Function
-
-Function GetZone(y%)
-	Local ZoneAmount% = 3
-	
-	Return(Min(Floor((Float(MapWidth - y) / MapWidth * ZoneAmount)), ZoneAmount - 1))
 End Function
 
 Function EraseMap()
@@ -1822,7 +1626,7 @@ Function EraseMap()
     If Item > -1 Then
     	Name = GadgetItemText(ListBox, Item)
 		For rt.RoomTemplates = Each RoomTemplates
-			If rt\Name = Name
+			If rt\Name = Name Then
 				For i = 0 To 5
 					If rt\Events[i] <> "" Then
 						HasEvent = True
@@ -1844,8 +1648,8 @@ Function EraseMap()
 		SetGadgetText(Event_Prob_Label, "Event chance: " + (SliderValue(Event_Prob) + 1) + "%")
 	EndIf
 	
-	For x = 0 To MapWidth
-		For y = 0 To MapHeight
+	For x = 0 To MapSize
+		For y = 0 To MapSize
 			Map(x, y) = Null
 			MapAngle(x, y) = 0
 			MapEvent(x, y) = ""
@@ -1893,8 +1697,8 @@ Function LoadMap(File$)
 		SetGadgetText(Descr_Text, MapDescription)
 		ZoneTransValue1 = ReadByte(f)
 		ZoneTransValue2 = ReadByte(f)
-		SetGadgetText(ZoneTrans1, (MapHeight) - ZoneTransValue1)
-		SetGadgetText(ZoneTrans2, (MapHeight) - ZoneTransValue2)
+		SetGadgetText(ZoneTrans1, (MapSize) - ZoneTransValue1)
+		SetGadgetText(ZoneTrans2, (MapSize) - ZoneTransValue2)
 		
 		Local RoomAmount% = ReadInt(f) ; ~ Amount of rooms
 		Local ForestAmount% = ReadInt(f) ; ~ Amount of forest pieces
@@ -2003,8 +1807,8 @@ Function SaveMap(File$, StreamTopRgm% = False, Old% = 0)
 		WriteByte(f, ZoneTransValue2)
 		; ~ Facility room amount
 		Temp = 0
-		For x = 0 To MapWidth
-			For y = 0 To MapHeight
+		For x = 0 To MapSize
+			For y = 0 To MapSize
 				If Map(x, y) <> Null Then
 					Temp = Temp + 1
 				EndIf
@@ -2037,8 +1841,8 @@ Function SaveMap(File$, StreamTopRgm% = False, Old% = 0)
 		WriteInt(f, CurrMapGrid)
 	EndIf
 	
-	For x = 0 To MapWidth
-		For y = 0 To MapHeight
+	For x = 0 To MapSize
+		For y = 0 To MapSize
 			If Map(x, y) <> Null
 				WriteByte(f, x)
 				WriteByte(f, y)
@@ -2108,12 +1912,8 @@ End Function
 Function WriteOptions()
 	Local f% = WriteFile("CONFIG_OPTINIT.SI")
 	
-	WriteInt(f, RedFog)
-	WriteInt(f, GreenFog)
-	WriteInt(f, BlueFog)
-	WriteInt(f, RedCursor)
-	WriteInt(f, GreenCursor)
-	WriteInt(f, BlueCursor)
+	WriteInt(f, opt\FogR) : WriteInt(f, opt\FogG) : WriteInt(f, opt\FogG)
+	WriteInt(f, opt\CursorR) : WriteInt(f, opt\CursorG) : WriteInt(f, opt\CursorG)
 	WriteInt(f, TextFieldText(CameraRangeOpt))
 	WriteByte(f, ButtonState(VSync))
 	WriteByte(f, ButtonState(ShowFPS))
