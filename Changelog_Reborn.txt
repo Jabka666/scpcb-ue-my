@@ -16,7 +16,7 @@
 - Added new key card loading screen.
 - Added anisotropic filtering.
 - Added support for resolutions of up to 4k.
-- Added coloring of the fog.
+- Added colored fog.
 - Added room2tunnel3.
 - Added bloody texture for SCP-096.
 - Added SCRAMBLE Gear.
@@ -74,12 +74,7 @@
 - Improved SCP-914.
 - Improved some loading screens.
 
-- Optimized items.
-- Optimized startup videos.
-- Optimized event of SCP-012's containment chamber.
-- Optimized game by converting a lot of .x files to .b3d.
-- Optimized game by reworking of time steps system.
-- Optimized game by reworking of texture cache system.
+- Optimized game.
 
 Bug Fixes:
 
@@ -128,7 +123,6 @@ Bug Fixes:
 - Fixed room lights not working most of the time.
 - Fixed launcher options not saving when quitting.
 - Fixed security camera bases rotating with the cameras.
-- Fixed fog while wearing night vision.
 - Fixed inventory not being fully centered.
 - Fixed SCP-173 not breaking the glass in the testroom event if the player looked away.
 - Fixed Right and Down movement always overriding Left and Up movement.
@@ -146,14 +140,15 @@ Bug Fixes:
 - Fixed step sounds in Dr. L.'s office.
 - Fixed SCP-1162 doesn't remove overlays.
 - Fixed light rendering through wooden doors.
-- Fixed elevators don't move any decals.
+- Fixed elevators don't move decals.
 - Fixed the Gate A bug where SCP-106 spawns constantly.
 - Fixed menu and inventory opening during the endings.
 - Fixed SCP-096 can't be triggered through the glass.
+- Fixed wrong paper texture for props.
+- Fixed syringes position in room2medibay and room2medibay2.
 
 - Small fixes for commands "disablenuke" and "enablecontrol/disablecontrol.
 - Small fixes for gateb and gateaentrance's walls.
-- Small fixes for syringes' positions in room2medibay and room2medibay2.
 - Small fixes for room2medibay2 and room2medibay's walls.
 - Small fixes for ending tunnel in the Gate A.
 - Small fixes for earphones' texture.
@@ -161,4 +156,3 @@ Bug Fixes:
 - Small fixes for room2offices4, room3servers2, room2pipes, room2clockroom, room2clockroom2 and room2pipes2.
 - Small fixes for SCP-173's AI.
 - Small fixes for SCP-860-1.
-- Small fixes for paper texture.
