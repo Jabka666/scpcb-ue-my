@@ -5647,7 +5647,7 @@ Function UpdateRooms()
 				EndIf
 			Next
 			
-			If (Not FoundNewPlayerRoom) And (PlayerRoom <> r) Then				
+			If (Not FoundNewPlayerRoom) And PlayerRoom <> r Then				
 				If x < 4.0 Then
 					If z < 4.0 Then
 						If Abs(EntityY(me\Collider) - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r

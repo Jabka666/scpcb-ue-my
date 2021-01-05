@@ -8719,7 +8719,7 @@ Function LoadEntities()
 	CreateBlurImage()
 	CameraProjMode(ArkBlurCam, 0)
 	
-	tt\OverlayTextureID[0] = LoadTexture_Strict("GFX\fog.png", 1, 2) ; ~ FOG
+	tt\OverlayTextureID[0] = LoadTexture_Strict("GFX\fog.png", 1, DeleteAllTextures) ; ~ FOG
 	tt\OverlayID[0] = CreateSprite(ArkBlurCam)
 	ScaleSprite(tt\OverlayID[0], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
 	EntityTexture(tt\OverlayID[0], tt\OverlayTextureID[0])
@@ -8727,7 +8727,7 @@ Function LoadEntities()
 	EntityOrder(tt\OverlayID[0], -1000)
 	MoveEntity(tt\OverlayID[0], 0.0, 0.0, 1.0)
 	
-	tt\OverlayTextureID[1] = LoadTexture_Strict("GFX\gas_mask_overlay.png", 1, 2) ; ~ GAS MASK
+	tt\OverlayTextureID[1] = LoadTexture_Strict("GFX\gas_mask_overlay.png", 1, DeleteAllTextures) ; ~ GAS MASK
 	tt\OverlayID[1] = CreateSprite(ArkBlurCam)
 	ScaleSprite(tt\OverlayID[1], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
 	EntityTexture(tt\OverlayID[1], tt\OverlayTextureID[1])
@@ -8736,7 +8736,7 @@ Function LoadEntities()
 	EntityOrder(tt\OverlayID[1], -1003)
 	MoveEntity(tt\OverlayID[1], 0.0, 0.0, 1.0)
 	
-	tt\OverlayTextureID[2] = LoadTexture_Strict("GFX\hazmat_suit_overlay.png", 1, 2) ; ~ HAZMAT SUIT
+	tt\OverlayTextureID[2] = LoadTexture_Strict("GFX\hazmat_suit_overlay.png", 1, DeleteAllTextures) ; ~ HAZMAT SUIT
 	tt\OverlayID[2] = CreateSprite(ArkBlurCam)
 	ScaleSprite(tt\OverlayID[2], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
 	EntityTexture(tt\OverlayID[2], tt\OverlayTextureID[2])
@@ -8745,7 +8745,7 @@ Function LoadEntities()
 	EntityOrder(tt\OverlayID[2], -1003)
 	MoveEntity(tt\OverlayID[2], 0, 0, 1.0)
 	
-	tt\OverlayTextureID[3] = LoadTexture_Strict("GFX\scp_008_overlay.png", 1, 2) ; ~ SCP-008
+	tt\OverlayTextureID[3] = LoadTexture_Strict("GFX\scp_008_overlay.png", 1, DeleteAllTextures) ; ~ SCP-008
 	tt\OverlayID[3] = CreateSprite(ArkBlurCam)
 	ScaleSprite(tt\OverlayID[3], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
 	EntityTexture(tt\OverlayID[3], tt\OverlayTextureID[3])
@@ -8754,7 +8754,7 @@ Function LoadEntities()
 	EntityOrder(tt\OverlayID[3], -1003)
 	MoveEntity(tt\OverlayID[3], 0.0, 0.0, 1.0)
 	
-	tt\OverlayTextureID[4] = LoadTexture_Strict("GFX\night_vision_goggles_overlay.png", 1, 2) ; ~ NIGHT VISION GOGGLES
+	tt\OverlayTextureID[4] = LoadTexture_Strict("GFX\night_vision_goggles_overlay.png", 1, DeleteAllTextures) ; ~ NIGHT VISION GOGGLES
 	tt\OverlayID[4] = CreateSprite(ArkBlurCam)
 	ScaleSprite(tt\OverlayID[4], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
 	EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
@@ -8763,7 +8763,7 @@ Function LoadEntities()
 	EntityOrder(tt\OverlayID[4], -1003)
 	MoveEntity(tt\OverlayID[4], 0.0, 0.0, 1.0)
 	
-	tt\OverlayTextureID[5] = LoadTexture_Strict("GFX\fog_night_vision_goggles.png", 1, 2) ; ~ FOG IN NIGHT VISION GOGGLES
+	tt\OverlayTextureID[5] = LoadTexture_Strict("GFX\fog_night_vision_goggles.png", 1, DeleteAllTextures) ; ~ FOG IN NIGHT VISION GOGGLES
 	tt\OverlayID[5] = CreateSprite(ArkBlurCam)
 	ScaleSprite(tt\OverlayID[5], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
 	EntityColor(tt\OverlayID[5], 0.0, 0.0, 0.0)
@@ -8802,7 +8802,7 @@ Function LoadEntities()
 	EntityOrder(tt\OverlayID[7], -1002)
 	MoveEntity(tt\OverlayID[7], 0.0, 0.0, 1.0)
 	
-	tt\OverlayTextureID[8] = LoadTexture_Strict("GFX\scp_409_overlay.png", 1, 2) ; ~ SCP-409
+	tt\OverlayTextureID[8] = LoadTexture_Strict("GFX\scp_409_overlay.png", 1, DeleteAllTextures) ; ~ SCP-409
 	tt\OverlayID[8] = CreateSprite(ArkBlurCam)
 	ScaleSprite(tt\OverlayID[8], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
 	EntityTexture(tt\OverlayID[8], tt\OverlayTextureID[8])
@@ -8811,7 +8811,7 @@ Function LoadEntities()
 	EntityOrder(tt\OverlayID[8], -1001)
 	MoveEntity(tt\OverlayID[8], 0.0, 0.0, 1.0)
 	
-	tt\OverlayTextureID[9] = LoadTexture_Strict("GFX\helmet_overlay.png", 1, 2) ; ~ HELMET
+	tt\OverlayTextureID[9] = LoadTexture_Strict("GFX\helmet_overlay.png", 1, DeleteAllTextures) ; ~ HELMET
 	tt\OverlayID[9] = CreateSprite(ArkBlurCam)
 	ScaleSprite(tt\OverlayID[9], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
 	EntityTexture(tt\OverlayID[9], tt\OverlayTextureID[9])
@@ -8820,7 +8820,7 @@ Function LoadEntities()
 	EntityOrder(tt\OverlayID[9], -1003)
 	MoveEntity(tt\OverlayID[9], 0.0, 0.0, 1.0)
 	
-	tt\OverlayTextureID[10] = LoadTexture_Strict("GFX\bloody_overlay.png", 1, 2) ; ~ BLOOD
+	tt\OverlayTextureID[10] = LoadTexture_Strict("GFX\bloody_overlay.png", 1, DeleteAllTextures) ; ~ BLOOD
 	tt\OverlayID[10] = CreateSprite(ArkBlurCam)
 	ScaleSprite(tt\OverlayID[10], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
 	EntityTexture(tt\OverlayID[10], tt\OverlayTextureID[10])
@@ -8829,7 +8829,7 @@ Function LoadEntities()
 	EntityOrder(tt\OverlayID[10], -1003)
 	MoveEntity(tt\OverlayID[10], 0.0, 0.0, 1.0)
 	
-	tt\OverlayTextureID[11] = LoadTexture_Strict("GFX\fog_gas_mask.png", 1, 2) ; ~ FOG IN GAS MASK
+	tt\OverlayTextureID[11] = LoadTexture_Strict("GFX\fog_gas_mask.png", 1, DeleteAllTextures) ; ~ FOG IN GAS MASK
 	tt\OverlayID[11] = CreateSprite(ArkBlurCam)
 	ScaleSprite(tt\OverlayID[11], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
 	EntityTexture(tt\OverlayID[11], tt\OverlayTextureID[11])
@@ -8984,55 +8984,55 @@ Function LoadEntities()
 	o\MiscModelID[0] = LoadMesh_Strict("GFX\items\cup_liquid.b3d") ; ~ Liquid for cups dispensed by SCP-294
 	HideEntity(o\MiscModelID[0])
 	
-	tt\LightSpriteID[0] = LoadTexture_Strict("GFX\light.png", 1, 2)
-	tt\LightSpriteID[1] = LoadTexture_Strict("GFX\light(2).png", 1, 2)
-	tt\LightSpriteID[2] = LoadTexture_Strict("GFX\light_sprite.png", 1, 2)
+	tt\LightSpriteID[0] = LoadTexture_Strict("GFX\light.png", 1, DeleteAllTextures)
+	tt\LightSpriteID[1] = LoadTexture_Strict("GFX\light(2).png", 1, DeleteAllTextures)
+	tt\LightSpriteID[2] = LoadTexture_Strict("GFX\light_sprite.png", 1, DeleteAllTextures)
 	
 	DrawLoading(15)
 	
-	tt\MiscTextureID[0] = LoadTexture_Strict("GFX\scp_079_overlay.png", 1, 2)
+	tt\MiscTextureID[0] = LoadTexture_Strict("GFX\scp_079_overlay.png", 1, DeleteAllTextures)
 	
 	For i = 1 To 6
-		tt\MiscTextureID[i] = LoadTexture_Strict("GFX\scp_079_overlay(" + (i + 1) + ").png", 1, 2)
+		tt\MiscTextureID[i] = LoadTexture_Strict("GFX\scp_079_overlay(" + (i + 1) + ").png", 1, DeleteAllTextures)
 	Next
 	
-	tt\MiscTextureID[7] = LoadTexture_Strict("GFX\scp_895_overlay.png", 1, 2)
+	tt\MiscTextureID[7] = LoadTexture_Strict("GFX\scp_895_overlay.png", 1, DeleteAllTextures)
 	
 	For i = 8 To 12
-		tt\MiscTextureID[i] = LoadTexture_Strict("GFX\scp_895_overlay(" + (i - 6) + ").png", 1, 2)
+		tt\MiscTextureID[i] = LoadTexture_Strict("GFX\scp_895_overlay(" + (i - 6) + ").png", 1, DeleteAllTextures)
 	Next
 	
-	tt\MiscTextureID[13] = LoadTexture_Strict("GFX\tesla_overlay.png", 1 + 2, 2)
+	tt\MiscTextureID[13] = LoadTexture_Strict("GFX\tesla_overlay.png", 1 + 2, DeleteAllTextures)
 	
-	tt\MiscTextureID[16] = LoadTexture_Strict("GFX\map\textures\keypad.jpg", 1, 2)
-	tt\MiscTextureID[17] = LoadTexture_Strict("GFX\map\textures\keypad_locked.png", 1, 2)
+	tt\MiscTextureID[16] = LoadTexture_Strict("GFX\map\textures\keypad.jpg", 1, DeleteAllTextures)
+	tt\MiscTextureID[17] = LoadTexture_Strict("GFX\map\textures\keypad_locked.png", 1, DeleteAllTextures)
 	
-	tt\MiscTextureID[18] = LoadTexture_Strict("GFX\map\textures\camera.png", 1, 2)
-	tt\MiscTextureID[19] = LoadTexture_Strict("GFX\map\textures\camera_red.png", 1, 2)
+	tt\MiscTextureID[18] = LoadTexture_Strict("GFX\map\textures\camera.png", 1, DeleteAllTextures)
+	tt\MiscTextureID[19] = LoadTexture_Strict("GFX\map\textures\camera_red.png", 1, DeleteAllTextures)
 	
 	DrawLoading(20)
 	
-	tt\DecalTextureID[0] = LoadTexture_Strict("GFX\decal.png", 1 + 2, 2)
+	tt\DecalTextureID[0] = LoadTexture_Strict("GFX\decal.png", 1 + 2, DeleteAllTextures)
 	For i = 1 To 7
-		tt\DecalTextureID[i] = LoadTexture_Strict("GFX\decal(" + (i + 1) + ").png", 1 + 2, 2)
+		tt\DecalTextureID[i] = LoadTexture_Strict("GFX\decal(" + (i + 1) + ").png", 1 + 2, DeleteAllTextures)
 	Next
 	
-	tt\DecalTextureID[8] = LoadTexture_Strict("GFX\decal_pd.png", 1 + 2, 2)	
+	tt\DecalTextureID[8] = LoadTexture_Strict("GFX\decal_pd.png", 1 + 2, DeleteAllTextures)	
 	For i = 9 To 12
-		tt\DecalTextureID[i] = LoadTexture_Strict("GFX\decal_pd(" + (i - 7) + ").png", 1 + 2, 2)	
+		tt\DecalTextureID[i] = LoadTexture_Strict("GFX\decal_pd(" + (i - 7) + ").png", 1 + 2, DeleteAllTextures)	
 	Next
 	
-	tt\DecalTextureID[13] = LoadTexture_Strict("GFX\bullet_hole.png", 1 + 2, 2)	
-	tt\DecalTextureID[14] = LoadTexture_Strict("GFX\bullet_hole(2).png", 1 + 2, 2)	
+	tt\DecalTextureID[13] = LoadTexture_Strict("GFX\bullet_hole.png", 1 + 2, DeleteAllTextures)	
+	tt\DecalTextureID[14] = LoadTexture_Strict("GFX\bullet_hole(2).png", 1 + 2, DeleteAllTextures)	
 	
-	tt\DecalTextureID[15] = LoadTexture_Strict("GFX\blood_drop.png", 1 + 2, 2)
-	tt\DecalTextureID[16] = LoadTexture_Strict("GFX\blood_drop(2).png", 1 + 2, 2)
+	tt\DecalTextureID[15] = LoadTexture_Strict("GFX\blood_drop.png", 1 + 2, DeleteAllTextures)
+	tt\DecalTextureID[16] = LoadTexture_Strict("GFX\blood_drop(2).png", 1 + 2, DeleteAllTextures)
 	
-	tt\DecalTextureID[17] = LoadTexture_Strict("GFX\decal_scp_427.png", 1 + 2, 2)
+	tt\DecalTextureID[17] = LoadTexture_Strict("GFX\decal_scp_427.png", 1 + 2, DeleteAllTextures)
 	
-	tt\DecalTextureID[18] = LoadTexture_Strict("GFX\decal_pd(6).png", 1 + 2, 2)	
+	tt\DecalTextureID[18] = LoadTexture_Strict("GFX\decal_pd(6).png", 1 + 2, DeleteAllTextures)	
 	
-	tt\DecalTextureID[19] = LoadTexture_Strict("GFX\decal_scp_409.png", 1 + 2, 2)
+	tt\DecalTextureID[19] = LoadTexture_Strict("GFX\decal_scp_409.png", 1 + 2, DeleteAllTextures)
 	
 	DrawLoading(25)
 	
@@ -9056,10 +9056,10 @@ Function LoadEntities()
         HideEntity(o\MonitorModelID[i])
     Next
 	
-	tt\MonitorTextureID[0] = LoadTexture_Strict("GFX\monitor_overlay.png", 1, 2)
-	tt\MonitorTextureID[1] = LoadTexture_Strict("GFX\map\textures\lockdown_screen(2).png", 1, 2)
-	tt\MonitorTextureID[2] = LoadTexture_Strict("GFX\map\textures\lockdown_screen.png", 1, 2)
-	tt\MonitorTextureID[3] = LoadTexture_Strict("GFX\map\textures\lockdown_screen(3).png", 1, 2)
+	tt\MonitorTextureID[0] = LoadTexture_Strict("GFX\monitor_overlay.png", 1, DeleteAllTextures)
+	tt\MonitorTextureID[1] = LoadTexture_Strict("GFX\map\textures\lockdown_screen(2).png", 1, DeleteAllTextures)
+	tt\MonitorTextureID[2] = LoadTexture_Strict("GFX\map\textures\lockdown_screen.png", 1, DeleteAllTextures)
+	tt\MonitorTextureID[3] = LoadTexture_Strict("GFX\map\textures\lockdown_screen(3).png", 1, DeleteAllTextures)
 	tt\MonitorTextureID[4] = CreateTextureUsingCacheSystem(1, 1)
 	SetBuffer(TextureBuffer(tt\MonitorTextureID[4]))
 	ClsColor(0, 0, 0)
@@ -9110,15 +9110,15 @@ Function LoadEntities()
 	
 	InitItemTemplates()
 	
-	tt\ParticleTextureID[0] = LoadTexture_Strict("GFX\smoke.png", 1 + 2, 2)
-	tt\ParticleTextureID[1] = LoadTexture_Strict("GFX\flash.png", 1 + 2, 2)
-	tt\ParticleTextureID[2] = LoadTexture_Strict("GFX\dust.png", 1 + 2, 2)
-	tt\ParticleTextureID[3] = LoadTexture_Strict("GFX\npcs\hg.pt", 1 + 2, 2)
-	tt\ParticleTextureID[4] = LoadTexture_Strict("GFX\map\textures\sun.png", 1 + 2, 2)
-	tt\ParticleTextureID[5] = LoadTexture_Strict("GFX\blood_sprite.png", 1 + 2, 2)
-	tt\ParticleTextureID[6] = LoadTexture_Strict("GFX\smoke(2).png", 1 + 2, 2)
-	tt\ParticleTextureID[7] = LoadTexture_Strict("GFX\spark.png", 1 + 2, 2)
-	tt\ParticleTextureID[8] = LoadTexture_Strict("GFX\particle.png", 1 + 2, 2)
+	tt\ParticleTextureID[0] = LoadTexture_Strict("GFX\smoke.png", 1 + 2, DeleteAllTextures)
+	tt\ParticleTextureID[1] = LoadTexture_Strict("GFX\flash.png", 1 + 2, DeleteAllTextures)
+	tt\ParticleTextureID[2] = LoadTexture_Strict("GFX\dust.png", 1 + 2, DeleteAllTextures)
+	tt\ParticleTextureID[3] = LoadTexture_Strict("GFX\npcs\hg.pt", 1 + 2, DeleteAllTextures)
+	tt\ParticleTextureID[4] = LoadTexture_Strict("GFX\map\textures\sun.png", 1 + 2, DeleteAllTextures)
+	tt\ParticleTextureID[5] = LoadTexture_Strict("GFX\blood_sprite.png", 1 + 2, DeleteAllTextures)
+	tt\ParticleTextureID[6] = LoadTexture_Strict("GFX\smoke(2).png", 1 + 2, DeleteAllTextures)
+	tt\ParticleTextureID[7] = LoadTexture_Strict("GFX\spark.png", 1 + 2, DeleteAllTextures)
+	tt\ParticleTextureID[8] = LoadTexture_Strict("GFX\particle.png", 1 + 2, DeleteAllTextures)
 	
 	SetChunkDataValues()
 	

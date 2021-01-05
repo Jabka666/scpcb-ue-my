@@ -173,7 +173,7 @@ Global Mesh_MagX#, Mesh_MagY#, Mesh_MagZ#
 
 ; ~ Find mesh extents
 Function GetMeshExtents(Mesh%)
-	Local su%, s%, i%, x#, y#, z#
+	Local su%, s%, v%, x#, y#, z#
 	Local MinX# = Infinity
 	Local MinY# = Infinity
 	Local MinZ# = Infinity
@@ -183,14 +183,10 @@ Function GetMeshExtents(Mesh%)
 	
 	For su = 1 To CountSurfaces(Mesh)
 		s = GetSurface(Mesh, su)
-		For i = 0 To CountVertices(s) - 1
-			x = VertexX(s, i)
-			y = VertexY(s, i)
-			z = VertexZ(s, i)
-			TFormPoint(x, y, z, Mesh, 0)
-			x = TFormedX()
-			y = TFormedY()
-			z = TFormedZ()
+		For v = 0 To CountVertices(s) - 1
+			x = VertexX(s, v)
+			y = VertexY(s, v)
+			z = VertexZ(s, v)
 			If x > MaxX Then MaxX = x
 			If x < MinX Then MinX = x
 			If y > MaxY Then MaxY = y

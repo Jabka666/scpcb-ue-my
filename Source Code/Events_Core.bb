@@ -1153,6 +1153,9 @@ Function UpdateEvents()
 								CreateConsoleMsg("")
 								CreateConsoleMsg("WARNING! Using the console commands or teleporting away from the intro scene may cause bugs or crashing.", 255, 0, 0)
 								CreateConsoleMsg("")
+								
+								PositionEntity(Curr173\Collider, EntityX(e\room\Objects[5], True), 0.5, EntityZ(e\room\Objects[5], True))
+								ResetEntity(Curr173\Collider)
 							EndIf
 							
 							If e\EventState3 < 3.0 Then
@@ -1564,13 +1567,9 @@ Function UpdateEvents()
 								If e\room\NPC[5] <> Null Then
 									RemoveNPC(e\room\NPC[5])
 								EndIf
-								For i = 7 To 11
-									If e\room\NPC[i] <> Null Then
-										RemoveNPC(e\room\NPC[i])
-									EndIf
-								Next
-								
-								If e\room\Objects[9] <> 0 Then FreeEntity(e\room\Objects[9]) : e\room\Objects[9] = 0
+								If e\room\NPC[7] <> Null Then
+									RemoveNPC(e\room\NPC[7])
+								EndIf
 								
 								; ~ Remove D-9341 model / texture
 								If o\DTextures[8] <> 0 Then FreeEntity(o\DTextures[8]) : o\DTextures[8] = 0
@@ -1603,9 +1602,6 @@ Function UpdateEvents()
 								e\room\NPC[2] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[2], True), 0.5, EntityZ(e\room\Objects[2], True))
 								PointEntity(e\room\NPC[2]\Collider, e\room\Objects[5])
 								ChangeNPCTextureID(e\room\NPC[2], 6)
-								
-								PositionEntity(Curr173\Collider, EntityX(e\room\Objects[5], True), 0.5, EntityZ(e\room\Objects[5], True))
-								ResetEntity(Curr173\Collider)
 								
 								e\room\NPC[3]\State = 9.0	
 								e\room\NPC[4]\State = 9.0
@@ -1644,6 +1640,7 @@ Function UpdateEvents()
 												UseDoor(e\room\RoomDoors[2], False)
 												e\room\RoomDoors[2]\Locked = 1
 												e\EventState3 = 910.0
+												e\room\NPC[3]\State3 = 0.0
 												SetNPCFrame(e\room\NPC[3], 608.0)
 											EndIf
 										EndIf
@@ -1651,12 +1648,59 @@ Function UpdateEvents()
 								EndIf
 							EndIf
 						Else
-							If e\room\NPC[3]\Frame =< 620.5 And e\room\NPC[3]\State = 8.0 Then
-								AnimateNPC(e\room\NPC[3], 608.0, 621.0, 0.4, False)
+							If e\room\NPC[3]\State3 = 0.0 Then
+								If e\room\NPC[3]\Frame =< 620.5 And e\room\NPC[3]\State = 8.0 Then
+									AnimateNPC(e\room\NPC[3], 608.0, 621.0, 0.4, False)
+								Else
+									e\room\NPC[3]\Angle = EntityYaw(e\room\NPC[3]\Collider)
+									e\room\NPC[3]\State = 9.0
+									e\room\NPC[3]\State3 = 1.0
+									e\room\NPC[4]\State = 9.0
+								EndIf
 							Else
-								e\room\NPC[3]\Angle = EntityYaw(e\room\NPC[3]\Collider)
-								e\room\NPC[3]\State = 9.0
-								e\room\NPC[4]\State = 9.0
+								e\room\NPC[3]\State3 = Max(e\room\NPC[3]\State3 + fps\FPSFactor[0], 50.0)
+								If e\room\NPC[3]\State3 >= 70.0 * 8.0 And e\room\NPC[3]\State3 - fps\FPSFactor[0] < 70.0 * 8.0 And e\room\NPC[3]\State = 9.0 Then
+									If e\room\NPC[3]\State2 < 2.0 Then
+										If ChannelPlaying(e\room\NPC[3]\SoundCHN) Then StopChannel(e\room\NPC[3]\SoundCHN)
+										If e\room\NPC[3]\Sound <> 0 Then
+											FreeSound_Strict(e\room\NPC[3]\Sound) : e\room\NPC[3]\Sound = 0
+										EndIf
+										
+										e\room\NPC[3]\Sound = LoadSound_Strict("SFX\Room\Intro\Guard\Ulgrin\EscortRefuse" + Rand(1, 2) + ".ogg")
+										e\room\NPC[3]\SoundCHN = PlaySound2(e\room\NPC[3]\Sound, Camera, e\room\NPC[3]\Collider)
+										e\room\NPC[3]\State3 = 50.0
+										e\room\NPC[3]\State2 = 3.0
+									ElseIf e\room\NPC[3]\State2 = 3.0
+										If ChannelPlaying(e\room\NPC[3]\SoundCHN) Then StopChannel(e\room\NPC[3]\SoundCHN)
+										If e\room\NPC[3]\Sound <> 0 Then
+											FreeSound_Strict(e\room\NPC[3]\Sound) : e\room\NPC[3]\Sound = 0
+										EndIf
+										
+										e\room\NPC[3]\Sound = LoadSound_Strict("SFX\Room\Intro\Guard\Ulgrin\EscortPissedOff" + Rand(1, 2) + ".ogg")
+										e\room\NPC[3]\SoundCHN = PlaySound2(e\room\NPC[3]\Sound, Camera, e\room\NPC[3]\Collider)
+										e\room\NPC[3]\State3 = 50.0
+										e\room\NPC[3]\State2 = 4.0
+									ElseIf e\room\NPC[3]\State2 = 4.0
+										If ChannelPlaying(e\room\NPC[3]\SoundCHN) Then StopChannel(e\room\NPC[3]\SoundCHN)
+										If e\room\NPC[3]\Sound <> 0 Then
+											FreeSound_Strict(e\room\NPC[3]\Sound) : e\room\NPC[3]\Sound = 0
+										EndIf
+										
+										e\room\NPC[3]\Sound = LoadSound_Strict("SFX\Room\Intro\Guard\Ulgrin\EscortKill" + Rand(1, 2) + ".ogg")
+										e\room\NPC[3]\SoundCHN = PlaySound2(e\room\NPC[3]\Sound, Camera, e\room\NPC[3]\Collider)
+										e\room\NPC[3]\State3 = 50.0 + 70.0 * 2.5
+										e\room\NPC[3]\State2 = 5.0
+									ElseIf e\room\NPC[3]\State2 = 5.0
+										For i = 3 To 4
+											e\room\NPC[i]\State = 11.0
+											e\room\NPC[i]\State3 = 1.0
+										Next
+										e\room\RoomDoors[2]\Locked = 0
+										UseDoor(e\room\RoomDoors[2], False)
+										e\room\RoomDoors[2]\Locked = 1
+									EndIf
+								EndIf
+								
 								If DistanceSquared(EntityX(me\Collider), EntityX(e\room\OBJ), EntityZ(me\Collider), EntityZ(e\room\OBJ)) < 16.0 Then
 									e\room\RoomDoors[2]\Locked = 0
 									UseDoor(e\room\RoomDoors[2], False)
@@ -1774,12 +1818,10 @@ Function UpdateEvents()
 							EndIf
 							
 							If IntroSFX[3] <> 0 Then
-								If EntityVisible(Curr173\Collider, me\Collider) Then
-									If EntityInView(Curr173\OBJ, Camera) Then
-										CreateMsg("Press " + key\Name[key\BLINK] + " to blink.", 6.0)
-										PlaySound_Strict(IntroSFX[3])
-										FreeSound_Strict(IntroSFX[3]) : IntroSFX[3] = 0
-									EndIf
+								If EntityVisible(Curr173\OBJ, Camera) And EntityInView(Curr173\OBJ, Camera) Then
+									CreateMsg("Press " + key\Name[key\BLINK] + " to blink.", 6.0)
+									PlaySound_Strict(IntroSFX[3])
+									FreeSound_Strict(IntroSFX[3]) : IntroSFX[3] = 0
 								EndIf
 							EndIf
 							
