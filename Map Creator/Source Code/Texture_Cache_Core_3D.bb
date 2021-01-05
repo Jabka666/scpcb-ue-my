@@ -1,66 +1,70 @@
+; ~ Texture Cache Constants
+;[Block]
 Const MapTexturesFolder$ = "GFX\map\textures\"
+Const DeleteMapTextures% = 0
+Const DeleteAllTextures% = 1
+;[End Block]
 
-; ~ TODO: Port normal texture caching
-Function GetTextureFromCache%(Name$)
-	Local tc.Materials
-	
-	For tc.Materials = Each Materials
-		If tc\Name = Name Then Return(tc\Diff)
-	Next
-	Return(0)
-End Function
+Type TextureInCache
+	Field Tex%
+	Field TexName$
+	Field TexDeleteType%
+End Type
 
-Function GetBumpFromCache%(Name$)
-	Local tc.Materials
+Function LoadTextureCheckingIfInCache(TexName$, TexFlags% = 1, DeleteType% = DeleteMapTextures)
+	Local tic.TextureInCache, Texture%, CurrPath$
 	
-	For tc.Materials = Each Materials
-		If tc\Name = Name Then Return(tc\Bump)
-	Next
-	Return(0)
-End Function
-
-Function GetCache.Materials(Name$)
-	Local tc.Materials
-	
-	For tc.Materials = Each Materials
-		If tc\Name = Name Then Return(tc)
-	Next
-	Return(Null)
-End Function
-
-Function AddTextureToCache(Texture%)
-	Local tc.Materials = GetCache(StripPath(TextureName(Texture)))
-	
-	If tc.Materials = Null Then
-		tc.Materials = New Materials
-		If FileType(TextureName(Texture)) = 1 Then
-			tc\Name = StripPath(TextureName(Texture))
-		ElseIf FileType(MapTexturesFolder + StripPath(TextureName(Texture))) = 1
-			tc\Name = MapTexturesFolder + StripPath(TextureName(Texture))
+	For tic.TextureInCache = Each TextureInCache
+		If tic\TexName <> "CreateTexture" Then
+			If StripPath(TexName) = tic\TexName Then
+				If tic\TexDeleteType < DeleteType Then
+					tic\TexDeleteType = DeleteType
+				EndIf
+				Return(tic\Tex)
+			EndIf
 		EndIf
-		tc\Diff = 0
+	Next
+	
+	CurrPath = TexName
+	tic.TextureInCache = New TextureInCache
+	tic\TexName = StripPath(TexName)
+	tic\TexDeleteType = DeleteType
+	If (Not tic\Tex) Then
+		tic\Tex = LoadTexture(CurrPath, TexFlags + 256)
 	EndIf
-	If tc\Diff = 0 Then tc\Diff = Texture
+	Return(tic\Tex)
 End Function
 
-Function ClearTextureCache()
-	Local tc.Materials
+Function DeleteTextureEntriesFromCache(DeleteType%)
+	Local tic.TextureInCache
 	
-	For tc.Materials = Each Materials
-		If tc\Diff <> 0 Then FreeTexture(tc\Diff)
-		If tc\Bump <> 0 Then FreeTexture(tc\Bump)
-		Delete(tc)
+	For tic.TextureInCache = Each TextureInCache
+		If tic\TexDeleteType =< DeleteType
+			If tic\Tex <> 0 Then FreeTexture(tic\Tex) : tic\Tex = 0
+			Delete(tic)
+		EndIf
 	Next
 End Function
 
-Function FreeTextureCache()
-	Local tc.Materials
+Function DeleteSingleTextureEntryFromCache(Texture%)
+	Local tic.TextureInCache
 	
-	For tc.Materials = Each Materials
-		If tc\Diff <> 0 Then FreeTexture(tc\Diff)
-		If tc\Bump <> 0 Then FreeTexture(tc\Bump)
-		tc\Diff = 0 : tc\Bump = 0
+	For tic.TextureInCache = Each TextureInCache
+		If tic\Tex = Texture
+			If tic\Tex <> 0 Then FreeTexture(tic\Tex) : tic\Tex = 0
+			Delete(tic)
+		EndIf
 	Next
+End Function
+
+Function CreateTextureUsingCacheSystem(Width%, Height%, TexFlags% = 1, Frames% = 1, DeleteType% = DeleteAllTextures)
+	Local tic.TextureInCache
+	
+	tic.TextureInCache = New TextureInCache
+	tic\TexName = "CreateTexture"
+	tic\TexDeleteType = DeleteType
+	tic\Tex = CreateTexture(Width, Height, TexFlags + 256, Frames)
+	Return(tic\Tex)
 End Function
 
 Function IsTexAlpha%(Tex%, Name$ = "") ; ~ Detect transparency in textures
@@ -100,7 +104,7 @@ Function LoadMissingTexture()
 	SetBuffer(BackBuffer())
 End Function
 
-Function CheckForTexture(Tex%, TexFlags% = 1)
+Function CheckForTexture%(Tex%, TexFlags% = 1)
 	Local Name$ = ""
 	Local Texture%
 	
@@ -109,7 +113,7 @@ Function CheckForTexture(Tex%, TexFlags% = 1)
 	ElseIf FileType(MapTexturesFolder + StripPath(TextureName(Tex))) = 1 ; ~ If not, check the MapTexturesFolder
 		Name = MapTexturesFolder + StripPath(TextureName(Tex))
 	EndIf
-	Texture = LoadTexture(Name, TexFlags)
+	Texture = LoadTextureCheckingIfInCache(Name, TexFlags, 0)
 	Return(Texture)
 End Function
 

@@ -3,12 +3,11 @@
 ; ~ Basic wrapper functions that check to make sure that the file exists before attempting to load it, raises an RTE if it doesn't
 ; ~ More informative alternative to MAVs outside of debug mode, makes it immiediately obvious whether or not someone is loading resources
 ; ~ Likely to cause more crashes than 'clean' CB, as this prevents anyone from loading any assets that don't exist, regardless if they are ever used
-; ~ Added zero checks since blitz load functions return zero sometimes even if the filetype existsFunction LoadMesh_Strict(File$, Parent% = 0)
+; ~ Added zero checks since blitz load functions return zero sometimes even if the filetype exists.
 
 Function LoadMesh_Strict(File$, Parent% = 0)
-	Local Tmp%, i%, SF%, b%, t1%, Name$, Texture%, t2%
+	Local Tmp%, i%, SF%, b%, t1%, t2%, Texture%
 	Local TexAlpha% = 0
-	Local Temp$
 	
 	If Tmp = 0 Then
 		If FileType(File) <> 1 Then RuntimeError("3D Mesh " + File + " not found.")
@@ -21,7 +20,6 @@ Function LoadMesh_Strict(File$, Parent% = 0)
 		b = GetSurfaceBrush(SF)
 		If b <> 0 Then
 			Texture = 0
-			Name = ""
 			t1 = 0 : t2 = 0
 			t1 = GetBrushTexture(b, 0) ; ~ Diffuse or Lightmap
 			If t1 <> 0 Then
@@ -63,13 +61,13 @@ Function LoadMesh_Strict(File$, Parent% = 0)
 End Function
 
 ; ~ Don't use in LoadRMesh, as Reg does this manually there. If you wanna fuck around with the logic in that function, be my guest 
-Function LoadTexture_Strict(File$, Flags% = 1)
+Function LoadTexture_Strict(File$, Flags% = 1, TexDeleteType% = DeleteMapTextures)
 	Local Tmp%
 	
-	If Tmp = 0 Then
+	If (Not Tmp) Then
 		If FileType(File) <> 1 Then RuntimeError("Texture " + File + " not found.")
-		Tmp = LoadTexture(File, Flags)
-		If Tmp = 0 Then RuntimeError("Failed to load Texture: " + File)
+		Tmp = LoadTextureCheckingIfInCache(File, Flags, TexDeleteType)
+		If (Not Tmp) Then RuntimeError("Failed to load Texture: " + File)
 	EndIf
 	Return(Tmp) 
 End Function
@@ -77,22 +75,23 @@ End Function
 Function LoadFont_Strict(File$ = "Tahoma", Height% = 13)
 	Local Tmp%
 	
-	If Tmp = 0 Then
+	If (Not Tmp) Then
 		If FileType(File) <> 1 Then RuntimeError("Font " + File + " not found.")
 		Tmp = LoadFont(File, Height)
-		If Tmp = 0 Then RuntimeError("Failed to load Font: " + File)
+		If (Not Tmp) Then RuntimeError("Failed to load Font: " + File)
 	EndIf
 	Return(Tmp)
 End Function
 
 Function LoadImage_Strict(File$)
-	Local Tmp%, Tmp2%
+	Local Tmp%
 	
-	If Tmp = 0 Then
-		If FileType(File) <> 1 Then RuntimeError("Image " + Chr(34) + File + Chr(34) + " missing. ")
+	If (Not Tmp) Then
+		If FileType(File) <> 1 Then RuntimeError("Image " + Chr(34) + File + Chr(34) + " not found. ")
 		Tmp = LoadImage(File)
-		Return(Tmp)
+		If (Not Tmp) Then RuntimeError("Failed to load image: " + File)
 	EndIf
+	Return(Tmp)
 End Function
 
 ;~IDEal Editor Parameters:

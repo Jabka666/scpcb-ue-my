@@ -1392,7 +1392,11 @@ Function LoadRoomMesh(rt.RoomTemplates)
 	If Instr(rt\OBJPath, ".rmesh") <> 0 Then ; ~ File is .rmesh
 		rt\OBJ = LoadRMesh(rt\OBJPath, rt)
 	Else ; ~ File is .b3d
-		If rt\OBJPath <> "" Then rt\OBJ = LoadWorld(rt\OBJPath, rt) Else rt\OBJ = CreatePivot()
+		If rt\OBJPath <> "" Then
+			rt\OBJ = LoadWorld(rt\OBJPath, rt)
+		Else
+			rt\OBJ = CreatePivot()
+		EndIf
 	EndIf
 	
 	If (Not rt\OBJ) Then RuntimeError("Failed to load map file.")
@@ -1463,6 +1467,8 @@ Type Rooms
 	Field MinX#, MinY#, MinZ#
 	Field MaxX#, MaxY#, MaxZ#
 End Type 
+
+Global PlayerRoom.Rooms
 
 Const GridSZ% = 19 ; ~ Same size as the main map itself (better for the map creator)
 

@@ -251,8 +251,6 @@ Include "Source Code\Achievements_Core.bb"
 
 Global CameraPitch#, Side#
 
-Global PlayerRoom.Rooms
-
 Global GrabbedEntity%
 
 Type Cheats
@@ -1859,7 +1857,7 @@ Global TempSoundCHN%
 Global TempSoundIndex% = 0
 
 ; ~ The Music now has to be pre-defined, as the new system uses streaming instead of the usual sound loading system Blitz3D has
-Global Music$[29]
+Global Music$[30]
 
 Music[0] = "LightContainmentZone"
 Music[1] = "HeavyContainmentZone"
@@ -1889,7 +1887,8 @@ Music[24] = "Credits"
 Music[25] = "SaveMeFrom"
 Music[26] = "Room106"
 Music[27] = "Room035"
-Music[28] = "Room409" 
+Music[28] = "Room409"
+Music[29] = "MaintenanceTunnels"
 
 Global MusicCHN%
 MusicCHN = StreamSound_Strict("SFX\Music\" + Music[2] + ".ogg", opt\MusicVolume, Mode)
@@ -3426,6 +3425,8 @@ Function MainLoop()
 						Exit
 					EndIf
 				Next
+			ElseIf PlayerRoom\RoomTemplate\Name = "room2mt" And (EntityY(me\Collider, True) >= 8.0 And EntityY(me\Collider, True) =< 12.0) Then
+				CurrFogColor = FogColorHCZ
 			EndIf
 		EndIf
 		If CurrFogColor = "" Then
@@ -8696,7 +8697,7 @@ Function LoadEntities()
 	tt\IconID[4] = LoadImage_Strict("GFX\hand_symbol.png")
 	tt\IconID[5] = LoadImage_Strict("GFX\hand_symbol(2).png")
 	
-	AmbientLightRoomTex = CreateTextureUsingCacheSystem(2, 2, 1)
+	AmbientLightRoomTex = CreateTextureUsingCacheSystem(2, 2)
 	TextureBlend(AmbientLightRoomTex, 5)
 	SetBuffer(TextureBuffer(AmbientLightRoomTex))
 	ClsColor(0, 0, 0)
@@ -9393,7 +9394,7 @@ Function InitNewGame()
 		EndIf
 	Next
 	
-	DeleteTextureEntriesFromCache(0)
+	DeleteTextureEntriesFromCache(DeleteMapTextures)
 	DrawLoading(100)
 	
 	FlushKeys()
@@ -9484,7 +9485,7 @@ Function InitLoadGame()
 		EndIf
 	Next
 	
-	DeleteTextureEntriesFromCache(0)
+	DeleteTextureEntriesFromCache(DeleteMapTextures)
 	
 	DrawLoading(100)
 	
@@ -9494,7 +9495,9 @@ Function InitLoadGame()
 	CatchErrors("InitLoadGame")
 End Function
 
-Function NullGame(PlayButtonSFX% = True) ; ~ CHECK FOR ERRORS
+; ~ For some reason, Bltiz3D says that PlayeRoom variable doesn't exist while calling this function
+; ~ TODO: Fix
+Function NullGame(PlayButtonSFX% = True)
 	CatchErrors("Uncaught (NullGame)")
 	
 	Local i%, x%, y%, Lvl%
@@ -9505,7 +9508,7 @@ Function NullGame(PlayButtonSFX% = True) ; ~ CHECK FOR ERRORS
 	KillSounds()
 	If PlayButtonSFX Then PlaySound_Strict(ButtonSFX)
 	
-	DeleteTextureEntriesFromCache(2)
+	DeleteTextureEntriesFromCache(DeleteAllTextures)
 	
 	UnableToMove = False
 	

@@ -4102,7 +4102,7 @@ Function UpdateEvents()
 							Meshes[i] = CopyEntity(o\MTModelID[i])
 							HideEntity(Meshes[i])
 						Next
-						;FreeTextureCache()
+						;DeleteTextureEntriesFromCache(DeleteMapTextures)
 						
 						TempInt = 0
 						
@@ -4390,7 +4390,7 @@ Function UpdateEvents()
 							HideEntity(Meshes[i])
 						Next
 						
-						;FreeTextureCache()
+						;DeleteTextureEntriesFromCache(DeleteMapTextures)
 						
 						TempInt = 0
 						
@@ -4614,7 +4614,7 @@ Function UpdateEvents()
 						Next
 						EntityAlpha(GetChild(e\room\OBJ, 2), 0.0)
 						
-						ShouldPlay = 7
+						ShouldPlay = 29
 						
 						If e\EventState = 0.0 Then
 							If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < EntityDistanceSquared(me\Collider, e\room\Objects[1]) Then

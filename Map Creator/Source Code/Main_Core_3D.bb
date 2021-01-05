@@ -1,6 +1,8 @@
 Include "Source Code\Strict_Loads_Core_3D.bb"
 Include "Source Code\INI_Core_3D.bb"
 Include "Source Code\Math_Core_3D.bb"
+Include "Source Code\Materials_Core_3D.bb"
+Include "Source Code\Texture_Cache_Core_3D.bb"
 
 Const ClrR% = 50, ClrG% = 50, ClrB% = 50
 
@@ -29,7 +31,7 @@ PositionEntity(Camera, 0.0, 1.0, 0.0)
 
 Global AmbientLightRoomTex%
 
-AmbientLightRoomTex = CreateTexture(2, 2, 257)
+AmbientLightRoomTex = CreateTextureUsingCacheSystem(2, 2)
 TextureBlend(AmbientLightRoomTex, 5)
 SetBuffer(TextureBuffer(AmbientLightRoomTex))
 ClsColor(0, 0, 0)
@@ -76,7 +78,7 @@ ChangeDir("..")
 
 LoadRoomTemplateMeshes()
 
-FreeTextureCache()
+DeleteTextureEntriesFromCache(DeleteMapTextures)
 
 ChangeDir("Map Creator")
 
@@ -171,10 +173,10 @@ Repeat
 	Local eName$, eProb#
 	
 	If FileType("CONFIG_MAPINIT.SI") = 1 Then
-		ClearTextureCache()
+		DeleteTextureEntriesFromCache(DeleteAllTextures)
 		For r.Rooms = Each Rooms
 			FreeEntity(r\OBJ)
-			FreeTexture(r\OverlayTex)
+			DeleteSingleTextureEntryFromCache(r\OverlayTex)
 			Delete(r)
 		Next
 		For x = 0 To MapSize
@@ -348,7 +350,7 @@ Repeat
 				;[End Block]
 		End Select
 		
-		FreeTextureCache()
+		DeleteTextureEntriesFromCache(DeleteMapTextures)
 		
 		CloseFile(f)
 		
@@ -691,11 +693,11 @@ Function LoadRoomTemplateMeshes()
 	rt\Shape = ROOM4
 	HideEntity(rt\OBJ)
 	
-	FreeTexture(GroundTexture)
-	FreeTexture(PathTexture)
+	DeleteSingleTextureEntryFromCache(GroundTexture)
+	DeleteSingleTextureEntryFromCache(PathTexture)
 	For i = ROOM1 To ROOM4
 		FreeImage(hMap[i])
-		FreeTexture(Mask[i])
+		DeleteSingleTextureEntryFromCache(Mask[i])
 	Next
 	
 	CatchErrors("LoadRoomTemplatesMeshes")
@@ -818,14 +820,14 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 				EndIf
 				
 				If CurrMapGrid <> 1 Then
-					r\OverlayTex = CreateTexture(1, 1)
+					r\OverlayTex = CreateTextureUsingCacheSystem(1, 1)
 					SetBuffer(TextureBuffer(r\OverlayTex))
 					ClsColor(0, 0, 0)
 					Cls()
 					SetBuffer(BackBuffer())
 					EntityTexture(GetChild(r\OBJ, 2), r\OverlayTex, 0, 0)
 				Else
-					r\OverlayTex = CreateTexture(1, 1)
+					r\OverlayTex = CreateTextureUsingCacheSystem(1, 1)
 					TextureBlend(r\OverlayTex, 5)
 					SetBuffer(TextureBuffer(r\OverlayTex))
 					ClsColor(255, 255, 255)
@@ -898,9 +900,6 @@ Function LoadRoomMesh(rt.RoomTemplates)
 	HideEntity(rt\OBJ)
 End Function
 
-Include "Source Code\Materials_Core_3D.bb"
-Include "Source Code\Texture_Cache_Core_3D.bb"
-
 Function LoadRMesh(File$, rt.RoomTemplates)
 	CatchErrors("Uncaught (LoadRMesh)")
 	
@@ -967,34 +966,26 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 			Temp1i = ReadByte(f)
 			If Temp1i <> 0 Then
 				Temp1s = ReadString(f)
-				Tex[j] = GetTextureFromCache(Temp1s)
-				If Tex[j] = 0 Then ; ~ Texture is not in cache
-					If FileType(File + Temp1s) = 1 ; ~ Check if texture is existing in original path
-						If Temp1i < 3 Then
-							Tex[j] = LoadTexture(File + Temp1s, 1)
-						Else
-							Tex[j] = LoadTexture(File + Temp1s, 3)
-						EndIf
-					ElseIf FileType(MapTexturesFolder + Temp1s) = 1 ; ~ If not, check the MapTexturesFolder
-						If Temp1i < 3 Then
-							Tex[j] = LoadTexture(MapTexturesFolder + Temp1s, 1)
-						Else
-							Tex[j] = LoadTexture(MapTexturesFolder + Temp1s, 3)
-						EndIf
+				If FileType(File + Temp1s) = 1 ; ~ Check if texture is existing in original path
+					If Temp1i < 3 Then
+						Tex[j] = LoadTextureCheckingIfInCache(File + Temp1s, 1, 0)
+					Else
+						Tex[j] = LoadTextureCheckingIfInCache(File + Temp1s, 3, 0)
 					EndIf
-					
-					If Tex[j] <> 0 Then
-						If Temp1i = 1 Then TextureBlend(Tex[j], 5)
-						If Instr(Lower(Temp1s), "_lm") <> 0 Then
-							TextureBlend(Tex[j], 3)
-						EndIf
-						AddTextureToCache(Tex[j])
+				ElseIf FileType(MapTexturesFolder + Temp1s) = 1 ; ~ If not, check the MapTexturesFolder
+					If Temp1i < 3 Then
+						Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 1, 0)
+					Else
+						Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 3, 0)
 					EndIf
 				EndIf
 				If Tex[j] <> 0 Then
+					If Temp1i = 1 Then TextureBlend(Tex[j], 5)
+					If Instr(Lower(Temp1s), "_lm") <> 0 Then
+						TextureBlend(Tex[j], 3)
+					EndIf
 					IsAlpha = 2
 					If Temp1i = 3 Then IsAlpha = 1
-					
 					TextureCoords(Tex[j], 1 - j)
 				EndIf
 			EndIf

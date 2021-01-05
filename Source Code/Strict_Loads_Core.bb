@@ -3,7 +3,7 @@
 ; ~ Basic wrapper functions that check to make sure that the file exists before attempting to load it, raises an RTE if it doesn't
 ; ~ More informative alternative to MAVs outside of debug mode, makes it immiediately obvious whether or not someone is loading resources
 ; ~ Likely to cause more crashes than 'clean' CB, as this prevents anyone from loading any assets that don't exist, regardless if they are ever used
-; ~ Added zero checks since blitz load functions return zero sometimes even if the filetype exists
+; ~ Added zero checks since blitz load functions return zero sometimes even if the filetype exists.
 
 Type Sound
 	Field InternalHandle%
@@ -264,7 +264,7 @@ Function UpdateStreamSoundOrigin(StreamHandle%, Cam%, Entity%, Range# = 10.0, Vo
 End Function
 
 Function LoadMesh_Strict(File$, Parent% = 0)
-	Local Tmp%, i%, SF%, b%, t1%, Name$, Texture%, t2%
+	Local Tmp%, i%, SF%, b%, t1%, t2%, Texture%
 	Local TexAlpha% = 0
 	Local Temp$
 	
@@ -279,19 +279,12 @@ Function LoadMesh_Strict(File$, Parent% = 0)
 		b = GetSurfaceBrush(SF)
 		If b <> 0 Then
 			Texture = 0
-			Name = ""
 			t1 = 0 : t2 = 0
 			t1 = GetBrushTexture(b, 0) ; ~ Diffuse or Lightmap
 			If t1 <> 0 Then
 				TexAlpha = IsTexAlpha(t1)
 				If TexAlpha <> 2 Then
-					If FileType(TextureName(t1)) = 1 ; ~ Check if texture is existing in original path
-						Name = TextureName(t1)
-						Texture = LoadTextureCheckingIfInCache(Name, TexAlpha, 0)
-					ElseIf FileType(MapTexturesFolder + StripPath(TextureName(t1))) = 1 ; ~ If not, check the MapTexturesFolder
-						Name = MapTexturesFolder + StripPath(TextureName(t1))
-						Texture = LoadTextureCheckingIfInCache(Name, TexAlpha, 0)
-					EndIf
+					Texture = CheckForTexture(t1, TexAlpha)
 					If Texture <> 0 Then
 						BrushTexture(b, Texture, 0, 0)
 					Else
@@ -299,14 +292,7 @@ Function LoadMesh_Strict(File$, Parent% = 0)
 						BrushTexture(b, MissingTexture, 0, 0)
 					EndIf
 				Else
-					t2 = GetBrushTexture(b, 1) ; ~ Diffuse (if lightmap is existing)
-					If FileType(TextureName(t1)) = 1 ; ~ Check if texture is existing in original path
-						Name = TextureName(t1)
-						Texture = LoadTextureCheckingIfInCache(Name, 1, 0)
-					ElseIf FileType(MapTexturesFolder + StripPath(TextureName(t1))) = 1 ; ~ If not, check the MapTexturesFolder
-						Name = MapTexturesFolder + StripPath(TextureName(t1))
-						Texture = LoadTextureCheckingIfInCache(Name, 1, 0)
-					EndIf
+					Texture = CheckForTexture(t1, TexAlpha)
 					If Texture <> 0 Then
 						TextureCoords(Texture, 1)
 						BrushTexture(b, Texture, 0, 0)
@@ -314,13 +300,8 @@ Function LoadMesh_Strict(File$, Parent% = 0)
 						BrushTexture(b, MissingTexture, 0, 0)
 					EndIf
 					
-					If FileType(TextureName(t2)) = 1 ; ~ Check if texture is existing in original path
-						Name = TextureName(t2)
-						Texture = LoadTextureCheckingIfInCache(Name, TexAlpha, 0)
-					ElseIf FileType(MapTexturesFolder + StripPath(TextureName(t2))) = 1 ; ~ If not, check the MapTexturesFolder
-						Name = MapTexturesFolder + StripPath(TextureName(t2))
-						Texture = LoadTextureCheckingIfInCache(Name, TexAlpha, 0)
-					EndIf
+					t2 = GetBrushTexture(b, 1) ; ~ Diffuse (if lightmap is existing)
+					Texture = CheckForTexture(t2, TexAlpha)
 					If Texture <> 0 Then
 						TextureCoords(Texture, 0)
 						BrushTexture(b, Texture, 0, 1)
@@ -339,7 +320,7 @@ Function LoadMesh_Strict(File$, Parent% = 0)
 End Function   
 
 Function LoadAnimMesh_Strict(File$, Parent% = 0)
-	Local Tmp%, i%, SF%, b%, t1%, Name$, Texture%
+	Local Tmp%, i%, SF%, b%, t1%, Texture%
 	Local TexAlpha% = 0
 	
 	If (Not Tmp) Then
@@ -353,7 +334,6 @@ Function LoadAnimMesh_Strict(File$, Parent% = 0)
 		b = GetSurfaceBrush(SF)
 		If b <> 0 Then
 			Texture = 0
-			Name = ""
 			t1 = 0
 			t1 = GetBrushTexture(b, 0) ; ~ Diffuse or Lightmap
 			If t1 <> 0 Then

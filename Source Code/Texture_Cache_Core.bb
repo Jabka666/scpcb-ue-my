@@ -2,7 +2,7 @@
 ;[Block]
 Const MapTexturesFolder$ = "GFX\map\textures\"
 Const DeleteMapTextures% = 0
-Const DeleteAllTextures% = 2
+Const DeleteAllTextures% = 1
 ;[End Block]
 
 Type TextureInCache
@@ -134,7 +134,7 @@ Function LoadMissingTexture()
 	SetBuffer(BackBuffer())
 End Function
 
-Function CheckForTexture(Tex%, TexFlags% = 1)
+Function CheckForTexture%(Tex%, TexFlags% = 1)
 	Local Name$ = ""
 	Local Texture%
 	
