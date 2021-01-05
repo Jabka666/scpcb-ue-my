@@ -9641,7 +9641,7 @@ Function UpdateEndings()
 								EndIf								
 							Else
 								ShouldPlay = 6
-								e\EventState = e\EventState  +fps\FPSFactor[0]
+								e\EventState = e\EventState + fps\FPSFactor[0]
 								
 								If e\EventState < 70.0 * 40.0 Then 	
 									e\room\NPC[0]\EnemyX = EntityX(e\room\Objects[11], True) + Sin(MilliSecs() / 25.0) * 3.0
@@ -10045,7 +10045,7 @@ Function UpdateEndings()
 											Next
 											
 											For i = 5 To 8
-												If EntityDistanceSquared(e\room\NPC[i]\Collider, me\Collider) < 25.0 Then
+												If EntityDistanceSquared(e\room\NPC[i]\Collider, me\Collider) < 25.0 And (Not chs\NoTarget) Then
 													e\room\NPC[i]\State = 6.0
 												Else
 													e\room\NPC[i]\State = 5.0
