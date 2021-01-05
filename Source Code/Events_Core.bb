@@ -9857,24 +9857,20 @@ Function UpdateEndings()
 							EndIf
 						EndIf
 						
-						; ~ Start shooting
 						If e\room\NPC[1] <> Null Then
-							If e\room\NPC[1]\State <> 1.0 Then
-								If (EntityDistanceSquared(e\room\NPC[1]\Collider, me\Collider) < 225.0 Lor EntityVisible(e\room\NPC[0]\Collider, me\Collider)) And (Not chs\Notarget) Then
-									e\room\NPC[1]\State = 1.0
-									e\room\NPC[1]\State3 = 1.0
-								Else
-									e\room\NPC[1]\State = 0.0
-									e\room\NPC[1]\State3 = 0.0
-								EndIf
-							EndIf
-							
-							; ~ Stop shooting
-							If (EntityDistanceSquared(e\room\NPC[1]\Collider, me\Collider) < 79.21 Lor EntityDistanceSquared(e\room\Objects[5], me\Collider) < 285.61) Lor chs\Notarget Then
+							; ~ Helicopter spots or player is within range --> Start shooting
+							If EntityDistanceSquared(e\room\NPC[1]\Collider, me\Collider) < 225.0 And (Not chs\NoTarget) Then
+								e\room\NPC[1]\State = 1.0
+								e\room\NPC[1]\State3 = 1.0
+							Else
 								e\room\NPC[1]\State = 0.0
 								e\room\NPC[1]\State3 = 0.0
+							EndIf
+							
+							; ~ Below roof or inside catwalk --> Stop shooting
+							If EntityDistanceSquared(e\room\NPC[1]\Collider, me\Collider) < 79.21 Lor EntityDistanceSquared(e\room\Objects[5], me\Collider) < 285.61 Lor chs\NoTarget Then
+								e\room\NPC[1]\State3 = 0.0
 							Else
-								e\room\NPC[1]\State = 1.0
 								e\room\NPC[1]\State3 = 1.0
 							EndIf
 						EndIf
