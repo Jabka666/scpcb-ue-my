@@ -1231,7 +1231,7 @@ Function UpdateConsole()
 					ClearCheats(chs)
 					
 					; ~ If death by SCP-173, enable GodMode, prevent instant death again -- Salvage
-					If Curr173\Idle Then
+					If Curr173\Idle = 1 Then
 						CreateConsoleMsg("Death by SCP-173 causes GodMode to be enabled!")
 						chs\GodMode = True
 						Curr173\Idle = 0

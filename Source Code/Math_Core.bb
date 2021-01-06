@@ -10,6 +10,15 @@ Function GenerateSeedNumber(Seed$)
 	Return(Temp)
 End Function
 
+Function WrapAngle#(Angle#)
+	If Angle = Infinity Then Return(0.0)
+	If Angle < 0.0 Then
+		Return(360.0 + (Angle Mod 360.0))
+	Else
+		Return(Angle Mod 360.0)
+	EndIf
+End Function
+
 Function CurveValue#(Number#, Old#, Smooth#)
 	If fps\FPSFactor[0] = 0.0 Then Return(Old)
 	
@@ -28,15 +37,6 @@ Function CurveAngle#(Value#, Old#, Smooth#)
 	If Diff > 180.0 Then Diff = Diff - 360.0
 	If Diff < -180.0 Then Diff = Diff + 360.0
 	Return(WrapAngle(Old + Diff * (1.0 / Smooth * fps\FPSFactor[0])))
-End Function
-
-Function WrapAngle#(Angle#)
-	If Angle = Infinity Then Return(0.0)
-	If Angle < 0.0 Then
-		Return(360.0 + (Angle Mod 360.0))
-	Else
-		Return(Angle Mod 360.0)
-	EndIf
 End Function
 
 Function PointDirection#(x1#, z1#, x2#, z2#)
@@ -128,7 +128,7 @@ End Function
 Function ChangeAngleValueForCorrectBoneAssigning%(Value#)
 	Local Number#
 	
-	If Value =< 180.0
+	If Value =< 180.0 Then
 		Number = Value
 	Else
 		Number = (-360.0) + Value

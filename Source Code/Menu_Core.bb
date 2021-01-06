@@ -1878,6 +1878,7 @@ Function UpdateLauncher(lnchr.Launcher)
 		EndIf
 		
 		If DrawLauncherButton(LauncherWidth - 30 - 90, LauncherHeight - 105, 100, 30, "LAUNCH", False, False) Then
+			; ~ TODO: Fix borderless windowed mode scaling
 			If opt\DisplayMode = 1 Then
 				opt\GraphicWidth = DesktopWidth()
 				opt\GraphicHeight = DesktopHeight()
