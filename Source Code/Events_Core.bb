@@ -1096,7 +1096,7 @@ Function UpdateEvents()
 								FreeSound_Strict(e\Sound2) : e\Sound2 = 0
 							EndIf
 							e\Sound2 = LoadSound_Strict("SFX\Alarm\Alarm2_" + Int(e\EventState3) + ".ogg")
-							e\SoundCHN2 = PlaySound_Strict(e\Sound2)
+							e\SoundCHN2 = PlaySound_Strict(e\Sound2, Int(e\EventState3) = 1, ANNOUNCEMENT)
 						Else
 							If Int(e\EventState3) = 8.0 Then me\CameraShake = 1.0
 						EndIf
@@ -1104,7 +1104,7 @@ Function UpdateEvents()
 					If ((e\EventState Mod 600.0 > 300.0) And ((e\EventState + fps\FPSFactor[0]) Mod 600.0 < 300.0)) Then
 						i = Floor((e\EventState - 5000.0) / 600.0) + 1.0
 						
-						If i = 0 Then PlaySound_Strict(LoadTempSound("SFX\Room\Intro\IA\Scripted\Scripted6.ogg"))
+						If i = 0 Then PlaySound_Strict(LoadTempSound("SFX\Room\Intro\IA\Scripted\Scripted6.ogg"), True, ANNOUNCEMENT)
 						
 						If i > 0 And i < 26 Then
 							If (Not CommotionState[i]) Then ; ~ Prevents the same commotion file from playing more then once.
@@ -6500,7 +6500,7 @@ Function UpdateEvents()
 									GiveAchievement(Achv079)
 									e\EventState = 3.0
 									e\EventState2 = 1.0
-									e\SoundCHN3 = StreamSound_Strict("SFX\SCP\079\Speech.ogg", opt\SFXVolume, 0.0)
+									e\SoundCHN3 = StreamSound_Strict("SFX\SCP\079\Speech.ogg", opt\SFXVolume, 0.0, True, ANNOUNCEMENT)
 									e\SoundCHN3_IsStream = True
 								EndIf							
 							ElseIf e\EventState < 2000.0 Then
@@ -6525,7 +6525,7 @@ Function UpdateEvents()
 									If e\SoundCHN3 <> 0 Then
 										StopStream_Strict(e\SoundCHN3) : e\SoundCHN3 = 0 
 									EndIf
-									e\SoundCHN3 = StreamSound_Strict("SFX\SCP\079\Refuse.ogg", opt\SFXVolume, 0.0)
+									e\SoundCHN3 = StreamSound_Strict("SFX\SCP\079\Refuse.ogg", opt\SFXVolume, 0.0, True, ANNOUNCEMENT)
 								EndIf
 							EndIf
 						Else
@@ -6553,7 +6553,7 @@ Function UpdateEvents()
 						If e\SoundCHN3 <> 0
 							StopStream_Strict(e\SoundCHN3) : e\SoundCHN3 = 0
 						EndIf
-						e\SoundCHN3 = StreamSound_Strict("SFX\SCP\079\GateB.ogg", opt\SFXVolume, 0.0)
+						e\SoundCHN3 = StreamSound_Strict("SFX\SCP\079\GateB.ogg", opt\SFXVolume, 0.0, True, ANNOUNCEMENT)
 						e\SoundCHN3_IsStream = True
 						e\EventState2 = 2.0
 						
@@ -6632,11 +6632,11 @@ Function UpdateEvents()
 							    If SoundTransmission And Rand(100) = 1 Then
 							    	If (Not e\SoundCHN2) Then
 									    LoadEventSound(e, "SFX\Character\LureSubject\Idle" + Rand(1, 6) + ".ogg", 1)
-									    e\SoundCHN2 = PlaySound_Strict(e\Sound2)								
+									    e\SoundCHN2 = PlaySound_Strict(e\Sound2, True, FIRST_PERSON)								
 								    EndIf
 								    If (Not ChannelPlaying(e\SoundCHN2)) Then
 									    LoadEventSound(e, "SFX\Character\LureSubject\Idle" + Rand(1, 6) + ".ogg", 1)
-									    e\SoundCHN2 = PlaySound_Strict(e\Sound2)
+									    e\SoundCHN2 = PlaySound_Strict(e\Sound2, True, FIRST_PERSON)
 								    EndIf
 							    EndIf
 								
@@ -6657,11 +6657,11 @@ Function UpdateEvents()
 							    If SoundTransmission And e\EventState3 < 2000.0 Then 
 								    If (Not e\SoundCHN2) Then 
 									    LoadEventSound(e, "SFX\Character\LureSubject\Sniffling.ogg", 1)
-									    e\SoundCHN2 = PlaySound_Strict(e\Sound2)								
+									    e\SoundCHN2 = PlaySound_Strict(e\Sound2, True, FIRST_PERSON)								
 								    EndIf
 								    If (Not ChannelPlaying(e\SoundCHN2)) Then
 									    LoadEventSound(e, "SFX\Character\LureSubject\Sniffling.ogg", 1)
-									    e\SoundCHN2 = PlaySound_Strict(e\Sound2)
+									    e\SoundCHN2 = PlaySound_Strict(e\Sound2, True, FIRST_PERSON)
 								    EndIf
 							    EndIf
 								
@@ -7373,7 +7373,7 @@ Function UpdateEvents()
 				If PlayerRoom = e\room Then
                     If e\EventState = 2.0 Then
                         If EntityDistanceSquared(me\Collider, e\room\Objects[6]) < 6.25 And e\EventState > 0.0 Then
-							PlaySound_Strict(LoadTempSound("SFX\SCP\079\TestroomWarning.ogg"))
+							PlaySound_Strict(LoadTempSound("SFX\SCP\079\TestroomWarning.ogg"), True, ANNOUNCEMENT)
 							For i = 0 To 5
 								em.Emitters = CreateEmitter(EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True), 0)
 								em\RandAngle = 5.0 : em\Speed = 0.042 : em\SizeChange = 0.0025	
