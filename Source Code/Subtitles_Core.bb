@@ -18,6 +18,7 @@ Function UpdateSubtitles()
 	Local sub.Subtitles, i%
 	Local ShouldDeleteSubtitles% = True
 	
+	; ~ TODO: Fix subtitles if two sounds played at the same time
 	For sub.Subtitles = Each Subtitles
 		If sub.Subtitles = First Subtitles Then
 			For i = ANNOUNCEMENT To THIRD_PERSON
@@ -60,6 +61,7 @@ Function ShowSubtitles(Name$, SubID%)
 	
 	CatchErrors("Uncaught (ShowSubtitles)")
 	
+	; ~ TODO: Determine subtitles ID in "subtitles.ini"
 	Local Loc% = GetINISectionLocation(SubtitlesFile, Name)
 	Local LinesAmount% = GetINIInt2(SubtitlesFile, Loc, "LinesAmount")
 	Local i%, sub.Subtitles

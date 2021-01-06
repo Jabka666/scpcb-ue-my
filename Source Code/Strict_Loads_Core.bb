@@ -114,6 +114,7 @@ Function LoadSound_Strict(File$)
 	snd\Name = File
 	snd\InternalHandle = 0
 	snd\ReleaseTime = 0
+	; ~ TODO: Determine a file that has subtitles here
 	If (Not opt\EnableSFXRelease) Then
 		If (Not snd\InternalHandle) Then 
 			snd\InternalHandle = LoadSound(snd\Name)
