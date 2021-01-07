@@ -9,12 +9,9 @@ Const THIRD_PERSON% = 3
 Type Subtitles
 	Field Txt$[4]
 	Field Timer#[4]
-	Field Dist#[4]
 End Type
 
 Function UpdateSubtitles()
-	If (Not opt\EnableSubtitles) Then Return
-	
 	Local sub.Subtitles, i%
 	Local ShouldDeleteSubtitles% = True
 	
@@ -33,21 +30,17 @@ Function UpdateSubtitles()
 End Function
 
 Function RenderSubtitles()
-	If (Not opt\EnableSubtitles) Then Return
-	
 	Local sub.Subtitles, i%
 	
 	For sub.Subtitles = Each Subtitles
 		If sub.Subtitles = First Subtitles Then
 			For i = ANNOUNCEMENT To THIRD_PERSON
 				If sub\Timer[i] > 0.0 Then
-					If sub\Dist[i] =< 255.0 Then
-						SetFont(fo\FontID[Font_Default])
-						Color(0, 0, 0)
-						Text(mo\Viewport_Center_X + MenuScale, mo\Viewport_Center_Y + (291 * MenuScale) - ((i * 20) * MenuScale), sub\Txt[i], True, False)
-						Color(Max(opt\SubColorR - sub\Dist[i], 0.0), Max(opt\SubColorG - sub\Dist[i], 0.0), Max(opt\SubColorB - sub\Dist[i], 0.0))
-						Text(mo\Viewport_Center_X, mo\Viewport_Center_Y + (290 * MenuScale) - ((i * 20) * MenuScale), sub\Txt[i], True, False)
-					EndIf
+					SetFont(fo\FontID[Font_Default])
+					Color(0, 0, 0)
+					Text(mo\Viewport_Center_X + MenuScale, mo\Viewport_Center_Y + (291 * MenuScale) - ((i * 20) * MenuScale), sub\Txt[i], True, False)
+					Color(opt\SubColorR, opt\SubColorG, opt\SubColorB)
+					Text(mo\Viewport_Center_X, mo\Viewport_Center_Y + (290 * MenuScale) - ((i * 20) * MenuScale), sub\Txt[i], True, False)
 				EndIf
 			Next
 		EndIf
@@ -56,22 +49,40 @@ End Function
 
 Const SubtitlesFile$ = "Data\subtitles.ini"
 
-Function ShowSubtitles(Name$, SubID%)
-	If (Not opt\EnableSubtitles) Then Return
-	
+Global SubtitlesID%
+
+Function ShowSubtitles(Name$)
 	CatchErrors("Uncaught (ShowSubtitles)")
 	
-	; ~ TODO: Determine subtitles ID in "subtitles.ini"
 	Local Loc% = GetINISectionLocation(SubtitlesFile, Name)
+	Local Person% = GetINIString2(SubtitlesFile, Loc, "Person")
 	Local LinesAmount% = GetINIInt2(SubtitlesFile, Loc, "LinesAmount")
 	Local i%, sub.Subtitles
 	
-	ClearSubtitles(SubID)
+	Select Person
+		Case "FIRST"
+			;[Block]
+			SubtitlesID = FIRST_PERSON
+			;[End Block]
+		Case "SECOND"
+			;[Block]
+			SubtitlesID = SECOND_PERSON
+			;[End Block]
+		Case "THIRD"
+			SubtitlesID = THIRD_PERSON
+			;[End Block]
+		Default
+			;[Block]
+			SubtitlesID = ANNOUNCEMENT
+			;[End Block]
+	End Select
+	
+	ClearSubtitles(SubtitlesID)
 	
 	For i = 1 To LinesAmount
 		sub.Subtitles = New Subtitles
-		sub\Txt[SubID] = GetINIString2(SubtitlesFile, Loc, "Txt" + i)
-		sub\Timer[SubID] = 70.0 * GetINIFloat2(SubtitlesFile, Loc, "Timer" + i)
+		sub\Txt[SubtitlesID] = GetINIString2(SubtitlesFile, Loc, "Txt" + i)
+		sub\Timer[SubtitlesID] = 70.0 * GetINIFloat2(SubtitlesFile, Loc, "Timer" + i)
 	Next
 	
 	CatchErrors("ShowSubtitles")

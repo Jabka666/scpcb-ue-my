@@ -1449,12 +1449,12 @@ Function UpdateConsole()
 							e2\EventState3 = 0.0
 							UpdateLever(e2\room\Levers[0])
 							RotateEntity(e2\room\Levers[0], 0.0, EntityYaw(e2\room\Levers[0]), 0.0)
-							TurnCheckpointMonitorsOff(0)
+							TurnCheckpointMonitorsOff()
 						ElseIf e2\EventID = e_room008
 							e2\EventState = 2.0
 							UpdateLever(e2\room\Levers[0])
 							RotateEntity(e2\room\Levers[0], 0.0, EntityYaw(e2\room\Levers[0]), 30.0)
-							TurnCheckpointMonitorsOff(1)
+							TurnCheckpointMonitorsOff(False)
 						EndIf
 					Next
 					
@@ -8214,6 +8214,7 @@ Function UpdateMenu()
 					
 					opt\CurrFOV = SlideBar(x + (270 * MenuScale), y, 100 * MenuScale, opt\CurrFOV * 2.0) / 2.0
 					opt\FOV = opt\CurrFOV + 40
+					CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * opt\RealGraphicWidth / opt\RealGraphicHeight)) / 2.0))
 					
 					y = y + (45 * MenuScale)
 					

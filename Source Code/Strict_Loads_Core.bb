@@ -8,6 +8,7 @@
 Type Sound
 	Field InternalHandle%
 	Field Name$
+	Field HasSubtitles%
 	Field Channels%[32]
 	Field ReleaseTime%
 End Type
@@ -39,7 +40,7 @@ Function AutoReleaseSounds()
 	Next
 End Function
 
-Function PlaySound_Strict%(SoundHandle%, HasSubtitles% = False, SubID% = ANNOUNCEMENT)
+Function PlaySound_Strict%(SoundHandle%)
 	Local snd.Sound = Object.Sound(SoundHandle)
 	
 	If snd <> Null Then
@@ -70,7 +71,7 @@ Function PlaySound_Strict%(SoundHandle%, HasSubtitles% = False, SubID% = ANNOUNC
 					Else
 						snd\Channels[i] = PlaySound(snd\InternalHandle)
 					EndIf
-					If HasSubtitles And opt\EnableSubtitles Then ShowSubtitles(snd\Name, SubID)
+					If opt\EnableSubtitles And snd\HasSubtitles Then ShowSubtitles(snd\Name)
 					ChannelVolume(snd\Channels[i], opt\SFXVolume)
 					snd\ReleaseTime = MilliSecs() + 5000 ; ~ Release after 5 seconds
 					Return(snd\Channels[i])
@@ -98,7 +99,7 @@ Function PlaySound_Strict%(SoundHandle%, HasSubtitles% = False, SubID% = ANNOUNC
 				Else
 					snd\Channels[i] = PlaySound(snd\InternalHandle)
 				EndIf
-				If HasSubtitles And opt\EnableSubtitles Then ShowSubtitles(snd\Name, SubID)
+				If opt\EnableSubtitles And snd\HasSubtitles Then ShowSubtitles(snd\Name)
 				ChannelVolume(snd\Channels[i], opt\SFXVolume)
 				snd\ReleaseTime = MilliSecs() + 5000 ; ~ Release after 5 seconds
 				Return(snd\Channels[i])
@@ -114,7 +115,12 @@ Function LoadSound_Strict(File$)
 	snd\Name = File
 	snd\InternalHandle = 0
 	snd\ReleaseTime = 0
-	; ~ TODO: Determine a file that has subtitles here
+	If opt\EnableSubtitles Then
+		; ~ Check if the sound has subtitles
+		If GetINISectionLocation(SubtitlesFile, File) <> 0 Then
+			snd\HasSubtitles = True
+		EndIf
+	EndIf
 	If (Not opt\EnableSFXRelease) Then
 		If (Not snd\InternalHandle) Then 
 			snd\InternalHandle = LoadSound(snd\Name)
@@ -141,7 +147,7 @@ End Type
 Const Mode% = 2
 Const TwoD% = 8192
 
-Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode% = Mode, HasSubtitles% = False, SubID% = ANNOUNCEMENT)
+Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode% = Mode)
 	If FileType(File) <> 1 Then
 		CreateConsoleMsg("Sound " + Chr(34) + File + Chr(34) + " not found.")
 		If opt\ConsoleOpening And opt\CanOpenConsole Then
@@ -154,7 +160,12 @@ Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode% = Mode, HasSubtitl
 	
 	st\CHN = PlayMusic(File, CustomMode + TwoD)
 	
-	If HasSubtitles And opt\EnableSubtitles Then ShowSubtitles(File, SubID)
+	If opt\EnableSubtitles Then
+		If GetINISectionLocation(SubtitlesFile, File) <> 0 Then
+			ShowSubtitles(File)
+		EndIf
+	EndIf
+	
 	If st\CHN = -1 Then
 		CreateConsoleMsg("Failed to stream Sound (returned -1): " + Chr(34) + File + Chr(34))
 		If opt\ConsoleOpening And opt\CanOpenConsole Then

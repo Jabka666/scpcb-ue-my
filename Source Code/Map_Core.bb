@@ -7715,13 +7715,13 @@ Function RenderRoomLights(Cam%)
 	Next
 End Function
 
-Function UpdateCheckpointMonitors(Number%)
+Function UpdateCheckpointMonitors(LCZ% = True)
 	Local i%, SF%, b%, t1%
 	Local Entity%, Name$
 	
 	Entity = o\MonitorModelID[1]
 	
-	If (Not Number) Then
+	If LCZ Then
 		UpdateCheckpoint1 = True
 	Else
 		UpdateCheckpoint2 = True
@@ -7735,7 +7735,7 @@ Function UpdateCheckpointMonitors(Number%)
 			If t1 <> 0 Then
 				Name = StripPath(TextureName(t1))
 				If Lower(Name) <> "monitor_overlay.png"
-					If (Not Number) Then
+					If LCZ Then
 						If MonitorTimer < 50.0 Then
 							BrushTexture(b, tt\MonitorTextureID[1], 0, 0)
 						Else
@@ -7757,13 +7757,13 @@ Function UpdateCheckpointMonitors(Number%)
 	Next
 End Function
 
-Function TurnCheckpointMonitorsOff(Number%)
+Function TurnCheckpointMonitorsOff(LCZ% = True)
 	Local i%, SF%, b%, t1%
 	Local Entity%, Name$
 	
 	Entity = o\MonitorModelID[1]
 	
-	If (Not Number) Then
+	If LCZ Then
 		UpdateCheckpoint1 = False
 		MonitorTimer = 0.0
 	Else

@@ -1,4 +1,4 @@
-Function PlaySound2%(SoundHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, HasSubtitles% = False, SubID% = ANNOUNCEMENT)
+Function PlaySound2%(SoundHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0)
 	Range = Max(Range, 1.0)
 	
 	Local SoundCHN% = 0
@@ -9,17 +9,13 @@ Function PlaySound2%(SoundHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, 
 		If 1.0 - Dist > 0.0 And 1.0 - Dist < 1.0 Then
 			Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 			
-			SoundCHN = PlaySound_Strict(SoundHandle, HasSubtitles, SubID)
-			
-			If HasSubtitles And opt\EnableSubtitles Then CalculateSubtitlesDistance(SubID, EntityDistanceSquared(Cam, Entity) / Range * 25.5)
+			SoundCHN = PlaySound_Strict(SoundHandle)
 			
 			ChannelVolume(SoundCHN, Volume * (1.0 - Dist) * opt\SFXVolume)
 			ChannelPan(SoundCHN, PanValue)
-		Else
-			If HasSubtitles And opt\EnableSubtitles Then CalculateSubtitlesDistance(SubID, 256.0)
 		EndIf
 	Else
-		If HasSubtitles And opt\EnableSubtitles Then ClearSubtitles(SubID)
+		If opt\EnableSubtitles Then ClearSubtitles(SubtitlesID)
 		If SoundCHN <> 0 Then
 			ChannelVolume(SoundCHN, 0.0)
 		EndIf 
@@ -27,7 +23,7 @@ Function PlaySound2%(SoundHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, 
 	Return(SoundCHN)
 End Function
 
-Function LoopSound2%(SoundHandle%, SoundCHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, HasSubtitles% = False, SubID% = ANNOUNCEMENT)
+Function LoopSound2%(SoundHandle%, SoundCHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0)
 	Range = Max(Range, 1.0)
 	
 	If Volume > 0.0 Then
@@ -35,17 +31,15 @@ Function LoopSound2%(SoundHandle%, SoundCHN%, Cam%, Entity%, Range# = 10.0, Volu
 		Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 		
 		If (Not SoundCHN) Then
-			SoundCHN = PlaySound_Strict(SoundHandle, HasSubtitles, SubID)
+			SoundCHN = PlaySound_Strict(SoundHandle)
 		Else
-			If (Not ChannelPlaying(SoundCHN)) Then SoundCHN = PlaySound_Strict(SoundHandle, HasSubtitles, SubID)
+			If (Not ChannelPlaying(SoundCHN)) Then SoundCHN = PlaySound_Strict(SoundHandle)
 		EndIf
-		
-		If HasSubtitles And opt\EnableSubtitles Then CalculateSubtitlesDistance(SubID, EntityDistanceSquared(Cam, Entity) / Range * 25.5)
 		
 		ChannelVolume(SoundCHN, Volume * (1.0 - Dist) * opt\SFXVolume)
 		ChannelPan(SoundCHN, PanValue)
 	Else
-		If HasSubtitles And opt\EnableSubtitles Then CalculateSubtitlesDistance(SubID, 256.0)
+		If opt\EnableSubtitles Then ClearSubtitles(SubtitlesID)
 		If SoundCHN <> 0 Then
 			ChannelVolume(SoundCHN, 0.0)
 		EndIf 
@@ -53,7 +47,7 @@ Function LoopSound2%(SoundHandle%, SoundCHN%, Cam%, Entity%, Range# = 10.0, Volu
 	Return(SoundCHN)
 End Function
 
-Function UpdateSoundOrigin(SoundCHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, SFXVolume% = True, HasSubtitles% = False, SubID% = ANNOUNCEMENT)
+Function UpdateSoundOrigin(SoundCHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, SFXVolume% = True)
 	Range = Max(Range, 1.0)
 	
 	If Volume > 0.0 Then
@@ -62,15 +56,11 @@ Function UpdateSoundOrigin(SoundCHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.
 		If 1.0 - Dist > 0.0 And 1.0 - Dist < 1.0 Then
 			Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 			
-			If HasSubtitles And opt\EnableSubtitles Then CalculateSubtitlesDistance(SubID, EntityDistanceSquared(Cam, Entity) / Range * 25.5)
-			
 			ChannelVolume(SoundCHN, Volume * (1.0 - Dist) * ((Not SFXVolume) + (SFXVolume * opt\SFXVolume)))
 			ChannelPan(SoundCHN, PanValue)
-		Else
-			If HasSubtitles And opt\EnableSubtitles Then CalculateSubtitlesDistance(SubID, 256.0)
 		EndIf
 	Else
-		If HasSubtitles And opt\EnableSubtitles Then ClearSubtitles(SubID)
+		If opt\EnableSubtitles Then ClearSubtitles(SubtitlesID)
 		If SoundCHN <> 0 Then
 			ChannelVolume(SoundCHN, 0.0)
 		EndIf 
@@ -486,13 +476,13 @@ Function GetStepSound(Entity%)
 	Return(0)
 End Function
 
-Function PlayAnnouncement(File$, HasSubtitles% = False) ; ~ This function streams the announcement currently playing
+Function PlayAnnouncement(File$) ; ~ This function streams the announcement currently playing
 	If IntercomStreamCHN <> 0 Then
 		StopStream_Strict(IntercomStreamCHN)
 		IntercomStreamCHN = 0
 	EndIf
 	
-	IntercomStreamCHN = StreamSound_Strict(File, opt\SFXVolume, 0, HasSubtitles)
+	IntercomStreamCHN = StreamSound_Strict(File, opt\SFXVolume, 0)
 End Function
 
 Function UpdateStreamSounds()
