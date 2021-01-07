@@ -60,15 +60,15 @@ Function ShowSubtitles(Name$)
 	Local i%, sub.Subtitles
 	
 	Select Person
-		Case "FIRST"
+		Case 1
 			;[Block]
 			SubtitlesID = FIRST_PERSON
 			;[End Block]
-		Case "SECOND"
+		Case 2
 			;[Block]
 			SubtitlesID = SECOND_PERSON
 			;[End Block]
-		Case "THIRD"
+		Case 3
 			SubtitlesID = THIRD_PERSON
 			;[End Block]
 		Default

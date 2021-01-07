@@ -1723,7 +1723,7 @@ Function UpdateEvents()
 							SetNPCFrame(e\room\NPC[7], 182.0)
 							
 							If e\room\NPC[6]\State = 1.0 And e\room\NPC[7]\Sound <> 0 Then 
-								If (Not ChannelPlaying(e\room\NPC[7]\SoundCHN)) Then StopChannel(e\room\NPC[7]\SoundCHN)
+								If ChannelPlaying(e\room\NPC[7]\SoundCHN) Then StopChannel(e\room\NPC[7]\SoundCHN)
 								If e\room\NPC[7]\Sound <> 0 Then 
 									FreeSound_Strict(e\room\NPC[7]\Sound) : e\room\NPC[7]\Sound = 0	
 								EndIf
