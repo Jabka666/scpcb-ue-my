@@ -15,7 +15,6 @@ Function PlaySound2%(SoundHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0)
 			ChannelPan(SoundCHN, PanValue)
 		EndIf
 	Else
-		If opt\EnableSubtitles Then ClearSubtitles(SubtitlesID)
 		If SoundCHN <> 0 Then
 			ChannelVolume(SoundCHN, 0.0)
 		EndIf 
@@ -39,7 +38,6 @@ Function LoopSound2%(SoundHandle%, SoundCHN%, Cam%, Entity%, Range# = 10.0, Volu
 		ChannelVolume(SoundCHN, Volume * (1.0 - Dist) * opt\SFXVolume)
 		ChannelPan(SoundCHN, PanValue)
 	Else
-		If opt\EnableSubtitles Then ClearSubtitles(SubtitlesID)
 		If SoundCHN <> 0 Then
 			ChannelVolume(SoundCHN, 0.0)
 		EndIf 
@@ -60,7 +58,6 @@ Function UpdateSoundOrigin(SoundCHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.
 			ChannelPan(SoundCHN, PanValue)
 		EndIf
 	Else
-		If opt\EnableSubtitles Then ClearSubtitles(SubtitlesID)
 		If SoundCHN <> 0 Then
 			ChannelVolume(SoundCHN, 0.0)
 		EndIf 

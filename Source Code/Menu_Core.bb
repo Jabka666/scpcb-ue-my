@@ -291,7 +291,12 @@ Function UpdateMainMenu()
 				End Select
 				
 				DrawButton(x, y, Width, Height, Txt)
-			Next	
+			Next
+			
+			If opt\AntiAliasing And opt\DisplayMode <> 0 Then
+				opt\AntiAliasing = False
+				PutINIValue(OptionFile, "Graphics", "Anti-Aliasing", opt\AntiAliasing)
+			EndIf
 		Else
 			x = 159 * MenuScale
 			y = 286 * MenuScale
@@ -1093,11 +1098,6 @@ Function RenderMainMenu()
 	
 	If opt\GraphicWidth > 1240 * MenuScale Then
 		DrawTiledImageRect(MenuWhite, 0, 5 * MenuScale, 512.0 * MenuScale, 5.0 * MenuScale, 985 * MenuScale, 407 * MenuScale, (opt\GraphicWidth - (940 * MenuScale)), 5 * MenuScale)
-	EndIf
-	
-	If opt\AntiAliasing And opt\DisplayMode <> 0 Then
-		opt\AntiAliasing = False
-		PutINIValue(OptionFile, "Graphics", "Anti-Aliasing", opt\AntiAliasing)
 	EndIf
 	
 	If mm\MainMenuTab <> MainMenuTab_Default Then
@@ -2035,7 +2035,7 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 		
 		Local Width% = 300, Height% = 20, i%
 		
-		x = mo\Viewport_Center_X - Width / 2
+		x = mo\Viewport_Center_X - (Width / 2)
 		y = mo\Viewport_Center_Y - 70
 		
 		DrawBar(BlinkMeterIMG, x, y, Width, Height, Percent)
@@ -2445,7 +2445,6 @@ End Function
 Type MenuPalette
 	Field Img%
 	Field x%, y%, Width%, Height%
-	Field Pixel%
 End Type
 
 Function RenderMenuPalettes()
@@ -2456,11 +2455,13 @@ Function RenderMenuPalettes()
 		If MouseOn(mp\x, mp\y, mp\Width, mp\Height) Then
 			If mo\MouseDown1 Then
 				LockBuffer(BackBuffer())
-				mp\Pixel = ReadPixelFast(ScaledMouseX(), ScaledMouseY(), BackBuffer())
+				
+				Local Pixel% = ReadPixelFast(ScaledMouseX(), ScaledMouseY(), BackBuffer())
+				
 				UnlockBuffer(BackBuffer())
-				opt\SubColorR = ReadPixelColor(mp\Pixel, 16)
-				opt\SubColorG = ReadPixelColor(mp\Pixel, 8)
-				opt\SubColorB = ReadPixelColor(mp\Pixel, 0)
+				opt\SubColorR = ReadPixelColor(Pixel, 16)
+				opt\SubColorG = ReadPixelColor(Pixel, 8)
+				opt\SubColorB = ReadPixelColor(Pixel, 0)
 			EndIf
 		EndIf
 	Next

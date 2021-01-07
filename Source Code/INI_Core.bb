@@ -637,7 +637,7 @@ Function ResetOptionsINI()
 	
 	opt\ScreenGamma = 1.0
 	
-	opt\AntiAliasing = True
+	If opt\DisplayMode = 0 Then opt\AntiAliasing = True
 	
 	opt\VSync = True
 	
