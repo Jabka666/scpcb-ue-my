@@ -137,8 +137,6 @@ Function UpdateGamma2()
 	EntityAlpha(FresizeImage, 1.0)
 End Function
 
-Global CurrTrisAmount%
-
 Function UpdateWorld2()
 	Local i%, np.NPCs
 	
@@ -170,8 +168,6 @@ Function UpdateWorld2()
 			EndIf
 		Next
 	EndIf
-	
-	CurrTrisAmount = TrisRendered()
 	
 	If HasBattery = 0 And wi\NightVision <> 3 Then
 		wi\IsNVGBlinking = True
@@ -205,6 +201,8 @@ End Function
 
 Const BRIGHTNESS% = 50
 
+Global CurrTrisAmount%
+
 Function RenderWorld2(Tween#)
 	Local i%, Dist#, Temp%, Temp2%, np.NPCs
 	Local l%, k%, xValue#, yValue#, PitchValue#, YawValue#
@@ -223,6 +221,8 @@ Function RenderWorld2(Tween#)
 	EndIf
 	
 	CameraViewport(Camera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)
+	
+	CurrTrisAmount = TrisRendered()
 	
 	Local HasBattery% = 2
 	Local Power% = 0

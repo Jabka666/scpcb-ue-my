@@ -6412,7 +6412,7 @@ Function UpdateSecurityCams() ; ~ SHOULD BE SEPARATED!
 				EndIf
 			EndIf
 			
-			If Close = True Then
+			If Close Then
 				If sc\Screen Then
 					sc\State = sc\State + fps\FPSFactor[0]
 					If me\BlinkTimer > -5.0 And EntityInView(sc\ScrOBJ, Camera) Then

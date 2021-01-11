@@ -3372,7 +3372,6 @@ Function MainLoop()
 				UpdateDoors()
 				UpdateScreens()
 				UpdateRoomLights(Camera)
-				RenderRoomLights(Camera)
 				If PlayerRoom\RoomTemplate\Name = "gatea" Lor (PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale) Then
 					If QuickLoadPercent = -1 Lor QuickLoadPercent = 100
 						UpdateEndings()
@@ -3718,6 +3717,14 @@ Function MainLoop()
 	
 	; ~ Go out of function immediately if the game has been quit
 	If MainMenuOpen Then Return
+	
+	If (Not MenuOpen) And (Not InvOpen) And OtherOpen = Null And SelectedDoor = Null And (Not ConsoleOpen) And (Not I_294\Using) And SelectedScreen = Null And me\EndingTimer >= 0.0 Then
+		If PlayerRoom <> Null Then
+			If PlayerRoom\RoomTemplate\Name <> "dimension1499" Then
+				RenderRoomLights(Camera)
+			EndIf
+		EndIf
+	EndIf
 	
 	RenderWorld2(Max(0.0, 1.0 + (fps\Accumulator / TICK_DURATION)))
 	

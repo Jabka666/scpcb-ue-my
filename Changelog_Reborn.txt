@@ -105,7 +105,6 @@ Bug Fixes:
 - Fixed lamps' texture in room1endroom3 and SCP-008's containment chamber.
 - Fixed some rooms' descriptions.
 - Fixed missing lamp in room2testroom.
-- Fixed missing "spark(2).png" file.
 - Fixed bug with joint.
 - Fixed severed hands' scale.
 - Fixed SCP-1048's document inside the clipboard in room2closets.
