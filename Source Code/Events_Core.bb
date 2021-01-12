@@ -6561,7 +6561,6 @@ Function UpdateEvents()
 						For e2.Events = Each Events
 							If e2\EventID = e_gateb Lor e2\EventID = e_gateaentrance Then
 								e2\EventState3 = 1.0
-								Exit
 							EndIf
 						Next
 					EndIf	

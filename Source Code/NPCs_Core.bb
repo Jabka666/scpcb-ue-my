@@ -6664,6 +6664,7 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 	
 	If Rnd(1.0) =< HitProb Then
 		TurnEntity(Camera, Rnd(-3.0, 3.0), Rnd(-3.0, 3.0), 0.0)
+		; ~ TODO: use vest and helmet factors
 		If wi\BallisticVest > 0 And wi\BallisticHelmet = 0 Then ; ~ If player is wearing the ballistic vest only
 			Select Rand(16)
 				Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ; ~ Vest
