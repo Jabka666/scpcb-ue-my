@@ -860,7 +860,7 @@ Function UpdateNPCs()
 						PositionEntity(n\Collider, 0.0, 500.0, 0.0)
 					EndIf
 					
-					If (Not n\Idle) And Spawn106 Then
+					If n\Idle = 0 And Spawn106 Then
 						If n\State =< 0.0 Then
 							If EntityY(n\Collider) < EntityY(me\Collider) - 20.0 - 0.55 Then
 								If Not PlayerRoom\RoomTemplate\DisableDecals Then
@@ -1507,7 +1507,7 @@ Function UpdateNPCs()
 							;[End Block]
 						Case 2.0 ; ~ Being active
 							;[Block]
-							If (Dist < HideDistance * 2.0) And (Not n\Idle) And PlayerInReachableRoom(True) Then
+							If (Dist < HideDistance * 2.0) And n\Idle = 0 And PlayerInReachableRoom(True) Then
 								n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider)
 								PlayerSeeAble = MeNPCSeesPlayer(n)
 								If PlayerSeeAble = True Lor n\State2 > 0.0 And (Not chs\NoTarget) Then ; ~ Attack
@@ -5759,9 +5759,9 @@ Function UpdateNPCs()
 				; ~ 2: King
 				; ~ 3: Front guard
 				
-				PrevFrame# = n\Frame
+				PrevFrame = n\Frame
 				
-				If (Not n\Idle) And EntityDistanceSquared(n\Collider, me\Collider) < PowTwo(HideDistance * 3.0) Then
+				If n\Idle = 0 And EntityDistanceSquared(n\Collider, me\Collider) < PowTwo(HideDistance * 3.0) Then
 					If n\PrevState = 0 Then
 						If n\State = 0.0 Lor n\State = 2.0 Then
 							For n2.NPCs = Each NPCs
@@ -6137,7 +6137,7 @@ Function UpdateNPCs()
 							;[End Block]
 					End Select
 					
-					If n\SoundCHN <> 0 And ChannelPlaying(n\SoundCHN) = True Then
+					If n\SoundCHN <> 0 And ChannelPlaying(n\SoundCHN) Then
 						UpdateSoundOrigin(n\SoundCHN, Camera, n\Collider, 20.0)
 					EndIf
 					
@@ -6210,7 +6210,7 @@ Function UpdateNPCs()
 							;[End Block]
 						Case 3.0 ; ~ Player isn't visible, tries to find
 							;[Block]
-							If PlayerSeeAble = True And (Not chs\Notarget) Then
+							If PlayerSeeAble And (Not chs\Notarget) Then
 								n\State = 2.0
 							EndIf
 							
@@ -6320,7 +6320,7 @@ Function UpdateNPCs()
 						Case 4.0 ; ~ Attacks
 							;[Block]
 							AnimateNPC(n, 126.0, 165.0, 0.6, False)
-							If (n\Frame >= 146.0 And PrevFrame < 146.0)
+							If n\Frame >= 146.0 And PrevFrame < 146.0 Then
 								If Dist < 1.21 Then
 									If Abs(DeltaYaw(n\Collider, me\Collider)) =< 60.0 Then
 										PlaySound_Strict(DamageSFX[Rand(5, 8)])
@@ -6531,10 +6531,10 @@ Function UpdateNPCs()
 						Else
 							UpdateGravity = True
 						EndIf
-						If UpdateGravity
+						If UpdateGravity Then
 							n\DropSpeed = Max(n\DropSpeed - 0.005 * fps\FPSFactor[0] * n\GravityMult, -n\MaxGravity)
 						Else
-							If n\FallingPickDistance > 0.0
+							If n\FallingPickDistance > 0.0 Then
 								n\DropSpeed = 0.0
 							Else
 								n\DropSpeed = Max(n\DropSpeed - 0.005 * fps\FPSFactor[0] * n\GravityMult, -n\MaxGravity)
