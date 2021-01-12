@@ -1787,7 +1787,7 @@ Function UpdateNPCs()
 								If ChannelPlaying(n\SoundCHN2) = True Then
 									UpdateSoundOrigin(n\SoundCHN2, Camera, n\OBJ)
 								EndIf
-							ElseIf (Not n\Idle)
+							ElseIf n\Idle = 0
 								If ChannelPlaying(n\SoundCHN) = True Then
 									StopChannel(n\SoundCHN)
 								EndIf
@@ -1926,7 +1926,7 @@ Function UpdateNPCs()
 								EndIf
 							EndIf
 							
-							If ChannelPlaying(n\SoundCHN2) = True Then
+							If ChannelPlaying(n\SoundCHN2) Then
 								UpdateSoundOrigin(n\SoundCHN2, Camera, n\OBJ)
 							EndIf
 							;[End Block]

@@ -8602,20 +8602,14 @@ Function UpdateEvents()
 				
 				If PlayerRoom = e\room
 					If e\EventState = 0.0 Then
-						If Curr049 = Null Then
-							Curr049 = CreateNPC(NPCtype049, EntityX(e\room\Objects[7], True), EntityY(e\room\Objects[7], True) + 5.0, EntityZ(e\room\Objects[7], True))
-							Curr049\State = 0.0 : Curr049\PrevState = 2 : Curr049\HideFromNVG = True
-							RotateEntity(Curr049\Collider, 0.0, e\room\Angle + 180.0, 0.0)
-							e\room\NPC[0] = Curr049
-						EndIf
 						e\EventState = 1.0
 						If e\EventState2 = 0.0 Then e\EventState2 = (-70.0) * 5.0
 					EndIf
 				EndIf
 				
-				If e\EventState = 1.0
-					If e\EventState2 < 0.0
-						If e\EventState2 = (-70.0) * 5.0
+				If e\EventState = 1.0 Then
+					If e\EventState2 < 0.0 Then
+						If e\EventState2 = (-70.0) * 5.0 Then
 							For sc.SecurityCams = Each SecurityCams
 								If sc\room = e\room
 									If EntityDistanceSquared(sc\ScrOBJ, Camera) < 25.0
@@ -8630,7 +8624,7 @@ Function UpdateEvents()
 							e\EventState2 = Min(e\EventState2 + fps\FPSFactor[0], 0.0)
 						EndIf
 					ElseIf e\EventState2 = 0.0
-						If e\room\NPC[0] <> Null Then
+						If Curr049 = Null Then
 							Local AdjDist1# = 0.0
 							Local AdjDist2# = 0.0
 							Local Adj1% = -1
@@ -8647,19 +8641,20 @@ Function UpdateEvents()
 									EndIf
 								EndIf
 							Next
-							If AdjDist1 > AdjDist2
-								PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\AdjDoor[Adj1]\FrameOBJ), EntityY(e\room\Objects[7], True), EntityZ(e\room\AdjDoor[Adj1]\FrameOBJ))
+							If AdjDist1 > AdjDist2 Then
+								Curr049 = CreateNPC(NPCtype049, EntityX(e\room\AdjDoor[Adj1]\FrameOBJ), EntityY(e\room\Objects[7], True), EntityZ(e\room\AdjDoor[Adj1]\FrameOBJ))
 							Else
-								PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\AdjDoor[Adj2]\FrameOBJ), EntityY(e\room\Objects[7], True), EntityZ(e\room\AdjDoor[Adj2]\FrameOBJ))
+								Curr049 = CreateNPC(NPCtype049, EntityX(e\room\AdjDoor[Adj2]\FrameOBJ), EntityY(e\room\Objects[7], True), EntityZ(e\room\AdjDoor[Adj2]\FrameOBJ))
 							EndIf
-							PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
-							MoveEntity(e\room\NPC[0]\Collider, 0.0, 0.0, -1.0)
-							ResetEntity(e\room\NPC[0]\Collider)
-							e\room\NPC[0]\HideFromNVG = False
-							e\room\NPC[0]\EnemyX = EntityX(me\Collider)
-							e\room\NPC[0]\EnemyY = EntityZ(me\Collider)
-							e\room\NPC[0]\EnemyZ = EntityZ(me\Collider)
-							e\room\NPC[0]\State = 5.0
+							PointEntity(Curr049\Collider, e\room\OBJ)
+							MoveEntity(Curr049\Collider, 0.0, 0.0, -1.0)
+							ResetEntity(Curr049\Collider)
+							Curr049\EnemyX = EntityX(me\Collider)
+							Curr049\EnemyY = EntityZ(me\Collider)
+							Curr049\EnemyZ = EntityZ(me\Collider)
+							Curr049\State = 5.0 : Curr049\PrevState = 2
+							
+							e\room\NPC[0] = Curr049
 							
 							e\EventState2 = 1.0
 						EndIf
