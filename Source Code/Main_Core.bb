@@ -219,7 +219,7 @@ Type Player
 	Field DropSpeed#, HeadDropSpeed#, CurrSpeed#
 	Field Crouch%, CrouchState#
 	Field SndVolume#
-	Field SelectedEnding$, EndingScreen%, EndingTimer#
+	Field SelectedEnding%, EndingScreen%, EndingTimer#
 	Field CreditsScreen%, CreditsTimer#
 	Field BlurVolume#, BlurTimer#
 	Field LightBlink#, LightFlash#
@@ -895,15 +895,21 @@ Function UpdateConsole()
 					;[Block]
 					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 					
-					If StrTemp = "" Then
-						If Rand(2) = 1 Then
-							me\SelectedEnding = "A" + Rand(2)
-						Else
-							me\SelectedEnding = "B" + Rand(2)
-						EndIf
-					Else
-						me\SelectedEnding = StrTemp
-					EndIf
+					Select StrTemp
+						Case "A"
+							;[Block]
+							me\SelectedEnding = Rand(Ending_A1, Ending_A2)
+							;[End Block]
+						Case "B"
+							;[Block]
+							me\SelectedEnding = Rand(Ending_B1, Ending_B2)
+							;[End Block]
+						Default
+							;[Block]
+							Rand(Ending_A1, Ending_B2)
+							;[End Block]
+					End Select
+					
 					me\KillTimer = -0.1
 					;[End Block]
 				Case "noclipspeed"
@@ -3553,7 +3559,7 @@ Function MainLoop()
 				me\KillTimer = me\KillTimer - (fps\FPSFactor[0] * 0.8)
 				If me\KillTimer < -360.0 Then 
 					MenuOpen = True 
-					If me\SelectedEnding <> "" Then me\EndingTimer = Min(me\KillTimer, -0.1)
+					If me\SelectedEnding <> -1 Then me\EndingTimer = Min(me\KillTimer, -0.1)
 				EndIf
 				DarkA = Max(DarkA, Min(Abs(me\KillTimer / 400.0), 1.0))
 			Else
@@ -3596,7 +3602,7 @@ Function MainLoop()
 		
 		UpdateGUI()
 		
-		If KeyHit(key\INVENTORY) And me\VomitTimer >= 0.0 And me\KillTimer >= 0.0 And me\SelectedEnding = "" Then
+		If KeyHit(key\INVENTORY) And me\VomitTimer >= 0.0 And me\KillTimer >= 0.0 And me\SelectedEnding = -1 Then
 			If (Not UnableToMove) And (Not me\Zombie) And (Not I_294\Using) Then
 				Local W$ = ""
 				Local V# = 0.0
@@ -3702,9 +3708,9 @@ Function MainLoop()
 		EndIf
 		
 		If me\EndingTimer < 0.0 Then
-			If me\SelectedEnding <> "" Then UpdateEnding()
+			If me\SelectedEnding <> -1 Then UpdateEnding()
 		Else
-			If me\SelectedEnding = "" Then UpdateMenu()			
+			If me\SelectedEnding = -1 Then UpdateMenu()			
 		EndIf
 		
 		UpdateMessages()
@@ -3736,9 +3742,9 @@ Function MainLoop()
 	If opt\EnableSubtitles Then RenderSubtitles()
 	
 	If me\EndingTimer < 0.0 Then
-		If me\SelectedEnding <> "" Then DrawEnding()
+		If me\SelectedEnding <> -1 Then DrawEnding()
 	Else
-		If me\SelectedEnding = "" Then DrawMenu()			
+		If me\SelectedEnding = -1 Then DrawMenu()			
 	EndIf
 	
 	UpdateConsole()
@@ -3819,6 +3825,14 @@ Function Kill(IsBloody% = False)
 	EndIf
 End Function
 
+; ~ Ending IDs
+;[Block]
+Const Ending_A1% = 0
+Const Ending_A2% = 1
+Const Ending_B1% = 2
+Const Ending_B2% = 3
+;[End Block]
+
 Function DrawEnding()
 	ShowPointer()
 	
@@ -3826,7 +3840,7 @@ Function DrawEnding()
 	Local itt.ItemTemplates, r.Rooms
 	
 	Select me\SelectedEnding
-		Case "B2", "A1"
+		Case Ending_A1, Ending_B2
 			;[Block]
 			ClsColor(Max(255.0 + (me\EndingTimer) * 2.8, 0.0), Max(255.0 + (me\EndingTimer) * 2.8, 0.0), Max(255.0 + (me\EndingTimer) * 2.8, 0.0))
 			;[End Block]
@@ -3959,16 +3973,7 @@ Function UpdateEnding()
 		
 		If me\EndingTimer > -700.0 Then 
 			If me\EndingTimer + fps\FPSFactor[1] > -450.0 And me\EndingTimer =< -450.0 Then
-				Select me\SelectedEnding
-					Case "A1", "A2"
-						;[Block]
-						PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\Ending" + me\SelectedEnding + ".ogg"))
-						;[End Block]
-					Case "B1", "B2"
-						;[Block]
-						PlaySound_Strict(LoadTempSound("SFX\Ending\GateB\Ending" + me\SelectedEnding + ".ogg"))
-						;[End Block]
-				End Select
+				PlaySound_Strict(LoadTempSound("SFX\Ending\Ending" + (me\SelectedEnding + 1) + ".ogg"))
 			EndIf			
 		Else
 			If me\EndingTimer < -1000.0 And me\EndingTimer > -2000.0 Then
@@ -5984,7 +5989,7 @@ Function UpdateGUI()
 		msg\KeyPadMsg = ""
 	EndIf
 	
-	If KeyHit(1) And me\EndingTimer = 0.0 And me\SelectedEnding = "" Then
+	If KeyHit(1) And me\EndingTimer = 0.0 And me\SelectedEnding = -1 Then
 		If MenuOpen Lor InvOpen Then
 			ResumeSounds()
 			If OptionsMenu <> 0 Then SaveOptionsINI()
@@ -9266,7 +9271,7 @@ Function InitNewGame()
 	me\BlinkEffect = 1.0
 	me\StaminaEffect = 1.0
 	me\Playable = True
-	
+	me\SelectedEnding = -1
 	me\HeartBeatRate = 70.0
 	
 	I_005\ChanceToSpawn = Rand(1, 6)
@@ -9421,6 +9426,7 @@ Function InitLoadGame()
 	DrawLoading(80)
 	
 	me\Playable = True
+	me\SelectedEnding = -1
 	
 	InitWayPoints()
 	
@@ -9569,7 +9575,7 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	I_005\ChanceToSpawn = 0
 	
-	me\SelectedEnding = ""
+	me\SelectedEnding = -1
 	me\EndingTimer = 0.0
 	me\ExplosionTimer = 0.0
 	

@@ -1884,8 +1884,8 @@ Function FillRoom(r.Rooms)
 			d2\AutoClose = False : d2\Locked = 1
 			FreeEntity(d2\Buttons[0]) : d2\Buttons[0] = 0
 			
-			d2 = CreateDoor(r\Zone, r\x - 1440.0 * RoomScale, r\y - 480.0 * RoomScale, r\z + 2328.0 * RoomScale, 0.0, r, me\SelectedEnding = "A2", Default_Door, 2)
-			If me\SelectedEnding = "A2" Then 
+			d2 = CreateDoor(r\Zone, r\x - 1440.0 * RoomScale, r\y - 480.0 * RoomScale, r\z + 2328.0 * RoomScale, 0.0, r, me\SelectedEnding = Ending_A2, Default_Door, 2)
+			If me\SelectedEnding = Ending_A2 Then 
 				d2\AutoClose = False : d2\Locked = 1	
 			Else
 				d2\AutoClose = False : d2\Locked = 0	
@@ -1894,8 +1894,8 @@ Function FillRoom(r.Rooms)
 			PositionEntity(d2\Buttons[1], r\x - 1590.0 * RoomScale, EntityY(d2\Buttons[0], True), r\z + 2484.0 * RoomScale, True)	
 			RotateEntity(d2\Buttons[1], 0.0, 90.0, 0.0, True)
 			
-			d2 = CreateDoor(r\Zone, r\x - 1440 * RoomScale, r\y - 480.0 * RoomScale, r\z + 4352.0 * RoomScale, 0.0, r, me\SelectedEnding = "A2", Default_Door, 2)
-			If me\SelectedEnding = "A2" Then 
+			d2 = CreateDoor(r\Zone, r\x - 1440 * RoomScale, r\y - 480.0 * RoomScale, r\z + 4352.0 * RoomScale, 0.0, r, me\SelectedEnding = Ending_A2, Default_Door, 2)
+			If me\SelectedEnding = Ending_A2 Then 
 				d2\AutoClose = False : d2\Locked = 1	
 			Else
 				d2\AutoClose = False : d2\Locked = 0

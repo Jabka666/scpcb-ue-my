@@ -9602,7 +9602,7 @@ Function UpdateEndings()
 						Else
 							UpdateSky()
 							
-							If e\EventState < 2.0 And me\SelectedEnding = "" Then 
+							If e\EventState < 2.0 And me\SelectedEnding = -1 Then 
 								If e\room\NPC[0]\State = 2.0 Then
 									ShouldPlay = 6
 								Else
@@ -9703,7 +9703,7 @@ Function UpdateEndings()
 										e\SoundCHN2_IsStream = True
 									EndIf
 								Else
-									If me\SelectedEnding = "" Then
+									If me\SelectedEnding = -1 Then
 									    ShouldPlay = 66
 										
 										StopStream_Strict(e\SoundCHN)
@@ -9719,7 +9719,7 @@ Function UpdateEndings()
 										
 										If Temp = 1 Then ; ~ Explode
 											me\ExplosionTimer = Max(me\ExplosionTimer, 0.1)
-											me\SelectedEnding = "B2"
+											me\SelectedEnding = Ending_B2
 										Else
 											PlayAnnouncement("SFX\Ending\GateB\AlphaWarheadsFail.ogg")
 											
@@ -9742,10 +9742,10 @@ Function UpdateEndings()
 											
 											e\EventState = 70.0 * 85.0
 											
-											me\SelectedEnding = "B1"
+											me\SelectedEnding = Ending_B1
 										EndIf
 									Else
-										If me\SelectedEnding = "B1" Then
+										If me\SelectedEnding = Ending_B1 Then
 											e\room\NPC[0]\EnemyX = EntityX(e\room\Objects[11], True) + Sin(MilliSecs() / 25.0) * 3.0
 											e\room\NPC[0]\EnemyY = EntityY(e\room\Objects[11], True) + Cos(MilliSecs() / 85.0) + 9.0
 											e\room\NPC[0]\EnemyZ = EntityZ(e\room\Objects[11], True) + Cos(MilliSecs() / 25.0) * 3.0
@@ -10250,7 +10250,7 @@ Function UpdateEndings()
 											MoveEntity(e\room\Objects[12], 0.0, 0.0, 0.01 * fps\FPSFactor[0])
 										EndIf
 										
-										If (Not ChannelPlaying(e\SoundCHN)) And me\SelectedEnding = "" Then
+										If (Not ChannelPlaying(e\SoundCHN)) And me\SelectedEnding = -1 Then
 											PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\Bell2.ogg"))
 											
 											p.Particles = CreateParticle(EntityX(e\room\Objects[11], True), EntityY(Camera, True), EntityZ(e\room\Objects[11], True), 4, 8.0, 0.0, 50.0)
@@ -10258,13 +10258,13 @@ Function UpdateEndings()
 											p.Particles = CreateParticle(EntityX(e\room\Objects[11], True), EntityY(Camera, True), EntityZ(e\room\Objects[11], True), 4, 8.0, 0.0, 50.0)
 											p\Speed = 0.25 : p\A = 0.5
 											
-											me\SelectedEnding = "A1"
+											me\SelectedEnding = Ending_A1
 											ClearCheats(chs)
 											me\KillTimer = -0.1
 											msg\DeathMsg = ""
 										EndIf
 										
-										If me\SelectedEnding <> "" Then
+										If me\SelectedEnding <> -1 Then
 											me\CameraShake = CurveValue(2.0, me\CameraShake, 10.0)
 											me\LightFlash = CurveValue(2.0, me\LightFlash, 8.0)
 										EndIf
@@ -10322,7 +10322,7 @@ Function UpdateEndings()
 										me\CurrSpeed = 0.0
 										If (Not ChannelPlaying(e\SoundCHN)) Then
 											PlaySound_Strict(IntroSFX[7])
-											me\SelectedEnding = "A2"
+											me\SelectedEnding = Ending_A2
 											ClearCheats(chs)
 											me\LightFlash = 20.0
 											me\KillTimer = -0.1
