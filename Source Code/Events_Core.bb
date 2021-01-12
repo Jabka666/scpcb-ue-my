@@ -741,7 +741,7 @@ Function QuickLoadEvents()
 				ScaleSprite(ForestNPC, 0.75 * (140.0 / 410.0), 0.75)
 				SpriteViewMode(ForestNPC, 4)
 				EntityFX(ForestNPC, 1 + 8)
-				ForestNPCTex = LoadAnimTexture_Strict("GFX\npcs\AgentIJ.AIJ", 1 + 2, 140, 410, 0, 4, 2)
+				ForestNPCTex = LoadAnimTexture_Strict("GFX\npcs\AgentIJ.AIJ", 1 + 2, 140, 410, 0, 4, DeleteAllTextures)
 				ForestNPCData[0] = 0.0
 				EntityTexture(ForestNPC, ForestNPCTex, ForestNPCData[0])
 				ForestNPCData[1] = 0.0

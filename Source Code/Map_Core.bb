@@ -229,15 +229,15 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 				Temp1s = ReadString(f)
 				If FileType(File + Temp1s) = 1 ; ~ Check if texture is existing in original path
 					If Temp1i < 3 Then
-						Tex[j] = LoadTextureCheckingIfInCache(File + Temp1s, 1, 0)
+						Tex[j] = LoadTextureCheckingIfInCache(File + Temp1s, 1)
 					Else
-						Tex[j] = LoadTextureCheckingIfInCache(File + Temp1s, 3, 0)
+						Tex[j] = LoadTextureCheckingIfInCache(File + Temp1s, 3)
 					EndIf
 				ElseIf FileType(MapTexturesFolder + Temp1s) = 1 ; ~ If not, check the MapTexturesFolder
 					If Temp1i < 3 Then
-						Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 1, 0)
+						Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 1)
 					Else
-						Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 3, 0)
+						Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 3)
 					EndIf
 				EndIf
 				If Tex[j] <> 0 Then
@@ -4807,11 +4807,11 @@ Function FillRoom(r.Rooms)
 				End Select 
 			Next
 			
-			r\Textures[0] = LoadTexture_Strict("GFX\npcs\pd_plane.png", 1 + 2, 2)
+			r\Textures[0] = LoadTexture_Strict("GFX\npcs\pd_plane.png", 1 + 2, DeleteAllTextures)
 			
-			r\Textures[1] = LoadTexture_Strict("GFX\npcs\pd_plane_eye.png", 1 + 2, 2)
+			r\Textures[1] = LoadTexture_Strict("GFX\npcs\pd_plane_eye.png", 1 + 2, DeleteAllTextures)
 			
-			Tex = LoadTexture_Strict("GFX\npcs\scp_106_eyes.png", 1, 2)
+			Tex = LoadTexture_Strict("GFX\npcs\scp_106_eyes.png", 1, DeleteAllTextures)
 			r\Objects[17] = CreateSprite()
 			PositionEntity(r\Objects[17], EntityX(r\Objects[8], True), r\y + 1376.0 * RoomScale, EntityZ(r\Objects[8], True) - 2848.0 * RoomScale)
 			ScaleSprite(r\Objects[17], 0.03, 0.03)
@@ -5068,8 +5068,8 @@ Function FillRoom(r.Rooms)
 			Local Scale# = RoomScale * 4.5 * 0.4
 			Local Screen%
 			
-			r\Textures[0] = LoadAnimTexture_Strict("GFX\SL_monitors_checkpoint.png", 1, 512, 512, 0, 4, 2)
-			r\Textures[1] = LoadAnimTexture_Strict("GFX\Sl_monitors.png", 1, 256, 256, 0, 10, 2)
+			r\Textures[0] = LoadAnimTexture_Strict("GFX\SL_monitors_checkpoint.png", 1, 512, 512, 0, 4, DeleteAllTextures)
+			r\Textures[1] = LoadAnimTexture_Strict("GFX\Sl_monitors.png", 1, 256, 256, 0, 10, DeleteAllTextures)
 			
 			; ~ Monitor Objects
 			For i = 0 To 14
