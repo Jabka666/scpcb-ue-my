@@ -5386,28 +5386,31 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\RoomDoors[2]\Buttons[0], EntityX(r\RoomDoors[2]\Buttons[0], True), EntityY(r\RoomDoors[2]\Buttons[1], True), EntityZ(r\RoomDoors[2]\Buttons[0], True) + 0.061, True)
 			PositionEntity(r\RoomDoors[2]\Buttons[1], EntityX(r\RoomDoors[2]\Buttons[1], True), EntityY(r\RoomDoors[2]\Buttons[1], True), EntityZ(r\RoomDoors[2]\Buttons[1], True) - 0.061, True)					
 			
+			; ~ Elevator pivots
 			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x - 4951.0 * RoomScale, r\y - 4763.0 * RoomScale, r\z + 1828.0 * RoomScale)
-            
+			PositionEntity(r\Objects[0], r\x + 552.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 656.0 * RoomScale)
+			
 			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x + 552.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 656.0 * RoomScale)
+			PositionEntity(r\Objects[1], r\x - 2040.0 * RoomScale, r\y - 4283.0 * RoomScale, r\z - 656.0 * RoomScale)
 			
+			; ~ Class-D spawn
 			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], r\x - 4951.0 * RoomScale, r\y - 4769.0 * RoomScale, r\z + 1692.0 * RoomScale)
+			PositionEntity(r\Objects[2], r\x - 4951.0 * RoomScale, r\y - 4763.0 * RoomScale, r\z + 1828.0 * RoomScale)
 			
+			; ~ Touching pivot
 			r\Objects[3] = CreatePivot()
-			PositionEntity(r\Objects[3], r\x - 2040.0 * RoomScale, r\y - 4283.0 * RoomScale, r\z - 656.0 * RoomScale)				
+			PositionEntity(r\Objects[3], r\x - 4885.0 * RoomScale, r\y - 4598.0 * RoomScale, r\z + 2235.0 * RoomScale)
 			
-			r\Objects[4] = CreatePivot()
-			PositionEntity(r\Objects[4], r\x - 4885.0 * RoomScale, r\y - 4598.0 * RoomScale, r\z + 2235.0 * RoomScale)
-			
-			For i = 0 To 4
+			For i = 0 To 3
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
 			sc = CreateSecurityCam(r\x - 3624.0 * RoomScale, r\y - 4112.0 * RoomScale, r\z + 2248.0 * RoomScale, r)
 			sc\Angle = 100.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
+			
+			de = CreateDecal(19, r\x - 4951.0 * RoomScale, r\y - 4767.0 * RoomScale, r\z + 1692.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.5, 0.8)
+			EntityParent(de\OBJ, r\OBJ)
 			
 			it = CreateItem("Document SCP-409", "paper", r\x - 3595.0 * RoomScale, r\y - 4608.0 * RoomScale, r\z + 2234.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)

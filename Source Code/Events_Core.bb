@@ -5790,7 +5790,7 @@ Function UpdateEvents()
 			Case e_room035
 				;[Block]
 				If PlayerRoom = e\room Then
-					; ~ EventState2: has SCP-035 told the code to the storage room (true / false)
+					; ~ EventState2: has SCP-035 told the code to the storage room (True / False)
 					
 					; ~ EventState3: has the player opened the gas valves (0 = no, 0 < x < 70.0 * 35.0 yes, x > 70.0 * 35.0 the host has died)
 					
@@ -5802,7 +5802,8 @@ Function UpdateEvents()
 							n\Model = "GFX\npcs\scp_035.b3d"
 							HideEntity(n\OBJ)
 							
-							SetNPCFrame(n, 501.0)
+							SetAnimTime(n\OBJ, 501.0)
+							n\Frame = 501.0
 							n\State = 6.0
 							
 							e\EventState = 1.0
@@ -5822,7 +5823,7 @@ Function UpdateEvents()
 									e\room\NPC[0]\ModelScaleY = x
 									e\room\NPC[0]\ModelScaleZ = x
 									ScaleEntity(e\room\NPC[0]\OBJ, x, x, x)
-									SetNPCFrame(e\room\NPC[0], Temp)
+									SetAnimTime(e\room\NPC[0]\OBJ, 501.0)
 									ShowEntity(e\room\NPC[0]\OBJ)
 									RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
 									Exit
@@ -9145,24 +9146,22 @@ Function UpdateEvents()
 						ShouldPlay = 28
 						
 					    If e\EventState = 0.0 Then
-							e\room\NPC[0] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True) + 0.5, EntityZ(e\room\Objects[0], True))
+							e\room\NPC[0] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True) + 0.5, EntityZ(e\room\Objects[2], True))
 							ChangeNPCTextureID(e\room\NPC[0], 13)
 							SetNPCFrame(e\room\NPC[0], 19.0)
 							e\room\NPC[0]\State = 8.0
 							TurnEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle, 0.0)
 							e\room\NPC[0]\IsDead = True
 							
-					        de.Decals = CreateDecal(19, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True) + 0.005, EntityZ(e\room\Objects[2], True), 90.0, Rnd(360.0), 0.0, 0.5, 0.8)
-							
-							e\EventState = 1.0
+					        e\EventState = 1.0
 				        ElseIf e\EventState = 1.0 Then 
-				            If e\room\RoomDoors[2]\Open = True Then GiveAchievement(Achv409)
+				            If e\room\RoomDoors[2]\Open Then GiveAchievement(Achv409)
 					        If EntityDistanceSquared(me\Collider, e\room\NPC[0]\Collider) < 1.21 And I_409\Timer < 1.0 Then
 						        I_409\Timer = 1.0
 					        EndIf
 					        ; ~ Touching the SCP-409
 							If I_409\Timer < 1.0 Then
-								If EntityDistanceSquared(e\room\Objects[4], me\Collider) < 0.49 Then
+								If EntityDistanceSquared(e\room\Objects[3], me\Collider) < 0.49 Then
 									ga\DrawHandIcon = True
 						            If mo\MouseHit1 Then
 						                CreateMsg("You touched SCP-409.", 6.0)
@@ -9174,7 +9173,7 @@ Function UpdateEvents()
 						    EndIf
 						EndIf
 					EndIf
-                    e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[1], e\room\Objects[3], e)
+                    e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 				EndIf
 				;[End Block]
 			Case e_room005
