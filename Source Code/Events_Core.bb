@@ -3736,7 +3736,7 @@ Function UpdateEvents()
 							
 							Local Temp3% = 0
 							
-							If Temp2
+							If Temp2 Then
 								If e\EventStr = "" And PlayerRoom = e\room
 									If EntityDistanceSquared(e\room\Objects[5], me\Collider) < EntityDistanceSquared(e\room\Objects[6], me\Collider)
 										Temp3 = 6
@@ -5245,7 +5245,7 @@ Function UpdateEvents()
 						Temp = True
 					EndIf
 					
-					If Temp = True Then 
+					If Temp Then 
 						e\EventState = e\EventState + 1.0
 						For it.Items = Each Items
 							If EntityDistanceSquared(it\Collider, me\Collider) < 25.0 Then
@@ -9717,16 +9717,13 @@ Function UpdateEndings()
 											EndIf
 										Next
 										
-										If Temp = 1 Then ; ~ Explode
+										If Temp = 1.0 Then ; ~ Explode
 											me\ExplosionTimer = Max(me\ExplosionTimer, 0.1)
 											me\SelectedEnding = Ending_B2
 										Else
 											PlayAnnouncement("SFX\Ending\GateB\AlphaWarheadsFail.ogg")
 											
-											For i = 0 To 1
-												n.NPCs = CreateNPC(NPCtypeMTF, EntityX(e\room\Objects[18], True) + (i * 0.4), EntityY(e\room\Objects[18], True) + 0.29, EntityZ(e\room\Objects[18], True) + (i * 0.4))
-											Next
-											
+											n.NPCs = CreateNPC(NPCtypeMTF, EntityX(e\room\Objects[18], True), EntityY(e\room\Objects[18], True) + 0.29, EntityZ(e\room\Objects[18], True))
 											n.NPCs = CreateNPC(NPCtypeMTF, EntityX(e\room\RoomDoors[2]\OBJ, True), EntityY(e\room\RoomDoors[2]\OBJ, True) + 0.29, (EntityZ(e\room\RoomDoors[2]\OBJ, True) + EntityZ(e\room\RoomDoors[3]\OBJ, True)) / 2.0)
 											
 											For n.NPCs = Each NPCs
@@ -9923,19 +9920,19 @@ Function UpdateEndings()
 							PointEntity(e\room\NPC[i]\Collider, e\room\Objects[3])
 						Next
 						
+						For i = 5 To 6
+							e\room\NPC[i] = CreateNPC(NPCtypeMTF, EntityX(e\room\Objects[i + 2], True), EntityY(e\room\Objects[i + 2], True), EntityZ(e\room\Objects[i + 2], True))
+							e\room\NPC[i]\State = 5.0
+							e\room\NPC[i]\PrevState = 1	
+							PointEntity(e\room\NPC[i]\Collider, e\room\Objects[3])
+						Next
+						
 						For i = 7 To 8
 							e\room\NPC[i] = CreateNPC(NPCtypeMTF, EntityX(e\room\Objects[i], True) + 0.8, EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True) + 0.8)
 							e\room\NPC[i]\State = 5.0
 							e\room\NPC[i]\PrevState = 1
 							PointEntity(e\room\NPC[i]\Collider, e\room\Objects[3])
 						Next	
-						
-						For i = 5 To 6
-							e\room\NPC[i] = CreateNPC(NPCtypeMTF, EntityX(e\room\Objects[i + 2], True), EntityY(e\room\Objects[i + 2], True), EntityZ(e\room\Objects[i + 2], True))
-							e\room\NPC[i]\State = 5.0
-							e\room\NPC[i]\PrevState = 1	
-							PointEntity(e\room\NPC[i]\Collider, e\room\Objects[3])
-						Next		
 						
 						If Curr106\Contained Then
 							e\room\RoomDoors[2]\Locked = 1
@@ -9944,21 +9941,15 @@ Function UpdateEndings()
 							ResetEntity(e\room\NPC[5]\Collider)
 						EndIf
 						
-						xTemp = EntityX(e\room\Objects[9], True)
-						zTemp = EntityZ(e\room\Objects[9], True)
-						FreeEntity(e\room\Objects[9])
-						
 						e\room\Objects[9] = LoadMesh_Strict("GFX\map\Props\lightgunbase.b3d")
-						PositionEntity(e\room\Objects[9], xTemp, e\room\y + 992.0 * RoomScale, zTemp)
+						PositionEntity(e\room\Objects[9], e\room\x + (2624.0 * RoomScale), e\room\y + (992.0 * RoomScale), e\room\z + (6157.0 * RoomScale))
 						ScaleEntity(e\room\Objects[9], RoomScale, RoomScale, RoomScale)
-						RotateEntity(e\room\Objects[9], 0.0, 48.0, 0.0)
-						EntityFX(e\room\Objects[9], 0)
 						e\room\Objects[10] = LoadMesh_Strict("GFX\map\Props\lightgun.b3d")
-						PositionEntity(e\room\Objects[10], xTemp, e\room\y + (992.0 + 288.0) * RoomScale, zTemp - 176.0 * RoomScale, True)
-						EntityFX(e\room\Objects[10], 0)
+						PositionEntity(e\room\Objects[10], e\room\x + (2614.0 * RoomScale), e\room\y + (1280.0 * RoomScale), e\room\z + (5981.0 * RoomScale), True)
 						ScaleEntity(e\room\Objects[10], RoomScale, RoomScale, RoomScale)
-						RotateEntity(e\room\Objects[10], 40.0, 0.0, 0.0)
 						EntityParent(e\room\Objects[10], e\room\Objects[9])
+						RotateEntity(e\room\Objects[9], 0.0, 48.0, 0.0)
+						RotateEntity(e\room\Objects[10], 40.0, 0.0, 0.0)
 						
 						For Temp = 0 To 20
 							For i = 0 To 1
@@ -9998,7 +9989,7 @@ Function UpdateEndings()
 						If e\EventState >= 350.0 Then
 							If (Not Curr106\Contained) Then
 								If e\EventState - fps\FPSFactor[0] < 350.0
-									de.Decals = CreateDecal(0, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True) + 0.005, EntityZ(e\room\Objects[3], True), 90.0, Rand(360.0), 0.0, 0.05, 0.8)
+									de.Decals = CreateDecal(0, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True) + 0.01, EntityZ(e\room\Objects[3], True), 90.0, Rand(360.0), 0.0, 0.05, 0.8)
 									de\SizeChange = 0.001
 									
 									PositionEntity(Curr106\Collider, EntityX(e\room\Objects[3], True), EntityY(me\Collider) - 3.0, EntityZ(e\room\Objects[3], True), True)
@@ -10019,10 +10010,9 @@ Function UpdateEndings()
 												Dist = EntityY(Curr106\Collider)
 												PositionEntity(Curr106\Collider, EntityX(Curr106\Collider), EntityY(e\room\Objects[3], True), EntityZ(Curr106\Collider), True)
 												Curr106\PathStatus = FindPath(Curr106, EntityX(e\room\NPC[5]\Collider, True), EntityY(e\room\NPC[5]\Collider, True), EntityZ(e\room\NPC[5]\Collider, True))
-												Curr106\PathTimer = 70.0 * 200.0
+												Curr106\PathTimer = 70.0 * 200.0 : Curr106\PathLocation = 1
 												PositionEntity(Curr106\Collider, EntityX(Curr106\Collider), Dist, EntityZ(Curr106\Collider), True)
 												ResetEntity(Curr106\Collider)
-												Curr106\PathLocation = 1
 											EndIf
 										Else
 											Curr106\PathTimer = 70.0 * 200.0
@@ -10053,7 +10043,7 @@ Function UpdateEndings()
 											
 											If fps\FPSFactor[0] > 0.0 Then ; ~ Decals under SCP-106
 												If ((e\EventState - fps\FPSFactor[0]) Mod 100.0) =< 50.0 And (e\EventState Mod 100.0) > 50.0 Then
-													de.Decals = CreateDecal(0, EntityX(Curr106\Collider, True), EntityY(e\room\Objects[3], True) + 0.005, EntityZ(Curr106\Collider, True), 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
+													de.Decals = CreateDecal(0, EntityX(Curr106\Collider, True), EntityY(e\room\Objects[3], True) + 0.01, EntityZ(Curr106\Collider, True), 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
 													de\SizeChange = 0.004 : de\Timer = 90000.0
 												EndIf
 											EndIf
@@ -10082,7 +10072,7 @@ Function UpdateEndings()
 											
 											If fps\FPSFactor[0] > 0.0 Then
 												If ((e\EventState - fps\FPSFactor[0]) Mod 160.0) =< 50.0 And (e\EventState Mod 160.0) > 50.0 Then
-													de.Decals = CreateDecal(0, EntityX(Curr106\Collider, True), EntityY(e\room\Objects[3], True) + 0.005, EntityZ(Curr106\Collider, True), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
+													de.Decals = CreateDecal(0, EntityX(Curr106\Collider, True), EntityY(e\room\Objects[3], True) + 0.01, EntityZ(Curr106\Collider, True), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
 													de\SizeChange = 0.004 : de\Timer = 90000.0	
 												EndIf
 											EndIf
@@ -10147,13 +10137,11 @@ Function UpdateEndings()
 											
 											; ~ MTF spawns at the tunnel entrance
 											For i = 5 To 8
-												e\room\NPC[i]\State = 3.0
 												PositionEntity(e\room\NPC[i]\Collider, EntityX(e\room\Objects[15], True) + (i - 6) * 0.3, EntityY(e\room\Objects[15], True), EntityZ(e\room\Objects[15], True) + (i - 6) * 0.3, True)
 												ResetEntity(e\room\NPC[i]\Collider)
 												
 												e\room\NPC[i]\PathStatus = FindPath(e\room\NPC[i], EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-												e\room\NPC[i]\PathTimer = 70.0 * 2.0
-												e\room\NPC[i]\LastSeen = 70.0 * 100.0
+												e\room\NPC[i]\State = 3.0 : e\room\NPC[i]\PathTimer = 70.0 * 2.0 : e\room\NPC[i]\LastSeen = 70.0 * 100.0
 											Next
 											e\room\NPC[5]\Sound = LoadSound_Strict("SFX\Character\MTF\ThereHeIs1.ogg")
 											PlaySound2(e\room\NPC[5]\Sound, Camera, e\room\NPC[5]\Collider, 25.0)

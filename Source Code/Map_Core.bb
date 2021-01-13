@@ -1880,30 +1880,32 @@ Function FillRoom(r.Rooms)
 			r\RoomDoors[2] = CreateDoor(r\Zone, r\x - 4064.0 * RoomScale, r\y - 1248.0 * RoomScale, r\z + 3952.0 * RoomScale, 0.0, r)
 			r\RoomDoors[2]\AutoClose = False
 			
-			d2 = CreateDoor(r\Zone, r\x, r\y, r\z - 1024.0 * RoomScale, 0.0, r)
-			d2\AutoClose = False : d2\Locked = 1
-			FreeEntity(d2\Buttons[0]) : d2\Buttons[0] = 0
+			d = CreateDoor(r\Zone, r\x, r\y, r\z - 1024.0 * RoomScale, 0.0, r)
+			d\AutoClose = False : d\Locked = 1
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			
-			d2 = CreateDoor(r\Zone, r\x - 1440.0 * RoomScale, r\y - 480.0 * RoomScale, r\z + 2328.0 * RoomScale, 0.0, r, me\SelectedEnding = Ending_A2, Default_Door, 2)
+			d = CreateDoor(r\Zone, r\x - 1440.0 * RoomScale, r\y - 480.0 * RoomScale, r\z + 2328.0 * RoomScale, 0.0, r, me\SelectedEnding = Ending_A2, Default_Door, 2)
+			d\AutoClose = False
 			If me\SelectedEnding = Ending_A2 Then 
-				d2\AutoClose = False : d2\Locked = 1	
+				d\Locked = 1	
 			Else
-				d2\AutoClose = False : d2\Locked = 0	
+				d\Locked = 0	
 			EndIf	
-			PositionEntity(d2\Buttons[0], r\x - 1320.0 * RoomScale, EntityY(d2\Buttons[0], True), r\z + 2294.0 * RoomScale, True)
-			PositionEntity(d2\Buttons[1], r\x - 1590.0 * RoomScale, EntityY(d2\Buttons[0], True), r\z + 2484.0 * RoomScale, True)	
-			RotateEntity(d2\Buttons[1], 0.0, 90.0, 0.0, True)
+			PositionEntity(d\Buttons[0], r\x - 1320.0 * RoomScale, EntityY(d\Buttons[0], True), r\z + 2294.0 * RoomScale, True)
+			PositionEntity(d\Buttons[1], r\x - 1590.0 * RoomScale, EntityY(d\Buttons[0], True), r\z + 2484.0 * RoomScale, True)	
+			RotateEntity(d\Buttons[1], 0.0, 90.0, 0.0, True)
 			
-			d2 = CreateDoor(r\Zone, r\x - 1440 * RoomScale, r\y - 480.0 * RoomScale, r\z + 4352.0 * RoomScale, 0.0, r, me\SelectedEnding = Ending_A2, Default_Door, 2)
+			d = CreateDoor(r\Zone, r\x - 1440.0 * RoomScale, r\y - 480.0 * RoomScale, r\z + 4352.0 * RoomScale, 0.0, r, me\SelectedEnding = Ending_A2, Default_Door, 2)
+			d\AutoClose = False
 			If me\SelectedEnding = Ending_A2 Then 
-				d2\AutoClose = False : d2\Locked = 1	
+				d\Locked = 1	
 			Else
-				d2\AutoClose = False : d2\Locked = 0
+				d\Locked = 0
 			EndIf
-			PositionEntity(d2\Buttons[0], r\x - 1320.0 * RoomScale, EntityY(d2\Buttons[0], True), r\z + 4378.0 * RoomScale, True)
-			RotateEntity(d2\Buttons[0], 0.0, 180.0, 0.0, True)
-			PositionEntity(d2\Buttons[1], r\x - 1590.0 * RoomScale, EntityY(d2\Buttons[0], True), r\z + 4232.0 * RoomScale, True)	
-			RotateEntity(d2\Buttons[1], 0.0, 90.0, 0.0, True)
+			PositionEntity(d\Buttons[0], r\x - 1320.0 * RoomScale, EntityY(d\Buttons[0], True), r\z + 4378.0 * RoomScale, True)
+			RotateEntity(d\Buttons[0], 0.0, 180.0, 0.0, True)
+			PositionEntity(d\Buttons[1], r\x - 1590.0 * RoomScale, EntityY(d\Buttons[0], True), r\z + 4232.0 * RoomScale, True)	
+			RotateEntity(d\Buttons[1], 0.0, 90.0, 0.0, True)
 			
 			For r2.Rooms = Each Rooms
 				If r2\RoomTemplate\Name = "gateb" Then
@@ -1941,10 +1943,7 @@ Function FillRoom(r.Rooms)
 			r\Objects[8] = CreatePivot()
 			PositionEntity(r\Objects[8], r\x - 1824.0 * RoomScale, r\y + 224.0 * RoomScale, r\z + 7056.0 * RoomScale)	
 			
-			r\Objects[9] = CreatePivot()
-			PositionEntity(r\Objects[9], r\x + 2624.0 * RoomScale, r\y + 992.0 * RoomScale, r\z + 6157.0 * RoomScale)	
-			
-			For i = 3 To 9
+			For i = 3 To 8
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
@@ -2014,7 +2013,7 @@ Function FillRoom(r.Rooms)
 			r\RoomDoors[2] = CreateDoor(r\Zone, r\x + 4352.0 * RoomScale, r\y + 10784.0 * RoomScale, r\z - 492.0 * RoomScale, 0.0, r)
 			r\RoomDoors[2]\AutoClose = False	
 			
-			r\RoomDoors[3] = CreateDoor(r\Zone, r\x + 4352.0 * RoomScale, r\y + 10784.0 * RoomScale, r\z + 500.0 * RoomScale, 0.0, r)
+			r\RoomDoors[3] = CreateDoor(r\Zone, r\x + 4352.0 * RoomScale, r\y + 10784.0 * RoomScale, r\z + 498.0 * RoomScale, 0.0, r)
 			r\RoomDoors[3]\AutoClose = False
 			
 			r\RoomDoors[4] = CreateDoor(r\Zone, r\x, r\y, r\z - 320.0 * RoomScale, 0.0, r, False, Big_Door, 5)
@@ -2024,7 +2023,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\RoomDoors[4]\Buttons[0], EntityX(r\RoomDoors[4]\Buttons[0], True), EntityY(r\RoomDoors[4]\Buttons[0], True), r\z - 198.0 * RoomScale, True)
 			RotateEntity(r\RoomDoors[4]\Buttons[0], 0.0, r\Angle - 180.0, 0.0, True)
 			
-			r\RoomDoors[5] = CreateDoor(r\Zone, r\x + 3248.0 * RoomScale, r\y + 9856.0 * RoomScale, r\z + 6400.0 * RoomScale, 0.0, r, False, Default_Door, 0, "GEAR")
+			r\RoomDoors[5] = CreateDoor(r\Zone, r\x + 3248.0 * RoomScale, r\y + 9856.0 * RoomScale, r\z + 6400.0 * RoomScale, 0.0, r, False, One_Sided_Door, 0, "GEAR")
 			r\RoomDoors[5]\AutoClose = False : r\RoomDoors[5]\Locked = 1
 			FreeEntity(r\RoomDoors[5]\Buttons[1]) : r\RoomDoors[5]\Buttons[1] = 0	
 			

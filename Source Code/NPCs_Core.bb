@@ -2285,7 +2285,7 @@ Function UpdateNPCs()
 					Case 2.0 ; ~ Shoots
 						;[Block]
 						AnimateNPC(n, 245.0, 248.0, 0.35)
-						If n\Reload = 0.0
+						If n\Reload = 0.0 Then
 							PlaySound2(GunshotSFX, Camera, n\Collider, 15.0)
 							p.Particles = CreateParticle(EntityX(n\OBJ, True), EntityY(n\OBJ, True), EntityZ(n\OBJ, True), 1, 0.2, 0.0, 5.0)
 							PositionEntity(p\Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
@@ -2448,18 +2448,18 @@ Function UpdateNPCs()
 								
 								If n\Reload > 0.0 And n\Reload =< 7.0
 								    If n\UseEarphones Then
-								        AnimateNPC(n, 867.0, 870.0, 0.35, True)
+								        AnimateNPC(n, 867.0, 870.0, 0.35)
 								    Else
-									    AnimateNPC(n, 245.0, 248.0, 0.35, True)
+									    AnimateNPC(n, 245.0, 248.0, 0.35)
 									EndIf
 								Else
 								    If n\UseEarphones Then
 								        If n\Frame < 884.0 Then
-										    AnimateNPC(n, 884.0, 926.0, 0.35, True)
+										    AnimateNPC(n, 884.0, 926.0, 0.35)
 									    EndIf
 									Else
 									    If n\Frame < 302.0 Then
-									        AnimateNPC(n, 302.0, 344.0, 0.35, True)
+									        AnimateNPC(n, 302.0, 344.0, 0.35)
 									    EndIf
 									EndIf
 								EndIf
@@ -2543,8 +2543,8 @@ Function UpdateNPCs()
 							AnimateNPC(n, 345.0, 357.0, 0.2, False)
 							If n\Frame >= 356.0 Then SetNPCFrame(n, 302.0)
 						EndIf
-						If n\Frame < 345.0
-							AnimateNPC(n, 302.0, 344.0, 0.35, True)
+						If n\Frame < 345.0 Then
+							AnimateNPC(n, 302.0, 344.0, 0.35)
 						EndIf
 						
 						Pvt = CreatePivot()
@@ -2575,7 +2575,7 @@ Function UpdateNPCs()
 						;[End Block]
 					Case 13.0
 						;[Block]
-						AnimateNPC(n, 202.0, 244.0, 0.35, True)
+						AnimateNPC(n, 202.0, 244.0, 0.35)
 						;[End Block]
 					Case 14.0
 						;[Block]
