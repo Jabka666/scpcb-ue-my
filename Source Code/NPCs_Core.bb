@@ -244,7 +244,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			n\OBJ2 = CreateSprite(FindChild(n\OBJ, "Reyelid"))
 			ScaleSprite(n\OBJ2, 0.07, 0.08)
 			EntityOrder(n\OBJ2, -5)
-			EntityTexture(n\OBJ2, tt\OverlayTextureID[6])
+			EntityTexture(n\OBJ2, tt\OverlayTextureID[5])
 			HideEntity(n\OBJ2)
 			
 			n\CollRadius = 0.26

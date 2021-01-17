@@ -142,7 +142,7 @@ Function UpdateMusic()
 End Function 
 
 Function PauseSounds()
-	Local e.Events, n.NPCs, d.Doors
+	Local e.Events, n.NPCs, d.Doors, i%
 	
 	For e.Events = Each Events
 		If e\SoundCHN <> 0 Then
@@ -222,13 +222,25 @@ Function PauseSounds()
 		If ChannelPlaying(SCRAMBLECHN) Then PauseChannel(SCRAMBLECHN)
 	EndIf
 	
+	For i = 0 To 1
+		If LowBatteryCHN[i] <> 0 Then
+			If ChannelPlaying(LowBatteryCHN[i]) Then PauseChannel(LowBatteryCHN[i])
+		EndIf
+	Next
+	
+	For i = 0 To 6
+		If RadioCHN[i] <> 0 Then
+			If ChannelPlaying(RadioCHN[i]) Then PauseChannel(RadioCHN[i])
+		EndIf
+	Next
+	
 	If IntercomStreamCHN <> 0 Then
 		SetStreamPaused_Strict(IntercomStreamCHN, True)
 	EndIf
 End Function
 
 Function ResumeSounds()
-	Local e.Events, n.NPCs, d.Doors
+	Local e.Events, n.NPCs, d.Doors, i%
 	
 	For e.Events = Each Events
 		If e\SoundCHN <> 0 Then
@@ -307,6 +319,16 @@ Function ResumeSounds()
 	If SCRAMBLECHN <> 0 Then
 		If ChannelPlaying(SCRAMBLECHN) Then ResumeChannel(SCRAMBLECHN)
 	EndIf
+	
+	For i = 0 To 1
+		If ChannelPlaying(LowBatteryCHN[i]) Then ResumeChannel(LowBatteryCHN[i])
+	Next
+	
+	For i = 0 To 6
+		If RadioCHN[i] <> 0 Then
+			If ChannelPlaying(RadioCHN[i]) Then ResumeChannel(RadioCHN[i])
+		EndIf
+	Next
 	
 	If IntercomStreamCHN <> 0 Then
 		SetStreamPaused_Strict(IntercomStreamCHN, False)
@@ -393,6 +415,16 @@ Function KillSounds()
 	If SCRAMBLECHN <> 0 Then
 		If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN)
 	EndIf
+	
+	For i = 0 To 1
+		If ChannelPlaying(LowBatteryCHN[i]) Then StopChannel(LowBatteryCHN[i])
+	Next
+	
+	For i = 0 To 6
+		If RadioCHN[i] <> 0 Then
+			If ChannelPlaying(RadioCHN[i]) Then StopChannel(RadioCHN[i])
+		EndIf
+	Next
 	
 	If IntercomStreamCHN <> 0 Then
 		StopStream_Strict(IntercomStreamCHN)
@@ -524,7 +556,7 @@ Function UpdateDeaf()
 	EndIf
 End Function
 
-Function LoadAllSounds()
+Function LoadSounds()
 	Local i%
 	
 	For i = 0 To 2
@@ -689,6 +721,13 @@ Function LoadAllSounds()
 	CrouchSFX = LoadSound_Strict("SFX\Character\D9341\Crouch.ogg")
 	
 	SCRAMBLESFX = LoadSound_Strict("SFX\General\SCRAMBLE.ogg")
+	
+	NVGSFX[0] = LoadSound_Strict("SFX\General\NVGOn.ogg")
+	NVGSFX[1] = LoadSound_Strict("SFX\General\NVGOff.ogg")
+	
+	For i = 0 To 1
+		LowBatterySFX[i] = LoadSound_Strict("SFX\General\LowBattery" + (i + 1) + ".ogg")
+	Next
 End Function
 
 ;~IDEal Editor Parameters:

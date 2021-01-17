@@ -2110,7 +2110,7 @@ Function FillRoom(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it = CreateItem("Radio Transceiver", "radio", r\x + 800.0 * RoomScale, r\y + 112.0 * RoomScale, r\z + 944.0 * RoomScale)
-			it\State = 80.0
+			it\State = Rnd(100.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case "room079"
@@ -2324,8 +2324,8 @@ Function FillRoom(r.Rooms)
 			RotateEntity(it\Collider, 0.0, 180.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it = CreateItem("S-NAV 300 Navigator", "nav", r\x - 914.0 * RoomScale, r\y + 137.0 * RoomScale, r\z + 61.0 * RoomScale)
-			it\State = 20.0
+			it = CreateItem("S-NAV Navigator", "nav", r\x - 914.0 * RoomScale, r\y + 137.0 * RoomScale, r\z + 61.0 * RoomScale)
+			it\State = Rnd(100.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case "room3tunnel"
@@ -2549,10 +2549,10 @@ Function FillRoom(r.Rooms)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
-			it = CreateItem("cup", "cup", r\x - 508.0 * RoomScale, r\y - 187.0 * RoomScale, r\z + 284.0 * RoomScale, 240, 175, 70)
+			it = CreateItem("Cup", "cup", r\x - 508.0 * RoomScale, r\y - 187.0 * RoomScale, r\z + 284.0 * RoomScale, 240, 175, 70)
 			EntityParent(it\Collider, r\OBJ) : it\Name = "Cup of Orange Juice"
 			
-			it = CreateItem("cup", "cup", r\x + 1412.0 * RoomScale, r\y - 187.0 * RoomScale, r\z - 716.0 * RoomScale, 87, 62, 45)
+			it = CreateItem("Cup", "cup", r\x + 1412.0 * RoomScale, r\y - 187.0 * RoomScale, r\z - 716.0 * RoomScale, 87, 62, 45)
 			EntityParent(it\Collider, r\OBJ) : it\Name = "Cup of Coffee"
 			
 			it = CreateItem("Empty Cup", "emptycup", r\x - 540.0 * RoomScale, r\y - 187.0 * RoomScale, r\z + 124.0 * RoomScale)
@@ -2906,7 +2906,7 @@ Function FillRoom(r.Rooms)
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			
 			it = CreateItem("Night Vision Goggles", "nvg", r\x + 320.0 * RoomScale, r\y + 0.5, r\z + 704.0 * RoomScale)
-			it\State = 300.0
+			it\State = Rnd(1000.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case "room3storage"
@@ -3073,7 +3073,7 @@ Function FillRoom(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it = CreateItem("Night Vision Goggles", "nvg", r\x + 1936.0 * RoomScale, r\y - 5496.0 * RoomScale, r\z - 944.0 * RoomScale)
-			it\State = 450.0
+			it\State = Rnd(1000.0)
 			EntityParent(it\Collider, r\OBJ)
 			
 			de = CreateDecal(3, r\x + xTemp * RoomScale, r\y - 5632.0 * RoomScale + 0.01, r\z + zTemp * RoomScale, 90.0, Rnd(360.0), 0.0, 0.5)
@@ -3436,8 +3436,8 @@ Function FillRoom(r.Rooms)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			
-			it = CreateItem("S-NAV 300 Navigator", "nav", r\x + 124.0 * RoomScale, r\y - 368.0 * RoomScale, r\z - 648.0 * RoomScale)
-			it\State = 20.0
+			it = CreateItem("S-NAV Navigator", "nav", r\x + 124.0 * RoomScale, r\y - 368.0 * RoomScale, r\z - 648.0 * RoomScale)
+			it\State = Rnd(100.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case "room3servers2"
@@ -3561,8 +3561,8 @@ Function FillRoom(r.Rooms)
 			it = CreateItem("Level 2 Key Card", "key2", r\x - 156.0 * RoomScale, r\y + 151.0 * RoomScale, r\z + 72.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it = CreateItem("S-NAV 300 Navigator", "nav", r\x + 305.0 * RoomScale, r\y + 153.0 * RoomScale, r\z + 944.0 * RoomScale)
-			it\State = 20.0
+			it = CreateItem("S-NAV Navigator", "nav", r\x + 305.0 * RoomScale, r\y + 153.0 * RoomScale, r\z + 944.0 * RoomScale)
+			it\State = Rnd(100.0)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it = CreateItem("Notification", "paper", r\x - 137.0 * RoomScale, r\y + 153.0 * RoomScale, r\z + 464.0 * RoomScale)
@@ -3605,8 +3605,8 @@ Function FillRoom(r.Rooms)
 			EndIf
 			EntityParent(it\Collider, r\OBJ)
 			
-			it = CreateItem("S-NAV 300 Navigator", "nav", r\x - 336.0 * RoomScale, r\y - 48.0 * RoomScale, r\z - 480.0 * RoomScale)
-			it\State = 28.0
+			it = CreateItem("S-NAV Navigator", "nav", r\x - 336.0 * RoomScale, r\y - 48.0 * RoomScale, r\z - 480.0 * RoomScale)
+			it\State = Rnd(100.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case "room2offices3"
@@ -3990,7 +3990,7 @@ Function FillRoom(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it = CreateItem("Night Vision Goggles", "nvg", r\x + 280.0 * RoomScale, r\y - 1456.0 * RoomScale, r\z + 2164.0 * RoomScale)
-			it\State = 400.0
+			it\State = Rnd(1000.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case "room2tesla", "room2tesla_lcz", "room2tesla_hcz"
@@ -4440,13 +4440,15 @@ Function FillRoom(r.Rooms)
 				For yTemp2 = 0 To 2
 					For zTemp2 = 0 To 2
 						TempStr = "9V Battery" : TempStr2 = "bat"
-						Chance = Rand(-10, 100)
+						
+						Local ItemChance% = Rand(-10, 100)
+						
 						Select True
-							Case Chance < 0
+							Case ItemChance < 0
 								;[Block]
 								Exit
 								;[End Block]
-							Case Chance < 40 ; ~ 40% chance for a document
+							Case ItemChance < 40 ; ~ 40% chance for a document
 								;[Block]
 								TempStr = "Document SCP-"
 								Select Rand(22)
@@ -4541,55 +4543,57 @@ Function FillRoom(r.Rooms)
 								End Select
 								TempStr2 = "paper"
 								;[End Block]
-							Case Chance >= 40 And Chance < 45 ; ~ 5% chance for a key card
+							Case ItemChance >= 40 And ItemChance < 45 ; ~ 5% chance for a key card
 								;[Block]
 								Temp3 = Rand(0, 2)
 								TempStr = "Level " + Str(Temp3) + " Key Card"
 								TempStr2 = "key" + Str(Temp3)
 								;[End Block]
-							Case Chance >= 45 And Chance < 50 ; ~ 5% chance for a medkit
+							Case ItemChance >= 45 And ItemChance < 50 ; ~ 5% chance for a medkit
 								;[Block]
 								TempStr = "First Aid Kit"
 								TempStr2 = "firstaid"
 								;[End Block]
-							Case Chance >= 50 And Chance < 60 ; ~ 10% chance for a battery
+							Case ItemChance >= 50 And ItemChance < 60 ; ~ 10% chance for a battery
 								;[Block]
 								TempStr = "9V Battery"
 								TempStr2 = "bat"
 								;[End Block]
-							Case Chance >= 60 And Chance < 70 ; ~ 10% chance for an SNAV
+							Case ItemChance >= 60 And ItemChance < 70 ; ~ 10% chance for an SNAV
 								;[Block]
-								TempStr = "S-NAV 300 Navigator"
+								TempStr = "S-NAV Navigator"
 								TempStr2 = "nav"
 								;[End Block]
-							Case Chance >= 70 And Chance < 85 ; ~ 15% chance for a radio
+							Case ItemChance >= 70 And ItemChance < 85 ; ~ 15% chance for a radio
 								;[Block]
 								TempStr = "Radio Transceiver"
 								TempStr2 = "radio"
 								;[End Block]
-							Case Chance >= 85 And Chance < 95 ; ~ 10% chance for a clipboard
+							Case ItemChance >= 85 And ItemChance < 95 ; ~ 10% chance for a clipboard
 								;[Block]
 								TempStr = "Clipboard"
 								TempStr2 = "clipboard"
 								;[End Block]
-							Case Chance >= 95 And Chance =< 100 ; ~ 5% chance for misc
+							Case ItemChance >= 95 And ItemChance =< 100 ; ~ 5% chance for misc
 								;[Block]
 								Temp3 = Rand(1, 3)
 								Select Temp3
 									Case 1 ; ~ Playing card
 										;[Block]
 										TempStr = "Playing Card"
+										TempStr2 = "playcard"
 										;[End Block]
 									Case 2 ; ~ Mastercard
 										;[Block]
 										TempStr = "Mastercard"
+										TempStr2 = Lower(TempStr)
 										;[End Block]
 									Case 3 ; ~ Origami
 										;[Block]
 										TempStr = "Origami"
+										TempStr2 = Lower(TempStr)
 										;[End Block]
 								End Select
-								TempStr2 = "misc"
 								;[End Block]
 						End Select
 						xTemp = (-672.0) + 864.0 * xTemp2
@@ -4882,7 +4886,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.012, True)
 			
 			it = CreateItem("Night Vision Goggles", "nvg", r\x + 56.0154 * RoomScale, r\y - 648.0 * RoomScale, r\z + 749.638 * RoomScale)
-			it\State = 200.0
+			it\State = Rnd(1000.0)
 			RotateEntity(it\Collider, 0.0, r\Angle + Rand(245), 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
@@ -5363,7 +5367,7 @@ Function FillRoom(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it = CreateItem("SCRAMBLE Gear", "scramble", r\x - 860.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 80.0 * RoomScale)
-			it\State = 450.0
+			it\State = Rnd(1000.0)
 			EntityParent(it\Collider, r\OBJ)
 		    ;[End Block]
 		Case "room409"
@@ -5434,7 +5438,7 @@ Function FillRoom(r.Rooms)
             it = CreateItem("Level 1 Key Card", "key1", r\x + 468.0 * RoomScale, r\y + 160.0 * RoomScale, r\z + 980.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it = CreateItem("Origami", "misc", r\x + 460.0 * RoomScale, r\y + 250.0 * RoomScale, r\z + 80.0 * RoomScale)
+			it = CreateItem("Origami", "origami", r\x + 460.0 * RoomScale, r\y + 250.0 * RoomScale, r\z + 80.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -6338,7 +6342,7 @@ Function CreateSecurityCam.SecurityCams(x1#, y1#, z1#, r.Rooms, Screen% = False,
 	Return(sc)
 End Function
 
-Function UpdateSecurityCams() ; ~ SHOULD BE SEPARATED!
+Function UpdateSecurityCams() ; ~ TODO: SHOULD BE SEPARATED!
 	CatchErrors("Uncaught (UpdateSecurityCams)")
 	
 	Local sc.SecurityCams
@@ -6712,6 +6716,7 @@ Function CheckForPropModel%(File$)
 	EndIf
 End Function
 
+; ~ TODO: REPLACE DIMS
 Function CreateMap()
 	I_Zone\Transition[0] = 13
 	I_Zone\Transition[1] = 7
@@ -6904,7 +6909,7 @@ Function CreateMap()
 				;[End Block]
 			Case 1
 				;[Block]
-				Zone = MapSize / 3 + 1
+				Zone = (MapSize / 3) + 1
 				Temp2 = MapSize * (2.0 / 3.0) - 1
 				;[End Block]
 			Case 0

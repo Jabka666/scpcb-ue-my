@@ -215,7 +215,7 @@ Function InitItemTemplates()
 	
 	CreateItemTemplate("Old Badge", "badge", ItemsPath + "badge.b3d", ItemsPath + "INV_D_9341_badge.png", ItemsPath + "D_9341_badge_HUD.png", 0.0001, 1, ItemsPath + "D_9341_badge.png", "", 0, 1 + 2 + 8)
 	
-	CreateItemTemplate("Origami", "misc", ItemsPath + "origami.b3d", ItemsPath + "INV_origami.png", "", 0.003, 0)
+	CreateItemTemplate("Origami", "origami", ItemsPath + "origami.b3d", ItemsPath + "INV_origami.png", "", 0.003, 0)
 	
 	CreateItemTemplate("Scorched Note", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_burnt_note.png", ItemsPath + "note_L(6).png", 0.0025, 0, ItemsPath + "burnt_note.png")
 	
@@ -266,14 +266,14 @@ Function InitItemTemplates()
 	
 	CreateItemTemplate("Clipboard", "clipboard", ItemsPath + "clipboard.b3d", ItemsPath + "INV_clipboard.png", "", 0.003, 1, "", ItemsPath + "INV_clipboard(2).png", 1)
 	
-	CreateItemTemplate("Electronical Components", "misc", ItemsPath + "circuits.b3d", ItemsPath + "INV_circuits.png", "", 0.0011, 1)
+	CreateItemTemplate("Electronical Components", "electronics", ItemsPath + "circuits.b3d", ItemsPath + "INV_circuits.png", "", 0.0011, 1)
 	
 	CreateItemTemplate("Empty Cup", "emptycup", ItemsPath + "cup.b3d", ItemsPath + "INV_cup.png", "", 0.04, 2)
 	
 	CreateItemTemplate("ReVision Eyedrops", "eyedrops", ItemsPath + "eye_drops.b3d", ItemsPath + "INV_eye_drops.png", "", 0.0012, 1)
 	CreateItemTemplate("Eyedrops", "fineeyedrops", ItemsPath + "eye_drops.b3d", ItemsPath + "INV_eye_drops.png", "", 0.0012, 1)
 	CreateItemTemplate("Eyedrops", "supereyedrops", ItemsPath + "eye_drops.b3d", ItemsPath + "INV_eye_drops.png", "", 0.0012, 1)
-	CreateItemTemplate("RedVision Eyedrops", "eyedrops", ItemsPath + "eye_drops.b3d", ItemsPath + "INV_eye_drops_red.png", "", 0.0012, 1, ItemsPath + "eye_drops_red.png")
+	CreateItemTemplate("RedVision Eyedrops", "eyedrops2", ItemsPath + "eye_drops.b3d", ItemsPath + "INV_eye_drops_red.png", "", 0.0012, 1, ItemsPath + "eye_drops_red.png")
 	
 	CreateItemTemplate("First Aid Kit", "firstaid", ItemsPath + "first_aid_kit.b3d", ItemsPath + "INV_first_aid_kit.png", "", 0.05, 1)
 	CreateItemTemplate("Small First Aid Kit", "finefirstaid", ItemsPath + "first_aid_kit.b3d", ItemsPath + "INV_first_aid_kit.png", "", 0.03, 1)
@@ -305,12 +305,14 @@ Function InitItemTemplates()
 	CreateItemTemplate("Black Severed Hand", "hand2", ItemsPath + "severed_hand.b3d", ItemsPath + "INV_severed_hand(2).png", "", 0.03, 2, ItemsPath + "severed_hand(2).png")
 	
 	CreateItemTemplate("S-NAV Navigator", "nav", ItemsPath + "navigator.b3d", ItemsPath + "INV_navigator.png", ItemsPath + "navigator_HUD.png", 0.0008, 1)
-	CreateItemTemplate("S-NAV Navigator Ultimate", "nav", ItemsPath + "navigator.b3d", ItemsPath + "INV_navigator.png", ItemsPath + "navigator_HUD.png", 0.0008, 1)
-	CreateItemTemplate("S-NAV 300 Navigator", "nav", ItemsPath + "navigator.b3d", ItemsPath + "INV_navigator.png", ItemsPath + "navigator_HUD.png", 0.0008, 1)
-	CreateItemTemplate("S-NAV 310 Navigator", "nav", ItemsPath + "navigator.b3d", ItemsPath + "INV_navigator.png", ItemsPath + "navigator_HUD.png", 0.0008, 1)
+	CreateItemTemplate("S-NAV Navigator Ultimate", "navulti", ItemsPath + "navigator.b3d", ItemsPath + "INV_navigator.png", ItemsPath + "navigator_HUD.png", 0.0008, 1)
+	CreateItemTemplate("S-NAV 300 Navigator", "nav300", ItemsPath + "navigator.b3d", ItemsPath + "INV_navigator.png", ItemsPath + "navigator_HUD.png", 0.0008, 1)
+	CreateItemTemplate("S-NAV 310 Navigator", "nav310", ItemsPath + "navigator.b3d", ItemsPath + "INV_navigator.png", ItemsPath + "navigator_HUD.png", 0.0008, 1)
 	
 	CreateItemTemplate("9V Battery", "bat", ItemsPath + "battery.b3d", ItemsPath + "INV_battery_9v.png", "", 0.008, 1)
-	CreateItemTemplate("18V Battery", "18vbat", ItemsPath + "battery.b3d", ItemsPath + "INV_battery_18v.png", "", 0.01, 1, ItemsPath + "battery_18V.png")
+	CreateItemTemplate("4.5V Battery", "badbat", ItemsPath + "battery.b3d", ItemsPath + "INV_battery_4.5v.png", "", 0.008, 1, ItemsPath + "battery_4.5V.png")
+	CreateItemTemplate("18V Battery", "finebat", ItemsPath + "battery.b3d", ItemsPath + "INV_battery_18v.png", "", 0.01, 1, ItemsPath + "battery_18V.png")
+	CreateItemTemplate("999V Battery", "superbat", ItemsPath + "battery.b3d", ItemsPath + "INV_battery_999v.png", "", 0.009, 1, ItemsPath + "battery_999V.png")
 	CreateItemTemplate("Strange Battery", "killbat", ItemsPath + "battery.b3d", ItemsPath + "INV_strange_battery.png", "", 0.01, 1, ItemsPath + "strange_battery.png")
 	
 	CreateItemTemplate("Syringe", "syringe", ItemsPath + "syringe.b3d", ItemsPath + "INV_syringe.png", "", 0.005, 2)
@@ -318,7 +320,7 @@ Function InitItemTemplates()
 	CreateItemTemplate("Syringe", "veryfinesyringe", ItemsPath + "syringe.b3d", ItemsPath + "INV_syringe.png", "", 0.005, 2)
 	CreateItemTemplate("Syringe", "syringeinf", ItemsPath + "syringe.b3d", ItemsPath + "INV_syringe_infect.png", "", 0.005, 2, ItemsPath + "syringe_infect.png")
 	
-	CreateItemTemplate("Wallet", "wallet", ItemsPath + "wallet.b3d", ItemsPath + "INV_wallet.png", "", 0.0005, 2, "", "", 1)
+	CreateItemTemplate("Wallet", "wallet", ItemsPath + "wallet.b3d", ItemsPath + "INV_wallet.png", "", 0.0006, 2, "", "", 1)
 	
 	; ~ [KEYCARDS, KEYS, CARDS, COINS]
 	
@@ -335,9 +337,9 @@ Function InitItemTemplates()
 	
 	CreateItemTemplate("Lost Key", "key", ItemsPath + "key.b3d", ItemsPath + "INV_key.png", "", 0.003, 3)
 	
-	CreateItemTemplate("Mastercard", "misc", ItemsPath + "key_card.b3d", ItemsPath + "INV_master_card.png", "", 0.0004, 1, ItemsPath + "master_card.png")
+	CreateItemTemplate("Mastercard", "mastercard", ItemsPath + "key_card.b3d", ItemsPath + "INV_master_card.png", "", 0.0004, 1, ItemsPath + "master_card.png")
 	
-	CreateItemTemplate("Playing Card", "misc", ItemsPath + "key_card.b3d", ItemsPath + "INV_playing_card.png", "", 0.0004, 1, ItemsPath + "playing_card.png")
+	CreateItemTemplate("Playing Card", "playcard", ItemsPath + "key_card.b3d", ItemsPath + "INV_playing_card.png", "", 0.0004, 1, ItemsPath + "playing_card.png")
 	
 	CreateItemTemplate("Quarter", "25ct", ItemsPath + "coin.b3d", ItemsPath + "INV_coin.png", "", 0.0005, 3)
 	
@@ -355,6 +357,99 @@ Function InitItemTemplates()
 		EndIf
 	Next
 End Function 
+
+Function GetRandDocument$()
+	Select Rand(0, 21)
+		Case 0
+			;[Block]
+			Return("005")
+			;[End Block]
+		Case 1
+			;[Block]
+			Return("008")
+			;[End Block]
+		Case 2
+			;[Block]
+			Return("012")
+			;[End Block]
+		Case 3
+			;[Block]
+			Return("035")
+			;[End Block]
+		Case 4
+			;[Block]
+			Return("049")
+			;[End Block]
+		Case 5
+			;[Block]
+			Return("096")
+			;[End Block]
+		Case 6
+			;[Block]
+			Return("106")
+			;[End Block]
+		Case 7
+			;[Block]
+			Return("173")
+			;[End Block]
+		Case 8
+			;[Block]
+			Return("205")
+			;[End Block]
+		Case 9
+			;[Block]
+			Return("409")
+			;[End Block]
+		Case 10
+			;[Block]
+			Return("513")
+			;[End Block]
+		Case 11
+			;[Block]
+			Return("682")
+			;[Block]
+		Case 12
+			;[Block]
+			Return("714")
+			;[End Block]
+		Case 13
+			;[Block]
+			Return("860")
+			;[End Block]
+		Case 14
+			;[Block]
+			Return("860-1")
+			;[End Block]
+		Case 15
+			;[Block]
+			Return("895")
+			;[End Block]
+		Case 16
+			;[Block]
+			Return("939")
+			;[End Block]
+		Case 17
+			;[Block]
+			Return("966")
+			;[End Block]
+		Case 18
+			;[Block]
+			Return("970")
+			;[End Block]
+		Case 19
+			;[Block]
+			Return("1048")
+			;[End Block]
+		Case 20
+			;[Block]
+			Return("1162")
+			;[End Block]
+		Case 21
+			;[Block]
+			Return("1499")
+			;[End Block]
+	End Select
+End Function
 
 Type Items
 	Field Name$
@@ -521,6 +616,15 @@ Function RemoveWearableItems(item.Items)
 	CatchErrors("RemoveWearableItems")
 End Function
 
+Function ClearSecondInv(item.Items, From% = 0)
+	Local i%
+	
+	For i = From To 19
+		If item\SecondInv[i] <> Null Then RemoveItem(item\SecondInv[i])
+		item\SecondInv[i] = Null
+	Next
+End Function
+
 Function UpdateItems()
 	CatchErrors("Uncaught (UpdateItems)")
 	
@@ -665,7 +769,6 @@ Function PickItem(item.Items)
 							For e.Events = Each Events
 								If e\EventName = "room1123" Then 
 									If e\EventState = 0.0 Then
-										ShowEntity(tt\OverlayID[7])
 										me\LightFlash = 3.0
 										PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))
 									EndIf
@@ -722,9 +825,9 @@ Function PickItem(item.Items)
 						;[Block]
 						item\State = 0.0
 						;[End Block]
-					Case "navigator", "nav"
+					Case "navulti"
 						;[Block]
-						If item\ItemTemplate\Name = "S-NAV Navigator Ultimate" Then GiveAchievement(AchvSNAV)
+						GiveAchievement(AchvSNAV)
 						;[End Block]
 					Case "hazmatsuit", "hazmatsuit2", "hazmatsuit3"
 						;[Block]
@@ -946,6 +1049,53 @@ Function Update294()
 	EndIf
 	
 	CatchErrors("Update294")
+End Function
+
+Function IsItemGoodFor1162%(itt.ItemTemplates)
+	Select itt\TempName
+		Case "key0", "key1", "key2", "key3"
+			;[Block]
+			Return(True)
+			;[End Block]
+		Case "mastercard", "playcard", "origami", "electronics", "scp420j", "cigarette"
+			;[Block]
+			Return(True)
+			;[End Block]
+		Case "vest", "finevest","gasmask"
+			;[Block]
+			Return(True)
+			;[End Block]
+		Case "radio", "18vradio"
+			;[Block]
+			Return(True)
+			;[End Block]
+		Case "clipboard", "eyedrops", "nvg"
+			;[Block]
+			Return(True)
+			;[End Block]
+		Default
+			;[Block]
+			If itt\TempName <> "paper" Then
+				Return(False)
+			ElseIf Instr(itt\Name, "Leaflet")
+				Return(False)
+			Else
+				; ~ If the item is a paper, only allow spawning it if the name contains the word "note" or "log"
+				; ~ (Because those are items created recently, which D-9341 has most likely never seen)
+				Return(((Not Instr(itt\Name, "Note")) And (Not Instr(itt\Name, "Log"))))
+			EndIf
+			;[End Block]
+	End Select
+End Function
+
+Function IsItemInFocus%()
+	Select SelectedItem\ItemTemplate\TempName
+		Case "nav", "nav300", "nav310", "navulti", "paper", "oldpaper", "badge", "radio", "18vradio", "fineradio", "veryfineradio"
+			;[Block]
+			Return(True)
+			;[End Block]
+	End Select
+	Return(False)
 End Function
 
 Function CanUseItem%(CanUseWithGasMask%, CanUseWithEyewear%)

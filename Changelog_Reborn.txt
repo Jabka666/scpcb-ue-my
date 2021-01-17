@@ -21,11 +21,14 @@
 - Added bloody texture for SCP-096.
 - Added SCRAMBLE Gear.
 - Added tiny visual effect for blood decals.
+- Added low battery sounds.
+- Added 4.5V and 999V batteries.
 
 - Now guard in "room2elevator" event can kill the player if he too close.
 - Now the pass code for O5 Council's office drops from falling guard in SCP-895's event.
 - Now crouching reduces stamina.
 - Now ballistic vest and ballistic helmet reduces damage from some NPCs.
+- Now all battery charges are randomized.
 
 - To obtain new difficulties you need to finish game on previous difficulty.
 

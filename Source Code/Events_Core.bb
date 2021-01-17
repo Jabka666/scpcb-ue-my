@@ -8448,11 +8448,11 @@ Function UpdateEvents()
 						Local ShouldCreateItem% = False
 						
 						For itt.ItemTemplates = Each ItemTemplates
-							If (IsItemGoodFor1162(itt)) Then
+							If IsItemGoodFor1162(itt) Then
 								Select Inventory[e\EventState2]\ItemTemplate\TempName
 									Case "key"
 										;[Block]
-										If itt\TempName = "key1" Lor itt\TempName = "key2" And Rand(2) = 1
+										If itt\TempName = "key0" Lor itt\TempName = "key1" And Rand(2) = 1
 											ShouldCreateItem = True
 										EndIf
 										;[End Block]
@@ -8464,25 +8464,31 @@ Function UpdateEvents()
 										;[End Block]
 									Case "gasmask", "gasmask3", "supergasmask", "hazmatsuit", "hazmatsuit2", "hazmatsuit3"
 										;[Block]
-										If itt\TempName = "gasmask" Lor itt\TempName = "gasmask3" Lor itt\TempName = "supergasmask" Lor itt\TempName = "hazmatsuit" Lor itt\TempName = "hazmatsuit2" Lor itt\TempName = "hazmatsuit3" And Rand(2) = 1
+										If itt\TempName = "gasmask" Lor itt\TempName = "gasmask3" Lor itt\TempName = "supergasmask" Lor itt\TempName = "hazmatsuit" Lor itt\TempName = "hazmatsuit2" Lor itt\TempName = "hazmatsuit3" And Rand(2) = 1 Then
 											ShouldCreateItem = True
 										EndIf
 										;[End Block]
 									Case "key0", "key1", "key2", "key3"
 										;[Block]
-										If itt\TempName = "key0" Lor itt\TempName = "key1" Lor itt\TempName = "key2" Lor itt\TempName = "key3" Lor itt\TempName = "misc" And Rand(6) = 1
+										If itt\TempName = "key0" Lor itt\TempName = "key1" Lor itt\TempName = "key2" Lor itt\TempName = "key3" And Rand(6) = 1 Then
+											ShouldCreateItem = True
+										EndIf
+										;[End Block]
+									Case "mastercard", "playcard", "origami", "electronics"
+										;[Block]
+										If itt\TempName = "mastercard" Lor itt\TempName = "playcard" Lor itt\TempName = "origami" Lor itt\TempName = "electronics" And Rand(5) = 1 Then
 											ShouldCreateItem = True
 										EndIf
 										;[End Block]
 									Case "vest", "finevest"
 										;[Block]
-										If itt\TempName = "vest" Lor itt\TempName = "finevest" And Rand(1) = 1
+										If itt\TempName = "vest" Lor itt\TempName = "finevest" And Rand(1) = 1 Then
 											ShouldCreateItem = True
 										EndIf
 										;[End Block]
 									Default
 										;[Block]
-										If itt\TempName = "misc" And Rand(6) = 1
+										If itt\TempName = "mastercard" Lor itt\TempName = "playcard" And Rand(6) = 1 Then
 											ShouldCreateItem = True
 										EndIf
 										;[End Block]
@@ -10341,49 +10347,6 @@ Function RemoveEvent(e.Events)
 	If e\Img <> 0 Then FreeImage(e\Img)
 	
 	Delete(e)
-End Function
-
-Function IsItemGoodFor1162(itt.ItemTemplates)
-	Select itt\TempName
-		Case "key0", "key1", "key2", "key3"
-			;[Block]
-			Return(True)
-			;[End Block]
-		Case "misc", "scp420j", "cigarette"
-			;[Block]
-			Return(True)
-			;[End Block]
-		Case "vest", "finevest","gasmask"
-			;[Block]
-			Return(True)
-			;[End Block]
-		Case "radio", "18vradio"
-			;[Block]
-			Return(True)
-			;[End Block]
-		Case "clipboard", "eyedrops", "nvg"
-			;[Block]
-			Return(True)
-			;[End Block]
-		Case "drawing"
-			;[Block]
-			If itt\Img <> 0 Then FreeImage(itt\Img)	
-			itt\Img = LoadImage_Strict(ItemsPath + "1048\1048(" + Rand(0, 25) + ").png") ; ~ Gives a random drawing
-			Return(True)
-			;[End Block]
-		Default
-			;[Block]
-			If itt\TempName <> "paper" Then
-				Return(False)
-			ElseIf Instr(itt\Name, "Leaflet")
-				Return(False)
-			Else
-				; ~ If the item is a paper, only allow spawning it if the name contains the word "note" or "log"
-				; ~ (Because those are items created recently, which D-9341 has most likely never seen)
-				Return(((Not Instr(itt\Name, "Note")) And (Not Instr(itt\Name, "Log"))))
-			EndIf
-			;[End Block]
-	End Select
 End Function
 
 Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)

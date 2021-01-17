@@ -48,19 +48,19 @@ Function UpdateParticles()
 	
 	For p.Particles = Each Particles
 		
-		MoveEntity(p\Pvt, 0.0, 0.0, p\Speed * fps\FPSFactor[0])
-		If p\Gravity <> 0 Then p\ySpeed = p\ySpeed - p\Gravity * fps\FPSFactor[0]
-		TranslateEntity(p\Pvt, 0.0, p\ySpeed * fps\FPSFactor[0], 0.0, True)
+		MoveEntity(p\Pvt, 0.0, 0.0, (p\Speed * fps\FPSFactor[0]))
+		If p\Gravity <> 0 Then p\ySpeed = p\ySpeed - (p\Gravity * fps\FPSFactor[0])
+		TranslateEntity(p\Pvt, 0.0, (p\ySpeed * fps\FPSFactor[0]), 0.0, True)
 		
 		PositionEntity(p\OBJ, EntityX(p\Pvt, True), EntityY(p\Pvt, True), EntityZ(p\Pvt, True), True)
 		
 		If p\AChange <> 0.0 Then
-			p\A = Min(Max(p\A + p\AChange * fps\FPSFactor[0], 0.0), 1.0)
+			p\A = Min(Max(p\A + (p\AChange * fps\FPSFactor[0]), 0.0), 1.0)
 			EntityAlpha(p\OBJ, p\A)		
 		EndIf
 		
 		If p\SizeChange <> 0.0 Then 
-			p\Size = p\Size + p\SizeChange * fps\FPSFactor[0]
+			p\Size = p\Size + (p\SizeChange * fps\FPSFactor[0])
 			ScaleSprite(p\OBJ, p\Size, p\Size)
 		EndIf
 		
