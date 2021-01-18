@@ -906,7 +906,7 @@ Function UpdateConsole()
 							;[End Block]
 						Default
 							;[Block]
-							Rand(Ending_A1, Ending_B2)
+							me\SelectedEnding = Rand(Ending_A1, Ending_B2)
 							;[End Block]
 					End Select
 					
