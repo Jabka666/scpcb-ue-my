@@ -4579,7 +4579,7 @@ Function MouseLook()
 		If opt\InvertMouse Then
 			mo\Mouse_Y_Speed_1 = CurveValue(-MouseYSpeed() * (opt\MouseSensitivity + 0.6), mo\Mouse_Y_Speed_1, (6.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing)
 		Else
-			mo\Mouse_Y_Speed_1 = CurveValue(MouseYSpeed () * (opt\MouseSensitivity + 0.6), mo\Mouse_Y_Speed_1, (6.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing)
+			mo\Mouse_Y_Speed_1 = CurveValue(MouseYSpeed() * (opt\MouseSensitivity + 0.6), mo\Mouse_Y_Speed_1, (6.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing)
 		EndIf
 		If IsNaN(mo\Mouse_Y_Speed_1) Then
 			mo\Mouse_X_Speed_1 = 0.0

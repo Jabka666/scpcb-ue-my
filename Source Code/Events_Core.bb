@@ -9821,7 +9821,7 @@ Function UpdateEndings()
 											TurnEntity(em\OBJ, (-80.0) + 20.0 * i, 0.0, 0.0)
 											EntityParent(em\OBJ, e\room\NPC[3]\Collider)
 											
-											If opt\ParticleAmount > 0
+											If opt\ParticleAmount > 0 Then
 												For i = 0 To (3 + (4 * (opt\ParticleAmount - 1)))
 													p.Particles = CreateParticle(EntityX(e\room\NPC[3]\Collider), EntityY(e\room\NPC[3]\Collider), EntityZ(e\room\NPC[3]\Collider), 0, Rnd(0.5, 1.0), -0.1, 200.0)
 													p\Speed = 0.01 : p\SizeChange = 0.01 : p\A = 1.0 : p\Achange = -0.005
@@ -10358,9 +10358,9 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 	EndIf
 	
 	If d\OpenState = 0.0 And (Not d\Open) Then
-		If Abs(EntityX(me\Collider) - EntityX(ElevatorOBJ, True)) =< 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then
-			If Abs(EntityZ(me\Collider) - EntityZ(ElevatorOBJ, True)) =< 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then
-				If Abs(EntityY(me\Collider) - EntityY(ElevatorOBJ, True)) =< 280.0 * RoomScale + (0.015 * fps\FPSFactor[0]) Then
+		If Abs(EntityX(me\Collider) - EntityX(ElevatorOBJ, True)) =< (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then
+			If Abs(EntityZ(me\Collider) - EntityZ(ElevatorOBJ, True)) =< (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then
+				If Abs(EntityY(me\Collider) - EntityY(ElevatorOBJ, True)) =< (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then
 					d\Locked = 1
 					If EventState = 0.0 Then
 						TeleportEntity(Curr096\Collider, EntityX(d\FrameOBJ), EntityY(d\FrameOBJ) + 1.0, EntityZ(d\FrameOBJ), Curr096\CollRadius)

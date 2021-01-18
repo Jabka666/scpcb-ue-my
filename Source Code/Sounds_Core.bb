@@ -228,11 +228,12 @@ Function PauseSounds()
 		EndIf
 	Next
 	
-	For i = 0 To 6
-		If RadioCHN[i] <> 0 Then
-			If ChannelPlaying(RadioCHN[i]) Then PauseChannel(RadioCHN[i])
-		EndIf
-	Next
+	; ~ TODO:
+	;For i = 0 To 6
+	;	If RadioCHN[i] <> 0 Then
+	;		If ChannelPlaying(RadioCHN[i]) Then PauseChannel(RadioCHN[i])
+	;	EndIf
+	;Next
 	
 	If IntercomStreamCHN <> 0 Then
 		SetStreamPaused_Strict(IntercomStreamCHN, True)
@@ -324,11 +325,12 @@ Function ResumeSounds()
 		If ChannelPlaying(LowBatteryCHN[i]) Then ResumeChannel(LowBatteryCHN[i])
 	Next
 	
-	For i = 0 To 6
-		If RadioCHN[i] <> 0 Then
-			If ChannelPlaying(RadioCHN[i]) Then ResumeChannel(RadioCHN[i])
-		EndIf
-	Next
+	; ~ TODO:
+	;For i = 0 To 6
+	;	If RadioCHN[i] <> 0 Then
+	;		If ChannelPlaying(RadioCHN[i]) Then ResumeChannel(RadioCHN[i])
+	;	EndIf
+	;Next
 	
 	If IntercomStreamCHN <> 0 Then
 		SetStreamPaused_Strict(IntercomStreamCHN, False)
