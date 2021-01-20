@@ -51,6 +51,8 @@ Function SaveGame(File$)
 	
 	WriteByte(f, I_005\ChanceToSpawn)
 	
+	WriteByte(f, I_500\Taken)
+	
 	WriteFloat(f, me\Stamina)
 	WriteFloat(f, me\StaminaEffect)
 	WriteFloat(f, me\StaminaEffectTimer)
@@ -533,6 +535,8 @@ Function LoadGame(File$)
 	me\Crouch = ReadByte(f)
 	
 	I_005\ChanceToSpawn = ReadByte(f)
+	
+	I_500\Taken = ReadByte(f)
 	
 	me\Stamina = ReadFloat(f)
 	me\StaminaEffect = ReadFloat(f)	
@@ -1399,6 +1403,8 @@ Function LoadGameQuick(File$)
 	me\Crouch = ReadByte(f)
 	
 	I_005\ChanceToSpawn = ReadByte(f)
+	
+	I_500\Taken = ReadByte(f)
 	
 	me\Stamina = ReadFloat(f)
 	me\StaminaEffect = ReadFloat(f)	

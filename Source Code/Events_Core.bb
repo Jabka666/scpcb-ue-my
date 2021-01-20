@@ -1633,6 +1633,7 @@ Function UpdateEvents()
 											If mo\MouseHit1 Then
 												SelectedItem = CreateItem("Document SCP-173", "paper", 0.0, 0.0, 0.0)
 												EntityType(SelectedItem\Collider, HIT_ITEM)
+												EntityParent(SelectedItem\Collider, 0)
 												
 												PickItem(SelectedItem)
 												
@@ -2435,7 +2436,7 @@ Function UpdateEvents()
 									
 									de.Decals = CreateDecal(3, EntityX(e\room\OBJ), e\room\y - 1534.0 * RoomScale, EntityZ(e\room\OBJ), 90.0, Rand(360.0), 0.0, 0.4)
 									
-									it = CreateItem("Unknown Note", "paper", EntityX(e\room\NPC[0]\Collider, True), EntityY(e\room\NPC[0]\Collider, True), EntityZ(e\room\NPC[0]\Collider))
+									it.Items = CreateItem("Unknown Note", "paper", EntityX(e\room\NPC[0]\Collider, True), EntityY(e\room\NPC[0]\Collider, True), EntityZ(e\room\NPC[0]\Collider))
 									EntityType(it\Collider, HIT_ITEM)
 								EndIf
 								If e\room\NPC[0]\Frame = 286.0 Then
@@ -3475,13 +3476,14 @@ Function UpdateEvents()
 							RotateEntity(it\Collider, 0.0, Rnd(360.0), 0.0)
 							TeleportEntity(it\Collider, EntityX(it\Collider), EntityY(it\Collider), EntityZ(it\Collider), -0.02, True, 10)
 							For i = 0 To 1
-								it2.Items = CreateItem("Quarter", "25ct", 1.0, 1.0, 1.0)
+								it2.Items = CreateItem("Quarter", "25ct", 0.0, 0.0, 0.0)
 								it2\Picked = True
 								it2\Dropped = -1
 								it2\ItemTemplate\Found = True
 								it\SecondInv[i] = it2
 								HideEntity(it2\Collider)
 								EntityType(it2\Collider, HIT_ITEM)
+								EntityParent(it2\Collider, 0)
 							Next
 						EndIf
 						
@@ -4270,10 +4272,10 @@ Function UpdateEvents()
 										Case 7
 											;[Block]
 											AddLight(Null, e\room\x + iX * 2.0 - (Sin(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 16.0 * RoomScale), 8.0 + (396.0 * RoomScale), e\room\z + iY * 2.0 + (Cos(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(TempInt, True)) * 16.0 * RoomScale), 2, 500.0 * RoomScale, 255, 200, 200)
-											it = CreateItem("SCP-500-01", "scp500pill", e\room\x + iX * 2.0 + (Cos(EntityYaw(TempInt, True)) * (-208.0) * RoomScale) - (Sin(EntityYaw(TempInt, True)) * 1226.0 * RoomScale), 8.0 + (90.0 * RoomScale), e\room\z + iY * 2.0 + (Sin(EntityYaw(TempInt, True)) * (-208.0) * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 1226.0 * RoomScale))
+											it.Items = CreateItem("SCP-500-01", "scp500pill", e\room\x + iX * 2.0 + (Cos(EntityYaw(TempInt, True)) * (-208.0) * RoomScale) - (Sin(EntityYaw(TempInt, True)) * 1226.0 * RoomScale), 8.0 + (90.0 * RoomScale), e\room\z + iY * 2.0 + (Sin(EntityYaw(TempInt, True)) * (-208.0) * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 1226.0 * RoomScale))
 											EntityType(it\Collider, HIT_ITEM)
 											
-											it = CreateItem("Night Vision Goggles", "nvg", e\room\x + iX * 2.0 - (Sin(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 16.0 * RoomScale), 8.0 + (90.0 * RoomScale), e\room\z + iY * 2.0 + (Cos(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(TempInt, True)) * 16.0 * RoomScale))
+											it.Items = CreateItem("Night Vision Goggles", "nvg", e\room\x + iX * 2.0 - (Sin(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 16.0 * RoomScale), 8.0 + (90.0 * RoomScale), e\room\z + iY * 2.0 + (Cos(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(TempInt, True)) * 16.0 * RoomScale))
 											EntityType(it\Collider, HIT_ITEM)
 											;[End Block]
 									End Select
@@ -4903,6 +4905,7 @@ Function UpdateEvents()
 									Else
 										SelectedItem = CreateItem("Drawing", "paper", 0.0, 0.0, 0.0)
 										EntityType(SelectedItem\Collider, HIT_ITEM)
+										EntityParent(SelectedItem\Collider, 0)
 										
 										PickItem(SelectedItem)
 										
@@ -5387,8 +5390,8 @@ Function UpdateEvents()
 									For i = - 1 To 1 Step 2
 										TFormPoint(x + 1024.0 * i, y, z, e\room\OBJ, 0)
 										it2.Items = CreateItem(it\Name, it\ItemTemplate\TempName, TFormedX(), EntityY(it\Collider), TFormedZ())
-										RotateEntity(it2\Collider, EntityPitch(it\Collider), EntityYaw(it\Collider), 0.0)
 										EntityType(it2\Collider, HIT_ITEM)
+										RotateEntity(it2\Collider, EntityPitch(it\Collider), EntityYaw(it\Collider), 0.0)
 									Next
 								Else
 									For it2.Items = Each Items
@@ -6277,12 +6280,11 @@ Function UpdateEvents()
 							
 							PlaySound_Strict(LoadTempSound("SFX\Room\Blackout.ogg"))
 							If EntityDistanceSquared(e\room\Objects[11], me\Collider) < EntityDistanceSquared(e\room\Objects[12], me\Collider) Then
-								it = CreateItem("Research Sector-02 Scheme", "paper", EntityX(e\room\Objects[11], True), EntityY(e\room\Objects[11], True), EntityZ(e\room\Objects[11], True))
-								EntityType(it\Collider, HIT_ITEM)
+								it.Items = CreateItem("Research Sector-02 Scheme", "paper", EntityX(e\room\Objects[11], True), EntityY(e\room\Objects[11], True), EntityZ(e\room\Objects[11], True))
 							Else
-								it = CreateItem("Research Sector-02 Scheme", "paper", EntityX(e\room\Objects[12], True), EntityY(e\room\Objects[12], True), EntityZ(e\room\Objects[12], True))
-								EntityType(it\Collider, HIT_ITEM)
+								it.Items = CreateItem("Research Sector-02 Scheme", "paper", EntityX(e\room\Objects[12], True), EntityY(e\room\Objects[12], True), EntityZ(e\room\Objects[12], True))
 							EndIf
+							EntityType(it\Collider, HIT_ITEM)
 							
 							e\EventState = 1.0
 						ElseIf e\EventState > 0.0
@@ -8240,12 +8242,11 @@ Function UpdateEvents()
 							e\EventState3 = 0.0
 						EndIf
 					Else
-						If e\EventState2 < 70.0 * 7.0
+						If e\EventState2 < 70.0 * 7.0 Then
 							e\EventState2 = e\EventState2 + fps\FPSFactor[0]
 							e\room\RoomDoors[0]\Open = False
 							e\room\RoomDoors[1]\Open = False
-							If e\EventState2 < 70.0 * 1.0
-								
+							If e\EventState2 < 70.0 * 1.0 Then
 								If BrokenDoor Then
 									Pvt = CreatePivot()
 									
@@ -8259,7 +8260,7 @@ Function UpdateEvents()
 										For i = 0 To (1 + (2 * (opt\ParticleAmount - 1)))
 											p.Particles = CreateParticle(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 7, 0.002, 0.0, 25.0)
 											p\Speed = Rnd(0.01, 0.05) : p\Size = 0.0075 : p\Achange = -0.05
-											RotateEntity(p\Pvt, Rnd(-45.0, 0.0), EntityYaw(Pvt) + Rnd(-10.0, 10.0), 0)
+											RotateEntity(p\Pvt, Rnd(-45.0, 0.0), EntityYaw(Pvt) + Rnd(-10.0, 10.0), 0.0)
 											ScaleSprite(p\OBJ, p\Size, p\Size)
 										Next
 									EndIf
@@ -8305,7 +8306,7 @@ Function UpdateEvents()
 				;[End Block]
 			Case e_room2scps2
 				;[Block]
-				If e\room\Dist < 15.0
+				If e\room\Dist < 15.0 Then
 					If Curr106\Contained Then e\EventState = 2.0
 					If Curr106\State < 0.0 Then e\EventState = 2.0
 					
@@ -8498,8 +8499,10 @@ Function UpdateEvents()
 							If ShouldCreateItem Then
 								RemoveWearableItems(Inventory[e\EventState2])
 								RemoveItem(Inventory[e\EventState2])
-								it = CreateItem(itt\Name, itt\TempName, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+								
+								it.Items = CreateItem(itt\Name, itt\TempName, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
 								EntityType(it\Collider, HIT_ITEM)
+								
 								PlaySound_Strict(LoadTempSound("SFX\SCP\1162\Exchange" + Rand(0, 4) + ".ogg"))
 								e\EventState3 = 0.0
 								
@@ -8519,8 +8522,9 @@ Function UpdateEvents()
 						FreeEntity(Pvt)
 						For itt.ItemTemplates = Each ItemTemplates
 							If IsItemGoodFor1162(itt) And Rand(6) = 1 Then
-								it = CreateItem(itt\Name, itt\TempName, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+								it.Items = CreateItem(itt\Name, itt\TempName, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
 								EntityType(it\Collider, HIT_ITEM)
+								
 								GiveAchievement(Achv1162)
 								mo\MouseHit1 = False
 								e\EventState3 = 0.0
@@ -8570,26 +8574,27 @@ Function UpdateEvents()
 						Select e\EventState
 							Case 1.0
 								;[Block]
-								it = CreateItem("Lost Key", "key", EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+								it.Items = CreateItem("Lost Key", "key", EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
 								;[End Block]
 							Case 2.0
 								;[Block]
-								it = CreateItem("Disciplinary Hearing DH-S-4137-17092", "oldpaper", EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+								it.Items = CreateItem("Disciplinary Hearing DH-S-4137-17092", "oldpaper", EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
 								;[End Block]
 							Case 3.0
 								;[Block]
-								it = CreateItem("Coin", "coin", EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+								it.Items = CreateItem("Coin", "coin", EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
 								;[End Block]
 							Case 4.0
 								;[Block]
-								it = CreateItem("Movie Ticket", "ticket", EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+								it.Items = CreateItem("Movie Ticket", "ticket", EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
 								;[End Block]
 							Case 5.0
 								;[Block]
-								it = CreateItem("Old Badge", "badge", EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+								it.Items = CreateItem("Old Badge", "badge", EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
 								;[End Block]
 						End Select
 						EntityType(it\Collider, HIT_ITEM)
+						
 						GiveAchievement(Achv1162)
 						mo\MouseHit1 = False
 						e\EventState3 = 0.0
@@ -9145,7 +9150,7 @@ Function UpdateEvents()
 					If EntityY(me\Collider) < -4000.0 * RoomScale Then
 						ShouldPlay = 28
 						
-					    If e\EventState = 0.0 Then
+						If e\EventState = 0.0 Then
 							e\room\NPC[0] = CreateNPC(NPCtypeD, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True) + 0.5, EntityZ(e\room\Objects[2], True))
 							ChangeNPCTextureID(e\room\NPC[0], 13)
 							SetNPCFrame(e\room\NPC[0], 19.0)
