@@ -449,6 +449,10 @@ Function KillSounds()
 			EndIf
 		Next
 	Next
+	
+	For i = ANNOUNCEMENT To THIRD_PERSON
+		ClearSubtitles(i)
+	Next
 End Function
 
 Function GetStepSound(Entity%)

@@ -1336,22 +1336,7 @@ Function UpdateConsole()
 					;[End Block]
 				Case "stopsound", "stfu"
 					;[Block]
-					For snd.Sound = Each Sound
-						For i = 0 To 31
-							If snd\Channels[i] <> 0 Then
-								StopChannel(snd\Channels[i])
-							EndIf
-						Next
-					Next
-					
-					If IntercomStreamCHN <> 0 Then
-						StopStream_Strict(IntercomStreamCHN)
-						IntercomStreamCHN = 0
-					EndIf
-					
-					For i = ANNOUNCEMENT To THIRD_PERSON
-						ClearSubtitles(i)
-					Next
+					KillSounds()
 					
 					For e.Events = Each Events
 						If e\EventID = e_room173 Then
@@ -1593,22 +1578,7 @@ Function UpdateConsole()
 					
 					opt\CameraFogFar = 50.0
 					
-					For snd.Sound = Each Sound
-						For i = 0 To 31
-							If snd\Channels[i] <> 0 Then
-								StopChannel(snd\Channels[i])
-							EndIf
-						Next
-					Next
-					
-					If IntercomStreamCHN <> 0 Then
-						StopStream_Strict(IntercomStreamCHN)
-						IntercomStreamCHN = 0
-					EndIf
-					
-					For i = ANNOUNCEMENT To THIRD_PERSON
-						ClearSubtitles(i)
-					Next
+					KillSounds()
 					
 					For e.Events = Each Events
 						If e\EventID = e_room173 Then
@@ -7692,7 +7662,7 @@ Function UpdateGUI()
 					;[End Block]
 				Case "oldpaper"
 					;[Block]
-					If SelectedItem\State = 0.0
+					If SelectedItem\State = 0.0 Then
 						Select SelectedItem\ItemTemplate\Name
 							Case "Disciplinary Hearing DH-S-4137-17092"
 								;[Block]
@@ -7707,7 +7677,7 @@ Function UpdateGUI()
 					;[End Block]
 				Case "coin"
 					;[Block]
-					If SelectedItem\State = 0.0
+					If SelectedItem\State = 0.0 Then
 						PlaySound_Strict(LoadTempSound("SFX\SCP\1162\NostalgiaCancer" + Rand(1, 5) + ".ogg"))
 					EndIf
 					
