@@ -52,28 +52,28 @@ Function GiveAchievement(AchvName%, ShowMessage% = True)
 End Function
 
 Function AchievementTooltip(AchvNo%)
-    Local Scale# = opt\GraphicHeight / 768.0
+	Local Scale# = opt\GraphicHeight / 768.0
 
-    SetFont(fo\FontID[Font_Digital])
+	SetFont(fo\FontID[Font_Digital])
 	
-    Local Width% = StringWidth(AchievementStrings[AchvNo])
+	Local Width% = StringWidth(AchievementStrings[AchvNo])
 	
-    SetFont(fo\FontID[Font_Default])
-    If StringWidth(AchievementDescs[AchvNo]) > Width Then
-        Width = StringWidth(AchievementDescs[AchvNo])
-    EndIf
-    Width = Width + 20 * MenuScale
-    
-    Local Height% = 38 * Scale
-    
-    Color(25, 25, 25)
-    Rect(ScaledMouseX() + (20 * MenuScale), ScaledMouseY() + (20 * MenuScale), Width, Height, True)
-    Color(150, 150, 150)
-    Rect(ScaledMouseX() + (20 * MenuScale), ScaledMouseY() + (20 * MenuScale), Width, Height, False)
-    SetFont(fo\FontID[Font_Digital])
-    Text(ScaledMouseX() + (20 * MenuScale) + (Width / 2), ScaledMouseY() + (35 * MenuScale), AchievementStrings[AchvNo], True, True)
-    SetFont(fo\FontID[Font_Default])
-    Text(ScaledMouseX() + (20 * MenuScale) + (Width / 2), ScaledMouseY() + (55 * MenuScale), AchievementDescs[AchvNo], True, True)
+	SetFont(fo\FontID[Font_Default])
+	If StringWidth(AchievementDescs[AchvNo]) > Width Then
+		Width = StringWidth(AchievementDescs[AchvNo])
+	EndIf
+	Width = Width + 20 * MenuScale
+	
+	Local Height% = 38 * Scale
+	
+	Color(25, 25, 25)
+	Rect(ScaledMouseX() + (20 * MenuScale), ScaledMouseY() + (20 * MenuScale), Width, Height, True)
+	Color(150, 150, 150)
+	Rect(ScaledMouseX() + (20 * MenuScale), ScaledMouseY() + (20 * MenuScale), Width, Height, False)
+	SetFont(fo\FontID[Font_Digital])
+	Text(ScaledMouseX() + (20 * MenuScale) + (Width / 2), ScaledMouseY() + (35 * MenuScale), AchievementStrings[AchvNo], True, True)
+	SetFont(fo\FontID[Font_Default])
+	Text(ScaledMouseX() + (20 * MenuScale) + (Width / 2), ScaledMouseY() + (55 * MenuScale), AchievementDescs[AchvNo], True, True)
 End Function
 
 Function DrawAchvIMG(x%, y%, AchvNo%)
@@ -155,7 +155,7 @@ Function RenderAchievementMsg()
 	
 	For amsg.AchievementMsg = Each AchievementMsg
 		If amsg\MsgTime <> 0.0
-            x = opt\GraphicWidth + amsg\MsgX
+			x = opt\GraphicWidth + amsg\MsgX
 			y = 0
 			For amsg2.AchievementMsg = Each AchievementMsg
 				If amsg2 <> amsg

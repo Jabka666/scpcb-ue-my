@@ -1868,13 +1868,13 @@ Function UpdateLauncher(lnchr.Launcher)
 		DrawImage(LauncherArrowIMG, 589, 268)
 		
 		If DrawLauncherButton(LauncherWidth - 275, LauncherHeight - 105, 150, 30, "REPORT A BUG!", False, False) Then
-		    ExecFile("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition/news/bug-reports1")
+			ExecFile("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition/news/bug-reports1")
 			Quit = True
 			Exit
 		EndIf
 		
 		If DrawLauncherButton(LauncherWidth - 275, LauncherHeight - 50, 150, 30, "SEE CHANGELOG", False, False) Then
-		    ExecFile("Changelog_Reborn.txt")
+			ExecFile("Changelog_Reborn.txt")
 		EndIf
 		
 		If DrawLauncherButton(LauncherWidth - 30 - 90, LauncherHeight - 105, 100, 30, "LAUNCH", False, False) Then
@@ -3087,9 +3087,9 @@ Function DrawOptionsTooltip(x%, y%, Width%, Height%, Option$, Value# = 0.0)
 			;[End Block]
 		Case "smoothhud"
 			;[Block]
-		    Txt = "Changes the HUD style to Dynamic or Classic one."
+			Txt = "Changes the HUD style to Dynamic or Classic one."
 			R = 255
-		    Txt2 = "This option cannot be changed in-game."
+			Txt2 = "This option cannot be changed in-game."
 			;[End Block]
 		Case "consoleenable"
 			;[Block]
@@ -3129,9 +3129,9 @@ Function DrawOptionsTooltip(x%, y%, Width%, Height%, Option$, Value# = 0.0)
 			;[End Block]
 		Case "subtitles"
 			;[Block]
-		    Txt = "Displays current dialogs in the text form. "
+			Txt = "Displays current dialogs in the text form."
 			R = 255
-		    Txt2 = "This option cannot be changed in-game."
+			Txt2 = "This option cannot be changed in-game."
 			;[End Block]
 		Case "subtitlescolor"
 			;[Block]

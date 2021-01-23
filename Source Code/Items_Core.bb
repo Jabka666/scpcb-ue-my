@@ -110,7 +110,7 @@ Function InitItemTemplates()
 	; ~ [PAPER]
 	
 	CreateItemTemplate("Document SCP-005", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_paper.png", ItemsPath + "doc_005.png", 0.003, 0)
-    CreateItemTemplate("Document SCP-008", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_paper.png", ItemsPath + "doc_008.png", 0.003, 0)
+	CreateItemTemplate("Document SCP-008", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_paper.png", ItemsPath + "doc_008.png", 0.003, 0)
 	CreateItemTemplate("Document SCP-012", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_paper.png", ItemsPath + "doc_012.png", 0.003, 0)
 	CreateItemTemplate("Document SCP-035", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_paper.png", ItemsPath + "doc_035.png", 0.003, 0)
 	CreateItemTemplate("Document SCP-049", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_paper.png", ItemsPath + "doc_049.png", 0.003, 0)
@@ -152,7 +152,7 @@ Function InitItemTemplates()
 	
 	CreateItemTemplate("Field Agent Log #235-001-CO5", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_paper.png", ItemsPath + "doc_O5.png", 0.003, 0)
 	
-    CreateItemTemplate("Groups of Interest Log", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_paper.png", ItemsPath + "doc_O5(2).png", 0.003, 0)
+	CreateItemTemplate("Groups of Interest Log", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_paper.png", ItemsPath + "doc_O5(2).png", 0.003, 0)
 	
 	CreateItemTemplate("Incident Report SCP-106-0204", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_paper.png", ItemsPath + "doc_IR_106.png", 0.003, 0)
 	
@@ -689,7 +689,7 @@ Function UpdateItems()
 					EndIf
 				EndIf
 				
- 				If i\Dist < HideDist * 0.2 Then
+				If i\Dist < HideDist * 0.2 Then
 					For i2.Items = Each Items
 						If i <> i2 And (Not i2\Picked) And i2\Dist < HideDist * 0.2 Then
 							xTemp = EntityX(i2\Collider, True) - EntityX(i\Collider, True)
@@ -810,8 +810,8 @@ Function PickItem(item.Items)
 						GiveAchievement(AchvOmni)
 						;[End Block]
 					Case "scp005"
-				        ;[Block]    
-				   	    GiveAchievement(Achv005)
+						;[Block]    
+						GiveAchievement(Achv005)
 						;[End Block]
 					Case "veryfinevest"
 						;[Block]

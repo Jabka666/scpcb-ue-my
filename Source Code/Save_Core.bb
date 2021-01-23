@@ -354,7 +354,7 @@ Function SaveGame(File$)
 		WriteFloat(f, d\SizeChange)
 		WriteFloat(f, d\AlphaChange)
 	Next
-    
+	
 	Local e.Events
 	
 	Temp = 0
@@ -881,8 +881,8 @@ Function LoadGame(File$)
 				Else
 					Temp = Default_Door
 				EndIf
-                
-                For r.Rooms = Each Rooms
+				
+				For r.Rooms = Each Rooms
 					r\Angle = WrapAngle(r\Angle)
 					If Int(r\x / 8.0) = x And Int(r\z / 8.0) = y Then
 						ShouldSpawnDoor = False
@@ -966,7 +966,7 @@ Function LoadGame(File$)
 						EndIf
 						Exit
 					EndIf
-                Next
+				Next
 			EndIf
 		Next
 	Next
@@ -1630,8 +1630,8 @@ Function LoadGameQuick(File$)
 		Local Temp2% = ReadByte(f)	
 		
 		If Angle >= 360.0
-            Angle = Angle - 360.0
-        EndIf
+			Angle = Angle - 360.0
+		EndIf
 		
 		For r.Rooms = Each Rooms
 			If r\x = x And r\z = z Then
@@ -2474,8 +2474,8 @@ Function LoadMap(File$)
 				Else 
 					Temp = Default_Door
 				EndIf
-                
-                For r.Rooms = Each Rooms
+				
+				For r.Rooms = Each Rooms
 					r\Angle = WrapAngle(r\Angle)
 					If Int(r\x / 8.0) = x And Int(r\z / 8.0) = y Then
 						ShouldSpawnDoor = False
@@ -2558,7 +2558,7 @@ Function LoadMap(File$)
 						EndIf
 						Exit
 					EndIf
-                Next
+				Next
 			EndIf
 		Next
 	Next

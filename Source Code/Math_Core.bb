@@ -1,11 +1,11 @@
 Function GenerateSeedNumber(Seed$)
- 	Local Temp% = 0
- 	Local Shift% = 0
+	Local Temp% = 0
+	Local Shift% = 0
 	Local i%
 	
- 	For i = 1 To Len(Seed)
- 		Temp = Temp Xor (Asc(Mid(Seed, i, 1)) Shl Shift)
- 		Shift = ((Shift + 1) Mod 24)
+	For i = 1 To Len(Seed)
+		Temp = Temp Xor (Asc(Mid(Seed, i, 1)) Shl Shift)
+		Shift = ((Shift + 1) Mod 24)
 	Next
 	Return(Temp)
 End Function

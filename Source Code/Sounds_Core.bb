@@ -456,18 +456,18 @@ Function KillSounds()
 End Function
 
 Function GetStepSound(Entity%)
-    Local Picker%, Brush%, Texture%, Name$
-    Local mat.Materials
-    
-    Picker = LinePick(EntityX(Entity), EntityY(Entity), EntityZ(Entity), 0, -1, 0)
-    If Picker <> 0 Then
-        If GetEntityType(Picker) <> HIT_MAP Then Return(0)
-        Brush = GetSurfaceBrush(GetSurface(Picker, CountSurfaces(Picker)))
-        If Brush <> 0 Then
-            Texture = GetBrushTexture(Brush, 3)
-            If Texture <> 0 Then
-                Name = StripPath(TextureName(Texture))
-                If Name <> "" Then DeleteSingleTextureEntryFromCache(Texture)
+	Local Picker%, Brush%, Texture%, Name$
+	Local mat.Materials
+	
+	Picker = LinePick(EntityX(Entity), EntityY(Entity), EntityZ(Entity), 0, -1, 0)
+	If Picker <> 0 Then
+		If GetEntityType(Picker) <> HIT_MAP Then Return(0)
+		Brush = GetSurfaceBrush(GetSurface(Picker, CountSurfaces(Picker)))
+		If Brush <> 0 Then
+			Texture = GetBrushTexture(Brush, 3)
+			If Texture <> 0 Then
+				Name = StripPath(TextureName(Texture))
+				If Name <> "" Then DeleteSingleTextureEntryFromCache(Texture)
 				For mat.Materials = Each Materials
 					If mat\Name = Name Then
 						If mat\StepSound > 0 Then

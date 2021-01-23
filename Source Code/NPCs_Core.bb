@@ -24,7 +24,6 @@ Type NPCs
 	Field NPCtype%, ID%
 	Field DropSpeed#, Gravity%
 	Field State#, State2#, State3#, PrevState%
-	Field MakingNoise%
 	Field Frame#
 	Field Angle#
 	Field Sound%, SoundCHN%, SoundTimer#
@@ -58,7 +57,7 @@ Type NPCs
 	Field PathX#, PathZ#
 	Field Model$
 	Field ModelScaleX#, ModelScaleY#, ModelScaleZ#
-	Field HideFromNVG
+	Field HideFromNVG%
 	Field TextureID% = -1
 	Field CollRadius#
 	Field IdleTimer#
@@ -500,7 +499,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			EntityRadius(n\Collider, 0.32)
 			EntityType(n\Collider, HIT_PLAYER)
 			
-            n\OBJ = CopyEntity(o\NPCModelID[NPCtypeVehicle])
+			n\OBJ = CopyEntity(o\NPCModelID[NPCtypeVehicle])
 			
 			Temp = GetINIFloat(NPCsFile, "Vehicle", "Scale") / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
@@ -509,7 +508,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			
 			n\Speed = GetINIFloat(NPCsFile, "Vehicle", "Speed") / 100.0
 			
-		    n\CollRadius = 0.72
+			n\CollRadius = 0.72
 			;[End Block]
 	End Select
 	
@@ -1048,25 +1047,25 @@ Function UpdateNPCs()
 							EndIf
 							
 							If n\Reload = 0.0 Then
-                                If Dist > 10.0 And (PlayerRoom\RoomTemplate\Name <> "gateb" And EntityY(me\Collider) =< 1040.0 * RoomScale) And PlayerRoom\RoomTemplate\Name <> "pocketdimension" And PlayerRoom\RoomTemplate\Name <> "gatea" And n\State < -5.0 Then ; ~ Timer idea -- Juanjpro
-                                    If (Not EntityInView(n\OBJ, Camera)) Then
-                                        TurnEntity(me\Collider, 0.0, 180.0, 0.0)
-                                        Pick = EntityPick(me\Collider, 5.0)
-                                        TurnEntity(me\Collider, 0.0, 180.0, 0.0)
-                                        If Pick <> 0 Then
+								If Dist > 10.0 And (PlayerRoom\RoomTemplate\Name <> "gateb" And EntityY(me\Collider) =< 1040.0 * RoomScale) And PlayerRoom\RoomTemplate\Name <> "pocketdimension" And PlayerRoom\RoomTemplate\Name <> "gatea" And n\State < -5.0 Then ; ~ Timer idea -- Juanjpro
+									If (Not EntityInView(n\OBJ, Camera)) Then
+										TurnEntity(me\Collider, 0.0, 180.0, 0.0)
+										Pick = EntityPick(me\Collider, 5.0)
+										TurnEntity(me\Collider, 0.0, 180.0, 0.0)
+										If Pick <> 0 Then
 											TeleportEntity(n\Collider, PickedX(), PickedY(), PickedZ(), n\CollRadius)
-                                            PointEntity(n\Collider, me\Collider)
-                                            RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0)
-                                            MoveEntity(n\Collider, 0.0, 0.0, -2.0)
-                                            PlaySound2(OldManSFX[3], Camera, n\Collider)
+											PointEntity(n\Collider, me\Collider)
+											RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0)
+											MoveEntity(n\Collider, 0.0, 0.0, -2.0)
+											PlaySound2(OldManSFX[3], Camera, n\Collider)
 											n\SoundCHN2 = PlaySound2(OldManSFX[6 + Rand(0, 2)], Camera, n\Collider)
-                                            n\PathTimer = 0.0
-                                            n\Reload = (70.0 * 10.0) / (SelectedDifficulty\OtherFactors + 1.0)
+											n\PathTimer = 0.0
+											n\Reload = (70.0 * 10.0) / (SelectedDifficulty\OtherFactors + 1.0)
 										EndIf
-                                    EndIf
-                                EndIf
-                            EndIf
-                            n\Reload = Max(0.0, n\Reload - fps\FPSFactor[0])
+									EndIf
+								EndIf
+							EndIf
+							n\Reload = Max(0.0, n\Reload - fps\FPSFactor[0])
 							
 							UpdateSoundOrigin(n\SoundCHN2, Camera, n\Collider)
 						Else ; ~ Idling outside the map
@@ -2360,9 +2359,9 @@ Function UpdateNPCs()
 					Case 7.0 ; ~ Just walking
 						;[Block]
 						If n\UseEarphones Then
-						    AnimateNPC(n, 623.0, 747.0, 0.2)
+							AnimateNPC(n, 623.0, 747.0, 0.2)
 						Else
-						    AnimateNPC(n, 77.0, 201.0, 0.2)
+							AnimateNPC(n, 77.0, 201.0, 0.2)
 						EndIf
 						;[End Block]
 					Case 8.0 ; ~ Idles
@@ -2371,9 +2370,9 @@ Function UpdateNPCs()
 					Case 9.0 ; ~ Looks at the player
 						;[Block]
 						If n\UseEarphones Then
-						    AnimateNPC(n, 623.0, 747.0, 0.2)
+							AnimateNPC(n, 623.0, 747.0, 0.2)
 						Else
-						    AnimateNPC(n, 77.0, 201.0, 0.2)
+							AnimateNPC(n, 77.0, 201.0, 0.2)
 						EndIf
 						n\BoneToManipulate = "head"
 						n\ManipulateBone = True
@@ -2392,14 +2391,14 @@ Function UpdateNPCs()
 						;[Block]
 						If n\UseEarphones Then
 							If n\Frame < 787.0 Lor (n\Frame > 824.0 And n\Frame < 867.0) Lor (n\Frame > 870.0 And n\Frame < 884.0) Lor n\Frame > 939.0
-							    AnimateNPC(n, 927.0, 939.0, 0.2, False)
-							    If n\Frame >= 883.0 Then SetNPCFrame(n, 884.0)
-						    EndIf
+								AnimateNPC(n, 927.0, 939.0, 0.2, False)
+								If n\Frame >= 883.0 Then SetNPCFrame(n, 884.0)
+							EndIf
 						Else
-						    If n\Frame < 39.0 Lor (n\Frame > 76.0 And n\Frame < 245.0) Lor (n\Frame > 248.0 And n\Frame < 302.0) Lor n\Frame > 344.0
-							    AnimateNPC(n, 345.0, 357.0, 0.2, False)
-							    If n\Frame >= 356.0 Then SetNPCFrame(n, 302.0)
-						    EndIf
+							If n\Frame < 39.0 Lor (n\Frame > 76.0 And n\Frame < 245.0) Lor (n\Frame > 248.0 And n\Frame < 302.0) Lor n\Frame > 344.0
+								AnimateNPC(n, 345.0, 357.0, 0.2, False)
+								If n\Frame >= 356.0 Then SetNPCFrame(n, 302.0)
+							EndIf
 						EndIf
 						
 						If me\KillTimer >= 0.0 Then
@@ -2447,20 +2446,20 @@ Function UpdateNPCs()
 								EndIf
 								
 								If n\Reload > 0.0 And n\Reload =< 7.0
-								    If n\UseEarphones Then
-								        AnimateNPC(n, 867.0, 870.0, 0.35)
-								    Else
-									    AnimateNPC(n, 245.0, 248.0, 0.35)
+									If n\UseEarphones Then
+										AnimateNPC(n, 867.0, 870.0, 0.35)
+									Else
+										AnimateNPC(n, 245.0, 248.0, 0.35)
 									EndIf
 								Else
-								    If n\UseEarphones Then
-								        If n\Frame < 884.0 Then
-										    AnimateNPC(n, 884.0, 926.0, 0.35)
-									    EndIf
+									If n\UseEarphones Then
+										If n\Frame < 884.0 Then
+											AnimateNPC(n, 884.0, 926.0, 0.35)
+										EndIf
 									Else
-									    If n\Frame < 302.0 Then
-									        AnimateNPC(n, 302.0, 344.0, 0.35)
-									    EndIf
+										If n\Frame < 302.0 Then
+											AnimateNPC(n, 302.0, 344.0, 0.35)
+										EndIf
 									EndIf
 								EndIf
 								
@@ -2475,9 +2474,9 @@ Function UpdateNPCs()
 										EndIf
 									Else
 										If n\UseEarphones Then
-									        AnimateNPC(n, 787.0, 823.0, n\CurrSpeed * 40.0)
-									    Else
-										    AnimateNPC(n, 39.0, 76.0, n\CurrSpeed * 40.0)
+											AnimateNPC(n, 787.0, 823.0, n\CurrSpeed * 40.0)
+										Else
+											AnimateNPC(n, 39.0, 76.0, n\CurrSpeed * 40.0)
 										EndIf
 										n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
 										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])
@@ -2518,9 +2517,9 @@ Function UpdateNPCs()
 									
 									If n\PathTimer = 1.0 Then
 										If n\UseEarphones Then
-									        AnimateNPC(n, 787.0, 823.0, n\CurrSpeed * 40.0)
-									    Else
-										    AnimateNPC(n, 39.0, 76.0, n\CurrSpeed * 40.0)
+											AnimateNPC(n, 787.0, 823.0, n\CurrSpeed * 40.0)
+										Else
+											AnimateNPC(n, 39.0, 76.0, n\CurrSpeed * 40.0)
 										EndIf
 										n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
 										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])
@@ -2714,7 +2713,7 @@ Function UpdateNPCs()
 														EndIf
 														
 														If Curr173\Idle = 3 And DistanceSquared(EntityX(Pvt), EntityX(n\Collider), EntityZ(Pvt), EntityZ(n\Collider)) > 16.0
-															If r\RoomDoors[1]\Open = True Then UseDoor(r\RoomDoors[1], False)
+															If r\RoomDoors.Doors[1]\Open = True Then UseDoor(r\RoomDoors.Doors[1], False)
 														EndIf
 														
 														FreeEntity(Pvt)
@@ -2739,8 +2738,8 @@ Function UpdateNPCs()
 															PlayMTFSound(n\Sound, n)
 															PlayAnnouncement("SFX\Character\MTF\Announc173Contain.ogg")
 															r\RoomDoors[1]\MTFClose = True
-															UseDoor(r\RoomDoors[1], False)
-															r\RoomDoors[1]\Open = False
+															UseDoor(r\RoomDoors.Doors[1], False)
+															r\RoomDoors.Doors[1]\Open = False
 															Exit
 														EndIf
 													EndIf
@@ -4571,45 +4570,45 @@ Function UpdateNPCs()
 				
 				If Dist < PowTwo(HideDistance) Then
 					If (Not n\IsDead) Then
-					    Select n\State 
-						    Case 0.0 ; ~ Spawns
+						Select n\State 
+							Case 0.0 ; ~ Spawns
 								;[Block]
-							    If n\Frame > 283.0 Then
-								    me\HeartBeatVolume = Max(CurveValue(1.0, me\HeartBeatVolume, 50.0), me\HeartBeatVolume)
-								    me\HeartBeatRate = Max(CurveValue(130.0, me\HeartBeatRate, 100.0), me\HeartBeatRate)
+								If n\Frame > 283.0 Then
+									me\HeartBeatVolume = Max(CurveValue(1.0, me\HeartBeatVolume, 50.0), me\HeartBeatVolume)
+									me\HeartBeatRate = Max(CurveValue(130.0, me\HeartBeatRate, 100.0), me\HeartBeatRate)
 									
-								    PointEntity(n\OBJ, me\Collider)
-								    RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 25.0), 0.0)
+									PointEntity(n\OBJ, me\Collider)
+									RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 25.0), 0.0)
 									
-								    AnimateNPC(n, 283.0, 389.0, 0.3, False)
+									AnimateNPC(n, 283.0, 389.0, 0.3, False)
 									
-								    If n\Frame > 388.0 Then
-									    n\State = 1.0
+									If n\Frame > 388.0 Then
+										n\State = 1.0
 										FreeSound_Strict(n\Sound) : n\Sound = 0
 									EndIf
-							    Else
-								    If Dist < 6.25 Then 
-									    SetNPCFrame(n, 284.0)
-									    n\Sound = LoadSound_Strict("SFX\SCP\035_Tentacle\TentacleSpawn.ogg")
-									    PlaySound_Strict(n\Sound)
-								    EndIf
-							    EndIf
+								Else
+									If Dist < 6.25 Then 
+										SetNPCFrame(n, 284.0)
+										n\Sound = LoadSound_Strict("SFX\SCP\035_Tentacle\TentacleSpawn.ogg")
+										PlaySound_Strict(n\Sound)
+									EndIf
+								EndIf
 								;[End Block]
-						    Case 1.0 ; ~ Idles
+							Case 1.0 ; ~ Idles
 								;[Block]
-							    If (Not n\Sound) Then
-								    FreeSound_Strict(n\Sound) : n\Sound = 0
-								    n\Sound = LoadSound_Strict("SFX\SCP\035_Tentacle\TentacleIdle.ogg")
-							    EndIf
-							    n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider)
+								If (Not n\Sound) Then
+									FreeSound_Strict(n\Sound) : n\Sound = 0
+									n\Sound = LoadSound_Strict("SFX\SCP\035_Tentacle\TentacleIdle.ogg")
+								EndIf
+								n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider)
 								
-							    If Dist < 3.24 And (Not chs\NoTarget) Then
-								    If Abs(DeltaYaw(n\Collider, me\Collider)) < 20.0 Then 
-									    n\State = 2.0
-									    If n\Sound <> 0 Then 
+								If Dist < 3.24 And (Not chs\NoTarget) Then
+									If Abs(DeltaYaw(n\Collider, me\Collider)) < 20.0 Then 
+										n\State = 2.0
+										If n\Sound <> 0 Then 
 											FreeSound_Strict(n\Sound) : n\Sound = 0 
 										EndIf
-								    EndIf
+									EndIf
 									
 									PointEntity(n\OBJ, me\Collider)
 									RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 25.0), 0.0)
@@ -4618,76 +4617,76 @@ Function UpdateNPCs()
 									If Rand(400) = 1 Then n\Angle = Rnd(360.0)
 									
 									RotateEntity(n\Collider, 0.0, CurveAngle(n\Angle + Sin(MilliSecs() / 50) * 2.0, EntityYaw(n\Collider), 150.0), 0.0, True)
-							    EndIf
+								EndIf
 								
-							    AnimateNPC(n, 33.0, 174.0, 0.3)
+								AnimateNPC(n, 33.0, 174.0, 0.3)
 								;[End Block]
-						    Case 2.0 ; ~ Attacks
+							Case 2.0 ; ~ Attacks
 								;[Block]
-							    ; ~ Finish the idle animation before playing the attack animation
-							    If n\Frame > 33.0 And n\Frame < 174.0 Then
-								    AnimateNPC(n, 33.0, 174.0, 2.0, False)
-							    Else
-								    PointEntity(n\OBJ, me\Collider)
-								    RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0.0)							
+								; ~ Finish the idle animation before playing the attack animation
+								If n\Frame > 33.0 And n\Frame < 174.0 Then
+									AnimateNPC(n, 33.0, 174.0, 2.0, False)
+								Else
+									PointEntity(n\OBJ, me\Collider)
+									RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0.0)							
 									
-								    If n\Frame > 33.0 Then n\Frame = 2.0
+									If n\Frame > 33.0 Then n\Frame = 2.0
 									
-								    AnimateNPC(n, 2.0, 32.0, 0.3, False)
+									AnimateNPC(n, 2.0, 32.0, 0.3, False)
 									
-								    If n\Frame >= 5.0 And n\Frame < 6.0 Then
-									    If Dist < 3.24 Then
-										    If Abs(DeltaYaw(n\Collider, me\Collider)) < 20.0 Then 
-											    If wi\HazmatSuit > 0 Then
-											        PlaySound_Strict(LoadTempSound("SFX\General\BodyFall.ogg"))
+									If n\Frame >= 5.0 And n\Frame < 6.0 Then
+										If Dist < 3.24 Then
+											If Abs(DeltaYaw(n\Collider, me\Collider)) < 20.0 Then 
+												If wi\HazmatSuit > 0 Then
+													PlaySound_Strict(LoadTempSound("SFX\General\BodyFall.ogg"))
 													InjurePlayer(Rnd(0.5))
 												Else
-												    PlaySound_Strict(DamageSFX[Rand(9, 10)])
+													PlaySound_Strict(DamageSFX[Rand(9, 10)])
 													InjurePlayer(Rnd(1.0, 1.5), 0.0, 100.0, Rnd(0.1, 0.55), 0.2)
 													
 													If me\Injuries > 3.0 Then
-													    If PlayerRoom\RoomTemplate\Name = "room2offices" Then
-														    msg\DeathMsg = Chr(34) + "One large and highly active tentacle-like appendage seems "
-														    msg\DeathMsg = msg\DeathMsg + "to have grown outside the dead body of a scientist within office area [DATA REDACTED]. It's level of aggression is "
-														    msg\DeathMsg = msg\DeathMsg + "unlike anything we've seen before - it looks like it has "
-														    msg\DeathMsg = msg\DeathMsg + "beaten some unfortunate Class D to death at some point during the breach." + Chr(34)
-													    Else
-														    msg\DeathMsg = Chr(34) + "We will need more than the regular cleaning team to take care of this. "
-														    msg\DeathMsg = msg\DeathMsg + "Two large and highly active tentacle-like appendages seem "
-														    msg\DeathMsg = msg\DeathMsg + "to have formed inside the chamber. Their level of aggression is "
-														    msg\DeathMsg = msg\DeathMsg + "unlike anything we've seen before - it looks like they have "
-														    msg\DeathMsg = msg\DeathMsg + "beaten some unfortunate Class D to death at some point during the breach." + Chr(34)
-													    EndIf
-													    Kill(True)
-												    EndIf
-											    EndIf
+														If PlayerRoom\RoomTemplate\Name = "room2offices" Then
+															msg\DeathMsg = Chr(34) + "One large and highly active tentacle-like appendage seems "
+															msg\DeathMsg = msg\DeathMsg + "to have grown outside the dead body of a scientist within office area [DATA REDACTED]. It's level of aggression is "
+															msg\DeathMsg = msg\DeathMsg + "unlike anything we've seen before - it looks like it has "
+															msg\DeathMsg = msg\DeathMsg + "beaten some unfortunate Class D to death at some point during the breach." + Chr(34)
+														Else
+															msg\DeathMsg = Chr(34) + "We will need more than the regular cleaning team to take care of this. "
+															msg\DeathMsg = msg\DeathMsg + "Two large and highly active tentacle-like appendages seem "
+															msg\DeathMsg = msg\DeathMsg + "to have formed inside the chamber. Their level of aggression is "
+															msg\DeathMsg = msg\DeathMsg + "unlike anything we've seen before - it looks like they have "
+															msg\DeathMsg = msg\DeathMsg + "beaten some unfortunate Class D to death at some point during the breach." + Chr(34)
+														EndIf
+														Kill(True)
+													EndIf
+												EndIf
 											Else
 												PlaySound2(MissSFX, Camera, n\Collider)
-										    EndIf
+											EndIf
 										Else
 											PlaySound2(MissSFX, Camera, n\Collider, 3.0)
-									    EndIf
-									    n\Frame = 6.0
-								    ElseIf n\Frame = 32.0
-									    n\State = 1.0
-									    n\Frame = 173.0
-								    EndIf
-							    EndIf
+										EndIf
+										n\Frame = 6.0
+									ElseIf n\Frame = 32.0
+										n\State = 1.0
+										n\Frame = 173.0
+									EndIf
+								EndIf
 								;[End Block]
-					    End Select
+						End Select
 					Else
 						; ~ The NPC was killed
-					    AnimateNPC(n, 515.0, 551.0, 0.15, False)
-					    If n\Frame >= 550.0 Then
+						AnimateNPC(n, 515.0, 551.0, 0.15, False)
+						If n\Frame >= 550.0 Then
 							If n\SoundCHN <> 0 Then
 								If ChannelPlaying(n\SoundCHN) = True Then StopChannel(n\SoundCHN)
 								If n\Sound <> 0 Then
 									FreeSound_Strict(n\Sound) : n\Sound = 0
 								EndIf
 							EndIf
-				            HideEntity(n\OBJ)
+							HideEntity(n\OBJ)
 							HideEntity(n\Collider)
-				        EndIf
+						EndIf
 					EndIf
 				EndIf
 				
@@ -6424,7 +6423,7 @@ Function UpdateNPCs()
 				Select n\State
 					Case 0.0 ; ~ Idles
 						;[Block]
-					    n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
+						n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
 						;[End Block]
 					Case 1.0 ; ~ Moves
 						;[Block]
@@ -6653,7 +6652,7 @@ Function MeNPCSeesPlayer%(n.NPCs, DisableSoundOnCrouch% = False)
 End Function
 
 Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False)  
-    Local p.Particles, de.Decals, n.NPCs
+	Local p.Particles, de.Decals, n.NPCs
 	Local Pvt%, ShotMessageUpdate$, i%
 	
 	p.Particles = CreateParticle(x, y, z, 1, Rnd(0.08, 0.1), 0.0, 5.0)
@@ -6782,7 +6781,7 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 					;[End Block]
 				Case 12 ;Right Shoulder
 					;[Block]
-				    InjurePlayer(Rnd(0.9, 1.1), 0.0, 650.0)
+					InjurePlayer(Rnd(0.9, 1.1), 0.0, 650.0)
 					ShotMessageUpdate = "A bullet hit your right shoulder."
 					;[End Block]	
 				Case 13 ; ~ Left Shoulder
@@ -6790,7 +6789,7 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 					InjurePlayer(Rnd(0.9, 1.1), 0.0, 650.0)
 					ShotMessageUpdate = "A bullet hit your left shoulder."
 					;[End Block]
-			    Case 14 ; ~ Right Shoulder (more damage)
+				Case 14 ; ~ Right Shoulder (more damage)
 					;[Block]
 					InjurePlayer(Rnd(2.4, 2.6), 0.0, 650.0)
 					ShotMessageUpdate = "A bullet hit your right shoulder."
@@ -6814,7 +6813,7 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 					InjurePlayer(Rnd(0.7, 0.9), 0.0, 650.0)
 					ShotMessageUpdate = "A bullet hit your left leg."
 					;[End Block]
-			    Case 2 ; ~ Right Leg
+				Case 2 ; ~ Right Leg
 					;[Block]
 					me\Stamina = 0.0
 					InjurePlayer(Rnd(0.7, 0.9), 0.0, 650.0)
@@ -6846,16 +6845,16 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 					ShotMessageUpdate = "A bullet hit your left arm."
 					;[End Block]
 				Case 8 ; ~ Right Arm
-				    ;[Block]
+					;[Block]
 					InjurePlayer(Rnd(0.5, 0.7), 0.0, 650.0)
-				    ShotMessageUpdate = "A bullet hit your right arm."
+					ShotMessageUpdate = "A bullet hit your right arm."
 					;[End Block]
 				Case 9 ; ~ Neck
 					;[Block]
 					InjurePlayer(Rnd(1.1, 1.3), 0.0, 650.0)
-				    ShotMessageUpdate = "A bullet struck your neck, making you gasp."
+					ShotMessageUpdate = "A bullet struck your neck, making you gasp."
 					;[End Block]
-                Case 10 ; ~ Face or Head
+				Case 10 ; ~ Face or Head
 					;[Block]
 					For n.NPCs = Each NPCs
 						If n\NPCtype = NPCtypeMTF Lor n\NPCtype = NPCtypeApache Lor n\NPCtype = NPCtypeGuard
@@ -6868,7 +6867,7 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 						EndIf
 					Next
 					;[End Block]
-		    End Select
+			End Select
 		EndIf
 		
 		If msg\Timer < 70.0 * 5.0 Then

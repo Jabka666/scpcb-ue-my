@@ -727,49 +727,49 @@ Function UpdateConsole()
 							;[End Block]
 						Case "reset372" 
 							;[Block]
-						    CreateConsoleMsg("HELP - reset372")
+							CreateConsoleMsg("HELP - reset372")
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("Returns SCP-372 to inactive state.")
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "106retreat" 
 							;[Block]
-						    CreateConsoleMsg("HELP - 106retreat")
+							CreateConsoleMsg("HELP - 106retreat")
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("Returns SCP-106 to inactive state.")
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "disable106"
 							;[Block]
-						   	CreateConsoleMsg("HELP - disable106")
+							CreateConsoleMsg("HELP - disable106")
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("Removes SCP-106 from the map.")
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "enable106"
 							;[Block]
-						   	CreateConsoleMsg("HELP - enable106")
+							CreateConsoleMsg("HELP - enable106")
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("Returns SCP-106 to the map.")
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "disable173"
 							;[Block]
-						   	CreateConsoleMsg("HELP - disable173")
+							CreateConsoleMsg("HELP - disable173")
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("Removes SCP-173 from the map.")
 							CreateConsoleMsg("******************************")	
 							;[End Block]
 						Case "enable173"
 							;[Block]
-						   	CreateConsoleMsg("HELP - enable173")
+							CreateConsoleMsg("HELP - enable173")
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("Returns SCP-173 to the map.")
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "reset096" 
 							;[Block]
-						    CreateConsoleMsg("HELP - reset096")
+							CreateConsoleMsg("HELP - reset096")
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("Returns SCP-096 to idle state.")
 							CreateConsoleMsg("******************************")
@@ -804,28 +804,28 @@ Function UpdateConsole()
 							;[End Block]
 						Case "disable049"
 							;[Block]
-						   	CreateConsoleMsg("HELP - disable049")
+							CreateConsoleMsg("HELP - disable049")
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("Removes SCP-049 from the map.")
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "enable049"
 							;[Block]
-						   	CreateConsoleMsg("HELP - enable049")
+							CreateConsoleMsg("HELP - enable049")
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("Returns SCP-049 to the map.")
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "disable966"
 							;[Block]
-						   	CreateConsoleMsg("HELP - disable966")
+							CreateConsoleMsg("HELP - disable966")
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("Removes SCP-966 from the map.")
 							CreateConsoleMsg("******************************")	
 							;[End Block]
 						Case "enable966"
 							;[Block]
-						   	CreateConsoleMsg("HELP - enable966")
+							CreateConsoleMsg("HELP - enable966")
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("Returns SCP-966 to the map.")
 							CreateConsoleMsg("******************************")
@@ -1073,7 +1073,7 @@ Function UpdateConsole()
 							CreateEvent("room372", "room372", 0, 0.0)   
 							Exit
 						EndIf
-				    Next
+					Next
 					;[End Block]
 				Case "disable173"
 					;[Block]
@@ -1101,36 +1101,36 @@ Function UpdateConsole()
 					ShowEntity(Curr106\OBJ)
 					;[End Block]
 				Case "disable966"
-				    ;[Block]
-			        For n.NPCs = Each NPCs
-			            If n\NPCtype = NPCtype966
-			                n\State = -1.0
-			                HideEntity(n\Collider)
-                            HideEntity(n\OBJ)
-			            EndIf
-			        Next
-			        ;[End Block]
-			    Case "enable966"
-			        ;[Block]
-			        For n.NPCs = Each NPCs
-			            If n\NPCtype = NPCtype966
-			                n\State = 0.0
-			                ShowEntity(n\Collider)
-			                If WearinNightVision > 0 Then ShowEntity(n\OBJ)
-			            EndIf
-			        Next
+					;[Block]
+					For n.NPCs = Each NPCs
+						If n\NPCtype = NPCtype966
+							n\State = -1.0
+							HideEntity(n\Collider)
+							HideEntity(n\OBJ)
+						EndIf
+					Next
+					;[End Block]
+				Case "enable966"
+					;[Block]
+					For n.NPCs = Each NPCs
+						If n\NPCtype = NPCtype966
+							n\State = 0.0
+							ShowEntity(n\Collider)
+							If WearinNightVision > 0 Then ShowEntity(n\OBJ)
+						EndIf
+					Next
 					;[End Block]
 				Case "disable049" 
-			        ;[Block]
+					;[Block]
 					Curr049\Idle = 1
-			        HideEntity(Curr049\Collider)
-			        HideEntity(Curr049\OBJ)
+					HideEntity(Curr049\Collider)
+					HideEntity(Curr049\OBJ)
 					;[End Block]
-			    Case "enable049"
-			        ;[Block]
+				Case "enable049"
+					;[Block]
 					Curr049\Idle = 0
-			        ShowEntity(Curr049\Collider)
-			        ShowEntity(Curr049\OBJ)
+					ShowEntity(Curr049\Collider)
+					ShowEntity(Curr049\OBJ)
 					;[End Block]
 				Case "106retreat"
 					;[Block]
@@ -1401,42 +1401,42 @@ Function UpdateConsole()
 				Case "money", "rich"
 					;[Block]
 					For i = 1 To 20
-					    If Rand(2) = 1 Then
-						    it.Items = CreateItem("Quarter", "25ct", EntityX(me\Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(Camera, True), EntityZ(me\Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
-					    Else
-					        it.Items = CreateItem("Coin", "coin", EntityX(me\Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(Camera, True), EntityZ(me\Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
-					    EndIf
+						If Rand(2) = 1 Then
+							it.Items = CreateItem("Quarter", "25ct", EntityX(me\Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(Camera, True), EntityZ(me\Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
+						Else
+							it.Items = CreateItem("Coin", "coin", EntityX(me\Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(Camera, True), EntityZ(me\Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
+						EndIf
 						EntityType(it\Collider, HIT_ITEM)
 					Next
 					;[End Block]
 				Case "disablecontrol"
-				    ;[Block]
-				    For e2.Events = Each Events
-				        If e2\EventID = e_room2ccont
+					;[Block]
+					For e2.Events = Each Events
+						If e2\EventID = e_room2ccont
 							UpdateLever(e2\room\Objects[5])
 							RotateEntity(e2\room\Objects[5], 0.0, EntityYaw(e2\room\Objects[5]), 0.0)
 							RemoteDoorOn = False
 							Exit
 						EndIf
 					Next
-				    CreateConsoleMsg("Remote door control disabled.", 255, 255, 255)
-				    ;[End Block]
+					CreateConsoleMsg("Remote door control disabled.", 255, 255, 255)
+					;[End Block]
 				Case "enablecontrol"
-				    ;[Block]
-				    For e2.Events = Each Events
-				        If e2\EventID = e_room2ccont
+					;[Block]
+					For e2.Events = Each Events
+						If e2\EventID = e_room2ccont
 							UpdateLever(e2\room\Objects[5])
 							RotateEntity(e2\room\Objects[5], 0.0, EntityYaw(e2\room\Objects[5]), 30.0)
 							RemoteDoorOn = True
 							Exit
 						EndIf
 					Next
-				    CreateConsoleMsg("Remote door control enabled.", 255, 255, 255)
-				    ;[End Block]
-			    Case "unlockcheckpoints"
-			        ;[Block]
-			        For e2.Events = Each Events
-				        If e2\EventID = e_room2sl
+					CreateConsoleMsg("Remote door control enabled.", 255, 255, 255)
+					;[End Block]
+				Case "unlockcheckpoints"
+					;[Block]
+					For e2.Events = Each Events
+						If e2\EventID = e_room2sl
 							e2\EventState3 = 0.0
 							UpdateLever(e2\room\Levers[0])
 							RotateEntity(e2\room\Levers[0], 0.0, EntityYaw(e2\room\Levers[0]), 0.0)
@@ -1449,12 +1449,12 @@ Function UpdateConsole()
 						EndIf
 					Next
 					
-				    CreateConsoleMsg("Checkpoints are now unlocked.", 255, 255, 255)								
+					CreateConsoleMsg("Checkpoints are now unlocked.", 255, 255, 255)								
 					;[End Block]
 				Case "disablenuke"
 					;[Block]
 					For e2.Events = Each Events
-				        If e2\EventID = e_room2nuke
+						If e2\EventID = e_room2nuke
 							e2\EventState = 0.0
 							UpdateLever(e2\room\Objects[1])
 							UpdateLever(e2\room\Objects[3])
@@ -1462,7 +1462,7 @@ Function UpdateConsole()
 							RotateEntity(e2\room\Objects[3], 0.0, EntityYaw(e2\room\Objects[3]), 0.0)
 							Exit
 						EndIf
-				    Next
+					Next
 					;[End Block]
 				Case "unlockexits"
 					;[Block]
@@ -2274,7 +2274,7 @@ Function UpdateDoors()
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState)* (d\FastOpen * 2 + 1) * fps\FPSFactor[0] / 162.0, 0.0, 0.0)
 							;[End Block]
 						Case One_Sided_Door
-						    ;[Block]
+							;[Block]
 							d\OpenState = Min(180.0, d\OpenState + (fps\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fps\FPSFactor[0] / 80.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fps\FPSFactor[0]) / 80.0, 0.0, 0.0)	
@@ -2355,7 +2355,7 @@ Function UpdateDoors()
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fps\FPSFactor[0]) / 162.0, 0.0, 0.0)
 							;[End Block]
 						Case One_Sided_Door
-						    ;[Block]
+							;[Block]
 							d\OpenState = Max(0.0, d\OpenState - (fps\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fps\FPSFactor[0]) * (d\FastOpen + 1) / 80.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * fps\FPSFactor[0] / 80.0, 0.0, 0.0)
@@ -2793,7 +2793,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True, Scripted% = False)
 					Temp = 8
 					;[End Block]
 				Case "scp005"
-				    ;[Block]
+					;[Block]
 					Temp = 9
 					;[End Block]
 				Default
@@ -2904,14 +2904,14 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True, Scripted% = False)
 				If (Not (d\IsElevatorDoor > 0)) Then
 					PlaySound_Strict(ButtonSFX2)
 					If PlayerRoom\RoomTemplate\Name <> "room2elevator" Then
-                        If d\Open Then
-                            CreateMsg("You pushed the button but nothing happened.", 6.0)
-                        Else    
-                            CreateMsg("The door appears to be locked.", 6.0)
-                        EndIf    
-                    Else
-                        CreateMsg("The elevator appears to be broken.", 6.0)
-                    EndIf
+						If d\Open Then
+							CreateMsg("You pushed the button but nothing happened.", 6.0)
+						Else    
+							CreateMsg("The door appears to be locked.", 6.0)
+						EndIf    
+					Else
+						CreateMsg("The elevator appears to be broken.", 6.0)
+					EndIf
 				Else
 					If d\IsElevatorDoor = 1 Then
 						CreateMsg("You called the elevator.", 6.0)
@@ -3058,7 +3058,7 @@ End Type
 Global I_294.SCP294 = New SCP294
 
 Type SCP409
-    Field Timer#
+	Field Timer#
 End Type 
 
 Global I_409.SCP409 = New SCP409
@@ -3086,9 +3086,9 @@ Global I_1025.SCP1025 = New SCP1025
 
 Type SCP1499
 	Field Using%
-    Field PrevX#, PrevY#, PrevZ#
-    Field PrevRoom.Rooms
-    Field x#, y#, z#
+	Field PrevX#, PrevY#, PrevZ#
+	Field PrevRoom.Rooms
+	Field x#, y#, z#
 	Field Sky%
 End Type
 
@@ -4018,13 +4018,13 @@ Function InitCredits()
 End Function
 
 Function DrawCredits()
-    Local Credits_Y# = (me\EndingTimer + 2000.0) / 2 + (opt\GraphicHeight + 10.0)
-    Local cl.CreditsLine
-    Local ID%
-    Local EndLinesAmount%
+	Local Credits_Y# = (me\EndingTimer + 2000.0) / 2 + (opt\GraphicHeight + 10.0)
+	Local cl.CreditsLine
+	Local ID%
+	Local EndLinesAmount%
 	Local LastCreditLine.CreditsLine
 	
-    Cls()
+	Cls()
 	
 	If Rand(1, 300) > 1 Then
 		DrawImage(me\CreditsScreen, mo\Viewport_Center_X - 400, mo\Viewport_Center_Y - 400)
@@ -4089,13 +4089,13 @@ Function DrawCredits()
 End Function
 
 Function UpdateCredits()
-    Local Credits_Y# = (me\EndingTimer + 2000.0) / 2 + (opt\GraphicHeight + 10.0)
-    Local cl.CreditsLine
-    Local ID%
-    Local EndLinesAmount%
+	Local Credits_Y# = (me\EndingTimer + 2000.0) / 2 + (opt\GraphicHeight + 10.0)
+	Local cl.CreditsLine
+	Local ID%
+	Local EndLinesAmount%
 	Local LastCreditLine.CreditsLine
 	
-    ID = 0
+	ID = 0
 	EndLinesAmount = 0
 	LastCreditLine = Null
 	For cl.CreditsLine = Each CreditsLine
@@ -4186,10 +4186,10 @@ Function MovePlayer()
 	EndIf
 	
 	If me\CurrSpeed > 0.0 Then
-        me\Stamina = Min(me\Stamina + 0.15 * fps\FPSFactor[0] / 1.25, 100.0)
-    Else
-        me\Stamina = Min(me\Stamina + 0.15 * fps\FPSFactor[0] * 1.25, 100.0)
-    EndIf
+		me\Stamina = Min(me\Stamina + 0.15 * fps\FPSFactor[0] / 1.25, 100.0)
+	Else
+		me\Stamina = Min(me\Stamina + 0.15 * fps\FPSFactor[0] * 1.25, 100.0)
+	EndIf
 	
 	If me\StaminaEffectTimer > 0.0 Then
 		me\StaminaEffectTimer = me\StaminaEffectTimer - (fps\FPSFactor[0] / 70.0)
@@ -4663,8 +4663,8 @@ Function MouseLook()
 	
 	If wi\HazmatSuit > 0 Then
 		If wi\HazmatSuit = 1 Then
-            me\Stamina = Min(60.0, me\Stamina)
-        EndIf
+			me\Stamina = Min(60.0, me\Stamina)
+		EndIf
 		If (Not I_714\Using) Then
 			If wi\HazmatSuit = 2 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fps\FPSFactor[0])
 		EndIf
@@ -4674,10 +4674,10 @@ Function MouseLook()
 	EndIf
 	
 	If wi\BallisticHelmet > 0 Then
-        ShowEntity(tt\OverlayID[8])
-    Else
-        HideEntity(tt\OverlayID[8])
-    EndIf
+		ShowEntity(tt\OverlayID[8])
+	Else
+		HideEntity(tt\OverlayID[8])
+	EndIf
 	
 	If wi\NightVision > 0 Lor wi\SCRAMBLE > 0 Then
 		ShowEntity(tt\OverlayID[4])
@@ -4942,10 +4942,10 @@ Function DrawGUI()
 			Color(200, 0, 0)
 			Rect(x - 53, y - 3, 36, 36)
 		Else
-		    If me\BlinkEffect < 1.0 Lor chs\NoBlink Then
-		        Color(0, 200, 0)
-			    Rect(x - 53, y - 3, 36, 36)
-            EndIf
+			If me\BlinkEffect < 1.0 Lor chs\NoBlink Then
+				Color(0, 200, 0)
+				Rect(x - 53, y - 3, 36, 36)
+			EndIf
 		EndIf
 		
 		Color(255, 255, 255)
@@ -4967,10 +4967,10 @@ Function DrawGUI()
 			Color(200, 0, 0)
 			Rect(x - 53, y - 3, 36, 36)
 		Else
-		    If chs\InfiniteStamina Lor me\StaminaEffect < 1.0 Lor wi\GasMask = 2 Lor I_1499\Using = 2 Lor wi\HazmatSuit = 2 Then
-                Color(0, 200, 0)
-			    Rect(x - 53, y - 3, 36, 36)
-            EndIf 
+			If chs\InfiniteStamina Lor me\StaminaEffect < 1.0 Lor wi\GasMask = 2 Lor I_1499\Using = 2 Lor wi\HazmatSuit = 2 Then
+				Color(0, 200, 0)
+				Rect(x - 53, y - 3, 36, 36)
+			EndIf 
 		EndIf
 		
 		Color(255, 255, 255)
@@ -4988,7 +4988,7 @@ Function DrawGUI()
 			SetFont(fo\FontID[Font_Console])
 			
 			Text(x - 60, 40, "Room: " + PlayerRoom\RoomTemplate\Name)
-            Text(x - 60, 60, "Room Coordinates: (" + Floor(EntityX(PlayerRoom\OBJ) / 8.0 + 0.5) + ", " + Floor(EntityZ(PlayerRoom\OBJ) / 8.0 + 0.5) + ", Angle: " + PlayerRoom\Angle + ")")
+			Text(x - 60, 60, "Room Coordinates: (" + Floor(EntityX(PlayerRoom\OBJ) / 8.0 + 0.5) + ", " + Floor(EntityZ(PlayerRoom\OBJ) / 8.0 + 0.5) + ", Angle: " + PlayerRoom\Angle + ")")
 			For ev.Events = Each Events
 				If ev\room = PlayerRoom Then
 					Text(x - 60, 80, "Room Event: " + ev\EventName + ", ID: " + ev\EventID) 
@@ -5736,12 +5736,12 @@ Function DrawGUI()
 					If (Not PreventItemOverlapping(False, False, False, True)) Then
 						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
-					    Width = 300
-					    Height = 20
-					    x = mo\Viewport_Center_X - (Width / 2)
-					    y = mo\Viewport_Center_Y + 80
+						Width = 300
+						Height = 20
+						x = mo\Viewport_Center_X - (Width / 2)
+						y = mo\Viewport_Center_Y + 80
 						
-					    DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
+						DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					EndIf
 					;[End Block]
 				Case "scramble"
@@ -5843,8 +5843,8 @@ Function UpdateGUI()
 						GiveAchievement(AchvMaynard)
 					ElseIf SelectedDoor\Code = "7816"
 						GiveAchievement(AchvHarp)
-				    ElseIf SelectedDoor\Code = "2411"
-				        GiveAchievement(AchvO5)
+					ElseIf SelectedDoor\Code = "2411"
+						GiveAchievement(AchvO5)
 					EndIf
 					
 					SelectedDoor\Locked = 0					
@@ -5925,7 +5925,7 @@ Function UpdateGUI()
 										ElseIf SelectedDoor\Code = "7816"
 											GiveAchievement(AchvHarp)
 										ElseIf SelectedDoor\Code = "2411"
-										    GiveAchievement(AchvO5)
+											GiveAchievement(AchvO5)
 										EndIf									
 										
 										SelectedDoor\Locked = 0
@@ -6236,7 +6236,7 @@ Function UpdateGUI()
 							EndIf
 							;[End Block]
 						Case "gasmask", "gasmask3", "supergasmask"
-                            ;[Block]
+							;[Block]
 							If wi\GasMask > 0 Then
 								CreateMsg("Double click on this item to take it off.", 6.0)
 							Else
@@ -6244,9 +6244,9 @@ Function UpdateGUI()
 								SelectedItem = Null
 								InvOpen = False
 							EndIf
-						    ;[End Block]
+							;[End Block]
 						Case "helmet"
-                            ;[Block]
+							;[Block]
 							If wi\BallisticHelmet > 0 Then
 								CreateMsg("Double click on this item to take it off.", 6.0)
 							Else
@@ -6254,9 +6254,9 @@ Function UpdateGUI()
 								SelectedItem = Null
 								InvOpen = False
 							EndIf
-						    ;[End Block] 
+							;[End Block] 
 						Case "nvg", "supernvg", "finenvg"
-                            ;[Block]
+							;[Block]
 							If wi\NightVision > 0 Then
 								CreateMsg("Double click on this item to take it off.", 6.0)
 							Else
@@ -6264,9 +6264,9 @@ Function UpdateGUI()
 								SelectedItem = Null
 								InvOpen = False
 							EndIf
-						    ;[End Block]
+							;[End Block]
 						Case "scramble"
-                            ;[Block]
+							;[Block]
 							If wi\SCRAMBLE > 0 Then
 								CreateMsg("Double click on this item to take it off.", 6.0)
 							Else
@@ -6274,7 +6274,7 @@ Function UpdateGUI()
 								SelectedItem = Null
 								InvOpen = False
 							EndIf
-						    ;[End Block]
+							;[End Block]
 						Default
 							;[Block]
 							DropItem(SelectedItem)
@@ -6652,7 +6652,7 @@ Function UpdateGUI()
 						If I_008\Timer > 0.0 Then
 							CreateMsg("You swallowed the pill. Your nausea is fading.", 6.0)
 						ElseIf I_409\Timer > 0.0 Then
-						    CreateMsg("You swallowed the pill. Your body is getting warmer and the crystals are receding.", 6.0)
+							CreateMsg("You swallowed the pill. Your body is getting warmer and the crystals are receding.", 6.0)
 						Else
 							CreateMsg("You swallowed the pill.", 6.0)
 						EndIf
@@ -7716,7 +7716,7 @@ Function UpdateGUI()
 					
 					me\VomitTimer = 70.0 * 1.0
 					
-				    I_008\Timer = I_008\Timer + (1.0 + (1.0 * SelectedDifficulty\AggressiveNPCs))
+					I_008\Timer = I_008\Timer + (1.0 + (1.0 * SelectedDifficulty\AggressiveNPCs))
 					RemoveItem(SelectedItem)
 					;[End Block]
 				Case "helmet"
@@ -7726,19 +7726,19 @@ Function UpdateGUI()
 						
 						SelectedItem\State = Min(SelectedItem\State + fps\FPSFactor[0], 100.0)
 						
-					    If SelectedItem\State = 100.0 Then
+						If SelectedItem\State = 100.0 Then
 							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 							
 							If wi\BallisticHelmet > 0 Then
 								CreateMsg("You removed the helmet.", 6.0)
-                                wi\BallisticHelmet = 0
+								wi\BallisticHelmet = 0
 							Else
 								CreateMsg("You put on the helmet.", 6.0)
 								wi\BallisticHelmet = 1
 							EndIf
-						    SelectedItem\State = 0.0
+							SelectedItem\State = 0.0
 							SelectedItem = Null
-					    EndIf
+						EndIf
 					EndIf
 					;[End Block]
 				Case "scramble"
@@ -7877,7 +7877,7 @@ Function DrawMenu()
 		MenuOpen = True
 		PauseSounds()
 		Delay(1000.0) ; ~ Reduce the CPU take while game is not in focus
-    EndIf
+	EndIf
 	If MenuOpen Then
 		Width = ImageWidth(tt\ImageID[0])
 		Height = ImageHeight(tt\ImageID[0])
@@ -9096,8 +9096,8 @@ Function LoadEntities()
 	o\NPCModelID[NPCtypeVehicle] = LoadAnimMesh_Strict("GFX\npcs\vehicle.b3d") ; ~ Vehicle
 	
 	For i = 0 To MaxNPCModelIDAmount - 1
-        HideEntity(o\NPCModelID[i])
-    Next
+		HideEntity(o\NPCModelID[i])
+	Next
 	
 	; ~ [DOORS]
 	
@@ -9124,7 +9124,7 @@ Function LoadEntities()
 	o\DoorModelID[10] = LoadMesh_Strict("GFX\map\Props\Door02.x") ; ~ One-sided Door
 	
 	For i = 0 To MaxDoorModelIDAmount - 1
-	    HideEntity(o\DoorModelID[i])
+		HideEntity(o\DoorModelID[i])
 	Next
 	
 	; ~ [LEVERS]
@@ -9134,7 +9134,7 @@ Function LoadEntities()
 	o\LeverModelID[1] = LoadMesh_Strict("GFX\map\Props\LeverHandle.b3d") ; ~ Lever Handle
 	
 	For i = 0 To MaxLeverModelIDAmount - 1
-	    HideEntity(o\LeverModelID[i])
+		HideEntity(o\LeverModelID[i])
 	Next
 	
 	; ~ [BUTTONS]
@@ -9150,8 +9150,8 @@ Function LoadEntities()
 	o\ButtonModelID[4] = LoadMesh_Strict("GFX\map\Props\ButtonElevator.b3d") ; ~ Elevator Button
 	
 	For i = 0 To MaxButtonModelIDAmount - 1
-        HideEntity(o\ButtonModelID[i])
-    Next	
+		HideEntity(o\ButtonModelID[i])
+	Next	
 	
 	; ~ [MISC]
 	
@@ -9219,8 +9219,8 @@ Function LoadEntities()
 	o\CamModelID[1] = LoadMesh_Strict("GFX\map\Props\CamHead.b3d") ; ~ Cam Head
 	
 	For i = 0 To MaxCamModelIDAmount - 1
-        HideEntity(o\CamModelID[i])
-    Next
+		HideEntity(o\CamModelID[i])
+	Next
 	
 	; ~ [MONITORS]
 	
@@ -9228,9 +9228,9 @@ Function LoadEntities()
 	
 	o\MonitorModelID[1] = LoadMesh_Strict("GFX\map\Props\monitor_checkpoint.b3d") ; ~ Checkpoint Monitor LCZ / HCZ
 	
-    For i = 0 To MaxMonitorModelIDAmount - 1
-        HideEntity(o\MonitorModelID[i])
-    Next
+	For i = 0 To MaxMonitorModelIDAmount - 1
+		HideEntity(o\MonitorModelID[i])
+	Next
 	
 	tt\MonitorTextureID[0] = LoadTexture_Strict("GFX\monitor_overlay.png", 1, DeleteAllTextures)
 	tt\MonitorTextureID[1] = LoadTexture_Strict("GFX\map\textures\lockdown_screen(2).png", 1, DeleteAllTextures)
@@ -9408,8 +9408,8 @@ Function LoadEntities()
 	o\MTModelID[6] = LoadRMesh("GFX\map\mt_generator.rmesh", Null) ; ~ Generator Room
 	
 	For i = 0 To MaxMTModelIDAmount - 1
-        HideEntity(o\MTModelID[i])
-    Next
+		HideEntity(o\MTModelID[i])
+	Next
 	
 	TextureLodBias(opt\TextureDetailsLevel)
 	TextureAnisotropic(opt\AnisotropicLevel)
@@ -10053,18 +10053,18 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 			End Select
 			;[End Block]
 		Case "helmet"
-		    ;[Block]
+			;[Block]
 			Select Setting
 				Case ROUGH, COARSE
-				    ;[Block]
+					;[Block]
 					d.Decals = CreateDecal(0, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
 					;[End Block]
 				Case ONETOONE
-				    ;[Block]
+					;[Block]
 					it2.Items = CreateItem("Ballistic Vest", "vest", x, y, z)
 					;[End Block]	
-			    Case FINE, VERYFINE
-			        ;[Block]
+				Case FINE, VERYFINE
+					;[Block]
 					it2.Items = CreateItem("Heavy Ballistic Vest", "finevest", x, y, z)
 					;[End Block]
 			End Select
@@ -10685,7 +10685,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 					;[Block]
 					it2.Items = CreateItem("Level 0 Key Card", "key0", x, y, z)
 					;[End Block]
-			    Case FINE
+				Case FINE
 					;[Block]
 					it2.Items = CreateItem("Level 1 Key Card", "key1", x, y, z)
 					;[End Block]
@@ -10724,7 +10724,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 					;[Block]
 					it2.Items = CreateItem("Level 0 Key Card", "key0", x, y, z)
 					;[End Block]
-			    Case FINE
+				Case FINE
 					;[Block]
 					it2.Items = CreateItem("Level 1 Key Card", "key1", x, y, z)
 					;[End Block]
@@ -11870,9 +11870,9 @@ Function Update409()
 			I_409\Timer = Min(I_409\Timer + (fps\FPSFactor[0] * 0.004), 100.0)
 		EndIf	
 		EntityAlpha(tt\OverlayID[7], Min(((I_409\Timer * 0.2) ^ 2.0) / 1000.0, 0.5))
-	    me\BlurTimer = Max(I_409\Timer * 3.0 * (2.0 - me\CrouchState), me\BlurTimer)
+		me\BlurTimer = Max(I_409\Timer * 3.0 * (2.0 - me\CrouchState), me\BlurTimer)
 		
-        If I_409\Timer > 40.0 And PrevI409Timer =< 40.0 Then
+		If I_409\Timer > 40.0 And PrevI409Timer =< 40.0 Then
 			CreateMsg("Crystals are enveloping the skin on your legs.", 6.0)
 		ElseIf I_409\Timer > 55.0 And PrevI409Timer =< 55.0 Then
 			CreateMsg("Crystals are up to your abdomen.", 6.0)
@@ -11893,10 +11893,10 @@ Function Update409()
 			msg\DeathMsg = "Pile of SCP-409 crystals found and, by comparing list of the dead, was found to be " + SubjectName + " who had physical contact with SCP-409. "
 			msg\DeathMsg = msg\DeathMsg + "Remains were incinerated along with crystal-infested areas of facility."
 			Kill(True)
-        EndIf
-    Else
+		EndIf
+	Else
 		HideEntity(tt\OverlayID[7])	
-    EndIf
+	EndIf
 End Function
 
 Type Decals
@@ -12070,7 +12070,7 @@ Function CheckTriggers$()
 			Else
 				EntityColor(PlayerRoom\TriggerBox[i], 255.0, 255.0, 255.0)
 				EntityAlpha(PlayerRoom\TriggerBox[i], 0.0)
- 			EndIf
+			EndIf
 			If EntityX(me\Collider) > ((sX * Mesh_MinX) + PlayerRoom\x) And EntityX(me\Collider) < ((sX * Mesh_MaxX) + PlayerRoom\x)
 				If EntityY(me\Collider) > ((sY * Mesh_MinY) + PlayerRoom\y) And EntityY(me\Collider) < ((sY * Mesh_MaxY) + PlayerRoom\y)
 					If EntityZ(me\Collider) > ((sZ * Mesh_MinZ) + PlayerRoom\z) And EntityZ(me\Collider) < ((sZ * Mesh_MaxZ) + PlayerRoom\z)

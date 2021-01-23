@@ -5,7 +5,7 @@ Global FresizeImage%, FresizeTexture%, FresizeTexture2%
 Global FresizeCam%
 
 Function InitFastResize()
-    ; ~ Create Camera
+	; ~ Create Camera
 	Local Cam% = CreateCamera()
 	
 	CameraProjMode(Cam, 2)
@@ -16,7 +16,7 @@ Function InitFastResize()
 	
 	FresizeCam = Cam
 	
-    ; ~ Create sprite
+	; ~ Create sprite
 	Local SPR% = CreateMesh(Cam)
 	Local SF% = CreateSurface(SPR)
 	
@@ -33,7 +33,7 @@ Function InitFastResize()
 	EntityBlend(SPR, 1)
 	FresizeImage = SPR
 	
-    ; ~ Create texture
+	; ~ Create texture
 	FresizeTexture = CreateTexture(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO, 1 + 256)
 	FresizeTexture2 = CreateTexture(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO, 1 + 256)
 	TextureBlend(FresizeTexture2, 3)
@@ -75,7 +75,7 @@ Function ScaleRender(x#, y#, hScale# = 1.0, vScale# = 1.0)
 End Function
 
 Function ResizeImage2(Image%, Width%, Height%)
-    Local Img% = CreateImage(Width, Height)
+	Local Img% = CreateImage(Width, Height)
 	Local OldWidth% = ImageWidth(Image)
 	Local OldHeight% = ImageHeight(Image)
 	
