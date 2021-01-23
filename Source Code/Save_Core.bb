@@ -919,7 +919,7 @@ Function LoadGame(File$)
 						If ShouldSpawnDoor Then
 							If x + 1 < MapSize + 1
 								If MapTemp(x + 1, y) > 0 Then
-									do.Doors = CreateDoor(r\Zone, Float(x) * Spacing + Spacing / 2.0, 0.0, Float(y) * Spacing, 90.0, r, Max(Rand(-3, 1), 0.0), Temp)
+									do.Doors = CreateDoor(Float(x) * Spacing + Spacing / 2.0, 0.0, Float(y) * Spacing, 90.0, r, Max(Rand(-3, 1), 0.0), Temp)
 									r\AdjDoor[0] = do
 								EndIf
 							EndIf
@@ -959,7 +959,7 @@ Function LoadGame(File$)
 						If ShouldSpawnDoor
 							If y + 1 < MapSize + 1
 								If MapTemp(x, y + 1) > 0 Then
-									do.Doors = CreateDoor(r\Zone, Float(x) * Spacing, 0.0, Float(y) * Spacing + Spacing / 2.0, 0.0, r, Max(Rand(-3, 1), 0), Temp)
+									do.Doors = CreateDoor(Float(x) * Spacing, 0.0, Float(y) * Spacing + Spacing / 2.0, 0.0, r, Max(Rand(-3, 1), 0), Temp)
 									r\AdjDoor[3] = do
 								EndIf
 							EndIf
@@ -2511,7 +2511,7 @@ Function LoadMap(File$)
 						If ShouldSpawnDoor Then
 							If x + 1 < MapSize + 1 Then
 								If MapTemp(x + 1, y) > 0 Then
-									d.Doors = CreateDoor(r\Zone, Float(x) * Spacing + Spacing / 2.0, 0.0, Float(y) * Spacing, 90.0, r, Max(Rand(-3, 1), 0), Temp)
+									d.Doors = CreateDoor(Float(x) * Spacing + Spacing / 2.0, 0.0, Float(y) * Spacing, 90.0, r, Max(Rand(-3, 1), 0), Temp)
 									r\AdjDoor[0] = d
 								EndIf
 							EndIf
@@ -2551,7 +2551,7 @@ Function LoadMap(File$)
 						If ShouldSpawnDoor Then
 							If y + 1 < MapSize + 1 Then
 								If MapTemp(x, y + 1) > 0 Then
-									d.Doors = CreateDoor(r\Zone, Float(x) * Spacing, 0.0, Float(y) * Spacing + Spacing / 2.0, 0.0, r, Max(Rand(-3, 1), 0), Temp)
+									d.Doors = CreateDoor(Float(x) * Spacing, 0.0, Float(y) * Spacing + Spacing / 2.0, 0.0, r, Max(Rand(-3, 1), 0), Temp)
 									r\AdjDoor[3] = d
 								EndIf
 							EndIf

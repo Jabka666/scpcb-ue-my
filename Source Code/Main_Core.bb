@@ -2052,7 +2052,6 @@ Type Doors
 	Field SoundCHN%
 	Field Code$
 	Field ID%
-	Field Level%
 	Field AutoClose%
 	Field LinkedDoor.Doors
 	Field IsElevatorDoor% = False
@@ -2069,7 +2068,7 @@ Const One_Sided_Door% = 4
 Const SCP_914_Door% = 5
 ;[End Block]
 
-Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, Open% = False, DoorType% = Default_Door, Keycard% = 0, Code$ = "", CheckIfZeroCard% = False)
+Function CreateDoor.Doors(x#, y#, z#, Angle#, room.Rooms, Open% = False, DoorType% = Default_Door, Keycard% = 0, Code$ = "", CheckIfZeroCard% = False)
 	Local d.Doors, Parent%, i%
 	
 	If room <> Null Then Parent = room\OBJ
@@ -2171,7 +2170,6 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, Open% = False, Do
 	If DoorType = Elevator_Door Then d\Locked = 1
 	
 	d\Code = Code
-	d\Level = Lvl
 	
 	d\Angle = Angle
 	d\Open = Open		

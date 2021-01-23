@@ -4280,7 +4280,7 @@ Function UpdateEvents()
 									End Select
 									
 									If e\room\grid\Grid[iX + (iY * GridSZ)] = 6 Lor e\room\grid\Grid[iX + (iY * GridSZ)] = 5 Then
-										dr = CreateDoor(e\room\Zone, e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 240.0 * RoomScale), 8.0, e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 240.0 * RoomScale), EntityYaw(TempInt, True) - 90.0, Null, False, Elevator_Door)
+										dr.Doors = CreateDoor(e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 240.0 * RoomScale), 8.0, e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 240.0 * RoomScale), EntityYaw(TempInt, True) - 90.0, Null, False, Elevator_Door)
 										PositionEntity(dr\Buttons[0], EntityX(dr\Buttons[0], True) + (Cos(EntityYaw(TempInt, True)) * 0.05), EntityY(dr\Buttons[0], True), EntityZ(dr\Buttons[0], True) + (Sin(EntityYaw(TempInt, True)) * 0.05), True)
 										PositionEntity(dr\Buttons[1], EntityX(dr\Buttons[1], True) + (Cos(EntityYaw(TempInt, True)) * 0.05), EntityY(dr\Buttons[1], True), EntityZ(dr\Buttons[1], True) + (Sin(EntityYaw(TempInt, True)) * 0.031), True)
 										
@@ -4488,7 +4488,7 @@ Function UpdateEvents()
 									End Select
 									
 									If e\room\grid\Grid[iX + (iY * GridSZ)] = 6 Lor e\room\grid\Grid[iX + (iY * GridSZ)] = 5 Then
-										dr = CreateDoor(e\room\Zone, e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 240.0 * RoomScale), 8.0, e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 240.0 * RoomScale), EntityYaw(TempInt, True) - 90.0, Null, False, Elevator_Door)
+										dr.Doors = CreateDoor(e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 240.0 * RoomScale), 8.0, e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 240.0 * RoomScale), EntityYaw(TempInt, True) - 90.0, Null, False, Elevator_Door)
 										PositionEntity(dr\Buttons[0], EntityX(dr\Buttons[0], True) + (Cos(EntityYaw(TempInt, True)) * 0.05), EntityY(dr\Buttons[0], True), EntityZ(dr\Buttons[0], True) + (Sin(EntityYaw(TempInt, True)) * 0.05), True)
 										PositionEntity(dr\Buttons[1], EntityX(dr\Buttons[1], True) + (Cos(EntityYaw(TempInt, True)) * 0.05), EntityY(dr\Buttons[1], True), EntityZ(dr\Buttons[1], True) + (Sin(EntityYaw(TempInt, True)) * 0.031), True)
 										
