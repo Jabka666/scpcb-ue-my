@@ -94,7 +94,7 @@ Type Mouse
 	Field DoubleClick%, DoubleClickSlot%
 	Field LastMouseHit1%
 	Field MouseUp1%
-	Field Mouselook_X_Inc#, Mouselook_y_Inc#
+	Field Mouselook_X_Inc#, Mouselook_Y_Inc#
 	Field Mouse_Left_Limit%, Mouse_Right_Limit%
 	Field Mouse_Top_Limit%, Mouse_Bottom_Limit%
 	Field Mouse_X_Speed_1#, Mouse_Y_Speed_1#
@@ -104,7 +104,7 @@ End Type
 Global mo.Mouse = New Mouse
 
 mo\Mouselook_X_Inc = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the X axis
-mo\Mouselook_y_Inc = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the Y axis
+mo\Mouselook_Y_Inc = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the Y axis
 mo\Mouse_Left_Limit = 250
 mo\Mouse_Right_Limit = GraphicsWidth() - 250
 mo\Mouse_Top_Limit = 150
@@ -1814,7 +1814,7 @@ Function RenderMessages()
 			Color(0, 0, 0)
 			Text(mo\Viewport_Center_X + MenuScale, (opt\GraphicHeight * 0.94) + MenuScale, msg\Txt, True, False)
 			Color(Temp2, Temp2, Temp2)
-			Text(mo\Viewport_Center_X, (opt\GraphicHeight * 0.94), msg\Txt, True, False)
+			Text(mo\Viewport_Center_X, opt\GraphicHeight * 0.94, msg\Txt, True, False)
 		EndIf
 	EndIf
 	Color(255, 255, 255)
@@ -2101,16 +2101,16 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, Open% = False, Do
 		d\FrameOBJ = CopyEntity(o\DoorModelID[1])
 	ElseIf DoorType = One_Sided_Door Lor DoorType = SCP_914_Door
 		d\OBJ = CopyEntity(o\DoorModelID[10])
-		ScaleEntity(d\OBJ, (203.0 * RoomScale) / MeshWidth(d\OBJ), 313.0 * RoomScale / MeshHeight(d\OBJ), 15.0 * RoomScale / MeshDepth(d\OBJ))
+		ScaleEntity(d\OBJ, 203.0 * RoomScale / MeshWidth(d\OBJ), 313.0 * RoomScale / MeshHeight(d\OBJ), 15.0 * RoomScale / MeshDepth(d\OBJ))
 		d\OBJ2 = CopyEntity(o\DoorModelID[10])
-		ScaleEntity(d\OBJ2, (203.0 * RoomScale) / MeshWidth(d\OBJ2), 313.0 * RoomScale / MeshHeight(d\OBJ2), 15.0 * RoomScale / MeshDepth(d\OBJ2))
+		ScaleEntity(d\OBJ2, 203.0 * RoomScale / MeshWidth(d\OBJ2), 313.0 * RoomScale / MeshHeight(d\OBJ2), 15.0 * RoomScale / MeshDepth(d\OBJ2))
 		
 		d\FrameOBJ = CopyEntity(o\DoorModelID[1])
 	Else
 		d\OBJ = CopyEntity(o\DoorModelID[0])
-		ScaleEntity(d\OBJ, (203.0 * RoomScale) / MeshWidth(d\OBJ), 313.0 * RoomScale / MeshHeight(d\OBJ), 15.0 * RoomScale / MeshDepth(d\OBJ))
+		ScaleEntity(d\OBJ, 203.0 * RoomScale / MeshWidth(d\OBJ), 313.0 * RoomScale / MeshHeight(d\OBJ), 15.0 * RoomScale / MeshDepth(d\OBJ))
 		d\OBJ2 = CopyEntity(o\DoorModelID[0])
-		ScaleEntity(d\OBJ2, (203.0 * RoomScale) / MeshWidth(d\OBJ2), 313.0 * RoomScale / MeshHeight(d\OBJ2), 15.0 * RoomScale / MeshDepth(d\OBJ2))
+		ScaleEntity(d\OBJ2, 203.0 * RoomScale / MeshWidth(d\OBJ2), 313.0 * RoomScale / MeshHeight(d\OBJ2), 15.0 * RoomScale / MeshDepth(d\OBJ2))
 		
 		d\FrameOBJ = CopyEntity(o\DoorModelID[1])
 	EndIf
@@ -2137,16 +2137,16 @@ Function CreateDoor.Doors(Lvl, x#, y#, z#, Angle#, room.Rooms, Open% = False, Do
 	
 	For i = 0 To 1
 		If Code <> "" Then 
-			d\Buttons[i] = CreateButton(2, x + ((DoorType <> Big_Door) * (0.6 + (i * (-1.2)))) + ((DoorType = Big_Door) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((DoorType <> Big_Door) * ((-0.1) + (i * 0.2))) + ((DoorType = Big_Door) * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((DoorType <> Big_Door) * (i * 180.0)) + ((DoorType = Big_Door) * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ)
+			d\Buttons[i] = CreateButton(2, x + ((DoorType <> Big_Door) * (0.6 + (i * (-1.2)))) + ((DoorType = Big_Door) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((DoorType <> Big_Door) * ((-0.1) + (i * 0.2))) + ((DoorType = Big_Door) * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((DoorType <> Big_Door) * (i * 180.0)) + ((DoorType = Big_Door) * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ, d\Locked)
 		ElseIf DoorType = Elevator_Door
-			d\Buttons[i] = CreateButton(i * 4, x + ((DoorType <> Big_Door) * (0.6 + (i * (-1.2)))) + ((DoorType = Big_Door) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((DoorType <> Big_Door) * ((-0.1) + (i * 0.2))) + ((DoorType = Big_Door) * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((DoorType <> Big_Door) * (i * 180.0)) + ((DoorType = Big_Door) * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ)
+			d\Buttons[i] = CreateButton(i * 4, x + ((DoorType <> Big_Door) * (0.6 + (i * (-1.2)))) + ((DoorType = Big_Door) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((DoorType <> Big_Door) * ((-0.1) + (i * 0.2))) + ((DoorType = Big_Door) * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((DoorType <> Big_Door) * (i * 180.0)) + ((DoorType = Big_Door) * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ, d\Locked)
 		Else
 			If Keycard > 0 Then
-				d\Buttons[i] = CreateButton(1, x + ((DoorType <> Big_Door) * (0.6 + (i * (-1.2)))) + ((DoorType = Big_Door) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((DoorType <> Big_Door) * ((-0.1) + (i * 0.2))) + ((DoorType = Big_Door) * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((DoorType <> Big_Door) * (i * 180.0)) + ((DoorType = Big_Door) * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ)
+				d\Buttons[i] = CreateButton(1, x + ((DoorType <> Big_Door) * (0.6 + (i * (-1.2)))) + ((DoorType = Big_Door) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((DoorType <> Big_Door) * ((-0.1) + (i * 0.2))) + ((DoorType = Big_Door) * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((DoorType <> Big_Door) * (i * 180.0)) + ((DoorType = Big_Door) * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ, d\Locked)
 			ElseIf Keycard < 0
-				d\Buttons[i] = CreateButton(3, x + ((DoorType <> Big_Door) * (0.6 + (i * (-1.2)))) + ((DoorType = Big_Door) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((DoorType <> Big_Door) * ((-0.1) + (i * 0.2))) + ((DoorType = Big_Door) * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((DoorType <> Big_Door) * (i * 180.0)) + ((DoorType = Big_Door) * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ)
+				d\Buttons[i] = CreateButton(3, x + ((DoorType <> Big_Door) * (0.6 + (i * (-1.2)))) + ((DoorType = Big_Door) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((DoorType <> Big_Door) * ((-0.1) + (i * 0.2))) + ((DoorType = Big_Door) * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((DoorType <> Big_Door) * (i * 180.0)) + ((DoorType = Big_Door) * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ, d\Locked)
 			Else
-				d\Buttons[i] = CreateButton(0, x + ((DoorType <> Big_Door) * (0.6 + (i * (-1.2)))) + ((DoorType = Big_Door) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((DoorType <> Big_Door) * ((-0.1) + (i * 0.2))) + ((DoorType = Big_Door) * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((DoorType <> Big_Door) * (i * 180.0)) + ((DoorType = Big_Door) * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ)
+				d\Buttons[i] = CreateButton(0, x + ((DoorType <> Big_Door) * (0.6 + (i * (-1.2)))) + ((DoorType = Big_Door) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((DoorType <> Big_Door) * ((-0.1) + (i * 0.2))) + ((DoorType = Big_Door) * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((DoorType <> Big_Door) * (i * 180.0)) + ((DoorType = Big_Door) * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ, d\Locked)
 			EndIf
 		EndIf
 	Next
@@ -2307,7 +2307,7 @@ Function UpdateDoors()
 					EndIf
 					If d\AutoClose And RemoteDoorOn Then
 						If EntityDistanceSquared(Camera, d\OBJ) < 4.41 Then
-							If I_714\Using = 0 And wi\GasMask < 3 And wi\HazmatSuit < 3 Then PlaySound_Strict(HorrorSFX[7])
+							If (Not I_714\Using) And wi\GasMask <> 3 And wi\HazmatSuit <> 3 Then PlaySound_Strict(HorrorSFX[7])
 							d\Open = False : d\SoundCHN = PlaySound2(CloseDoorSFX(Min(d\DoorType, 1), Rand(0, 2)), Camera, d\OBJ) : d\AutoClose = False
 						EndIf
 					EndIf				
@@ -2756,10 +2756,8 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True, Scripted% = False)
 	
 	If d\KeyCard > 0 Then
 		If SelectedItem = Null Then
-			If ShowMsg = True Then
-				If msg\Timer < 70.0 * 3.0 Lor (Not (Instr(msg\Txt, "The keycard") Lor Instr(msg\Txt, "A keycard with") Lor Instr(msg\Txt, "You hold the"))) Then
-					CreateMsg("A keycard is required to operate this door.", 6.0)
-				EndIf
+			If ShowMsg Then
+				CreateMsg("A keycard is required to operate this door.", 6.0)
 			EndIf
 			If (Not Scripted) Then Return
 		Else
@@ -2808,9 +2806,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True, Scripted% = False)
 			
 			If Temp = -1 Then 
 				If ShowMsg Then
-					If msg\Timer < 70.0 * 3.0 Lor (Not (Instr(msg\Txt, "The keycard") Lor Instr(msg\Txt, "A keycard with") Lor Instr(msg\Txt, "You hold the"))) Then
-						CreateMsg("A keycard is required to operate this door.", 6.0)
-					EndIf
+					CreateMsg("A keycard is required to operate this door.", 6.0)
 				EndIf
 				If (Not Scripted) Then Return				
 			ElseIf Temp >= d\KeyCard 
@@ -2885,32 +2881,22 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True, Scripted% = False)
 				If Temp >= 3 Then
 					PlaySound_Strict(ButtonSFX)
 					If Temp = 4 Then
-						If (msg\Timer < 70.0 * 3.0) Lor (Not (Instr(msg\Txt, "You placed your") Lor Instr(msg\Txt, "You place") Lor Instr(msg\Txt, "You hold the") Lor Instr(msg\Txt, "The type of"))) Then
-							CreateMsg("There is no place to insert the key.", 6.0)
-						EndIf
+						CreateMsg("There is no place to insert the key.", 6.0)
 					Else
-						If (msg\Timer < 70.0 * 3.0) Lor (Not (Instr(msg\Txt, "You placed your") Lor Instr(msg\Txt, "You place") Lor Instr(msg\Txt, "You hold the") Lor Instr(msg\Txt, "There is"))) Then
-							CreateMsg("The type of this slot doesn't require keycards.", 6.0)
-						EndIf
+						CreateMsg("The type of this slot doesn't require keycards.", 6.0)
 					EndIf
 					If (Not Scripted) Then Return
 				Else
 					PlaySound_Strict(ScannerSFX1)
 					If Temp = 2 Then
-						If msg\Timer < 70.0 * 3.0 Lor (Not (Instr(msg\Txt, "You placed your") Lor Instr(msg\Txt, "You place") Lor Instr(msg\Txt, "The type of") Lor Instr(msg\Txt, "There is"))) Then
-							CreateMsg("You hold the key onto the scanner. The scanner reads: " + Chr(34) + "Unknown DNA verified. ERROR! Access granted." + Chr(34), 6.0)
-						EndIf
+						CreateMsg("You hold the key onto the scanner. The scanner reads: " + Chr(34) + "Unknown DNA verified. ERROR! Access granted." + Chr(34), 6.0)
 					Else
-						If msg\Timer < 70.0 * 3.0 Lor (Not (Instr(msg\Txt, "You place") Lor Instr(msg\Txt, "You hold the") Lor Instr(msg\Txt, "The type of") Lor Instr(msg\Txt, "There is"))) Then
-							CreateMsg("You place the palm of the hand onto the scanner. The scanner reads: " + Chr(34) + "DNA verified. Access granted." + Chr(34), 6.0)
-						EndIf
+						CreateMsg("You place the palm of the hand onto the scanner. The scanner reads: " + Chr(34) + "DNA verified. Access granted." + Chr(34), 6.0)
 					EndIf
 				EndIf
 			Else
 				PlaySound_Strict(ScannerSFX2)
-				If msg\Timer < 70.0 * 3.0 Lor (Not (Instr(msg\Txt, "You place") Lor Instr(msg\Txt, "You hold the") Lor Instr(msg\Txt, "The type of") Lor Instr(msg\Txt, "There is"))) Then
-					CreateMsg("You placed your palm onto the scanner. The scanner reads: " + Chr(34) + "DNA does not match known sample. Access denied." + Chr(34), 6.0)
-				EndIf
+				CreateMsg("You placed your palm onto the scanner. The scanner reads: " + Chr(34) + "DNA does not match known sample. Access denied." + Chr(34), 6.0)
 				If (Not Scripted) Then Return			
 			EndIf
 		EndIf
@@ -2934,7 +2920,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True, Scripted% = False)
 					ElseIf d\IsElevatorDoor = 3 Then
 						CreateMsg("The elevator is already on this floor.", 6.0)
 					ElseIf msg\Txt <> "You called the elevator."
-						If msg\Timer < 70.0 * 3.0 Lor msg\Txt = "You already called the elevator."
+						If msg\Txt = "You already called the elevator."
 							Select Rand(10)
 								Case 1
 									;[Block]
@@ -3604,7 +3590,7 @@ Function MainLoop()
 				If (W <> "vest" And W <> "finevest" And W <> "hazmatsuit" And W <> "hazmatsuit2" And W <> "hazmatsuit3") Lor V = 0.0 Lor V = 100.0
 					If InvOpen Then
 						ResumeSounds()
-						MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_X_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
+						StopMouseMovement()
 					Else
 						mo\DoubleClickSlot = -1
 						PauseSounds()
@@ -3681,7 +3667,7 @@ Function MainLoop()
 				If ConsoleOpen Then
 					UsedConsole = True
 					ResumeSounds()
-					MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_X_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
+					StopMouseMovement()
 					mm\ShouldDeleteGadgets = True
 				Else
 					PauseSounds()
@@ -4247,7 +4233,7 @@ Function MovePlayer()
 		EndIf
 	Next
 	
-	If I_714\Using = 1 Then
+	If I_714\Using Then
 		me\Stamina = Min(me\Stamina, 10.0)
 		me\Sanity = Max(-850.0, me\Sanity)
 	EndIf
@@ -4461,7 +4447,7 @@ Function MovePlayer()
 	If me\Injuries > 1.0 Then
 		Temp2 = me\Bloodloss
 		me\BlurTimer = Max(Max(Sin(MilliSecs() / 100.0) * me\Bloodloss * 30.0, me\Bloodloss * 2.0 * (2.0 - me\CrouchState)), me\BlurTimer)
-		If I_427\Using = 0 And I_427\Timer < 70.0 * 360.0 Then
+		If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then
 			me\Bloodloss = Min(me\Bloodloss + (Min(me\Injuries, 3.5) / 300.0) * fps\FPSFactor[0], 100.0)
 		EndIf
 		If Temp2 =< 60.0 And me\Bloodloss > 60.0 Then
@@ -4533,6 +4519,12 @@ Function MovePlayer()
 	CatchErrors("MovePlayer")
 End Function
 
+Function StopMouseMovement()
+	MouseXSpeed() : MouseYSpeed() : MouseZSpeed()
+	mo\Mouse_X_Speed_1 = 0.0
+	mo\Mouse_Y_Speed_1 = 0.0
+End Function
+
 Function MouseLook()
 	Local i%
 	
@@ -4558,12 +4550,11 @@ Function MouseLook()
 			mo\Mouse_Y_Speed_1 = CurveValue(MouseYSpeed() * (opt\MouseSensitivity + 0.6), mo\Mouse_Y_Speed_1, (6.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing)
 		EndIf
 		If IsNaN(mo\Mouse_Y_Speed_1) Then
-			mo\Mouse_X_Speed_1 = 0.0
-			mo\Mouse_Y_Speed_1 = 0.0
+			StopMouseMovement()
 		EndIf
 		
 		Local The_Yaw# = ((mo\Mouse_X_Speed_1)) * mo\Mouselook_X_Inc / (1.0 + wi\BallisticVest)
-		Local The_Pitch# = ((mo\Mouse_Y_Speed_1)) * mo\Mouselook_y_Inc / (1.0 + wi\BallisticVest)
+		Local The_Pitch# = ((mo\Mouse_Y_Speed_1)) * mo\Mouselook_Y_Inc / (1.0 + wi\BallisticVest)
 		
 		TurnEntity(me\Collider, 0.0, -The_Yaw, 0.0) ; ~ Turn the user on the Y (Yaw) axis
 		CameraPitch = CameraPitch + The_Pitch
@@ -4637,7 +4628,7 @@ Function MouseLook()
 	EndIf
 	
 	If wi\GasMask > 0 Lor I_1499\Using > 0 Then
-		If I_714\Using = 0 Then
+		If (Not I_714\Using) Then
 			If wi\GasMask = 2 Lor I_1499\Using = 2 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fps\FPSFactor[0])
 		EndIf
 		If me\KillTimer >= 0.0 Then
@@ -4676,7 +4667,7 @@ Function MouseLook()
 		If wi\HazmatSuit = 1 Then
             me\Stamina = Min(60.0, me\Stamina)
         EndIf
-		If I_714\Using = 0 Then
+		If (Not I_714\Using) Then
 			If wi\HazmatSuit = 2 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fps\FPSFactor[0])
 		EndIf
 		ShowEntity(tt\OverlayID[2])
@@ -4749,7 +4740,7 @@ Function MouseLook()
 					;[End Block]
 				Case 3 ; ~ Appendicitis
 					; ~ 0.035 / sec = 2.1 / min
-					If I_427\Using = 0 And I_427\Timer < 70.0 * 360.0 Then
+					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then
 						I_1025\State[i] = I_1025\State[i] + (fps\FPSFactor[0] * 0.0005)
 					EndIf
 					If I_1025\State[i] > 20.0 Then
@@ -4774,7 +4765,7 @@ Function MouseLook()
 					;[End Block]
 				Case 5 ; ~ Cardiac arrest
 					;[Block]
-					If I_427\Using = 0 And I_427\Timer < 70.0 * 360.0 Then
+					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then
 						I_1025\State[i] = I_1025\State[i] + (fps\FPSFactor[0] * 0.35)
 					EndIf
 					
@@ -4974,7 +4965,7 @@ Function DrawGUI()
 		Color(0, 0, 0)
 		Rect(x - 50, y, 30, 30)
 		
-		If PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor I_714\Using > 0 Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor wi\HazmatSuit = 1 Lor wi\BallisticVest = 2 Then
+		If PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor I_714\Using Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor wi\HazmatSuit = 1 Lor wi\BallisticVest = 2 Then
 			Color(200, 0, 0)
 			Rect(x - 53, y - 3, 36, 36)
 		Else
@@ -5227,7 +5218,7 @@ Function DrawGUI()
 						;[End Block]
 					Case "scp714"
 						;[Block]
-						If I_714\Using = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						If I_714\Using = True Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
 						;[End Block]
 					Case "nvg"
 						;[Block]
@@ -5255,7 +5246,7 @@ Function DrawGUI()
 						;[End Block]
 					Case "scp427"
 						;[Block]
-						If I_427\Using = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						If I_427\Using Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
 						;[End Block]
 				End Select
 			EndIf
@@ -5332,8 +5323,8 @@ Function DrawGUI()
 					Else
 						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
-						Width = 300.0
-						Height = 20.0
+						Width = 300
+						Height = 20
 						x = mo\Viewport_Center_X - (Width / 2)
 						y = mo\Viewport_Center_Y + 80
 						
@@ -5771,7 +5762,7 @@ Function DrawGUI()
 			End Select
 			
 			If SelectedItem <> Null Then
-				If SelectedItem\ItemTemplate\Img <> 0
+				If SelectedItem\ItemTemplate\Img <> 0 Then
 					Local IN$ = SelectedItem\ItemTemplate\TempName
 					
 					If IN = "paper" Lor IN = "badge" Lor IN = "oldpaper" Lor IN = "ticket" Then
@@ -5780,8 +5771,8 @@ Function DrawGUI()
 								Local IN2$ = a_it\ItemTemplate\Tempname
 								
 								If IN2 = "paper" Lor IN2 = "badge" Lor IN2 = "oldpaper" Lor IN2 = "ticket" Then
-									If a_it\ItemTemplate\Img <> 0
-										If a_it\ItemTemplate\Img <> SelectedItem\ItemTemplate\Img
+									If a_it\ItemTemplate\Img <> 0 Then
+										If a_it\ItemTemplate\Img <> SelectedItem\ItemTemplate\Img Then
 											FreeImage(a_it\ItemTemplate\Img) : a_it\ItemTemplate\Img = 0
 										EndIf
 									EndIf
@@ -5897,7 +5888,7 @@ Function UpdateGUI()
 				If msg\KeyPadTimer =< 0.0 Then
 					msg\KeyPadMsg = ""
 					SelectedDoor = Null
-					MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_X_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
+					StopMouseMovement()
 				EndIf
 			EndIf
 			
@@ -5942,7 +5933,7 @@ Function UpdateGUI()
 										SelectedDoor\Locked = 0
 										UseDoor(SelectedDoor, True)
 										SelectedDoor = Null
-										MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_X_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
+										StopMouseMovement()
 									Else
 										PlaySound_Strict(ScannerSFX2)
 										msg\KeyPadMsg = "ACCESS DENIED"
@@ -5969,7 +5960,7 @@ Function UpdateGUI()
 			
 			If mo\MouseHit2 Then
 				SelectedDoor = Null
-				MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_X_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
+				StopMouseMovement()
 			EndIf
 		Else
 			SelectedDoor = Null
@@ -5984,7 +5975,7 @@ Function UpdateGUI()
 		If MenuOpen Lor InvOpen Then
 			ResumeSounds()
 			If OptionsMenu <> 0 Then SaveOptionsINI()
-			MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_X_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
+			StopMouseMovement()
 		Else
 			PauseSounds()
 		EndIf
@@ -6167,7 +6158,7 @@ Function UpdateGUI()
 		If ClosedInv And (Not InvOpen) Then 
 			ResumeSounds() 
 			OtherOpen = Null
-			MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_X_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
+			StopMouseMovement()
 		EndIf
 	ElseIf InvOpen Then
 		SelectedDoor = Null
@@ -6603,7 +6594,7 @@ Function UpdateGUI()
 		
 		If (Not InvOpen) Then 
 			ResumeSounds() 
-			MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_X_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
+			StopMouseMovement()
 		EndIf
 	Else
 		If SelectedItem <> Null Then
@@ -6907,7 +6898,7 @@ Function UpdateGUI()
 						SelectedItem\State = Rand(0.0, 5.0)
 					EndIf
 					
-					If I_714\Using = 0 And wi\GasMask < 3 And wi\HazmatSuit < 3 Then I_1025\State[SelectedItem\State] = Max(1.0, I_1025\State[SelectedItem\State])
+					If (Not I_714\Using) And wi\GasMask <> 3 And wi\HazmatSuit <> 3 Then I_1025\State[SelectedItem\State] = Max(1.0, I_1025\State[SelectedItem\State])
 					;[End Block]
 				Case "cup"
 					;[Block]
@@ -7399,7 +7390,7 @@ Function UpdateGUI()
 				Case "scp420j"
 					;[Block]
 					If CanUseItem(False, True) Then
-						If I_714\Using = 1 Lor wi\GasMask = 3 Lor wi\HazmatSuit = 3 Then
+						If I_714\Using Lor wi\GasMask = 3 Lor wi\HazmatSuit = 3 Then
 							CreateMsg(Chr(34) + "DUDE WTF THIS SHIT DOESN'T EVEN WORK." + Chr(34), 6.0)
 						Else
 							CreateMsg(Chr(34) + "MAN DATS SUM GOOD ASS SHIT." + Chr(34), 6.0)
@@ -7414,7 +7405,7 @@ Function UpdateGUI()
 				Case "joint"
 					;[Block]
 					If CanUseItem(False, True) Then
-						If I_714\Using = 1 Lor wi\GasMask = 3 Lor wi\HazmatSuit = 3 Then
+						If I_714\Using Lor wi\GasMask = 3 Lor wi\HazmatSuit = 3 Then
 							CreateMsg(Chr(34) + "DUDE WTF THIS SHIT DOESN'T EVEN WORK." + Chr(34), 6.0)
 						Else
 							CreateMsg(Chr(34) + "UH WHERE... WHAT WAS I DOING AGAIN... MAN I NEED TO TAKE A NAP..." + Chr(34), 6.0)
@@ -7429,7 +7420,7 @@ Function UpdateGUI()
 				Case "scp420s"
 					;[Block]
 					If CanUseItem(False, True) Then
-						If I_714\Using = 1 Lor wi\GasMask = 3 Lor wi\HazmatSuit = 3 Then
+						If I_714\Using Lor wi\GasMask = 3 Lor wi\HazmatSuit = 3 Then
 							CreateMsg(Chr(34) + "DUDE WTF THIS SHIT DOESN'T EVEN WORK." + Chr(34), 6.0)
 						Else
 							CreateMsg(Chr(34) + "UUUUUUUUUUUUHHHHHHHHHHHH..." + Chr(34), 6.0)
@@ -7443,13 +7434,13 @@ Function UpdateGUI()
 					;[End Block]
 				Case "scp714"
 					;[Block]
-					If I_714\Using = 1 Then
+					If I_714\Using Then
 						CreateMsg("You removed the ring.", 6.0)
-						I_714\Using = 0
+						I_714\Using = False
 					Else
 						CreateMsg("You put on the ring.", 6.0)
 						GiveAchievement(Achv714)
-						I_714\Using = 1
+						I_714\Using = True
 					EndIf
 					SelectedItem = Null	
 					;[End Block]
@@ -7691,13 +7682,13 @@ Function UpdateGUI()
 					;[End Block]
 				Case "scp427"
 					;[Block]
-					If I_427\Using = 1 Then
+					If I_427\Using Then
 						CreateMsg("You closed the locket.", 6.0)
-						I_427\Using = 0
+						I_427\Using = False
 					Else
 						GiveAchievement(Achv427)
 						CreateMsg("You opened the locket.", 6.0)
-						I_427\Using = 1
+						I_427\Using = True
 					EndIf
 					SelectedItem = Null
 					;[End Block]
@@ -8674,7 +8665,7 @@ Function UpdateMenu()
 				If DrawButton(x, y, 430 * MenuScale, 60 * MenuScale, "Resume", True, True) Then
 					MenuOpen = False
 					ResumeSounds()
-					MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_X_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
+					StopMouseMovement()
 					DeleteMenuGadgets()
 					Return
 				EndIf
@@ -9777,9 +9768,9 @@ Function NullGame(PlayButtonSFX% = True)
 	EndIf
 	wi\SCRAMBLE = 0
 	
-	I_714\Using = 0
+	I_714\Using = False
 	
-	I_427\Using = 0
+	I_427\Using = False
 	I_427\Timer = 0.0
 	
 	me\ForceMove = 0.0
@@ -11442,7 +11433,7 @@ Function Use294()
 			HidePointer()
 			I_294\Using = False
 			I_294\ToInput = ""
-			MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_X_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
+			StopMouseMovement()
 		EndIf
 	Else ; ~ Playing a dispensing sound
 		If I_294\ToInput <> "OUT OF RANGE" Then I_294\ToInput = "DISPENSING..."
@@ -11451,7 +11442,7 @@ Function Use294()
 			If I_294\ToInput <> "OUT OF RANGE" Then
 				HidePointer()
 				I_294\Using = False
-				MouseXSpeed() : MouseYSpeed() : MouseZSpeed() : mo\Mouse_X_Speed_1 = 0.0 : mo\Mouse_Y_Speed_1 = 0.0
+				StopMouseMovement()
 				
 				Local e.Events
 				
@@ -11473,7 +11464,7 @@ Function Use427()
 	Local PrevI427Timer# = I_427\Timer
 	
 	If I_427\Timer < 70.0 * 360.0
-		If I_427\Using = 1 Then
+		If I_427\Using Then
 			I_427\Timer = I_427\Timer + fps\FPSFactor[0]
 			For e.Events = Each Events
 				If e\EventID = e_1048a Then
@@ -11727,7 +11718,7 @@ Function Update008()
 		ShowEntity(tt\OverlayID[3])
 		If I_008\Timer < 93.0 Then
 			PrevI008Timer = I_008\Timer
-			If I_427\Using = 0 And I_427\Timer < 70.0 * 360.0 Then
+			If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then
 				I_008\Timer = Min(I_008\Timer + (fps\FPSFactor[0] * 0.002), 100.0)
 			EndIf
 			
@@ -11877,7 +11868,7 @@ Function Update409()
 	If I_409\Timer > 0.0 Then
 		ShowEntity(tt\OverlayID[7])
 		
-		If I_427\Using = 0 And I_427\Timer < 70.0 * 360.0 Then
+		If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then
 			I_409\Timer = Min(I_409\Timer + (fps\FPSFactor[0] * 0.004), 100.0)
 		EndIf	
 		EntityAlpha(tt\OverlayID[7], Min(((I_409\Timer * 0.2) ^ 2.0) / 1000.0, 0.5))

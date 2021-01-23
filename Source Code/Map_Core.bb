@@ -6428,7 +6428,7 @@ Function UpdateSecurityCams() ; ~ TODO: SHOULD BE SEPARATED!
 					sc\State = sc\State + fps\FPSFactor[0]
 					If me\BlinkTimer > -5.0 And EntityInView(sc\ScrOBJ, Camera) Then
 						If EntityVisible(Camera, sc\ScrOBJ) Then
-							If (sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3) And I_714\Using = 0 And wi\HazmatSuit < 3 And wi\GasMask < 3 Then
+							If (sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3) And (Not I_714\Using) And wi\HazmatSuit <> 3 And wi\GasMask <> 3 Then
 								If me\BlinkTimer > -5.0 Then
 									me\Sanity = me\Sanity - fps\FPSFactor[0]
 									me\RestoreSanity = False
@@ -6493,7 +6493,7 @@ Function UpdateSecurityCams() ; ~ TODO: SHOULD BE SEPARATED!
 						sc\State = 0.0
 					EndIf
 					
-					If (sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3) And I_714\Using = 0 And wi\HazmatSuit < 3 And wi\GasMask < 3 Then
+					If (sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3) And (Not I_714\Using) And wi\HazmatSuit <> 3 And wi\GasMask <> 3 Then
 						If sc\InSight Then
 							Local Pvt% = CreatePivot()
 							
@@ -6507,7 +6507,7 @@ Function UpdateSecurityCams() ; ~ TODO: SHOULD BE SEPARATED!
 							CameraPitch = CameraPitch - 90.0
 							
 							FreeEntity(Pvt)
-							If (sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3) And (I_714\Using = 0 Lor wi\GasMask < 3 Lor wi\HazmatSuit < 3) Then
+							If (sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3) And ((Not I_714\Using) And wi\GasMask <> 3 And wi\HazmatSuit <> 3) Then
 								If me\Sanity < -800.0 Then
 									If Rand(3) = 1 Then EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
 									If Rand(6) < 5 Then
@@ -6538,7 +6538,7 @@ Function UpdateSecurityCams() ; ~ TODO: SHOULD BE SEPARATED!
 						EndIf
 					Else
 						If sc\InSight Then
-							If I_714\Using = 1 Lor wi\HazmatSuit = 3 Lor wi\GasMask = 3 Then EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
+							If I_714\Using Lor wi\HazmatSuit = 3 Lor wi\GasMask = 3 Then EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
 						EndIf
 					EndIf
 					

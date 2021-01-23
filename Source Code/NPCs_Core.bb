@@ -1552,14 +1552,14 @@ Function UpdateNPCs()
 													EndIf
 												Next
 											EndIf
-										ElseIf I_714\Using = 1 Then
+										ElseIf I_714\Using Then
 											me\BlurTimer = me\BlurTimer + fps\FPSFactor[0] * 2.5
 											If me\BlurTimer > 250.0 And me\BlurTimer - fps\FPSFactor[0] * 2.5 =< 250.0 And n\PrevState <> 3 Then
 												If n\SoundCHN2 <> 0 Then StopChannel(n\SoundCHN2)
 												n\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\049\714Equipped.ogg"))
 												n\PrevState = 3
 											ElseIf me\BlurTimer >= 500.0
-												I_714\Using = 0
+												I_714\Using = False
 											EndIf
 										Else
 											me\CurrCameraZoom = 20.0
@@ -5535,9 +5535,9 @@ Function UpdateNPCs()
 									RotateEntity(n\Collider, 0.0, CurveAngle(Angle, EntityYaw(n\Collider), 20.0), 0.0)
 									
 									If n\State3 < 900.0 Then
-										me\BlurTimer = ((Sin(MilliSecs() / 50) + 1.0) * 200) / Dist
+										me\BlurTimer = Float(((Sin(MilliSecs() / 50.0) + 1.0) * 200.0) / Dist)
 										
-										If I_714\Using = 0 And wi\GasMask < 3 And wi\HazmatSuit < 3 And Dist < 16.0 Then
+										If (Not I_714\Using) And wi\GasMask <> 3 And wi\HazmatSuit <> 3 And Dist < 16.0 Then
 											me\BlinkEffect = Max(me\BlinkEffect, 1.5)
 											me\BlinkEffectTimer = 1000.0
 											

@@ -1173,8 +1173,7 @@ Function UpdateEvents()
 								If e\EventState3 - fps\FPSFactor[0] / 30.0 < 9.3 And e\EventState3 > 9.3 Then PlaySound_Strict(IntroSFX[1])
 								
 								If e\EventState3 < 14.0 Then
-									mo\Mouse_X_Speed_1 = 0.0
-									mo\Mouse_Y_Speed_1 = 0.0
+									StopMouseMovement()
 									
 									If e\EventState3 - fps\FPSFactor[0] / 30.0 < 12.0 And e\EventState3 > 12.0 Then PlaySound2(StepSFX(0, 0, 0), Camera, me\Collider, 8.0, 0.3)
 									
@@ -1689,7 +1688,7 @@ Function UpdateEvents()
 										
 										e\room\NPC[3]\Sound = LoadSound_Strict("SFX\Room\Intro\Guard\Ulgrin\EscortKill" + Rand(1, 2) + ".ogg")
 										e\room\NPC[3]\SoundCHN = PlaySound2(e\room\NPC[3]\Sound, Camera, e\room\NPC[3]\Collider)
-										e\room\NPC[3]\State3 = 50.0 + 70.0 * 2.5
+										e\room\NPC[3]\State3 = 50.0 + (70.0 * 2.5)
 										e\room\NPC[3]\State2 = 5.0
 									ElseIf e\room\NPC[3]\State2 = 5.0
 										For i = 3 To 4
@@ -2476,7 +2475,7 @@ Function UpdateEvents()
 								EndIf
 							EndIf
 						Next
-						If CoffinDistance < 4.0 And HasBatteryFor895 And I_714\Using = 0 And wi\GasMask < 3 And wi\HazmatSuit < 3 Then
+						If CoffinDistance < 4.0 And HasBatteryFor895 And (Not I_714\Using) And wi\GasMask <> 3 And wi\HazmatSuit <> 3 Then
 							TurnEntity(me\Collider, 0.0, AngleDist(PointDirection(EntityX(me\Collider, True), EntityZ(me\Collider, True), EntityX(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True)) + 90.0 + Sin(WrapAngle(e\EventState3 / 10.0)), EntityYaw(me\Collider)) / 4.0, 0.0, True)
 							CameraPitch = (CameraPitch * 0.8) + (((-60.0) * Min(Max((2.0 - Distance(EntityX(me\Collider, True), EntityX(e\room\Objects[1], True), EntityZ(me\Collider, True), EntityZ(e\room\Objects[1], True))) / 2.0, 0.0), 1.0)) * 0.2)
 							
@@ -2952,7 +2951,7 @@ Function UpdateEvents()
 											Pvt = CreatePivot()
 											PositionEntity(Pvt, EntityX(e\room\Objects[i], True), EntityY(me\Collider), EntityZ(e\room\Objects[i], True))
 											PointEntity(Pvt, me\Collider)
-											RotateEntity(Pvt, 0, Int(EntityYaw(Pvt) / 90) * 90.0, 0.0, True)
+											RotateEntity(Pvt, 0.0, Int(EntityYaw(Pvt) / 90.0) * 90.0, 0.0, True)
 											MoveEntity(Pvt, 0.0, 0.0, 100.0 * RoomScale)
 											PositionEntity(me\Collider, EntityX(Pvt), EntityY(me\Collider), EntityZ(Pvt))
 											FreeEntity(Pvt)
@@ -3017,7 +3016,7 @@ Function UpdateEvents()
 										
 										e\EventStr = Float(0.0)
 									EndIf
-								ElseIf EntityY(me\Collider) < -180.0 * RoomScale ; ~ The "exit room"
+								ElseIf EntityY(me\Collider) < (-180.0) * RoomScale ; ~ The "exit room"
 									Temp = Distance(EntityX(me\Collider), EntityX(e\room\Objects[8], True) + 1024.0 * RoomScale, EntityZ(me\Collider), EntityZ(e\room\Objects[8], True))
 									If Temp < 640.0 * RoomScale
 										me\BlurTimer = ((640.0 * RoomScale) - Temp) * 3000.0
@@ -4425,8 +4424,8 @@ Function UpdateEvents()
 							e\room\grid\Meshes[i] = Meshes[i]
 						Next
 						
-						PositionEntity(e\room\Objects[0], e\room\x + FirstX * 2.0, 8.0, e\room\z + FirstY * 2.0, True)
-						PositionEntity(e\room\Objects[1], e\room\x + LastX * 2.0, 8.0, e\room\z + LastY * 2.0, True)
+						PositionEntity(e\room\Objects[0], e\room\x + (FirstX * 2.0), 8.0, e\room\z + (FirstY * 2.0), True)
+						PositionEntity(e\room\Objects[1], e\room\x + (LastX * 2.0), 8.0, e\room\z + (LastY * 2.0), True)
 					ElseIf (Not e\room\grid\Meshes[0]) Then
 						; ~ Place the tunnels
 						For i = 0 To 6
@@ -4446,6 +4445,7 @@ Function UpdateEvents()
 											;[Block]
 											TempInt = CopyEntity(Meshes[e\room\grid\Grid[iX + (iY * GridSZ)] - 1])
 										Case 2
+											;[Block]
 											If e\room\grid\Grid[(iX + 1) + ((iY) * GridSZ)] > 0 And e\room\grid\Grid[(iX - 1) + ((iY) * GridSZ)] > 0 Then ; ~ Horizontal
 												TempInt = CopyEntity(Meshes[e\room\grid\Grid[iX + (iY * GridSZ)] - 1])
 												AddLight(Null, e\room\x + iX * 2.0, 8.0 + (372.0 * RoomScale), e\room\z + iY * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
@@ -4741,7 +4741,7 @@ Function UpdateEvents()
 								Pvt = CreatePivot()
 								PositionEntity(Pvt, EntityX(Curr106\Collider), EntityY(Curr106\Collider), EntityZ(Curr106\Collider))
 								PointEntity(Pvt, me\Collider)
-								If WrapAngle(EntityYaw(Pvt) - EntityYaw(Curr106\Collider)) < 80 Then
+								If WrapAngle(EntityYaw(Pvt) - EntityYaw(Curr106\Collider)) < 80.0 Then
 									Curr106\State = -11.0
 									Curr106\Idle = 0
 									PlaySound_Strict(HorrorSFX[10])
@@ -4803,7 +4803,7 @@ Function UpdateEvents()
 			Case e_room2pit
 				;[Block]
 				If Curr173\Idle = 0 Then 
-					If e\room\Dist < 8.0  And e\room\Dist > 0.0 Then			
+					If e\room\Dist < 8.0 And e\room\Dist > 0.0 Then			
 						If (Not EntityVisible(Curr173\Collider, Camera)) And (Not EntityVisible(e\room\Objects[0], Camera)) Then 
 							PositionEntity(Curr173\Collider, EntityX(e\room\Objects[0], True), 0.5, EntityZ(e\room\Objects[0], True))
 							ResetEntity(Curr173\Collider)
@@ -5353,10 +5353,10 @@ Function UpdateEvents()
 							Case 60.0
 								;[Block]
 								If (Not tt\MiscTextureID[14]) Then
-									Local Tex970% = LoadTexture_Strict("GFX\npcs\scp_173_H.png")
+									Tex = LoadTexture_Strict("GFX\npcs\scp_173_H.png")
 									
-									EntityTexture(Curr173\OBJ, Tex970, 0, 0)
-									DeleteSingleTextureEntryFromCache(Tex970)
+									EntityTexture(Curr173\OBJ, Tex)
+									DeleteSingleTextureEntryFromCache(Tex)
 								EndIf
 								;[End Block]
 						End Select
@@ -5461,7 +5461,7 @@ Function UpdateEvents()
 						EndIf
 					EndIf
 					
-					If e\room\Objects[3] > 0 Then 
+					If e\room\Objects[3] <> 0 Then 
 						If me\BlinkTimer < -8.0 And me\BlinkTimer > -12.0 Then
 							PointEntity(e\room\Objects[3], Camera)
 							RotateEntity(e\room\Objects[3], 0.0, EntityYaw(e\room\Objects[3], True), 0.0, True)
@@ -5674,7 +5674,7 @@ Function UpdateEvents()
 								EndIf
 							EndIf
 							
-							If I_714\Using = 0 And wi\GasMask < 3 And wi\HazmatSuit < 3 Then
+							If (Not I_714\Using) And wi\GasMask <> 3 And wi\HazmatSuit <> 3 Then
 								If EntityVisible(e\room\Objects[2], Camera) Then 							
 									e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\Objects[3], 10.0, e\EventState3 / (86.0 * 70.0))
 									
@@ -5685,7 +5685,7 @@ Function UpdateEvents()
 									
 									TurnEntity(Pvt, 90.0, 0.0, 0.0)
 									CameraPitch = CurveAngle(EntityPitch(Pvt) + 25.0, CameraPitch + 90.0, 80.0 - (e\EventState3 / 200.0))
-									CameraPitch = CameraPitch - 90
+									CameraPitch = CameraPitch - 90.0
 									
 									Dist = Distance(EntityX(me\Collider), EntityX(e\room\Objects[2], True), EntityZ(me\Collider), EntityZ(e\room\Objects[2], True))
 									
@@ -6186,7 +6186,7 @@ Function UpdateEvents()
 										e\EventState2 = Min(e\EventState2 + (fps\FPSFactor[0] / 6000.0), 1.0)
 										e\EventState3 = CurveValue(e\EventState2, e\EventState3, 50.0)
 										
-										If I_714\Using = 0 And wi\HazmatSuit < 3 And wi\GasMask < 3 Then
+										If (Not I_714\Using) And wi\HazmatSuit <> 3 And wi\GasMask <> 3 Then
 											me\Sanity = me\Sanity - (fps\FPSFactor[0] * 1.1)
 											me\BlurTimer = Sin(MilliSecs() / 10.0) * Abs(me\Sanity)
 										EndIf
@@ -6225,7 +6225,7 @@ Function UpdateEvents()
 							e\EventState3 = Max(e\EventState3 - (fps\FPSFactor[0] / 100.0), 0.0)
 						EndIf
 						
-						If e\EventState3 > 0.0 And I_714\Using = 0 And wi\HazmatSuit < 3 And wi\GasMask < 3 Then 
+						If e\EventState3 > 0.0 And (Not I_714\Using) And wi\HazmatSuit <> 3 And wi\GasMask <> 3 Then 
 							e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\OBJ, 10.0, e\EventState3)
 							e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\OBJ, 10.0, (e\EventState3 - 0.5) * 2.0)
 						EndIf
@@ -6421,21 +6421,18 @@ Function UpdateEvents()
 								Next
 								
 								n.NPCs = CreateNPC(NPCtypeMTF, EntityX(e\room\Objects[5], True), EntityY(e\room\Objects[5], True) + 0.2, EntityZ(e\room\Objects[5], True))
-								n\State = 6.0
-								n\Reload = 70.0 * 6.0
+								n\State = 6.0 : n\Reload = 70.0 * 6.0
 								PointEntity(n\Collider, me\Collider)
 								e\room\NPC[1] = n
 								
 								n.NPCs = CreateNPC(NPCtypeMTF, EntityX(e\room\Objects[5], True), EntityY(e\room\Objects[5], True) + 0.2, EntityZ(e\room\Objects[5], True))
-								n\State = 6.0
-								n\Reload = 70.0 * 6.0 + Rnd(15.0, 30.0)
+								n\State = 6.0 : n\Reload = 70.0 * 6.0 + Rnd(15.0, 30.0)
 								RotateEntity(n\Collider, 0.0, EntityYaw(e\room\NPC[1]\Collider), 0.0)
 								MoveEntity(n\Collider, 0.5, 0.0, 0.0)
 								PointEntity(n\Collider, me\Collider)
 								
 								n.NPCs = CreateNPC(NPCtypeMTF, EntityX(e\room\Objects[5], True), EntityY(e\room\Objects[5], True) + 0.2, EntityZ(e\room\Objects[5], True))
-								n\State = 6.0
-								n\Reload = 70.0 * 6.0 + Rnd(15.0, 30.0)
+								n\State = 6.0 : n\Reload = 70.0 * 6.0 + Rnd(15.0, 30.0)
 								RotateEntity(n\Collider, 0.0, EntityYaw(e\room\NPC[1]\Collider), 0.0)
 								n\State2 = EntityYaw(n\Collider)
 								MoveEntity(n\Collider, -0.65, 0.0, 0.0)
@@ -6553,7 +6550,7 @@ Function UpdateEvents()
 				
 				If e\EventState2 = 1.0 Then
 					If RemoteDoorOn Then 	
-						If e\SoundCHN3 <> 0
+						If e\SoundCHN3 <> 0 Then
 							StopStream_Strict(e\SoundCHN3) : e\SoundCHN3 = 0
 						EndIf
 						e\SoundCHN3 = StreamSound_Strict("SFX\SCP\079\GateB.ogg", opt\SFXVolume, 0.0)
@@ -6709,7 +6706,7 @@ Function UpdateEvents()
 									    RotateEntity(de\OBJ, EntityPitch(e\room\Objects[7], True), EntityYaw(e\room\Objects[7], True), EntityRoll(de\OBJ))
 										EntityParent(de\OBJ, e\room\Objects[7])
 									ElseIf e\EventState3 > 3200.0 Then
-										If e\EventState2 = True Then
+										If e\EventState2 = 1.0 Then
 										    Curr106\Contained = True
 										Else
 										    PositionEntity(Curr106\Collider, EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True), EntityZ(e\room\Objects[6], True))
@@ -6803,7 +6800,7 @@ Function UpdateEvents()
 							EndIf
 							
 							If e\EventState > 7.0 Then
-								If (Rand(0, 300) = 1) Then
+								If Rand(0, 300) = 1 Then
 									e\room\RoomDoors[0]\Open = (Not e\room\RoomDoors[0]\Open)
 								EndIf
 							EndIf 
@@ -7012,7 +7009,7 @@ Function UpdateEvents()
 						EndIf
 						
 						; ~ The player fell
-						If (Not chs\NoClip)
+						If (Not chs\NoClip) Then
 							If EntityY(me\Collider) =< 28.5 Then 
 								Kill() 
 								me\BlinkTimer = -2.0
@@ -7154,7 +7151,7 @@ Function UpdateEvents()
 			Case e_room1123
 				;[Block]
 				If PlayerRoom = e\room Then
-					If I_714\Using = 0 And wi\HazmatSuit < 3 And wi\GasMask < 3 Then
+					If (Not I_714\Using) And wi\HazmatSuit <> 3 And wi\GasMask <> 3 Then
 						If EntityDistanceSquared(me\Collider, e\room\Objects[3]) < 0.81 Lor e\EventState > 0.0 Then
 							If e\EventState = 0.0 Then me\BlurTimer = 1000.0
 					        me\CameraShake = 1.0
@@ -7205,7 +7202,7 @@ Function UpdateEvents()
 								e\Sound2 = LoadSound_Strict("SFX\Door\1123DoorOpen.ogg")
 								e\SoundCHN2 = PlaySound_Strict(e\Sound2)
 							EndIf
-							RotateEntity(e\room\Objects[11], 0.0, CurveAngle(10.0, EntityYaw(e\room\Objects[11], 0), 40.0), 0.0, False)
+							RotateEntity(e\room\Objects[11], 0.0, CurveAngle(10.0, EntityYaw(e\room\Objects[11], 0), 40.0), 0.0)
 							If e\EventState2 >= 1040.0 And e\EventState2 - fps\FPSFactor[0] < 1040.0 Then 
 								PlaySound2(LoadTempSound("SFX\SCP\1123\Officer1.ogg"), Camera, e\room\NPC[0]\OBJ)
 							ElseIf e\EventState2 >= 1400.0 And e\EventState2 - fps\FPSFactor[0] < 1400.0 Then 
@@ -7243,21 +7240,21 @@ Function UpdateEvents()
 							If EntityDistanceSquared(me\Collider, e\room\Objects[12]) < 1.21 Then
 								ga\DrawHandIcon = True
 								If mo\MouseHit1 Then
-									RotateEntity(e\room\Objects[13], 0.0, 1.0, 0.0, False)
-									RotateEntity(e\room\Objects[11], 0.0, 90.0, 0.0, False)
+									RotateEntity(e\room\Objects[13], 0.0, 1.0, 0.0)
+									RotateEntity(e\room\Objects[11], 0.0, 90.0, 0.0)
 									PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Horror.ogg"))
 								EndIf
 							EndIf							
 						Else
 							RotateEntity(e\room\Objects[13], 0.0, CurveAngle(90.0, EntityYaw(e\room\Objects[13], False), 40.0), 0.0)
-							If EntityYaw(e\room\Objects[13], False) > 30.0 Then
+							If EntityYaw(e\room\Objects[13]) > 30.0 Then
 								e\room\NPC[0]\State = 3.0
 								PointEntity(e\room\NPC[0]\Collider, me\Collider)
 								AnimateNPC(e\room\NPC[0], 27.0, 54.0, 0.5, False)
 								If e\room\NPC[0]\Frame >= 54.0 Then
 									e\EventState = 5.0
 									e\EventState2 = 0.0
-									PositionEntity(me\Collider, EntityX(e\room\OBJ, True), 0.3, EntityZ(e\room\OBJ, True)-160.0 * RoomScale, True)
+									PositionEntity(me\Collider, EntityX(e\room\OBJ, True), 0.3, EntityZ(e\room\OBJ, True) - 160.0 * RoomScale, True)
 									ResetEntity(me\Collider)									
 									me\BlinkTimer = -10.0
 									me\BlurTimer = 500.0
@@ -7269,8 +7266,8 @@ Function UpdateEvents()
 					ElseIf e\EventState = 5.0
 						e\EventState2 = e\EventState2 + fps\FPSFactor[0]
 						If e\EventState2 > 500.0 Then 
-							RotateEntity(e\room\Objects[9], 0.0, 90.0, 0.0, False)
-							RotateEntity(e\room\Objects[13], 0.0, 0.0, 0.0, False)
+							RotateEntity(e\room\Objects[9], 0.0, 90.0, 0.0)
+							RotateEntity(e\room\Objects[13], 0.0, 0.0, 0.0)
 							
 							x = (EntityX(e\room\Objects[8], True) + EntityX(e\room\Objects[12], True)) / 2.0
 							y = EntityY(e\room\Objects[5], True)
@@ -7316,7 +7313,7 @@ Function UpdateEvents()
 						me\Injuries = me\PrevInjuries
 						me\Bloodloss = me\PrevBloodloss
 						SecondaryLightOn = PrevSecondaryLightOn
-						RotateEntity(e\room\Objects[9], 0.0, 0.0, 0.0, False)
+						RotateEntity(e\room\Objects[9], 0.0, 0.0, 0.0)
 						me\PrevInjuries = 0.0
 						me\PrevBloodloss = 0.0
 						PrevSecondaryLightOn = 0.0
@@ -7351,7 +7348,11 @@ Function UpdateEvents()
 					    ScaleEntity(e\room\Objects[7], 0.05, 0.05, 0.05)
 						
 						TFormPoint(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0.0, e\room\OBJ)
-						If TFormedZ() = 0.0 Then Temp = -1 Else Temp = -Sgn(TFormedZ())
+						If TFormedZ() = 0.0 Then
+							Temp = -1
+						Else
+							Temp = -Sgn(TFormedZ())
+						EndIf
 						TFormPoint(-720.0, 0.0, 816.0 * Temp, e\room\OBJ, 0)
 						PositionEntity(e\room\Objects[7], TFormedX(), 0.0, TFormedZ())
 						
@@ -7802,7 +7803,7 @@ Function UpdateEvents()
 					e\EventState = e\EventState - fps\FPSFactor[0]
 					
 					If e\EventState < 70.0 * 17.0 Then
-						If	e\EventState + fps\FPSFactor[0] >= 70.0 * 17.0 Then LoadEventSound(e, "SFX\SCP\682\Roar.ogg") : e\SoundCHN = PlaySound_Strict(e\Sound)
+						If e\EventState + fps\FPSFactor[0] >= 70.0 * 17.0 Then LoadEventSound(e, "SFX\SCP\682\Roar.ogg") : e\SoundCHN = PlaySound_Strict(e\Sound)
 						If e\EventState > (70.0 * 17.0) - (70.0 * 3.0) Then me\CameraShake = 0.5
 						If e\EventState < (70.0 * 17.0) - (70.0 * 7.5) And e\EventState > (70.0 * 17.0) - (70.0 * 11.0) Then me\CameraShake = 2.0				
 						If e\EventState < 70.0 * 1.0 Then 
@@ -7929,7 +7930,7 @@ Function UpdateEvents()
 						
 						e\room\RoomDoors[1]\Open = False
 						If e\EventState > 70.0 * 2.0 Then
-							If e\room\RoomDoors[0]\Open = True Then
+							If e\room\RoomDoors[0]\Open Then
 								e\room\RoomDoors[0]\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\914\DoorClose.ogg"), Camera, e\room\RoomDoors[0]\OBJ)
 							EndIf
 							e\room\RoomDoors[0]\Open = False
@@ -7946,7 +7947,7 @@ Function UpdateEvents()
 										;[Block]
 										me\KillTimer = Min(-1.0, me\KillTimer)
 										me\BlinkTimer = -10.0
-										If e\SoundCHN <> 0 Then StopChannel e\SoundCHN
+										If e\SoundCHN <> 0 Then StopChannel(e\SoundCHN)
 										msg\DeathMsg = Chr(34) + "A heavily mutilated corpse found inside the output booth of SCP-914. DNA testing identified the corpse as Class D " + SubjectName + ". "
 										msg\DeathMsg = msg\DeathMsg + "The subject had obviously been " + Chr(34) + "refined" + Chr(34) + " by SCP-914 on the " + Chr(34) + "Rough" + Chr(34) + " setting, but we are still confused as to how he "
 										msg\DeathMsg = msg\DeathMsg + "ended up inside the intake booth and who or what wound the key." + Chr(34)
@@ -8087,13 +8088,13 @@ Function UpdateEvents()
 							;[End Block]
 						Case 3.0
 							;[Block]
-							If I_427\Using = 0 And I_427\Timer < 70.0 * 360.0 Then
+							If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then
 								e\EventState2 = e\EventState2 + fps\FPSFactor[0]
 							EndIf
 							
 							me\BlurTimer = e\EventState2 * 2.0
 							
-							If I_427\Using = 0 And I_427\Timer < 70.0 * 360.0 Then
+							If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then
 								If e\EventState2 > 250.0 And e\EventState2 - fps\FPSFactor[0] =< 250.0 Then
 									Select Rand(3)
 										Case 1
@@ -8138,7 +8139,7 @@ Function UpdateEvents()
 							EndIf
 							
 							; ~ Remove event when player was cured by SCP-427
-							If e\EventState2 = 0.0 And I_427\Using > 0 Then
+							If e\EventState2 = 0.0 And I_427\Using Then
 								e\EventState3 = 70.0 * 30.0
 							EndIf
 							;[End Block]
@@ -8266,13 +8267,13 @@ Function UpdateEvents()
 									EndIf
 									FreeEntity(Pvt)
 								EndIf
-							ElseIf e\EventState2 > 70.0 * 3.0 And e\EventState < 70.0 * 5.5
+							ElseIf e\EventState2 > 70.0 * 3.0 And e\EventState2 < 70.0 * 6.0
 								Pvt = CreatePivot(e\room\OBJ)								
 								For i = 0 To 1
 									If i = 0
-										PositionEntity(Pvt, 312.0, 416.0, -128.0, False)
+										PositionEntity(Pvt, 312.0, 416.0, -128.0)
 									Else
-										PositionEntity(Pvt, 312.0, 416.0, 224.0, False)
+										PositionEntity(Pvt, 312.0, 416.0, 224.0)
 									EndIf
 									p.Particles = CreateParticle(EntityX(Pvt, True), EntityY(Pvt, True), EntityZ(Pvt, True), 6, 0.8, 0.0, 50.0)
 									p\Speed = 0.025 : p\Achange = -0.02

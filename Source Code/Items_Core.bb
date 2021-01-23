@@ -767,7 +767,7 @@ Function PickItem(item.Items)
 				Select item\ItemTemplate\TempName
 					Case "scp1123"
 						;[Block]
-						If I_714\Using = 0 And wi\GasMask < 3 And wi\HazmatSuit < 3 Then
+						If (Not I_714\Using) And wi\GasMask <> 3 And wi\HazmatSuit <> 3 Then
 							For e.Events = Each Events
 								If e\EventName = "room1123" Then 
 									If e\EventState = 0.0 Then

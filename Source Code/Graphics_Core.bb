@@ -205,7 +205,7 @@ Function UpdateWorld2()
 	EndIf
 End Function
 
-Const BRIGHTNESS# = 50.0
+Const BRIGHTNESS# = 45.0
 
 Global CurrTrisAmount%
 
