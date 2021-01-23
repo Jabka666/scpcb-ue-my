@@ -9159,7 +9159,9 @@ Function UpdateEvents()
 							TurnEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle, 0.0)
 							e\room\NPC[0]\IsDead = True
 							
-					        e\EventState = 1.0
+							e\Sound = LoadSound_Strict("SFX\General\SparkShort.ogg")
+							
+							e\EventState = 1.0
 				        ElseIf e\EventState = 1.0 Then 
 				            If e\room\RoomDoors[2]\Open Then GiveAchievement(Achv409)
 					        If EntityDistanceSquared(me\Collider, e\room\NPC[0]\Collider) < 1.21 And I_409\Timer < 1.0 Then
@@ -9177,6 +9179,24 @@ Function UpdateEvents()
 						            EndIf
 						        EndIf
 						    EndIf
+						EndIf
+						
+						If Rand(50) = 1 Then
+							PlaySound2(e\Sound, Camera, e\room\Objects[4], 3.0, 0.4)
+							
+							Pvt = CreatePivot()
+							PositionEntity(Pvt, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True))
+							RotateEntity(Pvt, 90.0, EntityYaw(e\room\Objects[4], True), 0.0)
+							
+							If opt\ParticleAmount > 0 Then
+								For i = 0 To (1 + (2 * (opt\ParticleAmount - 1)))
+									p.Particles = CreateParticle(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 7, 0.002, 0, 25)
+									p\Speed = Rnd(0.005, 0.03) : p\Size = Rnd(0.005, 0.0075) : p\Achange = -0.05
+									RotateEntity(p\Pvt, Rnd(-20.0, 0.0), EntityYaw(Pvt) + Rnd(170.0, 190.0), 0.0)
+									ScaleSprite(p\OBJ, p\Size, p\Size)
+								Next
+							EndIf	
+							FreeEntity(Pvt)
 						EndIf
 					EndIf
                     e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)

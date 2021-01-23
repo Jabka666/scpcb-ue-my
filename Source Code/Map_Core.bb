@@ -5409,7 +5409,11 @@ Function FillRoom(r.Rooms)
 			r\Objects[3] = CreatePivot()
 			PositionEntity(r\Objects[3], r\x - 4885.0 * RoomScale, r\y - 4598.0 * RoomScale, r\z + 2235.0 * RoomScale)
 			
-			For i = 0 To 3
+			; ~ Sparks pivot
+			r\Objects[4] = CreatePivot()
+			PositionEntity(r\Objects[4], r\x - 4464.0 * RoomScale, r\y - 4345.0 * RoomScale, r\z - 1945.0 * RoomScale)
+			
+			For i = 0 To 4
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
