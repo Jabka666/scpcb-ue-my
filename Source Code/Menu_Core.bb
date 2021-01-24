@@ -1874,7 +1874,7 @@ Function UpdateLauncher(lnchr.Launcher)
 		EndIf
 		
 		If DrawLauncherButton(LauncherWidth - 275, LauncherHeight - 50, 150, 30, "SEE CHANGELOG", False, False) Then
-			ExecFile("Changelog_Reborn.txt")
+			ExecFile("Changelog.txt")
 		EndIf
 		
 		If DrawLauncherButton(LauncherWidth - 30 - 90, LauncherHeight - 105, 100, 30, "LAUNCH", False, False) Then

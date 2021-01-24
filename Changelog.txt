@@ -1,6 +1,7 @@
 ===============================================================
 ---------------------------REBORN.-----------------------------
 ===============================================================
+; ~ Includes some old UE stuff, also fixes it.
 
 - Added more console names for NPC's spawning.
 - Added symbols' fast erasing.
@@ -29,6 +30,7 @@
 - Now crouching reduces stamina.
 - Now ballistic vest and ballistic helmet reduces damage from some NPCs.
 - Now all battery charges are randomized.
+- Now using the "Esc" button has "BACK" button effect.
 
 - To obtain new difficulties you need to finish game on previous difficulty.
 
