@@ -166,8 +166,8 @@ Function UpdateEmitters()
 	Next
 	
 	If InSmoke Then
-		If me\EyeIrritation > (70.0 * 6.0) Then me\BlurVolume = Max(me\BlurVolume, (me\EyeIrritation - (70.0 * 6.0)) / (70.0 * 24.0))
-		If me\EyeIrritation > (70.0 * 24.0) Then 
+		If me\EyeIrritation > 70.0 * 6.0 Then me\BlurVolume = Max(me\BlurVolume, (me\EyeIrritation - (70.0 * 6.0)) / (70.0 * 24.0))
+		If me\EyeIrritation > 70.0 * 24.0 Then 
 			msg\DeathMsg = SubjectName + " found dead in [DATA REDACTED]. Cause of death: Suffocation due to decontamination gas."
 			Kill()
 		EndIf

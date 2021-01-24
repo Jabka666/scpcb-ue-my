@@ -7210,7 +7210,7 @@ Function NPCSpeedChange(n.NPCs)
 	End Select
 End Function
 
-Function PlayerInReachableRoom(CanSpawnIn049Chamber% = False)
+Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False)
 	Local RN$ = PlayerRoom\RoomTemplate\Name
 	Local e.Events
 	
@@ -7245,7 +7245,7 @@ Function PlayerInReachableRoom(CanSpawnIn049Chamber% = False)
 	Return(True)
 End Function
 
-Function CheckForNPCInFacility(n.NPCs)
+Function CheckForNPCInFacility%(n.NPCs)
 	; ~ False (= 0): NPC is not in facility (mostly meant for "dimension1499")
 	; ~ True (= 1): NPC is in facility
 	; ~ 2: NPC is in tunnels (Maintenance Tunnels / SCP-049 tunnels / SCP-939 storage room, etc...)
@@ -7338,7 +7338,7 @@ End Function
 Function FinishWalking(n.NPCs, StartFrame#, EndFrame#, Speed#)
 	Local CenterFrame#
 	
-	If n <> Null
+	If n <> Null Then
 		CenterFrame = (EndFrame - StartFrame) / 2.0
 		If n\Frame >= CenterFrame
 			AnimateNPC(n, StartFrame, EndFrame, Speed, False)

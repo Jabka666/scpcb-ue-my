@@ -1834,7 +1834,7 @@ Function FillRoom(r.Rooms)
 			
 			; ~ Security camera inside
 			sc.SecurityCams = CreateSecurityCam(r\x - 688.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 688.0 * RoomScale, r, True, r\x + 668.0 * RoomScale, r\y + 1.1, r\z - 96.0 * RoomScale)
-			sc\Angle = 45.0 + 180.0 : sc\Turn = 45.0
+			sc\Angle = 225.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 40.0, 0.0, 0.0)
 			TurnEntity(sc\ScrOBJ, 0.0, 90.0, 0.0)
 			
@@ -1857,12 +1857,12 @@ Function FillRoom(r.Rooms)
 			;[Block]
 			; ~ Security cameras inside
 			sc.SecurityCams = CreateSecurityCam(r\x + 512.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 384.0 * RoomScale, r, True, r\x + 668.0 * RoomScale, r\y + 1.1, r\z - 96.0 * RoomScale)
-			sc\Angle = 45.0 + 90.0 : sc\Turn = 45.0
+			sc\Angle = 135.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 40.0, 0.0, 0.0)
 			TurnEntity(sc\ScrOBJ, 0.0, 90.0, 0.0)
 			
 			sc.SecurityCams = CreateSecurityCam(r\x - 384.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 512.0 * RoomScale, r, True, r\x + 96.0 * RoomScale, r\y + 1.1, r\z - 668.0 * RoomScale)
-			sc\Angle = 45.0 + 90.0 + 180.0 : sc\Turn = 45.0
+			sc\Angle = 315.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 40.0, 0.0, 0.0)
 			
 			; ~ Create blood decals inside
@@ -3979,7 +3979,7 @@ Function FillRoom(r.Rooms)
 			EntityRadius(r\Objects[3], 0.1)
 			
 			sc.SecurityCams = CreateSecurityCam(r\x - 320.0 * RoomScale, r\y + 704.0 * RoomScale, r\z + 288.0 * RoomScale, r, True, r\x - 800.0 * RoomScale, r\y + 288.0 * RoomScale, r\z - 340.0 * RoomScale)
-			sc\Angle = 45.0 + 180.0 : sc\Turn = 45.0 : sc\CoffinEffect = 1 : CoffinCam = sc
+			sc\Angle = 225.0 : sc\Turn = 45.0 : sc\CoffinEffect = 1 : CoffinCam = sc
 			TurnEntity(sc\CameraOBJ, 120.0, 0.0, 0.0)
 			TurnEntity(sc\ScrOBJ, 0.0, 180.0, 0.0)
 			
@@ -4389,7 +4389,7 @@ Function FillRoom(r.Rooms)
 			Next
 			
 			sc.SecurityCams = CreateSecurityCam(r\x + 768.0 * RoomScale, r\y - 5936.0 * RoomScale, r\z + 1632.0 * RoomScale, r, True, r\x - 272.0 * RoomScale, r\y - 7872.0 * RoomScale, r\z + 2956.0 * RoomScale)
-			sc\Angle = 45.0 + 90.0 + 180.0 : sc\Turn = 20.0 : sc\CoffinEffect = 0
+			sc\Angle = 315.0 : sc\Turn = 20.0 : sc\CoffinEffect = 0
 			TurnEntity(sc\CameraOBJ, 45.0, 0.0, 0.0)
 			TurnEntity(sc\ScrOBJ, 0.0, -10.0, 0.0)
 			

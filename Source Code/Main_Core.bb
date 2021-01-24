@@ -4898,24 +4898,24 @@ Function DrawGUI()
 			Select i
 				Case 0
 					;[Block]
-					y = y - 64 - 5
+					y = y - 59
 					;[End Block]
 				Case 1
 					;[Block]
-					x = x + 64 + 5
+					x = x + 69
 					;[End Block]
 				Case 2
 					;[Block]
-					y = y + 64 + 5
+					y = y + 69
 					;[End Block]
 				Case 3
 					;[Block]
-					x = x - 5 - 64
+					x = x - 69
 					;[End Block]
 			End Select
 			DrawImage(tt\IconID[4], x, y)
 			Color(0, 0, 0)
-			Rect(x + 4, y + 4, 64 - 8, 64 - 8)
+			Rect(x + 4, y + 4, 56, 56)
 			DrawImage(ga\ArrowIMG[i], x + 21, y + 21)
 			ga\DrawArrowIcon[i] = False
 		EndIf
@@ -5260,7 +5260,7 @@ Function DrawGUI()
 			
 			If Inventory[n] <> Null Then
 				If SelectedItem <> Inventory[n] Lor IsMouseOn = n Then 
-					DrawImage(Inventory[n]\InvImg, x + INVENTORY_GFX_SIZE / 2 - 32, y + INVENTORY_GFX_SIZE / 2 - 32)
+					DrawImage(Inventory[n]\InvImg, x + (INVENTORY_GFX_SIZE / 2) - 32, y + (INVENTORY_GFX_SIZE / 2) - 32)
 				EndIf
 			EndIf
 			
@@ -5890,8 +5890,8 @@ Function UpdateGUI()
 				EndIf
 			EndIf
 			
-			x = x + 44 * Scale
-			y = y + 249 * Scale
+			x = x + (44 * Scale)
+			y = y + (249 * Scale)
 			
 			For n = 0 To 3
 				For i = 0 To 2
@@ -6066,7 +6066,7 @@ Function UpdateGUI()
 			TempX = TempX + 1
 			If TempX = 5 Then 
 				TempX = 0
-				y = y + INVENTORY_GFX_SIZE * 2 
+				y = y + (INVENTORY_GFX_SIZE * 2)
 				x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1.0)) / 2
 			EndIf
 		Next

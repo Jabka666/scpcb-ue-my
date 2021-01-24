@@ -62,7 +62,7 @@ Function AchievementTooltip(AchvNo%)
 	If StringWidth(AchievementDescs[AchvNo]) > Width Then
 		Width = StringWidth(AchievementDescs[AchvNo])
 	EndIf
-	Width = Width + 20 * MenuScale
+	Width = Width + (20 * MenuScale)
 	
 	Local Height% = 38 * Scale
 	
@@ -129,13 +129,13 @@ Function UpdateAchievementMsg()
 			If amsg\MsgTime > 0.0 And amsg\MsgTime < 70.0 * 7.0
 				amsg\MsgTime = amsg\MsgTime + fps\FPSFactor[1]
 				If amsg\MsgX > -Width
-					amsg\MsgX = Max(amsg\MsgX - 4.0 * fps\FPSFactor[1], -Width)
+					amsg\MsgX = Max(amsg\MsgX - (4.0 * fps\FPSFactor[1]), -Width)
 				EndIf
 			ElseIf amsg\MsgTime >= 70.0 * 7.0
 				amsg\MsgTime = -1.0
 			ElseIf amsg\MsgTime = -1.0
 				If amsg\MsgX < 0.0
-					amsg\MsgX = Min(amsg\MsgX + 4.0 * fps\FPSFactor[1], 0.0)
+					amsg\MsgX = Min(amsg\MsgX + (4.0 * fps\FPSFactor[1]), 0.0)
 				Else
 					amsg\MsgTime = 0.0
 				EndIf
@@ -154,25 +154,25 @@ Function RenderAchievementMsg()
 	Local x%, y%
 	
 	For amsg.AchievementMsg = Each AchievementMsg
-		If amsg\MsgTime <> 0.0
+		If amsg\MsgTime <> 0.0 Then
 			x = opt\GraphicWidth + amsg\MsgX
 			y = 0
 			For amsg2.AchievementMsg = Each AchievementMsg
-				If amsg2 <> amsg
-					If amsg2\MsgID > amsg\MsgID
+				If amsg2 <> amsg Then
+					If amsg2\MsgID > amsg\MsgID Then
 						y = y + Height 
 					EndIf
 				EndIf
 			Next
 			DrawFrame(x, y, Width, Height)
 			Color(0, 0, 0)
-			Rect(x + 10.0 * Scale, y + 10.0 * Scale, 64.0 * Scale, 64.0 * Scale, True)
-			DrawImage(AchvIMG[amsg\AchvID], x + 10 * Scale, y + 10 * Scale)
+			Rect(x + (10.0 * Scale), y + (10.0 * Scale), 64.0 * Scale, 64.0 * Scale)
+			DrawImage(AchvIMG[amsg\AchvID], x + (10 * Scale), y + 10 * Scale)
 			Color(50, 50, 50)
-			Rect(x + 10.0 * Scale, y + 10.0 * Scale, 64.0 * Scale, 64.0 * Scale, False)
+			Rect(x + (10.0 * Scale), y + (10.0 * Scale), 64.0 * Scale, 64.0 * Scale, False)
 			Color(255, 255, 255)
 			SetFont(fo\FontID[Font_Default])
-			RowText("Achievement Unlocked - " + amsg\Txt, x + 84.0 * Scale, y + 10.0 * Scale, Width - 94.0 * Scale, y - 20.0 * Scale)
+			RowText("Achievement Unlocked - " + amsg\Txt, x + (84.0 * Scale), y + (10.0 * Scale), Width - (94.0 * Scale), y - (20.0 * Scale))
 		EndIf
 	Next
 End Function
