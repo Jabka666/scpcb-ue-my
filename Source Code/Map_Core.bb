@@ -3542,8 +3542,8 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "room2offices"
 			;[Block]
-			w.Waypoints = CreateWaypoint(r\x - 32.0 * RoomScale, r\y + 66.0 * RoomScale, r\z + 288.0 * RoomScale, Null, r)
-			w2.Waypoints = CreateWaypoint(r\x, r\y + 66.0 * RoomScale, r\z - 448.0 * RoomScale, Null, r)
+			w.WayPoints = CreateWaypoint(r\x - 32.0 * RoomScale, r\y + 66.0 * RoomScale, r\z + 288.0 * RoomScale, Null, r)
+			w2.WayPoints = CreateWaypoint(r\x, r\y + 66.0 * RoomScale, r\z - 448.0 * RoomScale, Null, r)
 			w\connected[0] = w2 : w\Dist[0] = EntityDistance(w\OBJ, w2\OBJ)
 			w2\connected[0] = w : w2\Dist[0] = w\Dist[0]
 			
@@ -3782,12 +3782,12 @@ Function FillRoom(r.Rooms)
 					Case 2
 						;[Block]
 						xTemp = 560.0
-						zTemp = 480.0
+						zTemp = 416.0
 						;[End Block]
 					Case 3
 						;[Block]
 						xTemp = -560.0
-						zTemp = 480.0
+						zTemp = 416.0
 						;[End Block]
 				End Select
 				sc.SecurityCams = CreateSecurityCam(r\x + xTemp * RoomScale, r\y + 386.0 * RoomScale, r\z + zTemp * RoomScale, r)
@@ -3882,7 +3882,7 @@ Function FillRoom(r.Rooms)
 				EntityParent(de\OBJ, r\OBJ)
 			Next
 			
-			it.Items = CreateItem("SCP-714", "scp714", r\x - 552.0 * RoomScale, r\y + 220.0 * RoomScale, r\z - 760.0 * RoomScale)
+			it.Items = CreateItem("SCP-714", "scp714", r\x - 555.5 * RoomScale, r\y + 220.0 * RoomScale, r\z - 758.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("SCP-1025", "scp1025", r\x + 552.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 758.0 * RoomScale)
@@ -4031,8 +4031,8 @@ Function FillRoom(r.Rooms)
 			Next
 			If (Not r\Objects[7])Then r\Objects[7] = LoadMesh_Strict("GFX\map\room2tesla_caution.b3d", r\OBJ)
 			
-			w.Waypoints = CreateWaypoint(r\x, r\y + 66.0 * RoomScale, r\z + 292.0 * RoomScale, Null, r)
-			w2.Waypoints = CreateWaypoint(r\x, r\y + 66.0 * RoomScale, r\z - 284.0 * RoomScale, Null, r)
+			w.WayPoints = CreateWaypoint(r\x, r\y + 66.0 * RoomScale, r\z + 292.0 * RoomScale, Null, r)
+			w2.WayPoints = CreateWaypoint(r\x, r\y + 66.0 * RoomScale, r\z - 284.0 * RoomScale, Null, r)
 			w\connected[0] = w2 : w\Dist[0] = EntityDistance(w\OBJ, w2\OBJ)
 			w2\connected[0] = w : w2\Dist[0] = w\Dist[0]
 			;[End Block]

@@ -304,7 +304,7 @@ Function UpdateMainMenu()
 			Width = 400 * MenuScale
 			Height = 70 * MenuScale
 			
-			If DrawButton(x + Width + (20 * MenuScale), y, (580 * MenuScale) - Width - (20 * MenuScale), Height, "BACK", False) Lor KeyHit(1) Then 
+			If DrawButton(x + Width + (20 * MenuScale), y, (580 * MenuScale) - Width - (20 * MenuScale), Height, "BACK", False) Then 
 				Select mm\MainMenuTab
 					Case MainMenuTab_New_Game
 						;[Block]
