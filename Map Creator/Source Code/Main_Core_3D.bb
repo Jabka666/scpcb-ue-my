@@ -855,6 +855,7 @@ Function CreateOverLapBox(r.Rooms)
 	If r\RoomTemplate\Name = "room3storage" Then Return
 	If r\RoomTemplate\Name = "room106" Then Return
 	If r\RoomTemplate\Name = "room079" Then Return
+	If r\RoomTemplate\Name = "gatebentrance" Then Return
 	If r\RoomTemplate\Name = "gateaentrance" Then Return
 	
 	r\OverlapCheckBox = CreateMesh()

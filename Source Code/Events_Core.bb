@@ -12,72 +12,73 @@ End Type
 
 ; ~ Event IDs Constants
 ;[Block]
-Const e_gateb% = 0
-Const e_room173% = 1, e_room173intro% = 2
-Const e_buttghost% = 3
-Const e_room2checkpoint% = 4
-Const e_room895% = 5, e_room895_106% = 6
-Const e_room1endroom106% = 7
-Const e_gateaentrance% = 8
-Const e_room2clockroom173% = 9, e_room2clockroom096% = 10
-Const e_room372% = 11
-Const e_pocketdimension% = 12
-Const e_room2cafeteria% = 13
-Const e_room2ccont% = 14
-Const e_room2closets% = 15
-Const e_room2doors173% = 16
-Const e_room2elevator% = 17, e_room2elevator2% = 18
-Const e_room2fan% = 19
-Const e_room2nuke% = 20
-Const e_room2offices2% = 21, e_room2offices3% = 22, e_room2offices035% = 23
-Const e_room2tesla% = 24
-Const e_room2trick% = 25
-Const e_room2mt% = 26
-Const e_room2pipes106% = 27
-Const e_room2pit106% = 28, e_room2pit% = 29
-Const e_room3pitduck% = 30, e_room3pit1048% = 31
-Const e_room2poffices2% = 32
-Const e_room2servers% = 33
-Const e_room2storage% = 34
-Const e_room3door% = 35
-Const e_room3servers% = 36
-Const e_room3storage% = 37
-Const e_room3tunnel% = 38
-Const e_room4% = 39
-Const e_room012% = 40
-Const e_room035% = 41
-Const e_room049% = 42
-Const e_room079% = 43
-Const e_room106% = 44
-Const e_room205% = 45
-Const e_room860% = 46
-Const e_room966% = 47
-Const e_room1123% = 48
-Const e_room2testroom2% = 49, e_room2testroom173% = 50
-Const e_room2tunnel2smoke% = 51, e_room2tunnel2% = 52
-Const e_room2tunnel106% = 53
-Const e_toiletguard% = 54
-Const e_room008% = 55
-Const e_106victim% = 56
-Const e_106sinkhole% = 57
-Const e_682roar% = 58
-Const e_room914% = 59
-Const e_1048a% = 60
-Const e_room4tunnels% = 61
-Const e_room2gw_b% = 62, e_room2gw% = 63
-Const e_room2scps2% = 64
-Const e_room1162% = 65
-Const e_room2sl% = 66
-Const e_096spawn% = 67
-Const e_room2medibay% = 68, e_room2medibay2% = 69
-Const e_dimension1499% = 70
-Const e_room2shaft% = 71
-Const e_room1lifts% = 72
-Const e_room4info% = 73
-Const e_room2bio% = 74
-Const e_room409% = 75
-Const e_room005% = 76
-Const e_gatea% = 77
+Const e_room173% = 0, e_room173intro% = 1
+Const e_buttghost% = 2
+Const e_room2checkpoint% = 3
+Const e_room895% = 4, e_room895_106% = 5
+Const e_room1endroom106% = 6
+Const e_room2clockroom173% = 7, e_room2clockroom096% = 8
+Const e_room372% = 9
+Const e_pocketdimension% = 10
+Const e_room2cafeteria% = 11
+Const e_room2ccont% = 12
+Const e_room2closets% = 13
+Const e_room2doors173% = 14
+Const e_room2elevator% = 15, e_room2elevator2% = 16
+Const e_room2fan% = 17
+Const e_room2nuke% = 18
+Const e_room2offices2% = 19, e_room2offices3% = 20, e_room2offices035% = 21
+Const e_room2tesla% = 22
+Const e_room2trick% = 23
+Const e_room2mt% = 24
+Const e_room2pipes106% = 25
+Const e_room2pit106% = 26, e_room2pit% = 27
+Const e_room3pitduck% = 28, e_room3pit1048% = 29
+Const e_room2poffices2% = 30
+Const e_room2servers% = 31
+Const e_room2storage% = 32
+Const e_room3door% = 33
+Const e_room3servers% = 34
+Const e_room3storage% = 35
+Const e_room3tunnel% = 36
+Const e_room4% = 37
+Const e_room012% = 38
+Const e_room035% = 39
+Const e_room049% = 40
+Const e_room079% = 41
+Const e_room106% = 42
+Const e_room205% = 43
+Const e_room860% = 44
+Const e_room966% = 45
+Const e_room1123% = 46
+Const e_room2testroom2% = 47, e_room2testroom173% = 48
+Const e_room2tunnel2smoke% = 49, e_room2tunnel2% = 50
+Const e_room2tunnel106% = 51
+Const e_toiletguard% = 52
+Const e_room008% = 53
+Const e_106victim% = 54
+Const e_106sinkhole% = 55
+Const e_682roar% = 56
+Const e_room914% = 57
+Const e_1048a% = 58
+Const e_room4tunnels% = 59
+Const e_room2gw_b% = 60, e_room2gw% = 61
+Const e_room2scps2% = 62
+Const e_room1162% = 63
+Const e_room2sl% = 64
+Const e_096spawn% = 65
+Const e_room2medibay% = 66, e_room2medibay2% = 67
+Const e_dimension1499% = 68
+Const e_room2shaft% = 69
+Const e_room1lifts% = 70
+Const e_room4info% = 71
+Const e_room2bio% = 72
+Const e_room409% = 73
+Const e_room005% = 74
+Const e_gatebentrance% = 75
+Const e_gateb% = 76
+Const e_gateaentrance% = 77
+Const e_gatea% = 78
 ;[End Block]
 
 Function CreateEvent.Events(EventName$, RoomName$, ID%, Prob# = 0.0)
@@ -133,10 +134,6 @@ End Function
 
 Function FindEventID%(EventName$)
 	Select EventName
-		Case "gateb"
-			;[Block]
-			Return(e_gateb)
-			;[End Block]
 		Case "room173"
 			;[Block]
 			Return(e_room173)
@@ -164,10 +161,6 @@ Function FindEventID%(EventName$)
 		Case "room1endroom106"
 			;[Block]
 			Return(e_room1endroom106)
-			;[End Block]
-		Case "gateaentrance"
-			;[Block]
-			Return(e_gateaentrance)
 			;[End Block]
 		Case "room2clockroom173"
 			;[Block]
@@ -441,6 +434,18 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room005)
 			;[End Block]
+		Case "gatebentrance"
+			;[Block]
+			Return(e_gatebentrance)
+			;[End Block]
+		Case "gateb"
+			;[Block]
+			Return(e_gateb)
+			;[End Block]
+		Case "gateaentrance"
+			;[Block]
+			Return(e_gateaentrance)
+			;[End Block]
 		Case "gatea"
 			;[Block]
 			Return(e_gatea)
@@ -584,7 +589,8 @@ Function InitEvents()
 	CreateEvent("room2ccont", "room2ccont", 0)
 	
 	CreateEvent("gateaentrance", "gateaentrance", 0)
-	CreateEvent("gatea", "gatea", 0)	
+	CreateEvent("gatea", "gatea", 0)
+	CreateEvent("gatebentrance", "gatebentrance", 0)
 	CreateEvent("gateb", "gateb", 0)
 	
 	CreateEvent("room205", "room205", 0)
@@ -838,7 +844,7 @@ Function UpdateEvents()
 			EndIf
 		EndIf
 		If (Not PlayerInReachableRoom()) Then
-			If (PlayerRoom\RoomTemplate\Name <> "gateb" And EntityY(me\Collider) =< 1040.0 * RoomScale) And PlayerRoom\RoomTemplate\Name <> "gatea" Then
+			If PlayerRoom\RoomTemplate\Name <> "gateb" And PlayerRoom\RoomTemplate\Name <> "gatea" Then
 				If PlayerRoom\RoomTemplate\Name <> "dimension1499" Then
 					If e\SoundCHN <> 0 And e\SoundCHN_IsStream Then
 						StopStream_Strict(e\SoundCHN)
@@ -862,26 +868,6 @@ Function UpdateEvents()
 		EndIf
 		
 		Select e\EventID
-			Case e_gateb
-				;[Block]
-				If (Not RemoteDoorOn) Then
-					e\room\RoomDoors[4]\Locked = 1
-				ElseIf RemoteDoorOn And e\EventState3 = 0.0
-					e\room\RoomDoors[4]\Locked = 2
-				Else
-					e\room\RoomDoors[4]\Locked = 0
-					
-					If Curr096 <> Null Then
-						If Curr096\State = 0.0 Lor Curr096\State = 5.0 Then
-							e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[8], e\room\Objects[9], e)
-						Else
-							e\EventState2 = Update096ElevatorEvent(e, e\EventState2, e\room\RoomDoors[0], e\room\Objects[8])
-						EndIf
-					Else
-						e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[8], e\room\Objects[9], e)
-					EndIf
-				EndIf
-				;[End Block]
 			Case e_room173
 				;[Block]
 				If e\room\RoomDoors[5] = Null Then
@@ -2646,6 +2632,43 @@ Function UpdateEvents()
 							
 							RemoveEvent(e)
 						EndIf
+					EndIf
+				EndIf
+				;[End Block]
+			Case e_gatebentrance
+				;[Block]
+				If PlayerRoom = e\room Then 
+					If (Not RemoteDoorOn) Then
+						e\room\RoomDoors[1]\Locked = 1
+					ElseIf RemoteDoorOn And e\EventState3 = 0.0
+						e\room\RoomDoors[1]\Locked = 2
+					Else
+						e\room\RoomDoors[1]\Locked = 0
+						
+						Local gateb.Rooms = Null
+						
+						For r.Rooms = Each Rooms
+							If r\RoomTemplate\Name = "gateb" Then
+								gateb = r 
+								Exit
+							EndIf
+						Next
+						
+						If Curr096 <> Null Then
+							If Curr096\State = 0.0 Lor Curr096\State = 5.0 Then
+								e\EventState = UpdateElevators(e\EventState, e\room\RoomDoors[0], gateb\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
+							Else
+								e\EventState = Update096ElevatorEvent(e, e\EventState, e\room\RoomDoors[0], e\room\Objects[0])
+							EndIf
+						Else
+							e\EventState = UpdateElevators(e\EventState, e\room\RoomDoors[0], gateb\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
+						EndIf
+						
+						If EntityDistanceSquared(me\Collider, e\room\Objects[1]) < 16.0 Then
+							gateb\RoomDoors[1]\Locked = 1
+							PlayerRoom = gateb
+							RemoveEvent(e)
+						EndIf						
 					EndIf
 				EndIf
 				;[End Block]
@@ -6558,7 +6581,7 @@ Function UpdateEvents()
 						e\EventState2 = 2.0
 						
 						For e2.Events = Each Events
-							If e2\EventID = e_gateb Lor e2\EventID = e_gateaentrance Then
+							If e2\EventID = e_gatebentrance Lor e2\EventID = e_gateaentrance Then
 								e2\EventState3 = 1.0
 							EndIf
 						Next
@@ -9578,269 +9601,263 @@ Function UpdateEndings()
 			Case e_gateb
 				;[Block]
 				If PlayerRoom = e\room Then
-					If EntityY(me\Collider) > 1040.0 * RoomScale Then
-						e\room\RoomDoors[1]\Locked = 1
+					e\room\RoomDoors[1]\Locked = 1
+					
+					For r.Rooms = Each Rooms
+						HideEntity(r\OBJ)
+					Next					
+					ShowEntity(e\room\OBJ)
+					
+					If e\EventState = 0.0 Then
+						DrawLoading(0, True)
 						
-						For r.Rooms = Each Rooms
-							HideEntity(r\OBJ)
-						Next					
-						ShowEntity(e\room\OBJ)
+						For n.NPCs = Each NPCs
+							If n <> Curr106 And n <> Curr173 Then  
+								RemoveNPC(n)
+							EndIf
+						Next
+						Curr096 = Null
+						Curr513_1 = Null
+						Curr049 = Null
 						
-						If e\EventState = 0.0 Then
-							DrawLoading(0, True)
-							
-							For n.NPCs = Each NPCs
-								If n <> Curr106 And n <> Curr173 Then  
-									RemoveNPC(n)
-								EndIf
-							Next
-							Curr096 = Null
-							Curr513_1 = Null
-							Curr049 = Null
-							
-							SecondaryLightOn = True
-							
-							DrawLoading(60, True)
-							DrawLoading(90, True)
-							
-							e\room\NPC[0] = CreateNPC(NPCtypeApache, e\room\x, 100.0, e\room\z)
-							e\room\NPC[0]\State = 1.0
-							
-							e\room\NPC[1] = CreateNPC(NPCtypeGuard, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True) + 0.2, EntityZ(e\room\Objects[4], True))
-							e\room\NPC[1]\State = 0.0
-							e\room\NPC[1]\State2 = 10.0
-							
-							Pvt = CreatePivot()
-							PositionEntity(Pvt, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
-							
-							e\room\Objects[0] = LoadMesh_Strict("GFX\map\exit1terrain.b3d", e\room\OBJ)
-							ScaleEntity(e\room\Objects[0], RoomScale, RoomScale, RoomScale, True)
-							RotateEntity(e\room\Objects[0], 0.0, e\room\Angle, 0.0, True)
-							PositionEntity(e\room\Objects[0], EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), True)
-							FreeEntity(Pvt)
-							
-							Delay(100)
-							
-							CreateConsoleMsg("")
-							CreateConsoleMsg("WARNING! Teleporting away from this area may cause bugs or crashing.", 255, 0, 0)
-							CreateConsoleMsg("")
-							
-							Sky = CreateSky("GFX\map\sky\sky")
-							RotateEntity(Sky, 0.0, e\room\Angle - 90.0, 0.0)
-							
-							e\EventState = 1.0
-							
-							DrawLoading(100, True)
-						Else
-							UpdateSky()
-							
-							If e\EventState < 2.0 And me\SelectedEnding = -1 Then 
-								If e\room\NPC[0]\State = 2.0 Then
-									ShouldPlay = 6
-								Else
-									e\EventState2 = ((e\EventState2 + fps\FPSFactor[0]) Mod 3600.0)
-									PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\OBJ, True) + Cos(e\EventState2 / 10.0) * 6000.0 * RoomScale, 14000.0 * RoomScale, EntityZ(e\room\OBJ, True) + Sin(e\EventState2 / 10.0) * 6000.0 * RoomScale)
-									RotateEntity(e\room\NPC[0]\Collider, 7.0, (e\EventState2 / 10.0), 20.0)										
-									ShouldPlay = 5
-								EndIf
-								
-								If EntityDistanceSquared(me\Collider, e\room\Objects[10]) < PowTwo(320.0 * RoomScale) Then
-									e\EventState = 2.0
-									e\room\RoomDoors[2]\Open = False
-									e\room\RoomDoors[2]\Locked = 1
-									e\room\RoomDoors[3]\Open = False
-									e\room\RoomDoors[3]\Locked = 1
-									
-									e\room\NPC[2] = CreateNPC(NPCtypeApache, EntityX(e\room\Objects[9], True), EntityY(e\room\Objects[9], True) + 0.5, EntityZ(e\room\Objects[9], True))
-									e\room\NPC[2]\State = 3.0
-									
-									e\room\NPC[3] = CreateNPC(NPCtypeApache, EntityX(e\room\Objects[7], True), EntityY(e\room\Objects[7], True) - 2.0, EntityZ(e\room\Objects[7], True))
-									e\room\NPC[3]\State = 3.0
-									
-									e\room\NPC[0]\State = 3.0
-									
-									If e\room\NPC[1] <> Null Then
-										RemoveNPC(e\room\NPC[1])
-									EndIf
-									PlayAnnouncement("SFX\Ending\GateB\682Battle.ogg")
-								EndIf								
-							Else
+						SecondaryLightOn = True
+						
+						DrawLoading(60, True)
+						
+						e\room\NPC[0] = CreateNPC(NPCtypeApache, e\room\x, 100.0, e\room\z)
+						e\room\NPC[0]\State = 1.0
+						
+						e\room\NPC[1] = CreateNPC(NPCtypeGuard, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True) + 0.2, EntityZ(e\room\Objects[2], True))
+						e\room\NPC[1]\State = 0.0
+						e\room\NPC[1]\State2 = 10.0
+						
+						e\room\Objects[0] = LoadMesh_Strict("GFX\map\exit1terrain.b3d", e\room\OBJ)
+						ScaleEntity(e\room\Objects[0], RoomScale, RoomScale, RoomScale, True)
+						RotateEntity(e\room\Objects[0], 0.0, e\room\Angle, 0.0, True)
+						PositionEntity(e\room\Objects[0], e\room\x + 4356.0 * RoomScale, e\room\y - 1017.0 * RoomScale, e\room\z + 2588.0 * RoomScale, True)
+						
+						CreateConsoleMsg("")
+						CreateConsoleMsg("WARNING! Teleporting away from this area may cause bugs or crashing.", 255, 0, 0)
+						CreateConsoleMsg("")
+						
+						Sky = CreateSky("GFX\map\sky\sky")
+						RotateEntity(Sky, 0.0, e\room\Angle - 90.0, 0.0)
+						
+						e\EventState = 1.0
+						
+						DrawLoading(100, True)
+					Else
+						UpdateSky()
+						
+						If e\EventState < 2.0 And me\SelectedEnding = -1 Then 
+							If e\room\NPC[0]\State = 2.0 Then
 								ShouldPlay = 6
-								e\EventState = e\EventState + fps\FPSFactor[0]
+							Else
+								e\EventState2 = ((e\EventState2 + fps\FPSFactor[0]) Mod 3600.0)
+								PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\OBJ, True) + Cos(e\EventState2 / 10.0) * 6000.0 * RoomScale, e\room\y + 3216.0 * RoomScale, EntityZ(e\room\OBJ, True) + Sin(e\EventState2 / 10.0) * 6000.0 * RoomScale)
+								RotateEntity(e\room\NPC[0]\Collider, 7.0, (e\EventState2 / 10.0), 20.0)										
+								ShouldPlay = 5
+							EndIf
+							
+							If EntityDistanceSquared(me\Collider, e\room\Objects[5]) < PowTwo(320.0 * RoomScale) Then
+								e\EventState = 2.0
+								e\room\RoomDoors[2]\Open = False
+								e\room\RoomDoors[2]\Locked = 1
+								e\room\RoomDoors[3]\Open = False
+								e\room\RoomDoors[3]\Locked = 1
 								
-								If e\EventState < 70.0 * 40.0 Then 	
-									e\room\NPC[0]\EnemyX = EntityX(e\room\Objects[11], True) + Sin(MilliSecs() / 25.0) * 3.0
-									e\room\NPC[0]\EnemyY = EntityY(e\room\Objects[11], True) + Cos(MilliSecs() / 85.0) + 9.0
-									e\room\NPC[0]\EnemyZ = EntityZ(e\room\Objects[11], True) + Cos(MilliSecs() / 25.0) * 3.0
-									
-									e\room\NPC[2]\EnemyX = EntityX(e\room\Objects[11], True) + Sin(MilliSecs() / 23.0) * 3.0
-									e\room\NPC[2]\EnemyY = EntityY(e\room\Objects[11], True) + Cos(MilliSecs() / 83.0) + 5.0
-									e\room\NPC[2]\EnemyZ = EntityZ(e\room\Objects[11], True) + Cos(MilliSecs() / 23.0) * 3.0
-									
-									If e\room\NPC[3]\State = 3.0 Then 
-										e\room\NPC[3]\EnemyX = EntityX(e\room\Objects[11], True) + Sin(MilliSecs() / 20.0) * 3.0
-										e\room\NPC[3]\EnemyY = EntityY(e\room\Objects[11], True) + Cos(MilliSecs() / 80.0) + 3.5
-										e\room\NPC[3]\EnemyZ = EntityZ(e\room\Objects[11], True) + Cos(MilliSecs() / 20.0) * 3.0
-									EndIf
+								e\room\NPC[2] = CreateNPC(NPCtypeApache, EntityX(e\room\Objects[11], True), EntityY(e\room\Objects[11], True) + 0.5, EntityZ(e\room\Objects[11], True))
+								e\room\NPC[2]\State = 3.0
+								
+								e\room\NPC[3] = CreateNPC(NPCtypeApache, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True) - 2.0, EntityZ(e\room\Objects[4], True))
+								e\room\NPC[3]\State = 3.0
+								
+								e\room\NPC[0]\State = 3.0
+								
+								If e\room\NPC[1] <> Null Then
+									RemoveNPC(e\room\NPC[1])
+								EndIf
+								PlayAnnouncement("SFX\Ending\GateB\682Battle.ogg")
+							EndIf								
+						Else
+							ShouldPlay = 6
+							e\EventState = e\EventState + fps\FPSFactor[0]
+							
+							If e\EventState < 70.0 * 40.0 Then 	
+								e\room\NPC[0]\EnemyX = EntityX(e\room\Objects[6], True) + Sin(MilliSecs() / 25.0) * 3.0
+								e\room\NPC[0]\EnemyY = EntityY(e\room\Objects[6], True) + Cos(MilliSecs() / 85.0) + 9.0
+								e\room\NPC[0]\EnemyZ = EntityZ(e\room\Objects[6], True) + Cos(MilliSecs() / 25.0) * 3.0
+								
+								e\room\NPC[2]\EnemyX = EntityX(e\room\Objects[6], True) + Sin(MilliSecs() / 23.0) * 3.0
+								e\room\NPC[2]\EnemyY = EntityY(e\room\Objects[6], True) + Cos(MilliSecs() / 83.0) + 5.0
+								e\room\NPC[2]\EnemyZ = EntityZ(e\room\Objects[6], True) + Cos(MilliSecs() / 23.0) * 3.0
+								
+								If e\room\NPC[3]\State = 3.0 Then 
+									e\room\NPC[3]\EnemyX = EntityX(e\room\Objects[6], True) + Sin(MilliSecs() / 20.0) * 3.0
+									e\room\NPC[3]\EnemyY = EntityY(e\room\Objects[6], True) + Cos(MilliSecs() / 80.0) + 3.5
+									e\room\NPC[3]\EnemyZ = EntityZ(e\room\Objects[6], True) + Cos(MilliSecs() / 20.0) * 3.0
 								EndIf
 							EndIf
-							
-							If e\EventState > 70.0 * 0.6 And e\EventState < 70.0 * 42.2 Then 
-								If e\EventState < 70.0 * 0.7 Then
-									me\CameraShake = 0.5
-								ElseIf e\EventState > 70.0 * 3.2 And e\EventState < 70.0 * 3.3
-									me\CameraShake = 0.5
-								ElseIf e\EventState > 70.0 * 6.1 And e\EventState < 70.0 * 6.2	
-									me\CameraShake = 0.5
-								ElseIf e\EventState < 70.0 * 10.8 And e\EventState < 70.0 * 10.9	
-									me\CameraShake = 0.5
-								ElseIf e\EventState > 70.0 * 12.1 And e\EventState < 70.0 * 12.3
-									me\CameraShake = 1.0
-								ElseIf e\EventState > 70.0 * 13.3 And e\EventState < 70.0 * 13.5
-									me\CameraShake = 1.5
-								ElseIf e\EventState > 70.0 * 16.5 And e\EventState < 70.0 * 18.5
-									me\CameraShake = 3.0
-								ElseIf e\EventState > 70.0 * 21.5 And e\EventState < 70.0 * 24.0	
-									me\CameraShake = 2.0
-								ElseIf e\EventState > 70.0 * 25.5 And e\EventState < 70.0 * 27.0	
-									me\CameraShake = 2.0	
-								ElseIf e\EventState > 70.0 * 31.0 And e\EventState < 70.0 * 31.5	
-									me\CameraShake = 0.5	
-								ElseIf e\EventState > 70.0 * 35.0 And e\EventState < 70.0 * 36.5	
-									me\CameraShake = 1.5		
-									If e\EventState - fps\FPSFactor[0] =< 70.0 * 35.0 Then
-										e\SoundCHN = StreamSound_Strict("SFX\Ending\GateB\DetonatingAlphaWarheads.ogg", opt\SFXVolume, 0.0)
-										e\SoundCHN_IsStream = True
-									EndIf									
-								ElseIf e\EventState > 70.0 * 39.5 And e\EventState < 70.0 * 39.8		
-									me\CameraShake = 1.0
-								ElseIf e\EventState > 70.0 * 42.0
-									me\CameraShake = 0.5
-									
-									; ~ Helicopters leave
-									e\room\NPC[0]\EnemyX = EntityX(e\room\Objects[19], True) + 4.0
-									e\room\NPC[0]\EnemyY = EntityY(e\room\Objects[19], True) + 4.0
-									e\room\NPC[0]\EnemyZ = EntityZ(e\room\Objects[19], True) + 4.0
-									
-									e\room\NPC[2]\EnemyX = EntityX(e\room\Objects[19], True)
-									e\room\NPC[2]\EnemyY = EntityY(e\room\Objects[19], True)
-									e\room\NPC[2]\EnemyZ = EntityZ(e\room\Objects[19], True)
-								EndIf
+						EndIf
+						
+						If e\EventState > 70.0 * 0.6 And e\EventState < 70.0 * 42.2 Then 
+							If e\EventState < 70.0 * 0.7 Then
+								me\CameraShake = 0.5
+							ElseIf e\EventState > 70.0 * 3.2 And e\EventState < 70.0 * 3.3
+								me\CameraShake = 0.5
+							ElseIf e\EventState > 70.0 * 6.1 And e\EventState < 70.0 * 6.2	
+								me\CameraShake = 0.5
+							ElseIf e\EventState < 70.0 * 10.8 And e\EventState < 70.0 * 10.9	
+								me\CameraShake = 0.5
+							ElseIf e\EventState > 70.0 * 12.1 And e\EventState < 70.0 * 12.3
+								me\CameraShake = 1.0
+							ElseIf e\EventState > 70.0 * 13.3 And e\EventState < 70.0 * 13.5
+								me\CameraShake = 1.5
+							ElseIf e\EventState > 70.0 * 16.5 And e\EventState < 70.0 * 18.5
+								me\CameraShake = 3.0
+							ElseIf e\EventState > 70.0 * 21.5 And e\EventState < 70.0 * 24.0	
+								me\CameraShake = 2.0
+							ElseIf e\EventState > 70.0 * 25.5 And e\EventState < 70.0 * 27.0	
+								me\CameraShake = 2.0	
+							ElseIf e\EventState > 70.0 * 31.0 And e\EventState < 70.0 * 31.5	
+								me\CameraShake = 0.5	
+							ElseIf e\EventState > 70.0 * 35.0 And e\EventState < 70.0 * 36.5	
+								me\CameraShake = 1.5		
+								If e\EventState - fps\FPSFactor[0] =< 70.0 * 35.0 Then
+									e\SoundCHN = StreamSound_Strict("SFX\Ending\GateB\DetonatingAlphaWarheads.ogg", opt\SFXVolume, 0.0)
+									e\SoundCHN_IsStream = True
+								EndIf									
+							ElseIf e\EventState > 70.0 * 39.5 And e\EventState < 70.0 * 39.8		
+								me\CameraShake = 1.0
+							ElseIf e\EventState > 70.0 * 42.0
+								me\CameraShake = 0.5
+								
+								; ~ Helicopters leave
+								e\room\NPC[0]\EnemyX = EntityX(e\room\Objects[9], True) + 4.0
+								e\room\NPC[0]\EnemyY = EntityY(e\room\Objects[9], True) + 4.0
+								e\room\NPC[0]\EnemyZ = EntityZ(e\room\Objects[9], True) + 4.0
+								
+								e\room\NPC[2]\EnemyX = EntityX(e\room\Objects[9], True)
+								e\room\NPC[2]\EnemyY = EntityY(e\room\Objects[9], True)
+								e\room\NPC[2]\EnemyZ = EntityZ(e\room\Objects[9], True)
 							EndIf
-							
-							If e\EventState >= 70.0 * 45.0 Then
-								If e\EventState < 70.0 * 75.0 Then
-									If (Not e\SoundCHN2) Then
-										e\SoundCHN2 = StreamSound_Strict("SFX\Ending\GateB\Siren.ogg", opt\SFXVolume, Mode)
-										e\SoundCHN2_IsStream = True
-									EndIf
-								Else
-									If me\SelectedEnding = -1 Then
-										ShouldPlay = 66
+						EndIf
+						
+						If e\EventState >= 70.0 * 45.0 Then
+							If e\EventState < 70.0 * 75.0 Then
+								If (Not e\SoundCHN2) Then
+									e\SoundCHN2 = StreamSound_Strict("SFX\Ending\GateB\Siren.ogg", opt\SFXVolume, Mode)
+									e\SoundCHN2_IsStream = True
+								EndIf
+							Else
+								If me\SelectedEnding = -1 Then
+									ShouldPlay = 66
+									
+									StopStream_Strict(e\SoundCHN)
+									StopStream_Strict(e\SoundCHN2)
+									
+									Temp = True
+									For e2.Events = Each Events
+										If e2\EventID = e_room2nuke Then
+											Temp = e2\EventState
+											Exit
+										EndIf
+									Next
+									
+									If Temp = 1.0 Then ; ~ Explode
+										me\ExplosionTimer = Max(me\ExplosionTimer, 0.1)
+										me\SelectedEnding = Ending_B2
+									Else
+										PlayAnnouncement("SFX\Ending\GateB\AlphaWarheadsFail.ogg")
 										
-										StopStream_Strict(e\SoundCHN)
-										StopStream_Strict(e\SoundCHN2)
+										n.NPCs = CreateNPC(NPCtypeMTF, EntityX(e\room\Objects[8], True), EntityY(e\room\Objects[8], True) + 0.29, EntityZ(e\room\Objects[8], True))
+										n.NPCs = CreateNPC(NPCtypeMTF, EntityX(e\room\RoomDoors[2]\OBJ, True), EntityY(e\room\RoomDoors[2]\OBJ, True) + 0.29, (EntityZ(e\room\RoomDoors[2]\OBJ, True) + EntityZ(e\room\RoomDoors[3]\OBJ, True)) / 2.0)
 										
-										Temp = True
-										For e2.Events = Each Events
-											If e2\EventID = e_room2nuke Then
-												Temp = e2\EventState
-												Exit
+										For n.NPCs = Each NPCs
+											If n\NPCtype = NPCtypeMTF Then
+												n\LastSeen = 70.0 * Rnd(30.0, 35.0)
+												n\State = 3.0
+												n\State2 = 10.0
+												n\EnemyX = EntityX(me\Collider)
+												n\EnemyY = EntityY(me\Collider)
+												n\EnemyZ = EntityZ(me\Collider)
 											EndIf
 										Next
 										
-										If Temp = 1.0 Then ; ~ Explode
-											me\ExplosionTimer = Max(me\ExplosionTimer, 0.1)
-											me\SelectedEnding = Ending_B2
-										Else
-											PlayAnnouncement("SFX\Ending\GateB\AlphaWarheadsFail.ogg")
-											
-											n.NPCs = CreateNPC(NPCtypeMTF, EntityX(e\room\Objects[18], True), EntityY(e\room\Objects[18], True) + 0.29, EntityZ(e\room\Objects[18], True))
-											n.NPCs = CreateNPC(NPCtypeMTF, EntityX(e\room\RoomDoors[2]\OBJ, True), EntityY(e\room\RoomDoors[2]\OBJ, True) + 0.29, (EntityZ(e\room\RoomDoors[2]\OBJ, True) + EntityZ(e\room\RoomDoors[3]\OBJ, True)) / 2.0)
-											
+										e\EventState = 70.0 * 85.0
+										
+										me\SelectedEnding = Ending_B1
+									EndIf
+								Else
+									If me\SelectedEnding = Ending_B1 Then
+										e\room\NPC[0]\EnemyX = EntityX(e\room\Objects[6], True) + Sin(MilliSecs() / 25.0) * 3.0
+										e\room\NPC[0]\EnemyY = EntityY(e\room\Objects[6], True) + Cos(MilliSecs() / 85.0) + 9.0
+										e\room\NPC[0]\EnemyZ = EntityZ(e\room\Objects[6], True) + Cos(MilliSecs() / 25.0) * 3.0
+										
+										e\room\NPC[2]\EnemyX = EntityX(e\room\Objects[6], True) + Sin(MilliSecs() / 23.0) * 3.0
+										e\room\NPC[2]\EnemyY = EntityY(e\room\Objects[6], True) + Cos(MilliSecs() / 83.0) + 5.0
+										e\room\NPC[2]\EnemyZ = EntityZ(e\room\Objects[6], True) + Cos(MilliSecs() / 23.0) * 3.0
+										
+										e\room\RoomDoors[4]\Open = True
+										e\room\RoomDoors[4]\Locked = 0
+										
+										If e\EventState3 > 0.0 And e\EventState3 =< 500.0
+											e\EventState3 = e\EventState3 + fps\FPSFactor[0]
+											UnableToMove = True
 											For n.NPCs = Each NPCs
 												If n\NPCtype = NPCtypeMTF Then
-													n\LastSeen = 70.0 * Rnd(30.0, 35.0)
+													n\LastSeen = (70.0 * Rnd(30.0, 35.0))
 													n\State = 3.0
 													n\State2 = 10.0
 													n\EnemyX = EntityX(me\Collider)
 													n\EnemyY = EntityY(me\Collider)
 													n\EnemyZ = EntityZ(me\Collider)
+													PointEntity(n\Collider, me\Collider)
 												EndIf
 											Next
-											
-											e\EventState = 70.0 * 85.0
-											
-											me\SelectedEnding = Ending_B1
-										EndIf
-									Else
-										If me\SelectedEnding = Ending_B1 Then
-											e\room\NPC[0]\EnemyX = EntityX(e\room\Objects[11], True) + Sin(MilliSecs() / 25.0) * 3.0
-											e\room\NPC[0]\EnemyY = EntityY(e\room\Objects[11], True) + Cos(MilliSecs() / 85.0) + 9.0
-											e\room\NPC[0]\EnemyZ = EntityZ(e\room\Objects[11], True) + Cos(MilliSecs() / 25.0) * 3.0
-											
-											e\room\NPC[2]\EnemyX = EntityX(e\room\Objects[11], True) + Sin(MilliSecs() / 23.0) * 3.0
-											e\room\NPC[2]\EnemyY = EntityY(e\room\Objects[11], True) + Cos(MilliSecs() / 83.0) + 5.0
-											e\room\NPC[2]\EnemyZ = EntityZ(e\room\Objects[11], True) + Cos(MilliSecs() / 23.0) * 3.0
-											
-											e\room\RoomDoors[5]\Open = True
-											e\room\RoomDoors[5]\Locked = 0
-											
-											If e\EventState3 > 0.0 And e\EventState3 =< 500.0
-												e\EventState3 = e\EventState3 + fps\FPSFactor[0]
-												UnableToMove = True
-												For n.NPCs = Each NPCs
-													If n\NPCtype = NPCtypeMTF Then
-														n\LastSeen = (70.0 * Rnd(30.0, 35.0))
-														n\State = 3.0
-														n\State2 = 10.0
-														n\EnemyX = EntityX(me\Collider)
-														n\EnemyY = EntityY(me\Collider)
-														n\EnemyZ = EntityZ(me\Collider)
-														PointEntity(n\Collider, me\Collider)
-													EndIf
-												Next
-											ElseIf e\EventState3 > 500.0
-												ShouldPlay = 0
-												me\CurrSpeed = 0.0
-												PlaySound_Strict(LoadTempSound("SFX\Ending\GateB\Gunshot.ogg"))
-												ClearCheats(chs)
-												me\LightFlash = 20.0
-												me\KillTimer = -0.1
-												msg\DeathMsg = ""
-												me\BlinkTimer = -10.0
-												For n.NPCs = Each NPCs
-													If n\NPCtype = NPCtypeMTF
-														RemoveNPC(n)
-													EndIf
-												Next
-												RemoveEvent(e)
-												Exit
-											EndIf
+										ElseIf e\EventState3 > 500.0
+											ShouldPlay = 0
+											me\CurrSpeed = 0.0
+											PlaySound_Strict(LoadTempSound("SFX\Ending\GateB\Gunshot.ogg"))
+											ClearCheats(chs)
+											me\LightFlash = 20.0
+											me\KillTimer = -0.1
+											msg\DeathMsg = ""
+											me\BlinkTimer = -10.0
+											For n.NPCs = Each NPCs
+												If n\NPCtype = NPCtypeMTF
+													RemoveNPC(n)
+												EndIf
+											Next
+											RemoveEvent(e)
+											Exit
 										EndIf
 									EndIf
 								EndIf
 							EndIf
-							
-							If e\EventState > 70.0 * 26.5 Then
-								If (Not e\room\Objects[12]) Then
-									e\room\Objects[12] = CopyEntity(o\NPCModelID[NPCtype682_Arm])
-									ScaleEntity(e\room\Objects[12], 0.15, 0.15, 0.15)
-									Temp = (Min(((EntityDistance(e\room\NPC[3]\Collider, me\Collider) / RoomScale) - 3000.0) / 4.0, 1000.0) + 12192.0) * RoomScale
-									PositionEntity(e\room\Objects[12], EntityX(e\room\NPC[3]\Collider), 12192.0 * RoomScale, EntityZ(e\room\NPC[3]\Collider))
-									RotateEntity(e\room\Objects[12], 0.0, e\room\Angle + Rnd(-10.0, 10.0), 0.0, True)
-									TurnEntity(e\room\Objects[12], 0.0, 0.0, 180.0)
-								Else
-									If WrapAngle(EntityRoll(e\room\Objects[12])) < 340.0 Then 
-										Angle = WrapAngle(EntityRoll(e\room\Objects[12]))
-										TurnEntity(e\room\Objects[12], 0.0, 0.0, (5.0 + Abs(Sin(Angle)) * 2.0) * fps\FPSFactor[0])
-										If Angle < 270.0 And WrapAngle(EntityRoll(e\room\Objects[12])) >= 270.0 Then
+						EndIf
+						
+						If e\EventState > 70.0 * 26.5 Then
+							If e\EventState4 = 0.0 Then
+								e\room\Objects[7] = CopyEntity(o\NPCModelID[NPCtype682_Arm])
+								ScaleEntity(e\room\Objects[7], 0.15, 0.15, 0.15)
+								Temp = (Min(((EntityDistance(e\room\NPC[3]\Collider, me\Collider) / RoomScale) - 3000.0) / 4.0, 1000.0) + 1408.0) * RoomScale
+								PositionEntity(e\room\Objects[7], EntityX(e\room\NPC[3]\Collider), e\room\y + 1408.0 * RoomScale, EntityZ(e\room\NPC[3]\Collider))
+								RotateEntity(e\room\Objects[7], 0.0, e\room\Angle + Rnd(-10.0, 10.0), 0.0, True)
+								TurnEntity(e\room\Objects[7], 0.0, 0.0, 180.0)
+								e\EventState4 = 1.0
+							Else
+								If e\room\Objects[7] <> 0 Then
+									If WrapAngle(EntityRoll(e\room\Objects[7])) < 340.0 Then 
+										Angle = WrapAngle(EntityRoll(e\room\Objects[7]))
+										TurnEntity(e\room\Objects[7], 0.0, 0.0, (5.0 + Abs(Sin(Angle)) * 2.0) * fps\FPSFactor[0])
+										If Angle < 270.0 And WrapAngle(EntityRoll(e\room\Objects[7])) >= 270.0 Then
 											PlaySound_Strict(LoadTempSound("SFX\Character\Apache\Crash1.ogg"))
 											e\room\NPC[3]\State = 4.0
 											e\room\NPC[3]\State2 = 1.0
-											e\room\NPC[3]\EnemyX = EntityX(e\room\Objects[7], True)
-											e\room\NPC[3]\EnemyY = EntityY(e\room\Objects[7], True) - 2.5
-											e\room\NPC[3]\EnemyZ = EntityZ(e\room\Objects[7], True)
+											e\room\NPC[3]\EnemyX = EntityX(e\room\Objects[4], True)
+											e\room\NPC[3]\EnemyY = EntityY(e\room\Objects[4], True) - 2.5
+											e\room\NPC[3]\EnemyZ = EntityZ(e\room\Objects[4], True)
 											
 											em.Emitters = CreateEmitter(EntityX(e\room\NPC[3]\Collider), EntityY(e\room\NPC[3]\Collider), EntityZ(e\room\NPC[3]\Collider), 0)
 											em\Room = PlayerRoom : em\RandAngle = 45.0 : em\Gravity = -0.18 : em\LifeTime = 400.0 : em\SizeChange = Rnd(0.005, 0.007) : em\Achange = -0.004
@@ -9863,38 +9880,38 @@ Function UpdateEndings()
 											EndIf
 										EndIf
 									Else
-										HideEntity(e\room\Objects[12])
+										FreeEntity(e\room\Objects[7]) : e\room\Objects[7] = 0
 									EndIf
 								EndIf
 							EndIf
 						EndIf
-						
-						Angle = Max(Sin(EntityYaw(me\Collider)), 0.0)
-						
-						If opt\ParticleAmount > 0 Then
-							If Rand(3) = 1 Then
-								p.Particles = CreateParticle(EntityX(Camera) + Rnd(-2.0, 2.0), EntityY(Camera) + Rnd(0.9, 2.0), EntityZ(Camera) + Rnd(-2.0, 2.0), 2, 0.006, 0.0, 300.0)
-								p\Speed = Rnd(0.002, 0.003) : p\SizeChange = -0.00001
-								RotateEntity(p\Pvt, Rnd(-20.0, 20.0), e\room\Angle - 90.0 + Rnd(-15.0, 15.0), 0.0, 0.0)
-							EndIf
+					EndIf
+					
+					Angle = Max(Sin(EntityYaw(me\Collider)), 0.0)
+					
+					If opt\ParticleAmount > 0 Then
+						If Rand(3) = 1 Then
+							p.Particles = CreateParticle(EntityX(Camera) + Rnd(-2.0, 2.0), EntityY(Camera) + Rnd(0.9, 2.0), EntityZ(Camera) + Rnd(-2.0, 2.0), 2, 0.006, 0.0, 300.0)
+							p\Speed = Rnd(0.002, 0.003) : p\SizeChange = -0.00001
+							RotateEntity(p\Pvt, Rnd(-20.0, 20.0), e\room\Angle - 90.0 + Rnd(-15.0, 15.0), 0.0, 0.0)
+						EndIf
+					EndIf
+					
+					If e\room\NPC[1] <> Null Then
+						; ~ Helicopter spots or player is within range --> Start shooting
+						If EntityDistanceSquared(e\room\NPC[1]\Collider, me\Collider) < 225.0 And (Not chs\NoTarget) Then
+							e\room\NPC[1]\State = 1.0
+							e\room\NPC[1]\State3 = 1.0
+						Else
+							e\room\NPC[1]\State = 0.0
+							e\room\NPC[1]\State3 = 0.0
 						EndIf
 						
-						If e\room\NPC[1] <> Null Then
-							; ~ Helicopter spots or player is within range --> Start shooting
-							If EntityDistanceSquared(e\room\NPC[1]\Collider, me\Collider) < 225.0 And (Not chs\NoTarget) Then
-								e\room\NPC[1]\State = 1.0
-								e\room\NPC[1]\State3 = 1.0
-							Else
-								e\room\NPC[1]\State = 0.0
-								e\room\NPC[1]\State3 = 0.0
-							EndIf
-							
-							; ~ Below roof or inside catwalk --> Stop shooting
-							If EntityDistanceSquared(e\room\NPC[1]\Collider, me\Collider) < 79.21 Lor EntityDistanceSquared(e\room\Objects[5], me\Collider) < 285.61 Lor chs\NoTarget Then
-								e\room\NPC[1]\State3 = 0.0
-							Else
-								e\room\NPC[1]\State3 = 1.0
-							EndIf
+						; ~ Below roof or inside catwalk --> Stop shooting
+						If EntityDistanceSquared(e\room\NPC[1]\Collider, me\Collider) < 79.21 Lor EntityDistanceSquared(e\room\Objects[3], me\Collider) < 285.61 Lor chs\NoTarget Then
+							e\room\NPC[1]\State3 = 0.0
+						Else
+							e\room\NPC[1]\State3 = 1.0
 						EndIf
 					EndIf
 				EndIf

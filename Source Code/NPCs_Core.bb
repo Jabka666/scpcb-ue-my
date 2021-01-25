@@ -568,7 +568,7 @@ Function UpdateNPCs()
 		Select n\NPCtype
 			Case NPCtype173
 				;[Block]
-				If Curr173\Idle <> 3 And (PlayerRoom\RoomTemplate\Name <> "gateb" And EntityY(me\Collider) =< 1040.0 * RoomScale) Then
+				If Curr173\Idle <> 3 And PlayerRoom\RoomTemplate\Name <> "gateb" Lor PlayerRoom\RoomTemplate\Name <> "gatea" Then
 					Dist = EntityDistance(n\Collider, me\Collider)		
 					
 					n\State3 = 1.0
@@ -662,7 +662,7 @@ Function UpdateNPCs()
 								; ~ Teleport to a room closer to the player
 								If Dist > 50.0 Then
 									If Rand(70) = 1 Then
-										If (PlayerRoom\RoomTemplate\Name <> "gateb" And EntityY(me\Collider) =< 1040.0 * RoomScale) And PlayerRoom\RoomTemplate\Name <> "gatea" And PlayerRoom\RoomTemplate\Name <> "pocketdimension" Then
+										If PlayerRoom\RoomTemplate\Name <> "gateb" And PlayerRoom\RoomTemplate\Name <> "gatea" And PlayerRoom\RoomTemplate\Name <> "pocketdimension" Then
 											For w.Waypoints = Each WayPoints
 												If w\door = Null And Rand(5) = 1 Then
 													x = Abs(EntityX(me\Collider) - EntityX(w\OBJ, True))
@@ -811,7 +811,7 @@ Function UpdateNPCs()
 				;[End Block]
 			Case NPCtype106
 				;[Block]
-				If n\Contained Lor (PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale) Then
+				If n\Contained Lor PlayerRoom\RoomTemplate\Name = "gateb" Then
 					n\Idle = 1
 					HideEntity(n\OBJ)
 					HideEntity(n\OBJ2)
@@ -1047,7 +1047,7 @@ Function UpdateNPCs()
 							EndIf
 							
 							If n\Reload = 0.0 Then
-								If Dist > 10.0 And (PlayerRoom\RoomTemplate\Name <> "gateb" And EntityY(me\Collider) =< 1040.0 * RoomScale) And PlayerRoom\RoomTemplate\Name <> "pocketdimension" And PlayerRoom\RoomTemplate\Name <> "gatea" And n\State < -5.0 Then ; ~ Timer idea -- Juanjpro
+								If Dist > 10.0 And PlayerRoom\RoomTemplate\Name <> "gateb" And PlayerRoom\RoomTemplate\Name <> "pocketdimension" And PlayerRoom\RoomTemplate\Name <> "gatea" And n\State < -5.0 Then ; ~ Timer idea -- Juanjpro
 									If (Not EntityInView(n\OBJ, Camera)) Then
 										TurnEntity(me\Collider, 0.0, 180.0, 0.0)
 										Pick = EntityPick(me\Collider, 5.0)
@@ -1095,7 +1095,7 @@ Function UpdateNPCs()
 						RotateEntity(n\OBJ2, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
 						MoveEntity(n\OBJ2, 0.0, 8.6 * 0.11, -1.5 * 0.11)
 						
-						If PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor PlayerRoom\RoomTemplate\Name = "gatea" Lor (PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale) Then
+						If PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor PlayerRoom\RoomTemplate\Name = "gateb" Lor PlayerRoom\RoomTemplate\Name = "gatea" Then
 							HideEntity(n\OBJ2)
 						Else
 							If Dist < opt\CameraFogFar * LightVolume * 0.6 Then
@@ -2237,7 +2237,7 @@ Function UpdateNPCs()
 										If PlayerRoom\RoomTemplate\Name = "room173" Then 
 											msg\DeathMsg = SubjectName + ". Cause of death: Gunshot wound to the head. The surveillance tapes confirm that the subject was terminated by Agent Ulgrin shortly after the site lockdown was initiated."
 											InstaKillPlayer = True
-										ElseIf PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale
+										ElseIf PlayerRoom\RoomTemplate\Name = "gateb"
 											msg\DeathMsg = Chr(34) + "Agent G. to control. Eliminated a Class D escapee in Gate B's courtyard." + Chr(34)
 										Else
 											msg\DeathMsg = ""
@@ -4432,7 +4432,7 @@ Function UpdateNPCs()
 				Dist = EntityDistance(me\Collider, n\Collider)
 				If Dist < 60.0 Then 
 					If PlayerRoom\RoomTemplate\Name = "gateb" Then 
-						Dist2 = Max(Min(EntityDistance(n\Collider, PlayerRoom\Objects[3]) / (8000.0 * RoomScale), 1.0), 0.0)
+						Dist2 = Max(Min(EntityDistance(n\Collider, PlayerRoom\Objects[10]) / (8000.0 * RoomScale), 1.0), 0.0)
 					Else 
 						Dist2 = 1.0
 					EndIf
@@ -7215,11 +7215,7 @@ Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False)
 	Local e.Events
 	
 	; ~ Player is in these rooms, returning false
-	If RN = "pocketdimension" Lor RN = "gatea" Lor RN = "dimension1499" Lor RN = "room173intro" Then
-		Return(False)
-	EndIf
-	; ~ Player is at Gate B and is at the surface, returning false
-	If RN = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale Then
+	If RN = "pocketdimension" Lor RN = "dimension1499" Lor RN = "room173intro" Lor RN = "gateb" Lor RN = "gatea" Then
 		Return(False)
 	EndIf
 	; ~ Player is in SCP-860-1's test room and inside the forest, returning false

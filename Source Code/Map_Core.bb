@@ -1908,10 +1908,7 @@ Function FillRoom(r.Rooms)
 			RotateEntity(d\Buttons[1], 0.0, 90.0, 0.0, True)
 			
 			For r2.Rooms = Each Rooms
-				If r2\RoomTemplate\Name = "gateb" Then
-					r\Objects[1] = r2\Objects[1]
-					r\Objects[2] = r2\Objects[2]	
-				ElseIf r2\RoomTemplate\Name = "gateaentrance"
+				If r2\RoomTemplate\Name = "gateaentrance" Then
 					; ~ Elevator
 					r\RoomDoors.Doors[1] = CreateDoor(r\x + 1544.0 * RoomScale, r\y, r\z - 64.0 * RoomScale, -90.0, r, False, Elevator_Door)
 					r\RoomDoors[1]\AutoClose = False
@@ -1919,8 +1916,9 @@ Function FillRoom(r.Rooms)
 					PositionEntity(r\RoomDoors[1]\Buttons[1], EntityX(r\RoomDoors[1]\Buttons[1], True) + 0.031, EntityY(r\RoomDoors[1]\Buttons[1], True), EntityZ(r\RoomDoors[1]\Buttons[1], True), True)
 					
 					r2\Objects[1] = CreatePivot()
-					PositionEntity(r2\Objects[1], r\x + 1848.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 64.0 * RoomScale)
-					EntityParent(r2\Objects[1], r\OBJ)						
+					PositionEntity(r2\Objects[1], r\x + 1848.0 * RoomScale, r\y, r\z - 64.0 * RoomScale)
+					EntityParent(r2\Objects[1], r\OBJ)
+					Exit
 				EndIf
 			Next
 			
@@ -1996,98 +1994,92 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\Objects[0], r\x + 1048.0 * RoomScale, r\y, r\z + 512.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
 			;[End Block]
-		Case "gateb"
+		Case "gatebentrance"
 			;[Block]
-			; ~ Elevators
 			r\RoomDoors.Doors[0] = CreateDoor(r\x + 720.0 * RoomScale, r\y, r\z + 1432.0 * RoomScale, 0.0, r, True, Elevator_Door)
 			r\RoomDoors[0]\AutoClose = False
 			PositionEntity(r\RoomDoors[0]\Buttons[0], EntityX(r\RoomDoors[0]\Buttons[0], True), EntityY(r\RoomDoors[0]\Buttons[0], True), EntityZ(r\RoomDoors[0]\Buttons[0], True) + 0.031, True)
 			PositionEntity(r\RoomDoors[0]\Buttons[1], EntityX(r\RoomDoors[0]\Buttons[1], True), EntityY(r\RoomDoors[0]\Buttons[1], True), EntityZ(r\RoomDoors[0]\Buttons[1], True) - 0.031, True)	
 			
-			r\RoomDoors.Doors[1] = CreateDoor(r\x - 5424.0 * RoomScale, r\y + 10784.0 * RoomScale, r\z - 1380.0 * RoomScale, 0.0, r, False, Elevator_Door)
+			r\RoomDoors.Doors[1] = CreateDoor(r\x, r\y, r\z - 320.0 * RoomScale, 0.0, r, False, Big_Door, 5)
 			r\RoomDoors[1]\AutoClose = False
-			PositionEntity(r\RoomDoors[1]\Buttons[0], EntityX(r\RoomDoors[1]\Buttons[0], True), EntityY(r\RoomDoors[1]\Buttons[0], True), EntityZ(r\RoomDoors[1]\Buttons[0], True) + 0.031, True)
-			PositionEntity(r\RoomDoors[1]\Buttons[1], EntityX(r\RoomDoors[1]\Buttons[1], True), EntityY(r\RoomDoors[1]\Buttons[1], True), EntityZ(r\RoomDoors[1]\Buttons[1], True) - 0.031, True)
-			
-			; ~ Other doors
-			r\RoomDoors.Doors[2] = CreateDoor(r\x + 4352.0 * RoomScale, r\y + 10784.0 * RoomScale, r\z - 492.0 * RoomScale, 0.0, r)
-			r\RoomDoors[2]\AutoClose = False	
-			
-			r\RoomDoors.Doors[3] = CreateDoor(r\x + 4352.0 * RoomScale, r\y + 10784.0 * RoomScale, r\z + 498.0 * RoomScale, 0.0, r)
-			r\RoomDoors[3]\AutoClose = False
-			
-			r\RoomDoors.Doors[4] = CreateDoor(r\x, r\y, r\z - 320.0 * RoomScale, 0.0, r, False, Big_Door, 5)
-			r\RoomDoors[4]\AutoClose = False
-			PositionEntity(r\RoomDoors[4]\Buttons[1], r\x + 358.0 * RoomScale, EntityY(r\RoomDoors[4]\Buttons[1], True), r\z - 528.0 * RoomScale, True)
-			RotateEntity(r\RoomDoors[4]\Buttons[1], 0.0, r\Angle - 90.0, 0.0, True)
-			PositionEntity(r\RoomDoors[4]\Buttons[0], EntityX(r\RoomDoors[4]\Buttons[0], True), EntityY(r\RoomDoors[4]\Buttons[0], True), r\z - 198.0 * RoomScale, True)
-			RotateEntity(r\RoomDoors[4]\Buttons[0], 0.0, r\Angle - 180.0, 0.0, True)
-			
-			r\RoomDoors.Doors[5] = CreateDoor(r\x + 3248.0 * RoomScale, r\y + 9856.0 * RoomScale, r\z + 6400.0 * RoomScale, 0.0, r, False, One_Sided_Door, 0, "GEAR")
-			r\RoomDoors[5]\AutoClose = False : r\RoomDoors[5]\Locked = 1
-			FreeEntity(r\RoomDoors[5]\Buttons[1]) : r\RoomDoors[5]\Buttons[1] = 0	
-			
-			d.Doors = CreateDoor(r\x + 3072.0 * RoomScale, r\y + 9856.0 * RoomScale, r\z + 5800.0 * RoomScale, 90.0, r, False, Default_Door, 3)
-			d\AutoClose = False
+			PositionEntity(r\RoomDoors[1]\Buttons[1], r\x + 358.0 * RoomScale, EntityY(r\RoomDoors[1]\Buttons[1], True), r\z - 528.0 * RoomScale, True)
+			RotateEntity(r\RoomDoors[1]\Buttons[1], 0.0, r\Angle - 90.0, 0.0, True)
+			PositionEntity(r\RoomDoors[1]\Buttons[0], EntityX(r\RoomDoors[1]\Buttons[0], True), EntityY(r\RoomDoors[1]\Buttons[0], True), r\z - 198.0 * RoomScale, True)
+			RotateEntity(r\RoomDoors[1]\Buttons[0], 0.0, r\Angle - 180.0, 0.0, True)
 			
 			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x + 4356.0 * RoomScale, r\y + 9767.0 * RoomScale, r\z + 2588.0 * RoomScale)
+			PositionEntity(r\Objects[0], r\x + 720.0 * RoomScale, r\y, r\z + 1744.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
+			;[End Block]
+		Case "gateb"
+			;[Block]
+			For r2.Rooms = Each Rooms
+				If r2\RoomTemplate\Name = "gatebentrance" Then
+					; ~ Elevator
+					r\RoomDoors.Doors[1] = CreateDoor(r\x - 5424.0 * RoomScale, r\y, r\z - 1380.0 * RoomScale, 0.0, r, False, Elevator_Door)
+					r\RoomDoors[1]\AutoClose = False
+					PositionEntity(r\RoomDoors[1]\Buttons[0], EntityX(r\RoomDoors[1]\Buttons[0], True), EntityY(r\RoomDoors[1]\Buttons[0], True), EntityZ(r\RoomDoors[1]\Buttons[0], True) + 0.031, True)
+					PositionEntity(r\RoomDoors[1]\Buttons[1], EntityX(r\RoomDoors[1]\Buttons[1], True), EntityY(r\RoomDoors[1]\Buttons[1], True), EntityZ(r\RoomDoors[1]\Buttons[1], True) - 0.031, True)
+					
+					r2\Objects[1] = CreatePivot()
+					PositionEntity(r2\Objects[1], r\x - 5424.0 * RoomScale, r\y, r\z - 1068.0 * RoomScale)		
+					EntityParent(r2\Objects[1], r\OBJ)
+					Exit
+				EndIf
+			Next
+			
+			; ~ Other doors
+			r\RoomDoors.Doors[2] = CreateDoor(r\x + 4352.0 * RoomScale, r\y, r\z - 492.0 * RoomScale, 0.0, r)
+			r\RoomDoors[2]\AutoClose = False	
+			
+			r\RoomDoors.Doors[3] = CreateDoor(r\x + 4352.0 * RoomScale, r\y, r\z + 498.0 * RoomScale, 0.0, r)
+			r\RoomDoors[3]\AutoClose = False
+			
+			r\RoomDoors.Doors[4] = CreateDoor(r\x + 3248.0 * RoomScale, r\y - 928.0 * RoomScale, r\z + 6400.0 * RoomScale, 0.0, r, False, One_Sided_Door, 0, "GEAR")
+			r\RoomDoors[4]\AutoClose = False : r\RoomDoors[4]\Locked = 1
+			FreeEntity(r\RoomDoors[4]\Buttons[1]) : r\RoomDoors[4]\Buttons[1] = 0	
+			
+			d.Doors = CreateDoor(r\x + 3072.0 * RoomScale, r\y - 928.0 * RoomScale, r\z + 5800.0 * RoomScale, 90.0, r, False, Default_Door, 3)
+			d\AutoClose = False
+			
+			r\Objects[2] = CreatePivot()
+			PositionEntity(r\Objects[2], r\x + 5203.0 * RoomScale, r\y + 1344.0 * RoomScale, r\z - 1739.0 * RoomScale)
 			
 			r\Objects[3] = CreatePivot()
-			PositionEntity(r\Objects[3], r\x - 7680.0 * RoomScale, r\y + 10992.0 * RoomScale, r\z - 27048.0 * RoomScale)
+			PositionEntity(r\Objects[3], r\x + 4363.0 * RoomScale, r\y - 248.0 * RoomScale, r\z + 2766.0 * RoomScale)
 			
 			r\Objects[4] = CreatePivot()
-			PositionEntity(r\Objects[4], r\x + 5203.36 * RoomScale, r\y + 12128.0 * RoomScale, r\z - 1739.19 * RoomScale)
-			
-			r\Objects[5] = CreatePivot()
-			PositionEntity(r\Objects[5], r\x + 4363.02 * RoomScale, r\y + 10536.0 * RoomScale, r\z + 2766.16 * RoomScale)
-			
-			r\Objects[6] = CreatePivot()
-			PositionEntity(r\Objects[6], r\x + 5192.0 * RoomScale, r\y + 12192.0 * RoomScale, r\z - 1760.0 * RoomScale)
-			
-			r\Objects[7] = CreatePivot()
-			PositionEntity(r\Objects[7], r\x + 5192.0 * RoomScale, r\y + 12192.0 * RoomScale, r\z - 4352.0 * RoomScale)
-			
-			; ~ Elevators' pivots
-			r\Objects[8] = CreatePivot()
-			PositionEntity(r\Objects[8], r\x + 720.0 * RoomScale, r\y, r\z + 1744.0 * RoomScale)
-			
-			r\Objects[9] = CreatePivot()
-			PositionEntity(r\Objects[9], r\x - 5424.0 * RoomScale, r\y + 10784.0 * RoomScale, r\z - 1068.0 * RoomScale)		
+			PositionEntity(r\Objects[4], r\x + 5192.0 * RoomScale, r\y + 1408.0 * RoomScale, r\z - 4352.0 * RoomScale)
 			
 			; ~ Walkway
-			r\Objects[10] = CreatePivot()
-			PositionEntity(r\Objects[10], r\x + 4352.0 * RoomScale, r\y + 10778.0 * RoomScale, r\z + 1344.0 * RoomScale)	
+			r\Objects[5] = CreatePivot()
+			PositionEntity(r\Objects[5], r\x + 4352.0 * RoomScale, r\y, r\z + 1344.0 * RoomScale)	
 			
 			; ~ SCP-682
-			r\Objects[11] = CreatePivot()
-			PositionEntity(r\Objects[11], r\x + 2816.0 * RoomScale, r\y + 11024.0 * RoomScale, r\z - 2816.0 * RoomScale)
+			r\Objects[6] = CreatePivot()
+			PositionEntity(r\Objects[6], r\x + 2816.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 2816.0 * RoomScale)
 			
-			For i = 3 To 11
+			For i = 3 To 6
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
-			r\Objects[14] = CreatePivot()
-			PositionEntity(r\Objects[14], r\x + 3536.0 * RoomScale, r\y + 10256.0 * RoomScale, r\z + 5512.0 * RoomScale)
-			
-			r\Objects[15] = CreatePivot()
-			PositionEntity(r\Objects[15], r\x + 3536.0 * RoomScale, r\y + 10256.0 * RoomScale, r\z + 5824.0 * RoomScale)
-			
-			r\Objects[16] = CreatePivot()
-			PositionEntity(r\Objects[16], r\x + 3856.0 * RoomScale, r\y + 10256.0 * RoomScale, r\z + 5512.0 * RoomScale)
-			
-			r\Objects[17] = CreatePivot()
-			PositionEntity(r\Objects[17], r\x + 3856.0 * RoomScale, r\y + 10256.0 * RoomScale, r\z + 5824.0 * RoomScale)
-			
 			; ~ MTF's spawnpoint
-			r\Objects[18] = CreatePivot()
-			PositionEntity(r\Objects[18], r\x + 3250.0 * RoomScale, r\y + 9896.0 * RoomScale, r\z + 6623.0 * RoomScale)
+			r\Objects[8] = CreatePivot()
+			PositionEntity(r\Objects[8], r\x + 3250.0 * RoomScale, r\y - 888.0 * RoomScale, r\z + 6623.0 * RoomScale)
 			
-			r\Objects[19] = CreatePivot()
-			PositionEntity(r\Objects[19], r\x + 3808.0 * RoomScale, r\y + 12320.0 * RoomScale, r\z - 13568.0 * RoomScale)
+			r\Objects[9] = CreatePivot()
+			PositionEntity(r\Objects[9], r\x + 3808.0 * RoomScale, r\y + 1536.0 * RoomScale, r\z - 13568.0 * RoomScale)
 			
-			For i = 14 To 19
+			; ~ Apache radius
+			r\Objects[10] = CreatePivot()
+			PositionEntity(r\Objects[10], r\x - 7680.0 * RoomScale, r\y + 208.0 * RoomScale, r\z - 27048.0 * RoomScale)
+			
+			; ~ Extra apache spawnpoint
+			r\Objects[11] = CreatePivot()
+			PositionEntity(r\Objects[11], r\x - 5424.0 * RoomScale, r\y, r\z - 1068.0 * RoomScale)
+			
+			For i = 8 To 11
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			;[End Block]
@@ -7130,7 +7122,7 @@ Function CreateMap()
 	
 	; ~ [ENTRANCE ZONE]
 	
-	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] - 3) = "gateb"
+	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] - 3) = "gatebentrance"
 	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] - 2) = "gateaentrance"
 	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] - 1) = "room1office"
 	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1]) = "room1lifts"
@@ -7279,6 +7271,9 @@ Function CreateMap()
 	Next		
 	
 	; ~ Rooms out of map
+	r = CreateRoom(0, ROOM1, (MapSize - 1) * 8.0, 500.0, -64.0, "gateb")
+	MapRoomID(ROOM1) = MapRoomID(ROOM1) + 1
+	
 	r = CreateRoom(0, ROOM1, (MapSize - 1) * 8.0, 500.0, 8.0, "gatea")
 	MapRoomID(ROOM1) = MapRoomID(ROOM1) + 1
 	

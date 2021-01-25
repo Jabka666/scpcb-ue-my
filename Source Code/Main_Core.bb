@@ -1483,9 +1483,9 @@ Function UpdateConsole()
 						Case "b"
 							;[Block]
 							For e.Events = Each Events
-								If e\EventID = e_gateb Then
+								If e\EventID = e_gatebentrance Then
 									e\EventState3 = 1.0
-									e\room\RoomDoors[4]\Open = True
+									e\room\RoomDoors[1]\Open = True
 									Exit
 								EndIf
 							Next	
@@ -1494,12 +1494,9 @@ Function UpdateConsole()
 						Default
 							;[Block]
 							For e.Events = Each Events
-								If e\EventID = e_gateaentrance Then
+								If e\EventID = e_gateaentrance Lor e\EventID = e_gatebentrance Then
 									e\EventState3 = 1.0
 									e\room\RoomDoors[1]\Open = True
-								ElseIf e\EventID = e_gateb Then
-									e\EventState3 = 1.0
-									e\room\RoomDoors[4]\Open = True
 								EndIf
 							Next
 							CreateConsoleMsg("Gate A and B are now unlocked.")	
@@ -3241,7 +3238,7 @@ Function MainLoop()
 			ShouldPlay = Min(me\Zone, 2.0)
 		EndIf
 		
-		If PlayerRoom\RoomTemplate\Name <> "pocketdimension" And PlayerRoom\RoomTemplate\Name <> "gatea" And (PlayerRoom\RoomTemplate\Name <> "gateb" And EntityY(me\Collider) =< 1040.0 * RoomScale) And (Not MenuOpen) And (Not ConsoleOpen) And (Not InvOpen) Then 
+		If PlayerRoom\RoomTemplate\Name <> "pocketdimension" And PlayerRoom\RoomTemplate\Name <> "gateb" And PlayerRoom\RoomTemplate\Name <> "gatea" And (Not MenuOpen) And (Not ConsoleOpen) And (Not InvOpen) Then 
 			If Rand(1500) = 1 Then
 				For i = 0 To 5
 					If AmbientSFX(i, CurrAmbientSFX) <> 0 Then
@@ -3307,7 +3304,7 @@ Function MainLoop()
 		
 		If (Not MenuOpen) And (Not InvOpen) And OtherOpen = Null And SelectedDoor = Null And (Not ConsoleOpen) And (Not I_294\Using) And SelectedScreen = Null And me\EndingTimer >= 0.0 Then
 			LightVolume = CurveValue(TempLightVolume, LightVolume, 50.0)
-			If PlayerRoom\RoomTemplate\Name = "room173intro" Lor PlayerRoom\RoomTemplate\Name = "gatea" Lor (PlayerRoom\RoomTempLate\Name = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale) Then
+			If PlayerRoom\RoomTemplate\Name = "room173intro" Lor PlayerRoom\RoomTemplate\Name = "gateb" Lor PlayerRoom\RoomTempLate\Name = "gatea" Then
 				CameraFogMode(Camera, 0)
 				CameraFogRange(Camera, 5.0, 30.0)
 				CameraRange(Camera, 0.01, 60.0)
@@ -3343,7 +3340,7 @@ Function MainLoop()
 				UpdateDoors()
 				UpdateScreens()
 				UpdateRoomLights(Camera)
-				If PlayerRoom\RoomTemplate\Name = "gatea" Lor (PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale) Then
+				If PlayerRoom\RoomTemplate\Name = "gateb" Lor PlayerRoom\RoomTemplate\Name = "gatea"Then
 					If QuickLoadPercent = -1 Lor QuickLoadPercent = 100
 						UpdateEndings()
 					EndIf
@@ -3369,7 +3366,7 @@ Function MainLoop()
 		If PlayerRoom <> Null Then
 			If PlayerRoom\RoomTemplate\Name = "room3storage" And EntityY(me\Collider) < -4100.0 * RoomScale Then
 				CurrFogColor = FogColorStorageTunnels
-			ElseIf PlayerRoom\RoomTemplate\Name = "gatea" Lor (PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale) Then
+			ElseIf PlayerRoom\RoomTemplate\Name = "gateb" Lor PlayerRoom\RoomTemplate\Name = "gatea" Then
 				CurrFogColor = FogColorOutside
 			ElseIf PlayerRoom\RoomTemplate\Name = "dimension1499"
 				CurrFogColor = FogColorDimension1499
@@ -3619,7 +3616,7 @@ Function MainLoop()
 		If KeyHit(key\SAVE) Then
 			If SelectedDifficulty\SaveType = SAVEANYWHERE Then
 				RN = PlayerRoom\RoomTemplate\Name
-				If RN = "room173intro" Lor (RN = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale) Lor RN = "gatea"
+				If RN = "room173intro" Lor RN = "gateb" Lor RN = "gatea"
 					CreateMsg("You cannot save in this location.", 6.0)
 				ElseIf (Not CanSave) Lor QuickLoadPercent > -1
 					CreateMsg("You cannot save at this moment.", 6.0)
@@ -3634,7 +3631,7 @@ Function MainLoop()
 					CreateMsg("Saving is only permitted on clickable monitors scattered throughout the facility.", 6.0)
 				Else
 					RN = PlayerRoom\RoomTemplate\Name
-					If RN = "room173intro" Lor (RN = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale) Lor RN = "gatea"
+					If RN = "room173intro" Lor RN = "gateb" Lor RN = "gatea"
 						CreateMsg("You cannot save in this location.", 6.0)
 					ElseIf (Not CanSave) Lor QuickLoadPercent > -1
 						CreateMsg("You cannot save at this moment.", 6.0)
@@ -6727,7 +6724,7 @@ Function UpdateGUI()
 								
 								Local RoomName$ = PlayerRoom\RoomTemplate\Name
 								
-								If RoomName = "dimension1499" Lor RoomName = "gatea" Lor (RoomName = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale)
+								If RoomName = "dimension1499" Lor RoomName = "gateb" Lor RoomName = "gatea" Then
 									me\Injuries = 2.5
 									CreateMsg("You started bleeding heavily.", 6.0)
 								Else
@@ -8265,7 +8262,7 @@ Function UpdateMenu()
 	Local r.Rooms
 	
 	If MenuOpen Then
-		If (PlayerRoom\RoomTemplate\Name <> "gateb" And EntityY(me\Collider) =< 1040.0 * RoomScale) And PlayerRoom\RoomTemplate\Name <> "gatea"
+		If PlayerRoom\RoomTemplate\Name <> "gateb" And PlayerRoom\RoomTemplate\Name <> "gatea" Then
 			If me\StopHidingTimer = 0.0 Then
 				If Curr173 <> Null And Curr106 <> Null Then
 					If EntityDistanceSquared(Curr173\Collider, me\Collider) < 16.0 Lor EntityDistanceSquared(Curr106\Collider, me\Collider) < 16.0 Then 
@@ -8600,7 +8597,7 @@ Function UpdateMenu()
 				Local RN$ = PlayerRoom\RoomTemplate\Name
 				Local AbleToSave% = True
 				
-				If RN = "room173intro" Lor (RN = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale) Lor RN = "gatea" Then AbleToSave = False
+				If RN = "room173intro" Lor RN = "gateb" Lor RN = "gatea" Then AbleToSave = False
 				If (Not CanSave) Then AbleToSave = False
 				If AbleToSave Then
 					QuitButton = 140
@@ -11706,9 +11703,7 @@ Function Update008()
 				Exit
 			EndIf
 		Next
-	ElseIf PlayerRoom\RoomTemplate\Name = "dimension1499" Lor PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor PlayerRoom\RoomTemplate\Name = "gatea"
-		TeleportForInfect = False
-	ElseIf PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale
+	ElseIf PlayerRoom\RoomTemplate\Name = "dimension1499" Lor PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor PlayerRoom\RoomTemplate\Name = "gateb" Lor PlayerRoom\RoomTemplate\Name = "gatea"
 		TeleportForInfect = False
 	EndIf
 	
@@ -11836,7 +11831,7 @@ Function Update008()
 				me\BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 96.0), me\BlinkTimer), -10.0)
 				If PlayerRoom\RoomTemplate\Name = "dimension1499" Then
 					msg\DeathMsg = "The whereabouts of SCP-1499 are still unknown, but a recon team has been dispatched to investigate reports of a violent attack to a church in the Russian town of [DATA REDACTED]."
-				ElseIf PlayerRoom\RoomTemplate\Name = "gatea" Lor (PlayerRoom\RoomTemplate\Name = "gateb" And EntityY(me\Collider) > 1040.0 * RoomScale) Then
+				ElseIf PlayerRoom\RoomTemplate\Name = "gateb" Lor PlayerRoom\RoomTemplate\Name = "gatea" Then
 					msg\DeathMsg = SubjectName + " found wandering around Gate "
 					If PlayerRoom\RoomTemplate\Name = "gatea" Then
 						msg\DeathMsg = msg\DeathMsg + "A"

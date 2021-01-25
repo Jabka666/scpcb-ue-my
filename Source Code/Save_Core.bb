@@ -2047,7 +2047,7 @@ Function LoadGameQuick(File$)
 				zTemp = EntityZ(r\Objects[0], True)
 				FreeEntity(r\Objects[0]) : r\Objects[0] = 0
 				r\Objects[0] = CreatePivot(r\OBJ)
-				PositionEntity(r\Objects[0], xTemp, 9767.0 * RoomScale, zTemp, True)
+				PositionEntity(r\Objects[0], xTemp, r\y - 1017.0 * RoomScale, zTemp, True)
 			EndIf
 		EndIf
 	Next
@@ -2564,13 +2564,23 @@ Function LoadMap(File$)
 	Next
 	
 	If opt\IntroEnabled Then r = CreateRoom(0, ROOM1, 8.0, 0.0, (MapSize + 2) * 8.0, "room173intro")
+	
 	r = CreateRoom(0, ROOM1, (MapSize + 2) * 8.0, 0.0, (MapSize + 2) * 8.0, "pocketdimension")
+	
+	r = CreateRoom(0, ROOM1, 0.0, 500.0, -80.0, "gateb")
+	
 	r = CreateRoom(0, ROOM1, 0.0, 500.0, -16.0, "gatea")
+	
 	r = CreateRoom(0, ROOM1, -16.0, 800.0, 0.0, "dimension1499")
 	
 	If opt\IntroEnabled Then CreateEvent("room173intro", "room173intro", 0)
+	
 	CreateEvent("pocketdimension", "pocketdimension", 0)   
+	
+	CreateEvent("gateb", "gateb", 0)
+	
 	CreateEvent("gatea", "gatea", 0)
+	
 	CreateEvent("dimension1499", "dimension1499", 0)
 	
 	For r.Rooms = Each Rooms
