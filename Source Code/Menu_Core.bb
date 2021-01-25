@@ -304,7 +304,7 @@ Function UpdateMainMenu()
 			Width = 400 * MenuScale
 			Height = 70 * MenuScale
 			
-			If DrawButton(x + Width + (20 * MenuScale), y, (580 * MenuScale) - Width - (20 * MenuScale), Height, "BACK", False) Then 
+			If DrawButton(x + Width + (20 * MenuScale), y, (580 * MenuScale) - Width - (20 * MenuScale), Height, "BACK", False) Lor KeyDown(1) Then 
 				Select mm\MainMenuTab
 					Case MainMenuTab_New_Game
 						;[Block]
@@ -332,10 +332,6 @@ Function UpdateMainMenu()
 						mm\MainMenuTab = MainMenuTab_New_Game
 						mm\CurrLoadGamePage = 0
 						mo\MouseHit1 = False
-						;[End Block]
-					Default
-						;[Block]
-						mm\MainMenuTab = MainMenuTab_Default
 						;[End Block]
 				End Select
 			EndIf
