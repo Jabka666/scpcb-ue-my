@@ -1774,6 +1774,7 @@ Function UpdateLauncher(lnchr.Launcher)
 	
 	Local LauncherIMG% = LoadImage_Strict("GFX\menu\launcher.png")
 	Local LauncherArrowIMG% = LoadImage_Strict("GFX\menu\arrow.png")
+	Local DiscordIMG% = LoadImage_Strict("GFX\menu\discord_icon.png")
 	
 	RotateImage(LauncherArrowIMG, -90.0)
 	MidHandle(LauncherArrowIMG)
@@ -1826,7 +1827,7 @@ Function UpdateLauncher(lnchr.Launcher)
 			EndIf
 			
 			y = y + 20
-			If y >= 250 - 65 + (LauncherHeight - 340) Then y = 270 - 65 : x = x + 100
+			If y >= LauncherHeight - 155 Then y = 205 : x = x + 100
 		Next
 		
 		opt\LauncherEnabled = DrawLauncherTick(455, 202, opt\LauncherEnabled)
@@ -1855,7 +1856,7 @@ Function UpdateLauncher(lnchr.Launcher)
 				Txt = "Windowed"
 				;[End Block]
 		End Select
-		Text(478, 262 - 55 + 140, "Current Resolution: " + lnchr\GFXModeWidths[lnchr\SelectedGFXMode] + "x" + lnchr\GFXModeHeights[lnchr\SelectedGFXMode] + ",32", True)
+		Text(478, 347, "Current Resolution: " + lnchr\GFXModeWidths[lnchr\SelectedGFXMode] + "x" + lnchr\GFXModeHeights[lnchr\SelectedGFXMode] + ",32", True)
 		DrawFrame(455, 254, 120, 30)
 		Text(515, 264, Txt, True)
 		If DrawLauncherButton(575, 254, 30, 30, "", False) Then
@@ -1863,17 +1864,22 @@ Function UpdateLauncher(lnchr.Launcher)
 		EndIf
 		DrawImage(LauncherArrowIMG, 589, 268)
 		
-		If DrawLauncherButton(LauncherWidth - 275, LauncherHeight - 105, 150, 30, "REPORT A BUG!", False, False) Then
+		If MouseOn(LauncherWidth - 617, LauncherHeight - 52, 32, 32) And mo\MouseHit1 Then
+			ExecFile("https://discord.gg/n7KdW4u")
+		EndIf
+		DrawImage(DiscordIMG, LauncherWidth - 617, LauncherHeight - 52)
+		
+		If DrawLauncherButton(LauncherWidth - 300, LauncherHeight - 105, 150, 30, "REPORT A BUG!", False, False) Then
 			ExecFile("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition/news/bug-reports1")
 			Quit = True
 			Exit
 		EndIf
 		
-		If DrawLauncherButton(LauncherWidth - 275, LauncherHeight - 50, 150, 30, "SEE CHANGELOG", False, False) Then
+		If DrawLauncherButton(LauncherWidth - 300, LauncherHeight - 50, 150, 30, "SEE CHANGELOG", False, False) Then
 			ExecFile("Changelog.txt")
 		EndIf
 		
-		If DrawLauncherButton(LauncherWidth - 30 - 90, LauncherHeight - 105, 100, 30, "LAUNCH", False, False) Then
+		If DrawLauncherButton(LauncherWidth - 120, LauncherHeight - 105, 100, 30, "LAUNCH", False, False) Then
 			; ~ TODO: Fix borderless windowed mode scaling
 			If opt\DisplayMode = 1 Then
 				opt\GraphicWidth = DesktopWidth()
@@ -1887,7 +1893,7 @@ Function UpdateLauncher(lnchr.Launcher)
 			Exit
 		EndIf
 		
-		If DrawLauncherButton(LauncherWidth - 30 - 90, LauncherHeight - 50, 100, 30, "EXIT", False, False) Then
+		If DrawLauncherButton(LauncherWidth - 120, LauncherHeight - 50, 100, 30, "EXIT", False, False) Then
 			Quit = True
 			Exit
 		EndIf
@@ -1903,6 +1909,7 @@ Function UpdateLauncher(lnchr.Launcher)
 	
 	FreeImage(LauncherArrowIMG)
 	FreeImage(LauncherIMG)
+	FreeImage(DiscordIMG)
 End Function
 
 Type LoadingScreens
@@ -2136,7 +2143,7 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 			SetFont(fo\FontID[Font_Default_Big])
 			Text(mo\Viewport_Center_X + 1, mo\Viewport_Center_Y + 81, SelectedLoadingScreen\Title, True, True)
 			SetFont(fo\FontID[Font_Default])
-			RowText(SelectedLoadingScreen\Txt[LoadingScreenText], mo\Viewport_Center_X - 201, mo\Viewport_Center_Y + 121, 400, 300, True)
+			RowText(SelectedLoadingScreen\Txt[LoadingScreenText], mo\Viewport_Center_X - 199, mo\Viewport_Center_Y + 121, 400, 300, True)
 			
 			Color(255, 255, 255)
 			SetFont(fo\FontID[Font_Default_Big])

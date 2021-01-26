@@ -4895,7 +4895,7 @@ Function DrawGUI()
 			Select i
 				Case 0
 					;[Block]
-					y = y - 59
+					y = y - 69
 					;[End Block]
 				Case 1
 					;[Block]
@@ -9907,12 +9907,6 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	For rt.RoomTemplates = Each RoomTemplates
 		If rt\OBJ <> 0 Then FreeEntity(rt\OBJ) : rt\OBJ = 0
-	Next
-	
-	For i = 0 To 6
-		If RadioCHN[i] <> 0 Then 
-			If ChannelPlaying(RadioCHN[i]) Then StopChannel(RadioCHN[i])
-		EndIf
 	Next
 	
 	I_1499\PrevX = 0.0
