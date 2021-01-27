@@ -1867,7 +1867,7 @@ Function UpdateLauncher(lnchr.Launcher)
 		If MouseOn(LauncherWidth - 617, LauncherHeight - 52, 32, 32) And mo\MouseHit1 Then
 			ExecFile("https://discord.gg/n7KdW4u")
 		EndIf
-		DrawImage(DiscordIMG, LauncherWidth - 617, LauncherHeight - 52)
+		DrawImage(DiscordIMG, LauncherWidth - 620, LauncherHeight - 54)
 		
 		If DrawLauncherButton(LauncherWidth - 300, LauncherHeight - 105, 150, 30, "REPORT A BUG!", False, False) Then
 			ExecFile("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition/news/bug-reports1")

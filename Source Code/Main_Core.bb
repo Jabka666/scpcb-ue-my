@@ -6954,7 +6954,6 @@ Function UpdateGUI()
 							
 							RemoveItem(SelectedItem)
 						EndIf
-						
 						SelectedItem = Null
 					EndIf
 					;[End Block]
