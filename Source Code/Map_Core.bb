@@ -4036,8 +4036,8 @@ Function FillRoom(r.Rooms)
 			Next
 			If (Not r\Objects[7])Then r\Objects[7] = LoadMesh_Strict("GFX\map\room2tesla_caution.b3d", r\OBJ)
 			
-			w.Waypoints = CreateWaypoint(r\x, r\y + 66.0 * RoomScale, r\z + 292.0 * RoomScale, Null, r)
-			w2.Waypoints = CreateWaypoint(r\x, r\y + 66.0 * RoomScale, r\z - 284.0 * RoomScale, Null, r)
+			w.WayPoints = CreateWaypoint(r\x, r\y + 66.0 * RoomScale, r\z + 292.0 * RoomScale, Null, r)
+			w2.WayPoints = CreateWaypoint(r\x, r\y + 66.0 * RoomScale, r\z - 284.0 * RoomScale, Null, r)
 			w\connected[0] = w2 : w\Dist[0] = EntityDistance(w\OBJ, w2\OBJ)
 			w2\connected[0] = w : w2\Dist[0] = w\Dist[0]
 			;[End Block]
@@ -6226,7 +6226,7 @@ End Type
 Type TempScreens
 	Field ImgPath$
 	Field x#, y#, z#
-	Field roomtemplate.RoomTemplates
+	Field RoomTemplate.RoomTemplates
 End Type
 
 Function CreateScreen.Screens(x#, y#, z#, ImgPath$, r.Rooms)
@@ -6237,6 +6237,10 @@ Function CreateScreen.Screens(x#, y#, z#, ImgPath$, r.Rooms)
 	EntityRadius(s\OBJ, 0.1)
 	
 	PositionEntity(s\OBJ, x, y, z)
+	
+	; ~ A hacky way to use .png format
+	If Right(ImgPath, 3) = "jpg" Then ImgPath = Left(ImgPath, Len(ImgPath) - 3) + "png"
+	
 	s\ImgPath = ImgPath
 	s\room = r
 	EntityParent(s\OBJ, r\OBJ)

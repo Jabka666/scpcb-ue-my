@@ -11617,7 +11617,7 @@ Function UpdateMTF()
 		ElseIf MTFTimer >= 25000.0 And MTFTimer =< 25000.0 + (70.0 * 60.0)
 			MTFTimer = MTFTimer + fps\FPSFactor[0]
 		ElseIf MTFTimer > 25000.0 + (70.0 * 60.0) And MTFTimer < 30000.0
-			If PlayerInReachableRoom()
+			If PlayerInReachableRoom() Then
 				PlayAnnouncement("SFX\Character\MTF\ThreatAnnouncFinal.ogg")
 			EndIf
 			MTFTimer = 30000.0
