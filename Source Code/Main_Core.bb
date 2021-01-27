@@ -4534,7 +4534,7 @@ Function MouseLook()
 		Local Up# = (Sin(me\Shake) / (20.0 + me\CrouchState * 20.0)) * 0.6		
 		Local Roll# = Max(Min(Sin(me\Shake / 2.0) * 2.5 * Min(me\Injuries + 0.25, 3.0), 8.0), -8.0)
 		
-		PositionEntity(Camera, EntityX(me\Collider) + Side, EntityY(me\Collider) + Up + 0.6 + me\CrouchState * -0.3, EntityZ(me\Collider))
+		PositionEntity(Camera, EntityX(me\Collider) + Side, EntityY(me\Collider) + Up + 0.6 + me\CrouchState * (-0.3), EntityZ(me\Collider))
 		RotateEntity(Camera, 0.0, EntityYaw(me\Collider), Roll * 0.5)
 		
 		; ~ Update the smoothing que to smooth the movement of the mouse

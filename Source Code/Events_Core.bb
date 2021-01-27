@@ -9209,13 +9209,13 @@ Function UpdateEvents()
 							
 							Pvt = CreatePivot()
 							PositionEntity(Pvt, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True))
-							RotateEntity(Pvt, 90.0, EntityYaw(e\room\Objects[4], True), 0.0)
+							RotateEntity(Pvt, 90.0, e\room\Angle + 180.0, 0.0)
 							
 							If opt\ParticleAmount > 0 Then
 								For i = 0 To (1 + (2 * (opt\ParticleAmount - 1)))
 									p.Particles = CreateParticle(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 7, 0.002, 0, 25)
 									p\Speed = Rnd(0.005, 0.03) : p\Size = Rnd(0.005, 0.0075) : p\Achange = -0.05
-									RotateEntity(p\Pvt, Rnd(-20.0, 0.0), EntityYaw(Pvt) + Rnd(170.0, 190.0), 0.0)
+									RotateEntity(p\Pvt, Rnd(-20.0, 0.0), EntityYaw(Pvt), 0.0)
 									ScaleSprite(p\OBJ, p\Size, p\Size)
 								Next
 							EndIf	
