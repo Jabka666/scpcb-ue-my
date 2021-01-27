@@ -274,5 +274,71 @@ Function CheckRoomOverlap%(r1.Rooms, r2.Rooms)
 	Return(True)
 End Function
 
+; ~ This must be called after the room angle has been finalized!
+Function SetupTriggerBoxes(r.Rooms)
+	Local sX#, sY#, sZ#
+	Local pXMin#, pXMax#
+	Local pZMin#, pZMax#
+	Local t.TriggerBox, i%
+	
+	For i = 0 To r\TriggerBoxAmount - 1
+		t = r\TriggerBoxes[i]
+		sX = EntityScaleX(t\OBJ, 1)
+		sY = Max(EntityScaleY(t\OBJ, 1), 0.001)
+		sZ = EntityScaleZ(t\OBJ, 1)
+		
+		GetMeshExtents(t\OBJ)
+		
+		pXMin = Cos(r\Angle) * sX * Mesh_MinX - Sin(r\Angle) * sZ * Mesh_MinZ + r\x
+		pZMin = Sin(r\Angle) * sX * Mesh_MinX + Cos(r\Angle) * sZ * Mesh_MinZ + r\z
+		
+		pXMax = Cos(r\Angle) * sX * Mesh_MaxX - Sin(r\Angle) * sZ * Mesh_MaxZ + r\x
+		pZMax = Sin(r\Angle) * sX * Mesh_MaxX + Cos(r\Angle) * sZ * Mesh_MaxZ + r\z
+		
+		If pXMin > pXMax Then
+			t\MinX = pXMax
+			t\MaxX = pXMin
+		Else
+			t\MinX = pXMin
+			t\MaxX = pXMax
+		EndIf
+		
+		If pZMin > pZMax Then
+			t\MinZ = pZMax
+			t\MaxZ = pZMin
+		Else
+			t\MinZ = pZMin
+			t\MaxZ = pZMax
+		EndIf
+		
+		t\MinY = ((sY * Mesh_MinY) + r\y)
+		t\MaxY = ((sY * Mesh_MaxY) + r\y)
+	Next
+End Function
+
+Function CheckTriggers$()
+	Local i%
+	
+	If PlayerRoom\TriggerBoxAmount = 0 Then
+		Return
+	Else
+		For i = 0 To PlayerRoom\TriggerBoxAmount - 1
+			If chs\DebugHUD Then
+				EntityAlpha(PlayerRoom\TriggerBoxes[i]\OBJ, 0.2)
+			Else
+				EntityAlpha(PlayerRoom\TriggerBoxes[i]\OBJ, 0.0)
+ 			EndIf
+			
+			If EntityX(me\Collider) > PlayerRoom\TriggerBoxes[i]\MinX And EntityX(me\Collider) < PlayerRoom\TriggerBoxes[i]\MaxX
+				If EntityY(me\Collider) > PlayerRoom\TriggerBoxes[i]\MinY And EntityY(me\Collider) < PlayerRoom\TriggerBoxes[i]\MaxY
+					If EntityZ(me\Collider) > PlayerRoom\TriggerBoxes[i]\MinZ And EntityZ(me\Collider) < PlayerRoom\TriggerBoxes[i]\MaxZ
+						Return(PlayerRoom\TriggerBoxes[i]\Name)
+					EndIf
+				EndIf
+			EndIf
+		Next
+	EndIf
+End Function
+
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D

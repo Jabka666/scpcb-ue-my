@@ -12039,39 +12039,6 @@ Function CheckForPlayerInFacility()
 	Return(1)
 End Function
 
-Function CheckTriggers$()
-	Local i%, sX#, sY#, sZ#
-	Local Inside% = -1
-	
-	If PlayerRoom\TriggerBoxAmount = 0 Then
-		Return("")
-	Else
-		For i = 0 To PlayerRoom\TriggerBoxAmount - 1
-			EntityAlpha(PlayerRoom\TriggerBox[i], 1.0)
-			sX = EntityScaleX(PlayerRoom\TriggerBox[i], 1)
-			sY = Max(EntityScaleY(PlayerRoom\TriggerBox[i], 1), 0.001)
-			sZ = EntityScaleZ(PlayerRoom\TriggerBox[i], 1)
-			GetMeshExtents(PlayerRoom\TriggerBox[i])
-			If chs\DebugHUD Then
-				EntityColor(PlayerRoom\TriggerBox[i], 255.0, 255.0, 0.0)
-				EntityAlpha(PlayerRoom\TriggerBox[i], 0.2)
-			Else
-				EntityColor(PlayerRoom\TriggerBox[i], 255.0, 255.0, 255.0)
-				EntityAlpha(PlayerRoom\TriggerBox[i], 0.0)
-			EndIf
-			If EntityX(me\Collider) > ((sX * Mesh_MinX) + PlayerRoom\x) And EntityX(me\Collider) < ((sX * Mesh_MaxX) + PlayerRoom\x)
-				If EntityY(me\Collider) > ((sY * Mesh_MinY) + PlayerRoom\y) And EntityY(me\Collider) < ((sY * Mesh_MaxY) + PlayerRoom\y)
-					If EntityZ(me\Collider) > ((sZ * Mesh_MinZ) + PlayerRoom\z) And EntityZ(me\Collider) < ((sZ * Mesh_MaxZ) + PlayerRoom\z)
-						Inside = i 
-						Exit
-					EndIf
-				EndIf
-			EndIf
-		Next
-		If Inside > -1 Then Return(PlayerRoom\TriggerBoxName[Inside])
-	EndIf
-End Function
-
 Function TeleportEntity(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = False, PickRange# = 2.0, Dir% = 0)
 	Local Pvt%, Pick#
 	; ~ Dir = 0 - towards the floor (default)

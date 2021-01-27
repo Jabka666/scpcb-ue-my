@@ -159,6 +159,13 @@ Function LoadWorld(File$, rt.RoomTemplates)
 	Return(World)	
 End Function
 
+Type TriggerBox
+	Field OBJ%
+	Field Name$
+	Field MinX#, MinY#, MinZ#
+	Field MaxX#, MaxY#, MaxZ#
+End Type
+
 Function LoadRMesh(File$, rt.RoomTemplates)
 	CatchErrors("Uncaught (LoadRMesh)")
 	
@@ -398,10 +405,9 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 	
 	; ~ Trigger boxes
 	If HasTriggerBox Then
-		rt\TempTriggerBoxAmount = ReadInt(f)
-		
 		Local TB%
 		
+		rt\TempTriggerBoxAmount = ReadInt(f)
 		For TB = 0 To rt\TempTriggerBoxAmount - 1
 			rt\TempTriggerBox[TB] = CreateMesh(rt\OBJ)
 			Count = ReadInt(f)
@@ -1460,8 +1466,7 @@ Type Rooms
 	Field LightHidden%[MaxRoomLights]
 	Field LightFlicker%[MaxRoomLights]
 	Field TriggerBoxAmount%
-	Field TriggerBox%[128]
-	Field TriggerBoxName$[128]
+	Field TriggerBoxes.TriggerBox[8]
 	Field MaxWayPointY#
 	Field LightR#[MaxRoomLights], LightG#[MaxRoomLights], LightB#[MaxRoomLights]
 	Field MinX#, MinY#, MinZ#
@@ -3542,8 +3547,8 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "room2offices"
 			;[Block]
-			w.Waypoints = CreateWaypoint(r\x - 32.0 * RoomScale, r\y + 66.0 * RoomScale, r\z + 288.0 * RoomScale, Null, r)
-			w2.Waypoints = CreateWaypoint(r\x, r\y + 66.0 * RoomScale, r\z - 448.0 * RoomScale, Null, r)
+			w.WayPoints = CreateWaypoint(r\x - 32.0 * RoomScale, r\y + 66.0 * RoomScale, r\z + 288.0 * RoomScale, Null, r)
+			w2.WayPoints = CreateWaypoint(r\x, r\y + 66.0 * RoomScale, r\z - 448.0 * RoomScale, Null, r)
 			w\connected[0] = w2 : w\Dist[0] = EntityDistance(w\OBJ, w2\OBJ)
 			w2\connected[0] = w : w2\Dist[0] = w\Dist[0]
 			
@@ -5570,8 +5575,11 @@ Function FillRoom(r.Rooms)
 	If r\RoomTemplate\TempTriggerBoxAmount > 0 Then
 		r\TriggerBoxAmount = r\RoomTemplate\TempTriggerBoxAmount
 		For i = 0 To r\TriggerBoxAmount - 1
-			r\TriggerBox[i] = CopyEntity(r\RoomTemplate\TempTriggerBox[i], r\OBJ)
-			r\TriggerBoxName[i] = r\RoomTemplate\TempTriggerBoxName[i]
+			r\TriggerBoxes[i] = New TriggerBox
+			r\TriggerBoxes[i]\OBJ = CopyEntity(r\RoomTemplate\TempTriggerBox[i], r\OBJ)
+			EntityColor(r\TriggerBoxes[i]\OBJ, 255, 255, 0)
+			EntityAlpha(r\TriggerBoxes[i]\OBJ, 0.0)
+			r\TriggerBoxes[i]\Name = r\RoomTemplate\TempTriggerBoxName[i]
 		Next
 	EndIf
 	
@@ -5682,29 +5690,29 @@ Function UpdateRooms()
 			ShowEntity(r\OBJ)
 			For i = 0 To MaxRoomLights - 1
 				If r\Lights[i] <> 0 Then
-					Dist = EntityDistance(me\Collider, r\Lights[i])
-					If Dist < HideDistance Then
-						TempLightVolume = TempLightVolume + r\LightIntensity[i] * r\LightIntensity[i] * ((HideDistance - Dist) / HideDistance)						
+					Dist = EntityDistanceSquared(me\Collider, r\Lights[i])
+					If Dist < PowTwo(HideDistance) Then
+						TempLightVolume = TempLightVolume + r\LightIntensity[i] * r\LightIntensity[i] * ((HideDistance - Sqr(Dist)) / HideDistance)						
 					EndIf
 				Else
 					Exit
 				EndIf
 			Next
 			If chs\DebugHUD Then
-				If r\TriggerBoxAmount > 0
+				If r\TriggerBoxAmount > 0 Then
 					For i = 0 To r\TriggerBoxAmount - 1
-						EntityColor(r\TriggerBox[i], 255, 255, 0)
-						EntityAlpha(r\TriggerBox[i], 0.2)
+						EntityColor(r\TriggerBoxes[i]\OBJ, 255, 255, 0)
+						EntityAlpha(r\TriggerBoxes[i]\OBJ, 0.2)
 					Next
 				EndIf
 			Else
-				If r\TriggerBoxAmount > 0
+				If r\TriggerBoxAmount > 0 Then
 					For i = 0 To r\TriggerBoxAmount - 1
-						EntityColor(r\TriggerBox[i], 255, 255, 255)
-						EntityAlpha(r\TriggerBox[i], 0.0)
+						EntityColor(r\TriggerBoxes[i]\OBJ, 255, 255, 255)
+						EntityAlpha(r\TriggerBoxes[i]\OBJ, 0.0)
 					Next
 				EndIf
-			EndIf
+ 			EndIf
 		EndIf
 	Next
 	
@@ -7458,6 +7466,7 @@ Function CreateMap()
 	
 	For r.Rooms = Each Rooms
 		r\Angle = WrapAngle(r\Angle)
+		SetupTriggerBoxes(r)
 		r\Adjacent[0] = Null
 		r\Adjacent[1] = Null
 		r\Adjacent[2] = Null

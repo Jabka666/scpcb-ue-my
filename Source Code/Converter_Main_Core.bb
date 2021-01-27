@@ -246,7 +246,7 @@ Function SaveRoomMesh(BaseMesh%, FileName$) ; ~ Base mesh should be a 3D World S
 		For z = 0 To TriggerBoxAmount - 1
 			WriteInt(f, CountSurfaces(TriggerBox[z]))
 			For i = 1 To CountSurfaces(TriggerBox[z])
-				Surf = GetSurface(TriggerBox[z],i)
+				Surf = GetSurface(TriggerBox[z], i)
 				WriteInt(f, CountVertices(Surf))
 				For j = 0 To CountVertices(Surf) - 1
 					; ~ World coords

@@ -764,6 +764,7 @@ Function LoadGame(File$)
 				r.Rooms = CreateRoom(Level, rt\Shape, x, y, z, rt\Name)
 				TurnEntity(r\OBJ, 0.0, Angle, 0.0)
 				r\Angle = Angle
+				SetupTriggerBoxes(r)
 				r\Found = Found
 				Exit
 			EndIf
