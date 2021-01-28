@@ -72,6 +72,9 @@ Function SaveGame(File$)
 		WriteFloat(f, I_1025\State[i])
 	Next
 	
+	WriteByte(f, me\Funds)
+	WriteByte(f, me\UsedMastercard)
+	
 	WriteFloat(f, me\VomitTimer)
 	WriteByte(f, me\Vomit)
 	WriteFloat(f, me\CameraShakeTimer)
@@ -556,6 +559,9 @@ Function LoadGame(File$)
 	For i = 0 To 5
 		I_1025\State[i] = ReadFloat(f)
 	Next
+	
+	me\Funds = ReadByte(f)
+	me\UsedMastercard = ReadByte(f)
 	
 	me\VomitTimer = ReadFloat(f)
 	me\Vomit = ReadByte(f)
@@ -1425,6 +1431,9 @@ Function LoadGameQuick(File$)
 	For i = 0 To 5
 		I_1025\State[i] = ReadFloat(f)
 	Next
+	
+	me\Funds = ReadByte(f)
+	me\UsedMastercard = ReadByte(f)
 	
 	me\VomitTimer = ReadFloat(f)
 	me\Vomit = ReadByte(f)

@@ -3354,18 +3354,29 @@ Function UpdateEvents()
 												e\EventState2 = e\EventState2 + 1.0
 												PlaySound_Strict(LoadTempSound("SFX\SCP\294\coin_drop.ogg"))
 												Inserted = True
+											ElseIf SelectedItem\ItemTemplate\TempName = "mastercard"
+												If me\Funds <> 0 Then
+													me\Funds = me\Funds - 1
+													e\EventState2 = 2.0
+													PlaySound_Strict(LoadTempSound("SFX\SCP\294\InsertMasterCard.ogg"))
+													Inserted = True
+												EndIf
+												me\UsedMastercard = True
+												SelectedItem = Null
 											EndIf
 										EndIf
 									EndIf
 									If e\EventState2 = 2.0 Then
 										I_294\Using = Temp
 										If I_294\Using Then mo\MouseHit1 = False
-									ElseIf e\EventState2 = 1.0 And (Not Inserted) Then
+									ElseIf e\EventState2 = 1.0 And (Not Inserted) And (Not me\UsedMastercard) Then
 										I_294\Using = False
 										CreateMsg("You need to insert another Quarter in order to use this machine.", 6.0)
-									ElseIf (Not Inserted) Then
+									ElseIf (Not Inserted) And (Not me\UsedMastercard) Then
 										I_294\Using = False
 										CreateMsg("You need to insert two Quarters in order to use this machine.", 6.0)
+									ElseIf me\UsedMastercard
+										CreateMsg("You don't have enough funds to use this machine.", 6.0)
 									EndIf
 								EndIf
 							EndIf

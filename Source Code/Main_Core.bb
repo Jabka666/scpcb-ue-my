@@ -232,6 +232,7 @@ Type Player
 	Field Zone%
 	Field Collider%, Head%
 	Field StopHidingTimer#
+	Field Funds%, UsedMastercard%
 End Type
 
 Global me.Player = New Player
@@ -617,6 +618,7 @@ Function UpdateConsole()
 							CreateConsoleMsg("- unlockcheckpoints") 
 							CreateConsoleMsg("- unlockexits")
 							CreateConsoleMsg("- disablenuke")
+							CreateConsoleMsg("- resetfunds")
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("Use " + Chr(34) + "help 3 / 3" + Chr(34) + " to find more commands.")
 							CreateConsoleMsg("Use " + Chr(34) + "help [command name]" + Chr(34) + " to get more information about a command.")
@@ -883,6 +885,13 @@ Function UpdateConsole()
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("SCP-409 crystallizes player.")
 							CreateConsoleMsg("Example: crystal 52")
+							CreateConsoleMsg("******************************")
+							;[End Block]
+						Case "resetfunds" 
+							;[Block]
+							CreateConsoleMsg("HELP - resetfunds")
+							CreateConsoleMsg("******************************")
+							CreateConsoleMsg("Resets your Mastercard funds.")
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Default
@@ -1692,6 +1701,10 @@ Function UpdateConsole()
 				Case "jorge"
 					;[Block]	
 					CreateConsoleMsg(Chr(74) + Chr(79) + Chr(82) + Chr(71) + Chr(69) + Chr(32) + Chr(72) + Chr(65) + Chr(83) + Chr(32) + Chr(66) + Chr(69) + Chr(69) + Chr(78) + Chr(32) + Chr(69) + Chr(88) + Chr(80) + Chr(69) + Chr(67) + Chr(84) + Chr(73) + Chr(78) + Chr(71) + Chr(32) + Chr(89) + Chr(79) + Chr(85) + Chr(46))
+					;[End Block]
+				Case "resetfunds"
+					;[Block]
+					me\Funds = Rand(0, 6)
 					;[End Block]
 				Default
 					;[Block]
@@ -3349,7 +3362,7 @@ Function MainLoop()
 						UpdateEvents()
 					EndIf
 					TimeCheckpointMonitors()
-					Update294()
+					UpdateVomit()
 				EndIf
 			EndIf
 			UpdateDecals()
@@ -4860,6 +4873,8 @@ Function DrawGUI()
 		Next
 	EndIf
 	
+	If I_294\Using Then Draw294()
+	
 	If ClosestButton <> 0 And SelectedDoor = Null And (Not InvOpen) And (Not MenuOpen) And OtherOpen = Null And (Not ConsoleOpen) Then
 		Temp = CreatePivot()
 		PositionEntity(Temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
@@ -4917,8 +4932,6 @@ Function DrawGUI()
 			ga\DrawArrowIcon[i] = False
 		EndIf
 	Next
-	
-	If I_294\Using Then Use294()
 	
 	If opt\HUDEnabled Then 
 		Width = 200
@@ -5307,7 +5320,7 @@ Function DrawGUI()
 						DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State3)
 					EndIf
 					;[End Block]
-				Case "key0", "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "scp860", "hand", "hand2", "25ct", "scp005", "key", "coin"
+				Case "key0", "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "scp860", "hand", "hand2", "25ct", "scp005", "key", "coin", "mastercard"
 					;[Block]
 					DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 					;[End Block]
@@ -5799,6 +5812,8 @@ Function UpdateGUI()
 	Local x2#, ProjY#, Scale#, Pvt%
 	Local n%, xTemp%, yTemp%, StrTemp$, GroupDesignation$
 	Local e.Events, it.Items, r.Rooms
+	
+	If I_294\Using Then Update294()
 	
 	If ClosestButton <> 0 And SelectedDoor = Null And (Not InvOpen) And (Not MenuOpen) And OtherOpen = Null And (Not ConsoleOpen) Then
 		Temp = CreatePivot()
@@ -7670,9 +7685,9 @@ Function UpdateGUI()
 					;[Block]
 					If SelectedItem\State = 0.0 Then
 						PlaySound_Strict(LoadTempSound("SFX\SCP\1162\NostalgiaCancer" + Rand(1, 5) + ".ogg"))
+						
+						SelectedItem\State = 1.0
 					EndIf
-					
-					SelectedItem\State = 1.0
 					;[End Block]
 				Case "scp427"
 					;[Block]
@@ -9432,6 +9447,7 @@ Function InitNewGame()
 	me\Playable = True
 	me\SelectedEnding = -1
 	me\HeartBeatRate = 70.0
+	me\Funds = Rand(0, 6)
 	
 	I_005\ChanceToSpawn = Rand(1, 6)
 	
@@ -9803,6 +9819,10 @@ Function NullGame(PlayButtonSFX% = True)
 	me\Crouch = False
 	me\CrouchState = 0.0
 	LightVolume = 0.0
+	
+	me\Funds = 0
+	me\UsedMastercard = False
+	
 	me\Vomit = False
 	me\VomitTimer = 0.0
 	SecondaryLightOn = True
@@ -11190,23 +11210,17 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 	If it2 <> Null Then EntityType(it2\Collider, HIT_ITEM)
 End Function
 
-Function Use294()
+Function Update294()
 	Local x#, y#, xTemp%, yTemp%, StrTemp$, Temp%
 	Local Sep1%, Sep2%, Alpha#, Glow%
 	Local R%, G%, B%
 	Local it.Items
 	
-	ShowPointer()
-	
 	x = mo\Viewport_Center_X - (ImageWidth(tt\ImageID[5]) / 2)
 	y = mo\Viewport_Center_Y - (ImageHeight(tt\ImageID[5]) / 2)
-	DrawImage(tt\ImageID[5], x, y)
-	If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	
 	Temp = True
 	If PlayerRoom\SoundCHN <> 0 Then Temp = False
-	
-	Text(x + 907, y + 185, I_294\ToInput, True, True)
 	
 	If Temp Then
 		If mo\MouseHit1 Then
@@ -11389,6 +11403,8 @@ Function Use294()
 						PlayerRoom\SoundCHN = PlaySound_Strict(LoadTempSound(StrTemp))
 					EndIf
 					
+					If me\UsedMastercard Then PlaySound_Strict(LoadTempSound("SFX\SCP\294\PullMasterCard.ogg"))
+					
 					If GetINIInt2("Data\SCP-294.ini", Loc, "Explosion") Then 
 						me\ExplosionTimer = 135.0
 						msg\DeathMsg = GetINIString2("Data\SCP-294.ini", Loc, "Death Message")
@@ -11418,7 +11434,6 @@ Function Use294()
 		EndIf
 		
 		If mo\MouseHit2 Lor (Not I_294\Using) Then 
-			HidePointer()
 			I_294\Using = False
 			I_294\ToInput = ""
 			StopMouseMovement()
@@ -11428,14 +11443,14 @@ Function Use294()
 		
 		If (Not ChannelPlaying(PlayerRoom\SoundCHN)) Then
 			If I_294\ToInput <> "OUT OF RANGE" Then
-				HidePointer()
 				I_294\Using = False
+				me\UsedMastercard = False
 				StopMouseMovement()
 				
 				Local e.Events
 				
 				For e.Events = Each Events
-					If PlayerRoom = e\room
+					If PlayerRoom = e\room Then
 						e\EventState2 = 0.0
 						Exit
 					EndIf
@@ -11443,6 +11458,34 @@ Function Use294()
 			EndIf
 			I_294\ToInput = ""
 			PlayerRoom\SoundCHN = 0
+		EndIf
+	EndIf
+End Function
+
+Function Draw294()
+	Local x#, y#, xTemp%, yTemp%, Temp%
+	
+	ShowPointer()
+	
+	x = mo\Viewport_Center_X - (ImageWidth(tt\ImageID[5]) / 2)
+	y = mo\Viewport_Center_Y - (ImageHeight(tt\ImageID[5]) / 2)
+	DrawImage(tt\ImageID[5], x, y)
+	If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+	
+	Temp = True
+	If PlayerRoom\SoundCHN <> 0 Then Temp = False
+	
+	Text(x + 907, y + 185, I_294\ToInput, True, True)
+	
+	If Temp Then
+		If mo\MouseHit2 Lor (Not I_294\Using) Then 
+			HidePointer()
+		EndIf
+	Else ; ~ Playing a dispensing sound
+		If (Not ChannelPlaying(PlayerRoom\SoundCHN)) Then
+			If I_294\ToInput <> "OUT OF RANGE" Then
+				HidePointer()
+			EndIf
 		EndIf
 	EndIf
 End Function
@@ -11679,6 +11722,86 @@ Function UpdateExplosion()
 			PositionEntity(me\Collider, EntityX(me\Collider), 200.0, EntityZ(me\Collider))
 		EndIf
 	EndIf
+End Function
+
+Function UpdateVomit()
+	CatchErrors("Uncaught (UpdateVomit)")
+	
+	Local Pvt%, de.Decals
+	
+	If me\CameraShakeTimer > 0.0 Then
+		me\CameraShakeTimer = me\CameraShakeTimer - (fps\FPSFactor[0] / 70.0)
+		me\CameraShake = 2.0
+	EndIf
+	
+	If me\VomitTimer > 0.0 Then
+		me\VomitTimer = me\VomitTimer - (fps\FPSFactor[0] / 70.0)
+		
+		If (MilliSecs() Mod 1600) < Rand(200, 400) Then
+			If me\BlurTimer = 0.0 Then me\BlurTimer = 70.0 * Rnd(10.0, 20.0)
+			me\CameraShake = Rnd(0.0, 2.0)
+		EndIf
+		
+		If Rand(50) = 50 And (MilliSecs() Mod 4000) < 200 Then PlaySound_Strict(CoughSFX[Rand(0, 2)])
+		
+		; ~ Regurgitate when timer is below 10 seconds.
+		If me\VomitTimer < 10.0 And Rnd(0.0, 500.0 * me\VomitTimer) < 2.0 Then
+			If (Not ChannelPlaying(VomitCHN)) And (Not me\Regurgitate) Then
+				VomitCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Retch" + Rand(1, 2) + ".ogg"))
+				me\Regurgitate = MilliSecs() + 50
+			EndIf
+		EndIf
+		
+		If me\Regurgitate > MilliSecs() And me\Regurgitate <> 0 Then
+			mo\Mouse_Y_Speed_1 = mo\Mouse_Y_Speed_1 + 1.0
+		Else
+			me\Regurgitate = 0
+		EndIf
+	ElseIf me\VomitTimer < 0.0 Then ; ~ Vomit
+		me\VomitTimer = me\VomitTimer - (fps\FPSFactor[0] / 70.0)
+		
+		If me\VomitTimer > -5.0 Then
+			If (MilliSecs() Mod 400) < 50 Then me\CameraShake = 4.0 
+			mo\Mouse_X_Speed_1 = 0.0
+			me\Playable = False
+		Else
+			me\Playable = True
+		EndIf
+		
+		If (Not me\Vomit) Then
+			me\BlurTimer = 70.0 * 40.0
+			VomitSFX = LoadSound_Strict("SFX\SCP\294\Vomit.ogg")
+			VomitCHN = PlaySound_Strict(VomitSFX)
+			me\PrevInjuries = me\Injuries
+			me\PrevBloodloss = me\Bloodloss
+			If (Not me\Crouch) Then SetCrouch(True)
+			me\Injuries = 1.5
+			me\Bloodloss = 70.0
+			me\EyeIrritation = 70.0 * 9.0
+			
+			Pvt = CreatePivot()
+			PositionEntity(Pvt, EntityX(Camera), EntityY(me\Collider) - 0.05, EntityZ(Camera))
+			TurnEntity(Pvt, 90.0, 0.0, 0.0)
+			EntityPick(Pvt, 0.3)
+			de.Decals = CreateDecal(5, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, 180.0, 0.0, 0.001, 1.0, 0, 1, 0, Rand(200, 255), 0)
+			de\SizeChange = 0.001 : de\MaxSize = 0.6
+			FreeEntity(Pvt)
+			me\Vomit = True
+		EndIf
+		
+		mo\Mouse_Y_Speed_1 = mo\Mouse_Y_Speed_1 + Max((1.0 + me\VomitTimer / 10.0), 0.0)
+		
+		If me\VomitTimer < -15.0 Then
+			FreeSound_Strict(VomitSFX)
+			me\VomitTimer = 0.0
+			If me\KillTimer >= 0.0 Then PlaySound_Strict(BreathSFX(0, 0))
+			me\Injuries = me\PrevInjuries
+			me\Bloodloss = me\PrevBloodloss
+			me\Vomit = False
+		EndIf
+	EndIf
+	
+	CatchErrors("UpdateVomit")
 End Function
 
 Function Update008()

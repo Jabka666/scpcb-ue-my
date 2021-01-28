@@ -31,6 +31,7 @@
 - Now ballistic vest and ballistic helmet reduces damage from some NPCs.
 - Now all battery charges are randomized.
 - Now using the "Esc" button has "BACK" button effect.
+- Now Mastercard can be used in SCP-294.
 
 - To obtain new difficulties you need to finish game on previous difficulty.
 
