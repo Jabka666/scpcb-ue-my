@@ -65,7 +65,7 @@ Function LoadWorld(File$, rt.RoomTemplates)
 					ts\y = y
 					ts\z = z
 					ts\ImgPath = KeyValue(Node, "imgpath", "")
-					ts\roomtemplate = rt
+					ts\RoomTemplate = rt
 				EndIf
 				;[End Block]
 			Case "waypoint"
@@ -2048,8 +2048,9 @@ Function FillRoom(r.Rooms)
 			d.Doors = CreateDoor(r\x + 3072.0 * RoomScale, r\y - 928.0 * RoomScale, r\z + 5800.0 * RoomScale, 90.0, r, False, Default_Door, 3)
 			d\AutoClose = False
 			
+			; ~ Guard spawnpoint
 			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], r\x + 5203.0 * RoomScale, r\y + 1344.0 * RoomScale, r\z - 1739.0 * RoomScale)
+			PositionEntity(r\Objects[2], r\x + 5203.0 * RoomScale, r\y + 1444.0 * RoomScale, r\z - 1739.0 * RoomScale)
 			
 			r\Objects[3] = CreatePivot()
 			PositionEntity(r\Objects[3], r\x + 4363.0 * RoomScale, r\y - 248.0 * RoomScale, r\z + 2766.0 * RoomScale)
@@ -2061,7 +2062,7 @@ Function FillRoom(r.Rooms)
 			r\Objects[5] = CreatePivot()
 			PositionEntity(r\Objects[5], r\x + 4352.0 * RoomScale, r\y, r\z + 1344.0 * RoomScale)	
 			
-			; ~ SCP-682
+			; ~ SCP-682's paw
 			r\Objects[6] = CreatePivot()
 			PositionEntity(r\Objects[6], r\x + 2816.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 2816.0 * RoomScale)
 			
@@ -2069,10 +2070,11 @@ Function FillRoom(r.Rooms)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
-			; ~ MTF's spawnpoint
+			; ~ MTF spawnpoint
 			r\Objects[8] = CreatePivot()
-			PositionEntity(r\Objects[8], r\x + 3250.0 * RoomScale, r\y - 888.0 * RoomScale, r\z + 6623.0 * RoomScale)
+			PositionEntity(r\Objects[8], r\x + 3600.0 * RoomScale, r\y - 888.0 * RoomScale, r\z + 6623.0 * RoomScale)
 			
+			; ~ "SCP-682" pivot
 			r\Objects[9] = CreatePivot()
 			PositionEntity(r\Objects[9], r\x + 3808.0 * RoomScale, r\y + 1536.0 * RoomScale, r\z - 13568.0 * RoomScale)
 			
@@ -2087,6 +2089,12 @@ Function FillRoom(r.Rooms)
 			For i = 8 To 11
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
+			
+			; ~ Temporary
+			w.WayPoints = CreateWaypoint(r\x + 3800.0 * RoomScale, r\y - 888.0 * RoomScale, r\z + 5623.0 * RoomScale, Null, r)
+			w2.WayPoints = CreateWaypoint(r\x + 3800.0 * RoomScale, r\y - 888.0 * RoomScale, r\z + 6323.0 * RoomScale, Null, r)
+			w\connected[0] = w2 : w\Dist[0] = EntityDistance(w\OBJ, w2\OBJ)
+			w2\connected[0] = w : w2\Dist[0] = w\Dist[0]
 			;[End Block]
 		Case "room372"
 			;[Block]

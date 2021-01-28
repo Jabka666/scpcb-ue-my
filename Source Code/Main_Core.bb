@@ -11982,16 +11982,16 @@ Function Update409()
 		
 		If I_409\Timer > 40.0 And PrevI409Timer =< 40.0 Then
 			CreateMsg("Crystals are enveloping the skin on your legs.", 6.0)
-		ElseIf I_409\Timer > 55.0 And PrevI409Timer =< 55.0 Then
+		ElseIf I_409\Timer > 55.0 And PrevI409Timer =< 55.0
 			CreateMsg("Crystals are up to your abdomen.", 6.0)
-		ElseIf I_409\Timer > 70.0 And PrevI409Timer =< 70.0 Then
+		ElseIf I_409\Timer > 70.0 And PrevI409Timer =< 70.0
 			CreateMsg("Crystals are starting to envelop your arms.", 6.0)
-		ElseIf I_409\Timer > 85.0 And PrevI409Timer =< 85.0 Then
+		ElseIf I_409\Timer > 85.0 And PrevI409Timer =< 85.0
 			CreateMsg("Crystals starting to envelop your head.", 6.0)
-		ElseIf I_409\Timer > 93.0 And PrevI409Timer =< 93.0 Then
+		ElseIf I_409\Timer > 93.0 And PrevI409Timer =< 93.0
 			PlaySound_Strict(DamageSFX[13])
 			me\Injuries = Max(me\Injuries, 2.0)
-		ElseIf I_409\Timer > 94.0 Then
+		ElseIf I_409\Timer > 94.0
 			I_409\Timer = Min(I_409\Timer + fps\FPSFactor[0] * 0.004, 100.0)
 			me\Playable = False
 			me\BlurTimer = 4.0

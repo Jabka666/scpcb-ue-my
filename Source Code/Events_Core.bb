@@ -9612,8 +9612,6 @@ Function UpdateEndings()
 			Case e_gateb
 				;[Block]
 				If PlayerRoom = e\room Then
-					e\room\RoomDoors[1]\Locked = 1
-					
 					For r.Rooms = Each Rooms
 						HideEntity(r\OBJ)
 					Next					
@@ -9638,7 +9636,7 @@ Function UpdateEndings()
 						e\room\NPC[0] = CreateNPC(NPCtypeApache, e\room\x, 100.0, e\room\z)
 						e\room\NPC[0]\State = 1.0
 						
-						e\room\NPC[1] = CreateNPC(NPCtypeGuard, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True) + 0.2, EntityZ(e\room\Objects[2], True))
+						e\room\NPC[1] = CreateNPC(NPCtypeGuard, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True))
 						e\room\NPC[1]\State = 0.0
 						e\room\NPC[1]\State2 = 10.0
 						
@@ -9782,22 +9780,17 @@ Function UpdateEndings()
 										PlayAnnouncement("SFX\Ending\GateB\AlphaWarheadsFail.ogg")
 										
 										n.NPCs = CreateNPC(NPCtypeMTF, EntityX(e\room\Objects[8], True), EntityY(e\room\Objects[8], True) + 0.29, EntityZ(e\room\Objects[8], True))
+										e\room\NPC[4] = n
 										n.NPCs = CreateNPC(NPCtypeMTF, EntityX(e\room\RoomDoors[2]\OBJ, True), EntityY(e\room\RoomDoors[2]\OBJ, True) + 0.29, (EntityZ(e\room\RoomDoors[2]\OBJ, True) + EntityZ(e\room\RoomDoors[3]\OBJ, True)) / 2.0)
+										e\room\NPC[5] = n
 										
-										For n.NPCs = Each NPCs
-											If n\NPCtype = NPCtypeMTF Then
-												n\LastSeen = 70.0 * Rnd(30.0, 35.0)
-												n\State = 3.0
-												n\State2 = 10.0
-												n\EnemyX = EntityX(me\Collider)
-												n\EnemyY = EntityY(me\Collider)
-												n\EnemyZ = EntityZ(me\Collider)
-											EndIf
+										For i = 4 To 5
+											e\room\NPC[i]\State = 10.0
 										Next
 										
-										e\EventState = 70.0 * 85.0
-										
 										me\SelectedEnding = Ending_B1
+										
+										e\EventState = 70.0 * 85.0
 									EndIf
 								Else
 									If me\SelectedEnding = Ending_B1 Then
@@ -9812,25 +9805,19 @@ Function UpdateEndings()
 										e\room\RoomDoors[4]\Open = True
 										e\room\RoomDoors[4]\Locked = 0
 										
-										If e\EventState3 > 0.0 And e\EventState3 =< 500.0
-											e\EventState3 = e\EventState3 + fps\FPSFactor[0]
-											UnableToMove = True
-											For n.NPCs = Each NPCs
-												If n\NPCtype = NPCtypeMTF Then
-													n\LastSeen = (70.0 * Rnd(30.0, 35.0))
-													n\State = 3.0
-													n\State2 = 10.0
-													n\EnemyX = EntityX(me\Collider)
-													n\EnemyY = EntityY(me\Collider)
-													n\EnemyZ = EntityZ(me\Collider)
-													PointEntity(n\Collider, me\Collider)
-												EndIf
-											Next
-										ElseIf e\EventState3 > 500.0
+										UnableToMove = True
+										
+										For i = 4 To 5
+											If e\room\NPC[i]\State3 = 70.0 * 4.0 Then
+												Temp = True
+											EndIf
+										Next
+										
+										If e\EventState > 70.0 * 92.0 And Temp Then
+											ClearCheats(chs)
 											ShouldPlay = 0
 											me\CurrSpeed = 0.0
 											PlaySound_Strict(LoadTempSound("SFX\Ending\GateB\Gunshot.ogg"))
-											ClearCheats(chs)
 											me\LightFlash = 20.0
 											me\KillTimer = -0.1
 											msg\DeathMsg = ""
@@ -9849,14 +9836,14 @@ Function UpdateEndings()
 						EndIf
 						
 						If e\EventState > 70.0 * 26.5 Then
-							If e\EventState4 = 0.0 Then
+							If e\EventState3 = 0.0 Then
 								e\room\Objects[7] = CopyEntity(o\NPCModelID[NPCtype682_Arm])
 								ScaleEntity(e\room\Objects[7], 0.15, 0.15, 0.15)
 								Temp = (Min(((EntityDistance(e\room\NPC[3]\Collider, me\Collider) / RoomScale) - 3000.0) / 4.0, 1000.0) + 1408.0) * RoomScale
 								PositionEntity(e\room\Objects[7], EntityX(e\room\NPC[3]\Collider), e\room\y + 1408.0 * RoomScale, EntityZ(e\room\NPC[3]\Collider))
 								RotateEntity(e\room\Objects[7], 0.0, e\room\Angle + Rnd(-10.0, 10.0), 0.0, True)
 								TurnEntity(e\room\Objects[7], 0.0, 0.0, 180.0)
-								e\EventState4 = 1.0
+								e\EventState3 = 1.0
 							Else
 								If e\room\Objects[7] <> 0 Then
 									If WrapAngle(EntityRoll(e\room\Objects[7])) < 340.0 Then 
@@ -10021,11 +10008,12 @@ Function UpdateEndings()
 						Next
 						
 						ResetEntity(me\Collider)
-						e\EventState = 1.0
 						
 						RotateEntity(me\Collider, 0.0, EntityYaw(me\Collider) + (e\room\Angle + 180.0), 0.0)
 						
 						If (Not Curr106\Contained) Then PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\106Escape.ogg"))
+						
+						e\EventState = 1.0
 						
 						DrawLoading(100)
 					Else
@@ -10145,7 +10133,8 @@ Function UpdateEndings()
 												Curr106\State = 100000.0
 												e\EventState2 = 0.0
 												For i = 5 To 8
-													e\room\NPC[i]\State = 1.0
+													e\room\NPC[i]\Speed = Rnd(0.02, 0.04)
+													e\room\NPC[i]\State = 10.0
 												Next
 												For i = 2 To 4 ; ~ Helicopters attack the player
 													e\room\NPC[i]\State = 2.0
@@ -10299,6 +10288,8 @@ Function UpdateEndings()
 										EndIf
 										
 										If (Not ChannelPlaying(e\SoundCHN)) And me\SelectedEnding = -1 Then
+											ClearCheats(chs)
+											
 											PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\Bell2.ogg"))
 											
 											p.Particles = CreateParticle(EntityX(e\room\Objects[11], True), EntityY(Camera, True), EntityZ(e\room\Objects[11], True), 4, 8.0, 0.0, 50.0)
@@ -10307,7 +10298,6 @@ Function UpdateEndings()
 											p\Speed = 0.25 : p\A = 0.5
 											
 											me\SelectedEnding = Ending_A1
-											ClearCheats(chs)
 											me\KillTimer = -0.1
 											msg\DeathMsg = ""
 										EndIf
@@ -10366,12 +10356,12 @@ Function UpdateEndings()
 											EndIf
 										Next										
 									Else
-										ShouldPlay = 0.0
+										ShouldPlay = 0
 										me\CurrSpeed = 0.0
 										If (Not ChannelPlaying(e\SoundCHN)) Then
+											ClearCheats(chs)
 											PlaySound_Strict(IntroSFX[7])
 											me\SelectedEnding = Ending_A2
-											ClearCheats(chs)
 											me\LightFlash = 20.0
 											me\KillTimer = -0.1
 											msg\DeathMsg = ""

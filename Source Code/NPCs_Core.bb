@@ -3561,6 +3561,8 @@ Function UpdateNPCs()
 								;[End Block]
 							Case 3.0 ; ~ Following a path
 								;[Block]
+								Dist = EntityDistance(n\Collider, me\Collider)
+								
 								n\Angle = CurveValue(0.0, n\Angle, 40.0)
 								
 								If n\PathStatus = 2 Then
@@ -4097,6 +4099,134 @@ Function UpdateNPCs()
 									n\Target = Null
 									n\State = 0.0
 								EndIf
+								;[End Block]
+							Case 10.0 ; ~ Trying to find player on Gates
+								;[Block]
+								n\Angle = CurveValue(0.0, n\Angle, 40.0)
+								
+								If me\KillTimer >= 0.0 Then
+									Dist = EntityDistance(n\Collider, me\Collider)
+									
+									SearchPlayer = False
+									
+									If Dist < 6.0 And EntityVisible(n\Collider, me\Collider) And (Not chs\NoTarget) Then
+										SearchPlayer = True
+									EndIf
+									
+									If SearchPlayer Then
+										Target = CreatePivot()
+										PositionEntity(Target, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
+										PointEntity(Target, me\Collider)
+										RotateEntity(Target, Min(EntityPitch(Target), 20.0), EntityYaw(Target), 0.0)
+										
+										RotateEntity(n\Collider, CurveAngle(EntityPitch(Target), EntityPitch(n\Collider), 10.0), CurveAngle(EntityYaw(Target), EntityYaw(n\Collider), 10.0), 0.0, True)
+										
+										PositionEntity(Target, EntityX(n\Collider), EntityY(n\Collider) + 0.2, EntityZ(n\Collider))
+										PointEntity(Target, me\Collider)
+										RotateEntity(Target, Min(EntityPitch(Target), 40.0), EntityYaw(n\Collider), 0.0)
+										
+										If PlayerRoom\RoomTemplate\Name = "gateb" Then
+											n\State3 = Min(n\State3 + fps\FPSFactor[0], 70.0 * 4.0)
+										Else
+											If n\Reload =< 0.0 Then
+												PlaySound2(GunshotSFX, Camera, n\Collider, 15.0)
+												
+												RotateEntity(Target, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
+												PositionEntity(Target, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
+												MoveEntity(Target, 0.8 * 0.079, 10.75 * 0.079, 6.9 * 0.079)
+												
+												Shoot(EntityX(Target), EntityY(Target), EntityZ(Target), ((25.0 / Dist) * (1.0 / Dist)), True)
+												n\Reload = 7.0
+											EndIf
+										EndIf
+										
+										If n\Reload > 0.0 And n\Reload =< 7.0 Then
+											AnimateNPC(n, 347.0, 351.0, 0.35)
+										Else
+											AnimateNPC(n, 79.0, 310.0, 0.35)
+										EndIf
+										
+										FreeEntity(Target)
+									Else
+										If PlayerRoom\RoomTemplate\Name = "gateb" Then n\State3 = Max(0.0, n\State3 - fps\FPSFactor[0])
+										
+										If Dist < 2.0 And chs\NoTarget Then
+											AnimateNPC(n, 79.0, 310.0, 0.35)
+										Else
+											If n\PathStatus = 1 Then
+												If n\Path[n\PathLocation] = Null Then 
+													If n\PathLocation > 19 Then 
+														n\PathLocation = 0 : n\PathStatus = 0
+													Else
+														n\PathLocation = n\PathLocation + 1
+													EndIf
+												Else
+													PrevDist = EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ)
+													
+													PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
+													RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
+													n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
+													RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
+													
+													n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
+													TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\FPSFactor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\FPSFactor[0], True)
+													AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
+													
+													NewDist = EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ)
+													
+													; ~ Open the door and make it automatically close after 5 seconds
+													If NewDist < 1.0 And n\Path[n\PathLocation]\door <> Null Then
+														If (Not n\Path[n\PathLocation]\door\Open)
+															PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\DoorType, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
+															PlayMTFSound(MTFSFX[0], n)
+														EndIf
+														n\Path[n\PathLocation]\door\Open = True
+														If n\Path[n\PathLocation]\door\MTFClose
+															n\Path[n\PathLocation]\door\TimerState = 70.0 * 5.0
+														EndIf
+													EndIf
+													
+													If (NewDist < 0.2) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then
+														n\PathLocation = n\PathLocation + 1
+													EndIf
+												EndIf
+											Else
+												If n\PathTimer = 0.0 Then n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider) + 0.5, EntityZ(me\Collider))
+												
+												wayPointCloseToPlayer = Null
+												
+												For wp.WayPoints = Each WayPoints
+													If EntityDistanceSquared(wp\OBJ, me\Collider) < 4.0 Then
+														wayPointCloseToPlayer = wp
+														Exit
+													EndIf
+												Next
+												
+												If wayPointCloseToPlayer <> Null
+													n\PathTimer = 1.0
+													If EntityVisible(wayPointCloseToPlayer\OBJ, n\Collider) Then
+														If Abs(DeltaYaw(n\Collider, wayPointCloseToPlayer\OBJ)) > 0.0 Then
+															PointEntity(n\OBJ, wayPointCloseToPlayer\OBJ)
+															RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 20.0), 0.0)
+														EndIf
+													EndIf
+												Else
+													n\PathTimer = 0.0
+												EndIf
+												
+												If n\PathTimer = 1.0 Then
+													AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 40.0)
+													n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
+													MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])
+												EndIf
+											EndIf
+										EndIf
+									EndIf
+								Else
+									n\State = 0.0
+								EndIf
+								
+								n\Angle = EntityYaw(n\Collider)
 								;[End Block]
 						End Select
 						
