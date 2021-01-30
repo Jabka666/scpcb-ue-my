@@ -4100,7 +4100,7 @@ Function UpdateNPCs()
 									n\State = 0.0
 								EndIf
 								;[End Block]
-							Case 10.0 ; ~ Trying to find player on Gates
+							Case 10.0 ; ~ Trying to find player on the Gate A or Gate B
 								;[Block]
 								n\Angle = CurveValue(0.0, n\Angle, 40.0)
 								
@@ -4202,7 +4202,7 @@ Function UpdateNPCs()
 													EndIf
 												Next
 												
-												If wayPointCloseToPlayer <> Null
+												If wayPointCloseToPlayer <> Null Then
 													n\PathTimer = 1.0
 													If EntityVisible(wayPointCloseToPlayer\OBJ, n\Collider) Then
 														If Abs(DeltaYaw(n\Collider, wayPointCloseToPlayer\OBJ)) > 0.0 Then
@@ -4263,7 +4263,7 @@ Function UpdateNPCs()
 						EndIf
 						
 						; ~ Teleport back to the facility if fell through the floor
-						If n\State <> 6.0 And n\State <> 7.0
+						If n\State <> 6.0 And n\State <> 7.0 Then
 							If EntityY(n\Collider) < -10.0 Then
 								TeleportCloser(n)
 							EndIf
@@ -5260,7 +5260,7 @@ Function UpdateNPCs()
 							If n\LastSeen > 0 And (Not chs\NoTarget) Then
 								PrevFrame = n\Frame
 								
-								If (n\Frame >= 18.0 And n\Frame < 68.0) Then
+								If n\Frame >= 18.0 And n\Frame < 68.0 Then
 									n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
 									AnimateNPC(n, 18.0, 68.0, 0.5, True)
 									
@@ -6714,7 +6714,7 @@ Function TeleportCloser(n.NPCs)
 	
 	Local ShouldTeleport% = False
 	
-	If (closestWaypoint <> Null) Then
+	If closestWaypoint <> Null Then
 		If n\InFacility <> 1 Lor SelectedDifficulty\AggressiveNPCs Then
 			ShouldTeleport = True
 		ElseIf EntityY(closestWaypoint\OBJ, True) =< 7.0 And EntityY(closestWaypoint\OBJ, True) >= -10.0 Then

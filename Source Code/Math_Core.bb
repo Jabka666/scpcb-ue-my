@@ -40,12 +40,12 @@ Function CurveAngle#(Value#, Old#, Smooth#)
 End Function
 
 Function PointDirection#(x1#, z1#, x2#, z2#)
-	Local dx#, dz#
+	Local dX#, dZ#
 	
-	dx = x1 - x2
-	dz = z1 - z2
+	dX = x1 - x2
+	dZ = z1 - z2
 	
-	Return(ATan2(dz, dx))
+	Return(ATan2(dZ, dX))
 End Function
 
 Function AngleDist#(a0#, a1#)

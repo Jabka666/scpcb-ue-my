@@ -424,13 +424,13 @@ Function UpdateConsole()
 		Color(50, 50, 50)
 		InBar = MouseOn(x + Width - (26 * MenuScale), y, 26 * MenuScale, Height)
 		If InBar Then Color(70, 70, 70)
-		Rect(x + Width - (26 * MenuScale), y, 26 * MenuScale, Height, True)
+		Rect(x + Width - (26 * MenuScale), y, 26 * MenuScale, Height)
 		
 		Color(120, 120, 120)
 		InBox = MouseOn(x + Width - (23 * MenuScale), y + Height - ScrollBarHeight + (ConsoleScroll * ScrollBarHeight / Height), 20 * MenuScale, ScrollBarHeight)
 		If InBox Then Color(200, 200, 200)
 		If ConsoleScrollDragging Then Color(255, 255, 255)
-		Rect(x + Width - (23 * MenuScale), y + Height - ScrollBarHeight + (ConsoleScroll * ScrollBarHeight / Height), 20 * MenuScale, ScrollBarHeight, True)
+		Rect(x + Width - (23 * MenuScale), y + Height - ScrollBarHeight + (ConsoleScroll * ScrollBarHeight / Height), 20 * MenuScale, ScrollBarHeight)
 		
 		If (Not MouseDown(1)) Then
 			ConsoleScrollDragging = False
@@ -1817,14 +1817,14 @@ Function RenderMessages()
 		SetFont(fo\FontID[Font_Default])
 		If (Not Temp) Then
 			Color(0, 0, 0)
-			Text(mo\Viewport_Center_X + MenuScale, mo\Viewport_Center_Y + (201 * MenuScale), msg\Txt, True, False)
+			Text(mo\Viewport_Center_X + MenuScale, mo\Viewport_Center_Y + (201 * MenuScale), msg\Txt, True)
 			Color(Temp2, Temp2, Temp2)
-			Text(mo\Viewport_Center_X, mo\Viewport_Center_Y + (200 * MenuScale), msg\Txt, True, False)
+			Text(mo\Viewport_Center_X, mo\Viewport_Center_Y + (200 * MenuScale), msg\Txt, True)
 		Else
 			Color(0, 0, 0)
-			Text(mo\Viewport_Center_X + MenuScale, (opt\GraphicHeight * 0.94) + MenuScale, msg\Txt, True, False)
+			Text(mo\Viewport_Center_X + MenuScale, (opt\GraphicHeight * 0.94) + MenuScale, msg\Txt, True)
 			Color(Temp2, Temp2, Temp2)
-			Text(mo\Viewport_Center_X, opt\GraphicHeight * 0.94, msg\Txt, True, False)
+			Text(mo\Viewport_Center_X, opt\GraphicHeight * 0.94, msg\Txt, True)
 		EndIf
 	EndIf
 	Color(255, 255, 255)
@@ -4155,7 +4155,7 @@ Function SetCrouch(NewCrouch%)
 End Function
 
 Function InjurePlayer(Injuries_#, Infection# = 0.0, BlurTimer_# = 0.0, VestFactor# = 0.0, HelmetFactor# = 0.0)
-	me\Injuries = me\Injuries + Injuries_ - (wi\BallisticVest * VestFactor) - (me\Crouch * wi\BallisticHelmet * HelmetFactor)
+	If Injuries_ <> 0.0 Then me\Injuries = me\Injuries + Injuries_ - ((wi\BallisticVest = 1) * VestFactor) - ((wi\BallisticVest = 2) * VestFactor * 1.3) - (me\Crouch * wi\BallisticHelmet * HelmetFactor)
 	If BlurTimer_ <> 0.0 Then me\BlurTimer = BlurTimer_
 	If Infection <> 0.0 Then I_008\Timer = I_008\Timer + (Infection * (wi\HazmatSuit = 0))
 End Function
@@ -5307,6 +5307,21 @@ Function DrawGUI()
 				Case "nvg", "supernvg", "finenvg"
 					;[Block]
 					If (Not PreventItemOverlapping(False, True)) Then
+						Select SelectedItem\ItemTemplate\TempName
+							Case "nvg"
+								;[Block]
+								If IsDoubleItem(wi\NightVision, 1, "pairs of goggles") Then Return
+								;[End Block]
+							Case "supernvg"
+								;[Block]
+								If IsDoubleItem(wi\NightVision, 2, "pairs of goggles") Then Return
+								;[End Block]
+							Case "finenvg"
+								;[Block]
+								If IsDoubleItem(wi\NightVision, 3, "pairs of goggles") Then Return
+								;[End Block]
+						End Select
+						
 						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
 						Width = 300
@@ -5502,6 +5517,21 @@ Function DrawGUI()
 				Case "gasmask", "supergasmask", "gasmask3"
 					;[Block]
 					If (Not PreventItemOverlapping(True)) Then
+						Select SelectedItem\ItemTemplate\TempName
+							Case "gasmask"
+								;[Block]
+								If IsDoubleItem(wi\GasMask, 1, "gas masks") Then Return
+								;[End Block]
+							Case "supergasmask"
+								;[Block]
+								If IsDoubleItem(wi\GasMask, 2, "gas masks") Then Return
+								;[End Block]
+							Case "gasmask3"
+								;[Block]
+								If IsDoubleItem(wi\GasMask, 3, "gas masks") Then Return
+								;[End Block]
+						End Select
+						
 						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
 						Width = 300
@@ -5706,7 +5736,18 @@ Function DrawGUI()
 					;[End Block]
 				Case "scp1499", "super1499"
 					;[Block]
-					If (Not PreventItemOverlapping(False, False, True))
+					If (Not PreventItemOverlapping(False, False, True)) Then
+						Select SelectedItem\ItemTemplate\TempName
+							Case "gasmask"
+								;[Block]
+								If IsDoubleItem(I_1499\Using, 1, "gas masks") Then Return
+								;[End Block]
+							Case "super1499"
+								;[Block]
+								If IsDoubleItem(I_1499\Using, 2, "gas masks") Then Return
+								;[End Block]
+						End Select
+						
 						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
 						Width = 300
@@ -6609,6 +6650,21 @@ Function UpdateGUI()
 				Case "nvg", "supernvg", "finenvg"
 					;[Block]
 					If (Not PreventItemOverlapping(False, True)) Then
+						Select SelectedItem\ItemTemplate\TempName
+							Case "nvg"
+								;[Block]
+								If IsDoubleItem(wi\NightVision, 1, "pairs of goggles") Then Return
+								;[End Block]
+							Case "supernvg"
+								;[Block]
+								If IsDoubleItem(wi\NightVision, 2, "pairs of goggles") Then Return
+								;[End Block]
+							Case "finenvg"
+								;[Block]
+								If IsDoubleItem(wi\NightVision, 3, "pairs of goggles") Then Return
+								;[End Block]
+						End Select
+						
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
 						SelectedItem\State3 = Min(SelectedItem\State3 + (fps\FPSFactor[0] / 1.6), 100.0)
@@ -7515,6 +7571,21 @@ Function UpdateGUI()
 				Case "gasmask", "supergasmask", "gasmask3"
 					;[Block]
 					If (Not PreventItemOverlapping(True)) Then
+						Select SelectedItem\ItemTemplate\TempName
+							Case "gasmask"
+								;[Block]
+								If IsDoubleItem(wi\GasMask, 1, "gas masks") Then Return
+								;[End Block]
+							Case "supergasmask"
+								;[Block]
+								If IsDoubleItem(wi\GasMask, 2, "gas masks") Then Return
+								;[End Block]
+							Case "gasmask3"
+								;[Block]
+								If IsDoubleItem(wi\GasMask, 3, "gas masks") Then Return
+								;[End Block]
+						End Select
+						
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
 						SelectedItem\State = Min(SelectedItem\State + (fps\FPSFactor[0]) / 1.6, 100.0)
@@ -7565,7 +7636,18 @@ Function UpdateGUI()
 					;[End Block]
 				Case "scp1499", "super1499"
 					;[Block]
-					If (Not PreventItemOverlapping(False, False, True))
+					If (Not PreventItemOverlapping(False, False, True)) Then
+						Select SelectedItem\ItemTemplate\TempName
+							Case "scp1499"
+								;[Block]
+								If IsDoubleItem(I_1499\Using, 1, "gas masks") Then Return
+								;[End Block]
+							Case "super1499"
+								;[Block]
+								If IsDoubleItem(I_1499\Using, 2, "gas masks") Then Return
+								;[End Block]
+						End Select
+						
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
 						SelectedItem\State = Min(SelectedItem\State + fps\FPSFactor[0] / 1.6, 100.0)

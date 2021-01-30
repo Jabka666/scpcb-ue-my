@@ -119,7 +119,7 @@ Function IsTexAlpha%(Tex%, Name$ = "") ; ~ Detect transparency in textures
 			Exit
 		EndIf
 	Next
-	Return(1 + (2 * (Temp <> 0)) + (4 * (Temp2 <> 0)))
+	Return(1 + (2 * (Temp <> False)) + (4 * (Temp2 <> False)))
 End Function
 
 ; ~ This is supposed to be the only texture that will be outside the TextureCache system

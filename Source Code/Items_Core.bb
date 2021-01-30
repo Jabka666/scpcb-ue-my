@@ -992,6 +992,7 @@ Function CanUseItem%(CanUseWithGasMask%, CanUseWithEyewear%)
 	Return(True)
 End Function
 
+; ~ Maybe re-work?
 Function PreventItemOverlapping%(GasMask% = False, NVG% = False, SCP1499% = False, Helmet% = False, SCRAMBLE% = False)
 	If (Not GasMask) And wi\GasMask > 0 Then
 		CreateMsg("You need to take off the gas mask in order to use that item.", 6.0)
@@ -1017,7 +1018,14 @@ Function PreventItemOverlapping%(GasMask% = False, NVG% = False, SCP1499% = Fals
 	Return(False)
 End Function
 
-;TODO: IsDoubleItem function
+Function IsDoubleItem%(Variable, ID, Msg$)
+	If Variable > 0 And Variable <> ID Then
+		CreateMsg("You are not able to wear two " + Msg + " at the same time.", 6.0)
+		SelectedItem = Null
+		Return(True)
+	EndIf
+	Return(False)
+End Function
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D

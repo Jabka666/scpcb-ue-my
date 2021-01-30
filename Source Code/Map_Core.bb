@@ -5490,7 +5490,7 @@ Function FillRoom(r.Rooms)
 				PositionEntity(r\Objects[1], r\x - 910.0 * RoomScale, r\y + 144.0 * RoomScale, r\z - 778.0 * RoomScale)				
 				TurnEntity(r\Objects[1], 6.0, 180.0, 0.0)
 				EntityParent(r\Objects[1], r\OBJ)
-			ElseIf r\RoomTemplate\Name = "room2medibay2"
+			Else
 				r\Objects[1] = CreatePivot()
 				PositionEntity(r\Objects[1], r\x - 820.0 * RoomScale, r\y, r\z - 318.399 * RoomScale)
 				EntityParent(r\Objects[1], r\OBJ)
