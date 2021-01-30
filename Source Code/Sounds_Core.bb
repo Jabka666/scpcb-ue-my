@@ -592,7 +592,7 @@ Function LoadSounds()
 	GunshotSFX = LoadSound_Strict("SFX\General\Gunshot.ogg")
 	Gunshot2SFX = LoadSound_Strict("SFX\General\Gunshot2.ogg")
 	Gunshot3SFX = LoadSound_Strict("SFX\General\BulletMiss.ogg")
-	BullethitSFX = LoadSound_Strict("SFX\General\BulletHit.ogg")
+	BulletHitSFX = LoadSound_Strict("SFX\General\BulletHit.ogg")
 	
 	TeslaIdleSFX = LoadSound_Strict("SFX\Room\Tesla\Idle.ogg")
 	TeslaActivateSFX = LoadSound_Strict("SFX\Room\Tesla\WindUp.ogg")

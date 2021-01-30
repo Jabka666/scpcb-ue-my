@@ -3696,13 +3696,13 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\Objects[1], r\x + 448.0 * RoomScale, r\y, r\z + 192.0 * RoomScale)
 			
 			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], EntityX(r\OBJ) - 200.0 * RoomScale, r\y + 460.0 * RoomScale, EntityZ(r\OBJ) + 1072.0 * RoomScale)
+			PositionEntity(r\Objects[2], EntityX(r\OBJ) - 400.0 * RoomScale, r\y + 440.0 * RoomScale, EntityZ(r\OBJ) + 1322.0 * RoomScale)
 			
 			r\Objects[3] = CreatePivot()
-			PositionEntity(r\Objects[3], EntityX(r\OBJ) - 80.0 * RoomScale, r\y + 100.0 * RoomScale, EntityZ(r\OBJ) + 526.0 * RoomScale)
+			PositionEntity(r\Objects[3], EntityX(r\OBJ) + 1000.0 * RoomScale, r\y + 120.0 * RoomScale, EntityZ(r\OBJ) + 666.0 * RoomScale)
 			
 			r\Objects[4] = CreatePivot()
-			PositionEntity(r\Objects[4], EntityX(r\OBJ) - 128.0 * RoomScale, r\y + 100.0 * RoomScale, EntityZ(r\OBJ) + 320.0 * RoomScale)
+			PositionEntity(r\Objects[4], EntityX(r\OBJ) + 628.0 * RoomScale, r\y + 120.0 * RoomScale, EntityZ(r\OBJ) + 320.0 * RoomScale)
 			
 			For i = 0 To 4
 				EntityParent(r\Objects[i], r\OBJ)

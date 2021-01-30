@@ -1904,7 +1904,7 @@ Global StoneDragSFX%
 Global GunshotSFX% 
 Global Gunshot2SFX% 
 Global Gunshot3SFX% 
-Global BullethitSFX% 
+Global BulletHitSFX% 
 
 Global TeslaIdleSFX% 
 Global TeslaActivateSFX% 
@@ -4155,8 +4155,8 @@ Function SetCrouch(NewCrouch%)
 End Function
 
 Function InjurePlayer(Injuries_#, Infection# = 0.0, BlurTimer_# = 0.0, VestFactor# = 0.0, HelmetFactor# = 0.0)
-	If Injuries_ <> 0.0 Then me\Injuries = me\Injuries + Injuries_ - ((wi\BallisticVest = 1) * VestFactor) - ((wi\BallisticVest = 2) * VestFactor * 1.3) - (me\Crouch * wi\BallisticHelmet * HelmetFactor)
-	If BlurTimer_ <> 0.0 Then me\BlurTimer = BlurTimer_
+	If Injuries_ <> 0.0 Then me\Injuries = me\Injuries + Injuries_ - ((wi\BallisticVest = 1) * VestFactor) - ((wi\BallisticVest = 2) * VestFactor * 1.35) - (me\Crouch * wi\BallisticHelmet * HelmetFactor)
+	If BlurTimer_ <> 0.0 And Injuries_ <> 0.0 Then me\BlurTimer = BlurTimer_
 	If Infection <> 0.0 Then I_008\Timer = I_008\Timer + (Infection * (wi\HazmatSuit = 0))
 End Function
 

@@ -6789,47 +6789,53 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 	p\Achange = -0.15
 	TurnEntity(p\OBJ, 0.0, 0.0, Rnd(360.0))
 	
-	If InstaKill Then Kill(True) : PlaySound_Strict(BullethitSFX) : Return
+	If InstaKill Then Kill(True) : PlaySound_Strict(BulletHitSFX) : Return
 	
 	If Rnd(1.0) =< HitProb Then
 		TurnEntity(Camera, Rnd(-3.0, 3.0), Rnd(-3.0, 3.0), 0.0)
-		; ~ TODO: use vest and helmet factors
-		If wi\BallisticVest > 0 And wi\BallisticHelmet = 0 Then ; ~ If player is wearing the ballistic vest only
-			Select Rand(16)
-				Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ; ~ Vest
-					;[Block]
-					InjurePlayer(Rnd(0.1, 0.2))
-					ShotMessageUpdate = "A bullet penetrated your vest, making you gasp."
-					;[End Block]
-				Case 11 ; ~ Left Leg
-					;[Block]
-					me\Stamina = 0.0
-					InjurePlayer(Rnd(0.7, 0.9), 0.0, 650.0)
-					ShotMessageUpdate = "A bullet hit your left leg."
-					;[End Block]
-				Case 12 ; ~ Right Leg
-					;[Block]
-					me\Stamina = 0.0
-					InjurePlayer(Rnd(0.7, 0.9), 0.0, 650.0)
-					ShotMessageUpdate = "A bullet hit your right leg."
-					;[End Block]
-				Case 13 ; ~ Left Arm
-					;[Block]
-					InjurePlayer(Rnd(0.5, 0.7), 0.0, 650.0)
-					ShotMessageUpdate = "A bullet hit your left arm."
-					;[End Block]
-				Case 14 ; ~ Right Arm
-					;[Block]
-					InjurePlayer(Rnd(0.5, 0.7), 0.0, 650.0)
-					ShotMessageUpdate = "A bullet hit your right arm."
-					;[End Block]
-				Case 15 ; ~ Neck
-					;[Block]
-					InjurePlayer(Rnd(1.1, 1.3), 0.0, 650.0)
-					ShotMessageUpdate = "A bullet struck your neck, making you gasp."
-					;[End Block]
-				Case 16 ; ~ Face or Head
-					;[Block]
+		Select Rand(17)
+			Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ; ~ Vest
+				;[Block]
+				me\Stamina = me\Stamina - Rnd(5.0)
+				InjurePlayer(Rnd(0.7, 0.9), 0.0, 650.0, Rnd(0.3, 0.6))
+				If wi\BallisticVest > 0 Then
+					ShotMessageUpdate = "A bullet penetrated your vest."
+				Else
+					ShotMessageUpdate = "A bullet hit your body."
+				EndIf
+				;[End Block]
+			Case 11 ; ~ Left Leg
+				;[Block]
+				me\Stamina = me\Stamina - Rnd(10.0)
+				InjurePlayer(Rnd(0.6, 0.8), 0.0, 650.0)
+				ShotMessageUpdate = "A bullet hit your left leg."
+				;[End Block]
+			Case 12 ; ~ Right Leg
+				;[Block]
+				me\Stamina = me\Stamina - Rnd(10.0)
+				InjurePlayer(Rnd(0.6, 0.8), 0.0, 650.0)
+				ShotMessageUpdate = "A bullet hit your right leg."
+				;[End Block]
+			Case 13 ; ~ Left Arm
+				;[Block]
+				InjurePlayer(Rnd(0.5, 0.7), 0.0, 650.0)
+				ShotMessageUpdate = "A bullet hit your left arm."
+				;[End Block]
+			Case 14 ; ~ Right Arm
+				;[Block]
+				InjurePlayer(Rnd(0.5, 0.7), 0.0, 650.0)
+				ShotMessageUpdate = "A bullet hit your right arm."
+				;[End Block]
+			Case 15 ; ~ Neck
+				;[Block]
+				InjurePlayer(Rnd(1.0, 1.2), 0.0, 650.0)
+				ShotMessageUpdate = "A bullet struck your neck, making you gasp."
+				;[End Block]
+			Case 16, 17 ; ~ Helmet, Face or Head
+				;[Block]
+				If wi\BallisticHelmet > 0 Then
+					InjurePlayer(0.0)
+				Else
 					For n.NPCs = Each NPCs
 						If n\NPCtype = NPCtypeMTF Lor n\NPCtype = NPCtypeApache Lor n\NPCtype = NPCtypeGuard
 							If EntityInView(n\OBJ, Camera) Then
@@ -6840,165 +6846,9 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 							Kill(True)
 						EndIf
 					Next
-					;[End Block]
-			End Select	
-		ElseIf wi\BallisticVest > 0 And wi\BallisticHelmet > 0 Then ; ~ If player is wearing the ballistic vest and the ballistic helmet
-			Select Rand(22)
-				Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ; ~ Vest
-					;[Block]
-					InjurePlayer(Rnd(0.1, 0.2))
-					ShotMessageUpdate = "A bullet penetrated your vest, making you gasp."
-					;[End Block]
-				Case 11 ; ~ Left Leg
-					;[Block]
-					me\Stamina = 0.0
-					InjurePlayer(Rnd(0.7, 0.9), 0.0, 650.0)
-					ShotMessageUpdate = "A bullet hit your left leg."
-					;[End Block]
-				Case 12 ; ~ Right Leg
-					;[Block]
-					me\Stamina = 0.0
-					InjurePlayer(Rnd(0.7, 0.9), 0.0, 650.0)
-					ShotMessageUpdate = "A bullet hit your right leg."
-					;[End Block]
-				Case 13 ; ~ Left Arm
-					;[Block]
-					InjurePlayer(Rnd(0.5, 0.7), 0.0, 650.0)
-					ShotMessageUpdate = "A bullet hit your left arm."
-					;[End Block]
-				Case 14 ; ~ Right Arm
-					;[Block]
-					InjurePlayer(Rnd(0.5, 0.7), 0.0, 650.0)
-					ShotMessageUpdate = "A bullet hit your right arm."
-					;[End Block]
-				Case 15 ;Neck
-					;[Block]
-					InjurePlayer(Rnd(1.1, 1.3), 0.0, 650.0)
-					ShotMessageUpdate = "A bullet struck your neck, making you gasp."
-					;[End Block]
-				Case 16, 17, 18, 19, 20, 21, 22 ; ~ Helmet
-					;[Block]
-					ShotMessageUpdate = "A bullet hit your helmet."
-					;[End Block]
-			End Select	
-		ElseIf wi\BallisticVest = 0 And wi\BallisticHelmet > 0 ; ~ If player is wearing the ballistic helmet only
-			Select Rand(16)
-				Case 1, 2, 3, 4, 5, 6, 7 ; ~ Helmet
-					;[Block]
-					ShotMessageUpdate = "A bullet hit your helmet."
-					;[End Block]
-				Case 8 ; ~ Left Leg
-					;[Block]
-					me\Stamina = 0.0
-					InjurePlayer(Rnd(0.7, 0.8), 0.0, 650.0)
-					ShotMessageUpdate = "A bullet hit your left leg."
-					;[End Block]
-				Case 9 ; ~ Right Leg
-					;[Block]
-					me\Stamina = 0.0
-					InjurePlayer(Rnd(0.7, 0.8), 0.0, 650.0)
-					ShotMessageUpdate = "A bullet hit your right leg."
-					;[End Block]
-				Case 10 ; ~ Left Arm
-					;[Block]
-					InjurePlayer(Rnd(0.5, 0.7), 0.0, 650.0)
-					ShotMessageUpdate = "A bullet hit your left arm."
-					;[End Block]
-				Case 11 ; ~ Right Arm
-					;[Block]
-					InjurePlayer(Rnd(0.5, 0.7), 0.0, 650.0)
-					ShotMessageUpdate = "A bullet hit your right arm."
-					;[End Block]
-				Case 12 ;Right Shoulder
-					;[Block]
-					InjurePlayer(Rnd(0.9, 1.1), 0.0, 650.0)
-					ShotMessageUpdate = "A bullet hit your right shoulder."
-					;[End Block]	
-				Case 13 ; ~ Left Shoulder
-					;[Block]
-					InjurePlayer(Rnd(0.9, 1.1), 0.0, 650.0)
-					ShotMessageUpdate = "A bullet hit your left shoulder."
-					;[End Block]
-				Case 14 ; ~ Right Shoulder (more damage)
-					;[Block]
-					InjurePlayer(Rnd(2.4, 2.6), 0.0, 650.0)
-					ShotMessageUpdate = "A bullet hit your right shoulder."
-					;[End Block]
-				Case 15 ; ~ Left Shoulder (more damage)
-					;[Block]
-					InjurePlayer(Rnd(2.4, 2.6), 0.0, 650.0)
-					ShotMessageUpdate = "A bullet hit your left shoulder."
-					;[End Block]
-				Case 16 ; ~ Neck
-					;[Block]
-					InjurePlayer(Rnd(1.1, 1.3), 0.0, 650.0)
-					ShotMessageUpdate = "A bullet struck your neck, making you gasp."
-					;[End Block]
-			End Select
-		ElseIf wi\BallisticVest = 0 And wi\BallisticHelmet = 0 ; ~ If player isn't wearing the ballistic vest and the ballistic helmet
-			Select Rand(10)
-				Case 1 ; ~ Left Leg
-					;[Block]
-					me\Stamina = 0.0
-					InjurePlayer(Rnd(0.7, 0.9), 0.0, 650.0)
-					ShotMessageUpdate = "A bullet hit your left leg."
-					;[End Block]
-				Case 2 ; ~ Right Leg
-					;[Block]
-					me\Stamina = 0.0
-					InjurePlayer(Rnd(0.7, 0.9), 0.0, 650.0)
-					ShotMessageUpdate = "A bullet hit your right leg."
-					;[End Block]
-				Case 3 ; ~ Right Shoulder
-					;[Block]
-					InjurePlayer(Rnd(0.9, 1.1), 0.0, 650.0)
-					ShotMessageUpdate = "A bullet hit your right shoulder."
-					;[End Block]	
-				Case 4 ; ~ Left Shoulder
-					;[Block]
-					InjurePlayer(Rnd(0.9, 1.1), 0.0, 650.0)
-					ShotMessageUpdate = "A bullet hit your left shoulder."
-					;[End Block]
-				Case 5 ; ~ Right Shoulder (more damage)
-					;[Block]
-					InjurePlayer(Rnd(2.4, 2.6), 0.0, 650.0)
-					ShotMessageUpdate = "A bullet hit your right shoulder."
-					;[End Block]
-				Case 6 ; ~ Left Shoulder (more damage)
-					;[Block]
-					InjurePlayer(Rnd(2.4, 2.6), 0.0, 650.0)
-					ShotMessageUpdate = "A bullet hit your left shoulder."
-					;[End Block]
-				Case 7 ; ~ Left Arm
-					;[Block]
-					InjurePlayer(Rnd(0.5, 0.7), 0.0, 650.0)
-					ShotMessageUpdate = "A bullet hit your left arm."
-					;[End Block]
-				Case 8 ; ~ Right Arm
-					;[Block]
-					InjurePlayer(Rnd(0.5, 0.7), 0.0, 650.0)
-					ShotMessageUpdate = "A bullet hit your right arm."
-					;[End Block]
-				Case 9 ; ~ Neck
-					;[Block]
-					InjurePlayer(Rnd(1.1, 1.3), 0.0, 650.0)
-					ShotMessageUpdate = "A bullet struck your neck, making you gasp."
-					;[End Block]
-				Case 10 ; ~ Face or Head
-					;[Block]
-					For n.NPCs = Each NPCs
-						If n\NPCtype = NPCtypeMTF Lor n\NPCtype = NPCtypeApache Lor n\NPCtype = NPCtypeGuard
-							If EntityInView(n\OBJ, Camera) Then
-								ShotMessageUpdate = "A bullet hit your face."
-							Else
-								ShotMessageUpdate = "A bullet hit your head."
-							EndIf
-							Kill(True)
-						EndIf
-					Next
-					;[End Block]
-			End Select
-		EndIf
+				EndIf
+				;[End Block]
+		End Select	
 		
 		If msg\Timer < 70.0 * 5.0 Then
 			CreateMsg(ShotMessageUpdate, 6.0)
@@ -7006,7 +6856,7 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 		
 		If me\Injuries >= 10.0 Then Kill(True)
 		
-		PlaySound_Strict(BullethitSFX)
+		PlaySound_Strict(BulletHitSFX)
 	ElseIf Particles And opt\ParticleAmount > 0
 		Pvt = CreatePivot()
 		PositionEntity(Pvt, EntityX(me\Collider), (EntityY(me\Collider) + EntityY(Camera)) / 2.0, EntityZ(me\Collider))
@@ -7484,6 +7334,7 @@ Function ChangeNPCTextureID(n.NPCs, TextureID%) ; ~ Works only for Class D model
 	EndIf
 	
 	n\TextureID = TextureID + 1
+	
 	If n\OBJ <> 0 Then FreeEntity(n\OBJ)
 	n\OBJ = CopyEntity(o\DTextures[TextureID])
 	
