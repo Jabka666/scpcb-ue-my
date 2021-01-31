@@ -10799,19 +10799,16 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 					If Rand(2) = 1 Then
 						it3.Items = CreateItem("Quarter", "25ct", x, y, z)
 						EntityType(it3\Collider, HIT_ITEM)
-						EntityParent(it3\Collider, 0)
 					EndIf
 					
 					If Rand(3) = 1 Then
 						it4.Items = CreateItem("Quarter", "25ct", x, y, z)
 						EntityType(it4\Collider, HIT_ITEM)
-						EntityParent(it4\Collider, 0)
 					EndIf
 					
 					If Rand(4) = 1 Then
 						it5.Items = CreateItem("Quarter", "25ct", x, y, z)
 						EntityType(it5\Collider, HIT_ITEM)
-						EntityParent(it5\Collider, 0)
 					EndIf
 					;[End Block]
 				Case ONETOONE

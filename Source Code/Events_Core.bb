@@ -9135,7 +9135,7 @@ Function UpdateEvents()
 			Case e_room409
 				;[Block]
 				If PlayerRoom = e\room Then
-					If EntityY(me\Collider) < -4000.0 * RoomScale Then
+					If EntityY(me\Collider) < (-4000.0) * RoomScale Then
 						ShouldPlay = 28
 						
 						If e\EventState = 0.0 Then
@@ -9595,6 +9595,9 @@ Function UpdateEndings()
 						Sky = CreateSky("GFX\map\sky\sky")
 						RotateEntity(Sky, 0.0, e\room\Angle - 90.0, 0.0)
 						
+						ResetEntity(me\Collider)
+						RotateEntity(me\Collider, 0.0, EntityYaw(me\Collider) + (e\room\Angle + 180.0), 0.0)
+						
 						e\EventState = 1.0
 						
 						DrawLoading(100, True)
@@ -9948,7 +9951,6 @@ Function UpdateEndings()
 						Next
 						
 						ResetEntity(me\Collider)
-						
 						RotateEntity(me\Collider, 0.0, EntityYaw(me\Collider) + (e\room\Angle + 180.0), 0.0)
 						
 						If (Not Curr106\Contained) Then PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\106Escape.ogg"))
