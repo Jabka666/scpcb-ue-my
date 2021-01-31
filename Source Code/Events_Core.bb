@@ -92,7 +92,8 @@ Function CreateEvent.Events(EventName$, RoomName$, ID%, Prob# = 0.0)
 	; ~ 1.0 means that the event is assigned to every room
 	; ~ The ID-variable is ignored if prob <> 0.0
 	
-	Local i% = 0, Temp%, e.Events, e2.Events, r.Rooms
+	Local e.Events, e2.Events, r.Rooms
+	Local i% = 0, Temp%
 	
 	If Prob = 0.0 Then
 		For r.Rooms = Each Rooms
@@ -454,8 +455,6 @@ Function FindEventID%(EventName$)
 End Function
 
 Function InitEvents()
-	Local e.Events
-	
 	If opt\IntroEnabled Then CreateEvent("room173intro", "room173intro", 0)
 	CreateEvent("room173", "room173", 0)
 	
@@ -671,7 +670,7 @@ End Function
 Function UpdateQuickLoading()
 	If QuickLoadPercent > -1 Then
 		If QuickLoadPercent > 99 Then
-			If QuickLoadPercent_DisplayTimer < 70.0
+			If QuickLoadPercent_DisplayTimer < 70.0 Then
 				QuickLoadPercent_DisplayTimer = Min(QuickLoadPercent_DisplayTimer + fps\FPSFactor[0], 70.0)
 			Else
 				QuickLoadPercent = -1
@@ -818,7 +817,7 @@ Function UpdateEvents()
 	Local Dist#, i%, Temp%, Pvt%, StrTemp$, j%, k%
 	Local CurrTrigger$ = "", fDir#, Scale#, Tex%
 	Local x#, y#, z#, xTemp#, yTemp#, b%, t%, SF%, TexName$
-	Local Angle#, GroupDesignation$
+	Local Angle#, GroupName$
 	
 	CurrStepSFX = 0
 	

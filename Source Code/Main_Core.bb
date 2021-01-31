@@ -2194,8 +2194,8 @@ Function CreateDoor.Doors(x#, y#, z#, Angle#, room.Rooms, Open% = False, DoorTyp
 End Function
 
 Function UpdateDoors()
-	Local i%, d.Doors, x#, z#, Dist#
-	Local p.Particles
+	Local p.Particles, d.Doors
+	Local x#, z#, Dist#, i%
 	
 	If UpdateDoorsTimer =< 0.0 Then
 		For d.Doors = Each Doors
@@ -2434,6 +2434,7 @@ Function UpdateDoors()
 	Next
 End Function
 
+; ~ TODO: Add "Type Buttons"
 Function CreateButton%(ButtonID%, x#, y#, z#, Pitch# = 0.0, Yaw# = 0.0, Roll# = 0.0, Parent% = 0, Locked% = False)
 	Local OBJ% = CopyEntity(o\ButtonModelID[ButtonID])	
 	
@@ -2468,8 +2469,8 @@ Function UpdateButton(OBJ%)
 End Function
 
 Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondPivot%, event.Events, IgnoreRotation% = True)
-	Local Dist#, Dir#, n.NPCs, it.Items, de.Decals
-	Local x#, z#
+	Local n.NPCs, it.Items, de.Decals
+	Local x#, z#, Dist#, Dir#
 	
 	door1\IsElevatorDoor = 1
 	door2\IsElevatorDoor = 1
@@ -3195,7 +3196,8 @@ Const FogColorForest$ = "098133162"
 Function MainLoop()
 	CatchErrors("Uncaught (MainLoop)")
 	
-	Local e.Events, r.Rooms, i%
+	Local e.Events, r.Rooms
+	Local i%
 	
 	While fps\Accumulator > 0.0
 		fps\Accumulator = fps\Accumulator - TICK_DURATION
@@ -3811,8 +3813,8 @@ Const Ending_B2% = 3
 Function DrawEnding()
 	ShowPointer()
 	
-	Local x%, y%, Width%, Height%, i%
 	Local itt.ItemTemplates, r.Rooms
+	Local x%, y%, Width%, Height%, i%
 	
 	Select me\SelectedEnding
 		Case Ending_A1, Ending_B2
@@ -4025,11 +4027,10 @@ Function InitCredits()
 End Function
 
 Function DrawCredits()
+	Local cl.CreditsLine, LastCreditLine.CreditsLine
 	Local Credits_Y# = (me\EndingTimer + 2000.0) / 2 + (opt\GraphicHeight + 10.0)
-	Local cl.CreditsLine
 	Local ID%
 	Local EndLinesAmount%
-	Local LastCreditLine.CreditsLine
 	
 	Cls()
 	
@@ -4096,11 +4097,10 @@ Function DrawCredits()
 End Function
 
 Function UpdateCredits()
+	Local cl.CreditsLine, LastCreditLine.CreditsLine
 	Local Credits_Y# = (me\EndingTimer + 2000.0) / 2 + (opt\GraphicHeight + 10.0)
-	Local cl.CreditsLine
 	Local ID%
 	Local EndLinesAmount%
-	Local LastCreditLine.CreditsLine
 	
 	ID = 0
 	EndLinesAmount = 0
@@ -4808,9 +4808,9 @@ Const INVENTORY_GFX_SPACING% = 35
 Function DrawGUI()
 	CatchErrors("Uncaught (DrawGUI)")
 	
+	Local e.Events, it.Items, ev.Events, ch.Chunk, a_it.Items
 	Local Temp%, x%, y%, z%, i%, YawValue#, PitchValue#
 	Local x1#, x2#, x3#, y1#, y2#, y3#, z2#, ProjY#, Scale#, Pvt%
-	Local e.Events, it.Items, ev.Events, ch.Chunk, a_it.Items
 	Local n%, xTemp%, yTemp%, StrTemp$
 	Local Width%, Height%
 	
@@ -5846,10 +5846,10 @@ End Function
 Function UpdateGUI()
 	CatchErrors("Uncaught (UpdateGUI)")
 	
+	Local e.Events, it.Items, r.Rooms
 	Local Temp%, x%, y%, z%, i%
 	Local x2#, ProjY#, Scale#, Pvt%
-	Local n%, xTemp%, yTemp%, StrTemp$, GroupDesignation$
-	Local e.Events, it.Items, r.Rooms
+	Local n%, xTemp%, yTemp%, StrTemp$, GroupName$
 	
 	If I_294\Using Then Update294()
 	
@@ -8351,8 +8351,8 @@ End Function
 Function UpdateMenu()
 	CatchErrors("Uncaught (UpdateMenu)")
 	
-	Local x%, y%, z%, Width%, Height%, i%
 	Local r.Rooms
+	Local x%, y%, z%, Width%, Height%, i%
 	
 	If MenuOpen Then
 		If PlayerRoom\RoomTemplate\Name <> "gateb" And PlayerRoom\RoomTemplate\Name <> "gatea" Then
@@ -9512,7 +9512,8 @@ End Function
 Function InitNewGame()
 	CatchErrors("Uncaught (InitNewGame)")
 	
-	Local i%, de.Decals, d.Doors, it.Items, r.Rooms, sc.SecurityCams, e.Events
+	Local de.Decals, d.Doors, it.Items, r.Rooms, sc.SecurityCams, e.Events
+	Local i%
 	
 	LoadEntities()
 	LoadSounds()
@@ -9675,7 +9676,8 @@ End Function
 Function InitLoadGame()
 	CatchErrors("Uncaught (InitLoadGame)")
 	
-	Local d.Doors, sc.SecurityCams, rt.RoomTemplates, e.Events, i%, x#, z#
+	Local d.Doors, sc.SecurityCams, rt.RoomTemplates, e.Events
+	Local i%, x#, z#
 	
 	DrawLoading(80)
 	
@@ -9766,10 +9768,10 @@ End Function
 Function NullGame(PlayButtonSFX% = True)
 	CatchErrors("Uncaught (NullGame)")
 	
-	Local i%, x%, y%, Lvl%
 	Local itt.ItemTemplates, s.Screens, lt.LightTemplates, d.Doors, m.Materials, de.Decals, sc.SecurityCams
 	Local wp.WayPoints, twp.TempWayPoints, r.Rooms, it.Items, pr.Props, c.ConsoleMsg, n.NPCs, em.Emitters
 	Local rt.RoomTemplates, p.Particles, e.Events, sub.Subtitles
+	Local i%, x%, y%, Lvl%
 	
 	KillSounds()
 	If PlayButtonSFX Then PlaySound_Strict(ButtonSFX)
@@ -10061,8 +10063,8 @@ Const VERYFINE% = 2
 Function Use914(item.Items, Setting%, x#, y#, z#)
 	me\RefinedItems = me\RefinedItems + 1
 	
-	Local it.Items, it2.Items, d.Decals, n.NPCs, i%
-	Local Remove% = True
+	Local it.Items, it2.Items, it3.Items, it4.Items, it5.Items, d.Decals, n.NPCs
+	Local Remove% = True, i%
 	
 	Select item\ItemTemplate\TempName
 		Case "gasmask", "gasmask3"
@@ -10794,19 +10796,23 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 					;[Block]
 					it2.Items = CreateItem("Quarter", "25ct", x, y, z)
 					
-					Local it3.Items, it4.Items, it5.Items
+					If Rand(2) = 1 Then
+						it3.Items = CreateItem("Quarter", "25ct", x, y, z)
+						EntityType(it3\Collider, HIT_ITEM)
+						EntityParent(it3\Collider, 0)
+					EndIf
 					
-					it3.Items = CreateItem("Quarter", "25ct", x, y, z)
-					EntityType(it3\Collider, HIT_ITEM)
-					EntityParent(it3\Collider, 0)
+					If Rand(3) = 1 Then
+						it4.Items = CreateItem("Quarter", "25ct", x, y, z)
+						EntityType(it4\Collider, HIT_ITEM)
+						EntityParent(it4\Collider, 0)
+					EndIf
 					
-					it4.Items = CreateItem("Quarter", "25ct", x, y, z)
-					EntityType(it4\Collider, HIT_ITEM)
-					EntityParent(it4\Collider, 0)
-					
-					it5.Items = CreateItem("Quarter", "25ct", x, y, z)
-					EntityType(it5\Collider, HIT_ITEM)
-					EntityParent(it5\Collider, 0)
+					If Rand(4) = 1 Then
+						it5.Items = CreateItem("Quarter", "25ct", x, y, z)
+						EntityType(it5\Collider, HIT_ITEM)
+						EntityParent(it5\Collider, 0)
+					EndIf
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -11289,10 +11295,10 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 End Function
 
 Function Update294()
+	Local it.Items
 	Local x#, y#, xTemp%, yTemp%, StrTemp$, Temp%
 	Local Sep1%, Sep2%, Alpha#, Glow%
 	Local R%, G%, B%
-	Local it.Items
 	
 	x = mo\Viewport_Center_X - (ImageWidth(tt\ImageID[5]) / 2)
 	y = mo\Viewport_Center_Y - (ImageHeight(tt\ImageID[5]) / 2)
@@ -11569,7 +11575,8 @@ Function Draw294()
 End Function
 
 Function Use427()
-	Local i%, Pvt%, de.Decals, e.Events, TempCHN%
+	Local de.Decals, e.Events
+	Local i%, Pvt%, TempCHN%
 	Local PrevI427Timer# = I_427\Timer
 	
 	If I_427\Timer < 70.0 * 360.0
@@ -11766,7 +11773,8 @@ Function UpdateCameraCheck()
 End Function
 
 Function UpdateExplosion()
-	Local i%, p.Particles
+	Local p.Particles
+	Local i%
 	
 	; ~ This here is necessary because the SCP-294's drinks with explosion effect didn't worked anymore -- ENDSHN
 	If me\ExplosionTimer > 0.0 Then
@@ -11805,7 +11813,8 @@ End Function
 Function UpdateVomit()
 	CatchErrors("Uncaught (UpdateVomit)")
 	
-	Local Pvt%, de.Decals
+	Local de.Decals
+	Local Pvt%
 	
 	If me\CameraShakeTimer > 0.0 Then
 		me\CameraShakeTimer = me\CameraShakeTimer - (fps\FPSFactor[0] / 70.0)
@@ -11886,7 +11895,7 @@ Function Update008()
 	Local r.Rooms, e.Events, p.Particles, de.Decals
 	Local PrevI008Timer#, i%
 	Local TeleportForInfect% = True
-	Local GroupDesignation$
+	Local GroupName$
 	
 	If PlayerRoom\RoomTemplate\Name = "room860"
 		For e.Events = Each Events
@@ -11985,11 +11994,11 @@ Function Update008()
 						PlayerRoom\NPC[0]\SoundCHN = PlaySound_Strict(PlayerRoom\NPC[0]\Sound)
 						
 						If Rand(2) = 1 Then
-							GroupDesignation = "Nine-Tailed Fox"
+							GroupName = "Nine-Tailed Fox"
 						Else
-							GroupDesignation = "See No Evil"
+							GroupName = "See No Evil"
 						EndIf
-						msg\DeathMsg = SubjectName + " found ingesting Dr. [DATA REDACTED] at Sector [DATA REDACTED]. Subject was immediately terminated by " + GroupDesignation + " and sent for autopsy. "
+						msg\DeathMsg = SubjectName + " found ingesting Dr. [DATA REDACTED] at Sector [DATA REDACTED]. Subject was immediately terminated by " + GroupName + " and sent for autopsy. "
 						msg\DeathMsg = msg\DeathMsg + "SCP-008 infection was confirmed, after which the body was incinerated."
 						Kill()
 						de.Decals = CreateDecal(3, EntityX(PlayerRoom\NPC[0]\Collider), 544.0 * RoomScale + 0.01, EntityZ(PlayerRoom\NPC[0]\Collider), 90.0, Rnd(360.0), 0.0, 0.8)
@@ -12033,11 +12042,11 @@ Function Update008()
 						msg\DeathMsg = msg\DeathMsg + "B"
 					EndIf
 					If Rand(2) = 1 Then
-						GroupDesignation = "Nine-Tailed Fox"
+						GroupName = "Nine-Tailed Fox"
 					Else
-						GroupDesignation = "See No Evil"
+						GroupName = "See No Evil"
 					EndIf
-					msg\DeathMsg = msg\DeathMsg + ". Subject was immediately terminated by " + GroupDesignation + " and sent for autopsy. "
+					msg\DeathMsg = msg\DeathMsg + ". Subject was immediately terminated by " + GroupName + " and sent for autopsy. "
 					msg\DeathMsg = msg\DeathMsg + "SCP-008 infection was confirmed, after which the body was incinerated."
 				Else
 					msg\DeathMsg = ""
@@ -12098,8 +12107,9 @@ Type Decals
 End Type
 
 Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#, Size# = 1.0, Alpha# = 1.0, FX% = 0, BlendMode% = 1, R% = 0, G% = 0, B% = 0)
-	Local d.Decals = New Decals
+	Local d.Decals
 	
+	d.Decals = New Decals
 	d\ID = ID
 	d\Size = Size
 	d\Alpha = Alpha
@@ -12168,8 +12178,8 @@ Function UpdateDecals()
 End Function
 
 Function UpdateLeave1499()
-	Local r.Rooms, it.Items, r2.Rooms, i%
-	Local r1499.Rooms
+	Local r.Rooms, it.Items, r2.Rooms, r1499.Rooms
+	Local i%
 	
 	If I_1499\Using = 0 And PlayerRoom\RoomTemplate\Name = "dimension1499" Then
 		For r.Rooms = Each Rooms
@@ -12184,7 +12194,7 @@ Function UpdateLeave1499()
 				UpdateDoors()
 				UpdateRooms()
 				If PlayerRoom\RoomTemplate\Name = "room3storage"
-					If EntityY(me\Collider) < -4600.0 * RoomScale
+					If EntityY(me\Collider) < (-4600.0) * RoomScale
 						For i = 0 To 3
 							PlayerRoom\NPC[i]\State = 2.0
 							PositionEntity(PlayerRoom\NPC[i]\Collider, EntityX(PlayerRoom\Objects[PlayerRoom\NPC[i]\State2], True), EntityY(PlayerRoom\Objects[PlayerRoom\NPC[i]\State2], True) + 0.2, EntityZ(PlayerRoom\Objects[PlayerRoom\NPC[i]\State2], True))

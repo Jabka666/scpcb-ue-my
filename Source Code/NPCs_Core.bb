@@ -70,10 +70,11 @@ End Type
 Const NPCsFile$ = "Data\NPCs.ini"
 
 Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
-	Local n.NPCs = New NPCs, n2.NPCs
+	Local n.NPCs, n2.NPCs
 	Local Temp#, i%, Tex%, TexFestive%
 	Local SF%, b%, t1%
 	
+	n.NPCs = New NPCs
 	n\NPCtype = NPCtype
 	n\GravityMult = 1.0
 	n\MaxGravity = 0.2
@@ -559,7 +560,7 @@ Function UpdateNPCs()
 	
 	Local n.NPCs, n2.NPCs, d.Doors, de.Decals, r.Rooms, e.Events, w.Waypoints, p.Particles, wp.WayPoints
 	Local i%, j%, Dist#, Dist2#, Angle#, x#, x2#, y#, z#, z2#, PrevFrame#, PlayerSeeAble%, RN$
-	Local Target%, Pvt%, Pick%, GroupDesignation$, PrevDist#, NewDist#
+	Local Target%, Pvt%, Pick%, GroupName$, PrevDist#, NewDist#
 	
 	For n.NPCs = Each NPCs
 		; ~ A variable to determine if the NPC is in the facility or not
@@ -1572,11 +1573,11 @@ Function UpdateNPCs()
 													Next
 												Else
 													If Rand(2) = 1 Then
-														GroupDesignation = "Nine-Tailed Fox"
+														GroupName = "Nine-Tailed Fox"
 													Else
-														GroupDesignation = "See No Evil"
+														GroupName = "See No Evil"
 													EndIf
-													msg\DeathMsg = "An active instance of SCP-049-2 was discovered in [DATA REDACTED]. Terminated by " + GroupDesignation + "."
+													msg\DeathMsg = "An active instance of SCP-049-2 was discovered in [DATA REDACTED]. Terminated by " + GroupName + "."
 													Kill() : me\KillAnim = 0
 												EndIf
 												PlaySound_Strict(HorrorSFX[13])
@@ -6207,11 +6208,11 @@ Function UpdateNPCs()
 												msg\DeathMsg = msg\DeathMsg + "died shortly after being shot by Agent [DATA REDACTED]."
 											Else
 												If Rand(2) = 1 Then
-													GroupDesignation = "Nine-Tailed Fox"
+													GroupName = "Nine-Tailed Fox"
 												Else
-													GroupDesignation = "See No Evil"
+													GroupName = "See No Evil"
 												EndIf
-												msg\DeathMsg = "An unidentified male and a deceased Class D subject were discovered in [DATA REDACTED] by the " + GroupDesignation + ". "
+												msg\DeathMsg = "An unidentified male and a deceased Class D subject were discovered in [DATA REDACTED] by the " + GroupName + ". "
 												msg\DeathMsg = msg\DeathMsg + "The man was described as highly agitated and seemed to only speak Russian. "
 												msg\DeathMsg = msg\DeathMsg + "He's been taken into a temporary holding area at [DATA REDACTED] while waiting for a translator to arrive."
 											EndIf
@@ -6237,11 +6238,11 @@ Function UpdateNPCs()
 												msg\DeathMsg = msg\DeathMsg + "died shortly after being shot by Agent [DATA REDACTED]."
 											Else
 												If Rand(2) = 1 Then
-													GroupDesignation = "Nine-Tailed Fox"
+													GroupName = "Nine-Tailed Fox"
 												Else
-													GroupDesignation = "See No Evil"
+													GroupName = "See No Evil"
 												EndIf
-												msg\DeathMsg = "An unidentified male and a deceased Class D subject were discovered in [DATA REDACTED] by the " + GroupDesignation + ". "
+												msg\DeathMsg = "An unidentified male and a deceased Class D subject were discovered in [DATA REDACTED] by the " + GroupName + ". "
 												msg\DeathMsg = msg\DeathMsg + "The man was described as highly agitated and seemed to only speak Russian. "
 												msg\DeathMsg = msg\DeathMsg + "He's been taken into a temporary holding area at [DATA REDACTED] while waiting for a translator to arrive."
 											EndIf
@@ -6456,11 +6457,11 @@ Function UpdateNPCs()
 										InjurePlayer(Rnd(0.4, 1.0), 1.0 + (1.0 * SelectedDifficulty\AggressiveNPCs), 0.0, Rnd(0.1, 0.25), 0.2)
 										If me\Injuries > 3.0 Then
 											If Rand(2) = 1 Then
-												GroupDesignation = "Nine-Tailed Fox"
+												GroupName = "Nine-Tailed Fox"
 											Else
-												GroupDesignation = "See No Evil"
+												GroupName = "See No Evil"
 											EndIf
-											msg\DeathMsg = SubjectName + ". Cause of death: multiple lacerations and severe blunt force trauma caused by [DATA REDACTED], who was infected with SCP-008. Said subject was located by " + GroupDesignation + " and terminated."
+											msg\DeathMsg = SubjectName + ". Cause of death: multiple lacerations and severe blunt force trauma caused by [DATA REDACTED], who was infected with SCP-008. Said subject was located by " + GroupName + " and terminated."
 											Kill(True)
 										EndIf
 									Else
@@ -6911,6 +6912,7 @@ Function MoveToPocketDimension()
 			PlayerRoom = r
 			
 			Return
+			Exit
 		EndIf
 	Next		
 End Function
@@ -7079,9 +7081,9 @@ Function ConsoleSpawnNPC(Name$, NPCState$ = "")
 End Function
 
 Function ManipulateNPCBones()
-	Local n.NPCs, Bone%, Pvt%, BoneName$
+	Local n.NPCs
 	Local MaxValue#, MinValue#, Offset#, Smooth#
-	Local i%
+	Local i%, Bone%, Pvt%, BoneName$
 	Local ToValue#
 	
 	For n.NPCs = Each NPCs
@@ -7123,7 +7125,7 @@ Function ManipulateNPCBones()
 									ToValue = DeltaYaw(Bone, Camera) + Offset
 								EndIf
 								Smooth = GetNPCManipulationValue(n\NPCNameInSection, n\BoneToManipulate, "controlleraxis" + i + "_smoothing", 2)
-								If Smooth > 0.0
+								If Smooth > 0.0 Then
 									n\BoneYaw = CurveAngle(ToValue, n\BoneYaw, Smooth)
 								Else
 									n\BoneYaw = ToValue
@@ -7191,8 +7193,8 @@ Function NPCSpeedChange(n.NPCs)
 End Function
 
 Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False)
-	Local RN$ = PlayerRoom\RoomTemplate\Name
 	Local e.Events
+	Local RN$ = PlayerRoom\RoomTemplate\Name
 	
 	; ~ Player is in these rooms, returning false
 	If RN = "pocketdimension" Lor RN = "dimension1499" Lor RN = "room173intro" Lor RN = "gateb" Lor RN = "gatea" Then
@@ -7212,7 +7214,7 @@ Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False)
 	
 	If (Not CanSpawnIn049Chamber) Then
 		If (Not SelectedDifficulty\AggressiveNPCs) Then
-			If RN = "room049" And EntityY(me\Collider) =< -2848.0 * RoomScale Then
+			If RN = "room049" And EntityY(me\Collider) =< (-2848.0) * RoomScale Then
 				Return(False)
 			EndIf
 		EndIf
@@ -7316,7 +7318,7 @@ Function FinishWalking(n.NPCs, StartFrame#, EndFrame#, Speed#)
 	
 	If n <> Null Then
 		CenterFrame = (EndFrame - StartFrame) / 2.0
-		If n\Frame >= CenterFrame
+		If n\Frame >= CenterFrame Then
 			AnimateNPC(n, StartFrame, EndFrame, Speed, False)
 		Else
 			AnimateNPC(n, EndFrame, StartFrame, -Speed, False)

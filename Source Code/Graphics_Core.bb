@@ -138,7 +138,8 @@ Function UpdateGamma2()
 End Function
 
 Function UpdateWorld2()
-	Local i%, np.NPCs
+	Local np.NPCs
+	Local i%
 	
 	wi\IsNVGBlinking = False
 	
@@ -210,7 +211,8 @@ Const BRIGHTNESS# = 45.0
 Global CurrTrisAmount%
 
 Function RenderWorld2(Tween#)
-	Local i%, k%, l%, np.NPCs
+	Local np.NPCs
+	Local i%, k%, l%
 	
 	CameraProjMode(ArkBlurCam, 0)
 	CameraProjMode(Camera, 1)

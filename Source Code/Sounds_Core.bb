@@ -142,7 +142,8 @@ Function UpdateMusic()
 End Function 
 
 Function PauseSounds()
-	Local e.Events, n.NPCs, d.Doors, i%
+	Local e.Events, n.NPCs, d.Doors
+	Local i%
 	
 	For e.Events = Each Events
 		If e\SoundCHN <> 0 Then
@@ -241,7 +242,8 @@ Function PauseSounds()
 End Function
 
 Function ResumeSounds()
-	Local e.Events, n.NPCs, d.Doors, i%
+	Local e.Events, n.NPCs, d.Doors
+	Local i%
 	
 	For e.Events = Each Events
 		If e\SoundCHN <> 0 Then
@@ -338,7 +340,8 @@ Function ResumeSounds()
 End Function
 
 Function KillSounds()
-	Local i%, e.Events, n.NPCs, d.Doors, snd.Sound
+	Local e.Events, n.NPCs, d.Doors, snd.Sound
+	Local i%
 	
 	For i = 0 To 9
 		If TempSounds[i] <> 0 Then FreeSound_Strict(TempSounds[i]) : TempSounds[i] = 0
@@ -456,8 +459,8 @@ Function KillSounds()
 End Function
 
 Function GetStepSound(Entity%)
-	Local Picker%, Brush%, Texture%, Name$
 	Local mat.Materials
+	Local Picker%, Brush%, Texture%, Name$
 	
 	Picker = LinePick(EntityX(Entity), EntityY(Entity), EntityZ(Entity), 0, -1, 0)
 	If Picker <> 0 Then
@@ -538,7 +541,8 @@ Function UpdateStreamSounds()
 End Function
 
 Function ControlSoundVolume()
-	Local snd.Sound, i%
+	Local snd.Sound
+	Local i%
 	
 	For snd.Sound = Each Sound
 		For i = 0 To 31
@@ -548,7 +552,7 @@ Function ControlSoundVolume()
 End Function
 
 Function UpdateDeaf()
-	If me\DeafTimer > 0.0
+	If me\DeafTimer > 0.0 Then
 		me\DeafTimer = me\DeafTimer - fps\FPSFactor[0]
 		opt\SFXVolume = 0.0
 		If opt\SFXVolume > 0.0 Then

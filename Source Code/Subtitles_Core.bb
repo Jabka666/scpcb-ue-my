@@ -12,8 +12,10 @@ Type Subtitles
 End Type
 
 Function UpdateSubtitles()
-	Local sub.Subtitles, i%
-	Local ShouldDeleteSubtitles% = True
+	If (Not opt\EnableSubtitles) Then Return
+	
+	Local sub.Subtitles
+	Local ShouldDeleteSubtitles% = True, i%
 	
 	; ~ TODO: Fix subtitles if two sounds played at the same time
 	For sub.Subtitles = Each Subtitles
@@ -30,7 +32,10 @@ Function UpdateSubtitles()
 End Function
 
 Function RenderSubtitles()
-	Local sub.Subtitles, i%
+	If (Not opt\EnableSubtitles) Then Return
+	
+	Local sub.Subtitles
+	Local i%
 	
 	For sub.Subtitles = Each Subtitles
 		If sub.Subtitles = First Subtitles Then
@@ -54,10 +59,13 @@ Global SubtitlesID%
 Function ShowSubtitles(Name$)
 	CatchErrors("Uncaught (ShowSubtitles)")
 	
+	If (Not opt\EnableSubtitles) Then Return
+	
+	Local sub.Subtitles
 	Local Loc% = GetINISectionLocation(SubtitlesFile, Name)
 	Local Person% = GetINIString2(SubtitlesFile, Loc, "Person")
 	Local LinesAmount% = GetINIInt2(SubtitlesFile, Loc, "LinesAmount")
-	Local i%, sub.Subtitles
+	Local i%
 	
 	Select Person
 		Case 1

@@ -105,8 +105,9 @@ Type AchievementMsg
 End Type
 
 Function CreateAchievementMsg.AchievementMsg(ID%, Txt$)
-	Local amsg.AchievementMsg = New AchievementMsg
+	Local amsg.AchievementMsg
 	
+	amsg.AchievementMsg = New AchievementMsg
 	amsg\AchvID = ID
 	amsg\Txt = Txt
 	amsg\MsgX = 0.0

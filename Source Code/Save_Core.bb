@@ -9,10 +9,10 @@ Function SaveGame(File$)
 	
 	If me\KillTimer < 0.0 Then Return
 	
-	GameSaved = True
-	
-	Local x%, y%, i%, Temp%
 	Local n.NPCs, r.Rooms, do.Doors
+	Local x%, y%, i%, Temp%
+	
+	GameSaved = True
 	
 	CreateDir(File)
 	
@@ -492,13 +492,13 @@ End Function
 Function LoadGame(File$)
 	CatchErrors("Uncaught (LoadGame)")
 	
+	Local r.Rooms, n.NPCs, do.Doors, rt.RoomTemplates
+	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, Tex%, ID%
+	Local f% = ReadFile(File + "save.cb")
+	
 	me\DropSpeed = 0.0
 	
 	GameSaved = True
-	
-	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, Tex%
-	Local r.Rooms, ID%, n.NPCs, do.Doors, rt.RoomTemplates
-	Local f% = ReadFile(File + "save.cb")
 	
 	StrTemp = ReadString(f)
 	StrTemp = ReadString(f)
@@ -1334,6 +1334,11 @@ End Function
 Function LoadGameQuick(File$)
 	CatchErrors("Uncaught (LoadGameQuick)")
 	
+	Local r.Rooms, n.NPCs, do.Doors
+	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, ID%, Tex%
+	Local Player_X#, Player_Y#, Player_Z#
+	Local f% = ReadFile(File + "save.cb")
+	
 	GameSaved = True
 	me\Zombie = False
 	me\Deaf = False
@@ -1344,10 +1349,6 @@ Function LoadGameQuick(File$)
 	
 	PositionEntity(me\Collider, 0.0, 1000.0, 0.0, True)
 	ResetEntity(me\Collider)
-	
-	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, ID%, Tex%
-	Local Player_X#, Player_Y#, Player_Z#, r.Rooms, n.NPCs, do.Doors
-	Local f% = ReadFile(File + "save.cb")
 	
 	StrTemp = ReadString(f)
 	StrTemp = ReadString(f)
@@ -2192,8 +2193,8 @@ End Function
 Function LoadMap(File$)
 	CatchErrors("Uncaught (LoadMap)")
 	
+	Local r.Rooms, rt.RoomTemplates, e.Events	
 	Local f%, x%, y%, Name$, Angle%, Prob#
-	Local r.Rooms, rt.RoomTemplates, e.Events
 	Local RoomAmount%, ForestPieceAmount%, MTPieceAmount%, i%
 	
 	f = ReadFile(File)

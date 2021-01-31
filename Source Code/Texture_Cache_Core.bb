@@ -12,8 +12,8 @@ Type TextureInCache
 End Type
 
 Function LoadTextureCheckingIfInCache(TexName$, TexFlags% = 1, DeleteType% = DeleteMapTextures)
-	Local tic.TextureInCache, Texture%, CurrPath$
-	Local mat.Materials
+	Local tic.TextureInCache, mat.Materials
+	Local Texture%, CurrPath$
 	
 	For tic.TextureInCache = Each TextureInCache
 		If tic\TexName <> "CreateTexture" Then
@@ -37,8 +37,8 @@ Function LoadTextureCheckingIfInCache(TexName$, TexFlags% = 1, DeleteType% = Del
 End Function
 
 Function LoadAnimTextureCheckingIfInCache(TexName$, TexFlags% = 1, Width%, Height%, FirstFrame%, Count%, DeleteType% = DeleteMapTextures)
-	Local tic.TextureInCache, Texture%, CurrPath$
-	Local mat.Materials
+	Local tic.TextureInCache, mat.Materials
+	Local Texture%, CurrPath$
 	
 	For tic.TextureInCache = Each TextureInCache
 		If tic\TexName <> "CreateTexture" Then
@@ -98,9 +98,9 @@ Function CreateTextureUsingCacheSystem(Width%, Height%, TexFlags% = 1, Frames% =
 End Function
 
 Function IsTexAlpha%(Tex%, Name$ = "") ; ~ Detect transparency in textures
+	Local mat.Materials
 	Local Temp1s$
 	Local Temp%, Temp2%
-	Local mat.Materials
 	
 	If Name = "" Then
 		Temp1s = StripPath(TextureName(Tex))

@@ -9,8 +9,8 @@ Function LoadWorld(File$, rt.RoomTemplates)
 	
 	If (Not Map) Then Return
 	
-	Local x#, y#, z#, i%, c%
 	Local mat.Materials
+	Local x#, y#, z#, i%, c%
 	Local World% = CreatePivot()
 	Local Meshes% = CreatePivot(World)
 	Local RenderBrushes% = CreateMesh(World)

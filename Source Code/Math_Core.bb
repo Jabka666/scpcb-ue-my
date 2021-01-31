@@ -280,10 +280,11 @@ End Function
 
 ; ~ This must be called after the room angle has been finalized!
 Function SetupTriggerBoxes(r.Rooms)
+	Local t.TriggerBox
 	Local sX#, sY#, sZ#
 	Local pXMin#, pXMax#
 	Local pZMin#, pZMax#
-	Local t.TriggerBox, i%
+	Local i%
 	
 	For i = 0 To r\TriggerBoxAmount - 1
 		t = r\TriggerBoxes[i]

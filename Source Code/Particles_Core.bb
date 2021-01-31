@@ -1,7 +1,7 @@
 Type Particles
 	Field OBJ%, Pvt%
 	Field Image%
-	Field R#, G#, B#, A#, Size#
+	Field A#, Size#
 	Field Speed#, ySpeed#, Gravity#
 	Field RChange#, GChange#, BChange#, AChange#
 	Field SizeChange#
@@ -9,10 +9,9 @@ Type Particles
 End Type 
 
 Function CreateParticle.Particles(x#, y#, z#, Image%, Size#, Gravity# = 1.0, LifeTime# = 200.0)
-	Local p.Particles = New Particles
+	Local p.Particles
 	
-	p\LifeTime = LifeTime
-	
+	p.Particles = New Particles
 	p\OBJ = CreateSprite()
 	PositionEntity(p\OBJ, x, y, z, True)
 	EntityTexture(p\OBJ, tt\ParticleTextureID[Image])
@@ -36,8 +35,9 @@ Function CreateParticle.Particles(x#, y#, z#, Image%, Size#, Gravity# = 1.0, Lif
 	PositionEntity(p\Pvt, x, y, z, True)
 	
 	p\Image = Image
+	p\LifeTime = LifeTime
 	p\Gravity = Gravity * 0.004
-	p\R = 255.0 : p\G = 255.0 : p\B = 255.0 : p\A = 1.0
+	p\A = 1.0
 	p\Size = Size
 	ScaleSprite(p\OBJ, p\Size, p\Size)
 	Return(p)
@@ -47,7 +47,6 @@ Function UpdateParticles()
 	Local p.Particles
 	
 	For p.Particles = Each Particles
-		
 		MoveEntity(p\Pvt, 0.0, 0.0, (p\Speed * fps\FPSFactor[0]))
 		If p\Gravity <> 0 Then p\ySpeed = p\ySpeed - (p\Gravity * fps\FPSFactor[0])
 		TranslateEntity(p\Pvt, 0.0, (p\ySpeed * fps\FPSFactor[0]), 0.0, True)
@@ -72,8 +71,8 @@ Function UpdateParticles()
 End Function
 	
 Function RemoveParticle(p.Particles)
-	FreeEntity(p\OBJ)
-	FreeEntity(p\Pvt)	
+	FreeEntity(p\OBJ) : p\OBJ = 0
+	FreeEntity(p\Pvt) : p\Pvt = 0
 	Delete(p)
 End Function
 
@@ -136,13 +135,12 @@ Function CreateEmitter.Emitters(x#, y#, z#, EmitterType%)
 End Function
 
 Function UpdateEmitters()
-	Local e.Emitters
+	Local e.Emitters, p.Particles
 	
 	InSmoke = False
 	For e.Emitters = Each Emitters
 		If fps\FPSFactor[0] > 0.0 And (PlayerRoom = e\room Lor e\room\Dist < 8.0) Then
-			Local p.Particles = CreateParticle(EntityX(e\OBJ, True), EntityY(e\OBJ, True), EntityZ(e\OBJ, True), Rand(e\MinImage, e\MaxImage), e\Size, e\Gravity, e\LifeTime)
-			
+			p.Particles = CreateParticle(EntityX(e\OBJ, True), EntityY(e\OBJ, True), EntityZ(e\OBJ, True), Rand(e\MinImage, e\MaxImage), e\Size, e\Gravity, e\LifeTime)
 			p\Speed = e\Speed
 			RotateEntity(p\Pvt, EntityPitch(e\OBJ, True), EntityYaw(e\OBJ, True), EntityRoll(e\OBJ, True), True)
 			TurnEntity(p\Pvt, Rnd(-e\RandAngle, e\RandAngle), Rnd(-e\RandAngle, e\RandAngle), 0)

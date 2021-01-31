@@ -25,9 +25,9 @@ Type ItemTemplates
 End Type 
 
 Function CreateItemTemplate.ItemTemplates(Name$, TempName$, OBJPath$, InvImgPath$, ImgPath$, Scale#, SoundID%, TexturePath$ = "", InvImgPath2$ = "", HasAnim% = False, TexFlags% = 9)
-	Local it.ItemTemplates = New ItemTemplates
-	Local it2.ItemTemplates
+	Local it.ItemTemplates, it2.ItemTemplates
 	
+	it.ItemTemplates = New ItemTemplates
 	; ~ If another item shares the same object, copy it
 	For it2.ItemTemplates = Each ItemTemplates
 		If it2\OBJPath = OBJPath And it2\OBJ <> 0 Then
@@ -474,12 +474,12 @@ End Type
 Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, A# = 1.0, InvSlots% = 0)
 	CatchErrors("Uncaught (CreateItem)")
 	
-	Local i.Items = New Items
-	Local it.ItemTemplates
+	Local i.Items, it.ItemTemplates
 	
 	Name = Lower(Name)
 	TempName = Lower(TempName)
 	
+	i.Items = New Items
 	For it.ItemTemplates = Each ItemTemplates
 		If Lower(it\Name) = Name And Lower(it\TempName) = TempName Then
 			i\ItemTemplate = it
@@ -630,9 +630,9 @@ End Function
 Function UpdateItems()
 	CatchErrors("Uncaught (UpdateItems)")
 	
-	Local n%, i.Items, i2.Items
+	Local i.Items, i2.Items, np.NPCs
 	Local xTemp#, yTemp#, zTemp#
-	Local Temp%, np.NPCs
+	Local Temp%, n%
 	Local Pick%, ed#
 	Local HideDist# = HideDistance * 0.5
 	Local DeletedItem% = False
@@ -747,10 +747,10 @@ Function PickItem(item.Items)
 	
 	CatchErrors("Uncaught (PickItem)")
 	
-	Local n% = 0
+	Local e.Events
+	Local n% = 0, z%
 	Local CanPickItem = 1
 	Local FullINV% = True
-	Local e.Events
 	
 	For n = 0 To MaxItemAmount - 1
 		If Inventory[n] = Null
@@ -758,8 +758,6 @@ Function PickItem(item.Items)
 			Exit
 		EndIf
 	Next
-	
-	Local z%
 	
 	If (Not FullINV) Then
 		For n = 0 To MaxItemAmount - 1
