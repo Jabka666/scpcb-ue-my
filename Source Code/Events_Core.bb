@@ -62,7 +62,7 @@ Const e_682roar% = 56
 Const e_room914% = 57
 Const e_1048a% = 58
 Const e_room4tunnels% = 59
-Const e_room2gw_b% = 60, e_room2gw% = 61
+Const e_room2gw_b% = 60, e_room_gw% = 61
 Const e_room2scps2% = 62
 Const e_room1162% = 63
 Const e_room2sl% = 64
@@ -378,9 +378,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room2gw_b)
 			;[End Block]
-		Case "room2gw"
+		Case "room_gw"
 			;[Block]
-			Return(e_room2gw)
+			Return(e_room_gw)
 			;[End Block]
 		Case "room2scps2"
 			;[Block]
@@ -608,7 +608,8 @@ Function InitEvents()
 	CreateEvent("room4tunnels", "room4tunnels", 0)
 	
 	CreateEvent("room2gw_b", "room2gw_b", Rand(0, 1))
-	CreateEvent("room2gw", "room2gw", 0, 1.0)
+	CreateEvent("room_gw", "room2gw", 0, 1.0)
+	CreateEvent("room_gw", "room3gw", 0, 1.0)
 	
 	CreateEvent("dimension1499", "dimension1499", 0)
 	
@@ -8184,7 +8185,7 @@ Function UpdateEvents()
 					e\SoundCHN = LoopSound2(AlarmSFX[3], e\SoundCHN, Camera, e\room\Objects[1], 5.0)
 				EndIf
 				;[End Block]
-			Case e_room2gw
+			Case e_room_gw
 				;[Block]
 				; ~ e\EventState: Determines if the airlock is in operation or not
 				
@@ -8254,10 +8255,18 @@ Function UpdateEvents()
 							ElseIf e\EventState2 > 70.0 * 3.0 And e\EventState2 < 70.0 * 6.0
 								Pvt = CreatePivot(e\room\OBJ)								
 								For i = 0 To 1
-									If i = 0
-										PositionEntity(Pvt, 312.0, 416.0, -128.0)
+									If e\room\RoomTemplate\Name = "room3gw"
+										If i = 0 Then
+											PositionEntity(Pvt, -288.0, 416.0, 320.0)
+										Else
+											PositionEntity(Pvt, 192.0, 416.0, 320.0)
+										EndIf
 									Else
-										PositionEntity(Pvt, 312.0, 416.0, 224.0)
+										If i = 0 Then
+											PositionEntity(Pvt, 312.0, 416.0, -128.0)
+										Else
+											PositionEntity(Pvt, 312.0, 416.0, 224.0)
+										EndIf
 									EndIf
 									p.Particles = CreateParticle(EntityX(Pvt, True), EntityY(Pvt, True), EntityZ(Pvt, True), 6, 0.8, 0.0, 50.0)
 									p\Speed = 0.025 : p\Achange = -0.02

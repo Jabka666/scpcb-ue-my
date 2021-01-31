@@ -453,7 +453,7 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 					ts\y = Temp2
 					ts\z = Temp3
 					ts\ImgPath = Temp2s
-					ts\roomtemplate = rt
+					ts\RoomTemplate = rt
 				EndIf
 				;[End Block]
 			Case "waypoint"
@@ -4964,6 +4964,47 @@ Function FillRoom(r.Rooms)
 				EndIf
 			EndIf
 			;[End Block]
+		Case "room3gw"
+	        ;[Block]
+			d.Doors = CreateDoor(r\x - 728.0 * RoomScale, r\y, r\z - 456.5 * RoomScale, 0.0, r, False, Default_Door, 3)
+			d\AutoClose = False
+			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.045, True)
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.045, True)	
+			
+			d.Doors = CreateDoor(r\x - 221.5 * RoomScale, r\y, r\z - 736.0 * RoomScale, -90.0, r, False, Default_Door, 3)
+			d\AutoClose = False
+			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) + 0.051, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) - 0.051, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
+			
+			r\RoomDoors.Doors[0] = CreateDoor(r\x - 459.0 * RoomScale, r\y, r\z + 339.0 * RoomScale, 90.0, r, True, Default_Door)
+			r\RoomDoors[0]\AutoClose = False : r\RoomDoors[0]\Locked = 1 : r\RoomDoors[0]\MTFClose = False
+			
+			For i = 0 To 1
+				FreeEntity(r\RoomDoors[0]\Buttons[i]) : r\RoomDoors[0]\Buttons[i] = 0
+			Next
+			
+			r\RoomDoors[1] = CreateDoor(r\x + 385.0 * RoomScale, r\y, r\z + 339.0 * RoomScale, 270.0, r, True, Default_Door)
+			r\RoomDoors[1]\AutoClose = False : r\RoomDoors[1]\Locked = 1 : r\RoomDoors[1]\MTFClose = False
+			
+			For i = 0 To 1
+				FreeEntity(r\RoomDoors[1]\Buttons[i]) : r\RoomDoors[1]\Buttons[i] = 0
+			Next
+			
+			r\Objects[0] = CreatePivot()
+			PositionEntity(r\Objects[0], r\x - 48.0 * RoomScale, r\y + 128.0 * RoomScale, r\z + 320.0 * RoomScale)
+			EntityParent(r\Objects[0], r\OBJ)
+			
+			For r2.Rooms = Each Rooms
+				If r2 <> r Then
+					If r2\RoomTemplate\Name = "room3gw" Then
+						r\Objects[2] = CopyEntity(r2\Objects[2], r\OBJ) ; ~ Don't load the mesh again
+						Exit
+					EndIf
+				EndIf
+			Next
+			If (Not r\Objects[2]) Then r\Objects[2] = LoadMesh_Strict("GFX\map\room3gw_pipes.b3d", r\OBJ)
+			EntityPickMode(r\Objects[2], 2)
+	        ;[End Block]
 		Case "room1162"
 			;[Block]
 			d.Doors = CreateDoor(r\x + 248.0 * RoomScale, r\y, r\z - 736.0 * RoomScale, 90.0, r, False, Default_Door, 2)
