@@ -155,7 +155,7 @@ Function SaveGame(File$)
 	
 	WriteInt(f, Temp)
 	For n.NPCs = Each NPCs
-		WriteByte(f, n\NPCtype)
+		WriteByte(f, n\NPCType)
 		WriteFloat(f, EntityX(n\Collider, True))
 		WriteFloat(f, EntityY(n\Collider, True))
 		WriteFloat(f, EntityZ(n\Collider, True))
@@ -631,31 +631,31 @@ Function LoadGame(File$)
 	
 	Temp = ReadInt(f)
 	For i = 1 To Temp
-		Local NPCtype% = ReadByte(f)
+		Local NPCType% = ReadByte(f)
 		
 		x = ReadFloat(f)
 		y = ReadFloat(f)
 		z = ReadFloat(f)
 		
-		n.NPCs = CreateNPC(NPCtype, x, y, z)
-		Select NPCtype
-			Case NPCtype173
+		n.NPCs = CreateNPC(NPCType, x, y, z)
+		Select NPCType
+			Case NPCType173
 				;[Block]
 				Curr173 = n
 				;[End Block]
-			Case NPCtype106
+			Case NPCType106
 				;[Block]
 				Curr106 = n
 				;[End Block]
-			Case NPCtype096
+			Case NPCType096
 				;[Block]
 				Curr096 = n
 				;[End Block]
-			Case NPCtype513_1
+			Case NPCType513_1
 				;[Block]
 				Curr513_1 = n
 				;[End Block]
-			Case NPCtype049
+			Case NPCType049
 				;[Block]
 				Curr049 = n
 				;[End Block]
@@ -694,8 +694,8 @@ Function LoadGame(File$)
 		
 		Local Frame# = ReadFloat(f)
 		
-		Select NPCtype
-			Case NPCtype106, NPCtypeD, NPCtype096, NPCtypeMTF, NPCtypeGuard, NPCtype049, NPCtype049_2, NPCtypeClerk, NPCtype008_1
+		Select NPCType
+			Case NPCType106, NPCTypeD, NPCType096, NPCTypeMTF, NPCTypeGuard, NPCType049, NPCType049_2, NPCTypeClerk, NPCType008_1
 				;[Block]
 				SetAnimTime(n\OBJ, Frame)
 				;[End Block]
@@ -1101,7 +1101,7 @@ Function LoadGame(File$)
 				HideChunks()
 				DeleteChunks()
 				For n.NPCs = Each NPCs
-					If n\NPCtype = NPCtype1499_1
+					If n\NPCType = NPCType1499_1
 						If n\InFacility = 0
 							RemoveNPC(n)
 						EndIf
@@ -1508,31 +1508,31 @@ Function LoadGameQuick(File$)
 	
 	Temp = ReadInt(f)
 	For i = 1 To Temp
-		Local NPCtype% = ReadByte(f)
+		Local NPCType% = ReadByte(f)
 		
 		x = ReadFloat(f)
 		y = ReadFloat(f)
 		z = ReadFloat(f)
 		
-		n.NPCs = CreateNPC(NPCtype, x, y, z)
-		Select NPCtype
-			Case NPCtype173
+		n.NPCs = CreateNPC(NPCType, x, y, z)
+		Select NPCType
+			Case NPCType173
 				;[Block]
 				Curr173 = n
 				;[End Block]
-			Case NPCtype106
+			Case NPCType106
 				;[Block]
 				Curr106 = n
 				;[End Block]
-			Case NPCtype096
+			Case NPCType096
 				;[Block]
 				Curr096 = n
 				;[End Block]
-			Case NPCtype513_1
+			Case NPCType513_1
 				;[Block]
 				Curr513_1 = n
 				;[End Block]
-			Case NPCtype049
+			Case NPCType049
 				;[Block]
 				Curr049 = n
 				;[End Block]
@@ -1571,8 +1571,8 @@ Function LoadGameQuick(File$)
 		
 		Local Frame# = ReadFloat(f)
 		
-		Select NPCtype
-			Case NPCtype106, NPCtypeD, NPCtype096, NPCtypeMTF, NPCtypeGuard, NPCtype049, NPCtype049_2, NPCtypeClerk, NPCtype008_1
+		Select NPCType
+			Case NPCType106, NPCTypeD, NPCType096, NPCTypeMTF, NPCTypeGuard, NPCType049, NPCType049_2, NPCTypeClerk, NPCType008_1
 				;[Block]
 				SetAnimTime(n\OBJ, Frame)
 				;[End Block]

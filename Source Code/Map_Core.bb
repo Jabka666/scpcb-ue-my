@@ -3418,7 +3418,7 @@ Function FillRoom(r.Rooms)
 			r\Objects[2] = CreatePivot()
 			PositionEntity(r\Objects[2], r\x + 736.0 * RoomScale, r\y - 512.0 * RoomScale, r\z + 272.0 * RoomScale)
 			
-			r\Objects[3] = CopyEntity(o\NPCModelID[NPCtypeDuck])
+			r\Objects[3] = CopyEntity(o\NPCModelID[NPCTypeDuck])
 			ScaleEntity(r\Objects[3], 0.07, 0.07, 0.07)
 			Tex = LoadTexture_Strict("GFX\npcs\duck(2).png")
 			EntityTexture(r\Objects[3], Tex)
@@ -3575,7 +3575,7 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "room2offices2"
 			;[Block]
-			r\Objects[0] = CopyEntity(o\NPCModelID[NPCtypeDuck])
+			r\Objects[0] = CopyEntity(o\NPCModelID[NPCTypeDuck])
 			ScaleEntity(r\Objects[0], 0.07, 0.07, 0.07)
 			
 			r\Objects[1] = CreatePivot()
@@ -5523,7 +5523,7 @@ Function FillRoom(r.Rooms)
 			EntityPickMode(r\Objects[0], 2)
 			
 			If r\RoomTemplate\Name = "room2medibay" Then
-				r\Objects[1] = CopyEntity(o\NPCModelID[NPCtypeDuck])
+				r\Objects[1] = CopyEntity(o\NPCModelID[NPCTypeDuck])
 				Tex = LoadTexture_Strict("GFX\npcs\duck(4).png")
 				EntityTexture(r\Objects[1], Tex)
 				DeleteSingleTextureEntryFromCache(Tex)
@@ -6175,7 +6175,7 @@ Function FindPath(n.NPCs, x#, y#, z#)
 						
 						If w\connected[i]\State = 1 Then
 							gTemp = w\Gcost + w\Dist[i]
-							If n\NPCtype = NPCtypeMTF Then
+							If n\NPCType = NPCTypeMTF Then
 								If w\connected[i]\door = Null Then gTemp = gTemp + 0.5
 							EndIf
 							If gTemp < w\connected[i]\Gcost Then
@@ -6186,7 +6186,7 @@ Function FindPath(n.NPCs, x#, y#, z#)
 						Else
 							w\connected[i]\Hcost = Abs(EntityX(w\connected[i]\OBJ, True) - EntityX(EndPoint\OBJ, True)) + Abs(EntityZ(w\connected[i]\OBJ, True) - EntityZ(EndPoint\OBJ, True))
 							gTemp = w\Gcost + w\Dist[i]
-							If n\NPCtype = NPCtypeMTF Then
+							If n\NPCType = NPCTypeMTF Then
 								If w\connected[i]\door = Null Then gTemp = gTemp + 0.5
 							EndIf
 							w\connected[i]\Gcost = gTemp
@@ -8048,7 +8048,7 @@ Function UpdateChunks(r.Rooms, ChunkPartAmount%, SpawnNPCs% = True)
 	Local CurrNPCNumber% = 0
 	
 	For n.NPCs = Each NPCs
-		If n\NPCtype = NPCtype1499_1 Then CurrNPCNumber = CurrNPCNumber + 1
+		If n\NPCType = NPCType1499_1 Then CurrNPCNumber = CurrNPCNumber + 1
 	Next
 	
 	Local MaxNPCs% = 64 ; ~ The maximum amount of NPCs in dimension1499
@@ -8067,42 +8067,42 @@ Function UpdateChunks(r.Rooms, ChunkPartAmount%, SpawnNPCs% = True)
 		Select Rand(1, 8)
 			Case 1
 				;[Block]
-				n.NPCs = CreateNPC(NPCtype1499_1, EntityX(me\Collider) + Rnd(40.0, 80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(me\Collider) + Rnd(40.0, 80.0))
+				n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(40.0, 80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(me\Collider) + Rnd(40.0, 80.0))
 				;[End Block]
 			Case 2
 				;[Block]
-				n.NPCs = CreateNPC(NPCtype1499_1, EntityX(me\Collider) + Rnd(40.0, 80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(me\Collider) + Rnd(-40.0, 40.0))
+				n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(40.0, 80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(me\Collider) + Rnd(-40.0, 40.0))
 				;[End Block]
 			Case 3
 				;[Block]
-				n.NPCs = CreateNPC(NPCtype1499_1, EntityX(me\Collider) + Rnd(40.0, 80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(me\Collider) + Rnd(-40.0, -80.0))
+				n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(40.0, 80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(me\Collider) + Rnd(-40.0, -80.0))
 				;[End Block]
 			Case 4
 				;[Block]
-				n.NPCs = CreateNPC(NPCtype1499_1, EntityX(me\Collider) + Rnd(-40.0, 40.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(me\Collider) + Rnd(-40.0, -80.0))
+				n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(-40.0, 40.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(me\Collider) + Rnd(-40.0, -80.0))
 				;[End Block]
 			Case 5
 				;[Block]
-				n.NPCs = CreateNPC(NPCtype1499_1, EntityX(me\Collider) + Rnd(-40.0, -80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(me\Collider) + Rnd(-40.0, -80.0))
+				n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(-40.0, -80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(me\Collider) + Rnd(-40.0, -80.0))
 				;[End Block]
 			Case 6
 				;[Block]
-				n.NPCs = CreateNPC(NPCtype1499_1, EntityX(me\Collider) + Rnd(-40.0, -80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(me\Collider) + Rnd(-40.0, 40.0))
+				n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(-40.0, -80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(me\Collider) + Rnd(-40.0, 40.0))
 				;[End Block]
 			Case 7
 				;[Block]
-				n.NPCs = CreateNPC(NPCtype1499_1, EntityX(me\Collider) + Rnd(-40.0, -80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(me\Collider) + Rnd(40.0, 80.0))
+				n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(-40.0, -80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(me\Collider) + Rnd(40.0, 80.0))
 				;[End Block]
 			Case 8
 				;[Block]
-				n.NPCs = CreateNPC(NPCtype1499_1, EntityX(me\Collider) + Rnd(-40.0, 40.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(me\Collider) + Rnd(40.0, 80.0))
+				n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(-40.0, 40.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(me\Collider) + Rnd(40.0, 80.0))
 				;[End Block]
 		End Select
 		If Rand(2) = 1 Then n\State2 = 500.0 * 3.0
 		n\Angle = Rnd(360.0)
 	Else
 		For n.NPCs = Each NPCs
-			If n\NPCtype = NPCtype1499_1 Then
+			If n\NPCType = NPCType1499_1 Then
 				If n\PrevState = 0 Then
 					If EntityDistanceSquared(n\Collider, me\Collider) > PowTwo(ChunkMaxDistance) Lor EntityY(n\Collider) < EntityY(PlayerRoom\OBJ) - 5.0 Then
 						; ~ This will be updated like this so that new NPCs can spawn for the player

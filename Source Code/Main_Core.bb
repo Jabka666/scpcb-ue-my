@@ -1064,7 +1064,7 @@ Function UpdateConsole()
 				Case "reset096"
 					;[Block]
 					For n.NPCs = Each NPCs
-						If n\NPCtype = NPCtype096 Then
+						If n\NPCType = NPCType096 Then
 							n\State = 0.0
 							StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0
 							If n\SoundCHN2 <> 0
@@ -1077,7 +1077,7 @@ Function UpdateConsole()
 				Case "reset372" 
 					;[Block]				
 					For n.NPCs = Each NPCs
-						If n\NPCtype = NPCtype372 Then
+						If n\NPCType = NPCType372 Then
 							RemoveNPC(n)
 							CreateEvent("room372", "room372", 0, 0.0)   
 							Exit
@@ -1112,7 +1112,7 @@ Function UpdateConsole()
 				Case "disable966"
 					;[Block]
 					For n.NPCs = Each NPCs
-						If n\NPCtype = NPCtype966
+						If n\NPCType = NPCType966
 							n\State = -1.0
 							HideEntity(n\Collider)
 							HideEntity(n\OBJ)
@@ -1122,7 +1122,7 @@ Function UpdateConsole()
 				Case "enable966"
 					;[Block]
 					For n.NPCs = Each NPCs
-						If n\NPCtype = NPCtype966
+						If n\NPCType = NPCType966
 							n\State = 0.0
 							ShowEntity(n\Collider)
 							If WearinNightVision > 0 Then ShowEntity(n\OBJ)
@@ -6706,7 +6706,7 @@ Function UpdateGUI()
 					;[Block]
 					PlaySound_Strict(LoadTempSound("SFX\SCP\513\Bell.ogg"))
 					
-					If Curr513_1 = Null Then Curr513_1 = CreateNPC(NPCtype513_1, 0.0, 0.0, 0.0)
+					If Curr513_1 = Null Then Curr513_1 = CreateNPC(NPCType513_1, 0.0, 0.0, 0.0)
 					SelectedItem = Null
 					;[End Block]
 				Case "scp500pill"
@@ -9117,73 +9117,73 @@ Function LoadEntities()
 	
 	; ~ [NPCs]
 	
-	o\NPCModelID[NPCtype008_1] = LoadAnimMesh_Strict("GFX\npcs\scp_008_1.b3d") ; ~ SCP-008-1
+	o\NPCModelID[NPCType008_1] = LoadAnimMesh_Strict("GFX\npcs\scp_008_1.b3d") ; ~ SCP-008-1
 	
-	o\NPCModelID[NPCtype035] = LoadAnimMesh_Strict("GFX\npcs\scp_035.b3d") ; ~ SCP-035
+	o\NPCModelID[NPCType035] = LoadAnimMesh_Strict("GFX\npcs\scp_035.b3d") ; ~ SCP-035
 	
-	o\NPCModelID[NPCtype035_Tentacle] = LoadAnimMesh_Strict("GFX\npcs\scp_035_tentacle.b3d") ; ~ SCP-035's Tentacle
+	o\NPCModelID[NPCType035_Tentacle] = LoadAnimMesh_Strict("GFX\npcs\scp_035_tentacle.b3d") ; ~ SCP-035's Tentacle
 	
-	o\NPCModelID[NPCtype049] = LoadAnimMesh_Strict("GFX\npcs\scp_049.b3d") ; ~ SCP-049
+	o\NPCModelID[NPCType049] = LoadAnimMesh_Strict("GFX\npcs\scp_049.b3d") ; ~ SCP-049
 	
-	o\NPCModelID[NPCtype049_2] = LoadAnimMesh_Strict("GFX\npcs\scp_049_2.b3d") ; ~ SCP-049-2
+	o\NPCModelID[NPCType049_2] = LoadAnimMesh_Strict("GFX\npcs\scp_049_2.b3d") ; ~ SCP-049-2
 	
-	o\NPCModelID[NPCtype066] = LoadAnimMesh_Strict("GFX\npcs\scp_066.b3d") ; ~ SCP-066
+	o\NPCModelID[NPCType066] = LoadAnimMesh_Strict("GFX\npcs\scp_066.b3d") ; ~ SCP-066
 	
-	o\NPCModelID[NPCtype096] = LoadAnimMesh_Strict("GFX\npcs\scp_096.b3d") ; ~ SCP-096
+	o\NPCModelID[NPCType096] = LoadAnimMesh_Strict("GFX\npcs\scp_096.b3d") ; ~ SCP-096
 	
-	o\NPCModelID[NPCtype106] = LoadAnimMesh_Strict("GFX\npcs\scp_106.b3d") ; ~ SCP-106
+	o\NPCModelID[NPCType106] = LoadAnimMesh_Strict("GFX\npcs\scp_106.b3d") ; ~ SCP-106
 	
-	o\NPCModelID[NPCtype173] = LoadMesh_Strict("GFX\npcs\scp_173.b3d") ; ~ SCP-173
+	o\NPCModelID[NPCType173] = LoadMesh_Strict("GFX\npcs\scp_173.b3d") ; ~ SCP-173
 	
-	o\NPCModelID[NPCtype173_Box] = LoadMesh_Strict("GFX\npcs\scp_173_box.b3d") ; ~ SCP-173's Box
+	o\NPCModelID[NPCType173_Box] = LoadMesh_Strict("GFX\npcs\scp_173_box.b3d") ; ~ SCP-173's Box
 	
-	o\NPCModelID[NPCtype205_Demon] = LoadAnimMesh_Strict("GFX\npcs\scp_205_demon.b3d") ; ~ SCP-205's Demon #1
+	o\NPCModelID[NPCType205_Demon] = LoadAnimMesh_Strict("GFX\npcs\scp_205_demon.b3d") ; ~ SCP-205's Demon #1
 	
-	o\NPCModelID[NPCtype205_Demon2] = LoadAnimMesh_Strict("GFX\npcs\scp_205_demon(2).b3d") ; ~ SCP-205's Demon #2
+	o\NPCModelID[NPCType205_Demon2] = LoadAnimMesh_Strict("GFX\npcs\scp_205_demon(2).b3d") ; ~ SCP-205's Demon #2
 	
-	o\NPCModelID[NPCtype205_Demon3] = LoadAnimMesh_Strict("GFX\npcs\scp_205_demon(3).b3d") ; ~ SCP-205's Demon #3
+	o\NPCModelID[NPCType205_Demon3] = LoadAnimMesh_Strict("GFX\npcs\scp_205_demon(3).b3d") ; ~ SCP-205's Demon #3
 	
-	o\NPCModelID[NPCtype205_Woman] = LoadAnimMesh_Strict("GFX\npcs\scp_205_woman.b3d") ; ~ SCP-205's Woman
+	o\NPCModelID[NPCType205_Woman] = LoadAnimMesh_Strict("GFX\npcs\scp_205_woman.b3d") ; ~ SCP-205's Woman
 	
-	o\NPCModelID[NPCtype372] = LoadAnimMesh_Strict("GFX\npcs\scp_372.b3d") ; ~ SCP-372
+	o\NPCModelID[NPCType372] = LoadAnimMesh_Strict("GFX\npcs\scp_372.b3d") ; ~ SCP-372
 	
-	o\NPCModelID[NPCtype513_1] = LoadAnimMesh_Strict("GFX\npcs\scp_513_1.b3d") ; ~ SCP-513-1
+	o\NPCModelID[NPCType513_1] = LoadAnimMesh_Strict("GFX\npcs\scp_513_1.b3d") ; ~ SCP-513-1
 	
-	o\NPCModelID[NPCtype682_Arm] = LoadMesh_Strict("GFX\npcs\scp_682_arm.b3d") ; ~ SCP-682's Arm
+	o\NPCModelID[NPCType682_Arm] = LoadMesh_Strict("GFX\npcs\scp_682_arm.b3d") ; ~ SCP-682's Arm
 	
-	o\NPCModelID[NPCtype860_2] = LoadAnimMesh_Strict("GFX\npcs\scp_860_2.b3d") ; ~ SCP-860-2
+	o\NPCModelID[NPCType860_2] = LoadAnimMesh_Strict("GFX\npcs\scp_860_2.b3d") ; ~ SCP-860-2
 	
-	o\NPCModelID[NPCtype939] = LoadAnimMesh_Strict("GFX\npcs\scp_939.b3d") ; ~ SCP-939
+	o\NPCModelID[NPCType939] = LoadAnimMesh_Strict("GFX\npcs\scp_939.b3d") ; ~ SCP-939
 	
-	o\NPCModelID[NPCtype966] = LoadAnimMesh_Strict("GFX\npcs\scp_966.b3d") ; ~ SCP-966
+	o\NPCModelID[NPCType966] = LoadAnimMesh_Strict("GFX\npcs\scp_966.b3d") ; ~ SCP-966
 	
-	o\NPCModelID[NPCtype1048] = LoadAnimMesh_Strict("GFX\npcs\scp_1048.b3d") ; ~ SCP-1048
+	o\NPCModelID[NPCType1048] = LoadAnimMesh_Strict("GFX\npcs\scp_1048.b3d") ; ~ SCP-1048
 	
-	o\NPCModelID[NPCtype1048_A] = LoadAnimMesh_Strict("GFX\npcs\scp_1048_a.b3d") ; ~ SCP-1048-A
+	o\NPCModelID[NPCType1048_A] = LoadAnimMesh_Strict("GFX\npcs\scp_1048_a.b3d") ; ~ SCP-1048-A
 	
-	o\NPCModelID[NPCtype1499_1] = LoadAnimMesh_Strict("GFX\npcs\scp_1499_1.b3d") ; ~ SCP-1499-1
+	o\NPCModelID[NPCType1499_1] = LoadAnimMesh_Strict("GFX\npcs\scp_1499_1.b3d") ; ~ SCP-1499-1
 	
-	o\NPCModelID[NPCtypeApache] = LoadAnimMesh_Strict("GFX\npcs\apache.b3d") ; ~ Apache Helicopter
+	o\NPCModelID[NPCTypeApache] = LoadAnimMesh_Strict("GFX\npcs\apache.b3d") ; ~ Apache Helicopter
 	
-	o\NPCModelID[NPCtypeApache_Rotor] = LoadAnimMesh_Strict("GFX\npcs\apache_rotor.b3d") ; ~ Helicopter's Rotor #1
+	o\NPCModelID[NPCTypeApache_Rotor] = LoadAnimMesh_Strict("GFX\npcs\apache_rotor.b3d") ; ~ Helicopter's Rotor #1
 	
-	o\NPCModelID[NPCtypeApache_Rotor2] = LoadAnimMesh_Strict("GFX\npcs\apache_rotor(2).b3d") ; ~ Helicopter's Rotor #2
+	o\NPCModelID[NPCTypeApache_Rotor2] = LoadAnimMesh_Strict("GFX\npcs\apache_rotor(2).b3d") ; ~ Helicopter's Rotor #2
 	
-	o\NPCModelID[NPCtypeCI] = LoadAnimMesh_Strict("GFX\npcs\CI.b3d") ; ~ CI
+	o\NPCModelID[NPCTypeCI] = LoadAnimMesh_Strict("GFX\npcs\CI.b3d") ; ~ CI
 	
-	o\NPCModelID[NPCtypeClerk] = LoadAnimMesh_Strict("GFX\npcs\clerk.b3d") ; ~ Clerk
+	o\NPCModelID[NPCTypeClerk] = LoadAnimMesh_Strict("GFX\npcs\clerk.b3d") ; ~ Clerk
 	
-	o\NPCModelID[NPCtypeD] = LoadAnimMesh_Strict("GFX\npcs\class_d.b3d") ; ~ Class-D
+	o\NPCModelID[NPCTypeD] = LoadAnimMesh_Strict("GFX\npcs\class_d.b3d") ; ~ Class-D
 	
-	o\NPCModelID[NPCtypeDuck] = LoadAnimMesh_Strict("GFX\npcs\duck.b3d") ; ~ Anomalous Duck
+	o\NPCModelID[NPCTypeDuck] = LoadAnimMesh_Strict("GFX\npcs\duck.b3d") ; ~ Anomalous Duck
 	
-	o\NPCModelID[NPCtypeGuard] = LoadAnimMesh_Strict("GFX\npcs\guard.b3d") ; ~ Guard
+	o\NPCModelID[NPCTypeGuard] = LoadAnimMesh_Strict("GFX\npcs\guard.b3d") ; ~ Guard
 	
-	o\NPCModelID[NPCtypeMTF] = LoadAnimMesh_Strict("GFX\npcs\MTF.b3d") ; ~ MTF
+	o\NPCModelID[NPCTypeMTF] = LoadAnimMesh_Strict("GFX\npcs\MTF.b3d") ; ~ MTF
 	
-	o\NPCModelID[NPCtypeNazi] = LoadAnimMesh_Strict("GFX\npcs\nazi_officer.b3d") ; ~ Nazi Officer
+	o\NPCModelID[NPCTypeNazi] = LoadAnimMesh_Strict("GFX\npcs\nazi_officer.b3d") ; ~ Nazi Officer
 	
-	o\NPCModelID[NPCtypeVehicle] = LoadAnimMesh_Strict("GFX\npcs\vehicle.b3d") ; ~ Vehicle
+	o\NPCModelID[NPCTypeVehicle] = LoadAnimMesh_Strict("GFX\npcs\vehicle.b3d") ; ~ Vehicle
 	
 	For i = 0 To MaxNPCModelIDAmount - 1
 		HideEntity(o\NPCModelID[i])
@@ -9388,9 +9388,9 @@ Function LoadEntities()
 	
 	SetChunkDataValues()
 	
-	; ~ NPCtypeD - different models with different textures (loaded using "CopyEntity") -- ENDSHN
+	; ~ NPCTypeD - different models with different textures (loaded using "CopyEntity") -- ENDSHN
 	For i = 0 To MaxDTextures - 1
-		o\DTextures[i] = CopyEntity(o\NPCModelID[NPCtypeD])
+		o\DTextures[i] = CopyEntity(o\NPCModelID[NPCTypeD])
 		HideEntity(o\DTextures[i])
 	Next
 	
@@ -9545,8 +9545,8 @@ Function InitNewGame()
 	
 	DrawLoading(79)
 	
-	Curr173 = CreateNPC(NPCtype173, 0.0, -30.0, 0.0)
-	Curr106 = CreateNPC(NPCtype106, 0.0, -30.0, 0.0)
+	Curr173 = CreateNPC(NPCType173, 0.0, -30.0, 0.0)
+	Curr106 = CreateNPC(NPCType106, 0.0, -30.0, 0.0)
 	Curr106\State = 70.0 * 60.0 * Rnd(12.0, 17.0)
 	
 	For d.Doors = Each Doors
@@ -10105,7 +10105,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case VERYFINE
 					;[Block]
-					n.NPCs = CreateNPC(NPCtype1499_1, x, y, z)
+					n.NPCs = CreateNPC(NPCType1499_1, x, y, z)
 					n\State = 1.0
 					n\Sound = LoadSound_Strict("SFX\SCP\1499\Triggered.ogg")
 					n\SoundCHN = PlaySound2(n\Sound, Camera, n\Collider, 20.0)
@@ -10881,7 +10881,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 					;[Block]
 					PlaySound_Strict(LoadTempSound("SFX\SCP\513\914Refine.ogg"))
 					For n.NPCs = Each NPCs
-						If n\NPCtype = NPCtype513_1 Then RemoveNPC(n)
+						If n\NPCType = NPCType513_1 Then RemoveNPC(n)
 					Next
 					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
 					;[End Block]
@@ -11127,7 +11127,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 				Case VERYFINE
 					;[Block]
 					If Rand(2) = 1 Then
-						n.NPCs = CreateNPC(NPCtype008_1, x, y, z)
+						n.NPCs = CreateNPC(NPCType008_1, x, y, z)
 						n\State = 2.0
 					Else
 						it2.Items = CreateItem("Syringe", "syringeinf", x, y, z)
@@ -11143,7 +11143,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
-					n.NPCs = CreateNPC(NPCtype008_1, x, y, z)
+					n.NPCs = CreateNPC(NPCType008_1, x, y, z)
 					n\State = 2.0
 					;[End Block]	
 				Case FINE
@@ -11670,7 +11670,6 @@ Function UpdateMTF()
 	
 	If MTFTimer = 0.0 Then
 		If Rand(30) = 1 And PlayerRoom\RoomTemplate\Name <> "dimension1499" Then
-			
 			Local entrance.Rooms = Null
 			
 			For r.Rooms = Each Rooms
@@ -11681,28 +11680,26 @@ Function UpdateMTF()
 			Next
 			
 			If entrance <> Null Then 
-				If me\Zone = 2 Then
-					If Abs(EntityZ(entrance\OBJ) - EntityZ(me\Collider)) < 30.0 Then
-						If PlayerInReachableRoom()
-							PlayAnnouncement("SFX\Character\MTF\Announc.ogg")
+				If Abs(EntityZ(entrance\OBJ) - EntityZ(me\Collider)) < 30.0 Then
+					If PlayerInReachableRoom() Then
+						PlayAnnouncement("SFX\Character\MTF\Announc.ogg")
+					EndIf
+					
+					MTFTimer = fps\FPSFactor[0]
+					
+					Local leader.NPCs
+					
+					For i = 0 To 2
+						n.NPCs = CreateNPC(NPCTypeMTF, EntityX(entrance\OBJ) + 0.3 * (i - 1), 0.6, EntityZ(entrance\OBJ) + 8.0)
+						
+						If i = 0 Then 
+							leader = n
+						Else
+							n\MTFLeader = leader
 						EndIf
 						
-						MTFTimer = fps\FPSFactor[0]
-						
-						Local leader.NPCs
-						
-						For i = 0 To 2
-							n.NPCs = CreateNPC(NPCtypeMTF, EntityX(entrance\OBJ) + 0.3 * (i - 1), 0.6, EntityZ(entrance\OBJ) + 8.0)
-							
-							If i = 0 Then 
-								leader = n
-							Else
-								n\MTFLeader = leader
-							EndIf
-							
-							n\PrevX = i
-						Next
-					EndIf
+						n\PrevX = i
+					Next
 				EndIf
 			EndIf
 		EndIf
@@ -11946,7 +11943,7 @@ Function Update008()
 							If r\RoomTemplate\Name = "room008" Then
 								PositionEntity(me\Collider, EntityX(r\Objects[7], True), EntityY(r\Objects[7], True), EntityZ(r\Objects[7], True), True)
 								ResetEntity(me\Collider)
-								r\NPC[0] = CreateNPC(NPCtypeD, EntityX(r\Objects[6], True), EntityY(r\Objects[6], True) + 0.2, EntityZ(r\Objects[6], True))
+								r\NPC[0] = CreateNPC(NPCTypeD, EntityX(r\Objects[6], True), EntityY(r\Objects[6], True) + 0.2, EntityZ(r\Objects[6], True))
 								r\NPC[0]\Sound = LoadSound_Strict("SFX\SCP\008\KillScientist1.ogg")
 								r\NPC[0]\SoundCHN = PlaySound_Strict(r\NPC[0]\Sound)
 								ChangeNPCTextureID(r\NPC[0], 12)
