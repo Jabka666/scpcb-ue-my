@@ -128,7 +128,9 @@
 		C45
 		slend
 		Salvage
-		Soylien ("Samuel")
+		Samuel ("Soylien")
+		Egor Oleynik ("Chumnaya Karkusa")
+		
 
 *Development Helpers
 		
@@ -145,11 +147,11 @@
 		Elan S.
 		Ashad Jackson ("ashadttt") 
 		Vladislav Borisevich ("Vane Brain")
-		Ne4to ("Dmitry Petrov")
+		Dmitry Petrov ("Ne4to")
 		
 *Mod Testers
 
-		Alexey Krasnov("TaskeWSH")
+		Alexey Krasnov ("TaskeWSH")
 		LoneWolf
 		[dataexpunded]
 		ALeKS GM
