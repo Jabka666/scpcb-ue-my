@@ -1509,7 +1509,7 @@ Function UpdateNPCs()
 							If (Dist < HideDistance * 2.0) And n\Idle = 0 And PlayerInReachableRoom(True) Then
 								n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider)
 								PlayerSeeAble = MeNPCSeesPlayer(n)
-								If PlayerSeeAble = True Lor n\State2 > 0.0 And (Not chs\NoTarget) Then ; ~ Attack
+								If PlayerSeeAble = 1 Lor n\State2 > 0.0 And (Not chs\NoTarget) Then ; ~ Attack
 									GiveAchievement(Achv049)
 									
 									; ~ Playing a sound after detecting the player
@@ -1522,7 +1522,7 @@ Function UpdateNPCs()
 									n\PathStatus = 0
 									n\PathTimer = 0.0
 									n\PathLocation = 0
-									If PlayerSeeAble = True Then n\State2 = 70.0 * 2.0
+									If PlayerSeeAble = 1 Then n\State2 = 70.0 * 2.0
 									
 									PointEntity(n\OBJ, me\Collider)
 									RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0)
@@ -1830,7 +1830,7 @@ Function UpdateNPCs()
 							;[Block]
 							n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider)
 							PlayerSeeAble = MeNPCSeesPlayer(n, True)
-							If PlayerSeeAble = True
+							If PlayerSeeAble = 1 Then
 								n\State = 2.0
 								n\PathStatus = 0
 								n\PathLocation = 0
@@ -1980,8 +1980,8 @@ Function UpdateNPCs()
 							;[End Block]
 						Case 2.0 ; ~ Player is visible, tries to kill
 							;[Block]
-							If PlayerSeeAble = True Lor n\State2 > 0.0 And (Not chs\Notarget) Then
-								If PlayerSeeAble = True
+							If PlayerSeeAble = 1 Lor n\State2 > 0.0 And (Not chs\Notarget) Then
+								If PlayerSeeAble = 1 Then
 									n\State2 = 70.0 * 2.0
 								Else
 									n\State2 = Max(n\State2 - fps\FPSFactor[0], 0.0)
@@ -2013,7 +2013,7 @@ Function UpdateNPCs()
 							;[End Block]
 						Case 3.0 ; ~ Player isn't visible, tries to find
 							;[Block]
-							If PlayerSeeAble = True And (Not chs\Notarget) Then
+							If PlayerSeeAble = 1 And (Not chs\Notarget) Then
 								n\State = 2.0
 							EndIf
 							
@@ -2713,7 +2713,7 @@ Function UpdateNPCs()
 														EndIf
 														
 														If Curr173\Idle = 3 And DistanceSquared(EntityX(Pvt), EntityX(n\Collider), EntityZ(Pvt), EntityZ(n\Collider)) > 16.0
-															If r\RoomDoors.Doors[1]\Open = True Then UseDoor(r\RoomDoors.Doors[1], False)
+															If r\RoomDoors.Doors[1]\Open Then UseDoor(r\RoomDoors.Doors[1], False)
 														EndIf
 														
 														FreeEntity(Pvt)
@@ -2813,12 +2813,12 @@ Function UpdateNPCs()
 											
 											If NewDist < 1.0 And n\Path[n\PathLocation]\door <> Null Then
 												; ~ Open the door and make it automatically close after 5 seconds
-												If (Not n\Path[n\PathLocation]\door\Open)
+												If (Not n\Path[n\PathLocation]\door\Open) Then
 													PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\DoorType, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
 													PlayMTFSound(MTFSFX[0], n)
 												EndIf
 												n\Path[n\PathLocation]\door\Open = True
-												If n\Path[n\PathLocation]\door\MTFClose
+												If n\Path[n\PathLocation]\door\MTFClose Then
 													n\Path[n\PathLocation]\door\TimerState = 70.0 * 5.0
 												EndIf
 											EndIf
@@ -3066,7 +3066,7 @@ Function UpdateNPCs()
 								;[Block]
 								n\Speed = 0.015
 								n\State2 = n\State2 - fps\FPSFactor[0]
-								If MeNPCSeesPlayer(n) = True Then
+								If MeNPCSeesPlayer(n) = 1 Then
 									Local Dist_To_Player# = EntityDistance(n\Collider, me\Collider)
 									Local PrevKillTimer#
 									
@@ -3163,7 +3163,7 @@ Function UpdateNPCs()
 								Else
 									n\LastSeen = n\LastSeen - fps\FPSFactor[0]
 									
-									If n\Reload =< 7.0
+									If n\Reload =< 7.0 Then
 										n\Reload = 7.0
 									EndIf
 									
@@ -3213,7 +3213,7 @@ Function UpdateNPCs()
 												
 												If NewDist < 1.0 And n\Path[n\PathLocation]\door <> Null Then
 													; ~ Open the door and make it automatically close after 5 seconds
-													If (Not n\Path[n\PathLocation]\door\Open)
+													If (Not n\Path[n\PathLocation]\door\Open) Then
 														PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\DoorType, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
 														PlayMTFSound(MTFSFX[0], n)
 													EndIf
@@ -6311,8 +6311,8 @@ Function UpdateNPCs()
 							;[End Block]
 						Case 2.0 ; ~ Player is visible, tries to kill
 							;[Block]
-							If PlayerSeeAble = True Lor n\State2 > 0.0 And (Not chs\Notarget) Then
-								If PlayerSeeAble = True
+							If PlayerSeeAble = 1 Lor n\State2 > 0.0 And (Not chs\Notarget) Then
+								If PlayerSeeAble = 1 Then
 									n\State2 = 70.0 * 2.0
 								Else
 									n\State2 = Max(n\State2 - fps\FPSFactor[0], 0.0)
@@ -6339,7 +6339,7 @@ Function UpdateNPCs()
 							;[End Block]
 						Case 3.0 ; ~ Player isn't visible, tries to find
 							;[Block]
-							If PlayerSeeAble And (Not chs\Notarget) Then
+							If PlayerSeeAble = 1 And (Not chs\Notarget) Then
 								n\State = 2.0
 							EndIf
 							
@@ -6762,7 +6762,7 @@ Function MeNPCSeesPlayer%(n.NPCs, DisableSoundOnCrouch% = False)
 				Return(1)
 			ElseIf (Not EntityVisible(n\Collider, me\Collider))
 				If DisableSoundOnCrouch And me\Crouch Then
-					Return(False)
+					Return(0)
 				Else
 					Return(2)
 				EndIf

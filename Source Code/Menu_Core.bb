@@ -2171,7 +2171,16 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 		
 		FirstLoop = False
 		If Percent <> 100 Then Exit
-	Until GetKey() Lor MouseHit(1)
+		
+		Local Close% = False
+		
+		If GetKey() Lor MouseHit(1) Then
+			Close = True
+			ResetInput()
+			ResetTimingAccumulator()
+			SetFont(fo\FontID[Font_Default])
+		EndIf
+	Until Close
 	
 	DeleteMenuGadgets()
 End Function

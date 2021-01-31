@@ -125,6 +125,10 @@ Function ReadPixelColor%(Pixel%, Shrid%)
 	Return(Pixel Shr Shrid) And $FF
 End Function
 
+Function ResetTimingAccumulator()
+	fps\Accumulator = 0.0
+End Function
+
 Function ChangeAngleValueForCorrectBoneAssigning%(Value#)
 	Local Number#
 	

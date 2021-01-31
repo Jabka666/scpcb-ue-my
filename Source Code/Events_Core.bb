@@ -8193,16 +8193,13 @@ Function UpdateEvents()
 				
 				; ~ e\EventState3: Checks if the player had left the airlock or not
 				
-				e\room\RoomDoors[0]\Locked = 1
-				e\room\RoomDoors[1]\Locked = 1
-				
 				Local BrokenDoor% = False
 				
 				If e\room\Objects[1] <> 0 Then BrokenDoor = True
 				
-				If PlayerRoom = e\room
-					If e\EventState = 0.0
-						If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 1.96 And e\EventState3 = 0.0
+				If PlayerRoom = e\room Then
+					If e\EventState = 0.0 Then
+						If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 0.64 And e\EventState3 = 0.0
 							e\EventState = 1.0
 							If BrokenDoor Then
 								If e\Sound2 <> 0 Then 

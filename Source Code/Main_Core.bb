@@ -9763,8 +9763,6 @@ Function InitLoadGame()
 	CatchErrors("InitLoadGame")
 End Function
 
-; ~ For some reason, Bltiz3D says that PlayeRoom variable doesn't exist while calling this function
-; ~ TODO: Fix
 Function NullGame(PlayButtonSFX% = True)
 	CatchErrors("Uncaught (NullGame)")
 	
@@ -10032,6 +10030,7 @@ Function NullGame(PlayButtonSFX% = True)
 	CurrAchvMSGID = 0
 	
 	ClearWorld()
+	ResetTimingAccumulator()
 	If Camera <> 0 Then Camera = 0
 	If ArkBlurCam <> 0 Then ArkBlurCam = 0
 	If me\Collider <> 0 Then me\Collider = 0
