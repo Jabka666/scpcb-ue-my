@@ -51,6 +51,7 @@
 - Changed chair's model.
 - Changed SCP-035's containment chamber.
 - Changed SCP-049's eyes color.
+- Changed game icon.
 
 - Replaced O5-14 Burnt Document by batteries in room2offices5.
 
