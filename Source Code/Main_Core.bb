@@ -3497,6 +3497,10 @@ Function MainLoop()
 							;[Block]
 							me\BLINKFREQ = Rnd(420.0, 630.0)
 							;[End Block]
+						Case EXTREME
+							;[Block]
+							me\BLINKFREQ = Rnd(200.0, 400.0)
+							;[End Block]
 					End Select 
 					me\BlinkTimer = me\BLINKFREQ
 				EndIf
@@ -3788,7 +3792,7 @@ Function Kill(IsBloody% = False)
 		
 		me\KillAnim = Rand(0, 1)
 		PlaySound_Strict(DamageSFX[0])
-		If SelectedDifficulty\PermaDeath Then
+		If SelectedDifficulty\SaveType = NOSAVES Then
 			DeleteFile(CurrentDir() + SavePath + CurrSave + "\save.cb") 
 			DeleteDir(SavePath + CurrSave) 
 			LoadSaveGames()
@@ -4872,7 +4876,7 @@ Function DrawGUI()
 	
 	If I_294\Using Then Draw294()
 	
-	If ClosestButton <> 0 And SelectedDoor = Null And (Not InvOpen) And (Not MenuOpen) And OtherOpen = Null And (Not ConsoleOpen) Then
+	If ClosestButton <> 0 And SelectedDoor = Null And (Not InvOpen) And (Not MenuOpen) And OtherOpen = Null And (Not ConsoleOpen) And SelectedDifficulty\OtherFactors <> EXTREME Then
 		Temp = CreatePivot()
 		PositionEntity(Temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 		PointEntity(Temp, ClosestButton)
@@ -4888,7 +4892,7 @@ Function DrawGUI()
 		DrawImage(tt\IconID[4], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - 32, mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - 32)
 	EndIf
 	
-	If ClosestItem <> Null Then
+	If ClosestItem <> Null And SelectedDifficulty\OtherFactors <> EXTREME Then
 		YawValue = -DeltaYaw(Camera, ClosestItem\Collider)
 		If YawValue > 90.0 And YawValue =< 180.0 Then YawValue = 90.0
 		If YawValue > 180.0 And YawValue < 270.0 Then YawValue = 270.0
@@ -4899,7 +4903,7 @@ Function DrawGUI()
 		DrawImage(tt\IconID[5], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - 32, mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - 32)
 	EndIf
 	
-	If ga\DrawHandIcon Then DrawImage(tt\IconID[4], mo\Viewport_Center_X - 32, mo\Viewport_Center_Y - 32)
+	If ga\DrawHandIcon And SelectedDifficulty\OtherFactors <> EXTREME Then DrawImage(tt\IconID[4], mo\Viewport_Center_X - 32, mo\Viewport_Center_Y - 32)
 	For i = 0 To 3
 		If ga\DrawArrowIcon[i] Then
 			x = mo\Viewport_Center_X - 32
@@ -4930,7 +4934,7 @@ Function DrawGUI()
 		EndIf
 	Next
 	
-	If opt\HUDEnabled Then 
+	If opt\HUDEnabled And SelectedDifficulty\OtherFactors <> EXTREME Then 
 		Width = 200
 		Height = 20
 		x = 80
@@ -5119,8 +5123,8 @@ Function DrawGUI()
 		
 		Local TempX% = 0
 		
-		x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
-		y = mo\Viewport_Center_Y - INVENTORY_GFX_SIZE * (Float(OtherSize) / MaxItemAmount * 2 - 1) - INVENTORY_GFX_SPACING
+		x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * 10 / 2 + INVENTORY_GFX_SPACING * (10 / 2 - 1)) / 2
+		y = mo\Viewport_Center_Y - INVENTORY_GFX_SIZE * (Float(OtherSize) / 10 * 2 - 1) - INVENTORY_GFX_SPACING
 		
 		IsMouseOn = -1
 		For n = 0 To OtherSize - 1
@@ -5141,7 +5145,7 @@ Function DrawGUI()
 			If OtherOpen = Null Then Exit
 			
 			If OtherOpen\SecondInv[n] <> Null Then
-				If (SelectedItem <> OtherOpen\SecondInv[n] Lor IsMouseOn = n) Then DrawImage(OtherOpen\SecondInv[n]\InvImg, x + INVENTORY_GFX_SIZE / 2 - 32, y + INVENTORY_GFX_SIZE / 2 - 32)
+				If (IsMouseOn = n Lor SelectedItem <> OtherOpen\SecondInv[n]) Then DrawImage(OtherOpen\SecondInv[n]\InvImg, x + INVENTORY_GFX_SIZE / 2 - 32, y + INVENTORY_GFX_SIZE / 2 - 32)
 			EndIf
 			If OtherOpen\SecondInv[n] <> Null And SelectedItem <> OtherOpen\SecondInv[n] Then
 				If IsMouseOn = n Then
@@ -5155,7 +5159,7 @@ Function DrawGUI()
 			If TempX = 5 Then 
 				TempX = 0
 				y = y + INVENTORY_GFX_SIZE * 2 
-				x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1.0)) / 2
+				x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * 10 / 2 + INVENTORY_GFX_SPACING * (10 / 2 - 1.0)) / 2
 			EndIf
 		Next
 		
@@ -5173,6 +5177,11 @@ Function DrawGUI()
 	ElseIf InvOpen Then
 		x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
 		y = mo\Viewport_Center_Y - INVENTORY_GFX_SIZE - INVENTORY_GFX_SPACING
+		
+		If MaxItemAmount = 2 Then
+			y = y + INVENTORY_GFX_SIZE
+			x = x - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING) / 2
+		EndIf
 		
 		IsMouseOn = -1
 		For n = 0 To MaxItemAmount - 1
@@ -5266,7 +5275,7 @@ Function DrawGUI()
 			DrawFrame(x, y, INVENTORY_GFX_SIZE, INVENTORY_GFX_SIZE, (x Mod 64), (x Mod 64))
 			
 			If Inventory[n] <> Null Then
-				If SelectedItem <> Inventory[n] Lor IsMouseOn = n Then 
+				If IsMouseOn = n Lor SelectedItem <> Inventory[n] Then 
 					DrawImage(Inventory[n]\InvImg, x + (INVENTORY_GFX_SIZE / 2) - 32, y + (INVENTORY_GFX_SIZE / 2) - 32)
 				EndIf
 			EndIf
@@ -5284,9 +5293,9 @@ Function DrawGUI()
 			EndIf					
 			
 			x = x + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING
-			If n = 4 Then 
+			If MaxItemAmount >= 4 And n = MaxItemAmount / 2 - 1 Then 
 				y = y + INVENTORY_GFX_SIZE * 2 
-				x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
+				x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2 
 			EndIf
 		Next
 		
@@ -6068,8 +6077,8 @@ Function UpdateGUI()
 		
 		Local TempX% = 0
 		
-		x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
-		y = mo\Viewport_Center_Y - INVENTORY_GFX_SIZE * (Float(OtherSize) / MaxItemAmount * 2 - 1) - INVENTORY_GFX_SPACING
+		x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * 10 / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
+		y = mo\Viewport_Center_Y - INVENTORY_GFX_SIZE * (Float(OtherSize) / 10 * 2 - 1) - INVENTORY_GFX_SPACING
 		
 		ItemAmount = 0
 		IsMouseOn = -1
@@ -6117,7 +6126,7 @@ Function UpdateGUI()
 			If TempX = 5 Then 
 				TempX = 0
 				y = y + (INVENTORY_GFX_SIZE * 2)
-				x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1.0)) / 2
+				x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * 10 / 2 + INVENTORY_GFX_SPACING * (10 / 2 - 1.0)) / 2
 			EndIf
 		Next
 		
@@ -6214,6 +6223,11 @@ Function UpdateGUI()
 		x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
 		y = mo\Viewport_Center_Y - INVENTORY_GFX_SIZE - INVENTORY_GFX_SPACING
 		
+		If MaxItemAmount = 2 Then
+			y = y + INVENTORY_GFX_SIZE
+			x = x - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING) / 2
+		EndIf
+		
 		ItemAmount = 0
 		IsMouseOn = -1
 		For n = 0 To MaxItemAmount - 1
@@ -6257,7 +6271,7 @@ Function UpdateGUI()
 			EndIf					
 			
 			x = x + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING
-			If n = 4 Then 
+			If MaxItemAmount >= 4 And n = MaxItemAmount / 2 - 1 Then 
 				y = y + INVENTORY_GFX_SIZE * 2 
 				x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
 			EndIf
@@ -8321,17 +8335,12 @@ Function DrawMenu()
 		
 		If AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg =< 0 Then
 			If me\KillTimer >= 0.0 Then	
-				y = y + (147 * MenuScale)
-				If (Not SelectedDifficulty\PermaDeath) Then
-					y = y + (75 * MenuScale)
-				EndIf
-				y = y + (150 * MenuScale)
+				y = y + ((297 + (75 * SelectedDifficulty\SaveType <> NOSAVES)) * MenuScale)
 			Else
-				y = y + (184 * MenuScale)
+				y = y + 184 * MenuScale
+				SetFont(fo\FontID[Font_Default])
+				RowText(msg\DeathMsg, x, y + (80 * MenuScale), 430 * MenuScale, 600 * MenuScale)
 			EndIf
-			
-			SetFont(fo\FontID[Font_Default])
-			If me\KillTimer < 0.0 Then RowText(msg\DeathMsg, x, y + (80 * MenuScale), 430 * MenuScale, 600 * MenuScale)
 		EndIf
 		
 		RenderMenuButtons()
@@ -8760,7 +8769,7 @@ Function UpdateMenu()
 				
 				y = y + (75 * MenuScale)
 				
-				If (Not SelectedDifficulty\PermaDeath) Then
+				If SelectedDifficulty\SaveType <> NOSAVES Then
 					If GameSaved Then
 						If DrawButton(x, y, 430 * MenuScale, 60 * MenuScale, "Load Game") Then
 							DrawLoading(0)
@@ -8771,8 +8780,6 @@ Function UpdateMenu()
 							MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 							HidePointer()
 							
-							FlushKeys()
-							FlushMouse()
 							me\Playable = True
 							
 							UpdateRooms()
@@ -8823,56 +8830,56 @@ Function UpdateMenu()
 			Else
 				y = y + (104 * MenuScale)
 				
-				If GameSaved And (Not SelectedDifficulty\PermaDeath) Then
-					If DrawButton(x, y, 430 * MenuScale, 60 * MenuScale, "Load Game") Then
-						DrawLoading(0)
-						
-						MenuOpen = False
-						LoadGameQuick(SavePath + CurrSave + "\")
-						
-						MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
-						HidePointer()
-						
-						FlushKeys()
-						FlushMouse()
-						me\Playable = True
-						
-						UpdateRooms()
-						
-						For r.Rooms = Each Rooms
-							x = Abs(EntityX(me\Collider) - EntityX(r\OBJ))
-							z = Abs(EntityZ(me\Collider) - EntityZ(r\OBJ))
+				If SelectedDifficulty\SaveType <> NOSAVES Then
+					If GameSaved Then
+						If DrawButton(x, y, 430 * MenuScale, 60 * MenuScale, "Load Game") Then
+							DrawLoading(0)
 							
-							If x < 12.0 And z < 12.0 Then
-								MapFound(Floor(EntityX(r\OBJ) / 8.0), Floor(EntityZ(r\OBJ) / 8.0)) = Max(MapFound(Floor(EntityX(r\OBJ) / 8.0), Floor(EntityZ(r\OBJ) / 8.0)), 1)
-								If x < 4.0 And z < 4.0 Then
-									If Abs(EntityY(me\Collider) - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r
-									MapFound(Floor(EntityX(r\OBJ) / 8.0), Floor(EntityZ(r\OBJ) / 8.0)) = 1
+							MenuOpen = False
+							LoadGameQuick(SavePath + CurrSave + "\")
+							
+							MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
+							HidePointer()
+							
+							me\Playable = True
+							
+							UpdateRooms()
+							
+							For r.Rooms = Each Rooms
+								x = Abs(EntityX(me\Collider) - EntityX(r\OBJ))
+								z = Abs(EntityZ(me\Collider) - EntityZ(r\OBJ))
+								
+								If x < 12.0 And z < 12.0 Then
+									MapFound(Floor(EntityX(r\OBJ) / 8.0), Floor(EntityZ(r\OBJ) / 8.0)) = Max(MapFound(Floor(EntityX(r\OBJ) / 8.0), Floor(EntityZ(r\OBJ) / 8.0)), 1)
+									If x < 4.0 And z < 4.0 Then
+										If Abs(EntityY(me\Collider) - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r
+										MapFound(Floor(EntityX(r\OBJ) / 8.0), Floor(EntityZ(r\OBJ) / 8.0)) = 1
+									EndIf
 								EndIf
-							EndIf
-						Next
-						
-						DrawLoading(100)
-						
-						me\DropSpeed = 0.0
-						
-						UpdateWorld(0.0)
-						
-						fps\FPSFactor[0] = 0.0
-						
-						ResetInput()
-						Return
+							Next
+							
+							DrawLoading(100)
+							
+							me\DropSpeed = 0.0
+							
+							UpdateWorld(0.0)
+							
+							fps\FPSFactor[0] = 0.0
+							
+							ResetInput()
+							Return
+						EndIf
+					Else
+						DrawButton(x, y, 430 * MenuScale, 60 * MenuScale, "Load Game", True, False, True)
 					EndIf
-				Else
-					DrawButton(x, y, 430 * MenuScale, 60 * MenuScale, "Load Game", True, False, True)
+					y = y + (80 * MenuScale)
 				EndIf
-				If DrawButton(x, y + (80 * MenuScale), 430 * MenuScale, 60 * MenuScale, "Quit to Menu") Then
+				If DrawButton(x, y, 430 * MenuScale, 60 * MenuScale, "Quit to Menu") Then
 					NullGame()
 					CurrSave = ""
 					ResetInput()
 					Return
 				EndIf
-				
 				y = y + (80 * MenuScale)
 			EndIf
 			
@@ -9509,6 +9516,13 @@ Function LoadEntities()
 	CatchErrors("LoadEntities")
 End Function
 
+Function InitStats()
+	MaxItemAmount = SelectedDifficulty\InventorySlots
+	
+	me\Playable = True
+	me\SelectedEnding = -1
+End Function
+
 Function InitNewGame()
 	CatchErrors("Uncaught (InitNewGame)")
 	
@@ -9518,14 +9532,14 @@ Function InitNewGame()
 	LoadEntities()
 	LoadSounds()
 	
+	InitStats()
+	
 	DrawLoading(45)
 	
 	HideDistance = 15.0
 	
 	me\BlinkEffect = 1.0
 	me\StaminaEffect = 1.0
-	me\Playable = True
-	me\SelectedEnding = -1
 	me\HeartBeatRate = 70.0
 	me\Funds = Rand(0, 6)
 	
@@ -9588,18 +9602,14 @@ Function InitNewGame()
 			PositionEntity(me\Collider, EntityX(r\OBJ) + 3584.0 * RoomScale, 704.0 * RoomScale, EntityZ(r\OBJ) + 1024.0 * RoomScale)
 			PlayerRoom = r
 			it.Items = CreateItem("Class D Orientation Leaflet", "paper", 1, 1, 1)
-			it\Picked = True
-			it\Dropped = -1
-			it\ItemTemplate\Found = True
+			it\Picked = True : it\Dropped = -1 : it\ItemTemplate\Found = True
 			Inventory[0] = it
 			HideEntity(it\Collider)
 			EntityType(it\Collider, HIT_ITEM)
 			EntityParent(it\Collider, 0)
 			ItemAmount = ItemAmount + 1
 			it.Items = CreateItem("Document SCP-173", "paper", 1, 1, 1)
-			it\Picked = True
-			it\Dropped = -1
-			it\ItemTemplate\Found = True
+			it\Picked = True : it\Dropped = -1 : it\ItemTemplate\Found = True
 			Inventory[1] = it
 			HideEntity(it\Collider)
 			EntityType(it\Collider, HIT_ITEM)
@@ -9665,8 +9675,7 @@ Function InitNewGame()
 	DeleteTextureEntriesFromCache(DeleteMapTextures)
 	DrawLoading(100)
 	
-	FlushKeys()
-	FlushMouse()
+	ResetInput()
 	
 	me\DropSpeed = 0.0
 	
@@ -9679,10 +9688,9 @@ Function InitLoadGame()
 	Local d.Doors, sc.SecurityCams, rt.RoomTemplates, e.Events
 	Local i%, x#, z#
 	
-	DrawLoading(80)
+	InitStats()
 	
-	me\Playable = True
-	me\SelectedEnding = -1
+	DrawLoading(80)
 	
 	InitWayPoints()
 	
@@ -9712,8 +9720,6 @@ Function InitLoadGame()
 	For rt.RoomTemplates = Each RoomTemplates
 		If rt\OBJ <> 0 Then FreeEntity(rt\OBJ) : rt\OBJ = 0
 	Next
-	
-	me\DropSpeed = 0.0
 	
 	For e.Events = Each Events
 		; ~ Loading the necessary stuff for dimension1499, but this will only be done if the player is in this dimension already
@@ -9760,7 +9766,10 @@ Function InitLoadGame()
 	DrawLoading(100)
 	
 	fps\FPSFactor[0] = 0.0
+	
 	ResetInput()
+	
+	me\DropSpeed = 0.0
 	
 	CatchErrors("InitLoadGame")
 End Function
@@ -9787,6 +9796,9 @@ Function NullGame(PlayButtonSFX% = True)
 	SelectedMap = ""
 	
 	UsedConsole = False
+	
+	ItemAmount = 0
+	MaxItemAmount = 0
 	
 	DoorTempID = 0
 	RoomTempID = 0
@@ -10482,6 +10494,14 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 										it2.Items = CreateItem("Level 1 Key Card", "key1", x, y, z)
 									EndIf
 									;[End Block]
+								Case EXTREME
+									;[Block]
+									If Rand(4) = 1 Then
+										it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
+									Else
+										it2.Items = CreateItem("Level 1 Key Card", "key1", x, y, z)
+									EndIf
+									;[End Block]
 							End Select
 							;[End Block]
 						Case 1
@@ -10507,6 +10527,14 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 										it2.Items = CreateItem("Level 2 Key Card", "key2", x, y, z)
 									EndIf
 									;[End Block]
+								Case EXTREME
+									;[Block]
+									If Rand(3) = 1 Then
+										it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
+									Else
+										it2.Items = CreateItem("Level 2 Key Card", "key2", x, y, z)
+									EndIf
+									;[End Block]
 							End Select
 							;[End Block]
 						Case 2
@@ -10527,6 +10555,14 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 								Case HARD
 									;[Block]
 									If Rand(3) = 1 Then
+										it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
+									Else
+										it2.Items = CreateItem("Level 3 Key Card", "key3", x, y, z)
+									EndIf
+									;[End Block]
+								Case EXTREME
+									;[Block]
+									If Rand(2) = 1 Then
 										it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
 									Else
 										it2.Items = CreateItem("Level 3 Key Card", "key3", x, y, z)
@@ -10561,6 +10597,14 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 										it2.Items = CreateItem("Playing Card", "playcard", x, y, z)	
 									EndIf
 									;[End Block]
+								Case EXTREME
+									;[Block]
+									If Rand(25) = 1 Then
+										it2.Items = CreateItem("Level 4 Key Card", "key4", x, y, z)
+									Else
+										it2.Items = CreateItem("Playing Card", "playcard", x, y, z)	
+									EndIf
+									;[End Block]
 							End Select
 							;[End Block]
 						Case 4
@@ -10581,6 +10625,14 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 								Case HARD
 									;[Block]
 									If Rand(3) = 1 Then
+										it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
+									Else
+										it2.Items = CreateItem("Level 5 Key Card", "key5", x, y, z)
+									EndIf
+									;[End Block]
+								Case EXTREME
+									;[Block]
+									If Rand(2) = 1 Then
 										it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
 									Else
 										it2.Items = CreateItem("Level 5 Key Card", "key5", x, y, z)
@@ -10635,6 +10687,18 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 										EndIf
 									EndIf
 									;[End Block]
+								Case HARD
+									;[Block]
+									If Rand(0, ((MAXACHIEVEMENTS - 1) * 6) - ((CurrAchvAmount - 1) * 3)) = 0 Then
+										it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
+									Else
+										If Rand(25) = 1 Then
+											it2.Items = CreateItem("Level 6 Key Card", "key6", x, y, z)
+										Else
+											it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
+										EndIf
+									EndIf
+									;[End Block]
 							End Select
 							;[End Block]
 						Case 6
@@ -10659,6 +10723,14 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 								Case HARD
 									;[Block]
 									If Rand(5) = 1 Then
+										it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
+									Else
+										it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
+									EndIf
+									;[End Block]
+								Case EXTREME
+									;[Block]
+									If Rand(6) = 1 Then
 										it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 									Else
 										it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
@@ -10714,6 +10786,18 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 								EndIf
 							EndIf
 							;[End Block]
+						Case EXTREME
+							;[Block]
+							If Rand(0, ((MAXACHIEVEMENTS - 1) * 6) - ((CurrAchvAmount - 1) * 3)) = 0
+								it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
+							Else
+								If Rand(35) = 1 Then
+									it2.Items = CreateItem("Level 6 Key Card", "key6", x, y, z)
+								Else
+									it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
+								EndIf
+							EndIf
+							;[End Block]
 					End Select
 					;[End Block]
 			End Select
@@ -10755,6 +10839,14 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 						Case HARD
 							;[Block]
 							If Rand(5) = 1 Then
+								it2.Items = CreateItem("Level 6 Key Card", "key6", x, y, z)
+							Else
+								it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
+							EndIf
+							;[End Block]
+						Case EXTREME
+							;[Block]
+							If Rand(6) = 1 Then
 								it2.Items = CreateItem("Level 6 Key Card", "key6", x, y, z)
 							Else
 								it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
@@ -11725,7 +11817,7 @@ Function UpdateMTF()
 				; ~ If the player has an SCP in their inventory play special voice line.
 				For i = 0 To MaxItemAmount - 1
 					If Inventory[i] <> Null Then
-						If (Left(Inventory[i]\ItemTempLate\Name, 4) = "SCP-") And (Left(Inventory[i]\ItemTemplate\Name, 7) <> "SCP-035") And (Left(Inventory[i]\ItemTemplate\Name, 7) <> "SCP-093")
+						If (Left(Inventory[i]\ItemTemplate\Name, 4) = "SCP-") And (Left(Inventory[i]\ItemTemplate\Name, 7) <> "SCP-035") And (Left(Inventory[i]\ItemTemplate\Name, 7) <> "SCP-093")
 							PlayAnnouncement("SFX\Character\MTF\ThreatAnnouncPossession.ogg")
 							MTFTimer = 25000.0
 							Return

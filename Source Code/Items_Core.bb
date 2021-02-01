@@ -2,9 +2,10 @@ Global BurntNote%
 
 Global ItemAmount%
 
-Const MaxItemAmount% = 10
+Global MaxItemAmount%
 
-Global Inventory.Items[MaxItemAmount + 1]
+Global Inventory.Items[11] ; ~ TODO: Replace by Dim to erase and rewrite data for skipping unnecessary checking
+
 Global InvSelect%, SelectedItem.Items
 
 Global ClosestItem.Items

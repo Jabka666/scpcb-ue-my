@@ -108,7 +108,7 @@ Const MainMenuTab_Options_Advanced% = 7
 Function UpdateMainMenu()
 	CatchErrors("Uncaught (UpdateMainMenu")
 	
-	Local x%, y%, Width%, Height%, Temp%, i%, n%, j%
+	Local x%, y%, Width%, Height%, Temp%, i%, n%, j%, g%
 	Local Dir%, File$, Test%, snd.Sound
 	
 	While fps\Accumulator > 0.0
@@ -255,8 +255,8 @@ Function UpdateMainMenu()
 										;[End Block]
 								End Select
 							Else
-								n = Rand(4, 8)
-								For j = 1 To n
+								g = Rand(4, 8)
+								For j = 1 To g
 									If Rand(3) = 1 Then
 										RandomSeed = RandomSeed + Rand(0, 9)
 									Else
@@ -343,7 +343,7 @@ Function UpdateMainMenu()
 					y = 376 * MenuScale
 					
 					Width = 580 * MenuScale
-					Height = 330 * MenuScale
+					Height = (310 + (35 * (Not difficulties[ESOTERIC]\Locked))) * MenuScale
 					
 					CurrSave = InputBox(x + (150 * MenuScale), y + (15 * MenuScale), 200 * MenuScale, 30 * MenuScale, CurrSave, 1, 15)
 					If SelectedInputBox = 1 Then
@@ -371,7 +371,12 @@ Function UpdateMainMenu()
 					
 					opt\IntroEnabled = DrawTick(x + (280 * MenuScale), y + (110 * MenuScale), opt\IntroEnabled)	
 					
-					For i = SAFE To ESOTERIC
+					If difficulties[ESOTERIC]\Locked Then
+						n = APOLLYON
+					Else
+						n = ESOTERIC
+					EndIf
+					For i = SAFE To n
 						Local PrevSelectedDifficulty.Difficulty = SelectedDifficulty
 						
 						If DrawTick(x + (20 * MenuScale), y + ((180 + 30 * i) * MenuScale), (SelectedDifficulty = difficulties[i]), difficulties[i]\Locked) Then SelectedDifficulty = difficulties[i]
@@ -384,35 +389,47 @@ Function UpdateMainMenu()
 					Next
 					
 					If SelectedDifficulty\Customizable Then
-						SelectedDifficulty\PermaDeath = DrawTick(x + (160 * MenuScale), y + (165 * MenuScale), (SelectedDifficulty\PermaDeath))
-						
-						If DrawTick(x + (160 * MenuScale), y + (195 * MenuScale), SelectedDifficulty\SaveType = SAVEANYWHERE And (Not SelectedDifficulty\PermaDeath), SelectedDifficulty\PermaDeath) Then 
-							SelectedDifficulty\SaveType = SAVEANYWHERE
-						Else
-							SelectedDifficulty\SaveType = SAVEONSCREENS
+						; ~ Save type
+						If MouseOn(x + (160 * MenuScale), y + (180 * MenuScale), ImageWidth(ga\ArrowIMG[1]), ImageHeight(ga\ArrowIMG[1])) And mo\MouseHit1 Then
+							If SelectedDifficulty\SaveType  < NOSAVES Then
+								SelectedDifficulty\SaveType = SelectedDifficulty\SaveType + 1
+							Else
+								SelectedDifficulty\SaveType = SAVEANYWHERE
+							EndIf
+							PlaySound_Strict(ButtonSFX)
 						EndIf
 						
-						SelectedDifficulty\AggressiveNPCs = DrawTick(x + (160 * MenuScale), y + (225 * MenuScale), SelectedDifficulty\AggressiveNPCs)
+						; ~ Agressive NPCs
+						SelectedDifficulty\AggressiveNPCs = DrawTick(x + (160 * MenuScale), y + (210 * MenuScale), SelectedDifficulty\AggressiveNPCs)
+						
+						; ~ Inventory slots
+						If MouseOn(x + (410 * MenuScale), y + (240 * MenuScale), ImageWidth(ga\ArrowIMG[3]), ImageHeight(ga\ArrowIMG[3])) And mo\MouseHit1 Then
+							SelectedDifficulty\InventorySlots = SelectedDifficulty\InventorySlots + 2
+							If SelectedDifficulty\InventorySlots > 10 Then SelectedDifficulty\InventorySlots = 2
+							PlaySound_Strict(ButtonSFX)
+						ElseIf MouseOn(x + (160 * MenuScale), y + (240 * MenuScale), ImageWidth(ga\ArrowIMG[1]), ImageHeight(ga\ArrowIMG[1])) And mo\MouseHit1
+							SelectedDifficulty\InventorySlots = SelectedDifficulty\InventorySlots - 2
+							If SelectedDifficulty\InventorySlots < 0 Then SelectedDifficulty\InventorySlots = 10
+							PlaySound_Strict(ButtonSFX)
+						EndIf
 						
 						; ~ Other factor's difficulty
-						If mo\MouseHit1 Then
-							If MouseOn(x + (160 * MenuScale), y + (255 * MenuScale), ImageWidth(ga\ArrowIMG[1]), ImageHeight(ga\ArrowIMG[1])) Then
-								If SelectedDifficulty\OtherFactors < HARD
-									SelectedDifficulty\OtherFactors = SelectedDifficulty\OtherFactors + 1
-								Else
-									SelectedDifficulty\OtherFactors = EASY
-								EndIf
-								PlaySound_Strict(ButtonSFX)
+						If MouseOn(x + (160 * MenuScale), y + (270 * MenuScale), ImageWidth(ga\ArrowIMG[1]), ImageHeight(ga\ArrowIMG[1])) And mo\MouseHit1 Then
+							If SelectedDifficulty\OtherFactors < EXTREME Then
+								SelectedDifficulty\OtherFactors = SelectedDifficulty\OtherFactors + 1
+							Else
+								SelectedDifficulty\OtherFactors = EASY
 							EndIf
+							PlaySound_Strict(ButtonSFX)
 						EndIf
 					EndIf
 					
-					If DrawButton(x, y + Height + (10 * MenuScale), 160 * MenuScale, 70 * MenuScale, "Load map", False) Then
+					If DrawButton(x, y + Height + (20 * MenuScale), 160 * MenuScale, (65 + (10 * (Not difficulties[ESOTERIC]\Locked))) * MenuScale, "Load map", False) Then
 						mm\MainMenuTab = MainMenuTab_Load_Map
 						LoadSavedMaps()
 					EndIf
 					
-					If DrawButton(x + (420 * MenuScale), y + Height + (10 * MenuScale), 160 * MenuScale, 70 * MenuScale, "START", False) Then
+					If DrawButton(x + (420 * MenuScale), y + Height + (20 * MenuScale), 160 * MenuScale, (65 + (10 * (Not difficulties[ESOTERIC]\Locked))) * MenuScale, "START", False) Then
 						If CurrSave = "" Then CurrSave = "untitled"
 						
 						If RandomSeed = "" Then
@@ -447,20 +464,20 @@ Function UpdateMainMenu()
 					Height = 296 * MenuScale
 					
 					If mm\CurrLoadGamePage < Ceil(Float(SaveGameAmount) / 5.0) - 1 And SaveMSG = "" Then 
-						If DrawButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">") Then
+						If DrawButton(x + Width - (50 * MenuScale), y + (450 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">") Then
 							mm\CurrLoadGamePage = mm\CurrLoadGamePage + 1
 							mm\ShouldDeleteGadgets = True
 						EndIf
 					Else
-						DrawButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">", True, False, True)
+						DrawButton(x + Width - (50 * MenuScale), y + (450 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">", True, False, True)
 					EndIf
 					If mm\CurrLoadGamePage > 0 And SaveMSG = "" Then
-						If DrawButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<") Then
+						If DrawButton(x, y + (450 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<") Then
 							mm\CurrLoadGamePage = mm\CurrLoadGamePage - 1
 							mm\ShouldDeleteGadgets = True
 						EndIf
 					Else
-						DrawButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<", True, False, True)
+						DrawButton(x, y + (450 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<", True, False, True)
 					EndIf
 					
 					If mm\CurrLoadGamePage > Ceil(Float(SaveGameAmount) / 5.0) - 1 Then
@@ -812,20 +829,20 @@ Function UpdateMainMenu()
 						Height = 340 * MenuScale
 						
 						If mm\CurrLoadGamePage = 0 Then 
-							If DrawButton(x - (310 * MenuScale) + Width - (30 * MenuScale), y + Height + (5 * MenuScale), 30 * MenuScale, 30 * MenuScale, ">", False) Then
+							If DrawButton(x - (310 * MenuScale) + Width - (30 * MenuScale), y + Height + (15 * MenuScale), 30 * MenuScale, 30 * MenuScale, ">", False) Then
 								mm\CurrLoadGamePage = mm\CurrLoadGamePage + 1
 								mm\ShouldDeleteGadgets = True
 							EndIf
 						Else
-							DrawButton(x - (310 * MenuScale) + Width - (30 * MenuScale), y + Height + (5 * MenuScale), 30 * MenuScale, 30 * MenuScale, ">", False, False, True)
+							DrawButton(x - (310 * MenuScale) + Width - (30 * MenuScale), y + Height + (15 * MenuScale), 30 * MenuScale, 30 * MenuScale, ">", False, False, True)
 						EndIf
 						If mm\CurrLoadGamePage = 1 Then
-							If DrawButton(x - (310 * MenuScale), y + Height + (5 * MenuScale), 30 * MenuScale, 30 * MenuScale, "<", False) Then
+							If DrawButton(x - (310 * MenuScale), y + Height + (15 * MenuScale), 30 * MenuScale, 30 * MenuScale, "<", False) Then
 								mm\CurrLoadGamePage = mm\CurrLoadGamePage - 1
 								mm\ShouldDeleteGadgets = True
 							EndIf
 						Else
-							DrawButton(x - (310 * MenuScale), y + Height + (5 * MenuScale), 30 * MenuScale, 30 * MenuScale, "<", False, False, True)
+							DrawButton(x - (310 * MenuScale), y + Height + (15 * MenuScale), 30 * MenuScale, 30 * MenuScale, "<", False, False, True)
 						EndIf
 						
 						If mm\CurrLoadGamePage = 0 Then
@@ -951,20 +968,20 @@ Function UpdateMainMenu()
 					Height = 350 * MenuScale
 					
 					If mm\CurrLoadGamePage < Ceil(Float(SavedMapsAmount) / 5.0) - 1 Then 
-						If DrawButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">") Then
+						If DrawButton(x + Width - (50 * MenuScale), y + (450 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">") Then
 							mm\CurrLoadGamePage = mm\CurrLoadGamePage + 1
 							mm\ShouldDeleteGadgets = True
 						EndIf
 					Else
-						DrawButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">", True, False, True)
+						DrawButton(x + Width - (50 * MenuScale), y + (450 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">", True, False, True)
 					EndIf
 					If mm\CurrLoadGamePage > 0 Then
-						If DrawButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<") Then
+						If DrawButton(x, y + (450 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<") Then
 							mm\CurrLoadGamePage = mm\CurrLoadGamePage - 1
 							mm\ShouldDeleteGadgets = True
 						EndIf
 					Else
-						DrawButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<", True, False, True)
+						DrawButton(x, y + (450 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<", True, False, True)
 					EndIf
 					
 					If mm\CurrLoadGamePage > Ceil(Float(SavedMapsAmount) / 5.0) - 1 Then
@@ -1002,7 +1019,7 @@ Function UpdateMainMenu()
 End Function
 
 Function RenderMainMenu()
-	Local x%, y%, Width%, Height%, Temp%, i%
+	Local x%, y%, Width%, Height%, Temp%, i%, n%
 	
 	Color(0, 0, 0)
 	
@@ -1120,7 +1137,7 @@ Function RenderMainMenu()
 				
 				y = y + Height + (20 * MenuScale)
 				Width = 580 * MenuScale
-				Height = 330 * MenuScale
+				Height = (310 + (35 * (Not difficulties[ESOTERIC]\Locked))) * MenuScale
 				
 				DrawFrame(x, y, Width, Height)				
 				
@@ -1149,44 +1166,76 @@ Function RenderMainMenu()
 				Color(255, 255, 255)
 				Text(x + (20 * MenuScale), y + (115 * MenuScale), "Enable intro sequence:")
 				
-				Text(x + (20 * MenuScale), y + (155 * MenuScale), "Difficulty:")				
-				For i = SAFE To ESOTERIC
+				Text(x + (20 * MenuScale), y + (155 * MenuScale), "Difficulty:")
+				If difficulties[ESOTERIC]\Locked Then
+					n = APOLLYON
+				Else
+					n = ESOTERIC
+				EndIf
+				For i = SAFE To n
 					Color(difficulties[i]\R, difficulties[i]\G, difficulties[i]\B)
 					Text(x + (60 * MenuScale), y + ((185 + 30 * i) * MenuScale), difficulties[i]\Name)
 				Next
 				
 				Color(255, 255, 255)
-				DrawFrame(x + (150 * MenuScale), y + (155 * MenuScale), 410 * MenuScale, 150 * MenuScale)
+				DrawFrame(x + (150 * MenuScale), y + (170 * MenuScale), 410 * MenuScale, (125 + (35 * (Not difficulties[ESOTERIC]\Locked))) * MenuScale)
 				
 				If SelectedDifficulty\Customizable Then
-					Text(x + (200 * MenuScale), y + (170 * MenuScale), "Permadeath")
+					; ~ Save type
+					DrawImage(ga\ArrowIMG[1], x + (160 * MenuScale), y + (180 * MenuScale))
+					Select SelectedDifficulty\SaveType
+						Case SAVEANYWHERE
+							;[Block]
+							Text(x + (200 * MenuScale), y + (186 * MenuScale), "Save anywhere")
+							;[End Block]
+						Case SAVEONSCREENS
+							;[Block]
+							Text(x + (200 * MenuScale), y + (186 * MenuScale), "Save on screens")
+							;[End Block]
+						Case SAVEONQUIT
+							;[Block]
+							Text(x + (200 * MenuScale), y + (186 * MenuScale), "Save on quit")
+							;[End Block]
+						Case NOSAVES
+							;[Block]
+							Text(x + (200 * MenuScale), y + (186 * MenuScale), "No saves")
+							;[End Block]
+					End Select
 					
-					Color(255 - (155 * SelectedDifficulty\PermaDeath), 255 - (155 * SelectedDifficulty\PermaDeath), 255 - (155 * SelectedDifficulty\PermaDeath))
-					Text(x + (200 * MenuScale), y + (200 * MenuScale), "Save anywhere")	
-					
+					; ~ Agressive NPCs
 					Color(255, 255, 255)
-					Text(x + (200 * MenuScale), y + (230 * MenuScale), "Aggressive NPCs")
+					Text(x + (200 * MenuScale), y + (215 * MenuScale), "Aggressive NPCs")
+					
+					; ~ Inventory slots
+					DrawImage(ga\ArrowIMG[3], x + (160 * MenuScale), y + 240 * MenuScale)
+					DrawImage(ga\ArrowIMG[1], x + ((400 + (Len(Str(SelectedDifficulty\InventorySlots)) * 5)) * MenuScale), y + 240 * MenuScale)
+					
+					Text(x + (200 * MenuScale), y + (246 * MenuScale), "Inventory slots: " + SelectedDifficulty\InventorySlots)
 					
 					; ~ Other factor's difficulty
-					DrawImage(ga\ArrowIMG[1], x + (160 * MenuScale), y + (255 * MenuScale))
+					DrawImage(ga\ArrowIMG[1], x + (160 * MenuScale), y + (270 * MenuScale))
 					
 					Color(255, 255, 255)
 					Select SelectedDifficulty\OtherFactors
 						Case EASY
 							;[Block]
-							Text(x + (200 * MenuScale), y + (260 * MenuScale), "Other difficulty factors: Easy")
+							Text(x + (200 * MenuScale), y + (276 * MenuScale), "Other difficulty factors: Easy")
 							;[End Block]
 						Case NORMAL
 							;[Block]
-							Text(x + (200 * MenuScale), y + (260 * MenuScale), "Other difficulty factors: Normal")
+							Text(x + (200 * MenuScale), y + (276 * MenuScale), "Other difficulty factors: Normal")
 							;[End Block]
 						Case HARD
 							;[Block]
-							Text(x + (200 * MenuScale), y + (260 * MenuScale), "Other difficulty factors: Hard")
+							Text(x + (200 * MenuScale), y + (276 * MenuScale), "Other difficulty factors: Hard")
+							;[End Block]
+						Case EXTREME
+							;[Block]
+							Text(x + (200 * MenuScale), y + (276 * MenuScale), "Other difficulty factors: Extreme")
 							;[End Block]
 					End Select
 				Else
-					RowText(SelectedDifficulty\Description, x + (160 * MenuScale), y + (160 * MenuScale), 390 * MenuScale, 200 * MenuScale)					
+					RowText(SelectedDifficulty\Description, x + (160 * MenuScale), y + (180 * MenuScale), 390 * MenuScale, 200 * MenuScale)					
 				EndIf
 				
 				SetFont(fo\FontID[Font_Default_Big])
@@ -1215,9 +1264,9 @@ Function RenderMainMenu()
 				
 				SetFont(fo\FontID[Font_Default_Big])
 				
-				DrawFrame(x + (60 * MenuScale), y + (440 * MenuScale), Width - (120 * MenuScale), 50 * MenuScale)
+				DrawFrame(x + (70 * MenuScale), y + (450 * MenuScale), Width - (140 * MenuScale), 50 * MenuScale)
 				
-				Text(x + (Width / 2.0), y + (465 * MenuScale), "Page " + Int(Max((mm\CurrLoadGamePage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SaveGameAmount) / 5.0))), 1)), True, True)
+				Text(x + (Width / 2), y + (475 * MenuScale), "Page " + Int(Max((mm\CurrLoadGamePage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SaveGameAmount) / 5.0))), 1)), True, True)
 				
 				SetFont(fo\FontID[Font_Default])
 				
@@ -1511,9 +1560,9 @@ Function RenderMainMenu()
 					
 					DrawFrame(x - (20 * MenuScale), y, Width, Height)	
 					
-					DrawFrame(x + (15 * MenuScale), y + Height + (5 * MenuScale), Width - (70 * MenuScale), 30 * MenuScale)	
+					DrawFrame(x + (25 * MenuScale), y + Height + (15 * MenuScale), Width - (90 * MenuScale), 30 * MenuScale)	
 					
-					Text(x + (Width / 2), y + Height + (20 * MenuScale), "Page " + Int(Max((mm\CurrLoadGamePage + 1), 1)) + "/2", True, True)
+					Text(x + (Width / 2), y + Height + (30 * MenuScale), "Page " + Int(Max((mm\CurrLoadGamePage + 1), 1)) + "/2", True, True)
 					
 					If mm\CurrLoadGamePage = 0 Then
 						y = y + (20 * MenuScale)
@@ -1699,9 +1748,9 @@ Function RenderMainMenu()
 				tW = 400 * MenuScale
 				tH = 150 * MenuScale
 				
-				DrawFrame(x + (60 * MenuScale), y + (440 * MenuScale), Width - (120 * MenuScale), 50 * MenuScale)
+				DrawFrame(x + (70 * MenuScale), y + (450 * MenuScale), Width - (140 * MenuScale), 50 * MenuScale)
 				
-				Text(x + (Width / 2), y + (465 * MenuScale), "Page " + Int(Max((mm\CurrLoadGamePage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SavedMapsAmount) / 5.0))), 1)), True, True)
+				Text(x + (Width / 2), y + (475 * MenuScale), "Page " + Int(Max((mm\CurrLoadGamePage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SavedMapsAmount) / 5.0))), 1)), True, True)
 				
 				SetFont(fo\FontID[Font_Default])
 				

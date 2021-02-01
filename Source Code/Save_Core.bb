@@ -81,15 +81,15 @@ Function SaveGame(File$)
 	WriteFloat(f, I_008\Timer)
 	WriteFloat(f, I_409\Timer)
 	
-	For i = 0 To ESOTERIC
+	For i = SAFE To ESOTERIC
 		If SelectedDifficulty = difficulties[i] Then
 			WriteByte(f, i)
 			
 			If i = ESOTERIC Then
 				WriteByte(f, SelectedDifficulty\AggressiveNPCs)
-				WriteByte(f, SelectedDifficulty\PermaDeath)
 				WriteByte(f, SelectedDifficulty\SaveType)
 				WriteByte(f, SelectedDifficulty\OtherFactors)
+				WriteByte(f, SelectedDifficulty\InventorySlots)
 			EndIf
 		EndIf
 	Next
@@ -574,9 +574,9 @@ Function LoadGame(File$)
 	SelectedDifficulty = difficulties[DifficultyIndex]
 	If DifficultyIndex = ESOTERIC Then
 		SelectedDifficulty\AggressiveNPCs = ReadByte(f)
-		SelectedDifficulty\PermaDeath = ReadByte(f)
 		SelectedDifficulty\SaveType	= ReadByte(f)
 		SelectedDifficulty\OtherFactors = ReadByte(f)
+		SelectedDifficulty\InventorySlots = ReadByte(f)
 	EndIf
 	
 	MonitorTimer = ReadFloat(f)
@@ -1447,9 +1447,9 @@ Function LoadGameQuick(File$)
 	SelectedDifficulty = difficulties[DifficultyIndex]
 	If DifficultyIndex = ESOTERIC Then
 		SelectedDifficulty\AggressiveNPCs = ReadByte(f)
-		SelectedDifficulty\PermaDeath = ReadByte(f)
 		SelectedDifficulty\SaveType	= ReadByte(f)
 		SelectedDifficulty\OtherFactors = ReadByte(f)
+		SelectedDifficulty\InventorySlots = ReadByte(f)
 	EndIf
 	
 	MonitorTimer = ReadFloat(f)

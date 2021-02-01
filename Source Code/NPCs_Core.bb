@@ -7188,6 +7188,10 @@ Function NPCSpeedChange(n.NPCs)
 					;[Block]
 					n\Speed = n\Speed * 1.2
 					;[End Block]
+				Case EXTREME
+					;[Block]
+					n\Speed = n\Speed * 1.3
+					;[End Block]
 			End Select
 	End Select
 End Function
