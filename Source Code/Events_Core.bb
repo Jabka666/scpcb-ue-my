@@ -1190,7 +1190,7 @@ Function UpdateEvents()
 								CameraPitch = 0.0
 								RotateEntity(me\Collider, 0.0, EntityYaw(Camera), 0.0)
 							ElseIf e\EventState3 < 40.0
-								If Inventory[0] <> Null Then
+								If Inventory(0) <> Null Then
 									CreateMsg("Press " + key\Name[key\INVENTORY] + " to open the inventory.", 6.0)
 									e\EventState3 = 40.0
 									Exit
@@ -2425,9 +2425,9 @@ Function UpdateEvents()
 						Local HasBatteryFor895% = False
 						
 						For i = 0 To MaxItemAmount - 1
-							If Inventory[i] <> Null Then
-								If (wi\NightVision = 1 And Inventory[i]\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory[i]\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory[i]\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE > 0 And Inventory[i]\ItemTemplate\TempName = "scramble") Then
-									If Inventory[i]\State > 0.0 Lor (wi\NightVision = 3 And Inventory[i]\ItemTemplate\TempName = "finenvg") Then
+							If Inventory(i) <> Null Then
+								If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE > 0 And Inventory(i)\ItemTemplate\TempName = "scramble") Then
+									If Inventory(i)\State > 0.0 Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Then
 										HasBatteryFor895 = True
 										Exit
 									EndIf
@@ -2463,10 +2463,10 @@ Function UpdateEvents()
 								If Rand(6) < 5 Then
 									EntityTexture(tt\OverlayID[4], tt\MiscTextureID[Rand(7, 12)])
 									For i = 0 To MaxItemAmount - 1
-										If Inventory[i] <> Null Then
-											If (wi\NightVision = 1 And Inventory[i]\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory[i]\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory[i]\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE > 0 And Inventory[i]\ItemTemplate\TempName = "scramble") Then
-												If Inventory[i]\State2 = 1.0 Then PlaySound_Strict(HorrorSFX[1])
-												Inventory[i]\State2 = 2.0
+										If Inventory(i) <> Null Then
+											If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE > 0 And Inventory(i)\ItemTemplate\TempName = "scramble") Then
+												If Inventory(i)\State2 = 1.0 Then PlaySound_Strict(HorrorSFX[1])
+												Inventory(i)\State2 = 2.0
 												Exit
 											EndIf
 										EndIf
@@ -2479,10 +2479,10 @@ Function UpdateEvents()
 								If Rand(50) = 1 Then
 									EntityTexture(tt\OverlayID[4], tt\MiscTextureID[Rand(7, 12)])
 									For i = 0 To MaxItemAmount - 1
-										If Inventory[i] <> Null Then
-											If (wi\NightVision = 1 And Inventory[i]\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory[i]\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory[i]\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE > 0 And Inventory[i]\ItemTemplate\TempName = "scramble") Then
-												If Inventory[i]\State2 = 0.0 Then PlaySound_Strict(HorrorSFX[0])
-												Inventory[i]\State2 = 1.0
+										If Inventory(i) <> Null Then
+											If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE > 0 And Inventory(i)\ItemTemplate\TempName = "scramble") Then
+												If Inventory(i)\State2 = 0.0 Then PlaySound_Strict(HorrorSFX[0])
+												Inventory(i)\State2 = 1.0
 												Exit
 											EndIf
 										EndIf
@@ -2491,9 +2491,9 @@ Function UpdateEvents()
 							Else
 								EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
 								For i = 0 To MaxItemAmount - 1
-									If Inventory[i] <> Null Then
-										If (wi\NightVision = 1 And Inventory[i]\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory[i]\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory[i]\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE > 0 And Inventory[i]\ItemTemplate\TempName = "scramble") Then
-											Inventory[i]\State2 = 0.0
+									If Inventory(i) <> Null Then
+										If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE > 0 And Inventory(i)\ItemTemplate\TempName = "scramble") Then
+											Inventory(i)\State2 = 0.0
 										EndIf
 									EndIf
 								Next
@@ -5269,9 +5269,9 @@ Function UpdateEvents()
 							Case 2.0
 								;[Block]
 								i = Rand(MaxItemAmount)
-								If Inventory[i] <> Null Then
-									RemoveWearableItems(Inventory[e\EventState2])
-									RemoveItem(Inventory[i])
+								If Inventory(i) <> Null Then
+									RemoveWearableItems(Inventory(e\EventState2))
+									RemoveItem(Inventory(i))
 								EndIf
 								;[End Block]
 							Case 5.0
@@ -5285,14 +5285,14 @@ Function UpdateEvents()
 							Case 14.0
 								;[Block]
 								For i = 0 To MaxItemAmount - 1
-									If Inventory[i] <> Null Then
-										If Inventory[i]\ItemTemplate\TempName = "paper" Then
-											RemoveItem(Inventory[i])
+									If Inventory(i) <> Null Then
+										If Inventory(i)\ItemTemplate\TempName = "paper" Then
+											RemoveItem(Inventory(i))
 											For itt.ItemTemplates = Each ItemTemplates
 												If itt\TempName = "paper" And Rand(6) = 1 Then
-													Inventory[i] = CreateItem(itt\Name, itt\TempName, 1.0, 1.0, 1.0)
-													HideEntity(Inventory[i]\Collider)
-													Inventory[i]\Picked = True
+													Inventory(i) = CreateItem(itt\Name, itt\TempName, 1.0, 1.0, 1.0)
+													HideEntity(Inventory(i)\Collider)
+													Inventory(i)\Picked = True
 													Exit
 												EndIf
 											Next
@@ -5318,13 +5318,13 @@ Function UpdateEvents()
 							Case 30.0
 								;[Block]
 								i = Rand(0, MaxItemAmount - 1)
-								If Inventory[i] <> Null Then
-									RemoveWearableItems(Inventory[e\EventState2])
-									RemoveItem(Inventory[i])
+								If Inventory(i) <> Null Then
+									RemoveWearableItems(Inventory(e\EventState2))
+									RemoveItem(Inventory(i))
 								EndIf
-								Inventory[i] = CreateItem("Strange Note", "paper", 1.0, 1.0, 1.0)
-								HideEntity(Inventory[i]\Collider)
-								Inventory[i]\Picked = True
+								Inventory(i) = CreateItem("Strange Note", "paper", 1.0, 1.0, 1.0)
+								HideEntity(Inventory(i)\Collider)
+								Inventory(i)\Picked = True
 								;[End Block]
 							Case 35.0
 								;[Block]
@@ -7311,9 +7311,9 @@ Function UpdateEvents()
 						PrevSecondaryLightOn = 0.0
 						If (Not me\Crouch) Then SetCrouch(True)
 						For i = 0 To MaxItemAmount - 1
-							If Inventory[i] <> Null Then
-								If Inventory[i]\ItemTemplate\Name = "Leaflet"
-									RemoveItem(Inventory[i])
+							If Inventory(i) <> Null Then
+								If Inventory(i)\ItemTemplate\Name = "Leaflet"
+									RemoveItem(Inventory(i))
 									Exit
 								EndIf
 							EndIf
@@ -8362,13 +8362,13 @@ Function UpdateEvents()
 					
 					If GrabbedEntity <> 0 Then
 						e\EventState2 = Rand(0, MaxItemAmount - 1)
-						If Inventory[e\EventState2] <> Null Then
+						If Inventory(e\EventState2) <> Null Then
 							; ~ Randomly picked item slot has an item in it, using this slot
 							e\EventState3 = 1.0
 						Else
 							; ~ Randomly picked item slot is empty, getting the first available slot
 							For i = 0 To MaxItemAmount - 1
-								Local IsSlotEmpty% = (Inventory[(i + e\EventState2) Mod MaxItemAmount] = Null)
+								Local IsSlotEmpty% = (Inventory((i + e\EventState2) Mod MaxItemAmount) = Null)
 								
 								If (Not IsSlotEmpty) Then
 									; ~ Successful
@@ -8440,7 +8440,7 @@ Function UpdateEvents()
 						
 						For itt.ItemTemplates = Each ItemTemplates
 							If IsItemGoodFor1162(itt) Then
-								Select Inventory[e\EventState2]\ItemTemplate\TempName
+								Select Inventory(e\EventState2)\ItemTemplate\TempName
 									Case "key"
 										;[Block]
 										If itt\TempName = "key0" Lor itt\TempName = "key1" And Rand(2) = 1
@@ -8487,8 +8487,8 @@ Function UpdateEvents()
 							EndIf
 							
 							If ShouldCreateItem Then
-								RemoveWearableItems(Inventory[e\EventState2])
-								RemoveItem(Inventory[e\EventState2])
+								RemoveWearableItems(Inventory(e\EventState2))
+								RemoveItem(Inventory(e\EventState2))
 								
 								it.Items = CreateItem(itt\Name, itt\TempName, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
 								EntityType(it\Collider, HIT_ITEM)
@@ -8537,8 +8537,8 @@ Function UpdateEvents()
 					ElseIf e\EventState3 >= 3.0
 						If e\EventState3 < 3.1
 							PlaySound_Strict(LoadTempSound("SFX\SCP\1162\Exchange" + Rand(0, 4) + ".ogg"))
-							RemoveWearableItems(Inventory[e\EventState2])
-							RemoveItem(Inventory[e\EventState2])
+							RemoveWearableItems(Inventory(e\EventState2))
+							RemoveItem(Inventory(e\EventState2))
 						Else
 							InjurePlayer(5.0)
 							Pvt = CreatePivot()

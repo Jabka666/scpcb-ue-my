@@ -4,7 +4,7 @@ Global ItemAmount%
 
 Global MaxItemAmount%
 
-Global Inventory.Items[11] ; ~ TODO: Replace by Dim to erase and rewrite data for skipping unnecessary checking
+Dim Inventory.Items(0)
 
 Global InvSelect%, SelectedItem.Items
 
@@ -556,8 +556,8 @@ Function RemoveItem(i.Items)
 	FreeEntity(i\Collider) : i\Collider = 0
 	
 	For n = 0 To MaxItemAmount - 1
-		If Inventory[n] = i
-			Inventory[n] = Null
+		If Inventory(n) = i
+			Inventory(n) = Null
 			ItemAmount = ItemAmount - 1
 			Exit
 		EndIf
@@ -753,7 +753,7 @@ Function PickItem(item.Items)
 	Local FullINV% = True
 	
 	For n = 0 To MaxItemAmount - 1
-		If Inventory[n] = Null
+		If Inventory(n) = Null
 			FullINV = False
 			Exit
 		EndIf
@@ -761,7 +761,7 @@ Function PickItem(item.Items)
 	
 	If (Not FullINV) Then
 		For n = 0 To MaxItemAmount - 1
-			If Inventory[n] = Null Then
+			If Inventory(n) = Null Then
 				Select item\ItemTemplate\TempName
 					Case "scp1123"
 						;[Block]
@@ -833,11 +833,11 @@ Function PickItem(item.Items)
 						;[Block]
 						CanPickItem = True
 						For z = 0 To MaxItemAmount - 1
-							If Inventory[z] <> Null Then
-								If Inventory[z]\ItemTemplate\TempName = "hazmatsuit" Lor Inventory[z]\ItemTemplate\TempName = "hazmatsuit2" Lor Inventory[z]\ItemTemplate\TempName = "hazmatsuit3" Then
+							If Inventory(z) <> Null Then
+								If Inventory(z)\ItemTemplate\TempName = "hazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "hazmatsuit2" Lor Inventory(z)\ItemTemplate\TempName = "hazmatsuit3" Then
 									CanPickItem = 0
 									Return
-								ElseIf Inventory[z]\ItemTemplate\TempName = "vest" Lor Inventory[z]\ItemTemplate\TempName = "finevest"
+								ElseIf Inventory(z)\ItemTemplate\TempName = "vest" Lor Inventory(z)\ItemTemplate\TempName = "finevest"
 									CanPickItem = 2
 									Return
 								EndIf
@@ -858,11 +858,11 @@ Function PickItem(item.Items)
 						;[Block]
 						CanPickItem = True
 						For z = 0 To MaxItemAmount - 1
-							If Inventory[z] <> Null Then
-								If Inventory[z]\ItemTemplate\TempName = "vest" Lor Inventory[z]\ItemTemplate\TempName = "finevest" Then
+							If Inventory(z) <> Null Then
+								If Inventory(z)\ItemTemplate\TempName = "vest" Lor Inventory(z)\ItemTemplate\TempName = "finevest" Then
 									CanPickItem = 0
 									Return
-								ElseIf Inventory[z]\ItemTemplate\TempName = "hazmatsuit" Lor Inventory[z]\ItemTemplate\TempName = "hazmatsuit2" Lor Inventory[z]\ItemTemplate\TempName = "hazmatsuit3"
+								ElseIf Inventory(z)\ItemTemplate\TempName = "hazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "hazmatsuit2" Lor Inventory(z)\ItemTemplate\TempName = "hazmatsuit3"
 									CanPickItem = 2
 									Return
 								EndIf
@@ -888,7 +888,7 @@ Function PickItem(item.Items)
 				item\ItemTemplate\Found = True
 				ItemAmount = ItemAmount + 1
 				
-				Inventory[n] = item
+				Inventory(n) = item
 				HideEntity(item\Collider)
 				Exit
 			EndIf
@@ -925,7 +925,7 @@ Function DropItem(item.Items, PlayDropSound% = True)
 	
 	item\Picked = False
 	For z = 0 To MaxItemAmount - 1
-		If Inventory[z] = item Then Inventory[z] = Null
+		If Inventory(z) = item Then Inventory(z) = Null
 	Next
 	RemoveWearableItems(item)
 	

@@ -12,7 +12,6 @@ Include "Source Code\Keys_Core.bb"
 Include "Source Code\INI_Core.bb"
 Include "Source Code\Math_Core.bb"
 Include "Source Code\Strict_Loads_Core.bb"
-Include "Source Code\Graphics_Core.bb"
 
 Const MaxFontIDAmount% = 8
 ; ~ Font IDs Constants
@@ -2038,6 +2037,8 @@ DrawLoading(35, True)
 Include "Source Code\Items_Core.bb"
 
 Include "Source Code\Particles_Core.bb"
+
+Include "Source Code\Graphics_Core.bb"
 
 Global ClosestButton%, ClosestDoor.Doors
 Global SelectedDoor.Doors, UpdateDoorsTimer#
@@ -4237,8 +4238,8 @@ Function MovePlayer()
 	EndIf
 	
 	For i = 0 To MaxItemAmount - 1
-		If Inventory[i] <> Null Then
-			If Inventory[i]\ItemTemplate\TempName = "finevest" Then me\Stamina = Min(me\Stamina, 60.0)
+		If Inventory(i) <> Null Then
+			If Inventory(i)\ItemTemplate\TempName = "finevest" Then me\Stamina = Min(me\Stamina, 60.0)
 		EndIf
 	Next
 	
@@ -5191,9 +5192,9 @@ Function DrawGUI()
 				EndIf
 			EndIf
 			
-			If Inventory[n] <> Null Then
+			If Inventory(n) <> Null Then
 				Color(200, 200, 200)
-				Select Inventory[n]\ItemTemplate\TempName 
+				Select Inventory(n)\ItemTemplate\TempName 
 					Case "gasmask"
 						;[Block]
 						If wi\GasMask = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
@@ -5274,20 +5275,20 @@ Function DrawGUI()
 			Color(255, 255, 255)
 			DrawFrame(x, y, INVENTORY_GFX_SIZE, INVENTORY_GFX_SIZE, (x Mod 64), (x Mod 64))
 			
-			If Inventory[n] <> Null Then
-				If IsMouseOn = n Lor SelectedItem <> Inventory[n] Then 
-					DrawImage(Inventory[n]\InvImg, x + (INVENTORY_GFX_SIZE / 2) - 32, y + (INVENTORY_GFX_SIZE / 2) - 32)
+			If Inventory(n) <> Null Then
+				If IsMouseOn = n Lor SelectedItem <> Inventory(n) Then 
+					DrawImage(Inventory(n)\InvImg, x + (INVENTORY_GFX_SIZE / 2) - 32, y + (INVENTORY_GFX_SIZE / 2) - 32)
 				EndIf
 			EndIf
 			
-			If Inventory[n] <> Null And SelectedItem <> Inventory[n] Then
+			If Inventory(n) <> Null And SelectedItem <> Inventory(n) Then
 				If IsMouseOn = n Then
 					If SelectedItem = Null Then
 						SetFont(fo\FontID[Font_Default])
 						Color(0, 0, 0)
-						Text(x + INVENTORY_GFX_SIZE / 2 + 1, y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - 15 + 1, Inventory[n]\Name, True)							
+						Text(x + INVENTORY_GFX_SIZE / 2 + 1, y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - 15 + 1, Inventory(n)\Name, True)							
 						Color(255, 255, 255)	
-						Text(x + INVENTORY_GFX_SIZE / 2, y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - 15, Inventory[n]\Name, True)	
+						Text(x + INVENTORY_GFX_SIZE / 2, y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - 15, Inventory(n)\Name, True)	
 					EndIf
 				EndIf
 			EndIf					
@@ -5303,7 +5304,7 @@ Function DrawGUI()
 			If mo\MouseDown1 Then
 				If MouseSlot = 66 Then
 					DrawImage(SelectedItem\InvImg, ScaledMouseX() - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, ScaledMouseY() - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
-				ElseIf SelectedItem <> Inventory[MouseSlot]
+				ElseIf SelectedItem <> Inventory(MouseSlot)
 					DrawImage(SelectedItem\InvImg, ScaledMouseX() - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, ScaledMouseY() - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 				EndIf
 			EndIf
@@ -6241,11 +6242,11 @@ Function UpdateGUI()
 				MouseSlot = n
 			EndIf
 			
-			If Inventory[n] <> Null And SelectedItem <> Inventory[n] Then
+			If Inventory(n) <> Null And SelectedItem <> Inventory(n) Then
 				If IsMouseOn = n Then
 					If SelectedItem = Null Then
 						If mo\MouseHit1 Then
-							SelectedItem = Inventory[n]
+							SelectedItem = Inventory(n)
 							
 							If mo\DoubleClick And mo\DoubleClickSlot = n Then
 								If wi\HazmatSuit > 0 And (Not Instr(SelectedItem\ItemTemplate\TempName, "hazmatsuit")) Then
@@ -6253,7 +6254,7 @@ Function UpdateGUI()
 									SelectedItem = Null
 									Return
 								EndIf
-								If Inventory[n]\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[Inventory[n]\ItemTemplate\Sound])
+								If Inventory(n)\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[Inventory(n)\ItemTemplate\Sound])
 								InvOpen = False
 								mo\DoubleClick = False
 							EndIf
@@ -6264,9 +6265,9 @@ Function UpdateGUI()
 			Else
 				If IsMouseOn = n And mo\MouseHit1 Then
 					For z = 0 To MaxItemAmount - 1
-						If Inventory[z] = SelectedItem Then Inventory[z] = Null
+						If Inventory(z) = SelectedItem Then Inventory(z) = Null
 					Next
-					Inventory[n] = SelectedItem
+					Inventory(n) = SelectedItem
 				EndIf
 			EndIf					
 			
@@ -6349,34 +6350,34 @@ Function UpdateGUI()
 					
 					MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 				Else
-					If Inventory[MouseSlot] = Null Then
+					If Inventory(MouseSlot) = Null Then
 						For z = 0 To MaxItemAmount - 1
-							If Inventory[z] = SelectedItem Then Inventory[z] = Null
+							If Inventory(z) = SelectedItem Then Inventory(z) = Null
 						Next
-						Inventory[MouseSlot] = SelectedItem
+						Inventory(MouseSlot) = SelectedItem
 						SelectedItem = Null
-					ElseIf Inventory[MouseSlot] <> SelectedItem
+					ElseIf Inventory(MouseSlot) <> SelectedItem
 						Select SelectedItem\ItemTemplate\TempName
 							Case "paper", "key0", "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "playcard", "mastercard", "oldpaper", "badge", "ticket", "25ct", "coin", "key", "scp860", "scp500pill", "scp500pilldeath", "scp005"
 								;[Block]
-								If Inventory[MouseSlot]\ItemTemplate\TempName = "clipboard" Then
+								If Inventory(MouseSlot)\ItemTemplate\TempName = "clipboard" Then
 									; ~ Add an item to clipboard
 									Local added.Items = Null
 									Local b$ = SelectedItem\ItemTemplate\TempName
 									Local c%, ri%
 									
 									If b <> "25ct" And b <> "coin" And b <> "key" And b <> "scp860" And b <> "scp500pill" And b <> "scp500pilldeath" And b <> "scp005" Then
-										For c = 0 To Inventory[MouseSlot]\InvSlots - 1
-											If Inventory[MouseSlot]\SecondInv[c] = Null Then
+										For c = 0 To Inventory(MouseSlot)\InvSlots - 1
+											If Inventory(MouseSlot)\SecondInv[c] = Null Then
 												If SelectedItem <> Null Then
-													Inventory[MouseSlot]\SecondInv[c] = SelectedItem
-													Inventory[MouseSlot]\State = 1.0
-													SetAnimTime(Inventory[MouseSlot]\Model, 0.0)
-													Inventory[MouseSlot]\InvImg = Inventory[MouseSlot]\ItemTemplate\InvImg
+													Inventory(MouseSlot)\SecondInv[c] = SelectedItem
+													Inventory(MouseSlot)\State = 1.0
+													SetAnimTime(Inventory(MouseSlot)\Model, 0.0)
+													Inventory(MouseSlot)\InvImg = Inventory(MouseSlot)\ItemTemplate\InvImg
 													
 													For ri = 0 To MaxItemAmount - 1
-														If Inventory[ri] = SelectedItem Then
-															Inventory[ri] = Null
+														If Inventory(ri) = SelectedItem Then
+															Inventory(ri) = Null
 															PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 														EndIf
 													Next
@@ -6400,24 +6401,24 @@ Function UpdateGUI()
 									Else
 										CreateMsg("You cannot combine these two items.", 6.0)
 									EndIf
-								ElseIf Inventory[MouseSlot]\ItemTemplate\TempName = "wallet" Then
+								ElseIf Inventory(MouseSlot)\ItemTemplate\TempName = "wallet" Then
 									; ~ Add an item to clipboard
 									added.Items = Null
 									b = SelectedItem\ItemTemplate\TempName
 									If b <> "paper" And b <> "oldpaper" Then
-										For c = 0 To Inventory[MouseSlot]\InvSlots - 1
-											If Inventory[MouseSlot]\SecondInv[c] = Null Then
+										For c = 0 To Inventory(MouseSlot)\InvSlots - 1
+											If Inventory(MouseSlot)\SecondInv[c] = Null Then
 												If SelectedItem <> Null Then
-													Inventory[MouseSlot]\SecondInv[c] = SelectedItem
-													Inventory[MouseSlot]\State = 1.0
+													Inventory(MouseSlot)\SecondInv[c] = SelectedItem
+													Inventory(MouseSlot)\State = 1.0
 													If b <> "25ct" And b <> "coin" And b <> "key" And b <> "scp860" And b <> "scp500pill" And b <> "scp500pilldeath" And b <> "scp005" Then
-														SetAnimTime(Inventory[MouseSlot]\Model, 3.0)
+														SetAnimTime(Inventory(MouseSlot)\Model, 3.0)
 													EndIf
-													Inventory[MouseSlot]\InvImg = Inventory[MouseSlot]\ItemTemplate\InvImg
+													Inventory(MouseSlot)\InvImg = Inventory(MouseSlot)\ItemTemplate\InvImg
 													
 													For ri = 0 To MaxItemAmount - 1
-														If Inventory[ri] = SelectedItem Then
-															Inventory[ri] = Null
+														If Inventory(ri) = SelectedItem Then
+															Inventory(ri) = Null
 															PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 														EndIf
 													Next
@@ -6442,12 +6443,12 @@ Function UpdateGUI()
 								;[End Block]
 							Case "badbat"
 								;[Block]
-								Select Inventory[MouseSlot]\ItemTemplate\TempName
+								Select Inventory(MouseSlot)\ItemTemplate\TempName
 									Case "nav", "nav310"
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
-										Inventory[MouseSlot]\State = Rnd(50.0)
+										Inventory(MouseSlot)\State = Rnd(50.0)
 										CreateMsg("You replaced the navigator's battery.", 6.0)
 										;[End Block]
 									Case "navulti", "nav300"
@@ -6458,7 +6459,7 @@ Function UpdateGUI()
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
-										Inventory[MouseSlot]\State = Rnd(50.0)
+										Inventory(MouseSlot)\State = Rnd(50.0)
 										CreateMsg("You replaced the radio's battery.", 6.0)
 										;[End Block]
 									Case "18vradio"
@@ -6473,7 +6474,7 @@ Function UpdateGUI()
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
-										Inventory[MouseSlot]\State = Rnd(500.0)
+										Inventory(MouseSlot)\State = Rnd(500.0)
 										CreateMsg("You replaced the goggles' battery.", 6.0)
 										;[End Block]
 									Case "finenvg"
@@ -6484,7 +6485,7 @@ Function UpdateGUI()
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
-										Inventory[MouseSlot]\State = Rnd(500.0)
+										Inventory(MouseSlot)\State = Rnd(500.0)
 										CreateMsg("You replaced the gear's battery.", 6.0)
 										;[End Block]
 									Default
@@ -6495,12 +6496,12 @@ Function UpdateGUI()
 								;[End Block]
 							Case "bat"
 								;[Block]
-								Select Inventory[MouseSlot]\ItemTemplate\TempName
+								Select Inventory(MouseSlot)\ItemTemplate\TempName
 									Case "nav", "nav310"
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
-										Inventory[MouseSlot]\State = Rnd(100.0)
+										Inventory(MouseSlot)\State = Rnd(100.0)
 										CreateMsg("You replaced the navigator's battery.", 6.0)
 										;[End Block]
 									Case "navulti", "nav300"
@@ -6511,7 +6512,7 @@ Function UpdateGUI()
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
-										Inventory[MouseSlot]\State = Rnd(100.0)
+										Inventory(MouseSlot)\State = Rnd(100.0)
 										CreateMsg("You replaced the radio's battery.", 6.0)
 										;[End Block]
 									Case "18vradio"
@@ -6526,7 +6527,7 @@ Function UpdateGUI()
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
-										Inventory[MouseSlot]\State = Rnd(1000.0)
+										Inventory(MouseSlot)\State = Rnd(1000.0)
 										CreateMsg("You replaced the goggles' battery.", 6.0)
 										;[End Block]
 									Case "finenvg"
@@ -6537,7 +6538,7 @@ Function UpdateGUI()
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
-										Inventory[MouseSlot]\State = Rnd(1000.0)
+										Inventory(MouseSlot)\State = Rnd(1000.0)
 										CreateMsg("You replaced the gear's battery.", 6.0)
 										;[End Block]
 									Default
@@ -6548,7 +6549,7 @@ Function UpdateGUI()
 								;[End Block]
 							Case "finebat"
 								;[Block]
-								Select Inventory[MouseSlot]\ItemTemplate\TempName
+								Select Inventory(MouseSlot)\ItemTemplate\TempName
 									Case "nav", "nav310"
 										;[Block]
 										CreateMsg("The battery does not fit inside this navigator.", 6.0)
@@ -6565,7 +6566,7 @@ Function UpdateGUI()
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
-										Inventory[MouseSlot]\State = Rnd(200.0)
+										Inventory(MouseSlot)\State = Rnd(200.0)
 										CreateMsg("You replaced the radio's battery.", 6.0)
 										;[End Block]
 									Case "fineradio", "veryfineradio"
@@ -6592,12 +6593,12 @@ Function UpdateGUI()
 								;[End Block]
 							Case "superbat", "killbat"
 								;[Block]
-								Select Inventory[MouseSlot]\ItemTemplate\TempName
+								Select Inventory(MouseSlot)\ItemTemplate\TempName
 									Case "nav", "nav310"
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
-										Inventory[MouseSlot]\State = Rnd(1000.0)
+										Inventory(MouseSlot)\State = Rnd(1000.0)
 										CreateMsg("You replaced the navigator's battery.", 6.0)
 										;[End Block]
 									Case "navulti", "nav300"
@@ -6608,7 +6609,7 @@ Function UpdateGUI()
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
-										Inventory[MouseSlot]\State = Rnd(1000.0)
+										Inventory(MouseSlot)\State = Rnd(1000.0)
 										CreateMsg("You replaced the radio's battery.", 6.0)
 										;[End Block]
 									Case "18vradio"
@@ -6623,7 +6624,7 @@ Function UpdateGUI()
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
-										Inventory[MouseSlot]\State = Rnd(10000.0)
+										Inventory(MouseSlot)\State = Rnd(10000.0)
 										CreateMsg("You replaced the goggles' battery.", 6.0)
 										;[End Block]
 									Case "finenvg"
@@ -6634,7 +6635,7 @@ Function UpdateGUI()
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
-										Inventory[MouseSlot]\State = Rnd(10000.0)
+										Inventory(MouseSlot)\State = Rnd(10000.0)
 										CreateMsg("You replaced the gear's battery.", 6.0)
 										;[End Block]
 									Default
@@ -7030,7 +7031,7 @@ Function UpdateGUI()
 							it.Items = CreateItem("Empty Cup", "emptycup", 0.0, 0.0, 0.0)
 							it\Picked = True
 							For i = 0 To MaxItemAmount - 1
-								If Inventory[i] = SelectedItem Then Inventory[i] = it : Exit
+								If Inventory(i) = SelectedItem Then Inventory(i) = it : Exit
 							Next					
 							EntityType(it\Collider, HIT_ITEM)
 							
@@ -7872,14 +7873,14 @@ Function UpdateGUI()
 					If I_500\Taken < Rand(10) Then
 						If ItemAmount < MaxItemAmount Then
 							For i = 0 To ItemAmount
-								If Inventory[i] = Null Then
-									Inventory[i] = CreateItem("SCP-500-01", "scp500pill", 0.0, 0.0, 0.0)
-									Inventory[i]\Picked = True
-									Inventory[i]\Dropped = -1
-									Inventory[i]\ItemTemplate\Found = True
-									HideEntity(Inventory[i]\Collider)
-									EntityType(Inventory[i]\Collider, HIT_ITEM)
-									EntityParent(Inventory[i]\Collider, 0)
+								If Inventory(i) = Null Then
+									Inventory(i) = CreateItem("SCP-500-01", "scp500pill", 0.0, 0.0, 0.0)
+									Inventory(i)\Picked = True
+									Inventory(i)\Dropped = -1
+									Inventory(i)\ItemTemplate\Found = True
+									HideEntity(Inventory(i)\Collider)
+									EntityType(Inventory(i)\Collider, HIT_ITEM)
+									EntityParent(Inventory(i)\Collider, 0)
 									
 									msg\Txt = "You took SCP-500-01 from the bottle."
 									msg\Timer = 70.0 * 6.0
@@ -9526,6 +9527,7 @@ End Function
 
 Function InitStats()
 	MaxItemAmount = SelectedDifficulty\InventorySlots
+	Dim Inventory.Items(MaxItemAmount)
 	
 	me\Playable = True
 	me\SelectedEnding = -1
@@ -9611,14 +9613,14 @@ Function InitNewGame()
 			PlayerRoom = r
 			it.Items = CreateItem("Class D Orientation Leaflet", "paper", 1, 1, 1)
 			it\Picked = True : it\Dropped = -1 : it\ItemTemplate\Found = True
-			Inventory[0] = it
+			Inventory(0) = it
 			HideEntity(it\Collider)
 			EntityType(it\Collider, HIT_ITEM)
 			EntityParent(it\Collider, 0)
 			ItemAmount = ItemAmount + 1
 			it.Items = CreateItem("Document SCP-173", "paper", 1, 1, 1)
 			it\Picked = True : it\Dropped = -1 : it\ItemTemplate\Found = True
-			Inventory[1] = it
+			Inventory(1) = it
 			HideEntity(it\Collider)
 			EntityType(it\Collider, HIT_ITEM)
 			EntityParent(it\Collider, 0)
@@ -9937,7 +9939,7 @@ Function NullGame(PlayButtonSFX% = True)
 	Next
 	
 	For i = 0 To MaxItemAmount - 1
-		If Inventory[i] <> Null Then Inventory[i] = Null
+		If Inventory(i) <> Null Then Inventory(i) = Null
 	Next
 	If SelectedItem <> Null Then SelectedItem = Null
 	
@@ -11824,8 +11826,8 @@ Function UpdateMTF()
 			If PlayerInReachableRoom()
 				; ~ If the player has an SCP in their inventory play special voice line.
 				For i = 0 To MaxItemAmount - 1
-					If Inventory[i] <> Null Then
-						If (Left(Inventory[i]\ItemTemplate\Name, 4) = "SCP-") And (Left(Inventory[i]\ItemTemplate\Name, 7) <> "SCP-035") And (Left(Inventory[i]\ItemTemplate\Name, 7) <> "SCP-093")
+					If Inventory(i) <> Null Then
+						If (Left(Inventory(i)\ItemTemplate\Name, 4) = "SCP-") And (Left(Inventory(i)\ItemTemplate\Name, 7) <> "SCP-035") And (Left(Inventory(i)\ItemTemplate\Name, 7) <> "SCP-093")
 							PlayAnnouncement("SFX\Character\MTF\ThreatAnnouncPossession.ogg")
 							MTFTimer = 25000.0
 							Return

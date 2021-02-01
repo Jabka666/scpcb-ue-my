@@ -1537,14 +1537,14 @@ Function UpdateNPCs()
 												n\PrevState = 3
 											ElseIf me\BlurTimer >= 500.0
 												For i = 0 To MaxItemAmount - 1
-													If Inventory[i] <> Null Then
-														If Instr(Inventory[i]\ItemTemplate\TempName, "hazmatsuit") And wi\HazmatSuit < 3 Then
-															If Inventory[i]\State2 < 3.0 Then
-																Inventory[i]\State2 = Inventory[i]\State2 + 1.0
+													If Inventory(i) <> Null Then
+														If Instr(Inventory(i)\ItemTemplate\TempName, "hazmatsuit") And wi\HazmatSuit < 3 Then
+															If Inventory(i)\State2 < 3.0 Then
+																Inventory(i)\State2 = Inventory(i)\State2 + 1.0
 																me\BlurTimer = 260.0
 																me\CameraShake = 2.0
 															Else
-																RemoveItem(Inventory[i])
+																RemoveItem(Inventory(i))
 																wi\HazmatSuit = 0
 															EndIf
 															Exit
@@ -4927,8 +4927,8 @@ Function UpdateNPCs()
 										Local DocAmount% = 0
 										
 										For i = 0 To MaxItemAmount - 1
-											If Inventory[i] <> Null Then
-												Local DocName$ = Inventory[i]\ItemTemplate\Name
+											If Inventory(i) <> Null Then
+												Local DocName$ = Inventory(i)\ItemTemplate\Name
 												
 												If DocName = "Log #1" Lor DocName = "Log #2" Lor DocName = "Log #3" Then
 													DocAmount = DocAmount + 1

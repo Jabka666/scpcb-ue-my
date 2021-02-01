@@ -416,7 +416,7 @@ Function SaveGame(File$)
 		Local ItemFound% = False
 		
 		For i = 0 To MaxItemAmount - 1
-			If Inventory[i] = it Then ItemFound = True : Exit
+			If Inventory(i) = it Then ItemFound = True : Exit
 		Next
 		If ItemFound Then 
 			WriteByte(f, i) 
@@ -1169,7 +1169,7 @@ Function LoadGame(File$)
 		
 		nt = ReadByte(f)
 		If nt < 66 Then
-			Inventory[nt] = it
+			Inventory(nt) = it
 			ItemAmount = ItemAmount + 1
 		EndIf
 		
@@ -1903,7 +1903,7 @@ Function LoadGameQuick(File$)
 		
 		nt = ReadByte(f)
 		If nt < 66 Then
-			Inventory[nt] = it
+			Inventory(nt) = it
 			ItemAmount = ItemAmount + 1
 		EndIf
 		

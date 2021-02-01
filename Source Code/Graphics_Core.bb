@@ -148,10 +148,10 @@ Function UpdateWorld2()
 	
 	If (wi\NightVision > 0 And wi\NightVision <> 3) Lor wi\SCRAMBLE > 0 Then
 		For i = 0 To MaxItemAmount - 1
-			If Inventory[i] <> Null Then
-				If (wi\NightVision = 1 And Inventory[i]\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory[i]\ItemTemplate\TempName = "supernvg") Lor (wi\SCRAMBLE > 0 And Inventory[i]\ItemTemplate\TempName = "scramble") Then
-					Inventory[i]\State = Max(0.0, Inventory[i]\State - (fps\FPSFactor[0] * (0.02 * wi\NightVision) + (0.25 * (wi\SCRAMBLE > 0))))
-					Power = Int(Inventory[i]\State)
+			If Inventory(i) <> Null Then
+				If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\SCRAMBLE > 0 And Inventory(i)\ItemTemplate\TempName = "scramble") Then
+					Inventory(i)\State = Max(0.0, Inventory(i)\State - (fps\FPSFactor[0] * (0.02 * wi\NightVision) + (0.25 * (wi\SCRAMBLE > 0))))
+					Power = Int(Inventory(i)\State)
 					If Power = 0 Then ; ~ This NVG or SCRAMBLE can't be used
 						HasBattery = 0
 						If wi\SCRAMBLE > 0 Then
@@ -234,9 +234,9 @@ Function RenderWorld2(Tween#)
 	
 	If (wi\NightVision > 0 And wi\NightVision <> 3) Lor wi\SCRAMBLE > 0 Then
 		For i = 0 To MaxItemAmount - 1
-			If Inventory[i] <> Null Then
-				If (wi\NightVision = 1 And Inventory[i]\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory[i]\ItemTemplate\TempName = "supernvg") Lor (wi\SCRAMBLE > 0 And Inventory[i]\ItemTemplate\TempName = "scramble") Then
-					Power = Int(Inventory[i]\State)
+			If Inventory(i) <> Null Then
+				If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\SCRAMBLE > 0 And Inventory(i)\ItemTemplate\TempName = "scramble") Then
+					Power = Int(Inventory(i)\State)
 					If Power = 0 Then ; ~ This NVG or SCRAMBLE can't be used
 						HasBattery = 0
 					ElseIf Power =< 100
