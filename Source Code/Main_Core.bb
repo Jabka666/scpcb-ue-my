@@ -4905,7 +4905,7 @@ Function DrawGUI()
 	
 	If ga\DrawHandIcon And SelectedDifficulty\OtherFactors <> EXTREME Then DrawImage(tt\IconID[4], mo\Viewport_Center_X - 32, mo\Viewport_Center_Y - 32)
 	For i = 0 To 3
-		If ga\DrawArrowIcon[i] Then
+		If ga\DrawArrowIcon[i] And SelectedDifficulty\OtherFactors <> EXTREME Then
 			x = mo\Viewport_Center_X - 32
 			y = mo\Viewport_Center_Y - 32		
 			Select i
