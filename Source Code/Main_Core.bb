@@ -8335,11 +8335,19 @@ Function DrawMenu()
 		
 		If AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg =< 0 Then
 			If me\KillTimer >= 0.0 Then	
-				y = y + ((297 + (75 * SelectedDifficulty\SaveType <> NOSAVES)) * MenuScale)
+				y = y + (297 * MenuScale)
+				If SelectedDifficulty\SaveType <> NOSAVES Then
+					y = y + (75 * MenuScale)
+				EndIf
 			Else
-				y = y + 184 * MenuScale
+				y = y + (184 * MenuScale)
+				If SelectedDifficulty\SaveType <> NOSAVES Then
+					y = y + (80 * MenuScale)
+				EndIf
+			EndIf
+			If me\KillTimer < 0.0 Then
 				SetFont(fo\FontID[Font_Default])
-				RowText(msg\DeathMsg, x, y + (80 * MenuScale), 430 * MenuScale, 600 * MenuScale)
+				RowText(msg\DeathMsg, x, y, 430 * MenuScale, 600 * MenuScale)
 			EndIf
 		EndIf
 		
