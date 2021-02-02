@@ -39,6 +39,25 @@ Function SetDifficultyColor(ID%, R%, G%, B%)
 	difficulties[ID]\B = B
 End Function
 
+Function WriteDifficultyFile()
+	Local File$ = WriteFile(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon Howl.cb")
+	
+	WriteByte(File, opt\DifficultiesLocked)
+	WriteByte(File, Achievements[33])
+	CloseFile(File)
+End Function
+
+Function ReadDifficultyFile()
+	Local File$
+	
+	If FileType(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon Howl.cb") = 1 Then
+		File = OpenFile(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon Howl.cb")
+		opt\DifficultiesLocked = ReadByte(File)
+		Achievements[33] = ReadByte(File)
+		CloseFile(File)
+	EndIf
+End Function
+
 Function UnlockDifficulties()
 	Select SelectedDifficulty\Name
 		Case "Safe"
@@ -61,8 +80,9 @@ Function UnlockDifficulties()
 			;[Block]
 			If difficulties[APOLLYON]\Locked Then
 				difficulties[APOLLYON]\Locked = False
-				SetDifficultyColor(APOLLYON, 110, 0, 0)
+				SetDifficultyColor(APOLLYON, 150, 150, 150)
 				opt\DifficultiesLocked = 1
+				GiveAchievement(AchvKeter)
 			EndIf
 			;[End Block]
 		Case "Apollyon"
@@ -70,11 +90,12 @@ Function UnlockDifficulties()
 			If difficulties[ESOTERIC]\Locked Then
 				difficulties[ESOTERIC]\Locked = False
 				; ~ ESOTERIC color already set
-				opt\DifficultiesLocked = 1
+				opt\DifficultiesLocked = 0
 			EndIf
 			;[End Block]
 	End Select
-	PutINIValue(OptionFile, "Global", "Difficulties Locked", opt\DifficultiesLocked)
+	
+	WriteDifficultyFile()
 End Function
 
 difficulties[SAFE] = New Difficulty

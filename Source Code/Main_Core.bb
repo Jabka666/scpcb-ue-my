@@ -3924,11 +3924,10 @@ Function UpdateEnding()
 	EndIf
 	
 	GiveAchievement(Achv055)
-	If (Not UsedConsole) Then
+	If (Not UsedConsole) Lor opt\DebugMode Then
 		GiveAchievement(AchvConsole)
 		UnlockDifficulties()
 	EndIf
-	If SelectedDifficulty\Name = "Keter" Then GiveAchievement(AchvKeter)
 	
 	ShouldPlay = 66
 	
@@ -9531,6 +9530,8 @@ Function InitStats()
 	
 	me\Playable = True
 	me\SelectedEnding = -1
+	
+	ReadDifficultyFile()
 End Function
 
 Function InitNewGame()
