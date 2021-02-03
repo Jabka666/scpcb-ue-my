@@ -40,8 +40,9 @@ Function SetDifficultyColor(ID%, R%, G%, B%)
 End Function
 
 Function WriteDifficultyFile()
-	Local File$ = WriteFile(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon Howl.cb")
+	Local File$
 	
+	File = WriteFile(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon Howl.cb")
 	WriteByte(File, opt\DifficultiesLocked)
 	WriteByte(File, Achievements[33])
 	CloseFile(File)

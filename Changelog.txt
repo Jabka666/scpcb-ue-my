@@ -155,6 +155,7 @@ Bug Fixes:
 - Fixed wrong paper texture for props.
 - Fixed syringes position in room2medibay and room2medibay2.
 - Fixed SCP-173's distance on S-NAV Ultimate.
+- Fixed Keter achivement saving.
 
 - Small fixes for commands "disablenuke" and "enablecontrol/disablecontrol.
 - Small fixes for gateb and gateaentrance's walls.
