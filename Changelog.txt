@@ -76,6 +76,7 @@
 - Renamed checkpoint1 to room2checkpoint.
 - Renamed checkpoint2 to room2checkpoint2.
 - Renamed Bar Style to Smooth HUD.
+- Renamed room1office to roomo5.
 
 - Combined "scp_1048_pen.b3d" and "scp_1048.b3d" models. 
 - Combined texture of SCP-173's cell.
