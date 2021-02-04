@@ -1930,6 +1930,8 @@ Global Death914SFX%
 
 Global DripSFX%[4]
 
+Global KnobSFX%[2]
+
 Global LeverSFX%, LightSFX% 
 Global ButtGhostSFX% 
 

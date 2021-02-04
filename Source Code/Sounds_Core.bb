@@ -738,6 +738,10 @@ Function LoadSounds()
 	For i = 0 To 1
 		LowBatterySFX[i] = LoadSound_Strict("SFX\General\LowBattery" + (i + 1) + ".ogg")
 	Next
+	
+	For i = 0 To 1
+		KnobSFX[i] = LoadSound_Strict("SFX\Room\914Chamber\Knob" + (i + 1) + ".ogg")
+	Next
 End Function
 
 ;~IDEal Editor Parameters:
