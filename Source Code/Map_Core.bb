@@ -3942,7 +3942,7 @@ Function FillRoom(r.Rooms)
 			it.Items = CreateItem("Document SCP-205", "paper", r\x - 357.0 * RoomScale, r\y + 120.0 * RoomScale, r\z + 50.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "room1endroom"
+		Case "room1endroom", "room1endroom3"
 			;[Block]
 			r\RoomDoors.Doors[0] = CreateDoor(r\x, r\y, r\z + 1136.0 * RoomScale, r\y, r, False, Big_Door)
 			r\RoomDoors[0]\AutoClose = False
