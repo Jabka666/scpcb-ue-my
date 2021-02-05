@@ -7806,10 +7806,7 @@ Function UpdateEvents()
 						e\EventState2 = 1.0
 					EndIf
 					
-					If e\EventState2 = 1.0
-						ShouldPlay = 22
-					EndIf
-					
+					If e\EventState2 = 1.0 Then ShouldPlay = 22
 					EntityPick(Camera, 1.0)
 					If PickedEntity() = e\room\Objects[0] Then
 						ga\DrawHandIcon = True
@@ -7871,14 +7868,10 @@ Function UpdateEvents()
 									Local Rotation# = Floor(EntityRoll(e\room\Objects[1]))
 									
 									If e\SoundCHN2 <> 0 Then e\SoundCHN2 = 0
-									If (Rotation > -92.0 And Rotation < -88.0) Lor (Rotation > -42.0 And Rotation < -38.0) Lor (Rotation > -2.0 And Rotation < 2.0) Lor (Rotation > 38.0 And Rotation < 42.0) Lor (Rotation > 88.0 And Rotation < 92.0) Then
-										If (Not e\SoundCHN) Then
-											e\SoundCHN = PlaySound2(KnobSFX[Rand(1, 2)], Camera, e\room\Objects[1], 2.0, 0.5)
-										EndIf
+									If (Rotation > -93.0 And Rotation < -87.0) Lor (Rotation > -43.0 And Rotation < -37.0) Lor (Rotation > -3.0 And Rotation < 3.0) Lor (Rotation > 37.0 And Rotation < 43.0) Lor (Rotation > 87.0 And Rotation < 93.0) Then
+										If (Not e\SoundCHN) Then e\SoundCHN = PlaySound2(KnobSFX[Rand(1, 2)], Camera, e\room\Objects[1], 2.0, 0.5)
 									Else
-										If e\SoundCHN <> 0 Then
-											e\SoundCHN = 0
-										EndIf
+										If e\SoundCHN <> 0 Then e\SoundCHN = 0
 									EndIf
 								EndIf
 							EndIf
@@ -8057,7 +8050,7 @@ Function UpdateEvents()
 							
 							Animate2(e\room\Objects[0], PrevFrame, 2.0, 647.0, 1.0, False)
 							
-							If (PrevFrame =< 400.0 And AnimTime(e\room\Objects[0]) > 400.0) Then
+							If PrevFrame =< 400.0 And AnimTime(e\room\Objects[0]) > 400.0 Then
 								e\SoundCHN = PlaySound_Strict(e\Sound)
 							EndIf
 							
@@ -8140,9 +8133,7 @@ Function UpdateEvents()
 							EndIf
 							
 							; ~ Remove event when player was cured by SCP-427
-							If e\EventState2 = 0.0 And I_427\Using Then
-								e\EventState3 = 70.0 * 30.0
-							EndIf
+							If e\EventState2 = 0.0 And I_427\Using Then e\EventState3 = 70.0 * 30.0
 							;[End Block]
 						Case 4.0
 							;[Block]
@@ -8160,9 +8151,7 @@ Function UpdateEvents()
 									If e\room\Objects[0] <> 0 Then
 										FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
 									EndIf
-									If e\EventState2 = 0.0 Then
-										RemoveEvent(e)
-									EndIf
+									If e\EventState2 = 0.0 Then RemoveEvent(e)
 								EndIf
 							EndIf
 						EndIf

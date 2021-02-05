@@ -8920,6 +8920,8 @@ Function LoadEntities()
 	Local b%, t1%, SF%
 	Local Name$, Test%, File$
 	
+	DeInitMainMenuAssets()
+	
 	ConsoleR = 0 : ConsoleG = 255 : ConsoleB = 255
 	
 	CreateConsoleMsg("Console commands: ")

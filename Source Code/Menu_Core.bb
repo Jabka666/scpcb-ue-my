@@ -446,7 +446,6 @@ Function UpdateMainMenu()
 						
 						If SameFound > 0 Then CurrSave = CurrSave + " (" + (SameFound + 1) + ")"
 						
-						DeInitMainMenuAssets()
 						InitNewGame()
 						MainMenuOpen = False
 						FlushKeys()
@@ -496,7 +495,6 @@ Function UpdateMainMenu()
 										DrawButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Load", False, False, True, 255, 0, 0)
 									Else
 										If DrawButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Load", False) Then
-											DeInitMainMenuAssets()
 											LoadEntities()
 											LoadSounds()
 											LoadGame(SavePath + SaveGames(i - 1) + "\")
