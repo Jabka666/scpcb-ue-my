@@ -3795,12 +3795,12 @@ Function FillRoom(r.Rooms)
 					Case 2
 						;[Block]
 						xTemp = 560.0
-						zTemp = 480.0
+						zTemp = 416.0
 						;[End Block]
 					Case 3
 						;[Block]
 						xTemp = -560.0
-						zTemp = 480.0
+						zTemp = 416.0
 						;[End Block]
 				End Select
 				sc.SecurityCams = CreateSecurityCam(r\x + xTemp * RoomScale, r\y + 386.0 * RoomScale, r\z + zTemp * RoomScale, r)
@@ -3895,7 +3895,7 @@ Function FillRoom(r.Rooms)
 				EntityParent(de\OBJ, r\OBJ)
 			Next
 			
-			it.Items = CreateItem("SCP-714", "scp714", r\x - 552.0 * RoomScale, r\y + 220.0 * RoomScale, r\z - 760.0 * RoomScale)
+			it.Items = CreateItem("SCP-714", "scp714", r\x - 555.5 * RoomScale, r\y + 220.0 * RoomScale, r\z - 758.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("SCP-1025", "scp1025", r\x + 552.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 758.0 * RoomScale)
