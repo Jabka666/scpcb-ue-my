@@ -3943,7 +3943,7 @@ Function UpdateEnding()
 		EndIf
 		
 		If (Not me\EndingScreen) Then
-			me\EndingScreen = LoadImage_Strict("GFX\ending_screen.png")
+			me\EndingScreen = LoadImage_Strict("GFX\menu\ending_screen.png")
 			
 			ShouldPlay = 23
 			opt\CurrMusicVolume = opt\MusicVolume
@@ -4020,7 +4020,7 @@ Function InitCredits()
 	fo\FontID[Font_Credits] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 21)
 	fo\FontID[Font_Credits_Big] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 35)
 	
-	If (Not me\CreditsScreen) Then me\CreditsScreen = LoadImage_Strict("GFX\credits_screen.png")
+	If (Not me\CreditsScreen) Then me\CreditsScreen = LoadImage_Strict("GFX\menu\credits_screen.png")
 	
 	Repeat
 		l = ReadLine(File)

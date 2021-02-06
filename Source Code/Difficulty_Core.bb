@@ -42,7 +42,7 @@ End Function
 Function WriteDifficultyFile()
 	Local File$
 	
-	File = WriteFile(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon Howl.cb")
+	File = WriteFile(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon howl.cb")
 	WriteByte(File, opt\DifficultiesLocked)
 	WriteByte(File, Achievements[33])
 	CloseFile(File)
@@ -51,8 +51,8 @@ End Function
 Function ReadDifficultyFile()
 	Local File$
 	
-	If FileType(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon Howl.cb") = 1 Then
-		File = OpenFile(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon Howl.cb")
+	If FileType(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon howl.cb") = 1 Then
+		File = OpenFile(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon howl.cb")
 		opt\DifficultiesLocked = ReadByte(File)
 		Achievements[33] = ReadByte(File)
 		CloseFile(File)
