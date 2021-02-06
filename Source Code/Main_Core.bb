@@ -3242,7 +3242,10 @@ Function MainLoop()
 		
 		UpdateStreamSounds()
 		
-		ga\DrawHandIcon = False
+		If ga\DrawHandIcon Then ga\DrawHandIcon = False
+		For i = 0 To 3
+			If ga\DrawArrowIcon[i] Then ga\DrawArrowIcon[i] = False
+		Next
 		
 		me\RestoreSanity = True
 		ShouldEntitiesFall = True
@@ -4932,7 +4935,6 @@ Function DrawGUI()
 			Color(0, 0, 0)
 			Rect(x + 4, y + 4, 56, 56)
 			DrawImage(ga\ArrowIMG[i], x + 21, y + 21)
-			ga\DrawArrowIcon[i] = False
 		EndIf
 	Next
 	
