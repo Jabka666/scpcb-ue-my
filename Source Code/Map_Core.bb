@@ -2089,12 +2089,6 @@ Function FillRoom(r.Rooms)
 			For i = 8 To 11
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
-			
-			; ~ Temporary
-			w.WayPoints = CreateWaypoint(r\x + 3800.0 * RoomScale, r\y - 888.0 * RoomScale, r\z + 5623.0 * RoomScale, Null, r)
-			w2.WayPoints = CreateWaypoint(r\x + 3800.0 * RoomScale, r\y - 888.0 * RoomScale, r\z + 6323.0 * RoomScale, Null, r)
-			w\connected[0] = w2 : w\Dist[0] = EntityDistance(w\OBJ, w2\OBJ)
-			w2\connected[0] = w : w2\Dist[0] = w\Dist[0]
 			;[End Block]
 		Case "room372"
 			;[Block]
