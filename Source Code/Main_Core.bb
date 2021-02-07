@@ -5606,35 +5606,35 @@ Function DrawGUI()
 							
 							x = x - 12.0 + (((EntityX(me\Collider) - 4.0) + 8.0) Mod 8.0) * 3.0
 							y = y + 12.0 - (((EntityZ(me\Collider) - 4.0) + 8.0) Mod 8.0) * 3.0
-							For x2 = Max(0.0, PlayerX - 6.0) To Min(MapSize, PlayerX + 6.0)
-								For z2 = Max(0.0, PlayerZ - 6.0) To Min(MapSize, PlayerZ + 6.0)
+							For x2 = Max(0.0, PlayerX - 6.0) To Min(MapGridSize, PlayerX + 6.0)
+								For z2 = Max(0.0, PlayerZ - 6.0) To Min(MapGridSize, PlayerZ + 6.0)
 									If CoffinDistance > 16.0 Lor Rnd(16.0) < CoffinDistance Then 
-										If MapTemp(x2, z2) > 0 And (MapFound(x2, z2) > 0 Lor SelectedItem\ItemTemplate\TempName = "nav310" Lor SelectedItem\ItemTemplate\TempName = "navulti") Then
+										If CurrGrid\Grid[x2 + (z2 * MapGridSize)] > 0 And (CurrGrid\Found[x2 + (z2 * MapGridSize)] > 0 Lor SelectedItem\ItemTemplate\TempName = "nav310" Lor SelectedItem\ItemTemplate\TempName = "navulti") Then
 											Local DrawX% = x + (PlayerX - 1 - x2) * 24 , DrawY% = y - (PlayerZ - 1 - z2) * 24
 											
-											If x2 + 1.0 =< MapSize Then
-												If MapTemp(x2 + 1, z2) = 0
+											If x2 + 1.0 =< MapGridSize Then
+												If CurrGrid\Grid[(x2 + 1) + (z2 * MapGridSize)] = 0
 													DrawImage(tt\ImageID[10], DrawX - 12, DrawY - 12)
 												EndIf
 											Else
 												DrawImage(tt\ImageID[10], DrawX - 12, DrawY - 12)
 											EndIf
 											If x2 - 1.0 >= 0.0 Then
-												If MapTemp(x2 - 1, z2) = 0
+												If CurrGrid\Grid[(x2 - 1) + (z2 * MapGridSize)] = 0
 													DrawImage(tt\ImageID[8], DrawX - 12, DrawY - 12)
 												EndIf
 											Else
 												DrawImage(tt\ImageID[8], DrawX - 12, DrawY - 12)
 											EndIf
 											If z2 - 1.0 >= 0.0 Then
-												If MapTemp(x2, z2 - 1) = 0
+												If CurrGrid\Grid[x2 + ((z2 - 1) * MapGridSize)] = 0
 													DrawImage(tt\ImageID[7], DrawX - 12, DrawY - 12)
 												EndIf
 											Else
 												DrawImage(tt\ImageID[7], DrawX - 12, DrawY - 12)
 											EndIf
-											If z2 + 1.0 =< MapSize Then
-												If MapTemp(x2, z2 + 1) = 0
+											If z2 + 1.0 =< MapGridSize Then
+												If CurrGrid\Grid[x2 + ((z2 + 1) * MapGridSize)] = 0
 													DrawImage(tt\ImageID[9], DrawX - 12, DrawY - 12)
 												EndIf
 											Else
@@ -8793,10 +8793,10 @@ Function UpdateMenu()
 								z = Abs(EntityZ(me\Collider) - EntityZ(r\OBJ))
 								
 								If x < 12.0 And z < 12.0 Then
-									MapFound(Floor(EntityX(r\OBJ) / 8.0), Floor(EntityZ(r\OBJ) / 8.0)) = Max(MapFound(Floor(EntityX(r\OBJ) / 8.0), Floor(EntityZ(r\OBJ) / 8.0)), 1)
+									CurrGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)] = Max(CurrGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)], 1.0)
 									If x < 4.0 And z < 4.0 Then
 										If Abs(EntityY(me\Collider) - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r
-										MapFound(Floor(EntityX(r\OBJ) / 8.0), Floor(EntityZ(r\OBJ) / 8.0)) = 1
+										CurrGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)] = 1
 									EndIf
 								EndIf
 							Next
@@ -8854,10 +8854,10 @@ Function UpdateMenu()
 								z = Abs(EntityZ(me\Collider) - EntityZ(r\OBJ))
 								
 								If x < 12.0 And z < 12.0 Then
-									MapFound(Floor(EntityX(r\OBJ) / 8.0), Floor(EntityZ(r\OBJ) / 8.0)) = Max(MapFound(Floor(EntityX(r\OBJ) / 8.0), Floor(EntityZ(r\OBJ) / 8.0)), 1)
+									CurrGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)] = Max(CurrGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)], 1.0)
 									If x < 4.0 And z < 4.0 Then
 										If Abs(EntityY(me\Collider) - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r
-										MapFound(Floor(EntityX(r\OBJ) / 8.0), Floor(EntityZ(r\OBJ) / 8.0)) = 1
+										CurrGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)] = 1
 									EndIf
 								EndIf
 							Next
@@ -9816,12 +9816,9 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	HideDistance = 15.0
 	
-	For x = 0 To MapSize + 1
-		For y = 0 To MapSize + 1
-			MapTemp(x, y) = 0
-			MapFound(x, y) = 0
-		Next
-	Next
+	If CurrGrid <> Null Then
+		Delete(CurrGrid) : CurrGrid = Null
+	EndIf
 	
 	For itt.ItemTemplates = Each ItemTemplates
 		itt\Found = False
