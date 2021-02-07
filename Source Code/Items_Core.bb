@@ -753,7 +753,7 @@ Function PickItem(item.Items)
 	Local FullINV% = True
 	
 	For n = 0 To MaxItemAmount - 1
-		If Inventory(n) = Null
+		If Inventory(n) = Null Then
 			FullINV = False
 			Exit
 		EndIf
@@ -908,7 +908,7 @@ Function DropItem(item.Items, PlayDropSound% = True)
 	
 	CatchErrors("Uncaught (DropItem)")
 	
-	Local z%
+	Local n%
 	
 	If PlayDropSound Then
 		If item\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[item\ItemTemplate\Sound])
@@ -924,9 +924,16 @@ Function DropItem(item.Items, PlayDropSound% = True)
 	ResetEntity(item\Collider)
 	
 	item\Picked = False
-	For z = 0 To MaxItemAmount - 1
-		If Inventory(z) = item Then Inventory(z) = Null
+	For n = 0 To MaxItemAmount - 1
+		If Inventory(n) = item Then
+			Inventory(n) = Null
+			ItemAmount = ItemAmount - 1
+			Exit
+		EndIf
 	Next
+	
+	If SelectedItem = item Then SelectedItem = Null
+	
 	RemoveWearableItems(item)
 	
 	CatchErrors("DropItem")

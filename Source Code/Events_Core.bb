@@ -7868,7 +7868,7 @@ Function UpdateEvents()
 									Local Rotation# = Floor(EntityRoll(e\room\Objects[1]))
 									
 									If e\SoundCHN2 <> 0 Then e\SoundCHN2 = 0
-									If (Rotation > -93.0 And Rotation < -87.0) Lor (Rotation > -43.0 And Rotation < -37.0) Lor (Rotation > -3.0 And Rotation < 3.0) Lor (Rotation > 37.0 And Rotation < 43.0) Lor (Rotation > 87.0 And Rotation < 93.0) Then
+									If (Rotation > -94.0 And Rotation < -86.0) Lor (Rotation > -44.0 And Rotation < -36.0) Lor (Rotation > -4.0 And Rotation < 4.0) Lor (Rotation > 36.0 And Rotation < 44.0) Lor (Rotation > 86.0 And Rotation < 94.0) Then
 										If (Not e\SoundCHN) Then e\SoundCHN = PlaySound2(KnobSFX[Rand(1, 2)], Camera, e\room\Objects[1], 2.0, 0.5)
 									Else
 										If e\SoundCHN <> 0 Then e\SoundCHN = 0

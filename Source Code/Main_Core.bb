@@ -5696,7 +5696,7 @@ Function DrawGUI()
 										Dist = Sqr(Dist)
 										Color(100, 0, 0)
 										Oval(x - (Dist * 1.5), y - 7 - (Dist * 1.5), Dist * 3, Dist * 3, False)
-										Text(x - (NAV_WIDTH / 2) + 10, y - NAV_HEIGHT / 2 + 30 + (20 * SCPs_Found), "SCP-106")
+										Text(x - (NAV_WIDTH / 2) + 10, y - (NAV_HEIGHT / 2) + 30 + (20 * SCPs_Found), "SCP-106")
 										SCPs_Found = SCPs_Found + 1
 									EndIf
 								EndIf
@@ -5735,8 +5735,8 @@ Function DrawGUI()
 							Color(30, 30, 30)
 							If SelectedItem\ItemTemplate\TempName = "nav" Lor SelectedItem\ItemTemplate\TempName = "nav300" Then
 								Color(100, 0, 0)
-								xTemp = x - (NAV_WIDTH / 2.0) + 196.0
-								yTemp = y - (NAV_HEIGHT / 2.0) + 10.0
+								xTemp = x - (NAV_WIDTH / 2) + 196.0
+								yTemp = y - (NAV_HEIGHT / 2) + 10.0
 								Rect(xTemp, yTemp, 80, 20, False)
 								
 								For i = 1 To Min(Ceil(SelectedItem\State / 10.0), 10.0)
@@ -6052,9 +6052,7 @@ Function UpdateGUI()
 		SelectedMonitor = Null
 		If SelectedItem <> Null Then
 			If Instr(SelectedItem\ItemTemplate\TempName, "vest") Lor Instr(SelectedItem\ItemTemplate\TempName, "hazmatsuit") Then
-				If wi\BallisticVest = 0 And wi\HazmatSuit = 0 Then
-					DropItem(SelectedItem)
-				EndIf
+				If wi\BallisticVest = 0 And wi\HazmatSuit = 0 Then DropItem(SelectedItem)
 				SelectedItem = Null
 			EndIf
 		EndIf
@@ -6299,7 +6297,6 @@ Function UpdateGUI()
 								CreateMsg("Double click on this item to take it off.", 6.0)
 							Else
 								DropItem(SelectedItem)
-								SelectedItem = Null
 								InvOpen = False
 							EndIf
 							;[End Block]
@@ -6309,7 +6306,6 @@ Function UpdateGUI()
 								CreateMsg("Double click on this item to take it off.", 6.0)
 							Else
 								DropItem(SelectedItem)
-								SelectedItem = Null
 								InvOpen = False
 							EndIf
 							;[End Block]
@@ -6319,7 +6315,6 @@ Function UpdateGUI()
 								CreateMsg("Double click on this item to take it off.", 6.0)
 							Else
 								DropItem(SelectedItem)
-								SelectedItem = Null
 								InvOpen = False
 							EndIf
 							;[End Block] 
@@ -6329,7 +6324,6 @@ Function UpdateGUI()
 								CreateMsg("Double click on this item to take it off.", 6.0)
 							Else
 								DropItem(SelectedItem)
-								SelectedItem = Null
 								InvOpen = False
 							EndIf
 							;[End Block]
@@ -6339,14 +6333,12 @@ Function UpdateGUI()
 								CreateMsg("Double click on this item to take it off.", 6.0)
 							Else
 								DropItem(SelectedItem)
-								SelectedItem = Null
 								InvOpen = False
 							EndIf
 							;[End Block]
 						Default
 							;[Block]
 							DropItem(SelectedItem)
-							SelectedItem = Null
 							InvOpen = False
 							;[End Block]
 					End Select
