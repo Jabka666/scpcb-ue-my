@@ -239,7 +239,7 @@ Function CalculateRoomTemplateExtents(r.RoomTemplates)
 	r\MaxZ = Mesh_MaxZ
 End Function
 
-; ~ Shrink the extents slightly - we don't care if the overlap is smaller than the thickness of the walls
+; ~ Shrink the extents slightly, so we don't care if the overlap is smaller than the thickness of the walls
 Const ShrinkAmount# = 0.05
 
 Function CalculateRoomExtents(r.Rooms)

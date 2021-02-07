@@ -6807,7 +6807,7 @@ Function CreateMap()
 		If x > MapGridSize * 0.6 Then
 			Width = -Width
 		ElseIf x > MapGridSize * 0.4
-			x = x - Width / 2 
+			x = x - (Width / 2)
 		EndIf
 		
 		; ~ Make sure the hallway doesn't go outside the array
@@ -7209,14 +7209,14 @@ Function CreateMap()
 	MapRoom(ROOM3, Room3Amount[0] + Room3Amount[1] + Floor(0.7 * Float(Room3Amount[2]))) = "room3servers2"
 	MapRoom(ROOM3, Room3Amount[0] + Room3Amount[1] + Floor(0.5 * Float(Room3Amount[2]))) = "room3offices"
 	
-	; ~ [GENERATE THE MAP]
+	; ~ [GENERATE OTHER ROOMS]
 	
 	Temp = 0
 	
 	Local r.Rooms, r2.Rooms, Spacing# = 8.0
 	
 	For y = MapGridSize - 1 To 1 Step - 1
-		If y < MapGridSize / 3 + 1 Then
+		If y < (MapGridSize / 3) + 1 Then
 			Zone = 3
 		ElseIf y < MapGridSize * (2.0 / 3.0)
 			Zone = 2
@@ -7227,9 +7227,9 @@ Function CreateMap()
 		For x = 1 To MapGridSize - 2
 			If CurrGrid\Grid[x + (y * MapGridSize)] = 255 Then
 				If y > MapGridSize / 2 Then
-					r = CreateRoom(Zone, ROOM2, x * 8.0, 0.0, y * 8.0, "room2checkpoint")
+					r.Rooms = CreateRoom(Zone, ROOM2, x * 8.0, 0.0, y * 8.0, "room2checkpoint")
 				Else
-					r = CreateRoom(Zone, ROOM2, x * 8.0, 0.0, y * 8.0, "room2checkpoint2")
+					r.Rooms = CreateRoom(Zone, ROOM2, x * 8.0, 0.0, y * 8.0, "room2checkpoint2")
 				EndIf
 			ElseIf CurrGrid\Grid[x + (y * MapGridSize)] > 0				
 				Temp = Min(CurrGrid\Grid[(x + 1) + (y * MapGridSize)], 1) + Min(CurrGrid\Grid[(x - 1) + (y * MapGridSize)], 1) + Min(CurrGrid\Grid[x + ((y + 1) * MapGridSize)], 1) + Min(CurrGrid\Grid[x + ((y - 1) * MapGridSize)], 1)
@@ -7240,7 +7240,7 @@ Function CreateMap()
 							If MapRoom(ROOM1, CurrGrid\RoomID[ROOM1]) <> "" Then CurrGrid\MapName[x + (y * MapGridSize)] = MapRoom(ROOM1, CurrGrid\RoomID[ROOM1])	
 						EndIf
 						
-						r = CreateRoom(Zone, ROOM1, x * 8.0, 0.0, y * 8.0, CurrGrid\MapName[x + (y * MapGridSize)])
+						r.Rooms = CreateRoom(Zone, ROOM1, x * 8.0, 0.0, y * 8.0, CurrGrid\MapName[x + (y * MapGridSize)])
 						If CurrGrid\Grid[x + ((y + 1) * MapGridSize)] Then
 							r\Angle = 180.0
 							TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
@@ -7261,16 +7261,24 @@ Function CreateMap()
 							If CurrGrid\RoomID[ROOM2] < MaxRooms And CurrGrid\MapName[x + (y * MapGridSize)] = ""  Then
 								If MapRoom(ROOM2, CurrGrid\RoomID[ROOM2]) <> "" Then CurrGrid\MapName[x + (y * MapGridSize)] = MapRoom(ROOM2, CurrGrid\RoomID[ROOM2])	
 							EndIf
-							r = CreateRoom(Zone, ROOM2, x * 8.0, 0.0, y * 8.0, CurrGrid\MapName[x + (y * MapGridSize)])
-							If Rand(2) = 1 Then r\Angle = 90.0 Else r\Angle = 270.0
+							r.Rooms = CreateRoom(Zone, ROOM2, x * 8.0, 0.0, y * 8.0, CurrGrid\MapName[x + (y * MapGridSize)])
+							If Rand(2) = 1 Then
+								r\Angle = 90.0
+							Else
+								r\Angle = 270.0
+							EndIf
 							TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 							CurrGrid\RoomID[ROOM2] = CurrGrid\RoomID[ROOM2] + 1
 						ElseIf CurrGrid\Grid[x + ((y - 1) * MapGridSize)] > 0 And CurrGrid\Grid[x + ((y + 1) * MapGridSize)] > 0
 							If CurrGrid\RoomID[ROOM2] < MaxRooms And CurrGrid\MapName[x + (y * MapGridSize)] = ""  Then
 								If MapRoom(ROOM2, CurrGrid\RoomID[ROOM2]) <> "" Then CurrGrid\MapName[x + (y * MapGridSize)] = MapRoom(ROOM2, CurrGrid\RoomID[ROOM2])	
 							EndIf
-							r = CreateRoom(Zone, ROOM2, x * 8.0, 0.0, y * 8.0, CurrGrid\MapName[x + (y * MapGridSize)])
-							If Rand(2) = 1 Then r\Angle = 180.0 Else r\Angle = 0.0
+							r.Rooms = CreateRoom(Zone, ROOM2, x * 8.0, 0.0, y * 8.0, CurrGrid\MapName[x + (y * MapGridSize)])
+							If Rand(2) = 1 Then
+								r\Angle = 180.0
+							Else
+								r\Angle = 0.0
+							EndIf
 							TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 							CurrGrid\RoomID[ROOM2] = CurrGrid\RoomID[ROOM2] + 1
 						Else
@@ -7279,19 +7287,19 @@ Function CreateMap()
 							EndIf
 							
 							If CurrGrid\Grid[(x - 1) + (y * MapGridSize)] > 0 And CurrGrid\Grid[x + ((y + 1) * MapGridSize)] > 0 Then
-								r = CreateRoom(Zone, ROOM2C, x * 8.0, 0.0, y * 8.0, CurrGrid\MapName[x + (y * MapGridSize)])
+								r.Rooms = CreateRoom(Zone, ROOM2C, x * 8.0, 0.0, y * 8.0, CurrGrid\MapName[x + (y * MapGridSize)])
 								r\Angle = 180.0
 								TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 							ElseIf CurrGrid\Grid[(x + 1) + (y * MapGridSize)] > 0 And CurrGrid\Grid[x + ((y + 1) * MapGridSize)] > 0
-								r = CreateRoom(Zone, ROOM2C, x * 8.0, 0.0, y * 8.0, CurrGrid\MapName[x + (y * MapGridSize)])
+								r.Rooms = CreateRoom(Zone, ROOM2C, x * 8.0, 0.0, y * 8.0, CurrGrid\MapName[x + (y * MapGridSize)])
 								r\Angle = 90.0
 								TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 							ElseIf CurrGrid\Grid[(x - 1) + (y * MapGridSize)] > 0 And CurrGrid\Grid[x + ((y - 1) * MapGridSize)] > 0
-								r = CreateRoom(Zone, ROOM2C, x * 8.0, 0.0, y * 8.0, CurrGrid\MapName[x + (y * MapGridSize)])
+								r.Rooms = CreateRoom(Zone, ROOM2C, x * 8.0, 0.0, y * 8.0, CurrGrid\MapName[x + (y * MapGridSize)])
 								TurnEntity(r\OBJ, 0.0, 270.0, 0.0)
 								r\Angle = 270.0
 							Else
-								r = CreateRoom(Zone, ROOM2C, x * 8.0, 0.0, y * 8.0, CurrGrid\MapName[x + (y * MapGridSize)])
+								r.Rooms = CreateRoom(Zone, ROOM2C, x * 8.0, 0.0, y * 8.0, CurrGrid\MapName[x + (y * MapGridSize)])
 							EndIf
 							CurrGrid\RoomID[ROOM2C] = CurrGrid\RoomID[ROOM2C] + 1
 						EndIf
@@ -7302,7 +7310,7 @@ Function CreateMap()
 							If MapRoom(ROOM3, CurrGrid\RoomID[ROOM3]) <> "" Then CurrGrid\MapName[x + (y * MapGridSize)] = MapRoom(ROOM3, CurrGrid\RoomID[ROOM3])	
 						EndIf
 						
-						r = CreateRoom(Zone, ROOM3, x * 8.0, 0.0, y * 8.0, CurrGrid\MapName[x + (y * MapGridSize)])
+						r.Rooms = CreateRoom(Zone, ROOM3, x * 8.0, 0.0, y * 8.0, CurrGrid\MapName[x + (y * MapGridSize)])
 						If (Not CurrGrid\Grid[x + ((y - 1) * MapGridSize)]) Then
 							TurnEntity(r\OBJ, 0.0, 180.0, 0.0)
 							r\Angle = 180.0
@@ -7321,7 +7329,7 @@ Function CreateMap()
 							If MapRoom(ROOM4, CurrGrid\RoomID[ROOM4]) <> "" Then CurrGrid\MapName[x + (y * MapGridSize)] = MapRoom(ROOM4, CurrGrid\RoomID[ROOM4])	
 						EndIf
 						
-						r = CreateRoom(Zone, ROOM4, x * 8.0, 0.0, y * 8.0, CurrGrid\MapName[x + (y * MapGridSize)])
+						r.Rooms = CreateRoom(Zone, ROOM4, x * 8.0, 0.0, y * 8.0, CurrGrid\MapName[x + (y * MapGridSize)])
 						CurrGrid\RoomID[ROOM4] = CurrGrid\RoomID[ROOM4] + 1
 						;[End Block]
 				End Select
@@ -7330,21 +7338,21 @@ Function CreateMap()
 	Next		
 	
 	; ~ Rooms out of map
-	r = CreateRoom(0, ROOM1, (MapGridSize - 1) * 8.0, 500.0, -64.0, "gateb")
+	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * 8.0, 500.0, -64.0, "gateb")
 	CurrGrid\RoomID[ROOM1] = CurrGrid\RoomID[ROOM1] + 1
 	
-	r = CreateRoom(0, ROOM1, (MapGridSize - 1) * 8.0, 500.0, 8.0, "gatea")
+	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * 8.0, 500.0, 8.0, "gatea")
 	CurrGrid\RoomID[ROOM1] = CurrGrid\RoomID[ROOM1] + 1
 	
-	r = CreateRoom(0, ROOM1, (MapGridSize - 1) * 8.0, 0.0, (MapGridSize - 1) * 8.0, "pocketdimension")
+	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * 8.0, 0.0, (MapGridSize - 1) * 8.0, "pocketdimension")
 	CurrGrid\RoomID[ROOM1] = CurrGrid\RoomID[ROOM1] + 1	
 	
 	If opt\IntroEnabled Then
-		r = CreateRoom(0, ROOM1, 8.0, 0.0, (MapGridSize - 1) * 8.0, "room173intro")
+		r.Rooms = CreateRoom(0, ROOM1, 8.0, 0.0, (MapGridSize - 1) * 8.0, "room173intro")
 		CurrGrid\RoomID[ROOM1] = CurrGrid\RoomID[ROOM1] + 1
 	EndIf
 	
-	r = CreateRoom(0, ROOM1, 8.0, 800.0, 0.0, "dimension1499")
+	r.Rooms = CreateRoom(0, ROOM1, 8.0, 800.0, 0.0, "dimension1499")
 	CurrGrid\RoomID[ROOM1] = CurrGrid\RoomID[ROOM1] + 1
 	
 	For r.Rooms = Each Rooms
@@ -7359,7 +7367,7 @@ Function CreateMap()
 					If CurrGrid\Grid[x + (y * MapGridSize)] = 0 Then
 						Zone = GetZone(y)
 						
-						Color(50 * Zone + 50, 50 * Zone + 50, 50 * Zone + 50)
+						Color((50 * Zone) + 50, (50 * Zone) + 50, (50 * Zone) + 50)
 						Rect(x * 32, y * 32, 30, 30)
 					Else
 						If CurrGrid\Grid[x + (y * MapGridSize)] = 255 Then
@@ -7380,8 +7388,8 @@ Function CreateMap()
 			
 			For x = 0 To MapGridSize - 1
 				For y = 0 To MapGridSize - 1
-					If MouseX() > x * 32 And MouseX() < x * 32 + 32 Then
-						If MouseY() > y * 32 And MouseY() < y * 32 + 32 Then
+					If ScaledMouseX() > x * 32 And ScaledMouseX() < (x * 32) + 32 Then
+						If ScaledMouseY() > y * 32 And ScaledMouseY() < (y * 32) + 32 Then
 							Color(255, 0, 0)
 						Else
 							Color(200, 200, 200)
@@ -7396,6 +7404,7 @@ Function CreateMap()
 				Next
 			Next
 			Text(mo\Viewport_Center_X, opt\GraphicHeight - 50, "PRESS ANY KEY TO CONTINUE", True, True)
+			If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 			Flip()
 		Until GetKey() Lor MouseHit(1)	
 	EndIf
@@ -7432,27 +7441,19 @@ Function CreateMap()
 						Select r\RoomTemplate\Shape
 							Case ROOM1
 								;[Block]
-								If r\Angle = 90.0
-									ShouldSpawnDoor = True
-								EndIf
+								If r\Angle = 90.0 Then ShouldSpawnDoor = True
 								;[End Block]
 							Case ROOM2
 								;[Block]
-								If r\Angle = 90.0 Lor r\Angle = 270.0
-									ShouldSpawnDoor = True
-								EndIf
+								If r\Angle = 90.0 Lor r\Angle = 270.0 Then ShouldSpawnDoor = True
 								;[End Block]
 							Case ROOM2C
 								;[Block]
-								If r\Angle = 0.0 Lor r\Angle = 90.0
-									ShouldSpawnDoor = True
-								EndIf
+								If r\Angle = 0.0 Lor r\Angle = 90.0 Then ShouldSpawnDoor = True
 								;[End Block]
 							Case ROOM3
 								;[Block]
-								If r\Angle = 0.0 Lor r\Angle = 180.0 Lor r\Angle = 90.0
-									ShouldSpawnDoor = True
-								EndIf
+								If r\Angle = 0.0 Lor r\Angle = 180.0 Lor r\Angle = 90.0 Then ShouldSpawnDoor = True
 								;[End Block]
 							Default
 								;[Block]
@@ -7473,27 +7474,19 @@ Function CreateMap()
 						Select r\RoomTemplate\Shape
 							Case ROOM1
 								;[Block]
-								If r\Angle = 180.0
-									ShouldSpawnDoor = True
-								EndIf
+								If r\Angle = 180.0 Then ShouldSpawnDoor = True
 								;[End Block]
 							Case ROOM2
 								;[Block]
-								If r\Angle = 0.0 Lor r\Angle = 180.0
-									ShouldSpawnDoor = True
-								EndIf
+								If r\Angle = 0.0 Lor r\Angle = 180.0 Then ShouldSpawnDoor = True
 								;[End Block]
 							Case ROOM2C
 								;[Block]
-								If r\Angle = 180.0 Lor r\Angle = 90.0
-									ShouldSpawnDoor = True
-								EndIf
+								If r\Angle = 180.0 Lor r\Angle = 90.0 Then ShouldSpawnDoor = True
 								;[End Block]
 							Case ROOM3
 								;[Block]
-								If r\Angle = 180.0 Lor r\Angle = 90.0 Lor r\Angle = 270.0
-									ShouldSpawnDoor = True
-								EndIf
+								If r\Angle = 180.0 Lor r\Angle = 90.0 Lor r\Angle = 270.0 Then ShouldSpawnDoor = True
 								;[End Block]
 							Default
 								;[Block]
@@ -7547,24 +7540,24 @@ Function CreateMap()
 	Next
 End Function
 
-Function SetRoom(Room_Name$, Room_Type%, Pos%, Min_Pos%, Max_Pos%) ; ~ Place a room without overwriting others
-	Local Looped%, Can_Place%
+Function SetRoom%(RoomName$, RoomType%, RoomPosition%, MinPos%, MaxPos%) ; ~ Place a room without overwriting others
+	Local Looped%, CanPlace%
 	
 	Looped = False
-	Can_Place = True
-	While MapRoom(Room_Type, Pos) <> ""
-		Pos = Pos + 1
-		If Pos > Max_Pos Then
+	CanPlace = True
+	While MapRoom(RoomType, RoomPosition) <> ""
+		RoomPosition = RoomPosition + 1
+		If RoomPosition > MaxPos Then
 			If (Not Looped) Then
-				Pos = Min_Pos + 1 : Looped = True
+				RoomPosition = MinPos + 1 : Looped = True
 			Else
-				Can_Place = False
+				CanPlace = False
 				Exit
 			EndIf
 		EndIf
 	Wend
-	If Can_Place = True Then
-		MapRoom(Room_Type, Pos) = Room_Name
+	If CanPlace Then
+		MapRoom(RoomType, RoomPosition) = RoomName
 		Return(True)
 	Else
 		Return(False)

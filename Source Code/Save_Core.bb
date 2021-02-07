@@ -2203,6 +2203,7 @@ Function LoadMap(File$)
 		Delete(CurrGrid) : CurrGrid = Null
 	EndIf
 	CurrGrid = New MapGrid
+	
 	CoffinDistance = 100.0
 	
 	If Right(File, 6) = "cbmap2" Then
@@ -2214,12 +2215,9 @@ Function LoadMap(File$)
 		ForestPieceAmount = ReadInt(f)
 		MTPieceAmount = ReadInt(f)
 		
-		If ForestPieceAmount > 0 Then
-			I_Zone\HasCustomForest = True
-		EndIf
-		If MTPieceAmount > 0 Then
-			I_Zone\HasCustomMT = True
-		EndIf
+		If ForestPieceAmount > 0 Then I_Zone\HasCustomForest = True
+		
+		If MTPieceAmount > 0 Then I_Zone\HasCustomMT = True
 		
 		; ~ Facility rooms
 		For i = 0 To RoomAmount - 1
@@ -2234,9 +2232,7 @@ Function LoadMap(File$)
 					r.Rooms = CreateRoom(0, rt\Shape, (MapGridSize - x) * 8.0, 0.0, y * 8.0, Name)
 					
 					r\Angle = Angle
-					If r\Angle <> 90.0 And r\Angle <> 270.0
-						r\Angle = r\Angle + 180.0
-					EndIf
+					If r\Angle <> 90.0 And r\Angle <> 270.0 Then r\Angle = r\Angle + 180.0
 					r\Angle = WrapAngle(r\Angle)
 					
 					TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
@@ -2275,8 +2271,10 @@ Function LoadMap(File$)
 			EndIf
 		Next
 		
+		Local fr.Forest
+		
 		If ForestRoom <> Null Then
-			Local fr.Forest = New Forest
+			fr.Forest = New Forest
 		EndIf
 		
 		; ~ Forest rooms
@@ -2287,14 +2285,9 @@ Function LoadMap(File$)
 			
 			Angle = ReadByte(f)
 			
-			If Angle <> 0.0 And Angle <> 2.0 Then
-				Angle = Angle + 2.0
-			EndIf
+			If Angle <> 0.0 And Angle <> 2.0 Then Angle = Angle + 2.0
 			Angle = Angle + 1.0
-			If Angle > 3.0 Then
-				Angle = (Angle Mod 4.0)
-			EndIf
-			
+			If Angle > 3.0 Then Angle = (Angle Mod 4.0)
 			x = (GridSize - 1) - x
 			
 			If fr <> Null Then
@@ -2422,9 +2415,7 @@ Function LoadMap(File$)
 					r.Rooms = CreateRoom(0, rt\Shape, (MapGridSize - x) * 8.0, 0.0, y * 8.0, Name)
 					
 					r\Angle = Angle
-					If r\Angle <> 90.0 And r\Angle <> 270.0
-						r\Angle = r\Angle + 180.0
-					EndIf
+					If r\Angle <> 90.0 And r\Angle <> 270.0 Then r\Angle = r\Angle + 180.0
 					r\Angle = WrapAngle(r\Angle)
 					
 					TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
@@ -2486,26 +2477,18 @@ Function LoadMap(File$)
 						Select r\RoomTemplate\Shape
 							Case ROOM1
 								;[Block]
-								If r\Angle = 90.0
-									ShouldSpawnDoor = True
-								EndIf
+								If r\Angle = 90.0 Then ShouldSpawnDoor = True
 								;[End Block]
 							Case ROOM2
 								;[Block]
-								If r\Angle = 90.0 Lor r\Angle = 270.0
-									ShouldSpawnDoor = True
-								EndIf
+								If r\Angle = 90.0 Lor r\Angle = 270.0 Then ShouldSpawnDoor = True
 								;[End Block]
 							Case ROOM2C
 								;[Block]
-								If r\Angle = 0.0 Lor r\Angle = 90.0
-									ShouldSpawnDoor = True
-								EndIf
+								If r\Angle = 0.0 Lor r\Angle = 90.0 Then ShouldSpawnDoor = True
 								;[End Block]
 							Case ROOM3
-								If r\Angle = 0.0 Lor r\Angle = 180.0 Lor r\Angle = 90.0
-									ShouldSpawnDoor = True
-								EndIf
+								If r\Angle = 0.0 Lor r\Angle = 180.0 Lor r\Angle = 90.0 Then ShouldSpawnDoor = True
 								;[End Block]
 							Default
 								;[Block]
@@ -2525,27 +2508,19 @@ Function LoadMap(File$)
 						Select r\RoomTemplate\Shape
 							Case ROOM1
 								;[Block]
-								If r\Angle = 180.0
-									ShouldSpawnDoor = True
-								EndIf
+								If r\Angle = 180.0 Then ShouldSpawnDoor = True
 								;[End Block]
 							Case ROOM2
 								;[Block]
-								If r\Angle = 0.0 Lor r\Angle = 180.0
-									ShouldSpawnDoor = True
-								EndIf
+								If r\Angle = 0.0 Lor r\Angle = 180.0 Then ShouldSpawnDoor = True
 								;[End Block]
 							Case ROOM2C
 								;[Block]
-								If r\Angle = 180.0 Lor r\Angle = 90.0
-									ShouldSpawnDoor = True
-								EndIf
+								If r\Angle = 180.0 Lor r\Angle = 90.0 Then ShouldSpawnDoor = True
 								;[End Block]
 							Case ROOM3
 								;[Block]
-								If r\Angle = 180.0 Lor r\Angle = 90.0 Lor r\Angle = 270.0
-									ShouldSpawnDoor = True
-								EndIf
+								If r\Angle = 180.0 Lor r\Angle = 90.0 Lor r\Angle = 270.0 Then ShouldSpawnDoor = True
 								;[End Block]
 							Default
 								;[Block]
@@ -2567,24 +2542,21 @@ Function LoadMap(File$)
 		Next
 	Next
 	
-	If opt\IntroEnabled Then r = CreateRoom(0, ROOM1, 8.0, 0.0, (MapGridSize + 2) * 8.0, "room173intro")
+	If opt\IntroEnabled Then
+		r.Rooms = CreateRoom(0, ROOM1, 8.0, 0.0, (MapGridSize + 2) * 8.0, "room173intro")
+		CreateEvent("room173intro", "room173intro", 0)
+	EndIf
 	
-	r = CreateRoom(0, ROOM1, (MapGridSize + 2) * 8.0, 0.0, (MapGridSize + 2) * 8.0, "pocketdimension")
-	
-	r = CreateRoom(0, ROOM1, 0.0, 500.0, -80.0, "gateb")
-	
-	r = CreateRoom(0, ROOM1, 0.0, 500.0, -16.0, "gatea")
-	
-	r = CreateRoom(0, ROOM1, -16.0, 800.0, 0.0, "dimension1499")
-	
-	If opt\IntroEnabled Then CreateEvent("room173intro", "room173intro", 0)
-	
+	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize + 2) * 8.0, 0.0, (MapGridSize + 2) * 8.0, "pocketdimension")
 	CreateEvent("pocketdimension", "pocketdimension", 0)   
 	
+	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, -80.0, "gateb")
 	CreateEvent("gateb", "gateb", 0)
 	
+	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, -16.0, "gatea")
 	CreateEvent("gatea", "gatea", 0)
 	
+	r.Rooms = CreateRoom(0, ROOM1, -16.0, 800.0, 0.0, "dimension1499")
 	CreateEvent("dimension1499", "dimension1499", 0)
 	
 	For r.Rooms = Each Rooms
