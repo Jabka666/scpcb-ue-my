@@ -10341,11 +10341,11 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 		PrevEventState = 0.0
 	EndIf
 	
+	d\Locked = 0
 	If d\OpenState = 0.0 And (Not d\Open) Then
 		If Abs(EntityX(me\Collider) - EntityX(ElevatorOBJ, True)) =< (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then
 			If Abs(EntityZ(me\Collider) - EntityZ(ElevatorOBJ, True)) =< (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then
 				If Abs(EntityY(me\Collider) - EntityY(ElevatorOBJ, True)) =< (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then
-					d\Locked = 1
 					If EventState = 0.0 Then
 						TeleportEntity(Curr096\Collider, EntityX(d\FrameOBJ), EntityY(d\FrameOBJ) + 1.0, EntityZ(d\FrameOBJ), Curr096\CollRadius)
 						PointEntity(Curr096\Collider, ElevatorOBJ)

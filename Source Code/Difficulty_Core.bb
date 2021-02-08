@@ -59,16 +59,17 @@ Function WriteDifficultyFile()
 End Function
 
 Function ReadDifficultyFile()
+	; ~ Go out of function immediately if the secret file wasn't created!
+	If FileType(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon howl.cb") <> 1 Then Return
+	
 	Local File$, i%
 	
-	If FileType(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon howl.cb") = 1 Then
-		File = OpenFile(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon howl.cb")
-		For i = SAFE To ESOTERIC
-			difficulties[i]\Locked = ReadByte(File)
-		Next
-		Achievements[33] = ReadByte(File)
-		CloseFile(File)
-	EndIf
+	File = OpenFile(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon howl.cb")
+	For i = SAFE To ESOTERIC
+		difficulties[i]\Locked = ReadByte(File)
+	Next
+	Achievements[33] = ReadByte(File)
+	CloseFile(File)
 End Function
 
 Function UnlockDifficulties()

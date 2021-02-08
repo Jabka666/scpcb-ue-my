@@ -1502,7 +1502,7 @@ Function UpdateConsole()
 						Default
 							;[Block]
 							For e.Events = Each Events
-								If e\EventID = e_gateaentrance Lor e\EventID = e_gatebentrance Then
+								If e\EventID = e_gatebentrance Lor e\EventID = e_gateaentrance Then
 									e\EventState3 = 1.0
 									e\room\RoomDoors[1]\Open = True
 								EndIf
@@ -11316,30 +11316,20 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 					;[Block]
 					it2.Items = CreateItem("Cup", "cup", x, y, z)
 					it2\Name = item\Name
-					it2\R = 255 - item\R
-					it2\G = 255 - item\G
-					it2\B = 255 - item\B
+					it2\R = 255 - item\R : it2\G = 255 - item\G : it2\B = 255 - item\B
 					;[End Block]
 				Case FINE
 					;[Block]
 					it2.Items = CreateItem("Cup", "cup", x, y, z)
-					it2\Name = item\Name
-					it2\State = 1.0
-					it2\R = Min(item\R * Rnd(0.9, 1.1), 255)
-					it2\G = Min(item\G * Rnd(0.9, 1.1), 255)
-					it2\B = Min(item\B * Rnd(0.9, 1.1), 255)
+					it2\Name = item\Name : it2\State = 1.0
+					it2\R = Min(item\R * Rnd(0.9, 1.1), 255) : it2\G = Min(item\G * Rnd(0.9, 1.1), 255) : it2\B = Min(item\B * Rnd(0.9, 1.1), 255)
 					;[End Block]
 				Case VERYFINE
 					;[Block]
 					it2.Items = CreateItem("Cup", "cup", x, y, z)
-					it2\Name = item\Name
-					it2\State = Max(it2\State * 2.0, 2.0)	
-					it2\R = Min(item\R * Rnd(0.5, 1.5), 255)
-					it2\G = Min(item\G * Rnd(0.5, 1.5), 255)
-					it2\B = Min(item\B * Rnd(0.5, 1.5), 255)
-					If Rand(5) = 1 Then
-						me\ExplosionTimer = 135.0
-					EndIf
+					it2\Name = item\Name : it2\State = Max(it2\State * 2.0, 2.0)	
+					it2\R = Min(item\R * Rnd(0.5, 1.5), 255) : it2\G = Min(item\G * Rnd(0.5, 1.5), 255) : it2\B = Min(item\B * Rnd(0.5, 1.5), 255)
+					If Rand(5) = 1 Then me\ExplosionTimer = 135.0
 					;[End Block]
 			End Select	
 			;[End Block]
@@ -11674,47 +11664,31 @@ Function Use427()
 	Local i%, Pvt%, TempCHN%
 	Local PrevI427Timer# = I_427\Timer
 	
-	If I_427\Timer < 70.0 * 360.0
+	If I_427\Timer < 70.0 * 360.0 Then
 		If I_427\Using Then
 			I_427\Timer = I_427\Timer + fps\FPSFactor[0]
 			For e.Events = Each Events
 				If e\EventID = e_1048a Then
-					If e\EventState2 > 0.0 Then
-						e\EventState2 = Max(e\EventState2 - (fps\FPSFactor[0] * 0.5), 0.0)
-					EndIf
+					If e\EventState2 > 0.0 Then e\EventState2 = Max(e\EventState2 - (fps\FPSFactor[0] * 0.5), 0.0)
 					Exit
 				EndIf
 			Next
-			If me\Injuries > 0.0 Then
-				me\Injuries = Max(me\Injuries - (fps\FPSFactor[0] * 0.0005), 0.0)
-			EndIf
-			If me\Bloodloss > 0.0 And me\Injuries =< 1.0 Then
-				me\Bloodloss = Max(me\Bloodloss - (fps\FPSFactor[0] * 0.001), 0.0)
-			EndIf
-			If I_008\Timer > 0.0 Then
-				I_008\Timer = Max(I_008\Timer - (fps\FPSFactor[0] * 0.001), 0.0)
-			EndIf
-			If I_409\Timer > 0.0 Then
-				I_409\Timer = Max(I_409\Timer - (fps\FPSFactor[0] * 0.003), 0.0)
-			EndIf
+			If me\Injuries > 0.0 Then me\Injuries = Max(me\Injuries - (fps\FPSFactor[0] * 0.0005), 0.0)
+			If me\Bloodloss > 0.0 And me\Injuries =< 1.0 Then me\Bloodloss = Max(me\Bloodloss - (fps\FPSFactor[0] * 0.001), 0.0)
+			If I_008\Timer > 0.0 Then I_008\Timer = Max(I_008\Timer - (fps\FPSFactor[0] * 0.001), 0.0)
+			If I_409\Timer > 0.0 Then I_409\Timer = Max(I_409\Timer - (fps\FPSFactor[0] * 0.003), 0.0)
 			For i = 0 To 5
-				If I_1025\State[i] > 0.0 Then
-					I_1025\State[i] = Max(I_1025\State[i] - (fps\FPSFactor[0] * 0.001), 0.0)
-				EndIf
+				If I_1025\State[i] > 0.0 Then I_1025\State[i] = Max(I_1025\State[i] - (fps\FPSFactor[0] * 0.001), 0.0)
 			Next
-			If (Not I_427\Sound[0]) Then
-				I_427\Sound[0] = LoadSound_Strict("SFX\SCP\427\Effect.ogg")
-			EndIf
-			If (Not ChannelPlaying(I_427\SoundCHN[0])) Then
-				I_427\SoundCHN[0] = PlaySound_Strict(I_427\Sound[0])
-			EndIf
+			If (Not I_427\Sound[0]) Then I_427\Sound[0] = LoadSound_Strict("SFX\SCP\427\Effect.ogg")
+			If (Not ChannelPlaying(I_427\SoundCHN[0])) Then I_427\SoundCHN[0] = PlaySound_Strict(I_427\Sound[0])
 			If I_427\Timer >= 70.0 * 180.0 Then
 				If (Not I_427\Sound[1]) Then I_427\Sound[1] = LoadSound_Strict("SFX\SCP\427\Transform.ogg")
 				If (Not ChannelPlaying(I_427\SoundCHN[1])) Then I_427\SoundCHN[1] = PlaySound_Strict(I_427\Sound[1])
 			EndIf
 			If PrevI427Timer < 70.0 * 60.0 And I_427\Timer >= 70.0 * 60.0 Then
 				CreateMsg("You feel refreshed and energetic.", 6.0)
-			ElseIf PrevI427Timer < 70.0 * 180.0 And I_427\Timer >= 70.0 * 180.0 Then
+			ElseIf PrevI427Timer < 70.0 * 180.0 And I_427\Timer >= 70.0 * 180.0
 				CreateMsg("You feel gentle muscle spasms all over your body.", 6.0)
 			EndIf
 		Else
@@ -11754,7 +11728,7 @@ Function Use427()
 		If I_427\Timer >= 70.0 * 420.0 Then
 			Kill()
 			msg\DeathMsg = Chr(34) + "Requesting support from MTF Nu-7. We need more firepower to take this thing down." + Chr(34)
-		ElseIf I_427\Timer >= 70.0 * 390.0 Then
+		ElseIf I_427\Timer >= 70.0 * 390.0
 			If (Not me\Crouch) Then SetCrouch(True)
 		EndIf
 	EndIf
@@ -12018,7 +11992,7 @@ Function Update008()
 			EntityAlpha(tt\OverlayID[3], Min(((I_008\Timer * 0.2) ^ 2.0) / 1000.0, 0.5) * (Sin(MilliSecs() / 8.0) + 2.0))
 			
 			For i = 0 To 6
-				If I_008\Timer > i * 15.0 + 10.0 And PrevI008Timer =< i * 15.0 + 10.0 Then
+				If I_008\Timer > (i * 15.0) + 10.0 And PrevI008Timer =< (i * 15.0) + 10.0 Then
 					PlaySound_Strict(LoadTempSound("SFX\SCP\008\Voices" + i + ".ogg"))
 				EndIf
 			Next
@@ -12262,7 +12236,7 @@ Function UpdateDecals()
 		EndIf
 		
 		If d\Size =< 0.0 Lor d\Alpha =< 0.0 Lor d\LifeTime = 5.0 Then
-			FreeEntity(d\OBJ)
+			FreeEntity(d\OBJ) : d\OBJ = 0
 			
 			Delete(d)
 		EndIf
