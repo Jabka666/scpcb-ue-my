@@ -1184,19 +1184,19 @@ Function RenderMainMenu()
 					Select SelectedDifficulty\SaveType
 						Case SAVEANYWHERE
 							;[Block]
-							Text(x + (200 * MenuScale), y + (186 * MenuScale), "Save anywhere")
+							Text(x + (200 * MenuScale), y + (186 * MenuScale), "Save type: Save anywhere")
 							;[End Block]
 						Case SAVEONSCREENS
 							;[Block]
-							Text(x + (200 * MenuScale), y + (186 * MenuScale), "Save on screens")
+							Text(x + (200 * MenuScale), y + (186 * MenuScale), "Save type: Save on screens")
 							;[End Block]
 						Case SAVEONQUIT
 							;[Block]
-							Text(x + (200 * MenuScale), y + (186 * MenuScale), "Save on quit")
+							Text(x + (200 * MenuScale), y + (186 * MenuScale), "Save type: Save on quit")
 							;[End Block]
 						Case NOSAVES
 							;[Block]
-							Text(x + (200 * MenuScale), y + (186 * MenuScale), "No saves")
+							Text(x + (200 * MenuScale), y + (186 * MenuScale), "Save type: No saves")
 							;[End Block]
 					End Select
 					
