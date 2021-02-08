@@ -4,161 +4,6 @@ Include "Source Code\Texture_Cache_Core.bb"
 
 Const RoomScale# = 8.0 / 2048.0
 
-Function LoadWorld(File$, rt.RoomTemplates)
-	Local Map% = LoadAnimMesh_Strict(File)
-	
-	If (Not Map) Then Return
-	
-	Local mat.Materials
-	Local x#, y#, z#, i%, c%
-	Local World% = CreatePivot()
-	Local Meshes% = CreatePivot(World)
-	Local RenderBrushes% = CreateMesh(World)
-	Local CollisionBrushes% = CreatePivot(World)
-	Local Range#, lColor$, Intensity#, Angles$
-	Local R%, G%, B%
-	Local Pitch#, Yaw#, Roll#
-	
-	EntityType(CollisionBrushes, HIT_MAP)
-	
-	For c = 1 To CountChildren(Map)
-		Local Node% = GetChild(Map, c)	
-		Local ClassName$ = Lower(KeyValue(Node, "classname"))
-		
-		Select ClassName
-			Case "mesh"
-				;[Block]
-				EntityParent(Node, Meshes)
-				
-				If KeyValue(Node, "disablecollisions") <> 1 Then
-					EntityType(Node, HIT_MAP)
-					EntityPickMode(Node, 2)				
-				EndIf
-				
-				c = c - 1
-				;[End Block]
-			Case "brush"
-				;[Block]
-				RotateMesh(Node, EntityPitch(Node), EntityYaw(Node), EntityRoll(Node))
-				PositionMesh(Node, EntityX(Node), EntityY(Node), EntityZ(Node))
-				
-				AddMesh(Node, RenderBrushes)
-				
-				EntityAlpha(Node, 0.0)
-				EntityType(Node, HIT_MAP)
-				EntityAlpha(Node, 0.0)
-				EntityParent(Node, CollisionBrushes)
-				EntityPickMode(Node, 2)
-				
-				c = c - 1
-				;[End Block]
-			Case "screen"
-				;[Block]
-				x = EntityX(Node) * RoomScale
-				y = EntityY(Node) * RoomScale
-				z = EntityZ(Node) * RoomScale
-				
-				If x <> 0 Lor y <> 0 Lor z <> 0 Then 
-					Local ts.TempScreens = New TempScreens	
-					
-					ts\x = x
-					ts\y = y
-					ts\z = z
-					ts\ImgPath = KeyValue(Node, "imgpath", "")
-					ts\RoomTemplate = rt
-				EndIf
-				;[End Block]
-			Case "waypoint"
-				;[Block]
-				x = EntityX(Node) * RoomScale
-				y = EntityY(Node) * RoomScale
-				z = EntityZ(Node) * RoomScale	
-				
-				Local w.TempWayPoints = New TempWayPoints
-				
-				w\roomtemplate = rt
-				w\x = x
-				w\y = y
-				w\z = z
-				;[End Block]
-			Case "light"
-				;[Block]
-				x = EntityX(Node) * RoomScale
-				y = EntityY(Node) * RoomScale
-				z = EntityZ(Node) * RoomScale
-				
-				If x <> 0 Lor y <> 0 Lor z <> 0 Then 
-					Range = Float(KeyValue(Node, "range", "1")) / 2000.0
-					lColor = KeyValue(Node, "color", "255 255 255")
-					Intensity = Min(Float(KeyValue(Node, "intensity", "1.0")) * 0.8, 1.0)
-					R = Int(Piece(lColor, 1, " ")) * Intensity
-					G = Int(Piece(lColor, 2, " ")) * Intensity
-					B = Int(Piece(lColor, 3, " ")) * Intensity
-					
-					AddTempLight(rt, x, y, z, 2, Range, R, G, B)
-				EndIf
-				;[End Block]
-			Case "spotlight"	
-				;[Block]
-				x = EntityX(Node) * RoomScale
-				y = EntityY(Node) * RoomScale
-				z = EntityZ(Node) * RoomScale
-				If x <> 0 Lor y <> 0 Lor z <> 0 Then 
-					Range = Float(KeyValue(Node, "range", "1")) / 700.0
-					lColor = KeyValue(Node, "color", "255 255 255")
-					Intensity = Min(Float(KeyValue(Node, "intensity", "1.0")) * 0.8, 1.0)
-					R = Int(Piece(lColor, 1, " ")) * Intensity
-					G = Int(Piece(lColor, 2, " ")) * Intensity
-					B = Int(Piece(lColor, 3, " ")) * Intensity
-					
-					Local lt.LightTemplates = AddTempLight(rt, x, y, z, 3, Range, R, G, B)
-					
-					Angles = KeyValue(Node, "angles", "0 0 0")
-					Pitch = Piece(Angles, 1, " ")
-					Yaw = Piece(Angles, 2, " ")
-					lt\Pitch = Pitch
-					lt\Yaw = Yaw
-					
-					lt\InnerConeAngle = Int(KeyValue(Node, "innerconeangle", ""))
-					lt\OuterConeAngle = Int(KeyValue(Node, "outerconeangle", ""))	
-				EndIf
-				;[End Block]
-			Case "soundemitter"
-				;[Block]
-				For i = 0 To 3
-					If (Not rt\TempSoundEmitter[i]) Then
-						rt\TempSoundEmitterX[i] = EntityX(Node) * RoomScale
-						rt\TempSoundEmitterY[i] = EntityY(Node) * RoomScale
-						rt\TempSoundEmitterZ[i] = EntityZ(Node) * RoomScale
-						rt\TempSoundEmitter[i] = Int(KeyValue(Node, "sound", "0"))
-						rt\TempSoundEmitterRange[i] = Float(KeyValue(Node, "range", "1"))
-						Exit
-					EndIf
-				Next
-				;[End Block]
-			; ~ Invisible collision brush
-			Case "field_hit"
-				;[Block]
-				EntityParent(Node, CollisionBrushes)
-				EntityType(Node, HIT_MAP)
-				EntityAlpha(Node, 0.0)
-				c = c - 1
-				;[End Block]
-			; ~ Camera start position point entity
-			Case "playerstart"
-				;[Block]
-				Angles = KeyValue(Node, "angles", "0 0 0")
-				Pitch = Piece(Angles, 1, " ")
-				Yaw = Piece(Angles, 2, " ")
-				Roll = Piece(Angles, 3, " ")
-				;[End Block]
-		End Select
-	Next
-	EntityFX(RenderBrushes, 1)
-	FreeEntity(Map)
-	Return(World)	
-End Function
-
 Type TriggerBox
 	Field OBJ%
 	Field Name$
@@ -1398,14 +1243,10 @@ Function LoadRoomMesh(rt.RoomTemplates)
 	If Instr(rt\OBJPath, ".rmesh") <> 0 Then ; ~ File is .rmesh
 		rt\OBJ = LoadRMesh(rt\OBJPath, rt)
 	Else ; ~ File is .b3d
-		If rt\OBJPath <> "" Then
-			rt\OBJ = LoadWorld(rt\OBJPath, rt)
-		Else
-			rt\OBJ = CreatePivot()
-		EndIf
+		RuntimeError(".b3d rooms are no longer supported, please use the converter! Affected room: " + Chr(34) + rt\OBJPath + Chr(34))
 	EndIf
 	
-	If (Not rt\OBJ) Then RuntimeError("Failed to load map file.")
+	If (Not rt\OBJ) Then RuntimeError("Failed to load map file: " + Chr(34) + rt\OBJPath + Chr(34) + ".")
 	
 	CalculateRoomTemplateExtents(rt)
 	
