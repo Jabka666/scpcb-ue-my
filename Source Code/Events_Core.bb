@@ -10081,7 +10081,7 @@ Function UpdateEndings()
 												Curr106\State = 100000.0
 												e\EventState2 = 0.0
 												For i = 5 To 8
-													e\room\NPC[i]\State = 10.0 : e\room\NPC[i]\Speed = Rnd(0.02, 0.04)
+													e\room\NPC[i]\State = 10.0 : e\room\NPC[i]\Speed = e\room\NPC[i]\Speed * Rnd(1.0, 1.2)
 												Next
 												For i = 2 To 4 ; ~ Helicopters attack the player
 													e\room\NPC[i]\State = 2.0
