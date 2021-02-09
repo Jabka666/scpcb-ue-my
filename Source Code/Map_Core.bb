@@ -29,7 +29,7 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 	Local HasTriggerBox% = False
 	
 	For i = 0 To 3 ; ~ Reattempt up to 3 times
-		If f = 0 Then
+		If (Not f) Then
 			f = ReadFile(File)
 		Else
 			Exit
@@ -5440,7 +5440,7 @@ Function FillRoom(r.Rooms)
 	Next
 	
 	For ts.TempScreens = Each TempScreens
-		If ts\roomtemplate = r\RoomTemplate Then
+		If ts\RoomTemplate = r\RoomTemplate Then
 			CreateScreen(r\x + ts\x, r\y + ts\y, r\z + ts\z, ts\ImgPath, r)
 		EndIf
 	Next
@@ -7801,9 +7801,10 @@ Type Chunk
 End Type
 
 Function CreateChunk.Chunk(OBJ%, x#, y#, z#, IsSpawnChunk% = False)
-	Local ch.Chunk = New Chunk
+	Local ch.Chunk
 	Local i%, chp.ChunkPart
 	
+	ch.Chunk = New Chunk
 	ch\ChunkPivot = CreatePivot()
 	ch\x = x
 	ch\y = y
@@ -7849,11 +7850,9 @@ Function UpdateChunks(r.Rooms, ChunkPartAmount%, SpawnNPCs% = True)
 		Local ChunkFound% = False
 		
 		For ch.Chunk = Each Chunk
-			If ch\x = x
-				If ch\z = z
-					ChunkFound = True
-					Exit
-				EndIf
+			If ch\x = x And ch\z = z Then
+				ChunkFound = True
+				Exit
 			EndIf
 		Next
 		If (Not ChunkFound) Then
@@ -7895,7 +7894,7 @@ Function UpdateChunks(r.Rooms, ChunkPartAmount%, SpawnNPCs% = True)
 		EndIf
 	Next
 	
-	If CurrNPCNumber < MaxNPCs
+	If CurrNPCNumber < MaxNPCs Then
 		Select Rand(1, 8)
 			Case 1
 				;[Block]
@@ -7953,10 +7952,10 @@ Function HideChunks()
 	For ch.Chunk = Each Chunk
 		If (Not ch\IsSpawnChunk)
 			For i = 0 To ch\Amount
-				FreeEntity(ch\OBJ[i])
+				FreeEntity(ch\OBJ[i]) : ch\OBJ[i] = 0
 			Next
-			FreeEntity(ch\PlatForm)
-			FreeEntity(ch\ChunkPivot)
+			FreeEntity(ch\PlatForm) : ch\PlatForm = 0
+			FreeEntity(ch\ChunkPivot) : ch\ChunkPivot = 0
 			Delete(ch)
 		EndIf
 	Next

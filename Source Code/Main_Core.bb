@@ -3775,9 +3775,7 @@ Function GetScreenshot()
 	FI_Save(13, fiBuffer, "Screenshots\Screenshot" + ScreenshotCount + ".png", 0)
 	FI_Unload(fiBuffer)
 	FreeBank(Bank)
-	If (Not MainMenuOpen) Then
-		CreateMsg("Screenshot Taken.", 6.0)
-	EndIf
+	If (Not MainMenuOpen) Then CreateMsg("Screenshot Taken.", 6.0)
 	PlaySound_Strict(LoadTempSound("SFX\General\Screenshot.ogg"))
 	ScreenshotCount = ScreenshotCount + 1
 End Function
@@ -3812,7 +3810,7 @@ Function Kill(IsBloody% = False)
 	EndIf
 End Function
 
-; ~ Ending IDs
+; ~ Ending IDs Constants
 ;[Block]
 Const Ending_A1% = 0
 Const Ending_A2% = 1
@@ -3854,19 +3852,19 @@ Function DrawEnding()
 			If me\EndingTimer < -1000.0 And me\EndingTimer > -2000.0 Then
 				Width = ImageWidth(tt\ImageID[0])
 				Height = ImageHeight(tt\ImageID[0])
-				x = mo\Viewport_Center_X - Width / 2
-				y = mo\Viewport_Center_Y - Height / 2
+				x = mo\Viewport_Center_X - (Width / 2)
+				y = mo\Viewport_Center_Y - (Height / 2)
 				
 				DrawImage(tt\ImageID[0], x, y)
 				
 				Color(255, 255, 255)
 				SetFont(fo\FontID[Font_Default_Big])
-				Text(x + Width / 2 + 40 * MenuScale, y + 20 * MenuScale, "THE END", True)
+				Text(x + (Width / 2) + (40 * MenuScale), y + (20 * MenuScale), "THE END", True)
 				SetFont(fo\FontID[Font_Default])
 				
 				If AchievementsMenu = 0 Then 
-					x = x + 132 * MenuScale
-					y = y + 122 * MenuScale
+					x = x + (132 * MenuScale)
+					y = y + (122 * MenuScale)
 					
 					Local RoomAmount% = 0, RoomsFound% = 0
 					
@@ -3991,9 +3989,9 @@ Function UpdateEnding()
 						StopStream_Strict(MusicCHN)
 						MusicCHN = StreamSound_Strict("SFX\Music\" + Music[NowPlaying] + ".ogg", 0.0, Mode)
 						SetStreamVolume_Strict(MusicCHN, 1.0 * opt\MusicVolume)
-						FlushKeys()
 						me\EndingTimer = -2000.0
 						mm\ShouldDeleteGadgets = True
+						ResetInput()
 						InitCredits()
 					EndIf
 				Else
@@ -10123,10 +10121,9 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 				Case VERYFINE
 					;[Block]
 					n.NPCs = CreateNPC(NPCType1499_1, x, y, z)
-					n\State = 1.0
+					n\State = 1.0 : n\State3 = 1.0
 					n\Sound = LoadSound_Strict("SFX\SCP\1499\Triggered.ogg")
 					n\SoundCHN = PlaySound2(n\Sound, Camera, n\Collider, 20.0)
-					n\State3 = 1.0
 					;[End Block]
 			End Select
 			;[End Block]
@@ -10269,7 +10266,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 					;[Block]
 					If Rand(3) = 1 Then
 						it2.Items = CreateItem("SCRAMBLE Gear", "scramble", x, y, z)
-						it2\State = Rnd(500.0, 1000.0)
+						it2\State = Rnd(0.0, 1000.0)
 					Else
 						it2.Items = CreateItem("Night Vision Goggles", "finenvg", x, y, z)
 					EndIf
@@ -10278,10 +10275,10 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 					;[Block]
 					If Rand(5) = 1 Then
 						it2.Items = CreateItem("SCRAMBLE Gear", "scramble", x, y, z)
-						it2\State = Rnd(500.0, 1000.0)
+						it2\State = Rnd(0.0, 1000.0)
 					Else
 						it2.Items = CreateItem("Night Vision Goggles", "supernvg", x, y, z)
-						it2\State = Rnd(500.0, 1000.0)
+						it2\State = Rnd(0.0, 1000.0)
 					EndIf
 					;[End Block]
 			End Select
@@ -10303,7 +10300,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 						Case 1
 							;[Block]
 							it2.Items = CreateItem("Radio Transceiver", "radio", x, y, z)
-							it2\State = Rnd(50.0, 100.0)
+							it2\State = Rnd(0.0, 100.0)
 							;[End Block]
 						Case 2
 							;[Block]
@@ -10311,13 +10308,13 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 								it2.Items = CreateItem("S-NAV 300 Navigator", "nav300", x, y, z)
 							Else
 								it2.Items = CreateItem("S-NAV Navigator", "nav", x, y, z)
-								it2\State = Rnd(50.0, 100.0)
+								it2\State = Rnd(0.0, 100.0)
 							EndIf
 							;[End Block]
 						Case 3
 							;[Block]
 							it2.Items = CreateItem("Night Vision Goggles", "nvg", x, y, z)
-							it2\State = Rnd(500.0, 1000.0)
+							it2\State = Rnd(0.0, 1000.0)
 							;[End Block]
 					End Select
 					;[End Block]
@@ -10338,7 +10335,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 								it2.Items = CreateItem("S-NAV Navigator Ultimate", "navulti", x, y, z)
 							Else
 								it2.Items = CreateItem("S-NAV 310 Navigator", "nav310", x, y, z)
-								it2\State = Rnd(50.0, 100.0)
+								it2\State = Rnd(0.0, 100.0)
 							EndIf
 							;[End Block]
 						Case 3
@@ -10351,12 +10348,12 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 								Case 2
 									;[Block]
 									it2.Items = CreateItem("Night Vision Goggles", "supernvg", x, y, z)
-									it2\State = Rnd(500.0, 1000.0)
+									it2\State = Rnd(0.0, 1000.0)
 									;[End Block]
 								Case 3
 									;[Block]
 									it2.Items = CreateItem("SCRAMBLE Gear", "scramble", x, y, z)
-									it2\State = Rnd(500.0, 1000.0)
+									it2\State = Rnd(0.0, 1000.0)
 									;[End Block]
 							End Select
 							;[End Block]
@@ -10932,7 +10929,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 				Case ONETOONE
 					;[Block]
 					it2.Items = CreateItem("S-NAV Navigator", "nav", x, y, z)
-					it2\State = Rnd(50.0, 100.0)
+					it2\State = Rnd(0.0, 100.0)
 					;[End Block]
 				Case FINE
 					;[Block]
@@ -10940,7 +10937,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 						it2.Items = CreateItem("S-NAV 300 Navigator", "nav300", x, y, z)
 					Else
 						it2.Items = CreateItem("S-NAV 310 Navigator", "nav310", x, y, z)
-						it2\State = Rnd(50.0, 100.0)
+						it2\State = Rnd(0.0, 100.0)
 					EndIf
 					;[End Block]
 				Case VERYFINE
@@ -10959,7 +10956,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 				Case ONETOONE
 					;[Block]
 					it2.Items = CreateItem("Radio Transceiver", "18vradio", x, y, z)
-					it2\State = Rnd(50.0, 100.0)
+					it2\State = Rnd(0.0, 100.0)
 					;[End Block]
 				Case FINE
 					;[Block]
