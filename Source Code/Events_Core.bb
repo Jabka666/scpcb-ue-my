@@ -5485,7 +5485,7 @@ Function UpdateEvents()
 					e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 					e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[2], e\room\RoomDoors[3], e\room\Objects[2], e\room\Objects[3], e)
 					
-					If EntityY(me\Collider) < -4600.0 * RoomScale Then
+					If EntityY(me\Collider) < (-4600.0) * RoomScale Then
 						GiveAchievement(Achv939)
 						
 						If wi\GasMask = 0 Then me\BlurTimer = Min(me\BlurTimer + (fps\FPSFactor[0] * 1.05), 1000.0)
@@ -6250,7 +6250,7 @@ Function UpdateEvents()
 			Case e_room049
 				;[Block]
 				If PlayerRoom = e\room Then
-					If EntityY(me\Collider) > -2848.0 * RoomScale Then
+					If EntityY(me\Collider) > (-2848.0) * RoomScale Then
 						e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 						e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[2], e\room\RoomDoors[3], e\room\Objects[2], e\room\Objects[3], e)
 					Else
@@ -6477,7 +6477,7 @@ Function UpdateEvents()
 			Case e_room079
 				;[Block]
 				If PlayerRoom = e\room Then
-					If EntityY(me\Collider) < -9500.0 * RoomScale Then
+					If EntityY(me\Collider) < (-9500.0) * RoomScale Then
 						If e\EventState = 0.0 Then
 							e\room\NPC[0] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True) + 0.5, EntityZ(e\room\Objects[2], True))
 							e\room\NPC[0]\State = 8.0
@@ -6576,16 +6576,16 @@ Function UpdateEvents()
 					If (Not ChannelPlaying(e\SoundCHN3)) Then e\SoundCHN3 = PlaySound_Strict(RadioStatic)   
 				EndIf
 				
-				If e\room\NPC[0] = Null Then
-					TFormPoint(1088.0, -5900.0, 1728.0, e\room\OBJ, 0)
-					e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
-					e\room\NPC[0]\HideFromNVG = True
-					TurnEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
-				EndIf
-				
-				If PlayerRoom = e\room Then 
+				If PlayerRoom = e\room Then
+					If e\room\NPC[0] = Null Then
+						TFormPoint(1088.0, -5900.0, 1728.0, e\room\OBJ, 0)
+						e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
+						e\room\NPC[0]\HideFromNVG = True
+						TurnEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
+					EndIf
+					
 					If e\room\NPC[0] <> Null Then
-						If EntityY(me\Collider) < -6900.0 * RoomScale
+						If EntityY(me\Collider) < (-6900.0) * RoomScale
 							ShouldPlay = 26
 							
 							e\room\NPC[0]\State = 6.0
@@ -7589,7 +7589,7 @@ Function UpdateEvents()
 			Case e_room008
 				;[Block]
 				If PlayerRoom = e\room Then	
-					If EntityY(me\Collider) < -4496.0 * RoomScale Then
+					If EntityY(me\Collider) < (-4496.0) * RoomScale Then
 						GiveAchievement(Achv008)
 						If e\EventState = 0.0 Then					
 							If Curr173\Idle < 2 And EntityDistanceSquared(Curr173\Collider, me\Collider) > PowTwo(HideDistance) ; ~ Just making sure that SCP-173 is far away enough to spawn him to this room
@@ -8732,9 +8732,7 @@ Function UpdateEvents()
 											EndIf
 										EndIf
 									Else
-										If e\room\NPC[0]\Frame >= 1118.0 Then
-											e\room\NPC[0]\PathTimer = 1.0
-										EndIf
+										If e\room\NPC[0]\Frame >= 1118.0 Then e\room\NPC[0]\PathTimer = 1.0
 									EndIf
 								EndIf
 							Else
@@ -9083,9 +9081,9 @@ Function UpdateEvents()
 				;[Block]
 				If e\EventState = 0.0 Then
 					e\room\NPC[0] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True) + 0.5, EntityZ(e\room\Objects[1], True))
-					RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
-					SetNPCFrame(e\room\NPC[0], 286.0)
 					e\room\NPC[0]\State = 8.0
+					SetNPCFrame(e\room\NPC[0], 286.0)
+					RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
 					
 					e\EventState = 1.0
 				EndIf

@@ -12304,15 +12304,9 @@ Function CheckForPlayerInFacility()
 	; ~ True (= 1): Player is in facility
 	; ~ 2: Player is in tunnels (maintenance tunnels / SCP-049's tunnels / SCP-939's storage room, etc...)
 	
-	If EntityY(me\Collider) > 100.0
-		Return(0)
-	EndIf
-	If EntityY(me\Collider) < -10.0
-		Return(2)
-	EndIf
-	If EntityY(me\Collider) > 7.0 And EntityY(me\Collider) =< 100.0
-		Return(2)
-	EndIf
+	If EntityY(me\Collider) > 100.0 Then Return(0)
+	If EntityY(me\Collider) < -10.0 Then Return(2)
+	If EntityY(me\Collider) > 7.0 And EntityY(me\Collider) =< 100.0 Then Return(2)
 	Return(1)
 End Function
 
