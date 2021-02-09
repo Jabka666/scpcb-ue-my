@@ -2068,7 +2068,7 @@ Function LoadGameQuick(File$)
 	CatchErrors("LoadGameQuick")
 End Function
 
-Function LoadSaveGames()
+Function LoadSavedGames()
 	CatchErrors("Uncaught (LoadSaveGames)")
 	
 	Local i%, myDir%, File$, j%
@@ -2133,6 +2133,8 @@ Function LoadSaveGames()
 	CatchErrors("LoadSaveGames")
 End Function
 
+Const MapCreatorPath$ = "Map Creator\Maps\"
+
 Function LoadSavedMaps()
 	CatchErrors("Uncaught (LoadSavedMaps)")
 	
@@ -2149,7 +2151,7 @@ Function LoadSavedMaps()
 		File = NextFile(Dir)
 		
 		If File = "" Then Exit
-		If FileType(CurrentDir() + "Map Creator\Maps\" + File) = 1 Then 
+		If FileType(CurrentDir() + MapCreatorPath + File) = 1 Then 
 			If File <> "." And File <> ".." Then
 				If Right(File, 6) = "cbmap2" Lor Right(File, 5) = "cbmap" Then
 					SavedMapsAmount = SavedMapsAmount + 1
@@ -2168,12 +2170,12 @@ Function LoadSavedMaps()
 		File = NextFile(Dir)
 		
 		If File = "" Then Exit
-		If FileType(CurrentDir() + "Map Creator\Maps\" + File) = 1 Then 
+		If FileType(CurrentDir() + MapCreatorPath + File) = 1 Then 
 			If File <> "." And File <> ".." Then
 				If Right(File, 6) = "cbmap2" Lor Right(File, 5) = "cbmap" Then
 					SavedMaps(i) = File
 					If Right(File, 6) = "cbmap2" Then
-						Local f% = ReadFile("Map Creator\Maps\" + File)
+						Local f% = ReadFile(MapCreatorPath + File)
 						
 						SavedMapsAuthor(i) = ReadLine(f)
 						CloseFile(f)

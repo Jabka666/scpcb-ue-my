@@ -89,7 +89,7 @@ Dim SavedMapsAuthor$(SavedMapsAmount + 1)
 
 Global SelectedMap$
 
-LoadSaveGames()
+LoadSavedGames()
 
 Const VersionNumber$ = "1.0.0"
 
@@ -271,7 +271,7 @@ Function UpdateMainMenu()
 						;[Block]
 						Txt = "LOAD GAME"
 						If Temp Then
-							LoadSaveGames()
+							LoadSavedGames()
 							mm\MainMenuTab = MainMenuTab_Load_Game
 						EndIf
 						;[End Block]
@@ -463,20 +463,20 @@ Function UpdateMainMenu()
 					Height = 296 * MenuScale
 					
 					If mm\CurrLoadGamePage < Ceil(Float(SaveGameAmount) / 5.0) - 1 And SaveMSG = "" Then 
-						If DrawButton(x + Width - (50 * MenuScale), y + (450 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">") Then
+						If DrawButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">") Then
 							mm\CurrLoadGamePage = mm\CurrLoadGamePage + 1
 							mm\ShouldDeleteGadgets = True
 						EndIf
 					Else
-						DrawButton(x + Width - (50 * MenuScale), y + (450 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">", True, False, True)
+						DrawButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">", True, False, True)
 					EndIf
 					If mm\CurrLoadGamePage > 0 And SaveMSG = "" Then
-						If DrawButton(x, y + (450 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<") Then
+						If DrawButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<") Then
 							mm\CurrLoadGamePage = mm\CurrLoadGamePage - 1
 							mm\ShouldDeleteGadgets = True
 						EndIf
 					Else
-						DrawButton(x, y + (450 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<", True, False, True)
+						DrawButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<", True, False, True)
 					EndIf
 					
 					If mm\CurrLoadGamePage > Ceil(Float(SaveGameAmount) / 5.0) - 1 Then
@@ -531,7 +531,7 @@ Function UpdateMainMenu()
 								DeleteFile(CurrentDir() + SavePath + SaveMSG + "\save.cb")
 								DeleteDir(CurrentDir() + SavePath + SaveMSG)
 								SaveMSG = ""
-								LoadSaveGames()
+								LoadSavedGames()
 								mm\ShouldDeleteGadgets = True
 							EndIf
 							If DrawButton(x + (250 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, "No", False) Then
@@ -827,20 +827,20 @@ Function UpdateMainMenu()
 						Height = 340 * MenuScale
 						
 						If mm\CurrLoadGamePage = 0 Then 
-							If DrawButton(x - (310 * MenuScale) + Width - (30 * MenuScale), y + Height + (15 * MenuScale), 30 * MenuScale, 30 * MenuScale, ">", False) Then
+							If DrawButton(x - (310 * MenuScale) + Width - (30 * MenuScale), y + Height + (5 * MenuScale), 30 * MenuScale, 30 * MenuScale, ">", False) Then
 								mm\CurrLoadGamePage = mm\CurrLoadGamePage + 1
 								mm\ShouldDeleteGadgets = True
 							EndIf
 						Else
-							DrawButton(x - (310 * MenuScale) + Width - (30 * MenuScale), y + Height + (15 * MenuScale), 30 * MenuScale, 30 * MenuScale, ">", False, False, True)
+							DrawButton(x - (310 * MenuScale) + Width - (30 * MenuScale), y + Height + (5 * MenuScale), 30 * MenuScale, 30 * MenuScale, ">", False, False, True)
 						EndIf
 						If mm\CurrLoadGamePage = 1 Then
-							If DrawButton(x - (310 * MenuScale), y + Height + (15 * MenuScale), 30 * MenuScale, 30 * MenuScale, "<", False) Then
+							If DrawButton(x - (310 * MenuScale), y + Height + (5 * MenuScale), 30 * MenuScale, 30 * MenuScale, "<", False) Then
 								mm\CurrLoadGamePage = mm\CurrLoadGamePage - 1
 								mm\ShouldDeleteGadgets = True
 							EndIf
 						Else
-							DrawButton(x - (310 * MenuScale), y + Height + (15 * MenuScale), 30 * MenuScale, 30 * MenuScale, "<", False, False, True)
+							DrawButton(x - (310 * MenuScale), y + Height + (5 * MenuScale), 30 * MenuScale, 30 * MenuScale, "<", False, False, True)
 						EndIf
 						
 						If mm\CurrLoadGamePage = 0 Then
@@ -966,20 +966,20 @@ Function UpdateMainMenu()
 					Height = 350 * MenuScale
 					
 					If mm\CurrLoadGamePage < Ceil(Float(SavedMapsAmount) / 5.0) - 1 Then 
-						If DrawButton(x + Width - (50 * MenuScale), y + (450 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">") Then
+						If DrawButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">") Then
 							mm\CurrLoadGamePage = mm\CurrLoadGamePage + 1
 							mm\ShouldDeleteGadgets = True
 						EndIf
 					Else
-						DrawButton(x + Width - (50 * MenuScale), y + (450 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">", True, False, True)
+						DrawButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">", True, False, True)
 					EndIf
 					If mm\CurrLoadGamePage > 0 Then
-						If DrawButton(x, y + (450 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<") Then
+						If DrawButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<") Then
 							mm\CurrLoadGamePage = mm\CurrLoadGamePage - 1
 							mm\ShouldDeleteGadgets = True
 						EndIf
 					Else
-						DrawButton(x, y + (450 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<", True, False, True)
+						DrawButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<", True, False, True)
 					EndIf
 					
 					If mm\CurrLoadGamePage > Ceil(Float(SavedMapsAmount) / 5.0) - 1 Then
@@ -987,21 +987,47 @@ Function UpdateMainMenu()
 						mm\ShouldDeleteGadgets = True
 					EndIf
 					
-					If SavedMaps(0) <> "" Then 
+					If SavedMapsAmount > 0 Then 
 						x = x + (20 * MenuScale)
 						y = y + (20 * MenuScale)
 						For i = (1 + (5 * mm\CurrLoadGamePage)) To 5 + (5 * mm\CurrLoadGamePage)
 							If i =< SavedMapsAmount Then
-								If DrawButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Load", False) Then
-									SelectedMap = SavedMaps(i - 1)
-									mm\MainMenuTab = MainMenuTab_New_Game
-									mm\ShouldDeleteGadgets = True
+								If SaveMSG = "" Then
+									If DrawButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Load", False) Then
+										SelectedMap = SavedMaps(i - 1)
+										mm\MainMenuTab = MainMenuTab_New_Game
+										mm\ShouldDeleteGadgets = True
+									EndIf
+									
+									If DrawButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Delete", False) Then
+										SaveMSG = SavedMaps(i - 1)
+										Exit
+									EndIf
+								Else
+									DrawButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Load", False, False, True)
+									DrawButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Delete", False, False, True)
 								EndIf
 								y = y + (80 * MenuScale)
 							Else
 								Exit
 							EndIf
 						Next
+						
+						If SaveMSG <> "" Then
+							x = 740 * MenuScale
+							y = 376 * MenuScale
+							
+							If DrawButton(x + (50 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Yes", False) Then
+								DeleteFile(CurrentDir() + MapCreatorPath + SaveMSG)
+								SaveMSG = ""
+								LoadSavedMaps()
+								mm\ShouldDeleteGadgets = True
+							EndIf
+							If DrawButton(x + (250 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, "No", False) Then
+								SaveMSG = ""
+								mm\ShouldDeleteGadgets = True
+							EndIf
+						EndIf
 					EndIf
 					;[End Block]
 			End Select
@@ -1262,9 +1288,9 @@ Function RenderMainMenu()
 				
 				SetFont(fo\FontID[Font_Default_Big])
 				
-				DrawFrame(x + (70 * MenuScale), y + (450 * MenuScale), Width - (140 * MenuScale), 50 * MenuScale)
+				DrawFrame(x + (60 * MenuScale), y + (440 * MenuScale), Width - (120 * MenuScale), 50 * MenuScale)
 				
-				Text(x + (Width / 2), y + (475 * MenuScale), "Page " + Int(Max((mm\CurrLoadGamePage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SaveGameAmount) / 5.0))), 1)), True, True)
+				Text(x + (Width / 2), y + (465 * MenuScale), "Page " + Int(Max((mm\CurrLoadGamePage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SaveGameAmount) / 5.0))), 1)), True, True)
 				
 				SetFont(fo\FontID[Font_Default])
 				
@@ -1558,9 +1584,9 @@ Function RenderMainMenu()
 					
 					DrawFrame(x - (20 * MenuScale), y, Width, Height)	
 					
-					DrawFrame(x + (25 * MenuScale), y + Height + (15 * MenuScale), Width - (90 * MenuScale), 30 * MenuScale)	
+					DrawFrame(x + (15 * MenuScale), y + Height + (5 * MenuScale), Width - (70 * MenuScale), 30 * MenuScale)	
 					
-					Text(x + (Width / 2), y + Height + (30 * MenuScale), "Page " + Int(Max((mm\CurrLoadGamePage + 1), 1)) + "/2", True, True)
+					Text(x + (Width / 2), y + Height + (20 * MenuScale), "Page " + Int(Max((mm\CurrLoadGamePage + 1), 1)) + "/2", True, True)
 					
 					If mm\CurrLoadGamePage = 0 Then
 						y = y + (20 * MenuScale)
@@ -1746,13 +1772,13 @@ Function RenderMainMenu()
 				tW = 400 * MenuScale
 				tH = 150 * MenuScale
 				
-				DrawFrame(x + (70 * MenuScale), y + (450 * MenuScale), Width - (140 * MenuScale), 50 * MenuScale)
+				DrawFrame(x + (60 * MenuScale), y + (440 * MenuScale), Width - (120 * MenuScale), 50 * MenuScale)
 				
-				Text(x + (Width / 2), y + (475 * MenuScale), "Page " + Int(Max((mm\CurrLoadGamePage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SavedMapsAmount) / 5.0))), 1)), True, True)
+				Text(x + (Width / 2), y + (465 * MenuScale), "Page " + Int(Max((mm\CurrLoadGamePage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SavedMapsAmount) / 5.0))), 1)), True, True)
 				
 				SetFont(fo\FontID[Font_Default])
 				
-				If SavedMaps(0) = "" Then 
+				If SavedMapsAmount = 0 Then
 					Text(x + (20 * MenuScale), y + (20 * MenuScale), "No saved maps. Use the Map Creator to create new maps.")
 				Else
 					x = x + (20 * MenuScale)
@@ -1761,10 +1787,14 @@ Function RenderMainMenu()
 						If i =< SavedMapsAmount Then
 							DrawFrame(x, y, 540 * MenuScale, 70 * MenuScale)
 							
-							Text(x + (20 * MenuScale), y + (10 * MenuScale), SavedMaps(i - 1))
-							Text(x + (20 * MenuScale), y + (37 * MenuScale), SavedMapsAuthor(i - 1))
+							If Len(SavedMaps(i - 1)) > 20 Then
+								Text(x + (20 * MenuScale), y + (15 * MenuScale), Left(SavedMaps(i - 1), 19) + "...")
+							Else
+								Text(x + (20 * MenuScale), y + (15 * MenuScale), SavedMaps(i - 1))
+							EndIf
+							Text(x + (20 * MenuScale), y + (45 * MenuScale), SavedMapsAuthor(i - 1))
 							
-							If MouseOn(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale)
+							If MouseOn(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale) Lor MouseOn(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale)
 								DrawMapCreatorTooltip(tX, tY, tW, tH, SavedMaps(i - 1))
 							EndIf
 							y = y + (80 * MenuScale)
@@ -1772,6 +1802,13 @@ Function RenderMainMenu()
 							Exit
 						EndIf
 					Next
+					
+					If SaveMSG <> "" Then
+						x = 740 * MenuScale
+						y = 376 * MenuScale
+						DrawFrame(x, y, 420 * MenuScale, 200 * MenuScale)
+						RowText("Are you sure you want to delete this map?", x + (20 * MenuScale), y + (15 * MenuScale), 400 * MenuScale, 200 * MenuScale)
+					EndIf
 				EndIf
 				;[End Block]
 		End Select

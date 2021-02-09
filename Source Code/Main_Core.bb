@@ -3801,7 +3801,7 @@ Function Kill(IsBloody% = False)
 		If SelectedDifficulty\SaveType = NOSAVES Then
 			DeleteFile(CurrentDir() + SavePath + CurrSave + "\save.cb") 
 			DeleteDir(SavePath + CurrSave) 
-			LoadSaveGames()
+			LoadSavedGames()
 		EndIf
 		
 		me\KillTimer = Min(-1.0, me\KillTimer)
