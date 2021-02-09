@@ -3107,10 +3107,7 @@ Function FillRoom(r.Rooms)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
-			r\Objects[4] = LoadMesh_Strict("GFX\map\room012_3.b3d")
-			Tex = LoadTexture_Strict("GFX\map\textures\scp-012_0.png")
-			EntityTexture(r\Objects[4], Tex, 0, 1)
-			DeleteSingleTextureEntryFromCache(Tex)
+			r\Objects[4] = LoadMesh_Strict("GFX\map\Props\012.b3d")
 			ScaleEntity(r\Objects[4], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[4], r\x - 360.0 * RoomScale, r\y - 130.0 * RoomScale, r\z + 456.0 * RoomScale)
 			EntityParent(r\Objects[4], r\Objects[2])
