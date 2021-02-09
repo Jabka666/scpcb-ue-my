@@ -1240,7 +1240,7 @@ Function UpdateNPCs()
 													TurnEntity(Pvt, 90.0, 0.0, 0.0)
 													EntityPick(Pvt, 0.3)
 													
-													de.Decals = CreateDecal(Rand(15, 16), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rand(360.0), 0.0, Rnd(0.2, 0.6))
+													de.Decals = CreateDecal(Rand(16, 17), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rand(360.0), 0.0, Rnd(0.2, 0.6))
 												Next
 												FreeEntity(Pvt)
 											EndIf
@@ -2287,7 +2287,7 @@ Function UpdateNPCs()
 						AnimateNPC(n, 245.0, 248.0, 0.35)
 						If n\Reload = 0.0 Then
 							PlaySound2(GunshotSFX, Camera, n\Collider, 15.0)
-							p.Particles = CreateParticle(EntityX(n\OBJ, True), EntityY(n\OBJ, True), EntityZ(n\OBJ, True), 1, 0.2, 0.0, 5.0)
+							p.Particles = CreateParticle(EntityX(n\OBJ, True), EntityY(n\OBJ, True), EntityZ(n\OBJ, True), 2, 0.2, 0.0, 5.0)
 							PositionEntity(p\Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 							RotateEntity(p\Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
 							MoveEntity(p\Pvt, 0.8 * 0.079, 10.75 * 0.079, 6.9 * 0.079)
@@ -3846,7 +3846,7 @@ Function UpdateNPCs()
 									PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 									MoveEntity(Pvt, 0.8 * 0.079, 10.75 * 0.079, 6.9 * 0.079)
 									
-									p.Particles = CreateParticle(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 1, Rnd(0.08, 0.1), 0.0, 5.0)
+									p.Particles = CreateParticle(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 2, Rnd(0.08, 0.1), 0.0, 5.0)
 									p\Achange = -0.15
 									TurnEntity(p\OBJ, 0.0, 0.0, Rnd(360.0))
 									
@@ -4004,7 +4004,7 @@ Function UpdateNPCs()
 											PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 											MoveEntity(Pvt, 0.8 * 0.079, 10.75 * 0.079, 6.9 * 0.079)
 											
-											p.Particles = CreateParticle(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 1, Rnd(0.08, 0.1), 0.0, 5.0)
+											p.Particles = CreateParticle(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 2, Rnd(0.08, 0.1), 0.0, 5.0)
 											p\Achange = -0.15
 											TurnEntity(p\OBJ, 0.0, 0.0, Rnd(360.0))
 											
@@ -6786,7 +6786,7 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 	Local p.Particles, de.Decals, n.NPCs
 	Local Pvt%, ShotMessageUpdate$, i%
 	
-	p.Particles = CreateParticle(x, y, z, 1, Rnd(0.08, 0.1), 0.0, 5.0)
+	p.Particles = CreateParticle(x, y, z, 2, Rnd(0.08, 0.1), 0.0, 5.0)
 	p\Achange = -0.15
 	TurnEntity(p\OBJ, 0.0, 0.0, Rnd(360.0))
 	
@@ -6855,7 +6855,7 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 			CreateMsg(ShotMessageUpdate, 6.0)
 		EndIf
 		
-		If me\Injuries >= 10.0 Then Kill(True)
+		If me\Injuries >= 6.0 Then Kill(True)
 		
 		PlaySound_Strict(BulletHitSFX)
 	ElseIf Particles And opt\ParticleAmount > 0
@@ -6880,7 +6880,7 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 					RotateEntity(p\Pvt, EntityPitch(Pvt) + Rnd(170.0, 190.0), EntityYaw(Pvt) + Rnd(-10.0, 10.0), 0)	
 				Next
 				
-				de.Decals = CreateDecal(Rand(13, 14), PickedX(), PickedY() + Rnd(-0.05, 0.05), PickedZ(), Rnd(-4.0, 4.0), Rnd(-4.0, 4.0), Rnd(-4.0, 4.0), Rnd(0.028, 0.034), 1.0, 1, 2)
+				de.Decals = CreateDecal(Rand(14, 15), PickedX(), PickedY() + Rnd(-0.05, 0.05), PickedZ(), Rnd(-4.0, 4.0), Rnd(-4.0, 4.0), Rnd(-4.0, 4.0), Rnd(0.028, 0.034), 1.0, 1, 2)
 				de\LifeTime = 70.0 * 20.0
 				AlignToVector(de\OBJ, -PickedNX(), -PickedNY(), -PickedNZ(), 3)
 				MoveEntity(de\OBJ, 0.0, 0.0, -0.001)

@@ -1710,9 +1710,9 @@ Function FillRoom(r.Rooms)
 			For i = 0 To 5
 				de.Decals = CreateDecal(Rand(2, 3), r\x + Rnd(-392.0, 520.0) * RoomScale, r\y + 3.0 * RoomScale + Rnd(0, 0.001), r\z + Rnd(-392.0, 520.0) * RoomScale, 90.0, Rnd(360.0), 0.0, Rnd(0.3, 0.6))
 				EntityParent(de\OBJ, r\OBJ)
-				de.Decals = CreateDecal(Rand(15, 16), r\x + Rnd(-392.0, 520.0) * RoomScale, r\y + 3.0 * RoomScale + Rnd(0, 0.001), r\z + Rnd(-392.0, 520.0) * RoomScale, 90.0, Rnd(360.0), 0.0, Rnd(0.1, 0.6))
+				de.Decals = CreateDecal(Rand(16, 17), r\x + Rnd(-392.0, 520.0) * RoomScale, r\y + 3.0 * RoomScale + Rnd(0, 0.001), r\z + Rnd(-392.0, 520.0) * RoomScale, 90.0, Rnd(360.0), 0.0, Rnd(0.1, 0.6))
 				EntityParent(de\OBJ, r\OBJ)
-				de.Decals = CreateDecal(Rand(15, 16), r\x + Rnd(-0.5, 0.5), r\y + 3.0 * RoomScale + Rnd(0, 0.001), r\z + Rnd(-0.5, 0.5), 90.0, Rnd(360.0), 0.0, Rnd(0.1, 0.6))
+				de.Decals = CreateDecal(Rand(16, 17), r\x + Rnd(-0.5, 0.5), r\y + 3.0 * RoomScale + Rnd(0, 0.001), r\z + Rnd(-0.5, 0.5), 90.0, Rnd(360.0), 0.0, Rnd(0.1, 0.6))
 				EntityParent(de\OBJ, r\OBJ)
 			Next
 			;[End Block]
@@ -3721,7 +3721,7 @@ Function FillRoom(r.Rooms)
 						zTemp = 636.0
 						;[End Block]
 				End Select
-				de.Decals = CreateDecal(Rand(15, 16), r\x + xTemp * RoomScale, r\y + 0.005, r\z + zTemp * RoomScale, 90.0, Rand(360.0), 0.0, ((i =< 10) * Rnd(0.2, 0.25)) + ((i > 10) * Rnd(0.1, 0.17)))
+				de.Decals = CreateDecal(Rand(16, 17), r\x + xTemp * RoomScale, r\y + 0.005, r\z + zTemp * RoomScale, 90.0, Rand(360.0), 0.0, ((i =< 10) * Rnd(0.2, 0.25)) + ((i > 10) * Rnd(0.1, 0.17)))
 				EntityParent(de\OBJ, r\OBJ)
 			Next
 			
@@ -4597,7 +4597,7 @@ Function FillRoom(r.Rooms)
 			EntityPickMode(Terrain, 3)
 			PositionEntity(Terrain, r\x, r\y + 2944.0 * RoomScale, r\z + 32.0, True)			
 			
-			de.Decals = CreateDecal(18, r\x - (1536.0 * RoomScale), r\y + 0.02, r\z + 608.0 * RoomScale + 32.0, 90.0, 0.0, 0.0, 0.8, 1.0, 1 + 8, 2)
+			de.Decals = CreateDecal(13, r\x - (1536.0 * RoomScale), r\y + 0.02, r\z + 608.0 * RoomScale + 32.0, 90.0, 0.0, 0.0, 0.8, 1.0, 1 + 8, 2)
 			
 			ScaleEntity(r\Objects[10], RoomScale * 1.5, RoomScale * 2.0, RoomScale * 1.5, True)			
 			PositionEntity(r\Objects[11], r\x, r\y, r\z + 64.0, True)	
@@ -7642,15 +7642,15 @@ Function UpdateCheckpointMonitors(LCZ% = True)
 				If Lower(Name) <> "monitor_overlay.png"
 					If LCZ Then
 						If MonitorTimer < 50.0 Then
-							BrushTexture(b, tt\MonitorTextureID[1], 0, 0)
+							BrushTexture(b, tt\MonitorTextureID[2], 0, 0)
 						Else
 							BrushTexture(b, tt\MonitorTextureID[3], 0, 0)
 						EndIf
 					Else
 						If MonitorTimer2 < 50.0
-							BrushTexture(b, tt\MonitorTextureID[1], 0, 0)
-						Else
 							BrushTexture(b, tt\MonitorTextureID[2], 0, 0)
+						Else
+							BrushTexture(b, tt\MonitorTextureID[1], 0, 0)
 						EndIf
 					EndIf
 					PaintSurface(SF, b)

@@ -8,19 +8,19 @@ Type Particles
 	Field LifeTime#
 End Type 
 
-Function CreateParticle.Particles(x#, y#, z#, Image%, Size#, Gravity# = 1.0, LifeTime# = 200.0)
+Function CreateParticle.Particles(x#, y#, z#, ID%, Size#, Gravity# = 1.0, LifeTime# = 200.0)
 	Local p.Particles
 	
 	p.Particles = New Particles
 	p\OBJ = CreateSprite()
 	PositionEntity(p\OBJ, x, y, z, True)
-	EntityTexture(p\OBJ, tt\ParticleTextureID[Image])
+	EntityTexture(p\OBJ, tt\ParticleTextureID[ID])
 	RotateEntity(p\OBJ, 0.0, 0.0, Rnd(360.0))
 	EntityFX(p\OBJ, 1 + 8)
 	
 	SpriteViewMode (p\OBJ, 3)
 	
-	Select Image
+	Select ID
 		Case 0, 5, 6
 			;[Block]
 			EntityBlend(p\OBJ, 1)
@@ -34,12 +34,13 @@ Function CreateParticle.Particles(x#, y#, z#, Image%, Size#, Gravity# = 1.0, Lif
 	p\Pvt = CreatePivot()
 	PositionEntity(p\Pvt, x, y, z, True)
 	
-	p\Image = Image
+	p\Image = ID
 	p\LifeTime = LifeTime
 	p\Gravity = Gravity * 0.004
 	p\A = 1.0
 	p\Size = Size
 	ScaleSprite(p\OBJ, p\Size, p\Size)
+	
 	Return(p)
 End Function
 	

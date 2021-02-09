@@ -200,7 +200,7 @@ fo\FontID[Font_Console] = LoadFont_Strict("GFX\fonts\Andale\Andale Mono.ttf", 16
 
 SetFont(fo\FontID[Font_Default_Big])
 
-Global BlinkMeterIMG% = LoadImage_Strict("GFX\blink_meter.png")
+Global BlinkMeterIMG% = LoadImage_Strict("GFX\blink_meter(1).png")
 
 DrawLoading(0, True)
 
@@ -2345,7 +2345,7 @@ Function UpdateDoors()
 										PositionEntity(Pvt, EntityX(d\FrameOBJ, True) + Rnd(-0.2, 0.2), EntityY(d\FrameOBJ, True) + Rnd(0.0, 1.2), EntityZ(d\FrameOBJ, True) + Rnd(-0.2, 0.2))
 										RotateEntity(Pvt, 0.0, Rnd(360.0), 0.0)
 										
-										p.Particles = CreateParticle(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 2, 0.002, 0.0, 300.0)
+										p.Particles = CreateParticle(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 3, 0.002, 0.0, 300.0)
 										p\Speed = 0.005 : p\SizeChange = -0.00001 : p\Size = 0.01 : p\Achange = -0.01
 										RotateEntity(p\Pvt, Rnd(-20.0, 20.0), Rnd(360.0), 0.0)
 										ScaleSprite(p\OBJ, p\Size, p\Size)
@@ -4481,7 +4481,7 @@ Function MovePlayer()
 			TurnEntity(Pvt, 90.0, 0.0, 0.0)
 			EntityPick(Pvt, 0.3)
 			
-			de.Decals = CreateDecal(Rand(15, 16), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rand(360.0), 0.0, Rnd(0.03, 0.08) * Min(me\Injuries, 3.0))
+			de.Decals = CreateDecal(Rand(16, 17), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rand(360.0), 0.0, Rnd(0.03, 0.08) * Min(me\Injuries, 3.0))
 			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + 0.009 
 			TempCHN = PlaySound_Strict(DripSFX[Rand(0, 2)])
 			ChannelVolume(TempCHN, Rnd(0.0, 0.8) * opt\SFXVolume)
@@ -4540,6 +4540,7 @@ Function StopMouseMovement()
 End Function
 
 Function MouseLook()
+	Local p.Particles
 	Local i%
 	
 	me\CameraShake = Max(me\CameraShake - (fps\FPSFactor[0] / 10.0), 0.0)
@@ -4628,8 +4629,7 @@ Function MouseLook()
 				MoveEntity(Pvt, 0.0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
 			EndIf
 			
-			Local p.Particles = CreateParticle(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 2, 0.002, 0.0, 300.0)
-			
+			p.Particles = CreateParticle(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 3, 0.002, 0.0, 300.0)
 			p\Speed = 0.001 : p\SizeChange = -0.00001
 			RotateEntity(p\Pvt, Rnd(-20.0, 20.0), Rnd(360.0), 0.0)
 			FreeEntity(Pvt)
@@ -8950,10 +8950,11 @@ Function LoadEntities()
 	ScaleImage(tt\ImageID[0], MenuScale, MenuScale)
 	
 	If (Not opt\SmoothHUD) Then
-		tt\ImageID[1] = LoadImage_Strict("GFX\blink_meter_red.png")
+		tt\ImageID[1] = LoadImage_Strict("GFX\blink_meter(2).png")
 		
-		tt\ImageID[2] = LoadImage_Strict("GFX\stamina_meter.png")
-		tt\ImageID[3] = LoadImage_Strict("GFX\stamina_meter_red.png")
+		For i = 2 To 3
+			tt\ImageID[i] = LoadImage_Strict("GFX\stamina_meter(" + (i - 1) + ").png")
+		Next
 	EndIf
 	
 	tt\ImageID[4] = LoadImage_Strict("GFX\keypad_HUD.png")
@@ -8979,8 +8980,9 @@ Function LoadEntities()
 	tt\IconID[1] = LoadImage_Strict("GFX\sprint_icon.png")
 	tt\IconID[2] = LoadImage_Strict("GFX\crouch_icon.png")
 	tt\IconID[3] = LoadImage_Strict("GFX\blink_icon.png")
-	tt\IconID[4] = LoadImage_Strict("GFX\hand_symbol.png")
-	tt\IconID[5] = LoadImage_Strict("GFX\hand_symbol(2).png")
+	For i = 4 To 5
+		tt\IconID[i] = LoadImage_Strict("GFX\hand_symbol(" + (i - 3) + ").png")
+	Next
 	
 	AmbientLightRoomTex = CreateTextureUsingCacheSystem(2, 2)
 	TextureBlend(AmbientLightRoomTex, 5)
@@ -9261,21 +9263,18 @@ Function LoadEntities()
 	o\MiscModelID[0] = LoadMesh_Strict("GFX\items\cup_liquid.b3d") ; ~ Liquid for cups dispensed by SCP-294
 	HideEntity(o\MiscModelID[0])
 	
-	tt\LightSpriteID[0] = LoadTexture_Strict("GFX\light.png", 1, DeleteAllTextures)
-	tt\LightSpriteID[1] = LoadTexture_Strict("GFX\light(2).png", 1, DeleteAllTextures)
+	For i = 0 To 1
+		tt\LightSpriteID[i] = LoadTexture_Strict("GFX\light(" + (i + 1) + ").png", 1, DeleteAllTextures)
+	Next
 	tt\LightSpriteID[2] = LoadTexture_Strict("GFX\light_sprite.png", 1, DeleteAllTextures)
 	
 	DrawLoading(15)
 	
-	tt\MiscTextureID[0] = LoadTexture_Strict("GFX\scp_079_overlay.png", 1, DeleteAllTextures)
-	
-	For i = 1 To 6
+	For i = 0 To 6
 		tt\MiscTextureID[i] = LoadTexture_Strict("GFX\scp_079_overlay(" + (i + 1) + ").png", 1, DeleteAllTextures)
 	Next
 	
-	tt\MiscTextureID[7] = LoadTexture_Strict("GFX\scp_895_overlay.png", 1, DeleteAllTextures)
-	
-	For i = 8 To 12
+	For i = 7 To 12
 		tt\MiscTextureID[i] = LoadTexture_Strict("GFX\scp_895_overlay(" + (i - 6) + ").png", 1, DeleteAllTextures)
 	Next
 	
@@ -9284,32 +9283,31 @@ Function LoadEntities()
 	tt\MiscTextureID[16] = LoadTexture_Strict("GFX\map\textures\keypad.jpg", 1, DeleteAllTextures)
 	tt\MiscTextureID[17] = LoadTexture_Strict("GFX\map\textures\keypad_locked.png", 1, DeleteAllTextures)
 	
-	tt\MiscTextureID[18] = LoadTexture_Strict("GFX\map\textures\camera.png", 1, DeleteAllTextures)
-	tt\MiscTextureID[19] = LoadTexture_Strict("GFX\map\textures\camera_red.png", 1, DeleteAllTextures)
+	For i = 18 To 19
+		tt\MiscTextureID[i] = LoadTexture_Strict("GFX\map\textures\camera(" + (i - 17) + ").png", 1, DeleteAllTextures)
+	Next
 	
 	tt\MiscTextureID[20] = LoadTexture_Strict("GFX\fog_night_vision_goggles.png", 1, DeleteAllTextures) ; ~ FOG IN NIGHT VISION GOGGLES
 	
 	DrawLoading(20)
 	
-	tt\DecalTextureID[0] = LoadTexture_Strict("GFX\decal.png", 1 + 2, DeleteAllTextures)
-	For i = 1 To 7
+	For i = 0 To 7
 		tt\DecalTextureID[i] = LoadTexture_Strict("GFX\decal(" + (i + 1) + ").png", 1 + 2, DeleteAllTextures)
 	Next
 	
-	tt\DecalTextureID[8] = LoadTexture_Strict("GFX\decal_pd.png", 1 + 2, DeleteAllTextures)	
-	For i = 9 To 12
+	For i = 8 To 13
 		tt\DecalTextureID[i] = LoadTexture_Strict("GFX\decal_pd(" + (i - 7) + ").png", 1 + 2, DeleteAllTextures)	
 	Next
 	
-	tt\DecalTextureID[13] = LoadTexture_Strict("GFX\bullet_hole.png", 1 + 2, DeleteAllTextures)	
-	tt\DecalTextureID[14] = LoadTexture_Strict("GFX\bullet_hole(2).png", 1 + 2, DeleteAllTextures)	
+	For i = 14 To 15
+		tt\DecalTextureID[i] = LoadTexture_Strict("GFX\bullet_hole(" + (i - 13) + ").png", 1 + 2, DeleteAllTextures)	
+	Next
 	
-	tt\DecalTextureID[15] = LoadTexture_Strict("GFX\blood_drop.png", 1 + 2, DeleteAllTextures)
-	tt\DecalTextureID[16] = LoadTexture_Strict("GFX\blood_drop(2).png", 1 + 2, DeleteAllTextures)
+	For i = 16 To 17
+		tt\DecalTextureID[i] = LoadTexture_Strict("GFX\blood_drop(" + (i - 15) + ").png", 1 + 2, DeleteAllTextures)
+	Next
 	
-	tt\DecalTextureID[17] = LoadTexture_Strict("GFX\decal_scp_427.png", 1 + 2, DeleteAllTextures)
-	
-	tt\DecalTextureID[18] = LoadTexture_Strict("GFX\decal_pd(6).png", 1 + 2, DeleteAllTextures)	
+	tt\DecalTextureID[18] = LoadTexture_Strict("GFX\decal_scp_427.png", 1 + 2, DeleteAllTextures)
 	
 	tt\DecalTextureID[19] = LoadTexture_Strict("GFX\decal_scp_409.png", 1 + 2, DeleteAllTextures)
 	
@@ -9336,9 +9334,9 @@ Function LoadEntities()
 	Next
 	
 	tt\MonitorTextureID[0] = LoadTexture_Strict("GFX\monitor_overlay.png", 1, DeleteAllTextures)
-	tt\MonitorTextureID[1] = LoadTexture_Strict("GFX\map\textures\lockdown_screen(2).png", 1, DeleteAllTextures)
-	tt\MonitorTextureID[2] = LoadTexture_Strict("GFX\map\textures\lockdown_screen.png", 1, DeleteAllTextures)
-	tt\MonitorTextureID[3] = LoadTexture_Strict("GFX\map\textures\lockdown_screen(3).png", 1, DeleteAllTextures)
+	For i = 1 To 3
+		tt\MonitorTextureID[i] = LoadTexture_Strict("GFX\map\textures\lockdown_screen(" + i + ").png", 1, DeleteAllTextures)
+	Next
 	tt\MonitorTextureID[4] = CreateTextureUsingCacheSystem(1, 1)
 	SetBuffer(TextureBuffer(tt\MonitorTextureID[4]))
 	ClsColor(0, 0, 0)
@@ -9389,13 +9387,14 @@ Function LoadEntities()
 	
 	InitItemTemplates()
 	
-	tt\ParticleTextureID[0] = LoadTexture_Strict("GFX\smoke.png", 1 + 2, DeleteAllTextures)
-	tt\ParticleTextureID[1] = LoadTexture_Strict("GFX\flash.png", 1 + 2, DeleteAllTextures)
-	tt\ParticleTextureID[2] = LoadTexture_Strict("GFX\dust.png", 1 + 2, DeleteAllTextures)
-	tt\ParticleTextureID[3] = LoadTexture_Strict("GFX\npcs\hg.pt", 1 + 2, DeleteAllTextures)
-	tt\ParticleTextureID[4] = LoadTexture_Strict("GFX\map\textures\sun.png", 1 + 2, DeleteAllTextures)
-	tt\ParticleTextureID[5] = LoadTexture_Strict("GFX\blood_sprite.png", 1 + 2, DeleteAllTextures)
-	tt\ParticleTextureID[6] = LoadTexture_Strict("GFX\smoke(2).png", 1 + 2, DeleteAllTextures)
+	For i = 0 To 1
+		tt\ParticleTextureID[i] = LoadTexture_Strict("GFX\smoke(" + (i + 1) + ").png", 1 + 2, DeleteAllTextures)
+	Next
+	tt\ParticleTextureID[2] = LoadTexture_Strict("GFX\flash.png", 1 + 2, DeleteAllTextures)
+	tt\ParticleTextureID[3] = LoadTexture_Strict("GFX\dust.png", 1 + 2, DeleteAllTextures)
+	tt\ParticleTextureID[4] = LoadTexture_Strict("GFX\npcs\hg.pt", 1 + 2, DeleteAllTextures)
+	tt\ParticleTextureID[5] = LoadTexture_Strict("GFX\map\textures\sun.png", 1 + 2, DeleteAllTextures)
+	tt\ParticleTextureID[6] = LoadTexture_Strict("GFX\blood_sprite.png", 1 + 2, DeleteAllTextures)
 	tt\ParticleTextureID[7] = LoadTexture_Strict("GFX\spark.png", 1 + 2, DeleteAllTextures)
 	tt\ParticleTextureID[8] = LoadTexture_Strict("GFX\particle.png", 1 + 2, DeleteAllTextures)
 	
@@ -11717,7 +11716,7 @@ Function Use427()
 			PositionEntity(Pvt, EntityX(me\Collider) + Rnd(-0.05, 0.05), EntityY(me\Collider) - 0.05, EntityZ(me\Collider) + Rnd(-0.05, 0.05))
 			TurnEntity(Pvt, 90.0, 0.0, 0.0)
 			EntityPick(Pvt, 0.3)
-			de.Decals = CreateDecal(17, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rand(360.0), 0.0, Rnd(0.03, 0.08) * 2.0)
+			de.Decals = CreateDecal(18, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rand(360.0), 0.0, Rnd(0.03, 0.08) * 2.0)
 			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + 0.009 
 			TempCHN = PlaySound_Strict(DripSFX[Rand(0, 2)])
 			ChannelVolume(TempCHN, Rnd(0.0, 0.8) * opt\SFXVolume)
@@ -12084,7 +12083,7 @@ Function Update008()
 					
 					If opt\ParticleAmount > 0 Then
 						If Rand(50) = 1 Then
-							p.Particles = CreateParticle(EntityX(PlayerRoom\NPC[0]\Collider), EntityY(PlayerRoom\NPC[0]\Collider), EntityZ(PlayerRoom\NPC[0]\Collider), 5, Rnd(0.05, 0.1), 0.15, 200)
+							p.Particles = CreateParticle(EntityX(PlayerRoom\NPC[0]\Collider), EntityY(PlayerRoom\NPC[0]\Collider), EntityZ(PlayerRoom\NPC[0]\Collider), 6, Rnd(0.05, 0.1), 0.15, 200)
 							p\Speed = 0.01 : p\SizeChange = 0.01 : p\A = 0.5 : p\Achange = -0.01
 							RotateEntity(p\Pvt, Rnd(360.0), Rnd(360.0), 0.0)
 						EndIf

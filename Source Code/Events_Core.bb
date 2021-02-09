@@ -3228,7 +3228,7 @@ Function UpdateEvents()
 						If opt\ParticleAmount > 0 Then
 							If Rand(800) = 1 Then 
 								Angle = EntityYaw(Camera, True) + Rnd(150, 210)
-								p.Particles = CreateParticle(EntityX(me\Collider) + Cos(Angle) * 7.5, 0.0, EntityZ(me\Collider) + Sin(Angle) * 7.5, 3, 4.0, 0.0, 2500.0)
+								p.Particles = CreateParticle(EntityX(me\Collider) + Cos(Angle) * 7.5, 0.0, EntityZ(me\Collider) + Sin(Angle) * 7.5, 4, 4.0, 0.0, 2500.0)
 								p\Speed = 0.01 : p\SizeChange = 0.0
 								EntityBlend(p\OBJ, 2)
 								PointEntity(p\Pvt, Camera)
@@ -3851,8 +3851,9 @@ Function UpdateEvents()
 									EndIf
 								Next
 								
-								HideEntity(e\room\Objects[3])
-								HideEntity(e\room\Objects[4])
+								For i = 3 To 4
+									HideEntity(e\room\Objects[i])
+								Next
 								
 								If Rand(5) < 5 Then 
 									PositionTexture(tt\MiscTextureID[13], 0.0, Rnd(0.0, 1.0))
@@ -3873,9 +3874,9 @@ Function UpdateEvents()
 					HideEntity(e\room\Objects[4])
 				EndIf
 				
-				If e\room\NPC[0] <> Null
-					If e\EventStr = "Step1" And e\room\NPC[0]\State <> 3.0
-						If e\EventState = 0.0
+				If e\room\NPC[0] <> Null then
+					If e\EventStr = "Step1" And e\room\NPC[0]\State <> 3.0 Then
+						If e\EventState = 0.0 Then
 							For i = 0 To 2
 								If DistanceSquared(EntityX(e\room\NPC[0]\Collider), EntityX(e\room\Objects[i], True), EntityZ(e\room\NPC[0]\Collider), EntityZ(e\room\Objects[i], True)) < PowTwo(400.0 * RoomScale)
 									StopChannel(e\SoundCHN)
@@ -7652,7 +7653,7 @@ Function UpdateEvents()
 								e\EventState = 2.0
 								PlaySound_Strict(LeverSFX)
 							Else
-								p.Particles = CreateParticle(EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), 6, 0.02, -0.12)
+								p.Particles = CreateParticle(EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), 1, 0.02, -0.12)
 								p\SizeChange = 0.012 :  p\Achange = -0.015
 								RotateEntity(p\Pvt, -90.0, 0.0, 0.0, True)
 								TurnEntity(p\Pvt, Rnd(-26.0, 26.0), Rnd(-26.0, 26.0), Rnd(360.0))
@@ -8183,7 +8184,7 @@ Function UpdateEvents()
 						e\EventState = 1.0
 					EndIf
 					
-					p.Particles = CreateParticle(EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), 6, 0.2, 0.0, 10.0)
+					p.Particles = CreateParticle(EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), 1, 0.2, 0.0, 10.0)
 					p\Speed = 0.01 : p\Achange = -0.02
 					RotateEntity(p\Pvt, -60.0, e\room\Angle - 90.0, 0.0)
 					
@@ -8270,7 +8271,7 @@ Function UpdateEvents()
 											PositionEntity(Pvt, 312.0, 416.0, 224.0)
 										EndIf
 									EndIf
-									p.Particles = CreateParticle(EntityX(Pvt, True), EntityY(Pvt, True), EntityZ(Pvt, True), 6, 0.8, 0.0, 50.0)
+									p.Particles = CreateParticle(EntityX(Pvt, True), EntityY(Pvt, True), EntityZ(Pvt, True), 1, 0.8, 0.0, 50.0)
 									p\Speed = 0.025 : p\Achange = -0.02
 									RotateEntity(p\Pvt, 90.0, 0.0, 0.0)
 								Next
@@ -9830,7 +9831,7 @@ Function UpdateEndings()
 					
 					If opt\ParticleAmount > 0 Then
 						If Rand(3) = 1 Then
-							p.Particles = CreateParticle(EntityX(Camera) + Rnd(-2.0, 2.0), EntityY(Camera) + Rnd(0.9, 2.0), EntityZ(Camera) + Rnd(-2.0, 2.0), 2, 0.006, 0.0, 300.0)
+							p.Particles = CreateParticle(EntityX(Camera) + Rnd(-2.0, 2.0), EntityY(Camera) + Rnd(0.9, 2.0), EntityZ(Camera) + Rnd(-2.0, 2.0), 3, 0.006, 0.0, 300.0)
 							p\Speed = Rnd(0.002, 0.003) : p\SizeChange = -0.00001
 							RotateEntity(p\Pvt, Rnd(-20.0, 20.0), e\room\Angle - 90.0 + Rnd(-15.0, 15.0), 0.0, 0.0)
 						EndIf
@@ -10089,11 +10090,11 @@ Function UpdateEndings()
 													e\EventState2 = e\EventState2 + fps\FPSFactor[0]
 													If e\EventState2 >= 70.0 * 7.5 Then
 														If e\EventState2 - fps\FPSFactor[0] < 70.0 * 7.5 Then
-															p.Particles = CreateParticle(EntityX(Curr106\OBJ, True), EntityY(Curr106\OBJ, True) + 0.4, EntityZ(Curr106\OBJ, True), 4, 7.0, 0.0, (70.0 * 6.7))
+															p.Particles = CreateParticle(EntityX(Curr106\OBJ, True), EntityY(Curr106\OBJ, True) + 0.4, EntityZ(Curr106\OBJ, True), 5, 7.0, 0.0, (70.0 * 6.7))
 															p\Speed = 0.0 : p\A = 1.0
 															EntityParent(p\Pvt, Curr106\Collider, True)
 															
-															p.Particles = CreateParticle(EntityX(e\room\Objects[10], True), EntityY(e\room\Objects[10], True), EntityZ(e\room\Objects[10], True), 4, 2.0, 0.0, (70.0 * 6.7))
+															p.Particles = CreateParticle(EntityX(e\room\Objects[10], True), EntityY(e\room\Objects[10], True), EntityZ(e\room\Objects[10], True), 5, 2.0, 0.0, (70.0 * 6.7))
 															p\Speed = 0.0 : p\A = 1.0
 															RotateEntity(p\Pvt, EntityPitch(e\room\Objects[10], True), EntityYaw(e\room\Objects[10], True), 0.0, True)
 															MoveEntity(p\Pvt, 0.0, 92.0 * RoomScale, 512.0 * RoomScale)
@@ -10175,9 +10176,9 @@ Function UpdateEndings()
 											
 											e\SoundCHN = PlaySound2(LoadTempSound("SFX\Ending\GateA\Bell1.ogg"), Camera, e\room\Objects[12])
 											
-											p.Particles = CreateParticle(EntityX(e\room\Objects[11], True), EntityY(Camera, True), EntityZ(e\room\Objects[11], True), 4, 8.0, 0, 50)
+											p.Particles = CreateParticle(EntityX(e\room\Objects[11], True), EntityY(Camera, True), EntityZ(e\room\Objects[11], True), 5, 8.0, 0, 50)
 											p\Speed = 0.15 : p\A = 0.5
-											p.Particles = CreateParticle(EntityX(e\room\Objects[11], True), EntityY(Camera, True), EntityZ(e\room\Objects[11], True), 4, 8.0, 0, 50)
+											p.Particles = CreateParticle(EntityX(e\room\Objects[11], True), EntityY(Camera, True), EntityZ(e\room\Objects[11], True), 5, 8.0, 0, 50)
 											p\Speed = 0.25 : p\A = 0.5
 											PointEntity(p\Pvt, me\Collider)
 											
@@ -10231,9 +10232,9 @@ Function UpdateEndings()
 											
 											PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\Bell2.ogg"))
 											
-											p.Particles = CreateParticle(EntityX(e\room\Objects[11], True), EntityY(Camera, True), EntityZ(e\room\Objects[11], True), 4, 8.0, 0.0, 50.0)
+											p.Particles = CreateParticle(EntityX(e\room\Objects[11], True), EntityY(Camera, True), EntityZ(e\room\Objects[11], True), 5, 8.0, 0.0, 50.0)
 											p\Speed = 0.15 : p\A = 0.5
-											p.Particles = CreateParticle(EntityX(e\room\Objects[11], True), EntityY(Camera, True), EntityZ(e\room\Objects[11], True), 4, 8.0, 0.0, 50.0)
+											p.Particles = CreateParticle(EntityX(e\room\Objects[11], True), EntityY(Camera, True), EntityZ(e\room\Objects[11], True), 5, 8.0, 0.0, 50.0)
 											p\Speed = 0.25 : p\A = 0.5
 											
 											me\SelectedEnding = Ending_A1
