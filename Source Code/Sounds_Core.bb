@@ -101,6 +101,8 @@ Function LoadEventSound(e.Events, File$, Number% = 0)
 End Function
 
 Function LoadTempSound(File$)
+	Local TempSound%
+	
 	If TempSounds[TempSoundIndex] <> 0 Then FreeSound_Strict(TempSounds[TempSoundIndex])
 	TempSound = LoadSound_Strict(File)
 	TempSounds[TempSoundIndex] = TempSound
@@ -566,6 +568,197 @@ Function UpdateDeaf()
 	EndIf
 End Function
 
+Global SoundEmitter%
+Global TempSounds%[10]
+Global TempSoundCHN%
+Global TempSoundIndex% = 0
+
+; ~ The Music now has to be pre-defined, as the new system uses streaming instead of the usual sound loading system Blitz3D has
+Global Music$[30]
+
+Music[0] = "LightContainmentZone"
+Music[1] = "HeavyContainmentZone"
+Music[2] = "EntranceZone"
+Music[3] = "PD"
+Music[4] = "Room079"
+Music[5] = "GateB1"
+Music[6] = "GateB2"
+Music[7] = "Room3Storage"
+Music[8] = "Room049"
+Music[9] = "Room860_1"
+Music[10] = "106Chase"
+Music[11] = "Menu"
+Music[12] = "860_2Chase"
+Music[13] = "Room173Intro"
+Music[14] = "Using178"
+Music[15] = "PDTrench"
+Music[16] = "Room205"
+Music[17] = "GateA"
+Music[18] = "1499"
+Music[19] = "1499_1Chase"
+Music[20] = "049Chase"
+Music[21] = "..\Ending\MenuBreath"
+Music[22] = "Room914"
+Music[23] = "Ending"
+Music[24] = "Credits"
+Music[25] = "SaveMeFrom"
+Music[26] = "Room106"
+Music[27] = "Room035"
+Music[28] = "Room409"
+Music[29] = "MaintenanceTunnels"
+
+Global MusicCHN%
+MusicCHN = StreamSound_Strict("SFX\Music\" + Music[2] + ".ogg", opt\MusicVolume, Mode)
+
+Global NowPlaying% = 2, ShouldPlay% = 11
+Global CurrMusic% = True
+
+DrawLoading(10, True)
+
+Dim OpenDoorSFX%(3, 3), CloseDoorSFX%(3, 3)
+Global BigDoorErrorSFX%[3]
+
+Global KeyCardSFX1% 
+Global KeyCardSFX2% 
+Global ScannerSFX1%
+Global ScannerSFX2%
+
+Global OpenDoorFastSFX%
+Global CautionSFX% 
+
+Global NuclearSirenSFX%
+
+Global CameraSFX% 
+
+Global StoneDragSFX% 
+
+Global GunshotSFX% 
+Global Gunshot2SFX% 
+Global Gunshot3SFX% 
+Global BulletHitSFX% 
+
+Global TeslaIdleSFX% 
+Global TeslaActivateSFX% 
+Global TeslaPowerUpSFX% 
+Global TeslaShockSFX%
+
+Global MagnetUpSFX%, MagnetDownSFX%
+Global FemurBreakerSFX%
+Global EndBreathCHN%
+Global EndBreathSFX%
+
+Global CrouchSFX%
+
+Global DecaySFX%[5]
+
+Global BurstSFX% 
+
+DrawLoading(20, True)
+
+Global RustleSFX%[6]
+
+Global Use914SFX%
+Global Death914SFX% 
+
+Global DripSFX%[4]
+
+Global KnobSFX%[2]
+
+Global LeverSFX%, LightSFX% 
+Global ButtGhostSFX% 
+
+Dim RadioSFX%(5, 10) 
+
+Global RadioSquelch% 
+Global RadioStatic% 
+Global RadioStatic895%
+Global RadioBuzz% 
+
+Global SCRAMBLESFX%
+Global SCRAMBLECHN%
+
+Global NVGSFX%[2]
+
+Global LowBatterySFX%[2]
+Global LowBatteryCHN%[2]
+
+Global ElevatorBeepSFX%, ElevatorMoveSFX% 
+
+Global PickSFX%[4]
+
+Global AmbientSFXCHN%, CurrAmbientSFX%
+Global AmbientSFXAmount%[6]
+; ~ 0 = Light Containment Zone
+; ~ 1 = Heavy Containment Zone
+; ~ 2 = Entrance Zone
+; ~ 3 = General
+; ~ 4 = Pre-Breach
+; ~ 5 = SCP-860-1
+
+AmbientSFXAmount[0] = 8 
+AmbientSFXAmount[1] = 11
+AmbientSFXAmount[2] = 12
+AmbientSFXAmount[3] = 15 
+AmbientSFXAmount[4] = 5
+AmbientSFXAmount[5] = 10
+
+Dim AmbientSFX%(6, 15)
+
+Global OldManSFX%[9]
+
+Global Scp173SFX%[3]
+
+Global HorrorSFX%[20]
+
+Global MissSFX%
+
+DrawLoading(25, True)
+
+Global IntroSFX%[12]
+
+Global AlarmSFX%[4]
+
+Global CommotionState%[25]
+
+Global HeartBeatSFX% 
+
+Global VomitSFX%
+
+Dim BreathSFX%(2, 5)
+Global BreathCHN%
+
+Global BreathGasRelaxedSFX%
+Global BreathGasRelaxedCHN%
+
+Global NeckSnapSFX%[3]
+
+Global DamageSFX%[14]
+
+Global MTFSFX%[2]
+
+Global CoughSFX%[3]
+Global CoughCHN%, VomitCHN%
+
+Global MachineSFX% 
+Global ApacheSFX%
+
+Global CurrStepSFX%
+Dim StepSFX%(6, 2, 8) ; ~ (Normal / Metal, Walk / Run, ID)
+
+Global ExplosionSFX%
+
+Global RadioCHN%[7]
+
+Global IntercomStreamCHN%
+
+DrawLoading(30, True)
+
+Global PlayCustomMusic% = False, CustomMusic% = 0
+
+Global UserTrackCheck% = 0, UserTrackCheck2% = 0
+Global UserTrackMusicAmount% = 0, CurrUserTrack%, UserTrackFlag% = False
+Global UserTrackName$[256]
+
 Function LoadSounds()
 	Local i%
 	
@@ -683,8 +876,7 @@ Function LoadSounds()
 	Next
 	IntroSFX[11] = LoadSound_Strict("SFX\Room\Intro\173Vent.ogg")
 	
-	AlarmSFX[0] = LoadSound_Strict("SFX\Alarm\Alarm.ogg")
-	For i = 2 To 4
+	For i = 0 To 3
 		AlarmSFX[i] = LoadSound_Strict("SFX\Alarm\Alarm" + (i + 1) + ".ogg")
 	Next
 	

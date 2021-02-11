@@ -63,23 +63,6 @@ Function AngleDist#(a0#, a1#)
 	Return(bb)
 End Function
 
-Function ScaledMouseX%()
-	Return(Float(MouseX() - (opt\RealGraphicWidth * 0.5 * (1.0 - opt\AspectRatio))) * Float(opt\GraphicWidth) / Float(opt\RealGraphicWidth * opt\AspectRatio))
-End Function
-
-Function ScaledMouseY%()
-	Return(Float(MouseY()) * Float(opt\GraphicHeight) / Float(opt\RealGraphicHeight))
-End Function
-
-Function MouseOn%(x%, y%, Width%, Height%)
-	If ScaledMouseX() > x And ScaledMouseX() < x + Width Then
-		If ScaledMouseY() > y And ScaledMouseY() < y + Height Then
-			Return(True)
-		EndIf
-	EndIf
-	Return(False)
-End Function
-
 Function f2s$(n#, Count%)
 	Return(Left(n, Len(Int(n)) + Count + 1))
 End Function
@@ -121,14 +104,6 @@ Function TurnIfDeviating%(Max_Deviation_Distance_%, Pathx%, Center_%, Dir%, RetV
 	EndIf
 End Function
 
-Function ReadPixelColor%(Pixel%, Shrid%)
-	Return(Pixel Shr Shrid) And $FF
-End Function
-
-Function ResetTimingAccumulator()
-	fps\Accumulator = 0.0
-End Function
-
 Function ChangeAngleValueForCorrectBoneAssigning%(Value#)
 	Local Number#
 	
@@ -138,6 +113,31 @@ Function ChangeAngleValueForCorrectBoneAssigning%(Value#)
 		Number = (-360.0) + Value
 	EndIf
 	Return(Number)
+End Function
+
+Function ReadPixelColor%(Pixel%, Shrid%)
+	Return(Pixel Shr Shrid) And $FF
+End Function
+
+Function ScaledMouseX%()
+	Return(Float(MouseX() - (opt\RealGraphicWidth * 0.5 * (1.0 - opt\AspectRatio))) * Float(opt\GraphicWidth) / Float(opt\RealGraphicWidth * opt\AspectRatio))
+End Function
+
+Function ScaledMouseY%()
+	Return(Float(MouseY()) * Float(opt\GraphicHeight) / Float(opt\RealGraphicHeight))
+End Function
+
+Function MouseOn%(x%, y%, Width%, Height%)
+	If ScaledMouseX() > x And ScaledMouseX() < x + Width Then
+		If ScaledMouseY() > y And ScaledMouseY() < y + Height Then
+			Return(True)
+		EndIf
+	EndIf
+	Return(False)
+End Function
+
+Function ResetTimingAccumulator()
+	fps\Accumulator = 0.0
 End Function
 
 Function Find860Angle(n.NPCs, fr.Forest)
@@ -169,6 +169,32 @@ Function Find860Angle(n.NPCs, fr.Forest)
 	Else
 		Return(PointDirection(EntityX(n\Collider), EntityZ(n\Collider), EntityX(me\Collider), EntityZ(me\Collider)) + 180.0)
 	EndIf		
+End Function
+
+Function CreateLine(x1#, y1#, z1#, x2#, y2#, z2#, Mesh% = 0)
+	Local Surf%, Verts%
+	
+	If (Not Mesh) Then 
+		Mesh = CreateMesh()
+		EntityFX(Mesh, 16)
+		Surf = CreateSurface(Mesh)	
+		Verts = 0
+		
+		AddVertex(Surf, x1, y1, z1, 0.0, 0.0)
+	Else
+		Surf = GetSurface(Mesh, 1)
+		Verts = CountVertices(Surf) - 1
+	EndIf
+	
+	AddVertex(Surf, (x1 + x2) / 2.0, (y1 + y2) / 2.0, (z1 + z2) / 2.0, 0.0, 0.0) 
+	; ~ You could skip creating the above vertex and change the line below to
+	; ~ So your line mesh would use less vertices, the drawback is that some videocards (like the matrox g400)
+	; ~ Aren't able to create a triangle with 2 vertices. so, it's your call :)
+	AddVertex(Surf, x2, y2, z2, 1.0, 0.0)
+	
+	AddTriangle(Surf, Verts, Verts + 2, Verts + 1)
+	
+	Return(Mesh)
 End Function
 
 Global Mesh_MinX#, Mesh_MinY#, Mesh_MinZ#
@@ -278,6 +304,13 @@ Function CheckRoomOverlap%(r1.Rooms, r2.Rooms)
 	Return(True)
 End Function
 
+Type TriggerBox
+	Field OBJ%
+	Field Name$
+	Field MinX#, MinY#, MinZ#
+	Field MaxX#, MaxY#, MaxZ#
+End Type
+
 ; ~ This must be called after the room angle has been finalized!
 Function SetupTriggerBoxes(r.Rooms)
 	Local t.TriggerBox
@@ -319,30 +352,6 @@ Function SetupTriggerBoxes(r.Rooms)
 		t\MinY = ((sY * Mesh_MinY) + r\y)
 		t\MaxY = ((sY * Mesh_MaxY) + r\y)
 	Next
-End Function
-
-Function CheckTriggers$()
-	Local i%
-	
-	If PlayerRoom\TriggerBoxAmount = 0 Then
-		Return
-	Else
-		For i = 0 To PlayerRoom\TriggerBoxAmount - 1
-			If chs\DebugHUD Then
-				EntityAlpha(PlayerRoom\TriggerBoxes[i]\OBJ, 0.2)
-			Else
-				EntityAlpha(PlayerRoom\TriggerBoxes[i]\OBJ, 0.0)
- 			EndIf
-			
-			If EntityX(me\Collider) > PlayerRoom\TriggerBoxes[i]\MinX And EntityX(me\Collider) < PlayerRoom\TriggerBoxes[i]\MaxX
-				If EntityY(me\Collider) > PlayerRoom\TriggerBoxes[i]\MinY And EntityY(me\Collider) < PlayerRoom\TriggerBoxes[i]\MaxY
-					If EntityZ(me\Collider) > PlayerRoom\TriggerBoxes[i]\MinZ And EntityZ(me\Collider) < PlayerRoom\TriggerBoxes[i]\MaxZ
-						Return(PlayerRoom\TriggerBoxes[i]\Name)
-					EndIf
-				EndIf
-			EndIf
-		Next
-	EndIf
 End Function
 
 ;~IDEal Editor Parameters:

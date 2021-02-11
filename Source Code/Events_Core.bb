@@ -3874,7 +3874,7 @@ Function UpdateEvents()
 					HideEntity(e\room\Objects[4])
 				EndIf
 				
-				If e\room\NPC[0] <> Null then
+				If e\room\NPC[0] <> Null Then
 					If e\EventStr = "Step1" And e\room\NPC[0]\State <> 3.0 Then
 						If e\EventState = 0.0 Then
 							For i = 0 To 2
@@ -8188,7 +8188,7 @@ Function UpdateEvents()
 					p\Speed = 0.01 : p\Achange = -0.02
 					RotateEntity(p\Pvt, -60.0, e\room\Angle - 90.0, 0.0)
 					
-					e\SoundCHN = LoopSound2(AlarmSFX[3], e\SoundCHN, Camera, e\room\Objects[1], 5.0)
+					e\SoundCHN = LoopSound2(AlarmSFX[2], e\SoundCHN, Camera, e\room\Objects[1], 5.0)
 				EndIf
 				;[End Block]
 			Case e_room_gw
@@ -8226,7 +8226,7 @@ Function UpdateEvents()
 							UseDoor(e\room\RoomDoors[1])
 							e\room\RoomDoors[0]\Locked = 1
 							e\room\RoomDoors[1]\Locked = 1
-							PlaySound_Strict(AlarmSFX[4])
+							PlaySound_Strict(AlarmSFX[3])
 						ElseIf EntityDistanceSquared(e\room\Objects[0], me\Collider) > 5.76
 							e\EventState3 = 0.0
 						EndIf
@@ -9223,6 +9223,11 @@ Function UpdateEvents()
 	
 	UpdateExplosion()
 End Function
+
+Type Dummy1499_1
+	Field Anim%
+	Field OBJ%
+End Type
 
 Function UpdateDimension1499()
 	Local e.Events, n.NPCs, n2.NPCs, r.Rooms, it.Items, du.Dummy1499_1

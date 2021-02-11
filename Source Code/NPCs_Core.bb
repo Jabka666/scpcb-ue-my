@@ -4223,8 +4223,6 @@ Function UpdateNPCs()
 											EndIf
 										EndIf
 									EndIf
-								Else
-									n\State = 0.0
 								EndIf
 								
 								n\Angle = EntityYaw(n\Collider)
@@ -4585,7 +4583,7 @@ Function UpdateNPCs()
 										If Rand(20) = 1 Then 
 											If EntityVisible(me\Collider, n\Collider) Then
 												n\State = 2.0
-												PlaySound2(AlarmSFX[2], Camera, n\Collider, 50.0, 1.0)
+												PlaySound2(AlarmSFX[1], Camera, n\Collider, 50.0, 1.0)
 											EndIf
 										EndIf									
 									EndIf
@@ -6732,6 +6730,174 @@ Function TeleportCloser(n.NPCs)
 	EndIf
 End Function
 
+Function FindPath(n.NPCs, x#, y#, z#)
+	Local Temp%, Dist#, Dist2#
+	Local xTemp#, yTemp#, zTemp#
+	Local w.WayPoints, StartPoint.WayPoints, EndPoint.WayPoints, smallest.WayPoints
+	Local StartX% = Floor(EntityX(n\Collider, True) / 8.0 + 0.5), StartZ% = Floor(EntityZ(n\Collider, True) / 8.0 + 0.5)
+	Local EndX% = Floor(x / 8.0 + 0.5), EndZ% = Floor(z / 8.0 + 0.5)
+	Local CurrX%, CurrZ%
+	
+   ; ~ PathStatus = 0, route hasn't been searched for yet
+   ; ~ PathStatus = 1, route found
+   ; ~ PathStatus = 2, route not found (target unreachable)
+	
+	For w.WayPoints = Each WayPoints
+		w\State = 0
+		w\Fcost = 0
+		w\Gcost = 0
+		w\Hcost = 0
+	Next
+	
+	Local i%
+	
+	n\PathStatus = 0
+	n\PathLocation = 0
+	For i = 0 To 20
+		If n\Path[i] <> Null Then n\Path[i] = Null
+	Next
+	
+	Local Pvt% = CreatePivot()
+	
+	PositionEntity(Pvt, x, y, z, True)   
+	
+	Temp = CreatePivot()
+	PositionEntity(Temp, EntityX(n\Collider, True), EntityY(n\Collider, True) + 0.15, EntityZ(n\Collider, True))
+	
+	Dist = 350.0
+	For w.WayPoints = Each WayPoints
+		xTemp = EntityX(w\OBJ, True) - EntityX(Temp, True)
+		zTemp = EntityZ(w\OBJ, True) - EntityZ(Temp, True)
+		yTemp = EntityY(w\OBJ, True) - EntityY(Temp, True)
+		Dist2 = (xTemp * xTemp) + (yTemp * yTemp) + (zTemp * zTemp)
+		If Dist2 < Dist Then 
+			; ~ Prefer waypoints that are visible
+			If (Not EntityVisible(w\OBJ, Temp)) Then Dist2 = Dist2 * 3.0
+			If Dist2 < Dist Then 
+				Dist = Dist2
+				StartPoint = w
+			EndIf
+		EndIf
+	Next
+	
+	FreeEntity(Temp)
+	
+	If StartPoint = Null Then Return(2)
+	StartPoint\State = 1	  
+	
+	EndPoint = Null
+	Dist = 400.0
+	For w.WayPoints = Each WayPoints
+		xTemp = EntityX(Pvt, True) - EntityX(w\OBJ, True)
+		zTemp = EntityZ(Pvt, True) - EntityZ(w\OBJ, True)
+		yTemp = EntityY(Pvt, True) - EntityY(w\OBJ, True)
+		Dist2 = (xTemp * xTemp) + (yTemp * yTemp) + (zTemp * zTemp)
+		
+		If Dist2 < Dist Then
+			Dist = Dist2
+			EndPoint = w
+		EndIf			
+	Next
+	
+	FreeEntity(Pvt)
+	
+	If EndPoint = StartPoint Then
+		If Dist < 0.4 Then
+			Return(0)
+		Else
+			n\Path[0] = EndPoint
+			Return(1)   
+		EndIf
+	EndIf
+	If EndPoint = Null Then Return(2)
+	
+	Repeat
+		Temp = False
+		smallest.WayPoints = Null
+		Dist = 10000.0
+		For w.WayPoints = Each WayPoints
+			If w\State = 1 Then
+				Temp = True
+				If w\Fcost < Dist Then
+					Dist = w\Fcost
+					smallest = w
+				EndIf
+			EndIf
+		Next
+		
+		If smallest <> Null Then
+			w = smallest
+			w\State = 2
+			
+			For i = 0 To 4
+				If w\connected[i] <> Null Then
+					If w\connected[i]\State < 2 Then
+						Local gTemp#
+						
+						If w\connected[i]\State = 1 Then
+							gTemp = w\Gcost + w\Dist[i]
+							If n\NPCType = NPCTypeMTF Then
+								If w\connected[i]\door = Null Then gTemp = gTemp + 0.5
+							EndIf
+							If gTemp < w\connected[i]\Gcost Then
+								w\connected[i]\Gcost = gTemp
+								w\connected[i]\Fcost = w\connected[i]\Gcost + w\connected[i]\Hcost
+								w\connected[i]\parent = w
+							EndIf
+						Else
+							w\connected[i]\Hcost = Abs(EntityX(w\connected[i]\OBJ, True) - EntityX(EndPoint\OBJ, True)) + Abs(EntityZ(w\connected[i]\OBJ, True) - EntityZ(EndPoint\OBJ, True))
+							gTemp = w\Gcost + w\Dist[i]
+							If n\NPCType = NPCTypeMTF Then
+								If w\connected[i]\door = Null Then gTemp = gTemp + 0.5
+							EndIf
+							w\connected[i]\Gcost = gTemp
+							w\connected[i]\Fcost = w\Gcost + w\Hcost
+							w\connected[i]\parent = w
+							w\connected[i]\State = 1
+						EndIf			
+					EndIf
+				EndIf
+			Next
+		Else
+			If EndPoint\State > 0 Then
+				StartPoint\parent = Null
+				EndPoint\State = 2
+				Exit
+			EndIf
+		EndIf
+		
+		If EndPoint\State > 0 Then
+			StartPoint\parent = Null
+			EndPoint\State = 2
+			Exit
+		EndIf
+	Until Temp = False
+	
+	If EndPoint\State > 0 Then
+		Local currpoint.WayPoints = EndPoint
+		Local twentiethpoint.WayPoints = EndPoint
+		Local Length% = 0
+		
+		Repeat
+			Length = Length + 1
+			currpoint = currpoint\parent
+			If Length > 20 Then
+				twentiethpoint = twentiethpoint\parent
+			EndIf
+		Until currpoint = Null
+		
+		currpoint.WayPoints = EndPoint
+		While twentiethpoint <> Null
+			Length = Min(Length - 1, 19)
+			twentiethpoint = twentiethpoint\parent
+			n\Path[Length] = twentiethpoint
+		Wend
+		Return(1)
+	Else
+		Return(2)
+	EndIf
+End Function
+
 Function OtherNPCSeesMeNPC%(n.NPCs, n2.NPCs)
 	If n2\BlinkTimer =< 0.0 Then Return(False)
 	
@@ -6789,6 +6955,8 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 	p.Particles = CreateParticle(x, y, z, 2, Rnd(0.08, 0.1), 0.0, 5.0)
 	p\Achange = -0.15
 	TurnEntity(p\OBJ, 0.0, 0.0, Rnd(360.0))
+	
+	LightVolume = TempLightVolume * 1.2
 	
 	If InstaKill Then Kill(True) : PlaySound_Strict(BulletHitSFX) : Return
 	
@@ -6863,7 +7031,6 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 		PositionEntity(Pvt, EntityX(me\Collider), (EntityY(me\Collider) + EntityY(Camera)) / 2.0, EntityZ(me\Collider))
 		PointEntity(Pvt, p\OBJ)
 		TurnEntity(Pvt, 0.0, 180.0, 0.0)
-		
 		EntityPick(Pvt, 2.5)
 		
 		If PickedEntity() <> 0 Then 
@@ -7141,39 +7308,6 @@ Function ManipulateNPCBones()
 			EndIf
 		EndIf
 	Next
-End Function
-
-Function GetNPCManipulationValue$(NPC$, Bone$, Section$, ValueType% = 0)
-	; ~ Valuetype determines what type of variable should the Output be returned
-	; ~ 0: String
-	; ~ 1: Int
-	; ~ 2: Float
-	; ~ 3: Boolean
-	
-	Local Value$ = GetINIString("Data\NPCBones.ini", NPC, Bone + "_" + Section)
-	
-	Select ValueType%
-		Case 0
-			;[Block]
-			Return(Value)
-			;[End Block]
-		Case 1
-			;[Block]
-			Return(Int(Value))
-			;[End Block]
-		Case 2
-			;[Block]
-			Return(Float(Value))
-			;[End Block]
-		Case 3
-			;[Block]
-			If Value = "True" Lor Value = "1"
-				Return(True)
-			Else
-				Return(False)
-			EndIf
-			;[End Block]
-	End Select
 End Function
 
 Function NPCSpeedChange(n.NPCs)

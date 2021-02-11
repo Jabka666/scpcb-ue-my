@@ -451,7 +451,6 @@ Function PlayStartupVideos()
 		Cls()
 		Flip()
 	Next
-	
 	ShowPointer()
 End Function
 
