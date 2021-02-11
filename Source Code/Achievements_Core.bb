@@ -165,7 +165,7 @@ Function RenderAchievementMsg()
 					EndIf
 				EndIf
 			Next
-			DrawFrame(x, y, Width, Height)
+			RenderFrame(x, y, Width, Height)
 			Color(0, 0, 0)
 			Rect(x + (10.0 * Scale), y + (10.0 * Scale), 64.0 * Scale, 64.0 * Scale)
 			DrawImage(AchvIMG[amsg\AchvID], x + (10 * Scale), y + 10 * Scale)

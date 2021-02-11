@@ -658,7 +658,7 @@ Global QuickLoadPercent% = -1
 Global QuickLoadPercent_DisplayTimer# = 0.0
 Global QuickLoad_CurrEvent.Events
 
-Function DrawQuickLoading()
+Function RenderQuickLoading()
 	If QuickLoadPercent > -1 Then
 		MidHandle(QuickLoadIcon)
 		DrawImage(QuickLoadIcon, opt\GraphicWidth - 90, opt\GraphicHeight - 150)

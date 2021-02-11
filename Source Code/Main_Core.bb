@@ -337,28 +337,24 @@ Function CreateConsoleMsg(Txt$, R% = -1, G% = -1, B% = -1, IsCommand% = False)
 	If c\B < 0 Then c\B = ConsoleB
 End Function
 
-Function UpdateConsole()
+Function RenderConsole()
 	If (Not opt\CanOpenConsole) Then
-		ConsoleOpen = False
 		Return
 	EndIf
 	
 	If ConsoleOpen Then
-		Local ev.Events, e.Events, e2.Events, r.Rooms, it.Items, n.NPCs, snd.Sound, cm.ConsoleMsg, itt.ItemTemplates
-		Local Tex%, Tex2%, InBar%, InBox%, MouseScroll#, Temp%, i%
-		Local Args$, StrTemp$, StrTemp2$, StrTemp3$, StrTemp4$
+		Local cm.ConsoleMsg
+		Local InBar%, InBox%
 		Local x%, y%, Width%, Height%
 		
 		SetFont(fo\FontID[Font_Console])
-		
-		ConsoleR = 255 : ConsoleG = 255 : ConsoleB = 255
 		
 		x = 0
 		y = opt\GraphicHeight - 300 * MenuScale
 		Width = opt\GraphicWidth
 		Height = 270 * MenuScale
 		
-		DrawFrame(x, y, Width, Height + (30 * MenuScale))
+		RenderFrame(x, y, Width, Height + (30 * MenuScale))
 		
 		Local ConsoleHeight% = 0
 		Local ScrollBarHeight% = 0
@@ -380,6 +376,72 @@ Function UpdateConsole()
 		If InBox Then Color(200, 200, 200)
 		If ConsoleScrollDragging Then Color(255, 255, 255)
 		Rect(x + Width - (23 * MenuScale), y + Height - ScrollBarHeight + (ConsoleScroll * ScrollBarHeight / Height), 20 * MenuScale, ScrollBarHeight)
+		
+		Color(255, 255, 255)
+		
+		Local TempY# = y + Height - (25.0 * MenuScale) - ConsoleScroll
+		Local Count% = 0
+		
+		For cm.ConsoleMsg = Each ConsoleMsg
+			Count = Count + 1
+			If Count > 1000 Then
+				Delete(cm)
+			Else
+				If TempY >= y And TempY < y + Height - (20 * MenuScale) Then
+					If cm = ConsoleReissue Then
+						Color(cm\R / 4, cm\G / 4, cm\B / 4)
+						Rect(x, TempY - (2 * MenuScale), Width - (30 * MenuScale), 24 * MenuScale, True)
+					EndIf
+					Color(cm\R, cm\G, cm\B)
+					If cm\IsCommand Then
+						Text(x + (20 * MenuScale), TempY, "> " + cm\Txt)
+					Else
+						Text(x + (20 * MenuScale), TempY, cm\Txt)
+					EndIf
+				EndIf
+				TempY = TempY - (15.0 * MenuScale)
+			EndIf
+		Next
+		Color(255, 255, 255)
+		
+		RenderMenuInputBoxes()
+		
+		If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+	EndIf
+	SetFont(fo\FontID[Font_Default])
+End Function
+
+Function UpdateConsole()
+	If (Not opt\CanOpenConsole) Then
+		ConsoleOpen = False
+		Return
+	EndIf
+	
+	If ConsoleOpen Then
+		Local ev.Events, e.Events, e2.Events, r.Rooms, it.Items, n.NPCs, snd.Sound, cm.ConsoleMsg, itt.ItemTemplates
+		Local Tex%, Tex2%, InBar%, InBox%, MouseScroll#, Temp%, i%
+		Local Args$, StrTemp$, StrTemp2$, StrTemp3$, StrTemp4$
+		Local x%, y%, Width%, Height%
+		
+		ConsoleR = 255 : ConsoleG = 255 : ConsoleB = 255
+		
+		x = 0
+		y = opt\GraphicHeight - 300 * MenuScale
+		Width = opt\GraphicWidth
+		Height = 270 * MenuScale
+		
+		Local ConsoleHeight% = 0
+		Local ScrollBarHeight% = 0
+		
+		For cm.ConsoleMsg = Each ConsoleMsg
+			ConsoleHeight = ConsoleHeight + (15 * MenuScale)
+		Next
+		ScrollBarHeight = (Float(Height) / Float(ConsoleHeight)) * Height
+		If ScrollBarHeight > Height Then ScrollBarHeight = Height
+		If ConsoleHeight < Height Then ConsoleHeight = Height
+		
+		InBar = MouseOn(x + Width - (26 * MenuScale), y, 26 * MenuScale, Height)
+		InBox = MouseOn(x + Width - (23 * MenuScale), y + Height - ScrollBarHeight + (ConsoleScroll * ScrollBarHeight / Height), 20 * MenuScale, ScrollBarHeight)
 		
 		If (Not MouseDown(1)) Then
 			ConsoleScrollDragging = False
@@ -490,13 +552,11 @@ Function UpdateConsole()
 		If ConsoleScroll < (-ConsoleHeight) + Height Then ConsoleScroll = (-ConsoleHeight) + Height
 		If ConsoleScroll > 0 Then ConsoleScroll = 0
 		
-		Color(255, 255, 255)
-		
 		SelectedInputBox = 2
 		
 		Local OldConsoleInput$ = ConsoleInput
 		
-		ConsoleInput = InputBox(x, y + Height, Width, 30 * MenuScale, ConsoleInput, 2)
+		ConsoleInput = UpdateMainMenuInputBox(x, y + Height, Width, 30 * MenuScale, ConsoleInput, 2)
 		If OldConsoleInput <> ConsoleInput Then ConsoleReissue = Null
 		ConsoleInput = Left(ConsoleInput, 100)
 		
@@ -1663,34 +1723,14 @@ Function UpdateConsole()
 			ConsoleInput = ""
 		EndIf
 		
-		Local TempY# = y + Height - (25.0 * MenuScale) - ConsoleScroll
 		Local Count% = 0
 		
 		For cm.ConsoleMsg = Each ConsoleMsg
 			Count = Count + 1
 			If Count > 1000 Then
 				Delete(cm)
-			Else
-				If TempY >= y And TempY < y + Height - (20 * MenuScale) Then
-					If cm = ConsoleReissue Then
-						Color(cm\R / 4, cm\G / 4, cm\B / 4)
-						Rect(x, TempY - (2 * MenuScale), Width - (30 * MenuScale), 24 * MenuScale, True)
-					EndIf
-					Color(cm\R, cm\G, cm\B)
-					If cm\IsCommand Then
-						Text(x + (20 * MenuScale), TempY, "> " + cm\Txt)
-					Else
-						Text(x + (20 * MenuScale), TempY, cm\Txt)
-					EndIf
-				EndIf
-				TempY = TempY - (15.0 * MenuScale)
 			EndIf
 		Next
-		Color(255, 255, 255)
-		
-		RenderMenuInputBoxes()
-		
-		If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	EndIf
 	
 	SetFont(fo\FontID[Font_Default])
@@ -2505,6 +2545,8 @@ Function MainLoop()
 		UpdateMessages()
 		If opt\EnableSubtitles Then UpdateSubtitles()
 		
+		UpdateConsole()
+		
 		UpdateQuickLoading()
 		
 		UpdateAchievementMsg()
@@ -2525,20 +2567,20 @@ Function MainLoop()
 	
 	UpdateBlur(me\BlurVolume)
 	
-	DrawGUI()
+	RenderGUI()
 	
 	RenderMessages()
 	If opt\EnableSubtitles Then RenderSubtitles()
 	
 	If me\EndingTimer < 0.0 Then
-		If me\SelectedEnding <> -1 Then DrawEnding()
+		If me\SelectedEnding <> -1 Then RenderEnding()
 	Else
-		If me\SelectedEnding = -1 Then DrawMenu()			
+		If me\SelectedEnding = -1 Then RenderMenu()			
 	EndIf
 	
-	UpdateConsole()
+	RenderConsole()
 	
-	DrawQuickLoading()
+	RenderQuickLoading()
 	
 	RenderAchievementMsg()
 	
@@ -2620,7 +2662,7 @@ Const Ending_B1% = 2
 Const Ending_B2% = 3
 ;[End Block]
 
-Function DrawEnding()
+Function RenderEnding()
 	ShowPointer()
 	
 	Local itt.ItemTemplates, r.Rooms
@@ -2702,11 +2744,11 @@ Function DrawEnding()
 					Text(x, y + (60 * MenuScale), "Documents discovered: " + DocsFound + "/" + DocAmount)
 					Text(x, y + (80 * MenuScale), "Items refined in SCP-914: " + me\RefinedItems)
 				Else
-					DrawMenu()
+					RenderMenu()
 				EndIf
 			; ~ Credits
 			ElseIf me\EndingTimer =< -2000.0
-				DrawCredits()
+				RenderCredits()
 			EndIf
 		EndIf
 	EndIf
@@ -2777,12 +2819,12 @@ Function UpdateEnding()
 					x = x + (Width / 2)
 					y = y + Height - (100 * MenuScale)
 					
-					If DrawButton(x - (170 * MenuScale), y - (200 * MenuScale), 430 * MenuScale, 60 * MenuScale, "ACHIEVEMENTS", True) Then
+					If UpdateMainMenuButton(x - (170 * MenuScale), y - (200 * MenuScale), 430 * MenuScale, 60 * MenuScale, "ACHIEVEMENTS", True) Then
 						AchievementsMenu = 1
 						mm\ShouldDeleteGadgets = True
 					EndIf
 					
-					If DrawButton(x - (170 * MenuScale), y - (100 * MenuScale), 430 * MenuScale, 60 * MenuScale, "MAIN MENU", True)
+					If UpdateMainMenuButton(x - (170 * MenuScale), y - (100 * MenuScale), 430 * MenuScale, 60 * MenuScale, "MAIN MENU", True)
 						ShouldPlay = 24
 						NowPlaying = ShouldPlay
 						For i = 0 To 9
@@ -2835,7 +2877,7 @@ Function InitCredits()
 	me\CreditsTimer = 0.0
 End Function
 
-Function DrawCredits()
+Function RenderCredits()
 	Local cl.CreditsLine, LastCreditLine.CreditsLine
 	Local Credits_Y# = (me\EndingTimer + 2000.0) / 2 + (opt\GraphicHeight + 10.0)
 	Local ID%
@@ -3628,7 +3670,7 @@ Const INVENTORY_GFX_SIZE% = 70
 Const INVENTORY_GFX_SPACING% = 35
 ;[End Block]
 
-Function DrawGUI()
+Function RenderGUI()
 	CatchErrors("Uncaught (DrawGUI)")
 	
 	Local e.Events, it.Items, ev.Events, ch.Chunk, a_it.Items
@@ -3693,7 +3735,7 @@ Function DrawGUI()
 		Next
 	EndIf
 	
-	If I_294\Using Then Draw294()
+	If I_294\Using Then Render294()
 	
 	If ClosestButton <> 0 And SelectedDoor = Null And (Not InvOpen) And (Not MenuOpen) And OtherOpen = Null And (Not ConsoleOpen) And SelectedDifficulty\OtherFactors <> EXTREME Then
 		Temp = CreatePivot()
@@ -3760,9 +3802,9 @@ Function DrawGUI()
 		
 		Color(255, 255, 255)
 		If me\BlinkTimer < 150.0 Then
-			DrawBar(tt\ImageID[1], x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ, 100, 0, 0)
+			RenderBar(tt\ImageID[1], x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ, 100, 0, 0)
 		Else
-			DrawBar(BlinkMeterIMG, x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ)
+			RenderBar(BlinkMeterIMG, x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ)
 		EndIf
 		Color(0, 0, 0)
 		Rect(x - 50, y, 30, 30)
@@ -3785,9 +3827,9 @@ Function DrawGUI()
 		y = opt\GraphicHeight - 55.0
 		
 		If me\Stamina =< 25.0 Then
-			DrawBar(tt\ImageID[3], x, y, Width, Height, me\Stamina, 100.0, 50, 0, 0)
+			RenderBar(tt\ImageID[3], x, y, Width, Height, me\Stamina, 100.0, 50, 0, 0)
 		Else
-			DrawBar(tt\ImageID[2], x, y, Width, Height, me\Stamina, 100.0, 50, 50, 50)
+			RenderBar(tt\ImageID[2], x, y, Width, Height, me\Stamina, 100.0, 50, 50, 50)
 		EndIf
 		Color(0, 0, 0)
 		Rect(x - 50, y, 30, 30)
@@ -3958,7 +4000,7 @@ Function DrawGUI()
 				Rect(x - 1, y - 1, INVENTORY_GFX_SIZE + 2, INVENTORY_GFX_SIZE + 2)
 			EndIf
 			
-			DrawFrame(x, y, INVENTORY_GFX_SIZE, INVENTORY_GFX_SIZE, (x Mod 64), (x Mod 64))
+			RenderFrame(x, y, INVENTORY_GFX_SIZE, INVENTORY_GFX_SIZE, (x Mod 64), (x Mod 64))
 			
 			If OtherOpen = Null Then Exit
 			
@@ -4090,7 +4132,7 @@ Function DrawGUI()
 			EndIf
 			
 			Color(255, 255, 255)
-			DrawFrame(x, y, INVENTORY_GFX_SIZE, INVENTORY_GFX_SIZE, (x Mod 64), (x Mod 64))
+			RenderFrame(x, y, INVENTORY_GFX_SIZE, INVENTORY_GFX_SIZE, (x Mod 64), (x Mod 64))
 			
 			If Inventory(n) <> Null Then
 				If IsMouseOn = n Lor SelectedItem <> Inventory(n) Then 
@@ -4156,7 +4198,7 @@ Function DrawGUI()
 						x = mo\Viewport_Center_X - (Width / 2)
 						y = mo\Viewport_Center_Y + 80
 						
-						DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State3)
+						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State3)
 					EndIf
 					;[End Block]
 				Case "key0", "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "scp860", "hand", "hand2", "25ct", "scp005", "key", "coin", "mastercard"
@@ -4175,7 +4217,7 @@ Function DrawGUI()
 						x = mo\Viewport_Center_X - (Width / 2)
 						y = mo\Viewport_Center_Y + 80
 						
-						DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
+						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					EndIf
 					;[End Block]
 				Case "paper", "ticket"
@@ -4327,7 +4369,7 @@ Function DrawGUI()
 						x = mo\Viewport_Center_X - (Width / 2)
 						y = mo\Viewport_Center_Y + 80
 						
-						DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
+						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					EndIf
 					;[End Block]
 				Case "vest", "finevest"
@@ -4339,7 +4381,7 @@ Function DrawGUI()
 					x = mo\Viewport_Center_X - (Width / 2)
 					y = mo\Viewport_Center_Y + 80
 					
-					DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
+					RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					;[End Block]
 				Case "gasmask", "supergasmask", "gasmask3"
 					;[Block]
@@ -4366,7 +4408,7 @@ Function DrawGUI()
 						x = mo\Viewport_Center_X - (Width / 2)
 						y = mo\Viewport_Center_Y + 80
 						
-						DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
+						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					EndIf
 					;[End Block]
 				Case "nav", "nav300", "nav310", "navulti"
@@ -4582,7 +4624,7 @@ Function DrawGUI()
 						x = mo\Viewport_Center_X - (Width / 2)
 						y = mo\Viewport_Center_Y + 80
 						
-						DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
+						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					EndIf
 					;[End Block]
 				Case "badge"
@@ -4616,7 +4658,7 @@ Function DrawGUI()
 						x = mo\Viewport_Center_X - (Width / 2)
 						y = mo\Viewport_Center_Y + 80
 						
-						DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
+						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					EndIf
 					;[End Block]
 				Case "scramble"
@@ -4629,7 +4671,7 @@ Function DrawGUI()
 						x = mo\Viewport_Center_X - (Width / 2)
 						y = mo\Viewport_Center_Y + 80
 						
-						DrawBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State3)
+						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State3)
 					EndIf
 					;[End Block]
 			End Select
@@ -6782,7 +6824,7 @@ Function UpdateGUI()
 	CatchErrors("UpdateGUI")
 End Function
 
-Function DrawMenu()
+Function RenderMenu()
 	CatchErrors("Uncaught (DrawMenu)")
 	
 	Local x%, y%, Width%, Height%, i%
@@ -6864,7 +6906,7 @@ Function DrawMenu()
 					Color(100, 100, 100)
 					Text(x, y + (5 * MenuScale), "Enable bump mapping:")	
 					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
-						DrawOptionsTooltip(tX, tY, tW, tH, "bump")
+						RenderOptionsTooltip(tX, tY, tW, tH, "bump")
 					EndIf
 					
 					y = y + (30 * MenuScale)
@@ -6872,7 +6914,7 @@ Function DrawMenu()
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "VSync:")
 					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
-						DrawOptionsTooltip(tX, tY, tW, tH, "vsync")
+						RenderOptionsTooltip(tX, tY, tW, tH, "vsync")
 					EndIf
 					
 					y = y + (30 * MenuScale)
@@ -6880,7 +6922,7 @@ Function DrawMenu()
 					Color(255 - (155 * (opt\DisplayMode <> 0)), 255 - (155 * (opt\DisplayMode <> 0)), 255 - (155 * (opt\DisplayMode <> 0)))
 					Text(x, y + (5 * MenuScale), "Anti-aliasing:")
 					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
-						DrawOptionsTooltip(tX, tY, tW, tH, "antialias")
+						RenderOptionsTooltip(tX, tY, tW, tH, "antialias")
 					EndIf
 					
 					y = y + (30 * MenuScale)
@@ -6888,7 +6930,7 @@ Function DrawMenu()
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Enable room lights:")
 					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
-						DrawOptionsTooltip(tX, tY, tW, tH, "roomlights")
+						RenderOptionsTooltip(tX, tY, tW, tH, "roomlights")
 					EndIf
 					
 					y = y + (40 * MenuScale)
@@ -6896,7 +6938,7 @@ Function DrawMenu()
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Screen gamma:")
 					If MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20) And OnSliderID = 0
-						DrawOptionsTooltip(tX, tY, tW, tH, "gamma", opt\ScreenGamma)
+						RenderOptionsTooltip(tX, tY, tW, tH, "gamma", opt\ScreenGamma)
 					EndIf
 					
 					y = y + (45 * MenuScale)
@@ -6904,7 +6946,7 @@ Function DrawMenu()
 					Color(255, 255, 255)
 					Text(x, y, "Particle amount:")
 					If (MouseOn(x + (270 * MenuScale), y - (9 * MenuScale), 114 * MenuScale, 20) And OnSliderID = 0) Lor OnSliderID = 2
-						DrawOptionsTooltip(tX, tY, tW, tH, "particleamount", opt\ParticleAmount)
+						RenderOptionsTooltip(tX, tY, tW, tH, "particleamount", opt\ParticleAmount)
 					EndIf
 					
 					y = y + (45 * MenuScale)
@@ -6912,7 +6954,7 @@ Function DrawMenu()
 					Color(255, 255, 255)
 					Text(x, y, "Texture LOD Bias:")
 					If (MouseOn(x + (270 * MenuScale), y - (9 * MenuScale), 114 * MenuScale, 20) And OnSliderID = 0) Lor OnSliderID = 3
-						DrawOptionsTooltip(tX, tY, tW, tH + 100 * MenuScale, "texquality")
+						RenderOptionsTooltip(tX, tY, tW, tH + 100 * MenuScale, "texquality")
 					EndIf
 					
 					y = y + (35 * MenuScale)
@@ -6920,7 +6962,7 @@ Function DrawMenu()
 					Color(100, 100, 100)
 					Text(x, y + (5 * MenuScale), "Save textures in the VRAM:")	
 					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
-						DrawOptionsTooltip(tX, tY, tW, tH, "vram")
+						RenderOptionsTooltip(tX, tY, tW, tH, "vram")
 					EndIf
 					
 					y = y + (40 * MenuScale)
@@ -6929,7 +6971,7 @@ Function DrawMenu()
 					Text(x, y + (5 * MenuScale), "Field of view:")
 					Color(255, 255, 0)
 					If MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20) And OnSliderID = 0
-						DrawOptionsTooltip(tX, tY, tW, tH, "fov")
+						RenderOptionsTooltip(tX, tY, tW, tH, "fov")
 					EndIf
 					
 					y = y + (45 * MenuScale)
@@ -6937,7 +6979,7 @@ Function DrawMenu()
 					Color(255, 255, 255)
 					Text(x, y, "Anisotropic filtering:")
 					If (MouseOn(x + (270 * MenuScale), y - (9 * MenuScale), 114 * MenuScale, 20) And OnSliderID = 0) Lor OnSliderID = 4
-						DrawOptionsTooltip(tX, tY, tW, tH, "anisotropic")
+						RenderOptionsTooltip(tX, tY, tW, tH, "anisotropic")
 					EndIf
 					;[End Block]
 				Case 2 ; ~ Audio
@@ -6949,7 +6991,7 @@ Function DrawMenu()
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Music volume:")
 					If MouseOn(x + (250 * MenuScale), y, 114 * MenuScale, 20)
-						DrawOptionsTooltip(tX, tY, tW, tH, "musicvol", opt\MusicVolume)
+						RenderOptionsTooltip(tX, tY, tW, tH, "musicvol", opt\MusicVolume)
 					EndIf
 					
 					y = y + (40 * MenuScale)
@@ -6957,7 +6999,7 @@ Function DrawMenu()
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Sound volume:")
 					If MouseOn(x + (250 * MenuScale), y, 114 * MenuScale, 20)
-						DrawOptionsTooltip(tX, tY, tW, tH, "soundvol", opt\PrevSFXVolume)
+						RenderOptionsTooltip(tX, tY, tW, tH, "soundvol", opt\PrevSFXVolume)
 					EndIf
 					
 					y = y + (40 * MenuScale)
@@ -6965,7 +7007,7 @@ Function DrawMenu()
 					Color(100, 100, 100)
 					Text(x, y + (5 * MenuScale), "Sound auto-release:")
 					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-						DrawOptionsTooltip(tX, tY, tW, tH + 220 * MenuScale, "sfxautorelease")
+						RenderOptionsTooltip(tX, tY, tW, tH + 220 * MenuScale, "sfxautorelease")
 					EndIf
 					
 					y = y + (30 * MenuScale)
@@ -6973,7 +7015,7 @@ Function DrawMenu()
 					Color(100, 100, 100)
 					Text(x, y + (5 * MenuScale), "Enable user tracks:")
 					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-						DrawOptionsTooltip(tX, tY, tW, tH, "usertrack")
+						RenderOptionsTooltip(tX, tY, tW, tH, "usertrack")
 					EndIf
 					
 					If opt\EnableUserTracks Then
@@ -6987,10 +7029,10 @@ Function DrawMenu()
 							Text(x + (310 * MenuScale), y + 5 * MenuScale, "Random")
 						EndIf
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-							DrawOptionsTooltip(tX, tY, tW, tH, "usertrackmode")
+							RenderOptionsTooltip(tX, tY, tW, tH, "usertrackmode")
 						EndIf
 						If MouseOn(x + (270 * MenuScale), y + 30 * MenuScale, 190 * MenuScale, 30 * MenuScale)
-							DrawOptionsTooltip(tX, tY, tW, tH, "usertrackscan")
+							RenderOptionsTooltip(tX, tY, tW, tH, "usertrackscan")
 						EndIf
 					EndIf
 					;[End Block]
@@ -7002,7 +7044,7 @@ Function DrawMenu()
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Mouse sensitivity:")
 					If MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20)
-						DrawOptionsTooltip(tX, tY, tW, tH, "mousesensitivity", opt\MouseSensitivity)
+						RenderOptionsTooltip(tX, tY, tW, tH, "mousesensitivity", opt\MouseSensitivity)
 					EndIf
 					
 					y = y + (40 * MenuScale)
@@ -7010,7 +7052,7 @@ Function DrawMenu()
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Invert mouse Y-axis:")
 					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-						DrawOptionsTooltip(tX, tY, tW, tH, "mouseinvert")
+						RenderOptionsTooltip(tX, tY, tW, tH, "mouseinvert")
 					EndIf
 					
 					y = y + (40 * MenuScale)
@@ -7018,7 +7060,7 @@ Function DrawMenu()
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Mouse smoothing:")
 					If MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20)
-						DrawOptionsTooltip(tX, tY, tW, tH, "mousesmoothing", opt\MouseSmoothing)
+						RenderOptionsTooltip(tX, tY, tW, tH, "mousesmoothing", opt\MouseSmoothing)
 					EndIf
 					
 					y = y + (40 * MenuScale)
@@ -7051,7 +7093,7 @@ Function DrawMenu()
 					Text(x, y + (205 * MenuScale), "Take Screenshot:")
 					
 					If MouseOn(x, y, 310 * MenuScale, 220 * MenuScale)
-						DrawOptionsTooltip(tX, tY, tW, tH, "controls")
+						RenderOptionsTooltip(tX, tY, tW, tH, "controls")
 					EndIf
 					;[End Block]
 				Case 4 ; ~ Advanced
@@ -7063,7 +7105,7 @@ Function DrawMenu()
 					Color(255, 255, 255)			
 					Text(x, y + (5 * MenuScale), "Show HUD:")	
 					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-						DrawOptionsTooltip(tX, tY, tW, tH, "hud")
+						RenderOptionsTooltip(tX, tY, tW, tH, "hud")
 					EndIf
 					
 					y = y + (30 * MenuScale)
@@ -7071,7 +7113,7 @@ Function DrawMenu()
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Enable console:")
 					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-						DrawOptionsTooltip(tX, tY, tW, tH, "consoleenable")
+						RenderOptionsTooltip(tX, tY, tW, tH, "consoleenable")
 					EndIf
 					
 					y = y + (30 * MenuScale)
@@ -7080,7 +7122,7 @@ Function DrawMenu()
 						Color(255, 255, 255)
 						Text(x, y + (5 * MenuScale), "Open console on error:")
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-							DrawOptionsTooltip(tX, tY, tW, tH, "consoleerror")
+							RenderOptionsTooltip(tX, tY, tW, tH, "consoleerror")
 						EndIf
 					EndIf
 					
@@ -7089,7 +7131,7 @@ Function DrawMenu()
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Achievement popups:")
 					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-						DrawOptionsTooltip(tX, tY, tW, tH, "achpopup")
+						RenderOptionsTooltip(tX, tY, tW, tH, "achpopup")
 					EndIf
 					
 					y = y + (30 * MenuScale)
@@ -7097,7 +7139,7 @@ Function DrawMenu()
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Show FPS:")
 					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-						DrawOptionsTooltip(tX, tY, tW, tH, "showfps")
+						RenderOptionsTooltip(tX, tY, tW, tH, "showfps")
 					EndIf
 					
 					y = y + (30 * MenuScale)
@@ -7110,10 +7152,10 @@ Function DrawMenu()
 						Text(x, y + (45 * MenuScale), opt\FrameLimit + " FPS")
 					EndIf
 					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-						DrawOptionsTooltip(tX, tY, tW, tH, "framelimit", opt\FrameLimit)
+						RenderOptionsTooltip(tX, tY, tW, tH, "framelimit", opt\FrameLimit)
 					EndIf
 					If MouseOn(x + (150 * MenuScale), y + (40 * MenuScale), 114 * MenuScale, 20)
-						DrawOptionsTooltip(tX, tY, tW, tH, "framelimit", opt\FrameLimit)
+						RenderOptionsTooltip(tX, tY, tW, tH, "framelimit", opt\FrameLimit)
 					EndIf
 					;[End Block]
 			End Select
@@ -7220,7 +7262,7 @@ Function UpdateMenu()
 		If AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg =< 0 Then
 			; ~ Just save this line, ok?
 		ElseIf AchievementsMenu =< 0 And OptionsMenu > 0 And QuitMsg =< 0 And me\KillTimer >= 0.0
-			If DrawButton(x + (101 * MenuScale), y + (440 * MenuScale), 230 * MenuScale, 60 * MenuScale, "Back") Then
+			If UpdateMainMenuButton(x + (101 * MenuScale), y + (440 * MenuScale), 230 * MenuScale, 60 * MenuScale, "Back") Then
 				AchievementsMenu = 0
 				OptionsMenu = 0
 				QuitMsg = 0
@@ -7233,19 +7275,19 @@ Function UpdateMenu()
 				mm\ShouldDeleteGadgets = True
 			EndIf
 			
-			If DrawButton(x - (5 * MenuScale), y, 100 * MenuScale, 30 * MenuScale, "GRAPHICS", False) Then
+			If UpdateMainMenuButton(x - (5 * MenuScale), y, 100 * MenuScale, 30 * MenuScale, "GRAPHICS", False) Then
 				OptionsMenu = 1
 				mm\ShouldDeleteGadgets = True
 			EndIf
-			If DrawButton(x + (105 * MenuScale), y, 100 * MenuScale, 30 * MenuScale, "AUDIO", False) Then
+			If UpdateMainMenuButton(x + (105 * MenuScale), y, 100 * MenuScale, 30 * MenuScale, "AUDIO", False) Then
 				OptionsMenu = 2
 				mm\ShouldDeleteGadgets = True
 			EndIf
-			If DrawButton(x + (215 * MenuScale), y, 100 * MenuScale, 30 * MenuScale, "CONTROLS", False) Then
+			If UpdateMainMenuButton(x + (215 * MenuScale), y, 100 * MenuScale, 30 * MenuScale, "CONTROLS", False) Then
 				OptionsMenu = 3
 				mm\ShouldDeleteGadgets = True
 			EndIf
-			If DrawButton(x + (325 * MenuScale), y, 100 * MenuScale, 30 * MenuScale, "ADVANCED", False) Then
+			If UpdateMainMenuButton(x + (325 * MenuScale), y, 100 * MenuScale, 30 * MenuScale, "ADVANCED", False) Then
 				OptionsMenu = 4
 				mm\ShouldDeleteGadgets = True
 			EndIf
@@ -7255,31 +7297,31 @@ Function UpdateMenu()
 					;[Block]
 					y = y + (50 * MenuScale)
 					
-					opt\BumpEnabled = DrawTick(x + (270 * MenuScale), y, opt\BumpEnabled, True)
+					opt\BumpEnabled = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\BumpEnabled, True)
 					
 					y = y + (30 * MenuScale)
 					
-					opt\VSync = DrawTick(x + (270 * MenuScale), y, opt\VSync)
+					opt\VSync = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\VSync)
 					
 					y = y + (30 * MenuScale)
 					
-					opt\AntiAliasing = DrawTick(x + (270 * MenuScale), y, opt\AntiAliasing, opt\DisplayMode <> 0)
+					opt\AntiAliasing = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\AntiAliasing, opt\DisplayMode <> 0)
 					
 					y = y + (30 * MenuScale)
 					
-					opt\EnableRoomLights = DrawTick(x + (270 * MenuScale), y, opt\EnableRoomLights)
+					opt\EnableRoomLights = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\EnableRoomLights)
 					
 					y = y + (40 * MenuScale)
 					
-					opt\ScreenGamma = SlideBar(x + (270 * MenuScale), y, 100 * MenuScale, opt\ScreenGamma * 50.0) / 50.0
+					opt\ScreenGamma = UpdateMainMenuSlideBar(x + (270 * MenuScale), y, 100 * MenuScale, opt\ScreenGamma * 50.0) / 50.0
 					
 					y = y + (45 * MenuScale)
 					
-					opt\ParticleAmount = Slider3(x + (270 * MenuScale), y, 100 * MenuScale, opt\ParticleAmount, 2, "MINIMAL", "REDUCED", "FULL")
+					opt\ParticleAmount = UpdateMainMenuSlider3(x + (270 * MenuScale), y, 100 * MenuScale, opt\ParticleAmount, 2, "MINIMAL", "REDUCED", "FULL")
 					
 					y = y + (45 * MenuScale)
 					
-					opt\TextureDetails = Slider5(x + (270 * MenuScale), y, 100 * MenuScale, opt\TextureDetails, 3, "0.8", "0.4", "0.0", "-0.4", "-0.8")
+					opt\TextureDetails = UpdateMainMenuSlider5(x + (270 * MenuScale), y, 100 * MenuScale, opt\TextureDetails, 3, "0.8", "0.4", "0.0", "-0.4", "-0.8")
 					Select opt\TextureDetails
 						Case 0
 							;[Block]
@@ -7306,17 +7348,17 @@ Function UpdateMenu()
 					
 					y = y + (35 * MenuScale)
 					
-					opt\SaveTexturesInVRAM = DrawTick(x + (270 * MenuScale), y, opt\SaveTexturesInVRAM, True)
+					opt\SaveTexturesInVRAM = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\SaveTexturesInVRAM, True)
 					
 					y = y + (40 * MenuScale)
 					
-					opt\CurrFOV = SlideBar(x + (270 * MenuScale), y, 100 * MenuScale, opt\CurrFOV * 2.0) / 2.0
+					opt\CurrFOV = UpdateMainMenuSlideBar(x + (270 * MenuScale), y, 100 * MenuScale, opt\CurrFOV * 2.0) / 2.0
 					opt\FOV = opt\CurrFOV + 40
 					CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * opt\RealGraphicWidth / opt\RealGraphicHeight)) / 2.0))
 					
 					y = y + (45 * MenuScale)
 					
-					opt\Anisotropic = Slider5(x + (270 * MenuScale), y, 100 * MenuScale, opt\Anisotropic, 4, "Trilinear", "2x", "4x", "8x", "16x")
+					opt\Anisotropic = UpdateMainMenuSlider5(x + (270 * MenuScale), y, 100 * MenuScale, opt\Anisotropic, 4, "Trilinear", "2x", "4x", "8x", "16x")
 					Select opt\Anisotropic
 						Case 0
 							;[Block]
@@ -7344,66 +7386,66 @@ Function UpdateMenu()
 					;[Block]
 					y = y + (50 * MenuScale)
 					
-					opt\MusicVolume = (SlideBar(x + (270 * MenuScale), y, 100 * MenuScale, opt\MusicVolume * 100.0) / 100.0)
+					opt\MusicVolume = (UpdateMainMenuSlideBar(x + (270 * MenuScale), y, 100 * MenuScale, opt\MusicVolume * 100.0) / 100.0)
 					
 					y = y + (40 * MenuScale)
 					
-					opt\PrevSFXVolume = (SlideBar(x + (270 * MenuScale), y, 100 * MenuScale, opt\SFXVolume * 100.0) / 100.0)
+					opt\PrevSFXVolume = (UpdateMainMenuSlideBar(x + (270 * MenuScale), y, 100 * MenuScale, opt\SFXVolume * 100.0) / 100.0)
 					If (Not me\Deaf) Then opt\SFXVolume = opt\PrevSFXVolume
 					
 					y = y + (40 * MenuScale)
 					
-					opt\EnableSFXRelease = DrawTick(x + (270 * MenuScale), y, opt\EnableSFXRelease, True)
+					opt\EnableSFXRelease = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\EnableSFXRelease, True)
 					
 					y = y + (30 * MenuScale)
 					
-					opt\EnableUserTracks = DrawTick(x + (270 * MenuScale), y, opt\EnableUserTracks, True)
+					opt\EnableUserTracks = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\EnableUserTracks, True)
 					
 					If opt\EnableUserTracks Then
 						y = y + (30 * MenuScale)
 						
-						opt\UserTrackMode = DrawTick(x + (270 * MenuScale), y, opt\UserTrackMode)
+						opt\UserTrackMode = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\UserTrackMode)
 						
-						DrawButton(x, y + (30 * MenuScale), 210 * MenuScale, 30 * MenuScale, "Scan for User Tracks", False, False, True)
+						UpdateMainMenuButton(x, y + (30 * MenuScale), 210 * MenuScale, 30 * MenuScale, "Scan for User Tracks", False, False, True)
 					EndIf
 					;[End Block]
 				Case 3 ; ~ Controls
 					;[Block]
 					y = y + (50 * MenuScale)
 					
-					opt\MouseSensitivity = (SlideBar(x + (270 * MenuScale), y, 100 * MenuScale, (opt\MouseSensitivity + 0.5) * 100.0) / 100.0) - 0.5
+					opt\MouseSensitivity = (UpdateMainMenuSlideBar(x + (270 * MenuScale), y, 100 * MenuScale, (opt\MouseSensitivity + 0.5) * 100.0) / 100.0) - 0.5
 					
 					y = y + (40 * MenuScale)
 					
-					opt\InvertMouse = DrawTick(x + (270 * MenuScale), y, opt\InvertMouse)
+					opt\InvertMouse = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\InvertMouse)
 					
 					y = y + 40 * MenuScale
 					
-					opt\MouseSmoothing = SlideBar(x + (270 * MenuScale), y, 100 * MenuScale, (opt\MouseSmoothing) * 50.0) / 50.0
+					opt\MouseSmoothing = UpdateMainMenuSlideBar(x + (270 * MenuScale), y, 100 * MenuScale, (opt\MouseSmoothing) * 50.0) / 50.0
 					
 					y = y + (70 * MenuScale)
 					
-					InputBox(x + (200 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_UP, 210.0)], 3)		
+					UpdateMainMenuInputBox(x + (200 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_UP, 210.0)], 3)		
 					
-					InputBox(x + (200 * MenuScale), y + (20 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_LEFT, 210.0)], 4)	
+					UpdateMainMenuInputBox(x + (200 * MenuScale), y + (20 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_LEFT, 210.0)], 4)	
 					
-					InputBox(x + (200 * MenuScale), y + (40 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_DOWN, 210.0)], 5)				
+					UpdateMainMenuInputBox(x + (200 * MenuScale), y + (40 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_DOWN, 210.0)], 5)				
 					
-					InputBox(x + (200 * MenuScale), y + (60 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_RIGHT, 210.0)], 6)
+					UpdateMainMenuInputBox(x + (200 * MenuScale), y + (60 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_RIGHT, 210.0)], 6)
 					
-					InputBox(x + (200 * MenuScale), y + (80 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SPRINT, 210.0)], 7)
+					UpdateMainMenuInputBox(x + (200 * MenuScale), y + (80 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SPRINT, 210.0)], 7)
 					
-					InputBox(x + (200 * MenuScale), y + (100 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CROUCH, 210.0)], 8)
+					UpdateMainMenuInputBox(x + (200 * MenuScale), y + (100 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CROUCH, 210.0)], 8)
 					
-					InputBox(x + (200 * MenuScale), y + (120 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\BLINK, 210.0)], 9)				
+					UpdateMainMenuInputBox(x + (200 * MenuScale), y + (120 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\BLINK, 210.0)], 9)				
 					
-					InputBox(x + (200 * MenuScale), y + (140 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\INVENTORY, 210.0)], 10)
+					UpdateMainMenuInputBox(x + (200 * MenuScale), y + (140 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\INVENTORY, 210.0)], 10)
 					
-					InputBox(x + (200 * MenuScale), y + (160 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SAVE, 210.0)], 11)	
+					UpdateMainMenuInputBox(x + (200 * MenuScale), y + (160 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SAVE, 210.0)], 11)	
 					
-					If opt\CanOpenConsole Then InputBox(x + (200 * MenuScale), y + 180 * MenuScale, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210.0)], 12)
+					If opt\CanOpenConsole Then UpdateMainMenuInputBox(x + (200 * MenuScale), y + 180 * MenuScale, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210.0)], 12)
 					
-					InputBox(x + (200 * MenuScale), y + (200 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, 210.0)], 13)
+					UpdateMainMenuInputBox(x + (200 * MenuScale), y + (200 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, 210.0)], 13)
 					
 					Local TempKey%
 					
@@ -7464,13 +7506,13 @@ Function UpdateMenu()
 					;[Block]
 					y = y + (50 * MenuScale)
 					
-					opt\HUDEnabled = DrawTick(x + (270 * MenuScale), y, opt\HUDEnabled)
+					opt\HUDEnabled = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\HUDEnabled)
 					
 					y = y + (30 * MenuScale)
 					
 					Local PrevCanOpenConsole% = opt\CanOpenConsole
 					
-					opt\CanOpenConsole = DrawTick(x + (270 * MenuScale), y, opt\CanOpenConsole)
+					opt\CanOpenConsole = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\CanOpenConsole)
 					
 					If PrevCanOpenConsole Then
 						If PrevCanOpenConsole <> opt\CanOpenConsole Then
@@ -7480,22 +7522,22 @@ Function UpdateMenu()
 					
 					y = y + (30 * MenuScale)
 					
-					If opt\CanOpenConsole Then opt\ConsoleOpening = DrawTick(x + (270 * MenuScale), y, opt\ConsoleOpening)
+					If opt\CanOpenConsole Then opt\ConsoleOpening = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\ConsoleOpening)
 					
 					y = y + (30 * MenuScale)
 					
-					opt\AchvMsgEnabled = DrawTick(x + (270 * MenuScale), y, opt\AchvMsgEnabled)
+					opt\AchvMsgEnabled = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\AchvMsgEnabled)
 					
 					y = y + (30 * MenuScale)
 					
-					opt\ShowFPS = DrawTick(x + (270 * MenuScale), y, opt\ShowFPS)
+					opt\ShowFPS = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\ShowFPS)
 					
 					y = y + (30 * MenuScale)
 					
 					Local PrevCurrFrameLimit% = opt\CurrFrameLimit > 0.0
 					
-					If DrawTick(x + (270 * MenuScale), y, opt\CurrFrameLimit > 0.0) Then
-						opt\CurrFrameLimit = SlideBar(x + (150 * MenuScale), y + (40 * MenuScale), 100 * MenuScale, opt\CurrFrameLimit# * 99.0) / 99.0
+					If UpdateMainMenuTick(x + (270 * MenuScale), y, opt\CurrFrameLimit > 0.0) Then
+						opt\CurrFrameLimit = UpdateMainMenuSlideBar(x + (150 * MenuScale), y + (40 * MenuScale), 100 * MenuScale, opt\CurrFrameLimit# * 99.0) / 99.0
 						opt\CurrFrameLimit = Max(opt\CurrFrameLimit, 0.01)
 						opt\FrameLimit = 19 + (opt\CurrFrameLimit * 100.0)
 					Else
@@ -7521,7 +7563,7 @@ Function UpdateMenu()
 				If (Not CanSave) Then AbleToSave = False
 				If AbleToSave Then
 					QuitButton = 140
-					If DrawButton(x, y + (60 * MenuScale), 430 * MenuScale, 60 * MenuScale, "Save & Quit") Then
+					If UpdateMainMenuButton(x, y + (60 * MenuScale), 430 * MenuScale, 60 * MenuScale, "Save & Quit") Then
 						me\DropSpeed = 0.0
 						SaveGame(SavePath + CurrSave + "\")
 						NullGame()
@@ -7532,14 +7574,14 @@ Function UpdateMenu()
 				EndIf
 			EndIf
 			
-			If DrawButton(x, y + (QuitButton * MenuScale), 430 * MenuScale, 60 * MenuScale, "Quit") Then
+			If UpdateMainMenuButton(x, y + (QuitButton * MenuScale), 430 * MenuScale, 60 * MenuScale, "Quit") Then
 				NullGame()
 				CurrSave = ""
 				ResetInput()
 				Return
 			EndIf
 			
-			If DrawButton(x + (101 * MenuScale), y + 344 * MenuScale, 230 * MenuScale, 60 * MenuScale, "Back") Then
+			If UpdateMainMenuButton(x + (101 * MenuScale), y + 344 * MenuScale, 230 * MenuScale, 60 * MenuScale, "Back") Then
 				AchievementsMenu = 0
 				OptionsMenu = 0
 				QuitMsg = 0
@@ -7547,7 +7589,7 @@ Function UpdateMenu()
 				mm\ShouldDeleteGadgets = True
 			EndIf
 		Else
-			If DrawButton(x + (101 * MenuScale), y + 344 * MenuScale, 230 * MenuScale, 60 * MenuScale, "Back") Then
+			If UpdateMainMenuButton(x + (101 * MenuScale), y + 344 * MenuScale, 230 * MenuScale, 60 * MenuScale, "Back") Then
 				AchievementsMenu = 0
 				OptionsMenu = 0
 				QuitMsg = 0
@@ -7557,13 +7599,13 @@ Function UpdateMenu()
 			
 			If AchievementsMenu > 0 Then
 				If AchievementsMenu =< Floor(Float(MAXACHIEVEMENTS - 1) / 12.0) Then 
-					If DrawButton(x + (341 * MenuScale), y + (344 * MenuScale), 50 * MenuScale, 60 * MenuScale, ">") Then
+					If UpdateMainMenuButton(x + (341 * MenuScale), y + (344 * MenuScale), 50 * MenuScale, 60 * MenuScale, ">") Then
 						AchievementsMenu = AchievementsMenu + 1
 						mm\ShouldDeleteGadgets = True
 					EndIf
 				EndIf
 				If AchievementsMenu > 1 Then
-					If DrawButton(x + (41 * MenuScale), y + (344 * MenuScale), 50 * MenuScale, 60 * MenuScale, "<") Then
+					If UpdateMainMenuButton(x + (41 * MenuScale), y + (344 * MenuScale), 50 * MenuScale, 60 * MenuScale, "<") Then
 						AchievementsMenu = AchievementsMenu - 1
 						mm\ShouldDeleteGadgets = True
 					EndIf
@@ -7577,7 +7619,7 @@ Function UpdateMenu()
 			If me\KillTimer >= 0.0 Then	
 				y = y + (72 * MenuScale)
 				
-				If DrawButton(x, y, 430 * MenuScale, 60 * MenuScale, "Resume", True, True) Then
+				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "Resume", True, True) Then
 					MenuOpen = False
 					ResumeSounds()
 					StopMouseMovement()
@@ -7589,7 +7631,7 @@ Function UpdateMenu()
 				
 				If SelectedDifficulty\SaveType <> NOSAVES Then
 					If GameSaved Then
-						If DrawButton(x, y, 430 * MenuScale, 60 * MenuScale, "Load Game") Then
+						If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "Load Game") Then
 							DrawLoading(0)
 							
 							MenuOpen = False
@@ -7627,19 +7669,19 @@ Function UpdateMenu()
 							Return
 						EndIf
 					Else
-						DrawButton(x, y, 430 * MenuScale, 60 * MenuScale, "Load Game", True, False, True)
+						UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "Load Game", True, False, True)
 					EndIf
 					y = y + (75 * MenuScale)
 				EndIf
 				
-				If DrawButton(x, y, 430 * MenuScale, 60 * MenuScale, "Achievements") Then 
+				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "Achievements") Then 
 					AchievementsMenu = 1
 					mm\ShouldDeleteGadgets = True
 				EndIf
 				
 				y = y + (75 * MenuScale)
 				
-				If DrawButton(x, y, 430 * MenuScale, 60 * MenuScale, "Options") Then 
+				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "Options") Then 
 					OptionsMenu = 1
 					mm\ShouldDeleteGadgets = True
 				EndIf
@@ -7650,7 +7692,7 @@ Function UpdateMenu()
 				
 				If SelectedDifficulty\SaveType <> NOSAVES Then
 					If GameSaved Then
-						If DrawButton(x, y, 430 * MenuScale, 60 * MenuScale, "Load Game") Then
+						If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "Load Game") Then
 							DrawLoading(0)
 							
 							MenuOpen = False
@@ -7688,11 +7730,11 @@ Function UpdateMenu()
 							Return
 						EndIf
 					Else
-						DrawButton(x, y, 430 * MenuScale, 60 * MenuScale, "Load Game", True, False, True)
+						UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "Load Game", True, False, True)
 					EndIf
 					y = y + (80 * MenuScale)
 				EndIf
-				If DrawButton(x, y, 430 * MenuScale, 60 * MenuScale, "Quit to Menu") Then
+				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "Quit to Menu") Then
 					NullGame()
 					CurrSave = ""
 					ResetInput()
@@ -7702,7 +7744,7 @@ Function UpdateMenu()
 			EndIf
 			
 			If me\KillTimer >= 0.0 And (Not MainMenuOpen) Then
-				If DrawButton(x, y, 430 * MenuScale, 60 * MenuScale, "Quit") Then
+				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "Quit") Then
 					QuitMsg = 1
 					mm\ShouldDeleteGadgets = True
 				EndIf
@@ -9128,7 +9170,7 @@ Function Update294()
 	EndIf
 End Function
 
-Function Draw294()
+Function Render294()
 	Local x#, y#, xTemp%, yTemp%, Temp%
 	
 	ShowPointer()
