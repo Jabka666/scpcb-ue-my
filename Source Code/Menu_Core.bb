@@ -2249,7 +2249,7 @@ Function DrawLoading(Percent%, ShortLoading% = False)
 			FlushMouse()
 		EndIf
 		
-		UpdateGamma2()
+		RenderGamma()
 		
 		Flip(False)
 		

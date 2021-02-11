@@ -2004,7 +2004,7 @@ Repeat
 		MainLoop()
 	EndIf
 	
-	UpdateGamma2()
+	RenderGamma()
 	
 	If KeyHit(key\SCREENSHOT) Then GetScreenshot()
 	
@@ -2565,7 +2565,7 @@ Function MainLoop()
 	
 	RenderWorld2(Max(0.0, 1.0 + (fps\Accumulator / TICK_DURATION)))
 	
-	UpdateBlur(me\BlurVolume)
+	RenderBlur(me\BlurVolume)
 	
 	RenderGUI()
 	

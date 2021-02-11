@@ -89,7 +89,7 @@ Function ResizeImage2(Image%, Width%, Height%)
 	Return(Img)
 End Function
 
-Function UpdateGamma2()
+Function RenderGamma()
 	If opt\DisplayMode = 1 Then
 		If opt\RealGraphicWidth <> opt\GraphicWidth Lor opt\RealGraphicHeight <> opt\GraphicHeight Then
 			SetBuffer(TextureBuffer(FresizeTexture))
@@ -395,7 +395,7 @@ Function CreateBlurImage()
 	EntityTexture(SPR, ArkBlurTexture)
 End Function
 
-Function UpdateBlur(Power#)
+Function RenderBlur(Power#)
 	EntityAlpha(ArkBlurImage, Power)
 	CopyRect(0, 0, ArkSw, ArkSh, SMALLEST_POWER_TWO_HALF - (ArkSw / 2), SMALLEST_POWER_TWO_HALF - (ArkSh / 2), BackBuffer(), TextureBuffer(ArkBlurTexture))
 End Function
