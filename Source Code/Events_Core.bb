@@ -3520,41 +3520,41 @@ Function UpdateEvents()
 					EndIf
 				Else
 					If e\EventState = 1.0 Then
-						If e\room\Dist < 5.0 Lor Rand(700) = 1 Then 
-							e\EventState = 2.0
-							
-							e\room\NPC[0]\State = 5.0
+						If e\room\Dist < 4.0 Lor Rand(700) = 1 Then 
 							e\room\NPC[0]\EnemyX = EntityX(e\room\Objects[1], True)
 							e\room\NPC[0]\EnemyY = EntityY(e\room\Objects[1], True)
 							e\room\NPC[0]\EnemyZ = EntityZ(e\room\Objects[1], True)
+							
+							e\EventState = 2.0
 						EndIf
 					ElseIf e\EventState = 2.0
+						If EntityDistanceSquared(e\room\NPC[0]\Collider, me\Collider) < 12.25 And (Not chs\NoTarget) Then
+							e\room\NPC[0]\State = 1.0 : e\room\NPC[0]\State3 = 1.0
+						Else
+							e\room\NPC[0]\State = 5.0 : e\room\NPC[0]\State3 = 0.0
+						EndIf
+						
 						If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\Objects[1]) < 4.0 Then
+							e\room\RoomDoors[0]\Locked = 0
 							UseDoor(e\room\RoomDoors[0], False, True, True)
+							e\room\RoomDoors[0]\Locked = 1
 							
 							PlaySound_Strict(LoadTempSound("SFX\Room\Room2ElevatorDeath.ogg"))
 							
-							e\EventState = 2.05
+							e\EventState = 3.0
 						EndIf
 					ElseIf e\EventState < 70.0 * 13.0
 						e\EventState = e\EventState + fps\FPSFactor[0]
 						If e\EventState > 70.0 * 6.7 And e\EventState < 70.0 * 7.4 Then
 							me\CameraShake = 7.4 - (e\EventState / 70.0)
+							If e\room\NPC[0] <> Null Then
+								RemoveNPC(e\room\NPC[0]) : e\room\NPC[0] = Null
+							EndIf
 						ElseIf e\EventState > 70.0 * 8.6 And e\EventState < 70.0 * 10.6
 							me\CameraShake = 10.6 - (e\EventState / 70.0)
 						ElseIf e\EventState > 70.0 * 12.6
-							me\CameraShake = 0.0
-							If e\EventState - fps\FPSFactor[0] < 70.0 * 12.6 And e\room\NPC[0] <> Null Then
-								RemoveNPC(e\room\NPC[0]) : e\room\NPC[0] = Null
-								
-								de.Decals = CreateDecal(3, EntityX(e\room\Objects[0], True), e\room\y + 0.005, EntityZ(e\room\Objects[0], True), 90.0, Rnd(360.0), 0.0)
-								
-								de.Decals = CreateDecal(7, EntityX(e\room\Objects[0], True), e\room\y + 0.005, EntityZ(e\room\Objects[0], True), 90.0, Rnd(360.0), 0.0, 0.5)
-							EndIf
-							e\room\RoomDoors[0]\Locked = 0
+							RemoveEvent(e)
 						EndIf
-					Else
-						If e\room\RoomDoors[0]\Open Then e\room\RoomDoors[0]\Locked = 1 : RemoveEvent(e)
 					EndIf
 				EndIf
 				;[End Block]

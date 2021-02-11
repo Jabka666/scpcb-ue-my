@@ -456,10 +456,56 @@ Function LoadOptionsINI()
 	
 	opt\TextureDetails = GetINIInt(OptionFile, "Graphics", "Texture Details", 4)
 	
+	Select opt\TextureDetails
+		Case 0
+			;[Block]
+			opt\TextureDetailsLevel = 0.8
+			;[End Block]
+		Case 1
+			;[Block]
+			opt\TextureDetailsLevel = 0.4
+			;[End Block]
+		Case 2
+			;[Block]
+			opt\TextureDetailsLevel = 0.0
+			;[End Block]
+		Case 3
+			;[Block]
+			opt\TextureDetailsLevel = -0.4
+			;[End Block]
+		Case 4
+			;[Block]
+			opt\TextureDetailsLevel = -0.8
+			;[End Block]
+	End Select
+	
 	opt\FOV = GetINIFloat(OptionFile, "Graphics", "FOV", 74.0)
 	opt\CurrFOV = opt\FOV - 40.0
 	
 	opt\Anisotropic = GetINIInt(OptionFile, "Graphics", "Anisotropic Filtering", 4)
+	
+	Select opt\Anisotropic
+		Case 0
+			;[Block]
+			opt\AnisotropicLevel = 0
+			;[End Block]
+		Case 1
+			;[Block]
+			opt\AnisotropicLevel = 2
+			;[End Block]
+		Case 2
+			;[Block]
+			opt\AnisotropicLevel = 4
+			;[End Block]
+		Case 3
+			;[Block]
+			opt\AnisotropicLevel = 8
+			;[End Block]
+		Case 4
+			;[Block]
+			opt\AnisotropicLevel = 16
+			;[End Block]
+	End Select
 	
 	; ~ [AUDIO]
 	

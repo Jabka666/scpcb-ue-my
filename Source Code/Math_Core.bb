@@ -54,7 +54,7 @@ Function AngleDist#(a0#, a1#)
 	
 	If b < -180.0 Then
 		bb = b + 360.0
-	ElseIf b > 180.0 Then
+	ElseIf b > 180.0
 		bb = b - 360.0
 	Else
 		bb = b

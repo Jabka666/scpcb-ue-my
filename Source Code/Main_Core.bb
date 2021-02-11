@@ -41,52 +41,6 @@ Global WireFrameState%
 
 LoadOptionsINI()
 
-Select opt\TextureDetails
-	Case 0
-		;[Block]
-		opt\TextureDetailsLevel = 0.8
-		;[End Block]
-	Case 1
-		;[Block]
-		opt\TextureDetailsLevel = 0.4
-		;[End Block]
-	Case 2
-		;[Block]
-		opt\TextureDetailsLevel = 0.0
-		;[End Block]
-	Case 3
-		;[Block]
-		opt\TextureDetailsLevel = -0.4
-		;[End Block]
-	Case 4
-		;[Block]
-		opt\TextureDetailsLevel = -0.8
-		;[End Block]
-End Select
-
-Select opt\Anisotropic
-	Case 0
-		;[Block]
-		opt\AnisotropicLevel = 0
-		;[End Block]
-	Case 1
-		;[Block]
-		opt\AnisotropicLevel = 2
-		;[End Block]
-	Case 2
-		;[Block]
-		opt\AnisotropicLevel = 4
-		;[End Block]
-	Case 3
-		;[Block]
-		opt\AnisotropicLevel = 8
-		;[End Block]
-	Case 4
-		;[Block]
-		opt\AnisotropicLevel = 16
-		;[End Block]
-End Select
-
 Type Mouse
 	Field MouseHit1%, MouseHit2%
 	Field MouseDown1%
@@ -366,8 +320,9 @@ Type ConsoleMsg
 End Type
 
 Function CreateConsoleMsg(Txt$, R% = -1, G% = -1, B% = -1, IsCommand% = False)
-	Local c.ConsoleMsg = New ConsoleMsg
+	Local c.ConsoleMsg
 	
+	c.ConsoleMsg = New ConsoleMsg
 	Insert c Before First ConsoleMsg
 	
 	c\Txt = Txt
@@ -8587,8 +8542,7 @@ Function InitLoadGame()
 	For e.Events = Each Events
 		; ~ Loading the necessary stuff for dimension1499, but this will only be done if the player is in this dimension already
 		If e\EventID = e_dimension1499
-			If e\EventState = 2.0
-				;[Block]
+			If e\EventState = 2.0 Then
 				DrawLoading(91)
 				e\room\Objects[0] = CreatePlane()
 				
@@ -8619,7 +8573,6 @@ Function InitLoadGame()
 				DrawLoading(98)
 				UpdateChunks(e\room, 15, False)
 				Exit
-				;[End Block]
 			EndIf
 		EndIf
 	Next
@@ -8951,7 +8904,7 @@ Function Update294()
 			Select yTemp
 				Case 0
 					;[Block]
-					StrTemp = (xTemp + 1) Mod 10
+					StrTemp = ((xTemp + 1) Mod 10)
 					;[End Block]
 				Case 1
 					;[Block]

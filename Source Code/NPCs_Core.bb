@@ -2231,8 +2231,7 @@ Function UpdateNPCs()
 								RotateEntity(Pvt, Min(EntityPitch(Pvt), 40.0), EntityYaw(n\Collider), 0.0)
 								
 								If n\Reload = 0.0
-									EntityPick(Pvt, Dist)
-									If PickedEntity() = me\Collider Lor n\State3 = 1.0 Then
+									If n\State3 = 1.0 Then
 										Local InstaKillPlayer% = False
 										
 										If PlayerRoom\RoomTemplate\Name = "room173" Then 
@@ -2258,7 +2257,7 @@ Function UpdateNPCs()
 									EndIf
 								EndIf
 								
-								If n\Reload > 0.0 And n\Reload =< 7.0
+								If n\Reload > 0.0 And n\Reload =< 7.0 Then
 									AnimateNPC(n, 245, 248, 0.35)
 								Else
 									If n\Frame < 302.0 Then AnimateNPC(n, 302.0, 344.0, 0.35)
@@ -2426,8 +2425,7 @@ Function UpdateNPCs()
 								RotateEntity(Pvt, Min(EntityPitch(Pvt), 40.0), EntityYaw(n\Collider), 0.0)
 								
 								If n\Reload = 0.0
-									EntityPick(Pvt, Dist)
-									If PickedEntity() = me\Collider Lor n\State3 = 1.0 Then
+									If n\State3 = 1.0 Then
 										InstaKillPlayer = False
 										
 										msg\DeathMsg = ""
