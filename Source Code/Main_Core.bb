@@ -8673,65 +8673,46 @@ Function NullGame(PlayButtonSFX% = True)
 		itt\Found = False
 	Next
 	
-	me\DropSpeed = 0.0
-	me\CurrSpeed = 0.0
+	; ~ Just remove the Type and create again
+	Delete(me)
+	me.Player = New Player
 	
-	me\DeathTimer = 0.0
+	If wi\NightVision > 0 Then
+		opt\CameraFogFar = opt\StoredCameraFogFar
+	Else
+		opt\CameraFogFar = 6.0
+	EndIf
 	
-	me\HeartBeatVolume = 0.0
+	Delete(wi)
+	wi.WearableItems = New WearableItems
 	
-	me\StaminaEffect = 1.0
-	me\StaminaEffectTimer = 0.0
-	me\BlinkEffect = 1.0
-	me\BlinkEffectTimer = 0.0
+	Delete(I_005)
+	I_005.SCP005 = New SCP005
 	
-	me\Bloodloss = 0.0
-	me\Injuries = 0.0
-	I_008\Timer = 0.0
-	I_409\Timer = 0.0
+	Delete(I_008)
+	I_008.SCP008 = New SCP008
 	
-	For i = 0 To 5
-		I_1025\State[i] = 0.0
-	Next
+	Delete(I_500)
+	I_500.SCP500 = New SCP500
 	
-	I_005\ChanceToSpawn = 0
+	Delete(I_409)
+	I_409.SCP409 = New SCP409
 	
-	I_500\Taken = 0
+	Delete(I_427)
+	I_427.SCP427 = New SCP427
 	
-	me\SelectedEnding = -1
-	me\EndingTimer = 0.0
-	me\ExplosionTimer = 0.0
+	Delete(I_714)
+	I_714.SCP714 = New SCP714
 	
-	me\CameraShake = 0.0
-	me\Shake = 0.0
-	me\LightFlash = 0.0
-	me\LightBlink = 0.0
+	Delete(I_1025)
+	I_1025.SCP1025 = New SCP1025
+	
+	Delete(I_1499)
+	I_1499.SCP1499 = New SCP1499
 	
 	ClearCheats(chs)
 	WireFrameState = 0
 	WireFrame(0)
-	
-	wi\GasMaskFogTimer = 0.0
-	wi\GasMask = 0
-	wi\HazmatSuit = 0
-	wi\BallisticVest = 0
-	wi\BallisticHelmet = 0
-	If wi\NightVision > 0 Then
-		opt\CameraFogFar = opt\StoredCameraFogFar
-		wi\NightVision = 0
-	Else
-		opt\CameraFogFar = 6.0
-	EndIf
-	wi\SCRAMBLE = 0
-	
-	I_714\Using = False
-	
-	I_427\Using = False
-	I_427\Timer = 0.0
-	
-	me\ForceMove = 0.0
-	me\ForceAngle = 0.0	
-	me\Playable = False
 	
 	CoffinDistance = 100.0
 	
@@ -8746,31 +8727,14 @@ Function NullGame(PlayButtonSFX% = True)
 		Achievements[i] = 0
 	Next
 	AchvPDDone = False
-	me\RefinedItems = 0
 	
 	ConsoleInput = ""
 	ConsoleOpen = False
 	
-	me\EyeIrritation = 0.0
-	me\EyeStuck = 0.0
-	
 	ShouldPlay = 0
 	
-	me\KillTimer = 0.0
-	me\FallTimer = 0.0
-	me\Stamina = 100.0
-	me\BlurTimer = 0.0
-	me\Sanity = 0.0
-	me\RestoreSanity = True
-	me\Crouch = False
-	me\CrouchState = 0.0
 	LightVolume = 0.0
 	
-	me\Funds = 0
-	me\UsedMastercard = False
-	
-	me\Vomit = False
-	me\VomitTimer = 0.0
 	SecondaryLightOn = True
 	PrevSecondaryLightOn = True
 	RemoteDoorOn = True
@@ -8874,14 +8838,6 @@ Function NullGame(PlayButtonSFX% = True)
 		If rt\OBJ <> 0 Then FreeEntity(rt\OBJ) : rt\OBJ = 0
 	Next
 	
-	I_1499\PrevX = 0.0
-	I_1499\PrevY = 0.0
-	I_1499\PrevZ = 0.0
-	If I_1499\PrevRoom <> Null Then I_1499\PrevRoom = Null
-	I_1499\x = 0.0
-	I_1499\y = 0.0
-	I_1499\z = 0.0
-	I_1499\Using = 0
 	DeleteChunks()
 	
 	OptionsMenu = -1
@@ -8890,10 +8846,6 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	opt\MusicVolume = opt\PrevMusicVolume
 	opt\SFXVolume = opt\PrevSFXVolume
-	me\Deaf = False
-	me\DeafTimer = 0.0
-	
-	me\Zombie = False
 	
 	Delete Each AchievementMsg
 	CurrAchvMSGID = 0
@@ -8902,12 +8854,11 @@ Function NullGame(PlayButtonSFX% = True)
 	ResetTimingAccumulator()
 	If Camera <> 0 Then Camera = 0
 	If ArkBlurCam <> 0 Then ArkBlurCam = 0
-	If me\Collider <> 0 Then me\Collider = 0
 	If Sky <> 0 Then Sky = 0
 	InitFastResize()
 	
+	; ~ Load main menu assets and open main menu
 	mm\ShouldDeleteGadgets = True
-	
 	InitMainMenuAssets()
 	MenuOpen = False
 	MainMenuOpen = True

@@ -23,7 +23,7 @@ Function UpdateSubtitles()
 			For i = ANNOUNCEMENT To THIRD_PERSON
 				If sub\Timer[i] > 0.0 Then
 					ShouldDeleteSubtitles = False
-					sub\Timer[i] = sub\Timer[i] - fps\FPSFactor[0 + (SelectedDoor <> Null)]
+					sub\Timer[i] = sub\Timer[i] - fps\Factor[0 + (SelectedDoor <> Null)]
 				EndIf
 			Next
 			If ShouldDeleteSubtitles Then Delete(sub)
