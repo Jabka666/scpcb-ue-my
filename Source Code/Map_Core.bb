@@ -37,7 +37,7 @@ Function CheckForPropModel%(File$)
 		Return(CopyEntity(o\ButtonModelID[0]))
 	ElseIf Instr(File, "Door01") <> 0 ; ~ Check for "Door01"
 		Return(CopyEntity(o\DoorModelID[0]))
-	ElseIf Instr(File, "\DoorFrame") <> 0 ; ~ Check for "DoorFrame"
+	ElseIf Instr(File, "\doorframe") <> 0 ; ~ Check for "DoorFrame"
 		Return(CopyEntity(o\DoorModelID[1]))
 	ElseIf Instr(File, "contdoorleft") <> 0 ; ~ Check for "ContDoorLeft"
 		Return(CopyEntity(o\DoorModelID[5]))
@@ -3756,7 +3756,7 @@ Function FillRoom(r.Rooms)
 			r\RoomDoors.Doors[2] = CreateDoor(r\x - 4064.0 * RoomScale, r\y - 1248.0 * RoomScale, r\z + 3952.0 * RoomScale, 0.0, r)
 			r\RoomDoors[2]\AutoClose = False
 			
-			d.Doors = CreateDoor(r\x, r\y, r\z + 2336.0 * RoomScale, 0.0, r, True)
+			d.Doors = CreateDoor(r\x, r\y, r\z + 2336.0 * RoomScale, 0.0, r, True, Big_Door)
 			For i = 0 To 1
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
 			Next

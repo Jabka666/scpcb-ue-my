@@ -3009,8 +3009,8 @@ Function MovePlayer()
 			TurnEntity(Pvt, 90.0, 0.0, 0.0)
 			EntityPick(Pvt, 0.3)
 			
-			de.Decals = CreateDecal(Rand(16, 17), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rand(360.0), 0.0, Rnd(0.03, 0.08) * Min(me\Injuries, 3.0))
-			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + 0.009 
+			de.Decals = CreateDecal(Rand(16, 17), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rand(360.0), 0.0, Rnd(0.03, 0.08) * Min(me\Injuries, 2.5))
+			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + Rnd(0.008, 0.009)
 			TempCHN = PlaySound_Strict(DripSFX[Rand(0, 2)])
 			ChannelVolume(TempCHN, Rnd(0.0, 0.8) * opt\SFXVolume)
 			ChannelPitch(TempCHN, Rand(20000, 30000))
@@ -8065,9 +8065,9 @@ Function LoadEntities()
 	
 	o\DoorModelID[4] = LoadMesh_Strict("GFX\map\Props\DoorColl.x") ; ~ Door Collider
 	
-	o\DoorModelID[5] = LoadMesh_Strict("GFX\map\Props\ContDoorLeft.x") ; ~ Big Door Left
+	o\DoorModelID[5] = LoadMesh_Strict("GFX\map\Props\contdoorleft.x") ; ~ Big Door Left
 	
-	o\DoorModelID[6] = LoadMesh_Strict("GFX\map\Props\ContDoorRight.x") ; ~ Big Door Right
+	o\DoorModelID[6] = LoadMesh_Strict("GFX\map\Props\contdoorright.x") ; ~ Big Door Right
 	
 	o\DoorModelID[7] = LoadMesh_Strict("GFX\map\Props\ElevatorDoor.b3d") ; ~ Elevator Door
 	
