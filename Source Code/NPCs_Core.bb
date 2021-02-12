@@ -577,7 +577,7 @@ Function UpdateNPCs()
 					If n\Idle < 2 Then
 						If n\IdleTimer > 0.1
 							n\Idle = 1
-							n\IdleTimer = Max(n\IdleTimer - fps\FPSFactor[0], 0.1)
+							n\IdleTimer = Max(n\IdleTimer - fps\Factor[0], 0.1)
 						ElseIf n\IdleTimer = 0.1
 							n\Idle = 0
 							n\IdleTimer = 0.0
@@ -658,7 +658,7 @@ Function UpdateNPCs()
 								
 								n\LastDist = Dist
 								
-								n\State = Max(0.0, n\State - fps\FPSFactor[0] / 20.0)
+								n\State = Max(0.0, n\State - fps\Factor[0] / 20.0)
 							Else 
 								; ~ Teleport to a room closer to the player
 								If Dist > 50.0 Then
@@ -757,20 +757,20 @@ Function UpdateNPCs()
 										Else
 											PointEntity(n\Collider, me\Collider)
 											RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), EntityRoll(n\Collider))
-											TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider) + 90.0) * n\Speed * fps\FPSFactor[0], 0.0, Sin(EntityYaw(n\Collider) + 90.0) * n\Speed * fps\FPSFactor[0])
+											TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider) + 90.0) * n\Speed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider) + 90.0) * n\Speed * fps\Factor[0])
 										EndIf
 									Else ; ~ Move to the location where he was last seen							
 										If n\EnemyX <> 0.0 Then						
 											If DistanceSquared(EntityX(n\Collider), n\EnemyX, EntityZ(n\Collider), n\EnemyZ) > 0.25 Then
 												AlignToVector(n\Collider, n\EnemyX - EntityX(n\Collider), 0.0, n\EnemyZ - EntityZ(n\Collider), 3)
-												MoveEntity(n\Collider, 0.0, 0.0, n\Speed * fps\FPSFactor[0])
+												MoveEntity(n\Collider, 0.0, 0.0, n\Speed * fps\Factor[0])
 												If Rand(500) = 1 Then n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
 											Else
 												n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
 											EndIf
 										Else
 											If Rand(400) = 1 Then RotateEntity(n\Collider, 0.0, Rnd(360.0), 10.0)
-											TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider) + 90.0) * n\Speed * fps\FPSFactor[0], 0.0, Sin(EntityYaw(n\Collider) + 90.0) * n\Speed * fps\FPSFactor[0])
+											TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider) + 90.0) * n\Speed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider) + 90.0) * n\Speed * fps\Factor[0])
 										EndIf
 									EndIf
 								EndIf
@@ -790,7 +790,7 @@ Function UpdateNPCs()
 								PointEntity(n\OBJ, n\Target\Collider)
 								RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0.0, True)								
 								Dist = EntityDistance(n\Collider, n\Target\Collider)
-								MoveEntity(n\Collider, 0.0, 0.0, 0.016 * fps\FPSFactor[0] * Max(Min((Dist * 2.0 - 1.0) * 0.5, 1.0), -0.5))
+								MoveEntity(n\Collider, 0.0, 0.0, 0.016 * fps\Factor[0] * Max(Min((Dist * 2.0 - 1.0) * 0.5, 1.0), -0.5))
 								n\GravityMult = 1.0
 							Else
 								PositionEntity(n\Collider, EntityX(n\Target\Collider), EntityY(n\Target\Collider) + 0.3, EntityZ(n\Target\Collider))
@@ -919,7 +919,7 @@ Function UpdateNPCs()
 										EndIf
 									EndIf
 								Else
-									n\State = n\State - fps\FPSFactor[0]
+									n\State = n\State - fps\Factor[0]
 								EndIf
 								
 								If Dist > 0.8 Then
@@ -946,7 +946,7 @@ Function UpdateNPCs()
 											n\CurrSpeed = 0.0
 										EndIf
 										
-										n\PathTimer = Max(n\PathTimer - fps\FPSFactor[0], 0.0)
+										n\PathTimer = Max(n\PathTimer - fps\Factor[0], 0.0)
 										If n\PathTimer =< 0.0 Then
 											n\PathStatus = FindPath(n, EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True))
 											n\PathTimer = 70.0 * 10.0
@@ -957,7 +957,7 @@ Function UpdateNPCs()
 											n\PathTimer = 70.0 * 10.0
 											n\CurrSpeed = 0.0
 										Else
-											n\PathTimer = Max(n\PathTimer - fps\FPSFactor[0], 0.0)
+											n\PathTimer = Max(n\PathTimer - fps\Factor[0], 0.0)
 											
 											If n\PathStatus = 2 Then
 												n\CurrSpeed = 0.0
@@ -1033,7 +1033,7 @@ Function UpdateNPCs()
 									EndIf
 								EndIf
 							EndIf 
-							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])
+							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 							
 							If n\State =< Rnd(-3500.0, -3000.0) Then 
 								If (Not EntityInView(n\OBJ, Camera)) And Dist > 5.0 Then
@@ -1066,7 +1066,7 @@ Function UpdateNPCs()
 									EndIf
 								EndIf
 							EndIf
-							n\Reload = Max(0.0, n\Reload - fps\FPSFactor[0])
+							n\Reload = Max(0.0, n\Reload - fps\Factor[0])
 							
 							UpdateSoundOrigin(n\SoundCHN2, Camera, n\Collider)
 						Else ; ~ Idling outside the map
@@ -1078,9 +1078,9 @@ Function UpdateNPCs()
 							If (Not PlayerRoom\RoomTemplate\DisableDecals) Then
 								If PlayerRoom\RoomTemplate\Name <> "gatea" Then
 									If SelectedDifficulty\AggressiveNPCs Then
-										n\State = n\State - (fps\FPSFactor[0] * 2.0)
+										n\State = n\State - (fps\Factor[0] * 2.0)
 									Else
-										n\State = n\State - fps\FPSFactor[0]
+										n\State = n\State - fps\Factor[0]
 									EndIf
 								EndIf
 							EndIf
@@ -1148,7 +1148,7 @@ Function UpdateNPCs()
 							Else
 								AnimateNPC(n, 936.0, 1263.0, 0.1)
 								If n\State3 < 70.0 * 6.0
-									n\State3 = n\State3 + fps\FPSFactor[0]
+									n\State3 = n\State3 + fps\Factor[0]
 								Else
 									If Rand(1, 5) = 1
 										n\State3 = -1.0
@@ -1271,7 +1271,7 @@ Function UpdateNPCs()
 								EndIf
 								
 								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0, True)
-								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])
+								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 							Else
 								If n\PathStatus = 1 Then
 									If n\Path[n\PathLocation] = Null Then 
@@ -1286,7 +1286,7 @@ Function UpdateNPCs()
 										RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 5.0), 0.0)
 										
 										If n\Frame > 847.0 Then n\CurrSpeed = CurveValue(n\Speed * 1.5, n\CurrSpeed, 15.0)
-										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])
+										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 										
 										If n\Frame < 906.0 Then
 											AnimateNPC(n, 737.0, 906.0, n\Speed * 8.0, False)
@@ -1309,7 +1309,7 @@ Function UpdateNPCs()
 								Else
 									AnimateNPC(n, 1471.0, 1556.0, 0.1)
 									
-									n\PathTimer = Max(0.0, n\PathTimer - fps\FPSFactor[0])
+									n\PathTimer = Max(0.0, n\PathTimer - fps\Factor[0])
 									If n\PathTimer =< 0 Then
 										If n\Target <> Null Then
 											n\PathStatus = FindPath(n, EntityX(n\Target\Collider), EntityY(n\Target\Collider) + 0.2, EntityZ(n\Target\Collider))	
@@ -1352,7 +1352,7 @@ Function UpdateNPCs()
 							AnimateNPC(n, 677.0, 737.0, 0.3, False)
 							If n\Frame >= 737.0 Then n\State = 3.0 : n\State2 = 0.0
 						ElseIf n\State = 3.0
-							n\State2 = n\State2 + fps\FPSFactor[0]
+							n\State2 = n\State2 + fps\Factor[0]
 							If n\State2 > 70.0 * 26.0 Then
 								AnimateNPC(n, 823.0, 847.0, n\Speed * 8.0, False)
 								If n\Frame > 846.9 Then
@@ -1379,7 +1379,7 @@ Function UpdateNPCs()
 							EndIf
 							
 							If n\Frame >= 422.0 Then
-								n\State2 = n\State2 + fps\FPSFactor[0]
+								n\State2 = n\State2 + fps\Factor[0]
 								If n\State2 > 1000.0 Then
 									If n\State2 > 1600.0 Then n\State2 = Rnd(0.0, 500.0)
 									
@@ -1423,7 +1423,7 @@ Function UpdateNPCs()
 										AnimateNPC(n, 423.0, 471.0, 0.2)
 									EndIf
 								EndIf
-								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])
+								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 							Else
 								AnimateNPC(n, 312.0, 422.0, 0.3, False)
 							EndIf
@@ -1466,7 +1466,7 @@ Function UpdateNPCs()
 				
 				If n\Idle > 0.1 Then
 					If PlayerRoom\RoomTemplate\Name <> "room049" Then
-						n\Idle = Max(n\Idle - (1 + SelectedDifficulty\AggressiveNPCs) * fps\FPSFactor[0], 0.1)
+						n\Idle = Max(n\Idle - (1 + SelectedDifficulty\AggressiveNPCs) * fps\Factor[0], 0.1)
 					EndIf
 					n\DropSpeed = 0
 					If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN)
@@ -1530,8 +1530,8 @@ Function UpdateNPCs()
 									
 									If Dist < 0.5 Then
 										If wi\HazmatSuit > 0 Then
-											me\BlurTimer = me\BlurTimer + fps\FPSFactor[0] * 2.5
-											If me\BlurTimer > 250.0 And me\BlurTimer - fps\FPSFactor[0] * 2.5 =< 250.0 And n\PrevState <> 3 Then
+											me\BlurTimer = me\BlurTimer + fps\Factor[0] * 2.5
+											If me\BlurTimer > 250.0 And me\BlurTimer - fps\Factor[0] * 2.5 =< 250.0 And n\PrevState <> 3 Then
 												If n\SoundCHN2 <> 0 Then StopChannel(n\SoundCHN2)
 												n\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\049\TakeOffHazmat.ogg"))
 												n\PrevState = 3
@@ -1553,8 +1553,8 @@ Function UpdateNPCs()
 												Next
 											EndIf
 										ElseIf I_714\Using Then
-											me\BlurTimer = me\BlurTimer + fps\FPSFactor[0] * 2.5
-											If me\BlurTimer > 250.0 And me\BlurTimer - fps\FPSFactor[0] * 2.5 =< 250.0 And n\PrevState <> 3 Then
+											me\BlurTimer = me\BlurTimer + fps\Factor[0] * 2.5
+											If me\BlurTimer > 250.0 And me\BlurTimer - fps\Factor[0] * 2.5 =< 250.0 And n\PrevState <> 3 Then
 												If n\SoundCHN2 <> 0 Then StopChannel(n\SoundCHN2)
 												n\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\049\714Equipped.ogg"))
 												n\PrevState = 3
@@ -1589,7 +1589,7 @@ Function UpdateNPCs()
 										EndIf
 									Else
 										n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
-										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])	
+										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])	
 										
 										If n\PrevState = 3 Then n\PrevState = 2
 										
@@ -1633,7 +1633,7 @@ Function UpdateNPCs()
 											n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 											PointEntity(n\OBJ, n\Path[n\PathLocation]\OBJ)
 											RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0)
-											MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])
+											MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 											
 											; ~ Opens doors in front of him
 											Dist2 = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
@@ -1679,7 +1679,7 @@ Function UpdateNPCs()
 											If n\PrevState > 1 Then n\PrevState = 1
 										EndIf
 									Else ; ~ Stands still and tries to find a path
-										n\PathTimer = n\PathTimer + fps\FPSFactor[0]
+										n\PathTimer = n\PathTimer + fps\Factor[0]
 										If n\PathTimer > 70.0 * (5.0 - (2.0 * SelectedDifficulty\AggressiveNPCs)) Then
 											n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 											n\PathTimer = 0.0
@@ -1867,7 +1867,7 @@ Function UpdateNPCs()
 										n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 										PointEntity(n\OBJ, n\Path[n\PathLocation]\OBJ)
 										RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0.0)
-										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])
+										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 										
 										; ~ Closes doors behind him
 										If n\PathLocation > 0 Then
@@ -1937,9 +1937,9 @@ Function UpdateNPCs()
 				
 				RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider), 0.0)
 				
-				n\LastSeen = Max(n\LastSeen - fps\FPSFactor[0], 0.0)
+				n\LastSeen = Max(n\LastSeen - fps\Factor[0], 0.0)
 				
-				n\State2 = Max(n\State2 - fps\FPSFactor[0], 0.0)
+				n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
 				
 				;[End Block]
 			Case NPCType049_2
@@ -1985,14 +1985,14 @@ Function UpdateNPCs()
 								If PlayerSeeAble = 1 Then
 									n\State2 = 70.0 * 2.0
 								Else
-									n\State2 = Max(n\State2 - fps\FPSFactor[0], 0.0)
+									n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
 								EndIf
 								PointEntity(n\OBJ, me\Collider)
 								RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 20.0), 0.0)
 								
 								AnimateNPC(n, 936.0, 1017.0, n\CurrSpeed * 60.0)
 								n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
-								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])
+								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 								
 								If Dist < 0.49 Then
 									If Abs(DeltaYaw(n\Collider, me\Collider)) =< 60.0 Then
@@ -2031,7 +2031,7 @@ Function UpdateNPCs()
 									
 									AnimateNPC(n, 936.0, 1017.0, n\CurrSpeed * 60.0)
 									n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
-									MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])
+									MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 									
 									; ~ Opens doors in front of him
 									Dist2 = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
@@ -2069,9 +2069,9 @@ Function UpdateNPCs()
 									AnimateNPC(n, 778.0, 926.0, 0.1)
 									n\CurrSpeed = 0.0
 									
-									n\PathTimer = n\PathTimer - fps\FPSFactor[0]
+									n\PathTimer = n\PathTimer - fps\Factor[0]
 									If n\PathTimer < 70.0 * 5.0
-										n\PathTimer = n\PathTimer + Rnd(1.0, 2.0 + (2.0 * SelectedDifficulty\AggressiveNPCs)) * fps\FPSFactor[0]
+										n\PathTimer = n\PathTimer + Rnd(1.0, 2.0 + (2.0 * SelectedDifficulty\AggressiveNPCs)) * fps\Factor[0]
 									Else
 										n\EnemyX = 0.0
 										n\EnemyY = 0.0
@@ -2108,7 +2108,7 @@ Function UpdateNPCs()
 								Else
 									n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 20.0)
 									AnimateNPC(n, 936.0, 1017.0, n\CurrSpeed * 60.0)
-									MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])
+									MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 								EndIf
 							EndIf
 							;[End Block]
@@ -2314,7 +2314,7 @@ Function UpdateNPCs()
 								
 								n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
 								
-								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])
+								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 								
 								If EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ) < 0.04 Then
 									n\PathLocation = n\PathLocation + 1
@@ -2354,7 +2354,7 @@ Function UpdateNPCs()
 							n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 10.0)
 						EndIf
 						
-						MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])
+						MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 						;[End Block]
 					Case 7.0 ; ~ Just walking
 						;[Block]
@@ -2385,7 +2385,7 @@ Function UpdateNPCs()
 						
 						n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
 						
-						MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])
+						MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 						;[End Block]
 					Case 11.0 ; ~ Trying to find the player and kill
 						;[Block]
@@ -2478,7 +2478,7 @@ Function UpdateNPCs()
 											AnimateNPC(n, 39.0, 76.0, n\CurrSpeed * 40.0)
 										EndIf
 										n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
-										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])
+										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 										
 										PointEntity(n\OBJ, n\Path[n\PathLocation]\OBJ)
 										
@@ -2521,7 +2521,7 @@ Function UpdateNPCs()
 											AnimateNPC(n, 39.0, 76.0, n\CurrSpeed * 40.0)
 										EndIf
 										n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
-										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])
+										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 									EndIf
 								EndIf
 								
@@ -2595,7 +2595,7 @@ Function UpdateNPCs()
 								AnimateNPC(n, 39.0, 76.0, n\CurrSpeed * 40.0)
 								n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
 								
-								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])
+								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 								
 								If EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ) < 0.04 Then
 									n\PathLocation = n\PathLocation + 1
@@ -2634,7 +2634,7 @@ Function UpdateNPCs()
 					n\IsDead = True
 				EndIf
 				
-				n\Reload = Max(0.0, n\Reload - fps\FPSFactor[0])
+				n\Reload = Max(0.0, n\Reload - fps\Factor[0])
 				PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.2, EntityZ(n\Collider))
 				
 				RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider) + 180.0, 0.0)
@@ -2648,7 +2648,7 @@ Function UpdateNPCs()
 				Else
 					n\MaxGravity = 0.03
 					
-					n\BlinkTimer = n\BlinkTimer - fps\FPSFactor[0]
+					n\BlinkTimer = n\BlinkTimer - fps\Factor[0]
 					If n\BlinkTimer =< -5.0 Then 
 						; ~ Only play the "blinking" sound clip if searching / Containing SCP-173
 						If n\State = 2.0
@@ -2659,7 +2659,7 @@ Function UpdateNPCs()
 						n\BlinkTimer = 70.0 * Rnd(6.0, 7.0)
 					EndIf	
 					
-					n\Reload = n\Reload - fps\FPSFactor[0]
+					n\Reload = n\Reload - fps\Factor[0]
 					
 					PrevFrame = n\Frame
 					
@@ -2669,7 +2669,7 @@ Function UpdateNPCs()
 					
 					If n\Idle > 0.0 Then
 						FinishWalking(n, 488.0, 522.0, 0.015 * 26.0)
-						n\Idle = n\Idle - fps\FPSFactor[0]
+						n\Idle = n\Idle - fps\Factor[0]
 						If n\Idle =< 0.0 Then n\Idle = 0.0
 					Else
 						Select n\State
@@ -2768,7 +2768,7 @@ Function UpdateNPCs()
 									EndIf
 									n\PathTimer = 70.0 * Rnd(6.0, 10.0)
 								ElseIf n\PathTimer =< 70.0 * 2.5 And n\MTFLeader = Null Then
-									n\PathTimer = n\PathTimer - fps\FPSFactor[0]
+									n\PathTimer = n\PathTimer - fps\Factor[0]
 									n\CurrSpeed = 0.0
 									If Rand(1, 35) = 1 Then
 										RotateEntity(n\Collider, 0.0, Rnd(360.0), 0.0, True)
@@ -2778,7 +2778,7 @@ Function UpdateNPCs()
 									RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 								Else
 									If n\PathStatus = 2 Then
-										n\PathTimer = n\PathTimer - (fps\FPSFactor[0] * 2.0)
+										n\PathTimer = n\PathTimer - (fps\Factor[0] * 2.0)
 										n\CurrSpeed = 0.0
 										If Rand(1, 35) = 1 Then
 											RotateEntity(n\Collider, 0.0, Rnd(360.0), 0.0, True)
@@ -2805,7 +2805,7 @@ Function UpdateNPCs()
 											
 											n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 											
-											TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\FPSFactor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\FPSFactor[0], True)
+											TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 											AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 											
 											NewDist = EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ)
@@ -2826,7 +2826,7 @@ Function UpdateNPCs()
 												n\PathLocation = n\PathLocation + 1
 											EndIf
 										EndIf
-										n\PathTimer = n\PathTimer - fps\FPSFactor[0]
+										n\PathTimer = n\PathTimer - fps\Factor[0]
 									ElseIf n\PathX <> 0.0
 										Pvt = CreatePivot()
 										PositionEntity(Pvt, n\PathX, 0.5, n\PathZ)
@@ -2837,7 +2837,7 @@ Function UpdateNPCs()
 										RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 										
 										n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
-										TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\FPSFactor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\FPSFactor[0], True)
+										TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 										AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 										
 										If DistanceSquared(EntityX(n\Collider), n\PathX, EntityZ(n\Collider), n\PathZ) < 0.04 Then
@@ -2848,7 +2848,7 @@ Function UpdateNPCs()
 										
 										FreeEntity(Pvt)
 									Else
-										n\PathTimer = n\PathTimer - (fps\FPSFactor[0] * 2.0)
+										n\PathTimer = n\PathTimer - (fps\Factor[0] * 2.0)
 										If n\MTFLeader = Null Then
 											If Rand(1, 35) = 1 Then
 												RotateEntity(n\Collider, 0.0, Rnd(360.0), 0.0, True)
@@ -2860,7 +2860,7 @@ Function UpdateNPCs()
 											RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 											
 											n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
-											TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\FPSFactor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\FPSFactor[0], True)
+											TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 											AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 										Else
 											If Rand(1, 35) = 1 Then
@@ -3064,7 +3064,7 @@ Function UpdateNPCs()
 							Case 1.0
 								;[Block]
 								n\Speed = 0.015
-								n\State2 = n\State2 - fps\FPSFactor[0]
+								n\State2 = n\State2 - fps\Factor[0]
 								If MeNPCSeesPlayer(n) = 1 Then
 									Local Dist_To_Player# = EntityDistance(n\Collider, me\Collider)
 									Local PrevKillTimer#
@@ -3156,11 +3156,11 @@ Function UpdateNPCs()
 										RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 										
 										n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
-										TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\FPSFactor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\FPSFactor[0], True)
+										TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 										AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 									EndIf
 								Else
-									n\LastSeen = n\LastSeen - fps\FPSFactor[0]
+									n\LastSeen = n\LastSeen - fps\Factor[0]
 									
 									If n\Reload =< 7.0 Then
 										n\Reload = 7.0
@@ -3170,7 +3170,7 @@ Function UpdateNPCs()
 										n\PathStatus = FindPath(n, n\EnemyX, n\EnemyY + 0.1, n\EnemyZ)
 										n\PathTimer = 70.0 * Rnd(6.0, 10.0)
 									ElseIf n\PathTimer =< 70.0 * 2.5 Then
-										n\PathTimer = n\PathTimer - fps\FPSFactor[0]
+										n\PathTimer = n\PathTimer - fps\Factor[0]
 										n\CurrSpeed = 0.0
 										If Rand(1, 35) = 1 Then
 											RotateEntity(n\Collider, 0.0, Rnd(360.0), 0.0, True)
@@ -3180,7 +3180,7 @@ Function UpdateNPCs()
 										RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 									Else
 										If n\PathStatus = 2 Then
-											n\PathTimer = n\PathTimer - (fps\FPSFactor[0] * 2.0)
+											n\PathTimer = n\PathTimer - (fps\Factor[0] * 2.0)
 											n\CurrSpeed = 0.0
 											If Rand(1, 35) = 1 Then
 												RotateEntity(n\Collider, 0.0, Rnd(360.0), 0.0, True)
@@ -3205,7 +3205,7 @@ Function UpdateNPCs()
 												
 												n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 												
-												TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\FPSFactor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\FPSFactor[0], True)
+												TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 												AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 												
 												NewDist = EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ)
@@ -3226,7 +3226,7 @@ Function UpdateNPCs()
 													n\PathLocation = n\PathLocation + 1
 												EndIf
 											EndIf
-											n\PathTimer = n\PathTimer - fps\FPSFactor[0]
+											n\PathTimer = n\PathTimer - fps\Factor[0]
 										Else
 											PositionEntity(n\OBJ, n\EnemyX, n\EnemyY, n\EnemyZ, True)
 											If DistanceSquared(EntityX(n\Collider, True), n\EnemyX, EntityZ(n\Collider, True), n\EnemyZ) < 0.04 Lor (Not EntityVisible(n\OBJ, n\Collider)) Then
@@ -3247,7 +3247,7 @@ Function UpdateNPCs()
 														EndIf
 													Next
 												EndIf
-												n\PathTimer = n\PathTimer - fps\FPSFactor[0]
+												n\PathTimer = n\PathTimer - fps\Factor[0]
 											Else
 												PointEntity(n\Collider, n\OBJ)
 												RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
@@ -3255,26 +3255,26 @@ Function UpdateNPCs()
 												RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 												
 												n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
-												TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\FPSFactor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\FPSFactor[0], True)
+												TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 												AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 											EndIf
 										EndIf
 									EndIf
 									
-									If n\MTFLeader = Null And n\LastSeen < 70.0 * 30.0 And n\LastSeen + fps\FPSFactor[0] >= 70.0 * 30.0 Then
+									If n\MTFLeader = Null And n\LastSeen < 70.0 * 30.0 And n\LastSeen + fps\Factor[0] >= 70.0 * 30.0 Then
 										If Rand(2) = 1 Then 
 											PlayMTFSound(LoadTempSound("SFX\Character\MTF\Searching" + Rand(1, 6) + ".ogg"), n)
 										EndIf
 									EndIf
 								EndIf
 								
-								If n\State2 =< 0.0 And n\State2 + fps\FPSFactor[0] > 0.0 Then
+								If n\State2 =< 0.0 And n\State2 + fps\Factor[0] > 0.0 Then
 									If n\MTFLeader = Null Then
 										PlayMTFSound(LoadTempSound("SFX\Character\MTF\Targetlost" + Rand(1, 3) + ".ogg"), n)
 										If MTFCameraCheckTimer = 0.0 Then
 											If Rand(15 - (7 * SelectedDifficulty\AggressiveNPCs)) = 1 ; ~ Maybe change this to another chance -- ENDSHN
 												PlayAnnouncement("SFX\Character\MTF\AnnouncCameraCheck.ogg")
-												MTFCameraCheckTimer = fps\FPSFactor[0]
+												MTFCameraCheckTimer = fps\Factor[0]
 											EndIf
 										EndIf
 									EndIf
@@ -3452,7 +3452,7 @@ Function UpdateNPCs()
 										If n\MTFLeader <> Null Then TempDist = 2.0
 										If Curr173Dist < TempDist Then
 											If n\MTFLeader = Null Then
-												n\State3 = n\State3 + fps\FPSFactor[0]
+												n\State3 = n\State3 + fps\Factor[0]
 												
 												If n\State3 >= 70.0 * 30.0 Then
 													Curr173\Idle = 2
@@ -3478,7 +3478,7 @@ Function UpdateNPCs()
 											RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 											
 											n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
-											TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\FPSFactor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\FPSFactor[0], True)
+											TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 											AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 										EndIf
 									Else
@@ -3487,7 +3487,7 @@ Function UpdateNPCs()
 											n\PathStatus = FindPath(n, EntityX(Curr173\Collider, True), EntityY(Curr173\Collider, True) + 0.1, EntityZ(Curr173\Collider, True))
 											n\PathTimer = 70.0 * Rnd(6.0, 10.0)
 										ElseIf n\PathTimer =< 70.0 * 2.5 Then
-											n\PathTimer = n\PathTimer - fps\FPSFactor[0]
+											n\PathTimer = n\PathTimer - fps\Factor[0]
 											n\CurrSpeed = 0.0
 											If Rand(1, 35) = 1 Then
 												RotateEntity(n\Collider, 0.0, Rnd(360.0), 0.0, True)
@@ -3497,7 +3497,7 @@ Function UpdateNPCs()
 											RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 										Else
 											If n\PathStatus = 2 Then
-												n\PathTimer = n\PathTimer - (fps\FPSFactor[0] * 2.0)
+												n\PathTimer = n\PathTimer - (fps\Factor[0] * 2.0)
 												n\CurrSpeed = 0.0
 												If Rand(1, 35) = 1 Then
 													RotateEntity(n\Collider, 0.0, Rnd(360.0), 0.0, True)
@@ -3522,7 +3522,7 @@ Function UpdateNPCs()
 													
 													n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 													
-													TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\FPSFactor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\FPSFactor[0], True)
+													TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 													AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 													
 													NewDist = EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ)
@@ -3543,9 +3543,9 @@ Function UpdateNPCs()
 														n\PathLocation = n\PathLocation + 1
 													EndIf
 												EndIf
-												n\PathTimer = n\PathTimer - fps\FPSFactor[0]
+												n\PathTimer = n\PathTimer - fps\Factor[0]
 											Else
-												n\PathTimer = n\PathTimer - (fps\FPSFactor[0] * 2.0)
+												n\PathTimer = n\PathTimer - (fps\Factor[0] * 2.0)
 												n\CurrSpeed = 0.0
 												If Rand(1, 35) = 1 Then
 													RotateEntity(n\Collider, 0.0, Rnd(360.0), 0.0, True)
@@ -3593,7 +3593,7 @@ Function UpdateNPCs()
 											RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0.0)
 											If n\Idle = 0 Then
 												n\CurrSpeed = CurveValue(n\Speed * Max(Min(Dist2, 1.0), 0.1), n\CurrSpeed, 20.0)
-												MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])
+												MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 												
 												If EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ) < 0.25
 													n\PathLocation = n\PathLocation + 1
@@ -3644,7 +3644,7 @@ Function UpdateNPCs()
 							Case 4.0 ; ~ SCP-106 or SCP-049 detected
 								;[Block]
 								n\Speed = 0.03
-								n\State2 = n\State2 - fps\FPSFactor[0]
+								n\State2 = n\State2 - fps\Factor[0]
 								If n\State2 > 0.0
 									If OtherNPCSeesMeNPC(n\Target, n)
 										n\State2 = 70.0 * 15.0
@@ -3669,12 +3669,12 @@ Function UpdateNPCs()
 										n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 										RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 										n\CurrSpeed = CurveValue(-n\Speed, n\CurrSpeed, 20.0)
-										TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\FPSFactor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\FPSFactor[0], True)
+										TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 										AnimateNPC(n, 522.0, 488.0, n\CurrSpeed * 26.0)
 										
 										n\PathTimer = 1.0
 										
-										n\State3 = Max(n\State3 - fps\FPSFactor[0], 0.0)
+										n\State3 = Max(n\State3 - fps\Factor[0], 0.0)
 										
 										HideEntity(n\Collider)
 										TurnEntity(n\Collider, 0.0, 180.0, 0.0)
@@ -3685,7 +3685,7 @@ Function UpdateNPCs()
 										ShowEntity(n\Collider)
 										TurnEntity(n\Collider, 0.0, 180.0, 0.0)
 									ElseIf n\State3 < 0.0
-										n\State3 = Min(n\State3 + fps\FPSFactor[0], 0.0)
+										n\State3 = Min(n\State3 + fps\Factor[0], 0.0)
 									EndIf
 									
 									If n\PathTimer =< 0.0 Then
@@ -3737,7 +3737,7 @@ Function UpdateNPCs()
 												RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 												
 												n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
-												TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\FPSFactor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\FPSFactor[0], True)
+												TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 												AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 												
 												NewDist = EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ)
@@ -3757,7 +3757,7 @@ Function UpdateNPCs()
 													n\PathLocation = n\PathLocation + 1
 												EndIf
 											EndIf
-											n\PathTimer = n\PathTimer - fps\FPSFactor[0]
+											n\PathTimer = n\PathTimer - fps\Factor[0]
 										Else
 											n\PathTimer = 0.0
 										EndIf
@@ -3783,7 +3783,7 @@ Function UpdateNPCs()
 										n\PathStatus = EntityVisible(n\Collider, Target)
 										n\PathTimer = Rand(100.0, 200.0)
 									Else
-										n\PathTimer = Min(n\PathTimer - fps\FPSFactor[0], 0.0)
+										n\PathTimer = Min(n\PathTimer - fps\Factor[0], 0.0)
 									EndIf
 									
 									If n\PathStatus = 1 And n\Reload =< 0.0 Then
@@ -3887,7 +3887,7 @@ Function UpdateNPCs()
 									EndIf
 									n\PathTimer = 70.0 * Rnd(6.0, 10.0)
 								ElseIf n\PathTimer =< 70.0 * 2.5 And n\MTFLeader = Null Then
-									n\PathTimer = n\PathTimer - fps\FPSFactor[0]
+									n\PathTimer = n\PathTimer - fps\Factor[0]
 									n\CurrSpeed = 0.0
 									
 									FinishWalking(n, 488.0, 522.0, n\Speed * 26.0)
@@ -3895,7 +3895,7 @@ Function UpdateNPCs()
 									RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 								Else
 									If n\PathStatus = 2 Then
-										n\PathTimer = n\PathTimer - (fps\FPSFactor[0] * 2.0)
+										n\PathTimer = n\PathTimer - (fps\Factor[0] * 2.0)
 										n\CurrSpeed = 0.0
 										
 										FinishWalking(n, 488.0, 522.0, n\Speed * 26.0)
@@ -3918,7 +3918,7 @@ Function UpdateNPCs()
 											
 											n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 											
-											TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\FPSFactor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\FPSFactor[0], True)
+											TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 											AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 											
 											NewDist = EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ)
@@ -3939,9 +3939,9 @@ Function UpdateNPCs()
 												n\PathLocation = n\PathLocation + 1
 											EndIf
 										EndIf
-										n\PathTimer = n\PathTimer - fps\FPSFactor[0]
+										n\PathTimer = n\PathTimer - fps\Factor[0]
 									Else
-										n\PathTimer = n\PathTimer - (fps\FPSFactor[0] * 2.0)
+										n\PathTimer = n\PathTimer - (fps\Factor[0] * 2.0)
 										If n\MTFLeader = Null Then
 											FinishWalking(n, 488.0, 522.0, n\Speed * 26.0)
 											n\CurrSpeed = 0.0
@@ -3950,7 +3950,7 @@ Function UpdateNPCs()
 											RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 											
 											n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
-											TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\FPSFactor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\FPSFactor[0], True)
+											TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 											AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 										Else
 											FinishWalking(n, 488.0, 522.0, n\Speed * 26.0)
@@ -3981,12 +3981,12 @@ Function UpdateNPCs()
 										n\PathLocation = 0
 										n\Speed = 0.02
 										n\CurrSpeed = CurveValue(-n\Speed, n\CurrSpeed, 20.0)
-										TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\FPSFactor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\FPSFactor[0], True)
+										TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 										AnimateNPC(n, 522.0, 488.0, n\CurrSpeed * 26.0)
 										
 										n\PathTimer = 1.0
 										
-										n\State3 = Max(n\State3 - fps\FPSFactor[0], 0.0)
+										n\State3 = Max(n\State3 - fps\Factor[0], 0.0)
 									Else
 										n\State3 = 0.0
 									EndIf
@@ -4066,7 +4066,7 @@ Function UpdateNPCs()
 												RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 												
 												n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
-												TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\FPSFactor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\FPSFactor[0], True)
+												TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 												AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 												
 												NewDist = EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ)
@@ -4087,7 +4087,7 @@ Function UpdateNPCs()
 													n\PathLocation = n\PathLocation + 1
 												EndIf
 											EndIf
-											n\PathTimer = n\PathTimer - fps\FPSFactor[0]
+											n\PathTimer = n\PathTimer - fps\Factor[0]
 										Else
 											n\PathTimer = 0.0
 										EndIf
@@ -4125,7 +4125,7 @@ Function UpdateNPCs()
 										RotateEntity(Target, Min(EntityPitch(Target), 40.0), EntityYaw(n\Collider), 0.0)
 										
 										If PlayerRoom\RoomTemplate\Name = "gateb" Then
-											n\State3 = Min(n\State3 + fps\FPSFactor[0], 70.0 * 4.0)
+											n\State3 = Min(n\State3 + fps\Factor[0], 70.0 * 4.0)
 										Else
 											If n\Reload =< 0.0 Then
 												PlaySound2(GunshotSFX, Camera, n\Collider, 15.0)
@@ -4147,7 +4147,7 @@ Function UpdateNPCs()
 										
 										FreeEntity(Target)
 									Else
-										If PlayerRoom\RoomTemplate\Name = "gateb" Then n\State3 = Max(0.0, n\State3 - fps\FPSFactor[0])
+										If PlayerRoom\RoomTemplate\Name = "gateb" Then n\State3 = Max(0.0, n\State3 - fps\Factor[0])
 										
 										If Dist < 2.0 And chs\NoTarget Then
 											AnimateNPC(n, 79.0, 310.0, 0.35)
@@ -4168,7 +4168,7 @@ Function UpdateNPCs()
 													RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 													
 													n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
-													TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\FPSFactor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\FPSFactor[0], True)
+													TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 													AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 													
 													NewDist = EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ)
@@ -4216,7 +4216,7 @@ Function UpdateNPCs()
 												If n\PathTimer = 1.0 Then
 													AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 40.0)
 													n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
-													MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])
+													MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 												EndIf
 											EndIf
 										EndIf
@@ -4244,14 +4244,14 @@ Function UpdateNPCs()
 									RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 									n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 									
-									TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) - 45.0) * 0.01 * fps\FPSFactor[0], 0.0, Sin(EntityYaw(n\Collider, True) - 45.0) * 0.01 * fps\FPSFactor[0], True)
+									TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) - 45.0) * 0.01 * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) - 45.0) * 0.01 * fps\Factor[0], True)
 								EndIf
 							Else
 								For n2.NPCs = Each NPCs
 									If n2 <> n And (Not n2\IsDead) Then
 										If Abs(DeltaYaw(n\Collider, n2\Collider)) < 80.0 Then
 											If EntityDistanceSquared(n\Collider, n2\Collider) < 0.49 Then							
-												TranslateEntity(n2\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * 0.01 * fps\FPSFactor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * 0.01 * fps\FPSFactor[0], True)
+												TranslateEntity(n2\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * 0.01 * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * 0.01 * fps\Factor[0], True)
 											EndIf
 										EndIf
 									EndIf
@@ -4327,7 +4327,7 @@ Function UpdateNPCs()
 					n\IsDead = True
 				EndIf
 				
-				MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])
+				MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 				
 				PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.32, EntityZ(n\Collider))
 				
@@ -4437,7 +4437,7 @@ Function UpdateNPCs()
 									PointEntity(n\OBJ, n\Path[0]\OBJ)
 									RotateEntity(n\Collider, CurveAngle(EntityPitch(n\OBJ), EntityPitch(n\Collider), 15.0), CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 15.0), 0.0, True)
 									n\CurrSpeed = CurveValue(0.05 * Max((7.0 - Dist) / 7.0, 0.0), n\CurrSpeed, 15.0)
-									MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])
+									MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 									If Rand(200) = 1 Then MoveEntity(n\Collider, 0.0, 0.0, 0.5)
 									RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0, True)
 								Else
@@ -4485,8 +4485,8 @@ Function UpdateNPCs()
 						End Select
 						
 						If n\State2 > 0.0 Then
-							If Dist < 4.0 Then n\State2 = n\State2 - fps\FPSFactor[0] * 4.0
-							n\State2 = n\State2 - fps\FPSFactor[0]
+							If Dist < 4.0 Then n\State2 = n\State2 - fps\Factor[0] * 4.0
+							n\State2 = n\State2 - fps\Factor[0]
 						Else
 							n\Path[0] = Null
 							n\Idle = 1
@@ -4544,9 +4544,9 @@ Function UpdateNPCs()
 							EndIf
 							FreeEntity(Temp)
 							
-							MoveEntity(n\Collider, 0.0, 0.0, 0.03 * fps\FPSFactor[0])
+							MoveEntity(n\Collider, 0.0, 0.0, 0.03 * fps\Factor[0])
 						EndIf
-						n\State = n\State - (fps\FPSFactor[0] * 0.8)
+						n\State = n\State - (fps\Factor[0] * 0.8)
 						If n\State =< 0.0 Then n\Idle = 1	
 					EndIf
 				EndIf
@@ -4571,8 +4571,8 @@ Function UpdateNPCs()
 				Select n\State
 					Case 0.0, 1.0
 						;[Block]
-						TurnEntity(n\OBJ2, 0.0, 20.0 * fps\FPSFactor[0], 0.0)
-						TurnEntity(n\OBJ3, 20.0 * fps\FPSFactor[0], 0.0, 0.0)
+						TurnEntity(n\OBJ2, 0.0, 20.0 * fps\Factor[0], 0.0)
+						TurnEntity(n\OBJ3, 20.0 * fps\Factor[0], 0.0, 0.0)
 						
 						If n\State = 1.0 And (Not chs\NoTarget) Then
 							If Abs(EntityX(me\Collider) - EntityX(n\Collider)) < 30.0 Then
@@ -4600,8 +4600,8 @@ Function UpdateNPCs()
 						
 						If chs\NoTarget And n\State = 2.0 Then n\State = 1.0
 						
-						TurnEntity(n\OBJ2, 0.0, 20.0 * fps\FPSFactor[0], 0.0)
-						TurnEntity(n\OBJ3, 20.0 * fps\FPSFactor[0], 0.0, 0.0)
+						TurnEntity(n\OBJ2, 0.0, 20.0 * fps\Factor[0], 0.0)
+						TurnEntity(n\OBJ3, 20.0 * fps\Factor[0], 0.0, 0.0)
 						
 						If Abs(EntityX(Target) - EntityX(n\Collider)) < 55.0 Then
 							If Abs(EntityZ(Target) - EntityZ(n\Collider)) < 55.0 Then
@@ -4614,13 +4614,13 @@ Function UpdateNPCs()
 									
 									n\CurrSpeed = CurveValue(Min(Dist - 6.5, 6.5) * 0.008, n\CurrSpeed, 50.0)
 									
-									MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])
+									MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 									
 									If n\PathTimer = 0.0 Then
 										n\PathStatus = EntityVisible(n\Collider, Target)
 										n\PathTimer = Rnd(100.0, 200.0)
 									Else
-										n\PathTimer = Min(n\PathTimer - fps\FPSFactor[0], 0.0)
+										n\PathTimer = Min(n\PathTimer - fps\Factor[0], 0.0)
 									EndIf
 									
 									If n\PathStatus = 1 Then ; ~ Player visible
@@ -4656,7 +4656,7 @@ Function UpdateNPCs()
 									EndIf
 									MoveEntity(n\Collider, (-EntityRoll(n\Collider)) * 0.002, 0.0, 0.0)
 									
-									n\Reload = n\Reload - fps\FPSFactor[0]
+									n\Reload = n\Reload - fps\Factor[0]
 								EndIf
 							EndIf
 						EndIf		
@@ -4665,17 +4665,17 @@ Function UpdateNPCs()
 					Case 4.0 ; ~ Crashes
 						;[Block]
 						If n\State2 < 300.0 Then
-							TurnEntity(n\OBJ2, 0.0, 20.0 * fps\FPSFactor[0], 0.0)
-							TurnEntity(n\OBJ3, 20.0 * fps\FPSFactor[0], 0.0, 0.0)
+							TurnEntity(n\OBJ2, 0.0, 20.0 * fps\Factor[0], 0.0)
+							TurnEntity(n\OBJ3, 20.0 * fps\Factor[0], 0.0, 0.0)
 							
-							TurnEntity(n\Collider, 0.0, (-fps\FPSFactor[0]) * 7.0, 0.0)
-							n\State2 = n\State2 + fps\FPSFactor[0] * 0.3
+							TurnEntity(n\Collider, 0.0, (-fps\Factor[0]) * 7.0, 0.0)
+							n\State2 = n\State2 + fps\Factor[0] * 0.3
 							
 							Target = CreatePivot()
 							PositionEntity(Target, n\EnemyX, n\EnemyY, n\EnemyZ, True)
 							
 							PointEntity(n\OBJ, Target)
-							MoveEntity(n\OBJ, 0.0, 0.0, fps\FPSFactor[0] * 0.001 * n\State2)
+							MoveEntity(n\OBJ, 0.0, 0.0, fps\Factor[0] * 0.001 * n\State2)
 							PositionEntity(n\Collider, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 							
 							If EntityDistanceSquared(n\OBJ, Target) < 0.09 Then
@@ -4953,11 +4953,11 @@ Function UpdateNPCs()
 									ElseIf ForestNPCData[2] = 1.0
 										If ForestNPCData[1] = 0.0
 											If Rand(200) = 1 Then
-												ForestNPCData[1] = fps\FPSFactor[0]
+												ForestNPCData[1] = fps\Factor[0]
 												EntityTexture(ForestNPC, ForestNPCTex, ForestNPCData[0] + 1.0)
 											EndIf
 										ElseIf ForestNPCData[1] > 0.0 And ForestNPCData[1] < 5.0
-											ForestNPCData[1] = Min(ForestNPCData[1] + fps\FPSFactor[0], 5.0)
+											ForestNPCData[1] = Min(ForestNPCData[1] + fps\Factor[0], 5.0)
 										Else
 											ForestNPCData[1] = 0
 											EntityTexture(ForestNPC, ForestNPCTex, ForestNPCData[0])
@@ -4989,7 +4989,7 @@ Function UpdateNPCs()
 										AnimateNPC(n, 298.0, 316.0, n\CurrSpeed * 10.0)
 										
 										n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
-										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])
+										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 										
 										If Dist > 15.0 Then
 											PositionEntity(n\Collider, 0.0, -110.0, 0.0)
@@ -5041,7 +5041,7 @@ Function UpdateNPCs()
 								RotateEntity(n\Collider, 0.0, Angle - 90.0, 0.0, True)
 								
 								n\CurrSpeed = CurveValue(n\Speed * 0.3, n\CurrSpeed, 50.0)
-								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])
+								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 								
 								AnimateNPC(n, 494.0, 569.0, n\CurrSpeed * 25.0)
 								
@@ -5059,7 +5059,7 @@ Function UpdateNPCs()
 								EndIf
 								
 								If me\CurrSpeed > 0.03 Then ; ~ The player is running
-									n\State3 = n\State3 + fps\FPSFactor[0]
+									n\State3 = n\State3 + fps\Factor[0]
 									If Rnd(5000.0) < n\State3 Then
 										Temp = True
 										If n\SoundCHN <> 0 Then
@@ -5070,7 +5070,7 @@ Function UpdateNPCs()
 										EndIf
 									EndIf
 								Else
-									n\State3 = Max(n\State3 - fps\FPSFactor[0], 0.0)
+									n\State3 = Max(n\State3 - fps\Factor[0], 0.0)
 								EndIf
 								
 								If Dist < 4.5 Lor n\State3 > Rnd(200.0, 250.0) Then
@@ -5130,7 +5130,7 @@ Function UpdateNPCs()
 									PlaySound2(StepSFX(3, 0, Rand(0, 2)), Camera, n\Collider, 10.0)
 								EndIf
 							EndIf
-							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])
+							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 							
 							If chs\Notarget Then
 								If (PrevFrame < 315.0 And n\Frame >= 315.0) Lor (PrevFrame < 492.0 And n\Frame >= 492.0) Then
@@ -5204,7 +5204,7 @@ Function UpdateNPCs()
 							
 							n\LastSeen = 0
 							
-							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])						
+							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])						
 							;[End Block]
 						Case 2.0 ; ~ Walking
 							;[Block]
@@ -5213,7 +5213,7 @@ Function UpdateNPCs()
 							Dist = EntityDistance(n\Collider, PlayerRoom\Objects[n\State2])
 							
 							n\CurrSpeed = CurveValue(n\Speed * 0.3 * Min(Dist, 1.0), n\CurrSpeed, 10.0)
-							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0]) 
+							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0]) 
 							
 							PrevFrame = n\Frame
 							AnimateNPC(n, 644.0, 683.0, 28.0 * n\CurrSpeed)
@@ -5306,9 +5306,9 @@ Function UpdateNPCs()
 								Angle = VectorYaw(n\EnemyX - EntityX(n\Collider), 0.0, n\EnemyZ - EntityZ(n\Collider))
 								RotateEntity(n\Collider, 0.0, CurveAngle(Angle, EntityYaw(n\Collider), 15.0), 0.0)									
 								
-								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])							
+								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])							
 								
-								n\LastSeen = n\LastSeen - fps\FPSFactor[0]
+								n\LastSeen = n\LastSeen - fps\Factor[0]
 							Else
 								n\State = 2.0
 							EndIf
@@ -5354,7 +5354,7 @@ Function UpdateNPCs()
 							EndIf
 							n\State = 1.0
 						EndIf
-						n\Reload = n\Reload - fps\FPSFactor[0]
+						n\Reload = n\Reload - fps\Factor[0]
 					EndIf				
 					
 					RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0, True)	
@@ -5474,7 +5474,7 @@ Function UpdateNPCs()
 									EndIf
 								EndIf
 								
-								n\State2 = n\State2 + fps\FPSFactor[0]
+								n\State2 = n\State2 + fps\Factor[0]
 								If n\State2 > 70.0 Then 
 									n\State = 3.0
 									n\State2 = 0.0
@@ -5487,7 +5487,7 @@ Function UpdateNPCs()
 								
 								AnimateNPC(n, 647.0, 683.0, n\CurrSpeed * 25.0, False)
 								
-								MoveEntity(n\Collider, 0.0, 0.0, (-n\CurrSpeed) * fps\FPSFactor[0])
+								MoveEntity(n\Collider, 0.0, 0.0, (-n\CurrSpeed) * fps\Factor[0])
 							EndIf
 						EndIf
 						;[End Block]
@@ -5498,11 +5498,11 @@ Function UpdateNPCs()
 						RotateEntity(n\Collider, 0.0, Angle, 0.0)
 						
 						n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
-						MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])
+						MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 						
 						If Rand(100) = 1 Then n\Angle = Rnd(-20.0, 20.0)
 						
-						n\State2 = n\State2 + fps\FPSFactor[0]
+						n\State2 = n\State2 + fps\Factor[0]
 						If n\State2 > 250.0 Then 
 							AnimateNPC(n, 684.0, 647.0, (-n\CurrSpeed) * 25.0, False)
 							If n\Frame = 647.0 Then 
@@ -5527,7 +5527,7 @@ Function UpdateNPCs()
 				EndIf
 				
 				If n\State3 > 0.0 Then
-					n\State3 = n\State3 - fps\FPSFactor[0]
+					n\State3 = n\State3 - fps\Factor[0]
 					LightVolume = TempLightVolume - TempLightVolume * Min(Max(n\State3 / 500.0, 0.01), 0.6)
 					me\HeartBeatRate = Max(me\HeartBeatRate, 130.0)
 					me\HeartBeatVolume = Max(me\HeartBeatVolume, Min(n\State3 / 1000.0, 1.0))
@@ -5593,7 +5593,7 @@ Function UpdateNPCs()
 									End Select
 									n\Reload = 70.0 * 20.0
 								EndIf
-								n\Reload = n\Reload - fps\FPSFactor[0]
+								n\Reload = n\Reload - fps\Factor[0]
 							EndIf
 						Else
 							ShowEntity(n\OBJ)
@@ -5610,9 +5610,9 @@ Function UpdateNPCs()
 						EndIf
 						
 						If me\Stamina < 10.0 Then 
-							n\State3 = n\State3 + fps\FPSFactor[0]
+							n\State3 = n\State3 + fps\Factor[0]
 						ElseIf n\State3 < 900.0
-							n\State3 = Max(n\State3 - fps\FPSFactor[0] * 0.2, 0.0)
+							n\State3 = Max(n\State3 - fps\Factor[0] * 0.2, 0.0)
 						EndIf
 						
 						If n\State <> 10.0 Then
@@ -5731,7 +5731,7 @@ Function UpdateNPCs()
 											n\PathTimer = 40 * 10.0
 											n\CurrSpeed = 0.0
 										EndIf
-										n\PathTimer = Max(n\PathTimer - fps\FPSFactor[0], 0.0)
+										n\PathTimer = Max(n\PathTimer - fps\Factor[0], 0.0)
 										
 										If (Not EntityVisible(n\Collider, me\Collider)) Then
 											If n\PathStatus = 2 Then
@@ -5805,7 +5805,7 @@ Function UpdateNPCs()
 									
 									RotateEntity(n\Collider, 0.0, CurveAngle(n\Angle, EntityYaw(n\Collider), 10.0), 0.0)
 									
-									MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])
+									MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 								EndIf
 								;[End Block]
 							Case 10.0 ; ~ Attacks
@@ -5912,14 +5912,14 @@ Function UpdateNPCs()
 									If n\Reload = 0.0 Then
 										If n\State2 < 500.0 * Rnd(1.0, 3.0) Then
 											n\CurrSpeed = 0.0
-											n\State2 = n\State2 + fps\FPSFactor[0]
+											n\State2 = n\State2 + fps\Factor[0]
 										Else
 											If n\CurrSpeed = 0.0 Then n\CurrSpeed = n\CurrSpeed + 0.0001
 										EndIf
 									Else
 										If n\State2 < 1500.0 Then
 											n\CurrSpeed = 0.0
-											n\State2 = n\State2 + fps\FPSFactor[0]
+											n\State2 = n\State2 + fps\Factor[0]
 										Else
 											If n\Target <> Null Then
 												If n\Target\Target <> Null Then
@@ -5941,7 +5941,7 @@ Function UpdateNPCs()
 									
 									If n\State2 < 10000.0 * Rnd(1.0, 3.0)
 										n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
-										n\State2 = n\State2 + fps\FPSFactor[0]
+										n\State2 = n\State2 + fps\Factor[0]
 									Else
 										n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 50.0)
 									EndIf
@@ -6267,7 +6267,7 @@ Function UpdateNPCs()
 						UpdateSoundOrigin(n\SoundCHN, Camera, n\Collider, 20.0)
 					EndIf
 					
-					MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])
+					MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 					
 					RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
 					PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.2, EntityZ(n\Collider))
@@ -6312,14 +6312,14 @@ Function UpdateNPCs()
 								If PlayerSeeAble = 1 Then
 									n\State2 = 70.0 * 2.0
 								Else
-									n\State2 = Max(n\State2 - fps\FPSFactor[0], 0.0)
+									n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
 								EndIf
 								PointEntity(n\OBJ, me\Collider)
 								RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 20.0), 0.0)
 								
 								AnimateNPC(n, 64.0, 93.0, n\CurrSpeed * 30.0)
 								n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
-								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])
+								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 								
 								If Dist < 1.21 Then
 									If Abs(DeltaYaw(n\Collider, me\Collider)) =< 60.0 Then
@@ -6353,7 +6353,7 @@ Function UpdateNPCs()
 									
 									AnimateNPC(n, 64.0, 93.0, n\CurrSpeed * 30.0)
 									n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
-									MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])
+									MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 									
 									; ~ Opens doors in front of him
 									Dist2 = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
@@ -6391,9 +6391,9 @@ Function UpdateNPCs()
 									AnimateNPC(n, 323.0, 344.0, 0.2)
 									n\CurrSpeed = 0.0
 									
-									n\PathTimer = n\PathTimer - fps\FPSFactor[0]
+									n\PathTimer = n\PathTimer - fps\Factor[0]
 									If n\PathTimer < 70.0 * 5.0
-										n\PathTimer = n\PathTimer + Rnd(1.0, 2.0 + (2.0 * SelectedDifficulty\AggressiveNPCs)) * fps\FPSFactor[0]
+										n\PathTimer = n\PathTimer + Rnd(1.0, 2.0 + (2.0 * SelectedDifficulty\AggressiveNPCs)) * fps\Factor[0]
 									Else
 										n\EnemyX = 0.0
 										n\EnemyY = 0.0
@@ -6430,12 +6430,12 @@ Function UpdateNPCs()
 								Else
 									n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 20.0)
 									AnimateNPC(n, 64.0, 93.0, n\CurrSpeed * 30.0)
-									MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])
+									MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 								EndIf
 								
 								If EntityDistanceSquared(n\Collider, me\Collider) > PowTwo(HideDistance)
 									If n\State3 < 70.0 * (15.0 + (10.0 * SelectedDifficulty\AggressiveNPCs))
-										n\State3 = n\State3 + fps\FPSFactor[0]
+										n\State3 = n\State3 + fps\Factor[0]
 									Else
 										n\State3 = 70.0 * (6.0 * 60.0)
 										n\State = 5.0
@@ -6486,7 +6486,7 @@ Function UpdateNPCs()
 							PositionEntity(n\Collider, 0.0, 500.0, 0.0)
 							ResetEntity(n\Collider)
 							If n\Idle > 0
-								n\Idle = Max(n\Idle - (1 + (1 * SelectedDifficulty\AggressiveNPCs)) * fps\FPSFactor[0], 0.0)
+								n\Idle = Max(n\Idle - (1 + (1 * SelectedDifficulty\AggressiveNPCs)) * fps\Factor[0], 0.0)
 							Else
 								If PlayerInReachableRoom() ; ~ Player is in a room where SCP-008-1 can teleport to
 									If Rand(50 - (20 * SelectedDifficulty\AggressiveNPCs)) = 1
@@ -6577,7 +6577,7 @@ Function UpdateNPCs()
 					n\SoundCHN2 = LoopSound2(n\Sound2, n\SoundCHN2, Camera, n\Collider, 11.5, 1.0)
 				EndIf
 				
-				MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\FPSFactor[0])
+				MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 				
 				PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.32, EntityZ(n\Collider))
 				
@@ -6658,12 +6658,12 @@ Function UpdateNPCs()
 							UpdateGravity = True
 						EndIf
 						If UpdateGravity Then
-							n\DropSpeed = Max(n\DropSpeed - 0.005 * fps\FPSFactor[0] * n\GravityMult, -n\MaxGravity)
+							n\DropSpeed = Max(n\DropSpeed - 0.005 * fps\Factor[0] * n\GravityMult, -n\MaxGravity)
 						Else
 							If n\FallingPickDistance > 0.0 Then
 								n\DropSpeed = 0.0
 							Else
-								n\DropSpeed = Max(n\DropSpeed - 0.005 * fps\FPSFactor[0] * n\GravityMult, -n\MaxGravity)
+								n\DropSpeed = Max(n\DropSpeed - 0.005 * fps\Factor[0] * n\GravityMult, -n\MaxGravity)
 							EndIf
 						EndIf
 					Else
@@ -7389,7 +7389,7 @@ Function AnimateNPC(n.NPCs, FirstFrame#, LastFrame#, Speed#, Loop% = True)
 	Local NewTime#, Temp%
 	
 	If Speed > 0.0 Then 
-		NewTime = Max(Min(n\Frame + Speed * fps\FPSFactor[0], LastFrame), FirstFrame)
+		NewTime = Max(Min(n\Frame + Speed * fps\Factor[0], LastFrame), FirstFrame)
 		
 		If Loop And NewTime >= LastFrame Then
 			NewTime = FirstFrame
@@ -7402,7 +7402,7 @@ Function AnimateNPC(n.NPCs, FirstFrame#, LastFrame#, Speed#, Loop% = True)
 		EndIf
 		
 		If Loop Then
-			NewTime = n\Frame + Speed * fps\FPSFactor[0]
+			NewTime = n\Frame + Speed * fps\Factor[0]
 			
 			If NewTime < LastFrame Then 
 				NewTime = FirstFrame
@@ -7410,7 +7410,7 @@ Function AnimateNPC(n.NPCs, FirstFrame#, LastFrame#, Speed#, Loop% = True)
 				NewTime = LastFrame
 			EndIf
 		Else
-			NewTime = Max(Min(n\Frame + Speed * fps\FPSFactor[0], FirstFrame), LastFrame)
+			NewTime = Max(Min(n\Frame + Speed * fps\Factor[0], FirstFrame), LastFrame)
 		EndIf
 	EndIf
 	SetNPCFrame(n, NewTime)
@@ -7420,7 +7420,7 @@ Function Animate2#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = True
 	Local NewTime#, Temp%
 	
 	If Speed > 0.0 Then 
-		NewTime = Max(Min(Curr + Speed * fps\FPSFactor[0], LastFrame), FirstFrame)
+		NewTime = Max(Min(Curr + Speed * fps\Factor[0], LastFrame), FirstFrame)
 		
 		If Loop Then
 			If NewTime >= LastFrame Then 
@@ -7435,12 +7435,12 @@ Function Animate2#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = True
 		EndIf
 		
 		If Loop Then
-			NewTime = Curr + Speed * fps\FPSFactor[0]
+			NewTime = Curr + Speed * fps\Factor[0]
 			
 			If NewTime < LastFrame Then NewTime = FirstFrame
 			If NewTime > FirstFrame Then NewTime = LastFrame
 		Else
-			NewTime = Max(Min(Curr + Speed * fps\FPSFactor[0], FirstFrame), LastFrame)
+			NewTime = Max(Min(Curr + Speed * fps\Factor[0], FirstFrame), LastFrame)
 		EndIf
 	EndIf
 	

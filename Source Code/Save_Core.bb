@@ -5,7 +5,7 @@ Function SaveGame(File$)
 	
 	If (Not me\Playable) Then Return ; ~ Don't save if the player can't move at all
 	
-	If me\DropSpeed > 0.02 * fps\FPSFactor[0] Lor me\DropSpeed < (-0.02) * fps\FPSFactor[0] Then Return
+	If me\DropSpeed > 0.02 * fps\Factor[0] Lor me\DropSpeed < (-0.02) * fps\Factor[0] Then Return
 	
 	If me\KillTimer < 0.0 Then Return
 	

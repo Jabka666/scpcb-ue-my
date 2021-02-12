@@ -119,8 +119,8 @@ Type FramesPerSeconds
 	Field CurrTime%
 	Field FPS%
 	Field TempFPS%
-	Field FPSGoal%
-	Field FPSFactor#[2]
+	Field Goal%
+	Field Factor#[2]
 End Type
 
 Global fps.FramesPerSeconds = New FramesPerSeconds
@@ -1786,7 +1786,7 @@ Function CreateMsg(Txt$, Sec#)
 End Function
 
 Function UpdateMessages()
-	If msg\Timer > 0.0 Then msg\Timer = msg\Timer - fps\FPSFactor[0]
+	If msg\Timer > 0.0 Then msg\Timer = msg\Timer - fps\Factor[0]
 End Function
 
 Function RenderMessages()
@@ -1995,8 +1995,8 @@ Repeat
 		Delay(WaitingTime)
 	EndIf
 	
-	fps\FPSFactor[0] = TICK_DURATION
-	fps\FPSFactor[1] = fps\FPSFactor[0]
+	fps\Factor[0] = TICK_DURATION
+	fps\Factor[1] = fps\Factor[0]
 	
 	If MainMenuOpen Then
 		UpdateMainMenu()
@@ -2009,10 +2009,10 @@ Repeat
 	If KeyHit(key\SCREENSHOT) Then GetScreenshot()
 	
 	If opt\ShowFPS Then
-		If fps\FPSGoal < MilliSecs() Then
+		If fps\Goal < MilliSecs() Then
 			fps\FPS = fps\TempFPS
 			fps\TempFPS = 0
-			fps\FPSGoal = MilliSecs() + 1000
+			fps\Goal = MilliSecs() + 1000
 		Else
 			fps\TempFPS = fps\TempFPS + 1
 		EndIf
@@ -2048,10 +2048,10 @@ Function MainLoop()
 		fps\Accumulator = fps\Accumulator - TICK_DURATION
 		If fps\Accumulator =< 0.0 Then CaptureWorld()
 		
-		If MenuOpen Lor InvOpen Lor OtherOpen <> Null Lor ConsoleOpen Lor SelectedDoor <> Null Lor SelectedScreen <> Null Lor I_294\Using Then fps\FPSFactor[0] = 0.0
+		If MenuOpen Lor InvOpen Lor OtherOpen <> Null Lor ConsoleOpen Lor SelectedDoor <> Null Lor SelectedScreen <> Null Lor I_294\Using Then fps\Factor[0] = 0.0
 		
 		If Input_ResetTime > 0.0 Then
-			Input_ResetTime = Max(Input_ResetTime - fps\FPSFactor[0], 0.0)
+			Input_ResetTime = Max(Input_ResetTime - fps\Factor[0], 0.0)
 		Else
 			mo\DoubleClick = False
 			mo\MouseHit1 = MouseHit(1)
@@ -2092,7 +2092,7 @@ Function MainLoop()
 		me\RestoreSanity = True
 		ShouldEntitiesFall = True
 		
-		If fps\FPSFactor[0] > 0.0 And PlayerRoom\RoomTemplate\Name <> "dimension1499" Then UpdateSecurityCams()
+		If fps\Factor[0] > 0.0 And PlayerRoom\RoomTemplate\Name <> "dimension1499" Then UpdateSecurityCams()
 		
 		If (Not MenuOpen) And (Not InvOpen) And OtherOpen = Null And SelectedDoor = Null And (Not ConsoleOpen) And (Not I_294\Using) And SelectedScreen = Null And me\EndingTimer >= 0.0 Then
 			ShouldPlay = Min(me\Zone, 2.0)
@@ -2153,7 +2153,7 @@ Function MainLoop()
 				Local RN$ = PlayerRoom\RoomTemplate\Name
 				
 				If RN <> "room860" And RN <> "room1123" And RN <> "room173intro" And RN <> "dimension1499" And RN <> "pocketdimension" Then
-					If fps\FPSFactor[0] > 0.0 Then me\LightBlink = Rnd(1.0, 2.0)
+					If fps\Factor[0] > 0.0 Then me\LightBlink = Rnd(1.0, 2.0)
 					PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(1, 8) + ".ogg"))
 				EndIf 
 			EndIf
@@ -2283,7 +2283,7 @@ Function MainLoop()
 		If chs\InfiniteStamina Then me\Stamina = 100.0
 		If chs\NoBlink Then me\BlinkTimer = me\BLINKFREQ
 		
-		If fps\FPSFactor[0] = 0.0 Then
+		If fps\Factor[0] = 0.0 Then
 			UpdateWorld(0.0)
 		Else
 			UpdateWorld()
@@ -2293,14 +2293,14 @@ Function MainLoop()
 		me\BlurVolume = Min(CurveValue(0.0, me\BlurVolume, 20.0), 0.95)
 		If me\BlurTimer > 0.0 Then
 			me\BlurVolume = Max(Min(0.95, me\BlurTimer / 1000.0), me\BlurVolume)
-			me\BlurTimer = Max(me\BlurTimer - fps\FPSFactor[0], 0.0)
+			me\BlurTimer = Max(me\BlurTimer - fps\Factor[0], 0.0)
 		EndIf
 		
 		Local DarkA# = 0.0
 		
 		If (Not MenuOpen)  Then
 			If me\Sanity < 0.0 Then
-				If me\RestoreSanity Then me\Sanity = Min(me\Sanity + fps\FPSFactor[0], 0.0)
+				If me\RestoreSanity Then me\Sanity = Min(me\Sanity + fps\Factor[0], 0.0)
 				If me\Sanity < -200.0 Then 
 					DarkA = Max(Min((-me\Sanity - 200.0) / 700.0, 0.6), DarkA)
 					If me\KillTimer >= 0.0 Then 
@@ -2312,11 +2312,11 @@ Function MainLoop()
 			
 			If me\EyeStuck > 0.0 Then 
 				me\BlinkTimer = me\BLINKFREQ
-				me\EyeStuck = Max(me\EyeStuck - fps\FPSFactor[0], 0.0)
+				me\EyeStuck = Max(me\EyeStuck - fps\Factor[0], 0.0)
 				
 				If me\EyeStuck < 9000.0 Then me\BlurTimer = Max(me\BlurTimer, (9000.0 - me\EyeStuck) * 0.5)
 				If me\EyeStuck < 6000.0 Then DarkA = Min(Max(DarkA, (6000.0 - me\EyeStuck) / 5000.0), 1.0)
-				If me\EyeStuck < 9000.0 And me\EyeStuck + fps\FPSFactor[0] >= 9000.0 Then 
+				If me\EyeStuck < 9000.0 And me\EyeStuck + fps\Factor[0] >= 9000.0 Then 
 					CreateMsg("The eyedrops are causing your eyes to tear up.", 6.0)
 				EndIf
 			EndIf
@@ -2352,24 +2352,24 @@ Function MainLoop()
 					End Select 
 					me\BlinkTimer = me\BLINKFREQ
 				EndIf
-				me\BlinkTimer = me\BlinkTimer - fps\FPSFactor[0]
+				me\BlinkTimer = me\BlinkTimer - fps\Factor[0]
 			Else
-				me\BlinkTimer = me\BlinkTimer - fps\FPSFactor[0] * 0.6 * me\BlinkEffect
+				me\BlinkTimer = me\BlinkTimer - fps\Factor[0] * 0.6 * me\BlinkEffect
 				If wi\NightVision = 0 And wi\SCRAMBLE = 0 Then
-					If me\EyeIrritation > 0.0 Then me\BlinkTimer = me\BlinkTimer - Min(me\EyeIrritation / 100.0 + 1.0, 4.0) * fps\FPSFactor[0]
+					If me\EyeIrritation > 0.0 Then me\BlinkTimer = me\BlinkTimer - Min(me\EyeIrritation / 100.0 + 1.0, 4.0) * fps\Factor[0]
 				EndIf
 				DarkA = Max(DarkA, 0.0)
 			EndIf
 			
-			me\EyeIrritation = Max(0.0, me\EyeIrritation - fps\FPSFactor[0])
+			me\EyeIrritation = Max(0.0, me\EyeIrritation - fps\Factor[0])
 			
 			If me\BlinkEffectTimer > 0.0 Then
-				me\BlinkEffectTimer = me\BlinkEffectTimer - (fps\FPSFactor[0] / 70.0)
+				me\BlinkEffectTimer = me\BlinkEffectTimer - (fps\Factor[0] / 70.0)
 			Else
 				If me\BlinkEffect <> 1.0 Then me\BlinkEffect = 1.0
 			EndIf
 			
-			me\LightBlink = Max(me\LightBlink - (fps\FPSFactor[0] / 35.0), 0.0)
+			me\LightBlink = Max(me\LightBlink - (fps\Factor[0] / 35.0), 0.0)
 			If me\LightBlink > 0.0 And wi\NightVision = 0 Then DarkA = Min(Max(DarkA, me\LightBlink * Rnd(0.3, 0.8)), 1.0)
 			
 			If I_294\Using Then DarkA = 1.0
@@ -2382,7 +2382,7 @@ Function MainLoop()
 				SelectedScreen = Null
 				SelectedMonitor = Null
 				me\BlurTimer = Abs(me\KillTimer * 5.0)
-				me\KillTimer = me\KillTimer - (fps\FPSFactor[0] * 0.8)
+				me\KillTimer = me\KillTimer - (fps\Factor[0] * 0.8)
 				If me\KillTimer < -360.0 Then 
 					MenuOpen = True 
 					If me\SelectedEnding <> -1 Then me\EndingTimer = Min(me\KillTimer, -0.1)
@@ -2403,7 +2403,7 @@ Function MainLoop()
 				SelectedScreen = Null
 				SelectedMonitor = Null
 				me\BlurTimer = Abs(me\FallTimer * 10.0)
-				me\FallTimer = me\FallTimer - fps\FPSFactor[0]
+				me\FallTimer = me\FallTimer - fps\Factor[0]
 				DarkA = Max(DarkA, Min(Abs(me\FallTimer / 400.0), 1.0))				
 			EndIf
 			
@@ -2422,7 +2422,7 @@ Function MainLoop()
 			ShowEntity(tt\OverlayID[6])
 			EntityAlpha(tt\OverlayID[6], Max(Min(me\LightFlash + Rnd(-0.2, 0.2), 1.0), 0.0))
 			EntityColor(tt\OverlayID[6], 255.0, 255.0, 255.0)
-			me\LightFlash = Max(me\LightFlash - (fps\FPSFactor[0] / 70.0), 0.0)
+			me\LightFlash = Max(me\LightFlash - (fps\Factor[0] / 70.0), 0.0)
 		Else
 			HideEntity(tt\OverlayID[6])
 		EndIf
@@ -2763,11 +2763,11 @@ End Function
 Function UpdateEnding()
 	Local x%, y%, Width%, Height%, i%
 	
-	fps\FPSFactor[0] = 0.0
+	fps\Factor[0] = 0.0
 	If me\EndingTimer > -2000.0 Then
-		me\EndingTimer = Max(me\EndingTimer - fps\FPSFactor[1], -1111.0)
+		me\EndingTimer = Max(me\EndingTimer - fps\Factor[1], -1111.0)
 	Else
-		me\EndingTimer = me\EndingTimer - fps\FPSFactor[1]
+		me\EndingTimer = me\EndingTimer - fps\Factor[1]
 	EndIf
 	
 	GiveAchievement(Achv055)
@@ -2800,7 +2800,7 @@ Function UpdateEnding()
 		EndIf
 		
 		If me\EndingTimer > -700.0 Then 
-			If me\EndingTimer + fps\FPSFactor[1] > -450.0 And me\EndingTimer =< -450.0 Then
+			If me\EndingTimer + fps\Factor[1] > -450.0 And me\EndingTimer =< -450.0 Then
 				PlaySound_Strict(LoadTempSound("SFX\Ending\Ending" + (me\SelectedEnding + 1) + ".ogg"))
 			EndIf			
 		Else
@@ -2966,7 +2966,7 @@ Function UpdateCredits()
 		ID = ID + 1
 	Next
 	If (Credits_Y + (24 * LastCreditLine\ID * MenuScale)) < -StringHeight(LastCreditLine\Txt)
-		me\CreditsTimer = me\CreditsTimer + (0.5 * fps\FPSFactor[1])
+		me\CreditsTimer = me\CreditsTimer + (0.5 * fps\Factor[1])
 		If me\CreditsTimer >= 0.0 And me\CreditsTimer < 255.0
 			; ~ Just save this line, ok?
 		ElseIf me\CreditsTimer >= 255.0
@@ -3041,7 +3041,7 @@ Function MovePlayer()
 	If chs\SuperMan Then
 		Speed = Speed * 3.0
 		
-		chs\SuperManTimer = chs\SuperManTimer + fps\FPSFactor[0]
+		chs\SuperManTimer = chs\SuperManTimer + fps\Factor[0]
 		
 		me\CameraShake = Sin(chs\SuperManTimer / 5.0) * (chs\SuperManTimer / 1500.0)
 		
@@ -3057,20 +3057,20 @@ Function MovePlayer()
 	EndIf
 	
 	If me\DeathTimer > 0.0 Then
-		me\DeathTimer = me\DeathTimer - fps\FPSFactor[0]
+		me\DeathTimer = me\DeathTimer - fps\Factor[0]
 		If me\DeathTimer < 1.0 Then me\DeathTimer = -1.0
 	ElseIf me\DeathTimer < 0.0 
 		Kill()
 	EndIf
 	
 	If me\CurrSpeed > 0.0 Then
-		me\Stamina = Min(me\Stamina + 0.15 * fps\FPSFactor[0] / 1.25, 100.0)
+		me\Stamina = Min(me\Stamina + 0.15 * fps\Factor[0] / 1.25, 100.0)
 	Else
-		me\Stamina = Min(me\Stamina + 0.15 * fps\FPSFactor[0] * 1.25, 100.0)
+		me\Stamina = Min(me\Stamina + 0.15 * fps\Factor[0] * 1.25, 100.0)
 	EndIf
 	
 	If me\StaminaEffectTimer > 0.0 Then
-		me\StaminaEffectTimer = me\StaminaEffectTimer - (fps\FPSFactor[0] / 70.0)
+		me\StaminaEffectTimer = me\StaminaEffectTimer - (fps\Factor[0] / 70.0)
 	Else
 		If me\StaminaEffect <> 1.0 Then me\StaminaEffect = 1.0
 	EndIf
@@ -3132,7 +3132,7 @@ Function MovePlayer()
 		If (me\Playable And (KeyDown(key\MOVEMENT_DOWN) Xor KeyDown(key\MOVEMENT_UP)) Lor (KeyDown(key\MOVEMENT_RIGHT) Xor KeyDown(key\MOVEMENT_LEFT))) Lor me\ForceMove > 0 Then
 			If (Not me\Crouch) And (KeyDown(key\SPRINT)) And me\Stamina > 0.0 And (Not me\Zombie) Then
 				Sprint = 2.5
-				me\Stamina = me\Stamina - fps\FPSFactor[0] * 0.4 * me\StaminaEffect
+				me\Stamina = me\Stamina - fps\Factor[0] * 0.4 * me\StaminaEffect
 				If me\Stamina =< 0.0 Then me\Stamina = -20.0
 			EndIf
 			
@@ -3156,7 +3156,7 @@ Function MovePlayer()
 			
 			Local TempCHN%
 			
-			If (Not UnableToMove) Then me\Shake = ((me\Shake + fps\FPSFactor[0] * Min(Sprint, 1.5) * 7.0) Mod 720.0)
+			If (Not UnableToMove) Then me\Shake = ((me\Shake + fps\Factor[0] * Min(Sprint, 1.5) * 7.0) Mod 720.0)
 			If Temp < 180.0 And (me\Shake Mod 360.0) >= 180.0 And me\KillTimer >= 0.0 Then
 				If CurrStepSFX = 0 Then
 					Temp = GetStepSound(me\Collider)
@@ -3207,11 +3207,11 @@ Function MovePlayer()
 		
 		Temp2 = Temp2 * chs\NoClipSpeed
 		
-		If KeyDown(key\MOVEMENT_DOWN) Then MoveEntity(me\Collider, 0.0, 0.0, (-Temp2) * fps\FPSFactor[0])
-		If KeyDown(key\MOVEMENT_UP) Then MoveEntity(me\Collider, 0.0, 0.0, Temp2 * fps\FPSFactor[0])
+		If KeyDown(key\MOVEMENT_DOWN) Then MoveEntity(me\Collider, 0.0, 0.0, (-Temp2) * fps\Factor[0])
+		If KeyDown(key\MOVEMENT_UP) Then MoveEntity(me\Collider, 0.0, 0.0, Temp2 * fps\Factor[0])
 		
-		If KeyDown(key\MOVEMENT_LEFT) Then MoveEntity(me\Collider, (-Temp2) * fps\FPSFactor[0], 0.0, 0.0)
-		If KeyDown(key\MOVEMENT_RIGHT) Then MoveEntity(me\Collider, Temp2 * fps\FPSFactor[0], 0.0, 0.0)
+		If KeyDown(key\MOVEMENT_LEFT) Then MoveEntity(me\Collider, (-Temp2) * fps\Factor[0], 0.0, 0.0)
+		If KeyDown(key\MOVEMENT_RIGHT) Then MoveEntity(me\Collider, Temp2 * fps\Factor[0], 0.0, 0.0)
 		
 		ResetEntity(me\Collider)
 	Else
@@ -3274,7 +3274,7 @@ Function MovePlayer()
 			me\CurrSpeed = Max(CurveValue(0.0, me\CurrSpeed - 0.1, 1.0), 0.0)
 		EndIf
 		
-		If (Not UnableToMove) Then TranslateEntity(me\Collider, Cos(Angle) * me\CurrSpeed * fps\FPSFactor[0], 0.0, Sin(Angle) * me\CurrSpeed * fps\FPSFactor[0], True)
+		If (Not UnableToMove) Then TranslateEntity(me\Collider, Cos(Angle) * me\CurrSpeed * fps\Factor[0], 0.0, Sin(Angle) * me\CurrSpeed * fps\Factor[0], True)
 		
 		Local CollidedFloor% = False
 		
@@ -3305,17 +3305,17 @@ Function MovePlayer()
 				Local Pick# = LinePick(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0.0, -PlayerFallingPickDistance, 0.0)
 				
 				If Pick Then
-					me\DropSpeed = Min(Max(me\DropSpeed - 0.006 * fps\FPSFactor[0], -2.0), 0.0)
+					me\DropSpeed = Min(Max(me\DropSpeed - 0.006 * fps\Factor[0], -2.0), 0.0)
 				Else
 					me\DropSpeed = 0.0
 				EndIf
 			Else
-				me\DropSpeed = Min(Max(me\DropSpeed - 0.006 * fps\FPSFactor[0], -2.0), 0.0)
+				me\DropSpeed = Min(Max(me\DropSpeed - 0.006 * fps\Factor[0], -2.0), 0.0)
 			EndIf
 		EndIf
 		PlayerFallingPickDistance = 10.0
 		
-		If (Not UnableToMove) And ShouldEntitiesFall Then TranslateEntity(me\Collider, 0.0, me\DropSpeed * fps\FPSFactor[0], 0.0)
+		If (Not UnableToMove) And ShouldEntitiesFall Then TranslateEntity(me\Collider, 0.0, me\DropSpeed * fps\Factor[0], 0.0)
 	EndIf
 	
 	me\ForceMove = False
@@ -3324,7 +3324,7 @@ Function MovePlayer()
 		Temp2 = me\Bloodloss
 		me\BlurTimer = Max(Max(Sin(MilliSecs() / 100.0) * me\Bloodloss * 30.0, me\Bloodloss * 2.0 * (2.0 - me\CrouchState)), me\BlurTimer)
 		If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then
-			me\Bloodloss = Min(me\Bloodloss + (Min(me\Injuries, 3.5) / 300.0) * fps\FPSFactor[0], 100.0)
+			me\Bloodloss = Min(me\Bloodloss + (Min(me\Injuries, 3.5) / 300.0) * fps\Factor[0], 100.0)
 		EndIf
 		If Temp2 =< 60.0 And me\Bloodloss > 60.0 Then
 			CreateMsg("You are feeling faint from the amount of blood you have lost.", 6.0)
@@ -3370,9 +3370,9 @@ Function MovePlayer()
 	EndIf
 	
 	If me\HealTimer > 0.0 Then
-		me\HealTimer = me\HealTimer - (fps\FPSFactor[0] / 70.0)
-		me\Bloodloss = Min(me\Bloodloss + (2.0 / 400.0) * fps\FPSFactor[0], 100.0)
-		me\Injuries = Max(me\Injuries - (fps\FPSFactor[0] / 70.0) / 30.0, 0.0)
+		me\HealTimer = me\HealTimer - (fps\Factor[0] / 70.0)
+		me\Bloodloss = Min(me\Bloodloss + (2.0 / 400.0) * fps\Factor[0], 100.0)
+		me\Injuries = Max(me\Injuries - (fps\Factor[0] / 70.0) / 30.0, 0.0)
 	EndIf
 		
 	If me\Playable Then
@@ -3387,9 +3387,9 @@ Function MovePlayer()
 			
 			me\HeartBeatTimer = 70.0 * (60.0 / Max(me\HeartBeatRate, 1.0))
 		Else
-			me\HeartBeatTimer = me\HeartBeatTimer - fps\FPSFactor[0]
+			me\HeartBeatTimer = me\HeartBeatTimer - fps\Factor[0]
 		EndIf
-		me\HeartBeatVolume = Max(me\HeartBeatVolume - fps\FPSFactor[0] * 0.05, 0.0)
+		me\HeartBeatVolume = Max(me\HeartBeatVolume - fps\Factor[0] * 0.05, 0.0)
 	EndIf
 	
 	CatchErrors("MovePlayer")
@@ -3399,10 +3399,10 @@ Function MouseLook()
 	Local p.Particles
 	Local i%
 	
-	me\CameraShake = Max(me\CameraShake - (fps\FPSFactor[0] / 10.0), 0.0)
+	me\CameraShake = Max(me\CameraShake - (fps\Factor[0] / 10.0), 0.0)
 	
 	CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / (Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * (Float(opt\RealGraphicWidth) / Float(opt\RealGraphicHeight)))) / 2.0)))
-	me\CurrCameraZoom = Max(me\CurrCameraZoom - fps\FPSFactor[0], 0.0)
+	me\CurrCameraZoom = Max(me\CurrCameraZoom - fps\Factor[0], 0.0)
 	
 	If me\KillTimer >= 0.0 And me\FallTimer >= 0.0 Then
 		me\HeadDropSpeed = 0.0
@@ -3463,13 +3463,13 @@ Function MouseLook()
 				RotateEntity(Camera, CurveAngle(EntityPitch(me\Head) + 40.0, EntityPitch(Camera), 40.0), EntityYaw(Camera), EntityRoll(Camera))
 			EndIf
 			
-			me\HeadDropSpeed = me\HeadDropSpeed - (0.002 * fps\FPSFactor[0])
+			me\HeadDropSpeed = me\HeadDropSpeed - (0.002 * fps\Factor[0])
 		EndIf
 		
 		If opt\InvertMouse Then
-			TurnEntity(Camera, (-MouseYSpeed()) * 0.05 * fps\FPSFactor[0], (-MouseXSpeed()) * 0.15 * fps\FPSFactor[0], 0.0)
+			TurnEntity(Camera, (-MouseYSpeed()) * 0.05 * fps\Factor[0], (-MouseXSpeed()) * 0.15 * fps\Factor[0], 0.0)
 		Else
-			TurnEntity(Camera, MouseYSpeed() * 0.05 * fps\FPSFactor[0], (-MouseXSpeed()) * 0.15 * fps\FPSFactor[0], 0.0)
+			TurnEntity(Camera, MouseYSpeed() * 0.05 * fps\Factor[0], (-MouseXSpeed()) * 0.15 * fps\Factor[0], 0.0)
 		EndIf
 	EndIf
 	
@@ -3499,7 +3499,7 @@ Function MouseLook()
 	
 	If wi\GasMask > 0 Lor I_1499\Using > 0 Then
 		If (Not I_714\Using) Then
-			If wi\GasMask = 2 Lor I_1499\Using = 2 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fps\FPSFactor[0])
+			If wi\GasMask = 2 Lor I_1499\Using = 2 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fps\Factor[0])
 		EndIf
 		If me\KillTimer >= 0.0 Then
 			If (Not ChannelPlaying(BreathCHN)) Then
@@ -3513,22 +3513,22 @@ Function MouseLook()
 		If wi\GasMaskFogTimer > 0.0 Then ShowEntity(tt\OverlayID[10])
 		
 		If ChannelPlaying(BreathCHN) Then
-			wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + fps\FPSFactor[0] * 2.0, 100.0)
+			wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + fps\Factor[0] * 2.0, 100.0)
 		Else
 			If wi\GasMask = 2 Lor I_1499\Using = 2 Then
 				If me\CurrSpeed > 0.0 And KeyDown(key\SPRINT) Then
-					wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + fps\FPSFactor[0] * 0.2, 100.0)
+					wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + fps\Factor[0] * 0.2, 100.0)
 				Else
-					wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - fps\FPSFactor[0] * 0.15)
+					wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - fps\Factor[0] * 0.15)
 				EndIf
 			Else
-				wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - fps\FPSFactor[0] * 0.15)
+				wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - fps\Factor[0] * 0.15)
 			EndIf
 		EndIf
 		EntityAlpha(tt\OverlayID[10], Min(((wi\GasMaskFogTimer * 0.2) ^ 2.0) / 1000.0, 0.45))
 	Else
 		If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN)
-		wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\FPSFactor[0] * 0.15))
+		wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.15))
 		HideEntity(tt\OverlayID[1])
 		HideEntity(tt\OverlayID[10])
 	EndIf
@@ -3538,7 +3538,7 @@ Function MouseLook()
 			me\Stamina = Min(60.0, me\Stamina)
 		EndIf
 		If (Not I_714\Using) Then
-			If wi\HazmatSuit = 2 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fps\FPSFactor[0])
+			If wi\HazmatSuit = 2 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fps\Factor[0])
 		EndIf
 		ShowEntity(tt\OverlayID[2])
 	Else
@@ -3578,7 +3578,7 @@ Function MouseLook()
 			Select i
 				Case 0 ; ~ Common cold
 					;[Block]
-					If fps\FPSFactor[0] > 0.0 Then 
+					If fps\Factor[0] > 0.0 Then 
 						If Rand(1000) = 1 Then
 							If (Not CoughCHN) Then
 								CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
@@ -3587,7 +3587,7 @@ Function MouseLook()
 							EndIf
 						EndIf
 					EndIf
-					me\Stamina = me\Stamina - (fps\FPSFactor[0] * 0.3)
+					me\Stamina = me\Stamina - (fps\Factor[0] * 0.3)
 					;[End Block]
 				Case 1 ; ~ Chicken pox
 					;[Block]
@@ -3597,7 +3597,7 @@ Function MouseLook()
 					;[End Block]
 				Case 2 ; ~ Cancer of the lungs
 					;[Block]
-					If fps\FPSFactor[0] > 0.0 Then 
+					If fps\Factor[0] > 0.0 Then 
 						If Rand(800) = 1 Then
 							If (Not CoughCHN) Then
 								CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
@@ -3606,18 +3606,18 @@ Function MouseLook()
 							EndIf
 						EndIf
 					EndIf
-					me\Stamina = me\Stamina - (fps\FPSFactor[0] * 0.1)
+					me\Stamina = me\Stamina - (fps\Factor[0] * 0.1)
 					;[End Block]
 				Case 3 ; ~ Appendicitis
 					; ~ 0.035 / sec = 2.1 / min
 					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then
-						I_1025\State[i] = I_1025\State[i] + (fps\FPSFactor[0] * 0.0005)
+						I_1025\State[i] = I_1025\State[i] + (fps\Factor[0] * 0.0005)
 					EndIf
 					If I_1025\State[i] > 20.0 Then
-						If I_1025\State[i] - fps\FPSFactor[0] =< 20.0 Then CreateMsg("The pain in your stomach is becoming unbearable.", 6.0)
-						me\Stamina = me\Stamina - (fps\FPSFactor[0] * 0.3)
+						If I_1025\State[i] - fps\Factor[0] =< 20.0 Then CreateMsg("The pain in your stomach is becoming unbearable.", 6.0)
+						me\Stamina = me\Stamina - (fps\Factor[0] * 0.3)
 					ElseIf I_1025\State[i] > 10.0
-						If I_1025\State[i] - fps\FPSFactor[0] =< 10.0 Then CreateMsg("Your stomach is aching.", 6.0)
+						If I_1025\State[i] - fps\Factor[0] =< 10.0 Then CreateMsg("Your stomach is aching.", 6.0)
 					EndIf
 					;[End Block]
 				Case 4 ; ~ Asthma
@@ -3636,7 +3636,7 @@ Function MouseLook()
 				Case 5 ; ~ Cardiac arrest
 					;[Block]
 					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then
-						I_1025\State[i] = I_1025\State[i] + (fps\FPSFactor[0] * 0.35)
+						I_1025\State[i] = I_1025\State[i] + (fps\Factor[0] * 0.35)
 					EndIf
 					
 					; ~ 35 / sec
@@ -4801,7 +4801,7 @@ Function UpdateGUI()
 			msg\Timer = 0.0
 			
 			If msg\KeyPadMsg <> "" Then 
-				msg\KeyPadTimer = msg\KeyPadTimer - fps\FPSFactor[1]
+				msg\KeyPadTimer = msg\KeyPadTimer - fps\Factor[1]
 				If msg\KeyPadTimer =< 0.0 Then
 					msg\KeyPadMsg = ""
 					SelectedDoor = Null
@@ -5533,7 +5533,7 @@ Function UpdateGUI()
 						
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
-						SelectedItem\State3 = Min(SelectedItem\State3 + (fps\FPSFactor[0] / 1.6), 100.0)
+						SelectedItem\State3 = Min(SelectedItem\State3 + (fps\Factor[0] / 1.6), 100.0)
 						
 						If SelectedItem\State3 = 100.0 Then
 							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
@@ -5691,7 +5691,7 @@ Function UpdateGUI()
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						If (Not me\Crouch) Then SetCrouch(True)
 						
-						SelectedItem\State = Min(SelectedItem\State + (fps\FPSFactor[0] / 5.0), 100.0)			
+						SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / 5.0), 100.0)			
 						
 						If SelectedItem\State = 100.0 Then
 							If SelectedItem\ItemTemplate\TempName = "finefirstaid" Then
@@ -5942,7 +5942,7 @@ Function UpdateGUI()
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
-					If SelectedItem\ItemTemplate\TempName <> "fineradio" And SelectedItem\ItemTemplate\TempName <> "veryfineradio" Then SelectedItem\State = Max(0.0, SelectedItem\State - fps\FPSFactor[0] * 0.004)
+					If SelectedItem\ItemTemplate\TempName <> "fineradio" And SelectedItem\ItemTemplate\TempName <> "veryfineradio" Then SelectedItem\State = Max(0.0, SelectedItem\State - fps\Factor[0] * 0.004)
 					
 					; ~ RadioState[5] = Has the "use the number keys" -message been shown yet (True / False)
 					; ~ RadioState[6] = A timer for the "code channel"
@@ -6246,9 +6246,9 @@ Function UpdateGUI()
 								
 								ResumeChannel(RadioCHN[0])
 								If (Not ChannelPlaying(RadioCHN[0])) Then RadioCHN[0] = PlaySound_Strict(RadioStatic)
-								RadioState[6] = RadioState[6] + fps\FPSFactor[0]
+								RadioState[6] = RadioState[6] + fps\Factor[0]
 								Temp = Mid(Str(AccessCode), RadioState[8] + 1.0, 1)
-								If RadioState[6] - fps\FPSFactor[0] =< RadioState[7] * 50.0 And RadioState[6] > RadioState[7] * 50.0 Then
+								If RadioState[6] - fps\Factor[0] =< RadioState[7] * 50.0 And RadioState[6] > RadioState[7] * 50.0 Then
 									PlaySound_Strict(RadioBuzz)
 									RadioState[7] = RadioState[7] + 1.0
 									If RadioState[7] >= Temp Then
@@ -6377,7 +6377,7 @@ Function UpdateGUI()
 					If wi\BallisticVest = 0 Then
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
-						SelectedItem\State = Min(SelectedItem\State + (fps\FPSFactor[0] / 4.0), 100.0)
+						SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / 4.0), 100.0)
 						
 						If SelectedItem\State = 100.0 Then
 							If wi\HazmatSuit > 0 Then
@@ -6408,7 +6408,7 @@ Function UpdateGUI()
 					;[Block]
 					me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 					
-					SelectedItem\State = Min(SelectedItem\State + (fps\FPSFactor[0] / (2.0 + (0.5 * (SelectedItem\ItemTemplate\TempName = "finevest")))), 100)
+					SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / (2.0 + (0.5 * (SelectedItem\ItemTemplate\TempName = "finevest")))), 100)
 					
 					If SelectedItem\State = 100.0 Then
 						If wi\BallisticVest > 0 Then
@@ -6454,7 +6454,7 @@ Function UpdateGUI()
 						
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
-						SelectedItem\State = Min(SelectedItem\State + (fps\FPSFactor[0]) / 1.6, 100.0)
+						SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0]) / 1.6, 100.0)
 						
 						If SelectedItem\State = 100.0 Then
 							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
@@ -6488,7 +6488,7 @@ Function UpdateGUI()
 					;[End Block]
 				Case "nav", "nav310"
 					;[Block]
-					SelectedItem\State = Max(0.0, SelectedItem\State - fps\FPSFactor[0] * 0.005)
+					SelectedItem\State = Max(0.0, SelectedItem\State - fps\Factor[0] * 0.005)
 					
 					If SelectedItem\State > 0.0 Then
 						If SelectedItem\State =< 10.0 And ((MilliSecs() Mod 800) < 200) Then
@@ -6516,7 +6516,7 @@ Function UpdateGUI()
 						
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
-						SelectedItem\State = Min(SelectedItem\State + fps\FPSFactor[0] / 1.6, 100.0)
+						SelectedItem\State = Min(SelectedItem\State + fps\Factor[0] / 1.6, 100.0)
 						
 						If SelectedItem\State = 100.0 Then
 							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
@@ -6680,7 +6680,7 @@ Function UpdateGUI()
 					If (Not PreventItemOverlapping(False, False, False, True)) Then
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
-						SelectedItem\State = Min(SelectedItem\State + fps\FPSFactor[0], 100.0)
+						SelectedItem\State = Min(SelectedItem\State + fps\Factor[0], 100.0)
 						
 						If SelectedItem\State = 100.0 Then
 							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
@@ -6702,7 +6702,7 @@ Function UpdateGUI()
 					If (Not PreventItemOverlapping(False, False, False, False, True)) Then
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
-						SelectedItem\State3 = Min(SelectedItem\State3 + (fps\FPSFactor[0] / 1.6), 100.0)
+						SelectedItem\State3 = Min(SelectedItem\State3 + (fps\Factor[0] / 1.6), 100.0)
 						
 						If SelectedItem\State3 = 100.0 Then
 							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
@@ -7233,7 +7233,7 @@ Function UpdateMenu()
 				EndIf
 			ElseIf me\StopHidingTimer < 40.0
 				If me\KillTimer >= 0.0 Then 
-					me\StopHidingTimer = me\StopHidingTimer + fps\FPSFactor[0]
+					me\StopHidingTimer = me\StopHidingTimer + fps\Factor[0]
 					
 					If me\StopHidingTimer >= 40.0 Then
 						PlaySound_Strict(HorrorSFX[15])
@@ -7663,7 +7663,7 @@ Function UpdateMenu()
 							
 							UpdateWorld(0.0)
 							
-							fps\FPSFactor[0] = 0.0
+							fps\Factor[0] = 0.0
 							
 							ResetInput()
 							Return
@@ -7724,7 +7724,7 @@ Function UpdateMenu()
 							
 							UpdateWorld(0.0)
 							
-							fps\FPSFactor[0] = 0.0
+							fps\Factor[0] = 0.0
 							
 							ResetInput()
 							Return
@@ -8521,7 +8521,7 @@ Function InitNewGame()
 	me\Stamina = 100.0
 	
 	For i = 0 To 70
-		fps\FPSFactor[0] = 1.0
+		fps\Factor[0] = 1.0
 		FlushKeys()
 		MovePlayer()
 		UpdateDoors()
@@ -8623,7 +8623,7 @@ Function InitLoadGame()
 	
 	DrawLoading(100)
 	
-	fps\FPSFactor[0] = 0.0
+	fps\Factor[0] = 0.0
 	
 	ResetInput()
 	
@@ -9205,19 +9205,19 @@ Function Use427()
 	
 	If I_427\Timer < 70.0 * 360.0 Then
 		If I_427\Using Then
-			I_427\Timer = I_427\Timer + fps\FPSFactor[0]
+			I_427\Timer = I_427\Timer + fps\Factor[0]
 			For e.Events = Each Events
 				If e\EventID = e_1048a Then
-					If e\EventState2 > 0.0 Then e\EventState2 = Max(e\EventState2 - (fps\FPSFactor[0] * 0.5), 0.0)
+					If e\EventState2 > 0.0 Then e\EventState2 = Max(e\EventState2 - (fps\Factor[0] * 0.5), 0.0)
 					Exit
 				EndIf
 			Next
-			If me\Injuries > 0.0 Then me\Injuries = Max(me\Injuries - (fps\FPSFactor[0] * 0.0005), 0.0)
-			If me\Bloodloss > 0.0 And me\Injuries =< 1.0 Then me\Bloodloss = Max(me\Bloodloss - (fps\FPSFactor[0] * 0.001), 0.0)
-			If I_008\Timer > 0.0 Then I_008\Timer = Max(I_008\Timer - (fps\FPSFactor[0] * 0.001), 0.0)
-			If I_409\Timer > 0.0 Then I_409\Timer = Max(I_409\Timer - (fps\FPSFactor[0] * 0.003), 0.0)
+			If me\Injuries > 0.0 Then me\Injuries = Max(me\Injuries - (fps\Factor[0] * 0.0005), 0.0)
+			If me\Bloodloss > 0.0 And me\Injuries =< 1.0 Then me\Bloodloss = Max(me\Bloodloss - (fps\Factor[0] * 0.001), 0.0)
+			If I_008\Timer > 0.0 Then I_008\Timer = Max(I_008\Timer - (fps\Factor[0] * 0.001), 0.0)
+			If I_409\Timer > 0.0 Then I_409\Timer = Max(I_409\Timer - (fps\Factor[0] * 0.003), 0.0)
 			For i = 0 To 5
-				If I_1025\State[i] > 0.0 Then I_1025\State[i] = Max(I_1025\State[i] - (fps\FPSFactor[0] * 0.001), 0.0)
+				If I_1025\State[i] > 0.0 Then I_1025\State[i] = Max(I_1025\State[i] - (fps\Factor[0] * 0.001), 0.0)
 			Next
 			If (Not I_427\Sound[0]) Then I_427\Sound[0] = LoadSound_Strict("SFX\SCP\427\Effect.ogg")
 			If (Not ChannelPlaying(I_427\SoundCHN[0])) Then I_427\SoundCHN[0] = PlaySound_Strict(I_427\Sound[0])
@@ -9236,12 +9236,12 @@ Function Use427()
 			Next
 		EndIf
 	Else
-		If PrevI427Timer - fps\FPSFactor[0] < 70.0 * 360.0 And I_427\Timer >= 70.0 * 360.0 Then
+		If PrevI427Timer - fps\Factor[0] < 70.0 * 360.0 And I_427\Timer >= 70.0 * 360.0 Then
 			CreateMsg("Your muscles are swelling. You feel more powerful than ever.", 6.0)
-		ElseIf PrevI427Timer - fps\FPSFactor[0] < 70.0 * 390.0 And I_427\Timer >= 70.0 * 390.0 Then
+		ElseIf PrevI427Timer - fps\Factor[0] < 70.0 * 390.0 And I_427\Timer >= 70.0 * 390.0 Then
 			CreateMsg("You can't feel your legs. But you don't need legs anymore.", 6.0)
 		EndIf
-		I_427\Timer = I_427\Timer + fps\FPSFactor[0]
+		I_427\Timer = I_427\Timer + fps\Factor[0]
 		If (Not I_427\Sound[0]) Then
 			I_427\Sound[0] = LoadSound_Strict("SFX\SCP\427\Effect.ogg")
 		EndIf
@@ -9296,7 +9296,7 @@ Function UpdateMTF()
 						PlayAnnouncement("SFX\Character\MTF\Announc.ogg")
 					EndIf
 					
-					MTFTimer = fps\FPSFactor[0]
+					MTFTimer = fps\Factor[0]
 					
 					Local leader.NPCs
 					
@@ -9316,21 +9316,21 @@ Function UpdateMTF()
 		EndIf
 	Else
 		If MTFTimer =< 70.0 * 120.0 Then
-			MTFTimer = MTFTimer + fps\FPSFactor[0]
+			MTFTimer = MTFTimer + fps\Factor[0]
 		ElseIf MTFTimer > 70.0 * 120.0 And MTFTimer < 10000.0
 			If PlayerInReachableRoom()
 				PlayAnnouncement("SFX\Character\MTF\AnnouncAfter1.ogg")
 			EndIf
 			MTFTimer = 10000.0
 		ElseIf MTFTimer >= 10000.0 And MTFTimer =< 10000.0 + (70.0 * 120.0)
-			MTFTimer = MTFTimer + fps\FPSFactor[0]
+			MTFTimer = MTFTimer + fps\Factor[0]
 		ElseIf MTFTimer > 10000.0 + (70.0 * 120.0) And MTFTimer < 20000.0
 			If PlayerInReachableRoom()
 				PlayAnnouncement("SFX\Character\MTF\AnnouncAfter2.ogg")
 			EndIf
 			MTFTimer = 20000.0
 		ElseIf MTFTimer >= 20000.0 And MTFTimer =< 20000.0 + (70.0 * 60.0)
-			MTFTimer = MTFTimer + fps\FPSFactor[0]
+			MTFTimer = MTFTimer + fps\Factor[0]
 		ElseIf MTFTimer > 20000.0 + (70.0 * 60.0) And MTFTimer < 25000.0
 			If PlayerInReachableRoom()
 				; ~ If the player has an SCP in their inventory play special voice line.
@@ -9348,7 +9348,7 @@ Function UpdateMTF()
 			EndIf
 			MTFTimer = 25000.0
 		ElseIf MTFTimer >= 25000.0 And MTFTimer =< 25000.0 + (70.0 * 60.0)
-			MTFTimer = MTFTimer + fps\FPSFactor[0]
+			MTFTimer = MTFTimer + fps\Factor[0]
 		ElseIf MTFTimer > 25000.0 + (70.0 * 60.0) And MTFTimer < 30000.0
 			If PlayerInReachableRoom() Then
 				PlayAnnouncement("SFX\Character\MTF\ThreatAnnouncFinal.ogg")
@@ -9360,7 +9360,7 @@ End Function
 
 Function UpdateCameraCheck()
 	If MTFCameraCheckTimer > 0.0 And MTFCameraCheckTimer < 70.0 * 90.0 Then
-		MTFCameraCheckTimer = MTFCameraCheckTimer + fps\FPSFactor[0]
+		MTFCameraCheckTimer = MTFCameraCheckTimer + fps\Factor[0]
 	ElseIf MTFCameraCheckTimer >= 70.0 * 90.0
 		MTFCameraCheckTimer = 0.0
 		If (Not me\Detected) Then
@@ -9383,9 +9383,9 @@ Function UpdateExplosion()
 	
 	; ~ This here is necessary because the SCP-294's drinks with explosion effect didn't worked anymore -- ENDSHN
 	If me\ExplosionTimer > 0.0 Then
-		me\ExplosionTimer = me\ExplosionTimer + fps\FPSFactor[0]
+		me\ExplosionTimer = me\ExplosionTimer + fps\Factor[0]
 		If me\ExplosionTimer < 140.0 Then
-			If me\ExplosionTimer - fps\FPSFactor[0] < 5.0 Then
+			If me\ExplosionTimer - fps\Factor[0] < 5.0 Then
 				ExplosionSFX = LoadSound_Strict("SFX\Ending\GateB\Nuke1.ogg")
 				PlaySound_Strict(ExplosionSFX)
 				me\CameraShake = 10.0
@@ -9394,7 +9394,7 @@ Function UpdateExplosion()
 			me\CameraShake = CurveValue(me\ExplosionTimer / 60.0, me\CameraShake, 50.0)
 		Else
 			me\CameraShake = Min((me\ExplosionTimer / 20.0), 20.0)
-			If me\ExplosionTimer - fps\FPSFactor[0] < 140.0 Then
+			If me\ExplosionTimer - fps\Factor[0] < 140.0 Then
 				me\BlinkTimer = 1.0
 				ExplosionSFX = LoadSound_Strict("SFX\Ending\GateB\Nuke2.ogg")
 				PlaySound_Strict(ExplosionSFX)				
@@ -9422,12 +9422,12 @@ Function UpdateVomit()
 	Local Pvt%
 	
 	If me\CameraShakeTimer > 0.0 Then
-		me\CameraShakeTimer = me\CameraShakeTimer - (fps\FPSFactor[0] / 70.0)
+		me\CameraShakeTimer = me\CameraShakeTimer - (fps\Factor[0] / 70.0)
 		me\CameraShake = 2.0
 	EndIf
 	
 	If me\VomitTimer > 0.0 Then
-		me\VomitTimer = me\VomitTimer - (fps\FPSFactor[0] / 70.0)
+		me\VomitTimer = me\VomitTimer - (fps\Factor[0] / 70.0)
 		
 		If (MilliSecs() Mod 1600) < Rand(200, 400) Then
 			If me\BlurTimer = 0.0 Then me\BlurTimer = 70.0 * Rnd(10.0, 20.0)
@@ -9450,7 +9450,7 @@ Function UpdateVomit()
 			me\Regurgitate = 0
 		EndIf
 	ElseIf me\VomitTimer < 0.0 Then ; ~ Vomit
-		me\VomitTimer = me\VomitTimer - (fps\FPSFactor[0] / 70.0)
+		me\VomitTimer = me\VomitTimer - (fps\Factor[0] / 70.0)
 		
 		If me\VomitTimer > -5.0 Then
 			If (MilliSecs() Mod 400) < 50 Then me\CameraShake = 4.0 
@@ -9520,7 +9520,7 @@ Function Update008()
 		If I_008\Timer < 93.0 Then
 			PrevI008Timer = I_008\Timer
 			If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then
-				I_008\Timer = Min(I_008\Timer + (fps\FPSFactor[0] * 0.002), 100.0)
+				I_008\Timer = Min(I_008\Timer + (fps\Factor[0] * 0.002), 100.0)
 			EndIf
 			
 			me\BlurTimer = Max(I_008\Timer * 3.0 * (2.0 - me\CrouchState), me\BlurTimer)
@@ -9569,7 +9569,7 @@ Function Update008()
 			EndIf
 		Else
 			PrevI008Timer = I_008\Timer
-			I_008\Timer = Min(I_008\Timer + (fps\FPSFactor[0] * 0.004), 100.0)
+			I_008\Timer = Min(I_008\Timer + (fps\Factor[0] * 0.004), 100.0)
 			
 			If TeleportForInfect Then
 				If I_008\Timer < 94.7 Then
@@ -9670,7 +9670,7 @@ Function Update409()
 		ShowEntity(tt\OverlayID[7])
 		
 		If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then
-			I_409\Timer = Min(I_409\Timer + (fps\FPSFactor[0] * 0.004), 100.0)
+			I_409\Timer = Min(I_409\Timer + (fps\Factor[0] * 0.004), 100.0)
 		EndIf	
 		EntityAlpha(tt\OverlayID[7], Min(((I_409\Timer * 0.2) ^ 2.0) / 1000.0, 0.5))
 		me\BlurTimer = Max(I_409\Timer * 3.0 * (2.0 - me\CrouchState), me\BlurTimer)
@@ -9687,7 +9687,7 @@ Function Update409()
 			PlaySound_Strict(DamageSFX[13])
 			me\Injuries = Max(me\Injuries, 2.0)
 		ElseIf I_409\Timer > 94.0
-			I_409\Timer = Min(I_409\Timer + fps\FPSFactor[0] * 0.004, 100.0)
+			I_409\Timer = Min(I_409\Timer + fps\Factor[0] * 0.004, 100.0)
 			me\Playable = False
 			me\BlurTimer = 4.0
 			me\CameraShake = 3.0

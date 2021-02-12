@@ -155,7 +155,7 @@ Global UpdateRoomLightsTimer# = 0.0
 
 Function UpdateRoomLights(Cam%)
 	If opt\EnableRoomLights And SecondaryLightOn > 0.5 And Cam = Camera Then
-		UpdateRoomLightsTimer = UpdateRoomLightsTimer + fps\FPSFactor[0]
+		UpdateRoomLightsTimer = UpdateRoomLightsTimer + fps\Factor[0]
 		If UpdateRoomLightsTimer >= 8.0 Then
 			UpdateRoomLightsTimer = 0.0
 		EndIf
@@ -2082,7 +2082,7 @@ Function UpdateDoors()
 		Next
 		UpdateDoorsTimer = 30.0
 	Else
-		UpdateDoorsTimer = Max(UpdateDoorsTimer - fps\FPSFactor[0], 0.0)
+		UpdateDoorsTimer = Max(UpdateDoorsTimer - fps\Factor[0], 0.0)
 	EndIf
 	
 	ClosestButton = 0
@@ -2123,39 +2123,39 @@ Function UpdateDoors()
 					Select d\DoorType
 						Case Default_Door
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + (fps\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fps\FPSFactor[0] / 80.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * fps\FPSFactor[0] / 80.0, 0.0, 0.0)	
+							d\OpenState = Min(180.0, d\OpenState + (fps\Factor[0] * 2.0 * (d\FastOpen + 1)))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fps\Factor[0] / 80.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * fps\Factor[0] / 80.0, 0.0, 0.0)	
 							;[End Block]
 						Case Big_Door
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + (fps\FPSFactor[0] * 0.8))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * fps\FPSFactor[0] / 180.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, (-Sin(d\OpenState)) * fps\FPSFactor[0] / 180.0, 0.0, 0.0)
+							d\OpenState = Min(180.0, d\OpenState + (fps\Factor[0] * 0.8))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * fps\Factor[0] / 180.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, (-Sin(d\OpenState)) * fps\Factor[0] / 180.0, 0.0, 0.0)
 							;[End Block]
 						Case Heavy_Door
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + (fps\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen + 1) * fps\FPSFactor[0] / 85.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fps\FPSFactor[0] / 120.0, 0.0, 0.0)
+							d\OpenState = Min(180.0, d\OpenState + (fps\Factor[0] * 2.0 * (d\FastOpen + 1)))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen + 1) * fps\Factor[0] / 85.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fps\Factor[0] / 120.0, 0.0, 0.0)
 							;[End Block]
 						Case Elevator_Door
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + (fps\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fps\FPSFactor[0] / 162.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState)* (d\FastOpen * 2 + 1) * fps\FPSFactor[0] / 162.0, 0.0, 0.0)
+							d\OpenState = Min(180.0, d\OpenState + (fps\Factor[0] * 2.0 * (d\FastOpen + 1)))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fps\Factor[0] / 162.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState)* (d\FastOpen * 2 + 1) * fps\Factor[0] / 162.0, 0.0, 0.0)
 							;[End Block]
 						Case One_Sided_Door
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + (fps\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fps\FPSFactor[0] / 80.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fps\FPSFactor[0]) / 80.0, 0.0, 0.0)	
+							d\OpenState = Min(180.0, d\OpenState + (fps\Factor[0] * 2.0 * (d\FastOpen + 1)))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fps\Factor[0] / 80.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fps\Factor[0]) / 80.0, 0.0, 0.0)	
 							;[End Block]	
 						Case SCP_914_Door ; ~ Used for SCP-914 only
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + (fps\FPSFactor[0] * 1.4))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * fps\FPSFactor[0] / 114.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (-fps\FPSFactor[0]) / 114.0, 0.0, 0.0)
+							d\OpenState = Min(180.0, d\OpenState + (fps\Factor[0] * 1.4))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * fps\Factor[0] / 114.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (-fps\Factor[0]) / 114.0, 0.0, 0.0)
 							;[End Block]
 					End Select
 				Else
@@ -2163,8 +2163,8 @@ Function UpdateDoors()
 					ResetEntity(d\OBJ)
 					If d\OBJ2 <> 0 Then ResetEntity(d\OBJ2)
 					If d\TimerState > 0.0 Then
-						d\TimerState = Max(0.0, d\TimerState - fps\FPSFactor[0])
-						If d\TimerState + fps\FPSFactor[0] > 110.0 And d\TimerState =< 110.0 Then d\SoundCHN = PlaySound2(CautionSFX, Camera, d\OBJ)
+						d\TimerState = Max(0.0, d\TimerState - fps\Factor[0])
+						If d\TimerState + fps\Factor[0] > 110.0 And d\TimerState =< 110.0 Then d\SoundCHN = PlaySound2(CautionSFX, Camera, d\OBJ)
 						
 						If d\TimerState = 0.0 Then 
 							d\Open = (Not d\Open)
@@ -2187,16 +2187,16 @@ Function UpdateDoors()
 					Select d\DoorType
 						Case Default_Door
 							;[Block]
-							d\OpenState = Max(0.0, d\OpenState - (fps\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fps\FPSFactor[0]) * (d\FastOpen + 1) / 80.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fps\FPSFactor[0]) / 80.0, 0.0, 0.0)	
+							d\OpenState = Max(0.0, d\OpenState - (fps\Factor[0] * 2.0 * (d\FastOpen + 1)))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fps\Factor[0]) * (d\FastOpen + 1) / 80.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fps\Factor[0]) / 80.0, 0.0, 0.0)	
 							;[End Block]
 						Case Big_Door
 							;[Block]
-							d\OpenState = Max(0.0, d\OpenState - (fps\FPSFactor[0] * 0.8))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fps\FPSFactor[0]) / 180.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * fps\FPSFactor[0] / 180.0, 0.0, 0.0)
-							If d\OpenState < 15.0 And d\OpenState + fps\FPSFactor[0] >= 15.0
+							d\OpenState = Max(0.0, d\OpenState - (fps\Factor[0] * 0.8))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fps\Factor[0]) / 180.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * fps\Factor[0] / 180.0, 0.0, 0.0)
+							If d\OpenState < 15.0 And d\OpenState + fps\Factor[0] >= 15.0
 								If opt\ParticleAmount = 2
 									For i = 0 To Rand(75, 99)
 										Local Pvt% = CreatePivot()
@@ -2216,27 +2216,27 @@ Function UpdateDoors()
 							;[End Block]
 						Case Heavy_Door
 							;[Block]
-							d\OpenState = Max(0.0, d\OpenState - (fps\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fps\FPSFactor[0]) * (d\FastOpen + 1) / 85.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fps\FPSFactor[0]) / 120.0, 0.0, 0.0)
+							d\OpenState = Max(0.0, d\OpenState - (fps\Factor[0] * 2.0 * (d\FastOpen + 1)))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fps\Factor[0]) * (d\FastOpen + 1) / 85.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fps\Factor[0]) / 120.0, 0.0, 0.0)
 							;[End Block]
 						Case Elevator_Door
 							;[Block]
-							d\OpenState = Max(0.0, d\OpenState - (fps\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fps\FPSFactor[0]) * (d\FastOpen + 1) / 162.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fps\FPSFactor[0]) / 162.0, 0.0, 0.0)
+							d\OpenState = Max(0.0, d\OpenState - (fps\Factor[0] * 2.0 * (d\FastOpen + 1)))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fps\Factor[0]) * (d\FastOpen + 1) / 162.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fps\Factor[0]) / 162.0, 0.0, 0.0)
 							;[End Block]
 						Case One_Sided_Door
 							;[Block]
-							d\OpenState = Max(0.0, d\OpenState - (fps\FPSFactor[0] * 2.0 * (d\FastOpen + 1)))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fps\FPSFactor[0]) * (d\FastOpen + 1) / 80.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * fps\FPSFactor[0] / 80.0, 0.0, 0.0)
+							d\OpenState = Max(0.0, d\OpenState - (fps\Factor[0] * 2.0 * (d\FastOpen + 1)))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fps\Factor[0]) * (d\FastOpen + 1) / 80.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * fps\Factor[0] / 80.0, 0.0, 0.0)
 							;[End Block]	
 						Case SCP_914_Door ; ~ Used for SCP-914 only
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState - (fps\FPSFactor[0] * 1.4))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fps\FPSFactor[0]) / 114.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * fps\FPSFactor[0] / 114.0, 0.0, 0.0)
+							d\OpenState = Min(180.0, d\OpenState - (fps\Factor[0] * 1.4))
+							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fps\Factor[0]) / 114.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * fps\Factor[0] / 114.0, 0.0, 0.0)
 							;[End Block]
 					End Select
 					
@@ -2323,9 +2323,9 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 	door2\Locked = 1
 	If door1\Open Then
 		door1\IsElevatorDoor = 3
-		If Abs(EntityX(me\Collider) - EntityX(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then
-			If Abs(EntityZ(me\Collider) - EntityZ(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then	
-				If Abs(EntityY(me\Collider) - EntityY(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then	
+		If Abs(EntityX(me\Collider) - EntityX(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
+			If Abs(EntityZ(me\Collider) - EntityZ(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then	
+				If Abs(EntityY(me\Collider) - EntityY(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then	
 					door1\Locked = 0
 					door1\IsElevatorDoor = 1
 				EndIf
@@ -2334,9 +2334,9 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 	EndIf
 	If door2\Open Then
 		door2\IsElevatorDoor = 3
-		If Abs(EntityX(me\Collider) - EntityX(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then
-			If Abs(EntityZ(me\Collider) - EntityZ(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then	
-				If Abs(EntityY(me\Collider) - EntityY(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then
+		If Abs(EntityX(me\Collider) - EntityX(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
+			If Abs(EntityZ(me\Collider) - EntityZ(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then	
+				If Abs(EntityY(me\Collider) - EntityY(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
 					door2\Locked = 0
 					door2\IsElevatorDoor = 1
 				EndIf
@@ -2351,10 +2351,10 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 		door2\Locked = 1
 		If door1\OpenState = 0.0 And door2\OpenState = 0.0 Then
 			If State < 0.0 Then
-				State = State - fps\FPSFactor[0]
-				If Abs(EntityX(me\Collider) - EntityX(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then
-					If Abs(EntityZ(me\Collider) - EntityZ(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then	
-						If Abs(EntityY(me\Collider) - EntityY(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then	
+				State = State - fps\Factor[0]
+				If Abs(EntityX(me\Collider) - EntityX(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
+					If Abs(EntityZ(me\Collider) - EntityZ(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then	
+						If Abs(EntityY(me\Collider) - EntityY(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then	
 							Inside = True
 							
 							If (Not event\SoundCHN) Then
@@ -2386,7 +2386,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 							z = Max(Min((EntityZ(me\Collider) - EntityZ(FirstPivot, True)), (280.0 * RoomScale) - 0.22), ((-280.0) * RoomScale) + 0.22)
 						EndIf
 						
-						TeleportEntity(me\Collider, EntityX(SecondPivot, True) + x, (0.1 * fps\FPSFactor[0]) + EntityY(SecondPivot, True) + (EntityY(me\Collider) - EntityY(FirstPivot, True)), EntityZ(SecondPivot, True) + z, 0.3, True)
+						TeleportEntity(me\Collider, EntityX(SecondPivot, True) + x, (0.1 * fps\Factor[0]) + EntityY(SecondPivot, True) + (EntityY(me\Collider) - EntityY(FirstPivot, True)), EntityZ(SecondPivot, True) + z, 0.3, True)
 						UpdateDoorsTimer = 0.0
 						me\DropSpeed = 0.0
 						UpdateDoors()
@@ -2396,9 +2396,9 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 					EndIf
 					
 					For n.NPCs = Each NPCs
-						If Abs(EntityX(n\Collider) - EntityX(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then
-							If Abs(EntityZ(n\Collider) - EntityZ(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then
-								If Abs(EntityY(n\Collider) - EntityY(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then
+						If Abs(EntityX(n\Collider) - EntityX(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
+							If Abs(EntityZ(n\Collider) - EntityZ(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
+								If Abs(EntityY(n\Collider) - EntityY(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
 									If (Not IgnoreRotation) Then
 										Dist = Distance(EntityX(n\Collider, True), EntityX(FirstPivot, True), EntityZ(n\Collider, True), EntityZ(FirstPivot, True))
 										Dir = PointDirection(EntityX(n\Collider, True), EntityZ(n\Collider, True), EntityX(FirstPivot, True), EntityZ(FirstPivot, True))
@@ -2412,7 +2412,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 										z = Max(Min((EntityZ(n\Collider) - EntityZ(FirstPivot, True)), (280.0 * RoomScale) - 0.22), ((-280.0) * RoomScale) + 0.22)
 									EndIf
 									
-									TeleportEntity(n\Collider, EntityX(SecondPivot, True) + x, (0.1 * fps\FPSFactor[0]) + EntityY(SecondPivot, True) + (EntityY(n\Collider) - EntityY(FirstPivot, True)), EntityZ(SecondPivot, True) + z, n\CollRadius, True)
+									TeleportEntity(n\Collider, EntityX(SecondPivot, True) + x, (0.1 * fps\Factor[0]) + EntityY(SecondPivot, True) + (EntityY(n\Collider) - EntityY(FirstPivot, True)), EntityZ(SecondPivot, True) + z, n\CollRadius, True)
 									If n = Curr173 Then
 										Curr173\IdleTimer = 10.0
 									EndIf
@@ -2422,9 +2422,9 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 					Next
 					
 					For it.Items = Each Items
-						If Abs(EntityX(it\Collider) - EntityX(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then
-							If Abs(EntityZ(it\Collider) - EntityZ(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then
-								If Abs(EntityY(it\Collider) - EntityY(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then
+						If Abs(EntityX(it\Collider) - EntityX(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
+							If Abs(EntityZ(it\Collider) - EntityZ(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
+								If Abs(EntityY(it\Collider) - EntityY(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
 									If (Not IgnoreRotation) Then
 										Dist = Distance(EntityX(it\Collider, True), EntityX(FirstPivot, True), EntityZ(it\Collider, True), EntityZ(FirstPivot, True))
 										Dir = PointDirection(EntityX(it\Collider, True), EntityZ(it\Collider, True), EntityX(FirstPivot, True), EntityZ(FirstPivot, True))
@@ -2437,16 +2437,16 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 										x = Max(Min((EntityX(it\Collider) - EntityX(FirstPivot, True)), (280.0 * RoomScale) - 0.22), ((-280.0) * RoomScale) + 0.22)
 										z = Max(Min((EntityZ(it\Collider) - EntityZ(FirstPivot, True)), (280.0 * RoomScale) - 0.22), ((-280.0) * RoomScale) + 0.22)
 									EndIf
-									TeleportEntity(it\Collider, EntityX(SecondPivot, True) + x, (0.1 * fps\FPSFactor[0]) + EntityY(SecondPivot, True) + (EntityY(it\Collider) - EntityY(FirstPivot, True)), EntityZ(SecondPivot, True) + z, 0.01, True)
+									TeleportEntity(it\Collider, EntityX(SecondPivot, True) + x, (0.1 * fps\Factor[0]) + EntityY(SecondPivot, True) + (EntityY(it\Collider) - EntityY(FirstPivot, True)), EntityZ(SecondPivot, True) + z, 0.01, True)
 								EndIf
 							EndIf
 						EndIf
 					Next
 					
 					For de.Decals = Each Decals
-						If Abs(EntityX(de\OBJ) - EntityX(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then
-							If Abs(EntityZ(de\OBJ) - EntityZ(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then
-								If Abs(EntityY(de\OBJ) - EntityY(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then
+						If Abs(EntityX(de\OBJ) - EntityX(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
+							If Abs(EntityZ(de\OBJ) - EntityZ(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
+								If Abs(EntityY(de\OBJ) - EntityY(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
 									If (Not IgnoreRotation) Then
 										Dist = Distance(EntityX(de\OBJ, True), EntityX(FirstPivot, True), EntityZ(de\OBJ, True), EntityZ(FirstPivot, True))
 										Dir = PointDirection(EntityX(de\OBJ, True), EntityZ(de\OBJ, True), EntityX(FirstPivot, True), EntityZ(FirstPivot, True))
@@ -2459,7 +2459,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 										x = Max(Min((EntityX(de\OBJ) - EntityX(FirstPivot, True)), (280.0 * RoomScale) - 0.22), ((-280.0) * RoomScale) + 0.22)
 										z = Max(Min((EntityZ(de\OBJ) - EntityZ(FirstPivot, True)), (280.0 * RoomScale) - 0.22), ((-280.0) * RoomScale) + 0.22)
 									EndIf
-									TeleportEntity(de\OBJ, EntityX(SecondPivot, True) + x, (0.1 * fps\FPSFactor[0]) + EntityY(SecondPivot, True) + (EntityY(de\OBJ) - EntityY(FirstPivot, True)), EntityZ(SecondPivot, True) + z, 0.01, True)
+									TeleportEntity(de\OBJ, EntityX(SecondPivot, True) + x, (0.1 * fps\Factor[0]) + EntityY(SecondPivot, True) + (EntityY(de\OBJ) - EntityY(FirstPivot, True)), EntityZ(SecondPivot, True) + z, 0.01, True)
 								EndIf
 							EndIf
 						EndIf
@@ -2470,10 +2470,10 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 					PlaySound2(ElevatorBeepSFX, Camera, FirstPivot, 4.0)
 				EndIf
 			Else
-				State = State + fps\FPSFactor[0]
-				If Abs(EntityX(me\Collider) - EntityX(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then
-					If Abs(EntityZ(me\Collider) - EntityZ(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then	
-						If Abs(EntityY(me\Collider) - EntityY(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then
+				State = State + fps\Factor[0]
+				If Abs(EntityX(me\Collider) - EntityX(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
+					If Abs(EntityZ(me\Collider) - EntityZ(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then	
+						If Abs(EntityY(me\Collider) - EntityY(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
 							Inside = True
 							
 							If (Not event\SoundCHN) Then
@@ -2503,7 +2503,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 							x = Max(Min((EntityX(me\Collider) - EntityX(SecondPivot, True)), (280 * RoomScale) - 0.22), ((-280) * RoomScale) + 0.22)
 							z = Max(Min((EntityZ(me\Collider) - EntityZ(SecondPivot, True)), (280 * RoomScale) - 0.22), ((-280) * RoomScale) + 0.22)
 						EndIf
-						TeleportEntity(me\Collider, EntityX(FirstPivot, True) + x, (0.1 * fps\FPSFactor[0]) + EntityY(FirstPivot, True) + (EntityY(me\Collider) - EntityY(SecondPivot, True)), EntityZ(FirstPivot, True) + z, 0.3, True)
+						TeleportEntity(me\Collider, EntityX(FirstPivot, True) + x, (0.1 * fps\Factor[0]) + EntityY(FirstPivot, True) + (EntityY(me\Collider) - EntityY(SecondPivot, True)), EntityZ(FirstPivot, True) + z, 0.3, True)
 						UpdateDoorsTimer = 0.0
 						me\DropSpeed = 0.0
 						UpdateDoors()
@@ -2513,9 +2513,9 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 					EndIf
 					
 					For n.NPCs = Each NPCs
-						If Abs(EntityX(n\Collider) - EntityX(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then
-							If Abs(EntityZ(n\Collider) - EntityZ(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then
-								If Abs(EntityY(n\Collider) - EntityY(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then
+						If Abs(EntityX(n\Collider) - EntityX(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
+							If Abs(EntityZ(n\Collider) - EntityZ(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
+								If Abs(EntityY(n\Collider) - EntityY(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
 									If (Not IgnoreRotation) Then
 										Dist = Distance(EntityX(n\Collider, True), EntityX(SecondPivot, True), EntityZ(n\Collider, True), EntityZ(SecondPivot, True))
 										Dir = PointDirection(EntityX(n\Collider, True), EntityZ(n\Collider, True), EntityX(SecondPivot, True), EntityZ(SecondPivot, True))
@@ -2527,7 +2527,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 										x = Max(Min((EntityX(n\Collider) - EntityX(SecondPivot, True)), (280.0 * RoomScale) - 0.22), ((-280.0) * RoomScale) + 0.22)
 										z = Max(Min((EntityZ(n\Collider) - EntityZ(SecondPivot, True)), (280.0 * RoomScale) - 0.22), ((-280.0) * RoomScale) + 0.22)
 									EndIf
-									TeleportEntity(n\Collider, EntityX(FirstPivot, True) + x, (0.1 * fps\FPSFactor[0]) + EntityY(FirstPivot, True) + (EntityY(n\Collider) - EntityY(SecondPivot, True)), EntityZ(FirstPivot, True) + z, n\CollRadius, True)
+									TeleportEntity(n\Collider, EntityX(FirstPivot, True) + x, (0.1 * fps\Factor[0]) + EntityY(FirstPivot, True) + (EntityY(n\Collider) - EntityY(SecondPivot, True)), EntityZ(FirstPivot, True) + z, n\CollRadius, True)
 									If n = Curr173 Then
 										Curr173\IdleTimer = 10.0
 									EndIf
@@ -2537,9 +2537,9 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 					Next
 					
 					For it.Items = Each Items
-						If Abs(EntityX(it\Collider) - EntityX(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then
-							If Abs(EntityZ(it\Collider) - EntityZ(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then
-								If Abs(EntityY(it\Collider) - EntityY(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then
+						If Abs(EntityX(it\Collider) - EntityX(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
+							If Abs(EntityZ(it\Collider) - EntityZ(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
+								If Abs(EntityY(it\Collider) - EntityY(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
 									If (Not IgnoreRotation) Then
 										Dist = Distance(EntityX(it\Collider, True), EntityX(SecondPivot, True), EntityZ(it\Collider, True), EntityZ(SecondPivot, True))
 										Dir = PointDirection(EntityX(it\Collider, True), EntityZ(it\Collider, True), EntityX(SecondPivot, True), EntityZ(SecondPivot, True))
@@ -2551,16 +2551,16 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 										x = Max(Min((EntityX(it\Collider) - EntityX(SecondPivot, True)), (280.0 * RoomScale) - 0.22), ((-280.0) * RoomScale) + 0.22)
 										z = Max(Min((EntityZ(it\Collider) - EntityZ(SecondPivot, True)), (280.0 * RoomScale) - 0.22), ((-280.0) * RoomScale) + 0.22)
 									EndIf
-									TeleportEntity(it\Collider, EntityX(FirstPivot, True) + x, (0.1 * fps\FPSFactor[0]) + EntityY(FirstPivot, True) + (EntityY(it\Collider) - EntityY(SecondPivot, True)), EntityZ(FirstPivot, True) + z, 0.01, True)
+									TeleportEntity(it\Collider, EntityX(FirstPivot, True) + x, (0.1 * fps\Factor[0]) + EntityY(FirstPivot, True) + (EntityY(it\Collider) - EntityY(SecondPivot, True)), EntityZ(FirstPivot, True) + z, 0.01, True)
 								EndIf
 							EndIf
 						EndIf
 					Next
 					
 					For de.Decals = Each Decals
-						If Abs(EntityX(de\OBJ) - EntityX(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then
-							If Abs(EntityZ(de\OBJ) - EntityZ(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then
-								If Abs(EntityY(de\OBJ) - EntityY(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\FPSFactor[0]) Then
+						If Abs(EntityX(de\OBJ) - EntityX(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
+							If Abs(EntityZ(de\OBJ) - EntityZ(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
+								If Abs(EntityY(de\OBJ) - EntityY(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
 									If (Not IgnoreRotation) Then
 										Dist = Distance(EntityX(de\OBJ, True), EntityX(SecondPivot, True), EntityZ(de\OBJ, True), EntityZ(SecondPivot, True))
 										Dir = PointDirection(EntityX(de\OBJ, True), EntityZ(de\OBJ, True), EntityX(SecondPivot, True), EntityZ(SecondPivot, True))
@@ -2572,7 +2572,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 										x = Max(Min((EntityX(de\OBJ) - EntityX(SecondPivot, True)), (280.0 * RoomScale) - 0.22), ((-280.0) * RoomScale) + 0.22)
 										z = Max(Min((EntityZ(de\OBJ) - EntityZ(SecondPivot, True)), (280.0 * RoomScale) - 0.22), ((-280.0) * RoomScale) + 0.22)
 									EndIf
-									TeleportEntity(de\OBJ, EntityX(FirstPivot, True) + x, (0.1 * fps\FPSFactor[0]) + EntityY(FirstPivot, True) + (EntityY(de\OBJ) - EntityY(SecondPivot, True)), EntityZ(FirstPivot, True) + z, 0.01, True)
+									TeleportEntity(de\OBJ, EntityX(FirstPivot, True) + x, (0.1 * fps\Factor[0]) + EntityY(FirstPivot, True) + (EntityY(de\OBJ) - EntityY(SecondPivot, True)), EntityZ(FirstPivot, True) + z, 0.01, True)
 								EndIf
 							EndIf
 						EndIf
@@ -2869,7 +2869,7 @@ Function UpdateDecals()
 	
 	For d.Decals = Each Decals
 		If d\SizeChange <> 0.0 Then
-			d\Size = d\Size + d\SizeChange * fps\FPSFactor[0]
+			d\Size = d\Size + d\SizeChange * fps\Factor[0]
 			ScaleSprite(d\OBJ, d\Size, d\Size)
 			
 			Select d\ID
@@ -2883,7 +2883,7 @@ Function UpdateDecals()
 						PlaySound2(DecaySFX[Rand(1, 3)], Camera, d2\OBJ, 10.0, Rnd(0.1, 0.5))
 						d\Timer = Rnd(50.0, 100.0)
 					Else
-						d\Timer = d\Timer - fps\FPSFactor[0]
+						d\Timer = d\Timer - fps\Factor[0]
 					EndIf
 					;[End Block]
 			End Select
@@ -2892,12 +2892,12 @@ Function UpdateDecals()
 		EndIf
 		
 		If d\AlphaChange <> 0.0 Then
-			d\Alpha = Min(d\Alpha + fps\FPSFactor[0] * d\AlphaChange, 1.0)
+			d\Alpha = Min(d\Alpha + fps\Factor[0] * d\AlphaChange, 1.0)
 			EntityAlpha(d\OBJ, d\Alpha)
 		EndIf
 		
 		If d\LifeTime > 0.0 Then
-			d\LifeTime = Max(d\LifeTime - fps\FPSFactor[0], 5.0)
+			d\LifeTime = Max(d\LifeTime - fps\Factor[0], 5.0)
 		EndIf
 		
 		If d\Size =< 0.0 Lor d\Alpha =< 0.0 Lor d\LifeTime = 5.0 Then
@@ -3026,10 +3026,10 @@ Function UpdateSecurityCams() ; ~ TODO: SHOULD BE SEPARATED!
 				Else
 					If sc\Turn > 0.0 Then
 						If (Not sc\Dir) Then
-							sc\CurrAngle = sc\CurrAngle + 0.2 * fps\FPSFactor[0]
+							sc\CurrAngle = sc\CurrAngle + 0.2 * fps\Factor[0]
 							If sc\CurrAngle > sc\Turn * 1.3 Then sc\Dir = True
 						Else
-							sc\CurrAngle = sc\CurrAngle - 0.2 * fps\FPSFactor[0]
+							sc\CurrAngle = sc\CurrAngle - 0.2 * fps\Factor[0]
 							If sc\CurrAngle < (-sc\Turn) * 1.3 Then sc\Dir = False
 						EndIf
 					EndIf
@@ -3062,12 +3062,12 @@ Function UpdateSecurityCams() ; ~ TODO: SHOULD BE SEPARATED!
 			
 			If Close Then
 				If sc\Screen Then
-					sc\State = sc\State + fps\FPSFactor[0]
+					sc\State = sc\State + fps\Factor[0]
 					If me\BlinkTimer > -5.0 And EntityInView(sc\ScrOBJ, Camera) Then
 						If EntityVisible(Camera, sc\ScrOBJ) Then
 							If (sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3) And (Not I_714\Using) And wi\HazmatSuit <> 3 And wi\GasMask <> 3 Then
 								If me\BlinkTimer > -5.0 Then
-									me\Sanity = me\Sanity - fps\FPSFactor[0]
+									me\Sanity = me\Sanity - fps\Factor[0]
 									me\RestoreSanity = False
 								EndIf
 							EndIf
@@ -3342,14 +3342,14 @@ End Function
 Function TimeCheckpointMonitors()
 	If UpdateCheckpoint1 Then
 		If MonitorTimer < 100.0
-			MonitorTimer = Min(MonitorTimer + fps\FPSFactor[0], 100.0)
+			MonitorTimer = Min(MonitorTimer + fps\Factor[0], 100.0)
 		Else
 			MonitorTimer = 0.0
 		EndIf
 	EndIf
 	If UpdateCheckpoint2 Then
 		If MonitorTimer2 < 100.0
-			MonitorTimer2 = Min(MonitorTimer2 + fps\FPSFactor[0], 100.0)
+			MonitorTimer2 = Min(MonitorTimer2 + fps\Factor[0], 100.0)
 		Else
 			MonitorTimer2 = 0.0
 		EndIf

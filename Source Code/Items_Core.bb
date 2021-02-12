@@ -674,8 +674,8 @@ Function UpdateItems()
 					If ShouldEntitiesFall Then
 						Pick = LinePick(EntityX(i\Collider), EntityY(i\Collider), EntityZ(i\Collider), 0.0, -10.0, 0.0)
 						If Pick Then
-							i\DropSpeed = i\DropSpeed - 0.0004 * fps\FPSfactor[0]
-							TranslateEntity(i\Collider, i\xSpeed * fps\FPSfactor[0], i\DropSpeed * fps\FPSfactor[0], i\zSpeed * fps\FPSfactor[0])
+							i\DropSpeed = i\DropSpeed - 0.0004 * fps\Factor[0]
+							TranslateEntity(i\Collider, i\xSpeed * fps\Factor[0], i\DropSpeed * fps\Factor[0], i\zSpeed * fps\Factor[0])
 							If i\WontColl Then ResetEntity(i\Collider)
 						Else
 							i\DropSpeed = 0.0

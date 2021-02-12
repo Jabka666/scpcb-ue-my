@@ -150,7 +150,7 @@ Function UpdateWorld2()
 		For i = 0 To MaxItemAmount - 1
 			If Inventory(i) <> Null Then
 				If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\SCRAMBLE > 0 And Inventory(i)\ItemTemplate\TempName = "scramble") Then
-					Inventory(i)\State = Max(0.0, Inventory(i)\State - (fps\FPSFactor[0] * (0.02 * wi\NightVision) + (0.25 * (wi\SCRAMBLE > 0))))
+					Inventory(i)\State = Max(0.0, Inventory(i)\State - (fps\Factor[0] * (0.02 * wi\NightVision) + (0.25 * (wi\SCRAMBLE > 0))))
 					Power = Int(Inventory(i)\State)
 					If Power = 0 Then ; ~ This NVG or SCRAMBLE can't be used
 						HasBattery = 0
@@ -181,7 +181,7 @@ Function UpdateWorld2()
 				If wi\NVGTimer =< -10.0 Then wi\NVGTimer = 600.0
 				wi\IsNVGBlinking = True
 			EndIf
-			wi\NVGTimer = wi\NVGTimer - fps\FPSFactor[0]
+			wi\NVGTimer = wi\NVGTimer - fps\Factor[0]
 		EndIf
 	EndIf
 	
@@ -195,7 +195,7 @@ Function UpdateWorld2()
 		If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN)
 	EndIf
 	
-	If fps\FPSFactor[0] > 0.0 Then
+	If fps\Factor[0] > 0.0 Then
 		If HasBattery = 1 And ((MilliSecs() Mod 800) < 200) Then
 			If (Not LowBatteryCHN[1]) Then
 				LowBatteryCHN[1] = PlaySound_Strict(LowBatterySFX[1])
@@ -344,7 +344,7 @@ Function RenderWorld2(Tween#)
 	RenderWorld()
 	CameraProjMode(ArkBlurCam, 0)
 	
-	If fps\FPSFactor[0] > 0.0 Then
+	If fps\Factor[0] > 0.0 Then
 		If HasBattery = 1 And ((MilliSecs() Mod 800) < 400)
 			Color(255, 0, 0)
 			SetFont(fo\FontID[Font_Digital])

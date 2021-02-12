@@ -116,7 +116,7 @@ Function UpdateMainMenu()
 		If fps\Accumulator =< 0.0 Then CaptureWorld()
 		
 		If Input_ResetTime > 0.0 Then
-			Input_ResetTime = Max(Input_ResetTime - fps\FPSFactor[0], 0.0)
+			Input_ResetTime = Max(Input_ResetTime - fps\Factor[0], 0.0)
 		Else
 			mo\DoubleClick = False
 			mo\MouseHit1 = MouseHit(1)
@@ -165,7 +165,7 @@ Function UpdateMainMenu()
 			mm\MainMenuBlinkDuration[0] = Rand(200, 500)
 		EndIf
 		
-		mm\MainMenuBlinkTimer[1] = mm\MainMenuBlinkTimer[1] - fps\FPSFactor[0]
+		mm\MainMenuBlinkTimer[1] = mm\MainMenuBlinkTimer[1] - fps\Factor[0]
 		If mm\MainMenuBlinkTimer[1] < mm\MainMenuBlinkDuration[1] Then
 			If mm\MainMenuBlinkTimer[1] < 0.0 Then
 				mm\MainMenuBlinkTimer[1] = Rnd(700.0, 800.0)

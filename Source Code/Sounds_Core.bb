@@ -115,7 +115,7 @@ Function UpdateMusic()
 		If (Not ChannelPlaying(ConsoleMusPlay)) Then ConsoleMusPlay = PlaySound_Strict(ConsoleMusFlush)
 	ElseIf (Not PlayCustomMusic)
 		If NowPlaying <> ShouldPlay Then ; ~ Playing the wrong clip, fade out
-			opt\CurrMusicVolume = Max(opt\CurrMusicVolume - (fps\FPSFactor[0] / 250.0), 0.0)
+			opt\CurrMusicVolume = Max(opt\CurrMusicVolume - (fps\Factor[0] / 250.0), 0.0)
 			If opt\CurrMusicVolume = 0.0 Then
 				If NowPlaying < 66 Then
 					StopStream_Strict(MusicCHN)
@@ -125,7 +125,7 @@ Function UpdateMusic()
 				CurrMusic = False
 			EndIf
 		Else ; ~ Playing the right clip
-			opt\CurrMusicVolume = opt\CurrMusicVolume + (opt\MusicVolume - opt\CurrMusicVolume) * (0.1 * fps\FPSFactor[0])
+			opt\CurrMusicVolume = opt\CurrMusicVolume + (opt\MusicVolume - opt\CurrMusicVolume) * (0.1 * fps\Factor[0])
 		EndIf
 		
 		If NowPlaying < 66 Then
@@ -136,7 +136,7 @@ Function UpdateMusic()
 			SetStreamVolume_Strict(MusicCHN, opt\CurrMusicVolume)
 		EndIf
 	Else
-		If fps\FPSFactor[0] > 0.0 Lor OptionsMenu = 2 Then
+		If fps\Factor[0] > 0.0 Lor OptionsMenu = 2 Then
 			If (Not ChannelPlaying(MusicCHN)) Then MusicCHN = PlaySound_Strict(CustomMusic)
 			ChannelVolume(MusicCHN, 1.0 * opt\MusicVolume)
 		EndIf
@@ -526,7 +526,7 @@ Function PlayAnnouncement(File$) ; ~ This function streams the announcement curr
 End Function
 
 Function UpdateStreamSounds()
-	If fps\FPSFactor[0] > 0.0 Then
+	If fps\Factor[0] > 0.0 Then
 		If IntercomStreamCHN <> 0 Then
 			SetStreamVolume_Strict(IntercomStreamCHN, opt\SFXVolume)
 		EndIf
@@ -555,7 +555,7 @@ End Function
 
 Function UpdateDeaf()
 	If me\DeafTimer > 0.0 Then
-		me\DeafTimer = me\DeafTimer - fps\FPSFactor[0]
+		me\DeafTimer = me\DeafTimer - fps\Factor[0]
 		opt\SFXVolume = 0.0
 		If opt\SFXVolume > 0.0 Then
 			ControlSoundVolume()
