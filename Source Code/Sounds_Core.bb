@@ -613,7 +613,7 @@ MusicCHN = StreamSound_Strict("SFX\Music\" + Music[2] + ".ogg", opt\MusicVolume,
 Global NowPlaying% = 2, ShouldPlay% = 11
 Global CurrMusic% = True
 
-DrawLoading(10, True)
+RenderLoading(10, True)
 
 Dim OpenDoorSFX%(3, 3), CloseDoorSFX%(3, 3)
 Global BigDoorErrorSFX%[3]
@@ -653,7 +653,7 @@ Global DecaySFX%[5]
 
 Global BurstSFX% 
 
-DrawLoading(20, True)
+RenderLoading(20, True)
 
 Global RustleSFX%[6]
 
@@ -712,7 +712,7 @@ Global HorrorSFX%[20]
 
 Global MissSFX%
 
-DrawLoading(25, True)
+RenderLoading(25, True)
 
 Global IntroSFX%[12]
 
@@ -751,7 +751,7 @@ Global RadioCHN%[7]
 
 Global IntercomStreamCHN%
 
-DrawLoading(30, True)
+RenderLoading(30, True)
 
 Global PlayCustomMusic% = False, CustomMusic% = 0
 

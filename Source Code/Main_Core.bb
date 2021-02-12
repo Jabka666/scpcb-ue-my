@@ -157,7 +157,7 @@ SetFont(fo\FontID[Font_Default_Big])
 
 Global BlinkMeterIMG% = LoadImage_Strict("GFX\blink_meter(1).png")
 
-DrawLoading(0, True)
+RenderLoading(0, True)
 
 Type Player
 	Field KillTimer#, KillAnim%, FallTimer#, DeathTimer#
@@ -335,80 +335,6 @@ Function CreateConsoleMsg(Txt$, R% = -1, G% = -1, B% = -1, IsCommand% = False)
 	If c\R < 0 Then c\R = ConsoleR
 	If c\G < 0 Then c\G = ConsoleG
 	If c\B < 0 Then c\B = ConsoleB
-End Function
-
-Function RenderConsole()
-	If (Not opt\CanOpenConsole) Then
-		Return
-	EndIf
-	
-	If ConsoleOpen Then
-		Local cm.ConsoleMsg
-		Local InBar%, InBox%
-		Local x%, y%, Width%, Height%
-		
-		SetFont(fo\FontID[Font_Console])
-		
-		x = 0
-		y = opt\GraphicHeight - 300 * MenuScale
-		Width = opt\GraphicWidth
-		Height = 270 * MenuScale
-		
-		RenderFrame(x, y, Width, Height + (30 * MenuScale))
-		
-		Local ConsoleHeight% = 0
-		Local ScrollBarHeight% = 0
-		
-		For cm.ConsoleMsg = Each ConsoleMsg
-			ConsoleHeight = ConsoleHeight + (15 * MenuScale)
-		Next
-		ScrollBarHeight = (Float(Height) / Float(ConsoleHeight)) * Height
-		If ScrollBarHeight > Height Then ScrollBarHeight = Height
-		If ConsoleHeight < Height Then ConsoleHeight = Height
-		
-		Color(50, 50, 50)
-		InBar = MouseOn(x + Width - (26 * MenuScale), y, 26 * MenuScale, Height)
-		If InBar Then Color(70, 70, 70)
-		Rect(x + Width - (26 * MenuScale), y, 26 * MenuScale, Height)
-		
-		Color(120, 120, 120)
-		InBox = MouseOn(x + Width - (23 * MenuScale), y + Height - ScrollBarHeight + (ConsoleScroll * ScrollBarHeight / Height), 20 * MenuScale, ScrollBarHeight)
-		If InBox Then Color(200, 200, 200)
-		If ConsoleScrollDragging Then Color(255, 255, 255)
-		Rect(x + Width - (23 * MenuScale), y + Height - ScrollBarHeight + (ConsoleScroll * ScrollBarHeight / Height), 20 * MenuScale, ScrollBarHeight)
-		
-		Color(255, 255, 255)
-		
-		Local TempY# = y + Height - (25.0 * MenuScale) - ConsoleScroll
-		Local Count% = 0
-		
-		For cm.ConsoleMsg = Each ConsoleMsg
-			Count = Count + 1
-			If Count > 1000 Then
-				Delete(cm)
-			Else
-				If TempY >= y And TempY < y + Height - (20 * MenuScale) Then
-					If cm = ConsoleReissue Then
-						Color(cm\R / 4, cm\G / 4, cm\B / 4)
-						Rect(x, TempY - (2 * MenuScale), Width - (30 * MenuScale), 24 * MenuScale, True)
-					EndIf
-					Color(cm\R, cm\G, cm\B)
-					If cm\IsCommand Then
-						Text(x + (20 * MenuScale), TempY, "> " + cm\Txt)
-					Else
-						Text(x + (20 * MenuScale), TempY, cm\Txt)
-					EndIf
-				EndIf
-				TempY = TempY - (15.0 * MenuScale)
-			EndIf
-		Next
-		Color(255, 255, 255)
-		
-		RenderMenuInputBoxes()
-		
-		If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
-	EndIf
-	SetFont(fo\FontID[Font_Default])
 End Function
 
 Function UpdateConsole()
@@ -1736,6 +1662,80 @@ Function UpdateConsole()
 	SetFont(fo\FontID[Font_Default])
 End Function
 
+Function RenderConsole()
+	If (Not opt\CanOpenConsole) Then
+		Return
+	EndIf
+	
+	If ConsoleOpen Then
+		Local cm.ConsoleMsg
+		Local InBar%, InBox%
+		Local x%, y%, Width%, Height%
+		
+		SetFont(fo\FontID[Font_Console])
+		
+		x = 0
+		y = opt\GraphicHeight - 300 * MenuScale
+		Width = opt\GraphicWidth
+		Height = 270 * MenuScale
+		
+		RenderFrame(x, y, Width, Height + (30 * MenuScale))
+		
+		Local ConsoleHeight% = 0
+		Local ScrollBarHeight% = 0
+		
+		For cm.ConsoleMsg = Each ConsoleMsg
+			ConsoleHeight = ConsoleHeight + (15 * MenuScale)
+		Next
+		ScrollBarHeight = (Float(Height) / Float(ConsoleHeight)) * Height
+		If ScrollBarHeight > Height Then ScrollBarHeight = Height
+		If ConsoleHeight < Height Then ConsoleHeight = Height
+		
+		Color(50, 50, 50)
+		InBar = MouseOn(x + Width - (26 * MenuScale), y, 26 * MenuScale, Height)
+		If InBar Then Color(70, 70, 70)
+		Rect(x + Width - (26 * MenuScale), y, 26 * MenuScale, Height)
+		
+		Color(120, 120, 120)
+		InBox = MouseOn(x + Width - (23 * MenuScale), y + Height - ScrollBarHeight + (ConsoleScroll * ScrollBarHeight / Height), 20 * MenuScale, ScrollBarHeight)
+		If InBox Then Color(200, 200, 200)
+		If ConsoleScrollDragging Then Color(255, 255, 255)
+		Rect(x + Width - (23 * MenuScale), y + Height - ScrollBarHeight + (ConsoleScroll * ScrollBarHeight / Height), 20 * MenuScale, ScrollBarHeight)
+		
+		Color(255, 255, 255)
+		
+		Local TempY# = y + Height - (25.0 * MenuScale) - ConsoleScroll
+		Local Count% = 0
+		
+		For cm.ConsoleMsg = Each ConsoleMsg
+			Count = Count + 1
+			If Count > 1000 Then
+				Delete(cm)
+			Else
+				If TempY >= y And TempY < y + Height - (20 * MenuScale) Then
+					If cm = ConsoleReissue Then
+						Color(cm\R / 4, cm\G / 4, cm\B / 4)
+						Rect(x, TempY - (2 * MenuScale), Width - (30 * MenuScale), 24 * MenuScale, True)
+					EndIf
+					Color(cm\R, cm\G, cm\B)
+					If cm\IsCommand Then
+						Text(x + (20 * MenuScale), TempY, "> " + cm\Txt)
+					Else
+						Text(x + (20 * MenuScale), TempY, cm\Txt)
+					EndIf
+				EndIf
+				TempY = TempY - (15.0 * MenuScale)
+			EndIf
+		Next
+		Color(255, 255, 255)
+		
+		RenderMenuInputBoxes()
+		
+		If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+	EndIf
+	SetFont(fo\FontID[Font_Default])
+End Function
+
 Function ClearConsole()
 	Local c.ConsoleMsg
 	
@@ -1837,7 +1837,7 @@ Global InFacility% = True
 
 Global ForestNPC%, ForestNPCTex%, ForestNPCData#[3]
 
-DrawLoading(35, True)
+RenderLoading(35, True)
 
 Include "Source Code\Items_Core.bb"
 
@@ -1845,11 +1845,11 @@ Include "Source Code\Particles_Core.bb"
 
 Include "Source Code\Graphics_Core.bb"
 
-DrawLoading(40, True)
+RenderLoading(40, True)
 
 Include "Source Code\Map_Core.bb"
 
-DrawLoading(80, True)
+RenderLoading(80, True)
 
 Include "Source Code\NPCs_Core.bb"
 
@@ -1873,7 +1873,7 @@ Collisions(HIT_178, HIT_MAP, 2, 2)
 Collisions(HIT_178, HIT_178, 1, 3)
 Collisions(HIT_DEAD, HIT_MAP, 2, 2)
 
-DrawLoading(90, True)
+RenderLoading(90, True)
 
 Global UnableToMove% = False
 Global ShouldEntitiesFall% = True
@@ -1890,7 +1890,7 @@ MainMenuOpen = True
 FlushKeys()
 FlushMouse()
 
-DrawLoading(100, True)
+RenderLoading(100, True)
 
 Global Input_ResetTime# = 0.0
 
@@ -2654,340 +2654,6 @@ Function Kill(IsBloody% = False)
 	EndIf
 End Function
 
-; ~ Ending IDs Constants
-;[Block]
-Const Ending_A1% = 0
-Const Ending_A2% = 1
-Const Ending_B1% = 2
-Const Ending_B2% = 3
-;[End Block]
-
-Function RenderEnding()
-	ShowPointer()
-	
-	Local itt.ItemTemplates, r.Rooms
-	Local x%, y%, Width%, Height%, i%
-	
-	Select me\SelectedEnding
-		Case Ending_A1, Ending_B2
-			;[Block]
-			ClsColor(Max(255.0 + (me\EndingTimer) * 2.8, 0.0), Max(255.0 + (me\EndingTimer) * 2.8, 0.0), Max(255.0 + (me\EndingTimer) * 2.8, 0.0))
-			;[End Block]
-		Default
-			;[Block]
-			ClsColor(0, 0, 0)
-			;[End Block]
-	End Select
-	
-	Cls()
-	
-	If me\EndingTimer < -200.0 Then
-		If me\EndingTimer > -700.0 Then 
-			If Rand(1, 150) < Min((Abs(me\EndingTimer) - 200.0), 155.0) Then
-				DrawImage(me\EndingScreen, mo\Viewport_Center_X - 400, mo\Viewport_Center_Y - 400)
-			Else
-				Color(0, 0, 0)
-				Rect(100, 100, opt\GraphicWidth - 200, opt\GraphicHeight - 200)
-				Color(255, 255, 255)
-			EndIf
-		Else
-			DrawImage(me\EndingScreen, mo\Viewport_Center_X - 400, mo\Viewport_Center_Y - 400)
-			
-			If me\EndingTimer < -1000.0 And me\EndingTimer > -2000.0 Then
-				Width = ImageWidth(tt\ImageID[0])
-				Height = ImageHeight(tt\ImageID[0])
-				x = mo\Viewport_Center_X - (Width / 2)
-				y = mo\Viewport_Center_Y - (Height / 2)
-				
-				DrawImage(tt\ImageID[0], x, y)
-				
-				Color(255, 255, 255)
-				SetFont(fo\FontID[Font_Default_Big])
-				Text(x + (Width / 2) + (40 * MenuScale), y + (20 * MenuScale), "THE END", True)
-				SetFont(fo\FontID[Font_Default])
-				
-				If AchievementsMenu = 0 Then 
-					x = x + (132 * MenuScale)
-					y = y + (122 * MenuScale)
-					
-					Local RoomAmount% = 0, RoomsFound% = 0
-					
-					For r.Rooms = Each Rooms
-						RoomAmount = RoomAmount + 1
-						RoomsFound = RoomsFound + r\Found
-					Next
-					
-					Local DocAmount% = 0, DocsFound% = 0
-					
-					For itt.ItemTemplates = Each ItemTemplates
-						If itt\TempName = "paper" Then
-							DocAmount = DocAmount + 1
-							DocsFound = DocsFound + itt\Found
-						EndIf
-					Next
-					
-					Local SCPsEncountered% = 1
-					
-					For i = 0 To 30
-						SCPsEncountered = SCPsEncountered + Achievements[i]
-					Next
-					
-					Local AchievementsUnlocked% = 0
-					
-					For i = 0 To MAXACHIEVEMENTS - 1
-						AchievementsUnlocked = AchievementsUnlocked + Achievements[i]
-					Next
-					
-					Text(x, y, "SCPs encountered: " + SCPsEncountered)
-					Text(x, y + (20 * MenuScale), "Achievements unlocked: " + AchievementsUnlocked + "/" + (MAXACHIEVEMENTS))
-					Text(x, y + (40 * MenuScale), "Rooms found: " + RoomsFound + "/" + RoomAmount)
-					Text(x, y + (60 * MenuScale), "Documents discovered: " + DocsFound + "/" + DocAmount)
-					Text(x, y + (80 * MenuScale), "Items refined in SCP-914: " + me\RefinedItems)
-				Else
-					RenderMenu()
-				EndIf
-			; ~ Credits
-			ElseIf me\EndingTimer =< -2000.0
-				RenderCredits()
-			EndIf
-		EndIf
-	EndIf
-	
-	RenderMenuButtons()
-	
-	If opt\DisplayMode = 0 Then DrawImage(CursorIMG), ScaledMouseX(), ScaledMouseY()
-	
-	SetFont(fo\FontID[Font_Default])
-End Function
-
-Function UpdateEnding()
-	Local x%, y%, Width%, Height%, i%
-	
-	fps\Factor[0] = 0.0
-	If me\EndingTimer > -2000.0 Then
-		me\EndingTimer = Max(me\EndingTimer - fps\Factor[1], -1111.0)
-	Else
-		me\EndingTimer = me\EndingTimer - fps\Factor[1]
-	EndIf
-	
-	GiveAchievement(Achv055)
-	If (Not UsedConsole) Lor opt\DebugMode Then
-		GiveAchievement(AchvConsole)
-		UnlockDifficulties()
-	EndIf
-	
-	ShouldPlay = 66
-	
-	If me\EndingTimer < -200.0 Then
-		If BreathCHN <> 0 Then
-			If ChannelPlaying(BreathCHN) Then StopChannel(BreathCHN) : me\Stamina = 100.0
-		EndIf
-		
-		If BreathGasRelaxedCHN <> 0 Then
-			If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN)
-		EndIf
-		
-		If (Not me\EndingScreen) Then
-			me\EndingScreen = LoadImage_Strict("GFX\menu\ending_screen.png")
-			
-			ShouldPlay = 23
-			opt\CurrMusicVolume = opt\MusicVolume
-			StopStream_Strict(MusicCHN)
-			MusicCHN = StreamSound_Strict("SFX\Music\" + Music[23] + ".ogg", opt\CurrMusicVolume, 0)
-			NowPlaying = ShouldPlay
-			
-			PlaySound_Strict(LightSFX)
-		EndIf
-		
-		If me\EndingTimer > -700.0 Then 
-			If me\EndingTimer + fps\Factor[1] > -450.0 And me\EndingTimer =< -450.0 Then
-				PlaySound_Strict(LoadTempSound("SFX\Ending\Ending" + (me\SelectedEnding + 1) + ".ogg"))
-			EndIf			
-		Else
-			If me\EndingTimer < -1000.0 And me\EndingTimer > -2000.0 Then
-				Width = ImageWidth(tt\ImageID[0])
-				Height = ImageHeight(tt\ImageID[0])
-				x = mo\Viewport_Center_X - (Width / 2)
-				y = mo\Viewport_Center_Y - (Height / 2)
-				
-				If AchievementsMenu = 0 Then 
-					x = x + (132 * MenuScale)
-					y = y + (122 * MenuScale)
-					
-					x = mo\Viewport_Center_X - (Width / 2)
-					y = mo\Viewport_Center_Y - (Height / 2)
-					x = x + (Width / 2)
-					y = y + Height - (100 * MenuScale)
-					
-					If UpdateMainMenuButton(x - (170 * MenuScale), y - (200 * MenuScale), 430 * MenuScale, 60 * MenuScale, "ACHIEVEMENTS", True) Then
-						AchievementsMenu = 1
-						mm\ShouldDeleteGadgets = True
-					EndIf
-					
-					If UpdateMainMenuButton(x - (170 * MenuScale), y - (100 * MenuScale), 430 * MenuScale, 60 * MenuScale, "MAIN MENU", True)
-						ShouldPlay = 24
-						NowPlaying = ShouldPlay
-						For i = 0 To 9
-							If TempSounds[i] <> 0 Then FreeSound_Strict(TempSounds[i]) : TempSounds[i] = 0
-						Next
-						StopStream_Strict(MusicCHN)
-						MusicCHN = StreamSound_Strict("SFX\Music\" + Music[NowPlaying] + ".ogg", 0.0, Mode)
-						SetStreamVolume_Strict(MusicCHN, 1.0 * opt\MusicVolume)
-						me\EndingTimer = -2000.0
-						mm\ShouldDeleteGadgets = True
-						ResetInput()
-						InitCredits()
-					EndIf
-				Else
-					ShouldPlay = 23
-					UpdateMenu()
-				EndIf
-			; ~ Credits
-			ElseIf me\EndingTimer =< -2000.0
-				ShouldPlay = 24
-				UpdateCredits()
-			EndIf
-		EndIf
-	EndIf
-End Function
-
-Type CreditsLine
-	Field Txt$
-	Field ID%
-	Field Stay%
-End Type
-
-Function InitCredits()
-	Local cl.CreditsLine
-	Local File% = OpenFile("Credits.txt")
-	Local l$
-	
-	fo\FontID[Font_Credits] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 21)
-	fo\FontID[Font_Credits_Big] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 35)
-	
-	If (Not me\CreditsScreen) Then me\CreditsScreen = LoadImage_Strict("GFX\menu\credits_screen.png")
-	
-	Repeat
-		l = ReadLine(File)
-		cl.CreditsLine = New CreditsLine
-		cl\Txt = l
-	Until Eof(File)
-	
-	Delete First CreditsLine
-	me\CreditsTimer = 0.0
-End Function
-
-Function RenderCredits()
-	Local cl.CreditsLine, LastCreditLine.CreditsLine
-	Local Credits_Y# = (me\EndingTimer + 2000.0) / 2 + (opt\GraphicHeight + 10.0)
-	Local ID%
-	Local EndLinesAmount%
-	
-	Cls()
-	
-	If Rand(1, 300) > 1 Then
-		DrawImage(me\CreditsScreen, mo\Viewport_Center_X - 400, mo\Viewport_Center_Y - 400)
-	EndIf
-	
-	ID = 0
-	EndLinesAmount = 0
-	LastCreditLine = Null
-	Color(255, 255, 255)
-	For cl.CreditsLine = Each CreditsLine
-		cl\ID = ID
-		If Left(cl\Txt, 1) = "*"
-			SetFont(fo\FontID[Font_Credits_Big])
-			If (Not cl\Stay) Then Text(mo\Viewport_Center_X, Credits_Y + (24 * cl\ID * MenuScale), Right(cl\Txt, Len(cl\Txt) - 1), True)
-		ElseIf Left(cl\Txt, 1) = "/"
-			LastCreditLine = Before(cl)
-		Else
-			SetFont(fo\FontID[Font_Credits])
-			If (Not cl\Stay) Then Text(mo\Viewport_Center_X, Credits_Y + (24 * cl\ID * MenuScale), cl\Txt, True)
-		EndIf
-		If LastCreditLine <> Null Then
-			If cl\ID > LastCreditLine\ID Then cl\Stay = True
-		EndIf
-		If cl\Stay Then EndLinesAmount = EndLinesAmount + 1
-		ID = ID + 1
-	Next
-	If (Credits_Y + (24 * LastCreditLine\ID * MenuScale)) < -StringHeight(LastCreditLine\Txt)
-		If me\CreditsTimer >= 0.0 And me\CreditsTimer < 255.0
-			Color(Max(Min(me\CreditsTimer, 255.0), 0.0), Max(Min(me\CreditsTimer, 255.0), 0.0), Max(Min(me\CreditsTimer, 255.0), 0.0))
-		ElseIf me\CreditsTimer >= 255.0
-			Color(255, 255, 255)
-		Else
-			Color(Max(Min(-me\CreditsTimer, 255.0), 0.0), Max(Min(-me\CreditsTimer, 255.0), 0.0), Max(Min(-me\CreditsTimer, 255.0), 0.0))
-		EndIf
-	EndIf
-	If me\CreditsTimer <> 0.0
-		For cl.CreditsLine = Each CreditsLine
-			If cl\Stay Then
-				SetFont(fo\FontID[Font_Credits])
-				If Left(cl\Txt, 1) = "/" Then
-					Text(mo\Viewport_Center_X, mo\Viewport_Center_Y + (EndLinesAmount / 2) + (24 * cl\ID * MenuScale), Right(cl\Txt, Len(cl\Txt) - 1), True)
-				Else
-					Text(mo\Viewport_Center_X, mo\Viewport_Center_Y + (24 * (cl\ID - LastCreditLine\ID) * MenuScale) - ((EndLinesAmount / 2) * 24 * MenuScale), cl\Txt, True)
-				EndIf
-			EndIf
-		Next
-	EndIf
-	
-	SetFont(fo\FontID[Font_Default])
-	Text(20 * MenuScale, opt\GraphicHeight - (30 * MenuScale), "PRESS ANY KEY TO SKIP")
-	
-	If me\CreditsTimer = -1.0 Then
-		FreeFont(fo\FontID[Font_Credits])
-		FreeFont(fo\FontID[Font_Credits_Big])
-		If me\CreditsScreen <> 0 Then
-			FreeImage(me\CreditsScreen) : me\CreditsScreen = 0
-		EndIf
-		If me\EndingScreen <> 0 Then
-			FreeImage(me\EndingScreen) : me\EndingScreen = 0
-		EndIf
-	EndIf
-End Function
-
-Function UpdateCredits()
-	Local cl.CreditsLine, LastCreditLine.CreditsLine
-	Local Credits_Y# = (me\EndingTimer + 2000.0) / 2 + (opt\GraphicHeight + 10.0)
-	Local ID%
-	Local EndLinesAmount%
-	
-	ID = 0
-	EndLinesAmount = 0
-	LastCreditLine = Null
-	For cl.CreditsLine = Each CreditsLine
-		cl\ID = ID
-		If Left(cl\Txt, 1) = "/" Then LastCreditLine = Before(cl)
-		If LastCreditLine <> Null Then
-			If cl\ID > LastCreditLine\ID Then cl\Stay = True
-		EndIf
-		If cl\Stay Then EndLinesAmount = EndLinesAmount + 1
-		ID = ID + 1
-	Next
-	If (Credits_Y + (24 * LastCreditLine\ID * MenuScale)) < -StringHeight(LastCreditLine\Txt)
-		me\CreditsTimer = me\CreditsTimer + (0.5 * fps\Factor[1])
-		If me\CreditsTimer >= 0.0 And me\CreditsTimer < 255.0
-			; ~ Just save this line, ok?
-		ElseIf me\CreditsTimer >= 255.0
-			If me\CreditsTimer > 500.0 Then me\CreditsTimer = -255.0
-		Else
-			If me\CreditsTimer >= -1.0 Then me\CreditsTimer = -1.0
-		EndIf
-	EndIf
-	
-	If GetKey() Then me\CreditsTimer = -1.0
-	
-	If me\CreditsTimer = -1.0 Then
-		Delete Each CreditsLine
-		NullGame(False)
-		StopStream_Strict(MusicCHN)
-		ShouldPlay = 21
-		CurrSave = ""
-		FlushKeys()
-	EndIf
-End Function
-
 Function StopMouseMovement()
 	MouseXSpeed() : MouseYSpeed() : MouseZSpeed()
 	mo\Mouse_X_Speed_1 = 0.0
@@ -3669,1048 +3335,6 @@ Const NAV_HEIGHT% = 256
 Const INVENTORY_GFX_SIZE% = 70
 Const INVENTORY_GFX_SPACING% = 35
 ;[End Block]
-
-Function RenderGUI()
-	CatchErrors("Uncaught (DrawGUI)")
-	
-	Local e.Events, it.Items, ev.Events, ch.Chunk, a_it.Items
-	Local Temp%, x%, y%, z%, i%, YawValue#, PitchValue#
-	Local x1#, x2#, x3#, y1#, y2#, y3#, z2#, ProjY#, Scale#, Pvt%
-	Local n%, xTemp%, yTemp%, StrTemp$
-	Local Width%, Height%
-	
-	If MenuOpen Lor ConsoleOpen Lor SelectedDoor <> Null Lor InvOpen Lor OtherOpen <> Null Lor me\EndingTimer < 0.0 Then
-		ShowPointer()
-	Else
-		HidePointer()
-	EndIf 	
-	
-	If PlayerRoom\RoomTemplate\Name = "pocketdimension" Then
-		For e.Events = Each Events
-			If PlayerRoom = e\room Then
-				If Float(e\EventStr) < 1000.0 Then
-					If e\EventState > 600.0 Then
-						If me\BlinkTimer < -3.0 And me\BlinkTimer > -10.0 Then
-							If (Not e\Img) Then
-								If me\BlinkTimer > -5.0 And Rand(30) = 1 Then
-									PlaySound_Strict(DripSFX[Rand(0, 5)])
-									If (Not e\Img) Then e\Img = LoadImage_Strict("GFX\npcs\scp_106_face.png")
-								EndIf
-							Else
-								DrawImage(e\Img, mo\Viewport_Center_X - Rand(390, 310), mo\Viewport_Center_Y - Rand(290, 310))
-							EndIf
-						Else
-							If e\Img <> 0 Then
-								FreeImage(e\Img) : e\Img = 0
-							EndIf
-						EndIf
-						Exit
-					EndIf
-				Else
-					If me\BlinkTimer < -3.0 And me\BlinkTimer > -10.0 Then
-						If (Not e\Img) Then
-							If me\BlinkTimer > -5.0 Then
-								If (Not e\Img) Then
-									e\Img = LoadImage_Strict("GFX\kneel_mortal.png")
-									If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN)
-									e\SoundCHN = PlaySound_Strict(e\Sound)
-								EndIf
-							EndIf
-						Else
-							DrawImage(e\Img, mo\Viewport_Center_X - Rand(390, 310), mo\Viewport_Center_Y - Rand(290, 310))
-						EndIf
-					Else
-						If e\Img <> 0 Then
-							FreeImage(e\Img) : e\Img = 0
-						EndIf
-						If me\BlinkTimer < -3.0 Then
-							If (Not ChannelPlaying(e\SoundCHN)) Then e\SoundCHN = PlaySound_Strict(e\Sound)
-						Else
-							If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN)
-						EndIf
-					EndIf
-					Exit
-				EndIf
-			EndIf
-		Next
-	EndIf
-	
-	If I_294\Using Then Render294()
-	
-	If ClosestButton <> 0 And SelectedDoor = Null And (Not InvOpen) And (Not MenuOpen) And OtherOpen = Null And (Not ConsoleOpen) And SelectedDifficulty\OtherFactors <> EXTREME Then
-		Temp = CreatePivot()
-		PositionEntity(Temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
-		PointEntity(Temp, ClosestButton)
-		YawValue = WrapAngle(EntityYaw(Camera) - EntityYaw(Temp))
-		If YawValue > 90.0 And YawValue =< 180.0 Then YawValue = 90.0
-		If YawValue > 180.0 And YawValue < 270.0 Then YawValue = 270.0
-		PitchValue = WrapAngle(EntityPitch(Camera) - EntityPitch(Temp))
-		If PitchValue > 90.0 And PitchValue =< 180.0 Then PitchValue = 90.0
-		If PitchValue > 180.0 And PitchValue < 270.0 Then PitchValue = 270.0
-		
-		FreeEntity(Temp)
-		
-		DrawImage(tt\IconID[4], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - 32, mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - 32)
-	EndIf
-	
-	If ClosestItem <> Null And SelectedDifficulty\OtherFactors <> EXTREME Then
-		YawValue = -DeltaYaw(Camera, ClosestItem\Collider)
-		If YawValue > 90.0 And YawValue =< 180.0 Then YawValue = 90.0
-		If YawValue > 180.0 And YawValue < 270.0 Then YawValue = 270.0
-		PitchValue = -DeltaPitch(Camera, ClosestItem\Collider)
-		If PitchValue > 90.0 And PitchValue =< 180.0 Then PitchValue = 90.0
-		If PitchValue > 180.0 And PitchValue < 270.0 Then PitchValue = 270.0
-		
-		DrawImage(tt\IconID[5], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - 32, mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - 32)
-	EndIf
-	
-	If ga\DrawHandIcon And SelectedDifficulty\OtherFactors <> EXTREME Then DrawImage(tt\IconID[4], mo\Viewport_Center_X - 32, mo\Viewport_Center_Y - 32)
-	For i = 0 To 3
-		If ga\DrawArrowIcon[i] And SelectedDifficulty\OtherFactors <> EXTREME Then
-			x = mo\Viewport_Center_X - 32
-			y = mo\Viewport_Center_Y - 32		
-			Select i
-				Case 0
-					;[Block]
-					y = y - 69
-					;[End Block]
-				Case 1
-					;[Block]
-					x = x + 69
-					;[End Block]
-				Case 2
-					;[Block]
-					y = y + 69
-					;[End Block]
-				Case 3
-					;[Block]
-					x = x - 69
-					;[End Block]
-			End Select
-			DrawImage(tt\IconID[4], x, y)
-			Color(0, 0, 0)
-			Rect(x + 4, y + 4, 56, 56)
-			DrawImage(ga\ArrowIMG[i], x + 21, y + 21)
-		EndIf
-	Next
-	
-	If opt\HUDEnabled And SelectedDifficulty\OtherFactors <> EXTREME Then 
-		Width = 200
-		Height = 20
-		x = 80
-		y = opt\GraphicHeight - 95
-		
-		Color(255, 255, 255)
-		If me\BlinkTimer < 150.0 Then
-			RenderBar(tt\ImageID[1], x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ, 100, 0, 0)
-		Else
-			RenderBar(BlinkMeterIMG, x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ)
-		EndIf
-		Color(0, 0, 0)
-		Rect(x - 50, y, 30, 30)
-		
-		If me\BlurTimer > 550.0 Lor me\BlinkEffect > 1.0 Lor me\LightFlash > 0.0 Lor (((me\LightBlink > 0.0 And (Not chs\NoBlink)) Lor me\EyeIrritation > 0.0) And wi\NightVision = 0) Then
-			Color(200, 0, 0)
-			Rect(x - 53, y - 3, 36, 36)
-		Else
-			If me\BlinkEffect < 1.0 Lor chs\NoBlink Then
-				Color(0, 200, 0)
-				Rect(x - 53, y - 3, 36, 36)
-			EndIf
-		EndIf
-		
-		Color(255, 255, 255)
-		Rect(x - 51, y - 1, 32, 32, False)
-		
-		DrawImage(tt\IconID[3], x - 50, y)
-		
-		y = opt\GraphicHeight - 55.0
-		
-		If me\Stamina =< 25.0 Then
-			RenderBar(tt\ImageID[3], x, y, Width, Height, me\Stamina, 100.0, 50, 0, 0)
-		Else
-			RenderBar(tt\ImageID[2], x, y, Width, Height, me\Stamina, 100.0, 50, 50, 50)
-		EndIf
-		Color(0, 0, 0)
-		Rect(x - 50, y, 30, 30)
-		
-		If PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor I_714\Using Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor wi\HazmatSuit = 1 Lor wi\BallisticVest = 2 Then
-			Color(200, 0, 0)
-			Rect(x - 53, y - 3, 36, 36)
-		Else
-			If chs\InfiniteStamina Lor me\StaminaEffect < 1.0 Lor wi\GasMask = 2 Lor I_1499\Using = 2 Lor wi\HazmatSuit = 2 Then
-				Color(0, 200, 0)
-				Rect(x - 53, y - 3, 36, 36)
-			EndIf 
-		EndIf
-		
-		Color(255, 255, 255)
-		Rect(x - 51, y - 1, 32, 32, False)
-		If me\Crouch Then
-			DrawImage(tt\IconID[2], x - 50, y)
-		ElseIf KeyDown(key\SPRINT) And me\CurrSpeed > 0.0 And (Not chs\NoClip) And me\Stamina > 0.0 Then
-			DrawImage(tt\IconID[1], x - 50, y)
-		Else
-			DrawImage(tt\IconID[0], x - 50, y)
-		EndIf
-		
-		If chs\DebugHUD Then
-			Color(255, 255, 255)
-			SetFont(fo\FontID[Font_Console])
-			
-			Text(x - 60, 40, "Room: " + PlayerRoom\RoomTemplate\Name)
-			Text(x - 60, 60, "Room Coordinates: (" + Floor(EntityX(PlayerRoom\OBJ) / 8.0 + 0.5) + ", " + Floor(EntityZ(PlayerRoom\OBJ) / 8.0 + 0.5) + ", Angle: " + PlayerRoom\Angle + ")")
-			For ev.Events = Each Events
-				If ev\room = PlayerRoom Then
-					Text(x - 60, 80, "Room Event: " + ev\EventName + ", ID: " + ev\EventID) 
-					Text(x - 60, 100, "State: " + ev\EventState)
-					Text(x - 60, 120, "State2: " + ev\EventState2)   
-					Text(x - 60, 140, "State3: " + ev\EventState3)
-					Text(x - 60, 160, "State4: " + ev\EventState4)
-					Text(x - 60, 180, "Str: "+ ev\EventStr)
-					Exit
-				EndIf
-			Next
-			If PlayerRoom\RoomTemplate\Name = "dimension1499"
-				Text(x - 60, 220, "Current Chunk X / Z: (" + (Int((EntityX(me\Collider) + 20) / 40)) + ", "+(Int((EntityZ(me\Collider) + 20) / 40)) + ")")
-				
-				Local CH_Amount% = 0
-				
-				For ch.Chunk = Each Chunk
-					CH_Amount = CH_Amount + 1
-				Next
-				Text(x - 60, 240, "Current Chunk Amount: " + CH_Amount)
-			Else
-				Text(x - 60, 240, "Current Room Position: (" + PlayerRoom\x + ", " + PlayerRoom\y + ", " + PlayerRoom\z + ")")
-			EndIf
-			
-			If SelectedMonitor <> Null Then
-				Text(x - 60, 280, "Current Monitor: " + SelectedMonitor\ScrOBJ)
-			Else
-				Text(x - 60, 280, "Current Monitor: Null")
-			EndIf
-			
-			Text(x - 60, 320, "Video memory: " + ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)) + " MB/" + (TotalVidMem() / 1024) + " MB" + Chr(10))
-			Text(x - 60, 340, "Global memory status: " + ((TotalPhys() / 1024) - (AvailPhys() / 1024)) + " MB/" + (TotalPhys() / 1024) + " MB")
-			Text(x - 60, 360, "Triangles Rendered: " + CurrTrisAmount)
-			Text(x - 60, 380, "Active Textures: " + ActiveTextures())	
-			
-			Text(x + 440, 40, "Player Position: (" + f2s(EntityX(me\Collider), 1) + ", " + f2s(EntityY(me\Collider), 1) + ", " + f2s(EntityZ(me\Collider), 1) + ")")
-			Text(x + 440, 60, "Player Rotation: (" + f2s(EntityPitch(me\Collider), 1) + ", " + f2s(EntityYaw(me\Collider), 1) + ", " + f2s(EntityRoll(me\Collider), 1) + ")")
-			
-			Text(x + 440, 100, "Injuries: " + me\Injuries)
-			Text(x + 440, 120, "Bloodloss: " + me\Bloodloss)
-			Text(x + 440, 140, "Blur Timer: " + me\BlurTimer)
-			Text(x + 440, 160, "Blink Timer: " + me\BlinkTimer)
-			Text(x + 440, 180, "Stamina: " + me\Stamina)
-			
-			Text(x + 440, 220, "SCP-008 Infection: " + I_008\Timer)
-			Text(x + 440, 240, "SCP-409 Crystallization: " + I_409\Timer)
-			Text(x + 440, 260, "SCP-427 State (Secs): " + Int(I_427\Timer / 70.0))
-			For i = 0 To 5
-				Text(x + 440, 280 + (20 * i), "SCP-1025 State " + i + ": " + I_1025\State[i])
-			Next
-			
-			SetFont(fo\FontID[Font_Default])
-		EndIf
-	EndIf
-	
-	If SelectedScreen <> Null Then
-		DrawImage(SelectedScreen\Img, mo\Viewport_Center_X - ImageWidth(SelectedScreen\Img) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedScreen\Img) / 2)
-		
-		If mo\MouseUp1 Lor mo\MouseHit2 Then
-			FreeImage(SelectedScreen\Img) : SelectedScreen\Img = 0
-		EndIf
-	EndIf
-	
-	Local PrevInvOpen% = InvOpen, MouseSlot% = 66
-	Local ShouldDrawHUD% = True
-	
-	If SelectedDoor <> Null Then
-		If SelectedItem <> Null Then
-			If SelectedItem\ItemTemplate\TempName = "scp005" Then ShouldDrawHUD = False
-		EndIf
-		
-		SelectedItem = Null
-		If ShouldDrawHUD Then
-			Pvt = CreatePivot()
-			PositionEntity(Pvt, EntityX(ClosestButton, True), EntityY(ClosestButton, True), EntityZ(ClosestButton, True))
-			RotateEntity(Pvt, 0.0, EntityYaw(ClosestButton, True) - 180.0, 0.0)
-			MoveEntity(Pvt, 0.0, 0.0, 0.22)
-			PositionEntity(Camera, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt))
-			PointEntity(Camera, ClosestButton)
-			FreeEntity(Pvt)
-			
-			CameraProject(Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) + MeshHeight(o\ButtonModelID[0]) * 0.015, EntityZ(ClosestButton, True))
-			ProjY = ProjectedY()
-			CameraProject(Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) - MeshHeight(o\ButtonModelID[0]) * 0.015, EntityZ(ClosestButton, True))
-			Scale = (ProjectedY() - ProjY) / 462.0
-			
-			x = mo\Viewport_Center_X - ImageWidth(tt\ImageID[4]) * (Scale / 2)
-			y = mo\Viewport_Center_Y - ImageHeight(tt\ImageID[4]) * (Scale / 2)	
-			
-			SetFont(fo\FontID[Font_Digital])
-			If msg\KeyPadMsg <> "" Then 
-				If (msg\KeyPadTimer Mod 70.0) < 35.0 Then Text(mo\Viewport_Center_X, y + (124 * Scale), msg\KeyPadMsg, True, True)
-			Else
-				Text(mo\Viewport_Center_X, y + (70 * Scale), "ACCESS CODE: ", True, True)	
-				SetFont(fo\FontID[Font_Digital_Big])
-				Text(mo\Viewport_Center_X, y + (124 * Scale), msg\KeyPadInput, True, True)
-			EndIf
-			
-			x = x + (44 * Scale)
-			y = y + (249 * Scale)
-			
-			If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
-		EndIf
-	EndIf
-	
-	Local PrevOtherOpen.Items
-	Local OtherSize%, OtherAmount%
-	Local IsEmpty%
-	Local IsMouseOn%
-	Local ClosedInv%
-	
-	If OtherOpen <> Null Then
-		PrevOtherOpen = OtherOpen
-		OtherSize = OtherOpen\InvSlots
-		
-		For i = 0 To OtherSize - 1
-			If OtherOpen\SecondInv[i] <> Null Then
-				OtherAmount = OtherAmount + 1
-			EndIf
-		Next
-		
-		Local TempX% = 0
-		
-		x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * 10 / 2 + INVENTORY_GFX_SPACING * (10 / 2 - 1)) / 2
-		y = mo\Viewport_Center_Y - INVENTORY_GFX_SIZE * (Float(OtherSize) / 10 * 2 - 1) - INVENTORY_GFX_SPACING
-		
-		IsMouseOn = -1
-		For n = 0 To OtherSize - 1
-			If ScaledMouseX() > x And ScaledMouseX() < x + INVENTORY_GFX_SIZE Then
-				If ScaledMouseY() > y And ScaledMouseY() < y + INVENTORY_GFX_SIZE Then
-					IsMouseOn = n
-				EndIf
-			EndIf
-			
-			If IsMouseOn = n Then
-				MouseSlot = n
-				Color(255, 0, 0)
-				Rect(x - 1, y - 1, INVENTORY_GFX_SIZE + 2, INVENTORY_GFX_SIZE + 2)
-			EndIf
-			
-			RenderFrame(x, y, INVENTORY_GFX_SIZE, INVENTORY_GFX_SIZE, (x Mod 64), (x Mod 64))
-			
-			If OtherOpen = Null Then Exit
-			
-			If OtherOpen\SecondInv[n] <> Null Then
-				If (IsMouseOn = n Lor SelectedItem <> OtherOpen\SecondInv[n]) Then DrawImage(OtherOpen\SecondInv[n]\InvImg, x + INVENTORY_GFX_SIZE / 2 - 32, y + INVENTORY_GFX_SIZE / 2 - 32)
-			EndIf
-			If OtherOpen\SecondInv[n] <> Null And SelectedItem <> OtherOpen\SecondInv[n] Then
-				If IsMouseOn = n Then
-					Color(255, 255, 255)	
-					Text(x + INVENTORY_GFX_SIZE / 2, y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - 15, OtherOpen\SecondInv[n]\ItemTemplate\Name, True)				
-				EndIf
-			EndIf					
-			
-			x = x + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING
-			TempX = TempX + 1
-			If TempX = 5 Then 
-				TempX = 0
-				y = y + INVENTORY_GFX_SIZE * 2 
-				x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * 10 / 2 + INVENTORY_GFX_SPACING * (10 / 2 - 1.0)) / 2
-			EndIf
-		Next
-		
-		If SelectedItem <> Null Then
-			If mo\MouseDown1 Then
-				If MouseSlot = 66 Then
-					DrawImage(SelectedItem\InvImg, ScaledMouseX() - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, ScaledMouseY() - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
-				ElseIf SelectedItem <> PrevOtherOpen\SecondInv[MouseSlot]
-					DrawImage(SelectedItem\InvImg, ScaledMouseX() - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, ScaledMouseY() - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
-				EndIf
-			EndIf
-		EndIf
-		
-		If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
-	ElseIf InvOpen Then
-		x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
-		y = mo\Viewport_Center_Y - INVENTORY_GFX_SIZE - INVENTORY_GFX_SPACING
-		
-		If MaxItemAmount = 2 Then
-			y = y + INVENTORY_GFX_SIZE
-			x = x - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING) / 2
-		EndIf
-		
-		IsMouseOn = -1
-		For n = 0 To MaxItemAmount - 1
-			If ScaledMouseX() > x And ScaledMouseX() < x + INVENTORY_GFX_SIZE Then
-				If ScaledMouseY() > y And ScaledMouseY() < y + INVENTORY_GFX_SIZE Then
-					IsMouseOn = n
-				EndIf
-			EndIf
-			
-			If Inventory(n) <> Null Then
-				Color(200, 200, 200)
-				Select Inventory(n)\ItemTemplate\TempName 
-					Case "gasmask"
-						;[Block]
-						If wi\GasMask = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
-						;[End Block]
-					Case "supergasmask"
-						;[Block]
-						If wi\GasMask = 2 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
-						;[End Block]
-					Case "gasmask3"
-						;[Block]
-						If wi\GasMask = 3 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
-						;[End Block]
-					Case "hazmatsuit"
-						;[Block]
-						If wi\HazmatSuit = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
-						;[End Block]
-					Case "hazmatsuit2"
-						;[Block]
-						If wi\HazmatSuit = 2 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
-						;[End Block]
-					Case "hazmatsuit3
-						;[Block]"
-						If wi\HazmatSuit = 3 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)	
-						;[End Block]
-					Case "vest"
-						;[Block]
-						If wi\BallisticVest = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
-						;[End Block]
-					Case "finevest"
-						;[Block]
-						If wi\BallisticVest = 2 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
-						;[End Block]
-					Case "helmet"
-						;[Block]
-						If wi\BallisticHelmet = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
-						;[End Block]
-					Case "scp714"
-						;[Block]
-						If I_714\Using = True Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
-						;[End Block]
-					Case "nvg"
-						;[Block]
-						If wi\NightVision = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
-						;[End Block]
-					Case "supernvg"
-						;[Block]
-						If wi\NightVision = 2 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
-						;[End Block]
-					Case "finenvg"
-						;[Block]
-						If wi\NightVision = 3 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
-						;[End Block]
-					Case "scramble"
-						;[Block]
-						If wi\SCRAMBLE = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
-						;[End Block]
-					Case "scp1499"
-						;[Block]
-						If I_1499\Using = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
-						;[End Block]
-					Case "super1499"
-						;[Block]
-						If I_1499\Using = 2 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
-						;[End Block]
-					Case "scp427"
-						;[Block]
-						If I_427\Using Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
-						;[End Block]
-				End Select
-			EndIf
-			
-			If IsMouseOn = n Then
-				MouseSlot = n
-				Color(255, 0, 0)
-				Rect(x - 1, y - 1, INVENTORY_GFX_SIZE + 2, INVENTORY_GFX_SIZE + 2)
-			EndIf
-			
-			Color(255, 255, 255)
-			RenderFrame(x, y, INVENTORY_GFX_SIZE, INVENTORY_GFX_SIZE, (x Mod 64), (x Mod 64))
-			
-			If Inventory(n) <> Null Then
-				If IsMouseOn = n Lor SelectedItem <> Inventory(n) Then 
-					DrawImage(Inventory(n)\InvImg, x + (INVENTORY_GFX_SIZE / 2) - 32, y + (INVENTORY_GFX_SIZE / 2) - 32)
-				EndIf
-			EndIf
-			
-			If Inventory(n) <> Null And SelectedItem <> Inventory(n) Then
-				If IsMouseOn = n Then
-					If SelectedItem = Null Then
-						SetFont(fo\FontID[Font_Default])
-						Color(0, 0, 0)
-						Text(x + INVENTORY_GFX_SIZE / 2 + 1, y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - 15 + 1, Inventory(n)\Name, True)							
-						Color(255, 255, 255)	
-						Text(x + INVENTORY_GFX_SIZE / 2, y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - 15, Inventory(n)\Name, True)	
-					EndIf
-				EndIf
-			EndIf					
-			
-			x = x + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING
-			If MaxItemAmount >= 4 And n = MaxItemAmount / 2 - 1 Then 
-				y = y + INVENTORY_GFX_SIZE * 2 
-				x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2 
-			EndIf
-		Next
-		
-		If SelectedItem <> Null Then
-			If mo\MouseDown1 Then
-				If MouseSlot = 66 Then
-					DrawImage(SelectedItem\InvImg, ScaledMouseX() - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, ScaledMouseY() - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
-				ElseIf SelectedItem <> Inventory(MouseSlot)
-					DrawImage(SelectedItem\InvImg, ScaledMouseX() - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, ScaledMouseY() - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
-				EndIf
-			EndIf
-		EndIf
-		
-		If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
-	Else
-		If SelectedItem <> Null Then
-			Select SelectedItem\ItemTemplate\TempName
-				Case "nvg", "supernvg", "finenvg"
-					;[Block]
-					If (Not PreventItemOverlapping(False, True)) Then
-						Select SelectedItem\ItemTemplate\TempName
-							Case "nvg"
-								;[Block]
-								If IsDoubleItem(wi\NightVision, 1, "pairs of goggles") Then Return
-								;[End Block]
-							Case "supernvg"
-								;[Block]
-								If IsDoubleItem(wi\NightVision, 2, "pairs of goggles") Then Return
-								;[End Block]
-							Case "finenvg"
-								;[Block]
-								If IsDoubleItem(wi\NightVision, 3, "pairs of goggles") Then Return
-								;[End Block]
-						End Select
-						
-						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
-						
-						Width = 300
-						Height = 20
-						x = mo\Viewport_Center_X - (Width / 2)
-						y = mo\Viewport_Center_Y + 80
-						
-						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State3)
-					EndIf
-					;[End Block]
-				Case "key0", "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "scp860", "hand", "hand2", "25ct", "scp005", "key", "coin", "mastercard"
-					;[Block]
-					DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
-					;[End Block]
-				Case "firstaid", "finefirstaid", "firstaid2"
-					;[Block]
-					If me\Bloodloss = 0.0 And me\Injuries = 0.0 Then
-						Return
-					Else
-						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
-						
-						Width = 300
-						Height = 20
-						x = mo\Viewport_Center_X - (Width / 2)
-						y = mo\Viewport_Center_Y + 80
-						
-						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
-					EndIf
-					;[End Block]
-				Case "paper", "ticket"
-					;[Block]
-					If (Not SelectedItem\ItemTemplate\Img) Then
-						Select SelectedItem\ItemTemplate\Name
-							Case "Burnt Note" 
-								;[Block]
-								SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\items\note_Maynard.png")
-								SetBuffer(ImageBuffer(SelectedItem\ItemTemplate\Img))
-								Color(0, 0, 0)
-								SetFont(fo\FontID[Font_Default])
-								Text(277, 469, AccessCode, True, True)
-								Color(255, 255, 255)
-								SetBuffer(BackBuffer())
-								;[End Block]
-							Case "Document SCP-372"
-								;[Block]
-								SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
-								SelectedItem\ItemTemplate\Img = ResizeImage2(SelectedItem\ItemTemplate\Img, ImageWidth(SelectedItem\ItemTemplate\Img) * MenuScale, ImageHeight(SelectedItem\ItemTemplate\Img) * MenuScale)
-								
-								SetBuffer(ImageBuffer(SelectedItem\ItemTemplate\Img))
-								Color(37, 45, 137)
-								SetFont(fo\FontID[Font_Journal])
-								Temp = ((Int(AccessCode) * 3) Mod 10000)
-								If Temp < 1000 Then Temp = Temp + 1000
-								Text(383 * MenuScale, 734 * MenuScale, Temp, True, True)
-								Color(255, 255, 255)
-								SetBuffer(BackBuffer())
-								;[End Block]
-							Case "Movie Ticket"
-								;[Block]
-								; ~ Don't resize because it messes up the masking
-								SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
-								;[End Block]
-							Default 
-								;[Block]
-								SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
-								SelectedItem\ItemTemplate\Img = ResizeImage2(SelectedItem\ItemTemplate\Img, ImageWidth(SelectedItem\ItemTemplate\Img) * MenuScale, ImageHeight(SelectedItem\ItemTemplate\Img) * MenuScale)
-								;[End Block]
-						End Select
-						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
-					EndIf
-					
-					DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\Img) / 2)
-					;[End Block]
-				Case "scp1025"
-					;[Block]
-					GiveAchievement(Achv1025) 
-					If (Not SelectedItem\ItemTemplate\Img) Then
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\items\1025\1025(" + Int(SelectedItem\State) + ").png")	
-						SelectedItem\ItemTemplate\Img = ResizeImage2(SelectedItem\ItemTemplate\Img, ImageWidth(SelectedItem\ItemTemplate\Img) * MenuScale, ImageHeight(SelectedItem\ItemTemplate\Img) * MenuScale)
-						
-						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
-					EndIf
-					
-					DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\Img) / 2)
-					;[End Block]
-				Case "radio", "18vradio", "fineradio", "veryfineradio"
-					;[Block]
-					; ~ RadioState[5] = Has the "use the number keys" -message been shown yet (True / False)
-					; ~ RadioState[6] = A timer for the "code channel"
-					; ~ RadioState[7] = Another timer for the "code channel"
-					
-					If (Not SelectedItem\ItemTemplate\Img) Then
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
-						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
-					EndIf
-					
-					StrTemp = ""
-					
-					x = opt\GraphicWidth - ImageWidth(SelectedItem\ItemTemplate\Img)
-					y = opt\GraphicHeight - ImageHeight(SelectedItem\ItemTemplate\Img)
-					
-					DrawImage(SelectedItem\ItemTemplate\Img, x, y)
-					
-					
-					If SelectedItem\State > 0.0 Lor (SelectedItem\ItemTemplate\TempName = "fineradio" Lor SelectedItem\ItemTemplate\TempName = "veryfineradio") Then
-						If PlayerRoom\RoomTemplate\Name <> "pocketdimension" And CoffinDistance >= 8.0 Then
-							Select Int(SelectedItem\State2)
-								Case 0
-									;[Block]
-									StrTemp = "        USER TRACK PLAYER - "
-									If (Not opt\EnableUserTracks) Then
-										StrTemp = StrTemp + "NOT ENABLED     "
-									ElseIf UserTrackMusicAmount < 1
-										StrTemp = StrTemp + "NO TRACKS FOUND     "
-									Else
-										If ChannelPlaying(RadioCHN[0]) Then StrTemp = StrTemp + Upper(UserTrackName[RadioState[0]]) + "          "
-									EndIf
-									;[End Block]
-								Case 1
-									;[Block]
-									StrTemp = "        WARNING - CONTAINMENT BREACH          "
-									;[End Block]
-								Case 2
-									;[Block]
-									StrTemp = "        SCP Foundation On-Site Radio          "
-									;[End Block]
-								Case 3
-									;[Block]
-									StrTemp = "             EMERGENCY CHANNEL - RESERVED FOR COMMUNICATION IN THE EVENT OF A CONTAINMENT BREACH         "
-									;[End Block]
-							End Select 
-							
-							x = x + 66
-							y = y + 419
-							
-							Color(30, 30, 30)
-							
-							If SelectedItem\ItemTemplate\TempName = "radio" Lor SelectedItem\ItemTemplate\TempName = "18vradio" Then
-								For i = 0 To 4
-									Rect(x, y + (8 * i), 43 - (i * 6), 4, Ceil(SelectedItem\State / 20.0) > 4 - i)
-								Next
-							EndIf	
-							
-							SetFont(fo\FontID[Font_Digital])
-							Text(x + 60, y, "CHN")	
-							
-							If SelectedItem\ItemTemplate\TempName = "veryfineradio" Then
-								StrTemp = ""
-								For i = 0 To Rand(5, 30)
-									StrTemp = StrTemp + Chr(Rand(1, 100))
-								Next
-								
-								SetFont(fo\FontID[Font_Digital_Big])
-								Text(x + 97, y + 16, Rand(0, 9), True, True)
-							Else
-								SetFont(fo\FontID[Font_Digital_Big])
-								Text(x + 97, y + 16, Int(SelectedItem\State2 + 1.0), True, True)
-							EndIf
-							
-							SetFont(fo\FontID[Font_Digital])
-							If StrTemp <> "" Then
-								StrTemp = Right(Left(StrTemp, (Int(MilliSecs() / 300) Mod Len(StrTemp))), 10)
-								Text(x + 32, y + 33, StrTemp)
-							EndIf
-							SetFont(fo\FontID[Font_Default])
-						EndIf
-					EndIf
-					;[End Block]
-				Case "hazmatsuit", "hazmatsuit2", "hazmatsuit3"
-					;[Block]
-					If wi\BallisticVest = 0 Then
-						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
-						
-						Width = 300
-						Height = 20
-						x = mo\Viewport_Center_X - (Width / 2)
-						y = mo\Viewport_Center_Y + 80
-						
-						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
-					EndIf
-					;[End Block]
-				Case "vest", "finevest"
-					;[Block]
-					DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
-					
-					Width = 300
-					Height = 20
-					x = mo\Viewport_Center_X - (Width / 2)
-					y = mo\Viewport_Center_Y + 80
-					
-					RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
-					;[End Block]
-				Case "gasmask", "supergasmask", "gasmask3"
-					;[Block]
-					If (Not PreventItemOverlapping(True)) Then
-						Select SelectedItem\ItemTemplate\TempName
-							Case "gasmask"
-								;[Block]
-								If IsDoubleItem(wi\GasMask, 1, "gas masks") Then Return
-								;[End Block]
-							Case "supergasmask"
-								;[Block]
-								If IsDoubleItem(wi\GasMask, 2, "gas masks") Then Return
-								;[End Block]
-							Case "gasmask3"
-								;[Block]
-								If IsDoubleItem(wi\GasMask, 3, "gas masks") Then Return
-								;[End Block]
-						End Select
-						
-						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
-						
-						Width = 300
-						Height = 20
-						x = mo\Viewport_Center_X - (Width / 2)
-						y = mo\Viewport_Center_Y + 80
-						
-						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
-					EndIf
-					;[End Block]
-				Case "nav", "nav300", "nav310", "navulti"
-					;[Block]
-					If (Not SelectedItem\ItemTemplate\Img) Then
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
-						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
-					EndIf
-					
-					x = opt\GraphicWidth - ImageWidth(SelectedItem\ItemTemplate\Img) * 0.5 + 20.0
-					y = opt\GraphicHeight - ImageHeight(SelectedItem\ItemTemplate\Img) * 0.4 - 85.0
-					
-					Local PlayerX%, PlayerZ%
-					
-					DrawImage(SelectedItem\ItemTemplate\Img, x - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, y - ImageHeight(SelectedItem\ItemTemplate\Img) / 2 + 85)
-					
-					SetFont(fo\FontID[Font_Digital])
-					
-					Local NavWorks% = True
-					
-					If PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor PlayerRoom\RoomTemplate\Name = "dimension1499" Then
-						NavWorks = False
-					ElseIf PlayerRoom\RoomTemplate\Name = "room860" Then
-						For e.Events = Each Events
-							If e\EventID = e_room860 Then
-								If e\EventState = 1.0 Then
-									NavWorks = False
-								EndIf
-								Exit
-							EndIf
-						Next
-					EndIf
-					
-					If (Not NavWorks) Then
-						If (MilliSecs() Mod 800) < 200 Then
-							Color(200, 0, 0)
-							Text(x, y + (NAV_HEIGHT / 2) - 80, "ERROR 06", True)
-							Text(x, y + (NAV_HEIGHT / 2) - 60, "LOCATION UNKNOWN", True)						
-						EndIf
-					Else
-						If (SelectedItem\State > 0.0 Lor (SelectedItem\ItemTemplate\TempName = "nav300" Lor SelectedItem\ItemTemplate\TempName = "navulti")) And (Rnd(CoffinDistance + 15.0) > 1.0 Lor PlayerRoom\RoomTemplate\Name <> "room895") Then
-							PlayerX = Floor((EntityX(PlayerRoom\OBJ) + 8.0) / 8.0 + 0.5)
-							PlayerZ = Floor((EntityZ(PlayerRoom\OBJ) + 8.0) / 8.0 + 0.5)
-							
-							SetBuffer(ImageBuffer(tt\ImageID[12]))
-							
-							Local xx% = x - ImageWidth(SelectedItem\ItemTemplate\Img) / 2
-							Local yy% = y - ImageHeight(SelectedItem\ItemTemplate\Img) / 2 + 85
-							
-							DrawImage(SelectedItem\ItemTemplate\Img, xx, yy)
-							
-							x = x - 12.0 + (((EntityX(me\Collider) - 4.0) + 8.0) Mod 8.0) * 3.0
-							y = y + 12.0 - (((EntityZ(me\Collider) - 4.0) + 8.0) Mod 8.0) * 3.0
-							For x2 = Max(0.0, PlayerX - 6.0) To Min(MapGridSize, PlayerX + 6.0)
-								For z2 = Max(0.0, PlayerZ - 6.0) To Min(MapGridSize, PlayerZ + 6.0)
-									If CoffinDistance > 16.0 Lor Rnd(16.0) < CoffinDistance Then 
-										If CurrGrid\Grid[x2 + (z2 * MapGridSize)] > 0 And (CurrGrid\Found[x2 + (z2 * MapGridSize)] > 0 Lor SelectedItem\ItemTemplate\TempName = "nav310" Lor SelectedItem\ItemTemplate\TempName = "navulti") Then
-											Local DrawX% = x + (PlayerX - 1 - x2) * 24 , DrawY% = y - (PlayerZ - 1 - z2) * 24
-											
-											If x2 + 1.0 =< MapGridSize Then
-												If CurrGrid\Grid[(x2 + 1) + (z2 * MapGridSize)] = 0
-													DrawImage(tt\ImageID[10], DrawX - 12, DrawY - 12)
-												EndIf
-											Else
-												DrawImage(tt\ImageID[10], DrawX - 12, DrawY - 12)
-											EndIf
-											If x2 - 1.0 >= 0.0 Then
-												If CurrGrid\Grid[(x2 - 1) + (z2 * MapGridSize)] = 0
-													DrawImage(tt\ImageID[8], DrawX - 12, DrawY - 12)
-												EndIf
-											Else
-												DrawImage(tt\ImageID[8], DrawX - 12, DrawY - 12)
-											EndIf
-											If z2 - 1.0 >= 0.0 Then
-												If CurrGrid\Grid[x2 + ((z2 - 1) * MapGridSize)] = 0
-													DrawImage(tt\ImageID[7], DrawX - 12, DrawY - 12)
-												EndIf
-											Else
-												DrawImage(tt\ImageID[7], DrawX - 12, DrawY - 12)
-											EndIf
-											If z2 + 1.0 =< MapGridSize Then
-												If CurrGrid\Grid[x2 + ((z2 + 1) * MapGridSize)] = 0
-													DrawImage(tt\ImageID[9], DrawX - 12, DrawY - 12)
-												EndIf
-											Else
-												DrawImage(tt\ImageID[9], DrawX - 12, DrawY - 12)
-											EndIf
-										EndIf
-									EndIf
-								Next
-							Next
-							
-							SetBuffer(BackBuffer())
-							DrawImageRect(tt\ImageID[12], xx + 80, yy + 70, xx + 80, yy + 70, 270, 230)
-							If SelectedItem\ItemTemplate\TempName = "nav" Lor SelectedItem\ItemTemplate\TempName = "nav300" Then
-								Color(100, 0, 0)
-							Else
-								Color(30, 30, 30)
-							EndIf
-							Rect(xx + 80, yy + 70, 270, 230, False)
-							
-							x = opt\GraphicWidth - ImageWidth(SelectedItem\ItemTemplate\Img) * 0.5 + 20.0
-							y = opt\GraphicHeight - ImageHeight(SelectedItem\ItemTemplate\Img) * 0.4 - 85.0
-							
-							If SelectedItem\ItemTemplate\TempName = "nav" Lor SelectedItem\ItemTemplate\TempName = "nav300" Then 
-								Color(100, 0, 0)
-							Else
-								Color(30, 30, 30)
-							EndIf
-							If ((MilliSecs() Mod 800) < 200) Then
-								If SelectedItem\ItemTemplate\TempName = "nav" Lor SelectedItem\ItemTemplate\TempName = "nav300" Then
-									Text(x - NAV_WIDTH / 2 + 10, y - NAV_HEIGHT / 2 + 10, "MAP DATABASE OFFLINE")
-								EndIf
-								
-								YawValue = EntityYaw(me\Collider) - 90.0
-								x1 = x + Cos(YawValue) * 6.0 : y1 = y - Sin(YawValue) * 6.0
-								x2 = x + Cos(YawValue - 140.0) * 5.0 : y2 = y - Sin(YawValue - 140.0) * 5.0				
-								x3 = x + Cos(YawValue + 140.0) * 5.0 : y3 = y - Sin(YawValue + 140.0) * 5.0
-								
-								Line(x1, y1, x2, y2)
-								Line(x1, y1, x3, y3)
-								Line(x2, y2, x3, y3)
-							EndIf
-							
-							Local SCPs_Found% = 0, Dist#
-							
-							If SelectedItem\ItemTemplate\TempName = "navulti" And (MilliSecs() Mod 600) < 400 Then
-								If Curr173 <> Null Then
-									Dist = EntityDistanceSquared(Camera, Curr173\OBJ)
-									If Dist < 900.0 Then
-										Dist = Sqr(Ceil(Dist / 8.0) * 8.0) ; ~ This is probably done to disguise SCP-173's teleporting behavior
-										Color(100, 0, 0)
-										Oval(x - (Dist * 3), y - 7 - (Dist * 3), Dist * 6, Dist * 6, False)
-										Text(x - (NAV_WIDTH / 2) + 10, y - (NAV_HEIGHT / 2) + 30, "SCP-173")
-										SCPs_Found = SCPs_Found + 1
-									EndIf
-								EndIf
-								If Curr106 <> Null Then
-									Dist = EntityDistanceSquared(Camera, Curr106\OBJ)
-									If Dist < 900.0 Then
-										Dist = Sqr(Dist)
-										Color(100, 0, 0)
-										Oval(x - (Dist * 1.5), y - 7 - (Dist * 1.5), Dist * 3, Dist * 3, False)
-										Text(x - (NAV_WIDTH / 2) + 10, y - (NAV_HEIGHT / 2) + 30 + (20 * SCPs_Found), "SCP-106")
-										SCPs_Found = SCPs_Found + 1
-									EndIf
-								EndIf
-								If Curr096 <> Null Then 
-									Dist = EntityDistanceSquared(Camera, Curr096\OBJ)
-									If Dist < 900.0 Then
-										Dist = Sqr(Dist)
-										Color(100, 0, 0)
-										Oval(x - (Dist * 1.5), y - 7 - (Dist * 1.5), Dist * 3, Dist * 3, False)
-										Text(x - (NAV_WIDTH / 2) + 10, y - (NAV_HEIGHT / 2) + 30 + (20 * SCPs_Found), "SCP-096")
-										SCPs_Found = SCPs_Found + 1
-									EndIf
-								EndIf
-								If Curr049 <> Null Then
-									If (Not Curr049\HideFromNVG) Then
-										Dist = EntityDistanceSquared(Camera, Curr049\OBJ)
-										If Dist < 900.0 Then
-											Dist = Sqr(Dist)
-											Color(100, 0, 0)
-											Oval(x - (Dist * 1.5), y - 7 - (Dist * 1.5), Dist * 3, Dist * 3, False)
-											Text(x - (NAV_WIDTH / 2) + 10, y - (NAV_HEIGHT / 2) + 30 + (20 * SCPs_Found), "SCP-049")
-											SCPs_Found = SCPs_Found + 1
-										EndIf
-									EndIf
-								EndIf
-								If PlayerRoom\RoomTemplate\Name = "room895" Then
-									If CoffinDistance < 8.0 Then
-										Dist = Rnd(4.0, 8.0)
-										Color(100, 0, 0)
-										Oval(x - (Dist * 1.5), y - 7.0 - (Dist * 1.5), Dist * 3, Dist * 3, False)
-										Text(x - (NAV_WIDTH / 2) + 10, y - (NAV_HEIGHT / 2) + 30 + (20 * SCPs_Found), "SCP-895")
-									EndIf
-								EndIf
-							EndIf
-							
-							Color(30, 30, 30)
-							If SelectedItem\ItemTemplate\TempName = "nav" Lor SelectedItem\ItemTemplate\TempName = "nav300" Then
-								Color(100, 0, 0)
-								xTemp = x - (NAV_WIDTH / 2) + 196.0
-								yTemp = y - (NAV_HEIGHT / 2) + 10.0
-								Rect(xTemp, yTemp, 80, 20, False)
-								
-								For i = 1 To Min(Ceil(SelectedItem\State / 10.0), 10.0)
-									DrawImage(tt\ImageID[11], xTemp + (i * 8) - 6, yTemp + 4)
-								Next
-								SetFont(fo\FontID[Font_Digital])
-							EndIf
-						EndIf
-					EndIf
-					;[End Block]
-				Case "scp1499", "super1499"
-					;[Block]
-					If (Not PreventItemOverlapping(False, False, True)) Then
-						Select SelectedItem\ItemTemplate\TempName
-							Case "gasmask"
-								;[Block]
-								If IsDoubleItem(I_1499\Using, 1, "gas masks") Then Return
-								;[End Block]
-							Case "super1499"
-								;[Block]
-								If IsDoubleItem(I_1499\Using, 2, "gas masks") Then Return
-								;[End Block]
-						End Select
-						
-						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
-						
-						Width = 300
-						Height = 20
-						x = mo\Viewport_Center_X - (Width / 2)
-						y = mo\Viewport_Center_Y + 80
-						
-						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
-					EndIf
-					;[End Block]
-				Case "badge"
-					;[Block]
-					If (Not SelectedItem\ItemTemplate\Img) Then
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
-						
-						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
-					EndIf
-					
-					DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\Img) / 2)
-					;[End Block]
-				Case "oldpaper"
-					;[Block]
-					If (Not SelectedItem\ItemTemplate\Img) Then
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
-						SelectedItem\ItemTemplate\Img = ResizeImage2(SelectedItem\ItemTemplate\Img, ImageWidth(SelectedItem\ItemTemplate\Img) * MenuScale, ImageHeight(SelectedItem\ItemTemplate\Img) * MenuScale)
-						
-						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
-					EndIf
-					
-					DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\Img) / 2)
-					;[End Block]
-				Case "helmet"
-					;[Block]
-					If (Not PreventItemOverlapping(False, False, False, True)) Then
-						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
-						
-						Width = 300
-						Height = 20
-						x = mo\Viewport_Center_X - (Width / 2)
-						y = mo\Viewport_Center_Y + 80
-						
-						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
-					EndIf
-					;[End Block]
-				Case "scramble"
-					;[Block]
-					If (Not PreventItemOverlapping(False, False, False, False, True)) Then
-						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
-						
-						Width = 300
-						Height = 20
-						x = mo\Viewport_Center_X - (Width / 2)
-						y = mo\Viewport_Center_Y + 80
-						
-						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State3)
-					EndIf
-					;[End Block]
-			End Select
-			
-			If SelectedItem <> Null Then
-				If SelectedItem\ItemTemplate\Img <> 0 Then
-					Local IN$ = SelectedItem\ItemTemplate\TempName
-					
-					If IN = "paper" Lor IN = "badge" Lor IN = "oldpaper" Lor IN = "ticket" Then
-						For a_it.Items = Each Items
-							If a_it <> SelectedItem
-								Local IN2$ = a_it\ItemTemplate\Tempname
-								
-								If IN2 = "paper" Lor IN2 = "badge" Lor IN2 = "oldpaper" Lor IN2 = "ticket" Then
-									If a_it\ItemTemplate\Img <> 0 Then
-										If a_it\ItemTemplate\Img <> SelectedItem\ItemTemplate\Img Then
-											FreeImage(a_it\ItemTemplate\Img) : a_it\ItemTemplate\Img = 0
-										EndIf
-									EndIf
-								EndIf
-							EndIf
-						Next
-					EndIf
-				EndIf			
-			EndIf
-			
-			If mo\MouseHit2 Then
-				IN = SelectedItem\ItemTemplate\TempName
-				If IN = "scp1025" Then
-					If SelectedItem\ItemTemplate\Img <> 0 Then
-						FreeImage(SelectedItem\ItemTemplate\Img) : SelectedItem\ItemTemplate\Img = 0
-					EndIf
-				EndIf
-			EndIf
-		EndIf		
-	EndIf
-	
-	CatchErrors("DrawGUI")
-End Function
 
 Function UpdateGUI()
 	CatchErrors("Uncaught (UpdateGUI)")
@@ -6824,397 +5448,1046 @@ Function UpdateGUI()
 	CatchErrors("UpdateGUI")
 End Function
 
-Function RenderMenu()
-	CatchErrors("Uncaught (DrawMenu)")
+Function RenderGUI()
+	CatchErrors("Uncaught (RenderGUI)")
 	
-	Local x%, y%, Width%, Height%, i%
+	Local e.Events, it.Items, ev.Events, ch.Chunk, a_it.Items
+	Local Temp%, x%, y%, z%, i%, YawValue#, PitchValue#
+	Local x1#, x2#, x3#, y1#, y2#, y3#, z2#, ProjY#, Scale#, Pvt%
+	Local n%, xTemp%, yTemp%, StrTemp$
+	Local Width%, Height%
 	
-	If (Not InFocus()) Then ; ~ Game is out of focus then pause the game
-		MenuOpen = True
-		PauseSounds()
-		Delay(1000.0) ; ~ Reduce the CPU take while game is not in focus
+	If MenuOpen Lor ConsoleOpen Lor SelectedDoor <> Null Lor InvOpen Lor OtherOpen <> Null Lor me\EndingTimer < 0.0 Then
+		ShowPointer()
+	Else
+		HidePointer()
+	EndIf 	
+	
+	If PlayerRoom\RoomTemplate\Name = "pocketdimension" Then
+		For e.Events = Each Events
+			If PlayerRoom = e\room Then
+				If Float(e\EventStr) < 1000.0 Then
+					If e\EventState > 600.0 Then
+						If me\BlinkTimer < -3.0 And me\BlinkTimer > -10.0 Then
+							If (Not e\Img) Then
+								If me\BlinkTimer > -5.0 And Rand(30) = 1 Then
+									PlaySound_Strict(DripSFX[Rand(0, 5)])
+									If (Not e\Img) Then e\Img = LoadImage_Strict("GFX\npcs\scp_106_face.png")
+								EndIf
+							Else
+								DrawImage(e\Img, mo\Viewport_Center_X - Rand(390, 310), mo\Viewport_Center_Y - Rand(290, 310))
+							EndIf
+						Else
+							If e\Img <> 0 Then
+								FreeImage(e\Img) : e\Img = 0
+							EndIf
+						EndIf
+						Exit
+					EndIf
+				Else
+					If me\BlinkTimer < -3.0 And me\BlinkTimer > -10.0 Then
+						If (Not e\Img) Then
+							If me\BlinkTimer > -5.0 Then
+								If (Not e\Img) Then
+									e\Img = LoadImage_Strict("GFX\kneel_mortal.png")
+									If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN)
+									e\SoundCHN = PlaySound_Strict(e\Sound)
+								EndIf
+							EndIf
+						Else
+							DrawImage(e\Img, mo\Viewport_Center_X - Rand(390, 310), mo\Viewport_Center_Y - Rand(290, 310))
+						EndIf
+					Else
+						If e\Img <> 0 Then
+							FreeImage(e\Img) : e\Img = 0
+						EndIf
+						If me\BlinkTimer < -3.0 Then
+							If (Not ChannelPlaying(e\SoundCHN)) Then e\SoundCHN = PlaySound_Strict(e\Sound)
+						Else
+							If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN)
+						EndIf
+					EndIf
+					Exit
+				EndIf
+			EndIf
+		Next
 	EndIf
-	If MenuOpen Then
-		Width = ImageWidth(tt\ImageID[0])
-		Height = ImageHeight(tt\ImageID[0])
-		x = mo\Viewport_Center_X - (Width / 2)
-		y = mo\Viewport_Center_Y - (Height / 2)
+	
+	If I_294\Using Then Render294()
+	
+	If ClosestButton <> 0 And SelectedDoor = Null And (Not InvOpen) And (Not MenuOpen) And OtherOpen = Null And (Not ConsoleOpen) And SelectedDifficulty\OtherFactors <> EXTREME Then
+		Temp = CreatePivot()
+		PositionEntity(Temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
+		PointEntity(Temp, ClosestButton)
+		YawValue = WrapAngle(EntityYaw(Camera) - EntityYaw(Temp))
+		If YawValue > 90.0 And YawValue =< 180.0 Then YawValue = 90.0
+		If YawValue > 180.0 And YawValue < 270.0 Then YawValue = 270.0
+		PitchValue = WrapAngle(EntityPitch(Camera) - EntityPitch(Temp))
+		If PitchValue > 90.0 And PitchValue =< 180.0 Then PitchValue = 90.0
+		If PitchValue > 180.0 And PitchValue < 270.0 Then PitchValue = 270.0
 		
-		DrawImage(tt\ImageID[0], x, y)
+		FreeEntity(Temp)
+		
+		DrawImage(tt\IconID[4], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - 32, mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - 32)
+	EndIf
+	
+	If ClosestItem <> Null And SelectedDifficulty\OtherFactors <> EXTREME Then
+		YawValue = -DeltaYaw(Camera, ClosestItem\Collider)
+		If YawValue > 90.0 And YawValue =< 180.0 Then YawValue = 90.0
+		If YawValue > 180.0 And YawValue < 270.0 Then YawValue = 270.0
+		PitchValue = -DeltaPitch(Camera, ClosestItem\Collider)
+		If PitchValue > 90.0 And PitchValue =< 180.0 Then PitchValue = 90.0
+		If PitchValue > 180.0 And PitchValue < 270.0 Then PitchValue = 270.0
+		
+		DrawImage(tt\IconID[5], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - 32, mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - 32)
+	EndIf
+	
+	If ga\DrawHandIcon And SelectedDifficulty\OtherFactors <> EXTREME Then DrawImage(tt\IconID[4], mo\Viewport_Center_X - 32, mo\Viewport_Center_Y - 32)
+	For i = 0 To 3
+		If ga\DrawArrowIcon[i] And SelectedDifficulty\OtherFactors <> EXTREME Then
+			x = mo\Viewport_Center_X - 32
+			y = mo\Viewport_Center_Y - 32		
+			Select i
+				Case 0
+					;[Block]
+					y = y - 69
+					;[End Block]
+				Case 1
+					;[Block]
+					x = x + 69
+					;[End Block]
+				Case 2
+					;[Block]
+					y = y + 69
+					;[End Block]
+				Case 3
+					;[Block]
+					x = x - 69
+					;[End Block]
+			End Select
+			DrawImage(tt\IconID[4], x, y)
+			Color(0, 0, 0)
+			Rect(x + 4, y + 4, 56, 56)
+			DrawImage(ga\ArrowIMG[i], x + 21, y + 21)
+		EndIf
+	Next
+	
+	If opt\HUDEnabled And SelectedDifficulty\OtherFactors <> EXTREME Then 
+		Width = 200
+		Height = 20
+		x = 80
+		y = opt\GraphicHeight - 95
 		
 		Color(255, 255, 255)
-		
-		x = x + (132 * MenuScale)
-		y = y + (122 * MenuScale)
-		
-		If AchievementsMenu > 0 Then
-			SetFont(fo\FontID[Font_Default_Big])
-			Text(x, y - (77 * MenuScale), "ACHIEVEMENTS", False, True)
-			SetFont(fo\FontID[Font_Default])
-		ElseIf OptionsMenu > 0 Then
-			SetFont(fo\FontID[Font_Default_Big])
-			Text(x, y - (77 * MenuScale), "OPTIONS", False, True)
-			SetFont(fo\FontID[Font_Default])
-		ElseIf QuitMsg > 0 Then
-			SetFont(fo\FontID[Font_Default_Big])
-			Text(x, y - (77 * MenuScale), "QUIT?", False, True)
-			SetFont(fo\FontID[Font_Default])
-		ElseIf me\KillTimer >= 0.0 Then
-			SetFont(fo\FontID[Font_Default_Big])
-			Text(x, y - (77 * MenuScale), "PAUSED", False, True)
-			SetFont(fo\FontID[Font_Default])
+		If me\BlinkTimer < 150.0 Then
+			RenderBar(tt\ImageID[1], x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ, 100, 0, 0)
 		Else
-			SetFont(fo\FontID[Font_Default_Big])
-			Text(x, y - (77 * MenuScale), "YOU DIED", False, True)
-			SetFont(fo\FontID[Font_Default])
-		EndIf		
+			RenderBar(BlinkMeterIMG, x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ)
+		EndIf
+		Color(0, 0, 0)
+		Rect(x - 50, y, 30, 30)
 		
-		Local AchvXIMG% = x + (22.0 * MenuScale)
-		Local Scale# = opt\GraphicHeight / 768.0
-		Local SeparationConst% = 76.0 * Scale
+		If me\BlurTimer > 550.0 Lor me\BlinkEffect > 1.0 Lor me\LightFlash > 0.0 Lor (((me\LightBlink > 0.0 And (Not chs\NoBlink)) Lor me\EyeIrritation > 0.0) And wi\NightVision = 0) Then
+			Color(200, 0, 0)
+			Rect(x - 53, y - 3, 36, 36)
+		Else
+			If me\BlinkEffect < 1.0 Lor chs\NoBlink Then
+				Color(0, 200, 0)
+				Rect(x - 53, y - 3, 36, 36)
+			EndIf
+		EndIf
 		
-		If AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg =< 0
-			SetFont(fo\FontID[Font_Default])
-			Text(x, y, "Difficulty: " + SelectedDifficulty\Name)
-			Text(x, y + (20 * MenuScale), "Save: " + CurrSave)
-			Text(x, y + (40 * MenuScale), "Map seed: " + RandomSeed)
-		ElseIf AchievementsMenu =< 0 And OptionsMenu > 0 And QuitMsg =< 0 And me\KillTimer >= 0.0
-			Color(0, 255, 0)
-			If OptionsMenu = 1
-				Rect(x - (10 * MenuScale), y - (5 * MenuScale), 110 * MenuScale, 40 * MenuScale, True)
-			ElseIf OptionsMenu = 2
-				Rect(x + (100 * MenuScale), y - (5 * MenuScale), 110 * MenuScale, 40 * MenuScale, True)
-			ElseIf OptionsMenu = 3
-				Rect(x + (210 * MenuScale), y - (5 * MenuScale), 110 * MenuScale, 40 * MenuScale, True)
-			ElseIf OptionsMenu = 4
-				Rect(x + (320 * MenuScale), y - (5 * MenuScale), 110 * MenuScale, 40 * MenuScale, True)
+		Color(255, 255, 255)
+		Rect(x - 51, y - 1, 32, 32, False)
+		
+		DrawImage(tt\IconID[3], x - 50, y)
+		
+		y = opt\GraphicHeight - 55.0
+		
+		If me\Stamina =< 25.0 Then
+			RenderBar(tt\ImageID[3], x, y, Width, Height, me\Stamina, 100.0, 50, 0, 0)
+		Else
+			RenderBar(tt\ImageID[2], x, y, Width, Height, me\Stamina, 100.0, 50, 50, 50)
+		EndIf
+		Color(0, 0, 0)
+		Rect(x - 50, y, 30, 30)
+		
+		If PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor I_714\Using Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor wi\HazmatSuit = 1 Lor wi\BallisticVest = 2 Then
+			Color(200, 0, 0)
+			Rect(x - 53, y - 3, 36, 36)
+		Else
+			If chs\InfiniteStamina Lor me\StaminaEffect < 1.0 Lor wi\GasMask = 2 Lor I_1499\Using = 2 Lor wi\HazmatSuit = 2 Then
+				Color(0, 200, 0)
+				Rect(x - 53, y - 3, 36, 36)
+			EndIf 
+		EndIf
+		
+		Color(255, 255, 255)
+		Rect(x - 51, y - 1, 32, 32, False)
+		If me\Crouch Then
+			DrawImage(tt\IconID[2], x - 50, y)
+		ElseIf KeyDown(key\SPRINT) And me\CurrSpeed > 0.0 And (Not chs\NoClip) And me\Stamina > 0.0 Then
+			DrawImage(tt\IconID[1], x - 50, y)
+		Else
+			DrawImage(tt\IconID[0], x - 50, y)
+		EndIf
+		
+		If chs\DebugHUD Then
+			Color(255, 255, 255)
+			SetFont(fo\FontID[Font_Console])
+			
+			Text(x - 60, 40, "Room: " + PlayerRoom\RoomTemplate\Name)
+			Text(x - 60, 60, "Room Coordinates: (" + Floor(EntityX(PlayerRoom\OBJ) / 8.0 + 0.5) + ", " + Floor(EntityZ(PlayerRoom\OBJ) / 8.0 + 0.5) + ", Angle: " + PlayerRoom\Angle + ")")
+			For ev.Events = Each Events
+				If ev\room = PlayerRoom Then
+					Text(x - 60, 80, "Room Event: " + ev\EventName + ", ID: " + ev\EventID) 
+					Text(x - 60, 100, "State: " + ev\EventState)
+					Text(x - 60, 120, "State2: " + ev\EventState2)   
+					Text(x - 60, 140, "State3: " + ev\EventState3)
+					Text(x - 60, 160, "State4: " + ev\EventState4)
+					Text(x - 60, 180, "Str: "+ ev\EventStr)
+					Exit
+				EndIf
+			Next
+			If PlayerRoom\RoomTemplate\Name = "dimension1499"
+				Text(x - 60, 220, "Current Chunk X / Z: (" + (Int((EntityX(me\Collider) + 20) / 40)) + ", "+(Int((EntityZ(me\Collider) + 20) / 40)) + ")")
+				
+				Local CH_Amount% = 0
+				
+				For ch.Chunk = Each Chunk
+					CH_Amount = CH_Amount + 1
+				Next
+				Text(x - 60, 240, "Current Chunk Amount: " + CH_Amount)
+			Else
+				Text(x - 60, 240, "Current Room Position: (" + PlayerRoom\x + ", " + PlayerRoom\y + ", " + PlayerRoom\z + ")")
 			EndIf
 			
-			Local tX# = mo\Viewport_Center_X + (Width / 2)
-			Local tY# = y
-			Local tW# = 400.0 * MenuScale
-			Local tH# = 150.0 * MenuScale
+			If SelectedMonitor <> Null Then
+				Text(x - 60, 280, "Current Monitor: " + SelectedMonitor\ScrOBJ)
+			Else
+				Text(x - 60, 280, "Current Monitor: Null")
+			EndIf
+			
+			Text(x - 60, 320, "Video memory: " + ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)) + " MB/" + (TotalVidMem() / 1024) + " MB" + Chr(10))
+			Text(x - 60, 340, "Global memory status: " + ((TotalPhys() / 1024) - (AvailPhys() / 1024)) + " MB/" + (TotalPhys() / 1024) + " MB")
+			Text(x - 60, 360, "Triangles Rendered: " + CurrTrisAmount)
+			Text(x - 60, 380, "Active Textures: " + ActiveTextures())	
+			
+			Text(x + 440, 40, "Player Position: (" + f2s(EntityX(me\Collider), 1) + ", " + f2s(EntityY(me\Collider), 1) + ", " + f2s(EntityZ(me\Collider), 1) + ")")
+			Text(x + 440, 60, "Player Rotation: (" + f2s(EntityPitch(me\Collider), 1) + ", " + f2s(EntityYaw(me\Collider), 1) + ", " + f2s(EntityRoll(me\Collider), 1) + ")")
+			
+			Text(x + 440, 100, "Injuries: " + me\Injuries)
+			Text(x + 440, 120, "Bloodloss: " + me\Bloodloss)
+			Text(x + 440, 140, "Blur Timer: " + me\BlurTimer)
+			Text(x + 440, 160, "Blink Timer: " + me\BlinkTimer)
+			Text(x + 440, 180, "Stamina: " + me\Stamina)
+			
+			Text(x + 440, 220, "SCP-008 Infection: " + I_008\Timer)
+			Text(x + 440, 240, "SCP-409 Crystallization: " + I_409\Timer)
+			Text(x + 440, 260, "SCP-427 State (Secs): " + Int(I_427\Timer / 70.0))
+			For i = 0 To 5
+				Text(x + 440, 280 + (20 * i), "SCP-1025 State " + i + ": " + I_1025\State[i])
+			Next
+			
+			SetFont(fo\FontID[Font_Default])
+		EndIf
+	EndIf
+	
+	If SelectedScreen <> Null Then
+		DrawImage(SelectedScreen\Img, mo\Viewport_Center_X - ImageWidth(SelectedScreen\Img) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedScreen\Img) / 2)
+		
+		If mo\MouseUp1 Lor mo\MouseHit2 Then
+			FreeImage(SelectedScreen\Img) : SelectedScreen\Img = 0
+		EndIf
+	EndIf
+	
+	Local PrevInvOpen% = InvOpen, MouseSlot% = 66
+	Local ShouldDrawHUD% = True
+	
+	If SelectedDoor <> Null Then
+		If SelectedItem <> Null Then
+			If SelectedItem\ItemTemplate\TempName = "scp005" Then ShouldDrawHUD = False
+		EndIf
+		
+		SelectedItem = Null
+		If ShouldDrawHUD Then
+			Pvt = CreatePivot()
+			PositionEntity(Pvt, EntityX(ClosestButton, True), EntityY(ClosestButton, True), EntityZ(ClosestButton, True))
+			RotateEntity(Pvt, 0.0, EntityYaw(ClosestButton, True) - 180.0, 0.0)
+			MoveEntity(Pvt, 0.0, 0.0, 0.22)
+			PositionEntity(Camera, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt))
+			PointEntity(Camera, ClosestButton)
+			FreeEntity(Pvt)
+			
+			CameraProject(Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) + MeshHeight(o\ButtonModelID[0]) * 0.015, EntityZ(ClosestButton, True))
+			ProjY = ProjectedY()
+			CameraProject(Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) - MeshHeight(o\ButtonModelID[0]) * 0.015, EntityZ(ClosestButton, True))
+			Scale = (ProjectedY() - ProjY) / 462.0
+			
+			x = mo\Viewport_Center_X - ImageWidth(tt\ImageID[4]) * (Scale / 2)
+			y = mo\Viewport_Center_Y - ImageHeight(tt\ImageID[4]) * (Scale / 2)	
+			
+			SetFont(fo\FontID[Font_Digital])
+			If msg\KeyPadMsg <> "" Then 
+				If (msg\KeyPadTimer Mod 70.0) < 35.0 Then Text(mo\Viewport_Center_X, y + (124 * Scale), msg\KeyPadMsg, True, True)
+			Else
+				Text(mo\Viewport_Center_X, y + (70 * Scale), "ACCESS CODE: ", True, True)	
+				SetFont(fo\FontID[Font_Digital_Big])
+				Text(mo\Viewport_Center_X, y + (124 * Scale), msg\KeyPadInput, True, True)
+			EndIf
+			
+			x = x + (44 * Scale)
+			y = y + (249 * Scale)
+			
+			If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+		EndIf
+	EndIf
+	
+	Local PrevOtherOpen.Items
+	Local OtherSize%, OtherAmount%
+	Local IsEmpty%
+	Local IsMouseOn%
+	Local ClosedInv%
+	
+	If OtherOpen <> Null Then
+		PrevOtherOpen = OtherOpen
+		OtherSize = OtherOpen\InvSlots
+		
+		For i = 0 To OtherSize - 1
+			If OtherOpen\SecondInv[i] <> Null Then
+				OtherAmount = OtherAmount + 1
+			EndIf
+		Next
+		
+		Local TempX% = 0
+		
+		x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * 10 / 2 + INVENTORY_GFX_SPACING * (10 / 2 - 1)) / 2
+		y = mo\Viewport_Center_Y - INVENTORY_GFX_SIZE * (Float(OtherSize) / 10 * 2 - 1) - INVENTORY_GFX_SPACING
+		
+		IsMouseOn = -1
+		For n = 0 To OtherSize - 1
+			If ScaledMouseX() > x And ScaledMouseX() < x + INVENTORY_GFX_SIZE Then
+				If ScaledMouseY() > y And ScaledMouseY() < y + INVENTORY_GFX_SIZE Then
+					IsMouseOn = n
+				EndIf
+			EndIf
+			
+			If IsMouseOn = n Then
+				MouseSlot = n
+				Color(255, 0, 0)
+				Rect(x - 1, y - 1, INVENTORY_GFX_SIZE + 2, INVENTORY_GFX_SIZE + 2)
+			EndIf
+			
+			RenderFrame(x, y, INVENTORY_GFX_SIZE, INVENTORY_GFX_SIZE, (x Mod 64), (x Mod 64))
+			
+			If OtherOpen = Null Then Exit
+			
+			If OtherOpen\SecondInv[n] <> Null Then
+				If (IsMouseOn = n Lor SelectedItem <> OtherOpen\SecondInv[n]) Then DrawImage(OtherOpen\SecondInv[n]\InvImg, x + INVENTORY_GFX_SIZE / 2 - 32, y + INVENTORY_GFX_SIZE / 2 - 32)
+			EndIf
+			If OtherOpen\SecondInv[n] <> Null And SelectedItem <> OtherOpen\SecondInv[n] Then
+				If IsMouseOn = n Then
+					Color(255, 255, 255)	
+					Text(x + INVENTORY_GFX_SIZE / 2, y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - 15, OtherOpen\SecondInv[n]\ItemTemplate\Name, True)				
+				EndIf
+			EndIf					
+			
+			x = x + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING
+			TempX = TempX + 1
+			If TempX = 5 Then 
+				TempX = 0
+				y = y + INVENTORY_GFX_SIZE * 2 
+				x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * 10 / 2 + INVENTORY_GFX_SPACING * (10 / 2 - 1.0)) / 2
+			EndIf
+		Next
+		
+		If SelectedItem <> Null Then
+			If mo\MouseDown1 Then
+				If MouseSlot = 66 Then
+					DrawImage(SelectedItem\InvImg, ScaledMouseX() - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, ScaledMouseY() - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+				ElseIf SelectedItem <> PrevOtherOpen\SecondInv[MouseSlot]
+					DrawImage(SelectedItem\InvImg, ScaledMouseX() - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, ScaledMouseY() - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+				EndIf
+			EndIf
+		EndIf
+		
+		If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+	ElseIf InvOpen Then
+		x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
+		y = mo\Viewport_Center_Y - INVENTORY_GFX_SIZE - INVENTORY_GFX_SPACING
+		
+		If MaxItemAmount = 2 Then
+			y = y + INVENTORY_GFX_SIZE
+			x = x - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING) / 2
+		EndIf
+		
+		IsMouseOn = -1
+		For n = 0 To MaxItemAmount - 1
+			If ScaledMouseX() > x And ScaledMouseX() < x + INVENTORY_GFX_SIZE Then
+				If ScaledMouseY() > y And ScaledMouseY() < y + INVENTORY_GFX_SIZE Then
+					IsMouseOn = n
+				EndIf
+			EndIf
+			
+			If Inventory(n) <> Null Then
+				Color(200, 200, 200)
+				Select Inventory(n)\ItemTemplate\TempName 
+					Case "gasmask"
+						;[Block]
+						If wi\GasMask = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
+					Case "supergasmask"
+						;[Block]
+						If wi\GasMask = 2 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
+					Case "gasmask3"
+						;[Block]
+						If wi\GasMask = 3 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
+					Case "hazmatsuit"
+						;[Block]
+						If wi\HazmatSuit = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
+					Case "hazmatsuit2"
+						;[Block]
+						If wi\HazmatSuit = 2 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
+					Case "hazmatsuit3
+						;[Block]"
+						If wi\HazmatSuit = 3 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)	
+						;[End Block]
+					Case "vest"
+						;[Block]
+						If wi\BallisticVest = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
+					Case "finevest"
+						;[Block]
+						If wi\BallisticVest = 2 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
+					Case "helmet"
+						;[Block]
+						If wi\BallisticHelmet = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
+					Case "scp714"
+						;[Block]
+						If I_714\Using = True Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
+					Case "nvg"
+						;[Block]
+						If wi\NightVision = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
+					Case "supernvg"
+						;[Block]
+						If wi\NightVision = 2 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
+					Case "finenvg"
+						;[Block]
+						If wi\NightVision = 3 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
+					Case "scramble"
+						;[Block]
+						If wi\SCRAMBLE = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
+					Case "scp1499"
+						;[Block]
+						If I_1499\Using = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
+					Case "super1499"
+						;[Block]
+						If I_1499\Using = 2 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
+					Case "scp427"
+						;[Block]
+						If I_427\Using Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
+				End Select
+			EndIf
+			
+			If IsMouseOn = n Then
+				MouseSlot = n
+				Color(255, 0, 0)
+				Rect(x - 1, y - 1, INVENTORY_GFX_SIZE + 2, INVENTORY_GFX_SIZE + 2)
+			EndIf
 			
 			Color(255, 255, 255)
-			Select OptionsMenu
-				Case 1 ; ~ Graphics
+			RenderFrame(x, y, INVENTORY_GFX_SIZE, INVENTORY_GFX_SIZE, (x Mod 64), (x Mod 64))
+			
+			If Inventory(n) <> Null Then
+				If IsMouseOn = n Lor SelectedItem <> Inventory(n) Then 
+					DrawImage(Inventory(n)\InvImg, x + (INVENTORY_GFX_SIZE / 2) - 32, y + (INVENTORY_GFX_SIZE / 2) - 32)
+				EndIf
+			EndIf
+			
+			If Inventory(n) <> Null And SelectedItem <> Inventory(n) Then
+				If IsMouseOn = n Then
+					If SelectedItem = Null Then
+						SetFont(fo\FontID[Font_Default])
+						Color(0, 0, 0)
+						Text(x + INVENTORY_GFX_SIZE / 2 + 1, y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - 15 + 1, Inventory(n)\Name, True)							
+						Color(255, 255, 255)	
+						Text(x + INVENTORY_GFX_SIZE / 2, y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - 15, Inventory(n)\Name, True)	
+					EndIf
+				EndIf
+			EndIf					
+			
+			x = x + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING
+			If MaxItemAmount >= 4 And n = MaxItemAmount / 2 - 1 Then 
+				y = y + INVENTORY_GFX_SIZE * 2 
+				x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2 
+			EndIf
+		Next
+		
+		If SelectedItem <> Null Then
+			If mo\MouseDown1 Then
+				If MouseSlot = 66 Then
+					DrawImage(SelectedItem\InvImg, ScaledMouseX() - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, ScaledMouseY() - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+				ElseIf SelectedItem <> Inventory(MouseSlot)
+					DrawImage(SelectedItem\InvImg, ScaledMouseX() - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, ScaledMouseY() - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+				EndIf
+			EndIf
+		EndIf
+		
+		If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+	Else
+		If SelectedItem <> Null Then
+			Select SelectedItem\ItemTemplate\TempName
+				Case "nvg", "supernvg", "finenvg"
 					;[Block]
-					SetFont(fo\FontID[Font_Default])
-					
-					y = y + (50 * MenuScale)
-					
-					Color(100, 100, 100)
-					Text(x, y + (5 * MenuScale), "Enable bump mapping:")	
-					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
-						RenderOptionsTooltip(tX, tY, tW, tH, "bump")
-					EndIf
-					
-					y = y + (30 * MenuScale)
-					
-					Color(255, 255, 255)
-					Text(x, y + (5 * MenuScale), "VSync:")
-					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
-						RenderOptionsTooltip(tX, tY, tW, tH, "vsync")
-					EndIf
-					
-					y = y + (30 * MenuScale)
-					
-					Color(255 - (155 * (opt\DisplayMode <> 0)), 255 - (155 * (opt\DisplayMode <> 0)), 255 - (155 * (opt\DisplayMode <> 0)))
-					Text(x, y + (5 * MenuScale), "Anti-aliasing:")
-					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
-						RenderOptionsTooltip(tX, tY, tW, tH, "antialias")
-					EndIf
-					
-					y = y + (30 * MenuScale)
-					
-					Color(255, 255, 255)
-					Text(x, y + (5 * MenuScale), "Enable room lights:")
-					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
-						RenderOptionsTooltip(tX, tY, tW, tH, "roomlights")
-					EndIf
-					
-					y = y + (40 * MenuScale)
-					
-					Color(255, 255, 255)
-					Text(x, y + (5 * MenuScale), "Screen gamma:")
-					If MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20) And OnSliderID = 0
-						RenderOptionsTooltip(tX, tY, tW, tH, "gamma", opt\ScreenGamma)
-					EndIf
-					
-					y = y + (45 * MenuScale)
-					
-					Color(255, 255, 255)
-					Text(x, y, "Particle amount:")
-					If (MouseOn(x + (270 * MenuScale), y - (9 * MenuScale), 114 * MenuScale, 20) And OnSliderID = 0) Lor OnSliderID = 2
-						RenderOptionsTooltip(tX, tY, tW, tH, "particleamount", opt\ParticleAmount)
-					EndIf
-					
-					y = y + (45 * MenuScale)
-					
-					Color(255, 255, 255)
-					Text(x, y, "Texture LOD Bias:")
-					If (MouseOn(x + (270 * MenuScale), y - (9 * MenuScale), 114 * MenuScale, 20) And OnSliderID = 0) Lor OnSliderID = 3
-						RenderOptionsTooltip(tX, tY, tW, tH + 100 * MenuScale, "texquality")
-					EndIf
-					
-					y = y + (35 * MenuScale)
-					
-					Color(100, 100, 100)
-					Text(x, y + (5 * MenuScale), "Save textures in the VRAM:")	
-					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
-						RenderOptionsTooltip(tX, tY, tW, tH, "vram")
-					EndIf
-					
-					y = y + (40 * MenuScale)
-					
-					Color(255, 255, 255)
-					Text(x, y + (5 * MenuScale), "Field of view:")
-					Color(255, 255, 0)
-					If MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20) And OnSliderID = 0
-						RenderOptionsTooltip(tX, tY, tW, tH, "fov")
-					EndIf
-					
-					y = y + (45 * MenuScale)
-					
-					Color(255, 255, 255)
-					Text(x, y, "Anisotropic filtering:")
-					If (MouseOn(x + (270 * MenuScale), y - (9 * MenuScale), 114 * MenuScale, 20) And OnSliderID = 0) Lor OnSliderID = 4
-						RenderOptionsTooltip(tX, tY, tW, tH, "anisotropic")
-					EndIf
-					;[End Block]
-				Case 2 ; ~ Audio
-					;[Block]
-					SetFont(fo\FontID[Font_Default])
-					
-					y = y + (50 * MenuScale)
-					
-					Color(255, 255, 255)
-					Text(x, y + (5 * MenuScale), "Music volume:")
-					If MouseOn(x + (250 * MenuScale), y, 114 * MenuScale, 20)
-						RenderOptionsTooltip(tX, tY, tW, tH, "musicvol", opt\MusicVolume)
-					EndIf
-					
-					y = y + (40 * MenuScale)
-					
-					Color(255, 255, 255)
-					Text(x, y + (5 * MenuScale), "Sound volume:")
-					If MouseOn(x + (250 * MenuScale), y, 114 * MenuScale, 20)
-						RenderOptionsTooltip(tX, tY, tW, tH, "soundvol", opt\PrevSFXVolume)
-					EndIf
-					
-					y = y + (40 * MenuScale)
-					
-					Color(100, 100, 100)
-					Text(x, y + (5 * MenuScale), "Sound auto-release:")
-					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-						RenderOptionsTooltip(tX, tY, tW, tH + 220 * MenuScale, "sfxautorelease")
-					EndIf
-					
-					y = y + (30 * MenuScale)
-					
-					Color(100, 100, 100)
-					Text(x, y + (5 * MenuScale), "Enable user tracks:")
-					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-						RenderOptionsTooltip(tX, tY, tW, tH, "usertrack")
-					EndIf
-					
-					If opt\EnableUserTracks Then
-						y = y + (30 * MenuScale)
+					If (Not PreventItemOverlapping(False, True)) Then
+						Select SelectedItem\ItemTemplate\TempName
+							Case "nvg"
+								;[Block]
+								If IsDoubleItem(wi\NightVision, 1, "pairs of goggles") Then Return
+								;[End Block]
+							Case "supernvg"
+								;[Block]
+								If IsDoubleItem(wi\NightVision, 2, "pairs of goggles") Then Return
+								;[End Block]
+							Case "finenvg"
+								;[Block]
+								If IsDoubleItem(wi\NightVision, 3, "pairs of goggles") Then Return
+								;[End Block]
+						End Select
 						
-						Color(255, 255, 255)
-						Text(x, y + (5 * MenuScale), "User track mode:")
-						If opt\UserTrackMode Then
-							Text(x + (310 * MenuScale), y + 5 * MenuScale, "Repeat")
-						Else
-							Text(x + (310 * MenuScale), y + 5 * MenuScale, "Random")
-						EndIf
-						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-							RenderOptionsTooltip(tX, tY, tW, tH, "usertrackmode")
-						EndIf
-						If MouseOn(x + (270 * MenuScale), y + 30 * MenuScale, 190 * MenuScale, 30 * MenuScale)
-							RenderOptionsTooltip(tX, tY, tW, tH, "usertrackscan")
+						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						
+						Width = 300
+						Height = 20
+						x = mo\Viewport_Center_X - (Width / 2)
+						y = mo\Viewport_Center_Y + 80
+						
+						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State3)
+					EndIf
+					;[End Block]
+				Case "key0", "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "scp860", "hand", "hand2", "25ct", "scp005", "key", "coin", "mastercard"
+					;[Block]
+					DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+					;[End Block]
+				Case "firstaid", "finefirstaid", "firstaid2"
+					;[Block]
+					If me\Bloodloss = 0.0 And me\Injuries = 0.0 Then
+						Return
+					Else
+						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						
+						Width = 300
+						Height = 20
+						x = mo\Viewport_Center_X - (Width / 2)
+						y = mo\Viewport_Center_Y + 80
+						
+						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
+					EndIf
+					;[End Block]
+				Case "paper", "ticket"
+					;[Block]
+					If (Not SelectedItem\ItemTemplate\Img) Then
+						Select SelectedItem\ItemTemplate\Name
+							Case "Burnt Note" 
+								;[Block]
+								SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\items\note_Maynard.png")
+								SetBuffer(ImageBuffer(SelectedItem\ItemTemplate\Img))
+								Color(0, 0, 0)
+								SetFont(fo\FontID[Font_Default])
+								Text(277, 469, AccessCode, True, True)
+								Color(255, 255, 255)
+								SetBuffer(BackBuffer())
+								;[End Block]
+							Case "Document SCP-372"
+								;[Block]
+								SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
+								SelectedItem\ItemTemplate\Img = ResizeImage2(SelectedItem\ItemTemplate\Img, ImageWidth(SelectedItem\ItemTemplate\Img) * MenuScale, ImageHeight(SelectedItem\ItemTemplate\Img) * MenuScale)
+								
+								SetBuffer(ImageBuffer(SelectedItem\ItemTemplate\Img))
+								Color(37, 45, 137)
+								SetFont(fo\FontID[Font_Journal])
+								Temp = ((Int(AccessCode) * 3) Mod 10000)
+								If Temp < 1000 Then Temp = Temp + 1000
+								Text(383 * MenuScale, 734 * MenuScale, Temp, True, True)
+								Color(255, 255, 255)
+								SetBuffer(BackBuffer())
+								;[End Block]
+							Case "Movie Ticket"
+								;[Block]
+								; ~ Don't resize because it messes up the masking
+								SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
+								;[End Block]
+							Default 
+								;[Block]
+								SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
+								SelectedItem\ItemTemplate\Img = ResizeImage2(SelectedItem\ItemTemplate\Img, ImageWidth(SelectedItem\ItemTemplate\Img) * MenuScale, ImageHeight(SelectedItem\ItemTemplate\Img) * MenuScale)
+								;[End Block]
+						End Select
+						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
+					EndIf
+					
+					DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\Img) / 2)
+					;[End Block]
+				Case "scp1025"
+					;[Block]
+					GiveAchievement(Achv1025) 
+					If (Not SelectedItem\ItemTemplate\Img) Then
+						SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\items\1025\1025(" + Int(SelectedItem\State) + ").png")	
+						SelectedItem\ItemTemplate\Img = ResizeImage2(SelectedItem\ItemTemplate\Img, ImageWidth(SelectedItem\ItemTemplate\Img) * MenuScale, ImageHeight(SelectedItem\ItemTemplate\Img) * MenuScale)
+						
+						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
+					EndIf
+					
+					DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\Img) / 2)
+					;[End Block]
+				Case "radio", "18vradio", "fineradio", "veryfineradio"
+					;[Block]
+					; ~ RadioState[5] = Has the "use the number keys" -message been shown yet (True / False)
+					; ~ RadioState[6] = A timer for the "code channel"
+					; ~ RadioState[7] = Another timer for the "code channel"
+					
+					If (Not SelectedItem\ItemTemplate\Img) Then
+						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
+						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
+					EndIf
+					
+					StrTemp = ""
+					
+					x = opt\GraphicWidth - ImageWidth(SelectedItem\ItemTemplate\Img)
+					y = opt\GraphicHeight - ImageHeight(SelectedItem\ItemTemplate\Img)
+					
+					DrawImage(SelectedItem\ItemTemplate\Img, x, y)
+					
+					
+					If SelectedItem\State > 0.0 Lor (SelectedItem\ItemTemplate\TempName = "fineradio" Lor SelectedItem\ItemTemplate\TempName = "veryfineradio") Then
+						If PlayerRoom\RoomTemplate\Name <> "pocketdimension" And CoffinDistance >= 8.0 Then
+							Select Int(SelectedItem\State2)
+								Case 0
+									;[Block]
+									StrTemp = "        USER TRACK PLAYER - "
+									If (Not opt\EnableUserTracks) Then
+										StrTemp = StrTemp + "NOT ENABLED     "
+									ElseIf UserTrackMusicAmount < 1
+										StrTemp = StrTemp + "NO TRACKS FOUND     "
+									Else
+										If ChannelPlaying(RadioCHN[0]) Then StrTemp = StrTemp + Upper(UserTrackName[RadioState[0]]) + "          "
+									EndIf
+									;[End Block]
+								Case 1
+									;[Block]
+									StrTemp = "        WARNING - CONTAINMENT BREACH          "
+									;[End Block]
+								Case 2
+									;[Block]
+									StrTemp = "        SCP Foundation On-Site Radio          "
+									;[End Block]
+								Case 3
+									;[Block]
+									StrTemp = "             EMERGENCY CHANNEL - RESERVED FOR COMMUNICATION IN THE EVENT OF A CONTAINMENT BREACH         "
+									;[End Block]
+							End Select 
+							
+							x = x + 66
+							y = y + 419
+							
+							Color(30, 30, 30)
+							
+							If SelectedItem\ItemTemplate\TempName = "radio" Lor SelectedItem\ItemTemplate\TempName = "18vradio" Then
+								For i = 0 To 4
+									Rect(x, y + (8 * i), 43 - (i * 6), 4, Ceil(SelectedItem\State / 20.0) > 4 - i)
+								Next
+							EndIf	
+							
+							SetFont(fo\FontID[Font_Digital])
+							Text(x + 60, y, "CHN")	
+							
+							If SelectedItem\ItemTemplate\TempName = "veryfineradio" Then
+								StrTemp = ""
+								For i = 0 To Rand(5, 30)
+									StrTemp = StrTemp + Chr(Rand(1, 100))
+								Next
+								
+								SetFont(fo\FontID[Font_Digital_Big])
+								Text(x + 97, y + 16, Rand(0, 9), True, True)
+							Else
+								SetFont(fo\FontID[Font_Digital_Big])
+								Text(x + 97, y + 16, Int(SelectedItem\State2 + 1.0), True, True)
+							EndIf
+							
+							SetFont(fo\FontID[Font_Digital])
+							If StrTemp <> "" Then
+								StrTemp = Right(Left(StrTemp, (Int(MilliSecs() / 300) Mod Len(StrTemp))), 10)
+								Text(x + 32, y + 33, StrTemp)
+							EndIf
+							SetFont(fo\FontID[Font_Default])
 						EndIf
 					EndIf
 					;[End Block]
-				Case 3 ; ~ Controls
+				Case "hazmatsuit", "hazmatsuit2", "hazmatsuit3"
 					;[Block]
-					SetFont(fo\FontID[Font_Default])
-					y = y + (50 * MenuScale)
-					
-					Color(255, 255, 255)
-					Text(x, y + (5 * MenuScale), "Mouse sensitivity:")
-					If MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20)
-						RenderOptionsTooltip(tX, tY, tW, tH, "mousesensitivity", opt\MouseSensitivity)
-					EndIf
-					
-					y = y + (40 * MenuScale)
-					
-					Color(255, 255, 255)
-					Text(x, y + (5 * MenuScale), "Invert mouse Y-axis:")
-					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-						RenderOptionsTooltip(tX, tY, tW, tH, "mouseinvert")
-					EndIf
-					
-					y = y + (40 * MenuScale)
-					
-					Color(255, 255, 255)
-					Text(x, y + (5 * MenuScale), "Mouse smoothing:")
-					If MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20)
-						RenderOptionsTooltip(tX, tY, tW, tH, "mousesmoothing", opt\MouseSmoothing)
-					EndIf
-					
-					y = y + (40 * MenuScale)
-					
-					Color(255, 255, 255)
-					Text(x, y + (5 * MenuScale), "Control configuration:")
-					
-					y = y + (30 * MenuScale)
-					
-					Text(x, y + (5 * MenuScale), "Move Forward:")
-					
-					Text(x, y + (25 * MenuScale), "Strafe Left:")
-					
-					Text(x, y + (45 * MenuScale), "Move Backward:")
-					
-					Text(x, y + (65 * MenuScale), "Strafe Right:")
-					
-					Text(x, y + (85 * MenuScale), "Sprint:")
-					
-					Text(x, y + (105 * MenuScale), "Crouch:")
-					
-					Text(x, y + (125 * MenuScale), "Manual Blink:")
-					
-					Text(x, y + (145 * MenuScale), "Inventory:")
-					
-					Text(x, y + (165 * MenuScale), "Quick Save:")
-					
-					If opt\CanOpenConsole Then Text(x, y + (185 * MenuScale), "Console:")
-					
-					Text(x, y + (205 * MenuScale), "Take Screenshot:")
-					
-					If MouseOn(x, y, 310 * MenuScale, 220 * MenuScale)
-						RenderOptionsTooltip(tX, tY, tW, tH, "controls")
+					If wi\BallisticVest = 0 Then
+						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						
+						Width = 300
+						Height = 20
+						x = mo\Viewport_Center_X - (Width / 2)
+						y = mo\Viewport_Center_Y + 80
+						
+						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					EndIf
 					;[End Block]
-				Case 4 ; ~ Advanced
+				Case "vest", "finevest"
 					;[Block]
-					SetFont(fo\FontID[Font_Default])
+					DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 					
-					y = y + (50 * MenuScale)
+					Width = 300
+					Height = 20
+					x = mo\Viewport_Center_X - (Width / 2)
+					y = mo\Viewport_Center_Y + 80
 					
-					Color(255, 255, 255)			
-					Text(x, y + (5 * MenuScale), "Show HUD:")	
-					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-						RenderOptionsTooltip(tX, tY, tW, tH, "hud")
+					RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
+					;[End Block]
+				Case "gasmask", "supergasmask", "gasmask3"
+					;[Block]
+					If (Not PreventItemOverlapping(True)) Then
+						Select SelectedItem\ItemTemplate\TempName
+							Case "gasmask"
+								;[Block]
+								If IsDoubleItem(wi\GasMask, 1, "gas masks") Then Return
+								;[End Block]
+							Case "supergasmask"
+								;[Block]
+								If IsDoubleItem(wi\GasMask, 2, "gas masks") Then Return
+								;[End Block]
+							Case "gasmask3"
+								;[Block]
+								If IsDoubleItem(wi\GasMask, 3, "gas masks") Then Return
+								;[End Block]
+						End Select
+						
+						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						
+						Width = 300
+						Height = 20
+						x = mo\Viewport_Center_X - (Width / 2)
+						y = mo\Viewport_Center_Y + 80
+						
+						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
+					EndIf
+					;[End Block]
+				Case "nav", "nav300", "nav310", "navulti"
+					;[Block]
+					If (Not SelectedItem\ItemTemplate\Img) Then
+						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
+						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
-					y = y + (30 * MenuScale)
+					x = opt\GraphicWidth - ImageWidth(SelectedItem\ItemTemplate\Img) * 0.5 + 20.0
+					y = opt\GraphicHeight - ImageHeight(SelectedItem\ItemTemplate\Img) * 0.4 - 85.0
 					
-					Color(255, 255, 255)
-					Text(x, y + (5 * MenuScale), "Enable console:")
-					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-						RenderOptionsTooltip(tX, tY, tW, tH, "consoleenable")
+					Local PlayerX%, PlayerZ%
+					
+					DrawImage(SelectedItem\ItemTemplate\Img, x - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, y - ImageHeight(SelectedItem\ItemTemplate\Img) / 2 + 85)
+					
+					SetFont(fo\FontID[Font_Digital])
+					
+					Local NavWorks% = True
+					
+					If PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor PlayerRoom\RoomTemplate\Name = "dimension1499" Then
+						NavWorks = False
+					ElseIf PlayerRoom\RoomTemplate\Name = "room860" Then
+						For e.Events = Each Events
+							If e\EventID = e_room860 Then
+								If e\EventState = 1.0 Then
+									NavWorks = False
+								EndIf
+								Exit
+							EndIf
+						Next
 					EndIf
 					
-					y = y + (30 * MenuScale)
-					
-					If opt\CanOpenConsole Then
-						Color(255, 255, 255)
-						Text(x, y + (5 * MenuScale), "Open console on error:")
-						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-							RenderOptionsTooltip(tX, tY, tW, tH, "consoleerror")
+					If (Not NavWorks) Then
+						If (MilliSecs() Mod 800) < 200 Then
+							Color(200, 0, 0)
+							Text(x, y + (NAV_HEIGHT / 2) - 80, "ERROR 06", True)
+							Text(x, y + (NAV_HEIGHT / 2) - 60, "LOCATION UNKNOWN", True)						
+						EndIf
+					Else
+						If (SelectedItem\State > 0.0 Lor (SelectedItem\ItemTemplate\TempName = "nav300" Lor SelectedItem\ItemTemplate\TempName = "navulti")) And (Rnd(CoffinDistance + 15.0) > 1.0 Lor PlayerRoom\RoomTemplate\Name <> "room895") Then
+							PlayerX = Floor((EntityX(PlayerRoom\OBJ) + 8.0) / 8.0 + 0.5)
+							PlayerZ = Floor((EntityZ(PlayerRoom\OBJ) + 8.0) / 8.0 + 0.5)
+							
+							SetBuffer(ImageBuffer(tt\ImageID[12]))
+							
+							Local xx% = x - ImageWidth(SelectedItem\ItemTemplate\Img) / 2
+							Local yy% = y - ImageHeight(SelectedItem\ItemTemplate\Img) / 2 + 85
+							
+							DrawImage(SelectedItem\ItemTemplate\Img, xx, yy)
+							
+							x = x - 12.0 + (((EntityX(me\Collider) - 4.0) + 8.0) Mod 8.0) * 3.0
+							y = y + 12.0 - (((EntityZ(me\Collider) - 4.0) + 8.0) Mod 8.0) * 3.0
+							For x2 = Max(0.0, PlayerX - 6.0) To Min(MapGridSize, PlayerX + 6.0)
+								For z2 = Max(0.0, PlayerZ - 6.0) To Min(MapGridSize, PlayerZ + 6.0)
+									If CoffinDistance > 16.0 Lor Rnd(16.0) < CoffinDistance Then 
+										If CurrGrid\Grid[x2 + (z2 * MapGridSize)] > 0 And (CurrGrid\Found[x2 + (z2 * MapGridSize)] > 0 Lor SelectedItem\ItemTemplate\TempName = "nav310" Lor SelectedItem\ItemTemplate\TempName = "navulti") Then
+											Local DrawX% = x + (PlayerX - 1 - x2) * 24 , DrawY% = y - (PlayerZ - 1 - z2) * 24
+											
+											If x2 + 1.0 =< MapGridSize Then
+												If CurrGrid\Grid[(x2 + 1) + (z2 * MapGridSize)] = 0
+													DrawImage(tt\ImageID[10], DrawX - 12, DrawY - 12)
+												EndIf
+											Else
+												DrawImage(tt\ImageID[10], DrawX - 12, DrawY - 12)
+											EndIf
+											If x2 - 1.0 >= 0.0 Then
+												If CurrGrid\Grid[(x2 - 1) + (z2 * MapGridSize)] = 0
+													DrawImage(tt\ImageID[8], DrawX - 12, DrawY - 12)
+												EndIf
+											Else
+												DrawImage(tt\ImageID[8], DrawX - 12, DrawY - 12)
+											EndIf
+											If z2 - 1.0 >= 0.0 Then
+												If CurrGrid\Grid[x2 + ((z2 - 1) * MapGridSize)] = 0
+													DrawImage(tt\ImageID[7], DrawX - 12, DrawY - 12)
+												EndIf
+											Else
+												DrawImage(tt\ImageID[7], DrawX - 12, DrawY - 12)
+											EndIf
+											If z2 + 1.0 =< MapGridSize Then
+												If CurrGrid\Grid[x2 + ((z2 + 1) * MapGridSize)] = 0
+													DrawImage(tt\ImageID[9], DrawX - 12, DrawY - 12)
+												EndIf
+											Else
+												DrawImage(tt\ImageID[9], DrawX - 12, DrawY - 12)
+											EndIf
+										EndIf
+									EndIf
+								Next
+							Next
+							
+							SetBuffer(BackBuffer())
+							DrawImageRect(tt\ImageID[12], xx + 80, yy + 70, xx + 80, yy + 70, 270, 230)
+							If SelectedItem\ItemTemplate\TempName = "nav" Lor SelectedItem\ItemTemplate\TempName = "nav300" Then
+								Color(100, 0, 0)
+							Else
+								Color(30, 30, 30)
+							EndIf
+							Rect(xx + 80, yy + 70, 270, 230, False)
+							
+							x = opt\GraphicWidth - ImageWidth(SelectedItem\ItemTemplate\Img) * 0.5 + 20.0
+							y = opt\GraphicHeight - ImageHeight(SelectedItem\ItemTemplate\Img) * 0.4 - 85.0
+							
+							If SelectedItem\ItemTemplate\TempName = "nav" Lor SelectedItem\ItemTemplate\TempName = "nav300" Then 
+								Color(100, 0, 0)
+							Else
+								Color(30, 30, 30)
+							EndIf
+							If ((MilliSecs() Mod 800) < 200) Then
+								If SelectedItem\ItemTemplate\TempName = "nav" Lor SelectedItem\ItemTemplate\TempName = "nav300" Then
+									Text(x - NAV_WIDTH / 2 + 10, y - NAV_HEIGHT / 2 + 10, "MAP DATABASE OFFLINE")
+								EndIf
+								
+								YawValue = EntityYaw(me\Collider) - 90.0
+								x1 = x + Cos(YawValue) * 6.0 : y1 = y - Sin(YawValue) * 6.0
+								x2 = x + Cos(YawValue - 140.0) * 5.0 : y2 = y - Sin(YawValue - 140.0) * 5.0				
+								x3 = x + Cos(YawValue + 140.0) * 5.0 : y3 = y - Sin(YawValue + 140.0) * 5.0
+								
+								Line(x1, y1, x2, y2)
+								Line(x1, y1, x3, y3)
+								Line(x2, y2, x3, y3)
+							EndIf
+							
+							Local SCPs_Found% = 0, Dist#
+							
+							If SelectedItem\ItemTemplate\TempName = "navulti" And (MilliSecs() Mod 600) < 400 Then
+								If Curr173 <> Null Then
+									Dist = EntityDistanceSquared(Camera, Curr173\OBJ)
+									If Dist < 900.0 Then
+										Dist = Sqr(Ceil(Dist / 8.0) * 8.0) ; ~ This is probably done to disguise SCP-173's teleporting behavior
+										Color(100, 0, 0)
+										Oval(x - (Dist * 3), y - 7 - (Dist * 3), Dist * 6, Dist * 6, False)
+										Text(x - (NAV_WIDTH / 2) + 10, y - (NAV_HEIGHT / 2) + 30, "SCP-173")
+										SCPs_Found = SCPs_Found + 1
+									EndIf
+								EndIf
+								If Curr106 <> Null Then
+									Dist = EntityDistanceSquared(Camera, Curr106\OBJ)
+									If Dist < 900.0 Then
+										Dist = Sqr(Dist)
+										Color(100, 0, 0)
+										Oval(x - (Dist * 1.5), y - 7 - (Dist * 1.5), Dist * 3, Dist * 3, False)
+										Text(x - (NAV_WIDTH / 2) + 10, y - (NAV_HEIGHT / 2) + 30 + (20 * SCPs_Found), "SCP-106")
+										SCPs_Found = SCPs_Found + 1
+									EndIf
+								EndIf
+								If Curr096 <> Null Then 
+									Dist = EntityDistanceSquared(Camera, Curr096\OBJ)
+									If Dist < 900.0 Then
+										Dist = Sqr(Dist)
+										Color(100, 0, 0)
+										Oval(x - (Dist * 1.5), y - 7 - (Dist * 1.5), Dist * 3, Dist * 3, False)
+										Text(x - (NAV_WIDTH / 2) + 10, y - (NAV_HEIGHT / 2) + 30 + (20 * SCPs_Found), "SCP-096")
+										SCPs_Found = SCPs_Found + 1
+									EndIf
+								EndIf
+								If Curr049 <> Null Then
+									If (Not Curr049\HideFromNVG) Then
+										Dist = EntityDistanceSquared(Camera, Curr049\OBJ)
+										If Dist < 900.0 Then
+											Dist = Sqr(Dist)
+											Color(100, 0, 0)
+											Oval(x - (Dist * 1.5), y - 7 - (Dist * 1.5), Dist * 3, Dist * 3, False)
+											Text(x - (NAV_WIDTH / 2) + 10, y - (NAV_HEIGHT / 2) + 30 + (20 * SCPs_Found), "SCP-049")
+											SCPs_Found = SCPs_Found + 1
+										EndIf
+									EndIf
+								EndIf
+								If PlayerRoom\RoomTemplate\Name = "room895" Then
+									If CoffinDistance < 8.0 Then
+										Dist = Rnd(4.0, 8.0)
+										Color(100, 0, 0)
+										Oval(x - (Dist * 1.5), y - 7.0 - (Dist * 1.5), Dist * 3, Dist * 3, False)
+										Text(x - (NAV_WIDTH / 2) + 10, y - (NAV_HEIGHT / 2) + 30 + (20 * SCPs_Found), "SCP-895")
+									EndIf
+								EndIf
+							EndIf
+							
+							Color(30, 30, 30)
+							If SelectedItem\ItemTemplate\TempName = "nav" Lor SelectedItem\ItemTemplate\TempName = "nav300" Then
+								Color(100, 0, 0)
+								xTemp = x - (NAV_WIDTH / 2) + 196.0
+								yTemp = y - (NAV_HEIGHT / 2) + 10.0
+								Rect(xTemp, yTemp, 80, 20, False)
+								
+								For i = 1 To Min(Ceil(SelectedItem\State / 10.0), 10.0)
+									DrawImage(tt\ImageID[11], xTemp + (i * 8) - 6, yTemp + 4)
+								Next
+								SetFont(fo\FontID[Font_Digital])
+							EndIf
 						EndIf
 					EndIf
-					
-					y = y + (30 * MenuScale)
-					
-					Color(255, 255, 255)
-					Text(x, y + (5 * MenuScale), "Achievement popups:")
-					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-						RenderOptionsTooltip(tX, tY, tW, tH, "achpopup")
+					;[End Block]
+				Case "scp1499", "super1499"
+					;[Block]
+					If (Not PreventItemOverlapping(False, False, True)) Then
+						Select SelectedItem\ItemTemplate\TempName
+							Case "gasmask"
+								;[Block]
+								If IsDoubleItem(I_1499\Using, 1, "gas masks") Then Return
+								;[End Block]
+							Case "super1499"
+								;[Block]
+								If IsDoubleItem(I_1499\Using, 2, "gas masks") Then Return
+								;[End Block]
+						End Select
+						
+						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						
+						Width = 300
+						Height = 20
+						x = mo\Viewport_Center_X - (Width / 2)
+						y = mo\Viewport_Center_Y + 80
+						
+						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
+					EndIf
+					;[End Block]
+				Case "badge"
+					;[Block]
+					If (Not SelectedItem\ItemTemplate\Img) Then
+						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
+						
+						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
-					y = y + (30 * MenuScale)
-					
-					Color(255, 255, 255)
-					Text(x, y + (5 * MenuScale), "Show FPS:")
-					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-						RenderOptionsTooltip(tX, tY, tW, tH, "showfps")
+					DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\Img) / 2)
+					;[End Block]
+				Case "oldpaper"
+					;[Block]
+					If (Not SelectedItem\ItemTemplate\Img) Then
+						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
+						SelectedItem\ItemTemplate\Img = ResizeImage2(SelectedItem\ItemTemplate\Img, ImageWidth(SelectedItem\ItemTemplate\Img) * MenuScale, ImageHeight(SelectedItem\ItemTemplate\Img) * MenuScale)
+						
+						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
-					y = y + (30 * MenuScale)
-					
-					Color(255, 255, 255)
-					Text(x, y + (5 * MenuScale), "Frame limit:")
-					Color(255, 255, 255)
-					If opt\CurrFrameLimit > 0.0 Then
-						Color(255, 255, 0)
-						Text(x, y + (45 * MenuScale), opt\FrameLimit + " FPS")
+					DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\Img) / 2)
+					;[End Block]
+				Case "helmet"
+					;[Block]
+					If (Not PreventItemOverlapping(False, False, False, True)) Then
+						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						
+						Width = 300
+						Height = 20
+						x = mo\Viewport_Center_X - (Width / 2)
+						y = mo\Viewport_Center_Y + 80
+						
+						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					EndIf
-					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-						RenderOptionsTooltip(tX, tY, tW, tH, "framelimit", opt\FrameLimit)
-					EndIf
-					If MouseOn(x + (150 * MenuScale), y + (40 * MenuScale), 114 * MenuScale, 20)
-						RenderOptionsTooltip(tX, tY, tW, tH, "framelimit", opt\FrameLimit)
+					;[End Block]
+				Case "scramble"
+					;[Block]
+					If (Not PreventItemOverlapping(False, False, False, False, True)) Then
+						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						
+						Width = 300
+						Height = 20
+						x = mo\Viewport_Center_X - (Width / 2)
+						y = mo\Viewport_Center_Y + 80
+						
+						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State3)
 					EndIf
 					;[End Block]
 			End Select
-		ElseIf AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg > 0 And me\KillTimer >= 0.0
-			; ~ Just save this line, ok?
-		Else
-			If AchievementsMenu > 0 Then
-				For i = 0 To 11
-					If i + ((AchievementsMenu - 1) * 12) < MAXACHIEVEMENTS Then
-						DrawAchvIMG(AchvXIMG, y + ((i / 4) * 120 * MenuScale), i + ((AchievementsMenu - 1) * 12))
-					Else
-						Exit
+			
+			If SelectedItem <> Null Then
+				If SelectedItem\ItemTemplate\Img <> 0 Then
+					Local IN$ = SelectedItem\ItemTemplate\TempName
+					
+					If IN = "paper" Lor IN = "badge" Lor IN = "oldpaper" Lor IN = "ticket" Then
+						For a_it.Items = Each Items
+							If a_it <> SelectedItem
+								Local IN2$ = a_it\ItemTemplate\Tempname
+								
+								If IN2 = "paper" Lor IN2 = "badge" Lor IN2 = "oldpaper" Lor IN2 = "ticket" Then
+									If a_it\ItemTemplate\Img <> 0 Then
+										If a_it\ItemTemplate\Img <> SelectedItem\ItemTemplate\Img Then
+											FreeImage(a_it\ItemTemplate\Img) : a_it\ItemTemplate\Img = 0
+										EndIf
+									EndIf
+								EndIf
+							EndIf
+						Next
 					EndIf
-				Next
-				For i = 0 To 11
-					If i + ((AchievementsMenu - 1) * 12) < MAXACHIEVEMENTS Then
-						If MouseOn(AchvXIMG + ((i Mod 4) * SeparationConst), y + ((i / 4) * 120 * MenuScale), 64 * Scale, 64 * Scale) Then
-							AchievementTooltip(i + ((AchievementsMenu - 1) * 12))
-							Exit
-						EndIf
-					Else
-						Exit
-					EndIf
-				Next
+				EndIf			
 			EndIf
-		EndIf
-		
-		y = y + (10 * MenuScale)
-		
-		If AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg =< 0 Then
-			If me\KillTimer >= 0.0 Then	
-				y = y + (297 * MenuScale)
-				If SelectedDifficulty\SaveType <> NOSAVES Then
-					y = y + (75 * MenuScale)
-				EndIf
-			Else
-				y = y + (184 * MenuScale)
-				If SelectedDifficulty\SaveType <> NOSAVES Then
-					y = y + (80 * MenuScale)
+			
+			If mo\MouseHit2 Then
+				IN = SelectedItem\ItemTemplate\TempName
+				If IN = "scp1025" Then
+					If SelectedItem\ItemTemplate\Img <> 0 Then
+						FreeImage(SelectedItem\ItemTemplate\Img) : SelectedItem\ItemTemplate\Img = 0
+					EndIf
 				EndIf
 			EndIf
-			If me\KillTimer < 0.0 Then
-				SetFont(fo\FontID[Font_Default])
-				RowText(msg\DeathMsg, x, y, 430 * MenuScale, 600 * MenuScale)
-			EndIf
-		EndIf
-		
-		RenderMenuButtons()
-		RenderMenuTicks()
-		RenderMenuInputBoxes()
-		RenderMenuSlideBars()
-		RenderMenuSliders()
-		
-		If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+		EndIf		
 	EndIf
 	
-	SetFont(fo\FontID[Font_Default])
-	
-	CatchErrors("DrawMenu")
+	CatchErrors("RenderGUI")
 End Function
 
 Function UpdateMenu()
@@ -7234,7 +6507,6 @@ Function UpdateMenu()
 			ElseIf me\StopHidingTimer < 40.0
 				If me\KillTimer >= 0.0 Then 
 					me\StopHidingTimer = me\StopHidingTimer + fps\Factor[0]
-					
 					If me\StopHidingTimer >= 40.0 Then
 						PlaySound_Strict(HorrorSFX[15])
 						CreateMsg("STOP HIDING!", 6.0)
@@ -7632,7 +6904,7 @@ Function UpdateMenu()
 				If SelectedDifficulty\SaveType <> NOSAVES Then
 					If GameSaved Then
 						If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "Load Game") Then
-							DrawLoading(0)
+							RenderLoading(0)
 							
 							MenuOpen = False
 							LoadGameQuick(SavePath + CurrSave + "\")
@@ -7657,7 +6929,7 @@ Function UpdateMenu()
 								EndIf
 							Next
 							
-							DrawLoading(100)
+							RenderLoading(100)
 							
 							me\DropSpeed = 0.0
 							
@@ -7693,7 +6965,7 @@ Function UpdateMenu()
 				If SelectedDifficulty\SaveType <> NOSAVES Then
 					If GameSaved Then
 						If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "Load Game") Then
-							DrawLoading(0)
+							RenderLoading(0)
 							
 							MenuOpen = False
 							LoadGameQuick(SavePath + CurrSave + "\")
@@ -7718,7 +6990,7 @@ Function UpdateMenu()
 								EndIf
 							Next
 							
-							DrawLoading(100)
+							RenderLoading(100)
 							
 							me\DropSpeed = 0.0
 							
@@ -7755,12 +7027,737 @@ Function UpdateMenu()
 	CatchErrors("UpdateMenu")
 End Function
 
-Const MaterialsFile$ = "Data\materials.ini"
+Function RenderMenu()
+	CatchErrors("Uncaught (RenderMenu)")
+	
+	Local x%, y%, Width%, Height%, i%
+	
+	If (Not InFocus()) Then ; ~ Game is out of focus then pause the game
+		MenuOpen = True
+		PauseSounds()
+		Delay(1000) ; ~ Reduce the CPU take while game is not in focus
+	EndIf
+	If MenuOpen Then
+		Width = ImageWidth(tt\ImageID[0])
+		Height = ImageHeight(tt\ImageID[0])
+		x = mo\Viewport_Center_X - (Width / 2)
+		y = mo\Viewport_Center_Y - (Height / 2)
+		
+		DrawImage(tt\ImageID[0], x, y)
+		
+		Color(255, 255, 255)
+		
+		x = x + (132 * MenuScale)
+		y = y + (122 * MenuScale)
+		
+		If AchievementsMenu > 0 Then
+			SetFont(fo\FontID[Font_Default_Big])
+			Text(x, y - (77 * MenuScale), "ACHIEVEMENTS", False, True)
+			SetFont(fo\FontID[Font_Default])
+		ElseIf OptionsMenu > 0 Then
+			SetFont(fo\FontID[Font_Default_Big])
+			Text(x, y - (77 * MenuScale), "OPTIONS", False, True)
+			SetFont(fo\FontID[Font_Default])
+		ElseIf QuitMsg > 0 Then
+			SetFont(fo\FontID[Font_Default_Big])
+			Text(x, y - (77 * MenuScale), "QUIT?", False, True)
+			SetFont(fo\FontID[Font_Default])
+		ElseIf me\KillTimer >= 0.0 Then
+			SetFont(fo\FontID[Font_Default_Big])
+			Text(x, y - (77 * MenuScale), "PAUSED", False, True)
+			SetFont(fo\FontID[Font_Default])
+		Else
+			SetFont(fo\FontID[Font_Default_Big])
+			Text(x, y - (77 * MenuScale), "YOU DIED", False, True)
+			SetFont(fo\FontID[Font_Default])
+		EndIf		
+		
+		Local AchvXIMG% = x + (22.0 * MenuScale)
+		Local Scale# = opt\GraphicHeight / 768.0
+		Local SeparationConst% = 76.0 * Scale
+		
+		If AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg =< 0
+			SetFont(fo\FontID[Font_Default])
+			Text(x, y, "Difficulty: " + SelectedDifficulty\Name)
+			Text(x, y + (20 * MenuScale), "Save: " + CurrSave)
+			Text(x, y + (40 * MenuScale), "Map seed: " + RandomSeed)
+		ElseIf AchievementsMenu =< 0 And OptionsMenu > 0 And QuitMsg =< 0 And me\KillTimer >= 0.0
+			Color(0, 255, 0)
+			If OptionsMenu = 1
+				Rect(x - (10 * MenuScale), y - (5 * MenuScale), 110 * MenuScale, 40 * MenuScale, True)
+			ElseIf OptionsMenu = 2
+				Rect(x + (100 * MenuScale), y - (5 * MenuScale), 110 * MenuScale, 40 * MenuScale, True)
+			ElseIf OptionsMenu = 3
+				Rect(x + (210 * MenuScale), y - (5 * MenuScale), 110 * MenuScale, 40 * MenuScale, True)
+			ElseIf OptionsMenu = 4
+				Rect(x + (320 * MenuScale), y - (5 * MenuScale), 110 * MenuScale, 40 * MenuScale, True)
+			EndIf
+			
+			Local tX# = mo\Viewport_Center_X + (Width / 2)
+			Local tY# = y
+			Local tW# = 400.0 * MenuScale
+			Local tH# = 150.0 * MenuScale
+			
+			Color(255, 255, 255)
+			Select OptionsMenu
+				Case 1 ; ~ Graphics
+					;[Block]
+					SetFont(fo\FontID[Font_Default])
+					
+					y = y + (50 * MenuScale)
+					
+					Color(100, 100, 100)
+					Text(x, y + (5 * MenuScale), "Enable bump mapping:")	
+					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
+						RenderOptionsTooltip(tX, tY, tW, tH, "bump")
+					EndIf
+					
+					y = y + (30 * MenuScale)
+					
+					Color(255, 255, 255)
+					Text(x, y + (5 * MenuScale), "VSync:")
+					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
+						RenderOptionsTooltip(tX, tY, tW, tH, "vsync")
+					EndIf
+					
+					y = y + (30 * MenuScale)
+					
+					Color(255 - (155 * (opt\DisplayMode <> 0)), 255 - (155 * (opt\DisplayMode <> 0)), 255 - (155 * (opt\DisplayMode <> 0)))
+					Text(x, y + (5 * MenuScale), "Anti-aliasing:")
+					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
+						RenderOptionsTooltip(tX, tY, tW, tH, "antialias")
+					EndIf
+					
+					y = y + (30 * MenuScale)
+					
+					Color(255, 255, 255)
+					Text(x, y + (5 * MenuScale), "Enable room lights:")
+					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
+						RenderOptionsTooltip(tX, tY, tW, tH, "roomlights")
+					EndIf
+					
+					y = y + (40 * MenuScale)
+					
+					Color(255, 255, 255)
+					Text(x, y + (5 * MenuScale), "Screen gamma:")
+					If MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20) And OnSliderID = 0
+						RenderOptionsTooltip(tX, tY, tW, tH, "gamma", opt\ScreenGamma)
+					EndIf
+					
+					y = y + (45 * MenuScale)
+					
+					Color(255, 255, 255)
+					Text(x, y, "Particle amount:")
+					If (MouseOn(x + (270 * MenuScale), y - (9 * MenuScale), 114 * MenuScale, 20) And OnSliderID = 0) Lor OnSliderID = 2
+						RenderOptionsTooltip(tX, tY, tW, tH, "particleamount", opt\ParticleAmount)
+					EndIf
+					
+					y = y + (45 * MenuScale)
+					
+					Color(255, 255, 255)
+					Text(x, y, "Texture LOD Bias:")
+					If (MouseOn(x + (270 * MenuScale), y - (9 * MenuScale), 114 * MenuScale, 20) And OnSliderID = 0) Lor OnSliderID = 3
+						RenderOptionsTooltip(tX, tY, tW, tH + 100 * MenuScale, "texquality")
+					EndIf
+					
+					y = y + (35 * MenuScale)
+					
+					Color(100, 100, 100)
+					Text(x, y + (5 * MenuScale), "Save textures in the VRAM:")	
+					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
+						RenderOptionsTooltip(tX, tY, tW, tH, "vram")
+					EndIf
+					
+					y = y + (40 * MenuScale)
+					
+					Color(255, 255, 255)
+					Text(x, y + (5 * MenuScale), "Field of view:")
+					Color(255, 255, 0)
+					If MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20) And OnSliderID = 0
+						RenderOptionsTooltip(tX, tY, tW, tH, "fov")
+					EndIf
+					
+					y = y + (45 * MenuScale)
+					
+					Color(255, 255, 255)
+					Text(x, y, "Anisotropic filtering:")
+					If (MouseOn(x + (270 * MenuScale), y - (9 * MenuScale), 114 * MenuScale, 20) And OnSliderID = 0) Lor OnSliderID = 4
+						RenderOptionsTooltip(tX, tY, tW, tH, "anisotropic")
+					EndIf
+					;[End Block]
+				Case 2 ; ~ Audio
+					;[Block]
+					SetFont(fo\FontID[Font_Default])
+					
+					y = y + (50 * MenuScale)
+					
+					Color(255, 255, 255)
+					Text(x, y + (5 * MenuScale), "Music volume:")
+					If MouseOn(x + (250 * MenuScale), y, 114 * MenuScale, 20)
+						RenderOptionsTooltip(tX, tY, tW, tH, "musicvol", opt\MusicVolume)
+					EndIf
+					
+					y = y + (40 * MenuScale)
+					
+					Color(255, 255, 255)
+					Text(x, y + (5 * MenuScale), "Sound volume:")
+					If MouseOn(x + (250 * MenuScale), y, 114 * MenuScale, 20)
+						RenderOptionsTooltip(tX, tY, tW, tH, "soundvol", opt\PrevSFXVolume)
+					EndIf
+					
+					y = y + (40 * MenuScale)
+					
+					Color(100, 100, 100)
+					Text(x, y + (5 * MenuScale), "Sound auto-release:")
+					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
+						RenderOptionsTooltip(tX, tY, tW, tH + 220 * MenuScale, "sfxautorelease")
+					EndIf
+					
+					y = y + (30 * MenuScale)
+					
+					Color(100, 100, 100)
+					Text(x, y + (5 * MenuScale), "Enable user tracks:")
+					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
+						RenderOptionsTooltip(tX, tY, tW, tH, "usertrack")
+					EndIf
+					
+					If opt\EnableUserTracks Then
+						y = y + (30 * MenuScale)
+						
+						Color(255, 255, 255)
+						Text(x, y + (5 * MenuScale), "User track mode:")
+						If opt\UserTrackMode Then
+							Text(x + (310 * MenuScale), y + 5 * MenuScale, "Repeat")
+						Else
+							Text(x + (310 * MenuScale), y + 5 * MenuScale, "Random")
+						EndIf
+						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
+							RenderOptionsTooltip(tX, tY, tW, tH, "usertrackmode")
+						EndIf
+						If MouseOn(x + (270 * MenuScale), y + 30 * MenuScale, 190 * MenuScale, 30 * MenuScale)
+							RenderOptionsTooltip(tX, tY, tW, tH, "usertrackscan")
+						EndIf
+					EndIf
+					;[End Block]
+				Case 3 ; ~ Controls
+					;[Block]
+					SetFont(fo\FontID[Font_Default])
+					y = y + (50 * MenuScale)
+					
+					Color(255, 255, 255)
+					Text(x, y + (5 * MenuScale), "Mouse sensitivity:")
+					If MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20)
+						RenderOptionsTooltip(tX, tY, tW, tH, "mousesensitivity", opt\MouseSensitivity)
+					EndIf
+					
+					y = y + (40 * MenuScale)
+					
+					Color(255, 255, 255)
+					Text(x, y + (5 * MenuScale), "Invert mouse Y-axis:")
+					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
+						RenderOptionsTooltip(tX, tY, tW, tH, "mouseinvert")
+					EndIf
+					
+					y = y + (40 * MenuScale)
+					
+					Color(255, 255, 255)
+					Text(x, y + (5 * MenuScale), "Mouse smoothing:")
+					If MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20)
+						RenderOptionsTooltip(tX, tY, tW, tH, "mousesmoothing", opt\MouseSmoothing)
+					EndIf
+					
+					y = y + (40 * MenuScale)
+					
+					Color(255, 255, 255)
+					Text(x, y + (5 * MenuScale), "Control configuration:")
+					
+					y = y + (30 * MenuScale)
+					
+					Text(x, y + (5 * MenuScale), "Move Forward:")
+					
+					Text(x, y + (25 * MenuScale), "Strafe Left:")
+					
+					Text(x, y + (45 * MenuScale), "Move Backward:")
+					
+					Text(x, y + (65 * MenuScale), "Strafe Right:")
+					
+					Text(x, y + (85 * MenuScale), "Sprint:")
+					
+					Text(x, y + (105 * MenuScale), "Crouch:")
+					
+					Text(x, y + (125 * MenuScale), "Manual Blink:")
+					
+					Text(x, y + (145 * MenuScale), "Inventory:")
+					
+					Text(x, y + (165 * MenuScale), "Quick Save:")
+					
+					If opt\CanOpenConsole Then Text(x, y + (185 * MenuScale), "Console:")
+					
+					Text(x, y + (205 * MenuScale), "Take Screenshot:")
+					
+					If MouseOn(x, y, 310 * MenuScale, 220 * MenuScale)
+						RenderOptionsTooltip(tX, tY, tW, tH, "controls")
+					EndIf
+					;[End Block]
+				Case 4 ; ~ Advanced
+					;[Block]
+					SetFont(fo\FontID[Font_Default])
+					
+					y = y + (50 * MenuScale)
+					
+					Color(255, 255, 255)			
+					Text(x, y + (5 * MenuScale), "Show HUD:")	
+					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
+						RenderOptionsTooltip(tX, tY, tW, tH, "hud")
+					EndIf
+					
+					y = y + (30 * MenuScale)
+					
+					Color(255, 255, 255)
+					Text(x, y + (5 * MenuScale), "Enable console:")
+					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
+						RenderOptionsTooltip(tX, tY, tW, tH, "consoleenable")
+					EndIf
+					
+					y = y + (30 * MenuScale)
+					
+					If opt\CanOpenConsole Then
+						Color(255, 255, 255)
+						Text(x, y + (5 * MenuScale), "Open console on error:")
+						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
+							RenderOptionsTooltip(tX, tY, tW, tH, "consoleerror")
+						EndIf
+					EndIf
+					
+					y = y + (30 * MenuScale)
+					
+					Color(255, 255, 255)
+					Text(x, y + (5 * MenuScale), "Achievement popups:")
+					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
+						RenderOptionsTooltip(tX, tY, tW, tH, "achpopup")
+					EndIf
+					
+					y = y + (30 * MenuScale)
+					
+					Color(255, 255, 255)
+					Text(x, y + (5 * MenuScale), "Show FPS:")
+					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
+						RenderOptionsTooltip(tX, tY, tW, tH, "showfps")
+					EndIf
+					
+					y = y + (30 * MenuScale)
+					
+					Color(255, 255, 255)
+					Text(x, y + (5 * MenuScale), "Frame limit:")
+					Color(255, 255, 255)
+					If opt\CurrFrameLimit > 0.0 Then
+						Color(255, 255, 0)
+						Text(x, y + (45 * MenuScale), opt\FrameLimit + " FPS")
+					EndIf
+					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
+						RenderOptionsTooltip(tX, tY, tW, tH, "framelimit", opt\FrameLimit)
+					EndIf
+					If MouseOn(x + (150 * MenuScale), y + (40 * MenuScale), 114 * MenuScale, 20)
+						RenderOptionsTooltip(tX, tY, tW, tH, "framelimit", opt\FrameLimit)
+					EndIf
+					;[End Block]
+			End Select
+		ElseIf AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg > 0 And me\KillTimer >= 0.0
+			; ~ Just save this line, ok?
+		Else
+			If AchievementsMenu > 0 Then
+				For i = 0 To 11
+					If i + ((AchievementsMenu - 1) * 12) < MAXACHIEVEMENTS Then
+						DrawAchvIMG(AchvXIMG, y + ((i / 4) * 120 * MenuScale), i + ((AchievementsMenu - 1) * 12))
+					Else
+						Exit
+					EndIf
+				Next
+				For i = 0 To 11
+					If i + ((AchievementsMenu - 1) * 12) < MAXACHIEVEMENTS Then
+						If MouseOn(AchvXIMG + ((i Mod 4) * SeparationConst), y + ((i / 4) * 120 * MenuScale), 64 * Scale, 64 * Scale) Then
+							AchievementTooltip(i + ((AchievementsMenu - 1) * 12))
+							Exit
+						EndIf
+					Else
+						Exit
+					EndIf
+				Next
+			EndIf
+		EndIf
+		
+		y = y + (10 * MenuScale)
+		
+		If AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg =< 0 Then
+			If me\KillTimer >= 0.0 Then	
+				y = y + (297 * MenuScale)
+				If SelectedDifficulty\SaveType <> NOSAVES Then
+					y = y + (75 * MenuScale)
+				EndIf
+			Else
+				y = y + (184 * MenuScale)
+				If SelectedDifficulty\SaveType <> NOSAVES Then
+					y = y + (80 * MenuScale)
+				EndIf
+			EndIf
+			If me\KillTimer < 0.0 Then
+				SetFont(fo\FontID[Font_Default])
+				RowText(msg\DeathMsg, x, y, 430 * MenuScale, 600 * MenuScale)
+			EndIf
+		EndIf
+		
+		RenderMenuButtons()
+		RenderMenuTicks()
+		RenderMenuInputBoxes()
+		RenderMenuSlideBars()
+		RenderMenuSliders()
+		
+		If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+	EndIf
+	
+	SetFont(fo\FontID[Font_Default])
+	
+	CatchErrors("RenderMenu")
+End Function
+
+; ~ Ending IDs Constants
+;[Block]
+Const Ending_A1% = 0
+Const Ending_A2% = 1
+Const Ending_B1% = 2
+Const Ending_B2% = 3
+;[End Block]
+
+Function UpdateEnding()
+	Local x%, y%, Width%, Height%, i%
+	
+	fps\Factor[0] = 0.0
+	If me\EndingTimer > -2000.0 Then
+		me\EndingTimer = Max(me\EndingTimer - fps\Factor[1], -1111.0)
+	Else
+		me\EndingTimer = me\EndingTimer - fps\Factor[1]
+	EndIf
+	
+	GiveAchievement(Achv055)
+	If (Not UsedConsole) Lor opt\DebugMode Then
+		GiveAchievement(AchvConsole)
+		UnlockDifficulties()
+	EndIf
+	
+	ShouldPlay = 66
+	
+	If me\EndingTimer < -200.0 Then
+		If BreathCHN <> 0 Then
+			If ChannelPlaying(BreathCHN) Then StopChannel(BreathCHN) : me\Stamina = 100.0
+		EndIf
+		
+		If BreathGasRelaxedCHN <> 0 Then
+			If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN)
+		EndIf
+		
+		If (Not me\EndingScreen) Then
+			me\EndingScreen = LoadImage_Strict("GFX\menu\ending_screen.png")
+			
+			ShouldPlay = 23
+			opt\CurrMusicVolume = opt\MusicVolume
+			StopStream_Strict(MusicCHN)
+			MusicCHN = StreamSound_Strict("SFX\Music\" + Music[23] + ".ogg", opt\CurrMusicVolume, 0)
+			NowPlaying = ShouldPlay
+			
+			PlaySound_Strict(LightSFX)
+		EndIf
+		
+		If me\EndingTimer > -700.0 Then 
+			If me\EndingTimer + fps\Factor[1] > -450.0 And me\EndingTimer =< -450.0 Then
+				PlaySound_Strict(LoadTempSound("SFX\Ending\Ending" + (me\SelectedEnding + 1) + ".ogg"))
+			EndIf			
+		Else
+			If me\EndingTimer < -1000.0 And me\EndingTimer > -2000.0 Then
+				Width = ImageWidth(tt\ImageID[0])
+				Height = ImageHeight(tt\ImageID[0])
+				x = mo\Viewport_Center_X - (Width / 2)
+				y = mo\Viewport_Center_Y - (Height / 2)
+				
+				If AchievementsMenu = 0 Then 
+					x = x + (132 * MenuScale)
+					y = y + (122 * MenuScale)
+					
+					x = mo\Viewport_Center_X - (Width / 2)
+					y = mo\Viewport_Center_Y - (Height / 2)
+					x = x + (Width / 2)
+					y = y + Height - (100 * MenuScale)
+					
+					If UpdateMainMenuButton(x - (170 * MenuScale), y - (200 * MenuScale), 430 * MenuScale, 60 * MenuScale, "ACHIEVEMENTS", True) Then
+						AchievementsMenu = 1
+						mm\ShouldDeleteGadgets = True
+					EndIf
+					
+					If UpdateMainMenuButton(x - (170 * MenuScale), y - (100 * MenuScale), 430 * MenuScale, 60 * MenuScale, "MAIN MENU", True)
+						ShouldPlay = 24
+						NowPlaying = ShouldPlay
+						For i = 0 To 9
+							If TempSounds[i] <> 0 Then FreeSound_Strict(TempSounds[i]) : TempSounds[i] = 0
+						Next
+						StopStream_Strict(MusicCHN)
+						MusicCHN = StreamSound_Strict("SFX\Music\" + Music[NowPlaying] + ".ogg", 0.0, Mode)
+						SetStreamVolume_Strict(MusicCHN, 1.0 * opt\MusicVolume)
+						me\EndingTimer = -2000.0
+						mm\ShouldDeleteGadgets = True
+						ResetInput()
+						InitCredits()
+					EndIf
+				Else
+					ShouldPlay = 23
+					UpdateMenu()
+				EndIf
+			; ~ Credits
+			ElseIf me\EndingTimer =< -2000.0
+				ShouldPlay = 24
+				UpdateCredits()
+			EndIf
+		EndIf
+	EndIf
+End Function
+
+Function RenderEnding()
+	ShowPointer()
+	
+	Local itt.ItemTemplates, r.Rooms
+	Local x%, y%, Width%, Height%, i%
+	
+	Select me\SelectedEnding
+		Case Ending_A1, Ending_B2
+			;[Block]
+			ClsColor(Max(255.0 + (me\EndingTimer) * 2.8, 0.0), Max(255.0 + (me\EndingTimer) * 2.8, 0.0), Max(255.0 + (me\EndingTimer) * 2.8, 0.0))
+			;[End Block]
+		Default
+			;[Block]
+			ClsColor(0, 0, 0)
+			;[End Block]
+	End Select
+	
+	Cls()
+	
+	If me\EndingTimer < -200.0 Then
+		If me\EndingTimer > -700.0 Then 
+			If Rand(1, 150) < Min((Abs(me\EndingTimer) - 200.0), 155.0) Then
+				DrawImage(me\EndingScreen, mo\Viewport_Center_X - 400, mo\Viewport_Center_Y - 400)
+			Else
+				Color(0, 0, 0)
+				Rect(100, 100, opt\GraphicWidth - 200, opt\GraphicHeight - 200)
+				Color(255, 255, 255)
+			EndIf
+		Else
+			DrawImage(me\EndingScreen, mo\Viewport_Center_X - 400, mo\Viewport_Center_Y - 400)
+			
+			If me\EndingTimer < -1000.0 And me\EndingTimer > -2000.0 Then
+				Width = ImageWidth(tt\ImageID[0])
+				Height = ImageHeight(tt\ImageID[0])
+				x = mo\Viewport_Center_X - (Width / 2)
+				y = mo\Viewport_Center_Y - (Height / 2)
+				
+				DrawImage(tt\ImageID[0], x, y)
+				
+				Color(255, 255, 255)
+				SetFont(fo\FontID[Font_Default_Big])
+				Text(x + (Width / 2) + (40 * MenuScale), y + (20 * MenuScale), "THE END", True)
+				SetFont(fo\FontID[Font_Default])
+				
+				If AchievementsMenu = 0 Then 
+					x = x + (132 * MenuScale)
+					y = y + (122 * MenuScale)
+					
+					Local RoomAmount% = 0, RoomsFound% = 0
+					
+					For r.Rooms = Each Rooms
+						RoomAmount = RoomAmount + 1
+						RoomsFound = RoomsFound + r\Found
+					Next
+					
+					Local DocAmount% = 0, DocsFound% = 0
+					
+					For itt.ItemTemplates = Each ItemTemplates
+						If itt\TempName = "paper" Then
+							DocAmount = DocAmount + 1
+							DocsFound = DocsFound + itt\Found
+						EndIf
+					Next
+					
+					Local SCPsEncountered% = 1
+					
+					For i = 0 To 30
+						SCPsEncountered = SCPsEncountered + Achievements[i]
+					Next
+					
+					Local AchievementsUnlocked% = 0
+					
+					For i = 0 To MAXACHIEVEMENTS - 1
+						AchievementsUnlocked = AchievementsUnlocked + Achievements[i]
+					Next
+					
+					Text(x, y, "SCPs encountered: " + SCPsEncountered)
+					Text(x, y + (20 * MenuScale), "Achievements unlocked: " + AchievementsUnlocked + "/" + (MAXACHIEVEMENTS))
+					Text(x, y + (40 * MenuScale), "Rooms found: " + RoomsFound + "/" + RoomAmount)
+					Text(x, y + (60 * MenuScale), "Documents discovered: " + DocsFound + "/" + DocAmount)
+					Text(x, y + (80 * MenuScale), "Items refined in SCP-914: " + me\RefinedItems)
+				Else
+					RenderMenu()
+				EndIf
+			; ~ Credits
+			ElseIf me\EndingTimer =< -2000.0
+				RenderCredits()
+			EndIf
+		EndIf
+	EndIf
+	
+	RenderMenuButtons()
+	
+	If opt\DisplayMode = 0 Then DrawImage(CursorIMG), ScaledMouseX(), ScaledMouseY()
+	
+	SetFont(fo\FontID[Font_Default])
+End Function
+
+Type CreditsLine
+	Field Txt$
+	Field ID%
+	Field Stay%
+End Type
+
+Function InitCredits()
+	Local cl.CreditsLine
+	Local File% = OpenFile("Credits.txt")
+	Local l$
+	
+	fo\FontID[Font_Credits] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 21)
+	fo\FontID[Font_Credits_Big] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 35)
+	
+	If (Not me\CreditsScreen) Then me\CreditsScreen = LoadImage_Strict("GFX\menu\credits_screen.png")
+	
+	Repeat
+		l = ReadLine(File)
+		cl.CreditsLine = New CreditsLine
+		cl\Txt = l
+	Until Eof(File)
+	
+	Delete First CreditsLine
+	me\CreditsTimer = 0.0
+End Function
+
+Function UpdateCredits()
+	Local cl.CreditsLine, LastCreditLine.CreditsLine
+	Local Credits_Y# = (me\EndingTimer + 2000.0) / 2 + (opt\GraphicHeight + 10.0)
+	Local ID%
+	Local EndLinesAmount%
+	
+	ID = 0
+	EndLinesAmount = 0
+	LastCreditLine = Null
+	For cl.CreditsLine = Each CreditsLine
+		cl\ID = ID
+		If Left(cl\Txt, 1) = "/" Then LastCreditLine = Before(cl)
+		If LastCreditLine <> Null Then
+			If cl\ID > LastCreditLine\ID Then cl\Stay = True
+		EndIf
+		If cl\Stay Then EndLinesAmount = EndLinesAmount + 1
+		ID = ID + 1
+	Next
+	If (Credits_Y + (24 * LastCreditLine\ID * MenuScale)) < -StringHeight(LastCreditLine\Txt)
+		me\CreditsTimer = me\CreditsTimer + (0.5 * fps\Factor[1])
+		If me\CreditsTimer >= 0.0 And me\CreditsTimer < 255.0
+			; ~ Just save this line, ok?
+		ElseIf me\CreditsTimer >= 255.0
+			If me\CreditsTimer > 500.0 Then me\CreditsTimer = -255.0
+		Else
+			If me\CreditsTimer >= -1.0 Then me\CreditsTimer = -1.0
+		EndIf
+	EndIf
+	
+	If GetKey() Then me\CreditsTimer = -1.0
+	
+	If me\CreditsTimer = -1.0 Then
+		Delete Each CreditsLine
+		NullGame(False)
+		StopStream_Strict(MusicCHN)
+		ShouldPlay = 21
+		CurrSave = ""
+		FlushKeys()
+	EndIf
+End Function
+
+Function RenderCredits()
+	Local cl.CreditsLine, LastCreditLine.CreditsLine
+	Local Credits_Y# = (me\EndingTimer + 2000.0) / 2 + (opt\GraphicHeight + 10.0)
+	Local ID%
+	Local EndLinesAmount%
+	
+	Cls()
+	
+	If Rand(1, 300) > 1 Then
+		DrawImage(me\CreditsScreen, mo\Viewport_Center_X - 400, mo\Viewport_Center_Y - 400)
+	EndIf
+	
+	ID = 0
+	EndLinesAmount = 0
+	LastCreditLine = Null
+	Color(255, 255, 255)
+	For cl.CreditsLine = Each CreditsLine
+		cl\ID = ID
+		If Left(cl\Txt, 1) = "*"
+			SetFont(fo\FontID[Font_Credits_Big])
+			If (Not cl\Stay) Then Text(mo\Viewport_Center_X, Credits_Y + (24 * cl\ID * MenuScale), Right(cl\Txt, Len(cl\Txt) - 1), True)
+		ElseIf Left(cl\Txt, 1) = "/"
+			LastCreditLine = Before(cl)
+		Else
+			SetFont(fo\FontID[Font_Credits])
+			If (Not cl\Stay) Then Text(mo\Viewport_Center_X, Credits_Y + (24 * cl\ID * MenuScale), cl\Txt, True)
+		EndIf
+		If LastCreditLine <> Null Then
+			If cl\ID > LastCreditLine\ID Then cl\Stay = True
+		EndIf
+		If cl\Stay Then EndLinesAmount = EndLinesAmount + 1
+		ID = ID + 1
+	Next
+	If (Credits_Y + (24 * LastCreditLine\ID * MenuScale)) < -StringHeight(LastCreditLine\Txt)
+		If me\CreditsTimer >= 0.0 And me\CreditsTimer < 255.0
+			Color(Max(Min(me\CreditsTimer, 255.0), 0.0), Max(Min(me\CreditsTimer, 255.0), 0.0), Max(Min(me\CreditsTimer, 255.0), 0.0))
+		ElseIf me\CreditsTimer >= 255.0
+			Color(255, 255, 255)
+		Else
+			Color(Max(Min(-me\CreditsTimer, 255.0), 0.0), Max(Min(-me\CreditsTimer, 255.0), 0.0), Max(Min(-me\CreditsTimer, 255.0), 0.0))
+		EndIf
+	EndIf
+	If me\CreditsTimer <> 0.0
+		For cl.CreditsLine = Each CreditsLine
+			If cl\Stay Then
+				SetFont(fo\FontID[Font_Credits])
+				If Left(cl\Txt, 1) = "/" Then
+					Text(mo\Viewport_Center_X, mo\Viewport_Center_Y + (EndLinesAmount / 2) + (24 * cl\ID * MenuScale), Right(cl\Txt, Len(cl\Txt) - 1), True)
+				Else
+					Text(mo\Viewport_Center_X, mo\Viewport_Center_Y + (24 * (cl\ID - LastCreditLine\ID) * MenuScale) - ((EndLinesAmount / 2) * 24 * MenuScale), cl\Txt, True)
+				EndIf
+			EndIf
+		Next
+	EndIf
+	
+	SetFont(fo\FontID[Font_Default])
+	Text(20 * MenuScale, opt\GraphicHeight - (30 * MenuScale), "PRESS ANY KEY TO SKIP")
+	
+	If me\CreditsTimer = -1.0 Then
+		FreeFont(fo\FontID[Font_Credits])
+		FreeFont(fo\FontID[Font_Credits_Big])
+		If me\CreditsScreen <> 0 Then
+			FreeImage(me\CreditsScreen) : me\CreditsScreen = 0
+		EndIf
+		If me\EndingScreen <> 0 Then
+			FreeImage(me\EndingScreen) : me\EndingScreen = 0
+		EndIf
+	EndIf
+End Function
 
 Function LoadEntities()
 	CatchErrors("Uncaught (LoadEntities)")
 	
-	DrawLoading(0)
+	RenderLoading(0)
 	
 	Local i%, Tex%
 	Local b%, t1%, SF%
@@ -7906,7 +7903,7 @@ Function LoadEntities()
 		HideEntity(tt\OverlayID[i])
 	Next
 	
-	DrawLoading(5)
+	RenderLoading(5)
 	
 	tt\OverlayTextureID[5] = CreateTextureUsingCacheSystem(1024, 1024, 1 + 2) ; ~ DARK
 	SetBuffer(TextureBuffer(tt\OverlayTextureID[5]))
@@ -8120,7 +8117,7 @@ Function LoadEntities()
 	Next
 	tt\LightSpriteID[2] = LoadTexture_Strict("GFX\light_sprite.png", 1, DeleteAllTextures)
 	
-	DrawLoading(15)
+	RenderLoading(15)
 	
 	For i = 0 To 6
 		tt\MiscTextureID[i] = LoadTexture_Strict("GFX\scp_079_overlay(" + (i + 1) + ").png", 1, DeleteAllTextures)
@@ -8141,7 +8138,7 @@ Function LoadEntities()
 	
 	tt\MiscTextureID[20] = LoadTexture_Strict("GFX\fog_night_vision_goggles.png", 1, DeleteAllTextures) ; ~ FOG IN NIGHT VISION GOGGLES
 	
-	DrawLoading(20)
+	RenderLoading(20)
 	
 	For i = 0 To 7
 		tt\DecalTextureID[i] = LoadTexture_Strict("GFX\decal(" + (i + 1) + ").png", 1 + 2, DeleteAllTextures)
@@ -8163,7 +8160,7 @@ Function LoadEntities()
 	
 	tt\DecalTextureID[19] = LoadTexture_Strict("GFX\decal_scp_409.png", 1 + 2, DeleteAllTextures)
 	
-	DrawLoading(25)
+	RenderLoading(25)
 	
 	; ~ [CAMS]
 	
@@ -8368,7 +8365,7 @@ Function LoadEntities()
 	TextureLodBias(opt\TextureDetailsLevel)
 	TextureAnisotropic(opt\AnisotropicLevel)
 	
-	DrawLoading(30)
+	RenderLoading(30)
 	
 	CatchErrors("LoadEntities")
 End Function
@@ -8394,7 +8391,7 @@ Function InitNewGame()
 	
 	InitStats()
 	
-	DrawLoading(45)
+	RenderLoading(45)
 	
 	HideDistance = 15.0
 	
@@ -8417,7 +8414,7 @@ Function InitNewGame()
 	EndIf
 	InitWayPoints()
 	
-	DrawLoading(79)
+	RenderLoading(79)
 	
 	Curr173 = CreateNPC(NPCType173, 0.0, -30.0, 0.0)
 	Curr106 = CreateNPC(NPCType106, 0.0, -30.0, 0.0)
@@ -8442,7 +8439,7 @@ Function InitNewGame()
 		EntityParent(it\Collider, 0)
 	Next
 	
-	DrawLoading(80)
+	RenderLoading(80)
 	For sc.SecurityCams = Each SecurityCams
 		sc\Angle = EntityYaw(sc\OBJ) + sc\Angle
 		EntityParent(sc\OBJ, 0)
@@ -8528,12 +8525,12 @@ Function InitNewGame()
 		UpdateNPCs()
 		UpdateWorld()
 		If (Int(Float(i) * 0.27) <> Int(Float(i - 1) * 0.27)) Then
-			DrawLoading(80 + Int(Float(i) * 0.27))
+			RenderLoading(80 + Int(Float(i) * 0.27))
 		EndIf
 	Next
 	
 	DeleteTextureEntriesFromCache(DeleteMapTextures)
-	DrawLoading(100)
+	RenderLoading(100)
 	
 	ResetInput()
 	
@@ -8550,7 +8547,7 @@ Function InitLoadGame()
 	
 	InitStats()
 	
-	DrawLoading(80)
+	RenderLoading(80)
 	
 	InitWayPoints()
 	
@@ -8569,7 +8566,7 @@ Function InitLoadGame()
 	
 	ResetEntity(me\Collider)
 	
-	DrawLoading(90)
+	RenderLoading(90)
 	
 	MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 	
@@ -8585,7 +8582,7 @@ Function InitLoadGame()
 		; ~ Loading the necessary stuff for dimension1499, but this will only be done if the player is in this dimension already
 		If e\EventID = e_dimension1499
 			If e\EventState = 2.0 Then
-				DrawLoading(91)
+				RenderLoading(91)
 				e\room\Objects[0] = CreatePlane()
 				
 				Local PlaneTex% = LoadTexture_Strict("GFX\map\dimension1499\grit3.jpg")
@@ -8594,16 +8591,16 @@ Function InitLoadGame()
 				DeleteSingleTextureEntryFromCache(PlaneTex)
 				PositionEntity(e\room\Objects[0], 0.0, EntityY(e\room\OBJ), 0.0)
 				EntityType(e\room\Objects[0], HIT_MAP)
-				DrawLoading(92)
+				RenderLoading(92)
 				I_1499\Sky = CreateSky("GFX\map\sky\1499sky")
-				DrawLoading(93)
+				RenderLoading(93)
 				For i = 1 To 15
 					e\room\Objects[i] = LoadMesh_Strict("GFX\map\dimension1499\1499object" + i + ".b3d")
 					HideEntity(e\room\Objects[i])
 				Next
-				DrawLoading(96)
+				RenderLoading(96)
 				CreateChunkParts(e\room)
-				DrawLoading(97)
+				RenderLoading(97)
 				x = EntityX(e\room\OBJ)
 				z = EntityZ(e\room\OBJ)
 				
@@ -8612,7 +8609,7 @@ Function InitLoadGame()
 				For i = -2 To 2 Step 2
 					ch = CreateChunk(-1, x * (i * 2.5), EntityY(e\room\OBJ), z)
 				Next
-				DrawLoading(98)
+				RenderLoading(98)
 				UpdateChunks(e\room, 15, False)
 				Exit
 			EndIf
@@ -8621,7 +8618,7 @@ Function InitLoadGame()
 	
 	DeleteTextureEntriesFromCache(DeleteMapTextures)
 	
-	DrawLoading(100)
+	RenderLoading(100)
 	
 	fps\Factor[0] = 0.0
 	

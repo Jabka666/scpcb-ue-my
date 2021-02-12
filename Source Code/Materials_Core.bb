@@ -17,6 +17,8 @@ Function ApplyBumpMap(Texture%)
 	TextureBumpEnvScale(Texture, 1.0)
 End Function
 
+Const MaterialsFile$ = "Data\materials.ini"
+
 Function LoadMaterials(File$)
 	CatchErrors("Uncaught (LoadMaterials)")
 	

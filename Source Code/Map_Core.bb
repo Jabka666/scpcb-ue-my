@@ -3442,7 +3442,7 @@ Function InitWayPoints(LoadingStart% = 45)
 		Number = Number + 1
 		Iter = Iter + 1
 		If Iter = 20 Then 
-			DrawLoading(LoadingStart + Floor((35.0 / Amount) * Number)) 
+			RenderLoading(LoadingStart + Floor((35.0 / Amount) * Number)) 
 			Iter = 0
 		EndIf
 		

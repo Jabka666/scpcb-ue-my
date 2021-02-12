@@ -1043,6 +1043,8 @@ Function UpdateMainMenu()
 End Function
 
 Function RenderMainMenu()
+	CatchErrors("Uncaught (RenderMainMenu")
+	
 	Local x%, y%, Width%, Height%, Temp%, i%, n%
 	
 	Color(0, 0, 0)
@@ -1833,6 +1835,8 @@ Function RenderMainMenu()
 	If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	
 	SetFont(fo\FontID[Font_Default])
+	
+	CatchErrors("Uncaught (RenderMainMenu")
 End Function
 
 Const LauncherWidth% = 640
@@ -2065,7 +2069,7 @@ Function InitLoadingScreens(File$)
 	CloseFile(f)
 End Function
 
-Function DrawLoading(Percent%, ShortLoading% = False)
+Function RenderLoading(Percent%, ShortLoading% = False)
 	Local x%, y%, Temp%, FirstLoop%
 	Local ls.LoadingScreens
 	
@@ -2313,36 +2317,6 @@ Type MenuButton
 	Field R%, G%, B%
 End Type
 
-Function RenderMenuButtons()
-	Local mb.MenuButton
-	
-	For mb.MenuButton = Each MenuButton
-		RenderFrame(mb\x, mb\y, mb\Width, mb\Height)
-		If MouseOn(mb\x, mb\y, mb\Width, mb\Height) Then
-			Color(30, 30, 30)
-			Rect(mb\x + (3 * MenuScale), mb\y + (3 * MenuScale), mb\Width - (6 * MenuScale), mb\Height - (6 * MenuScale))	
-		Else
-			Color(0, 0, 0)
-		EndIf
-		
-		If mb\Locked Then
-			If mb\R <> 255 Lor mb\G <> 255 Lor mb\B <> 255 Then
-				Color(mb\R, mb\G, mb\B)
-			Else
-				Color(100, 100, 100)
-			EndIf
-		Else
-			Color(mb\R, mb\G, mb\B)
-		EndIf
-		If mb\BigFont Then 
-			SetFont(fo\FontID[Font_Default_Big])
-		Else 
-			SetFont(fo\FontID[Font_Default])
-		EndIf
-		Text(mb\x + (mb\Width / 2), mb\y + (mb\Height / 2), mb\Txt, True, True)
-	Next
-End Function
-
 Function UpdateMainMenuButton%(x%, y%, Width%, Height%, Txt$, BigFont% = True, WaitForMouseUp% = False, Locked% = False, R% = 255, G% = 255, B% = 255)
 	Local mb.MenuButton, currMButton.MenuButton
 	Local Clicked% = False
@@ -2382,8 +2356,37 @@ Function UpdateMainMenuButton%(x%, y%, Width%, Height%, Txt$, BigFont% = True, W
 			EndIf
 		EndIf
 	EndIf
-	
 	Return(Clicked)
+End Function
+
+Function RenderMenuButtons()
+	Local mb.MenuButton
+	
+	For mb.MenuButton = Each MenuButton
+		RenderFrame(mb\x, mb\y, mb\Width, mb\Height)
+		If MouseOn(mb\x, mb\y, mb\Width, mb\Height) Then
+			Color(30, 30, 30)
+			Rect(mb\x + (3 * MenuScale), mb\y + (3 * MenuScale), mb\Width - (6 * MenuScale), mb\Height - (6 * MenuScale))	
+		Else
+			Color(0, 0, 0)
+		EndIf
+		
+		If mb\Locked Then
+			If mb\R <> 255 Lor mb\G <> 255 Lor mb\B <> 255 Then
+				Color(mb\R, mb\G, mb\B)
+			Else
+				Color(100, 100, 100)
+			EndIf
+		Else
+			Color(mb\R, mb\G, mb\B)
+		EndIf
+		If mb\BigFont Then 
+			SetFont(fo\FontID[Font_Default_Big])
+		Else 
+			SetFont(fo\FontID[Font_Default])
+		EndIf
+		Text(mb\x + (mb\Width / 2), mb\y + (mb\Height / 2), mb\Txt, True, True)
+	Next
 End Function
 
 Function UpdateLauncherButton%(x%, y%, Width%, Height%, Txt$, BigFont% = True, WaitForMouseUp% = False, Locked% = False, R% = 255, G% = 255, B% = 255)
@@ -2420,7 +2423,6 @@ Function UpdateLauncherButton%(x%, y%, Width%, Height%, Txt$, BigFont% = True, W
 		SetFont(fo\FontID[Font_Default])
 	EndIf
 	Text(x + (Width / 2), y + (Height / 2), Txt, True, True)
-	
 	Return(Clicked)
 End Function
 
@@ -2429,40 +2431,6 @@ Type MenuTick
 	Field Selected%
 	Field Locked%
 End Type
-
-Function RenderMenuTicks()
-	Local mt.MenuTick
-	Local Width%, Height%
-	
-	For mt.MenuTick = Each MenuTick
-		Width = 20 * MenuScale
-		Height = 20 * MenuScale
-		
-		Color(255, 255, 255)
-		RenderTiledImageRect(MenuWhite, (mt\x Mod (256 * MenuScale)), (mt\y Mod (256 * MenuScale)), 512 * MenuScale, 512 * MenuScale, mt\x, mt\y, Width, Height)
-		
-		Local Highlight% = MouseOn(mt\x, mt\y, Width, Height)
-		
-		If Highlight Then
-			Color(50, 50, 50)
-		Else
-			Color(0, 0, 0)		
-		EndIf
-		
-		Rect(mt\x + 2, mt\y + 2, Width - 4, Height - 4)
-		
-		If mt\Selected Then
-			If Highlight Then
-				Color(255, 255, 255)
-			Else
-				Color(200, 200, 200)
-			EndIf
-			RenderTiledImageRect(MenuWhite, (mt\x Mod (256 * MenuScale)), (mt\y Mod (256 * MenuScale)), 512 * MenuScale, 512 * MenuScale, mt\x + 4, mt\y + 4, Width - 8, Height - 8)
-		EndIf
-		
-		Color(255, 255, 255)
-	Next
-End Function
 
 Function UpdateMainMenuTick%(x%, y%, Selected%, Locked% = False)
 	Local mt.MenuTick, currTick.MenuTick
@@ -2499,8 +2467,40 @@ Function UpdateMainMenuTick%(x%, y%, Selected%, Locked% = False)
 			EndIf
 		EndIf
 	EndIf
-	
 	Return(Selected)
+End Function
+
+Function RenderMenuTicks()
+	Local mt.MenuTick
+	Local Width%, Height%
+	
+	For mt.MenuTick = Each MenuTick
+		Width = 20 * MenuScale
+		Height = 20 * MenuScale
+		
+		Color(255, 255, 255)
+		RenderTiledImageRect(MenuWhite, (mt\x Mod (256 * MenuScale)), (mt\y Mod (256 * MenuScale)), 512 * MenuScale, 512 * MenuScale, mt\x, mt\y, Width, Height)
+		
+		Local Highlight% = MouseOn(mt\x, mt\y, Width, Height)
+		
+		If Highlight Then
+			Color(50, 50, 50)
+		Else
+			Color(0, 0, 0)		
+		EndIf
+		
+		Rect(mt\x + 2, mt\y + 2, Width - 4, Height - 4)
+		
+		If mt\Selected Then
+			If Highlight Then
+				Color(255, 255, 255)
+			Else
+				Color(200, 200, 200)
+			EndIf
+			RenderTiledImageRect(MenuWhite, (mt\x Mod (256 * MenuScale)), (mt\y Mod (256 * MenuScale)), 512 * MenuScale, 512 * MenuScale, mt\x + 4, mt\y + 4, Width - 8, Height - 8)
+		EndIf
+		Color(255, 255, 255)
+	Next
 End Function
 
 Function UpdateLauncherTick%(x%, y%, Selected%, Locked% = False)
@@ -2532,9 +2532,7 @@ Function UpdateLauncherTick%(x%, y%, Selected%, Locked% = False)
 		EndIf
 		RenderTiledImageRect(MenuWhite, (x Mod 256), (y Mod 256), 512, 512, x + 4, y + 4, Width - 8, Height - 8)
 	EndIf
-	
 	Color(255, 255, 255)
-	
 	Return(Selected)
 End Function
 
@@ -2542,26 +2540,6 @@ Type MenuPalette
 	Field Img%
 	Field x%, y%, Width%, Height%
 End Type
-
-Function RenderMenuPalettes()
-	Local mp.MenuPalette
-	
-	For mp.MenuPalette = Each MenuPalette
-		DrawImage(mp\Img, mp\x, mp\y)
-		If MouseOn(mp\x, mp\y, mp\Width, mp\Height) Then
-			If mo\MouseDown1 Then
-				LockBuffer(BackBuffer())
-				
-				Local Pixel% = ReadPixelFast(ScaledMouseX(), ScaledMouseY(), BackBuffer())
-				
-				UnlockBuffer(BackBuffer())
-				opt\SubColorR = ReadPixelColor(Pixel, 16)
-				opt\SubColorG = ReadPixelColor(Pixel, 8)
-				opt\SubColorB = ReadPixelColor(Pixel, 0)
-			EndIf
-		EndIf
-	Next
-End Function
 
 Function UpdateMainMenuPalette(Img%, x%, y%)
 	Local mp.MenuPalette, currPalette.MenuPalette
@@ -2581,6 +2559,26 @@ Function UpdateMainMenuPalette(Img%, x%, y%)
 		mp\Width = ImageWidth(Img)
 		mp\Height = ImageHeight(Img)
 	EndIf
+End Function
+
+Function RenderMenuPalettes()
+	Local mp.MenuPalette
+	
+	For mp.MenuPalette = Each MenuPalette
+		DrawImage(mp\Img, mp\x, mp\y)
+		If MouseOn(mp\x, mp\y, mp\Width, mp\Height) Then
+			If mo\MouseDown1 Then
+				LockBuffer(BackBuffer())
+				
+				Local Pixel% = ReadPixelFast(ScaledMouseX(), ScaledMouseY(), BackBuffer())
+				
+				UnlockBuffer(BackBuffer())
+				opt\SubColorR = ReadPixelColor(Pixel, 16)
+				opt\SubColorG = ReadPixelColor(Pixel, 8)
+				opt\SubColorB = ReadPixelColor(Pixel, 0)
+			EndIf
+		EndIf
+	Next
 End Function
 
 Function UpdateInput$(aString$, MaxChr%)
@@ -2618,29 +2616,6 @@ Type MenuInputBox
 	Field ID%
 End Type
 
-Function RenderMenuInputBoxes()
-	Local mib.MenuInputBox
-	
-	For mib.MenuInputBox = Each MenuInputBox
-		Color(255, 255, 255)
-		RenderTiledImageRect(MenuWhite, (mib\x Mod (256 * MenuScale)), (mib\y Mod (256 * MenuScale)), 512 * MenuScale, 512 * MenuScale, mib\x, mib\y, mib\Width, mib\Height)
-		Color(0, 0, 0)
-		
-		If MouseOn(mib\x, mib\y, mib\Width, mib\Height) Then
-			Color(50, 50, 50)
-		EndIf
-		
-		Rect(mib\x + (2 * MenuScale), mib\y + (2 * MenuScale), mib\Width - (4 * MenuScale), mib\Height - (4 * MenuScale))
-		Color(255, 255, 255)	
-		
-		If SelectedInputBox = mib\ID Then
-			If (MilliSecs() Mod 800) < 400 Then Rect(mib\x + (mib\Width / 2) - (StringWidth(mib\Txt) / 2) + StringWidth(Left(mib\Txt, CursorPos)), mib\y + (mib\Height / 2) - (5 * MenuScale), 2 * MenuScale, 12 * MenuScale)
-		EndIf	
-		
-		Text(mib\x + (mib\Width / 2), mib\y + (mib\Height / 2), mib\Txt, True, True)
-	Next
-End Function
-
 Function UpdateMainMenuInputBox$(x%, y%, Width%, Height%, Txt$, ID% = 0, MaxChr% = 0)
 	Local mib.MenuInputBox, currInputBox.MenuInputBox
 	Local InputBoxExists% = False
@@ -2676,8 +2651,30 @@ Function UpdateMainMenuInputBox$(x%, y%, Width%, Height%, Txt$, ID% = 0, MaxChr%
 	If SelectedInputBox = ID Then
 		Txt = UpdateInput(Txt, MaxChr)
 	EndIf
-	
 	Return(Txt)
+End Function
+
+Function RenderMenuInputBoxes()
+	Local mib.MenuInputBox
+	
+	For mib.MenuInputBox = Each MenuInputBox
+		Color(255, 255, 255)
+		RenderTiledImageRect(MenuWhite, (mib\x Mod (256 * MenuScale)), (mib\y Mod (256 * MenuScale)), 512 * MenuScale, 512 * MenuScale, mib\x, mib\y, mib\Width, mib\Height)
+		Color(0, 0, 0)
+		
+		If MouseOn(mib\x, mib\y, mib\Width, mib\Height) Then
+			Color(50, 50, 50)
+		EndIf
+		
+		Rect(mib\x + (2 * MenuScale), mib\y + (2 * MenuScale), mib\Width - (4 * MenuScale), mib\Height - (4 * MenuScale))
+		Color(255, 255, 255)	
+		
+		If SelectedInputBox = mib\ID Then
+			If (MilliSecs() Mod 800) < 400 Then Rect(mib\x + (mib\Width / 2) - (StringWidth(mib\Txt) / 2) + StringWidth(Left(mib\Txt, CursorPos)), mib\y + (mib\Height / 2) - (5 * MenuScale), 2 * MenuScale, 12 * MenuScale)
+		EndIf	
+		
+		Text(mib\x + (mib\Width / 2), mib\y + (mib\Height / 2), mib\Txt, True, True)
+	Next
 End Function
 
 Type MenuSlideBar
@@ -2686,21 +2683,6 @@ Type MenuSlideBar
 	Field TextLeft$
 	Field TextRight$
 End Type
-
-Function RenderMenuSlideBars()
-	Local msb.MenuSlideBar
-	
-	For msb.MenuSlideBar = Each MenuSlideBar
-		Color(255, 255, 255)
-		Rect(msb\x, msb\y, msb\Width + 14, 20, False)
-		
-		DrawImage(BlinkMeterIMG, msb\x + msb\Width * msb\Value / 100.0 + 3, msb\y + 3)
-		
-		Color(170, 170, 170)
-		Text(msb\x - (50 * MenuScale), msb\y + (4 * MenuScale), msb\TextLeft)					
-		Text(msb\x + msb\Width + (38 * MenuScale), msb\y + (4 * MenuScale), msb\TextRight)	
-	Next
-End Function
 
 Function UpdateMainMenuSlideBar#(x%, y%, Width%, Value#, TextLeft$ = "LOW", TextRight$ = "HIGH")
 	Local msb.MenuSlideBar, currSlideBar.MenuSlideBar
@@ -2730,8 +2712,22 @@ Function UpdateMainMenuSlideBar#(x%, y%, Width%, Value#, TextLeft$ = "LOW", Text
 			Value = Min(Max((ScaledMouseX() - x) * 100 / Width, 0), 100)
 		EndIf
 	EndIf
-	
 	Return(Value)
+End Function
+
+Function RenderMenuSlideBars()
+	Local msb.MenuSlideBar
+	
+	For msb.MenuSlideBar = Each MenuSlideBar
+		Color(255, 255, 255)
+		Rect(msb\x, msb\y, msb\Width + 14, 20, False)
+		
+		DrawImage(BlinkMeterIMG, msb\x + msb\Width * msb\Value / 100.0 + 3, msb\y + 3)
+		
+		Color(170, 170, 170)
+		Text(msb\x - (50 * MenuScale), msb\y + (4 * MenuScale), msb\TextLeft)					
+		Text(msb\x + msb\Width + (38 * MenuScale), msb\y + (4 * MenuScale), msb\TextRight)	
+	Next
 End Function
 
 Global OnSliderID% = 0
@@ -2743,6 +2739,100 @@ Type MenuSlider
 	Field Val1$, Val2$, Val3$, Val4$, Val5$
 	Field Amount%
 End Type
+
+Function UpdateMainMenuSlider3(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$)
+	Local ms.MenuSlider, currSlider.MenuSlider
+	Local Slider3Exists% = False
+	
+	For ms.MenuSlider = Each MenuSlider
+		If ms\x = x And ms\y = y And ms\Width = Width And ms\Amount = 3 Then
+			Slider3Exists = True
+			Exit
+		EndIf
+	Next
+	If (Not Slider3Exists) Then
+		ms.MenuSlider = New MenuSlider
+		ms\x = x
+		ms\y = y
+		ms\Width = Width
+		ms\ID = ID
+		ms\Value = Value
+		ms\Val1 = Val1
+		ms\Val2 = Val2
+		ms\Val3 = Val3
+		ms\Amount = 3
+	Else
+		currSlider = ms
+		currSlider\Value = Value
+	EndIf
+	
+	If mo\MouseDown1 Then
+		If ScaledMouseX() >= x And ScaledMouseX() =< x + Width + 14 And ScaledMouseY() >= y - 8 And ScaledMouseY() =< y + 10
+			OnSliderID = ID
+		EndIf
+	EndIf
+	
+	If ID = OnSliderID Then
+		If ScaledMouseX() =< x + 8
+			Value = 0
+		ElseIf ScaledMouseX() >= x + (Width / 2) And ScaledMouseX() =< x + (Width / 2) + 8
+			Value = 1
+		ElseIf ScaledMouseX() >= x + Width
+			Value = 2
+		EndIf
+	EndIf
+	Return(Value)
+End Function
+
+Function UpdateMainMenuSlider5(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$, Val4$, Val5$)
+	Local ms.MenuSlider, currSlider.MenuSlider
+	Local Slider5Exists% = False
+	
+	For ms.MenuSlider = Each MenuSlider
+		If ms\x = x And ms\y = y And ms\Width = Width And ms\Amount = 5 Then
+			Slider5Exists = True
+			Exit
+		EndIf
+	Next
+	If (Not Slider5Exists) Then
+		ms.MenuSlider = New MenuSlider
+		ms\x = x
+		ms\y = y
+		ms\Width = Width
+		ms\ID = ID
+		ms\Value = Value
+		ms\Val1 = Val1
+		ms\Val2 = Val2
+		ms\Val3 = Val3
+		ms\Val4 = Val4
+		ms\Val5 = Val5
+		ms\Amount = 5
+	Else
+		currSlider = ms
+		currSlider\Value = Value
+	EndIf
+	
+	If mo\MouseDown1 Then
+		If ScaledMouseX() >= x And ScaledMouseX() =< x + Width + 14 And ScaledMouseY() >= y - 8 And ScaledMouseY() =< y + 10
+			OnSliderID = ID
+		EndIf
+	EndIf
+	
+	If ID = OnSliderID Then
+		If (ScaledMouseX() =< x + 8)
+			Value = 0
+		ElseIf ScaledMouseX() >= x + (Width / 4) And ScaledMouseX() =< x + (Width / 4) + 8
+			Value = 1
+		ElseIf ScaledMouseX() >= x + (Width / 2) And ScaledMouseX() =< x + (Width / 2) + 8
+			Value = 2
+		ElseIf ScaledMouseX() >= x + (Width * 0.75) And ScaledMouseX() =< x + (Width * 0.75) + 8
+			Value = 3
+		ElseIf ScaledMouseX() >= x + Width
+			Value = 4
+		EndIf
+	EndIf
+	Return(Value)
+End Function
 
 Function RenderMenuSliders()
 	Local ms.MenuSlider
@@ -2836,102 +2926,6 @@ Function RenderMenuSliders()
 			EndIf
 		EndIf
 	Next
-End Function
-
-Function UpdateMainMenuSlider3(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$)
-	Local ms.MenuSlider, currSlider.MenuSlider
-	Local Slider3Exists% = False
-	
-	For ms.MenuSlider = Each MenuSlider
-		If ms\x = x And ms\y = y And ms\Width = Width And ms\Amount = 3 Then
-			Slider3Exists = True
-			Exit
-		EndIf
-	Next
-	If (Not Slider3Exists) Then
-		ms.MenuSlider = New MenuSlider
-		ms\x = x
-		ms\y = y
-		ms\Width = Width
-		ms\ID = ID
-		ms\Value = Value
-		ms\Val1 = Val1
-		ms\Val2 = Val2
-		ms\Val3 = Val3
-		ms\Amount = 3
-	Else
-		currSlider = ms
-		currSlider\Value = Value
-	EndIf
-	
-	If mo\MouseDown1 Then
-		If ScaledMouseX() >= x And ScaledMouseX() =< x + Width + 14 And ScaledMouseY() >= y - 8 And ScaledMouseY() =< y + 10
-			OnSliderID = ID
-		EndIf
-	EndIf
-	
-	If ID = OnSliderID Then
-		If ScaledMouseX() =< x + 8
-			Value = 0
-		ElseIf ScaledMouseX() >= x + (Width / 2) And ScaledMouseX() =< x + (Width / 2) + 8
-			Value = 1
-		ElseIf ScaledMouseX() >= x + Width
-			Value = 2
-		EndIf
-	EndIf
-	
-	Return(Value)
-End Function
-
-Function UpdateMainMenuSlider5(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$, Val4$, Val5$)
-	Local ms.MenuSlider, currSlider.MenuSlider
-	Local Slider5Exists% = False
-	
-	For ms.MenuSlider = Each MenuSlider
-		If ms\x = x And ms\y = y And ms\Width = Width And ms\Amount = 5 Then
-			Slider5Exists = True
-			Exit
-		EndIf
-	Next
-	If (Not Slider5Exists) Then
-		ms.MenuSlider = New MenuSlider
-		ms\x = x
-		ms\y = y
-		ms\Width = Width
-		ms\ID = ID
-		ms\Value = Value
-		ms\Val1 = Val1
-		ms\Val2 = Val2
-		ms\Val3 = Val3
-		ms\Val4 = Val4
-		ms\Val5 = Val5
-		ms\Amount = 5
-	Else
-		currSlider = ms
-		currSlider\Value = Value
-	EndIf
-	
-	If mo\MouseDown1 Then
-		If ScaledMouseX() >= x And ScaledMouseX() =< x + Width + 14 And ScaledMouseY() >= y - 8 And ScaledMouseY() =< y + 10
-			OnSliderID = ID
-		EndIf
-	EndIf
-	
-	If ID = OnSliderID Then
-		If (ScaledMouseX() =< x + 8)
-			Value = 0
-		ElseIf ScaledMouseX() >= x + (Width / 4) And ScaledMouseX() =< x + (Width / 4) + 8
-			Value = 1
-		ElseIf ScaledMouseX() >= x + (Width / 2) And ScaledMouseX() =< x + (Width / 2) + 8
-			Value = 2
-		ElseIf ScaledMouseX() >= x + (Width * 0.75) And ScaledMouseX() =< x + (Width * 0.75) + 8
-			Value = 3
-		ElseIf ScaledMouseX() >= x + Width
-			Value = 4
-		EndIf
-	EndIf
-	
-	Return(Value)
 End Function
 
 Function DeleteMenuGadgets()
@@ -3029,7 +3023,6 @@ Function GetLineAmount(A$, W%, H%, Leading# = 1.0)
 		
 		If ((LinesShown + 1) * Height) > H Then Exit ; ~ The next line would be too tall, so leave
 	Wend
-	
 	Return(LinesShown + 1)
 End Function
 
@@ -3269,7 +3262,6 @@ Function RenderMapCreatorTooltip(x%, y%, Width%, Height%, MapName$)
 		Txt[0] = Left(MapName, Len(MapName) - 7)
 		
 		Local f% = OpenFile("Map Creator\Maps\" + MapName)
-		
 		Local Author$ = ReadLine(f)
 		Local Descr$ = ReadLine(f)
 		

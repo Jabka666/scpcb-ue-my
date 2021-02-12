@@ -658,16 +658,6 @@ Global QuickLoadPercent% = -1
 Global QuickLoadPercent_DisplayTimer# = 0.0
 Global QuickLoad_CurrEvent.Events
 
-Function RenderQuickLoading()
-	If QuickLoadPercent > -1 Then
-		MidHandle(QuickLoadIcon)
-		DrawImage(QuickLoadIcon, opt\GraphicWidth - 90, opt\GraphicHeight - 150)
-		Color(255, 255, 255)
-		SetFont(fo\FontID[Font_Default])
-		Text(opt\GraphicWidth - 100, opt\GraphicHeight - 90, "LOADING: " + QuickLoadPercent + "%", 1)
-	EndIf
-End Function
-
 Function UpdateQuickLoading()
 	If QuickLoadPercent > -1 Then
 		If QuickLoadPercent > 99 Then
@@ -682,6 +672,16 @@ Function UpdateQuickLoading()
 		QuickLoadPercent = -1
 		QuickLoadPercent_DisplayTimer = 0.0
 		QuickLoad_CurrEvent = Null
+	EndIf
+End Function
+
+Function RenderQuickLoading()
+	If QuickLoadPercent > -1 Then
+		MidHandle(QuickLoadIcon)
+		DrawImage(QuickLoadIcon, opt\GraphicWidth - 90, opt\GraphicHeight - 150)
+		Color(255, 255, 255)
+		SetFont(fo\FontID[Font_Default])
+		Text(opt\GraphicWidth - 100, opt\GraphicHeight - 90, "LOADING: " + QuickLoadPercent + "%", 1)
 	EndIf
 End Function
 
@@ -9566,7 +9566,7 @@ Function UpdateEndings()
 					ShowEntity(e\room\OBJ)
 					
 					If e\EventState = 0.0 Then
-						DrawLoading(0, True)
+						RenderLoading(0, True)
 						
 						For n.NPCs = Each NPCs
 							If n <> Curr106 And n <> Curr173 Then  
@@ -9579,7 +9579,7 @@ Function UpdateEndings()
 						
 						SecondaryLightOn = True
 						
-						DrawLoading(60, True)
+						RenderLoading(60, True)
 						
 						e\room\NPC[0] = CreateNPC(NPCTypeApache, e\room\x, 100.0, e\room\z)
 						e\room\NPC[0]\State = 1.0
@@ -9604,7 +9604,7 @@ Function UpdateEndings()
 						
 						e\EventState = 1.0
 						
-						DrawLoading(100, True)
+						RenderLoading(100, True)
 					Else
 						UpdateSky()
 						
@@ -9870,7 +9870,7 @@ Function UpdateEndings()
 					ShowEntity(e\room\OBJ)
 					
 					If e\EventState = 0.0 Then
-						DrawLoading(0)
+						RenderLoading(0)
 						
 						e\room\Objects[0] = LoadRMesh("GFX\map\gatea_tunnel_opt.rmesh", Null)
 						PositionEntity(e\room\Objects[0], EntityX(e\room\OBJ, True), EntityY(e\room\OBJ, True), EntityZ(e\room\OBJ, True))
@@ -9879,7 +9879,7 @@ Function UpdateEndings()
 						EntityPickMode(e\room\Objects[0], 3)
 						EntityParent(e\room\Objects[0], e\room\OBJ)
 						
-						DrawLoading(30)
+						RenderLoading(30)
 						
 						For n.NPCs = Each NPCs
 							If n <> Curr106 And n <> Curr173 Then  
@@ -9906,7 +9906,7 @@ Function UpdateEndings()
 						Sky = CreateSky("GFX\map\sky\sky")
 						RotateEntity(Sky, 0.0, e\room\Angle, 0.0)
 						
-						DrawLoading(60)
+						RenderLoading(60)
 						
 						For i = 0 To 1
 							e\room\NPC[i] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[i + 5], True), EntityY(e\room\Objects[i + 5], True), EntityZ(e\room\Objects[i + 5], True))
@@ -9961,7 +9961,7 @@ Function UpdateEndings()
 						
 						e\EventState = 1.0
 						
-						DrawLoading(100)
+						RenderLoading(100)
 					Else
 						ShouldPlay = 17
 						
