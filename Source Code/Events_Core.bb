@@ -10255,12 +10255,15 @@ Function UpdateEndings()
 								EndIf
 							Else 
 								If e\EventState2 = 0.0 Then
-									e\EventState2 = 1.0
+									For i = 2 To 4
+										e\room\NPC[i]\State = 0.0
+									Next
 									
 									For i = 5 To 8
 										e\room\NPC[i]\State = 3.0 : e\room\NPC[i]\PathTimer = 70.0 * Rnd(15.0, 20.0) : e\room\NPC[i]\LastSeen = 70.0 * 300.0
 										e\room\NPC[i]\PathStatus = FindPath(e\room\NPC[i], EntityX(e\room\OBJ) - 1.0 + 2.0 * (i Mod 2), EntityY(me\Collider) + 0.2, EntityZ(e\room\OBJ) - 2.0 * (i Mod 2))
 									Next
+									e\EventState2 = 1.0
 								Else
 									For i = 5 To 8
 										If e\room\NPC[i]\State = 5.0 Then
@@ -10268,7 +10271,7 @@ Function UpdateEndings()
 											e\room\NPC[i]\EnemyY = EntityY(me\Collider)
 											e\room\NPC[i]\EnemyZ = EntityZ(me\Collider)
 										Else
-											If EntityDistanceSquared(e\room\NPC[i]\Collider, me\Collider) < 36.0
+											If EntityDistanceSquared(e\room\NPC[5]\Collider, me\Collider) < 36.0 Lor EntityDistanceSquared(e\room\NPC[6]\Collider, me\Collider) < 36.0 Lor EntityDistanceSquared(e\room\NPC[7]\Collider, me\Collider) < 36.0 Lor EntityDistanceSquared(e\room\NPC[8]\Collider, me\Collider) < 36.0 Then
 												e\room\NPC[i]\State = 5.0 : e\room\NPC[i]\CurrSpeed = 0.0
 											EndIf
 										EndIf
@@ -10277,17 +10280,17 @@ Function UpdateEndings()
 									If e\EventState2 =< 1.0 Then
 										For i = 5 To 8
 											If e\room\NPC[i]\State = 5.0 Then
-												For Temp = 5 To 8
-													e\room\NPC[Temp]\PathTimer = 70.0 * Rnd(7.0, 10.0) : e\room\NPC[Temp]\Reload = 2000.0
-													e\room\NPC[Temp]\EnemyX = EntityX(me\Collider)
-													e\room\NPC[Temp]\EnemyY = EntityY(me\Collider)
-													e\room\NPC[Temp]\EnemyZ = EntityZ(me\Collider)
-													UnableToMove = True
-												Next
+												e\room\NPC[i]\PathTimer = 70.0 * Rnd(7.0, 10.0) : e\room\NPC[i]\Reload = 2000.0
+												e\room\NPC[i]\EnemyX = EntityX(me\Collider)
+												e\room\NPC[i]\EnemyY = EntityY(me\Collider)
+												e\room\NPC[i]\EnemyZ = EntityZ(me\Collider)
+												
+												me\SelectedEnding = Ending_A2
+												UnableToMove = True
 												
 												If e\EventState2 = 1.0 Then
 													e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\STOPRIGHTTHERE.ogg"))
-													e\EventState2 = 2.0			
+													e\EventState2 = 2.0	
 												EndIf
 											Else
 												e\room\NPC[i]\LastSeen = 70.0 * 300.0 : e\room\NPC[i]\Reload = 2000.0 : e\room\NPC[i]\State3 = 70.0 * 145.0											
@@ -10299,7 +10302,11 @@ Function UpdateEndings()
 										If (Not ChannelPlaying(e\SoundCHN)) Then
 											ClearCheats(chs)
 											PlaySound_Strict(IntroSFX[7])
-											me\SelectedEnding = Ending_A2
+											For n.NPCs = Each NPCs
+												If n\NPCType = NPCTypeMTF
+													RemoveNPC(n)
+												EndIf
+											Next
 											me\LightFlash = 20.0
 											me\KillTimer = -0.1
 											msg\DeathMsg = ""

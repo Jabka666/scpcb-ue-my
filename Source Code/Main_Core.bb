@@ -7765,6 +7765,9 @@ Function LoadEntities()
 	
 	DeInitMainMenuAssets()
 	
+	MaxItemAmount = SelectedDifficulty\InventorySlots
+	Dim Inventory.Items(MaxItemAmount)
+	
 	ConsoleR = 0 : ConsoleG = 255 : ConsoleB = 255
 	
 	CreateConsoleMsg("Console commands: ")
@@ -8371,9 +8374,6 @@ Function LoadEntities()
 End Function
 
 Function InitStats()
-	MaxItemAmount = SelectedDifficulty\InventorySlots
-	Dim Inventory.Items(MaxItemAmount)
-	
 	me\Playable = True
 	me\SelectedEnding = -1
 	
@@ -8662,10 +8662,6 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	HideDistance = 15.0
 	
-	If CurrGrid <> Null Then
-		Delete(CurrGrid) : CurrGrid = Null
-	EndIf
-	
 	For itt.ItemTemplates = Each ItemTemplates
 		itt\Found = False
 	Next
@@ -8715,11 +8711,6 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	MTFTimer = 0.0
 	
-	For s.Screens = Each Screens
-		If s\Img <> 0 Then FreeImage(s\Img) : s\Img = 0
-		Delete(s)
-	Next
-	
 	For i = 0 To MAXACHIEVEMENTS - 1
 		Achievements[i] = 0
 	Next
@@ -8742,6 +8733,13 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	For sub.Subtitles = Each Subtitles
 		Delete(sub)
+	Next
+	
+	Delete(CurrGrid)
+	
+	For s.Screens = Each Screens
+		If s\Img <> 0 Then FreeImage(s\Img) : s\Img = 0
+		Delete(s)
 	Next
 	
 	For i = 0 To MaxItemAmount - 1
