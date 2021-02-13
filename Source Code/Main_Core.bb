@@ -1203,7 +1203,6 @@ Function UpdateConsole()
 							;[Block]
 							chs\NoClip = True
 							me\Playable = True
-							UnableToMove = False
 							;[End Block]
 						Case "off", "0", "false"
 							;[Block]
@@ -1217,7 +1216,6 @@ Function UpdateConsole()
 								RotateEntity(me\Collider, 0.0, EntityYaw(me\Collider), 0.0)
 							Else
 								me\Playable = True
-								UnableToMove = False
 							EndIf
 							;[End Block]
 					End Select
@@ -1875,7 +1873,6 @@ Collisions(HIT_DEAD, HIT_MAP, 2, 2)
 
 RenderLoading(90, True)
 
-Global UnableToMove% = False
 Global ShouldEntitiesFall% = True
 Global PlayerFallingPickDistance# = 10.0
 
@@ -2431,8 +2428,8 @@ Function MainLoop()
 		
 		UpdateGUI()
 		
-		If KeyHit(key\INVENTORY) And me\VomitTimer >= 0.0 And me\KillTimer >= 0.0 And me\SelectedEnding = -1 Then
-			If (Not UnableToMove) And (Not me\Zombie) And (Not I_294\Using) Then
+		If KeyHit(key\INVENTORY) Then
+			If me\Playable And (Not me\Zombie) And (Not I_294\Using) And me\VomitTimer >= 0.0 And me\KillTimer >= 0.0 And me\SelectedEnding = -1 Then
 				Local W$ = ""
 				Local V# = 0.0
 				
@@ -2822,7 +2819,7 @@ Function MovePlayer()
 			
 			Local TempCHN%
 			
-			If (Not UnableToMove) Then me\Shake = ((me\Shake + fps\Factor[0] * Min(Sprint, 1.5) * 7.0) Mod 720.0)
+			If me\Playable Then me\Shake = ((me\Shake + fps\Factor[0] * Min(Sprint, 1.5) * 7.0) Mod 720.0)
 			If Temp < 180.0 And (me\Shake Mod 360.0) >= 180.0 And me\KillTimer >= 0.0 Then
 				If CurrStepSFX = 0 Then
 					Temp = GetStepSound(me\Collider)
@@ -2940,7 +2937,7 @@ Function MovePlayer()
 			me\CurrSpeed = Max(CurveValue(0.0, me\CurrSpeed - 0.1, 1.0), 0.0)
 		EndIf
 		
-		If (Not UnableToMove) Then TranslateEntity(me\Collider, Cos(Angle) * me\CurrSpeed * fps\Factor[0], 0.0, Sin(Angle) * me\CurrSpeed * fps\Factor[0], True)
+		If me\Playable Then TranslateEntity(me\Collider, Cos(Angle) * me\CurrSpeed * fps\Factor[0], 0.0, Sin(Angle) * me\CurrSpeed * fps\Factor[0], True)
 		
 		Local CollidedFloor% = False
 		
@@ -2981,7 +2978,7 @@ Function MovePlayer()
 		EndIf
 		PlayerFallingPickDistance = 10.0
 		
-		If (Not UnableToMove) And ShouldEntitiesFall Then TranslateEntity(me\Collider, 0.0, me\DropSpeed * fps\Factor[0], 0.0)
+		If me\Playable And ShouldEntitiesFall Then TranslateEntity(me\Collider, 0.0, me\DropSpeed * fps\Factor[0], 0.0)
 	EndIf
 	
 	me\ForceMove = False
@@ -6912,8 +6909,6 @@ Function UpdateMenu()
 							MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 							HidePointer()
 							
-							me\Playable = True
-							
 							UpdateRooms()
 							
 							For r.Rooms = Each Rooms
@@ -6972,8 +6967,6 @@ Function UpdateMenu()
 							
 							MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 							HidePointer()
-							
-							me\Playable = True
 							
 							UpdateRooms()
 							
@@ -8642,8 +8635,6 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	DeleteTextureEntriesFromCache(DeleteAllTextures)
 	
-	UnableToMove = False
-	
 	QuickLoadPercent = -1
 	QuickLoadPercent_DisplayTimer = 0.0
 	QuickLoad_CurrEvent = Null
@@ -9493,7 +9484,6 @@ Function Update008()
 			ElseIf I_008\Timer >= 91.5
 				me\BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 91.5), me\BlinkTimer), -10.0)
 				me\Zombie = True
-				UnableToMove = True
 				If I_008\Timer >= 92.7 And PrevI008Timer < 92.7 Then
 					If TeleportForInfect Then
 						For r.Rooms = Each Rooms
@@ -9506,7 +9496,6 @@ Function Update008()
 								ChangeNPCTextureID(r\NPC[0], 12)
 								r\NPC[0]\State = 6.0
 								PlayerRoom = r
-								UnableToMove = False
 								Exit
 							EndIf
 						Next
@@ -9529,7 +9518,6 @@ Function Update008()
 					me\ForceMove = 0.75
 					me\Injuries = 2.5
 					me\Bloodloss = 0.0
-					UnableToMove = False
 					
 					Animate2(PlayerRoom\NPC[0]\OBJ, AnimTime(PlayerRoom\NPC[0]\OBJ), 357.0, 381.0, 0.3)
 				ElseIf I_008\Timer < 98.5
@@ -9537,7 +9525,6 @@ Function Update008()
 					me\BlurTimer = 950.0
 					
 					me\ForceMove = 0.0
-					UnableToMove = True
 					PointEntity(Camera, PlayerRoom\NPC[0]\Collider)
 					
 					If PrevI008Timer < 94.7 Then 

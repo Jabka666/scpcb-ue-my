@@ -6390,7 +6390,6 @@ Function UpdateEvents()
 				
 				If e\EventState < 0.0 Then
 					If e\EventState > (-70.0) * 4.0 Then
-						I_008\Timer = 0.0
 						If me\FallTimer >= 0.0 Then 
 							me\FallTimer = Min(-1.0, me\FallTimer)
 							PositionEntity(me\Head, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True), True)
@@ -9753,7 +9752,7 @@ Function UpdateEndings()
 										
 										e\room\RoomDoors[4]\Open = True : e\room\RoomDoors[4]\Locked = 0
 										
-										UnableToMove = True
+										me\Playable = False
 										
 										For i = 4 To 5
 											If e\room\NPC[i]\State3 = 70.0 * 4.0 Then
@@ -10285,8 +10284,8 @@ Function UpdateEndings()
 												e\room\NPC[i]\EnemyY = EntityY(me\Collider)
 												e\room\NPC[i]\EnemyZ = EntityZ(me\Collider)
 												
+												me\Playable = False
 												me\SelectedEnding = Ending_A2
-												UnableToMove = True
 												
 												If e\EventState2 = 1.0 Then
 													e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\STOPRIGHTTHERE.ogg"))
