@@ -10278,7 +10278,7 @@ Function UpdateEndings()
 										For i = 5 To 8
 											If e\room\NPC[i]\State = 5.0 Then
 												For Temp = 5 To 8
-													e\room\NPC[Temp]\State = 5.0 : e\room\NPC[Temp]\PathTimer = 70.0 * Rnd(7.0, 10.0) : e\room\NPC[Temp]\Reload = 2000.0
+													e\room\NPC[Temp]\PathTimer = 70.0 * Rnd(7.0, 10.0) : e\room\NPC[Temp]\Reload = 2000.0
 													e\room\NPC[Temp]\EnemyX = EntityX(me\Collider)
 													e\room\NPC[Temp]\EnemyY = EntityY(me\Collider)
 													e\room\NPC[Temp]\EnemyZ = EntityZ(me\Collider)

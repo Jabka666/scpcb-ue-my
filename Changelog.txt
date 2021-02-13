@@ -3,6 +3,7 @@
 ===============================================================
 ; ~ Includes some old UE stuff, also fixes it.
 
+- Added new bump textures.
 - Added more console names for NPC's spawning.
 - Added symbols' fast erasing.
 - Added more details to the Gate A.

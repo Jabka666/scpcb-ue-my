@@ -3585,7 +3585,7 @@ Function UpdateNPCs()
 											EndIf
 										EndIf
 										
-										If Dist < HideDistance * 0.7 Then 
+										If Dist < HideDistance Then 
 											Dist2 = EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ) 
 											
 											PointEntity(n\OBJ, n\Path[n\PathLocation]\OBJ)
