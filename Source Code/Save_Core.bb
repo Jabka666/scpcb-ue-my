@@ -618,6 +618,8 @@ Function LoadGame(File$)
 	AchvPDDone = ReadByte(f)
 	me\RefinedItems = ReadInt(f)
 	
+	; ~ TODO: Use CreateMap()
+	CurrGrid.MapGrid = New MapGrid
 	For x = 0 To MapGridSize 
 		For y = 0 To MapGridSize
 			CurrGrid\Grid[x + (y * MapGridSize)] = ReadInt(f)
