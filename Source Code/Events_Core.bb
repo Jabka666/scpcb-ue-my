@@ -9722,9 +9722,11 @@ Function UpdateEndings()
 									Next
 									
 									If Temp = 1.0 Then ; ~ Explode
-										me\ExplosionTimer = Max(me\ExplosionTimer, 0.1)
 										me\SelectedEnding = Ending_B2
+										me\ExplosionTimer = Max(me\ExplosionTimer, 0.1)
 									Else
+										me\SelectedEnding = Ending_B1
+										
 										PlayAnnouncement("SFX\Ending\GateB\AlphaWarheadsFail.ogg")
 										
 										n.NPCs = CreateNPC(NPCTypeMTF, EntityX(e\room\Objects[8], True), EntityY(e\room\Objects[8], True) + 0.29, EntityZ(e\room\Objects[8], True))
@@ -9735,8 +9737,6 @@ Function UpdateEndings()
 										For i = 4 To 5
 											e\room\NPC[i]\State = 10.0
 										Next
-										
-										me\SelectedEnding = Ending_B1
 										
 										e\EventState = 70.0 * 85.0
 									EndIf
@@ -9761,19 +9761,23 @@ Function UpdateEndings()
 										Next
 										
 										If e\EventState > 70.0 * 92.0 And Temp Then
-											ClearCheats(chs)
+											ClearCheats()
+											
 											ShouldPlay = 0
-											me\CurrSpeed = 0.0
+											
 											PlaySound_Strict(LoadTempSound("SFX\Ending\GateB\Gunshot.ogg"))
+											
 											me\LightFlash = 20.0
 											me\KillTimer = -0.1
 											msg\DeathMsg = ""
 											me\BlinkTimer = -10.0
+											
 											For n.NPCs = Each NPCs
 												If n\NPCType = NPCTypeMTF
 													RemoveNPC(n)
 												EndIf
 											Next
+											
 											RemoveEvent(e)
 											Exit
 										EndIf
@@ -10223,6 +10227,7 @@ Function UpdateEndings()
 									
 									If e\EventState3 >= 230.0 Then
 										If e\EventState3 - fps\Factor[0] < 230.0 Then
+											me\SelectedEnding = Ending_A1
 											e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\CI.ogg"))
 										EndIf
 										
@@ -10231,8 +10236,8 @@ Function UpdateEndings()
 											MoveEntity(e\room\Objects[12], 0.0, 0.0, 0.01 * fps\Factor[0])
 										EndIf
 										
-										If (Not ChannelPlaying(e\SoundCHN)) And me\SelectedEnding = -1 Then
-											ClearCheats(chs)
+										If (Not ChannelPlaying(e\SoundCHN)) Then
+											ClearCheats()
 											
 											PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\Bell2.ogg"))
 											
@@ -10241,14 +10246,13 @@ Function UpdateEndings()
 											p.Particles = CreateParticle(EntityX(e\room\Objects[11], True), EntityY(Camera, True), EntityZ(e\room\Objects[11], True), 5, 8.0, 0.0, 50.0)
 											p\Speed = 0.25 : p\A = 0.5
 											
-											me\SelectedEnding = Ending_A1
-											me\KillTimer = -0.1
-											msg\DeathMsg = ""
-										EndIf
-										
-										If me\SelectedEnding <> -1 Then
 											me\CameraShake = CurveValue(2.0, me\CameraShake, 10.0)
 											me\LightFlash = CurveValue(2.0, me\LightFlash, 8.0)
+											me\KillTimer = -0.1
+											msg\DeathMsg = ""
+											
+											RemoveEvent(e)
+											Exit
 										EndIf
 									EndIf
 								EndIf
@@ -10299,17 +10303,21 @@ Function UpdateEndings()
 										ShouldPlay = 0
 										me\CurrSpeed = 0.0
 										If (Not ChannelPlaying(e\SoundCHN)) Then
-											ClearCheats(chs)
+											ClearCheats()
+											
 											PlaySound_Strict(IntroSFX[7])
+											
 											For n.NPCs = Each NPCs
 												If n\NPCType = NPCTypeMTF
 													RemoveNPC(n)
 												EndIf
 											Next
+											
 											me\LightFlash = 20.0
 											me\KillTimer = -0.1
 											msg\DeathMsg = ""
 											me\BlinkTimer = -10.0
+											
 											RemoveEvent(e)
 											Exit
 										EndIf

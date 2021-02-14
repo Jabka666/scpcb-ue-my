@@ -218,7 +218,9 @@ Type Cheats
 	Field DebugHUD%
 End Type
 
-Function ClearCheats(chs.Cheats)
+Global chs.Cheats = New Cheats
+
+Function ClearCheats()
 	chs\GodMode = False
 	chs\NoBlink = False
 	chs\NoTarget = False
@@ -230,9 +232,17 @@ Function ClearCheats(chs.Cheats)
 	chs\DebugHUD = False
 End Function
 
-Global chs.Cheats = New Cheats
-
-ClearCheats(chs)
+Function InitCheats()
+	chs\GodMode = True
+	chs\NoBlink = True
+	chs\NoTarget = True
+	chs\NoClip = True
+	chs\NoClipSpeed = 2.0
+	chs\InfiniteStamina = True
+	chs\SuperMan = False
+	chs\SuperManTimer = 0.0
+	chs\DebugHUD = True
+End Function
 
 Global CoffinDistance# = 100.0
 
@@ -1177,7 +1187,7 @@ Function UpdateConsole()
 					me\FallTimer = 0.0
 					MenuOpen = False
 					
-					ClearCheats(chs)
+					ClearCheats()
 					
 					; ~ If death by SCP-173, enable GodMode, prevent instant death again -- Salvage
 					If Curr173\Idle = 1 Then
@@ -8368,6 +8378,12 @@ Function InitStats()
 	me\Playable = True
 	me\SelectedEnding = -1
 	
+	If opt\DebugMode Then
+		InitCheats()
+	Else
+		ClearCheats()
+	EndIf
+	
 	ReadDifficultyFile()
 End Function
 
@@ -8692,7 +8708,7 @@ Function NullGame(PlayButtonSFX% = True)
 	Delete(I_1499)
 	I_1499.SCP1499 = New SCP1499
 	
-	ClearCheats(chs)
+	ClearCheats()
 	WireFrameState = 0
 	WireFrame(0)
 	

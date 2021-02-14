@@ -1369,7 +1369,7 @@ Function LoadGameQuick(File$)
 	MenuOpen = False
 	
 	ClearConsole()
-	ClearCheats(chs)
+	ClearCheats()
 	WireFrameState = 0
 	WireFrame(0)
 	
