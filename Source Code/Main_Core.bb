@@ -6534,7 +6534,7 @@ Function UpdateMenu()
 		x = x + (132 * MenuScale)
 		y = y + (122 * MenuScale)
 		
-		If (Not mo\MouseDown1) Then OnSliderID = 0
+		If (Not mo\MouseDown1) Then mm\OnSliderID = 0
 		
 		If AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg =< 0 Then
 			; ~ Just save this line, ok?
@@ -7109,7 +7109,7 @@ Function RenderMenu()
 					
 					Color(100, 100, 100)
 					Text(x, y + (5 * MenuScale), "Enable bump mapping:")	
-					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
+					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0
 						RenderOptionsTooltip(tX, tY, tW, tH, "bump")
 					EndIf
 					
@@ -7117,7 +7117,7 @@ Function RenderMenu()
 					
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "VSync:")
-					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
+					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0
 						RenderOptionsTooltip(tX, tY, tW, tH, "vsync")
 					EndIf
 					
@@ -7125,7 +7125,7 @@ Function RenderMenu()
 					
 					Color(255 - (155 * (opt\DisplayMode <> 0)), 255 - (155 * (opt\DisplayMode <> 0)), 255 - (155 * (opt\DisplayMode <> 0)))
 					Text(x, y + (5 * MenuScale), "Anti-aliasing:")
-					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
+					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0
 						RenderOptionsTooltip(tX, tY, tW, tH, "antialias")
 					EndIf
 					
@@ -7133,7 +7133,7 @@ Function RenderMenu()
 					
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Enable room lights:")
-					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
+					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0
 						RenderOptionsTooltip(tX, tY, tW, tH, "roomlights")
 					EndIf
 					
@@ -7141,7 +7141,7 @@ Function RenderMenu()
 					
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Screen gamma:")
-					If MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20) And OnSliderID = 0
+					If MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20) And mm\OnSliderID = 0
 						RenderOptionsTooltip(tX, tY, tW, tH, "gamma", opt\ScreenGamma)
 					EndIf
 					
@@ -7149,7 +7149,7 @@ Function RenderMenu()
 					
 					Color(255, 255, 255)
 					Text(x, y, "Particle amount:")
-					If (MouseOn(x + (270 * MenuScale), y - (9 * MenuScale), 114 * MenuScale, 20) And OnSliderID = 0) Lor OnSliderID = 2
+					If (MouseOn(x + (270 * MenuScale), y - (9 * MenuScale), 114 * MenuScale, 20) And mm\OnSliderID = 0) Lor mm\OnSliderID = 2
 						RenderOptionsTooltip(tX, tY, tW, tH, "particleamount", opt\ParticleAmount)
 					EndIf
 					
@@ -7157,7 +7157,7 @@ Function RenderMenu()
 					
 					Color(255, 255, 255)
 					Text(x, y, "Texture LOD Bias:")
-					If (MouseOn(x + (270 * MenuScale), y - (9 * MenuScale), 114 * MenuScale, 20) And OnSliderID = 0) Lor OnSliderID = 3
+					If (MouseOn(x + (270 * MenuScale), y - (9 * MenuScale), 114 * MenuScale, 20) And mm\OnSliderID = 0) Lor mm\OnSliderID = 3
 						RenderOptionsTooltip(tX, tY, tW, tH + 100 * MenuScale, "texquality")
 					EndIf
 					
@@ -7165,7 +7165,7 @@ Function RenderMenu()
 					
 					Color(100, 100, 100)
 					Text(x, y + (5 * MenuScale), "Save textures in the VRAM:")	
-					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
+					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0
 						RenderOptionsTooltip(tX, tY, tW, tH, "vram")
 					EndIf
 					
@@ -7174,7 +7174,7 @@ Function RenderMenu()
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Field of view:")
 					Color(255, 255, 0)
-					If MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20) And OnSliderID = 0
+					If MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20) And mm\OnSliderID = 0
 						RenderOptionsTooltip(tX, tY, tW, tH, "fov")
 					EndIf
 					
@@ -7182,7 +7182,7 @@ Function RenderMenu()
 					
 					Color(255, 255, 255)
 					Text(x, y, "Anisotropic filtering:")
-					If (MouseOn(x + (270 * MenuScale), y - (9 * MenuScale), 114 * MenuScale, 20) And OnSliderID = 0) Lor OnSliderID = 4
+					If (MouseOn(x + (270 * MenuScale), y - (9 * MenuScale), 114 * MenuScale, 20) And mm\OnSliderID = 0) Lor mm\OnSliderID = 4
 						RenderOptionsTooltip(tX, tY, tW, tH, "anisotropic")
 					EndIf
 					;[End Block]

@@ -5,6 +5,7 @@ Type MainMenu
 	Field MainMenuTab%, PrevMainMenuTab%
 	Field ShouldDeleteGadgets%
 	Field CurrLoadGamePage%
+	Field OnSliderID%, OnPalette%
 End Type
 
 Global mm.MainMenu = New MainMenu
@@ -173,7 +174,7 @@ Function UpdateMainMenu()
 			EndIf
 		EndIf
 		
-		If (Not mo\MouseDown1) Then OnSliderID = 0
+		If (Not mo\MouseDown1) Then mm\OnSliderID = 0
 		
 		If mm\PrevMainMenuTab <> mm\MainMenuTab Then
 			DeleteMenuGadgets()
@@ -1384,7 +1385,7 @@ Function RenderMainMenu()
 					
 					Color(255, 255, 255)				
 					Text(x, y + (5 * MenuScale), "Enable bump mapping:")	
-					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
+					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0
 						RenderOptionsTooltip(tX, tY, tW, tH, "bump")
 					EndIf
 					
@@ -1392,7 +1393,7 @@ Function RenderMainMenu()
 					
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "VSync:")
-					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
+					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0
 						RenderOptionsTooltip(tX, tY, tW, tH, "vsync")
 					EndIf
 					
@@ -1400,7 +1401,7 @@ Function RenderMainMenu()
 					
 					Color(255 - (155 * (opt\DisplayMode <> 0)), 255 - (155 * (opt\DisplayMode <> 0)), 255 - (155 * (opt\DisplayMode <> 0)))
 					Text(x, y + (5 * MenuScale), "Anti-aliasing:")
-					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
+					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0
 						RenderOptionsTooltip(tX, tY, tW, tH, "antialias")
 					EndIf
 					
@@ -1408,7 +1409,7 @@ Function RenderMainMenu()
 					
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Enable room lights:")
-					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
+					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0
 						RenderOptionsTooltip(tX, tY, tW, tH, "roomlights")
 					EndIf
 					
@@ -1416,7 +1417,7 @@ Function RenderMainMenu()
 					
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Screen gamma:")
-					If MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20) And OnSliderID = 0
+					If MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20) And mm\OnSliderID = 0
 						RenderOptionsTooltip(tX, tY, tW, tH, "gamma", opt\ScreenGamma)
 					EndIf
 					
@@ -1424,7 +1425,7 @@ Function RenderMainMenu()
 					
 					Color(255, 255, 255)
 					Text(x, y, "Particle amount:")
-					If (MouseOn(x + (290 * MenuScale), y - (9 * MenuScale), 164 * MenuScale, 20) And OnSliderID = 0) Lor OnSliderID = 2
+					If (MouseOn(x + (290 * MenuScale), y - (9 * MenuScale), 164 * MenuScale, 20) And mm\OnSliderID = 0) Lor mm\OnSliderID = 2
 						RenderOptionsTooltip(tX, tY, tW, tH, "particleamount", opt\ParticleAmount)
 					EndIf
 					
@@ -1432,7 +1433,7 @@ Function RenderMainMenu()
 					
 					Color(255, 255, 255)
 					Text(x, y, "Texture LOD Bias:")
-					If (MouseOn(x + (290 * MenuScale), y - (9 * MenuScale), 164 * MenuScale, 20) And OnSliderID = 0) Lor OnSliderID = 3
+					If (MouseOn(x + (290 * MenuScale), y - (9 * MenuScale), 164 * MenuScale, 20) And mm\OnSliderID = 0) Lor mm\OnSliderID = 3
 						RenderOptionsTooltip(tX, tY, tW, tH + (100 * MenuScale), "texquality")
 					EndIf
 					
@@ -1440,7 +1441,7 @@ Function RenderMainMenu()
 					
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Save textures in the VRAM:")
-					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0
+					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0
 						RenderOptionsTooltip(tX, tY, tW, tH, "vram")
 					EndIf
 					
@@ -1448,7 +1449,7 @@ Function RenderMainMenu()
 					
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Field of view:")
-					If MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20) And OnSliderID = 0
+					If MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20) And mm\OnSliderID = 0
 						RenderOptionsTooltip(tX, tY, tW, tH, "fov")
 					EndIf
 					
@@ -1456,7 +1457,7 @@ Function RenderMainMenu()
 					
 					Color(255, 255, 255)
 					Text(x, y, "Anisotropic filtering:")
-					If (MouseOn(x + (290 * MenuScale), y - (9 * MenuScale), 164 * MenuScale, 20) And OnSliderID = 0) Lor OnSliderID = 4
+					If (MouseOn(x + (290 * MenuScale), y - (9 * MenuScale), 164 * MenuScale, 20) And mm\OnSliderID = 0) Lor mm\OnSliderID = 4
 						RenderOptionsTooltip(tX, tY, tW, tH, "anisotropic")
 					EndIf
 					;[End Block]
@@ -1836,7 +1837,7 @@ Function RenderMainMenu()
 		SetFont(fo\FontID[Font_Default])
 	EndIf
 	
-	If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+	If opt\DisplayMode = 0 And (Not mm\OnPalette) Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	
 	SetFont(fo\FontID[Font_Default])
 	
@@ -2563,6 +2564,12 @@ Function UpdateMainMenuPalette(Img%, x%, y%)
 		mp\Width = ImageWidth(Img)
 		mp\Height = ImageHeight(Img)
 	EndIf
+	
+	If MouseOn(x, y, ImageWidth(Img), ImageHeight(Img)) Then
+		mm\OnPalette = True
+	Else
+		mm\OnPalette = False
+	EndIf
 End Function
 
 Function RenderMenuPalettes()
@@ -2581,6 +2588,8 @@ Function RenderMenuPalettes()
 				opt\SubColorG = ReadPixelColor(Pixel, 8)
 				opt\SubColorB = ReadPixelColor(Pixel, 0)
 			EndIf
+			Color(0, 0, 0)
+			Oval(ScaledMouseX(), ScaledMouseY(), 5 * MenuScale, 5 * MenuScale, False)
 		EndIf
 	Next
 End Function
@@ -2711,7 +2720,7 @@ Function UpdateMainMenuSlideBar#(x%, y%, Width%, Value#, TextLeft$ = "LOW", Text
 		currSlideBar\Value = Value
 	EndIf
 	
-	If mo\MouseDown1 And OnSliderID = 0 Then
+	If mo\MouseDown1 And mm\OnSliderID = 0 Then
 		If ScaledMouseX() >= x And ScaledMouseX() =< x + Width + 14 And ScaledMouseY() >= y And ScaledMouseY() =< y + 20 Then
 			Value = Min(Max((ScaledMouseX() - x) * 100 / Width, 0), 100)
 		EndIf
@@ -2733,8 +2742,6 @@ Function RenderMenuSlideBars()
 		Text(msb\x + msb\Width + (38 * MenuScale), msb\y + (4 * MenuScale), msb\TextRight)	
 	Next
 End Function
-
-Global OnSliderID% = 0
 
 Type MenuSlider
 	Field x%, y%, Width%
@@ -2772,11 +2779,11 @@ Function UpdateMainMenuSlider3(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$)
 	
 	If mo\MouseDown1 Then
 		If ScaledMouseX() >= x And ScaledMouseX() =< x + Width + 14 And ScaledMouseY() >= y - 8 And ScaledMouseY() =< y + 10
-			OnSliderID = ID
+			mm\OnSliderID = ID
 		EndIf
 	EndIf
 	
-	If ID = OnSliderID Then
+	If ID = mm\OnSliderID Then
 		If ScaledMouseX() =< x + 8
 			Value = 0
 		ElseIf ScaledMouseX() >= x + (Width / 2) And ScaledMouseX() =< x + (Width / 2) + 8
@@ -2818,11 +2825,11 @@ Function UpdateMainMenuSlider5(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$,
 	
 	If mo\MouseDown1 Then
 		If ScaledMouseX() >= x And ScaledMouseX() =< x + Width + 14 And ScaledMouseY() >= y - 8 And ScaledMouseY() =< y + 10
-			OnSliderID = ID
+			mm\OnSliderID = ID
 		EndIf
 	EndIf
 	
-	If ID = OnSliderID Then
+	If ID = mm\OnSliderID Then
 		If (ScaledMouseX() =< x + 8)
 			Value = 0
 		ElseIf ScaledMouseX() >= x + (Width / 4) And ScaledMouseX() =< x + (Width / 4) + 8
@@ -2843,7 +2850,7 @@ Function RenderMenuSliders()
 	
 	For ms.MenuSlider = Each MenuSlider
 		If ms\Amount = 3
-			If ms\ID = OnSliderID Then
+			If ms\ID = mm\OnSliderID Then
 				Color(0, 255, 0)
 			Else
 				Color(200, 200, 200)
@@ -2853,7 +2860,7 @@ Function RenderMenuSliders()
 			Rect(ms\x + (ms\Width / 2) + 5, ms\y - 8, 4, 9)
 			Rect(ms\x + ms\Width + 10, ms\y - 8, 4, 9)
 			
-			If ms\ID <> OnSliderID Then
+			If ms\ID <> mm\OnSliderID Then
 				If ScaledMouseX() >= ms\x And ScaledMouseX() =< ms\x + ms\Width + 14 And ScaledMouseY() >= ms\y - 8 And ScaledMouseY() =< ms\y + 10
 					Color(0, 200, 0)
 					Rect(ms\x, ms\y, ms\Width + 14, 10, False)
@@ -2880,7 +2887,7 @@ Function RenderMenuSliders()
 				Text(ms\x + ms\Width + 12, ms\y + 12, ms\Val3, True)
 			EndIf
 		ElseIf ms\Amount = 5
-			If ms\ID = OnSliderID Then
+			If ms\ID = mm\OnSliderID Then
 				Color(0, 255, 0)
 			Else
 				Color(200, 200, 200)
@@ -2892,7 +2899,7 @@ Function RenderMenuSliders()
 			Rect(ms\x + (ms\Width * 0.75) + 7.5, ms\y - 8, 4, 9)
 			Rect(ms\x + ms\Width + 10, ms\y - 8, 4, 9)
 			
-			If ms\ID <> OnSliderID Then
+			If ms\ID <> mm\OnSliderID Then
 				If (ScaledMouseX() >= ms\x) And (ScaledMouseX() =< ms\x + ms\Width + 14) And (ScaledMouseY() >= ms\y - 8) And (ScaledMouseY() =< ms\y + 10)
 					Color(0, 200, 0)
 					Rect(ms\x, ms\y, ms\Width + 14, 10, False)
