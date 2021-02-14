@@ -121,8 +121,8 @@ Function UpdateMainMenu()
 			mo\DoubleClick = False
 			mo\MouseHit1 = MouseHit(1)
 			If mo\MouseHit1 Then
-				If MilliSecs() - mo\LastMouseHit1 < 800 Then mo\DoubleClick = True
-				mo\LastMouseHit1 = MilliSecs()
+				If MilliSecs2() - mo\LastMouseHit1 < 800 Then mo\DoubleClick = True
+				mo\LastMouseHit1 = MilliSecs2()
 			EndIf
 			
 			Local PrevMouseDown1% = mo\MouseDown1
@@ -433,7 +433,7 @@ Function UpdateMainMenu()
 						If CurrSave = "" Then CurrSave = "untitled"
 						
 						If RandomSeed = "" Then
-							RandomSeed = Abs(MilliSecs())
+							RandomSeed = Abs(MilliSecs2())
 						EndIf
 						
 						SeedRnd(GenerateSeedNumber(RandomSeed))
@@ -1053,7 +1053,7 @@ Function RenderMainMenu()
 	
 	DrawImage(mma\BackGround, 0, 0)
 	
-	If (MilliSecs() Mod mm\MainMenuBlinkTimer[0]) >= Rand(mm\MainMenuBlinkDuration[0]) Then
+	If (MilliSecs2() Mod mm\MainMenuBlinkTimer[0]) >= Rand(mm\MainMenuBlinkDuration[0]) Then
 		DrawImage(mma\SCP173, opt\GraphicWidth - ImageWidth(mma\SCP173), opt\GraphicHeight - ImageHeight(mma\SCP173))
 	EndIf
 	
@@ -2670,7 +2670,7 @@ Function RenderMenuInputBoxes()
 		Color(255, 255, 255)	
 		
 		If SelectedInputBox = mib\ID Then
-			If (MilliSecs() Mod 800) < 400 Then Rect(mib\x + (mib\Width / 2) - (StringWidth(mib\Txt) / 2) + StringWidth(Left(mib\Txt, CursorPos)), mib\y + (mib\Height / 2) - (5 * MenuScale), 2 * MenuScale, 12 * MenuScale)
+			If (MilliSecs2() Mod 800) < 400 Then Rect(mib\x + (mib\Width / 2) - (StringWidth(mib\Txt) / 2) + StringWidth(Left(mib\Txt, CursorPos)), mib\y + (mib\Height / 2) - (5 * MenuScale), 2 * MenuScale, 12 * MenuScale)
 		EndIf	
 		
 		Text(mib\x + (mib\Width / 2), mib\y + (mib\Height / 2), mib\Txt, True, True)

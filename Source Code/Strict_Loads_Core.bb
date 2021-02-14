@@ -24,14 +24,14 @@ Function AutoReleaseSounds()
 			If snd\Channels[i] <> 0 Then
 				If ChannelPlaying(snd\Channels[i]) Then
 					TryRelease = False
-					snd\ReleaseTime = MilliSecs() + 5000
+					snd\ReleaseTime = MilliSecs2() + 5000
 					Exit
 				EndIf
 			EndIf
 		Next
 		
 		If TryRelease Then
-			If snd\ReleaseTime < MilliSecs() Then
+			If snd\ReleaseTime < MilliSecs2() Then
 				If snd\InternalHandle <> 0 Then
 					FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
 				EndIf
@@ -73,7 +73,7 @@ Function PlaySound_Strict%(SoundHandle%)
 					EndIf
 					If opt\EnableSubtitles And snd\HasSubtitles Then ShowSubtitles(snd\Name)
 					ChannelVolume(snd\Channels[i], opt\SFXVolume)
-					snd\ReleaseTime = MilliSecs() + 5000 ; ~ Release after 5 seconds
+					snd\ReleaseTime = MilliSecs2() + 5000 ; ~ Release after 5 seconds
 					Return(snd\Channels[i])
 				EndIf
 			Else
@@ -101,7 +101,7 @@ Function PlaySound_Strict%(SoundHandle%)
 				EndIf
 				If opt\EnableSubtitles And snd\HasSubtitles Then ShowSubtitles(snd\Name)
 				ChannelVolume(snd\Channels[i], opt\SFXVolume)
-				snd\ReleaseTime = MilliSecs() + 5000 ; ~ Release after 5 seconds
+				snd\ReleaseTime = MilliSecs2() + 5000 ; ~ Release after 5 seconds
 				Return(snd\Channels[i])
 			EndIf
 		Next

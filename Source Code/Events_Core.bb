@@ -1686,7 +1686,7 @@ Function UpdateEvents()
 						EndIf
 						
 						If e\room\NPC[7] <> Null Then
-							RotateEntity(e\room\NPC[7]\Collider, 0.0, 180.0 + Sin(MilliSecs() / 20.0) * 3.0, 0.0, True)
+							RotateEntity(e\room\NPC[7]\Collider, 0.0, 180.0 + Sin(MilliSecs2() / 20.0) * 3.0, 0.0, True)
 							PositionEntity(e\room\NPC[7]\Collider, EntityX(e\room\OBJ, True) - 3361.0 * RoomScale, (-315.0) * RoomScale, EntityZ(e\room\OBJ, True) - 2165.0 * RoomScale)
 							ResetEntity(e\room\NPC[7]\Collider)
 							
@@ -2311,7 +2311,7 @@ Function UpdateEvents()
 				;[End Block]
 			Case e_room895, e_room895_106
 				;[Block]
-				If e\EventState < MilliSecs() Then
+				If e\EventState < MilliSecs2() Then
 					; ~ SCP-079 starts broadcasting SCP-895's camera feed on monitors after leaving the first zone
 					If me\Zone > 0 Then 
 						If EntityPitch(e\room\Levers[0], True) > 0.0 Then ; ~ Camera feed on
@@ -2326,7 +2326,7 @@ Function UpdateEvents()
 							Next
 						EndIf						
 					EndIf
-					e\EventState = MilliSecs() + 3000
+					e\EventState = MilliSecs2() + 3000
 				EndIf
 				
 				If PlayerRoom = e\room Then
@@ -2441,7 +2441,7 @@ Function UpdateEvents()
 							
 							me\Sanity = me\Sanity - (fps\Factor[0] * 1.1 * wi\NightVision + wi\SCRAMBLE)
 							me\RestoreSanity = False
-							me\BlurTimer = Sin(MilliSecs() / 10) * Abs(me\Sanity)
+							me\BlurTimer = Sin(MilliSecs2() / 10) * Abs(me\Sanity)
 							
 							If me\VomitTimer < 0.0 Then
 								me\RestoreSanity = False
@@ -2986,7 +2986,7 @@ Function UpdateEvents()
 									
 									me\Sanity = Max(me\Sanity - fps\Factor[0] / Temp / 8.0, -1000.0)
 									
-									me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs()) / 20.0) + 1.0) * 15.0 * Max((6.0 - Temp) / 6.0, 0.0))
+									me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs2()) / 20.0) + 1.0) * 15.0 * Max((6.0 - Temp) / 6.0, 0.0))
 									
 									Pvt = CreatePivot()
 									PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
@@ -3242,8 +3242,8 @@ Function UpdateEvents()
 							PositionEntity(Curr106\Collider, EntityX(e\room\Objects[e\EventState2], True), 0.27, EntityZ(e\room\Objects[e\EventState2], True))
 							
 							PointEntity(Curr106\Collider, Camera)
-							TurnEntity(Curr106\Collider, 0.0, Sin(MilliSecs() / 20.0) * 6.0, 0, True)
-							MoveEntity(Curr106\Collider, 0.0, 0.0, Sin(MilliSecs() / 15.0) * 0.06)
+							TurnEntity(Curr106\Collider, 0.0, Sin(MilliSecs2() / 20.0) * 6.0, 0, True)
+							MoveEntity(Curr106\Collider, 0.0, 0.0, Sin(MilliSecs2() / 15.0) * 0.06)
 							
 							ShowEntity(Curr106\OBJ)
 							ShowEntity(Curr106\Collider)
@@ -3700,7 +3700,7 @@ Function UpdateEvents()
 					If e\EventState = 0.0 Then
 						If e\room\Dist < 8.0 Then
 							HideEntity(e\room\Objects[3])
-							If (MilliSecs() Mod 1500) < 800 Then
+							If (MilliSecs2() Mod 1500) < 800 Then
 								ShowEntity(e\room\Objects[4])
 							Else
 								HideEntity(e\room\Objects[4])
@@ -3798,7 +3798,7 @@ Function UpdateEvents()
 						e\EventState = e\EventState + fps\Factor[0]
 						If e\EventState =< 40.0 Then
 							HideEntity(e\room\Objects[3])
-							If (MilliSecs() Mod 100) < 50 Then
+							If (MilliSecs2() Mod 100) < 50 Then
 								ShowEntity(e\room\Objects[4])
 							Else
 								HideEntity(e\room\Objects[4])
@@ -4790,8 +4790,8 @@ Function UpdateEvents()
 						ResetEntity(Curr106\Collider)
 						
 						PointEntity(Curr106\Collider, Camera)
-						TurnEntity(Curr106\Collider, 0.0, Sin(MilliSecs() / 20) * 6.0, 0.0, True)
-						MoveEntity(Curr106\Collider, 0.0, 0.0, Sin(MilliSecs() / 15) * 0.06)
+						TurnEntity(Curr106\Collider, 0.0, Sin(MilliSecs2() / 20) * 6.0, 0.0, True)
+						MoveEntity(Curr106\Collider, 0.0, 0.0, Sin(MilliSecs2() / 15) * 0.06)
 						PositionEntity(Curr106\OBJ, EntityX(Curr106\Collider), EntityY(Curr106\Collider) - 0.15, EntityZ(Curr106\Collider))
 						
 						RotateEntity(Curr106\OBJ, 0.0, EntityYaw(Curr106\Collider), 0.0)
@@ -5370,7 +5370,7 @@ Function UpdateEvents()
 						If e\room\NPC[0] <> Null Then
 							If EntityDistanceSquared(me\Collider, e\room\NPC[0]\Collider) < 9.0 Then
 								If EntityInView(e\room\NPC[0]\OBJ, Camera) Then
-									me\CurrCameraZoom = (Sin(Float(MilliSecs()) / 20.0) + 1.0) * 15.0
+									me\CurrCameraZoom = (Sin(Float(MilliSecs2()) / 20.0) + 1.0) * 15.0
 									me\HeartBeatVolume = Max(CurveValue(0.3, me\HeartBeatVolume, 2.0), me\HeartBeatVolume)
 									me\HeartBeatRate = Max(me\HeartBeatRate, 120.0)
 								EndIf
@@ -5419,7 +5419,7 @@ Function UpdateEvents()
 							ElseIf e\EventState > 60.0
 								AnimateNPC(e\room\NPC[0], 80.0, 61.0, -0.02, False)
 								e\room\NPC[0]\DropSpeed = 0.0
-								y = CurveValue(1.5 + Sin(Float(MilliSecs()) / 20.0) * 0.1, EntityY(e\room\NPC[0]\Collider), 50.0)
+								y = CurveValue(1.5 + Sin(Float(MilliSecs2()) / 20.0) * 0.1, EntityY(e\room\NPC[0]\Collider), 50.0)
 								PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\NPC[0]\Collider), y, EntityZ(e\room\NPC[0]\Collider))
 								TurnEntity(e\room\NPC[0]\Collider, 0.0, fps\Factor[0] * 0.1, 0.0)
 							EndIf 								
@@ -5617,7 +5617,7 @@ Function UpdateEvents()
 				;[End Block]
 			Case e_room4
 				;[Block]
-				If e\EventState < MilliSecs() Then
+				If e\EventState < MilliSecs2() Then
 					If PlayerRoom <> e\room Then
 						If DistanceSquared(EntityX(me\Collider), EntityX(e\room\OBJ), EntityZ(me\Collider), EntityZ(e\room\OBJ)) < 256.0 Then
 							If Curr049 <> Null Then
@@ -5633,7 +5633,7 @@ Function UpdateEvents()
 							EndIf
 						EndIf
 					EndIf
-					If e <> Null Then e\EventState = MilliSecs() + 5000
+					If e <> Null Then e\EventState = MilliSecs2() + 5000
 				EndIf
 				;[End Block]
 			Case e_room012
@@ -5692,8 +5692,8 @@ Function UpdateEvents()
 									
 									me\HeartBeatRate = 150.0
 									me\HeartBeatVolume = Max(3.0 - Dist, 0.0) / 3.0
-									me\BlurVolume = Max((2.0 - Dist) * (e\EventState3 / 800.0)*(Sin(Float(MilliSecs()) / 20.0 + 1.0)), me\BlurVolume)
-									me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs()) / 20.0) + 1.0) * 8.0 * Max((3.0 - Dist), 0.0))
+									me\BlurVolume = Max((2.0 - Dist) * (e\EventState3 / 800.0)*(Sin(Float(MilliSecs2()) / 20.0 + 1.0)), me\BlurVolume)
+									me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs2()) / 20.0) + 1.0) * 8.0 * Max((3.0 - Dist), 0.0))
 									
 									If BreathCHN <> 0 Then
 										If ChannelPlaying(BreathCHN) Then StopChannel(BreathCHN)
@@ -6189,7 +6189,7 @@ Function UpdateEvents()
 										
 										If (Not I_714\Using) And wi\HazmatSuit <> 3 And wi\GasMask <> 3 Then
 											me\Sanity = me\Sanity - (fps\Factor[0] * 1.1)
-											me\BlurTimer = Sin(MilliSecs() / 10.0) * Abs(me\Sanity)
+											me\BlurTimer = Sin(MilliSecs2() / 10.0) * Abs(me\Sanity)
 										EndIf
 										
 										If wi\HazmatSuit = 0 Then
@@ -6721,8 +6721,8 @@ Function UpdateEvents()
 							EndIf
 							
 							If e\EventState2 Then
-								PositionEntity(e\room\Objects[6], EntityX(e\room\Objects[6], True), CurveValue(-8308.0 * RoomScale + Sin(Float(MilliSecs()) * 0.04) * 0.07, EntityY(e\room\Objects[6], True), 200.0), EntityZ(e\room\Objects[6], True), True)
-								RotateEntity(e\room\Objects[6], Sin(Float(MilliSecs()) * 0.03), EntityYaw(e\room\Objects[6], True), -Sin(Float(MilliSecs()) * 0.025), True)
+								PositionEntity(e\room\Objects[6], EntityX(e\room\Objects[6], True), CurveValue(-8308.0 * RoomScale + Sin(Float(MilliSecs2()) * 0.04) * 0.07, EntityY(e\room\Objects[6], True), 200.0), EntityZ(e\room\Objects[6], True), True)
+								RotateEntity(e\room\Objects[6], Sin(Float(MilliSecs2()) * 0.03), EntityYaw(e\room\Objects[6], True), -Sin(Float(MilliSecs2()) * 0.025), True)
 							Else
 								PositionEntity(e\room\Objects[6], EntityX(e\room\Objects[6], True), CurveValue(-8608.0 * RoomScale, EntityY(e\room\Objects[6], True), 200.0), EntityZ(e\room\Objects[6], True), True)
 								RotateEntity(e\room\Objects[6], 0, EntityYaw(e\room\Objects[6], True), 0.0, True)
@@ -7602,7 +7602,7 @@ Function UpdateEvents()
 								e\SoundCHN = LoopSound2(AlarmSFX[0], e\SoundCHN, Camera, e\room\Objects[0], 5.0)
 							EndIf
 							
-							If (MilliSecs() Mod 1000) < 500 Then
+							If (MilliSecs2() Mod 1000) < 500 Then
 								ShowEntity(e\room\Objects[5]) 
 							Else
 								HideEntity(e\room\Objects[5])
@@ -9641,18 +9641,18 @@ Function UpdateEndings()
 							e\EventState = e\EventState + fps\Factor[0]
 							
 							If e\EventState < 70.0 * 40.0 Then 	
-								e\room\NPC[0]\EnemyX = EntityX(e\room\Objects[6], True) + Sin(MilliSecs() / 25.0) * 3.0
-								e\room\NPC[0]\EnemyY = EntityY(e\room\Objects[6], True) + Cos(MilliSecs() / 85.0) + 9.0
-								e\room\NPC[0]\EnemyZ = EntityZ(e\room\Objects[6], True) + Cos(MilliSecs() / 25.0) * 3.0
+								e\room\NPC[0]\EnemyX = EntityX(e\room\Objects[6], True) + Sin(MilliSecs2() / 25.0) * 3.0
+								e\room\NPC[0]\EnemyY = EntityY(e\room\Objects[6], True) + Cos(MilliSecs2() / 85.0) + 9.0
+								e\room\NPC[0]\EnemyZ = EntityZ(e\room\Objects[6], True) + Cos(MilliSecs2() / 25.0) * 3.0
 								
-								e\room\NPC[2]\EnemyX = EntityX(e\room\Objects[6], True) + Sin(MilliSecs() / 23.0) * 3.0
-								e\room\NPC[2]\EnemyY = EntityY(e\room\Objects[6], True) + Cos(MilliSecs() / 83.0) + 5.0
-								e\room\NPC[2]\EnemyZ = EntityZ(e\room\Objects[6], True) + Cos(MilliSecs() / 23.0) * 3.0
+								e\room\NPC[2]\EnemyX = EntityX(e\room\Objects[6], True) + Sin(MilliSecs2() / 23.0) * 3.0
+								e\room\NPC[2]\EnemyY = EntityY(e\room\Objects[6], True) + Cos(MilliSecs2() / 83.0) + 5.0
+								e\room\NPC[2]\EnemyZ = EntityZ(e\room\Objects[6], True) + Cos(MilliSecs2() / 23.0) * 3.0
 								
 								If e\room\NPC[3]\State = 3.0 Then 
-									e\room\NPC[3]\EnemyX = EntityX(e\room\Objects[6], True) + Sin(MilliSecs() / 20.0) * 3.0
-									e\room\NPC[3]\EnemyY = EntityY(e\room\Objects[6], True) + Cos(MilliSecs() / 80.0) + 3.5
-									e\room\NPC[3]\EnemyZ = EntityZ(e\room\Objects[6], True) + Cos(MilliSecs() / 20.0) * 3.0
+									e\room\NPC[3]\EnemyX = EntityX(e\room\Objects[6], True) + Sin(MilliSecs2() / 20.0) * 3.0
+									e\room\NPC[3]\EnemyY = EntityY(e\room\Objects[6], True) + Cos(MilliSecs2() / 80.0) + 3.5
+									e\room\NPC[3]\EnemyZ = EntityZ(e\room\Objects[6], True) + Cos(MilliSecs2() / 20.0) * 3.0
 								EndIf
 							EndIf
 						EndIf
@@ -9742,13 +9742,13 @@ Function UpdateEndings()
 									EndIf
 								Else
 									If me\SelectedEnding = Ending_B1 Then
-										e\room\NPC[0]\EnemyX = EntityX(e\room\Objects[6], True) + Sin(MilliSecs() / 25.0) * 3.0
-										e\room\NPC[0]\EnemyY = EntityY(e\room\Objects[6], True) + Cos(MilliSecs() / 85.0) + 9.0
-										e\room\NPC[0]\EnemyZ = EntityZ(e\room\Objects[6], True) + Cos(MilliSecs() / 25.0) * 3.0
+										e\room\NPC[0]\EnemyX = EntityX(e\room\Objects[6], True) + Sin(MilliSecs2() / 25.0) * 3.0
+										e\room\NPC[0]\EnemyY = EntityY(e\room\Objects[6], True) + Cos(MilliSecs2() / 85.0) + 9.0
+										e\room\NPC[0]\EnemyZ = EntityZ(e\room\Objects[6], True) + Cos(MilliSecs2() / 25.0) * 3.0
 										
-										e\room\NPC[2]\EnemyX = EntityX(e\room\Objects[6], True) + Sin(MilliSecs() / 23.0) * 3.0
-										e\room\NPC[2]\EnemyY = EntityY(e\room\Objects[6], True) + Cos(MilliSecs() / 83.0) + 5.0
-										e\room\NPC[2]\EnemyZ = EntityZ(e\room\Objects[6], True) + Cos(MilliSecs() / 23.0) * 3.0
+										e\room\NPC[2]\EnemyX = EntityX(e\room\Objects[6], True) + Sin(MilliSecs2() / 23.0) * 3.0
+										e\room\NPC[2]\EnemyY = EntityY(e\room\Objects[6], True) + Cos(MilliSecs2() / 83.0) + 5.0
+										e\room\NPC[2]\EnemyZ = EntityZ(e\room\Objects[6], True) + Cos(MilliSecs2() / 23.0) * 3.0
 										
 										e\room\RoomDoors[4]\Open = True : e\room\RoomDoors[4]\Locked = 0
 										

@@ -196,7 +196,7 @@ Function UpdateWorld2()
 	EndIf
 	
 	If fps\Factor[0] > 0.0 Then
-		If HasBattery = 1 And ((MilliSecs() Mod 800) < 200) Then
+		If HasBattery = 1 And ((MilliSecs2() Mod 800) < 200) Then
 			If (Not LowBatteryCHN[1]) Then
 				LowBatteryCHN[1] = PlaySound_Strict(LowBatterySFX[1])
 			ElseIf (Not ChannelPlaying(LowBatteryCHN[1])) Then
@@ -345,7 +345,7 @@ Function RenderWorld2(Tween#)
 	CameraProjMode(ArkBlurCam, 0)
 	
 	If fps\Factor[0] > 0.0 Then
-		If HasBattery = 1 And ((MilliSecs() Mod 800) < 400)
+		If HasBattery = 1 And ((MilliSecs2() Mod 800) < 400)
 			Color(255, 0, 0)
 			SetFont(fo\FontID[Font_Digital])
 			

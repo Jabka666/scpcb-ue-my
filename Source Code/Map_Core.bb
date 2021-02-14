@@ -3037,7 +3037,7 @@ Function UpdateSecurityCams() ; ~ TODO: SHOULD BE SEPARATED!
 					RotateEntity(sc\CameraOBJ, EntityPitch(sc\CameraOBJ), sc\room\Angle + sc\Angle + Max(Min(sc\CurrAngle, sc\Turn), -sc\Turn), 0)
 					
 					If EntityInView(sc\CameraOBJ, Camera) And EntityVisible(sc\CameraOBJ, Camera) Then
-						If (MilliSecs() Mod 1200) < 800 Then
+						If (MilliSecs2() Mod 1200) < 800 Then
 							EntityTexture(sc\CameraOBJ, tt\MiscTextureID[19])
 						Else
 							EntityTexture(sc\CameraOBJ, tt\MiscTextureID[18])
@@ -3186,7 +3186,7 @@ Function UpdateSecurityCams() ; ~ TODO: SHOULD BE SEPARATED!
 						
 						If Rand(500) = 1 Then EntityTexture(sc\ScrOverlay, tt\MiscTextureID[Rand(1, 6)])
 						
-						If (MilliSecs() Mod sc\PlayerState) >= Rand(600) Then
+						If (MilliSecs2() Mod sc\PlayerState) >= Rand(600) Then
 							EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
 						Else
 							If (Not sc\SoundCHN) Then
@@ -3396,7 +3396,7 @@ End Function
 Function InitWayPoints(LoadingStart% = 45)
 	Local d.Doors, w.WayPoints, w2.WayPoints, r.Rooms, ClosestRoom.Rooms
 	Local x#, y#, z#
-	Local Temper% = MilliSecs()
+	Local Temper% = MilliSecs2()
 	Local Dist#, Dist2#
 	
 	For d.Doors = Each Doors
@@ -8719,7 +8719,7 @@ Function SetChunkDataValues()
 		Next
 	Next
 	
-	SeedRnd(MilliSecs())
+	SeedRnd(MilliSecs2())
 End Function
 
 Type ChunkPart
@@ -8769,7 +8769,7 @@ Function CreateChunkParts(r.Rooms)
 		EndIf
 	Next
 	
-	SeedRnd(MilliSecs())
+	SeedRnd(MilliSecs2())
 End Function
 
 Type Chunk

@@ -642,9 +642,9 @@ Function UpdateItems()
 		i\Dropped = 0
 		
 		If (Not i\Picked) Then
-			If i\DistTimer < MilliSecs() Then
+			If i\DistTimer < MilliSecs2() Then
 				i\Dist = EntityDistance(Camera, i\Collider)
-				i\DistTimer = MilliSecs() + 700
+				i\DistTimer = MilliSecs2() + 700
 				If i\Dist < HideDist Then ShowEntity(i\Collider)
 			EndIf
 			

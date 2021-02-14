@@ -125,7 +125,7 @@ End Type
 
 Global fps.FramesPerSeconds = New FramesPerSeconds
 
-SeedRnd(MilliSecs())
+SeedRnd(MilliSecs2())
 
 Global GameSaved%
 
@@ -932,8 +932,7 @@ Function UpdateConsole()
 					
 					For r.Rooms = Each Rooms
 						If r\RoomTemplate\Name = StrTemp Then
-							PositionEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.7, EntityZ(r\OBJ))
-							ResetEntity(me\Collider)
+							TeleportEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.7, EntityZ(r\OBJ))
 							UpdateDoors()
 							UpdateRooms()
 							For it.Items = Each Items
@@ -1974,20 +1973,19 @@ End Function
 Repeat
 	Cls()
 	
-	Local ElapsedMilliseconds%
+	Local ElapsedMilliSecs%
 	
-	fps\CurrTime = MilliSecs()
+	fps\CurrTime = MilliSecs2()
 	
-	ElapsedMilliseconds = fps\CurrTime - fps\PrevTime
-	If (ElapsedMilliseconds > 0 And ElapsedMilliseconds < 500) Then
-		fps\Accumulator = fps\Accumulator + Max(0.0, Float(ElapsedMilliseconds) * 70.0 / 1000.0)
+	ElapsedMilliSecs = fps\CurrTime - fps\PrevTime
+	If (ElapsedMilliSecs > 0 And ElapsedMilliSecs < 500) Then
+		fps\Accumulator = fps\Accumulator + Max(0.0, Float(ElapsedMilliSecs) * 70.0 / 1000.0)
 	EndIf
 	fps\PrevTime = fps\CurrTime
 	
 	If opt\Framelimit > 0.0 Then
-		Local LoopDelay% = MilliSecs()
-		; ~ Framelimit
-		Local WaitingTime% = (1000.0 / opt\Framelimit) - (MilliSecs() - LoopDelay)
+		Local LoopDelay% = MilliSecs2()
+		Local WaitingTime% = (1000.0 / opt\Framelimit) - (MilliSecs2() - LoopDelay)
 		
 		Delay(WaitingTime)
 	EndIf
@@ -2006,10 +2004,10 @@ Repeat
 	If KeyHit(key\SCREENSHOT) Then GetScreenshot()
 	
 	If opt\ShowFPS Then
-		If fps\Goal < MilliSecs() Then
+		If fps\Goal < MilliSecs2() Then
 			fps\FPS = fps\TempFPS
 			fps\TempFPS = 0
-			fps\Goal = MilliSecs() + 1000
+			fps\Goal = MilliSecs2() + 1000
 		Else
 			fps\TempFPS = fps\TempFPS + 1
 		EndIf
@@ -2053,8 +2051,8 @@ Function MainLoop()
 			mo\DoubleClick = False
 			mo\MouseHit1 = MouseHit(1)
 			If mo\MouseHit1 Then
-				If MilliSecs() - mo\LastMouseHit1 < 800 Then mo\DoubleClick = True
-				mo\LastMouseHit1 = MilliSecs()
+				If MilliSecs2() - mo\LastMouseHit1 < 800 Then mo\DoubleClick = True
+				mo\LastMouseHit1 = MilliSecs2()
 			EndIf
 			
 			Local PrevMouseDown1% = mo\MouseDown1
@@ -2985,7 +2983,7 @@ Function MovePlayer()
 	
 	If me\Injuries > 1.0 Then
 		Temp2 = me\Bloodloss
-		me\BlurTimer = Max(Max(Sin(MilliSecs() / 100.0) * me\Bloodloss * 30.0, me\Bloodloss * 2.0 * (2.0 - me\CrouchState)), me\BlurTimer)
+		me\BlurTimer = Max(Max(Sin(MilliSecs2() / 100.0) * me\Bloodloss * 30.0, me\Bloodloss * 2.0 * (2.0 - me\CrouchState)), me\BlurTimer)
 		If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then
 			me\Bloodloss = Min(me\Bloodloss + (Min(me\Injuries, 3.5) / 300.0) * fps\Factor[0], 100.0)
 		EndIf
@@ -3015,7 +3013,7 @@ Function MovePlayer()
 			FreeEntity(Pvt)
 		EndIf
 		
-		me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs()) / 20.0) + 1.0) * me\Bloodloss * 0.2)
+		me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs2()) / 20.0) + 1.0) * me\Bloodloss * 0.2)
 		
 		If me\Bloodloss > 60.0 Then 
 			If (Not me\Crouch) Then SetCrouch(True)
@@ -3100,7 +3098,7 @@ Function MouseLook()
 		
 		If PlayerRoom\RoomTemplate\Name = "pocketdimension" Then
 			If EntityY(me\Collider) < 2000.0 * RoomScale Lor EntityY(me\Collider) > 2608.0 * RoomScale Then
-				RotateEntity(Camera, WrapAngle(EntityPitch(Camera)), WrapAngle(EntityYaw(Camera)), Roll + WrapAngle(Sin(MilliSecs() / 150.0) * 30.0)) ; ~ Pitch the user's camera up and down
+				RotateEntity(Camera, WrapAngle(EntityPitch(Camera)), WrapAngle(EntityYaw(Camera)), Roll + WrapAngle(Sin(MilliSecs2() / 150.0) * 30.0)) ; ~ Pitch the user's camera up and down
 			EndIf
 		EndIf
 	Else
@@ -4894,7 +4892,7 @@ Function UpdateGUI()
 						EndIf
 						
 						If SelectedItem\ItemTemplate\TempName = "radio" Lor SelectedItem\ItemTemplate\TempName = "18vradio" Then
-							If SelectedItem\State =< 20.0 And ((MilliSecs() Mod 800) < 200) Then
+							If SelectedItem\State =< 20.0 And ((MilliSecs2() Mod 800) < 200) Then
 								If (Not LowBatteryCHN[0]) Then
 									LowBatteryCHN[0] = PlaySound_Strict(LowBatterySFX[0])
 								ElseIf (Not ChannelPlaying(LowBatteryCHN[0])) Then
@@ -5112,7 +5110,7 @@ Function UpdateGUI()
 					SelectedItem\State = Max(0.0, SelectedItem\State - fps\Factor[0] * 0.005)
 					
 					If SelectedItem\State > 0.0 Then
-						If SelectedItem\State =< 10.0 And ((MilliSecs() Mod 800) < 200) Then
+						If SelectedItem\State =< 10.0 And ((MilliSecs2() Mod 800) < 200) Then
 							If (Not LowBatteryCHN[0]) Then
 								LowBatteryCHN[0] = PlaySound_Strict(LowBatterySFX[0])
 							ElseIf (Not ChannelPlaying(LowBatteryCHN[0])) Then
@@ -6127,7 +6125,7 @@ Function RenderGUI()
 							
 							SetFont(fo\FontID[Font_Digital])
 							If StrTemp <> "" Then
-								StrTemp = Right(Left(StrTemp, (Int(MilliSecs() / 300) Mod Len(StrTemp))), 10)
+								StrTemp = Right(Left(StrTemp, (Int(MilliSecs2() / 300) Mod Len(StrTemp))), 10)
 								Text(x + 32, y + 33, StrTemp)
 							EndIf
 							SetFont(fo\FontID[Font_Default])
@@ -6218,7 +6216,7 @@ Function RenderGUI()
 					EndIf
 					
 					If (Not NavWorks) Then
-						If (MilliSecs() Mod 800) < 200 Then
+						If (MilliSecs2() Mod 800) < 200 Then
 							Color(200, 0, 0)
 							Text(x, y + (NAV_HEIGHT / 2) - 80, "ERROR 06", True)
 							Text(x, y + (NAV_HEIGHT / 2) - 60, "LOCATION UNKNOWN", True)						
@@ -6293,7 +6291,7 @@ Function RenderGUI()
 							Else
 								Color(30, 30, 30)
 							EndIf
-							If ((MilliSecs() Mod 800) < 200) Then
+							If ((MilliSecs2() Mod 800) < 200) Then
 								If SelectedItem\ItemTemplate\TempName = "nav" Lor SelectedItem\ItemTemplate\TempName = "nav300" Then
 									Text(x - NAV_WIDTH / 2 + 10, y - NAV_HEIGHT / 2 + 10, "MAP DATABASE OFFLINE")
 								EndIf
@@ -6310,7 +6308,7 @@ Function RenderGUI()
 							
 							Local SCPs_Found% = 0, Dist#
 							
-							If SelectedItem\ItemTemplate\TempName = "navulti" And (MilliSecs() Mod 600) < 400 Then
+							If SelectedItem\ItemTemplate\TempName = "navulti" And (MilliSecs2() Mod 600) < 400 Then
 								If Curr173 <> Null Then
 									Dist = EntityDistanceSquared(Camera, Curr173\OBJ)
 									If Dist < 900.0 Then
@@ -9366,22 +9364,22 @@ Function UpdateVomit()
 	If me\VomitTimer > 0.0 Then
 		me\VomitTimer = me\VomitTimer - (fps\Factor[0] / 70.0)
 		
-		If (MilliSecs() Mod 1600) < Rand(200, 400) Then
+		If (MilliSecs2() Mod 1600) < Rand(200, 400) Then
 			If me\BlurTimer = 0.0 Then me\BlurTimer = 70.0 * Rnd(10.0, 20.0)
 			me\CameraShake = Rnd(0.0, 2.0)
 		EndIf
 		
-		If Rand(50) = 50 And (MilliSecs() Mod 4000) < 200 Then PlaySound_Strict(CoughSFX[Rand(0, 2)])
+		If Rand(50) = 50 And (MilliSecs2() Mod 4000) < 200 Then PlaySound_Strict(CoughSFX[Rand(0, 2)])
 		
 		; ~ Regurgitate when timer is below 10 seconds
 		If me\VomitTimer < 10.0 And Rnd(0.0, 500.0 * me\VomitTimer) < 2.0 Then
 			If (Not ChannelPlaying(VomitCHN)) And (Not me\Regurgitate) Then
 				VomitCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Retch" + Rand(1, 2) + ".ogg"))
-				me\Regurgitate = MilliSecs() + 50
+				me\Regurgitate = MilliSecs2() + 50
 			EndIf
 		EndIf
 		
-		If me\Regurgitate > MilliSecs() And me\Regurgitate <> 0 Then
+		If me\Regurgitate > MilliSecs2() And me\Regurgitate <> 0 Then
 			mo\Mouse_Y_Speed_1 = mo\Mouse_Y_Speed_1 + 1.0
 		Else
 			me\Regurgitate = 0
@@ -9390,7 +9388,7 @@ Function UpdateVomit()
 		me\VomitTimer = me\VomitTimer - (fps\Factor[0] / 70.0)
 		
 		If me\VomitTimer > -5.0 Then
-			If (MilliSecs() Mod 400) < 50 Then me\CameraShake = 4.0 
+			If (MilliSecs2() Mod 400) < 50 Then me\CameraShake = 4.0 
 			mo\Mouse_X_Speed_1 = 0.0
 			me\Playable = False
 		Else
@@ -9465,7 +9463,7 @@ Function Update008()
 			me\HeartBeatRate = Max(me\HeartBeatRate, 100.0)
 			me\HeartBeatVolume = Max(me\HeartBeatVolume, I_008\Timer / 120.0)
 			
-			EntityAlpha(tt\OverlayID[3], Min(((I_008\Timer * 0.2) ^ 2.0) / 1000.0, 0.5) * (Sin(MilliSecs() / 8.0) + 2.0))
+			EntityAlpha(tt\OverlayID[3], Min(((I_008\Timer * 0.2) ^ 2.0) / 1000.0, 0.5) * (Sin(MilliSecs2() / 8.0) + 2.0))
 			
 			For i = 0 To 6
 				If I_008\Timer > (i * 15.0) + 10.0 And PrevI008Timer =< (i * 15.0) + 10.0 Then
@@ -9508,7 +9506,7 @@ Function Update008()
 			
 			If TeleportForInfect Then
 				If I_008\Timer < 94.7 Then
-					EntityAlpha(tt\OverlayID[3], 0.5 * (Sin(MilliSecs() / 8.0) + 2.0))
+					EntityAlpha(tt\OverlayID[3], 0.5 * (Sin(MilliSecs2() / 8.0) + 2.0))
 					me\BlurTimer = 900.0
 					
 					If I_008\Timer > 94.5 Then me\BlinkTimer = Max(Min((-50.0) * (I_008\Timer - 94.5), me\BlinkTimer), -10.0)
@@ -9521,7 +9519,7 @@ Function Update008()
 					
 					Animate2(PlayerRoom\NPC[0]\OBJ, AnimTime(PlayerRoom\NPC[0]\OBJ), 357.0, 381.0, 0.3)
 				ElseIf I_008\Timer < 98.5
-					EntityAlpha(tt\OverlayID[3], 0.5 * (Sin(MilliSecs() / 5.0) + 2.0))
+					EntityAlpha(tt\OverlayID[3], 0.5 * (Sin(MilliSecs2() / 5.0) + 2.0))
 					me\BlurTimer = 950.0
 					
 					me\ForceMove = 0.0
@@ -9563,9 +9561,9 @@ Function Update008()
 					EndIf
 					
 					PositionEntity(me\Head, EntityX(PlayerRoom\NPC[0]\Collider, True), EntityY(PlayerRoom\NPC[0]\Collider, True) + 0.65, EntityZ(PlayerRoom\NPC[0]\Collider, True), True)
-					RotateEntity(me\Head, (1.0 + Sin(MilliSecs() / 5.0)) * 15.0, PlayerRoom\Angle - 180.0, 0.0, True)
+					RotateEntity(me\Head, (1.0 + Sin(MilliSecs2() / 5.0)) * 15.0, PlayerRoom\Angle - 180.0, 0.0, True)
 					MoveEntity(me\Head, 0.0, 0.0, -0.4)
-					TurnEntity(me\Head, 80.0 + (Sin(MilliSecs() / 5.0)) * 30.0, (Sin(MilliSecs() / 5.0)) * 40.0, 0.0)
+					TurnEntity(me\Head, 80.0 + (Sin(MilliSecs2() / 5.0)) * 30.0, (Sin(MilliSecs2() / 5.0)) * 40.0, 0.0)
 				EndIf
 			Else
 				Kill()
