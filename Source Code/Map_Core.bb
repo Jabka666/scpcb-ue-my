@@ -2733,7 +2733,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True, Scripted% = False)
 				EndIf
 			Else
 				PlaySound_Strict(ScannerSFX2)
-				CreateMsg("You placed your palm onto the scanner. The scanner reads: " + Chr(34) + "DNA does not match known sample. Access denied." + Chr(34), 6.0)
+				CreateMsg("You placed your palm onto the scanner. The scanner reads: " + Chr(34) + "DNA doesn't match known sample. Access denied." + Chr(34), 6.0)
 				If (Not Scripted) Then Return			
 			EndIf
 		EndIf
@@ -2765,7 +2765,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True, Scripted% = False)
 									;[End Block]
 								Case 2
 									;[Block]
-									CreateMsg("Pressing it harder does not make the elevator come faster.", 6.0)
+									CreateMsg("Pressing it harder doesn't make the elevator come faster.", 6.0)
 									;[End Block]
 								Case 3
 									;[Block]
@@ -8588,16 +8588,16 @@ End Function
 
 Function LoadTerrain(HeightMap%, yScale# = 0.7, t1%, t2%, Mask%)
 	; ~ Load the HeightMap
-	If (Not HeightMap) Then RuntimeError("HeightMap image " + HeightMap + " does not exist.")
+	If (Not HeightMap) Then RuntimeError("HeightMap image " + HeightMap + " doesn't exist.")
 	
 	; ~ Store HeightMap dimensions
 	Local x% = ImageWidth(HeightMap) - 1, y = ImageHeight(HeightMap) - 1
 	Local lx%, ly%, Index%
 	
 	; ~ Load texture and lightmaps
-	If (Not t1) Then RuntimeError("Texture 1 " + t1 + " does not exist.")
-	If (Not t2) Then RuntimeError("Texture 2 " + t2 + " does not exist.")
-	If (Not Mask) Then RuntimeError("Mask image " + Mask + " does not exist.")
+	If (Not t1) Then RuntimeError("Texture 1 " + Chr(34) + t1 + Chr(34) + " doesn't exist.")
+	If (Not t2) Then RuntimeError("Texture 2 " + Chr(34) + t2 + Chr(34) + " doesn't exist.")
+	If (Not Mask) Then RuntimeError("Mask image " + Chr(34) + Mask + Chr(34) + " doesn't exist.")
 	
 	; ~ Auto scale the textures to the right size
 	If t1 Then ScaleTexture(t1, x / 4, y / 4)

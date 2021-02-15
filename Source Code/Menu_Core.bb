@@ -1102,7 +1102,7 @@ Function RenderMainMenu()
 					;[End Block]
 				Case 15
 					;[Block]
-					mm\MainMenuStr = "Stone does not care"
+					mm\MainMenuStr = "Stone doesn't care"
 					;[End Block]
 				Case 16
 					;[Block]
@@ -3151,7 +3151,7 @@ Function RenderOptionsTooltip(x%, y%, Width%, Height%, Option$, Value# = 0.0)
 			Txt = "Sets the playing mode for the custom tracks. " + Chr(34) + "Repeat" + Chr(34) + " plays every file in alphabetical order. " + Chr(34) + "Random" + Chr(34) + " chooses the "
 			Txt = Txt + "Next track at random."
 			R = 255 : G = 255
-			Txt2 = "Note that the random mode does not prevent previously played tracks from repeating."
+			Txt2 = "Note that the random mode doesn't prevent previously played tracks from repeating."
 			;[End Block]
 		Case "usertrackscan"
 			;[Block]

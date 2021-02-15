@@ -3944,7 +3944,7 @@ Function UpdateGUI()
 										;[End Block]
 									Case "18vradio"
 										;[Block]
-										CreateMsg("The battery does not fit inside this radio.", 6.0)
+										CreateMsg("The battery doesn't fit inside this radio.", 6.0)
 										;[End Block]
 									Case "fineradio", "veryfineradio"
 										;[Block]
@@ -3997,7 +3997,7 @@ Function UpdateGUI()
 										;[End Block]
 									Case "18vradio"
 										;[Block]
-										CreateMsg("The battery does not fit inside this radio.", 6.0)
+										CreateMsg("The battery doesn't fit inside this radio.", 6.0)
 										;[End Block]
 									Case "fineradio", "veryfineradio"
 										;[Block]
@@ -4032,7 +4032,7 @@ Function UpdateGUI()
 								Select Inventory(MouseSlot)\ItemTemplate\TempName
 									Case "nav", "nav310"
 										;[Block]
-										CreateMsg("The battery does not fit inside this navigator.", 6.0)
+										CreateMsg("The battery doesn't fit inside this navigator.", 6.0)
 										;[End Block]
 									Case "navulti", "nav300"
 										;[Block]
@@ -4040,7 +4040,7 @@ Function UpdateGUI()
 										;[End Block]
 									Case "radio"
 										;[Block]
-										CreateMsg("The battery does not fit inside this radio.", 6.0)
+										CreateMsg("The battery doesn't fit inside this radio.", 6.0)
 										;[End Block]
 									Case "18vradio"
 										;[Block]
@@ -4055,7 +4055,7 @@ Function UpdateGUI()
 										;[End Block]
 									Case "nvg", "supernvg"
 										;[Block]
-										CreateMsg("The battery does not fit inside these goggles.", 6.0)
+										CreateMsg("The battery doesn't fit inside these goggles.", 6.0)
 										;[End Block]
 									Case "finenvg"
 										;[Block]
@@ -4063,7 +4063,7 @@ Function UpdateGUI()
 										;[End Block]
 									Case "scramble"
 										;[Block]
-										CreateMsg("The battery does not fit inside this gear.", 6.0)
+										CreateMsg("The battery doesn't fit inside this gear.", 6.0)
 										;[End Block]
 									Default
 										;[Block]
@@ -4094,7 +4094,7 @@ Function UpdateGUI()
 										;[End Block]
 									Case "18vradio"
 										;[Block]
-										CreateMsg("The battery does not fit inside this radio.", 6.0)
+										CreateMsg("The battery doesn't fit inside this radio.", 6.0)
 										;[End Block]
 									Case "fineradio", "veryfineradio"
 										;[Block]
@@ -4313,7 +4313,7 @@ Function UpdateGUI()
 				Case "firstaid", "finefirstaid", "firstaid2"
 					;[Block]
 					If me\Bloodloss = 0.0 And me\Injuries = 0.0 Then
-						CreateMsg("You do not need to use a first aid kit right now.", 6.0)
+						CreateMsg("You don't need to use a first aid kit right now.", 6.0)
 						SelectedItem = Null
 						Return
 					Else

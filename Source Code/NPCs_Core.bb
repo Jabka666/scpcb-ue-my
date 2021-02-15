@@ -5576,7 +5576,7 @@ Function UpdateNPCs()
 											;[End Block]
 										Case 3
 											;[Block]
-											CreateMsg("You feel like something is here with you, but you do not see anything.", 6.0)
+											CreateMsg("You feel like something is here with you, but you don't see anything.", 6.0)
 											;[End Block]
 										Case 4
 											;[Block]
@@ -7257,7 +7257,7 @@ Function ManipulateNPCBones()
 			If BoneName <> ""
 				Pvt = CreatePivot()
 				Bone = FindChild(n\OBJ, BoneName)
-				If (Not Bone) Then RuntimeError("ERROR: NPC bone " + Chr(34) + BoneName + Chr(34) + " does not exist.")
+				If (Not Bone) Then RuntimeError("ERROR: NPC bone " + Chr(34) + BoneName + Chr(34) + " doesn't exist.")
 				PositionEntity(Pvt, EntityX(Bone, True), EntityY(Bone, True), EntityZ(Bone, True))
 				Select n\ManipulationType
 					Case 0 ; ~ Looking at player

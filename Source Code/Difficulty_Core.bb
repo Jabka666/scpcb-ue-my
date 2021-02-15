@@ -101,7 +101,7 @@ End Function
 
 difficulties[SAFE] = New Difficulty
 difficulties[SAFE]\Name = "Safe"
-difficulties[SAFE]\Description = "The game can be saved any time. However, as in the case of SCP Objects, a Safe classification does not mean that handling it does not pose a threat."
+difficulties[SAFE]\Description = "The game can be saved any time. However, as in the case of SCP Objects, a Safe classification doesn't mean that handling it doesn't pose a threat."
 difficulties[SAFE]\AggressiveNPCs = False
 difficulties[SAFE]\InventorySlots = 10
 difficulties[SAFE]\SaveType = SAVEANYWHERE
