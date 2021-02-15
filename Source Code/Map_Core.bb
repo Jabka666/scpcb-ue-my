@@ -1890,7 +1890,7 @@ Function UpdateButton(OBJ%)
 		PositionEntity(Temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 		PointEntity(Temp, OBJ)
 		
-		If EntityPick(Temp, 0.65) = OBJ Then
+		If EntityPick(Temp, 0.6) = OBJ Then
 			If (Not ClosestButton) Then 
 				ClosestButton = OBJ
 			Else
@@ -2096,7 +2096,7 @@ Function UpdateDoors()
 						If Abs(EntityX(me\Collider) - EntityX(d\Buttons[i], True)) < 1.0 Then 
 							If Abs(EntityZ(me\Collider) - EntityZ(d\Buttons[i], True)) < 1.0 Then 
 								Dist = DistanceSquared(EntityX(me\Collider, True), EntityX(d\Buttons[i], True), EntityZ(me\Collider, True), EntityZ(d\Buttons[i], True))
-								If Dist < 0.49 Then
+								If Dist < 0.64 Then
 									Local Temp% = CreatePivot()
 									
 									PositionEntity(Temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
@@ -3412,7 +3412,7 @@ Function InitWayPoints(LoadingStart% = 45)
 				If x < 20.0 Then
 					z = Abs(EntityZ(r\OBJ, True) - EntityZ(d\FrameOBJ, True))
 					If z < 20.0 Then
-						Dist2 = x * x + z * z
+						Dist2 = (x * x) + (z * z)
 						If Dist2 < Dist Then
 							ClosestRoom = r
 							Dist = Dist2
@@ -3556,7 +3556,7 @@ Function UpdateScreens()
 	
 	For s.Screens = Each Screens
 		If s\room = PlayerRoom Then
-			If EntityDistanceSquared(me\Collider, s\OBJ) < 1.44 Then
+			If EntityDistanceSquared(me\Collider, s\OBJ) < 1.21 Then
 				EntityPick(Camera, 1.2)
 				If PickedEntity() = s\OBJ And s\ImgPath <> "" Then
 					ga\DrawHandIcon = True
@@ -3575,41 +3575,31 @@ Function UpdateScreens()
 	Next
 End Function
 
-Function UpdateLever(OBJ%, Locked% = False)
+Function UpdateLever%(OBJ%, Locked% = False)
 	Local Dist# = EntityDistanceSquared(Camera, OBJ)
+	Local PrevPitch# = EntityPitch(OBJ)
 	
-	If Dist < 64.0 Then 
-		If Dist < 0.64 And (Not Locked) Then 
-			If EntityInView(OBJ, Camera) Then 
-				EntityPick(Camera, 0.65)
-				
-				If PickedEntity() = OBJ Then
-					ga\DrawHandIcon = True
-					If mo\MouseHit1 Then GrabbedEntity = OBJ
-				EndIf
-				
-				Local PrevPitch# = EntityPitch(OBJ)
-				
-				If mo\MouseDown1 Lor mo\MouseHit1 Then
-					If GrabbedEntity <> 0 Then
-						If GrabbedEntity = OBJ Then
-							ga\DrawHandIcon = True 
-							RotateEntity(GrabbedEntity, Max(Min(EntityPitch(OBJ) + Max(Min(mo\Mouse_Y_Speed_1 * 8.0, 30.0), -30.0), 80.0), -80.0), EntityYaw(OBJ), 0.0)
-							
-							ga\DrawArrowIcon[0] = True
-							ga\DrawArrowIcon[2] = True
-						EndIf
-					EndIf
-				EndIf 
-				
-				If EntityPitch(OBJ, True) > 75.0 Then
-					If PrevPitch =< 75.0 Then PlaySound2(LeverSFX, Camera, OBJ, 1.0)
-				ElseIf EntityPitch(OBJ, True) < -75.0
-					If PrevPitch >= -75.0 Then PlaySound2(LeverSFX, Camera, OBJ, 1.0)	
-				EndIf						
-			EndIf
+	If Dist < 0.64 And (Not Locked) And EntityInView(OBJ, Camera) Then 
+		EntityPick(Camera, 0.6)
+		
+		If PickedEntity() = OBJ Then
+			ga\DrawHandIcon = True
+			If mo\MouseHit1 Then GrabbedEntity = OBJ
 		EndIf
 		
+		If GrabbedEntity <> 0 Then
+			If mo\MouseDown1 Lor mo\MouseHit1 Then
+				If GrabbedEntity = OBJ Then
+					ga\DrawHandIcon = True 
+					RotateEntity(GrabbedEntity, Max(Min(EntityPitch(OBJ) + Max(Min(mo\Mouse_Y_Speed_1 * 8.0, 30.0), -30.0), 80.0), -80.0), EntityYaw(OBJ), 0.0)
+					
+					ga\DrawArrowIcon[0] = True
+					ga\DrawArrowIcon[2] = True
+				EndIf
+			EndIf
+		EndIf 
+		
+		; ~ Reset lever state if player doesn't click on the mouse
 		If (Not mo\MouseDown1) And (Not mo\MouseHit1) Then 
 			If EntityPitch(OBJ, True) > 0.0 Then
 				RotateEntity(OBJ, CurveValue(80.0, EntityPitch(OBJ), 10.0), EntityYaw(OBJ), 0.0)
@@ -3618,9 +3608,23 @@ Function UpdateLever(OBJ%, Locked% = False)
 			EndIf
 			GrabbedEntity = 0
 		EndIf
+	Else
+		; ~ Reset lever state if player is far away or doesn't look at the lever
+		If EntityPitch(OBJ, True) > 0.0 Then
+			RotateEntity(OBJ, CurveValue(80.0, EntityPitch(OBJ), 10.0), EntityYaw(OBJ), 0.0)
+		Else
+			RotateEntity(OBJ, CurveValue(-80.0, EntityPitch(OBJ), 10.0), EntityYaw(OBJ), 0.0)
+		EndIf
+		If GrabbedEntity <> 0 And GrabbedEntity = OBJ Then GrabbedEntity = 0
 	EndIf
 	
-	If EntityPitch(OBJ, True) > 0 Then
+	If EntityPitch(OBJ, True) > 75.0 Then
+		If PrevPitch =< 75.0 Then PlaySound2(LeverSFX, Camera, OBJ, 1.0)
+	ElseIf EntityPitch(OBJ, True) < -75.0
+		If PrevPitch >= -75.0 Then PlaySound2(LeverSFX, Camera, OBJ, 1.0)	
+	EndIf	
+	
+	If EntityPitch(OBJ, True) > 0.0 Then
 		Return(True)
 	Else
 		Return(False)

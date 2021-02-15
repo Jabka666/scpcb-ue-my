@@ -570,7 +570,7 @@ Function UpdateNPCs()
 			Case NPCType173
 				;[Block]
 				If Curr173\Idle <> 3 And PlayerRoom\RoomTemplate\Name <> "gateb" Lor PlayerRoom\RoomTemplate\Name <> "gatea" Then
-					Dist = EntityDistance(n\Collider, me\Collider)		
+					Dist = EntityDistanceSquared(n\Collider, me\Collider)		
 					
 					n\State3 = 1.0
 					
@@ -590,8 +590,8 @@ Function UpdateNPCs()
 							Local Temp% = False
 							Local Move% = True
 							
-							If Dist < 15.0 Then
-								If Dist < 10.0 Then 
+							If Dist < 225.0 Then
+								If Dist < 100.0 Then 
 									If EntityVisible(n\Collider, me\Collider) Then
 										Temp = True
 										n\EnemyX = EntityX(me\Collider, True)
@@ -616,18 +616,18 @@ Function UpdateNPCs()
 							
 							; ~ Doesn't move
 							If (Not Move) Then
-								me\BlurVolume = Max(Max(Min((4.0 - Dist) / 6.0, 0.9), 0.1), me\BlurVolume)
-								me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs2()) / 20.0) + 1.0) * 15.0 * Max((3.5 - Dist) / 3.5, 0.0))								
+								me\BlurVolume = Max(Max(Min((4.0 - Sqr(Dist)) / 6.0, 0.9), 0.1), me\BlurVolume)
+								me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs2()) / 20.0) + 1.0) * 15.0 * Max((3.5 - Sqr(Dist)) / 3.5, 0.0))								
 								
-								If Dist < 3.5 And MilliSecs2() - n\LastSeen > 60000 And Temp Then
+								If Dist < 12.25 And MilliSecs2() - n\LastSeen > 60000 And Temp Then
 									PlaySound_Strict(HorrorSFX[Rand(3, 4)])
 									
 									n\LastSeen = MilliSecs2()
 								EndIf
 								
-								If Dist < 1.5 And Rand(700) = 1 Then PlaySound2(Scp173SFX[Rand(0, 2)], Camera, n\OBJ)
+								If Dist < 2.25 And Rand(700) = 1 Then PlaySound2(Scp173SFX[Rand(0, 2)], Camera, n\OBJ)
 								
-								If Dist < 1.5 And n\LastDist > 2.0 And Temp Then
+								If Dist < 2.25 And n\LastDist > 2.0 And Temp Then
 									me\CurrCameraZoom = 40.0
 									me\HeartBeatRate = Max(me\HeartBeatRate, 140.0)
 									me\HeartBeatVolume = 0.5
@@ -656,12 +656,12 @@ Function UpdateNPCs()
 									End Select
 								EndIf									
 								
-								n\LastDist = Dist
+								n\LastDist = Sqr(Dist)
 								
 								n\State = Max(0.0, n\State - fps\Factor[0] / 20.0)
 							Else 
 								; ~ Teleport to a room closer to the player
-								If Dist > 50.0 Then
+								If Dist > 2500.0 Then
 									If Rand(70) = 1 Then
 										If PlayerRoom\RoomTemplate\Name <> "gateb" And PlayerRoom\RoomTemplate\Name <> "gatea" And PlayerRoom\RoomTemplate\Name <> "pocketdimension" Then
 											For w.Waypoints = Each WayPoints
@@ -679,7 +679,7 @@ Function UpdateNPCs()
 											Next
 										EndIf
 									EndIf
-								ElseIf Dist > HideDistance * 0.8 ; ~ Move randomly from waypoint to another
+								ElseIf Dist > PowTwo(HideDistance * 0.8) ; ~ Move randomly from waypoint to another
 									If Rand(70) = 1 Then TeleportCloser(n)
 								Else ; ~ Actively move towards the player
 									n\State = CurveValue(SoundVol, n\State, 3.0)
@@ -721,7 +721,7 @@ Function UpdateNPCs()
 									
 									; ~ Attacks
 									If Temp Then 				
-										If Dist < 0.65 Then
+										If Dist < 0.4225 Then
 											If me\KillTimer >= 0.0 And (Not chs\GodMode) Then
 												Select PlayerRoom\RoomTemplate\Name
 													Case "room2clockroom", "room2closets", "room895"
@@ -781,7 +781,7 @@ Function UpdateNPCs()
 						If n\Target <> Null Then
 							Local Tmp% = False
 							
-							If Dist > HideDistance * 0.7 Then
+							If Dist > PowTwo(HideDistance * 0.7) Then
 								If (Not EntityVisible(n\OBJ, me\Collider)) Then
 									Tmp = True
 								EndIf
@@ -789,8 +789,8 @@ Function UpdateNPCs()
 							If (Not Tmp) Then
 								PointEntity(n\OBJ, n\Target\Collider)
 								RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0.0, True)								
-								Dist = EntityDistance(n\Collider, n\Target\Collider)
-								MoveEntity(n\Collider, 0.0, 0.0, 0.016 * fps\Factor[0] * Max(Min((Dist * 2.0 - 1.0) * 0.5, 1.0), -0.5))
+								Dist = EntityDistanceSquared(n\Collider, n\Target\Collider)
+								MoveEntity(n\Collider, 0.0, 0.0, 0.016 * fps\Factor[0] * Max(Min(((Sqr(Dist) * 2.0) - 1.0) * 0.5, 1.0), -0.5))
 								n\GravityMult = 1.0
 							Else
 								PositionEntity(n\Collider, EntityX(n\Target\Collider), EntityY(n\Target\Collider) + 0.3, EntityZ(n\Target\Collider))
@@ -818,7 +818,7 @@ Function UpdateNPCs()
 					HideEntity(n\OBJ2)
 					PositionEntity(n\OBJ, 0.0, 500.0, 0.0, True)
 				Else
-					Dist = EntityDistance(n\Collider, me\Collider)
+					Dist = EntityDistanceSquared(n\Collider, me\Collider)
 					
 					Local Spawn106% = True
 					
@@ -898,7 +898,7 @@ Function UpdateNPCs()
 								
 								Local Visible% = False
 								
-								If Dist < 8.0 Then
+								If Dist < 64.0 Then
 									Visible = EntityVisible(n\Collider, me\Collider)
 								EndIf
 								
@@ -909,8 +909,8 @@ Function UpdateNPCs()
 									If EntityInView(n\Collider, Camera) Then
 										GiveAchievement(Achv106)
 										
-										me\BlurVolume = Max(Max(Min((4.0 - Dist) / 6.0, 0.9), 0.1), me\BlurVolume)
-										me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs2()) / 20.0) + 1.0) * 20.0 * Max((4.0 - Dist) / 4.0, 0.0))
+										me\BlurVolume = Max(Max(Min((4.0 - Sqr(Dist)) / 6.0, 0.9), 0.1), me\BlurVolume)
+										me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs2()) / 20.0) + 1.0) * 20.0 * Max((4.0 - Sqr(Dist)) / 4.0, 0.0))
 										
 										If MilliSecs2() - n\LastSeen > 60000 Then 
 											me\CurrCameraZoom = 40.0
@@ -922,9 +922,9 @@ Function UpdateNPCs()
 									n\State = n\State - fps\Factor[0]
 								EndIf
 								
-								If Dist > 0.8 Then
-									If (Dist > 25.0 Lor PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor Visible Lor n\PathStatus <> 1) And PlayerRoom\RoomTemplate\Name <> "gatea" Then 
-										If (Dist > 40.0 Lor PlayerRoom\RoomTemplate\Name = "pocketdimension") Then
+								If Dist > 0.64 Then
+									If (Dist > 625.0 Lor PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor Visible Lor n\PathStatus <> 1) And PlayerRoom\RoomTemplate\Name <> "gatea" Then 
+										If (Dist > 1600.0 Lor PlayerRoom\RoomTemplate\Name = "pocketdimension") Then
 											TranslateEntity(n\Collider, 0.0, ((EntityY(me\Collider) - 0.14) - EntityY(n\Collider)) / 50.0, 0.0)
 										EndIf
 										
@@ -976,9 +976,9 @@ Function UpdateNPCs()
 													
 													PointEntity(n\OBJ, n\Path[n\PathLocation]\OBJ)
 													
-													Dist2 = EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ)
+													Dist2 = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 													
-													RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), Min(20.0, Dist2 * 10.0)), 0.0)
+													RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), Min(20.0, Sqr(Dist2) * 10.0)), 0.0)
 													n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
 													
 													PrevFrame = AnimTime(n\OBJ)
@@ -989,7 +989,7 @@ Function UpdateNPCs()
 														PlaySound2(StepSFX(2, 0, Rand(0, 2)), Camera, n\Collider, 6.0, Rnd(0.8, 1.0))
 													EndIf
 													
-													If Dist2 < 0.2 Then n\PathLocation = n\PathLocation + 1
+													If Dist2 < 0.04 Then n\PathLocation = n\PathLocation + 1
 												EndIf
 											ElseIf n\PathStatus = 0
 												If n\State3 = 0.0 Then AnimateNPC(n, 334.0, 494.0, 0.3)
@@ -999,7 +999,7 @@ Function UpdateNPCs()
 									EndIf
 								Else
 									If (Not chs\NoTarget) Then
-										If Dist > 0.5 Then 
+										If Dist > 0.25 Then 
 											n\CurrSpeed = CurveValue(n\Speed * 2.5, n\CurrSpeed, 10.0)
 										Else
 											n\CurrSpeed = 0.0
@@ -1036,7 +1036,7 @@ Function UpdateNPCs()
 							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 							
 							If n\State =< Rnd(-3500.0, -3000.0) Then 
-								If (Not EntityInView(n\OBJ, Camera)) And Dist > 5.0 Then
+								If (Not EntityInView(n\OBJ, Camera)) And Dist > 25.0 Then
 									n\State = Rnd(22000.0, 27000.0)
 									PositionEntity(n\Collider, 0.0, 500.0, 0.0)
 								EndIf
@@ -1048,7 +1048,7 @@ Function UpdateNPCs()
 							EndIf
 							
 							If n\Reload = 0.0 Then
-								If Dist > 10.0 And PlayerRoom\RoomTemplate\Name <> "gateb" And PlayerRoom\RoomTemplate\Name <> "pocketdimension" And PlayerRoom\RoomTemplate\Name <> "gatea" And n\State < -5.0 Then ; ~ Timer idea -- Juanjpro
+								If Dist > 100.0 And PlayerRoom\RoomTemplate\Name <> "gateb" And PlayerRoom\RoomTemplate\Name <> "pocketdimension" And PlayerRoom\RoomTemplate\Name <> "gatea" And n\State < -5.0 Then ; ~ Timer idea -- Juanjpro
 									If (Not EntityInView(n\OBJ, Camera)) Then
 										TurnEntity(me\Collider, 0.0, 180.0, 0.0)
 										Pick = EntityPick(me\Collider, 5.0)
@@ -1099,12 +1099,12 @@ Function UpdateNPCs()
 						If PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor PlayerRoom\RoomTemplate\Name = "gateb" Lor PlayerRoom\RoomTemplate\Name = "gatea" Then
 							HideEntity(n\OBJ2)
 						Else
-							If Dist < opt\CameraFogFar * LightVolume * 0.6 Then
+							If Dist < PowTwo(opt\CameraFogFar * LightVolume * 0.6) Then
 								HideEntity(n\OBJ2)
 							Else
 								If n\State =< -10.0 Then
 									ShowEntity(n\OBJ2)
-									EntityAlpha(n\OBJ2, Min(Dist - opt\CameraFogFar * LightVolume * 0.6, 1.0))
+									EntityAlpha(n\OBJ2, Min(Sqr(Dist) - opt\CameraFogFar * LightVolume * 0.6, 1.0))
 								EndIf
 							EndIf
 						EndIf						
@@ -1115,10 +1115,10 @@ Function UpdateNPCs()
 				;[End Block]
 			Case NPCType096
 				;[Block]
-				Dist = EntityDistance(me\Collider, n\Collider)
+				Dist = EntityDistanceSquared(me\Collider, n\Collider)
 				Angle = WrapAngle(DeltaYaw(n\Collider, me\Collider))
 				
-				If wi\SCRAMBLE > 0 And Dist < 16.0 And (Angle < 135.0 Lor Angle > 225.0) And EntityVisible(Camera, n\OBJ2) Then
+				If wi\SCRAMBLE > 0 And Dist < 256.0 And (Angle < 135.0 Lor Angle > 225.0) And EntityVisible(Camera, n\OBJ2) Then
 					ShowEntity(n\OBJ2)
 					ScaleSprite(n\OBJ2, Rnd(0.06, 0.08), Rnd(0.07, 0.09))
 					PositionEntity(n\OBJ2, Rnd(0.1) - 0.05, Rnd(0.1) - 0.05, Rnd(0.1) - 0.05)
@@ -1129,7 +1129,7 @@ Function UpdateNPCs()
 				Select n\State
 					Case 0.0
 						;[Block]
-						If Dist < 8.0 Then
+						If Dist < 64.0 Then
 							GiveAchievement(Achv096)
 							If (Not n\SoundCHN) Then
 								n\SoundCHN = StreamSound_Strict("SFX\Music\096.ogg", 0)
@@ -1192,7 +1192,7 @@ Function UpdateNPCs()
 								n\SoundCHN2 = StreamSound_Strict("SFX\Music\096Chase.ogg", 0)
 								n\SoundCHN2_IsStream = 2
 							Else
-								SetStreamVolume_Strict(n\SoundCHN2, Min(Max(8.0 - Dist, 0.6), 1.0) * opt\SFXVolume)
+								SetStreamVolume_Strict(n\SoundCHN2, Min(Max(8.0 - Sqr(Dist), 0.6), 1.0) * opt\SFXVolume)
 							EndIf
 						EndIf
 						
@@ -1213,14 +1213,14 @@ Function UpdateNPCs()
 								n\PathTimer = Max(70.0 * 3.0, n\PathTimer)
 								n\PathStatus = 0
 								
-								If n\Target <> Null Then Dist = EntityDistance(n\Target\Collider, n\Collider)
+								If n\Target <> Null Then Dist = EntityDistanceSquared(n\Target\Collider, n\Collider)
 								
-								If Dist < 2.8 Lor n\Frame < 150.0 Then 
+								If Dist < 7.84 Lor n\Frame < 150.0 Then 
 									If n\Frame > 193.0 Then n\Frame = 2.0 ; ~ Go to the start of the jump animation
 									
 									AnimateNPC(n, 2.0, 193.0, 0.7)
 									
-									If Dist > 1.0 Then 
+									If Dist > 1.21 Then 
 										n\CurrSpeed = CurveValue(n\Speed * 2.0, n\CurrSpeed, 15.0)
 									Else
 										n\CurrSpeed = 0.0
@@ -1321,7 +1321,7 @@ Function UpdateNPCs()
 								EndIf
 							EndIf
 							
-							If Dist > 32.0 Lor EntityY(n\Collider) < -50.0 Then
+							If Dist > 1024.0 Lor EntityY(n\Collider) < -50.0 Then
 								If Rand(50) = 1 Then TeleportCloser(n)
 							EndIf
 						Else
@@ -1366,8 +1366,8 @@ Function UpdateNPCs()
 						;[End Block]
 					Case 5.0
 						;[Block]
-						If Dist < 16.0 Then 
-							If Dist < 4.0 Then
+						If Dist < 256.0 Then 
+							If Dist < 16.0 Then
 								GiveAchievement(Achv096)
 							EndIf
 							
@@ -1409,7 +1409,7 @@ Function UpdateNPCs()
 									If n\LastSeen Then 
 										PointEntity(n\OBJ, me\Collider)
 										RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 130.0), 0.0)
-										If Dist < 1.5 Then n\State2 = 0.0
+										If Dist < 2.25 Then n\State2 = 0.0
 									Else
 										RotateEntity(n\Collider, 0.0, CurveAngle(n\Angle, EntityYaw(n\Collider), 50.0), 0.0)
 									EndIf
@@ -1460,7 +1460,7 @@ Function UpdateNPCs()
 				
 				PrevFrame = n\Frame
 				
-				Dist = EntityDistance(me\Collider, n\Collider)
+				Dist = EntityDistanceSquared(me\Collider, n\Collider)
 				
 				n\BlinkTimer = 1.0
 				
@@ -1507,7 +1507,7 @@ Function UpdateNPCs()
 							;[End Block]
 						Case 2.0 ; ~ Being active
 							;[Block]
-							If (Dist < HideDistance * 2.0) And n\Idle = 0 And PlayerInReachableRoom(True) Then
+							If (Dist < PowTwo(HideDistance * 2.0)) And n\Idle = 0 And PlayerInReachableRoom(True) Then
 								n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider)
 								PlayerSeeAble = MeNPCSeesPlayer(n)
 								If PlayerSeeAble = 1 Lor n\State2 > 0.0 And (Not chs\NoTarget) Then ; ~ Attack
@@ -1528,7 +1528,7 @@ Function UpdateNPCs()
 									PointEntity(n\OBJ, me\Collider)
 									RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0)
 									
-									If Dist < 0.5 Then
+									If Dist < 0.25 Then
 										If wi\HazmatSuit > 0 Then
 											me\BlurTimer = me\BlurTimer + fps\Factor[0] * 2.5
 											If me\BlurTimer > 250.0 And me\BlurTimer - fps\Factor[0] * 2.5 =< 250.0 And n\PrevState <> 3 Then
@@ -1593,7 +1593,7 @@ Function UpdateNPCs()
 										
 										If n\PrevState = 3 Then n\PrevState = 2
 										
-										If Dist < 3.0 Then
+										If Dist < 9.0 Then
 											AnimateNPC(n, Max(Min(AnimTime(n\OBJ), 428.0), 387), 463.0, n\CurrSpeed * 38.0)
 										Else
 											If n\Frame > 428.0 Then
@@ -1687,13 +1687,13 @@ Function UpdateNPCs()
 											
 											; ~ Attempt to find a room (the PlayerRoom or one of it's adjacent rooms) for SCP-049 to go to but select the one closest to him
 											If n\PathStatus <> 1 Then
-												Local ClosestDist# = EntityDistance(PlayerRoom\OBJ, n\Collider)
+												Local ClosestDist# = EntityDistanceSquared(PlayerRoom\OBJ, n\Collider)
 												Local ClosestRoom.Rooms = PlayerRoom
 												Local CurrDist# = 0.0
 												
 												For i = 0 To 3
 													If PlayerRoom\Adjacent[i] <> Null Then
-														CurrDist = EntityDistance(PlayerRoom\Adjacent[i]\OBJ, n\Collider)
+														CurrDist = EntityDistanceSquared(PlayerRoom\Adjacent[i]\OBJ, n\Collider)
 														If CurrDist < ClosestDist Then
 															ClosestDist = CurrDist
 															ClosestRoom = PlayerRoom\Adjacent[i]
@@ -1721,12 +1721,12 @@ Function UpdateNPCs()
 												
 												; ~ No path could still be found, just make SCP-049 go to a room (further away than the very first attempt)
 												If n\PathStatus <> 1 Then
-													ClosestDist = 100.0 ; ~ Prevent the PlayerRoom to be considered the closest, so SCP-049 wouldn't try to find a path there
+													ClosestDist = 10000.0 ; ~ Prevent the PlayerRoom to be considered the closest, so SCP-049 wouldn't try to find a path there
 													ClosestRoom.Rooms = PlayerRoom
 													CurrDist = 0.0
 													For i = 0 To 3
 														If PlayerRoom\Adjacent[i] <> Null Then
-															CurrDist = EntityDistance(PlayerRoom\Adjacent[i]\OBJ, n\Collider)
+															CurrDist = EntityDistanceSquared(PlayerRoom\Adjacent[i]\OBJ, n\Collider)
 															If CurrDist < ClosestDist Then
 																ClosestDist = CurrDist
 																For j = 0 To 3
@@ -1809,14 +1809,14 @@ Function UpdateNPCs()
 							;[End Block]
 						Case 4.0 ; ~ Standing on catwalk
 							;[Block]
-							If Dist < 8.0 Then
+							If Dist < 64.0 Then
 								AnimateNPC(n, 18.0, 19.0, 0.05)
 								
 								PointEntity(n\OBJ, me\Collider)	
 								RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 45.0), 0.0)
 								
 								n\State3 = 1.0
-							ElseIf Dist > HideDistance * 0.8 And n\State3 > 0.0 Then
+							ElseIf Dist > PowTwo(HideDistance * 0.8) And n\State3 > 0.0 Then
 								n\State = 2.0
 								n\State3 = 0.0
 								For r.Rooms = Each Rooms
@@ -2117,7 +2117,7 @@ Function UpdateNPCs()
 							If n\Frame < 66.0 Then
 								AnimateNPC(n, 2.0, 65.0, 0.7, False)
 								If n\Frame >= 23.0 And PrevFrame < 23.0 Then
-									If Dist < 1.21 Then
+									If Dist < 0.64 Then
 										If Abs(DeltaYaw(n\Collider, me\Collider)) =< 60.0
 											PlaySound2(DamageSFX[Rand(5, 8)], Camera, n\Collider)
 											InjurePlayer(Rnd(0.4, 1.0), 0.0, 0.0, Rnd(0.1, 0.25), 0.2)
@@ -2138,7 +2138,7 @@ Function UpdateNPCs()
 							Else
 								AnimateNPC(n, 66.0, 132.0, 0.7, False)
 								If n\Frame >= 90.0 And PrevFrame < 90.0 Then
-									If Dist < 1.21 Then
+									If Dist < 0.64 Then
 										If Abs(DeltaYaw(n\Collider, me\Collider)) =< 60.0
 											PlaySound2(DamageSFX[Rand(5, 8)], Camera, n\Collider)
 											InjurePlayer(Rnd(0.4, 1.0), 0.0, 0.0, Rnd(0.1, 0.25), 0.2)
@@ -2203,14 +2203,14 @@ Function UpdateNPCs()
 						EndIf
 						
 						If me\KillTimer >= 0.0 Then
-							Dist = EntityDistance(n\Collider, me\Collider)
+							Dist = EntityDistanceSquared(n\Collider, me\Collider)
 							
 							Local ShootAccuracy# = 0.4 + 0.5 * SelectedDifficulty\AggressiveNPCs
-							Local DetectDistance# = 11.0
+							Local DetectDistance# = 121.0
 							
 							; ~ If at Gate B increase his distance so that he can shoot the player from a distance after they are spotted.
 							If PlayerRoom\RoomTemplate\Name = "gateb" Then
-								DetectDistance = 21.0
+								DetectDistance = 441.0
 								ShootAccuracy = 0.0
 								If Rand(1, 8 - SelectedDifficulty\AggressiveNPCs * 4) < 2 Then ShootAccuracy = 0.03
 								
@@ -2218,7 +2218,7 @@ Function UpdateNPCs()
 								ShootAccuracy = ShootAccuracy + (0.5 - me\CurrSpeed * 20.0)
 							EndIf
 							
-							If Dist < DetectDistance Then
+							If Dist < PowTwo(DetectDistance) Then
 								Pvt = CreatePivot()
 								PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
 								PointEntity(Pvt, me\Collider)
@@ -2333,8 +2333,8 @@ Function UpdateNPCs()
 						
 						RotateEntity(n\Collider, 0.0, CurveAngle(n\Angle + Sin(MilliSecs2() / 50) * 2.0, EntityYaw(n\Collider), 150.0), 0.0, True)
 						
-						Dist = EntityDistance(n\Collider, me\Collider)
-						If Dist < 15.0 Then
+						Dist = EntityDistanceSquared(n\Collider, me\Collider)
+						If Dist < 225.0 Then
 							If WrapAngle(EntityYaw(n\Collider) - DeltaYaw(n\Collider, me\Collider)) < 90.0 Then
 								If EntityVisible(me\Collider, n\Collider) Then n\State = 1.0
 							EndIf
@@ -2344,12 +2344,12 @@ Function UpdateNPCs()
 						;[Block]
 						RotateEntity(n\Collider, 0.0, CurveAngle(VectorYaw(n\EnemyX - EntityX(n\Collider), 0.0, n\EnemyZ - EntityZ(n\Collider)) + n\Angle, EntityYaw(n\Collider), 20.0), 0.0)
 						
-						Dist = Distance(EntityX(n\Collider), n\EnemyX, EntityZ(n\Collider), n\EnemyZ)
+						Dist = DistanceSquared(EntityX(n\Collider), n\EnemyX, EntityZ(n\Collider), n\EnemyZ)
 						
 						AnimateNPC(n, 1.0, 38.0, n\CurrSpeed * 40.0)
 						
-						If Dist > 2.0 Lor Dist < 1.0  Then
-							n\CurrSpeed = CurveValue(n\Speed * Sgn(Dist - 1.5) * 0.75, n\CurrSpeed, 10.0)
+						If Dist > 4.0 Lor Dist < 1.21 Then
+							n\CurrSpeed = CurveValue(n\Speed * Sgn(Sqr(Dist) - 1.5) * 0.75, n\CurrSpeed, 10.0)
 						Else
 							n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 10.0)
 						EndIf
@@ -2402,11 +2402,11 @@ Function UpdateNPCs()
 						EndIf
 						
 						If me\KillTimer >= 0.0 Then
-							Dist = EntityDistance(n\Collider, me\Collider)
+							Dist = EntityDistanceSquared(n\Collider, me\Collider)
 							
 							Local SearchPlayer% = False
 							
-							If Dist < 11.0 Then
+							If Dist < 121.0 Then
 								If EntityVisible(n\Collider, me\Collider)
 									SearchPlayer = True
 								EndIf
@@ -2437,7 +2437,7 @@ Function UpdateNPCs()
 										MoveEntity(Pvt, 0.8 * 0.079, 10.75 * 0.079, 6.9 * 0.079)
 										
 										PointEntity(Pvt, me\Collider)
-										Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((25.0 / Dist) * (1.0 / Dist)), True, InstaKillPlayer)
+										Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((25.0 / Sqr(Dist)) * (1.0 / Sqr(Dist))), True, InstaKillPlayer)
 										n\Reload = 7.0
 									Else
 										n\CurrSpeed = n\Speed
@@ -2794,7 +2794,7 @@ Function UpdateNPCs()
 												n\PathLocation = n\PathLocation + 1
 											EndIf
 										Else
-											PrevDist = EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ)
+											PrevDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 											
 											PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
 											RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
@@ -2808,9 +2808,9 @@ Function UpdateNPCs()
 											TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 											AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 											
-											NewDist = EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ)
+											NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 											
-											If NewDist < 1.0 And n\Path[n\PathLocation]\door <> Null Then
+											If NewDist < 1.21 And n\Path[n\PathLocation]\door <> Null Then
 												; ~ Open the door and make it automatically close after 5 seconds
 												If (Not n\Path[n\PathLocation]\door\Open) Then
 													PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\DoorType, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
@@ -2822,7 +2822,7 @@ Function UpdateNPCs()
 												EndIf
 											EndIf
 											
-											If NewDist < 0.2 Lor (PrevDist < NewDist And PrevDist < 1.0) Then
+											If NewDist < 0.04 Lor (PrevDist < NewDist And PrevDist < 1.21) Then
 												n\PathLocation = n\PathLocation + 1
 											EndIf
 										EndIf
@@ -3066,10 +3066,11 @@ Function UpdateNPCs()
 								n\Speed = 0.015
 								n\State2 = n\State2 - fps\Factor[0]
 								If MeNPCSeesPlayer(n) = 1 Then
-									Local Dist_To_Player# = EntityDistance(n\Collider, me\Collider)
 									Local PrevKillTimer#
 									
-									If Dist_To_Player < 7.0 Then
+									DetectDistance = EntityDistanceSquared(n\Collider, me\Collider)
+									
+									If DetectDistance < 49.0 Then
 										Angle = VectorYaw(EntityX(me\Collider) - EntityX(n\Collider), 0.0, EntityZ(me\Collider) -EntityZ(n\Collider))
 										
 										RotateEntity(n\Collider, 0.0, CurveAngle(Angle, EntityYaw(n\Collider), 10.0), 0.0, True)
@@ -3089,7 +3090,7 @@ Function UpdateNPCs()
 													PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 													MoveEntity(Pvt, 0.8 * 0.079, 10.75 * 0.079, 6.9 * 0.079)
 													
-													Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((25.0 / Dist_To_Player) * (1.0 / Dist_To_Player)), True)
+													Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((25.0 / Sqr(DetectDistance)) * (1.0 / Sqr(DetectDistance))), True)
 													n\Reload = 7.0
 													
 													FreeEntity(Pvt)
@@ -3196,7 +3197,7 @@ Function UpdateNPCs()
 													n\PathLocation = n\PathLocation + 1
 												EndIf
 											Else
-												PrevDist = EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ)
+												PrevDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 												
 												PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
 												RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
@@ -3208,9 +3209,9 @@ Function UpdateNPCs()
 												TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 												AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 												
-												NewDist = EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ)
+												NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 												
-												If NewDist < 1.0 And n\Path[n\PathLocation]\door <> Null Then
+												If NewDist < 1.21 And n\Path[n\PathLocation]\door <> Null Then
 													; ~ Open the door and make it automatically close after 5 seconds
 													If (Not n\Path[n\PathLocation]\door\Open) Then
 														PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\DoorType, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
@@ -3222,7 +3223,7 @@ Function UpdateNPCs()
 													EndIf
 												EndIf
 												
-												If (NewDist < 0.2) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then
+												If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.21)) Then
 													n\PathLocation = n\PathLocation + 1
 												EndIf
 											EndIf
@@ -3440,16 +3441,16 @@ Function UpdateNPCs()
 										EndIf
 									Next
 									
-									Local Curr173Dist# = Distance(EntityX(n\Collider, True), EntityX(Curr173\Collider, True), EntityZ(n\Collider, True), EntityZ(Curr173\Collider, True))
+									Local Curr173Dist# = DistanceSquared(EntityX(n\Collider, True), EntityX(Curr173\Collider, True), EntityZ(n\Collider, True), EntityZ(Curr173\Collider, True))
 									
-									If Curr173Dist < 5.0 Then
+									If Curr173Dist < 25.0 Then
 										If Curr173\Idle <> 2 Then Curr173\Idle = 1
 										n\State2 = 70.0 * 15.0
 										n\PathTimer = 0.0
 										
-										Local TempDist# = 1.0
+										Local TempDist# = 1.21
 										
-										If n\MTFLeader <> Null Then TempDist = 2.0
+										If n\MTFLeader <> Null Then TempDist = 4.0
 										If Curr173Dist < TempDist Then
 											If n\MTFLeader = Null Then
 												n\State3 = n\State3 + fps\Factor[0]
@@ -3513,7 +3514,7 @@ Function UpdateNPCs()
 														n\PathLocation = n\PathLocation + 1
 													EndIf
 												Else
-													PrevDist = EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ)
+													PrevDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 													
 													PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
 													RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
@@ -3525,9 +3526,9 @@ Function UpdateNPCs()
 													TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 													AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 													
-													NewDist = EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ)
+													NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 													
-													If NewDist < 1.0 And n\Path[n\PathLocation]\door <> Null Then
+													If NewDist < 1.21 And n\Path[n\PathLocation]\door <> Null Then
 														; ~ Open the door and make it automatically close after 5 seconds
 														If (Not n\Path[n\PathLocation]\door\Open) Then
 															PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\DoorType, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
@@ -3539,7 +3540,7 @@ Function UpdateNPCs()
 														EndIf
 													EndIf
 													
-													If (NewDist < 0.2) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then
+													If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.21)) Then
 														n\PathLocation = n\PathLocation + 1
 													EndIf
 												EndIf
@@ -3560,7 +3561,7 @@ Function UpdateNPCs()
 								;[End Block]
 							Case 3.0 ; ~ Following a path
 								;[Block]
-								Dist = EntityDistance(n\Collider, me\Collider)
+								Dist = EntityDistanceSquared(n\Collider, me\Collider)
 								
 								n\Angle = CurveValue(0.0, n\Angle, 40.0)
 								
@@ -3585,14 +3586,13 @@ Function UpdateNPCs()
 											EndIf
 										EndIf
 										
-										If Dist < HideDistance Then 
-											Dist2 = EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ) 
+										If Dist < PowTwo(HideDistance) Then 
+											Dist2 = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ) 
 											
 											PointEntity(n\OBJ, n\Path[n\PathLocation]\OBJ)
-											
 											RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0.0)
 											If n\Idle = 0 Then
-												n\CurrSpeed = CurveValue(n\Speed * Max(Min(Dist2, 1.0), 0.1), n\CurrSpeed, 20.0)
+												n\CurrSpeed = CurveValue(n\Speed * Max(Min(Sqr(Dist2), 1.0), 0.1), n\CurrSpeed, 20.0)
 												MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 												
 												If EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ) < 0.25
@@ -3613,7 +3613,7 @@ Function UpdateNPCs()
 								EndIf
 								
 								If n\Idle = 0 And n\PathStatus = 1 Then
-									If Dist < HideDistance Then
+									If Dist < PowTwo(HideDistance) Then
 										If n\Frame > 959.0 Then
 											AnimateNPC(n, 1376.0, 1383.0, 0.2, False)
 											If n\Frame > 1382.9 Then n\Frame = 488.0
@@ -3622,7 +3622,7 @@ Function UpdateNPCs()
 										EndIf
 									EndIf
 								Else
-									If Dist < HideDistance Then
+									If Dist < PowTwo(HideDistance) Then
 										If n\LastSeen > 0 Then 
 											AnimateNPC(n, 78.0, 312.0, 0.2, True)
 										Else
@@ -3729,7 +3729,7 @@ Function UpdateNPCs()
 													n\PathLocation = n\PathLocation + 1
 												EndIf
 											Else
-												PrevDist = EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ)
+												PrevDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 												
 												PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
 												RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
@@ -3740,9 +3740,9 @@ Function UpdateNPCs()
 												TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 												AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 												
-												NewDist = EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ)
+												NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 												
-												If NewDist < 2.0 And n\Path[n\PathLocation]\door <> Null Then
+												If NewDist < 4.0 And n\Path[n\PathLocation]\door <> Null Then
 													If (Not n\Path[n\PathLocation]\door\Open)
 														PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\DoorType, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
 														PlayMTFSound(MTFSFX[0], n)
@@ -3753,7 +3753,7 @@ Function UpdateNPCs()
 													EndIf
 												EndIf
 												
-												If NewDist < 0.2 Lor (PrevDist < NewDist And PrevDist < 1.0) Then
+												If NewDist < 0.04 Lor (PrevDist < NewDist And PrevDist < 1.21) Then
 													n\PathLocation = n\PathLocation + 1
 												EndIf
 											EndIf
@@ -3771,7 +3771,7 @@ Function UpdateNPCs()
 								Target = CreatePivot()
 								PositionEntity(Target, n\EnemyX, n\EnemyY, n\EnemyZ, True)
 								
-								If Dist < HideDistance Then
+								If Dist < PowTwo(HideDistance) Then
 									AnimateNPC(n, 79.0, 194.0, 0.2)
 								EndIf
 								
@@ -3787,7 +3787,7 @@ Function UpdateNPCs()
 									EndIf
 									
 									If n\PathStatus = 1 And n\Reload =< 0.0 Then
-										Dist = Distance(EntityX(Target), EntityX(n\Collider), EntityZ(Target), EntityZ(n\Collider))
+										Dist = DistanceSquared(EntityX(Target), EntityX(n\Collider), EntityZ(Target), EntityZ(n\Collider))
 									EndIf
 								EndIf		
 								
@@ -3909,7 +3909,7 @@ Function UpdateNPCs()
 												n\PathLocation = n\PathLocation + 1
 											EndIf
 										Else
-											PrevDist = EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ)
+											PrevDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 											
 											PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
 											RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
@@ -3921,9 +3921,9 @@ Function UpdateNPCs()
 											TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 											AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 											
-											NewDist = EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ)
+											NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 											
-											If NewDist < 1.0 And n\Path[n\PathLocation]\door <> Null Then
+											If NewDist < 1.21 And n\Path[n\PathLocation]\door <> Null Then
 												; ~ Open the door and make it automatically close after 5 seconds
 												If (Not n\Path[n\PathLocation]\door\Open) Then
 													PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\DoorType, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
@@ -3935,7 +3935,7 @@ Function UpdateNPCs()
 												EndIf
 											EndIf
 											
-											If NewDist < 0.2 Lor (PrevDist < NewDist And PrevDist < 1.0) Then
+											If NewDist < 0.04 Lor (PrevDist < NewDist And PrevDist < 1.21) Then
 												n\PathLocation = n\PathLocation + 1
 											EndIf
 										EndIf
@@ -4058,7 +4058,7 @@ Function UpdateNPCs()
 													n\PathLocation = n\PathLocation + 1
 												EndIf
 											Else
-												PrevDist = EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ)
+												PrevDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 												
 												PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
 												RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
@@ -4069,10 +4069,10 @@ Function UpdateNPCs()
 												TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 												AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 												
-												NewDist = EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ)
+												NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 												
 												; ~ Open the door and make it automatically close after 5 seconds
-												If NewDist < 1.0 And n\Path[n\PathLocation]\door <> Null Then
+												If NewDist < 1.21 And n\Path[n\PathLocation]\door <> Null Then
 													If (Not n\Path[n\PathLocation]\door\Open)
 														PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\DoorType, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
 														PlayMTFSound(MTFSFX[0], n)
@@ -4083,7 +4083,7 @@ Function UpdateNPCs()
 													EndIf
 												EndIf
 												
-												If (NewDist < 0.2) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then
+												If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.21)) Then
 													n\PathLocation = n\PathLocation + 1
 												EndIf
 											EndIf
@@ -4104,11 +4104,11 @@ Function UpdateNPCs()
 								n\Angle = CurveValue(0.0, n\Angle, 40.0)
 								
 								If me\KillTimer >= 0.0 Then
-									Dist = EntityDistance(n\Collider, me\Collider)
+									Dist = EntityDistanceSquared(n\Collider, me\Collider)
 									
 									SearchPlayer = False
 									
-									If Dist < 6.0 And EntityVisible(n\Collider, me\Collider) And (Not chs\NoTarget) Then
+									If Dist < 36.0 And EntityVisible(n\Collider, me\Collider) And (Not chs\NoTarget) Then
 										SearchPlayer = True
 									EndIf
 									
@@ -4132,9 +4132,9 @@ Function UpdateNPCs()
 												
 												RotateEntity(Target, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
 												PositionEntity(Target, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
-												MoveEntity(Target, 0.8 * 0.079, 10.75 * 0.079, 6.9 * 0.079)
+												MoveEntity(Target, 0.0632, 0.84925, 0.5451)
 												
-												Shoot(EntityX(Target), EntityY(Target), EntityZ(Target), ((25.0 / Dist) * (1.0 / Dist)), True)
+												Shoot(EntityX(Target), EntityY(Target), EntityZ(Target), ((25.0 / Sqr(Dist)) * (1.0 / Sqr(Dist))), True)
 												n\Reload = 7.0
 											EndIf
 										EndIf
@@ -4149,7 +4149,7 @@ Function UpdateNPCs()
 									Else
 										If PlayerRoom\RoomTemplate\Name = "gateb" Then n\State3 = Max(0.0, n\State3 - fps\Factor[0])
 										
-										If Dist < 2.0 And chs\NoTarget Then
+										If Dist < 4.0 And chs\NoTarget Then
 											AnimateNPC(n, 79.0, 310.0, 0.35)
 										Else
 											If n\PathStatus = 1 Then
@@ -4160,21 +4160,19 @@ Function UpdateNPCs()
 														n\PathLocation = n\PathLocation + 1
 													EndIf
 												Else
-													PrevDist = EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ)
+													PrevDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 													
-													PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
-													RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
-													n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
-													RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
+													PointEntity(n\OBJ, n\Path[n\PathLocation]\OBJ)
+													RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0.0)
 													
 													n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 													TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 													AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 													
-													NewDist = EntityDistance(n\Collider, n\Path[n\PathLocation]\OBJ)
+													NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 													
 													; ~ Open the door and make it automatically close after 5 seconds
-													If NewDist < 1.0 And n\Path[n\PathLocation]\door <> Null Then
+													If NewDist < 1.21 And n\Path[n\PathLocation]\door <> Null Then
 														If (Not n\Path[n\PathLocation]\door\Open)
 															PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\DoorType, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
 															PlayMTFSound(MTFSFX[0], n)
@@ -4185,7 +4183,7 @@ Function UpdateNPCs()
 														EndIf
 													EndIf
 													
-													If (NewDist < 0.2) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then
+													If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.21)) Then
 														n\PathLocation = n\PathLocation + 1
 													EndIf
 												EndIf
@@ -4367,7 +4365,7 @@ Function UpdateNPCs()
 							Next
 						EndIf
 					Else
-						Dist = EntityDistance(me\Collider, n\Collider)
+						Dist = EntityDistanceSquared(me\Collider, n\Collider)
 						
 						; ~ Use the prev-values to do a "twitching" effect
 						n\PrevX = CurveValue(0.0, n\PrevX, 10.0)
@@ -4398,9 +4396,9 @@ Function UpdateNPCs()
 							If n\LastSeen Then 	
 								PointEntity(n\OBJ2, me\Collider)
 								RotateEntity(n\OBJ, 0.0, CurveAngle(EntityYaw(n\OBJ2), EntityYaw(n\OBJ), 40.0), 0.0)
-								If Dist < 4.0 Then n\State = Rand(1.0, 2.0)
+								If Dist < 16.0 Then n\State = Rand(1.0, 2.0)
 							Else
-								If Dist < 6.0 And Rand(5) = 1 Then
+								If Dist < 36.0 And Rand(5) = 1 Then
 									If EntityInView(n\Collider, Camera) Then
 										If EntityVisible(me\Collider, n\Collider) Then
 											n\LastSeen = 1
@@ -4419,7 +4417,7 @@ Function UpdateNPCs()
 									If x < 8.0 And x > 1.0 Then
 										z = Abs(EntityZ(n\Collider, True) - EntityZ(w\OBJ, True))
 										If z < 8.0 And z > 1.0 Then
-											If EntityDistanceSquared(me\Collider, w\OBJ) > PowTwo(Dist) Then
+											If EntityDistanceSquared(me\Collider, w\OBJ) > Dist Then
 												n\Path[0] = w
 												Exit
 											EndIf
@@ -4436,14 +4434,14 @@ Function UpdateNPCs()
 								If EntityDistanceSquared(n\Collider, n\Path[0]\OBJ) > 1.21 Then
 									PointEntity(n\OBJ, n\Path[0]\OBJ)
 									RotateEntity(n\Collider, CurveAngle(EntityPitch(n\OBJ), EntityPitch(n\Collider), 15.0), CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 15.0), 0.0, True)
-									n\CurrSpeed = CurveValue(0.05 * Max((7.0 - Dist) / 7.0, 0.0), n\CurrSpeed, 15.0)
+									n\CurrSpeed = CurveValue(0.05 * Max((7.0 - Sqr(Dist)) / 7.0, 0.0), n\CurrSpeed, 15.0)
 									MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 									If Rand(200) = 1 Then MoveEntity(n\Collider, 0.0, 0.0, 0.5)
 									RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0, True)
 								Else
 									For i = 0 To 4
 										If n\Path[0]\connected[i] <> Null Then
-											If EntityDistanceSquared(me\Collider, n\Path[0]\connected[i]\OBJ) > PowTwo(Dist) Then
+											If EntityDistanceSquared(me\Collider, n\Path[0]\connected[i]\OBJ) > Dist Then
 												If n\LastSeen = 0 Then 
 													If EntityInView(n\Collider, Camera) Then
 														If EntityVisible(me\Collider, n\Collider) Then
@@ -4485,7 +4483,7 @@ Function UpdateNPCs()
 						End Select
 						
 						If n\State2 > 0.0 Then
-							If Dist < 4.0 Then n\State2 = n\State2 - fps\Factor[0] * 4.0
+							If Dist < 16.0 Then n\State2 = n\State2 - fps\Factor[0] * 4.0
 							n\State2 = n\State2 - fps\Factor[0]
 						Else
 							n\Path[0] = Null
@@ -4556,8 +4554,8 @@ Function UpdateNPCs()
 				;[End Block]
 			Case NPCTypeApache
 				;[Block]
-				Dist = EntityDistance(me\Collider, n\Collider)
-				If Dist < 60.0 Then 
+				Dist = EntityDistanceSquared(me\Collider, n\Collider)
+				If Dist < 3600.0 Then 
 					If PlayerRoom\RoomTemplate\Name = "gateb" Then 
 						Dist2 = Max(Min(EntityDistance(n\Collider, PlayerRoom\Objects[10]) / (8000.0 * RoomScale), 1.0), 0.0)
 					Else 
@@ -4610,9 +4608,9 @@ Function UpdateNPCs()
 									RotateEntity(n\Collider, CurveAngle(Min(WrapAngle(EntityPitch(n\OBJ)), 40.0), EntityPitch(n\Collider), 40.0), CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 90.0), EntityRoll(n\Collider), True)
 									PositionEntity(n\Collider, EntityX(n\Collider), CurveValue(EntityY(Target) + 8.0, EntityY(n\Collider), 70.0), EntityZ(n\Collider))
 									
-									Dist = Distance(EntityX(Target), EntityX(n\Collider), EntityZ(Target), EntityZ(n\Collider))
+									Dist = DistanceSquared(EntityX(Target), EntityX(n\Collider), EntityZ(Target), EntityZ(n\Collider))
 									
-									n\CurrSpeed = CurveValue(Min(Dist - 6.5, 6.5) * 0.008, n\CurrSpeed, 50.0)
+									n\CurrSpeed = CurveValue(Min(Sqr(Dist) - 6.5, 6.5) * 0.008, n\CurrSpeed, 50.0)
 									
 									MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 									
@@ -4626,7 +4624,7 @@ Function UpdateNPCs()
 									If n\PathStatus = 1 Then ; ~ Player visible
 										RotateEntity(n\Collider, EntityPitch(n\Collider), EntityYaw(n\Collider), CurveAngle(0.0, EntityRoll(n\Collider), 40.0), True)
 										If n\Reload =< 0.0 Then
-											If Dist < 20.0 Then
+											If Dist < 400.0 Then
 												Pvt = CreatePivot()
 												PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
 												RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), EntityRoll(n\Collider))
@@ -4636,7 +4634,7 @@ Function UpdateNPCs()
 												If WrapAngle(EntityYaw(Pvt) - EntityYaw(n\Collider)) < 10.0 Then
 													PlaySound2(Gunshot2SFX, Camera, n\Collider, 20.0)
 													
-													Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((10.0 / Dist) * (1.0 / Dist)) * (n\State = 2.0), (n\State = 2.0))
+													Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((10.0 / Sqr(Dist)) * (1.0 / Sqr(Dist))) * (n\State = 2.0), (n\State = 2.0))
 													
 													n\Reload = 5.0
 													
@@ -4829,7 +4827,7 @@ Function UpdateNPCs()
 				If PlayerRoom\RoomTemplate\Name = "room860" Then
 					Local fr.Forest = PlayerRoom\fr
 					
-					Dist = EntityDistance(me\Collider, n\Collider)
+					Dist = EntityDistanceSquared(me\Collider, n\Collider)
 					
 					If ForestNPC <> 0
 						If ForestNPCData[2] = 1.0
@@ -4991,7 +4989,7 @@ Function UpdateNPCs()
 										n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
 										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 										
-										If Dist > 15.0 Then
+										If Dist > 225.0 Then
 											PositionEntity(n\Collider, 0.0, -110.0, 0.0)
 											n\State = 0.0
 											n\State2 = 0.0
@@ -5046,7 +5044,7 @@ Function UpdateNPCs()
 								AnimateNPC(n, 494.0, 569.0, n\CurrSpeed * 25.0)
 								
 								If n\State2 = 0.0 Then
-									If Dist < 8.0 Then
+									If Dist < 64.0 Then
 										If EntityInView(n\Collider, Camera) Then
 											If Rand(8) = 1 Then
 												PlaySound_Strict(LoadTempSound("SFX\SCP\860\Chase" + Rand(1, 2) + ".ogg"))
@@ -5073,7 +5071,7 @@ Function UpdateNPCs()
 									n\State3 = Max(n\State3 - fps\Factor[0], 0.0)
 								EndIf
 								
-								If Dist < 4.5 Lor n\State3 > Rnd(200.0, 250.0) Then
+								If Dist < 20.25 Lor n\State3 > Rnd(200.0, 250.0) Then
 									n\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\860\Cancer" + Rand(3, 5) + ".ogg"), Camera, n\Collider)
 									If (Not chs\Notarget) Then
 										n\State = 3.0
@@ -5085,7 +5083,7 @@ Function UpdateNPCs()
 									EndIf
 								EndIf
 								
-								If Dist > 20.0 Then
+								If Dist > 400.0 Then
 									n\State = 0.0
 									n\State2 = 0.0
 									PositionEntity(n\Collider, 0.0, -110.0, 0.0)
@@ -5108,7 +5106,7 @@ Function UpdateNPCs()
 							RotateEntity(n\Collider, 0.0, Angle - 90.0, 0.0, True)
 							
 							; ~ If close enough to attack or already attacking, play the attack anim
-							If (Dist < 1.1 Lor (n\Frame > 451.0 And n\Frame < 493.0) Lor me\KillTimer < 0.0) Then
+							If (Dist < 1.21 Lor (n\Frame > 451.0 And n\Frame < 493.0) Lor me\KillTimer < 0.0) Then
 								msg\DeathMsg = ""
 								
 								n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
@@ -5155,9 +5153,9 @@ Function UpdateNPCs()
 						PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.23, EntityZ(n\Collider))
 						RotateEntity(n\OBJ, EntityPitch(n\Collider) - 90.0, EntityYaw(n\Collider), EntityRoll(n\Collider), True)
 						
-						If Dist > 8.0 Then
+						If Dist > 64.0 Then
 							ShowEntity(n\OBJ2)
-							EntityAlpha(n\OBJ2, Min(Dist - 8.0, 1.0))
+							EntityAlpha(n\OBJ2, Min(Sqr(Dist) - 8.0, 1.0))
 							
 							PositionEntity(n\OBJ2, EntityX(n\OBJ), EntityY(n\OBJ) , EntityZ(n\OBJ))
 							RotateEntity(n\OBJ2, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
@@ -5208,11 +5206,11 @@ Function UpdateNPCs()
 							;[End Block]
 						Case 2.0 ; ~ Walking
 							;[Block]
-							n\State2 = Max(n\State2, (n\PrevState - 3))
+							n\State2 = Max(n\State2, n\PrevState - 3)
 							
-							Dist = EntityDistance(n\Collider, PlayerRoom\Objects[n\State2])
+							Dist = EntityDistanceSquared(n\Collider, PlayerRoom\Objects[n\State2])
 							
-							n\CurrSpeed = CurveValue(n\Speed * 0.3 * Min(Dist, 1.0), n\CurrSpeed, 10.0)
+							n\CurrSpeed = CurveValue(n\Speed * 0.3 * Min(Sqr(Dist), 1.0), n\CurrSpeed, 10.0)
 							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0]) 
 							
 							PrevFrame = n\Frame
@@ -5240,7 +5238,7 @@ Function UpdateNPCs()
 							PointEntity(n\OBJ, PlayerRoom\Objects[n\State2])
 							RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 20.0), 0.0)
 							
-							If Dist < 0.4 Then
+							If Dist < 0.16 Then
 								n\State2 = n\State2 + 1.0
 								If n\State2 > n\PrevState Then n\State2 = (n\PrevState - 3)
 								n\State = 1.0
@@ -5324,10 +5322,10 @@ Function UpdateNPCs()
 					End Select
 					
 					If n\State < 3.0 And (Not chs\NoTarget) And (Not n\IgnorePlayer) Then
-						Dist = EntityDistance(n\Collider, me\Collider)
+						Dist = EntityDistanceSquared(n\Collider, me\Collider)
 						
-						If Dist < 4.0 Then Dist = Dist - EntityVisible(me\Collider, n\Collider)
-						If me\SndVolume * 1.2 > Dist Lor Dist < 1.5 Then
+						If Dist < 16.0 Then Dist = Dist - PowTwo((EntityVisible(me\Collider, n\Collider) + (EntityVisible(me\Collider, n\Collider) * 0.21)))
+						If PowTwo(me\SndVolume * 1.2) > Dist Lor Dist < 2.25 Then
 							If n\State3 = 0.0 Then
 								If n\Sound <> 0 Then 
 									FreeSound_Strict(n\Sound) : n\Sound = 0
@@ -5340,7 +5338,7 @@ Function UpdateNPCs()
 							EndIf
 							
 							n\State = 3.0
-						ElseIf me\SndVolume * 1.6 > Dist
+						ElseIf PowTwo(me\SndVolume * 1.6) > Dist
 							If n\State <> 1 And n\Reload =< 0.0 Then
 								If n\Sound <> 0 Then 
 									FreeSound_Strict(n\Sound) : n\Sound = 0
@@ -5365,7 +5363,7 @@ Function UpdateNPCs()
 				;[End Block]
 			Case NPCType066
 				;[Block]
-				Dist = Distance(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider))
+				Dist = DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider))
 				
 				Select n\State
 					Case 0.0
@@ -5373,7 +5371,7 @@ Function UpdateNPCs()
 						; ~ Idles: moves around randomly from waypoint to another if the player is far enough
 						; ~ Starts staring at the player when the player is close enough
 						
-						If Dist > 20.0 Then
+						If Dist > 400.0 Then
 							AnimateNPC(n, 451.0, 612.0, 0.2)
 							
 							If n\State2 < MilliSecs2() Then
@@ -5390,7 +5388,7 @@ Function UpdateNPCs()
 								Next
 								n\State2 = MilliSecs2() + 5000.0
 							EndIf
-						ElseIf Dist < 8.0
+						ElseIf Dist < 64.0
 							n\LastDist = Rnd(1.0, 2.5)
 							n\State = 1.0
 						EndIf
@@ -5400,16 +5398,16 @@ Function UpdateNPCs()
 						If n\Frame < 451.0 Then
 							Angle = WrapAngle(CurveAngle(DeltaYaw(n\Collider, me\Collider) - 180.0, (AnimTime(n\OBJ) - 2.0) / 1.2445, 15.0))
 							
-							SetNPCFrame(n, Angle * 1.2445 + 2.0)
+							SetNPCFrame(n, (Angle * 1.2445) + 2.0)
 						Else
 							AnimateNPC(n, 636.0, 646.0, 0.4, False)
 							If n\Frame = 646.0 Then SetNPCFrame(n, 2.0)
 						EndIf
-						Dist = Distance(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider))
+						Dist = DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider))
 						
 						If Rand(700) = 1 Then PlaySound2(LoadTempSound("SFX\SCP\066\Eric" + Rand(1, 3) + ".ogg"), Camera, n\Collider, 8.0)
 						
-						If Dist < 1.0 + n\LastDist Then n\State = Rand(2.0, 3.0)
+						If Dist < 1.21 + PowTwo(n\LastDist) Then n\State = Rand(2.0, 3.0)
 						;[End Block]
 					Case 2.0 ; ~ Rolls towards the player and make a sound, and then escape	
 						;[Block]
@@ -5535,7 +5533,7 @@ Function UpdateNPCs()
 				
 				If ChannelPlaying(n\SoundCHN2) Then
 					UpdateSoundOrigin(n\SoundCHN2, Camera, n\Collider, 20.0, 1.0, False)
-					me\BlurTimer = Max((5.0 - Dist) * 300.0, 0.0)
+					me\BlurTimer = Max((5.0 - (Sqr(Dist)) * 300.0), 0.0)
 				EndIf
 				
 				PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.2, EntityZ(n\Collider))
@@ -5544,10 +5542,10 @@ Function UpdateNPCs()
 				;[End Block]
 			Case NPCType966
 				;[Block]
-				Dist = EntityDistance(n\Collider, me\Collider)
+				Dist = EntityDistanceSquared(n\Collider, me\Collider)
 				
 				If n\State > -1.0 Then
-					If Dist < HideDistance Then
+					If Dist < PowTwo(HideDistance) Then
 						; ~ n\State: The "general" state (Idles / Wanders off/ Attacks / Echo and etc.)
 						
 						; ~ n\State2: Timer for doing raycasts
@@ -5564,7 +5562,7 @@ Function UpdateNPCs()
 						If wi\NightVision = 0 Then
 							HideEntity(n\OBJ)
 							If (Not chs\Notarget) Then
-								If Dist < 1.0 And n\Reload =< 0.0 And msg\Timer =< 0.0 Then
+								If Dist < 1.21 And n\Reload =< 0.0 And msg\Timer =< 0.0 Then
 									Select Rand(6)
 										Case 1
 											;[Block]
@@ -5630,7 +5628,7 @@ Function UpdateNPCs()
 									
 									; ~ Echo / Stares off / Walking around periodically
 									If n\Frame > 213.0
-										If Rand(3) = 1 And Dist < 4.0 Then
+										If Rand(3) = 1 And Dist < 16.0 Then
 											n\State = Rand(1.0, 4.0)
 										Else
 											n\State = Rand(5.0, 6.0)								
@@ -5638,7 +5636,7 @@ Function UpdateNPCs()
 									EndIf
 									
 									; ~ Echo if player gets close
-									If Dist < 2.0 Then 
+									If Dist < 4.0 Then 
 										n\State = Rand(1, 4)
 									EndIf 							
 								EndIf
@@ -5661,9 +5659,9 @@ Function UpdateNPCs()
 									RotateEntity(n\Collider, 0.0, CurveAngle(Angle, EntityYaw(n\Collider), 20.0), 0.0)
 									
 									If n\State3 < 900.0 Then
-										me\BlurTimer = Float(((Sin(MilliSecs2() / 50.0) + 1.0) * 200.0) / Dist)
+										me\BlurTimer = Float(((Sin(MilliSecs2() / 50.0) + 1.0) * 200.0) / Sqr(Dist))
 										
-										If (Not I_714\Using) And wi\GasMask <> 3 And wi\HazmatSuit <> 3 And Dist < 16.0 Then
+										If (Not I_714\Using) And wi\GasMask <> 3 And wi\HazmatSuit <> 3 And Dist < 256.0 Then
 											me\BlinkEffect = Max(me\BlinkEffect, 1.5)
 											me\BlinkEffectTimer = 1000.0
 											
@@ -5725,7 +5723,7 @@ Function UpdateNPCs()
 									EndIf
 									
 									; ~ Chasing the player
-									If n\State = 8.0 And Dist < 32.0 Then
+									If n\State = 8.0 And Dist < 1024.0 Then
 										If n\PathTimer =< 0.0 Then
 											n\PathStatus = FindPath(n, EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True))
 											n\PathTimer = 40 * 10.0
@@ -5780,10 +5778,10 @@ Function UpdateNPCs()
 											n\Angle = VectorYaw(EntityX(me\Collider) - EntityX(n\Collider), 0.0, EntityZ(me\Collider) - EntityZ(n\Collider))
 											n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
 											
-											If Dist < 1.0 Then n\State = 10.0
+											If Dist < 1.21 Then n\State = 10.0
 										EndIf
 									Else
-										If MilliSecs2() > n\State2 And Dist < 16.0 Then
+										If MilliSecs2() > n\State2 And Dist < 256.0 Then
 											HideEntity(n\Collider) 
 											EntityPick(n\Collider, 1.5)
 											If PickedEntity() <> 0 Then
@@ -5849,7 +5847,7 @@ Function UpdateNPCs()
 								EndIf
 								
 								If n\Frame > 470.0 And PrevFrame =< 470.0 Lor n\Frame > 500.0 And PrevFrame =< 500.0 Lor n\Frame > 527.0 And PrevFrame =< 527.0 Then
-									If Dist < 1.0 Then
+									If Dist < 0.64 Then
 										If Abs(DeltaYaw(n\Collider, me\Collider)) =< 60.0 Then
 											PlaySound2(DamageSFX[Rand(11, 12)], Camera, n\Collider)
 											InjurePlayer(Rnd(0.5, 1.0), 0.0, 500.0, Rnd(0.1, 0.3))
@@ -6191,7 +6189,7 @@ Function UpdateNPCs()
 							If n\State2 = 1.0
 								AnimateNPC(n, 63.0, 100.0, 0.6, False)
 								If PrevFrame < 89.0 And n\Frame >= 89.0 Then
-									If Dist > 0.7225 Lor Abs(DeltaYaw(n\Collider, me\Collider)) > 60.0 Then
+									If Dist > 0.64 Lor Abs(DeltaYaw(n\Collider, me\Collider)) > 60.0 Then
 										PlaySound2(MissSFX, Camera, n\Collider, 2.5)
 									Else
 										InjurePlayer(Rnd(0.75, 1.5), 0.0, 500.0, Rnd(0.1, 0.4), 0.2)
@@ -6221,7 +6219,7 @@ Function UpdateNPCs()
 							Else
 								AnimateNPC(n, 168.0, 202.0, 0.6, False)
 								If PrevFrame < 189.0 And n\Frame >= 189.0 Then
-									If Dist > 0.7225 Lor Abs(DeltaYaw(n\Collider, me\Collider)) > 60.0 Then
+									If Dist > 0.64 Lor Abs(DeltaYaw(n\Collider, me\Collider)) > 60.0 Then
 										PlaySound2(MissSFX, Camera, n\Collider, 2.5)
 									Else
 										InjurePlayer(Rnd(0.75, 1.5), 0.0, 500.0, Rnd(0.1, 0.4), 0.2)
@@ -6259,7 +6257,7 @@ Function UpdateNPCs()
 							PointEntity(n\OBJ, me\Collider)
 							RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 20.0), 0.0)
 							
-							If Dist > 0.7225 Then n\State = 1.0
+							If Dist > 0.64 Then n\State = 1.0
 							;[End Block]
 					End Select
 					
@@ -6447,7 +6445,7 @@ Function UpdateNPCs()
 							;[Block]
 							AnimateNPC(n, 126.0, 165.0, 0.6, False)
 							If n\Frame >= 146.0 And PrevFrame < 146.0 Then
-								If Dist < 1.21 Then
+								If Dist < 0.64 Then
 									If Abs(DeltaYaw(n\Collider, me\Collider)) =< 60.0 Then
 										PlaySound_Strict(DamageSFX[Rand(5, 8)])
 										InjurePlayer(Rnd(0.4, 1.0), 1.0 + (1.0 * SelectedDifficulty\AggressiveNPCs), 0.0, Rnd(0.1, 0.25), 0.2)
@@ -6467,7 +6465,7 @@ Function UpdateNPCs()
 									PlaySound2(MissSFX, Camera, n\Collider, 2.5)
 								EndIf
 							ElseIf n\Frame >= 164.0
-								If EntityDistanceSquared(n\Collider, me\Collider) < 1.21
+								If EntityDistanceSquared(n\Collider, me\Collider) < 0.64
 									If (Abs(DeltaYaw(n\Collider, me\Collider)) =< 60.0)
 										SetNPCFrame(n, 126.0)
 									Else
@@ -6587,9 +6585,9 @@ Function UpdateNPCs()
 		
 		If n\IsDead Then EntityType(n\Collider, HIT_DEAD)
 		
-		Local GravityDist# = Distance(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider))
+		Local GravityDist# = DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider))
 		
-		If GravityDist < HideDistance * 0.7 Lor n\NPCType = NPCType1499_1 Then
+		If GravityDist < PowTwo(HideDistance * 0.7) Lor n\NPCType = NPCType1499_1 Then
 			If n\InFacility = InFacility Then
 				TranslateEntity(n\Collider, 0.0, n\DropSpeed, 0.0)
 				
@@ -6697,12 +6695,12 @@ Function TeleportCloser(n.NPCs)
 				If zTemp < 10.0 And zTemp > 1.0 Then
 					If EntityDistanceSquared(me\Collider, w\OBJ) > PowTwo(16.0 - (8.0 * SelectedDifficulty\AggressiveNPCs)) Then
 						; ~ Teleports to the nearby waypoint that takes it closest to the player
-						Local NewDist# = EntityDistance(me\Collider, w\OBJ)
+						Local NewDist# = EntityDistanceSquared(me\Collider, w\OBJ)
 						
 						If NewDist < ClosestDist Lor closestWaypoint = Null Then
 							ClosestDist = NewDist	
 							closestWaypoint = w
-						EndIf						
+						EndIf
 					EndIf
 				EndIf
 			EndIf

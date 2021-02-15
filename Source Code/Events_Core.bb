@@ -2380,8 +2380,9 @@ Function UpdateEvents()
 								e\room\NPC[0]\GravityMult = 1.0
 							EndIf
 							If EntityY(e\room\NPC[0]\Collider) > (-1531.0 * RoomScale) + 0.35 Then
-								Dist = EntityDistance(me\Collider, e\room\NPC[0]\Collider)
-								If Dist < 0.8 Then ; ~ Get the player out of the way
+								Dist = EntityDistanceSquared(me\Collider, e\room\NPC[0]\Collider)
+								If Dist < 0.64 Then ; ~ Get the player out of the way
+									Dist = Sqr(Dist)
 									fDir = PointDirection(EntityX(me\Collider, True), EntityZ(me\Collider, True), EntityX(e\room\NPC[0]\Collider, True), EntityZ(e\room\NPC[0]\Collider, True))
 									TranslateEntity(me\Collider, Cos(-fDir + 90.0) * (Dist - 0.8) * (Dist - 0.8), 0, Sin(-fDir + 90.0) * (Dist - 0.8) * (Dist - 0.8))
 								EndIf
@@ -2888,17 +2889,17 @@ Function UpdateEvents()
 									If DistanceSquared(EntityX(me\Collider), x, EntityZ(me\Collider), z) < PowTwo(200.0 * RoomScale) Then Safe = True : Exit
 								Next
 								
-								Dist = EntityDistance(me\Collider, e\room\Objects[18])
+								Dist = EntityDistanceSquared(me\Collider, e\room\Objects[18])
 								
 								If e\SoundCHN2 <> 0 And ChannelPlaying(e\SoundCHN2) Then e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, Camera, 10.0, 0.3 + (Not Safe) * 0.6)
 								If Safe Lor chs\NoTarget Then
 									EntityTexture(e\room\Objects[18], e\room\Textures[0])
-								ElseIf Dist < 8.0
+								ElseIf Dist < 64.0
 									e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\Objects[18], 8.0)
 									EntityTexture(e\room\Objects[18], e\room\Textures[1])
-									InjurePlayer((8.0 - Dist) * (fps\Factor[0] * 0.0003))
+									InjurePlayer((8.0 - Sqr(Dist)) * (fps\Factor[0] * 0.0003))
 									
-									If Dist < 7.0 Then 
+									If Dist < 49.0 Then 
 										Pvt = CreatePivot()
 										PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 										PointEntity(Pvt, e\room\Objects[18])
@@ -2910,7 +2911,7 @@ Function UpdateEvents()
 									EndIf
 								EndIf
 								
-								me\CameraShake = Max(4.0 + ((Not Safe) * 4.0) - Dist, 0.0)
+								me\CameraShake = Max(4.0 + ((Not Safe) * 4.0) - Sqr(Dist), 0.0)
 								
 								; ~ Check if player is at the sinkhole (the exit from the trench room)
 								If EntityY(me\Collider) < 8.5 Then
@@ -2971,8 +2972,8 @@ Function UpdateEvents()
 								
 								e\EventState4 = 1.0
 								
-								Temp = EntityDistance(me\Collider, e\room\Objects[17])
-								If Temp < 2000.0 * RoomScale Then
+								Temp = EntityDistanceSquared(me\Collider, e\room\Objects[17])
+								If Temp < PowTwo(2000.0 * RoomScale) Then
 									InjurePlayer(fps\Factor[0] / 4000.0)
 									e\EventStr = Float(e\EventStr) + (fps\Factor[0] / 1000.0)
 									
@@ -2984,9 +2985,9 @@ Function UpdateEvents()
 									
 									If EntityInView(e\room\Objects[17], Camera) Then e\EventState4 = 2.0
 									
-									me\Sanity = Max(me\Sanity - fps\Factor[0] / Temp / 8.0, -1000.0)
+									me\Sanity = Max(me\Sanity - fps\Factor[0] / Sqr(Temp) / 8.0, -1000.0)
 									
-									me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs2()) / 20.0) + 1.0) * 15.0 * Max((6.0 - Temp) / 6.0, 0.0))
+									me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs2()) / 20.0) + 1.0) * 15.0 * Max((6.0 - Sqr(Temp)) / 6.0, 0.0))
 									
 									Pvt = CreatePivot()
 									PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
@@ -3013,14 +3014,14 @@ Function UpdateEvents()
 										e\EventStr = Float(0.0)
 									EndIf
 								ElseIf EntityY(me\Collider) < (-180.0) * RoomScale ; ~ The "exit room"
-									Temp = Distance(EntityX(me\Collider), EntityX(e\room\Objects[8], True) + 1024.0 * RoomScale, EntityZ(me\Collider), EntityZ(e\room\Objects[8], True))
-									If Temp < 640.0 * RoomScale
-										me\BlurTimer = ((640.0 * RoomScale) - Temp) * 3000.0
+									Temp = DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[8], True) + 1024.0 * RoomScale, EntityZ(me\Collider), EntityZ(e\room\Objects[8], True))
+									If Temp < PowTwo(640.0 * RoomScale)
+										me\BlurTimer = ((640.0 * RoomScale) - Sqr(Temp)) * 3000.0
 										
-										e\SoundCHN2 = LoopSound2(DecaySFX[Rand(1, 3)], e\SoundCHN2, Camera, me\Collider, 2.0, (640.0 * RoomScale - Temp) * Abs(me\CurrSpeed) * 100)
-										me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, Temp * 10.0)
+										e\SoundCHN2 = LoopSound2(DecaySFX[Rand(1, 3)], e\SoundCHN2, Camera, me\Collider, 2.0, (640.0 * RoomScale - Sqr(Temp)) * Abs(me\CurrSpeed) * 100)
+										me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, Sqr(Temp) * 10.0)
 										
-										If Temp < 130.0 * RoomScale Then
+										If Temp < PowTwo(130.0 * RoomScale) Then
 											For r.Rooms = Each Rooms
 												If r\RoomTemplate\Name = "room2shaft" Then
 													GiveAchievement(AchvPD)
@@ -3122,9 +3123,9 @@ Function UpdateEvents()
 						UpdateDoors()
 						UpdateRooms()
 					ElseIf e\EventState2 = 0.0
-						Dist = EntityDistance(me\Collider, e\room\OBJ)	
+						Dist = EntityDistanceSquared(me\Collider, e\room\OBJ)	
 						
-						If Dist > 1700.0 * RoomScale Then
+						If Dist > PowTwo(1700.0 * RoomScale) Then
 							me\BlinkTimer = -10.0
 							
 							Select Rand(25)
@@ -3135,7 +3136,7 @@ Function UpdateEvents()
 									Pvt = CreatePivot()
 									PositionEntity(Pvt, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 									PointEntity(Pvt, e\room\OBJ)
-									MoveEntity(Pvt, 0.0, 0.0, Dist * 1.9)
+									MoveEntity(Pvt, 0.0, 0.0, Sqr(Dist) * 1.9)
 									PositionEntity(me\Collider, EntityX(Pvt), EntityY(me\Collider) + 0.1, EntityZ(Pvt))
 									ResetEntity(me\Collider)
 									
@@ -5688,12 +5689,12 @@ Function UpdateEvents()
 									CameraPitch = CurveAngle(EntityPitch(Pvt) + 25.0, CameraPitch + 90.0, 80.0 - (e\EventState3 / 200.0))
 									CameraPitch = CameraPitch - 90.0
 									
-									Dist = Distance(EntityX(me\Collider), EntityX(e\room\Objects[2], True), EntityZ(me\Collider), EntityZ(e\room\Objects[2], True))
+									Dist = DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[2], True), EntityZ(me\Collider), EntityZ(e\room\Objects[2], True))
 									
 									me\HeartBeatRate = 150.0
-									me\HeartBeatVolume = Max(3.0 - Dist, 0.0) / 3.0
-									me\BlurVolume = Max((2.0 - Dist) * (e\EventState3 / 800.0)*(Sin(Float(MilliSecs2()) / 20.0 + 1.0)), me\BlurVolume)
-									me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs2()) / 20.0) + 1.0) * 8.0 * Max((3.0 - Dist), 0.0))
+									me\HeartBeatVolume = Max(3.0 - Sqr(Dist), 0.0) / 3.0
+									me\BlurVolume = Max((2.0 - Sqr(Dist)) * (e\EventState3 / 800.0)*(Sin(Float(MilliSecs2()) / 20.0 + 1.0)), me\BlurVolume)
+									me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs2()) / 20.0) + 1.0) * 8.0 * Max((3.0 - Sqr(Dist)), 0.0))
 									
 									If BreathCHN <> 0 Then
 										If ChannelPlaying(BreathCHN) Then StopChannel(BreathCHN)
@@ -5703,7 +5704,7 @@ Function UpdateEvents()
 										If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN)
 									EndIf
 									
-									If Dist < 0.6 Then
+									If Dist < 0.36 Then
 										e\EventState3 = Min(e\EventState3 + fps\Factor[0], 70.0 * 86.0)
 										If e\EventState3 > 70.0 * 1.0 And e\EventState3 - fps\Factor[0] =< 70.0 * 1.0 Then
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech1.ogg"))
@@ -7069,7 +7070,7 @@ Function UpdateEvents()
 						If (Not Curr106\Contained) Then Curr106\Idle = 0
 						If EntityYaw(e\room\Objects[3]) = 0.0 Then
 							HideEntity(fr.Forest\Forest_Pivot)
-							If Abs(DistanceSquared(EntityX(e\room\Objects[3], True), EntityX(me\Collider, True), EntityZ(e\room\Objects[3], True), EntityZ(me\Collider, True))) < 1.21 Then
+							If Abs(DistanceSquared(EntityX(e\room\Objects[3], True), EntityX(me\Collider, True), EntityZ(e\room\Objects[3], True), EntityZ(me\Collider, True))) < 0.64 Then
 								ga\DrawHandIcon = True
 								If SelectedItem = Null Then
 									If mo\MouseHit1 Then
@@ -7230,7 +7231,7 @@ Function UpdateEvents()
 						EndIf
 						
 						If EntityYaw(e\room\Objects[13]) = 0.0 Then
-							If EntityDistanceSquared(me\Collider, e\room\Objects[12]) < 1.21 Then
+							If EntityDistanceSquared(me\Collider, e\room\Objects[12]) < 0.64 Then
 								ga\DrawHandIcon = True
 								If mo\MouseHit1 Then
 									RotateEntity(e\room\Objects[13], 0.0, 1.0, 0.0)
@@ -7704,8 +7705,9 @@ Function UpdateEvents()
 							EntityType(e\room\NPC[0]\Collider, HIT_PLAYER)
 							If EntityY(e\room\NPC[0]\Collider) > 0.35 Then
 								AnimateNPC(e\room\NPC[0], 1.0, 10.0, 0.12, False)
-								Dist = EntityDistance(me\Collider, e\room\NPC[0]\Collider)
-								If Dist < 0.8 Then ; ~ Get the player out of the way
+								Dist = EntityDistanceSquared(me\Collider, e\room\NPC[0]\Collider)
+								If Dist < 0.64 Then ; ~ Get the player out of the way
+									Dist = Sqr(Dist)
 									fDir = PointDirection(EntityX(me\Collider, True), EntityZ(me\Collider, True), EntityX(e\room\NPC[0]\Collider, True), EntityZ(e\room\NPC[0]\Collider, True))
 									TranslateEntity(me\Collider, Cos(-fDir + 90.0) * (Dist - 0.8) * (Dist - 0.8), 0.0, Sin(-fDir + 90.0) * (Dist - 0.8) * (Dist - 0.8))
 								EndIf
@@ -7743,18 +7745,18 @@ Function UpdateEvents()
 					Else
 						e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\OBJ, 4.5, 1.5)
 					EndIf
-					Dist = Distance(EntityX(me\Collider), EntityX(e\room\OBJ), EntityZ(me\Collider), EntityZ(e\room\OBJ))
-					If Dist < 2.0 Then
+					Dist = DistanceSquared(EntityX(me\Collider), EntityX(e\room\OBJ), EntityZ(me\Collider), EntityZ(e\room\OBJ))
+					If Dist < 4.0 Then
 						CurrStepSFX = 1
-						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, Max(Dist * 50.0, 1.0))	
-						me\CrouchState = (2.0 - Dist) / 2.0
+						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, Max(Sqr(Dist) * 50.0, 1.0))	
+						me\CrouchState = (2.0 - Sqr(Dist)) / 2.0
 						
-						If Dist < 0.5 Then
+						If Dist < 0.25 Then
 							If e\EventState2 = 0.0 Then
 								PlaySound_Strict(LoadTempSound("SFX\Room\SinkholeFall.ogg"))
 							EndIf
 							
-							me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, Max(Dist  * 50.0, 1.0))
+							me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, Max(Sqr(Dist) * 50.0, 1.0))
 							
 							x = CurveValue(EntityX(e\room\OBJ), EntityX(me\Collider), 10.0)
 							y = CurveValue(EntityY(e\room\OBJ) - e\EventState2, EntityY(me\Collider), 25.0)
@@ -9159,7 +9161,7 @@ Function UpdateEvents()
 							EndIf
 							; ~ Touching the SCP-409
 							If I_409\Timer < 1.0 Then
-								If EntityDistanceSquared(e\room\Objects[3], me\Collider) < 0.49 Then
+								If EntityDistanceSquared(e\room\Objects[3], me\Collider) < 0.64 Then
 									ga\DrawHandIcon = True
 									If mo\MouseHit1 Then
 										CreateMsg("You touched SCP-409.", 6.0)
@@ -10047,15 +10049,15 @@ Function UpdateEndings()
 										EndIf
 									EndIf
 									
-									Dist = Distance(EntityX(Curr106\Collider), EntityX(e\room\Objects[4], True), EntityZ(Curr106\Collider), EntityZ(e\room\Objects[4], True))
+									Dist = DistanceSquared(EntityX(Curr106\Collider), EntityX(e\room\Objects[4], True), EntityZ(Curr106\Collider), EntityZ(e\room\Objects[4], True))
 									
-									Curr106\CurrSpeed = CurveValue(0.0, Curr106\CurrSpeed, Max(5.0 * Dist, 2.0))
-									If Dist < 15.0 Then
+									Curr106\CurrSpeed = CurveValue(0.0, Curr106\CurrSpeed, Max(5.0 * Sqr(Dist), 2.0))
+									If Dist < 225.0 Then
 										If (Not e\SoundCHN2) Then
 											e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\Franklin.ogg"))
 										EndIf
 										
-										If Dist < 0.4 Then
+										If Dist < 0.16 Then
 											Curr106\PathStatus = 0
 											Curr106\PathTimer = 70.0 * 200.0
 											If Curr106\State3 = 0.0 Then 
@@ -10090,7 +10092,7 @@ Function UpdateEndings()
 												HideEntity(Curr106\OBJ)
 											EndIf
 										Else
-											If Dist < 8.5 Then 
+											If Dist < 72.25 Then 
 												If e\EventState2 = 0.0 Then
 													e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\HIDTurret.ogg"))
 													e\EventState2 = 1.0
@@ -10115,7 +10117,7 @@ Function UpdateEndings()
 												EndIf
 												
 												If opt\ParticleAmount > 0 Then
-													For i = 0 To Rand(2, 2 + (6 * (opt\ParticleAmount - 1))) - Int(Dist)
+													For i = 0 To Rand(2, 2 + (6 * (opt\ParticleAmount - 1))) - Int(Sqr(Dist))
 														p.Particles = CreateParticle(EntityX(Curr106\OBJ, True), EntityY(Curr106\OBJ, True) + Rnd(0.4, 0.9), EntityZ(Curr106\OBJ), 0, 0.006, -0.002, 40.0)
 														p\Speed = 0.005 : p\A = 0.8 : p\Achange = -0.01
 														RotateEntity(p\Pvt, -Rnd(70.0, 110.0), Rnd(360.0), 0.0) 	
@@ -10208,8 +10210,9 @@ Function UpdateEndings()
 									If me\KillTimer = 0.0 Then 
 										CameraZoom(Camera, 1.0 + Sin(e\EventState3 * 0.8) * 0.2)
 										
-										Dist = EntityDistance(me\Collider, e\room\Objects[11])
-										If Dist < 6.5 Then
+										Dist = EntityDistanceSquared(me\Collider, e\room\Objects[11])
+										If Dist < 42.25 Then
+											Dist = Sqr(Dist)
 											PositionEntity(me\Collider, CurveValue(EntityX(e\room\Objects[11], True), EntityX(me\Collider), Dist * 80.0), EntityY(me\Collider), CurveValue(EntityZ(e\room\Objects[0], True), EntityZ(me\Collider), Dist * 80.0))
 										EndIf
 									EndIf
