@@ -1011,6 +1011,7 @@ Function UpdateEvents()
 										If EntityY(me\Collider) < 320.0 * RoomScale Then me\BlinkTimer = -10.0
 									EndIf
 									PositionEntity(Curr173\Collider, e\room\x - 96.0 * RoomScale, 0.31, e\room\z + 592.0 * RoomScale, True)
+									ResetEntity(Curr173\Collider)
 									RotateEntity(Curr173\Collider, 0.0, 190.0, 0.0)
 									
 									If e\room\NPC[2]\State <> 1.0 And me\KillTimer >= 0.0 Then

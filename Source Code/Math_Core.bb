@@ -111,7 +111,7 @@ Function TurnIfDeviating%(Max_Deviation_Distance_%, Pathx%, Center_%, Dir%, RetV
 	EndIf
 End Function
 
-Function ChangeAngleValueForCorrectBoneAssigning%(Value#)
+Function ChangeAngleValueForCorrectBoneAssigning#(Value#)
 	Local Number#
 	
 	If Value =< 180.0 Then
@@ -126,11 +126,11 @@ Function ReadPixelColor%(Pixel%, Shrid%)
 	Return(Pixel Shr Shrid) And $FF
 End Function
 
-Function ScaledMouseX%()
+Function ScaledMouseX#()
 	Return(Float(MouseX() - (opt\RealGraphicWidth * 0.5 * (1.0 - opt\AspectRatio))) * Float(opt\GraphicWidth) / Float(opt\RealGraphicWidth * opt\AspectRatio))
 End Function
 
-Function ScaledMouseY%()
+Function ScaledMouseY#()
 	Return(Float(MouseY()) * Float(opt\GraphicHeight) / Float(opt\RealGraphicHeight))
 End Function
 
