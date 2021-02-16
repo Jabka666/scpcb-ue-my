@@ -17,17 +17,12 @@ Function CreateParticle.Particles(x#, y#, z#, ID%, Size#, Gravity# = 1.0, LifeTi
 	EntityTexture(p\OBJ, tt\ParticleTextureID[ID])
 	RotateEntity(p\OBJ, 0.0, 0.0, Rnd(360.0))
 	EntityFX(p\OBJ, 1 + 8)
-	
-	SpriteViewMode (p\OBJ, 3)
+	SpriteViewMode(p\OBJ, 3)
 	
 	Select ID
 		Case 0, 5, 6
 			;[Block]
 			EntityBlend(p\OBJ, 1)
-			;[End Block]
-		Case 1, 2, 3, 4, 7
-			;[Block]
-			EntityBlend(p\OBJ, 0)
 			;[End Block]
 	End Select
 	

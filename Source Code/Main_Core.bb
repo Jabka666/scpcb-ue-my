@@ -229,7 +229,7 @@ Function ClearCheats()
 	chs\InfiniteStamina = False
 	chs\SuperMan = False
 	chs\SuperManTimer = 0.0
-	chs\DebugHUD = False
+	chs\DebugHUD = 0
 End Function
 
 Function InitCheats()
@@ -241,7 +241,7 @@ Function InitCheats()
 	chs\InfiniteStamina = True
 	chs\SuperMan = False
 	chs\SuperManTimer = 0.0
-	chs\DebugHUD = True
+	chs\DebugHUD = Rand(1, 3)
 End Function
 
 Global CoffinDistance# = 100.0
@@ -500,7 +500,7 @@ Function UpdateConsole()
 			ConsoleReissue = Null
 			ConsoleScroll = 0
 			CreateConsoleMsg(ConsoleInput, 255, 255, 0, True)
-			If Instr(ConsoleInput, " ") > 0 Then
+			If Instr(ConsoleInput, " ") <> 0 Then
 				StrTemp = Lower(Left(ConsoleInput, Instr(ConsoleInput, " ") - 1))
 			Else
 				StrTemp = Lower(ConsoleInput)
@@ -516,7 +516,7 @@ Function UpdateConsole()
 					EndIf
 					ConsoleR = 0 : ConsoleG = 255 : ConsoleB = 255
 					
-					Select Lower(StrTemp)
+					Select StrTemp
 						Case "1", ""
 							;[Block]
 							CreateConsoleMsg("LIST OF COMMANDS - PAGE 1 / 3")
@@ -954,7 +954,7 @@ Function UpdateConsole()
 						EndIf
 					Next
 					
-					If PlayerRoom\RoomTemplate\Name <> StrTemp Then CreateConsoleMsg("Room not found.", 255, 150, 0)
+					If PlayerRoom\RoomTemplate\Name <> StrTemp Then CreateConsoleMsg("Room not found.", 255, 0, 0)
 					;[End Block]
 				Case "spawnitem"
 					;[Block]
@@ -976,7 +976,7 @@ Function UpdateConsole()
 						EndIf
 					Next
 					
-					If (Not Temp) Then CreateConsoleMsg("Item not found.", 255, 150, 0)
+					If (Not Temp) Then CreateConsoleMsg("Item not found.", 255, 0, 0)
 					;[End Block]
 				Case "wireframe", "wf"
 					;[Block]
@@ -1090,8 +1090,9 @@ Function UpdateConsole()
 					If Curr106\State =< 0.0 Then
 						Curr106\State = Rnd(22000.0, 27000.0)
 						PositionEntity(Curr106\Collider, 0.0, 500.0, 0.0)
+						ResetEntity(Curr106\Collider)
 					Else
-						CreateConsoleMsg("SCP-106 is currently not active, so it cannot retreat.")
+						CreateConsoleMsg("SCP-106 is currently not active, so it cannot retreat.", 255, 150, 0)
 					EndIf
 					;[End Block]
 				Case "halloween"
@@ -1263,27 +1264,34 @@ Function UpdateConsole()
 					;[End Block]
 				Case "debughud"
 					;[Block]
-					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+					If Instr(ConsoleInput, " ") <> 0 Then
+						StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+					Else
+						StrTemp = ""
+					EndIf
+					
 					Select StrTemp
-						Case "on", "1", "true"
+						Case "game", "1"
 							;[Block]
-							chs\DebugHUD = True
+							chs\DebugHUD = 1
 							;[End Block]
-						Case "off", "0", "false"
+						Case "player", "me", "2"
 							;[Block]
-							chs\DebugHUD = False
+							chs\DebugHUD = 2
+							;[End Block]
+						Case "scps", "scp", "3"
+							;[Block]
+							chs\DebugHUD = 3
+							;[End Block]
+						Case "off", "false", "0"
+							;[Block]
+							chs\DebugHUD = 0
 							;[End Block]
 						Default
 							;[Block]
-							chs\DebugHUD = (Not chs\DebugHUD)
+							CreateConsoleMsg("First, select the debug category.", 255, 150, 0)
 							;[End Block]
 					End Select
-					
-					If chs\DebugHUD Then
-						CreateConsoleMsg("DEBUG MODE ON")
-					Else
-						CreateConsoleMsg("DEBUG MODE OFF")
-					EndIf
 					;[End Block]
 				Case "stopsound", "stfu"
 					;[Block]
@@ -1370,7 +1378,7 @@ Function UpdateConsole()
 							Exit
 						EndIf
 					Next
-					CreateConsoleMsg("Remote door control disabled.", 255, 255, 255)
+					CreateConsoleMsg("Remote door control disabled.")
 					;[End Block]
 				Case "enablecontrol"
 					;[Block]
@@ -1382,7 +1390,7 @@ Function UpdateConsole()
 							Exit
 						EndIf
 					Next
-					CreateConsoleMsg("Remote door control enabled.", 255, 255, 255)
+					CreateConsoleMsg("Remote door control enabled.")
 					;[End Block]
 				Case "unlockcheckpoints"
 					;[Block]
@@ -1400,7 +1408,7 @@ Function UpdateConsole()
 						EndIf
 					Next
 					
-					CreateConsoleMsg("Checkpoints are now unlocked.", 255, 255, 255)								
+					CreateConsoleMsg("Checkpoints are now unlocked.")								
 					;[End Block]
 				Case "disablenuke"
 					;[Block]
@@ -1626,7 +1634,7 @@ Function UpdateConsole()
 						Achievements[Int(StrTemp)] = True
 						CreateConsoleMsg("Achievemt " + AchievementStrings[Int(StrTemp)] + " unlocked.")
 					Else
-						CreateConsoleMsg("Achievement with ID " + Int(StrTemp) + " doesn't exist.", 255, 150, 0)
+						CreateConsoleMsg("Achievement with ID " + Int(StrTemp) + " doesn't exist.", 255, 0, 0)
 					EndIf
 					;[End Block]
 				Case "427state"
@@ -1762,7 +1770,7 @@ Function ClearConsole()
 	CreateConsoleMsg("  - notarget [on / off]")
 	CreateConsoleMsg("  - noclipspeed [x] (default = 2.0)")
 	CreateConsoleMsg("  - wireframe [on / off]")
-	CreateConsoleMsg("  - debughud [on / off]")
+	CreateConsoleMsg("  - debughud [category]")
 	CreateConsoleMsg("  - camerafog [near] [far]")
 	CreateConsoleMsg("  - heal")
 	CreateConsoleMsg("  - revive")
@@ -5453,10 +5461,218 @@ Function UpdateGUI()
 	CatchErrors("UpdateGUI")
 End Function
 
+Function RenderHUD()
+	Local x%, y%, Width%, Height%
+	
+	Width = 200
+	Height = 20
+	x = 80
+	y = opt\GraphicHeight - 95
+	
+	Color(255, 255, 255)
+	If me\BlinkTimer < 150.0 Then
+		RenderBar(tt\ImageID[1], x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ, 100, 0, 0)
+	Else
+		RenderBar(BlinkMeterIMG, x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ)
+	EndIf
+	Color(0, 0, 0)
+	Rect(x - 50, y, 30, 30)
+	
+	If me\BlurTimer > 550.0 Lor me\BlinkEffect > 1.0 Lor me\LightFlash > 0.0 Lor (((me\LightBlink > 0.0 And (Not chs\NoBlink)) Lor me\EyeIrritation > 0.0) And wi\NightVision = 0) Then
+		Color(200, 0, 0)
+		Rect(x - 53, y - 3, 36, 36)
+	Else
+		If me\BlinkEffect < 1.0 Lor chs\NoBlink Then
+			Color(0, 200, 0)
+			Rect(x - 53, y - 3, 36, 36)
+		EndIf
+	EndIf
+	
+	Color(255, 255, 255)
+	Rect(x - 51, y - 1, 32, 32, False)
+	
+	DrawImage(tt\IconID[3], x - 50, y)
+	
+	y = opt\GraphicHeight - 55.0
+	
+	If me\Stamina =< 25.0 Then
+		RenderBar(tt\ImageID[3], x, y, Width, Height, me\Stamina, 100.0, 50, 0, 0)
+	Else
+		RenderBar(tt\ImageID[2], x, y, Width, Height, me\Stamina, 100.0, 50, 50, 50)
+	EndIf
+	Color(0, 0, 0)
+	Rect(x - 50, y, 30, 30)
+	
+	If PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor I_714\Using Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor wi\HazmatSuit = 1 Lor wi\BallisticVest = 2 Then
+		Color(200, 0, 0)
+		Rect(x - 53, y - 3, 36, 36)
+	Else
+		If chs\InfiniteStamina Lor me\StaminaEffect < 1.0 Lor wi\GasMask = 2 Lor I_1499\Using = 2 Lor wi\HazmatSuit = 2 Then
+			Color(0, 200, 0)
+			Rect(x - 53, y - 3, 36, 36)
+		EndIf 
+	EndIf
+	
+	Color(255, 255, 255)
+	Rect(x - 51, y - 1, 32, 32, False)
+	If me\Crouch Then
+		DrawImage(tt\IconID[2], x - 50, y)
+	ElseIf KeyDown(key\SPRINT) And me\CurrSpeed > 0.0 And (Not chs\NoClip) And me\Stamina > 0.0 Then
+		DrawImage(tt\IconID[1], x - 50, y)
+	Else
+		DrawImage(tt\IconID[0], x - 50, y)
+	EndIf
+End Function
+
+Function RenderDebugHUD()
+	Local ev.Events, ch.Chunk
+	Local x%, y%, i%
+	
+	x = 20 * MenuScale
+	y = 40 * MenuScale
+	
+	Color(255, 255, 255)
+	SetFont(fo\FontID[Font_Console])
+	
+	If chs\DebugHUD = 1 Then
+		Text(x, y, "Room: " + PlayerRoom\RoomTemplate\Name)
+		Text(x, y + (20 * MenuScale), "Room Coordinates: (" + Floor(EntityX(PlayerRoom\OBJ) / 8.0 + 0.5) + ", " + Floor(EntityZ(PlayerRoom\OBJ) / 8.0 + 0.5) + ", Angle: " + PlayerRoom\Angle + ")")
+		For ev.Events = Each Events
+			If ev\room = PlayerRoom Then
+				Text(x, y + (40 * MenuScale), "Room Event: " + ev\EventName + ", ID: " + ev\EventID) 
+				Text(x, y + (60 * MenuScale), "State: " + ev\EventState)
+				Text(x, y + (80 * MenuScale), "State2: " + ev\EventState2)   
+				Text(x, y + (100 * MenuScale), "State3: " + ev\EventState3)
+				Text(x, y + (120 * MenuScale), "State4: " + ev\EventState4)
+				Text(x, y + (140 * MenuScale), "Str: "+ ev\EventStr)
+				Exit
+			EndIf
+		Next
+		If PlayerRoom\RoomTemplate\Name = "dimension1499" Then
+			Text(x, y + (180 * MenuScale), "Current Chunk X / Z: (" + (Int((EntityX(me\Collider) + 20) / 40)) + ", "+(Int((EntityZ(me\Collider) + 20) / 40)) + ")")
+			
+			Local CH_Amount% = 0
+			
+			For ch.Chunk = Each Chunk
+				CH_Amount = CH_Amount + 1
+			Next
+			Text(x, y + (200 * MenuScale), "Current Chunk Amount: " + CH_Amount)
+		Else
+			Text(x, y + (200 * MenuScale), "Current Room Position: (" + PlayerRoom\x + ", " + PlayerRoom\y + ", " + PlayerRoom\z + ")")
+		EndIf
+		
+		If SelectedMonitor <> Null Then
+			Text(x, y + (240 * MenuScale), "Current Monitor: " + SelectedMonitor\ScrOBJ)
+		Else
+			Text(x, y + (240 * MenuScale), "Current Monitor: Null")
+		EndIf
+		
+		If SelectedItem <> Null Then
+			Text(x, y + (280 * MenuScale), "Current Button: " + SelectedItem\ItemTemplate\Name)
+		Else
+			Text(x, y + (280 * MenuScale), "Current Button: Null")
+		EndIf
+		
+		Text(x, y + (320 * MenuScale), "Date and Time: " + CurrentDate() + ", " + CurrentTime())
+		Text(x, y + (340 * MenuScale), "Video memory: " + ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)) + " MB/" + (TotalVidMem() / 1024) + " MB" + Chr(10))
+		Text(x, y + (360 * MenuScale), "Global memory status: " + ((TotalPhys() / 1024) - (AvailPhys() / 1024)) + " MB/" + (TotalPhys() / 1024) + " MB")
+		Text(x, y + (380 * MenuScale), "Triangles Rendered: " + CurrTrisAmount)
+		Text(x, y + (400 * MenuScale), "Active Textures: " + ActiveTextures())	
+	ElseIf chs\DebugHUD = 2
+		Text(x, y, "Player Position: (" + f2s(EntityX(me\Collider), 1) + ", " + f2s(EntityY(me\Collider), 1) + ", " + f2s(EntityZ(me\Collider), 1) + ")")
+		Text(x, y + (20 * MenuScale), "Player Rotation: (" + f2s(EntityPitch(me\Collider), 1) + ", " + f2s(EntityYaw(me\Collider), 1) + ", " + f2s(EntityRoll(me\Collider), 1) + ")")
+		
+		Text(x, y + (60 * MenuScale), "Injuries: " + me\Injuries)
+		Text(x, y + (80 * MenuScale), "Bloodloss: " + me\Bloodloss)
+		
+		Text(x, y + (120 * MenuScale), "Blur Timer: " + me\BlurTimer)
+		Text(x, y + (140 * MenuScale), "Light Blink: " + me\LightBlink)
+		Text(x, y + (160 * MenuScale), "Light Flash: " + me\LightFlash)
+		
+		Text(x, y + (200 * MenuScale), "Blink Frequency: " + me\BLINKFREQ)
+		Text(x, y + (220 * MenuScale), "Blink Timer: " + me\BlinkTimer)
+		Text(x, y + (240 * MenuScale), "Blink Effect: " + me\BlinkEffect)
+		Text(x, y + (260 * MenuScale), "Blink Effect Timer: " + me\BlinkEffectTimer)
+		Text(x, y + (280 * MenuScale), "Eye Irritation: " + me\EyeIrritation)
+		Text(x, y + (300 * MenuScale), "Eye Stuck: " + me\EyeStuck)
+		
+		Text(x, y + (340 * MenuScale), "Stamina: " + me\Stamina)
+		Text(x, y + (360 * MenuScale), "Stamina Effect: " + me\StaminaEffect)
+		Text(x, y + (380 * MenuScale), "Stamina Effect Timer: " + me\StaminaEffectTimer)
+		
+		Text(x, y + (420 * MenuScale), "Deaf Timer: " + me\DeafTimer)
+		
+		Text(x + (380 * MenuScale), y, "Kill Timer: " + me\KillTimer)
+		Text(x + (380 * MenuScale), y + (20 * MenuScale), "Death Timer: " + me\DeathTimer)
+		Text(x + (380 * MenuScale), y + (40 * MenuScale), "Fall Timer: " + me\FallTimer)
+		
+		Text(x + (380 * MenuScale), y + (80 * MenuScale), "Heal Timer: " + me\HealTimer)
+		
+		Text(x + (380 * MenuScale), y + (120 * MenuScale), "Heart Beat Timer: " + me\HeartBeatTimer)
+		
+		Text(x + (380 * MenuScale), y + (160 * MenuScale), "Explosion Timer: " + me\ExplosionTimer)
+		
+		Text(x + (380 * MenuScale), y + (200 * MenuScale), "Current Speed: " + me\CurrSpeed)
+		
+		Text(x + (380 * MenuScale), y + (240 * MenuScale), "Camera Shake Timer: " + me\CameraShakeTimer)
+		Text(x + (380 * MenuScale), y + (260 * MenuScale), "Current Camera Zoom: " + me\CurrCameraZoom)
+		
+		Text(x + (380 * MenuScale), y + (300 * MenuScale), "Vomit Timer: " + me\VomitTimer)
+		
+		If me\Playable Then
+			Text(x + (380 * MenuScale), y + (340 * MenuScale), "Is Playable: True")
+		Else
+			Text(x + (380 * MenuScale), y + (340 * MenuScale), "Is Playable: False")
+		EndIf
+		
+		Text(x + (380 * MenuScale), y + (380 * MenuScale), "Refined Items: " + me\RefinedItems)
+		Text(x + (380 * MenuScale), y + (400 * MenuScale), "Funds: " + me\Funds)
+	ElseIf chs\DebugHUD = 3
+		If Curr049 <> Null Then
+			Text(x, y, "SCP-049 Position: (" + f2s(EntityX(Curr049\OBJ), 2) + ", " + f2s(EntityY(Curr049\OBJ), 2) + ", " + f2s(EntityZ(Curr049\OBJ), 2) + ")")
+			Text(x, y + (20 * MenuScale), "SCP-049 Idle: " + Curr049\Idle)
+			Text(x, y + (40 * MenuScale), "SCP-049 State: " + Curr049\State)
+		EndIf
+		If Curr096 <> Null Then
+			Text(x, y + (60 * MenuScale), "SCP-096 Position: (" + f2s(EntityX(Curr096\OBJ), 2) + ", " + f2s(EntityY(Curr096\OBJ), 2) + ", " + f2s(EntityZ(Curr096\OBJ), 2) + ")")
+			Text(x, y + (80 * MenuScale), "SCP-096 Idle: " + Curr096\Idle)
+			Text(x, y + (100 * MenuScale), "SCP-096 State: " + Curr096\State)
+		EndIf
+		If Curr106 <> Null Then
+			Text(x, y + (120 * MenuScale), "SCP-106 Position: (" + f2s(EntityX(Curr106\OBJ), 2) + ", " + f2s(EntityY(Curr106\OBJ), 2) + ", " + f2s(EntityZ(Curr106\OBJ), 2) + ")")
+			Text(x, y + (140 * MenuScale), "SCP-106 Idle: " + Curr106\Idle)
+			Text(x, y + (160 * MenuScale), "SCP-106 State: " + Curr106\State)
+		EndIf
+		If Curr173 <> Null Then
+			Text(x, y + (180 * MenuScale), "SCP-173 Position: (" + f2s(EntityX(Curr173\OBJ), 2) + ", " + f2s(EntityY(Curr173\OBJ), 2) + ", " + f2s(EntityZ(Curr173\OBJ), 2) + ")")
+			Text(x, y + (200 * MenuScale), "SCP-173 Idle: " + Curr173\Idle)
+			Text(x, y + (220 * MenuScale), "SCP-173 State: " + Curr173\State)
+		EndIf
+		
+		Text(x, y + (260 * MenuScale), "Pills Taken: " + I_500\Taken)
+		
+		Text(x, y + (300 * MenuScale), "SCP-008 Infection (Secs): " + Int(I_008\Timer / 70.0))
+		Text(x, y + (320 * MenuScale), "SCP-409 Crystallization (Secs): " + Int(I_409\Timer / 70.0))
+		Text(x, y + (340 * MenuScale), "SCP-427 State (Secs): " + Int(I_427\Timer / 70.0))
+		For i = 0 To 5
+			Text(x, y + ((360 + (20 * i)) * MenuScale), "SCP-1025 State " + i + ": " + I_1025\State[i])
+		Next
+		
+		If I_005\ChanceToSpawn = 1 Then
+			Text(x, y + (500 * MenuScale), "SCP-005 Spawned in the Chamber!")
+		ElseIf I_005\ChanceToSpawn = 2
+			Text(x, y + (500 * MenuScale), "SCP-005 Spawned in Dr.Maynard's Office!")
+		ElseIf I_005\ChanceToSpawn = 3
+			Text(x, y + (500 * MenuScale), "SCP-005 Spawned in SCP-409's Containment Chamber!")
+		EndIf
+	EndIf
+	SetFont(fo\FontID[Font_Default])
+End Function
+
 Function RenderGUI()
 	CatchErrors("Uncaught (RenderGUI)")
 	
-	Local e.Events, it.Items, ev.Events, ch.Chunk, a_it.Items
+	Local e.Events, it.Items, a_it.Items
 	Local Temp%, x%, y%, z%, i%, YawValue#, PitchValue#
 	Local x1#, x2#, x3#, y1#, y2#, y3#, z2#, ProjY#, Scale#, Pvt%
 	Local n%, xTemp%, yTemp%, StrTemp$
@@ -5578,124 +5794,11 @@ Function RenderGUI()
 	Next
 	
 	If opt\HUDEnabled And SelectedDifficulty\OtherFactors <> EXTREME Then 
-		Width = 200
-		Height = 20
-		x = 80
-		y = opt\GraphicHeight - 95
-		
-		Color(255, 255, 255)
-		If me\BlinkTimer < 150.0 Then
-			RenderBar(tt\ImageID[1], x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ, 100, 0, 0)
-		Else
-			RenderBar(BlinkMeterIMG, x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ)
-		EndIf
-		Color(0, 0, 0)
-		Rect(x - 50, y, 30, 30)
-		
-		If me\BlurTimer > 550.0 Lor me\BlinkEffect > 1.0 Lor me\LightFlash > 0.0 Lor (((me\LightBlink > 0.0 And (Not chs\NoBlink)) Lor me\EyeIrritation > 0.0) And wi\NightVision = 0) Then
-			Color(200, 0, 0)
-			Rect(x - 53, y - 3, 36, 36)
-		Else
-			If me\BlinkEffect < 1.0 Lor chs\NoBlink Then
-				Color(0, 200, 0)
-				Rect(x - 53, y - 3, 36, 36)
-			EndIf
-		EndIf
-		
-		Color(255, 255, 255)
-		Rect(x - 51, y - 1, 32, 32, False)
-		
-		DrawImage(tt\IconID[3], x - 50, y)
-		
-		y = opt\GraphicHeight - 55.0
-		
-		If me\Stamina =< 25.0 Then
-			RenderBar(tt\ImageID[3], x, y, Width, Height, me\Stamina, 100.0, 50, 0, 0)
-		Else
-			RenderBar(tt\ImageID[2], x, y, Width, Height, me\Stamina, 100.0, 50, 50, 50)
-		EndIf
-		Color(0, 0, 0)
-		Rect(x - 50, y, 30, 30)
-		
-		If PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor I_714\Using Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor wi\HazmatSuit = 1 Lor wi\BallisticVest = 2 Then
-			Color(200, 0, 0)
-			Rect(x - 53, y - 3, 36, 36)
-		Else
-			If chs\InfiniteStamina Lor me\StaminaEffect < 1.0 Lor wi\GasMask = 2 Lor I_1499\Using = 2 Lor wi\HazmatSuit = 2 Then
-				Color(0, 200, 0)
-				Rect(x - 53, y - 3, 36, 36)
-			EndIf 
-		EndIf
-		
-		Color(255, 255, 255)
-		Rect(x - 51, y - 1, 32, 32, False)
-		If me\Crouch Then
-			DrawImage(tt\IconID[2], x - 50, y)
-		ElseIf KeyDown(key\SPRINT) And me\CurrSpeed > 0.0 And (Not chs\NoClip) And me\Stamina > 0.0 Then
-			DrawImage(tt\IconID[1], x - 50, y)
-		Else
-			DrawImage(tt\IconID[0], x - 50, y)
-		EndIf
-		
-		If chs\DebugHUD Then
-			Color(255, 255, 255)
-			SetFont(fo\FontID[Font_Console])
-			
-			Text(x - 60, 40, "Room: " + PlayerRoom\RoomTemplate\Name)
-			Text(x - 60, 60, "Room Coordinates: (" + Floor(EntityX(PlayerRoom\OBJ) / 8.0 + 0.5) + ", " + Floor(EntityZ(PlayerRoom\OBJ) / 8.0 + 0.5) + ", Angle: " + PlayerRoom\Angle + ")")
-			For ev.Events = Each Events
-				If ev\room = PlayerRoom Then
-					Text(x - 60, 80, "Room Event: " + ev\EventName + ", ID: " + ev\EventID) 
-					Text(x - 60, 100, "State: " + ev\EventState)
-					Text(x - 60, 120, "State2: " + ev\EventState2)   
-					Text(x - 60, 140, "State3: " + ev\EventState3)
-					Text(x - 60, 160, "State4: " + ev\EventState4)
-					Text(x - 60, 180, "Str: "+ ev\EventStr)
-					Exit
-				EndIf
-			Next
-			If PlayerRoom\RoomTemplate\Name = "dimension1499"
-				Text(x - 60, 220, "Current Chunk X / Z: (" + (Int((EntityX(me\Collider) + 20) / 40)) + ", "+(Int((EntityZ(me\Collider) + 20) / 40)) + ")")
-				
-				Local CH_Amount% = 0
-				
-				For ch.Chunk = Each Chunk
-					CH_Amount = CH_Amount + 1
-				Next
-				Text(x - 60, 240, "Current Chunk Amount: " + CH_Amount)
-			Else
-				Text(x - 60, 240, "Current Room Position: (" + PlayerRoom\x + ", " + PlayerRoom\y + ", " + PlayerRoom\z + ")")
-			EndIf
-			
-			If SelectedMonitor <> Null Then
-				Text(x - 60, 280, "Current Monitor: " + SelectedMonitor\ScrOBJ)
-			Else
-				Text(x - 60, 280, "Current Monitor: Null")
-			EndIf
-			
-			Text(x - 60, 320, "Video memory: " + ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)) + " MB/" + (TotalVidMem() / 1024) + " MB" + Chr(10))
-			Text(x - 60, 340, "Global memory status: " + ((TotalPhys() / 1024) - (AvailPhys() / 1024)) + " MB/" + (TotalPhys() / 1024) + " MB")
-			Text(x - 60, 360, "Triangles Rendered: " + CurrTrisAmount)
-			Text(x - 60, 380, "Active Textures: " + ActiveTextures())	
-			
-			Text(x + 440, 40, "Player Position: (" + f2s(EntityX(me\Collider), 1) + ", " + f2s(EntityY(me\Collider), 1) + ", " + f2s(EntityZ(me\Collider), 1) + ")")
-			Text(x + 440, 60, "Player Rotation: (" + f2s(EntityPitch(me\Collider), 1) + ", " + f2s(EntityYaw(me\Collider), 1) + ", " + f2s(EntityRoll(me\Collider), 1) + ")")
-			
-			Text(x + 440, 100, "Injuries: " + me\Injuries)
-			Text(x + 440, 120, "Bloodloss: " + me\Bloodloss)
-			Text(x + 440, 140, "Blur Timer: " + me\BlurTimer)
-			Text(x + 440, 160, "Blink Timer: " + me\BlinkTimer)
-			Text(x + 440, 180, "Stamina: " + me\Stamina)
-			
-			Text(x + 440, 220, "SCP-008 Infection: " + I_008\Timer)
-			Text(x + 440, 240, "SCP-409 Crystallization: " + I_409\Timer)
-			Text(x + 440, 260, "SCP-427 State (Secs): " + Int(I_427\Timer / 70.0))
-			For i = 0 To 5
-				Text(x + 440, 280 + (20 * i), "SCP-1025 State " + i + ": " + I_1025\State[i])
-			Next
-			
-			SetFont(fo\FontID[Font_Default])
-		EndIf
+		RenderHUD()
+	EndIf
+	
+	If chs\DebugHUD <> 0 Then
+		RenderDebugHUD()
 	EndIf
 	
 	If SelectedScreen <> Null Then
@@ -7781,7 +7884,7 @@ Function LoadEntities()
 	CreateConsoleMsg("  - notarget [on / off]")
 	CreateConsoleMsg("  - noclipspeed [x] (default = 2.0)")
 	CreateConsoleMsg("  - wireframe [on / off]")
-	CreateConsoleMsg("  - debughud [on / off]")
+	CreateConsoleMsg("  - debughud [category]")
 	CreateConsoleMsg("  - camerafog [near] [far]")
 	CreateConsoleMsg("  - heal")
 	CreateConsoleMsg("  - revive")
@@ -8407,7 +8510,7 @@ Function InitNewGame()
 	me\HeartBeatRate = 70.0
 	me\Funds = Rand(0, 6)
 	
-	I_005\ChanceToSpawn = Rand(1, 6)
+	I_005\ChanceToSpawn = Rand(1, 3)
 	
 	AccessCode = 0
 	For i = 0 To 3

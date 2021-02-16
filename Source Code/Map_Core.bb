@@ -7432,7 +7432,7 @@ Function FillRoom(r.Rooms)
 			If I_005\ChanceToSpawn = 1 Then
 				it.Items = CreateItem("SCP-005", "scp005", r\x, r\y + 254.0 * RoomScale, r\z - 260.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
-			ElseIf I_005\ChanceToSpawn = 2 Lor I_005\ChanceToSpawn > 3
+			ElseIf I_005\ChanceToSpawn = 2
 				it.Items = CreateItem("Note from Maynard", "paper", r\x, r\y + 254.0 * RoomScale, r\z - 260.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)	
 			EndIf
@@ -7589,7 +7589,7 @@ Function UpdateRooms()
 					Exit
 				EndIf
 			Next
-			If chs\DebugHUD Then
+			If chs\DebugHUD <> 0 Then
 				If r\TriggerBoxAmount > 0 Then
 					For i = 0 To r\TriggerBoxAmount - 1
 						EntityColor(r\TriggerBoxes[i]\OBJ, 255, 255, 0)
@@ -8683,7 +8683,7 @@ Function CheckTriggers$()
 		Return
 	Else
 		For i = 0 To PlayerRoom\TriggerBoxAmount - 1
-			If chs\DebugHUD Then
+			If chs\DebugHUD <> 0 Then
 				EntityAlpha(PlayerRoom\TriggerBoxes[i]\OBJ, 0.2)
 			Else
 				EntityAlpha(PlayerRoom\TriggerBoxes[i]\OBJ, 0.0)

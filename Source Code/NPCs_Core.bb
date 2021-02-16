@@ -367,7 +367,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			DeleteSingleTextureEntryFromCache(Tex)
 			
 			EntityFX(n\OBJ2, 1 + 8)
-			EntityBlend(n\OBJ2, BLEND_ADD)
 			SpriteViewMode(n\OBJ2, 2)
 			
 			n\Speed = GetINIFloat(NPCsFile, "SCP-860-2", "Speed") / 100.0

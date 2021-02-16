@@ -9193,7 +9193,7 @@ Function UpdateEvents()
 				If (Not Curr106\Contained) Then 
 					If PlayerRoom = e\room Then
 						If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 2.25 Then
-							If e\EventState = 0.0 And I_005\ChanceToSpawn =< 3 Then
+							If e\EventState = 0.0 And I_005\ChanceToSpawn <> 3 Then
 								PlaySound_Strict(HorrorSFX[10])
 								
 								de.Decals = CreateDecal(0, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True), 0.0, e\room\Angle + 360.0, Rnd(360.0), 0.1, 0.01)
