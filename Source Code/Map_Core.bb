@@ -3373,18 +3373,11 @@ Type WayPoints
 End Type
 
 Function CreateWaypoint.WayPoints(x#, y#, z#, door.Doors, room.Rooms)
-	Local w.WayPoints = New WayPoints
+	Local w.WayPoints
 	
-	If opt\DebugMode Then
-		w\OBJ = CreateSprite()
-		PositionEntity(w\OBJ, x, y, z)
-		ScaleSprite(w\OBJ, 0.15 , 0.15)
-		EntityTexture(w\OBJ, tt\LightSpriteID[0])
-		EntityBlend(w\OBJ, 3)	
-	Else
-		w\OBJ = CreatePivot()
-		PositionEntity(w\OBJ, x, y, z)
-	EndIf
+	w.WayPoints = New WayPoints
+	w\OBJ = CreatePivot()
+	PositionEntity(w\OBJ, x, y, z)
 	EntityParent(w\OBJ, room\OBJ)
 	
 	w\room = room

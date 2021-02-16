@@ -3806,6 +3806,8 @@ Function UpdateNPCs()
 								If n\Reload =< 0.0 And me\KillTimer = 0.0 Then
 									If EntityVisible(n\Collider, me\Collider) Then
 										If Abs(DeltaYaw(n\Collider, me\Collider)) < 50.0 Then
+											PrevKillTimer = me\KillTimer
+											
 											PlaySound2(GunshotSFX, Camera, n\Collider, 15.0)
 											
 											Pvt = CreatePivot()
@@ -3818,13 +3820,14 @@ Function UpdateNPCs()
 											n\Reload = 7.0
 											
 											FreeEntity(Pvt)
+											
+											msg\DeathMsg = SubjectName + ". Died of blood loss after being shot by Nine-Tailed Fox."
+											
+											If PrevKillTimer >= 0.0 And me\KillTimer < 0.0 Then
+												msg\DeathMsg = Chr(34) + SubjectName + " was spotted in Gate A area and terminated. Incident needs an investigation." + Chr(34)
+												PlayMTFSound(LoadTempSound("SFX\Character\MTF\Targetterminated" + Rand(1, 4) + ".ogg"), n)
+											EndIf
 										EndIf	
-									EndIf
-								EndIf
-								
-								If me\KillTimer < 0.0 Then
-									If PlayerRoom\RoomTemplate\Name = "gatea" Then
-										msg\DeathMsg = Chr(34) + SubjectName + " was spotted in Gate A area and terminated. Incident needs an investigation." + Chr(34)
 									EndIf
 								EndIf
 								;[End Block]
@@ -4128,6 +4131,8 @@ Function UpdateNPCs()
 											n\State3 = Min(n\State3 + fps\Factor[0], 70.0 * 4.0)
 										Else
 											If n\Reload =< 0.0 Then
+												PrevKillTimer = me\KillTimer
+												
 												PlaySound2(GunshotSFX, Camera, n\Collider, 15.0)
 												
 												RotateEntity(Target, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
@@ -4136,6 +4141,13 @@ Function UpdateNPCs()
 												
 												Shoot(EntityX(Target), EntityY(Target), EntityZ(Target), ((25.0 / Sqr(Dist)) * (1.0 / Sqr(Dist))), True)
 												n\Reload = 7.0
+												
+												msg\DeathMsg = SubjectName + ". Died of blood loss after being shot by Nine-Tailed Fox."
+												
+												If PrevKillTimer >= 0.0 And me\KillTimer < 0.0 Then
+													msg\DeathMsg = Chr(34) + SubjectName + " was spotted in Gate A area and terminated. Incident needs an investigation." + Chr(34)
+													PlayMTFSound(LoadTempSound("SFX\Character\MTF\Targetterminated" + Rand(1, 4) + ".ogg"), n)
+												EndIf
 											EndIf
 										EndIf
 										
@@ -4220,7 +4232,6 @@ Function UpdateNPCs()
 										EndIf
 									EndIf
 								EndIf
-								
 								n\Angle = EntityYaw(n\Collider)
 								;[End Block]
 						End Select

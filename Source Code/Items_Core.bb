@@ -584,6 +584,7 @@ Function RemoveWearableItems(item.Items)
 		Case "hazmatsuit",  "hazmatsuit2", "hazmatsuit3"
 			;[Block]
 			wi\HazmatSuit = 0
+			SetAnimTime(item\Model, 4.0)
 			;[End Block]
 		Case "vest", "finevest"
 			;[Block]
@@ -931,8 +932,6 @@ Function DropItem(item.Items, PlayDropSound% = True)
 			Exit
 		EndIf
 	Next
-	
-	If SelectedItem = item Then SelectedItem = Null
 	
 	RemoveWearableItems(item)
 	

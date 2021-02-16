@@ -901,20 +901,23 @@ Function UpdateEvents()
 						If e\room\NPC[0] <> Null Then SetNPCFrame(e\room\NPC[0], 74.0) : e\room\NPC[0]\State = 8.0
 						
 						If e\room\NPC[1] = Null Then
-							e\room\NPC[1] = CreateNPC(NPCTypeD, 0.0, 0.0, 0.0)
+							e\room\NPC[1] = CreateNPC(NPCTypeD, e\room\x, e\room\y + 0.5, e\room\z - 1.0)
 							ChangeNPCTextureID(e\room\NPC[1], 3)
-							SetNPCFrame(e\room\NPC[1], 210.0)
-							PositionEntity(e\room\NPC[1]\Collider, e\room\x, 0.5, e\room\z - 1.0, True)
+						Else
+							PositionEntity(e\room\NPC[1]\Collider, e\room\x, e\room\y + 0.5, e\room\z - 1.0, True)
 							ResetEntity(e\room\NPC[1]\Collider)
 						EndIf
+						SetNPCFrame(e\room\NPC[1], 210.0)
 						
 						If e\room\NPC[2] = Null Then
-							e\room\NPC[2] = CreateNPC(NPCTypeGuard, 0.0, 0.0, 0.0)
-							e\room\NPC[2]\State = 7.0
+							e\room\NPC[2] = CreateNPC(NPCTypeGuard, e\room\x, e\room\y + 0.5, e\room\z + 528.0 * RoomScale)
+						Else
 							PositionEntity(e\room\NPC[2]\Collider, e\room\x, 0.5, e\room\z + 528.0 * RoomScale, True)
 							ResetEntity(e\room\NPC[2]\Collider)
-							PointEntity(e\room\NPC[2]\Collider, e\room\NPC[1]\Collider)
 						EndIf
+						e\room\NPC[2]\State = 7.0
+						PointEntity(e\room\NPC[2]\Collider, e\room\NPC[1]\Collider)
+						PointEntity(e\room\NPC[1]\Collider, e\room\NPC[2]\Collider)
 						
 						If e\room\NPC[0] = Null Then
 							e\room\NPC[3] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True))
@@ -955,21 +958,18 @@ Function UpdateEvents()
 						e\EventState = Max(e\EventState, 500.0)
 					EndIf
 					
-					If e\EventState < 850.0 Then
-						PositionEntity(Curr173\Collider, e\room\x + 32.0 * RoomScale, 0.31, e\room\z + 1072.0 * RoomScale, True)
-						HideEntity(Curr173\OBJ)
-					EndIf
-					
 					If e\EventState >= 500.0 Then
 						e\EventState = e\EventState + fps\Factor[0]
 						If e\EventState2 = 0.0 Then
-							ShowEntity(Curr173\OBJ)
 							If e\EventState > 900.0 And e\room\RoomDoors[5]\Open Then
 								If e\EventState - fps\Factor[0] =< 900.0 Then 
 									e\room\NPC[1]\Sound = LoadSound_Strict("SFX\Room\Intro\WhatThe1a.ogg")
 									e\room\NPC[1]\SoundCHN = PlaySound2(e\room\NPC[1]\Sound, Camera, e\room\NPC[1]\Collider)
 									e\room\NPC[2]\Sound = LoadSound_Strict("SFX\Room\Intro\WhatThe1b.ogg")
 									e\room\NPC[2]\SoundCHN = PlaySound2(e\room\NPC[2]\Sound, Camera, e\room\NPC[2]\Collider)
+									
+									PositionEntity(Curr173\Collider, e\room\x + 32.0 * RoomScale, 0.31, e\room\z + 1072.0 * RoomScale, True)
+									ResetEntity(Curr173\Collider)
 								EndIf
 								e\room\NPC[1]\State = 3.0
 								e\room\NPC[1]\CurrSpeed = CurveValue(-0.008, e\room\NPC[1]\CurrSpeed, 5.0)
@@ -1012,7 +1012,7 @@ Function UpdateEvents()
 									PositionEntity(Curr173\Collider, e\room\x - 96.0 * RoomScale, 0.31, e\room\z + 592.0 * RoomScale, True)
 									RotateEntity(Curr173\Collider, 0.0, 190.0, 0.0)
 									
-									If e\room\NPC[2]\State <> 1.0 And me\KillTimer >= 0.0
+									If e\room\NPC[2]\State <> 1.0 And me\KillTimer >= 0.0 Then
 										If EntityZ(e\room\NPC[2]\Collider) < e\room\z - 1150.0 * RoomScale Then
 											e\room\RoomDoors[5]\Open = False
 											me\LightBlink = 3.0
@@ -1675,12 +1675,15 @@ Function UpdateEvents()
 									e\room\RoomDoors[2]\Locked = 0
 									UseDoor(e\room\RoomDoors[2], False)
 									e\room\RoomDoors[2]\Locked = 1
-									e\EventState3 = 0.0
 									For i = 3 To 4
 										e\room\NPC[i]\State = 0.0
 									Next
 									
 									UseDoor(e\room\RoomDoors[1], False)
+									
+									If ChannelPlaying(e\room\NPC[3]\SoundCHN) Then StopChannel(e\room\NPC[3]\SoundCHN)
+									
+									e\EventState3 = 0.0
 								EndIf
 							EndIf
 						EndIf
@@ -2085,9 +2088,7 @@ Function UpdateEvents()
 										ResetEntity(Curr173\Collider)
 										PointEntity(Curr173\Collider, e\room\NPC[0]\Collider)
 									EndIf
-									me\BlinkTimer = -10.0
-									me\LightBlink = 1.0
-									me\CameraShake = 3.0
+									me\BlinkTimer = -10.0 : me\LightBlink = 1.0 : me\CameraShake = 3.0
 								ElseIf e\EventState < 20300.0
 									PointEntity(e\room\NPC[0]\Collider, Curr173\Collider)
 									e\room\NPC[0]\State = 2.0
