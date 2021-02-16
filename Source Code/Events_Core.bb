@@ -794,10 +794,10 @@ Function QuickLoadEvents()
 						Local ch.Chunk
 						
 						For i = -2 To 0 Step 2
-							ch = CreateChunk(-1, x * (i * 2.5), EntityY(e\room\OBJ), z, True)
+							ch.Chunk = CreateChunk(-1, x * (i * 2.5), EntityY(e\room\OBJ), z, True)
 						Next
 						For i = -2 To 0 Step 2
-							ch = CreateChunk(-1, x * (i * 2.5), EntityY(e\room\OBJ), z - 40.0, True)
+							ch.Chunk = CreateChunk(-1, x * (i * 2.5), EntityY(e\room\OBJ), z - 40.0, True)
 						Next
 						e\EventState = 2.0
 						e\EventStr = 18
@@ -1554,6 +1554,7 @@ Function UpdateEvents()
 									If e\room\NPC[i]\Sound <> 0 Then
 										FreeSound_Strict(e\room\NPC[i]\Sound) : e\room\NPC[i]\Sound = 0
 									EndIf
+									e\room\NPC[i]\State = 9.0	
 								Next
 								
 								e\room\NPC[3]\Sound = LoadSound_Strict("SFX\Room\Intro\Guard\Ulgrin\EscortDone" + Rand(1, 5) + ".ogg")
@@ -1576,10 +1577,6 @@ Function UpdateEvents()
 								e\room\NPC[2] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[2], True), 0.5, EntityZ(e\room\Objects[2], True))
 								PointEntity(e\room\NPC[2]\Collider, e\room\Objects[5])
 								ChangeNPCTextureID(e\room\NPC[2], 6)
-								
-								For i = 3 To 4
-									e\room\NPC[i]\State = 9.0	
-								Next
 							EndIf
 						ElseIf e\EventState3 =< 905.0
 							If (Not ChannelPlaying(e\room\NPC[3]\SoundCHN)) And e\room\NPC[3]\Frame < 358.0 Then
@@ -1698,11 +1695,6 @@ Function UpdateEvents()
 							SetNPCFrame(e\room\NPC[7], 182.0)
 							
 							If e\room\NPC[6]\State = 1.0 And e\room\NPC[7]\Sound <> 0 Then 
-								If ChannelPlaying(e\room\NPC[7]\SoundCHN) Then StopChannel(e\room\NPC[7]\SoundCHN)
-								If e\room\NPC[7]\Sound <> 0 Then 
-									FreeSound_Strict(e\room\NPC[7]\Sound) : e\room\NPC[7]\Sound = 0	
-								EndIf
-								
 								If e\room\NPC[7]\Sound <> 0 Then e\room\NPC[7]\SoundCHN = LoopSound2(e\room\NPC[7]\Sound, e\room\NPC[7]\SoundCHN, Camera, e\room\NPC[7]\Collider, 7.0)
 							EndIf
 						EndIf

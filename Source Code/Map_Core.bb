@@ -8809,7 +8809,7 @@ Function CreateChunk.Chunk(OBJ%, x#, y#, z#, IsSpawnChunk% = False)
 	Return(ch)
 End Function
 
-Const ChunkMaxDistance# = 40.0 * 3.0
+Const ChunkMaxDistance# = 120.0
 
 Function UpdateChunks(r.Rooms, ChunkPartAmount%, SpawnNPCs% = True)
 	Local ch.Chunk, ch2.Chunk, n.NPCs
@@ -8835,7 +8835,7 @@ Function UpdateChunks(r.Rooms, ChunkPartAmount%, SpawnNPCs% = True)
 			EndIf
 		Next
 		If (Not ChunkFound) Then
-			CurrChunkData = CHUNKDATA[Abs(((x + 32) / 40) Mod 64) * 64 + (Abs(((z + 32) / 40) Mod 64))]
+			CurrChunkData = CHUNKDATA[Abs((((x + 32) / 40) Mod 64) * 64) + (Abs(((z + 32) / 40) Mod 64))]
 			ch2 = CreateChunk(CurrChunkData, x, y, z)
 			ch2\IsSpawnChunk = False
 		EndIf
