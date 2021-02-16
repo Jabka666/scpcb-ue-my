@@ -880,6 +880,7 @@ Function UpdateEvents()
 						EndIf
 					Next
 				EndIf
+				
 				If e\EventState = 0.0 Then
 					If PlayerRoom = e\room Then
 						e\room\RoomDoors[2]\Open = True
@@ -900,20 +901,20 @@ Function UpdateEvents()
 						
 						If e\room\NPC[0] <> Null Then SetNPCFrame(e\room\NPC[0], 74.0) : e\room\NPC[0]\State = 8.0
 						
-						If e\room\NPC[1] = Null Then
-							e\room\NPC[1] = CreateNPC(NPCTypeD, e\room\x, e\room\y + 0.5, e\room\z - 1.0)
-							ChangeNPCTextureID(e\room\NPC[1], 3)
-						Else
+						If e\room\NPC[1] <> Null Then
 							PositionEntity(e\room\NPC[1]\Collider, e\room\x, e\room\y + 0.5, e\room\z - 1.0, True)
 							ResetEntity(e\room\NPC[1]\Collider)
+						Else
+							e\room\NPC[1] = CreateNPC(NPCTypeD, e\room\x, e\room\y + 0.5, e\room\z - 1.0)
+							ChangeNPCTextureID(e\room\NPC[1], 3)
 						EndIf
 						SetNPCFrame(e\room\NPC[1], 210.0)
 						
-						If e\room\NPC[2] = Null Then
-							e\room\NPC[2] = CreateNPC(NPCTypeGuard, e\room\x, e\room\y + 0.5, e\room\z + 528.0 * RoomScale)
-						Else
+						If e\room\NPC[2] <> Null Then
 							PositionEntity(e\room\NPC[2]\Collider, e\room\x, 0.5, e\room\z + 528.0 * RoomScale, True)
 							ResetEntity(e\room\NPC[2]\Collider)
+						Else
+							e\room\NPC[2] = CreateNPC(NPCTypeGuard, e\room\x, e\room\y + 0.5, e\room\z + 528.0 * RoomScale)
 						EndIf
 						e\room\NPC[2]\State = 7.0
 						PointEntity(e\room\NPC[2]\Collider, e\room\NPC[1]\Collider)
@@ -3674,6 +3675,7 @@ Function UpdateEvents()
 							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 180.0, 0.0)
 							MoveEntity(e\room\NPC[0]\Collider, 0.0, 0.0, -0.5)
 						EndIf
+						
 						If e\room\NPC[1] = Null Then
 							If EntityDistanceSquared(e\room\NPC[0]\Collider, me\Collider) < 6.25 Then
 								e\room\NPC[1] = CreateNPC(NPCType035_Tentacle, EntityX(e\room\NPC[0]\Collider), 0.13, EntityZ(e\room\NPC[0]\Collider))
@@ -4296,11 +4298,11 @@ Function UpdateEvents()
 										RotateEntity(TempInt2, 0.0, EntityYaw(TempInt, True) + 180.0, 0, True)
 										PositionEntity(TempInt2, e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 552.0 * RoomScale), 8.0 + (240.0 * RoomScale), e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 552.0 * RoomScale))
 										If e\room\grid\Grid[iX + (iY * GridSZ)] = 6 Then
-											If e\room\RoomDoors[1] = Null Then
+											If e\room\RoomDoors[1] <> Null Then
+												RemoveDoor(dr)
+											Else
 												dr\Open = (Not e\room\RoomDoors[0]\Open)
 												e\room\RoomDoors[1] = dr
-											Else
-												RemoveDoor(dr)
 											EndIf
 											If (Not e\room\Objects[3]) Then
 												e\room\Objects[3] = TempInt2
@@ -4309,11 +4311,11 @@ Function UpdateEvents()
 												FreeEntity(TempInt2)
 											EndIf
 										Else
-											If e\room\RoomDoors[3] = Null Then
+											If e\room\RoomDoors[3] <> Null Then
+												RemoveDoor(dr)
+											Else
 												dr\Open = (Not e\room\RoomDoors[2]\Open)
 												e\room\RoomDoors[3] = dr
-											Else
-												RemoveDoor(dr)
 											EndIf
 											If (Not e\room\Objects[5]) Then
 												e\room\Objects[5] = TempInt2
@@ -4504,11 +4506,11 @@ Function UpdateEvents()
 										RotateEntity(TempInt2, 0.0, EntityYaw(TempInt, True) + 180.0, 0.0, True)
 										PositionEntity(TempInt2, e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 552.0 * RoomScale), 8.0 + (240.0 * RoomScale), e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 552.0 * RoomScale))
 										If e\room\grid\Grid[iX + (iY * GridSZ)] = 6 Then
-											If e\room\RoomDoors[1] = Null Then
+											If e\room\RoomDoors[1] <> Null Then
+												RemoveDoor(dr)
+											Else
 												dr\Open = (Not e\room\RoomDoors[0]\Open)
 												e\room\RoomDoors[1] = dr
-											Else
-												RemoveDoor(dr)
 											EndIf
 											If (Not e\room\Objects[3]) Then
 												e\room\Objects[3] = TempInt2
@@ -4517,11 +4519,11 @@ Function UpdateEvents()
 												FreeEntity(TempInt2)
 											EndIf
 										Else
-											If e\room\RoomDoors[3] = Null Then
+											If e\room\RoomDoors[3] <> Null Then
+												RemoveDoor(dr)
+											Else
 												dr\Open = (Not e\room\RoomDoors[2]\Open)
 												e\room\RoomDoors[3] = dr
-											Else
-												RemoveDoor(dr)
 											EndIf
 											If (Not e\room\Objects[5]) Then
 												e\room\Objects[5] = TempInt2
@@ -4959,11 +4961,11 @@ Function UpdateEvents()
 							e\room\RoomDoors[i]\Locked = 1
 						Next
 						
-						If Curr096 = Null Then
-							Curr096 = CreateNPC(NPCType096, EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True) + 0.1, EntityZ(e\room\Objects[6], True))
-						Else
+						If Curr096 <> Null Then
 							PositionEntity(Curr096\Collider, EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True) + 0.1, EntityZ(e\room\Objects[6], True), True)
 							ResetEntity(Curr096\Collider)
+						Else
+							Curr096 = CreateNPC(NPCType096, EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True) + 0.1, EntityZ(e\room\Objects[6], True))
 						EndIf
 						Curr096\State = 6.0 : Curr096\State2 = 70.0 * 10.0
 						RotateEntity(Curr096\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
@@ -5083,8 +5085,7 @@ Function UpdateEvents()
 							StopStream_Strict(Curr096\SoundCHN)
 							Curr096\SoundCHN = 0
 							
-							RemoveNPC(e\room\NPC[0])
-							e\room\NPC[0] = Null
+							RemoveNPC(e\room\NPC[0]) : e\room\NPC[0] = Null
 						EndIf
 					Else
 						If e\EventState >= 70.0 * 40.0 And e\EventState - fps\Factor[0] < 70.0 * 40.0 Then ; ~ Open them again to let the player in
@@ -5349,8 +5350,7 @@ Function UpdateEvents()
 							Case 52.0
 								;[Block]
 								If e\room\NPC[1] <> Null Then
-									RemoveNPC(e\room\NPC[1])
-									e\room\NPC[1] = Null
+									RemoveNPC(e\room\NPC[1]) : e\room\NPC[1] = Null
 								EndIf
 								;[Block]
 							Case 60.0
@@ -5495,7 +5495,7 @@ Function UpdateEvents()
 						
 						ShouldPlay = 7
 						
-						If e\room\NPC[0] = Null Lor e\room\NPC[1] = Null Lor e\room\NPC[2] = Null Lor e\room\NPC[3] = Null Lor e\room\NPC[4] = Null Lor e\room\NPC[5] = Null Then
+						If e\room\NPC[0] = Null Then
 							For i = 0 To 3
 								e\room\NPC[i] = CreateNPC(NPCType939, 0.0, 0.0, 0.0)
 							Next
@@ -6168,14 +6168,14 @@ Function UpdateEvents()
 								If EntityZ(me\Collider) > Min(EntityZ(e\room\Objects[7], True), EntityZ(e\room\Objects[8], True)) Then
 									If EntityZ(me\Collider) < Max(EntityZ(e\room\Objects[7], True), EntityZ(e\room\Objects[8], True)) Then
 										If e\room\NPC[0] = Null Then
-											If e\room\NPC[0] = Null Then e\room\NPC[0] = CreateNPC(NPCType035_Tentacle, 0.0, 0.0, 0.0)
+											e\room\NPC[0] = CreateNPC(NPCType035_Tentacle, 0.0, 0.0, 0.0)
 										EndIf
 										
 										PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[4], True), 0.13, EntityZ(e\room\Objects[4], True))
 										
 										If e\room\NPC[0]\State > 0.0 Then 
 											If e\room\NPC[1] = Null Then
-												If e\room\NPC[1] = Null Then e\room\NPC[1] = CreateNPC(NPCType035_Tentacle, 0.0, 0.0, 0.0)
+												e\room\NPC[1] = CreateNPC(NPCType035_Tentacle, 0.0, 0.0, 0.0)
 											EndIf
 										EndIf
 										
@@ -6579,13 +6579,6 @@ Function UpdateEvents()
 				EndIf
 				
 				If PlayerRoom = e\room Then
-					If e\room\NPC[0] = Null Then
-						TFormPoint(1088.0, -5900.0, 1728.0, e\room\OBJ, 0)
-						e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
-						e\room\NPC[0]\HideFromNVG = True
-						TurnEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
-					EndIf
-					
 					If e\room\NPC[0] <> Null Then
 						If EntityY(me\Collider) < (-6900.0) * RoomScale
 							ShouldPlay = 26
@@ -6730,6 +6723,11 @@ Function UpdateEvents()
 								RotateEntity(e\room\Objects[6], 0, EntityYaw(e\room\Objects[6], True), 0.0, True)
 							EndIf
 						EndIf
+					Else
+						TFormPoint(1088.0, -5900.0, 1728.0, e\room\OBJ, 0)
+						e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
+						e\room\NPC[0]\HideFromNVG = True
+						TurnEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
 					EndIf
 					e\EventState4 = UpdateElevators(e\EventState4, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[11], e\room\Objects[12], e)
 				Else
@@ -7013,7 +7011,7 @@ Function UpdateEvents()
 							EndIf
 						EndIf
 						
-						If e\room\NPC[0] <> Null
+						If e\room\NPC[0] <> Null Then
 							If e\room\NPC[0]\State = 0.0 Lor EntityDistanceSquared(me\Collider, e\room\NPC[0]\Collider) > 400.0 Then
 								e\EventState3 = e\EventState3 + (1.0 + me\CurrSpeed) * fps\Factor[0]
 								If (e\EventState3 Mod 500.0) < 10.0 And ((e\EventState3 - fps\Factor[0]) Mod 500.0) > 490.0 Then
@@ -7122,10 +7120,10 @@ Function UpdateEvents()
 						EndIf
 					EndIf
 				Else
-					If fr = Null Then
-						RemoveEvent(e)
-					Else
+					If fr <> Null Then
 						If fr\Forest_Pivot <> 0 Then HideEntity(fr\Forest_Pivot)
+					Else
+						RemoveEvent(e)
 					EndIf
 				EndIf
 				;[End Block]
@@ -8570,6 +8568,7 @@ Function UpdateEvents()
 							EndIf
 							e\EventState2 = 0.0
 						EndIf
+						
 						Select e\EventState
 							Case 1.0
 								;[Block]
@@ -8621,8 +8620,8 @@ Function UpdateEvents()
 						If e\EventState2 = (-70.0) * 5.0 Then
 							For sc.SecurityCams = Each SecurityCams
 								If sc\room = e\room Then
-									If EntityDistanceSquared(sc\ScrOBJ, Camera) < 25.0
-										If EntityVisible(sc\ScrOBJ, Camera)
+									If EntityDistanceSquared(sc\ScrOBJ, Camera) < 25.0 Then
+										If EntityVisible(sc\ScrOBJ, Camera) Then
 											e\EventState2 = Min(e\EventState2 + fps\Factor[0], 0.0)
 											Exit
 										EndIf
@@ -8633,40 +8632,47 @@ Function UpdateEvents()
 							e\EventState2 = Min(e\EventState2 + fps\Factor[0], 0.0)
 						EndIf
 					ElseIf e\EventState2 = 0.0
-						If Curr049 = Null Then
-							Local AdjDist1# = 0.0
-							Local AdjDist2# = 0.0
-							Local Adj1% = -1
-							Local Adj2% = -1
-							
-							For i = 0 To 3
-								If e\room\AdjDoor[i] <> Null
-									If Adj1 = -1
-										AdjDist1 = EntityDistanceSquared(e\room\Objects[7], e\room\AdjDoor[i]\FrameOBJ)
-										Adj1 = i
-									Else
-										AdjDist2 = EntityDistanceSquared(e\room\Objects[7], e\room\AdjDoor[i]\FrameOBJ)
-										Adj2 = i
-									EndIf
+						Local AdjDist1# = 0.0
+						Local AdjDist2# = 0.0
+						Local Adj1% = -1
+						Local Adj2% = -1
+						
+						For i = 0 To 3
+							If e\room\AdjDoor[i] <> Null
+								If Adj1 = -1
+									AdjDist1 = EntityDistanceSquared(e\room\Objects[7], e\room\AdjDoor[i]\FrameOBJ)
+									Adj1 = i
+								Else
+									AdjDist2 = EntityDistanceSquared(e\room\Objects[7], e\room\AdjDoor[i]\FrameOBJ)
+									Adj2 = i
 								EndIf
-							Next
+							EndIf
+						Next
+						
+						If Curr049 = Null Then
 							If AdjDist1 > AdjDist2 Then
 								Curr049 = CreateNPC(NPCType049, EntityX(e\room\AdjDoor[Adj1]\FrameOBJ), EntityY(e\room\Objects[7], True), EntityZ(e\room\AdjDoor[Adj1]\FrameOBJ))
 							Else
 								Curr049 = CreateNPC(NPCType049, EntityX(e\room\AdjDoor[Adj2]\FrameOBJ), EntityY(e\room\Objects[7], True), EntityZ(e\room\AdjDoor[Adj2]\FrameOBJ))
 							EndIf
-							Curr049\State = 5.0 : Curr049\PrevState = 2
-							Curr049\EnemyX = EntityX(me\Collider)
-							Curr049\EnemyY = EntityZ(me\Collider)
-							Curr049\EnemyZ = EntityZ(me\Collider)
-							PointEntity(Curr049\Collider, e\room\OBJ)
-							MoveEntity(Curr049\Collider, 0.0, 0.0, -1.0)
+						Else
+							If AdjDist1 > AdjDist2 Then
+								PositionEntity(Curr049\Collider, EntityX(e\room\AdjDoor[Adj1]\FrameOBJ), EntityY(e\room\Objects[7], True), EntityZ(e\room\AdjDoor[Adj1]\FrameOBJ), True)
+							Else
+								PositionEntity(Curr049\Collider, EntityX(e\room\AdjDoor[Adj2]\FrameOBJ), EntityY(e\room\Objects[7], True), EntityZ(e\room\AdjDoor[Adj2]\FrameOBJ), True)
+							EndIf
 							ResetEntity(Curr049\Collider)
-							
-							e\room\NPC[0] = Curr049
-							
-							e\EventState2 = 1.0
 						EndIf
+						Curr049\State = 5.0 : Curr049\PrevState = 2
+						Curr049\EnemyX = EntityX(me\Collider)
+						Curr049\EnemyY = EntityZ(me\Collider)
+						Curr049\EnemyZ = EntityZ(me\Collider)
+						PointEntity(Curr049\Collider, e\room\OBJ)
+						MoveEntity(Curr049\Collider, 0.0, 0.0, -1.0)
+						ResetEntity(Curr049\Collider)
+						
+						e\room\NPC[0] = Curr049
+						e\EventState2 = 1.0
 					ElseIf e\EventState2 = 1.0
 						If e\room\NPC[0]\PathStatus <> 1 Then
 							e\room\NPC[0]\PathStatus = FindPath(e\room\NPC[0], EntityX(e\room\Objects[15], True), EntityY(e\room\Objects[15], True), EntityZ(e\room\Objects[15], True))
@@ -8968,11 +8974,11 @@ Function UpdateEvents()
 						End Select
 						Pvt = CreatePivot(e\room\OBJ)
 						PositionEntity(Pvt, xSpawn, 0.0, zSpawn)
-						If Curr096 = Null
-							Curr096 = CreateNPC(NPCType096, EntityX(Pvt, True), e\room\y + 0.5, EntityZ(Pvt, True))
-						Else
+						If Curr096 <> Null Then
 							PositionEntity(Curr096\Collider, EntityX(Pvt, True), e\room\y + 0.5, EntityZ(Pvt, True))
 							ResetEntity(Curr096\Collider)
+						Else
+							Curr096 = CreateNPC(NPCType096, EntityX(Pvt, True), e\room\y + 0.5, EntityZ(Pvt, True))
 						EndIf
 						Curr096\State = 5.0
 						PointEntity(Curr096\Collider, me\Collider)
@@ -10149,8 +10155,7 @@ Function UpdateEndings()
 											e\room\RoomDoors[2]\Open = True
 											
 											For i = 2 To 4
-												RemoveNPC(e\room\NPC[i])
-												e\room\NPC[i] = Null
+												RemoveNPC(e\room\NPC[i]) : e\room\NPC[i] = Null
 											Next
 											
 											e\EventState3 = 1.0
