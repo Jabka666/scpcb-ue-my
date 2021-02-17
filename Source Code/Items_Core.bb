@@ -1,15 +1,6 @@
 Global BurntNote%
 
-Global ItemAmount%
-
-Global MaxItemAmount%
-
-Dim Inventory.Items(0)
-
-Global InvSelect%, SelectedItem.Items
-
-Global ClosestItem.Items
-Global OtherOpen.Items = Null
+Global ItemAmount%, MaxItemAmount%
 
 Global LastItemID%
 
@@ -470,6 +461,13 @@ Type Items
 	Field ID%
 	Field InvSlots%
 End Type 
+
+Dim Inventory.Items(0)
+
+Global SelectedItem.Items
+
+Global ClosestItem.Items
+Global OtherOpen.Items = Null
 
 Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, A# = 1.0, InvSlots% = 0)
 	CatchErrors("Uncaught (CreateItem)")

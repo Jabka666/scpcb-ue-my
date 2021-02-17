@@ -3349,6 +3349,7 @@ Const INVENTORY_GFX_SIZE% = 70
 Const INVENTORY_GFX_SPACING% = 35
 ;[End Block]
 
+; ~ TODO: Fix weird SelectedItem behavior
 Function UpdateGUI()
 	CatchErrors("Uncaught (UpdateGUI)")
 	
