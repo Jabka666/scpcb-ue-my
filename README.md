@@ -7,6 +7,6 @@ This game and the source code are licensed under Creative Commons Attribution-Sh
 http://creativecommons.org/licenses/by-sa/3.0/
 
 Requirements:
-•	Blitz3D v1.112
+•	Blitz3D v1.121
 
 Beware - the source code is perhaps more horrifying than the game itself!

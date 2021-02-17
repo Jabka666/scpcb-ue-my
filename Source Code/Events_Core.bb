@@ -964,13 +964,13 @@ Function UpdateEvents()
 						If e\EventState2 = 0.0 Then
 							If e\EventState > 900.0 And e\room\RoomDoors[5]\Open Then
 								If e\EventState - fps\Factor[0] =< 900.0 Then 
+									PositionEntity(Curr173\Collider, e\room\x + 32.0 * RoomScale, 0.31, e\room\z + 1072.0 * RoomScale, True)
+									ResetEntity(Curr173\Collider)
+									
 									e\room\NPC[1]\Sound = LoadSound_Strict("SFX\Room\Intro\WhatThe1a.ogg")
 									e\room\NPC[1]\SoundCHN = PlaySound2(e\room\NPC[1]\Sound, Camera, e\room\NPC[1]\Collider)
 									e\room\NPC[2]\Sound = LoadSound_Strict("SFX\Room\Intro\WhatThe1b.ogg")
 									e\room\NPC[2]\SoundCHN = PlaySound2(e\room\NPC[2]\Sound, Camera, e\room\NPC[2]\Collider)
-									
-									PositionEntity(Curr173\Collider, e\room\x + 32.0 * RoomScale, 0.31, e\room\z + 1072.0 * RoomScale, True)
-									ResetEntity(Curr173\Collider)
 								EndIf
 								e\room\NPC[1]\State = 3.0
 								e\room\NPC[1]\CurrSpeed = CurveValue(-0.008, e\room\NPC[1]\CurrSpeed, 5.0)
@@ -995,6 +995,7 @@ Function UpdateEvents()
 								
 								If e\EventState < 900.0 + (70.0 * 4.0) Then
 									PositionEntity(Curr173\Collider, e\room\x + 32.0 * RoomScale, 0.31, e\room\z + 1072.0 * RoomScale, True)
+									ResetEntity(Curr173\Collider)
 									RotateEntity(Curr173\Collider, 0.0, 190.0, 0.0)
 									
 									If e\EventState > 900.0 + 70.0 And e\EventState < 900.0 + (70.0 * 2.5) Then

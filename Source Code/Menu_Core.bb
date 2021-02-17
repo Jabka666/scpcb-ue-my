@@ -1876,7 +1876,10 @@ Function UpdateLauncher(lnchr.Launcher)
 		Local SameFound% = False
 		
 		For n = 0 To lnchr\TotalGFXModes - 1
-			If lnchr\GFXModeWidths[n] = GfxModeWidth(i) And lnchr\GFXModeHeights[n] = GfxModeHeight(i) Then SameFound = True : Exit
+			If lnchr\GFXModeWidths[n] = GfxModeWidth(i) And lnchr\GFXModeHeights[n] = GfxModeHeight(i) Then
+				SameFound = True
+				Exit
+			EndIf
 		Next
 		If (Not SameFound) Then
 			If GfxModeWidth(i) >= 800 And GfxModeHeight(i) >= 600 Then

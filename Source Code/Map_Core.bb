@@ -2,8 +2,6 @@ Include "Source Code\Materials_Core.bb"
 
 Include "Source Code\Texture_Cache_Core.bb"
 
-Const RoomScale# = 8.0 / 2048.0
-
 Type Props
 	Field File$
 	Field OBJ%
@@ -285,6 +283,8 @@ Function AmbientLightRooms(Value% = 0)
 	ClsColor(0, 0, 0)
 	SetBuffer(OldBuffer)
 End Function
+
+Const RoomScale# = 8.0 / 2048.0
 
 Function LoadRMesh(File$, rt.RoomTemplates)
 	CatchErrors("Uncaught (LoadRMesh)")
@@ -1867,6 +1867,159 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 	CatchErrors("CreateRoom")
 End Function
 
+Type TempWayPoints
+	Field x#, y#, z#
+	Field roomtemplate.RoomTemplates
+End Type
+
+Type WayPoints
+	Field OBJ%
+	Field door.Doors
+	Field room.Rooms
+	Field State%
+	Field connected.WayPoints[5]
+	Field Dist#[5]
+	Field Fcost#, Gcost#, Hcost#
+	Field parent.WayPoints
+End Type
+
+Function CreateWaypoint.WayPoints(x#, y#, z#, door.Doors, room.Rooms)
+	Local w.WayPoints
+	
+	w.WayPoints = New WayPoints
+	w\OBJ = CreatePivot()
+	PositionEntity(w\OBJ, x, y, z)
+	EntityParent(w\OBJ, room\OBJ)
+	
+	w\room = room
+	w\door = door
+	
+	Return(w)
+End Function
+
+Function InitWayPoints(LoadingStart% = 45)
+	Local d.Doors, w.WayPoints, w2.WayPoints, r.Rooms, ClosestRoom.Rooms
+	Local x#, y#, z#
+	Local Temper% = MilliSecs2()
+	Local Dist#, Dist2#
+	
+	For d.Doors = Each Doors
+		If d\OBJ <> 0 Then HideEntity(d\OBJ)
+		If d\OBJ2 <> 0 Then HideEntity(d\OBJ2)
+		If d\FrameOBJ <> 0 Then HideEntity(d\FrameOBJ)
+		
+		If d\room = Null Then
+			ClosestRoom.Rooms = Null
+			Dist = 30.0
+			For r.Rooms = Each Rooms
+				x = Abs(EntityX(r\OBJ, True) - EntityX(d\FrameOBJ, True))
+				If x < 20.0 Then
+					z = Abs(EntityZ(r\OBJ, True) - EntityZ(d\FrameOBJ, True))
+					If z < 20.0 Then
+						Dist2 = (x * x) + (z * z)
+						If Dist2 < Dist Then
+							ClosestRoom = r
+							Dist = Dist2
+						EndIf
+					EndIf
+				EndIf
+			Next
+		Else
+			ClosestRoom = d\room
+		EndIf
+		If (Not d\DisableWaypoint) Then CreateWaypoint(EntityX(d\FrameOBJ, True), EntityY(d\FrameOBJ, True) + 0.18, EntityZ(d\FrameOBJ, True), d, ClosestRoom)
+	Next
+	
+	Local Amount% = 0
+	
+	For w.WayPoints = Each WayPoints
+		EntityPickMode(w\OBJ, 1, True)
+		EntityRadius(w\OBJ, 0.2)
+		Amount = Amount + 1
+	Next
+	
+	Local Number% = 0
+	Local Iter% = 0
+	Local i%, n%
+	
+	For w.WayPoints = Each WayPoints
+		Number = Number + 1
+		Iter = Iter + 1
+		If Iter = 20 Then 
+			RenderLoading(LoadingStart + Floor((35.0 / Amount) * Number)) 
+			Iter = 0
+		EndIf
+		
+		w2.WayPoints = After(w)
+		
+		Local CanCreateWayPoint% = False
+		
+		While w2 <> Null
+			If w\room = w2\room Lor w\door <> Null Lor w2\door <> Null
+				Dist = EntityDistance(w\OBJ, w2\OBJ)
+				
+				If w\room\MaxWayPointY = 0.0 Lor w2\room\MaxWayPointY = 0.0
+					CanCreateWayPoint = True
+				Else
+					If Abs(EntityY(w\OBJ) - EntityY(w2\OBJ)) =< w\room\MaxWayPointY
+						CanCreateWayPoint = True
+					EndIf
+				EndIf
+				
+				If Dist < 7.0 Then
+					If CanCreateWayPoint
+						If EntityVisible(w\OBJ, w2\OBJ) Then
+							For i = 0 To 4
+								If w\connected[i] = Null Then
+									w\connected[i] = w2.WayPoints 
+									w\Dist[i] = Dist
+									Exit
+								EndIf
+							Next
+							
+							For n = 0 To 4
+								If w2\connected[n] = Null Then 
+									w2\connected[n] = w.WayPoints 
+									w2\Dist[n] = Dist
+									Exit
+								EndIf					
+							Next
+						EndIf
+					EndIf	
+				EndIf
+			EndIf
+			w2 = After(w2)
+		Wend
+	Next
+	
+	For d.Doors = Each Doors
+		If d\OBJ <> 0 Then ShowEntity(d\OBJ)
+		If d\OBJ2 <> 0 Then ShowEntity(d\OBJ2)
+		If d\FrameOBJ <> 0 Then ShowEntity(d\FrameOBJ)		
+	Next
+	
+	For w.WayPoints = Each WayPoints
+		EntityPickMode(w\OBJ, 0, 0)
+		EntityRadius(w\OBJ, 0)
+		
+		For i = 0 To 4
+			If w\connected[i] <> Null Then 
+				Local tLine% = CreateLine(EntityX(w\OBJ, True), EntityY(w\OBJ, True), EntityZ(w\OBJ, True), EntityX(w\connected[i]\OBJ, True), EntityY(w\connected[i]\OBJ, True), EntityZ(w\connected[i]\OBJ, True))
+				
+				EntityColor(tLine, 255.0, 0.0, 0.0)
+				EntityParent(tLine, w\OBJ)
+			EndIf
+		Next
+	Next
+End Function
+
+Function RemoveWaypoint(w.WayPoints)
+	FreeEntity(w\OBJ) : w\OBJ = 0
+	Delete(w)
+End Function
+
+Global ClosestButton%
+
 ; ~ TODO: Add "Type Buttons"
 Function CreateButton%(ButtonID%, x#, y#, z#, Pitch# = 0.0, Yaw# = 0.0, Roll# = 0.0, Parent% = 0, Locked% = False)
 	Local OBJ% = CopyEntity(o\ButtonModelID[ButtonID])	
@@ -1901,8 +2054,7 @@ Function UpdateButton(OBJ%)
 	EndIf			
 End Function
 
-Global ClosestButton%, ClosestDoor.Doors
-Global SelectedDoor.Doors, UpdateDoorsTimer#
+Global UpdateDoorsTimer#
 Global DoorTempID%
 
 Type BrokenDoor
@@ -1929,6 +2081,9 @@ Type Doors
 	Field IsElevatorDoor% = False
 	Field MTFClose% = True
 End Type 
+
+Global ClosestDoor.Doors
+Global SelectedDoor.Doors
 
 ; ~ Doors IDs Constants
 ;[Block]
@@ -2906,8 +3061,7 @@ Function UpdateDecals()
 	Next
 End Function
 
-Global SelectedMonitor.SecurityCams
-Global CoffinCam.SecurityCams
+Global ScreenTexs%[2]
 
 Type SecurityCams
 	Field OBJ%, MonitorOBJ%, Pvt%
@@ -2926,7 +3080,8 @@ Type SecurityCams
 	Field MinAngle#, MaxAngle#, Dir%
 End Type
 
-Global ScreenTexs%[2]
+Global SelectedMonitor.SecurityCams
+Global CoffinCam.SecurityCams
 
 Function CreateSecurityCam.SecurityCams(x1#, y1#, z1#, r.Rooms, Screen% = False, x2# = 0.0, y2# = 0.0, z2# = 0.0)
 	Local sc.SecurityCams = New SecurityCams
@@ -3352,157 +3507,6 @@ Function TimeCheckpointMonitors()
 			MonitorTimer2 = 0.0
 		EndIf
 	EndIf
-End Function
-
-Type TempWayPoints
-	Field x#, y#, z#
-	Field roomtemplate.RoomTemplates
-End Type
-
-Type WayPoints
-	Field OBJ%
-	Field door.Doors
-	Field room.Rooms
-	Field State%
-	Field connected.WayPoints[5]
-	Field Dist#[5]
-	Field Fcost#, Gcost#, Hcost#
-	Field parent.WayPoints
-End Type
-
-Function CreateWaypoint.WayPoints(x#, y#, z#, door.Doors, room.Rooms)
-	Local w.WayPoints
-	
-	w.WayPoints = New WayPoints
-	w\OBJ = CreatePivot()
-	PositionEntity(w\OBJ, x, y, z)
-	EntityParent(w\OBJ, room\OBJ)
-	
-	w\room = room
-	w\door = door
-	
-	Return(w)
-End Function
-
-Function InitWayPoints(LoadingStart% = 45)
-	Local d.Doors, w.WayPoints, w2.WayPoints, r.Rooms, ClosestRoom.Rooms
-	Local x#, y#, z#
-	Local Temper% = MilliSecs2()
-	Local Dist#, Dist2#
-	
-	For d.Doors = Each Doors
-		If d\OBJ <> 0 Then HideEntity(d\OBJ)
-		If d\OBJ2 <> 0 Then HideEntity(d\OBJ2)
-		If d\FrameOBJ <> 0 Then HideEntity(d\FrameOBJ)
-		
-		If d\room = Null Then
-			ClosestRoom.Rooms = Null
-			Dist = 30.0
-			For r.Rooms = Each Rooms
-				x = Abs(EntityX(r\OBJ, True) - EntityX(d\FrameOBJ, True))
-				If x < 20.0 Then
-					z = Abs(EntityZ(r\OBJ, True) - EntityZ(d\FrameOBJ, True))
-					If z < 20.0 Then
-						Dist2 = (x * x) + (z * z)
-						If Dist2 < Dist Then
-							ClosestRoom = r
-							Dist = Dist2
-						EndIf
-					EndIf
-				EndIf
-			Next
-		Else
-			ClosestRoom = d\room
-		EndIf
-		If (Not d\DisableWaypoint) Then CreateWaypoint(EntityX(d\FrameOBJ, True), EntityY(d\FrameOBJ, True) + 0.18, EntityZ(d\FrameOBJ, True), d, ClosestRoom)
-	Next
-	
-	Local Amount% = 0
-	
-	For w.WayPoints = Each WayPoints
-		EntityPickMode(w\OBJ, 1, True)
-		EntityRadius(w\OBJ, 0.2)
-		Amount = Amount + 1
-	Next
-	
-	Local Number% = 0
-	Local Iter% = 0
-	Local i%, n%
-	
-	For w.WayPoints = Each WayPoints
-		Number = Number + 1
-		Iter = Iter + 1
-		If Iter = 20 Then 
-			RenderLoading(LoadingStart + Floor((35.0 / Amount) * Number)) 
-			Iter = 0
-		EndIf
-		
-		w2.WayPoints = After(w)
-		
-		Local CanCreateWayPoint% = False
-		
-		While w2 <> Null
-			If w\room = w2\room Lor w\door <> Null Lor w2\door <> Null
-				Dist = EntityDistance(w\OBJ, w2\OBJ)
-				
-				If w\room\MaxWayPointY = 0.0 Lor w2\room\MaxWayPointY = 0.0
-					CanCreateWayPoint = True
-				Else
-					If Abs(EntityY(w\OBJ) - EntityY(w2\OBJ)) =< w\room\MaxWayPointY
-						CanCreateWayPoint = True
-					EndIf
-				EndIf
-				
-				If Dist < 7.0 Then
-					If CanCreateWayPoint
-						If EntityVisible(w\OBJ, w2\OBJ) Then
-							For i = 0 To 4
-								If w\connected[i] = Null Then
-									w\connected[i] = w2.WayPoints 
-									w\Dist[i] = Dist
-									Exit
-								EndIf
-							Next
-							
-							For n = 0 To 4
-								If w2\connected[n] = Null Then 
-									w2\connected[n] = w.WayPoints 
-									w2\Dist[n] = Dist
-									Exit
-								EndIf					
-							Next
-						EndIf
-					EndIf	
-				EndIf
-			EndIf
-			w2 = After(w2)
-		Wend
-	Next
-	
-	For d.Doors = Each Doors
-		If d\OBJ <> 0 Then ShowEntity(d\OBJ)
-		If d\OBJ2 <> 0 Then ShowEntity(d\OBJ2)
-		If d\FrameOBJ <> 0 Then ShowEntity(d\FrameOBJ)		
-	Next
-	
-	For w.WayPoints = Each WayPoints
-		EntityPickMode(w\OBJ, 0, 0)
-		EntityRadius(w\OBJ, 0)
-		
-		For i = 0 To 4
-			If w\connected[i] <> Null Then 
-				Local tLine% = CreateLine(EntityX(w\OBJ, True), EntityY(w\OBJ, True), EntityZ(w\OBJ, True), EntityX(w\connected[i]\OBJ, True), EntityY(w\connected[i]\OBJ, True), EntityZ(w\connected[i]\OBJ, True))
-				
-				EntityColor(tLine, 255.0, 0.0, 0.0)
-				EntityParent(tLine, w\OBJ)
-			EndIf
-		Next
-	Next
-End Function
-
-Function RemoveWaypoint(w.WayPoints)
-	FreeEntity(w\OBJ) : w\OBJ = 0
-	Delete(w)
 End Function
 
 Global SelectedScreen.Screens
@@ -7635,7 +7639,7 @@ Function UpdateRooms()
 		Next
 	EndIf
 	
-	CatchErrors("UpdateErrors")
+	CatchErrors("UpdateRooms")
 End Function
 
 Function IsRoomAdjacent(this.Rooms, that.Rooms)
@@ -8583,16 +8587,16 @@ End Function
 
 Function LoadTerrain(HeightMap%, yScale# = 0.7, t1%, t2%, Mask%)
 	; ~ Load the HeightMap
-	If (Not HeightMap) Then RuntimeError("HeightMap image " + HeightMap + " doesn't exist.")
+	If (Not HeightMap) Then RuntimeError("HeightMap Image " + HeightMap + " not found.")
 	
 	; ~ Store HeightMap dimensions
 	Local x% = ImageWidth(HeightMap) - 1, y = ImageHeight(HeightMap) - 1
 	Local lx%, ly%, Index%
 	
 	; ~ Load texture and lightmaps
-	If (Not t1) Then RuntimeError("Texture 1 " + Chr(34) + t1 + Chr(34) + " doesn't exist.")
-	If (Not t2) Then RuntimeError("Texture 2 " + Chr(34) + t2 + Chr(34) + " doesn't exist.")
-	If (Not Mask) Then RuntimeError("Mask image " + Chr(34) + Mask + Chr(34) + " doesn't exist.")
+	If (Not t1) Then RuntimeError("Texture #1 " + Chr(34) + t1 + Chr(34) + " not found.")
+	If (Not t2) Then RuntimeError("Texture #2 " + Chr(34) + t2 + Chr(34) + " not found.")
+	If (Not Mask) Then RuntimeError("Mask image " + Chr(34) + Mask + Chr(34) + " not found.")
 	
 	; ~ Auto scale the textures to the right size
 	If t1 Then ScaleTexture(t1, x / 4, y / 4)

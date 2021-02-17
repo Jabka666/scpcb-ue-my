@@ -1,5 +1,3 @@
-Global Curr173.NPCs, Curr106.NPCs, Curr096.NPCs, Curr513_1.NPCs, Curr049.NPCs
-
 ; ~ NPC IDs Constants
 ;[Block]
 ; ~ Main
@@ -66,6 +64,8 @@ Type NPCs
 	Field UseEarphones% = False
 	Field Contained% = False
 End Type
+
+Global Curr173.NPCs, Curr106.NPCs, Curr096.NPCs, Curr513_1.NPCs, Curr049.NPCs
 
 Const NPCsFile$ = "Data\NPCs.ini"
 
