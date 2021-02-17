@@ -2740,7 +2740,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True, Scripted% = False)
 	Else
 		If d\Locked = 1 Then
 			If ShowMsg Then 
-				If (Not (d\IsElevatorDoor > 0)) Then
+				If (Not d\IsElevatorDoor > 0) Then
 					PlaySound_Strict(ButtonSFX2)
 					If PlayerRoom\RoomTemplate\Name <> "room2elevator" Then
 						If d\Open Then
@@ -2757,26 +2757,24 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True, Scripted% = False)
 					ElseIf d\IsElevatorDoor = 3 Then
 						CreateMsg("The elevator is already on this floor.", 6.0)
 					ElseIf msg\Txt <> "You called the elevator."
-						If msg\Txt = "You already called the elevator."
-							Select Rand(10)
-								Case 1
-									;[Block]
-									CreateMsg("Stop spamming the button.", 6.0)
-									;[End Block]
-								Case 2
-									;[Block]
-									CreateMsg("Pressing it harder doesn't make the elevator come faster.", 6.0)
-									;[End Block]
-								Case 3
-									;[Block]
-									CreateMsg("If you continue pressing this button I will generate a Memory Access Violation.", 6.0)
-									;[End Block]
-								Default
-									;[Block]
-									CreateMsg("You already called the elevator.", 6.0)
-									;[End Block]
-							End Select
-						EndIf
+						Select Rand(10)
+							Case 1
+								;[Block]
+								CreateMsg("Stop spamming the button.", 6.0)
+								;[End Block]
+							Case 2
+								;[Block]
+								CreateMsg("Pressing it harder doesn't make the elevator come faster.", 6.0)
+								;[End Block]
+							Case 3
+								;[Block]
+								CreateMsg("If you continue pressing this button I will generate a Memory Access Violation.", 6.0)
+								;[End Block]
+							Default
+								;[Block]
+								CreateMsg("You already called the elevator.", 6.0)
+								;[End Block]
+						End Select
 					Else
 						CreateMsg("You already called the elevator.", 6.0)
 					EndIf
@@ -6809,7 +6807,7 @@ Function FillRoom(r.Rooms)
 			EndIf
 			;[End Block]
 		Case "room3gw"
-	        ;[Block]
+			;[Block]
 			d.Doors = CreateDoor(r\x - 728.0 * RoomScale, r\y, r\z - 456.5 * RoomScale, 0.0, r, False, Default_Door, 3)
 			d\AutoClose = False
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.044, True)
@@ -6846,7 +6844,7 @@ Function FillRoom(r.Rooms)
 			Next
 			If (Not r\Objects[2]) Then r\Objects[2] = LoadMesh_Strict("GFX\map\room3gw_pipes.b3d", r\OBJ)
 			EntityPickMode(r\Objects[2], 2)
-	        ;[End Block]
+			;[End Block]
 		Case "room1162"
 			;[Block]
 			d.Doors = CreateDoor(r\x + 248.0 * RoomScale, r\y, r\z - 736.0 * RoomScale, 90.0, r, False, Default_Door, 2)
@@ -7603,7 +7601,7 @@ Function UpdateRooms()
 						EntityAlpha(r\TriggerBoxes[i]\OBJ, 0.0)
 					Next
 				EndIf
- 			EndIf
+			EndIf
 		EndIf
 	Next
 	
@@ -8449,7 +8447,7 @@ Function CreateMap()
 			Text(mo\Viewport_Center_X, opt\GraphicHeight - 50, "PRESS ANY KEY TO CONTINUE", True, True)
 			If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 			Flip()
-		Until GetKey() Lor MouseHit(1)	
+		Until GetKey() Lor mo\MouseHit1
 	EndIf
 	
 	For y = 0 To MapGridSize
@@ -8687,7 +8685,7 @@ Function CheckTriggers$()
 				EntityAlpha(PlayerRoom\TriggerBoxes[i]\OBJ, 0.2)
 			Else
 				EntityAlpha(PlayerRoom\TriggerBoxes[i]\OBJ, 0.0)
- 			EndIf
+			EndIf
 			
 			If EntityX(me\Collider) > PlayerRoom\TriggerBoxes[i]\MinX And EntityX(me\Collider) < PlayerRoom\TriggerBoxes[i]\MaxX
 				If EntityY(me\Collider) > PlayerRoom\TriggerBoxes[i]\MinY And EntityY(me\Collider) < PlayerRoom\TriggerBoxes[i]\MaxY

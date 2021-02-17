@@ -379,7 +379,7 @@ Function UpdateConsole()
 		InBar = MouseOn(x + Width - (26 * MenuScale), y, 26 * MenuScale, Height)
 		InBox = MouseOn(x + Width - (23 * MenuScale), y + Height - ScrollBarHeight + (ConsoleScroll * ScrollBarHeight / Height), 20 * MenuScale, ScrollBarHeight)
 		
-		If (Not MouseDown(1)) Then
+		If (Not mo\MouseDown1) Then
 			ConsoleScrollDragging = False
 		ElseIf ConsoleScrollDragging Then
 			ConsoleScroll = ConsoleScroll + ((ScaledMouseY() - ConsoleMouseMem) * Height / ScrollBarHeight)
@@ -2680,9 +2680,6 @@ Function ResetInput()
 	mo\MouseHit2 = False
 	mo\MouseDown1 = False
 	mo\MouseUp1 = False
-	MouseHit(1)
-	MouseHit(2)
-	MouseDown(1)
 	GrabbedEntity = 0
 	Input_ResetTime = 10.0
 End Function
