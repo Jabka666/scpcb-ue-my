@@ -2420,7 +2420,7 @@ Function MainLoop()
 				DarkA = Max(DarkA, Min(Abs(me\FallTimer / 400.0), 1.0))				
 			EndIf
 			
-			If SelectedItem <> Null Then
+			If SelectedItem <> Null And (Not InvOpen) And (Not mo\MouseDown1) Then
 				If IsItemInFocus() Then
 					DarkA = Max(DarkA, 0.5)
 				EndIf
