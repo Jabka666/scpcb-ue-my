@@ -3605,6 +3605,11 @@ Function UpdateScreens()
 	Next
 End Function
 
+Function RemoveScreen(s.Screens)
+	If s\Img <> 0 Then FreeImage(s\Img) : s\Img = 0
+	Delete(s)
+End Function
+
 Function UpdateLever%(OBJ%, Locked% = False)
 	Local Dist# = EntityDistanceSquared(Camera, OBJ)
 	Local PrevPitch# = EntityPitch(OBJ)

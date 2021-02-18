@@ -8846,8 +8846,7 @@ Function NullGame(PlayButtonSFX% = True)
 	Delete(CurrGrid)
 	
 	For s.Screens = Each Screens
-		If s\Img <> 0 Then FreeImage(s\Img) : s\Img = 0
-		Delete(s)
+		RemoveScreen(s)
 	Next
 	
 	For i = 0 To MaxItemAmount - 1
@@ -8861,7 +8860,7 @@ Function NullGame(PlayButtonSFX% = True)
 	bk.BrokenDoor = New BrokenDoor
 	
 	For d.Doors = Each Doors
-		Delete(d)
+		RemoveDoor(d)
 	Next
 	
 	For lt.LightTemplates = Each LightTemplates
@@ -8873,7 +8872,7 @@ Function NullGame(PlayButtonSFX% = True)
 	Next
 	
 	For wp.WayPoints = Each WayPoints
-		Delete(wp)
+		RemoveWaypoint(wp)
 	Next
 	
 	For twp.TempWayPoints = Each TempWayPoints
@@ -8918,11 +8917,7 @@ Function NullGame(PlayButtonSFX% = True)
 	ForestNPCTex = 0
 	
 	For e.Events = Each Events
-		If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
-		If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
-		If e\Sound3 <> 0 Then FreeSound_Strict(e\Sound3) : e\Sound3 = 0
-		
-		Delete(e)
+		RemoveEvent(e)
 	Next
 	
 	For sc.SecurityCams = Each SecurityCams
