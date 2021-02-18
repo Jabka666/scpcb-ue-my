@@ -3084,8 +3084,9 @@ Global SelectedMonitor.SecurityCams
 Global CoffinCam.SecurityCams
 
 Function CreateSecurityCam.SecurityCams(x1#, y1#, z1#, r.Rooms, Screen% = False, x2# = 0.0, y2# = 0.0, z2# = 0.0)
-	Local sc.SecurityCams = New SecurityCams
+	Local sc.SecurityCams
 	
+	sc.SecurityCams = New SecurityCams
 	sc\OBJ = CopyEntity(o\CamModelID[0])
 	ScaleEntity(sc\OBJ, 0.0015, 0.0015, 0.0015)
 	PositionEntity(sc\OBJ, x1, y1, z1)
@@ -3137,7 +3138,7 @@ Function CreateSecurityCam.SecurityCams(x1#, y1#, z1#, r.Rooms, Screen% = False,
 	Return(sc)
 End Function
 
-Function UpdateSecurityCams() ; ~ TODO: SHOULD BE SEPARATED!
+Function UpdateSecurityCams()
 	CatchErrors("Uncaught (UpdateSecurityCams)")
 	
 	Local sc.SecurityCams
@@ -3215,7 +3216,12 @@ Function UpdateSecurityCams() ; ~ TODO: SHOULD BE SEPARATED!
 			
 			If Close Then
 				If sc\Screen Then
-					sc\State = sc\State + fps\Factor[0]
+					If sc\State < sc\RenderInterval Then
+						sc\State = sc\State + fps\Factor[0]
+					Else
+						sc\State = 0.0
+					EndIf
+					
 					If me\BlinkTimer > -5.0 And EntityInView(sc\ScrOBJ, Camera) Then
 						If EntityVisible(Camera, sc\ScrOBJ) Then
 							If (sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3) And (Not I_714\Using) And wi\HazmatSuit <> 3 And wi\GasMask <> 3 Then
@@ -3243,44 +3249,6 @@ Function UpdateSecurityCams() ; ~ TODO: SHOULD BE SEPARATED!
 						sc\InSight = True
 					Else
 						sc\InSight = False
-					EndIf
-					
-					If sc\State >= sc\RenderInterval Then
-						If me\BlinkTimer > -5.0 And EntityInView(sc\ScrOBJ, Camera) Then
-							If EntityVisible(Camera, sc\ScrOBJ) Then
-								If CoffinCam = Null Lor Rand(5) = 5 Lor sc\CoffinEffect <> 3 Then
-									HideEntity(Camera)
-									ShowEntity(sc\Cam)
-									Cls()
-									
-									RenderRoomLights(sc\Cam)
-									
-									SetBuffer(BackBuffer())
-									RenderWorld()
-									CopyRect(0, 0, 512, 512, 0, 0, BackBuffer(), TextureBuffer(ScreenTexs[sc\ScrTexture]))
-									
-									HideEntity(sc\Cam)
-									ShowEntity(Camera)										
-								Else
-									HideEntity(Camera)
-									ShowEntity(CoffinCam\room\OBJ)
-									EntityAlpha(GetChild(CoffinCam\room\OBJ, 2), 1.0)
-									ShowEntity(CoffinCam\Cam)
-									Cls()
-									
-									RenderRoomLights(CoffinCam\Cam)
-									
-									SetBuffer(BackBuffer())
-									RenderWorld()
-									CopyRect(0, 0, 512, 512, 0, 0, BackBuffer(), TextureBuffer(ScreenTexs[sc\ScrTexture]))
-									
-									HideEntity(CoffinCam\room\OBJ)
-									HideEntity(CoffinCam\Cam)
-									ShowEntity(Camera)										
-								EndIf
-							EndIf
-						EndIf
-						sc\State = 0.0
 					EndIf
 					
 					If (sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3) And (Not I_714\Using) And wi\HazmatSuit <> 3 And wi\GasMask <> 3 Then
@@ -3364,6 +3332,73 @@ Function UpdateSecurityCams() ; ~ TODO: SHOULD BE SEPARATED!
 				EndIf
 			Else
 				CatchErrors("UpdateSecurityCameras (screen doesn't exist anymore)")
+			EndIf
+		EndIf
+	Next
+End Function
+
+Function RenderSecurityCams()
+	CatchErrors("Uncaught (RenderSecurityCams)")
+	
+	Local sc.SecurityCams
+	
+	For sc.SecurityCams = Each SecurityCams
+		Local Close% = False
+		
+		If sc\room <> Null Then
+			If sc\room\Dist < 6.0 Lor PlayerRoom = sc\room Then 
+				Close = True
+			EndIf
+			
+			If Close Then
+				If sc\Screen Then
+					If sc\State >= sc\RenderInterval Then
+						If me\BlinkTimer > -5.0 And EntityInView(sc\ScrOBJ, Camera) Then
+							If EntityVisible(Camera, sc\ScrOBJ) Then
+								If CoffinCam = Null Lor Rand(5) = 5 Lor sc\CoffinEffect <> 3 Then
+									HideEntity(Camera)
+									ShowEntity(sc\Cam)
+									Cls()
+									
+									RenderRoomLights(sc\Cam)
+									
+									SetBuffer(BackBuffer())
+									RenderWorld()
+									CopyRect(0, 0, 512, 512, 0, 0, BackBuffer(), TextureBuffer(ScreenTexs[sc\ScrTexture]))
+									
+									HideEntity(sc\Cam)
+									ShowEntity(Camera)										
+								Else
+									HideEntity(Camera)
+									ShowEntity(CoffinCam\room\OBJ)
+									EntityAlpha(GetChild(CoffinCam\room\OBJ, 2), 1.0)
+									ShowEntity(CoffinCam\Cam)
+									Cls()
+									
+									RenderRoomLights(CoffinCam\Cam)
+									
+									SetBuffer(BackBuffer())
+									RenderWorld()
+									CopyRect(0, 0, 512, 512, 0, 0, BackBuffer(), TextureBuffer(ScreenTexs[sc\ScrTexture]))
+									
+									HideEntity(CoffinCam\room\OBJ)
+									HideEntity(CoffinCam\Cam)
+									ShowEntity(Camera)										
+								EndIf
+							EndIf
+						EndIf
+					EndIf
+				EndIf
+			EndIf
+			
+			If sc <> Null Then
+				If sc\room <> Null Then
+					CatchErrors("RenderSecurityCameras (" + sc\room\RoomTemplate\Name + ")")
+				Else
+					CatchErrors("RenderSecurityCameras (screen has no room)")
+				EndIf
+			Else
+				CatchErrors("RenderSecurityCameras (screen doesn't exist anymore)")
 			EndIf
 		EndIf
 	Next
@@ -8451,7 +8486,7 @@ Function CreateMap()
 			Text(mo\Viewport_Center_X, opt\GraphicHeight - 50, "PRESS ANY KEY TO CONTINUE", True, True)
 			If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 			Flip()
-		Until GetKey() Lor mo\MouseHit1
+		Until GetKey() Lor MouseHit(1)
 	EndIf
 	
 	For y = 0 To MapGridSize

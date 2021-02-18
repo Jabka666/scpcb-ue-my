@@ -2270,7 +2270,7 @@ Function RenderLoading(Percent%, ShortLoading% = False)
 		
 		Local Close% = False
 		
-		If GetKey() Lor mo\MouseHit1 Then
+		If GetKey() Lor MouseHit(1) Then
 			Close = True
 			ResetInput()
 			ResetTimingAccumulator()

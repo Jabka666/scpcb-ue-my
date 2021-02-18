@@ -2568,6 +2568,8 @@ Function MainLoop()
 	; ~ Go out of function immediately if the game has been quit
 	If MainMenuOpen Then Return
 	
+	If fps\Factor[0] > 0.0 And PlayerRoom\RoomTemplate\Name <> "dimension1499" Then RenderSecurityCams()
+	
 	If (Not MenuOpen) And (Not InvOpen) And OtherOpen = Null And SelectedDoor = Null And (Not ConsoleOpen) And (Not I_294\Using) And SelectedScreen = Null And me\EndingTimer >= 0.0 Then
 		If PlayerRoom <> Null Then
 			If PlayerRoom\RoomTemplate\Name <> "dimension1499" Then
