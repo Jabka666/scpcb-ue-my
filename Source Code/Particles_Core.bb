@@ -7,7 +7,7 @@ Type Particles
 	Field LifeTime#
 End Type 
 
-Function CreateParticle.Particles(x#, y#, z#, ID%, Size#, Gravity# = 1.0, LifeTime# = 200.0)
+Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTime# = 200.0)
 	Local p.Particles
 	
 	p.Particles = New Particles
@@ -135,7 +135,7 @@ Function UpdateEmitters()
 	
 	For e.Emitters = Each Emitters
 		If fps\Factor[0] > 0.0 And (PlayerRoom = e\room Lor e\room\Dist < 8.0) Then
-			p.Particles = CreateParticle(EntityX(e\OBJ, True), EntityY(e\OBJ, True), EntityZ(e\OBJ, True), 0, e\Size, e\Gravity, e\LifeTime)
+			p.Particles = CreateParticle(0, EntityX(e\OBJ, True), EntityY(e\OBJ, True), EntityZ(e\OBJ, True), e\Size, e\Gravity, e\LifeTime)
 			p\Speed = e\Speed
 			RotateEntity(p\Pvt, EntityPitch(e\OBJ, True), EntityYaw(e\OBJ, True), EntityRoll(e\OBJ, True), True)
 			TurnEntity(p\Pvt, Rnd(-e\RandAngle, e\RandAngle), Rnd(-e\RandAngle, e\RandAngle), 0)

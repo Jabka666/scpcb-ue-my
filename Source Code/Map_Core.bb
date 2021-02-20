@@ -2367,7 +2367,7 @@ Function UpdateDoors()
 										PositionEntity(Pvt, EntityX(d\FrameOBJ, True) + Rnd(-0.2, 0.2), EntityY(d\FrameOBJ, True) + Rnd(0.0, 1.2), EntityZ(d\FrameOBJ, True) + Rnd(-0.2, 0.2))
 										RotateEntity(Pvt, 0.0, Rnd(360.0), 0.0)
 										
-										p.Particles = CreateParticle(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 3, 0.002, 0.0, 300.0)
+										p.Particles = CreateParticle(3, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 0.002, 0.0, 300.0)
 										p\Speed = 0.005 : p\SizeChange = -0.00001 : p\Size = 0.01 : p\Alphachange = -0.01
 										RotateEntity(p\Pvt, Rnd(-20.0, 20.0), Rnd(360.0), 0.0)
 										ScaleSprite(p\OBJ, p\Size, p\Size)

@@ -2243,7 +2243,7 @@ Function UpdateNPCs()
 										
 										RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
 										PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
-										MoveEntity(Pvt,0.8 * 0.079, 10.75 * 0.079, 6.9 * 0.079)
+										MoveEntity(Pvt, 0.0632, 0.84925, 0.5451)
 										
 										PointEntity(Pvt, me\Collider)
 										Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ShootAccuracy, True, InstaKillPlayer)
@@ -2282,10 +2282,10 @@ Function UpdateNPCs()
 						AnimateNPC(n, 245.0, 248.0, 0.35)
 						If n\Reload = 0.0 Then
 							PlaySound2(GunshotSFX, Camera, n\Collider, 15.0)
-							p.Particles = CreateParticle(EntityX(n\OBJ, True), EntityY(n\OBJ, True), EntityZ(n\OBJ, True), 2, 0.2, 0.0, 5.0)
+							p.Particles = CreateParticle(2, EntityX(n\OBJ, True), EntityY(n\OBJ, True), EntityZ(n\OBJ, True), 0.2, 0.0, 5.0)
 							PositionEntity(p\Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 							RotateEntity(p\Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
-							MoveEntity(p\Pvt, 0.8 * 0.079, 10.75 * 0.079, 6.9 * 0.079)
+							MoveEntity(p\Pvt, 0.0632, 0.84925, 0.5451)
 							n\Reload = 7.0
 						EndIf
 						;[End Block]
@@ -2430,7 +2430,7 @@ Function UpdateNPCs()
 										
 										RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
 										PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
-										MoveEntity(Pvt, 0.8 * 0.079, 10.75 * 0.079, 6.9 * 0.079)
+										MoveEntity(Pvt, 0.0632, 0.84925, 0.5451)
 										
 										PointEntity(Pvt, me\Collider)
 										Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((25.0 / Sqr(Dist)) * (1.0 / Sqr(Dist))), True, InstaKillPlayer)
@@ -3084,7 +3084,7 @@ Function UpdateNPCs()
 													
 													RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
 													PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
-													MoveEntity(Pvt, 0.8 * 0.079, 10.75 * 0.079, 6.9 * 0.079)
+													MoveEntity(Pvt, 0.0632, 0.84925, 0.5451)
 													
 													Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((25.0 / Sqr(DetectDistance)) * (1.0 / Sqr(DetectDistance))), True)
 													n\Reload = 7.0
@@ -3810,7 +3810,7 @@ Function UpdateNPCs()
 											
 											RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
 											PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
-											MoveEntity(Pvt, 0.8 * 0.079, 10.75 * 0.079, 6.9 * 0.079)
+											MoveEntity(Pvt, 0.0632, 0.84925, 0.5451)
 											
 											Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 0.9)
 											n\Reload = 7.0
@@ -3841,9 +3841,9 @@ Function UpdateNPCs()
 									
 									RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
 									PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
-									MoveEntity(Pvt, 0.8 * 0.079, 10.75 * 0.079, 6.9 * 0.079)
+									MoveEntity(Pvt,0.0632, 0.84925, 0.5451)
 									
-									p.Particles = CreateParticle(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 2, Rnd(0.08, 0.1), 0.0, 5.0)
+									p.Particles = CreateParticle(2, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), Rnd(0.08, 0.1), 0.0, 5.0)
 									p\AlphaChange = -0.15
 									TurnEntity(p\OBJ, 0.0, 0.0, Rnd(360.0))
 									
@@ -3999,9 +3999,9 @@ Function UpdateNPCs()
 											
 											RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
 											PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
-											MoveEntity(Pvt, 0.8 * 0.079, 10.75 * 0.079, 6.9 * 0.079)
+											MoveEntity(Pvt, 0.0632, 0.84925, 0.5451)
 											
-											p.Particles = CreateParticle(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 2, Rnd(0.08, 0.1), 0.0, 5.0)
+											p.Particles = CreateParticle(2, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), Rnd(0.08, 0.1), 0.0, 5.0)
 											p\AlphaChange = -0.15
 											TurnEntity(p\OBJ, 0.0, 0.0, Rnd(360.0))
 											
@@ -6955,7 +6955,7 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 	Local p.Particles, de.Decals, n.NPCs
 	Local Pvt%, ShotMessageUpdate$, i%
 	
-	p.Particles = CreateParticle(x, y, z, 2, Rnd(0.08, 0.1), 0.0, 5.0)
+	p.Particles = CreateParticle(2, x, y, z, Rnd(0.08, 0.1), 0.0, 5.0)
 	p\AlphaChange = -0.15
 	TurnEntity(p\OBJ, 0.0, 0.0, Rnd(360.0))
 	
@@ -7040,12 +7040,12 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 			PlaySound2(Gunshot3SFX, Camera, Pvt, 0.4, Rnd(0.8, 1.0))
 			
 			If Particles Then 
-				p.Particles = CreateParticle(PickedX(), PickedY(), PickedZ(), 0, 0.03, 0.0, 80.0)
+				p.Particles = CreateParticle(0, PickedX(), PickedY(), PickedZ(), 0.03, 0.0, 80.0)
 				p\Speed = 0.001 : p\SizeChange = 0.003 : p\Alpha = 0.8 : p\AlphaChange = -0.01
 				RotateEntity(p\Pvt, EntityPitch(Pvt) - 180.0, EntityYaw(Pvt), 0)
 				
 				For i = 0 To Rand(2, 3)
-					p.Particles = CreateParticle(PickedX(), PickedY(), PickedZ(), 0, 0.006, 0.003, 80.0)
+					p.Particles = CreateParticle(0, PickedX(), PickedY(), PickedZ(), 0.006, 0.003, 80.0)
 					p\Speed = 0.02 : p\Alpha = 0.8 : p\AlphaChange = -0.01
 					RotateEntity(p\Pvt, EntityPitch(Pvt) + Rnd(170.0, 190.0), EntityYaw(Pvt) + Rnd(-10.0, 10.0), 0)	
 				Next

@@ -2807,7 +2807,7 @@ Function UpdateMove()
 	EndIf
 	
 	If (Not chs\NoClip) Then 
-		If (me\Playable And (KeyDown(key\MOVEMENT_DOWN) Xor KeyDown(key\MOVEMENT_UP)) Lor (KeyDown(key\MOVEMENT_RIGHT) Xor KeyDown(key\MOVEMENT_LEFT))) Lor me\ForceMove > 0 Then
+		If (me\Playable And (KeyDown(key\MOVEMENT_DOWN) Xor KeyDown(key\MOVEMENT_UP)) Lor (KeyDown(key\MOVEMENT_RIGHT) Xor KeyDown(key\MOVEMENT_LEFT))) Lor me\ForceMove > 0.0 Then
 			If (Not me\Crouch) And (KeyDown(key\SPRINT)) And me\Stamina > 0.0 And (Not me\Zombie) Then
 				Sprint = 2.5
 				me\Stamina = me\Stamina - fps\Factor[0] * 0.4 * me\StaminaEffect
@@ -3165,7 +3165,7 @@ Function UpdateMouseLook()
 				MoveEntity(Pvt, 0.0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
 			EndIf
 			
-			p.Particles = CreateParticle(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 3, 0.002, 0.0, 300.0)
+			p.Particles = CreateParticle(3, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 0.002, 0.0, 300.0)
 			p\Speed = 0.001 : p\SizeChange = -0.00001
 			RotateEntity(p\Pvt, Rnd(-20.0, 20.0), Rnd(360.0), 0.0)
 			FreeEntity(Pvt)
@@ -8560,8 +8560,8 @@ Function InitNewGame()
 		Next
 		
 		If (Not r\RoomTemplate\DisableDecals) Then
-			If Rand(4) = 1 Then de.Decals = CreateDecal(Rand(2, 3), EntityX(r\OBJ) + Rnd(- 2.0, 2.0), r\y + 0.005, EntityZ(r\OBJ) + Rnd(-2.0, 2.0), 90.0, Rand(360.0), 0.0, Rnd(0.1, 0.4), Rnd(0.85, 0.95))
-			If Rand(4) = 1 Then de.Decals = CreateDecal(0, EntityX(r\OBJ) + Rnd(-2.0, 2.0), r\y + 0.005, EntityZ(r\OBJ) + Rnd(-2.0, 2.0), 90.0, Rand(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.7, 0.85))
+			If Rand(4) = 1 Then de.Decals = CreateDecal(Rand(2, 3), EntityX(r\OBJ) + Rnd(- 2.0, 2.0), r\y + 0.005, EntityZ(r\OBJ) + Rnd(-2.0, 2.0), 90.0, Rnd(360.0), 0.0, Rnd(0.1, 0.4), Rnd(0.85, 0.95))
+			If Rand(4) = 1 Then de.Decals = CreateDecal(0, EntityX(r\OBJ) + Rnd(-2.0, 2.0), r\y + 0.005, EntityZ(r\OBJ) + Rnd(-2.0, 2.0), 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.7, 0.85))
 		EndIf
 		
 		If r\RoomTemplate\Name = "room173" And (Not opt\IntroEnabled) Then 
@@ -9433,7 +9433,7 @@ Function UpdateExplosion()
 				ExplosionSFX = LoadSound_Strict("SFX\Ending\GateB\Nuke2.ogg")
 				PlaySound_Strict(ExplosionSFX)				
 				For i = 0 To (10 + (10 * (opt\ParticleAmount + 1)))
-					p.Particles = CreateParticle(EntityX(me\Collider) + Rnd(-0.5, 0.5), EntityY(me\Collider) - Rnd(0.2, 1.5), EntityZ(me\Collider) + Rnd(-0.5, 0.5), 0, Rnd(0.2, 0.6), 0.0, 350.0)	
+					p.Particles = CreateParticle(0, EntityX(me\Collider) + Rnd(-0.5, 0.5), EntityY(me\Collider) - Rnd(0.2, 1.5), EntityZ(me\Collider) + Rnd(-0.5, 0.5), Rnd(0.2, 0.6), 0.0, 350.0)	
 					RotateEntity(p\Pvt, -90.0, 0.0, 0.0, True)
 					p\Speed = Rnd(0.05, 0.07)
 				Next
@@ -9653,7 +9653,7 @@ Function Update008()
 					
 					If opt\ParticleAmount > 0 Then
 						If Rand(50) = 1 Then
-							p.Particles = CreateParticle(EntityX(PlayerRoom\NPC[0]\Collider), EntityY(PlayerRoom\NPC[0]\Collider), EntityZ(PlayerRoom\NPC[0]\Collider), 6, Rnd(0.05, 0.1), 0.15, 200)
+							p.Particles = CreateParticle(6, EntityX(PlayerRoom\NPC[0]\Collider), EntityY(PlayerRoom\NPC[0]\Collider), EntityZ(PlayerRoom\NPC[0]\Collider), Rnd(0.05, 0.1), 0.15, 200)
 							p\Speed = 0.01 : p\SizeChange = 0.01 : p\Alpha = 0.5 : p\AlphaChange = -0.01
 							RotateEntity(p\Pvt, Rnd(360.0), Rnd(360.0), 0.0)
 						EndIf
