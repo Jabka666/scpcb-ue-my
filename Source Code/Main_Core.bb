@@ -8482,8 +8482,7 @@ Function LoadEntities()
 End Function
 
 Function InitStats()
-	me\Playable = True
-	me\SelectedEnding = -1
+	me\Playable = True : me\SelectedEnding = -1
 	
 	If opt\DebugMode Then
 		InitCheats()

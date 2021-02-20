@@ -2038,8 +2038,7 @@ Function UpdateEvents()
 								EndIf
 								If e\EventState < 14130.0 Then 
 									SetNPCFrame(e\room\NPC[2], 50.0)
-									me\BlinkTimer = -10.0
-									me\LightBlink = 1.0
+									me\BlinkTimer = -10.0 : me\LightBlink = 1.0
 								Else 
 									Animate2(e\room\NPC[2]\OBJ, AnimTime(e\room\NPC[2]\OBJ), 712.0, 779.0, 0.5, False)
 									
@@ -3979,8 +3978,8 @@ Function UpdateEvents()
 			Case e_room2mt
 				;[Block]
 				If EntityY(me\Collider, True) >= 8.0 And EntityY(me\Collider, True) =< 12.0 Then
-					If (EntityX(me\Collider, True) >= e\room\x - 6.0) And (EntityX(me\Collider, True) =< (e\room\x + 2.0 * GridSZ + 6.0)) Then
-						If (EntityZ(me\Collider, True) >= e\room\z - 6.0) And (EntityZ(me\Collider, True) =< (e\room\z + 2.0 * GridSZ + 6.0)) Then
+					If (EntityX(me\Collider, True) >= e\room\x - 6.0) And (EntityX(me\Collider, True) =< (e\room\x + 2.0 * MTGridSize + 6.0)) Then
+						If (EntityZ(me\Collider, True) >= e\room\z - 6.0) And (EntityZ(me\Collider, True) =< (e\room\z + 2.0 * MTGridSize + 6.0)) Then
 							PlayerRoom = e\room
 						EndIf
 					EndIf
@@ -3989,19 +3988,19 @@ Function UpdateEvents()
 				If PlayerRoom = e\room Then
 					Local Meshes%[7]
 					Local TempStr$
-					Local ia%, ib%, ic%, id%
+					Local iA%, iB%, iC%, iD%
 					Local dr.Doors
 					Local TempInt%, TempInt2%
 					Local iX%, iY%
 					
 					If I_Zone\HasCustomMT Then
-						If (Not e\room\grid\Meshes[0]) Then
+						If (Not e\room\mt\Meshes[0]) Then
 							PlaceMapCreatorMT(e\room)
 						EndIf
 					EndIf
 					
-					If e\room\grid = Null Then
-						e\room\grid.Grids = New Grids
+					If e\room\mt = Null Then
+						e\room\mt.MTGrid = New MTGrid
 						
 						Local OldSeed% = RndSeed()
 						
@@ -4015,12 +4014,16 @@ Function UpdateEvents()
 						; ~ 2 = left
 						; ~ 3 = down
 						
-						iX = GridSZ / 2 + Rand(-2, 2)
-						iY = GridSZ / 2 + Rand(-2, 2)
+						iX = MTGridSize / 2 + Rand(-2, 2)
+						iY = MTGridSize / 2 + Rand(-2, 2)
 						
-						e\room\grid\Grid[iX + (iY * GridSZ)] = 1
+						e\room\mt\Grid[iX + (iY * MTGridSize)] = 1
 						
-						If Dir = 2 Then e\room\grid\Grid[(iX + 1) + (iY * GridSZ)] = 1 Else e\room\grid\Grid[(iX - 1) + (iY * GridSZ)] = 1
+						If Dir = 2 Then
+							e\room\mt\Grid[(iX + 1) + (iY * MTGridSize)] = 1
+						Else
+							e\room\mt\Grid[(iX - 1) + (iY * MTGridSize)] = 1
+						EndIf
 						
 						Local Count% = 2
 						
@@ -4032,25 +4035,41 @@ Function UpdateEvents()
 								Select Dir
 									Case 0
 										;[Block]
-										If iX < GridSZ - 2 - (i Mod 2) Then iX = iX + 1 Else TempInt2 = False
+										If iX < MTGridSize - 2 - (i Mod 2) Then
+											iX = iX + 1
+										Else
+											TempInt2 = False
+										EndIf
 										;[End Block]
 									Case 1
 										;[Block]
-										If iY < GridSZ - 2 - (i Mod 2) Then iY = iY + 1 Else TempInt2 = False
+										If iY < MTGridSize - 2 - (i Mod 2) Then
+											iY = iY + 1
+										Else
+											TempInt2 = False
+										EndIf
 										;[End Block]
 									Case 2
 										;[Block]
-										If iX > 1 + (i Mod 2) Then iX = iX - 1 Else TempInt2 = False
+										If iX > 1 + (i Mod 2) Then
+											iX = iX - 1
+										Else
+											TempInt2 = False
+										EndIf
 										;[End Block]
 									Case 3
 										;[Block]
-										If iY > 1 + (i Mod 2) Then iY = iY - 1 Else TempInt2 = False
+										If iY > 1 + (i Mod 2) Then
+											iY = iY - 1
+										Else
+											TempInt2 = False
+										EndIf
 										;[End Block]
 								End Select
 								
 								If TempInt2 Then
-									If e\room\grid\Grid[iX + (iY * GridSZ)] = 0 Then
-										e\room\grid\Grid[iX + (iY * GridSZ)] = 1
+									If e\room\mt\Grid[iX + (iY * MTGridSize)] = 0 Then
+										e\room\mt\Grid[iX + (iY * MTGridSize)] = 1
 										Count = Count + 1
 									EndIf
 								Else
@@ -4067,26 +4086,26 @@ Function UpdateEvents()
 						Wend
 						
 						; ~ Generate the tunnels
-						For iY = 0 To GridSZ - 1
-							For iX = 0 To GridSZ - 1
-								If e\room\grid\Grid[iX + (iY * GridSZ)] > 0 Then
-									e\room\grid\Grid[iX + (iY * GridSZ)] = (e\room\grid\Grid[(iX) + ((iY + 1) * GridSZ)] > 0) + (e\room\grid\Grid[(iX) + ((iY - 1) * GridSZ)] > 0) + (e\room\grid\Grid[(iX + 1) + ((iY) * GridSZ)] > 0) + (e\room\grid\Grid[(iX - 1) + ((iY) * GridSZ)] > 0)
+						For iY = 0 To MTGridSize - 1
+							For iX = 0 To MTGridSize - 1
+								If e\room\mt\Grid[iX + (iY * MTGridSize)] > 0 Then
+									e\room\mt\Grid[iX + (iY * MTGridSize)] = (e\room\mt\Grid[(iX) + ((iY + 1) * MTGridSize)] > 0) + (e\room\mt\Grid[(iX) + ((iY - 1) * MTGridSize)] > 0) + (e\room\mt\Grid[(iX + 1) + ((iY) * MTGridSize)] > 0) + (e\room\mt\Grid[(iX - 1) + ((iY) * MTGridSize)] > 0)
 								EndIf
 							Next
 						Next
 						
-						Local MaxX% = GridSZ - 1
+						Local MaxX% = MTGridSize - 1
 						Local CanRetry% = False
 						
 						For iX = 0 To MaxX
-							For iY = 0 To GridSZ - 1
-								If e\room\grid\Grid[iX + 1 + (iY * GridSZ)] > 0 Then
+							For iY = 0 To MTGridSize - 1
+								If e\room\mt\Grid[iX + 1 + (iY * MTGridSize)] > 0 Then
 									MaxX = iX
-									If (e\room\grid\Grid[iX + 1 + ((iY + 1) * GridSZ)] < 3) And (e\room\grid\Grid[iX + 1 + ((iY - 1) * GridSZ)] < 3) Then
+									If (e\room\mt\Grid[iX + 1 + ((iY + 1) * MTGridSize)] < 3) And (e\room\mt\Grid[iX + 1 + ((iY - 1) * MTGridSize)] < 3) Then
 										CanRetry = True
 										If Rand(0, 1) = 1 Then
-											e\room\grid\Grid[iX + 1 + ((iY) * GridSZ)] = e\room\grid\Grid[iX + 1 + ((iY) * GridSZ)] + 1
-											e\room\grid\Grid[iX + ((iY) * GridSZ)] = 7 ; ~ Generator room
+											e\room\mt\Grid[iX + 1 + ((iY) * MTGridSize)] = e\room\mt\Grid[iX + 1 + ((iY) * MTGridSize)] + 1
+											e\room\mt\Grid[iX + ((iY) * MTGridSize)] = 7 ; ~ Generator room
 											CanRetry = False
 											Exit
 										EndIf
@@ -4104,32 +4123,32 @@ Function UpdateEvents()
 						FirstX = -1
 						LastY = -1
 						
-						For iY = 0 To GridSZ - 1
-							For iX = 0 To GridSZ - 1
-								If e\room\grid\Grid[iX + (iY * GridSZ)] = 2 Then
-									If e\room\grid\Grid[(iX + 1) + ((iY) * GridSZ)] > 0 And e\room\grid\Grid[(iX - 1) + ((iY) * GridSZ)] > 0 Then ; ~ Horizontal
+						For iY = 0 To MTGridSize - 1
+							For iX = 0 To MTGridSize - 1
+								If e\room\mt\Grid[iX + (iY * MTGridSize)] = 2 Then
+									If e\room\mt\Grid[(iX + 1) + ((iY) * MTGridSize)] > 0 And e\room\mt\Grid[(iX - 1) + ((iY) * MTGridSize)] > 0 Then ; ~ Horizontal
 										If FirstX = -1 Lor FirstY = -1 Then
-											If e\room\grid\Grid[iX - 1 + (iY * GridSZ)] < 3 And e\room\grid\Grid[iX + 1 + (iY * GridSZ)] < 3 And e\room\grid\Grid[iX + ((iY - 1) * GridSZ)] < 3 And e\room\grid\Grid[iX + ((iY + 1) * GridSZ)] < 3 Then
-												If e\room\grid\Grid[iX - 1 + ((iY - 1) * GridSZ)] < 1 And e\room\grid\Grid[iX + 1 + ((iY - 1) * GridSZ)] < 1 And e\room\grid\Grid[iX + 1 + ((iY - 1) * GridSZ)] < 1 And e\room\grid\Grid[iX - 1 + ((iY + 1) * GridSZ)] < 1 Then
+											If e\room\mt\Grid[iX - 1 + (iY * MTGridSize)] < 3 And e\room\mt\Grid[iX + 1 + (iY * MTGridSize)] < 3 And e\room\mt\Grid[iX + ((iY - 1) * MTGridSize)] < 3 And e\room\mt\Grid[iX + ((iY + 1) * MTGridSize)] < 3 Then
+												If e\room\mt\Grid[iX - 1 + ((iY - 1) * MTGridSize)] < 1 And e\room\mt\Grid[iX + 1 + ((iY - 1) * MTGridSize)] < 1 And e\room\mt\Grid[iX + 1 + ((iY - 1) * MTGridSize)] < 1 And e\room\mt\Grid[iX - 1 + ((iY + 1) * MTGridSize)] < 1 Then
 													FirstX = iX : FirstY = iY
 												EndIf
 											EndIf
 										EndIf
-										If e\room\grid\Grid[iX - 1 + (iY * GridSZ)] < 3 And e\room\grid\Grid[iX + 1 + (iY * GridSZ)] < 3 And e\room\grid\Grid[iX + ((iY - 1) * GridSZ)] < 3 And e\room\grid\Grid[iX + ((iY + 1) * GridSZ)] < 3 Then
-											If e\room\grid\Grid[iX - 1 + ((iY - 1) * GridSZ)] < 1 And e\room\grid\Grid[iX + 1 + ((iY - 1) * GridSZ)] < 1 And e\room\grid\Grid[iX + 1 + ((iY - 1) * GridSZ)] < 1 And e\room\grid\Grid[iX - 1 + ((iY + 1) * GridSZ)] < 1 Then
+										If e\room\mt\Grid[iX - 1 + (iY * MTGridSize)] < 3 And e\room\mt\Grid[iX + 1 + (iY * MTGridSize)] < 3 And e\room\mt\Grid[iX + ((iY - 1) * MTGridSize)] < 3 And e\room\mt\Grid[iX + ((iY + 1) * MTGridSize)] < 3 Then
+											If e\room\mt\Grid[iX - 1 + ((iY - 1) * MTGridSize)] < 1 And e\room\mt\Grid[iX + 1 + ((iY - 1) * MTGridSize)] < 1 And e\room\mt\Grid[iX + 1 + ((iY - 1) * MTGridSize)] < 1 And e\room\mt\Grid[iX - 1 + ((iY + 1) * MTGridSize)] < 1 Then
 												LastX = iX : LastY = iY
 											EndIf
 										EndIf
-									ElseIf e\room\grid\Grid[(iX) + ((iY + 1) * GridSZ)] > 0 And e\room\grid\Grid[(iX) + ((iY - 1) * GridSZ)] > 0 Then ; ~ Vertical
+									ElseIf e\room\mt\Grid[(iX) + ((iY + 1) * MTGridSize)] > 0 And e\room\mt\Grid[(iX) + ((iY - 1) * MTGridSize)] > 0 Then ; ~ Vertical
 										If FirstX = -1 Lor FirstY = -1 Then
-											If e\room\grid\Grid[iX - 1 + (iY * Gridsz)] < 3 And e\room\grid\grid[iX + 1 + (iY * GridSZ)] < 3 And e\room\grid\Grid[iX + ((iY - 1) * GridSZ)] < 3 And e\room\grid\Grid[iX + ((iY + 1) * GridSZ)] < 3 Then
-												If e\room\grid\Grid[iX - 1 + ((iY - 1) * GridSZ)] < 1 And e\room\grid\Grid[iX + 1 + ((iY - 1) * GridSZ)] < 1 And e\room\grid\Grid[iX + 1 + ((iY - 1) * GridSZ)] < 1 And e\room\grid\Grid[iX - 1 + ((iY + 1) * GridSZ)] < 1 Then
+											If e\room\mt\Grid[iX - 1 + (iY * MTGridSize)] < 3 And e\room\mt\Grid[iX + 1 + (iY * MTGridSize)] < 3 And e\room\mt\Grid[iX + ((iY - 1) * MTGridSize)] < 3 And e\room\mt\Grid[iX + ((iY + 1) * MTGridSize)] < 3 Then
+												If e\room\mt\Grid[iX - 1 + ((iY - 1) * MTGridSize)] < 1 And e\room\mt\Grid[iX + 1 + ((iY - 1) * MTGridSize)] < 1 And e\room\mt\Grid[iX + 1 + ((iY - 1) * MTGridSize)] < 1 And e\room\mt\Grid[iX - 1 + ((iY + 1) * MTGridSize)] < 1 Then
 													FirstX = iX : FirstY = iY
 												EndIf
 											EndIf
 										EndIf
-										If e\room\grid\Grid[iX - 1 + (iY * GridSZ)] < 3 And e\room\grid\Grid[iX + 1 + (iY * GridSZ)] < 3 And e\room\grid\Grid[iX + ((iY - 1) * GridSZ)] < 3 And e\room\grid\Grid[iX + ((iY + 1) * GridSZ)] < 3 Then
-											If e\room\grid\Grid[iX - 1 + ((iY - 1) * GridSZ)] < 1 And e\room\grid\Grid[iX + 1 + ((iY - 1) * GridSZ)] < 1 And e\room\grid\Grid[iX + 1 + ((iY - 1) * GridSZ)] < 1 And e\room\grid\Grid[iX - 1 + ((iY + 1) * GridSZ)] < 1 Then
+										If e\room\mt\Grid[iX - 1 + (iY * MTGridSize)] < 3 And e\room\mt\Grid[iX + 1 + (iY * MTGridSize)] < 3 And e\room\mt\Grid[iX + ((iY - 1) * MTGridSize)] < 3 And e\room\mt\Grid[iX + ((iY + 1) * MTGridSize)] < 3 Then
+											If e\room\mt\Grid[iX - 1 + ((iY - 1) * MTGridSize)] < 1 And e\room\mt\Grid[iX + 1 + ((iY - 1) * MTGridSize)] < 1 And e\room\mt\Grid[iX + 1 + ((iY - 1) * MTGridSize)] < 1 And e\room\mt\Grid[iX - 1 + ((iY + 1) * MTGridSize)] < 1 Then
 												LastX = iX : LastY = iY
 											EndIf
 										EndIf
@@ -4150,147 +4169,147 @@ Function UpdateEvents()
 						
 						TempInt = 0
 						
-						For iY = 0 To GridSZ - 1
-							For iX = 0 To GridSZ - 1
-								If e\room\grid\Grid[iX + (iY * GridSZ)] > 0 Then
-									Select e\room\grid\Grid[iX + (iY * GridSZ)]
-										Case 1, 7
+						For iY = 0 To MTGridSize - 1
+							For iX = 0 To MTGridSize - 1
+								If e\room\mt\Grid[iX + (iY * MTGridSize)] > 0 Then
+									Select e\room\mt\Grid[iX + (iY * MTGridSize)]
+										Case ROOM1 + 1, ROOM4 + 3
 											;[Block]
-											TempInt = CopyEntity(Meshes[e\room\grid\Grid[iX + (iY * GridSZ)] - 1])
+											TempInt = CopyEntity(Meshes[e\room\mt\Grid[iX + (iY * MTGridSize)] - 1])
 											
-											If e\room\grid\Grid[(iX + 1) + ((iY) * GridSZ)] > 0 Then
+											If e\room\mt\Grid[(iX + 1) + ((iY) * MTGridSize)] > 0 Then
 												RotateEntity(TempInt, 0.0, 90.0, 0.0)
-												e\room\grid\Angles[iX + (iY * GridSZ)] = 1
-											ElseIf e\room\grid\Grid[(iX - 1) + ((iY) * GridSZ)] > 0 Then
+												e\room\mt\Angles[iX + (iY * MTGridSize)] = 1
+											ElseIf e\room\mt\Grid[(iX - 1) + ((iY) * MTGridSize)] > 0 Then
 												RotateEntity(TempInt, 0.0, 270.0, 0.0)
-												e\room\grid\Angles[iX + (iY * GridSZ)] = 3
-											ElseIf e\room\grid\Grid[(iX) + ((iY + 1) * GridSZ)] > 0 Then
+												e\room\mt\Angles[iX + (iY * MTGridSize)] = 3
+											ElseIf e\room\mt\Grid[(iX) + ((iY + 1) * MTGridSize)] > 0 Then
 												RotateEntity(TempInt, 0.0, 180.0, 0.0)
-												e\room\grid\Angles[iX + (iY * GridSZ)] = 2
+												e\room\mt\Angles[iX + (iY * MTGridSize)] = 2
 											Else
 												RotateEntity(TempInt, 0.0, 0.0, 0.0)
-												e\room\grid\Angles[iX + (iY * GridSZ)] = 0
+												e\room\mt\Angles[iX + (iY * MTGridSize)] = 0
 											EndIf
 											;[End Block]
-										Case 2
+										Case ROOM2 + 1
 											;[Block]
 											If (iX = FirstX And iY = FirstY) Lor (iX = LastX And iY = LastY) Then
-												e\room\grid\Grid[iX + (iY * GridSZ)] = 6
+												e\room\mt\Grid[iX + (iY * MTGridSize)] = 6
 											EndIf
 											
-											If e\room\grid\Grid[(iX + 1) + ((iY) * GridSZ)] > 0 And e\room\grid\Grid[(iX - 1) + ((iY) * GridSZ)] > 0 Then ; ~ Horizontal
-												TempInt = CopyEntity(Meshes[e\room\grid\Grid[iX + (iY * GridSZ)] - 1])
+											If e\room\mt\Grid[(iX + 1) + (iY * MTGridSize)] > 0 And e\room\mt\Grid[(iX - 1) + (iY * MTGridSize)] > 0 Then ; ~ Horizontal
+												TempInt = CopyEntity(Meshes[e\room\mt\Grid[iX + (iY * MTGridSize)] - 1])
 												
-												AddLight(Null, e\room\x + iX * 2.0, 8.0 + (372.0 * RoomScale), e\room\z + iY * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
+												AddLight(Null, e\room\x + (iX * 2.0), e\room\y + 8.0 + (372.0 * RoomScale), e\room\z + (iY * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
 												
 												TempInt2 = Rand(0, 1)
-												RotateEntity(TempInt, 0.0, TempInt2 * 180.0 + 90.0, 0.0)
+												RotateEntity(TempInt, 0.0, (TempInt2 * 180.0) + 90.0, 0.0)
 												
-												e\room\grid\Angles[iX + (iY * GridSZ)] = (TempInt2 * 2) + 1
-											ElseIf e\room\grid\Grid[(iX) + ((iY + 1) * GridSZ)] > 0 And e\room\grid\Grid[(iX) + ((iY - 1) * GridSZ)] > 0 Then ; ~ Vertical
-												TempInt = CopyEntity(Meshes[e\room\grid\Grid[iX + (iY * GridSZ)] - 1])
+												e\room\mt\Angles[iX + (iY * MTGridSize)] = (TempInt2 * 2) + 1
+											ElseIf e\room\mt\Grid[iX + ((iY + 1) * MTGridSize)] > 0 And e\room\mt\Grid[iX + ((iY - 1) * MTGridSize)] > 0 Then ; ~ Vertical
+												TempInt = CopyEntity(Meshes[e\room\mt\Grid[iX + (iY * MTGridSize)] - 1])
 												
-												AddLight(Null, e\room\x + iX * 2.0, 8.0 + (372.0 * RoomScale), e\room\z + iY * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
+												AddLight(Null, e\room\x + (iX * 2.0), e\room\y + 8.0 + (372.0 * RoomScale), e\room\z + (iY * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
 												
 												TempInt2 = Rand(0, 1)
 												RotateEntity(TempInt, 0.0, TempInt2 * 180.0, 0.0)
-												e\room\grid\Angles[iX + (iY * Gridsz)] = (TempInt2 * 2)
+												e\room\mt\Angles[iX + (iY * MTGridSize)] = (TempInt2 * 2)
 											Else
-												TempInt = CopyEntity(Meshes[e\room\grid\Grid[iX + (iY * GridSZ)]])
+												TempInt = CopyEntity(Meshes[e\room\mt\Grid[iX + (iY * MTGridSize)]])
 												
-												AddLight(Null, e\room\x + iX * 2.0, 8.0 + (416.0 * RoomScale), e\room\z + iY * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
+												AddLight(Null, e\room\x + (iX * 2.0), e\room\y + 8.0 + (416.0 * RoomScale), e\room\z + (iY * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
 												
-												ia = e\room\grid\Grid[(iX) + ((iY + 1) * GridSZ)]
-												ib = e\room\grid\Grid[(iX) + ((iY - 1) * GridSZ)]
-												ic = e\room\grid\Grid[(iX + 1) + ((iY) * GridSZ)]
-												id = e\room\grid\Grid[(iX - 1) + ((iY) * GridSZ)]
+												iA = e\room\mt\Grid[iX + ((iY + 1) * MTGridSize)]
+												iB = e\room\mt\Grid[iX + ((iY - 1) * MTGridSize)]
+												iC = e\room\mt\Grid[(iX + 1) + (iY * MTGridSize)]
+												iD = e\room\mt\Grid[(iX - 1) + (iY * MTGridSize)]
 												
-												If ia > 0 And ic > 0 Then
+												If iA > 0 And iC > 0 Then
 													RotateEntity(TempInt, 0.0, 0.0, 0.0)
-													e\room\grid\Angles[iX + (iY * GridSZ)] = 0
-												ElseIf ia > 0 And id > 0 Then
+													e\room\mt\Angles[iX + (iY * MTGridSize)] = 0
+												ElseIf iA > 0 And iD > 0 Then
 													RotateEntity(TempInt, 0.0, 90.0, 0.0)
-													e\room\grid\Angles[iX + (iY * GridSZ)] = 1
-												ElseIf ib > 0 And ic > 0 Then
+													e\room\mt\Angles[iX + (iY * MTGridSize)] = 1
+												ElseIf iB > 0 And iC > 0 Then
 													RotateEntity(TempInt, 0.0, 270.0, 0.0)
-													e\room\grid\Angles[iX + (iY * GridSZ)] = 3
+													e\room\mt\Angles[iX + (iY * MTGridSize)] = 3
 												Else
 													RotateEntity(TempInt, 0.0, 180.0, 0.0)
-													e\room\grid\Angles[iX + (iY * GridSZ)] = 2
+													e\room\mt\Angles[iX + (iY * MTGridSize)] = 2
 												EndIf
 											EndIf
 											
 											If iX = FirstX And iY = FirstY Then
-												e\room\grid\Grid[iX + (iY * GridSZ)] = 5
+												e\room\mt\Grid[iX + (iY * MTGridSize)] = 5
 											EndIf
 											;[End Block]
-										Case 3
+										Case ROOM2C + 1
 											;[Block]
-											TempInt = CopyEntity(Meshes[e\room\grid\Grid[iX + (iY * GridSZ)]])
+											TempInt = CopyEntity(Meshes[e\room\mt\Grid[iX + (iY * MTGridSize)]])
 											
-											ia = e\room\grid\Grid[(iX) + ((iY + 1) * GridSZ)]
-											ib = e\room\grid\Grid[(iX) + ((iY - 1) * GridSZ)]
-											ic = e\room\grid\Grid[(iX + 1) + ((iY) * GridSZ)]
-											id = e\room\grid\Grid[(iX - 1) + ((iY) * GridSZ)]
-											If ia > 0 And ic > 0 And id > 0 Then
+											iA = e\room\mt\Grid[iX + ((iY + 1) * MTGridSize)]
+											iB = e\room\mt\Grid[iX + ((iY - 1) * MTGridSize)]
+											iC = e\room\mt\Grid[(iX + 1) + (iY * MTGridSize)]
+											iD = e\room\mt\Grid[(iX - 1) + (iY * MTGridSize)]
+											If iA > 0 And iC > 0 And iD > 0 Then
 												RotateEntity(TempInt, 0.0, 90.0, 0.0)
-												e\room\grid\Angles[iX + (iY * GridSZ)] = 1
-											ElseIf ib > 0 And ic > 0 And id > 0 Then
+												e\room\mt\Angles[iX + (iY * MTGridSize)] = 1
+											ElseIf iB > 0 And iC > 0 And iD > 0 Then
 												RotateEntity(TempInt, 0.0, 270.0, 0.0)
-												e\room\grid\Angles[iX + (iY * GridSZ)] = 3
-											ElseIf ic > 0 And ia > 0 And ib > 0 Then
+												e\room\mt\Angles[iX + (iY * MTGridSize)] = 3
+											ElseIf iC > 0 And iA > 0 And iB > 0 Then
 												RotateEntity(TempInt, 0.0, 0.0, 0.0)
-												e\room\grid\Angles[iX + (iY * GridSZ)] = 0
+												e\room\mt\Angles[iX + (iY * MTGridSize)] = 0
 											Else
 												RotateEntity(TempInt, 0.0, 180.0, 0.0)
-												e\room\grid\Angles[iX + (iY * GridSZ)] = 2
+												e\room\mt\Angles[iX + (iY * MTGridSize)] = 2
 											EndIf
 											;[End Block]
-										Case 4
+										Case ROOM3 + 1
 											;[Block]
-											TempInt = CopyEntity(Meshes[e\room\grid\Grid[iX + (iY * GridSZ)]])
+											TempInt = CopyEntity(Meshes[e\room\mt\Grid[iX + (iY * MTGridSize)]])
 											
 											TempInt2 = Rand(0, 3)
 											RotateEntity(TempInt, 0.0, TempInt2 * 90.0, 0.0)
 											
-											e\room\grid\Angles[iX + (iY * GridSZ)] = TempInt2
+											e\room\mt\Angles[iX + (iY * MTGridSize)] = TempInt2
 											;[End Block]
 									End Select
 									
 									ScaleEntity(TempInt, RoomScale, RoomScale, RoomScale, True)
-									PositionEntity(TempInt, e\room\x + iX * 2.0, 8.0, e\room\z + iY * 2.0, True)
+									PositionEntity(TempInt, e\room\x + (iX * 2.0), e\room\y + 8.0, e\room\z + (iY * 2.0), True)
 									
-									Select e\room\grid\Grid[iX + (iY * GridSZ)]
-										Case 1
+									Select e\room\mt\Grid[iX + (iY * MTGridSize)]
+										Case ROOM1 + 1
 											;[Block]
-											AddLight(Null, e\room\x + iX * 2.0, 8.0 + (372.0 * RoomScale), e\room\z + iY * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
+											AddLight(Null, e\room\x + (iX * 2.0), e\room\y + 8.0 + (372.0 * RoomScale), e\room\z + (iY * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
 											;[End Block]
-										Case 3, 4
+										Case ROOM2C + 1, ROOM3 + 1
 											;[Block]
-											AddLight(Null, e\room\x + iX * 2.0, 8.0 + (416.0 * RoomScale), e\room\z + iY * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
+											AddLight(Null, e\room\x + (iX * 2.0), e\room\y + 8.0 + (416.0 * RoomScale), e\room\z + (iY * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
 											;[End Block]
-										Case 7
+										Case ROOM4 + 3
 											;[Block]
-											AddLight(Null, e\room\x + iX * 2.0 - (Sin(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 16.0 * RoomScale), 8.0 + (396.0 * RoomScale), e\room\z + iY * 2.0 + (Cos(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(TempInt, True)) * 16.0 * RoomScale), 2, 500.0 * RoomScale, 255, 200, 200)
-											it.Items = CreateItem("SCP-500-01", "scp500pill", e\room\x + iX * 2.0 + (Cos(EntityYaw(TempInt, True)) * (-208.0) * RoomScale) - (Sin(EntityYaw(TempInt, True)) * 1226.0 * RoomScale), 8.0 + (90.0 * RoomScale), e\room\z + iY * 2.0 + (Sin(EntityYaw(TempInt, True)) * (-208.0) * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 1226.0 * RoomScale))
+											AddLight(Null, e\room\x + (iX * 2.0) - (Sin(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 16.0 * RoomScale), e\room\y + 8.0 + (396.0 * RoomScale), e\room\z + (iY * 2.0) + (Cos(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(TempInt, True)) * 16.0 * RoomScale), 2, 500.0 * RoomScale, 255, 200, 200)
+											it.Items = CreateItem("SCP-500-01", "scp500pill", e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * (-208.0) * RoomScale) - (Sin(EntityYaw(TempInt, True)) * 1226.0 * RoomScale), e\room\y + 8.0 + (90.0 * RoomScale), e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * (-208.0) * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 1226.0 * RoomScale))
 											EntityType(it\Collider, HIT_ITEM)
 											
-											it.Items = CreateItem("Night Vision Goggles", "nvg", e\room\x + iX * 2.0 - (Sin(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 16.0 * RoomScale), 8.0 + (90.0 * RoomScale), e\room\z + iY * 2.0 + (Cos(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(TempInt, True)) * 16.0 * RoomScale))
+											it.Items = CreateItem("Night Vision Goggles", "nvg", e\room\x + (iX * 2.0) - (Sin(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 16.0 * RoomScale), e\room\y + 8.0 + (90.0 * RoomScale), e\room\z + (iY * 2.0) + (Cos(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(TempInt, True)) * 16.0 * RoomScale))
 											EntityType(it\Collider, HIT_ITEM)
 											;[End Block]
 									End Select
 									
-									If e\room\grid\Grid[iX + (iY * GridSZ)] = 6 Lor e\room\grid\Grid[iX + (iY * GridSZ)] = 5 Then
-										dr.Doors = CreateDoor(e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 240.0 * RoomScale), 8.0, e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 240.0 * RoomScale), EntityYaw(TempInt, True) - 90.0, Null, False, Elevator_Door)
+									If e\room\mt\Grid[iX + (iY * MTGridSize)] = 6 Lor e\room\mt\Grid[iX + (iY * MTGridSize)] = 5 Then
+										dr.Doors = CreateDoor(e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 240.0 * RoomScale), e\room\y + 8.0, e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 240.0 * RoomScale), EntityYaw(TempInt, True) - 90.0, Null, False, Elevator_Door)
 										PositionEntity(dr\Buttons[0], EntityX(dr\Buttons[0], True) + (Cos(EntityYaw(TempInt, True)) * 0.05), EntityY(dr\Buttons[0], True), EntityZ(dr\Buttons[0], True) + (Sin(EntityYaw(TempInt, True)) * 0.05), True)
 										PositionEntity(dr\Buttons[1], EntityX(dr\Buttons[1], True) + (Cos(EntityYaw(TempInt, True)) * 0.05), EntityY(dr\Buttons[1], True), EntityZ(dr\Buttons[1], True) + (Sin(EntityYaw(TempInt, True)) * 0.031), True)
 										
-										AddLight(Null, e\room\x + iX * 2.0 + (Cos(EntityYaw(TempInt, True)) * 555.0 * RoomScale), 8.0 + (469.0 * RoomScale), e\room\z + iY * 2.0 + (Sin(EntityYaw(TempInt, True)) * 555.0 * RoomScale), 2, 600.0 * RoomScale, 255, 255, 255)
+										AddLight(Null, e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 555.0 * RoomScale), e\room\y + 8.0 + (469.0 * RoomScale), e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 555.0 * RoomScale), 2, 600.0 * RoomScale, 255, 255, 255)
 										
 										TempInt2 = CreatePivot()
-										RotateEntity(TempInt2, 0.0, EntityYaw(TempInt, True) + 180.0, 0, True)
-										PositionEntity(TempInt2, e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 552.0 * RoomScale), 8.0 + (240.0 * RoomScale), e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 552.0 * RoomScale))
-										If e\room\grid\Grid[iX + (iY * GridSZ)] = 6 Then
+										RotateEntity(TempInt2, 0.0, EntityYaw(TempInt, True) + 180.0, 0.0, True)
+										PositionEntity(TempInt2, e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 552.0 * RoomScale), e\room\y + 8.0 + (240.0 * RoomScale), e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 552.0 * RoomScale))
+										If e\room\mt\Grid[iX + (iY * MTGridSize)] = 6 Then
 											If e\room\RoomDoors[1] <> Null Then
 												RemoveDoor(dr)
 											Else
@@ -4299,7 +4318,7 @@ Function UpdateEvents()
 											EndIf
 											If (Not e\room\Objects[3]) Then
 												e\room\Objects[3] = TempInt2
-												PositionEntity(e\room\Objects[1], e\room\x + iX * 2.0, 8.0, e\room\z + iY * 2.0, True)
+												PositionEntity(e\room\Objects[1], e\room\x + (iX * 2.0), e\room\y + 38.0, e\room\z + (iY * 2.0), True)
 											Else
 												FreeEntity(TempInt2)
 											EndIf
@@ -4312,106 +4331,106 @@ Function UpdateEvents()
 											EndIf
 											If (Not e\room\Objects[5]) Then
 												e\room\Objects[5] = TempInt2
-												PositionEntity(e\room\Objects[0], e\room\x + iX * 2.0, 8.0, e\room\z + iY * 2.0, True)
+												PositionEntity(e\room\Objects[0], e\room\x + (iX * 2.0), e\room\y + 8.0, e\room\z + (iY * 2.0), True)
 											Else
 												FreeEntity(TempInt2)
 											EndIf
 										EndIf
 									EndIf
 									
-									e\room\grid\Entities[iX + (iY * GridSZ)] = TempInt
+									e\room\mt\Entities[iX + (iY * MTGridSize)] = TempInt
 									
-									wayp.WayPoints = CreateWaypoint(e\room\x + (iX * 2.0), 8.2, e\room\z + (iY * 2.0), Null, e\room)
+									wayp.WayPoints = CreateWaypoint(e\room\x + (iX * 2.0), e\room\y + 8.2, e\room\z + (iY * 2.0), Null, e\room)
 									
-									e\room\grid\waypoints[iX + (iY * GridSZ)] = wayp
+									e\room\mt\waypoints[iX + (iY * MTGridSize)] = wayp
 									
-									If iY < GridSZ - 1 Then
-										If e\room\grid\waypoints[iX + ((iY + 1) * GridSZ)] <> Null Then
-											Dist = EntityDistance(e\room\grid\waypoints[iX + (iY * GridSZ)]\OBJ, e\room\grid\waypoints[iX + ((iY + 1) * GridSZ)]\OBJ)
+									If iY < MTGridSize - 1 Then
+										If e\room\mt\waypoints[iX + ((iY + 1) * MTGridSize)] <> Null Then
+											Dist = EntityDistance(e\room\mt\waypoints[iX + (iY * MTGridSize)]\OBJ, e\room\mt\waypoints[iX + ((iY + 1) * MTGridSize)]\OBJ)
 											For i = 0 To 3
-												If e\room\grid\waypoints[iX + (iY * GridSZ)]\connected[i] = e\room\grid\waypoints[iX + ((iY + 1) * GridSZ)] Then
+												If e\room\mt\waypoints[iX + (iY * MTGridSize)]\connected[i] = e\room\mt\waypoints[iX + ((iY + 1) * MTGridSize)] Then
 													Exit
-												ElseIf e\room\grid\waypoints[iX + (iY * GridSZ)]\connected[i] = Null Then
-													e\room\grid\waypoints[iX + (iY * GridSZ)]\connected[i] = e\room\grid\waypoints[iX + ((iY + 1) * GridSZ)]
-													e\room\grid\waypoints[iX + (iY * GridSZ)]\Dist[i] = Dist
+												ElseIf e\room\mt\waypoints[iX + (iY * MTGridSize)]\connected[i] = Null Then
+													e\room\mt\waypoints[iX + (iY * MTGridSize)]\connected[i] = e\room\mt\waypoints[iX + ((iY + 1) * MTGridSize)]
+													e\room\mt\waypoints[iX + (iY * MTGridSize)]\Dist[i] = Dist
 													Exit
 												EndIf
 											Next
 											For i = 0 To 3
-												If e\room\grid\waypoints[iX + ((iY + 1) * GridSZ)]\connected[i] = e\room\grid\waypoints[iX + (iY * GridSZ)] Then
+												If e\room\mt\waypoints[iX + ((iY + 1) * MTGridSize)]\connected[i] = e\room\mt\waypoints[iX + (iY * MTGridSize)] Then
 													Exit
-												ElseIf e\room\grid\waypoints[iX + ((iY + 1) * GridSZ)]\connected[i] = Null Then
-													e\room\grid\waypoints[iX + ((iY + 1) * GridSZ)]\connected[i] = e\room\grid\waypoints[iX + (iY * GridSZ)]
-													e\room\grid\waypoints[iX + ((iY + 1) * GridSZ)]\Dist[i] = Dist
+												ElseIf e\room\mt\waypoints[iX + ((iY + 1) * MTGridSize)]\connected[i] = Null Then
+													e\room\mt\waypoints[iX + ((iY + 1) * MTGridSize)]\connected[i] = e\room\mt\waypoints[iX + (iY * MTGridSize)]
+													e\room\mt\waypoints[iX + ((iY + 1) * MTGridSize)]\Dist[i] = Dist
 													Exit
 												EndIf
 											Next
 										EndIf
 									EndIf
 									If iY > 0 Then
-										If e\room\grid\waypoints[iX + ((iY - 1) * GridSZ)] <> Null Then
-											Dist = EntityDistance(e\room\grid\waypoints[iX + (iY * GridSZ)]\OBJ, e\room\grid\waypoints[iX + ((iY - 1) * GridSZ)]\OBJ)
+										If e\room\mt\waypoints[iX + ((iY - 1) * MTGridSize)] <> Null Then
+											Dist = EntityDistance(e\room\mt\waypoints[iX + (iY * MTGridSize)]\OBJ, e\room\mt\waypoints[iX + ((iY - 1) * MTGridSize)]\OBJ)
 											For i = 0 To 3
-												If e\room\grid\waypoints[iX + (iY * GridSZ)]\connected[i] = e\room\grid\waypoints[iX + ((iY - 1) * GridSZ)] Then
+												If e\room\mt\waypoints[iX + (iY * MTGridSize)]\connected[i] = e\room\mt\waypoints[iX + ((iY - 1) * MTGridSize)] Then
 													Exit
-												ElseIf e\room\grid\waypoints[iX + (iY * GridSZ)]\connected[i] = Null Then
-													e\room\grid\waypoints[iX + (iY * GridSZ)]\connected[i] = e\room\grid\waypoints[iX + ((iY - 1) * GridSZ)]
-													e\room\grid\waypoints[iX + (iY * GridSZ)]\Dist[i] = Dist
+												ElseIf e\room\mt\waypoints[iX + (iY * MTGridSize)]\connected[i] = Null Then
+													e\room\mt\waypoints[iX + (iY * MTGridSize)]\connected[i] = e\room\mt\waypoints[iX + ((iY - 1) * MTGridSize)]
+													e\room\mt\waypoints[iX + (iY * MTGridSize)]\Dist[i] = Dist
 													Exit
 												EndIf
 											Next
 											For i = 0 To 3
-												If e\room\grid\waypoints[iX + ((iY - 1) * GridSZ)]\connected[i] = e\room\grid\waypoints[iX + (iY * GridSZ)] Then
+												If e\room\mt\waypoints[iX + ((iY - 1) * MTGridSize)]\connected[i] = e\room\mt\waypoints[iX + (iY * MTGridSize)] Then
 													Exit
-												ElseIf e\room\grid\waypoints[iX + (iY * GridSZ)]\connected[i] = Null Then
-													e\room\grid\waypoints[iX + ((iY - 1) * GridSZ)]\connected[i] = e\room\grid\waypoints[iX + (iY * GridSZ)]
-													e\room\grid\waypoints[iX + ((iY - 1) * GridSZ)]\Dist[i] = Dist
+												ElseIf e\room\mt\waypoints[iX + (iY * MTGridSize)]\connected[i] = Null Then
+													e\room\mt\waypoints[iX + ((iY - 1) * MTGridSize)]\connected[i] = e\room\mt\waypoints[iX + (iY * MTGridSize)]
+													e\room\mt\waypoints[iX + ((iY - 1) * MTGridSize)]\Dist[i] = Dist
 													Exit
 												EndIf
 											Next
 										EndIf
 									EndIf
 									If iX > 0 Then
-										If e\room\grid\waypoints[iX - 1 + (iY * GridSZ)] <> Null Then
-											Dist = EntityDistance(e\room\grid\waypoints[iX + (iY * GridSZ)]\OBJ, e\room\grid\waypoints[iX - 1 + (iY * GridSZ)]\OBJ)
+										If e\room\mt\waypoints[iX - 1 + (iY * MTGridSize)] <> Null Then
+											Dist = EntityDistance(e\room\mt\waypoints[iX + (iY * MTGridSize)]\OBJ, e\room\mt\waypoints[iX - 1 + (iY * MTGridSize)]\OBJ)
 											For i = 0 To 3
-												If e\room\grid\waypoints[iX + (iY * GridSZ)]\connected[i] = e\room\grid\waypoints[iX - 1 + (iY * GridSZ)] Then
+												If e\room\mt\waypoints[iX + (iY * MTGridSize)]\connected[i] = e\room\mt\waypoints[iX - 1 + (iY * MTGridSize)] Then
 													Exit
-												ElseIf e\room\grid\waypoints[iX + (iY*GridSZ)]\connected[i] = Null Then
-													e\room\grid\waypoints[iX + (iY * GridSZ)]\connected[i] = e\room\grid\waypoints[iX - 1 + (iY * GridSZ)]
-													e\room\grid\waypoints[iX + (iY * GridSZ)]\Dist[i] = Dist
+												ElseIf e\room\mt\waypoints[iX + (iY*MTGridSize)]\connected[i] = Null Then
+													e\room\mt\waypoints[iX + (iY * MTGridSize)]\connected[i] = e\room\mt\waypoints[iX - 1 + (iY * MTGridSize)]
+													e\room\mt\waypoints[iX + (iY * MTGridSize)]\Dist[i] = Dist
 													Exit
 												EndIf
 											Next
 											For i = 0 To 3
-												If e\room\grid\waypoints[iX - 1 + (iY * GridSZ)]\connected[i] = e\room\grid\waypoints[iX + (iY * GridSZ)] Then
+												If e\room\mt\waypoints[iX - 1 + (iY * MTGridSize)]\connected[i] = e\room\mt\waypoints[iX + (iY * MTGridSize)] Then
 													Exit
-												ElseIf e\room\grid\waypoints[iX + (iY * GridSZ)]\connected[i] = Null Then
-													e\room\grid\waypoints[iX - 1 + (iY * GridSZ)]\connected[i] = e\room\grid\waypoints[iX + (iY * GridSZ)]
-													e\room\grid\waypoints[iX - 1 + (iY * GridSZ)]\Dist[i] = Dist
+												ElseIf e\room\mt\waypoints[iX + (iY * MTGridSize)]\connected[i] = Null Then
+													e\room\mt\waypoints[iX - 1 + (iY * MTGridSize)]\connected[i] = e\room\mt\waypoints[iX + (iY * MTGridSize)]
+													e\room\mt\waypoints[iX - 1 + (iY * MTGridSize)]\Dist[i] = Dist
 													Exit
 												EndIf
 											Next
 										EndIf
 									EndIf
-									If iX < GridSZ - 1 Then
-										If e\room\grid\waypoints[iX + 1 + (iY * GridSZ)] <> Null Then
-											Dist = EntityDistance(e\room\grid\waypoints[iX + (iY * GridSZ)]\OBJ, e\room\grid\waypoints[iX + 1 + (iY * GridSZ)]\OBJ)
+									If iX < MTGridSize - 1 Then
+										If e\room\mt\waypoints[iX + 1 + (iY * MTGridSize)] <> Null Then
+											Dist = EntityDistance(e\room\mt\waypoints[iX + (iY * MTGridSize)]\OBJ, e\room\mt\waypoints[iX + 1 + (iY * MTGridSize)]\OBJ)
 											For i = 0 To 3
-												If e\room\grid\waypoints[iX + (iY * GridSZ)]\connected[i] = e\room\grid\waypoints[iX + 1 + (iY * GridSZ)] Then
+												If e\room\mt\waypoints[iX + (iY * MTGridSize)]\connected[i] = e\room\mt\waypoints[iX + 1 + (iY * MTGridSize)] Then
 													Exit
-												ElseIf e\room\grid\waypoints[iX + (iY * GridSZ)]\connected[i] = Null Then
-													e\room\grid\waypoints[iX + (iY * GridSZ)]\connected[i] = e\room\grid\waypoints[iX + 1 + (iY * GridSZ)]
-													e\room\grid\waypoints[iX + (iY * GridSZ)]\Dist[i] = Dist
+												ElseIf e\room\mt\waypoints[iX + (iY * MTGridSize)]\connected[i] = Null Then
+													e\room\mt\waypoints[iX + (iY * MTGridSize)]\connected[i] = e\room\mt\waypoints[iX + 1 + (iY * MTGridSize)]
+													e\room\mt\waypoints[iX + (iY * MTGridSize)]\Dist[i] = Dist
 													Exit
 												EndIf
 											Next
 											For i = 0 To 3
-												If e\room\grid\waypoints[iX + 1 + (iY * GridSZ)]\connected[i] = e\room\grid\waypoints[iX + (iY * GridSZ)] Then
+												If e\room\mt\waypoints[iX + 1 + (iY * MTGridSize)]\connected[i] = e\room\mt\waypoints[iX + (iY * MTGridSize)] Then
 													Exit
-												ElseIf e\room\grid\waypoints[iX + (iY * GridSZ)]\connected[i] = Null Then
-													e\room\grid\waypoints[iX + 1 + (iY * GridSZ)]\connected[i] = e\room\grid\waypoints[iX + (iY * GridSZ)]
-													e\room\grid\waypoints[iX + 1 + (iY * GridSZ)]\Dist[i] = Dist
+												ElseIf e\room\mt\waypoints[iX + (iY * MTGridSize)]\connected[i] = Null Then
+													e\room\mt\waypoints[iX + 1 + (iY * MTGridSize)]\connected[i] = e\room\mt\waypoints[iX + (iY * MTGridSize)]
+													e\room\mt\waypoints[iX + 1 + (iY * MTGridSize)]\Dist[i] = Dist
 													Exit
 												EndIf
 											Next
@@ -4422,12 +4441,12 @@ Function UpdateEvents()
 						Next
 						
 						For i = 0 To 6
-							e\room\grid\Meshes[i] = Meshes[i]
+							e\room\mt\Meshes[i] = Meshes[i]
 						Next
 						
-						PositionEntity(e\room\Objects[0], e\room\x + (FirstX * 2.0), 8.0, e\room\z + (FirstY * 2.0), True)
-						PositionEntity(e\room\Objects[1], e\room\x + (LastX * 2.0), 8.0, e\room\z + (LastY * 2.0), True)
-					ElseIf (Not e\room\grid\Meshes[0]) Then
+						PositionEntity(e\room\Objects[0], e\room\x + (FirstX * 2.0), e\room\y + 8.0, e\room\z + (FirstY * 2.0), True)
+						PositionEntity(e\room\Objects[1], e\room\x + (LastX * 2.0), e\room\y + 8.0, e\room\z + (LastY * 2.0), True)
+					ElseIf (Not e\room\mt\Meshes[0]) Then
 						; ~ Place the tunnels
 						For i = 0 To 6
 							Meshes[i] = CopyEntity(o\MTModelID[i])
@@ -4436,31 +4455,32 @@ Function UpdateEvents()
 						
 						TempInt = 0
 						
-						For iY = 0 To GridSZ - 1
-							For iX = 0 To GridSZ - 1
-								If e\room\grid\Grid[iX + (iY * GridSZ)] > 0 Then
-									Select e\room\grid\Grid[iX + (iY * GridSZ)]
-										Case 1, 7
+						For iY = 0 To MTGridSize - 1
+							For iX = 0 To MTGridSize - 1
+								If e\room\mt\Grid[iX + (iY * MTGridSize)] > 0 Then
+									Select e\room\mt\Grid[iX + (iY * MTGridSize)]
+										Case ROOM1 + 1, ROOM4 + 3
 											;[Block]
-											TempInt = CopyEntity(Meshes[e\room\grid\Grid[iX + (iY * GridSZ)] - 1])
-										Case 2
+											TempInt = CopyEntity(Meshes[e\room\mt\Grid[iX + (iY * MTGridSize)] - 1])
+											;[End Block]
+										Case ROOM2 + 1
 											;[Block]
-											If e\room\grid\Grid[(iX + 1) + ((iY) * GridSZ)] > 0 And e\room\grid\Grid[(iX - 1) + ((iY) * GridSZ)] > 0 Then ; ~ Horizontal
-												TempInt = CopyEntity(Meshes[e\room\grid\Grid[iX + (iY * GridSZ)] - 1])
-												AddLight(Null, e\room\x + iX * 2.0, 8.0 + (372.0 * RoomScale), e\room\z + iY * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
-											ElseIf e\room\grid\Grid[(iX) + ((iY + 1) * GridSZ)] > 0 And e\room\grid\Grid[(iX) + ((iY - 1) * GridSZ)] > 0 Then ; ~ Vertical
-												TempInt = CopyEntity(Meshes[e\room\grid\grid[iX + (iY * GridSZ)] - 1])
-												AddLight(Null, e\room\x + iX * 2.0, 8.0 + (372.0 * RoomScale), e\room\z + iY * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
+											If e\room\mt\Grid[(iX + 1) + ((iY) * MTGridSize)] > 0 And e\room\mt\Grid[(iX - 1) + ((iY) * MTGridSize)] > 0 Then ; ~ Horizontal
+												TempInt = CopyEntity(Meshes[e\room\mt\Grid[iX + (iY * MTGridSize)] - 1])
+												AddLight(Null, e\room\x + (iX * 2.0), e\room\y + 8.0 + (372.0 * RoomScale), e\room\z + (iY * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
+											ElseIf e\room\mt\Grid[(iX) + ((iY + 1) * MTGridSize)] > 0 And e\room\mt\Grid[(iX) + ((iY - 1) * MTGridSize)] > 0 Then ; ~ Vertical
+												TempInt = CopyEntity(Meshes[e\room\mt\Grid[iX + (iY * MTGridSize)] - 1])
+												AddLight(Null, e\room\x + (iX * 2.0), e\room\y + 8.0 + (372.0 * RoomScale), e\room\z + (iY * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
 											Else
-												TempInt = CopyEntity(Meshes[e\room\grid\grid[iX + (iY * GridSZ)]])
-												AddLight(Null, e\room\x + iX * 2.0, 8.0 + (416.0 * RoomScale), e\room\z + iY * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
+												TempInt = CopyEntity(Meshes[e\room\mt\Grid[iX + (iY * MTGridSize)]])
+												AddLight(Null, e\room\x + (iX * 2.0), e\room\y + 8.0 + (416.0 * RoomScale), e\room\z + (iY * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
 											EndIf
 											;[End Block]
-										Case 3, 4
+										Case ROOM2C + 1, ROOM3 + 1
 											;[Block]
-											TempInt = CopyEntity(Meshes[e\room\grid\Grid[iX + (iY * GridSZ)]])
+											TempInt = CopyEntity(Meshes[e\room\mt\Grid[iX + (iY * MTGridSize)]])
 											;[End Block]
-										Case 5, 6
+										Case ROOM4 + 1, ROOM4 + 2
 											;[Block]
 											TempInt = CopyEntity(Meshes[5])
 											;[End Block]
@@ -4468,35 +4488,35 @@ Function UpdateEvents()
 									
 									ScaleEntity(TempInt, RoomScale, RoomScale, RoomScale, True)
 									
-									RotateEntity(TempInt, 0.0, e\room\grid\Angles[iX + (iY * GridSZ)] * 90.0, 0.0)
-									PositionEntity(TempInt, e\room\x + iX * 2.0, 8.0, e\room\z + iY * 2.0, True)
+									RotateEntity(TempInt, 0.0, e\room\mt\Angles[iX + (iY * MTGridSize)] * 90.0, 0.0)
+									PositionEntity(TempInt, e\room\x + (iX * 2.0), e\room\y + 8.0, e\room\z + (iY * 2.0), True)
 									
-									Select e\room\grid\Grid[iX + (iY * GridSZ)]
-										Case 1, 5, 6
+									Select e\room\mt\Grid[iX + (iY * MTGridSize)]
+										Case ROOM1 + 1, ROOM4 + 1, ROOM4 + 2
 											;[Block]
-											AddLight(Null, e\room\x + iX * 2.0, 8.0 + (372.0 * RoomScale), e\room\z + iY * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
+											AddLight(Null, e\room\x + (iX * 2.0), e\room\y + 8.0 + (372.0 * RoomScale), e\room\z + (iY * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
 											;[End Block]
-										Case 3, 4
+										Case ROOM2C + 1, ROOM3 + 1
 											;[Block]
-											AddLight(Null, e\room\x + iX * 2.0, 8.0 + (416.0 * RoomScale), e\room\z + iY * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
+											AddLight(Null, e\room\x + (iX * 2.0), e\room\y + 8.0 + (416.0 * RoomScale), e\room\z + (iY * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
 											;[End Block]
-										Case 7
+										Case ROOM4 + 3
 											;[Block]
-											AddLight(Null, e\room\x + iX * 2.0 - (Sin(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 16.0 * RoomScale), 8.0 + (396.0 * RoomScale), e\room\z + iY * 2.0 + (Cos(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(TempInt, True)) * 16.0 * RoomScale), 2, 500.0 * RoomScale, 255, 200, 200)
+											AddLight(Null, e\room\x + (iX * 2.0) - (Sin(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 16.0 * RoomScale), e\room\y + 8.0 + (396.0 * RoomScale), e\room\z + (iY * 2.0) + (Cos(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(TempInt, True)) * 16.0 * RoomScale), 2, 500.0 * RoomScale, 255, 200, 200)
 											;[End Block]
 									End Select
 									
-									If e\room\grid\Grid[iX + (iY * GridSZ)] = 6 Lor e\room\grid\Grid[iX + (iY * GridSZ)] = 5 Then
-										dr.Doors = CreateDoor(e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 240.0 * RoomScale), 8.0, e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 240.0 * RoomScale), EntityYaw(TempInt, True) - 90.0, Null, False, Elevator_Door)
+									If e\room\mt\Grid[iX + (iY * MTGridSize)] = 6 Lor e\room\mt\Grid[iX + (iY * MTGridSize)] = 5 Then
+										dr.Doors = CreateDoor(e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 240.0 * RoomScale), e\room\y + 8.0, e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 240.0 * RoomScale), EntityYaw(TempInt, True) - 90.0, Null, False, Elevator_Door)
 										PositionEntity(dr\Buttons[0], EntityX(dr\Buttons[0], True) + (Cos(EntityYaw(TempInt, True)) * 0.05), EntityY(dr\Buttons[0], True), EntityZ(dr\Buttons[0], True) + (Sin(EntityYaw(TempInt, True)) * 0.05), True)
 										PositionEntity(dr\Buttons[1], EntityX(dr\Buttons[1], True) + (Cos(EntityYaw(TempInt, True)) * 0.05), EntityY(dr\Buttons[1], True), EntityZ(dr\Buttons[1], True) + (Sin(EntityYaw(TempInt, True)) * 0.031), True)
 										
-										AddLight(Null, e\room\x + iX * 2.0 + (Cos(EntityYaw(TempInt, True)) * 555.0 * RoomScale), 8.0 + (469.0 * RoomScale), e\room\z + iY * 2.0 + (Sin(EntityYaw(TempInt, True)) * 555.0 * RoomScale), 2, 600.0 * RoomScale, 255, 255, 255)
+										AddLight(Null, e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 555.0 * RoomScale), e\room\y + 8.0 + (469.0 * RoomScale), e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 555.0 * RoomScale), 2, 600.0 * RoomScale, 255, 255, 255)
 										
 										TempInt2 = CreatePivot()
 										RotateEntity(TempInt2, 0.0, EntityYaw(TempInt, True) + 180.0, 0.0, True)
-										PositionEntity(TempInt2, e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 552.0 * RoomScale), 8.0 + (240.0 * RoomScale), e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 552.0 * RoomScale))
-										If e\room\grid\Grid[iX + (iY * GridSZ)] = 6 Then
+										PositionEntity(TempInt2, e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 552.0 * RoomScale), e\room\y + 8.0 + (240.0 * RoomScale), e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 552.0 * RoomScale))
+										If e\room\mt\Grid[iX + (iY * MTGridSize)] = 6 Then
 											If e\room\RoomDoors[1] <> Null Then
 												RemoveDoor(dr)
 											Else
@@ -4505,7 +4525,7 @@ Function UpdateEvents()
 											EndIf
 											If (Not e\room\Objects[3]) Then
 												e\room\Objects[3] = TempInt2
-												PositionEntity(e\room\Objects[1], e\room\x + iX * 2.0, 8.0, e\room\z + iY * 2.0, True)
+												PositionEntity(e\room\Objects[1], e\room\x + (iX * 2.0), e\room\y + 8.0, e\room\z + (iY * 2.0), True)
 											Else
 												FreeEntity(TempInt2)
 											EndIf
@@ -4518,106 +4538,106 @@ Function UpdateEvents()
 											EndIf
 											If (Not e\room\Objects[5]) Then
 												e\room\Objects[5] = TempInt2
-												PositionEntity(e\room\Objects[0], e\room\x + iX * 2.0, 8.0, e\room\z + iY * 2.0, True)
+												PositionEntity(e\room\Objects[0], e\room\x + (iX * 2.0), e\room\y + 8.0, e\room\z + (iY * 2.0), True)
 											Else
 												FreeEntity(TempInt2)
 											EndIf
 										EndIf
 									EndIf
 									
-									e\room\grid\Entities[iX + (iY * GridSZ)] = TempInt
+									e\room\mt\Entities[iX + (iY * MTGridSize)] = TempInt
 									
-									wayp.WayPoints = CreateWaypoint(e\room\x + (iX * 2.0), 8.2, e\room\z + (iY * 2.0), Null, e\room)
+									wayp.WayPoints = CreateWaypoint(e\room\x + (iX * 2.0), e\room\y + 8.2, e\room\z + (iY * 2.0), Null, e\room)
 									
-									e\room\grid\waypoints[iX + (iY * GridSZ)] = wayp
+									e\room\mt\waypoints[iX + (iY * MTGridSize)] = wayp
 									
-									If iY < GridSZ - 1 Then
-										If e\room\grid\waypoints[iX + ((iY + 1) * GridSZ)] <> Null Then
-											Dist = EntityDistance(e\room\grid\waypoints[iX + (iY * GridSZ)]\OBJ, e\room\grid\waypoints[iX + ((iY + 1) * GridSZ)]\OBJ)
+									If iY < MTGridSize - 1 Then
+										If e\room\mt\waypoints[iX + ((iY + 1) * MTGridSize)] <> Null Then
+											Dist = EntityDistance(e\room\mt\waypoints[iX + (iY * MTGridSize)]\OBJ, e\room\mt\waypoints[iX + ((iY + 1) * MTGridSize)]\OBJ)
 											For i = 0 To 3
-												If e\room\grid\waypoints[iX + (iY * GridSZ)]\connected[i] = e\room\grid\waypoints[iX + ((iY + 1) * GridSZ)] Then
+												If e\room\mt\waypoints[iX + (iY * MTGridSize)]\connected[i] = e\room\mt\waypoints[iX + ((iY + 1) * MTGridSize)] Then
 													Exit
-												ElseIf e\room\grid\waypoints[iX + (iY * GridSZ)]\connected[i] = Null Then
-													e\room\grid\waypoints[iX + (iY * GridSZ)]\connected[i] = e\room\grid\waypoints[iX + ((iY + 1) * GridSZ)]
-													e\room\grid\waypoints[iX + (iY * GridSZ)]\Dist[i] = Dist
+												ElseIf e\room\mt\waypoints[iX + (iY * MTGridSize)]\connected[i] = Null Then
+													e\room\mt\waypoints[iX + (iY * MTGridSize)]\connected[i] = e\room\mt\waypoints[iX + ((iY + 1) * MTGridSize)]
+													e\room\mt\waypoints[iX + (iY * MTGridSize)]\Dist[i] = Dist
 													Exit
 												EndIf
 											Next
 											For i = 0 To 3
-												If e\room\grid\waypoints[iX + ((iY + 1) * GridSZ)]\connected[i] = e\room\grid\waypoints[iX + (iY * GridSZ)] Then
+												If e\room\mt\waypoints[iX + ((iY + 1) * MTGridSize)]\connected[i] = e\room\mt\waypoints[iX + (iY * MTGridSize)] Then
 													Exit
-												ElseIf e\room\grid\waypoints[iX + ((iY + 1) * GridSZ)]\connected[i] = Null Then
-													e\room\grid\waypoints[iX + ((iY + 1) * GridSZ)]\connected[i] = e\room\grid\waypoints[iX + (iY * GridSZ)]
-													e\room\grid\waypoints[iX + ((iY + 1) * GridSZ)]\Dist[i] = Dist
+												ElseIf e\room\mt\waypoints[iX + ((iY + 1) * MTGridSize)]\connected[i] = Null Then
+													e\room\mt\waypoints[iX + ((iY + 1) * MTGridSize)]\connected[i] = e\room\mt\waypoints[iX + (iY * MTGridSize)]
+													e\room\mt\waypoints[iX + ((iY + 1) * MTGridSize)]\Dist[i] = Dist
 													Exit
 												EndIf
 											Next
 										EndIf
 									EndIf
 									If iY > 0 Then
-										If e\room\grid\waypoints[iX + ((iY - 1) * GridSZ)] <> Null Then
-											Dist = EntityDistance(e\room\grid\waypoints[iX + (iY * GridSZ)]\OBJ, e\room\grid\waypoints[iX + ((iY - 1) * GridSZ)]\OBJ)
+										If e\room\mt\waypoints[iX + ((iY - 1) * MTGridSize)] <> Null Then
+											Dist = EntityDistance(e\room\mt\waypoints[iX + (iY * MTGridSize)]\OBJ, e\room\mt\waypoints[iX + ((iY - 1) * MTGridSize)]\OBJ)
 											For i = 0 To 3
-												If e\room\grid\waypoints[iX + (iY * GridSZ)]\connected[i] = e\room\grid\waypoints[iX + ((iY - 1) * GridSZ)] Then
+												If e\room\mt\waypoints[iX + (iY * MTGridSize)]\connected[i] = e\room\mt\waypoints[iX + ((iY - 1) * MTGridSize)] Then
 													Exit
-												ElseIf e\room\grid\waypoints[iX + (iY * GridSZ)]\connected[i] = Null Then
-													e\room\grid\waypoints[iX + (iY * GridSZ)]\connected[i] = e\room\grid\waypoints[iX + ((iY - 1) * GridSZ)]
-													e\room\grid\waypoints[iX + (iY * GridSZ)]\Dist[i] = Dist
+												ElseIf e\room\mt\waypoints[iX + (iY * MTGridSize)]\connected[i] = Null Then
+													e\room\mt\waypoints[iX + (iY * MTGridSize)]\connected[i] = e\room\mt\waypoints[iX + ((iY - 1) * MTGridSize)]
+													e\room\mt\waypoints[iX + (iY * MTGridSize)]\Dist[i] = Dist
 													Exit
 												EndIf
 											Next
 											For i = 0 To 3
-												If e\room\grid\waypoints[iX + ((iY - 1) * GridSZ)]\connected[i] = e\room\grid\waypoints[iX + (iY * GridSZ)] Then
+												If e\room\mt\waypoints[iX + ((iY - 1) * MTGridSize)]\connected[i] = e\room\mt\waypoints[iX + (iY * MTGridSize)] Then
 													Exit
-												ElseIf e\room\grid\waypoints[iX + (iY * GridSZ)]\connected[i] = Null Then
-													e\room\grid\waypoints[iX + ((iY - 1) * GridSZ)]\connected[i] = e\room\grid\waypoints[iX + (iY * GridSZ)]
-													e\room\grid\waypoints[iX + ((iY - 1) * GridSZ)]\Dist[i] = Dist
+												ElseIf e\room\mt\waypoints[iX + (iY * MTGridSize)]\connected[i] = Null Then
+													e\room\mt\waypoints[iX + ((iY - 1) * MTGridSize)]\connected[i] = e\room\mt\waypoints[iX + (iY * MTGridSize)]
+													e\room\mt\waypoints[iX + ((iY - 1) * MTGridSize)]\Dist[i] = Dist
 													Exit
 												EndIf
 											Next
 										EndIf
 									EndIf
 									If iX > 0 Then
-										If e\room\grid\waypoints[iX - 1 + (iY * GridSZ)] <> Null Then
-											Dist = EntityDistance(e\room\grid\waypoints[iX + (iY * GridSZ)]\OBJ, e\room\grid\waypoints[iX - 1 + (iY * GridSZ)]\OBJ)
+										If e\room\mt\waypoints[iX - 1 + (iY * MTGridSize)] <> Null Then
+											Dist = EntityDistance(e\room\mt\waypoints[iX + (iY * MTGridSize)]\OBJ, e\room\mt\waypoints[iX - 1 + (iY * MTGridSize)]\OBJ)
 											For i = 0 To 3
-												If e\room\grid\waypoints[iX + (iY * GridSZ)]\connected[i] = e\room\grid\waypoints[iX - 1 + (iY * GridSZ)] Then
+												If e\room\mt\waypoints[iX + (iY * MTGridSize)]\connected[i] = e\room\mt\waypoints[iX - 1 + (iY * MTGridSize)] Then
 													Exit
-												ElseIf e\room\grid\waypoints[iX + (iY * GridSZ)]\connected[i] = Null Then
-													e\room\grid\waypoints[iX + (iY * GridSZ)]\connected[i] = e\room\grid\waypoints[iX - 1 + (iY * GridSZ)]
-													e\room\grid\waypoints[iX + (iY * GridSZ)]\Dist[i] = Dist
+												ElseIf e\room\mt\waypoints[iX + (iY * MTGridSize)]\connected[i] = Null Then
+													e\room\mt\waypoints[iX + (iY * MTGridSize)]\connected[i] = e\room\mt\waypoints[iX - 1 + (iY * MTGridSize)]
+													e\room\mt\waypoints[iX + (iY * MTGridSize)]\Dist[i] = Dist
 													Exit
 												EndIf
 											Next
 											For i = 0 To 3
-												If e\room\grid\waypoints[iX - 1 + (iY * GridSZ)]\connected[i] = e\room\grid\waypoints[iX + (iY * GridSZ)] Then
+												If e\room\mt\waypoints[iX - 1 + (iY * MTGridSize)]\connected[i] = e\room\mt\waypoints[iX + (iY * MTGridSize)] Then
 													Exit
-												ElseIf e\room\grid\waypoints[iX + (iY * GridSZ)]\connected[i] = Null Then
-													e\room\grid\waypoints[iX - 1 + (iY * GridSZ)]\connected[i] = e\room\grid\waypoints[iX + (iY * GridSZ)]
-													e\room\grid\waypoints[iX - 1 + (iY * GridSZ)]\Dist[i] = Dist
+												ElseIf e\room\mt\waypoints[iX + (iY * MTGridSize)]\connected[i] = Null Then
+													e\room\mt\waypoints[iX - 1 + (iY * MTGridSize)]\connected[i] = e\room\mt\waypoints[iX + (iY * MTGridSize)]
+													e\room\mt\waypoints[iX - 1 + (iY * MTGridSize)]\Dist[i] = Dist
 													Exit
 												EndIf
 											Next
 										EndIf
 									EndIf
-									If iX < GridSZ - 1 Then
-										If e\room\grid\waypoints[iX + 1 + (iY * GridSZ)] <> Null Then
-											Dist = EntityDistance(e\room\grid\waypoints[iX + (iY * GridSZ)]\OBJ, e\room\grid\waypoints[iX + 1 + (iY * GridSZ)]\OBJ)
+									If iX < MTGridSize - 1 Then
+										If e\room\mt\waypoints[iX + 1 + (iY * MTGridSize)] <> Null Then
+											Dist = EntityDistance(e\room\mt\waypoints[iX + (iY * MTGridSize)]\OBJ, e\room\mt\waypoints[iX + 1 + (iY * MTGridSize)]\OBJ)
 											For i = 0 To 3
-												If e\room\grid\waypoints[iX + (iY * GridSZ)]\connected[i] = e\room\grid\waypoints[iX + 1 + (iY * GridSZ)] Then
+												If e\room\mt\waypoints[iX + (iY * MTGridSize)]\connected[i] = e\room\mt\waypoints[iX + 1 + (iY * MTGridSize)] Then
 													Exit
-												ElseIf e\room\grid\waypoints[iX + (iY * GridSZ)]\connected[i] = Null Then
-													e\room\grid\waypoints[iX + (iY * GridSZ)]\connected[i] = e\room\grid\waypoints[iX + 1 + (iY * GridSZ)]
-													e\room\grid\waypoints[iX + (iY * GridSZ)]\Dist[i] = Dist
+												ElseIf e\room\mt\waypoints[iX + (iY * MTGridSize)]\connected[i] = Null Then
+													e\room\mt\waypoints[iX + (iY * MTGridSize)]\connected[i] = e\room\mt\waypoints[iX + 1 + (iY * MTGridSize)]
+													e\room\mt\waypoints[iX + (iY * MTGridSize)]\Dist[i] = Dist
 													Exit
 												EndIf
 											Next
 											For i = 0 To 3
-												If e\room\grid\waypoints[iX + 1 + (iY * GridSZ)]\connected[i] = e\room\grid\waypoints[iX + (iY * GridSZ)] Then
+												If e\room\mt\waypoints[iX + 1 + (iY * MTGridSize)]\connected[i] = e\room\mt\waypoints[iX + (iY * MTGridSize)] Then
 													Exit
-												ElseIf e\room\grid\waypoints[iX + (iY * GridSZ)]\connected[i] = Null Then
-													e\room\grid\waypoints[iX + 1 + (iY * GridSZ)]\connected[i] = e\room\grid\waypoints[iX + (iY * GridSZ)]
-													e\room\grid\waypoints[iX + 1 + (iY * GridSZ)]\Dist[i] = Dist
+												ElseIf e\room\mt\waypoints[iX + (iY * MTGridSize)]\connected[i] = Null Then
+													e\room\mt\waypoints[iX + 1 + (iY * MTGridSize)]\connected[i] = e\room\mt\waypoints[iX + (iY * MTGridSize)]
+													e\room\mt\waypoints[iX + 1 + (iY * MTGridSize)]\Dist[i] = Dist
 													Exit
 												EndIf
 											Next
@@ -4628,13 +4648,13 @@ Function UpdateEvents()
 						Next
 						
 						For i = 0 To 6
-							e\room\grid\Meshes[i] = Meshes[i]
+							e\room\mt\Meshes[i] = Meshes[i]
 						Next
 						
 						SeedRnd(OldSeed)
 						
 						For it.Items = Each Items
-							If (EntityY(it\Collider, True) >= 8.0) And (EntityY(it\Collider, True) =< 12.0) And (EntityX(it\Collider, True) >= e\room\x - 6.0) And (EntityX(it\Collider, True) =< (e\room\x + (2.0 * GridSZ) + 6.0)) And (EntityZ(it\Collider, True) >= e\room\z - 6.0) And (EntityZ(it\Collider, True) =< (e\room\z + (2.0 * GridSZ) + 6.0)) Then
+							If (EntityY(it\Collider, True) >= 8.0) And (EntityY(it\Collider, True) =< 12.0) And (EntityX(it\Collider, True) >= e\room\x - 6.0) And (EntityX(it\Collider, True) =< (e\room\x + (2.0 * MTGridSize) + 6.0)) And (EntityZ(it\Collider, True) >= e\room\z - 6.0) And (EntityZ(it\Collider, True) =< (e\room\z + (2.0 * MTGridSize) + 6.0)) Then
 								TranslateEntity(it\Collider, 0.0, 0.3, 0.0, True)
 								ResetEntity(it\Collider)
 							EndIf
@@ -4672,10 +4692,10 @@ Function UpdateEvents()
 							For i = 0 To 1
 								Local spawnPoint.WayPoints = Null
 								
-								For x = i * ((GridSZ * GridSZ) / 5.0) To (GridSZ * GridSZ - 1)
-									If Rand(2) = 1 And e\room\grid\waypoints[x] <> Null Then 
-										spawnPoint = e\room	\grid\waypoints[x]
-										x = GridSZ * GridSZ
+								For x = i * ((MTGridSize ^ 2) / 5.0) To ((MTGridSize ^ 2) - 1)
+									If Rand(2) = 1 And e\room\mt\waypoints[x] <> Null Then 
+										spawnPoint = e\room\mt\waypoints[x]
+										x = MTGridSize ^ 2
 									EndIf
 								Next 
 								If spawnPoint <> Null Then
@@ -4684,26 +4704,26 @@ Function UpdateEvents()
 							Next
 						EndIf
 					Else
-						For iY = 0 To GridSZ - 1
-							For iX = 0 To GridSZ - 1
-								If e\room\grid\Entities[iX + (iY * GridSZ)] <> 0
-									HideEntity(e\room\grid\Entities[iX + (iY * GridSZ)])
+						For iY = 0 To MTGridSize - 1
+							For iX = 0 To MTGridSize - 1
+								If e\room\mt\Entities[iX + (iY * MTGridSize)] <> 0
+									HideEntity(e\room\mt\Entities[iX + (iY * MTGridSize)])
 								EndIf
 							Next
 						Next
 					EndIf
 					
-					UpdateMT(e\room\grid)
+					UpdateMT(e\room\mt)
 					
 					e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[2], e\room\Objects[3], e, False)
 					e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[2], e\room\RoomDoors[3], e\room\Objects[4], e\room\Objects[5], e, False)
 				Else
-					If e\room\grid <> Null Then
-						If e\room\grid\Meshes[0] <> 0 Then
-							For iY = 0 To GridSZ - 1
-								For iX = 0 To GridSZ - 1
-									If e\room\grid\Entities[iX + (iY * GridSZ)] <> 0
-										HideEntity(e\room\grid\Entities[iX + (iY * GridSZ)])
+					If e\room\mt <> Null Then
+						If e\room\mt\Meshes[0] <> 0 Then
+							For iY = 0 To MTGridSize - 1
+								For iX = 0 To MTGridSize - 1
+									If e\room\mt\Entities[iX + (iY * MTGridSize)] <> 0
+										HideEntity(e\room\mt\Entities[iX + (iY * MTGridSize)])
 									EndIf
 								Next
 							Next

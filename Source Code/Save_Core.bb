@@ -260,14 +260,14 @@ Function SaveGame(File$)
 		Next
 		WriteByte(f, 2)
 		
-		If r\grid = Null Then ; ~ This room doesn't have a grid
+		If r\mt = Null Then ; ~ This room doesn't have a grid
 			WriteByte(f, 0)
 		Else ; ~ This room has a grid
 			WriteByte(f, 1)
-			For y = 0 To GridSZ - 1
-				For x = 0 To GridSZ - 1
-					WriteByte(f, r\grid\Grid[x + (y * GridSZ)])
-					WriteByte(f, r\grid\Angles[x + (y * GridSZ)])
+			For y = 0 To MTGridSize - 1
+				For x = 0 To MTGridSize - 1
+					WriteByte(f, r\mt\Grid[x + (y * MTGridSize)])
+					WriteByte(f, r\mt\Angles[x + (y * MTGridSize)])
 				Next
 			Next
 		EndIf
@@ -280,9 +280,9 @@ Function SaveGame(File$)
 			Else
 				WriteByte(f, 2)
 			EndIf
-			For y = 0 To GridSize - 1
-				For x = 0 To GridSize - 1
-					WriteByte(f, r\fr\Grid[x + (y * GridSize)])
+			For y = 0 To ForestGridSize - 1
+				For x = 0 To ForestGridSize - 1
+					WriteByte(f, r\fr\Grid[x + (y * ForestGridSize)])
 				Next
 			Next
 			WriteFloat(f, EntityX(r\fr\Forest_Pivot, True))
@@ -799,30 +799,30 @@ Function LoadGame(File$)
 		Next
 		
 		If ReadByte(f) = 1 Then ; ~ This room has a grid
-			If r\grid <> Null Then ; ~ Remove the old grid content
-				For x = 0 To GridSZ - 1
-					For y = 0 To GridSZ - 1
-						If r\grid\Entities[x + (y * GridSZ)] <> 0 Then
-							FreeEntity(r\grid\Entities[x + (y * GridSZ)]) : r\grid\Entities[x + (y * GridSZ)] = 0
+			If r\mt <> Null Then ; ~ Remove the old grid content
+				For x = 0 To MTGridSize - 1
+					For y = 0 To MTGridSize - 1
+						If r\mt\Entities[x + (y * MTGridSize)] <> 0 Then
+							FreeEntity(r\mt\Entities[x + (y * MTGridSize)]) : r\mt\Entities[x + (y * MTGridSize)] = 0
 						EndIf
-						If r\grid\waypoints[x + (y * Gridsz)] <> Null Then
-							RemoveWaypoint(r\grid\waypoints[x + (y * GridSZ)])
-							r\grid\waypoints[x + (y * GridSZ)] = Null
+						If r\mt\waypoints[x + (y * MTGridSize)] <> Null Then
+							RemoveWaypoint(r\mt\waypoints[x + (y * MTGridSize)])
+							r\mt\waypoints[x + (y * MTGridSize)] = Null
 						EndIf
 					Next
 				Next
 				For x = 0 To 6
-					If r\grid\Meshes[x] <> 0 Then
-						FreeEntity(r\grid\Meshes[x]) : r\grid\Meshes[x] = 0
+					If r\mt\Meshes[x] <> 0 Then
+						FreeEntity(r\mt\Meshes[x]) : r\mt\Meshes[x] = 0
 					EndIf
 				Next
-				Delete(r\grid)
+				Delete(r\mt) : r\mt = Null
 			EndIf
-			r\grid = New Grids
-			For y = 0 To GridSZ - 1
-				For x = 0 To GridSZ - 1
-					r\grid\Grid[x + (y * GridSZ)] = ReadByte(f)
-					r\grid\Angles[x + (y * GridSZ)] = ReadByte(f)
+			r\mt.MTGrid = New MTGrid
+			For y = 0 To MTGridSize - 1
+				For x = 0 To MTGridSize - 1
+					r\mt\Grid[x + (y * MTGridSize)] = ReadByte(f)
+					r\mt\Angles[x + (y * MTGridSize)] = ReadByte(f)
 					; ~ Get only the necessary data, make the event handle the meshes and waypoints separately
 				Next
 			Next
@@ -834,14 +834,14 @@ Function LoadGame(File$)
 			If r\fr <> Null Then ; ~ Remove the old forest
 				DestroyForest(r\fr)
 			Else
-				r\fr = New Forest
+				r\fr.Forest = New Forest
 			EndIf
-			For y = 0 To GridSize - 1
+			For y = 0 To ForestGridSize - 1
 				Local sssss$ = ""
 				
-				For x = 0 To GridSize - 1
-					r\fr\Grid[x + (y * GridSize)] = ReadByte(f)
-					sssss = sssss + Str(r\fr\Grid[x + (y * GridSize)])
+				For x = 0 To ForestGridSize - 1
+					r\fr\Grid[x + (y * ForestGridSize)] = ReadByte(f)
+					sssss = sssss + Str(r\fr\Grid[x + (y * ForestGridSize)])
 				Next
 			Next
 			
@@ -856,7 +856,7 @@ Function LoadGame(File$)
 			EndIf
 		ElseIf r\fr <> Null Then ; ~ Remove the old forest
 			DestroyForest(r\fr)
-			Delete(r\fr)
+			Delete(r\fr) : r\fr = Null
 		EndIf
 	Next
 	
@@ -1670,37 +1670,36 @@ Function LoadGameQuick(File$)
 		Next
 		
 		If ReadByte(f) = 1 Then ; ~ This room has a grid
-			For y = 0 To GridSZ - 1
-				For x = 0 To GridSZ - 1
+			For y = 0 To MTGridSize - 1
+				For x = 0 To MTGridSize - 1
 					ReadByte(f) : ReadByte(f)
 				Next
 			Next
 		Else ; ~ This grid doesn't exist in the save
-			If r\grid <> Null Then
-				For x = 0 To GridSZ - 1
-					For y = 0 To GridSZ - 1
-						If r\grid\Entities[x + (y * GridSZ)] <> 0 Then
-							FreeEntity(r\grid\Entities[x + (y * GridSZ)]) : r\grid\Entities[x + (y * GridSZ)] = 0
+			If r\mt <> Null Then
+				For x = 0 To MTGridSize - 1
+					For y = 0 To MTGridSize - 1
+						If r\mt\Entities[x + (y * MTGridSize)] <> 0 Then
+							FreeEntity(r\mt\Entities[x + (y * MTGridSize)]) : r\mt\Entities[x + (y * MTGridSize)] = 0
 						EndIf
-						If r\grid\waypoints[x + (y * GridSZ)] <> Null Then
-							RemoveWaypoint(r\grid\waypoints[x + (y * GridSZ)])
-							r\grid\waypoints[x + (y * GridSZ)] = Null
+						If r\mt\waypoints[x + (y * MTGridSize)] <> Null Then
+							RemoveWaypoint(r\mt\waypoints[x + (y * MTGridSize)])
+							r\mt\waypoints[x + (y * MTGridSize)] = Null
 						EndIf
 					Next
 				Next
 				For x = 0 To 6
-					If r\grid\Meshes[x] <> 0 Then
-						FreeEntity(r\grid\Meshes[x]) : r\grid\Meshes[x] = 0
+					If r\mt\Meshes[x] <> 0 Then
+						FreeEntity(r\mt\Meshes[x]) : r\mt\Meshes[x] = 0
 					EndIf
 				Next
-				Delete(r\grid)
-				r\grid = Null
+				Delete(r\mt) : r\mt = Null
 			EndIf
 		EndIf
 		
 		If ReadByte(f) > 0 Then ; ~ This room has a forest
-			For y = 0 To GridSize - 1
-				For x = 0 To GridSize - 1
+			For y = 0 To ForestGridSize - 1
+				For x = 0 To ForestGridSize - 1
 					ReadByte(f)
 				Next
 			Next
@@ -1710,7 +1709,7 @@ Function LoadGameQuick(File$)
 			Local lZ# = ReadFloat(f)
 		ElseIf r\fr <> Null Then ; ~ Remove the old forest
 			DestroyForest(r\fr)
-			Delete(r\fr)
+			Delete(r\fr) : r\fr = Null
 		EndIf
 		
 		If Temp2 = 1 Then PlayerRoom = r.Rooms
@@ -2287,7 +2286,7 @@ Function LoadMap(File$)
 			If Angle <> 0.0 And Angle <> 2.0 Then Angle = Angle + 2.0
 			Angle = Angle + 1.0
 			If Angle > 3.0 Then Angle = (Angle Mod 4.0)
-			x = (GridSize - 1) - x
+			x = (ForestGridSize - 1) - x
 			
 			If fr <> Null Then
 				Select Name
@@ -2299,27 +2298,27 @@ Function LoadMap(File$)
 					; ~ 21, 22, 23, 24 = DOORROOM
 					Case "scp-860-1 endroom"
 						;[Block]
-						fr\grid[(y * GridSize) + x] = Angle + 1.0
+						fr\Grid[(y * ForestGridSize) + x] = Angle + 1.0
 						;[End Block]
 					Case "scp-860-1 path"
 						;[Block]
-						fr\grid[(y * GridSize) + x] = Angle + 5.0
+						fr\Grid[(y * ForestGridSize) + x] = Angle + 5.0
 						;[End Block]
 					Case "scp-860-1 corner"
 						;[Block]
-						fr\grid[(y * GridSize) + x] = Angle + 9.0
+						fr\Grid[(y * ForestGridSize) + x] = Angle + 9.0
 						;[End Block]
 					Case "scp-860-1 t-shaped path"
 						;[Block]
-						fr\grid[(y * GridSize) + x] = Angle + 13.0
+						fr\Grid[(y * ForestGridSize) + x] = Angle + 13.0
 						;[End Block]
 					Case "scp-860-1 4-way path"
 						;[Block]
-						fr\grid[(y * GridSize) + x] = Angle + 17.0
+						fr\Grid[(y * ForestGridSize) + x] = Angle + 17.0
 						;[End Block]
 					Case "scp-860-1 door"
 						;[Block]
-						fr\grid[(y * GridSize) + x] = Angle + 21.0
+						fr\Grid[(y * ForestGridSize) + x] = Angle + 21.0
 						;[End Block]
 				End Select
 			EndIf
@@ -2340,7 +2339,7 @@ Function LoadMap(File$)
 		Next
 		
 		If MTRoom <> Null Then
-			MTRoom\grid = New Grids
+			MTRoom\mt = New MTGrid
 		EndIf
 		
 		; ~ Maintenance tunnels rooms
@@ -2361,40 +2360,40 @@ Function LoadMap(File$)
 				Angle = (Angle Mod 4.0)
 			EndIf
 			
-			x = (GridSZ - 1) - x
+			x = (MTGridSize - 1) - x
 			
 			If MTRoom <> Null Then
 				Select Name
 					Case "maintenance tunnel endroom"
 						;[Block]
-						MTRoom\grid\Grid[x + (y * GridSZ)] = ROOM1 + 1
+						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM1 + 1
 						;[End Block]
 					Case "maintenance tunnel corridor"
 						;[Block]
-						MTRoom\grid\Grid[x + (y * GridSZ)] = ROOM2 + 1
+						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM2 + 1
 						;[End Block]
 					Case "maintenance tunnel corner"
 						;[Block]
-						MTRoom\grid\Grid[x + (y * GridSZ)] = ROOM2C + 1
+						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM2C + 1
 						;[End Block]
 					Case "maintenance tunnel t-shaped room"
 						;[Block]
-						MTRoom\grid\Grid[x + (y * GridSZ)] = ROOM3 + 1
+						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM3 + 1
 						;[End Block]
 					Case "maintenance tunnel 4-way room"
 						;[Block]
-						MTRoom\grid\Grid[x + (y * GridSZ)] = ROOM4 + 1
+						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM4 + 1
 						;[End Block]
 					Case "maintenance tunnel elevator"
 						;[Block]
-						MTRoom\grid\Grid[x + (y * GridSZ)] = ROOM4 + 2
+						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM4 + 2
 						;[End Block]
 					Case "maintenance tunnel generator room"
 						;[Block]
-						MTRoom\grid\Grid[x + (y * GridSZ)] = ROOM4 + 3
+						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM4 + 3
 						;[End Block]
 				End Select
-				MTRoom\grid\Angles[x + (y * GridSZ)] = Angle
+				MTRoom\mt\Angles[x + (y * MTGridSize)] = Angle
 			EndIf
 		Next
 	Else

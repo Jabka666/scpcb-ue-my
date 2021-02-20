@@ -339,7 +339,11 @@ Function KeyValue$(Entity%, Key$, DefaultValue$ = "")
 	Key = Lower(Key)
 	Repeat
 		p = Instr(Properties, Chr(10))
-		If p Then Test = (Left(Properties, p - 1)) Else Test = Properties
+		If p Then 
+			Test = (Left(Properties, p - 1))
+		Else
+			Test = Properties
+		EndIf
 		TestKey = Piece(Test, 1, "=")
 		TestKey = Trim(TestKey)
 		TestKey = Replace(TestKey, Chr(34), "")

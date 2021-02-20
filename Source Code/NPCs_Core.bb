@@ -4873,10 +4873,10 @@ Function UpdateNPCs()
 								z = Floor((TFormedZ() + 6.0) / 12.0)
 								
 								; ~ Step through nearby cells
-								For x2 = Max(x - 1, 1) To Min(x + 1, GridSize) Step 2
-									For z2 = Max(z - 1, 1) To Min(z + 1, GridSize) Step 2
+								For x2 = Max(x - 1, 1) To Min(x + 1, ForestGridSize) Step 2
+									For z2 = Max(z - 1, 1) To Min(z + 1, ForestGridSize) Step 2
 										; ~ Choose an empty cell (not on the path)
-										If fr\grid[(z2 * GridSize) + x2] = 0 Then
+										If fr\Grid[(z2 * ForestGridSize) + x2] = 0 Then
 											; ~ Spawn the monster between the empty cell and the cell the player is in
 											TFormPoint(((x2 + x) / 2) * 12.0, 0, ((z2 + z) / 2) * 12.0, fr\Forest_Pivot, 0)
 											
@@ -4885,7 +4885,7 @@ Function UpdateNPCs()
 												PositionEntity(n\Collider, 0.0, -110.0, 0.0)
 											Else
 												PositionEntity(n\Collider, TFormedX(), EntityY(fr\Forest_Pivot, True) + 2.3, TFormedZ())
-												x2 = GridSize
+												x2 = ForestGridSize
 												Exit												
 											EndIf
 										EndIf
@@ -5022,10 +5022,10 @@ Function UpdateNPCs()
 								x = Floor((TFormedX() + 6.0) / 12.0)
 								z = Floor((TFormedZ() + 6.0) / 12.0)
 								
-								For x2 = Max(x - 1, 1) To Min(x + 1, GridSize)
-									For z2 = Max(z - 1, 1) To Min(z + 1, GridSize)
+								For x2 = Max(x - 1, 1) To Min(x + 1, ForestGridSize)
+									For z2 = Max(z - 1, 1) To Min(z + 1, ForestGridSize)
 										; ~ Find a nearby cell that's on the path and not the cell the player is in
-										If fr\grid[(z2 * GridSize) + x2] > 0 And (x2<>x Lor z2 <> z) And (x2 = x Lor z2 = z) Then
+										If fr\Grid[(z2 * ForestGridSize) + x2] > 0 And (x2<>x Lor z2 <> z) And (x2 = x Lor z2 = z) Then
 											; ~ Transform the position of the cell back to world coordinates
 											TFormPoint(x2 * 12.0, 0.0, z2 * 12.0, fr\Forest_Pivot, 0)
 											
@@ -5034,7 +5034,7 @@ Function UpdateNPCs()
 											If EntityInView(n\Collider, Camera) Then
 												me\BlinkTimer = -10.0
 											Else
-												x2 = GridSize
+												x2 = ForestGridSize
 												Exit
 											EndIf
 										EndIf

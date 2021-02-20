@@ -729,13 +729,13 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 	CatchErrors("LoadRMesh")
 End Function
 
-Const GridSize% = 10
+Const ForestGridSize% = 10
 
 Type Forest
 	Field TileMesh%[5]
 	Field DetailMesh%[5]
-	Field Grid%[(GridSize ^ 2) + 11]
-	Field TileEntities%[(GridSize ^ 2) + 1]
+	Field Grid%[(ForestGridSize ^ 2) + 11]
+	Field TileEntities%[(ForestGridSize ^ 2) + 1]
 	Field Forest_Pivot%
 	Field Door%[2]
 	Field DetailEntities%[2]
@@ -769,26 +769,26 @@ Function GenForestGrid(fr.Forest)
 	Door2_Pos = Rand(3, 7)
 	
 	; ~ Clear the grid
-	For i = 0 To GridSize - 1
-		For j = 0 To GridSize - 1
-			fr\Grid[(j * GridSize) + i] = 0
+	For i = 0 To ForestGridSize - 1
+		For j = 0 To ForestGridSize - 1
+			fr\Grid[(j * ForestGridSize) + i] = 0
 		Next
 	Next
 	
 	; ~ Set the position of the concrete and doors
 	fr\Grid[Door1_Pos] = 3
-	fr\Grid[((GridSize - 1) * GridSize) + Door2_Pos] = 3
+	fr\Grid[((ForestGridSize - 1) * ForestGridSize) + Door2_Pos] = 3
 	
 	; ~ Generate the path
 	Local PathX% = Door2_Pos
 	Local PathY% = 1
 	Local Dir% = 1
 	
-	fr\Grid[((GridSize - 1 - PathY) * GridSize) + PathX] = 1
+	fr\Grid[((ForestGridSize - 1 - PathY) * ForestGridSize) + PathX] = 1
 	
 	Local Deviated%
 	
-	While PathY < GridSize - 4
+	While PathY < ForestGridSize - 4
 		If Dir = 1 Then ; ~ Determine whether to go forward or to the side
 			If Chance(Deviation_Chance) Then
 				; ~ Pick a branch direction
@@ -796,7 +796,7 @@ Function GenForestGrid(fr.Forest)
 				; ~ Make sure you have not passed max side distance
 				Dir = TurnIfDeviating(Max_Deviation_Distance, PathX, Center, Dir)
 				Deviated = TurnIfDeviating(Max_Deviation_Distance, PathX, Center, Dir, 1)
-				If Deviated Then fr\Grid[((GridSize - 1 - PathY) * GridSize) + PathX] = 1
+				If Deviated Then fr\Grid[((ForestGridSize - 1 - PathY) * ForestGridSize) + PathX] = 1
 				PathX = MoveForward(Dir, PathX, PathY)
 				PathY = MoveForward(Dir, PathX, PathY, 1)
 			EndIf
@@ -810,20 +810,20 @@ Function GenForestGrid(fr.Forest)
 			PathY = MoveForward(Dir, PathX, PathY, 1)
 			; ~ If we just started going forward go twice so as to avoid creating a potential 2x2 line
 			If Dir = 1 Then
-				fr\Grid[((GridSize - 1 - PathY) * GridSize) + PathX] = 1
+				fr\Grid[((ForestGridSize - 1 - PathY) * ForestGridSize) + PathX] = 1
 				PathX = MoveForward(Dir, PathX, PathY)
 				PathY = MoveForward(Dir, PathX, PathY, 1)
 			EndIf
 		EndIf
 		;~ Add our position to the grid
-		fr\Grid[((GridSize - 1 - PathY) * GridSize) + PathX] = 1
+		fr\Grid[((ForestGridSize - 1 - PathY) * ForestGridSize) + PathX] = 1
 	Wend
 	; ~ Finally, bring the path back to the door now that we have reached the end
 	Dir = 1
-	While PathY < GridSize - 2
+	While PathY < ForestGridSize - 2
 		PathX = MoveForward(Dir, PathX, PathY)
 		PathY = MoveForward(Dir, PathX, PathY, 1)
-		fr\Grid[((GridSize - 1 - PathY) * GridSize) + PathX] = 1
+		fr\Grid[((ForestGridSize - 1 - PathY) * ForestGridSize) + PathX] = 1
 	Wend
 	
 	If PathX <> Door1_Pos Then
@@ -832,7 +832,7 @@ Function GenForestGrid(fr.Forest)
 		While PathX <> Door1_Pos
 			PathX = MoveForward(Dir, PathX, PathY)
 			PathY = MoveForward(Dir, PathX, PathY, 1)
-			fr\Grid[((GridSize - 1 - PathY) * GridSize) + PathX] = 1
+			fr\Grid[((ForestGridSize - 1 - PathY) * ForestGridSize) + PathX] = 1
 		Wend
 	EndIf
 	
@@ -841,7 +841,7 @@ Function GenForestGrid(fr.Forest)
 	Local Branch_Type%, Branch_Pos%
 	
 	New_Y = -3 ; ~ Used for counting off. Branches will only be considered once every 4 units so as to avoid potentially too many branches
-	While New_Y < GridSize - 6
+	While New_Y < ForestGridSize - 6
 		New_Y = New_Y + 4
 		Temp_Y = New_Y
 		New_X = 0
@@ -854,22 +854,30 @@ Function GenForestGrid(fr.Forest)
 			; ~ Determine if on left or on right
 			Branch_Pos = 2 * Rand(0, 1)
 			; ~ Get leftmost or rightmost path in this row
-			LeftMost = GridSize
+			LeftMost = ForestGridSize
 			RightMost = 0
-			For i = 0 To GridSize
-				If fr\Grid[((GridSize - 1 - New_Y) * GridSize) + i] = 1 Then
+			For i = 0 To ForestGridSize
+				If fr\Grid[((ForestGridSize - 1 - New_Y) * ForestGridSize) + i] = 1 Then
 					If i < LeftMost Then LeftMost = i
 					If i > RightMost Then RightMost = i
 				EndIf
 			Next
-			If Branch_Pos = 0 Then New_X = LeftMost - 1 Else New_X = RightMost + 1
+			If Branch_Pos = 0 Then
+				New_X = LeftMost - 1
+			Else
+				New_X = RightMost + 1
+			EndIf
 			; ~ Before creating a branch make sure there are no 1's above or below
-			If (Temp_Y <> 0 And fr\Grid[((GridSize - 1 - Temp_Y + 1) * GridSize) + New_X] = 1) Lor fr\Grid[((GridSize - 1 - Temp_Y - 1) * GridSize) + New_X] = 1 Then
+			If (Temp_Y <> 0 And fr\Grid[((ForestGridSize - 1 - Temp_Y + 1) * ForestGridSize) + New_X] = 1) Lor fr\Grid[((ForestGridSize - 1 - Temp_Y - 1) * ForestGridSize) + New_X] = 1 Then
 				Exit ; ~ Break simply to stop creating the branch
 			EndIf
-			fr\Grid[((GridSize - 1 - Temp_Y) * GridSize) + New_X] = Branch_Type ; ~ Make 4s so you don't confuse your branch for a path; will be changed later
-			If Branch_Pos = 0 Then New_X = LeftMost - 2 Else New_X = RightMost + 2
-			fr\Grid[((GridSize - 1 - Temp_Y) * GridSize) + New_X] = Branch_Type ; ~ Branch out twice to avoid creating an unwanted 2x2 path with the real path
+			fr\Grid[((ForestGridSize - 1 - Temp_Y) * ForestGridSize) + New_X] = Branch_Type ; ~ Make 4s so you don't confuse your branch for a path; will be changed later
+			If Branch_Pos = 0 Then
+				New_X = LeftMost - 2
+			Else
+				New_X = RightMost + 2
+			EndIf
+			fr\Grid[((ForestGridSize - 1 - Temp_Y) * ForestGridSize) + New_X] = Branch_Type ; ~ Branch out twice to avoid creating an unwanted 2x2 path with the real path
 			i = 2
 			While i < Branch_Max_Life
 				i = i + 1
@@ -887,27 +895,27 @@ Function GenForestGrid(fr.Forest)
 				EndIf
 				
 				; ~ Before creating a branch make sure there are no 1's above or below
-				n = ((GridSize - 1 - Temp_Y + 1) * GridSize) + New_X
-				If n < GridSize - 1 Then 
+				n = ((ForestGridSize - 1 - Temp_Y + 1) * ForestGridSize) + New_X
+				If n < ForestGridSize - 1 Then 
 					If Temp_Y <> 0 And fr\Grid[n] = 1 Then Exit
 				EndIf
-				n = ((GridSize - 1 - Temp_Y - 1) * GridSize) + New_X
+				n = ((ForestGridSize - 1 - Temp_Y - 1) * ForestGridSize) + New_X
 				If n > 0 Then 
 					If fr\Grid[n] = 1 Then Exit
 				EndIf
-				fr\Grid[((GridSize - 1 - Temp_Y) * GridSize) + New_X] = Branch_Type ; ~ Make 4s so you don't confuse your branch for a path; will be changed later
-				If Temp_Y >= GridSize - 2 Then Exit
+				fr\Grid[((ForestGridSize - 1 - Temp_Y) * ForestGridSize) + New_X] = Branch_Type ; ~ Make 4s so you don't confuse your branch for a path; will be changed later
+				If Temp_Y >= ForestGridSize - 2 Then Exit
 			Wend
 		EndIf
 	Wend
 	
 	; ~ Change branches from 4s to 1s (they were 4s so that they didn't accidently create a 2x2 path unintentionally)
-	For i = 0 To GridSize - 1
-		For j = 0 To GridSize - 1
-			If fr\Grid[(i * GridSize) + j] = -1 Then
-				fr\Grid[(i * GridSize) + j] = 1
-			ElseIf fr\Grid[(i * GridSize) + j] = -2
-				fr\Grid[(i * GridSize) + j] = 1
+	For i = 0 To ForestGridSize - 1
+		For j = 0 To ForestGridSize - 1
+			If fr\Grid[(i * ForestGridSize) + j] = -1 Then
+				fr\Grid[(i * ForestGridSize) + j] = 1
+			ElseIf fr\Grid[(i * ForestGridSize) + j] = -2
+				fr\Grid[(i * ForestGridSize) + j] = 1
 			EndIf
 		Next
 	Next
@@ -986,15 +994,15 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 	Tempf3 = MeshWidth(fr\TileMesh[ROOM1])
 	Tempf1 = Tile_Size / Tempf3
 	
-	For tX = 0 To GridSize - 1
-		For tY = 0 To GridSize - 1
-			If fr\Grid[(tY * GridSize) + tX] = 1 Then 
+	For tX = 0 To ForestGridSize - 1
+		For tY = 0 To ForestGridSize - 1
+			If fr\Grid[(tY * ForestGridSize) + tX] = 1 Then 
 				Tile_Type = 0
-				If tX + 1 < GridSize Then Tile_Type = (fr\Grid[(tY * GridSize) + tX + 1] > 0)
-				If tX - 1 >= 0 Then Tile_Type = Tile_Type + (fr\Grid[(tY * GridSize) + tX - 1] > 0)
+				If tX + 1 < ForestGridSize Then Tile_Type = (fr\Grid[(tY * ForestGridSize) + tX + 1] > 0)
+				If tX - 1 >= 0 Then Tile_Type = Tile_Type + (fr\Grid[(tY * ForestGridSize) + tX - 1] > 0)
 				
-				If tY + 1 < GridSize Then Tile_Type = Tile_Type + (fr\Grid[((tY + 1) * GridSize) + tX] > 0)
-				If tY - 1 >= 0 Then Tile_Type = Tile_Type + (fr\Grid[((tY - 1) * GridSize) + tX] > 0)
+				If tY + 1 < ForestGridSize Then Tile_Type = Tile_Type + (fr\Grid[((tY + 1) * ForestGridSize) + tX] > 0)
+				If tY - 1 >= 0 Then Tile_Type = Tile_Type + (fr\Grid[((tY - 1) * ForestGridSize) + tX] > 0)
 				
 				Local Angle# = 0.0
 				
@@ -1003,11 +1011,11 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 						;[Block]
 						Tile_Entity = CopyEntity(fr\TileMesh[ROOM1])
 						
-						If fr\Grid[((tY + 1) * GridSize) + tX] > 0 Then
+						If fr\Grid[((tY + 1) * ForestGridSize) + tX] > 0 Then
 							Angle = 180.0
-						ElseIf fr\Grid[(tY * GridSize) + tX - 1] > 0
+						ElseIf fr\Grid[(tY * ForestGridSize) + tX - 1] > 0
 							Angle = 270.0
-						ElseIf fr\Grid[(tY * GridSize) + tX + 1] > 0
+						ElseIf fr\Grid[(tY * ForestGridSize) + tX + 1] > 0
 							Angle = 90.0
 						Else
 							Angle = 0.0
@@ -1017,20 +1025,20 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 						;[End Block]
 					Case 2
 						;[Block]
-						If fr\Grid[((tY - 1) * GridSize) + tX] > 0 And fr\Grid[((tY + 1) * GridSize) + tX] > 0 Then
+						If fr\Grid[((tY - 1) * ForestGridSize) + tX] > 0 And fr\Grid[((tY + 1) * ForestGridSize) + tX] > 0 Then
 							Tile_Entity = CopyEntity(fr\TileMesh[ROOM2])
 							Tile_Type = ROOM2 + 1
-						ElseIf fr\Grid[(tY * GridSize) + tX + 1] > 0 And fr\Grid[(tY * GridSize) + tX - 1] > 0
+						ElseIf fr\Grid[(tY * ForestGridSize) + tX + 1] > 0 And fr\Grid[(tY * ForestGridSize) + tX - 1] > 0
 							Tile_Entity = CopyEntity(fr\TileMesh[ROOM2])
 							Angle = 90.0
 							Tile_Type = ROOM2 + 1
 						Else
 							Tile_Entity = CopyEntity(fr\TileMesh[ROOM2C])
-							If fr\Grid[(tY * GridSize) + tX - 1] > 0 And fr\Grid[((tY + 1) * GridSize) + tX] > 0 Then
+							If fr\Grid[(tY * ForestGridSize) + tX - 1] > 0 And fr\Grid[((tY + 1) * ForestGridSize) + tX] > 0 Then
 								Angle = 180.0
-							ElseIf fr\Grid[(tY * GridSize) + tX + 1] > 0 And fr\Grid[((tY - 1) * GridSize) + tX] > 0
+							ElseIf fr\Grid[(tY * ForestGridSize) + tX + 1] > 0 And fr\Grid[((tY - 1) * ForestGridSize) + tX] > 0
 								Angle = 0.0
-							ElseIf fr\Grid[(tY * GridSize) + tX - 1] > 0 And fr\Grid[((tY - 1) * GridSize) + tX] > 0
+							ElseIf fr\Grid[(tY * ForestGridSize) + tX - 1] > 0 And fr\Grid[((tY - 1) * ForestGridSize) + tX] > 0
 								Angle = 270.0
 							Else
 								Angle = 90.0
@@ -1042,11 +1050,11 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 						;[Block]
 						Tile_Entity = CopyEntity(fr\TileMesh[ROOM3])
 						
-						If fr\Grid[((tY - 1) * GridSize) + tX] = 0 Then
+						If fr\Grid[((tY - 1) * ForestGridSize) + tX] = 0 Then
 							Angle = 180.0
-						ElseIf fr\Grid[(tY * GridSize) + tX - 1] = 0
+						ElseIf fr\Grid[(tY * ForestGridSize) + tX - 1] = 0
 							Angle = 90.0
-						ElseIf fr\Grid[(tY * GridSize) + tX + 1] = 0
+						ElseIf fr\Grid[(tY * ForestGridSize) + tX + 1] = 0
 							Angle = 270.0
 						Else
 							Angle = 0.0
@@ -1133,7 +1141,7 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 					
 					If it <> Null Then EntityParent(it\Collider, 0)
 					
-					fr\TileEntities[tX + (tY * GridSize)] = Tile_Entity
+					fr\TileEntities[tX + (tY * ForestGridSize)] = Tile_Entity
 				EndIf
 			EndIf
 		Next
@@ -1141,9 +1149,9 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 	
 	; ~ Place the wall		
 	For i = 0 To 1
-		tY = i * (GridSize - 1)
-		For tX = 0 To GridSize - 1
-			If fr\Grid[(tY * GridSize) + tX] = 3 Then
+		tY = i * (ForestGridSize - 1)
+		For tX = 0 To ForestGridSize - 1
+			If fr\Grid[(tY * ForestGridSize) + tX] = 3 Then
 				fr\DetailEntities[i] = CopyEntity(fr\DetailMesh[4])
 				ScaleEntity(fr\DetailEntities[i], RoomScale, RoomScale, RoomScale)
 				
@@ -1234,18 +1242,18 @@ Function PlaceMapCreatorForest(fr.Forest, x#, y#, z#, r.Rooms)
 	Tempf3 = MeshWidth(fr\TileMesh[ROOM1])
 	Tempf1 = Tile_Size / Tempf3
 	
-	For tX = 0 To GridSize - 1
-		For tY = 0 To GridSize - 1
-			If fr\Grid[(tY * GridSize) + tX] > 0 Then 
+	For tX = 0 To ForestGridSize - 1
+		For tY = 0 To ForestGridSize - 1
+			If fr\Grid[(tY * ForestGridSize) + tX] > 0 Then 
 				Tile_Type = 0
 				
 				Local Angle# = 0.0
 				
-				Tile_Type = Ceil(Float(fr\Grid[(tY * GridSize) + tX]) / 4.0)
+				Tile_Type = Ceil(Float(fr\Grid[(tY * ForestGridSize) + tX]) / 4.0)
 				If Tile_Type = 6 Then
 					Tile_Type = 2
 				EndIf
-				Angle = (fr\Grid[(tY * GridSize) + tX] Mod 4.0) * 90.0
+				Angle = (fr\Grid[(tY * ForestGridSize) + tX] Mod 4.0) * 90.0
 				
 				Tile_Entity = CopyEntity(fr\TileMesh[Tile_Type - 1])
 				
@@ -1323,10 +1331,10 @@ Function PlaceMapCreatorForest(fr.Forest, x#, y#, z#, r.Rooms)
 					
 					If it <> Null Then EntityParent(it\Collider, 0)
 					
-					fr\TileEntities[tX + (tY * GridSize)] = Tile_Entity
+					fr\TileEntities[tX + (tY * ForestGridSize)] = Tile_Entity
 				EndIf
 				
-				If Ceil(Float(fr\Grid[(tY * GridSize) + tX]) / 4.0) = 6 Then
+				If Ceil(Float(fr\Grid[(tY * ForestGridSize) + tX]) / 4.0) = 6 Then
 					For i = 0 To 1
 						If (Not fr\Door[i]) Then
 							fr\DetailEntities[i] = CopyEntity(fr\DetailMesh[4])
@@ -1366,11 +1374,11 @@ Function DestroyForest(fr.Forest)
 	
 	Local tX%, tY%, i%
 	
-	For tX = 0 To GridSize - 1
-		For tY = 0 To GridSize - 1
-			If fr\TileEntities[tX + (tY * GridSize)] <> 0 Then
-				FreeEntity(fr\TileEntities[tX + (tY * GridSize)]) : fr\TileEntities[tX + (tY * GridSize)] = 0
-				fr\Grid[tX + (tY * GridSize)] = 0
+	For tX = 0 To ForestGridSize - 1
+		For tY = 0 To ForestGridSize - 1
+			If fr\TileEntities[tX + (tY * ForestGridSize)] <> 0 Then
+				FreeEntity(fr\TileEntities[tX + (tY * ForestGridSize)]) : fr\TileEntities[tX + (tY * ForestGridSize)] = 0
+				fr\Grid[tX + (tY * ForestGridSize)] = 0
 			EndIf
 		Next
 	Next
@@ -1395,17 +1403,17 @@ Function UpdateForest(fr.Forest, Ent%)
 	Local tX%, tY%
 	
 	If Abs(EntityY(Ent, True) - EntityY(fr\Forest_Pivot, True)) < 12.0 Then
-		For tX = 0 To GridSize - 1
-			For tY = 0 To GridSize - 1
-				If fr\TileEntities[tX + (tY * GridSize)] <> 0 Then
-					If Abs(EntityX(Ent, True) - EntityX(fr\TileEntities[tX + (tY * GridSize)], True)) < HideDistance Then
-						If Abs(EntityZ(Ent, True) - EntityZ(fr\TileEntities[tX + (tY * GridSize)], True)) < HideDistance Then
-							ShowEntity(fr\TileEntities[tX + (tY * GridSize)])
+		For tX = 0 To ForestGridSize - 1
+			For tY = 0 To ForestGridSize - 1
+				If fr\TileEntities[tX + (tY * ForestGridSize)] <> 0 Then
+					If Abs(EntityX(Ent, True) - EntityX(fr\TileEntities[tX + (tY * ForestGridSize)], True)) < HideDistance Then
+						If Abs(EntityZ(Ent, True) - EntityZ(fr\TileEntities[tX + (tY * ForestGridSize)], True)) < HideDistance Then
+							ShowEntity(fr\TileEntities[tX + (tY * ForestGridSize)])
 						Else
-							HideEntity(fr\TileEntities[tX + (tY * GridSize)])
+							HideEntity(fr\TileEntities[tX + (tY * ForestGridSize)])
 						EndIf
 					Else
-						HideEntity(fr\TileEntities[tX + (tY * GridSize)])
+						HideEntity(fr\TileEntities[tX + (tY * ForestGridSize)])
 					EndIf
 				EndIf
 			Next
@@ -1565,7 +1573,7 @@ Type Rooms
 	Field Levers%[10]
 	Field RoomDoors.Doors[7]
 	Field NPC.NPCs[12]
-	Field grid.Grids
+	Field mt.MTGrid
 	Field Adjacent.Rooms[4]
 	Field AdjDoor.Doors[4]
 	Field NonFreeAble%[10]
@@ -1586,33 +1594,33 @@ End Type
 
 Global PlayerRoom.Rooms
 
-Const GridSZ% = 19 ; ~ Same size as the main map itself (better for the map creator)
+Const MTGridSize% = 19 ; ~ Same size as the main map itself (better for the map creator)
 
-Type Grids
-	Field Grid%[GridSZ ^ 2]
-	Field Angles%[GridSZ ^ 2]
+Type MTGrid
+	Field Grid%[MTGridSize ^ 2]
+	Field Angles%[MTGridSize ^ 2]
 	Field Meshes%[7]
-	Field Entities%[GridSZ ^ 2]
-	Field waypoints.WayPoints[GridSZ ^ 2]
+	Field Entities%[MTGridSize ^ 2]
+	Field waypoints.WayPoints[MTGridSize ^ 2]
 End Type
 
-Function UpdateMT(grid.Grids)
+Function UpdateMT(mt.MTGrid)
 	CatchErrors("Uncaught (UpdateMT)")
 	
 	Local tX%, tY%
 	
-	For tX = 0 To GridSZ - 1
-		For tY = 0 To GridSZ - 1
-			If grid\Entities[tX + (tY * GridSZ)] <> 0 Then
-				If Abs(EntityY(me\Collider, True) - EntityY(grid\Entities[tX + (tY * GridSZ)], True)) > 4.0 Then Exit
-				If Abs(EntityX(me\Collider, True) - EntityX(grid\Entities[tX + (tY * GridSZ)], True)) < HideDistance Then
-					If Abs(EntityZ(me\Collider, True) - EntityZ(grid\Entities[tX + (tY * GridSZ)], True)) < HideDistance Then
-						ShowEntity(grid\Entities[tX + (tY * GridSZ)])
+	For tX = 0 To MTGridSize - 1
+		For tY = 0 To MTGridSize - 1
+			If mt\Entities[tX + (tY * MTGridSize)] <> 0 Then
+				If Abs(EntityY(me\Collider, True) - EntityY(mt\Entities[tX + (tY * MTGridSize)], True)) > 4.0 Then Exit
+				If Abs(EntityX(me\Collider, True) - EntityX(mt\Entities[tX + (tY * MTGridSize)], True)) < HideDistance Then
+					If Abs(EntityZ(me\Collider, True) - EntityZ(mt\Entities[tX + (tY * MTGridSize)], True)) < HideDistance Then
+						ShowEntity(mt\Entities[tX + (tY * MTGridSize)])
 					Else
-						HideEntity(grid\Entities[tX + (tY * GridSZ)])
+						HideEntity(mt\Entities[tX + (tY * MTGridSize)])
 					EndIf
 				Else
-					HideEntity(grid\Entities[tX + (tY * GridSZ)])
+					HideEntity(mt\Entities[tX + (tY * MTGridSize)])
 				EndIf
 			EndIf
 		Next
@@ -1633,158 +1641,154 @@ Function PlaceMapCreatorMT(r.Rooms)
 		HideEntity(Meshes[i])
 	Next
 	
-	For y = 0 To GridSZ - 1
-		For x = 0 To GridSZ - 1
-			If r\grid\Grid[x + (y * GridSZ)] > 0 Then
+	For y = 0 To MTGridSize - 1
+		For x = 0 To MTGridSize - 1
+			If r\mt\Grid[x + (y * MTGridSize)] > 0 Then
 				Local Tile_Type% = 0
 				Local Angle# = 0.0
 				
-				Tile_Type = r\grid\Grid[x + (y * GridSZ)]
-				Angle = r\grid\Angles[x + (y * GridSZ)] * 90.0
+				Tile_Type = r\mt\Grid[x + (y * MTGridSize)]
+				Angle = r\mt\Angles[x + (y * MTGridSize)] * 90.0
 				
 				Local Tile_Entity% = CopyEntity(Meshes[Tile_Type - 1])
 				
 				RotateEntity(Tile_Entity, 0.0, Angle, 0.0)
 				ScaleEntity(Tile_Entity, RoomScale, RoomScale, RoomScale, True)
-				PositionEntity(Tile_Entity, r\x + x * 2.0, 8.0, r\z + y * 2.0, True)
+				PositionEntity(Tile_Entity, r\x + (x * 2.0), r\y + 8.0, r\z + (y * 2.0), True)
 				
 				Select Tile_Type
-					Case ROOM1 + 1
+					Case ROOM1 + 1, ROOM2 + 1
 						;[Block]
-						AddLight(Null, r\x + x * 2.0, 8.0 + (372.0 * RoomScale), r\z + y * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
-						;[End Block]
-					Case ROOM2 + 1
-						;[Block]
-						AddLight(Null, r\x + x * 2.0, 8.0 + (372.0 * RoomScale), r\z + y * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
+						AddLight(Null, r\x + (x * 2.0), r\y + 8.0 + (372.0 * RoomScale), r\z + (y * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
 						;[End Block]
 					Case ROOM2C + 1, ROOM3 + 1, ROOM4 + 1
 						;[Block]
-						AddLight(Null, r\x + x * 2.0, 8.0 + (416.0 * RoomScale), r\z + y * 2.0, 2, 500.0 * RoomScale, 255, 255, 255)
+						AddLight(Null, r\x + (x * 2.0), r\y + 8.0 + (416.0 * RoomScale), r\z + (y * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
 						;[End Block]
 					Case ROOM4 + 2
 						;[Block]
-						dr.Doors = CreateDoor(r\x + (x * 2.0) + (Cos(EntityYaw(Tile_Entity, True)) * 240.0 * RoomScale), 8.0, r\z + (y * 2.0) + (Sin(EntityYaw(Tile_Entity, True)) * 240.0 * RoomScale), EntityYaw(Tile_Entity, True) - 90.0, Null, False, Elevator_Door)
+						dr.Doors = CreateDoor(r\x + (x * 2.0) + (Cos(EntityYaw(Tile_Entity, True)) * 240.0 * RoomScale), r\y + 8.0, r\z + (y * 2.0) + (Sin(EntityYaw(Tile_Entity, True)) * 240.0 * RoomScale), EntityYaw(Tile_Entity, True) - 90.0, Null, False, Elevator_Door)
 						PositionEntity(dr\Buttons[0], EntityX(dr\Buttons[0], True) + (Cos(EntityYaw(Tile_Entity, True)) * 0.05), EntityY(dr\Buttons[0], True), EntityZ(dr\Buttons[0], True) + (Sin(EntityYaw(Tile_Entity, True)) * 0.05), True)
 						PositionEntity(dr\Buttons[1], EntityX(dr\Buttons[1], True) + (Cos(EntityYaw(Tile_Entity, True)) * 0.05), EntityY(dr\Buttons[1], True), EntityZ(dr\Buttons[1], True) + (Sin(EntityYaw(Tile_Entity, True)) * 0.031), True)
 						
-						AddLight(Null, r\x + x * 2.0 + (Cos(EntityYaw(Tile_Entity, True)) * 555.0 * RoomScale), 8.0 + (469.0 * RoomScale), r\z + y * 2.0 + (Sin(EntityYaw(Tile_Entity, True)) * 555.0 * RoomScale), 2, 600.0 * RoomScale, 255, 255, 255)
+						AddLight(Null, r\x + (x * 2.0) + (Cos(EntityYaw(Tile_Entity, True)) * 555.0 * RoomScale), r\y + 8.0 + (469.0 * RoomScale), r\z + (y * 2.0) + (Sin(EntityYaw(Tile_Entity, True)) * 555.0 * RoomScale), 2, 600.0 * RoomScale, 255, 255, 255)
 						
 						Local TempInt2% = CreatePivot()
 						
 						RotateEntity(TempInt2, 0.0, EntityYaw(Tile_Entity, True) + 180.0, 0.0, True)
-						PositionEntity(TempInt2, r\x + (x * 2.0) + (Cos(EntityYaw(Tile_Entity, True)) * 552.0 * RoomScale), 8.0 + (240.0 * RoomScale), r\z + (y * 2.0) + (Sin(EntityYaw(Tile_Entity, True)) * 552.0 * RoomScale))
+						PositionEntity(TempInt2, r\x + (x * 2.0) + (Cos(EntityYaw(Tile_Entity, True)) * 552.0 * RoomScale), r\y + 8.0 + (240.0 * RoomScale), r\z + (y * 2.0) + (Sin(EntityYaw(Tile_Entity, True)) * 552.0 * RoomScale))
 						If r\RoomDoors[1] = Null Then
 							r\RoomDoors[1] = dr
 							r\Objects[3] = TempInt2
-							PositionEntity(r\Objects[0], r\x + x * 2.0, 8.0, r\z + y * 2.0, True)
+							PositionEntity(r\Objects[0], r\x + (x * 2.0), r\y + 8.0, r\z + (y * 2.0), True)
 						ElseIf r\RoomDoors[1] <> Null And r\RoomDoors[3] = Null Then
 							r\RoomDoors[3] = dr
 							r\Objects[5] = TempInt2
-							PositionEntity(r\Objects[1], r\x + x * 2.0, 8.0, r\z + y * 2.0, True)
+							PositionEntity(r\Objects[1], r\x + (x * 2.0), r\y + 8.0, r\z + (y * 2.0), True)
 						EndIf
 						;[End Block]
 					Case ROOM4 + 3
 						;[Block]
-						AddLight(Null, r\x + x * 2.0 - (Sin(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale), 8.0 + (396.0 * RoomScale), r\z + y * 2.0 + (Cos(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale), 2, 500.0 * RoomScale, 255, 200, 200)
-						it.Items = CreateItem("SCP-500-01", "scp500pill", r\x + x * 2.0 + (Cos(EntityYaw(Tile_Entity, True)) * (-208.0) * RoomScale) - (Sin(EntityYaw(Tile_Entity, True)) * 1226.0 * RoomScale), 8.0 + (90.0 * RoomScale), r\z + y * 2.0 + (Sin(EntityYaw(Tile_Entity, True)) * (-208.0) * RoomScale) + (Cos(EntityYaw(Tile_Entity, True)) * 1226.0 * RoomScale))
+						AddLight(Null, r\x + (x * 2.0) - (Sin(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale), r\y + 8.0 + (396.0 * RoomScale), r\z + (y * 2.0) + (Cos(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale), 2, 500.0 * RoomScale, 255, 200, 200)
+						it.Items = CreateItem("SCP-500-01", "scp500pill", r\x + (x * 2.0) + (Cos(EntityYaw(Tile_Entity, True)) * (-208.0) * RoomScale) - (Sin(EntityYaw(Tile_Entity, True)) * 1226.0 * RoomScale), r\y + 8.0 + (90.0 * RoomScale), r\z + (y * 2.0) + (Sin(EntityYaw(Tile_Entity, True)) * (-208.0) * RoomScale) + (Cos(EntityYaw(Tile_Entity, True)) * 1226.0 * RoomScale))
 						EntityType(it\Collider, HIT_ITEM)
 						
-						it.Items = CreateItem("Night Vision Goggles", "nvg", r\x + x * 2.0 - (Sin(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale), 8.0 + (90.0 * RoomScale),  r\z + y * 2.0 + (Cos(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale))
+						it.Items = CreateItem("Night Vision Goggles", "nvg", r\x + (x * 2.0) - (Sin(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale), r\y + 8.0 + (90.0 * RoomScale),  r\z + (y * 2.0) + (Cos(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale))
 						EntityType(it\Collider, HIT_ITEM)
 						;[End Block]
 				End Select
 				
-				r\grid\Entities[x + (y * GridSZ)] = Tile_Entity
-				wayp = CreateWaypoint(r\x + (x * 2.0), 8.2, r\z + (y * 2.0), Null, r)
-				r\grid\waypoints[x + (y * GridSZ)] = wayp
+				r\mt\Entities[x + (y * MTGridSize)] = Tile_Entity
+				wayp = CreateWaypoint(r\x + (x * 2.0), r\y + 8.2, r\z + (y * 2.0), Null, r)
+				r\mt\waypoints[x + (y * MTGridSize)] = wayp
 				
-				If y < GridSZ - 1 Then
-					If r\grid\waypoints[x + ((y + 1) * GridSZ)] <> Null Then
-						Dist = EntityDistance(r\grid\waypoints[x + (y * GridSZ)]\OBJ, r\grid\waypoints[x + ((y + 1) * GridSZ)]\OBJ)
+				If y < MTGridSize - 1 Then
+					If r\mt\waypoints[x + ((y + 1) * MTGridSize)] <> Null Then
+						Dist = EntityDistance(r\mt\waypoints[x + (y * MTGridSize)]\OBJ, r\mt\waypoints[x + ((y + 1) * MTGridSize)]\OBJ)
 						For i = 0 To 3
-							If r\grid\waypoints[x + (y * GridSZ)]\connected[i] = r\grid\waypoints[x + ((y + 1) * GridSZ)] Then
+							If r\mt\waypoints[x + (y * MTGridSize)]\connected[i] = r\mt\waypoints[x + ((y + 1) * MTGridSize)] Then
 								Exit 
-							ElseIf r\grid\waypoints[x + (y * GridSZ)]\connected[i] = Null Then
-								r\grid\waypoints[x + (y * GridSZ)]\connected[i] = r\grid\waypoints[x + ((y + 1) * GridSZ)]
-								r\grid\waypoints[x + (y * GridSZ)]\Dist[i] = Dist
+							ElseIf r\mt\waypoints[x + (y * MTGridSize)]\connected[i] = Null Then
+								r\mt\waypoints[x + (y * MTGridSize)]\connected[i] = r\mt\waypoints[x + ((y + 1) * MTGridSize)]
+								r\mt\waypoints[x + (y * MTGridSize)]\Dist[i] = Dist
 								Exit
 							EndIf
 						Next
 						For i = 0 To 3
-							If r\grid\waypoints[x + ((y + 1) * GridSZ)]\connected[i] = r\grid\waypoints[x + (y * GridSZ)] Then
+							If r\mt\waypoints[x + ((y + 1) * MTGridSize)]\connected[i] = r\mt\waypoints[x + (y * MTGridSize)] Then
 								Exit
-							ElseIf r\grid\waypoints[x + ((y + 1) * GridSZ)]\connected[i] = Null Then
-								r\grid\waypoints[x + ((y + 1) * GridSZ)]\connected[i] = r\grid\waypoints[x + (y * GridSZ)]
-								r\grid\waypoints[x + ((y + 1) * GridSZ)]\Dist[i] = Dist
+							ElseIf r\mt\waypoints[x + ((y + 1) * MTGridSize)]\connected[i] = Null Then
+								r\mt\waypoints[x + ((y + 1) * MTGridSize)]\connected[i] = r\mt\waypoints[x + (y * MTGridSize)]
+								r\mt\waypoints[x + ((y + 1) * MTGridSize)]\Dist[i] = Dist
 								Exit
 							EndIf
 						Next
 					EndIf
 				EndIf
 				If y > 0 Then
-					If r\grid\waypoints[x + ((y - 1) * GridSZ)] <> Null Then
-						Dist = EntityDistance(r\grid\waypoints[x + (y * GridSZ)]\OBJ, r\grid\waypoints[x + ((y - 1) * GridSZ)]\OBJ)
+					If r\mt\waypoints[x + ((y - 1) * MTGridSize)] <> Null Then
+						Dist = EntityDistance(r\mt\waypoints[x + (y * MTGridSize)]\OBJ, r\mt\waypoints[x + ((y - 1) * MTGridSize)]\OBJ)
 						For i = 0 To 3
-							If r\grid\waypoints[x + (y * GridSZ)]\connected[i] = r\grid\waypoints[x + ((y - 1) * GridSZ)] Then
+							If r\mt\waypoints[x + (y * MTGridSize)]\connected[i] = r\mt\waypoints[x + ((y - 1) * MTGridSize)] Then
 								Exit
-							ElseIf r\grid\waypoints[x + (y * GridSZ)]\connected[i] = Null Then
-								r\grid\waypoints[x + (y * GridSZ)]\connected[i] = r\grid\waypoints[x + ((y - 1) * GridSZ)]
-								r\grid\waypoints[x + (y * GridSZ)]\Dist[i] = Dist
+							ElseIf r\mt\waypoints[x + (y * MTGridSize)]\connected[i] = Null Then
+								r\mt\waypoints[x + (y * MTGridSize)]\connected[i] = r\mt\waypoints[x + ((y - 1) * MTGridSize)]
+								r\mt\waypoints[x + (y * MTGridSize)]\Dist[i] = Dist
 								Exit
 							EndIf
 						Next
 						For i = 0 To 3
-							If r\grid\waypoints[x + ((y - 1) * GridSZ)]\connected[i] = r\grid\waypoints[x + (y * GridSZ)] Then
+							If r\mt\waypoints[x + ((y - 1) * MTGridSize)]\connected[i] = r\mt\waypoints[x + (y * MTGridSize)] Then
 								Exit
-							ElseIf r\grid\waypoints[x + (y * GridSZ)]\connected[i] = Null Then
-								r\grid\waypoints[x + ((y - 1) * GridSZ)]\connected[i] = r\grid\waypoints[x + (y * GridSZ)]
-								r\grid\waypoints[x + ((y - 1) * GridSZ)]\Dist[i] = Dist
+							ElseIf r\mt\waypoints[x + (y * MTGridSize)]\connected[i] = Null Then
+								r\mt\waypoints[x + ((y - 1) * MTGridSize)]\connected[i] = r\mt\waypoints[x + (y * MTGridSize)]
+								r\mt\waypoints[x + ((y - 1) * MTGridSize)]\Dist[i] = Dist
 								Exit
 							EndIf
 						Next
 					EndIf
 				EndIf
 				If x > 0 Then
-					If r\grid\waypoints[x - 1 + (y * GridSZ)] <> Null Then
-						Dist = EntityDistance(r\grid\waypoints[x + (y * GridSZ)]\OBJ, r\grid\waypoints[x - 1 + (y * GridSZ)]\OBJ)
+					If r\mt\waypoints[x - 1 + (y * MTGridSize)] <> Null Then
+						Dist = EntityDistance(r\mt\waypoints[x + (y * MTGridSize)]\OBJ, r\mt\waypoints[x - 1 + (y * MTGridSize)]\OBJ)
 						For i = 0 To 3
-							If r\grid\waypoints[x + (y * GridSZ)]\connected[i] = r\grid\waypoints[x - 1 + (y * GridSZ)] Then
+							If r\mt\waypoints[x + (y * MTGridSize)]\connected[i] = r\mt\waypoints[x - 1 + (y * MTGridSize)] Then
 								Exit
-							ElseIf r\grid\waypoints[x + (y * GridSZ)]\connected[i] = Null Then
-								r\grid\waypoints[x + (y * GridSZ)]\connected[i] = r\grid\waypoints[x - 1 + (y * GridSZ)]
-								r\grid\waypoints[x + (y * GridSZ)]\Dist[i] = Dist
+							ElseIf r\mt\waypoints[x + (y * MTGridSize)]\connected[i] = Null Then
+								r\mt\waypoints[x + (y * MTGridSize)]\connected[i] = r\mt\waypoints[x - 1 + (y * MTGridSize)]
+								r\mt\waypoints[x + (y * MTGridSize)]\Dist[i] = Dist
 								Exit
 							EndIf
 						Next
 						For i = 0 To 3
-							If r\grid\waypoints[x - 1 + (y * GridSZ)]\connected[i] = r\grid\waypoints[x + (y * GridSZ)] Then
+							If r\mt\waypoints[x - 1 + (y * MTGridSize)]\connected[i] = r\mt\waypoints[x + (y * MTGridSize)] Then
 								Exit
-							ElseIf r\grid\waypoints[x + (y * GridSZ)]\connected[i] = Null Then
-								r\grid\waypoints[x - 1 + (y * GridSZ)]\connected[i] = r\grid\waypoints[x + (y * GridSZ)]
-								r\grid\waypoints[x - 1 + (y * GridSZ)]\Dist[i] = Dist
+							ElseIf r\mt\waypoints[x + (y * MTGridSize)]\connected[i] = Null Then
+								r\mt\waypoints[x - 1 + (y * MTGridSize)]\connected[i] = r\mt\waypoints[x + (y * MTGridSize)]
+								r\mt\waypoints[x - 1 + (y * MTGridSize)]\Dist[i] = Dist
 								Exit
 							EndIf
 						Next
 					EndIf
 				EndIf
-				If x < GridSZ - 1 Then
-					If r\grid\waypoints[x + 1 + (y * GridSZ)] <> Null Then
-						Dist = EntityDistance(r\grid\waypoints[x + (y * GridSZ)]\OBJ, r\grid\waypoints[x + 1 + (y * GridSZ)]\OBJ)
+				If x < MTGridSize - 1 Then
+					If r\mt\waypoints[x + 1 + (y * MTGridSize)] <> Null Then
+						Dist = EntityDistance(r\mt\waypoints[x + (y * MTGridSize)]\OBJ, r\mt\waypoints[x + 1 + (y * MTGridSize)]\OBJ)
 						For i = 0 To 3
-							If r\grid\waypoints[x + (y * GridSZ)]\connected[i] = r\grid\waypoints[x + 1 + (y * GridSZ)] Then
+							If r\mt\waypoints[x + (y * MTGridSize)]\connected[i] = r\mt\waypoints[x + 1 + (y * MTGridSize)] Then
 								Exit
-							ElseIf r\grid\waypoints[x + (y * GridSZ)]\connected[i] = Null Then
-								r\grid\waypoints[x + (y * GridSZ)]\connected[i] = r\grid\waypoints[x + 1 + (y * GridSZ)]
-								r\grid\waypoints[x + (y * GridSZ)]\Dist[i] = Dist
+							ElseIf r\mt\waypoints[x + (y * MTGridSize)]\connected[i] = Null Then
+								r\mt\waypoints[x + (y * MTGridSize)]\connected[i] = r\mt\waypoints[x + 1 + (y * MTGridSize)]
+								r\mt\waypoints[x + (y * MTGridSize)]\Dist[i] = Dist
 								Exit
 							EndIf
 						Next
 						For i = 0 To 3
-							If r\grid\waypoints[x + 1 + (y * GridSZ)]\connected[i] = r\grid\waypoints[x + (y * GridSZ)] Then
+							If r\mt\waypoints[x + 1 + (y * MTGridSize)]\connected[i] = r\mt\waypoints[x + (y * MTGridSize)] Then
 								Exit
-							ElseIf r\grid\waypoints[x + (y * GridSZ)]\connected[i] = Null Then
-								r\grid\waypoints[x + 1 + (y * GridSZ)]\connected[i] = r\grid\waypoints[x + (y * GridSZ)]
-								r\grid\waypoints[x + 1 + (y * GridSZ)]\Dist[i] = Dist
+							ElseIf r\mt\waypoints[x + (y * MTGridSize)]\connected[i] = Null Then
+								r\mt\waypoints[x + 1 + (y * MTGridSize)]\connected[i] = r\mt\waypoints[x + (y * MTGridSize)]
+								r\mt\waypoints[x + 1 + (y * MTGridSize)]\Dist[i] = Dist
 								Exit
 							EndIf
 						Next
@@ -1795,7 +1799,7 @@ Function PlaceMapCreatorMT(r.Rooms)
 	Next
 	
 	For i = 0 To 6
-		r\grid\Meshes[i] = Meshes[i]
+		r\mt\Meshes[i] = Meshes[i]
 	Next
 	
 	CatchErrors("PlaceMapCreatorMT")
@@ -2982,10 +2986,10 @@ Function RemoveDoor(d.Doors)
 	
 	If d\OBJ <> 0 Then FreeEntity(d\OBJ) : d\OBJ = 0
 	If d\OBJ2 <> 0 Then FreeEntity(d\OBJ2) : d\OBJ2 = 0
-	If d\FrameOBJ <> 0 Then FreeEntity(d\FrameOBJ) : d\FrameOBJ = 0
 	For i = 0 To 1
 		If d\Buttons[i] <> 0 Then FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
 	Next
+	If d\FrameOBJ <> 0 Then FreeEntity(d\FrameOBJ) : d\FrameOBJ = 0
 	Delete(d)
 End Function
 
@@ -7937,7 +7941,11 @@ Function CreateMap()
 			If x2 < x + Width Then
 				If i = 1 Then
 					TempHeight = Height 
-					If Rand(2) = 1 Then x2 = x Else x2 = x + Width
+					If Rand(2) = 1 Then
+						x2 = x
+					Else
+						x2 = x + Width
+					EndIf
 				Else
 					TempHeight = Rand(1, Height)
 				EndIf
