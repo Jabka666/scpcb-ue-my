@@ -795,24 +795,24 @@ Function GenForestGrid(fr.Forest)
 				Dir = 2 * Rand(0, 1)
 				; ~ Make sure you have not passed max side distance
 				Dir = TurnIfDeviating(Max_Deviation_Distance, PathX, Center, Dir)
-				Deviated = TurnIfDeviating(Max_Deviation_Distance, PathX, Center, Dir, 1)
+				Deviated = TurnIfDeviating(Max_Deviation_Distance, PathX, Center, Dir, True)
 				If Deviated Then fr\Grid[((ForestGridSize - 1 - PathY) * ForestGridSize) + PathX] = 1
 				PathX = MoveForward(Dir, PathX, PathY)
-				PathY = MoveForward(Dir, PathX, PathY, 1)
+				PathY = MoveForward(Dir, PathX, PathY, True)
 			EndIf
 		Else
 			; ~ We are going to the side, so determine whether to keep going or go forward again
 			Dir = TurnIfDeviating(Max_Deviation_Distance, PathX, Center, Dir)
-			Deviated = TurnIfDeviating(Max_Deviation_Distance, PathX, Center, Dir, 1)
+			Deviated = TurnIfDeviating(Max_Deviation_Distance, PathX, Center, Dir, True)
 			If Deviated Lor Chance(Return_Chance) Then Dir = 1
 			
 			PathX = MoveForward(Dir, PathX, PathY)
-			PathY = MoveForward(Dir, PathX, PathY, 1)
+			PathY = MoveForward(Dir, PathX, PathY, True)
 			; ~ If we just started going forward go twice so as to avoid creating a potential 2x2 line
 			If Dir = 1 Then
 				fr\Grid[((ForestGridSize - 1 - PathY) * ForestGridSize) + PathX] = 1
 				PathX = MoveForward(Dir, PathX, PathY)
-				PathY = MoveForward(Dir, PathX, PathY, 1)
+				PathY = MoveForward(Dir, PathX, PathY, True)
 			EndIf
 		EndIf
 		;~ Add our position to the grid
@@ -822,7 +822,7 @@ Function GenForestGrid(fr.Forest)
 	Dir = 1
 	While PathY < ForestGridSize - 2
 		PathX = MoveForward(Dir, PathX, PathY)
-		PathY = MoveForward(Dir, PathX, PathY, 1)
+		PathY = MoveForward(Dir, PathX, PathY, True)
 		fr\Grid[((ForestGridSize - 1 - PathY) * ForestGridSize) + PathX] = 1
 	Wend
 	
@@ -831,7 +831,7 @@ Function GenForestGrid(fr.Forest)
 		If Door1_Pos > PathX Then Dir = 2
 		While PathX <> Door1_Pos
 			PathX = MoveForward(Dir, PathX, PathY)
-			PathY = MoveForward(Dir, PathX, PathY, 1)
+			PathY = MoveForward(Dir, PathX, PathY, True)
 			fr\Grid[((ForestGridSize - 1 - PathY) * ForestGridSize) + PathX] = 1
 		Wend
 	EndIf

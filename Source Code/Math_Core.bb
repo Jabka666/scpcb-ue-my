@@ -79,23 +79,23 @@ Function Chance%(Percent%)
 	Return(Rand(0, 100) =< Percent)
 End Function
 
-Function MoveForward%(Dir%, PathX%, PathY%, RetVal% = 0)
+Function MoveForward%(Dir%, PathX%, PathY%, RetVal% = False)
 	; ~ Move 1 unit along the grid in the designated direction
 	If Dir = 1 Then
-		If RetVal = 0 Then
+		If (Not RetVal) Then
 			Return(PathX)
 		Else
 			Return(PathY + 1)
 		EndIf
 	EndIf
-	If RetVal = 0 Then
+	If (Not RetVal) Then
 		Return(PathX - 1 + Dir)
 	Else
 		Return(PathY)
 	EndIf
 End Function
 
-Function TurnIfDeviating%(Max_Deviation_Distance_%, Pathx%, Center_%, Dir%, RetVal% = 0)
+Function TurnIfDeviating%(Max_Deviation_Distance_%, Pathx%, Center_%, Dir%, RetVal% = False)
 	; ~ Check if deviating and return the answer. if deviating, turn around
 	Local Current_Deviation% = Center_ - Pathx
 	Local Deviated% = False
@@ -104,7 +104,7 @@ Function TurnIfDeviating%(Max_Deviation_Distance_%, Pathx%, Center_%, Dir%, RetV
 		Dir = ((Dir + 2) Mod 4)
 		Deviated = True
 	EndIf
-	If RetVal = 0 Then 
+	If (Not RetVal) Then 
 		Return(Dir) 
 	Else 
 		Return(Deviated)
