@@ -1172,8 +1172,8 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 	CatchErrors("PlaceForest")
 End Function
 
-Function PlaceForest_MapCreator(fr.Forest, x#, y#, z#, r.Rooms)
-	CatchErrors("Uncaught (PlaceForest_MapCreator)")
+Function PlaceMapCreatorForest(fr.Forest, x#, y#, z#, r.Rooms)
+	CatchErrors("Uncaught (PlaceMapCreatorForest)")
 	
 	Local tX%, tY%
 	Local Tile_Size# = 12.0
@@ -1358,7 +1358,7 @@ Function PlaceForest_MapCreator(fr.Forest, x#, y#, z#, r.Rooms)
 		Next
 	Next
 	
-	CatchErrors("PlaceForest_MapCreator")
+	CatchErrors("PlaceMapCreatorForest")
 End Function
 
 Function DestroyForest(fr.Forest)
@@ -1398,8 +1398,8 @@ Function UpdateForest(fr.Forest, Ent%)
 		For tX = 0 To GridSize - 1
 			For tY = 0 To GridSize - 1
 				If fr\TileEntities[tX + (tY * GridSize)] <> 0 Then
-					If Abs(EntityX(Ent, True) - EntityX(fr\TileEntities[tX + (tY * GridSize)], True)) < 20.0 Then
-						If Abs(EntityZ(Ent, True) - EntityZ(fr\TileEntities[tX + (tY * GridSize)], True)) < 20.0 Then
+					If Abs(EntityX(Ent, True) - EntityX(fr\TileEntities[tX + (tY * GridSize)], True)) < HideDistance Then
+						If Abs(EntityZ(Ent, True) - EntityZ(fr\TileEntities[tX + (tY * GridSize)], True)) < HideDistance Then
 							ShowEntity(fr\TileEntities[tX + (tY * GridSize)])
 						Else
 							HideEntity(fr\TileEntities[tX + (tY * GridSize)])
@@ -1534,7 +1534,7 @@ Global RoomAmbience%[10]
 
 Global Sky%
 
-Global HideDistance# = 15.0
+Const HideDistance# = 15.0
 
 Global SecondaryLightOn# = True
 Global PrevSecondaryLightOn# = True
@@ -1596,7 +1596,9 @@ Type Grids
 	Field waypoints.WayPoints[GridSZ ^ 2]
 End Type
 
-Function UpdateGrid(grid.Grids)
+Function UpdateMT(grid.Grids)
+	CatchErrors("Uncaught (UpdateMT)")
+	
 	Local tX%, tY%
 	
 	For tX = 0 To GridSZ - 1
@@ -1615,9 +1617,13 @@ Function UpdateGrid(grid.Grids)
 			EndIf
 		Next
 	Next
+	
+	CatchErrors("UpdateMT")
 End Function
 
-Function PlaceGrid_MapCreator(r.Rooms)
+Function PlaceMapCreatorMT(r.Rooms)
+	CatchErrors("Uncaught (PlaceMapCreatorMT)")
+	
 	Local dr.Doors, it.Items, wayp.WayPoints
 	Local x%, y%, i%, Dist#
 	Local Meshes%[7]
@@ -1791,6 +1797,8 @@ Function PlaceGrid_MapCreator(r.Rooms)
 	For i = 0 To 6
 		r\grid\Meshes[i] = Meshes[i]
 	Next
+	
+	CatchErrors("PlaceMapCreatorMT")
 End Function
 
 Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
@@ -2360,7 +2368,7 @@ Function UpdateDoors()
 										RotateEntity(Pvt, 0.0, Rnd(360.0), 0.0)
 										
 										p.Particles = CreateParticle(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 3, 0.002, 0.0, 300.0)
-										p\Speed = 0.005 : p\SizeChange = -0.00001 : p\Size = 0.01 : p\Achange = -0.01
+										p\Speed = 0.005 : p\SizeChange = -0.00001 : p\Size = 0.01 : p\Alphachange = -0.01
 										RotateEntity(p\Pvt, Rnd(-20.0, 20.0), Rnd(360.0), 0.0)
 										ScaleSprite(p\OBJ, p\Size, p\Size)
 										EntityOrder(p\OBJ, -1)
@@ -3012,8 +3020,13 @@ Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#, Size# = 1.0, A
 	SpriteViewMode(d\OBJ, 2)
 	If R <> 0 Lor G <> 0 Lor B <> 0 Then EntityColor(d\OBJ, R, G, B)
 	
-	If (Not tt\DecalTextureID[ID]) Lor (Not d\OBJ) Then Return(Null)
-	
+	If (Not tt\DecalTextureID[ID]) Then
+		CreateConsoleMsg("Decal Texture ID: " + ID + " not found.")
+		If opt\ConsoleOpening And opt\CanOpenConsole Then
+			ConsoleOpen = True
+		EndIf
+		Return(Null)
+	EndIf
 	Return(d)
 End Function
 
@@ -3759,12 +3772,12 @@ Function FillRoom(r.Rooms)
 			
 			; ~ Smoke
 			em.Emitters = CreateEmitter(r\x - 175.0 * RoomScale, r\y + 370.0 * RoomScale, r\z + 656.0 * RoomScale, 0)
-			em\RandAngle = 20.0 : em\Speed = 0.05 : em\SizeChange = 0.007 : em\Achange = -0.006 : em\Gravity = -0.24
+			em\RandAngle = 20.0 : em\Speed = 0.05 : em\SizeChange = 0.007 : em\AlphaChange = -0.006 : em\Gravity = -0.24
 			TurnEntity(em\OBJ, 90.0, 0.0, 0.0)
 			EntityParent(em\OBJ, r\OBJ)
 			
 			em.Emitters = CreateEmitter(r\x - 655.0 * RoomScale, 370.0 * RoomScale, r\z + 240.0 * RoomScale, 0)
-			em\RandAngle = 20.0 : em\Speed = 0.05 : em\SizeChange = 0.007 : em\Achange = -0.006 : em\Gravity = -0.24
+			em\RandAngle = 20.0 : em\Speed = 0.05 : em\SizeChange = 0.007 : em\AlphaChange = -0.006 : em\Gravity = -0.24
 			TurnEntity(em\OBJ, 90.0, 0.0, 0.0)
 			EntityParent(em\OBJ, r\OBJ)
 			;[End Block]
@@ -4180,7 +4193,7 @@ Function FillRoom(r.Rooms)
 			For xTemp = -1 To 1 Step 2
 				For zTemp = -1 To 1
 					em.Emitters = CreateEmitter(r\x + 202.0 * RoomScale * xTemp, r\y + 8.0 * RoomScale, r\z + 256.0 * RoomScale * zTemp, 0)
-					em\RandAngle = 30.0 : em\Speed = 0.0045 : em\SizeChange = 0.007 : em\Achange = -0.016
+					em\RandAngle = 30.0 : em\Speed = 0.0045 : em\SizeChange = 0.007 : em\AlphaChange = -0.016
 					If i < 3 Then 
 						TurnEntity(em\OBJ, -45.0, -90.0, 0.0) 
 					Else 
@@ -4739,13 +4752,13 @@ Function FillRoom(r.Rooms)
 			Next
 			
 			em.Emitters = CreateEmitter(r\x - 269.0 * RoomScale, r\y + 20.0, r\z + 624.0 * RoomScale, 0)
-			em\RandAngle = 15.0 : em\Speed = 0.05 : em\SizeChange = 0.007 : em\Achange = -0.006 : em\Gravity = -0.24
+			em\RandAngle = 15.0 : em\Speed = 0.05 : em\SizeChange = 0.007 : em\AlphaChange = -0.006 : em\Gravity = -0.24
 			TurnEntity(em\OBJ, 90.0, 0.0, 0.0)
 			EntityParent(em\OBJ, r\OBJ)
 			r\Objects[5] = em\OBJ
 			
 			em.Emitters = CreateEmitter(r\x - 269.0 * RoomScale, r\y + 20.0, r\z + 135.0 * RoomScale, 0)
-			em\RandAngle = 15.0 : em\Speed = 0.05 : em\SizeChange = 0.007 : em\Achange = -0.006 : em\Gravity = -0.24
+			em\RandAngle = 15.0 : em\Speed = 0.05 : em\SizeChange = 0.007 : em\AlphaChange = -0.006 : em\Gravity = -0.24
 			TurnEntity(em\OBJ, 90.0, 0.0, 0.0)
 			EntityParent(em\OBJ, r\OBJ)
 			r\Objects[6] = em\OBJ
@@ -4955,7 +4968,7 @@ Function FillRoom(r.Rooms)
 			Next
 			
 			em.Emitters = CreateEmitter(r\x + 5218.0 * RoomScale, r\y - 5584.0 * RoomScale, r\z - 600.0 * RoomScale, 0)
-			em\RandAngle = 15.0 : em\Speed = 0.03 : em\SizeChange = 0.01 : em\Achange = -0.006 : em\Gravity = -0.2 
+			em\RandAngle = 15.0 : em\Speed = 0.03 : em\SizeChange = 0.01 : em\AlphaChange = -0.006 : em\Gravity = -0.2 
 			TurnEntity(em\OBJ, 20.0, -100.0, 0.0)
 			EntityParent(em\OBJ, r\OBJ) : em\room = r
 			
@@ -5230,12 +5243,12 @@ Function FillRoom(r.Rooms)
 			EntityParent(r\Objects[i], r\OBJ)
 			
 			em.Emitters = CreateEmitter(r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 0)
-			em\RandAngle = 55.0 : em\Speed = 0.0005 : em\Achange = -0.015 : em\SizeChange = 0.007
+			em\RandAngle = 55.0 : em\Speed = 0.0005 : em\AlphaChange = -0.015 : em\SizeChange = 0.007
 			TurnEntity(em\OBJ, -90.0, 0.0, 0.0)
 			EntityParent(em\OBJ, r\OBJ)
 			
 			em.Emitters = CreateEmitter(r\x - 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 0)
-			em\RandAngle = 55.0 : em\Speed = 0.0005 : em\Achange = -0.015 : em\SizeChange = 0.007
+			em\RandAngle = 55.0 : em\Speed = 0.0005 : em\AlphaChange = -0.015 : em\SizeChange = 0.007
 			TurnEntity(em\OBJ, -90.0, 0.0, 0.0)
 			EntityParent(em\OBJ, r\OBJ)
 			;[End Block]
@@ -7196,7 +7209,7 @@ Function FillRoom(r.Rooms)
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			
 			em.Emitters = CreateEmitter(r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 0)
-			em\RandAngle = 55.0 : em\Speed = 0.0005 : em\Achange = -0.015 : em\SizeChange = 0.007
+			em\RandAngle = 55.0 : em\Speed = 0.0005 : em\AlphaChange = -0.015 : em\SizeChange = 0.007
 			TurnEntity(em\OBJ, -90.0, 0.0, 0.0)
 			EntityParent(em\OBJ, r\OBJ)
 			

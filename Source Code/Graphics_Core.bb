@@ -174,9 +174,9 @@ Function UpdateWorld2()
 		If wi\NightVision = 2 Then
 			If wi\NVGTimer =< 0.0 Then
 				For np.NPCs = Each NPCs
-					np\NVX = EntityX(np\Collider, True)
-					np\NVY = EntityY(np\Collider, True)
-					np\NVZ = EntityZ(np\Collider, True)
+					np\NVGX = EntityX(np\Collider, True)
+					np\NVGY = EntityY(np\Collider, True)
+					np\NVGZ = EntityZ(np\Collider, True)
 				Next
 				If wi\NVGTimer =< -10.0 Then wi\NVGTimer = 600.0
 				wi\IsNVGBlinking = True
@@ -276,8 +276,8 @@ Function RenderWorld2(Tween#)
 			Color(255, 255, 255)
 			
 			For np.NPCs = Each NPCs
-				If np\NVName <> "" And (Not np\HideFromNVG) Then ; ~ Don't waste your time if the string is empty
-					PositionEntity(Temp2, np\NVX, np\NVY, np\NVZ)
+				If np\NVGName <> "" And (Not np\HideFromNVG) Then ; ~ Don't waste your time if the string is empty
+					PositionEntity(Temp2, np\NVGX, np\NVGY, np\NVGZ)
 					
 					Local Dist# = EntityDistanceSquared(Temp2, me\Collider)
 					
@@ -307,7 +307,7 @@ Function RenderWorld2(Tween#)
 						EndIf
 						
 						If (Not wi\IsNVGBlinking) Then
-							Text(mo\Viewport_Center_X + (xValue * mo\Viewport_Center_X), mo\Viewport_Center_Y - (yValue * mo\Viewport_Center_Y), np\NVName, True, True)
+							Text(mo\Viewport_Center_X + (xValue * mo\Viewport_Center_X), mo\Viewport_Center_Y - (yValue * mo\Viewport_Center_Y), np\NVGName, True, True)
 							Text(mo\Viewport_Center_X + (xValue * mo\Viewport_Center_X), mo\Viewport_Center_Y - (yValue * mo\Viewport_Center_Y) + (30 * MenuScale), f2s(Sqr(Dist), 1) + " m", True, True)
 						EndIf
 					EndIf

@@ -852,7 +852,7 @@ Function LoadGame(File$)
 			If HasForest = 1 Then
 				PlaceForest(r\fr, lX, lY, lZ, r)
 			Else
-				PlaceForest_MapCreator(r\fr, lX, lY, lZ, r)
+				PlaceMapCreatorForest(r\fr, lX, lY, lZ, r)
 			EndIf
 		ElseIf r\fr <> Null Then ; ~ Remove the old forest
 			DestroyForest(r\fr)
@@ -2061,8 +2061,6 @@ Function LoadGameQuick(File$)
 			EndIf
 		EndIf
 	Next
-	; ~ Resetting some stuff (those get changed when going to the endings)
-	HideDistance = 15.0
 	
 	CatchErrors("LoadGameQuick")
 End Function
@@ -2329,7 +2327,7 @@ Function LoadMap(File$)
 		
 		If fr <> Null Then
 			ForestRoom\fr = fr
-			PlaceForest_MapCreator(ForestRoom\fr, ForestRoom\x, ForestRoom\y + 30.0, ForestRoom\z, ForestRoom)
+			PlaceMapCreatorForest(ForestRoom\fr, ForestRoom\x, ForestRoom\y + 30.0, ForestRoom\z, ForestRoom)
 		EndIf
 		
 		Local MTRoom.Rooms

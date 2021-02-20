@@ -653,6 +653,8 @@ Global DecaySFX%[5]
 
 Global BurstSFX% 
 
+Global HissSFX%
+
 RenderLoading(20, True)
 
 Global RustleSFX%[6]
@@ -804,6 +806,8 @@ Function LoadSounds()
 	Next
 	
 	BurstSFX = LoadSound_Strict("SFX\Room\TunnelBurst.ogg")
+	
+	HissSFX = LoadSound_Strict("SFX\General\Hiss.ogg")
 	
 	For i = 0 To 5
 		RustleSFX[i] = LoadSound_Strict("SFX\SCP\372\Rustle" + i + ".ogg")

@@ -35,10 +35,10 @@ Type NPCs
 	Field Target.NPCs, TargetID%
 	Field EnemyX#, EnemyY#, EnemyZ#
 	Field Path.WayPoints[21], PathStatus%, PathTimer#, PathLocation%
-	Field NVX#, NVY#, NVZ#, NVName$
+	Field HideFromNVG%
+	Field NVGX#, NVGY#, NVGZ#, NVGName$
 	Field GravityMult# = 1.0
 	Field MaxGravity# = 0.2
-	Field MTFVariant%
 	Field MTFLeader.NPCs
 	Field IsDead%
 	Field BlinkTimer# = 1.0
@@ -46,16 +46,13 @@ Type NPCs
 	Field ManipulateBone%
 	Field ManipulationType%
 	Field BoneToManipulate$
-	Field BonePitch#
-	Field BoneYaw#
-	Field BoneRoll#
+	Field BonePitch#, BoneYaw#, BoneRoll#
 	Field NPCNameInSection$
 	Field InFacility% = True
 	Field HP%
 	Field PathX#, PathZ#
 	Field Model$
 	Field ModelScaleX#, ModelScaleY#, ModelScaleZ#
-	Field HideFromNVG%
 	Field TextureID% = -1
 	Field CollRadius#
 	Field IdleTimer#
@@ -83,7 +80,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 	Select NPCType
 		Case NPCType173
 			;[Block]
-			n\NVName = "SCP-173"
+			n\NVGName = "SCP-173"
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.23, 0.32)
 			EntityType(n\Collider, HIT_PLAYER)
@@ -120,7 +117,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCType106
 			;[Block]
-			n\NVName = "SCP-106"
+			n\NVGName = "SCP-106"
 			n\Collider = CreatePivot()
 			n\GravityMult = 0.0
 			n\MaxGravity = 0.0
@@ -145,7 +142,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCTypeGuard
 			;[Block]
-			n\NVName = "Human"
+			n\NVGName = "Human"
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.2)
 			EntityType(n\Collider, HIT_PLAYER)
@@ -162,7 +159,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCTypeMTF
 			;[Block]
-			n\NVName = "Human"
+			n\NVGName = "Human"
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.2)
 			EntityType(n\Collider, HIT_PLAYER)
@@ -184,7 +181,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCTypeD
 			;[Block]
-			n\NVName = "Human"
+			n\NVGName = "Human"
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.32)
 			EntityType(n\Collider, HIT_PLAYER)
@@ -202,7 +199,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCType372
 			;[Block]
-			n\NVName = "SCP-372"
+			n\NVGName = "SCP-372"
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.2)
 			
@@ -213,7 +210,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCType513_1
 			;[Block]
-			n\NVName = "SCP-513-1"
+			n\NVGName = "SCP-513-1"
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.2)
 			n\OBJ = CopyEntity(o\NPCModelID[NPCType513_1])
@@ -227,7 +224,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCType096
 			;[Block]
-			n\NVName = "SCP-096"
+			n\NVGName = "SCP-096"
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.26)
 			EntityType(n\Collider, HIT_PLAYER)
@@ -251,7 +248,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCType049
 			;[Block]
-			n\NVName = "SCP-049"
+			n\NVGName = "SCP-049"
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.2)
 			EntityType(n\Collider, HIT_PLAYER)
@@ -269,7 +266,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCType049_2
 			;[Block]
-			n\NVName = "Human"
+			n\NVGName = "Human"
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.2)
 			EntityType(n\Collider, HIT_PLAYER)
@@ -291,7 +288,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCTypeApache
 			;[Block]
-			n\NVName = "Apache Helicopter"
+			n\NVGName = "Apache Helicopter"
 			n\GravityMult = 0.0
 			n\MaxGravity = 0.0
 			n\Collider = CreatePivot()
@@ -337,7 +334,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCType035_Tentacle
 			;[Block]
-			n\NVName = "Unidentified"
+			n\NVGName = "Unidentified"
 			
 			n\Collider = CreatePivot()
 			
@@ -351,7 +348,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCType860_2
 			;[Block]
-			n\NVName = "Unidentified"
+			n\NVGName = "Unidentified"
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.25)
@@ -384,7 +381,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			For n2.NPCs = Each NPCs
 				If n\NPCType = n2\NPCType And n <> n2 Then i = i + 1
 			Next
-			n\NVName = "SCP-939-" + i
+			n\NVGName = "SCP-939-" + i
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.3)
@@ -400,7 +397,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCType066
 			;[Block]
-			n\NVName = "SCP-066"
+			n\NVGName = "SCP-066"
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.2)
 			EntityType(n\Collider, HIT_PLAYER)
@@ -418,7 +415,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			For n2.NPCs = Each NPCs
 				If n\NPCType = n2\NPCType And n <> n2 Then i = i + 1
 			Next
-			n\NVName = "SCP-966-" + i
+			n\NVGName = "SCP-966-" + i
 			
 			n\Collider = CreatePivot()
 			EntityRadius n\Collider,0.2
@@ -437,7 +434,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCType1499_1
 			;[Block]
-			n\NVName = "Unidentified"
+			n\NVGName = "Unidentified"
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.2)
 			EntityType(n\Collider, HIT_PLAYER)
@@ -454,7 +451,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCType008_1
 			;[Block]
-			n\NVName = "Human"
+			n\NVGName = "Human"
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.2)
 			EntityType(n\Collider, HIT_PLAYER)
@@ -476,7 +473,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCTypeClerk
 			;[Block]
-			n\NVName = "Human"
+			n\NVGName = "Human"
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.32)
 			EntityType(n\Collider, HIT_PLAYER)
@@ -494,7 +491,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCTypeVehicle
 			;[Block]
-			n\NVName = "Vehicle"
+			n\NVGName = "Vehicle"
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.32)
 			EntityType(n\Collider, HIT_PLAYER)
@@ -3847,7 +3844,7 @@ Function UpdateNPCs()
 									MoveEntity(Pvt, 0.8 * 0.079, 10.75 * 0.079, 6.9 * 0.079)
 									
 									p.Particles = CreateParticle(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 2, Rnd(0.08, 0.1), 0.0, 5.0)
-									p\Achange = -0.15
+									p\AlphaChange = -0.15
 									TurnEntity(p\OBJ, 0.0, 0.0, Rnd(360.0))
 									
 									FreeEntity(Pvt)
@@ -4005,7 +4002,7 @@ Function UpdateNPCs()
 											MoveEntity(Pvt, 0.8 * 0.079, 10.75 * 0.079, 6.9 * 0.079)
 											
 											p.Particles = CreateParticle(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 2, Rnd(0.08, 0.1), 0.0, 5.0)
-											p\Achange = -0.15
+											p\AlphaChange = -0.15
 											TurnEntity(p\OBJ, 0.0, 0.0, Rnd(360.0))
 											
 											If n\Target\HP > 0 Then
@@ -6684,7 +6681,7 @@ Function UpdateNPCs()
 		Else
 			n\DropSpeed = 0.0
 		EndIf
-		CatchErrors(Chr(34) + n\NVName + Chr(34) + " NPC; ID: " + n\NPCType)
+		CatchErrors("UpdateNPCs: NPC Name: " + Chr(34) + n\NVGName + Chr(34) + ", ID: " + n\NPCType)
 	Next
 	
 	UpdateCameraCheck()
@@ -6959,7 +6956,7 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 	Local Pvt%, ShotMessageUpdate$, i%
 	
 	p.Particles = CreateParticle(x, y, z, 2, Rnd(0.08, 0.1), 0.0, 5.0)
-	p\Achange = -0.15
+	p\AlphaChange = -0.15
 	TurnEntity(p\OBJ, 0.0, 0.0, Rnd(360.0))
 	
 	LightVolume = TempLightVolume * 1.2
@@ -7044,12 +7041,12 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 			
 			If Particles Then 
 				p.Particles = CreateParticle(PickedX(), PickedY(), PickedZ(), 0, 0.03, 0.0, 80.0)
-				p\Speed = 0.001 : p\SizeChange = 0.003 : p\A = 0.8 : p\Achange = -0.01
+				p\Speed = 0.001 : p\SizeChange = 0.003 : p\Alpha = 0.8 : p\AlphaChange = -0.01
 				RotateEntity(p\Pvt, EntityPitch(Pvt) - 180.0, EntityYaw(Pvt), 0)
 				
 				For i = 0 To Rand(2, 3)
 					p.Particles = CreateParticle(PickedX(), PickedY(), PickedZ(), 0, 0.006, 0.003, 80.0)
-					p\Speed = 0.02 : p\A = 0.8 : p\Achange = -0.01
+					p\Speed = 0.02 : p\Alpha = 0.8 : p\AlphaChange = -0.01
 					RotateEntity(p\Pvt, EntityPitch(Pvt) + Rnd(170.0, 190.0), EntityYaw(Pvt) + Rnd(-10.0, 10.0), 0)	
 				Next
 				

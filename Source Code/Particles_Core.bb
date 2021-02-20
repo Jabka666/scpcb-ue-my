@@ -1,9 +1,8 @@
 Type Particles
 	Field OBJ%, Pvt%
-	Field Image%
-	Field A#, Size#
+	Field Alpha#, Size#
 	Field Speed#, ySpeed#, Gravity#
-	Field RChange#, GChange#, BChange#, AChange#
+	Field RChange#, GChange#, BChange#, AlphaChange#
 	Field SizeChange#
 	Field LifeTime#
 End Type 
@@ -29,13 +28,19 @@ Function CreateParticle.Particles(x#, y#, z#, ID%, Size#, Gravity# = 1.0, LifeTi
 	p\Pvt = CreatePivot()
 	PositionEntity(p\Pvt, x, y, z, True)
 	
-	p\Image = ID
 	p\LifeTime = LifeTime
 	p\Gravity = Gravity * 0.004
-	p\A = 1.0
+	p\Alpha = 1.0
 	p\Size = Size
 	ScaleSprite(p\OBJ, p\Size, p\Size)
 	
+	If (Not tt\ParticleTextureID[ID]) Then
+		CreateConsoleMsg("Particle Texture ID: " + ID + " not found.")
+		If opt\ConsoleOpening And opt\CanOpenConsole Then
+			ConsoleOpen = True
+		EndIf
+		Return(Null)
+	EndIf
 	Return(p)
 End Function
 	
@@ -49,9 +54,9 @@ Function UpdateParticles()
 		
 		PositionEntity(p\OBJ, EntityX(p\Pvt, True), EntityY(p\Pvt, True), EntityZ(p\Pvt, True), True)
 		
-		If p\AChange <> 0.0 Then
-			p\A = Min(Max(p\A + (p\AChange * fps\Factor[0]), 0.0), 1.0)
-			EntityAlpha(p\OBJ, p\A)		
+		If p\AlphaChange <> 0.0 Then
+			p\Alpha = Min(Max(p\Alpha + (p\AlphaChange * fps\Factor[0]), 0.0), 1.0)
+			EntityAlpha(p\OBJ, p\Alpha)		
 		EndIf
 		
 		If p\SizeChange <> 0.0 Then 
@@ -60,7 +65,7 @@ Function UpdateParticles()
 		EndIf
 		
 		p\LifeTime = p\LifeTime - fps\Factor[0]
-		If p\LifeTime =< 0.0 Lor p\Size < 0.00001 Lor p\A =< 0.0 Then
+		If p\LifeTime =< 0.0 Lor p\Size < 0.00001 Lor p\Alpha =< 0.0 Then
 			RemoveParticle(p)
 		EndIf
 	Next
@@ -72,27 +77,22 @@ Function RemoveParticle(p.Particles)
 	Delete(p)
 End Function
 
-Global InSmoke%
-Global HissSFX% = LoadSound_Strict("SFX\General\Hiss.ogg")
-Global SmokeDelay# = 0.0
-
 Type Emitters
 	Field OBJ%
 	Field Size#
-	Field MinImage%, MaxImage%
 	Field Gravity#
 	Field LifeTime#
-	Field Disable%
 	Field room.Rooms
 	Field SoundCHN%
 	Field Speed#, RandAngle#
-	Field SizeChange#, AChange#
+	Field SizeChange#, AlphaChange#
 End Type 
 
 Function CreateEmitter.Emitters(x#, y#, z#, EmitterType%) 
-	Local e.Emitters = New Emitters
+	Local e.Emitters
 	Local r.Rooms
 	
+	e.Emitters = New Emitters
 	e\OBJ = CreatePivot()
 	NameEntity(e\OBJ, "Emitter1")
 	PositionEntity(e\OBJ, x, y, z, True)
@@ -106,7 +106,7 @@ Function CreateEmitter.Emitters(x#, y#, z#, EmitterType%)
 			e\SizeChange = 0.005
 			e\Speed = 0.004
 			e\RandAngle = 20.0
-			e\AChange = -0.008
+			e\AlphaChange = -0.008
 			;[End Block]
 		Case 1
 			;[Block]
@@ -116,8 +116,7 @@ Function CreateEmitter.Emitters(x#, y#, z#, EmitterType%)
 			e\SizeChange = 0.008
 			e\Speed = 0.004
 			e\RandAngle = 40
-			e\AChange = -0.01
-			e\MinImage = 6 : e\MaxImage = 6
+			e\AlphaChange = -0.01
 			;[End Block]
 	End Select
 	
@@ -132,11 +131,11 @@ End Function
 
 Function UpdateEmitters()
 	Local e.Emitters, p.Particles
+	Local InSmoke% = False
 	
-	InSmoke = False
 	For e.Emitters = Each Emitters
 		If fps\Factor[0] > 0.0 And (PlayerRoom = e\room Lor e\room\Dist < 8.0) Then
-			p.Particles = CreateParticle(EntityX(e\OBJ, True), EntityY(e\OBJ, True), EntityZ(e\OBJ, True), Rand(e\MinImage, e\MaxImage), e\Size, e\Gravity, e\LifeTime)
+			p.Particles = CreateParticle(EntityX(e\OBJ, True), EntityY(e\OBJ, True), EntityZ(e\OBJ, True), 0, e\Size, e\Gravity, e\LifeTime)
 			p\Speed = e\Speed
 			RotateEntity(p\Pvt, EntityPitch(e\OBJ, True), EntityYaw(e\OBJ, True), EntityRoll(e\OBJ, True), True)
 			TurnEntity(p\Pvt, Rnd(-e\RandAngle, e\RandAngle), Rnd(-e\RandAngle, e\RandAngle), 0)
@@ -145,7 +144,7 @@ Function UpdateEmitters()
 			
 			p\SizeChange = e\SizeChange
 			
-			p\AChange = e\AChange
+			p\AlphaChange = e\AlphaChange
 			
 			e\SoundCHN = LoopSound2(HissSFX, e\SoundCHN, Camera, e\OBJ)
 			

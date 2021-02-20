@@ -110,8 +110,9 @@ Function PlaySound_Strict%(SoundHandle%)
 End Function
 
 Function LoadSound_Strict(File$)
-	Local snd.Sound = New Sound
+	Local snd.Sound
 	
+	snd.Sound = New Sound
 	snd\Name = File
 	snd\InternalHandle = 0
 	snd\ReleaseTime = 0

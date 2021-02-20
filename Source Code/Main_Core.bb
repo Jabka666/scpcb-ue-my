@@ -2200,9 +2200,9 @@ Function MainLoop()
 			CanSave = True
 			UpdateDeaf()
 			UpdateEmitters()
-			MouseLook()
+			UpdateMouseLook()
 			If PlayerRoom\RoomTemplate\Name = "dimension1499" And QuickLoadPercent > 0 And QuickLoadPercent < 100 Then ShouldEntitiesFall = False
-			MovePlayer()
+			UpdateMove()
 			InFacility = CheckForPlayerInFacility()
 			If PlayerRoom\RoomTemplate\Name = "dimension1499"
 				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100
@@ -2709,8 +2709,8 @@ Function InjurePlayer(Injuries_#, Infection# = 0.0, BlurTimer_# = 0.0, VestFacto
 	If Infection <> 0.0 Then I_008\Timer = I_008\Timer + (Infection * (wi\HazmatSuit = 0))
 End Function
 
-Function MovePlayer()
-	CatchErrors("Uncaught (MovePlayer)")
+Function UpdateMove()
+	CatchErrors("Uncaught (UpdateMove)")
 	
 	Local de.Decals
 	Local Sprint# = 1.0, Speed# = 0.018
@@ -3070,10 +3070,12 @@ Function MovePlayer()
 		me\HeartBeatVolume = Max(me\HeartBeatVolume - fps\Factor[0] * 0.05, 0.0)
 	EndIf
 	
-	CatchErrors("MovePlayer")
+	CatchErrors("UpdateMove")
 End Function
 
-Function MouseLook()
+Function UpdateMouseLook()
+	CatchErrors("Uncaught (UpdateMouseLook)")
+	
 	Local p.Particles
 	Local i%
 	
@@ -3334,6 +3336,8 @@ Function MouseLook()
 			End Select 
 		EndIf
 	Next
+	
+	CatchErrors("UpdateMouseLook")
 End Function
 
 ; ~ Navigator Constants
@@ -8503,12 +8507,7 @@ Function InitNewGame()
 	
 	RenderLoading(45)
 	
-	HideDistance = 15.0
-	
-	me\BlinkEffect = 1.0
-	me\StaminaEffect = 1.0
-	me\HeartBeatRate = 70.0
-	me\Funds = Rand(0, 6)
+	me\BlinkTimer = -10.0 : me\BlinkEffect = 1.0 : me\Stamina = 100.0 : me\StaminaEffect = 1.0 : me\HeartBeatRate = 70.0 : me\Funds = Rand(0, 6)
 	
 	I_005\ChanceToSpawn = Rand(1, 3)
 	
@@ -8624,25 +8623,13 @@ Function InitNewGame()
 	
 	HidePointer()
 	
-	me\BlinkTimer = -10.0
-	me\Stamina = 100.0
-	
-	For i = 0 To 70
-		fps\Factor[0] = 1.0
-		FlushKeys()
-		MovePlayer()
-		UpdateDoors()
-		UpdateNPCs()
-		UpdateWorld()
-		If (Int(Float(i) * 0.27) <> Int(Float(i - 1) * 0.27)) Then
-			RenderLoading(80 + Int(Float(i) * 0.27))
-		EndIf
-	Next
-	
-	DeleteTextureEntriesFromCache(DeleteMapTextures)
-	RenderLoading(100)
+	fps\Factor[0] = 1.0
 	
 	ResetInput()
+	
+	DeleteTextureEntriesFromCache(DeleteMapTextures)
+	
+	RenderLoading(100)
 	
 	me\DropSpeed = 0.0
 	
@@ -8767,8 +8754,6 @@ Function NullGame(PlayButtonSFX% = True)
 	RoomTempID = 0
 	
 	GameSaved = 0
-	
-	HideDistance = 15.0
 	
 	For itt.ItemTemplates = Each ItemTemplates
 		itt\Found = False
@@ -9669,7 +9654,7 @@ Function Update008()
 					If opt\ParticleAmount > 0 Then
 						If Rand(50) = 1 Then
 							p.Particles = CreateParticle(EntityX(PlayerRoom\NPC[0]\Collider), EntityY(PlayerRoom\NPC[0]\Collider), EntityZ(PlayerRoom\NPC[0]\Collider), 6, Rnd(0.05, 0.1), 0.15, 200)
-							p\Speed = 0.01 : p\SizeChange = 0.01 : p\A = 0.5 : p\Achange = -0.01
+							p\Speed = 0.01 : p\SizeChange = 0.01 : p\Alpha = 0.5 : p\AlphaChange = -0.01
 							RotateEntity(p\Pvt, Rnd(360.0), Rnd(360.0), 0.0)
 						EndIf
 					EndIf
