@@ -172,7 +172,7 @@ Function SaveGame(File$)
 		WriteFloat(f, n\LastDist)
 		WriteInt(f, n\LastSeen)
 		
-		WriteInt(f, n\CurrSpeed)
+		WriteFloat(f, n\CurrSpeed)
 		
 		WriteFloat(f, n\Angle)
 		
@@ -195,7 +195,7 @@ Function SaveGame(File$)
 		
 		WriteByte(f, n\UseEarphones)
 		WriteByte(f, n\Contained)
-		WriteInt(f, n\IsDead)
+		WriteByte(f, n\IsDead)
 		WriteFloat(f, n\PathX)
 		WriteFloat(f, n\PathZ)
 		WriteInt(f, n\HP)
@@ -675,7 +675,7 @@ Function LoadGame(File$)
 		n\LastDist = ReadFloat(f)
 		n\LastSeen = ReadInt(f)
 		
-		n\CurrSpeed = ReadInt(f)
+		n\CurrSpeed = ReadFloat(f)
 		n\Angle = ReadFloat(f)
 		n\Reload = ReadFloat(f)
 		
@@ -704,7 +704,7 @@ Function LoadGame(File$)
 		n\Frame = Frame
 		n\UseEarphones = ReadByte(f)
 		n\Contained = ReadByte(f)
-		n\IsDead = ReadInt(f)
+		n\IsDead = ReadByte(f)
 		n\PathX = ReadFloat(f)
 		n\PathZ = ReadFloat(f)
 		n\HP = ReadInt(f)
@@ -1551,7 +1551,7 @@ Function LoadGameQuick(File$)
 		n\LastDist = ReadFloat(f)
 		n\LastSeen = ReadInt(f)
 		
-		n\CurrSpeed = ReadInt(f)
+		n\CurrSpeed = ReadFloat(f)
 		n\Angle = ReadFloat(f)
 		n\Reload = ReadFloat(f)
 		
@@ -1580,7 +1580,7 @@ Function LoadGameQuick(File$)
 		n\Frame = Frame
 		n\UseEarphones = ReadByte(f)
 		n\Contained = ReadByte(f)
-		n\IsDead = ReadInt(f)
+		n\IsDead = ReadByte(f)
 		n\PathX = ReadFloat(f)
 		n\PathZ = ReadFloat(f)
 		n\HP = ReadInt(f)
