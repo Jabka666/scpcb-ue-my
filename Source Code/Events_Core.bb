@@ -100,7 +100,10 @@ Function CreateEvent.Events(EventName$, RoomName$, ID%, Prob# = 0.0)
 			If RoomName = "" Lor RoomName = r\RoomTemplate\Name Then
 				Temp = False
 				For e2.Events = Each Events
-					If e2\room = r Then Temp = True : Exit
+					If e2\room = r Then
+						Temp = True
+						Exit
+					EndIf
 				Next
 				
 				i = i + 1
@@ -118,7 +121,10 @@ Function CreateEvent.Events(EventName$, RoomName$, ID%, Prob# = 0.0)
 			If RoomName = "" Lor RoomName = r\RoomTemplate\Name Then
 				Temp = False
 				For e2.Events = Each Events
-					If e2\room = r Then Temp = True : Exit
+					If e2\room = r Then
+						Temp = True
+						Exit
+					EndIf
 				Next
 				
 				If Rnd(0.0, 1.0) < Prob And (Not Temp) Then
@@ -2460,7 +2466,7 @@ Function UpdateEvents()
 									EntityTexture(tt\OverlayID[4], tt\MiscTextureID[Rand(7, 12)])
 									For i = 0 To MaxItemAmount - 1
 										If Inventory(i) <> Null Then
-											If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE > 0 And Inventory(i)\ItemTemplate\TempName = "scramble") Then
+											If Inventory(i)\Picked = 2 And (Inventory(i)\ItemTemplate\TempName = "nvg" Lor Inventory(i)\ItemTemplate\TempName = "finenvg" Lor Inventory(i)\ItemTemplate\TempName = "supernvg" Lor Inventory(i)\ItemTemplate\TempName = "scramble") Then
 												If Inventory(i)\State2 = 1.0 Then PlaySound_Strict(HorrorSFX[1])
 												Inventory(i)\State2 = 2.0
 												Exit
@@ -2476,7 +2482,7 @@ Function UpdateEvents()
 									EntityTexture(tt\OverlayID[4], tt\MiscTextureID[Rand(7, 12)])
 									For i = 0 To MaxItemAmount - 1
 										If Inventory(i) <> Null Then
-											If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE > 0 And Inventory(i)\ItemTemplate\TempName = "scramble") Then
+											If Inventory(i)\Picked = 2 And (Inventory(i)\ItemTemplate\TempName = "nvg" Lor Inventory(i)\ItemTemplate\TempName = "finenvg" Lor Inventory(i)\ItemTemplate\TempName = "supernvg" Lor Inventory(i)\ItemTemplate\TempName = "scramble") Then
 												If Inventory(i)\State2 = 0.0 Then PlaySound_Strict(HorrorSFX[0])
 												Inventory(i)\State2 = 1.0
 												Exit
@@ -2488,8 +2494,9 @@ Function UpdateEvents()
 								EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
 								For i = 0 To MaxItemAmount - 1
 									If Inventory(i) <> Null Then
-										If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE > 0 And Inventory(i)\ItemTemplate\TempName = "scramble") Then
+										If Inventory(i)\Picked = 2 And (Inventory(i)\ItemTemplate\TempName = "nvg" Lor Inventory(i)\ItemTemplate\TempName = "finenvg" Lor Inventory(i)\ItemTemplate\TempName = "supernvg" Lor Inventory(i)\ItemTemplate\TempName = "scramble") Then
 											Inventory(i)\State2 = 0.0
+											Exit
 										EndIf
 									EndIf
 								Next
@@ -2880,7 +2887,10 @@ Function UpdateEvents()
 									x = x + EntityX(e\room\Objects[8], True)
 									z = z + EntityZ(e\room\Objects[8], True)
 									
-									If DistanceSquared(EntityX(me\Collider), x, EntityZ(me\Collider), z) < PowTwo(200.0 * RoomScale) Then Safe = True : Exit
+									If DistanceSquared(EntityX(me\Collider), x, EntityZ(me\Collider), z) < PowTwo(200.0 * RoomScale) Then
+										Safe = True
+										Exit
+									EndIf
 								Next
 								
 								Dist = EntityDistanceSquared(me\Collider, e\room\Objects[18])
@@ -3301,7 +3311,7 @@ Function UpdateEvents()
 								If mo\MouseHit1 Then
 									Temp = True
 									For it.Items = Each Items
-										If (Not it\Picked) Then
+										If it\Picked = 0 Then
 											If EntityX(it\Collider) - EntityX(e\room\Objects[1], True) = 0.0 Then
 												If EntityZ(it\Collider) - EntityZ(e\room\Objects[1], True) = 0.0 Then
 													Temp = False
@@ -3476,7 +3486,7 @@ Function UpdateEvents()
 							TeleportEntity(it\Collider, EntityX(it\Collider), EntityY(it\Collider), EntityZ(it\Collider), -0.02, True, 10.0)
 							For i = 0 To 1
 								it2.Items = CreateItem("Quarter", "25ct", 0.0, 0.0, 0.0)
-								it2\Picked = True : it2\Dropped = -1 : it2\ItemTemplate\Found = True
+								it2\Picked = 1 : it2\Dropped = -1 : it2\ItemTemplate\Found = True
 								it\SecondInv[i] = it2
 								HideEntity(it2\Collider)
 								EntityType(it2\Collider, HIT_ITEM)
@@ -5301,7 +5311,7 @@ Function UpdateEvents()
 												If itt\TempName = "paper" And Rand(6) = 1 Then
 													Inventory(i) = CreateItem(itt\Name, itt\TempName, 1.0, 1.0, 1.0)
 													HideEntity(Inventory(i)\Collider)
-													Inventory(i)\Picked = True
+													Inventory(i)\Picked = 1
 													Exit
 												EndIf
 											Next
@@ -5333,7 +5343,7 @@ Function UpdateEvents()
 								EndIf
 								Inventory(i) = CreateItem("Strange Note", "paper", 1.0, 1.0, 1.0)
 								HideEntity(Inventory(i)\Collider)
-								Inventory(i)\Picked = True
+								Inventory(i)\Picked = 1
 								;[End Block]
 							Case 35.0
 								;[Block]
@@ -7840,7 +7850,7 @@ Function UpdateEvents()
 									
 									If Angle < 181.0 And Angle > 90.0 Then
 										For it.Items = Each Items
-											If it\Collider <> 0 And (Not it\Picked) Then
+											If it\Collider <> 0 And it\Picked = 0 Then
 												If Abs(EntityX(it\Collider) - (e\room\x - 712.0 * RoomScale)) < 200.0 Then
 													If Abs(EntityY(it\Collider) - (e\room\y + 648.0 * RoomScale)) < 104.0 Then
 														e\EventState = 1.0
@@ -7978,7 +7988,7 @@ Function UpdateEvents()
 						
 						If e\EventState > 70.0 * 12.0 Then							
 							For it.Items = Each Items
-								If it\Collider <> 0 And (Not it\Picked) Then
+								If it\Collider <> 0 And it\Picked = 0 Then
 									If DistanceSquared(EntityX(it\Collider), EntityX(e\room\Objects[2], True), EntityZ(it\Collider), EntityZ(e\room\Objects[2], True)) < PowTwo(180.0 * RoomScale) Then
 										Use914(it, Setting, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True), EntityZ(e\room\Objects[3], True))
 									EndIf
@@ -8361,7 +8371,7 @@ Function UpdateEvents()
 					PositionEntity(pp, 976.0, 128.0, -640.0)
 					
 					For it.Items = Each Items
-						If (Not it\Picked) Then
+						If it\Picked = 0 Then
 							If EntityDistanceSquared(it\Collider, e\room\Objects[0]) < 0.5625 Then Pick1162 = False
 						EndIf
 					Next

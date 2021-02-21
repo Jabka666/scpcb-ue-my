@@ -449,7 +449,7 @@ Type Items
 	Field Collider%, Model%
 	Field ItemTemplate.ItemTemplates
 	Field DropSpeed#
-	Field R%, G%, B%, A#
+	Field R%, G%, B%, Alpha#
 	Field SoundCHN%
 	Field Dist#, DistTimer#
 	Field State#, State2#, State3#
@@ -469,7 +469,7 @@ Global SelectedItem.Items
 Global ClosestItem.Items
 Global OtherOpen.Items = Null
 
-Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, A# = 1.0, InvSlots% = 0)
+Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha# = 1.0, InvSlots% = 0)
 	CatchErrors("Uncaught (CreateItem)")
 	
 	Local i.Items, it.ItemTemplates
@@ -507,7 +507,7 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 		i\R = R
 		i\G = G
 		i\B = B
-		i\A = A
+		i\Alpha = Alpha
 		
 		Local Liquid% = CopyEntity(o\MiscModelID[0])
 		
@@ -516,11 +516,11 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 		EntityParent(Liquid, i\Model)
 		EntityColor(Liquid, R, G, B)
 		
-		If A < 0.0 Then 
+		If Alpha < 0.0 Then 
 			EntityFX(Liquid, 1)
-			EntityAlpha(Liquid, Abs(A))
+			EntityAlpha(Liquid, Abs(Alpha))
 		Else
-			EntityAlpha(Liquid, Abs(A))
+			EntityAlpha(Liquid, Abs(Alpha))
 		EndIf
 		EntityShininess(Liquid, 1.0)
 	EndIf
@@ -574,45 +574,47 @@ End Function
 Function RemoveWearableItems(item.Items)
 	CatchErrors("Uncaught (RemoveWearableItems)")
 	
-	Select item\ItemTemplate\TempName
-		Case "gasmask", "supergasmask", "gasmask3"
-			;[Block]
-			wi\GasMask = 0
-			;[End Block]
-		Case "hazmatsuit",  "hazmatsuit2", "hazmatsuit3"
-			;[Block]
-			wi\HazmatSuit = 0
-			SetAnimTime(item\Model, 4.0)
-			;[End Block]
-		Case "vest", "finevest"
-			;[Block]
-			wi\BallisticVest = 0
-			;[End Block]
-		Case "helmet"
-			;[Block]
-			wi\BallisticHelmet = 0
-			;[End Block]
-		Case "nvg", "supernvg", "finenvg"
-			;[Block]
-			If wi\NightVision > 0 Then opt\CameraFogFar = opt\StoredCameraFogFar : wi\NightVision = 0
-			;[End Block]
-		Case "scp714"
-			;[Block]
-			I_714\Using = 0
-			;[End Block]
-		Case "scp1499", "super1499"
-			;[Block]
-			I_1499\Using = 0
-			;[End Block]
-		Case "scp427"
-			;[Block]
-			I_427\Using = 0
-			;[End Block]
-		Case "scramble"
-			;[Block]
-			wi\SCRAMBLE = 0
-			;[End Block]
-	End Select
+	If item\Picked = 2 Then
+		Select item\ItemTemplate\TempName
+			Case "gasmask", "supergasmask", "gasmask3"
+				;[Block]
+				wi\GasMask = 0
+				;[End Block]
+			Case "hazmatsuit",  "hazmatsuit2", "hazmatsuit3"
+				;[Block]
+				wi\HazmatSuit = 0
+				SetAnimTime(item\Model, 4.0)
+				;[End Block]
+			Case "vest", "finevest"
+				;[Block]
+				wi\BallisticVest = 0
+				;[End Block]
+			Case "helmet"
+				;[Block]
+				wi\BallisticHelmet = 0
+				;[End Block]
+			Case "nvg", "supernvg", "finenvg"
+				;[Block]
+				If wi\NightVision > 0 Then opt\CameraFogFar = opt\StoredCameraFogFar : wi\NightVision = 0
+				;[End Block]
+			Case "scp714"
+				;[Block]
+				I_714\Using = 0
+				;[End Block]
+			Case "scp1499", "super1499"
+				;[Block]
+				I_1499\Using = 0
+				;[End Block]
+			Case "scp427"
+				;[Block]
+				I_427\Using = 0
+				;[End Block]
+			Case "scramble"
+				;[Block]
+				wi\SCRAMBLE = 0
+				;[End Block]
+		End Select
+	EndIf
 	
 	CatchErrors("RemoveWearableItems")
 End Function
@@ -640,7 +642,7 @@ Function UpdateItems()
 	For i.Items = Each Items
 		i\Dropped = 0
 		
-		If (Not i\Picked) Then
+		If i\Picked = 0 Then
 			If i\DistTimer < MilliSecs2() Then
 				i\Dist = EntityDistance(Camera, i\Collider)
 				i\DistTimer = MilliSecs2() + 700
@@ -690,7 +692,7 @@ Function UpdateItems()
 				
 				If i\Dist < HideDist * 0.2 Then
 					For i2.Items = Each Items
-						If i <> i2 And (Not i2\Picked) And i2\Dist < HideDist * 0.2 Then
+						If i <> i2 And i2\Picked = 0 And i2\Dist < HideDist * 0.2 Then
 							xTemp = EntityX(i2\Collider, True) - EntityX(i\Collider, True)
 							yTemp = EntityY(i2\Collider, True) - EntityY(i\Collider, True)
 							zTemp = EntityZ(i2\Collider, True) - EntityZ(i\Collider, True)
@@ -881,7 +883,7 @@ Function PickItem(item.Items)
 				End Select
 				
 				If item\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[item\ItemTemplate\Sound])
-				item\Picked = True
+				item\Picked = 1
 				item\Dropped = -1
 				
 				item\ItemTemplate\Found = True
@@ -922,7 +924,6 @@ Function DropItem(item.Items, PlayDropSound% = True)
 	RotateEntity(item\Collider, 0.0, EntityYaw(Camera) + Rnd(-110.0, 110.0), 0.0)
 	ResetEntity(item\Collider)
 	
-	item\Picked = False
 	For n = 0 To MaxItemAmount - 1
 		If Inventory(n) = item Then
 			Inventory(n) = Null
@@ -932,6 +933,8 @@ Function DropItem(item.Items, PlayDropSound% = True)
 	Next
 	
 	RemoveWearableItems(item)
+	
+	item\Picked = 0
 	
 	CatchErrors("DropItem")
 End Function
@@ -1346,7 +1349,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 				Case ONETOONE, FINE, VERYFINE
 					;[Block]
 					For it.Items = Each Items
-						If it <> item And it\Collider <> 0 And (Not it\Picked) Then
+						If it <> item And it\Collider <> 0 And it\Picked = 0 Then
 							If DistanceSquared(EntityX(it\Collider, True), x, EntityZ(it\Collider, True), z) < PowTwo(180.0 * RoomScale)
 								Select it\ItemTemplate\TempName
 									Case "gasmask", "supergasmask"

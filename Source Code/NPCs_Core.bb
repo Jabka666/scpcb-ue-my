@@ -1565,7 +1565,10 @@ Function UpdateNPCs()
 												If PlayerRoom\RoomTemplate\Name = "room049"
 													msg\DeathMsg = "Three (3) active instances of SCP-049-2 discovered in the tunnel outside SCP-049's containment chamber. Terminated by Nine-Tailed Fox."
 													For e.Events = Each Events
-														If e\EventID = e_room049 Then e\EventState = -1.0 : Exit
+														If e\EventID = e_room049 Then
+															e\EventState = -1.0
+															Exit
+														EndIf
 													Next
 												Else
 													If Rand(2) = 1 Then
@@ -1746,7 +1749,8 @@ Function UpdateNPCs()
 															If (n\Path[1]\door\Locked = 1 Lor n\Path[1]\door\KeyCard <> 0 Lor n\Path[1]\door\Code <> "") And (Not n\Path[1]\door\Open) Then
 																Repeat
 																	If n\PathLocation > 19 Then
-																		n\PathLocation = 0 : n\PathStatus = 0 : Exit
+																		n\PathLocation = 0 : n\PathStatus = 0
+																		Exit
 																	Else
 																		n\PathLocation = n\PathLocation + 1
 																	EndIf
@@ -6601,7 +6605,10 @@ Function UpdateNPCs()
 				Local CollidedFloor% = False
 				
 				For i = 1 To CountCollisions(n\Collider)
-					If CollisionY(n\Collider, i) < EntityY(n\Collider) - 0.01 Then CollidedFloor = True : Exit
+					If CollisionY(n\Collider, i) < EntityY(n\Collider) - 0.01 Then
+						CollidedFloor = True
+						Exit
+					EndIf
 				Next
 				
 				If CollidedFloor Then

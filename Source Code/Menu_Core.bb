@@ -502,7 +502,7 @@ Function UpdateMainMenu()
 										If UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Load", False) Then
 											LoadEntities()
 											LoadSounds()
-											LoadGame(SavePath + SaveGames(i - 1) + "\")
+											LoadGame(SaveGames(i - 1))
 											InitLoadGame()
 											CurrSave = SaveGames(i - 1)
 											MainMenuOpen = False
@@ -533,8 +533,7 @@ Function UpdateMainMenu()
 							y = 376 * MenuScale
 							
 							If UpdateMainMenuButton(x + (50 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Yes", False) Then
-								DeleteFile(CurrentDir() + SavePath + SaveMSG + "\save.cb")
-								DeleteDir(CurrentDir() + SavePath + SaveMSG)
+								DeleteSavedGame(SaveMSG)
 								SaveMSG = ""
 								LoadSavedGames()
 								mm\ShouldDeleteGadgets = True
@@ -775,7 +774,10 @@ Function UpdateMainMenu()
 						Local TempKey%
 						
 						For i = 0 To 227
-							If KeyHit(i) Then TempKey = i : Exit
+							If KeyHit(i) Then
+								TempKey = i
+								Exit
+							EndIf
 						Next
 						If TempKey <> 0 Then
 							Select SelectedInputBox
