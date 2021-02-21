@@ -1114,7 +1114,6 @@ Function UpdateEvents()
 			Case e_room173intro
 				;[Block]
 				If me\KillTimer >= 0.0 And e\EventState2 = 0.0 Then
-					me\Zone = 0
 					If e\EventState3 > 0.0 Then
 						ShouldPlay = 13
 						; ~ Slow the player down to match his speed to the guards
@@ -2211,7 +2210,7 @@ Function UpdateEvents()
 					; ~ Play a sound clip when the player passes through the gate
 					If e\EventState2 = 0.0 Then
 						If EntityZ(me\Collider) < e\room\z Then
-							If me\Zone = 1 Then
+							If CurrentZone = HCZ Then
 								PlaySound_Strict(LoadTempSound("SFX\Ambient\ToZone2.ogg"))
 							Else
 								PlaySound_Strict(LoadTempSound("SFX\Ambient\ToZone3.ogg"))
@@ -2308,7 +2307,7 @@ Function UpdateEvents()
 				;[Block]
 				If e\EventState < MilliSecs2() Then
 					; ~ SCP-079 starts broadcasting SCP-895's camera feed on monitors after leaving the first zone
-					If me\Zone > 0 Then 
+					If CurrentZone > LCZ Then 
 						If EntityPitch(e\room\Levers[0], True) > 0.0 Then ; ~ Camera feed on
 							For sc.SecurityCams = Each SecurityCams
 								If sc\CoffinEffect = 0 And sc\room\RoomTemplate\Name <> "room106" And sc\room\RoomTemplate\Name <> "room205" Then sc\CoffinEffect = 2
