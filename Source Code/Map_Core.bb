@@ -7925,7 +7925,7 @@ Function CreateMap(Zone%)
 	Next
 	
 	Repeat
-		Width = Rand(10, 15)
+		Width = Rand(7, 11)
 		
 		If x > MapGridSize * 0.6 Then
 			Width = -Width
@@ -7946,7 +7946,7 @@ Function CreateMap(Zone%)
 			CurrMapGrid\Grid[Min(i, MapGridSize) + (y * MapGridSize)] = 1
 		Next
 		
-		Height = Rand(3, 4)
+		Height = Rand(2, 4)
 		If y - Height < 1 Then Height = y - 1
 		
 		yHallways = Rand(4, 5)
@@ -7988,7 +7988,7 @@ Function CreateMap(Zone%)
 				Temp = Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1.0)
 				Temp = Temp + Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1.0)			
 				CurrMapGrid\Grid[x + (y * MapGridSize)] = Temp
-				Select CurrMapGrid\Grid[x + (y * MapGridSize)]
+				Select Temp
 					Case 1
 						;[Block]
 						RoomAmount[ROOM1] = RoomAmount[ROOM1] + 1
@@ -8019,8 +8019,8 @@ Function CreateMap(Zone%)
 	Local Placed%
 	
 	; ~ Force more ROOM1 (if needed)
-	; ~ Need more rooms if there are less than 5 of them
-	Temp = (-RoomAmount[ROOM1]) + 5
+	; ~ Need more rooms if there are less than 3 of them
+	Temp = (-RoomAmount[ROOM1]) + 3
 	If Temp > 0 Then
 		For y = 2 To MapGridSize - 2
 			For x = 2 To MapGridSize - 2
