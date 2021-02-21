@@ -1428,7 +1428,7 @@ Global RoomTempID%
 Type RoomTemplates
 	Field OBJ%, ID%
 	Field OBJPath$
-	Field Zone%[5]
+	Field Zone%[3]
 	Field TempSoundEmitter%[MaxRoomEmitters]
 	Field TempSoundEmitterX#[MaxRoomEmitters], TempSoundEmitterY#[MaxRoomEmitters], TempSoundEmitterZ#[MaxRoomEmitters]
 	Field TempSoundEmitterRange#[MaxRoomEmitters]
@@ -1444,10 +1444,10 @@ Type RoomTemplates
 End Type 	
 
 Function CreateRoomTemplate.RoomTemplates(MeshPath$)
-	Local rt.RoomTemplates = New RoomTemplates
+	Local rt.RoomTemplates
 	
+	rt.RoomTemplates = New RoomTemplates
 	rt\OBJPath = MeshPath
-	
 	rt\ID = RoomTempID
 	RoomTempID = RoomTempID + 1
 	
@@ -1497,7 +1497,7 @@ Function LoadRoomTemplates(File$)
 					;[End Block]
 			End Select
 			
-			For i = 0 To 4
+			For i = 0 To 2
 				rt\Zone[i] = GetINIInt(File, TemporaryString, "Zone" + (i + 1))
 			Next
 			
@@ -1842,7 +1842,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 	For rt.RoomTemplates = Each RoomTemplates
 		Local i%
 		
-		For i = 0 To 4
+		For i = 0 To 2
 			If rt\Zone[i] = Zone Then 
 				If rt\Shape = RoomShape Then Temp = Temp + rt\Commonness : Exit
 			EndIf
@@ -1853,7 +1853,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 	
 	Temp = 0
 	For rt.RoomTemplates = Each RoomTemplates
-		For i = 0 To 4
+		For i = 0 To 2
 			If rt\Zone[i] = Zone And rt\Shape = RoomShape Then
 				Temp = Temp + rt\Commonness
 				If RandomRoom > Temp - rt\Commonness And RandomRoom =< Temp Then
@@ -2161,7 +2161,7 @@ Function CreateDoor.Doors(x#, y#, z#, Angle#, room.Rooms, Open% = False, DoorTyp
 	RotateEntity(d\OBJ, 0.0, Angle, 0.0)
 	EntityType(d\OBJ, HIT_MAP)
 	EntityPickMode(d\OBJ, 2)
-	MakeCollBox(d\OBJ)
+	CreateCollBox(d\OBJ)
 	EntityParent(d\OBJ, Parent)
 	
 	If d\OBJ2 <> 0 Then
@@ -2169,7 +2169,7 @@ Function CreateDoor.Doors(x#, y#, z#, Angle#, room.Rooms, Open% = False, DoorTyp
 		RotateEntity(d\OBJ2, 0.0, Angle + ((DoorType <> Big_Door) * 180.0), 0.0)
 		EntityType(d\OBJ2, HIT_MAP)
 		EntityPickMode(d\OBJ2, 2)
-		MakeCollBox(d\OBJ2)
+		CreateCollBox(d\OBJ2)
 		EntityParent(d\OBJ2, Parent)
 	EndIf
 	
@@ -3622,11 +3622,6 @@ Function UpdateScreens()
 	Next
 End Function
 
-Function RemoveScreen(s.Screens)
-	If s\Img <> 0 Then FreeImage(s\Img) : s\Img = 0
-	Delete(s)
-End Function
-
 Function UpdateLever%(OBJ%, Locked% = False)
 	Local Dist# = EntityDistanceSquared(Camera, OBJ)
 	Local PrevPitch# = EntityPitch(OBJ)
@@ -3686,7 +3681,7 @@ End Function
 Function FillRoom(r.Rooms)
 	CatchErrors("Uncaught (FillRoom)")
 	
-	Local d.Doors, d2.Doors, sc.SecurityCams, de.Decals, r2.Rooms, sc2.SecurityCams, tw.TempWayPoints
+	Local d.Doors, d2.Doors, sc.SecurityCams, de.Decals, r2.Rooms, sc2.SecurityCams, tw.TempWayPoints, fr.Forest
 	Local it.Items, it2.Items, em.Emitters, w.WayPoints, w2.WayPoints, lt.LightTemplates, ts.TempScreens
 	Local xTemp#, yTemp#, zTemp#, xTemp2%, yTemp2%, zTemp2%
 	Local t1%, Tex%
@@ -3732,8 +3727,7 @@ Function FillRoom(r.Rooms)
 			
 			; ~ The forest
 			If (Not I_Zone\HasCustomForest) Then
-				Local fr.Forest = New Forest
-				
+				fr.Forest = New Forest
 				r\fr = fr
 				GenForestGrid(fr)
 				PlaceForest(fr, r\x, r\y + 30.0, r\z, r)
@@ -3780,7 +3774,7 @@ Function FillRoom(r.Rooms)
 			TurnEntity(em\OBJ, 90.0, 0.0, 0.0)
 			EntityParent(em\OBJ, r\OBJ)
 			
-			em.Emitters = CreateEmitter(r\x - 655.0 * RoomScale, 370.0 * RoomScale, r\z + 240.0 * RoomScale, 0)
+			em.Emitters = CreateEmitter(r\x - 655.0 * RoomScale, r\y + 370.0 * RoomScale, r\z + 240.0 * RoomScale, 0)
 			em\RandAngle = 20.0 : em\Speed = 0.05 : em\SizeChange = 0.007 : em\AlphaChange = -0.006 : em\Gravity = -0.24
 			TurnEntity(em\OBJ, 90.0, 0.0, 0.0)
 			EntityParent(em\OBJ, r\OBJ)
@@ -4085,7 +4079,7 @@ Function FillRoom(r.Rooms)
 			r\Objects[1] = CreateSprite(r\Objects[0])
 			SpriteViewMode(r\Objects[1], 2)
 			PositionEntity(r\Objects[1], 0.082, 0.119, 0.010)
-			ScaleSprite(r\Objects[1], 0.18 * 0.5, 0.145 * 0.5)
+			ScaleSprite(r\Objects[1], 0.09, 0.0725)
 			TurnEntity(r\Objects[1], 0.0, 13.0, 0.0)
 			MoveEntity(r\Objects[1], 0.0, 0.0, -0.022)
 			EntityTexture(r\Objects[1], tt\MiscTextureID[6])
@@ -4428,13 +4422,13 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\RoomDoors[0]\Buttons[0], EntityX(r\RoomDoors[0]\Buttons[0], True) - 0.061, EntityY(r\RoomDoors[0]\Buttons[0], True), EntityZ(r\RoomDoors[0]\Buttons[0], True), True)
 			FreeEntity(r\RoomDoors[0]\Buttons[1]) : r\RoomDoors[0]\Buttons[1] = 0
 			
-			de.Decals = CreateDecal(0, r\x - 808.0 * RoomScale, r\y + 0.005, r\z - 72.0 * RoomScale, 90.0, Rand(360.0), 0.0)
+			de.Decals = CreateDecal(0, r\x - 808.0 * RoomScale, r\y + 0.005, r\z - 72.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
 			EntityParent(de\OBJ, r\OBJ)
 			
-			de.Decals = CreateDecal(2, r\x - 808.0 * RoomScale, r\y + 0.01, r\z - 72.0 * RoomScale, 90.0, Rand(360.0), 0.0, 0.3)
+			de.Decals = CreateDecal(2, r\x - 808.0 * RoomScale, r\y + 0.01, r\z - 72.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.3)
 			EntityParent(de\OBJ, r\OBJ)
 			
-			de.Decals = CreateDecal(0, r\x - 432.0 * RoomScale, r\y + 0.01, r\z, 90.0, Rand(360.0), 0.0)
+			de.Decals = CreateDecal(0, r\x - 432.0 * RoomScale, r\y + 0.01, r\z, 90.0, Rnd(360.0), 0.0)
 			EntityParent(de\OBJ, r\OBJ)
 			
 			r\Objects[0] = CreatePivot(r\OBJ)
@@ -4595,7 +4589,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\Objects[4], r\x - 552.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 656.0 * RoomScale)
 			EntityParent(r\Objects[4], r\OBJ)
 			
-			de.Decals = CreateDecal(0, r\x + 64.0 * RoomScale, r\y + 0.005, r\z + 144.0 * RoomScale, 90.0, Rand(360.0), 0.0)
+			de.Decals = CreateDecal(0, r\x + 64.0 * RoomScale, r\y + 0.005, r\z + 144.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
 			EntityParent(de\OBJ, r\OBJ)
 			
 			it.Items = CreateItem("Scorched Note", "paper", r\x + 64.0 * RoomScale, r\y + 144.0 * RoomScale, r\z - 384.0 * RoomScale)
@@ -5627,10 +5621,10 @@ Function FillRoom(r.Rooms)
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			TurnEntity(sc\ScrOBJ, 0.0, 90.0, 0.0)
 			
-			de.Decals = CreateDecal(0, r\x + 272.0 * RoomScale, r\y + 0.005, r\z + 262.0 * RoomScale, 90.0, Rand(360.0), 0.0)
+			de.Decals = CreateDecal(0, r\x + 272.0 * RoomScale, r\y + 0.005, r\z + 262.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
 			EntityParent(de\OBJ, r\OBJ)
 			
-			de.Decals = CreateDecal(0, r\x + 456.0 * RoomScale, r\y + 0.005, r\z + 135.0 * RoomScale, 90.0, Rand(360.0), 0.0)
+			de.Decals = CreateDecal(0, r\x + 456.0 * RoomScale, r\y + 0.005, r\z + 135.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
 			EntityParent(de\OBJ, r\OBJ)
 			
 			For i = 0 To 4
@@ -5805,7 +5799,7 @@ Function FillRoom(r.Rooms)
 						zTemp = 636.0
 						;[End Block]
 				End Select
-				de.Decals = CreateDecal(Rand(16, 17), r\x + xTemp * RoomScale, r\y + 0.005, r\z + zTemp * RoomScale, 90.0, Rand(360.0), 0.0, ((i =< 10) * Rnd(0.2, 0.25)) + ((i > 10) * Rnd(0.1, 0.17)))
+				de.Decals = CreateDecal(Rand(16, 17), r\x + xTemp * RoomScale, r\y + 0.005, r\z + zTemp * RoomScale, 90.0, Rnd(360.0), 0.0, ((i =< 10) * Rnd(0.2, 0.25)) + ((i > 10) * Rnd(0.1, 0.17)))
 				EntityParent(de\OBJ, r\OBJ)
 			Next
 			

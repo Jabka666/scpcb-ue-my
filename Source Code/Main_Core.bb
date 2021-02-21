@@ -3021,7 +3021,7 @@ Function UpdateMove()
 			TurnEntity(Pvt, 90.0, 0.0, 0.0)
 			EntityPick(Pvt, 0.3)
 			
-			de.Decals = CreateDecal(Rand(16, 17), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rand(360.0), 0.0, Rnd(0.03, 0.08) * Min(me\Injuries, 2.5))
+			de.Decals = CreateDecal(Rand(16, 17), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.03, 0.08) * Min(me\Injuries, 2.5))
 			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + Rnd(0.008, 0.009)
 			TempCHN = PlaySound_Strict(DripSFX[Rand(0, 2)])
 			ChannelVolume(TempCHN, Rnd(0.0, 0.8) * opt\SFXVolume)
@@ -8830,7 +8830,7 @@ Function NullGame(PlayButtonSFX% = True)
 	Delete(CurrGrid)
 	
 	For s.Screens = Each Screens
-		RemoveScreen(s)
+		Delete(s)
 	Next
 	
 	For i = 0 To MaxItemAmount - 1
@@ -8844,7 +8844,7 @@ Function NullGame(PlayButtonSFX% = True)
 	bk.BrokenDoor = New BrokenDoor
 	
 	For d.Doors = Each Doors
-		RemoveDoor(d)
+		Delete(d)
 	Next
 	
 	For lt.LightTemplates = Each LightTemplates
@@ -8856,7 +8856,7 @@ Function NullGame(PlayButtonSFX% = True)
 	Next
 	
 	For wp.WayPoints = Each WayPoints
-		RemoveWaypoint(wp)
+		Delete(wp)
 	Next
 	
 	For twp.TempWayPoints = Each TempWayPoints
@@ -8901,7 +8901,7 @@ Function NullGame(PlayButtonSFX% = True)
 	ForestNPCTex = 0
 	
 	For e.Events = Each Events
-		RemoveEvent(e)
+		Delete(e)
 	Next
 	
 	For sc.SecurityCams = Each SecurityCams
@@ -9289,7 +9289,7 @@ Function Use427()
 			PositionEntity(Pvt, EntityX(me\Collider) + Rnd(-0.05, 0.05), EntityY(me\Collider) - 0.05, EntityZ(me\Collider) + Rnd(-0.05, 0.05))
 			TurnEntity(Pvt, 90.0, 0.0, 0.0)
 			EntityPick(Pvt, 0.3)
-			de.Decals = CreateDecal(18, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rand(360.0), 0.0, Rnd(0.03, 0.08) * 2.0)
+			de.Decals = CreateDecal(18, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.03, 0.08) * 2.0)
 			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + 0.009 
 			TempCHN = PlaySound_Strict(DripSFX[Rand(0, 2)])
 			ChannelVolume(TempCHN, Rnd(0.0, 0.8) * opt\SFXVolume)
@@ -9716,7 +9716,7 @@ Function Update409()
 			PlaySound_Strict(DamageSFX[13])
 			me\Injuries = Max(me\Injuries, 2.0)
 		ElseIf I_409\Timer > 94.0
-			I_409\Timer = Min(I_409\Timer + fps\Factor[0] * 0.004, 100.0)
+			I_409\Timer = Min(I_409\Timer + (fps\Factor[0] * 0.004), 100.0)
 			me\Playable = False
 			me\BlurTimer = 4.0
 			me\CameraShake = 3.0
@@ -9798,21 +9798,21 @@ Function CheckForPlayerInFacility()
 	Return(1)
 End Function
 
-Function TeleportEntity(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = False, PickRange# = 2.0, Dir% = 0)
+Function TeleportEntity(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = False, PickRange# = 2.0, Dir% = False)
 	Local Pvt%, Pick#
 	; ~ Dir = 0 - towards the floor (default)
 	; ~ Dir = 1 - towrads the ceiling (mostly for PD decal after leaving dimension)
 	
 	Pvt = CreatePivot()
 	PositionEntity(Pvt, x, y + 0.05, z, IsGlobal)
-	If Dir = 0
+	If (Not Dir)
 		RotateEntity(Pvt, 90.0, 0.0, 0.0)
 	Else
 		RotateEntity(Pvt, -90.0, 0.0, 0.0)
 	EndIf
 	Pick = EntityPick(Pvt, PickRange)
 	If Pick <> 0 Then
-		If Dir = 0 Then
+		If (Not Dir) Then
 			PositionEntity(Entity, x, PickedY() + CustomRadius + 0.02, z, IsGlobal)
 		Else
 			PositionEntity(Entity, x, PickedY() + CustomRadius - 0.02, z, IsGlobal)

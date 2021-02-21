@@ -2329,7 +2329,7 @@ Function UpdateEvents()
 					If CoffinDistance < 1.5 Then 
 						GiveAchievement(Achv895)
 						If (Not Curr106\Contained) And e\EventID = e_room895_106 And e\EventState2 = 0.0 Then
-							de.Decals = CreateDecal(0, EntityX(e\room\Objects[1], True), e\room\y - 1531.0 * RoomScale, EntityZ(e\room\Objects[1], True), 90.0, Rand(360.0), 0.0, 0.05, 0.8)
+							de.Decals = CreateDecal(0, EntityX(e\room\Objects[1], True), e\room\y - 1531.0 * RoomScale, EntityZ(e\room\Objects[1], True), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
 							de\SizeChange = 0.001
 							
 							PositionEntity(Curr106\Collider, EntityX(e\room\Objects[1], True), e\room\y - 1541.0 * RoomScale, EntityZ(e\room\Objects[1], True))
@@ -2389,7 +2389,7 @@ Function UpdateEvents()
 									LoadEventSound(e,"SFX\General\BodyFall.ogg")
 									e\SoundCHN = PlaySound_Strict(e\Sound)
 									
-									de.Decals = CreateDecal(3, EntityX(e\room\OBJ), e\room\y - 1534.0 * RoomScale, EntityZ(e\room\OBJ), 90.0, Rand(360.0), 0.0, 0.4)
+									de.Decals = CreateDecal(3, EntityX(e\room\OBJ), e\room\y - 1534.0 * RoomScale, EntityZ(e\room\OBJ), 90.0, Rnd(360.0), 0.0, 0.4)
 									
 									it.Items = CreateItem("Unknown Note", "paper", EntityX(e\room\NPC[0]\Collider, True), EntityY(e\room\NPC[0]\Collider, True), EntityZ(e\room\NPC[0]\Collider))
 									EntityType(it\Collider, HIT_ITEM)
@@ -2996,7 +2996,7 @@ Function UpdateEvents()
 									; ~ Teleport the player to the trenches
 									If me\Crouch Then
 										me\BlinkTimer = -10.0
-										PositionEntity(me\Collider, EntityX(e\room\Objects[8], True) - 1344.0 * RoomScale, 2944.0 * RoomScale, EntityZ(e\room\Objects[8], True) - 1184.0 * RoomScale)
+										PositionEntity(me\Collider, EntityX(e\room\Objects[8], True) - 1344.0 * RoomScale, e\room\y + 2944.0 * RoomScale, EntityZ(e\room\Objects[8], True) - 1184.0 * RoomScale)
 										ResetEntity(me\Collider)
 										me\Crouch = False
 										
@@ -3043,8 +3043,8 @@ Function UpdateEvents()
 													Curr106\State = 10000.0
 													Curr106\Idle = 0
 													
-													de.Decals = CreateDecal(0, EntityX(r\Objects[0], True), EntityY(r\Objects[0], True), EntityZ(r\Objects[0], True), 270.0, Rand(360.0), 0.0)
-													TeleportEntity(de\OBJ, EntityX(r\Objects[0], True), EntityY(r\Objects[0], True) + 0.6, EntityZ(r\Objects[0], True), 0.0, True, 4.0, 1)
+													de.Decals = CreateDecal(0, EntityX(r\Objects[0], True), EntityY(r\Objects[0], True), EntityZ(r\Objects[0], True), 270.0, Rnd(360.0), 0.0)
+													TeleportEntity(de\OBJ, EntityX(r\Objects[0], True), EntityY(r\Objects[0], True) + 0.6, EntityZ(r\Objects[0], True), 0.0, True, 4.0, True)
 													
 													For e2.Events = Each Events
 														If e2\EventID = e_room2sl
@@ -3474,7 +3474,7 @@ Function UpdateEvents()
 							EntityType(it\Collider, HIT_ITEM)
 							PointEntity(it\Collider, e\room\NPC[0]\Collider)
 							RotateEntity(it\Collider, 0.0, Rnd(360.0), 0.0)
-							TeleportEntity(it\Collider, EntityX(it\Collider), EntityY(it\Collider), EntityZ(it\Collider), -0.02, True, 10)
+							TeleportEntity(it\Collider, EntityX(it\Collider), EntityY(it\Collider), EntityZ(it\Collider), -0.02, True, 10.0)
 							For i = 0 To 1
 								it2.Items = CreateItem("Quarter", "25ct", 0.0, 0.0, 0.0)
 								it2\Picked = True : it2\Dropped = -1 : it2\ItemTemplate\Found = True
@@ -4680,7 +4680,7 @@ Function UpdateEvents()
 							e\EventState = 2.0
 							
 							If (Not Curr106\Contained) Then 	
-								de.Decals = CreateDecal(0, EntityX(e\room\Objects[Temp], True), EntityY(e\room\Objects[Temp], True) + 0.005, EntityZ(e\room\Objects[Temp], True), 90.0, Rand(360.0), 0.0, 0.05, 0.8)
+								de.Decals = CreateDecal(0, EntityX(e\room\Objects[Temp], True), EntityY(e\room\Objects[Temp], True) + 0.005, EntityZ(e\room\Objects[Temp], True), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
 								de\SizeChange = 0.001
 								
 								PositionEntity(Curr106\Collider, EntityX(e\room\Objects[Temp], True), EntityY(me\Collider, True) - 3.0, EntityZ(e\room\Objects[Temp], True))
@@ -7458,7 +7458,7 @@ Function UpdateEvents()
 				ElseIf e\EventState = 1.0
 					If e\room\Dist < 3.0 Lor Rand(7000) = 1 Then
 						e\EventState = 2.0
-						de.Decals = CreateDecal(1, EntityX(e\room\OBJ), e\room\y + 445.0 * RoomScale, EntityZ(e\room\OBJ), -90.0, Rand(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.7, 0.85))
+						de.Decals = CreateDecal(1, EntityX(e\room\OBJ), e\room\y + 445.0 * RoomScale, EntityZ(e\room\OBJ), -90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.7, 0.85))
 						
 						PlaySound_Strict(HorrorSFX[10])
 					ElseIf e\room\Dist > 8.0
@@ -7487,7 +7487,7 @@ Function UpdateEvents()
 					ElseIf e\EventState > 180.0 And e\EventState < 300.0 Then
 						Curr106\State = -10.0 : Curr106\Idle = 0 : Curr106\PathTimer = 70.0 * 10.0 : Curr106\PathStatus = 0 : Curr106\PathLocation = 0
 						PositionEntity(Curr106\Collider, EntityX(e\room\OBJ, True), -3.0, EntityZ(e\room\OBJ, True), True)
-						de.Decals = CreateDecal(0, EntityX(e\room\OBJ, True), e\room\y + 0.005, EntityZ(e\room\OBJ, True), 90.0, Rand(360.0), 0.0, 0.05, 0.8)
+						de.Decals = CreateDecal(0, EntityX(e\room\OBJ, True), e\room\y + 0.005, EntityZ(e\room\OBJ, True), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
 						de\SizeChange = 0.01
 						e\EventState = 300.0
 					ElseIf e\EventState < 800.0
@@ -7723,7 +7723,7 @@ Function UpdateEvents()
 									LoadEventSound(e, "SFX\General\BodyFall.ogg")
 									PlaySound2(e\Sound, Camera, e\room\NPC[0]\Collider)
 									
-									de.Decals = CreateDecal(0, EntityX(e\room\OBJ), e\room\y + 0.005, EntityZ(e\room\OBJ), 90.0, Rand(360.0), 0.0, 0.4, 0.8)
+									de.Decals = CreateDecal(0, EntityX(e\room\OBJ), e\room\y + 0.005, EntityZ(e\room\OBJ), 90.0, Rnd(360.0), 0.0, 0.4, 0.8)
 								EndIf
 								
 								If e\EventState > 400.0 Then
@@ -8316,7 +8316,7 @@ Function UpdateEvents()
 						If e\EventState = 0.0 Then
 							LoadEventSound(e, "SFX\Character\Scientist\EmilyScream.ogg")
 							e\SoundCHN = PlaySound2(e\Sound, Camera, e\room\Objects[0], 100.0, 1.0)
-							de.Decals = CreateDecal(0, EntityX(e\room\Objects[0], True), e\room\y + 0.005, EntityZ(e\room\Objects[0], True), 90.0, Rand(360.0), 0.0, 0.8, 0.8, 1)
+							de.Decals = CreateDecal(0, EntityX(e\room\Objects[0], True), e\room\y + 0.005, EntityZ(e\room\Objects[0], True), 90.0, Rnd(360.0), 0.0, 0.8, 0.8, 1)
 							e\EventState = 1.0
 						ElseIf e\EventState = 1.0
 							If (Not ChannelPlaying(e\SoundCHN)) Then
@@ -9998,7 +9998,7 @@ Function UpdateEndings()
 						If e\EventState >= 350.0 Then
 							If (Not Curr106\Contained) Then
 								If e\EventState - fps\Factor[0] < 350.0
-									de.Decals = CreateDecal(0, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True) + 0.01, EntityZ(e\room\Objects[3], True), 90.0, Rand(360.0), 0.0, 0.05, 0.8)
+									de.Decals = CreateDecal(0, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True) + 0.01, EntityZ(e\room\Objects[3], True), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
 									de\SizeChange = 0.001
 									
 									PositionEntity(Curr106\Collider, EntityX(e\room\Objects[3], True), EntityY(me\Collider) - 3.0, EntityZ(e\room\Objects[3], True), True)

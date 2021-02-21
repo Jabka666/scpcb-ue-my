@@ -1236,7 +1236,7 @@ Function UpdateNPCs()
 													TurnEntity(Pvt, 90.0, 0.0, 0.0)
 													EntityPick(Pvt, 0.3)
 													
-													de.Decals = CreateDecal(Rand(16, 17), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rand(360.0), 0.0, Rnd(0.2, 0.6))
+													de.Decals = CreateDecal(Rand(16, 17), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.2, 0.6))
 												Next
 												FreeEntity(Pvt)
 											EndIf

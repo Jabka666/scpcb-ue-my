@@ -143,11 +143,11 @@ Function MouseOn%(x%, y%, Width%, Height%)
 	Return(False)
 End Function
 
-Function ResetTimingAccumulator()
+Function ResetTimingAccumulator%()
 	fps\Accumulator = 0.0
 End Function
 
-Function Find860Angle(n.NPCs, fr.Forest)
+Function Find860Angle#(n.NPCs, fr.Forest)
 	TFormPoint(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0, fr\Forest_Pivot)
 	
 	Local PlayerX# = Floor((TFormedX() + 6.0) / 12.0)
@@ -178,7 +178,7 @@ Function Find860Angle(n.NPCs, fr.Forest)
 	EndIf		
 End Function
 
-Function CreateLine(x1#, y1#, z1#, x2#, y2#, z2#, Mesh% = 0)
+Function CreateLine%(x1#, y1#, z1#, x2#, y2#, z2#, Mesh% = 0)
 	Local Surf%, Verts%
 	
 	If (Not Mesh) Then 
@@ -209,7 +209,7 @@ Global Mesh_MaxX#, Mesh_MaxY#, Mesh_MaxZ#
 Global Mesh_MagX#, Mesh_MagY#, Mesh_MagZ#
 
 ; ~ Find mesh extents
-Function GetMeshExtents(Mesh%)
+Function GetMeshExtents%(Mesh%)
 	Local su%, s%, v%, x#, y#, z#
 	Local MinX# = Infinity
 	Local MinY# = Infinity
@@ -245,7 +245,7 @@ Function GetMeshExtents(Mesh%)
 End Function
 
 ; ~ Create a collision box for a mesh entity taking into account entity scale (won't work in non-uniform scaled space)
-Function MakeCollBox(Mesh%)
+Function CreateCollBox%(Mesh%)
 	Local sX# = EntityScaleX(Mesh, 1)
 	Local sY# = Max(EntityScaleY(Mesh, 1), 0.001)
 	Local sZ# = EntityScaleZ(Mesh, 1)
@@ -260,7 +260,7 @@ Function GetZone%(y%)
 	Return(Min(Floor((Float(MapGridSize - y) / MapGridSize * ZONEAMOUNT)), ZONEAMOUNT - 1))
 End Function
 
-Function CalculateRoomTemplateExtents(r.RoomTemplates)
+Function CalculateRoomTemplateExtents%(r.RoomTemplates)
 	If r\DisableOverlapCheck Then Return
 	
 	GetMeshExtents(GetChild(r\OBJ, 2))
@@ -275,7 +275,7 @@ End Function
 ; ~ Shrink the extents slightly, so we don't care if the overlap is smaller than the thickness of the walls
 Const ShrinkAmount# = 0.05
 
-Function CalculateRoomExtents(r.Rooms)
+Function CalculateRoomExtents%(r.Rooms)
 	If r\RoomTemplate\DisableOverlapCheck Then Return
 	
 	; ~ Convert from the rooms local space to world space
@@ -319,7 +319,7 @@ Type TriggerBox
 End Type
 
 ; ~ This must be called after the room angle has been finalized!
-Function SetupTriggerBoxes(r.Rooms)
+Function SetupTriggerBoxes%(r.Rooms)
 	Local t.TriggerBox
 	Local sX#, sY#, sZ#
 	Local pXMin#, pXMax#
