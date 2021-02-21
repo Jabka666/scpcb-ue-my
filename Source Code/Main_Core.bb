@@ -2107,7 +2107,7 @@ Function MainLoop()
 		If fps\Factor[0] > 0.0 And PlayerRoom\RoomTemplate\Name <> "dimension1499" Then UpdateSecurityCams()
 		
 		If (Not MenuOpen) And (Not InvOpen) And OtherOpen = Null And SelectedDoor = Null And (Not ConsoleOpen) And (Not I_294\Using) And SelectedScreen = Null And me\EndingTimer >= 0.0 Then
-			ShouldPlay = Min(AmbientZone, 2.0)
+			ShouldPlay = Min(CurrentZone, 2.0)
 		EndIf
 		
 		If PlayerRoom\RoomTemplate\Name <> "pocketdimension" And PlayerRoom\RoomTemplate\Name <> "gateb" And PlayerRoom\RoomTemplate\Name <> "gatea" And (Not MenuOpen) And (Not ConsoleOpen) And (Not InvOpen) Then 
