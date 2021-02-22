@@ -7912,12 +7912,12 @@ Function CreateMap(Zone%)
 	
 	SeedRnd(GenerateSeedNumber(RandomSeed + Zone))
 	
+	CurrentZone = Zone
+	
 	If CurrMapGrid <> Null Then
 		Delete(CurrMapGrid) : CurrMapGrid = Null
 	EndIf
 	CurrMapGrid.MapGrid = New MapGrid
-	
-	CurrentZone = Zone
 	
 	x = Floor(MapGridSize / 2)
 	y = MapGridSize - 2
