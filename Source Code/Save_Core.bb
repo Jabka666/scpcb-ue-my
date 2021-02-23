@@ -249,7 +249,7 @@ Function SaveGame(File$, SaveZone% = LCZ)
 	For x = 0 To MapGridSize
 		For y = 0 To MapGridSize
 			WriteInt(f, CurrMapGrid\Grid[x + (y * MapGridSize)])
-			WriteByte(f, CurrMapGrid\Found[x + (y * MapGridSize)])
+			WriteByte(f, CurrMapGrid\RoomFound[x + (y * MapGridSize)])
 		Next
 	Next
 	
@@ -819,7 +819,7 @@ Function LoadGame(File$)
 	For x = 0 To MapGridSize 
 		For y = 0 To MapGridSize
 			CurrMapGrid\Grid[x + (y * MapGridSize)] = ReadInt(f)
-			CurrMapGrid\Found[x + (y * MapGridSize)] = ReadByte(f)
+			CurrMapGrid\RoomFound[x + (y * MapGridSize)] = ReadByte(f)
 		Next
 	Next
 	
@@ -1753,7 +1753,7 @@ Function LoadGameQuick(File$, LoadZone% = True)
 		For x = 0 To MapGridSize
 			For y = 0 To MapGridSize
 				CurrMapGrid\Grid[x + (y * MapGridSize)] = ReadInt(f)
-				CurrMapGrid\Found[x + (y * MapGridSize)] = ReadByte(f)
+				CurrMapGrid\RoomFound[x + (y * MapGridSize)] = ReadByte(f)
 			Next
 		Next
 		
