@@ -7892,8 +7892,8 @@ Const MapGridSize% = 18
 Const RoomSpacing# = 8.0
 
 Type MapGrid
-	Field Grid%[(MapGridSize + 1) ^ 2] ; ~ TODO: Grid%[MapGridSize ^ 2]
-	Field RoomFound%[(MapGridSize + 1) ^ 2] ; ~ TODO: RoomFound%[MapGridSize ^ 2]
+	Field Grid%[MapGridSize ^ 2]
+	Field RoomFound%[MapGridSize ^ 2]
 	Field RoomName$[MapGridSize ^ 2]
 	Field RoomShape%[MapGridSize ^ 2]
 	Field RoomAngle%[MapGridSize ^ 2]
@@ -7995,15 +7995,8 @@ Function CreateMap(Zone%)
 	For y = 1 To MapGridSize - 1
 		For x = 1 To MapGridSize - 1
 			If CurrMapGrid\Grid[x + (y * MapGridSize)] > 0 Then
-				; ~ Make sure if the rooms inside the grid
 				Temp = 0
-				If x < MapGridSize - 1 Then
-					Temp = Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1.0)
-				EndIf
-				If x > 0 Then
-					Temp = Temp + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1.0)
-				EndIf
-				Temp = Temp + Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1.0)
+				Temp = Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1.0)
 				CurrMapGrid\Grid[x + (y * MapGridSize)] = Temp
 				Select Temp
 					Case 1
@@ -8221,15 +8214,8 @@ Function CreateMap(Zone%)
 	For y = MapGridSize - 1 To 1 Step -1
 		For x = 1 To MapGridSize - 2
 			If CurrMapGrid\Grid[x + (y * MapGridSize)] > 0 Then
-				; ~ Make sure If the rooms inside the grid
 				Temp = 0
-				If x < MapGridSize - 1 Then
-					Temp = Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1.0)
-				EndIf
-				If x > 0 Then
-					Temp = Temp + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1.0)
-				EndIf
-				Temp = Temp + Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1.0)
+				Temp = Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1.0)
 				Select Temp ; ~ Amount of bordering rooms
 					Case 1 ; ~ Generate ROOM1
 						;[Block]
