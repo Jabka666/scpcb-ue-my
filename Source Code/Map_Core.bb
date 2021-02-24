@@ -7915,8 +7915,6 @@ Function CreateMap(Zone%)
 	Local i%, Temp%
 	Local Width%, Height%, TempHeight%, yHallways%
 	
-	I_Zone\Transition[0] = 13
-	I_Zone\Transition[1] = 7
 	I_Zone\HasCustomForest = False
 	I_Zone\HasCustomMT = False
 	
