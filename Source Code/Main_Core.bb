@@ -6365,7 +6365,7 @@ Function RenderGUI()
 										If CurrMapGrid\Grid[x2 + (z2 * MapGridSize)] > 0 And (CurrMapGrid\RoomFound[x2 + (z2 * MapGridSize)] > 0 Lor SelectedItem\ItemTemplate\TempName = "nav310" Lor SelectedItem\ItemTemplate\TempName = "navulti") Then
 											Local DrawX% = x + (PlayerX - 1 - x2) * 24 , DrawY% = y - (PlayerZ - 1 - z2) * 24
 											
-											If x2 + 1.0 =< MapGridSize Then
+											If x2 + 1.0 =< MapGridSize - 1 Then
 												If CurrMapGrid\Grid[(x2 + 1) + (z2 * MapGridSize)] = 0
 													DrawImage(tt\ImageID[10], DrawX - 12, DrawY - 12)
 												EndIf
@@ -6386,7 +6386,7 @@ Function RenderGUI()
 											Else
 												DrawImage(tt\ImageID[7], DrawX - 12, DrawY - 12)
 											EndIf
-											If z2 + 1.0 =< MapGridSize Then
+											If z2 + 1.0 =< MapGridSize - 1 Then
 												If CurrMapGrid\Grid[x2 + ((z2 + 1) * MapGridSize)] = 0
 													DrawImage(tt\ImageID[9], DrawX - 12, DrawY - 12)
 												EndIf

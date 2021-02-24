@@ -7934,9 +7934,9 @@ Function CreateMap(Zone%)
 	Repeat
 		Width = Rand(11, 15)
 		
-		If x > MapGridSize * 0.6 Then
+		If x > (MapGridSize - 1) * 0.6 Then
 			Width = -Width
-		ElseIf x > MapGridSize * 0.4
+		ElseIf x > (MapGridSize - 1) * 0.4
 			x = x - (Width / 2)
 		EndIf
 		
@@ -8394,7 +8394,7 @@ Function CreateMap(Zone%)
 	If Zone = EZ Then
 		r.Rooms = CreateRoom(0, ROOM1, (MapGridSize + 1) * RoomSpacing, 500.0, -64.0, "gateb")
 		
-		r.Rooms = CreateRoom(0, ROOM1, (MapGridSize = 1) * RoomSpacing, 500.0, RoomSpacing, "gatea")
+		r.Rooms = CreateRoom(0, ROOM1, (MapGridSize + 1) * RoomSpacing, 500.0, RoomSpacing, "gatea")
 	EndIf
 	
 	; ~ Prevent room overlaps
@@ -8451,8 +8451,8 @@ Function CreateMap(Zone%)
 		Until GetKey() Lor MouseHit(1)
 	EndIf
 	
-	For y = 0 To MapGridSize
-		For x = 0 To MapGridSize
+	For y = 0 To MapGridSize - 1
+		For x = 0 To MapGridSize - 1
 			CurrMapGrid\Grid[x + (y * MapGridSize)] = Min(CurrMapGrid\Grid[x + (y * MapGridSize)], 1.0)
 		Next
 	Next
@@ -8460,8 +8460,8 @@ Function CreateMap(Zone%)
 	Local d.Doors
 	Local ShouldSpawnDoor%
 	
-	For y = MapGridSize To 0 Step -1
-		For x = MapGridSize To 0 Step -1
+	For y = MapGridSize - 1 To 0 Step -1
+		For x = MapGridSize - 1 To 0 Step -1
 			If CurrMapGrid\Grid[x + (y * MapGridSize)] > 0 Then
 				For r.Rooms = Each Rooms
 					r\Angle = WrapAngle(r\Angle)

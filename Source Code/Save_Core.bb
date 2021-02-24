@@ -246,8 +246,8 @@ Function SaveGame(File$, SaveZone% = LCZ)
 	
 	f = WriteFile(File + "\" + CurrentZone + ".zone")
 	
-	For x = 0 To MapGridSize
-		For y = 0 To MapGridSize
+	For x = 0 To MapGridSize - 1
+		For y = 0 To MapGridSize - 1
 			WriteInt(f, CurrMapGrid\Grid[x + (y * MapGridSize)])
 			WriteByte(f, CurrMapGrid\RoomFound[x + (y * MapGridSize)])
 		Next
@@ -816,8 +816,8 @@ Function LoadGame(File$)
 	f = ReadFile(SavePath + File + "\" + CurrentZone + ".zone")
 	
 	CurrMapGrid.MapGrid = New MapGrid
-	For x = 0 To MapGridSize 
-		For y = 0 To MapGridSize
+	For x = 0 To MapGridSize - 1
+		For y = 0 To MapGridSize - 1
 			CurrMapGrid\Grid[x + (y * MapGridSize)] = ReadInt(f)
 			CurrMapGrid\RoomFound[x + (y * MapGridSize)] = ReadByte(f)
 		Next
@@ -1070,8 +1070,8 @@ Function LoadGame(File$)
 	Local Zone%, ShouldSpawnDoor%
 	
 	For Zone = CurrentZone To CurrentZone
-		For y = MapGridSize To 0 Step -1
-			For x = MapGridSize To 0 Step -1
+		For y = MapGridSize - 1 To 0 Step -1
+			For x = MapGridSize - 1 To 0 Step -1
 				If CurrMapGrid\Grid[x + (y * MapGridSize)] > 0 Then
 					For r.Rooms = Each Rooms
 						r\Angle = WrapAngle(r\Angle)
@@ -1750,8 +1750,8 @@ Function LoadGameQuick(File$, LoadZone% = True)
 	If LoadZone Then
 		f = ReadFile(SavePath + File + "\" + CurrentZone + ".zone")
 		
-		For x = 0 To MapGridSize
-			For y = 0 To MapGridSize
+		For x = 0 To MapGridSize - 1
+			For y = 0 To MapGridSize - 1
 				CurrMapGrid\Grid[x + (y * MapGridSize)] = ReadInt(f)
 				CurrMapGrid\RoomFound[x + (y * MapGridSize)] = ReadByte(f)
 			Next
