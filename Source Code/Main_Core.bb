@@ -8573,27 +8573,54 @@ Function InitNewGame(Zone% = LCZ)
 			If Rand(4) = 1 Then de.Decals = CreateDecal(0, EntityX(r\OBJ) + Rnd(-2.0, 2.0), r\y + 0.005, EntityZ(r\OBJ) + Rnd(-2.0, 2.0), 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.7, 0.85))
 		EndIf
 		
-		If r\RoomTemplate\Name = "room173" And (Not opt\IntroEnabled) Then 
-			PositionEntity(me\Collider, EntityX(r\OBJ) + 3584.0 * RoomScale, 704.0 * RoomScale, EntityZ(r\OBJ) + 1024.0 * RoomScale)
-			PlayerRoom = r
-			it.Items = CreateItem("Class D Orientation Leaflet", "paper", 1, 1, 1)
-			it\Picked = 1 : it\Dropped = -1 : it\ItemTemplate\Found = True
-			Inventory(0) = it
-			HideEntity(it\Collider)
-			EntityType(it\Collider, HIT_ITEM)
-			EntityParent(it\Collider, 0)
-			ItemAmount = ItemAmount + 1
-			it.Items = CreateItem("Document SCP-173", "paper", 1, 1, 1)
-			it\Picked = 1 : it\Dropped = -1 : it\ItemTemplate\Found = True
-			Inventory(1) = it
-			HideEntity(it\Collider)
-			EntityType(it\Collider, HIT_ITEM)
-			EntityParent(it\Collider, 0)
-			ItemAmount = ItemAmount + 1
-		ElseIf r\RoomTemplate\Name = "room173intro" And opt\IntroEnabled Then
-			PositionEntity(me\Collider, EntityX(r\OBJ), 1.0, EntityZ(r\OBJ))
-			PlayerRoom = r
-		EndIf
+		Select Zone
+			Case LCZ
+				;[Block]
+				If IntroEnabled Then
+					If r\RoomTemplate\Name = "room173intro" Then
+						TeleportEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.7, EntityZ(r\OBJ))
+						PlayerRoom = r
+						Exit
+					EndIf
+				Else
+					If r\RoomTemplate\Name = "room173" Then 
+						TeleportEntity(me\Collider, EntityX(r\OBJ) + 3584.0 * RoomScale, EntityY(r\OBJ) + 704.0 * RoomScale, EntityZ(r\OBJ) + 1024.0 * RoomScale)
+						PlayerRoom = r
+						it.Items = CreateItem("Class D Orientation Leaflet", "paper", 1, 1, 1)
+						it\Picked = 1 : it\Dropped = -1 : it\ItemTemplate\Found = True
+						Inventory(0) = it
+						HideEntity(it\Collider)
+						EntityType(it\Collider, HIT_ITEM)
+						EntityParent(it\Collider, 0)
+						ItemAmount = ItemAmount + 1
+						it.Items = CreateItem("Document SCP-173", "paper", 1, 1, 1)
+						it\Picked = 1 : it\Dropped = -1 : it\ItemTemplate\Found = True
+						Inventory(1) = it
+						HideEntity(it\Collider)
+						EntityType(it\Collider, HIT_ITEM)
+						EntityParent(it\Collider, 0)
+						ItemAmount = ItemAmount + 1
+						Exit
+					EndIf
+				EndIf
+				;[End Block]
+			Case HCZ
+				;[Block]
+				If r\RoomTemplate\Name = "room1endroom2" Then 
+					TeleportEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.7, EntityZ(r\OBJ))
+					PlayerRoom = r
+					Exit
+				EndIf
+				;[End Block]
+			Case EZ
+				;[Block]
+				If r\RoomTemplate\Name = "room1endroom3" Then
+					PositionEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.7, EntityZ(r\OBJ))
+					PlayerRoom = r
+					Exit
+				EndIf
+				;[End Block]
+		End Select
 	Next
 	
 	Local rt.RoomTemplates
