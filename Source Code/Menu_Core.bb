@@ -455,7 +455,7 @@ Function UpdateMainMenu()
 							InitNewGame(Clamp(Int(Left(CurrSave, 1)), 0.0, 2.0))
 						Else
 							InitNewGame()
-						Endif
+						EndIf
 						MainMenuOpen = False
 						FlushKeys()
 						FlushMouse()
