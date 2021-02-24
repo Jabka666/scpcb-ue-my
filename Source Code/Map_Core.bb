@@ -7930,6 +7930,8 @@ Function CreateMap(Zone%)
 	; ~ Find the start room coordinates
 	StartX = Floor(MapGridSize / 2)
 	StartY = MapGridSize - 1
+	; ~ Set start identificator for the grid
+	CurrMapGrid\Grid[StartX + (StartY * MapGridSize)] = MapGrid_StartTile
 	
 	x = StartX
 	y = StartY - 1
@@ -7994,13 +7996,9 @@ Function CreateMap(Zone%)
 		y = y - Height
 	Until y < 2
 	
-	; ~ Set start identificator for the grid
-	CurrMapGrid\Grid[StartX + (StartY * MapGridSize)] = MapGrid_StartTile
-	
 	; ~ Find the end room
 	EndX = x
 	EndY = y
-	
 	; ~ Set end identificator for the grid
 	CurrMapGrid\Grid[EndX + (EndY * MapGridSize)] = MapGrid_EndTile
 	
@@ -8296,6 +8294,45 @@ Function CreateMap(Zone%)
 		Next
 	Next		
 	
+	; ~ First, create the start and end rooms for each zone
+	Local r.Rooms
+	
+	Select Zone
+		Case LCZ
+			;[Block]
+			CurrMapGrid\RoomName[StartX + (StartY * MapGridSize)] = "room173"
+			r.Rooms = CreateRoom(Zone, ROOM1, StartX * RoomSpacing, 0.0, StartY * RoomSpacing, CurrMapGrid\RoomName[StartX + (StartY * MapGridSize)])
+			r\Angle = 0.0
+			TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
+			CurrMapGrid\RoomName[EndX + (EndY * MapGridSize)] = "room1endroom"
+			r.Rooms = CreateRoom(Zone, ROOM1, EndX * RoomSpacing, 0.0, EndY * RoomSpacing, CurrMapGrid\RoomName[EndX + (EndY * MapGridSize)])
+			r\Angle = 180.0
+			TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
+			;[End Block]
+		Case HCZ
+			;[Block]
+			CurrMapGrid\RoomName[StartX + (StartY * MapGridSize)] = "room1endroom2"
+			r.Rooms = CreateRoom(Zone, ROOM1, StartX * RoomSpacing, 0.0, StartY * RoomSpacing, CurrMapGrid\RoomName[StartX + (StartY * MapGridSize)])
+			r\Angle = 0.0
+			TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
+			CurrMapGrid\RoomName[EndX + (EndY * MapGridSize)] = "room1endroom2"
+			r.Rooms = CreateRoom(Zone, ROOM1, EndX * RoomSpacing, 0.0, EndY * RoomSpacing, CurrMapGrid\RoomName[EndX + (EndY * MapGridSize)])
+			r\Angle = 180.0
+			TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
+			;[End Block]
+		Case EZ
+			;[Block]
+			CurrMapGrid\RoomName[StartX + (StartY * MapGridSize)] = "room1endroom3"
+			r.Rooms = CreateRoom(Zone, ROOM1, StartX * RoomSpacing, 0.0, StartY * RoomSpacing, CurrMapGrid\RoomName[StartX + (StartY * MapGridSize)])
+			r\Angle = 0.0
+			TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
+			CurrMapGrid\RoomName[EndX + (EndY * MapGridSize)] = "room1endroom3"
+			r.Rooms = CreateRoom(Zone, ROOM1, EndX * RoomSpacing, 0.0, EndY * RoomSpacing, CurrMapGrid\RoomName[EndX + (EndY * MapGridSize)])
+			r\Angle = 180.0
+			TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
+			;[End Block]
+	End Select
+	
 	; ~ Assign the "important" rooms into the map first, aka all rooms that have the "commonness" value 0 and the "autospawn" value set to False
 	Local rt.RoomTemplates
 	
@@ -8356,8 +8393,6 @@ Function CreateMap(Zone%)
 	Next
 	
 	; ~ Create the rooms itself
-	Local r.Rooms
-	
 	For y = 1 To MapGridSize - 2
 		For x = 1 To MapGridSize - 2
 			If CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile Then
@@ -8368,43 +8403,6 @@ Function CreateMap(Zone%)
 			EndIf
 		Next
 	Next
-	
-	; ~ Create the start and end rooms for each zone
-	Select Zone
-		Case LCZ
-			;[Block]
-			CurrMapGrid\RoomName[StartX + (StartY * MapGridSize)] = "room173"
-			r.Rooms = CreateRoom(Zone, ROOM1, StartX * RoomSpacing, 0.0, StartY * RoomSpacing, CurrMapGrid\RoomName[StartX + (StartY * MapGridSize)])
-			r\Angle = 0.0
-			TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
-			CurrMapGrid\RoomName[EndX + (EndY * MapGridSize)] = "room1endroom"
-			r.Rooms = CreateRoom(Zone, ROOM1, EndX * RoomSpacing, 0.0, EndY * RoomSpacing, CurrMapGrid\RoomName[EndX + (EndY * MapGridSize)])
-			r\Angle = 180.0
-			TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
-			;[End Block]
-		Case HCZ
-			;[Block]
-			CurrMapGrid\RoomName[StartX + (StartY * MapGridSize)] = "room1endroom2"
-			r.Rooms = CreateRoom(Zone, ROOM1, StartX * RoomSpacing, 0.0, StartY * RoomSpacing, CurrMapGrid\RoomName[StartX + (StartY * MapGridSize)])
-			r\Angle = 0.0
-			TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
-			CurrMapGrid\RoomName[EndX + (EndY * MapGridSize)] = "room1endroom2"
-			r.Rooms = CreateRoom(Zone, ROOM1, EndX * RoomSpacing, 0.0, EndY * RoomSpacing, CurrMapGrid\RoomName[EndX + (EndY * MapGridSize)])
-			r\Angle = 180.0
-			TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
-			;[End Block]
-		Case EZ
-			;[Block]
-			CurrMapGrid\RoomName[StartX + (StartY * MapGridSize)] = "room1endroom3"
-			r.Rooms = CreateRoom(Zone, ROOM1, StartX * RoomSpacing, 0.0, StartY * RoomSpacing, CurrMapGrid\RoomName[StartX + (StartY * MapGridSize)])
-			r\Angle = 0.0
-			TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
-			CurrMapGrid\RoomName[EndX + (EndY * MapGridSize)] = "room1endroom3"
-			r.Rooms = CreateRoom(Zone, ROOM1, EndX * RoomSpacing, 0.0, EndY * RoomSpacing, CurrMapGrid\RoomName[EndX + (EndY * MapGridSize)])
-			r\Angle = 180.0
-			TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
-			;[End Block]
-	End Select
 	
 	; ~ Spawn some rooms outside the map
 	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize + 1) * RoomSpacing, 0.0, (MapGridSize + 1) * RoomSpacing, "pocketdimension")
