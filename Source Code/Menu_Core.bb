@@ -1969,8 +1969,9 @@ Function UpdateLauncher(lnchr.Launcher)
 		EndIf
 		DrawImage(LauncherArrowIMG, 589, 268)
 		
-		If MouseOn(LauncherWidth - 617, LauncherHeight - 52, 32, 32) And mo\MouseHit1 Then
-			ExecFile("https://discord.gg/n7KdW4u")
+		If MouseOn(LauncherWidth - 617, LauncherHeight - 52, 32, 32) Then
+			Rect(LauncherWidth - 621, LauncherHeight - 55, 34, 34, False)
+			If mo\MouseHit1 Then ExecFile("https://discord.gg/n7KdW4u")
 		EndIf
 		DrawImage(DiscordIMG, LauncherWidth - 620, LauncherHeight - 54)
 		

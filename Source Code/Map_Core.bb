@@ -7952,7 +7952,7 @@ Function CreateMap(Zone%)
 				
 				For y2 = y - TempHeight To y
 					If y2 = MapGridSize - 17 Then
-						CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] = MapGrid_EndTile
+						CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] = MapGrid_EndTile ; ~ Set end identificator for the grid
 					Else
 						CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] = MapGrid_Tile
 					EndIf
