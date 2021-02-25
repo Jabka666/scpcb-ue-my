@@ -1915,10 +1915,10 @@ Function UpdateLauncher(lnchr.Launcher)
 		Color(255, 255, 255)
 		DrawImage(LauncherIMG, 0, 0)
 		
-		Text(20, 240 - 65, "Resolution: ")
+		Text(LauncherWidth - 620, LauncherHeight - 305, "Resolution: ")
 		
-		Local x% = 40
-		Local y% = 205
+		Local x% = LauncherWidth - 600
+		Local y% = LauncherHeight - 275
 		
 		For i = 0 To lnchr\GFXModes - 1
 			Color(0, 0, 0)
@@ -1932,13 +1932,16 @@ Function UpdateLauncher(lnchr.Launcher)
 			EndIf
 			
 			y = y + 20
-			If y >= LauncherHeight - 155 Then y = 205 : x = x + 100
+			If y >= LauncherHeight - 155 Then
+				y = LauncherHeight - 275
+				x = x + 100
+			EndIf
 		Next
 		
-		opt\LauncherEnabled = UpdateLauncherTick(455, 202, opt\LauncherEnabled)
-		Text(485, 206, "Use launcher")
+		opt\LauncherEnabled = UpdateLauncherTick(LauncherWidth - 185, LauncherHeight - 278, opt\LauncherEnabled)
+		Text(LauncherWidth - 155, LauncherHeight - 275, "Use launcher")
 		
-		Text(455, 234, "Display Mode:")
+		Text(LauncherWidth - 185, LauncherHeight - 246, "Display Mode:")
 		
 		Local Txt$
 		
@@ -1951,9 +1954,9 @@ Function UpdateLauncher(lnchr.Launcher)
 				;[Block]
 				Txt = "Borderless"
 				If lnchr\GFXModeWidths[lnchr\SelectedGFXMode] < DesktopWidth() Then
-					Text(365, 412, "(upscaled to: " + DesktopWidth() + "x" + DesktopHeight() + ",32)")
+					Text(LauncherWidth - 275, LauncherHeight - 68, "(upscaled to: " + DesktopWidth() + "x" + DesktopHeight() + ",32)")
 				ElseIf lnchr\GFXModeWidths[lnchr\SelectedGFXMode] > DesktopWidth() Then
-					Text(365, 412, "(downscaled to: " + DesktopWidth() + "x" + DesktopHeight() + ",32)")
+					Text(LauncherWidth - 275, LauncherHeight - 68, "(downscaled to: " + DesktopWidth() + "x" + DesktopHeight() + ",32)")
 				EndIf
 				;[End Block]
 			Case 2
@@ -1961,13 +1964,13 @@ Function UpdateLauncher(lnchr.Launcher)
 				Txt = "Windowed"
 				;[End Block]
 		End Select
-		Text(478, 347, "Current Resolution: " + lnchr\GFXModeWidths[lnchr\SelectedGFXMode] + "x" + lnchr\GFXModeHeights[lnchr\SelectedGFXMode] + ",32", True)
-		RenderFrame(455, 254, 120, 30)
+		Text(LauncherWidth - 162, LauncherHeight - 133, "Current Resolution: " + lnchr\GFXModeWidths[lnchr\SelectedGFXMode] + "x" + lnchr\GFXModeHeights[lnchr\SelectedGFXMode] + ",32", True)
+		RenderFrame(LauncherWidth - 185, LauncherHeight - 226, 120, 30)
 		Text(515, 264, Txt, True)
-		If UpdateLauncherButton(575, 254, 30, 30, "", False) Then
+		If UpdateLauncherButton(LauncherWidth - 65, LauncherHeight - 226, 30, 30, "", False) Then
 			opt\DisplayMode = ((opt\DisplayMode + 1) Mod 3)
 		EndIf
-		DrawImage(LauncherArrowIMG, 589, 268)
+		DrawImage(LauncherArrowIMG, LauncherWidth - 51, LauncherHeight - 212)
 		
 		If MouseOn(LauncherWidth - 617, LauncherHeight - 52, 32, 32) Then
 			Rect(LauncherWidth - 621, LauncherHeight - 55, 34, 34, False)
