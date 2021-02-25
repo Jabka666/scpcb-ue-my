@@ -7720,45 +7720,6 @@ Function IsRoomAdjacent%(this.Rooms, that.Rooms)
 	Return(False)
 End Function
 
-Dim MapRoom$(ROOM4 + 1, 0)
-
-Function SetRoom(RoomName$, RoomType%, RoomAmount%) ; ~ Place a room without overwriting others
-	Local Dir% = Rand(2) = 1
-	Local PosStep% = -1 + Dir * 2
-	Local Reached% = False
-	Local Valid% = True
-	Local Pos% = Rand(0, RoomAmount - 1)
-	
-	While MapRoom(RoomType, Pos) <> ""
-		If Reached Then
-			If Dir Then
-				Pos = Pos + 1
-			Else
-				Pos = Pos - 1
-			EndIf
-			If Pos < 0 Lor Pos > (RoomAmount - 1) Then
-				Valid = False
-				Exit
-			EndIf
-		Else
-			Pos = Pos + PosStep
-			If Pos > RoomAmount - 1 Lor Pos < 0
-				Reached = True
-				Pos = Pos - PosStep
-			EndIf
-			If Dir Then
-				PosStep = PosStep + 1
-			Else
-				PosStep = PosStep - 1
-			EndIf
-			Dir = (Not Dir)
-			PosStep = PosStep * (-1)
-		EndIf
-	Wend
-	
-	If Valid Then MapRoom(RoomType, Pos) = RoomName
-End Function
-
 Function PreventRoomOverlap%(r.Rooms)
 	If r\RoomTemplate\DisableOverlapCheck Then Return
 	
@@ -7914,7 +7875,7 @@ Const MapGrid_EndTile% = 3
 ;[End Block]
 
 Function CreateMap(Zone%)
-	Local x%, y%, x2%, y2%, StartX%, StartY%, EndX%, EndY%
+	Local x%, y%, x2%, y2%, StartX%, StartY%
 	Local i%, Temp%
 	Local Width%, Height%, TempHeight%, yHallways%
 	
@@ -7990,7 +7951,11 @@ Function CreateMap(Zone%)
 				EndIf
 				
 				For y2 = y - TempHeight To y
-					CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] = MapGrid_Tile
+					If y2 = MapGridSize - 17 Then
+						CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] = MapGrid_EndTile
+					Else
+						CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] = MapGrid_Tile
+					EndIf
 				Next
 				If TempHeight = Height Then Temp = x2
 			EndIf
@@ -7998,12 +7963,6 @@ Function CreateMap(Zone%)
 		x = Temp
 		y = y - Height
 	Until y < 2
-	
-	; ~ Find the end room
-	EndX = x
-	EndY = y
-	; ~ Set end identificator for the grid
-	CurrMapGrid\Grid[EndX + (EndY * MapGridSize)] = MapGrid_EndTile
 	
 	Local RoomAmount%[ROOM4 + 1]
 	
@@ -8148,7 +8107,7 @@ Function CreateMap(Zone%)
 			For x = 3 To MapGridSize - 3
 				If CurrMapGrid\Grid[x + (y * MapGridSize)] = 1 Then
 					Select True ; ~ See if adding some rooms is possible
-						Case CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] > 0
+						Case CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] > MapGrid_NoTile
 							;[Block]
 							If (CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 2) + (y * MapGridSize)]) = 0 Then
 								If (CurrMapGrid\Grid[(x + 1) + ((y - 2) * MapGridSize)] + CurrMapGrid\Grid[(x + 2) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + ((y - 1) * MapGridSize)]) = 0 Then
@@ -8164,7 +8123,7 @@ Function CreateMap(Zone%)
 								EndIf
 							EndIf
 							;[End Block]
-						Case CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > 0
+						Case CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile
 							;[Block]
 							If (CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x - 2) + (y * MapGridSize)]) = 0 Then
 								If (CurrMapGrid\Grid[(x - 1) + ((y - 2) * MapGridSize)] + CurrMapGrid\Grid[(x - 2) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[(x - 1) + ((y - 1) * MapGridSize)]) = 0 Then
@@ -8180,7 +8139,7 @@ Function CreateMap(Zone%)
 								EndIf
 							EndIf
 							;[End Block]
-						Case CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] > 0
+						Case CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] > MapGrid_NoTile
 							;[Block]
 							If (CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] + CurrMapGrid\Grid[x + ((y + 2) * MapGridSize)]) = 0 Then
 								If (CurrMapGrid\Grid[(x - 2) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x - 1) + ((y + 2) * MapGridSize)] + CurrMapGrid\Grid[(x - 1) + ((y + 1) * MapGridSize)]) = 0 Then
@@ -8196,7 +8155,7 @@ Function CreateMap(Zone%)
 								EndIf
 							EndIf
 							;[End Block]
-						Case CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > 0
+						Case CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile
 							;[Block]
 							If (CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] + CurrMapGrid\Grid[x + ((y - 2) * MapGridSize)]) = 0 Then
 								If (CurrMapGrid\Grid[(x - 2) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[(x - 1) + ((y - 2) * MapGridSize)] + CurrMapGrid\Grid[(x - 1) + ((y - 1) * MapGridSize)]) = 0 Then
@@ -8297,7 +8256,7 @@ Function CreateMap(Zone%)
 		Next
 	Next		
 	
-	; ~ First, create the start and end rooms for each zone
+	; ~ First, create the start room for each zone
 	Local r.Rooms
 	
 	Select Zone
@@ -8307,20 +8266,12 @@ Function CreateMap(Zone%)
 			r.Rooms = CreateRoom(Zone, ROOM1, StartX * RoomSpacing, 0.0, StartY * RoomSpacing, CurrMapGrid\RoomName[StartX + (StartY * MapGridSize)])
 			r\Angle = 0.0
 			TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
-			CurrMapGrid\RoomName[EndX + (EndY * MapGridSize)] = "room1endroom"
-			r.Rooms = CreateRoom(Zone, ROOM1, EndX * RoomSpacing, 0.0, EndY * RoomSpacing, CurrMapGrid\RoomName[EndX + (EndY * MapGridSize)])
-			r\Angle = 180.0
-			TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 			;[End Block]
 		Case HCZ
 			;[Block]
 			CurrMapGrid\RoomName[StartX + (StartY * MapGridSize)] = "room1endroom2"
 			r.Rooms = CreateRoom(Zone, ROOM1, StartX * RoomSpacing, 0.0, StartY * RoomSpacing, CurrMapGrid\RoomName[StartX + (StartY * MapGridSize)])
 			r\Angle = 0.0
-			TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
-			CurrMapGrid\RoomName[EndX + (EndY * MapGridSize)] = "room1endroom2"
-			r.Rooms = CreateRoom(Zone, ROOM1, EndX * RoomSpacing, 0.0, EndY * RoomSpacing, CurrMapGrid\RoomName[EndX + (EndY * MapGridSize)])
-			r\Angle = 180.0
 			TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 			;[End Block]
 		Case EZ
@@ -8329,14 +8280,41 @@ Function CreateMap(Zone%)
 			r.Rooms = CreateRoom(Zone, ROOM1, StartX * RoomSpacing, 0.0, StartY * RoomSpacing, CurrMapGrid\RoomName[StartX + (StartY * MapGridSize)])
 			r\Angle = 0.0
 			TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
-			CurrMapGrid\RoomName[EndX + (EndY * MapGridSize)] = "room1endroom3"
-			r.Rooms = CreateRoom(Zone, ROOM1, EndX * RoomSpacing, 0.0, EndY * RoomSpacing, CurrMapGrid\RoomName[EndX + (EndY * MapGridSize)])
-			r\Angle = 180.0
-			TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 			;[End Block]
 	End Select
 	
-	; ~ Assign the "important" rooms into the map first, aka all rooms that have the "commonness" value 0 and the "autospawn" value set to False
+	; ~ After, create end rooms for each zone
+	For y = 1 To MapGridSize - 2
+		For x = 1 To MapGridSize - 2
+			If CurrMapGrid\Grid[x + (y * MapGridSize)] = MapGrid_EndTile And CurrMapGrid\RoomName[x + (y * MapGridSize)] = "" Then
+				Select Zone
+					Case LCZ
+						;[Block]
+						CurrMapGrid\RoomName[x + (y * MapGridSize)] = "room1endroom"
+						r.Rooms = CreateRoom(Zone, ROOM1, x * RoomSpacing, 0.0, y * RoomSpacing, CurrMapGrid\RoomName[x + (y * MapGridSize)])
+						r\Angle = 180.0
+						TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
+						;[End Block]
+					Case HCZ
+						;[Block]
+						CurrMapGrid\RoomName[x + (y * MapGridSize)] = "room1endroom2"
+						r.Rooms = CreateRoom(Zone, ROOM1, x * RoomSpacing, 0.0, y * RoomSpacing, CurrMapGrid\RoomName[x + (y * MapGridSize)])
+						r\Angle = 180.0
+						TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
+						;[End Block]
+					Case EZ
+						;[Block]
+						CurrMapGrid\RoomName[x + (y * MapGridSize)] = "room1endroom3"
+						r.Rooms = CreateRoom(Zone, ROOM1, x * RoomSpacing, 0.0, y * RoomSpacing, CurrMapGrid\RoomName[x + (y * MapGridSize)])
+						r\Angle = 180.0
+						TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
+						;[End Block]
+				End Select
+			EndIf
+		Next
+	Next
+	
+	; ~ Assign the "important" rooms into the map first, aka all rooms that have the "Commonness" value 0 and the "AutoSpawn" value set to False
 	Local rt.RoomTemplates
 	
 	For rt.RoomTemplates = Each RoomTemplates
