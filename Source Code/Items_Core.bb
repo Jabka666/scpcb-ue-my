@@ -50,7 +50,10 @@ Function CreateItemTemplate.ItemTemplates(Name$, TempName$, OBJPath$, InvImgPath
 				Exit
 			EndIf
 		Next
-		If (Not Texture) Then Texture = LoadTexture_Strict(TexturePath, TexFlags) : it\TexPath = TexturePath
+		If (Not Texture) Then
+			Texture = LoadTexture_Strict(TexturePath, TexFlags)
+			it\TexPath = TexturePath
+		EndIf
 		EntityTexture(it\OBJ, Texture)
 		it\Tex = Texture
 	EndIf  

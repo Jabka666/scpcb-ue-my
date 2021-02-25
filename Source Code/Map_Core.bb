@@ -65,7 +65,7 @@ Function AddLight%(room.Rooms, x#, y#, z#, lType%, Range#, R%, G%, B%)
 				room\LightSprites[i] = CreateSprite()
 				PositionEntity(room\LightSprites[i], x, y, z)
 				ScaleSprite(room\LightSprites[i], 0.13 , 0.13)
-				EntityTexture(room\LightSprites[i], tt\LightSpriteID[0])
+				EntityTexture(room\LightSprites[i], t\LightSpriteID[0])
 				EntityFX(room\LightSprites[i], 1 + 8)
 				EntityBlend(room\LightSprites[i], 3)
 				EntityColor(room\LightSprites[i], R, G, B)
@@ -79,7 +79,7 @@ Function AddLight%(room.Rooms, x#, y#, z#, lType%, Range#, R%, G%, B%)
 				room\LightSprites2[i] = CreateSprite()
 				PositionEntity(room\LightSprites2[i], x, y, z)
 				ScaleSprite(room\LightSprites2[i], 0.6, 0.6)
-				EntityTexture(room\LightSprites2[i], tt\LightSpriteID[2])
+				EntityTexture(room\LightSprites2[i], t\LightSpriteID[2])
 				EntityBlend(room\LightSprites2[i], 3)
 				EntityOrder(room\LightSprites2[i], -1)
 				EntityColor(room\LightSprites2[i], R, G, B)
@@ -113,7 +113,7 @@ Function AddLight%(room.Rooms, x#, y#, z#, lType%, Range#, R%, G%, B%)
 		Sprite = CreateSprite()
 		PositionEntity(Sprite, x, y, z)
 		ScaleSprite(Sprite, 0.13 , 0.13)
-		EntityTexture(Sprite, tt\LightSpriteID[0])
+		EntityTexture(Sprite, t\LightSpriteID[0])
 		EntityFX(Sprite, 1 + 8)
 		EntityBlend(Sprite, 3)
 		EntityColor(Sprite, R, G, B)
@@ -1480,7 +1480,7 @@ Function LoadRoomTemplates(File$)
 		If Left(TemporaryString, 1) = "[" Then
 			TemporaryString = Mid(TemporaryString, 2, Len(TemporaryString) - 2)
 			If TemporaryString <> "room ambience" Then
-				StrTemp = GetINIString(File, TemporaryString, "Mesh")
+				StrTemp = GetINIString(File, TemporaryString, "Mesh Path")
 				
 				rt.RoomTemplates = CreateRoomTemplate(StrTemp)
 				rt\Name = Lower(TemporaryString)
@@ -2057,7 +2057,7 @@ Function CreateButton%(ButtonID%, x#, y#, z#, Pitch# = 0.0, Yaw# = 0.0, Roll# = 
 	ScaleEntity(OBJ, 0.03, 0.03, 0.03)
 	RotateEntity(OBJ, Pitch, Yaw, Roll)
 	EntityPickMode(OBJ, 2)
-	If Locked Then EntityTexture(OBJ, tt\MiscTextureID[17])
+	If Locked Then EntityTexture(OBJ, t\MiscTextureID[17])
 	If Parent <> 0 Then EntityParent(OBJ, Parent)
 	
 	Return(OBJ)
@@ -2459,11 +2459,11 @@ Function UpdateDoors()
 		If d\Locked <> d\LockedUpdated Then
 			If d\Locked = 1 Then
 				For i = 0 To 1
-					If d\Buttons[i] <> 0 Then EntityTexture(d\Buttons[i], tt\MiscTextureID[17])
+					If d\Buttons[i] <> 0 Then EntityTexture(d\Buttons[i], t\MiscTextureID[17])
 				Next
 			Else
 				For i = 0 To 1
-					If d\Buttons[i] <> 0 Then EntityTexture(d\Buttons[i], tt\MiscTextureID[16])
+					If d\Buttons[i] <> 0 Then EntityTexture(d\Buttons[i], t\MiscTextureID[16])
 				Next
 			EndIf
 			d\LockedUpdated = d\Locked
@@ -3034,14 +3034,14 @@ Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#, Size# = 1.0, A
 	PositionEntity(de\OBJ, x, y, z)
 	ScaleSprite(de\OBJ, Size, Size)
 	RotateEntity(de\OBJ, Pitch, Yaw, Roll)
-	EntityTexture(de\OBJ, tt\DecalTextureID[ID])
+	EntityTexture(de\OBJ, t\DecalTextureID[ID])
 	EntityAlpha(de\OBJ, Alpha)
 	EntityFX(de\OBJ, FX)
 	EntityBlend(de\OBJ, BlendMode)
 	SpriteViewMode(de\OBJ, 2)
 	If R <> 0 Lor G <> 0 Lor B <> 0 Then EntityColor(de\OBJ, R, G, B)
 	
-	If (Not tt\DecalTextureID[ID]) Then
+	If (Not t\DecalTextureID[ID]) Then
 		CreateConsoleMsg("Decal Texture ID: " + ID + " not found.")
 		If opt\ConsoleOpening And opt\CanOpenConsole Then
 			ConsoleOpen = True
@@ -3148,7 +3148,7 @@ Function CreateSecurityCam.SecurityCams(x1#, y1#, z1#, r.Rooms, Screen% = False,
 		sc\ScrOverlay = CreateSprite(sc\ScrOBJ)
 		ScaleSprite(sc\ScrOverlay, MeshWidth(o\MonitorModelID[0]) * Scale * 0.95 * 0.5, MeshHeight(o\MonitorModelID[0]) * Scale * 0.95 * 0.5)
 		MoveEntity(sc\ScrOverlay, 0.0, 0.0, -0.005)
-		EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
+		EntityTexture(sc\ScrOverlay, t\MonitorTextureID[0])
 		SpriteViewMode(sc\ScrOverlay, 2)
 		EntityFX(sc\ScrOverlay, 1)
 		EntityBlend(sc\ScrOverlay, 3)
@@ -3200,12 +3200,15 @@ Function UpdateSecurityCams()
 			
 			If Close Lor sc = CoffinCam Then 
 				If sc\FollowPlayer Then
-					If sc <> CoffinCam
+					If sc <> CoffinCam Then
 						If EntityVisible(sc\CameraOBJ, Camera)
 							If MTFCameraCheckTimer > 0.0 Then MTFCameraCheckDetected = True
 						EndIf
 					EndIf
-					If (Not sc\Pvt) Then sc\Pvt = CreatePivot(sc\OBJ) : EntityParent(sc\Pvt, 0) ; ~ Sets position and rotation of the pivot to the cam object
+					If (Not sc\Pvt) Then
+						sc\Pvt = CreatePivot(sc\OBJ)
+						EntityParent(sc\Pvt, 0) ; ~ Sets position and rotation of the pivot to the cam object
+					EndIf
 					PointEntity(sc\Pvt, Camera)
 					
 					RotateEntity(sc\CameraOBJ, CurveAngle(EntityPitch(sc\Pvt), EntityPitch(sc\CameraOBJ), 75.0), CurveAngle(EntityYaw(sc\Pvt), EntityYaw(sc\CameraOBJ), 75.0), 0.0)
@@ -3226,9 +3229,9 @@ Function UpdateSecurityCams()
 					
 					If EntityInView(sc\CameraOBJ, Camera) And EntityVisible(sc\CameraOBJ, Camera) Then
 						If (MilliSecs2() Mod 1200) < 800 Then
-							EntityTexture(sc\CameraOBJ, tt\MiscTextureID[19])
+							EntityTexture(sc\CameraOBJ, t\MiscTextureID[19])
 						Else
-							EntityTexture(sc\CameraOBJ, tt\MiscTextureID[18])
+							EntityTexture(sc\CameraOBJ, t\MiscTextureID[18])
 						EndIf
 					EndIf
 					
@@ -3301,9 +3304,9 @@ Function UpdateSecurityCams()
 							FreeEntity(Pvt)
 							If (sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3) And ((Not I_714\Using) And wi\GasMask <> 3 And wi\HazmatSuit <> 3) Then
 								If me\Sanity < -800.0 Then
-									If Rand(3) = 1 Then EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
+									If Rand(3) = 1 Then EntityTexture(sc\ScrOverlay, t\MonitorTextureID[0])
 									If Rand(6) < 5 Then
-										EntityTexture(sc\ScrOverlay, tt\MiscTextureID[Rand(7, 12)])
+										EntityTexture(sc\ScrOverlay, t\MiscTextureID[Rand(7, 12)])
 										If sc\PlayerState = 1 Then PlaySound_Strict(HorrorSFX[1])
 										sc\PlayerState = 2
 										If (Not sc\SoundCHN) Then
@@ -3316,21 +3319,21 @@ Function UpdateSecurityCams()
 									me\BlurTimer = 1000.0
 									If me\VomitTimer = 0.0 Then me\VomitTimer = 1.0
 								ElseIf me\Sanity < -500.0
-									If Rand(7) = 1 Then EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
+									If Rand(7) = 1 Then EntityTexture(sc\ScrOverlay, t\MonitorTextureID[0])
 									If Rand(50) = 1 Then
-										EntityTexture(sc\ScrOverlay, tt\MiscTextureID[Rand(7, 12)])
+										EntityTexture(sc\ScrOverlay, t\MiscTextureID[Rand(7, 12)])
 										If sc\PlayerState = 0 Then PlaySound_Strict(HorrorSFX[0])
 										sc\PlayerState = Max(sc\PlayerState, 1)
 										If sc\CoffinEffect = 3 And Rand(100) = 1 Then sc\CoffinEffect = 2 : sc\PlayerState = Rand(10000, 20000)
 									EndIf
 								Else
-									EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
+									EntityTexture(sc\ScrOverlay, t\MonitorTextureID[0])
 								EndIf
 							EndIf
 						EndIf
 					Else
 						If sc\InSight Then
-							If I_714\Using Lor wi\HazmatSuit = 3 Lor wi\GasMask = 3 Then EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
+							If I_714\Using Lor wi\HazmatSuit = 3 Lor wi\GasMask = 3 Then EntityTexture(sc\ScrOverlay, t\MonitorTextureID[0])
 						EndIf
 					EndIf
 					
@@ -3339,10 +3342,10 @@ Function UpdateSecurityCams()
 							sc\PlayerState = Rand(60000, 65000)
 						EndIf
 						
-						If Rand(500) = 1 Then EntityTexture(sc\ScrOverlay, tt\MiscTextureID[Rand(1, 6)])
+						If Rand(500) = 1 Then EntityTexture(sc\ScrOverlay, t\MiscTextureID[Rand(1, 6)])
 						
 						If (MilliSecs2() Mod sc\PlayerState) >= Rand(600) Then
-							EntityTexture(sc\ScrOverlay, tt\MonitorTextureID[0])
+							EntityTexture(sc\ScrOverlay, t\MonitorTextureID[0])
 						Else
 							If (Not sc\SoundCHN) Then
 								sc\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(1, 3) + ".ogg"))
@@ -3351,7 +3354,7 @@ Function UpdateSecurityCams()
 								sc\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(1, 3) + ".ogg"))
 								If sc\CoffinEffect = 2 Then sc\CoffinEffect = 3 : sc\PlayerState = 0
 							EndIf
-							EntityTexture(sc\ScrOverlay, tt\MiscTextureID[Rand(1, 6)])
+							EntityTexture(sc\ScrOverlay, t\MiscTextureID[Rand(1, 6)])
 						EndIf
 					EndIf
 				EndIf
@@ -3506,15 +3509,15 @@ Function UpdateCheckpointMonitors(LCZ% = True)
 				If Lower(Name) <> "monitor_overlay.png"
 					If LCZ Then
 						If MonitorTimer < 50.0 Then
-							BrushTexture(b, tt\MonitorTextureID[2], 0, 0)
+							BrushTexture(b, t\MonitorTextureID[2], 0, 0)
 						Else
-							BrushTexture(b, tt\MonitorTextureID[3], 0, 0)
+							BrushTexture(b, t\MonitorTextureID[3], 0, 0)
 						EndIf
 					Else
 						If MonitorTimer2 < 50.0
-							BrushTexture(b, tt\MonitorTextureID[2], 0, 0)
+							BrushTexture(b, t\MonitorTextureID[2], 0, 0)
 						Else
-							BrushTexture(b, tt\MonitorTextureID[1], 0, 0)
+							BrushTexture(b, t\MonitorTextureID[1], 0, 0)
 						EndIf
 					EndIf
 					PaintSurface(SF, b)
@@ -3551,7 +3554,7 @@ Function TurnCheckpointMonitorsOff(LCZ% = True)
 			If t1 <> 0 Then
 				Name = StripPath(TextureName(t1))
 				If Lower(Name) <> "monitor_overlay.png"
-					BrushTexture(b, tt\MonitorTextureID[4], 0, 0)
+					BrushTexture(b, t\MonitorTextureID[4], 0, 0)
 					PaintSurface(SF, b)
 				EndIf
 				If Name <> "" Then DeleteSingleTextureEntryFromCache(t1)
@@ -4099,7 +4102,7 @@ Function FillRoom(r.Rooms)
 			ScaleSprite(r\Objects[1], 0.09, 0.0725)
 			TurnEntity(r\Objects[1], 0.0, 13.0, 0.0)
 			MoveEntity(r\Objects[1], 0.0, 0.0, -0.022)
-			EntityTexture(r\Objects[1], tt\MiscTextureID[6])
+			EntityTexture(r\Objects[1], t\MiscTextureID[6])
 			HideEntity(r\Objects[1])
 			
 			r\Objects[2] = CreatePivot()
@@ -4676,7 +4679,7 @@ Function FillRoom(r.Rooms)
 			r\Objects[5] = CreateSprite()
 			PositionEntity(r\Objects[5], r\x - 158.0 * RoomScale, r\y - 4737.0 * RoomScale, r\z + 298.0 * RoomScale)
 			ScaleSprite(r\Objects[5], 0.02, 0.02)
-			EntityTexture(r\Objects[5], tt\LightSpriteID[1])
+			EntityTexture(r\Objects[5], t\LightSpriteID[1])
 			EntityBlend(r\Objects[5], 3)
 			HideEntity(r\Objects[5])
 			
@@ -5199,7 +5202,7 @@ Function FillRoom(r.Rooms)
 			r\Objects[3] = CreateSprite()
 			PositionEntity(r\Objects[3], r\x - 43.5 * RoomScale, - 574.0 * RoomScale, r\z - 362.0 * RoomScale)
 			ScaleSprite(r\Objects[3], 0.015, 0.015)
-			EntityTexture(r\Objects[3], tt\LightSpriteID[1])
+			EntityTexture(r\Objects[3], t\LightSpriteID[1])
 			EntityBlend(r\Objects[3], 3)
 			HideEntity(r\Objects[3])
 			
@@ -5933,7 +5936,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\Objects[2], r\x, r\y, r\z)	
 			
 			r\Objects[3] = CreateSprite()
-			EntityTexture(r\Objects[3], tt\MiscTextureID[13])
+			EntityTexture(r\Objects[3], t\MiscTextureID[13])
 			SpriteViewMode(r\Objects[3], 2) 
 			EntityBlend(r\Objects[3], 3) 
 			EntityFX(r\Objects[3], 1 + 8 + 16)
@@ -5943,7 +5946,7 @@ Function FillRoom(r.Rooms)
 			r\Objects[4] = CreateSprite()
 			PositionEntity(r\Objects[4], r\x - 32.0 * RoomScale, r\y + 568.0 * RoomScale, r\z)
 			ScaleSprite(r\Objects[4], 0.03, 0.03)
-			EntityTexture(r\Objects[4], tt\LightSpriteID[1])
+			EntityTexture(r\Objects[4], t\LightSpriteID[1])
 			EntityBlend(r\Objects[4], 3)
 			HideEntity(r\Objects[4])
 			

@@ -90,7 +90,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			; ~ On Halloween set Jack-o'-lantern texture
 			If (Left(CurrentDate(), 7) = "31 Oct ") Then
-				tt\MiscTextureID[14] = True
+				t\MiscTextureID[14] = True
 				TexFestive = LoadTexture_Strict("GFX\npcs\scp_173_H.png")
 				EntityTexture(n\OBJ, TexFestive, 0, 0)
 				DeleteSingleTextureEntryFromCache(TexFestive)
@@ -98,7 +98,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			; ~ On New Year set cookie texture
 			If (Left(CurrentDate(), 7) = "01 Jan ") Then
-				tt\MiscTextureID[15] = True
+				t\MiscTextureID[15] = True
 				TexFestive = LoadTexture_Strict("GFX\npcs\scp_173_NY.png")
 				EntityTexture(n\OBJ, TexFestive, 0, 0)
 				DeleteSingleTextureEntryFromCache(TexFestive)
@@ -241,7 +241,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\OBJ2 = CreateSprite(FindChild(n\OBJ, "Reyelid"))
 			ScaleSprite(n\OBJ2, 0.07, 0.08)
 			EntityOrder(n\OBJ2, -5)
-			EntityTexture(n\OBJ2, tt\OverlayTextureID[5])
+			EntityTexture(n\OBJ2, t\OverlayTextureID[5])
 			HideEntity(n\OBJ2)
 			
 			n\CollRadius = 0.26
@@ -324,7 +324,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 				
 				PositionEntity(LightSprite, 1.65 * i, 1.17, 0.0, -0.25)
 				ScaleSprite(LightSprite, 0.13, 0.13)
-				EntityTexture(LightSprite, tt\LightSpriteID[0])
+				EntityTexture(LightSprite, t\LightSpriteID[0])
 				EntityBlend(LightSprite, 3)
 				EntityFX(LightSprite, 1 + 8)				
 			Next
@@ -7226,8 +7226,7 @@ Function ConsoleSpawnNPC(Name$, NPCState$ = "")
 			;[End Block]
 		Case "apache", "helicopter"
 			;[Block]
-			n.NPCs = CreateNPC(NPCTypeApache, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = "Apache spawned."
+			CreateConsoleMsg("Apache Helicopter cannot be spawned with the console. Sorry!", 255, 0, 0)
 			;[End Block]
 		Case "tentacle", "scp035tentacle", "scp-035tentacle", "scp-035-tentacle", "scp035-tentacle"
 			;[Block]
@@ -7242,7 +7241,7 @@ Function ConsoleSpawnNPC(Name$, NPCState$ = "")
 		Case "vehicle", "truck"
 			;[Block]
 			n.NPCs = CreateNPC(NPCTypeVehicle, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = "Vehicle spawned."
+			CreateConsoleMsg("Vehicle cannot be spawned with the console. Sorry!", 255, 0, 0)
 			;[End Block]
 		Default 
 			;[Block]
