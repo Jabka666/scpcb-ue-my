@@ -4361,7 +4361,7 @@ Function FillRoom(r.Rooms)
 			
 			; ~ Player's position after leaving the pocket dimension
 			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x + 1560.0 * RoomScale, r\y, r\z + 250.0 * RoomScale)
+			PositionEntity(r\Objects[0], r\x + 1560.0 * RoomScale, r\y + 510.0 * RoomScale, r\z + 250.0 * RoomScale)
 			
 			r\Objects[1] = CreatePivot()
 			PositionEntity(r\Objects[1], r\x + 1344.0 * RoomScale, r\y - 752.0 * RoomScale, r\z - 384.0 * RoomScale)
@@ -6040,7 +6040,10 @@ Function FillRoom(r.Rooms)
 			r\Objects[3] = CreatePivot()
 			PositionEntity(r\Objects[3], r\x + 308.0 * RoomScale, r\y + 0.5, r\z + 640.0 * RoomScale)
 			
-			For i = 0 To 3
+			r\Objects[4] = CreatePivot()
+			PositionEntity(r\Objects[4], r\x, r\y, r\z - 784.0 * RoomScale)
+			
+			For i = 0 To 4
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
@@ -7288,6 +7291,10 @@ Function FillRoom(r.Rooms)
 			d.Doors = CreateDoor(r\x, r\y, r\z - 240.0 * RoomScale, 0.0, r, False, Default_Door, 0, "2411")
 			d\AutoClose = False
 			
+			r\Objects[0] = CreatePivot()
+			PositionEntity(r\Objects[0], r\x, r\y, r\z - 784.0 * RoomScale)
+			EntityParent(r\Objects[0], r\OBJ)
+			
 			it.Items = CreateItem("Field Agent Log #235-001-CO5", "paper", r\x, r\y + 200.0 * RoomScale, r\z + 870.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -7401,6 +7408,11 @@ Function FillRoom(r.Rooms)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) + 0.061, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) - 0.061, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			
+			; ~ Player's position after leaving the pocket dimension
+			r\Objects[0] = CreatePivot()
+			PositionEntity(r\Objects[0], r\x + 500.0 * RoomScale, r\y + 511.0 * RoomScale, r\z + 576.0 * RoomScale)
+			EntityParent(r\Objects[0], r\OBJ)
+			
 			sc.SecurityCams = CreateSecurityCam(r\x + 980.0 * RoomScale, r\y + 515.0 * RoomScale, r\z + 100.0 * RoomScale, r)
 			sc\Angle = 30.0 : sc\Turn = 30.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
@@ -7509,6 +7521,13 @@ Function FillRoom(r.Rooms)
 				it.Items = CreateItem("Note from Maynard", "paper", r\x, r\y + 254.0 * RoomScale, r\z - 260.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)	
 			EndIf
+			;[End Block]
+		Case "room3offices2"
+			;[Block]
+			; ~ Player's position after leaving the pocket dimension
+			r\Objects[0] = CreatePivot()
+			PositionEntity(r\Objects[0], r\x, r\y + 368.0 * RoomScale, r\z)
+			EntityParent(r\Objects[0], r\OBJ)
 			;[End Block]
 	End Select
 	
