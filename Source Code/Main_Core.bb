@@ -157,7 +157,7 @@ SetFont(fo\FontID[Font_Default_Big])
 
 Global BlinkMeterIMG% = LoadImage_Strict("GFX\blink_meter(1).png")
 
-RenderLoading(0, True)
+RenderLoading(0, "MAIN CORE")
 
 Type Player
 	Field KillTimer#, KillAnim%, FallTimer#, DeathTimer#
@@ -200,6 +200,8 @@ Type WearableItems
 End Type
 
 Global wi.WearableItems = New WearableItems
+
+RenderLoading(5, "ACHIEVEMENTS CORE")
 
 Include "Source Code\Achievements_Core.bb"
 
@@ -250,6 +252,8 @@ Global SoundTransmission%
 Global MainMenuOpen%, MenuOpen%, InvOpen%
 
 Global AccessCode%
+
+RenderLoading(10, "DIFFICULTY CORE")
 
 Include "Source Code\Difficulty_Core.bb"
 
@@ -1874,7 +1878,11 @@ End Function
 
 Global Camera%
 
+RenderLoading(15, "SUBTITLES CORE")
+
 Include "Source Code\Subtitles_Core.bb"
+
+RenderLoading(20, "SOUNDS CORE")
 
 Include "Source Code\Sounds_Core.bb"
 
@@ -1885,21 +1893,27 @@ Global InFacility% = True
 
 Global ForestNPC%, ForestNPCTex%, ForestNPCData#[3]
 
-RenderLoading(35, True)
+RenderLoading(25, "ITEMS CORE")
 
 Include "Source Code\Items_Core.bb"
 
+RenderLoading(30, "PARTICLES CORE")
+
 Include "Source Code\Particles_Core.bb"
+
+RenderLoading(35, "GRAPHICS CORE")
 
 Include "Source Code\Graphics_Core.bb"
 
-RenderLoading(40, True)
+RenderLoading(40, "MAP CORE")
 
 Include "Source Code\Map_Core.bb"
 
-RenderLoading(80, True)
+RenderLoading(60, "NPCs CORE")
 
 Include "Source Code\NPCs_Core.bb"
+
+RenderLoading(65, "EVENTS CORE")
 
 Include "Source Code\Events_Core.bb"
 
@@ -1921,18 +1935,22 @@ Collisions(HIT_178, HIT_MAP, 2, 2)
 Collisions(HIT_178, HIT_178, 1, 3)
 Collisions(HIT_DEAD, HIT_MAP, 2, 2)
 
-RenderLoading(90, True)
-
 Global ShouldEntitiesFall% = True
 Global PlayerFallingPickDistance# = 10.0
 
 Global MTFCameraCheckTimer# = 0.0
 Global MTFCameraCheckDetected% = False
 
+RenderLoading(70, "MENU CORE")
+
 Include "Source Code\Menu_Core.bb"
 
 InitMainMenuAssets()
 MainMenuOpen = True
+
+RenderLoading(80, "SAVE CORE")
+
+Include "Source Code\Save_Core.bb"
 
 FlushKeys()
 FlushMouse()
@@ -7026,7 +7044,7 @@ Function UpdateMenu()
 				If SelectedDifficulty\SaveType <> NOSAVES Then
 					If GameSaved Then
 						If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "Load Game") Then
-							RenderLoading(0)
+							RenderLoading(0, "GAME FILES")
 							
 							MenuOpen = False
 							LoadGameQuick(CurrSave)
@@ -7085,7 +7103,7 @@ Function UpdateMenu()
 				If SelectedDifficulty\SaveType <> NOSAVES Then
 					If GameSaved Then
 						If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "Load Game") Then
-							RenderLoading(0)
+							RenderLoading(0, "GAME FILES")
 							
 							MenuOpen = False
 							LoadGameQuick(CurrSave)
@@ -7875,7 +7893,7 @@ End Function
 Function LoadEntities(Zone% = LCZ)
 	CatchErrors("Uncaught (LoadEntities)")
 	
-	RenderLoading(0)
+	RenderLoading(0, "VARIABLES")
 	
 	Local i%, Tex%
 	Local b%, t1%, SF%
@@ -7885,7 +7903,7 @@ Function LoadEntities(Zone% = LCZ)
 	If MainMenuOpen Then DeInitMainMenuAssets()
 	
 	; ~ Create player parameters
-	RenderLoading(5)
+	RenderLoading(5, "PLAYER")
 	
 	MaxItemAmount = SelectedDifficulty\InventorySlots
 	Dim Inventory.Items(MaxItemAmount)
@@ -7901,8 +7919,8 @@ Function LoadEntities(Zone% = LCZ)
 	CreateBlurImage()
 	CameraProjMode(ArkBlurCam, 0)
 	
-	; ~ Load images and icons
-	RenderLoading(10)
+	; ~ Load images
+	RenderLoading(10, "IMAGES")
 	
 	t\ImageID[0] = LoadImage_Strict("GFX\menu\pause_menu.png")
 	MaskImage(t\ImageID[0], 255, 255, 0)
@@ -7935,6 +7953,9 @@ Function LoadEntities(Zone% = LCZ)
 	
 	t\ImageID[12] = CreateImage(opt\GraphicWidth, opt\GraphicHeight)
 	
+	; ~ Load icons
+	RenderLoading(15, "ICONS")
+	
 	t\IconID[0] = LoadImage_Strict("GFX\walk_icon.png")
 	t\IconID[1] = LoadImage_Strict("GFX\sprint_icon.png")
 	t\IconID[2] = LoadImage_Strict("GFX\crouch_icon.png")
@@ -7944,7 +7965,7 @@ Function LoadEntities(Zone% = LCZ)
 	Next
 	
 	; ~ Load textures
-	RenderLoading(15)
+	RenderLoading(20, "TEXTURES")
 	
 	LoadMissingTexture()
 	
@@ -8134,7 +8155,7 @@ Function LoadEntities(Zone% = LCZ)
 	t\ParticleTextureID[8] = LoadTexture_Strict("GFX\particle.png", 1 + 2, DeleteAllTextures)
 	
 	; ~ Create player collider and head
-	RenderLoading(20)
+	RenderLoading(25, "COLLISIONS")
 	
 	me\Collider = CreatePivot()
 	EntityRadius(me\Collider, 0.15, 0.30)
@@ -8146,7 +8167,7 @@ Function LoadEntities(Zone% = LCZ)
 	EntityType(me\Head, HIT_PLAYER)
 	
 	; ~ Load models
-	RenderLoading(25)
+	RenderLoading(30, "MODELS")
 	
 	o\NPCModelID[NPCType008_1] = LoadAnimMesh_Strict("GFX\npcs\scp_008_1.b3d") ; ~ SCP-008-1
 	
@@ -8453,8 +8474,11 @@ Function LoadEntities(Zone% = LCZ)
 	o\MiscModelID[0] = LoadMesh_Strict("GFX\items\cup_liquid.b3d") ; ~ Liquid for cups dispensed by SCP-294
 	HideEntity(o\MiscModelID[0])
 	
+	; ~ Create items
+	InitItemTemplates()
+	
 	; ~ Load user tracks
-	RenderLoading(30)
+	RenderLoading(35, "USER TRACKS")
 	
 	UserTrackMusicAmount = 0
 	If opt\EnableUserTracks Then
@@ -8482,13 +8506,12 @@ Function LoadEntities(Zone% = LCZ)
 	EndIf
 	
 	; ~ Misc objects
-	RenderLoading(35)
-	
-	; ~ Create items
-	InitItemTemplates()
+	RenderLoading(40, "CHUNKS")
 	
 	; ~ Create chunks
 	SetChunkDataValues()
+	
+	RenderLoading(45, "MATERIALS")
 	
 	; ~ Load materials
 	LoadMaterials(MaterialsFile)
@@ -8517,11 +8540,11 @@ Function LoadEntities(Zone% = LCZ)
 	CreateConsoleMsg("  - disable106 / enable106")
 	CreateConsoleMsg("  - spawn [NPC type]")
 	
+	RenderLoading(50, "GRAPHICS")
+	
 	; ~ Apply graphics changes
 	TextureLodBias(opt\TextureDetailsLevel)
 	TextureAnisotropic(opt\AnisotropicLevel)
-	
-	RenderLoading(40)
 	
 	CatchErrors("LoadEntities")
 End Function
@@ -8549,7 +8572,7 @@ Function InitNewGame(Zone% = LCZ)
 	
 	InitStats()
 	
-	RenderLoading(45)
+	RenderLoading(60, "PLAYER STATS")
 	
 	me\BlinkTimer = -10.0 : me\BlinkEffect = 1.0 : me\Stamina = 100.0 : me\StaminaEffect = 1.0 : me\HeartBeatRate = 70.0 : me\Funds = Rand(0, 6)
 	
@@ -8560,6 +8583,8 @@ Function InitNewGame(Zone% = LCZ)
 		AccessCode = AccessCode + Rand(1, 9) * (10 ^ i)
 	Next	
 	
+	RenderLoading(65, "MAP")
+	
 	If SelectedMap = "" Then
 		CreateMap(Zone)
 	Else
@@ -8567,11 +8592,11 @@ Function InitNewGame(Zone% = LCZ)
 	EndIf
 	InitWayPoints()
 	
-	RenderLoading(79)
-	
 	Curr173 = CreateNPC(NPCType173, 0.0, -30.0, 0.0)
 	Curr106 = CreateNPC(NPCType106, 0.0, -30.0, 0.0)
 	Curr106\State = 70.0 * 60.0 * Rnd(12.0, 17.0)
+	
+	RenderLoading(80, "POSITIONS")
 	
 	For d.Doors = Each Doors
 		EntityParent(d\OBJ, 0)
@@ -8592,7 +8617,6 @@ Function InitNewGame(Zone% = LCZ)
 		EntityParent(it\Collider, 0)
 	Next
 	
-	RenderLoading(80)
 	For sc.SecurityCams = Each SecurityCams
 		sc\Angle = EntityYaw(sc\OBJ) + sc\Angle
 		EntityParent(sc\OBJ, 0)
@@ -8717,7 +8741,7 @@ Function InitLoadGame()
 	
 	InitStats()
 	
-	RenderLoading(80)
+	RenderLoading(80, "POSITIONS")
 	
 	InitWayPoints()
 	
@@ -8734,8 +8758,6 @@ Function InitLoadGame()
 		EntityParent(sc\OBJ, 0)
 	Next
 	
-	RenderLoading(90)
-	
 	For rt.RoomTemplates = Each RoomTemplates
 		If rt\OBJ <> 0 Then FreeEntity(rt\OBJ) : rt\OBJ = 0
 	Next
@@ -8744,7 +8766,6 @@ Function InitLoadGame()
 		; ~ Loading the necessary stuff for dimension1499, but this will only be done if the player is in this dimension already
 		If e\EventID = e_dimension1499
 			If e\EventState = 2.0 Then
-				RenderLoading(91)
 				e\room\Objects[0] = CreatePlane()
 				
 				Local PlaneTex% = LoadTexture_Strict("GFX\map\dimension1499\grit3.jpg")
@@ -8753,16 +8774,16 @@ Function InitLoadGame()
 				DeleteSingleTextureEntryFromCache(PlaneTex)
 				PositionEntity(e\room\Objects[0], 0.0, EntityY(e\room\OBJ), 0.0)
 				EntityType(e\room\Objects[0], HIT_MAP)
-				RenderLoading(92)
+				
 				I_1499\Sky = CreateSky("GFX\map\sky\1499sky")
-				RenderLoading(93)
+				
 				For i = 1 To 15
 					e\room\Objects[i] = LoadMesh_Strict("GFX\map\dimension1499\1499object" + i + ".b3d")
 					HideEntity(e\room\Objects[i])
 				Next
-				RenderLoading(96)
+				
 				CreateChunkParts(e\room)
-				RenderLoading(97)
+				
 				x = EntityX(e\room\OBJ)
 				z = EntityZ(e\room\OBJ)
 				
@@ -8771,7 +8792,7 @@ Function InitLoadGame()
 				For i = -2 To 2 Step 2
 					ch = CreateChunk(-1, x * (i * 2.5), EntityY(e\room\OBJ), z)
 				Next
-				RenderLoading(98)
+				
 				UpdateChunks(e\room, 15, False)
 				Exit
 			EndIf
@@ -9032,8 +9053,6 @@ Function NullGame(PlayButtonSFX% = True, LoadZone% = False)
 	
 	CatchErrors("NullGame")
 End Function
-
-Include "Source Code\Save_Core.bb"
 
 Function Update294()
 	Local it.Items

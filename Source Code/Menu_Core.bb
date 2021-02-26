@@ -2055,31 +2055,31 @@ Function InitLoadingScreens(File$)
 			
 			ls\DisableBackground = GetINIInt(File, TemporaryString, "DisableBackground")
 			
-			Select Lower(GetINIString(File, TemporaryString, "Align X"))
-				Case "left"
+			Select GetINIString(File, TemporaryString, "Align X")
+				Case "Left"
 					;[Block]
 					ls\AlignX = -1
 					;[End Block]
-				Case "middle", "center"
+				Case "Middle", "Center"
 					;[Block]
 					ls\AlignX = 0
 					;[End Block]
-				Case "right" 
+				Case "Right" 
 					;[Block]
 					ls\AlignX = 1
 					;[End Block]
 			End Select 
 			
-			Select Lower(GetINIString(File, TemporaryString, "Align Y"))
-				Case "top", "up"
+			Select GetINIString(File, TemporaryString, "Align Y")
+				Case "Top", "Up"
 					;[Block]
 					ls\AlignY = -1
 					;[End Block]
-				Case "middle", "center"
+				Case "Middle", "Center"
 					;[Block]
 					ls\AlignY = 0
 					;[End Block]
-				Case "bottom", "down"
+				Case "Bottom", "Down"
 					;[Block]
 					ls\AlignY = 1
 					;[End Block]
@@ -2090,7 +2090,7 @@ Function InitLoadingScreens(File$)
 	CloseFile(f)
 End Function
 
-Function RenderLoading(Percent%, ShortLoading% = False)
+Function RenderLoading(Percent%, Assets$ = "")
 	Local x%, y%, Temp%, FirstLoop%
 	Local ls.LoadingScreens
 	
@@ -2145,14 +2145,17 @@ Function RenderLoading(Percent%, ShortLoading% = False)
 		
 		DrawImage(SelectedLoadingScreen\Img, x, y)
 		
-		Local Width% = 300, Height% = 20, i%
+		Local Width% = 300 * MenuScale, Height% = 20 * MenuScale, i%
 		
 		x = mo\Viewport_Center_X - (Width / 2)
-		y = mo\Viewport_Center_Y - 70
+		y = opt\GraphicHeight - (80 * MenuScale)
 		
 		RenderBar(BlinkMeterIMG, x, y, Width, Height, Percent)
 		
 		Color(255, 255, 255)
+		If opt\SmoothHUD Then
+			Text(mo\Viewport_Center_X, opt\GraphicHeight - (70 * MenuScale), Percent + "%", True, True)
+		EndIf
 		
 		If SelectedLoadingScreen\Title = "CWM" Then
 			If (Not ShortLoading) Then 
@@ -2173,7 +2176,7 @@ Function RenderLoading(Percent%, ShortLoading% = False)
 			For i = 0 To Temp
 				StrTemp = StrTemp + Chr(Rand(48, 122))
 			Next
-			Text(mo\Viewport_Center_X, mo\Viewport_Center_Y + 80, StrTemp, True, True)
+			Text(mo\Viewport_Center_X, mo\Viewport_Center_Y - (450 * MenuScale), StrTemp, True, True)
 			
 			If Percent = 0 Then 
 				If Rand(5) = 1 Then
@@ -2246,30 +2249,32 @@ Function RenderLoading(Percent%, ShortLoading% = False)
 				StrTemp = Replace(SelectedLoadingScreen\Txt[0], Mid(SelectedLoadingScreen\Txt[0], Rand(1, Len(StrTemp) - 1), 1), Chr(Rand(130, 250)))
 			Next		
 			SetFont(fo\FontID[Font_Default])
-			RowText(StrTemp, mo\Viewport_Center_X - 200, mo\Viewport_Center_Y + 120, 400, 300, True)		
+			RowText(StrTemp, mo\Viewport_Center_X - (200 * MenuScale), mo\Viewport_Center_Y + (250 * MenuScale), 400 * MenuScale, 300 * MenuScale, True)	
 		Else
 			Color(0, 0, 0)
 			SetFont(fo\FontID[Font_Default_Big])
-			Text(mo\Viewport_Center_X + 1, mo\Viewport_Center_Y + 81, SelectedLoadingScreen\Title, True, True)
+			Text(mo\Viewport_Center_X + 1, mo\Viewport_Center_Y - (451 * MenuScale), SelectedLoadingScreen\Title, True, True)
 			SetFont(fo\FontID[Font_Default])
-			RowText(SelectedLoadingScreen\Txt[LoadingScreenText], mo\Viewport_Center_X - 199, mo\Viewport_Center_Y + 121, 400, 300, True)
+			RowText(SelectedLoadingScreen\Txt[LoadingScreenText], mo\Viewport_Center_X - (199 * MenuScale), mo\Viewport_Center_Y + (251 * MenuScale), 400 * MenuScale, 300 * MenuScale, True)
 			
 			Color(255, 255, 255)
 			SetFont(fo\FontID[Font_Default_Big])
-			Text(mo\Viewport_Center_X, mo\Viewport_Center_Y + 80, SelectedLoadingScreen\Title, True, True)
+			Text(mo\Viewport_Center_X, mo\Viewport_Center_Y - (450 * MenuScale), SelectedLoadingScreen\Title, True, True)
 			SetFont(fo\FontID[Font_Default])
-			RowText(SelectedLoadingScreen\Txt[LoadingScreenText], mo\Viewport_Center_X - 200, mo\Viewport_Center_Y + 120, 400, 300, True)
+			RowText(SelectedLoadingScreen\Txt[LoadingScreenText], mo\Viewport_Center_X - (200 * MenuScale), mo\Viewport_Center_Y + (250 * MenuScale), 400 * MenuScale, 300 * MenuScale, True)
 		EndIf
-		
-		Color(0, 0, 0)
-		Text(mo\Viewport_Center_X + 1, mo\Viewport_Center_Y - 101, "LOADING - " + Percent + " %", True, True)
-		Color(255, 255, 255)
-		Text(mo\Viewport_Center_X, mo\Viewport_Center_Y - 100, "LOADING - " + Percent + " %", True, True)
 		
 		If Percent = 100 Then 
 			If FirstLoop And SelectedLoadingScreen\Title <> "CWM" Then PlaySound_Strict(LoadTempSound(("SFX\Horror\Horror8.ogg")))
-			Text(mo\Viewport_Center_X, opt\GraphicHeight - 50, "PRESS ANY KEY TO CONTINUE", True, True)
+			Color(0, 0, 0)
+			Text(mo\Viewport_Center_X, opt\GraphicHeight - (34 * MenuScale), "PRESS ANY KEY TO CONTINUE", True, True)
+			Color(255, 255, 255)
+			Text(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), "PRESS ANY KEY TO CONTINUE", True, True)
 		Else
+			Color(0, 0, 0)
+			Text(mo\Viewport_Center_X + MenuScale, opt\GraphicHeight - (34 * MenuScale), "LOADING ASSETS: " + Assets, True, True)
+			Color(255, 255, 255)
+			Text(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), "LOADING ASSETS: " + Assets, True, True)
 			FlushKeys()
 			FlushMouse()
 		EndIf

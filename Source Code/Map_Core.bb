@@ -1,4 +1,8 @@
+RenderLoading(45, "MATERIALS CORE")
+
 Include "Source Code\Materials_Core.bb"
+
+RenderLoading(50, "TEXTURE CACHE CORE")
 
 Include "Source Code\Texture_Cache_Core.bb"
 
@@ -1926,7 +1930,7 @@ Function CreateWaypoint.WayPoints(x#, y#, z#, door.Doors, room.Rooms)
 	Return(w)
 End Function
 
-Function InitWayPoints(LoadingStart% = 45)
+Function InitWayPoints(LoadingStart% = 60)
 	Local d.Doors, w.WayPoints, w2.WayPoints, r.Rooms, ClosestRoom.Rooms
 	Local x#, y#, z#
 	Local Temper% = MilliSecs2()
@@ -1975,7 +1979,7 @@ Function InitWayPoints(LoadingStart% = 45)
 		Number = Number + 1
 		Iter = Iter + 1
 		If Iter = 20 Then 
-			RenderLoading(LoadingStart + Floor((35.0 / Amount) * Number)) 
+			RenderLoading(LoadingStart + Floor((20.0 / Amount) * Number), "WAYPOINTS") 
 			Iter = 0
 		EndIf
 		
@@ -8718,6 +8722,8 @@ Function CheckTriggers$()
 		Next
 	EndIf
 End Function
+
+RenderLoading(55, "SKY CORE")
 
 Include "Source Code\Sky_Core.bb"
 
