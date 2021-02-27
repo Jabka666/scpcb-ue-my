@@ -1557,8 +1557,10 @@ End Function
 Function LoadRoomMesh(rt.RoomTemplates)
 	If Instr(rt\OBJPath, ".rmesh") <> 0 Then ; ~ File is .rmesh
 		rt\OBJ = LoadRMesh(rt\OBJPath, rt)
-	Else ; ~ File is .b3d
+	ElseIf Instr(rt\OBJPath, ".b3d") <> 0 ; ~ File is .b3d
 		RuntimeError(".b3d rooms are no longer supported, please use the converter! Affected room: " + Chr(34) + rt\OBJPath + Chr(34))
+	Else ; ~ File not found
+		RuntimeError("File: " + rt\OBJPath + " not found.")
 	EndIf
 	
 	If (Not rt\OBJ) Then RuntimeError("Failed to load map file: " + Chr(34) + rt\OBJPath + Chr(34) + ".")
