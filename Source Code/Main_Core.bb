@@ -8873,14 +8873,17 @@ Function NullGame(PlayButtonSFX% = True, LoadZone% = False)
 	Delete(I_008)
 	I_008.SCP008 = New SCP008
 	
-	Delete(I_500)
-	I_500.SCP500 = New SCP500
+	Delete(I_294)
+	I_294.SCP294 = New SCP294
 	
 	Delete(I_409)
 	I_409.SCP409 = New SCP409
 	
 	Delete(I_427)
 	I_427.SCP427 = New SCP427
+	
+	Delete(I_500)
+	I_500.SCP500 = New SCP500
 	
 	Delete(I_714)
 	I_714.SCP714 = New SCP714

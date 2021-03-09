@@ -14,7 +14,7 @@ End Type
 ;[Block]
 Const e_room173% = 0, e_room173intro% = 1
 Const e_buttghost% = 2
-Const e_room2checkpoint% = 3
+Const e_room1checkpoint% = 3
 Const e_room895% = 4, e_room895_106% = 5
 Const e_room1endroom106% = 6
 Const e_room2clockroom173% = 7, e_room2clockroom096% = 8
@@ -153,9 +153,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_buttghost)
 			;[End Block]
-		Case "room2checkpoint"
+		Case "room1checkpoint"
 			;[Block]
-			Return(e_room2checkpoint)
+			Return(e_room1checkpoint)
 			;[End Block]
 		Case "room895"
 			;[Block]
@@ -549,8 +549,9 @@ Function InitEvents()
 		CreateEvent("room895", "room895", 0)
 	EndIf 
 	
-	CreateEvent("room2checkpoint", "room2checkpoint", 0, 1.0)
-	CreateEvent("room2checkpoint", "room2checkpoint2", 0, 1.0)
+	CreateEvent("room1checkpoint", "room1checkpoint_ez", 0, 1.0)
+	CreateEvent("room1checkpoint", "room1checkpoint_lcz", 0, 1.0)
+	CreateEvent("room1checkpoint", "room1checkpoint_hcz", 0, 1.0)
 	
 	CreateEvent("room3door", "room3", 0, 0.1)
 	CreateEvent("room3door", "room3tunnel", 0, 0.1)	
@@ -2213,56 +2214,54 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_room2checkpoint
+			Case e_room1checkpoint
 				;[Block]
 				If PlayerRoom = e\room Then
 					; ~ Play a sound clip when the player passes through the gate
-					If e\EventState2 = 0.0 Then
-						If EntityZ(me\Collider) < e\room\z Then
-							If CurrentZone = HCZ Then
-								PlaySound_Strict(LoadTempSound("SFX\Ambient\ToZone2.ogg"))
-							Else
-								PlaySound_Strict(LoadTempSound("SFX\Ambient\ToZone3.ogg"))
-							EndIf
-							e\EventState2 = 1.0
+					If e\EventState = 0.0 Then
+						If CurrentZone = LCZ Then
+							PlaySound_Strict(LoadTempSound("SFX\Ambient\Checkpoint_LCZ.ogg"))
+						ElseIf CurrentZone = EZ
+							PlaySound_Strict(LoadTempSound("SFX\Ambient\Checkpoint_EZ.ogg"))
 						EndIf
+						e\EventState = 1.0
 					EndIf
 					
-					If e\EventState3 = 0.0 Then
+					If e\EventState2 = 0.0 Then
 						If Rand(2) = 1 Then
 							GiveAchievement(Achv1048)
-							e\room\Objects[1] = CopyEntity(o\NPCModelID[NPCType1048])
-							ScaleEntity(e\room\Objects[1], 0.05, 0.05, 0.05)
-							PositionEntity(e\room\Objects[1], EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
-							SetAnimTime(e\room\Objects[1], 267.0)	
+							e\room\Objects[3] = CopyEntity(o\NPCModelID[NPCType1048])
+							ScaleEntity(e\room\Objects[3], 0.05, 0.05, 0.05)
+							PositionEntity(e\room\Objects[3], EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
+							SetAnimTime(e\room\Objects[3], 267.0)	
 						EndIf
 						
-						e\EventState3 = 1.0
-					ElseIf e\room\Objects[1] <> 0
-						If e\EventState3 = 1.0 Then
-							PointEntity(e\room\Objects[1], me\Collider)
-							RotateEntity(e\room\Objects[1], -90.0, EntityYaw(e\room\Objects[1]), 0.0)
-							Angle = WrapAngle(DeltaYaw(me\Collider, e\room\Objects[1]))
-							If Angle < 40.0 Lor Angle > 320.0 Then e\EventState3 = 2.0
-						ElseIf e\EventState3 = 2.0
-							PointEntity(e\room\Objects[1], me\Collider)
-							RotateEntity(e\room\Objects[1], -90.0, EntityYaw(e\room\Objects[1]), 0.0)
-							Animate2(e\room\Objects[1], AnimTime(e\room\Objects[1]), 267.0, 283.0, 0.3, False)
-							If AnimTime(e\room\Objects[1]) = 283.0 Then e\EventState3 = 3.0
-						ElseIf e\EventState3 = 3.0
-							Animate2(e\room\Objects[1], AnimTime(e\room\Objects[1]), 283.0, 267.0, -0.2, False)
-							If AnimTime(e\room\Objects[1]) = 267.0 Then e\EventState3 = 4.0
-						ElseIf e\EventState3 = 4.0
-							Angle = WrapAngle(DeltaYaw(me\Collider, e\room\Objects[1]))
+						e\EventState2 = 1.0
+					ElseIf e\room\Objects[3] <> 0
+						If e\EventState2 = 1.0 Then
+							PointEntity(e\room\Objects[3], me\Collider)
+							RotateEntity(e\room\Objects[3], -90.0, EntityYaw(e\room\Objects[3]), 0.0)
+							Angle = WrapAngle(DeltaYaw(me\Collider, e\room\Objects[3]))
+							If Angle < 40.0 Lor Angle > 320.0 Then e\EventState2 = 2.0
+						ElseIf e\EventState2 = 2.0
+							PointEntity(e\room\Objects[3], me\Collider)
+							RotateEntity(e\room\Objects[3], -90.0, EntityYaw(e\room\Objects[3]), 0.0)
+							Animate2(e\room\Objects[3], AnimTime(e\room\Objects[3]), 267.0, 283.0, 0.3, False)
+							If AnimTime(e\room\Objects[3]) = 283.0 Then e\EventState2 = 3.0
+						ElseIf e\EventState2 = 3.0
+							Animate2(e\room\Objects[3], AnimTime(e\room\Objects[3]), 283.0, 267.0, -0.2, False)
+							If AnimTime(e\room\Objects[3]) = 267.0 Then e\EventState2 = 4.0
+						ElseIf e\EventState2 = 4.0
+							Angle = WrapAngle(DeltaYaw(me\Collider, e\room\Objects[3]))
 							If Angle > 90.0 And Angle < 270.0 Then 
-								FreeEntity(e\room\Objects[1]) : e\room\Objects[1] = 0
-								e\EventState3 = 5.0
+								FreeEntity(e\room\Objects[3]) : e\room\Objects[3] = 0
+								e\EventState2 = 5.0
 							EndIf
 						EndIf
 					EndIf
 				EndIf
 				
-				If e\room\RoomTemplate\Name = "room2checkpoint2" Then
+				If e\room\RoomTemplate\Name = "room1checkpoint_ez" Then
 					For e2.Events = Each Events
 						If e2\EventID = e_room008
 							If e2\EventState = 2.0 Then
@@ -2301,16 +2300,6 @@ Function UpdateEvents()
 						EndIf
 					Next
 				EndIf
-				
-				If e\room\RoomDoors[0]\Open <> e\EventState Then
-					If (Not e\Sound) Then LoadEventSound(e, "SFX\Door\DoorCheckpoint.ogg")
-					e\SoundCHN = PlaySound2(e\Sound, Camera, e\room\RoomDoors[0]\OBJ)
-					e\SoundCHN2 = PlaySound2(e\Sound, Camera, e\room\RoomDoors[1]\OBJ)
-				EndIf
-				e\EventState = e\room\RoomDoors[0]\Open
-				
-				If ChannelPlaying(e\SoundCHN) Then UpdateSoundOrigin(e\SoundCHN, Camera, e\room\RoomDoors[0]\OBJ)
-				If ChannelPlaying(e\SoundCHN2) Then UpdateSoundOrigin(e\SoundCHN2, Camera, e\room\RoomDoors[1]\OBJ)
 				;[End Block]
 			Case e_room895, e_room895_106
 				;[Block]
@@ -8948,15 +8937,6 @@ Function UpdateEvents()
 										e\EventState = 2.0
 									EndIf
 									Exit
-								EndIf
-							Next
-							
-							For r.Rooms = Each Rooms
-								If r\RoomTemplate\Name = "room2checkpoint"
-									If r\Dist < 10.0 Then
-										e\EventState = 2.0
-										Exit
-									EndIf
 								EndIf
 							Next
 							
