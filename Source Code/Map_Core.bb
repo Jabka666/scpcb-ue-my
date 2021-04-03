@@ -1439,7 +1439,6 @@ Type RoomTemplates
 	Field TempTriggerBox%[128]
 	Field TempTriggerBoxName$[128]
 	Field DisableOverlapCheck% = True
-	Field AutoSpawn%
 	Field MinX#, MinY#, MinZ#
 	Field MaxX#, MaxY#, MaxZ#
 End Type 	
@@ -1448,7 +1447,7 @@ Function CreateRoomTemplate.RoomTemplates(MeshPath$)
 	Local rt.RoomTemplates
 	
 	rt.RoomTemplates = New RoomTemplates
-	rt\OBJPath = "GFX\map\" + MeshPath
+	rt\OBJPath = MeshPath
 	rt\ID = RoomTempID
 	RoomTempID = RoomTempID + 1
 	
@@ -1479,60 +1478,61 @@ Function LoadRoomTemplates(File$)
 		TemporaryString = Trim(ReadLine(f))
 		If Left(TemporaryString, 1) = "[" Then
 			TemporaryString = Mid(TemporaryString, 2, Len(TemporaryString) - 2)
-			If TemporaryString <> "room ambience" Then
-				StrTemp = GetINIString(File, TemporaryString, "Mesh")
-				
-				rt.RoomTemplates = CreateRoomTemplate(StrTemp)
-				rt\Name = Lower(TemporaryString)
-				
-				StrTemp = GetINIString(File, TemporaryString, "Shape")
-				
-				Select StrTemp
-					Case "room1", "1"
-						;[Block]
-						rt\Shape = ROOM1
-						;[End Block]
-					Case "room2", "2"
-						;[Block]
-						rt\Shape = ROOM2
-						;[End Block]
-					Case "room2C", "2C"
-						;[Block]
-						rt\Shape = ROOM2C
-						;[End Block]
-					Case "room3", "3"
-						;[Block]
-						rt\Shape = ROOM3
-						;[End Block]
-					Case "room4", "4"
-						;[Block]
-						rt\Shape = ROOM4
-						;[End Block]
-				End Select
-				
-				StrTemp = GetINIString(File, TemporaryString, "Zone")
-				
-				Select StrTemp
-					Case "LCZ"
-						;[Block]
-						rt\Zone = LCZ
-						;[End Block]
-					Case "HCZ"
-						;[Block]
-						rt\Zone = HCZ
-						;[End Block]
-					Case "EZ"
-						;[Block]
-						rt\Zone = EZ
-						;[End Block]
-				End Select
-				
-				rt\Commonness = Max(Min(GetINIInt(File, TemporaryString, "Commonness"), 100.0), 0.0)
-				rt\Large = GetINIInt(File, TemporaryString, "Large")
-				rt\DisableDecals = GetINIInt(File, TemporaryString, "DisableDecals")
-				rt\DisableOverlapCheck = GetINIInt(File, TemporaryString, "DisableOverlapCheck")
-				rt\AutoSpawn = GetINIInt(File, TemporaryString, "AutoSpawn", False)
-			EndIf
+			StrTemp = GetINIString(File, TemporaryString, "Mesh Path")
+			
+			rt.RoomTemplates = CreateRoomTemplate(StrTemp)
+			rt\Name = Lower(TemporaryString)
+			
+			StrTemp = GetINIString(File, TemporaryString, "Shape")
+			
+			Select StrTemp
+				Case "-1"
+					;[Block]
+					rt\Shape = -1
+					;[End Block]
+				Case "room1", "1"
+					;[Block]
+					rt\Shape = ROOM1
+					;[End Block]
+				Case "room2", "2"
+					;[Block]
+					rt\Shape = ROOM2
+					;[End Block]
+				Case "room2C", "2C"
+					;[Block]
+					rt\Shape = ROOM2C
+					;[End Block]
+				Case "room3", "3"
+					;[Block]
+					rt\Shape = ROOM3
+					;[End Block]
+				Case "room4", "4"
+					;[Block]
+					rt\Shape = ROOM4
+					;[End Block]
+			End Select
+			
+			StrTemp = GetINIString(File, TemporaryString, "Zone")
+			
+			Select StrTemp
+				Case "LCZ"
+					;[Block]
+					rt\Zone = LCZ
+					;[End Block]
+				Case "HCZ"
+					;[Block]
+					rt\Zone = HCZ
+					;[End Block]
+				Case "EZ"
+					;[Block]
+					rt\Zone = EZ
+					;[End Block]
+			End Select
+			
+			rt\Commonness = Max(Min(GetINIInt(File, TemporaryString, "Commonness"), 100.0), 0.0)
+			rt\Large = GetINIInt(File, TemporaryString, "Large")
+			rt\DisableDecals = GetINIInt(File, TemporaryString, "DisableDecals")
+			rt\DisableOverlapCheck = GetINIInt(File, TemporaryString, "DisableOverlapCheck")
 		EndIf
 	Wend
 	
@@ -7672,7 +7672,7 @@ Function UpdateRooms()
 		EndIf
 	Next
 	
-	CurrMapGrid\RoomFound[Floor(EntityX(PlayerRoom\OBJ) / 8.0) + (Floor(EntityZ(PlayerRoom\OBJ) / 8.0) * MapGridSize)] = 1
+	CurrMapGrid\Found[Floor(EntityX(PlayerRoom\OBJ) / 8.0) + (Floor(EntityZ(PlayerRoom\OBJ) / 8.0) * MapGridSize)] = 1
 	PlayerRoom\Found = True
 	
 	TempLightVolume = Max(TempLightVolume / 4.5, 1.0)
@@ -7763,7 +7763,7 @@ Function PreventRoomOverlap%(r.Rooms)
 	Local IsIntersecting% = False
 	
 	; ~ Just skip it when it would try to check for the checkpoints
-	If r\RoomTemplate\AutoSpawn Then Return(True)
+	If r\RoomTemplate\Name = "room2checkpoint" Lor r\RoomTemplate\Name = "room2checkpoint2" Lor r\RoomTemplate\Name = "room173" Then Return(True)
 	
 	; ~ First, check if the room is actually intersecting at all
 	For r2.Rooms = Each Rooms
@@ -7816,7 +7816,7 @@ Function PreventRoomOverlap%(r.Rooms)
 	
 	For r2.Rooms = Each Rooms
 		If r2 <> r And (Not r2\RoomTemplate\DisableOverlapCheck)  Then
-			If r\RoomTemplate\Shape = r2\RoomTemplate\Shape And r\Zone = r2\Zone And (Not r2\RoomTemplate\AutoSpawn) Then
+			If r\RoomTemplate\Shape = r2\RoomTemplate\Shape And r\Zone = r2\Zone And (r2\RoomTemplate\Name <> "room2checkpoint" And r2\RoomTemplate\Name <> "room2checkpoint2" And r2\RoomTemplate\Name <> "room173") Then
 				x = r\x / 8.0
 				y = r\z / 8.0
 				Rot = r\Angle
@@ -7888,22 +7888,20 @@ Function PreventRoomOverlap%(r.Rooms)
 	Return(False)
 End Function
 
-Const MapGridSize% = 18
-Const RoomSpacing# = 8.0
+Const MapGridSize% = 12
 
 Type MapGrid
-	Field Grid%[(MapGridSize + 1) ^ 2] ; ~ TODO: Grid%[MapGridSize ^ 2]
-	Field RoomFound%[(MapGridSize + 1) ^ 2] ; ~ TODO: RoomFound%[MapGridSize ^ 2]
+	Field Grid%[(MapGridSize + 1) ^ 2]
+	Field Found%[(MapGridSize + 1) ^ 2]
 	Field RoomName$[MapGridSize ^ 2]
-	Field RoomShape%[MapGridSize ^ 2]
-	Field RoomAngle%[MapGridSize ^ 2]
+	Field RoomID%[ROOM4 + 1]
 End Type
 
 Global CurrMapGrid.MapGrid
 Global CurrentZone%, AmbientZone%
 
 Function CreateMap(Zone%)
-	Local x%, y%, x2%, y2%, StartX%, EndX%
+	Local x%, y%, x2%, y2%
 	Local i%, Temp%
 	Local Width%, Height%, TempHeight%, yHallways%
 	
@@ -7921,18 +7919,15 @@ Function CreateMap(Zone%)
 	EndIf
 	CurrMapGrid.MapGrid = New MapGrid
 	
-	; ~ Find the start room
-	StartX = Floor(MapGridSize / 2)
+	x = Floor(MapGridSize / 2)
 	y = MapGridSize - 2
-	x = StartX
 	
-	; ~ Generate the entire grid
 	For i = y To MapGridSize - 1
 		CurrMapGrid\Grid[x + (i * MapGridSize)] = 1
 	Next
 	
 	Repeat
-		Width = Rand(11, 15)
+		Width = Rand(7, 11)
 		
 		If x > MapGridSize * 0.6 Then
 			Width = -Width
@@ -7953,7 +7948,7 @@ Function CreateMap(Zone%)
 			CurrMapGrid\Grid[Min(i, MapGridSize) + (y * MapGridSize)] = 1
 		Next
 		
-		Height = Rand(3, 4)
+		Height = Rand(2, 4)
 		If y - Height < 1 Then Height = y - 1
 		
 		yHallways = Rand(4, 5)
@@ -7977,7 +7972,11 @@ Function CreateMap(Zone%)
 				EndIf
 				
 				For y2 = y - TempHeight To y
-					CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] = 1
+					If y2 = 1 Then ; ~ A room leading from zone to another
+						CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] = 255
+					Else
+						CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] = 1
+					EndIf
 				Next
 				If TempHeight = Height Then Temp = x2
 			EndIf
@@ -7986,25 +7985,15 @@ Function CreateMap(Zone%)
 		y = y - Height
 	Until y < 2
 	
-	; ~ Find the end room
-	EndX = x
-	
 	Local RoomAmount%[ROOM4 + 1]
 	
 	; ~ Count the amount of rooms
 	For y = 1 To MapGridSize - 1
 		For x = 1 To MapGridSize - 1
 			If CurrMapGrid\Grid[x + (y * MapGridSize)] > 0 Then
-				; ~ Make sure if the rooms inside the grid
-				Temp = 0
-				If x < MapGridSize - 1 Then
-					Temp = Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1.0)
-				EndIf
-				If x > 0 Then
-					Temp = Temp + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1.0)
-				EndIf
+				Temp = Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1.0)
 				Temp = Temp + Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1.0)
-				CurrMapGrid\Grid[x + (y * MapGridSize)] = Temp
+				If CurrMapGrid\Grid[x + (y * MapGridSize)] < 255 Then CurrMapGrid\Grid[x + (y * MapGridSize)] = Temp
 				Select Temp
 					Case 1
 						;[Block]
@@ -8036,8 +8025,8 @@ Function CreateMap(Zone%)
 	Local Placed%
 	
 	; ~ Force more ROOM1 (if needed)
-	; ~ Need more rooms if there are less than 5 of them
-	Temp = (-RoomAmount[ROOM1]) + 5
+	; ~ Need more rooms if there are less than 3 of them
+	Temp = (-RoomAmount[ROOM1]) + 3
 	If Temp > 0 Then
 		For y = 2 To MapGridSize - 2
 			For x = 2 To MapGridSize - 2
@@ -8217,201 +8206,160 @@ Function CreateMap(Zone%)
 		Next
 	EndIf
 	
-	; ~ Determine shape and angle of the rooms
+	Local MaxRooms% = 55 * MapGridSize / 20
+	
+	MaxRooms = Max(MaxRooms, RoomAmount[ROOM1] + 1)
+	MaxRooms = Max(MaxRooms, RoomAmount[ROOM2] + 1)
+	MaxRooms = Max(MaxRooms, RoomAmount[ROOM2C] + 1)
+	MaxRooms = Max(MaxRooms, RoomAmount[ROOM3] + 1)
+	MaxRooms = Max(MaxRooms, RoomAmount[ROOM4] + 1)
+	
+	Dim MapRoom$(ROOM4 + 1, MaxRooms)
+	
+	MapRoom(ROOM1, 0) = "room173"
+	
+	Local rt.RoomTemplates
+	
+	For rt.RoomTemplates = Each RoomTemplates
+		If rt\Zone = Zone And rt\Commonness = 0 And rt\Shape > 0 Then
+			SetRoom(rt\Name, rt\Shape, RoomAmount[rt\Shape - 1])
+		EndIf
+	Next
+	
+	Local r.Rooms, Spacing# = 8.0
+	
+	; ~ Loading the map
+	Temp = 0
 	For y = MapGridSize - 1 To 1 Step -1
 		For x = 1 To MapGridSize - 2
-			If CurrMapGrid\Grid[x + (y * MapGridSize)] > 0 Then
-				; ~ Make sure If the rooms inside the grid
-				Temp = 0
-				If x < MapGridSize - 1 Then
-					Temp = Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1.0)
-				EndIf
-				If x > 0 Then
-					Temp = Temp + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1.0)
-				EndIf
-				Temp = Temp + Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1.0)
+			If CurrMapGrid\Grid[x + (y * MapGridSize)] = 255 Then
+				r.Rooms = CreateRoom(Zone, ROOM2, x * 8.0, 0.0, y * 8.0, "room2checkpoint")
+			ElseIf CurrMapGrid\Grid[x + (y * MapGridSize)] > 0 Then
+				Temp = Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1.0)
 				Select Temp ; ~ Amount of bordering rooms
 					Case 1 ; ~ Generate ROOM1
 						;[Block]
-						If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] Then
-							CurrMapGrid\RoomAngle[x + (y * MapGridSize)] = 2
-						ElseIf CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)]
-							CurrMapGrid\RoomAngle[x + (y * MapGridSize)] = 3
-						ElseIf CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)]
-							CurrMapGrid\RoomAngle[x + (y * MapGridSize)] = 1
-						Else 
-							CurrMapGrid\RoomAngle[x + (y * MapGridSize)] = 0
+						If CurrMapGrid\RoomID[ROOM1] < MaxRooms And CurrMapGrid\RoomName[x + (y * MapGridSize)] = "" Then
+							If MapRoom(ROOM1, CurrMapGrid\RoomID[ROOM1]) <> "" Then CurrMapGrid\RoomName[x + (y * MapGridSize)] = MapRoom(ROOM1, CurrMapGrid\RoomID[ROOM1])	
 						EndIf
-						CurrMapGrid\RoomShape[x + (y * MapGridSize)] = ROOM1
+						
+						r.Rooms = CreateRoom(Zone, ROOM1, x * 8.0, 0.0, y * 8.0, CurrMapGrid\RoomName[x + (y * MapGridSize)])
+						If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] Then
+							r\Angle = 180.0
+							TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
+						ElseIf CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)]
+							r\Angle = 270.0
+							TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
+						ElseIf CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)]
+							r\Angle = 90.0
+							TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
+						Else 
+							r\Angle = 0.0
+						EndIf
+						CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
 						;[End Block]
 					Case 2 ; ~ Generate ROOM2 and ROOM2C
 						;[Block]
 						If CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] > 0 And CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > 0 Then
-							If Rand(2) = 1 Then
-								CurrMapGrid\RoomAngle[x + (y * MapGridSize)] = 1
-							Else
-								CurrMapGrid\RoomAngle[x + (y * MapGridSize)] = 3
+							If CurrMapGrid\RoomID[ROOM2] < MaxRooms And CurrMapGrid\RoomName[x + (y * MapGridSize)] = ""  Then
+								If MapRoom(ROOM2, CurrMapGrid\RoomID[ROOM2]) <> "" Then CurrMapGrid\RoomName[x + (y * MapGridSize)] = MapRoom(ROOM2, CurrMapGrid\RoomID[ROOM2])	
 							EndIf
-							CurrMapGrid\RoomShape[x + (y * MapGridSize)] = ROOM2
+							r.Rooms = CreateRoom(Zone, ROOM2, x * 8.0, 0.0, y * 8.0, CurrMapGrid\RoomName[x + (y * MapGridSize)])
+							If Rand(2) = 1 Then
+								r\Angle = 90.0
+							Else
+								r\Angle = 270.0
+							EndIf
+							TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
+							CurrMapGrid\RoomID[ROOM2] = CurrMapGrid\RoomID[ROOM2] + 1
 						ElseIf CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] > 0 And CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > 0
+							If CurrMapGrid\RoomID[ROOM2] < MaxRooms And CurrMapGrid\RoomName[x + (y * MapGridSize)] = ""  Then
+								If MapRoom(ROOM2, CurrMapGrid\RoomID[ROOM2]) <> "" Then CurrMapGrid\RoomName[x + (y * MapGridSize)] = MapRoom(ROOM2, CurrMapGrid\RoomID[ROOM2])	
+							EndIf
+							r.Rooms = CreateRoom(Zone, ROOM2, x * 8.0, 0.0, y * 8.0, CurrMapGrid\RoomName[x + (y * MapGridSize)])
 							If Rand(2) = 1 Then
-								CurrMapGrid\RoomAngle[x + (y * MapGridSize)] = 2
+								r\Angle = 180.0
 							Else
-								CurrMapGrid\RoomAngle[x + (y * MapGridSize)] = 0
+								r\Angle = 0.0
 							EndIf
-							CurrMapGrid\RoomShape[x + (y * MapGridSize)] = ROOM2
+							TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
+							CurrMapGrid\RoomID[ROOM2] = CurrMapGrid\RoomID[ROOM2] + 1
 						Else
-							If CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] > 0 And CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > 0 Then
-								CurrMapGrid\RoomAngle[x + (y * MapGridSize)] = 2
-							ElseIf CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > 0 And CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > 0
-								CurrMapGrid\RoomAngle[x + (y * MapGridSize)] = 1
-							ElseIf CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] > 0 And CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] > 0
-								CurrMapGrid\RoomAngle[x + (y * MapGridSize)] = 3
-							Else
-								CurrMapGrid\RoomAngle[x + (y * MapGridSize)] = 0
+							If CurrMapGrid\RoomID[ROOM2C] < MaxRooms And CurrMapGrid\RoomName[x + (y * MapGridSize)] = ""  Then
+								If MapRoom(ROOM2C, CurrMapGrid\RoomID[ROOM2C]) <> "" Then CurrMapGrid\RoomName[x + (y * MapGridSize)] = MapRoom(ROOM2C, CurrMapGrid\RoomID[ROOM2C])	
 							EndIf
-							CurrMapGrid\RoomShape[x + (y * MapGridSize)] = ROOM2C
+							
+							If CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] > 0 And CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > 0 Then
+								r.Rooms = CreateRoom(Zone, ROOM2C, x * 8.0, 0.0, y * 8.0, CurrMapGrid\RoomName[x + (y * MapGridSize)])
+								r\Angle = 180.0
+								TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
+							ElseIf CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > 0 And CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > 0
+								r.Rooms = CreateRoom(Zone, ROOM2C, x * 8.0, 0.0, y * 8.0, CurrMapGrid\RoomName[x + (y * MapGridSize)])
+								r\Angle = 90.0
+								TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
+							ElseIf CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] > 0 And CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] > 0
+								r.Rooms = CreateRoom(Zone, ROOM2C, x * 8.0, 0.0, y * 8.0, CurrMapGrid\RoomName[x + (y * MapGridSize)])
+								TurnEntity(r\OBJ, 0.0, 270.0, 0.0)
+								r\Angle = 270.0
+							Else
+								r.Rooms = CreateRoom(Zone, ROOM2C, x * 8.0, 0.0, y * 8.0, CurrMapGrid\RoomName[x + (y * MapGridSize)])
+							EndIf
+							CurrMapGrid\RoomID[ROOM2C] = CurrMapGrid\RoomID[ROOM2C] + 1
 						EndIf
 						;[End Block]
 					Case 3 ; ~ Generate ROOM3
 						;[Block]
-						If (Not CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)]) Then
-							CurrMapGrid\RoomAngle[x + (y * MapGridSize)] = 2
-						ElseIf (Not CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)])
-							CurrMapGrid\RoomAngle[x + (y * MapGridSize)] = 1
-						ElseIf (Not CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)])
-							CurrMapGrid\RoomAngle[x + (y * MapGridSize)] = 3
-						Else
-							CurrMapGrid\RoomAngle[x + (y * MapGridSize)] = 0
+						If CurrMapGrid\RoomID[ROOM3] < MaxRooms And CurrMapGrid\RoomName[x + (y * MapGridSize)] = ""  Then
+							If MapRoom(ROOM3, CurrMapGrid\RoomID[ROOM3]) <> "" Then CurrMapGrid\RoomName[x + (y * MapGridSize)] = MapRoom(ROOM3, CurrMapGrid\RoomID[ROOM3])	
 						EndIf
-						CurrMapGrid\RoomShape[x + (y * MapGridSize)] = ROOM3
+						
+						r.Rooms = CreateRoom(Zone, ROOM3, x * 8.0, 0.0, y * 8.0, CurrMapGrid\RoomName[x + (y * MapGridSize)])
+						If (Not CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)]) Then
+							TurnEntity(r\OBJ, 0.0, 180.0, 0.0)
+							r\Angle = 180.0
+						ElseIf (Not CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)])
+							TurnEntity(r\OBJ, 0.0, 90.0, 0.0)
+							r\Angle = 90.0
+						ElseIf (Not CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)])
+							TurnEntity(r\OBJ, 0.0, -90.0, 0.0)
+							r\Angle = 270.0
+						EndIf
+						CurrMapGrid\RoomID[ROOM3] = CurrMapGrid\RoomID[ROOM3] + 1
 						;[End Block]
 					Case 4 ; ~ Generate ROOM4
 						;[Block]
-						CurrMapGrid\RoomAngle[x + (y * MapGridSize)] = Rand(0, 3)
-						CurrMapGrid\RoomShape[x + (y * MapGridSize)] = ROOM4
+						If CurrMapGrid\RoomID[ROOM4] < MaxRooms And CurrMapGrid\RoomName[x + (y * MapGridSize)] = ""  Then
+							If MapRoom(ROOM4, CurrMapGrid\RoomID[ROOM4]) <> "" Then CurrMapGrid\RoomName[x + (y * MapGridSize)] = MapRoom(ROOM4, CurrMapGrid\RoomID[ROOM4])	
+						EndIf
+						
+						r.Rooms = CreateRoom(Zone, ROOM4, x * 8.0, 0.0, y * 8.0, CurrMapGrid\RoomName[x + (y * MapGridSize)])
+						CurrMapGrid\RoomID[ROOM4] = CurrMapGrid\RoomID[ROOM4] + 1
 						;[End Block]
 				End Select
 			EndIf
 		Next
 	Next		
 	
-	; ~ Assign the "important" rooms into the map first, aka all rooms that have the "commonness" value 0 and the "autospawn" value set to False
-	Local rt.RoomTemplates
-	
-	For rt.RoomTemplates = Each RoomTemplates
-		If rt\Commonness = 0 And rt\Zone = Zone And (Not rt\AutoSpawn) Then
-			; ~ Be in the loop until it has been positioned successfully
-			x = 0
-			y = 1
-			Repeat
-				If CurrMapGrid\Grid[x + (y * MapGridSize)] > 0 And CurrMapGrid\RoomName[x + (y * MapGridSize)] = "" Then
-					If CurrMapGrid\RoomShape[x + (y * MapGridSize)] = rt\Shape Then
-						If Rand(5) = 1 Then
-							CurrMapGrid\RoomName[x + (y * MapGridSize)] = rt\Name
-							Exit
-						EndIf
-					EndIf
-				EndIf
-				x = x + 1
-				If x > MapGridSize - 1 Then
-					x = 0
-					y = y + 1
-					If y > MapGridSize - 2 Then y = 0
-				EndIf
-			Forever
-		EndIf
-	Next
-	
-	; ~ Then assign all other rooms (commonness between 1 and 100)
-	Local RandomRoom%
-	
-	For y = MapGridSize - 1 To 1 Step -1
-		For x = 1 To MapGridSize - 2
-			If CurrMapGrid\Grid[x + (y * MapGridSize)] > 0 And CurrMapGrid\RoomName[x + (y * MapGridSize)] = "" Then
-				; ~ First, add all the commonness amounts as one
-				Temp = 0
-				For rt.RoomTemplates = Each RoomTemplates
-					If rt\Commonness > 0 And rt\Zone = Zone Then
-						If rt\Shape = CurrMapGrid\RoomShape[x + (y * MapGridSize)] Then
-							Temp = Temp + rt\Commonness
-						EndIf
-					EndIf
-				Next
-				RandomRoom = Rand(Temp)
-				Temp = 0
-				For rt.RoomTemplates = Each RoomTemplates
-					If rt\Commonness > 0 And rt\Zone = Zone Then
-						If rt\Shape = CurrMapGrid\RoomShape[x + (y * MapGridSize)] Then
-							Temp = Temp + rt\Commonness
-							If RandomRoom > Temp - rt\Commonness And RandomRoom =< Temp Then
-								CurrMapGrid\RoomName[x + (y * MapGridSize)] = rt\Name
-								Exit
-							EndIf
-						EndIf
-					EndIf
-				Next
-			EndIf
-		Next
-	Next
-	
-	; ~ Create the rooms itself
-	Local r.Rooms
-	
-	For y = MapGridSize - 1 To 1 Step -1
-		For x = 1 To MapGridSize - 2
-			If CurrMapGrid\Grid[x + (y * MapGridSize)] > 0 Then
-				r.Rooms = CreateRoom(Zone, CurrMapGrid\RoomShape[x + (y * MapGridSize)], x * RoomSpacing, 0.0, y * RoomSpacing, CurrMapGrid\RoomName[x + (y * MapGridSize)])
-				If r = Null Then RuntimeError("Attempt to create room " + CurrMapGrid\RoomName[x + (y * MapGridSize)] + " was unsuccessful!")
-				r\Angle = CurrMapGrid\RoomAngle[x + (y * MapGridSize)] * 90.0
-				TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
-			EndIf
-		Next
-	Next
-	
-	; ~ TODO: MAKE CHECKPOINTS AND FIX START ROOMS
-	; ~ Create the start and end rooms for each zone
-	Select Zone
-		Case LCZ
-			;[Block]
-			r.Rooms = CreateRoom(Zone, ROOM1, StartX * RoomSpacing, 0.0, RoomSpacing, "room173")
-			r\Angle = 180.0
-			TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
-			r.Rooms = CreateRoom(Zone, ROOM1, EndX * RoomSpacing, 0.0, (MapGridSize - 1) * RoomSpacing, "room1endroom")
-			r\Angle = 0.0
-			;[End Block]
-		Case HCZ
-			;[Block]
-			r.Rooms = CreateRoom(Zone, ROOM1, StartX * RoomSpacing, 0.0, RoomSpacing, "room1endroom2")
-			r\Angle = 180.0
-			TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
-			r.Rooms = CreateRoom(Zone, ROOM1, EndX * RoomSpacing, 0.0, (MapGridSize - 1) * RoomSpacing, "room1endroom2")
-			r\Angle = 0.0
-			;[End Block]
-		Case EZ
-			;[Block]
-			r.Rooms = CreateRoom(Zone, ROOM1, StartX * RoomSpacing, 0.0, RoomSpacing, "room1endroom3")
-			r\Angle = 180.0
-			TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
-			r = CreateRoom(Zone, ROOM1, EndX * RoomSpacing, 0.0, (MapGridSize - 1) * RoomSpacing, "room1endroom3")
-			r\Angle = 0.0
-			;[End Block]
-	End Select
-	
 	; ~ Spawn some rooms outside the map
-	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize + 1) * RoomSpacing, 0.0, (MapGridSize + 1) * RoomSpacing, "pocketdimension")
+	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * 8.0, 0.0, (MapGridSize - 1) * 8.0, "pocketdimension")
+	CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1	
 	
-	r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 800.0, 0.0, "dimension1499")
-	
-	If opt\IntroEnabled And Zone = LCZ Then r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 0.0, (MapGridSize + 1) * RoomSpacing, "room173intro")
-	
-	If Zone = EZ Then
-		r.Rooms = CreateRoom(0, ROOM1, (MapGridSize + 1) * RoomSpacing, 500.0, -64.0, "gateb")
-		
-		r.Rooms = CreateRoom(0, ROOM1, (MapGridSize = 1) * RoomSpacing, 500.0, RoomSpacing, "gatea")
+	If opt\IntroEnabled And Zone = 0 Then
+		r.Rooms = CreateRoom(0, ROOM1, 8.0, 0.0, (MapGridSize - 1) * 8.0, "room173intro")
+		CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
 	EndIf
 	
-	; ~ Prevent room overlaps
+	r.Rooms = CreateRoom(0, ROOM1, 8.0, 800.0, 0.0, "dimension1499")
+	CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
+	
+	If Zone = EZ Then
+		r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * 8.0, 500.0, -64.0, "gateb")
+		CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
+		
+		r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * 8.0, 500.0, 8.0, "gatea")
+		CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
+	EndIf
+	
 	For r.Rooms = Each Rooms
 		PreventRoomOverlap(r)
 	Next
@@ -8507,7 +8455,7 @@ Function CreateMap(Zone%)
 						If ShouldSpawnDoor Then
 							If x + 1 < MapGridSize + 1 Then
 								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > 0 Then
-									d.Doors = CreateDoor(Float(x) * RoomSpacing + RoomSpacing / 2.0, 0.0, Float(y) * RoomSpacing, 90.0, r, Max(Rand(-3, 1), 0.0), (Zone Mod 2) * 2)
+									d.Doors = CreateDoor(Float(x) * Spacing + Spacing / 2.0, 0.0, Float(y) * Spacing, 90.0, r, Max(Rand(-3, 1), 0.0), (Zone Mod 2) * 2)
 									r\AdjDoor[0] = d
 								EndIf
 							EndIf
@@ -8540,7 +8488,7 @@ Function CreateMap(Zone%)
 						If ShouldSpawnDoor
 							If y + 1 < MapGridSize + 1 Then
 								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > 0 Then
-									d.Doors = CreateDoor(Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + RoomSpacing / 2.0, 0.0, r, Max(Rand(-3, 1), 0.0), (Zone Mod 2) * 2)
+									d.Doors = CreateDoor(Float(x) * Spacing, 0.0, Float(y) * Spacing + Spacing / 2.0, 0.0, r, Max(Rand(-3, 1), 0.0), (Zone Mod 2) * 2)
 									r\AdjDoor[3] = d
 								EndIf
 							EndIf
