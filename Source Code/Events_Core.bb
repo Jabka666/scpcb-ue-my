@@ -2221,48 +2221,44 @@ Function UpdateEvents()
 					If e\EventState = 0.0 Then
 						If CurrentZone = LCZ Then
 							PlaySound_Strict(LoadTempSound("SFX\Ambient\Checkpoint_LCZ.ogg"))
-						;ElseIf CurrentZone = HCZ
-							;PlaySound_Strict(LoadTempSound("SFX\Ambient\Checkpoint_HCZ.ogg"))
-						Else
+						ElseIf CurrentZone = EZ
 							PlaySound_Strict(LoadTempSound("SFX\Ambient\Checkpoint_EZ.ogg"))
 						EndIf
-						
 						e\EventState = 1.0
 					EndIf
 					
-					x = UpdateLever(e\room\Levers[0])
-					
-					;If e\EventState2 = 0.0 Then
-					;	If Rand(2) = 1 Then
-					;		GiveAchievement(Achv1048)
-					;		e\room\Objects[3] = CopyEntity(o\NPCModelID[NPCType1048])
-					;		ScaleEntity(e\room\Objects[3], 0.05, 0.05, 0.05)
-					;		PositionEntity(e\room\Objects[3], EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
-					;		SetAnimTime(e\room\Objects[3], 267.0)	
-					;	EndIf
-					;	e\EventState2 = 1.0
-					;ElseIf e\room\Objects[3] <> 0
-					;	If e\EventState2 = 1.0 Then
-					;		PointEntity(e\room\Objects[3], me\Collider)
-					;		RotateEntity(e\room\Objects[3], -90.0, EntityYaw(e\room\Objects[3]), 0.0)
-					;		Angle = WrapAngle(DeltaYaw(me\Collider, e\room\Objects[3]))
-					;		If Angle < 40.0 Lor Angle > 320.0 Then e\EventState2 = 2.0
-					;	ElseIf e\EventState2 = 2.0
-					;		PointEntity(e\room\Objects[3], me\Collider)
-					;		RotateEntity(e\room\Objects[3], -90.0, EntityYaw(e\room\Objects[3]), 0.0)
-					;		Animate2(e\room\Objects[3], AnimTime(e\room\Objects[3]), 267.0, 283.0, 0.3, False)
-					;		If AnimTime(e\room\Objects[3]) = 283.0 Then e\EventState2 = 3.0
-					;	ElseIf e\EventState2 = 3.0
-					;		Animate2(e\room\Objects[3], AnimTime(e\room\Objects[3]), 283.0, 267.0, -0.2, False)
-					;		If AnimTime(e\room\Objects[3]) = 267.0 Then e\EventState2 = 4.0
-					;	ElseIf e\EventState2 = 4.0
-					;		Angle = WrapAngle(DeltaYaw(me\Collider, e\room\Objects[3]))
-					;		If Angle > 90.0 And Angle < 270.0 Then 
-					;			FreeEntity(e\room\Objects[3]) : e\room\Objects[3] = 0
-					;			e\EventState2 = 5.0
-					;		EndIf
-					;	EndIf
-					;EndIf
+					If e\EventState2 = 0.0 Then
+						If Rand(2) = 1 Then
+							GiveAchievement(Achv1048)
+							e\room\Objects[3] = CopyEntity(o\NPCModelID[NPCType1048])
+							ScaleEntity(e\room\Objects[3], 0.05, 0.05, 0.05)
+							PositionEntity(e\room\Objects[3], EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
+							SetAnimTime(e\room\Objects[3], 267.0)	
+						EndIf
+						
+						e\EventState2 = 1.0
+					ElseIf e\room\Objects[3] <> 0
+						If e\EventState2 = 1.0 Then
+							PointEntity(e\room\Objects[3], me\Collider)
+							RotateEntity(e\room\Objects[3], -90.0, EntityYaw(e\room\Objects[3]), 0.0)
+							Angle = WrapAngle(DeltaYaw(me\Collider, e\room\Objects[3]))
+							If Angle < 40.0 Lor Angle > 320.0 Then e\EventState2 = 2.0
+						ElseIf e\EventState2 = 2.0
+							PointEntity(e\room\Objects[3], me\Collider)
+							RotateEntity(e\room\Objects[3], -90.0, EntityYaw(e\room\Objects[3]), 0.0)
+							Animate2(e\room\Objects[3], AnimTime(e\room\Objects[3]), 267.0, 283.0, 0.3, False)
+							If AnimTime(e\room\Objects[3]) = 283.0 Then e\EventState2 = 3.0
+						ElseIf e\EventState2 = 3.0
+							Animate2(e\room\Objects[3], AnimTime(e\room\Objects[3]), 283.0, 267.0, -0.2, False)
+							If AnimTime(e\room\Objects[3]) = 267.0 Then e\EventState2 = 4.0
+						ElseIf e\EventState2 = 4.0
+							Angle = WrapAngle(DeltaYaw(me\Collider, e\room\Objects[3]))
+							If Angle > 90.0 And Angle < 270.0 Then 
+								FreeEntity(e\room\Objects[3]) : e\room\Objects[3] = 0
+								e\EventState2 = 5.0
+							EndIf
+						EndIf
+					EndIf
 				EndIf
 				
 				If e\room\RoomTemplate\Name = "room1checkpoint_ez" Then
@@ -3545,7 +3541,7 @@ Function UpdateEvents()
 							e\EventState = 2.0
 						EndIf
 					ElseIf e\EventState = 2.0
-						If EntityDistanceSquared(e\room\NPC[0]\Collider, me\Collider) < 9.0 And (Not chs\NoTarget) Then
+						If EntityDistanceSquared(e\room\NPC[0]\Collider, me\Collider) < 12.25 And (Not chs\NoTarget) Then
 							e\room\NPC[0]\State = 1.0 : e\room\NPC[0]\State3 = 1.0
 						Else
 							e\room\NPC[0]\State = 5.0 : e\room\NPC[0]\State3 = 0.0

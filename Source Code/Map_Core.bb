@@ -31,19 +31,19 @@ Function CreatePropOBJ%(File$)
 End Function
 
 Function CheckForPropModel%(File$)
-	If Instr(File, Lower("LeverBase")) <> 0 Then ; ~ Check for "LeverBase"
+	If Instr(File, "leverbase") <> 0 Then ; ~ Check for "LeverBase"
 		Return(CopyEntity(o\LeverModelID[0]))
-	ElseIf Instr(File, Lower("LeverHandle")) <> 0 ; ~ Check for "LeverHandle"
+	ElseIf Instr(File, "leverhandle") <> 0 ; ~ Check for "LeverHandle"
 		Return(CopyEntity(o\LeverModelID[1]))
 	ElseIf Instr(File, "Button.") <> 0 ; ~ Check for "Button"
 		Return(CopyEntity(o\ButtonModelID[0]))
-	ElseIf Instr(File, Lower("door01")) <> 0 ; ~ Check for "Door01"
+	ElseIf Instr(File, "door01") <> 0 ; ~ Check for "Door01"
 		Return(CopyEntity(o\DoorModelID[0]))
-	ElseIf Instr(File, Lower("\doorframe")) <> 0 ; ~ Check for "DoorFrame"
+	ElseIf Instr(File, "\doorframe") <> 0 ; ~ Check for "DoorFrame"
 		Return(CopyEntity(o\DoorModelID[1]))
-	ElseIf Instr(File, Lower("contdoorleft")) <> 0 ; ~ Check for "ContDoorLeft"
+	ElseIf Instr(File, "contdoorleft") <> 0 ; ~ Check for "ContDoorLeft"
 		Return(CopyEntity(o\DoorModelID[5]))
-	ElseIf Instr(File, Lower("contdoorright")) <> 0 ; ~ Check for "ContDoorRight"
+	ElseIf Instr(File, "contdoorright") <> 0 ; ~ Check for "ContDoorRight"
 		Return(CopyEntity(o\DoorModelID[6]))
 	Else
 		Return(LoadMesh_Strict(File))
@@ -1932,7 +1932,7 @@ Function CreateWaypoint.WayPoints(x#, y#, z#, door.Doors, room.Rooms)
 	Return(w)
 End Function
 
-Function InitWayPoints(LoadingStart% = 65)
+Function InitWayPoints(LoadingStart% = 60)
 	Local d.Doors, w.WayPoints, w2.WayPoints, r.Rooms, ClosestRoom.Rooms
 	Local x#, y#, z#
 	Local Temper% = MilliSecs2()
@@ -2057,11 +2057,10 @@ Global ClosestButton%
 
 ; ~ TODO: Add "Type Buttons"
 Function CreateButton%(ButtonID%, x#, y#, z#, Pitch# = 0.0, Yaw# = 0.0, Roll# = 0.0, Parent% = 0, Locked% = False)
-	Local OBJ%
+	Local OBJ% = CopyEntity(o\ButtonModelID[ButtonID])	
 	
-	OBJ = CopyEntity(o\ButtonModelID[ButtonID])	
-	ScaleEntity(OBJ, 0.03, 0.03, 0.03)
 	PositionEntity(OBJ, x, y, z)
+	ScaleEntity(OBJ, 0.03, 0.03, 0.03)
 	RotateEntity(OBJ, Pitch, Yaw, Roll)
 	EntityPickMode(OBJ, 2)
 	If Locked Then EntityTexture(OBJ, t\MiscTextureID[17])
@@ -3691,15 +3690,13 @@ Function UpdateLever%(OBJ%, Locked% = False)
 			GrabbedEntity = 0
 		EndIf
 	Else
-		If GrabbedEntity <> 0 And GrabbedEntity = OBJ Then
-			; ~ Reset lever state if player is far away or doesn't look at the lever
-			If EntityPitch(OBJ, True) > 0.0 Then
-				RotateEntity(OBJ, CurveValue(80.0, EntityPitch(OBJ), 10.0), EntityYaw(OBJ), 0.0)
-			Else
-				RotateEntity(OBJ, CurveValue(-80.0, EntityPitch(OBJ), 10.0), EntityYaw(OBJ), 0.0)
-			EndIf
-			GrabbedEntity = 0
+		; ~ Reset lever state if player is far away or doesn't look at the lever
+		If EntityPitch(OBJ, True) > 0.0 Then
+			RotateEntity(OBJ, CurveValue(80.0, EntityPitch(OBJ), 10.0), EntityYaw(OBJ), 0.0)
+		Else
+			RotateEntity(OBJ, CurveValue(-80.0, EntityPitch(OBJ), 10.0), EntityYaw(OBJ), 0.0)
 		EndIf
+		If GrabbedEntity <> 0 And GrabbedEntity = OBJ Then GrabbedEntity = 0
 	EndIf
 	
 	If EntityPitch(OBJ, True) > 75.0 Then
@@ -4097,6 +4094,7 @@ Function FillRoom(r.Rooms)
 			
 			d.Doors = CreateDoor(r\x, r\y, r\z + 64.0 * RoomScale, 0.0, r, False, Heavy_Door, 3)
 			d\AutoClose = False : d\Locked = 1 : d\MTFClose = False : d\DisableWaypoint = True
+			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			
 			; ~ Elevators' doors
@@ -4140,52 +4138,31 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "room1checkpoint_lcz", "room1checkpoint_hcz", "room1checkpoint_ez"
 			;[Block]
-			; ~ Elevator Door
-			r\RoomDoors[0] = CreateDoor(r\x + 295.0 * RoomScale, r\y, r\z + 1021.0 * RoomScale, 0.0, r, True, Elevator_Door)
-			PositionEntity(r\RoomDoors[0]\Buttons[0], EntityX(r\RoomDoors[0]\Buttons[0], True), EntityY(r\RoomDoors[0]\Buttons[0], True), EntityZ(r\RoomDoors[0]\Buttons[0], True) + 0.032, True)
-			PositionEntity(r\RoomDoors[0]\Buttons[1], EntityX(r\RoomDoors[0]\Buttons[1], True), EntityY(r\RoomDoors[0]\Buttons[1], True), EntityZ(r\RoomDoors[0]\Buttons[1], True) - 0.032, True)
+			r\RoomDoors.Doors[0] = CreateDoor(r\x + 315.0 * RoomScale, r\y, r\z - 453.0, 0.0, r, False, ((r\RoomTemplate\Name = "room1checkpoint_hcz") * Heavy_Door) + Default_Door, 3)
 			
-			r\RoomDoors[1] = CreateDoor(r\x - 9.0 * RoomScale, r\y, r\z + 471.0 * RoomScale, 0.0, r, False, Heavy_Door * (r\RoomTemplate\Name = "room1checkpoint_hcz"), 3)
-			PositionEntity(r\RoomDoors[1]\Buttons[0], EntityX(r\RoomDoors[1]\Buttons[0], True), EntityY(r\RoomDoors[1]\Buttons[0], True), EntityZ(r\RoomDoors[1]\Buttons[0], True) + 0.061, True)
-			PositionEntity(r\RoomDoors[1]\Buttons[1], EntityX(r\RoomDoors[1]\Buttons[1], True), EntityY(r\RoomDoors[1]\Buttons[1], True), EntityZ(r\RoomDoors[1]\Buttons[1], True) - 0.061, True)
+			r\RoomDoors.Doors[1] = CreateDoor(r\x - 376.0 * RoomScale, r\y, r\z - 459.0, 0.0, r, False, ((r\RoomTemplate\Name = "room1checkpoint_hcz") * Heavy_Door) + Default_Door, 3)
 			
-			d.Doors = CreateDoor(r\x + 706.0 * RoomScale, r\y, r\z + 471.0 * RoomScale, 0.0, r, False, Heavy_Door * (r\RoomTemplate\Name = "room1checkpoint_hcz"), 3)
-			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.061, True)
-			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.061, True)
+			; ~ Elevator door
+			;r\RoomDoors.Doors[2] = CreateDoor(r\x - 2.0 * RoomScale, r\y, r\z - 1016.0 * RoomScale, 0.0, r, False, Elevator_Door)
 			
 			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x + 400.0 * RoomScale, r\y + 134.0 * RoomScale, r\z + 79.0 * RoomScale)
+			PositionEntity(r\Objects[0], r\x + 222.0 * RoomScale, r\y + 143.0 * RoomScale, r\z - 437.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
 			
 			; ~ Monitors at the both sides
-			r\Objects[1] = CopyEntity(o\MonitorModelID[1 * (r\RoomTemplate\Name = "room1checkpoint_lcz")], r\OBJ)
-			PositionEntity(r\Objects[1], r\x + 424.0 * RoomScale, r\y + 280.0 * RoomScale, r\z - 61.0 * RoomScale, True)
+			r\Objects[1] = CopyEntity(o\MonitorModelID[1], r\OBJ)
+			PositionEntity(r\Objects[1], r\x - 138.0 * RoomScale, r\y + 372.0 * RoomScale, r\z + 301.0 * RoomScale, True)
 			ScaleEntity(r\Objects[1], 2.0, 2.0, 2.0)
-			RotateEntity(r\Objects[1], 0.0, 270.0, 0.0)
+			RotateEntity(r\Objects[1], 0.0, 90.0, 0.0)
 			
-			r\Objects[2] = CopyEntity(o\MonitorModelID[1 * (r\RoomTemplate\Name = "room1checkpoint_lcz")], r\OBJ)
-			PositionEntity(r\Objects[2], r\x + 335.0 * RoomScale, r\y + 315.0 * RoomScale, r\z + 529.0 * RoomScale, True)
+			r\Objects[2] = CopyEntity(o\MonitorModelID[1], r\OBJ)
+			PositionEntity(r\Objects[2], r\x - 0.5 * RoomScale, r\y + 372.0 * RoomScale, r\z - 510.0 * RoomScale, True)
 			ScaleEntity(r\Objects[2], 2.0, 2.0, 2.0)
-			RotateEntity(r\Objects[2], 0.0, 180.0, 0.0)
+			RotateEntity(r\Objects[2], 0.0, 0.0, 0.0)
 			
-			r\Objects[3] = CopyEntity(o\LeverModelID[0])
-			r\Objects[4] = CopyEntity(o\LeverModelID[1])
-			
-			r\Levers[0] = r\Objects[4]
-			
-			For i = 3 To 4
-				ScaleEntity(r\Objects[i], 0.04, 0.04, 0.04)
-				PositionEntity(r\Objects[i], r\x + 514.0 * RoomScale, r\y + 225.0 * RoomScale, r\z + 367.0 * RoomScale)
-				EntityPickMode(r\Objects[i], 1, False)
-				EntityRadius(r\Objects[i], 0.1)
-				EntityParent(r\Objects[i], r\OBJ)
-			Next
-			RotateEntity(r\Objects[3], 0.0, 90.0, 0.0)
-			RotateEntity(r\Objects[4], -75.0, 270.0, 0.0)
-			
-			sc.SecurityCams = CreateSecurityCam(r\x + 420.0 * RoomScale, r\y + 433.0 * RoomScale, r\z - 940.0 * RoomScale, r)
-			sc\Angle = 40.0 : sc\Turn = 20.0
-			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
+			;sc.SecurityCams = CreateSecurityCam(r\x - 576.0, r\y + 447.0, r\z - 992.0 * RoomScale, r)
+			;sc\Angle = 45.0 : sc\Turn = 0.0
+			;TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			;[End Block]
 		Case "room2pit"
 			;[Block]
@@ -6188,12 +6165,12 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "room2ccont"
 			;[Block]
-			d.Doors = CreateDoor(r\x + 64.0 * RoomScale, r\y, r\z + 368.0 * RoomScale, 0.0, r, False, Default_Door, 4)
+			d.Doors = CreateDoor(r\x + 64.0 * RoomScale, r\y, r\z + 368.0 * RoomScale, 0.0, r, False, Default_Door, 3)
 			d\AutoClose = False
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.061, True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.061, True)
 			
-			d.Doors = CreateDoor(r\x - 720.0 * RoomScale, r\y + 896.0 * RoomScale, r\z + 736.0 * RoomScale, 90.0, r, False, One_Sided_Door, 4)
+			d.Doors = CreateDoor(r\x - 720.0 * RoomScale, r\y + 896.0 * RoomScale, r\z + 736.0 * RoomScale, 90.0, r, False, One_Sided_Door, 3)
 			d\AutoClose = False
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.061, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.061, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
@@ -7592,16 +7569,17 @@ Function UpdateRooms()
 						If x < 4.0 Then
 							z = Abs(PlayerRoom\Adjacent[i]\z - EntityZ(me\Collider, True))
 							If z < 4.0 Then
-								FoundNewPlayerRoom = True
-								PlayerRoom = PlayerRoom\Adjacent[i]
-								Exit
+								y = Abs(PlayerRoom\Adjacent[i]\y - EntityY(me\Collider, True))
+								If y < 4.0 Then
+									FoundNewPlayerRoom = True
+									PlayerRoom = PlayerRoom\Adjacent[i]
+									Exit
+								EndIf
 							EndIf
 						EndIf
 					EndIf
 				Next
 			EndIf
-		Else
-			FoundNewPlayerRoom = True ; ~ PlayerRoom stays the same when you're high up, or deep down
 		EndIf
 	EndIf
 	
@@ -7876,7 +7854,7 @@ Const MapGrid_EndTile% = 3
 ;[End Block]
 
 Function CreateMap(Zone%)
-	Local x%, y%, x2%, y2%, StartX%, StartY%, EndX%, EndY%
+	Local x%, y%, x2%, y2%, StartX%, StartY%
 	Local i%, Temp%
 	Local Width%, Height%, TempHeight%, yHallways%
 	
@@ -7895,6 +7873,7 @@ Function CreateMap(Zone%)
 	; ~ Find the start room coordinates
 	StartX = Floor(MapGridSize / 2)
 	StartY = MapGridSize - 1
+	; ~ Set start identificator for the grid
 	CurrMapGrid\Grid[StartX + (StartY * MapGridSize)] = MapGrid_StartTile
 	
 	x = StartX
@@ -7906,11 +7885,11 @@ Function CreateMap(Zone%)
 	Next
 	
 	Repeat
-		Width = Rand(10, 15)
+		Width = Rand(11, 15)
 		
-		If x > Floor((MapGridSize - 1) * 0.6) Then
+		If x > (MapGridSize - 1) * 0.6 Then
 			Width = -Width
-		ElseIf x > Floor((MapGridSize - 1) * 0.4)
+		ElseIf x > (MapGridSize - 1) * 0.4
 			x = x - (Width / 2)
 		EndIf
 		
@@ -7951,7 +7930,11 @@ Function CreateMap(Zone%)
 				EndIf
 				
 				For y2 = y - TempHeight To y
-					CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] = MapGrid_Tile
+					If y2 = MapGridSize - 17 Then
+						CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] = MapGrid_EndTile ; ~ Set end identificator for the grid
+					Else
+						CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] = MapGrid_Tile
+					EndIf
 				Next
 				If TempHeight = Height Then Temp = x2
 			EndIf
@@ -7959,11 +7942,6 @@ Function CreateMap(Zone%)
 		x = Temp
 		y = y - Height
 	Until y < 2
-	
-	; ~ Find the end room coordinates
-	EndX = x
-	EndY = y
-	CurrMapGrid\Grid[EndX + (EndY * MapGridSize)] = MapGrid_EndTile
 	
 	Local RoomAmount%[ROOM4 + 1]
 	
@@ -8257,7 +8235,7 @@ Function CreateMap(Zone%)
 		Next
 	Next		
 	
-	; ~ Create the start and end room for each zone
+	; ~ First, create the start room for each zone
 	Local r.Rooms
 	
 	Select Zone
@@ -8267,34 +8245,53 @@ Function CreateMap(Zone%)
 			r.Rooms = CreateRoom(Zone, ROOM1, StartX * RoomSpacing, 0.0, StartY * RoomSpacing, CurrMapGrid\RoomName[StartX + (StartY * MapGridSize)])
 			r\Angle = 0.0
 			TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
-			CurrMapGrid\RoomName[EndX + (EndY * MapGridSize)] = "room1checkpoint_lcz"
-			r.Rooms = CreateRoom(Zone, ROOM1, EndX * RoomSpacing, 0.0, EndY * RoomSpacing, CurrMapGrid\RoomName[EndX + (EndY * MapGridSize)])
-			r\Angle = 180.0
-			TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 			;[End Block]
 		Case HCZ
 			;[Block]
-			CurrMapGrid\RoomName[StartX + (StartY * MapGridSize)] = "room1endroom2"
+			CurrMapGrid\RoomName[StartX + (StartY * MapGridSize)] = "room1checkpoint_hcz"
 			r.Rooms = CreateRoom(Zone, ROOM1, StartX * RoomSpacing, 0.0, StartY * RoomSpacing, CurrMapGrid\RoomName[StartX + (StartY * MapGridSize)])
 			r\Angle = 0.0
-			TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
-			CurrMapGrid\RoomName[EndX + (EndY * MapGridSize)] = "room1checkpoint_hcz"
-			r.Rooms = CreateRoom(Zone, ROOM1, EndX * RoomSpacing, 0.0, EndY * RoomSpacing, CurrMapGrid\RoomName[EndX + (EndY * MapGridSize)])
-			r\Angle = 180.0
 			TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 			;[End Block]
 		Case EZ
 			;[Block]
-			CurrMapGrid\RoomName[StartX + (StartY * MapGridSize)] = "room1endroom3"
+			CurrMapGrid\RoomName[StartX + (StartY * MapGridSize)] = "room1checkpoint_ez"
 			r.Rooms = CreateRoom(Zone, ROOM1, StartX * RoomSpacing, 0.0, StartY * RoomSpacing, CurrMapGrid\RoomName[StartX + (StartY * MapGridSize)])
 			r\Angle = 0.0
 			TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
-			CurrMapGrid\RoomName[EndX + (EndY * MapGridSize)] = "room1checkpoint_ez"
-			r.Rooms = CreateRoom(Zone, ROOM1, EndX * RoomSpacing, 0.0, EndY * RoomSpacing, CurrMapGrid\RoomName[EndX + (EndY * MapGridSize)])
-			r\Angle = 180.0
-			TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 			;[End Block]
 	End Select
+	
+	; ~ After, create end rooms for each zone
+	For y = 1 To MapGridSize - 2
+		For x = 1 To MapGridSize - 2
+			If CurrMapGrid\Grid[x + (y * MapGridSize)] = MapGrid_EndTile And CurrMapGrid\RoomName[x + (y * MapGridSize)] = "" Then
+				Select Zone
+					Case LCZ
+						;[Block]
+						CurrMapGrid\RoomName[x + (y * MapGridSize)] = "room1checkpoint_lcz"
+						r.Rooms = CreateRoom(Zone, ROOM1, x * RoomSpacing, 0.0, y * RoomSpacing, CurrMapGrid\RoomName[x + (y * MapGridSize)])
+						r\Angle = 180.0
+						TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
+						;[End Block]
+					Case HCZ
+						;[Block]
+						CurrMapGrid\RoomName[x + (y * MapGridSize)] = "room1endroom2"
+						r.Rooms = CreateRoom(Zone, ROOM1, x * RoomSpacing, 0.0, y * RoomSpacing, CurrMapGrid\RoomName[x + (y * MapGridSize)])
+						r\Angle = 180.0
+						TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
+						;[End Block]
+					Case EZ
+						;[Block]
+						CurrMapGrid\RoomName[x + (y * MapGridSize)] = "room1endroom3"
+						r.Rooms = CreateRoom(Zone, ROOM1, x * RoomSpacing, 0.0, y * RoomSpacing, CurrMapGrid\RoomName[x + (y * MapGridSize)])
+						r\Angle = 180.0
+						TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
+						;[End Block]
+				End Select
+			EndIf
+		Next
+	Next
 	
 	; ~ Assign the "important" rooms into the map first, aka all rooms that have the "Commonness" value 0 and the "AutoSpawn" value set to False
 	Local rt.RoomTemplates
@@ -8428,16 +8425,14 @@ Function CreateMap(Zone%)
 					Else
 						If CurrMapGrid\RoomName[x + (y * MapGridSize)] <> "" Then
 							Color(0, 0, 0)
-							Text(((i * 32) + 2) * MenuScale, ((y * 32) + 2) * MenuScale, CurrMapGrid\Grid[x + (y * MapGridSize)])
+							Text((i * 32) + 2, (y * 32) + 2, CurrMapGrid\Grid[x + (y * MapGridSize)])
 						EndIf
 					EndIf
 				Next
 				i = i - 1
 			Next
-			Color(0, 0, 0)
-			Text(mo\Viewport_Center_X, opt\GraphicHeight - (34 * MenuScale), "PRESS ANY KEY TO CONTINUE", True, True)
 			Color(255, 255, 255)
-			Text(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), "PRESS ANY KEY TO CONTINUE", True, True)
+			Text(mo\Viewport_Center_X, opt\GraphicHeight - (50 * MenuScale), "PRESS ANY KEY TO CONTINUE", True, True)
 			If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 			Flip()
 		Until GetKey() Lor MouseHit(1)
@@ -8453,8 +8448,8 @@ Function CreateMap(Zone%)
 	Local ShouldSpawnDoor%
 	
 	; ~ Create the doors between rooms
-	For y = 0 To MapGridSize - 1
-		For x = 0 To MapGridSize - 1
+	For y = MapGridSize - 1 To 0 Step -1
+		For x = MapGridSize - 1 To 0 Step -1
 			If CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile Then
 				For r.Rooms = Each Rooms
 					r\Angle = WrapAngle(r\Angle)
@@ -8485,7 +8480,7 @@ Function CreateMap(Zone%)
 						
 						If ShouldSpawnDoor Then
 							If x + 1 < MapGridSize + 1 Then
-								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile Then
+								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > 0 Then
 									d.Doors = CreateDoor(Float(x) * RoomSpacing + RoomSpacing / 2.0, 0.0, Float(y) * RoomSpacing, 90.0, r, Max(Rand(-3, 1), 0.0), (Zone Mod 2) * 2)
 									r\AdjDoor[0] = d
 								EndIf
@@ -8518,7 +8513,7 @@ Function CreateMap(Zone%)
 						
 						If ShouldSpawnDoor
 							If y + 1 < MapGridSize + 1 Then
-								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile Then
+								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > 0 Then
 									d.Doors = CreateDoor(Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + RoomSpacing / 2.0, 0.0, r, Max(Rand(-3, 1), 0.0), (Zone Mod 2) * 2)
 									r\AdjDoor[3] = d
 								EndIf
