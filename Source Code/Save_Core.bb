@@ -2224,7 +2224,7 @@ Function LoadGameQuick(File$, LoadZone% = True)
 		For sc.SecurityCams = Each SecurityCams
 			sc\PlayerState = 0
 		Next
-		EntityTexture(t\OverlayID[4], t\OverlayTextureID[4])
+		EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
 		me\RestoreSanity = True
 		
 		CloseFile(f)

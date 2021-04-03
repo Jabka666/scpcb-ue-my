@@ -38,8 +38,6 @@ Function InitMainMenuAssets()
 	
 	mm\MainMenuBlinkTimer[0] = 1.0
 	mm\MainMenuBlinkTimer[1] = 1.0
-	
-	MainMenuOpen = True
 End Function
 
 Function DeInitMainMenuAssets()
@@ -50,8 +48,6 @@ Function DeInitMainMenuAssets()
 	
 	mm\MainMenuBlinkTimer[0] = 0.0
 	mm\MainMenuBlinkTimer[1] = 0.0
-	
-	MainMenuOpen = False
 End Function
 
 Type GameAssets
@@ -461,6 +457,7 @@ Function UpdateMainMenu()
 							InitNewGame()
 						EndIf
 						
+						MainMenuOpen = False
 						FlushKeys()
 						FlushMouse()
 						
@@ -513,6 +510,7 @@ Function UpdateMainMenu()
 											LoadGame(SaveGames(i - 1))
 											InitLoadGame()
 											CurrSave = SaveGames(i - 1)
+											MainMenuOpen = False
 											mm\ShouldDeleteGadgets = True
 										EndIf
 									EndIf

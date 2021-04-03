@@ -93,12 +93,10 @@ Function RenderGamma()
 	If opt\DisplayMode = 1 Then
 		If opt\RealGraphicWidth <> opt\GraphicWidth Lor opt\RealGraphicHeight <> opt\GraphicHeight Then
 			SetBuffer(TextureBuffer(FresizeTexture))
-			ClsColor(0, 0, 0)
-			Cls()
+			ClsColor(0, 0, 0) : Cls()
 			CopyRect(0, 0, opt\GraphicWidth, opt\GraphicHeight, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_X, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_Y, BackBuffer(), TextureBuffer(FresizeTexture))
 			SetBuffer(BackBuffer())
-			ClsColor(0, 0, 0)
-			Cls()
+			ClsColor(0, 0, 0) : Cls()
 			ScaleRender(0, 0, SMALLEST_POWER_TWO / Float(opt\GraphicWidth) * opt\AspectRatio, SMALLEST_POWER_TWO / Float(opt\GraphicWidth) * opt\AspectRatio)
 			; ~ Might want to replace Float(opt\GraphicWidth) with Max(opt\GraphicWidth, opt\GraphicHeight) if portrait sizes cause issues
 			; ~ Everyone uses landscape so it's probably a non-issue
@@ -110,8 +108,7 @@ Function RenderGamma()
 	If opt\ScreenGamma >= 1.0 Then
 		CopyRect(0, 0, opt\RealGraphicWidth, opt\RealGraphicHeight, SMALLEST_POWER_TWO_HALF - opt\RealGraphicWidth / 2, SMALLEST_POWER_TWO_HALF - opt\RealGraphicHeight / 2, BackBuffer(), TextureBuffer(FresizeTexture))
 		EntityBlend(FresizeImage, 1)
-		ClsColor(0, 0, 0)
-		Cls()
+		ClsColor(0, 0, 0) : Cls()
 		ScaleRender((-1.0) / Float(opt\RealGraphicWidth), 1.0 / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth))
 		EntityFX(FresizeImage, 1 + 32)
 		EntityBlend(FresizeImage, 3)
@@ -120,8 +117,7 @@ Function RenderGamma()
 	ElseIf opt\ScreenGamma < 1.0 ; ~ Maybe optimize this if it's too slow, alternatively give players the option to disable gamma
 		CopyRect(0, 0, opt\RealGraphicWidth, opt\RealGraphicHeight, SMALLEST_POWER_TWO_HALF - opt\RealGraphicWidth / 2, SMALLEST_POWER_TWO_HALF - opt\RealGraphicHeight / 2, BackBuffer(), TextureBuffer(FresizeTexture))
 		EntityBlend(FresizeImage, 1)
-		ClsColor(0, 0, 0)
-		Cls()
+		ClsColor(0, 0, 0) : Cls()
 		ScaleRender((-1.0) / Float(opt\RealGraphicWidth), 1.0 / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth))
 		EntityFX(FresizeImage, 1 + 32)
 		EntityBlend(FresizeImage, 2)
@@ -339,7 +335,7 @@ Function RenderWorld2(Tween#)
 		For l = 0 To Min(Floor((Power + 50) * 0.01), 11)
 			Rect(45, mo\Viewport_Center_Y - (l * 20), 54, 10)
 		Next
-		DrawImage(t\ImageID[6], 40, mo\Viewport_Center_Y + 30)
+		DrawImage(tt\ImageID[6], 40, mo\Viewport_Center_Y + 30)
 	EndIf
 	
 	; ~ Render sprites

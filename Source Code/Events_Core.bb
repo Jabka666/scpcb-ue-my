@@ -823,7 +823,7 @@ Function UpdateEvents()
 	Local it.Items, it2.Items, em.Emitters, sc.SecurityCams, sc2.SecurityCams, wayp.Waypoints, do.Doors
 	Local Dist#, i%, Temp%, Pvt%, StrTemp$, j%, k%
 	Local CurrTrigger$ = "", fDir#, Scale#, Tex%
-	Local x#, y#, z#, xTemp#, yTemp#, b%, BT%, SF%, TexName$
+	Local x#, y#, z#, xTemp#, yTemp#, b%, t%, SF%, TexName$
 	Local Angle#, GroupName$
 	
 	CurrStepSFX = 0
@@ -905,10 +905,7 @@ Function UpdateEvents()
 							MoveEntity(e\room\RoomDoors[1]\OBJ2, -Sin(e\room\RoomDoors[1]\OpenState) / 180.0, 0.0, 0.0)
 						Wend
 						
-						If e\room\NPC[0] <> Null Then
-							e\room\NPC[0]\State = 8.0
-							SetNPCFrame(e\room\NPC[0], 74.0)
-						EndIf
+						If e\room\NPC[0] <> Null Then SetNPCFrame(e\room\NPC[0], 74.0) : e\room\NPC[0]\State = 8.0
 						
 						If e\room\NPC[1] <> Null Then
 							PositionEntity(e\room\NPC[1]\Collider, e\room\x, e\room\y + 0.5, e\room\z - 1.0, True)
@@ -1738,11 +1735,11 @@ Function UpdateEvents()
 								e\room\NPC[5]\UseEarphones = True
 								
 								e\room\NPC[6] = CreateNPC(NPCTypeD, e\room\x - 3712.0 * RoomScale, -0.3, e\room\z - 2208.0 * RoomScale)
-								ChangeNPCTextureID(e\room\NPC[6], 4)
+								ChangeNPCTextureID(e\room\NPC[6], 3)
 								
 								e\room\NPC[7] = CreateNPC(NPCTypeD, e\room\x - 3712.0 * RoomScale, -0.3, e\room\z - 2208.0 * RoomScale)
 								e\room\NPC[7]\Sound = LoadSound_Strict("SFX\Room\Intro\Scientist\Conversation.ogg")
-								ChangeNPCTextureID(e\room\NPC[7], 3)
+								ChangeNPCTextureID(e\room\NPC[7], 2)
 								PositionEntity(me\Collider, PlayerRoom\x - (3072.0 + 1024.0) * RoomScale, 0.3, PlayerRoom\z + 192.0 * RoomScale)
 								ResetEntity(me\Collider)
 								
@@ -1754,7 +1751,7 @@ Function UpdateEvents()
 								
 								e\room\NPC[9] = CreateNPC(NPCTypeD, e\room\x - 4000.0 * RoomScale, 1.1, e\room\z - 3900.0 * RoomScale)
 								e\room\NPC[9]\State2 = 1.0
-								ChangeNPCTextureID(e\room\NPC[9], 7)
+								ChangeNPCTextureID(e\room\NPC[9], 8)
 								
 								e\room\NPC[10] = CreateNPC(NPCTypeGuard, e\room\x - 4200.0 * RoomScale, 1.0, e\room\z - 3900.0 * RoomScale)
 								e\room\NPC[10]\State = 7.0
@@ -2461,12 +2458,12 @@ Function UpdateEvents()
 								Else
 									msg\DeathMsg = Chr(34) + "Class D viewed SCP-895 through a pair of digital night vision goggles, killing him." + Chr(34)
 								EndIf
-								EntityTexture(t\OverlayID[4], t\OverlayTextureID[4])
+								EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
 								If me\VomitTimer < -10.0 Then Kill()
 							ElseIf me\Sanity < -800.0 Then
-								If Rand(3) = 1 Then EntityTexture(t\OverlayID[4], t\OverlayTextureID[4])
+								If Rand(3) = 1 Then EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
 								If Rand(6) < 5 Then
-									EntityTexture(t\OverlayID[4], t\MiscTextureID[Rand(7, 12)])
+									EntityTexture(tt\OverlayID[4], tt\MiscTextureID[Rand(7, 12)])
 									For i = 0 To MaxItemAmount - 1
 										If Inventory(i) <> Null Then
 											If Inventory(i)\Picked = 2 And (Inventory(i)\ItemTemplate\TempName = "nvg" Lor Inventory(i)\ItemTemplate\TempName = "finenvg" Lor Inventory(i)\ItemTemplate\TempName = "supernvg" Lor Inventory(i)\ItemTemplate\TempName = "scramble") Then
@@ -2480,9 +2477,9 @@ Function UpdateEvents()
 								me\BlurTimer = 1000.0
 								If me\VomitTimer = 0.0 Then me\VomitTimer = 1.0
 							ElseIf me\Sanity < -500.0 Then
-								If Rand(7) = 1 Then EntityTexture(t\OverlayID[4], t\OverlayTextureID[4])
+								If Rand(7) = 1 Then EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
 								If Rand(50) = 1 Then
-									EntityTexture(t\OverlayID[4], t\MiscTextureID[Rand(7, 12)])
+									EntityTexture(tt\OverlayID[4], tt\MiscTextureID[Rand(7, 12)])
 									For i = 0 To MaxItemAmount - 1
 										If Inventory(i) <> Null Then
 											If Inventory(i)\Picked = 2 And (Inventory(i)\ItemTemplate\TempName = "nvg" Lor Inventory(i)\ItemTemplate\TempName = "finenvg" Lor Inventory(i)\ItemTemplate\TempName = "supernvg" Lor Inventory(i)\ItemTemplate\TempName = "scramble") Then
@@ -2494,7 +2491,7 @@ Function UpdateEvents()
 									Next
 								EndIf
 							Else
-								EntityTexture(t\OverlayID[4], t\OverlayTextureID[4])
+								EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
 								For i = 0 To MaxItemAmount - 1
 									If Inventory(i) <> Null Then
 										If Inventory(i)\Picked = 2 And (Inventory(i)\ItemTemplate\TempName = "nvg" Lor Inventory(i)\ItemTemplate\TempName = "finenvg" Lor Inventory(i)\ItemTemplate\TempName = "supernvg" Lor Inventory(i)\ItemTemplate\TempName = "scramble") Then
@@ -2510,7 +2507,7 @@ Function UpdateEvents()
 					If e\EventState3 > 0.0 Then e\EventState3 = Max(e\EventState3 - fps\Factor[0], 0.0)
 					If e\EventState3 = 0.0 Then
 						e\EventState3 = -1.0
-						EntityTexture(t\OverlayID[4], t\OverlayTextureID[4])
+						EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
 					EndIf
 					
 					ShouldPlay = 66
@@ -2543,7 +2540,7 @@ Function UpdateEvents()
 								e\room\RoomDoors[0]\Open = True
 								
 								e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\RoomDoors[0]\OBJ, True), 0.5, EntityZ(e\room\RoomDoors[0]\OBJ, True))
-								ChangeNPCTextureID(e\room\NPC[0], 0)
+								ChangeNPCTextureID(e\room\NPC[0], 4)
 								PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
 								RotateEntity(e\room\NPC[0]\Collider, 0.0, EntityYaw(e\room\NPC[0]\Collider), 0.0, True)
 								MoveEntity(e\room\NPC[0]\Collider, 0.0, 0.0, 0.5) 
@@ -3409,13 +3406,13 @@ Function UpdateEvents()
 				If e\EventState = 0.0 Then
 					If PlayerRoom = e\room And Curr173\Idle < 2 Then
 						e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
-						ChangeNPCTextureID(e\room\NPC[0], 8)
+						ChangeNPCTextureID(e\room\NPC[0], 11)
 						
 						e\room\NPC[0]\Sound = LoadSound_Strict("SFX\Room\Storeroom\Escape1.ogg")
 						e\room\NPC[0]\SoundCHN = PlaySound2(e\room\NPC[0]\Sound, Camera, e\room\NPC[0]\Collider, 12.0)
 						
 						e\room\NPC[1] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
-						ChangeNPCTextureID(e\room\NPC[1], 3)
+						ChangeNPCTextureID(e\room\NPC[1], 2)
 						
 						PointEntity(e\room\NPC[0]\Collider, e\room\NPC[1]\Collider)
 						PointEntity(e\room\NPC[1]\Collider, e\room\NPC[0]\Collider)
@@ -3573,7 +3570,7 @@ Function UpdateEvents()
 					
 					e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[0], True), e\room\y + 0.5, EntityZ(e\room\Objects[0], True))
 					e\room\NPC[0]\State = 8.0
-					ChangeNPCTextureID(e\room\NPC[0], 1)
+					ChangeNPCTextureID(e\room\NPC[0], 0)
 					SetNPCFrame(e\room\NPC[0], 19.0)
 					RotateEntity(e\room\NPC[0]\Collider, 0.0, EntityYaw(e\room\OBJ) - 80.0, 0.0, True)	
 					
@@ -3626,7 +3623,7 @@ Function UpdateEvents()
 					If e\EventState3 = 0.0 Then
 						e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[6], True), 0.55, EntityZ(e\room\Objects[6], True))
 						e\room\NPC[0]\State = 3.0
-						ChangeNPCTextureID(e\room\NPC[0], 0)
+						ChangeNPCTextureID(e\room\NPC[0], 9)
 						SetNPCFrame(e\room\NPC[0], 40.0)
 						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0)
 						e\EventState3 = 1.0
@@ -3675,7 +3672,7 @@ Function UpdateEvents()
 						If e\room\NPC[0] = Null Then
 							e\room\NPC[0] = CreateNPC(NPCTypeD, e\room\x, 0.5, e\room\z)
 							e\room\NPC[0]\State = 3.0
-							ChangeNPCTextureID(e\room\NPC[0], 1)
+							ChangeNPCTextureID(e\room\NPC[0], 7)
 							SetNPCFrame(e\room\NPC[0], 19.0)
 							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 180.0, 0.0)
 							MoveEntity(e\room\NPC[0]\Collider, 0.0, 0.0, -0.5)
@@ -3865,7 +3862,7 @@ Function UpdateEvents()
 								Next
 								
 								If Rand(5) < 5 Then 
-									PositionTexture(t\MiscTextureID[13], 0.0, Rnd(0.0, 1.0))
+									PositionTexture(tt\MiscTextureID[13], 0.0, Rnd(0.0, 1.0))
 									ShowEntity(e\room\Objects[3])			
 								EndIf
 							Else 
@@ -4878,7 +4875,7 @@ Function UpdateEvents()
 						
 						For itt.ItemTemplates = Each ItemTemplates
 							If itt\Name = "Drawing" Then
-								If itt\Img <> 0 Then FreeImage(itt\Img)	: itt\Img = 0
+								If itt\Img <> 0 Then FreeImage(itt\Img)	
 								itt\Img = LoadImage_Strict(ImgPath)
 								MaskImage(itt\Img, 255, 0, 255)
 								itt\ImgPath = ImgPath
@@ -4893,8 +4890,8 @@ Function UpdateEvents()
 						For i = 1 To CountSurfaces(e\room\Objects[2])
 							SF = GetSurface(e\room\Objects[2], i)
 							b = GetSurfaceBrush(SF)
-							BT = GetBrushTexture(b, 0)
-							TexName = StripPath(TextureName(BT))
+							t = GetBrushTexture(b, 0)
+							TexName = StripPath(TextureName(t))
 							
 							If Lower(TexName) = "1048(0).png" Then
 								PaintSurface(SF, Brush)
@@ -5333,7 +5330,7 @@ Function UpdateEvents()
 								;[Block]
 								e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\OBJ) + Cos(e\room\Angle - 90.0) * 760.0 * RoomScale, 0.35, EntityZ(e\room\OBJ) + Sin(e\room\Angle - 90.0) * 760.0 * RoomScale)
 								RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle - 200.0, 0.0, True)
-								ChangeNPCTextureID(e\room\NPC[0], 2)
+								ChangeNPCTextureID(e\room\NPC[0], 1)
 								SetNPCFrame(e\room\NPC[0], 80.0)
 								e\room\NPC[0]\State = 10.0
 								;[End Block]
@@ -5372,7 +5369,7 @@ Function UpdateEvents()
 								;[Block]
 							Case 60.0
 								;[Block]
-								If (Not t\MiscTextureID[14]) Then
+								If (Not tt\MiscTextureID[14]) Then
 									Tex = LoadTexture_Strict("GFX\npcs\scp_173_H.png")
 									
 									EntityTexture(Curr173\OBJ, Tex)
@@ -5519,13 +5516,13 @@ Function UpdateEvents()
 							
 							e\room\NPC[4] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[17], True), EntityY(e\room\Objects[17], True), EntityZ(e\room\Objects[17], True))
 							e\room\NPC[4]\State = 3.0
-							ChangeNPCTextureID(e\room\NPC[4], 9)
+							ChangeNPCTextureID(e\room\NPC[4], 14)
 							SetNPCFrame(e\room\NPC[4], 40.0)
 							TurnEntity(e\room\NPC[4]\Collider, 0.0, e\room\Angle + 90.0, 0.0)
 							
 							e\room\NPC[5] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[18], True), EntityY(e\room\Objects[18], True), EntityZ(e\room\Objects[18], True))
 							e\room\NPC[5]\State = 8.0
-							ChangeNPCTextureID(e\room\NPC[5], 10)
+							ChangeNPCTextureID(e\room\NPC[5], 15)
 							SetNPCFrame(e\room\NPC[5], 19.0)
 							TurnEntity(e\room\NPC[5]\Collider, 0.0, e\room\Angle + 90.0, 0.0)
 						Else
@@ -6525,7 +6522,7 @@ Function UpdateEvents()
 							ElseIf e\EventState < 2000.0 Then
 								If IsStreamPlaying_Strict(e\SoundCHN3) Then
 									If Rand(4) = 1 Then
-										EntityTexture(e\room\Objects[1], t\MiscTextureID[Rand(1, 6)])
+										EntityTexture(e\room\Objects[1], tt\MiscTextureID[Rand(1, 6)])
 										ShowEntity(e\room\Objects[1])
 									ElseIf Rand(10) = 1 
 										HideEntity(e\room\Objects[1])							
@@ -6534,7 +6531,7 @@ Function UpdateEvents()
 									If e\SoundCHN3 <> 0 Then
 										StopStream_Strict(e\SoundCHN3) : e\SoundCHN3 = 0
 									EndIf
-									EntityTexture(e\room\Objects[1], t\MiscTextureID[0])
+									EntityTexture(e\room\Objects[1], tt\MiscTextureID[0])
 									ShowEntity(e\room\Objects[1])
 									e\EventState = e\EventState + fps\Factor[0]
 								EndIf
@@ -6551,11 +6548,11 @@ Function UpdateEvents()
 							If e\SoundCHN3 <> 0 Then
 								If (Not IsStreamPlaying_Strict(e\SoundCHN3)) Then
 									e\SoundCHN3 = 0
-									EntityTexture(e\room\Objects[1], t\MiscTextureID[0])
+									EntityTexture(e\room\Objects[1], tt\MiscTextureID[0])
 									ShowEntity(e\room\Objects[1])
 								Else
 									If Rand(4) = 1 Then
-										EntityTexture(e\room\Objects[1], t\MiscTextureID[Rand(1, 6)])
+										EntityTexture(e\room\Objects[1], tt\MiscTextureID[Rand(1, 6)])
 										ShowEntity(e\room\Objects[1])
 									ElseIf Rand(10) = 1 
 										HideEntity(e\room\Objects[1])							
@@ -8181,7 +8178,7 @@ Function UpdateEvents()
 				If e\room\Dist < 10.0 And e\room\Dist > 0.0 Then
 					e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\OBJ, True), 0.5, EntityZ(e\room\OBJ, True))
 					e\room\NPC[0]\State = 8.0
-					ChangeNPCTextureID(e\room\NPC[0], 1)
+					ChangeNPCTextureID(e\room\NPC[0], 10)
 					SetNPCFrame(e\room\NPC[0], 19.0)
 					RotateEntity(e\room\NPC[0]\Collider, 0.0, Rnd(360.0), 0.0, True)	
 					
@@ -9171,7 +9168,7 @@ Function UpdateEvents()
 						If e\EventState = 0.0 Then
 							e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True) + 0.5, EntityZ(e\room\Objects[2], True))
 							e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
-							ChangeNPCTextureID(e\room\NPC[0], 3)
+							ChangeNPCTextureID(e\room\NPC[0], 13)
 							SetNPCFrame(e\room\NPC[0], 19.0)
 							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle, 0.0)
 							
