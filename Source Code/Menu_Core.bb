@@ -451,11 +451,7 @@ Function UpdateMainMenu()
 						
 						If SameFound > 0 Then CurrSave = CurrSave + " (" + (SameFound + 1) + ")"
 						
-						If opt\DebugMode Then
-							InitNewGame(Clamp(Int(Left(CurrSave, 1)), 0.0, 2.0))
-						Else
-							InitNewGame()
-						EndIf
+						InitNewGame()
 						
 						MainMenuOpen = False
 						FlushKeys()
