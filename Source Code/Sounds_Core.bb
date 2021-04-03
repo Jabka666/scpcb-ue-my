@@ -844,12 +844,12 @@ Function LoadSounds()
 		PickSFX[i] = LoadSound_Strict("SFX\Interact\PickItem" + i + ".ogg")
 	Next
 	
-	AmbientSFXAmount[LCZ] = 11
-	AmbientSFXAmount[HCZ] = 11
-	AmbientSFXAmount[EZ] = 12
-	AmbientSFXAmount[GENERAL] = 15
-	AmbientSFXAmount[PRE_BREACH] = 5
-	AmbientSFXAmount[FOREST] = 10
+	AmbientSFXAmount[0] = 11
+	AmbientSFXAmount[1] = 11
+	AmbientSFXAmount[2] = 12
+	AmbientSFXAmount[3] = 15
+	AmbientSFXAmount[4] = 5
+	AmbientSFXAmount[5] = 10
 	
 	For i = 0 To 2
 		OldManSFX[i] = LoadSound_Strict("SFX\SCP\106\Corrosion" + (i + 1) + ".ogg")

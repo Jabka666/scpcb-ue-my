@@ -254,6 +254,12 @@ Function CreateCollBox%(Mesh%)
 	EntityBox(Mesh, Mesh_MinX * sX, Mesh_MinY * sY, Mesh_MinZ * sZ, Mesh_MagX * sX, Mesh_MagY * sY, Mesh_MagZ * sZ)
 End Function
 
+Const ZONEAMOUNT% = 3
+
+Function GetZone%(y%)
+	Return(Min(Floor((Float(MapGridSize - y) / MapGridSize * ZONEAMOUNT)), ZONEAMOUNT - 1))
+End Function
+
 Function CalculateRoomTemplateExtents%(r.RoomTemplates)
 	If r\DisableOverlapCheck Then Return
 	
