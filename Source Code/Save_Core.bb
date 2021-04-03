@@ -240,7 +240,7 @@ Function SaveGame(File$, SaveZone% = LCZ)
 		EndIf
 	Next
 	
-	WriteByte(f, CurrentZone + SaveZone)
+	WriteByte(f, CurrentZone)
 	
 	CloseFile(f)
 	

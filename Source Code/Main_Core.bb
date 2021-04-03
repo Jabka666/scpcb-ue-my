@@ -1655,40 +1655,6 @@ Function UpdateConsole()
 					;[Block]
 					me\Funds = Rand(0, 6)
 					;[End Block]
-				Case "up"
-					;[Block]
-					If CurrentZone > 0 Then
-						SaveGame(CurrSave, -1)
-						NullGame(False, True)
-						If FileType(SavePath + CurrSave + "\" + (CurrentZone - 1) + ".zone") = 1 Then
-							LoadEntities()
-							LoadSounds()
-							LoadGame(CurrSave)
-							InitLoadGame()
-						Else
-							InitNewGame(CurrentZone - 1)
-							LoadGameQuick(CurrSave, False)
-						EndIf
-						SaveGame(CurrSave)
-					EndIf
-					;[End Block]
-				Case "down"
-					;[Block]
-					If CurrentZone < 2 Then
-						SaveGame(CurrSave, +1)
-						NullGame(False, True)
-						If FileType(SavePath + CurrSave + "\" + (CurrentZone + 1) + ".zone") = 1 Then
-							LoadEntities()
-							LoadSounds()
-							LoadGame(CurrSave)
-							InitLoadGame()
-						Else
-							InitNewGame(CurrentZone + 1)
-							LoadGameQuick(CurrSave, False)
-						EndIf
-						SaveGame(CurrSave)
-					EndIf
-					;[End Block]
 				Default
 					;[Block]
 					CreateConsoleMsg("Command not found.", 255, 0, 0)
@@ -8735,7 +8701,7 @@ Function InitLoadGame()
 	CatchErrors("InitLoadGame")
 End Function
 
-Function NullGame(PlayButtonSFX% = True, LoadZone% = False)
+Function NullGame(PlayButtonSFX% = True)
 	CatchErrors("Uncaught (NullGame)")
 	
 	Local itt.ItemTemplates, s.Screens, lt.LightTemplates, d.Doors, m.Materials, de.Decals, sc.SecurityCams
@@ -8950,14 +8916,12 @@ Function NullGame(PlayButtonSFX% = True, LoadZone% = False)
 	If Sky <> 0 Then Sky = 0
 	InitFastResize()
 	
-	If (Not LoadZone) Then
-		; ~ Load main menu assets and open main menu
-		mm\ShouldDeleteGadgets = True
-		InitMainMenuAssets()
-		MenuOpen = False
-		MainMenuOpen = True
-		mm\MainMenuTab = MainMenuTab_Default
-	EndIf
+	; ~ Load main menu assets and open main menu
+	mm\ShouldDeleteGadgets = True
+	InitMainMenuAssets()
+	MenuOpen = False
+	MainMenuOpen = True
+	mm\MainMenuTab = MainMenuTab_Default
 	
 	CatchErrors("NullGame")
 End Function
