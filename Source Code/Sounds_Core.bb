@@ -613,6 +613,8 @@ MusicCHN = StreamSound_Strict("SFX\Music\" + Music[2] + ".ogg", opt\MusicVolume,
 Global NowPlaying% = 2, ShouldPlay% = 11
 Global CurrMusic% = True
 
+RenderLoading(10, True)
+
 Dim OpenDoorSFX%(3, 3), CloseDoorSFX%(3, 3)
 Global BigDoorErrorSFX%[3]
 
@@ -652,6 +654,8 @@ Global DecaySFX%[5]
 Global BurstSFX% 
 
 Global HissSFX%
+
+RenderLoading(20, True)
 
 Global RustleSFX%[6]
 
@@ -710,6 +714,8 @@ Global HorrorSFX%[20]
 
 Global MissSFX%
 
+RenderLoading(25, True)
+
 Global IntroSFX%[12]
 
 Global AlarmSFX%[4]
@@ -747,6 +753,8 @@ Global RadioCHN%[7]
 
 Global IntercomStreamCHN%
 
+RenderLoading(30, True)
+
 Global PlayCustomMusic% = False, CustomMusic% = 0
 
 Global UserTrackCheck% = 0, UserTrackCheck2% = 0
@@ -755,8 +763,6 @@ Global UserTrackName$[256]
 
 Function LoadSounds()
 	Local i%
-	
-	RenderLoading(55, "SOUNDS")
 	
 	For i = 0 To 2
 		OpenDoorSFX(Default_Door, i) = LoadSound_Strict("SFX\Door\DoorOpen" + (i + 1) + ".ogg") ; ~ Also one-sided door
