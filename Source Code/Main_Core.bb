@@ -2500,7 +2500,7 @@ Function MainLoop()
 						CreateMsg(msg\Txt + " (game is loading)", 6.0)
 					EndIf
 				Else
-					SaveGame(CurrSave)
+					SaveGame(SavePath + CurrSave + "\")
 				EndIf
 			ElseIf SelectedDifficulty\SaveType = SAVEONSCREENS
 				If SelectedScreen = Null And SelectedMonitor = Null Then
@@ -2520,7 +2520,7 @@ Function MainLoop()
 							me\Playable = True
 							me\DropSpeed = 0.0
 						EndIf
-						SaveGame(CurrSave)
+						SaveGame(SavePath + CurrSave + "\")
 					EndIf
 				EndIf
 			Else
@@ -2655,7 +2655,8 @@ Function Kill(IsBloody% = False)
 		me\KillAnim = Rand(0, 1)
 		PlaySound_Strict(DamageSFX[0])
 		If SelectedDifficulty\SaveType = NOSAVES Then
-			DeleteSavedGame(CurrSave)
+			DeleteFile(CurrentDir() + SavePath + CurrSave + "\save.cb") 
+			DeleteDir(SavePath + CurrSave) 
 			LoadSavedGames()
 		EndIf
 		
@@ -3642,7 +3643,7 @@ Function UpdateGUI()
 					RotateEntity(SelectedItem\Collider, 0.0, Rnd(360.0), 0.0)
 					ResetEntity(SelectedItem\Collider)
 					SelectedItem\DropSpeed = 0.0
-					SelectedItem\Picked = 0
+					SelectedItem\Picked = False
 					For z = 0 To OtherSize - 1
 						If OtherOpen\SecondInv[z] = SelectedItem Then OtherOpen\SecondInv[z] = Null
 					Next
@@ -4177,12 +4178,11 @@ Function UpdateGUI()
 						If SelectedItem\State3 = 100.0 Then
 							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 							
-							If SelectedItem\Picked = 2 Then
+							If wi\NightVision > 0 Then
 								CreateMsg("You removed the goggles.", 6.0)
 								wi\NightVision = 0
 								opt\CameraFogFar = opt\StoredCameraFogFar
 								If SelectedItem\State > 0.0 Then PlaySound_Strict(NVGSFX[1])
-								SelectedItem\Picked = 1
 							Else
 								CreateMsg("You put on the goggles.", 6.0)
 								Select SelectedItem\ItemTemplate\TempName
@@ -4202,7 +4202,6 @@ Function UpdateGUI()
 								opt\StoredCameraFogFar = opt\CameraFogFar
 								opt\CameraFogFar = 30.0
 								If SelectedItem\State > 0.0 Then PlaySound_Strict(NVGSFX[0])
-								SelectedItem\Picked = 2
 							EndIf
 							SelectedItem\State3 = 0.0
 							SelectedItem = Null
@@ -4521,12 +4520,9 @@ Function UpdateGUI()
 							CreateMsg(StrTemp, 6.0)
 						Else
 							it.Items = CreateItem("Empty Cup", "emptycup", 0.0, 0.0, 0.0)
-							it\Picked = 1
+							it\Picked = True
 							For i = 0 To MaxItemAmount - 1
-								If Inventory(i) = SelectedItem Then
-									Inventory(i) = it
-									Exit
-								EndIf
+								If Inventory(i) = SelectedItem Then Inventory(i) = it : Exit
 							Next					
 							EntityType(it\Collider, HIT_ITEM)
 							
@@ -5024,11 +5020,10 @@ Function UpdateGUI()
 						SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / 4.0), 100.0)
 						
 						If SelectedItem\State = 100.0 Then
-							If SelectedItem\Picked = 2 Then
+							If wi\HazmatSuit > 0 Then
 								CreateMsg("You removed the hazmat suit.", 6.0)
 								wi\HazmatSuit = 0
 								DropItem(SelectedItem)
-								SelectedItem\Picked = 1
 							Else
 								CreateMsg("You put on the hazmat suit.", 6.0)
 								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
@@ -5043,7 +5038,6 @@ Function UpdateGUI()
 								wi\GasMask = 0
 								wi\BallisticHelmet = 0
 								wi\SCRAMBLE = 0
-								SelectedItem\Picked = 2
 							EndIf
 							SelectedItem\State = 0.0
 							SelectedItem = Null
@@ -5057,11 +5051,10 @@ Function UpdateGUI()
 					SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / (2.0 + (0.5 * (SelectedItem\ItemTemplate\TempName = "finevest")))), 100)
 					
 					If SelectedItem\State = 100.0 Then
-						If SelectedItem\Picked = 2 Then
+						If wi\BallisticVest > 0 Then
 							CreateMsg("You removed the vest.", 6.0)
 							wi\BallisticVest = 0
 							DropItem(SelectedItem)
-							SelectedItem\Picked = 1
 						Else
 							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 							Select SelectedItem\ItemTemplate\TempName
@@ -5076,7 +5069,6 @@ Function UpdateGUI()
 									wi\BallisticVest = 2
 									;[End Block]
 							End Select
-							SelectedItem\Picked = 2
 						EndIf
 						SelectedItem\State = 0.0
 						SelectedItem = Null
@@ -5107,10 +5099,9 @@ Function UpdateGUI()
 						If SelectedItem\State = 100.0 Then
 							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 							
-							If SelectedItem\Picked = 2 Then
+							If wi\GasMask > 0 Then
 								CreateMsg("You removed the gas mask.", 6.0)
 								wi\GasMask = 0
-								SelectedItem\Picked = 1
 							Else
 								Select SelectedItem\ItemTemplate\TempName
 									Case "gasmask"
@@ -5129,7 +5120,6 @@ Function UpdateGUI()
 										wi\GasMask = 3
 										;[End Block]
 								End Select
-								SelectedItem\Picked = 2
 							EndIf
 							SelectedItem\State = 0.0
 							SelectedItem = Null
@@ -5171,10 +5161,9 @@ Function UpdateGUI()
 						If SelectedItem\State = 100.0 Then
 							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 							
-							If SelectedItem\Picked = 2 Then
+							If I_1499\Using > 0 Then
 								CreateMsg("You removed the gas mask.", 6.0)
 								I_1499\Using = 0
-								SelectedItem\Picked = 1
 							Else
 								Select SelectedItem\ItemTemplate\TempName
 									Case "scp1499"
@@ -5232,7 +5221,6 @@ Function UpdateGUI()
 										Exit
 									EndIf
 								Next
-								SelectedItem\Picked = 1
 							EndIf
 							SelectedItem\State = 0.0
 							SelectedItem = Null
@@ -5288,15 +5276,13 @@ Function UpdateGUI()
 					;[End Block]
 				Case "scp427"
 					;[Block]
-					If SelectedItem\Picked = 2 Then
+					If I_427\Using Then
 						CreateMsg("You closed the locket.", 6.0)
 						I_427\Using = False
-						SelectedItem\Picked = 1
 					Else
 						GiveAchievement(Achv427)
 						CreateMsg("You opened the locket.", 6.0)
 						I_427\Using = True
-						SelectedItem\Picked = 2
 					EndIf
 					SelectedItem = Null
 					;[End Block]
@@ -5339,14 +5325,12 @@ Function UpdateGUI()
 						If SelectedItem\State = 100.0 Then
 							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 							
-							If SelectedItem\Picked = 2 Then
+							If wi\BallisticHelmet > 0 Then
 								CreateMsg("You removed the helmet.", 6.0)
 								wi\BallisticHelmet = 0
-								SelectedItem\Picked = 1
 							Else
 								CreateMsg("You put on the helmet.", 6.0)
 								wi\BallisticHelmet = 1
-								SelectedItem\Picked = 2
 							EndIf
 							SelectedItem\State = 0.0
 							SelectedItem = Null
@@ -5363,14 +5347,12 @@ Function UpdateGUI()
 						If SelectedItem\State3 = 100.0 Then
 							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 							
-							If SelectedItem\Picked = 2 Then
+							If wi\SCRAMBLE > 0 Then
 								CreateMsg("You removed the gear.", 6.0)
 								wi\SCRAMBLE = 0
-								SelectedItem\Picked = 1
 							Else
 								CreateMsg("You put on the gear.", 6.0)
 								wi\SCRAMBLE = 1
-								SelectedItem\Picked = 2
 							EndIf
 							SelectedItem\State3 = 0.0
 							SelectedItem = Null
@@ -5384,7 +5366,7 @@ Function UpdateGUI()
 							For i = 0 To ItemAmount
 								If Inventory(i) = Null Then
 									Inventory(i) = CreateItem("SCP-500-01", "scp500pill", 0.0, 0.0, 0.0)
-									Inventory(i)\Picked = 1
+									Inventory(i)\Picked = True
 									Inventory(i)\Dropped = -1
 									Inventory(i)\ItemTemplate\Found = True
 									HideEntity(Inventory(i)\Collider)
@@ -5981,7 +5963,76 @@ Function RenderGUI()
 			
 			If Inventory(n) <> Null Then
 				Color(200, 200, 200)
-				If Inventory(n)\Picked = 2 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+				Select Inventory(n)\ItemTemplate\TempName 
+					Case "gasmask"
+						;[Block]
+						If wi\GasMask = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
+					Case "supergasmask"
+						;[Block]
+						If wi\GasMask = 2 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
+					Case "gasmask3"
+						;[Block]
+						If wi\GasMask = 3 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
+					Case "hazmatsuit"
+						;[Block]
+						If wi\HazmatSuit = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
+					Case "hazmatsuit2"
+						;[Block]
+						If wi\HazmatSuit = 2 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
+					Case "hazmatsuit3
+						;[Block]"
+						If wi\HazmatSuit = 3 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)	
+						;[End Block]
+					Case "vest"
+						;[Block]
+						If wi\BallisticVest = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
+					Case "finevest"
+						;[Block]
+						If wi\BallisticVest = 2 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
+					Case "helmet"
+						;[Block]
+						If wi\BallisticHelmet = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
+					Case "scp714"
+						;[Block]
+						If I_714\Using = True Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
+					Case "nvg"
+						;[Block]
+						If wi\NightVision = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
+					Case "supernvg"
+						;[Block]
+						If wi\NightVision = 2 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
+					Case "finenvg"
+						;[Block]
+						If wi\NightVision = 3 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
+					Case "scramble"
+						;[Block]
+						If wi\SCRAMBLE = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
+					Case "scp1499"
+						;[Block]
+						If I_1499\Using = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
+					Case "super1499"
+						;[Block]
+						If I_1499\Using = 2 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
+					Case "scp427"
+						;[Block]
+						If I_427\Using Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						;[End Block]
+				End Select
 			EndIf
 			
 			If IsMouseOn = n Then
@@ -6803,10 +6854,7 @@ Function UpdateMenu()
 					Local TempKey%
 					
 					For i = 0 To 227
-						If KeyHit(i) Then
-							TempKey = i
-							Exit
-						EndIf
+						If KeyHit(i) Then TempKey = i : Exit
 					Next
 					If TempKey <> 0 Then
 						Select SelectedInputBox
@@ -6921,7 +6969,7 @@ Function UpdateMenu()
 					QuitButton = 140
 					If UpdateMainMenuButton(x, y + (60 * MenuScale), 430 * MenuScale, 60 * MenuScale, "Save & Quit") Then
 						me\DropSpeed = 0.0
-						SaveGame(CurrSave)
+						SaveGame(SavePath + CurrSave + "\")
 						NullGame()
 						CurrSave = ""
 						ResetInput()
@@ -6991,7 +7039,7 @@ Function UpdateMenu()
 							RenderLoading(0)
 							
 							MenuOpen = False
-							LoadGameQuick(CurrSave)
+							LoadGameQuick(SavePath + CurrSave + "\")
 							
 							MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 							HidePointer()
@@ -7050,7 +7098,7 @@ Function UpdateMenu()
 							RenderLoading(0)
 							
 							MenuOpen = False
-							LoadGameQuick(CurrSave)
+							LoadGameQuick(SavePath + CurrSave + "\")
 							
 							MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 							HidePointer()
@@ -8539,14 +8587,14 @@ Function InitNewGame(Zone% = LCZ)
 			PositionEntity(me\Collider, EntityX(r\OBJ) + 3584.0 * RoomScale, 704.0 * RoomScale, EntityZ(r\OBJ) + 1024.0 * RoomScale)
 			PlayerRoom = r
 			it.Items = CreateItem("Class D Orientation Leaflet", "paper", 1, 1, 1)
-			it\Picked = 1 : it\Dropped = -1 : it\ItemTemplate\Found = True
+			it\Picked = True : it\Dropped = -1 : it\ItemTemplate\Found = True
 			Inventory(0) = it
 			HideEntity(it\Collider)
 			EntityType(it\Collider, HIT_ITEM)
 			EntityParent(it\Collider, 0)
 			ItemAmount = ItemAmount + 1
 			it.Items = CreateItem("Document SCP-173", "paper", 1, 1, 1)
-			it\Picked = 1 : it\Dropped = -1 : it\ItemTemplate\Found = True
+			it\Picked = True : it\Dropped = -1 : it\ItemTemplate\Found = True
 			Inventory(1) = it
 			HideEntity(it\Collider)
 			EntityType(it\Collider, HIT_ITEM)
@@ -8721,7 +8769,6 @@ Function NullGame(PlayButtonSFX% = True)
 	ItemAmount = 0
 	MaxItemAmount = 0
 	
-	LastItemID = 0
 	DoorTempID = 0
 	RoomTempID = 0
 	

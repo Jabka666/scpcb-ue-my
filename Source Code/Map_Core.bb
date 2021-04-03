@@ -3020,26 +3020,26 @@ Type Decals
 End Type
 
 Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#, Size# = 1.0, Alpha# = 1.0, FX% = 0, BlendMode% = 1, R% = 0, G% = 0, B% = 0)
-	Local de.Decals
+	Local d.Decals
 	
-	de.Decals = New Decals
-	de\ID = ID
-	de\Size = Size
-	de\Alpha = Alpha
-	de\FX = FX : de\BlendMode = BlendMode
-	de\R = R : de\G = G : de\B = B
-	de\MaxSize = 1.0
+	d.Decals = New Decals
+	d\ID = ID
+	d\Size = Size
+	d\Alpha = Alpha
+	d\FX = FX : d\BlendMode = BlendMode
+	d\R = R : d\G = G : d\B = B
+	d\MaxSize = 1.0
 	
-	de\OBJ = CreateSprite()
-	PositionEntity(de\OBJ, x, y, z)
-	ScaleSprite(de\OBJ, Size, Size)
-	RotateEntity(de\OBJ, Pitch, Yaw, Roll)
-	EntityTexture(de\OBJ, tt\DecalTextureID[ID])
-	EntityAlpha(de\OBJ, Alpha)
-	EntityFX(de\OBJ, FX)
-	EntityBlend(de\OBJ, BlendMode)
-	SpriteViewMode(de\OBJ, 2)
-	If R <> 0 Lor G <> 0 Lor B <> 0 Then EntityColor(de\OBJ, R, G, B)
+	d\OBJ = CreateSprite()
+	PositionEntity(d\OBJ, x, y, z)
+	ScaleSprite(d\OBJ, Size, Size)
+	RotateEntity(d\OBJ, Pitch, Yaw, Roll)
+	EntityTexture(d\OBJ, tt\DecalTextureID[ID])
+	EntityAlpha(d\OBJ, Alpha)
+	EntityFX(d\OBJ, FX)
+	EntityBlend(d\OBJ, BlendMode)
+	SpriteViewMode(d\OBJ, 2)
+	If R <> 0 Lor G <> 0 Lor B <> 0 Then EntityColor(d\OBJ, R, G, B)
 	
 	If (Not tt\DecalTextureID[ID]) Then
 		CreateConsoleMsg("Decal Texture ID: " + ID + " not found.")
@@ -3048,7 +3048,7 @@ Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#, Size# = 1.0, A
 		EndIf
 		Return(Null)
 	EndIf
-	Return(de)
+	Return(d)
 End Function
 
 Function UpdateDecals()
@@ -5473,7 +5473,7 @@ Function FillRoom(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it2.Items = CreateItem("Document SCP-1048", "paper", 1.0, 1.0, 1.0)
-			it2\Picked = 1 : it2\Dropped = -1 : it\SecondInv[0] = it2
+			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[0] = it2
 			HideEntity(it2\Collider)
 			EntityParent(it2\Collider, r\OBJ)
 			
@@ -7888,7 +7888,7 @@ Function PreventRoomOverlap%(r.Rooms)
 	Return(False)
 End Function
 
-Const MapGridSize% = 12
+Const MapGridSize% = 18
 
 Type MapGrid
 	Field Grid%[(MapGridSize + 1) ^ 2]
@@ -8332,7 +8332,6 @@ Function CreateMap(Zone%)
 		Next
 	Next		
 	
-	; ~ Spawn some rooms outside the map
 	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * 8.0, 0.0, (MapGridSize - 1) * 8.0, "pocketdimension")
 	CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1	
 	
