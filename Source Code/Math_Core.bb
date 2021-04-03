@@ -307,6 +307,7 @@ End Function
 Function CheckRoomOverlap%(r1.Rooms, r2.Rooms)
 	If r1\MaxX =< r2\MinX Lor r1\MaxY =< r2\MinY Lor r1\MaxZ =< r2\MinZ Then Return(False)
 	If r1\MinX >= r2\MaxX Lor r1\MinY >= r2\MaxY Lor r1\MinZ >= r2\MaxZ Then Return(False)
+	
 	Return(True)
 End Function
 

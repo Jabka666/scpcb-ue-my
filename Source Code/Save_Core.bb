@@ -140,8 +140,8 @@ Function SaveGame(File$)
 	
 	For x = 0 To MapGridSize
 		For y = 0 To MapGridSize
-			WriteInt(f, CurrMapGrid\Grid[x + (y * MapGridSize)])
-			WriteByte(f, CurrMapGrid\Found[x + (y * MapGridSize)])
+			WriteInt(f, CurrGrid\Grid[x + (y * MapGridSize)])
+			WriteByte(f, CurrGrid\Found[x + (y * MapGridSize)])
 		Next
 	Next
 	
@@ -619,11 +619,11 @@ Function LoadGame(File$)
 	me\RefinedItems = ReadInt(f)
 	
 	; ~ TODO: Use CreateMap()
-	CurrMapGrid.MapGrid = New MapGrid
+	CurrGrid.MapGrid = New MapGrid
 	For x = 0 To MapGridSize 
 		For y = 0 To MapGridSize
-			CurrMapGrid\Grid[x + (y * MapGridSize)] = ReadInt(f)
-			CurrMapGrid\Found[x + (y * MapGridSize)] = ReadByte(f)
+			CurrGrid\Grid[x + (y * MapGridSize)] = ReadInt(f)
+			CurrGrid\Found[x + (y * MapGridSize)] = ReadByte(f)
 		Next
 	Next
 	
@@ -882,7 +882,7 @@ Function LoadGame(File$)
 		EndIf
 		
 		For x = MapGridSize To 0 Step -1
-			If CurrMapGrid\Grid[x + (y * MapGridSize)] > 0 Then
+			If CurrGrid\Grid[x + (y * MapGridSize)] > 0 Then
 				If Zone = 2 Then
 					Temp = Heavy_Door
 				Else
@@ -925,7 +925,7 @@ Function LoadGame(File$)
 						End Select
 						If ShouldSpawnDoor Then
 							If x + 1 < MapGridSize + 1
-								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > 0 Then
+								If CurrGrid\Grid[(x + 1) + (y * MapGridSize)] > 0 Then
 									do.Doors = CreateDoor(Float(x) * Spacing + Spacing / 2.0, 0.0, Float(y) * Spacing, 90.0, r, Max(Rand(-3, 1), 0.0), Temp)
 									r\AdjDoor[0] = do
 								EndIf
@@ -965,7 +965,7 @@ Function LoadGame(File$)
 						End Select
 						If ShouldSpawnDoor
 							If y + 1 < MapGridSize + 1
-								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > 0 Then
+								If CurrGrid\Grid[x + ((y + 1) * MapGridSize)] > 0 Then
 									do.Doors = CreateDoor(Float(x) * Spacing, 0.0, Float(y) * Spacing + Spacing / 2.0, 0.0, r, Max(Rand(-3, 1), 0), Temp)
 									r\AdjDoor[3] = do
 								EndIf
@@ -1494,8 +1494,8 @@ Function LoadGameQuick(File$)
 	
 	For x = 0 To MapGridSize
 		For y = 0 To MapGridSize
-			CurrMapGrid\Grid[x + (y * MapGridSize)] = ReadInt(f)
-			CurrMapGrid\Found[x + (y * MapGridSize)] = ReadByte(f)
+			CurrGrid\Grid[x + (y * MapGridSize)] = ReadInt(f)
+			CurrGrid\Found[x + (y * MapGridSize)] = ReadByte(f)
 		Next
 	Next
 	
@@ -2197,10 +2197,10 @@ Function LoadMap(File$)
 	
 	f = ReadFile(File)
 	
-	If CurrMapGrid <> Null Then
-		Delete(CurrMapGrid) : CurrMapGrid = Null
+	If CurrGrid <> Null Then
+		Delete(CurrGrid) : CurrGrid = Null
 	EndIf
-	CurrMapGrid = New MapGrid
+	CurrGrid = New MapGrid
 	
 	CoffinDistance = 100.0
 	
@@ -2235,7 +2235,7 @@ Function LoadMap(File$)
 					
 					TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 					
-					CurrMapGrid\Grid[(MapGridSize - x) + (y * MapGridSize)] = True
+					CurrGrid\Grid[(MapGridSize - x) + (y * MapGridSize)] = True
 					Exit
 				EndIf
 			Next
@@ -2418,7 +2418,7 @@ Function LoadMap(File$)
 					
 					TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 					
-					CurrMapGrid\Grid[(MapGridSize - x) + (y * MapGridSize)] = True
+					CurrGrid\Grid[(MapGridSize - x) + (y * MapGridSize)] = True
 					Exit
 				EndIf
 			Next
@@ -2461,7 +2461,7 @@ Function LoadMap(File$)
 		EndIf
 		
 		For x = MapGridSize To 0 Step -1
-			If CurrMapGrid\Grid[x + (y * MapGridSize)] > 0 Then
+			If CurrGrid\Grid[x + (y * MapGridSize)] > 0 Then
 				If Zone = 2 Then 
 					Temp = Heavy_Door
 				Else 
@@ -2495,7 +2495,7 @@ Function LoadMap(File$)
 						End Select
 						If ShouldSpawnDoor Then
 							If x + 1 < MapGridSize + 1 Then
-								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > 0 Then
+								If CurrGrid\Grid[(x + 1) + (y * MapGridSize)] > 0 Then
 									d.Doors = CreateDoor(Float(x) * Spacing + Spacing / 2.0, 0.0, Float(y) * Spacing, 90.0, r, Max(Rand(-3, 1), 0), Temp)
 									r\AdjDoor[0] = d
 								EndIf
@@ -2527,7 +2527,7 @@ Function LoadMap(File$)
 						End Select
 						If ShouldSpawnDoor Then
 							If y + 1 < MapGridSize + 1 Then
-								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > 0 Then
+								If CurrGrid\Grid[x + ((y + 1) * MapGridSize)] > 0 Then
 									d.Doors = CreateDoor(Float(x) * Spacing, 0.0, Float(y) * Spacing + Spacing / 2.0, 0.0, r, Max(Rand(-3, 1), 0), Temp)
 									r\AdjDoor[3] = d
 								EndIf

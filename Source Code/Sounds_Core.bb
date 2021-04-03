@@ -695,14 +695,14 @@ Global AmbientSFXAmount%[6]
 ; ~ 2 = Entrance Zone
 ; ~ 3 = General
 ; ~ 4 = Pre-Breach
-; ~ 5 = Forest
+; ~ 5 = SCP-860-1
 
-AmbientSFXAmount[LCZ] = 8 
-AmbientSFXAmount[HCZ] = 11
-AmbientSFXAmount[EZ] = 12
-AmbientSFXAmount[GENERAL] = 15 
-AmbientSFXAmount[PRE_BREACH] = 5
-AmbientSFXAmount[FOREST] = 10
+AmbientSFXAmount[0] = 8 
+AmbientSFXAmount[1] = 11
+AmbientSFXAmount[2] = 12
+AmbientSFXAmount[3] = 15 
+AmbientSFXAmount[4] = 5
+AmbientSFXAmount[5] = 10
 
 Dim AmbientSFX%(6, 15)
 

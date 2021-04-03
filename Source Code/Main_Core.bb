@@ -183,6 +183,7 @@ Type Player
 	Field Zombie%
 	Field Detected%
 	Field ExplosionTimer#
+	Field Zone%
 	Field Collider%, Head%
 	Field StopHidingTimer#
 	Field Funds%, UsedMastercard%
@@ -2107,7 +2108,7 @@ Function MainLoop()
 		If fps\Factor[0] > 0.0 And PlayerRoom\RoomTemplate\Name <> "dimension1499" Then UpdateSecurityCams()
 		
 		If (Not MenuOpen) And (Not InvOpen) And OtherOpen = Null And SelectedDoor = Null And (Not ConsoleOpen) And (Not I_294\Using) And SelectedScreen = Null And me\EndingTimer >= 0.0 Then
-			ShouldPlay = Min(AmbientZone, 2.0)
+			ShouldPlay = Min(me\Zone, 2.0)
 		EndIf
 		
 		If PlayerRoom\RoomTemplate\Name <> "pocketdimension" And PlayerRoom\RoomTemplate\Name <> "gateb" And PlayerRoom\RoomTemplate\Name <> "gatea" And (Not MenuOpen) And (Not ConsoleOpen) And (Not InvOpen) Then 
@@ -2120,15 +2121,15 @@ Function MainLoop()
 				
 				PositionEntity(SoundEmitter, EntityX(Camera) + Rnd(-1.0, 1.0), 0.0, EntityZ(Camera) + Rnd(-1.0, 1.0))
 				
-				If Rand(3) = 1 Then AmbientZone = GENERAL
+				If Rand(3) = 1 Then me\Zone = 3
 				
 				If PlayerRoom\RoomTemplate\Name = "room173intro" Then 
-					AmbientZone = PRE_BREACH
+					me\Zone = 4
 				ElseIf PlayerRoom\RoomTemplate\Name = "room860"
 					For e.Events = Each Events
 						If e\EventID = e_room860 Then
 							If e\EventState = 1.0 Then
-								AmbientZone = FOREST
+								me\Zone = 5
 								PositionEntity(SoundEmitter, EntityX(SoundEmitter), 30.0, EntityZ(SoundEmitter))
 							EndIf
 							Exit
@@ -2136,28 +2137,28 @@ Function MainLoop()
 					Next
 				EndIf
 				
-				CurrAmbientSFX = Rand(0, AmbientSFXAmount[AmbientZone] - 1)
+				CurrAmbientSFX = Rand(0, AmbientSFXAmount[me\Zone] - 1)
 				
-				Select AmbientZone
-					Case LCZ, HCZ, EZ
+				Select me\Zone
+					Case 0, 1, 2
 						;[Block]
-						If (Not AmbientSFX(AmbientZone, CurrAmbientSFX)) Then AmbientSFX(AmbientZone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Zone" + (AmbientZone + 1) + "\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
+						If (Not AmbientSFX(me\Zone, CurrAmbientSFX)) Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Zone" + (me\Zone + 1) + "\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
 						;[End Block]
-					Case GENERAL
+					Case 3
 						;[Block]
-						If (Not AmbientSFX(AmbientZone, CurrAmbientSFX)) Then AmbientSFX(AmbientZone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\General\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
+						If (Not AmbientSFX(me\Zone, CurrAmbientSFX)) Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\General\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
 						;[End Block]
-					Case PRE_BREACH
+					Case 4
 						;[Block]
-						If (Not AmbientSFX(AmbientZone, CurrAmbientSFX)) Then AmbientSFX(AmbientZone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Pre-breach\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
+						If (Not AmbientSFX(me\Zone, CurrAmbientSFX)) Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Pre-breach\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
 						;[End Block]
-					Case FOREST
+					Case 5
 						;[Block]
-						If (Not AmbientSFX(AmbientZone, CurrAmbientSFX)) Then AmbientSFX(AmbientZone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Forest\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
+						If (Not AmbientSFX(me\Zone, CurrAmbientSFX)) Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Forest\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
 						;[End Block]
 				End Select
 				
-				AmbientSFXCHN = PlaySound2(AmbientSFX(AmbientZone, CurrAmbientSFX), Camera, SoundEmitter)
+				AmbientSFXCHN = PlaySound2(AmbientSFX(me\Zone, CurrAmbientSFX), Camera, SoundEmitter)
 			EndIf
 			UpdateSoundOrigin(AmbientSFXCHN, Camera, SoundEmitter)
 			
@@ -2269,16 +2270,16 @@ Function MainLoop()
 			EndIf
 		EndIf
 		If CurrFogColor = "" Then
-			Select CurrentZone
-				Case LCZ
+			Select me\Zone
+				Case 0
 					;[Block]
 					CurrFogColor = FogColorLCZ
 					;[End Block]
-				Case HCZ
+				Case 1
 					;[Block]
 					CurrFogColor = FogColorHCZ
 					;[End Block]
-				Case EZ
+				Case 2
 					;[Block]
 					CurrFogColor = FogColorEZ
 					;[End Block]
@@ -5551,57 +5552,36 @@ Function RenderDebugHUD()
 				Exit
 			EndIf
 		Next
-		
-		Local Zone$
-		
-		Select CurrentZone
-			Case LCZ
-				;[Block]
-				Zone = "LCZ"
-				;[End Block]
-			Case HCZ
-				;[Block]
-				Zone = "HCZ"
-				;[End Block]
-			Case EZ
-				;[Block]
-				Zone = "EZ"
-				;[End Block]
-		End Select
-		
-		Text(x, (y + 180 * MenuScale), "Current Zone: " + Zone)
-		Text(x, (y + 200 * MenuScale), "Ambient Zone: " + AmbientZone)
-		Text(x, (y + 220 * MenuScale), "CurrentTrigger: " + CheckTriggers())
 		If PlayerRoom\RoomTemplate\Name = "dimension1499" Then
-			Text(x, y + (240 * MenuScale), "Current Chunk X / Z: (" + (Int((EntityX(me\Collider) + 20) / 40)) + ", "+(Int((EntityZ(me\Collider) + 20) / 40)) + ")")
+			Text(x, y + (180 * MenuScale), "Current Chunk X / Z: (" + (Int((EntityX(me\Collider) + 20) / 40)) + ", "+(Int((EntityZ(me\Collider) + 20) / 40)) + ")")
 			
 			Local CH_Amount% = 0
 			
 			For ch.Chunk = Each Chunk
 				CH_Amount = CH_Amount + 1
 			Next
-			Text(x, y + (260 * MenuScale), "Current Chunk Amount: " + CH_Amount)
+			Text(x, y + (200 * MenuScale), "Current Chunk Amount: " + CH_Amount)
 		Else
-			Text(x, y + (260 * MenuScale), "Current Room Position: (" + PlayerRoom\x + ", " + PlayerRoom\y + ", " + PlayerRoom\z + ")")
+			Text(x, y + (200 * MenuScale), "Current Room Position: (" + PlayerRoom\x + ", " + PlayerRoom\y + ", " + PlayerRoom\z + ")")
 		EndIf
 		
 		If SelectedMonitor <> Null Then
-			Text(x, y + (280 * MenuScale), "Current Monitor: " + SelectedMonitor\ScrOBJ)
+			Text(x, y + (240 * MenuScale), "Current Monitor: " + SelectedMonitor\ScrOBJ)
 		Else
-			Text(x, y + (280 * MenuScale), "Current Monitor: Null")
+			Text(x, y + (240 * MenuScale), "Current Monitor: Null")
 		EndIf
 		
 		If SelectedItem <> Null Then
-			Text(x, y + (300 * MenuScale), "Current Button: " + SelectedItem\ItemTemplate\Name)
+			Text(x, y + (280 * MenuScale), "Current Button: " + SelectedItem\ItemTemplate\Name)
 		Else
-			Text(x, y + (300 * MenuScale), "Current Button: Null")
+			Text(x, y + (280 * MenuScale), "Current Button: Null")
 		EndIf
 		
-		Text(x, y + (340 * MenuScale), "Date and Time: " + CurrentDate() + ", " + CurrentTime())
-		Text(x, y + (360 * MenuScale), "Video memory: " + ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)) + " MB/" + (TotalVidMem() / 1024) + " MB" + Chr(10))
-		Text(x, y + (380 * MenuScale), "Global memory status: " + ((TotalPhys() / 1024) - (AvailPhys() / 1024)) + " MB/" + (TotalPhys() / 1024) + " MB")
-		Text(x, y + (400 * MenuScale), "Triangles Rendered: " + CurrTrisAmount)
-		Text(x, y + (420 * MenuScale), "Active Textures: " + ActiveTextures())	
+		Text(x, y + (320 * MenuScale), "Date and Time: " + CurrentDate() + ", " + CurrentTime())
+		Text(x, y + (340 * MenuScale), "Video memory: " + ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)) + " MB/" + (TotalVidMem() / 1024) + " MB" + Chr(10))
+		Text(x, y + (360 * MenuScale), "Global memory status: " + ((TotalPhys() / 1024) - (AvailPhys() / 1024)) + " MB/" + (TotalPhys() / 1024) + " MB")
+		Text(x, y + (380 * MenuScale), "Triangles Rendered: " + CurrTrisAmount)
+		Text(x, y + (400 * MenuScale), "Active Textures: " + ActiveTextures())	
 	ElseIf chs\DebugHUD = 2
 		Text(x, y, "Player Position: (" + f2s(EntityX(me\Collider), 1) + ", " + f2s(EntityY(me\Collider), 1) + ", " + f2s(EntityZ(me\Collider), 1) + ")")
 		Text(x, y + (20 * MenuScale), "Player Rotation: (" + f2s(EntityPitch(me\Collider), 1) + ", " + f2s(EntityYaw(me\Collider), 1) + ", " + f2s(EntityRoll(me\Collider), 1) + ")")
@@ -6375,32 +6355,32 @@ Function RenderGUI()
 							For x2 = Max(0.0, PlayerX - 6.0) To Min(MapGridSize, PlayerX + 6.0)
 								For z2 = Max(0.0, PlayerZ - 6.0) To Min(MapGridSize, PlayerZ + 6.0)
 									If CoffinDistance > 16.0 Lor Rnd(16.0) < CoffinDistance Then 
-										If CurrMapGrid\Grid[x2 + (z2 * MapGridSize)] > 0 And (CurrMapGrid\Found[x2 + (z2 * MapGridSize)] > 0 Lor SelectedItem\ItemTemplate\TempName = "nav310" Lor SelectedItem\ItemTemplate\TempName = "navulti") Then
+										If CurrGrid\Grid[x2 + (z2 * MapGridSize)] > 0 And (CurrGrid\Found[x2 + (z2 * MapGridSize)] > 0 Lor SelectedItem\ItemTemplate\TempName = "nav310" Lor SelectedItem\ItemTemplate\TempName = "navulti") Then
 											Local DrawX% = x + (PlayerX - 1 - x2) * 24 , DrawY% = y - (PlayerZ - 1 - z2) * 24
 											
 											If x2 + 1.0 =< MapGridSize Then
-												If CurrMapGrid\Grid[(x2 + 1) + (z2 * MapGridSize)] = 0
+												If CurrGrid\Grid[(x2 + 1) + (z2 * MapGridSize)] = 0
 													DrawImage(tt\ImageID[10], DrawX - 12, DrawY - 12)
 												EndIf
 											Else
 												DrawImage(tt\ImageID[10], DrawX - 12, DrawY - 12)
 											EndIf
 											If x2 - 1.0 >= 0.0 Then
-												If CurrMapGrid\Grid[(x2 - 1) + (z2 * MapGridSize)] = 0
+												If CurrGrid\Grid[(x2 - 1) + (z2 * MapGridSize)] = 0
 													DrawImage(tt\ImageID[8], DrawX - 12, DrawY - 12)
 												EndIf
 											Else
 												DrawImage(tt\ImageID[8], DrawX - 12, DrawY - 12)
 											EndIf
 											If z2 - 1.0 >= 0.0 Then
-												If CurrMapGrid\Grid[x2 + ((z2 - 1) * MapGridSize)] = 0
+												If CurrGrid\Grid[x2 + ((z2 - 1) * MapGridSize)] = 0
 													DrawImage(tt\ImageID[7], DrawX - 12, DrawY - 12)
 												EndIf
 											Else
 												DrawImage(tt\ImageID[7], DrawX - 12, DrawY - 12)
 											EndIf
 											If z2 + 1.0 =< MapGridSize Then
-												If CurrMapGrid\Grid[x2 + ((z2 + 1) * MapGridSize)] = 0
+												If CurrGrid\Grid[x2 + ((z2 + 1) * MapGridSize)] = 0
 													DrawImage(tt\ImageID[9], DrawX - 12, DrawY - 12)
 												EndIf
 											Else
@@ -7051,10 +7031,10 @@ Function UpdateMenu()
 								z = Abs(EntityZ(me\Collider) - EntityZ(r\OBJ))
 								
 								If x < 12.0 And z < 12.0 Then
-									CurrMapGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)] = Max(CurrMapGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)], 1.0)
+									CurrGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)] = Max(CurrGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)], 1.0)
 									If x < 4.0 And z < 4.0 Then
 										If Abs(EntityY(me\Collider) - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r
-										CurrMapGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)] = 1
+										CurrGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)] = 1
 									EndIf
 								EndIf
 							Next
@@ -7110,10 +7090,10 @@ Function UpdateMenu()
 								z = Abs(EntityZ(me\Collider) - EntityZ(r\OBJ))
 								
 								If x < 12.0 And z < 12.0 Then
-									CurrMapGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)] = Max(CurrMapGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)], 1.0)
+									CurrGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)] = Max(CurrGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)], 1.0)
 									If x < 4.0 And z < 4.0 Then
 										If Abs(EntityY(me\Collider) - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r
-										CurrMapGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)] = 1
+										CurrGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)] = 1
 									EndIf
 								EndIf
 							Next
@@ -8513,7 +8493,7 @@ Function InitStats()
 	ReadDifficultyFile()
 End Function
 
-Function InitNewGame(Zone% = LCZ)
+Function InitNewGame()
 	CatchErrors("Uncaught (InitNewGame)")
 	
 	Local de.Decals, d.Doors, it.Items, r.Rooms, sc.SecurityCams, e.Events
@@ -8536,7 +8516,7 @@ Function InitNewGame(Zone% = LCZ)
 	Next	
 	
 	If SelectedMap = "" Then
-		CreateMap(Zone)
+		CreateMap()
 	Else
 		LoadMap("Map Creator\Maps\" + SelectedMap)
 	EndIf
@@ -8847,7 +8827,7 @@ Function NullGame(PlayButtonSFX% = True)
 		Delete(sub)
 	Next
 	
-	Delete(CurrMapGrid)
+	Delete(CurrGrid)
 	
 	For s.Screens = Each Screens
 		Delete(s)
@@ -9344,28 +9324,26 @@ Function UpdateMTF()
 			Next
 			
 			If entrance <> Null Then 
-				If CurrentZone = EZ Then
-					If Abs(EntityZ(entrance\OBJ) - EntityZ(me\Collider)) < 30.0 Then
-						If PlayerInReachableRoom() Then
-							PlayAnnouncement("SFX\Character\MTF\Announc.ogg")
+				If Abs(EntityZ(entrance\OBJ) - EntityZ(me\Collider)) < 30.0 Then
+					If PlayerInReachableRoom() Then
+						PlayAnnouncement("SFX\Character\MTF\Announc.ogg")
+					EndIf
+					
+					MTFTimer = fps\Factor[0]
+					
+					Local leader.NPCs
+					
+					For i = 0 To 2
+						n.NPCs = CreateNPC(NPCTypeMTF, EntityX(entrance\OBJ) + 0.3 * (i - 1), 0.6, EntityZ(entrance\OBJ) + 8.0)
+						
+						If i = 0 Then 
+							leader = n
+						Else
+							n\MTFLeader = leader
 						EndIf
 						
-						MTFTimer = fps\Factor[0]
-						
-						Local leader.NPCs
-						
-						For i = 0 To 2
-							n.NPCs = CreateNPC(NPCTypeMTF, EntityX(entrance\OBJ) + 0.3 * (i - 1), 0.6, EntityZ(entrance\OBJ) + 8.0)
-							
-							If i = 0 Then 
-								leader = n
-							Else
-								n\MTFLeader = leader
-							EndIf
-							
-							n\PrevX = i
-						Next
-					EndIf
+						n\PrevX = i
+					Next
 				EndIf
 			EndIf
 		EndIf
