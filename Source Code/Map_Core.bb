@@ -8099,7 +8099,7 @@ Function CreateMap(Zone%)
 	EndIf
 	
 	; ~ Force more ROOM4 and ROOM2C
-	If RoomAmount[ROOM4] < 1 Then ; ~ We want at least one ROOM4
+	If RoomAmount[4] < 1 Then ; ~ We want at least one ROOM4
 		Temp = 0
 		For y = 2 To MapGridSize - 2
 			For x = 2 To MapGridSize - 2
@@ -8438,17 +8438,7 @@ Function CreateMap(Zone%)
 						ElseIf CurrMapGrid\Grid[x + (y * MapGridSize)] = MapGrid_EndTile
 							Color(200, 0, 0)
 						Else
-							If CurrMapGrid\RoomShape[x + (y * MapGridSize)] = ROOM1 Then
-								Color(255, 255, 255)
-							ElseIf CurrMapGrid\RoomShape[x + (y * MapGridSize)] = ROOM2
-								Color(255, 255, 50)
-							ElseIf CurrMapGrid\RoomShape[x + (y * MapGridSize)] = ROOM2C
-								Color(150, 50, 150)
-							ElseIf CurrMapGrid\RoomShape[x + (y * MapGridSize)] = ROOM3
-								Color(50, 255, 255)
-							Else
-								Color(50, 50, 255)
-							EndIf
+							Color(255, 255, 255)
 						EndIf
 						Rect((i * 32) * MenuScale, (y * 32) * MenuScale, 30 * MenuScale, 30 * MenuScale)
 					EndIf
