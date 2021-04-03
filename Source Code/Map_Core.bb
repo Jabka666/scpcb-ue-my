@@ -7905,8 +7905,6 @@ Function CreateMap(Zone%)
 	Local i%, Temp%
 	Local Width%, Height%, TempHeight%, yHallways%
 	
-	I_Zone\Transition[0] = 13
-	I_Zone\Transition[1] = 7
 	I_Zone\HasCustomForest = False
 	I_Zone\HasCustomMT = False
 	
@@ -7972,11 +7970,7 @@ Function CreateMap(Zone%)
 				EndIf
 				
 				For y2 = y - TempHeight To y
-					If y2 = 1 Then ; ~ A room leading from zone to another
-						CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] = 255
-					Else
-						CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] = 1
-					EndIf
+					CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] = 1
 				Next
 				If TempHeight = Height Then Temp = x2
 			EndIf
@@ -7992,8 +7986,8 @@ Function CreateMap(Zone%)
 		For x = 1 To MapGridSize - 1
 			If CurrMapGrid\Grid[x + (y * MapGridSize)] > 0 Then
 				Temp = Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1.0)
-				Temp = Temp + Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1.0)
-				If CurrMapGrid\Grid[x + (y * MapGridSize)] < 255 Then CurrMapGrid\Grid[x + (y * MapGridSize)] = Temp
+				Temp = Temp + Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1.0)			
+				CurrMapGrid\Grid[x + (y * MapGridSize)] = Temp
 				Select Temp
 					Case 1
 						;[Block]
@@ -8232,9 +8226,7 @@ Function CreateMap(Zone%)
 	Temp = 0
 	For y = MapGridSize - 1 To 1 Step -1
 		For x = 1 To MapGridSize - 2
-			If CurrMapGrid\Grid[x + (y * MapGridSize)] = 255 Then
-				r.Rooms = CreateRoom(Zone, ROOM2, x * 8.0, 0.0, y * 8.0, "room2checkpoint")
-			ElseIf CurrMapGrid\Grid[x + (y * MapGridSize)] > 0 Then
+			If CurrMapGrid\Grid[x + (y * MapGridSize)] > 0 Then
 				Temp = Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1.0)
 				Select Temp ; ~ Amount of bordering rooms
 					Case 1 ; ~ Generate ROOM1

@@ -3085,11 +3085,6 @@ Function UpdateMouseLook()
 	If me\KillTimer >= 0.0 And me\FallTimer >= 0.0 Then
 		me\HeadDropSpeed = 0.0
 		
-		If IsNaN(EntityX(me\Collider)) Then
-			PositionEntity(me\Collider, EntityX(Camera, True), EntityY(Camera, True) - 0.5, EntityZ(Camera, True), True)
-			CreateConsoleMsg("RESETTING COORDINATES! New coordinates: " + EntityX(me\Collider))				
-		EndIf
-		
 		Local Up# = (Sin(me\Shake) / (20.0 + me\CrouchState * 20.0)) * 0.6		
 		Local Roll# = Max(Min(Sin(me\Shake / 2.0) * 2.5 * Min(me\Injuries + 0.25, 3.0), 8.0), -8.0)
 		
@@ -3097,14 +3092,15 @@ Function UpdateMouseLook()
 		RotateEntity(Camera, 0.0, EntityYaw(me\Collider), Roll * 0.5)
 		
 		; ~ Update the smoothing que to smooth the movement of the mouse
-		mo\Mouse_X_Speed_1 = CurveValue(MouseXSpeed() * (opt\MouseSensitivity + 0.6) , mo\Mouse_X_Speed_1, (6.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing)
-		If IsNaN(mo\Mouse_X_Speed_1) Then mo\Mouse_X_Speed_1 = 0.0
+		mo\Mouse_X_Speed_1 = CurveValue(MouseXSpeed() * (opt\MouseSensitivity + 0.6) , mo\Mouse_X_Speed_1, (6.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing) 
 		If opt\InvertMouse Then
 			mo\Mouse_Y_Speed_1 = CurveValue(-MouseYSpeed() * (opt\MouseSensitivity + 0.6), mo\Mouse_Y_Speed_1, (6.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing)
 		Else
 			mo\Mouse_Y_Speed_1 = CurveValue(MouseYSpeed() * (opt\MouseSensitivity + 0.6), mo\Mouse_Y_Speed_1, (6.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing)
 		EndIf
-		If IsNaN(mo\Mouse_Y_Speed_1) Then mo\Mouse_Y_Speed_1 = 0.0
+		If IsNaN(mo\Mouse_Y_Speed_1) Then
+			StopMouseMovement()
+		EndIf
 		
 		Local The_Yaw# = ((mo\Mouse_X_Speed_1)) * mo\Mouselook_X_Inc / (1.0 + wi\BallisticVest)
 		Local The_Pitch# = ((mo\Mouse_Y_Speed_1)) * mo\Mouselook_Y_Inc / (1.0 + wi\BallisticVest)
