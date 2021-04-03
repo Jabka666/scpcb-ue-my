@@ -37,7 +37,7 @@ Function CheckForPropModel%(File$)
 		Return(CopyEntity(o\LeverModelID[1]))
 	ElseIf Instr(File, "Button.") <> 0 ; ~ Check for "Button"
 		Return(CopyEntity(o\ButtonModelID[0]))
-	ElseIf Instr(File, "door01") <> 0 ; ~ Check for "Door01"
+	ElseIf Instr(File, "Door01") <> 0 ; ~ Check for "Door01"
 		Return(CopyEntity(o\DoorModelID[0]))
 	ElseIf Instr(File, "\doorframe") <> 0 ; ~ Check for "DoorFrame"
 		Return(CopyEntity(o\DoorModelID[1]))
@@ -2387,7 +2387,7 @@ Function UpdateDoors()
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fps\Factor[0]) / 180.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * fps\Factor[0] / 180.0, 0.0, 0.0)
 							If d\OpenState < 15.0 And d\OpenState + fps\Factor[0] >= 15.0
-								If opt\ParticleAmount = 2 Then
+								If opt\ParticleAmount = 2
 									For i = 0 To Rand(75, 99)
 										Local Pvt% = CreatePivot()
 										
@@ -2838,8 +2838,8 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True, Scripted% = False)
 				If (Not Scripted) Then Return				
 			ElseIf Temp >= d\KeyCard 
 				SelectedItem = Null
-				If d\Locked = 1 Then
-					If ShowMsg Then
+				If ShowMsg Then
+					If d\Locked = 1 Then
 						PlaySound_Strict(KeyCardSFX2)
 						If Temp = 1 Then 
 							CreateMsg("The keycard was inserted into the slot. UNKNOWN ERROR! " + Chr(34) + "Do" + Chr(Rand(48, 122)) + "s th" + Chr(Rand(48, 122)) + " B" + Chr(Rand(48, 122)) + "ack " + Chr(Rand(48, 122)) + "oon howl? " + Chr(Rand(48, 122)) + "es. N" + Chr(Rand(48, 122)) + ". Ye" + Chr(Rand(48, 122)) + ". " + Chr(Rand(48, 122)) + "o." + Chr(34), 8.0)
@@ -2850,10 +2850,8 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True, Scripted% = False)
 								CreateMsg("The keycard was inserted into the slot but nothing happened.", 6.0)
 							EndIf
 						EndIf
-					EndIf
-					If (Not Scripted) Then Return
-				Else
-					If ShowMsg Then
+						If (Not Scripted) Then Return
+					Else
 						PlaySound_Strict(KeyCardSFX1)
 						If Temp = 9 Then
 							CreateMsg("You hold the key close to the slot.", 6.0)
@@ -2905,19 +2903,17 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True, Scripted% = False)
 			EndIf
 		EndIf
 		SelectedItem = Null
-		If Temp <> 0 Then
-			If Temp >= 3 Then
-				If ShowMsg Then
+		If ShowMsg Then
+			If Temp <> 0 Then
+				If Temp >= 3 Then
 					PlaySound_Strict(ButtonSFX)
 					If Temp = 4 Then
 						CreateMsg("There is no place to insert the key.", 6.0)
 					Else
 						CreateMsg("The type of this slot doesn't require keycards.", 6.0)
 					EndIf
-				EndIf
-				If (Not Scripted) Then Return
-			Else
-				If ShowMsg Then
+					If (Not Scripted) Then Return
+				Else
 					PlaySound_Strict(ScannerSFX1)
 					If Temp = 2 Then
 						CreateMsg("You hold the key onto the scanner. The scanner reads: " + Chr(34) + "Unknown DNA verified. ERROR! Access granted." + Chr(34), 6.0)
@@ -2925,13 +2921,11 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True, Scripted% = False)
 						CreateMsg("You place the palm of the hand onto the scanner. The scanner reads: " + Chr(34) + "DNA verified. Access granted." + Chr(34), 6.0)
 					EndIf
 				EndIf
-			EndIf
-		Else
-			If ShowMsg Then
+			Else
 				PlaySound_Strict(ScannerSFX2)
 				CreateMsg("You placed your palm onto the scanner. The scanner reads: " + Chr(34) + "DNA doesn't match known sample. Access denied." + Chr(34), 6.0)
+				If (Not Scripted) Then Return			
 			EndIf
-			If (Not Scripted) Then Return			
 		EndIf
 	Else
 		If d\Locked = 1 Then
@@ -3087,14 +3081,11 @@ Function UpdateDecals()
 					;[End Block]
 			End Select
 			
-			If d\Size >= d\MaxSize Then
-				d\SizeChange = 0.0
-				d\Size = d\MaxSize
-			EndIf
+			If d\Size >= d\MaxSize Then d\SizeChange = 0.0 : d\Size = d\MaxSize
 		EndIf
 		
 		If d\AlphaChange <> 0.0 Then
-			d\Alpha = Min(d\Alpha + (fps\Factor[0] * d\AlphaChange), 1.0)
+			d\Alpha = Min(d\Alpha + fps\Factor[0] * d\AlphaChange, 1.0)
 			EntityAlpha(d\OBJ, d\Alpha)
 		EndIf
 		
@@ -3104,6 +3095,7 @@ Function UpdateDecals()
 		
 		If d\Size =< 0.0 Lor d\Alpha =< 0.0 Lor d\LifeTime = 5.0 Then
 			FreeEntity(d\OBJ) : d\OBJ = 0
+			
 			Delete(d)
 		EndIf
 	Next
@@ -4136,33 +4128,87 @@ Function FillRoom(r.Rooms)
 			de.Decals = CreateDecal(3, r\x - 2200.0 * RoomScale, r\y - 10688.0 * RoomScale + 0.01, r\z + 1000.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.5)
 			EntityParent(de\OBJ, r\OBJ)
 			;[End Block]
-		Case "room1checkpoint_lcz", "room1checkpoint_hcz", "room1checkpoint_ez"
+		Case "room2checkpoint"
 			;[Block]
-			r\RoomDoors.Doors[0] = CreateDoor(r\x + 315.0 * RoomScale, r\y, r\z - 453.0, 0.0, r, False, ((r\RoomTemplate\Name = "room1checkpoint_hcz") * Heavy_Door) + Default_Door, 3)
+			r\RoomDoors.Doors[0] = CreateDoor(r\x + 48.0 * RoomScale, r\y, r\z - 128.0 * RoomScale, 0.0, r, False, Default_Door, 3)
+			r\RoomDoors[0]\AutoClose = False : r\RoomDoors[0]\Timer = 70.0 * 5.0
+			PositionEntity(r\RoomDoors[0]\Buttons[0], r\x - 152.0 * RoomScale, EntityY(r\RoomDoors[0]\Buttons[0], True), r\z - 346.0 * RoomScale, True)
+			PositionEntity(r\RoomDoors[0]\Buttons[1], r\x - 152.0 * RoomScale, EntityY(r\RoomDoors[0]\Buttons[1], True), r\z + 90.0 * RoomScale, True)
 			
-			r\RoomDoors.Doors[1] = CreateDoor(r\x - 376.0 * RoomScale, r\y, r\z - 459.0, 0.0, r, False, ((r\RoomTemplate\Name = "room1checkpoint_hcz") * Heavy_Door) + Default_Door, 3)
+			r\RoomDoors.Doors[1] = CreateDoor(r\x - 352.0 * RoomScale, r\y, r\z - 128.0 * RoomScale, 0.0, r, False, Default_Door, 3)
+			r\RoomDoors[1]\AutoClose = False : r\RoomDoors[1]\Timer = 70.0 * 5.0
+			For i = 0 To 1
+				FreeEntity(r\RoomDoors[1]\Buttons[i]) : r\RoomDoors[1]\Buttons[i] = 0
+			Next
 			
-			; ~ Elevator door
-			;r\RoomDoors.Doors[2] = CreateDoor(r\x - 2.0 * RoomScale, r\y, r\z - 1016.0 * RoomScale, 0.0, r, False, Elevator_Door)
+			r\RoomDoors[0]\LinkedDoor = r\RoomDoors[1]
+			r\RoomDoors[1]\LinkedDoor = r\RoomDoors[0]
 			
 			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x + 222.0 * RoomScale, r\y + 143.0 * RoomScale, r\z - 437.0 * RoomScale)
+			PositionEntity(r\Objects[0], r\x + 720.0 * RoomScale, r\y + 120.0 * RoomScale, r\z + 333.0 * RoomScale)
+			EntityParent(r\Objects[0], r\OBJ)
+			
+			sc.SecurityCams = CreateSecurityCam(r\x + 192.0 * RoomScale, r\y + 704.0 * RoomScale, r\z - 960.0 * RoomScale, r)
+			sc\Angle = 45.0 : sc\Turn = 0.0
+			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
+			
+			; ~ Monitors at the both sides
+			r\Objects[2] = CopyEntity(o\MonitorModelID[1], r\OBJ)
+			PositionEntity(r\Objects[2], r\x - 152.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 124.0 * RoomScale, True)
+			ScaleEntity(r\Objects[2], 2.0, 2.0, 2.0)
+			RotateEntity(r\Objects[2], 0.0, 180.0, 0.0)
+			EntityFX(r\Objects[2], 1)
+			
+			r\Objects[3] = CopyEntity(o\MonitorModelID[1], r\OBJ)
+			PositionEntity(r\Objects[3], r\x - 152.0 * RoomScale, 384.0 * RoomScale, r\z - 380.0 * RoomScale, True)
+			ScaleEntity(r\Objects[3], 2.0, 2.0, 2.0)
+			RotateEntity(r\Objects[3], 0.0, 0.0, 0.0)
+			EntityFX(r\Objects[3], 1)
+			
+			If CurrMapGrid\Grid[Floor(r\x / 8.0) + ((Floor(r\z / 8.0) - 1) * MapGridSize)] = 0 Then
+				d.Doors = CreateDoor(r\x, r\y, r\z - 4.0, 0.0, r, False, Heavy_Door, 0, "GEAR")
+				d\AutoClose = False : d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+				FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			EndIf
+			;[End Block]
+		Case "room2checkpoint2"
+			;[Block]
+			r\RoomDoors.Doors[0] = CreateDoor(r\x - 48.0 * RoomScale, r\y, r\z + 128.0 * RoomScale, 0.0, r, False, Default_Door, 5)
+			r\RoomDoors[0]\AutoClose = False : r\RoomDoors[0]\Timer = 70.0 * 5.0
+			PositionEntity(r\RoomDoors[0]\Buttons[0], r\x + 152.0 * RoomScale, EntityY(r\RoomDoors[0]\Buttons[0], True), r\z - 90.0 * RoomScale, True)			
+			PositionEntity(r\RoomDoors[0]\Buttons[1], r\x + 152.0 * RoomScale, EntityY(r\RoomDoors[0]\Buttons[1], True), r\z + 346.0 * RoomScale, True)
+			
+			r\RoomDoors.Doors[1] = CreateDoor(r\x + 352.0 * RoomScale, r\y, r\z + 128.0 * RoomScale, 0.0, r, False, Default_Door, 5)
+			r\RoomDoors[1]\AutoClose = False : r\RoomDoors[1]\Timer = 70.0 * 5.0
+			For i = 0 To 1
+				FreeEntity(r\RoomDoors[1]\Buttons[i]) : r\RoomDoors[1]\Buttons[i] = 0
+			Next
+			
+			r\RoomDoors[0]\LinkedDoor = r\RoomDoors[1]
+			r\RoomDoors[1]\LinkedDoor = r\RoomDoors[0]
+			
+			r\Objects[0] = CreatePivot()
+			PositionEntity(r\Objects[0], r\x - 720.0 * RoomScale, r\y + 120.0 * RoomScale, r\z + 464.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
 			
 			; ~ Monitors at the both sides
-			r\Objects[1] = CopyEntity(o\MonitorModelID[1], r\OBJ)
-			PositionEntity(r\Objects[1], r\x - 138.0 * RoomScale, r\y + 372.0 * RoomScale, r\z + 301.0 * RoomScale, True)
-			ScaleEntity(r\Objects[1], 2.0, 2.0, 2.0)
-			RotateEntity(r\Objects[1], 0.0, 90.0, 0.0)
-			
 			r\Objects[2] = CopyEntity(o\MonitorModelID[1], r\OBJ)
-			PositionEntity(r\Objects[2], r\x - 0.5 * RoomScale, r\y + 372.0 * RoomScale, r\z - 510.0 * RoomScale, True)
+			PositionEntity(r\Objects[2], r\x + 152.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 380.0 * RoomScale, True)
 			ScaleEntity(r\Objects[2], 2.0, 2.0, 2.0)
-			RotateEntity(r\Objects[2], 0.0, 0.0, 0.0)
+			RotateEntity(r\Objects[2], 0.0, 180.0, 0.0)
+			EntityFX(r\Objects[2], 1)
 			
-			;sc.SecurityCams = CreateSecurityCam(r\x - 576.0, r\y + 447.0, r\z - 992.0 * RoomScale, r)
-			;sc\Angle = 45.0 : sc\Turn = 0.0
-			;TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
+			r\Objects[3] = CopyEntity(o\MonitorModelID[1], r\OBJ)
+			PositionEntity(r\Objects[3], r\x + 152.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 124.0 * RoomScale, True)
+			ScaleEntity(r\Objects[3], 2.0, 2.0, 2.0)
+			RotateEntity(r\Objects[3], 0.0, 0.0, 0.0)
+			EntityFX(r\Objects[3], 1)
+			
+			If CurrMapGrid\Grid[Floor(r\x / 8.0) + ((Floor(r\z / 8.0) - 1) * MapGridSize)] = 0 Then
+				d.Doors = CreateDoor(r\x, r\y, r\z - 4.0, 0.0, r, False, Default_Door, 0, "GEAR")
+				d\AutoClose = False : d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+				FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			EndIf
 			;[End Block]
 		Case "room2pit"
 			;[Block]
@@ -8248,14 +8294,14 @@ Function CreateMap(Zone%)
 			;[End Block]
 		Case HCZ
 			;[Block]
-			CurrMapGrid\RoomName[StartX + (StartY * MapGridSize)] = "room1checkpoint_hcz"
+			CurrMapGrid\RoomName[StartX + (StartY * MapGridSize)] = "room1endroom2"
 			r.Rooms = CreateRoom(Zone, ROOM1, StartX * RoomSpacing, 0.0, StartY * RoomSpacing, CurrMapGrid\RoomName[StartX + (StartY * MapGridSize)])
 			r\Angle = 0.0
 			TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 			;[End Block]
 		Case EZ
 			;[Block]
-			CurrMapGrid\RoomName[StartX + (StartY * MapGridSize)] = "room1checkpoint_ez"
+			CurrMapGrid\RoomName[StartX + (StartY * MapGridSize)] = "room1endroom3"
 			r.Rooms = CreateRoom(Zone, ROOM1, StartX * RoomSpacing, 0.0, StartY * RoomSpacing, CurrMapGrid\RoomName[StartX + (StartY * MapGridSize)])
 			r\Angle = 0.0
 			TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
@@ -8269,7 +8315,7 @@ Function CreateMap(Zone%)
 				Select Zone
 					Case LCZ
 						;[Block]
-						CurrMapGrid\RoomName[x + (y * MapGridSize)] = "room1checkpoint_lcz"
+						CurrMapGrid\RoomName[x + (y * MapGridSize)] = "room1endroom"
 						r.Rooms = CreateRoom(Zone, ROOM1, x * RoomSpacing, 0.0, y * RoomSpacing, CurrMapGrid\RoomName[x + (y * MapGridSize)])
 						r\Angle = 180.0
 						TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
