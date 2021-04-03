@@ -84,7 +84,7 @@ EndIf
 
 ; ~ New "fake fullscreen" - ENDSHN Psst, it's called borderless windowed mode -- Love Mark
 If opt\DisplayMode = 1 Then
-	Graphics3DExt(DesktopWidth(), DesktopHeight(), 32, 4)
+	Graphics3DExt(DesktopWidth(), DesktopHeight(), 0, 4)
 	
 	If (Not opt\LauncherEnabled) Then
 		opt\RealGraphicWidth = DesktopWidth() : opt\GraphicWidth = DesktopWidth()
@@ -93,7 +93,7 @@ If opt\DisplayMode = 1 Then
 	
 	opt\AspectRatio = (Float(opt\GraphicWidth) / Float(opt\GraphicHeight)) / (Float(opt\RealGraphicWidth) / Float(opt\RealGraphicHeight))
 Else
-	Graphics3DExt(opt\GraphicWidth, opt\GraphicHeight, 32, (opt\DisplayMode = 2) + 1)
+	Graphics3DExt(opt\GraphicWidth, opt\GraphicHeight, 0, (opt\DisplayMode = 2) + 1)
 	
 	If (Not opt\LauncherEnabled) Then
 		opt\RealGraphicWidth = opt\GraphicWidth
@@ -2471,7 +2471,7 @@ Function MainLoop()
 				DarkA = Max(DarkA, Min(Abs(me\FallTimer / 400.0), 1.0))				
 			EndIf
 			
-			If SelectedItem <> Null And (Not InvOpen) And (Not mo\MouseDown1) Then
+			If SelectedItem <> Null And (Not InvOpen) Then
 				If IsItemInFocus() Then
 					DarkA = Max(DarkA, 0.5)
 				EndIf
@@ -8505,15 +8505,14 @@ Function LoadEntities(Zone% = LCZ)
 		CloseDir(Dir)
 	EndIf
 	
-	; ~ Misc objects
+	; ~ Create chunks
 	RenderLoading(40, "CHUNKS")
 	
-	; ~ Create chunks
 	SetChunkDataValues()
 	
+	; ~ Load materials
 	RenderLoading(45, "MATERIALS")
 	
-	; ~ Load materials
 	LoadMaterials(MaterialsFile)
 	
 	; ~ Create command list
@@ -8540,9 +8539,9 @@ Function LoadEntities(Zone% = LCZ)
 	CreateConsoleMsg("  - disable106 / enable106")
 	CreateConsoleMsg("  - spawn [NPC type]")
 	
+	; ~ Apply graphics changes
 	RenderLoading(50, "GRAPHICS")
 	
-	; ~ Apply graphics changes
 	TextureLodBias(opt\TextureDetailsLevel)
 	TextureAnisotropic(opt\AnisotropicLevel)
 	
@@ -8635,11 +8634,10 @@ Function InitNewGame(Zone% = LCZ)
 		Select Zone
 			Case LCZ
 				;[Block]
-				If IntroEnabled Then
+				If opt\IntroEnabled Then
 					If r\RoomTemplate\Name = "room173intro" Then
 						PositionEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.7, EntityZ(r\OBJ))
 						PlayerRoom = r
-						Exit
 					EndIf
 				Else
 					If r\RoomTemplate\Name = "room173" Then 
@@ -8659,24 +8657,21 @@ Function InitNewGame(Zone% = LCZ)
 						EntityType(it\Collider, HIT_ITEM)
 						EntityParent(it\Collider, 0)
 						ItemAmount = ItemAmount + 1
-						Exit
 					EndIf
 				EndIf
 				;[End Block]
 			Case HCZ
 				;[Block]
-				If r\RoomTemplate\Name = "room1endroom2" Then 
-					PositionEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.7, EntityZ(r\OBJ))
+				If r\RoomTemplate\Name = "room1checkpoint_hcz" Then 
+					PositionEntity(me\Collider, EntityX(r\OBJ, True), EntityY(r\OBJ, True) + 0.7, EntityZ(r\OBJ, True), True)
 					PlayerRoom = r
-					Exit
 				EndIf
 				;[End Block]
 			Case EZ
 				;[Block]
-				If r\RoomTemplate\Name = "room1endroom3" Then
+				If r\RoomTemplate\Name = "room1checkpoint_ez" Then
 					PositionEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.7, EntityZ(r\OBJ))
 					PlayerRoom = r
-					Exit
 				EndIf
 				;[End Block]
 		End Select

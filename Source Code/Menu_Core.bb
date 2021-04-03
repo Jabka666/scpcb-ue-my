@@ -2116,11 +2116,9 @@ Function RenderLoading(Percent%, Assets$ = "")
 		Cls()
 		
 		If Percent > 20 Then UpdateMusic()
-			
-		If (Not ShortLoading) Then
-			If Percent > (100.0 / SelectedLoadingScreen\TxtAmount) * (LoadingScreenText + 1) Then
-				LoadingScreenText = LoadingScreenText + 1
-			EndIf
+		
+		If Percent > (100.0 / SelectedLoadingScreen\TxtAmount) * (LoadingScreenText + 1) Then
+			LoadingScreenText = LoadingScreenText + 1
 		EndIf
 		
 		If (Not SelectedLoadingScreen\DisableBackground) Then
@@ -2154,7 +2152,7 @@ Function RenderLoading(Percent%, Assets$ = "")
 		
 		Color(255, 255, 255)
 		If opt\SmoothHUD Then
-			Text(mo\Viewport_Center_X, opt\GraphicHeight - (70 * MenuScale), Percent + "%", True, True)
+			Text(x + (Width / 2), opt\GraphicHeight - (70 * MenuScale), Percent + "%", True, True)
 		EndIf
 		
 		If SelectedLoadingScreen\Title = "CWM" Then
@@ -2249,19 +2247,19 @@ Function RenderLoading(Percent%, Assets$ = "")
 				StrTemp = Replace(SelectedLoadingScreen\Txt[0], Mid(SelectedLoadingScreen\Txt[0], Rand(1, Len(StrTemp) - 1), 1), Chr(Rand(130, 250)))
 			Next		
 			SetFont(fo\FontID[Font_Default])
-			RowText(StrTemp, mo\Viewport_Center_X - (200 * MenuScale), mo\Viewport_Center_Y + (250 * MenuScale), 400 * MenuScale, 300 * MenuScale, True)	
+			RowText(StrTemp, mo\Viewport_Center_X - (200 * MenuScale), mo\Viewport_Center_Y + (280 * MenuScale), 400 * MenuScale, 300 * MenuScale, True)	
 		Else
 			Color(0, 0, 0)
 			SetFont(fo\FontID[Font_Default_Big])
 			Text(mo\Viewport_Center_X + 1, mo\Viewport_Center_Y - (451 * MenuScale), SelectedLoadingScreen\Title, True, True)
 			SetFont(fo\FontID[Font_Default])
-			RowText(SelectedLoadingScreen\Txt[LoadingScreenText], mo\Viewport_Center_X - (199 * MenuScale), mo\Viewport_Center_Y + (251 * MenuScale), 400 * MenuScale, 300 * MenuScale, True)
+			RowText(SelectedLoadingScreen\Txt[LoadingScreenText], mo\Viewport_Center_X - (199 * MenuScale), mo\Viewport_Center_Y + (281 * MenuScale), 400 * MenuScale, 300 * MenuScale, True)
 			
 			Color(255, 255, 255)
 			SetFont(fo\FontID[Font_Default_Big])
 			Text(mo\Viewport_Center_X, mo\Viewport_Center_Y - (450 * MenuScale), SelectedLoadingScreen\Title, True, True)
 			SetFont(fo\FontID[Font_Default])
-			RowText(SelectedLoadingScreen\Txt[LoadingScreenText], mo\Viewport_Center_X - (200 * MenuScale), mo\Viewport_Center_Y + (250 * MenuScale), 400 * MenuScale, 300 * MenuScale, True)
+			RowText(SelectedLoadingScreen\Txt[LoadingScreenText], mo\Viewport_Center_X - (200 * MenuScale), mo\Viewport_Center_Y + (280 * MenuScale), 400 * MenuScale, 300 * MenuScale, True)
 		EndIf
 		
 		If Percent = 100 Then 
@@ -2324,13 +2322,14 @@ End Function
 Function RenderBar(Img%, x%, y%, Width%, Height%, Value1#, Value2# = 100.0, R% = 100, G% = 100, B% = 100)
 	Local i%
 	
-	Rect(x, y, Width + 4, Height, False)
+	Color(255, 255, 255)
+	Rect(x, y, Width + (4 * MenuScale), Height, False)
 	If opt\SmoothHUD Then
 		Color(R, G, B)	
-		Rect(x + 3, y + 3, Float((Width - 2) * (Value1 / Value2)), 14)	
+		Rect(x + (3 * MenuScale), y + (3 * MenuScale), (Float((Width - (2 * MenuScale)) * (Value1 / Value2))), 14 * MenuScale)	
 	Else
 		For i = 1 To Int(((Width - 2) * ((Value1 / Value2) / 10.0)))
-			DrawImage(Img, x + 3 + 10 * (i - 1), y + 3)
+			DrawImage(Img, x + 3 + (10 * (i - 1)), y + 3)
 		Next
 	EndIf
 End Function
@@ -2969,7 +2968,7 @@ Function DeleteMenuGadgets()
 	Delete Each MenuSlider
 End Function
 
-Function RowText(A$, x%, y%, W%, H%, Align% = 0, Leading# = 1.0)
+Function RowText(A$, x%, y%, W%, H%, Align% = False, Leading# = 1.0)
 	; ~ Display A$ starting at x, y - no wider than W and no taller than H (all in pixels)
 	; ~ Leading is optional extra vertical spacing in pixels
 	
@@ -2977,45 +2976,45 @@ Function RowText(A$, x%, y%, W%, H%, Align% = 0, Leading# = 1.0)
 	
 	Local LinesShown% = 0
 	Local Height% = StringHeight(A) + Leading
-	Local b$
+	Local s$
 	
 	While Len(A) > 0
 		Local Space$ = Instr(A, " ")
 		
-		If Space = 0 Then Space = Len(A$)
+		If Space = 0 Then Space = Len(A)
 		
 		Local Temp$ = Left(A, Space)
 		Local Trimmed$ = Trim(Temp) ; ~ We might ignore a final space 
 		Local Extra% = 0 ; ~ We haven't ignored it yet
 		
 		; ~ Ignore final space if doing so would make a word fit at end of line:
-		If (StringWidth (b + Temp) > W) And (StringWidth(b + Trimmed) =< W) Then
+		If (StringWidth(s + Temp) > W) And (StringWidth(s + Trimmed) =< W) Then
 			Temp = Trimmed
 			Extra = 1
 		EndIf
 		
-		If StringWidth(b + Temp) > W Then ; ~ Too big, so print what will fit
+		If StringWidth(s + Temp) > W Then ; ~ Too big, so print what will fit
 			If Align Then
-				Text(x + W / 2 - (StringWidth(b) / 2), LinesShown * Height + y, b)
+				Text(x + (W / 2) - (StringWidth(s) / 2), y + (LinesShown * Height), s)
 			Else
-				Text(x, LinesShown * Height + y, b)
+				Text(x, y + (LinesShown * Height), s)
 			EndIf
 			
 			LinesShown = LinesShown + 1
-			b = ""
+			s = ""
 		Else ; ~ Append it to b$ (which will eventually be printed) and remove it from A$
-			b = b + Temp
+			s = s + Temp
 			A = Right(A, Len(A) - (Len(Temp) + Extra))
 		EndIf
 		
 		If ((LinesShown + 1) * Height) > H Then Exit ; ~ The next line would be too tall, so leave
 	Wend
 	
-	If (b <> "") And ((LinesShown + 1) =< H) Then
+	If (s <> "") And ((LinesShown + 1) =< H) Then
 		If Align Then
-			Text(x + W / 2 - (StringWidth(b) / 2), LinesShown * Height + y, b) ; ~ Print any remaining text if it'll fit vertically
+			Text(x + (W / 2) - (StringWidth(s) / 2), y + (LinesShown * Height), s) ; ~ Print any remaining text if it'll fit vertically
 		Else
-			Text(x, LinesShown * Height + y, b) ; ~ Print any remaining text if it'll fit vertically
+			Text(x, y + (LinesShown * Height), s) ; ~ Print any remaining text if it'll fit vertically
 		EndIf
 	EndIf
 End Function
@@ -3028,7 +3027,7 @@ Function GetLineAmount(A$, W%, H%, Leading# = 1.0)
 	
 	Local LinesShown% = 0
 	Local Height% = StringHeight(A) + Leading
-	Local b$
+	Local s$
 	
 	While Len(A) > 0
 		Local Space$ = Instr(A, " ")
@@ -3040,16 +3039,16 @@ Function GetLineAmount(A$, W%, H%, Leading# = 1.0)
 		Local Extra% = 0 ; ~ We haven't ignored it yet
 		
 		; ~ Ignore final space if doing so would make a word fit at end of line:
-		If (StringWidth(b + Temp) > W) And (StringWidth(b + Trimmed) =< W) Then
+		If (StringWidth(s + Temp) > W) And (StringWidth(s + Trimmed) =< W) Then
 			Temp = Trimmed
 			Extra = 1
 		EndIf
 		
-		If StringWidth(b + Temp) > W Then ; ~ Too big, so print what will fit
+		If StringWidth(s + Temp) > W Then ; ~ Too big, so print what will fit
 			LinesShown = LinesShown + 1
-			b = ""
+			s = ""
 		Else ; ~ Append it to b$ (which will eventually be printed) and remove it from A$
-			b = b + Temp
+			s = s + Temp
 			A = Right(A, Len(A) - (Len(Temp) + Extra))
 		EndIf
 		
