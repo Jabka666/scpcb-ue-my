@@ -484,7 +484,7 @@ Function InitEvents()
 	CreateEvent("room2clockroom096", "room2clockroom3", 0)
 	
 	CreateEvent("room1endroom106", "room1endroom", Rand(0, 1))
-	CreateEvent("room1endroom106", "room1endroom3", Rand(0, 1))
+	CreateEvent("room1endroom106", "room1endroom3", 0.3)
 	
 	CreateEvent("room2poffices2", "room2poffices2", 0)
 	
@@ -821,7 +821,7 @@ Function UpdateEvents()
 	
 	Local p.Particles, n.NPCs, r.Rooms, e.Events, e2.Events, de.Decals, du.Dummy1499_1, w.Waypoints
 	Local it.Items, it2.Items, em.Emitters, sc.SecurityCams, sc2.SecurityCams, wayp.Waypoints, do.Doors
-	Local Dist#, i%, Temp%, Temp2%, Temp3%, Pvt%, StrTemp$, j%, k%
+	Local Dist#, i%, Temp%, Pvt%, StrTemp$, j%, k%
 	Local CurrTrigger$ = "", fDir#, Scale#, Tex%
 	Local x#, y#, z#, xTemp#, yTemp#, b%, BT%, SF%, TexName$
 	Local Angle#, GroupName$
@@ -2872,18 +2872,18 @@ Function UpdateEvents()
 									Select i
 										Case 0
 											;[Block]
-											x = (-1452.0) * RoomScale
-											z = (-37.0) * RoomScale
+											x = -1452.0 * RoomScale
+											z = -37.0 * RoomScale
 											;[End Block]
 										Case 1
 											;[Block]
-											x = (-121.0) * RoomScale
+											x = -121.0 * RoomScale
 											z = 188.0 * RoomScale
 											;[End Block]
 										Case 2
 											;[Block]
 											x = 1223.0 * RoomScale
-											z = (-196.0) * RoomScale
+											z = -196.0 * RoomScale
 											;[End Block]
 									End Select
 									
@@ -3029,23 +3029,8 @@ Function UpdateEvents()
 										me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, Sqr(Temp) * 10.0)
 										
 										If Temp < PowTwo(130.0 * RoomScale) Then
-											Select CurrentZone
-												Case LCZ
-													;[Block]
-													StrTemp = "room2posters"
-													;[End Block]
-												Case HCZ
-													;[Block]
-													StrTemp = "room2shaft"
-													;[End Block]
-												Case EZ
-													;[Block]
-													StrTemp = "room3offices2"
-													;[End Block]
-											End Select
-											
 											For r.Rooms = Each Rooms
-												If r\RoomTemplate\Name = StrTemp Then
+												If r\RoomTemplate\Name = "room2shaft" Then
 													GiveAchievement(AchvPD)
 													AchvPDDone = True
 													e\EventState = 0.0
@@ -3054,21 +3039,34 @@ Function UpdateEvents()
 													SecondaryLightOn = PrevSecondaryLightOn
 													PrevSecondaryLightOn = 0.0
 													
-													me\BlinkTimer = -10.0 : me\LightBlink = 5.0 : me\BlurTimer = 1500.0
+													me\BlinkTimer = -10.0
+													me\LightBlink = 5.0
+													
+													me\BlurTimer = 1500.0
 													
 													PlayerRoom = r
 													
 													PlaySound_Strict(LoadTempSound("SFX\Room\PocketDimension\Exit.ogg"))
 													
-													TeleportEntity(me\Collider, EntityX(r\Objects[0], True), 0.7, EntityZ(r\Objects[0], True), 0.3, True)
+													TeleportEntity(me\Collider, EntityX(r\Objects[0], True), 0.4, EntityZ(r\Objects[0], True), 0.3, True)
 													
-													UpdateDoorsTimer = 0.0
-													UpdateDoors()
 													UpdateRooms()
-													Curr106\State = 10000.0 : Curr106\Idle = 0
+													UpdateDoors()
+													Curr106\State = 10000.0
+													Curr106\Idle = 0
 													
 													de.Decals = CreateDecal(0, EntityX(r\Objects[0], True), EntityY(r\Objects[0], True), EntityZ(r\Objects[0], True), 270.0, Rnd(360.0), 0.0)
-													TeleportEntity(de\OBJ, EntityX(r\Objects[0], True), EntityY(r\Objects[0], True), EntityZ(r\Objects[0], True), 0.0, True, 4.0, True)
+													TeleportEntity(de\OBJ, EntityX(r\Objects[0], True), EntityY(r\Objects[0], True) + 0.6, EntityZ(r\Objects[0], True), 0.0, True, 4.0, True)
+													
+													For e2.Events = Each Events
+														If e2\EventID = e_room2sl
+															e2\EventState3 = 0.0
+															UpdateLever(e2\room\Levers[0])
+															RotateEntity(e2\room\Levers[0], 0.0, EntityYaw(e2\room\Levers[0]), 0.0)
+															TurnCheckpointMonitorsOff()
+															Exit
+														EndIf
+													Next
 													Exit
 													Return
 												EndIf
@@ -3081,49 +3079,43 @@ Function UpdateEvents()
 						
 						If EntityY(me\Collider) < -1600.0 * RoomScale Then
 							If EntityDistanceSquared(me\Collider, e\room\Objects[8]) > PowTwo(4750.0 * RoomScale) Then
-								Select CurrentZone
-									Case LCZ
-										;[Block]
-										StrTemp = "room914"
-										Temp2 = 4
-										;[End Block]
-									Case HCZ
-										;[Block]
-										StrTemp = "room106"
-										Temp2 = 10
-										;[End Block]
-									Case EZ
-										;[Block]
-										StrTemp = "roomo5"
-										Temp2 = 0
-										;[End Block]
-								End Select
-								
+								me\DropSpeed = 0.0
+								me\BlurTimer = 1500.0
+								PositionEntity(me\Collider, EntityX(e\room\OBJ, True), 0.4, EntityX(e\room\OBJ, True))
 								For r.Rooms = Each Rooms
-									If r\RoomTemplate\Name = StrTemp Then
-										GiveAchievement(AchvPD)
-										AchvPDDone = True
+									If r\RoomTemplate\Name = "room106" Then
 										e\EventState = 0.0
 										e\EventState2 = 0.0
 										
+										TeleportEntity(me\Collider, EntityX(r\Objects[10], True), 0.4, EntityZ(r\Objects[10], True), 0.3, True)
+										
+										GiveAchievement(AchvPD)
+										AchvPDDone = True
 										SecondaryLightOn = PrevSecondaryLightOn
 										PrevSecondaryLightOn = 0.0
 										
-										me\BlinkTimer = -10.0 : me\LightBlink = 5.0 : me\BlurTimer = 1500.0
+										Curr106\State = 10000.0
+										Curr106\Idle = 0
 										
-										PlayerRoom = r
-										
-										TeleportEntity(me\Collider, EntityX(r\Objects[Temp2], True), 0.7, EntityZ(r\Objects[Temp2], True), 0.3, True)
-										
-										UpdateDoorsTimer = 0.0
-										UpdateDoors()
-										UpdateRooms()
-										Curr106\State = 10000.0 : Curr106\Idle = 0
-										
+										For e2.Events = Each Events
+											If e2\EventID = e_room2sl
+												e2\EventState3 = 0.0
+												UpdateLever(e2\room\Levers[0])
+												RotateEntity(e2\room\Levers[0], 0.0, EntityYaw(e2\room\Levers[0]), 0.0)
+												TurnCheckpointMonitorsOff()
+												Exit
+											EndIf
+										Next
 										Exit
 										Return
 									EndIf
 								Next
+								ResetEntity(me\Collider)
+								
+								e\EventState2 = 0.0
+								UpdateDoorsTimer = 0.0
+								UpdateDoors()
+								UpdateRooms()
 							Else ; ~ The player is not at the exit, must've fallen down
 								If me\KillTimer >= 0.0 Then 
 									PlaySound_Strict(HorrorSFX[8])
@@ -3184,14 +3176,45 @@ Function UpdateEvents()
 									PositionEntity(me\Collider, EntityX(e\room\Objects[8], True) - 400.0 * RoomScale, e\room\y - 300.0 * RoomScale, EntityZ(e\room\Objects[8], True))
 									ResetEntity(me\Collider)
 									;[End Block]
-								Case 16, 17, 18 ; ~ The tower room
+								Case 16, 17, 18, 19
+									;[Block]
+									me\BlurTimer = 1500.0
+									For r.Rooms = Each Rooms
+										If r\RoomTemplate\Name = "room2tunnel" Then
+											GiveAchievement(AchvPD)
+											AchvPDDone = True
+											
+											e\EventState = 0.0
+											e\EventState2 = 0.0
+											
+											SecondaryLightOn = PrevSecondaryLightOn
+											PrevSecondaryLightOn = 0.0
+											TeleportEntity(me\Collider, EntityX(r\OBJ, True), 0.4, EntityZ(r\OBJ, True), 0.3, True)
+											Curr106\State = 250.0
+											Curr106\Idle = 0
+											
+											For e2.Events = Each Events
+												If e2\EventID = e_room2sl
+													e2\EventState3 = 0.0
+													UpdateLever(e2\room\Levers[0])
+													RotateEntity(e2\room\Levers[0], 0.0, EntityYaw(e2\room\Levers[0]), 0.0)
+													TurnCheckpointMonitorsOff()
+													Exit
+												EndIf
+											Next
+											Exit
+											Return
+										EndIf
+									Next
+									;[End Block]
+								Case 20, 21, 22 ; ~ The tower room
 									;[Block]
 									me\BlinkTimer = -10.0
 									PositionEntity(me\Collider, EntityX(e\room\Objects[12], True), 0.6, EntityZ(e\room\Objects[12], True))
 									ResetEntity(me\Collider)
 									e\EventState2 = 15.0
 									;[End Block]
-								Case 19, 20, 21
+								Case 23, 24, 25
 									;[Block]
 									me\BlurTimer = 1500.0
 									e\EventState2 = 1.0
@@ -3203,50 +3226,11 @@ Function UpdateEvents()
 									PositionEntity(me\Collider, EntityX(e\room\Objects[8], True), e\room\y + 2288.0 * RoomScale, EntityZ(e\room\Objects[8], True))
 									ResetEntity(me\Collider)
 									;[End Block]
-								Case 22, 23, 24, 25
-									;[Block]
-									Select CurrentZone
-										Case LCZ
-											;[Block]
-											StrTemp = "room2"
-											;[End Block]
-										Case HCZ
-											;[Block]
-											StrTemp = "room2tunnel"
-											;[End Block]
-										Case EZ
-											;[Block]
-											StrTemp = "room3offices"
-											;[End Block]
-									End Select
-									
-									For r.Rooms = Each Rooms
-										If r\RoomTemplate\Name = StrTemp Then
-											GiveAchievement(AchvPD)
-											AchvPDDone = True
-											e\EventState = 0.0
-											e\EventState2 = 0.0
-											
-											SecondaryLightOn = PrevSecondaryLightOn
-											PrevSecondaryLightOn = 0.0
-											
-											me\BlinkTimer = -10.0 : me\LightBlink = 5.0 : me\BlurTimer = 1500.0
-											
-											PlayerRoom = r
-											
-											TeleportEntity(me\Collider, EntityX(r\OBJ, True), 0.7, EntityZ(r\OBJ, True), 0.3, True)
-											
-											UpdateDoorsTimer = 0.0
-											UpdateDoors()
-											UpdateRooms()
-											Curr106\State = 250.0 : Curr106\Idle = 0
-											
-											Exit
-											Return
-										EndIf
-									Next
-									;[End Block]
 							End Select 
+							
+							UpdateDoorsTimer = 0.0
+							UpdateDoors()
+							UpdateRooms()
 						EndIf					
 					Else ; ~ Pillar room
 						If opt\ParticleAmount > 0 Then
@@ -3750,7 +3734,7 @@ Function UpdateEvents()
 								EndIf
 							Next
 							
-							Temp2 = True
+							Local Temp2% = True
 							
 							For e2.Events = Each Events
 								If e2\EventID = e\EventID And e2 <> e
@@ -3762,7 +3746,7 @@ Function UpdateEvents()
 								EndIf
 							Next
 							
-							Temp3 = 0
+							Local Temp3% = 0
 							
 							If Temp2 Then
 								If e\EventStr = "" And PlayerRoom = e\room
