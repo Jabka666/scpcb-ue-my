@@ -7720,7 +7720,7 @@ End Function
 Dim MapRoom$(ROOM4 + 1, 0)
 
 Function SetRoom(RoomName$, RoomType%, RoomAmount%) ; ~ Place a room without overwriting others
-	Local Dir% = Rand(2) = 1
+	Local Dir% = (Rand(2) = 1)
 	Local PosStep% = -1 + Dir * 2
 	Local Reached% = False
 	Local Valid% = True
@@ -7748,7 +7748,7 @@ Function SetRoom(RoomName$, RoomType%, RoomAmount%) ; ~ Place a room without ove
 			Else
 				PosStep = PosStep - 1
 			EndIf
-			Dir = (Not Dir)
+			Dir = Not Dir
 			PosStep = PosStep * (-1)
 		EndIf
 	Wend
@@ -7905,6 +7905,8 @@ Function CreateMap(Zone%)
 	Local i%, Temp%
 	Local Width%, Height%, TempHeight%, yHallways%
 	
+	I_Zone\Transition[0] = 13
+	I_Zone\Transition[1] = 7
 	I_Zone\HasCustomForest = False
 	I_Zone\HasCustomMT = False
 	
@@ -7972,6 +7974,7 @@ Function CreateMap(Zone%)
 				For y2 = y - TempHeight To y
 					CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] = 1
 				Next
+				
 				If TempHeight = Height Then Temp = x2
 			EndIf
 		Next
@@ -7987,7 +7990,7 @@ Function CreateMap(Zone%)
 			If CurrMapGrid\Grid[x + (y * MapGridSize)] > 0 Then
 				Temp = Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1.0)
 				Temp = Temp + Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1.0)			
-				CurrMapGrid\Grid[x + (y * MapGridSize)] = Temp
+				If CurrMapGrid\Grid[x + (y * MapGridSize)] < 255 Then CurrMapGrid\Grid[x + (y * MapGridSize)] = Temp
 				Select CurrMapGrid\Grid[x + (y * MapGridSize)]
 					Case 1
 						;[Block]
@@ -8082,7 +8085,7 @@ Function CreateMap(Zone%)
 		For y = 2 To MapGridSize - 2
 			For x = 2 To MapGridSize - 2
 				If CurrMapGrid\Grid[x + (y * MapGridSize)] = 3 Then
-					Select False ; ~ See if adding a ROOM1 is possible
+					Select 0 ; ~ See if adding a ROOM1 is possible
 						Case (CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] Lor CurrMapGrid\Grid[(x + 1) + ((y + 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x + 1) + ((y - 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x + 2) + (y * MapGridSize)])
 							;[Block]
 							CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] = 1
@@ -8226,7 +8229,7 @@ Function CreateMap(Zone%)
 	Temp = 0
 	For y = MapGridSize - 1 To 1 Step -1
 		For x = 1 To MapGridSize - 2
-			If CurrMapGrid\Grid[x + (y * MapGridSize)] > 0 Then
+			If CurrMapGrid\Grid[x + (y * MapGridSize)] > 0
 				Temp = Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1.0)
 				Select Temp ; ~ Amount of bordering rooms
 					Case 1 ; ~ Generate ROOM1
@@ -8287,7 +8290,7 @@ Function CreateMap(Zone%)
 								TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 							ElseIf CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > 0 And CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > 0
 								r.Rooms = CreateRoom(Zone, ROOM2C, x * 8.0, 0.0, y * 8.0, CurrMapGrid\RoomName[x + (y * MapGridSize)])
-								r\Angle = 90.0
+								r\Angle = 90
 								TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 							ElseIf CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] > 0 And CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] > 0
 								r.Rooms = CreateRoom(Zone, ROOM2C, x * 8.0, 0.0, y * 8.0, CurrMapGrid\RoomName[x + (y * MapGridSize)])
