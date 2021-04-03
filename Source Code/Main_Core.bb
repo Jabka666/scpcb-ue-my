@@ -1658,7 +1658,7 @@ Function UpdateConsole()
 				Case "up"
 					;[Block]
 					If CurrentZone > 0 Then
-						SaveGame(CurrSave, False, -1)
+						SaveGame(CurrSave, -1)
 						NullGame(False, True)
 						If FileType(SavePath + CurrSave + "\" + (CurrentZone - 1) + ".zone") = 1 Then
 							LoadEntities()
@@ -1669,13 +1669,13 @@ Function UpdateConsole()
 							InitNewGame(CurrentZone - 1)
 							LoadGameQuick(CurrSave, False)
 						EndIf
-						SaveGame(CurrSave, False)
+						SaveGame(CurrSave)
 					EndIf
 					;[End Block]
 				Case "down"
 					;[Block]
 					If CurrentZone < 2 Then
-						SaveGame(CurrSave, False, +1)
+						SaveGame(CurrSave, +1)
 						NullGame(False, True)
 						If FileType(SavePath + CurrSave + "\" + (CurrentZone + 1) + ".zone") = 1 Then
 							LoadEntities()
@@ -1686,7 +1686,7 @@ Function UpdateConsole()
 							InitNewGame(CurrentZone + 1)
 							LoadGameQuick(CurrSave, False)
 						EndIf
-						SaveGame(CurrSave, False)
+						SaveGame(CurrSave)
 					EndIf
 					;[End Block]
 				Default
@@ -8632,15 +8632,13 @@ Function InitNewGame(Zone% = LCZ)
 	
 	HidePointer()
 	
-	me\DropSpeed = 0.0
+	fps\Factor[0] = 1.0
+	
+	ResetInput()
 	
 	DeleteTextureEntriesFromCache(DeleteMapTextures)
 	
 	RenderLoading(100)
-	
-	fps\Factor[0] = 0.0
-	
-	ResetInput()
 	
 	me\DropSpeed = 0.0
 	

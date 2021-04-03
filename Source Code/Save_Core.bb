@@ -1,6 +1,6 @@
 Const SavePath$ = "Saves\"
 
-Function SaveGame(File$, SaveMsg% = True, SaveZone% = LCZ)
+Function SaveGame(File$, SaveZone% = LCZ)
 	CatchErrors("Uncaught (SaveGame)")
 	
 	If (Not me\Playable) Lor me\Zombie Then Return ; ~ Don't save if the player can't move at all
@@ -561,16 +561,14 @@ Function SaveGame(File$, SaveMsg% = True, SaveZone% = LCZ)
 	
 	CloseFile(f)
 	
-	If SaveMsg Then
-		If (Not MenuOpen) And (Not MainMenuOpen) Then
-			If SelectedDifficulty\SaveType = SAVEONSCREENS Then
-				PlaySound_Strict(LoadTempSound("SFX\General\Save2.ogg"))
-			Else
-				PlaySound_Strict(LoadTempSound("SFX\General\Save1.ogg"))
-			EndIf
-			
-			CreateMsg("Game progress saved.", 6.0)
+	If (Not MenuOpen) And (Not MainMenuOpen) Then
+		If SelectedDifficulty\SaveType = SAVEONSCREENS Then
+			PlaySound_Strict(LoadTempSound("SFX\General\Save2.ogg"))
+		Else
+			PlaySound_Strict(LoadTempSound("SFX\General\Save1.ogg"))
 		EndIf
+		
+		CreateMsg("Game progress saved.", 6.0)
 	EndIf
 	
 	CatchErrors("SaveGame")
@@ -1074,7 +1072,7 @@ Function LoadGame(File$)
 	For Zone = CurrentZone To CurrentZone
 		For y = MapGridSize - 1 To 0 Step -1
 			For x = MapGridSize - 1 To 0 Step -1
-				If CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile Then
+				If CurrMapGrid\Grid[x + (y * MapGridSize)] > 0 Then
 					For r.Rooms = Each Rooms
 						r\Angle = WrapAngle(r\Angle)
 						If Int(r\x / 8.0) = x And Int(r\z / 8.0) = y Then
