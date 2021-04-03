@@ -5270,7 +5270,7 @@ Function UpdateGUI()
 										Exit
 									EndIf
 								Next
-								SelectedItem\Picked = 2
+								SelectedItem\Picked = 1
 							EndIf
 							SelectedItem\State = 0.0
 							SelectedItem = Null
