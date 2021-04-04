@@ -2041,12 +2041,12 @@ End Function
 
 Global ClosestButton%
 
-; ~ TODO: Add "Type Buttons"
 Function CreateButton%(ButtonID%, x#, y#, z#, Pitch# = 0.0, Yaw# = 0.0, Roll# = 0.0, Parent% = 0, Locked% = False)
-	Local OBJ% = CopyEntity(o\ButtonModelID[ButtonID])	
+	Local OBJ%
 	
-	PositionEntity(OBJ, x, y, z)
+	OBJ = CopyEntity(o\ButtonModelID[ButtonID])
 	ScaleEntity(OBJ, 0.03, 0.03, 0.03)
+	PositionEntity(OBJ, x, y, z)
 	RotateEntity(OBJ, Pitch, Yaw, Roll)
 	EntityPickMode(OBJ, 2)
 	If Locked Then EntityTexture(OBJ, t\MiscTextureID[17])
@@ -4078,7 +4078,6 @@ Function FillRoom(r.Rooms)
 			
 			d.Doors = CreateDoor(r\x, r\y, r\z + 64.0 * RoomScale, 0.0, r, False, Heavy_Door, 3)
 			d\AutoClose = False : d\Locked = 1 : d\MTFClose = False : d\DisableWaypoint = True
-			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			
 			; ~ Elevators' doors
@@ -6204,12 +6203,12 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "room2ccont"
 			;[Block]
-			d.Doors = CreateDoor(r\x + 64.0 * RoomScale, r\y, r\z + 368.0 * RoomScale, 0.0, r, False, Default_Door, 3)
+			d.Doors = CreateDoor(r\x + 64.0 * RoomScale, r\y, r\z + 368.0 * RoomScale, 0.0, r, False, Default_Door, 4)
 			d\AutoClose = False
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.061, True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.061, True)
 			
-			d.Doors = CreateDoor(r\x - 720.0 * RoomScale, r\y + 896.0 * RoomScale, r\z + 736.0 * RoomScale, 90.0, r, False, One_Sided_Door, 3)
+			d.Doors = CreateDoor(r\x - 720.0 * RoomScale, r\y + 896.0 * RoomScale, r\z + 736.0 * RoomScale, 90.0, r, False, One_Sided_Door, 4)
 			d\AutoClose = False
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.061, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.061, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
@@ -8550,13 +8549,13 @@ Function CreateMap()
 			EndIf
 			
 			If (Not Temp3) Then
-				RED = Max(0.0, RED - 2.0)
-				GREEN = Max(0.0, GREEN - 2.0)
-				BLUE = Max(0.0, BLUE - 2.0)
+				RED = Max(0.0, RED - 3.0)
+				GREEN = Max(0.0, GREEN - 3.0)
+				BLUE = Max(0.0, BLUE - 3.0)
 			Else
-				RED = Min(RED + 2.0, 255.0)
-				GREEN = Min(GREEN + 2.0, 255.0)
-				BLUE = Min(BLUE + 2.0, 255.0)
+				RED = Min(RED + 3.0, 255.0)
+				GREEN = Min(GREEN + 3.0, 255.0)
+				BLUE = Min(BLUE + 3.0, 255.0)
 			EndIf
 			
 			Color(0, 0, 0)

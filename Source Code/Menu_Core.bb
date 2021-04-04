@@ -2261,13 +2261,13 @@ Function RenderLoading(Percent%, Assets$ = "")
 			EndIf
 			
 			If (Not Temp2) Then
-				R = Max(0.0, R - 2.0)
-				G = Max(0.0, G - 2.0)
-				B = Max(0.0, B - 2.0)
+				R = Max(0.0, R - 3.0)
+				G = Max(0.0, G - 3.0)
+				B = Max(0.0, B - 3.0)
 			Else
-				R = Min(R + 2.0, 255.0)
-				G = Min(G + 2.0, 255.0)
-				B = Min(B + 2.0, 255.0)
+				R = Min(R + 3.0, 255.0)
+				G = Min(G + 3.0, 255.0)
+				B = Min(B + 3.0, 255.0)
 			EndIf
 			If FirstLoop And SelectedLoadingScreen\Title <> "CWM" Then PlaySound_Strict(LoadTempSound(("SFX\Horror\Horror8.ogg")))
 			Color(0, 0, 0)
@@ -2636,7 +2636,10 @@ Function UpdateInput$(aString$, MaxChr%)
 	Else
 		aString = TextInput(Left(aString, CursorPos)) + Mid(aString, CursorPos + 1)
 		CursorPos = CursorPos + Len(aString) - Length
-		If MaxChr > 0 And MaxChr < Len(aString) Then aString = Left(aString, MaxChr) : CursorPos = MaxChr
+		If MaxChr > 0 And MaxChr < Len(aString) Then
+			aString = Left(aString, MaxChr)
+			CursorPos = MaxChr
+		EndIf
 	EndIf
 	Return(aString)
 End Function
@@ -2674,10 +2677,17 @@ Function UpdateMainMenuInputBox$(x%, y%, Width%, Height%, Txt$, ID% = 0, MaxChr%
 	
 	If MouseOn(x, y, Width, Height) Then
 		MouseOnBox = True
-		If mo\MouseHit1 Then SelectedInputBox = ID : FlushKeys() : CursorPos = -1
+		If mo\MouseHit1 Then
+			SelectedInputBox = ID
+			FlushKeys()
+			CursorPos = -1
+		EndIf
 	EndIf
 	
-	If (Not MouseOnBox) And mo\MouseHit1 And SelectedInputBox = ID Then SelectedInputBox = 0 : CursorPos = -1
+	If (Not MouseOnBox) And mo\MouseHit1 And SelectedInputBox = ID Then
+		SelectedInputBox = 0
+		CursorPos = -1
+	EndIf
 	
 	If SelectedInputBox = ID Then
 		Txt = UpdateInput(Txt, MaxChr)
@@ -2966,88 +2976,88 @@ Function DeleteMenuGadgets()
 	Delete Each MenuSlider
 End Function
 
-Function RowText(A$, x%, y%, W%, H%, Align% = 0, Leading# = 1.0)
+Function RowText(Txt$, x%, y%, W%, H%, Align% = False, Leading# = 1.0)
 	; ~ Display A$ starting at x, y - no wider than W and no taller than H (all in pixels)
 	; ~ Leading is optional extra vertical spacing in pixels
 	
 	If H < 1 Then H = 2048
 	
 	Local LinesShown% = 0
-	Local Height% = StringHeight(A) + Leading
-	Local b$
+	Local Height% = StringHeight(Txt) + Leading
+	Local s$
 	
-	While Len(A) > 0
-		Local Space$ = Instr(A, " ")
+	While Len(Txt) > 0
+		Local Space$ = Instr(Txt, " ")
 		
-		If Space = 0 Then Space = Len(A$)
+		If Space = 0 Then Space = Len(Txt)
 		
-		Local Temp$ = Left(A, Space)
+		Local Temp$ = Left(Txt, Space)
 		Local Trimmed$ = Trim(Temp) ; ~ We might ignore a final space 
 		Local Extra% = 0 ; ~ We haven't ignored it yet
 		
 		; ~ Ignore final space if doing so would make a word fit at end of line:
-		If (StringWidth (b + Temp) > W) And (StringWidth(b + Trimmed) =< W) Then
+		If (StringWidth(s + Temp) > W) And (StringWidth(s + Trimmed) =< W) Then
 			Temp = Trimmed
 			Extra = 1
 		EndIf
 		
-		If StringWidth(b + Temp) > W Then ; ~ Too big, so print what will fit
+		If StringWidth(s + Temp) > W Then ; ~ Too big, so print what will fit
 			If Align Then
-				Text(x + W / 2 - (StringWidth(b) / 2), LinesShown * Height + y, b)
+				Text(x + (W / 2) - (StringWidth(s) / 2), y + (LinesShown * Height), s)
 			Else
-				Text(x, LinesShown * Height + y, b)
+				Text(x, y + (LinesShown * Height), s)
 			EndIf
 			
 			LinesShown = LinesShown + 1
-			b = ""
+			s = ""
 		Else ; ~ Append it to b$ (which will eventually be printed) and remove it from A$
-			b = b + Temp
-			A = Right(A, Len(A) - (Len(Temp) + Extra))
+			s = s + Temp
+			Txt = Right(Txt, Len(Txt) - (Len(Temp) + Extra))
 		EndIf
 		
 		If ((LinesShown + 1) * Height) > H Then Exit ; ~ The next line would be too tall, so leave
 	Wend
 	
-	If (b <> "") And ((LinesShown + 1) =< H) Then
+	If (s <> "") And ((LinesShown + 1) =< H) Then
 		If Align Then
-			Text(x + W / 2 - (StringWidth(b) / 2), LinesShown * Height + y, b) ; ~ Print any remaining text if it'll fit vertically
+			Text(x + (W / 2) - (StringWidth(s) / 2), y + (LinesShown * Height), s) ; ~ Print any remaining text if it'll fit vertically
 		Else
-			Text(x, LinesShown * Height + y, b) ; ~ Print any remaining text if it'll fit vertically
+			Text(x, y + (LinesShown * Height), s) ; ~ Print any remaining text if it'll fit vertically
 		EndIf
 	EndIf
 End Function
 
-Function GetLineAmount(A$, W%, H%, Leading# = 1.0)
+Function GetLineAmount(Txt$, W%, H%, Leading# = 1.0)
 	; ~ Display A$ no wider than W and no taller than H (all in pixels)
 	; ~ Leading is optional extra vertical spacing in pixels
 	
 	If H < 1 Then H = 2048
 	
 	Local LinesShown% = 0
-	Local Height% = StringHeight(A) + Leading
-	Local b$
+	Local Height% = StringHeight(Txt) + Leading
+	Local s$
 	
-	While Len(A) > 0
-		Local Space$ = Instr(A, " ")
+	While Len(Txt) > 0
+		Local Space$ = Instr(Txt, " ")
 		
-		If Space = 0 Then Space = Len(A)
+		If Space = 0 Then Space = Len(Txt)
 		
-		Local Temp$ = Left(A, Space)
+		Local Temp$ = Left(Txt, Space)
 		Local Trimmed$ = Trim(Temp) ; ~ We might ignore a final space 
 		Local Extra% = 0 ; ~ We haven't ignored it yet
 		
 		; ~ Ignore final space if doing so would make a word fit at end of line:
-		If (StringWidth(b + Temp) > W) And (StringWidth(b + Trimmed) =< W) Then
+		If (StringWidth(s + Temp) > W) And (StringWidth(s + Trimmed) =< W) Then
 			Temp = Trimmed
 			Extra = 1
 		EndIf
 		
-		If StringWidth(b + Temp) > W Then ; ~ Too big, so print what will fit
+		If StringWidth(s + Temp) > W Then ; ~ Too big, so print what will fit
 			LinesShown = LinesShown + 1
-			b = ""
+			s = ""
 		Else ; ~ Append it to b$ (which will eventually be printed) and remove it from A$
-			b = b + Temp
-			A = Right(A, Len(A) - (Len(Temp) + Extra))
+			s = s + Temp
+			Txt = Right(Txt, Len(Txt) - (Len(Temp) + Extra))
 		EndIf
 		
 		If ((LinesShown + 1) * Height) > H Then Exit ; ~ The next line would be too tall, so leave
@@ -3298,14 +3308,15 @@ Function RenderMapCreatorTooltip(x%, y%, Width%, Height%, MapName$)
 		ReadByte(f)
 		
 		Local rAmount% = ReadInt(f)
+		Local HasForest%, HasMT%
 		
 		If ReadInt(f) > 0 Then
-			Local HasForest% = True
+			HasForest = True
 		Else
 			HasForest = False
 		EndIf
 		If ReadInt(f) > 0 Then
-			Local HasMT% = True
+			HasMT = True
 		Else
 			HasMT = False
 		EndIf

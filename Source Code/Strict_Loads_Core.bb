@@ -282,9 +282,9 @@ Function LoadMesh_Strict(File$, Parent% = 0)
 	Local Temp$
 	
 	If (Not Tmp) Then
-		If FileType(File) <> 1 Then RuntimeError("3D Mesh " + File + " not found.")
+		If FileType(File) <> 1 Then RuntimeError("3D Mesh " + Chr(34) + File + Chr(34) + " not found.")
 		Tmp = LoadMesh(File, Parent)
-		If (Not Tmp) Then RuntimeError("Failed to load 3D Mesh: " + File)
+		If (Not Tmp) Then RuntimeError("Failed to load 3D Mesh: " + Chr(34) + File + Chr(34))
 	EndIf
 	
 	For i = 1 To CountSurfaces(Tmp)
@@ -337,9 +337,9 @@ Function LoadAnimMesh_Strict(File$, Parent% = 0)
 	Local TexAlpha% = 0
 	
 	If (Not Tmp) Then
-		If FileType(File) <> 1 Then RuntimeError("3D Animated Mesh " + File + " not found.")
+		If FileType(File) <> 1 Then RuntimeError("3D Animated Mesh " + Chr(34) + File + Chr(34) + " not found.")
 		Tmp = LoadAnimMesh(File, Parent)
-		If (Not Tmp) Then RuntimeError("Failed to load 3D Animated Mesh: " + File)
+		If (Not Tmp) Then RuntimeError("Failed to load 3D Animated Mesh: " + Chr(34) + File + Chr(34))
 	EndIf
 	
 	For i = 1 To CountSurfaces(Tmp)
@@ -372,9 +372,9 @@ Function LoadTexture_Strict(File$, Flags% = 1, TexDeleteType% = DeleteMapTexture
 	Local Tmp%
 	
 	If (Not Tmp) Then
-		If FileType(File) <> 1 Then RuntimeError("Texture " + File + " not found.")
+		If FileType(File) <> 1 Then RuntimeError("Texture " + Chr(34) + File + Chr(34) + " not found.")
 		Tmp = LoadTextureCheckingIfInCache(File, Flags, TexDeleteType)
-		If (Not Tmp) Then RuntimeError("Failed to load Texture: " + File)
+		If (Not Tmp) Then RuntimeError("Failed to load Texture: " + Chr(34) + File + Chr(34))
 	EndIf
 	Return(Tmp) 
 End Function
@@ -383,9 +383,9 @@ Function LoadAnimTexture_Strict(File$, Flags%, Width%, Height%, FirstFrame%, Cou
 	Local Tmp%
 	
 	If (Not Tmp) Then
-		If FileType(File) <> 1 Then RuntimeError("Animated Texture " + File + " not found.")
+		If FileType(File) <> 1 Then RuntimeError("Animated Texture " + Chr(34) + File + Chr(34) + " not found.")
 		Tmp = LoadAnimTextureCheckingIfInCache(File, Flags, Width, Height, FirstFrame, Count, TexDeleteType)
-		If (Not Tmp) Then RuntimeError("Failed to load Animated Texture: " + File)
+		If (Not Tmp) Then RuntimeError("Failed to load Animated Texture: " + Chr(34) + File + Chr(34))
 	EndIf
 	Return(Tmp) 
 End Function   
@@ -394,9 +394,9 @@ Function LoadBrush_Strict(File$, Flags%, u# = 1.0, v# = 1.0)
 	Local Tmp%
 	
 	If (Not Tmp) Then
-		If FileType(File) <> 1 Then RuntimeError("Brush Texture " + File + " not found.")
+		If FileType(File) <> 1 Then RuntimeError("Brush Texture " + Chr(34) + File + Chr(34) + " not found.")
 		Tmp = LoadBrush(File, Flags, u, v)
-		If (Not Tmp) Then RuntimeError("Failed to load Brush: " + File)
+		If (Not Tmp) Then RuntimeError("Failed to load Brush: " + Chr(34) + File + Chr(34))
 	EndIf
 	Return(Tmp)
 End Function 
@@ -405,9 +405,9 @@ Function LoadFont_Strict(File$ = "Tahoma", Height% = 13, IgnoreScaling% = False)
 	Local Tmp%
 	
 	If (Not Tmp) Then
-		If FileType(File) <> 1 Then RuntimeError("Font " + File + " not found.")
+		If FileType(File) <> 1 Then RuntimeError("Font " + Chr(34) + File + Chr(34) + " not found.")
 		Tmp = LoadFont(File, (Int(Height * (opt\GraphicHeight / 1024.0))) * (Not IgnoreScaling) + IgnoreScaling * Height)
-		If (Not Tmp) Then RuntimeError("Failed to load Font: " + File)
+		If (Not Tmp) Then RuntimeError("Failed to load Font: " + Chr(34) + File + Chr(34))
 	EndIf
 	Return(Tmp)
 End Function
@@ -418,7 +418,7 @@ Function LoadImage_Strict(File$)
 	If (Not Tmp) Then
 		If FileType(File) <> 1 Then RuntimeError("Image " + Chr(34) + File + Chr(34) + " not found. ")
 		Tmp = LoadImage(File)
-		If (Not Tmp) Then RuntimeError("Failed to load image: " + File)
+		If (Not Tmp) Then RuntimeError("Failed to load image: " + Chr(34) + File + Chr(34))
 	EndIf
 	Return(Tmp)
 End Function

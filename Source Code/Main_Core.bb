@@ -8615,9 +8615,11 @@ Function InitNewGame()
 			EntityType(it\Collider, HIT_ITEM)
 			EntityParent(it\Collider, 0)
 			ItemAmount = ItemAmount + 1
+			Exit
 		ElseIf r\RoomTemplate\Name = "room173intro" And opt\IntroEnabled Then
 			PositionEntity(me\Collider, EntityX(r\OBJ), 1.0, EntityZ(r\OBJ))
 			PlayerRoom = r
+			Exit
 		EndIf
 	Next
 	
@@ -8810,6 +8812,9 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	Delete(I_008)
 	I_008.SCP008 = New SCP008
+	
+	Delete(I_294)
+	I_294.SCP294 = New SCP294
 	
 	Delete(I_409)
 	I_409.SCP409 = New SCP409
