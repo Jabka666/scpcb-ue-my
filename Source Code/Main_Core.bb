@@ -84,7 +84,7 @@ EndIf
 
 ; ~ New "fake fullscreen" - ENDSHN Psst, it's called borderless windowed mode -- Love Mark
 If opt\DisplayMode = 1 Then
-	Graphics3DExt(DesktopWidth(), DesktopHeight(), 32, 4)
+	Graphics3DExt(DesktopWidth(), DesktopHeight(), 0, 4)
 	
 	If (Not opt\LauncherEnabled) Then
 		opt\RealGraphicWidth = DesktopWidth() : opt\GraphicWidth = DesktopWidth()
@@ -93,7 +93,7 @@ If opt\DisplayMode = 1 Then
 	
 	opt\AspectRatio = (Float(opt\GraphicWidth) / Float(opt\GraphicHeight)) / (Float(opt\RealGraphicWidth) / Float(opt\RealGraphicHeight))
 Else
-	Graphics3DExt(opt\GraphicWidth, opt\GraphicHeight, 32, (opt\DisplayMode = 2) + 1)
+	Graphics3DExt(opt\GraphicWidth, opt\GraphicHeight, 0, (opt\DisplayMode = 2) + 1)
 	
 	If (Not opt\LauncherEnabled) Then
 		opt\RealGraphicWidth = opt\GraphicWidth
@@ -273,7 +273,7 @@ Const MaxIconIDAmount% = 6
 Const MaxImageIDAmount% = 13
 ;[End Block]
 
-Type TextureTemplate
+Type Textures
 	Field MiscTextureID%[MaxMiscTextureIDAmount]
 	Field MonitorTextureID%[MaxMonitorTextureIDAmount]
 	Field DecalTextureID%[MaxDecalTextureIDAmount]
@@ -285,7 +285,7 @@ Type TextureTemplate
 	Field OverlayID%[MaxOverlayIDAmount]
 End Type
 
-Global tt.TextureTemplate = New TextureTemplate
+Global t.Textures = New Textures
 
 ; ~ Objects Constants
 ;[Block]
@@ -1097,14 +1097,14 @@ Function UpdateConsole()
 					;[End Block]
 				Case "halloween"
 					;[Block]
-					tt\MiscTextureID[14] = (Not tt\MiscTextureID[14])
-					If tt\MiscTextureID[14] Then
+					t\MiscTextureID[14] = (Not t\MiscTextureID[14])
+					If t\MiscTextureID[14] Then
 						Tex = LoadTexture_Strict("GFX\npcs\scp_173_H.png", 1)
 						EntityTexture(Curr173\OBJ, Tex, 0, 0)
 						DeleteSingleTextureEntryFromCache(Tex)
 						CreateConsoleMsg("173 JACK-O-LANTERN ON")
 					Else
-						If tt\MiscTextureID[15] Then tt\MiscTextureID[15] = (Not tt\MiscTextureID[15])
+						If t\MiscTextureID[15] Then t\MiscTextureID[15] = (Not t\MiscTextureID[15])
 						Tex2 = LoadTexture_Strict("GFX\npcs\scp_173.png", 1)
 						EntityTexture(Curr173\OBJ, Tex2, 0, 0)
 						DeleteSingleTextureEntryFromCache(Tex2)
@@ -1113,14 +1113,14 @@ Function UpdateConsole()
 					;[End Block]
 				Case "newyear" 
 					;[Block]
-					tt\MiscTextureID[15] = (Not tt\MiscTextureID[15])
-					If tt\MiscTextureID[15] Then
+					t\MiscTextureID[15] = (Not t\MiscTextureID[15])
+					If t\MiscTextureID[15] Then
 						Tex = LoadTexture_Strict("GFX\npcs\scp_173_NY.png", 1)
 						EntityTexture(Curr173\OBJ, Tex, 0, 0)
 						DeleteSingleTextureEntryFromCache(Tex)
 						CreateConsoleMsg("173 COOKIE ON")
 					Else
-						If tt\MiscTextureID[14] Then tt\MiscTextureID[14] = (Not tt\MiscTextureID[14])
+						If t\MiscTextureID[14] Then t\MiscTextureID[14] = (Not t\MiscTextureID[14])
 						Tex2 = LoadTexture_Strict("GFX\npcs\scp_173.png", 1)
 						EntityTexture(Curr173\OBJ, Tex2, 0, 0)
 						DeleteSingleTextureEntryFromCache(Tex2)
@@ -2033,7 +2033,7 @@ Repeat
 	
 	If (Not opt\VSync) Then
 		Flip(False)
-	Else 
+	Else
 		Flip(True)
 	EndIf
 Forever
@@ -2078,7 +2078,7 @@ Function MainLoop()
 			mo\MouseDown1 = MouseDown(1)
 			If PrevMouseDown1 = True And (Not mo\MouseDown1) Then 
 				mo\MouseUp1 = True 
-			Else 
+			Else
 				mo\MouseUp1 = False
 			EndIf
 			
@@ -2181,12 +2181,12 @@ Function MainLoop()
 				CameraFogMode(Camera, 0)
 				CameraFogRange(Camera, 5.0, 30.0)
 				CameraRange(Camera, 0.01, 60.0)
-				HideEntity(tt\OverlayID[0])
+				HideEntity(t\OverlayID[0])
 			Else
 				CameraFogMode(Camera, 1)
 				CameraFogRange(Camera, opt\CameraFogNear * LightVolume, opt\CameraFogFar * LightVolume)
 				CameraRange(Camera, 0.01, Min(opt\CameraFogFar * LightVolume * 1.5, 28.0))
-				ShowEntity(tt\OverlayID[0])
+				ShowEntity(t\OverlayID[0])
 			EndIf
 			For r.Rooms = Each Rooms
 				For i = 0 To r\MaxLights - 1
@@ -2367,8 +2367,8 @@ Function MainLoop()
 				EndIf
 				me\BlinkTimer = me\BlinkTimer - fps\Factor[0]
 			Else
-				me\BlinkTimer = me\BlinkTimer - fps\Factor[0] * 0.6 * me\BlinkEffect
-				If wi\NightVision = 0 And wi\SCRAMBLE = 0 Then
+				me\BlinkTimer = me\BlinkTimer - (fps\Factor[0] * 0.6 * me\BlinkEffect)
+				If wi\NightVision = 0 And (Not wi\SCRAMBLE) Then
 					If me\EyeIrritation > 0.0 Then me\BlinkTimer = me\BlinkTimer - Min(me\EyeIrritation / 100.0 + 1.0, 4.0) * fps\Factor[0]
 				EndIf
 				DarkA = Max(DarkA, 0.0)
@@ -2402,7 +2402,7 @@ Function MainLoop()
 				EndIf
 				DarkA = Max(DarkA, Min(Abs(me\KillTimer / 400.0), 1.0))
 			Else
-				HideEntity(tt\OverlayID[9])
+				HideEntity(t\OverlayID[9])
 			EndIf
 			
 			If me\FallTimer < 0.0 Then
@@ -2420,7 +2420,7 @@ Function MainLoop()
 				DarkA = Max(DarkA, Min(Abs(me\FallTimer / 400.0), 1.0))				
 			EndIf
 			
-			If SelectedItem <> Null And (Not InvOpen) And (Not mo\MouseDown1) Then
+			If SelectedItem <> Null And (Not InvOpen) Then
 				If IsItemInFocus() Then
 					DarkA = Max(DarkA, 0.5)
 				EndIf
@@ -2428,16 +2428,16 @@ Function MainLoop()
 			
 			If SelectedScreen <> Null Then DarkA = Max(DarkA, 0.5)
 			
-			EntityAlpha(tt\OverlayID[5], DarkA)	
+			EntityAlpha(t\OverlayID[5], DarkA)	
 		EndIf
 		
 		If me\LightFlash > 0.0 Then
-			ShowEntity(tt\OverlayID[6])
-			EntityAlpha(tt\OverlayID[6], Max(Min(me\LightFlash + Rnd(-0.2, 0.2), 1.0), 0.0))
-			EntityColor(tt\OverlayID[6], 255.0, 255.0, 255.0)
+			ShowEntity(t\OverlayID[6])
+			EntityAlpha(t\OverlayID[6], Max(Min(me\LightFlash + Rnd(-0.2, 0.2), 1.0), 0.0))
+			EntityColor(t\OverlayID[6], 255.0, 255.0, 255.0)
 			me\LightFlash = Max(me\LightFlash - (fps\Factor[0] / 70.0), 0.0)
 		Else
-			HideEntity(tt\OverlayID[6])
+			HideEntity(t\OverlayID[6])
 		EndIf
 		
 		UpdateWorld2()
@@ -2651,7 +2651,7 @@ Function Kill(IsBloody% = False)
 	EndIf
 	
 	If me\KillTimer >= 0.0 Then
-		If IsBloody Then ShowEntity(tt\OverlayID[9])
+		If IsBloody Then ShowEntity(t\OverlayID[9])
 		
 		me\KillAnim = Rand(0, 1)
 		PlaySound_Strict(DamageSFX[0])
@@ -2727,10 +2727,10 @@ Function UpdateMove()
 			msg\DeathMsg = "A Class D jumpsuit found in [DATA REDACTED]. Upon further examination, the jumpsuit was found to be filled with 12.5 kilograms of blue ash-like substance. "
 			msg\DeathMsg = msg\DeathMsg + "Chemical analysis of the substance remains non-conclusive. Most likely related to SCP-914."
 			Kill()
-			ShowEntity(tt\OverlayID[0])
+			ShowEntity(t\OverlayID[0])
 		Else
 			me\BlurTimer = 500.0		
-			HideEntity(tt\OverlayID[0])
+			HideEntity(t\OverlayID[0])
 		EndIf
 	EndIf
 	
@@ -3087,6 +3087,11 @@ Function UpdateMouseLook()
 	If me\KillTimer >= 0.0 And me\FallTimer >= 0.0 Then
 		me\HeadDropSpeed = 0.0
 		
+		If IsNaN(EntityX(me\Collider)) Then
+			PositionEntity(me\Collider, EntityX(Camera, True), EntityY(Camera, True) - 0.5, EntityZ(Camera, True), True)
+			CreateConsoleMsg("RESETTING COORDINATES! New coordinates: " + EntityX(me\Collider))				
+		EndIf
+		
 		Local Up# = (Sin(me\Shake) / (20.0 + me\CrouchState * 20.0)) * 0.6		
 		Local Roll# = Max(Min(Sin(me\Shake / 2.0) * 2.5 * Min(me\Injuries + 0.25, 3.0), 8.0), -8.0)
 		
@@ -3094,15 +3099,14 @@ Function UpdateMouseLook()
 		RotateEntity(Camera, 0.0, EntityYaw(me\Collider), Roll * 0.5)
 		
 		; ~ Update the smoothing que to smooth the movement of the mouse
-		mo\Mouse_X_Speed_1 = CurveValue(MouseXSpeed() * (opt\MouseSensitivity + 0.6) , mo\Mouse_X_Speed_1, (6.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing) 
+		mo\Mouse_X_Speed_1 = CurveValue(MouseXSpeed() * (opt\MouseSensitivity + 0.6) , mo\Mouse_X_Speed_1, (6.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing)
+		If IsNaN(mo\Mouse_X_Speed_1) Then mo\Mouse_X_Speed_1 = 0.0
 		If opt\InvertMouse Then
 			mo\Mouse_Y_Speed_1 = CurveValue(-MouseYSpeed() * (opt\MouseSensitivity + 0.6), mo\Mouse_Y_Speed_1, (6.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing)
 		Else
 			mo\Mouse_Y_Speed_1 = CurveValue(MouseYSpeed() * (opt\MouseSensitivity + 0.6), mo\Mouse_Y_Speed_1, (6.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing)
 		EndIf
-		If IsNaN(mo\Mouse_Y_Speed_1) Then
-			StopMouseMovement()
-		EndIf
+		If IsNaN(mo\Mouse_Y_Speed_1) Then mo\Mouse_Y_Speed_1 = 0.0
 		
 		Local The_Yaw# = ((mo\Mouse_X_Speed_1)) * mo\Mouselook_X_Inc / (1.0 + wi\BallisticVest)
 		Local The_Pitch# = ((mo\Mouse_Y_Speed_1)) * mo\Mouselook_Y_Inc / (1.0 + wi\BallisticVest)
@@ -3189,8 +3193,8 @@ Function UpdateMouseLook()
 			EndIf
 		EndIf
 		
-		ShowEntity(tt\OverlayID[1])
-		If wi\GasMaskFogTimer > 0.0 Then ShowEntity(tt\OverlayID[10])
+		ShowEntity(t\OverlayID[1])
+		If wi\GasMaskFogTimer > 0.0 Then ShowEntity(t\OverlayID[10])
 		
 		If ChannelPlaying(BreathCHN) Then
 			wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + fps\Factor[0] * 2.0, 100.0)
@@ -3205,12 +3209,12 @@ Function UpdateMouseLook()
 				wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - fps\Factor[0] * 0.15)
 			EndIf
 		EndIf
-		EntityAlpha(tt\OverlayID[10], Min(((wi\GasMaskFogTimer * 0.2) ^ 2.0) / 1000.0, 0.45))
+		EntityAlpha(t\OverlayID[10], Min(((wi\GasMaskFogTimer * 0.2) ^ 2.0) / 1000.0, 0.45))
 	Else
 		If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN)
 		wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.15))
-		HideEntity(tt\OverlayID[1])
-		HideEntity(tt\OverlayID[10])
+		HideEntity(t\OverlayID[1])
+		HideEntity(t\OverlayID[10])
 	EndIf
 	
 	If wi\HazmatSuit > 0 Then
@@ -3220,37 +3224,37 @@ Function UpdateMouseLook()
 		If (Not I_714\Using) Then
 			If wi\HazmatSuit = 2 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fps\Factor[0])
 		EndIf
-		ShowEntity(tt\OverlayID[2])
+		ShowEntity(t\OverlayID[2])
 	Else
-		HideEntity(tt\OverlayID[2])
+		HideEntity(t\OverlayID[2])
 	EndIf
 	
-	If wi\BallisticHelmet > 0 Then
-		ShowEntity(tt\OverlayID[8])
+	If wi\BallisticHelmet Then
+		ShowEntity(t\OverlayID[8])
 	Else
-		HideEntity(tt\OverlayID[8])
+		HideEntity(t\OverlayID[8])
 	EndIf
 	
-	If wi\NightVision > 0 Lor wi\SCRAMBLE > 0 Then
-		ShowEntity(tt\OverlayID[4])
+	If wi\NightVision > 0 Lor wi\SCRAMBLE Then
+		ShowEntity(t\OverlayID[4])
 		If wi\NightVision = 2 Then
-			EntityColor(tt\OverlayID[4], 0.0, 100.0, 255.0)
+			EntityColor(t\OverlayID[4], 0.0, 100.0, 255.0)
 			AmbientLightRooms(15)
 		ElseIf wi\NightVision = 3
-			EntityColor(tt\OverlayID[4], 255.0, 0.0, 0.0)
+			EntityColor(t\OverlayID[4], 255.0, 0.0, 0.0)
 			AmbientLightRooms(15)
 		ElseIf wi\NightVision = 1
-			EntityColor(tt\OverlayID[4], 0.0, 255.0, 0.0)
+			EntityColor(t\OverlayID[4], 0.0, 255.0, 0.0)
 			AmbientLightRooms(15)
 		Else
-			EntityColor(tt\OverlayID[4], 128.0, 128.0, 128.0)
+			EntityColor(t\OverlayID[4], 128.0, 128.0, 128.0)
 			AmbientLightRooms(0)
 		EndIf
-		EntityTexture(tt\OverlayID[0], tt\MiscTextureID[20])
+		EntityTexture(t\OverlayID[0], t\MiscTextureID[20])
 	Else
 		AmbientLightRooms(0)
-		HideEntity(tt\OverlayID[4])
-		EntityTexture(tt\OverlayID[0], tt\OverlayTextureID[0])
+		HideEntity(t\OverlayID[4])
+		EntityTexture(t\OverlayID[0], t\OverlayTextureID[0])
 	EndIf
 	
 	For i = 0 To 5
@@ -3435,8 +3439,8 @@ Function UpdateGUI()
 			CameraProject(Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) - MeshHeight(o\ButtonModelID[0]) * 0.015, EntityZ(ClosestButton, True))
 			Scale = (ProjectedY() - ProjY) / 462.0
 			
-			x = mo\Viewport_Center_X - ImageWidth(tt\ImageID[4]) * (Scale / 2)
-			y = mo\Viewport_Center_Y - ImageHeight(tt\ImageID[4]) * (Scale / 2)	
+			x = mo\Viewport_Center_X - ImageWidth(t\ImageID[4]) * (Scale / 2)
+			y = mo\Viewport_Center_Y - ImageHeight(t\ImageID[4]) * (Scale / 2)	
 			
 			msg\Txt = ""
 			msg\Timer = 0.0
@@ -3808,7 +3812,7 @@ Function UpdateGUI()
 							;[End Block]
 						Case "helmet"
 							;[Block]
-							If wi\BallisticHelmet > 0 Then
+							If wi\BallisticHelmet Then
 								CreateMsg("Double click on this item to take it off.", 6.0)
 							Else
 								DropItem(SelectedItem)
@@ -3826,7 +3830,7 @@ Function UpdateGUI()
 							;[End Block]
 						Case "scramble"
 							;[Block]
-							If wi\SCRAMBLE > 0 Then
+							If wi\SCRAMBLE Then
 								CreateMsg("Double click on this item to take it off.", 6.0)
 							Else
 								DropItem(SelectedItem)
@@ -4523,7 +4527,10 @@ Function UpdateGUI()
 							it.Items = CreateItem("Empty Cup", "emptycup", 0.0, 0.0, 0.0)
 							it\Picked = True
 							For i = 0 To MaxItemAmount - 1
-								If Inventory(i) = SelectedItem Then Inventory(i) = it : Exit
+								If Inventory(i) = SelectedItem Then
+									Inventory(i) = it
+									Exit
+								EndIf
 							Next					
 							EntityType(it\Collider, HIT_ITEM)
 							
@@ -5037,8 +5044,8 @@ Function UpdateGUI()
 								EndIf
 								If wi\NightVision > 0 Then opt\CameraFogFar = opt\StoredCameraFogFar : wi\NightVision = 0
 								wi\GasMask = 0
-								wi\BallisticHelmet = 0
-								wi\SCRAMBLE = 0
+								wi\BallisticHelmet = False
+								wi\SCRAMBLE = False
 							EndIf
 							SelectedItem\State = 0.0
 							SelectedItem = Null
@@ -5326,12 +5333,12 @@ Function UpdateGUI()
 						If SelectedItem\State = 100.0 Then
 							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 							
-							If wi\BallisticHelmet > 0 Then
+							If wi\BallisticHelmet Then
 								CreateMsg("You removed the helmet.", 6.0)
-								wi\BallisticHelmet = 0
+								wi\BallisticHelmet = False
 							Else
 								CreateMsg("You put on the helmet.", 6.0)
-								wi\BallisticHelmet = 1
+								wi\BallisticHelmet = True
 							EndIf
 							SelectedItem\State = 0.0
 							SelectedItem = Null
@@ -5348,12 +5355,12 @@ Function UpdateGUI()
 						If SelectedItem\State3 = 100.0 Then
 							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 							
-							If wi\SCRAMBLE > 0 Then
+							If wi\SCRAMBLE Then
 								CreateMsg("You removed the gear.", 6.0)
-								wi\SCRAMBLE = 0
+								wi\SCRAMBLE = False
 							Else
 								CreateMsg("You put on the gear.", 6.0)
-								wi\SCRAMBLE = 1
+								wi\SCRAMBLE = True
 							EndIf
 							SelectedItem\State3 = 0.0
 							SelectedItem = Null
@@ -5405,7 +5412,7 @@ Function UpdateGUI()
 			End Select
 			
 			If mo\MouseHit2 Then
-				EntityAlpha(tt\OverlayID[5], 0.0)
+				EntityAlpha(t\OverlayID[5], 0.0)
 				
 				Local IN$ = SelectedItem\ItemTemplate\TempName
 				
@@ -5475,7 +5482,7 @@ Function RenderHUD()
 	
 	Color(255, 255, 255)
 	If me\BlinkTimer < 150.0 Then
-		RenderBar(tt\ImageID[1], x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ, 100, 0, 0)
+		RenderBar(t\ImageID[1], x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ, 100, 0, 0)
 	Else
 		RenderBar(BlinkMeterIMG, x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ)
 	EndIf
@@ -5495,14 +5502,14 @@ Function RenderHUD()
 	Color(255, 255, 255)
 	Rect(x - 51, y - 1, 32, 32, False)
 	
-	DrawImage(tt\IconID[3], x - 50, y)
+	DrawImage(t\IconID[3], x - 50, y)
 	
 	y = opt\GraphicHeight - 55.0
 	
 	If me\Stamina =< 25.0 Then
-		RenderBar(tt\ImageID[3], x, y, Width, Height, me\Stamina, 100.0, 50, 0, 0)
+		RenderBar(t\ImageID[3], x, y, Width, Height, me\Stamina, 100.0, 50, 0, 0)
 	Else
-		RenderBar(tt\ImageID[2], x, y, Width, Height, me\Stamina, 100.0, 50, 50, 50)
+		RenderBar(t\ImageID[2], x, y, Width, Height, me\Stamina, 100.0, 50, 50, 50)
 	EndIf
 	Color(0, 0, 0)
 	Rect(x - 50, y, 30, 30)
@@ -5520,11 +5527,11 @@ Function RenderHUD()
 	Color(255, 255, 255)
 	Rect(x - 51, y - 1, 32, 32, False)
 	If me\Crouch Then
-		DrawImage(tt\IconID[2], x - 50, y)
+		DrawImage(t\IconID[2], x - 50, y)
 	ElseIf KeyDown(key\SPRINT) And me\CurrSpeed > 0.0 And (Not chs\NoClip) And me\Stamina > 0.0 Then
-		DrawImage(tt\IconID[1], x - 50, y)
+		DrawImage(t\IconID[1], x - 50, y)
 	Else
-		DrawImage(tt\IconID[0], x - 50, y)
+		DrawImage(t\IconID[0], x - 50, y)
 	EndIf
 End Function
 
@@ -5753,7 +5760,7 @@ Function RenderGUI()
 		
 		FreeEntity(Temp)
 		
-		DrawImage(tt\IconID[4], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - 32, mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - 32)
+		DrawImage(t\IconID[4], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - 32, mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - 32)
 	EndIf
 	
 	If ClosestItem <> Null And SelectedDifficulty\OtherFactors <> EXTREME Then
@@ -5764,10 +5771,10 @@ Function RenderGUI()
 		If PitchValue > 90.0 And PitchValue =< 180.0 Then PitchValue = 90.0
 		If PitchValue > 180.0 And PitchValue < 270.0 Then PitchValue = 270.0
 		
-		DrawImage(tt\IconID[5], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - 32, mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - 32)
+		DrawImage(t\IconID[5], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - 32, mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - 32)
 	EndIf
 	
-	If ga\DrawHandIcon And SelectedDifficulty\OtherFactors <> EXTREME Then DrawImage(tt\IconID[4], mo\Viewport_Center_X - 32, mo\Viewport_Center_Y - 32)
+	If ga\DrawHandIcon And SelectedDifficulty\OtherFactors <> EXTREME Then DrawImage(t\IconID[4], mo\Viewport_Center_X - 32, mo\Viewport_Center_Y - 32)
 	For i = 0 To 3
 		If ga\DrawArrowIcon[i] And SelectedDifficulty\OtherFactors <> EXTREME Then
 			x = mo\Viewport_Center_X - 32
@@ -5790,7 +5797,7 @@ Function RenderGUI()
 					x = x - 69
 					;[End Block]
 			End Select
-			DrawImage(tt\IconID[4], x, y)
+			DrawImage(t\IconID[4], x, y)
 			Color(0, 0, 0)
 			Rect(x + 4, y + 4, 56, 56)
 			DrawImage(ga\ArrowIMG[i], x + 21, y + 21)
@@ -5836,8 +5843,8 @@ Function RenderGUI()
 			CameraProject(Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) - MeshHeight(o\ButtonModelID[0]) * 0.015, EntityZ(ClosestButton, True))
 			Scale = (ProjectedY() - ProjY) / 462.0
 			
-			x = mo\Viewport_Center_X - ImageWidth(tt\ImageID[4]) * (Scale / 2)
-			y = mo\Viewport_Center_Y - ImageHeight(tt\ImageID[4]) * (Scale / 2)	
+			x = mo\Viewport_Center_X - ImageWidth(t\ImageID[4]) * (Scale / 2)
+			y = mo\Viewport_Center_Y - ImageHeight(t\ImageID[4]) * (Scale / 2)	
 			
 			SetFont(fo\FontID[Font_Digital])
 			If msg\KeyPadMsg <> "" Then 
@@ -5978,11 +5985,11 @@ Function RenderGUI()
 						;[End Block]
 					Case "helmet"
 						;[Block]
-						If wi\BallisticHelmet = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						If wi\BallisticHelmet Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
 						;[End Block]
 					Case "scp714"
 						;[Block]
-						If I_714\Using = True Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						If I_714\Using Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
 						;[End Block]
 					Case "nvg"
 						;[Block]
@@ -5998,7 +6005,7 @@ Function RenderGUI()
 						;[End Block]
 					Case "scramble"
 						;[Block]
-						If wi\SCRAMBLE = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						If wi\SCRAMBLE Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
 						;[End Block]
 					Case "scp1499"
 						;[Block]
@@ -6343,7 +6350,7 @@ Function RenderGUI()
 							PlayerX = Floor((EntityX(PlayerRoom\OBJ) + 8.0) / 8.0 + 0.5)
 							PlayerZ = Floor((EntityZ(PlayerRoom\OBJ) + 8.0) / 8.0 + 0.5)
 							
-							SetBuffer(ImageBuffer(tt\ImageID[12]))
+							SetBuffer(ImageBuffer(t\ImageID[12]))
 							
 							Local xx% = x - ImageWidth(SelectedItem\ItemTemplate\Img) / 2
 							Local yy% = y - ImageHeight(SelectedItem\ItemTemplate\Img) / 2 + 85
@@ -6355,36 +6362,36 @@ Function RenderGUI()
 							For x2 = Max(0.0, PlayerX - 6.0) To Min(MapGridSize, PlayerX + 6.0)
 								For z2 = Max(0.0, PlayerZ - 6.0) To Min(MapGridSize, PlayerZ + 6.0)
 									If CoffinDistance > 16.0 Lor Rnd(16.0) < CoffinDistance Then 
-										If CurrGrid\Grid[x2 + (z2 * MapGridSize)] > 0 And (CurrGrid\Found[x2 + (z2 * MapGridSize)] > 0 Lor SelectedItem\ItemTemplate\TempName = "nav310" Lor SelectedItem\ItemTemplate\TempName = "navulti") Then
+										If CurrMapGrid\Grid[x2 + (z2 * MapGridSize)] > 0 And (CurrMapGrid\Found[x2 + (z2 * MapGridSize)] > 0 Lor SelectedItem\ItemTemplate\TempName = "nav310" Lor SelectedItem\ItemTemplate\TempName = "navulti") Then
 											Local DrawX% = x + (PlayerX - 1 - x2) * 24 , DrawY% = y - (PlayerZ - 1 - z2) * 24
 											
 											If x2 + 1.0 =< MapGridSize Then
-												If CurrGrid\Grid[(x2 + 1) + (z2 * MapGridSize)] = 0
-													DrawImage(tt\ImageID[10], DrawX - 12, DrawY - 12)
+												If CurrMapGrid\Grid[(x2 + 1) + (z2 * MapGridSize)] = 0
+													DrawImage(t\ImageID[10], DrawX - 12, DrawY - 12)
 												EndIf
 											Else
-												DrawImage(tt\ImageID[10], DrawX - 12, DrawY - 12)
+												DrawImage(t\ImageID[10], DrawX - 12, DrawY - 12)
 											EndIf
 											If x2 - 1.0 >= 0.0 Then
-												If CurrGrid\Grid[(x2 - 1) + (z2 * MapGridSize)] = 0
-													DrawImage(tt\ImageID[8], DrawX - 12, DrawY - 12)
+												If CurrMapGrid\Grid[(x2 - 1) + (z2 * MapGridSize)] = 0
+													DrawImage(t\ImageID[8], DrawX - 12, DrawY - 12)
 												EndIf
 											Else
-												DrawImage(tt\ImageID[8], DrawX - 12, DrawY - 12)
+												DrawImage(t\ImageID[8], DrawX - 12, DrawY - 12)
 											EndIf
 											If z2 - 1.0 >= 0.0 Then
-												If CurrGrid\Grid[x2 + ((z2 - 1) * MapGridSize)] = 0
-													DrawImage(tt\ImageID[7], DrawX - 12, DrawY - 12)
+												If CurrMapGrid\Grid[x2 + ((z2 - 1) * MapGridSize)] = 0
+													DrawImage(t\ImageID[7], DrawX - 12, DrawY - 12)
 												EndIf
 											Else
-												DrawImage(tt\ImageID[7], DrawX - 12, DrawY - 12)
+												DrawImage(t\ImageID[7], DrawX - 12, DrawY - 12)
 											EndIf
 											If z2 + 1.0 =< MapGridSize Then
-												If CurrGrid\Grid[x2 + ((z2 + 1) * MapGridSize)] = 0
-													DrawImage(tt\ImageID[9], DrawX - 12, DrawY - 12)
+												If CurrMapGrid\Grid[x2 + ((z2 + 1) * MapGridSize)] = 0
+													DrawImage(t\ImageID[9], DrawX - 12, DrawY - 12)
 												EndIf
 											Else
-												DrawImage(tt\ImageID[9], DrawX - 12, DrawY - 12)
+												DrawImage(t\ImageID[9], DrawX - 12, DrawY - 12)
 											EndIf
 										EndIf
 									EndIf
@@ -6392,7 +6399,7 @@ Function RenderGUI()
 							Next
 							
 							SetBuffer(BackBuffer())
-							DrawImageRect(tt\ImageID[12], xx + 80, yy + 70, xx + 80, yy + 70, 270, 230)
+							DrawImageRect(t\ImageID[12], xx + 80, yy + 70, xx + 80, yy + 70, 270, 230)
 							If SelectedItem\ItemTemplate\TempName = "nav" Lor SelectedItem\ItemTemplate\TempName = "nav300" Then
 								Color(100, 0, 0)
 							Else
@@ -6486,7 +6493,7 @@ Function RenderGUI()
 								Rect(xTemp, yTemp, 80, 20, False)
 								
 								For i = 1 To Min(Ceil(SelectedItem\State / 10.0), 10.0)
-									DrawImage(tt\ImageID[11], xTemp + (i * 8) - 6, yTemp + 4)
+									DrawImage(t\ImageID[11], xTemp + (i * 8) - 6, yTemp + 4)
 								Next
 								SetFont(fo\FontID[Font_Digital])
 							EndIf
@@ -6633,8 +6640,8 @@ Function UpdateMenu()
 		InvOpen = False
 		ConsoleOpen = False
 		
-		Width = ImageWidth(tt\ImageID[0])
-		Height = ImageHeight(tt\ImageID[0])
+		Width = ImageWidth(t\ImageID[0])
+		Height = ImageHeight(t\ImageID[0])
 		x = mo\Viewport_Center_X - (Width / 2)
 		y = mo\Viewport_Center_Y - (Height / 2)
 		
@@ -6834,7 +6841,10 @@ Function UpdateMenu()
 					Local TempKey%
 					
 					For i = 0 To 227
-						If KeyHit(i) Then TempKey = i : Exit
+						If KeyHit(i) Then
+							TempKey = i
+							Exit
+						EndIf
 					Next
 					If TempKey <> 0 Then
 						Select SelectedInputBox
@@ -7031,10 +7041,10 @@ Function UpdateMenu()
 								z = Abs(EntityZ(me\Collider) - EntityZ(r\OBJ))
 								
 								If x < 12.0 And z < 12.0 Then
-									CurrGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)] = Max(CurrGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)], 1.0)
+									CurrMapGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)] = Max(CurrMapGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)], 1.0)
 									If x < 4.0 And z < 4.0 Then
 										If Abs(EntityY(me\Collider) - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r
-										CurrGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)] = 1
+										CurrMapGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)] = 1
 									EndIf
 								EndIf
 							Next
@@ -7090,10 +7100,10 @@ Function UpdateMenu()
 								z = Abs(EntityZ(me\Collider) - EntityZ(r\OBJ))
 								
 								If x < 12.0 And z < 12.0 Then
-									CurrGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)] = Max(CurrGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)], 1.0)
+									CurrMapGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)] = Max(CurrMapGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)], 1.0)
 									If x < 4.0 And z < 4.0 Then
 										If Abs(EntityY(me\Collider) - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r
-										CurrGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)] = 1
+										CurrMapGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)] = 1
 									EndIf
 								EndIf
 							Next
@@ -7146,12 +7156,12 @@ Function RenderMenu()
 		Delay(1000) ; ~ Reduce the CPU take while game is not in focus
 	EndIf
 	If MenuOpen Then
-		Width = ImageWidth(tt\ImageID[0])
-		Height = ImageHeight(tt\ImageID[0])
+		Width = ImageWidth(t\ImageID[0])
+		Height = ImageHeight(t\ImageID[0])
 		x = mo\Viewport_Center_X - (Width / 2)
 		y = mo\Viewport_Center_Y - (Height / 2)
 		
-		DrawImage(tt\ImageID[0], x, y)
+		DrawImage(t\ImageID[0], x, y)
 		
 		Color(255, 255, 255)
 		
@@ -7581,8 +7591,8 @@ Function UpdateEnding()
 			EndIf			
 		Else
 			If me\EndingTimer < -1000.0 And me\EndingTimer > -2000.0 Then
-				Width = ImageWidth(tt\ImageID[0])
-				Height = ImageHeight(tt\ImageID[0])
+				Width = ImageWidth(t\ImageID[0])
+				Height = ImageHeight(t\ImageID[0])
 				x = mo\Viewport_Center_X - (Width / 2)
 				y = mo\Viewport_Center_Y - (Height / 2)
 				
@@ -7659,12 +7669,12 @@ Function RenderEnding()
 			DrawImage(me\EndingScreen, mo\Viewport_Center_X - 400, mo\Viewport_Center_Y - 400)
 			
 			If me\EndingTimer < -1000.0 And me\EndingTimer > -2000.0 Then
-				Width = ImageWidth(tt\ImageID[0])
-				Height = ImageHeight(tt\ImageID[0])
+				Width = ImageWidth(t\ImageID[0])
+				Height = ImageHeight(t\ImageID[0])
 				x = mo\Viewport_Center_X - (Width / 2)
 				y = mo\Viewport_Center_Y - (Height / 2)
 				
-				DrawImage(tt\ImageID[0], x, y)
+				DrawImage(t\ImageID[0], x, y)
 				
 				Color(255, 255, 255)
 				SetFont(fo\FontID[Font_Default_Big])
@@ -7905,43 +7915,43 @@ Function LoadEntities()
 		TempSounds[i] = 0
 	Next
 	
-	tt\ImageID[0] = LoadImage_Strict("GFX\menu\pause_menu.png")
-	MaskImage(tt\ImageID[0], 255, 255, 0)
-	ScaleImage(tt\ImageID[0], MenuScale, MenuScale)
+	t\ImageID[0] = LoadImage_Strict("GFX\menu\pause_menu.png")
+	MaskImage(t\ImageID[0], 255, 255, 0)
+	ScaleImage(t\ImageID[0], MenuScale, MenuScale)
 	
 	If (Not opt\SmoothHUD) Then
-		tt\ImageID[1] = LoadImage_Strict("GFX\blink_meter(2).png")
+		t\ImageID[1] = LoadImage_Strict("GFX\blink_meter(2).png")
 		
 		For i = 2 To 3
-			tt\ImageID[i] = LoadImage_Strict("GFX\stamina_meter(" + (i - 1) + ").png")
+			t\ImageID[i] = LoadImage_Strict("GFX\stamina_meter(" + (i - 1) + ").png")
 		Next
 	EndIf
 	
-	tt\ImageID[4] = LoadImage_Strict("GFX\keypad_HUD.png")
-	MaskImage(tt\ImageID[4], 255, 0, 255)
+	t\ImageID[4] = LoadImage_Strict("GFX\keypad_HUD.png")
+	MaskImage(t\ImageID[4], 255, 0, 255)
 	
-	tt\ImageID[5] = LoadImage_Strict("GFX\scp_294_panel.png")
-	MaskImage(tt\ImageID[5], 255, 0, 255)
+	t\ImageID[5] = LoadImage_Strict("GFX\scp_294_panel.png")
+	MaskImage(t\ImageID[5], 255, 0, 255)
 	
-	tt\ImageID[6] = LoadImage_Strict("GFX\night_vision_goggles_battery.png")
-	MaskImage(tt\ImageID[6], 255, 0, 255)
+	t\ImageID[6] = LoadImage_Strict("GFX\night_vision_goggles_battery.png")
+	MaskImage(t\ImageID[6], 255, 0, 255)
 	
-	tt\ImageID[7] = LoadImage_Strict("GFX\items\navigator_room_border.png")
-	MaskImage(tt\ImageID[7], 255, 0, 255)
+	t\ImageID[7] = LoadImage_Strict("GFX\items\navigator_room_border.png")
+	MaskImage(t\ImageID[7], 255, 0, 255)
 	For i = 8 To 10
-		tt\ImageID[i] = LoadImage_Strict("GFX\items\navigator_room_border(" + (i - 6) + ").png")
-		MaskImage(tt\ImageID[i], 255, 0, 255)
+		t\ImageID[i] = LoadImage_Strict("GFX\items\navigator_room_border(" + (i - 6) + ").png")
+		MaskImage(t\ImageID[i], 255, 0, 255)
 	Next
-	tt\ImageID[11] = LoadImage_Strict("GFX\items\navigator_battery_meter.png")
+	t\ImageID[11] = LoadImage_Strict("GFX\items\navigator_battery_meter.png")
 	
-	tt\ImageID[12] = CreateImage(opt\GraphicWidth, opt\GraphicHeight)
+	t\ImageID[12] = CreateImage(opt\GraphicWidth, opt\GraphicHeight)
 	
-	tt\IconID[0] = LoadImage_Strict("GFX\walk_icon.png")
-	tt\IconID[1] = LoadImage_Strict("GFX\sprint_icon.png")
-	tt\IconID[2] = LoadImage_Strict("GFX\crouch_icon.png")
-	tt\IconID[3] = LoadImage_Strict("GFX\blink_icon.png")
+	t\IconID[0] = LoadImage_Strict("GFX\walk_icon.png")
+	t\IconID[1] = LoadImage_Strict("GFX\sprint_icon.png")
+	t\IconID[2] = LoadImage_Strict("GFX\crouch_icon.png")
+	t\IconID[3] = LoadImage_Strict("GFX\blink_icon.png")
 	For i = 4 To 5
-		tt\IconID[i] = LoadImage_Strict("GFX\hand_symbol(" + (i - 3) + ").png")
+		t\IconID[i] = LoadImage_Strict("GFX\hand_symbol(" + (i - 3) + ").png")
 	Next
 	
 	AmbientLightRoomTex = CreateTextureUsingCacheSystem(2, 2)
@@ -7966,119 +7976,119 @@ Function LoadEntities()
 	CreateBlurImage()
 	CameraProjMode(ArkBlurCam, 0)
 	
-	tt\OverlayTextureID[0] = LoadTexture_Strict("GFX\fog.png", 1, DeleteAllTextures) ; ~ FOG
-	tt\OverlayID[0] = CreateSprite(ArkBlurCam)
-	ScaleSprite(tt\OverlayID[0], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
-	EntityTexture(tt\OverlayID[0], tt\OverlayTextureID[0])
-	EntityBlend(tt\OverlayID[0], 2)
-	EntityOrder(tt\OverlayID[0], -1000)
-	MoveEntity(tt\OverlayID[0], 0.0, 0.0, 1.0)
+	t\OverlayTextureID[0] = LoadTexture_Strict("GFX\fog.png", 1, DeleteAllTextures) ; ~ FOG
+	t\OverlayID[0] = CreateSprite(ArkBlurCam)
+	ScaleSprite(t\OverlayID[0], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
+	EntityTexture(t\OverlayID[0], t\OverlayTextureID[0])
+	EntityBlend(t\OverlayID[0], 2)
+	EntityOrder(t\OverlayID[0], -1000)
+	MoveEntity(t\OverlayID[0], 0.0, 0.0, 1.0)
 	
-	tt\OverlayTextureID[1] = LoadTexture_Strict("GFX\gas_mask_overlay.png", 1, DeleteAllTextures) ; ~ GAS MASK
-	tt\OverlayID[1] = CreateSprite(ArkBlurCam)
-	ScaleSprite(tt\OverlayID[1], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
-	EntityTexture(tt\OverlayID[1], tt\OverlayTextureID[1])
-	EntityBlend(tt\OverlayID[1], 2)
-	EntityFX(tt\OverlayID[1], 1)
-	EntityOrder(tt\OverlayID[1], -1003)
-	MoveEntity(tt\OverlayID[1], 0.0, 0.0, 1.0)
+	t\OverlayTextureID[1] = LoadTexture_Strict("GFX\gas_mask_overlay.png", 1, DeleteAllTextures) ; ~ GAS MASK
+	t\OverlayID[1] = CreateSprite(ArkBlurCam)
+	ScaleSprite(t\OverlayID[1], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
+	EntityTexture(t\OverlayID[1], t\OverlayTextureID[1])
+	EntityBlend(t\OverlayID[1], 2)
+	EntityFX(t\OverlayID[1], 1)
+	EntityOrder(t\OverlayID[1], -1003)
+	MoveEntity(t\OverlayID[1], 0.0, 0.0, 1.0)
 	
-	tt\OverlayTextureID[2] = LoadTexture_Strict("GFX\hazmat_suit_overlay.png", 1, DeleteAllTextures) ; ~ HAZMAT SUIT
-	tt\OverlayID[2] = CreateSprite(ArkBlurCam)
-	ScaleSprite(tt\OverlayID[2], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
-	EntityTexture(tt\OverlayID[2], tt\OverlayTextureID[2])
-	EntityBlend(tt\OverlayID[2], 2)
-	EntityFX(tt\OverlayID[2], 1)
-	EntityOrder(tt\OverlayID[2], -1003)
-	MoveEntity(tt\OverlayID[2], 0, 0, 1.0)
+	t\OverlayTextureID[2] = LoadTexture_Strict("GFX\hazmat_suit_overlay.png", 1, DeleteAllTextures) ; ~ HAZMAT SUIT
+	t\OverlayID[2] = CreateSprite(ArkBlurCam)
+	ScaleSprite(t\OverlayID[2], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
+	EntityTexture(t\OverlayID[2], t\OverlayTextureID[2])
+	EntityBlend(t\OverlayID[2], 2)
+	EntityFX(t\OverlayID[2], 1)
+	EntityOrder(t\OverlayID[2], -1003)
+	MoveEntity(t\OverlayID[2], 0, 0, 1.0)
 	
-	tt\OverlayTextureID[3] = LoadTexture_Strict("GFX\scp_008_overlay.png", 1, DeleteAllTextures) ; ~ SCP-008
-	tt\OverlayID[3] = CreateSprite(ArkBlurCam)
-	ScaleSprite(tt\OverlayID[3], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
-	EntityTexture(tt\OverlayID[3], tt\OverlayTextureID[3])
-	EntityBlend(tt\OverlayID[3], 3)
-	EntityFX(tt\OverlayID[3], 1)
-	EntityOrder(tt\OverlayID[3], -1003)
-	MoveEntity(tt\OverlayID[3], 0.0, 0.0, 1.0)
+	t\OverlayTextureID[3] = LoadTexture_Strict("GFX\scp_008_overlay.png", 1, DeleteAllTextures) ; ~ SCP-008
+	t\OverlayID[3] = CreateSprite(ArkBlurCam)
+	ScaleSprite(t\OverlayID[3], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
+	EntityTexture(t\OverlayID[3], t\OverlayTextureID[3])
+	EntityBlend(t\OverlayID[3], 3)
+	EntityFX(t\OverlayID[3], 1)
+	EntityOrder(t\OverlayID[3], -1003)
+	MoveEntity(t\OverlayID[3], 0.0, 0.0, 1.0)
 	
-	tt\OverlayTextureID[4] = LoadTexture_Strict("GFX\night_vision_goggles_overlay.png", 1, DeleteAllTextures) ; ~ NIGHT VISION GOGGLES
-	tt\OverlayID[4] = CreateSprite(ArkBlurCam)
-	ScaleSprite(tt\OverlayID[4], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
-	EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
-	EntityBlend(tt\OverlayID[4], 2)
-	EntityFX(tt\OverlayID[4], 1)
-	EntityOrder(tt\OverlayID[4], -1003)
-	MoveEntity(tt\OverlayID[4], 0.0, 0.0, 1.0)
+	t\OverlayTextureID[4] = LoadTexture_Strict("GFX\night_vision_goggles_overlay.png", 1, DeleteAllTextures) ; ~ NIGHT VISION GOGGLES
+	t\OverlayID[4] = CreateSprite(ArkBlurCam)
+	ScaleSprite(t\OverlayID[4], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
+	EntityTexture(t\OverlayID[4], t\OverlayTextureID[4])
+	EntityBlend(t\OverlayID[4], 2)
+	EntityFX(t\OverlayID[4], 1)
+	EntityOrder(t\OverlayID[4], -1003)
+	MoveEntity(t\OverlayID[4], 0.0, 0.0, 1.0)
 	
 	For i = 1 To 4
-		HideEntity(tt\OverlayID[i])
+		HideEntity(t\OverlayID[i])
 	Next
 	
 	RenderLoading(5)
 	
-	tt\OverlayTextureID[5] = CreateTextureUsingCacheSystem(1024, 1024, 1 + 2) ; ~ DARK
-	SetBuffer(TextureBuffer(tt\OverlayTextureID[5]))
+	t\OverlayTextureID[5] = CreateTextureUsingCacheSystem(1024, 1024, 1 + 2) ; ~ DARK
+	SetBuffer(TextureBuffer(t\OverlayTextureID[5]))
 	Cls()
 	SetBuffer(BackBuffer())
-	tt\OverlayID[5] = CreateSprite(ArkBlurCam)
-	ScaleSprite(tt\OverlayID[5], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
-	EntityTexture(tt\OverlayID[5], tt\OverlayTextureID[5])
-	EntityBlend(tt\OverlayID[5], 1)
-	EntityOrder(tt\OverlayID[5], -1002)
-	MoveEntity(tt\OverlayID[5], 0.0, 0.0, 1.0)
-	EntityAlpha(tt\OverlayID[5], 0.0)
+	t\OverlayID[5] = CreateSprite(ArkBlurCam)
+	ScaleSprite(t\OverlayID[5], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
+	EntityTexture(t\OverlayID[5], t\OverlayTextureID[5])
+	EntityBlend(t\OverlayID[5], 1)
+	EntityOrder(t\OverlayID[5], -1002)
+	MoveEntity(t\OverlayID[5], 0.0, 0.0, 1.0)
+	EntityAlpha(t\OverlayID[5], 0.0)
 	
-	tt\OverlayTextureID[6] = CreateTextureUsingCacheSystem(1024, 1024, 1 + 2) ; ~ LIGHT
-	SetBuffer(TextureBuffer(tt\OverlayTextureID[6]))
+	t\OverlayTextureID[6] = CreateTextureUsingCacheSystem(1024, 1024, 1 + 2) ; ~ LIGHT
+	SetBuffer(TextureBuffer(t\OverlayTextureID[6]))
 	ClsColor(255, 255, 255)
 	Cls()
 	ClsColor(0, 0, 0)
 	SetBuffer(BackBuffer())
-	tt\OverlayID[6] = CreateSprite(ArkBlurCam)
-	ScaleSprite(tt\OverlayID[6], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
-	EntityTexture(tt\OverlayID[6], tt\OverlayTextureID[6])
-	EntityBlend(tt\OverlayID[6], 1)
-	EntityOrder(tt\OverlayID[6], -1002)
-	MoveEntity(tt\OverlayID[6], 0.0, 0.0, 1.0)
+	t\OverlayID[6] = CreateSprite(ArkBlurCam)
+	ScaleSprite(t\OverlayID[6], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
+	EntityTexture(t\OverlayID[6], t\OverlayTextureID[6])
+	EntityBlend(t\OverlayID[6], 1)
+	EntityOrder(t\OverlayID[6], -1002)
+	MoveEntity(t\OverlayID[6], 0.0, 0.0, 1.0)
 	
-	tt\OverlayTextureID[7] = LoadTexture_Strict("GFX\scp_409_overlay.png", 1, DeleteAllTextures) ; ~ SCP-409
-	tt\OverlayID[7] = CreateSprite(ArkBlurCam)
-	ScaleSprite(tt\OverlayID[7], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
-	EntityTexture(tt\OverlayID[7], tt\OverlayTextureID[7])
-	EntityBlend(tt\OverlayID[7], 3)
-	EntityFX(tt\OverlayID[7], 1)
-	EntityOrder(tt\OverlayID[7], -1001)
-	MoveEntity(tt\OverlayID[7], 0.0, 0.0, 1.0)
+	t\OverlayTextureID[7] = LoadTexture_Strict("GFX\scp_409_overlay.png", 1, DeleteAllTextures) ; ~ SCP-409
+	t\OverlayID[7] = CreateSprite(ArkBlurCam)
+	ScaleSprite(t\OverlayID[7], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
+	EntityTexture(t\OverlayID[7], t\OverlayTextureID[7])
+	EntityBlend(t\OverlayID[7], 3)
+	EntityFX(t\OverlayID[7], 1)
+	EntityOrder(t\OverlayID[7], -1001)
+	MoveEntity(t\OverlayID[7], 0.0, 0.0, 1.0)
 	
-	tt\OverlayTextureID[8] = LoadTexture_Strict("GFX\helmet_overlay.png", 1, DeleteAllTextures) ; ~ HELMET
-	tt\OverlayID[8] = CreateSprite(ArkBlurCam)
-	ScaleSprite(tt\OverlayID[8], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
-	EntityTexture(tt\OverlayID[8], tt\OverlayTextureID[8])
-	EntityBlend(tt\OverlayID[8], 2)
-	EntityFX(tt\OverlayID[8], 1)
-	EntityOrder(tt\OverlayID[8], -1003)
-	MoveEntity(tt\OverlayID[8], 0.0, 0.0, 1.0)
+	t\OverlayTextureID[8] = LoadTexture_Strict("GFX\helmet_overlay.png", 1, DeleteAllTextures) ; ~ HELMET
+	t\OverlayID[8] = CreateSprite(ArkBlurCam)
+	ScaleSprite(t\OverlayID[8], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
+	EntityTexture(t\OverlayID[8], t\OverlayTextureID[8])
+	EntityBlend(t\OverlayID[8], 2)
+	EntityFX(t\OverlayID[8], 1)
+	EntityOrder(t\OverlayID[8], -1003)
+	MoveEntity(t\OverlayID[8], 0.0, 0.0, 1.0)
 	
-	tt\OverlayTextureID[9] = LoadTexture_Strict("GFX\bloody_overlay.png", 1, DeleteAllTextures) ; ~ BLOOD
-	tt\OverlayID[9] = CreateSprite(ArkBlurCam)
-	ScaleSprite(tt\OverlayID[9], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
-	EntityTexture(tt\OverlayID[9], tt\OverlayTextureID[9])
-	EntityBlend(tt\OverlayID[9], 2)
-	EntityFX(tt\OverlayID[9], 1)
-	EntityOrder(tt\OverlayID[9], -1003)
-	MoveEntity(tt\OverlayID[9], 0.0, 0.0, 1.0)
+	t\OverlayTextureID[9] = LoadTexture_Strict("GFX\bloody_overlay.png", 1, DeleteAllTextures) ; ~ BLOOD
+	t\OverlayID[9] = CreateSprite(ArkBlurCam)
+	ScaleSprite(t\OverlayID[9], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
+	EntityTexture(t\OverlayID[9], t\OverlayTextureID[9])
+	EntityBlend(t\OverlayID[9], 2)
+	EntityFX(t\OverlayID[9], 1)
+	EntityOrder(t\OverlayID[9], -1003)
+	MoveEntity(t\OverlayID[9], 0.0, 0.0, 1.0)
 	
-	tt\OverlayTextureID[10] = LoadTexture_Strict("GFX\fog_gas_mask.png", 1, DeleteAllTextures) ; ~ FOG IN GAS MASK
-	tt\OverlayID[10] = CreateSprite(ArkBlurCam)
-	ScaleSprite(tt\OverlayID[10], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
-	EntityTexture(tt\OverlayID[10], tt\OverlayTextureID[10])
-	EntityBlend(tt\OverlayID[10], 3)
-	EntityFX(tt\OverlayID[10], 1)
-	EntityOrder(tt\OverlayID[10], -1000)
-	MoveEntity(tt\OverlayID[10], 0.0, 0.0, 1.0)
+	t\OverlayTextureID[10] = LoadTexture_Strict("GFX\fog_gas_mask.png", 1, DeleteAllTextures) ; ~ FOG IN GAS MASK
+	t\OverlayID[10] = CreateSprite(ArkBlurCam)
+	ScaleSprite(t\OverlayID[10], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
+	EntityTexture(t\OverlayID[10], t\OverlayTextureID[10])
+	EntityBlend(t\OverlayID[10], 3)
+	EntityFX(t\OverlayID[10], 1)
+	EntityOrder(t\OverlayID[10], -1000)
+	MoveEntity(t\OverlayID[10], 0.0, 0.0, 1.0)
 	
 	For i = 7 To 10
-		HideEntity(tt\OverlayID[i])
+		HideEntity(t\OverlayID[i])
 	Next
 	
 	me\Collider = CreatePivot()
@@ -8224,52 +8234,52 @@ Function LoadEntities()
 	HideEntity(o\MiscModelID[0])
 	
 	For i = 0 To 1
-		tt\LightSpriteID[i] = LoadTexture_Strict("GFX\light(" + (i + 1) + ").png", 1, DeleteAllTextures)
+		t\LightSpriteID[i] = LoadTexture_Strict("GFX\light(" + (i + 1) + ").png", 1, DeleteAllTextures)
 	Next
-	tt\LightSpriteID[2] = LoadTexture_Strict("GFX\light_sprite.png", 1, DeleteAllTextures)
+	t\LightSpriteID[2] = LoadTexture_Strict("GFX\light_sprite.png", 1, DeleteAllTextures)
 	
 	RenderLoading(15)
 	
 	For i = 0 To 6
-		tt\MiscTextureID[i] = LoadTexture_Strict("GFX\scp_079_overlay(" + (i + 1) + ").png", 1, DeleteAllTextures)
+		t\MiscTextureID[i] = LoadTexture_Strict("GFX\scp_079_overlay(" + (i + 1) + ").png", 1, DeleteAllTextures)
 	Next
 	
 	For i = 7 To 12
-		tt\MiscTextureID[i] = LoadTexture_Strict("GFX\scp_895_overlay(" + (i - 6) + ").png", 1, DeleteAllTextures)
+		t\MiscTextureID[i] = LoadTexture_Strict("GFX\scp_895_overlay(" + (i - 6) + ").png", 1, DeleteAllTextures)
 	Next
 	
-	tt\MiscTextureID[13] = LoadTexture_Strict("GFX\tesla_overlay.png", 1 + 2, DeleteAllTextures)
+	t\MiscTextureID[13] = LoadTexture_Strict("GFX\tesla_overlay.png", 1 + 2, DeleteAllTextures)
 	
-	tt\MiscTextureID[16] = LoadTexture_Strict("GFX\map\textures\keypad.jpg", 1, DeleteAllTextures)
-	tt\MiscTextureID[17] = LoadTexture_Strict("GFX\map\textures\keypad_locked.png", 1, DeleteAllTextures)
+	t\MiscTextureID[16] = LoadTexture_Strict("GFX\map\textures\keypad.jpg", 1, DeleteAllTextures)
+	t\MiscTextureID[17] = LoadTexture_Strict("GFX\map\textures\keypad_locked.png", 1, DeleteAllTextures)
 	
 	For i = 18 To 19
-		tt\MiscTextureID[i] = LoadTexture_Strict("GFX\map\textures\camera(" + (i - 17) + ").png", 1, DeleteAllTextures)
+		t\MiscTextureID[i] = LoadTexture_Strict("GFX\map\textures\camera(" + (i - 17) + ").png", 1, DeleteAllTextures)
 	Next
 	
-	tt\MiscTextureID[20] = LoadTexture_Strict("GFX\fog_night_vision_goggles.png", 1, DeleteAllTextures) ; ~ FOG IN NIGHT VISION GOGGLES
+	t\MiscTextureID[20] = LoadTexture_Strict("GFX\fog_night_vision_goggles.png", 1, DeleteAllTextures) ; ~ FOG IN NIGHT VISION GOGGLES
 	
 	RenderLoading(20)
 	
 	For i = 0 To 7
-		tt\DecalTextureID[i] = LoadTexture_Strict("GFX\decal(" + (i + 1) + ").png", 1 + 2, DeleteAllTextures)
+		t\DecalTextureID[i] = LoadTexture_Strict("GFX\decal(" + (i + 1) + ").png", 1 + 2, DeleteAllTextures)
 	Next
 	
 	For i = 8 To 13
-		tt\DecalTextureID[i] = LoadTexture_Strict("GFX\decal_pd(" + (i - 7) + ").png", 1 + 2, DeleteAllTextures)	
+		t\DecalTextureID[i] = LoadTexture_Strict("GFX\decal_pd(" + (i - 7) + ").png", 1 + 2, DeleteAllTextures)	
 	Next
 	
 	For i = 14 To 15
-		tt\DecalTextureID[i] = LoadTexture_Strict("GFX\bullet_hole(" + (i - 13) + ").png", 1 + 2, DeleteAllTextures)	
+		t\DecalTextureID[i] = LoadTexture_Strict("GFX\bullet_hole(" + (i - 13) + ").png", 1 + 2, DeleteAllTextures)	
 	Next
 	
 	For i = 16 To 17
-		tt\DecalTextureID[i] = LoadTexture_Strict("GFX\blood_drop(" + (i - 15) + ").png", 1 + 2, DeleteAllTextures)
+		t\DecalTextureID[i] = LoadTexture_Strict("GFX\blood_drop(" + (i - 15) + ").png", 1 + 2, DeleteAllTextures)
 	Next
 	
-	tt\DecalTextureID[18] = LoadTexture_Strict("GFX\decal_scp_427.png", 1 + 2, DeleteAllTextures)
+	t\DecalTextureID[18] = LoadTexture_Strict("GFX\decal_scp_427.png", 1 + 2, DeleteAllTextures)
 	
-	tt\DecalTextureID[19] = LoadTexture_Strict("GFX\decal_scp_409.png", 1 + 2, DeleteAllTextures)
+	t\DecalTextureID[19] = LoadTexture_Strict("GFX\decal_scp_409.png", 1 + 2, DeleteAllTextures)
 	
 	RenderLoading(25)
 	
@@ -8293,12 +8303,12 @@ Function LoadEntities()
 		HideEntity(o\MonitorModelID[i])
 	Next
 	
-	tt\MonitorTextureID[0] = LoadTexture_Strict("GFX\monitor_overlay.png", 1, DeleteAllTextures)
+	t\MonitorTextureID[0] = LoadTexture_Strict("GFX\monitor_overlay.png", 1, DeleteAllTextures)
 	For i = 1 To 3
-		tt\MonitorTextureID[i] = LoadTexture_Strict("GFX\map\textures\lockdown_screen(" + i + ").png", 1, DeleteAllTextures)
+		t\MonitorTextureID[i] = LoadTexture_Strict("GFX\map\textures\lockdown_screen(" + i + ").png", 1, DeleteAllTextures)
 	Next
-	tt\MonitorTextureID[4] = CreateTextureUsingCacheSystem(1, 1)
-	SetBuffer(TextureBuffer(tt\MonitorTextureID[4]))
+	t\MonitorTextureID[4] = CreateTextureUsingCacheSystem(1, 1)
+	SetBuffer(TextureBuffer(t\MonitorTextureID[4]))
 	ClsColor(0, 0, 0)
 	Cls()
 	SetBuffer(BackBuffer())
@@ -8311,7 +8321,7 @@ Function LoadEntities()
 			If t1 <> 0 Then
 				Name = StripPath(TextureName(t1))
 				If Lower(Name) <> "monitor_overlay.png"
-					BrushTexture(b, tt\MonitorTextureID[4], 0, 0)
+					BrushTexture(b, t\MonitorTextureID[4], 0, 0)
 					PaintSurface(SF, b)
 				EndIf
 				If Name <> "" Then DeleteSingleTextureEntryFromCache(t1)
@@ -8348,15 +8358,15 @@ Function LoadEntities()
 	InitItemTemplates()
 	
 	For i = 0 To 1
-		tt\ParticleTextureID[i] = LoadTexture_Strict("GFX\smoke(" + (i + 1) + ").png", 1 + 2, DeleteAllTextures)
+		t\ParticleTextureID[i] = LoadTexture_Strict("GFX\smoke(" + (i + 1) + ").png", 1 + 2, DeleteAllTextures)
 	Next
-	tt\ParticleTextureID[2] = LoadTexture_Strict("GFX\flash.png", 1 + 2, DeleteAllTextures)
-	tt\ParticleTextureID[3] = LoadTexture_Strict("GFX\dust.png", 1 + 2, DeleteAllTextures)
-	tt\ParticleTextureID[4] = LoadTexture_Strict("GFX\npcs\hg.pt", 1 + 2, DeleteAllTextures)
-	tt\ParticleTextureID[5] = LoadTexture_Strict("GFX\map\textures\sun.png", 1 + 2, DeleteAllTextures)
-	tt\ParticleTextureID[6] = LoadTexture_Strict("GFX\blood_sprite.png", 1 + 2, DeleteAllTextures)
-	tt\ParticleTextureID[7] = LoadTexture_Strict("GFX\spark.png", 1 + 2, DeleteAllTextures)
-	tt\ParticleTextureID[8] = LoadTexture_Strict("GFX\particle.png", 1 + 2, DeleteAllTextures)
+	t\ParticleTextureID[2] = LoadTexture_Strict("GFX\flash.png", 1 + 2, DeleteAllTextures)
+	t\ParticleTextureID[3] = LoadTexture_Strict("GFX\dust.png", 1 + 2, DeleteAllTextures)
+	t\ParticleTextureID[4] = LoadTexture_Strict("GFX\npcs\hg.pt", 1 + 2, DeleteAllTextures)
+	t\ParticleTextureID[5] = LoadTexture_Strict("GFX\map\textures\sun.png", 1 + 2, DeleteAllTextures)
+	t\ParticleTextureID[6] = LoadTexture_Strict("GFX\blood_sprite.png", 1 + 2, DeleteAllTextures)
+	t\ParticleTextureID[7] = LoadTexture_Strict("GFX\spark.png", 1 + 2, DeleteAllTextures)
+	t\ParticleTextureID[8] = LoadTexture_Strict("GFX\particle.png", 1 + 2, DeleteAllTextures)
 	
 	SetChunkDataValues()
 	
@@ -8496,7 +8506,7 @@ End Function
 Function InitNewGame()
 	CatchErrors("Uncaught (InitNewGame)")
 	
-	Local de.Decals, d.Doors, it.Items, r.Rooms, sc.SecurityCams, e.Events
+	Local de.Decals, d.Doors, it.Items, r.Rooms, sc.SecurityCams, e.Events, rt.RoomTemplates, tw.TempWayPoints
 	Local i%
 	
 	LoadEntities()
@@ -8548,6 +8558,7 @@ Function InitNewGame()
 	Next
 	
 	RenderLoading(80)
+	
 	For sc.SecurityCams = Each SecurityCams
 		sc\Angle = EntityYaw(sc\OBJ) + sc\Angle
 		EntityParent(sc\OBJ, 0)
@@ -8586,21 +8597,13 @@ Function InitNewGame()
 		EndIf
 	Next
 	
-	Local rt.RoomTemplates
-	
 	For rt.RoomTemplates = Each RoomTemplates
 		If rt\OBJ <> 0 Then FreeEntity(rt\OBJ) : rt\OBJ = 0
 	Next	
 	
-	Local tw.TempWayPoints
-	
 	For tw.TempWayPoints = Each TempWayPoints
 		Delete(tw)
 	Next
-	
-	TurnEntity(me\Collider, 0.0, Rnd(160.0, 200.0), 0.0)
-	
-	ResetEntity(me\Collider)
 	
 	If SelectedMap = "" Then InitEvents()
 	
@@ -8616,21 +8619,25 @@ Function InitNewGame()
 		EndIf
 	Next
 	
+	TurnEntity(me\Collider, 0.0, Rnd(160.0, 200.0), 0.0)
+	
+	ResetEntity(me\Collider)
+	
 	MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 	
 	SetFont(fo\FontID[Font_Default])
 	
 	HidePointer()
 	
-	fps\Factor[0] = 1.0
+	fps\Factor[0] = 0.0
 	
 	ResetInput()
+	
+	me\DropSpeed = 0.0
 	
 	DeleteTextureEntriesFromCache(DeleteMapTextures)
 	
 	RenderLoading(100)
-	
-	me\DropSpeed = 0.0
 	
 	CatchErrors("InitNewGame")
 End Function
@@ -8660,15 +8667,7 @@ Function InitLoadGame()
 		EntityParent(sc\OBJ, 0)
 	Next
 	
-	ResetEntity(me\Collider)
-	
 	RenderLoading(90)
-	
-	MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
-	
-	SetFont(fo\FontID[Font_Default])
-	
-	HidePointer()
 	
 	For rt.RoomTemplates = Each RoomTemplates
 		If rt\OBJ <> 0 Then FreeEntity(rt\OBJ) : rt\OBJ = 0
@@ -8703,7 +8702,7 @@ Function InitLoadGame()
 				Local ch.Chunk
 				
 				For i = -2 To 2 Step 2
-					ch = CreateChunk(-1, x * (i * 2.5), EntityY(e\room\OBJ), z)
+					ch.Chunk = CreateChunk(-1, x * (i * 2.5), EntityY(e\room\OBJ), z)
 				Next
 				RenderLoading(98)
 				UpdateChunks(e\room, 15, False)
@@ -8712,15 +8711,23 @@ Function InitLoadGame()
 		EndIf
 	Next
 	
-	DeleteTextureEntriesFromCache(DeleteMapTextures)
+	ResetEntity(me\Collider)
 	
-	RenderLoading(100)
+	MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
+	
+	SetFont(fo\FontID[Font_Default])
+	
+	HidePointer()
 	
 	fps\Factor[0] = 0.0
 	
 	ResetInput()
 	
 	me\DropSpeed = 0.0
+	
+	DeleteTextureEntriesFromCache(DeleteMapTextures)
+	
+	RenderLoading(100)
 	
 	CatchErrors("InitLoadGame")
 End Function
@@ -8777,14 +8784,14 @@ Function NullGame(PlayButtonSFX% = True)
 	Delete(I_008)
 	I_008.SCP008 = New SCP008
 	
-	Delete(I_500)
-	I_500.SCP500 = New SCP500
-	
 	Delete(I_409)
 	I_409.SCP409 = New SCP409
 	
 	Delete(I_427)
 	I_427.SCP427 = New SCP427
+	
+	Delete(I_500)
+	I_500.SCP500 = New SCP500
 	
 	Delete(I_714)
 	I_714.SCP714 = New SCP714
@@ -8827,7 +8834,7 @@ Function NullGame(PlayButtonSFX% = True)
 		Delete(sub)
 	Next
 	
-	Delete(CurrGrid)
+	Delete(CurrMapGrid)
 	
 	For s.Screens = Each Screens
 		Delete(s)
@@ -8920,6 +8927,12 @@ Function NullGame(PlayButtonSFX% = True)
 		If rt\OBJ <> 0 Then FreeEntity(rt\OBJ) : rt\OBJ = 0
 	Next
 	
+	Delete(o)
+	o.Objects = New Objects
+	
+	Delete(t)
+	t.Textures = New Textures
+	
 	DeleteChunks()
 	
 	OptionsMenu = -1
@@ -8957,8 +8970,8 @@ Function Update294()
 	Local Sep1%, Sep2%, Alpha#, Glow%
 	Local R%, G%, B%
 	
-	x = mo\Viewport_Center_X - (ImageWidth(tt\ImageID[5]) / 2)
-	y = mo\Viewport_Center_Y - (ImageHeight(tt\ImageID[5]) / 2)
+	x = mo\Viewport_Center_X - (ImageWidth(t\ImageID[5]) / 2)
+	y = mo\Viewport_Center_Y - (ImageHeight(t\ImageID[5]) / 2)
 	
 	Temp = True
 	If PlayerRoom\SoundCHN <> 0 Then Temp = False
@@ -9208,9 +9221,9 @@ Function Render294()
 	
 	ShowPointer()
 	
-	x = mo\Viewport_Center_X - (ImageWidth(tt\ImageID[5]) / 2)
-	y = mo\Viewport_Center_Y - (ImageHeight(tt\ImageID[5]) / 2)
-	DrawImage(tt\ImageID[5], x, y)
+	x = mo\Viewport_Center_X - (ImageWidth(t\ImageID[5]) / 2)
+	y = mo\Viewport_Center_Y - (ImageHeight(t\ImageID[5]) / 2)
+	DrawImage(t\ImageID[5], x, y)
 	If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	
 	Temp = True
@@ -9351,21 +9364,17 @@ Function UpdateMTF()
 		If MTFTimer =< 70.0 * 120.0 Then
 			MTFTimer = MTFTimer + fps\Factor[0]
 		ElseIf MTFTimer > 70.0 * 120.0 And MTFTimer < 10000.0
-			If PlayerInReachableRoom()
-				PlayAnnouncement("SFX\Character\MTF\AnnouncAfter1.ogg")
-			EndIf
+			If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\AnnouncAfter1.ogg")
 			MTFTimer = 10000.0
 		ElseIf MTFTimer >= 10000.0 And MTFTimer =< 10000.0 + (70.0 * 120.0)
 			MTFTimer = MTFTimer + fps\Factor[0]
 		ElseIf MTFTimer > 10000.0 + (70.0 * 120.0) And MTFTimer < 20000.0
-			If PlayerInReachableRoom()
-				PlayAnnouncement("SFX\Character\MTF\AnnouncAfter2.ogg")
-			EndIf
+			If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\AnnouncAfter2.ogg")
 			MTFTimer = 20000.0
 		ElseIf MTFTimer >= 20000.0 And MTFTimer =< 20000.0 + (70.0 * 60.0)
 			MTFTimer = MTFTimer + fps\Factor[0]
 		ElseIf MTFTimer > 20000.0 + (70.0 * 60.0) And MTFTimer < 25000.0
-			If PlayerInReachableRoom()
+			If PlayerInReachableRoom() Then
 				; ~ If the player has an SCP in their inventory play special voice line.
 				For i = 0 To MaxItemAmount - 1
 					If Inventory(i) <> Null Then
@@ -9383,9 +9392,7 @@ Function UpdateMTF()
 		ElseIf MTFTimer >= 25000.0 And MTFTimer =< 25000.0 + (70.0 * 60.0)
 			MTFTimer = MTFTimer + fps\Factor[0]
 		ElseIf MTFTimer > 25000.0 + (70.0 * 60.0) And MTFTimer < 30000.0
-			If PlayerInReachableRoom() Then
-				PlayAnnouncement("SFX\Character\MTF\ThreatAnnouncFinal.ogg")
-			EndIf
+			If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\ThreatAnnouncFinal.ogg")
 			MTFTimer = 30000.0
 		EndIf
 	EndIf
@@ -9549,7 +9556,7 @@ Function Update008()
 	EndIf
 	
 	If I_008\Timer > 0.0 Then
-		ShowEntity(tt\OverlayID[3])
+		ShowEntity(t\OverlayID[3])
 		If I_008\Timer < 93.0 Then
 			PrevI008Timer = I_008\Timer
 			If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then
@@ -9561,7 +9568,7 @@ Function Update008()
 			me\HeartBeatRate = Max(me\HeartBeatRate, 100.0)
 			me\HeartBeatVolume = Max(me\HeartBeatVolume, I_008\Timer / 120.0)
 			
-			EntityAlpha(tt\OverlayID[3], Min(((I_008\Timer * 0.2) ^ 2.0) / 1000.0, 0.5) * (Sin(MilliSecs2() / 8.0) + 2.0))
+			EntityAlpha(t\OverlayID[3], Min(((I_008\Timer * 0.2) ^ 2.0) / 1000.0, 0.5) * (Sin(MilliSecs2() / 8.0) + 2.0))
 			
 			For i = 0 To 6
 				If I_008\Timer > (i * 15.0) + 10.0 And PrevI008Timer =< (i * 15.0) + 10.0 Then
@@ -9604,7 +9611,7 @@ Function Update008()
 			
 			If TeleportForInfect Then
 				If I_008\Timer < 94.7 Then
-					EntityAlpha(tt\OverlayID[3], 0.5 * (Sin(MilliSecs2() / 8.0) + 2.0))
+					EntityAlpha(t\OverlayID[3], 0.5 * (Sin(MilliSecs2() / 8.0) + 2.0))
 					me\BlurTimer = 900.0
 					
 					If I_008\Timer > 94.5 Then me\BlinkTimer = Max(Min((-50.0) * (I_008\Timer - 94.5), me\BlinkTimer), -10.0)
@@ -9617,7 +9624,7 @@ Function Update008()
 					
 					Animate2(PlayerRoom\NPC[0]\OBJ, AnimTime(PlayerRoom\NPC[0]\OBJ), 357.0, 381.0, 0.3)
 				ElseIf I_008\Timer < 98.5
-					EntityAlpha(tt\OverlayID[3], 0.5 * (Sin(MilliSecs2() / 5.0) + 2.0))
+					EntityAlpha(t\OverlayID[3], 0.5 * (Sin(MilliSecs2() / 5.0) + 2.0))
 					me\BlurTimer = 950.0
 					
 					me\ForceMove = 0.0
@@ -9688,7 +9695,7 @@ Function Update008()
 			EndIf
 		EndIf
 	Else
-		HideEntity(tt\OverlayID[3])
+		HideEntity(t\OverlayID[3])
 	EndIf
 End Function
 
@@ -9696,12 +9703,12 @@ Function Update409()
 	Local PrevI409Timer# = I_409\Timer
 	
 	If I_409\Timer > 0.0 Then
-		ShowEntity(tt\OverlayID[7])
+		ShowEntity(t\OverlayID[7])
 		
 		If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then
 			I_409\Timer = Min(I_409\Timer + (fps\Factor[0] * 0.004), 100.0)
 		EndIf	
-		EntityAlpha(tt\OverlayID[7], Min(((I_409\Timer * 0.2) ^ 2.0) / 1000.0, 0.5))
+		EntityAlpha(t\OverlayID[7], Min(((I_409\Timer * 0.2) ^ 2.0) / 1000.0, 0.5))
 		me\BlurTimer = Max(I_409\Timer * 3.0 * (2.0 - me\CrouchState), me\BlurTimer)
 		
 		If I_409\Timer > 40.0 And PrevI409Timer =< 40.0 Then
@@ -9727,7 +9734,7 @@ Function Update409()
 			Kill(True)
 		EndIf
 	Else
-		HideEntity(tt\OverlayID[7])	
+		HideEntity(t\OverlayID[7])	
 	EndIf
 End Function
 

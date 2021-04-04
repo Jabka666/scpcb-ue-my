@@ -13,7 +13,7 @@ Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTi
 	p.Particles = New Particles
 	p\OBJ = CreateSprite()
 	PositionEntity(p\OBJ, x, y, z, True)
-	EntityTexture(p\OBJ, tt\ParticleTextureID[ID])
+	EntityTexture(p\OBJ, t\ParticleTextureID[ID])
 	RotateEntity(p\OBJ, 0.0, 0.0, Rnd(360.0))
 	EntityFX(p\OBJ, 1 + 8)
 	SpriteViewMode(p\OBJ, 3)
@@ -34,7 +34,7 @@ Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTi
 	p\Size = Size
 	ScaleSprite(p\OBJ, p\Size, p\Size)
 	
-	If (Not tt\ParticleTextureID[ID]) Then
+	If (Not t\ParticleTextureID[ID]) Then
 		CreateConsoleMsg("Particle Texture ID: " + ID + " not found.")
 		If opt\ConsoleOpening And opt\CanOpenConsole Then
 			ConsoleOpen = True

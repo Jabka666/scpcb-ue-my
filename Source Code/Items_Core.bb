@@ -50,7 +50,10 @@ Function CreateItemTemplate.ItemTemplates(Name$, TempName$, OBJPath$, InvImgPath
 				Exit
 			EndIf
 		Next
-		If (Not Texture) Then Texture = LoadTexture_Strict(TexturePath, TexFlags) : it\TexPath = TexturePath
+		If (Not Texture) Then
+			Texture = LoadTexture_Strict(TexturePath, TexFlags)
+			it\TexPath = TexturePath
+		EndIf
 		EntityTexture(it\OBJ, Texture)
 		it\Tex = Texture
 	EndIf  
@@ -590,7 +593,7 @@ Function RemoveWearableItems(item.Items)
 			;[End Block]
 		Case "helmet"
 			;[Block]
-			wi\BallisticHelmet = 0
+			wi\BallisticHelmet = False
 			;[End Block]
 		Case "nvg", "supernvg", "finenvg"
 			;[Block]
@@ -598,7 +601,7 @@ Function RemoveWearableItems(item.Items)
 			;[End Block]
 		Case "scp714"
 			;[Block]
-			I_714\Using = 0
+			I_714\Using = False
 			;[End Block]
 		Case "scp1499", "super1499"
 			;[Block]
@@ -606,11 +609,11 @@ Function RemoveWearableItems(item.Items)
 			;[End Block]
 		Case "scp427"
 			;[Block]
-			I_427\Using = 0
+			I_427\Using = False
 			;[End Block]
 		Case "scramble"
 			;[Block]
-			wi\SCRAMBLE = 0
+			wi\SCRAMBLE = False
 			;[End Block]
 	End Select
 	
@@ -987,7 +990,7 @@ Function CanUseItem%(CanUseWithGasMask%, CanUseWithEyewear%)
 	If (Not CanUseWithGasMask) And (wi\GasMask > 0 Lor I_1499\Using > 0) Then
 		CreateMsg("You can't use that item while wearing a gas mask.", 6.0)
 		Return(False)
-	ElseIf (Not CanUseWithEyewear) And (wi\NightVision > 0 Lor wi\SCRAMBLE > 0)
+	ElseIf (Not CanUseWithEyewear) And (wi\NightVision > 0 Lor wi\SCRAMBLE)
 		CreateMsg("You can't use that item while wearing headgear.", 6.0)
 		Return(False)
 	EndIf
@@ -1008,11 +1011,11 @@ Function PreventItemOverlapping%(GasMask% = False, NVG% = False, SCP1499% = Fals
 		CreateMsg("You need to take off the goggles in order to use that item.", 6.0)
 		SelectedItem = Null
 		Return(True)
-	ElseIf (Not Helmet) And wi\BallisticHelmet > 0
+	ElseIf (Not Helmet) And wi\BallisticHelmet
 		CreateMsg("You need to take off the helmet in order to use that item.", 6.0)
 		SelectedItem = Null
 		Return(True)
-	ElseIf (Not SCRAMBLE) And wi\SCRAMBLE > 0
+	ElseIf (Not SCRAMBLE) And wi\SCRAMBLE
 		CreateMsg("You need to take off the gear in order to use that item.", 6.0)
 		SelectedItem = Null
 		Return(True)

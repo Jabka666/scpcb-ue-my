@@ -138,10 +138,24 @@ Function SaveGame(File$)
 	WriteByte(f, AchvPDDone)
 	WriteInt(f, me\RefinedItems)
 	
+	If UsedConsole Then
+		WriteInt(f, 100)
+	Else
+		WriteInt(f, 994)
+	EndIf
+	WriteFloat(f, opt\CameraFogFar)
+	WriteFloat(f, opt\StoredCameraFogFar)
+	
+	WriteByte(f, I_427\Using)
+	WriteFloat(f, I_427\Timer)
+	WriteByte(f, I_714\Using)
+	
+	WriteFloat(f, MTFTimer)
+	
 	For x = 0 To MapGridSize
 		For y = 0 To MapGridSize
-			WriteInt(f, CurrGrid\Grid[x + (y * MapGridSize)])
-			WriteByte(f, CurrGrid\Found[x + (y * MapGridSize)])
+			WriteInt(f, CurrMapGrid\Grid[x + (y * MapGridSize)])
+			WriteByte(f, CurrMapGrid\Found[x + (y * MapGridSize)])
 		Next
 	Next
 	
@@ -206,8 +220,6 @@ Function SaveGame(File$)
 		WriteInt(f, n\TextureID)
 	Next
 	
-	WriteFloat(f, MTFTimer)
-	
 	WriteInt(f, 632)
 	
 	WriteByte(f, bk\IsBroken)
@@ -237,7 +249,7 @@ Function SaveGame(File$)
 		
 		If PlayerRoom = r Then 
 			WriteByte(f, 1)
-		Else 
+		Else
 			WriteByte(f, 0)
 		EndIf
 		
@@ -408,18 +420,21 @@ Function SaveGame(File$)
 		
 		If SelectedItem = it Then 
 			WriteByte(f, 1) 
-		Else 
+		Else
 			WriteByte(f, 0)
 		EndIf
 		
 		Local ItemFound% = False
 		
 		For i = 0 To MaxItemAmount - 1
-			If Inventory(i) = it Then ItemFound = True : Exit
+			If Inventory(i) = it Then
+				ItemFound = True
+				Exit
+			EndIf
 		Next
 		If ItemFound Then 
 			WriteByte(f, i) 
-		Else 
+		Else
 			WriteByte(f, 66)
 		EndIf
 		
@@ -430,7 +445,7 @@ Function SaveGame(File$)
 		WriteInt(f, it\ID)
 		If it\ItemTemplate\InvImg = it\InvImg Then 
 			WriteByte(f, 0) 
-		Else 
+		Else
 			WriteByte(f, 1)
 		EndIf
 	Next
@@ -460,18 +475,6 @@ Function SaveGame(File$)
 	For itt.ItemTemplates = Each ItemTemplates
 		WriteByte(f, itt\Found)
 	Next
-	
-	If UsedConsole Then
-		WriteInt(f, 100)
-	Else
-		WriteInt(f, 994)
-	EndIf
-	WriteFloat(f, opt\CameraFogFar)
-	WriteFloat(f, opt\StoredCameraFogFar)
-	WriteByte(f, I_427\Using)
-	WriteFloat(f, I_427\Timer)
-	
-	WriteByte(f, I_714\Using)
 	
 	CloseFile(f)
 	
@@ -618,12 +621,23 @@ Function LoadGame(File$)
 	AchvPDDone = ReadByte(f)
 	me\RefinedItems = ReadInt(f)
 	
-	; ~ TODO: Use CreateMap()
-	CurrGrid.MapGrid = New MapGrid
+	If ReadInt(f) <> 994 Then UsedConsole = True
+	
+	opt\CameraFogFar = ReadFloat(f)
+	opt\StoredCameraFogFar = ReadFloat(f)
+	If opt\CameraFogFar = 0.0 Then opt\CameraFogFar = 6.0
+	
+	I_427\Using = ReadByte(f)
+	I_427\Timer = ReadFloat(f)
+	I_714\Using = ReadByte(f)
+	
+	MTFTimer = ReadFloat(f)
+	
+	CurrMapGrid.MapGrid = New MapGrid
 	For x = 0 To MapGridSize 
 		For y = 0 To MapGridSize
-			CurrGrid\Grid[x + (y * MapGridSize)] = ReadInt(f)
-			CurrGrid\Found[x + (y * MapGridSize)] = ReadByte(f)
+			CurrMapGrid\Grid[x + (y * MapGridSize)] = ReadInt(f)
+			CurrMapGrid\Found[x + (y * MapGridSize)] = ReadByte(f)
 		Next
 	Next
 	
@@ -737,8 +751,6 @@ Function LoadGame(File$)
 		EndIf
 	Next
 	
-	MTFTimer = ReadFloat(f)
-	
 	If ReadInt(f) <> 632 Then RuntimeError("Couldn't load the game, save file corrupted (error 1)")
 	
 	bk\IsBroken = ReadByte(f)
@@ -782,7 +794,10 @@ Function LoadGame(File$)
 			ID = ReadInt(f)
 			If ID > 0 Then
 				For n.NPCs = Each NPCs
-					If n\ID = ID Then r\NPC[x] = n : Exit
+					If n\ID = ID Then
+						r\NPC[x] = n
+						Exit
+					EndIf
 				Next
 			EndIf
 		Next
@@ -869,7 +884,6 @@ Function LoadGame(File$)
 	
 	If ReadInt(f) <> 954 Then RuntimeError("Couldn't load the game, save file may be corrupted (error 2)")
 	
-	Local Spacing# = 8.0
 	Local Zone%, ShouldSpawnDoor%
 	
 	For y = MapGridSize To 0 Step -1
@@ -880,9 +894,8 @@ Function LoadGame(File$)
 		Else
 			Zone = 1
 		EndIf
-		
 		For x = MapGridSize To 0 Step -1
-			If CurrGrid\Grid[x + (y * MapGridSize)] > 0 Then
+			If CurrMapGrid\Grid[x + (y * MapGridSize)] > 0 Then
 				If Zone = 2 Then
 					Temp = Heavy_Door
 				Else
@@ -891,7 +904,7 @@ Function LoadGame(File$)
 				
 				For r.Rooms = Each Rooms
 					r\Angle = WrapAngle(r\Angle)
-					If Int(r\x / 8.0) = x And Int(r\z / 8.0) = y Then
+					If Int(r\x / RoomSpacing) = x And Int(r\z / RoomSpacing) = y Then
 						ShouldSpawnDoor = False
 						Select r\RoomTemplate\Shape
 							Case ROOM1
@@ -925,8 +938,8 @@ Function LoadGame(File$)
 						End Select
 						If ShouldSpawnDoor Then
 							If x + 1 < MapGridSize + 1
-								If CurrGrid\Grid[(x + 1) + (y * MapGridSize)] > 0 Then
-									do.Doors = CreateDoor(Float(x) * Spacing + Spacing / 2.0, 0.0, Float(y) * Spacing, 90.0, r, Max(Rand(-3, 1), 0.0), Temp)
+								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile Then
+									do.Doors = CreateDoor(Float(x) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Float(y) * RoomSpacing, 90.0, r, Max(Rand(-3, 1), 0.0), Temp)
 									r\AdjDoor[0] = do
 								EndIf
 							EndIf
@@ -965,8 +978,8 @@ Function LoadGame(File$)
 						End Select
 						If ShouldSpawnDoor
 							If y + 1 < MapGridSize + 1
-								If CurrGrid\Grid[x + ((y + 1) * MapGridSize)] > 0 Then
-									do.Doors = CreateDoor(Float(x) * Spacing, 0.0, Float(y) * Spacing + Spacing / 2.0, 0.0, r, Max(Rand(-3, 1), 0), Temp)
+								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile Then
+									do.Doors = CreateDoor(Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + (RoomSpacing / 2.0), 0.0, r, Max(Rand(-3, 1), 0), Temp)
 									r\AdjDoor[3] = do
 								EndIf
 							EndIf
@@ -1177,7 +1190,10 @@ Function LoadGame(File$)
 		
 		For itt.ItemTemplates = Each ItemTemplates
 			If itt\TempName = TempName And itt\Name = IttName Then
-				If itt\IsAnim <> 0 Then SetAnimTime(it\Model, ReadFloat(f)) : Exit
+				If itt\IsAnim <> 0 Then
+					SetAnimTime(it\Model, ReadFloat(f))
+					Exit
+				EndIf
 			EndIf
 		Next
 		it\InvSlots = ReadByte(f)
@@ -1201,7 +1217,10 @@ Function LoadGame(File$)
 		Local ij.Items
 		
 		For ij.Items = Each Items
-			If ij\ID = o_i Then it.Items = ij : Exit
+			If ij\ID = o_i Then
+				it.Items = ij
+				Exit
+			EndIf
 		Next
 		For j = 0 To it\InvSlots - 1
 			o_i = ReadInt(f)
@@ -1238,20 +1257,6 @@ Function LoadGame(File$)
 			do\room = closestroom
 		EndIf
 	Next
-	
-	If ReadInt(f) <> 994
-		UsedConsole = True
-	EndIf
-	
-	opt\CameraFogFar = ReadFloat(f)
-	opt\StoredCameraFogFar = ReadFloat(f)
-	If opt\CameraFogFar = 0.0 Then
-		opt\CameraFogFar = 6.0
-	EndIf
-	I_427\Using = ReadByte(f)
-	I_427\Timer = ReadFloat(f)
-	
-	I_714\Using = ReadByte(f)
 	
 	CloseFile(f)
 	
@@ -1492,10 +1497,22 @@ Function LoadGameQuick(File$)
 	AchvPDDone = ReadByte(f)
 	me\RefinedItems = ReadInt(f)
 	
+	If ReadInt(f) <> 994 Then UsedConsole = True
+	
+	opt\CameraFogFar = ReadFloat(f)
+	opt\StoredCameraFogFar = ReadFloat(f)
+	If opt\CameraFogFar = 0.0 Then opt\CameraFogFar = 6.0
+	
+	I_427\Using = ReadByte(f)
+	I_427\Timer = ReadFloat(f)
+	I_714\Using = ReadByte(f)
+	
+	MTFTimer = ReadFloat(f)
+	
 	For x = 0 To MapGridSize
 		For y = 0 To MapGridSize
-			CurrGrid\Grid[x + (y * MapGridSize)] = ReadInt(f)
-			CurrGrid\Found[x + (y * MapGridSize)] = ReadByte(f)
+			CurrMapGrid\Grid[x + (y * MapGridSize)] = ReadInt(f)
+			CurrMapGrid\Found[x + (y * MapGridSize)] = ReadByte(f)
 		Next
 	Next
 	
@@ -1613,8 +1630,6 @@ Function LoadGameQuick(File$)
 		EndIf
 	Next
 	
-	MTFTimer = ReadFloat(f)
-	
 	If ReadInt(f) <> 632 Then RuntimeError("Couldn't load the game, save file corrupted (error 1)")
 	
 	bk\IsBroken = ReadByte(f)
@@ -1653,7 +1668,10 @@ Function LoadGameQuick(File$)
 			ID = ReadInt(f)
 			If ID > 0 Then
 				For n.NPCs = Each NPCs
-					If n\ID = ID Then r\NPC[x] = n : Exit
+					If n\ID = ID Then
+						r\NPC[x] = n
+						Exit
+					EndIf
 				Next
 			EndIf
 		Next
@@ -1909,7 +1927,10 @@ Function LoadGameQuick(File$)
 		
 		For itt.ItemTemplates = Each ItemTemplates
 			If itt\TempName = TempName Then
-				If itt\IsAnim <> 0 Then SetAnimTime(it\Model, ReadFloat(f)) : Exit
+				If itt\IsAnim <> 0 Then
+					SetAnimTime(it\Model, ReadFloat(f))
+					Exit
+				EndIf
 			EndIf
 		Next
 		it\InvSlots = ReadByte(f)
@@ -1933,7 +1954,10 @@ Function LoadGameQuick(File$)
 		Local ij.Items
 		
 		For ij.Items = Each Items
-			If ij\ID = o_i Then it.Items = ij : Exit
+			If ij\ID = o_i Then
+				it.Items = ij
+				Exit
+			EndIf
 		Next
 		For j = 0 To it\InvSlots - 1
 			o_i = ReadInt(f)
@@ -1970,28 +1994,14 @@ Function LoadGameQuick(File$)
 		EndIf
 	Next
 	
-	If ReadInt(f) <> 994
-		UsedConsole = True
-	EndIf
-	
 	; ~ This will hopefully fix the SCP-895 crash bug after the player died by it's sanity effect and then quickloaded the game -- ENDSHN
 	Local sc.SecurityCams
 	
 	For sc.SecurityCams = Each SecurityCams
 		sc\PlayerState = 0
 	Next
-	EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
+	EntityTexture(t\OverlayID[4], t\OverlayTextureID[4])
 	me\RestoreSanity = True
-	
-	opt\CameraFogFar = ReadFloat(f)
-	opt\StoredCameraFogFar = ReadFloat(f)
-	If opt\CameraFogFar = 0.0 Then
-		opt\CameraFogFar = 6.0
-	EndIf
-	I_427\Using = ReadByte(f)
-	I_427\Timer = ReadFloat(f)
-	
-	I_714\Using = ReadByte(f)
 	
 	CloseFile(f)
 	
@@ -2197,10 +2207,10 @@ Function LoadMap(File$)
 	
 	f = ReadFile(File)
 	
-	If CurrGrid <> Null Then
-		Delete(CurrGrid) : CurrGrid = Null
+	If CurrMapGrid <> Null Then
+		Delete(CurrMapGrid) : CurrMapGrid = Null
 	EndIf
-	CurrGrid = New MapGrid
+	CurrMapGrid = New MapGrid
 	
 	CoffinDistance = 100.0
 	
@@ -2235,7 +2245,7 @@ Function LoadMap(File$)
 					
 					TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 					
-					CurrGrid\Grid[(MapGridSize - x) + (y * MapGridSize)] = True
+					CurrMapGrid\Grid[(MapGridSize - x) + (y * MapGridSize)] = True
 					Exit
 				EndIf
 			Next
@@ -2418,7 +2428,7 @@ Function LoadMap(File$)
 					
 					TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 					
-					CurrGrid\Grid[(MapGridSize - x) + (y * MapGridSize)] = True
+					CurrMapGrid\Grid[(MapGridSize - x) + (y * MapGridSize)] = True
 					Exit
 				EndIf
 			Next
@@ -2447,7 +2457,6 @@ Function LoadMap(File$)
 	CloseFile(f)
 	
 	Local Temp% = 0, Zone%
-	Local Spacing# = 8.0
 	Local ShouldSpawnDoor% = False
 	Local d.Doors
 	
@@ -2459,18 +2468,16 @@ Function LoadMap(File$)
 		Else
 			Zone = 1
 		EndIf
-		
 		For x = MapGridSize To 0 Step -1
-			If CurrGrid\Grid[x + (y * MapGridSize)] > 0 Then
+			If CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile Then
 				If Zone = 2 Then 
 					Temp = Heavy_Door
-				Else 
+				Else
 					Temp = Default_Door
 				EndIf
-				
 				For r.Rooms = Each Rooms
 					r\Angle = WrapAngle(r\Angle)
-					If Int(r\x / 8.0) = x And Int(r\z / 8.0) = y Then
+					If Int(r\x / RoomSpacing) = x And Int(r\z / RoomSpacing) = y Then
 						ShouldSpawnDoor = False
 						Select r\RoomTemplate\Shape
 							Case ROOM1
@@ -2495,8 +2502,8 @@ Function LoadMap(File$)
 						End Select
 						If ShouldSpawnDoor Then
 							If x + 1 < MapGridSize + 1 Then
-								If CurrGrid\Grid[(x + 1) + (y * MapGridSize)] > 0 Then
-									d.Doors = CreateDoor(Float(x) * Spacing + Spacing / 2.0, 0.0, Float(y) * Spacing, 90.0, r, Max(Rand(-3, 1), 0), Temp)
+								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile Then
+									d.Doors = CreateDoor(Float(x) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Float(y) * RoomSpacing, 90.0, r, Max(Rand(-3, 1), 0), Temp)
 									r\AdjDoor[0] = d
 								EndIf
 							EndIf
@@ -2527,8 +2534,8 @@ Function LoadMap(File$)
 						End Select
 						If ShouldSpawnDoor Then
 							If y + 1 < MapGridSize + 1 Then
-								If CurrGrid\Grid[x + ((y + 1) * MapGridSize)] > 0 Then
-									d.Doors = CreateDoor(Float(x) * Spacing, 0.0, Float(y) * Spacing + Spacing / 2.0, 0.0, r, Max(Rand(-3, 1), 0), Temp)
+								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile Then
+									d.Doors = CreateDoor(Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + (RoomSpacing / 2.0), 0.0, r, Max(Rand(-3, 1), 0), Temp)
 									r\AdjDoor[3] = d
 								EndIf
 							EndIf
@@ -2541,20 +2548,20 @@ Function LoadMap(File$)
 	Next
 	
 	If opt\IntroEnabled Then
-		r.Rooms = CreateRoom(0, ROOM1, 8.0, 0.0, (MapGridSize + 2) * 8.0, "room173intro")
+		r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 0.0, (MapGridSize + 2) * RoomSpacing, "room173intro")
 		CreateEvent("room173intro", "room173intro", 0)
 	EndIf
 	
-	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize + 2) * 8.0, 0.0, (MapGridSize + 2) * 8.0, "pocketdimension")
+	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize + 2) * RoomSpacing, 0.0, (MapGridSize + 2) * RoomSpacing, "pocketdimension")
 	CreateEvent("pocketdimension", "pocketdimension", 0)   
 	
-	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, -80.0, "gateb")
+	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, RoomSpacing * (-10), "gateb")
 	CreateEvent("gateb", "gateb", 0)
 	
-	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, -16.0, "gatea")
+	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, RoomSpacing * (-2), "gatea")
 	CreateEvent("gatea", "gatea", 0)
 	
-	r.Rooms = CreateRoom(0, ROOM1, -16.0, 800.0, 0.0, "dimension1499")
+	r.Rooms = CreateRoom(0, ROOM1, RoomSpacing * (-2), 800.0, 0.0, "dimension1499")
 	CreateEvent("dimension1499", "dimension1499", 0)
 	
 	For r.Rooms = Each Rooms

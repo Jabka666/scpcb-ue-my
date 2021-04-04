@@ -90,7 +90,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			; ~ On Halloween set Jack-o'-lantern texture
 			If (Left(CurrentDate(), 7) = "31 Oct ") Then
-				tt\MiscTextureID[14] = True
+				t\MiscTextureID[14] = True
 				TexFestive = LoadTexture_Strict("GFX\npcs\scp_173_H.png")
 				EntityTexture(n\OBJ, TexFestive, 0, 0)
 				DeleteSingleTextureEntryFromCache(TexFestive)
@@ -98,7 +98,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			; ~ On New Year set cookie texture
 			If (Left(CurrentDate(), 7) = "01 Jan ") Then
-				tt\MiscTextureID[15] = True
+				t\MiscTextureID[15] = True
 				TexFestive = LoadTexture_Strict("GFX\npcs\scp_173_NY.png")
 				EntityTexture(n\OBJ, TexFestive, 0, 0)
 				DeleteSingleTextureEntryFromCache(TexFestive)
@@ -241,7 +241,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\OBJ2 = CreateSprite(FindChild(n\OBJ, "Reyelid"))
 			ScaleSprite(n\OBJ2, 0.07, 0.08)
 			EntityOrder(n\OBJ2, -5)
-			EntityTexture(n\OBJ2, tt\OverlayTextureID[5])
+			EntityTexture(n\OBJ2, t\OverlayTextureID[5])
 			HideEntity(n\OBJ2)
 			
 			n\CollRadius = 0.26
@@ -324,7 +324,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 				
 				PositionEntity(LightSprite, 1.65 * i, 1.17, 0.0, -0.25)
 				ScaleSprite(LightSprite, 0.13, 0.13)
-				EntityTexture(LightSprite, tt\LightSpriteID[0])
+				EntityTexture(LightSprite, t\LightSpriteID[0])
 				EntityBlend(LightSprite, 3)
 				EntityFX(LightSprite, 1 + 8)				
 			Next
@@ -655,7 +655,7 @@ Function UpdateNPCs()
 								n\LastDist = Sqr(Dist)
 								
 								n\State = Max(0.0, n\State - fps\Factor[0] / 20.0)
-							Else 
+							Else
 								; ~ Teleport to a room closer to the player
 								If Dist > 2500.0 Then
 									If Rand(70) = 1 Then
@@ -938,7 +938,7 @@ Function UpdateNPCs()
 											ElseIf PrevFrame =< 311.0 And n\Frame > 311.0 
 												PlaySound2(StepSFX(2, 0, Rand(0, 2)), Camera, n\Collider, 6.0, Rnd(0.8, 1.0))
 											EndIf
-										Else 
+										Else
 											n\CurrSpeed = 0.0
 										EndIf
 										
@@ -947,7 +947,7 @@ Function UpdateNPCs()
 											n\PathStatus = FindPath(n, EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True))
 											n\PathTimer = 70.0 * 10.0
 										EndIf
-									Else 
+									Else
 										If n\PathTimer =< 0.0 Then
 											n\PathStatus = FindPath(n, EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True))
 											n\PathTimer = 70.0 * 10.0
@@ -1114,7 +1114,7 @@ Function UpdateNPCs()
 				Dist = EntityDistanceSquared(me\Collider, n\Collider)
 				Angle = WrapAngle(DeltaYaw(n\Collider, me\Collider))
 				
-				If wi\SCRAMBLE > 0 And Dist < 256.0 And (Angle < 135.0 Lor Angle > 225.0) And EntityVisible(Camera, n\OBJ2) Then
+				If wi\SCRAMBLE And Dist < 256.0 And (Angle < 135.0 Lor Angle > 225.0) And EntityVisible(Camera, n\OBJ2) Then
 					ShowEntity(n\OBJ2)
 					ScaleSprite(n\OBJ2, Rnd(0.06, 0.08), Rnd(0.07, 0.09))
 					PositionEntity(n\OBJ2, Rnd(0.1) - 0.05, Rnd(0.1) - 0.05, Rnd(0.1) - 0.05)
@@ -1155,7 +1155,7 @@ Function UpdateNPCs()
 							EndIf
 							
 							If (Not chs\NoTarget) Then
-								If wi\SCRAMBLE = 0 And (Angle < 135.0 Lor Angle > 225.0) And (EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera)) Then
+								If (Not wi\SCRAMBLE) And (Angle < 135.0 Lor Angle > 225.0) And (EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera)) Then
 									If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And me\LightBlink =< 0.0
 										PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"))
 										
@@ -1425,7 +1425,7 @@ Function UpdateNPCs()
 							EndIf
 							
 							If (Not chs\NoTarget) Then
-								If wi\SCRAMBLE = 0 And (Angle < 135.0 Lor Angle > 225.0) And (EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera)) Then
+								If (Not wi\SCRAMBLE) And (Angle < 135.0 Lor Angle > 225.0) And (EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera)) Then
 									If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And me\LightBlink =< 0.0
 										PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"))
 										
@@ -1549,8 +1549,8 @@ Function UpdateNPCs()
 												Next
 											EndIf
 										ElseIf I_714\Using Then
-											me\BlurTimer = me\BlurTimer + fps\Factor[0] * 2.5
-											If me\BlurTimer > 250.0 And me\BlurTimer - fps\Factor[0] * 2.5 =< 250.0 And n\PrevState <> 3 Then
+											me\BlurTimer = me\BlurTimer + (fps\Factor[0] * 2.5)
+											If me\BlurTimer > 250.0 And me\BlurTimer - (fps\Factor[0] * 2.5) =< 250.0 And n\PrevState <> 3 Then
 												If n\SoundCHN2 <> 0 Then StopChannel(n\SoundCHN2)
 												n\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\049\714Equipped.ogg"))
 												n\PrevState = 3
@@ -1565,7 +1565,10 @@ Function UpdateNPCs()
 												If PlayerRoom\RoomTemplate\Name = "room049"
 													msg\DeathMsg = "Three (3) active instances of SCP-049-2 discovered in the tunnel outside SCP-049's containment chamber. Terminated by Nine-Tailed Fox."
 													For e.Events = Each Events
-														If e\EventID = e_room049 Then e\EventState = -1.0 : Exit
+														If e\EventID = e_room049 Then
+															e\EventState = -1.0
+															Exit
+														EndIf
 													Next
 												Else
 													If Rand(2) = 1 Then
@@ -1746,7 +1749,8 @@ Function UpdateNPCs()
 															If (n\Path[1]\door\Locked = 1 Lor n\Path[1]\door\KeyCard <> 0 Lor n\Path[1]\door\Code <> "") And (Not n\Path[1]\door\Open) Then
 																Repeat
 																	If n\PathLocation > 19 Then
-																		n\PathLocation = 0 : n\PathStatus = 0 : Exit
+																		n\PathLocation = 0 : n\PathStatus = 0
+																		Exit
 																	Else
 																		n\PathLocation = n\PathLocation + 1
 																	EndIf
@@ -3858,7 +3862,7 @@ Function UpdateNPCs()
 								If n\PathTimer =< 0.0 Then
 									If n\MTFLeader <> Null Then
 										n\PathStatus = FindPath(n, EntityX(n\MTFLeader\Collider, True), EntityY(n\MTFLeader\Collider, True) + 0.1, EntityZ(n\MTFLeader\Collider, True))
-									Else 
+									Else
 										For r = Each Rooms
 											If ((Abs(r\x - EntityX(n\Collider, True)) > 12.0) Lor (Abs(r\z - EntityZ(n\Collider, True)) > 12.0)) And (Rand(1, Max(4 - Int(Abs(r\z - EntityZ(n\Collider, True) / 8.0)), 2)) = 1) Then
 												x = r\x
@@ -4565,7 +4569,7 @@ Function UpdateNPCs()
 				If Dist < 3600.0 Then 
 					If PlayerRoom\RoomTemplate\Name = "gateb" Then 
 						Dist2 = Max(Min(EntityDistance(n\Collider, PlayerRoom\Objects[10]) / (8000.0 * RoomScale), 1.0), 0.0)
-					Else 
+					Else
 						Dist2 = 1.0
 					EndIf
 					n\SoundCHN = LoopSound2(ApacheSFX, n\SoundCHN, Camera, n\Collider, 25.0, Dist2)
@@ -4656,7 +4660,7 @@ Function UpdateNPCs()
 												FreeEntity(Pvt)
 											EndIf
 										EndIf
-									Else 
+									Else
 										RotateEntity(n\Collider, EntityPitch(n\Collider), EntityYaw(n\Collider), CurveAngle(-20.0, EntityRoll(n\Collider), 40.0), True)
 									EndIf
 									MoveEntity(n\Collider, (-EntityRoll(n\Collider)) * 0.002, 0.0, 0.0)
@@ -6601,7 +6605,10 @@ Function UpdateNPCs()
 				Local CollidedFloor% = False
 				
 				For i = 1 To CountCollisions(n\Collider)
-					If CollisionY(n\Collider, i) < EntityY(n\Collider) - 0.01 Then CollidedFloor = True : Exit
+					If CollisionY(n\Collider, i) < EntityY(n\Collider) - 0.01 Then
+						CollidedFloor = True
+						Exit
+					EndIf
 				Next
 				
 				If CollidedFloor Then
@@ -7005,7 +7012,7 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 				;[End Block]
 			Case 16, 17 ; ~ Helmet, Face or Head
 				;[Block]
-				If wi\BallisticHelmet > 0 Then
+				If wi\BallisticHelmet Then
 					InjurePlayer(0.0)
 				Else
 					For n.NPCs = Each NPCs

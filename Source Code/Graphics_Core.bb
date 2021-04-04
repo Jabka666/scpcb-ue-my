@@ -93,10 +93,12 @@ Function RenderGamma()
 	If opt\DisplayMode = 1 Then
 		If opt\RealGraphicWidth <> opt\GraphicWidth Lor opt\RealGraphicHeight <> opt\GraphicHeight Then
 			SetBuffer(TextureBuffer(FresizeTexture))
-			ClsColor(0, 0, 0) : Cls()
+			ClsColor(0, 0, 0)
+			Cls()
 			CopyRect(0, 0, opt\GraphicWidth, opt\GraphicHeight, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_X, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_Y, BackBuffer(), TextureBuffer(FresizeTexture))
 			SetBuffer(BackBuffer())
-			ClsColor(0, 0, 0) : Cls()
+			ClsColor(0, 0, 0)
+			Cls()
 			ScaleRender(0, 0, SMALLEST_POWER_TWO / Float(opt\GraphicWidth) * opt\AspectRatio, SMALLEST_POWER_TWO / Float(opt\GraphicWidth) * opt\AspectRatio)
 			; ~ Might want to replace Float(opt\GraphicWidth) with Max(opt\GraphicWidth, opt\GraphicHeight) if portrait sizes cause issues
 			; ~ Everyone uses landscape so it's probably a non-issue
@@ -108,7 +110,8 @@ Function RenderGamma()
 	If opt\ScreenGamma >= 1.0 Then
 		CopyRect(0, 0, opt\RealGraphicWidth, opt\RealGraphicHeight, SMALLEST_POWER_TWO_HALF - opt\RealGraphicWidth / 2, SMALLEST_POWER_TWO_HALF - opt\RealGraphicHeight / 2, BackBuffer(), TextureBuffer(FresizeTexture))
 		EntityBlend(FresizeImage, 1)
-		ClsColor(0, 0, 0) : Cls()
+		ClsColor(0, 0, 0)
+		Cls()
 		ScaleRender((-1.0) / Float(opt\RealGraphicWidth), 1.0 / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth))
 		EntityFX(FresizeImage, 1 + 32)
 		EntityBlend(FresizeImage, 3)
@@ -117,7 +120,8 @@ Function RenderGamma()
 	ElseIf opt\ScreenGamma < 1.0 ; ~ Maybe optimize this if it's too slow, alternatively give players the option to disable gamma
 		CopyRect(0, 0, opt\RealGraphicWidth, opt\RealGraphicHeight, SMALLEST_POWER_TWO_HALF - opt\RealGraphicWidth / 2, SMALLEST_POWER_TWO_HALF - opt\RealGraphicHeight / 2, BackBuffer(), TextureBuffer(FresizeTexture))
 		EntityBlend(FresizeImage, 1)
-		ClsColor(0, 0, 0) : Cls()
+		ClsColor(0, 0, 0)
+		Cls()
 		ScaleRender((-1.0) / Float(opt\RealGraphicWidth), 1.0 / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth))
 		EntityFX(FresizeImage, 1 + 32)
 		EntityBlend(FresizeImage, 2)
@@ -146,15 +150,15 @@ Function UpdateWorld2()
 	Local HasBattery%
 	Local Power%
 	
-	If (wi\NightVision > 0 And wi\NightVision <> 3) Lor wi\SCRAMBLE > 0 Then
+	If (wi\NightVision > 0 And wi\NightVision <> 3) Lor wi\SCRAMBLE Then
 		For i = 0 To MaxItemAmount - 1
 			If Inventory(i) <> Null Then
-				If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\SCRAMBLE > 0 And Inventory(i)\ItemTemplate\TempName = "scramble") Then
-					Inventory(i)\State = Max(0.0, Inventory(i)\State - (fps\Factor[0] * (0.02 * wi\NightVision) + (0.25 * (wi\SCRAMBLE > 0))))
+				If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
+					Inventory(i)\State = Max(0.0, Inventory(i)\State - (fps\Factor[0] * (0.02 * wi\NightVision) + (0.25 * (wi\SCRAMBLE))))
 					Power = Int(Inventory(i)\State)
 					If Power = 0 Then ; ~ This NVG or SCRAMBLE can't be used
 						HasBattery = 0
-						If wi\SCRAMBLE > 0 Then
+						If wi\SCRAMBLE Then
 							CreateMsg("The batteries in this gear died.", 6.0)
 						Else
 							CreateMsg("The batteries in these night vision goggles died.", 6.0)
@@ -185,8 +189,8 @@ Function UpdateWorld2()
 		EndIf
 	EndIf
 	
-	If wi\SCRAMBLE > 0 Then
-		If HasBattery = 0 
+	If wi\SCRAMBLE Then
+		If HasBattery = 0 Then
 			If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN)
 		Else
 			SCRAMBLECHN = LoopSound2(SCRAMBLESFX, SCRAMBLECHN, Camera, Camera)
@@ -232,10 +236,10 @@ Function RenderWorld2(Tween#)
 	Local HasBattery%
 	Local Power%
 	
-	If (wi\NightVision > 0 And wi\NightVision <> 3) Lor wi\SCRAMBLE > 0 Then
+	If (wi\NightVision > 0 And wi\NightVision <> 3) Lor wi\SCRAMBLE Then
 		For i = 0 To MaxItemAmount - 1
 			If Inventory(i) <> Null Then
-				If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\SCRAMBLE > 0 And Inventory(i)\ItemTemplate\TempName = "scramble") Then
+				If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
 					Power = Int(Inventory(i)\State)
 					If Power = 0 Then ; ~ This NVG or SCRAMBLE can't be used
 						HasBattery = 0
@@ -335,7 +339,7 @@ Function RenderWorld2(Tween#)
 		For l = 0 To Min(Floor((Power + 50) * 0.01), 11)
 			Rect(45, mo\Viewport_Center_Y - (l * 20), 54, 10)
 		Next
-		DrawImage(tt\ImageID[6], 40, mo\Viewport_Center_Y + 30)
+		DrawImage(t\ImageID[6], 40, mo\Viewport_Center_Y + 30)
 	EndIf
 	
 	; ~ Render sprites

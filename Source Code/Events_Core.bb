@@ -100,7 +100,10 @@ Function CreateEvent.Events(EventName$, RoomName$, ID%, Prob# = 0.0)
 			If RoomName = "" Lor RoomName = r\RoomTemplate\Name Then
 				Temp = False
 				For e2.Events = Each Events
-					If e2\room = r Then Temp = True : Exit
+					If e2\room = r Then
+						Temp = True
+						Exit
+					EndIf
 				Next
 				
 				i = i + 1
@@ -118,7 +121,10 @@ Function CreateEvent.Events(EventName$, RoomName$, ID%, Prob# = 0.0)
 			If RoomName = "" Lor RoomName = r\RoomTemplate\Name Then
 				Temp = False
 				For e2.Events = Each Events
-					If e2\room = r Then Temp = True : Exit
+					If e2\room = r Then
+						Temp = True
+						Exit
+					EndIf
 				Next
 				
 				If Rnd(0.0, 1.0) < Prob And (Not Temp) Then
@@ -478,7 +484,7 @@ Function InitEvents()
 	CreateEvent("room2clockroom096", "room2clockroom3", 0)
 	
 	CreateEvent("room1endroom106", "room1endroom", Rand(0, 1))
-	CreateEvent("room1endroom106", "room1endroom3", 0.3)
+	CreateEvent("room1endroom106", "room1endroom3", Rand(0, 1))
 	
 	CreateEvent("room2poffices2", "room2poffices2", 0)
 	
@@ -817,7 +823,7 @@ Function UpdateEvents()
 	Local it.Items, it2.Items, em.Emitters, sc.SecurityCams, sc2.SecurityCams, wayp.Waypoints, do.Doors
 	Local Dist#, i%, Temp%, Pvt%, StrTemp$, j%, k%
 	Local CurrTrigger$ = "", fDir#, Scale#, Tex%
-	Local x#, y#, z#, xTemp#, yTemp#, b%, t%, SF%, TexName$
+	Local x#, y#, z#, xTemp#, yTemp#, b%, BT%, SF%, TexName$
 	Local Angle#, GroupName$
 	
 	CurrStepSFX = 0
@@ -899,7 +905,10 @@ Function UpdateEvents()
 							MoveEntity(e\room\RoomDoors[1]\OBJ2, -Sin(e\room\RoomDoors[1]\OpenState) / 180.0, 0.0, 0.0)
 						Wend
 						
-						If e\room\NPC[0] <> Null Then SetNPCFrame(e\room\NPC[0], 74.0) : e\room\NPC[0]\State = 8.0
+						If e\room\NPC[0] <> Null Then
+							e\room\NPC[0]\State = 8.0
+							SetNPCFrame(e\room\NPC[0], 74.0)
+						EndIf
 						
 						If e\room\NPC[1] <> Null Then
 							PositionEntity(e\room\NPC[1]\Collider, e\room\x, e\room\y + 0.5, e\room\z - 1.0, True)
@@ -2039,7 +2048,7 @@ Function UpdateEvents()
 								If e\EventState < 14130.0 Then 
 									SetNPCFrame(e\room\NPC[2], 50.0)
 									me\BlinkTimer = -10.0 : me\LightBlink = 1.0
-								Else 
+								Else
 									Animate2(e\room\NPC[2]\OBJ, AnimTime(e\room\NPC[2]\OBJ), 712.0, 779.0, 0.5, False)
 									
 									Curr173\Idle = 0
@@ -2418,12 +2427,12 @@ Function UpdateEvents()
 						EndIf
 					EndIf
 					
-					If wi\NightVision > 0 Lor wi\SCRAMBLE > 0 Then
+					If wi\NightVision > 0 Lor wi\SCRAMBLE Then
 						Local HasBatteryFor895% = False
 						
 						For i = 0 To MaxItemAmount - 1
 							If Inventory(i) <> Null Then
-								If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE > 0 And Inventory(i)\ItemTemplate\TempName = "scramble") Then
+								If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
 									If Inventory(i)\State > 0.0 Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Then
 										HasBatteryFor895 = True
 										Exit
@@ -2448,20 +2457,20 @@ Function UpdateEvents()
 								If wi\NightVision > 1 Then
 									msg\DeathMsg = Chr(34) + "Class D viewed SCP-895 through a pair of digital night vision goggles, presumably enhanced by SCP-914. It might be possible that the subject "
 									msg\DeathMsg = msg\DeathMsg + "was able to resist the memetic effects partially through these goggles. The goggles have been stored for further study." + Chr(34)
-								ElseIf wi\SCRAMBLE > 0
+								ElseIf wi\SCRAMBLE
 									msg\DeathMsg = Chr(34) + "Class D viewed SCP-895 through an apparatus called " + Chr(34) + "SCRAMBLE Gear" + Chr(34) + ", killing him." + Chr(34)
 								Else
 									msg\DeathMsg = Chr(34) + "Class D viewed SCP-895 through a pair of digital night vision goggles, killing him." + Chr(34)
 								EndIf
-								EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
+								EntityTexture(t\OverlayID[4], t\OverlayTextureID[4])
 								If me\VomitTimer < -10.0 Then Kill()
 							ElseIf me\Sanity < -800.0 Then
-								If Rand(3) = 1 Then EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
+								If Rand(3) = 1 Then EntityTexture(t\OverlayID[4], t\OverlayTextureID[4])
 								If Rand(6) < 5 Then
-									EntityTexture(tt\OverlayID[4], tt\MiscTextureID[Rand(7, 12)])
+									EntityTexture(t\OverlayID[4], t\MiscTextureID[Rand(7, 12)])
 									For i = 0 To MaxItemAmount - 1
 										If Inventory(i) <> Null Then
-											If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE > 0 And Inventory(i)\ItemTemplate\TempName = "scramble") Then
+											If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
 												If Inventory(i)\State2 = 1.0 Then PlaySound_Strict(HorrorSFX[1])
 												Inventory(i)\State2 = 2.0
 												Exit
@@ -2472,12 +2481,12 @@ Function UpdateEvents()
 								me\BlurTimer = 1000.0
 								If me\VomitTimer = 0.0 Then me\VomitTimer = 1.0
 							ElseIf me\Sanity < -500.0 Then
-								If Rand(7) = 1 Then EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
+								If Rand(7) = 1 Then EntityTexture(t\OverlayID[4], t\OverlayTextureID[4])
 								If Rand(50) = 1 Then
-									EntityTexture(tt\OverlayID[4], tt\MiscTextureID[Rand(7, 12)])
+									EntityTexture(t\OverlayID[4], t\MiscTextureID[Rand(7, 12)])
 									For i = 0 To MaxItemAmount - 1
 										If Inventory(i) <> Null Then
-											If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE > 0 And Inventory(i)\ItemTemplate\TempName = "scramble") Then
+											If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
 												If Inventory(i)\State2 = 0.0 Then PlaySound_Strict(HorrorSFX[0])
 												Inventory(i)\State2 = 1.0
 												Exit
@@ -2486,10 +2495,10 @@ Function UpdateEvents()
 									Next
 								EndIf
 							Else
-								EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
+								EntityTexture(t\OverlayID[4], t\OverlayTextureID[4])
 								For i = 0 To MaxItemAmount - 1
 									If Inventory(i) <> Null Then
-										If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE > 0 And Inventory(i)\ItemTemplate\TempName = "scramble") Then
+										If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
 											Inventory(i)\State2 = 0.0
 										EndIf
 									EndIf
@@ -2501,7 +2510,7 @@ Function UpdateEvents()
 					If e\EventState3 > 0.0 Then e\EventState3 = Max(e\EventState3 - fps\Factor[0], 0.0)
 					If e\EventState3 = 0.0 Then
 						e\EventState3 = -1.0
-						EntityTexture(tt\OverlayID[4], tt\OverlayTextureID[4])
+						EntityTexture(t\OverlayID[4], t\OverlayTextureID[4])
 					EndIf
 					
 					ShouldPlay = 66
@@ -2764,7 +2773,7 @@ Function UpdateEvents()
 						CurrStepSFX = 1
 						
 						If Achievements[38] = True And (Not AchvPDDone) Then Achievements[38] = False
-					Else 
+					Else
 						ShouldPlay = 1
 						
 						GiveAchievement(AchvPD)
@@ -2863,25 +2872,28 @@ Function UpdateEvents()
 									Select i
 										Case 0
 											;[Block]
-											x = -1452.0 * RoomScale
-											z = -37.0 * RoomScale
+											x = (-1452.0) * RoomScale
+											z = (-37.0) * RoomScale
 											;[End Block]
 										Case 1
 											;[Block]
-											x = -121.0 * RoomScale
+											x = (-121.0) * RoomScale
 											z = 188.0 * RoomScale
 											;[End Block]
 										Case 2
 											;[Block]
 											x = 1223.0 * RoomScale
-											z = -196.0 * RoomScale
+											z = (-196.0) * RoomScale
 											;[End Block]
 									End Select
 									
 									x = x + EntityX(e\room\Objects[8], True)
 									z = z + EntityZ(e\room\Objects[8], True)
 									
-									If DistanceSquared(EntityX(me\Collider), x, EntityZ(me\Collider), z) < PowTwo(200.0 * RoomScale) Then Safe = True : Exit
+									If DistanceSquared(EntityX(me\Collider), x, EntityZ(me\Collider), z) < PowTwo(200.0 * RoomScale) Then
+										Safe = True
+										Exit
+									EndIf
 								Next
 								
 								Dist = EntityDistanceSquared(me\Collider, e\room\Objects[18])
@@ -3021,27 +3033,25 @@ Function UpdateEvents()
 												If r\RoomTemplate\Name = "room2shaft" Then
 													GiveAchievement(AchvPD)
 													AchvPDDone = True
+													
 													e\EventState = 0.0
 													e\EventState2 = 0.0
 													
 													SecondaryLightOn = PrevSecondaryLightOn
 													PrevSecondaryLightOn = 0.0
 													
-													me\BlinkTimer = -10.0
-													me\LightBlink = 5.0
-													
-													me\BlurTimer = 1500.0
+													me\BlinkTimer = -10.0 : me\LightBlink = 5.0 : me\BlurTimer = 1500.0
 													
 													PlayerRoom = r
 													
 													PlaySound_Strict(LoadTempSound("SFX\Room\PocketDimension\Exit.ogg"))
 													
-													TeleportEntity(me\Collider, EntityX(r\Objects[0], True), 0.4, EntityZ(r\Objects[0], True), 0.3, True)
+													TeleportEntity(me\Collider, EntityX(r\Objects[0], True), 0.6, EntityZ(r\Objects[0], True), 0.3, True)
 													
-													UpdateRooms()
+													UpdateDoorsTimer = 0.0
 													UpdateDoors()
-													Curr106\State = 10000.0
-													Curr106\Idle = 0
+													UpdateRooms()
+													Curr106\State = 10000.0 : Curr106\Idle = 0
 													
 													de.Decals = CreateDecal(0, EntityX(r\Objects[0], True), EntityY(r\Objects[0], True), EntityZ(r\Objects[0], True), 270.0, Rnd(360.0), 0.0)
 													TeleportEntity(de\OBJ, EntityX(r\Objects[0], True), EntityY(r\Objects[0], True) + 0.6, EntityZ(r\Objects[0], True), 0.0, True, 4.0, True)
@@ -3065,25 +3075,29 @@ Function UpdateEvents()
 							EndIf	
 						EndIf
 						
-						If EntityY(me\Collider) < -1600.0 * RoomScale Then
+						If EntityY(me\Collider) < (-1600.0) * RoomScale Then
 							If EntityDistanceSquared(me\Collider, e\room\Objects[8]) > PowTwo(4750.0 * RoomScale) Then
-								me\DropSpeed = 0.0
-								me\BlurTimer = 1500.0
-								PositionEntity(me\Collider, EntityX(e\room\OBJ, True), 0.4, EntityX(e\room\OBJ, True))
 								For r.Rooms = Each Rooms
 									If r\RoomTemplate\Name = "room106" Then
+										GiveAchievement(AchvPD)
+										AchvPDDone = True
+										
 										e\EventState = 0.0
 										e\EventState2 = 0.0
 										
-										TeleportEntity(me\Collider, EntityX(r\Objects[10], True), 0.4, EntityZ(r\Objects[10], True), 0.3, True)
+										me\BlinkTimer = -10.0 : me\LightBlink = 5.0 : me\BlurTimer = 1500.0
 										
-										GiveAchievement(AchvPD)
-										AchvPDDone = True
+										PlayerRoom = r
+										
 										SecondaryLightOn = PrevSecondaryLightOn
 										PrevSecondaryLightOn = 0.0
 										
-										Curr106\State = 10000.0
-										Curr106\Idle = 0
+										TeleportEntity(me\Collider, EntityX(r\Objects[10], True), 0.4, EntityZ(r\Objects[10], True), 0.3, True)
+										
+										UpdateDoorsTimer = 0.0
+										UpdateDoors()
+										UpdateRooms()
+										Curr106\State = 10000.0 : Curr106\Idle = 0
 										
 										For e2.Events = Each Events
 											If e2\EventID = e_room2sl
@@ -3098,12 +3112,6 @@ Function UpdateEvents()
 										Return
 									EndIf
 								Next
-								ResetEntity(me\Collider)
-								
-								e\EventState2 = 0.0
-								UpdateDoorsTimer = 0.0
-								UpdateDoors()
-								UpdateRooms()
 							Else ; ~ The player is not at the exit, must've fallen down
 								If me\KillTimer >= 0.0 Then 
 									PlaySound_Strict(HorrorSFX[8])
@@ -3113,10 +3121,6 @@ Function UpdateEvents()
 								me\BlurTimer = 3000.0
 							EndIf
 						EndIf
-						
-						UpdateDoorsTimer = 0.0
-						UpdateDoors()
-						UpdateRooms()
 					ElseIf e\EventState2 = 0.0
 						Dist = EntityDistanceSquared(me\Collider, e\room\OBJ)	
 						
@@ -3152,21 +3156,19 @@ Function UpdateEvents()
 									;[End Block]
 								Case 11, 12 ; ~ Middle of the large starting room
 									;[Block]
-									me\BlurTimer = 500.0
+									me\BlurTimer = 1000.0
 									PositionEntity(me\Collider, EntityX(e\room\OBJ), 0.6, EntityZ(e\room\OBJ))
 									;[End Block]
 								Case 13, 14, 15 ; ~ The exit room"
 									;[Block]
-									me\BlurTimer = 1500.0
+									me\BlinkTimer = -10.0 : me\BlurTimer = 1500.0
 									e\EventState2 = 1.0
-									me\BlinkTimer = -10.0
 									
 									PositionEntity(me\Collider, EntityX(e\room\Objects[8], True) - 400.0 * RoomScale, e\room\y - 300.0 * RoomScale, EntityZ(e\room\Objects[8], True))
 									ResetEntity(me\Collider)
 									;[End Block]
 								Case 16, 17, 18, 19
 									;[Block]
-									me\BlurTimer = 1500.0
 									For r.Rooms = Each Rooms
 										If r\RoomTemplate\Name = "room2tunnel" Then
 											GiveAchievement(AchvPD)
@@ -3175,11 +3177,19 @@ Function UpdateEvents()
 											e\EventState = 0.0
 											e\EventState2 = 0.0
 											
+											me\BlinkTimer = -10.0 : me\LightBlink = 5.0 : me\BlurTimer = 1500.0
+											
+											PlayerRoom = r
+											
 											SecondaryLightOn = PrevSecondaryLightOn
 											PrevSecondaryLightOn = 0.0
+											
 											TeleportEntity(me\Collider, EntityX(r\OBJ, True), 0.4, EntityZ(r\OBJ, True), 0.3, True)
-											Curr106\State = 250.0
-											Curr106\Idle = 0
+											
+											UpdateDoorsTimer = 0.0
+											UpdateDoors()
+											UpdateRooms()
+											Curr106\State = 10000.0 : Curr106\Idle = 0
 											
 											For e2.Events = Each Events
 												If e2\EventID = e_room2sl
@@ -3260,7 +3270,7 @@ Function UpdateEvents()
 								Curr106\State = -10.0
 								ResetEntity(Curr106\Collider)
 							EndIf
-						Else 
+						Else
 							Curr106\State = -10.0 : Curr106\Idle = 0
 						EndIf
 						
@@ -3853,10 +3863,10 @@ Function UpdateEvents()
 								Next
 								
 								If Rand(5) < 5 Then 
-									PositionTexture(tt\MiscTextureID[13], 0.0, Rnd(0.0, 1.0))
+									PositionTexture(t\MiscTextureID[13], 0.0, Rnd(0.0, 1.0))
 									ShowEntity(e\room\Objects[3])			
 								EndIf
-							Else 
+							Else
 								If e\EventState - fps\Factor[0] < 70.0 * 1.0 Then 
 									StopChannel(e\SoundCHN)	
 									e\SoundCHN = PlaySound2(TeslaPowerUpSFX, Camera, e\room\Objects[3], 4.0, 0.5)
@@ -4866,7 +4876,7 @@ Function UpdateEvents()
 						
 						For itt.ItemTemplates = Each ItemTemplates
 							If itt\Name = "Drawing" Then
-								If itt\Img <> 0 Then FreeImage(itt\Img)	
+								If itt\Img <> 0 Then FreeImage(itt\Img)	: itt\Img = 0
 								itt\Img = LoadImage_Strict(ImgPath)
 								MaskImage(itt\Img, 255, 0, 255)
 								itt\ImgPath = ImgPath
@@ -4881,8 +4891,8 @@ Function UpdateEvents()
 						For i = 1 To CountSurfaces(e\room\Objects[2])
 							SF = GetSurface(e\room\Objects[2], i)
 							b = GetSurfaceBrush(SF)
-							t = GetBrushTexture(b, 0)
-							TexName = StripPath(TextureName(t))
+							BT = GetBrushTexture(b, 0)
+							TexName = StripPath(TextureName(BT))
 							
 							If Lower(TexName) = "1048(0).png" Then
 								PaintSurface(SF, Brush)
@@ -5360,7 +5370,7 @@ Function UpdateEvents()
 								;[Block]
 							Case 60.0
 								;[Block]
-								If (Not tt\MiscTextureID[14]) Then
+								If (Not t\MiscTextureID[14]) Then
 									Tex = LoadTexture_Strict("GFX\npcs\scp_173_H.png")
 									
 									EntityTexture(Curr173\OBJ, Tex)
@@ -5963,7 +5973,7 @@ Function UpdateEvents()
 											e\room\NPC[0]\Sound = LoadSound_Strict("SFX\SCP\035\GasedKilled2.ogg")
 											e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound)
 											e\EventState = 70.0 * 60.0
-										Else 
+										Else
 											If e\room\NPC[0]\Sound <> 0 Then 
 												FreeSound_Strict(e\room\NPC[0]\Sound) : e\room\NPC[0]\Sound = 0
 											EndIf
@@ -6513,7 +6523,7 @@ Function UpdateEvents()
 							ElseIf e\EventState < 2000.0 Then
 								If IsStreamPlaying_Strict(e\SoundCHN3) Then
 									If Rand(4) = 1 Then
-										EntityTexture(e\room\Objects[1], tt\MiscTextureID[Rand(1, 6)])
+										EntityTexture(e\room\Objects[1], t\MiscTextureID[Rand(1, 6)])
 										ShowEntity(e\room\Objects[1])
 									ElseIf Rand(10) = 1 
 										HideEntity(e\room\Objects[1])							
@@ -6522,7 +6532,7 @@ Function UpdateEvents()
 									If e\SoundCHN3 <> 0 Then
 										StopStream_Strict(e\SoundCHN3) : e\SoundCHN3 = 0
 									EndIf
-									EntityTexture(e\room\Objects[1], tt\MiscTextureID[0])
+									EntityTexture(e\room\Objects[1], t\MiscTextureID[0])
 									ShowEntity(e\room\Objects[1])
 									e\EventState = e\EventState + fps\Factor[0]
 								EndIf
@@ -6539,11 +6549,11 @@ Function UpdateEvents()
 							If e\SoundCHN3 <> 0 Then
 								If (Not IsStreamPlaying_Strict(e\SoundCHN3)) Then
 									e\SoundCHN3 = 0
-									EntityTexture(e\room\Objects[1], tt\MiscTextureID[0])
+									EntityTexture(e\room\Objects[1], t\MiscTextureID[0])
 									ShowEntity(e\room\Objects[1])
 								Else
 									If Rand(4) = 1 Then
-										EntityTexture(e\room\Objects[1], tt\MiscTextureID[Rand(1, 6)])
+										EntityTexture(e\room\Objects[1], t\MiscTextureID[Rand(1, 6)])
 										ShowEntity(e\room\Objects[1])
 									ElseIf Rand(10) = 1 
 										HideEntity(e\room\Objects[1])							
@@ -7782,7 +7792,7 @@ Function UpdateEvents()
 							If e\EventState2 = 2.0 Then MoveToPocketDimension()
 						EndIf
 					EndIf
-				Else 
+				Else
 					e\EventState2 = 0.0
 				EndIf
 				;[End Block]
@@ -10268,7 +10278,7 @@ Function UpdateEndings()
 										EndIf
 									EndIf
 								EndIf
-							Else 
+							Else
 								If e\EventState2 = 0.0 Then
 									For i = 2 To 4
 										e\room\NPC[i]\State = 0.0

@@ -106,7 +106,7 @@ Function TurnIfDeviating%(Max_Deviation_Distance_%, Pathx%, Center_%, Dir%, RetV
 	EndIf
 	If (Not RetVal) Then 
 		Return(Dir) 
-	Else 
+	Else
 		Return(Deviated)
 	EndIf
 End Function
