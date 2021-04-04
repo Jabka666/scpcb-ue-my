@@ -7808,7 +7808,7 @@ Function UpdateCredits()
 		EndIf
 	EndIf
 	
-	If GetKey() Then me\CreditsTimer = -1.0
+	If GetKey() <> 0 Then me\CreditsTimer = -1.0
 	
 	If me\CreditsTimer = -1.0 Then
 		Delete Each CreditsLine
@@ -7816,7 +7816,7 @@ Function UpdateCredits()
 		StopStream_Strict(MusicCHN)
 		ShouldPlay = 21
 		CurrSave = ""
-		FlushKeys()
+		ResetInput()
 	EndIf
 End Function
 
@@ -7876,7 +7876,10 @@ Function RenderCredits()
 	EndIf
 	
 	SetFont(fo\FontID[Font_Default])
-	Text(20 * MenuScale, opt\GraphicHeight - (30 * MenuScale), "PRESS ANY KEY TO SKIP")
+	Color(0, 0, 0)
+	Text(20 * MenuScale, opt\GraphicHeight - (34 * MenuScale), "PRESS ANY KEY TO SKIP")
+	Color(255, 255, 255)
+	Text(20 * MenuScale, opt\GraphicHeight - (35 * MenuScale), "PRESS ANY KEY TO SKIP")
 	
 	If me\CreditsTimer = -1.0 Then
 		FreeFont(fo\FontID[Font_Credits])

@@ -8498,12 +8498,13 @@ Function CreateMap()
 	If opt\DebugMode Then
 		Repeat
 			Cls()
+			i = MapGridSize - 1
 			For x = 0 To MapGridSize - 1
 				For y = 0 To MapGridSize - 1
 					If CurrMapGrid\Grid[x + (y * MapGridSize)] = MapGrid_NoTile Then
 						Zone = GetZone(y)
 						Color((50 * Zone) + 50, (50 * Zone) + 50, (50 * Zone) + 50)
-						Rect(x * 32, y * 32, 30, 30)
+						Rect((i * 32) * MenuScale, (y * 32) * MenuScale, 30 * MenuScale, 30 * MenuScale)
 					Else
 						If CurrMapGrid\Grid[x + (y * MapGridSize)] = MapGrid_CheckpointTile Then
 							Color(0, 200, 0)
@@ -8516,31 +8517,53 @@ Function CreateMap()
 						Else
 							Color(255, 255, 255)
 						EndIf
-						Rect(x * 32, y * 32, 30, 30)
+						Rect((i * 32) * MenuScale, (y * 32) * MenuScale, 30 * MenuScale, 30 * MenuScale)
 					EndIf
 				Next
+				i = i - 1
 			Next	
 			
+			i = MapGridSize - 1
 			For x = 0 To MapGridSize - 1
 				For y = 0 To MapGridSize - 1
-					If ScaledMouseX() > x * 32 And ScaledMouseX() < (x * 32) + 32 Then
-						If ScaledMouseY() > y * 32 And ScaledMouseY() < (y * 32) + 32 Then
-							Color(255, 0, 0)
-						Else
-							Color(200, 200, 200)
-						EndIf
+					If ScaledMouseX() > (i * 32) * MenuScale And ScaledMouseX() < ((i * 32) + 32) * MenuScale And ScaledMouseY() > (y * 32) * MenuScale And ScaledMouseY() < ((y * 32) + 32) * MenuScale Then
+						Color(255, 0, 0)
+						Text(((i * 32) + 2) * MenuScale, ((y * 32) + 2) * MenuScale, CurrMapGrid\Grid[x + (y * MapGridSize)] + " " + CurrMapGrid\RoomName[x + (y * MapGridSize)])
 					Else
-						Color(200, 200, 200)
-					EndIf
-					
-					If CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile Then
-						Text((x * 32) + 2, (y * 32) + 2, CurrMapGrid\Grid[x + (y * MapGridSize)] + " " + Replace(CurrMapGrid\RoomName[x + (y * MapGridSize)], "room", ""))
+						If CurrMapGrid\RoomName[x + (y * MapGridSize)] <> "" Then
+							Color(0, 0, 0)
+							Text(((i * 32) + 2) * MenuScale, ((y * 32) + 2) * MenuScale, CurrMapGrid\Grid[x + (y * MapGridSize)])
+						EndIf
 					EndIf
 				Next
+				i = i - 1
 			Next
-			Text(mo\Viewport_Center_X, opt\GraphicHeight - 50, "PRESS ANY KEY TO CONTINUE", True, True)
-			If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 			Flip()
+			
+			Local RED#, GREEN#, BLUE#
+			Local Temp3%
+			
+			If RED = 0.0 Then
+				Temp3 = True
+			ElseIf RED = 255.0
+				Temp3 = False
+			EndIf
+			
+			If (Not Temp3) Then
+				RED = Max(0.0, RED - 2.0)
+				GREEN = Max(0.0, GREEN - 2.0)
+				BLUE = Max(0.0, BLUE - 2.0)
+			Else
+				RED = Min(RED + 2.0, 255.0)
+				GREEN = Min(GREEN + 2.0, 255.0)
+				BLUE = Min(BLUE + 2.0, 255.0)
+			EndIf
+			
+			Color(0, 0, 0)
+			Text(mo\Viewport_Center_X, opt\GraphicHeight - (34 * MenuScale), "PRESS ANY KEY TO CONTINUE", True, True)
+			Color(RED, GREEN, BLUE)
+			Text(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), "PRESS ANY KEY TO CONTINUE", True, True)
+			If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 		Until GetKey() Lor MouseHit(1)
 	EndIf
 	
