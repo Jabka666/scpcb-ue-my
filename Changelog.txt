@@ -84,6 +84,7 @@
 
 - Improved SCP-914.
 - Improved some loading screens.
+- Improved game loading screen style.
 
 - Optimized game.
 

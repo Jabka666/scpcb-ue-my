@@ -2074,6 +2074,20 @@ Function LoadGameQuick(File$)
 	CatchErrors("LoadGameQuick")
 End Function
 
+Global SaveMSG$
+
+Global CurrSave$
+Global SaveGameAmount%
+
+Dim SaveGames$(SaveGameAmount + 1) 
+Dim SaveGameTime$(SaveGameAmount + 1)
+Dim SaveGameDate$(SaveGameAmount + 1)
+Dim SaveGameVersion$(SaveGameAmount + 1)
+
+Global SavedMapsAmount% = 0
+Dim SavedMaps$(SavedMapsAmount + 1)
+Dim SavedMapsAuthor$(SavedMapsAmount + 1)
+
 Function LoadSavedGames()
 	CatchErrors("Uncaught (LoadSaveGames)")
 	

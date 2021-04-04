@@ -9589,7 +9589,7 @@ Function UpdateEndings()
 					ShowEntity(e\room\OBJ)
 					
 					If e\EventState = 0.0 Then
-						RenderLoading(0, True)
+						RenderLoading(0, "ENDING STUFF")
 						
 						For n.NPCs = Each NPCs
 							If n <> Curr106 And n <> Curr173 Then  
@@ -9599,10 +9599,6 @@ Function UpdateEndings()
 						Curr096 = Null
 						Curr513_1 = Null
 						Curr049 = Null
-						
-						SecondaryLightOn = True
-						
-						RenderLoading(60, True)
 						
 						e\room\NPC[0] = CreateNPC(NPCTypeApache, e\room\x, 100.0, e\room\z)
 						e\room\NPC[0]\State = 1.0
@@ -9615,9 +9611,7 @@ Function UpdateEndings()
 						RotateEntity(e\room\Objects[0], 0.0, e\room\Angle, 0.0, True)
 						PositionEntity(e\room\Objects[0], e\room\x + 4356.0 * RoomScale, e\room\y - 1017.0 * RoomScale, e\room\z + 2588.0 * RoomScale, True)
 						
-						CreateConsoleMsg("")
-						CreateConsoleMsg("WARNING! Teleporting away from this area may cause bugs or crashing.", 255, 0, 0)
-						CreateConsoleMsg("")
+						RenderLoading(60, "ENDING STUFF")
 						
 						Sky = CreateSky("GFX\map\sky\sky")
 						RotateEntity(Sky, 0.0, e\room\Angle - 90.0, 0.0)
@@ -9625,9 +9619,17 @@ Function UpdateEndings()
 						ResetEntity(me\Collider)
 						RotateEntity(me\Collider, 0.0, EntityYaw(me\Collider) + (e\room\Angle + 180.0), 0.0)
 						
+						RenderLoading(90, "ENDING STUFF")
+						
+						SecondaryLightOn = True
+						
+						CreateConsoleMsg("")
+						CreateConsoleMsg("WARNING! Teleporting away from this area may cause bugs or crashing.", 255, 0, 0)
+						CreateConsoleMsg("")
+						
 						e\EventState = 1.0
 						
-						RenderLoading(100, True)
+						RenderLoading(100)
 					Else
 						UpdateSky()
 						
@@ -9897,16 +9899,7 @@ Function UpdateEndings()
 					ShowEntity(e\room\OBJ)
 					
 					If e\EventState = 0.0 Then
-						RenderLoading(0)
-						
-						e\room\Objects[0] = LoadRMesh("GFX\map\gatea_tunnel_opt.rmesh", Null)
-						PositionEntity(e\room\Objects[0], EntityX(e\room\OBJ, True), EntityY(e\room\OBJ, True), EntityZ(e\room\OBJ, True))
-						ScaleEntity(e\room\Objects[0], RoomScale, RoomScale, RoomScale)
-						EntityType(e\room\Objects[0], HIT_MAP)
-						EntityPickMode(e\room\Objects[0], 3)
-						EntityParent(e\room\Objects[0], e\room\OBJ)
-						
-						RenderLoading(30)
+						RenderLoading(0, "ENDING STUFF")
 						
 						For n.NPCs = Each NPCs
 							If n <> Curr106 And n <> Curr173 Then  
@@ -9917,21 +9910,10 @@ Function UpdateEndings()
 						Curr513_1 = Null
 						Curr049 = Null
 						
-						SecondaryLightOn = True
-						
 						For i = 2 To 4
 							e\room\NPC[i] = CreateNPC(NPCTypeApache, e\room\x, e\room\y + 11.0, e\room\z)
 							e\room\NPC[i]\State = (Not Curr106\Contained)
 						Next
-						
-						CreateConsoleMsg("")
-						CreateConsoleMsg("WARNING! Teleporting away from this area may cause bugs or crashing.", 255, 0, 0)
-						CreateConsoleMsg("")
-						
-						Sky = CreateSky("GFX\map\sky\sky")
-						RotateEntity(Sky, 0.0, e\room\Angle, 0.0)
-						
-						RenderLoading(60)
 						
 						For i = 0 To 1
 							e\room\NPC[i] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[i + 5], True), EntityY(e\room\Objects[i + 5], True), EntityZ(e\room\Objects[i + 5], True))
@@ -9960,6 +9942,20 @@ Function UpdateEndings()
 							ResetEntity(e\room\NPC[5]\Collider)
 						EndIf
 						
+						RenderLoading(30, "ENDING STUFF")
+						
+						Sky = CreateSky("GFX\map\sky\sky")
+						RotateEntity(Sky, 0.0, e\room\Angle, 0.0)
+						
+						RenderLoading(60, "ENDING STUFF")
+						
+						e\room\Objects[0] = LoadRMesh("GFX\map\gatea_tunnel_opt.rmesh", Null)
+						PositionEntity(e\room\Objects[0], EntityX(e\room\OBJ, True), EntityY(e\room\OBJ, True), EntityZ(e\room\OBJ, True))
+						ScaleEntity(e\room\Objects[0], RoomScale, RoomScale, RoomScale)
+						EntityType(e\room\Objects[0], HIT_MAP)
+						EntityPickMode(e\room\Objects[0], 3)
+						EntityParent(e\room\Objects[0], e\room\OBJ)
+						
 						e\room\Objects[9] = LoadMesh_Strict("GFX\map\Props\lightgunbase.b3d")
 						PositionEntity(e\room\Objects[9], e\room\x + (2624.0 * RoomScale), e\room\y + (992.0 * RoomScale), e\room\z + (6157.0 * RoomScale))
 						ScaleEntity(e\room\Objects[9], RoomScale, RoomScale, RoomScale)
@@ -9970,19 +9966,18 @@ Function UpdateEndings()
 						RotateEntity(e\room\Objects[9], 0.0, 48.0, 0.0)
 						RotateEntity(e\room\Objects[10], 40.0, 0.0, 0.0)
 						
-						For Temp = 0 To 20
-							For i = 0 To 1
-								TranslateEntity(e\room\NPC[i]\Collider, 0.0, -0.04, 0.0)
-							Next							
-							For i = 5 To 8
-								TranslateEntity(e\room\NPC[i]\Collider, 0.0, -0.04, 0.0)
-							Next
-						Next
+						RenderLoading(90, "ENDING STUFF")
 						
 						ResetEntity(me\Collider)
 						RotateEntity(me\Collider, 0.0, EntityYaw(me\Collider) + (e\room\Angle + 180.0), 0.0)
 						
 						If (Not Curr106\Contained) Then PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\106Escape.ogg"))
+						
+						SecondaryLightOn = True
+						
+						CreateConsoleMsg("")
+						CreateConsoleMsg("WARNING! Teleporting away from this area may cause bugs or crashing.", 255, 0, 0)
+						CreateConsoleMsg("")
 						
 						e\EventState = 1.0
 						
