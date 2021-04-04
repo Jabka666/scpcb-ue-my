@@ -2058,9 +2058,9 @@ Forever
 
 ; ~ Fog Constants
 ;[Block]
-Const FogColorLCZ$ = "010010010"
-Const FogColorHCZ$ = "010006006"
-Const FogColorEZ$ = "010010020"
+Const FogColorLCZ$ = "008008008"
+Const FogColorHCZ$ = "010005005"
+Const FogColorEZ$ = "010010015"
 Const FogColorStorageTunnels$ = "005015003"
 Const FogColorOutside$ = "255255255"
 Const FogColorDimension1499$ = "096097104"
