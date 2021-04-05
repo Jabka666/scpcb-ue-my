@@ -1432,7 +1432,7 @@ Global RoomTempID%
 Type RoomTemplates
 	Field OBJ%, ID%
 	Field OBJPath$
-	Field Zone%[3]
+	Field Zone%[5]
 	Field TempSoundEmitter%[MaxRoomEmitters]
 	Field TempSoundEmitterX#[MaxRoomEmitters], TempSoundEmitterY#[MaxRoomEmitters], TempSoundEmitterZ#[MaxRoomEmitters]
 	Field TempSoundEmitterRange#[MaxRoomEmitters]
@@ -1471,44 +1471,46 @@ Function LoadRoomTemplates(File$)
 		TemporaryString = Trim(ReadLine(f))
 		If Left(TemporaryString, 1) = "[" Then
 			TemporaryString = Mid(TemporaryString, 2, Len(TemporaryString) - 2)
-			StrTemp = GetINIString(File, TemporaryString, "Mesh Path")
-			
-			rt.RoomTemplates = CreateRoomTemplate(StrTemp)
-			rt\Name = Lower(TemporaryString)
-			
-			StrTemp = GetINIString(File, TemporaryString, "Shape")
-			
-			Select StrTemp
-				Case "room1", "1"
-					;[Block]
-					rt\Shape = ROOM1
-					;[End Block]
-				Case "room2", "2"
-					;[Block]
-					rt\Shape = ROOM2
-					;[End Block]
-				Case "room2C", "2C", "room2c", "2c"
-					;[Block]
-					rt\Shape = ROOM2C
-					;[End Block]
-				Case "room3", "3"
-					;[Block]
-					rt\Shape = ROOM3
-					;[End Block]
-				Case "room4", "4"
-					;[Block]
-					rt\Shape = ROOM4
-					;[End Block]
-			End Select
-			
-			For i = 0 To 2
-				rt\Zone[i] = GetINIInt(File, TemporaryString, "Zone" + (i + 1))
-			Next
-			
-			rt\Commonness = Max(Min(GetINIInt(File, TemporaryString, "Commonness"), 100), 0)
-			rt\Large = GetINIInt(File, TemporaryString, "Large")
-			rt\DisableDecals = GetINIInt(File, TemporaryString, "Disabledecals")
-			rt\DisableOverlapCheck = GetINIInt(File, TemporaryString, "DisableOverlapCheck")
+			If TemporaryString <> "room ambience" Then
+				StrTemp = GetINIString(File, TemporaryString, "Mesh Path")
+				
+				rt.RoomTemplates = CreateRoomTemplate(StrTemp)
+				rt\Name = Lower(TemporaryString)
+				
+				StrTemp = GetINIString(File, TemporaryString, "Shape")
+				
+				Select StrTemp
+					Case "room1", "1"
+						;[Block]
+						rt\Shape = ROOM1
+						;[End Block]
+					Case "room2", "2"
+						;[Block]
+						rt\Shape = ROOM2
+						;[End Block]
+					Case "room2C", "2C", "room2c", "2c"
+						;[Block]
+						rt\Shape = ROOM2C
+						;[End Block]
+					Case "room3", "3"
+						;[Block]
+						rt\Shape = ROOM3
+						;[End Block]
+					Case "room4", "4"
+						;[Block]
+						rt\Shape = ROOM4
+						;[End Block]
+				End Select
+				
+				For i = 0 To 4
+					rt\Zone[i] = GetINIInt(File, TemporaryString, "Zone" + (i + 1))
+				Next
+				
+				rt\Commonness = Max(Min(GetINIInt(File, TemporaryString, "Commonness"), 100), 0)
+				rt\Large = GetINIInt(File, TemporaryString, "Large")
+				rt\DisableDecals = GetINIInt(File, TemporaryString, "Disabledecals")
+				rt\DisableOverlapCheck = GetINIInt(File, TemporaryString, "DisableOverlapCheck")
+			EndIf
 		EndIf
 	Wend
 	
@@ -1529,7 +1531,7 @@ End Function
 Function LoadRoomMesh(rt.RoomTemplates)
 	If Instr(rt\OBJPath, ".rmesh") <> 0 Then ; ~ File is .rmesh
 		rt\OBJ = LoadRMesh(rt\OBJPath, rt)
-	ElseIf Instr(rt\OBJPath, ".b3d") <> 0 Then ; ~ File is .b3d
+	ElseIf Instr(rt\OBJPath, ".b3d") <> 0 ; ~ File is .b3d
 		RuntimeError(".b3d rooms are no longer supported, please use the converter! Affected room: " + Chr(34) + rt\OBJPath + Chr(34))
 	Else ; ~ File not found
 		RuntimeError("File: " + Chr(34) + rt\OBJPath + Chr(34) + " not found.")
@@ -1848,7 +1850,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 	For rt.RoomTemplates = Each RoomTemplates
 		Local i%
 		
-		For i = 0 To 2
+		For i = 0 To 4
 			If rt\Zone[i] = Zone Then 
 				If rt\Shape = RoomShape Then
 					Temp = Temp + rt\Commonness
@@ -1862,7 +1864,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 	
 	Temp = 0
 	For rt.RoomTemplates = Each RoomTemplates
-		For i = 0 To 2
+		For i = 0 To 4
 			If rt\Zone[i] = Zone And rt\Shape = RoomShape Then
 				Temp = Temp + rt\Commonness
 				If RandomRoom > Temp - rt\Commonness And RandomRoom =< Temp Then

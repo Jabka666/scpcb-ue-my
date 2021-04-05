@@ -539,10 +539,10 @@ Type RoomTemplates
 End Type
 
 Function CreateRoomTemplate.RoomTemplates(MeshPath$)
-	Local rt.RoomTemplates = New RoomTemplates
+	Local rt.RoomTemplates
 	
-	rt\OBJPath = MeshPath
-	
+	rt.RoomTemplates = New RoomTemplates
+	rt\OBJPath = "GFX\map\" + MeshPath
 	rt\ID = RoomTempID
 	RoomTempID = RoomTempID + 1
 	
@@ -562,39 +562,41 @@ Function LoadRoomTemplates(File$)
 		TemporaryString = Trim(ReadLine(f))
 		If Left(TemporaryString, 1) = "[" Then
 			TemporaryString = Mid(TemporaryString, 2, Len(TemporaryString) - 2)
-			StrTemp = GetINIString(File, TemporaryString, "Mesh Path")
-			
-			rt = CreateRoomTemplate(StrTemp)
-			rt\Name = Lower(TemporaryString)
-			
-			StrTemp = Lower(GetINIString(File, TemporaryString, "Shape"))
-			
-			Select StrTemp
-				Case "room1", "1"
-					;[Block]
-					rt\Shape = ROOM1
-					;[End Block]
-				Case "room2", "2"
-					;[Block]
-					rt\Shape = ROOM2
-					;[End Block]
-				Case "room2c", "2c"
-					;[Block]
-					rt\Shape = ROOM2C
-					;[End Block]
-				Case "room3", "3"
-					;[Block]
-					rt\Shape = ROOM3
-					;[End Block]
-				Case "room4", "4"
-					;[Block]
-					rt\Shape = ROOM4
-					;[End Block]
-			End Select
-			
-			For i = 0 To 4
-				rt\Zone[i] = GetINIInt(File, TemporaryString, "Zone" + (i + 1))
-			Next
+			If TemporaryString <> "room ambience" Then
+				StrTemp = GetINIString(File, TemporaryString, "Mesh Path")
+				
+				rt.RoomTemplates = CreateRoomTemplate(StrTemp)
+				rt\Name = Lower(TemporaryString)
+				
+				StrTemp = GetINIString(File, TemporaryString, "Shape")
+				
+				Select StrTemp
+					Case "room1", "1"
+						;[Block]
+						rt\Shape = ROOM1
+						;[End Block]
+					Case "room2", "2"
+						;[Block]
+						rt\Shape = ROOM2
+						;[End Block]
+					Case "room2C", "2C", "room2c", "2c"
+						;[Block]
+						rt\Shape = ROOM2C
+						;[End Block]
+					Case "room3", "3"
+						;[Block]
+						rt\Shape = ROOM3
+						;[End Block]
+					Case "room4", "4"
+						;[Block]
+						rt\Shape = ROOM4
+						;[End Block]
+				End Select
+				
+				For i = 0 To 4
+					rt\Zone[i] = GetINIInt(File, TemporaryString, "Zone" + (i + 1))
+				Next
+			EndIf
 		EndIf
 	Wend
 	
@@ -644,7 +646,7 @@ Function LoadRoomTemplateMeshes()
 		EndIf
 	Next
 	
-	Local hMap%[5], Mask%[5]
+	Local hMap%[ROOM4 + 1], Mask%[ROOM4 + 1]
 	Local GroundTexture% = LoadTexture_Strict("GFX\map\textures\forestfloor.jpg")
 	Local PathTexture% = LoadTexture_Strict("GFX\map\textures\forestpath.jpg")
 	
@@ -726,7 +728,7 @@ Function PlaceRoom.Rooms(Name$, x%, z%, Zone%, Shape%, Event$ = "", EventChance#
 	
 	For rt.RoomTemplates = Each RoomTemplates
 		If rt\Name = Name
-			r = CreateRoom(Zone, Shape, x * Spacing, 0.0, z * Spacing, Name)
+			r.Rooms = CreateRoom(Zone, Shape, x * Spacing, 0.0, z * Spacing, Name)
 			Exit
 		EndIf
 	Next
@@ -783,14 +785,13 @@ End Type
 Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 	CatchErrors("Uncaught (CreateRoom)")
 	
-	Local r.Rooms = New Rooms
+	Local r.Rooms
 	Local rt.RoomTemplates
 	Local Tempf1#, Tempf2#, Tempf3#
 	
+	r.Rooms = New Rooms
 	r\Zone = Zone
-	
 	r\RoomType = RoomShape
-	
 	r\x = x : r\y = y : r\z = z
 	
 	If Name <> "" Then
@@ -894,6 +895,10 @@ End Function
 Function LoadRoomMesh(rt.RoomTemplates)
 	If Instr(rt\OBJPath, ".rmesh") <> 0 Then ; ~ File is RoomMesh
 		rt\OBJ = LoadRMesh(rt\OBJPath, rt)
+	ElseIf Instr(rt\OBJPath, ".b3d") <> 0 ; ~ File is .b3d
+		RuntimeError(".b3d rooms are no longer supported, please use the converter! Affected room: " + Chr(34) + rt\OBJPath + Chr(34))
+	Else ; ~ File not found
+		RuntimeError("File: " + Chr(34) + rt\OBJPath + Chr(34) + " not found.")
 	EndIf
 	
 	If (Not rt\OBJ) Then RuntimeError("Failed To load map file " + Chr(34) + rt\OBJPath + Chr(34) + ".")
@@ -969,15 +974,15 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 				Temp1s = ReadString(f)
 				If FileType(File + Temp1s) = 1 ; ~ Check if texture is existing in original path
 					If Temp1i < 3 Then
-						Tex[j] = LoadTextureCheckingIfInCache(File + Temp1s, 1, 0)
+						Tex[j] = LoadTextureCheckingIfInCache(File + Temp1s, 1, DeleteMapTextures)
 					Else
-						Tex[j] = LoadTextureCheckingIfInCache(File + Temp1s, 3, 0)
+						Tex[j] = LoadTextureCheckingIfInCache(File + Temp1s, 3, DeleteMapTextures)
 					EndIf
 				ElseIf FileType(MapTexturesFolder + Temp1s) = 1 ; ~ If not, check the MapTexturesFolder
 					If Temp1i < 3 Then
-						Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 1, 0)
+						Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 1, DeleteMapTextures)
 					Else
-						Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 3, 0)
+						Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 3, DeleteMapTextures)
 					EndIf
 				EndIf
 				If Tex[j] <> 0 Then
@@ -1212,9 +1217,9 @@ Function LoadTerrain(HeightMap%, yScale# = 0.7, t1%, t2%, Mask%)
 	Local lX%, lY%, Index%
 	
 	; ~ Load texture and lightmaps
-	If (Not t1) Then RuntimeError("Texture 1 " + t1 + " does not exist.")
-	If (Not t2) Then RuntimeError("Texture 2 " + t2 + " does not exist.")
-	If (Not Mask) Then RuntimeError("Mask image " + Mask + " does not exist.")
+	If (Not t1) Then RuntimeError("Texture 1 " + Chr(34) + t1 + Chr(34) + " does not exist.")
+	If (Not t2) Then RuntimeError("Texture 2 " + Chr(34) + t2 + Chr(34) + " does not exist.")
+	If (Not Mask) Then RuntimeError("Mask image " + Chr(34) + Mask + Chr(34) + " does not exist.")
 	
 	; ~ Auto scale the textures to the right size
 	If t1 Then ScaleTexture(t1, x / 4.0, y / 4.0)

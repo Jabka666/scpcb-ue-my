@@ -9,10 +9,10 @@ Function LoadMesh_Strict(File$, Parent% = 0)
 	Local Tmp%, i%, SF%, b%, t1%, t2%, Texture%
 	Local TexAlpha% = 0
 	
-	If Tmp = 0 Then
-		If FileType(File) <> 1 Then RuntimeError("3D Mesh " + File + " not found.")
+	If (Not Tmp) Then
+		If FileType(File) <> 1 Then RuntimeError("3D Mesh " + Chr(34) + File + Chr(34) + " not found.")
 		Tmp = LoadMesh(File, Parent)
-		If Tmp = 0 Then RuntimeError("Failed to load 3D Mesh: " + File)
+		If (Not Tmp) Then RuntimeError("Failed to load 3D Mesh: " + Chr(34) + File + Chr(34))
 	EndIf
 	
 	For i = 1 To CountSurfaces(Tmp)
@@ -34,7 +34,7 @@ Function LoadMesh_Strict(File$, Parent% = 0)
 					EndIf
 				Else
 					t2 = GetBrushTexture(b, 1) ; ~ Diffuse (if lightmap is existing)
-					Texture = CheckForTexture(t1, TexAlpha)
+					Texture = CheckForTexture(t1, 1)
 					If Texture <> 0 Then
 						TextureCoords(Texture, 1)
 						BrushTexture(b, Texture, 0, 0)
@@ -65,9 +65,9 @@ Function LoadTexture_Strict(File$, Flags% = 1, TexDeleteType% = DeleteMapTexture
 	Local Tmp%
 	
 	If (Not Tmp) Then
-		If FileType(File) <> 1 Then RuntimeError("Texture " + File + " not found.")
+		If FileType(File) <> 1 Then RuntimeError("Texture " + Chr(34) + File + Chr(34) + " not found.")
 		Tmp = LoadTextureCheckingIfInCache(File, Flags, TexDeleteType)
-		If (Not Tmp) Then RuntimeError("Failed to load Texture: " + File)
+		If (Not Tmp) Then RuntimeError("Failed to load Texture: " + Chr(34) + File + Chr(34))
 	EndIf
 	Return(Tmp) 
 End Function
@@ -76,9 +76,9 @@ Function LoadFont_Strict(File$ = "Tahoma", Height% = 13)
 	Local Tmp%
 	
 	If (Not Tmp) Then
-		If FileType(File) <> 1 Then RuntimeError("Font " + File + " not found.")
+		If FileType(File) <> 1 Then RuntimeError("Font " + Chr(34) + File + Chr(34) + " not found.")
 		Tmp = LoadFont(File, Height)
-		If (Not Tmp) Then RuntimeError("Failed to load Font: " + File)
+		If (Not Tmp) Then RuntimeError("Failed to load Font: " + Chr(34) + File + Chr(34))
 	EndIf
 	Return(Tmp)
 End Function
@@ -87,9 +87,9 @@ Function LoadImage_Strict(File$)
 	Local Tmp%
 	
 	If (Not Tmp) Then
-		If FileType(File) <> 1 Then RuntimeError("Image " + Chr(34) + File + Chr(34) + " not found. ")
+		If FileType(File) <> 1 Then RuntimeError("Image " + Chr(34) + File + Chr(34) + " not found.")
 		Tmp = LoadImage(File)
-		If (Not Tmp) Then RuntimeError("Failed to load image: " + File)
+		If (Not Tmp) Then RuntimeError("Failed to load image: " + Chr(34) + File + Chr(34))
 	EndIf
 	Return(Tmp)
 End Function

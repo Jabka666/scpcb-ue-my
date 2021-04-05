@@ -1412,8 +1412,9 @@ Type RoomTemplates
 End Type 
 
 Function CreateRoomTemplate.RoomTemplates()
-	Local rt.RoomTemplates = New RoomTemplates
+	Local rt.RoomTemplates
 	
+	rt.RoomTemplates = New RoomTemplates
 	rt\ID = RoomTempID
 	RoomTempID = RoomTempID + 1
 	
@@ -1442,7 +1443,7 @@ Function LoadRoomTemplates(File$)
 			End Select
 			
 			If AddRoom Then
-				rt = CreateRoomTemplate()
+				rt.RoomTemplates = CreateRoomTemplate()
 				rt\Name = TemporaryString
 				
 				StrTemp = Lower(GetINIString(File, TemporaryString, "Shape"))
@@ -1479,32 +1480,32 @@ Function LoadRoomTemplates(File$)
 	; ~ Forest pieces
 	Local Fr_Prefix$ = "SCP-860-1 "
 	
-	rt = CreateRoomTemplate()
+	rt.RoomTemplates = CreateRoomTemplate()
 	rt\Name = Fr_Prefix + "door"
 	rt\Shape = ROOM1
 	rt\Description = "FRDOOR"
 	rt\MapGrid = 1
-	rt = CreateRoomTemplate()
+	rt.RoomTemplates = CreateRoomTemplate()
 	rt\Name = Fr_Prefix + "endroom"
 	rt\Shape = ROOM1
 	rt\Description = "FRENDROOM"
 	rt\MapGrid = 1
-	rt = CreateRoomTemplate()
+	rt.RoomTemplates = CreateRoomTemplate()
 	rt\Name = Fr_Prefix + "path"
 	rt\Shape = ROOM2
 	rt\Description = "FRPATH"
 	rt\MapGrid = 1
-	rt = CreateRoomTemplate()
+	rt.RoomTemplates = CreateRoomTemplate()
 	rt\Name = Fr_Prefix + "corner"
 	rt\Shape = ROOM2C
 	rt\Description = "FRCORNER"
 	rt\MapGrid = 1
-	rt = CreateRoomTemplate()
+	rt.RoomTemplates = CreateRoomTemplate()
 	rt\Name = Fr_Prefix + "t-shaped path"
 	rt\Shape = ROOM3
 	rt\Description = "FRTSHAPE"
 	rt\MapGrid = 1
-	rt = CreateRoomTemplate()
+	rt.RoomTemplates = CreateRoomTemplate()
 	rt\Name = Fr_Prefix + "4-way path"
 	rt\Shape = ROOM4
 	rt\Description = "FR4WAY"
@@ -1513,37 +1514,37 @@ Function LoadRoomTemplates(File$)
 	; ~ Maintenance tunnel rooms
 	Local MT_Prefix$ = "Maintenance tunnel "
 	
-	rt = CreateRoomTemplate()
+	rt.RoomTemplates = CreateRoomTemplate()
 	rt\Name = MT_Prefix + "endroom"
 	rt\Shape = ROOM1
 	rt\Description = "MTENDROOM"
 	rt\MapGrid = 2
-	rt = CreateRoomTemplate()
+	rt.RoomTemplates = CreateRoomTemplate()
 	rt\Name = MT_Prefix + "corridor"
 	rt\Shape = ROOM2
 	rt\Description = "MTCORRIDOR"
 	rt\MapGrid = 2
-	rt = CreateRoomTemplate()
+	rt.RoomTemplates = CreateRoomTemplate()
 	rt\Name = MT_Prefix + "corner"
 	rt\Shape = ROOM2C
 	rt\Description = "MTCORNER"
 	rt\MapGrid = 2
-	rt = CreateRoomTemplate()
+	rt.RoomTemplates = CreateRoomTemplate()
 	rt\Name = MT_Prefix + "t-shaped room"
 	rt\Shape = ROOM3
 	rt\Description = "MTTSHAPE"
 	rt\MapGrid = 2
-	rt = CreateRoomTemplate()
+	rt.RoomTemplates = CreateRoomTemplate()
 	rt\Name = MT_Prefix + "4-way room"
 	rt\Shape = ROOM4
 	rt\Description = "MT4WAY"
 	rt\MapGrid = 2
-	rt = CreateRoomTemplate()
+	rt.RoomTemplates = CreateRoomTemplate()
 	rt\Name = MT_Prefix + "elevator"
 	rt\Shape = ROOM2
 	rt\Description = "MTELEVATOR"
 	rt\MapGrid = 2
-	rt = CreateRoomTemplate()
+	rt.RoomTemplates = CreateRoomTemplate()
 	rt\Name = MT_Prefix + "generator room"
 	rt\Shape = ROOM1
 	rt\Description = "MTGENERATOR"
@@ -1688,7 +1689,7 @@ Function LoadMap(File$)
 	Local x%, y%
 	Local rt.RoomTemplates
 	
-	If Right(File, 6) = "cbmap2"
+	If Right(File, 6) = "cbmap2" Then
 		MapAuthor = ReadLine(f)
 		MapDescription = ReadLine(f)
 		If MapAuthor = "[Unknown]" Then MapAuthor = ""
