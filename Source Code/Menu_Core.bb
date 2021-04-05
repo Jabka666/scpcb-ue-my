@@ -1857,6 +1857,7 @@ Function UpdateLauncher(lnchr.Launcher)
 	Local LauncherIMG% = LoadImage_Strict("GFX\menu\launcher.png")
 	Local LauncherArrowIMG% = LoadImage_Strict("GFX\menu\arrow.png")
 	Local DiscordIMG% = LoadImage_Strict("GFX\menu\discord_icon.png")
+	Local ModDBIMG% = LoadImage_Strict("GFX\menu\moddb_icon.png")
 	
 	RotateImage(LauncherArrowIMG, -90.0)
 	MidHandle(LauncherArrowIMG)
@@ -1952,11 +1953,16 @@ Function UpdateLauncher(lnchr.Launcher)
 		EndIf
 		DrawImage(LauncherArrowIMG, LauncherWidth - 51, LauncherHeight - 212)
 		
-		If MouseOn(LauncherWidth - 617, LauncherHeight - 52, 32, 32) Then
-			Rect(LauncherWidth - 621, LauncherHeight - 55, 34, 34, False)
+		If MouseOn(LauncherWidth - 620, LauncherHeight - 86, 64, 64) Then
+			Rect(LauncherWidth - 621, LauncherHeight - 87, 66, 66, False)
 			If mo\MouseHit1 Then ExecFile("https://discord.gg/n7KdW4u")
 		EndIf
-		DrawImage(DiscordIMG, LauncherWidth - 620, LauncherHeight - 54)
+		DrawImage(DiscordIMG, LauncherWidth - 620, LauncherHeight - 86)
+		If MouseOn(LauncherWidth - 540, LauncherHeight - 86, 64, 64) Then
+			Rect(LauncherWidth - 541, LauncherHeight - 87, 66, 66, False)
+			If mo\MouseHit1 Then ExecFile("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition")
+		EndIf
+		DrawImage(ModDBIMG, LauncherWidth - 540, LauncherHeight - 86)
 		
 		If UpdateLauncherButton(LauncherWidth - 300, LauncherHeight - 105, 150, 30, "REPORT A BUG!", False, False) Then
 			ExecFile("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition/news/bug-reports1")
