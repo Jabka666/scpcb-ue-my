@@ -279,7 +279,6 @@ End Function
 Function LoadMesh_Strict(File$, Parent% = 0)
 	Local Tmp%, i%, SF%, b%, t1%, t2%, Texture%
 	Local TexAlpha% = 0
-	Local Temp$
 	
 	If (Not Tmp) Then
 		If FileType(File) <> 1 Then RuntimeError("3D Mesh " + Chr(34) + File + Chr(34) + " not found.")
@@ -305,7 +304,8 @@ Function LoadMesh_Strict(File$, Parent% = 0)
 						BrushTexture(b, MissingTexture, 0, 0)
 					EndIf
 				Else
-					Texture = CheckForTexture(t1, TexAlpha)
+					t2 = GetBrushTexture(b, 1) ; ~ Diffuse (if Lightmap is existing)
+					Texture = CheckForTexture(t1, 1)
 					If Texture <> 0 Then
 						TextureCoords(Texture, 1)
 						BrushTexture(b, Texture, 0, 0)
@@ -313,7 +313,6 @@ Function LoadMesh_Strict(File$, Parent% = 0)
 						BrushTexture(b, MissingTexture, 0, 0)
 					EndIf
 					
-					t2 = GetBrushTexture(b, 1) ; ~ Diffuse (if lightmap is existing)
 					Texture = CheckForTexture(t2, TexAlpha)
 					If Texture <> 0 Then
 						TextureCoords(Texture, 0)
@@ -330,7 +329,7 @@ Function LoadMesh_Strict(File$, Parent% = 0)
 		EndIf
 	Next
 	Return(Tmp)
-End Function   
+End Function
 
 Function LoadAnimMesh_Strict(File$, Parent% = 0)
 	Local Tmp%, i%, SF%, b%, t1%, Texture%

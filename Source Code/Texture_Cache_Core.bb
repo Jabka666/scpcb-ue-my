@@ -143,7 +143,7 @@ Function CheckForTexture%(Tex%, TexFlags% = 1)
 	ElseIf FileType(MapTexturesFolder + StripPath(TextureName(Tex))) = 1 ; ~ If not, check the MapTexturesFolder
 		Name = MapTexturesFolder + StripPath(TextureName(Tex))
 	EndIf
-	Texture = LoadTextureCheckingIfInCache(Name, TexFlags, 0)
+	Texture = LoadTextureCheckingIfInCache(Name, TexFlags, DeleteMapTextures)
 	Return(Texture)
 End Function
 
