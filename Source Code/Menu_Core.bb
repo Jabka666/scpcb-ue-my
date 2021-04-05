@@ -2070,9 +2070,52 @@ Function InitLoadingScreens(File$)
 	CloseFile(f)
 End Function
 
+Type LoadingTextColor
+	Field R#, G#, B#
+	Field ChangeColor%
+End Type
+
+Function InitLoadingTextColor()
+	Local ltc.LoadingTextColor
+	
+	ltc.LoadingTextColor = New LoadingTextColor
+	ltc\R = 255.0 : ltc\G = 255.0 : ltc\B = 255.0
+End Function
+
+Function UpdateLoadingTextColor()
+	Local ltc.LoadingTextColor
+	
+	ltc.LoadingTextColor = First LoadingTextColor
+	If ltc\R = 0.0 Then
+		ltc\ChangeColor = True
+	ElseIf ltc\R = 255.0
+		ltc\ChangeColor = False
+	EndIf
+	
+	If (Not ltc\ChangeColor) Then
+		ltc\R = Max(0.0, ltc\R - 3.0)
+		ltc\G = Max(0.0, ltc\G - 3.0)
+		ltc\B = Max(0.0, ltc\B - 3.0)
+	Else
+		ltc\R = Min(ltc\R + 3.0, 255.0)
+		ltc\G = Min(ltc\G + 3.0, 255.0)
+		ltc\B = Min(ltc\B + 3.0, 255.0)
+	EndIf
+End Function
+
+Function RenderLoadingText()
+	Local ltc.LoadingTextColor
+	
+	ltc.LoadingTextColor = First LoadingTextColor
+	Color(0, 0, 0)
+	Text(mo\Viewport_Center_X, opt\GraphicHeight - (34 * MenuScale), "PRESS ANY KEY TO CONTINUE", True, True)
+	Color(ltc\R, ltc\G, ltc\B)
+	Text(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), "PRESS ANY KEY TO CONTINUE", True, True)
+End Function
+
 Function RenderLoading(Percent%, Assets$ = "")
 	Local x%, y%, Temp%, FirstLoop%
-	Local ls.LoadingScreens
+	Local ls.LoadingScreens, ltc.LoadingTextColor
 	
 	If Percent = 0 Then
 		LoadingScreenText = 0
@@ -2090,6 +2133,8 @@ Function RenderLoading(Percent%, Assets$ = "")
 	EndIf	
 	
 	FirstLoop = True
+	
+	InitLoadingTextColor()
 	
 	Repeat 
 		ClsColor(0, 0, 0)
@@ -2251,29 +2296,9 @@ Function RenderLoading(Percent%, Assets$ = "")
 			FlushKeys()
 			FlushMouse()
 		Else
-			Local R#, G#, B#
-			Local Temp2%
-			
-			If R = 0.0 Then
-				Temp2 = True
-			ElseIf R = 255.0
-				Temp2 = False
-			EndIf
-			
-			If (Not Temp2) Then
-				R = Max(0.0, R - 3.0)
-				G = Max(0.0, G - 3.0)
-				B = Max(0.0, B - 3.0)
-			Else
-				R = Min(R + 3.0, 255.0)
-				G = Min(G + 3.0, 255.0)
-				B = Min(B + 3.0, 255.0)
-			EndIf
 			If FirstLoop And SelectedLoadingScreen\Title <> "CWM" Then PlaySound_Strict(LoadTempSound(("SFX\Horror\Horror8.ogg")))
-			Color(0, 0, 0)
-			Text(mo\Viewport_Center_X, opt\GraphicHeight - (34 * MenuScale), "PRESS ANY KEY TO CONTINUE", True, True)
-			Color(R, G, B)
-			Text(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), "PRESS ANY KEY TO CONTINUE", True, True)
+			UpdateLoadingTextColor()
+			RenderLoadingText()
 		EndIf
 		
 		RenderGamma()
@@ -2285,11 +2310,12 @@ Function RenderLoading(Percent%, Assets$ = "")
 		
 		Local Close% = False
 		
-		If GetKey() Lor MouseHit(1) Then
-			Close = True
+		If GetKey() <> 0 Lor MouseHit(1) Then
+			Delete(ltc)
 			ResetInput()
 			ResetTimingAccumulator()
 			SetFont(fo\FontID[Font_Default])
+			Close = True
 		EndIf
 	Until Close
 	
@@ -2321,13 +2347,13 @@ End Function
 Function RenderBar(Img%, x%, y%, Width%, Height%, Value1#, Value2# = 100.0, R% = 100, G% = 100, B% = 100)
 	Local i%
 	
-	Rect(x, y, Width + 4, Height, False)
+	Rect(x, y, Width + (4 * MenuScale), Height, False)
 	If opt\SmoothHUD Then
 		Color(R, G, B)	
-		Rect(x + 3, y + 3, Float((Width - 2) * (Value1 / Value2)), 14)	
+		Rect(x + (3 * MenuScale), y + (3 * MenuScale), Float((Width - (2 * MenuScale)) * (Value1 / Value2)), 14 * MenuScale)	
 	Else
-		For i = 1 To Int(((Width - 2) * ((Value1 / Value2) / 10.0)))
-			DrawImage(Img, x + 3 + 10 * (i - 1), y + 3)
+		For i = 1 To Int(((Width - (2 * MenuScale)) * ((Value1 / Value2) / 10.0)))
+			DrawImage(Img, x + ((3 + (10 * (i - 1))) * MenuScale), y + (3 * MenuScale))
 		Next
 	EndIf
 End Function

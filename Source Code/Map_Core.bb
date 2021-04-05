@@ -8538,32 +8538,8 @@ Function CreateMap()
 				i = i - 1
 			Next
 			Flip()
-			
-			Local RED#, GREEN#, BLUE#
-			Local Temp3%
-			
-			If RED = 0.0 Then
-				Temp3 = True
-			ElseIf RED = 255.0
-				Temp3 = False
-			EndIf
-			
-			If (Not Temp3) Then
-				RED = Max(0.0, RED - 3.0)
-				GREEN = Max(0.0, GREEN - 3.0)
-				BLUE = Max(0.0, BLUE - 3.0)
-			Else
-				RED = Min(RED + 3.0, 255.0)
-				GREEN = Min(GREEN + 3.0, 255.0)
-				BLUE = Min(BLUE + 3.0, 255.0)
-			EndIf
-			
-			Color(0, 0, 0)
-			Text(mo\Viewport_Center_X, opt\GraphicHeight - (34 * MenuScale), "PRESS ANY KEY TO CONTINUE", True, True)
-			Color(RED, GREEN, BLUE)
-			Text(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), "PRESS ANY KEY TO CONTINUE", True, True)
 			If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
-		Until GetKey() Lor MouseHit(1)
+		Until GetKey() <> 0 Lor MouseHit(1)
 	EndIf
 	
 	For y = 0 To MapGridSize
