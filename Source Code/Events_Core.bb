@@ -9163,7 +9163,7 @@ Function UpdateEvents()
 			Case e_room409
 				;[Block]
 				If PlayerRoom = e\room Then
-					If EntityY(me\Collider) < (-4000.0) * RoomScale Then
+					If EntityY(me\Collider) < (-3728.0) * RoomScale Then
 						ShouldPlay = 28
 						
 						If e\EventState = 0.0 Then

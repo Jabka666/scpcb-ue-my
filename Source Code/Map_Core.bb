@@ -4517,7 +4517,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) - 0.09, True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.09, True)
 			
-			d.Doors = CreateDoor(r\x - 544.0 * RoomScale, r\y + 1504.0 * RoomScale, r\z + 738.0 * RoomScale, 90.0, r, False, Default_Door, 5)
+			d.Doors = CreateDoor(r\x - 549.0 * RoomScale, r\y + 3808.0 * RoomScale, r\z + 738.0 * RoomScale, 90.0, r, False, Default_Door, 5)
 			d\AutoClose = False		
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), r\z + 608.0 * RoomScale, True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), r\z + 608.0 * RoomScale, True)
@@ -4528,7 +4528,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\RoomDoors[0]\Buttons[0], EntityX(r\RoomDoors[0]\Buttons[0], True) + 0.031, EntityY(r\RoomDoors[0]\Buttons[0], True), EntityZ(r\RoomDoors[0]\Buttons[0], True), True)
 			PositionEntity(r\RoomDoors[0]\Buttons[1], EntityX(r\RoomDoors[0]\Buttons[1], True) - 0.031, EntityY(r\RoomDoors[0]\Buttons[1], True), EntityZ(r\RoomDoors[0]\Buttons[1], True), True)
 			
-			r\RoomDoors.Doors[1] = CreateDoor(r\x + 680.0 * RoomScale, r\y + 1504.0 * RoomScale, r\z, -90.0, r, False, Elevator_Door)
+			r\RoomDoors.Doors[1] = CreateDoor(r\x + 675.0 * RoomScale, r\y + 3808.0 * RoomScale, r\z, -90.0, r, False, Elevator_Door)
 			r\RoomDoors[1]\AutoClose = False
 			PositionEntity(r\RoomDoors[1]\Buttons[0], EntityX(r\RoomDoors[1]\Buttons[0], True) + 0.031, EntityY(r\RoomDoors[1]\Buttons[0], True), EntityZ(r\RoomDoors[1]\Buttons[0], True), True)
 			PositionEntity(r\RoomDoors[1]\Buttons[1], EntityX(r\RoomDoors[1]\Buttons[1], True) - 0.031, EntityY(r\RoomDoors[1]\Buttons[1], True), EntityZ(r\RoomDoors[1]\Buttons[1], True), True)
@@ -4538,7 +4538,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\Objects[4], r\x + 1496.0 * RoomScale, r\y + 240.0 * RoomScale, r\z)
 			
 			r\Objects[5] = CreatePivot()
-			PositionEntity(r\Objects[5], r\x + 984.0 * RoomScale, r\y + 1744.0 * RoomScale, r\z)
+			PositionEntity(r\Objects[5], r\x + 979.0 * RoomScale, r\y + 4048.0 * RoomScale, r\z)
 			
 			r\Objects[6] = CreatePivot()
 			PositionEntity(r\Objects[6], r\x + 1110.0 * RoomScale, r\y + 36.0 * RoomScale, r\z - 208.0 * RoomScale)
@@ -4554,23 +4554,23 @@ Function FillRoom(r.Rooms)
 				
 				For i = 0 To 1
 					ScaleEntity(r\Objects[k * 2 + i], 0.04, 0.04, 0.04)
-					PositionEntity(r\Objects[k * 2 + i], r\x - 975.0 * RoomScale, r\y + 1712.0 * RoomScale, r\z - (502.0 - 132.0 * k) * RoomScale)
+					PositionEntity(r\Objects[k * 2 + i], r\x - 980.0 * RoomScale, r\y + 4016.0 * RoomScale, r\z - (502.0 - (132.0 * k)) * RoomScale)
 					EntityParent(r\Objects[k * 2 + i], r\OBJ)
 				Next
-				RotateEntity(r\Objects[k * 2], 0.0, -90.0 - 180.0, 0.0)
-				RotateEntity(r\Objects[k * 2 + 1], 10.0, -90.0 - 180.0 - 180.0, 0.0)
+				RotateEntity(r\Objects[k * 2], 0.0, -270.0, 0.0)
+				RotateEntity(r\Objects[k * 2 + 1], 10.0, -90.0, 0.0)
 				EntityPickMode(r\Objects[k * 2 + 1], 1, False)
 				EntityRadius(r\Objects[k * 2 + 1], 0.1)
 			Next
 			
-			it.Items = CreateItem("Nuclear Device Document", "paper", r\x - 944.0 * RoomScale, r\y + 1684.0 * RoomScale, r\z - 706.0 * RoomScale)
+			it.Items = CreateItem("Nuclear Device Document", "paper", r\x - 940.0 * RoomScale, r\y + 3988.0 * RoomScale, r\z - 706.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Ballistic Vest", "vest", r\x - 768.0 * RoomScale, r\y + 1652.0 * RoomScale, r\z - 768.0 * RoomScale)
+			it.Items = CreateItem("Ballistic Vest", "vest", r\x - 764.0 * RoomScale, r\y + 3958.0 * RoomScale, r\z - 768.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, -90.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			sc.SecurityCams = CreateSecurityCam(r\x + 624.0 * RoomScale, r\y + 1888.0 * RoomScale, r\z - 312.0 * RoomScale, r)
+			sc.SecurityCams = CreateSecurityCam(r\x + 619.0 * RoomScale, r\y + 4191.0 * RoomScale, r\z - 312.0 * RoomScale, r)
 			sc\Angle = 90.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			;[End Block]
@@ -7347,13 +7347,13 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\RoomDoors[0]\Buttons[0], EntityX(r\RoomDoors[0]\Buttons[0], True) - 0.031, EntityY(r\RoomDoors[0]\Buttons[0], True), EntityZ(r\RoomDoors[0]\Buttons[0], True), True)
 			PositionEntity(r\RoomDoors[0]\Buttons[1], EntityX(r\RoomDoors[0]\Buttons[1], True) + 0.031, EntityY(r\RoomDoors[0]\Buttons[1], True), EntityZ(r\RoomDoors[0]\Buttons[1], True), True)							
 			
-			r\RoomDoors.Doors[1] = CreateDoor(r\x - 2328.0 * RoomScale, r\y - 4528.0 * RoomScale, r\z - 656.0 * RoomScale, -90.0, r, False, Elevator_Door)
+			r\RoomDoors.Doors[1] = CreateDoor(r\x - 2328.0 * RoomScale, r\y - 4256.0 * RoomScale, r\z - 648.0 * RoomScale, -90.0, r, False, Elevator_Door)
 			r\RoomDoors[1]\AutoClose = False
 			PositionEntity(r\RoomDoors[1]\Buttons[0], EntityX(r\RoomDoors[1]\Buttons[0], True) - 0.031, EntityY(r\RoomDoors[1]\Buttons[1], True), EntityZ(r\RoomDoors[1]\Buttons[0], True), True)
 			PositionEntity(r\RoomDoors[1]\Buttons[1], EntityX(r\RoomDoors[1]\Buttons[1], True) + 0.031, EntityY(r\RoomDoors[1]\Buttons[1], True), EntityZ(r\RoomDoors[1]\Buttons[1], True), True)					
 			
 			; ~ A door to the containment chamber	
-			r\RoomDoors.Doors[2] = CreateDoor(r\x - 4336.0 * RoomScale, r\y - 4528.0 * RoomScale, r\z + 1552.0 * RoomScale, 0.0, r, False, Default_Door, 4)
+			r\RoomDoors.Doors[2] = CreateDoor(r\x - 4336.0 * RoomScale, r\y - 4256.0 * RoomScale, r\z + 1560.0 * RoomScale, 0.0, r, False, Default_Door, 4)
 			r\RoomDoors[2]\AutoClose = False
 			PositionEntity(r\RoomDoors[2]\Buttons[0], EntityX(r\RoomDoors[2]\Buttons[0], True), EntityY(r\RoomDoors[2]\Buttons[1], True), EntityZ(r\RoomDoors[2]\Buttons[0], True) + 0.061, True)
 			PositionEntity(r\RoomDoors[2]\Buttons[1], EntityX(r\RoomDoors[2]\Buttons[1], True), EntityY(r\RoomDoors[2]\Buttons[1], True), EntityZ(r\RoomDoors[2]\Buttons[1], True) - 0.061, True)					
@@ -7363,37 +7363,37 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\Objects[0], r\x + 552.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 656.0 * RoomScale)
 			
 			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x - 2040.0 * RoomScale, r\y - 4283.0 * RoomScale, r\z - 656.0 * RoomScale)
+			PositionEntity(r\Objects[1], r\x - 2040.0 * RoomScale, r\y - 4011.0 * RoomScale, r\z - 648.0 * RoomScale)
 			
 			; ~ Class-D spawn
 			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], r\x - 4951.0 * RoomScale, r\y - 4763.0 * RoomScale, r\z + 1828.0 * RoomScale)
+			PositionEntity(r\Objects[2], r\x - 4951.0 * RoomScale, r\y - 4491.0 * RoomScale, r\z + 1836.0 * RoomScale)
 			
 			; ~ Touching pivot
 			r\Objects[3] = CreatePivot()
-			PositionEntity(r\Objects[3], r\x - 4885.0 * RoomScale, r\y - 4598.0 * RoomScale, r\z + 2235.0 * RoomScale)
+			PositionEntity(r\Objects[3], r\x - 4885.0 * RoomScale, r\y - 4326.0 * RoomScale, r\z + 2243.0 * RoomScale)
 			
 			; ~ Sparks pivot
 			r\Objects[4] = CreatePivot()
-			PositionEntity(r\Objects[4], r\x - 4464.0 * RoomScale, r\y - 4345.0 * RoomScale, r\z - 1945.0 * RoomScale)
+			PositionEntity(r\Objects[4], r\x - 4468.0 * RoomScale, r\y - 4066.0 * RoomScale, r\z - 1937.0 * RoomScale)
 			
 			For i = 0 To 4
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
-			sc.SecurityCams = CreateSecurityCam(r\x - 3624.0 * RoomScale, r\y - 4112.0 * RoomScale, r\z + 2248.0 * RoomScale, r)
+			sc.SecurityCams = CreateSecurityCam(r\x - 3624.0 * RoomScale, r\y - 3840.0 * RoomScale, r\z + 2256.0 * RoomScale, r)
 			sc\Angle = 100.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			
-			de.Decals = CreateDecal(19, r\x - 4951.0 * RoomScale, r\y - 4767.0 * RoomScale, r\z + 1692.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.5, 0.8)
+			de.Decals = CreateDecal(19, r\x - 4951.0 * RoomScale, r\y - 4495.0 * RoomScale, r\z + 1700.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.5, 0.8)
 			EntityParent(de\OBJ, r\OBJ)
 			
-			it.Items = CreateItem("Document SCP-409", "paper", r\x - 3595.0 * RoomScale, r\y - 4608.0 * RoomScale, r\z + 2234.0 * RoomScale)
+			it.Items = CreateItem("Document SCP-409", "paper", r\x - 3595.0 * RoomScale, r\y - 4336.0 * RoomScale, r\z + 2242.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
 			If I_005\ChanceToSpawn = 3 Then
-				it.Items = CreateItem("SCP-005", "scp005", r\x - 5050.0 * RoomScale, r\y - 4688.0 * RoomScale, r\z + 1720.0 * RoomScale)
+				it.Items = CreateItem("SCP-005", "scp005", r\x - 5050.0 * RoomScale, r\y - 4416.0 * RoomScale, r\z + 1728.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)	
 			EndIf
 			;[End Block]
@@ -7451,7 +7451,7 @@ Function FillRoom(r.Rooms)
 				EntityParent(r\Objects[1], r\OBJ)
 			Else
 				r\Objects[1] = CreatePivot()
-				PositionEntity(r\Objects[1], r\x - 820.0 * RoomScale, r\y, r\z - 318.399 * RoomScale)
+				PositionEntity(r\Objects[1], r\x - 820.0 * RoomScale, r\y, r\z - 318.0 * RoomScale)
 				EntityParent(r\Objects[1], r\OBJ)
 			EndIf
 			
