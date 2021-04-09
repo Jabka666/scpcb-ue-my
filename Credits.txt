@@ -127,7 +127,7 @@
 		Yuri Novikov ("BayanForce")
 		C45
 		slend
-		Salvage
+		Stefan Koch ("Salvage")
 		Samuel ("Soylien")
 		Egor Oleynik ("Chumnaya Karkusa")
 		
@@ -139,15 +139,16 @@
 		neptuneprogamertv
 		The KMan
 		purseit
-		Levi The Boss#1360
+		Levi The Boss
 		Seth Smith ("Faust")
-		I SˆNHOR PaORUSSO I
+		Sehnor
 		Leonard Blackmore ("UnknownDev")
 		Ivan Mikhailov ("Redbull.Ivan")
 		Elan S.
 		Ashad Jackson ("ashadttt") 
 		Vladislav Borisevich ("Vane Brain")
 		Dmitry Petrov ("Ne4to")
+		BerkeliumÎ›sset
 		
 *Mod Testers
 
