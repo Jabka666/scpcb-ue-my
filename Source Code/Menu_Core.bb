@@ -400,7 +400,7 @@ Function UpdateMainMenu()
 							PlaySound_Strict(ButtonSFX)
 						ElseIf MouseOn(x + (160 * MenuScale), y + (240 * MenuScale), ImageWidth(ga\ArrowIMG[1]), ImageHeight(ga\ArrowIMG[1])) And mo\MouseHit1
 							SelectedDifficulty\InventorySlots = SelectedDifficulty\InventorySlots - 2
-							If SelectedDifficulty\InventorySlots < 0 Then SelectedDifficulty\InventorySlots = 10
+							If SelectedDifficulty\InventorySlots =< 0 Then SelectedDifficulty\InventorySlots = 10
 							PlaySound_Strict(ButtonSFX)
 						EndIf
 						
