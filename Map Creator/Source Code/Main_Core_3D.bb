@@ -11,7 +11,7 @@ Global MouseHit1%
 Const ResWidth% = 895
 Const ResHeight% = 560
 
-Graphics3D(ResWidth, ResHeight, 32, 4)
+Graphics3D(ResWidth, ResHeight, 0, 4)
 
 Local HHWND% = api_GetActiveWindow() ; ~ User32.dll
 
@@ -73,6 +73,41 @@ Global CurrMapGrid% = 0
 
 Global PickedRoom.Rooms
 Global CurrSelectedRoom.Rooms
+
+; ~ Objects Constants
+;[Block]
+Const MaxButtonModelIDAmount% = 1
+Const MaxDoorModelIDAmount% = 4
+Const MaxLeverModelIDAmount% = 2
+;[End Block]
+
+Type Objects
+	Field ButtonModelID[MaxButtonModelIDAmount]
+	Field DoorModelID[MaxDoorModelIDAmount]
+	Field LeverModelID[MaxLeverModelIDAmount]
+End Type
+
+Global o.Objects = New Objects
+
+; ~ [BUTTONS]
+
+o\ButtonModelID[0] = LoadMesh_Strict("..\GFX\map\Props\Button.b3d") ; ~ Button
+
+; ~ [DOORS]
+
+o\DoorModelID[0] = LoadMesh_Strict("..\GFX\map\Props\Door01.x") ; ~ Default Door
+
+o\DoorModelID[1] = LoadMesh_Strict("..\GFX\map\Props\DoorFrame.x") ; ~ Door Frame
+
+o\DoorModelID[2] = LoadMesh_Strict("..\GFX\map\Props\contdoorleft.x") ; ~ Big Door Left
+
+o\DoorModelID[3] = LoadMesh_Strict("..\GFX\map\Props\contdoorright.x") ; ~ Big Door Right
+
+; ~ [LEVERS]
+
+o\LeverModelID[0] = LoadMesh_Strict("..\GFX\map\Props\LeverBase.b3d") ; ~ Lever Base
+
+o\LeverModelID[1] = LoadMesh_Strict("..\GFX\map\Props\LeverHandle.b3d") ; ~ Lever Handle
 
 ChangeDir("..")
 
@@ -746,6 +781,26 @@ Type Props
 	Field OBJ%
 End Type
 
+Function CheckForPropModel%(File$)
+	If Instr(File, Lower("Button.")) <> 0 Then ; ~ Check for "Button"
+		Return(CopyEntity(o\ButtonModelID[0]))
+	ElseIf Instr(File, Lower("Door01")) <> 0 ; ~ Check for "Door01"
+		Return(CopyEntity(o\DoorModelID[0]))
+	ElseIf Instr(File, Lower("\DoorFrame")) <> 0 ; ~ Check for "DoorFrame"
+		Return(CopyEntity(o\DoorModelID[1]))
+	ElseIf Instr(File, Lower("ContDoorLeft")) <> 0 ; ~ Check for "ContDoorLeft"
+		Return(CopyEntity(o\DoorModelID[2]))
+	ElseIf Instr(File, Lower("ContDoorRight")) <> 0 ; ~ Check for "ContDoorRight"
+		Return(CopyEntity(o\DoorModelID[3]))
+	ElseIf Instr(File, Lower("LeverBase")) <> 0 ; ~ Check for "LeverBase"
+		Return(CopyEntity(o\LeverModelID[0]))
+	ElseIf Instr(File, Lower("LeverHandle")) <> 0 ; ~ Check for "LeverHandle"
+		Return(CopyEntity(o\LeverModelID[1]))
+	Else
+		Return(LoadMesh_Strict(File))
+	EndIf
+End Function
+
 Function CreatePropOBJ%(File$)
 	Local p.Props
 	
@@ -760,7 +815,8 @@ Function CreatePropOBJ%(File$)
 	
 	p.Props = New Props
 	p\File = File
-	p\OBJ = LoadMesh_Strict(File)
+	; ~ A hacky optimization (just copy models that loaded as variable). Also fixes wrong models folder if the CBRE was used
+	p\OBJ = CheckForPropModel(File)
 	Return(p\OBJ)
 End Function
 

@@ -11,6 +11,26 @@ Type Props
 	Field OBJ%
 End Type
 
+Function CheckForPropModel%(File$)
+	If Instr(File, Lower("Button.")) <> 0 Then ; ~ Check for "Button"
+		Return(CopyEntity(o\ButtonModelID[0]))
+	ElseIf Instr(File, Lower("Door01")) <> 0 ; ~ Check for "Door01"
+		Return(CopyEntity(o\DoorModelID[0]))
+	ElseIf Instr(File, Lower("\DoorFrame")) <> 0 ; ~ Check for "DoorFrame"
+		Return(CopyEntity(o\DoorModelID[1]))
+	ElseIf Instr(File, Lower("ContDoorLeft")) <> 0 ; ~ Check for "ContDoorLeft"
+		Return(CopyEntity(o\DoorModelID[5]))
+	ElseIf Instr(File, Lower("ContDoorRight")) <> 0 ; ~ Check for "ContDoorRight"
+		Return(CopyEntity(o\DoorModelID[6]))
+	ElseIf Instr(File, Lower("LeverBase")) <> 0 ; ~ Check for "LeverBase"
+		Return(CopyEntity(o\LeverModelID[0]))
+	ElseIf Instr(File, Lower("LeverHandle")) <> 0 ; ~ Check for "LeverHandle"
+		Return(CopyEntity(o\LeverModelID[1]))
+	Else
+		Return(LoadMesh_Strict(File))
+	EndIf
+End Function
+
 Function CreatePropOBJ%(File$)
 	Local p.Props
 	
@@ -28,26 +48,6 @@ Function CreatePropOBJ%(File$)
 	; ~ A hacky optimization (just copy models that loaded as variable). Also fixes wrong models folder if the CBRE was used
 	p\OBJ = CheckForPropModel(File)
 	Return(p\OBJ)
-End Function
-
-Function CheckForPropModel%(File$)
-	If Instr(File, Lower("LeverBase")) <> 0 Then ; ~ Check for "LeverBase"
-		Return(CopyEntity(o\LeverModelID[0]))
-	ElseIf Instr(File, Lower("LeverHandle")) <> 0 ; ~ Check for "LeverHandle"
-		Return(CopyEntity(o\LeverModelID[1]))
-	ElseIf Instr(File, Lower("Button.")) <> 0 ; ~ Check for "Button"
-		Return(CopyEntity(o\ButtonModelID[0]))
-	ElseIf Instr(File, Lower("Door01")) <> 0 ; ~ Check for "Door01"
-		Return(CopyEntity(o\DoorModelID[0]))
-	ElseIf Instr(File, Lower("\DoorFrame")) <> 0 ; ~ Check for "DoorFrame"
-		Return(CopyEntity(o\DoorModelID[1]))
-	ElseIf Instr(File, Lower("ContDoorLeft")) <> 0 ; ~ Check for "ContDoorLeft"
-		Return(CopyEntity(o\DoorModelID[5]))
-	ElseIf Instr(File, Lower("ContDoorRight")) <> 0 ; ~ Check for "ContDoorRight"
-		Return(CopyEntity(o\DoorModelID[6]))
-	Else
-		Return(LoadMesh_Strict(File))
-	EndIf
 End Function
 
 Global LightVolume#, TempLightVolume#

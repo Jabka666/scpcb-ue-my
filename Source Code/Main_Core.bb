@@ -293,27 +293,27 @@ Global t.Textures = New Textures
 
 ; ~ Objects Constants
 ;[Block]
-Const MaxMTModelIDAmount% = 7
-Const MaxMonitorModelIDAmount% = 2
-Const MaxDoorModelIDAmount% = 11
-Const MaxButtonModelIDAmount% = 5
-Const MaxLeverModelIDAmount% = 2
-Const MaxCamModelIDAmount% = 2
-Const MaxMiscModelIDAmount% = 1
 Const MaxNPCModelIDAmount% = 34
 Const MaxDTextures% = 16
+Const MaxButtonModelIDAmount% = 5
+Const MaxDoorModelIDAmount% = 11
+Const MaxLeverModelIDAmount% = 2
+Const MaxCamModelIDAmount% = 2
+Const MaxMonitorModelIDAmount% = 2
+Const MaxMTModelIDAmount% = 7
+Const MaxMiscModelIDAmount% = 1
 ;[End Block]
 
 Type Objects
-	Field DoorModelID%[MaxDoorModelIDAmount]
 	Field NPCModelID%[MaxNPCModelIDAmount]
-	Field MTModelID%[MaxMTModelIDAmount]
+	Field DTextures%[MaxDTextures]
 	Field ButtonModelID%[MaxButtonModelIDAmount]
+	Field DoorModelID%[MaxDoorModelIDAmount]
 	Field LeverModelID%[MaxLeverModelIDAmount]
 	Field CamModelID%[MaxCamModelIDAmount]
 	Field MonitorModelID%[MaxMonitorModelIDAmount]
+	Field MTModelID%[MaxMTModelIDAmount]
 	Field MiscModelID%[MaxMiscModelIDAmount]
-	Field DTextures%[MaxDTextures]
 End Type
 
 Global o.Objects = New Objects

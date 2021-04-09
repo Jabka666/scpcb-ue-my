@@ -26,14 +26,14 @@ Function LoadMesh_Strict(File$, Parent% = 0)
 				TexAlpha = IsTexAlpha(t1)
 				If TexAlpha <> 2 Then
 					Texture = CheckForTexture(t1, TexAlpha)
-					If Texture <> 0 Then 
+					If Texture <> 0 Then
 						BrushTexture(b, Texture, 0, 0)
 					Else
 						; ~ Sometimes that error is intentional - such as if the mesh doesn't has a texture applied or an invalid one which gets fixed by something like EntityTexture
 						BrushTexture(b, MissingTexture, 0, 0)
 					EndIf
 				Else
-					t2 = GetBrushTexture(b, 1) ; ~ Diffuse (if lightmap is existing)
+					t2 = GetBrushTexture(b, 1) ; ~ Diffuse (if Lightmap is existing)
 					Texture = CheckForTexture(t1, 1)
 					If Texture <> 0 Then
 						TextureCoords(Texture, 1)

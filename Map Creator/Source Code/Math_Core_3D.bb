@@ -7,6 +7,13 @@ Function WrapAngle#(Angle#)
 	EndIf
 End Function
 
+Function MilliSecs2%()
+	Local RetVal% = MilliSecs()
+	
+	If RetVal < 0 Then RetVal = RetVal + 2147483648
+	Return(RetVal)
+End Function
+
 Const ZONEAMOUNT% = 3
 
 Function GetZone%(y%)
