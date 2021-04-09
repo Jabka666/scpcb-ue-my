@@ -3063,8 +3063,9 @@ Function UpdateDecals()
 					If d\Timer =< 0.0 Then
 						Local Angle# = Rnd(360.0)
 						Local Temp# = Rnd(d\Size)
-						Local d2.Decals = CreateDecal(1, EntityX(d\OBJ) + Cos(Angle) * Temp, EntityY(d\OBJ) - 0.0005, EntityZ(d\OBJ) + Sin(Angle) * Temp, EntityPitch(d\OBJ), EntityYaw(d\OBJ), EntityRoll(d\OBJ), Rnd(0.1, 0.5))
+						Local d2.Decals
 						
+						d2.Decals = CreateDecal(1, EntityX(d\OBJ) + Cos(Angle) * Temp, EntityY(d\OBJ) - 0.0005, EntityZ(d\OBJ) + Sin(Angle) * Temp, EntityPitch(d\OBJ), EntityYaw(d\OBJ), EntityRoll(d\OBJ), Rnd(0.1, 0.5))
 						PlaySound2(DecaySFX[Rand(1, 3)], Camera, d2\OBJ, 10.0, Rnd(0.1, 0.5))
 						d\Timer = Rnd(50.0, 100.0)
 					Else
@@ -3514,7 +3515,7 @@ Function UpdateCheckpointMonitors(LCZ% = True)
 							BrushTexture(b, t\MonitorTextureID[3], 0, 0)
 						EndIf
 					Else
-						If MonitorTimer2 < 50.0
+						If MonitorTimer2 < 50.0 Then
 							BrushTexture(b, t\MonitorTextureID[2], 0, 0)
 						Else
 							BrushTexture(b, t\MonitorTextureID[1], 0, 0)
@@ -6205,7 +6206,7 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "room2ccont"
 			;[Block]
-			d.Doors = CreateDoor(r\x + 64.0 * RoomScale, r\y, r\z + 368.0 * RoomScale, 0.0, r, False, Default_Door, 4)
+			d.Doors = CreateDoor(r\x, r\y, r\z + 368.0 * RoomScale, 0.0, r, False, Default_Door, 4)
 			d\AutoClose = False
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.061, True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.061, True)
