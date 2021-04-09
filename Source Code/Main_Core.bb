@@ -2512,9 +2512,9 @@ Function MainLoop()
 			If SelectedDifficulty\SaveType = SAVEANYWHERE Then
 				RN = PlayerRoom\RoomTemplate\Name
 				If RN = "room173intro" Lor RN = "gateb" Lor RN = "gatea"
-					CreateMsg("You cannot save in this location.", 6.0)
+					CreateMsg("You can't save in this location.", 6.0)
 				ElseIf (Not CanSave) Lor QuickLoadPercent > -1
-					CreateMsg("You cannot save at this moment.", 6.0)
+					CreateMsg("You can't save at this moment.", 6.0)
 					If QuickLoadPercent > -1 Then
 						CreateMsg(msg\Txt + " (game is loading)", 6.0)
 					EndIf
@@ -2527,9 +2527,9 @@ Function MainLoop()
 				Else
 					RN = PlayerRoom\RoomTemplate\Name
 					If RN = "room173intro" Lor RN = "gateb" Lor RN = "gatea"
-						CreateMsg("You cannot save in this location.", 6.0)
+						CreateMsg("You can't save in this location.", 6.0)
 					ElseIf (Not CanSave) Lor QuickLoadPercent > -1
-						CreateMsg("You cannot save at this moment.", 6.0)
+						CreateMsg("You can't save at this moment.", 6.0)
 						If QuickLoadPercent > -1 Then
 							CreateMsg(msg\Txt + " (game is loading)", 6.0)
 						EndIf
@@ -2546,7 +2546,7 @@ Function MainLoop()
 				CreateMsg("Quick saving is disabled.", 6.0)
 			EndIf
 		ElseIf SelectedDifficulty\SaveType = SAVEONSCREENS And (SelectedScreen <> Null Lor SelectedMonitor <> Null)
-			If (msg\Txt <> "Game progress saved." And msg\Txt <> "You cannot save in this location." And msg\Txt <> "You cannot save at this moment.") Lor msg\Timer =< 0.0 Then
+			If (msg\Txt <> "Game progress saved." And msg\Txt <> "You can't save in this location." And msg\Txt <> "You can't save at this moment.") Lor msg\Timer =< 0.0 Then
 				CreateMsg("Press " + key\Name[key\SAVE] + " to save.", 6.0)
 			EndIf
 			If mo\MouseHit2 Then SelectedMonitor = Null
@@ -3724,7 +3724,7 @@ Function UpdateGUI()
 						Select SelectedItem\ItemTemplate\TempName
 							Default
 								;[Block]
-								CreateMsg("You cannot combine these two items.", 6.0)
+								CreateMsg("You can't combine these two items.", 6.0)
 								;[End Block]
 						End Select					
 					EndIf
@@ -3770,7 +3770,7 @@ Function UpdateGUI()
 							
 							If mo\DoubleClick And mo\DoubleClickSlot = n Then
 								If wi\HazmatSuit > 0 And (Not Instr(SelectedItem\ItemTemplate\TempName, "hazmatsuit")) Then
-									CreateMsg("You cannot use any items while wearing a hazmat suit.", 6.0)
+									CreateMsg("You can't use any items while wearing a hazmat suit.", 6.0)
 									SelectedItem = Null
 									Return
 								EndIf
@@ -3913,7 +3913,7 @@ Function UpdateGUI()
 											EndIf
 										EndIf
 									Else
-										CreateMsg("You cannot combine these two items.", 6.0)
+										CreateMsg("You can't combine these two items.", 6.0)
 									EndIf
 								ElseIf Inventory(MouseSlot)\ItemTemplate\TempName = "wallet" Then
 									; ~ Add an item to clipboard
@@ -3948,10 +3948,10 @@ Function UpdateGUI()
 											CreateMsg("You put " + added\ItemTemplate\Name + " into the wallet.", 6.0)
 										EndIf
 									Else
-										CreateMsg("You cannot combine these two items.", 6.0)
+										CreateMsg("You can't combine these two items.", 6.0)
 									EndIf
 								Else
-									CreateMsg("You cannot combine these two items.", 6.0)
+									CreateMsg("You can't combine these two items.", 6.0)
 								EndIf
 								SelectedItem = Null
 								;[End Block]
@@ -4004,7 +4004,7 @@ Function UpdateGUI()
 										;[End Block]
 									Default
 										;[Block]
-										CreateMsg("You cannot combine these two items.", 6.0)
+										CreateMsg("You can't combine these two items.", 6.0)
 										;[End Block]
 								End Select
 								;[End Block]
@@ -4057,7 +4057,7 @@ Function UpdateGUI()
 										;[End Block]
 									Default
 										;[Block]
-										CreateMsg("You cannot combine these two items.", 6.0)
+										CreateMsg("You can't combine these two items.", 6.0)
 										;[End Block]
 								End Select
 								;[End Block]
@@ -4101,7 +4101,7 @@ Function UpdateGUI()
 										;[End Block]
 									Default
 										;[Block]
-										CreateMsg("You cannot combine these two items.", 6.0)
+										CreateMsg("You can't combine these two items.", 6.0)
 										;[End Block]
 								End Select
 								;[End Block]
@@ -4154,13 +4154,13 @@ Function UpdateGUI()
 										;[End Block]
 									Default
 										;[Block]
-										CreateMsg("You cannot combine these two items.", 6.0)
+										CreateMsg("You can't combine these two items.", 6.0)
 										;[End Block]
 								End Select
 								;[End Block]
 							Default
 								;[Block]
-								CreateMsg("You cannot combine these two items.", 6.0)
+								CreateMsg("You can't combine these two items.", 6.0)
 								;[End Block]
 						End Select					
 					EndIf
@@ -5407,7 +5407,7 @@ Function UpdateGUI()
 								EndIf
 							Next
 						Else
-							msg\Txt = "You cannot carry any more items."
+							msg\Txt = "You can't carry any more items."
 							msg\Timer = 70.0 * 6.0				
 						EndIf
 					Else
