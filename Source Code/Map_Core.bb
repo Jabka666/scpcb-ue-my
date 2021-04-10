@@ -5195,16 +5195,15 @@ Function FillRoom(r.Rooms)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			RotateEntity(r\Objects[1], 10.0, -180.0, 0.0)
-			
 			EntityPickMode(r\Objects[1], 1, False)
 			EntityRadius(r\Objects[1], 0.1)
 			
 			r\Objects[2] = LoadRMesh("GFX\map\room012_2_opt.rmesh", Null)
 			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
-			PositionEntity(r\Objects[2], r\x - 360 * RoomScale, - 130.0 * RoomScale, r\z + 456.0 * RoomScale)
+			PositionEntity(r\Objects[2], r\x - 360 * RoomScale, r\y - 130.0 * RoomScale, r\z + 456.0 * RoomScale)
 			
 			r\Objects[3] = CreateSprite()
-			PositionEntity(r\Objects[3], r\x - 43.5 * RoomScale, - 574.0 * RoomScale, r\z - 362.0 * RoomScale)
+			PositionEntity(r\Objects[3], r\x - 43.5 * RoomScale, r\y - 574.0 * RoomScale, r\z - 362.0 * RoomScale)
 			ScaleSprite(r\Objects[3], 0.015, 0.015)
 			EntityTexture(r\Objects[3], t\LightSpriteID[1])
 			EntityBlend(r\Objects[3], 3)
@@ -5231,10 +5230,10 @@ Function FillRoom(r.Rooms)
 		Case "room2tunnel2"
 			;[Block]
 			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x, 544.0 * RoomScale, r\z + 512.0 * RoomScale)
+			PositionEntity(r\Objects[0], r\x, r\y + 544.0 * RoomScale, r\z + 512.0 * RoomScale)
 			
 			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x, 544.0 * RoomScale, r\z - 512.0 * RoomScale)
+			PositionEntity(r\Objects[1], r\x, r\y + 544.0 * RoomScale, r\z - 512.0 * RoomScale)
 			
 			For i = 0 To 1
 				EntityParent(r\Objects[i], r\OBJ)
