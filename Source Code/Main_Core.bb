@@ -1934,6 +1934,7 @@ Global I_005.SCP005 = New SCP005
 
 Type SCP008
 	Field Timer#
+	Field Revert%
 End Type
 
 Global I_008.SCP008 = New SCP008
@@ -1947,6 +1948,7 @@ Global I_294.SCP294 = New SCP294
 
 Type SCP409
 	Field Timer#
+	Field Revert%
 End Type 
 
 Global I_409.SCP409 = New SCP409
@@ -2808,10 +2810,6 @@ Function UpdateMove()
 	If I_714\Using Then
 		me\Stamina = Min(me\Stamina, 10.0)
 		me\Sanity = Max(-850.0, me\Sanity)
-	EndIf
-	
-	If I_409\Timer > 10.0 Then 
-		me\Stamina = Max(me\Stamina, I_409\Timer / 15.0)
 	EndIf
 	
 	If me\Zombie Then 
@@ -4245,14 +4243,13 @@ Function UpdateGUI()
 						
 						If I_008\Timer > 0.0 Then
 							CreateMsg("You swallowed the pill. Your nausea is fading.", 6.0)
+							I_008\Revert = True
 						ElseIf I_409\Timer > 0.0 Then
 							CreateMsg("You swallowed the pill. Your body is getting warmer and the crystals are receding.", 6.0)
+							I_409\Revert = True
 						Else
 							CreateMsg("You swallowed the pill.", 6.0)
 						EndIf
-						
-						I_008\Timer = 0.0
-						I_409\Timer = 0.0
 						
 						me\DeathTimer = 0.0
 						me\Stamina = 100.0
@@ -5532,7 +5529,7 @@ Function RenderHUD()
 	Color(0, 0, 0)
 	Rect(x - 50, y, 30, 30)
 	
-	If PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor I_714\Using Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor wi\HazmatSuit = 1 Lor wi\BallisticVest = 2 Then
+	If PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor I_714\Using Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor wi\HazmatSuit = 1 Lor wi\BallisticVest = 2 Lor I_409\Timer >= 55.0 Then
 		Color(200, 0, 0)
 		Rect(x - 53, y - 3, 36, 36)
 	Else
@@ -5680,8 +5677,8 @@ Function RenderDebugHUD()
 		
 		Text(x, y + (260 * MenuScale), "Pills Taken: " + I_500\Taken)
 		
-		Text(x, y + (300 * MenuScale), "SCP-008 Infection (Secs): " + Int(I_008\Timer / 70.0))
-		Text(x, y + (320 * MenuScale), "SCP-409 Crystallization (Secs): " + Int(I_409\Timer / 70.0))
+		Text(x, y + (300 * MenuScale), "SCP-008 Infection: " + I_008\Timer)
+		Text(x, y + (320 * MenuScale), "SCP-409 Crystallization: " + I_409\Timer)
 		Text(x, y + (340 * MenuScale), "SCP-427 State (Secs): " + Int(I_427\Timer / 70.0))
 		For i = 0 To 5
 			Text(x, y + ((360 + (20 * i)) * MenuScale), "SCP-1025 State " + i + ": " + I_1025\State[i])
@@ -9590,7 +9587,11 @@ Function Update008()
 		If I_008\Timer < 93.0 Then
 			PrevI008Timer = I_008\Timer
 			If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then
-				I_008\Timer = Min(I_008\Timer + (fps\Factor[0] * 0.002), 100.0)
+				If I_008\Revert Then
+					I_008\Timer = Max(0.0, I_008\Timer - (fps\Factor[0] * 0.01))
+				Else
+					I_008\Timer = Min(I_008\Timer + (fps\Factor[0] * 0.002), 100.0)
+				EndIf
 			EndIf
 			
 			me\BlurTimer = Max(I_008\Timer * 3.0 * (2.0 - me\CrouchState), me\BlurTimer)
@@ -9602,18 +9603,34 @@ Function Update008()
 			
 			For i = 0 To 6
 				If I_008\Timer > (i * 15.0) + 10.0 And PrevI008Timer =< (i * 15.0) + 10.0 Then
-					PlaySound_Strict(LoadTempSound("SFX\SCP\008\Voices" + i + ".ogg"))
+					If (Not I_008\Revert) Then PlaySound_Strict(LoadTempSound("SFX\SCP\008\Voices" + i + ".ogg"))
 				EndIf
 			Next
 			
 			If I_008\Timer > 20.0 And PrevI008Timer =< 20.0 Then
-				CreateMsg("You feel kinda feverish.", 6.0)
+				If I_008\Revert Then
+					CreateMsg("You feel better.", 6.0)
+				Else
+					CreateMsg("You feel kinda feverish.", 6.0)
+				EndIf
 			ElseIf I_008\Timer > 40.0 And PrevI008Timer =< 40.0
-				CreateMsg("You feel nauseated.", 6.0)
+				If I_008\Revert Then
+					CreateMsg("Your nausea is fading.", 6.0)
+				Else
+					CreateMsg("You feel nauseated.", 6.0)
+				EndIf
 			ElseIf I_008\Timer > 60.0 And PrevI008Timer =< 60.0
-				CreateMsg("The nausea's getting worse.", 6.0)
+				If I_008\Revert Then
+					CreateMsg("The headache is fading.", 6.0)
+				Else
+					CreateMsg("The nausea's getting worse.", 6.0)
+				EndIf
 			ElseIf I_008\Timer > 80.0 And PrevI008Timer =< 80.0
-				CreateMsg("You feel very faint.", 6.0)
+				If I_008\Revert Then
+					CreateMsg("You feel more energetic.", 6.0)
+				Else
+					CreateMsg("You feel very faint.", 6.0)
+				EndIf
 			ElseIf I_008\Timer >= 91.5
 				me\BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 91.5), me\BlinkTimer), -10.0)
 				me\Zombie = True
@@ -9725,6 +9742,7 @@ Function Update008()
 			EndIf
 		EndIf
 	Else
+		If I_008\Revert Then I_008\Revert = False
 		HideEntity(t\OverlayID[3])
 	EndIf
 End Function
@@ -9736,27 +9754,54 @@ Function Update409()
 		ShowEntity(t\OverlayID[7])
 		
 		If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then
-			I_409\Timer = Min(I_409\Timer + (fps\Factor[0] * 0.004), 100.0)
+			If I_409\Revert Then
+				I_409\Timer = Max(0.0, I_409\Timer - (fps\Factor[0] * 0.01))
+			Else
+				I_409\Timer = Min(I_409\Timer + (fps\Factor[0] * 0.004), 100.0)
+			EndIf
 		EndIf	
 		EntityAlpha(t\OverlayID[7], Min(((I_409\Timer * 0.2) ^ 2.0) / 1000.0, 0.5))
 		me\BlurTimer = Max(I_409\Timer * 3.0 * (2.0 - me\CrouchState), me\BlurTimer)
 		
 		If I_409\Timer > 40.0 And PrevI409Timer =< 40.0 Then
-			CreateMsg("Crystals are enveloping the skin on your legs.", 6.0)
+			If I_409\Revert Then
+				CreateMsg("Crystals are falling from the skin on your legs.", 6.0)
+			Else
+				CreateMsg("Crystals are enveloping the skin on your legs.", 6.0)
+			EndIf
 		ElseIf I_409\Timer > 55.0 And PrevI409Timer =< 55.0
-			CreateMsg("Crystals are up to your abdomen.", 6.0)
+			If I_409\Revert Then
+				CreateMsg("Crystals are falling from your abdomen.", 6.0)
+			Else
+				CreateMsg("Crystals are enveloping your abdomen.", 6.0)
+			EndIf
 		ElseIf I_409\Timer > 70.0 And PrevI409Timer =< 70.0
-			CreateMsg("Crystals are starting to envelop your arms.", 6.0)
+			If I_409\Revert Then
+				CreateMsg("Crystals are falling from your arms.", 6.0)
+			Else
+				CreateMsg("Crystals are starting to envelop your arms.", 6.0)
+			EndIf
 		ElseIf I_409\Timer > 85.0 And PrevI409Timer =< 85.0
-			CreateMsg("Crystals starting to envelop your head.", 6.0)
+			If I_409\Revert Then
+				CreateMsg("Crystals starting to envelop your head.", 6.0)
+			Else
+				CreateMsg("Crystals starting to envelop your head.", 6.0)
+			EndIf
 		ElseIf I_409\Timer > 93.0 And PrevI409Timer =< 93.0
-			PlaySound_Strict(DamageSFX[13])
-			me\Injuries = Max(me\Injuries, 2.0)
+			If (Not I_409\Revert) Then
+				PlaySound_Strict(DamageSFX[13])
+				me\Injuries = Max(me\Injuries, 2.0)
+			EndIf
 		ElseIf I_409\Timer > 94.0
 			I_409\Timer = Min(I_409\Timer + (fps\Factor[0] * 0.004), 100.0)
 			me\Playable = False
 			me\BlurTimer = 4.0
 			me\CameraShake = 3.0
+		EndIf
+		If I_409\Timer >= 55.0 Then
+			me\StaminaEffect = 1.2
+			me\StaminaEffectTimer = 1.0
+			me\Stamina = Min(me\Stamina, 60.0)
 		EndIf
 		If I_409\Timer >= 96.9222 Then
 			msg\DeathMsg = "Pile of SCP-409 crystals found and, by comparing list of the dead, was found to be " + SubjectName + " who had physical contact with SCP-409. "
@@ -9764,6 +9809,7 @@ Function Update409()
 			Kill(True)
 		EndIf
 	Else
+		If I_409\Revert Then I_409\Revert = False
 		HideEntity(t\OverlayID[7])	
 	EndIf
 End Function

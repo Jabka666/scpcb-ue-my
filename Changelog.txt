@@ -87,6 +87,8 @@
 - Improved game loading screen style.
 - Improved some sounds.
 
+- Nerfed SCP-500-01.
+
 - Optimized game.
 
 Bug Fixes:

@@ -79,7 +79,9 @@ Function SaveGame(File$)
 	WriteByte(f, me\Vomit)
 	WriteFloat(f, me\CameraShakeTimer)
 	WriteFloat(f, I_008\Timer)
+	WriteByte(f, I_008\Revert)
 	WriteFloat(f, I_409\Timer)
+	WriteByte(f, I_409\Revert)
 	
 	For i = SAFE To ESOTERIC
 		If SelectedDifficulty = difficulties[i] Then
@@ -569,7 +571,9 @@ Function LoadGame(File$)
 	me\Vomit = ReadByte(f)
 	me\CameraShakeTimer = ReadFloat(f)
 	I_008\Timer = ReadFloat(f)
+	I_008\Revert = ReadByte(f)
 	I_409\Timer = ReadFloat(f)
+	I_409\Revert = ReadByte(f)
 	
 	Local DifficultyIndex% = ReadByte(f)
 	
@@ -1445,7 +1449,9 @@ Function LoadGameQuick(File$)
 	me\Vomit = ReadByte(f)
 	me\CameraShakeTimer = ReadFloat(f)
 	I_008\Timer = ReadFloat(f)
+	I_008\Revert = ReadByte(f)
 	I_409\Timer = ReadFloat(f)
+	I_409\Revert = ReadByte(f)
 	
 	Local DifficultyIndex% = ReadByte(f)
 	
