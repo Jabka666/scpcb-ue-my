@@ -1922,7 +1922,7 @@ MainMenuOpen = True
 FlushKeys()
 FlushMouse()
 
-RenderLoading(100, True)
+RenderLoading(100)
 
 Global Input_ResetTime# = 0.0
 
@@ -8516,6 +8516,8 @@ End Function
 Function InitStats()
 	me\Playable = True : me\SelectedEnding = -1
 	
+	HideDistance = 15.0
+	
 	If opt\DebugMode Then
 		InitCheats()
 	Else
@@ -8656,7 +8658,7 @@ Function InitNewGame()
 	
 	HidePointer()
 	
-	fps\Factor[0] = 0.0
+	fps\Factor[0] = 1.0
 	
 	ResetInput()
 	
@@ -8745,7 +8747,7 @@ Function InitLoadGame()
 	
 	HidePointer()
 	
-	fps\Factor[0] = 0.0
+	fps\Factor[0] = 1.0
 	
 	ResetInput()
 	
@@ -8784,6 +8786,8 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	DoorTempID = 0
 	RoomTempID = 0
+	
+	HideDistance = 0.0
 	
 	GameSaved = 0
 	

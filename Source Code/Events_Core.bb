@@ -701,7 +701,7 @@ Function QuickLoadEvents()
 	
 	Local e.Events = QuickLoad_CurrEvent
 	Local r.Rooms, sc.SecurityCams, sc2.SecurityCams, n.NPCs
-	Local Scale#, Pvt%, Tex%, i%, x#, z#
+	Local Scale#, Pvt%, i%, x#, z#
 	
 	; ~ Might be a good idea to use QuickLoadPercent to determine the "steps" of the loading process 
 	; ~ Instead of magic values in e\eventState and e\eventStr
@@ -5372,7 +5372,6 @@ Function UpdateEvents()
 								;[Block]
 								If (Not t\MiscTextureID[14]) Then
 									Tex = LoadTexture_Strict("GFX\npcs\scp_173_H.png")
-									
 									EntityTexture(Curr173\OBJ, Tex)
 									DeleteSingleTextureEntryFromCache(Tex)
 								EndIf
@@ -9974,6 +9973,8 @@ Function UpdateEndings()
 						If (Not Curr106\Contained) Then PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\106Escape.ogg"))
 						
 						SecondaryLightOn = True
+						
+						HideDistance = 35.0
 						
 						CreateConsoleMsg("")
 						CreateConsoleMsg("WARNING! Teleporting away from this area may cause bugs or crashing.", 255, 0, 0)

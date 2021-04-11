@@ -1550,7 +1550,7 @@ Global RoomAmbience%[10]
 
 Global Sky%
 
-Const HideDistance# = 15.0
+Global HideDistance# = 15.0
 
 Global SecondaryLightOn# = True
 Global PrevSecondaryLightOn# = True
@@ -3887,11 +3887,12 @@ Function FillRoom(r.Rooms)
 			r\Objects[6] = CreatePivot()
 			PositionEntity(r\Objects[6], r\x - 5048.0 * RoomScale, r\y + 1912.0 * RoomScale, r\z + 4656.0 * RoomScale)	
 			
+			; ~ MTF spawnpoint
 			r\Objects[7] = CreatePivot()
-			PositionEntity(r\Objects[7], r\x + 1824.0 * RoomScale, r\y + 224.0 * RoomScale, r\z + 7056.0 * RoomScale)	
+			PositionEntity(r\Objects[7], r\x + 1824.0 * RoomScale, r\y + 0.22, r\z + 7056.0 * RoomScale)	
 			
 			r\Objects[8] = CreatePivot()
-			PositionEntity(r\Objects[8], r\x - 1824.0 * RoomScale, r\y + 224.0 * RoomScale, r\z + 7056.0 * RoomScale)	
+			PositionEntity(r\Objects[8], r\x - 1824.0 * RoomScale, r\y + 0.22, r\z + 7056.0 * RoomScale)	
 			
 			For i = 3 To 8
 				EntityParent(r\Objects[i], r\OBJ)
@@ -4256,12 +4257,12 @@ Function FillRoom(r.Rooms)
 			Tex = LoadTexture_Strict("GFX\map\textures\glass.png", 1 + 2)
 			r\Objects[2] = CreateSprite()
 			EntityTexture(r\Objects[2], Tex)
+			DeleteSingleTextureEntryFromCache(Tex)
 			SpriteViewMode(r\Objects[2], 2)
 			ScaleSprite(r\Objects[2], 182.0 * RoomScale * 0.5, 192.0 * RoomScale * 0.5)
 			PositionEntity(r\Objects[2], r\x - 632.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 208.0 * RoomScale)
 			TurnEntity(r\Objects[2], 0.0, 180.0, 0.0)			
 			HideEntity(r\Objects[2])
-			DeleteSingleTextureEntryFromCache(Tex)
 			
 			For i = 0 To 2
 				EntityParent(r\Objects[i], r\OBJ)
@@ -4666,11 +4667,11 @@ Function FillRoom(r.Rooms)
 			Tex = LoadTexture_Strict("GFX\map\textures\glass.png", 1 + 2)
 			r\Objects[2] = CreateSprite()
 			EntityTexture(r\Objects[2], Tex)
+			DeleteSingleTextureEntryFromCache(Tex)
 			SpriteViewMode(r\Objects[2], 2)
 			ScaleSprite(r\Objects[2], 256.0 * RoomScale * 0.5, 194.0 * RoomScale * 0.5)
 			PositionEntity(r\Objects[2], r\x - 176.0 * RoomScale, r\y - 4881.0 * RoomScale, r\z + 448.0 * RoomScale)
 			TurnEntity(r\Objects[2], 0, 90, 0)			
-			DeleteSingleTextureEntryFromCache(Tex)
 			
 			; ~ SCP-173's spawnpoint
 			r\Objects[3] = CreatePivot()
@@ -5355,6 +5356,7 @@ Function FillRoom(r.Rooms)
 			ScaleEntity(r\Objects[3], 0.07, 0.07, 0.07)
 			Tex = LoadTexture_Strict("GFX\npcs\duck(2).png")
 			EntityTexture(r\Objects[3], Tex)
+			DeleteSingleTextureEntryFromCache(Tex)
 			PositionEntity(r\Objects[3], r\x + 928.0 * RoomScale, r\y - 640.0 * RoomScale, r\z + 704.0 * RoomScale)
 			
 			For i = 0 To 3
@@ -6117,6 +6119,7 @@ Function FillRoom(r.Rooms)
 					If xTemp = 2 And zTemp = 1 Then r\RoomDoors[5] = d
 				Next	
 			Next
+			DeleteSingleTextureEntryFromCache(Tex)
 			
 			; ~ The door in the office below the walkway
 			r\RoomDoors.Doors[6] = CreateDoor(r\x - 3712.0 * RoomScale, r\y - 385.0 * RoomScale, r\z - 128.0 * RoomScale, 0.0, r, True, Default_Door, 6)
@@ -6743,13 +6746,13 @@ Function FillRoom(r.Rooms)
 			
 			Tex = LoadTexture_Strict("GFX\npcs\scp_106_eyes.png", 1, DeleteAllTextures)
 			r\Objects[17] = CreateSprite()
+			EntityTexture(r\Objects[17], Tex)
+			DeleteSingleTextureEntryFromCache(Tex)
 			PositionEntity(r\Objects[17], EntityX(r\Objects[8], True), r\y + 1376.0 * RoomScale, EntityZ(r\Objects[8], True) - 2848.0 * RoomScale)
 			ScaleSprite(r\Objects[17], 0.03, 0.03)
-			EntityTexture(r\Objects[17], Tex)
 			EntityBlend(r\Objects[17], 3)
 			EntityFX(r\Objects[17], 1 + 8)
 			SpriteViewMode(r\Objects[17], 2)
-			DeleteSingleTextureEntryFromCache(Tex)
 			HideEntity(r\Objects[17])
 			
 			r\Objects[18] = CreateSprite()
