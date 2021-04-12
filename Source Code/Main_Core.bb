@@ -3291,9 +3291,7 @@ Function UpdateMouseLook()
 					;[End Block]
 				Case 1 ; ~ Chicken pox
 					;[Block]
-					If Rand(9000) = 1 Then
-						CreateMsg("Your skin is feeling itchy.", 6.0)
-					EndIf
+					If Rand(9000) = 1 Then CreateMsg("Your skin is feeling itchy.", 6.0)
 					;[End Block]
 				Case 2 ; ~ Cancer of the lungs
 					;[Block]
