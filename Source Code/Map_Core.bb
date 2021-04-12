@@ -1550,7 +1550,7 @@ Global RoomAmbience%[10]
 
 Global Sky%
 
-Global HideDistance# = 15.0
+Global HideDistance#
 
 Global SecondaryLightOn# = True
 Global PrevSecondaryLightOn# = True

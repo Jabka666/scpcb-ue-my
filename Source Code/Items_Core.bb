@@ -1226,16 +1226,12 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
-					Remove = False
+					it2.Items = CreateItem("SCRAMBLE Gear", "scramble", x, y, z)
+					it2\State = Rnd(0.0, 1000.0)
 					;[End Block]
 				Case FINE
 					;[Block]
-					If Rand(3) = 1 Then
-						it2.Items = CreateItem("SCRAMBLE Gear", "scramble", x, y, z)
-						it2\State = Rnd(0.0, 1000.0)
-					Else
-						it2.Items = CreateItem("Night Vision Goggles", "finenvg", x, y, z)
-					EndIf
+					it2.Items = CreateItem("Night Vision Goggles", "finenvg", x, y, z)
 					;[End Block]
 				Case VERYFINE
 					;[Block]

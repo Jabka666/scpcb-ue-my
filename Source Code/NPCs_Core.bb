@@ -1580,7 +1580,7 @@ Function UpdateNPCs()
 													Kill() : me\KillAnim = 0
 												EndIf
 												PlaySound_Strict(HorrorSFX[13])
-												If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2)
+												If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2) : n\Sound2 = 0
 												n\Sound2 = LoadSound_Strict("SFX\SCP\049\Kidnap" + Rand(1, 2) + ".ogg")
 												n\SoundCHN2 = LoopSound2(n\Sound2, n\SoundCHN2, Camera, n\OBJ)
 												n\State = 3.0
@@ -1662,7 +1662,7 @@ Function UpdateNPCs()
 											
 											; ~ Playing a sound if he hears the player
 											If n\PrevState = 0 And (Not ChannelPlaying(n\SoundCHN2)) Then
-												If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2)
+												If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2) : n\Sound2 = 0
 												If Rand(30) = 1
 													n\Sound2 = LoadSound_Strict("SFX\SCP\049\Searching7.ogg")
 												Else
@@ -1914,9 +1914,7 @@ Function UpdateNPCs()
 								EndIf
 							EndIf
 							
-							If PlayerRoom\RoomTemplate\Name = "room2sl" Then
-								ShouldPlay = 20
-							EndIf
+							If PlayerRoom\RoomTemplate\Name = "room2sl" Then ShouldPlay = 20
 							
 							If n\CurrSpeed > 0.005 Then
 								If (PrevFrame < 361.0 And n\Frame >= 361.0) Lor (PrevFrame < 377.0 And n\Frame >= 377.0) Then
@@ -2640,6 +2638,67 @@ Function UpdateNPCs()
 			Case NPCTypeMTF
 				;[Block]
 				UpdateMTFUnit(n)
+				;[End Block]
+			Case NPCTypeD, NPCTypeClerk
+				;[Block]
+				RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), EntityRoll(n\Collider), True)
+				
+				PrevFrame = AnimTime(n\OBJ)
+				
+				Select n\State
+					Case 0.0 ; ~ Idles
+						;[Block]
+						n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
+						Animate2(n\OBJ, AnimTime(n\OBJ), 210.0, 235.0, 0.1)
+						;[End Block]
+					Case 1.0 ; ~ Walking
+						;[Block]
+						If n\State2 = 1.0
+							n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
+						Else
+							n\CurrSpeed = CurveValue(0.015, n\CurrSpeed, 5.0)
+						EndIf
+						Animate2(n\OBJ, AnimTime(n\OBJ), 236.0, 260.0, n\CurrSpeed * 18.0)
+						;[End Block]
+					Case 2.0 ; ~ Running
+						;[Block]
+						n\CurrSpeed = CurveValue(0.03, n\CurrSpeed, 5.0)
+						Animate2(n\OBJ, AnimTime(n\OBJ), 301.0, 319.0, n\CurrSpeed * 18.0)
+						;[End Block]
+				End Select
+				
+				If n\State2 <> 2.0
+					If n\State = 1.0
+						If n\CurrSpeed > 0.01 Then
+							If PrevFrame < 244.0 And AnimTime(n\OBJ) >= 244.0 Then
+								PlaySound2(StepSFX(GetStepSound(n\Collider), 0, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))						
+							ElseIf PrevFrame < 256.0 And AnimTime(n\OBJ) >= 256.0
+								PlaySound2(StepSFX(GetStepSound(n\Collider), 0, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
+							EndIf
+						EndIf
+					ElseIf n\State = 2.0
+						If n\CurrSpeed > 0.01 Then
+							If PrevFrame < 309.0 And AnimTime(n\OBJ) >= 309.0
+								PlaySound2(StepSFX(GetStepSound(n\Collider), 1, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
+							ElseIf PrevFrame =< 319.0 And AnimTime(n\OBJ) =< 301.0
+								PlaySound2(StepSFX(GetStepSound(n\Collider), 1, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
+							EndIf
+						EndIf
+					EndIf
+				EndIf
+				
+				If n\Frame = 19.0 Lor n\Frame = 40.0 Lor n\Frame = 60.0 Lor n\Frame = 629.0 Lor n\Frame = 677.0 Lor n\Frame = 711.0 Lor n\Frame = 779.0 Then
+					n\IsDead = True
+				EndIf
+				If AnimTime(n\OBJ) = 19.0 Lor AnimTime(n\OBJ) = 40.0 Lor AnimTime(n\OBJ) = 60.0 Lor AnimTime(n\OBJ) = 629.0 Lor AnimTime(n\OBJ) = 677.0 Lor AnimTime(n\OBJ) = 711.0 Lor AnimTime(n\OBJ) = 779.0 Then
+					n\IsDead = True
+				EndIf
+				
+				MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+				
+				PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.32, EntityZ(n\Collider))
+				
+				RotateEntity(n\OBJ, EntityPitch(n\Collider), EntityYaw(n\Collider) - 180.0, 0.0)
 				;[End Block]
 			Case NPCType513_1
 				;[Block]

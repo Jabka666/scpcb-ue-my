@@ -8658,7 +8658,7 @@ Function InitNewGame()
 	
 	HidePointer()
 	
-	fps\Factor[0] = 1.0
+	fps\Factor[0] = 0.0
 	
 	ResetInput()
 	
@@ -8747,7 +8747,7 @@ Function InitLoadGame()
 	
 	HidePointer()
 	
-	fps\Factor[0] = 1.0
+	fps\Factor[0] = 0.0
 	
 	ResetInput()
 	
