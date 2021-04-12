@@ -7969,7 +7969,7 @@ Function LoadEntities()
 	LoadMissingTexture()
 	
 	AmbientLightRoomTex = CreateTextureUsingCacheSystem(2, 2)
-	TextureBlend(AmbientLightRoomTex, 5)
+	TextureBlend(AmbientLightRoomTex, 3)
 	SetBuffer(TextureBuffer(AmbientLightRoomTex))
 	ClsColor(0, 0, 0)
 	Cls()
@@ -8100,25 +8100,6 @@ Function LoadEntities()
 	Next
 	t\LightSpriteID[2] = LoadTexture_Strict("GFX\light_sprite.png", 1, DeleteAllTextures)
 	
-	For i = 0 To 6
-		t\MiscTextureID[i] = LoadTexture_Strict("GFX\scp_079_overlay(" + (i + 1) + ").png", 1, DeleteAllTextures)
-	Next
-	
-	For i = 7 To 12
-		t\MiscTextureID[i] = LoadTexture_Strict("GFX\scp_895_overlay(" + (i - 6) + ").png", 1, DeleteAllTextures)
-	Next
-	
-	t\MiscTextureID[13] = LoadTexture_Strict("GFX\tesla_overlay.png", 1 + 2, DeleteAllTextures)
-	
-	t\MiscTextureID[16] = LoadTexture_Strict("GFX\map\textures\keypad.jpg", 1, DeleteAllTextures)
-	t\MiscTextureID[17] = LoadTexture_Strict("GFX\map\textures\keypad_locked.png", 1, DeleteAllTextures)
-	
-	For i = 18 To 19
-		t\MiscTextureID[i] = LoadTexture_Strict("GFX\map\textures\camera(" + (i - 17) + ").png", 1, DeleteAllTextures)
-	Next
-	
-	t\MiscTextureID[20] = LoadTexture_Strict("GFX\fog_night_vision_goggles.png", 1, DeleteAllTextures) ; ~ FOG IN NIGHT VISION GOGGLES
-	
 	For i = 0 To 7
 		t\DecalTextureID[i] = LoadTexture_Strict("GFX\decal(" + (i + 1) + ").png", 1 + 2, DeleteAllTextures)
 	Next
@@ -8159,6 +8140,25 @@ Function LoadEntities()
 	t\ParticleTextureID[6] = LoadTexture_Strict("GFX\blood_sprite.png", 1 + 2, DeleteAllTextures)
 	t\ParticleTextureID[7] = LoadTexture_Strict("GFX\spark.png", 1 + 2, DeleteAllTextures)
 	t\ParticleTextureID[8] = LoadTexture_Strict("GFX\particle.png", 1 + 2, DeleteAllTextures)
+	
+	For i = 0 To 6
+		t\MiscTextureID[i] = LoadTexture_Strict("GFX\scp_079_overlay(" + (i + 1) + ").png", 1, DeleteAllTextures)
+	Next
+	
+	For i = 7 To 12
+		t\MiscTextureID[i] = LoadTexture_Strict("GFX\scp_895_overlay(" + (i - 6) + ").png", 1, DeleteAllTextures)
+	Next
+	
+	t\MiscTextureID[13] = LoadTexture_Strict("GFX\tesla_overlay.png", 1 + 2, DeleteAllTextures)
+	
+	t\MiscTextureID[16] = LoadTexture_Strict("GFX\map\textures\keypad.jpg", 1, DeleteAllTextures)
+	t\MiscTextureID[17] = LoadTexture_Strict("GFX\map\textures\keypad_locked.png", 1, DeleteAllTextures)
+	
+	For i = 18 To 19
+		t\MiscTextureID[i] = LoadTexture_Strict("GFX\map\textures\camera(" + (i - 17) + ").png", 1, DeleteAllTextures)
+	Next
+	
+	t\MiscTextureID[20] = LoadTexture_Strict("GFX\fog_night_vision_goggles.png", 1, DeleteAllTextures) ; ~ FOG IN NIGHT VISION GOGGLES
 	
 	LoadMaterials(MaterialsFile)
 	

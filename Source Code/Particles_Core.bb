@@ -19,9 +19,13 @@ Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTi
 	SpriteViewMode(p\OBJ, 3)
 	
 	Select ID
-		Case 0, 5, 6
+		Case 0, 1, 6
 			;[Block]
 			EntityBlend(p\OBJ, 1)
+			;[End Block]
+		Case 2, 3, 4, 5, 7
+			;[Block]
+			EntityBlend(p\OBJ, 3)
 			;[End Block]
 	End Select
 	
@@ -49,7 +53,7 @@ Function UpdateParticles()
 	
 	For p.Particles = Each Particles
 		MoveEntity(p\Pvt, 0.0, 0.0, (p\Speed * fps\Factor[0]))
-		If p\Gravity <> 0 Then p\ySpeed = p\ySpeed - (p\Gravity * fps\Factor[0])
+		If p\Gravity <> 0.0 Then p\ySpeed = p\ySpeed - (p\Gravity * fps\Factor[0])
 		TranslateEntity(p\Pvt, 0.0, (p\ySpeed * fps\Factor[0]), 0.0, True)
 		
 		PositionEntity(p\OBJ, EntityX(p\Pvt, True), EntityY(p\Pvt, True), EntityZ(p\Pvt, True), True)

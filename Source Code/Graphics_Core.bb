@@ -226,9 +226,7 @@ Function RenderWorld2(Tween#)
 	ElseIf wi\NightVision = 3
 		AmbientLight(255.0, 255.0, 255.0)
 	ElseIf PlayerRoom <> Null
-		If PlayerRoom\RoomTemplate\Name <> "room173intro" And PlayerRoom\RoomTemplate\Name <> "gateb" And PlayerRoom\RoomTemplate\Name <> "gatea" Then
-			AmbientLight(BRIGHTNESS, BRIGHTNESS, BRIGHTNESS)
-		EndIf
+		AmbientLight(BRIGHTNESS, BRIGHTNESS, BRIGHTNESS)
 	EndIf
 	
 	CameraViewport(Camera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)

@@ -13,7 +13,7 @@ End Type
 
 Function LoadTextureCheckingIfInCache(TexName$, TexFlags% = 1, DeleteType% = DeleteMapTextures)
 	Local tic.TextureInCache, mat.Materials
-	Local Texture%, CurrPath$
+	Local CurrPath$
 	
 	For tic.TextureInCache = Each TextureInCache
 		If tic\TexName <> "CreateTexture" Then
@@ -31,14 +31,14 @@ Function LoadTextureCheckingIfInCache(TexName$, TexFlags% = 1, DeleteType% = Del
 	tic\TexName = StripPath(TexName)
 	tic\TexDeleteType = DeleteType
 	If (Not tic\Tex) Then
-		tic\Tex = LoadTexture(CurrPath, TexFlags + (256 * (opt\SaveTexturesInVRAM <> 0)))
+		tic\Tex = LoadTexture(CurrPath, TexFlags)
 	EndIf
 	Return(tic\Tex)
 End Function
 
 Function LoadAnimTextureCheckingIfInCache(TexName$, TexFlags% = 1, Width%, Height%, FirstFrame%, Count%, DeleteType% = DeleteMapTextures)
 	Local tic.TextureInCache, mat.Materials
-	Local Texture%, CurrPath$
+	Local CurrPath$
 	
 	For tic.TextureInCache = Each TextureInCache
 		If tic\TexName <> "CreateTexture" Then
@@ -56,7 +56,7 @@ Function LoadAnimTextureCheckingIfInCache(TexName$, TexFlags% = 1, Width%, Heigh
 	tic\TexName = StripPath(TexName)
 	tic\TexDeleteType = DeleteType
 	If (Not tic\Tex) Then
-		tic\Tex = LoadAnimTexture(CurrPath, TexFlags + (256 * (opt\SaveTexturesInVRAM <> 0)), Width, Height, FirstFrame, Count)
+		tic\Tex = LoadAnimTexture(CurrPath, TexFlags, Width, Height, FirstFrame, Count)
 	EndIf
 	Return(tic\Tex)
 End Function
@@ -144,6 +144,13 @@ Function CheckForTexture%(Tex%, TexFlags% = 1)
 		Name = MapTexturesFolder + StripPath(TextureName(Tex))
 	EndIf
 	Texture = LoadTextureCheckingIfInCache(Name, TexFlags, DeleteMapTextures)
+	If Texture <> 0 Then
+		If ((TexFlags Shr 1) Mod 2) = 0 Then
+			TextureBlend(Texture, 5)
+		Else
+			TextureBlend(Texture, 1)
+		EndIf
+	EndIf
 	Return(Texture)
 End Function
 

@@ -362,7 +362,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			ScaleSprite(n\OBJ2, 0.1, 0.1)
 			EntityTexture(n\OBJ2, Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
-			
 			EntityFX(n\OBJ2, 1 + 8)
 			SpriteViewMode(n\OBJ2, 2)
 			
