@@ -3213,22 +3213,22 @@ Function UpdateMouseLook()
 		If wi\GasMaskFogTimer > 0.0 Then ShowEntity(t\OverlayID[10])
 		
 		If ChannelPlaying(BreathCHN) Then
-			wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + fps\Factor[0] * 2.0, 100.0)
+			wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + (fps\Factor[0] * 2.0), 100.0)
 		Else
 			If wi\GasMask = 2 Lor I_1499\Using = 2 Then
 				If me\CurrSpeed > 0.0 And KeyDown(key\SPRINT) Then
-					wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + fps\Factor[0] * 0.2, 100.0)
+					wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + (fps\Factor[0] * 0.2), 100.0)
 				Else
-					wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - fps\Factor[0] * 0.15)
+					wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.32))
 				EndIf
 			Else
-				wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - fps\Factor[0] * 0.15)
+				wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.32))
 			EndIf
 		EndIf
 		EntityAlpha(t\OverlayID[10], Min(((wi\GasMaskFogTimer * 0.2) ^ 2.0) / 1000.0, 0.45))
 	Else
 		If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN)
-		wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.15))
+		wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.32))
 		HideEntity(t\OverlayID[1])
 		HideEntity(t\OverlayID[10])
 	EndIf
