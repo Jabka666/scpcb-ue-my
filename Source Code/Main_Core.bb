@@ -1104,12 +1104,14 @@ Function UpdateConsole()
 					t\MiscTextureID[14] = (Not t\MiscTextureID[14])
 					If t\MiscTextureID[14] Then
 						Tex = LoadTexture_Strict("GFX\npcs\scp_173_H.png", 1)
+						TextureBlend(Tex, 5)
 						EntityTexture(Curr173\OBJ, Tex, 0, 0)
 						DeleteSingleTextureEntryFromCache(Tex)
 						CreateConsoleMsg("173 JACK-O-LANTERN ON")
 					Else
 						If t\MiscTextureID[15] Then t\MiscTextureID[15] = (Not t\MiscTextureID[15])
 						Tex2 = LoadTexture_Strict("GFX\npcs\scp_173.png", 1)
+						TextureBlend(Tex2, 5)
 						EntityTexture(Curr173\OBJ, Tex2, 0, 0)
 						DeleteSingleTextureEntryFromCache(Tex2)
 						CreateConsoleMsg("173 JACK-O-LANTERN OFF")
@@ -1120,12 +1122,14 @@ Function UpdateConsole()
 					t\MiscTextureID[15] = (Not t\MiscTextureID[15])
 					If t\MiscTextureID[15] Then
 						Tex = LoadTexture_Strict("GFX\npcs\scp_173_NY.png", 1)
+						TextureBlend(Tex, 5)
 						EntityTexture(Curr173\OBJ, Tex, 0, 0)
 						DeleteSingleTextureEntryFromCache(Tex)
 						CreateConsoleMsg("173 COOKIE ON")
 					Else
 						If t\MiscTextureID[14] Then t\MiscTextureID[14] = (Not t\MiscTextureID[14])
 						Tex2 = LoadTexture_Strict("GFX\npcs\scp_173.png", 1)
+						TextureBlend(Tex2, 5)
 						EntityTexture(Curr173\OBJ, Tex2, 0, 0)
 						DeleteSingleTextureEntryFromCache(Tex2)
 						CreateConsoleMsg("173 COOKIE OFF")
@@ -2222,7 +2226,7 @@ Function MainLoop()
 			UpdateEmitters()
 			UpdateMouseLook()
 			If PlayerRoom\RoomTemplate\Name = "dimension1499" And QuickLoadPercent > 0 And QuickLoadPercent < 100 Then ShouldEntitiesFall = False
-			UpdateMove()
+			UpdateMoving()
 			InFacility = CheckForPlayerInFacility()
 			If PlayerRoom\RoomTemplate\Name = "dimension1499"
 				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100
@@ -2729,7 +2733,7 @@ Function InjurePlayer(Injuries_#, Infection# = 0.0, BlurTimer_# = 0.0, VestFacto
 	If Infection <> 0.0 Then I_008\Timer = I_008\Timer + (Infection * (wi\HazmatSuit = 0))
 End Function
 
-Function UpdateMove()
+Function UpdateMoving()
 	CatchErrors("Uncaught (UpdateMove)")
 	
 	Local de.Decals
@@ -7974,7 +7978,7 @@ Function LoadEntities()
 	ClsColor(0, 0, 0)
 	Cls()
 	SetBuffer(BackBuffer())
-	AmbientLightRoomVal = 0
+	AmbientLightRoomVal = 255
 	
 	ScreenTexs[0] = CreateTextureUsingCacheSystem(512, 512, 1)
 	ScreenTexs[1] = CreateTextureUsingCacheSystem(512, 512, 1)
@@ -8153,9 +8157,13 @@ Function LoadEntities()
 	
 	t\MiscTextureID[16] = LoadTexture_Strict("GFX\map\textures\keypad.jpg", 1, DeleteAllTextures)
 	t\MiscTextureID[17] = LoadTexture_Strict("GFX\map\textures\keypad_locked.png", 1, DeleteAllTextures)
+	For i = 16 To 17
+		TextureBlend(t\MiscTextureID[i], 5)
+	Next
 	
 	For i = 18 To 19
 		t\MiscTextureID[i] = LoadTexture_Strict("GFX\map\textures\camera(" + (i - 17) + ").png", 1, DeleteAllTextures)
+		TextureBlend(t\MiscTextureID[i], 5)
 	Next
 	
 	t\MiscTextureID[20] = LoadTexture_Strict("GFX\fog_night_vision_goggles.png", 1, DeleteAllTextures) ; ~ FOG IN NIGHT VISION GOGGLES
@@ -8246,47 +8254,56 @@ Function LoadEntities()
 	
 	; ~ Gonzales
 	Tex = LoadTexture_Strict("GFX\npcs\Gonzales.png")
+	TextureBlend(Tex, 5)
 	EntityTexture(o\DTextures[0], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ SCP-970's corpse
 	Tex = LoadTexture_Strict("GFX\npcs\D_9341(2).png")
+	TextureBlend(Tex, 5)
 	EntityTexture(o\DTextures[1], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ Scientist
 	Tex = LoadTexture_Strict("GFX\npcs\scientist.png")
+	TextureBlend(Tex, 5)
 	EntityTexture(o\DTextures[2], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ Franklin
 	Tex = LoadTexture_Strict("GFX\npcs\Franklin.png")
+	TextureBlend(Tex, 5)
 	EntityTexture(o\DTextures[3], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ Janitor # 1
 	Tex = LoadTexture_Strict("GFX\npcs\janitor.png")
+	TextureBlend(Tex, 5)
 	EntityTexture(o\DTextures[4], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ Maynard
 	Tex = LoadTexture_Strict("GFX\npcs\Maynard.png")
+	TextureBlend(Tex, 5)
 	EntityTexture(o\DTextures[5], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ Afro-American Class-D
 	Tex = LoadTexture_Strict("GFX\npcs\class_d(2).png")
+	TextureBlend(Tex, 5)
 	EntityTexture(o\DTextures[6], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ 035 victim
 	Tex = LoadTexture_Strict("GFX\npcs\scp_035_victim.png")
+	TextureBlend(Tex, 5)
 	EntityTexture(o\DTextures[7], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	If opt\IntroEnabled Then
 		; ~ D-9341
 		Tex = LoadTexture_Strict("GFX\npcs\D_9341.png")
+		TextureBlend(Tex, 5)
 		EntityTexture(o\DTextures[8], Tex)
 		DeleteSingleTextureEntryFromCache(Tex)
 	Else
@@ -8296,36 +8313,43 @@ Function LoadEntities()
 	
 	; ~ Body # 1
 	Tex = LoadTexture_Strict("GFX\npcs\body.png")
+	TextureBlend(Tex, 5)
 	EntityTexture(o\DTextures[9], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ Body # 2
 	Tex = LoadTexture_Strict("GFX\npcs\body(2).png")
+	TextureBlend(Tex, 5)
 	EntityTexture(o\DTextures[10], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ Janitor # 2
 	Tex = LoadTexture_Strict("GFX\npcs\janitor(2).png")
+	TextureBlend(Tex, 5)
 	EntityTexture(o\DTextures[11], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ SCP-008-1's victim
 	Tex = LoadTexture_Strict("GFX\npcs\scp_008_1_victim.png")
+	TextureBlend(Tex, 5)
 	EntityTexture(o\DTextures[12], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ SCP-409's victim
 	Tex = LoadTexture_Strict("GFX\npcs\body(3).png")
+	TextureBlend(Tex, 5)
 	EntityTexture(o\DTextures[13], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ SCP-939's victim # 2
 	Tex = LoadTexture_Strict("GFX\npcs\scp_939_victim.png")
+	TextureBlend(Tex, 5)
 	EntityTexture(o\DTextures[14], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ SCP-939's victim # 1
 	Tex = LoadTexture_Strict("GFX\npcs\scp_939_victim(2).png")
+	TextureBlend(Tex, 5)
 	EntityTexture(o\DTextures[15], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
