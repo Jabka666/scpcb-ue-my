@@ -41,7 +41,7 @@ Const e_room3door% = 33
 Const e_room3servers% = 34
 Const e_room3storage% = 35
 Const e_room3tunnel% = 36
-Const e_room4% = 37
+Const e_room4_lcz% = 37
 Const e_room012% = 38
 Const e_room035% = 39
 Const e_room049% = 40
@@ -289,9 +289,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room3tunnel)
 			;[End Block]
-		Case "room4"
+		Case "room4_lcz"
 			;[Block]
-			Return(e_room4)
+			Return(e_room4_lcz)
 			;[End Block]
 		Case "room012"
 			;[Block]
@@ -522,7 +522,7 @@ Function InitEvents()
 	; ~ The dead guard
 	CreateEvent("room3tunnel", "room3tunnel", 0, 0.08)
 	
-	CreateEvent("room4", "room4", 0)
+	CreateEvent("room4_lcz", "room4_lcz", 0)
 	
 	If Rand(5) < 5 Then 
 		Select Rand(3)
@@ -562,7 +562,7 @@ Function InitEvents()
 		CreateEvent("106victim", "room3_2", Rand(1, 2))
 		CreateEvent("106sinkhole", "room3", Rand(2, 3))
 	EndIf
-	CreateEvent("106sinkhole", "room4", Rand(1, 2))
+	CreateEvent("106sinkhole", "room4_lcz", Rand(1, 2))
 	
 	CreateEvent("room079", "room079", 0)	
 	
@@ -5634,7 +5634,7 @@ Function UpdateEvents()
 					RemoveEvent(e)
 				EndIf
 				;[End Block]
-			Case e_room4
+			Case e_room4_lcz
 				;[Block]
 				If e\EventState < MilliSecs2() Then
 					If PlayerRoom <> e\room Then
