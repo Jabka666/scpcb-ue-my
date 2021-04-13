@@ -25,6 +25,7 @@
 - Added tiny visual effect for blood decals.
 - Added low battery sounds.
 - Added 4.5V and 999V batteries.
+- Added tiny visual effect for tesla gates.
 
 - Re-added room3gw.
 
