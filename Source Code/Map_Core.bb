@@ -3762,7 +3762,7 @@ Function FillRoom(r.Rooms)
 			RotateEntity(it\Collider, 0.0, r\Angle + 170.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "room2clockroom"
+		Case "room2c_lockroom_lcz"
 			;[Block]
 			; ~ Doors
 			r\RoomDoors.Doors[0] = CreateDoor(r\x - 736.0 * RoomScale, r\y, r\z - 104.0 * RoomScale, 0.0, r)
@@ -3800,7 +3800,7 @@ Function FillRoom(r.Rooms)
 			TurnEntity(em\OBJ, 90.0, 0.0, 0.0)
 			EntityParent(em\OBJ, r\OBJ)
 			;[End Block]
-		Case "room2clockroom3"
+		Case "room2c_lockroom_ez"
 			;[Block]
 			; ~ Security cameras inside
 			sc.SecurityCams = CreateSecurityCam(r\x + 512.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 384.0 * RoomScale, r, True, r\x + 668.0 * RoomScale, r\y + 1.1, r\z - 96.0 * RoomScale)
@@ -7194,7 +7194,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\Objects[0], r\x + 640.0 * RoomScale, r\y + 8.0 * RoomScale, r\z - 896.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
 			;[End Block]
-		Case "room2clockroom2"
+		Case "room2c_lockroom_2_lcz"
 			;[Block]
 			d.Doors = CreateDoor(r\x - 736.0 * RoomScale, r\y, r\z - 104.0 * RoomScale, 0.0, r)
 			d\Timer = 70.0 * 5.0 : d\AutoClose = False : d\Locked = 1
@@ -8263,7 +8263,7 @@ Function CreateMap()
 	SetRoom("room205", ROOM1, Floor(0.5 * Float(Room1Amount[0])), MinPos, MaxPos)
 	SetRoom("room1archive", ROOM1, Floor(0.6 * Float(Room1Amount[0])), MinPos, MaxPos)
 	
-	MapRoom(ROOM2C, 0) = "room2clockroom"
+	MapRoom(ROOM2C, 0) = "room2c_lockroom_lcz"
 	
 	MinPos = 1
 	MaxPos = Room2Amount[0] - 1
@@ -8342,7 +8342,7 @@ Function CreateMap()
 	SetRoom("room2offices2", ROOM2, MinPos + Floor(0.9 * Float(Room2Amount[2])), MinPos, MaxPos)
 	
 	MapRoom(ROOM2C, Room2CAmount[0] + Room2CAmount[1]) = "room2ccont"	
-	MapRoom(ROOM2C, Room2CAmount[0] + Room2CAmount[1] + 1) = "room2clockroom3"		
+	MapRoom(ROOM2C, Room2CAmount[0] + Room2CAmount[1] + 1) = "room2c_lockroom_ez"		
 	
 	MapRoom(ROOM3, Room3Amount[0] + Room3Amount[1] + Floor(0.3 * Float(Room3Amount[2]))) = "room3servers"
 	MapRoom(ROOM3, Room3Amount[0] + Room3Amount[1] + Floor(0.7 * Float(Room3Amount[2]))) = "room3servers2"

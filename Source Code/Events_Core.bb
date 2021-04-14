@@ -17,7 +17,7 @@ Const e_buttghost% = 2
 Const e_room2checkpoint% = 3
 Const e_room895% = 4, e_room895_106% = 5
 Const e_room1endroom106% = 6
-Const e_room2clockroom173% = 7, e_room2clockroom096% = 8
+Const e_room2c_lockroom_173% = 7, e_room2c_lockroom_096% = 8
 Const e_room372% = 9
 Const e_pocketdimension% = 10
 Const e_room2cafeteria% = 11
@@ -169,13 +169,13 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room1endroom106)
 			;[End Block]
-		Case "room2clockroom173"
+		Case "room2c_lockroom_173"
 			;[Block]
-			Return(e_room2clockroom173)
+			Return(e_room2c_lockroom_173)
 			;[End Block]
-		Case "room2clockroom096"
+		Case "room2c_lockroom_096"
 			;[Block]
-			Return(e_room2clockroom096)
+			Return(e_room2c_lockroom_096)
 			;[End Block]
 		Case "room372"
 			;[Block]
@@ -471,8 +471,8 @@ Function InitEvents()
 	
 	; ~ The chance for SCP-173 appearing in the first room2clockroom is about 66%
 	; ~ There's a 30% chance that it appears in the later room2clockrooms
-	If Rand(3) < 3 Then CreateEvent("room2clockroom173", "room2clockroom", 0)
-	CreateEvent("room2clockroom173", "room2clockroom", 0, 0.3 + (0.5 * SelectedDifficulty\AggressiveNPCs))
+	If Rand(3) < 3 Then CreateEvent("room2c_lockroom_173", "room2c_lockroom_lcz", 0)
+	CreateEvent("room2c_lockroom_173", "room2c_lockroom_lcz", 0, 0.3 + (0.5 * SelectedDifficulty\AggressiveNPCs))
 	
 	CreateEvent("room2trick", "room2", 0, 0.15)	
 	
@@ -480,8 +480,8 @@ Function InitEvents()
 	
 	CreateEvent("room2storage", "room2storage", 0)	
 	
-	; ~ SCP-096 spawns in the first (and last) "room2clockroom3"
-	CreateEvent("room2clockroom096", "room2clockroom3", 0)
+	; ~ SCP-096 spawns in the first (and last)
+	CreateEvent("room2c_lockroom_096", "room2c_lockroom_ez", 0)
 	
 	CreateEvent("room1endroom106", "room1endroom", Rand(0, 1))
 	CreateEvent("room1endroom106", "room1endroom3", Rand(0, 1))
@@ -2693,7 +2693,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_room2clockroom173
+			Case e_room2c_lockroom_173
 				;[Block]
 				If e\room\Dist < 6.0  And e\room\Dist > 0.0 Then
 					If Curr173\Idle > 1 Then
@@ -2707,7 +2707,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_room2clockroom096
+			Case e_room2c_lockroom_096
 				;[Block]
 				If PlayerRoom = e\room Then
 					If Curr096 = Null Then

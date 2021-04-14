@@ -719,7 +719,7 @@ Function UpdateNPCs()
 										If Dist < 0.4225 Then
 											If me\KillTimer >= 0.0 And (Not chs\GodMode) Then
 												Select PlayerRoom\RoomTemplate\Name
-													Case "room2clockroom", "room2closets", "room895"
+													Case "room2c_lockroom_lcz", "room2closets", "room895"
 														;[Block]
 														msg\DeathMsg = SubjectName + ". Cause of death: Fatal cervical fracture. The surveillance tapes confirm that the subject was killed by SCP-173."	
 														;[End Block]
