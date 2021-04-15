@@ -8127,6 +8127,7 @@ Function LoadEntities()
 	t\MonitorTextureID[0] = LoadTexture_Strict("GFX\monitor_overlay.png", 1, DeleteAllTextures)
 	For i = 1 To 3
 		t\MonitorTextureID[i] = LoadTexture_Strict("GFX\map\textures\lockdown_screen(" + i + ").png", 1, DeleteAllTextures)
+		TextureBlend(t\MonitorTextureID[i], 5)
 	Next
 	t\MonitorTextureID[4] = CreateTextureUsingCacheSystem(1, 1)
 	SetBuffer(TextureBuffer(t\MonitorTextureID[4]))

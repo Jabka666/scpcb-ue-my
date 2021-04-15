@@ -4154,13 +4154,11 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\Objects[2], r\x - 152.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 124.0 * RoomScale, True)
 			ScaleEntity(r\Objects[2], 2.0, 2.0, 2.0)
 			RotateEntity(r\Objects[2], 0.0, 180.0, 0.0)
-			EntityFX(r\Objects[2], 1)
 			
 			r\Objects[3] = CopyEntity(o\MonitorModelID[1], r\OBJ)
 			PositionEntity(r\Objects[3], r\x - 152.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 380.0 * RoomScale, True)
 			ScaleEntity(r\Objects[3], 2.0, 2.0, 2.0)
 			RotateEntity(r\Objects[3], 0.0, 0.0, 0.0)
-			EntityFX(r\Objects[3], 1)
 			
 			sc.SecurityCams = CreateSecurityCam(r\x + 192.0 * RoomScale, r\y + 704.0 * RoomScale, r\z - 960.0 * RoomScale, r)
 			sc\Angle = 45.0 : sc\Turn = 0.0
@@ -4197,13 +4195,11 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\Objects[2], r\x + 152.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 380.0 * RoomScale, True)
 			ScaleEntity(r\Objects[2], 2.0, 2.0, 2.0)
 			RotateEntity(r\Objects[2], 0.0, 180.0, 0.0)
-			EntityFX(r\Objects[2], 1)
 			
 			r\Objects[3] = CopyEntity(o\MonitorModelID[1], r\OBJ)
 			PositionEntity(r\Objects[3], r\x + 152.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 124.0 * RoomScale, True)
 			ScaleEntity(r\Objects[3], 2.0, 2.0, 2.0)
 			RotateEntity(r\Objects[3], 0.0, 0.0, 0.0)
-			EntityFX(r\Objects[3], 1)
 			
 			sc.SecurityCams = CreateSecurityCam(r\x - 192.0 * RoomScale, r\y + 704.0 * RoomScale, r\z + 960.0 * RoomScale, r)
 			sc\Angle = 225.0 : sc\Turn = 0.0
@@ -7256,7 +7252,6 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\Objects[0], r\x - 700.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 290.0 * RoomScale, True)
 			ScaleEntity(r\Objects[0], 2.0, 2.0, 2.0)
 			RotateEntity(r\Objects[0], 0.0, 0.0, 0.0)
-			EntityFX(r\Objects[0], 1)
 			;[End Block]
 		Case "room2bio"
 			;[Block]	
