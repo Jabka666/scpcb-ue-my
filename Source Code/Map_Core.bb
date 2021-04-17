@@ -7383,7 +7383,7 @@ Function FillRoom(r.Rooms)
 			sc\Angle = 100.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			
-			de.Decals = CreateDecal(19, r\x - 4951.0 * RoomScale, r\y - 4495.0 * RoomScale, r\z + 1700.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.5, 0.8)
+			de.Decals = CreateDecal(19, r\x - 4951.0 * RoomScale, r\y - 4495.0 * RoomScale, r\z + 1700.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.65, 0.8)
 			EntityParent(de\OBJ, r\OBJ)
 			
 			it.Items = CreateItem("Document SCP-409", "paper", r\x - 3595.0 * RoomScale, r\y - 4336.0 * RoomScale, r\z + 2242.0 * RoomScale)

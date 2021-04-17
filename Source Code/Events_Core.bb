@@ -9182,18 +9182,16 @@ Function UpdateEvents()
 							
 							e\EventState = 1.0
 						ElseIf e\EventState = 1.0 Then 
-							If e\room\RoomDoors[2]\Open Then GiveAchievement(Achv409)
-							If EntityDistanceSquared(me\Collider, e\room\NPC[0]\Collider) < 1.21 And I_409\Timer < 1.0 Then
-								I_409\Timer = 1.0
-							EndIf
-							; ~ Touching the SCP-409
-							If I_409\Timer < 1.0 Then
+							If I_409\Timer = 0.0 Then
+								If EntityDistanceSquared(me\Collider, e\room\NPC[0]\Collider) < 0.64 Then I_409\Timer = 0.001
+								
+								; ~ Touching the SCP-409
 								If EntityDistanceSquared(e\room\Objects[3], me\Collider) < 0.64 Then
 									ga\DrawHandIcon = True
 									If mo\MouseHit1 Then
 										CreateMsg("You touched SCP-409.", 6.0)
 										me\BlurTimer = 2000.0
-										I_409\Timer = I_409\Timer + 1.0
+										I_409\Timer = 0.001
 										GiveAchievement(Achv409)
 									EndIf
 								EndIf
