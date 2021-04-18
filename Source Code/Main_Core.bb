@@ -1027,7 +1027,7 @@ Function UpdateConsole()
 					For n.NPCs = Each NPCs
 						If n\NPCType = NPCType372 Then
 							RemoveNPC(n)
-							CreateEvent("room372", "room372", 0, 0.0)   
+							CreateEvent("cont_372", "cont_372", 0, 0.0)   
 							Exit
 						EndIf
 					Next

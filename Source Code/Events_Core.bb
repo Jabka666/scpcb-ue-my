@@ -18,7 +18,7 @@ Const e_room2checkpoint% = 3
 Const e_room895% = 4, e_room895_106% = 5
 Const e_room1endroom106% = 6
 Const e_room2c_lockroom_173% = 7, e_room2c_lockroom_096% = 8
-Const e_room372% = 9
+Const e_cont_372% = 9
 Const e_pocketdimension% = 10
 Const e_room2cafeteria% = 11
 Const e_room2ccont% = 12
@@ -177,9 +177,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room2c_lockroom_096)
 			;[End Block]
-		Case "room372"
+		Case "cont_372"
 			;[Block]
-			Return(e_room372)
+			Return(e_cont_372)
 			;[End Block]
 		Case "pocketdimension"
 			;[Block]
@@ -576,7 +576,7 @@ Function InitEvents()
 	
 	CreateEvent("room106", "room106", 0)	
 	
-	CreateEvent("room372", "room372", 0)
+	CreateEvent("cont_372", "cont_372", 0)
 	
 	CreateEvent("room914", "room914", 0)
 	
@@ -2717,7 +2717,7 @@ Function UpdateEvents()
 					RemoveEvent(e)
 				EndIf
 				;[End Block]
-			Case e_room372
+			Case e_cont_372
 				;[Block]
 				If PlayerRoom = e\room Then
 					If e\EventState = 0.0 Then
