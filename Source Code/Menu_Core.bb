@@ -1043,7 +1043,11 @@ Function RenderMainMenu()
 	
 	Color(0, 0, 0)
 	
-	ShowPointer()
+	If (Not mm\OnPalette) Then
+		ShowPointer()
+	Else
+		HidePointer()
+	EndIf
 	
 	DrawImage(mma\BackGround, 0, 0)
 	
@@ -1858,6 +1862,7 @@ Function UpdateLauncher(lnchr.Launcher)
 	Local LauncherArrowIMG% = LoadImage_Strict("GFX\menu\arrow.png")
 	Local DiscordIMG% = LoadImage_Strict("GFX\menu\discord_icon.png")
 	Local ModDBIMG% = LoadImage_Strict("GFX\menu\moddb_icon.png")
+	Local YouTubeIMG% = LoadImage_Strict("GFX\menu\youtube_icon.png")
 	
 	RotateImage(LauncherArrowIMG, -90.0)
 	MidHandle(LauncherArrowIMG)
@@ -1958,11 +1963,16 @@ Function UpdateLauncher(lnchr.Launcher)
 			If mo\MouseHit1 Then ExecFile("https://discord.gg/n7KdW4u")
 		EndIf
 		DrawImage(DiscordIMG, LauncherWidth - 620, LauncherHeight - 86)
-		If MouseOn(LauncherWidth - 540, LauncherHeight - 86, 64, 64) Then
-			Rect(LauncherWidth - 541, LauncherHeight - 87, 66, 66, False)
+		If MouseOn(LauncherWidth - 510, LauncherHeight - 86, 64, 64) Then
+			Rect(LauncherWidth - 511, LauncherHeight - 87, 66, 66, False)
 			If mo\MouseHit1 Then ExecFile("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition")
 		EndIf
-		DrawImage(ModDBIMG, LauncherWidth - 540, LauncherHeight - 86)
+		DrawImage(ModDBIMG, LauncherWidth - 510, LauncherHeight - 86)
+		If MouseOn(LauncherWidth - 400, LauncherHeight - 86, 64, 64) Then
+			Rect(LauncherWidth - 401, LauncherHeight - 87, 66, 66, False)
+			If mo\MouseHit1 Then ExecFile("https://www.youtube.com/channel/UCPqWOCPfKooDnrLNzA67Acw")
+		EndIf
+		DrawImage(YouTubeIMG, LauncherWidth - 400, LauncherHeight - 86)
 		
 		If UpdateLauncherButton(LauncherWidth - 300, LauncherHeight - 105, 150, 30, "REPORT A BUG!", False, False) Then
 			ExecFile("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition/news/bug-reports1")
@@ -2005,6 +2015,8 @@ Function UpdateLauncher(lnchr.Launcher)
 	FreeImage(LauncherArrowIMG)
 	FreeImage(LauncherIMG)
 	FreeImage(DiscordIMG)
+	FreeImage(ModDBIMG)
+	FreeImage(YouTubeIMG)
 End Function
 
 Type LoadingScreens
