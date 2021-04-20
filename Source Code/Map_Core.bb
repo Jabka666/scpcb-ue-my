@@ -3232,7 +3232,7 @@ Function UpdateSecurityCams()
 			EndIf
 			
 			If sc\room <> Null Then
-				If sc\room\RoomTemplate\Name = "room2sl" Then sc\CoffinEffect = 0
+				If sc\room\RoomTemplate\Name = "room2_sl" Then sc\CoffinEffect = 0
 			EndIf
 			
 			If Close Lor sc = CoffinCam Then 
@@ -7088,7 +7088,7 @@ Function FillRoom(r.Rooms)
 			it.Items = CreateItem("Sticky Note", "paper", r\x - 991.0 * RoomScale, r\y - 242.0 * RoomScale, r\z + 904.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "room2sl"
+		Case "room2_sl"
 			;[Block]
 			; ~ Doors for room
 			r\RoomDoors.Doors[0] = CreateDoor(r\x + 480.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 90.0, r, False, Default_Door, 3)
@@ -8308,7 +8308,7 @@ Function CreateMap()
 	SetRoom("cont_427_714_860_1025", ROOM2, Floor(0.2 * Float(Room2Amount[0])), MinPos, MaxPos)
 	SetRoom("room2storage", ROOM2, Floor(0.3 * Float(Room2Amount[0])), MinPos, MaxPos)
 	SetRoom("room2gw_b", ROOM2, Floor(0.4 * Float(Room2Amount[0])), MinPos, MaxPos)
-	SetRoom("room2sl", ROOM2, Floor(0.5 * Float(Room2Amount[0])), MinPos, MaxPos)
+	SetRoom("room2_sl", ROOM2, Floor(0.5 * Float(Room2Amount[0])), MinPos, MaxPos)
 	SetRoom("room012", ROOM2, Floor(0.55 * Float(Room2Amount[0])), MinPos, MaxPos)
 	SetRoom("room2scps2", ROOM2, Floor(0.6 * Float(Room2Amount[0])), MinPos, MaxPos)
 	SetRoom("room2medibay", ROOM2, Floor(0.7 * Float(Room2Amount[0])), MinPos, MaxPos)

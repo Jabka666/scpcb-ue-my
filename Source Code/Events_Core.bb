@@ -65,7 +65,7 @@ Const e_room4tunnels% = 59
 Const e_room2gw_b% = 60, e_room_gw% = 61
 Const e_room2scps2% = 62
 Const e_room1162% = 63
-Const e_room2sl% = 64
+Const e_room2_sl% = 64
 Const e_096spawn% = 65
 Const e_room2medibay% = 66, e_room2medibay2% = 67
 Const e_dimension1499% = 68
@@ -397,9 +397,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room1162)
 			;[End Block]
-		Case "room2sl"
+		Case "room2_sl"
 			;[Block]
-			Return(e_room2sl)
+			Return(e_room2_sl)
 			;[End Block]
 		Case "096spawn"
 			;[Block]
@@ -623,7 +623,7 @@ Function InitEvents()
 	
 	CreateEvent("room2scps2", "room2scps2", 0)
 	
-	CreateEvent("room2sl", "room2sl", 0)
+	CreateEvent("room2_sl", "room2_sl", 0)
 	
 	CreateEvent("room2medibay", "room2medibay", 0)
 	CreateEvent("room2medibay2", "room2medibay2", 0)
@@ -2284,7 +2284,7 @@ Function UpdateEvents()
 					Next
 				Else
 					For e2.Events = Each Events
-						If e2\EventID = e_room2sl Then
+						If e2\EventID = e_room2_sl Then
 							If e2\EventState3 = 0.0 Then
 								If e\room\Dist < 12.0 Then
 									TurnCheckpointMonitorsOff()
@@ -3057,7 +3057,7 @@ Function UpdateEvents()
 													TeleportEntity(de\OBJ, EntityX(r\Objects[0], True), EntityY(r\Objects[0], True) + 0.6, EntityZ(r\Objects[0], True), 0.0, True, 4.0, True)
 													
 													For e2.Events = Each Events
-														If e2\EventID = e_room2sl
+														If e2\EventID = e_room2_sl
 															e2\EventState3 = 0.0
 															UpdateLever(e2\room\Levers[0])
 															RotateEntity(e2\room\Levers[0], 0.0, EntityYaw(e2\room\Levers[0]), 0.0)
@@ -3100,7 +3100,7 @@ Function UpdateEvents()
 										Curr106\State = 10000.0 : Curr106\Idle = 0
 										
 										For e2.Events = Each Events
-											If e2\EventID = e_room2sl
+											If e2\EventID = e_room2_sl
 												e2\EventState3 = 0.0
 												UpdateLever(e2\room\Levers[0])
 												RotateEntity(e2\room\Levers[0], 0.0, EntityYaw(e2\room\Levers[0]), 0.0)
@@ -3192,7 +3192,7 @@ Function UpdateEvents()
 											Curr106\State = 10000.0 : Curr106\Idle = 0
 											
 											For e2.Events = Each Events
-												If e2\EventID = e_room2sl
+												If e2\EventID = e_room2_sl
 													e2\EventState3 = 0.0
 													UpdateLever(e2\room\Levers[0])
 													RotateEntity(e2\room\Levers[0], 0.0, EntityYaw(e2\room\Levers[0]), 0.0)
@@ -8620,7 +8620,7 @@ Function UpdateEvents()
 					FreeEntity(pp)
 				EndIf
 				;[End Block]
-			Case e_room2sl
+			Case e_room2_sl
 				;[Block]
 				; ~ e\EventState: Determines if the player already entered the room or not (0 = No, 1 = Yes)
 				
@@ -9142,7 +9142,7 @@ Function UpdateEvents()
 			Case e_room4_ic
 				;[Block]
 				For e2.Events = Each Events
-					If e2\EventID = e_room2sl Then
+					If e2\EventID = e_room2_sl Then
 						If e2\EventState3 = 0.0 Then
 							If e\room\Dist < 12.0 Then
 								TurnCheckpointMonitorsOff()

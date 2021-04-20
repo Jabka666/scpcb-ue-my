@@ -1403,7 +1403,7 @@ Function UpdateConsole()
 				Case "unlockcheckpoints"
 					;[Block]
 					For e2.Events = Each Events
-						If e2\EventID = e_room2sl
+						If e2\EventID = e_room2_sl
 							e2\EventState3 = 0.0
 							UpdateLever(e2\room\Levers[0])
 							RotateEntity(e2\room\Levers[0], 0.0, EntityYaw(e2\room\Levers[0]), 0.0)
@@ -8670,7 +8670,7 @@ Function InitNewGame()
 		If e\EventID = e_room106
 			e\EventState2 = 1.0
 		EndIf	
-		If e\EventID = e_room2sl
+		If e\EventID = e_room2_sl
 			e\EventState3 = 1.0
 		EndIf
 	Next

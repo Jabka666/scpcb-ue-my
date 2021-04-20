@@ -1914,7 +1914,7 @@ Function UpdateNPCs()
 								EndIf
 							EndIf
 							
-							If PlayerRoom\RoomTemplate\Name = "room2sl" Then ShouldPlay = 20
+							If PlayerRoom\RoomTemplate\Name = "room2_sl" Then ShouldPlay = 20
 							
 							If n\CurrSpeed > 0.005 Then
 								If (PrevFrame < 361.0 And n\Frame >= 361.0) Lor (PrevFrame < 377.0 And n\Frame >= 377.0) Then
