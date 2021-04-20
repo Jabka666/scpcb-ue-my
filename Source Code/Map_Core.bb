@@ -6840,7 +6840,7 @@ Function FillRoom(r.Rooms)
 			
 			it.Items = CreateItem("Burnt Note", "paper", EntityX(r\OBJ), r\y + 0.5, EntityZ(r\OBJ) + 3.5)
 			;[End Block]
-		Case "room3z3"
+		Case "room3_4_ez"
 			;[Block]
 			sc.SecurityCams = CreateSecurityCam(r\x - 320.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 512.25 * RoomScale, r)
 			sc\Angle = 225.0 : sc\Turn = 45.0
