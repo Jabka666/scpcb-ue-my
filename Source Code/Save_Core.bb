@@ -1132,7 +1132,7 @@ Function LoadGame(File$)
 				Next
 			EndIf
 		; ~ Reset the forest event to make it loading properly
-		ElseIf e\EventID = e_room860
+		ElseIf e\EventID = e_cont_860_1
 			e\EventStr = ""
 		ElseIf e\EventID = e_room205
 			e\EventStr = ""
@@ -1875,7 +1875,7 @@ Function LoadGameQuick(File$)
 				e\room\Objects[0] = CreatePivot()
 				e\room\Objects[1] = CreatePivot()
 			EndIf
-		ElseIf e\EventID = e_room860 Then
+		ElseIf e\EventID = e_cont_860_1 Then
 			If e\EventState = 1.0 Then
 				ShowEntity(e\room\fr\Forest_Pivot)
 			EndIf
@@ -2296,7 +2296,7 @@ Function LoadMap(File$)
 		Local ForestRoom.Rooms
 		
 		For r.Rooms = Each Rooms
-			If r\RoomTemplate\Name = "room860" Then
+			If r\RoomTemplate\Name = "cont_860_1" Then
 				ForestRoom = r
 				Exit
 			EndIf

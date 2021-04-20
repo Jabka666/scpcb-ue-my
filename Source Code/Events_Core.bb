@@ -48,7 +48,7 @@ Const e_cont_049% = 40
 Const e_room079% = 41
 Const e_room106% = 42
 Const e_room205% = 43
-Const e_room860% = 44
+Const e_cont_860_1% = 44
 Const e_cont_966% = 45
 Const e_room1123% = 46
 Const e_room2testroom2% = 47, e_room2testroom173% = 48
@@ -317,9 +317,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room205)
 			;[End Block]
-		Case "room860"
+		Case "cont_860_1"
 			;[Block]
-			Return(e_room860)
+			Return(e_cont_860_1)
 			;[End Block]
 		Case "cont_966"
 			;[Block]
@@ -601,7 +601,7 @@ Function InitEvents()
 	
 	CreateEvent("room205", "room205", 0)
 	
-	CreateEvent("room860", "room860", 0)
+	CreateEvent("cont_860_1", "cont_860_1", 0)
 	
 	CreateEvent("cont_966", "cont_966", 0)
 	
@@ -746,7 +746,7 @@ Function QuickLoadEvents()
 				EndIf
 			EndIf
 			;[End Block]
-		Case e_room860
+		Case e_cont_860_1
 			;[Block]
 			If e\EventStr = "Load0"
 				QuickLoadPercent = 15
@@ -3926,7 +3926,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				
-				If PlayerRoom\RoomTemplate\Name <> "pocketdimension" And PlayerRoom\RoomTemplate\Name <> "room860" Then
+				If PlayerRoom\RoomTemplate\Name <> "pocketdimension" And PlayerRoom\RoomTemplate\Name <> "cont_860_1" Then
 					If e\EventState2 = 0.0 Then
 						If e\EventState3 =< 0.0 Then 
 							Temp = False
@@ -6758,9 +6758,9 @@ Function UpdateEvents()
 						If e\SoundCHN3 <> 0 Then
 							If ChannelPlaying(e\SoundCHN3) Then StopChannel(e\SoundCHN3)
 						EndIf
-					ElseIf PlayerRoom\RoomTemplate\Name = "room860" Then
+					ElseIf PlayerRoom\RoomTemplate\Name = "cont_860_1" Then
 						For e2.Events = Each Events
-							If e2\EventID = e_room860 Then
+							If e2\EventID = e_cont_860_1 Then
 								If e2\EventState = 1.0 Then
 									If e\SoundCHN2 <> 0 Then
 										If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2)
@@ -6984,7 +6984,7 @@ Function UpdateEvents()
 					e\EventStr = ""
 				EndIf
 				;[End block]
-			Case e_room860
+			Case e_cont_860_1
 				;[Block]
 				; ~ e\EventState: Is the player in the forest
 				
@@ -7805,7 +7805,7 @@ Function UpdateEvents()
 				;[Block]
 				If e\EventState = 0.0 Then
 					If PlayerRoom = e\room Then e\EventState = 70.0 * Rnd(300.0, 1000.0)
-				ElseIf PlayerRoom\RoomTemplate\Name <> "pocketdimension" And PlayerRoom\RoomTemplate\Name <> "room860" And PlayerRoom\RoomTemplate\Name <> "room1123" And PlayerRoom\RoomTemplate\Name <> "dimension1499" 
+				ElseIf PlayerRoom\RoomTemplate\Name <> "pocketdimension" And PlayerRoom\RoomTemplate\Name <> "cont_860_1" And PlayerRoom\RoomTemplate\Name <> "room1123" And PlayerRoom\RoomTemplate\Name <> "dimension1499" 
 					e\EventState = e\EventState - fps\Factor[0]
 					
 					If e\EventState < 70.0 * 17.0 Then

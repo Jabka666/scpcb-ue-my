@@ -820,9 +820,9 @@ Function UpdateNPCs()
 					
 					; ~ Checking if SCP-106 is allowed to spawn
 					If PlayerRoom\RoomTemplate\Name = "dimension1499" Then Spawn106 = False
-					If PlayerRoom\RoomTemplate\Name = "room860" Then
+					If PlayerRoom\RoomTemplate\Name = "cont_860_1" Then
 						For e.Events = Each Events
-							If e\EventID = e_room860 Then
+							If e\EventID = e_cont_860_1 Then
 								If e\EventState = 1.0 Then 
 									Spawn106 = False
 								EndIf
@@ -834,7 +834,7 @@ Function UpdateNPCs()
 						Spawn106 = False
 					EndIf
 					; ~ GateA event has been triggered. Don't make SCP-106 disappear!
-					; ~ The reason why this is a seperate for loop is because we need to make sure that room860 would not be able to overwrite the "Spawn106" variable
+					; ~ The reason why this is a seperate for loop is because we need to make sure that cont_860_1 would not be able to overwrite the "Spawn106" variable
 					If PlayerRoom\RoomTemplate\Name = "gatea" Then
 						For e.Events = Each Events
 							If e\EventID = e_gatea Then
@@ -3193,7 +3193,7 @@ Function UpdateNPCs()
 				;[End Block]
 			Case NPCType860_2
 				;[Block]
-				If PlayerRoom\RoomTemplate\Name = "room860" Then
+				If PlayerRoom\RoomTemplate\Name = "cont_860_1" Then
 					Local fr.Forest = PlayerRoom\fr
 					
 					Dist = EntityDistanceSquared(me\Collider, n\Collider)
@@ -4978,9 +4978,9 @@ Function UpdateNPCs()
 						
 						If n\InFacility = 1 Then
 							If PlayerRoom\RoomTemplate\Name <> "room173intro" Then
-								If PlayerRoom\RoomTemplate\Name = "room860" Then
+								If PlayerRoom\RoomTemplate\Name = "cont_860_1" Then
 									For e.Events = Each Events
-										If e\EventID = e_room860 Then
+										If e\EventID = e_cont_860_1 Then
 											If e\EventState = 1.0
 												UpdateGravity = True
 											EndIf
@@ -7295,9 +7295,9 @@ Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False)
 		Return(False)
 	EndIf
 	; ~ Player is in SCP-860-1's test room and inside the forest, returning false
-	If RN = "room860" Then
+	If RN = "cont_860_1" Then
 		For e.Events = Each Events
-			If e\EventID = e_room860 Then
+			If e\EventID = e_cont_860_1 Then
 				If e\EventState = 1.0 Then
 					Return(False)
 				EndIf

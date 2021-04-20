@@ -3746,7 +3746,7 @@ Function FillRoom(r.Rooms)
 	Local TempStr$, TempStr2$, TempStr3$
 	
 	Select r\RoomTemplate\Name
-		Case "room860"
+		Case "cont_860_1"
 			;[Block]
 			; ~ Doors to observation booth
 			d.Doors = CreateDoor(r\x + 928.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 0.0, r, False, Default_Door, 0, "GEAR")
@@ -8370,7 +8370,7 @@ Function CreateMap()
 	SetRoom("room2offices", ROOM2, MinPos + Floor(0.45 * Room2Amount[2]), MinPos, MaxPos)
 	SetRoom("room2offices4", ROOM2, MinPos + Floor(0.5 * Room2Amount[2]), MinPos, MaxPos)	
 	SetRoom("room2offices5", ROOM2, MinPos + Floor(0.55 * Room2Amount[2]), MinPos, MaxPos)	
-	SetRoom("room860", ROOM2, MinPos + Floor(0.6 * Room2Amount[2]), MinPos, MaxPos)
+	SetRoom("cont_860_1", ROOM2, MinPos + Floor(0.6 * Room2Amount[2]), MinPos, MaxPos)
 	SetRoom("room2medibay2", ROOM2, MinPos + Floor(0.7 * Float(Room2Amount[2])), MinPos, MaxPos)
 	SetRoom("room2poffices2", ROOM2, MinPos + Floor(0.8 * Room2Amount[2]), MinPos, MaxPos)
 	SetRoom("room2offices2", ROOM2, MinPos + Floor(0.9 * Float(Room2Amount[2])), MinPos, MaxPos)

@@ -2149,9 +2149,9 @@ Function MainLoop()
 				
 				If PlayerRoom\RoomTemplate\Name = "room173intro" Then 
 					me\Zone = 4
-				ElseIf PlayerRoom\RoomTemplate\Name = "room860"
+				ElseIf PlayerRoom\RoomTemplate\Name = "cont_860_1"
 					For e.Events = Each Events
-						If e\EventID = e_room860 Then
+						If e\EventID = e_cont_860_1 Then
 							If e\EventState = 1.0 Then
 								me\Zone = 5
 								PositionEntity(SoundEmitter, EntityX(SoundEmitter), 30.0, EntityZ(SoundEmitter))
@@ -2189,7 +2189,7 @@ Function MainLoop()
 			If Rand(50000) = 3 Then
 				Local RN$ = PlayerRoom\RoomTemplate\Name
 				
-				If RN <> "room860" And RN <> "room1123" And RN <> "room173intro" And RN <> "dimension1499" And RN <> "pocketdimension" Then
+				If RN <> "cont_860_1" And RN <> "room1123" And RN <> "room173intro" And RN <> "dimension1499" And RN <> "pocketdimension" Then
 					If fps\Factor[0] > 0.0 Then me\LightBlink = Rnd(1.0, 2.0)
 					PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(1, 8) + ".ogg"))
 				EndIf 
@@ -2267,9 +2267,9 @@ Function MainLoop()
 				CurrFogColor = FogColorOutside
 			ElseIf PlayerRoom\RoomTemplate\Name = "dimension1499"
 				CurrFogColor = FogColorDimension1499
-			ElseIf PlayerRoom\RoomTemplate\Name = "room860"
+			ElseIf PlayerRoom\RoomTemplate\Name = "cont_860_1"
 				For e.Events = Each Events
-					If e\EventID = e_room860 Then
+					If e\EventID = e_cont_860_1 Then
 						If e\EventState = 1.0 Then
 							CurrFogColor = FogColorForest
 						EndIf
@@ -6345,9 +6345,9 @@ Function RenderGUI()
 					
 					If PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor PlayerRoom\RoomTemplate\Name = "dimension1499" Then
 						NavWorks = False
-					ElseIf PlayerRoom\RoomTemplate\Name = "room860" Then
+					ElseIf PlayerRoom\RoomTemplate\Name = "cont_860_1" Then
 						For e.Events = Each Events
-							If e\EventID = e_room860 Then
+							If e\EventID = e_cont_860_1 Then
 								If e\EventState = 1.0 Then
 									NavWorks = False
 								EndIf
@@ -9602,9 +9602,9 @@ Function Update008()
 	Local TeleportForInfect% = True
 	Local GroupName$
 	
-	If PlayerRoom\RoomTemplate\Name = "room860"
+	If PlayerRoom\RoomTemplate\Name = "cont_860_1"
 		For e.Events = Each Events
-			If e\EventID = e_room860 Then
+			If e\EventID = e_cont_860_1 Then
 				If e\EventState = 1.0 Then
 					TeleportForInfect = False
 				EndIf
