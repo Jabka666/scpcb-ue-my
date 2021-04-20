@@ -12,7 +12,7 @@ End Type
 
 ; ~ Event IDs Constants
 ;[Block]
-Const e_room173% = 0, e_room173intro% = 1
+Const e_cont_173% = 0, e_room173intro% = 1
 Const e_buttghost% = 2
 Const e_room2checkpoint% = 3
 Const e_room895% = 4, e_room895_106% = 5
@@ -141,9 +141,9 @@ End Function
 
 Function FindEventID%(EventName$)
 	Select EventName
-		Case "room173"
+		Case "cont_173"
 			;[Block]
-			Return(e_room173)
+			Return(e_cont_173)
 			;[End Block]
 		Case "room173intro"
 			;[Block]
@@ -462,7 +462,7 @@ End Function
 
 Function InitEvents()
 	If opt\IntroEnabled Then CreateEvent("room173intro", "room173intro", 0)
-	CreateEvent("room173", "room173", 0)
+	CreateEvent("cont_173", "cont_173", 0)
 	
 	CreateEvent("pocketdimension", "pocketdimension", 0)	
 	
@@ -875,7 +875,7 @@ Function UpdateEvents()
 		EndIf
 		
 		Select e\EventID
-			Case e_room173
+			Case e_cont_173
 				;[Block]
 				If e\room\RoomDoors[5] = Null Then
 					For i = 0 To 3
@@ -2118,7 +2118,7 @@ Function UpdateEvents()
 										ResetEntity(Curr173\Collider)
 										
 										For r.Rooms = Each Rooms
-											If r\RoomTemplate\Name = "room173" Then
+											If r\RoomTemplate\Name = "cont_173" Then
 												PlayerRoom = r
 												
 												x = EntityX(r\OBJ, True) + 3712.0 * RoomScale

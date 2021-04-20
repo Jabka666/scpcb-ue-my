@@ -1306,7 +1306,7 @@ Function UpdateConsole()
 					KillSounds()
 					
 					For e.Events = Each Events
-						If e\EventID = e_room173 Then
+						If e\EventID = e_cont_173 Then
 							For i = 0 To 2
 								If e\room\NPC[i] <> Null Then RemoveNPC(e\room\NPC[i])
 								If i < 2 Then FreeEntity(e\room\Objects[i]) : e\room\Objects[i] = 0
@@ -1545,7 +1545,7 @@ Function UpdateConsole()
 					KillSounds()
 					
 					For e.Events = Each Events
-						If e\EventID = e_room173 Then
+						If e\EventID = e_cont_173 Then
 							For i = 0 To 2
 								If e\room\NPC[i] <> Null Then RemoveNPC(e\room\NPC[i])
 								If i < 2 Then FreeEntity(e\room\Objects[i]) : e\room\Objects[i] = 0
@@ -8626,7 +8626,7 @@ Function InitNewGame()
 			If Rand(4) = 1 Then de.Decals = CreateDecal(0, EntityX(r\OBJ) + Rnd(-2.0, 2.0), r\y + 0.005, EntityZ(r\OBJ) + Rnd(-2.0, 2.0), 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.7, 0.85))
 		EndIf
 		
-		If r\RoomTemplate\Name = "room173" And (Not opt\IntroEnabled) Then 
+		If r\RoomTemplate\Name = "cont_173" And (Not opt\IntroEnabled) Then 
 			PositionEntity(me\Collider, EntityX(r\OBJ) + 3584.0 * RoomScale, r\y + 704.0 * RoomScale, EntityZ(r\OBJ) + 1024.0 * RoomScale)
 			PlayerRoom = r
 			it.Items = CreateItem("Class D Orientation Leaflet", "paper", 1.0, 1.0, 1.0)

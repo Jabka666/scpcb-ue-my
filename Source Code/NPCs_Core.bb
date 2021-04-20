@@ -2232,7 +2232,7 @@ Function UpdateNPCs()
 									If n\State3 = 1.0 Then
 										Local InstaKillPlayer% = False
 										
-										If PlayerRoom\RoomTemplate\Name = "room173" Then 
+										If PlayerRoom\RoomTemplate\Name = "cont_173" Then 
 											msg\DeathMsg = SubjectName + ". Cause of death: Gunshot wound to the head. The surveillance tapes confirm that the subject was terminated by Agent Ulgrin shortly after the site lockdown was initiated."
 											InstaKillPlayer = True
 										ElseIf PlayerRoom\RoomTemplate\Name = "gateb"
@@ -5102,7 +5102,7 @@ Function UpdateMTFUnit(n.NPCs)
 						If Curr173\Idle <> 2 Then
 							If (Not Curr173\IsDead) And Curr173\Idle = 3 Then
 								For r.Rooms = Each Rooms
-									If r\RoomTemplate\Name = "room173" Then
+									If r\RoomTemplate\Name = "cont_173" Then
 										If EntityX(n\Collider, True) - r\x < 15.0 Then
 											If r\RoomDoors[1]\Open Then UseDoor(r\RoomDoors[1], False)
 											Curr173\IsDead = True
@@ -5129,7 +5129,7 @@ Function UpdateMTFUnit(n.NPCs)
 							
 							If (Not Tmp) Then
 								For r.Rooms = Each Rooms
-									If r\RoomTemplate\Name = "room173" Then
+									If r\RoomTemplate\Name = "cont_173" Then
 										Local FoundChamber% = False
 										Local Pvt% = CreatePivot()
 										

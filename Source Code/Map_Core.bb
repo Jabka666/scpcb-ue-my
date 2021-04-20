@@ -5652,7 +5652,7 @@ Function FillRoom(r.Rooms)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			;[End Block]
-		Case "room173"
+		Case "cont_173"
 			;[Block]
 			; ~ The containment doors
 			r\RoomDoors.Doors[1] = CreateDoor(r\x + 4000.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 1696.0 * RoomScale, 90.0, r, True, Big_Door)
@@ -7800,7 +7800,7 @@ Function PreventRoomOverlap(r.Rooms)
 	Local IsIntersecting% = False
 	
 	; ~ Just skip it when it would try to check for the checkpoints
-	If r\RoomTemplate\Name = "room2checkpoint" Lor r\RoomTemplate\Name = "room2checkpoint2" Lor r\RoomTemplate\Name = "room173" Then Return(True)
+	If r\RoomTemplate\Name = "room2checkpoint" Lor r\RoomTemplate\Name = "room2checkpoint2" Lor r\RoomTemplate\Name = "cont_173" Then Return(True)
 	
 	; ~ First, check if the room is actually intersecting at all
 	For r2.Rooms = Each Rooms
@@ -7853,7 +7853,7 @@ Function PreventRoomOverlap(r.Rooms)
 	
 	For r2.Rooms = Each Rooms
 		If r2 <> r And (Not r2\RoomTemplate\DisableOverlapCheck) Then
-			If r\RoomTemplate\Shape = r2\RoomTemplate\Shape And r\Zone = r2\Zone And (r2\RoomTemplate\Name <> "room2checkpoint" And r2\RoomTemplate\Name <> "room2checkpoint2" And r2\RoomTemplate\Name <> "room173") Then
+			If r\RoomTemplate\Shape = r2\RoomTemplate\Shape And r\Zone = r2\Zone And (r2\RoomTemplate\Name <> "room2checkpoint" And r2\RoomTemplate\Name <> "room2checkpoint2" And r2\RoomTemplate\Name <> "cont_173") Then
 				x = r\x / 8.0
 				y = r\z / 8.0
 				Rot = r\Angle
@@ -8289,7 +8289,7 @@ Function CreateMap()
 	
 	Local MinPos% = 1, MaxPos% = Room1Amount[0] - 1
 	
-	MapRoom(ROOM1, 0) = "room173"
+	MapRoom(ROOM1, 0) = "cont_173"
 	
 	SetRoom("cont_372", ROOM1, Floor(0.1 * Float(Room1Amount[0])), MinPos, MaxPos)
 	SetRoom("room005", ROOM1, Floor(0.3 * Float(Room1Amount[0])), MinPos, MaxPos)

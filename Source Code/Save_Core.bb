@@ -1868,7 +1868,7 @@ Function LoadGameQuick(File$)
 			EndIf
 		Next	
 		e\EventStr = ReadString(f)
-		If e\EventID = e_room173
+		If e\EventID = e_cont_173 Then
 			; ~ A hacky fix for the case that the intro objects aren't loaded when they should
 			; ~ Altough I'm too lazy to add those objects there because at the time where you can save, those objects are already in the ground anyway -- ENDSHN
 			If (Not e\room\Objects[0]) Then
