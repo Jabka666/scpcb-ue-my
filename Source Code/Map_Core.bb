@@ -5752,7 +5752,7 @@ Function FillRoom(r.Rooms)
 				EntityParent(de\OBJ, r\OBJ)
 			Next
 			;[End Block]
-		Case "room2scps"
+		Case "cont_427_714_860_1025"
 			;[Block]
 			d.Doors = CreateDoor(r\x + 272.0 * RoomScale, r\y, r\z, 90.0, r, False, Default_Door, 3)
 			d\AutoClose = False
@@ -8305,7 +8305,7 @@ Function CreateMap()
 	MapRoom(ROOM2, 0) = "room2closets" 
 	
 	SetRoom("room2testroom", ROOM2, Floor(0.1 * Float(Room2Amount[0])), MinPos, MaxPos)
-	SetRoom("room2scps", ROOM2, Floor(0.2 * Float(Room2Amount[0])), MinPos, MaxPos)
+	SetRoom("cont_427_714_860_1025", ROOM2, Floor(0.2 * Float(Room2Amount[0])), MinPos, MaxPos)
 	SetRoom("room2storage", ROOM2, Floor(0.3 * Float(Room2Amount[0])), MinPos, MaxPos)
 	SetRoom("room2gw_b", ROOM2, Floor(0.4 * Float(Room2Amount[0])), MinPos, MaxPos)
 	SetRoom("room2sl", ROOM2, Floor(0.5 * Float(Room2Amount[0])), MinPos, MaxPos)
