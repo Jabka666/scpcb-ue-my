@@ -21,7 +21,7 @@ Const e_room2c_lockroom_173% = 7, e_room2c_lockroom_096% = 8
 Const e_cont_372% = 9
 Const e_pocketdimension% = 10
 Const e_room2cafeteria% = 11
-Const e_room2ccont% = 12
+Const e_room2c_ec% = 12
 Const e_room2closets% = 13
 Const e_room2doors173% = 14
 Const e_room2elevator% = 15, e_room2elevator2% = 16
@@ -189,9 +189,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room2cafeteria)
 			;[End Block]
-		Case "room2ccont"
+		Case "room2c_ec"
 			;[Block]
-			Return(e_room2ccont)
+			Return(e_room2c_ec)
 			;[End Block]
 		Case "room2closets"
 			;[Block]
@@ -592,7 +592,7 @@ Function InitEvents()
 	
 	CreateEvent("room2mt", "room2mt", 0)
 	
-	CreateEvent("room2ccont", "room2ccont", 0)
+	CreateEvent("room2c_ec", "room2c_ec", 0)
 	
 	CreateEvent("gateaentrance", "gateaentrance", 0)
 	CreateEvent("gatea", "gatea", 0)
@@ -3366,7 +3366,7 @@ Function UpdateEvents()
 					e\EventState = 1.0
 				EndIf
 				;[End Block]
-			Case e_room2ccont
+			Case e_room2c_ec
 				;[Block]
 				If PlayerRoom = e\room Then
 					EntityPick(Camera, 1.5)

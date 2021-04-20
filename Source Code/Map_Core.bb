@@ -6269,7 +6269,7 @@ Function FillRoom(r.Rooms)
 			it.Items = CreateItem("Class D Orientation Leaflet", "paper", r\x - (2914.0 + 1024.0) * RoomScale, r\y + 170.0 * RoomScale, r\z + 40.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "room2ccont"
+		Case "room2c_ec"
 			;[Block]
 			d.Doors = CreateDoor(r\x, r\y, r\z + 368.0 * RoomScale, 0.0, r, False, Default_Door, 4)
 			d\AutoClose = False
@@ -8375,7 +8375,7 @@ Function CreateMap()
 	SetRoom("room2poffices2", ROOM2, MinPos + Floor(0.8 * Room2Amount[2]), MinPos, MaxPos)
 	SetRoom("room2offices2", ROOM2, MinPos + Floor(0.9 * Float(Room2Amount[2])), MinPos, MaxPos)
 	
-	MapRoom(ROOM2C, Room2CAmount[0] + Room2CAmount[1]) = "room2ccont"	
+	MapRoom(ROOM2C, Room2CAmount[0] + Room2CAmount[1]) = "room2c_ec"	
 	MapRoom(ROOM2C, Room2CAmount[0] + Room2CAmount[1] + 1) = "room2c_lockroom_ez"		
 	
 	MapRoom(ROOM3, Room3Amount[0] + Room3Amount[1] + Floor(0.3 * Float(Room3Amount[2]))) = "room3servers"
