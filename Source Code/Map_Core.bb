@@ -4272,7 +4272,7 @@ Function FillRoom(r.Rooms)
 			sc\Angle = 225.0 : sc\Turn = 0.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			;[End Block]
-		Case "room2pit"
+		Case "room2_4_hcz"
 			;[Block]
 			; ~ Smoke
 			i = 0
@@ -5303,7 +5303,7 @@ Function FillRoom(r.Rooms)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			;[End Block]
-		Case "room2pipes"
+		Case "room2_2_hcz"
 			;[Block]
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x + 368.0 * RoomScale, r\y, r\z)

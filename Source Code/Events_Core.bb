@@ -31,8 +31,8 @@ Const e_room2offices2% = 19, e_room2offices3% = 20, e_room2offices035% = 21
 Const e_room2tesla% = 22
 Const e_room2trick% = 23
 Const e_room2mt% = 24
-Const e_room2pipes106% = 25
-Const e_room2pit106% = 26, e_room2pit% = 27
+Const e_room2_2_hcz_106% = 25
+Const e_room2_4_hcz_106% = 26, e_room2_4_hcz% = 27
 Const e_room3pitduck% = 28, e_room3pit1048% = 29
 Const e_room2poffices2% = 30
 Const e_room2servers% = 31
@@ -241,17 +241,17 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room2mt)
 			;[End Block]
-		Case "room2pipes106"
+		Case "room2_2_hcz_106"
 			;[Block]
-			Return(e_room2pipes106)
+			Return(e_room2_2_hcz_106)
 			;[End Block]
-		Case "room2pit106"
+		Case "room2_4_hcz_106"
 			;[Block]
-			Return(e_room2pit106)
+			Return(e_room2_4_hcz_106)
 			;[End Block]
-		Case "room2pit"
+		Case "room2_4_hcz"
 			;[Block]
-			Return(e_room2pit)
+			Return(e_room2_4_hcz)
 			;[End Block]
 		Case "room3pitduck"
 			;[Block]
@@ -583,9 +583,9 @@ Function InitEvents()
 	CreateEvent("buttghost", "room2toilets", 0)
 	CreateEvent("toiletguard", "room2toilets", 1)
 	
-	CreateEvent("room2pipes106", "room2pipes", Rand(0, 3)) 
+	CreateEvent("room2_2_hcz_106", "room2_2_hcz", Rand(0, 3)) 
 	
-	CreateEvent("room2pit", "room2pit", 0, 0.4 + (0.4 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent("room2_4_hcz", "room2_4_hcz", 0, 0.4 + (0.4 * SelectedDifficulty\AggressiveNPCs))
 	
 	CreateEvent("room2testroom2", "room2testroom2", 0)
 	CreateEvent("room2testroom173", "room2testroom", 0, 1.0)	
@@ -634,19 +634,19 @@ Function InitEvents()
 	
 	CreateEvent("096spawn", "room4pit", 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent("096spawn", "room3pit", 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
-	CreateEvent("096spawn", "room2pipes", 0, 0.4 + (0.2 * SelectedDifficulty\AggressiveNPCs))
-	CreateEvent("096spawn", "room2pit", 0, 0.5 + (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent("096spawn", "room2_2_hcz", 0, 0.4 + (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent("096spawn", "room2_4_hcz", 0, 0.5 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent("096spawn", "room3tunnel", 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent("096spawn", "room4_2_hcz", 0, 0.7 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent("096spawn", "room2tunnel", 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent("096spawn", "room2tunnel2", 0, 0.4 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent("096spawn", "room3z2", 0, 0.7 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	
-	CreateEvent("room2pit", "room2_4", 0, 0.4 + (0.4 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent("room2_4_hcz", "room2_4", 0, 0.4 + (0.4 * SelectedDifficulty\AggressiveNPCs))
 	
 	CreateEvent("room2offices035", "room2offices", 0)
 	
-	CreateEvent("room2pit106", "room2pit", 0, 0.07 + (0.1 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent("room2_4_hcz_106", "room2_4_hcz", 0, 0.07 + (0.1 * SelectedDifficulty\AggressiveNPCs))
 	
 	CreateEvent("room4_ic", "room4_ic", 0)
 	
@@ -4742,7 +4742,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf 
 				;[End Block]
-			Case e_room2pipes106
+			Case e_room2_2_hcz_106
 				;[Block]
 				If (Not Curr106\Contained) Then 
 					If e\EventState = 0.0 Then
@@ -4799,7 +4799,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_room2pit106
+			Case e_room2_4_hcz_106
 				;[Block]
 				If (Not Curr106\Contained) And Curr106\State > 0.0 Then 
 					If e\EventState = 0.0 Then
@@ -4823,7 +4823,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_room2pit
+			Case e_room2_4_hcz
 				;[Block]
 				If Curr173\Idle = 0 Then 
 					If e\room\Dist < 8.0 And e\room\Dist > 0.0 Then			
