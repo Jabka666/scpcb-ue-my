@@ -296,7 +296,7 @@ Global t.Textures = New Textures
 Const MaxNPCModelIDAmount% = 34
 Const MaxDTextures% = 16
 Const MaxButtonModelIDAmount% = 5
-Const MaxDoorModelIDAmount% = 11
+Const MaxDoorModelIDAmount% = 13
 Const MaxLeverModelIDAmount% = 2
 Const MaxCamModelIDAmount% = 2
 Const MaxMonitorModelIDAmount% = 2
@@ -3397,7 +3397,7 @@ Function UpdateGUI()
 				If ClosestDoor\Code <> "" Then
 					SelectedDoor = ClosestDoor
 				ElseIf me\Playable Then
-					PlaySound2(ButtonSFX, Camera, ClosestButton)
+					If ClosestDoor\DoorType <> Office_Door Then PlaySound2(ButtonSFX, Camera, ClosestButton)
 					UseDoor(ClosestDoor, True)				
 				EndIf
 			EndIf
@@ -8394,6 +8394,10 @@ Function LoadEntities()
 	
 	o\DoorModelID[10] = LoadMesh_Strict("GFX\map\Props\Door02.x") ; ~ One-sided Door
 	
+	o\DoorModelID[11] = LoadMesh_Strict("GFX\map\Props\officedoor.b3d") ; ~ Office Door
+	
+	o\DoorModelID[12] = LoadMesh_Strict("GFX\map\Props\officeframe.b3d") ; ~ Ofifce Door Frame
+	
 	For i = 0 To MaxDoorModelIDAmount - 1
 		HideEntity(o\DoorModelID[i])
 	Next
@@ -8590,6 +8594,8 @@ Function InitNewGame()
 		EntityParent(d\OBJ, 0)
 		If d\DoorType = Default_Door Lor d\DoorType = One_Sided_Door Lor d\DoorType = SCP_914_Door Then
 			MoveEntity(d\OBJ, 0.0, 0.0, 8.0 * RoomScale)
+		ElseIf d\DoorType = OfficeDoor Then
+			MoveEntity(d\OBJ, 92.0 * RoomScale, 0.0, 0.0)
 		EndIf
 		If d\OBJ2 <> 0 Then EntityParent(d\OBJ2, 0)
 		If d\OBJ2 <> 0 And (d\DoorType = Default_Door Lor d\DoorType = One_Sided_Door) Then

@@ -2114,8 +2114,9 @@ Const Default_Door% = 0
 Const Big_Door% = 1
 Const Heavy_Door% = 2
 Const Elevator_Door% = 3
-Const One_Sided_Door% = 4
-Const SCP_914_Door% = 5
+Const Office_Door% = 4
+Const One_Sided_Door% = 5
+Const SCP_914_Door% = 6
 ;[End Block]
 
 Function CreateDoor.Doors(x#, y#, z#, Angle#, room.Rooms, Open% = False, DoorType% = Default_Door, Keycard% = 0, Code$ = "", CheckIfZeroCard% = False)
@@ -2155,6 +2156,11 @@ Function CreateDoor.Doors(x#, y#, z#, Angle#, room.Rooms, Open% = False, DoorTyp
 		ScaleEntity(d\OBJ2, 203.0 * RoomScale / MeshWidth(d\OBJ2), 313.0 * RoomScale / MeshHeight(d\OBJ2), 15.0 * RoomScale / MeshDepth(d\OBJ2))
 		
 		d\FrameOBJ = CopyEntity(o\DoorModelID[1])
+	ElseIf DoorType = Office_Door
+		d\OBJ = CopyEntity(o\DoorModelID[11])
+		ScaleEntity(d\OBJ, RoomScale, RoomScale, RoomScale)
+		
+		d\FrameOBJ = CopyEntity(o\DoorModelID[12])
 	Else
 		d\OBJ = CopyEntity(o\DoorModelID[0])
 		ScaleEntity(d\OBJ, 203.0 * RoomScale / MeshWidth(d\OBJ), 313.0 * RoomScale / MeshHeight(d\OBJ), 15.0 * RoomScale / MeshDepth(d\OBJ))
@@ -2185,12 +2191,18 @@ Function CreateDoor.Doors(x#, y#, z#, Angle#, room.Rooms, Open% = False, DoorTyp
 	EndIf
 	
 	For i = 0 To 1
-		If Code <> "" Then 
-			d\Buttons[i] = CreateButton(2, x + ((DoorType <> Big_Door) * (0.6 + (i * (-1.2)))) + ((DoorType = Big_Door) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((DoorType <> Big_Door) * ((-0.1) + (i * 0.2))) + ((DoorType = Big_Door) * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((DoorType <> Big_Door) * (i * 180.0)) + ((DoorType = Big_Door) * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ, d\Locked)
+		If DoorType = Office_Door
+			d\Buttons[i] = CreatePivot()
+			PositionEntity(d\Buttons[i], x - 0.25, y + 0.6, z + 0.1 + (i * (-0.2)))
+			EntityRadius(d\Buttons[i], 0.1)
+			EntityPickMode(d\Buttons[i], 1)
+			EntityParent(d\Buttons[i], d\FrameOBJ)
 		ElseIf DoorType = Elevator_Door
 			d\Buttons[i] = CreateButton(i * 4, x + ((DoorType <> Big_Door) * (0.6 + (i * (-1.2)))) + ((DoorType = Big_Door) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((DoorType <> Big_Door) * ((-0.1) + (i * 0.2))) + ((DoorType = Big_Door) * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((DoorType <> Big_Door) * (i * 180.0)) + ((DoorType = Big_Door) * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ, d\Locked)
 		Else
-			If Keycard > 0 Then
+			If Code <> "" Then 
+				d\Buttons[i] = CreateButton(2, x + ((DoorType <> Big_Door) * (0.6 + (i * (-1.2)))) + ((DoorType = Big_Door) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((DoorType <> Big_Door) * ((-0.1) + (i * 0.2))) + ((DoorType = Big_Door) * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((DoorType <> Big_Door) * (i * 180.0)) + ((DoorType = Big_Door) * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ, d\Locked)
+			ElseIf Keycard > 0 Then
 				d\Buttons[i] = CreateButton(1, x + ((DoorType <> Big_Door) * (0.6 + (i * (-1.2)))) + ((DoorType = Big_Door) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((DoorType <> Big_Door) * ((-0.1) + (i * 0.2))) + ((DoorType = Big_Door) * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((DoorType <> Big_Door) * (i * 180.0)) + ((DoorType = Big_Door) * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ, d\Locked)
 			ElseIf Keycard < 0
 				d\Buttons[i] = CreateButton(3, x + ((DoorType <> Big_Door) * (0.6 + (i * (-1.2)))) + ((DoorType = Big_Door) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((DoorType <> Big_Door) * ((-0.1) + (i * 0.2))) + ((DoorType = Big_Door) * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((DoorType <> Big_Door) * (i * 180.0)) + ((DoorType = Big_Door) * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ, d\Locked)
@@ -2267,7 +2279,7 @@ Function UpdateDoors()
 	ClosestDoor = Null
 	
 	For d.Doors = Each Doors
-		If d\Dist < HideDistance * 2.0 Lor d\IsElevatorDoor > 0 Then ; ~ Make elevator doors update everytime because if not, this can cause a bug where the elevators suddenly won't work, most noticeable in room2tunnel -- ENDSHN
+		If d\Dist < HideDistance * 2.0 Lor d\IsElevatorDoor > 0 Then ; ~ Make elevator doors update everytime because if not, this can cause a bug where the elevators suddenly won't work, most noticeable in room2mt -- ENDSHN
 			If (d\OpenState >= 180.0 Lor d\OpenState =< 0.0) And (Not GrabbedEntity) Then
 				For i = 0 To 1
 					If d\Buttons[i] <> 0 Then
@@ -2322,6 +2334,17 @@ Function UpdateDoors()
 							d\OpenState = Min(180.0, d\OpenState + (fps\Factor[0] * 2.0 * (d\FastOpen + 1)))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fps\Factor[0] / 162.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState)* (d\FastOpen * 2 + 1) * fps\Factor[0] / 162.0, 0.0, 0.0)
+							;[End Block]
+						Case Office_Door
+							;[Block]
+							d\OpenState = Min(180.0, d\OpenState + (fps\Factor[0] * 2.0))
+							RotateEntity(d\OBJ, 0.0, PlayerRoom\Angle + d\Angle + (d\OpenState / 2.5), 0.0)	
+							For i = 0 To 1
+								If d\Buttons[i] <> 0 Then
+									RotateEntity(d\Buttons[i], 0.0, PlayerRoom\Angle + d\Angle + (d\OpenState / 2.5), 0.0)
+									MoveEntity(d\Buttons[i], ((i = 0) * Sin(d\OpenState) * fps\Factor[0] / (-500.0)) + ((i = 1) * Sin(d\OpenState) * fps\Factor[0] / 500.0), 0.0, Sin(d\OpenState) * (-fps\Factor[0]) / 77.0)
+								EndIf
+							Next
 							;[End Block]
 						Case One_Sided_Door
 							;[Block]
@@ -2404,6 +2427,17 @@ Function UpdateDoors()
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fps\Factor[0]) * (d\FastOpen + 1) / 162.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fps\Factor[0]) / 162.0, 0.0, 0.0)
 							;[End Block]
+						Case Office_Door
+							;[Block]
+							d\OpenState = Max(0.0, d\OpenState - (fps\Factor[0] * 2.0))
+							RotateEntity(d\OBJ, 0.0, PlayerRoom\Angle + d\Angle + (d\OpenState / 2.5), 0.0)
+							For i = 0 To 1
+								If d\Buttons[i] <> 0 Then
+									RotateEntity(d\Buttons[i], 0.0, PlayerRoom\Angle + d\Angle + (d\OpenState / 2.5), 0.0)
+									MoveEntity(d\Buttons[i], ((i = 0) * Sin(d\OpenState) * fps\Factor[0] / 500.0) + ((i = 1) * Sin(d\OpenState) * fps\Factor[0] / (-500.0)), 0.0, Sin(d\OpenState) * fps\Factor[0] / 77.0)
+								EndIf
+							Next
+							;[End Block]
 						Case One_Sided_Door
 							;[Block]
 							d\OpenState = Max(0.0, d\OpenState - (fps\Factor[0] * 2.0 * (d\FastOpen + 1)))
@@ -2420,15 +2454,15 @@ Function UpdateDoors()
 					
 					If d\Angle = 0.0 Lor d\Angle = 180.0 Then
 						If Abs(EntityZ(d\FrameOBJ, True) - EntityZ(me\Collider)) < 0.15 Then
-							If Abs(EntityX(d\FrameOBJ, True) - EntityX(me\Collider)) < 0.7 * (d\DoorType * 2 + 1) Then
-								z = CurveValue(EntityZ(d\FrameOBJ, True) + 0.15 * Sgn(EntityZ(me\Collider) - EntityZ(d\FrameOBJ, True)), EntityZ(me\Collider), 5)
+							If Abs(EntityX(d\FrameOBJ, True) - EntityX(me\Collider)) < 0.5 * ((d\DoorType = Big_Door) * 3) Then
+								z = CurveValue(EntityZ(d\FrameOBJ, True) + 0.15 * Sgn(EntityZ(me\Collider) - EntityZ(d\FrameOBJ, True)), EntityZ(me\Collider), 5.0)
 								PositionEntity(me\Collider, EntityX(me\Collider), EntityY(me\Collider), z)
 							EndIf
 						EndIf
 					Else
 						If Abs(EntityX(d\FrameOBJ, True) - EntityX(me\Collider)) < 0.15 Then	
-							If Abs(EntityZ(d\FrameOBJ, True) - EntityZ(me\Collider)) < 0.7 * (d\DoorType * 2 + 1) Then
-								x = CurveValue(EntityX(d\FrameOBJ, True) + 0.15 * Sgn(EntityX(me\Collider) - EntityX(d\FrameOBJ, True)), EntityX(me\Collider), 5)
+							If Abs(EntityZ(d\FrameOBJ, True) - EntityZ(me\Collider)) < 0.5 * ((d\DoorType = Big_Door) * 3) Then
+								x = CurveValue(EntityX(d\FrameOBJ, True) + 0.15 * Sgn(EntityX(me\Collider) - EntityX(d\FrameOBJ, True)), EntityX(me\Collider), 5.0)
 								PositionEntity(me\Collider, x, EntityY(me\Collider), EntityZ(me\Collider))
 							EndIf
 						EndIf
@@ -2438,6 +2472,8 @@ Function UpdateDoors()
 					PositionEntity(d\OBJ, EntityX(d\FrameOBJ, True), EntityY(d\FrameOBJ, True), EntityZ(d\FrameOBJ, True))
 					If d\DoorType = Default_Door Lor d\DoorType = One_Sided_Door Lor d\DoorType = SCP_914_Door Then
 						MoveEntity(d\OBJ, 0.0, 0.0, 8.0 * RoomScale)
+					ElseIf d\DoorType = Office_Door
+						MoveEntity(d\OBJ, 92.0 * RoomScale, 0.0, 0.0)
 					EndIf
 					If d\OBJ2 <> 0 Then
 						PositionEntity(d\OBJ2, EntityX(d\FrameOBJ, True), EntityY(d\FrameOBJ, True), EntityZ(d\FrameOBJ, True))
@@ -7246,8 +7282,10 @@ Function FillRoom(r.Rooms)
 			EntityType(r\Levers[1], HIT_MAP)
 			EntityAlpha(r\Levers[1], 0.0)
 			;[End Block]
-		Case "room4info"
+		Case "room4_ic"
 			;[Block]
+			d.Doors = CreateDoor(r\x + 704.0 * RoomScale, r\y, r\z - 336.0 * RoomScale, 0.0, r, False, Office_Door)
+			
 			r\Objects[0] = CopyEntity(o\MonitorModelID[1], r\OBJ)
 			PositionEntity(r\Objects[0], r\x - 700.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 290.0 * RoomScale, True)
 			ScaleEntity(r\Objects[0], 2.0, 2.0, 2.0)
@@ -7267,6 +7305,8 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "room2offices5"
 			;[Block]
+			d.Doors = CreateDoor(r\x + 240.0 * RoomScale, r\y, r\z, 90.0, r, False, Office_Door)
+			
 			r\Objects[0] = LoadMesh_Strict("GFX\map\room2offices5_hb.b3d", r\OBJ)
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
@@ -8281,7 +8321,7 @@ Function CreateMap()
 	
 	MapRoom(ROOM3, Floor(Rnd(0.2, 0.8) * Float(Room3Amount[0]))) = "room3storage"
 	
-	MapRoom(ROOM4, Floor(0.3 * Float(Room4Amount[0]))) = "room4info"
+	MapRoom(ROOM4, Floor(0.3 * Float(Room4Amount[0]))) = "room4_ic"
 	
 	; ~ [HEAVY CONTAINMENT ZONE]
 	

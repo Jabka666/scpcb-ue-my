@@ -71,7 +71,7 @@ Const e_room2medibay% = 66, e_room2medibay2% = 67
 Const e_dimension1499% = 68
 Const e_room2shaft% = 69
 Const e_room1lifts% = 70
-Const e_room4info% = 71
+Const e_room4_ic% = 71
 Const e_room2bio% = 72
 Const e_room409% = 73
 Const e_room005% = 74
@@ -425,9 +425,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room1lifts)
 			;[End Block]
-		Case "room4info"
+		Case "room4_ic"
 			;[Block]
-			Return(e_room4info)
+			Return(e_room4_ic)
 			;[End Block]
 		Case "room2bio"
 			;[Block]
@@ -648,7 +648,7 @@ Function InitEvents()
 	
 	CreateEvent("room2pit106", "room2pit", 0, 0.07 + (0.1 * SelectedDifficulty\AggressiveNPCs))
 	
-	CreateEvent("room4info", "room4info", 0)
+	CreateEvent("room4_ic", "room4_ic", 0)
 	
 	CreateEvent("room2bio", "room2bio", 0)
 	
@@ -5733,7 +5733,7 @@ Function UpdateEvents()
 										ElseIf e\EventState3 > 70.0 * 31.0 And e\EventState3 - fps\Factor[0] =< 70.0 * 31.0
 											Tex = LoadTexture_Strict("GFX\map\textures\scp-012_1.png")
 											TextureBlend(Tex, 5)
-											EntityTexture(e\room\Objects[4], Tex, 0, 1)
+											EntityTexture(e\room\Objects[4], Tex)
 											DeleteSingleTextureEntryFromCache(Tex)
 											
 											CreateMsg("You tear open your left wrist and start writing on the composition with your blood.", 6.0)
@@ -5746,7 +5746,7 @@ Function UpdateEvents()
 										ElseIf e\EventState3 > 70.0 * 63.0 And e\EventState3 - fps\Factor[0] =< 70.0 * 63.0
 											Tex = LoadTexture_Strict("GFX\map\textures\scp-012_2.png")
 											TextureBlend(Tex, 5)
-											EntityTexture(e\room\Objects[4], Tex, 0, 1)	
+											EntityTexture(e\room\Objects[4], Tex)	
 											DeleteSingleTextureEntryFromCache(Tex)
 											
 											InjurePlayer(0.5)
@@ -5754,7 +5754,7 @@ Function UpdateEvents()
 										ElseIf e\EventState3 > 70.0 * 74.0 And e\EventState3 - fps\Factor[0] =< 70.0 * 74.0
 											Tex = LoadTexture_Strict("GFX\map\textures\scp-012_3.png")
 											TextureBlend(Tex, 5)
-											EntityTexture(e\room\Objects[4], Tex, 0, 1)
+											EntityTexture(e\room\Objects[4], Tex)
 											DeleteSingleTextureEntryFromCache(Tex)
 											
 											CreateMsg("You rip the wound wide open. Grabbing scoops of blood pouring out.", 6.0)
@@ -7215,7 +7215,7 @@ Function UpdateEvents()
 								e\Sound2 = LoadSound_Strict("SFX\Door\1123DoorOpen.ogg")
 								e\SoundCHN2 = PlaySound_Strict(e\Sound2)
 							EndIf
-							RotateEntity(e\room\Objects[11], 0.0, CurveAngle(10.0, EntityYaw(e\room\Objects[11], 0), 40.0), 0.0)
+							RotateEntity(e\room\Objects[11], 0.0, CurveAngle(10.0, EntityYaw(e\room\Objects[11]), 40.0), 0.0)
 							If e\EventState2 >= 1040.0 And e\EventState2 - fps\Factor[0] < 1040.0 Then 
 								PlaySound2(LoadTempSound("SFX\SCP\1123\Officer1.ogg"), Camera, e\room\NPC[0]\OBJ)
 							ElseIf e\EventState2 >= 1400.0 And e\EventState2 - fps\Factor[0] < 1400.0 Then 
@@ -9139,7 +9139,7 @@ Function UpdateEvents()
 					Next
 				EndIf
 				;[End Block]
-			Case e_room4info
+			Case e_room4_ic
 				;[Block]
 				For e2.Events = Each Events
 					If e2\EventID = e_room2sl Then

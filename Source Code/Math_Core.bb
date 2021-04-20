@@ -19,13 +19,13 @@ Function WrapAngle#(Angle#)
 	EndIf
 End Function
 
-Function CurveValue#(Number#, Old#, Smooth#)
+Function CurveValue#(Value#, Old#, Smooth#)
 	If fps\Factor[0] = 0.0 Then Return(Old)
 	
-	If Number < Old Then
-		Return(Max(Old + (Number - Old) * (1.0 / Smooth * fps\Factor[0]), Number))
+	If Value < Old Then
+		Return(Max(Old + (Value - Old) * (1.0 / Smooth * fps\Factor[0]), Value))
 	Else
-		Return(Min(Old + (Number - Old) * (1.0 / Smooth * fps\Factor[0]), Number))
+		Return(Min(Old + (Value - Old) * (1.0 / Smooth * fps\Factor[0]), Value))
 	EndIf
 End Function
 
