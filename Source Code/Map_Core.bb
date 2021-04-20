@@ -3927,7 +3927,7 @@ Function FillRoom(r.Rooms)
 			RotateEntity(d\Buttons[1], 0.0, 90.0, 0.0, True)
 			
 			For r2.Rooms = Each Rooms
-				If r2\RoomTemplate\Name = "gateaentrance" Then
+				If r2\RoomTemplate\Name = "gate_a_entrance" Then
 					; ~ Elevator
 					r\RoomDoors.Doors[1] = CreateDoor(r\x + 1544.0 * RoomScale, r\y, r\z - 64.0 * RoomScale, -90.0, r, False, Elevator_Door)
 					r\RoomDoors[1]\AutoClose = False
@@ -3994,7 +3994,7 @@ Function FillRoom(r.Rooms)
 			w\connected[0] = w2 : w\Dist[0] = EntityDistance(w\OBJ, w2\OBJ)
 			w2\connected[0] = w : w2\Dist[0] = w\Dist[0]
 			;[End Block]
-		Case "gateaentrance"
+		Case "gate_a_entrance"
 			;[Block]
 			; ~ Elevator
 			r\RoomDoors.Doors[0] = CreateDoor(r\x + 736.0 * RoomScale, r\y, r\z + 512.0 * RoomScale, -90.0, r, True, Elevator_Door)
@@ -4014,7 +4014,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\Objects[0], r\x + 1048.0 * RoomScale, r\y, r\z + 512.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
 			;[End Block]
-		Case "gatebentrance"
+		Case "gate_b_entrance"
 			;[Block]
 			r\RoomDoors.Doors[0] = CreateDoor(r\x + 720.0 * RoomScale, r\y, r\z + 1432.0 * RoomScale, 0.0, r, True, Elevator_Door)
 			r\RoomDoors[0]\AutoClose = False
@@ -4035,7 +4035,7 @@ Function FillRoom(r.Rooms)
 		Case "gateb"
 			;[Block]
 			For r2.Rooms = Each Rooms
-				If r2\RoomTemplate\Name = "gatebentrance" Then
+				If r2\RoomTemplate\Name = "gate_b_entrance" Then
 					; ~ Elevator
 					r\RoomDoors.Doors[1] = CreateDoor(r\x - 5424.0 * RoomScale, r\y, r\z - 1380.0 * RoomScale, 0.0, r, False, Elevator_Door)
 					r\RoomDoors[1]\AutoClose = False
@@ -8353,8 +8353,8 @@ Function CreateMap()
 	
 	; ~ [ENTRANCE ZONE]
 	
-	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] - 3) = "gatebentrance"
-	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] - 2) = "gateaentrance"
+	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] - 3) = "gate_b_entrance"
+	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] - 2) = "gate_a_entrance"
 	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] - 1) = "room_o5"
 	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1]) = "room1lifts"
 	

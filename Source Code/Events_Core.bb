@@ -75,9 +75,9 @@ Const e_room4_ic% = 71
 Const e_room2bio% = 72
 Const e_room409% = 73
 Const e_room005% = 74
-Const e_gatebentrance% = 75
+Const e_gate_b_entrance% = 75
 Const e_gateb% = 76
-Const e_gateaentrance% = 77
+Const e_gate_a_entrance% = 77
 Const e_gatea% = 78
 ;[End Block]
 
@@ -441,17 +441,17 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room005)
 			;[End Block]
-		Case "gatebentrance"
+		Case "gate_b_entrance"
 			;[Block]
-			Return(e_gatebentrance)
+			Return(e_gate_b_entrance)
 			;[End Block]
 		Case "gateb"
 			;[Block]
 			Return(e_gateb)
 			;[End Block]
-		Case "gateaentrance"
+		Case "gate_a_entrance"
 			;[Block]
-			Return(e_gateaentrance)
+			Return(e_gate_a_entrance)
 			;[End Block]
 		Case "gatea"
 			;[Block]
@@ -594,9 +594,9 @@ Function InitEvents()
 	
 	CreateEvent("room2c_ec", "room2c_ec", 0)
 	
-	CreateEvent("gateaentrance", "gateaentrance", 0)
+	CreateEvent("gate_a_entrance", "gate_a_entrance", 0)
 	CreateEvent("gatea", "gatea", 0)
-	CreateEvent("gatebentrance", "gatebentrance", 0)
+	CreateEvent("gate_b_entrance", "gate_b_entrance", 0)
 	CreateEvent("gateb", "gateb", 0)
 	
 	CreateEvent("room205", "room205", 0)
@@ -2614,7 +2614,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_gatebentrance
+			Case e_gate_b_entrance
 				;[Block]
 				If PlayerRoom = e\room Then 
 					If (Not RemoteDoorOn) Then
@@ -2651,7 +2651,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_gateaentrance
+			Case e_gate_a_entrance
 				;[Block]
 				If PlayerRoom = e\room Then 
 					If (Not RemoteDoorOn) Then
@@ -6580,7 +6580,7 @@ Function UpdateEvents()
 						e\EventState2 = 2.0
 						
 						For e2.Events = Each Events
-							If e2\EventID = e_gatebentrance Lor e2\EventID = e_gateaentrance Then
+							If e2\EventID = e_gate_b_entrance Lor e2\EventID = e_gate_a_entrance Then
 								e2\EventState3 = 1.0
 							EndIf
 						Next

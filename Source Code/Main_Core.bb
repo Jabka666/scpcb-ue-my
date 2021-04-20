@@ -1439,7 +1439,7 @@ Function UpdateConsole()
 						Case "a"
 							;[Block]
 							For e.Events = Each Events
-								If e\EventID = e_gateaentrance Then
+								If e\EventID = e_gate_a_entrance Then
 									e\EventState3 = 1.0
 									e\room\RoomDoors[1]\Open = True
 									Exit
@@ -1450,7 +1450,7 @@ Function UpdateConsole()
 						Case "b"
 							;[Block]
 							For e.Events = Each Events
-								If e\EventID = e_gatebentrance Then
+								If e\EventID = e_gate_b_entrance Then
 									e\EventState3 = 1.0
 									e\room\RoomDoors[1]\Open = True
 									Exit
@@ -1461,7 +1461,7 @@ Function UpdateConsole()
 						Default
 							;[Block]
 							For e.Events = Each Events
-								If e\EventID = e_gatebentrance Lor e\EventID = e_gateaentrance Then
+								If e\EventID = e_gate_b_entrance Lor e\EventID = e_gate_a_entrance Then
 									e\EventState3 = 1.0
 									e\room\RoomDoors[1]\Open = True
 								EndIf
@@ -9380,7 +9380,7 @@ Function Use427()
 End Function
 
 Function UpdateMTF()
-	If PlayerRoom\RoomTemplate\Name = "gateaentrance" Then Return
+	If PlayerRoom\RoomTemplate\Name = "gate_a_entrance" Then Return
 	
 	Local r.Rooms, n.NPCs
 	Local Dist#, i%
@@ -9390,7 +9390,7 @@ Function UpdateMTF()
 			Local entrance.Rooms = Null
 			
 			For r.Rooms = Each Rooms
-				If r\RoomTemplate\Name = "gateaentrance" Then 
+				If r\RoomTemplate\Name = "gate_a_entrance" Then 
 					entrance = r
 					Exit
 				EndIf
