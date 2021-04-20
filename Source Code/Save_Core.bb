@@ -2088,14 +2088,14 @@ Global SaveMSG$
 Global CurrSave$
 Global SaveGameAmount%
 
-Dim SaveGames$(SaveGameAmount + 1) 
-Dim SaveGameTime$(SaveGameAmount + 1)
-Dim SaveGameDate$(SaveGameAmount + 1)
-Dim SaveGameVersion$(SaveGameAmount + 1)
+Dim SaveGames$(SaveGameAmount) 
+Dim SaveGameTime$(SaveGameAmount)
+Dim SaveGameDate$(SaveGameAmount)
+Dim SaveGameVersion$(SaveGameAmount)
 
 Global SavedMapsAmount% = 0
-Dim SavedMaps$(SavedMapsAmount + 1)
-Dim SavedMapsAuthor$(SavedMapsAmount + 1)
+Dim SavedMaps$(SavedMapsAmount)
+Dim SavedMapsAuthor$(SavedMapsAmount)
 
 Function LoadSavedGames()
 	CatchErrors("Uncaught (LoadSaveGames)")
@@ -2119,7 +2119,7 @@ Function LoadSavedGames()
 	Forever 
 	CloseDir(myDir)
 	
-	Dim SaveGames$(SaveGameAmount + 1) 
+	Dim SaveGames$(SaveGameAmount) 
 	
 	myDir = ReadDir(SavePath) 
 	i = 0
@@ -2137,9 +2137,9 @@ Function LoadSavedGames()
 	Forever 
 	CloseDir(myDir)
 	
-	Dim SaveGameTime$(SaveGameAmount + 1)
-	Dim SaveGameDate$(SaveGameAmount + 1)
-	Dim SaveGameVersion$(SaveGameAmount + 1)
+	Dim SaveGameTime$(SaveGameAmount)
+	Dim SaveGameDate$(SaveGameAmount)
+	Dim SaveGameVersion$(SaveGameAmount)
 	For i = 1 To SaveGameAmount
 		Local f% = ReadFile(SavePath + SaveGames(i - 1) + "\save.cb")
 		
@@ -2190,8 +2190,8 @@ Function LoadSavedMaps()
 	Forever 
 	CloseDir(Dir)
 	
-	Dim SavedMaps$(SavedMapsAmount + 1)
-	Dim SavedMapsAuthor$(SavedMapsAmount + 1)
+	Dim SavedMaps$(SavedMapsAmount)
+	Dim SavedMapsAuthor$(SavedMapsAmount)
 	
 	i = 0
 	Dir = ReadDir("Map Creator\Maps") 

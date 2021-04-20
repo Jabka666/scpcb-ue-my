@@ -7904,7 +7904,7 @@ Function LoadEntities()
 	DeInitMainMenuAssets()
 	
 	MaxItemAmount = SelectedDifficulty\InventorySlots
-	Dim Inventory.Items(MaxItemAmount)
+	Dim Inventory.Items(MaxItemAmount - 1)
 	
 	SoundEmitter = CreatePivot()
 	

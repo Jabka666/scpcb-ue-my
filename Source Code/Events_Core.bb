@@ -469,8 +469,8 @@ Function InitEvents()
 	; ~ There's a 7% chance that SCP-106 appears in the rooms named "room2tunnel"
 	CreateEvent("room2tunnel106", "room2tunnel", 0, 0.07 + (0.1 * SelectedDifficulty\AggressiveNPCs))
 	
-	; ~ The chance for SCP-173 appearing in the first room2clockroom is about 66%
-	; ~ There's a 30% chance that it appears in the later room2clockrooms
+	; ~ The chance for SCP-173 appearing in the first room2c_lockroom_lcz is about 66%
+	; ~ There's a 30% chance that it appears in the later room2c_lockroom_lcz
 	If Rand(3) < 3 Then CreateEvent("room2c_lockroom_173", "room2c_lockroom_lcz", 0)
 	CreateEvent("room2c_lockroom_173", "room2c_lockroom_lcz", 0, 0.3 + (0.5 * SelectedDifficulty\AggressiveNPCs))
 	
@@ -2695,7 +2695,7 @@ Function UpdateEvents()
 				;[End Block]
 			Case e_room2c_lockroom_173
 				;[Block]
-				If e\room\Dist < 6.0  And e\room\Dist > 0.0 Then
+				If e\room\Dist < 6.0 And e\room\Dist > 0.0 Then
 					If Curr173\Idle > 1 Then
 						RemoveEvent(e)
 					Else

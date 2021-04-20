@@ -613,7 +613,7 @@ MusicCHN = StreamSound_Strict("SFX\Music\" + Music[2] + ".ogg", opt\MusicVolume,
 Global NowPlaying% = 2, ShouldPlay% = 11
 Global CurrMusic% = True
 
-Dim OpenDoorSFX%(4, 3), CloseDoorSFX%(4, 3)
+Dim OpenDoorSFX%(4, 2), CloseDoorSFX%(4, 2)
 Global BigDoorErrorSFX%[3]
 
 Global KeyCardSFX1% 
@@ -665,7 +665,7 @@ Global KnobSFX%[2]
 Global LeverSFX%, LightSFX% 
 Global ButtGhostSFX% 
 
-Dim RadioSFX%(5, 10) 
+Dim RadioSFX%(2, 8) 
 
 Global RadioSquelch% 
 Global RadioStatic% 
@@ -700,7 +700,7 @@ AmbientSFXAmount[3] = 15
 AmbientSFXAmount[4] = 5
 AmbientSFXAmount[5] = 10
 
-Dim AmbientSFX%(6, 15)
+Dim AmbientSFX%(5, 15)
 
 Global OldManSFX%[9]
 
@@ -720,7 +720,7 @@ Global HeartBeatSFX%
 
 Global VomitSFX%
 
-Dim BreathSFX%(2, 5)
+Dim BreathSFX%(1, 4)
 Global BreathCHN%
 
 Global BreathGasRelaxedSFX%
@@ -739,7 +739,7 @@ Global MachineSFX%
 Global ApacheSFX%
 
 Global CurrStepSFX%
-Dim StepSFX%(6, 2, 8) ; ~ (Normal / Metal, Walk / Run, ID)
+Dim StepSFX%(5, 1, 7) ; ~ (Normal / Metal, Walk / Run, ID)
 
 Global ExplosionSFX%
 

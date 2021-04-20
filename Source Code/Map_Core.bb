@@ -3741,7 +3741,7 @@ Function FillRoom(r.Rooms)
 	Local d.Doors, d2.Doors, sc.SecurityCams, de.Decals, r2.Rooms, sc2.SecurityCams, tw.TempWayPoints, fr.Forest
 	Local it.Items, it2.Items, em.Emitters, w.WayPoints, w2.WayPoints, lt.LightTemplates, ts.TempScreens
 	Local xTemp#, yTemp#, zTemp#, xTemp2%, yTemp2%, zTemp2%
-	Local t1%, Tex%
+	Local t1%, Tex%, Screen%, Scale#
 	Local i%, k%, Temp%, Temp3%, Angle#
 	Local TempStr$, TempStr2$, TempStr3$
 	
@@ -3835,6 +3835,37 @@ Function FillRoom(r.Rooms)
 			em\RandAngle = 20.0 : em\Speed = 0.05 : em\SizeChange = 0.007 : em\AlphaChange = -0.006 : em\Gravity = -0.24
 			TurnEntity(em\OBJ, 90.0, 0.0, 0.0)
 			EntityParent(em\OBJ, r\OBJ)
+			;[End Block]
+		Case "room2c_lockroom_2_lcz"
+			;[Block]
+			d.Doors = CreateDoor(r\x - 736.0 * RoomScale, r\y, r\z - 104.0 * RoomScale, 0.0, r)
+			d\Timer = 70.0 * 5.0 : d\AutoClose = False : d\Locked = 1
+			PositionEntity(d\Buttons[0], r\x - 288.0 * RoomScale, EntityY(d\Buttons[0], True), r\z - 634.0 * RoomScale, True)
+			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
+			
+			d2.Doors = CreateDoor(r\x + 104.0 * RoomScale, r\y, r\z + 736.0 * RoomScale, 270.0, r)
+			d2\Timer = 70.0 * 5.0 : d2\AutoClose = False : d2\Locked = 1
+			PositionEntity(d2\Buttons[0], r\x + 634.0 * RoomScale, EntityY(d2\Buttons[0], True), r\z + 288.0 * RoomScale, True)
+			RotateEntity(d2\Buttons[0], 0.0, 90.0, 0.0, True)
+			FreeEntity(d2\Buttons[1]) : d2\Buttons[1] = 0
+			
+			d\LinkedDoor = d2
+			d2\LinkedDoor = d
+			
+			Scale = RoomScale * 4.5 * 0.4
+			
+			r\Objects[0] = CopyEntity(o\MonitorModelID[0])
+			ScaleEntity(r\Objects[0], Scale, Scale, Scale)
+			PositionEntity(r\Objects[0], r\x + 668.0 * RoomScale, r\y + 1.1, r\z - 96.0 * RoomScale)
+			RotateEntity(r\Objects[0], 0.0, 90.0, 0.0)
+			
+			r\Objects[1] = CopyEntity(o\MonitorModelID[0])
+			ScaleEntity(r\Objects[1], Scale, Scale, Scale)
+			PositionEntity(r\Objects[1], r\x + 96.0 * RoomScale, r\y + 1.1, r\z - 668.0 * RoomScale)
+			
+			For i = 0 To 1
+				EntityParent(r\Objects[i], r\OBJ)
+			Next
 			;[End Block]
 		Case "room2c_lockroom_ez"
 			;[Block]
@@ -7072,8 +7103,7 @@ Function FillRoom(r.Rooms)
 			d\AutoClose = False : d\Locked = 1 : d\MTFClose = False
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			
-			Local Scale# = RoomScale * 4.5 * 0.4
-			Local Screen%
+			Scale = RoomScale * 4.5 * 0.4
 			
 			r\Textures[0] = LoadAnimTexture_Strict("GFX\SL_monitors_checkpoint.png", 1, 512, 512, 0, 4, DeleteAllTextures)
 			r\Textures[1] = LoadAnimTexture_Strict("GFX\Sl_monitors.png", 1, 256, 256, 0, 10, DeleteAllTextures)
@@ -7225,37 +7255,6 @@ Function FillRoom(r.Rooms)
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x + 640.0 * RoomScale, r\y + 8.0 * RoomScale, r\z - 896.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
-			;[End Block]
-		Case "room2c_lockroom_2_lcz"
-			;[Block]
-			d.Doors = CreateDoor(r\x - 736.0 * RoomScale, r\y, r\z - 104.0 * RoomScale, 0.0, r)
-			d\Timer = 70.0 * 5.0 : d\AutoClose = False : d\Locked = 1
-			PositionEntity(d\Buttons[0], r\x - 288.0 * RoomScale, EntityY(d\Buttons[0], True), r\z - 634.0 * RoomScale, True)
-			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
-			
-			d2.Doors = CreateDoor(r\x + 104.0 * RoomScale, r\y, r\z + 736.0 * RoomScale, 270.0, r)
-			d2\Timer = 70.0 * 5.0 : d2\AutoClose = False : d2\Locked = 1
-			PositionEntity(d2\Buttons[0], r\x + 634.0 * RoomScale, EntityY(d2\Buttons[0], True), r\z + 288.0 * RoomScale, True)
-			RotateEntity(d2\Buttons[0], 0.0, 90.0, 0.0, True)
-			FreeEntity(d2\Buttons[1]) : d2\Buttons[1] = 0
-			
-			d\LinkedDoor = d2
-			d2\LinkedDoor = d
-			
-			Scale = RoomScale * 4.5 * 0.4
-			
-			r\Objects[0] = CopyEntity(o\MonitorModelID[0])
-			ScaleEntity(r\Objects[0], Scale, Scale, Scale)
-			PositionEntity(r\Objects[0], r\x + 668.0 * RoomScale, r\y + 1.1, r\z - 96.0 * RoomScale)
-			RotateEntity(r\Objects[0], 0.0, 90.0, 0.0)
-			
-			r\Objects[1] = CopyEntity(o\MonitorModelID[0])
-			ScaleEntity(r\Objects[1], Scale, Scale, Scale)
-			PositionEntity(r\Objects[1], r\x + 96.0 * RoomScale, r\y + 1.1, r\z - 668.0 * RoomScale)
-			
-			For i = 0 To 1
-				EntityParent(r\Objects[i], r\OBJ)
-			Next
 			;[End Block]
 		Case "room2cpit"
 			;[Block]
@@ -7768,7 +7767,7 @@ Function IsRoomAdjacent(this.Rooms, that.Rooms)
 	Return(False)
 End Function
 
-Dim MapRoom$(ROOM4 + 1, 0)
+Dim MapRoom$(ROOM4, 0)
 
 Function SetRoom%(RoomName$, RoomType%, RoomPosition%, MinPos%, MaxPos%) ; ~ Place a room without overwriting others
 	Local Looped%, CanPlace%
@@ -8284,7 +8283,7 @@ Function CreateMap()
 	MaxRooms = Max(MaxRooms, Room3Amount[0] + Room3Amount[1] + Room3Amount[2] + 1)
 	MaxRooms = Max(MaxRooms, Room4Amount[0] + Room4Amount[1] + Room4Amount[2] + 1)
 	
-	Dim MapRoom$(ROOM4 + 1, MaxRooms)
+	Dim MapRoom$(ROOM4, MaxRooms)
 	
 	; ~ [LIGHT CONTAINMENT ZONE]
 	
