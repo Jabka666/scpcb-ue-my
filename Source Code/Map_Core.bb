@@ -7323,7 +7323,7 @@ Function FillRoom(r.Rooms)
 				EntityParent(it\Collider, r\OBJ) 
 			EndIf
 			;[End Block]
-		Case "roomo5"
+		Case "room_o5"
 			;[Block]
 			d.Doors = CreateDoor(r\x, r\y, r\z - 240.0 * RoomScale, 0.0, r, False, Default_Door, 0, "2411")
 			d\AutoClose = False
@@ -8355,7 +8355,7 @@ Function CreateMap()
 	
 	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] - 3) = "gatebentrance"
 	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] - 2) = "gateaentrance"
-	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] - 1) = "roomo5"
+	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] - 1) = "room_o5"
 	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1]) = "room1lifts"
 	
 	MinPos = Room2Amount[0] + Room2Amount[1]
