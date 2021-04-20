@@ -6062,7 +6062,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\Objects[0], r\x - 832.0 * RoomScale, r\y + 0.5, r\z)
 			EntityParent(r\Objects[0], r\OBJ)
 			;[End Block]
-		Case "room914"
+		Case "cont_914"
 			;[Block]
 			r\RoomDoors.Doors[2] = CreateDoor(r\x, r\y, r\z - 368.0 * RoomScale, 0.0, r, False, Big_Door, 2)
 			r\RoomDoors[2]\AutoClose = False
@@ -8293,7 +8293,7 @@ Function CreateMap()
 	
 	SetRoom("cont_372", ROOM1, Floor(0.1 * Float(Room1Amount[0])), MinPos, MaxPos)
 	SetRoom("room005", ROOM1, Floor(0.3 * Float(Room1Amount[0])), MinPos, MaxPos)
-	SetRoom("room914", ROOM1, Floor(0.35 * Float(Room1Amount[0])), MinPos, MaxPos)
+	SetRoom("cont_914", ROOM1, Floor(0.35 * Float(Room1Amount[0])), MinPos, MaxPos)
 	SetRoom("room205", ROOM1, Floor(0.5 * Float(Room1Amount[0])), MinPos, MaxPos)
 	SetRoom("room1archive", ROOM1, Floor(0.6 * Float(Room1Amount[0])), MinPos, MaxPos)
 	

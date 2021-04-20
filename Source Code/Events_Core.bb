@@ -59,7 +59,7 @@ Const e_room008% = 53
 Const e_106victim% = 54
 Const e_106sinkhole% = 55
 Const e_682roar% = 56
-Const e_room914% = 57
+Const e_cont_914% = 57
 Const e_1048a% = 58
 Const e_room4_2_hcz% = 59
 Const e_room2gw_b% = 60, e_room_gw% = 61
@@ -369,9 +369,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_682roar)
 			;[End Block]
-		Case "room914"
+		Case "cont_914"
 			;[Block]
-			Return(e_room914)
+			Return(e_cont_914)
 			;[End Block]
 		Case "1048a"
 			;[Block]
@@ -578,7 +578,7 @@ Function InitEvents()
 	
 	CreateEvent("cont_372", "cont_372", 0)
 	
-	CreateEvent("room914", "room914", 0)
+	CreateEvent("cont_914", "cont_914", 0)
 	
 	CreateEvent("buttghost", "room2toilets", 0)
 	CreateEvent("toiletguard", "room2toilets", 1)
@@ -7819,7 +7819,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_room914
+			Case e_cont_914
 				;[Block]
 				If PlayerRoom = e\room Then
 					If e\room\RoomDoors[2]\Open Lor e\room\RoomDoors[3]\Open Then
