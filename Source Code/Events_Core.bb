@@ -14,7 +14,7 @@ End Type
 ;[Block]
 Const e_cont_173% = 0, e_room173intro% = 1
 Const e_buttghost% = 2
-Const e_room2checkpoint% = 3
+Const e_room2_checkpoint% = 3
 Const e_room895% = 4, e_room895_106% = 5
 Const e_room1endroom106% = 6
 Const e_room2c_lockroom_173% = 7, e_room2c_lockroom_096% = 8
@@ -153,9 +153,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_buttghost)
 			;[End Block]
-		Case "room2checkpoint"
+		Case "room2_checkpoint"
 			;[Block]
-			Return(e_room2checkpoint)
+			Return(e_room2_checkpoint)
 			;[End Block]
 		Case "room895"
 			;[Block]
@@ -549,8 +549,8 @@ Function InitEvents()
 		CreateEvent("room895", "room895", 0)
 	EndIf 
 	
-	CreateEvent("room2checkpoint", "room2checkpoint", 0, 1.0)
-	CreateEvent("room2checkpoint", "room2checkpoint2", 0, 1.0)
+	CreateEvent("room2_checkpoint", "room2_checkpoint_lcz_hcz", 0, 1.0)
+	CreateEvent("room2_checkpoint", "room2_checkpoint_hcz_ez", 0, 1.0)
 	
 	CreateEvent("room3door", "room3", 0, 0.1)
 	CreateEvent("room3door", "room3tunnel", 0, 0.1)	
@@ -2214,7 +2214,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_room2checkpoint
+			Case e_room2_checkpoint
 				;[Block]
 				If PlayerRoom = e\room Then
 					; ~ Play a sound clip when the player passes through the gate
@@ -2263,7 +2263,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				
-				If e\room\RoomTemplate\Name = "room2checkpoint2" Then
+				If e\room\RoomTemplate\Name = "room2_checkpoint_hcz_ez" Then
 					For e2.Events = Each Events
 						If e2\EventID = e_room008
 							If e2\EventState = 2.0 Then
@@ -8939,7 +8939,7 @@ Function UpdateEvents()
 							Next
 							
 							For r.Rooms = Each Rooms
-								If r\RoomTemplate\Name = "room2checkpoint"
+								If r\RoomTemplate\Name = "room2_checkpoint_lcz_hcz"
 									If r\Dist < 10.0 Then
 										e\EventState = 2.0
 										Exit
