@@ -4894,7 +4894,7 @@ Function FillRoom(r.Rooms)
 			it.Items = CreateItem("Document SCP-513", "paper", r\x - 480.0 * RoomScale, r\y + 104.0 * RoomScale, r\z - 176.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "room966"
+		Case "cont_966"
 			;[Block]
 			d.Doors = CreateDoor(r\x - 400.0 * RoomScale, r\y, r\z, -90.0, r, False, Default_Door, 3)
 			d\AutoClose = False
@@ -8349,7 +8349,7 @@ Function CreateMap()
 	MapRoom(ROOM2C, Room2CAmount[0] + Floor(0.5 * Float(Room2CAmount[1]))) = "room2cpit"
 	
 	MapRoom(ROOM3, Room3Amount[0] + Floor(0.3 * Float(Room3Amount[1]))) = "cont_513"
-	MapRoom(ROOM3, Room3Amount[0] + Floor(0.6 * Float(Room3Amount[1]))) = "room966"
+	MapRoom(ROOM3, Room3Amount[0] + Floor(0.6 * Float(Room3Amount[1]))) = "cont_966"
 	
 	; ~ [ENTRANCE ZONE]
 	

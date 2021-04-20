@@ -49,7 +49,7 @@ Const e_room079% = 41
 Const e_room106% = 42
 Const e_room205% = 43
 Const e_room860% = 44
-Const e_room966% = 45
+Const e_cont_966% = 45
 Const e_room1123% = 46
 Const e_room2testroom2% = 47, e_room2testroom173% = 48
 Const e_room2tunnel2smoke% = 49, e_room2tunnel2% = 50
@@ -321,9 +321,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room860)
 			;[End Block]
-		Case "room966"
+		Case "cont_966"
 			;[Block]
-			Return(e_room966)
+			Return(e_cont_966)
 			;[End Block]
 		Case "room1123"
 			;[Block]
@@ -603,7 +603,7 @@ Function InitEvents()
 	
 	CreateEvent("room860", "room860", 0)
 	
-	CreateEvent("room966", "room966", 0)
+	CreateEvent("cont_966", "cont_966", 0)
 	
 	CreateEvent("room1123", "room1123", 0)
 	
@@ -7147,7 +7147,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_room966
+			Case e_cont_966
 				;[Block]
 				If PlayerRoom = e\room Then
 					If e\EventState = 0.0 Then
