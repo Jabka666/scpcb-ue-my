@@ -484,7 +484,7 @@ Function InitEvents()
 	CreateEvent("room2c_lockroom_096", "room2c_lockroom_ez", 0)
 	
 	CreateEvent("room1endroom106", "room1endroom", Rand(0, 1))
-	CreateEvent("room1endroom106", "room1endroom3", Rand(0, 1))
+	CreateEvent("room1endroom106", "room1_endroom_ez", Rand(0, 1))
 	
 	CreateEvent("room2poffices2", "room2poffices2", 0)
 	
