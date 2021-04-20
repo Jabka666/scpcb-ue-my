@@ -4459,7 +4459,7 @@ Function FillRoom(r.Rooms)
 			it.Items = CreateItem("ReVision Eyedrops", "eyedrops", r\x + 1930.0 * RoomScale, r\y + 225.0 * RoomScale, r\z + 128.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "room2poffices"
+		Case "room2_poffices"
 			;[Block]
 			d.Doors = CreateDoor(r\x + 240.0 * RoomScale, r\y, r\z + 448.0 * RoomScale, 270.0, r, False, Default_Door, 0, Str(AccessCode))
 			d\AutoClose = False
@@ -8361,7 +8361,7 @@ Function CreateMap()
 	MinPos = Room2Amount[0] + Room2Amount[1]
 	MaxPos = Room2Amount[0] + Room2Amount[1] + Room2Amount[2] - 1		
 	
-	MapRoom(ROOM2, MinPos + Floor(0.1 * Float(Room2Amount[2]))) = "room2poffices"
+	MapRoom(ROOM2, MinPos + Floor(0.1 * Float(Room2Amount[2]))) = "room2_poffices"
 	
 	SetRoom("room2cafeteria", ROOM2, MinPos + Floor(0.2 * Float(Room2Amount[2])), MinPos, MaxPos)
 	SetRoom("room2sroom", ROOM2, MinPos + Floor(0.3 * Float(Room2Amount[2])), MinPos, MaxPos)
