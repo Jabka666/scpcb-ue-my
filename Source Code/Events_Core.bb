@@ -45,7 +45,7 @@ Const e_room4_lcz% = 37
 Const e_room012% = 38
 Const e_room035% = 39
 Const e_cont_049% = 40
-Const e_room079% = 41
+Const e_cont_079% = 41
 Const e_room106% = 42
 Const e_room205% = 43
 Const e_cont_860_1% = 44
@@ -305,9 +305,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_cont_049)
 			;[End Block]
-		Case "room079"
+		Case "cont_079"
 			;[Block]
-			Return(e_room079)
+			Return(e_cont_079)
 			;[End Block]
 		Case "room106"
 			;[Block]
@@ -564,7 +564,7 @@ Function InitEvents()
 	EndIf
 	CreateEvent("106sinkhole", "room4_lcz", Rand(1, 2))
 	
-	CreateEvent("room079", "room079", 0)	
+	CreateEvent("cont_079", "cont_079", 0)	
 	
 	CreateEvent("cont_049", "cont_049", 0)
 	
@@ -6496,7 +6496,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_room079
+			Case e_cont_079
 				;[Block]
 				If PlayerRoom = e\room Then
 					If EntityY(me\Collider) < (-9500.0) * RoomScale Then
