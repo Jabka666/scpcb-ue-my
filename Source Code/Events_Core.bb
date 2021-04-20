@@ -61,7 +61,7 @@ Const e_106sinkhole% = 55
 Const e_682roar% = 56
 Const e_room914% = 57
 Const e_1048a% = 58
-Const e_room4tunnels% = 59
+Const e_room4_2_hcz% = 59
 Const e_room2gw_b% = 60, e_room_gw% = 61
 Const e_room2scps2% = 62
 Const e_room1162% = 63
@@ -377,9 +377,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_1048a)
 			;[End Block]
-		Case "room4tunnels"
+		Case "room4_2_hcz"
 			;[Block]
-			Return(e_room4tunnels)
+			Return(e_room4_2_hcz)
 			;[End Block]
 		Case "room2gw_b"
 			;[Block]
@@ -611,7 +611,7 @@ Function InitEvents()
 	CreateEvent("room2tesla", "room2tesla_hcz", 0, 0.9)
 	CreateEvent("room2tesla", "room2tesla", 0, 0.9)
 	
-	CreateEvent("room4tunnels", "room4tunnels", 0)
+	CreateEvent("room4_2_hcz", "room4_2_hcz", 0)
 	
 	CreateEvent("room2gw_b", "room2gw_b", Rand(0, 1))
 	CreateEvent("room_gw", "room2gw", 0, 1.0)
@@ -637,7 +637,7 @@ Function InitEvents()
 	CreateEvent("096spawn", "room2pipes", 0, 0.4 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent("096spawn", "room2pit", 0, 0.5 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent("096spawn", "room3tunnel", 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
-	CreateEvent("096spawn", "room4tunnels", 0, 0.7 + (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent("096spawn", "room4_2_hcz", 0, 0.7 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent("096spawn", "room2tunnel", 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent("096spawn", "room2tunnel2", 0, 0.4 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent("096spawn", "room3z2", 0, 0.7 + (0.2 * SelectedDifficulty\AggressiveNPCs))
@@ -8179,7 +8179,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_room4tunnels
+			Case e_room4_2_hcz
 				;[Block]
 				If e\room\Dist < 10.0 And e\room\Dist > 0.0 Then
 					e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\OBJ, True), 0.5, EntityZ(e\room\OBJ, True))
@@ -8964,9 +8964,9 @@ Function UpdateEvents()
 					
 					If e\EventState = 0.0
 						Select e\room\RoomTemplate\Name
-							Case "room4pit", "room3pit", "room3z2", "room4tunnels", "room3tunnel"
+							Case "room4pit", "room3pit", "room3z2", "room4_2_hcz", "room3tunnel"
 								;[Block]
-								If e\room\RoomTemplate\Name = "room4pit" Lor e\room\RoomTemplate\Name = "room4tunnels"
+								If e\room\RoomTemplate\Name = "room4pit" Lor e\room\RoomTemplate\Name = "room4_2_hcz"
 									Place = Rand(0, 3)
 								Else
 									Place = Rand(0, 2)
