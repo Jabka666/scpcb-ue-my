@@ -44,7 +44,7 @@ Const e_room3tunnel% = 36
 Const e_room4_lcz% = 37
 Const e_room012% = 38
 Const e_room035% = 39
-Const e_room049% = 40
+Const e_cont_049% = 40
 Const e_room079% = 41
 Const e_room106% = 42
 Const e_room205% = 43
@@ -301,9 +301,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room035)
 			;[End Block]
-		Case "room049"
+		Case "cont_049"
 			;[Block]
-			Return(e_room049)
+			Return(e_cont_049)
 			;[End Block]
 		Case "room079"
 			;[Block]
@@ -566,7 +566,7 @@ Function InitEvents()
 	
 	CreateEvent("room079", "room079", 0)	
 	
-	CreateEvent("room049", "room049", 0)
+	CreateEvent("cont_049", "cont_049", 0)
 	
 	CreateEvent("room012", "room012", 0)
 	
@@ -6270,7 +6270,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_room049
+			Case e_cont_049
 				;[Block]
 				If PlayerRoom = e\room Then
 					If EntityY(me\Collider) > (-2848.0) * RoomScale Then

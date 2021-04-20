@@ -830,7 +830,7 @@ Function UpdateNPCs()
 							EndIf
 						Next
 					EndIf
-					If PlayerRoom\RoomTemplate\Name = "room049" And EntityY(me\Collider) =< -2848.0 * RoomScale Then
+					If PlayerRoom\RoomTemplate\Name = "cont_049" And EntityY(me\Collider) =< -2848.0 * RoomScale Then
 						Spawn106 = False
 					EndIf
 					; ~ GateA event has been triggered. Don't make SCP-106 disappear!
@@ -1461,7 +1461,7 @@ Function UpdateNPCs()
 				n\BlinkTimer = 1.0
 				
 				If n\Idle > 0.1 Then
-					If PlayerRoom\RoomTemplate\Name <> "room049" Then
+					If PlayerRoom\RoomTemplate\Name <> "cont_049" Then
 						n\Idle = Max(n\Idle - (1 + SelectedDifficulty\AggressiveNPCs) * fps\Factor[0], 0.1)
 					EndIf
 					n\DropSpeed = 0
@@ -1562,10 +1562,10 @@ Function UpdateNPCs()
 											me\BlurTimer = 500.0
 											
 											If (Not chs\GodMode) Then
-												If PlayerRoom\RoomTemplate\Name = "room049"
+												If PlayerRoom\RoomTemplate\Name = "cont_049"
 													msg\DeathMsg = "Three (3) active instances of SCP-049-2 discovered in the tunnel outside SCP-049's containment chamber. Terminated by Nine-Tailed Fox."
 													For e.Events = Each Events
-														If e\EventID = e_room049 Then
+														If e\EventID = e_cont_049 Then
 															e\EventState = -1.0
 															Exit
 														EndIf
@@ -7308,7 +7308,7 @@ Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False)
 	
 	If (Not CanSpawnIn049Chamber) Then
 		If (Not SelectedDifficulty\AggressiveNPCs) Then
-			If RN = "room049" And EntityY(me\Collider) =< (-2848.0) * RoomScale Then
+			If RN = "cont_049" And EntityY(me\Collider) =< (-2848.0) * RoomScale Then
 				Return(False)
 			EndIf
 		EndIf
