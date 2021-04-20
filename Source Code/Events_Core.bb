@@ -64,7 +64,7 @@ Const e_1048a% = 58
 Const e_room4_2_hcz% = 59
 Const e_room2gw_b% = 60, e_room_gw% = 61
 Const e_room2scps2% = 62
-Const e_room1162% = 63
+Const e_cont_1162% = 63
 Const e_room2_sl% = 64
 Const e_096spawn% = 65
 Const e_room2medibay% = 66, e_room2medibay2% = 67
@@ -393,9 +393,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room2scps2)
 			;[End Block]
-		Case "room1162"
+		Case "cont_1162"
 			;[Block]
-			Return(e_room1162)
+			Return(e_cont_1162)
 			;[End Block]
 		Case "room2_sl"
 			;[Block]
@@ -619,7 +619,7 @@ Function InitEvents()
 	
 	CreateEvent("dimension1499", "dimension1499", 0)
 	
-	CreateEvent("room1162", "room1162", 0)
+	CreateEvent("cont_1162", "cont_1162", 0)
 	
 	CreateEvent("room2scps2", "room2scps2", 0)
 	
@@ -8347,7 +8347,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_room1162
+			Case e_cont_1162
 				;[Block]
 				; ~ e\EventState: A variable to determine the "nostalgia" items
 				; ~ 0.0 = No nostalgia item

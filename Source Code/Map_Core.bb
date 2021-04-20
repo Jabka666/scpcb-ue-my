@@ -6989,7 +6989,7 @@ Function FillRoom(r.Rooms)
 			If (Not r\Objects[2]) Then r\Objects[2] = LoadMesh_Strict("GFX\map\room3gw_pipes.b3d", r\OBJ)
 			EntityPickMode(r\Objects[2], 2)
 			;[End Block]
-		Case "room1162"
+		Case "cont_1162"
 			;[Block]
 			d.Doors = CreateDoor(r\x + 248.0 * RoomScale, r\y, r\z - 736.0 * RoomScale, 90.0, r, False, Default_Door, 2)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.031, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
@@ -8316,7 +8316,7 @@ Function CreateMap()
 	SetRoom("room2elevator", ROOM2, Floor(0.85 * Float(Room2Amount[0])), MinPos, MaxPos)
 	SetRoom("room2posters", ROOM2, Floor(0.9 * Float(Room2Amount[0])), MinPos, MaxPos)
 	
-	MapRoom(ROOM2C, Floor(0.5 * Float(Room2CAmount[0]))) = "room1162"
+	MapRoom(ROOM2C, Floor(0.5 * Float(Room2CAmount[0]))) = "cont_1162"
 	
 	MapRoom(ROOM3, Floor(Rnd(0.2, 0.8) * Float(Room3Amount[0]))) = "room3storage"
 	
