@@ -5238,7 +5238,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\Objects[0], r\x - 248.0 * RoomScale, r\y + 528.0 * RoomScale, r\z)
 			EntityParent(r\Objects[0], r\OBJ)
 			;[End Block]
-		Case "room012"
+		Case "cont_012"
 			;[Block]
 			d.Doors = CreateDoor(r\x + 264.0 * RoomScale, r\y, r\z + 672.0 * RoomScale, 270.0, r, False, Default_Door, 3)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.031, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.061, True)
@@ -5262,7 +5262,7 @@ Function FillRoom(r.Rooms)
 			EntityPickMode(r\Objects[1], 1, False)
 			EntityRadius(r\Objects[1], 0.1)
 			
-			r\Objects[2] = LoadRMesh("GFX\map\room012_2_opt.rmesh", Null)
+			r\Objects[2] = LoadRMesh("GFX\map\cont_012_box.rmesh", Null)
 			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[2], r\x - 360 * RoomScale, r\y - 130.0 * RoomScale, r\z + 456.0 * RoomScale)
 			
@@ -8309,7 +8309,7 @@ Function CreateMap()
 	SetRoom("room2storage", ROOM2, Floor(0.3 * Float(Room2Amount[0])), MinPos, MaxPos)
 	SetRoom("room2gw_b", ROOM2, Floor(0.4 * Float(Room2Amount[0])), MinPos, MaxPos)
 	SetRoom("room2_sl", ROOM2, Floor(0.5 * Float(Room2Amount[0])), MinPos, MaxPos)
-	SetRoom("room012", ROOM2, Floor(0.55 * Float(Room2Amount[0])), MinPos, MaxPos)
+	SetRoom("cont_012", ROOM2, Floor(0.55 * Float(Room2Amount[0])), MinPos, MaxPos)
 	SetRoom("room2scps2", ROOM2, Floor(0.6 * Float(Room2Amount[0])), MinPos, MaxPos)
 	SetRoom("room2medibay", ROOM2, Floor(0.7 * Float(Room2Amount[0])), MinPos, MaxPos)
 	SetRoom("room1123", ROOM2, Floor(0.75 * Float(Room2Amount[0])), MinPos, MaxPos)

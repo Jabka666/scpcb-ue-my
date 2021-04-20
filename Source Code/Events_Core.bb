@@ -42,7 +42,7 @@ Const e_room3servers% = 34
 Const e_room3storage% = 35
 Const e_room3tunnel% = 36
 Const e_room4_lcz% = 37
-Const e_room012% = 38
+Const e_cont_012% = 38
 Const e_room035% = 39
 Const e_cont_049% = 40
 Const e_cont_079% = 41
@@ -293,9 +293,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room4_lcz)
 			;[End Block]
-		Case "room012"
+		Case "cont_012"
 			;[Block]
-			Return(e_room012)
+			Return(e_cont_012)
 			;[End Block]
 		Case "room035"
 			;[Block]
@@ -568,7 +568,7 @@ Function InitEvents()
 	
 	CreateEvent("cont_049", "cont_049", 0)
 	
-	CreateEvent("room012", "room012", 0)
+	CreateEvent("cont_012", "cont_012", 0)
 	
 	CreateEvent("room035", "room035", 0)
 	
@@ -5655,7 +5655,7 @@ Function UpdateEvents()
 					If e <> Null Then e\EventState = MilliSecs2() + 5000
 				EndIf
 				;[End Block]
-			Case e_room012
+			Case e_cont_012
 				;[Block]
 				If PlayerRoom = e\room Then
 					If EntityY(me\Collider) < 0.0 Then
