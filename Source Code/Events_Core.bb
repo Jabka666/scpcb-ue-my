@@ -33,7 +33,7 @@ Const e_room2trick% = 23
 Const e_room2mt% = 24
 Const e_room2_2_hcz_106% = 25
 Const e_room2_4_hcz_106% = 26, e_room2_4_hcz% = 27
-Const e_room3pitduck% = 28, e_room3pit1048% = 29
+Const e_room3_hcz_duck% = 28, e_room3_hcz_1048% = 29
 Const e_room2poffices2% = 30
 Const e_room2servers% = 31
 Const e_room2storage% = 32
@@ -253,13 +253,13 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room2_4_hcz)
 			;[End Block]
-		Case "room3pitduck"
+		Case "room3_hcz_duck"
 			;[Block]
-			Return(e_room3pitduck)
+			Return(e_room3_hcz_duck)
 			;[End Block]
-		Case "room3pit1048"
+		Case "room3_hcz_1048"
 			;[Block]
-			Return(e_room3pit1048)
+			Return(e_room3_hcz_1048)
 			;[End Block]
 		Case "room2poffices2"
 			;[Block]
@@ -508,8 +508,8 @@ Function InitEvents()
 	
 	CreateEvent("room2cafeteria", "room2cafeteria", 0)	
 	
-	CreateEvent("room3pitduck", "room3pit", 0)
-	CreateEvent("room3pit1048", "room3pit", 1)
+	CreateEvent("room3_hcz_duck", "room3_hcz", 0)
+	CreateEvent("room3_hcz_1048", "room3_hcz", 1)
 	
 	; ~ The event that causes the door to open by itself in "room2offices3"
 	CreateEvent("room2offices3", "room2offices3", 0, 1.0)	
@@ -532,7 +532,7 @@ Function InitEvents()
 				;[End Block]
 			Case 2
 				;[Block]
-				CreateEvent("682roar", "room3pit", Rand(0, 2))	
+				CreateEvent("682roar", "room3_hcz", Rand(0, 2))	
 				;[End Block]
 			Case 3
 				;[Block]
@@ -633,7 +633,7 @@ Function InitEvents()
 	CreateEvent("room1lifts", "room1lifts", 0)
 	
 	CreateEvent("096spawn", "room4pit", 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
-	CreateEvent("096spawn", "room3pit", 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent("096spawn", "room3_hcz", 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent("096spawn", "room2_2_hcz", 0, 0.4 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent("096spawn", "room2_4_hcz", 0, 0.5 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent("096spawn", "room3tunnel", 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
@@ -4835,7 +4835,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_room3pitduck
+			Case e_room3_hcz_duck
 				;[Block]
 				If PlayerRoom = e\room Then
 					If (Not e\room\Objects[2]) Then
@@ -4864,7 +4864,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_room3pit1048
+			Case e_room3_hcz_1048
 				;[Block]
 				If PlayerRoom = e\room Then
 					If (Not e\room\Objects[2]) Then
@@ -8964,7 +8964,7 @@ Function UpdateEvents()
 					
 					If e\EventState = 0.0
 						Select e\room\RoomTemplate\Name
-							Case "room4pit", "room3pit", "room3z2", "room4_2_hcz", "room3tunnel"
+							Case "room4pit", "room3_hcz", "room3z2", "room4_2_hcz", "room3tunnel"
 								;[Block]
 								If e\room\RoomTemplate\Name = "room4pit" Lor e\room\RoomTemplate\Name = "room4_2_hcz"
 									Place = Rand(0, 3)
