@@ -1421,7 +1421,7 @@ Function UpdateConsole()
 				Case "disablenuke"
 					;[Block]
 					For e2.Events = Each Events
-						If e2\EventID = e_room2nuke
+						If e2\EventID = e_room2_nuke
 							e2\EventState = 0.0
 							UpdateLever(e2\room\Objects[1])
 							UpdateLever(e2\room\Objects[3])
@@ -8664,7 +8664,7 @@ Function InitNewGame()
 	If SelectedMap = "" Then InitEvents()
 	
 	For e.Events = Each Events
-		If e\EventID = e_room2nuke
+		If e\EventID = e_room2_nuke
 			e\EventState = 1.0
 		EndIf
 		If e\EventID = e_room106

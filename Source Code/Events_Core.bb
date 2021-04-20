@@ -26,7 +26,7 @@ Const e_room2closets% = 13
 Const e_room2doors173% = 14
 Const e_room2elevator% = 15, e_room2elevator2% = 16
 Const e_room2fan% = 17
-Const e_room2nuke% = 18
+Const e_room2_nuke% = 18
 Const e_room2offices2% = 19, e_room2offices3% = 20, e_room2offices035% = 21
 Const e_room2tesla% = 22
 Const e_room2trick% = 23
@@ -213,9 +213,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room2fan)
 			;[End Block]
-		Case "room2nuke"
+		Case "room2_nuke"
 			;[Block]
-			Return(e_room2nuke)
+			Return(e_room2_nuke)
 			;[End Block]
 		Case "room2offices2"
 			;[Block]
@@ -541,7 +541,7 @@ Function InitEvents()
 		End Select 
 	EndIf 
 	
-	CreateEvent("room2nuke", "room2nuke", 0)
+	CreateEvent("room2_nuke", "room2_nuke", 0)
 	
 	If Rand(5) < 5 Then 
 		CreateEvent("room895_106", "room895", 0)
@@ -3613,7 +3613,7 @@ Function UpdateEvents()
 					EndIf					
 				EndIf
 				;[End Block]
-			Case e_room2nuke
+			Case e_room2_nuke
 				;[Block]
 				If PlayerRoom = e\room Then
 					e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[4], e\room\Objects[5], e)
@@ -9745,7 +9745,7 @@ Function UpdateEndings()
 									
 									Temp = True
 									For e2.Events = Each Events
-										If e2\EventID = e_room2nuke Then
+										If e2\EventID = e_room2_nuke Then
 											Temp = e2\EventState
 											Exit
 										EndIf
