@@ -6043,7 +6043,7 @@ Function FillRoom(r.Rooms)
 			w\connected[0] = w2 : w\Dist[0] = EntityDistance(w\OBJ, w2\OBJ)
 			w2\connected[0] = w : w2\Dist[0] = w\Dist[0]
 			;[End Block]
-		Case "room2doors"
+		Case "room2_6_lcz"
 			;[Block]
 			d.Doors = CreateDoor(r\x, r\y, r\z + 528.0 * RoomScale, 0.0, r)
 			d\AutoClose = False

@@ -23,7 +23,7 @@ Const e_pocketdimension% = 10
 Const e_room2cafeteria% = 11
 Const e_room2c_ec% = 12
 Const e_room2closets% = 13
-Const e_room2doors173% = 14
+Const e_room2_6_lcz_173% = 14
 Const e_room2elevator% = 15, e_room2elevator2% = 16
 Const e_room2fan% = 17
 Const e_room2_nuke% = 18
@@ -197,9 +197,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room2closets)
 			;[End Block]
-		Case "room2doors173"
+		Case "room2_6_lcz_173"
 			;[Block]
-			Return(e_room2doors173)
+			Return(e_room2_6_lcz_173)
 			;[End Block]
 		Case "room2elevator"
 			;[Block]
@@ -498,8 +498,8 @@ Function InitEvents()
 	CreateEvent("room2tunnel2smoke", "room2tunnel2", 0, 0.2)
 	CreateEvent("room2tunnel2", "room2tunnel2", 0, (0.2 * SelectedDifficulty\AggressiveNPCs))
 	
-	; ~ SCP-173 appears in half of the "room2doors"-rooms
-	CreateEvent("room2doors173", "room2doors", 0, 0.5 + (0.4 * SelectedDifficulty\AggressiveNPCs))
+	; ~ SCP-173 appears in half of the "room2_6_lcz"-rooms
+	CreateEvent("room2_6_lcz_173", "room2_6_lcz", 0, 0.5 + (0.4 * SelectedDifficulty\AggressiveNPCs))
 	
 	; ~ The anomalous duck in "room2offices2"-rooms
 	CreateEvent("room2offices2", "room2offices2", 0, 0.7)
@@ -3501,7 +3501,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_room2doors173
+			Case e_room2_6_lcz_173
 				;[Block]
 				If PlayerRoom = e\room Then
 					If e\EventState = 0.0 And Curr173\Idle = 0 Then

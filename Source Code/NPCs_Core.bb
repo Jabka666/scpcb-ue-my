@@ -729,7 +729,7 @@ Function UpdateNPCs()
 														msg\DeathMsg = SubjectName + ". Cause of death: Fatal cervical fracture. According to Security Chief Franklin who was present at SCP-173's containment "
 														msg\DeathMsg = msg\DeathMsg + "chamber during the breach, the subject was killed by SCP-173 as soon as the disruptions in the electrical network started."
 														;[End block]
-													Case "room2doors"
+													Case "room2_6_lcz"
 														;[Block]
 														msg\DeathMsg = Chr(34) + "If I'm not mistaken, one of the main purposes of these rooms was to stop SCP-173 from moving further in the event of a containment breach. "
 														msg\DeathMsg = msg\DeathMsg + "So, who's brilliant idea was it to put A GODDAMN MAN-SIZED VENTILATION DUCT in there?" + Chr(34)
