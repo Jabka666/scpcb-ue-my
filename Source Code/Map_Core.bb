@@ -7515,7 +7515,7 @@ Function FillRoom(r.Rooms)
 			it.Items = CreateItem("First Aid Kit", "firstaid", r\x - 506.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 322.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)	
 			;[End Block]
-		Case "room005"
+		Case "cont_005"
 			;[Block]
 			d.Doors = CreateDoor(r\x, r\y, r\z - 672.0 * RoomScale, 0.0, r, False, Default_Door, 4)
 			d\AutoClose = False
@@ -8292,7 +8292,7 @@ Function CreateMap()
 	MapRoom(ROOM1, 0) = "cont_173"
 	
 	SetRoom("cont_372", ROOM1, Floor(0.1 * Float(Room1Amount[0])), MinPos, MaxPos)
-	SetRoom("room005", ROOM1, Floor(0.3 * Float(Room1Amount[0])), MinPos, MaxPos)
+	SetRoom("cont_005", ROOM1, Floor(0.3 * Float(Room1Amount[0])), MinPos, MaxPos)
 	SetRoom("cont_914", ROOM1, Floor(0.35 * Float(Room1Amount[0])), MinPos, MaxPos)
 	SetRoom("room205", ROOM1, Floor(0.5 * Float(Room1Amount[0])), MinPos, MaxPos)
 	SetRoom("room1archive", ROOM1, Floor(0.6 * Float(Room1Amount[0])), MinPos, MaxPos)

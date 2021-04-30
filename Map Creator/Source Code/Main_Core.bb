@@ -569,7 +569,7 @@ Repeat
 													Exit
 												EndIf
 											Next
-											If Map(x, y)\Name = "room173" Or Map(x, y)\Name = "room2checkpoint" Or Map(x, y)\Name = "room2checkpoint2" Then
+											If Map(x, y)\Name = "cont_173" Or Map(x, y)\Name = "room2checkpoint" Or Map(x, y)\Name = "room2checkpoint2" Then
 												MapAngle(x, y) = 180
 											EndIf
 											
@@ -656,7 +656,7 @@ Repeat
 					If MouseX() > (GadgetX(Map_2D) + GadgetX(WinHandle)) And MouseX() < ((Width) + GadgetX(Map_2D) + GadgetX(WinHandle))
 						Offset = 45
 						If MouseY() > (GadgetY(Map_2D) + GadgetY(WinHandle) + Offset) And MouseY() < ((Height) + GadgetY(Map_2D) + GadgetY(WinHandle) + Offset)
-							If Map(Grid_SelectedX, Grid_SelectedY)\Name <> "room173" Then
+							If Map(Grid_SelectedX, Grid_SelectedY)\Name <> "cont_173" Then
 								Local PrevAngle% = MapAngle(Grid_SelectedX, Grid_SelectedY)
 								
 								; ~ Left

@@ -74,7 +74,7 @@ Const e_room1lifts% = 70
 Const e_room4_ic% = 71
 Const e_room2bio% = 72
 Const e_room409% = 73
-Const e_room005% = 74
+Const e_cont_005% = 74
 Const e_gate_b_entrance% = 75
 Const e_gateb% = 76
 Const e_gate_a_entrance% = 77
@@ -437,9 +437,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room409)
 			;[End Block]
-		Case "room005"
+		Case "cont_005"
 			;[Block]
-			Return(e_room005)
+			Return(e_cont_005)
 			;[End Block]
 		Case "gate_b_entrance"
 			;[Block]
@@ -654,7 +654,7 @@ Function InitEvents()
 	
 	CreateEvent("room409", "room409", 0)
 	
-	CreateEvent("room005", "room005", 0)
+	CreateEvent("cont_005", "cont_005", 0)
 End Function
 
 Global QuickLoadIcon% = LoadImage_Strict("GFX\menu\QuickLoading.png")
@@ -9214,7 +9214,7 @@ Function UpdateEvents()
 					e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 				EndIf
 				;[End Block]
-			Case e_room005
+			Case e_cont_005
 				;[Block]
 				If (Not Curr106\Contained) Then 
 					If PlayerRoom = e\room Then
