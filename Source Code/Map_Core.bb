@@ -3816,12 +3816,12 @@ Function FillRoom(r.Rooms)
 			r\RoomDoors[1]\LinkedDoor = r\RoomDoors[0]
 			
 			; ~ Security camera inside
-			sc.SecurityCams = CreateSecurityCam(r\x - 688.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 688.0 * RoomScale, r, True, r\x + 668.0 * RoomScale, r\y + 1.1, r\z - 96.0 * RoomScale)
+			sc.SecurityCams = CreateSecurityCam(r\x - 688.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 688.0 * RoomScale, r, True, r\x + 670.0 * RoomScale, r\y + 280.0 * RoomScale, r\z - 96.0 * RoomScale)
 			sc\Angle = 225.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 40.0, 0.0, 0.0)
 			TurnEntity(sc\ScrOBJ, 0.0, 90.0, 0.0)
 			
-			sc.SecurityCams = CreateSecurityCam(r\x - 112.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 112.0 * RoomScale, r, True, r\x + 96.0 * RoomScale, r\y + 1.1, r\z - 668.0 * RoomScale)
+			sc.SecurityCams = CreateSecurityCam(r\x - 112.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 112.0 * RoomScale, r, True, r\x + 96.0 * RoomScale, r\y + 280.0 * RoomScale, r\z - 670.0 * RoomScale)
 			sc\Angle = 45.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 40.0, 0.0, 0.0)
 			
@@ -3851,21 +3851,6 @@ Function FillRoom(r.Rooms)
 			
 			d\LinkedDoor = d2
 			d2\LinkedDoor = d
-			
-			Scale = RoomScale * 4.5 * 0.4
-			
-			r\Objects[0] = CopyEntity(o\MonitorModelID[0])
-			ScaleEntity(r\Objects[0], Scale, Scale, Scale)
-			PositionEntity(r\Objects[0], r\x + 668.0 * RoomScale, r\y + 1.1, r\z - 96.0 * RoomScale)
-			RotateEntity(r\Objects[0], 0.0, 90.0, 0.0)
-			
-			r\Objects[1] = CopyEntity(o\MonitorModelID[0])
-			ScaleEntity(r\Objects[1], Scale, Scale, Scale)
-			PositionEntity(r\Objects[1], r\x + 96.0 * RoomScale, r\y + 1.1, r\z - 668.0 * RoomScale)
-			
-			For i = 0 To 1
-				EntityParent(r\Objects[i], r\OBJ)
-			Next
 			;[End Block]
 		Case "room2c_lockroom_ez"
 			;[Block]
