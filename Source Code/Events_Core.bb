@@ -9218,7 +9218,7 @@ Function UpdateEvents()
 				;[Block]
 				If (Not Curr106\Contained) Then 
 					If PlayerRoom = e\room Then
-						If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 2.25 Then
+						If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 1.69 Then
 							If e\EventState = 0.0 And I_005\ChanceToSpawn <> 3 Then
 								PlaySound_Strict(HorrorSFX[10])
 								

@@ -7502,25 +7502,25 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "cont_005"
 			;[Block]
-			d.Doors = CreateDoor(r\x, r\y, r\z - 672.0 * RoomScale, 0.0, r, False, Default_Door, 4)
+			d.Doors = CreateDoor(r\x, r\y, r\z - 656.0 * RoomScale, 0.0, r, False, Default_Door, 4)
 			d\AutoClose = False
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.061, True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.061, True)
 			
 			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x, r\y + 76.0 * RoomScale, r\z - 260.0 * RoomScale)
+			PositionEntity(r\Objects[0], r\x, r\y + 76.0 * RoomScale, r\z - 238.0 * RoomScale)
 			
 			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x, r\y + 188.0 * RoomScale, r\z - 25.0 * RoomScale)			
+			PositionEntity(r\Objects[1], r\x, r\y + 188.0 * RoomScale, r\z + 185.0 * RoomScale)			
 			
 			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], r\x, r\y + 12.0 * RoomScale, r\z + 55.0 * RoomScale)
+			PositionEntity(r\Objects[2], r\x, r\y + 12.0 * RoomScale, r\z + 230.0 * RoomScale)
 			
 			For i = 0 To 2
 				EntityParent(r\Objects[i], r\OBJ)
 			Next			
 			
-			sc.SecurityCams = CreateSecurityCam(r\x, r\y + 415.0 * RoomScale, r\z - 572.0 * RoomScale, r)
+			sc.SecurityCams = CreateSecurityCam(r\x, r\y + 415.0 * RoomScale, r\z - 556.0 * RoomScale, r)
 			sc\Angle = 0.0 : sc\Turn = 30.0
 			TurnEntity(sc\CameraOBJ, 30.0, 0.0, 0.0)
 			
@@ -7528,10 +7528,10 @@ Function FillRoom(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			
 			If I_005\ChanceToSpawn = 1 Then
-				it.Items = CreateItem("SCP-005", "scp005", r\x, r\y + 254.0 * RoomScale, r\z - 260.0 * RoomScale)
+				it.Items = CreateItem("SCP-005", "scp005", r\x, r\y + 255.0 * RoomScale, r\z - 238.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			ElseIf I_005\ChanceToSpawn = 2
-				it.Items = CreateItem("Note from Maynard", "paper", r\x, r\y + 254.0 * RoomScale, r\z - 260.0 * RoomScale)
+				it.Items = CreateItem("Note from Maynard", "paper", r\x, r\y + 254.0 * RoomScale, r\z - 238.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)	
 			EndIf
 			;[End Block]
