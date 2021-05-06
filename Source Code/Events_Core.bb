@@ -52,8 +52,8 @@ Const e_cont_860_1% = 44
 Const e_cont_966% = 45
 Const e_room1123% = 46
 Const e_room2testroom2% = 47, e_room2testroom173% = 48
-Const e_room2tunnel2smoke% = 49, e_room2tunnel2% = 50
-Const e_room2tunnel106% = 51
+Const e_room2_6_hcz_smoke% = 49, e_room2_6_hcz% = 50
+Const e_room2_5_hcz_106% = 51
 Const e_toiletguard% = 52
 Const e_room008% = 53
 Const e_106victim% = 54
@@ -337,17 +337,17 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room2testroom173)
 			;[End Block]
-		Case "room2tunnel2smoke"
+		Case "room2_6_hcz_smoke"
 			;[Block]
-			Return(e_room2tunnel2smoke)
+			Return(e_room2_6_hcz_smoke)
 			;[End Block]
-		Case "room2tunnel2"
+		Case "room2_6_hcz"
 			;[Block]
-			Return(e_room2tunnel2)
+			Return(e_room2_6_hcz)
 			;[End Block]
-		Case "room2tunnel106"
+		Case "room2_5_hcz_106"
 			;[Block]
-			Return(e_room2tunnel106)
+			Return(e_room2_5_hcz_106)
 			;[End Block]
 		Case "toiletguard"
 			;[Block]
@@ -466,8 +466,8 @@ Function InitEvents()
 	
 	CreateEvent("pocketdimension", "pocketdimension", 0)	
 	
-	; ~ There's a 7% chance that SCP-106 appears in the rooms named "room2tunnel"
-	CreateEvent("room2tunnel106", "room2tunnel", 0, 0.07 + (0.1 * SelectedDifficulty\AggressiveNPCs))
+	; ~ There's a 7% chance that SCP-106 appears in the rooms named "room2_5_hcz"
+	CreateEvent("room2_5_hcz_106", "room2_5_hcz", 0, 0.07 + (0.1 * SelectedDifficulty\AggressiveNPCs))
 	
 	; ~ The chance for SCP-173 appearing in the first room2c_lockroom_lcz is about 66%
 	; ~ There's a 30% chance that it appears in the later room2c_lockroom_lcz
@@ -495,8 +495,8 @@ Function InitEvents()
 	
 	CreateEvent("room3storage", "room3storage", 0)
 	
-	CreateEvent("room2tunnel2smoke", "room2tunnel2", 0, 0.2)
-	CreateEvent("room2tunnel2", "room2tunnel2", 0, (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent("room2_6_hcz_smoke", "room2_6_hcz", 0, 0.2)
+	CreateEvent("room2_6_hcz", "room2_6_hcz", 0, (0.2 * SelectedDifficulty\AggressiveNPCs))
 	
 	; ~ SCP-173 appears in half of the "room2_6_lcz"-rooms
 	CreateEvent("room2_6_lcz_173", "room2_6_lcz", 0, 0.5 + (0.4 * SelectedDifficulty\AggressiveNPCs))
@@ -528,7 +528,7 @@ Function InitEvents()
 		Select Rand(3)
 			Case 1
 				;[Block]
-				CreateEvent("682roar", "room2tunnel", Rand(0, 2))
+				CreateEvent("682roar", "room2_5_hcz", Rand(0, 2))
 				;[End Block]
 			Case 2
 				;[Block]
@@ -638,8 +638,8 @@ Function InitEvents()
 	CreateEvent("096spawn", "room2_4_hcz", 0, 0.5 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent("096spawn", "room3tunnel", 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent("096spawn", "room4_2_hcz", 0, 0.7 + (0.2 * SelectedDifficulty\AggressiveNPCs))
-	CreateEvent("096spawn", "room2tunnel", 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
-	CreateEvent("096spawn", "room2tunnel2", 0, 0.4 + (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent("096spawn", "room2_5_hcz", 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent("096spawn", "room2_6_hcz", 0, 0.4 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent("096spawn", "room3z2", 0, 0.7 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	
 	CreateEvent("room2_4_hcz", "room2_4", 0, 0.4 + (0.4 * SelectedDifficulty\AggressiveNPCs))
@@ -3170,7 +3170,7 @@ Function UpdateEvents()
 								Case 16, 17, 18, 19
 									;[Block]
 									For r.Rooms = Each Rooms
-										If r\RoomTemplate\Name = "room2tunnel" Then
+										If r\RoomTemplate\Name = "room2_5_hcz" Then
 											GiveAchievement(AchvPD)
 											AchvPDDone = True
 											
@@ -7400,7 +7400,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_room2tunnel2smoke
+			Case e_room2_6_hcz_smoke
 				;[Block]
 				If PlayerRoom = e\room Then
 					If e\room\Dist < 3.5 Then
@@ -7420,7 +7420,7 @@ Function UpdateEvents()
 					EndIf					
 				EndIf
 				;[End Block]
-			Case e_room2tunnel2
+			Case e_room2_6_hcz
 				;[Block]
 				If PlayerRoom = e\room Then
 					If Curr173\Idle > 1 Then
@@ -7455,7 +7455,7 @@ Function UpdateEvents()
 					RemoveEvent(e)
 				EndIf
 				;[End Block]
-			Case e_room2tunnel106
+			Case e_room2_5_hcz_106
 				;[Block]
 				If e\EventState = 0.0 Then
 					If e\room\Dist < 5.0 And e\room\Dist > 0.0 Then
