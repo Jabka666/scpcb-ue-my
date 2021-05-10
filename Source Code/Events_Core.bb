@@ -28,7 +28,7 @@ Const e_room2elevator% = 15, e_room2elevator2% = 16
 Const e_room2fan% = 17
 Const e_room2_nuke% = 18
 Const e_room2offices2% = 19, e_room2offices3% = 20, e_room2offices035% = 21
-Const e_room2tesla% = 22
+Const e_room2_tesla% = 22
 Const e_room2trick% = 23
 Const e_room2mt% = 24
 Const e_room2_2_hcz_106% = 25
@@ -229,9 +229,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room2offices035)
 			;[End Block]
-		Case "room2tesla"
+		Case "room2_tesla"
 			;[Block]
-			Return(e_room2tesla)
+			Return(e_room2_tesla)
 			;[End Block]
 		Case "room2trick"
 			;[Block]
@@ -607,9 +607,9 @@ Function InitEvents()
 	
 	CreateEvent("room1123", "room1123", 0)
 	
-	CreateEvent("room2tesla", "room2tesla_lcz", 0, 0.9)
-	CreateEvent("room2tesla", "room2tesla_hcz", 0, 0.9)
-	CreateEvent("room2tesla", "room2tesla", 0, 0.9)
+	CreateEvent("room2_tesla", "room2_tesla_lcz", 0, 0.9)
+	CreateEvent("room2_tesla", "room2_tesla_hcz", 0, 0.9)
+	CreateEvent("room2_tesla", "room2_tesla_ez", 0, 0.9)
 	
 	CreateEvent("room4_2_hcz", "room4_2_hcz", 0)
 	
@@ -3699,7 +3699,7 @@ Function UpdateEvents()
 					If e\room\NPC[1]\IsDead Then RemoveEvent(e)
 				EndIf
 				;[End Block]
-			Case e_room2tesla
+			Case e_room2_tesla
 				;[Block]
 				Temp = True
 				If e\EventState2 > 70.0 * 3.5 And e\EventState2 < 70.0 * 90.0 Then Temp = False

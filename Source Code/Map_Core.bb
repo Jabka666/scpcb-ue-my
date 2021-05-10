@@ -5977,7 +5977,7 @@ Function FillRoom(r.Rooms)
 			it\State = Rnd(1000.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "room2tesla", "room2tesla_lcz", "room2tesla_hcz"
+		Case "room2_tesla_lcz", "room2_tesla_hcz", "room2_tesla_ez"
 			;[Block]
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x - 114.0 * RoomScale, r\y, r\z)
@@ -6015,7 +6015,7 @@ Function FillRoom(r.Rooms)
 			
 			For r2.Rooms = Each Rooms
 				If r2 <> r Then
-					If r2\RoomTemplate\Name = "room2tesla" Lor r2\RoomTemplate\Name = "room2tesla_lcz" Lor r2\RoomTemplate\Name = "room2tesla_hcz" Then
+					If r2\RoomTemplate\Name = "room2_tesla_lcz" Lor r2\RoomTemplate\Name = "room2_tesla_hcz" Lor r2\RoomTemplate\Name = "room2_tesla_ez" Then
 						r\Objects[7] = CopyEntity(r2\Objects[7], r\OBJ) ; ~ Don't load the mesh again
 						Exit
 					EndIf

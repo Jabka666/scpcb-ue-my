@@ -1379,7 +1379,7 @@ Function UpdateConsole()
 				Case "disablecontrol"
 					;[Block]
 					For e2.Events = Each Events
-						If e2\EventID = e_room2c_ec
+						If e2\EventID = e_room2c_ec Then
 							UpdateLever(e2\room\Objects[5])
 							RotateEntity(e2\room\Objects[5], 0.0, EntityYaw(e2\room\Objects[5]), 0.0)
 							RemoteDoorOn = False
