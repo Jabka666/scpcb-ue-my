@@ -673,7 +673,7 @@ Function UpdateConsole()
 							CreateConsoleMsg("Valid parameters are:")
 							CreateConsoleMsg("008-1 / 049 / 049-2 / 066 / 096 / 106 / 173 / 860")
 							CreateConsoleMsg("/ 372 / 513-1 / 966 / 1499-1 / class-d / 939")
-							CreateConsoleMsg("/ guard / mtf / apache / tentacle / 1048a/ 1048")
+							CreateConsoleMsg("/ guard / mtf / apache / tentacle / 1048_a/ 1048")
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "reset372" 
@@ -920,7 +920,7 @@ Function UpdateConsole()
 					If I_427\Timer >= 70.0 * 360.0 Then I_427\Timer = 0.0
 					
 					For e.Events = Each Events
-						If e\EventID = e_1048a Then
+						If e\EventID = e_1048_a Then
 							If PlayerRoom = e\room Then me\BlinkTimer = -10.0
 							If e\room\Objects[0] <> 0 Then
 								FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
@@ -1027,7 +1027,7 @@ Function UpdateConsole()
 					For n.NPCs = Each NPCs
 						If n\NPCType = NPCType372 Then
 							RemoveNPC(n)
-							CreateEvent("cont_372", "cont_372", 0, 0.0)   
+							CreateEvent("cont1_372", "cont1_372", 0, 0.0)   
 							Exit
 						EndIf
 					Next
@@ -1306,7 +1306,7 @@ Function UpdateConsole()
 					KillSounds()
 					
 					For e.Events = Each Events
-						If e\EventID = e_cont_173 Then
+						If e\EventID = e_cont1_173 Then
 							For i = 0 To 2
 								If e\room\NPC[i] <> Null Then RemoveNPC(e\room\NPC[i])
 								If i < 2 Then FreeEntity(e\room\Objects[i]) : e\room\Objects[i] = 0
@@ -1408,7 +1408,7 @@ Function UpdateConsole()
 							UpdateLever(e2\room\Levers[0])
 							RotateEntity(e2\room\Levers[0], 0.0, EntityYaw(e2\room\Levers[0]), 0.0)
 							TurnCheckpointMonitorsOff()
-						ElseIf e2\EventID = e_room008
+						ElseIf e2\EventID = e_cont2_008
 							e2\EventState = 2.0
 							UpdateLever(e2\room\Levers[0])
 							RotateEntity(e2\room\Levers[0], 0.0, EntityYaw(e2\room\Levers[0]), 30.0)
@@ -1545,7 +1545,7 @@ Function UpdateConsole()
 					KillSounds()
 					
 					For e.Events = Each Events
-						If e\EventID = e_cont_173 Then
+						If e\EventID = e_cont1_173 Then
 							For i = 0 To 2
 								If e\room\NPC[i] <> Null Then RemoveNPC(e\room\NPC[i])
 								If i < 2 Then FreeEntity(e\room\Objects[i]) : e\room\Objects[i] = 0
@@ -2069,7 +2069,7 @@ Const FogColorHCZ$ = "010005005"
 Const FogColorEZ$ = "010010015"
 Const FogColorStorageTunnels$ = "005015003"
 Const FogColorOutside$ = "255255255"
-Const FogColorDimension1499$ = "096097104"
+Const FogColordimension_1499$ = "096097104"
 Const FogColorPD$ = "000000000"
 Const FogColorPDTrench$ = "038055047"
 Const FogColorForest$ = "098133162"
@@ -2129,13 +2129,13 @@ Function MainLoop()
 		me\RestoreSanity = True
 		ShouldEntitiesFall = True
 		
-		If fps\Factor[0] > 0.0 And PlayerRoom\RoomTemplate\Name <> "dimension1499" Then UpdateSecurityCams()
+		If fps\Factor[0] > 0.0 And PlayerRoom\RoomTemplate\Name <> "dimension_1499" Then UpdateSecurityCams()
 		
 		If (Not MenuOpen) And (Not InvOpen) And OtherOpen = Null And SelectedDoor = Null And (Not ConsoleOpen) And (Not I_294\Using) And SelectedScreen = Null And me\EndingTimer >= 0.0 Then
 			ShouldPlay = Min(me\Zone, 2.0)
 		EndIf
 		
-		If PlayerRoom\RoomTemplate\Name <> "pocketdimension" And PlayerRoom\RoomTemplate\Name <> "gateb" And PlayerRoom\RoomTemplate\Name <> "gatea" And (Not MenuOpen) And (Not ConsoleOpen) And (Not InvOpen) Then 
+		If PlayerRoom\RoomTemplate\Name <> "dimension_106" And PlayerRoom\RoomTemplate\Name <> "gate_b" And PlayerRoom\RoomTemplate\Name <> "gate_a" And (Not MenuOpen) And (Not ConsoleOpen) And (Not InvOpen) Then 
 			If Rand(1500) = 1 Then
 				For i = 0 To 5
 					If AmbientSFX(i, CurrAmbientSFX) <> 0 Then
@@ -2147,11 +2147,11 @@ Function MainLoop()
 				
 				If Rand(3) = 1 Then me\Zone = 3
 				
-				If PlayerRoom\RoomTemplate\Name = "room173intro" Then 
+				If PlayerRoom\RoomTemplate\Name = "cont1_173_intro" Then 
 					me\Zone = 4
-				ElseIf PlayerRoom\RoomTemplate\Name = "cont_860_1"
+				ElseIf PlayerRoom\RoomTemplate\Name = "cont2_860_1"
 					For e.Events = Each Events
-						If e\EventID = e_cont_860_1 Then
+						If e\EventID = e_cont2_860_1 Then
 							If e\EventState = 1.0 Then
 								me\Zone = 5
 								PositionEntity(SoundEmitter, EntityX(SoundEmitter), 30.0, EntityZ(SoundEmitter))
@@ -2189,7 +2189,7 @@ Function MainLoop()
 			If Rand(50000) = 3 Then
 				Local RN$ = PlayerRoom\RoomTemplate\Name
 				
-				If RN <> "cont_860_1" And RN <> "room1123" And RN <> "room173intro" And RN <> "dimension1499" And RN <> "pocketdimension" Then
+				If RN <> "cont2_860_1" And RN <> "cont2_1123" And RN <> "cont1_173_intro" And RN <> "dimension_1499" And RN <> "dimension_106" Then
 					If fps\Factor[0] > 0.0 Then me\LightBlink = Rnd(1.0, 2.0)
 					PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(1, 8) + ".ogg"))
 				EndIf 
@@ -2201,7 +2201,7 @@ Function MainLoop()
 		
 		If (Not MenuOpen) And (Not InvOpen) And OtherOpen = Null And SelectedDoor = Null And (Not ConsoleOpen) And (Not I_294\Using) And SelectedScreen = Null And me\EndingTimer >= 0.0 Then
 			LightVolume = CurveValue(TempLightVolume, LightVolume, 50.0)
-			If PlayerRoom\RoomTemplate\Name = "room173intro" Lor PlayerRoom\RoomTemplate\Name = "gateb" Lor PlayerRoom\RoomTempLate\Name = "gatea" Then
+			If PlayerRoom\RoomTemplate\Name = "cont1_173_intro" Lor PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTempLate\Name = "gate_a" Then
 				CameraFogMode(Camera, 0)
 				CameraFogRange(Camera, 5.0, 30.0)
 				CameraRange(Camera, 0.01, 60.0)
@@ -2225,10 +2225,10 @@ Function MainLoop()
 			UpdateDeaf()
 			UpdateEmitters()
 			UpdateMouseLook()
-			If PlayerRoom\RoomTemplate\Name = "dimension1499" And QuickLoadPercent > 0 And QuickLoadPercent < 100 Then ShouldEntitiesFall = False
+			If PlayerRoom\RoomTemplate\Name = "dimension_1499" And QuickLoadPercent > 0 And QuickLoadPercent < 100 Then ShouldEntitiesFall = False
 			UpdateMoving()
 			InFacility = CheckForPlayerInFacility()
-			If PlayerRoom\RoomTemplate\Name = "dimension1499"
+			If PlayerRoom\RoomTemplate\Name = "dimension_1499"
 				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100
 					UpdateDimension1499()
 				EndIf
@@ -2237,7 +2237,7 @@ Function MainLoop()
 				UpdateDoors()
 				UpdateScreens()
 				UpdateRoomLights(Camera)
-				If PlayerRoom\RoomTemplate\Name = "gateb" Lor PlayerRoom\RoomTemplate\Name = "gatea"Then
+				If PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a"Then
 					If QuickLoadPercent = -1 Lor QuickLoadPercent = 100
 						UpdateEndings()
 					EndIf
@@ -2261,24 +2261,24 @@ Function MainLoop()
 		Local CurrFogColor$ = ""
 		
 		If PlayerRoom <> Null Then
-			If PlayerRoom\RoomTemplate\Name = "room3storage" And EntityY(me\Collider) < -4100.0 * RoomScale Then
+			If PlayerRoom\RoomTemplate\Name = "room3_storage" And EntityY(me\Collider) < -4100.0 * RoomScale Then
 				CurrFogColor = FogColorStorageTunnels
-			ElseIf PlayerRoom\RoomTemplate\Name = "gateb" Lor PlayerRoom\RoomTemplate\Name = "gatea" Then
+			ElseIf PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a" Then
 				CurrFogColor = FogColorOutside
-			ElseIf PlayerRoom\RoomTemplate\Name = "dimension1499"
-				CurrFogColor = FogColorDimension1499
-			ElseIf PlayerRoom\RoomTemplate\Name = "cont_860_1"
+			ElseIf PlayerRoom\RoomTemplate\Name = "dimension_1499"
+				CurrFogColor = FogColordimension_1499
+			ElseIf PlayerRoom\RoomTemplate\Name = "cont2_860_1"
 				For e.Events = Each Events
-					If e\EventID = e_cont_860_1 Then
+					If e\EventID = e_cont2_860_1 Then
 						If e\EventState = 1.0 Then
 							CurrFogColor = FogColorForest
 						EndIf
 						Exit
 					EndIf
 				Next
-			ElseIf PlayerRoom\RoomTemplate\Name = "pocketdimension"
+			ElseIf PlayerRoom\RoomTemplate\Name = "dimension_106"
 				For e.Events = Each Events
-					If e\EventID = e_pocketdimension Then
+					If e\EventID = e_dimension_106 Then
 						If EntityY(me\Collider) > 2608.0 * RoomScale Lor e\EventState2 > 1.0 Then
 							CurrFogColor = FogColorPDTrench
 						ElseIf EntityY(me\Collider) >= 2000.0 * RoomScale And EntityY(me\Collider) =< 2608.0 * RoomScale
@@ -2289,7 +2289,7 @@ Function MainLoop()
 						Exit
 					EndIf
 				Next
-			ElseIf PlayerRoom\RoomTemplate\Name = "room2mt" And (EntityY(me\Collider, True) >= 8.0 And EntityY(me\Collider, True) =< 12.0) Then
+			ElseIf PlayerRoom\RoomTemplate\Name = "room2_mt" And (EntityY(me\Collider, True) >= 8.0 And EntityY(me\Collider, True) =< 12.0) Then
 				CurrFogColor = FogColorHCZ
 			EndIf
 		EndIf
@@ -2499,9 +2499,9 @@ Function MainLoop()
 		EndIf
 		
 		If PlayerRoom <> Null Then
-			If PlayerRoom\RoomTemplate\Name = "room173intro" Then
+			If PlayerRoom\RoomTemplate\Name = "cont1_173_intro" Then
 				For e.Events = Each Events
-					If e\EventID = e_room173intro Then
+					If e\EventID = e_cont1_173_intro Then
 						If e\EventState3 >= 40.0 And e\EventState3 < 50.0 Then
 							If InvOpen Then
 								CreateMsg("Double click on the document to view it.", 6.0)
@@ -2517,7 +2517,7 @@ Function MainLoop()
 		If KeyHit(key\SAVE) Then
 			If SelectedDifficulty\SaveType = SAVEANYWHERE Then
 				RN = PlayerRoom\RoomTemplate\Name
-				If RN = "room173intro" Lor RN = "gateb" Lor RN = "gatea"
+				If RN = "cont1_173_intro" Lor RN = "gate_b" Lor RN = "gate_a"
 					CreateMsg("You can't save in this location.", 6.0)
 				ElseIf (Not CanSave) Lor QuickLoadPercent > -1
 					CreateMsg("You can't save at this moment.", 6.0)
@@ -2532,7 +2532,7 @@ Function MainLoop()
 					CreateMsg("Saving is only permitted on clickable monitors scattered throughout the facility.", 6.0)
 				Else
 					RN = PlayerRoom\RoomTemplate\Name
-					If RN = "room173intro" Lor RN = "gateb" Lor RN = "gatea"
+					If RN = "cont1_173_intro" Lor RN = "gate_b" Lor RN = "gate_a"
 						CreateMsg("You can't save in this location.", 6.0)
 					ElseIf (Not CanSave) Lor QuickLoadPercent > -1
 						CreateMsg("You can't save at this moment.", 6.0)
@@ -2592,11 +2592,11 @@ Function MainLoop()
 	; ~ Go out of function immediately if the game has been quit
 	If MainMenuOpen Then Return
 	
-	If fps\Factor[0] > 0.0 And PlayerRoom\RoomTemplate\Name <> "dimension1499" Then RenderSecurityCams()
+	If fps\Factor[0] > 0.0 And PlayerRoom\RoomTemplate\Name <> "dimension_1499" Then RenderSecurityCams()
 	
 	If (Not MenuOpen) And (Not InvOpen) And OtherOpen = Null And SelectedDoor = Null And (Not ConsoleOpen) And (Not I_294\Using) And SelectedScreen = Null And me\EndingTimer >= 0.0 Then
 		If PlayerRoom <> Null Then
-			If PlayerRoom\RoomTemplate\Name <> "dimension1499" Then
+			If PlayerRoom\RoomTemplate\Name <> "dimension_1499" Then
 				RenderRoomLights(Camera)
 			EndIf
 		EndIf
@@ -2780,7 +2780,7 @@ Function UpdateMoving()
 	Local Temp#, Temp3%
 	
 	If me\KillTimer >= 0.0 Then
-		If PlayerRoom\RoomTemplate\Name <> "pocketdimension" Then 
+		If PlayerRoom\RoomTemplate\Name <> "dimension_106" Then 
 			If KeyDown(key\SPRINT) And (Not chs\NoClip) Then
 				If me\Stamina < 5.0 Then
 					Temp = 0
@@ -2834,7 +2834,7 @@ Function UpdateMoving()
 				If me\Stamina =< 0.0 Then me\Stamina = -20.0
 			EndIf
 			
-			If PlayerRoom\RoomTemplate\Name = "pocketdimension" Then 
+			If PlayerRoom\RoomTemplate\Name = "dimension_106" Then 
 				If EntityY(me\Collider) < 2000.0 * RoomScale Lor EntityY(me\Collider) > 2608.0 * RoomScale Then
 					me\Stamina = 0.0
 					Speed = 0.015
@@ -2859,7 +2859,7 @@ Function UpdateMoving()
 				If CurrStepSFX = 0 Then
 					Temp = GetStepSound(me\Collider)
 					
-					If PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor PlayerRoom\RoomTemplate\Name = "room2poffices2" Then
+					If PlayerRoom\RoomTemplate\Name = "dimension_106" Lor PlayerRoom\RoomTemplate\Name = "room2_office_4" Then
 						Temp3 = 5
 					Else
 						Temp3 = 0
@@ -2981,7 +2981,7 @@ Function UpdateMoving()
 		Next
 		
 		If CollidedFloor = True Then
-			If PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor PlayerRoom\RoomTemplate\Name = "room2poffices2" Then
+			If PlayerRoom\RoomTemplate\Name = "dimension_106" Lor PlayerRoom\RoomTemplate\Name = "room2_office_4" Then
 				Temp3 = 5
 			Else
 				Temp3 = 0
@@ -3139,7 +3139,7 @@ Function UpdateMouseLook()
 		
 		RotateEntity(Camera, WrapAngle(CameraPitch + Rnd(-me\CameraShake, me\CameraShake)), WrapAngle(EntityYaw(me\Collider) + Rnd(-me\CameraShake, me\CameraShake)), Roll) ; ~ Pitch the user's camera up and down
 		
-		If PlayerRoom\RoomTemplate\Name = "pocketdimension" Then
+		If PlayerRoom\RoomTemplate\Name = "dimension_106" Then
 			If EntityY(me\Collider) < 2000.0 * RoomScale Lor EntityY(me\Collider) > 2608.0 * RoomScale Then
 				RotateEntity(Camera, WrapAngle(EntityPitch(Camera)), WrapAngle(EntityYaw(Camera)), Roll + WrapAngle(Sin(MilliSecs2() / 150.0) * 30.0)) ; ~ Pitch the user's camera up and down
 			EndIf
@@ -4271,7 +4271,7 @@ Function UpdateGUI()
 						EndIf
 						
 						For e.Events = Each Events
-							If e\EventID = e_1048a Then
+							If e\EventID = e_1048_a Then
 								If e\EventState2 > 0.0 Then
 									CreateMsg("You swallowed the pill. Ear-like organs are falling from your body.", 6.0)
 									
@@ -4320,12 +4320,12 @@ Function UpdateGUI()
 								
 								Local RoomName$ = PlayerRoom\RoomTemplate\Name
 								
-								If RoomName = "dimension1499" Lor RoomName = "gateb" Lor RoomName = "gatea" Then
+								If RoomName = "dimension_1499" Lor RoomName = "gate_b" Lor RoomName = "gate_a" Then
 									me\Injuries = 2.5
 									CreateMsg("You started bleeding heavily.", 6.0)
 								Else
 									For r.Rooms = Each Rooms
-										If r\RoomTemplate\Name = "pocketdimension" Then
+										If r\RoomTemplate\Name = "dimension_106" Then
 											PositionEntity(me\Collider, EntityX(r\OBJ), 0.8, EntityZ(r\OBJ))		
 											ResetEntity(me\Collider)									
 											UpdateDoors()
@@ -4623,7 +4623,7 @@ Function UpdateGUI()
 							RadioState[0] = -1.0
 						EndIf
 						
-						If PlayerRoom\RoomTemplate\Name = "pocketdimension" Then
+						If PlayerRoom\RoomTemplate\Name = "dimension_106" Then
 							For i = 0 To 4
 								If ChannelPlaying(RadioCHN[i]) Then PauseChannel(RadioCHN[i])
 							Next
@@ -5204,7 +5204,7 @@ Function UpdateGUI()
 								End Select
 								GiveAchievement(Achv1499)
 								For r.Rooms = Each Rooms
-									If r\RoomTemplate\Name = "dimension1499" Then
+									If r\RoomTemplate\Name = "dimension_1499" Then
 										me\BlinkTimer = -1.0
 										I_1499\PrevRoom = PlayerRoom
 										I_1499\PrevX = EntityX(me\Collider)
@@ -5234,7 +5234,7 @@ Function UpdateGUI()
 											EndIf
 										EndIf
 										For e.Events = Each Events
-											If e\EventID = e_dimension1499 Then
+											If e\EventID = e_dimension_1499 Then
 												If EntityDistanceSquared(e\room\OBJ, me\Collider) > PowTwo(8300.0 * RoomScale) Then
 													If e\EventState2 < 5.0 Then
 														e\EventState2 = e\EventState2 + 1.0
@@ -5531,7 +5531,7 @@ Function RenderHUD()
 	Color(0, 0, 0)
 	Rect(x - 50, y, 30, 30)
 	
-	If PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor I_714\Using Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor wi\HazmatSuit = 1 Lor wi\BallisticVest = 2 Lor I_409\Timer >= 55.0 Then
+	If PlayerRoom\RoomTemplate\Name = "dimension_106" Lor I_714\Using Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor wi\HazmatSuit = 1 Lor wi\BallisticVest = 2 Lor I_409\Timer >= 55.0 Then
 		Color(200, 0, 0)
 		Rect(x - 53, y - 3, 36, 36)
 	Else
@@ -5576,7 +5576,7 @@ Function RenderDebugHUD()
 				Exit
 			EndIf
 		Next
-		If PlayerRoom\RoomTemplate\Name = "dimension1499" Then
+		If PlayerRoom\RoomTemplate\Name = "dimension_1499" Then
 			Text(x, y + (180 * MenuScale), "Current Chunk X / Z: (" + (Int((EntityX(me\Collider) + 20) / 40)) + ", "+(Int((EntityZ(me\Collider) + 20) / 40)) + ")")
 			
 			Local CH_Amount% = 0
@@ -5712,7 +5712,7 @@ Function RenderGUI()
 		HidePointer()
 	EndIf 	
 	
-	If PlayerRoom\RoomTemplate\Name = "pocketdimension" Then
+	If PlayerRoom\RoomTemplate\Name = "dimension_106" Then
 		For e.Events = Each Events
 			If PlayerRoom = e\room Then
 				If Float(e\EventStr) < 1000.0 Then
@@ -6210,7 +6210,7 @@ Function RenderGUI()
 					
 					
 					If SelectedItem\State > 0.0 Lor (SelectedItem\ItemTemplate\TempName = "fineradio" Lor SelectedItem\ItemTemplate\TempName = "veryfineradio") Then
-						If PlayerRoom\RoomTemplate\Name <> "pocketdimension" And CoffinDistance >= 8.0 Then
+						If PlayerRoom\RoomTemplate\Name <> "dimension_106" And CoffinDistance >= 8.0 Then
 							Select Int(SelectedItem\State2)
 								Case 0
 									;[Block]
@@ -6343,11 +6343,11 @@ Function RenderGUI()
 					
 					Local NavWorks% = True
 					
-					If PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor PlayerRoom\RoomTemplate\Name = "dimension1499" Then
+					If PlayerRoom\RoomTemplate\Name = "dimension_106" Lor PlayerRoom\RoomTemplate\Name = "dimension_1499" Then
 						NavWorks = False
-					ElseIf PlayerRoom\RoomTemplate\Name = "cont_860_1" Then
+					ElseIf PlayerRoom\RoomTemplate\Name = "cont2_860_1" Then
 						For e.Events = Each Events
-							If e\EventID = e_cont_860_1 Then
+							If e\EventID = e_cont2_860_1 Then
 								If e\EventState = 1.0 Then
 									NavWorks = False
 								EndIf
@@ -6363,7 +6363,7 @@ Function RenderGUI()
 							Text(x, y + (NAV_HEIGHT / 2) - 60, "LOCATION UNKNOWN", True)						
 						EndIf
 					Else
-						If (SelectedItem\State > 0.0 Lor (SelectedItem\ItemTemplate\TempName = "nav300" Lor SelectedItem\ItemTemplate\TempName = "navulti")) And (Rnd(CoffinDistance + 15.0) > 1.0 Lor PlayerRoom\RoomTemplate\Name <> "room895") Then
+						If (SelectedItem\State > 0.0 Lor (SelectedItem\ItemTemplate\TempName = "nav300" Lor SelectedItem\ItemTemplate\TempName = "navulti")) And (Rnd(CoffinDistance + 15.0) > 1.0 Lor PlayerRoom\RoomTemplate\Name <> "cont1_895") Then
 							PlayerX = Floor((EntityX(PlayerRoom\OBJ) + 8.0) / 8.0 + 0.5)
 							PlayerZ = Floor((EntityZ(PlayerRoom\OBJ) + 8.0) / 8.0 + 0.5)
 							
@@ -6492,7 +6492,7 @@ Function RenderGUI()
 										EndIf
 									EndIf
 								EndIf
-								If PlayerRoom\RoomTemplate\Name = "room895" Then
+								If PlayerRoom\RoomTemplate\Name = "cont1_895" Then
 									If CoffinDistance < 8.0 Then
 										Dist = Rnd(4.0, 8.0)
 										Color(100, 0, 0)
@@ -6633,7 +6633,7 @@ Function UpdateMenu()
 	Local x%, y%, z%, Width%, Height%, i%
 	
 	If MenuOpen Then
-		If PlayerRoom\RoomTemplate\Name <> "gateb" And PlayerRoom\RoomTemplate\Name <> "gatea" Then
+		If PlayerRoom\RoomTemplate\Name <> "gate_b" And PlayerRoom\RoomTemplate\Name <> "gate_a" Then
 			If me\StopHidingTimer = 0.0 Then
 				If Curr173 <> Null And Curr106 <> Null Then
 					If EntityDistanceSquared(Curr173\Collider, me\Collider) < 16.0 Lor EntityDistanceSquared(Curr106\Collider, me\Collider) < 16.0 Then 
@@ -6970,7 +6970,7 @@ Function UpdateMenu()
 				Local RN$ = PlayerRoom\RoomTemplate\Name
 				Local AbleToSave% = True
 				
-				If RN = "room173intro" Lor RN = "gateb" Lor RN = "gatea" Then AbleToSave = False
+				If RN = "cont1_173_intro" Lor RN = "gate_b" Lor RN = "gate_a" Then AbleToSave = False
 				If (Not CanSave) Then AbleToSave = False
 				If AbleToSave Then
 					QuitButton = 140
@@ -8626,7 +8626,7 @@ Function InitNewGame()
 			If Rand(4) = 1 Then de.Decals = CreateDecal(0, EntityX(r\OBJ) + Rnd(-2.0, 2.0), r\y + 0.005, EntityZ(r\OBJ) + Rnd(-2.0, 2.0), 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.7, 0.85))
 		EndIf
 		
-		If r\RoomTemplate\Name = "cont_173" And (Not opt\IntroEnabled) Then 
+		If r\RoomTemplate\Name = "cont1_173" And (Not opt\IntroEnabled) Then 
 			PositionEntity(me\Collider, EntityX(r\OBJ) + 3584.0 * RoomScale, r\y + 704.0 * RoomScale, EntityZ(r\OBJ) + 1024.0 * RoomScale)
 			PlayerRoom = r
 			it.Items = CreateItem("Class D Orientation Leaflet", "paper", 1.0, 1.0, 1.0)
@@ -8644,7 +8644,7 @@ Function InitNewGame()
 			EntityParent(it\Collider, 0)
 			ItemAmount = ItemAmount + 1
 			Exit
-		ElseIf r\RoomTemplate\Name = "room173intro" And opt\IntroEnabled Then
+		ElseIf r\RoomTemplate\Name = "cont1_173_intro" And opt\IntroEnabled Then
 			PositionEntity(me\Collider, EntityX(r\OBJ), 1.0, EntityZ(r\OBJ))
 			PlayerRoom = r
 			Exit
@@ -8667,7 +8667,7 @@ Function InitNewGame()
 		If e\EventID = e_room2_nuke
 			e\EventState = 1.0
 		EndIf
-		If e\EventID = e_room106
+		If e\EventID = e_cont1_106
 			e\EventState2 = 1.0
 		EndIf	
 		If e\EventID = e_room2_sl
@@ -8729,13 +8729,13 @@ Function InitLoadGame()
 	RenderLoading(85, "EVENTS")
 	
 	For e.Events = Each Events
-		; ~ Loading the necessary stuff for dimension1499, but this will only be done if the player is in this dimension already
-		If e\EventID = e_dimension1499
+		; ~ Loading the necessary stuff for dimension_1499, but this will only be done if the player is in this dimension already
+		If e\EventID = e_dimension_1499
 			If e\EventState = 2.0 Then
 				RenderLoading(91)
 				e\room\Objects[0] = CreatePlane()
 				
-				Local PlaneTex% = LoadTexture_Strict("GFX\map\dimension1499\grit3.jpg")
+				Local PlaneTex% = LoadTexture_Strict("GFX\map\Dimension1499\grit3.jpg")
 				
 				EntityTexture(e\room\Objects[0], PlaneTex)
 				DeleteSingleTextureEntryFromCache(PlaneTex)
@@ -8745,7 +8745,7 @@ Function InitLoadGame()
 				I_1499\Sky = CreateSky("GFX\map\sky\1499sky")
 				RenderLoading(93)
 				For i = 1 To 15
-					e\room\Objects[i] = LoadMesh_Strict("GFX\map\dimension1499\1499object" + i + ".b3d")
+					e\room\Objects[i] = LoadMesh_Strict("GFX\map\Dimension1499\1499object" + i + ".b3d")
 					HideEntity(e\room\Objects[i])
 				Next
 				RenderLoading(96)
@@ -9313,7 +9313,7 @@ Function Use427()
 		If I_427\Using Then
 			I_427\Timer = I_427\Timer + fps\Factor[0]
 			For e.Events = Each Events
-				If e\EventID = e_1048a Then
+				If e\EventID = e_1048_a Then
 					If e\EventState2 > 0.0 Then e\EventState2 = Max(e\EventState2 - (fps\Factor[0] * 0.5), 0.0)
 					Exit
 				EndIf
@@ -9386,7 +9386,7 @@ Function UpdateMTF()
 	Local Dist#, i%
 	
 	If MTFTimer = 0.0 Then
-		If Rand(30) = 1 And PlayerRoom\RoomTemplate\Name <> "dimension1499" Then
+		If Rand(30) = 1 And PlayerRoom\RoomTemplate\Name <> "dimension_1499" Then
 			Local entrance.Rooms = Null
 			
 			For r.Rooms = Each Rooms
@@ -9486,7 +9486,7 @@ Function UpdateExplosion()
 		me\ExplosionTimer = me\ExplosionTimer + fps\Factor[0]
 		If me\ExplosionTimer < 140.0 Then
 			If me\ExplosionTimer - fps\Factor[0] < 5.0 Then
-				ExplosionSFX = LoadSound_Strict("SFX\Ending\GateB\Nuke1.ogg")
+				ExplosionSFX = LoadSound_Strict("SFX\Ending\gateb\Nuke1.ogg")
 				PlaySound_Strict(ExplosionSFX)
 				me\CameraShake = 10.0
 				me\ExplosionTimer = 5.0
@@ -9496,7 +9496,7 @@ Function UpdateExplosion()
 			me\CameraShake = Min((me\ExplosionTimer / 20.0), 20.0)
 			If me\ExplosionTimer - fps\Factor[0] < 140.0 Then
 				me\BlinkTimer = 1.0
-				ExplosionSFX = LoadSound_Strict("SFX\Ending\GateB\Nuke2.ogg")
+				ExplosionSFX = LoadSound_Strict("SFX\Ending\gateb\Nuke2.ogg")
 				PlaySound_Strict(ExplosionSFX)				
 				For i = 0 To (10 + (10 * (opt\ParticleAmount + 1)))
 					p.Particles = CreateParticle(0, EntityX(me\Collider) + Rnd(-0.5, 0.5), EntityY(me\Collider) - Rnd(0.2, 1.5), EntityZ(me\Collider) + Rnd(-0.5, 0.5), Rnd(0.2, 0.6), 0.0, 350.0)	
@@ -9602,16 +9602,16 @@ Function Update008()
 	Local TeleportForInfect% = True
 	Local GroupName$
 	
-	If PlayerRoom\RoomTemplate\Name = "cont_860_1"
+	If PlayerRoom\RoomTemplate\Name = "cont2_860_1"
 		For e.Events = Each Events
-			If e\EventID = e_cont_860_1 Then
+			If e\EventID = e_cont2_860_1 Then
 				If e\EventState = 1.0 Then
 					TeleportForInfect = False
 				EndIf
 				Exit
 			EndIf
 		Next
-	ElseIf PlayerRoom\RoomTemplate\Name = "dimension1499" Lor PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor PlayerRoom\RoomTemplate\Name = "gateb" Lor PlayerRoom\RoomTemplate\Name = "gatea"
+	ElseIf PlayerRoom\RoomTemplate\Name = "dimension_1499" Lor PlayerRoom\RoomTemplate\Name = "dimension_106" Lor PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a"
 		TeleportForInfect = False
 	EndIf
 	
@@ -9670,7 +9670,7 @@ Function Update008()
 				If I_008\Timer >= 92.7 And PrevI008Timer < 92.7 Then
 					If TeleportForInfect Then
 						For r.Rooms = Each Rooms
-							If r\RoomTemplate\Name = "room008" Then
+							If r\RoomTemplate\Name = "cont2_008" Then
 								PositionEntity(me\Collider, EntityX(r\Objects[7], True), EntityY(r\Objects[7], True), EntityZ(r\Objects[7], True), True)
 								ResetEntity(me\Collider)
 								r\NPC[0] = CreateNPC(NPCTypeD, EntityX(r\Objects[6], True), EntityY(r\Objects[6], True) + 0.2, EntityZ(r\Objects[6], True))
@@ -9753,11 +9753,11 @@ Function Update008()
 			Else
 				Kill()
 				me\BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 96.0), me\BlinkTimer), -10.0)
-				If PlayerRoom\RoomTemplate\Name = "dimension1499" Then
+				If PlayerRoom\RoomTemplate\Name = "dimension_1499" Then
 					msg\DeathMsg = "The whereabouts of SCP-1499 are still unknown, but a recon team has been dispatched to investigate reports of a violent attack to a church in the Russian town of [DATA REDACTED]."
-				ElseIf PlayerRoom\RoomTemplate\Name = "gateb" Lor PlayerRoom\RoomTemplate\Name = "gatea" Then
+				ElseIf PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a" Then
 					msg\DeathMsg = SubjectName + " found wandering around Gate "
-					If PlayerRoom\RoomTemplate\Name = "gatea" Then
+					If PlayerRoom\RoomTemplate\Name = "gate_a" Then
 						msg\DeathMsg = msg\DeathMsg + "A"
 					Else
 						msg\DeathMsg = msg\DeathMsg + "B"
@@ -9851,7 +9851,7 @@ Function UpdateLeave1499()
 	Local r.Rooms, it.Items, r2.Rooms, r1499.Rooms
 	Local i%
 	
-	If I_1499\Using = 0 And PlayerRoom\RoomTemplate\Name = "dimension1499" Then
+	If I_1499\Using = 0 And PlayerRoom\RoomTemplate\Name = "dimension_1499" Then
 		For r.Rooms = Each Rooms
 			If r = I_1499\PrevRoom Then
 				me\BlinkTimer = -1.0
@@ -9863,7 +9863,7 @@ Function UpdateLeave1499()
 				PlayerRoom = r
 				UpdateDoors()
 				UpdateRooms()
-				If PlayerRoom\RoomTemplate\Name = "room3storage"
+				If PlayerRoom\RoomTemplate\Name = "room3_storage"
 					If EntityY(me\Collider) < (-4600.0) * RoomScale
 						For i = 0 To 3
 							PlayerRoom\NPC[i]\State = 2.0
@@ -9875,7 +9875,7 @@ Function UpdateLeave1499()
 					EndIf
 				EndIf
 				For r2.Rooms = Each Rooms
-					If r2\RoomTemplate\Name = "dimension1499" Then
+					If r2\RoomTemplate\Name = "dimension_1499" Then
 						r1499 = r2
 						Exit
 					EndIf
@@ -9904,7 +9904,7 @@ Function UpdateLeave1499()
 End Function
 
 Function CheckForPlayerInFacility()
-	; ~ False (= 0): Player is not in facility (mostly meant for "dimension1499")
+	; ~ False (= 0): Player is not in facility (mostly meant for "dimension_1499")
 	; ~ True (= 1): Player is in facility
 	; ~ 2: Player is in tunnels (maintenance tunnels / SCP-049's tunnels / SCP-939's storage room, etc...)
 	

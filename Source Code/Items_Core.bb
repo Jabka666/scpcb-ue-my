@@ -770,7 +770,7 @@ Function PickItem(item.Items)
 						;[Block]
 						If (Not I_714\Using) And wi\GasMask <> 3 And wi\HazmatSuit <> 3 Then
 							For e.Events = Each Events
-								If e\EventName = "room1123" Then 
+								If e\EventName = "cont2_1123" Then 
 									If e\EventState = 0.0 Then
 										me\LightFlash = 3.0
 										PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))

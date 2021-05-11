@@ -1110,8 +1110,8 @@ Function LoadGame(File$)
 	Next
 	
 	For e.Events = Each Events
-		; ~ Reset e_dimension1499
-		If e\EventID = e_dimension1499 Then
+		; ~ Reset e_dimension_1499
+		If e\EventID = e_dimension_1499 Then
 			If e\EventState > 0.0 Then
 				e\EventState = 0.0
 				e\EventStr = ""
@@ -1132,11 +1132,11 @@ Function LoadGame(File$)
 				Next
 			EndIf
 		; ~ Reset the forest event to make it loading properly
-		ElseIf e\EventID = e_cont_860_1
+		ElseIf e\EventID = e_cont2_860_1
 			e\EventStr = ""
-		ElseIf e\EventID = e_room205
+		ElseIf e\EventID = e_cont1_205
 			e\EventStr = ""
-		ElseIf e\EventID = e_room106
+		ElseIf e\EventID = e_cont1_106
 			If e\EventState2 = 0.0 Then
 				PositionEntity(e\room\Objects[6], EntityX(e\room\Objects[6], True), -1280.0 * RoomScale, EntityZ(e\room\Objects[6], True), True)
 			EndIf
@@ -1313,7 +1313,7 @@ Function LoadGame(File$)
 		Next
 	Next
 	
-	If PlayerRoom\RoomTemplate\Name = "dimension1499"
+	If PlayerRoom\RoomTemplate\Name = "dimension_1499"
 		me\BlinkTimer = -1.0
 		ShouldEntitiesFall = False
 		PlayerRoom = I_1499\PrevRoom
@@ -1868,14 +1868,14 @@ Function LoadGameQuick(File$)
 			EndIf
 		Next	
 		e\EventStr = ReadString(f)
-		If e\EventID = e_cont_173 Then
+		If e\EventID = e_cont1_173 Then
 			; ~ A hacky fix for the case that the intro objects aren't loaded when they should
 			; ~ Altough I'm too lazy to add those objects there because at the time where you can save, those objects are already in the ground anyway -- ENDSHN
 			If (Not e\room\Objects[0]) Then
 				e\room\Objects[0] = CreatePivot()
 				e\room\Objects[1] = CreatePivot()
 			EndIf
-		ElseIf e\EventID = e_cont_860_1 Then
+		ElseIf e\EventID = e_cont2_860_1 Then
 			If e\EventState = 1.0 Then
 				ShowEntity(e\room\fr\Forest_Pivot)
 			EndIf
@@ -2030,7 +2030,7 @@ Function LoadGameQuick(File$)
 	
 	If Sky <> 0 Then FreeEntity(Sky) : Sky = 0
 	For r.Rooms = Each Rooms
-		If r\RoomTemplate\Name = "gatea" Then
+		If r\RoomTemplate\Name = "gate_a" Then
 			If r\Objects[0] <> 0 Then
 				FreeEntity(r\Objects[0]) : r\Objects[0] = 0
 				
@@ -2040,12 +2040,12 @@ Function LoadGameQuick(File$)
 				
 				r\Objects[10] = 0 ; ~ r\Objects[10] is already deleted because it is a parent object to r\Objects[9] which is already deleted a line before
 				
-				; ~ Readding this object, as it is originally inside the "FillRoom" function but gets deleted when it loads GateA
+				; ~ Readding this object, as it is originally inside the "FillRoom" function but gets deleted when it loads Gate A
 				r\Objects[9] = CreatePivot()
 				PositionEntity(r\Objects[9], xTemp, r\y + 992.0 * RoomScale, zTemp, True)
 				EntityParent(r\Objects[9], r\OBJ)
 				
-				; ~ The GateA wall pieces
+				; ~ The Gate A wall pieces
 				xTemp = EntityX(r\Objects[13], True)
 				zTemp = EntityZ(r\Objects[13], True)
 				FreeEntity(r\Objects[13])
@@ -2066,7 +2066,7 @@ Function LoadGameQuick(File$)
 				FreeEntity(r\Objects[12]) : r\Objects[12] = 0
 				FreeEntity(r\Objects[17]) : r\Objects[17] = 0
 			EndIf
-		ElseIf r\RoomTemplate\Name = "gateb" Then
+		ElseIf r\RoomTemplate\Name = "gate_b" Then
 			If r\Objects[0] <> 0 Then
 				xTemp = EntityX(r\Objects[0], True)
 				zTemp = EntityZ(r\Objects[0], True)
@@ -2296,7 +2296,7 @@ Function LoadMap(File$)
 		Local ForestRoom.Rooms
 		
 		For r.Rooms = Each Rooms
-			If r\RoomTemplate\Name = "cont_860_1" Then
+			If r\RoomTemplate\Name = "cont2_860_1" Then
 				ForestRoom = r
 				Exit
 			EndIf
@@ -2365,7 +2365,7 @@ Function LoadMap(File$)
 		Local MTRoom.Rooms
 		
 		For r.Rooms = Each Rooms
-			If r\RoomTemplate\Name = "room2mt" Then
+			If r\RoomTemplate\Name = "room2_mt" Then
 				MTRoom = r
 				Exit
 			EndIf
@@ -2571,21 +2571,21 @@ Function LoadMap(File$)
 	Next
 	
 	If opt\IntroEnabled Then
-		r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 0.0, (MapGridSize + 2) * RoomSpacing, "room173intro")
-		CreateEvent("room173intro", "room173intro", 0)
+		r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 0.0, (MapGridSize + 2) * RoomSpacing, "cont1_173_intro")
+		CreateEvent("cont1_173_intro", "cont1_173_intro", 0)
 	EndIf
 	
-	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize + 2) * RoomSpacing, 0.0, (MapGridSize + 2) * RoomSpacing, "pocketdimension")
-	CreateEvent("pocketdimension", "pocketdimension", 0)   
+	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize + 2) * RoomSpacing, 0.0, (MapGridSize + 2) * RoomSpacing, "dimension_106")
+	CreateEvent("dimension_106", "dimension_106", 0)   
 	
-	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, RoomSpacing * (-10), "gateb")
-	CreateEvent("gateb", "gateb", 0)
+	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, RoomSpacing * (-10), "gate_b")
+	CreateEvent("gate_b", "gate_b", 0)
 	
-	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, RoomSpacing * (-2), "gatea")
-	CreateEvent("gatea", "gatea", 0)
+	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, RoomSpacing * (-2), "gate_a")
+	CreateEvent("gate_a", "gate_a", 0)
 	
-	r.Rooms = CreateRoom(0, ROOM1, RoomSpacing * (-2), 800.0, 0.0, "dimension1499")
-	CreateEvent("dimension1499", "dimension1499", 0)
+	r.Rooms = CreateRoom(0, ROOM1, RoomSpacing * (-2), 800.0, 0.0, "dimension_1499")
+	CreateEvent("dimension_1499", "dimension_1499", 0)
 	
 	For r.Rooms = Each Rooms
 		For i = 0 To 3

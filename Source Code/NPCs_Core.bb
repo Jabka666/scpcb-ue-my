@@ -565,7 +565,7 @@ Function UpdateNPCs()
 		Select n\NPCType
 			Case NPCType173
 				;[Block]
-				If Curr173\Idle <> 3 And PlayerRoom\RoomTemplate\Name <> "gateb" Lor PlayerRoom\RoomTemplate\Name <> "gatea" Then
+				If Curr173\Idle <> 3 And PlayerRoom\RoomTemplate\Name <> "gate_b" Lor PlayerRoom\RoomTemplate\Name <> "gate_a" Then
 					Dist = EntityDistanceSquared(n\Collider, me\Collider)		
 					
 					n\State3 = 1.0
@@ -659,7 +659,7 @@ Function UpdateNPCs()
 								; ~ Teleport to a room closer to the player
 								If Dist > 2500.0 Then
 									If Rand(70) = 1 Then
-										If PlayerRoom\RoomTemplate\Name <> "gateb" And PlayerRoom\RoomTemplate\Name <> "gatea" And PlayerRoom\RoomTemplate\Name <> "pocketdimension" Then
+										If PlayerRoom\RoomTemplate\Name <> "gate_b" And PlayerRoom\RoomTemplate\Name <> "gate_a" And PlayerRoom\RoomTemplate\Name <> "dimension_106" Then
 											For w.Waypoints = Each WayPoints
 												If w\door = Null And Rand(5) = 1 Then
 													x = Abs(EntityX(me\Collider) - EntityX(w\OBJ, True))
@@ -720,11 +720,11 @@ Function UpdateNPCs()
 										If Dist < 0.4225 Then
 											If me\KillTimer >= 0.0 And (Not chs\GodMode) Then
 												Select PlayerRoom\RoomTemplate\Name
-													Case "room2c_lockroom_lcz", "room2closets", "room895"
+													Case "room2c_gw_lcz", "room2_closets", "cont1_895"
 														;[Block]
 														msg\DeathMsg = SubjectName + ". Cause of death: Fatal cervical fracture. The surveillance tapes confirm that the subject was killed by SCP-173."	
 														;[End Block]
-													Case "room173intro"
+													Case "cont1_173_intro"
 														;[Block]
 														msg\DeathMsg = SubjectName + ". Cause of death: Fatal cervical fracture. According to Security Chief Franklin who was present at SCP-173's containment "
 														msg\DeathMsg = msg\DeathMsg + "chamber during the breach, the subject was killed by SCP-173 as soon as the disruptions in the electrical network started."
@@ -808,7 +808,7 @@ Function UpdateNPCs()
 				;[End Block]
 			Case NPCType106
 				;[Block]
-				If n\Contained Lor PlayerRoom\RoomTemplate\Name = "gateb" Then
+				If n\Contained Lor PlayerRoom\RoomTemplate\Name = "gate_b" Then
 					n\Idle = 1
 					HideEntity(n\OBJ)
 					HideEntity(n\OBJ2)
@@ -819,10 +819,10 @@ Function UpdateNPCs()
 					Local Spawn106% = True
 					
 					; ~ Checking if SCP-106 is allowed to spawn
-					If PlayerRoom\RoomTemplate\Name = "dimension1499" Then Spawn106 = False
-					If PlayerRoom\RoomTemplate\Name = "cont_860_1" Then
+					If PlayerRoom\RoomTemplate\Name = "dimension_1499" Then Spawn106 = False
+					If PlayerRoom\RoomTemplate\Name = "cont2_860_1" Then
 						For e.Events = Each Events
-							If e\EventID = e_cont_860_1 Then
+							If e\EventID = e_cont2_860_1 Then
 								If e\EventState = 1.0 Then 
 									Spawn106 = False
 								EndIf
@@ -830,17 +830,17 @@ Function UpdateNPCs()
 							EndIf
 						Next
 					EndIf
-					If PlayerRoom\RoomTemplate\Name = "cont_049" And EntityY(me\Collider) =< -2848.0 * RoomScale Then
+					If PlayerRoom\RoomTemplate\Name = "cont2_049" And EntityY(me\Collider) =< -2848.0 * RoomScale Then
 						Spawn106 = False
 					EndIf
-					; ~ GateA event has been triggered. Don't make SCP-106 disappear!
-					; ~ The reason why this is a seperate for loop is because we need to make sure that cont_860_1 would not be able to overwrite the "Spawn106" variable
-					If PlayerRoom\RoomTemplate\Name = "gatea" Then
+					; ~ Gate A event has been triggered. Don't make SCP-106 disappear!
+					; ~ The reason why this is a seperate for loop is because we need to make sure that cont2_860_1 would not be able to overwrite the "Spawn106" variable
+					If PlayerRoom\RoomTemplate\Name = "gate_a" Then
 						For e.Events = Each Events
-							If e\EventID = e_gatea Then
+							If e\EventID = e_gate_a Then
 								If e\EventState <> 0.0 Then
 									Spawn106 = True
-									If PlayerRoom\RoomTemplate\Name = "dimension1499" Then
+									If PlayerRoom\RoomTemplate\Name = "dimension_1499" Then
 										n\Idle = 1
 									Else
 										n\Idle = 0
@@ -868,7 +868,7 @@ Function UpdateNPCs()
 								
 								SetAnimTime(n\OBJ, 110.0)
 								
-								If PlayerRoom\RoomTemplate\Name <> "room895"
+								If PlayerRoom\RoomTemplate\Name <> "cont1_895"
 									PositionEntity(n\Collider, EntityX(me\Collider), EntityY(me\Collider) - 15.0, EntityZ(me\Collider))
 								EndIf
 								
@@ -890,7 +890,7 @@ Function UpdateNPCs()
 									n\State = -10.0
 								EndIf
 							Else
-								If PlayerRoom\RoomTemplate\Name <> "gatea" Then ShouldPlay = 10
+								If PlayerRoom\RoomTemplate\Name <> "gate_a" Then ShouldPlay = 10
 								
 								Local Visible% = False
 								
@@ -901,7 +901,7 @@ Function UpdateNPCs()
 								If chs\NoTarget Then Visible = False
 								
 								If Visible Then
-									If PlayerRoom\RoomTemplate\Name <> "gatea" Then n\PathTimer = 0.0
+									If PlayerRoom\RoomTemplate\Name <> "gate_a" Then n\PathTimer = 0.0
 									If EntityInView(n\Collider, Camera) Then
 										GiveAchievement(Achv106)
 										
@@ -919,8 +919,8 @@ Function UpdateNPCs()
 								EndIf
 								
 								If Dist > 0.64 Then
-									If (Dist > 625.0 Lor PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor Visible Lor n\PathStatus <> 1) And PlayerRoom\RoomTemplate\Name <> "gatea" Then 
-										If (Dist > 1600.0 Lor PlayerRoom\RoomTemplate\Name = "pocketdimension") Then
+									If (Dist > 625.0 Lor PlayerRoom\RoomTemplate\Name = "dimension_106" Lor Visible Lor n\PathStatus <> 1) And PlayerRoom\RoomTemplate\Name <> "gate_a" Then 
+										If (Dist > 1600.0 Lor PlayerRoom\RoomTemplate\Name = "dimension_106") Then
 											TranslateEntity(n\Collider, 0.0, ((EntityY(me\Collider) - 0.14) - EntityY(n\Collider)) / 50.0, 0.0)
 										EndIf
 										
@@ -1009,10 +1009,10 @@ Function UpdateNPCs()
 											If Ceil(n\Frame) = 110.0 And (Not chs\GodMode) Then
 												PlaySound_Strict(DamageSFX[1])
 												PlaySound_Strict(HorrorSFX[5])											
-												If PlayerRoom\RoomTemplate\Name = "pocketdimension" Then
+												If PlayerRoom\RoomTemplate\Name = "dimension_106" Then
 													msg\DeathMsg = SubjectName + ". Body partially decomposed by what is assumed to be SCP-106's " + Chr(34) + "corrosion" + Chr(34) + " effect. Body disposed of via incineration."
 													Kill(True)
-												ElseIf PlayerRoom\RoomTemplate\Name = "gatea"
+												ElseIf PlayerRoom\RoomTemplate\Name = "gate_a"
 													msg\DeathMsg = Chr(34) + "SCP-106 was spotted in Gate A area, finally breaching the containment. After using the High-Intensity Discharge turret by personnel, object went into a pocket dimension. "
 													msg\DeathMsg = msg\DeathMsg + "Casualty is 1 (one) D-class personnel, identified by viewers as " + SubjectName + ", who also escaped from facility and encounters with object. "
 													msg\DeathMsg = msg\DeathMsg + "Incident needs an investigation, containment procedures are restoring." + Chr(34)
@@ -1044,7 +1044,7 @@ Function UpdateNPCs()
 							EndIf
 							
 							If n\Reload = 0.0 Then
-								If Dist > 100.0 And PlayerRoom\RoomTemplate\Name <> "gateb" And PlayerRoom\RoomTemplate\Name <> "pocketdimension" And PlayerRoom\RoomTemplate\Name <> "gatea" And n\State < -5.0 Then ; ~ Timer idea -- Juanjpro
+								If Dist > 100.0 And PlayerRoom\RoomTemplate\Name <> "gate_b" And PlayerRoom\RoomTemplate\Name <> "dimension_106" And PlayerRoom\RoomTemplate\Name <> "gate_a" And n\State < -5.0 Then ; ~ Timer idea -- Juanjpro
 									If (Not EntityInView(n\OBJ, Camera)) Then
 										TurnEntity(me\Collider, 0.0, 180.0, 0.0)
 										Pick = EntityPick(me\Collider, 5.0)
@@ -1072,7 +1072,7 @@ Function UpdateNPCs()
 							SetNPCFrame(n, 110.0)
 							
 							If (Not PlayerRoom\RoomTemplate\DisableDecals) Then
-								If PlayerRoom\RoomTemplate\Name <> "gatea" Then
+								If PlayerRoom\RoomTemplate\Name <> "gate_a" Then
 									If SelectedDifficulty\AggressiveNPCs Then
 										n\State = n\State - (fps\Factor[0] * 2.0)
 									Else
@@ -1092,7 +1092,7 @@ Function UpdateNPCs()
 						RotateEntity(n\OBJ2, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
 						MoveEntity(n\OBJ2, 0.0, 8.6 * 0.11, -1.5 * 0.11)
 						
-						If PlayerRoom\RoomTemplate\Name = "pocketdimension" Lor PlayerRoom\RoomTemplate\Name = "gateb" Lor PlayerRoom\RoomTemplate\Name = "gatea" Then
+						If PlayerRoom\RoomTemplate\Name = "dimension_106" Lor PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a" Then
 							HideEntity(n\OBJ2)
 						Else
 							If Dist < PowTwo(opt\CameraFogFar * LightVolume * 0.6) Then
@@ -1461,7 +1461,7 @@ Function UpdateNPCs()
 				n\BlinkTimer = 1.0
 				
 				If n\Idle > 0.1 Then
-					If PlayerRoom\RoomTemplate\Name <> "cont_049" Then
+					If PlayerRoom\RoomTemplate\Name <> "cont2_049" Then
 						n\Idle = Max(n\Idle - (1 + SelectedDifficulty\AggressiveNPCs) * fps\Factor[0], 0.1)
 					EndIf
 					n\DropSpeed = 0
@@ -1562,10 +1562,10 @@ Function UpdateNPCs()
 											me\BlurTimer = 500.0
 											
 											If (Not chs\GodMode) Then
-												If PlayerRoom\RoomTemplate\Name = "cont_049"
+												If PlayerRoom\RoomTemplate\Name = "cont2_049"
 													msg\DeathMsg = "Three (3) active instances of SCP-049-2 discovered in the tunnel outside SCP-049's containment chamber. Terminated by Nine-Tailed Fox."
 													For e.Events = Each Events
-														If e\EventID = e_cont_049 Then
+														If e\EventID = e_cont2_049 Then
 															e\EventState = -1.0
 															Exit
 														EndIf
@@ -2207,7 +2207,7 @@ Function UpdateNPCs()
 							Local DetectDistance# = 121.0
 							
 							; ~ If at Gate B increase his distance so that he can shoot the player from a distance after they are spotted.
-							If PlayerRoom\RoomTemplate\Name = "gateb" Then
+							If PlayerRoom\RoomTemplate\Name = "gate_b" Then
 								DetectDistance = 441.0
 								ShootAccuracy = 0.0
 								If Rand(1, 8 - SelectedDifficulty\AggressiveNPCs * 4) < 2 Then ShootAccuracy = 0.03
@@ -2232,10 +2232,10 @@ Function UpdateNPCs()
 									If n\State3 = 1.0 Then
 										Local InstaKillPlayer% = False
 										
-										If PlayerRoom\RoomTemplate\Name = "cont_173" Then 
+										If PlayerRoom\RoomTemplate\Name = "cont1_173" Then 
 											msg\DeathMsg = SubjectName + ". Cause of death: Gunshot wound to the head. The surveillance tapes confirm that the subject was terminated by Agent Ulgrin shortly after the site lockdown was initiated."
 											InstaKillPlayer = True
-										ElseIf PlayerRoom\RoomTemplate\Name = "gateb"
+										ElseIf PlayerRoom\RoomTemplate\Name = "gate_b"
 											msg\DeathMsg = Chr(34) + "Agent G. to control. Eliminated a Class D escapee in Gate B's courtyard." + Chr(34)
 										Else
 											msg\DeathMsg = ""
@@ -2702,7 +2702,7 @@ Function UpdateNPCs()
 				;[End Block]
 			Case NPCType513_1
 				;[Block]
-				If PlayerRoom\RoomTemplate\Name <> "pocketdimension" Then 
+				If PlayerRoom\RoomTemplate\Name <> "dimension_106" Then 
 					If n\Idle Then
 						HideEntity(n\OBJ)
 						HideEntity(n\OBJ2)
@@ -2868,7 +2868,7 @@ Function UpdateNPCs()
 			Case NPCType372
 				;[Block]
 				RN = PlayerRoom\RoomTemplate\Name
-				If RN <> "pocketdimension" And RN <> "dimension1499" Then 
+				If RN <> "dimension_106" And RN <> "dimension_1499" Then 
 					If n\Idle Then
 						HideEntity(n\OBJ)
 						If Rand(50) = 1 And (me\BlinkTimer < -5.0 And me\BlinkTimer > -15.0) Then
@@ -2925,7 +2925,7 @@ Function UpdateNPCs()
 				;[Block]
 				Dist = EntityDistanceSquared(me\Collider, n\Collider)
 				If Dist < 3600.0 Then 
-					If PlayerRoom\RoomTemplate\Name = "gateb" Then 
+					If PlayerRoom\RoomTemplate\Name = "gate_b" Then 
 						Dist2 = Max(Min(EntityDistance(n\Collider, PlayerRoom\Objects[10]) / (8000.0 * RoomScale), 1.0), 0.0)
 					Else
 						Dist2 = 1.0
@@ -3008,7 +3008,7 @@ Function UpdateNPCs()
 													n\Reload = 5.0
 													
 													If me\KillTimer < 0.0 And n\State <> 3 Then
-														If PlayerRoom\RoomTemplate\Name = "gateb" Then
+														If PlayerRoom\RoomTemplate\Name = "gate_b" Then
 															msg\DeathMsg = Chr(34) + "CH-2 to control. Shot down a runaway Class D at Gate B." + Chr(34)
 														Else
 															msg\DeathMsg = Chr(34) + "CH-2 to control. Shot down a runaway Class D at Gate A." + Chr(34)
@@ -3193,7 +3193,7 @@ Function UpdateNPCs()
 				;[End Block]
 			Case NPCType860_2
 				;[Block]
-				If PlayerRoom\RoomTemplate\Name = "cont_860_1" Then
+				If PlayerRoom\RoomTemplate\Name = "cont2_860_1" Then
 					Local fr.Forest = PlayerRoom\fr
 					
 					Dist = EntityDistanceSquared(me\Collider, n\Collider)
@@ -3546,11 +3546,11 @@ Function UpdateNPCs()
 				;[End Block] 
 			Case NPCType939
 				;[Block]
-				If PlayerRoom\RoomTemplate\Name <> "room3storage" Then
+				If PlayerRoom\RoomTemplate\Name <> "room3_storage" Then
 					n\State = 66.0
 				EndIf
 				
-				; ~ State is set to 66 in the room3storage-event if player isn't inside the room
+				; ~ State is set to 66 in the room3_storage-event if player isn't inside the room
 				If n\State < 66.0 Then 
 					Select n\State
 						Case 0.0 ; ~ Idles
@@ -4502,7 +4502,7 @@ Function UpdateNPCs()
 							;[Block]
 							If chs\NoTarget Then n\State = 0.0
 							
-							If PlayerRoom\RoomTemplate\Name = "dimension1499" And n\PrevState = 0 Then
+							If PlayerRoom\RoomTemplate\Name = "dimension_1499" And n\PrevState = 0 Then
 								ShouldPlay = 19
 							EndIf
 							
@@ -4565,7 +4565,7 @@ Function UpdateNPCs()
 										PlaySound2(DamageSFX[Rand(11, 12)], Camera, n\Collider)
 										If me\Injuries > 10.0 Then
 											Kill(True)
-											If PlayerRoom\RoomTemplate\Name = "dimension1499"
+											If PlayerRoom\RoomTemplate\Name = "dimension_1499"
 												msg\DeathMsg = "All personnel situated within Evacuation Shelter LC-2 during the breach have been administered "
 												msg\DeathMsg = msg\DeathMsg + "Class-B amnestics due to Incident 1499-E. The Class D subject involved in the event "
 												msg\DeathMsg = msg\DeathMsg + "died shortly after being shot by Agent [DATA REDACTED]."
@@ -4595,7 +4595,7 @@ Function UpdateNPCs()
 										PlaySound2(DamageSFX[Rand(11, 12)], Camera, n\Collider)
 										If me\Injuries > 10.0 Then
 											Kill(True)
-											If PlayerRoom\RoomTemplate\Name = "dimension1499"
+											If PlayerRoom\RoomTemplate\Name = "dimension_1499"
 												msg\DeathMsg = "All personnel situated within Evacuation Shelter LC-2 during the breach have been administered "
 												msg\DeathMsg = msg\DeathMsg + "Class-B amnestics due to Incident 1499-E. The Class D subject involved in the event "
 												msg\DeathMsg = msg\DeathMsg + "died shortly after being shot by Agent [DATA REDACTED]."
@@ -4977,10 +4977,10 @@ Function UpdateNPCs()
 						Local MaxX#, MinX#, MaxZ#, MinZ#
 						
 						If n\InFacility = 1 Then
-							If PlayerRoom\RoomTemplate\Name <> "room173intro" Then
-								If PlayerRoom\RoomTemplate\Name = "cont_860_1" Then
+							If PlayerRoom\RoomTemplate\Name <> "cont1_173_intro" Then
+								If PlayerRoom\RoomTemplate\Name = "cont2_860_1" Then
 									For e.Events = Each Events
-										If e\EventID = e_cont_860_1 Then
+										If e\EventID = e_cont2_860_1 Then
 											If e\EventState = 1.0
 												UpdateGravity = True
 											EndIf
@@ -5102,7 +5102,7 @@ Function UpdateMTFUnit(n.NPCs)
 						If Curr173\Idle <> 2 Then
 							If (Not Curr173\IsDead) And Curr173\Idle = 3 Then
 								For r.Rooms = Each Rooms
-									If r\RoomTemplate\Name = "cont_173" Then
+									If r\RoomTemplate\Name = "cont1_173" Then
 										If EntityX(n\Collider, True) - r\x < 15.0 Then
 											If r\RoomDoors[1]\Open Then UseDoor(r\RoomDoors[1], False)
 											Curr173\IsDead = True
@@ -5129,7 +5129,7 @@ Function UpdateMTFUnit(n.NPCs)
 							
 							If (Not Tmp) Then
 								For r.Rooms = Each Rooms
-									If r\RoomTemplate\Name = "cont_173" Then
+									If r\RoomTemplate\Name = "cont1_173" Then
 										Local FoundChamber% = False
 										Local Pvt% = CreatePivot()
 										
@@ -6486,7 +6486,7 @@ Function UpdateMTFUnit(n.NPCs)
 						PointEntity(Target, me\Collider)
 						RotateEntity(Target, Min(EntityPitch(Target), 40.0), EntityYaw(n\Collider), 0.0)
 						
-						If PlayerRoom\RoomTemplate\Name = "gateb" Then
+						If PlayerRoom\RoomTemplate\Name = "gate_b" Then
 							n\State3 = Min(n\State3 + fps\Factor[0], 70.0 * 4.0)
 						Else
 							If n\Reload =< 0.0 Then
@@ -6518,7 +6518,7 @@ Function UpdateMTFUnit(n.NPCs)
 						
 						FreeEntity(Target)
 					Else
-						If PlayerRoom\RoomTemplate\Name = "gateb" Then n\State3 = Max(0.0, n\State3 - fps\Factor[0])
+						If PlayerRoom\RoomTemplate\Name = "gate_b" Then n\State3 = Max(0.0, n\State3 - fps\Factor[0])
 						
 						If Dist < 4.0 And chs\NoTarget Then
 							AnimateNPC(n, 79.0, 310.0, 0.35)
@@ -7017,7 +7017,7 @@ Function MoveToPocketDimension()
 	Local r.Rooms
 	
 	For r.Rooms = Each Rooms
-		If r\RoomTemplate\Name = "pocketdimension" Then
+		If r\RoomTemplate\Name = "dimension_106" Then
 			me\FallTimer = 0.0
 			UpdateDoors()
 			UpdateRooms()
@@ -7291,13 +7291,13 @@ Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False)
 	Local RN$ = PlayerRoom\RoomTemplate\Name
 	
 	; ~ Player is in these rooms, returning false
-	If RN = "pocketdimension" Lor RN = "dimension1499" Lor RN = "room173intro" Lor RN = "gateb" Lor RN = "gatea" Then
+	If RN = "dimension_106" Lor RN = "dimension_1499" Lor RN = "cont1_173_intro" Lor RN = "gate_b" Lor RN = "gate_a" Then
 		Return(False)
 	EndIf
 	; ~ Player is in SCP-860-1's test room and inside the forest, returning false
-	If RN = "cont_860_1" Then
+	If RN = "cont2_860_1" Then
 		For e.Events = Each Events
-			If e\EventID = e_cont_860_1 Then
+			If e\EventID = e_cont2_860_1 Then
 				If e\EventState = 1.0 Then
 					Return(False)
 				EndIf
@@ -7308,7 +7308,7 @@ Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False)
 	
 	If (Not CanSpawnIn049Chamber) Then
 		If (Not SelectedDifficulty\AggressiveNPCs) Then
-			If RN = "cont_049" And EntityY(me\Collider) =< (-2848.0) * RoomScale Then
+			If RN = "cont2_049" And EntityY(me\Collider) =< (-2848.0) * RoomScale Then
 				Return(False)
 			EndIf
 		EndIf
@@ -7318,7 +7318,7 @@ Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False)
 End Function
 
 Function CheckForNPCInFacility%(n.NPCs)
-	; ~ False (= 0): NPC is not in facility (mostly meant for "dimension1499")
+	; ~ False (= 0): NPC is not in facility (mostly meant for "dimension_1499")
 	; ~ True (= 1): NPC is in facility
 	; ~ 2: NPC is in tunnels (Maintenance Tunnels / SCP-049 tunnels / SCP-939 storage room, etc...)
 	

@@ -590,7 +590,6 @@ Function LoadRoomTemplates(File$)
 	Local TemporaryString$, i%
 	Local rt.RoomTemplates = Null
 	Local StrTemp$ = ""
-	
 	Local f% = OpenFile(File)
 	
 	While (Not Eof(f))
@@ -614,7 +613,7 @@ Function LoadRoomTemplates(File$)
 						;[Block]
 						rt\Shape = ROOM2
 						;[End Block]
-					Case "room2C", "2C", "room2c", "2c"
+					Case "room2C", "2C"
 						;[Block]
 						rt\Shape = ROOM2C
 						;[End Block]
@@ -905,15 +904,16 @@ Function CreateOverLapBox(r.Rooms)
 	Local s%
 	Local SizeAdd# = 0.02
 	
-	If r\RoomTemplate\Name = "gateb" Then Return
-	If r\RoomTemplate\Name = "gatea" Then Return
-	If r\RoomTemplate\Name = "room049" Then Return
-	If r\RoomTemplate\Name = "room008" Then Return
-	If r\RoomTemplate\Name = "room3storage" Then Return
-	If r\RoomTemplate\Name = "room106" Then Return
-	If r\RoomTemplate\Name = "room079" Then Return
-	If r\RoomTemplate\Name = "gatebentrance" Then Return
-	If r\RoomTemplate\Name = "gateaentrance" Then Return
+	If r\RoomTemplate\Name = "gate_b" Then Return
+	If r\RoomTemplate\Name = "gate_a" Then Return
+	If r\RoomTemplate\Name = "cont2_049" Then Return
+	If r\RoomTemplate\Name = "cont2_008" Then Return
+	If r\RoomTemplate\Name = "cont2_409" Then Return
+	If r\RoomTemplate\Name = "room3_storage" Then Return
+	If r\RoomTemplate\Name = "cont1_106" Then Return
+	If r\RoomTemplate\Name = "cont1_079" Then Return
+	If r\RoomTemplate\Name = "gate_b_entrance" Then Return
+	If r\RoomTemplate\Name = "gate_a_entrance" Then Return
 	
 	r\OverlapCheckBox = CreateMesh()
 	GetMeshExtents(GetChild(r\OBJ, 2))

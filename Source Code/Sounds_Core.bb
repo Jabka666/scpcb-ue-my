@@ -533,7 +533,7 @@ Function UpdateStreamSounds()
 	EndIf
 	
 	If (Not PlayerInReachableRoom()) Then
-		If PlayerRoom\RoomTemplate\Name <> "gateb" And PlayerRoom\RoomTemplate\Name <> "gatea" Then
+		If PlayerRoom\RoomTemplate\Name <> "gate_b" And PlayerRoom\RoomTemplate\Name <> "gate_a" Then
 			If IntercomStreamCHN <> 0 Then
 				StopStream_Strict(IntercomStreamCHN)
 				IntercomStreamCHN = 0
@@ -581,19 +581,19 @@ Music[1] = "HeavyContainmentZone"
 Music[2] = "EntranceZone"
 Music[3] = "PD"
 Music[4] = "Cont_079"
-Music[5] = "GateB1"
-Music[6] = "GateB2"
-Music[7] = "Room3Storage"
+Music[5] = "Gate_B1"
+Music[6] = "Gate_B2"
+Music[7] = "Room3_storage"
 Music[8] = "Cont_049"
 Music[9] = "Cont_860_1"
 Music[10] = "106Chase"
 Music[11] = "Menu"
 Music[12] = "860_2Chase"
-Music[13] = "Room173Intro"
+Music[13] = "Cont_173_Intro"
 Music[14] = "Using178"
 Music[15] = "PDTrench"
-Music[16] = "Room205"
-Music[17] = "GateA"
+Music[16] = "Cont_205"
+Music[17] = "Gate_A"
 Music[18] = "1499"
 Music[19] = "1499_1Chase"
 Music[20] = "049Chase"
@@ -602,9 +602,9 @@ Music[22] = "Cont_914"
 Music[23] = "Ending"
 Music[24] = "Credits"
 Music[25] = "SaveMeFrom"
-Music[26] = "Room106"
-Music[27] = "Room035"
-Music[28] = "Room409"
+Music[26] = "Cont_106"
+Music[27] = "Cont_035"
+Music[28] = "Cont_409"
 Music[29] = "MaintenanceTunnels"
 
 Global MusicCHN%

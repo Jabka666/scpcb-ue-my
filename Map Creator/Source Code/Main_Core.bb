@@ -569,7 +569,7 @@ Repeat
 													Exit
 												EndIf
 											Next
-											If Map(x, y)\Name = "cont_173" Or Map(x, y)\Name = "room2checkpoint" Or Map(x, y)\Name = "room2checkpoint2" Then
+											If Map(x, y)\Name = "cont1_173" Or Map(x, y)\Name = "room2_checkpoint_lcz_hcz" Or Map(x, y)\Name = "room2_checkpoint_hcz_ez" Then
 												MapAngle(x, y) = 180
 											EndIf
 											
@@ -656,7 +656,7 @@ Repeat
 					If MouseX() > (GadgetX(Map_2D) + GadgetX(WinHandle)) And MouseX() < ((Width) + GadgetX(Map_2D) + GadgetX(WinHandle))
 						Offset = 45
 						If MouseY() > (GadgetY(Map_2D) + GadgetY(WinHandle) + Offset) And MouseY() < ((Height) + GadgetY(Map_2D) + GadgetY(WinHandle) + Offset)
-							If Map(Grid_SelectedX, Grid_SelectedY)\Name <> "cont_173" Then
+							If Map(Grid_SelectedX, Grid_SelectedY)\Name <> "cont1_173" Then
 								Local PrevAngle% = MapAngle(Grid_SelectedX, Grid_SelectedY)
 								
 								; ~ Left
@@ -1427,7 +1427,6 @@ Function LoadRoomTemplates(File$)
 	Local StrTemp$ = ""
 	Local f% = OpenFile(File)
 	
-	; ~ Facility rooms
 	While (Not Eof(f))
 		TemporaryString = Trim(ReadLine(f))
 		If Left(TemporaryString, 1) = "[" Then
@@ -1436,7 +1435,7 @@ Function LoadRoomTemplates(File$)
 			Local AddRoom% = True
 			
 			Select TemporaryString
-				Case "room ambience", "room173intro", "pocketdimension", "dimension1499", "gateb", "gatea"
+				Case "room ambience", "cont1_173_intro", "dimension_106", "dimension_1499", "gate_b", "gate_a"
 					;[Block]
 					AddRoom = False
 					;[End Block]
@@ -1446,7 +1445,7 @@ Function LoadRoomTemplates(File$)
 				rt.RoomTemplates = CreateRoomTemplate()
 				rt\Name = TemporaryString
 				
-				StrTemp = Lower(GetINIString(File, TemporaryString, "Shape"))
+				StrTemp = GetINIString(File, TemporaryString, "Shape")
 				Select StrTemp
 					Case "room1", "1"
 						;[Block]
@@ -1456,7 +1455,7 @@ Function LoadRoomTemplates(File$)
 						;[Block]
 						rt\Shape = ROOM2
 						;[End Block]
-					Case "room2c", "2c"
+					Case "room2C", "2C"
 						;[Block]
 						rt\Shape = ROOM2C
 						;[End Block]
