@@ -6021,11 +6021,6 @@ Function FillRoom(r.Rooms)
 				EndIf
 			Next
 			If (Not r\Objects[7])Then r\Objects[7] = LoadMesh_Strict("GFX\map\Props\tesla_caution.b3d", r\OBJ)
-			
-			w.WayPoints = CreateWaypoint(r\x, r\y + 66.0 * RoomScale, r\z + 292.0 * RoomScale, Null, r)
-			w2.WayPoints = CreateWaypoint(r\x, r\y + 66.0 * RoomScale, r\z - 284.0 * RoomScale, Null, r)
-			w\connected[0] = w2 : w\Dist[0] = EntityDistance(w\OBJ, w2\OBJ)
-			w2\connected[0] = w : w2\Dist[0] = w\Dist[0]
 			;[End Block]
 		Case "room2_6_lcz"
 			;[Block]
