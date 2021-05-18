@@ -4883,54 +4883,54 @@ Function FillRoom(r.Rooms)
 						;[End Block]
 					Case 2
 						;[Block]
+						xTemp = -177.0
+						zTemp = 467.0
+						Scale = Rnd(0.2, 0.3)
+						;[End Block]
+					Case 3
+						;[Block]
 						xTemp = -79.0
 						zTemp = 215.0
 						Scale = Rnd(0.1, 0.2)
 						;[End Block]
-					Case 3
+					Case 4
 						;[Block]
 						xTemp = -13.0
 						zTemp = 201.0
 						Scale = Rnd(0.1, 0.15)
 						;[End Block]
-					Case 4
+					Case 5
 						;[Block]
 						xTemp = 85.0
 						zTemp = 97.0
 						Scale = Rnd(0.2, 0.3)
 						;[End Block]
-					Case 5
+					Case 6
 						;[Block]
 						xTemp = 205.0
 						zTemp = 180.0
 						Scale = Rnd(0.1, 0.2)
 						;[End Block]
-					Case 6
+					Case 7
 						;[Block]
 						xTemp = 235.0
 						zTemp = 114.0
 						Scale = Rnd(0.1, 0.2)
 						;[End Block]
-					Case 7
+					Case 8
 						;[Block]
 						xTemp = 182.0
 						zTemp = 47.0
 						Scale = Rnd(0.1, 0.2)
 						;[End Block]
-					Case 8
+					Case 9
 						;[Block]
 						xTemp = 52.0
 						zTemp = 200.0
 						Scale = Rnd(0.2, 0.3)
 						;[End Block]
-					Case 9
-						;[Block]
-						xTemp = -177.0
-						zTemp = 467.0
-						Scale = Rnd(0.2, 0.3)
-						;[End Block]
 				End Select
-				If i < 2 Then
+				If i < 3 Then
 					yTemp = 0.0
 				Else
 					yTemp = 3.0
