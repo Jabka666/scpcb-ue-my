@@ -4866,10 +4866,78 @@ Function FillRoom(r.Rooms)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.061, True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.031, True)
 			
-			sc.SecurityCams = CreateSecurityCam(r\x - 312.0 * RoomScale, r\y + 414.0 * RoomScale, r\z + 656.0 * RoomScale, r)
-			sc\FollowPlayer = True
+			; ~ Dust decals
+			For i = 0 To 8
+				Select i
+					Case 0
+						;[Block]
+						xTemp = 0.0
+						zTemp = 300.0
+						Scale = Rnd(0.8, 1.0)
+						;[End Block]
+					Case 1
+						;[Block]
+						xTemp = -87.0
+						zTemp = 466.0
+						Scale = Rnd(0.1, 0.2)
+						;[End Block]
+					Case 2
+						;[Block]
+						xTemp = -79.0
+						zTemp = 215.0
+						Scale = Rnd(0.1, 0.2)
+						;[End Block]
+					Case 3
+						;[Block]
+						xTemp = -13.0
+						zTemp = 201.0
+						Scale = Rnd(0.05, 0.1)
+						;[End Block]
+					Case 4
+						;[Block]
+						xTemp = 85.0
+						zTemp = 97.0
+						Scale = Rnd(0.2, 0.3)
+						;[End Block]
+					Case 5
+						;[Block]
+						xTemp = 205.0
+						zTemp = 180.0
+						Scale = Rnd(0.1, 0.2)
+						;[End Block]
+					Case 6
+						;[Block]
+						xTemp = 235.0
+						zTemp = 114.0
+						Scale = Rnd(0.1, 0.2)
+						;[End Block]
+					Case 7
+						;[Block]
+						xTemp = 182.0
+						zTemp = 47.0
+						Scale = Rnd(0.1, 0.2)
+						;[End Block]
+					Case 8
+						;[Block]
+						xTemp = 52.0
+						zTemp = 200.0
+						Scale = Rnd(0.2, 0.3)
+						;[End Block]
+				End Select
+				If i < 2 Then
+					yTemp = 0.0
+				Else
+					yTemp = 3.0
+				EndIf
+				de.Decals = CreateDecal(0, r\x + xTemp * RoomScale, r\y + yTemp * RoomScale + 0.005, r\z + zTemp * RoomScale, 90.0, Rnd(360.0), 0.0, Scale, Rnd(0.6, 0.8), 1)
+				EntityParent(de\OBJ, r\OBJ)
+			Next
 			
-			it.Items = CreateItem("SCP-513", "scp513", r\x - 32.0 * RoomScale, r\y + 196.0 * RoomScale, r\z + 688.0 * RoomScale)
+			sc.SecurityCams = CreateSecurityCam(r\x - 450.0 * RoomScale, r\y + 420.0 * RoomScale, r\z + 250.0 * RoomScale, r)
+			sc\Angle = 135.0 : sc\Turn = 0.0
+			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
+			
+			it.Items = CreateItem("SCP-513", "scp513", r\x, r\y + 196.0 * RoomScale, r\z + 655.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Blood-stained Note", "paper", r\x + 736.0 * RoomScale, r\y + 1.0, r\z + 48.0 * RoomScale)
@@ -6965,7 +7033,7 @@ Function FillRoom(r.Rooms)
 					EndIf
 				EndIf
 			Next
-			If (Not r\Objects[2]) Then r\Objects[2] = LoadMesh_Strict("GFX\map\room3_gw_pipes.b3d", r\OBJ)
+			If (Not r\Objects[2]) Then r\Objects[2] = LoadMesh_Strict("GFX\map\room3gw_pipes.b3d", r\OBJ)
 			EntityPickMode(r\Objects[2], 2)
 			;[End Block]
 		Case "cont2c_1162"
