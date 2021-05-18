@@ -4867,7 +4867,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.031, True)
 			
 			; ~ Dust decals
-			For i = 0 To 8
+			For i = 0 To 9
 				Select i
 					Case 0
 						;[Block]
@@ -4891,7 +4891,7 @@ Function FillRoom(r.Rooms)
 						;[Block]
 						xTemp = -13.0
 						zTemp = 201.0
-						Scale = Rnd(0.05, 0.1)
+						Scale = Rnd(0.1, 0.15)
 						;[End Block]
 					Case 4
 						;[Block]
@@ -4921,6 +4921,12 @@ Function FillRoom(r.Rooms)
 						;[Block]
 						xTemp = 52.0
 						zTemp = 200.0
+						Scale = Rnd(0.2, 0.3)
+						;[End Block]
+					Case 9
+						;[Block]
+						xTemp = -177.0
+						zTemp = 467.0
 						Scale = Rnd(0.2, 0.3)
 						;[End Block]
 				End Select
