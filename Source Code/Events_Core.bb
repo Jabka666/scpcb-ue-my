@@ -3865,7 +3865,7 @@ Function UpdateEvents()
 								If Rand(5) < 5 Then 
 									PositionTexture(t\MiscTextureID[13], 0.0, Rnd(0.0, 1.0))
 									ShowEntity(e\room\Objects[3])
-									If e\room\Dist < 6.0 Then LightVolume = TempLightVolume * Rnd(1.0, 1.3)
+									If e\room\Dist < 6.0 Then LightVolume = TempLightVolume * Rnd(1.5, 2.0)
 								EndIf
 							Else
 								If e\EventState - fps\Factor[0] < 70.0 * 1.0 Then 
