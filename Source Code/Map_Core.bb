@@ -4255,7 +4255,7 @@ Function FillRoom(r.Rooms)
 			RotateEntity(r\Objects[3], 0.0, 0.0, 0.0)
 			
 			sc.SecurityCams = CreateSecurityCam(r\x + 192.0 * RoomScale, r\y + 704.0 * RoomScale, r\z - 960.0 * RoomScale, r)
-			sc\Angle = -225.0 : sc\Turn = 0.0
+			sc\Angle = 45.0 : sc\Turn = 0.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			;[End Block]
 		Case "room2_4_hcz"
