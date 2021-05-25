@@ -70,15 +70,14 @@ Const e_096_spawn% = 65
 Const e_room2_medibay_lcz% = 66, e_room2_medibay_ez% = 67
 Const e_dimension_1499% = 68
 Const e_room2_shaft% = 69
-Const e_room1_lifts% = 70
-Const e_room4_ic% = 71
-Const e_room2_bio% = 72
-Const e_cont2_409% = 73
-Const e_cont1_005% = 74
-Const e_gate_b_entrance% = 75
-Const e_gate_b% = 76
-Const e_gate_a_entrance% = 77
-Const e_gate_a% = 78
+Const e_room4_ic% = 70
+Const e_room2_bio% = 71
+Const e_cont2_409% = 72
+Const e_cont1_005% = 73
+Const e_gate_b_entrance% = 74
+Const e_gate_b% = 75
+Const e_gate_a_entrance% = 76
+Const e_gate_a% = 77
 ;[End Block]
 
 Function CreateEvent.Events(EventName$, RoomName$, ID%, Prob# = 0.0)
@@ -421,10 +420,6 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room2_shaft)
 			;[End Block]
-		Case "room1_lifts"
-			;[Block]
-			Return(e_room1_lifts)
-			;[End Block]
 		Case "room4_ic"
 			;[Block]
 			Return(e_room4_ic)
@@ -629,8 +624,6 @@ Function InitEvents()
 	CreateEvent("room2_medibay_ez", "room2_medibay_ez", 0)
 	
 	CreateEvent("room2_shaft", "room2_shaft", 0)
-	
-	CreateEvent("room1_lifts", "room1_lifts", 0)
 	
 	CreateEvent("096_spawn", "room4_hcz", 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent("096_spawn", "room3_hcz", 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
@@ -9124,19 +9117,6 @@ Function UpdateEvents()
 						PlaySound2(ButtonSFX2, Camera, e\room\Objects[2])
 						mo\MouseHit1 = False
 					EndIf
-				EndIf
-				;[End Block]
-			Case e_room1_lifts
-				;[Block]
-				If PlayerRoom = e\room Then
-					For i = 0 To 1
-						UpdateButton(e\room\Objects[i])
-						If ClosestButton = e\room\Objects[i] And mo\MouseHit1 Then
-							CreateMsg("The elevator appears to be broken.", 6.0)
-							PlaySound2(ButtonSFX2, Camera, e\room\Objects[i])
-							mo\MouseHit1 = False
-						EndIf
-					Next
 				EndIf
 				;[End Block]
 			Case e_room4_ic

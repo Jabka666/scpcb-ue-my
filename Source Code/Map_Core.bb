@@ -2959,7 +2959,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True, Scripted% = False)
 			If ShowMsg Then 
 				If (Not d\IsElevatorDoor > 0) Then
 					PlaySound_Strict(ButtonSFX2)
-					If PlayerRoom\RoomTemplate\Name <> "room2_elevator" Then
+					If PlayerRoom\RoomTemplate\Name <> "room2_elevator" And PlayerRoom\RoomTemplate\Name <> "room1_lifts" Then
 						If d\Open Then
 							CreateMsg("You pushed the button but nothing happened.", 6.0)
 						Else
@@ -6907,16 +6907,16 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "room1_lifts"
 			;[Block]
-			For i = 0 To 1
-				r\Objects[i] = CreateButton(0, r\x + (96.0 + (i * -192.0)) * RoomScale, r\y + 160.0 * RoomScale, r\z + 71.0 * RoomScale, 0.0, 0.0, 0.0, 0, True)
-				EntityParent(r\Objects[i], r\OBJ)
-			Next
+			d.Doors = CreateDoor(r\x - 239.0 * RoomScale, r\y, r\z + 96.0 * RoomScale, 0.0, r, False, Elevator_Door)
+			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			
-			sc.SecurityCams = CreateSecurityCam(r\x + 384.0 * RoomScale, r\y + (448.0 - 64.0) * RoomScale, r\z - 960.0 * RoomScale, r)
+			d.Doors = CreateDoor(r\x + 239.0 * RoomScale, r\y, r\z + 96.0 * RoomScale, 0.0, r, False, Elevator_Door)
+			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 1.2, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
+			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
+			
+			sc.SecurityCams = CreateSecurityCam(r\x + 384.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 960.0 * RoomScale, r)
 			sc\Angle = 45.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
-			
-			w.WayPoints = CreateWaypoint(r\x, r\y + 66.0 * RoomScale, r\z, Null, r)
 			;[End Block]
 		Case "room2_servers_ez"
 			;[Block]
