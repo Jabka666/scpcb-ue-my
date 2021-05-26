@@ -5293,9 +5293,9 @@ Function FillRoom(r.Rooms)
 					EndIf
 				EndIf
 			Next
-			If (Not r\Objects[0]) Then r\Objects[0] = LoadRMesh("GFX\map\fan_opt.rmesh", Null)
+			If (Not r\Objects[0]) Then r\Objects[0] = LoadRMesh("GFX\map\room2_2_lcz_fan.rmesh", Null)
 			ScaleEntity(r\Objects[0], RoomScale, RoomScale, RoomScale)
-			PositionEntity(r\Objects[0], r\x - 248.0 * RoomScale, r\y + 528.0 * RoomScale, r\z)
+			PositionEntity(r\Objects[0], r\x - 270.0 * RoomScale, r\y + 528.0 * RoomScale, r\z)
 			EntityParent(r\Objects[0], r\OBJ)
 			;[End Block]
 		Case "cont2_012"

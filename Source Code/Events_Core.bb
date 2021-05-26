@@ -3584,7 +3584,7 @@ Function UpdateEvents()
 					If e\EventState3 > 0.01 Then
 						e\room\SoundCHN = LoopSound2(RoomAmbience[8], e\room\SoundCHN, Camera, e\room\Objects[0], 5.0, (e\EventState3 / 4.0))
 					EndIf
-					e\EventState3 = CurveValue(e\EventState2 * 5, e\EventState3, 150.0)			
+					e\EventState3 = CurveValue(e\EventState2 * 5.0, e\EventState3, 150.0)			
 				EndIf
 				
 				If e\room\Dist < 16.0 Then 
@@ -3596,9 +3596,9 @@ Function UpdateEvents()
 							e\EventState3 = e\EventState2 * 5.0
 						Else
 							If Temp = 0.0 And e\EventState2 = 1.0 Then ; ~ Turn on the fan
-								PlaySound2 (LoadTempSound("SFX\Ambient\Room Ambience\FanOn.ogg"), Camera, e\room\Objects[0], 8.0)
+								PlaySound2(LoadTempSound("SFX\Ambient\Room Ambience\FanOn.ogg"), Camera, e\room\Objects[0], 8.0)
 							ElseIf Temp = 1.0 And e\EventState2 = 0.0 ; ~ Turn off the fan
-								PlaySound2 (LoadTempSound("SFX\Ambient\Room Ambience\FanOff.ogg"), Camera, e\room\Objects[0], 8.0)
+								PlaySound2(LoadTempSound("SFX\Ambient\Room Ambience\FanOff.ogg"), Camera, e\room\Objects[0], 8.0)
 							EndIf
 						EndIf
 					Else
