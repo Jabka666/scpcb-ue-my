@@ -16,7 +16,7 @@ Const e_cont1_173% = 0, e_cont1_173_intro% = 1
 Const e_butt_ghost% = 2
 Const e_room2_checkpoint% = 3
 Const e_cont1_895% = 4, e_cont1_895_106% = 5
-Const e_room1_dl_106% = 6
+Const e_room1_dead_end_106% = 6
 Const e_room2c_gw_lcz_173% = 7, e_room2c_gw_ez_096% = 8
 Const e_cont1_372% = 9
 Const e_dimension_106% = 10
@@ -164,9 +164,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_cont1_895_106)
 			;[End Block]
-		Case "room1_dl_106"
+		Case "room1_dead_end_106"
 			;[Block]
-			Return(e_room1_dl_106)
+			Return(e_room1_dead_end_106)
 			;[End Block]
 		Case "room2c_gw_lcz_173"
 			;[Block]
@@ -478,8 +478,8 @@ Function InitEvents()
 	; ~ SCP-096 spawns in the first (and last)
 	CreateEvent("room2c_gw_ez_096", "room2c_gw_ez", 0)
 	
-	CreateEvent("room1_dl_106", "room1_dl_lcz", Rand(0, 1))
-	CreateEvent("room1_dl_106", "room1_dl_ez", Rand(0, 1))
+	CreateEvent("room1_dead_end_106", "room1_dead_end_lcz", Rand(0, 1))
+	CreateEvent("room1_dead_end_106", "room1_dead_end_ez", Rand(0, 1))
 	
 	CreateEvent("room2_office_4", "room2_office_4", 0)
 	
@@ -2525,7 +2525,7 @@ Function UpdateEvents()
 					CoffinDistance = e\room\Dist
 				EndIf
 				;[End Block]
-			Case e_room1_dl_106
+			Case e_room1_dead_end_106
 				;[Block]
 				If (Not Curr106\Contained) Then
 					If e\EventState = 0.0 Then
