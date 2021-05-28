@@ -89,27 +89,38 @@ End Type
 
 Global o.Objects = New Objects
 
+ChangeDir("..")
+
+Local i%
+
 ; ~ [BUTTONS]
 
-o\ButtonModelID[0] = LoadMesh_Strict("..\GFX\map\Props\Button.b3d") ; ~ Button
+o\ButtonModelID[0] = LoadMesh_Strict("GFX\map\Props\Button.b3d") ; ~ Button
+HideEntity(o\ButtonModelID[0])
 
 ; ~ [DOORS]
 
-o\DoorModelID[0] = LoadMesh_Strict("..\GFX\map\Props\Door01.x") ; ~ Default Door
+o\DoorModelID[0] = LoadMesh_Strict("GFX\map\Props\Door01.x") ; ~ Default Door
 
-o\DoorModelID[1] = LoadMesh_Strict("..\GFX\map\Props\DoorFrame.x") ; ~ Door Frame
+o\DoorModelID[1] = LoadMesh_Strict("GFX\map\Props\DoorFrame.x") ; ~ Door Frame
 
-o\DoorModelID[2] = LoadMesh_Strict("..\GFX\map\Props\contdoorleft.x") ; ~ Big Door Left
+o\DoorModelID[2] = LoadMesh_Strict("GFX\map\Props\contdoorleft.x") ; ~ Big Door Left
 
-o\DoorModelID[3] = LoadMesh_Strict("..\GFX\map\Props\contdoorright.x") ; ~ Big Door Right
+o\DoorModelID[3] = LoadMesh_Strict("GFX\map\Props\contdoorright.x") ; ~ Big Door Right
+
+For i = 0 To 3
+	HideEntity(o\DoorModelID[i])
+Next
 
 ; ~ [LEVERS]
 
-o\LeverModelID[0] = LoadMesh_Strict("..\GFX\map\Props\LeverBase.b3d") ; ~ Lever Base
+o\LeverModelID[0] = LoadMesh_Strict("GFX\map\Props\LeverBase.b3d") ; ~ Lever Base
 
-o\LeverModelID[1] = LoadMesh_Strict("..\GFX\map\Props\LeverHandle.b3d") ; ~ Lever Handle
+o\LeverModelID[1] = LoadMesh_Strict("GFX\map\Props\LeverHandle.b3d") ; ~ Lever Handle
 
-ChangeDir("..")
+For i = 0 To 1
+	HideEntity(o\LeverModelID[i])
+Next
 
 LoadRoomTemplateMeshes()
 
@@ -182,7 +193,7 @@ Repeat
 	ElapsedTime = ElapsedTime + Float(MilliSecs() - PrevTime) / Float(Period)
 	PrevTime = MilliSecs()
 	
-	Local f%, i%
+	Local f%
 	
 	If FileType("CONFIG_OPTINIT.SI") = 1 Then
 		f = ReadFile("CONFIG_OPTINIT.SI")
