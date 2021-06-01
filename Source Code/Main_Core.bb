@@ -8396,7 +8396,7 @@ Function LoadEntities()
 	
 	o\DoorModelID[11] = LoadMesh_Strict("GFX\map\Props\officedoor.b3d") ; ~ Office Door
 	
-	o\DoorModelID[12] = LoadMesh_Strict("GFX\map\Props\officeframe.b3d") ; ~ Ofifce Door Frame
+	o\DoorModelID[12] = LoadMesh_Strict("GFX\map\Props\officedoorframe.b3d") ; ~ Ofifce Door Frame
 	
 	For i = 0 To MaxDoorModelIDAmount - 1
 		HideEntity(o\DoorModelID[i])
