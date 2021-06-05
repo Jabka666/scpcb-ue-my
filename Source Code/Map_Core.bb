@@ -6766,7 +6766,7 @@ Function FillRoom(r.Rooms)
 			
 			r\Objects[10] = CopyEntity(r\Objects[9])
 			
-			r\Objects[11] = LoadRMesh("GFX\map\pocketdimension5_opt.rmesh", Null) ; ~ The pillar room
+			r\Objects[11] = LoadRMesh("GFX\map\dimension_106_5.rmesh", Null) ; ~ The pillar room
 			
 			Local Terrain% = LoadMesh_Strict("GFX\map\pocketdimensionterrain.b3d")
 			
