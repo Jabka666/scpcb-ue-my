@@ -6758,7 +6758,7 @@ Function FillRoom(r.Rooms)
 			r\RoomDoors[1]\AutoClose = False
 			
 			Local Entity%
-			Local Hallway% = LoadRMesh("GFX\map\pocketdimension2_opt.rmesh", Null) ; ~ The tunnels in the first room
+			Local Hallway% = LoadRMesh("GFX\map\dimension_106_2.rmesh", Null) ; ~ The tunnels in the first room
 			
 			r\Objects[8] = LoadRMesh("GFX\map\pocketdimension3_opt.rmesh", Null) ; ~ The room with the throne, moving pillars etc 
 			
