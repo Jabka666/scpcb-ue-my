@@ -27,6 +27,7 @@
 - Added 4.5V and 999V batteries.
 - Added tiny visual effect for tesla gates.
 - Added YouTube, Discord and ModDB icons into the launcher.
+- Added second variation of SCP-035's emotion.
 
 - Re-added room3gw.
 

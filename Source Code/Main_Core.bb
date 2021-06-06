@@ -1943,6 +1943,12 @@ End Type
 
 Global I_008.SCP008 = New SCP008
 
+Type SCP035
+	Field Sad%
+End Type
+
+Global I_035.SCP035 = New SCP035
+
 Type SCP294
 	Field Using%
 	Field ToInput$
@@ -6136,6 +6142,15 @@ Function RenderGUI()
 					;[End Block]
 				Case "paper", "ticket"
 					;[Block]
+					If I_035\Sad = 1 Then
+						If SelectedItem\ItemTemplate\Name = "Document SCP-035" Then
+							If SelectedItem\ItemTemplate\Img <> 0 Then
+								FreeImage(SelectedItem\ItemTemplate\Img) : SelectedItem\ItemTemplate\Img = 0
+								I_035\Sad = 2
+							EndIf
+						EndIf
+					EndIf
+					
 					If (Not SelectedItem\ItemTemplate\Img) Then
 						Select SelectedItem\ItemTemplate\Name
 							Case "Burnt Note" 
@@ -6167,6 +6182,15 @@ Function RenderGUI()
 								; ~ Don't resize because it messes up the masking
 								SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
 								;[End Block]
+							Case "Document SCP-035"
+								;[Block]
+								If I_035\Sad <> 0 Then
+									SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\items\doc_035_sad.png")
+								Else
+									SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
+								EndIf
+								SelectedItem\ItemTemplate\Img = ResizeImage2(SelectedItem\ItemTemplate\Img, ImageWidth(SelectedItem\ItemTemplate\Img) * MenuScale, ImageHeight(SelectedItem\ItemTemplate\Img) * MenuScale)
+								;[End Block]
 							Default 
 								;[Block]
 								SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
@@ -6175,7 +6199,6 @@ Function RenderGUI()
 						End Select
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
-					
 					DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\Img) / 2)
 					;[End Block]
 				Case "scp1025"
@@ -8842,6 +8865,9 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	Delete(I_008)
 	I_008.SCP008 = New SCP008
+	
+	Delete(I_035)
+	I_035.SCP035 = New SCP035
 	
 	Delete(I_294)
 	I_294.SCP294 = New SCP294

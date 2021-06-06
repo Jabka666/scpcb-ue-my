@@ -3739,7 +3739,7 @@ Function FillRoom(r.Rooms)
 	
 	Local d.Doors, d2.Doors, sc.SecurityCams, de.Decals, r2.Rooms, sc2.SecurityCams, tw.TempWayPoints, fr.Forest
 	Local it.Items, it2.Items, em.Emitters, w.WayPoints, w2.WayPoints, lt.LightTemplates, ts.TempScreens
-	Local xTemp#, yTemp#, zTemp#, xTemp2%, yTemp2%, zTemp2%
+	Local xTemp#, yTemp#, zTemp#, xTemp2%, yTemp2%, zTemp2%, SF%, b%, Name$
 	Local t1%, Tex%, Screen%, Scale#
 	Local i%, k%, Temp%, Temp3%, Angle#
 	Local TempStr$, TempStr2$, TempStr3$
@@ -4842,7 +4842,33 @@ Function FillRoom(r.Rooms)
 			r\Objects[8] = CreatePivot()
 			PositionEntity(r\Objects[8], r\x + 176.0 * RoomScale, r\y + 0.5, r\z - 144.0 * RoomScale)	
 			
-			For i = 7 To 8
+			r\Objects[9] = LoadMesh_Strict("GFX\map\Props\cont1_035_label.b3d")
+			If I_035\Sad <> 0 Then
+				Tex = LoadTexture_Strict("GFX\map\textures\label035_sad.png")
+				TextureBlend(Tex, 5)
+				For i = 2 To CountSurfaces(r\Objects[9])
+					SF = GetSurface(r\Objects[9], i)
+					b = GetSurfaceBrush(SF)
+					If b <> 0 Then
+						t1 = GetBrushTexture(b, 0)
+						If t1 <> 0 Then
+							Name = StripPath(TextureName(t1))
+							If Lower(Name) = "label035_smile.png"
+								BrushTexture(b, Tex, 0, 0)
+								PaintSurface(SF, b)
+							EndIf
+							If Name <> "" Then DeleteSingleTextureEntryFromCache(t1)
+						EndIf
+						FreeBrush(b)
+					EndIf
+				Next
+				DeleteSingleTextureEntryFromCache(Tex)
+			EndIf
+			ScaleEntity(r\Objects[9], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[9], r\x - 30.0 * RoomScale, r\y + 230.0 * RoomScale, r\z - 704.0 * RoomScale)
+			RotateEntity(r\Objects[9], 0.0, 180.0, 0.0)
+			
+			For i = 7 To 9
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			

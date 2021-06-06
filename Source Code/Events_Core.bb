@@ -815,7 +815,7 @@ Function UpdateEvents()
 	Local p.Particles, n.NPCs, r.Rooms, e.Events, e2.Events, de.Decals, du.Dummy1499_1, w.Waypoints
 	Local it.Items, it2.Items, em.Emitters, sc.SecurityCams, sc2.SecurityCams, wayp.Waypoints, do.Doors
 	Local Dist#, i%, Temp%, Pvt%, StrTemp$, j%, k%
-	Local CurrTrigger$ = "", fDir#, Scale#, Tex%
+	Local CurrTrigger$ = "", fDir#, Scale#, Tex%, t1%, Name$
 	Local x#, y#, z#, xTemp#, yTemp#, b%, BT%, SF%, TexName$
 	Local Angle#, GroupName$
 	
@@ -5918,7 +5918,31 @@ Function UpdateEvents()
 												EndIf
 												e\room\NPC[0]\Sound = LoadSound_Strict("SFX\SCP\035\GasedKilled1.ogg")
 												e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound)
+												
 												PlaySound_Strict(LoadTempSound("SFX\SCP\035\KilledGetUp.ogg"))
+												
+												I_035\Sad = 1
+												
+												Tex = LoadTexture_Strict("GFX\map\textures\label035_sad.png")
+												TextureBlend(Tex, 5)
+												For i = 2 To CountSurfaces(e\room\Objects[9])
+													SF = GetSurface(e\room\Objects[9], i)
+													b = GetSurfaceBrush(SF)
+													If b <> 0 Then
+														t1 = GetBrushTexture(b, 0)
+														If t1 <> 0 Then
+															Name = StripPath(TextureName(t1))
+															If Lower(Name) = "label035_smile.png"
+																BrushTexture(b, Tex, 0, 0)
+																PaintSurface(SF, b)
+															EndIf
+															If Name <> "" Then DeleteSingleTextureEntryFromCache(t1)
+														EndIf
+														FreeBrush(b)
+													EndIf
+												Next
+												DeleteSingleTextureEntryFromCache(Tex)
+												
 												e\EventState = 70.0 * 60.0
 											EndIf
 										EndIf
