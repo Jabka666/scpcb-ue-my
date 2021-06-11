@@ -982,11 +982,11 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 	Next
 	
 	; ~ Detail meshes
-	fr\DetailMesh[0] = LoadMesh_Strict("GFX\map\forest\detail\tree1.b3d")
-	fr\DetailMesh[1] = LoadMesh_Strict("GFX\map\forest\detail\rock1.b3d")
-	fr\DetailMesh[2] = LoadMesh_Strict("GFX\map\forest\detail\rock2.b3d")
-	fr\DetailMesh[3] = LoadMesh_Strict("GFX\map\forest\detail\tree2.b3d")
-	fr\DetailMesh[4] = LoadRMesh("GFX\map\forest\wall_opt.rmesh", Null)
+	fr\DetailMesh[0] = LoadMesh_Strict("GFX\map\Props\tree1.b3d")
+	fr\DetailMesh[1] = LoadMesh_Strict("GFX\map\Props\rock1.b3d")
+	fr\DetailMesh[2] = LoadMesh_Strict("GFX\map\Props\rock2.b3d")
+	fr\DetailMesh[3] = LoadMesh_Strict("GFX\map\Props\tree2.b3d")
+	fr\DetailMesh[4] = LoadRMesh("GFX\map\wall_opt.rmesh", Null)
 	
 	For i = ROOM1 To ROOM4
 		HideEntity(fr\TileMesh[i])
@@ -1230,11 +1230,11 @@ Function PlaceMapCreatorForest(fr.Forest, x#, y#, z#, r.Rooms)
 	Next
 	
 	; ~ Detail meshes
-	fr\DetailMesh[0] = LoadMesh_Strict("GFX\map\forest\detail\tree1.b3d")
-	fr\DetailMesh[1] = LoadMesh_Strict("GFX\map\forest\detail\rock1.b3d")
-	fr\DetailMesh[2] = LoadMesh_Strict("GFX\map\forest\detail\rock2.b3d")
-	fr\DetailMesh[3] = LoadMesh_Strict("GFX\map\forest\detail\tree2.b3d")
-	fr\DetailMesh[4] = LoadRMesh("GFX\map\forest\wall_opt.rmesh", Null)
+	fr\DetailMesh[0] = LoadMesh_Strict("GFX\map\Props\tree1.b3d")
+	fr\DetailMesh[1] = LoadMesh_Strict("GFX\map\Props\rock1.b3d")
+	fr\DetailMesh[2] = LoadMesh_Strict("GFX\map\Props\rock2.b3d")
+	fr\DetailMesh[3] = LoadMesh_Strict("GFX\map\Props\tree2.b3d")
+	fr\DetailMesh[4] = LoadRMesh("GFX\map\wall_opt.rmesh", Null)
 	
 	For i = ROOM1 To ROOM4
 		HideEntity(fr\TileMesh[i])
