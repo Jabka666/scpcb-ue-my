@@ -2190,12 +2190,14 @@ Function CreateDoor.Doors(x#, y#, z#, Angle#, room.Rooms, Open% = False, DoorTyp
 	EndIf
 	
 	For i = 0 To 1
-		If DoorType = Office_Door
-			d\Buttons[i] = CreatePivot()
-			PositionEntity(d\Buttons[i], x - 0.25, y + 0.6, z + 0.1 + (i * (-0.2)))
-			EntityRadius(d\Buttons[i], 0.1)
-			EntityPickMode(d\Buttons[i], 1)
-			EntityParent(d\Buttons[i], d\FrameOBJ)
+		If DoorType = Office_Door Then
+			If (Not d\Open) Then
+				d\Buttons[i] = CreatePivot()
+				PositionEntity(d\Buttons[i], x, y + 0.8, z + 0.1 + (i * (-0.2)))
+				EntityRadius(d\Buttons[i], 0.1)
+				EntityPickMode(d\Buttons[i], 1)
+				EntityParent(d\Buttons[i], d\FrameOBJ)
+			EndIf
 		ElseIf DoorType = Elevator_Door
 			d\Buttons[i] = CreateButton(i * 4, x + ((DoorType <> Big_Door) * (0.6 + (i * (-1.2)))) + ((DoorType = Big_Door) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((DoorType <> Big_Door) * ((-0.1) + (i * 0.2))) + ((DoorType = Big_Door) * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((DoorType <> Big_Door) * (i * 180.0)) + ((DoorType = Big_Door) * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ, d\Locked)
 		Else
@@ -2332,17 +2334,15 @@ Function UpdateDoors()
 							;[Block]
 							d\OpenState = Min(180.0, d\OpenState + (fps\Factor[0] * 2.0 * (d\FastOpen + 1)))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fps\Factor[0] / 162.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState)* (d\FastOpen * 2 + 1) * fps\Factor[0] / 162.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fps\Factor[0] / 162.0, 0.0, 0.0)
 							;[End Block]
 						Case Office_Door
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + (fps\Factor[0] * 2.0))
-							RotateEntity(d\OBJ, 0.0, PlayerRoom\Angle + d\Angle + (d\OpenState / 2.5), 0.0)	
+							d\OpenState = CurveValue(180.0, d\OpenState, 40.0) + (fps\Factor[0] * 0.01)
+							RotateEntity(d\OBJ, 0.0, PlayerRoom\Angle + d\Angle + (d\OpenState / 2.5), 0.0)
+							Animate2(d\OBJ, AnimTime(d\OBJ), 1.0, 47.0, 1.0, False)
 							For i = 0 To 1
-								If d\Buttons[i] <> 0 Then
-									RotateEntity(d\Buttons[i], 0.0, PlayerRoom\Angle + d\Angle + (d\OpenState / 2.5), 0.0)
-									MoveEntity(d\Buttons[i], ((i = 0) * Sin(d\OpenState) * fps\Factor[0] / (-500.0)) + ((i = 1) * Sin(d\OpenState) * fps\Factor[0] / 500.0), 0.0, Sin(d\OpenState) * (-fps\Factor[0]) / 77.0)
-								EndIf
+								FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
 							Next
 							;[End Block]
 						Case One_Sided_Door
@@ -2425,17 +2425,6 @@ Function UpdateDoors()
 							d\OpenState = Max(0.0, d\OpenState - (fps\Factor[0] * 2.0 * (d\FastOpen + 1)))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fps\Factor[0]) * (d\FastOpen + 1) / 162.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fps\Factor[0]) / 162.0, 0.0, 0.0)
-							;[End Block]
-						Case Office_Door
-							;[Block]
-							d\OpenState = Max(0.0, d\OpenState - (fps\Factor[0] * 2.0))
-							RotateEntity(d\OBJ, 0.0, PlayerRoom\Angle + d\Angle + (d\OpenState / 2.5), 0.0)
-							For i = 0 To 1
-								If d\Buttons[i] <> 0 Then
-									RotateEntity(d\Buttons[i], 0.0, PlayerRoom\Angle + d\Angle + (d\OpenState / 2.5), 0.0)
-									MoveEntity(d\Buttons[i], ((i = 0) * Sin(d\OpenState) * fps\Factor[0] / 500.0) + ((i = 1) * Sin(d\OpenState) * fps\Factor[0] / (-500.0)), 0.0, Sin(d\OpenState) * fps\Factor[0] / 77.0)
-								EndIf
-							Next
 							;[End Block]
 						Case One_Sided_Door
 							;[Block]

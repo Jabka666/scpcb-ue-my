@@ -8417,7 +8417,7 @@ Function LoadEntities()
 	
 	o\DoorModelID[10] = LoadMesh_Strict("GFX\map\Props\Door02.x") ; ~ One-sided Door
 	
-	o\DoorModelID[11] = LoadMesh_Strict("GFX\map\Props\officedoor.b3d") ; ~ Office Door
+	o\DoorModelID[11] = LoadAnimMesh_Strict("GFX\map\Props\officedoor.b3d") ; ~ Office Door
 	
 	o\DoorModelID[12] = LoadMesh_Strict("GFX\map\Props\officedoorframe.b3d") ; ~ Ofifce Door Frame
 	

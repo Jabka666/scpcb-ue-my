@@ -613,7 +613,7 @@ MusicCHN = StreamSound_Strict("SFX\Music\" + Music[2] + ".ogg", opt\MusicVolume,
 Global NowPlaying% = 2, ShouldPlay% = 11
 Global CurrMusic% = True
 
-Dim OpenDoorSFX%(4, 2), CloseDoorSFX%(4, 2)
+Dim OpenDoorSFX%(4, 2), CloseDoorSFX%(3, 2)
 Global BigDoorErrorSFX%[3]
 
 Global KeyCardSFX1% 
@@ -768,7 +768,6 @@ Function LoadSounds()
 		OpenDoorSFX(Elevator_Door, i) = LoadSound_Strict("SFX\Door\ElevatorOpen" + (i + 1) + ".ogg")
 		CloseDoorSFX(Elevator_Door, i) = LoadSound_Strict("SFX\Door\ElevatorClose" + (i + 1) + ".ogg")
 		OpenDoorSFX(Office_Door, i) = LoadSound_Strict("SFX\Door\OfficeDoorOpen" + (i + 1) + ".ogg")
-		CloseDoorSFX(Office_Door, i) = LoadSound_Strict("SFX\Door\OfficeDoorClose" + (i + 1) + ".ogg")
 		BigDoorErrorSFX[i] = LoadSound_Strict("SFX\Door\BigDoorError" + (i + 1) + ".ogg")
 	Next
 	
