@@ -2193,7 +2193,7 @@ Function CreateDoor.Doors(x#, y#, z#, Angle#, room.Rooms, Open% = False, DoorTyp
 		If DoorType = Office_Door Then
 			If (Not d\Open) Then
 				d\Buttons[i] = CreatePivot()
-				PositionEntity(d\Buttons[i], x, y + 0.8, z + 0.1 + (i * (-0.2)))
+				PositionEntity(d\Buttons[i], x - 0.25, y + 0.55, z + 0.1 + (i * (-0.2)))
 				EntityRadius(d\Buttons[i], 0.1)
 				EntityPickMode(d\Buttons[i], 1)
 				EntityParent(d\Buttons[i], d\FrameOBJ)
@@ -2340,7 +2340,7 @@ Function UpdateDoors()
 							;[Block]
 							d\OpenState = CurveValue(180.0, d\OpenState, 40.0) + (fps\Factor[0] * 0.01)
 							RotateEntity(d\OBJ, 0.0, PlayerRoom\Angle + d\Angle + (d\OpenState / 2.5), 0.0)
-							Animate2(d\OBJ, AnimTime(d\OBJ), 1.0, 47.0, 1.0, False)
+							Animate2(d\OBJ, AnimTime(d\OBJ), 1.0, 41.0, 1.2, False)
 							For i = 0 To 1
 								FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
 							Next
