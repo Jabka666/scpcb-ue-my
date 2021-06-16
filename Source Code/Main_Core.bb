@@ -266,7 +266,7 @@ Global RadioState3%[10]
 
 ; ~ Textures Constants
 ;[Block]
-Const MaxMiscTextureIDAmount% = 21
+Const MaxMiscTextureIDAmount% = 24
 Const MaxMonitorTextureIDAmount% = 5
 Const MaxOverlayTextureIDAmount% = 11
 Const MaxOverlayIDAmount% = 11
@@ -301,7 +301,7 @@ Const MaxLeverModelIDAmount% = 2
 Const MaxCamModelIDAmount% = 2
 Const MaxMonitorModelIDAmount% = 2
 Const MaxMTModelIDAmount% = 7
-Const MaxMiscModelIDAmount% = 1
+Const MaxMiscModelIDAmount% = 2
 ;[End Block]
 
 Type Objects
@@ -8192,6 +8192,11 @@ Function LoadEntities()
 	
 	t\MiscTextureID[20] = LoadTexture_Strict("GFX\fog_night_vision_goggles.png", 1, DeleteAllTextures) ; ~ FOG IN NIGHT VISION GOGGLES
 	
+	For i = 21 To 23
+		t\MiscTextureID[i] = LoadTexture_Strict("GFX\map\textures\elevator_panel_" + (i - 20) + ".png", 1, DeleteAllTextures) ; ~ Elevator arrows
+		TextureBlend(t\MiscTextureID[i], 5)
+	Next
+	
 	LoadMaterials(MaterialsFile)
 	
 	RenderLoading(25, "MODELS")
@@ -8499,7 +8504,12 @@ Function LoadEntities()
 	; ~ [MISC]
 	
 	o\MiscModelID[0] = LoadMesh_Strict("GFX\items\cup_liquid.b3d") ; ~ Liquid for cups dispensed by SCP-294
-	HideEntity(o\MiscModelID[0])
+	
+	o\MiscModelID[1] = LoadMesh_Strict("GFX\map\Props\elevator_panel.b3d") ; ~ Elevator floor panel
+	
+	For i = 0 To 1
+		HideEntity(o\MiscModelID[i])
+	Next
 	
 	RenderLoading(30, "CHUNKS")
 	

@@ -2102,6 +2102,7 @@ Type Doors
 	Field LinkedDoor.Doors
 	Field IsElevatorDoor% = False
 	Field MTFClose% = True
+	Field ElevatorPanel%[2]
 End Type 
 
 Global ClosestDoor.Doors
@@ -2200,6 +2201,12 @@ Function CreateDoor.Doors(x#, y#, z#, Angle#, room.Rooms, Open% = False, DoorTyp
 			EndIf
 		ElseIf DoorType = Elevator_Door
 			d\Buttons[i] = CreateButton(i * 4, x + ((DoorType <> Big_Door) * (0.6 + (i * (-1.2)))) + ((DoorType = Big_Door) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((DoorType <> Big_Door) * ((-0.1) + (i * 0.2))) + ((DoorType = Big_Door) * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((DoorType <> Big_Door) * (i * 180.0)) + ((DoorType = Big_Door) * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ, d\Locked)
+			
+			d\ElevatorPanel[i] = CopyEntity(o\MiscModelID[1])
+			ScaleEntity(d\ElevatorPanel[i], RoomScale, RoomScale, RoomScale)
+			RotateEntity(d\ElevatorPanel[i], 0.0, i * 180.0, 0.0)
+			PositionEntity(d\ElevatorPanel[i], x, y + 1.3, z + 0.16 + (i * (-0.32)))
+			EntityParent(d\ElevatorPanel[i], d\FrameOBJ)
 		Else
 			If Code <> "" Then 
 				d\Buttons[i] = CreateButton(2, x + ((DoorType <> Big_Door) * (0.6 + (i * (-1.2)))) + ((DoorType = Big_Door) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((DoorType <> Big_Door) * ((-0.1) + (i * 0.2))) + ((DoorType = Big_Door) * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((DoorType <> Big_Door) * (i * 180.0)) + ((DoorType = Big_Door) * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ, d\Locked)
@@ -2484,6 +2491,7 @@ Function UpdateDoors()
 					If d\Buttons[i] <> 0 Then EntityTexture(d\Buttons[i], t\MiscTextureID[16])
 				Next
 			EndIf
+			
 			d\LockedUpdated = d\Locked
 		EndIf
 		
@@ -2500,7 +2508,7 @@ End Function
 
 Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondPivot%, event.Events, IgnoreRotation% = True)
 	Local n.NPCs, it.Items, de.Decals
-	Local x#, z#, Dist#, Dir#
+	Local x#, z#, Dist#, Dir#, i%
 	
 	door1\IsElevatorDoor = 1
 	door2\IsElevatorDoor = 1
@@ -2510,13 +2518,13 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 		If (ClosestButton = door2\Buttons[0] Lor ClosestButton = door2\Buttons[1]) And mo\MouseHit1 Then
 			UseDoor(door1, False)
 		EndIf
-	ElseIf door2\Open And (Not door1\Open) And door2\OpenState = 180.0 Then
+	ElseIf door2\Open And (Not door1\Open) And door2\OpenState = 180.0
 		State = 1.0
 		door2\Locked = 0
 		If (ClosestButton = door1\Buttons[0] Lor ClosestButton = door1\Buttons[1]) And mo\MouseHit1 Then
 			UseDoor(door2, False)
 		EndIf
-	ElseIf Abs(door1\OpenState - door2\OpenState) < 0.2 Then
+	ElseIf Abs(door1\OpenState - door2\OpenState) < 0.2
 		door1\IsElevatorDoor = 2
 		door2\IsElevatorDoor = 2
 	EndIf
@@ -6923,10 +6931,12 @@ Function FillRoom(r.Rooms)
 			;[Block]
 			d.Doors = CreateDoor(r\x - 239.0 * RoomScale, r\y, r\z + 96.0 * RoomScale, 0.0, r, False, Elevator_Door)
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
+			FreeEntity(d\ElevatorPanel[1]) : d\ElevatorPanel[1] = 0
 			
 			d.Doors = CreateDoor(r\x + 239.0 * RoomScale, r\y, r\z + 96.0 * RoomScale, 0.0, r, False, Elevator_Door)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 1.2, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
+			FreeEntity(d\ElevatorPanel[1]) : d\ElevatorPanel[1] = 0
 			
 			sc.SecurityCams = CreateSecurityCam(r\x + 384.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 960.0 * RoomScale, r)
 			sc\Angle = 45.0 : sc\Turn = 45.0
