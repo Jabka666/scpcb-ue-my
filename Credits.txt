@@ -123,7 +123,6 @@
 		Nikita Sidorov ("Jabka")
 		Andre Pari ("ADMClef")
 		Dawid Mleczko ("Mleczyk76")
-		Dmitriy Sazanov ("Dmitriy-Bars")
 		Yuri Novikov ("BayanForce")
 		C45
 		slend
@@ -149,7 +148,9 @@
 		Vladislav Borisevich ("Vane Brain")
 		Dmitry Petrov ("Ne4to")
 		BerkeliumΛsset
-		
+		EpicDasherFR
+		Dmitriy Sazanov ("Dmitriy-Bars")
+
 *Mod Testers
 
 		Alexey Krasnov ("TaskeWSH")
