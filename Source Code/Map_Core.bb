@@ -2205,7 +2205,7 @@ Function CreateDoor.Doors(x#, y#, z#, Angle#, room.Rooms, Open% = False, DoorTyp
 			d\ElevatorPanel[i] = CopyEntity(o\MiscModelID[1])
 			ScaleEntity(d\ElevatorPanel[i], RoomScale, RoomScale, RoomScale)
 			RotateEntity(d\ElevatorPanel[i], 0.0, i * 180.0, 0.0)
-			PositionEntity(d\ElevatorPanel[i], x, y + 1.3, z + 0.13 + (i * (-0.26)))
+			PositionEntity(d\ElevatorPanel[i], x, y + 1.27, z + 0.13 + (i * (-0.26)))
 			EntityParent(d\ElevatorPanel[i], d\FrameOBJ)
 		Else
 			If Code <> "" Then 
