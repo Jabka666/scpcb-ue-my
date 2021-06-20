@@ -2205,7 +2205,7 @@ Function CreateDoor.Doors(x#, y#, z#, Angle#, room.Rooms, Open% = False, DoorTyp
 			d\ElevatorPanel[i] = CopyEntity(o\MiscModelID[1])
 			ScaleEntity(d\ElevatorPanel[i], RoomScale, RoomScale, RoomScale)
 			RotateEntity(d\ElevatorPanel[i], 0.0, i * 180.0, 0.0)
-			PositionEntity(d\ElevatorPanel[i], x, y + 1.3, z + 0.16 + (i * (-0.32)))
+			PositionEntity(d\ElevatorPanel[i], x, y + 1.3, z + 0.13 + (i * (-0.26)))
 			EntityParent(d\ElevatorPanel[i], d\FrameOBJ)
 		Else
 			If Code <> "" Then 
@@ -6992,17 +6992,6 @@ Function FillRoom(r.Rooms)
 				FreeEntity(r\RoomDoors[1]\Buttons[i]) : r\RoomDoors[1]\Buttons[i] = 0
 			Next
 			
-			For r2.Rooms = Each Rooms
-				If r2 <> r Then
-					If r2\RoomTemplate\Name = "room2_gw" Lor r2\RoomTemplate\Name = "room2_gw_b" Then
-						r\Objects[2] = CopyEntity(r2\Objects[2], r\OBJ) ; ~ Don't load the mesh again
-						Exit
-					EndIf
-				EndIf
-			Next
-			If (Not r\Objects[2]) Then r\Objects[2] = LoadMesh_Strict("GFX\map\room2gw_pipes.b3d", r\OBJ)
-			EntityPickMode(r\Objects[2], 2)
-			
 			If r\RoomTemplate\Name = "room2_gw" Then
 				r\Objects[0] = CreatePivot()
 				PositionEntity(r\Objects[0], r\x + 344.0 * RoomScale, r\y + 128.0 * RoomScale, r\z)
@@ -7069,17 +7058,6 @@ Function FillRoom(r.Rooms)
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x - 48.0 * RoomScale, r\y + 128.0 * RoomScale, r\z + 320.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
-			
-			For r2.Rooms = Each Rooms
-				If r2 <> r Then
-					If r2\RoomTemplate\Name = "room3_gw" Then
-						r\Objects[2] = CopyEntity(r2\Objects[2], r\OBJ) ; ~ Don't load the mesh again
-						Exit
-					EndIf
-				EndIf
-			Next
-			If (Not r\Objects[2]) Then r\Objects[2] = LoadMesh_Strict("GFX\map\room3gw_pipes.b3d", r\OBJ)
-			EntityPickMode(r\Objects[2], 2)
 			;[End Block]
 		Case "cont2c_1162"
 			;[Block]

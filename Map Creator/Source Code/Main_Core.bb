@@ -561,7 +561,7 @@ Repeat
 									EndIf
 									If Item >= 0 Then
 										If Map(x, y) = Null Then
-											Local Room_Name$ = GadgetItemText$(ListBox, Item)
+											Local Room_Name$ = GadgetItemText(ListBox, Item)
 											
 											For rt.RoomTemplates = Each RoomTemplates
 												If rt\Name = Room_Name
@@ -569,9 +569,7 @@ Repeat
 													Exit
 												EndIf
 											Next
-											If Map(x, y)\Name = "cont1_173" Or Map(x, y)\Name = "room2_checkpoint_lcz_hcz" Or Map(x, y)\Name = "room2_checkpoint_hcz_ez" Then
-												MapAngle(x, y) = 180
-											EndIf
+											If Map(x, y)\Name = "cont1_173" Or Map(x, y)\Name = "room2_checkpoint_lcz_hcz" Or Map(x, y)\Name = "room2_checkpoint_hcz_ez" Then MapAngle(x, y) = 180
 											
 											Local Item2% = SelectedGadgetItem(ComboBox)
 											
@@ -631,7 +629,7 @@ Repeat
 					Else
 						x2 = Float(Width) / Float(MapSize + 1)
 						y2 = Float(Height) / Float(MapSize + 1)
-						DrawImage(MapIcons(Map(x, y)\Shape, Floor(MapAngle(x, y) / 90.0)), (x2 * x) + (x2 / 2.0) + 0.5, (y2 * y) + (y2 / 2.0) + 0.5)
+						DrawImage(MapIcons(Map(x, y)\Shape, Floor(MapAngle(x, y) / 90)), (x2 * x) + (x2 / 2.0) + 0.5, (y2 * y) + (y2 / 2.0) + 0.5)
 						
 						If Grid_SelectedX = x And Grid_SelectedY = y Then
 							If PrevSelectedX <> Grid_SelectedX Or PrevSelectedY <> Grid_SelectedY Then
@@ -656,7 +654,7 @@ Repeat
 					If MouseX() > (GadgetX(Map_2D) + GadgetX(WinHandle)) And MouseX() < ((Width) + GadgetX(Map_2D) + GadgetX(WinHandle))
 						Offset = 45
 						If MouseY() > (GadgetY(Map_2D) + GadgetY(WinHandle) + Offset) And MouseY() < ((Height) + GadgetY(Map_2D) + GadgetY(WinHandle) + Offset)
-							If Map(Grid_SelectedX, Grid_SelectedY)\Name <> "cont1_173" Then
+							If Map(Grid_SelectedX, Grid_SelectedY)\Name <> "cont1_173" And Map(Grid_SelectedX, Grid_SelectedY)\Name <> "room2_checkpoint_lcz_hcz" And Map(Grid_SelectedX, Grid_SelectedY)\Name <> "room2_checkpoint_hcz_ez" Then
 								Local PrevAngle% = MapAngle(Grid_SelectedX, Grid_SelectedY)
 								
 								; ~ Left
@@ -1717,15 +1715,11 @@ Function LoadMap(File$)
 				EndIf
 			Next
 			
-			MapAngle(x, y) = ReadByte(f) * 90.0
+			MapAngle(x, y) = ReadByte(f) * 90
 			MapEvent(x, y) = ReadString(f)
-			If MapEvent(x, y) = ""
-				MapEvent(x, y) = "[none]"
-			EndIf
+			If MapEvent(x, y) = "" Then MapEvent(x, y) = "[none]"
 			MapEventProb(x, y) = ReadFloat(f)
-			If MapEventProb(x, y) = 0.0
-				MapEventProb(x, y) = 1.0
-			EndIf
+			If MapEventProb(x, y) = 0.0 Then MapEventProb(x, y) = 1.0
 		Next
 		; ~ Forest pieces
 		For i = 0 To ForestAmount - 1
@@ -1739,7 +1733,7 @@ Function LoadMap(File$)
 					Exit
 				EndIf
 			Next
-			ForestPlaceAngle(x, y) = ReadByte(f) * 90.0
+			ForestPlaceAngle(x, y) = ReadByte(f) * 90
 		Next
 		; ~ Maintenance tunnel pieces
 		For i = 0 To MTRoomAmount - 1
@@ -1753,7 +1747,7 @@ Function LoadMap(File$)
 					Exit
 				EndIf
 			Next
-			MTRoomAngle(x, y) = ReadByte(f) * 90.0
+			MTRoomAngle(x, y) = ReadByte(f) * 90
 		Next
 	Else
 		While (Not Eof(f))
@@ -1767,15 +1761,11 @@ Function LoadMap(File$)
 					Exit
 				EndIf
 			Next
-			MapAngle(x, y) = ReadByte(f) * 90.0
+			MapAngle(x, y) = ReadByte(f) * 90
 			MapEvent(x, y) = ReadString(f)
-			If MapEvent(x, y) = ""
-				MapEvent(x, y) = "[none]"
-			EndIf
+			If MapEvent(x, y) = "" Then MapEvent(x, y) = "[none]"
 			MapEventProb(x, y) = ReadFloat(f)
-			If MapEventProb(x, y) = 0.0
-				MapEventProb(x, y) = 1.0
-			EndIf
+			If MapEventProb(x, y) = 0.0 Then MapEventProb(x, y) = 1.0
 		Wend
 	EndIf
 	
@@ -1847,7 +1837,7 @@ Function SaveMap(File$, StreamTopRgm% = False, Old% = 0)
 				WriteByte(f, x)
 				WriteByte(f, y)
 				WriteString(f, Lower(Map(x, y)\Name))
-				WriteByte(f, Floor(MapAngle(x, y) / 90.0))
+				WriteByte(f, Floor(MapAngle(x, y) / 90))
 				If MapEvent(x, y) <> "[none]" Then
 					WriteString(f, MapEvent(x, y))
 				Else

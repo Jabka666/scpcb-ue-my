@@ -162,7 +162,7 @@ PositionEntity(Camera, (MapSize / 2.0) * 8.0, 1.0, MapSize * 8.0)
 RotateEntity(Camera, 0.0, 180.0, 0.0)
 MXS = 180.0
 
-Const Period# = 1000.0 / 60
+Const Period# = 1000.0 / 60.0
 
 Global PrevTime% = MilliSecs()
 Global ElapsedTime#
@@ -253,7 +253,7 @@ Repeat
 					y = ReadByte(f)
 					Name = Lower(ReadString(f))
 					
-					Angle = ReadByte(f) * 90.0
+					Angle = ReadByte(f) * 90
 					
 					eName = ReadString(f)
 					eProb = ReadFloat(f)
@@ -265,8 +265,8 @@ Repeat
 							r\GridZ = y
 							
 							r\Angle = Angle
-							If r\Angle <> 90.0 And r\Angle <> 270.0 Then
-								r\Angle = r\Angle + 180.0
+							If r\Angle <> 90 And r\Angle <> 270 Then
+								r\Angle = r\Angle + 180
 							EndIf
 							r\Angle = WrapAngle(r\Angle)
 							
@@ -306,7 +306,7 @@ Repeat
 					y = ReadByte(f)
 					Name = Lower(ReadString(f))
 					
-					Angle = ReadByte(f) * 90.0
+					Angle = ReadByte(f) * 90
 					
 					For rt.RoomTemplates = Each RoomTemplates
 						If Lower(rt\Name) = Name Then
@@ -315,8 +315,8 @@ Repeat
 							r\GridZ = y
 							
 							r\Angle = Angle
-							If r\Angle <> 90.0 And r\Angle <> 270.0 Then
-								r\Angle = r\Angle + 180.0
+							If r\Angle <> 90 And r\Angle <> 270 Then
+								r\Angle = r\Angle + 180
 							EndIf
 							
 							r\Angle = WrapAngle(r\Angle)
@@ -362,7 +362,7 @@ Repeat
 					y = ReadByte(f)
 					Name = Lower(ReadString(f))
 					
-					Angle = ReadByte(f) * 90.0
+					Angle = ReadByte(f) * 90
 					
 					For rt.RoomTemplates = Each RoomTemplates
 						If Lower(rt\Name) = Name Then
@@ -371,11 +371,11 @@ Repeat
 							r\GridZ = y
 							
 							r\Angle = Angle
-							If r\Angle <> 90.0 And r\Angle <> 270.0 Then
-								r\Angle = r\Angle + 180.0
+							If r\Angle <> 90 And r\Angle <> 270 Then
+								r\Angle = r\Angle + 180
 							EndIf
 							If rt\Shape = ROOM2C Lor rt\Shape = ROOM3 Then
-								r\Angle = r\Angle - 90.0
+								r\Angle = r\Angle - 90
 							EndIf
 							r\Angle = WrapAngle(r\Angle)
 							
@@ -878,7 +878,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 				PositionEntity(r\OBJ, x, y, z)
 				
 				If Name = "scp-860-1 door" Then
-					r\ForestWallOBJ = LoadRMesh("..\GFX\map\forest\wall_opt.rmesh", Null)
+					r\ForestWallOBJ = LoadRMesh("..\GFX\map\wall_opt.rmesh", Null)
 					ScaleEntity(r\ForestWallOBJ, RoomScale, RoomScale, RoomScale)
 					PositionEntity(r\ForestWallOBJ, x, y, z, True)
 					EntityParent(r\ForestWallOBJ, r\OBJ)

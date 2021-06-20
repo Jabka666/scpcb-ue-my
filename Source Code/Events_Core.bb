@@ -9957,7 +9957,7 @@ Function UpdateEndings()
 						
 						RenderLoading(60, "ENDING STUFF")
 						
-						e\room\Objects[0] = LoadRMesh("GFX\map\gatea_tunnel_opt.rmesh", Null)
+						e\room\Objects[0] = LoadRMesh("GFX\map\gate_a_tunnel.rmesh", Null)
 						PositionEntity(e\room\Objects[0], EntityX(e\room\OBJ, True), EntityY(e\room\OBJ, True), EntityZ(e\room\OBJ, True))
 						ScaleEntity(e\room\Objects[0], RoomScale, RoomScale, RoomScale)
 						EntityType(e\room\Objects[0], HIT_MAP)

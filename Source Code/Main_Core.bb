@@ -1391,7 +1391,7 @@ Function UpdateConsole()
 				Case "enablecontrol"
 					;[Block]
 					For e2.Events = Each Events
-						If e2\EventID = e_room2c_ec
+						If e2\EventID = e_room2c_ec Then
 							UpdateLever(e2\room\Objects[5])
 							RotateEntity(e2\room\Objects[5], 0.0, EntityYaw(e2\room\Objects[5]), 30.0)
 							RemoteDoorOn = True
@@ -1403,7 +1403,7 @@ Function UpdateConsole()
 				Case "unlockcheckpoints"
 					;[Block]
 					For e2.Events = Each Events
-						If e2\EventID = e_room2_sl
+						If e2\EventID = e_room2_sl Then
 							e2\EventState3 = 0.0
 							UpdateLever(e2\room\Levers[0])
 							RotateEntity(e2\room\Levers[0], 0.0, EntityYaw(e2\room\Levers[0]), 0.0)
