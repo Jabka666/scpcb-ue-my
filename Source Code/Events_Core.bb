@@ -62,7 +62,7 @@ Const e_682_roar% = 57
 Const e_cont1_914% = 58
 Const e_1048_a% = 59
 Const e_room4_2_hcz% = 60
-Const e_room2_gw_b% = 61, e_gateway% = 62
+Const e_room2_gw_2% = 61, e_gateway% = 62
 Const e_cont2_500_1499% = 63
 Const e_cont2c_1162% = 64
 Const e_room2_sl% = 65
@@ -380,9 +380,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room4_2_hcz)
 			;[End Block]
-		Case "room2_gw_b"
+		Case "room2_gw_2"
 			;[Block]
-			Return(e_room2_gw_b)
+			Return(e_room2_gw_2)
 			;[End Block]
 		Case "gateway"
 			;[Block]
@@ -608,7 +608,7 @@ Function InitEvents()
 	
 	CreateEvent("room4_2_hcz", "room4_2_hcz", 0)
 	
-	CreateEvent("room2_gw_b", "room2_gw_b", Rand(0, 1))
+	CreateEvent("room2_gw_2", "room2_gw_2", Rand(0, 1))
 	CreateEvent("gateway", "room2_gw", 0, 1.0)
 	CreateEvent("gateway", "room3_gw", 0, 1.0)
 	
@@ -8208,7 +8208,7 @@ Function UpdateEvents()
 					RemoveEvent(e)
 				EndIf
 				;[End Block]
-			Case e_room2_gw_b
+			Case e_room2_gw_2
 				;[Block]
 				If e\room\Dist < 8.0 Then
 					If e\EventState = 0.0 Then

@@ -3301,7 +3301,7 @@ Function RenderOptionsTooltip(x%, y%, Width%, Height%, Option$, Value# = 0.0)
 			;[End Block]
 		Case "subtitles"
 			;[Block]
-			Txt = "Displays current dialogs in the text form."
+			Txt = "Displays current dialogs in the text form. (WIP)"
 			R = 255
 			Txt2 = "This option cannot be changed in-game."
 			;[End Block]
