@@ -4019,7 +4019,7 @@ Function UpdateNPCs()
 								AnimateNPC(n, 214.0, 257.0, 0.25, False)
 								If n\Frame > 256.0 Then n\State = 0.0
 								
-								If n\Frame > 228.0 And PrevFrame =< 228.0
+								If n\Frame > 228.0 And PrevFrame =< 228.0 Then
 									PlaySound2(LoadTempSound("SFX\SCP\966\Echo" + Rand(1, 3) + ".ogg"), Camera, n\Collider)
 								EndIf
 								
@@ -4071,7 +4071,7 @@ Function UpdateNPCs()
 									If n\Frame > 456.0 Then n\State = 0.0
 								EndIf
 								
-								If n\Frame > 271.0 And PrevFrame =< 271.0 Lor n\Frame > 314.0 And PrevFrame =< 314.0 Lor n\Frame > 301.0 And PrevFrame =< 301.0 Then
+								If (n\Frame > 271.0 And PrevFrame =< 271.0) Lor (n\Frame > 301.0 And PrevFrame =< 301.0) Lor (n\Frame > 314.0 And PrevFrame =< 314.0) Then
 									PlaySound2(LoadTempSound("SFX\SCP\966\Idle" + Rand(1, 3) + ".ogg"), Camera, n\Collider)
 								EndIf
 								
