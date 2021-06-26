@@ -102,7 +102,7 @@ HideEntity(o\ButtonModelID[0])
 
 o\DoorModelID[0] = LoadMesh_Strict("GFX\map\Props\Door01.x") ; ~ Default Door
 
-o\DoorModelID[1] = LoadMesh_Strict("GFX\map\Props\DoorFrame.x") ; ~ Door Frame
+o\DoorModelID[1] = LoadMesh_Strict("GFX\map\Props\DoorFrame.b3d") ; ~ Door Frame
 
 o\DoorModelID[2] = LoadMesh_Strict("GFX\map\Props\contdoorleft.x") ; ~ Big Door Left
 

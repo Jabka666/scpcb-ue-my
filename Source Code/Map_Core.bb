@@ -6017,7 +6017,7 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "room1_dead_end_lcz", "room1_dead_end_ez"
 			;[Block]
-			r\RoomDoors.Doors[0] = CreateDoor(r\x, r\y, r\z + 1136.0 * RoomScale, r\y, r, False, Big_Door)
+			r\RoomDoors.Doors[0] = CreateDoor(r\x, r\y, r\z + 1202.0 * RoomScale, r\y, r, False, Big_Door)
 			r\RoomDoors[0]\AutoClose = False
 			For i = 0 To 1
 				FreeEntity(r\RoomDoors[0]\Buttons[i]) : r\RoomDoors[0]\Buttons[i] = 0
@@ -6925,10 +6925,12 @@ Function FillRoom(r.Rooms)
 		Case "room1_lifts"
 			;[Block]
 			d.Doors = CreateDoor(r\x - 239.0 * RoomScale, r\y, r\z + 96.0 * RoomScale, 0.0, r, False, Elevator_Door)
+			d\AutoClose = False : d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			FreeEntity(d\ElevatorPanel[0]) : d\ElevatorPanel[0] = 0
 			
 			d.Doors = CreateDoor(r\x + 239.0 * RoomScale, r\y, r\z + 96.0 * RoomScale, 0.0, r, False, Elevator_Door)
+			d\AutoClose = False : d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 1.2, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			FreeEntity(d\ElevatorPanel[0]) : d\ElevatorPanel[0] = 0
