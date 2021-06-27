@@ -3656,7 +3656,7 @@ Function UpdateScreens()
 	
 	For s.Screens = Each Screens
 		If s\room = PlayerRoom Then
-			If EntityDistanceSquared(me\Collider, s\OBJ) < 1.21 Then
+			If EntityDistanceSquared(me\Collider, s\OBJ) < 1.44 Then
 				EntityPick(Camera, 1.2)
 				If PickedEntity() = s\OBJ And s\ImgPath <> "" Then
 					ga\DrawHandIcon = True
@@ -4482,14 +4482,11 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "room2_office_4"
 			;[Block]
-			d.Doors = CreateDoor(r\x + 240.0 * RoomScale, r\y, r\z + 48.0 * RoomScale, 270.0, r, False, Default_Door, 3)
+			d.Doors = CreateDoor(r\x + 256.0 * RoomScale, r\y, r\z, 270.0, r, False, Default_Door, 3)
 			d\AutoClose = False
-			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) + 0.061, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
-			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) - 0.061, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)			
 			
-			r\RoomDoors.Doors[0] = CreateDoor(r\x - 432.0 * RoomScale, r\y, r\z, 90.0, r, False, Default_Door, 0, "1234")
+			r\RoomDoors.Doors[0] = CreateDoor(r\x - 448.0 * RoomScale, r\y, r\z, 90.0, r, False, Default_Door, 0, "1234")
 			r\RoomDoors[0]\AutoClose = False : r\RoomDoors[0]\MTFClose = False : r\RoomDoors[0]\DisableWaypoint = True
-			PositionEntity(r\RoomDoors[0]\Buttons[0], EntityX(r\RoomDoors[0]\Buttons[0], True) - 0.061, EntityY(r\RoomDoors[0]\Buttons[0], True), EntityZ(r\RoomDoors[0]\Buttons[0], True), True)
 			FreeEntity(r\RoomDoors[0]\Buttons[1]) : r\RoomDoors[0]\Buttons[1] = 0
 			
 			de.Decals = CreateDecal(0, r\x - 808.0 * RoomScale, r\y + 0.005, r\z - 72.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
