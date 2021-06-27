@@ -3511,9 +3511,9 @@ Function UpdateEvents()
 				;[Block]
 				If e\EventState = 0.0 Then
 					If e\room\Dist < 8.0 And e\room\Dist > 0.0 Then
-						e\room\NPC[0] = CreateNPC(NPCTypeGuard, EntityX(e\room\OBJ, True), 0.5, EntityZ(e\room\OBJ, True))
+						e\room\NPC[0] = CreateNPC(NPCTypeGuard, e\room\x, 0.5, e\room\z)
 						PointEntity(e\room\NPC[0]\Collider, me\Collider)
-						RotateEntity(e\room\NPC[0]\Collider, 0.0, EntityYaw(e\room\NPC[0]\Collider), 0.0, True)
+						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
 						
 						e\EventState = 1.0
 					EndIf
