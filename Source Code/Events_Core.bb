@@ -4710,7 +4710,7 @@ Function UpdateEvents()
 					Else
 						For iY = 0 To MTGridSize - 1
 							For iX = 0 To MTGridSize - 1
-								If e\room\mt\Entities[iX + (iY * MTGridSize)] <> 0
+								If e\room\mt\Entities[iX + (iY * MTGridSize)] <> 0 Then
 									HideEntity(e\room\mt\Entities[iX + (iY * MTGridSize)])
 								EndIf
 							Next
@@ -4770,7 +4770,7 @@ Function UpdateEvents()
 							PositionEntity(Curr106\Collider, EntityX(e\room\Objects[0], True), EntityY(me\Collider) - 0.15, EntityZ(e\room\Objects[0], True))
 							PointEntity(Curr106\Collider, e\room\Objects[1])
 							MoveEntity(Curr106\Collider, 0.0, 0.0, EntityDistance(e\room\Objects[0], e\room\Objects[1]) * ((e\EventState - 150.0) / 100.0))
-							AnimateNPC(Curr106, 284.0, 333.0, 0.02 * 35.0)
+							AnimateNPC(Curr106, 284.0, 333.0, 0.7)
 						EndIf
 						ResetEntity(Curr106\Collider)
 						
@@ -4811,7 +4811,10 @@ Function UpdateEvents()
 						Curr106\Idle = 1
 						AnimateNPC(Curr106, 334.0, 494.0, 0.3)
 						If e\EventState > 800.0 Then
-							If me\BlinkTimer < -5.0 Then Curr106\Idle = 0 : RemoveEvent(e)
+							If me\BlinkTimer < -5.0 Then
+								Curr106\Idle = 0
+								RemoveEvent(e)
+							EndIf
 						EndIf
 					EndIf
 				EndIf

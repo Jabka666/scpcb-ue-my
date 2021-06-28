@@ -4215,7 +4215,7 @@ Function UpdateNPCs()
 									EndIf
 								EndIf
 								
-								If n\Frame > 470.0 And PrevFrame =< 470.0 Lor n\Frame > 500.0 And PrevFrame =< 500.0 Lor n\Frame > 527.0 And PrevFrame =< 527.0 Then
+								If (n\Frame > 470.0 And PrevFrame =< 470.0) Lor (n\Frame > 500.0 And PrevFrame =< 500.0) Lor (n\Frame > 527.0 And PrevFrame =< 527.0) Then
 									If Dist < 0.64 Then
 										If Abs(DeltaYaw(n\Collider, me\Collider)) =< 60.0 Then
 											PlaySound2(DamageSFX[Rand(11, 12)], Camera, n\Collider)
