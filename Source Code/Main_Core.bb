@@ -2865,7 +2865,7 @@ Function UpdateMoving()
 				If CurrStepSFX = 0 Then
 					Temp = GetStepSound(me\Collider)
 					
-					If PlayerRoom\RoomTemplate\Name = "dimension_106" Lor PlayerRoom\RoomTemplate\Name = "room2_office_4" Then
+					If PlayerRoom\RoomTemplate\Name = "dimension_106" Lor PlayerRoom\RoomTemplate\Name = "room2_scientists_2" Then
 						Temp3 = 5
 					Else
 						Temp3 = 0
@@ -2987,7 +2987,7 @@ Function UpdateMoving()
 		Next
 		
 		If CollidedFloor = True Then
-			If PlayerRoom\RoomTemplate\Name = "dimension_106" Lor PlayerRoom\RoomTemplate\Name = "room2_office_4" Then
+			If PlayerRoom\RoomTemplate\Name = "dimension_106" Lor PlayerRoom\RoomTemplate\Name = "room2_scientists_2" Then
 				Temp3 = 5
 			Else
 				Temp3 = 0

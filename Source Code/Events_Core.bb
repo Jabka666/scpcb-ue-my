@@ -34,7 +34,7 @@ Const e_room2_mt% = 25
 Const e_room2_2_hcz_106% = 26
 Const e_room2_4_hcz_106% = 27, e_room2_4_hcz% = 28
 Const e_room3_hcz_duck% = 29, e_room3_hcz_1048% = 30
-Const e_room2_office_4% = 31
+Const e_room2_scientists_2% = 31
 Const e_room2_servers_hcz% = 32
 Const e_room2_storage% = 33
 Const e_door_closing% = 34
@@ -260,9 +260,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room3_hcz_1048)
 			;[End Block]
-		Case "room2_office_4"
+		Case "room2_scientists_2"
 			;[Block]
-			Return(e_room2_office_4)
+			Return(e_room2_scientists_2)
 			;[End Block]
 		Case "room2_servers_hcz"
 			;[Block]
@@ -481,7 +481,7 @@ Function InitEvents()
 	CreateEvent("room1_dead_end_106", "room1_dead_end_lcz", Rand(0, 1))
 	CreateEvent("room1_dead_end_106", "room1_dead_end_ez", Rand(0, 1))
 	
-	CreateEvent("room2_office_4", "room2_office_4", 0)
+	CreateEvent("room2_scientists_2", "room2_scientists_2", 0)
 	
 	CreateEvent("room2_2_lcz", "room2_2_lcz", 0, 1.0)
 	
@@ -4936,7 +4936,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_room2_office_4
+			Case e_room2_scientists_2
 				;[Block]
 				If PlayerRoom = e\room Then
 					If e\EventState = 0.0 Then
