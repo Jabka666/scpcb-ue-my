@@ -4829,7 +4829,6 @@ Function FillRoom(r.Rooms)
 			r\Objects[9] = LoadMesh_Strict("GFX\map\Props\cont1_035_label.b3d")
 			If I_035\Sad <> 0 Then
 				Tex = LoadTexture_Strict("GFX\map\textures\label035_sad.png")
-				TextureBlend(Tex, 5)
 				For i = 2 To CountSurfaces(r\Objects[9])
 					SF = GetSurface(r\Objects[9], i)
 					b = GetSurfaceBrush(SF)

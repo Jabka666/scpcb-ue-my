@@ -54,7 +54,6 @@ Function CreateItemTemplate.ItemTemplates(Name$, TempName$, OBJPath$, InvImgPath
 			Texture = LoadTexture_Strict(TexturePath, TexFlags)
 			it\TexPath = TexturePath
 		EndIf
-		TextureBlend(Texture, 5)
 		EntityTexture(it\OBJ, Texture)
 		it\Tex = Texture
 	EndIf  
