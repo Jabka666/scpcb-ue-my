@@ -2491,7 +2491,6 @@ Function UpdateDoors()
 					If d\Buttons[i] <> 0 Then EntityTexture(d\Buttons[i], t\MiscTextureID[16])
 				Next
 			EndIf
-			
 			d\LockedUpdated = d\Locked
 		EndIf
 		
@@ -2506,9 +2505,78 @@ Function UpdateDoors()
 	Next
 End Function
 
-Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondPivot%, event.Events, IgnoreRotation% = True)
+Global PlayerElevatorFloor%, ToElevatorFloor%, PlayerInsideElevator%
+
+; ~ Elevator Floor Constants
+;[Block]
+Const LowerFloor% = -1
+Const NullFloor% = 0
+Const UpperFloor% = 1
+;[End Block]
+
+Function FindFloor%()
+	If Floor(EntityY(me\Collider)) < 0.0 Then
+		PlayerElevatorFloor = LowerFloor
+	ElseIf Floor(EntityY(me\Collider)) > 0.0
+		PlayerElevatorFloor = UpperFloor
+	Else
+		PlayerElevatorFloor = NullFloor
+	EndIf
+End Function
+
+Function UpdateElevatorPanel%(d.Doors)
+	Local TextureID%, i%
+	
+	; ~ 21 = DEFAULT
+	; ~ 22 = UP
+	; ~ 23 = DOWN
+	
+	If PlayerInsideElevator Then
+		If PlayerElevatorFloor = LowerFloor Then
+			TextureID = 22
+		ElseIf PlayerElevatorFloor = UpperFloor
+			TextureID = 23
+		Else
+			If ToElevatorFloor = LowerFloor Then
+				TextureID = 23
+			Else
+				TextureID = 22
+			EndIf
+		EndIf
+	Else
+		If PlayerElevatorFloor = LowerFloor Then
+			TextureID = 23
+		ElseIf PlayerElevatorFloor = UpperFloor
+			TextureID = 22
+		Else
+			If ToElevatorFloor = LowerFloor Then
+				TextureID = 22
+			Else
+				TextureID = 23
+			EndIf
+		EndIf
+	EndIf
+	
+	For i = 0 To 1
+		EntityTexture(d\ElevatorPanel[i], t\MiscTextureID[TextureID])
+	Next
+End Function
+
+Function ClearElevatorPanelTexture%(d.Doors)
+	Local i%
+	
+	For i = 0 To 1
+		EntityTexture(d\ElevatorPanel[i], t\MiscTextureID[21])
+	Next
+End Function
+
+Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondPivot%, event.Events, IgnoreRotation% = True, ToFloor% = LowerFloor)
 	Local n.NPCs, it.Items, de.Decals
-	Local x#, z#, Dist#, Dir#, i%
+	Local x#, z#, Dist#, Dir#
+	
+	; ~ First, find the current floor the player is walking on
+	ToElevatorFloor = ToFloor
+	FindFloor()
 	
 	door1\IsElevatorDoor = 1
 	door2\IsElevatorDoor = 1
@@ -2554,7 +2622,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 		EndIf	
 	EndIf
 	
-	Local Inside% = False
+	PlayerInsideElevator = False
 	
 	If (Not door1\Open) And (Not door2\Open) Then
 		door1\Locked = 1
@@ -2565,7 +2633,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 				If Abs(EntityX(me\Collider) - EntityX(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
 					If Abs(EntityZ(me\Collider) - EntityZ(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then	
 						If Abs(EntityY(me\Collider) - EntityY(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then	
-							Inside = True
+							PlayerInsideElevator = True
 							
 							If (Not event\SoundCHN) Then
 								event\SoundCHN = PlaySound_Strict(ElevatorMoveSFX)
@@ -2582,7 +2650,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 					door1\Locked = 1
 					door2\Locked = 0
 					State = 0.0
-					If Inside Then
+					If PlayerInsideElevator Then
 						If (Not IgnoreRotation) Then
 							Dist = Distance(EntityX(me\Collider, True), EntityX(FirstPivot, True), EntityZ(me\Collider, True), EntityZ(FirstPivot, True))
 							Dir = PointDirection(EntityX(me\Collider, True), EntityZ(me\Collider, True), EntityX(FirstPivot, True), EntityZ(FirstPivot, True))
@@ -2674,9 +2742,12 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 							EndIf
 						EndIf
 					Next
-					UseDoor(door2, False, (Not Inside))
+					UseDoor(door2, False, (Not PlayerInsideElevator))
 					door1\Open = False
 					
+					; ~ Return to default panel texture
+					ClearElevatorPanelTexture(door1)
+					ClearElevatorPanelTexture(door2)
 					PlaySound2(ElevatorBeepSFX, Camera, FirstPivot, 4.0)
 				EndIf
 			Else
@@ -2684,7 +2755,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 				If Abs(EntityX(me\Collider) - EntityX(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
 					If Abs(EntityZ(me\Collider) - EntityZ(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then	
 						If Abs(EntityY(me\Collider) - EntityY(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
-							Inside = True
+							PlayerInsideElevator = True
 							
 							If (Not event\SoundCHN) Then
 								event\SoundCHN = PlaySound_Strict(ElevatorMoveSFX)
@@ -2697,11 +2768,11 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 					EndIf
 				EndIf	
 				
-				If State > 500.0 Then 
+				If State > 500.0 Then
 					door1\Locked = 0
 					door2\Locked = 1
 					State = 0.0
-					If Inside Then
+					If PlayerInsideElevator Then
 						If (Not IgnoreRotation) Then
 							Dist = Distance(EntityX(me\Collider, True), EntityX(SecondPivot, True), EntityZ(me\Collider, True), EntityZ(SecondPivot, True))
 							Dir = PointDirection(EntityX(me\Collider, True), EntityZ(me\Collider, True), EntityX(SecondPivot, True), EntityZ(SecondPivot, True))
@@ -2787,9 +2858,12 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 							EndIf
 						EndIf
 					Next
-					UseDoor(door1, False, (Not Inside))
+					UseDoor(door1, False, (Not PlayerInsideElevator))
 					door2\Open = False
 					
+					; ~ Return to default panel texture
+					ClearElevatorPanelTexture(door1)
+					ClearElevatorPanelTexture(door2)
 					PlaySound2(ElevatorBeepSFX, Camera, SecondPivot, 4.0)
 				EndIf	
 			EndIf
@@ -2952,6 +3026,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True, Scripted% = False)
 			If (Not Scripted) Then Return
 		EndIf
 	Else
+		If d\DoorType = Elevator_Door Then UpdateElevatorPanel(d)
 		If d\Locked = 1 Then
 			If ShowMsg Then 
 				If (Not d\IsElevatorDoor > 0) Then
@@ -2968,7 +3043,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True, Scripted% = False)
 				Else
 					If d\IsElevatorDoor = 1 Then
 						CreateMsg("You called the elevator.", 6.0)
-					ElseIf d\IsElevatorDoor = 3 Then
+					ElseIf d\IsElevatorDoor = 3
 						CreateMsg("The elevator is already on this floor.", 6.0)
 					ElseIf msg\Txt <> "You called the elevator."
 						Select Rand(10)
