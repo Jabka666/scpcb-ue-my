@@ -2544,15 +2544,19 @@ Function UpdateElevatorPanel%(d.Doors)
 			EndIf
 		EndIf
 	Else
-		If PlayerElevatorFloor = LowerFloor Then
-			TextureID = 23
-		ElseIf PlayerElevatorFloor = UpperFloor
-			TextureID = 22
+		If d\IsElevatorDoor = 3 Then
+			TextureID = 21
 		Else
-			If ToElevatorFloor = LowerFloor Then
+			If PlayerElevatorFloor = LowerFloor Then
+				TextureID = 23
+			ElseIf PlayerElevatorFloor = UpperFloor
 				TextureID = 22
 			Else
-				TextureID = 23
+				If ToElevatorFloor = LowerFloor Then
+					TextureID = 22
+				Else
+					TextureID = 23
+				EndIf
 			EndIf
 		EndIf
 	EndIf
