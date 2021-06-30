@@ -2531,21 +2531,19 @@ Function UpdateElevatorPanel%(d.Doors)
 	; ~ 22 = UP
 	; ~ 23 = DOWN
 	
-	If PlayerInsideElevator Then
-		If PlayerElevatorFloor = LowerFloor Then
-			TextureID = 22
-		ElseIf PlayerElevatorFloor = UpperFloor
-			TextureID = 23
-		Else
-			If ToElevatorFloor = LowerFloor Then
+	If d\IsElevatorDoor <> 3 Then
+		If PlayerInsideElevator Then
+			If PlayerElevatorFloor = LowerFloor Then
+				TextureID = 22
+			ElseIf PlayerElevatorFloor = UpperFloor
 				TextureID = 23
 			Else
-				TextureID = 22
+				If ToElevatorFloor = LowerFloor Then
+					TextureID = 23
+				Else
+					TextureID = 22
+				EndIf
 			EndIf
-		EndIf
-	Else
-		If d\IsElevatorDoor = 3 Then
-			TextureID = 21
 		Else
 			If PlayerElevatorFloor = LowerFloor Then
 				TextureID = 23
@@ -2559,11 +2557,11 @@ Function UpdateElevatorPanel%(d.Doors)
 				EndIf
 			EndIf
 		EndIf
+		
+		For i = 0 To 1
+			EntityTexture(d\ElevatorPanel[i], t\MiscTextureID[TextureID])
+		Next
 	EndIf
-	
-	For i = 0 To 1
-		EntityTexture(d\ElevatorPanel[i], t\MiscTextureID[TextureID])
-	Next
 End Function
 
 Function ClearElevatorPanelTexture%(d.Doors)
