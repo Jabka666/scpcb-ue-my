@@ -2531,7 +2531,7 @@ Function UpdateElevatorPanel%(d.Doors)
 	; ~ 22 = UP
 	; ~ 23 = DOWN
 	
-	If d\IsElevatorDoor <> 3 Then
+	If d\IsElevatorDoor <> 3 And d\IsElevatorDoor <> 0 Then
 		If PlayerInsideElevator Then
 			If PlayerElevatorFloor = LowerFloor Then
 				TextureID = 22
