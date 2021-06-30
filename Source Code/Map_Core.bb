@@ -372,7 +372,7 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 					EndIf
 				EndIf
 				If Tex[j] <> 0 Then
-					If Temp1i = 1 Then TextureBlend(Tex[j], 5)
+					If Temp1i = 1 Then TextureBlend(Tex[j], 2)
 					If Instr(Lower(Temp1s), "_lm") <> 0 Then
 						TextureBlend(Tex[j], 2)
 					EndIf
