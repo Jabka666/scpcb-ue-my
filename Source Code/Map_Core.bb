@@ -2625,6 +2625,13 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 	EndIf
 	
 	PlayerInsideElevator = False
+	If (Abs(EntityX(me\Collider) - EntityX(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0])) Lor (Abs(EntityX(me\Collider) - EntityX(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0])) Then
+		If (Abs(EntityZ(me\Collider) - EntityZ(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0])) Lor (Abs(EntityZ(me\Collider) - EntityZ(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0])) Then	
+			If (Abs(EntityY(me\Collider) - EntityY(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0])) Lor (Abs(EntityY(me\Collider) - EntityY(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0])) Then	
+				PlayerInsideElevator = True
+			EndIf
+		EndIf
+	EndIf
 	
 	If (Not door1\Open) And (Not door2\Open) Then
 		door1\Locked = 1
@@ -2635,8 +2642,6 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 				If Abs(EntityX(me\Collider) - EntityX(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
 					If Abs(EntityZ(me\Collider) - EntityZ(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then	
 						If Abs(EntityY(me\Collider) - EntityY(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then	
-							PlayerInsideElevator = True
-							
 							If (Not event\SoundCHN) Then
 								event\SoundCHN = PlaySound_Strict(ElevatorMoveSFX)
 							Else
@@ -2757,8 +2762,6 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 				If Abs(EntityX(me\Collider) - EntityX(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
 					If Abs(EntityZ(me\Collider) - EntityZ(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then	
 						If Abs(EntityY(me\Collider) - EntityY(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
-							PlayerInsideElevator = True
-							
 							If (Not event\SoundCHN) Then
 								event\SoundCHN = PlaySound_Strict(ElevatorMoveSFX)
 							Else
