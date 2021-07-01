@@ -7992,7 +7992,7 @@ Function LoadEntities()
 	LoadMissingTexture()
 	
 	AmbientLightRoomTex = CreateTextureUsingCacheSystem(2, 2)
-	TextureBlend(AmbientLightRoomTex, 5)
+	TextureBlend(AmbientLightRoomTex, 3)
 	SetBuffer(TextureBuffer(AmbientLightRoomTex))
 	ClsColor(0, 0, 0)
 	Cls()
