@@ -3989,7 +3989,7 @@ Function UpdateNPCs()
 						Select n\State
 							Case 0.0 ; ~ Idles
 								;[Block]
-								If n\Frame > 556.0
+								If n\Frame > 556.0 Then
 									AnimateNPC(n, 628.0, 652.0, 0.25, False)
 									If n\Frame > 651.0 Then SetNPCFrame(n, 2.0)
 								Else
@@ -4093,9 +4093,11 @@ Function UpdateNPCs()
 									
 									; ~ Chasing the player
 									If n\State = 8.0 And Dist < 1024.0 Then
+										If chs\NoTarget Then n\State = 0.0
+										
 										If n\PathTimer =< 0.0 Then
 											n\PathStatus = FindPath(n, EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True))
-											n\PathTimer = 40 * 10.0
+											n\PathTimer = 40.0 * 10.0
 											n\CurrSpeed = 0.0
 										EndIf
 										n\PathTimer = Max(n\PathTimer - fps\Factor[0], 0.0)
@@ -4135,7 +4137,7 @@ Function UpdateNPCs()
 													If (Not Temp) Then
 														n\PathStatus = 0
 														n\PathLocation = 0
-														n\PathTimer = 40 * 10.0
+														n\PathTimer = 40.0 * 10.0
 													EndIf
 												EndIf
 												
@@ -4177,7 +4179,7 @@ Function UpdateNPCs()
 								;[End Block]
 							Case 10.0 ; ~ Attacks
 								;[Block]
-								If chs\Notarget Then n\State = 0.0
+								If chs\NoTarget Then n\State = 0.0
 								
 								If n\LastSeen = 0 Then
 									PlaySound2(LoadTempSound("SFX\SCP\966\Echo" + Rand(1, 3) + ".ogg"), Camera, n\Collider)
@@ -4230,6 +4232,7 @@ Function UpdateNPCs()
 								RotateEntity(n\Collider, 0.0, CurveAngle(n\Angle, EntityYaw(n\Collider), 30.0), 0.0)
 								;[End Block]
 						End Select
+						CreateConsoleMsg(n\State)
 					Else
 						HideEntity(n\OBJ)
 						If Rand(600) = 1 Then
