@@ -4232,7 +4232,6 @@ Function UpdateNPCs()
 								RotateEntity(n\Collider, 0.0, CurveAngle(n\Angle, EntityYaw(n\Collider), 30.0), 0.0)
 								;[End Block]
 						End Select
-						CreateConsoleMsg(n\State)
 					Else
 						HideEntity(n\OBJ)
 						If Rand(600) = 1 Then
