@@ -3515,6 +3515,8 @@ Function UpdateEvents()
 						PointEntity(e\room\NPC[0]\Collider, me\Collider)
 						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
 						
+						e\room\RoomDoors[0]\IsElevatorDoor = 2
+						
 						e\EventState = 1.0
 					EndIf
 				Else
@@ -3537,6 +3539,7 @@ Function UpdateEvents()
 							e\room\RoomDoors[0]\Locked = 0
 							UseDoor(e\room\RoomDoors[0], False, True, True)
 							e\room\RoomDoors[0]\Locked = 1
+							e\room\RoomDoors[0]\IsElevatorDoor = 0
 							
 							PlaySound_Strict(LoadTempSound("SFX\Room\ElevatorDeath.ogg"))
 							
