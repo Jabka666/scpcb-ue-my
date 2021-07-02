@@ -8291,15 +8291,15 @@ Function UpdateEvents()
 								For i = 0 To 1
 									If e\room\RoomTemplate\Name = "room3_gw"
 										If i = 0 Then
-											PositionEntity(Pvt, -288.0, 416.0, 320.0)
+											PositionEntity(Pvt, -81.0, 416.0, 320.0)
 										Else
-											PositionEntity(Pvt, 192.0, 416.0, 320.0)
+											PositionEntity(Pvt, 143.0, 416.0, 320.0)
 										EndIf
 									Else
 										If i = 0 Then
-											PositionEntity(Pvt, 312.0, 416.0, -128.0)
+											PositionEntity(Pvt, 320.0, 416.0, -81.0)
 										Else
-											PositionEntity(Pvt, 312.0, 416.0, 224.0)
+											PositionEntity(Pvt, 320.0, 416.0, 143.0)
 										EndIf
 									EndIf
 									p.Particles = CreateParticle(1, EntityX(Pvt, True), EntityY(Pvt, True), EntityZ(Pvt, True), 0.8, 0.0, 50.0)

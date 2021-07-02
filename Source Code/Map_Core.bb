@@ -2577,8 +2577,8 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 	Local x#, z#, Dist#, Dir#
 	
 	; ~ First, find the current floor the player is walking on
-	ToElevatorFloor = ToFloor
 	FindFloor()
+	ToElevatorFloor = ToFloor
 	
 	door1\IsElevatorDoor = 1
 	door2\IsElevatorDoor = 1
@@ -2625,10 +2625,20 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 	EndIf
 	
 	PlayerInsideElevator = False
-	If (Abs(EntityX(me\Collider) - EntityX(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0])) Lor (Abs(EntityX(me\Collider) - EntityX(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0])) Then
-		If (Abs(EntityZ(me\Collider) - EntityZ(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0])) Lor (Abs(EntityZ(me\Collider) - EntityZ(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0])) Then	
-			If (Abs(EntityY(me\Collider) - EntityY(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0])) Lor (Abs(EntityY(me\Collider) - EntityY(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0])) Then	
-				PlayerInsideElevator = True
+	If PlayerElevatorFloor = NullFloor Then
+		If Abs(EntityX(me\Collider) - EntityX(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
+			If Abs(EntityZ(me\Collider) - EntityZ(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then	
+				If Abs(EntityY(me\Collider) - EntityY(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then	
+					PlayerInsideElevator = True
+				EndIf
+			EndIf
+		EndIf
+	Else
+		If Abs(EntityX(me\Collider) - EntityX(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
+			If Abs(EntityZ(me\Collider) - EntityZ(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
+				If Abs(EntityY(me\Collider) - EntityY(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
+					PlayerInsideElevator = True
+				EndIf
 			EndIf
 		EndIf
 	EndIf
@@ -7034,7 +7044,7 @@ Function FillRoom(r.Rooms)
 			;[Block]
 			If r\RoomTemplate\Name = "room2_gw_2" Then
 				r\Objects[0] = CreatePivot()
-				PositionEntity(r\Objects[0], r\x + 280.0 * RoomScale, r\y + 340.0 * RoomScale, r\z - 340.0 * RoomScale)
+				PositionEntity(r\Objects[0], r\x + 262.0 * RoomScale, r\y + 325.0 * RoomScale, r\z - 345.0 * RoomScale)
 				
 				r\Objects[1] = CreatePivot()
 				PositionEntity(r\Objects[1], r\x - 156.0 * RoomScale, r\y + 0.5, r\z + 121.0 * RoomScale)
@@ -7059,6 +7069,19 @@ Function FillRoom(r.Rooms)
 			For i = 0 To 1
 				FreeEntity(r\RoomDoors[1]\Buttons[i]) : r\RoomDoors[1]\Buttons[i] = 0
 			Next
+			
+			For r2.Rooms = Each Rooms
+				If r2 <> r Then
+					If r2\RoomTemplate\Name = "room2_gw" Lor r2\RoomTemplate\Name = "room2_gw_2" Then
+						r\Objects[2] = CopyEntity(r2\Objects[2]) ; ~ Don't load the mesh again
+						Exit
+					EndIf
+				EndIf
+			Next
+			If (Not r\Objects[2]) Then r\Objects[2] = LoadRMesh("GFX\map\room2_gw_pipes.rmesh", Null)
+			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[2], r\x, r\y, r\z)
+			EntityParent(r\Objects[2], r\OBJ)
 			
 			If r\RoomTemplate\Name = "room2_gw" Then
 				r\Objects[0] = CreatePivot()
@@ -7126,6 +7149,19 @@ Function FillRoom(r.Rooms)
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x - 48.0 * RoomScale, r\y + 128.0 * RoomScale, r\z + 320.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
+			
+			For r2.Rooms = Each Rooms
+				If r2 <> r Then
+					If r2\RoomTemplate\Name = "room3_gw" Then
+						r\Objects[1] = CopyEntity(r2\Objects[1]) ; ~ Don't load the mesh again
+						Exit
+					EndIf
+				EndIf
+			Next
+			If (Not r\Objects[1]) Then r\Objects[1] = LoadRMesh("GFX\map\room3_gw_pipes.rmesh", Null)
+			ScaleEntity(r\Objects[1], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[1], r\x, r\y, r\z)
+			EntityParent(r\Objects[1], r\OBJ)
 			;[End Block]
 		Case "cont2c_1162"
 			;[Block]
