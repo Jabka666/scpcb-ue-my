@@ -2628,12 +2628,12 @@ Function UpdateEvents()
 						
 						If Curr096 <> Null Then
 							If Curr096\State = 0.0 Lor Curr096\State = 5.0 Then
-								e\EventState = UpdateElevators(e\EventState, e\room\RoomDoors[0], gateb\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e, True, UpperFloor)
+								e\EventState = UpdateElevators(e\EventState, e\room\RoomDoors[0], gateb\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 							Else
 								e\EventState = Update096ElevatorEvent(e, e\EventState, e\room\RoomDoors[0], e\room\Objects[0])
 							EndIf
 						Else
-							e\EventState = UpdateElevators(e\EventState, e\room\RoomDoors[0], gateb\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e, True, UpperFloor)
+							e\EventState = UpdateElevators(e\EventState, e\room\RoomDoors[0], gateb\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 						EndIf
 						
 						If EntityDistanceSquared(me\Collider, e\room\Objects[1]) < 16.0 Then
@@ -2665,12 +2665,12 @@ Function UpdateEvents()
 						
 						If Curr096 <> Null Then
 							If Curr096\State = 0.0 Lor Curr096\State = 5.0 Then
-								e\EventState = UpdateElevators(e\EventState, e\room\RoomDoors[0], gatea\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e, True, UpperFloor)
+								e\EventState = UpdateElevators(e\EventState, e\room\RoomDoors[0], gatea\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 							Else
 								e\EventState = Update096ElevatorEvent(e, e\EventState, e\room\RoomDoors[0], e\room\Objects[0])
 							EndIf
 						Else
-							e\EventState = UpdateElevators(e\EventState, e\room\RoomDoors[0], gatea\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e, True, UpperFloor)
+							e\EventState = UpdateElevators(e\EventState, e\room\RoomDoors[0], gatea\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 						EndIf
 						If (Not Curr106\Contained) Then 
 							If e\EventState < -1.5 And e\EventState + fps\Factor[0] >= -1.5 Then
@@ -3612,7 +3612,7 @@ Function UpdateEvents()
 			Case e_room2_nuke
 				;[Block]
 				If PlayerRoom = e\room Then
-					e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[4], e\room\Objects[5], e, True, UpperFloor)
+					e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[4], e\room\Objects[5], e)
 					
 					e\EventState = UpdateLever(e\room\Objects[1])
 					UpdateLever(e\room\Objects[3])
@@ -4722,8 +4722,8 @@ Function UpdateEvents()
 					
 					UpdateMT(e\room\mt)
 					
-					e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[2], e\room\Objects[3], e, False, UpperFloor)
-					e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[2], e\room\RoomDoors[3], e\room\Objects[4], e\room\Objects[5], e, False, UpperFloor)
+					e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[2], e\room\Objects[3], e, False)
+					e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[2], e\room\RoomDoors[3], e\room\Objects[4], e\room\Objects[5], e, False)
 				Else
 					If e\room\mt <> Null Then
 						If e\room\mt\Meshes[0] <> 0 Then

@@ -2514,7 +2514,7 @@ Const NullFloor% = 0
 Const UpperFloor% = 1
 ;[End Block]
 
-Function FindFloor%()
+Function FindPlayerFloor%()
 	If Floor(EntityY(me\Collider)) < 0.0 Then
 		PlayerElevatorFloor = LowerFloor
 	ElseIf Floor(EntityY(me\Collider)) > 0.0
@@ -2524,6 +2524,19 @@ Function FindFloor%()
 	EndIf
 End Function
 
+Function FindFloor%(Name$)
+	Select Name
+		Case "room3_storage", "cont1_079", "cont1_106", "cont2_008", "cont2_049", "cont2_409"
+			;[Block]
+			ToElevatorFloor = LowerFloor
+			;[End Block]
+		Case "room2_mt", "room2_nuke", "gate_a_entrance", "gate_b_entrance"
+			;[Block]
+			ToElevatorFloor = UpperFloor
+			;[End Block]
+	End Select
+End Function
+
 Function UpdateElevatorPanel%(d.Doors)
 	Local TextureID%, i%
 	
@@ -2531,37 +2544,35 @@ Function UpdateElevatorPanel%(d.Doors)
 	; ~ 22 = UP
 	; ~ 23 = DOWN
 	
-	If d\IsElevatorDoor <> 3 And d\IsElevatorDoor <> 0 Then
-		If PlayerInsideElevator Then
-			If PlayerElevatorFloor = LowerFloor Then
-				TextureID = 22
-			ElseIf PlayerElevatorFloor = UpperFloor
-				TextureID = 23
-			Else
-				If ToElevatorFloor = LowerFloor Then
-					TextureID = 23
-				Else
-					TextureID = 22
-				EndIf
-			EndIf
+	If PlayerInsideElevator Then
+		If PlayerElevatorFloor = LowerFloor Then
+			TextureID = 22
+		ElseIf PlayerElevatorFloor = UpperFloor
+			TextureID = 23
 		Else
-			If PlayerElevatorFloor = LowerFloor Then
+			If ToElevatorFloor = LowerFloor Then
 				TextureID = 23
-			ElseIf PlayerElevatorFloor = UpperFloor
-				TextureID = 22
 			Else
-				If ToElevatorFloor = LowerFloor Then
-					TextureID = 22
-				Else
-					TextureID = 23
-				EndIf
+				TextureID = 22
 			EndIf
 		EndIf
-		
-		For i = 0 To 1
-			EntityTexture(d\ElevatorPanel[i], t\MiscTextureID[TextureID])
-		Next
+	Else
+		If PlayerElevatorFloor = LowerFloor Then
+			TextureID = 23
+		ElseIf PlayerElevatorFloor = UpperFloor
+			TextureID = 22
+		Else
+			If ToElevatorFloor = LowerFloor Then
+				TextureID = 22
+			Else
+				TextureID = 23
+			EndIf
+		EndIf
 	EndIf
+	
+	For i = 0 To 1
+		EntityTexture(d\ElevatorPanel[i], t\MiscTextureID[TextureID])
+	Next
 End Function
 
 Function ClearElevatorPanelTexture%(d.Doors)
@@ -2572,13 +2583,34 @@ Function ClearElevatorPanelTexture%(d.Doors)
 	Next
 End Function
 
-Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondPivot%, event.Events, IgnoreRotation% = True, ToFloor% = LowerFloor)
+Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondPivot%, event.Events, IgnoreRotation% = True)
 	Local n.NPCs, it.Items, de.Decals
 	Local x#, z#, Dist#, Dir#
 	
-	; ~ First, find the current floor the player is walking on
-	FindFloor()
-	ToElevatorFloor = ToFloor
+	; ~ First, check the current floor the player is walking on
+	FindPlayerFloor()
+	; ~ Second, find the floor the lower or upper floor
+	If PlayerRoom <> Null Then FindFloor(PlayerRoom\RoomTemplate\Name)
+	
+	; ~ After, determine if the player inside the elevator
+	PlayerInsideElevator = False
+	If PlayerElevatorFloor = NullFloor Then
+		If Abs(EntityX(me\Collider) - EntityX(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
+			If Abs(EntityZ(me\Collider) - EntityZ(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
+				If Abs(EntityY(me\Collider) - EntityY(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
+					PlayerInsideElevator = True
+				EndIf
+			EndIf
+		EndIf
+	Else
+		If Abs(EntityX(me\Collider) - EntityX(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
+			If Abs(EntityZ(me\Collider) - EntityZ(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
+				If Abs(EntityY(me\Collider) - EntityY(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
+					PlayerInsideElevator = True
+				EndIf
+			EndIf
+		EndIf
+	EndIf
 	
 	door1\IsElevatorDoor = 1
 	door2\IsElevatorDoor = 1
@@ -2624,43 +2656,20 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 		EndIf	
 	EndIf
 	
-	PlayerInsideElevator = False
-	If PlayerElevatorFloor = NullFloor Then
-		If Abs(EntityX(me\Collider) - EntityX(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
-			If Abs(EntityZ(me\Collider) - EntityZ(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then	
-				If Abs(EntityY(me\Collider) - EntityY(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then	
-					PlayerInsideElevator = True
-				EndIf
-			EndIf
-		EndIf
-	Else
-		If Abs(EntityX(me\Collider) - EntityX(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
-			If Abs(EntityZ(me\Collider) - EntityZ(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
-				If Abs(EntityY(me\Collider) - EntityY(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
-					PlayerInsideElevator = True
-				EndIf
-			EndIf
-		EndIf
-	EndIf
-	
 	If (Not door1\Open) And (Not door2\Open) Then
 		door1\Locked = 1
 		door2\Locked = 1
 		If door1\OpenState = 0.0 And door2\OpenState = 0.0 Then
 			If State < 0.0 Then
 				State = State - fps\Factor[0]
-				If Abs(EntityX(me\Collider) - EntityX(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
-					If Abs(EntityZ(me\Collider) - EntityZ(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then	
-						If Abs(EntityY(me\Collider) - EntityY(FirstPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then	
-							If (Not event\SoundCHN) Then
-								event\SoundCHN = PlaySound_Strict(ElevatorMoveSFX)
-							Else
-								If (Not ChannelPlaying(event\SoundCHN)) Then event\SoundCHN = PlaySound_Strict(ElevatorMoveSFX)
-							EndIf
-							
-							me\CameraShake = Sin(Abs(State) / 3.0) * 0.3
-						EndIf
+				If PlayerInsideElevator Then
+					If (Not event\SoundCHN) Then
+						event\SoundCHN = PlaySound_Strict(ElevatorMoveSFX)
+					Else
+						If (Not ChannelPlaying(event\SoundCHN)) Then event\SoundCHN = PlaySound_Strict(ElevatorMoveSFX)
 					EndIf
+					
+					me\CameraShake = Sin(Abs(State) / 3.0) * 0.3
 				EndIf
 				
 				If State < -500.0 Then
@@ -2769,18 +2778,14 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 				EndIf
 			Else
 				State = State + fps\Factor[0]
-				If Abs(EntityX(me\Collider) - EntityX(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
-					If Abs(EntityZ(me\Collider) - EntityZ(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then	
-						If Abs(EntityY(me\Collider) - EntityY(SecondPivot, True)) < (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
-							If (Not event\SoundCHN) Then
-								event\SoundCHN = PlaySound_Strict(ElevatorMoveSFX)
-							Else
-								If (Not ChannelPlaying(event\SoundCHN)) Then event\SoundCHN = PlaySound_Strict(ElevatorMoveSFX)
-							EndIf
-							
-							me\CameraShake = Sin(Abs(State) / 3.0) * 0.3
-						EndIf
+				If PlayerInsideElevator Then
+					If (Not event\SoundCHN) Then
+						event\SoundCHN = PlaySound_Strict(ElevatorMoveSFX)
+					Else
+						If (Not ChannelPlaying(event\SoundCHN)) Then event\SoundCHN = PlaySound_Strict(ElevatorMoveSFX)
 					EndIf
+					
+					me\CameraShake = Sin(Abs(State) / 3.0) * 0.3
 				EndIf	
 				
 				If State > 500.0 Then
@@ -3041,7 +3046,9 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True, Scripted% = False)
 			If (Not Scripted) Then Return
 		EndIf
 	Else
-		If d\DoorType = Elevator_Door Then UpdateElevatorPanel(d)
+		If d\DoorType = Elevator_Door Then
+			If d\IsElevatorDoor <> 0 And d\IsElevatorDoor <> 3 Then UpdateElevatorPanel(d)
+		EndIf
 		If d\Locked = 1 Then
 			If ShowMsg Then 
 				If (Not d\IsElevatorDoor > 0) Then
