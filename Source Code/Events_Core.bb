@@ -2765,7 +2765,7 @@ Function UpdateEvents()
 						ShouldPlay = 3
 						CurrStepSFX = 1
 						
-						If Achievements[38] = True And (Not AchvPDDone) Then Achievements[38] = False
+						If achv\Achievement[38] = True And (Not achv\AchvPDDone) Then achv\Achievement[38] = False
 					Else
 						ShouldPlay = 1
 						
@@ -3025,7 +3025,7 @@ Function UpdateEvents()
 											For r.Rooms = Each Rooms
 												If r\RoomTemplate\Name = "room2_shaft" Then
 													GiveAchievement(AchvPD)
-													AchvPDDone = True
+													achv\AchvPDDone = True
 													
 													e\EventState = 0.0
 													e\EventState2 = 0.0
@@ -3073,7 +3073,7 @@ Function UpdateEvents()
 								For r.Rooms = Each Rooms
 									If r\RoomTemplate\Name = "cont1_106" Then
 										GiveAchievement(AchvPD)
-										AchvPDDone = True
+										achv\AchvPDDone = True
 										
 										e\EventState = 0.0
 										e\EventState2 = 0.0
@@ -3165,7 +3165,7 @@ Function UpdateEvents()
 									For r.Rooms = Each Rooms
 										If r\RoomTemplate\Name = "room2_5_hcz" Then
 											GiveAchievement(AchvPD)
-											AchvPDDone = True
+											achv\AchvPDDone = True
 											
 											e\EventState = 0.0
 											e\EventState2 = 0.0

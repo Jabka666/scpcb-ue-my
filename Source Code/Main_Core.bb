@@ -1635,8 +1635,8 @@ Function UpdateConsole()
 					EndIf
 					
 					If Int(StrTemp) >= 0 And Int(StrTemp) < MAXACHIEVEMENTS Then
-						Achievements[Int(StrTemp)] = True
-						CreateConsoleMsg("Achievemt " + AchievementStrings[Int(StrTemp)] + " unlocked.")
+						achv\Achievement[Int(StrTemp)] = True
+						CreateConsoleMsg("Achievemt " + achv\AchievementStrings[Int(StrTemp)] + " unlocked.")
 					Else
 						CreateConsoleMsg("Achievement with ID " + Int(StrTemp) + " doesn't exist.", 255, 0, 0)
 					EndIf
@@ -3564,7 +3564,7 @@ Function UpdateGUI()
 		mm\ShouldDeleteGadgets = True
 		MenuOpen = (Not MenuOpen)
 		
-		AchievementsMenu = 0
+		mm\AchievementsMenu = 0
 		OptionsMenu = 0
 		QuitMsg = 0
 		
@@ -6686,11 +6686,11 @@ Function UpdateMenu()
 		
 		If (Not mo\MouseDown1) Then mm\OnSliderID = 0
 		
-		If AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg =< 0 Then
+		If mm\AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg =< 0 Then
 			; ~ Just save this line, ok?
-		ElseIf AchievementsMenu =< 0 And OptionsMenu > 0 And QuitMsg =< 0 And me\KillTimer >= 0.0
+		ElseIf mm\AchievementsMenu =< 0 And OptionsMenu > 0 And QuitMsg =< 0 And me\KillTimer >= 0.0
 			If UpdateMainMenuButton(x + (101 * MenuScale), y + (440 * MenuScale), 230 * MenuScale, 60 * MenuScale, "Back") Then
-				AchievementsMenu = 0
+				mm\AchievementsMenu = 0
 				OptionsMenu = 0
 				QuitMsg = 0
 				mo\MouseHit1 = False
@@ -6982,7 +6982,7 @@ Function UpdateMenu()
 					EndIf
 					;[End Block]
 			End Select
-		ElseIf AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg > 0 And me\KillTimer >= 0.0
+		ElseIf mm\AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg > 0 And me\KillTimer >= 0.0
 			Local QuitButton% = 60 
 			
 			If SelectedDifficulty\SaveType = SAVEONQUIT Lor SelectedDifficulty\SaveType = SAVEANYWHERE Then
@@ -7012,7 +7012,7 @@ Function UpdateMenu()
 			EndIf
 			
 			If UpdateMainMenuButton(x + (101 * MenuScale), y + 344 * MenuScale, 230 * MenuScale, 60 * MenuScale, "Back") Then
-				AchievementsMenu = 0
+				mm\AchievementsMenu = 0
 				OptionsMenu = 0
 				QuitMsg = 0
 				mo\MouseHit1 = False
@@ -7020,23 +7020,23 @@ Function UpdateMenu()
 			EndIf
 		Else
 			If UpdateMainMenuButton(x + (101 * MenuScale), y + 344 * MenuScale, 230 * MenuScale, 60 * MenuScale, "Back") Then
-				AchievementsMenu = 0
+				mm\AchievementsMenu = 0
 				OptionsMenu = 0
 				QuitMsg = 0
 				mo\MouseHit1 = False
 				mm\ShouldDeleteGadgets = True
 			EndIf
 			
-			If AchievementsMenu > 0 Then
-				If AchievementsMenu =< Floor(Float(MAXACHIEVEMENTS - 1) / 12.0) Then 
+			If mm\AchievementsMenu > 0 Then
+				If mm\AchievementsMenu =< Floor(Float(MAXACHIEVEMENTS - 1) / 12.0) Then 
 					If UpdateMainMenuButton(x + (341 * MenuScale), y + (344 * MenuScale), 50 * MenuScale, 60 * MenuScale, ">") Then
-						AchievementsMenu = AchievementsMenu + 1
+						mm\AchievementsMenu = mm\AchievementsMenu + 1
 						mm\ShouldDeleteGadgets = True
 					EndIf
 				EndIf
-				If AchievementsMenu > 1 Then
+				If mm\AchievementsMenu > 1 Then
 					If UpdateMainMenuButton(x + (41 * MenuScale), y + (344 * MenuScale), 50 * MenuScale, 60 * MenuScale, "<") Then
-						AchievementsMenu = AchievementsMenu - 1
+						mm\AchievementsMenu = mm\AchievementsMenu - 1
 						mm\ShouldDeleteGadgets = True
 					EndIf
 				EndIf
@@ -7045,7 +7045,7 @@ Function UpdateMenu()
 		
 		y = y + (10 * MenuScale)
 		
-		If AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg =< 0 Then
+		If mm\AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg =< 0 Then
 			If me\KillTimer >= 0.0 Then	
 				y = y + (72 * MenuScale)
 				
@@ -7103,7 +7103,7 @@ Function UpdateMenu()
 				EndIf
 				
 				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "Achievements") Then 
-					AchievementsMenu = 1
+					mm\AchievementsMenu = 1
 					mm\ShouldDeleteGadgets = True
 				EndIf
 				
@@ -7204,7 +7204,7 @@ Function RenderMenu()
 		x = x + (132 * MenuScale)
 		y = y + (122 * MenuScale)
 		
-		If AchievementsMenu > 0 Then
+		If mm\AchievementsMenu > 0 Then
 			SetFont(fo\FontID[Font_Default_Big])
 			Text(x, y - (77 * MenuScale), "ACHIEVEMENTS", False, True)
 			SetFont(fo\FontID[Font_Default])
@@ -7230,12 +7230,12 @@ Function RenderMenu()
 		Local Scale# = opt\GraphicHeight / 768.0
 		Local SeparationConst% = 76.0 * Scale
 		
-		If AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg =< 0
+		If mm\AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg =< 0
 			SetFont(fo\FontID[Font_Default])
 			Text(x, y, "Difficulty: " + SelectedDifficulty\Name)
 			Text(x, y + (20 * MenuScale), "Save: " + CurrSave)
 			Text(x, y + (40 * MenuScale), "Map seed: " + RandomSeed)
-		ElseIf AchievementsMenu =< 0 And OptionsMenu > 0 And QuitMsg =< 0 And me\KillTimer >= 0.0
+		ElseIf mm\AchievementsMenu =< 0 And OptionsMenu > 0 And QuitMsg =< 0 And me\KillTimer >= 0.0
 			Color(0, 255, 0)
 			If OptionsMenu = 1
 				Rect(x - (10 * MenuScale), y - (5 * MenuScale), 110 * MenuScale, 40 * MenuScale, True)
@@ -7516,21 +7516,21 @@ Function RenderMenu()
 					EndIf
 					;[End Block]
 			End Select
-		ElseIf AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg > 0 And me\KillTimer >= 0.0
+		ElseIf mm\AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg > 0 And me\KillTimer >= 0.0
 			; ~ Just save this line, ok?
 		Else
-			If AchievementsMenu > 0 Then
+			If mm\AchievementsMenu > 0 Then
 				For i = 0 To 11
-					If i + ((AchievementsMenu - 1) * 12) < MAXACHIEVEMENTS Then
-						DrawAchvIMG(AchvXIMG, y + ((i / 4) * 120 * MenuScale), i + ((AchievementsMenu - 1) * 12))
+					If i + ((mm\AchievementsMenu - 1) * 12) < MAXACHIEVEMENTS Then
+						DrawAchvIMG(AchvXIMG, y + ((i / 4) * 120 * MenuScale), i + ((mm\AchievementsMenu - 1) * 12))
 					Else
 						Exit
 					EndIf
 				Next
 				For i = 0 To 11
-					If i + ((AchievementsMenu - 1) * 12) < MAXACHIEVEMENTS Then
+					If i + ((mm\AchievementsMenu - 1) * 12) < MAXACHIEVEMENTS Then
 						If MouseOn(AchvXIMG + ((i Mod 4) * SeparationConst), y + ((i / 4) * 120 * MenuScale), 64 * Scale, 64 * Scale) Then
-							AchievementTooltip(i + ((AchievementsMenu - 1) * 12))
+							AchievementTooltip(i + ((mm\AchievementsMenu - 1) * 12))
 							Exit
 						EndIf
 					Else
@@ -7542,7 +7542,7 @@ Function RenderMenu()
 		
 		y = y + (10 * MenuScale)
 		
-		If AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg =< 0 Then
+		If mm\AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg =< 0 Then
 			If me\KillTimer >= 0.0 Then	
 				y = y + (297 * MenuScale)
 				If SelectedDifficulty\SaveType <> NOSAVES Then
@@ -7632,7 +7632,7 @@ Function UpdateEnding()
 				x = mo\Viewport_Center_X - (Width / 2)
 				y = mo\Viewport_Center_Y - (Height / 2)
 				
-				If AchievementsMenu = 0 Then 
+				If mm\AchievementsMenu = 0 Then 
 					x = x + (132 * MenuScale)
 					y = y + (122 * MenuScale)
 					
@@ -7642,7 +7642,7 @@ Function UpdateEnding()
 					y = y + Height - (100 * MenuScale)
 					
 					If UpdateMainMenuButton(x - (170 * MenuScale), y - (200 * MenuScale), 430 * MenuScale, 60 * MenuScale, "ACHIEVEMENTS", True) Then
-						AchievementsMenu = 1
+						mm\AchievementsMenu = 1
 						mm\ShouldDeleteGadgets = True
 					EndIf
 					
@@ -7717,7 +7717,7 @@ Function RenderEnding()
 				Text(x + (Width / 2) + (40 * MenuScale), y + (20 * MenuScale), "THE END", True)
 				SetFont(fo\FontID[Font_Default])
 				
-				If AchievementsMenu = 0 Then 
+				If mm\AchievementsMenu = 0 Then 
 					x = x + (132 * MenuScale)
 					y = y + (122 * MenuScale)
 					
@@ -7740,13 +7740,13 @@ Function RenderEnding()
 					Local SCPsEncountered% = 1
 					
 					For i = 0 To 30
-						SCPsEncountered = SCPsEncountered + Achievements[i]
+						SCPsEncountered = SCPsEncountered + achv\Achievement[i]
 					Next
 					
 					Local AchievementsUnlocked% = 0
 					
 					For i = 0 To MAXACHIEVEMENTS - 1
-						AchievementsUnlocked = AchievementsUnlocked + Achievements[i]
+						AchievementsUnlocked = AchievementsUnlocked + achv\Achievement[i]
 					Next
 					
 					Text(x, y, "SCPs encountered: " + SCPsEncountered)
@@ -7953,6 +7953,23 @@ Function LoadEntities()
 	For i = 4 To 5
 		t\IconID[i] = LoadImage_Strict("GFX\hand_symbol(" + (i - 3) + ").png")
 	Next
+	
+	For i = 0 To MAXACHIEVEMENTS - 1
+		Local Loc2% = GetINISectionLocation(AchievementsFile, "a" + Str(i))
+		
+		achv\AchievementStrings[i] = GetINIString2(AchievementsFile, Loc2, "AchvName")
+		achv\AchievementDescs[i] = GetINIString2(AchievementsFile, Loc2, "AchvDesc")
+		
+		Local Image$ = GetINIString2(AchievementsFile, Loc2, "AchvImage") 
+		
+		achv\AchvIMG[i] = LoadImage_Strict("GFX\menu\achievements\" + Image + ".png")
+		achv\AchvIMG[i] = ResizeImage2(achv\AchvIMG[i], ImageWidth(achv\AchvIMG[i]) * opt\GraphicHeight / 768.0, ImageHeight(achv\AchvIMG[i]) * opt\GraphicHeight / 768.0)
+		BufferDirty(ImageBuffer(achv\AchvIMG[i]))
+	Next
+	
+	achv\AchvLocked = LoadImage_Strict("GFX\menu\achievements\AchvLocked.png")
+	achv\AchvLocked = ResizeImage2(achv\AchvLocked, ImageWidth(achv\AchvLocked) * opt\GraphicHeight / 768.0, ImageHeight(achv\AchvLocked) * opt\GraphicHeight / 768.0)
+	BufferDirty(ImageBuffer(achv\AchvLocked))
 	
 	RenderLoading(15, "IMAGES")
 	
@@ -8881,10 +8898,8 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	MTFTimer = 0.0
 	
-	For i = 0 To MAXACHIEVEMENTS - 1
-		Achievements[i] = 0
-	Next
-	AchvPDDone = False
+	Delete(achv)
+	achv.Achievements = New Achievements
 	
 	ConsoleInput = ""
 	ConsoleOpen = False
@@ -9010,7 +9025,7 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	OptionsMenu = -1
 	QuitMsg = -1
-	AchievementsMenu = -1
+	mm\AchievementsMenu = -1
 	
 	opt\MusicVolume = opt\PrevMusicVolume
 	opt\SFXVolume = opt\PrevSFXVolume

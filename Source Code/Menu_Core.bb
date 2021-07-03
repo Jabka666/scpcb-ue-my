@@ -6,6 +6,7 @@ Type MainMenu
 	Field ShouldDeleteGadgets%
 	Field CurrLoadGamePage%
 	Field OnSliderID%, OnPalette%
+	Field AchievementsMenu%
 End Type
 
 Global mm.MainMenu = New MainMenu

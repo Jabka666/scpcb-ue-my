@@ -54,7 +54,7 @@ Function WriteDifficultyFile()
 	For i = SAFE To ESOTERIC
 		WriteByte(File, difficulties[i]\Locked)
 	Next
-	WriteByte(File, Achievements[33])
+	WriteByte(File, achv\Achievement[33])
 	CloseFile(File)
 End Function
 
@@ -68,7 +68,7 @@ Function ReadDifficultyFile()
 	For i = SAFE To ESOTERIC
 		difficulties[i]\Locked = ReadByte(File)
 	Next
-	Achievements[33] = ReadByte(File)
+	achv\Achievement[33] = ReadByte(File)
 	CloseFile(File)
 End Function
 

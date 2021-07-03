@@ -137,9 +137,9 @@ Function SaveGame(File$)
 	WriteByte(f, SoundTransmission)
 	
 	For i = 0 To MAXACHIEVEMENTS - 1
-		WriteByte(f, Achievements[i])
+		WriteByte(f, achv\Achievement[i])
 	Next
-	WriteByte(f, AchvPDDone)
+	WriteByte(f, achv\AchvPDDone)
 	WriteInt(f, me\RefinedItems)
 	
 	If UsedConsole Then
@@ -624,9 +624,9 @@ Function LoadGame(File$)
 	SoundTransmission = ReadByte(f)	
 	
 	For i = 0 To MAXACHIEVEMENTS - 1
-		Achievements[i] = ReadByte(f)
+		achv\Achievement[i] = ReadByte(f)
 	Next
-	AchvPDDone = ReadByte(f)
+	achv\AchvPDDone = ReadByte(f)
 	me\RefinedItems = ReadInt(f)
 	
 	If ReadInt(f) <> 994 Then UsedConsole = True
@@ -1498,9 +1498,9 @@ Function LoadGameQuick(File$)
 	SoundTransmission = ReadByte(f)	
 	
 	For i = 0 To MAXACHIEVEMENTS - 1
-		Achievements[i] = ReadByte(f)
+		achv\Achievement[i] = ReadByte(f)
 	Next
-	AchvPDDone = ReadByte(f)
+	achv\AchvPDDone = ReadByte(f)
 	me\RefinedItems = ReadInt(f)
 	
 	If ReadInt(f) <> 994 Then UsedConsole = True

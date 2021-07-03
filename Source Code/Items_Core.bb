@@ -1609,7 +1609,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 							Local CurrAchvAmount% = 0
 							
 							For i = 0 To MAXACHIEVEMENTS - 1
-								If Achievements[i] = True
+								If achv\Achievement[i] = True
 									CurrAchvAmount = CurrAchvAmount + 1
 								EndIf
 							Next
@@ -1708,7 +1708,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 					;[Block]
 					CurrAchvAmount = 0
 					For i = 0 To MAXACHIEVEMENTS - 1
-						If Achievements[i] = True
+						If achv\Achievement[i] = True
 							CurrAchvAmount = CurrAchvAmount + 1
 						EndIf
 					Next
