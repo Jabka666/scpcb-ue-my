@@ -98,7 +98,6 @@ Function CreateEmitter.Emitters(x#, y#, z#, EmitterType%)
 	
 	e.Emitters = New Emitters
 	e\OBJ = CreatePivot()
-	NameEntity(e\OBJ, "Emitter1")
 	PositionEntity(e\OBJ, x, y, z, True)
 	
 	Select EmitterType
