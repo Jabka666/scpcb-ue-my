@@ -7948,7 +7948,7 @@ Function UpdateRooms()
 		EndIf
 	Next
 	
-	CurrMapGrid\Found[Floor(EntityX(PlayerRoom\OBJ) / 8.0) + (Floor(EntityZ(PlayerRoom\OBJ) / 8.0) * MapGridSize)] = 1
+	CurrMapGrid\Found[Floor(EntityX(PlayerRoom\OBJ) / 8.0) + (Floor(EntityZ(PlayerRoom\OBJ) / 8.0) * MapGridSize)] = MapGrid_tile
 	PlayerRoom\Found = True
 	
 	TempLightVolume = Max(TempLightVolume / 5.0, 0.8)
@@ -8263,6 +8263,7 @@ Function CreateMap()
 		Zone = GetZone(y)
 		For x = 1 To MapGridSize - 1
 			If CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile Then
+				Temp = 0
 				Temp = Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1.0)			
 				If CurrMapGrid\Grid[x + (y * MapGridSize)] <> MapGrid_CheckpointTile Then CurrMapGrid\Grid[x + (y * MapGridSize)] = Temp
 				Select CurrMapGrid\Grid[x + (y * MapGridSize)]
@@ -8813,7 +8814,7 @@ Function CreateMap()
 	Next
 	
 	; ~ Create the doors between rooms
-	For y = MapGridSize To 0 Step -1
+	For y = 0 To MapGridSize - 1
 		If y < I_Zone\Transition[1] - 1 Then
 			Zone = 3
 		ElseIf y >= I_Zone\Transition[1] - 1 And y < I_Zone\Transition[0] - 1 Then
@@ -8821,7 +8822,7 @@ Function CreateMap()
 		Else
 			Zone = 1
 		EndIf
-		For x = MapGridSize To 0 Step -1
+		For x = 0 To MapGridSize - 1
 			If CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile Then
 				If Zone = 2 Then
 					Temp = Heavy_Door

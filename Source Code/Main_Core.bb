@@ -6398,32 +6398,32 @@ Function RenderGUI()
 							For x2 = Max(0.0, PlayerX - 6.0) To Min(MapGridSize, PlayerX + 6.0)
 								For z2 = Max(0.0, PlayerZ - 6.0) To Min(MapGridSize, PlayerZ + 6.0)
 									If CoffinDistance > 16.0 Lor Rnd(16.0) < CoffinDistance Then 
-										If CurrMapGrid\Grid[x2 + (z2 * MapGridSize)] > 0 And (CurrMapGrid\Found[x2 + (z2 * MapGridSize)] > 0 Lor SelectedItem\ItemTemplate\TempName = "nav310" Lor SelectedItem\ItemTemplate\TempName = "navulti") Then
+										If (CurrMapGrid\Grid[x2 + (z2 * MapGridSize)] > MapGrid_NoTile And (CurrMapGrid\Found[x2 + (z2 * MapGridSize)] > MapGrid_NoTile) Lor SelectedItem\ItemTemplate\TempName = "nav310" Lor SelectedItem\ItemTemplate\TempName = "navulti") Then
 											Local DrawX% = x + (PlayerX - 1 - x2) * 24 , DrawY% = y - (PlayerZ - 1 - z2) * 24
 											
 											If x2 + 1.0 =< MapGridSize Then
-												If CurrMapGrid\Grid[(x2 + 1) + (z2 * MapGridSize)] = 0
+												If CurrMapGrid\Grid[(x2 + 1) + (z2 * MapGridSize)] = MapGrid_NoTile
 													DrawImage(t\ImageID[10], DrawX - 12, DrawY - 12)
 												EndIf
 											Else
 												DrawImage(t\ImageID[10], DrawX - 12, DrawY - 12)
 											EndIf
 											If x2 - 1.0 >= 0.0 Then
-												If CurrMapGrid\Grid[(x2 - 1) + (z2 * MapGridSize)] = 0
+												If CurrMapGrid\Grid[(x2 - 1) + (z2 * MapGridSize)] = MapGrid_NoTile
 													DrawImage(t\ImageID[8], DrawX - 12, DrawY - 12)
 												EndIf
 											Else
 												DrawImage(t\ImageID[8], DrawX - 12, DrawY - 12)
 											EndIf
 											If z2 - 1.0 >= 0.0 Then
-												If CurrMapGrid\Grid[x2 + ((z2 - 1) * MapGridSize)] = 0
+												If CurrMapGrid\Grid[x2 + ((z2 - 1) * MapGridSize)] = MapGrid_NoTile
 													DrawImage(t\ImageID[7], DrawX - 12, DrawY - 12)
 												EndIf
 											Else
 												DrawImage(t\ImageID[7], DrawX - 12, DrawY - 12)
 											EndIf
 											If z2 + 1.0 =< MapGridSize Then
-												If CurrMapGrid\Grid[x2 + ((z2 + 1) * MapGridSize)] = 0
+												If CurrMapGrid\Grid[x2 + ((z2 + 1) * MapGridSize)] = MapGrid_NoTile
 													DrawImage(t\ImageID[9], DrawX - 12, DrawY - 12)
 												EndIf
 											Else
@@ -7080,7 +7080,7 @@ Function UpdateMenu()
 									CurrMapGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)] = Max(CurrMapGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)], 1.0)
 									If x < 4.0 And z < 4.0 Then
 										If Abs(EntityY(me\Collider) - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r
-										CurrMapGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)] = 1
+										CurrMapGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)] = MapGrid_Tile
 									EndIf
 								EndIf
 							Next
@@ -7139,7 +7139,7 @@ Function UpdateMenu()
 									CurrMapGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)] = Max(CurrMapGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)], 1.0)
 									If x < 4.0 And z < 4.0 Then
 										If Abs(EntityY(me\Collider) - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r
-										CurrMapGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)] = 1
+										CurrMapGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)] = MapGrid_Tile
 									EndIf
 								EndIf
 							Next
@@ -8907,6 +8907,8 @@ Function NullGame(PlayButtonSFX% = True)
 	Next
 	
 	Delete(CurrMapGrid)
+	Delete(I_Zone)
+	I_Zone.MapZones = New MapZones
 	
 	For s.Screens = Each Screens
 		Delete(s)
