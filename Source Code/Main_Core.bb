@@ -271,7 +271,7 @@ Const MaxMonitorTextureIDAmount% = 5
 Const MaxOverlayTextureIDAmount% = 11
 Const MaxOverlayIDAmount% = 11
 Const MaxDecalTextureIDAmount% = 20
-Const MaxParticleTextureIDAmount% = 9
+Const MaxParticleTextureIDAmount% = 8
 Const MaxLightSpriteIDAmount% = 3
 Const MaxIconIDAmount% = 6
 Const MaxImageIDAmount% = 13
@@ -8162,7 +8162,6 @@ Function LoadEntities()
 	t\ParticleTextureID[5] = LoadTexture_Strict("GFX\map\textures\sun.png", 1 + 2, DeleteAllTextures)
 	t\ParticleTextureID[6] = LoadTexture_Strict("GFX\blood_sprite.png", 1 + 2, DeleteAllTextures)
 	t\ParticleTextureID[7] = LoadTexture_Strict("GFX\spark.png", 1 + 2, DeleteAllTextures)
-	t\ParticleTextureID[8] = LoadTexture_Strict("GFX\particle.png", 1 + 2, DeleteAllTextures)
 	
 	For i = 0 To 6
 		t\MiscTextureID[i] = LoadTexture_Strict("GFX\scp_079_overlay(" + (i + 1) + ").png", 1, DeleteAllTextures)
