@@ -19,12 +19,14 @@ Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTi
 	SpriteViewMode(p\OBJ, 3)
 	
 	Select ID
-		Case 0, 1, 6
+		Case 0, 1, 3, 6
 			;[Block]
+			EntityFX(p\OBJ, 1)
 			EntityBlend(p\OBJ, 1)
 			;[End Block]
-		Case 2, 3, 4, 5, 7
+		Case 2, 4, 5, 7
 			;[Block]
+			EntityFX(p\OBJ, 1 + 8)
 			EntityBlend(p\OBJ, 3)
 			;[End Block]
 	End Select
@@ -118,7 +120,7 @@ Function CreateEmitter.Emitters(x#, y#, z#, EmitterType%)
 			e\LifeTime = 200.0
 			e\SizeChange = 0.008
 			e\Speed = 0.004
-			e\RandAngle = 40
+			e\RandAngle = 40.0
 			e\AlphaChange = -0.01
 			;[End Block]
 	End Select
@@ -141,7 +143,7 @@ Function UpdateEmitters()
 			p.Particles = CreateParticle(0, EntityX(e\OBJ, True), EntityY(e\OBJ, True), EntityZ(e\OBJ, True), e\Size, e\Gravity, e\LifeTime)
 			p\Speed = e\Speed
 			RotateEntity(p\Pvt, EntityPitch(e\OBJ, True), EntityYaw(e\OBJ, True), EntityRoll(e\OBJ, True), True)
-			TurnEntity(p\Pvt, Rnd(-e\RandAngle, e\RandAngle), Rnd(-e\RandAngle, e\RandAngle), 0)
+			TurnEntity(p\Pvt, Rnd(-e\RandAngle, e\RandAngle), Rnd(-e\RandAngle, e\RandAngle), 0.0)
 			
 			TurnEntity(p\OBJ, 0.0, 0.0, Rnd(360.0))
 			
