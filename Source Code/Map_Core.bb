@@ -4592,6 +4592,7 @@ Function FillRoom(r.Rooms)
 			d.Doors = CreateDoor(r\x - 448.0 * RoomScale, r\y, r\z, 270.0, r, False, Default_Door, 0, "GEAR")
 			d\AutoClose = False : d\Locked = 1 : d\MTFClose = False : d\DisableWaypoint = True
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
 			d.Doors = CreateDoor(r\x + 256.0 * RoomScale, r\y, r\z - 576.0 * RoomScale, 270.0, r, False, Default_Door, 0, "7816")
 			d\AutoClose = False
