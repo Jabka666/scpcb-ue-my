@@ -293,8 +293,8 @@ Global t.Textures = New Textures
 
 ; ~ Objects Constants
 ;[Block]
-Const MaxNPCModelIDAmount% = 34
-Const MaxDTextures% = 16
+Const MaxNPCModelIDAmount% = 33
+Const MaxDTextures% = 15
 Const MaxButtonModelIDAmount% = 5
 Const MaxDoorModelIDAmount% = 13
 Const MaxLeverModelIDAmount% = 2
@@ -8211,8 +8211,6 @@ Function LoadEntities()
 	
 	o\NPCModelID[NPCType008_1] = LoadAnimMesh_Strict("GFX\npcs\scp_008_1.b3d") ; ~ SCP-008-1
 	
-	o\NPCModelID[NPCType035] = LoadAnimMesh_Strict("GFX\npcs\scp_035.b3d") ; ~ SCP-035
-	
 	o\NPCModelID[NPCType035_Tentacle] = LoadAnimMesh_Strict("GFX\npcs\scp_035_tentacle.b3d") ; ~ SCP-035's Tentacle
 	
 	o\NPCModelID[NPCType049] = LoadAnimMesh_Strict("GFX\npcs\scp_049.b3d") ; ~ SCP-049
@@ -8322,54 +8320,49 @@ Function LoadEntities()
 	EntityTexture(o\DTextures[6], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
-	; ~ 035 victim
-	Tex = LoadTexture_Strict("GFX\npcs\scp_035_victim.png")
-	EntityTexture(o\DTextures[7], Tex)
-	DeleteSingleTextureEntryFromCache(Tex)
-	
 	If opt\IntroEnabled Then
 		; ~ D-9341
 		Tex = LoadTexture_Strict("GFX\npcs\D_9341.png")
-		EntityTexture(o\DTextures[8], Tex)
+		EntityTexture(o\DTextures[7], Tex)
 		DeleteSingleTextureEntryFromCache(Tex)
 	Else
 		; ~ Remove the model because intro scene is disabled
-		If o\DTextures[8] <> 0 Then FreeEntity(o\DTextures[8]) : o\DTextures[8] = 0
+		If o\DTextures[7] <> 0 Then FreeEntity(o\DTextures[7]) : o\DTextures[7] = 0
 	EndIf
 	
 	; ~ Body # 1
 	Tex = LoadTexture_Strict("GFX\npcs\body.png")
-	EntityTexture(o\DTextures[9], Tex)
+	EntityTexture(o\DTextures[8], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ Body # 2
 	Tex = LoadTexture_Strict("GFX\npcs\body(2).png")
-	EntityTexture(o\DTextures[10], Tex)
+	EntityTexture(o\DTextures[9], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ Janitor # 2
 	Tex = LoadTexture_Strict("GFX\npcs\janitor(2).png")
-	EntityTexture(o\DTextures[11], Tex)
+	EntityTexture(o\DTextures[10], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ SCP-008-1's victim
 	Tex = LoadTexture_Strict("GFX\npcs\scp_008_1_victim.png")
-	EntityTexture(o\DTextures[12], Tex)
+	EntityTexture(o\DTextures[11], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ SCP-409's victim
 	Tex = LoadTexture_Strict("GFX\npcs\body(3).png")
-	EntityTexture(o\DTextures[13], Tex)
+	EntityTexture(o\DTextures[12], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ SCP-939's victim # 2
 	Tex = LoadTexture_Strict("GFX\npcs\scp_939_victim.png")
-	EntityTexture(o\DTextures[14], Tex)
+	EntityTexture(o\DTextures[13], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ SCP-939's victim # 1
 	Tex = LoadTexture_Strict("GFX\npcs\scp_939_victim(2).png")
-	EntityTexture(o\DTextures[15], Tex)
+	EntityTexture(o\DTextures[14], Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ [BUTTONS]
@@ -9702,7 +9695,7 @@ Function Update008()
 								r\NPC[0] = CreateNPC(NPCTypeD, EntityX(r\Objects[6], True), EntityY(r\Objects[6], True) + 0.2, EntityZ(r\Objects[6], True))
 								r\NPC[0]\Sound = LoadSound_Strict("SFX\SCP\008\KillScientist1.ogg")
 								r\NPC[0]\SoundCHN = PlaySound_Strict(r\NPC[0]\Sound)
-								ChangeNPCTextureID(r\NPC[0], 12)
+								ChangeNPCTextureID(r\NPC[0], 11)
 								r\NPC[0]\State = 6.0
 								PlayerRoom = r
 								Exit

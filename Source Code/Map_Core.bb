@@ -2524,17 +2524,19 @@ Function FindPlayerFloor%()
 	EndIf
 End Function
 
-Function FindFloor%(Name$)
-	Select Name
-		Case "room3_storage", "cont1_079", "cont1_106", "cont2_008", "cont2_049", "cont2_409"
-			;[Block]
-			ToElevatorFloor = LowerFloor
-			;[End Block]
-		Case "room2_mt", "room2_nuke", "gate_a_entrance", "gate_b_entrance"
-			;[Block]
-			ToElevatorFloor = UpperFloor
-			;[End Block]
-	End Select
+Function FindFloor%()
+	If PlayerRoom <> Null Then
+		Select PlayerRoom\RoomTemplate\Name
+			Case "room3_storage", "cont1_079", "cont1_106", "cont2_008", "cont2_049", "cont2_409"
+				;[Block]
+				Return(LowerFloor)
+				;[End Block]
+			Case "room2_mt", "room2_nuke", "gate_a_entrance", "gate_b_entrance"
+				;[Block]
+				Return(UpperFloor)
+				;[End Block]
+		End Select
+	EndIf
 End Function
 
 Function UpdateElevatorPanel%(d.Doors)
@@ -2590,7 +2592,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 	; ~ First, check the current floor the player is walking on
 	FindPlayerFloor()
 	; ~ Second, find the floor the lower or upper floor
-	If PlayerRoom <> Null Then FindFloor(PlayerRoom\RoomTemplate\Name)
+	ToElevatorFloor = FindFloor()
 	
 	; ~ After, determine if the player inside the elevator
 	PlayerInsideElevator = False
@@ -4980,7 +4982,7 @@ Function FillRoom(r.Rooms)
 						t1 = GetBrushTexture(b, 0)
 						If t1 <> 0 Then
 							Name = StripPath(TextureName(t1))
-							If Lower(Name) = "label035_smile.png"
+							If Lower(Name) <> "cable_black.jpg"
 								BrushTexture(b, Tex, 0, 0)
 								PaintSurface(SF, b)
 							EndIf
@@ -5546,6 +5548,28 @@ Function FillRoom(r.Rooms)
 			EntityParent(em\OBJ, r\OBJ)
 			
 			em.Emitters = CreateEmitter(r\x - 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 0)
+			em\RandAngle = 55.0 : em\Speed = 0.0005 : em\AlphaChange = -0.015 : em\SizeChange = 0.007
+			TurnEntity(em\OBJ, -90.0, 0.0, 0.0)
+			EntityParent(em\OBJ, r\OBJ)
+			;[End Block]
+		Case "room4_hcz"
+			;[Block]
+			em.Emitters = CreateEmitter(r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 0)
+			em\RandAngle = 55.0 : em\Speed = 0.0005 : em\AlphaChange = -0.015 : em\SizeChange = 0.007
+			TurnEntity(em\OBJ, -90.0, 0.0, 0.0)
+			EntityParent(em\OBJ, r\OBJ)
+			
+			em.Emitters = CreateEmitter(r\x - 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 0)
+			em\RandAngle = 55.0 : em\Speed = 0.0005 : em\AlphaChange = -0.015 : em\SizeChange = 0.007
+			TurnEntity(em\OBJ, -90.0, 0.0, 0.0)
+			EntityParent(em\OBJ, r\OBJ)
+			
+			em.Emitters = CreateEmitter(r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z + 688.0 * RoomScale, 0)
+			em\RandAngle = 55.0 : em\Speed = 0.0005 : em\AlphaChange = -0.015 : em\SizeChange = 0.007
+			TurnEntity(em\OBJ, -90.0, 0.0, 0.0)
+			EntityParent(em\OBJ, r\OBJ)
+			
+			em.Emitters = CreateEmitter(r\x - 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z + 688.0 * RoomScale, 0)
 			em\RandAngle = 55.0 : em\Speed = 0.0005 : em\AlphaChange = -0.015 : em\SizeChange = 0.007
 			TurnEntity(em\OBJ, -90.0, 0.0, 0.0)
 			EntityParent(em\OBJ, r\OBJ)

@@ -1748,7 +1748,7 @@ Function UpdateEvents()
 								
 								e\room\NPC[9] = CreateNPC(NPCTypeD, e\room\x - 4000.0 * RoomScale, 1.1, e\room\z - 3900.0 * RoomScale)
 								e\room\NPC[9]\State2 = 1.0
-								ChangeNPCTextureID(e\room\NPC[9], 8)
+								ChangeNPCTextureID(e\room\NPC[9], 7)
 								
 								e\room\NPC[10] = CreateNPC(NPCTypeGuard, e\room\x - 4200.0 * RoomScale, 1.0, e\room\z - 3900.0 * RoomScale)
 								e\room\NPC[10]\State = 7.0
@@ -3400,7 +3400,7 @@ Function UpdateEvents()
 				If e\EventState = 0.0 Then
 					If PlayerRoom = e\room And Curr173\Idle < 2 Then
 						e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
-						ChangeNPCTextureID(e\room\NPC[0], 11)
+						ChangeNPCTextureID(e\room\NPC[0], 10)
 						
 						e\room\NPC[0]\Sound = LoadSound_Strict("SFX\Room\Storeroom\Escape1.ogg")
 						e\room\NPC[0]\SoundCHN = PlaySound2(e\room\NPC[0]\Sound, Camera, e\room\NPC[0]\Collider, 12.0)
@@ -3620,7 +3620,7 @@ Function UpdateEvents()
 					If e\EventState3 = 0.0 Then
 						e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[6], True), 0.55, EntityZ(e\room\Objects[6], True))
 						e\room\NPC[0]\State = 3.0
-						ChangeNPCTextureID(e\room\NPC[0], 9)
+						ChangeNPCTextureID(e\room\NPC[0], 8)
 						SetNPCFrame(e\room\NPC[0], 40.0)
 						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0)
 						e\EventState3 = 1.0
@@ -3669,10 +3669,10 @@ Function UpdateEvents()
 						If e\room\NPC[0] = Null Then
 							e\room\NPC[0] = CreateNPC(NPCTypeD, e\room\x, 0.5, e\room\z)
 							e\room\NPC[0]\State = 3.0
-							ChangeNPCTextureID(e\room\NPC[0], 7)
 							SetNPCFrame(e\room\NPC[0], 19.0)
 							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 180.0, 0.0)
 							MoveEntity(e\room\NPC[0]\Collider, 0.0, 0.0, -0.5)
+							FreeEntity(e\room\NPC[0]\OBJ2) : e\room\NPC[0]\OBJ2 = 0
 						EndIf
 						
 						If e\room\NPC[1] = Null Then
@@ -5516,13 +5516,13 @@ Function UpdateEvents()
 							
 							e\room\NPC[4] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[17], True), EntityY(e\room\Objects[17], True), EntityZ(e\room\Objects[17], True))
 							e\room\NPC[4]\State = 3.0
-							ChangeNPCTextureID(e\room\NPC[4], 14)
+							ChangeNPCTextureID(e\room\NPC[4], 13)
 							SetNPCFrame(e\room\NPC[4], 40.0)
 							TurnEntity(e\room\NPC[4]\Collider, 0.0, e\room\Angle + 90.0, 0.0)
 							
 							e\room\NPC[5] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[18], True), EntityY(e\room\Objects[18], True), EntityZ(e\room\Objects[18], True))
 							e\room\NPC[5]\State = 8.0
-							ChangeNPCTextureID(e\room\NPC[5], 15)
+							ChangeNPCTextureID(e\room\NPC[5], 14)
 							SetNPCFrame(e\room\NPC[5], 19.0)
 							TurnEntity(e\room\NPC[5]\Collider, 0.0, e\room\Angle + 90.0, 0.0)
 						Else
@@ -5816,41 +5816,14 @@ Function UpdateEvents()
 					
 					If e\EventState = 0.0 Then
 						If EntityDistanceSquared(me\Collider, e\room\Objects[3]) < 4.0 Then
-							n.NPCs = CreateNPC(NPCTypeD, EntityX(e\room\Objects[4], True), 0.5, EntityZ(e\room\Objects[4], True))
-							
-							n\Texture = "GFX\npcs\scp_035_victim.png"
-							n\Model = "GFX\npcs\scp_035.b3d"
-							HideEntity(n\OBJ)
-							
-							SetAnimTime(n\OBJ, 501.0)
-							n\Frame = 501.0
-							n\State = 6.0
+							e\room\NPC[0] = CreateNPC(NPCType035, EntityX(e\room\Objects[4], True), 0.5, EntityZ(e\room\Objects[4], True))
+							e\room\NPC[0]\State = 6.0
+							SetNPCFrame(e\room\NPC[0], 501.0)
+							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
 							
 							e\EventState = 1.0
 						EndIf
 					ElseIf e\EventState > 0.0
-						If e\room\NPC[0] = Null Then
-							For n.NPCs = Each NPCs
-								If n\Texture = "GFX\npcs\scp_035_victim.png" Then
-									e\room\NPC[0] = n
-									
-									Temp = e\room\NPC[0]\Frame
-									
-									FreeEntity(e\room\NPC[0]\OBJ)
-									e\room\NPC[0]\OBJ = CopyEntity(o\NPCModelID[NPCType035])
-									x = GetINIFloat(NPCsFile, "Class D", "Scale") / MeshWidth(e\room\NPC[0]\OBJ)
-									e\room\NPC[0]\ModelScaleX = x
-									e\room\NPC[0]\ModelScaleY = x
-									e\room\NPC[0]\ModelScaleZ = x
-									ScaleEntity(e\room\NPC[0]\OBJ, x, x, x)
-									SetAnimTime(e\room\NPC[0]\OBJ, 501.0)
-									ShowEntity(e\room\NPC[0]\OBJ)
-									RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
-									Exit
-								EndIf
-							Next
-						EndIf
-						
 						ShouldPlay = 27
 						
 						If e\room\NPC[0]\SoundCHN <> 0 Then
@@ -5942,6 +5915,23 @@ Function UpdateEvents()
 													EndIf
 												Next
 												DeleteSingleTextureEntryFromCache(Tex)
+												
+												EntityParent(e\room\NPC[0]\OBJ2, 0)
+												
+												Local PrevMaskX# = EntityX(e\room\NPC[0]\OBJ2)
+												Local PrevMaskY# = EntityY(e\room\NPC[0]\OBJ2)
+												Local PrevMaskZ# = EntityZ(e\room\NPC[0]\OBJ2)
+												Local PrevMaskPitch# = EntityPitch(e\room\NPC[0]\OBJ2)
+												Local PrevMaskYaw# = EntityYaw(e\room\NPC[0]\OBJ2)
+												Local PrevMaskRoll# = EntityRoll(e\room\NPC[0]\OBJ2)
+												
+												FreeEntity(e\room\NPC[0]\OBJ2) : e\room\NPC[0]\OBJ2 = 0
+												e\room\NPC[0]\OBJ2 = LoadMesh_Strict("GFX\npcs\scp_035_sad.b3d")
+												Scale = GetINIFloat(NPCsFile, "Class D", "Scale") / MeshWidth(e\room\NPC[0]\OBJ)
+												ScaleEntity(e\room\NPC[0]\OBJ2, Scale, Scale, Scale)
+												PositionEntity(e\room\NPC[0]\OBJ2, PrevMaskX, PrevMaskY, PrevMaskZ)
+												RotateEntity(e\room\NPC[0]\OBJ2, PrevMaskPitch, PrevMaskYaw, PrevMaskRoll)
+												EntityParent(e\room\NPC[0]\OBJ2, FindChild(e\room\NPC[0]\OBJ, "Bip01_Head"))
 												
 												e\EventState = 70.0 * 60.0
 											EndIf
@@ -7201,7 +7191,7 @@ Function UpdateEvents()
 						SecondaryLightOn = True
 						
 						e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True), EntityZ(e\room\Objects[6], True))
-						FreeEntity(e\room\NPC[0]\OBJ)
+						FreeEntity(e\room\NPC[0]\OBJ) : e\room\NPC[0]\OBJ = 0
 						e\room\NPC[0]\OBJ = CopyEntity(o\NPCModelID[NPCTypeNazi])
 						Scale = GetINIFloat(NPCsFile, "Class D", "Scale") / MeshWidth(e\room\NPC[0]\OBJ)
 						ScaleEntity(e\room\NPC[0]\OBJ, Scale, Scale, Scale)
@@ -8198,7 +8188,7 @@ Function UpdateEvents()
 				If e\room\Dist < 10.0 And e\room\Dist > 0.0 Then
 					e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\OBJ, True), 0.5, EntityZ(e\room\OBJ, True))
 					e\room\NPC[0]\State = 8.0
-					ChangeNPCTextureID(e\room\NPC[0], 10)
+					ChangeNPCTextureID(e\room\NPC[0], 9)
 					SetNPCFrame(e\room\NPC[0], 19.0)
 					RotateEntity(e\room\NPC[0]\Collider, 0.0, Rnd(360.0), 0.0, True)	
 					
@@ -9175,7 +9165,7 @@ Function UpdateEvents()
 						If e\EventState = 0.0 Then
 							e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True) + 0.5, EntityZ(e\room\Objects[2], True))
 							e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
-							ChangeNPCTextureID(e\room\NPC[0], 13)
+							ChangeNPCTextureID(e\room\NPC[0], 12)
 							SetNPCFrame(e\room\NPC[0], 19.0)
 							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle, 0.0)
 							

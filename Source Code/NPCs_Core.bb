@@ -8,13 +8,16 @@ Const NPCType966% = 12, NPCType1499_1% = 13
 Const NPCTypeApache% = 14, NPCTypeClerk% = 15, NPCTypeD% = 16, NPCTypeGuard% = 17, NPCTypeMTF% = 18, NPCTypeVehicle% = 19
 
 ; ~ Placeholder
-Const NPCType035% = 20, NPCType205_Demon% = 21, NPCType205_Demon2% = 22, NPCType205_Demon3% = 23, NPCType205_Woman% = 24
-Const NPCType1048% = 25, NPCType1048_A% = 26
+Const NPCType205_Demon% = 20, NPCType205_Demon2% = 21, NPCType205_Demon3% = 22, NPCType205_Woman% = 23
+Const NPCType1048% = 24, NPCType1048_A% = 25
 
-Const NPCTypeDuck% = 27, NPCTypeCI% = 28, NPCTypeNazi% = 29
+Const NPCTypeDuck% = 26, NPCTypeCI% = 27, NPCTypeNazi% = 28
 
 ; ~ Objects
-Const NPCTypeApache_Rotor% = 30, NPCTypeApache_Rotor2% = 31, NPCType173_Box% = 32, NPCType682_Arm% = 33
+Const NPCTypeApache_Rotor% = 29, NPCTypeApache_Rotor2% = 30, NPCType173_Box% = 31, NPCType682_Arm% = 32
+
+; ~ Hybrid (NPC, but doesn't need a model)
+Const NPCtype035% = 33
 ;[End Block]
 
 Type NPCs
@@ -192,6 +195,36 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			
 			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0)
+			
+			n\Speed = GetINIFloat(NPCsFile, "Class D", "Speed") / 100.0
+			
+			n\CollRadius = 0.32
+			;[End Block]
+		Case NPCtype035
+			;[Block]
+			n\NVGName = "Human"
+			n\Collider = CreatePivot()
+			EntityRadius(n\Collider, 0.32)
+			EntityType(n\Collider, HIT_PLAYER)
+			
+			n\OBJ = CopyEntity(o\NPCModelID[NPCTypeD])
+			
+			Temp = GetINIFloat(NPCsFile, "Class D", "Scale") / MeshWidth(n\OBJ)
+			ScaleEntity(n\OBJ, Temp, Temp, Temp)
+			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0)
+			
+			Tex = LoadTexture_Strict("GFX\npcs\scp_035_victim.png")
+			EntityTexture(n\OBJ, Tex)
+			DeleteSingleTextureEntryFromCache(Tex)
+			
+			If I_035\Sad <> 0 Then
+				n\OBJ2 = LoadMesh_Strict("GFX\npcs\scp_035_sad.b3d")
+			Else
+				n\OBJ2 = LoadMesh_Strict("GFX\npcs\scp_035_smile.b3d")
+			EndIf
+			ScaleEntity(n\OBJ2, Temp, Temp, Temp)
+			PositionEntity(n\OBJ2, EntityX(n\OBJ), EntityY(n\OBJ) + 0.85, EntityZ(n\OBJ) - 0.085)
+			EntityParent(n\OBJ2, FindChild(n\OBJ, "Bip01_Head"))
 			
 			n\Speed = GetINIFloat(NPCsFile, "Class D", "Speed") / 100.0
 			
@@ -2639,7 +2672,7 @@ Function UpdateNPCs()
 				;[Block]
 				UpdateMTFUnit(n)
 				;[End Block]
-			Case NPCTypeD, NPCTypeClerk
+			Case NPCTypeD, NPCTypeClerk, NPCtype035
 				;[Block]
 				RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), EntityRoll(n\Collider), True)
 				

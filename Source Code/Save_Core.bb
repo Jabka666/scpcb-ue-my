@@ -717,7 +717,7 @@ Function LoadGame(File$)
 		Local Frame# = ReadFloat(f)
 		
 		Select NPCType
-			Case NPCType106, NPCTypeD, NPCType096, NPCTypeMTF, NPCTypeGuard, NPCType049, NPCType049_2, NPCTypeClerk, NPCType008_1
+			Case NPCType106, NPCTypeD, NPCType096, NPCTypeMTF, NPCTypeGuard, NPCType049, NPCType049_2, NPCTypeClerk, NPCType008_1, NPCType035
 				;[Block]
 				SetAnimTime(n\OBJ, Frame)
 				;[End Block]
@@ -1343,6 +1343,7 @@ Function LoadGameQuick(File$)
 	
 	Local r.Rooms, n.NPCs, do.Doors
 	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, ID%, Tex%
+	Local SF%, b%, t1%
 	Local Player_X#, Player_Y#, Player_Z#
 	Local f% = ReadFile(File + "save.cb")
 	
@@ -1594,7 +1595,7 @@ Function LoadGameQuick(File$)
 		Local Frame# = ReadFloat(f)
 		
 		Select NPCType
-			Case NPCType106, NPCTypeD, NPCType096, NPCTypeMTF, NPCTypeGuard, NPCType049, NPCType049_2, NPCTypeClerk, NPCType008_1
+			Case NPCType106, NPCTypeD, NPCType096, NPCTypeMTF, NPCTypeGuard, NPCType049, NPCType049_2, NPCTypeClerk, NPCType008_1, NPCType035
 				;[Block]
 				SetAnimTime(n\OBJ, Frame)
 				;[End Block]
@@ -2074,6 +2075,30 @@ Function LoadGameQuick(File$)
 				r\Objects[0] = CreatePivot(r\OBJ)
 				PositionEntity(r\Objects[0], xTemp, r\y - 1017.0 * RoomScale, zTemp, True)
 			EndIf
+		ElseIf r\RoomTemplate\Name = "cont1_035"
+			If I_035\Sad <> 0 Then
+				Tex = LoadTexture_Strict("GFX\map\textures\label035_sad.png")
+			Else
+				Tex = LoadTexture_Strict("GFX\map\textures\label035_smile.png")
+			EndIf
+			
+			For i = 2 To CountSurfaces(r\Objects[9])
+				SF = GetSurface(r\Objects[9], i)
+				b = GetSurfaceBrush(SF)
+				If b <> 0 Then
+					t1 = GetBrushTexture(b, 0)
+					If t1 <> 0 Then
+						Name = StripPath(TextureName(t1))
+						If Lower(Name) <> "cable_black.jpg"
+							BrushTexture(b, Tex, 0, 0)
+							PaintSurface(SF, b)
+						EndIf
+						If Name <> "" Then DeleteSingleTextureEntryFromCache(t1)
+					EndIf
+					FreeBrush(b)
+				EndIf
+			Next
+			DeleteSingleTextureEntryFromCache(Tex)
 		EndIf
 	Next
 	
