@@ -5905,7 +5905,7 @@ Function UpdateEvents()
 														t1 = GetBrushTexture(b, 0)
 														If t1 <> 0 Then
 															Name = StripPath(TextureName(t1))
-															If Lower(Name) = "label035_smile.png"
+															If Lower(Name) <> "cable_black.jpg" Then
 																BrushTexture(b, Tex, 0, 0)
 																PaintSurface(SF, b)
 															EndIf
