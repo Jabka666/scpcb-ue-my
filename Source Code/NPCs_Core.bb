@@ -223,7 +223,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 				n\OBJ2 = LoadMesh_Strict("GFX\npcs\scp_035_smile.b3d")
 			EndIf
 			ScaleEntity(n\OBJ2, Temp, Temp, Temp)
-			PositionEntity(n\OBJ2, EntityX(n\OBJ), EntityY(n\OBJ) + 0.85, EntityZ(n\OBJ) - 0.085)
+			PositionEntity(n\OBJ2, EntityX(n\OBJ), EntityY(n\OBJ) + 0.85, EntityZ(n\OBJ) - 0.095)
 			EntityParent(n\OBJ2, FindChild(n\OBJ, "Bip01_Head"))
 			
 			n\Speed = GetINIFloat(NPCsFile, "Class D", "Speed") / 100.0
