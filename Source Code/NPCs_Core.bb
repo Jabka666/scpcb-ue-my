@@ -2148,7 +2148,7 @@ Function UpdateNPCs()
 							If n\Frame < 66.0 Then
 								AnimateNPC(n, 2.0, 65.0, 0.7, False)
 								If n\Frame >= 23.0 And PrevFrame < 23.0 Then
-									If Dist < 0.64 Then
+									If Dist < 0.49 Then
 										If Abs(DeltaYaw(n\Collider, me\Collider)) =< 60.0
 											PlaySound2(DamageSFX[Rand(5, 8)], Camera, n\Collider)
 											InjurePlayer(Rnd(0.4, 1.0), 0.0, 0.0, Rnd(0.1, 0.25), 0.2)
@@ -2169,8 +2169,8 @@ Function UpdateNPCs()
 							Else
 								AnimateNPC(n, 66.0, 132.0, 0.7, False)
 								If n\Frame >= 90.0 And PrevFrame < 90.0 Then
-									If Dist < 0.64 Then
-										If Abs(DeltaYaw(n\Collider, me\Collider)) =< 60.0
+									If Dist < 0.49 Then
+										If Abs(DeltaYaw(n\Collider, me\Collider)) =< 60.0 Then
 											PlaySound2(DamageSFX[Rand(5, 8)], Camera, n\Collider)
 											InjurePlayer(Rnd(0.4, 1.0), 0.0, 0.0, Rnd(0.1, 0.25), 0.2)
 											
@@ -4182,7 +4182,7 @@ Function UpdateNPCs()
 											n\Angle = VectorYaw(EntityX(me\Collider) - EntityX(n\Collider), 0.0, EntityZ(me\Collider) - EntityZ(n\Collider))
 											n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
 											
-											If Dist < 1.21 Then n\State = 10.0
+											If Dist < 0.81 Then n\State = 10.0
 										EndIf
 									Else
 										If MilliSecs2() > n\State2 And Dist < 256.0 Then
@@ -4590,7 +4590,7 @@ Function UpdateNPCs()
 							;[Block]
 							n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
 							Dist = EntityDistanceSquared(n\Collider, me\Collider)
-							If n\State2 = 1.0
+							If n\State2 = 1.0 Then
 								AnimateNPC(n, 63.0, 100.0, 0.6, False)
 								If PrevFrame < 89.0 And n\Frame >= 89.0 Then
 									If Dist > 0.64 Lor Abs(DeltaYaw(n\Collider, me\Collider)) > 60.0 Then
@@ -4849,7 +4849,7 @@ Function UpdateNPCs()
 							;[Block]
 							AnimateNPC(n, 126.0, 165.0, 0.6, False)
 							If n\Frame >= 146.0 And PrevFrame < 146.0 Then
-								If Dist < 0.64 Then
+								If Dist < 0.49 Then
 									If Abs(DeltaYaw(n\Collider, me\Collider)) =< 60.0 Then
 										PlaySound_Strict(DamageSFX[Rand(5, 8)])
 										InjurePlayer(Rnd(0.4, 1.0), 1.0 + (1.0 * SelectedDifficulty\AggressiveNPCs), 0.0, Rnd(0.1, 0.25), 0.2)
