@@ -2850,7 +2850,7 @@ Function UpdateMoving()
 					EndIf
 				EndIf	
 				
-				If InvOpen Lor OtherOpen <> Null Then Speed = 0.0095
+				If InvOpen Lor OtherOpen <> Null Then Speed = 0.009
 				
 				If me\ForceMove > 0.0 Then Speed = Speed * me\ForceMove
 				
