@@ -3301,7 +3301,7 @@ Function UpdateEvents()
 			Case e_room2_cafeteria
 				;[Block]
 				If PlayerRoom = e\room Then
-					If (Not I_294\Using) Then
+					If (Not I_294\Using) And (Not InvOpen) And OtherOpen = Null And SelectedDoor = Null And SelectedScreen = Null Then
 						If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 2.25 Then
 							GiveAchievement(Achv294)
 							If EntityInView(e\room\Objects[0], Camera) Then

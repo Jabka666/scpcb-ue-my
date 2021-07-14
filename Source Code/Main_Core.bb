@@ -206,7 +206,7 @@ RenderLoading(5, "ACHIEVEMENTS CORE")
 
 Include "Source Code\Achievements_Core.bb"
 
-Global CameraPitch#, Side#
+Global CameraPitch#
 
 Global GrabbedEntity%
 
@@ -1817,6 +1817,8 @@ Function RenderMessages()
 				If SelectedItem\ItemTemplate\TempName = "paper" Lor SelectedItem\ItemTemplate\TempName = "oldpaper" Then
 					Temp = True
 				EndIf
+			ElseIf I_294\Using Lor SelectedDoor <> Null Lor SelectedScreen <> Null
+				Temp = True
 			EndIf
 		EndIf
 		
@@ -2087,7 +2089,7 @@ Function MainLoop()
 		fps\Accumulator = fps\Accumulator - TICK_DURATION
 		If fps\Accumulator =< 0.0 Then CaptureWorld()
 		
-		If MenuOpen Lor InvOpen Lor OtherOpen <> Null Lor ConsoleOpen Lor SelectedDoor <> Null Lor SelectedScreen <> Null Lor I_294\Using Then fps\Factor[0] = 0.0
+		If MenuOpen Lor ConsoleOpen Then fps\Factor[0] = 0.0
 		
 		If Input_ResetTime > 0.0 Then
 			Input_ResetTime = Max(Input_ResetTime - fps\Factor[0], 0.0)
@@ -2133,11 +2135,11 @@ Function MainLoop()
 		
 		If fps\Factor[0] > 0.0 And PlayerRoom\RoomTemplate\Name <> "dimension_1499" Then UpdateSecurityCams()
 		
-		If (Not MenuOpen) And (Not InvOpen) And OtherOpen = Null And SelectedDoor = Null And (Not ConsoleOpen) And (Not I_294\Using) And SelectedScreen = Null And me\EndingTimer >= 0.0 Then
+		If (Not MenuOpen) And (Not ConsoleOpen) And me\EndingTimer >= 0.0 Then
 			ShouldPlay = Min(me\Zone, 2.0)
 		EndIf
 		
-		If PlayerRoom\RoomTemplate\Name <> "dimension_106" And PlayerRoom\RoomTemplate\Name <> "gate_b" And PlayerRoom\RoomTemplate\Name <> "gate_a" And (Not MenuOpen) And (Not ConsoleOpen) And (Not InvOpen) Then 
+		If PlayerRoom\RoomTemplate\Name <> "dimension_106" And PlayerRoom\RoomTemplate\Name <> "gate_b" And PlayerRoom\RoomTemplate\Name <> "gate_a" And (Not MenuOpen) And (Not ConsoleOpen) Then 
 			If Rand(1500) = 1 Then
 				For i = 0 To 5
 					If AmbientSFX(i, CurrAmbientSFX) <> 0 Then
@@ -2201,7 +2203,7 @@ Function MainLoop()
 		UpdateCheckpoint1 = False
 		UpdateCheckpoint2 = False
 		
-		If (Not MenuOpen) And (Not InvOpen) And OtherOpen = Null And SelectedDoor = Null And (Not ConsoleOpen) And (Not I_294\Using) And SelectedScreen = Null And me\EndingTimer >= 0.0 Then
+		If (Not MenuOpen) And (Not ConsoleOpen) And me\EndingTimer >= 0.0 Then
 			LightVolume = CurveValue(TempLightVolume, LightVolume, 50.0)
 			If PlayerRoom\RoomTemplate\Name = "cont1_173_intro" Lor PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTempLate\Name = "gate_a" Then
 				CameraFogMode(Camera, 0)
@@ -2226,8 +2228,8 @@ Function MainLoop()
 			CanSave = True
 			UpdateDeaf()
 			UpdateEmitters()
-			UpdateMouseLook()
 			If PlayerRoom\RoomTemplate\Name = "dimension_1499" And QuickLoadPercent > 0 And QuickLoadPercent < 100 Then ShouldEntitiesFall = False
+			UpdateMouseLook()
 			UpdateMoving()
 			InFacility = CheckForPlayerInFacility()
 			If PlayerRoom\RoomTemplate\Name = "dimension_1499"
@@ -2237,7 +2239,7 @@ Function MainLoop()
 				UpdateLeave1499()
 			Else
 				UpdateDoors()
-				UpdateScreens()
+				If (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And SelectedDoor = Null And SelectedScreen = Null Then UpdateScreens()
 				UpdateRoomLights(Camera)
 				If PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a"Then
 					If QuickLoadPercent = -1 Lor QuickLoadPercent = 100
@@ -2416,10 +2418,7 @@ Function MainLoop()
 			If wi\NightVision = 0 Then DarkA = Max((1.0 - SecondaryLightOn) * 0.9, DarkA)
 			
 			If me\KillTimer < 0.0 Then
-				InvOpen = False
-				SelectedItem = Null
-				SelectedScreen = Null
-				SelectedMonitor = Null
+				NullSelectedStuff()
 				me\BlurTimer = Abs(me\KillTimer * 5.0)
 				me\KillTimer = me\KillTimer - (fps\Factor[0] * 0.8)
 				If me\KillTimer < -360.0 Then 
@@ -2437,10 +2436,7 @@ Function MainLoop()
 						If wi\HazmatSuit = 0 And wi\BallisticVest = 0 Then DropItem(SelectedItem)
 					EndIf
 				EndIf
-				InvOpen = False
-				SelectedItem = Null
-				SelectedScreen = Null
-				SelectedMonitor = Null
+				NullSelectedStuff()
 				me\BlurTimer = Abs(me\FallTimer * 10.0)
 				me\FallTimer = me\FallTimer - fps\Factor[0]
 				DarkA = Max(DarkA, Min(Abs(me\FallTimer / 400.0), 1.0))				
@@ -2470,7 +2466,7 @@ Function MainLoop()
 		
 		UpdateGUI()
 		
-		If KeyHit(key\INVENTORY) Then
+		If KeyHit(key\INVENTORY) And SelectedDoor = Null And SelectedScreen = Null And (Not I_294\Using) Then
 			If me\Playable And (Not me\Zombie) And (Not I_294\Using) And me\VomitTimer >= 0.0 And me\KillTimer >= 0.0 And me\SelectedEnding = -1 Then
 				Local W$ = ""
 				Local V# = 0.0
@@ -2487,11 +2483,9 @@ Function MainLoop()
 				EndIf
 				If (W <> "vest" And W <> "finevest" And W <> "hazmatsuit" And W <> "hazmatsuit2" And W <> "hazmatsuit3") Lor V = 0.0 Lor V = 100.0
 					If InvOpen Then
-						ResumeSounds()
 						StopMouseMovement()
 					Else
 						mo\DoubleClickSlot = -1
-						PauseSounds()
 					EndIf
 					InvOpen = (Not InvOpen)
 					If OtherOpen <> Null Then OtherOpen = Null
@@ -2596,7 +2590,7 @@ Function MainLoop()
 	
 	If fps\Factor[0] > 0.0 And PlayerRoom\RoomTemplate\Name <> "dimension_1499" Then RenderSecurityCams()
 	
-	If (Not MenuOpen) And (Not InvOpen) And OtherOpen = Null And SelectedDoor = Null And (Not ConsoleOpen) And (Not I_294\Using) And SelectedScreen = Null And me\EndingTimer >= 0.0 Then
+	If (Not MenuOpen) And (Not ConsoleOpen) And me\EndingTimer >= 0.0 Then
 		If PlayerRoom <> Null Then
 			If PlayerRoom\RoomTemplate\Name <> "dimension_1499" Then
 				RenderRoomLights(Camera)
@@ -2712,6 +2706,17 @@ Function ResetInput()
 	Input_ResetTime = 10.0
 End Function
 
+Function NullSelectedStuff()
+	InvOpen = False
+	I_294\Using = False
+	SelectedDoor = Null
+	SelectedScreen = Null
+	SelectedMonitor = Null
+	OtherOpen = Null
+	ClosestButton = 0
+	GrabbedEntity = 0
+End Function
+
 Function SetCrouch(NewCrouch%)
 	Local Temp%
 	
@@ -2736,7 +2741,7 @@ Function InjurePlayer(Injuries_#, Infection# = 0.0, BlurTimer_# = 0.0, VestFacto
 End Function
 
 Function UpdateMoving()
-	CatchErrors("Uncaught (UpdateMove)")
+	CatchErrors("Uncaught (UpdateMoving)")
 	
 	Local de.Decals
 	Local Sprint# = 1.0, Speed# = 0.018
@@ -2783,7 +2788,7 @@ Function UpdateMoving()
 	
 	If me\KillTimer >= 0.0 Then
 		If PlayerRoom\RoomTemplate\Name <> "dimension_106" Then 
-			If KeyDown(key\SPRINT) And (Not chs\NoClip) Then
+			If (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) And (Not chs\NoClip) Then
 				If me\Stamina < 5.0 Then
 					Temp = 0
 					If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp = 1
@@ -2828,107 +2833,131 @@ Function UpdateMoving()
 		me\CrouchState = CurveValue(me\Crouch, me\CrouchState, 10.0)
 	EndIf
 	
-	If (Not chs\NoClip) Then 
-		If (me\Playable And (KeyDown(key\MOVEMENT_DOWN) Xor KeyDown(key\MOVEMENT_UP)) Lor (KeyDown(key\MOVEMENT_RIGHT) Xor KeyDown(key\MOVEMENT_LEFT))) Lor me\ForceMove > 0.0 Then
-			If (Not me\Crouch) And (KeyDown(key\SPRINT)) And me\Stamina > 0.0 And (Not me\Zombie) Then
+	If SelectedDoor = Null And SelectedScreen = Null And (Not I_294\Using) Then
+		If (Not chs\NoClip) Then 
+			If (me\Playable And (KeyDown(key\MOVEMENT_DOWN) Xor KeyDown(key\MOVEMENT_UP)) Lor (KeyDown(key\MOVEMENT_RIGHT) Xor KeyDown(key\MOVEMENT_LEFT))) Lor me\ForceMove > 0.0 Then
+				If (Not me\Crouch) And (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) And me\Stamina > 0.0 And (Not me\Zombie) Then
+					Sprint = 2.5
+					me\Stamina = me\Stamina - fps\Factor[0] * 0.4 * me\StaminaEffect
+					If me\Stamina =< 0.0 Then me\Stamina = -20.0
+				EndIf
+				
+				If PlayerRoom\RoomTemplate\Name = "dimension_106" Then 
+					If EntityY(me\Collider) < 2000.0 * RoomScale Lor EntityY(me\Collider) > 2608.0 * RoomScale Then
+						me\Stamina = 0.0
+						Speed = 0.015
+						Sprint = 1.0					
+					EndIf
+				EndIf	
+				
+				If InvOpen Lor OtherOpen <> Null Then Speed = 0.0095
+				
+				If me\ForceMove > 0.0 Then Speed = Speed * me\ForceMove
+				
+				If SelectedItem <> Null Then
+					If SelectedItem\ItemTemplate\TempName = "firstaid" Lor SelectedItem\ItemTemplate\TempName = "finefirstaid" Lor SelectedItem\ItemTemplate\TempName = "firstaid2" Then
+						Sprint = 0.0
+					EndIf
+				EndIf
+				
+				Temp = (me\Shake Mod 360.0)
+				
+				Local TempCHN%
+				
+				If me\Playable Then me\Shake = ((me\Shake + fps\Factor[0] * Min(Sprint, 1.5) * 7.0) Mod 720.0)
+				If Temp < 180.0 And (me\Shake Mod 360.0) >= 180.0 And me\KillTimer >= 0.0 Then
+					If CurrStepSFX = 0 Then
+						Temp = GetStepSound(me\Collider)
+						
+						If PlayerRoom\RoomTemplate\Name = "dimension_106" Lor PlayerRoom\RoomTemplate\Name = "room2_scientists_2" Then
+							Temp3 = 5
+						Else
+							Temp3 = 0
+						EndIf
+						
+						If Sprint = 1.0 Then
+							me\SndVolume = Max(4.0, me\SndVolume)
+							TempCHN = PlaySound_Strict(StepSFX(Temp, 0, Rand(0, 7 - Temp3)))
+							ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume)
+						Else
+							me\SndVolume = Max(2.5 - (me\Crouch * 0.6), me\SndVolume)
+							TempCHN = PlaySound_Strict(StepSFX(Temp, 1 - (Temp3 / 5), Rand(0, 7 - Temp3)))
+							ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume)
+						EndIf
+					ElseIf CurrStepSFX = 1
+						TempCHN = PlaySound_Strict(StepSFX(2, 0, Rand(0, 2)))
+						ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.4)) * opt\SFXVolume)
+					ElseIf CurrStepSFX = 2
+						TempCHN = PlaySound_Strict(StepSFX(3, 0, Rand(0, 2)))
+						ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.4)) * opt\SFXVolume)
+					EndIf
+				EndIf	
+			EndIf
+		Else
+			If (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) Then 
 				Sprint = 2.5
-				me\Stamina = me\Stamina - fps\Factor[0] * 0.4 * me\StaminaEffect
-				If me\Stamina =< 0.0 Then me\Stamina = -20.0
+			ElseIf KeyDown(key\CROUCH)
+				Sprint = 0.5
 			EndIf
-			
-			If PlayerRoom\RoomTemplate\Name = "dimension_106" Then 
-				If EntityY(me\Collider) < 2000.0 * RoomScale Lor EntityY(me\Collider) > 2608.0 * RoomScale Then
-					me\Stamina = 0.0
-					Speed = 0.015
-					Sprint = 1.0					
-				EndIf
-			EndIf	
-			
-			If me\ForceMove > 0.0 Then Speed = Speed * me\ForceMove
-			
-			If SelectedItem <> Null Then
-				If SelectedItem\ItemTemplate\TempName = "firstaid" Lor SelectedItem\ItemTemplate\TempName = "finefirstaid" Lor SelectedItem\ItemTemplate\TempName = "firstaid2" Then
-					Sprint = 0.0
-				EndIf
-			EndIf
-			
-			Temp = (me\Shake Mod 360.0)
-			
-			Local TempCHN%
-			
-			If me\Playable Then me\Shake = ((me\Shake + fps\Factor[0] * Min(Sprint, 1.5) * 7.0) Mod 720.0)
-			If Temp < 180.0 And (me\Shake Mod 360.0) >= 180.0 And me\KillTimer >= 0.0 Then
-				If CurrStepSFX = 0 Then
-					Temp = GetStepSound(me\Collider)
-					
-					If PlayerRoom\RoomTemplate\Name = "dimension_106" Lor PlayerRoom\RoomTemplate\Name = "room2_scientists_2" Then
-						Temp3 = 5
-					Else
-						Temp3 = 0
-					EndIf
-					
-					If Sprint = 1.0 Then
-						me\SndVolume = Max(4.0, me\SndVolume)
-						TempCHN = PlaySound_Strict(StepSFX(Temp, 0, Rand(0, 7 - Temp3)))
-						ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume)
-					Else
-						me\SndVolume = Max(2.5 - (me\Crouch * 0.6), me\SndVolume)
-						TempCHN = PlaySound_Strict(StepSFX(Temp, 1 - (Temp3 / 5), Rand(0, 7 - Temp3)))
-						ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume)
-					EndIf
-				ElseIf CurrStepSFX = 1
-					TempCHN = PlaySound_Strict(StepSFX(2, 0, Rand(0, 2)))
-					ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.4)) * opt\SFXVolume)
-				ElseIf CurrStepSFX = 2
-					TempCHN = PlaySound_Strict(StepSFX(3, 0, Rand(0, 2)))
-					ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.4)) * opt\SFXVolume)
-				EndIf
-			EndIf	
 		EndIf
-	Else
-		If KeyDown(key\SPRINT) Then 
-			Sprint = 2.5
-		ElseIf KeyDown(key\CROUCH)
-			Sprint = 0.5
+		If KeyHit(key\CROUCH) And me\Playable And (Not me\Zombie) And me\Bloodloss < 60.0 And I_427\Timer < 70.0 * 390.0 And (Not chs\NoClip) And (SelectedItem = Null Lor (SelectedItem\ItemTemplate\TempName <> "firstaid" And SelectedItem\ItemTemplate\TempName <> "finefirstaid" And SelectedItem\ItemTemplate\TempName <> "firstaid2")) Then 
+			SetCrouch((Not me\Crouch))
 		EndIf
-	EndIf
-	
-	If KeyHit(key\CROUCH) And me\Playable And (Not me\Zombie) And me\Bloodloss < 60.0 And I_427\Timer < 70.0 * 390.0 And (Not chs\NoClip) And (SelectedItem = Null Lor (SelectedItem\ItemTemplate\TempName <> "firstaid" And SelectedItem\ItemTemplate\TempName <> "finefirstaid" And SelectedItem\ItemTemplate\TempName <> "firstaid2")) Then 
-		SetCrouch((Not me\Crouch))
-	EndIf
-	
-	Local Temp2# = (Speed * Sprint) / (1.0 + me\CrouchState)
-	
-	If chs\NoClip Then 
-		me\Shake = 0.0
-		me\CurrSpeed = 0.0
 		
-		RotateEntity(me\Collider, WrapAngle(EntityPitch(Camera)), WrapAngle(EntityYaw(Camera)), 0.0)
+		Local Temp2# = (Speed * Sprint) / (1.0 + me\CrouchState)
 		
-		Temp2 = Temp2 * chs\NoClipSpeed
-		
-		If KeyDown(key\MOVEMENT_DOWN) Then MoveEntity(me\Collider, 0.0, 0.0, (-Temp2) * fps\Factor[0])
-		If KeyDown(key\MOVEMENT_UP) Then MoveEntity(me\Collider, 0.0, 0.0, Temp2 * fps\Factor[0])
-		
-		If KeyDown(key\MOVEMENT_LEFT) Then MoveEntity(me\Collider, (-Temp2) * fps\Factor[0], 0.0, 0.0)
-		If KeyDown(key\MOVEMENT_RIGHT) Then MoveEntity(me\Collider, Temp2 * fps\Factor[0], 0.0, 0.0)
-		
-		ResetEntity(me\Collider)
-	Else
-		Temp2 = Temp2 / Max((me\Injuries + 3.0) / 3.0, 1.0)
-		If me\Injuries > 0.5 Then Temp2 = Temp2 * Min((Sin(me\Shake / 2.0) + 1.2), 1.0)
-		Temp = False
-		If (Not me\Zombie) Then
-			If KeyDown(key\MOVEMENT_DOWN) And me\Playable Then
-				If (Not KeyDown(key\MOVEMENT_UP)) Then
+		If chs\NoClip Then 
+			me\Shake = 0.0
+			me\CurrSpeed = 0.0
+			
+			RotateEntity(me\Collider, WrapAngle(EntityPitch(Camera)), WrapAngle(EntityYaw(Camera)), 0.0)
+			
+			Temp2 = Temp2 * chs\NoClipSpeed
+			
+			If KeyDown(key\MOVEMENT_DOWN) Then MoveEntity(me\Collider, 0.0, 0.0, (-Temp2) * fps\Factor[0])
+			If KeyDown(key\MOVEMENT_UP) Then MoveEntity(me\Collider, 0.0, 0.0, Temp2 * fps\Factor[0])
+			
+			If KeyDown(key\MOVEMENT_LEFT) Then MoveEntity(me\Collider, (-Temp2) * fps\Factor[0], 0.0, 0.0)
+			If KeyDown(key\MOVEMENT_RIGHT) Then MoveEntity(me\Collider, Temp2 * fps\Factor[0], 0.0, 0.0)
+			
+			ResetEntity(me\Collider)
+		Else
+			Temp2 = Temp2 / Max((me\Injuries + 3.0) / 3.0, 1.0)
+			If me\Injuries > 0.5 Then Temp2 = Temp2 * Min((Sin(me\Shake / 2.0) + 1.2), 1.0)
+			Temp = False
+			If (Not me\Zombie) Then
+				If KeyDown(key\MOVEMENT_DOWN) And me\Playable Then
+					If (Not KeyDown(key\MOVEMENT_UP)) Then
+						Temp = True
+						Angle = 180.0
+						If KeyDown(key\MOVEMENT_LEFT) Then
+							If (Not KeyDown(key\MOVEMENT_RIGHT)) Then Angle = 135.0
+						ElseIf KeyDown(key\MOVEMENT_RIGHT)
+							Angle = -135.0
+						EndIf
+					Else
+						If KeyDown(key\MOVEMENT_LEFT) Then
+							If (Not KeyDown(key\MOVEMENT_RIGHT)) Then
+								Temp = True
+								Angle = 90.0
+							EndIf
+						ElseIf KeyDown(key\MOVEMENT_RIGHT)
+							Temp = True
+							Angle = -90.0
+						EndIf
+					EndIf
+				ElseIf KeyDown(key\MOVEMENT_UP) And me\Playable
 					Temp = True
-					Angle = 180.0
+					Angle = 0.0
 					If KeyDown(key\MOVEMENT_LEFT) Then
-						If (Not KeyDown(key\MOVEMENT_RIGHT)) Then Angle = 135.0
+						If (Not KeyDown(key\MOVEMENT_RIGHT)) Then Angle = 45.0
 					ElseIf KeyDown(key\MOVEMENT_RIGHT)
-						Angle = -135.0
+						Angle = -45.0
 					EndIf
-				Else
+				ElseIf me\ForceMove > 0.0
+					Temp = True
+					Angle = me\ForceAngle
+				ElseIf me\Playable
 					If KeyDown(key\MOVEMENT_LEFT) Then
 						If (Not KeyDown(key\MOVEMENT_RIGHT)) Then
 							Temp = True
@@ -2939,86 +2968,65 @@ Function UpdateMoving()
 						Angle = -90.0
 					EndIf
 				EndIf
-			ElseIf KeyDown(key\MOVEMENT_UP) And me\Playable
-				Temp = True
-				Angle = 0.0
-				If KeyDown(key\MOVEMENT_LEFT) Then
-					If (Not KeyDown(key\MOVEMENT_RIGHT)) Then Angle = 45.0
-				ElseIf KeyDown(key\MOVEMENT_RIGHT)
-					Angle = -45.0
-				EndIf
-			ElseIf me\ForceMove > 0.0
+			Else
 				Temp = True
 				Angle = me\ForceAngle
-			ElseIf me\Playable
-				If KeyDown(key\MOVEMENT_LEFT) Then
-					If (Not KeyDown(key\MOVEMENT_RIGHT)) Then
-						Temp = True
-						Angle = 90.0
-					EndIf
-				ElseIf KeyDown(key\MOVEMENT_RIGHT)
-					Temp = True
-					Angle = -90.0
-				EndIf
-			EndIf
-		Else
-			Temp = True
-			Angle = me\ForceAngle
-		EndIf
-		
-		Angle = WrapAngle(EntityYaw(me\Collider, True) + Angle + 90.0)
-		
-		If Temp Then 
-			me\CurrSpeed = CurveValue(Temp2, me\CurrSpeed, 20.0)
-		Else
-			me\CurrSpeed = Max(CurveValue(0.0, me\CurrSpeed - 0.1, 1.0), 0.0)
-		EndIf
-		
-		If me\Playable Then TranslateEntity(me\Collider, Cos(Angle) * me\CurrSpeed * fps\Factor[0], 0.0, Sin(Angle) * me\CurrSpeed * fps\Factor[0], True)
-		
-		Local CollidedFloor% = False
-		
-		For i = 1 To CountCollisions(me\Collider)
-			If CollisionY(me\Collider, i) < EntityY(me\Collider) - 0.25 Then CollidedFloor = True
-		Next
-		
-		If CollidedFloor = True Then
-			If PlayerRoom\RoomTemplate\Name = "dimension_106" Lor PlayerRoom\RoomTemplate\Name = "room2_scientists_2" Then
-				Temp3 = 5
-			Else
-				Temp3 = 0
 			EndIf
 			
-			If me\DropSpeed < -0.07 Then 
-				If CurrStepSFX = 0 Then
-					PlaySound_Strict(StepSFX(GetStepSound(me\Collider), 0, Rand(0, 7 - Temp3)))
-				ElseIf CurrStepSFX = 1
-					PlaySound_Strict(StepSFX(2, 0, Rand(0, 2)))
-				ElseIf CurrStepSFX = 2
-					PlaySound_Strict(StepSFX(3, 0, Rand(0, 2)))
-				EndIf
-				me\SndVolume = Max(3.0, me\SndVolume)
-			EndIf
-			me\DropSpeed = 0.0
-		Else
-			If PlayerFallingPickDistance <> 0.0 Then
-				Local Pick# = LinePick(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0.0, -PlayerFallingPickDistance, 0.0)
-				
-				If Pick Then
-					me\DropSpeed = Min(Max(me\DropSpeed - 0.006 * fps\Factor[0], -2.0), 0.0)
-				Else
-					me\DropSpeed = 0.0
-				EndIf
+			Angle = WrapAngle(EntityYaw(me\Collider, True) + Angle + 90.0)
+			
+			If Temp Then 
+				me\CurrSpeed = CurveValue(Temp2, me\CurrSpeed, 20.0)
 			Else
-				me\DropSpeed = Min(Max(me\DropSpeed - 0.006 * fps\Factor[0], -2.0), 0.0)
+				me\CurrSpeed = Max(CurveValue(0.0, me\CurrSpeed - 0.1, 1.0), 0.0)
 			EndIf
+			
+			If me\Playable Then TranslateEntity(me\Collider, Cos(Angle) * me\CurrSpeed * fps\Factor[0], 0.0, Sin(Angle) * me\CurrSpeed * fps\Factor[0], True)
+			
+			Local CollidedFloor% = False
+			
+			For i = 1 To CountCollisions(me\Collider)
+				If CollisionY(me\Collider, i) < EntityY(me\Collider) - 0.25 Then CollidedFloor = True
+			Next
+			
+			If CollidedFloor Then
+				If PlayerRoom\RoomTemplate\Name = "dimension_106" Lor PlayerRoom\RoomTemplate\Name = "room2_scientists_2" Then
+					Temp3 = 5
+				Else
+					Temp3 = 0
+				EndIf
+				
+				If me\DropSpeed < -0.07 Then 
+					If CurrStepSFX = 0 Then
+						PlaySound_Strict(StepSFX(GetStepSound(me\Collider), 0, Rand(0, 7 - Temp3)))
+					ElseIf CurrStepSFX = 1
+						PlaySound_Strict(StepSFX(2, 0, Rand(0, 2)))
+					ElseIf CurrStepSFX = 2
+						PlaySound_Strict(StepSFX(3, 0, Rand(0, 2)))
+					EndIf
+					me\SndVolume = Max(3.0, me\SndVolume)
+				EndIf
+				me\DropSpeed = 0.0
+			Else
+				If PlayerFallingPickDistance <> 0.0 Then
+					Local Pick# = LinePick(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0.0, -PlayerFallingPickDistance, 0.0)
+					
+					If Pick Then
+						me\DropSpeed = Min(Max(me\DropSpeed - 0.006 * fps\Factor[0], -2.0), 0.0)
+					Else
+						me\DropSpeed = 0.0
+					EndIf
+				Else
+					me\DropSpeed = Min(Max(me\DropSpeed - 0.006 * fps\Factor[0], -2.0), 0.0)
+				EndIf
+			EndIf
+			PlayerFallingPickDistance = 10.0
+			
+			If me\Playable And ShouldEntitiesFall Then TranslateEntity(me\Collider, 0.0, me\DropSpeed * fps\Factor[0], 0.0)
 		EndIf
-		PlayerFallingPickDistance = 10.0
 		
-		If me\Playable And ShouldEntitiesFall Then TranslateEntity(me\Collider, 0.0, me\DropSpeed * fps\Factor[0], 0.0)
+		me\ForceMove = False
 	EndIf
-	
-	me\ForceMove = False
 	
 	If me\Injuries > 1.0 Then
 		Temp2 = me\Bloodloss
@@ -3092,7 +3100,7 @@ Function UpdateMoving()
 		me\HeartBeatVolume = Max(me\HeartBeatVolume - fps\Factor[0] * 0.05, 0.0)
 	EndIf
 	
-	CatchErrors("UpdateMove")
+	CatchErrors("UpdateMoving")
 End Function
 
 Function UpdateMouseLook()
@@ -3117,7 +3125,7 @@ Function UpdateMouseLook()
 		Local Up# = (Sin(me\Shake) / (20.0 + me\CrouchState * 20.0)) * 0.6		
 		Local Roll# = Max(Min(Sin(me\Shake / 2.0) * 2.5 * Min(me\Injuries + 0.25, 3.0), 8.0), -8.0)
 		
-		PositionEntity(Camera, EntityX(me\Collider) + Side, EntityY(me\Collider) + Up + 0.6 + me\CrouchState * (-0.3), EntityZ(me\Collider))
+		PositionEntity(Camera, EntityX(me\Collider), EntityY(me\Collider) + Up + 0.6 + me\CrouchState * (-0.3), EntityZ(me\Collider))
 		RotateEntity(Camera, 0.0, EntityYaw(me\Collider), Roll * 0.5)
 		
 		; ~ Update the smoothing que to smooth the movement of the mouse
@@ -3129,6 +3137,8 @@ Function UpdateMouseLook()
 			mo\Mouse_Y_Speed_1 = CurveValue(MouseYSpeed() * (opt\MouseSensitivity + 0.6), mo\Mouse_Y_Speed_1, (6.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing)
 		EndIf
 		If IsNaN(mo\Mouse_Y_Speed_1) Then mo\Mouse_Y_Speed_1 = 0.0
+		
+		If InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor SelectedDoor <> Null Lor SelectedScreen <> Null Then StopMouseMovement()
 		
 		Local The_Yaw# = ((mo\Mouse_X_Speed_1)) * mo\Mouselook_X_Inc / (1.0 + wi\BallisticVest)
 		Local The_Pitch# = ((mo\Mouse_Y_Speed_1)) * mo\Mouselook_Y_Inc / (1.0 + wi\BallisticVest)
@@ -3198,9 +3208,11 @@ Function UpdateMouseLook()
 		EndIf
 	EndIf
 	
-	; ~ Limit the mouse's movement. Using this method produces smoother mouselook movement than centering the mouse each loop.
-	If (MouseX() > mo\Mouse_Right_Limit) Lor (MouseX() < mo\Mouse_Left_Limit) Lor (MouseY() > mo\Mouse_Bottom_Limit) Lor (MouseY() < mo\Mouse_Top_Limit)
-		MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
+	; ~ Limit the mouse's movement. Using this method produces smoother mouselook movement than centering the mouse each loop
+	If (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And SelectedDoor = Null And SelectedScreen = Null Then
+		If (MouseX() > mo\Mouse_Right_Limit) Lor (MouseX() < mo\Mouse_Left_Limit) Lor (MouseY() > mo\Mouse_Bottom_Limit) Lor (MouseY() < mo\Mouse_Top_Limit)
+			MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
+		EndIf
 	EndIf
 	
 	If wi\GasMask > 0 Lor I_1499\Using > 0 Then
@@ -3222,7 +3234,7 @@ Function UpdateMouseLook()
 			wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + (fps\Factor[0] * 2.0), 100.0)
 		Else
 			If wi\GasMask = 2 Lor I_1499\Using = 2 Then
-				If me\CurrSpeed > 0.0 And KeyDown(key\SPRINT) Then
+				If me\CurrSpeed > 0.0 And (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) Then
 					wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + (fps\Factor[0] * 0.2), 100.0)
 				Else
 					wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.32))
@@ -3387,7 +3399,7 @@ Function UpdateGUI()
 	
 	If I_294\Using Then Update294()
 	
-	If ClosestButton <> 0 And SelectedDoor = Null And (Not InvOpen) And (Not MenuOpen) And OtherOpen = Null And (Not ConsoleOpen) Then
+	If ClosestButton <> 0 And (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And SelectedDoor = Null And SelectedScreen = Null And (Not MenuOpen) And (Not ConsoleOpen) Then
 		Temp = CreatePivot()
 		PositionEntity(Temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 		PointEntity(Temp, ClosestButton)
@@ -3461,9 +3473,6 @@ Function UpdateGUI()
 			
 			x = mo\Viewport_Center_X - ImageWidth(t\ImageID[4]) * (Scale / 2)
 			y = mo\Viewport_Center_Y - ImageHeight(t\ImageID[4]) * (Scale / 2)	
-			
-			msg\Txt = ""
-			msg\Timer = 0.0
 			
 			If msg\KeyPadMsg <> "" Then 
 				msg\KeyPadTimer = msg\KeyPadTimer - fps\Factor[1]
@@ -3554,7 +3563,7 @@ Function UpdateGUI()
 	EndIf
 	
 	If KeyHit(1) And me\EndingTimer = 0.0 And me\SelectedEnding = -1 Then
-		If MenuOpen Lor InvOpen Then
+		If MenuOpen Then
 			ResumeSounds()
 			If OptionsMenu <> 0 Then SaveOptionsINI()
 			StopMouseMovement()
@@ -3736,7 +3745,6 @@ Function UpdateGUI()
 		EndIf
 		
 		If ClosedInv And (Not InvOpen) Then 
-			ResumeSounds() 
 			OtherOpen = Null
 			StopMouseMovement()
 		EndIf
@@ -3865,6 +3873,7 @@ Function UpdateGUI()
 					End Select
 					
 					MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
+					StopMouseMovement()
 				Else
 					If Inventory(MouseSlot) = Null Then
 						For z = 0 To MaxItemAmount - 1
@@ -4172,7 +4181,6 @@ Function UpdateGUI()
 		EndIf
 		
 		If (Not InvOpen) Then 
-			ResumeSounds() 
 			StopMouseMovement()
 		EndIf
 	Else
@@ -5547,7 +5555,7 @@ Function RenderHUD()
 	Rect(x - 51, y - 1, 32, 32, False)
 	If me\Crouch Then
 		DrawImage(t\IconID[2], x - 50, y)
-	ElseIf KeyDown(key\SPRINT) And me\CurrSpeed > 0.0 And (Not chs\NoClip) And me\Stamina > 0.0 Then
+	ElseIf (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) And me\CurrSpeed > 0.0 And (Not chs\NoClip) And me\Stamina > 0.0 Then
 		DrawImage(t\IconID[1], x - 50, y)
 	Else
 		DrawImage(t\IconID[0], x - 50, y)
@@ -5766,7 +5774,7 @@ Function RenderGUI()
 	
 	If I_294\Using Then Render294()
 	
-	If ClosestButton <> 0 And SelectedDoor = Null And (Not InvOpen) And (Not MenuOpen) And OtherOpen = Null And (Not ConsoleOpen) And SelectedDifficulty\OtherFactors <> EXTREME Then
+	If ClosestButton <> 0 And (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And SelectedDoor = Null And SelectedScreen = Null And (Not MenuOpen) And (Not ConsoleOpen) And SelectedDifficulty\OtherFactors <> EXTREME Then
 		Temp = CreatePivot()
 		PositionEntity(Temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 		PointEntity(Temp, ClosestButton)
@@ -5782,7 +5790,7 @@ Function RenderGUI()
 		DrawImage(t\IconID[4], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - 32, mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - 32)
 	EndIf
 	
-	If ClosestItem <> Null And SelectedDifficulty\OtherFactors <> EXTREME Then
+	If ClosestItem <> Null And (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And SelectedDoor = Null And SelectedScreen = Null And (Not MenuOpen) And (Not ConsoleOpen) And SelectedDifficulty\OtherFactors <> EXTREME Then
 		YawValue = -DeltaYaw(Camera, ClosestItem\Collider)
 		If YawValue > 90.0 And YawValue =< 180.0 Then YawValue = 90.0
 		If YawValue > 180.0 And YawValue < 270.0 Then YawValue = 270.0
@@ -5793,35 +5801,37 @@ Function RenderGUI()
 		DrawImage(t\IconID[5], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - 32, mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - 32)
 	EndIf
 	
-	If ga\DrawHandIcon And SelectedDifficulty\OtherFactors <> EXTREME Then DrawImage(t\IconID[4], mo\Viewport_Center_X - 32, mo\Viewport_Center_Y - 32)
-	For i = 0 To 3
-		If ga\DrawArrowIcon[i] And SelectedDifficulty\OtherFactors <> EXTREME Then
-			x = mo\Viewport_Center_X - 32
-			y = mo\Viewport_Center_Y - 32		
-			Select i
-				Case 0
-					;[Block]
-					y = y - 69
-					;[End Block]
-				Case 1
-					;[Block]
-					x = x + 69
-					;[End Block]
-				Case 2
-					;[Block]
-					y = y + 69
-					;[End Block]
-				Case 3
-					;[Block]
-					x = x - 69
-					;[End Block]
-			End Select
-			DrawImage(t\IconID[4], x, y)
-			Color(0, 0, 0)
-			Rect(x + 4, y + 4, 56, 56)
-			DrawImage(ga\ArrowIMG[i], x + 21, y + 21)
-		EndIf
-	Next
+	If (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And SelectedDoor = Null And SelectedScreen = Null And (Not MenuOpen) And (Not ConsoleOpen) And SelectedDifficulty\OtherFactors <> EXTREME Then
+		If ga\DrawHandIcon Then DrawImage(t\IconID[4], mo\Viewport_Center_X - 32, mo\Viewport_Center_Y - 32)
+		For i = 0 To 3
+			If ga\DrawArrowIcon[i] Then
+				x = mo\Viewport_Center_X - 32
+				y = mo\Viewport_Center_Y - 32		
+				Select i
+					Case 0
+						;[Block]
+						y = y - 69
+						;[End Block]
+					Case 1
+						;[Block]
+						x = x + 69
+						;[End Block]
+					Case 2
+						;[Block]
+						y = y + 69
+						;[End Block]
+					Case 3
+						;[Block]
+						x = x - 69
+						;[End Block]
+				End Select
+				DrawImage(t\IconID[4], x, y)
+				Color(0, 0, 0)
+				Rect(x + 4, y + 4, 56, 56)
+				DrawImage(ga\ArrowIMG[i], x + 21, y + 21)
+			EndIf
+		Next
+	EndIf
 	
 	If opt\HUDEnabled And SelectedDifficulty\OtherFactors <> EXTREME Then 
 		RenderHUD()
@@ -8836,6 +8846,8 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	GameSaved = 0
 	
+	NullSelectedStuff()
+	
 	For itt.ItemTemplates = Each ItemTemplates
 		itt\Found = False
 	Next
@@ -8925,8 +8937,6 @@ Function NullGame(PlayButtonSFX% = True)
 		If Inventory(i) <> Null Then Inventory(i) = Null
 	Next
 	If SelectedItem <> Null Then SelectedItem = Null
-	
-	ClosestButton = 0
 	
 	Delete(bk)
 	bk.BrokenDoor = New BrokenDoor

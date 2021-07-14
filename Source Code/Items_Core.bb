@@ -746,6 +746,7 @@ Function PickItem(item.Items)
 		CreateMsg("You cannot pick up any items while wearing a hazmat suit.", 6.0)
 		Return
 	EndIf
+	If InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor SelectedDoor <> Null Lor SelectedScreen <> Null Then Return
 	
 	CatchErrors("Uncaught (PickItem)")
 	

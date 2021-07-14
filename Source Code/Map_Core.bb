@@ -3732,7 +3732,7 @@ Function CreateScreen.Screens(x#, y#, z#, ImgPath$, r.Rooms)
 	Local s.Screens = New Screens
 	
 	s\OBJ = CreatePivot()
-	EntityPickMode(s\OBJ, 1)	
+	EntityPickMode(s\OBJ, 1)
 	EntityRadius(s\OBJ, 0.1)
 	
 	PositionEntity(s\OBJ, x, y, z)
@@ -3748,9 +3748,6 @@ Function CreateScreen.Screens(x#, y#, z#, ImgPath$, r.Rooms)
 End Function
 
 Function UpdateScreens()
-	If SelectedScreen <> Null Then Return
-	If SelectedDoor <> Null Then Return
-	
 	Local s.Screens
 	
 	For s.Screens = Each Screens
@@ -3769,7 +3766,6 @@ Function UpdateScreens()
 					EndIf
 				EndIf
 			EndIf
-			Exit
 		EndIf
 	Next
 End Function
