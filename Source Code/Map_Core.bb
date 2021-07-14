@@ -7861,7 +7861,7 @@ Function UpdateRooms()
 	CatchErrors("Uncaught (UpdateRooms)")
 	
 	Local Dist#, i%, j%, r.Rooms
-	Local x#, z#, Hide% = True
+	Local x#, y#, z#, Hide% = True
 	
 	; ~ The reason why it is like this:
 	; ~ When the map gets spawned by a seed, it starts from LCZ to HCZ to EZ (bottom to top)
@@ -7895,16 +7895,17 @@ Function UpdateRooms()
 						If x < 4.0 Then
 							z = Abs(PlayerRoom\Adjacent[i]\z - EntityZ(me\Collider, True))
 							If z < 4.0 Then
-								FoundNewPlayerRoom = True
-								PlayerRoom = PlayerRoom\Adjacent[i]
-								Exit
+								y = Abs(PlayerRoom\Adjacent[i]\y - EntityY(me\Collider, True))
+								If y < 4.0 Then
+									FoundNewPlayerRoom = True
+									PlayerRoom = PlayerRoom\Adjacent[i]
+									Exit
+								EndIf
 							EndIf
 						EndIf
 					EndIf
 				Next
 			EndIf
-		Else
-			FoundNewPlayerRoom = True ; ~ PlayerRoom stays the same when you're high up, or deep down
 		EndIf
 	EndIf
 	
