@@ -452,6 +452,10 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_gate_a)
 			;[End Block]
+		Default
+			;[Block]
+			Return(-1)
+			;[End Block]
 	End Select
 End Function
 
