@@ -459,5 +459,42 @@ Function PlayStartupVideos()
 	ShowPointer()
 End Function
 
+Global ScreenshotCount% = 1
+
+While FileType("Screenshots\Screenshot" + ScreenshotCount + ".png") = 1
+	ScreenshotCount = ScreenshotCount + 1
+Wend
+
+Function GetScreenshot()
+	Local x%, y%
+	
+	If FileType("Screenshots\") <> 2 Then
+		CreateDir("Screenshots")
+	EndIf
+	
+	Local Bank% = CreateBank(opt\RealGraphicWidth * opt\RealGraphicHeight * 3)
+	
+	LockBuffer(BackBuffer())
+	For x = 0 To opt\RealGraphicWidth - 1
+		For y = 0 To opt\RealGraphicHeight - 1
+			Local Pixel% = ReadPixelFast(x, y, BackBuffer())
+			
+			PokeByte(Bank, (y * (opt\RealGraphicWidth * 3)) + (x * 3), ReadPixelColor(Pixel, 0))
+			PokeByte(Bank, (y * (opt\RealGraphicWidth * 3)) + (x * 3) + 1, ReadPixelColor(Pixel, 8))
+			PokeByte(Bank, (y * (opt\RealGraphicWidth * 3)) + (x * 3) + 2, ReadPixelColor(Pixel, 16))
+		Next
+	Next
+	UnlockBuffer(BackBuffer())
+	
+	Local fiBuffer% = FI_ConvertFromRawBits(Bank, opt\RealGraphicWidth, opt\RealGraphicHeight, opt\RealGraphicWidth * 3, 24, $FF0000, $00FF00, $0000FF, True)
+	
+	FI_Save(13, fiBuffer, "Screenshots\Screenshot" + ScreenshotCount + ".png", 0)
+	FI_Unload(fiBuffer)
+	FreeBank(Bank)
+	If (Not MainMenuOpen) Then CreateMsg("Screenshot Taken.", 6.0)
+	PlaySound_Strict(LoadTempSound("SFX\General\Screenshot.ogg"))
+	ScreenshotCount = ScreenshotCount + 1
+End Function
+
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D
