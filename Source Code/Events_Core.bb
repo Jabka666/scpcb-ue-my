@@ -38,7 +38,7 @@ Const e_room2_scientists_2% = 30
 Const e_room2_servers_hcz% = 31
 Const e_room2_storage% = 32
 Const e_door_closing% = 33
-Const e_room3_servers% = 34
+Const e_room3_2_ez% = 34
 Const e_room3_storage% = 35
 Const e_room3_2_hcz% = 36
 Const e_room4_lcz% = 37
@@ -276,9 +276,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_door_closing)
 			;[End Block]
-		Case "room3_servers"
+		Case "room3_2_ez"
 			;[Block]
-			Return(e_room3_servers)
+			Return(e_room3_2_ez)
 			;[End Block]
 		Case "room3_storage"
 			;[Block]
@@ -515,8 +515,8 @@ Function InitEvents()
 	
 	CreateEvent("room2_servers_hcz", "room2_servers_hcz", 0)	
 	
-	CreateEvent("room3_servers", "room3_servers", 0)	
-	CreateEvent("room3_servers", "room3_servers_2", 0)
+	CreateEvent("room3_2_ez", "room3_2_ez", 0)	
+	CreateEvent("room3_2_ez", "room3_3_ez", 0)
 	
 	; ~ The dead guard
 	CreateEvent("room3_2_hcz", "room3_2_hcz", 0, 0.08)
@@ -5470,7 +5470,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_room3_servers
+			Case e_room3_2_ez
 				;[Block]
 				If PlayerRoom = e\room Then
 					If e\EventState3 = 0.0 And Curr173\Idle = 0 Then
