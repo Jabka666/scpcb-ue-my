@@ -311,13 +311,6 @@ Function CheckRoomOverlap%(r1.Rooms, r2.Rooms)
 	Return(True)
 End Function
 
-Type TriggerBox
-	Field OBJ%
-	Field Name$
-	Field MinX#, MinY#, MinZ#
-	Field MaxX#, MaxY#, MaxZ#
-End Type
-
 ; ~ This must be called after the room angle has been finalized!
 Function SetupTriggerBoxes%(r.Rooms)
 	Local t.TriggerBox
@@ -359,6 +352,30 @@ Function SetupTriggerBoxes%(r.Rooms)
 		t\MinY = ((sY * Mesh_MinY) + r\y)
 		t\MaxY = ((sY * Mesh_MaxY) + r\y)
 	Next
+End Function
+
+Function CheckTriggers$()
+	Local i%
+	
+	If PlayerRoom\TriggerboxAmount = 0 Then
+		Return
+	Else
+		For i = 0 To PlayerRoom\TriggerBoxAmount - 1
+			If chs\DebugHUD <> 0 Then
+				EntityAlpha(PlayerRoom\Triggerboxes[i]\OBJ, 0.2)
+			Else
+				EntityAlpha(PlayerRoom\Triggerboxes[i]\OBJ, 0.0)
+ 			EndIf
+			
+			If EntityX(me\Collider) > PlayerRoom\TriggerBoxes[i]\MinX And EntityX(me\Collider) < PlayerRoom\TriggerBoxes[i]\MaxX Then
+				If EntityY(me\Collider) > PlayerRoom\TriggerBoxes[i]\MinY And EntityY(me\Collider) < PlayerRoom\TriggerBoxes[i]\MaxY Then
+					If EntityZ(me\Collider) > PlayerRoom\TriggerBoxes[i]\MinZ And EntityZ(me\Collider) < PlayerRoom\TriggerBoxes[i]\MaxZ Then
+						Return(PlayerRoom\TriggerBoxes[i]\Name)
+					EndIf
+				EndIf
+			EndIf
+		Next
+	EndIf
 End Function
 
 ;~IDEal Editor Parameters:

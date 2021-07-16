@@ -1543,6 +1543,13 @@ Function LoadRoomMesh(rt.RoomTemplates)
 	HideEntity(rt\OBJ)
 End Function
 
+Type TriggerBox
+	Field OBJ%
+	Field Name$
+	Field MinX#, MinY#, MinZ#
+	Field MaxX#, MaxY#, MaxZ#
+End Type
+
 LoadRoomTemplates("Data\rooms.ini")
 
 Global RoomAmbience%[10]
@@ -4469,7 +4476,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\Objects[0], r\x - 190.0 * RoomScale, r\y + 4.0 * RoomScale, r\z + 190.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
 			;[End Block]
-		Case "room2_toilets"
+		Case "room2_6_ez"
 			;[Block]
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x + 1040.0 * RoomScale, r\y + 192.0 * RoomScale, r\z)
@@ -9058,30 +9065,6 @@ Function LoadTerrain(HeightMap%, yScale# = 0.7, t1%, t2%, Mask%)
 	EntityFX(Mesh2, 1 + 2 + 32)
 	
 	Return(Mesh)
-End Function
-
-Function CheckTriggers$()
-	Local i%
-	
-	If PlayerRoom\TriggerBoxAmount = 0 Then
-		Return
-	Else
-		For i = 0 To PlayerRoom\TriggerBoxAmount - 1
-			If chs\DebugHUD <> 0 Then
-				EntityAlpha(PlayerRoom\TriggerBoxes[i]\OBJ, 0.2)
-			Else
-				EntityAlpha(PlayerRoom\TriggerBoxes[i]\OBJ, 0.0)
-			EndIf
-			
-			If EntityX(me\Collider) > PlayerRoom\TriggerBoxes[i]\MinX And EntityX(me\Collider) < PlayerRoom\TriggerBoxes[i]\MaxX
-				If EntityY(me\Collider) > PlayerRoom\TriggerBoxes[i]\MinY And EntityY(me\Collider) < PlayerRoom\TriggerBoxes[i]\MaxY
-					If EntityZ(me\Collider) > PlayerRoom\TriggerBoxes[i]\MinZ And EntityZ(me\Collider) < PlayerRoom\TriggerBoxes[i]\MaxZ
-						Return(PlayerRoom\TriggerBoxes[i]\Name)
-					EndIf
-				EndIf
-			EndIf
-		Next
-	EndIf
 End Function
 
 RenderLoading(55, "SKY CORE")

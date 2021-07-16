@@ -579,8 +579,8 @@ Function InitEvents()
 	
 	CreateEvent("cont1_914", "cont1_914", 0)
 	
-	CreateEvent("butt_ghost", "room2_toilets", 0)
-	CreateEvent("toilet_guard", "room2_toilets", 1)
+	CreateEvent("butt_ghost", "room2_6_ez", 0)
+	CreateEvent("toilet_guard", "room2_6_ez", 1)
 	
 	CreateEvent("room2_2_hcz_106", "room2_2_hcz", Rand(0, 3)) 
 	
