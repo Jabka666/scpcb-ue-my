@@ -1086,9 +1086,11 @@ Function LoadGame(File$)
 		Next
 	Next
 	
+	Local e.Events
+	
 	Temp = ReadInt(f)
 	For i = 1 To Temp
-		Local e.Events = New Events
+		e.Events = New Events
 		
 		e\EventName = ReadString(f)
 		e\EventID = ReadByte(f)
@@ -1098,16 +1100,15 @@ Function LoadGame(File$)
 		e\EventState4 = ReadFloat(f)
 		x = ReadFloat(f)
 		z = ReadFloat(f)
-		For  r.Rooms = Each Rooms
+		For r.Rooms = Each Rooms
 			If EntityX(r\OBJ) = x And EntityZ(r\OBJ) = z Then
 				e\room = r
 				Exit
 			EndIf
 		Next
 		e\EventStr = ReadString(f)
-	Next
-	
-	For e.Events = Each Events
+		FindEventType(e)
+		
 		; ~ Reset e_dimension_1499
 		If e\EventID = e_dimension_1499 Then
 			If e\EventState > 0.0 Then
@@ -1869,6 +1870,7 @@ Function LoadGameQuick(File$)
 			EndIf
 		Next	
 		e\EventStr = ReadString(f)
+		FindEventType(e)
 		If e\EventID = e_cont1_173 Then
 			; ~ A hacky fix for the case that the intro objects aren't loaded when they should
 			; ~ Altough I'm too lazy to add those objects there because at the time where you can save, those objects are already in the ground anyway -- ENDSHN
@@ -2307,12 +2309,14 @@ Function LoadMap(File$)
 						e.Events = New Events
 						e\EventName = Name
 						e\EventID = FindEventID(Name)
+						FindEventType(e)
 						e\room = r   
 					EndIf
 				ElseIf Prob = 0.0 And Name <> "" Then
 					e.Events = New Events
 					e\EventName = Name
 					e\EventID = FindEventID(Name)
+					FindEventType(e)
 					e\room = r  
 				EndIf
 			EndIf
@@ -2490,12 +2494,14 @@ Function LoadMap(File$)
 						e.Events = New Events
 						e\EventName = Name
 						e\EventID = FindEventID(Name)
+						FindEventType(e)
 						e\room = r   
 					EndIf
 				ElseIf Prob = 0.0 And Name <> "" Then
 					e.Events = New Events
 					e\EventName = Name
 					e\EventID = FindEventID(Name)
+					FindEventType(e)
 					e\room = r
 				EndIf
 			EndIf

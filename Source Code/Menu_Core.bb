@@ -2171,7 +2171,7 @@ Function RenderLoading(Percent%, Assets$ = "")
 		
 		If SelectedLoadingScreen\AlignX = 0 Then
 			x = mo\Viewport_Center_X - ImageWidth(SelectedLoadingScreen\Img) / 2 
-		ElseIf  SelectedLoadingScreen\AlignX = 1
+		ElseIf SelectedLoadingScreen\AlignX = 1
 			x = opt\GraphicWidth - ImageWidth(SelectedLoadingScreen\Img)
 		Else
 			x = 0
@@ -2179,7 +2179,7 @@ Function RenderLoading(Percent%, Assets$ = "")
 		
 		If SelectedLoadingScreen\AlignY = 0 Then
 			y = mo\Viewport_Center_Y - ImageHeight(SelectedLoadingScreen\Img) / 2 
-		ElseIf  SelectedLoadingScreen\AlignY = 1
+		ElseIf SelectedLoadingScreen\AlignY = 1
 			y = opt\GraphicHeight - ImageHeight(SelectedLoadingScreen\Img)
 		Else
 			y = 0

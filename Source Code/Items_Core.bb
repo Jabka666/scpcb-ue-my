@@ -56,7 +56,7 @@ Function CreateItemTemplate.ItemTemplates(Name$, TempName$, OBJPath$, InvImgPath
 		EndIf
 		EntityTexture(it\OBJ, Texture)
 		it\Tex = Texture
-	EndIf  
+	EndIf
 	
 	it\Scale = Scale
 	ScaleEntity(it\OBJ, Scale, Scale, Scale, True)

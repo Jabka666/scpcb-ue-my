@@ -854,14 +854,7 @@ Function UpdateNPCs()
 					; ~ Checking if SCP-106 is allowed to spawn
 					If PlayerRoom\RoomTemplate\Name = "dimension_1499" Then Spawn106 = False
 					If PlayerRoom\RoomTemplate\Name = "cont2_860_1" Then
-						For e.Events = Each Events
-							If e\EventID = e_cont2_860_1 Then
-								If e\EventState = 1.0 Then 
-									Spawn106 = False
-								EndIf
-								Exit
-							EndIf
-						Next
+						If forest_event\EventState = 1.0 Then Spawn106 = False
 					EndIf
 					If PlayerRoom\RoomTemplate\Name = "cont2_049" And EntityY(me\Collider) =< -2848.0 * RoomScale Then
 						Spawn106 = False
@@ -5014,14 +5007,7 @@ Function UpdateNPCs()
 						If n\InFacility = 1 Then
 							If PlayerRoom\RoomTemplate\Name <> "cont1_173_intro" Then
 								If PlayerRoom\RoomTemplate\Name = "cont2_860_1" Then
-									For e.Events = Each Events
-										If e\EventID = e_cont2_860_1 Then
-											If e\EventState = 1.0
-												UpdateGravity = True
-											EndIf
-											Exit
-										EndIf
-									Next
+									If forest_event\EventState = 1.0 Then UpdateGravity = True
 								EndIf
 							Else
 								UpdateGravity = True
@@ -7331,14 +7317,7 @@ Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False)
 	EndIf
 	; ~ Player is in SCP-860-1's test room and inside the forest, returning false
 	If RN = "cont2_860_1" Then
-		For e.Events = Each Events
-			If e\EventID = e_cont2_860_1 Then
-				If e\EventState = 1.0 Then
-					Return(False)
-				EndIf
-				Exit
-			EndIf
-		Next	
+		If forest_event\EventState = 1.0 Then Return(False)
 	EndIf
 	
 	If (Not CanSpawnIn049Chamber) Then

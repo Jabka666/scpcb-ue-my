@@ -3067,7 +3067,7 @@ Function UseDoor(d.Doors, ShowMsg% = True, PlaySFX% = True, Scripted% = False)
 							CreateMsg("You pushed the button but nothing happened.", 6.0)
 						Else
 							CreateMsg("The door appears to be locked.", 6.0)
-						EndIf    
+						EndIf
 					Else
 						CreateMsg("The elevator appears to be broken.", 6.0)
 					EndIf

@@ -2154,15 +2154,10 @@ Function MainLoop()
 				If PlayerRoom\RoomTemplate\Name = "cont1_173_intro" Then 
 					me\Zone = 4
 				ElseIf PlayerRoom\RoomTemplate\Name = "cont2_860_1"
-					For e.Events = Each Events
-						If e\EventID = e_cont2_860_1 Then
-							If e\EventState = 1.0 Then
-								me\Zone = 5
-								PositionEntity(SoundEmitter, EntityX(SoundEmitter), 30.0, EntityZ(SoundEmitter))
-							EndIf
-							Exit
-						EndIf
-					Next
+					If forest_event\EventState = 1.0 Then
+						me\Zone = 5
+						PositionEntity(SoundEmitter, EntityX(SoundEmitter), 30.0, EntityZ(SoundEmitter))
+					EndIf
 				EndIf
 				
 				CurrAmbientSFX = Rand(0, AmbientSFXAmount[me\Zone] - 1)
@@ -2272,14 +2267,7 @@ Function MainLoop()
 			ElseIf PlayerRoom\RoomTemplate\Name = "dimension_1499"
 				CurrFogColor = FogColordimension_1499
 			ElseIf PlayerRoom\RoomTemplate\Name = "cont2_860_1"
-				For e.Events = Each Events
-					If e\EventID = e_cont2_860_1 Then
-						If e\EventState = 1.0 Then
-							CurrFogColor = FogColorForest
-						EndIf
-						Exit
-					EndIf
-				Next
+				If forest_event\EventState = 1.0 Then CurrFogColor = FogColorForest
 			ElseIf PlayerRoom\RoomTemplate\Name = "dimension_106"
 				For e.Events = Each Events
 					If e\EventID = e_dimension_106 Then
@@ -6338,14 +6326,7 @@ Function RenderGUI()
 					If PlayerRoom\RoomTemplate\Name = "dimension_106" Lor PlayerRoom\RoomTemplate\Name = "dimension_1499" Then
 						NavWorks = False
 					ElseIf PlayerRoom\RoomTemplate\Name = "cont2_860_1" Then
-						For e.Events = Each Events
-							If e\EventID = e_cont2_860_1 Then
-								If e\EventState = 1.0 Then
-									NavWorks = False
-								EndIf
-								Exit
-							EndIf
-						Next
+						If forest_event\EventState = 1.0 Then NavWorks = False
 					EndIf
 					
 					If (Not NavWorks) Then
@@ -7926,6 +7907,9 @@ Function LoadEntities()
 	For i = 4 To 5
 		t\IconID[i] = LoadImage_Strict("GFX\hand_symbol(" + (i - 3) + ").png")
 	Next
+	
+	QuickLoadIcon = LoadImage_Strict("GFX\menu\QuickLoading.png")
+	ResizeImage(QuickLoadIcon, ImageWidth(QuickLoadIcon) * MenuScale, ImageHeight(QuickLoadIcon) * MenuScale)
 	
 	For i = 0 To MAXACHIEVEMENTS - 1
 		Local Loc2% = GetINISectionLocation(AchievementsFile, "a" + Str(i))
@@ -9595,14 +9579,7 @@ Function Update008()
 	Local GroupName$
 	
 	If PlayerRoom\RoomTemplate\Name = "cont2_860_1"
-		For e.Events = Each Events
-			If e\EventID = e_cont2_860_1 Then
-				If e\EventState = 1.0 Then
-					TeleportForInfect = False
-				EndIf
-				Exit
-			EndIf
-		Next
+		If forest_event\EventState = 1.0 Then TeleportForInfect = False
 	ElseIf PlayerRoom\RoomTemplate\Name = "dimension_1499" Lor PlayerRoom\RoomTemplate\Name = "dimension_106" Lor PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a"
 		TeleportForInfect = False
 	EndIf

@@ -10,6 +10,8 @@ Type Events
 	Field Img%
 End Type 
 
+Global forest_event.Events
+
 ; ~ Event IDs Constants
 ;[Block]
 Const e_cont1_173% = 0, e_cont1_173_intro% = 1
@@ -79,64 +81,6 @@ Const e_gate_b% = 75
 Const e_gate_a_entrance% = 76
 Const e_gate_a% = 77
 ;[End Block]
-
-Function CreateEvent.Events(EventName$, RoomName$, ID%, Prob# = 0.0)
-	; ~ RoomName = the name of the room(s) you want the event to be assigned to
-	
-	; ~ The ID-variable determines which of the rooms the event is assigned to,
-	; ~ 0 will assign it to the first generated room, 1 to the second, etc.
-	
-	; ~ The prob-variable can be used to randomly assign events into some rooms
-	; ~ 0.5 means that there's a 50% chance that event is assigned to the rooms
-	; ~ 1.0 means that the event is assigned to every room
-	; ~ The ID-variable is ignored if prob <> 0.0
-	
-	Local e.Events, e2.Events, r.Rooms
-	Local i% = 0, Temp%
-	
-	If Prob = 0.0 Then
-		For r.Rooms = Each Rooms
-			If RoomName = "" Lor RoomName = r\RoomTemplate\Name Then
-				Temp = False
-				For e2.Events = Each Events
-					If e2\room = r Then
-						Temp = True
-						Exit
-					EndIf
-				Next
-				
-				i = i + 1
-				If i >= ID And (Not Temp) Then
-					e.Events = New Events
-					e\EventName = EventName
-					e\EventID = FindEventID(EventName)
-					e\room = r
-					Return(e)
-				EndIf
-			EndIf
-		Next
-	Else
-		For r.Rooms = Each Rooms
-			If RoomName = "" Lor RoomName = r\RoomTemplate\Name Then
-				Temp = False
-				For e2.Events = Each Events
-					If e2\room = r Then
-						Temp = True
-						Exit
-					EndIf
-				Next
-				
-				If Rnd(0.0, 1.0) < Prob And (Not Temp) Then
-					e.Events = New Events
-					e\EventName = EventName
-					e\EventID = FindEventID(EventName)
-					e\room = r
-				EndIf
-			EndIf
-		Next		
-	EndIf
-	Return(Null)
-End Function
 
 Function FindEventID%(EventName$)
 	Select EventName
@@ -459,6 +403,75 @@ Function FindEventID%(EventName$)
 	End Select
 End Function
 
+Function FindEventType%(e.Events)
+	Select e\EventID
+		Case e_cont2_860_1
+			;[Block]
+			forest_event = e
+			;[End Block]
+	End Select
+End Function
+
+Function CreateEvent.Events(EventName$, RoomName$, ID%, Prob# = 0.0)
+	; ~ RoomName = the name of the room(s) you want the event to be assigned to
+	
+	; ~ The ID-variable determines which of the rooms the event is assigned to,
+	; ~ 0 will assign it to the first generated room, 1 to the second, etc.
+	
+	; ~ The prob-variable can be used to randomly assign events into some rooms
+	; ~ 0.5 means that there's a 50% chance that event is assigned to the rooms
+	; ~ 1.0 means that the event is assigned to every room
+	; ~ The ID-variable is ignored if prob <> 0.0
+	
+	Local e.Events, e2.Events, r.Rooms
+	Local i% = 0, Temp%
+	
+	If Prob = 0.0 Then
+		For r.Rooms = Each Rooms
+			If RoomName = "" Lor RoomName = r\RoomTemplate\Name Then
+				Temp = False
+				For e2.Events = Each Events
+					If e2\room = r Then
+						Temp = True
+						Exit
+					EndIf
+				Next
+				
+				i = i + 1
+				If i >= ID And (Not Temp) Then
+					e.Events = New Events
+					e\EventName = EventName
+					e\EventID = FindEventID(EventName)
+					FindEventType(e)
+					e\room = r
+					Return(e)
+				EndIf
+			EndIf
+		Next
+	Else
+		For r.Rooms = Each Rooms
+			If RoomName = "" Lor RoomName = r\RoomTemplate\Name Then
+				Temp = False
+				For e2.Events = Each Events
+					If e2\room = r Then
+						Temp = True
+						Exit
+					EndIf
+				Next
+				
+				If Rnd(0.0, 1.0) < Prob And (Not Temp) Then
+					e.Events = New Events
+					e\EventName = EventName
+					e\EventID = FindEventID(EventName)
+					FindEventType(e)
+					e\room = r
+				EndIf
+			EndIf
+		Next		
+	EndIf
+	Return(Null)
+End Function
+
 Function InitEvents()
 	If opt\IntroEnabled Then CreateEvent("cont1_173_intro", "cont1_173_intro", 0)
 	CreateEvent("cont1_173", "cont1_173", 0)
@@ -654,9 +667,7 @@ Function InitEvents()
 	CreateEvent("cont1_005", "cont1_005", 0)
 End Function
 
-Global QuickLoadIcon% = LoadImage_Strict("GFX\menu\QuickLoading.png")
-ResizeImage(QuickLoadIcon, ImageWidth(QuickLoadIcon) * MenuScale, ImageHeight(QuickLoadIcon) * MenuScale)
-
+Global QuickLoadIcon%
 Global QuickLoadPercent% = -1
 Global QuickLoadPercent_DisplayTimer# = 0.0
 Global QuickLoad_CurrEvent.Events
@@ -6767,19 +6778,14 @@ Function UpdateEvents()
 							If ChannelPlaying(e\SoundCHN3) Then StopChannel(e\SoundCHN3)
 						EndIf
 					ElseIf PlayerRoom\RoomTemplate\Name = "cont2_860_1" Then
-						For e2.Events = Each Events
-							If e2\EventID = e_cont2_860_1 Then
-								If e2\EventState = 1.0 Then
-									If e\SoundCHN2 <> 0 Then
-										If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2)
-									EndIf
-									If e\SoundCHN3 <> 0 Then
-										If ChannelPlaying(e\SoundCHN3) Then StopChannel(e\SoundCHN3)
-									EndIf
-								EndIf
-								Exit
+						If forest_event\EventState = 1.0 Then
+							If forest_event\SoundCHN2 <> 0 Then
+								If ChannelPlaying(forest_event\SoundCHN2) Then StopChannel(forest_event\SoundCHN2)
 							EndIf
-						Next
+							If forest_event\SoundCHN3 <> 0 Then
+								If ChannelPlaying(forest_event\SoundCHN3) Then StopChannel(forest_event\SoundCHN3)
+							EndIf
+						EndIf
 					EndIf
 				EndIf
 				;[End Block]
