@@ -5227,8 +5227,6 @@ Function UpdateEvents()
 						e\EventState2 = e\EventState2 - fps\Factor[0]
 					EndIf
 					
-					LightVolume = TempLightVolume * 0.5
-					
 					TFormPoint(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0.0, e\room\OBJ)
 					
 					Temp = 0
