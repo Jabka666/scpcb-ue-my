@@ -1804,7 +1804,7 @@ Function UpdateEvents()
 							EndIf
 							
 							If IntroSFX[3] <> 0 Then
-								If EntityVisible(Curr173\OBJ, Camera) And EntityInView(Curr173\OBJ, Camera) Then
+								If (EntityVisible(Curr173\OBJ, Camera) And EntityInView(Curr173\OBJ, Camera)) Lor (EntityVisible(Curr173\OBJ2, Camera) And EntityInView(Curr173\OBJ2, Camera)) Then
 									CreateMsg("Press " + key\Name[key\BLINK] + " to blink.", 6.0)
 									PlaySound_Strict(IntroSFX[3])
 									FreeSound_Strict(IntroSFX[3]) : IntroSFX[3] = 0
@@ -3513,7 +3513,7 @@ Function UpdateEvents()
 				;[Block]
 				If PlayerRoom = e\room Then
 					If e\EventState = 0.0 And Curr173\Idle = 0 Then
-						If (Not EntityInView(Curr173\OBJ, Camera)) Then
+						If (Not EntityInView(Curr173\OBJ, Camera)) And (Not EntityInView(Curr173\OBJ2, Camera)) Then
 							e\EventState = 1.0
 							PositionEntity(Curr173\Collider, EntityX(e\room\Objects[0], True), 0.5, EntityZ(e\room\Objects[0], True))
 							ResetEntity(Curr173\Collider)
@@ -5386,6 +5386,7 @@ Function UpdateEvents()
 								If (Not t\MiscTextureID[14]) Then
 									Tex = LoadTexture_Strict("GFX\npcs\scp_173_H.png")
 									EntityTexture(Curr173\OBJ, Tex)
+									EntityTexture(Curr173\OBJ2, Tex)
 									DeleteSingleTextureEntryFromCache(Tex)
 								EndIf
 								;[End Block]
@@ -7568,7 +7569,7 @@ Function UpdateEvents()
 								e\EventState = Max(e\EventState, 70.0 * 12.0)
 							ElseIf Dist > 1.96
 								; ~ If the player moves a bit further and blinks, SCP-173 attacks
-								If e\EventState > 70.0 * 12.0 And (me\BlinkTimer =< -10.0 Lor (Not EntityInView(Curr173\OBJ, Camera))) Then
+								If e\EventState > 70.0 * 12.0 And (me\BlinkTimer =< -10.0 Lor me\LightBlink > 0.0 Lor (Not EntityInView(Curr173\OBJ, Camera) And (Not EntityInView(Curr173\OBJ2, Camera)))) Then
 									If EntityDistanceSquared(Curr173\Collider, e\room\Objects[0]) > 25.0 Then
 										; ~ Remove event, if SCP-173 is far away from the room (perhaps because the player left and SCP-173 moved to some other room?) 
 										RemoveEvent(e)
@@ -7648,7 +7649,7 @@ Function UpdateEvents()
 								If e\EventState2 = 0.0 Then
 									ShowEntity(e\room\Objects[2])
 									If EntityDistanceSquared(Curr173\Collider, e\room\Objects[4]) < 9.0 Then
-										If me\BlinkTimer < -10.0 Lor (Not EntityInView(Curr173\OBJ, Camera)) And Curr173\Idle = 0 Then
+										If me\BlinkTimer < -10.0 Lor me\LightBlink > 0.0 Lor ((Not EntityInView(Curr173\OBJ, Camera) And (Not EntityInView(Curr173\OBJ2, Camera)))) And Curr173\Idle = 0 Then
 											PositionEntity(Curr173\Collider, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True), True)
 											ResetEntity(Curr173\Collider)
 											

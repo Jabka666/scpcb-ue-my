@@ -14,7 +14,7 @@ Const NPCType1048% = 24, NPCType1048_A% = 25
 Const NPCTypeDuck% = 26, NPCTypeCI% = 27, NPCTypeNazi% = 28
 
 ; ~ Objects
-Const NPCTypeApache_Rotor% = 29, NPCTypeApache_Rotor2% = 30, NPCType173_Box% = 31, NPCType682_Arm% = 32
+Const NPCTypeApache_Rotor% = 29, NPCTypeApache_Rotor2% = 30, NPCType173_Box% = 31, NPCType173_Head% = 32, NPCType682_Arm% = 33
 
 ; ~ Hybrid (NPC, but doesn't need a model)
 Const NPCtype035% = 33
@@ -90,12 +90,14 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\Gravity = True
 			
 			n\OBJ = CopyEntity(o\NPCModelID[NPCType173])
+			n\OBJ2 = CopyEntity(o\NPCModelID[NPCType173_Head])
 			
 			; ~ On Halloween set Jack-o'-lantern texture
 			If (Left(CurrentDate(), 7) = "31 Oct ") Then
 				t\MiscTextureID[14] = True
 				TexFestive = LoadTexture_Strict("GFX\npcs\scp_173_H.png")
-				EntityTexture(n\OBJ, TexFestive, 0, 0)
+				EntityTexture(n\OBJ, TexFestive)
+				EntityTexture(n\OBJ2, TexFestive)
 				DeleteSingleTextureEntryFromCache(TexFestive)
 			EndIf
 			
@@ -103,18 +105,20 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			If (Left(CurrentDate(), 7) = "01 Jan ") Then
 				t\MiscTextureID[15] = True
 				TexFestive = LoadTexture_Strict("GFX\npcs\scp_173_NY.png")
-				EntityTexture(n\OBJ, TexFestive, 0, 0)
+				EntityTexture(n\OBJ, TexFestive)
+				EntityTexture(n\OBJ2, TexFestive)
 				DeleteSingleTextureEntryFromCache(TexFestive)
 			EndIf
 			
 			Temp = GetINIFloat(NPCsFile, "SCP-173", "Scale") / MeshDepth(n\OBJ)			
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
+			ScaleEntity(n\OBJ2, Temp, Temp, Temp)
 			
 			n\Speed = GetINIFloat(NPCsFile, "SCP-173", "Speed") / 100.0
 			
-			n\OBJ2 = CopyEntity(o\NPCModelID[NPCType173_Box])
-			ScaleEntity(n\OBJ2, RoomScale, RoomScale, RoomScale)
-			HideEntity(n\OBJ2)
+			n\OBJ3 = CopyEntity(o\NPCModelID[NPCType173_Box])
+			ScaleEntity(n\OBJ3, RoomScale, RoomScale, RoomScale)
+			HideEntity(n\OBJ3)
 			
 			n\CollRadius = 0.32
 			;[End Block]
@@ -615,6 +619,9 @@ Function UpdateNPCs()
 						PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.32, EntityZ(n\Collider))
 						RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
 						
+						PositionEntity(n\OBJ2, EntityX(n\Collider), EntityY(n\Collider) - 0.32, EntityZ(n\Collider))
+						RotateEntity(n\OBJ2, 0.0, (EntityYaw(n\Collider) - 180.0) + n\Angle, 0.0)
+						
 						If n\Idle = 0 Then
 							Local Temp% = False
 							Local Move% = True
@@ -636,8 +643,8 @@ Function UpdateNPCs()
 								n\PrevX = EntityX(n\Collider)
 								n\PrevZ = EntityZ(n\Collider)				
 								
-								If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And (Not wi\IsNVGBlinking) And me\LightBlink =< 0.0 Then
-									If EntityInView(n\OBJ, Camera) Then Move = False
+								If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And (Not wi\IsNVGBlinking) And (EntityInView(n\OBJ, Camera) Lor EntityInView(n\OBJ2, Camera)) And me\LightBlink =< 0.0 Then
+									Move = False
 								EndIf
 							EndIf
 							
@@ -749,7 +756,8 @@ Function UpdateNPCs()
 									EndIf
 									
 									; ~ Attacks
-									If Temp Then 				
+									If Temp Then
+										n\Angle = DeltaYaw(n\Collider, Camera)
 										If Dist < 0.4225 Then
 											If me\KillTimer >= 0.0 And (Not chs\GodMode) Then
 												Select PlayerRoom\RoomTemplate\Name
@@ -789,7 +797,8 @@ Function UpdateNPCs()
 											TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider) + 90.0) * n\Speed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider) + 90.0) * n\Speed * fps\Factor[0])
 										EndIf
 									Else ; ~ Move to the location where he was last seen							
-										If n\EnemyX <> 0.0 Then						
+										If n\EnemyX <> 0.0 Then
+											n\Angle = DeltaYaw(n\Collider, Camera)
 											If DistanceSquared(EntityX(n\Collider), n\EnemyX, EntityZ(n\Collider), n\EnemyZ) > 0.25 Then
 												AlignToVector(n\Collider, n\EnemyX - EntityX(n\Collider), 0.0, n\EnemyZ - EntityZ(n\Collider), 3)
 												MoveEntity(n\Collider, 0.0, 0.0, n\Speed * fps\Factor[0])
@@ -800,6 +809,7 @@ Function UpdateNPCs()
 										Else
 											If Rand(400) = 1 Then RotateEntity(n\Collider, 0.0, Rnd(360.0), 10.0)
 											TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider) + 90.0) * n\Speed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider) + 90.0) * n\Speed * fps\Factor[0])
+											If (Not chs\NoTarget) Then n\Angle = Rnd(-120.0, 120.0)
 										EndIf
 									EndIf
 								EndIf
@@ -832,10 +842,13 @@ Function UpdateNPCs()
 						PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) + 0.05 + Sin(MilliSecs2() * 0.08) * 0.02, EntityZ(n\Collider))
 						RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
 						
-						ShowEntity(n\OBJ2)
+						PositionEntity(n\OBJ2, EntityX(n\Collider), EntityY(n\Collider) + 0.05 + Sin(MilliSecs2() * 0.08) * 0.02, EntityZ(n\Collider))
+						RotateEntity(n\OBJ2, 0.0, (EntityYaw(n\Collider) - 180.0) + n\Angle, 0.0)
 						
-						PositionEntity(n\OBJ2, EntityX(n\Collider), EntityY(n\Collider) - 0.05 + Sin(MilliSecs2() * 0.08) * 0.02, EntityZ(n\Collider))
-						RotateEntity(n\OBJ2, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
+						ShowEntity(n\OBJ3)
+						
+						PositionEntity(n\OBJ3, EntityX(n\Collider), EntityY(n\Collider) - 0.05 + Sin(MilliSecs2() * 0.08) * 0.02, EntityZ(n\Collider))
+						RotateEntity(n\OBJ3, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
 					EndIf
 				EndIf
 				;[End Block]

@@ -222,7 +222,7 @@ End Type
 
 Global chs.Cheats = New Cheats
 
-Function ClearCheats()
+Function ClearCheats%()
 	chs\GodMode = False
 	chs\NoBlink = False
 	chs\NoTarget = False
@@ -234,7 +234,7 @@ Function ClearCheats()
 	chs\DebugHUD = 0
 End Function
 
-Function InitCheats()
+Function InitCheats%()
 	chs\GodMode = True
 	chs\NoBlink = True
 	chs\NoTarget = True
@@ -293,7 +293,7 @@ Global t.Textures = New Textures
 
 ; ~ Objects Constants
 ;[Block]
-Const MaxNPCModelIDAmount% = 33
+Const MaxNPCModelIDAmount% = 34
 Const MaxDTextures% = 15
 Const MaxButtonModelIDAmount% = 5
 Const MaxDoorModelIDAmount% = 13
@@ -333,7 +333,7 @@ Type ConsoleMsg
 	Field R%, G%, B%
 End Type
 
-Function CreateConsoleMsg(Txt$, R% = -1, G% = -1, B% = -1, IsCommand% = False)
+Function CreateConsoleMsg%(Txt$, R% = -1, G% = -1, B% = -1, IsCommand% = False)
 	Local c.ConsoleMsg
 	
 	c.ConsoleMsg = New ConsoleMsg
@@ -351,7 +351,7 @@ Function CreateConsoleMsg(Txt$, R% = -1, G% = -1, B% = -1, IsCommand% = False)
 	If c\B < 0 Then c\B = ConsoleB
 End Function
 
-Function UpdateConsole()
+Function UpdateConsole%()
 	If (Not opt\CanOpenConsole) Then
 		ConsoleOpen = False
 		Return
@@ -1104,13 +1104,15 @@ Function UpdateConsole()
 					t\MiscTextureID[14] = (Not t\MiscTextureID[14])
 					If t\MiscTextureID[14] Then
 						Tex = LoadTexture_Strict("GFX\npcs\scp_173_H.png", 1)
-						EntityTexture(Curr173\OBJ, Tex, 0, 0)
+						EntityTexture(Curr173\OBJ, Tex)
+						EntityTexture(Curr173\OBJ2, Tex)
 						DeleteSingleTextureEntryFromCache(Tex)
 						CreateConsoleMsg("173 JACK-O-LANTERN ON")
 					Else
 						If t\MiscTextureID[15] Then t\MiscTextureID[15] = (Not t\MiscTextureID[15])
 						Tex2 = LoadTexture_Strict("GFX\npcs\scp_173.png", 1)
-						EntityTexture(Curr173\OBJ, Tex2, 0, 0)
+						EntityTexture(Curr173\OBJ, Tex2)
+						EntityTexture(Curr173\OBJ2, Tex2)
 						DeleteSingleTextureEntryFromCache(Tex2)
 						CreateConsoleMsg("173 JACK-O-LANTERN OFF")
 					EndIf
@@ -1120,13 +1122,15 @@ Function UpdateConsole()
 					t\MiscTextureID[15] = (Not t\MiscTextureID[15])
 					If t\MiscTextureID[15] Then
 						Tex = LoadTexture_Strict("GFX\npcs\scp_173_NY.png", 1)
-						EntityTexture(Curr173\OBJ, Tex, 0, 0)
+						EntityTexture(Curr173\OBJ, Tex)
+						EntityTexture(Curr173\OBJ2, Tex)
 						DeleteSingleTextureEntryFromCache(Tex)
 						CreateConsoleMsg("173 COOKIE ON")
 					Else
 						If t\MiscTextureID[14] Then t\MiscTextureID[14] = (Not t\MiscTextureID[14])
 						Tex2 = LoadTexture_Strict("GFX\npcs\scp_173.png", 1)
-						EntityTexture(Curr173\OBJ, Tex2, 0, 0)
+						EntityTexture(Curr173\OBJ, Tex2)
+						EntityTexture(Curr173\OBJ2, Tex2)
 						DeleteSingleTextureEntryFromCache(Tex2)
 						CreateConsoleMsg("173 COOKIE OFF")
 					EndIf
@@ -8180,7 +8184,9 @@ Function LoadEntities()
 	
 	o\NPCModelID[NPCType106] = LoadAnimMesh_Strict("GFX\npcs\scp_106.b3d") ; ~ SCP-106
 	
-	o\NPCModelID[NPCType173] = LoadMesh_Strict("GFX\npcs\scp_173.b3d") ; ~ SCP-173
+	o\NPCModelID[NPCType173] = LoadMesh_Strict("GFX\npcs\scp_173_body.b3d") ; ~ SCP-173's Body
+	
+	o\NPCModelID[NPCType173_Head] = LoadMesh_Strict("GFX\npcs\scp_173_head.b3d") ; ~ SCP-173's Head
 	
 	o\NPCModelID[NPCType173_Box] = LoadMesh_Strict("GFX\npcs\scp_173_box.b3d") ; ~ SCP-173's Box
 	
