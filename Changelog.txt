@@ -19,25 +19,31 @@
 - Added anisotropic filtering.
 - Added support for resolutions of up to 4k.
 - Added colored fog.
-- Added room2tunnel3.
+- Added new HCZ room.
 - Added bloody texture for SCP-096.
 - Added SCRAMBLE Gear.
 - Added tiny visual effect for blood decals.
-- Added low battery sounds.
+- Added low battery sounds for NVG and S-NAV.
 - Added 4.5V and 999V batteries.
 - Added tiny visual effect for tesla gates.
 - Added YouTube, Discord and ModDB icons into the launcher.
 - Added second variation of SCP-035's emotion.
+- Added head turning for SCP-173.
+- Added office door.
+- Added an elevator panel showing the floor that you are going to.
+- Added more details for rooms.
+- Added delete button for custom maps menu.
 
-- Re-added room3gw.
+- Re-added room3_gw.
 
-- Now guard in "room2elevator" event can kill the player if he too close.
+- Now guard in "room2_elevator" event can kill the player if he too close.
 - Now the pass code for O5 Council's office drops from falling guard in SCP-895's event.
 - Now crouching reduces stamina.
 - Now ballistic vest and ballistic helmet reduces damage from some NPCs.
 - Now all battery charges are randomized.
 - Now using the "Esc" button has "BACK" button effect.
-- Now Mastercard can be used in SCP-294.
+- Now the Mastercard can be used in SCP-294.
+- Now inventory, SCP-294, save screens and code buttons don't stop the game.
 
 - To obtain new difficulties you need to finish game on previous difficulty.
 
@@ -50,43 +56,33 @@
 - Changed console font.
 - Changed SCP-1048's achievement icon.
 - Changed NVG, SCP-008, SCP-682 and SCP-1048's loading screens.
-- Changed chance to spawn SCP-005.
+- Changed chance to get SCP-005 inside his containment chamber.
 - Changed idle animation for Class-D.
-- Changed chair's model.
-- Changed SCP-035's containment chamber.
 - Changed SCP-049's eyes color.
 - Changed game icon.
+- Changed credits file.
+- Changed rooms' brightness level.
 
 - Replaced O5-14 Burnt Document by batteries in room2offices5.
 
 - Removed light cones.
-- Removed unnecessary variables and functions in the code.
 - Removed unnecessary room1archive event.
 - Removed all stuff from other mods, except SCP-409, SCP-005, FOV and some files from Box of Horrors.
 - Removed event of SCP-096's containment chamber.
-- Removed some unnecessary files.
 - Removed quick loading from SCP-966 and SCP-409's containment chambers.
-- Removed achievement of anomalous ducks.
+- Removed anomalous ducks' achievement
 - Removed paper strips.
 - Removed graphics driver selection, which did not actually change anything anyways.
 - Removed unnecessary console commands.
 - Removed antialiased text.
 
-- Renamed room2testroom to room2testroom2.
-- Renamed room2testroom2 to room2testroom.
-- Renamed room2tunnel to room2mt.
-- Renamed tunnel to room2tunnel.
-- Renamed tunnel2 to room2tunnel2.
-- Renamed checkpoint1 to room2checkpoint.
-- Renamed checkpoint2 to room2checkpoint2.
+- Renamed all rooms.
 - Renamed Bar Style to Smooth HUD.
-- Renamed room1office to roomo5.
 
 - Combined "scp_1048_pen.b3d" and "scp_1048.b3d" models. 
-- Combined texture of SCP-173's cell.
+- Combined texture for SCP-173's cell.
 
 - Improved SCP-914.
-- Improved some loading screens.
 - Improved game loading screen style.
 - Improved some sounds.
 
@@ -104,7 +100,7 @@ Bug Fixes:
 - Fixed SCP-106's eyes glowing in the dark and flying in midair while he is emerging.
 - Fixed SCP-173's head poking out of its box when recontained by the MTFs.
 - Fixed item's positions in room2closets.
-- Fixed missing lamps in room2pit.
+- Fixed missing lamps in room2_4_hcz (room2pit).
 - Fixed missing pipes in SCP-035's containment chamber.
 - Fixed font for startup videos.
 - Fixed lockdown monitor in room4info.
@@ -120,9 +116,7 @@ Bug Fixes:
 - Fixed button sound not working when not using launcher.
 - Fixed using of the items while wearing night vision.
 - Fixed elevators' pivots for SCP-008, SCP-106 and SCP-079's containment chambers.
-- Fixed lamps' texture in room1endroom3 and SCP-008's containment chamber.
 - Fixed some rooms' descriptions.
-- Fixed missing lamp in room2testroom.
 - Fixed bug with joint.
 - Fixed severed hands' scale.
 - Fixed SCP-1048's document inside the clipboard in room2closets.
@@ -131,7 +125,7 @@ Bug Fixes:
 - Fixed smelly joint.
 - Fixed SCP-106's appearing in SCP-895's containment chamber.
 - Fixed blinking sound for MTF.
-- Fixed lights and some textures in room2servers2.
+- Fixed lights and some textures in room2_servers_ez.
 - Fixed weird battery's selecting.
 - Fixed type of the door in checkpoints-endrooms.
 - Fixed grammatical mistake for one of the SCP-1048's drawings.
@@ -140,8 +134,8 @@ Bug Fixes:
 - Fixed room lights not working most of the time.
 - Fixed launcher options not saving when quitting.
 - Fixed security camera bases rotating with the cameras.
-- Fixed inventory not being fully centered.
-- Fixed SCP-173 not breaking the glass in the testroom event if the player looked away.
+- Fixed inventory not being fully centered while using clipboard/wallet.
+- Fixed SCP-173 not breaking the glass in the room2_test_lcz event if the player looked away.
 - Fixed Right and Down movement always overriding Left and Up movement.
 - Fixed steps sound inside the fake tunnel in Pocket Dimension.
 - Fixed input boxes displaying too many characters for a frame, if too many characters are entered.
@@ -150,7 +144,6 @@ Bug Fixes:
 - Fixed brightness of the buttons guarded by 4-digit pass code.
 - Fixed missing texture for MTF's P90.
 - Fixed structure of the fake tunnel inside Pocket Dimension.
-- Fixed waypoints in SCP-205's containment chamber.
 - Fixed flickering of the monitor overlay.
 - Fixed flying monitor after endings or "kill" command.
 - Fixed SCP-860-1's generation.
@@ -162,16 +155,15 @@ Bug Fixes:
 - Fixed menu and inventory opening during the endings.
 - Fixed SCP-096 can't be triggered through the glass.
 - Fixed wrong paper texture for props.
-- Fixed syringes position in room2medibay and room2medibay2.
+- Fixed syringes position in room2_medibay_lcz and room2_medibay_ez.
 - Fixed SCP-173's distance on S-NAV Ultimate.
 - Fixed Keter achivement saving.
+- Fixed missing props, broken textures, waypoints and etc. for each room.
+- Fixed light rendering through NPCs.
 
 - Small fixes for commands "disablenuke" and "enablecontrol/disablecontrol.
-- Small fixes for gateb and gateaentrance's walls.
-- Small fixes for room2medibay2 and room2medibay's walls.
-- Small fixes for ending tunnel in the Gate A.
 - Small fixes for earphones' texture.
 - Small fixes for main menu.
-- Small fixes for room2offices4, room3servers2, room2pipes, room2clockroom, room2clockroom2 and room2pipes2.
 - Small fixes for SCP-173's AI.
 - Small fixes for SCP-860-1.
+- Small fixes for chair model.
