@@ -6019,6 +6019,15 @@ Function FillRoom(r.Rooms)
 			d.Doors = CreateDoor(r\x - 560.0 * RoomScale, r\y, r\z + 272.0 * RoomScale, 0.0, r, False, Default_Door, 3)
 			d\AutoClose = False
 			
+			d.Doors = CreateDoor(r\x - 816.0 * RoomScale, r\y, r\z, 270.0, r, False, Default_Door, 3)
+			d\AutoClose = False : d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			FreeEntity(d\OBJ2) : d\OBJ2 = 0
+			
+			d.Doors = CreateDoor(r\x + 816.0 * RoomScale, r\y, r\z, 90.0, r, False, Default_Door, 3)
+			d\AutoClose = False : d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			For i = 0 To 3
 				Select i
 					Case 0
@@ -6134,19 +6143,19 @@ Function FillRoom(r.Rooms)
 				EntityParent(de\OBJ, r\OBJ)
 			Next
 			
-			it.Items = CreateItem("SCP-714", "scp714", r\x - 555.5 * RoomScale, r\y + 220.0 * RoomScale, r\z - 758.0 * RoomScale)
+			it.Items = CreateItem("SCP-714", "scp714", r\x - 560.0 * RoomScale, r\y + 185.0 * RoomScale, r\z - 760.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("SCP-1025", "scp1025", r\x + 552.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 758.0 * RoomScale)
+			it.Items = CreateItem("SCP-1025", "scp1025", r\x + 560.0 * RoomScale, r\y + 185.0 * RoomScale, r\z - 760.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("SCP-860", "scp860", r\x + 568.0 * RoomScale, r\y + 178.0 * RoomScale, r\z + 750.0 * RoomScale)
+			it.Items = CreateItem("SCP-860", "scp860", r\x + 560.0 * RoomScale, r\y + 185.0 * RoomScale, r\z + 760.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Document SCP-714", "paper", r\x - 728.0 * RoomScale, r\y + 288.0 * RoomScale, r\z - 360.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Document SCP-427", "paper", r\x - 608.0 * RoomScale, r\y + 66.0 * RoomScale, r\z + 636.0 * RoomScale)
+			it.Items = CreateItem("Document SCP-427", "paper", r\x - 608.0 * RoomScale, r\y + 185.0 * RoomScale, r\z + 636.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case "cont1_205"
