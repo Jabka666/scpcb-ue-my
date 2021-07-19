@@ -2238,7 +2238,7 @@ Function MainLoop()
 				UpdateLeave1499()
 			Else
 				UpdateDoors()
-				If (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And SelectedDoor = Null And SelectedScreen = Null Then UpdateScreens()
+				UpdateScreens()
 				UpdateRoomLights(Camera)
 				If PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a"Then
 					If QuickLoadPercent = -1 Lor QuickLoadPercent = 100
@@ -9913,6 +9913,23 @@ Function TeleportEntity(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = Fa
 	EndIf
 	FreeEntity(Pvt)
 	ResetEntity(Entity)
+End Function
+
+Function InteractObject%(OBJ%, Dist#, Arrow% = False, ArrowID% = 0, MouseDown_% = False)
+	If InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor SelectedDoor <> Null Lor SelectedScreen <> Null Then Return
+	
+	If EntityDistanceSquared(me\Collider, OBJ) < Dist Then
+		If EntityInView(OBJ, Camera) Then
+			If Arrow Then ga\DrawArrowIcon[ArrowID] = True
+			ga\DrawHandIcon = True
+			If MouseDown_ Then
+				If mo\MouseDown1 Then Return(True)
+			Else
+				If mo\MouseHit1 Then Return(True)
+			EndIf
+		EndIf
+	EndIf
+	Return(False)
 End Function
 
 ;~IDEal Editor Parameters:

@@ -21,7 +21,7 @@ Const NPCtype035% = 33
 ;[End Block]
 
 Type NPCs
-	Field OBJ%, OBJ2%, OBJ3%, OBJ4%, Collider%
+	Field OBJ%, OBJ2%, OBJ3%, Collider%
 	Field NPCType%, ID%
 	Field DropSpeed#, Gravity%
 	Field State#, State2#, State3#, PrevState%
@@ -549,6 +549,8 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 	PositionEntity(n\Collider, x, y, z, True)
 	PositionEntity(n\OBJ, x, y, z, True)
 	EntityPickMode(n\OBJ, 2)
+	If n\OBJ2 <> 0 Then EntityPickMode(n\OBJ2, 2)
+	If n\OBJ3 <> 0 Then EntityPickMode(n\OBJ3, 2)
 	
 	ResetEntity(n\Collider)
 	
@@ -565,7 +567,6 @@ Function RemoveNPC(n.NPCs)
 	
 	If n\OBJ2 <> 0 Then FreeEntity(n\OBJ2) : n\OBJ2 = 0
 	If n\OBJ3 <> 0 Then FreeEntity(n\OBJ3) : n\OBJ3 = 0
-	If n\OBJ4 <> 0 Then FreeEntity(n\OBJ4) : n\OBJ4 = 0
 	
 	If (Not n\SoundCHN_IsStream)
 		If n\SoundCHN <> 0 And ChannelPlaying(n\SoundCHN) Then

@@ -3755,6 +3755,8 @@ Function CreateScreen.Screens(x#, y#, z#, ImgPath$, r.Rooms)
 End Function
 
 Function UpdateScreens()
+	If InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor SelectedDoor <> Null Lor SelectedScreen <> Null Then Return
+	
 	Local s.Screens
 	
 	For s.Screens = Each Screens

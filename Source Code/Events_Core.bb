@@ -1617,25 +1617,19 @@ Function UpdateEvents()
 									AnimateNPC(e\room\NPC[3], 358.0, 482.0, 0.4, False)
 								Else
 									AnimateNPC(e\room\NPC[3], 483.0, 607.0, 0.2, True)
-									If EntityDistanceSquared(me\Collider, e\room\NPC[3]\Collider) < 2.25 Then
-										If EntityInView(e\room\NPC[3]\OBJ, Camera) Then
-											ga\DrawHandIcon = True
-											
-											If mo\MouseHit1 Then
-												SelectedItem = CreateItem("Document SCP-173", "paper", 0.0, 0.0, 0.0)
-												EntityType(SelectedItem\Collider, HIT_ITEM)
-												EntityParent(SelectedItem\Collider, 0)
-												
-												PickItem(SelectedItem)
-												
-												e\room\RoomDoors[2]\Locked = 0
-												UseDoor(e\room\RoomDoors[2], False)
-												e\room\RoomDoors[2]\Locked = 1
-												e\EventState3 = 910.0
-												e\room\NPC[3]\State3 = 0.0
-												SetNPCFrame(e\room\NPC[3], 608.0)
-											EndIf
-										EndIf
+									If InteractObject(e\room\NPC[3]\OBJ, 2.25) Then
+										SelectedItem = CreateItem("Document SCP-173", "paper", 0.0, 0.0, 0.0)
+										EntityType(SelectedItem\Collider, HIT_ITEM)
+										EntityParent(SelectedItem\Collider, 0)
+										
+										PickItem(SelectedItem)
+										
+										e\room\RoomDoors[2]\Locked = 0
+										UseDoor(e\room\RoomDoors[2], False)
+										e\room\RoomDoors[2]\Locked = 1
+										e\EventState3 = 910.0
+										e\room\NPC[3]\State3 = 0.0
+										SetNPCFrame(e\room\NPC[3], 608.0)
 									EndIf
 								EndIf
 							EndIf
@@ -3312,61 +3306,55 @@ Function UpdateEvents()
 			Case e_room2_cafeteria
 				;[Block]
 				If PlayerRoom = e\room Then
-					If (Not I_294\Using) And (Not InvOpen) And OtherOpen = Null And SelectedDoor = Null And SelectedScreen = Null Then
-						If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 2.25 Then
-							GiveAchievement(Achv294)
-							If EntityInView(e\room\Objects[0], Camera) Then
-								ga\DrawHandIcon = True
-								If mo\MouseHit1 Then
-									Temp = True
-									For it.Items = Each Items
-										If (Not it\Picked) Then
-											If EntityX(it\Collider) - EntityX(e\room\Objects[1], True) = 0.0 Then
-												If EntityZ(it\Collider) - EntityZ(e\room\Objects[1], True) = 0.0 Then
-													Temp = False
-													Exit
-												EndIf
-											EndIf
-										EndIf
-									Next
-									
-									Local Inserted% = False
-									
-									If e\EventState2 < 2.0 Then
-										If SelectedItem <> Null Then
-											If SelectedItem\ItemTemplate\TempName = "25ct" Lor SelectedItem\ItemTemplate\TempName = "coin" Then
-												RemoveItem(SelectedItem)
-												e\EventState2 = e\EventState2 + 1.0
-												PlaySound_Strict(LoadTempSound("SFX\SCP\294\coin_drop.ogg"))
-												Inserted = True
-											ElseIf SelectedItem\ItemTemplate\TempName = "mastercard"
-												If me\Funds <> 0 Then
-													me\Funds = me\Funds - 1
-													e\EventState2 = 2.0
-													PlaySound_Strict(LoadTempSound("SFX\SCP\294\InsertMasterCard.ogg"))
-													Inserted = True
-												EndIf
-												me\UsedMastercard = True
-												SelectedItem = Null
-											EndIf
-										EndIf
-									EndIf
-									If e\EventState2 = 2.0 Then
-										I_294\Using = Temp
-										If I_294\Using Then mo\MouseHit1 = False
-									ElseIf e\EventState2 = 1.0 And (Not Inserted) And (Not me\UsedMastercard) Then
-										I_294\Using = False
-										CreateMsg("You need to insert another Quarter in order to use this machine.", 6.0)
-									ElseIf (Not Inserted) And (Not me\UsedMastercard) Then
-										I_294\Using = False
-										CreateMsg("You need to insert two Quarters in order to use this machine.", 6.0)
-									ElseIf me\UsedMastercard
-										CreateMsg("You don't have enough funds to use this machine.", 6.0)
+					If InteractObject(e\room\Objects[0], 2.25) Then
+						Temp = True
+						For it.Items = Each Items
+							If (Not it\Picked) Then
+								If EntityX(it\Collider) - EntityX(e\room\Objects[1], True) = 0.0 Then
+									If EntityZ(it\Collider) - EntityZ(e\room\Objects[1], True) = 0.0 Then
+										Temp = False
+										Exit
 									EndIf
 								EndIf
 							EndIf
+						Next
+						
+						Local Inserted% = False
+						
+						If e\EventState2 < 2.0 Then
+							If SelectedItem <> Null Then
+								If SelectedItem\ItemTemplate\TempName = "25ct" Lor SelectedItem\ItemTemplate\TempName = "coin" Then
+									RemoveItem(SelectedItem)
+									e\EventState2 = e\EventState2 + 1.0
+									PlaySound_Strict(LoadTempSound("SFX\SCP\294\coin_drop.ogg"))
+									Inserted = True
+								ElseIf SelectedItem\ItemTemplate\TempName = "mastercard"
+									If me\Funds <> 0 Then
+										me\Funds = me\Funds - 1
+										e\EventState2 = 2.0
+										PlaySound_Strict(LoadTempSound("SFX\SCP\294\InsertMasterCard.ogg"))
+										Inserted = True
+									EndIf
+									me\UsedMastercard = True
+									SelectedItem = Null
+								EndIf
+							EndIf
 						EndIf
-					EndIf		
+						If e\EventState2 = 2.0 Then
+							GiveAchievement(Achv294)
+							
+							I_294\Using = Temp
+							If I_294\Using Then mo\MouseHit1 = False
+						ElseIf e\EventState2 = 1.0 And (Not Inserted) And (Not me\UsedMastercard) Then
+							I_294\Using = False
+							CreateMsg("You need to insert another Quarter in order to use this machine.", 6.0)
+						ElseIf (Not Inserted) And (Not me\UsedMastercard) Then
+							I_294\Using = False
+							CreateMsg("You need to insert two Quarters in order to use this machine.", 6.0)
+						ElseIf me\UsedMastercard
+							CreateMsg("You don't have enough funds to use this machine.", 6.0)
+						EndIf
+					EndIf
 				EndIf
 				
 				If e\EventState = 0.0 Then
@@ -4934,23 +4922,20 @@ Function UpdateEvents()
 							If AnimTime(e\room\Objects[2]) = 634.0 Then e\EventState = 2.0
 						ElseIf e\EventState = 2.0
 							Animate2(e\room\Objects[2], AnimTime(e\room\Objects[2]), 339.0, 487.0, 1.0)
-							If EntityDistanceSquared(me\Collider, e\room\Objects[2]) < 2.25 Then
-								ga\DrawHandIcon = True
-								If mo\MouseHit1 Then
-									If ItemAmount >= MaxItemAmount Then
-										CreateMsg("You cannot carry any more items.", 6.0)
-									Else
-										SelectedItem = CreateItem("Drawing", "paper", 0.0, 0.0, 0.0)
-										EntityType(SelectedItem\Collider, HIT_ITEM)
-										EntityParent(SelectedItem\Collider, 0)
-										
-										PickItem(SelectedItem)
-										
-										FreeEntity(e\room\Objects[2]) : e\room\Objects[2] = 0
-										
-										e\EventState = 3.0
-										RemoveEvent(e)
-									EndIf
+							If InteractObject(e\room\Objects[2], 2.25) Then
+								If ItemAmount >= MaxItemAmount Then
+									CreateMsg("You cannot carry any more items.", 6.0)
+								Else
+									SelectedItem = CreateItem("Drawing", "paper", 0.0, 0.0, 0.0)
+									EntityType(SelectedItem\Collider, HIT_ITEM)
+									EntityParent(SelectedItem\Collider, 0)
+									
+									PickItem(SelectedItem)
+									
+									FreeEntity(e\room\Objects[2]) : e\room\Objects[2] = 0
+									
+									e\EventState = 3.0
+									RemoveEvent(e)
 								EndIf
 							EndIf
 						EndIf
@@ -7061,37 +7046,32 @@ Function UpdateEvents()
 						EndIf
 						
 						For i = 0 To 1
-							If EntityDistanceSquared(fr\Door[i], me\Collider) < 0.64 Then
-								If EntityInView(fr\Door[i], Camera) Then
-									ga\DrawHandIcon = True
-									If mo\MouseHit1 Then
-										If i = e\EventState2 Then
-											me\BlinkTimer = -10.0
-											
-											PlaySound_Strict(LoadTempSound("SFX\Door\WoodenDoorOpen.ogg"))
-											
-											RotateEntity(e\room\Objects[3], 0.0, 0.0, 0.0)
-											RotateEntity(e\room\Objects[4], 0.0, 180.0, 0.0)
-											
-											PositionEntity(me\Collider, EntityX(e\room\Objects[2], True), 0.5, EntityZ(e\room\Objects[2], True))
-											
-											RotateEntity(me\Collider, 0.0, EntityYaw(e\room\OBJ, True) + e\EventState2 * 180.0, 0.0)
-											MoveEntity(me\Collider, 0.0, 0.0, 1.5)
-											
-											ResetEntity(me\Collider)
-											
-											UpdateDoorsTimer = 0.0
-											UpdateDoors()
-											
-											SecondaryLightOn = PrevSecondaryLightOn
-											
-											e\EventState = 0.0
-											e\EventState3 = 0.0
-										Else
-											PlaySound_Strict(LoadTempSound("SFX\Door\WoodenDoorBudge.ogg"))
-											CreateMsg("The door will not budge.", 6.0)
-										EndIf
-									EndIf
+							If InteractObject(fr\Door[i], 0.64) Then
+								If i = e\EventState2 Then
+									me\BlinkTimer = -10.0
+									
+									PlaySound_Strict(LoadTempSound("SFX\Door\WoodenDoorOpen.ogg"))
+									
+									RotateEntity(e\room\Objects[3], 0.0, 0.0, 0.0)
+									RotateEntity(e\room\Objects[4], 0.0, 180.0, 0.0)
+									
+									PositionEntity(me\Collider, EntityX(e\room\Objects[2], True), 0.5, EntityZ(e\room\Objects[2], True))
+									
+									RotateEntity(me\Collider, 0.0, EntityYaw(e\room\OBJ, True) + e\EventState2 * 180.0, 0.0)
+									MoveEntity(me\Collider, 0.0, 0.0, 1.5)
+									
+									ResetEntity(me\Collider)
+									
+									UpdateDoorsTimer = 0.0
+									UpdateDoors()
+									
+									SecondaryLightOn = PrevSecondaryLightOn
+									
+									e\EventState = 0.0
+									e\EventState3 = 0.0
+								Else
+									PlaySound_Strict(LoadTempSound("SFX\Door\WoodenDoorBudge.ogg"))
+									CreateMsg("The door will not budge.", 6.0)
 								EndIf
 							EndIf
 						Next
@@ -7101,9 +7081,8 @@ Function UpdateEvents()
 					Else
 						If (Not Curr106\Contained) Then Curr106\Idle = 0
 						If EntityYaw(e\room\Objects[3]) = 0.0 Then
-							HideEntity(fr.Forest\Forest_Pivot)
-							If Abs(DistanceSquared(EntityX(e\room\Objects[3], True), EntityX(me\Collider, True), EntityZ(e\room\Objects[3], True), EntityZ(me\Collider, True))) < 0.64 Then
-								ga\DrawHandIcon = True
+							If fr\Forest_Pivot <> 0 Then HideEntity(fr\Forest_Pivot)
+							If InteractObject(e\room\Objects[3], 0.64) Then
 								If SelectedItem = Null Then
 									If mo\MouseHit1 Then
 										PlaySound_Strict(LoadTempSound("SFX\Door\WoodenDoorBudge.ogg"))
@@ -7263,13 +7242,10 @@ Function UpdateEvents()
 						EndIf
 						
 						If EntityYaw(e\room\Objects[13]) = 0.0 Then
-							If EntityDistanceSquared(me\Collider, e\room\Objects[12]) < 0.64 Then
-								ga\DrawHandIcon = True
-								If mo\MouseHit1 Then
-									RotateEntity(e\room\Objects[13], 0.0, 1.0, 0.0)
-									RotateEntity(e\room\Objects[11], 0.0, 90.0, 0.0)
-									PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Horror.ogg"))
-								EndIf
+							If InteractObject(e\room\Objects[12], 0.64) Then
+								RotateEntity(e\room\Objects[13], 0.0, 1.0, 0.0)
+								RotateEntity(e\room\Objects[11], 0.0, 90.0, 0.0)
+								PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Horror.ogg"))
 							EndIf							
 						Else
 							RotateEntity(e\room\Objects[13], 0.0, CurveAngle(90.0, EntityYaw(e\room\Objects[13]), 40.0), 0.0)
@@ -7666,14 +7642,8 @@ Function UpdateEvents()
 									EndIf
 								EndIf
 								
-								If Dist < 1.21 Then
-									If EntityInView(e\room\Objects[0], Camera) Then
-										ga\DrawHandIcon = True
-										If mo\MouseDown1 Then
-											ga\DrawArrowIcon[2] = True
-											RotateEntity(e\room\Levers[0], Max(Min(EntityPitch(e\room\Levers[0]) + Max(Min(-mo\Mouse_Y_Speed_1, 10.0), -10.0), 89.0), 35.0), EntityYaw(e\room\Levers[0]), 0.0)
-										EndIf
-									EndIf
+								If InteractObject(e\room\Levers[0], 0.81, True, 2, True) Then
+									RotateEntity(e\room\Levers[0], Max(Min(EntityPitch(e\room\Levers[0]) + Max(Min(-mo\Mouse_Y_Speed_1, 10.0), -10.0), 89.0), 35.0), EntityYaw(e\room\Levers[0]), 0.0)
 								EndIf
 								
 								If me\Bloodloss > 0.0 And I_008\Timer = 0.0 Then
@@ -9067,14 +9037,11 @@ Function UpdateEvents()
 							EndIf
 						EndIf
 					Else
-						If EntityDistanceSquared(e\room\Objects[1], me\Collider) < 0.49 Then
-							ga\DrawHandIcon = True
-							If mo\MouseHit1 Then
-								CreateMsg("You feel a cold breeze next to your body.", 6.0)
-								InjurePlayer(Rnd(-0.5, 0.3))
-								me\Bloodloss = 0.0
-								PlaySound_Strict(LoadTempSound("SFX\SCP\Joke\Quack.ogg"))
-							EndIf
+						If InteractObject(e\room\Objects[1], 0.49) Then
+							CreateMsg("You feel a cold breeze next to your body.", 6.0)
+							InjurePlayer(Rnd(-0.5, 0.3))
+							me\Bloodloss = 0.0
+							PlaySound_Strict(LoadTempSound("SFX\SCP\Joke\Quack.ogg"))
 						EndIf
 					EndIf
 				EndIf
@@ -9186,14 +9153,11 @@ Function UpdateEvents()
 								If EntityDistanceSquared(me\Collider, e\room\NPC[0]\Collider) < 0.64 Then I_409\Timer = 0.001
 								
 								; ~ Touching the SCP-409
-								If EntityDistanceSquared(e\room\Objects[3], me\Collider) < 0.64 Then
-									ga\DrawHandIcon = True
-									If mo\MouseHit1 Then
-										CreateMsg("You touched SCP-409.", 6.0)
-										me\BlurTimer = 2000.0
-										I_409\Timer = 0.001
-										GiveAchievement(Achv409)
-									EndIf
+								If InteractObject(e\room\Objects[3], 0.64) Then
+									CreateMsg("You touched SCP-409.", 6.0)
+									me\BlurTimer = 2000.0
+									I_409\Timer = 0.001
+									GiveAchievement(Achv409)
 								EndIf
 							EndIf
 						EndIf
