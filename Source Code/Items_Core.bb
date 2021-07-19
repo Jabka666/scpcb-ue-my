@@ -503,7 +503,7 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 	PositionEntity(i\Collider, x, y, z, True)
 	RotateEntity(i\Collider, 0.0, Rnd(360.0), 0.0)
 	
-	i\Dist = EntityDistance(me\Collider, i\Collider)
+	i\Dist = EntityDistanceSquared(me\Collider, i\Collider)
 	i\DropSpeed = 0.0
 	
 	If TempName = "cup" Then
@@ -636,7 +636,7 @@ Function UpdateItems()
 	Local xTemp#, yTemp#, zTemp#
 	Local Temp%, n%
 	Local Pick%, ed#
-	Local HideDist# = HideDistance * 0.5
+	Local HideDist# = PowTwo(HideDistance / 2.0)
 	Local DeletedItem% = False
 	
 	ClosestItem = Null
@@ -645,21 +645,21 @@ Function UpdateItems()
 		
 		If (Not i\Picked) Then
 			If i\DistTimer < MilliSecs2() Then
-				i\Dist = EntityDistance(Camera, i\Collider)
+				i\Dist = EntityDistanceSquared(Camera, i\Collider)
 				i\DistTimer = MilliSecs2() + 700
 				If i\Dist < HideDist Then ShowEntity(i\Collider)
 			EndIf
 			
 			If i\Dist < HideDist Then
 				ShowEntity(i\Collider)
-				If i\Dist < 1.2 Then
+				If i\Dist < 1.44 Then
 					If ClosestItem = Null Then
 						If EntityInView(i\Model, Camera) Then
 							If EntityVisible(i\Collider, Camera) Then
 								ClosestItem = i
 							EndIf
 						EndIf
-					ElseIf ClosestItem = i Lor i\Dist < EntityDistance(Camera, ClosestItem\Collider) Then 
+					ElseIf ClosestItem = i Lor i\Dist < EntityDistanceSquared(Camera, ClosestItem\Collider) Then 
 						If EntityInView(i\Model, Camera) Then
 							If EntityVisible(i\Collider, Camera) Then
 								ClosestItem = i
@@ -691,9 +691,9 @@ Function UpdateItems()
 					EndIf
 				EndIf
 				
-				If i\Dist < HideDist * 0.2 Then
+				If i\Dist < HideDist * 0.04 Then
 					For i2.Items = Each Items
-						If i <> i2 And (Not i2\Picked) And i2\Dist < HideDist * 0.2 Then
+						If i <> i2 And (Not i2\Picked) And i2\Dist < HideDist * 0.04 Then
 							xTemp = EntityX(i2\Collider, True) - EntityX(i\Collider, True)
 							yTemp = EntityY(i2\Collider, True) - EntityY(i\Collider, True)
 							zTemp = EntityZ(i2\Collider, True) - EntityZ(i\Collider, True)

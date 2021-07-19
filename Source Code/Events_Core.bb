@@ -5411,7 +5411,7 @@ Function UpdateEvents()
 									Next
 								Else
 									For it2.Items = Each Items
-										If it2 <> it And it2\Dist < 15.0 Then
+										If it2 <> it And it2\Dist < 225.0 Then
 											TFormPoint(EntityX(it2\Collider), EntityY(it2\Collider), EntityZ(it2\Collider), 0.0, e\room\OBJ)
 										EndIf
 									Next
