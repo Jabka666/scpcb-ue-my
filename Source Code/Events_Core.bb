@@ -8344,7 +8344,7 @@ Function UpdateEvents()
 						If e\EventState = 0.0 Then
 							LoadEventSound(e, "SFX\Character\Scientist\EmilyScream.ogg")
 							e\SoundCHN = PlaySound2(e\Sound, Camera, e\room\Objects[0], 100.0, 1.0)
-							de.Decals = CreateDecal(0, EntityX(e\room\Objects[0], True), e\room\y + 0.005, EntityZ(e\room\Objects[0], True), 90.0, Rnd(360.0), 0.0, 0.8, 0.8, 1)
+							de.Decals = CreateDecal(0, EntityX(e\room\Objects[0], True), e\room\y + 0.005, EntityZ(e\room\Objects[0], True), 90.0, Rnd(360.0), 0.0, 0.8, 0.8)
 							e\EventState = 1.0
 						ElseIf e\EventState = 1.0
 							If (Not ChannelPlaying(e\SoundCHN)) Then
