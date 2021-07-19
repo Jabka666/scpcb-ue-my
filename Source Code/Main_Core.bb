@@ -2632,7 +2632,7 @@ Function Kill(IsBloody% = False)
 		PlaySound_Strict(DamageSFX[0])
 		If SelectedDifficulty\SaveType = NOSAVES Then
 			DeleteFile(CurrentDir() + SavePath + CurrSave + "\save.cb") 
-			DeleteDir(SavePath + CurrSave) 
+			DeleteDir(SavePath + CurrSave)
 			LoadSavedGames()
 		EndIf
 		
@@ -4469,40 +4469,39 @@ Function UpdateGUI()
 						; ~ The state of refined items is more than 1.0 (fine setting increases it by 1, very fine doubles it)
 						x2 = SelectedItem\State + 1.0
 						
-						Local INIStr$ = "Data\SCP-294.ini"
-						Local Loc% = GetINISectionLocation(INIStr, SelectedItem\Name)
+						Local Loc% = GetINISectionLocation(SCP294File, SelectedItem\Name)
 						
-						StrTemp = GetINIString2(INIStr, Loc, "Message")
+						StrTemp = GetINIString2(SCP294File, Loc, "Message")
 						If StrTemp <> "" Then CreateMsg(StrTemp, 6.0)
 						
-						If GetINIInt2(INIStr, Loc, "Lethal")
-							msg\DeathMsg = GetINIString2(INIStr, Loc, "Death Message")
-							If GetINIInt2(INIStr, Loc, "Lethal") Then Kill()
+						If GetINIInt2(SCP294File, Loc, "Lethal")
+							msg\DeathMsg = GetINIString2(SCP294File, Loc, "Death Message")
+							If GetINIInt2(SCP294File, Loc, "Lethal") Then Kill()
 						EndIf
-						me\BlurTimer = GetINIInt2(INIStr, Loc, "Blur") * 70.0
-						If me\VomitTimer = 0.0 Then me\VomitTimer = GetINIInt2(INIStr, Loc, "Vomit")
-						me\CameraShakeTimer = GetINIString2(INIStr, Loc, "Camera Shake")
-						me\Injuries = Max(me\Injuries + GetINIInt2(INIStr, Loc, "Damage"), 0.0)
-						me\Bloodloss = Max(me\Bloodloss + GetINIInt2(INIStr, Loc, "Blood Loss"), 0.0)
-						StrTemp =  GetINIString2(INIStr, Loc, "Sound")
+						me\BlurTimer = GetINIInt2(SCP294File, Loc, "Blur") * 70.0
+						If me\VomitTimer = 0.0 Then me\VomitTimer = GetINIInt2(SCP294File, Loc, "Vomit")
+						me\CameraShakeTimer = GetINIString2(SCP294File, Loc, "Camera Shake")
+						me\Injuries = Max(me\Injuries + GetINIInt2(SCP294File, Loc, "Damage"), 0.0)
+						me\Bloodloss = Max(me\Bloodloss + GetINIInt2(SCP294File, Loc, "Blood Loss"), 0.0)
+						StrTemp =  GetINIString2(SCP294File, Loc, "Sound")
 						If StrTemp <> "" Then
 							PlaySound_Strict(LoadTempSound(StrTemp))
 						EndIf
-						If GetINIInt2(INIStr, Loc, "Stomach Ache") Then I_1025\State[3] = 1.0
+						If GetINIInt2(SCP294File, Loc, "Stomach Ache") Then I_1025\State[3] = 1.0
 						
-						If GetINIInt2(INIStr, Loc, "Infection") Then I_008\Timer = 1.0
+						If GetINIInt2(SCP294File, Loc, "Infection") Then I_008\Timer = 1.0
 						
-						If GetINIInt2(INIStr, Loc, "Crystallization") Then I_409\Timer = 1.0
+						If GetINIInt2(SCP294File, Loc, "Crystallization") Then I_409\Timer = 1.0
 						
-						me\DeathTimer = GetINIInt2(INIStr, Loc, "Death Timer") * 70.0
+						me\DeathTimer = GetINIInt2(SCP294File, Loc, "Death Timer") * 70.0
 						
-						me\BlinkEffect = Float(GetINIString2(INIStr, Loc, "Blink Effect", 1.0)) * x2
-						me\BlinkEffectTimer = Float(GetINIString2(INIStr, Loc, "Blink Effect Timer", 1.0)) * x2
+						me\BlinkEffect = Float(GetINIString2(SCP294File, Loc, "Blink Effect", 1.0)) * x2
+						me\BlinkEffectTimer = Float(GetINIString2(SCP294File, Loc, "Blink Effect Timer", 1.0)) * x2
 						
-						me\StaminaEffect = Float(GetINIString2(INIStr, Loc, "Stamina Effect", 1.0)) * x2
-						me\StaminaEffectTimer = Float(GetINIString2(INIStr, Loc, "Stamina Effect Timer", 1.0)) * x2
+						me\StaminaEffect = Float(GetINIString2(SCP294File, Loc, "Stamina Effect", 1.0)) * x2
+						me\StaminaEffectTimer = Float(GetINIString2(SCP294File, Loc, "Stamina Effect Timer", 1.0)) * x2
 						
-						StrTemp = GetINIString2(INIStr, Loc, "Refuse Message")
+						StrTemp = GetINIString2(SCP294File, Loc, "Refuse Message")
 						If StrTemp <> "" Then
 							CreateMsg(StrTemp, 6.0)
 						Else
@@ -9006,6 +9005,8 @@ Function NullGame(PlayButtonSFX% = True)
 	CatchErrors("NullGame")
 End Function
 
+Const SCP294File$ = "Data\SCP-294.ini"
+
 Function Update294()
 	Local it.Items
 	Local x#, y#, xTemp%, yTemp%, StrTemp$, Temp%
@@ -9188,11 +9189,11 @@ Function Update294()
 				EndIf
 				
 				If I_294\ToInput <> "" Then
-					Local Loc% = GetINISectionLocation("Data\SCP-294.ini", I_294\ToInput)
+					Local Loc% = GetINISectionLocation(SCP294File, I_294\ToInput)
 				EndIf
 				
 				If Loc > 0 Then
-					StrTemp = GetINIString2("Data\SCP-294.ini", Loc, "Dispense Sound")
+					StrTemp = GetINIString2(SCP294File, Loc, "Dispense Sound")
 					If StrTemp = "" Then
 						PlayerRoom\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Dispense1.ogg"))
 					Else
@@ -9201,12 +9202,12 @@ Function Update294()
 					
 					If me\UsedMastercard Then PlaySound_Strict(LoadTempSound("SFX\SCP\294\PullMasterCard.ogg"))
 					
-					If GetINIInt2("Data\SCP-294.ini", Loc, "Explosion") Then 
+					If GetINIInt2(SCP294File, Loc, "Explosion") Then 
 						me\ExplosionTimer = 135.0
-						msg\DeathMsg = GetINIString2("Data\SCP-294.ini", Loc, "Death Message")
+						msg\DeathMsg = GetINIString2(SCP294File, Loc, "Death Message")
 					EndIf
 					
-					StrTemp = GetINIString2("Data\SCP-294.ini", Loc, "Color")
+					StrTemp = GetINIString2(SCP294File, Loc, "Color")
 					
 					Sep1 = Instr(StrTemp, ", ", 1)
 					Sep2 = Instr(StrTemp, ", ", Sep1 + 1)
@@ -9214,8 +9215,8 @@ Function Update294()
 					G = Trim(Mid(StrTemp, Sep1 + 1, Sep2 - Sep1 - 1))
 					B = Trim(Right(StrTemp, Len(StrTemp) - Sep2))
 					
-					Alpha = Float(GetINIString2("Data\SCP-294.ini", Loc, "Alpha", 1.0))
-					Glow = GetINIInt2("Data\SCP-294.ini", Loc, "Glow")
+					Alpha = Float(GetINIString2(SCP294File, Loc, "Alpha", 1.0))
+					Glow = GetINIInt2(SCP294File, Loc, "Glow")
 					If Glow Then Alpha = -Alpha
 					
 					it.Items = CreateItem("Cup", "cup", EntityX(PlayerRoom\Objects[1], True), EntityY(PlayerRoom\Objects[1], True), EntityZ(PlayerRoom\Objects[1], True), R, G, B, Alpha)

@@ -2604,13 +2604,13 @@ Function LoadMap(File$)
 	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize + 2) * RoomSpacing, 0.0, (MapGridSize + 2) * RoomSpacing, "dimension_106")
 	CreateEvent("dimension_106", "dimension_106", 0)   
 	
-	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, RoomSpacing * (-10), "gate_b")
+	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, RoomSpacing * (-10.0), "gate_b")
 	CreateEvent("gate_b", "gate_b", 0)
 	
-	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, RoomSpacing * (-2), "gate_a")
+	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, RoomSpacing * (-2.0), "gate_a")
 	CreateEvent("gate_a", "gate_a", 0)
 	
-	r.Rooms = CreateRoom(0, ROOM1, RoomSpacing * (-2), 800.0, 0.0, "dimension_1499")
+	r.Rooms = CreateRoom(0, ROOM1, RoomSpacing * (-2.0), 800.0, 0.0, "dimension_1499")
 	CreateEvent("dimension_1499", "dimension_1499", 0)
 	
 	For r.Rooms = Each Rooms
