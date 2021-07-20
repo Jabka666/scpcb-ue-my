@@ -1508,7 +1508,7 @@ Function RenderMainMenu()
 						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTracksMode)
 						EndIf
-						If MouseOn(x, y + (30 * MenuScale), 190 * MenuScale, 30 * MenuScale)
+						If MouseOn(x, y + (30 * MenuScale), 210 * MenuScale, 30 * MenuScale)
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTrackScan)
 						EndIf
 						If UserTrackCheck > 0 Then
