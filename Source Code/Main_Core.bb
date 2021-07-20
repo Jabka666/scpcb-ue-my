@@ -136,10 +136,11 @@ AppTitle("SCP - Containment Breach Ultimate Edition v" + VersionNumber)
 If opt\PlayStartup Then PlayStartupVideos()
 
 Global CursorIMG% = LoadImage_Strict("GFX\cursor.png")
+CursorIMG = ResizeImage2(CursorIMG, MenuScale, MenuScale)
 
 Global SelectedLoadingScreen.LoadingScreens, LoadingScreenAmount%, LoadingScreenText%
 Global LoadingBack% = LoadImage_Strict("LoadingScreens\loading_back.png")
-ResizeImage2(LoadingBack, MenuScale, MenuScale)
+LoadingBack = ResizeImage2(LoadingBack, MenuScale, MenuScale)
 
 InitLoadingScreens("LoadingScreens\loading_screens.ini")
 
@@ -1843,10 +1844,9 @@ Function RenderMessages()
 		EndIf
 	EndIf
 	Color(255, 255, 255)
-	Text(20, 20, MilliSecs2() - MS)
 	If opt\ShowFPS Then
 		SetFont(fo\FontID[Font_Console])
-		Text(20, 20, "FPS: " + fps\FPS)
+		Text(20 * MenuScale, 20 * MenuScale, "FPS: " + fps\FPS)
 		SetFont(fo\FontID[Font_Default])
 	EndIf
 End Function
@@ -2022,12 +2022,9 @@ Function CatchErrors(Location$)
 	SetErrorMsg(5, "Error located in: " + Location + Chr(10) + Chr(10) + "Please take a screenshot of this error and send it to us!") 
 End Function
 
-Global MS%
-
 Repeat
 	Cls()
 	
-	MS = MilliSecs2()
 	Local ElapsedMilliSecs%
 	
 	fps\CurrTime = MilliSecs2()
@@ -5459,12 +5456,12 @@ Function UpdateGUI()
 End Function
 
 Function RenderHUD()
-	Local x%, y%, Width%, Height%
+	Local x%, y%, Width%, Height%, IconID%
 	
-	Width = 200
-	Height = 20
-	x = 80
-	y = opt\GraphicHeight - 95
+	Width = 200 * MenuScale
+	Height = 20 * MenuScale
+	x = 80 * MenuScale
+	y = opt\GraphicHeight - (95 * MenuScale)
 	
 	Color(255, 255, 255)
 	If me\BlinkTimer < 150.0 Then
@@ -5473,24 +5470,24 @@ Function RenderHUD()
 		RenderBar(BlinkMeterIMG, x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ)
 	EndIf
 	Color(0, 0, 0)
-	Rect(x - 50, y, 30, 30)
+	Rect(x - (50 * MenuScale), y, 30 * MenuScale, 30 * MenuScale)
 	
 	If me\BlurTimer > 550.0 Lor me\BlinkEffect > 1.0 Lor me\LightFlash > 0.0 Lor (((me\LightBlink > 0.0 And (Not chs\NoBlink)) Lor me\EyeIrritation > 0.0) And wi\NightVision = 0) Then
 		Color(200, 0, 0)
-		Rect(x - 53, y - 3, 36, 36)
+		Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
 	Else
 		If me\BlinkEffect < 1.0 Lor chs\NoBlink Then
 			Color(0, 200, 0)
-			Rect(x - 53, y - 3, 36, 36)
+			Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
 		EndIf
 	EndIf
 	
 	Color(255, 255, 255)
-	Rect(x - 51, y - 1, 32, 32, False)
+	Rect(x - (51 * MenuScale), y - MenuScale, 32 * MenuScale, 32 * MenuScale, False)
 	
-	DrawImage(t\IconID[3], x - 50, y)
+	DrawImage(t\IconID[3], x - (50 * MenuScale), y)
 	
-	y = opt\GraphicHeight - 55.0
+	y = opt\GraphicHeight - (55 * MenuScale)
 	
 	If me\Stamina =< 25.0 Then
 		RenderBar(t\ImageID[3], x, y, Width, Height, me\Stamina, 100.0, 50, 0, 0)
@@ -5498,27 +5495,28 @@ Function RenderHUD()
 		RenderBar(t\ImageID[2], x, y, Width, Height, me\Stamina, 100.0, 50, 50, 50)
 	EndIf
 	Color(0, 0, 0)
-	Rect(x - 50, y, 30, 30)
+	Rect(x - (50 * MenuScale), y, 30 * MenuScale, 30 * MenuScale)
 	
 	If PlayerRoom\RoomTemplate\Name = "dimension_106" Lor I_714\Using Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor wi\HazmatSuit = 1 Lor wi\BallisticVest = 2 Lor I_409\Timer >= 55.0 Then
 		Color(200, 0, 0)
-		Rect(x - 53, y - 3, 36, 36)
+		Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
 	Else
 		If chs\InfiniteStamina Lor me\StaminaEffect < 1.0 Lor wi\GasMask = 2 Lor I_1499\Using = 2 Lor wi\HazmatSuit = 2 Then
 			Color(0, 200, 0)
-			Rect(x - 53, y - 3, 36, 36)
+			Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
 		EndIf 
 	EndIf
 	
 	Color(255, 255, 255)
-	Rect(x - 51, y - 1, 32, 32, False)
+	Rect(x - (51 * MenuScale), y - MenuScale, 32 * MenuScale, 32 * MenuScale, False)
 	If me\Crouch Then
-		DrawImage(t\IconID[2], x - 50, y)
+		IconID = 2
 	ElseIf (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) And me\CurrSpeed > 0.0 And (Not chs\NoClip) And me\Stamina > 0.0 Then
-		DrawImage(t\IconID[1], x - 50, y)
+		IconID = 1
 	Else
-		DrawImage(t\IconID[0], x - 50, y)
+		IconID = 0
 	EndIf
+	DrawImage(t\IconID[IconID], x - (50 * MenuScale), y)
 End Function
 
 Function RenderDebugHUD()
@@ -7909,11 +7907,16 @@ Function LoadEntities()
 	RenderLoading(10, "ICONS")
 	
 	t\IconID[0] = LoadImage_Strict("GFX\walk_icon.png")
+	t\IconID[0] = ResizeImage2(t\IconID[0], MenuScale, MenuScale)
 	t\IconID[1] = LoadImage_Strict("GFX\sprint_icon.png")
+	t\IconID[1] = ResizeImage2(t\IconID[1], MenuScale, MenuScale)
 	t\IconID[2] = LoadImage_Strict("GFX\crouch_icon.png")
+	t\IconID[2] = ResizeImage2(t\IconID[2], MenuScale, MenuScale)
 	t\IconID[3] = LoadImage_Strict("GFX\blink_icon.png")
+	t\IconID[3] = ResizeImage2(t\IconID[3], MenuScale, MenuScale)
 	For i = 4 To 5
 		t\IconID[i] = LoadImage_Strict("GFX\hand_symbol(" + (i - 3) + ").png")
+		t\IconID[i] = ResizeImage2(t\IconID[i], MenuScale, MenuScale)
 	Next
 	
 	QuickLoadIcon = LoadImage_Strict("GFX\menu\QuickLoading.png")
@@ -7939,33 +7942,38 @@ Function LoadEntities()
 	RenderLoading(15, "IMAGES")
 	
 	t\ImageID[0] = LoadImage_Strict("GFX\menu\pause_menu.png")
+	t\ImageID[0] = ResizeImage2(t\ImageID[0], MenuScale, MenuScale)
 	MaskImage(t\ImageID[0], 255, 255, 0)
-	ScaleImage(t\ImageID[0], MenuScale, MenuScale)
 	
 	If (Not opt\SmoothHUD) Then
 		t\ImageID[1] = LoadImage_Strict("GFX\blink_meter(2).png")
+		t\ImageID[1] = ResizeImage2(t\ImageID[1], MenuScale, MenuScale)
 		
 		For i = 2 To 3
 			t\ImageID[i] = LoadImage_Strict("GFX\stamina_meter(" + (i - 1) + ").png")
+			t\ImageID[i] = ResizeImage2(t\ImageID[i], MenuScale, MenuScale)
 		Next
 	EndIf
 	
 	t\ImageID[4] = LoadImage_Strict("GFX\keypad_HUD.png")
+	t\ImageID[4] = ResizeImage2(t\ImageID[4], MenuScale, MenuScale)
 	MaskImage(t\ImageID[4], 255, 0, 255)
 	
 	t\ImageID[5] = LoadImage_Strict("GFX\scp_294_panel.png")
+	t\ImageID[5] = ResizeImage2(t\ImageID[5], MenuScale, MenuScale)
 	MaskImage(t\ImageID[5], 255, 0, 255)
 	
 	t\ImageID[6] = LoadImage_Strict("GFX\night_vision_goggles_battery.png")
+	t\ImageID[6] = ResizeImage2(t\ImageID[6], MenuScale, MenuScale)
 	MaskImage(t\ImageID[6], 255, 0, 255)
 	
-	t\ImageID[7] = LoadImage_Strict("GFX\items\navigator_room_border.png")
-	MaskImage(t\ImageID[7], 255, 0, 255)
-	For i = 8 To 10
+	For i = 7 To 10
 		t\ImageID[i] = LoadImage_Strict("GFX\items\navigator_room_border(" + (i - 6) + ").png")
+		t\ImageID[i] = ResizeImage2(t\ImageID[i], MenuScale, MenuScale)
 		MaskImage(t\ImageID[i], 255, 0, 255)
 	Next
 	t\ImageID[11] = LoadImage_Strict("GFX\items\navigator_battery_meter.png")
+	t\ImageID[11] = ResizeImage2(t\ImageID[11], MenuScale, MenuScale)
 	
 	t\ImageID[12] = CreateImage(opt\GraphicWidth, opt\GraphicHeight)
 	
