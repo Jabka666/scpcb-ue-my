@@ -1159,6 +1159,7 @@ Function UpdateEvents()
 								
 								PositionEntity(Curr173\Collider, EntityX(e\room\Objects[5], True), 0.5, EntityZ(e\room\Objects[5], True))
 								ResetEntity(Curr173\Collider)
+								Curr173\Angle = 90.0
 							EndIf
 							
 							If e\EventState3 < 3.0 Then
@@ -1331,7 +1332,56 @@ Function UpdateEvents()
 								If Rand(3) = 1 Then
 									e\EventStr = "Scripted\Scripted" + Rand(1, 5) + ".ogg|Off.ogg|"
 								Else
-									GenerateRandomIA()
+									; ~ GENERATE THE IA...
+									; ~ ATTENTION...
+									e\EventStr = "1\Attention" + Rand(0, 1) + ".ogg"
+									Select Rand(3)
+										Case 1
+											;[Block]
+											StrTemp = "Crew"
+											e\EventStr = e\EventStr + "|2\Crew" + Rand(0, 4) + ".ogg"
+											;[End Block]
+										Case 2
+											;[Block]
+											StrTemp = "Scientist"
+											e\EventStr = e\EventStr + "|2\Scientist" + Rand(0, 18) + ".ogg"
+											;[End Block]
+										Case 3
+											;[Block]
+											StrTemp = "Security"	
+											e\EventStr = e\EventStr + "|2\Security" + Rand(0, 5) + ".ogg"
+											;[End Block]
+									End Select
+									
+									If Rand(2) = 1 And StrTemp = "Scientist" Then
+										; ~ CALL ON LINE...
+										e\EventStr = e\EventStr + "|3\CallOnLine.ogg"
+										
+										e\EventStr = e\EventStr + "|Numbers\" + Rand(1, 9) + ".ogg"
+										If Rand(2) = 1 Then e\EventStr = e\EventStr + "|Numbers\" + Rand(1, 9) + ".ogg"
+									Else
+										; ~ REPORT TO...
+										e\EventStr = e\EventStr + "|3\Report" + Rand(0, 1) + ".ogg"
+										
+										Select StrTemp
+											Case "Crew"
+												;[Block]
+												e\EventStr = e\EventStr + "|4\Crew" + Rand(0, 6) + ".ogg"
+												If Rand(2) = 1 Then e\EventStr = e\EventStr + "|5\Crew" + Rand(0, 6) + ".ogg"
+												;[End Block]
+											Case "Scientist"
+												;[Block]
+												e\EventStr = e\EventStr + "|4\Scientist" + Rand(0, 7) + ".ogg"
+												If Rand(2) = 1 Then e\EventStr = e\EventStr + "|5\Scientist0.ogg"
+												;[End Block]
+											Case "Security"
+												;[Block]
+												e\EventStr = e\EventStr + "|4\Security" + Rand(0, 5) + ".ogg"
+												If Rand(2) = 1 Then e\EventStr = e\EventStr + "|5\Security" + Rand(0, 2) + ".ogg"
+												;[End Block]
+										End Select
+									EndIf
+									e\EventStr = e\EventStr + "|Off.ogg|"
 								EndIf
 							EndIf
 							
@@ -10386,67 +10436,6 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 		EventState = EventState + (fps\Factor[0] * 1.4)
 	EndIf
 	Return(EventState)
-End Function
-
-Function GenerateRandomIA()
-	Local e.Events
-	Local StrTemp$
-	
-	For e.Events = Each Events
-		If e\EventID = e_cont1_173_intro Then
-			; ~ GENERATE THE IA...
-			; ~ ATTENTION...
-			e\EventStr = "1\Attention" + Rand(0, 1) + ".ogg"
-			Select Rand(3)
-				Case 1
-					;[Block]
-					StrTemp = "Crew"
-					e\EventStr = e\EventStr + "|2\Crew" + Rand(0, 4) + ".ogg"
-					;[End Block]
-				Case 2
-					;[Block]
-					StrTemp = "Scientist"
-					e\EventStr = e\EventStr + "|2\Scientist" + Rand(0, 18) + ".ogg"
-					;[End Block]
-				Case 3
-					;[Block]
-					StrTemp = "Security"	
-					e\EventStr = e\EventStr + "|2\Security" + Rand(0, 5) + ".ogg"
-					;[End Block]
-			End Select
-			
-			If Rand(2) = 1 And StrTemp = "Scientist" Then
-				; ~ CALL ON LINE...
-				e\EventStr = e\EventStr + "|3\CallOnLine.ogg"
-				
-				e\EventStr = e\EventStr + "|Numbers\" + Rand(1, 9) + ".ogg"
-				If Rand(2) = 1 Then e\EventStr = e\EventStr + "|Numbers\" + Rand(1, 9) + ".ogg"
-			Else
-				; ~ REPORT TO...
-				e\EventStr = e\EventStr + "|3\Report" + Rand(0, 1) + ".ogg"
-				
-				Select StrTemp
-					Case "Crew"
-						;[Block]
-						e\EventStr = e\EventStr + "|4\Crew" + Rand(0, 6) + ".ogg"
-						If Rand(2) = 1 Then e\EventStr = e\EventStr + "|5\Crew" + Rand(0, 6) + ".ogg"
-						;[End Block]
-					Case "Scientist"
-						;[Block]
-						e\EventStr = e\EventStr + "|4\Scientist" + Rand(0, 7) + ".ogg"
-						If Rand(2) = 1 Then e\EventStr = e\EventStr + "|5\Scientist0.ogg"
-						;[End Block]
-					Case "Security"
-						;[Block]
-						e\EventStr = e\EventStr + "|4\Security" + Rand(0, 5) + ".ogg"
-						If Rand(2) = 1 Then e\EventStr = e\EventStr + "|5\Security" + Rand(0, 2) + ".ogg"
-						;[End Block]
-				End Select
-			EndIf
-			e\EventStr = e\EventStr + "|Off.ogg|"
-			Exit
-		EndIf
-	Next
 End Function
 
 ;~IDEal Editor Parameters:
