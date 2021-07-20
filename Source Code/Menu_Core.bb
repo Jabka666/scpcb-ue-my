@@ -1380,7 +1380,7 @@ Function RenderMainMenu()
 					Color(255, 255, 255)				
 					Text(x, y + (5 * MenuScale), "Enable bump mapping:")	
 					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0
-						RenderOptionsTooltip(tX, tY, tW, tH, "bump")
+						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_BumpMapping)
 					EndIf
 					
 					y = y + (30 * MenuScale)
@@ -1388,7 +1388,7 @@ Function RenderMainMenu()
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "VSync:")
 					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0
-						RenderOptionsTooltip(tX, tY, tW, tH, "vsync")
+						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_VSync)
 					EndIf
 					
 					y = y + (30 * MenuScale)
@@ -1396,7 +1396,7 @@ Function RenderMainMenu()
 					Color(255 - (155 * (opt\DisplayMode <> 0)), 255 - (155 * (opt\DisplayMode <> 0)), 255 - (155 * (opt\DisplayMode <> 0)))
 					Text(x, y + (5 * MenuScale), "Anti-aliasing:")
 					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0
-						RenderOptionsTooltip(tX, tY, tW, tH, "antialias")
+						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AntiAliasing)
 					EndIf
 					
 					y = y + (30 * MenuScale)
@@ -1404,7 +1404,7 @@ Function RenderMainMenu()
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Enable room lights:")
 					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0
-						RenderOptionsTooltip(tX, tY, tW, tH, "roomlights")
+						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_RoomLights)
 					EndIf
 					
 					y = y + (40 * MenuScale)
@@ -1412,7 +1412,7 @@ Function RenderMainMenu()
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Screen gamma:")
 					If MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20) And mm\OnSliderID = 0
-						RenderOptionsTooltip(tX, tY, tW, tH, "gamma", opt\ScreenGamma)
+						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ScreenGamma, opt\ScreenGamma)
 					EndIf
 					
 					y = y + (45 * MenuScale)
@@ -1420,7 +1420,7 @@ Function RenderMainMenu()
 					Color(255, 255, 255)
 					Text(x, y, "Particle amount:")
 					If (MouseOn(x + (290 * MenuScale), y - (9 * MenuScale), 164 * MenuScale, 20) And mm\OnSliderID = 0) Lor mm\OnSliderID = 2
-						RenderOptionsTooltip(tX, tY, tW, tH, "particleamount", opt\ParticleAmount)
+						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ParticleAmount, opt\ParticleAmount)
 					EndIf
 					
 					y = y + (45 * MenuScale)
@@ -1428,7 +1428,7 @@ Function RenderMainMenu()
 					Color(255, 255, 255)
 					Text(x, y, "Texture LOD Bias:")
 					If (MouseOn(x + (290 * MenuScale), y - (9 * MenuScale), 164 * MenuScale, 20) And mm\OnSliderID = 0) Lor mm\OnSliderID = 3
-						RenderOptionsTooltip(tX, tY, tW, tH + (100 * MenuScale), "texquality")
+						RenderOptionsTooltip(tX, tY, tW, tH + (100 * MenuScale), Tooltip_TextureLODBias)
 					EndIf
 					
 					y = y + (35 * MenuScale)
@@ -1436,7 +1436,7 @@ Function RenderMainMenu()
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Save textures in the VRAM:")
 					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0
-						RenderOptionsTooltip(tX, tY, tW, tH, "vram")
+						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SaveTexturesInVRAM)
 					EndIf
 					
 					y = y + (40 * MenuScale)
@@ -1444,7 +1444,7 @@ Function RenderMainMenu()
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Field of view:")
 					If MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20) And mm\OnSliderID = 0
-						RenderOptionsTooltip(tX, tY, tW, tH, "fov")
+						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FOV)
 					EndIf
 					
 					y = y + (45 * MenuScale)
@@ -1452,7 +1452,7 @@ Function RenderMainMenu()
 					Color(255, 255, 255)
 					Text(x, y, "Anisotropic filtering:")
 					If (MouseOn(x + (290 * MenuScale), y - (9 * MenuScale), 164 * MenuScale, 20) And mm\OnSliderID = 0) Lor mm\OnSliderID = 4
-						RenderOptionsTooltip(tX, tY, tW, tH, "anisotropic")
+						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AnisotropicFiltering)
 					EndIf
 					;[End Block]
 				ElseIf mm\MainMenuTab = MainMenuTab_Options_Audio
@@ -1469,7 +1469,7 @@ Function RenderMainMenu()
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Music volume:")
 					If MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20)
-						RenderOptionsTooltip(tX, tY, tW, tH, "musicvol", opt\MusicVolume)
+						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MusicVolume, opt\MusicVolume)
 					EndIf
 					
 					y = y + (40 * MenuScale)
@@ -1477,7 +1477,7 @@ Function RenderMainMenu()
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Sound volume:")
 					If MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20)
-						RenderOptionsTooltip(tX, tY, tW, tH, "soundvol", opt\PrevSFXVolume)
+						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SoundVolume, opt\PrevSFXVolume)
 					EndIf
 					
 					y = y + (40 * MenuScale)
@@ -1485,14 +1485,14 @@ Function RenderMainMenu()
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Sound auto-release:")
 					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-						RenderOptionsTooltip(tX, tY, tW, tH + (220 * MenuScale), "sfxautorelease")
+						RenderOptionsTooltip(tX, tY, tW, tH + (220 * MenuScale), Tooltip_SoundAutoRelease)
 					EndIf
 					y = y + (30 * MenuScale)
 					
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Enable user tracks:")
 					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-						RenderOptionsTooltip(tX, tY, tW, tH, "usertrack")
+						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTracks)
 					EndIf
 					
 					y = y + (30 * MenuScale)
@@ -1506,10 +1506,10 @@ Function RenderMainMenu()
 							Text(x + (330 * MenuScale), y + (5 * MenuScale), "Random")
 						EndIf
 						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-							RenderOptionsTooltip(tX, tY, tW, tH, "usertrackmode")
+							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTracksMode)
 						EndIf
 						If MouseOn(x, y + (30 * MenuScale), 190 * MenuScale, 30 * MenuScale)
-							RenderOptionsTooltip(tX, tY, tW, tH, "usertrackscan")
+							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTrackScan)
 						EndIf
 						If UserTrackCheck > 0 Then
 							Text(x, y + (100 * MenuScale), "User tracks found (" + UserTrackCheck2 + "/" + UserTrackCheck + " successfully loaded)")
@@ -1526,7 +1526,7 @@ Function RenderMainMenu()
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Mouse sensitivity:")
 					If MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20)
-						RenderOptionsTooltip(tX, tY, tW, tH, "mousesensitivity", opt\MouseSensitivity)
+						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseSensitivity, opt\MouseSensitivity)
 					EndIf
 					
 					y = y + (40 * MenuScale)
@@ -1534,7 +1534,7 @@ Function RenderMainMenu()
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Invert mouse Y-axis:")
 					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-						RenderOptionsTooltip(tX, tY, tW, tH, "mouseinvert")
+						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseInvert)
 					EndIf
 					
 					y = y + (40 * MenuScale)
@@ -1542,7 +1542,7 @@ Function RenderMainMenu()
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Mouse smoothing:")
 					If MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20)
-						RenderOptionsTooltip(tX, tY, tW, tH, "mousesmoothing", opt\MouseSmoothing)
+						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseSmoothing, opt\MouseSmoothing)
 					EndIf
 					
 					Color(255, 255, 255)
@@ -1576,7 +1576,7 @@ Function RenderMainMenu()
 					Text(x + (260 * MenuScale), y + (105 * MenuScale), "Take Screenshot:")
 					
 					If MouseOn(x, y, Width - (40 * MenuScale), 120 * MenuScale)
-						RenderOptionsTooltip(tX, tY, tW, tH, "controls")
+						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ControlConfiguration)
 					EndIf
 					;[End Block]
 				ElseIf mm\MainMenuTab = MainMenuTab_Options_Advanced
@@ -1595,7 +1595,7 @@ Function RenderMainMenu()
 						Color(255, 255, 255)				
 						Text(x, y + (5 * MenuScale), "Show HUD:")	
 						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-							RenderOptionsTooltip(tX, tY, tW, tH, "hud")
+							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_HUD)
 						EndIf
 						
 						y = y + (30 * MenuScale)
@@ -1603,7 +1603,7 @@ Function RenderMainMenu()
 						Color(255, 255, 255)
 						Text(x, y + (5 * MenuScale), "Enable console:")
 						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-							RenderOptionsTooltip(tX, tY, tW, tH, "consoleenable")
+							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Console)
 						EndIf
 						
 						y = y + (30 * MenuScale)
@@ -1612,7 +1612,7 @@ Function RenderMainMenu()
 							Color(255, 255, 255)
 							Text(x, y + (5 * MenuScale), "Open console on error:")
 							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-								RenderOptionsTooltip(tX, tY, tW, tH, "consoleerror")
+								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ConsoleOnError)
 							EndIf
 						EndIf
 						
@@ -1621,7 +1621,7 @@ Function RenderMainMenu()
 						Color(255, 255, 255)
 						Text(x, y + (5 * MenuScale), "Achievement popups:")
 						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-							RenderOptionsTooltip(tX, tY, tW, tH, "achpopup")
+							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AchievementPopups)
 						EndIf
 						
 						y = y + (30 * MenuScale)
@@ -1629,7 +1629,7 @@ Function RenderMainMenu()
 						Color(255, 255, 255)
 						Text(x, y + (5 * MenuScale), "Show FPS:")
 						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-							RenderOptionsTooltip(tX, tY, tW, tH, "showfps")
+							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FPS)
 						EndIf
 						
 						y = y + (30 * MenuScale)
@@ -1642,10 +1642,10 @@ Function RenderMainMenu()
 							Text(x, y + (45 * MenuScale), opt\FrameLimit + " FPS")
 						EndIf
 						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-							RenderOptionsTooltip(tX, tY, tW, tH, "framelimit", opt\FrameLimit)
+							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FrameLimit, opt\FrameLimit)
 						EndIf
 						If MouseOn(x + (130 * MenuScale), y + (40 * MenuScale), 164 * MenuScale, 20)
-							RenderOptionsTooltip(tX, tY, tW, tH, "framelimit", opt\FrameLimit)
+							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FrameLimit, opt\FrameLimit)
 						EndIf
 					Else
 						y = y + (20 * MenuScale)
@@ -1654,7 +1654,7 @@ Function RenderMainMenu()
 							Color(255, 255, 255)
 							Text(x, y + (5 * MenuScale), "Smooth HUD:")
 							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-								RenderOptionsTooltip(tX, tY, tW, tH, "smoothhud")
+								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SmoothHUD)
 							EndIf
 						EndIf
 						
@@ -1663,7 +1663,7 @@ Function RenderMainMenu()
 						Color(255, 255, 255)
 						Text(x, y + (5 * MenuScale), "Play startup videos:")
 						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-							RenderOptionsTooltip(tX, tY, tW, tH, "playstartup")
+							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_StartupVideos)
 						EndIf
 						
 						y = y + (30 * MenuScale)
@@ -1671,7 +1671,7 @@ Function RenderMainMenu()
 						Color(255, 255, 255)
 						Text(x, y + (5 * MenuScale), "Use launcher:")
 						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-							RenderOptionsTooltip(tX, tY, tW, tH, "uselauncher")
+							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Launcher)
 						EndIf
 						
 						y = y + (30 * MenuScale)
@@ -1679,7 +1679,7 @@ Function RenderMainMenu()
 						Color(255, 255, 255)
 						Text(x, y + (5 * MenuScale), "Enable Subtitles:")
 						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-							RenderOptionsTooltip(tX, tY, tW, tH, "subtitles")
+							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Subtitles)
 						EndIf
 						
 						y = y + (30 * MenuScale)
@@ -1693,7 +1693,7 @@ Function RenderMainMenu()
 						
 						If opt\EnableSubtitles Then
 							If MouseOn(x + (230 * MenuScale), y, 147 * MenuScale, 147 * MenuScale)
-								RenderOptionsTooltip(tX, tY, tW, tH, "subtitlescolor")
+								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
 							EndIf
 						EndIf
 						
@@ -1703,7 +1703,7 @@ Function RenderMainMenu()
 							Color(255, 255, 255)
 							Text(x, y + (5 * MenuScale), "RED COLOR:")
 							If MouseOn(x + (125 * MenuScale), y, 40 * MenuScale, 20 * MenuScale)
-								RenderOptionsTooltip(tX, tY, tW, tH, "subtitlescolor")
+								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
 							EndIf
 						EndIf
 						
@@ -1713,7 +1713,7 @@ Function RenderMainMenu()
 							Color(255, 255, 255)
 							Text(x, y + (5 * MenuScale), "GREEN COLOR:")
 							If MouseOn(x + (125 * MenuScale), y, 40 * MenuScale, 20 * MenuScale)
-								RenderOptionsTooltip(tX, tY, tW, tH, "subtitlescolor")
+								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
 							EndIf
 						EndIf
 						
@@ -1723,14 +1723,14 @@ Function RenderMainMenu()
 							Color(255, 255, 255)
 							Text(x, y + (5 * MenuScale), "BLUE COLOR:")
 							If MouseOn(x + (125 * MenuScale), y, 40 * MenuScale, 20 * MenuScale)
-								RenderOptionsTooltip(tX, tY, tW, tH, "subtitlescolor")
+								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
 							EndIf
 						EndIf
 						
 						y = y + (40 * MenuScale)
 						
 						If MouseOn(x, y, 170 * MenuScale, 30 * MenuScale)
-							RenderOptionsTooltip(tX, tY, tW, tH, "resetoptions")
+							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ResetOptions)
 						EndIf
 						
 						If opt\EnableSubtitles Then
@@ -3111,7 +3111,55 @@ Function GetLineAmount(Txt$, W%, H%, Leading# = 1.0)
 	Return(LinesShown + 1)
 End Function
 
-Function RenderOptionsTooltip(x%, y%, Width%, Height%, Option$, Value# = 0.0)
+; ~ Graphics Tooltips Constants
+;[Block]
+Const Tooltip_BumpMapping% = 0
+Const Tooltip_VSync% = 1
+Const Tooltip_AntiAliasing% = 2
+Const Tooltip_RoomLights% = 3
+Const Tooltip_ScreenGamma% = 4
+Const Tooltip_TextureLODBias% = 5
+Const Tooltip_ParticleAmount% = 6
+Const Tooltip_SaveTexturesInVRAM% = 7
+Const Tooltip_FOV% = 8
+Const Tooltip_AnisotropicFiltering% = 9
+;[End Block]
+
+; ~ Audio Tooltips Constants
+;[Block]
+Const Tooltip_MusicVolume% = 10
+Const Tooltip_SoundVolume% = 11
+Const Tooltip_SoundAutoRelease% = 12
+Const Tooltip_UserTracks% = 13
+Const Tooltip_UserTracksMode% = 14
+Const Tooltip_UserTrackScan% = 15
+;[End Block]
+
+; ~ Controls Tooltips Constants
+;[Block]
+Const Tooltip_MouseSensitivity% = 16
+Const Tooltip_MouseInvert% = 17
+Const Tooltip_MouseSmoothing% = 18
+Const Tooltip_ControlConfiguration% = 19
+;[End Block]
+
+; ~ Advanced Tooltips Constants
+;[Block]
+Const Tooltip_HUD% = 20
+Const Tooltip_Console% = 21
+Const Tooltip_ConsoleOnError% = 23
+Const Tooltip_AchievementPopups% = 24
+Const Tooltip_FPS% = 25
+Const Tooltip_FrameLimit% = 26
+Const Tooltip_SmoothHUD% = 27
+Const Tooltip_StartupVideos% = 28
+Const Tooltip_Launcher% = 29
+Const Tooltip_Subtitles% = 30
+Const Tooltip_SubtitlesColor% = 31
+Const Tooltip_ResetOptions% = 32
+;[End Block]
+
+Function RenderOptionsTooltip(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 	Local fX# = x + (6.0 * MenuScale)
 	Local fY# = y + (6.0 * MenuScale)
 	Local fW# = Width - (12.0 * MenuScale)
@@ -3124,39 +3172,39 @@ Function RenderOptionsTooltip(x%, y%, Width%, Height%, Option$, Value# = 0.0)
 	Color(255, 255, 255)
 	Select Lower(Option)
 			; ~ [GRAPHICS]
-		Case "bump"
+		Case Tooltip_BumpMapping
 			;[Block]
 			Txt = Chr(34) + "Bump mapping" + Chr(34) + " is used to simulate bumps and dents by distorting the lightmaps."
 			R = 255
 			Txt2 = "This option cannot be changed in-game."
 			;[End Block]
-		Case "vsync"
+		Case Tooltip_VSync
 			;[Block]
 			Txt = Chr(34) + "Vertical sync" + Chr(34) + " waits for the display to finish its current refresh cycle before calculating the next frame, preventing issues such as "
 			Txt = Txt + "screen tearing. This ties the game's frame rate to your display's refresh rate and may cause some input lag."
 			;[End Block]
-		Case "antialias"
+		Case Tooltip_AntiAliasing
 			;[Block]
 			Txt = Chr(34) + "Anti-Aliasing" + Chr(34) + " is used to smooth the rendered image before displaying in order to reduce aliasing around the edges of models."
 			R = 255 : G = 255
 			Txt2 = "This option only takes effect in fullscreen."
 			;[End Block]
-		Case "roomlights"
+		Case Tooltip_RoomLights
 			;[Block]
 			Txt = "Toggles the artificial lens flare effect generated over specific light sources."
 			;[End Block]
-		Case "gamma"
+		Case Tooltip_ScreenGamma
 			;[Block]
 			Txt = Chr(34) + "Gamma correction" + Chr(34) + " is used to achieve a good brightness factor to balance out your display's gamma if the game appears either too dark or bright. "
 			Txt = Txt + "Setting it too high or low can cause the graphics to look less detailed."
 			R = 255 : G = 255
 			Txt2 = "Current value: " + Int(Value * 100.0) + "% (default is 100%)"
 			;[End Block]
-		Case "texquality"
+		Case Tooltip_TextureLODBias
 			;[Block]
 			Txt = Chr(34) + "Texture LOD Bias" + Chr(34) + " affects the distance at which texture detail will change to prevent aliasing. Change this option if textures flicker or look too blurry."
 			;[End Block]
-		Case "particleamount"
+		Case Tooltip_ParticleAmount
 			;[Block]
 			Txt = "Determines the amount of particles that can be rendered per tick."
 			Select Value
@@ -3178,110 +3226,104 @@ Function RenderOptionsTooltip(x%, y%, Width%, Height%, Option$, Value# = 0.0)
 					;[End Block]
 			End Select
 			;[End Block]
-		Case "vram"
+		Case Tooltip_SaveTexturesInVRAM
 			;[Block]
 			Txt = "Textures that are stored in the Video-RAM will load faster, but this also has negative effects on the texture quality as well."
 			R = 255
 			Txt2 = "This option cannot be changed in-game."
 			;[End Block]
-		Case "fov"
+		Case Tooltip_FOV
 			;[Block]
 			Txt = Chr(34) + "Field of view" + Chr(34) + " is the amount of game view that is on display during a game."
 			R = 255 : G = 255
 			Txt2 = "Current value: " + Int(opt\FOV) + "° (default is 74°)"
 			;[End Block]
-		Case "anisotropic"
+		Case Tooltip_AnisotropicFiltering
 			;[Block]
 			Txt = Chr(34) + "Anisotropic filtering" + Chr(34) + " enhances the image quality of textures on surfaces that are at oblique viewing angles with respect to the camera."
 			;[End Block]
 			; ~ [AUDIO]
-		Case "musicvol"
+		Case Tooltip_MusicVolume
 			;[Block]
 			Txt = "Adjusts the volume of background music. Sliding the bar fully to the left will mute all music."
 			R = 255 : G = 255
 			Txt2 = "Current value: " + Int(Value * 100.0) + "% (default is 50%)"
 			;[End Block]
-		Case "soundvol"
+		Case Tooltip_SoundVolume
 			;[Block]
 			Txt = "Adjusts the volume of sound effects. Sliding the bar fully to the left will mute all sounds."
 			R = 255 : G = 255
 			Txt2 = "Current value: " + Int(Value * 100.0) + "% (default is 50%)"
 			;[End Block]
-		Case "sfxautorelease"
+		Case Tooltip_SoundAutoRelease
 			;[Block]
 			Txt = Chr(34) + "Sound auto-release" + Chr(34) + " will free a sound from memory if it not used after 5 seconds. Prevents memory allocation issues."
 			R = 255
 			Txt2 = "This option cannot be changed in-game."
 			;[End Block]
-		Case "usertrack"
+		Case Tooltip_UserTracks
 			;[Block]
 			Txt = "Toggles the ability to play custom tracks over channel 1 of the radio. These tracks are loaded from the " + Chr(34) + "SFX\Radio\UserTracks\" + Chr(34)
 			Txt = Txt + " directory. Press " + Chr(34) + "1" + Chr(34) + " when the radio is selected to change track."
 			R = 255
 			Txt2 = "This option cannot be changed in-game."
 			;[End Block]
-		Case "usertrackmode"
+		Case Tooltip_UserTracksMode
 			;[Block]
 			Txt = "Sets the playing mode for the custom tracks. " + Chr(34) + "Repeat" + Chr(34) + " plays every file in alphabetical order. " + Chr(34) + "Random" + Chr(34) + " chooses the "
 			Txt = Txt + "Next track at random."
 			R = 255 : G = 255
 			Txt2 = "Note that the random mode doesn't prevent previously played tracks from repeating."
 			;[End Block]
-		Case "usertrackscan"
+		Case Tooltip_UserTrackScan
 			;[Block]
 			Txt = "Re-checks the user tracks directory for any new or removed sound files."
 			R = 255
 			Txt2 = "This button cannot be used in-game."
 			;[End Block]
 			; ~ [CONTROLS]
-		Case "mousesensitivity"
+		Case Tooltip_MouseSensitivity
 			;[Block]
 			Txt = "Adjusts the speed of the mouse pointer."
 			R = 255 : G = 255
 			Txt2 = "Current value: " + Int((0.5 + Value) * 100.0) + "% (default is 50%)"
 			;[End Block]
-		Case "mouseinvert"
+		Case Tooltip_MouseInvert
 			;[Block]
 			Txt = Chr(34) + "Invert mouse Y-axis" + Chr(34) + " is self-explanatory."
 			;[End Block]
-		Case "mousesmoothing"
+		Case Tooltip_MouseSmoothing
 			;[Block]
 			Txt = "Adjusts the amount of smoothing of the mouse pointer."
 			R = 255 : G = 255
 			Txt2 = "Current value: " + Int(Value * 100.0) + "% (default is 100%)"
 			;[End Block]
-		Case "controls"
+		Case Tooltip_ControlConfiguration
 			;[Block]
 			Txt = "Configure the in-game control scheme."
 			;[End Block]
 			; ~ [ADVANCED]
-		Case "hud"
+		Case Tooltip_HUD
 			;[Block]
 			Txt = "Displays the blink and stamina meters."
 			;[End Block]
-		Case "smoothhud"
-			;[Block]
-			Txt = "Changes the HUD style to Dynamic or Classic one."
-			R = 255
-			Txt2 = "This option cannot be changed in-game."
-			;[End Block]
-		Case "consoleenable"
+		Case Tooltip_Console
 			;[Block]
 			Txt = "Toggles the use of the developer console. Can be used in-game by pressing " + key\Name[key\CONSOLE] + "."
 			;[End Block]
-		Case "consoleerror"
+		Case Tooltip_ConsoleOnError
 			;[Block]
 			Txt = Chr(34) + "Open console on error" + Chr(34) + " is self-explanatory."
 			;[End Block]
-		Case "achpopup"
+		Case Tooltip_AchievementPopups
 			;[Block]
 			Txt = "Displays a pop-up notification when an achievement is unlocked."
 			;[End Block]
-		Case "showfps"
+		Case Tooltip_FPS
 			;[Block]
 			Txt = "Displays the frames per second counter at the top left-hand corner."
 			;[End Block]
-		Case "framelimit"
+		Case Tooltip_FrameLimit
 			;[Block]
 			Txt = "Limits the frame rate that the game can run at to a desired value."
 			If Value > 0 And Value < 60 Then
@@ -3289,29 +3331,35 @@ Function RenderOptionsTooltip(x%, y%, Width%, Height%, Option$, Value# = 0.0)
 				Txt2 = "Usually, 60 FPS or higher is preferred. If you are noticing excessive stuttering at this setting, try lowering it to make your framerate more consistent."
 			EndIf
 			;[End Block]
-		Case "playstartup"
+		Case Tooltip_SmoothHUD
+			;[Block]
+			Txt = "Changes the HUD style to Dynamic or Classic one."
+			R = 255
+			Txt2 = "This option cannot be changed in-game."
+			;[End Block]
+		Case Tooltip_StartupVideos
 			;[Block]
 			Txt = Chr(34) + "Play startup videos" + Chr(34) + " is self-explanatory."
 			R = 255
 			Txt2 = "This option cannot be changed in-game."
 			;[End Block]
-		Case "uselauncher"
+		Case Tooltip_Launcher
 			;[Block]
 			Txt = Chr(34) + "Use launcher" + Chr(34) + " is self-explanatory."
 			R = 255
 			Txt2 = "This option cannot be changed in-game."
 			;[End Block]
-		Case "subtitles"
+		Case Tooltip_Subtitles
 			;[Block]
 			Txt = "Displays current dialogs in the text form. (WIP)"
 			R = 255
 			Txt2 = "This option cannot be changed in-game."
 			;[End Block]
-		Case "subtitlescolor"
+		Case Tooltip_SubtitlesColor
 			;[Block]
 			Txt = Chr(34) + "Subtitles color" + Chr(34) + " is self-explanatory."
 			;[End Block]
-		Case "resetoptions"
+		Case Tooltip_ResetOptions
 			;[Block]
 			Txt = Chr(34) + "Reset options" + Chr(34) + " is self-explanatory."
 			;[End Block]
