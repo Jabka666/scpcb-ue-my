@@ -3768,7 +3768,7 @@ Function UpdateScreens()
 					If mo\MouseUp1 Then 
 						SelectedScreen = s
 						s\Img = LoadImage_Strict("GFX\screens\" + s\ImgPath)
-						s\Img = ResizeImage2(s\Img, ImageWidth(s\Img) * MenuScale, ImageHeight(s\Img) * MenuScale)
+						s\Img = ResizeImage2(s\Img, MenuScale, MenuScale)
 						MaskImage(s\Img, 255, 0, 255)
 						PlaySound_Strict(ButtonSFX)
 						mo\MouseUp1 = False

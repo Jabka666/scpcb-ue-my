@@ -139,6 +139,7 @@ Global CursorIMG% = LoadImage_Strict("GFX\cursor.png")
 
 Global SelectedLoadingScreen.LoadingScreens, LoadingScreenAmount%, LoadingScreenText%
 Global LoadingBack% = LoadImage_Strict("LoadingScreens\loading_back.png")
+ResizeImage2(LoadingBack, MenuScale, MenuScale)
 
 InitLoadingScreens("LoadingScreens\loading_screens.ini")
 
@@ -1842,6 +1843,7 @@ Function RenderMessages()
 		EndIf
 	EndIf
 	Color(255, 255, 255)
+	Text(20, 20, MilliSecs2() - MS)
 	If opt\ShowFPS Then
 		SetFont(fo\FontID[Font_Console])
 		Text(20, 20, "FPS: " + fps\FPS)
@@ -2020,9 +2022,12 @@ Function CatchErrors(Location$)
 	SetErrorMsg(5, "Error located in: " + Location + Chr(10) + Chr(10) + "Please take a screenshot of this error and send it to us!") 
 End Function
 
+Global MS%
+
 Repeat
 	Cls()
 	
+	MS = MilliSecs2()
 	Local ElapsedMilliSecs%
 	
 	fps\CurrTime = MilliSecs2()
@@ -6126,7 +6131,7 @@ Function RenderGUI()
 							Case "Document SCP-372"
 								;[Block]
 								SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
-								SelectedItem\ItemTemplate\Img = ResizeImage2(SelectedItem\ItemTemplate\Img, ImageWidth(SelectedItem\ItemTemplate\Img) * MenuScale, ImageHeight(SelectedItem\ItemTemplate\Img) * MenuScale)
+								SelectedItem\ItemTemplate\Img = ResizeImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 								
 								SetBuffer(ImageBuffer(SelectedItem\ItemTemplate\Img))
 								Color(37, 45, 137)
@@ -6149,12 +6154,12 @@ Function RenderGUI()
 								Else
 									SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
 								EndIf
-								SelectedItem\ItemTemplate\Img = ResizeImage2(SelectedItem\ItemTemplate\Img, ImageWidth(SelectedItem\ItemTemplate\Img) * MenuScale, ImageHeight(SelectedItem\ItemTemplate\Img) * MenuScale)
+								SelectedItem\ItemTemplate\Img = ResizeImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 								;[End Block]
 							Default 
 								;[Block]
 								SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
-								SelectedItem\ItemTemplate\Img = ResizeImage2(SelectedItem\ItemTemplate\Img, ImageWidth(SelectedItem\ItemTemplate\Img) * MenuScale, ImageHeight(SelectedItem\ItemTemplate\Img) * MenuScale)
+								SelectedItem\ItemTemplate\Img = ResizeImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 								;[End Block]
 						End Select
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
@@ -6166,7 +6171,7 @@ Function RenderGUI()
 					GiveAchievement(Achv1025) 
 					If (Not SelectedItem\ItemTemplate\Img) Then
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\items\1025\1025(" + Int(SelectedItem\State) + ").png")	
-						SelectedItem\ItemTemplate\Img = ResizeImage2(SelectedItem\ItemTemplate\Img, ImageWidth(SelectedItem\ItemTemplate\Img) * MenuScale, ImageHeight(SelectedItem\ItemTemplate\Img) * MenuScale)
+						SelectedItem\ItemTemplate\Img = ResizeImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 						
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
@@ -6531,7 +6536,7 @@ Function RenderGUI()
 					;[Block]
 					If (Not SelectedItem\ItemTemplate\Img) Then
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
-						SelectedItem\ItemTemplate\Img = ResizeImage2(SelectedItem\ItemTemplate\Img, ImageWidth(SelectedItem\ItemTemplate\Img) * MenuScale, ImageHeight(SelectedItem\ItemTemplate\Img) * MenuScale)
+						SelectedItem\ItemTemplate\Img = ResizeImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 						
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
@@ -7912,7 +7917,7 @@ Function LoadEntities()
 	Next
 	
 	QuickLoadIcon = LoadImage_Strict("GFX\menu\QuickLoading.png")
-	ResizeImage(QuickLoadIcon, ImageWidth(QuickLoadIcon) * MenuScale, ImageHeight(QuickLoadIcon) * MenuScale)
+	QuickLoadIcon = ResizeImage2(QuickLoadIcon, MenuScale, MenuScale)
 	
 	For i = 0 To MAXACHIEVEMENTS - 1
 		Local Loc2% = GetINISectionLocation(AchievementsFile, "a" + Str(i))
@@ -7923,12 +7928,12 @@ Function LoadEntities()
 		Local Image$ = GetINIString2(AchievementsFile, Loc2, "AchvImage") 
 		
 		achv\AchvIMG[i] = LoadImage_Strict("GFX\menu\achievements\" + Image + ".png")
-		achv\AchvIMG[i] = ResizeImage2(achv\AchvIMG[i], ImageWidth(achv\AchvIMG[i]) * opt\GraphicHeight / 768.0, ImageHeight(achv\AchvIMG[i]) * opt\GraphicHeight / 768.0)
+		achv\AchvIMG[i] = ResizeImage2(achv\AchvIMG[i], opt\GraphicHeight / 768.0, opt\GraphicHeight / 768.0)
 		BufferDirty(ImageBuffer(achv\AchvIMG[i]))
 	Next
 	
 	achv\AchvLocked = LoadImage_Strict("GFX\menu\achievements\AchvLocked.png")
-	achv\AchvLocked = ResizeImage2(achv\AchvLocked, ImageWidth(achv\AchvLocked) * opt\GraphicHeight / 768.0, ImageHeight(achv\AchvLocked) * opt\GraphicHeight / 768.0)
+	achv\AchvLocked = ResizeImage2(achv\AchvLocked, opt\GraphicHeight / 768.0, opt\GraphicHeight / 768.0)
 	BufferDirty(ImageBuffer(achv\AchvLocked))
 	
 	RenderLoading(15, "IMAGES")

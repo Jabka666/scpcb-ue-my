@@ -1,6 +1,3 @@
-Global SMALLEST_POWER_TWO#
-Global SMALLEST_POWER_TWO_HALF#
-
 Global FresizeImage%, FresizeTexture%, FresizeTexture2%
 Global FresizeCam%
 
@@ -27,15 +24,15 @@ Function InitFastResize()
 	AddTriangle(SF, 0, 1, 2)
 	AddTriangle(SF, 3, 2, 1)
 	EntityFX(SPR, 17)
-	ScaleEntity(SPR, SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicHeight), 1.0)
+	ScaleEntity(SPR, 4096.0 / Float(opt\RealGraphicWidth), 4096.0 / Float(opt\RealGraphicHeight), 1.0)
 	PositionEntity(SPR, 0, 0, 1.0001)
 	EntityOrder(SPR, -100001)
 	EntityBlend(SPR, 1)
 	FresizeImage = SPR
 	
 	; ~ Create texture
-	FresizeTexture = CreateTexture(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO, 1 + 256)
-	FresizeTexture2 = CreateTexture(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO, 1 + 256)
+	FresizeTexture = CreateTexture(4096.0, 4096.0, 1 + 256)
+	FresizeTexture2 = CreateTexture(4096.0, 4096.0, 1 + 256)
 	TextureBlend(FresizeTexture2, 3)
 	SetBuffer(TextureBuffer(FresizeTexture2))
 	ClsColor(0, 0, 0)
@@ -51,13 +48,64 @@ Function Graphics3DExt%(Width%, Height%, Depth% = 32, Mode% = 2)
 	Graphics3D(Width, Height, Depth, Mode)
 	TextureFilter("", 8192) ; ~ This turns on Anisotropic filtering for textures
 	TextureAnisotropic(opt\AnisotropicLevel)
-	SMALLEST_POWER_TWO = 512.0
-	While SMALLEST_POWER_TWO < Width Lor SMALLEST_POWER_TWO < Height
-		SMALLEST_POWER_TWO = SMALLEST_POWER_TWO * 2.0
-	Wend
-	SMALLEST_POWER_TWO_HALF = SMALLEST_POWER_TWO / 2.0
 	InitFastResize()
 	AntiAlias(opt\AntiAliasing)
+End Function
+
+Function ResizeImage2%(SrcImage%, ScaleX#, ScaleY#, ExactSize% = False)
+	Local SrcWidth%, SrcHeight%
+	Local DestWidth%, DestHeight%
+	Local ScratchImage%, DestImage%
+	Local SrcBuffer%, ScratchBuffer%, DestBuffer%
+	Local X1%, Y1%, X2%, Y2%
+	
+	; ~ Get the width and height of the source image
+	SrcWidth = ImageWidth(SrcImage)
+	SrcHeight = ImageHeight(SrcImage)
+	
+	; ~ Calculate the width and height of the dest image, or the scale
+	If ExactSize = False
+		DestWidth = Floor(SrcWidth * ScaleX)
+		DestHeight = Floor(SrcHeight * ScaleY)
+	Else
+		DestWidth = ScaleX
+		DestHeight = ScaleY
+		
+		ScaleX = Float(DestWidth) / Float(SrcWidth)
+		ScaleY = Float(DestHeight) / Float(SrcHeight)
+	EndIf
+	
+	; ~ If the image does not need to be scaled, just copy the image and exit the function
+	If (SrcWidth = DestWidth) And (SrcHeight = DestHeight) Then Return(CopyImage(SrcImage))
+	
+	; ~ Create a scratch image that is as tall as the source image, and as wide as the destination image
+	ScratchImage = CreateImage(DestWidth, SrcHeight)
+	
+	; ~ Create the destination image
+	DestImage = CreateImage(DestWidth, DestHeight)
+	
+	; ~ Get pointers to the image buffers
+	SrcBuffer = ImageBuffer(SrcImage)
+	ScratchBuffer = ImageBuffer(ScratchImage)
+	DestBuffer = ImageBuffer(DestImage)
+	
+	; ~ Duplicate columns from source image to scratch image
+	For X2 = 0 To DestWidth - 1
+		X1 = Floor(X2 / ScaleX)
+		CopyRect(X1, 0, 1, SrcHeight, X2, 0, SrcBuffer, ScratchBuffer)
+	Next
+	
+	; ~ Duplicate rows from scratch image to destination image
+	For Y2 = 0 To DestHeight - 1
+		Y1 = Floor(Y2 / ScaleY)
+		CopyRect(0, Y1, DestWidth, 1, 0, Y2, ScratchBuffer, DestBuffer)
+	Next
+	
+	; ~ Free the scratch image
+	FreeImage(ScratchImage)
+	
+	; ~ Return the new image
+	Return(DestImage)
 End Function
 
 Function ScaleRender(x#, y#, hScale# = 1.0, vScale# = 1.0)
@@ -74,32 +122,17 @@ Function ScaleRender(x#, y#, hScale# = 1.0, vScale# = 1.0)
 	If Camera <> 0 Then ShowEntity(Camera)
 End Function
 
-Function ResizeImage2(Image%, Width%, Height%)
-	Local Img% = CreateImage(Width, Height)
-	Local OldWidth% = ImageWidth(Image)
-	Local OldHeight% = ImageHeight(Image)
-	
-	CopyRect(0, 0, OldWidth, OldHeight, SMALLEST_POWER_TWO_HALF - OldWidth / 2, SMALLEST_POWER_TWO_HALF - OldHeight / 2, ImageBuffer(Image), TextureBuffer(FresizeTexture))
-	SetBuffer(BackBuffer())
-	ScaleRender(0.0, 0.0, SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth) * Float(Width) / Float(OldWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth) * Float(Height) / Float(OldHeight))
-	; ~ Might want to replace Float(opt\GraphicWidth) with Max(opt\GraphicWidth, opt\GraphicHeight) if portrait sizes cause issues
-	; ~ Everyone uses landscape so it's probably a non-issue
-	CopyRect(opt\RealGraphicWidth / 2 - Width / 2, opt\RealGraphicHeight / 2 - Height / 2, Width, Height, 0, 0, BackBuffer(), ImageBuffer(Img))
-	FreeImage(Image)
-	Return(Img)
-End Function
-
 Function RenderGamma()
 	If opt\DisplayMode = 1 Then
 		If opt\RealGraphicWidth <> opt\GraphicWidth Lor opt\RealGraphicHeight <> opt\GraphicHeight Then
 			SetBuffer(TextureBuffer(FresizeTexture))
 			ClsColor(0, 0, 0)
 			Cls()
-			CopyRect(0, 0, opt\GraphicWidth, opt\GraphicHeight, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_X, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_Y, BackBuffer(), TextureBuffer(FresizeTexture))
+			CopyRect(0, 0, opt\GraphicWidth, opt\GraphicHeight, 2048.0 - mo\Viewport_Center_X, 2048.0 - mo\Viewport_Center_Y, BackBuffer(), TextureBuffer(FresizeTexture))
 			SetBuffer(BackBuffer())
 			ClsColor(0, 0, 0)
 			Cls()
-			ScaleRender(0, 0, SMALLEST_POWER_TWO / Float(opt\GraphicWidth) * opt\AspectRatio, SMALLEST_POWER_TWO / Float(opt\GraphicWidth) * opt\AspectRatio)
+			ScaleRender(0, 0, 4096.0 / Float(opt\GraphicWidth) * opt\AspectRatio, 4096.0 / Float(opt\GraphicWidth) * opt\AspectRatio)
 			; ~ Might want to replace Float(opt\GraphicWidth) with Max(opt\GraphicWidth, opt\GraphicHeight) if portrait sizes cause issues
 			; ~ Everyone uses landscape so it's probably a non-issue
 		EndIf
@@ -108,21 +141,21 @@ Function RenderGamma()
 	; ~ Not by any means a perfect solution
 	; ~ Not even proper gamma correction but it's a nice looking alternative that works in windowed mode
 	If opt\ScreenGamma >= 1.0 Then
-		CopyRect(0, 0, opt\RealGraphicWidth, opt\RealGraphicHeight, SMALLEST_POWER_TWO_HALF - opt\RealGraphicWidth / 2, SMALLEST_POWER_TWO_HALF - opt\RealGraphicHeight / 2, BackBuffer(), TextureBuffer(FresizeTexture))
+		CopyRect(0, 0, opt\RealGraphicWidth, opt\RealGraphicHeight, 2048.0 - opt\RealGraphicWidth / 2, 2048.0 - opt\RealGraphicHeight / 2, BackBuffer(), TextureBuffer(FresizeTexture))
 		EntityBlend(FresizeImage, 1)
 		ClsColor(0, 0, 0)
 		Cls()
-		ScaleRender((-1.0) / Float(opt\RealGraphicWidth), 1.0 / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth))
+		ScaleRender((-1.0) / Float(opt\RealGraphicWidth), 1.0 / Float(opt\RealGraphicWidth), 4096.0 / Float(opt\RealGraphicWidth), 4096.0 / Float(opt\RealGraphicWidth))
 		EntityFX(FresizeImage, 1 + 32)
 		EntityBlend(FresizeImage, 3)
 		EntityAlpha(FresizeImage, opt\ScreenGamma - 1.0)
-		ScaleRender((-1.0) / Float(opt\RealGraphicWidth), 1.0 / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth))
+		ScaleRender((-1.0) / Float(opt\RealGraphicWidth), 1.0 / Float(opt\RealGraphicWidth), 4096.0 / Float(opt\RealGraphicWidth), 4096.0 / Float(opt\RealGraphicWidth))
 	Else ; ~ Maybe optimize this if it's too slow, alternatively give players the option to disable gamma
-		CopyRect(0, 0, opt\RealGraphicWidth, opt\RealGraphicHeight, SMALLEST_POWER_TWO_HALF - opt\RealGraphicWidth / 2, SMALLEST_POWER_TWO_HALF - opt\RealGraphicHeight / 2, BackBuffer(), TextureBuffer(FresizeTexture))
+		CopyRect(0, 0, opt\RealGraphicWidth, opt\RealGraphicHeight, 2048.0 - opt\RealGraphicWidth / 2, 2048.0 - opt\RealGraphicHeight / 2, BackBuffer(), TextureBuffer(FresizeTexture))
 		EntityBlend(FresizeImage, 1)
 		ClsColor(0, 0, 0)
 		Cls()
-		ScaleRender((-1.0) / Float(opt\RealGraphicWidth), 1.0 / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth))
+		ScaleRender((-1.0) / Float(opt\RealGraphicWidth), 1.0 / Float(opt\RealGraphicWidth), 4096.0 / Float(opt\RealGraphicWidth), 4096.0 / Float(opt\RealGraphicWidth))
 		EntityFX(FresizeImage, 1 + 32)
 		EntityBlend(FresizeImage, 2)
 		EntityAlpha(FresizeImage, 1.0)
@@ -130,7 +163,7 @@ Function RenderGamma()
 		ClsColor(255 * opt\ScreenGamma, 255 * opt\ScreenGamma, 255 * opt\ScreenGamma)
 		Cls()
 		SetBuffer(BackBuffer())
-		ScaleRender((-1.0) / Float(opt\RealGraphicWidth), 1.0 / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth))
+		ScaleRender((-1.0) / Float(opt\RealGraphicWidth), 1.0 / Float(opt\RealGraphicWidth), 4096.0 / Float(opt\RealGraphicWidth), 4096.0 / Float(opt\RealGraphicWidth))
 		SetBuffer(TextureBuffer(FresizeTexture2))
 		ClsColor(0, 0, 0)
 		Cls()
@@ -389,20 +422,20 @@ Function CreateBlurImage()
 	AddTriangle(SF, 0, 1, 2)
 	AddTriangle(SF, 3, 2, 1)
 	EntityFX(SPR, 17)
-	ScaleEntity(SPR, SMALLEST_POWER_TWO / Float(ArkSw), SMALLEST_POWER_TWO / Float(ArkSw), 1.0)
+	ScaleEntity(SPR, 4096.0 / Float(ArkSw), 4096.0 / Float(ArkSw), 1.0)
 	PositionEntity(SPR, 0, 0, 1.0001)
 	EntityOrder(SPR, -100000)
 	EntityBlend(SPR, 1)
 	ArkBlurImage = SPR
 	
 	; ~ Create blur texture
-	ArkBlurTexture = CreateTextureUsingCacheSystem(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO, 0)
+	ArkBlurTexture = CreateTextureUsingCacheSystem(4096.0, 4096.0, 0)
 	EntityTexture(SPR, ArkBlurTexture)
 End Function
 
 Function RenderBlur(Power#)
 	EntityAlpha(ArkBlurImage, Power)
-	CopyRect(0, 0, ArkSw, ArkSh, SMALLEST_POWER_TWO_HALF - (ArkSw / 2), SMALLEST_POWER_TWO_HALF - (ArkSh / 2), BackBuffer(), TextureBuffer(ArkBlurTexture))
+	CopyRect(0, 0, ArkSw, ArkSh, 2048.0 - (ArkSw / 2), 2048.0 - (ArkSh / 2), BackBuffer(), TextureBuffer(ArkBlurTexture))
 End Function
 
 Function PlayStartupVideos()

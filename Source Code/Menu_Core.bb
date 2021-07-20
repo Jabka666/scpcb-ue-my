@@ -26,16 +26,16 @@ MaskImage(MenuBlack, 255, 255, 0)
 
 Function InitMainMenuAssets()
 	mma\BackGround = LoadImage_Strict("GFX\menu\back.png")
-	ResizeImage(mma\BackGround, ImageWidth(mma\BackGround) * MenuScale, ImageHeight(mma\BackGround) * MenuScale)
+	mma\BackGround = ResizeImage2(mma\BackGround, MenuScale, MenuScale)
 	
 	mma\SECURE_CONTAIN_PROTECT = LoadImage_Strict("GFX\menu\SCP_text.png")
-	ResizeImage(mma\SECURE_CONTAIN_PROTECT, ImageWidth(mma\SECURE_CONTAIN_PROTECT) * MenuScale, ImageHeight(mma\SECURE_CONTAIN_PROTECT) * MenuScale)
+	mma\SECURE_CONTAIN_PROTECT = ResizeImage2(mma\SECURE_CONTAIN_PROTECT, MenuScale, MenuScale)
 	
 	mma\SCP173 = LoadImage_Strict("GFX\menu\scp_173_back.png")
-	ResizeImage(mma\SCP173, ImageWidth(mma\SCP173) * MenuScale, ImageHeight(mma\SCP173) * MenuScale)
+	mma\SCP173 = ResizeImage2(mma\SCP173, MenuScale, MenuScale)
 	
 	mma\Palette = LoadImage_Strict("GFX\menu\palette.png")
-	ResizeImage(mma\Palette, ImageWidth(mma\Palette) * MenuScale, ImageHeight(mma\Palette) * MenuScale)
+	mma\Palette = ResizeImage2(mma\Palette, MenuScale, MenuScale)
 	
 	mm\MainMenuBlinkTimer[0] = 1.0
 	mm\MainMenuBlinkTimer[1] = 1.0
@@ -2144,6 +2144,7 @@ Function RenderLoading(Percent%, Assets$ = "")
 			If ls\ID = Temp Then
 				If (Not ls\Img) Then 
 					ls\Img = LoadImage_Strict("LoadingScreens\" + ls\ImgPath + ".png")
+					ls\Img = ResizeImage2(ls\Img, MenuScale, MenuScale)
 					SelectedLoadingScreen = ls
 				EndIf
 				Exit
