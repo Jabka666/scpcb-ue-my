@@ -8742,7 +8742,7 @@ Function UpdateEvents()
 								For i = 0 To 1
 									e\room\RoomDoors[i]\Locked = 1
 								Next
-								If e\room\NPC[0]\Reload = 0.0
+								If e\room\NPC[0]\Reload = 0.0 Then
 									If (Not e\room\RoomDoors[0]\Open) Then PlaySound_Strict(LoadTempSound("SFX\Door\DoorOpen079.ogg"))
 									e\room\NPC[0]\Reload = 1.0
 								EndIf
@@ -8863,29 +8863,31 @@ Function UpdateEvents()
 						EndIf
 					EndIf
 					
-					If e\room\NPC[0] <> Null Then
-						If e\EventState2 < 7.0 Then
-							If e\EventState2 > 2.0 Then
-								If Abs(EntityY(e\room\RoomDoors[0]\FrameOBJ) - EntityY(e\room\NPC[0]\Collider)) > 1.0
-									If Abs(EntityY(e\room\RoomDoors[0]\FrameOBJ) - EntityY(me\Collider)) < 1.0
-										If e\room\RoomDoors[0]\Open Then
-											e\room\RoomDoors[0]\Open = False : e\room\RoomDoors[0]\FastOpen = 1
-											PlaySound_Strict(LoadTempSound("SFX\Door\DoorClose079.ogg"))
+					If PlayerRoom = e\room Then
+						If e\room\NPC[0] <> Null Then
+							If e\EventState2 < 7.0 Then
+								If e\EventState2 > 2.0 Then
+									If Abs(EntityY(e\room\RoomDoors[0]\FrameOBJ) - EntityY(e\room\NPC[0]\Collider)) > 1.0
+										If Abs(EntityY(e\room\RoomDoors[0]\FrameOBJ) - EntityY(me\Collider)) < 1.0
+											If e\room\RoomDoors[0]\Open Then
+												e\room\RoomDoors[0]\Open = False : e\room\RoomDoors[0]\FastOpen = 1
+												PlaySound_Strict(LoadTempSound("SFX\Door\DoorClose079.ogg"))
+											EndIf
+										EndIf
+									Else
+										If (Not e\room\RoomDoors[0]\Open) Then
+											e\room\RoomDoors[0]\FastOpen = 0 : e\room\RoomDoors[0]\Open = True
+											PlaySound2(OpenDoorSFX(0, Rand(0, 2)), Camera, e\room\RoomDoors[0]\OBJ)
+											PlaySound_Strict(LoadTempSound("SFX\Door\DoorOpen079.ogg"))
 										EndIf
 									EndIf
-								Else
-									If (Not e\room\RoomDoors[0]\Open) Then
-										e\room\RoomDoors[0]\FastOpen = 0 : e\room\RoomDoors[0]\Open = True
-										PlaySound2(OpenDoorSFX(0, Rand(0, 2)), Camera, e\room\RoomDoors[0]\OBJ)
-										PlaySound_Strict(LoadTempSound("SFX\Door\DoorOpen079.ogg"))
-									EndIf
 								EndIf
-							EndIf
-						Else
-							If (Not e\room\RoomDoors[0]\Open) Then
-								e\room\RoomDoors[0]\FastOpen = 0 : e\room\RoomDoors[0]\Open = True
-								PlaySound2(OpenDoorSFX(0, Rand(0, 2)), Camera, e\room\RoomDoors[0]\OBJ)
-								PlaySound_Strict(LoadTempSound("SFX\Door\DoorOpen079.ogg"))
+							Else
+								If (Not e\room\RoomDoors[0]\Open) Then
+									e\room\RoomDoors[0]\FastOpen = 0 : e\room\RoomDoors[0]\Open = True
+									PlaySound2(OpenDoorSFX(0, Rand(0, 2)), Camera, e\room\RoomDoors[0]\OBJ)
+									PlaySound_Strict(LoadTempSound("SFX\Door\DoorOpen079.ogg"))
+								EndIf
 							EndIf
 						EndIf
 					EndIf
