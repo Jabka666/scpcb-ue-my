@@ -6352,7 +6352,6 @@ Function RenderGUI()
 							
 							DrawImage(SelectedItem\ItemTemplate\Img, xx, yy)
 							
-							; ~ Who was the idiot who used images instead of "Rect" function? -- Jabka
 							x = x - 12.0 + (((EntityX(me\Collider) - 4.0) + 8.0) Mod 8.0) * 3.0
 							y = y + 12.0 - (((EntityZ(me\Collider) - 4.0) + 8.0) Mod 8.0) * 3.0
 							For x2 = Max(0.0, PlayerX - 6) To Min(MapGridSize, PlayerX + 6)
