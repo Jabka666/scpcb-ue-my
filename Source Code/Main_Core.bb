@@ -276,7 +276,7 @@ Const MaxDecalTextureIDAmount% = 20
 Const MaxParticleTextureIDAmount% = 8
 Const MaxLightSpriteIDAmount% = 3
 Const MaxIconIDAmount% = 6
-Const MaxImageIDAmount% = 13
+Const MaxImageIDAmount% = 8
 ;[End Block]
 
 Type Textures
@@ -5122,7 +5122,7 @@ Function UpdateGUI()
 					SelectedItem\State = Max(0.0, SelectedItem\State - fps\Factor[0] * 0.005)
 					
 					If SelectedItem\State > 0.0 Then
-						If SelectedItem\State =< 10.0 And ((MilliSecs2() Mod 800) < 200) Then
+						If SelectedItem\State =< 20.0 And ((MilliSecs2() Mod 800) < 200) Then
 							If (Not LowBatteryCHN[0]) Then
 								LowBatteryCHN[0] = PlaySound_Strict(LowBatterySFX[0])
 							ElseIf (Not ChannelPlaying(LowBatteryCHN[0])) Then
@@ -6194,7 +6194,6 @@ Function RenderGUI()
 					
 					DrawImage(SelectedItem\ItemTemplate\Img, x, y)
 					
-					
 					If SelectedItem\State > 0.0 Lor (SelectedItem\ItemTemplate\TempName = "fineradio" Lor SelectedItem\ItemTemplate\TempName = "veryfineradio") Then
 						If PlayerRoom\RoomTemplate\Name <> "dimension_106" And CoffinDistance >= 8.0 Then
 							Select Int(SelectedItem\State2)
@@ -6346,13 +6345,14 @@ Function RenderGUI()
 							PlayerX = Floor((EntityX(PlayerRoom\OBJ) + 8.0) / 8.0 + 0.5)
 							PlayerZ = Floor((EntityZ(PlayerRoom\OBJ) + 8.0) / 8.0 + 0.5)
 							
-							SetBuffer(ImageBuffer(t\ImageID[12]))
+							SetBuffer(ImageBuffer(t\ImageID[7]))
 							
 							Local xx% = x - ImageWidth(SelectedItem\ItemTemplate\Img) / 2
 							Local yy% = y - ImageHeight(SelectedItem\ItemTemplate\Img) / 2 + 85
 							
 							DrawImage(SelectedItem\ItemTemplate\Img, xx, yy)
 							
+							; ~ Who was the idiot who used images instead of "Rect" function? -- Jabka
 							x = x - 12.0 + (((EntityX(me\Collider) - 4.0) + 8.0) Mod 8.0) * 3.0
 							y = y + 12.0 - (((EntityZ(me\Collider) - 4.0) + 8.0) Mod 8.0) * 3.0
 							For x2 = Max(0.0, PlayerX - 6) To Min(MapGridSize, PlayerX + 6)
@@ -6361,33 +6361,34 @@ Function RenderGUI()
 										If CurrMapGrid\Grid[x2 + (z2 * MapGridSize)] > MapGrid_NoTile And (CurrMapGrid\Found[x2 + (z2 * MapGridSize)] > MapGrid_NoTile Lor SelectedItem\ItemTemplate\TempName = "nav310" Lor SelectedItem\ItemTemplate\TempName = "navulti") Then
 											Local DrawX% = x + (PlayerX - 1 - x2) * 24, DrawY% = y - (PlayerZ - 1 - z2) * 24
 											
+											Color(30, 30, 30)
 											If x2 + 1.0 =< MapGridSize Then
 												If CurrMapGrid\Grid[(x2 + 1) + (z2 * MapGridSize)] = MapGrid_NoTile
-													DrawImage(t\ImageID[10], DrawX - 12, DrawY - 12)
+													Rect(DrawX - 12, DrawY - 12, 1, 24)
 												EndIf
 											Else
-												DrawImage(t\ImageID[10], DrawX - 12, DrawY - 12)
+												Rect(DrawX - 12, DrawY - 12, 1, 24)
 											EndIf
 											If x2 - 1.0 >= 0.0 Then
 												If CurrMapGrid\Grid[(x2 - 1) + (z2 * MapGridSize)] = MapGrid_NoTile
-													DrawImage(t\ImageID[8], DrawX - 12, DrawY - 12)
+													Rect(DrawX + 12, DrawY - 12, 1, 24)
 												EndIf
 											Else
-												DrawImage(t\ImageID[8], DrawX - 12, DrawY - 12)
+												Rect(DrawX + 12, DrawY - 12, 1, 24)
 											EndIf
 											If z2 - 1.0 >= 0.0 Then
 												If CurrMapGrid\Grid[x2 + ((z2 - 1) * MapGridSize)] = MapGrid_NoTile
-													DrawImage(t\ImageID[7], DrawX - 12, DrawY - 12)
+													Rect(DrawX - 12, DrawY - 12, 24, 1)
 												EndIf
 											Else
-												DrawImage(t\ImageID[7], DrawX - 12, DrawY - 12)
+												Rect(DrawX - 12, DrawY - 12, 24, 1)
 											EndIf
 											If z2 + 1.0 =< MapGridSize Then
 												If CurrMapGrid\Grid[x2 + ((z2 + 1) * MapGridSize)] = MapGrid_NoTile
-													DrawImage(t\ImageID[9], DrawX - 12, DrawY - 12)
+													Rect(DrawX - 12, DrawY + 12, 24, 1)
 												EndIf
 											Else
-												DrawImage(t\ImageID[9], DrawX - 12, DrawY - 12)
+												Rect(DrawX - 12, DrawY + 12, 24, 1)
 											EndIf
 										EndIf
 									EndIf
@@ -6395,7 +6396,7 @@ Function RenderGUI()
 							Next
 							
 							SetBuffer(BackBuffer())
-							DrawImageRect(t\ImageID[12], xx + 80, yy + 70, xx + 80, yy + 70, 270, 230)
+							DrawImageRect(t\ImageID[7], xx + 80, yy + 70, xx + 80, yy + 70, 270, 230)
 							If SelectedItem\ItemTemplate\TempName = "nav" Lor SelectedItem\ItemTemplate\TempName = "nav300" Then
 								Color(100, 0, 0)
 							Else
@@ -6488,8 +6489,14 @@ Function RenderGUI()
 								yTemp = y - (NAV_HEIGHT / 2) + 10.0
 								Rect(xTemp, yTemp, 80, 20, False)
 								
+								; ~ Battery
+								If SelectedItem\State =< 20.0 Then
+									Color(100, 0, 0)
+								Else
+									Color(30, 30, 30)
+								EndIf
 								For i = 1 To Min(Ceil(SelectedItem\State / 10.0), 10.0)
-									DrawImage(t\ImageID[11], xTemp + (i * 8) - 6, yTemp + 4)
+									Rect(xTemp + (i * 8) - 6, yTemp + 4, 4, 12)
 								Next
 								SetFont(fo\FontID[Font_Digital])
 							EndIf
@@ -7967,15 +7974,7 @@ Function LoadEntities()
 	t\ImageID[6] = ResizeImage2(t\ImageID[6], MenuScale, MenuScale)
 	MaskImage(t\ImageID[6], 255, 0, 255)
 	
-	For i = 7 To 10
-		t\ImageID[i] = LoadImage_Strict("GFX\items\navigator_room_border(" + (i - 6) + ").png")
-		t\ImageID[i] = ResizeImage2(t\ImageID[i], MenuScale, MenuScale)
-		MaskImage(t\ImageID[i], 255, 0, 255)
-	Next
-	t\ImageID[11] = LoadImage_Strict("GFX\items\navigator_battery_meter.png")
-	t\ImageID[11] = ResizeImage2(t\ImageID[11], MenuScale, MenuScale)
-	
-	t\ImageID[12] = CreateImage(opt\GraphicWidth, opt\GraphicHeight)
+	t\ImageID[7] = CreateImage(opt\GraphicWidth, opt\GraphicHeight)
 	
 	RenderLoading(20, "TEXTURES")
 	
