@@ -54,8 +54,6 @@ End Function
 
 Const SubtitlesFile$ = "Data\subtitles.ini"
 
-Global SubtitlesID%
-
 Function ShowSubtitles(Name$)
 	CatchErrors("Uncaught (ShowSubtitles)")
 	
@@ -65,46 +63,43 @@ Function ShowSubtitles(Name$)
 	Local Loc% = GetINISectionLocation(SubtitlesFile, Name)
 	Local Person% = GetINIString2(SubtitlesFile, Loc, "Person")
 	Local LinesAmount% = GetINIInt2(SubtitlesFile, Loc, "LinesAmount")
-	Local i%
+	Local SubID%, i%
 	
 	Select Person
 		Case 1
 			;[Block]
-			SubtitlesID = FIRST_PERSON
+			SubID = FIRST_PERSON
 			;[End Block]
 		Case 2
 			;[Block]
-			SubtitlesID = SECOND_PERSON
+			SubID = SECOND_PERSON
 			;[End Block]
 		Case 3
-			SubtitlesID = THIRD_PERSON
+			SubID = THIRD_PERSON
 			;[End Block]
 		Default
 			;[Block]
-			SubtitlesID = ANNOUNCEMENT
+			SubID = ANNOUNCEMENT
 			;[End Block]
 	End Select
 	
-	ClearSubtitles(SubtitlesID)
-	
 	For i = 1 To LinesAmount
 		sub.Subtitles = New Subtitles
-		sub\Txt[SubtitlesID] = GetINIString2(SubtitlesFile, Loc, "Txt" + i)
-		sub\Timer[SubtitlesID] = 70.0 * GetINIFloat2(SubtitlesFile, Loc, "Timer" + i)
+		sub\Txt[SubID] = GetINIString2(SubtitlesFile, Loc, "Txt" + i)
+		sub\Timer[SubID] = 70.0 * GetINIFloat2(SubtitlesFile, Loc, "Timer" + i)
 	Next
+	
+	DebugLog("Subtitles showed successfully!")
 	
 	CatchErrors("ShowSubtitles")
 End Function
 
-Function ClearSubtitles(SubID%)
+Function ClearSubtitles(sub.Subtitles)
 	If (Not opt\EnableSubtitles) Then Return
 	
-	Local sub.Subtitles
+	Delete Last Subtitles
 	
-	For sub.Subtitles = Each Subtitles
-		If sub\Txt[SubID] <> "" Then sub\Txt[SubID] = ""
-		If sub\Timer[SubID] <> 0.0 Then sub\Timer[SubID] = 0.0
-	Next
+	DebugLog("Subtitles deleted successfully!")
 End Function
 
 ;~IDEal Editor Parameters:

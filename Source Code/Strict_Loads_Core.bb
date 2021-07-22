@@ -71,7 +71,9 @@ Function PlaySound_Strict%(SoundHandle%)
 					Else
 						snd\Channels[i] = PlaySound(snd\InternalHandle)
 					EndIf
-					If opt\EnableSubtitles And snd\HasSubtitles Then ShowSubtitles(snd\Name)
+					If opt\EnableSubtitles Then
+						If snd\HasSubtitles Then ShowSubtitles(snd\Name)
+					EndIf
 					ChannelVolume(snd\Channels[i], opt\SFXVolume)
 					snd\ReleaseTime = MilliSecs2() + 5000 ; ~ Release after 5 seconds
 					Return(snd\Channels[i])
@@ -99,7 +101,9 @@ Function PlaySound_Strict%(SoundHandle%)
 				Else
 					snd\Channels[i] = PlaySound(snd\InternalHandle)
 				EndIf
-				If opt\EnableSubtitles And snd\HasSubtitles Then ShowSubtitles(snd\Name)
+				If opt\EnableSubtitles Then 
+					If snd\HasSubtitles Then ShowSubtitles(snd\Name)
+				EndIf
 				ChannelVolume(snd\Channels[i], opt\SFXVolume)
 				snd\ReleaseTime = MilliSecs2() + 5000 ; ~ Release after 5 seconds
 				Return(snd\Channels[i])
@@ -120,6 +124,7 @@ Function LoadSound_Strict(File$)
 		; ~ Check if the sound has subtitles
 		If GetINISectionLocation(SubtitlesFile, File) <> 0 Then
 			snd\HasSubtitles = True
+			DebugLog("Sound " + snd\Name + " has subtitles!")
 		EndIf
 	EndIf
 	If (Not opt\EnableSFXRelease) Then
@@ -160,12 +165,6 @@ Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode% = Mode)
 	Local st.Stream = New Stream
 	
 	st\CHN = PlayMusic(File, CustomMode + TwoD)
-	
-	If opt\EnableSubtitles Then
-		If GetINISectionLocation(SubtitlesFile, File) <> 0 Then
-			ShowSubtitles(File)
-		EndIf
-	EndIf
 	
 	If st\CHN = -1 Then
 		CreateConsoleMsg("Failed to stream Sound (returned -1): " + Chr(34) + File + Chr(34))

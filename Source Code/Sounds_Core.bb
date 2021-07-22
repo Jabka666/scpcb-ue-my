@@ -342,7 +342,7 @@ Function ResumeSounds()
 End Function
 
 Function KillSounds()
-	Local e.Events, n.NPCs, d.Doors, snd.Sound
+	Local e.Events, n.NPCs, d.Doors, snd.Sound, sub.Subtitles
 	Local i%
 	
 	For i = 0 To 9
@@ -455,9 +455,7 @@ Function KillSounds()
 		Next
 	Next
 	
-	For i = ANNOUNCEMENT To THIRD_PERSON
-		ClearSubtitles(i)
-	Next
+	Delete Each Subtitles
 End Function
 
 Function GetStepSound(Entity%)

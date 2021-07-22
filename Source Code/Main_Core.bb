@@ -2570,7 +2570,7 @@ Function MainLoop()
 		EndIf
 		
 		UpdateMessages()
-		If opt\EnableSubtitles Then UpdateSubtitles()
+		UpdateSubtitles()
 		
 		UpdateConsole()
 		
@@ -2599,7 +2599,7 @@ Function MainLoop()
 	RenderGUI()
 	
 	RenderMessages()
-	If opt\EnableSubtitles Then RenderSubtitles()
+	RenderSubtitles()
 	
 	If me\EndingTimer < 0.0 Then
 		If me\SelectedEnding <> -1 Then RenderEnding()
