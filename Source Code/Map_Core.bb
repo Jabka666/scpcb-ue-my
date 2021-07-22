@@ -5463,11 +5463,9 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "cont2_012"
 			;[Block]
-			d.Doors = CreateDoor(r\x + 264.0 * RoomScale, r\y, r\z + 672.0 * RoomScale, 270.0, r, False, Default_Door, 3)
-			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.031, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.061, True)
-			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.031, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.061, True)
+			d.Doors = CreateDoor(r\x + 256.0 * RoomScale, r\y, r\z + 672.0 * RoomScale, 270.0, r, False, Default_Door, 3)
 			
-			r\RoomDoors.Doors[0] = CreateDoor(r\x - 512.0 * RoomScale, r\y - 768.0 * RoomScale, r\z - 336.0 * RoomScale, 0.0, r)
+			r\RoomDoors.Doors[0] = CreateDoor(r\x - 512.0 * RoomScale, r\y - 768.0 * RoomScale, r\z - 320.0 * RoomScale, 0.0, r)
 			r\RoomDoors[0]\AutoClose = False : r\RoomDoors[0]\Locked = 1
 			PositionEntity(r\RoomDoors[0]\Buttons[0], r\x + 176.0 * RoomScale, r\y - 512.0 * RoomScale, r\z - 352.0 * RoomScale, True)
 			FreeEntity(r\RoomDoors[0]\Buttons[1]) : r\RoomDoors[0]\Buttons[1] = 0
@@ -5487,7 +5485,7 @@ Function FillRoom(r.Rooms)
 			
 			r\Objects[2] = LoadRMesh("GFX\map\cont2_012_box.rmesh", Null)
 			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
-			PositionEntity(r\Objects[2], r\x - 360 * RoomScale, r\y - 130.0 * RoomScale, r\z + 456.0 * RoomScale)
+			PositionEntity(r\Objects[2], r\x - 360.0 * RoomScale, r\y - 130.0 * RoomScale, r\z + 456.0 * RoomScale)
 			
 			r\Objects[3] = CreateSprite()
 			PositionEntity(r\Objects[3], r\x - 43.5 * RoomScale, r\y - 574.0 * RoomScale, r\z - 362.0 * RoomScale)

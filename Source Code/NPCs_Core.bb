@@ -4133,9 +4133,7 @@ Function UpdateNPCs()
 									EndIf
 									
 									; ~ Chasing the player
-									If n\State = 8.0 And Dist < 1024.0 Then
-										If chs\NoTarget Then n\State = 0.0
-										
+									If n\State = 8.0 And Dist < 1024.0 And (Not chs\NoTarget) Then
 										If n\PathTimer =< 0.0 Then
 											n\PathStatus = FindPath(n, EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True))
 											n\PathTimer = 40.0 * 10.0
