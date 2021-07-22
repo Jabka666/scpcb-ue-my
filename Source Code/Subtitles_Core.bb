@@ -7,8 +7,8 @@ Const THIRD_PERSON% = 3
 ;[End Block]
 
 Type Subtitles
-	Field Txt$[4]
-	Field Timer#[4]
+	Field Txt$[THIRD_PERSON + 1]
+	Field Timer#[THIRD_PERSON + 1]
 End Type
 
 Function UpdateSubtitles()
@@ -17,7 +17,6 @@ Function UpdateSubtitles()
 	Local sub.Subtitles
 	Local ShouldDeleteSubtitles% = True, i%
 	
-	; ~ TODO: Fix subtitles if two sounds played at the same time
 	For sub.Subtitles = Each Subtitles
 		If sub.Subtitles = First Subtitles Then
 			For i = ANNOUNCEMENT To THIRD_PERSON
