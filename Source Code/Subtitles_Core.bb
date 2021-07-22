@@ -59,7 +59,7 @@ Function ShowSubtitles(Name$)
 	
 	If (Not opt\EnableSubtitles) Then Return
 	
-	Local sub.Subtitles
+	Local sub.Subtitles, CurrSub.Subtitles
 	Local Loc% = GetINISectionLocation(SubtitlesFile, Name)
 	Local Person% = GetINIString2(SubtitlesFile, Loc, "Person")
 	Local LinesAmount% = GetINIInt2(SubtitlesFile, Loc, "LinesAmount")
@@ -83,23 +83,24 @@ Function ShowSubtitles(Name$)
 			;[End Block]
 	End Select
 	
+	For sub.Subtitles = Each Subtitles
+		If sub\Txt[SubID] = "" Then
+			CurrSub.Subtitles = sub.Subtitles
+			Exit
+		EndIf
+	Next
+	
 	For i = 1 To LinesAmount
-		sub.Subtitles = New Subtitles
+		If CurrSub = Null Then
+			sub.Subtitles = New Subtitles
+		Else
+			sub.Subtitles = CurrSub.Subtitles
+		EndIf
 		sub\Txt[SubID] = GetINIString2(SubtitlesFile, Loc, "Txt" + i)
 		sub\Timer[SubID] = 70.0 * GetINIFloat2(SubtitlesFile, Loc, "Timer" + i)
 	Next
 	
-	DebugLog("Subtitles showed successfully!")
-	
 	CatchErrors("ShowSubtitles")
-End Function
-
-Function ClearSubtitles(sub.Subtitles)
-	If (Not opt\EnableSubtitles) Then Return
-	
-	Delete Last Subtitles
-	
-	DebugLog("Subtitles deleted successfully!")
 End Function
 
 ;~IDEal Editor Parameters:

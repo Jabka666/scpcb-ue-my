@@ -2613,7 +2613,7 @@ Type MenuPalette
 End Type
 
 Function UpdateMainMenuPalette(Img%, x%, y%)
-	Local mp.MenuPalette, currPalette.MenuPalette
+	Local mp.MenuPalette
 	Local PaletteExists% = False
 	
 	For mp.MenuPalette = Each MenuPalette

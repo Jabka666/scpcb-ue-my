@@ -124,7 +124,6 @@ Function LoadSound_Strict(File$)
 		; ~ Check if the sound has subtitles
 		If GetINISectionLocation(SubtitlesFile, File) <> 0 Then
 			snd\HasSubtitles = True
-			DebugLog("Sound " + snd\Name + " has subtitles!")
 		EndIf
 	EndIf
 	If (Not opt\EnableSFXRelease) Then
