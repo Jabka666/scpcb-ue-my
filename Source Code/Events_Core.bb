@@ -5045,7 +5045,7 @@ Function UpdateEvents()
 						e\EventState = 1.0
 					EndIf
 				ElseIf e\EventState < 70.0 * 45.0
-					If	Rand(200) < 5 And PlayerRoom = e\room Then 
+					If Rand(200) < 5 And PlayerRoom = e\room Then 
 						me\LightBlink = Rnd(1.0, 2.0)
 						If Rand(5) = 1 Then PlaySound2(IntroSFX[Rand(8, 10)], Camera, e\room\OBJ, 8.0, Rnd(0.1, 0.3))
 					EndIf

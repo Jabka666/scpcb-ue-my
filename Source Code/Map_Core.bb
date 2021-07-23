@@ -5586,15 +5586,11 @@ Function FillRoom(r.Rooms)
 			d.Doors = CreateDoor(r\x, r\y, r\z, 0.0, r, False, Heavy_Door)
 			d\Locked = 1
 			
-			r\RoomDoors.Doors[0] = CreateDoor(r\x - 208.0 * RoomScale, r\y, r\z - 736.0 * RoomScale, 90.0, r, True)
+			r\RoomDoors.Doors[0] = CreateDoor(r\x - 224.0 * RoomScale, r\y, r\z - 736.0 * RoomScale, 90.0, r, True)
 			r\RoomDoors[0]\AutoClose = False
-			PositionEntity(r\RoomDoors[0]\Buttons[0], EntityX(r\RoomDoors[0]\Buttons[0], True) - 0.061, EntityY(r\RoomDoors[0]\Buttons[0], True), EntityZ(r\RoomDoors[0]\Buttons[0], True), True)
-			PositionEntity(r\RoomDoors[0]\Buttons[1], EntityX(r\RoomDoors[0]\Buttons[1], True) + 0.061, EntityY(r\RoomDoors[0]\Buttons[1], True), EntityZ(r\RoomDoors[0]\Buttons[1], True), True)
 			
-			r\RoomDoors.Doors[1] = CreateDoor(r\x - 208.0 * RoomScale, r\y, r\z + 736.0 * RoomScale, 90.0, r, True)
+			r\RoomDoors.Doors[1] = CreateDoor(r\x - 224.0 * RoomScale, r\y, r\z + 736.0 * RoomScale, 90.0, r, True)
 			r\RoomDoors[1]\AutoClose = False
-			PositionEntity(r\RoomDoors[1]\Buttons[0], EntityX(r\RoomDoors[1]\Buttons[0], True) - 0.061, EntityY(r\RoomDoors[1]\Buttons[0], True), EntityZ(r\RoomDoors[1]\Buttons[0], True), True)
-			PositionEntity(r\RoomDoors[1]\Buttons[1], EntityX(r\RoomDoors[1]\Buttons[1], True) + 0.061, EntityY(r\RoomDoors[1]\Buttons[1], True), EntityZ(r\RoomDoors[1]\Buttons[1], True), True)
 			
 			For k = 0 To 2
 				r\Objects[k * 2] = CopyEntity(o\LeverModelID[0])
@@ -5630,20 +5626,13 @@ Function FillRoom(r.Rooms)
 			
 			; ~ SCP-096's spawnpoint
 			r\Objects[6] = CreatePivot()
-			PositionEntity(r\Objects[6], r\x - 320 * RoomScale, r\y + 0.5, r\z)
+			PositionEntity(r\Objects[6], r\x - 352.0 * RoomScale, r\y + 0.5, r\z)
 			
 			; ~ Guard's spawnpoint
 			r\Objects[7] = CreatePivot()
 			PositionEntity(r\Objects[7], r\x - 1328.0 * RoomScale, r\y + 0.5, r\z + 528.0 * RoomScale)
 			
-			; ~ The point where the guard walks to
-			r\Objects[8] = CreatePivot() 
-			PositionEntity(r\Objects[8], r\x - 1376.0 * RoomScale, r\y + 0.5, r\z + 32.0 * RoomScale)
-			
-			r\Objects[9] = CreatePivot()
-			PositionEntity(r\Objects[9], r\x - 848.0 * RoomScale, r\y + 0.5, r\z + 576.0 * RoomScale)
-			
-			For i = 6 To 9
+			For i = 6 To 7
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			;[End Block]
