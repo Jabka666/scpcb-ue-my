@@ -4710,29 +4710,31 @@ Function FillRoom(r.Rooms)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) - 0.09, True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.09, True)
 			
-			d.Doors = CreateDoor(r\x - 549.0 * RoomScale, r\y + 3808.0 * RoomScale, r\z + 738.0 * RoomScale, 90.0, r, False, Default_Door, 5)
-			d\AutoClose = False		
-			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), r\z + 608.0 * RoomScale, True)
-			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), r\z + 608.0 * RoomScale, True)
+			d.Doors = CreateDoor(r\x - 32.0 * RoomScale, r\y + 3808.0 * RoomScale, r\z + 692.0 * RoomScale, 90.0, r, False, Default_Door, 5)
+			d\AutoClose = False
+			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) - 0.075, True)
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.075, True)
+			
+			d.Doors = CreateDoor(r\x - 288.0 * RoomScale, r\y + 3808.0 * RoomScale, r\z + 896.0 * RoomScale, 180.0, r, False, Default_Door, 5)
+			d\AutoClose = False : d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
 			; ~ Elevators
-			r\RoomDoors.Doors[0] = CreateDoor(r\x + 1192.0 * RoomScale, r\y, r\z, -90.0, r, True, Elevator_Door)
+			r\RoomDoors.Doors[0] = CreateDoor(r\x + 1200.0 * RoomScale, r\y, r\z, -90.0, r, True, Elevator_Door)
 			r\RoomDoors[0]\AutoClose = False
-			PositionEntity(r\RoomDoors[0]\Buttons[0], EntityX(r\RoomDoors[0]\Buttons[0], True) + 0.031, EntityY(r\RoomDoors[0]\Buttons[0], True), EntityZ(r\RoomDoors[0]\Buttons[0], True), True)
-			PositionEntity(r\RoomDoors[0]\Buttons[1], EntityX(r\RoomDoors[0]\Buttons[1], True) - 0.031, EntityY(r\RoomDoors[0]\Buttons[1], True), EntityZ(r\RoomDoors[0]\Buttons[1], True), True)
 			
-			r\RoomDoors.Doors[1] = CreateDoor(r\x + 675.0 * RoomScale, r\y + 3808.0 * RoomScale, r\z, -90.0, r, False, Elevator_Door)
+			r\RoomDoors.Doors[1] = CreateDoor(r\x + 1200.0 * RoomScale, r\y + 3808.0 * RoomScale, r\z, -90.0, r, False, Elevator_Door)
 			r\RoomDoors[1]\AutoClose = False
-			PositionEntity(r\RoomDoors[1]\Buttons[0], EntityX(r\RoomDoors[1]\Buttons[0], True) + 0.031, EntityY(r\RoomDoors[1]\Buttons[0], True), EntityZ(r\RoomDoors[1]\Buttons[0], True), True)
-			PositionEntity(r\RoomDoors[1]\Buttons[1], EntityX(r\RoomDoors[1]\Buttons[1], True) - 0.031, EntityY(r\RoomDoors[1]\Buttons[1], True), EntityZ(r\RoomDoors[1]\Buttons[1], True), True)
 			
 			; ~ Elevators' pivots
 			r\Objects[4] = CreatePivot()
-			PositionEntity(r\Objects[4], r\x + 1496.0 * RoomScale, r\y + 240.0 * RoomScale, r\z)
+			PositionEntity(r\Objects[4], r\x + 1504.0 * RoomScale, r\y + 240.0 * RoomScale, r\z)
 			
 			r\Objects[5] = CreatePivot()
-			PositionEntity(r\Objects[5], r\x + 979.0 * RoomScale, r\y + 4048.0 * RoomScale, r\z)
+			PositionEntity(r\Objects[5], r\x + 1504.0 * RoomScale, r\y + 4048.0 * RoomScale, r\z)
 			
+			; ~ Body
 			r\Objects[6] = CreatePivot()
 			PositionEntity(r\Objects[6], r\x + 1110.0 * RoomScale, r\y + 36.0 * RoomScale, r\z - 208.0 * RoomScale)
 			
@@ -4747,7 +4749,7 @@ Function FillRoom(r.Rooms)
 				
 				For i = 0 To 1
 					ScaleEntity(r\Objects[k * 2 + i], 0.04, 0.04, 0.04)
-					PositionEntity(r\Objects[k * 2 + i], r\x - 980.0 * RoomScale, r\y + 4016.0 * RoomScale, r\z - (502.0 - (132.0 * k)) * RoomScale)
+					PositionEntity(r\Objects[k * 2 + i], r\x - 495.0 * RoomScale, r\y + 4016.0 * RoomScale, r\z - (553.0 - (132.0 * k)) * RoomScale)
 					EntityParent(r\Objects[k * 2 + i], r\OBJ)
 				Next
 				RotateEntity(r\Objects[k * 2], 0.0, -270.0, 0.0)
@@ -4756,14 +4758,14 @@ Function FillRoom(r.Rooms)
 				EntityRadius(r\Objects[k * 2 + 1], 0.1)
 			Next
 			
-			it.Items = CreateItem("Nuclear Device Document", "paper", r\x - 940.0 * RoomScale, r\y + 3988.0 * RoomScale, r\z - 706.0 * RoomScale)
+			it.Items = CreateItem("Nuclear Device Document", "paper", r\x - 464.0 * RoomScale, r\y + 3958.0 * RoomScale, r\z - 710.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Ballistic Vest", "vest", r\x - 764.0 * RoomScale, r\y + 3958.0 * RoomScale, r\z - 768.0 * RoomScale)
+			it.Items = CreateItem("Ballistic Vest", "vest", r\x - 248.0 * RoomScale, r\y + 3958.0 * RoomScale, r\z - 818.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, -90.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			sc.SecurityCams = CreateSecurityCam(r\x + 619.0 * RoomScale, r\y + 4191.0 * RoomScale, r\z - 312.0 * RoomScale, r)
+			sc.SecurityCams = CreateSecurityCam(r\x + 1121.0 * RoomScale, r\y + 4191.0 * RoomScale, r\z - 306.0 * RoomScale, r)
 			sc\Angle = 90.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			;[End Block]
