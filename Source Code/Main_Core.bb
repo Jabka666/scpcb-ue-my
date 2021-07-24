@@ -564,8 +564,7 @@ Function UpdateConsole%()
 							CreateConsoleMsg("- enable049")
 							CreateConsoleMsg("- disable966")
 							CreateConsoleMsg("- enable966")
-							CreateConsoleMsg("- enablecontrol") 
-							CreateConsoleMsg("- disablecontrol") 
+							CreateConsoleMsg("- doorcontrol") 
 							CreateConsoleMsg("- unlockcheckpoints") 
 							CreateConsoleMsg("- unlockexits")
 							CreateConsoleMsg("- disablenuke")
@@ -727,18 +726,11 @@ Function UpdateConsole%()
 							CreateConsoleMsg("Returns SCP-096 to idle state.")
 							CreateConsoleMsg("******************************")
 							;[End Block]
-						Case "enablecontrol" 
+						Case "doorcontrol" 
 							;[Block]
 							CreateConsoleMsg("HELP - enablecontrol")
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Turns on the Remote Door Control lever.")
-							CreateConsoleMsg("******************************")
-							;[End Block]
-						Case "disablecontrol" 
-							;[Block]
-							CreateConsoleMsg("HELP - disablecontrol")
-							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Turns off the Remote Door Control lever.")
+							CreateConsoleMsg("Turns on/off the Remote Door Control lever.")
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "asd"
@@ -1378,29 +1370,38 @@ Function UpdateConsole%()
 						EntityType(it\Collider, HIT_ITEM)
 					Next
 					;[End Block]
-				Case "disablecontrol"
+				Case "doorcontrol"
 					;[Block]
-					For e2.Events = Each Events
-						If e2\EventID = e_room2c_ec Then
-							UpdateLever(e2\room\Objects[5])
-							RotateEntity(e2\room\Objects[5], 0.0, EntityYaw(e2\room\Objects[5]), 0.0)
-							RemoteDoorOn = False
-							Exit
-						EndIf
-					Next
-					CreateConsoleMsg("Remote door control disabled.")
-					;[End Block]
-				Case "enablecontrol"
-					;[Block]
-					For e2.Events = Each Events
-						If e2\EventID = e_room2c_ec Then
-							UpdateLever(e2\room\Objects[5])
-							RotateEntity(e2\room\Objects[5], 0.0, EntityYaw(e2\room\Objects[5]), 30.0)
+					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+					
+					Select StrTemp
+						Case "on", "1", "true"
+							;[Block]
 							RemoteDoorOn = True
+							;[End Block]
+						Case "off", "0", "false"
+							;[Block]
+							RemoteDoorOn = False
+							;[End Block]
+						Default
+							;[Block]
+							RemoteDoorOn = (Not RemoteDoorOn)
+							;[End Block]
+					End Select
+					
+					If RemoteDoorOn Then
+						CreateConsoleMsg("REMOTE DOOR CONTROL ENABLED")
+					Else
+						CreateConsoleMsg("REMOTE DOOR CONTROL DISABLED")
+					EndIf
+					
+					For e2.Events = Each Events
+						If e2\EventID = e_room2c_ec Then
+							UpdateLever(e2\room\Objects[5])
+							RotateEntity(e2\room\Objects[5], 0.0, EntityYaw(e2\room\Objects[5]), RemoteDoorOn * 30.0)
 							Exit
 						EndIf
 					Next
-					CreateConsoleMsg("Remote door control enabled.")
 					;[End Block]
 				Case "unlockcheckpoints"
 					;[Block]

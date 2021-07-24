@@ -3781,52 +3781,48 @@ End Function
 
 Function UpdateLever%(OBJ%, Locked% = False)
 	Local Dist# = EntityDistanceSquared(Camera, OBJ)
-	Local PrevPitch# = EntityPitch(OBJ)
 	
-	If Dist < 0.64 And (Not Locked) And EntityInView(OBJ, Camera) Then 
-		EntityPick(Camera, 0.6)
-		
-		If PickedEntity() = OBJ Then
-			ga\DrawHandIcon = True
-			If mo\MouseHit1 Then GrabbedEntity = OBJ
+	If Dist < 64.0 Then 
+		If Dist < 0.64 And (Not Locked) Then 
+			If EntityInView(OBJ, Camera) Then 
+				EntityPick(Camera, 0.65)
+				
+				If PickedEntity() = OBJ Then
+					ga\DrawHandIcon = True
+					If mo\MouseHit1 Then GrabbedEntity = OBJ
+				EndIf
+				
+				Local PrevPitch# = EntityPitch(OBJ)
+				
+				If (mo\MouseDown1 Lor mo\MouseHit1) Then
+					If GrabbedEntity <> 0 Then
+						If GrabbedEntity = OBJ Then
+							ga\DrawHandIcon = True 
+							RotateEntity(GrabbedEntity, Max(Min(EntityPitch(OBJ) + Max(Min(mo\Mouse_Y_Speed_1 * 8.0, 30.0), -30.0), 80.0), -80.0), EntityYaw(OBJ), 0.0)
+							
+							ga\DrawArrowIcon[0] = True
+							ga\DrawArrowIcon[2] = True
+						EndIf
+					EndIf
+				EndIf 
+				
+				If EntityPitch(OBJ, True) > 75.0 Then
+					If PrevPitch =< 75.0 Then PlaySound2(LeverSFX, Camera, OBJ, 1.0)
+				ElseIf EntityPitch(OBJ, True) < -75.0
+					If PrevPitch >= -75.0 Then PlaySound2(LeverSFX, Camera, OBJ, 1.0)	
+				EndIf						
+			EndIf
 		EndIf
 		
-		If GrabbedEntity <> 0 Then
-			If mo\MouseDown1 Lor mo\MouseHit1 Then
-				If GrabbedEntity = OBJ Then
-					ga\DrawHandIcon = True 
-					RotateEntity(GrabbedEntity, Max(Min(EntityPitch(OBJ) + Max(Min(mo\Mouse_Y_Speed_1 * 8.0, 30.0), -30.0), 80.0), -80.0), EntityYaw(OBJ), 0.0)
-					
-					ga\DrawArrowIcon[0] = True
-					ga\DrawArrowIcon[2] = True
-				EndIf
-			EndIf
-		EndIf 
-		
-		; ~ Reset lever state if player doesn't click on the mouse
 		If (Not mo\MouseDown1) And (Not mo\MouseHit1) Then 
-			If EntityPitch(OBJ, True) > 0.0 Then
+			If EntityPitch(OBJ,True) > 0 Then
 				RotateEntity(OBJ, CurveValue(80.0, EntityPitch(OBJ), 10.0), EntityYaw(OBJ), 0.0)
 			Else
 				RotateEntity(OBJ, CurveValue(-80.0, EntityPitch(OBJ), 10.0), EntityYaw(OBJ), 0.0)
 			EndIf
 			GrabbedEntity = 0
 		EndIf
-	Else
-		; ~ Reset lever state if player is far away or doesn't look at the lever
-		If EntityPitch(OBJ, True) > 0.0 Then
-			RotateEntity(OBJ, CurveValue(80.0, EntityPitch(OBJ), 10.0), EntityYaw(OBJ), 0.0)
-		Else
-			RotateEntity(OBJ, CurveValue(-80.0, EntityPitch(OBJ), 10.0), EntityYaw(OBJ), 0.0)
-		EndIf
-		If GrabbedEntity <> 0 And GrabbedEntity = OBJ Then GrabbedEntity = 0
 	EndIf
-	
-	If EntityPitch(OBJ, True) > 75.0 Then
-		If PrevPitch =< 75.0 Then PlaySound2(LeverSFX, Camera, OBJ, 1.0)
-	ElseIf EntityPitch(OBJ, True) < -75.0
-		If PrevPitch >= -75.0 Then PlaySound2(LeverSFX, Camera, OBJ, 1.0)	
-	EndIf	
 	
 	If EntityPitch(OBJ, True) > 0.0 Then
 		Return(True)
