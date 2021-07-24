@@ -3599,6 +3599,26 @@ Function UpdateEvents()
 							e\EventState = 3.0
 						EndIf
 					ElseIf e\EventState < 70.0 * 13.0
+						If me\CameraShake > 0.0 Then
+							If opt\ParticleAmount > 0 Then
+								For i = 0 To 5 + (5 * (opt\ParticleAmount - 1))
+									Pvt = CreatePivot()
+									PositionEntity(Pvt, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True))
+									RotateEntity(Pvt, 0.0, Rnd(360.0), 0.0)
+									If Rand(2) = 1 Then
+										MoveEntity(Pvt, 0.0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
+									Else
+										MoveEntity(Pvt, 0.0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
+									EndIf
+									
+									p.Particles = CreateParticle(3, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 0.002, 0.0, 300.0)
+									p\Speed = 0.001 : p\SizeChange = -0.00001
+									RotateEntity(p\Pvt, Rnd(-20.0, 20.0), Rnd(360.0), 0.0)
+									FreeEntity(Pvt)
+								Next
+							EndIf
+						EndIf
+						
 						e\EventState = e\EventState + fps\Factor[0]
 						If e\EventState > 70.0 * 6.7 And e\EventState < 70.0 * 7.4 Then
 							me\CameraShake = 7.4 - (e\EventState / 70.0)
@@ -3607,7 +3627,7 @@ Function UpdateEvents()
 							EndIf
 						ElseIf e\EventState > 70.0 * 8.6 And e\EventState < 70.0 * 10.6
 							me\CameraShake = 10.6 - (e\EventState / 70.0)
-						ElseIf e\EventState > 70.0 * 12.6
+						ElseIf e\EventState >= 70.0 * 13.0
 							RemoveEvent(e)
 						EndIf
 					EndIf
@@ -3883,7 +3903,7 @@ Function UpdateEvents()
 									For i = 0 To 2
 										If DistanceSquared(EntityX(Curr106\Collider), EntityX(e\room\Objects[i], True), EntityZ(Curr106\Collider), EntityZ(e\room\Objects[i], True)) < PowTwo(250.0 * RoomScale) Then
 											If PlayerRoom = e\room Then me\LightFlash = 0.3
-											If opt\ParticleAmount > 0
+											If opt\ParticleAmount > 0 Then
 												For i = 0 To 5 + (5 * (opt\ParticleAmount - 1))
 													p.Particles = CreateParticle(0, EntityX(Curr106\Collider, True), EntityY(Curr106\Collider, True), EntityZ(Curr106\Collider, True), 0.015, -0.2, 250.0)
 													p\Size = 0.03 : p\Gravity = -0.2 : p\LifeTime = 200.0 : p\SizeChange = 0.005 : p\Speed = 0.001
@@ -7837,14 +7857,33 @@ Function UpdateEvents()
 			Case e_682_roar
 				;[Block]
 				If e\EventState = 0.0 Then
-					If PlayerRoom = e\room Then e\EventState = 70.0 * Rnd(300.0, 700.0)
+					If PlayerRoom = e\room Then e\EventState = 70.0 * 18.0
 				ElseIf PlayerRoom\RoomTemplate\Name <> "dimension_106" And PlayerRoom\RoomTemplate\Name <> "cont2_860_1" And PlayerRoom\RoomTemplate\Name <> "cont2_1123" And PlayerRoom\RoomTemplate\Name <> "dimension_1499" 
 					e\EventState = e\EventState - fps\Factor[0]
 					
 					If e\EventState < 70.0 * 17.0 Then
 						If e\EventState + fps\Factor[0] >= 70.0 * 17.0 Then LoadEventSound(e, "SFX\SCP\682\Roar.ogg") : e\SoundCHN = PlaySound_Strict(e\Sound)
 						If e\EventState > (70.0 * 17.0) - (70.0 * 3.0) Then me\CameraShake = 0.5
-						If e\EventState < (70.0 * 17.0) - (70.0 * 7.5) And e\EventState > (70.0 * 17.0) - (70.0 * 11.0) Then me\CameraShake = 2.0				
+						If e\EventState < (70.0 * 17.0) - (70.0 * 7.5) And e\EventState > (70.0 * 17.0) - (70.0 * 11.0) Then me\CameraShake = 2.0
+						If me\CameraShake > 0.0 Then
+							If opt\ParticleAmount > 0 Then
+								For i = 0 To 5 + (5 * (opt\ParticleAmount - 1))
+									Pvt = CreatePivot()
+									PositionEntity(Pvt, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True))
+									RotateEntity(Pvt, 0.0, Rnd(360.0), 0.0)
+									If Rand(2) = 1 Then
+										MoveEntity(Pvt, 0.0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
+									Else
+										MoveEntity(Pvt, 0.0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
+									EndIf
+									
+									p.Particles = CreateParticle(3, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 0.002, 0.0, 300.0)
+									p\Speed = 0.001 : p\SizeChange = -0.00001
+									RotateEntity(p\Pvt, Rnd(-20.0, 20.0), Rnd(360.0), 0.0)
+									FreeEntity(Pvt)
+								Next
+							EndIf
+						EndIf
 						If e\EventState < 70.0 * 1.0 Then 
 							If e\Sound <> 0 Then FreeSound_Strict(e\Sound) 
 							RemoveEvent(e)
@@ -9218,7 +9257,7 @@ Function UpdateEvents()
 							PlaySound2(e\Sound, Camera, e\room\Objects[4], 3.0, 0.4)
 							
 							If opt\ParticleAmount > 0 Then
-								For i = 0 To (1 + (2 * (opt\ParticleAmount - 1)))
+								For i = 0 To (2 + (1 * (opt\ParticleAmount - 1)))
 									p.Particles = CreateParticle(7, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True), 0.002, 0.0, 25.0)
 									p\Speed = Rnd(0.005, 0.03) : p\Size = Rnd(0.005, 0.0075) : p\AlphaChange = -0.05
 									RotateEntity(p\Pvt, Rnd(-20.0, 0.0), e\room\Angle, 0.0)
