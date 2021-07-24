@@ -7094,22 +7094,17 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "room2_servers_ez"
 			;[Block]
-			d.Doors = CreateDoor(r\x + 264.0 * RoomScale, r\y, r\z + 672.0 * RoomScale, 270.0, r, False, Default_Door, 3)
-			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.031, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
-			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.031, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)	
+			d.Doors = CreateDoor(r\x + 256.0 * RoomScale, r\y, r\z + 672.0 * RoomScale, 270.0, r, False, Default_Door, 3)
 			
-			d.Doors = CreateDoor(r\x - 512.0 * RoomScale, r\y - 768.0 * RoomScale, r\z - 336.0 * RoomScale, 0.0, r, False, Default_Door, 3)
-			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.061, True)
-			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.061, True)	
+			d.Doors = CreateDoor(r\x - 512.0 * RoomScale, r\y - 768.0 * RoomScale, r\z - 320.0 * RoomScale, 180.0, r, False, One_Sided_Door, 3)
 			
-			d.Doors = CreateDoor(r\x - 509.0 * RoomScale, r\y - 768.0 * RoomScale, r\z - 1037.0 * RoomScale, 0.0, r, False, Default_Door, 3)
-			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+			d.Doors = CreateDoor(r\x - 512.0 * RoomScale, r\y - 768.0 * RoomScale, r\z - 1040.0 * RoomScale, 0.0, r, False, Default_Door, 3)
+			d\AutoClose = False : d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
-			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.012, True)
+			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
-			it.Items = CreateItem("Night Vision Goggles", "nvg", r\x + 56.0154 * RoomScale, r\y - 648.0 * RoomScale, r\z + 749.638 * RoomScale)
+			it.Items = CreateItem("Night Vision Goggles", "nvg", r\x + 48.0 * RoomScale, r\y - 648.0 * RoomScale, r\z + 784.0 * RoomScale)
 			it\State = Rnd(1000.0)
-			RotateEntity(it\Collider, 0.0, r\Angle + Rand(245), 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case "room2_gw", "room2_gw_2"
