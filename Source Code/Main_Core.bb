@@ -1833,13 +1833,9 @@ Function RenderMessages()
 		
 		SetFont(fo\FontID[Font_Default])
 		If (Not Temp) Then
-			Color(0, 0, 0)
-			Text(mo\Viewport_Center_X + MenuScale, mo\Viewport_Center_Y + (201 * MenuScale), msg\Txt, True)
 			Color(Temp2, Temp2, Temp2)
 			Text(mo\Viewport_Center_X, mo\Viewport_Center_Y + (200 * MenuScale), msg\Txt, True)
 		Else
-			Color(0, 0, 0)
-			Text(mo\Viewport_Center_X + MenuScale, (opt\GraphicHeight * 0.94) + MenuScale, msg\Txt, True)
 			Color(Temp2, Temp2, Temp2)
 			Text(mo\Viewport_Center_X, opt\GraphicHeight * 0.94, msg\Txt, True)
 		EndIf
@@ -6028,8 +6024,6 @@ Function RenderGUI()
 				If IsMouseOn = n Then
 					If SelectedItem = Null Then
 						SetFont(fo\FontID[Font_Default])
-						Color(0, 0, 0)
-						Text(x + INVENTORY_GFX_SIZE / 2 + 1, y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - 15 + 1, Inventory(n)\Name, True)							
 						Color(255, 255, 255)	
 						Text(x + INVENTORY_GFX_SIZE / 2, y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - 15, Inventory(n)\Name, True)	
 					EndIf
@@ -7754,6 +7748,8 @@ Function InitCredits()
 	
 	If (Not me\CreditsScreen) Then me\CreditsScreen = LoadImage_Strict("GFX\menu\credits_screen.png")
 	
+	InitLoadingTextColor()
+	
 	Repeat
 		l = ReadLine(File)
 		cl.CreditsLine = New CreditsLine
@@ -7765,7 +7761,7 @@ Function InitCredits()
 End Function
 
 Function UpdateCredits()
-	Local cl.CreditsLine, LastCreditLine.CreditsLine
+	Local cl.CreditsLine, LastCreditLine.CreditsLine, ltc.LoadingTextColor
 	Local Credits_Y# = (me\EndingTimer + 2000.0) / 2 + (opt\GraphicHeight + 10.0)
 	Local ID%
 	Local EndLinesAmount%
@@ -7796,6 +7792,7 @@ Function UpdateCredits()
 	If GetKey() <> 0 Then me\CreditsTimer = -1.0
 	
 	If me\CreditsTimer = -1.0 Then
+		DeInitLoadingTextColor(ltc)
 		Delete Each CreditsLine
 		NullGame(False)
 		StopStream_Strict(MusicCHN)
@@ -7860,11 +7857,7 @@ Function RenderCredits()
 		Next
 	EndIf
 	
-	SetFont(fo\FontID[Font_Default])
-	Color(0, 0, 0)
-	Text(20 * MenuScale, opt\GraphicHeight - (34 * MenuScale), "PRESS ANY KEY TO SKIP")
-	Color(255, 255, 255)
-	Text(20 * MenuScale, opt\GraphicHeight - (35 * MenuScale), "PRESS ANY KEY TO SKIP")
+	RenderLoadingText(20 * MenuScale, opt\GraphicHeight - (35 * MenuScale))
 	
 	If me\CreditsTimer = -1.0 Then
 		FreeFont(fo\FontID[Font_Credits])

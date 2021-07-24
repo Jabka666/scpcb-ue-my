@@ -2103,35 +2103,33 @@ Function InitLoadingTextColor()
 	ltc\R = 255.0 : ltc\G = 255.0 : ltc\B = 255.0
 End Function
 
-Function UpdateLoadingTextColor()
-	Local ltc.LoadingTextColor
-	
-	ltc.LoadingTextColor = First LoadingTextColor
-	If ltc\R = 0.0 Then
-		ltc\ChangeColor = True
-	ElseIf ltc\R = 255.0
-		ltc\ChangeColor = False
-	EndIf
-	
-	If (Not ltc\ChangeColor) Then
-		ltc\R = Max(0.0, ltc\R - 3.0)
-		ltc\G = Max(0.0, ltc\G - 3.0)
-		ltc\B = Max(0.0, ltc\B - 3.0)
-	Else
-		ltc\R = Min(ltc\R + 3.0, 255.0)
-		ltc\G = Min(ltc\G + 3.0, 255.0)
-		ltc\B = Min(ltc\B + 3.0, 255.0)
-	EndIf
+Function DeInitLoadingTextColor(ltc.LoadingTextColor)
+	Delete(ltc)
 End Function
 
-Function RenderLoadingText()
+Function RenderLoadingText(x%, y%, AlignX% = False, AlignY% = False)
 	Local ltc.LoadingTextColor
 	
-	ltc.LoadingTextColor = First LoadingTextColor
-	Color(0, 0, 0)
-	Text(mo\Viewport_Center_X, opt\GraphicHeight - (34 * MenuScale), "PRESS ANY KEY TO CONTINUE", True, True)
-	Color(ltc\R, ltc\G, ltc\B)
-	Text(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), "PRESS ANY KEY TO CONTINUE", True, True)
+	For ltc.LoadingTextColor = Each LoadingTextColor
+		If ltc\R = 0.0 Then
+			ltc\ChangeColor = True
+		ElseIf ltc\R = 255.0
+			ltc\ChangeColor = False
+		EndIf
+		
+		If (Not ltc\ChangeColor) Then
+			ltc\R = Max(0.0, ltc\R - 3.0)
+			ltc\G = Max(0.0, ltc\G - 3.0)
+			ltc\B = Max(0.0, ltc\B - 3.0)
+		Else
+			ltc\R = Min(ltc\R + 3.0, 255.0)
+			ltc\G = Min(ltc\G + 3.0, 255.0)
+			ltc\B = Min(ltc\B + 3.0, 255.0)
+		EndIf
+		SetFont(fo\FontID[Default_Font])
+		Color(ltc\R, ltc\G, ltc\B)
+		Text(x, y, "PRESS ANY KEY TO CONTINUE", AlignX, AlignY)
+	Next
 End Function
 
 Function RenderLoading(Percent%, Assets$ = "")
@@ -2310,8 +2308,6 @@ Function RenderLoading(Percent%, Assets$ = "")
 		EndIf
 		
 		If Percent <> 100 Then
-			Color(0, 0, 0)
-			Text(mo\Viewport_Center_X + MenuScale, opt\GraphicHeight - (34 * MenuScale), "LOADING ASSETS: " + Assets, True, True)
 			Color(255, 255, 255)
 			Text(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), "LOADING ASSETS: " + Assets, True, True)
 			
@@ -2319,8 +2315,7 @@ Function RenderLoading(Percent%, Assets$ = "")
 			FlushMouse()
 		Else
 			If FirstLoop And SelectedLoadingScreen\Title <> "CWM" Then PlaySound_Strict(LoadTempSound(("SFX\Horror\Horror8.ogg")))
-			UpdateLoadingTextColor()
-			RenderLoadingText()
+			RenderLoadingText(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), True, True)
 		EndIf
 		
 		RenderGamma()
@@ -2333,7 +2328,7 @@ Function RenderLoading(Percent%, Assets$ = "")
 		Local Close% = False
 		
 		If GetKey() <> 0 Lor MouseHit(1) Then
-			Delete(ltc)
+			DeInitLoadingTextColor(ltc)
 			ResetInput()
 			ResetTimingAccumulator()
 			SetFont(fo\FontID[Font_Default])
