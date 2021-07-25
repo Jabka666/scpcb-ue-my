@@ -7857,7 +7857,7 @@ Function UpdateEvents()
 			Case e_682_roar
 				;[Block]
 				If e\EventState = 0.0 Then
-					If PlayerRoom = e\room Then e\EventState = 70.0 * 18.0
+					If PlayerRoom = e\room Then e\EventState = 70.0 * Rnd(50.0, 100.0)
 				ElseIf PlayerRoom\RoomTemplate\Name <> "dimension_106" And PlayerRoom\RoomTemplate\Name <> "cont2_860_1" And PlayerRoom\RoomTemplate\Name <> "cont2_1123" And PlayerRoom\RoomTemplate\Name <> "dimension_1499" 
 					e\EventState = e\EventState - fps\Factor[0]
 					
