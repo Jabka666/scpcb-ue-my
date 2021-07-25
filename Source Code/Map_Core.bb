@@ -4528,7 +4528,7 @@ Function FillRoom(r.Rooms)
 			d\AutoClose = False
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.1, True)
 			
-			d.Doors = CreateDoor(r\x + 464.0 * RoomScale, r\y, r\z, 90.0, r, False, Default_Door, 5)
+			d.Doors = CreateDoor(r\x + 463.0 * RoomScale, r\y, r\z, 90.0, r, False, Default_Door, 5)
 			d\AutoClose = False
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) - 0.1, True)
 			
@@ -6511,6 +6511,7 @@ Function FillRoom(r.Rooms)
 			;[Block]
 			d.Doors = CreateDoor(r\x, r\y, r\z + 384.0 * RoomScale, 0.0, r, False, Default_Door, 4)
 			d\AutoClose = False
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.1, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)	
 			
 			d.Doors = CreateDoor(r\x - 704.0 * RoomScale, r\y + 896.0 * RoomScale, r\z + 736.0 * RoomScale, 90.0, r, False, One_Sided_Door, 4)
 			d\AutoClose = False
@@ -7186,9 +7187,10 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "room3_gw"
 			;[Block]
-			d.Doors = CreateDoor(r\x + 175.0 * RoomScale, r\y, r\z - 736.0 * RoomScale, 90.0, r, False, Default_Door, 4)
+			d.Doors = CreateDoor(r\x + 174.0 * RoomScale, r\y, r\z - 736.0 * RoomScale, 90.0, r, False, Default_Door, 4)
 			d\AutoClose = False : d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
 			d.Doors = CreateDoor(r\x - 728.0 * RoomScale, r\y, r\z - 456.5 * RoomScale, 0.0, r, False, Default_Door)
 			d\AutoClose = False
@@ -7200,7 +7202,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) + 0.052, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) - 0.052, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			
-			d.Doors = CreateDoor(r\x - 32.0 * RoomScale, r\y, r\z - 456.0 * RoomScale, 0.0, r, False, Default_Door, 4)
+			d.Doors = CreateDoor(r\x - 31.0 * RoomScale, r\y, r\z - 456.5 * RoomScale, 0.0, r, False, Default_Door, 4)
 			d\AutoClose = False
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.09, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.044, True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 1.035, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.044, True)	
