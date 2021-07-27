@@ -611,13 +611,17 @@ MusicCHN = StreamSound_Strict("SFX\Music\" + Music[2] + ".ogg", opt\MusicVolume,
 Global NowPlaying% = 2, ShouldPlay% = 11
 Global CurrMusic% = True
 
-Dim OpenDoorSFX%(4, 2), CloseDoorSFX%(3, 2)
+Dim OpenDoorSFX%(5, 2), CloseDoorSFX%(3, 2)
 Global BigDoorErrorSFX%[3]
 
 Global KeyCardSFX1% 
 Global KeyCardSFX2% 
 Global ScannerSFX1%
 Global ScannerSFX2%
+Global DoorBudgeSFX1%
+Global DoorBudgeSFX2%
+
+Global DoorUnlockedSFX%
 
 Global OpenDoorFastSFX%
 Global CautionSFX% 
@@ -766,6 +770,7 @@ Function LoadSounds()
 		OpenDoorSFX(Elevator_Door, i) = LoadSound_Strict("SFX\Door\ElevatorOpen" + (i + 1) + ".ogg")
 		CloseDoorSFX(Elevator_Door, i) = LoadSound_Strict("SFX\Door\ElevatorClose" + (i + 1) + ".ogg")
 		OpenDoorSFX(Office_Door, i) = LoadSound_Strict("SFX\Door\OfficeDoorOpen" + (i + 1) + ".ogg")
+		OpenDoorSFX(Wooden_Door, i) = LoadSound_Strict("SFX\Door\WoodenDoorOpen" + (i + 1) + ".ogg")
 		BigDoorErrorSFX[i] = LoadSound_Strict("SFX\Door\BigDoorError" + (i + 1) + ".ogg")
 	Next
 	
@@ -773,6 +778,10 @@ Function LoadSounds()
 	KeyCardSFX2 = LoadSound_Strict("SFX\Interact\KeyCardUse2.ogg")
 	ScannerSFX1 = LoadSound_Strict("SFX\Interact\ScannerUse1.ogg")
 	ScannerSFX2 = LoadSound_Strict("SFX\Interact\ScannerUse2.ogg")
+	DoorBudgeSFX1 = LoadSound_Strict("SFX\Interact\DoorBudge1.ogg")
+	DoorBudgeSFX2 = LoadSound_Strict("SFX\Interact\DoorBudge2.ogg")
+	
+	DoorUnlockedSFX = LoadSound_Strict("SFX\Interact\DoorUnlocked.ogg")
 	
 	OpenDoorFastSFX = LoadSound_Strict("SFX\Door\DoorOpenFast.ogg")
 	CautionSFX = LoadSound_Strict("SFX\Room\LockroomSiren.ogg")
