@@ -3365,8 +3365,7 @@ Function UpdateGUI()
 				If ClosestDoor\Code <> "" Then
 					SelectedDoor = ClosestDoor
 				ElseIf me\Playable Then
-					If ClosestDoor\DoorType <> Office_Door Then PlaySound2(ButtonSFX, Camera, ClosestButton)
-					UseDoor(ClosestDoor, True)				
+					UseDoor(ClosestDoor)				
 				EndIf
 			EndIf
 		EndIf
@@ -3384,33 +3383,13 @@ Function UpdateGUI()
 	
 	If SelectedDoor <> Null Then
 		If SelectedItem <> Null Then
-			If SelectedItem\ItemTemplate\TempName = "scp005" Then 
+			If SelectedItem\ItemTemplate\TempName = "scp005" Then
 				ShouldDrawHUD = False
-				If SelectedDoor\Code <> "GEAR" Then
-					SelectedDoor\Locked = 1					
-					
-					If SelectedDoor\Code = Str(AccessCode) Then
-						GiveAchievement(AchvMaynard)
-					ElseIf SelectedDoor\Code = "7816"
-						GiveAchievement(AchvHarp)
-					ElseIf SelectedDoor\Code = "2411"
-						GiveAchievement(AchvO5)
-					EndIf
-					
-					SelectedDoor\Locked = 0					
-					UseDoor(SelectedDoor, True)
-					SelectedDoor = Null
-					PlaySound_Strict(ScannerSFX1)
-					CreateMsg("You hold the key close to the keypad.", 6.0)
-				Else
-					SelectedDoor = Null
-					PlaySound_Strict(ScannerSFX2)
-					CreateMsg("You hold the key close to the keypad but nothing happens.", 6.0)
-				EndIf
+				UseDoor(SelectedDoor)
+			Else
+				SelectedItem = Null
 			EndIf
 		EndIf
-		
-		SelectedItem = Null
 		If ShouldDrawHUD Then
 			Pvt = CreatePivot()
 			PositionEntity(Pvt, EntityX(ClosestButton, True), EntityY(ClosestButton, True), EntityZ(ClosestButton, True))
@@ -3466,7 +3445,6 @@ Function UpdateGUI()
 								Case 8
 									;[Block]
 									If msg\KeyPadInput = SelectedDoor\Code Then
-										PlaySound_Strict(ScannerSFX1)
 										If SelectedDoor\Code = Str(AccessCode) Then
 											GiveAchievement(AchvMaynard)
 										ElseIf SelectedDoor\Code = "7816"
@@ -3476,11 +3454,10 @@ Function UpdateGUI()
 										EndIf									
 										
 										SelectedDoor\Locked = 0
-										UseDoor(SelectedDoor, True)
+										UseDoor(SelectedDoor)
 										SelectedDoor = Null
 										StopMouseMovement()
 									Else
-										PlaySound_Strict(ScannerSFX2)
 										msg\KeyPadMsg = "ACCESS DENIED"
 										msg\KeyPadTimer = 210.0
 										msg\KeyPadInput = ""	
