@@ -1812,7 +1812,11 @@ Function CreateMsg(Txt$, Sec#)
 End Function
 
 Function UpdateMessages()
-	If msg\Timer > 0.0 Then msg\Timer = msg\Timer - fps\Factor[0]
+	If msg\Timer > 0.0 Then
+		msg\Timer = msg\Timer - fps\Factor[0]
+	Else
+		If msg\Txt <> "" Then msg\Txt = ""
+	EndIf
 End Function
 
 Function RenderMessages()
@@ -3424,7 +3428,7 @@ Function UpdateGUI()
 			y = mo\Viewport_Center_Y - ImageHeight(t\ImageID[4]) * (Scale / 2)	
 			
 			If msg\KeyPadMsg <> "" Then 
-				msg\KeyPadTimer = msg\KeyPadTimer - fps\Factor[1]
+				msg\KeyPadTimer = msg\KeyPadTimer - fps\Factor[0]
 				If msg\KeyPadTimer =< 0.0 Then
 					msg\KeyPadMsg = ""
 					SelectedDoor = Null
@@ -3506,9 +3510,9 @@ Function UpdateGUI()
 			SelectedDoor = Null
 		EndIf
 	Else
-		msg\KeyPadInput = ""
-		msg\KeyPadTimer = 0.0
-		msg\KeyPadMsg = ""
+		If msg\KeyPadInput <> "" Then msg\KeyPadInput = ""
+		If msg\KeyPadTimer <> 0.0 Then msg\KeyPadTimer = 0.0
+		If msg\KeyPadMsg <> "" Then msg\KeyPadMsg = ""
 	EndIf
 	
 	If KeyHit(1) And me\EndingTimer = 0.0 And me\SelectedEnding = -1 Then
