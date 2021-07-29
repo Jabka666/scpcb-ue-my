@@ -1839,8 +1839,6 @@ Function RenderMessages()
 			Color(Temp2, Temp2, Temp2)
 			Text(mo\Viewport_Center_X, opt\GraphicHeight * 0.94, msg\Txt, True)
 		EndIf
-	Else
-		If msg\Txt <> "" Then msg\Txt = ""
 	EndIf
 	Color(255, 255, 255)
 	If opt\ShowFPS Then
@@ -3410,10 +3408,9 @@ Function UpdateGUI()
 			y = mo\Viewport_Center_Y - ImageHeight(t\ImageID[4]) * (Scale / 2)	
 			
 			If msg\KeyPadMsg <> "" Then 
-				msg\KeyPadTimer = msg\KeyPadTimer - fps\Factor[0]
+				msg\KeyPadTimer = msg\KeyPadTimer - fps\Factor[1]
 				If msg\KeyPadTimer =< 0.0 Then
 					msg\KeyPadMsg = ""
-					msg\KeyPadInput = ""
 					SelectedDoor = Null
 					StopMouseMovement()
 				EndIf
@@ -3447,13 +3444,23 @@ Function UpdateGUI()
 									;[End Block]
 								Case 8
 									;[Block]
-									UseDoor(SelectedDoor)
-									StopMouseMovement()
 									If msg\KeyPadInput = SelectedDoor\Code Then
+										If SelectedDoor\Code = Str(AccessCode) Then
+											GiveAchievement(AchvMaynard)
+										ElseIf SelectedDoor\Code = "7816"
+											GiveAchievement(AchvHarp)
+										ElseIf SelectedDoor\Code = "2411"
+											GiveAchievement(AchvO5)
+										EndIf									
+										
+										SelectedDoor\Locked = 0
+										UseDoor(SelectedDoor)
 										SelectedDoor = Null
+										StopMouseMovement()
 									Else
 										msg\KeyPadMsg = "ACCESS DENIED"
-										msg\KeyPadTimer = 70.0 * 3.0
+										msg\KeyPadTimer = 210.0
+										msg\KeyPadInput = ""	
 									EndIf
 									;[End Block]
 								Case 9, 10, 11
@@ -3481,9 +3488,9 @@ Function UpdateGUI()
 			SelectedDoor = Null
 		EndIf
 	Else
-		If msg\KeyPadMsg <> "" Then msg\KeyPadMsg = ""
-		If msg\KeyPadTimer <> 0.0 Then msg\KeyPadTimer = 0.0
-		If msg\KeyPadInput <> "" Then msg\KeyPadInput = ""
+		msg\KeyPadInput = ""
+		msg\KeyPadTimer = 0.0
+		msg\KeyPadMsg = ""
 	EndIf
 	
 	If KeyHit(1) And me\EndingTimer = 0.0 And me\SelectedEnding = -1 Then
@@ -5778,11 +5785,10 @@ Function RenderGUI()
 	
 	If SelectedDoor <> Null Then
 		If SelectedItem <> Null Then
-			If SelectedItem\ItemTemplate\TempName = "scp005" Then
-				ShouldDrawHUD = False
-			EndIf
+			If SelectedItem\ItemTemplate\TempName = "scp005" Then ShouldDrawHUD = False
 		EndIf
 		
+		SelectedItem = Null
 		If ShouldDrawHUD Then
 			Pvt = CreatePivot()
 			PositionEntity(Pvt, EntityX(ClosestButton, True), EntityY(ClosestButton, True), EntityZ(ClosestButton, True))

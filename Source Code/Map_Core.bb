@@ -3079,22 +3079,14 @@ Function UseDoor(d.Doors, Scripted% = False)
 				SelectedItem = Null
 			EndIf
 			
-			If d\Code = Str(AccessCode) Then
-				GiveAchievement(AchvMaynard)
-			ElseIf d\Code = "7816"
-				GiveAchievement(AchvHarp)
-			ElseIf d\Code = "2411"
-				GiveAchievement(AchvO5)
-			EndIf
-			
-			If (d\Code = "GEAR") Lor (d\Locked = 1) Then
+			If d\Code = "GEAR" Lor d\Locked = 1 Then
 				Sound = ScannerSFX2
 			Else
 				Sound = ScannerSFX1
 			EndIf
 			
 			PlaySound2(Sound, Camera, ClosestButton)
-			If (d\Code = "GEAR") Lor (d\Locked = 1) Then Return
+			If d\Code = "GEAR" Lor d\Locked = 1 Then Return
 		Else
 			If d\DoorType = Wooden_Door Lor d\DoorType = Office_Door Then
 				If SelectedItem = Null Then
@@ -3185,6 +3177,14 @@ Function UseDoor(d.Doors, Scripted% = False)
 				EndIf
 			EndIf
 		EndIf
+	EndIf
+	
+	If d\Code = Str(AccessCode) Then
+		GiveAchievement(AchvMaynard)
+	ElseIf d\Code = "7816"
+		GiveAchievement(AchvHarp)
+	ElseIf d\Code = "2411"
+		GiveAchievement(AchvO5)
 	EndIf
 	
 	If d\DoorType = Elevator_Door Then
