@@ -7032,8 +7032,6 @@ Function UpdateEvents()
 				
 				If PlayerRoom = e\room And fr <> Null Then 
 					If e\EventState = 1.0 Then ; ~ The player is in the forest
-						ShowEntity(fr.Forest\Forest_Pivot)
-						
 						CurrStepSFX = 2
 						
 						Curr106\Idle = 1
@@ -7086,11 +7084,16 @@ Function UpdateEvents()
 						EndIf
 						
 						For i = 0 To 1
-							If i = e\EventState2 Then
-								If fr\RoomDoors[i]\Open Then
+							If InteractObject(fr\Door[i], 0.64) Then
+								If i = e\EventState2 Then
 									me\BlinkTimer = -10.0
 									
-									PositionEntity(me\Collider, EntityX(e\room\RoomDoors[0]\FrameOBJ, True), 0.5, EntityZ(e\room\RoomDoors[0]\FrameOBJ, True))
+									PlaySound_Strict(LoadTempSound("SFX\Door\WoodenDoorOpen.ogg"))
+									
+									RotateEntity(e\room\Objects[3], 0.0, 0.0, 0.0)
+									RotateEntity(e\room\Objects[4], 0.0, 180.0, 0.0)
+									
+									PositionEntity(me\Collider, EntityX(e\room\Objects[2], True), 0.5, EntityZ(e\room\Objects[2], True))
 									
 									RotateEntity(me\Collider, 0.0, EntityYaw(e\room\OBJ, True) + e\EventState2 * 180.0, 0.0)
 									MoveEntity(me\Collider, 0.0, 0.0, 1.5)
@@ -7102,14 +7105,12 @@ Function UpdateEvents()
 									
 									SecondaryLightOn = PrevSecondaryLightOn
 									
-									fr\RoomDoors[i]\Open = False
-									fr\RoomDoors[i]\Locked = 1
-									
 									e\EventState = 0.0
 									e\EventState3 = 0.0
+								Else
+									PlaySound_Strict(LoadTempSound("SFX\Door\WoodenDoorBudge.ogg"))
+									CreateMsg("The door will not budge.", 6.0)
 								EndIf
-							Else
-								fr\RoomDoors[i]\Locked = 2
 							EndIf
 						Next
 						
@@ -7117,43 +7118,55 @@ Function UpdateEvents()
 						CameraFogRange(Camera, 0.5, 8.0)
 					Else
 						If (Not Curr106\Contained) Then Curr106\Idle = 0
-						If e\room\RoomDoors[0]\Open Then
-							me\BlinkTimer = -10.0
-							
-							If e\room\NPC[0] <> Null Then
-								; ~ Reset monster to the (hidden) idle state
-								e\room\NPC[0]\State = 0.0
-							EndIf
-							
-							PrevSecondaryLightOn = SecondaryLightOn
-							SecondaryLightOn = True
-							
-							Pvt = CreatePivot()
-							PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
-							PointEntity(Pvt, e\room\OBJ)
-							Angle = WrapAngle(EntityYaw(Pvt) - EntityYaw(e\room\OBJ, True))
-							If Angle > 90.0 And Angle < 270.0 Then
-								PositionEntity(me\Collider, EntityX(fr\RoomDoors[0]\FrameOBJ, True), EntityY(fr\RoomDoors[0]\FrameOBJ, True) + EntityY(me\Collider, True) + 0.5, EntityZ(fr\RoomDoors[0]\FrameOBJ, True), True)
-								RotateEntity(me\Collider, 0.0, EntityYaw(fr\RoomDoors[0]\FrameOBJ, True) - 180.0, 0.0, True)
-								MoveEntity(me\Collider, -0.5, 0.0, 0.5)
-								e\EventState2 = 1.0
-							Else
-								PositionEntity(me\Collider, EntityX(fr\RoomDoors[1]\FrameOBJ, True), EntityY(fr\RoomDoors[1]\FrameOBJ, True) + EntityY(me\Collider, True) + 0.5, EntityZ(fr\RoomDoors[1]\FrameOBJ, True), True)
-								RotateEntity(me\Collider, 0.0, EntityYaw(fr\RoomDoors[1]\FrameOBJ, True) - 180.0, 0.0, True)
-								MoveEntity(me\Collider, -0.5, 0.0, 0.5)
-								e\EventState2 = 0.0
-							EndIf
-							FreeEntity(Pvt)
-							ResetEntity(me\Collider)
-							
-							e\EventState = 1.0
-							; ~ Reset monster spawn timer
-							e\EventState3 = 0.0
-							
-							e\room\RoomDoors[0]\Open = False
-							e\room\RoomDoors[0]\Locked = 1
-						Else
+						If EntityYaw(e\room\Objects[3]) = 0.0 Then
 							If fr\Forest_Pivot <> 0 Then HideEntity(fr\Forest_Pivot)
+							If InteractObject(e\room\Objects[3], 0.64) Then
+								If SelectedItem = Null Then
+									If mo\MouseHit1 Then
+										PlaySound_Strict(LoadTempSound("SFX\Door\WoodenDoorBudge.ogg"))
+										CreateMsg("The door will not budge.", 6.0)
+									EndIf
+								ElseIf SelectedItem\ItemTemplate\TempName = "scp860" Lor SelectedItem\ItemTemplate\TempName = "scp005" 
+									If mo\MouseHit1 Then
+										PlaySound_Strict(LoadTempSound("SFX\Door\WoodenDoorOpen.ogg"))
+										ShowEntity(fr.Forest\Forest_Pivot)
+										SelectedItem = Null
+										
+										me\BlinkTimer = -10.0
+										
+										e\EventState = 1.0
+										
+										; ~ Reset monster spawn timer
+										e\EventState3 = 0.0
+										
+										If e\room\NPC[0] <> Null Then
+											; ~ Reset monster to the (hidden) idle state
+											e\room\NPC[0]\State = 0.0
+										EndIf
+										
+										PrevSecondaryLightOn = SecondaryLightOn
+										SecondaryLightOn = True
+										
+										Pvt = CreatePivot()
+										PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
+										PointEntity(Pvt, e\room\OBJ)
+										Angle = WrapAngle(EntityYaw(Pvt) - EntityYaw(e\room\OBJ, True))
+										If Angle > 90.0 And Angle < 270.0 Then
+											PositionEntity(me\Collider, EntityX(fr\Door[0], True), EntityY(fr\Door[0], True) + EntityY(me\Collider, True) + 0.5, EntityZ(fr\Door[0], True), True)
+											RotateEntity(me\Collider, 0.0, EntityYaw(fr\Door[0], True) - 180.0, 0.0, True)
+											MoveEntity(me\Collider, -0.5, 0.0, 0.5)
+											e\EventState2 = 1.0
+										Else
+											PositionEntity(me\Collider, EntityX(fr\Door[1], True), EntityY(fr\Door[1], True) + EntityY(me\Collider, True) + 0.5, EntityZ(fr\Door[1], True), True)
+											RotateEntity(me\Collider, 0.0, EntityYaw(fr\Door[1], True) - 180.0, 0.0, True)
+											MoveEntity(me\Collider, -0.5, 0.0, 0.5)
+											e\EventState2 = 0.0
+										EndIf
+										FreeEntity(Pvt)
+										ResetEntity(me\Collider)
+									EndIf
+								EndIf
+							EndIf
 						EndIf
 					EndIf
 				Else

@@ -741,7 +741,7 @@ Type Forest
 	Field Grid%[(ForestGridSize ^ 2) + 11]
 	Field TileEntities%[(ForestGridSize ^ 2) + 1]
 	Field Forest_Pivot%
-	Field RoomDoors.Doors[2]
+	Field Door%[2]
 	Field DetailEntities%[2]
 	Field ID%
 End Type
@@ -944,7 +944,7 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 	Local Tile_Type%
 	Local Tile_Entity%, Detail_Entity%
 	Local Tempf1#, Tempf2#, Tempf3#, Tempf4#
-	Local i%, Width%, lX%, lY%, d%
+	Local i%, Width%, Frame%, lX%, lY%, d%
 	
 	If fr\Forest_Pivot <> 0 Then FreeEntity(fr\Forest_Pivot) : fr\Forest_Pivot = 0
 	For i = ROOM1 To ROOM4
@@ -1159,8 +1159,17 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 				fr\DetailEntities[i] = CopyEntity(fr\DetailMesh[4])
 				ScaleEntity(fr\DetailEntities[i], RoomScale, RoomScale, RoomScale)
 				
-				fr\RoomDoors[i] = CreateDoor(0.0 * RoomScale, 32.0 * RoomScale, 0.0, 180.0, Null, False, Wooden_Door, 0, "", False, fr\DetailEntities[i])
-				fr\RoomDoors[i]\DisableWaypoint = True
+				fr\door[i] = CopyEntity(r\Objects[3])
+				ScaleEntity(fr\door[i], 49.0 * RoomScale, 45.0 * RoomScale, 48.0 * RoomScale, True)
+				EntityPickMode(fr\door[i], 2)
+				PositionEntity(fr\door[i], 72.0 * RoomScale, 32.0 * RoomScale, 0.0, True)
+				RotateEntity(fr\door[i], 0.0, 180.0, 0.0)
+				EntityParent(fr\door[i], fr\DetailEntities[i])
+				
+				Frame = CopyEntity(r\Objects[2], fr\door[i])
+				PositionEntity(Frame, 0.0, 32.0 * RoomScale, 0.0, True)
+				ScaleEntity(Frame, 48.0 * RoomScale, 45.0 * RoomScale, 48.0 * RoomScale, True)
+				EntityParent(Frame, fr\DetailEntities[i])
 				
 				EntityType(fr\DetailEntities[i], HIT_MAP)
 				EntityPickMode(fr\DetailEntities[i], 2)
@@ -1183,7 +1192,7 @@ Function PlaceMapCreatorForest(fr.Forest, x#, y#, z#, r.Rooms)
 	Local Tile_Type%, Detail_Entity%
 	Local Tile_Entity%, Eetail_Entity%
 	Local Tempf1#, Tempf2#, Tempf3#, Tempf4#
-	Local i%, Width%, lX%, lY%, d%
+	Local i%, Width%, Frame%, lX%, lY%, d%
 	
 	If fr\Forest_Pivot <> 0 Then FreeEntity(fr\Forest_Pivot) : fr\Forest_Pivot = 0
 	For i = ROOM1 To ROOM4
@@ -1331,12 +1340,21 @@ Function PlaceMapCreatorForest(fr.Forest, x#, y#, z#, r.Rooms)
 				
 				If Ceil(Float(fr\Grid[(tY * ForestGridSize) + tX]) / 4.0) = 6 Then
 					For i = 0 To 1
-						If fr\RoomDoors[i] = Null Then
+						If (Not fr\Door[i]) Then
 							fr\DetailEntities[i] = CopyEntity(fr\DetailMesh[4])
 							ScaleEntity(fr\DetailEntities[i], RoomScale, RoomScale, RoomScale)
 							
-							fr\RoomDoors[i] = CreateDoor(0.0 * RoomScale, 32.0 * RoomScale, 0.0, 180.0, Null, False, Wooden_Door, 0, "", False, fr\DetailEntities[i])
-							fr\RoomDoors[i]\DisableWaypoint = True
+							fr\Door[i] = CopyEntity(r\Objects[3])
+							ScaleEntity(fr\Door[i], 49.0 * RoomScale, 45.0 * RoomScale, 48.0 * RoomScale, True)
+							EntityPickMode(fr\Door[i], 2)
+							PositionEntity(fr\Door[i], 72.0 * RoomScale, 32.0 * RoomScale, 0.0, True)
+							RotateEntity(fr\Door[i], 0.0, 180.0, 0.0)
+							EntityParent(fr\Door[i], fr\DetailEntities[i])
+							
+							Frame = CopyEntity(r\Objects[2], fr\Door[i])
+							PositionEntity(Frame, 0.0, 32.0 * RoomScale, 0.0, True)
+							ScaleEntity(Frame, 48.0 * RoomScale, 45.0 * RoomScale, 48.0 * RoomScale, True)
+							EntityParent(Frame, fr\DetailEntities[i])
 							
 							EntityType(fr\DetailEntities[i], HIT_MAP)
 							EntityPickMode(fr\DetailEntities[i], 2)
@@ -1369,7 +1387,7 @@ Function DestroyForest(fr.Forest)
 		Next
 	Next
 	For i = 0 To 1
-		If fr\RoomDoors[i] <> Null Then RemoveDoor(fr\RoomDoors[i])
+		If fr\Door[i] <> 0 Then FreeEntity(fr\Door[i]) : fr\Door[i] = 0
 		If fr\DetailEntities[i] <> 0 Then FreeEntity(fr\DetailEntities[i]) : fr\DetailEntities[i] = 0
 	Next
 	If fr\Forest_Pivot <> 0 Then FreeEntity(fr\Forest_Pivot) : fr\Forest_Pivot = 0
@@ -2085,7 +2103,7 @@ Type Doors
 	Field room.Rooms
 	Field DisableWaypoint%
 	Field SoundCHN%
-	Field Code$
+	Field Code$, KeyName$
 	Field ID%
 	Field AutoClose%
 	Field LinkedDoor.Doors
@@ -2109,14 +2127,10 @@ Const One_Sided_Door% = 6
 Const SCP_914_Door% = 7
 ;[End Block]
 
-Function CreateDoor.Doors(x#, y#, z#, Angle#, room.Rooms, Open% = False, DoorType% = Default_Door, Keycard% = 0, Code$ = "", CheckIfZeroCard% = False, CustomParent% = 0)
+Function CreateDoor.Doors(x#, y#, z#, Angle#, room.Rooms, Open% = False, DoorType% = Default_Door, Keycard% = 0, Code$ = "", CheckIfZeroCard% = False, KeyName$ = "")
 	Local d.Doors, Parent%, i%
 	
-	If room.Rooms <> Null Then
-		Parent = room\OBJ
-	Else
-		Parent = CustomParent
-	EndIf
+	If room <> Null Then Parent = room\OBJ
 	
 	d.Doors = New Doors
 	If DoorType = Big_Door Then
@@ -2244,6 +2258,7 @@ Function CreateDoor.Doors(x#, y#, z#, Angle#, room.Rooms, Open% = False, DoorTyp
 	If DoorType = Elevator_Door Then d\Locked = 1
 	
 	d\Code = Code
+	d\KeyName = KeyName
 	
 	d\Angle = Angle
 	d\Open = Open		
@@ -2352,6 +2367,9 @@ Function UpdateDoors()
 							d\OpenState = CurveValue(180.0, d\OpenState, 40.0) + (fps\Factor[0] * 0.01)
 							RotateEntity(d\OBJ, 0.0, PlayerRoom\Angle + d\Angle + (d\OpenState / 2.5), 0.0)
 							If d\DoorType = Office_Door Then Animate2(d\OBJ, AnimTime(d\OBJ), 1.0, 41.0, 1.2, False)
+							For i = 0 To 1
+								FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
+							Next
 							;[End Block]
 						Case One_Sided_Door
 							;[Block]
@@ -2445,6 +2463,9 @@ Function UpdateDoors()
 							d\OpenState = CurveValue(0.0, d\OpenState, 40.0) - (fps\Factor[0] * 0.01)
 							RotateEntity(d\OBJ, 0.0, PlayerRoom\Angle + d\Angle + (d\OpenState / 2.5), 0.0)
 							If d\DoorType = Office_Door Then Animate2(d\OBJ, AnimTime(d\OBJ), 1.0, 41.0, 1.2, False)
+							For i = 0 To 1
+								FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
+							Next
 							;[End Block]
 						Case SCP_914_Door ; ~ Used for SCP-914 only
 							;[Block]
@@ -2948,10 +2969,6 @@ Function UseDoorItem(item.Items)
 			;[Block]
 			Return(-2)
 			;[End Block]
-		Case "scp860"
-			;[Block]
-			Return(-3)
-			;[End Block]
 		Default
 			;[Block]
 			Return(0)
@@ -3091,18 +3108,22 @@ Function UseDoor(d.Doors, Scripted% = False)
 						Return
 					EndIf
 				Else
-					If (Temp <> 9) And (Temp <> d\KeyCard) Then
+					If Temp <> 9 Then
 						CreateMsg("The door will not budge.", 6.0)
 					Else
 						If d\Locked = 1 Then
-							CreateMsg("You unlocked the door.", 6.0)
-							d\Locked = 0
+							If Temp = 9 Then
+								CreateMsg("You unlocked the door.", 6.0)
+								d\Locked = 0
+							EndIf
 						ElseIf d\Locked = 2
-							CreateMsg("You tried to unlock the door, but nothing happened.", 6.0)
+							If Temp = 9 Then
+								CreateMsg("You tried to unlock the door, but nothing happened.", 6.0)
+							EndIf
 						EndIf
 						SelectedItem = Null
 					EndIf
-					If (Temp <> 9) Lor (d\Locked = 1) Lor (d\Locked = 2) Lor (Temp <> d\KeyCard) Then
+					If (Temp <> 9) Lor (d\Locked = 1) Lor (d\Locked = 2) Then
 						If d\DoorType = Office_Door Then
 							Sound = DoorBudgeSFX1
 						Else
@@ -3183,11 +3204,7 @@ Function UseDoor(d.Doors, Scripted% = False)
 			d\SoundCHN = PlaySound2(BigDoorErrorSFX[Rand(0, 2)], Camera, d\OBJ)
 		Else
 			If d\DoorType <> Default_Door And d\DoorType <> One_Sided_Door Then
-				If PlayerRoom\RoomTemplate\Name = "cont2_860_1" Then
-					d\SoundCHN = PlaySound2(OpenDoorSFX(d\DoorType, 2), Camera, d\OBJ)
-				Else
-					d\SoundCHN = PlaySound2(OpenDoorSFX(d\DoorType, Rand(0, 1)), Camera, d\OBJ)
-				EndIf
+				d\SoundCHN = PlaySound2(OpenDoorSFX(d\DoorType, Rand(0, 2)), Camera, d\OBJ)
 			Else
 				d\SoundCHN = PlaySound2(OpenDoorSFX(0, Rand(0, 2)), Camera, d\OBJ)
 			EndIf
@@ -3926,8 +3943,27 @@ Function FillRoom(r.Rooms)
 			d.Doors = CreateDoor(r\x + 416.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 0.0, r, False, Default_Door, 3)
 			d\AutoClose = False
 			
-			r\RoomDoors.Doors[0] = CreateDoor(r\x + 184.0 * RoomScale, r\y, r\z, 0.0, r, False, Wooden_Door, -3)
-			r\RoomDoors[0]\Locked = 1
+			r\RoomDoors.Doors[0] = CreateDoor(r\x + 184.0 * RoomScale, r\y, r\z, 0.0, r, False, Wooden_Door)
+			
+			; ~ The wooden doors
+			r\Objects[2] = CopyEntity(o\DoorModelID[8])
+			ScaleEntity(r\Objects[2], 46.0 * RoomScale, 45.0 * RoomScale, 80.0 * RoomScale)
+			PositionEntity(r\Objects[2], r\x + 184.0 * RoomScale, r\y, r\z)
+			
+			r\Objects[3] = CopyEntity(o\DoorModelID[9])
+			ScaleEntity(r\Objects[3], 49.0 * RoomScale, 45.0 * RoomScale, 46.0 * RoomScale)
+			PositionEntity(r\Objects[3], r\x + 112.0 * RoomScale, r\y, r\z + 0.05)
+			EntityType(r\Objects[3], HIT_MAP)
+			EntityPickMode(r\Objects[3], 2)
+			
+			r\Objects[4] = CopyEntity(r\Objects[3])
+			ScaleEntity(r\Objects[4], 49.0 * RoomScale, 45.0 * RoomScale, 46.0 * RoomScale)
+			PositionEntity(r\Objects[4], r\x + 256.0 * RoomScale, r\y, r\z - 0.05)
+			RotateEntity(r\Objects[4], 0.0, 180.0, 0.0)
+			
+			For i = 2 To 4
+				EntityParent(r\Objects[i], r\OBJ)
+			Next
 			
 			; ~ The forest
 			If (Not I_Zone\HasCustomForest) Then
@@ -6903,10 +6939,10 @@ Function FillRoom(r.Rooms)
 			
 			; ~ Just locked doors
 			d.Doors = CreateDoor(r\x, r\y + 769.0 * RoomScale, r\z + 416.0 * RoomScale, 0.0, r, False, Wooden_Door)
-			d\Locked = 2 : d\DisableWaypoint = True
+			d\Locked = 2 : d\DisableWaypoint = True : d\MTFClose = False
 			
 			d.Doors = CreateDoor(r\x, r\y + 769.0 * RoomScale, r\z - 1024.0 * RoomScale, 0.0, r, False, Wooden_Door)
-			d\Locked = 2 : d\DisableWaypoint = True
+			d\Locked = 2 : d\DisableWaypoint = True : d\MTFClose = False
 			
 			; ~ Fake door to the pre-containment chamber
 			r\RoomDoors.Doors[0] = CreateDoor(r\x + 352.0 * RoomScale, r\y + 769.0 * RoomScale, r\z - 640.0 * RoomScale, 90.0, r)
@@ -6915,15 +6951,13 @@ Function FillRoom(r.Rooms)
 			
 			; ~ A door inside the cell 
 			r\RoomDoors.Doors[1] = CreateDoor(r\x - 336.0 * RoomScale, r\y + 769.0 * RoomScale, r\z + 712.0 * RoomScale, 90.0, r, False, Wooden_Door)
-			r\RoomDoors[1]\Locked = 2 : d\DisableWaypoint = True
+			r\RoomDoors[1]\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			
 			; ~ An intermediate door
 			r\RoomDoors.Doors[2] = CreateDoor(r\x - 336.0 * RoomScale, r\y + 769.0 * RoomScale, r\z + 168.0 * RoomScale, 270.0, r, False, Wooden_Door)
-			r\RoomDoors.Doors[2]\DisableWaypoint = True
 			
 			; ~ A door leading to the nazi before shot
 			r\RoomDoors.Doors[3] = CreateDoor(r\x - 668.0 * RoomScale, r\y + 769.0 * RoomScale, r\z - 704.0 * RoomScale, 0.0, r, False, Wooden_Door)
-			r\RoomDoors.Doors[3]\DisableWaypoint = True
 			
 			; ~ SCP-1123 sound position
 			r\Objects[3] = CreatePivot()
@@ -7542,9 +7576,9 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\Objects[0], r\x + 640.0 * RoomScale, r\y + 8.0 * RoomScale, r\z - 896.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
 			;[End Block]
-		Case "room2c_mr"
+		Case "room2c_pit"
 			;[Block]
-			d.Doors = CreateDoor(r\x - 272.0 * RoomScale, r\y, r\z - 768.0 * RoomScale, 90.0, r, False, Heavy_Door, 3)
+			d.Doors = CreateDoor(r\x - 256.0 * RoomScale, r\y, r\z - 752.0 * RoomScale, 90.0, r, False, Heavy_Door, 3)
 			d\Locked = 1 : d\AutoClose = False : d\MTFClose = False : d\DisableWaypoint = True
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.061, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
@@ -8633,7 +8667,7 @@ Function CreateMap()
 	SetRoom("room2_test_hcz", ROOM2, Room2Amount[0] + Floor(0.7 * Float(Room2Amount[1])), MinPos, MaxPos)
 	SetRoom("room2_servers_hcz", ROOM2, Room2Amount[0] + Floor(0.9 * Room2Amount[1]), MinPos, MaxPos)
 	
-	MapRoom(ROOM2C, Room2CAmount[0] + Floor(0.5 * Float(Room2CAmount[1]))) = "room2c_mr"
+	MapRoom(ROOM2C, Room2CAmount[0] + Floor(0.5 * Float(Room2CAmount[1]))) = "room2c_pit"
 	
 	MapRoom(ROOM3, Room3Amount[0] + Floor(0.3 * Float(Room3Amount[1]))) = "cont3_513"
 	MapRoom(ROOM3, Room3Amount[0] + Floor(0.6 * Float(Room3Amount[1]))) = "cont3_966"

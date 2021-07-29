@@ -1839,6 +1839,8 @@ Function RenderMessages()
 			Color(Temp2, Temp2, Temp2)
 			Text(mo\Viewport_Center_X, opt\GraphicHeight * 0.94, msg\Txt, True)
 		EndIf
+	Else
+		If msg\Txt <> "" Then msg\Txt = ""
 	EndIf
 	Color(255, 255, 255)
 	If opt\ShowFPS Then
@@ -3354,6 +3356,11 @@ Function UpdateGUI()
 	If I_294\Using Then Update294()
 	
 	If ClosestButton <> 0 And (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And SelectedDoor = Null And SelectedScreen = Null And (Not MenuOpen) And (Not ConsoleOpen) Then
+		Temp = CreatePivot()
+		PositionEntity(Temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
+		PointEntity(Temp, ClosestButton)
+		FreeEntity(Temp)
+		
 		If mo\MouseUp1 Then
 			mo\MouseUp1 = False
 			If ClosestDoor <> Null Then 
