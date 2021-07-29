@@ -103,7 +103,6 @@ Function UpdateMainMenu()
 	
 	While fps\Accumulator > 0.0
 		fps\Accumulator = fps\Accumulator - TICK_DURATION
-		If fps\Accumulator =< 0.0 Then CaptureWorld()
 		
 		If Input_ResetTime > 0.0 Then
 			Input_ResetTime = Max(Input_ResetTime - fps\Factor[0], 0.0)

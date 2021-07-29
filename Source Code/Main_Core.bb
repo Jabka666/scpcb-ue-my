@@ -3354,11 +3354,6 @@ Function UpdateGUI()
 	If I_294\Using Then Update294()
 	
 	If ClosestButton <> 0 And (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And SelectedDoor = Null And SelectedScreen = Null And (Not MenuOpen) And (Not ConsoleOpen) Then
-		Temp = CreatePivot()
-		PositionEntity(Temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
-		PointEntity(Temp, ClosestButton)
-		FreeEntity(Temp)
-		
 		If mo\MouseUp1 Then
 			mo\MouseUp1 = False
 			If ClosestDoor <> Null Then 
@@ -5810,8 +5805,6 @@ Function RenderGUI()
 		If SelectedItem <> Null Then
 			If SelectedItem\ItemTemplate\TempName = "scp005" Then ShouldDrawHUD = False
 		EndIf
-		
-		SelectedItem = Null
 		If ShouldDrawHUD Then
 			Pvt = CreatePivot()
 			PositionEntity(Pvt, EntityX(ClosestButton, True), EntityY(ClosestButton, True), EntityZ(ClosestButton, True))
