@@ -738,7 +738,7 @@ Function UpdateNPCs()
 																	
 																	If EntityPick(Pvt, 0.5) = d\Buttons[i] Then 
 																		PlaySound_Strict(LoadTempSound("SFX\Door\DoorOpen173.ogg"))
-																		UseDoor(d, True)
+																		UseDoor(d, False)
 																	EndIf
 																	FreeEntity(Pvt)
 																EndIf
@@ -1662,7 +1662,7 @@ Function UpdateNPCs()
 														If (Not n\Path[n\PathLocation - 1]\door\IsElevatorDoor) Then
 															If EntityDistanceSquared(n\Path[n\PathLocation - 1]\OBJ, n\Collider) > 0.09 Then
 																If n\Path[n\PathLocation - 1]\door\OpenState = 180.0 And n\Path[n\PathLocation - 1]\door\MTFClose And (n\Path[n\PathLocation - 1]\door\Buttons[0] <> 0 Lor n\Path[n\PathLocation - 1]\door\Buttons[1] <> 0) Then
-																	UseDoor(n\Path[n\PathLocation - 1]\door, True)
+																	UseDoor(n\Path[n\PathLocation - 1]\door, False)
 																EndIf
 															EndIf
 														EndIf
@@ -1685,7 +1685,7 @@ Function UpdateNPCs()
 															Temp = False
 														Else
 															If (Not n\Path[n\PathLocation]\door\Open) And (n\Path[n\PathLocation]\door\Buttons[0] <> 0 Lor n\Path[n\PathLocation]\door\Buttons[1] <> 0) Then
-																UseDoor(n\Path[n\PathLocation]\door, True)
+																UseDoor(n\Path[n\PathLocation]\door, False)
 															EndIf
 														EndIf
 													EndIf
@@ -1916,7 +1916,7 @@ Function UpdateNPCs()
 												If n\Path[n\PathLocation - 1]\door <> Null Then
 													If n\Path[n\PathLocation - 1]\door\KeyCard = 0
 														If EntityDistanceSquared(n\Path[n\PathLocation - 1]\OBJ, n\Collider) > 0.09
-															If n\Path[n\PathLocation - 1]\door\Open Then UseDoor(n\Path[n\PathLocation - 1]\door, True)
+															If n\Path[n\PathLocation - 1]\door\Open Then UseDoor(n\Path[n\PathLocation - 1]\door, False)
 														EndIf
 													EndIf
 												EndIf
@@ -1927,7 +1927,7 @@ Function UpdateNPCs()
 										Dist2 = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 										If Dist2 < 0.36 Then
 											If n\Path[n\PathLocation]\door <> Null Then
-												If (Not n\Path[n\PathLocation]\door\Open) Then UseDoor(n\Path[n\PathLocation]\Door, True)
+												If (Not n\Path[n\PathLocation]\door\Open) Then UseDoor(n\Path[n\PathLocation]\Door, False)
 											EndIf
 										EndIf
 										
@@ -2081,7 +2081,7 @@ Function UpdateNPCs()
 												If ((n\Path[n\PathLocation]\door\Locked = 1 Lor n\Path[n\PathLocation]\door\KeyCard > 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open)) Then
 													Temp = False
 												Else
-													If (Not n\Path[n\PathLocation]\door\Open) Then UseDoor(n\Path[n\PathLocation]\Door, True)
+													If (Not n\Path[n\PathLocation]\door\Open) Then UseDoor(n\Path[n\PathLocation]\Door, False)
 												EndIf
 											EndIf
 											If n\Path[n\PathLocation]\door\OpenState >= 180.0
@@ -3858,7 +3858,7 @@ Function UpdateNPCs()
 													If d\Locked = 0 And d\KeyCard = 0 And d\Code = "" Then
 														If Abs(EntityX(d\FrameOBJ) - EntityX(n\Collider)) < 16.0 Then
 															If Abs(EntityZ(d\FrameOBJ) - EntityZ(n\Collider)) < 16.0 Then
-																UseDoor(d, True)
+																UseDoor(d, False)
 															EndIf
 														EndIf
 													EndIf
@@ -4165,7 +4165,7 @@ Function UpdateNPCs()
 																	Temp = False
 																Else
 																	If (Not n\Path[n\PathLocation]\door\Open) And (n\Path[n\PathLocation]\door\Buttons[0] <> 0 Lor n\Path[n\PathLocation]\door\Buttons[1] <> 0) Then
-																		UseDoor(n\Path[n\PathLocation]\door, True)
+																		UseDoor(n\Path[n\PathLocation]\door, False)
 																	EndIf
 																EndIf
 															EndIf
@@ -4772,7 +4772,7 @@ Function UpdateNPCs()
 												If ((n\Path[n\PathLocation]\door\Locked = 1 Lor n\Path[n\PathLocation]\door\KeyCard > 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open)) Then
 													Temp = False
 												Else
-													If (Not n\Path[n\PathLocation]\door\Open) Then UseDoor(n\Path[n\PathLocation]\Door, True)
+													If (Not n\Path[n\PathLocation]\door\Open) Then UseDoor(n\Path[n\PathLocation]\Door, False)
 												EndIf
 											EndIf
 											If n\Path[n\PathLocation]\door\OpenState >= 180.0
@@ -5138,7 +5138,7 @@ Function UpdateMTFUnit(n.NPCs)
 								For r.Rooms = Each Rooms
 									If r\RoomTemplate\Name = "cont1_173" Then
 										If EntityX(n\Collider, True) - r\x < 15.0 Then
-											If r\RoomDoors[1]\Open Then UseDoor(r\RoomDoors[1], True)
+											If r\RoomDoors[1]\Open Then UseDoor(r\RoomDoors[1], False)
 											Curr173\IsDead = True
 										EndIf
 									EndIf
@@ -5174,7 +5174,7 @@ Function UpdateMTFUnit(n.NPCs)
 										EndIf
 										
 										If Curr173\Idle = 3 And DistanceSquared(EntityX(Pvt), EntityX(n\Collider), EntityZ(Pvt), EntityZ(n\Collider)) > 16.0 Then
-											If r\RoomDoors[1]\Open Then UseDoor(r\RoomDoors[1], True)
+											If r\RoomDoors[1]\Open Then UseDoor(r\RoomDoors[1], False)
 										EndIf
 										
 										FreeEntity(Pvt)
