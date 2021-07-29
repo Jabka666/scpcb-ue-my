@@ -3386,8 +3386,6 @@ Function UpdateGUI()
 			If SelectedItem\ItemTemplate\TempName = "scp005" Then 
 				ShouldDrawHUD = False
 				If SelectedDoor\Code <> "GEAR" Then
-					SelectedDoor\Locked = 1					
-					
 					If SelectedDoor\Code = Str(AccessCode) Then
 						GiveAchievement(AchvMaynard)
 					ElseIf SelectedDoor\Code = "7816"
@@ -3396,7 +3394,6 @@ Function UpdateGUI()
 						GiveAchievement(AchvO5)
 					EndIf
 					
-					SelectedDoor\Locked = 0					
 					UseDoor(SelectedDoor, True)
 					SelectedDoor = Null
 					PlaySound_Strict(ScannerSFX1)
@@ -3474,7 +3471,6 @@ Function UpdateGUI()
 											GiveAchievement(AchvO5)
 										EndIf									
 										
-										SelectedDoor\Locked = 0
 										UseDoor(SelectedDoor, True)
 										SelectedDoor = Null
 										StopMouseMovement()
