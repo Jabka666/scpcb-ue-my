@@ -5609,7 +5609,7 @@ Function FillRoom(r.Rooms)
 							;[End Block]
 						Case 1 ; ~ Generator fuel pump
 							;[Block]
-							PositionEntity(r\Objects[k * 2 + i], r\x - 920.0 * RoomScale, r\y + 164.0 * RoomScale, r\z + 898.0 * RoomScale)
+							PositionEntity(r\Objects[k * 2 + i], r\x - 917.0 * RoomScale, r\y + 164.0 * RoomScale, r\z + 898.0 * RoomScale)
 							;[End Block]
 						Case 2 ; ~ Generator On / Off
 							;[Block]
@@ -5618,7 +5618,7 @@ Function FillRoom(r.Rooms)
 					End Select
 					EntityParent(r\Objects[k * 2 + i], r\OBJ)
 				Next
-				RotateEntity(r\Objects[k * 2 + 1], 81, -180, 0)
+				RotateEntity(r\Objects[k * 2 + 1], 81.0, -180.0, 0.0)
 				EntityPickMode(r\Objects[k * 2 + 1], 1, False)
 				EntityRadius(r\Objects[k * 2 + 1], 0.1)
 			Next
@@ -6139,7 +6139,7 @@ Function FillRoom(r.Rooms)
 			it.Items = CreateItem("SCP-1025", "scp1025", r\x + 560.0 * RoomScale, r\y + 185.0 * RoomScale, r\z - 760.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("SCP-860", "scp860", r\x + 560.0 * RoomScale, r\y + 185.0 * RoomScale, r\z + 760.0 * RoomScale)
+			it.Items = CreateItem("SCP-860", "scp860", r\x + 560.0 * RoomScale, r\y + 185.0 * RoomScale, r\z + 747.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Document SCP-714", "paper", r\x - 728.0 * RoomScale, r\y + 288.0 * RoomScale, r\z - 360.0 * RoomScale)
@@ -7770,13 +7770,13 @@ Function FillRoom(r.Rooms)
 			d\AutoClose = False
 			
 			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x, r\y + 76.0 * RoomScale, r\z - 238.0 * RoomScale)
+			PositionEntity(r\Objects[0], r\x, r\y + 76.0 * RoomScale, r\z - 210.0 * RoomScale)
 			
 			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x, r\y + 188.0 * RoomScale, r\z + 185.0 * RoomScale)			
+			PositionEntity(r\Objects[1], r\x, r\y + 188.0 * RoomScale, r\z + 187.0 * RoomScale)			
 			
 			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], r\x, r\y + 12.0 * RoomScale, r\z + 230.0 * RoomScale)
+			PositionEntity(r\Objects[2], r\x, r\y + 12.0 * RoomScale, r\z + 240.0 * RoomScale)
 			
 			For i = 0 To 2
 				EntityParent(r\Objects[i], r\OBJ)
@@ -7790,10 +7790,10 @@ Function FillRoom(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			
 			If I_005\ChanceToSpawn = 1 Then
-				it.Items = CreateItem("SCP-005", "scp005", r\x, r\y + 255.0 * RoomScale, r\z - 230.0 * RoomScale)
+				it.Items = CreateItem("SCP-005", "scp005", r\x, r\y + 255.0 * RoomScale, r\z - 210.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			ElseIf I_005\ChanceToSpawn = 2
-				it.Items = CreateItem("Note from Maynard", "paper", r\x, r\y + 255.0 * RoomScale, r\z - 230.0 * RoomScale)
+				it.Items = CreateItem("Note from Maynard", "paper", r\x, r\y + 255.0 * RoomScale, r\z - 210.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)	
 			EndIf
 			;[End Block]
