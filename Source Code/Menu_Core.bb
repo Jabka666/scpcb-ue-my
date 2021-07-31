@@ -21,6 +21,7 @@ End Type
 Global mma.MainMenuAssets = New MainMenuAssets
 
 MenuWhite = LoadImage_Strict("GFX\menu\menu_white.png")
+MenuGray = LoadImage_Strict("GFX\menu\menu_gray.png")
 MenuBlack = LoadImage_Strict("GFX\menu\menu_black.png")
 MaskImage(MenuBlack, 255, 255, 0)
 
@@ -88,8 +89,8 @@ Const VersionNumber$ = "1.0.0"
 Const MainMenuTab_Default% = 0
 Const MainMenuTab_New_Game% = 1
 Const MainMenuTab_Load_Game% = 2
-Const MainMenuTab_Options_Graphics% = 3
-Const MainMenuTab_Load_Map% = 4
+Const MainMenuTab_Load_Map% = 3
+Const MainMenuTab_Options_Graphics% = 4
 Const MainMenuTab_Options_Audio% = 5
 Const MainMenuTab_Options_Controls% = 6
 Const MainMenuTab_Options_Advanced% = 7
@@ -1856,18 +1857,21 @@ Function UpdateLauncher(lnchr.Launcher)
 	
 	fo\FontID[Font_Default] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 16, True)
 	SetFont(fo\FontID[Font_Default])
+	
+	; ~ TODO: Get rid of these lines
 	MenuWhite = LoadImage_Strict("GFX\menu\menu_white.png")
+	MenuGray = LoadImage_Strict("GFX\menu\menu_gray.png")
 	MenuBlack = LoadImage_Strict("GFX\menu\menu_black.png")	
 	MaskImage(MenuBlack, 255, 255, 0)
 	
-	Local LauncherIMG% = LoadImage_Strict("GFX\menu\launcher.png")
-	Local LauncherArrowIMG% = LoadImage_Strict("GFX\menu\arrow.png")
-	Local DiscordIMG% = LoadImage_Strict("GFX\menu\discord_icon.png")
-	Local ModDBIMG% = LoadImage_Strict("GFX\menu\moddb_icon.png")
-	Local YouTubeIMG% = LoadImage_Strict("GFX\menu\youtube_icon.png")
+	Local LauncherIMG%[3]
 	
-	RotateImage(LauncherArrowIMG, -90.0)
-	MidHandle(LauncherArrowIMG)
+	LauncherIMG[0] = LoadImage_Strict("GFX\menu\launcher.png")
+	LauncherIMG[1] = LoadImage_Strict("GFX\menu\arrow.png")
+	LauncherIMG[2] = LoadAnimImage_Strict("GFX\menu\launcher_media.png", 64, 64, 0, 3)
+	
+	RotateImage(LauncherIMG[1], -90.0)
+	MidHandle(LauncherIMG[1])
 	
 	For i = 1 To lnchr\TotalGFXModes
 		Local SameFound% = False
@@ -1901,7 +1905,7 @@ Function UpdateLauncher(lnchr.Launcher)
 		mo\MouseHit1 = MouseHit(1)
 		
 		Color(255, 255, 255)
-		DrawImage(LauncherIMG, 0, 0)
+		DrawImage(LauncherIMG[0], 0, 0)
 		
 		Text(LauncherWidth - 620, LauncherHeight - 305, "Resolution: ")
 		
@@ -1958,23 +1962,23 @@ Function UpdateLauncher(lnchr.Launcher)
 		If UpdateLauncherButton(LauncherWidth - 65, LauncherHeight - 226, 30, 30, "", False) Then
 			opt\DisplayMode = ((opt\DisplayMode + 1) Mod 3)
 		EndIf
-		DrawImage(LauncherArrowIMG, LauncherWidth - 51, LauncherHeight - 212)
+		DrawImage(LauncherIMG[1], LauncherWidth - 51, LauncherHeight - 212)
 		
 		If MouseOn(LauncherWidth - 620, LauncherHeight - 86, 64, 64) Then
 			Rect(LauncherWidth - 621, LauncherHeight - 87, 66, 66, False)
 			If mo\MouseHit1 Then ExecFile("https://discord.gg/n7KdW4u")
 		EndIf
-		DrawImage(DiscordIMG, LauncherWidth - 620, LauncherHeight - 86)
+		DrawImage(LauncherIMG[2], LauncherWidth - 620, LauncherHeight - 86, 0)
 		If MouseOn(LauncherWidth - 510, LauncherHeight - 86, 64, 64) Then
 			Rect(LauncherWidth - 511, LauncherHeight - 87, 66, 66, False)
 			If mo\MouseHit1 Then ExecFile("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition")
 		EndIf
-		DrawImage(ModDBIMG, LauncherWidth - 510, LauncherHeight - 86)
+		DrawImage(LauncherIMG[2], LauncherWidth - 510, LauncherHeight - 86, 1)
 		If MouseOn(LauncherWidth - 400, LauncherHeight - 86, 64, 64) Then
 			Rect(LauncherWidth - 401, LauncherHeight - 87, 66, 66, False)
 			If mo\MouseHit1 Then ExecFile("https://www.youtube.com/channel/UCPqWOCPfKooDnrLNzA67Acw")
 		EndIf
-		DrawImage(YouTubeIMG, LauncherWidth - 400, LauncherHeight - 86)
+		DrawImage(LauncherIMG[2], LauncherWidth - 400, LauncherHeight - 86, 2)
 		
 		If UpdateLauncherButton(LauncherWidth - 300, LauncherHeight - 105, 150, 30, "REPORT A BUG!", False, False) Then
 			ExecFile("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition/news/bug-reports1")
@@ -2012,13 +2016,11 @@ Function UpdateLauncher(lnchr.Launcher)
 	PutINIValue(OptionFile, "Advanced", "Launcher Enabled", opt\LauncherEnabled)
 	PutINIValue(OptionFile, "Global", "Display Mode", opt\DisplayMode)
 	
-	If Quit Then End()
+	For i = 0 To 2
+		FreeImage(LauncherIMG[i]) : LauncherIMG[i] = 0
+	Next
 	
-	FreeImage(LauncherArrowIMG)
-	FreeImage(LauncherIMG)
-	FreeImage(DiscordIMG)
-	FreeImage(ModDBIMG)
-	FreeImage(YouTubeIMG)
+	If Quit Then End()
 End Function
 
 Type LoadingScreens
@@ -2354,9 +2356,16 @@ Function RenderTiledImageRect(Img%, SrcX%, SrcY%, SrcWidth#, SrcHeight#, x%, y%,
 	Wend
 End Function
 
-Function RenderFrame(x%, y%, Width%, Height%, xOffset% = 0, yOffset% = 0)
+Function RenderFrame(x%, y%, Width%, Height%, xOffset% = 0, yOffset% = 0, Locked% = False)
+	Local IMG%
+	
 	Color(255, 255, 255)
-	RenderTiledImageRect(MenuWhite, xOffset, (y Mod (256 * MenuScale)), 512 * MenuScale, 512 * MenuScale, x, y, Width, Height)
+	If Locked Then
+		IMG = MenuGray
+	Else
+		IMG = MenuWhite
+	EndIf
+	RenderTiledImageRect(IMG, xOffset, (y Mod (256 * MenuScale)), 512 * MenuScale, 512 * MenuScale, x, y, Width, Height)
 	RenderTiledImageRect(MenuBlack, yOffset, (y Mod (256 * MenuScale)), 512 * MenuScale, 512 * MenuScale, x + (3 * MenuScale), y + (3 * MenuScale), Width - (6 * MenuScale), Height - (6 * MenuScale))	
 End Function
 
@@ -2428,7 +2437,7 @@ Function RenderMenuButtons()
 	Local mb.MenuButton
 	
 	For mb.MenuButton = Each MenuButton
-		RenderFrame(mb\x, mb\y, mb\Width, mb\Height)
+		RenderFrame(mb\x, mb\y, mb\Width, mb\Height, 0, 0, mb\Locked)
 		If MouseOn(mb\x, mb\y, mb\Width, mb\Height) Then
 			Color(30, 30, 30)
 			Rect(mb\x + (3 * MenuScale), mb\y + (3 * MenuScale), mb\Width - (6 * MenuScale), mb\Height - (6 * MenuScale))	
@@ -2457,7 +2466,7 @@ End Function
 Function UpdateLauncherButton%(x%, y%, Width%, Height%, Txt$, BigFont% = True, WaitForMouseUp% = False, Locked% = False, R% = 255, G% = 255, B% = 255)
 	Local Clicked% = False
 	
-	RenderFrame(x, y, Width, Height)
+	RenderFrame(x, y, Width, Height, 0, 0, Locked)
 	If MouseOn(x, y, Width, Height) Then
 		Color(30, 30, 30)
 		If (mo\MouseHit1 And (Not WaitForMouseUp)) Lor (mo\MouseUp1 And WaitForMouseUp) Then 
@@ -2538,13 +2547,20 @@ End Function
 Function RenderMenuTicks()
 	Local mt.MenuTick
 	Local Width%, Height%
+	Local IMG%
 	
 	For mt.MenuTick = Each MenuTick
 		Width = 20 * MenuScale
 		Height = 20 * MenuScale
 		
+		If mt\Locked Then
+			IMG = MenuGray
+		Else
+			IMG = MenuWhite
+		EndIf
+		
 		Color(255, 255, 255)
-		RenderTiledImageRect(MenuWhite, (mt\x Mod (256 * MenuScale)), (mt\y Mod (256 * MenuScale)), 512 * MenuScale, 512 * MenuScale, mt\x, mt\y, Width, Height)
+		RenderTiledImageRect(IMG, (mt\x Mod (256 * MenuScale)), (mt\y Mod (256 * MenuScale)), 512 * MenuScale, 512 * MenuScale, mt\x, mt\y, Width, Height)
 		
 		Local Highlight% = MouseOn(mt\x, mt\y, Width, Height)
 		
@@ -2562,7 +2578,7 @@ Function RenderMenuTicks()
 			Else
 				Color(200, 200, 200)
 			EndIf
-			RenderTiledImageRect(MenuWhite, (mt\x Mod (256 * MenuScale)), (mt\y Mod (256 * MenuScale)), 512 * MenuScale, 512 * MenuScale, mt\x + 4, mt\y + 4, Width - 8, Height - 8)
+			RenderTiledImageRect(IMG, (mt\x Mod (256 * MenuScale)), (mt\y Mod (256 * MenuScale)), 512 * MenuScale, 512 * MenuScale, mt\x + 4, mt\y + 4, Width - 8, Height - 8)
 		EndIf
 		Color(255, 255, 255)
 	Next
@@ -2571,9 +2587,16 @@ End Function
 Function UpdateLauncherTick%(x%, y%, Selected%, Locked% = False)
 	Local Width% = 20, Height% = 20
 	Local Highlight% = MouseOn(x, y, Width, Height)
+	Local IMG%
+	
+	If Locked Then
+		IMG = MenuGray
+	Else
+		IMG = MenuWhite
+	EndIf
 	
 	Color(255, 255, 255)
-	RenderTiledImageRect(MenuWhite, (x Mod 256), (y Mod 256), 512, 512, x, y, Width, Height)
+	RenderTiledImageRect(IMG, (x Mod 256), (y Mod 256), 512, 512, x, y, Width, Height)
 	
 	If Highlight Then
 		If Locked Then
@@ -2595,7 +2618,7 @@ Function UpdateLauncherTick%(x%, y%, Selected%, Locked% = False)
 		Else
 			Color(200, 200, 200)
 		EndIf
-		RenderTiledImageRect(MenuWhite, (x Mod 256), (y Mod 256), 512, 512, x + 4, y + 4, Width - 8, Height - 8)
+		RenderTiledImageRect(IMG, (x Mod 256), (y Mod 256), 512, 512, x + 4, y + 4, Width - 8, Height - 8)
 	EndIf
 	Color(255, 255, 255)
 	Return(Selected)

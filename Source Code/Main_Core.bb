@@ -32,12 +32,12 @@ End Type
 
 Global fo.Fonts = New Fonts
 
-Global MenuWhite%, MenuBlack%
-
 Global ButtonSFX% = LoadSound_Strict("SFX\Interact\Button.ogg")
 Global ButtonSFX2% = LoadSound_Strict("SFX\Interact\Button2.ogg")
 
 Global WireFrameState%
+
+Global MenuWhite%, MenuGray%, MenuBlack%
 
 LoadOptionsINI()
 

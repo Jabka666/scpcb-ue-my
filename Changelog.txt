@@ -34,7 +34,8 @@
 - Added more details for rooms;
 - Added delete button for custom maps menu;
 - Added tiny visual effect for camera shaking (SCP-682 roar event, falling elevator and etc.).
-
+- Added gray color for locked buttons and ticks.
+ 
 - Re-added room3_gw.
 
 - Now guard in "room2_elevator" event can kill the player if he too close;
@@ -157,6 +158,7 @@ Bug Fixes:
 - Fixed menu and inventory opening during the endings;
 - Fixed SCP-096 can't be triggered through the glass;
 - Fixed wrong paper texture for props;
+- Fixed SCP-420-J position in room2_office_3 (room2sroom);
 - Fixed syringes position in room2_medibay_lcz and room2_medibay_ez;
 - Fixed SCP-173's distance on S-NAV Ultimate;
 - Fixed Keter achivement saving;
