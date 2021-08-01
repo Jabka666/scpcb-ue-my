@@ -2988,9 +2988,9 @@ Function UseDoor(d.Doors, Scripted% = False)
 					Else
 						If d\Locked = 1 Then
 							If Temp = 9 Then
-								CreateMsg("You hold the key close to the slot but nothing happened.", 6.0)
+								CreateMsg("You hold the key close to the slot, but nothing happened.", 6.0)
 							Else
-								CreateMsg("The keycard was inserted into the slot but nothing happened.", 6.0)
+								CreateMsg("The keycard was inserted into the slot, but nothing happened.", 6.0)
 							EndIf
 						Else
 							If Temp = 9 Then
@@ -3052,6 +3052,39 @@ Function UseDoor(d.Doors, Scripted% = False)
 					Return
 				EndIf
 			EndIf
+		ElseIf d\Code <> ""
+			If SelectedItem = Null Then
+				If (d\Locked = 0) And (d\Code = msg\KeyPadInput) And d\Code <> "GEAR" Then
+					PlaySound2(ScannerSFX1, Camera, ClosestButton)
+				Else
+					PlaySound2(ScannerSFX2, Camera, ClosestButton)
+					Return
+				EndIf
+			Else
+				If Temp = 9 Then
+					If d\Locked = 1 Then
+						CreateMsg("You hold the key close to the keypad, but nothing happened.", 6.0)
+					Else
+						CreateMsg("You hold the key close to the keypad.", 6.0)
+					EndIf
+				EndIf
+				SelectedItem = Null
+				
+				If (d\Locked = 0) And (d\Code <> "GEAR") And (Temp = 9) Then
+					PlaySound2(ScannerSFX1, Camera, ClosestButton)
+				Else
+					PlaySound2(ScannerSFX2, Camera, ClosestButton)
+					Return
+				EndIf
+			EndIf
+			
+			If d\Code = Str(AccessCode) Then
+				GiveAchievement(AchvMaynard)
+			ElseIf d\Code = "7816"
+				GiveAchievement(AchvHarp)
+			ElseIf d\Code = "2411"
+				GiveAchievement(AchvO5)
+			EndIf	
 		Else
 			If d\DoorType = Wooden_Door Lor d\DoorType = Office_Door Then
 				If d\Locked > 0 Then
@@ -3136,6 +3169,8 @@ Function UseDoor(d.Doors, Scripted% = False)
 				EndIf
 			EndIf
 		EndIf
+	Else
+		If d\DoorType = Wooden_Door Lor d\DoorType = Office_Door Then Return
 	EndIf
 	
 	If d\DoorType = Elevator_Door Then

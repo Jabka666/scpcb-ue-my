@@ -3382,30 +3382,13 @@ Function UpdateGUI()
 	
 	If SelectedDoor <> Null Then
 		If SelectedItem <> Null Then
-			If SelectedItem\ItemTemplate\TempName = "scp005" Then 
+			If SelectedItem\ItemTemplate\TempName = "scp005" Then
+				UseDoor(SelectedDoor)
 				ShouldDrawHUD = False
-				If SelectedDoor\Code <> "GEAR" Then
-					If SelectedDoor\Code = Str(AccessCode) Then
-						GiveAchievement(AchvMaynard)
-					ElseIf SelectedDoor\Code = "7816"
-						GiveAchievement(AchvHarp)
-					ElseIf SelectedDoor\Code = "2411"
-						GiveAchievement(AchvO5)
-					EndIf
-					
-					UseDoor(SelectedDoor)
-					SelectedDoor = Null
-					PlaySound_Strict(ScannerSFX1)
-					CreateMsg("You hold the key close to the keypad.", 6.0)
-				Else
-					SelectedDoor = Null
-					PlaySound_Strict(ScannerSFX2)
-					CreateMsg("You hold the key close to the keypad but nothing happens.", 6.0)
-				EndIf
+			Else
+				SelectedItem = Null
 			EndIf
 		EndIf
-		
-		SelectedItem = Null
 		If ShouldDrawHUD Then
 			Pvt = CreatePivot()
 			PositionEntity(Pvt, EntityX(ClosestButton, True), EntityY(ClosestButton, True), EntityZ(ClosestButton, True))
@@ -3460,21 +3443,11 @@ Function UpdateGUI()
 									;[End Block]
 								Case 8
 									;[Block]
+									UseDoor(SelectedDoor)
 									If msg\KeyPadInput = SelectedDoor\Code Then
-										PlaySound_Strict(ScannerSFX1)
-										If SelectedDoor\Code = Str(AccessCode) Then
-											GiveAchievement(AchvMaynard)
-										ElseIf SelectedDoor\Code = "7816"
-											GiveAchievement(AchvHarp)
-										ElseIf SelectedDoor\Code = "2411"
-											GiveAchievement(AchvO5)
-										EndIf									
-										
-										UseDoor(SelectedDoor)
 										SelectedDoor = Null
 										StopMouseMovement()
 									Else
-										PlaySound_Strict(ScannerSFX2)
 										msg\KeyPadMsg = "ACCESS DENIED"
 										msg\KeyPadTimer = 210.0
 										msg\KeyPadInput = ""	
@@ -5802,7 +5775,9 @@ Function RenderGUI()
 	
 	If SelectedDoor <> Null Then
 		If SelectedItem <> Null Then
-			If SelectedItem\ItemTemplate\TempName = "scp005" Then ShouldDrawHUD = False
+			If SelectedItem\ItemTemplate\TempName = "scp005" Then
+				ShouldDrawHUD = False
+			EndIf
 		EndIf
 		If ShouldDrawHUD Then
 			Pvt = CreatePivot()
