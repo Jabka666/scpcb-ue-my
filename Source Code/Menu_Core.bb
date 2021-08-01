@@ -62,14 +62,13 @@ Global ga.GameAssets = New GameAssets
 
 Function LoadGameAssets()
 	Local i%
-	Local IMG% = LoadImage_Strict("GFX\menu\arrow.png")
 	
+	; ~ TODO: Make as one image
 	For i = 0 To 3
-		ga\ArrowIMG[i] = CopyImage(IMG)
+		ga\ArrowIMG[i] = LoadImage_Strict("GFX\menu\arrow.png")
 		RotateImage(ga\ArrowIMG[i], i * 90.0)
 		HandleImage(ga\ArrowIMG[i], 0, 0)
 	Next
-	FreeImage(IMG)
 End Function
 
 LoadGameAssets()
