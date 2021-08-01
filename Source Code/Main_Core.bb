@@ -3364,8 +3364,7 @@ Function UpdateGUI()
 				If ClosestDoor\Code <> "" Then
 					SelectedDoor = ClosestDoor
 				ElseIf me\Playable Then
-					If ClosestDoor\DoorType <> Office_Door Then PlaySound2(ButtonSFX, Camera, ClosestButton)
-					UseDoor(ClosestDoor, True)				
+					UseDoor(ClosestDoor)				
 				EndIf
 			EndIf
 		EndIf
@@ -3394,7 +3393,7 @@ Function UpdateGUI()
 						GiveAchievement(AchvO5)
 					EndIf
 					
-					UseDoor(SelectedDoor, True)
+					UseDoor(SelectedDoor)
 					SelectedDoor = Null
 					PlaySound_Strict(ScannerSFX1)
 					CreateMsg("You hold the key close to the keypad.", 6.0)
@@ -3471,7 +3470,7 @@ Function UpdateGUI()
 											GiveAchievement(AchvO5)
 										EndIf									
 										
-										UseDoor(SelectedDoor, True)
+										UseDoor(SelectedDoor)
 										SelectedDoor = Null
 										StopMouseMovement()
 									Else
@@ -8343,31 +8342,31 @@ Function LoadEntities()
 	
 	; ~ [DOORS]
 	
-	o\DoorModelID[0] = LoadMesh_Strict("GFX\map\Props\Door01.x") ; ~ Default Door
+	o\DoorModelID[Default_Door] = LoadMesh_Strict("GFX\map\Props\Door01.x") ; ~ Default Door
 	
-	o\DoorModelID[1] = LoadMesh_Strict("GFX\map\Props\DoorFrame.b3d") ; ~ Door Frame
+	o\DoorModelID[Elevator_Door] = LoadMesh_Strict("GFX\map\Props\ElevatorDoor.b3d") ; ~ Elevator Door
 	
-	o\DoorModelID[2] = LoadMesh_Strict("GFX\map\Props\HeavyDoor1.x") ; ~ Heavy Door #1
+	o\DoorModelID[Heavy_Door] = LoadMesh_Strict("GFX\map\Props\HeavyDoor1.x") ; ~ Heavy Door #1
 	
-	o\DoorModelID[3] = LoadMesh_Strict("GFX\map\Props\HeavyDoor2.x") ; ~ Heavy Door #2
+	o\DoorModelID[Big_Door] = LoadMesh_Strict("GFX\map\Props\contdoorleft.x") ; ~ Big Door Left
 	
-	o\DoorModelID[4] = LoadMesh_Strict("GFX\map\Props\DoorColl.x") ; ~ Door Collider
+	o\DoorModelID[Office_Door] = LoadAnimMesh_Strict("GFX\map\Props\officedoor.b3d") ; ~ Office Door
 	
-	o\DoorModelID[5] = LoadMesh_Strict("GFX\map\Props\contdoorleft.x") ; ~ Big Door Left
+	o\DoorModelID[Wooden_Door] = LoadMesh_Strict("GFX\map\Props\DoorWooden.b3d") ; ~ Wooden Door
 	
-	o\DoorModelID[6] = LoadMesh_Strict("GFX\map\Props\contdoorright.x") ; ~ Big Door Right
+	o\DoorModelID[One_Sided_Door] = LoadMesh_Strict("GFX\map\Props\Door02.x") ; ~ One-sided Door
 	
-	o\DoorModelID[7] = LoadMesh_Strict("GFX\map\Props\ElevatorDoor.b3d") ; ~ Elevator Door
+	o\DoorModelID[Heavy_Door + 5] = LoadMesh_Strict("GFX\map\Props\HeavyDoor2.x") ; ~ Heavy Door #2
 	
-	o\DoorModelID[8] = LoadMesh_Strict("GFX\map\Props\DoorWoodenFrame.b3d") ; ~ Wooden Door Frame
+	o\DoorModelID[Big_Door + 5] = LoadMesh_Strict("GFX\map\Props\contdoorright.x") ; ~ Big Door Right
 	
-	o\DoorModelID[9] = LoadMesh_Strict("GFX\map\Props\DoorWooden.b3d") ; ~ Wooden Door
+	o\DoorModelID[9] = LoadMesh_Strict("GFX\map\Props\DoorFrame.b3d") ; ~ Door Frame
 	
-	o\DoorModelID[10] = LoadMesh_Strict("GFX\map\Props\Door02.x") ; ~ One-sided Door
+	o\DoorModelID[10] = LoadMesh_Strict("GFX\map\Props\officedoorframe.b3d") ; ~ Ofifce Door Frame
 	
-	o\DoorModelID[11] = LoadAnimMesh_Strict("GFX\map\Props\officedoor.b3d") ; ~ Office Door
+	o\DoorModelID[11] = LoadMesh_Strict("GFX\map\Props\DoorWoodenFrame.b3d") ; ~ Wooden Door Frame
 	
-	o\DoorModelID[12] = LoadMesh_Strict("GFX\map\Props\officedoorframe.b3d") ; ~ Ofifce Door Frame
+	o\DoorModelID[12] = LoadMesh_Strict("GFX\map\Props\ContDoorFrame.b3d") ; ~ Big Door Frame
 	
 	For i = 0 To MaxDoorModelIDAmount - 1
 		HideEntity(o\DoorModelID[i])

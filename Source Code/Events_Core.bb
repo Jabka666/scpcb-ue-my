@@ -1237,9 +1237,7 @@ Function UpdateEvents()
 										e\room\NPC[i]\State = 9.0
 									Next
 									
-									e\room\RoomDoors[5]\Locked = 0		
-									UseDoor(e\room\RoomDoors[5], False)
-									e\room\RoomDoors[5]\Locked = 1
+									UseDoor(e\room\RoomDoors[5], True)
 								EndIf
 							Else
 								If e\room\NPC[3]\Sound2 <> 0 Then
@@ -1264,9 +1262,7 @@ Function UpdateEvents()
 										e\room\NPC[3]\PathStatus = FindPath(e\room\NPC[3], PlayerRoom\x - 320.0 * RoomScale, 0.3, PlayerRoom\z - 704.0 * RoomScale)
 										e\room\NPC[4]\PathStatus = FindPath(e\room\NPC[4], PlayerRoom\x - 320.0 * RoomScale, 0.3, PlayerRoom\z - 704.0 * RoomScale)
 										
-										e\room\RoomDoors[5]\Locked = 0		
-										UseDoor(e\room\RoomDoors[5], False)
-										e\room\RoomDoors[5]\Locked = 1
+										UseDoor(e\room\RoomDoors[5], True)
 										
 										e\EventState3 = 710.0
 									EndIf
@@ -1290,9 +1286,7 @@ Function UpdateEvents()
 									ElseIf e\EventState3 > 630.0
 										PositionEntity(me\Collider, EntityX(me\Collider), EntityY(me\Collider), Min(EntityZ(me\Collider), EntityZ(e\room\OBJ, True) + 490.0 * RoomScale))
 										If e\room\RoomDoors[5]\Open Then 
-											e\room\RoomDoors[5]\Locked = 0		
-											UseDoor(e\room\RoomDoors[5], False)
-											e\room\RoomDoors[5]\Locked = 1
+											UseDoor(e\room\RoomDoors[5], True)
 											
 											em.Emitters = CreateEmitter(PlayerRoom\x - (2976.0 + 1024.0) * RoomScale, PlayerRoom\y + 373.0 * RoomScale, PlayerRoom\z + 204.0 * RoomScale, 0)
 											em\RandAngle = 7.0 : em\Speed = 0.03 : em\SizeChange = 0.003 : em\Room = PlayerRoom
@@ -1404,7 +1398,7 @@ Function UpdateEvents()
 									If EntityZ(e\room\NPC[6]\Collider) > EntityZ(e\room\OBJ, True) - 64.0 * RoomScale Then
 										RotateEntity(e\room\NPC[6]\Collider, 0.0, CurveAngle(90.0, EntityYaw(e\room\NPC[6]\Collider), 15.0), 0.0)
 										If e\room\RoomDoors[6]\Open Then 
-											UseDoor(e\room\RoomDoors[6], False, True, True)
+											UseDoor(e\room\RoomDoors[6], True)
 										EndIf
 										If e\room\RoomDoors[6]\OpenState < 1.0 Then e\room\NPC[6]\State = 0.0
 									EndIf
@@ -1636,9 +1630,7 @@ Function UpdateEvents()
 								
 								e\EventState3 = 905.0
 								
-								e\room\RoomDoors[3]\Locked = 0
-								UseDoor(e\room\RoomDoors[3], False)
-								e\room\RoomDoors[3]\Locked = 1
+								UseDoor(e\room\RoomDoors[3], True)
 								
 								e\room\NPC[1] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[1], True), 0.5, EntityZ(e\room\Objects[1], True))
 								PointEntity(e\room\NPC[1]\Collider, e\room\Objects[5])
@@ -1674,9 +1666,7 @@ Function UpdateEvents()
 										
 										PickItem(SelectedItem)
 										
-										e\room\RoomDoors[2]\Locked = 0
-										UseDoor(e\room\RoomDoors[2], False)
-										e\room\RoomDoors[2]\Locked = 1
+										UseDoor(e\room\RoomDoors[2], True)
 										e\EventState3 = 910.0
 										e\room\NPC[3]\State3 = 0.0
 										SetNPCFrame(e\room\NPC[3], 608.0)
@@ -1726,21 +1716,17 @@ Function UpdateEvents()
 										For i = 3 To 4
 											e\room\NPC[i]\State = 11.0 : e\room\NPC[i]\State3 = 1.0
 										Next
-										e\room\RoomDoors[2]\Locked = 0
-										UseDoor(e\room\RoomDoors[2], False)
-										e\room\RoomDoors[2]\Locked = 1
+										UseDoor(e\room\RoomDoors[2], True)
 									EndIf
 								EndIf
 								
 								If DistanceSquared(EntityX(me\Collider), EntityX(e\room\OBJ), EntityZ(me\Collider), EntityZ(e\room\OBJ)) < 16.0 Then
-									e\room\RoomDoors[2]\Locked = 0
-									UseDoor(e\room\RoomDoors[2], False)
-									e\room\RoomDoors[2]\Locked = 1
+									For i = 1 To 2
+										UseDoor(e\room\RoomDoors[i], True)
+									Next
 									For i = 3 To 4
 										e\room\NPC[i]\State = 0.0
 									Next
-									
-									UseDoor(e\room\RoomDoors[1], False)
 									
 									If ChannelPlaying(e\room\NPC[3]\SoundCHN) Then StopChannel(e\room\NPC[3]\SoundCHN)
 									
@@ -1908,13 +1894,11 @@ Function UpdateEvents()
 										e\Sound = LoadSound_Strict("SFX\Room\Intro\Scientist\Franklin\Refuse3.ogg")
 										e\SoundCHN = PlaySound_Strict(e\Sound)
 										
-										UseDoor(e\room\RoomDoors[1], False)
+										UseDoor(e\room\RoomDoors[1], True)
 									ElseIf e\EventState > 1000.0
 										e\room\NPC[0]\State = 1.0 : e\room\NPC[0]\State2 = 10.0 : e\room\NPC[0]\State3 = 1.0
 										e\room\NPC[3]\State = 11.0
-										e\room\RoomDoors[2]\Locked = 0
-										UseDoor(e\room\RoomDoors[2], False)
-										e\room\RoomDoors[2]\Locked = 1
+										UseDoor(e\room\RoomDoors[2], True)
 										e\EventState2 = 1.0
 										Exit
 									EndIf
@@ -1924,7 +1908,7 @@ Function UpdateEvents()
 									EndIf
 								ElseIf Temp = True
 									e\EventState = 10000.0
-									UseDoor(e\room\RoomDoors[1], False)
+									UseDoor(e\room\RoomDoors[1], True)
 								EndIf
 							EndIf
 							
@@ -1961,7 +1945,7 @@ Function UpdateEvents()
 								
 								PositionEntity(me\Collider, Max(EntityX(me\Collider), EntityX(e\room\OBJ) + 352.0 * RoomScale), EntityY(me\Collider), EntityZ(me\Collider))
 							ElseIf e\EventState >= 10440.0 And e\EventState - fps\Factor[0] < 10440.0
-								UseDoor(e\room\RoomDoors[1], False)
+								UseDoor(e\room\RoomDoors[1], True)
 								PlaySound_Strict(IntroSFX[3])
 							ElseIf e\EventState >= 10740.0 And e\EventState - fps\Factor[0] < 10740.0
 								If e\Sound <> 0 Then
@@ -3589,9 +3573,7 @@ Function UpdateEvents()
 						EndIf
 						
 						If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\Objects[1]) < 4.0 Then
-							e\room\RoomDoors[0]\Locked = 0
-							UseDoor(e\room\RoomDoors[0], False, True, True)
-							e\room\RoomDoors[0]\Locked = 1
+							UseDoor(e\room\RoomDoors[0], True)
 							e\room\RoomDoors[0]\IsElevatorDoor = 0
 							
 							PlaySound_Strict(LoadTempSound("SFX\Room\ElevatorDeath.ogg"))
@@ -5042,8 +5024,7 @@ Function UpdateEvents()
 					If PlayerRoom = e\room Then
 						; ~ Close the doors when the player enters the room
 						For i = 0 To 1
-							UseDoor(e\room\RoomDoors[i], False)
-							e\room\RoomDoors[i]\Locked = 1
+							UseDoor(e\room\RoomDoors[i], True)
 						Next
 						
 						If Curr096 <> Null Then
@@ -5174,15 +5155,12 @@ Function UpdateEvents()
 						EndIf
 					Else
 						If e\EventState >= 70.0 * 40.0 And e\EventState - fps\Factor[0] < 70.0 * 40.0 Then ; ~ Open them again to let the player in
-							e\room\RoomDoors[0]\Locked = 0
-							e\room\RoomDoors[1]\Locked = 0
-							UseDoor(e\room\RoomDoors[0], False)
-							UseDoor(e\room\RoomDoors[1], False)
+							For i = 0 To 1
+								UseDoor(e\room\RoomDoors[i], True)
+							Next
 							If e\Sound <> 0 Then
 								FreeSound_Strict(e\Sound) : e\Sound = 0
 							EndIf
-							e\room\RoomDoors[0]\Locked = 1
-							e\room\RoomDoors[1]\Locked = 1
 						EndIf
 						
 						If PlayerRoom = e\room Then
@@ -5243,16 +5221,11 @@ Function UpdateEvents()
 					Else
 						If Rand(200) < 5 Then me\LightBlink = Rnd(0.5, 1.0)
 						
-						If e\room\RoomDoors[0]\Open Then 
-							e\room\RoomDoors[0]\Locked = 0
-							UseDoor(e\room\RoomDoors[0], False) 
-						EndIf
-						If e\room\RoomDoors[1]\Open Then 
-							e\room\RoomDoors[1]\Locked = 0
-							UseDoor(e\room\RoomDoors[1], False)
-						EndIf
-						e\room\RoomDoors[0]\Locked = 1
-						e\room\RoomDoors[1]\Locked = 1							
+						For i = 0 To 1
+							If e\room\RoomDoors[i]\Open Then 
+								UseDoor(e\room\RoomDoors[i], True) 
+							EndIf
+						Next
 					EndIf
 				EndIf
 				;[End Block]
@@ -5732,9 +5705,7 @@ Function UpdateEvents()
 								PlaySound_Strict(HorrorSFX[7])
 								PlaySound2(LeverSFX, Camera, e\room\RoomDoors[0]\OBJ)
 								
-								e\room\RoomDoors[0]\Locked = 0
-								UseDoor(e\room\RoomDoors[0], False)
-								e\room\RoomDoors[0]\Locked = 1
+								UseDoor(e\room\RoomDoors[0], True)
 								
 								e\EventState = 1.0
 							EndIf
@@ -6177,13 +6148,11 @@ Function UpdateEvents()
 									e\room\RoomDoors[2]\Open = False
 									e\room\RoomDoors[2]\Locked = 1
 									
-									If (Not e\room\RoomDoors[1]\Open) Then 
-										e\room\RoomDoors[0]\Locked = 0
-										e\room\RoomDoors[1]\Locked = 0
-										UseDoor(e\room\RoomDoors[1])
-										e\room\RoomDoors[0]\Locked = 1
-										e\room\RoomDoors[1]\Locked = 1
-									EndIf
+									For i = 0 To 1
+										If (Not e\room\RoomDoors[i]\Open) Then 
+											UseDoor(e\room\RoomDoors[i], True)
+										EndIf
+									Next
 									
 									If e\EventState3 = 0.0 Then
 										If e\room\NPC[0]\Sound <> 0 Then 
@@ -6230,12 +6199,12 @@ Function UpdateEvents()
 										For i = 0 To 2
 											e\room\RoomDoors[i]\Locked = 0										
 										Next
-										UseDoor(e\room\RoomDoors[1], False)
+										UseDoor(e\room\RoomDoors[1], True)
 										For do.Doors = Each Doors
 											If do\DoorType = Heavy_Door Then
 												If Abs(EntityX(e\room\OBJ) - EntityX(do\FrameOBJ, True)) < 4.5 Then 
 													If Abs(EntityZ(e\room\OBJ) - EntityZ(do\FrameOBJ, True)) < 4.5 Then 
-														UseDoor(do, False)
+														UseDoor(do, True)
 														Exit
 													EndIf
 												EndIf
@@ -6449,7 +6418,7 @@ Function UpdateEvents()
 										ResetEntity(e\room\NPC[0]\Collider)
 										PlaySound2(ElevatorBeepSFX, Camera, e\room\Objects[i], 4.0)
 										e\room\RoomDoors[i]\Locked = 0
-										UseDoor(e\room\RoomDoors[i], False, True)
+										UseDoor(e\room\RoomDoors[i], True)
 										e\room\RoomDoors[i - 1]\Open = False
 										e\room\RoomDoors[i]\Open = True
 										e\room\NPC[0]\PathStatus = FindPath(e\room\NPC[0], EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
@@ -7056,8 +7025,6 @@ Function UpdateEvents()
 				;[Block]
 				; ~ e\EventState: Is the player in the forest
 				
-				; ~ e\EventState2: Which side of the door did the player enter from
-				
 				; ~ e\EventState3: SCP-860-2 spawn timer
 				
 				Local fr.Forest = e\room\fr
@@ -7116,33 +7083,23 @@ Function UpdateEvents()
 						EndIf
 						
 						For i = 0 To 1
-							If InteractObject(fr\Door[i], 0.64) Then
-								If i = e\EventState2 Then
-									me\BlinkTimer = -10.0
-									
-									PlaySound_Strict(LoadTempSound("SFX\Door\WoodenDoorOpen.ogg"))
-									
-									RotateEntity(e\room\Objects[3], 0.0, 0.0, 0.0)
-									RotateEntity(e\room\Objects[4], 0.0, 180.0, 0.0)
-									
-									PositionEntity(me\Collider, EntityX(e\room\Objects[2], True), 0.5, EntityZ(e\room\Objects[2], True))
-									
-									RotateEntity(me\Collider, 0.0, EntityYaw(e\room\OBJ, True) + e\EventState2 * 180.0, 0.0)
-									MoveEntity(me\Collider, 0.0, 0.0, 1.5)
-									
-									ResetEntity(me\Collider)
-									
-									UpdateDoorsTimer = 0.0
-									UpdateDoors()
-									
-									SecondaryLightOn = PrevSecondaryLightOn
-									
-									e\EventState = 0.0
-									e\EventState3 = 0.0
-								Else
-									PlaySound_Strict(LoadTempSound("SFX\Door\WoodenDoorBudge.ogg"))
-									CreateMsg("The door will not budge.", 6.0)
-								EndIf
+							If fr\ForestDoors[i]\Open Then
+								me\BlinkTimer = -10.0
+								
+								PositionEntity(me\Collider, EntityX(e\room\RoomDoors[0]\FrameOBJ, True), 0.5, EntityZ(e\room\RoomDoors[0]\FrameOBJ, True))
+								
+								RotateEntity(me\Collider, 0.0, EntityYaw(e\room\OBJ, True) + e\EventState2 * 180.0, 0.0)
+								MoveEntity(me\Collider, 0.0, 0.0, 1.5)
+								
+								ResetEntity(me\Collider)
+								
+								UpdateDoorsTimer = 0.0
+								UpdateDoors()
+								
+								SecondaryLightOn = PrevSecondaryLightOn
+								
+								e\EventState = 0.0
+								e\EventState3 = 0.0
 							EndIf
 						Next
 						
@@ -7150,55 +7107,58 @@ Function UpdateEvents()
 						CameraFogRange(Camera, 0.5, 8.0)
 					Else
 						If (Not Curr106\Contained) Then Curr106\Idle = 0
-						If EntityYaw(e\room\Objects[3]) = 0.0 Then
-							If fr\Forest_Pivot <> 0 Then HideEntity(fr\Forest_Pivot)
-							If InteractObject(e\room\Objects[3], 0.64) Then
-								If SelectedItem = Null Then
-									If mo\MouseHit1 Then
-										PlaySound_Strict(LoadTempSound("SFX\Door\WoodenDoorBudge.ogg"))
-										CreateMsg("The door will not budge.", 6.0)
-									EndIf
-								ElseIf SelectedItem\ItemTemplate\TempName = "scp860" Lor SelectedItem\ItemTemplate\TempName = "scp005" 
-									If mo\MouseHit1 Then
-										PlaySound_Strict(LoadTempSound("SFX\Door\WoodenDoorOpen.ogg"))
-										ShowEntity(fr.Forest\Forest_Pivot)
-										SelectedItem = Null
-										
-										me\BlinkTimer = -10.0
-										
-										e\EventState = 1.0
-										
-										; ~ Reset monster spawn timer
-										e\EventState3 = 0.0
-										
-										If e\room\NPC[0] <> Null Then
-											; ~ Reset monster to the (hidden) idle state
-											e\room\NPC[0]\State = 0.0
-										EndIf
-										
-										PrevSecondaryLightOn = SecondaryLightOn
-										SecondaryLightOn = True
-										
-										Pvt = CreatePivot()
-										PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
-										PointEntity(Pvt, e\room\OBJ)
-										Angle = WrapAngle(EntityYaw(Pvt) - EntityYaw(e\room\OBJ, True))
-										If Angle > 90.0 And Angle < 270.0 Then
-											PositionEntity(me\Collider, EntityX(fr\Door[0], True), EntityY(fr\Door[0], True) + EntityY(me\Collider, True) + 0.5, EntityZ(fr\Door[0], True), True)
-											RotateEntity(me\Collider, 0.0, EntityYaw(fr\Door[0], True) - 180.0, 0.0, True)
-											MoveEntity(me\Collider, -0.5, 0.0, 0.5)
-											e\EventState2 = 1.0
-										Else
-											PositionEntity(me\Collider, EntityX(fr\Door[1], True), EntityY(fr\Door[1], True) + EntityY(me\Collider, True) + 0.5, EntityZ(fr\Door[1], True), True)
-											RotateEntity(me\Collider, 0.0, EntityYaw(fr\Door[1], True) - 180.0, 0.0, True)
-											MoveEntity(me\Collider, -0.5, 0.0, 0.5)
-											e\EventState2 = 0.0
-										EndIf
-										FreeEntity(Pvt)
-										ResetEntity(me\Collider)
-									EndIf
-								EndIf
+						If fr\Forest_Pivot <> 0 Then HideEntity(fr\Forest_Pivot)
+						; ~ Reset the doors after leaving the forest
+						For i = 0 To 1
+							If fr\ForestDoors[i]\Open Then fr\ForestDoors[i]\Open = False
+							If fr\ForestDoors[i]\Locked <> 2 Then fr\ForestDoors[i]\Locked = 2
+						Next
+						
+						If e\room\RoomDoors[0]\Open Then
+							ShowEntity(fr.Forest\Forest_Pivot)
+							
+							me\BlinkTimer = -10.0
+							
+							If e\room\NPC[0] <> Null Then
+								; ~ Reset monster to the (hidden) idle state
+								e\room\NPC[0]\State = 0.0
 							EndIf
+							
+							; ~ Reset the door leading to the forest
+							e\room\RoomDoors[0]\Open = False
+							e\room\RoomDoors[0]\Locked = 1
+							
+							PrevSecondaryLightOn = SecondaryLightOn
+							SecondaryLightOn = True
+							
+							Pvt = CreatePivot()
+							PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
+							PointEntity(Pvt, e\room\OBJ)
+							Angle = WrapAngle(EntityYaw(Pvt) - EntityYaw(e\room\OBJ, True))
+							If Angle > 90.0 And Angle < 270.0 Then
+								PositionEntity(me\Collider, EntityX(fr\ForestDoors[0]\FrameOBJ, True), EntityY(fr\ForestDoors[0]\FrameOBJ, True) + EntityY(me\Collider, True) + 0.5, EntityZ(fr\ForestDoors[0]\FrameOBJ, True), True)
+								RotateEntity(me\Collider, 0.0, EntityYaw(fr\ForestDoors[0]\FrameOBJ, True) - 180.0, 0.0, True)
+								MoveEntity(me\Collider, -0.5, 0.0, 0.5)
+								
+								; ~ Determine the locked door
+								fr\ForestDoors[0]\Locked = 2
+								fr\ForestDoors[1]\Locked = 1
+							Else
+								PositionEntity(me\Collider, EntityX(fr\ForestDoors[1]\FrameOBJ, True), EntityY(fr\ForestDoors[1]\FrameOBJ, True) + EntityY(me\Collider, True) + 0.5, EntityZ(fr\ForestDoors[1]\FrameOBJ, True), True)
+								RotateEntity(me\Collider, 0.0, EntityYaw(fr\ForestDoors[1]\FrameOBJ, True) - 180.0, 0.0, True)
+								MoveEntity(me\Collider, -0.5, 0.0, 0.5)
+								
+								; ~ Determine the locked door
+								fr\ForestDoors[0]\Locked = 1
+								fr\ForestDoors[1]\Locked = 2
+							EndIf
+							FreeEntity(Pvt)
+							ResetEntity(me\Collider)
+							
+							; ~ Reset monster spawn timer
+							e\EventState3 = 0.0
+							; ~ The player has entered the forest
+							e\EventState = 1.0
 						EndIf
 					EndIf
 				Else
@@ -7227,13 +7187,13 @@ Function UpdateEvents()
 				;[Block]
 				If PlayerRoom = e\room Then
 					If (Not I_714\Using) And wi\HazmatSuit <> 3 And wi\GasMask <> 3 Then
-						If EntityDistanceSquared(me\Collider, e\room\Objects[3]) < 0.81 Lor e\EventState > 0.0 Then
+						If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 0.81 Lor e\EventState > 0.0 Then
 							If e\EventState = 0.0 Then me\BlurTimer = 1000.0
 							me\CameraShake = 1.0
-							If (Not e\Sound3) Then
-								e\Sound3 = LoadSound_Strict("SFX\SCP\1123\Ambient.ogg")
+							If (Not e\Sound2) Then
+								e\Sound2 = LoadSound_Strict("SFX\SCP\1123\Ambient.ogg")
 							Else
-								e\SoundCHN3 = LoopSound2(e\Sound3, e\SoundCHN3, Camera, me\Collider, 4.0, 4.0)
+								e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, me\Collider, 4.0, 4.0)
 							EndIf
 						EndIf
 					EndIf
@@ -7248,13 +7208,13 @@ Function UpdateEvents()
 						PrevSecondaryLightOn = SecondaryLightOn
 						SecondaryLightOn = True
 						
-						e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True), EntityZ(e\room\Objects[6], True))
+						e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
 						FreeEntity(e\room\NPC[0]\OBJ) : e\room\NPC[0]\OBJ = 0
 						e\room\NPC[0]\OBJ = CopyEntity(o\NPCModelID[NPCTypeNazi])
 						Scale = GetINIFloat(NPCsFile, "Class D", "Scale") / MeshWidth(e\room\NPC[0]\OBJ)
 						ScaleEntity(e\room\NPC[0]\OBJ, Scale, Scale, Scale)
 						
-						PositionEntity(me\Collider, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True), True)
+						PositionEntity(me\Collider, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True), True)
 						ResetEntity(me\Collider)
 						
 						me\CameraShake = 1.0
@@ -7273,11 +7233,8 @@ Function UpdateEvents()
 						EndIf
 						
 						If e\EventState2 > 1000.0 Then
-							If (Not e\Sound2) Then
-								e\Sound2 = LoadSound_Strict("SFX\Door\1123DoorOpen.ogg")
-								e\SoundCHN2 = PlaySound_Strict(e\Sound2)
-							EndIf
-							RotateEntity(e\room\Objects[11], 0.0, CurveAngle(10.0, EntityYaw(e\room\Objects[11]), 40.0), 0.0)
+							If (Not e\room\RoomDoors[1]\Open) Then UseDoor(e\room\RoomDoors[1], True)
+							
 							If e\EventState2 >= 1040.0 And e\EventState2 - fps\Factor[0] < 1040.0 Then 
 								PlaySound2(LoadTempSound("SFX\SCP\1123\Officer1.ogg"), Camera, e\room\NPC[0]\OBJ)
 							ElseIf e\EventState2 >= 1400.0 And e\EventState2 - fps\Factor[0] < 1400.0 Then 
@@ -7285,10 +7242,10 @@ Function UpdateEvents()
 							EndIf
 							e\room\NPC[0]\State = 3.0
 							AnimateNPC(e\room\NPC[0], 3.0, 26.0, 0.2)
-							If EntityDistanceSquared(me\Collider, e\room\Objects[4]) > PowTwo(392.0 * RoomScale) Then
+							If EntityDistanceSquared(me\Collider, e\room\Objects[2]) > PowTwo(392.0 * RoomScale) Then
 								me\BlinkTimer = -10.0
 								me\BlurTimer = 500.0
-								PositionEntity(me\Collider, EntityX(e\room\Objects[5], True), EntityY(e\room\Objects[5], True), EntityZ(e\room\Objects[5], True), True)
+								PositionEntity(me\Collider, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True), EntityZ(e\room\Objects[3], True), True)
 								RotateEntity(me\Collider, 0.0, EntityYaw(e\room\OBJ, True), 0.0)
 								ResetEntity(me\Collider)
 								e\EventState = 3.0
@@ -7296,10 +7253,10 @@ Function UpdateEvents()
 						EndIf
 					ElseIf e\EventState = 3.0
 						If e\room\RoomDoors[0]\OpenState > 160.0 Then
-							If e\Sound = 0 Then e\Sound = LoadSound_Strict("SFX\Music\1123.ogg")
+							If (Not e\Sound) Then e\Sound = LoadSound_Strict("SFX\Music\1123.ogg")
 							e\SoundCHN = PlaySound_Strict(e\Sound)
 							
-							PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[7], True), EntityY(e\room\Objects[7], True), EntityZ(e\room\Objects[7], True))
+							PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True))
 							ResetEntity(e\room\NPC[0]\Collider)
 							
 							e\EventState = 4.0
@@ -7311,44 +7268,38 @@ Function UpdateEvents()
 							e\room\RoomDoors[0]\Open = False
 						EndIf
 						
-						If EntityYaw(e\room\Objects[13]) = 0.0 Then
-							If InteractObject(e\room\Objects[12], 0.64) Then
-								RotateEntity(e\room\Objects[13], 0.0, 1.0, 0.0)
-								RotateEntity(e\room\Objects[11], 0.0, 90.0, 0.0)
-								PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Horror.ogg"))
-							EndIf							
-						Else
-							RotateEntity(e\room\Objects[13], 0.0, CurveAngle(90.0, EntityYaw(e\room\Objects[13]), 40.0), 0.0)
-							If EntityYaw(e\room\Objects[13]) > 30.0 Then
-								e\room\NPC[0]\State = 3.0
-								PointEntity(e\room\NPC[0]\Collider, me\Collider)
-								AnimateNPC(e\room\NPC[0], 27.0, 54.0, 0.5, False)
-								If e\room\NPC[0]\Frame >= 54.0 Then
-									e\EventState = 5.0
-									e\EventState2 = 0.0
-									PositionEntity(me\Collider, EntityX(e\room\OBJ, True), 0.3, EntityZ(e\room\OBJ, True) - 160.0 * RoomScale, True)
-									ResetEntity(me\Collider)									
-									me\BlinkTimer = -10.0
-									me\BlurTimer = 500.0
-									me\Injuries = 1.5
-									me\Bloodloss = 70.0
-								EndIf								
+						If e\room\RoomDoors[3]\Open Then
+							;PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Horror.ogg"))
+							e\room\NPC[0]\State = 3.0
+							PointEntity(e\room\NPC[0]\Collider, me\Collider)
+							AnimateNPC(e\room\NPC[0], 27.0, 54.0, 0.5, False)
+							If e\room\NPC[0]\Frame >= 54.0 Then
+								e\EventState = 5.0
+								e\EventState2 = 0.0
+								PositionEntity(me\Collider, EntityX(e\room\OBJ, True), 0.3, EntityZ(e\room\OBJ, True) - 160.0 * RoomScale, True)
+								ResetEntity(me\Collider)									
+								me\BlinkTimer = -10.0
+								me\BlurTimer = 500.0
+								me\Injuries = 1.5
+								me\Bloodloss = 70.0
 							EndIf
 						EndIf
 					ElseIf e\EventState = 5.0
 						e\EventState2 = e\EventState2 + fps\Factor[0]
 						If e\EventState2 > 500.0 Then 
-							RotateEntity(e\room\Objects[9], 0.0, 90.0, 0.0)
-							RotateEntity(e\room\Objects[13], 0.0, 0.0, 0.0)
+							For i = 2 To 3
+								e\room\RoomDoors[i]\Open = False
+								e\room\RoomDoors[i]\Locked = 2
+							Next
 							
-							x = (EntityX(e\room\Objects[8], True) + EntityX(e\room\Objects[12], True)) / 2.0
-							y = EntityY(e\room\Objects[5], True)
-							z = (EntityZ(e\room\Objects[8], True) + EntityZ(e\room\Objects[12], True)) / 2.0
+							x = (EntityX(e\room\RoomDoors[2]\FrameOBJ, True) + EntityX(e\room\RoomDoors[3]\FrameOBJ, True)) / 2.0
+							y = EntityY(e\room\Objects[3], True)
+							z = (EntityZ(e\room\RoomDoors[2]\FrameOBJ, True) + EntityZ(e\room\RoomDoors[2]\FrameOBJ, True)) / 2.0
 							PositionEntity(me\Collider, x, y, z, True)
 							ResetEntity(me\Collider)
 							
-							x = (EntityX(me\Collider, True) + EntityX(e\room\Objects[12], True)) / 2.0
-							z = (EntityZ(me\Collider, True) + EntityZ(e\room\Objects[12], True)) / 2.0
+							x = (EntityX(me\Collider, True) + EntityX(e\room\RoomDoors[3]\FrameOBJ, True)) / 2.0
+							z = (EntityZ(me\Collider, True) + EntityZ(e\room\RoomDoors[3]\FrameOBJ, True)) / 2.0
 							
 							PositionEntity(e\room\NPC[0]\Collider, x, y + 0.2, z)
 							ResetEntity(e\room\NPC[0]\Collider)
@@ -7385,7 +7336,6 @@ Function UpdateEvents()
 						me\Injuries = me\PrevInjuries
 						me\Bloodloss = me\PrevBloodloss
 						SecondaryLightOn = PrevSecondaryLightOn
-						RotateEntity(e\room\Objects[9], 0.0, 0.0, 0.0)
 						me\PrevInjuries = 0.0
 						me\PrevBloodloss = 0.0
 						PrevSecondaryLightOn = 0.0
@@ -7400,10 +7350,10 @@ Function UpdateEvents()
 						Next
 						GiveAchievement(Achv1123)
 						
-						If e\SoundCHN3 <> 0 Then
-							If ChannelPlaying(e\SoundCHN3) Then StopChannel(e\SoundCHN3)
-							If e\Sound3 <> 0 Then
-								FreeSound_Strict(e\Sound3) : e\Sound3 = 0
+						If e\Sound2 <> 0 Then
+							If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2)
+							If e\Sound2 <> 0 Then
+								FreeSound_Strict(e\Sound2) : e\Sound2 = 0
 							EndIf
 						EndIf
 						
@@ -8312,12 +8262,9 @@ Function UpdateEvents()
 								e\SoundCHN = 0
 							EndIf
 							e\Sound = LoadSound_Strict("SFX\Door\Airlock.ogg")
-							e\room\RoomDoors[0]\Locked = 0
-							e\room\RoomDoors[1]\Locked = 0
-							UseDoor(e\room\RoomDoors[0])
-							UseDoor(e\room\RoomDoors[1])
-							e\room\RoomDoors[0]\Locked = 1
-							e\room\RoomDoors[1]\Locked = 1
+							For i = 0 To 1
+								UseDoor(e\room\RoomDoors[i], True)
+							Next
 							PlaySound_Strict(AlarmSFX[3])
 						ElseIf EntityDistanceSquared(e\room\Objects[0], me\Collider) > 5.76
 							e\EventState3 = 0.0
@@ -8374,14 +8321,11 @@ Function UpdateEvents()
 							e\EventState = 0.0
 							e\EventState2 = 0.0
 							e\EventState3 = 1.0
-							If (Not e\room\RoomDoors[0]\Open) Then
-								e\room\RoomDoors[0]\Locked = 0
-								e\room\RoomDoors[1]\Locked = 0
-								UseDoor(e\room\RoomDoors[0])
-								UseDoor(e\room\RoomDoors[1])
-								e\room\RoomDoors[0]\Locked = 1
-								e\room\RoomDoors[1]\Locked = 1
-							EndIf
+							For i = 0 To 1
+								If (Not e\room\RoomDoors[i]\Open) Then
+									UseDoor(e\room\RoomDoors[i], True)
+								EndIf
+							Next
 						EndIf
 					EndIf
 					
