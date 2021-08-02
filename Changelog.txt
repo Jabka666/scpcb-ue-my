@@ -163,7 +163,6 @@ Bug Fixes:
 - Fixed SCP-173's distance on S-NAV Ultimate;
 - Fixed Keter achivement saving;
 - Fixed missing props, broken textures, waypoints and etc. for each room;
-- Fixed light rendering through NPCs.
 
 - Small fixes for earphones' texture;
 - Small fixes for main menu;

@@ -548,9 +548,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 	
 	PositionEntity(n\Collider, x, y, z, True)
 	PositionEntity(n\OBJ, x, y, z, True)
-	EntityPickMode(n\OBJ, 2)
-	If n\OBJ2 <> 0 Then EntityPickMode(n\OBJ2, 2)
-	If n\OBJ3 <> 0 Then EntityPickMode(n\OBJ3, 2)
 	
 	ResetEntity(n\Collider)
 	
