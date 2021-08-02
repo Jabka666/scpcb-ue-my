@@ -1497,7 +1497,7 @@ Function UpdateNPCs()
 				
 				PrevFrame = n\Frame
 				
-				Dist = EntityDistanceSquared(me\Collider, n\Collider)
+				Dist = EntityDistance(me\Collider, n\Collider)
 				
 				n\BlinkTimer = 1.0
 				
@@ -1505,11 +1505,15 @@ Function UpdateNPCs()
 					If PlayerRoom\RoomTemplate\Name <> "cont2_049" Then
 						n\Idle = Max(n\Idle - (1 + SelectedDifficulty\AggressiveNPCs) * fps\Factor[0], 0.1)
 					EndIf
-					n\DropSpeed = 0
-					If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN)
-					If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2)
+					n\DropSpeed = 0.0
+					If n\SoundCHN <> 0 Then
+						If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN)
+					EndIf
+					If n\SoundCHN2 <> 0 Then
+						If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2)
+					EndIf
 					PositionEntity(n\Collider, 0.0, -500.0, 0.0)
-					PositionEntity(n\OBJ, 0.0, -500.0, 0.0)
+					ResetEntity(n\Collider)
 				Else
 					If n\Idle = 0.1 Then
 						If PlayerInReachableRoom() Then
@@ -1536,7 +1540,7 @@ Function UpdateNPCs()
 							;[Block]
 							If n\Frame >= 538.0 Then
 								AnimateNPC(n, 659.0, 538.0, -0.45, False)
-								If n\Frame > 537.9 Then SetNPCFrame(n, 37.0)
+								If n\Frame > 537.9 Then n\Frame = 37.0
 							Else
 								AnimateNPC(n, 37.0, 269.0, 0.7, False)
 								If n\Frame > 268.9 Then n\State = 2.0
@@ -1544,10 +1548,10 @@ Function UpdateNPCs()
 							;[End Block]
 						Case 2.0 ; ~ Being active
 							;[Block]
-							If (Dist < PowTwo(HideDistance * 2.0)) And n\Idle = 0 And PlayerInReachableRoom(True) Then
+							If (Dist < HideDistance * 2.0) And n\Idle = 0 And PlayerInReachableRoom(True) Then
 								n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider)
 								PlayerSeeAble = MeNPCSeesPlayer(n)
-								If PlayerSeeAble = 1 Lor n\State2 > 0.0 And (Not chs\NoTarget) Then ; ~ Attack
+								If PlayerSeeAble = 1 Lor n\State2 > 0.0 Then ; ~ Player is visible for SCP-049's sight
 									GiveAchievement(Achv049)
 									
 									; ~ Playing a sound after detecting the player
@@ -1563,12 +1567,12 @@ Function UpdateNPCs()
 									If PlayerSeeAble = 1 Then n\State2 = 70.0 * 2.0
 									
 									PointEntity(n\OBJ, me\Collider)
-									RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0)
+									RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0.0)
 									
-									If Dist < 0.25 Then
+									If Dist < 0.5 Then
 										If wi\HazmatSuit > 0 Then
-											me\BlurTimer = me\BlurTimer + fps\Factor[0] * 2.5
-											If me\BlurTimer > 250.0 And me\BlurTimer - fps\Factor[0] * 2.5 =< 250.0 And n\PrevState <> 3 Then
+											me\BlurTimer = me\BlurTimer + (fps\Factor[0] * 2.5)
+											If me\BlurTimer > 250.0 And me\BlurTimer - (fps\Factor[0] * 2.5) =< 250.0 And n\PrevState <> 3 Then
 												If n\SoundCHN2 <> 0 Then StopChannel(n\SoundCHN2)
 												n\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\049\TakeOffHazmat.ogg"))
 												n\PrevState = 3
@@ -1592,7 +1596,9 @@ Function UpdateNPCs()
 										ElseIf I_714\Using Then
 											me\BlurTimer = me\BlurTimer + (fps\Factor[0] * 2.5)
 											If me\BlurTimer > 250.0 And me\BlurTimer - (fps\Factor[0] * 2.5) =< 250.0 And n\PrevState <> 3 Then
-												If n\SoundCHN2 <> 0 Then StopChannel(n\SoundCHN2)
+												If n\SoundCHN2 <> 0 Then
+													If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2)
+												EndIf
 												n\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\049\714Equipped.ogg"))
 												n\PrevState = 3
 											ElseIf me\BlurTimer >= 500.0
@@ -1603,7 +1609,7 @@ Function UpdateNPCs()
 											me\BlurTimer = 500.0
 											
 											If (Not chs\GodMode) Then
-												If PlayerRoom\RoomTemplate\Name = "cont2_049"
+												If PlayerRoom\RoomTemplate\Name = "cont2_049" Then
 													msg\DeathMsg = "Three (3) active instances of SCP-049-2 discovered in the tunnel outside SCP-049's containment chamber. Terminated by Nine-Tailed Fox."
 													For e.Events = Each Events
 														If e\EventID = e_cont2_049 Then
@@ -1612,12 +1618,7 @@ Function UpdateNPCs()
 														EndIf
 													Next
 												Else
-													If Rand(2) = 1 Then
-														GroupName = "Nine-Tailed Fox"
-													Else
-														GroupName = "See No Evil"
-													EndIf
-													msg\DeathMsg = "An active instance of SCP-049-2 was discovered in [DATA REDACTED]. Terminated by " + GroupName + "."
+													msg\DeathMsg = "An active instance of SCP-049-2 was discovered in [REDACTED]. Terminated by Nine-Tailed Fox."
 													Kill() : me\KillAnim = 0
 												EndIf
 												PlaySound_Strict(HorrorSFX[13])
@@ -1629,16 +1630,16 @@ Function UpdateNPCs()
 										EndIf
 									Else
 										n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
-										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])	
+										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 										
 										If n\PrevState = 3 Then n\PrevState = 2
 										
-										If Dist < 9.0 Then
-											AnimateNPC(n, Max(Min(AnimTime(n\OBJ), 428.0), 387), 463.0, n\CurrSpeed * 38.0)
+										If Dist < 3.0 Then
+											AnimateNPC(n, Max(Min(AnimTime(n\OBJ), 428.0), 387.0), 463.0, n\CurrSpeed * 38.0)
 										Else
 											If n\Frame > 428.0 Then
 												AnimateNPC(n, Min(AnimTime(n\OBJ), 463.0), 498.0, n\CurrSpeed * 38.0, False)
-												If n\Frame > 497.9 Then SetNPCFrame(n, 358.0)
+												If n\Frame > 497.9 Then n\Frame = 358.0
 											Else
 												AnimateNPC(n, Max(Min(AnimTime(n\OBJ), 358.0), 346.0), 393.0, n\CurrSpeed * 38.0)
 											EndIf
@@ -1647,7 +1648,7 @@ Function UpdateNPCs()
 								Else ; ~ Finding a path to the player
 									If n\PathStatus = 1 ; ~ Path to player found
 										While n\Path[n\PathLocation] = Null
-											If n\PathLocation > 19 Then 
+											If n\PathLocation > 19 Then
 												n\PathLocation = 0 : n\PathStatus = 0
 												Exit
 											Else
@@ -1659,9 +1660,9 @@ Function UpdateNPCs()
 											If n\PathLocation > 0 Then
 												If n\Path[n\PathLocation - 1] <> Null Then
 													If n\Path[n\PathLocation - 1]\door <> Null Then
-														If (Not n\Path[n\PathLocation - 1]\door\IsElevatorDoor) Then
+														If (Not n\Path[n\PathLocation - 1]\door\IsElevatorDoor > 0) Then
 															If EntityDistanceSquared(n\Path[n\PathLocation - 1]\OBJ, n\Collider) > 0.09 Then
-																If n\Path[n\PathLocation - 1]\door\OpenState = 180.0 And n\Path[n\PathLocation - 1]\door\MTFClose And (n\Path[n\PathLocation - 1]\door\Buttons[0] <> 0 Lor n\Path[n\PathLocation - 1]\door\Buttons[1] <> 0) Then
+																If (n\Path[n\PathLocation - 1]\door\MTFClose) And (n\Path[n\PathLocation - 1]\door\OpenState = 180.0) And (n\Path[n\PathLocation - 1]\door\Buttons[0] <> 0 Lor n\Path[n\PathLocation - 1]\door\Buttons[1] <> 0) Then
 																	UseDoor(n\Path[n\PathLocation - 1]\door, True)
 																EndIf
 															EndIf
@@ -1672,7 +1673,7 @@ Function UpdateNPCs()
 											
 											n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 											PointEntity(n\OBJ, n\Path[n\PathLocation]\OBJ)
-											RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0)
+											RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0.0)
 											MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 											
 											; ~ Opens doors in front of him
@@ -1680,8 +1681,8 @@ Function UpdateNPCs()
 											If Dist2 < 0.36 Then
 												Temp = True
 												If n\Path[n\PathLocation]\door <> Null Then
-													If (Not n\Path[n\PathLocation]\door\IsElevatorDoor)
-														If (n\Path[n\PathLocation]\door\Locked = 1 Lor n\Path[n\PathLocation]\door\KeyCard <> 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open) Then
+													If (Not n\Path[n\PathLocation]\door\IsElevatorDoor > 0) Then
+														If (n\Path[n\PathLocation]\door\Locked > 0 Lor n\Path[n\PathLocation]\door\KeyCard <> 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open) Then
 															Temp = False
 														Else
 															If (Not n\Path[n\PathLocation]\door\Open) And (n\Path[n\PathLocation]\door\Buttons[0] <> 0 Lor n\Path[n\PathLocation]\door\Buttons[1] <> 0) Then
@@ -1693,18 +1694,18 @@ Function UpdateNPCs()
 												If Dist2 < 0.04 And Temp Then
 													n\PathLocation = n\PathLocation + 1
 												ElseIf Dist2 < 0.25 And (Not Temp)
-													; ~ Breaking up the path when the door in front of 049 cannot be operated by himself
+													; ~ Breaking up the path when the door in front of SCP-049 cannot be operated by himself
 													n\PathStatus = 0
 													n\PathTimer = 0.0
 												EndIf
 											EndIf
 											
-											AnimateNPC(n, Max(Min(AnimTime(n\OBJ), 358.0), 346), 393.0, n\CurrSpeed * 38.0)
+											AnimateNPC(n, Max(Min(AnimTime(n\OBJ), 358.0), 346.0), 393.0, n\CurrSpeed * 38.0)
 											
 											; ~ Playing a sound if he hears the player
 											If n\PrevState = 0 And (Not ChannelPlaying(n\SoundCHN2)) Then
 												If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2) : n\Sound2 = 0
-												If Rand(30) = 1
+												If Rand(30) = 1 Then
 													n\Sound2 = LoadSound_Strict("SFX\SCP\049\Searching7.ogg")
 												Else
 													n\Sound2 = LoadSound_Strict("SFX\SCP\049\Searching" + Rand(1, 6) + ".ogg")
@@ -1727,13 +1728,13 @@ Function UpdateNPCs()
 											
 											; ~ Attempt to find a room (the PlayerRoom or one of it's adjacent rooms) for SCP-049 to go to but select the one closest to him
 											If n\PathStatus <> 1 Then
-												Local ClosestDist# = EntityDistanceSquared(PlayerRoom\OBJ, n\Collider)
+												Local ClosestDist# = EntityDistance(PlayerRoom\OBJ, n\Collider)
 												Local ClosestRoom.Rooms = PlayerRoom
 												Local CurrDist# = 0.0
 												
 												For i = 0 To 3
 													If PlayerRoom\Adjacent[i] <> Null Then
-														CurrDist = EntityDistanceSquared(PlayerRoom\Adjacent[i]\OBJ, n\Collider)
+														CurrDist = EntityDistance(PlayerRoom\Adjacent[i]\OBJ, n\Collider)
 														If CurrDist < ClosestDist Then
 															ClosestDist = CurrDist
 															ClosestRoom = PlayerRoom\Adjacent[i]
@@ -1761,12 +1762,12 @@ Function UpdateNPCs()
 												
 												; ~ No path could still be found, just make SCP-049 go to a room (further away than the very first attempt)
 												If n\PathStatus <> 1 Then
-													ClosestDist = 10000.0 ; ~ Prevent the PlayerRoom to be considered the closest, so SCP-049 wouldn't try to find a path there
+													ClosestDist = 100.0 ; ~ Prevent the PlayerRoom to be considered the closest, so SCP-049 wouldn't try to find a path there
 													ClosestRoom.Rooms = PlayerRoom
 													CurrDist = 0.0
 													For i = 0 To 3
 														If PlayerRoom\Adjacent[i] <> Null Then
-															CurrDist = EntityDistanceSquared(PlayerRoom\Adjacent[i]\OBJ, n\Collider)
+															CurrDist = EntityDistance(PlayerRoom\Adjacent[i]\OBJ, n\Collider)
 															If CurrDist < ClosestDist Then
 																ClosestDist = CurrDist
 																For j = 0 To 3
@@ -1787,7 +1788,7 @@ Function UpdateNPCs()
 												If n\PathStatus = 1 Then
 													If n\Path[1] <> Null Then
 														If n\Path[1]\door <> Null Then
-															If (n\Path[1]\door\Locked = 1 Lor n\Path[1]\door\KeyCard <> 0 Lor n\Path[1]\door\Code <> "") And (Not n\Path[1]\door\Open) Then
+															If (n\Path[1]\door\Locked > 0 Lor n\Path[1]\door\KeyCard <> 0 Lor n\Path[1]\door\Code <> "") And (Not n\Path[1]\door\Open) Then
 																Repeat
 																	If n\PathLocation > 19 Then
 																		n\PathLocation = 0 : n\PathStatus = 0
@@ -1820,17 +1821,21 @@ Function UpdateNPCs()
 								If n\CurrSpeed > 0.005 Then
 									If (PrevFrame < 361.0 And n\Frame >= 361.0) Lor (PrevFrame < 377.0 And n\Frame >= 377.0) Then
 										PlaySound2(StepSFX(5, 0, Rand(4, 6)), Camera, n\Collider, 8.0, Rnd(0.8, 1.0))						
-									ElseIf (PrevFrame < 431.0 And n\Frame >= 431.0) Lor (PrevFrame < 447.0 And n\Frame >= 447.0) Then
+									ElseIf (PrevFrame < 431.0 And n\Frame >= 431.0) Lor (PrevFrame < 447.0 And n\Frame >= 447.0)
 										PlaySound2(StepSFX(5, 0, Rand(4, 6)), Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
 									EndIf
 								EndIf
 								
-								If ChannelPlaying(n\SoundCHN2) = True Then
-									UpdateSoundOrigin(n\SoundCHN2, Camera, n\OBJ)
+								If n\SoundCHN2 <> 0 Then
+									If ChannelPlaying(n\SoundCHN2) Then
+										UpdateSoundOrigin(n\SoundCHN2, Camera, n\OBJ)
+									EndIf
 								EndIf
 							ElseIf n\Idle = 0
-								If ChannelPlaying(n\SoundCHN) = True Then
-									StopChannel(n\SoundCHN)
+								If n\SoundCHN <> 0 Then
+									If ChannelPlaying(n\SoundCHN) Then
+										StopChannel(n\SoundCHN)
+									EndIf
 								EndIf
 								If PlayerInReachableRoom(True) And InFacility = 1 Then ; ~ Player is in a room where SCP-049 can teleport to
 									If Rand(1, 3 - SelectedDifficulty\OtherFactors) = 1 Then
@@ -1850,14 +1855,14 @@ Function UpdateNPCs()
 							;[End Block]
 						Case 4.0 ; ~ Standing on catwalk
 							;[Block]
-							If Dist < 64.0 Then
+							If Dist < 8.0 Then
 								AnimateNPC(n, 18.0, 19.0, 0.05)
 								
 								PointEntity(n\OBJ, me\Collider)	
 								RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 45.0), 0.0)
 								
 								n\State3 = 1.0
-							ElseIf Dist > PowTwo(HideDistance * 0.8) And n\State3 > 0.0 Then
+							ElseIf Dist > HideDistance * 0.8 And n\State3 > 0.0 Then
 								n\State = 2.0
 								n\State3 = 0.0
 								For r.Rooms = Each Rooms
@@ -1870,7 +1875,9 @@ Function UpdateNPCs()
 							;[End Block]
 						Case 5.0 ; ~ Going to surveillance room
 							;[Block]
-							n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider)
+							If n\Sound <> 0 Then
+								n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider)
+							EndIf
 							PlayerSeeAble = MeNPCSeesPlayer(n, True)
 							If PlayerSeeAble = 1 Then
 								n\State = 2.0
@@ -1884,7 +1891,7 @@ Function UpdateNPCs()
 							ElseIf PlayerSeeAble = 2 And n\State3 > 0.0
 								n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 							Else
-								If n\State3 = 6.0
+								If n\State3 = 6.0 Then
 									If EntityDistanceSquared(n\Collider, me\Collider) > PowTwo(HideDistance) Then
 										n\State = 2.0
 										n\PathStatus = 0
@@ -1897,8 +1904,8 @@ Function UpdateNPCs()
 									EndIf
 								EndIf
 								
-								If n\PathStatus = 1
-									If n\Path[n\PathLocation] = Null
+								If n\PathStatus = 1 Then
+									If n\Path[n\PathLocation] = Null Then
 										If n\PathLocation > 19 Then
 											n\PathLocation = 0 : n\PathStatus = 0
 										Else
@@ -1912,10 +1919,10 @@ Function UpdateNPCs()
 										
 										; ~ Closes doors behind him
 										If n\PathLocation > 0 Then
-											If n\Path[n\PathLocation - 1] <> Null
+											If n\Path[n\PathLocation - 1] <> Null Then
 												If n\Path[n\PathLocation - 1]\door <> Null Then
-													If n\Path[n\PathLocation - 1]\door\KeyCard = 0
-														If EntityDistanceSquared(n\Path[n\PathLocation - 1]\OBJ, n\Collider) > 0.09
+													If n\Path[n\PathLocation - 1]\door\KeyCard = 0 Then
+														If EntityDistanceSquared(n\Path[n\PathLocation - 1]\OBJ, n\Collider) > 0.09 Then
 															If n\Path[n\PathLocation - 1]\door\Open Then UseDoor(n\Path[n\PathLocation - 1]\door, True)
 														EndIf
 													EndIf
@@ -1927,11 +1934,11 @@ Function UpdateNPCs()
 										Dist2 = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 										If Dist2 < 0.36 Then
 											If n\Path[n\PathLocation]\door <> Null Then
-												If (Not n\Path[n\PathLocation]\door\Open) Then UseDoor(n\Path[n\PathLocation]\Door, True)
+												If (Not n\Path[n\PathLocation]\door\Open) Then UseDoor(n\Path[n\PathLocation]\door, True)
 											EndIf
 										EndIf
 										
-										If Dist2 < 0.04
+										If Dist2 < 0.04 Then
 											n\PathLocation = n\PathLocation + 1
 										EndIf
 										
@@ -1955,7 +1962,9 @@ Function UpdateNPCs()
 								EndIf
 							EndIf
 							
-							If PlayerRoom\RoomTemplate\Name = "room2_sl" Then ShouldPlay = 20
+							If PlayerRoom\RoomTemplate\Name = "room2_sl" Then
+								ShouldPlay = 20
+							EndIf
 							
 							If n\CurrSpeed > 0.005 Then
 								If (PrevFrame < 361.0 And n\Frame >= 361.0) Lor (PrevFrame < 377.0 And n\Frame >= 377.0) Then
@@ -1965,8 +1974,10 @@ Function UpdateNPCs()
 								EndIf
 							EndIf
 							
-							If ChannelPlaying(n\SoundCHN2) Then
-								UpdateSoundOrigin(n\SoundCHN2, Camera, n\OBJ)
+							If n\SoundCHN2 <> 0 Then
+								If ChannelPlaying(n\SoundCHN2) Then
+									UpdateSoundOrigin(n\SoundCHN2,Camera,n\OBJ)
+								EndIf
 							EndIf
 							;[End Block]
 					End Select
@@ -1979,7 +1990,6 @@ Function UpdateNPCs()
 				n\LastSeen = Max(n\LastSeen - fps\Factor[0], 0.0)
 				
 				n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
-				
 				;[End Block]
 			Case NPCType049_2
 				;[Block]
@@ -3654,7 +3664,7 @@ Function UpdateNPCs()
 								n\State = 1.0
 							EndIf
 							;[End Block]
-						Case 3.0
+						Case 3.0 ; ~ Attack
 							;[Block]
 							If EntityVisible(me\Collider, n\Collider) Then
 								n\EnemyX = EntityX(me\Collider)
@@ -6723,10 +6733,10 @@ End Function
 Function FindPath(n.NPCs, x#, y#, z#)
 	Local Temp%, Dist#, Dist2#
 	Local xTemp#, yTemp#, zTemp#
-	Local w.WayPoints, StartPoint.WayPoints, EndPoint.WayPoints, smallest.WayPoints
+	Local w.WayPoints, StartPoint.WayPoints, EndPoint.WayPoints, Smallest.WayPoints  
 	Local StartX% = Floor(EntityX(n\Collider, True) / 8.0 + 0.5), StartZ% = Floor(EntityZ(n\Collider, True) / 8.0 + 0.5)
 	Local EndX% = Floor(x / 8.0 + 0.5), EndZ% = Floor(z / 8.0 + 0.5)
-	Local CurrX%, CurrZ%
+	Local CurrX%, CurrZ%, i%, gTemp#
 	
    ; ~ PathStatus = 0, route hasn't been searched for yet
    ; ~ PathStatus = 1, route found
@@ -6738,8 +6748,6 @@ Function FindPath(n.NPCs, x#, y#, z#)
 		w\Gcost = 0
 		w\Hcost = 0
 	Next
-	
-	Local i%
 	
 	n\PathStatus = 0
 	n\PathLocation = 0
@@ -6759,21 +6767,20 @@ Function FindPath(n.NPCs, x#, y#, z#)
 		xTemp = EntityX(w\OBJ, True) - EntityX(Temp, True)
 		zTemp = EntityZ(w\OBJ, True) - EntityZ(Temp, True)
 		yTemp = EntityY(w\OBJ, True) - EntityY(Temp, True)
-		Dist2 = (xTemp * xTemp) + (yTemp * yTemp) + (zTemp * zTemp)
-		If Dist2 < Dist Then 
+		Dist2 = (xTemp ^ 2) + (yTemp ^ 2) + (zTemp ^ 2)
+		If Dist2 < Dist Then
 			; ~ Prefer waypoints that are visible
 			If (Not EntityVisible(w\OBJ, Temp)) Then Dist2 = Dist2 * 3.0
-			If Dist2 < Dist Then 
+			If Dist2 < Dist Then
 				Dist = Dist2
 				StartPoint = w
 			EndIf
 		EndIf
 	Next
-	
 	FreeEntity(Temp)
 	
 	If StartPoint = Null Then Return(2)
-	StartPoint\State = 1	  
+	StartPoint\State = 1
 	
 	EndPoint = Null
 	Dist = 400.0
@@ -6781,14 +6788,13 @@ Function FindPath(n.NPCs, x#, y#, z#)
 		xTemp = EntityX(Pvt, True) - EntityX(w\OBJ, True)
 		zTemp = EntityZ(Pvt, True) - EntityZ(w\OBJ, True)
 		yTemp = EntityY(Pvt, True) - EntityY(w\OBJ, True)
-		Dist2 = (xTemp * xTemp) + (yTemp * yTemp) + (zTemp * zTemp)
+		Dist2 = (xTemp ^ 2) + (yTemp ^ 2) + (zTemp ^ 2)
 		
 		If Dist2 < Dist Then
 			Dist = Dist2
 			EndPoint = w
-		EndIf			
+		EndIf
 	Next
-	
 	FreeEntity(Pvt)
 	
 	If EndPoint = StartPoint Then
@@ -6796,34 +6802,32 @@ Function FindPath(n.NPCs, x#, y#, z#)
 			Return(0)
 		Else
 			n\Path[0] = EndPoint
-			Return(1)   
+			Return(1)           
 		EndIf
 	EndIf
 	If EndPoint = Null Then Return(2)
 	
 	Repeat
 		Temp = False
-		smallest.WayPoints = Null
+		Smallest.WayPoints = Null
 		Dist = 10000.0
 		For w.WayPoints = Each WayPoints
 			If w\State = 1 Then
 				Temp = True
 				If w\Fcost < Dist Then
 					Dist = w\Fcost
-					smallest = w
+					Smallest = w
 				EndIf
 			EndIf
 		Next
 		
-		If smallest <> Null Then
-			w = smallest
+		If Smallest <> Null Then
+			w = Smallest
 			w\State = 2
 			
 			For i = 0 To 4
 				If w\connected[i] <> Null Then
 					If w\connected[i]\State < 2 Then
-						Local gTemp#
-						
 						If w\connected[i]\State = 1 Then
 							gTemp = w\Gcost + w\Dist[i]
 							If n\NPCType = NPCTypeMTF Then
@@ -6832,59 +6836,60 @@ Function FindPath(n.NPCs, x#, y#, z#)
 							If gTemp < w\connected[i]\Gcost Then
 								w\connected[i]\Gcost = gTemp
 								w\connected[i]\Fcost = w\connected[i]\Gcost + w\connected[i]\Hcost
-								w\connected[i]\parent = w
+								w\connected[i]\Parent = w
 							EndIf
 						Else
 							w\connected[i]\Hcost = Abs(EntityX(w\connected[i]\OBJ, True) - EntityX(EndPoint\OBJ, True)) + Abs(EntityZ(w\connected[i]\OBJ, True) - EntityZ(EndPoint\OBJ, True))
-							gTemp = w\Gcost + w\Dist[i]
+							gTemp = w\Gcost + w\dist[i]
 							If n\NPCType = NPCTypeMTF Then
 								If w\connected[i]\door = Null Then gTemp = gTemp + 0.5
 							EndIf
 							w\connected[i]\Gcost = gTemp
 							w\connected[i]\Fcost = w\Gcost + w\Hcost
-							w\connected[i]\parent = w
+							w\connected[i]\Parent = w
 							w\connected[i]\State = 1
-						EndIf			
+						EndIf            
 					EndIf
 				EndIf
 			Next
 		Else
 			If EndPoint\State > 0 Then
-				StartPoint\parent = Null
+				StartPoint\Parent = Null
 				EndPoint\State = 2
 				Exit
 			EndIf
 		EndIf
 		
 		If EndPoint\State > 0 Then
-			StartPoint\parent = Null
+			StartPoint\Parent = Null
 			EndPoint\State = 2
 			Exit
 		EndIf
-	Until Temp = False
+	Until (Not Temp)
 	
 	If EndPoint\State > 0 Then
-		Local currpoint.WayPoints = EndPoint
-		Local twentiethpoint.WayPoints = EndPoint
+		Local CurrPoint.WayPoints = EndPoint
+		Local TwentiethPoint.WayPoints = EndPoint
 		Local Length% = 0
 		
 		Repeat
 			Length = Length + 1
-			currpoint = currpoint\parent
+			CurrPoint = CurrPoint\Parent
 			If Length > 20 Then
-				twentiethpoint = twentiethpoint\parent
+				TwentiethPoint = TwentiethPoint\Parent
 			EndIf
-		Until currpoint = Null
+		Until CurrPoint = Null
 		
-		currpoint.WayPoints = EndPoint
-		While twentiethpoint <> Null
-			Length = Min(Length - 1, 19)
-			twentiethpoint = twentiethpoint\parent
-			n\Path[Length] = twentiethpoint
+		CurrPoint.WayPoints = EndPoint
+		While TwentiethPoint <> Null
+			Length = Min(Length - 1, 19.0)
+			TwentiethPoint = TwentiethPoint\Parent
+			n\Path[Length] = TwentiethPoint
 		Wend
+		
 		Return(1)
 	Else
-		Return(2)
+		Return(2) 
 	EndIf
 End Function
 
@@ -6901,20 +6906,19 @@ End Function
 
 Function MeNPCSeesPlayer%(n.NPCs, DisableSoundOnCrouch% = False)
 	; ~ Return values:
-	; ~ False (= 0): Player is Not detected anyhow
-	; ~ True (= 1): Player is detected by vision
+	; ~ 0: Player is not detected anyhow
+	; ~ 1: Player is detected by vision
 	; ~ 2: Player is detected by emitting a sound
 	; ~ 3: Player is detected by a camera (only for MTF Units!)
-	; ~ 4: Player is detected through glass
 	
 	If chs\NoTarget Then Return(False)
 	
-	If (Not me\Detected) Lor n\NPCType <> NPCTypeMTF
-		If n\BlinkTimer =< 0.0 Then Return(False)
-		If EntityDistanceSquared(me\Collider, n\Collider) > PowTwo(8.0 - me\CrouchState + me\SndVolume) Then Return(False)
+	If (Not me\Detected) Lor n\NPCType <> NPCTypeMTF Then
+		If n\BlinkTimer =< 0.0 Then Return(0)
+		If EntityDistanceSquared(me\Collider, n\Collider) > PowTwo(8.0 - me\CrouchState + me\SndVolume) Then Return(0)
 		
 		; ~ Spots the player if he's either in view or making a loud sound
-		If me\SndVolume > 1.0
+		If me\SndVolume > 1.0 Then
 			If (Abs(DeltaYaw(n\Collider, me\Collider)) > 60.0) And EntityVisible(n\Collider, me\Collider)
 				Return(1)
 			ElseIf (Not EntityVisible(n\Collider, me\Collider))
@@ -6925,12 +6929,12 @@ Function MeNPCSeesPlayer%(n.NPCs, DisableSoundOnCrouch% = False)
 				EndIf
 			EndIf
 		Else
-			If Abs(DeltaYaw(n\Collider, me\Collider)) > 60.0 Then Return(False)
+			If Abs(DeltaYaw(n\Collider, me\Collider)) > 60.0 Then Return(0)
 		EndIf
 		Return(EntityVisible(n\Collider, me\Collider))
 	Else
 		If EntityDistanceSquared(me\Collider, n\Collider) > PowTwo(8.0 - me\CrouchState + me\SndVolume) Then Return(3)
-		If EntityVisible(n\Collider, Camera) Then Return(True)
+		If EntityVisible(n\Collider, Camera) Then Return(1)
 		
 		; ~ Spots the player if he's either in view or making a loud sound
 		If me\SndVolume > 1.0 Then Return(2)

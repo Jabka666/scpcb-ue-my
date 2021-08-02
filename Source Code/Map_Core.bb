@@ -3054,7 +3054,7 @@ Function UseDoor(d.Doors, Scripted% = False)
 			EndIf
 		ElseIf d\Code <> ""
 			If SelectedItem = Null Then
-				If (d\Locked = 0) And (d\Code = msg\KeyPadInput) And d\Code <> "GEAR" Then
+				If (d\Locked = 0) And (d\Code <> "GEAR") And (d\Code = msg\KeyPadInput) Then
 					PlaySound2(ScannerSFX1, Camera, ClosestButton)
 				Else
 					PlaySound2(ScannerSFX2, Camera, ClosestButton)
