@@ -1494,7 +1494,7 @@ Function UpdateNPCs()
 				
 				PrevFrame = n\Frame
 				
-				Dist = EntityDistance(me\Collider, n\Collider)
+				Dist = EntityDistanceSquared(me\Collider, n\Collider)
 				
 				n\BlinkTimer = 1.0
 				
@@ -1537,7 +1537,7 @@ Function UpdateNPCs()
 							;[Block]
 							If n\Frame >= 538.0 Then
 								AnimateNPC(n, 659.0, 538.0, -0.45, False)
-								If n\Frame > 537.9 Then n\Frame = 37.0
+								If n\Frame > 537.9 Then SetNPCFrame(n, 37.0)
 							Else
 								AnimateNPC(n, 37.0, 269.0, 0.7, False)
 								If n\Frame > 268.9 Then n\State = 2.0
@@ -1545,10 +1545,10 @@ Function UpdateNPCs()
 							;[End Block]
 						Case 2.0 ; ~ Being active
 							;[Block]
-							If (Dist < HideDistance * 2.0) And n\Idle = 0 And PlayerInReachableRoom(True) Then
+							If (Dist < PowTwo(HideDistance * 2.0)) And n\Idle = 0 And PlayerInReachableRoom(True) Then
 								n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider)
 								PlayerSeeAble = MeNPCSeesPlayer(n)
-								If PlayerSeeAble = 1 Lor n\State2 > 0.0 Then ; ~ Player is visible for SCP-049's sight
+								If PlayerSeeAble = 1 Lor n\State2 > 0.0 And (Not chs\NoTarget) Then ; ~ Player is visible for SCP-049's sight
 									GiveAchievement(Achv049)
 									
 									; ~ Playing a sound after detecting the player
@@ -1566,7 +1566,7 @@ Function UpdateNPCs()
 									PointEntity(n\OBJ, me\Collider)
 									RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0.0)
 									
-									If Dist < 0.5 Then
+									If Dist < 0.25 Then
 										If wi\HazmatSuit > 0 Then
 											me\BlurTimer = me\BlurTimer + (fps\Factor[0] * 2.5)
 											If me\BlurTimer > 250.0 And me\BlurTimer - (fps\Factor[0] * 2.5) =< 250.0 And n\PrevState <> 3 Then
@@ -1631,12 +1631,12 @@ Function UpdateNPCs()
 										
 										If n\PrevState = 3 Then n\PrevState = 2
 										
-										If Dist < 3.0 Then
+										If Dist < 9.0 Then
 											AnimateNPC(n, Max(Min(AnimTime(n\OBJ), 428.0), 387.0), 463.0, n\CurrSpeed * 38.0)
 										Else
 											If n\Frame > 428.0 Then
 												AnimateNPC(n, Min(AnimTime(n\OBJ), 463.0), 498.0, n\CurrSpeed * 38.0, False)
-												If n\Frame > 497.9 Then n\Frame = 358.0
+												If n\Frame > 497.9 Then SetNPCFrame(n, 358.0)
 											Else
 												AnimateNPC(n, Max(Min(AnimTime(n\OBJ), 358.0), 346.0), 393.0, n\CurrSpeed * 38.0)
 											EndIf
@@ -1725,13 +1725,13 @@ Function UpdateNPCs()
 											
 											; ~ Attempt to find a room (the PlayerRoom or one of it's adjacent rooms) for SCP-049 to go to but select the one closest to him
 											If n\PathStatus <> 1 Then
-												Local ClosestDist# = EntityDistance(PlayerRoom\OBJ, n\Collider)
+												Local ClosestDist# = EntityDistanceSquared(PlayerRoom\OBJ, n\Collider)
 												Local ClosestRoom.Rooms = PlayerRoom
 												Local CurrDist# = 0.0
 												
 												For i = 0 To 3
 													If PlayerRoom\Adjacent[i] <> Null Then
-														CurrDist = EntityDistance(PlayerRoom\Adjacent[i]\OBJ, n\Collider)
+														CurrDist = EntityDistanceSquared(PlayerRoom\Adjacent[i]\OBJ, n\Collider)
 														If CurrDist < ClosestDist Then
 															ClosestDist = CurrDist
 															ClosestRoom = PlayerRoom\Adjacent[i]
@@ -1759,12 +1759,12 @@ Function UpdateNPCs()
 												
 												; ~ No path could still be found, just make SCP-049 go to a room (further away than the very first attempt)
 												If n\PathStatus <> 1 Then
-													ClosestDist = 100.0 ; ~ Prevent the PlayerRoom to be considered the closest, so SCP-049 wouldn't try to find a path there
+													ClosestDist = 10000.0 ; ~ Prevent the PlayerRoom to be considered the closest, so SCP-049 wouldn't try to find a path there
 													ClosestRoom.Rooms = PlayerRoom
 													CurrDist = 0.0
 													For i = 0 To 3
 														If PlayerRoom\Adjacent[i] <> Null Then
-															CurrDist = EntityDistance(PlayerRoom\Adjacent[i]\OBJ, n\Collider)
+															CurrDist = EntityDistanceSquared(PlayerRoom\Adjacent[i]\OBJ, n\Collider)
 															If CurrDist < ClosestDist Then
 																ClosestDist = CurrDist
 																For j = 0 To 3
@@ -1852,14 +1852,14 @@ Function UpdateNPCs()
 							;[End Block]
 						Case 4.0 ; ~ Standing on catwalk
 							;[Block]
-							If Dist < 8.0 Then
+							If Dist < 64.0 Then
 								AnimateNPC(n, 18.0, 19.0, 0.05)
 								
 								PointEntity(n\OBJ, me\Collider)	
 								RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 45.0), 0.0)
 								
 								n\State3 = 1.0
-							ElseIf Dist > HideDistance * 0.8 And n\State3 > 0.0 Then
+							ElseIf Dist > PowTwo(HideDistance * 0.8) And n\State3 > 0.0 Then
 								n\State = 2.0
 								n\State3 = 0.0
 								For r.Rooms = Each Rooms
@@ -1959,9 +1959,7 @@ Function UpdateNPCs()
 								EndIf
 							EndIf
 							
-							If PlayerRoom\RoomTemplate\Name = "room2_sl" Then
-								ShouldPlay = 20
-							EndIf
+							If PlayerRoom\RoomTemplate\Name = "room2_sl" Then ShouldPlay = 20
 							
 							If n\CurrSpeed > 0.005 Then
 								If (PrevFrame < 361.0 And n\Frame >= 361.0) Lor (PrevFrame < 377.0 And n\Frame >= 377.0) Then
@@ -2084,8 +2082,8 @@ Function UpdateNPCs()
 									If Dist2 < 0.36 Then
 										Temp = True
 										If n\Path[n\PathLocation]\door <> Null
-											If (Not n\Path[n\PathLocation]\door\IsElevatorDoor)
-												If ((n\Path[n\PathLocation]\door\Locked = 1 Lor n\Path[n\PathLocation]\door\KeyCard > 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open)) Then
+											If (Not n\Path[n\PathLocation]\door\IsElevatorDoor > 0)
+												If ((n\Path[n\PathLocation]\door\Locked > 0 Lor n\Path[n\PathLocation]\door\KeyCard > 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open)) Then
 													Temp = False
 												Else
 													If (Not n\Path[n\PathLocation]\door\Open) Then UseDoor(n\Path[n\PathLocation]\Door, True)
@@ -4068,7 +4066,9 @@ Function UpdateNPCs()
 								If n\Frame > 256.0 Then n\State = 0.0
 								
 								If n\Frame > 228.0 And PrevFrame =< 228.0 Then
-									PlaySound2(LoadTempSound("SFX\SCP\966\Echo" + Rand(1, 3) + ".ogg"), Camera, n\Collider)
+									If (Not ChannelPlaying(n\SoundCHN)) Then
+										n\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\966\Echo" + Rand(1, 3) + ".ogg"), Camera, n\Collider)
+									EndIf
 								EndIf
 								
 								If (Not chs\Notarget) Then
@@ -4120,7 +4120,9 @@ Function UpdateNPCs()
 								EndIf
 								
 								If (n\Frame > 271.0 And PrevFrame =< 271.0) Lor (n\Frame > 301.0 And PrevFrame =< 301.0) Lor (n\Frame > 314.0 And PrevFrame =< 314.0) Then
-									PlaySound2(LoadTempSound("SFX\SCP\966\Idle" + Rand(1, 3) + ".ogg"), Camera, n\Collider)
+									If (Not ChannelPlaying(n\SoundCHN)) Then
+										n\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\966\Idle" + Rand(1, 3) + ".ogg"), Camera, n\Collider)
+									EndIf
 								EndIf
 								
 								If (Not chs\Notarget) Then
@@ -4167,8 +4169,8 @@ Function UpdateNPCs()
 													Temp = True
 													If Dist2 < 0.64 Then 
 														If n\Path[n\PathLocation]\door <> Null Then
-															If (Not n\Path[n\PathLocation]\door\IsElevatorDoor)
-																If (n\Path[n\PathLocation]\door\Locked = 1 Lor n\Path[n\PathLocation]\door\KeyCard <> 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open) Then
+															If (Not n\Path[n\PathLocation]\door\IsElevatorDoor > 0)
+																If (n\Path[n\PathLocation]\door\Locked > 0 Lor n\Path[n\PathLocation]\door\KeyCard <> 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open) Then
 																	Temp = False
 																Else
 																	If (Not n\Path[n\PathLocation]\door\Open) And (n\Path[n\PathLocation]\door\Buttons[0] <> 0 Lor n\Path[n\PathLocation]\door\Buttons[1] <> 0) Then
@@ -4775,8 +4777,8 @@ Function UpdateNPCs()
 									If Dist2 < 0.36 Then
 										Temp = True
 										If n\Path[n\PathLocation]\door <> Null
-											If (Not n\Path[n\PathLocation]\door\IsElevatorDoor)
-												If ((n\Path[n\PathLocation]\door\Locked = 1 Lor n\Path[n\PathLocation]\door\KeyCard > 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open)) Then
+											If (Not n\Path[n\PathLocation]\door\IsElevatorDoor > 0)
+												If ((n\Path[n\PathLocation]\door\Locked > 0 Lor n\Path[n\PathLocation]\door\KeyCard > 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open)) Then
 													Temp = False
 												Else
 													If (Not n\Path[n\PathLocation]\door\Open) Then UseDoor(n\Path[n\PathLocation]\Door, True)

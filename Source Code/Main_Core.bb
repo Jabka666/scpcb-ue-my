@@ -2226,7 +2226,6 @@ Function MainLoop()
 				Next
 			Next
 			me\SndVolume = CurveValue(0.0, me\SndVolume, 5.0)
-			CreateMsg(Str(me\SndVolume), 6.0)
 			
 			CanSave = True
 			UpdateDeaf()

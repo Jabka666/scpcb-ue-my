@@ -2099,7 +2099,7 @@ Type Doors
 	Field KeyCard%
 	Field room.Rooms
 	Field DisableWaypoint%
-	Field SoundCHN%
+	Field SoundCHN%, SoundCHN2%
 	Field Code$
 	Field ID%
 	Field AutoClose%
@@ -2226,11 +2226,13 @@ Function CreateDoor.Doors(x#, y#, z#, Angle#, room.Rooms, Open% = False, DoorTyp
 	
 	For i = 0 To 1
 		If (DoorType = Office_Door) Lor (DoorType = Wooden_Door) Then
-			d\Buttons[i] = CreatePivot()
-			PositionEntity(d\Buttons[i], x - 0.22, y + 0.6, z + 0.1 + (i * (-0.2)))
-			EntityRadius(d\Buttons[i], 0.1)
-			EntityPickMode(d\Buttons[i], 1)
-			EntityParent(d\Buttons[i], d\FrameOBJ)
+			If (Not d\Open) Then
+				d\Buttons[i] = CreatePivot()
+				PositionEntity(d\Buttons[i], x - 0.22, y + 0.6, z + 0.1 + (i * (-0.2)))
+				EntityRadius(d\Buttons[i], 0.1)
+				EntityPickMode(d\Buttons[i], 1)
+				EntityParent(d\Buttons[i], d\FrameOBJ)
+			EndIf
 		Else
 			If DoorType = Elevator_Door Then
 				ButtonID = i * 4
@@ -2493,7 +2495,9 @@ Function UpdateDoors()
 				EndIf
 			EndIf
 		EndIf
-		UpdateSoundOrigin(d\SoundCHN, Camera, d\FrameOBJ)
+		If d\SoundCHN <> 0 Then
+			If ChannelPlaying(d\SoundCHN) Then UpdateSoundOrigin(d\SoundCHN, Camera, d\FrameOBJ)
+		EndIf
 		
 		If d\DoorType <> Office_Door And d\DoorType <> Wooden_Door Then
 			If d\Locked <> d\LockedUpdated Then
@@ -2681,10 +2685,10 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 			If State < 0.0 Then
 				State = State - fps\Factor[0]
 				If PlayerInsideElevator Then
-					If (Not event\SoundCHN) Then
-						event\SoundCHN = PlaySound_Strict(ElevatorMoveSFX)
+					If (Not door1\SoundCHN2) Then
+						door1\SoundCHN2 = PlaySound_Strict(ElevatorMoveSFX)
 					Else
-						If (Not ChannelPlaying(event\SoundCHN)) Then event\SoundCHN = PlaySound_Strict(ElevatorMoveSFX)
+						If (Not ChannelPlaying(door1\SoundCHN2)) Then door1\SoundCHN2 = PlaySound_Strict(ElevatorMoveSFX)
 					EndIf
 					
 					me\CameraShake = Sin(Abs(State) / 3.0) * 0.3
@@ -2714,7 +2718,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 						UpdateDoors()
 						UpdateRooms()
 						
-						door2\SoundCHN = PlaySound_Strict(OpenDoorSFX(3, Rand(0, 2)))
+						door1\SoundCHN = PlaySound2(OpenDoorSFX(Elevator_Door, Rand(0, 2)), Camera, door1\OBJ)
 					EndIf
 					
 					For n.NPCs = Each NPCs
@@ -2786,7 +2790,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 							EndIf
 						EndIf
 					Next
-					UseDoor(door2, True)
+					UseDoor(door2, True, (Not PlayerInsideElevator))
 					door1\Open = False
 					
 					; ~ Return to default panel texture
@@ -2797,10 +2801,10 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 			Else
 				State = State + fps\Factor[0]
 				If PlayerInsideElevator Then
-					If (Not event\SoundCHN) Then
-						event\SoundCHN = PlaySound_Strict(ElevatorMoveSFX)
+					If (Not door2\SoundCHN2) Then
+						door2\SoundCHN2 = PlaySound_Strict(ElevatorMoveSFX)
 					Else
-						If (Not ChannelPlaying(event\SoundCHN)) Then event\SoundCHN = PlaySound_Strict(ElevatorMoveSFX)
+						If (Not ChannelPlaying(door2\SoundCHN2)) Then door2\SoundCHN2 = PlaySound_Strict(ElevatorMoveSFX)
 					EndIf
 					
 					me\CameraShake = Sin(Abs(State) / 3.0) * 0.3
@@ -2828,7 +2832,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 						UpdateDoors()
 						UpdateRooms()
 						
-						door1\SoundCHN = PlaySound_Strict(OpenDoorSFX(3, Rand(0, 2)))
+						door2\SoundCHN = PlaySound2(OpenDoorSFX(Elevator_Door, Rand(0, 2)), Camera, door2\OBJ)
 					EndIf
 					
 					For n.NPCs = Each NPCs
@@ -2896,7 +2900,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 							EndIf
 						EndIf
 					Next
-					UseDoor(door1, True)
+					UseDoor(door1, True, (Not PlayerInsideElevator))
 					door2\Open = False
 					
 					; ~ Return to default panel texture
@@ -2966,7 +2970,7 @@ Function UseDoorItem(item.Items)
 	End Select
 End Function
 
-Function UseDoor(d.Doors, Scripted% = False)
+Function UseDoor(d.Doors, Scripted% = False, PlaySFX% = True)
 	Local Temp%
 	
 	If (Not Scripted) Then
@@ -3185,32 +3189,35 @@ Function UseDoor(d.Doors, Scripted% = False)
 		d\TimerState = d\Timer
 	EndIf
 	
-	If d\Open Then
-		If d\DoorType = Big_Door And d\Locked = 2 Then
-			d\SoundCHN = PlaySound2(BigDoorErrorSFX[Rand(0, 2)], Camera, d\OBJ)
-		Else
-			If d\DoorType <> Default_Door And d\DoorType <> One_Sided_Door Then
-				If d\DoorType = Wooden_Door Then
-					If PlayerRoom\RoomTemplate\Name = "cont2_860_1" Then
-						d\SoundCHN = PlaySound2(OpenDoorSFX(d\DoorType, 2), Camera, d\OBJ)
-					Else
-						d\SoundCHN = PlaySound2(OpenDoorSFX(d\DoorType, Rand(0, 1)), Camera, d\OBJ)
-					EndIf
+	If PlaySFX Then
+		If d\Open Then
+			If d\DoorType = Wooden_Door Then
+				If PlayerRoom\RoomTemplate\Name = "cont2_860_1" Then
+					d\SoundCHN = PlaySound2(OpenDoorSFX(d\DoorType, 2), Camera, d\OBJ)
 				Else
-					d\SoundCHN = PlaySound2(OpenDoorSFX(d\DoorType, Rand(0, 2)), Camera, d\OBJ)
+					d\SoundCHN = PlaySound2(OpenDoorSFX(d\DoorType, Rand(0, 1)), Camera, d\OBJ)
 				EndIf
 			Else
-				d\SoundCHN = PlaySound2(OpenDoorSFX(Default_Door, Rand(0, 2)), Camera, d\OBJ)
+				If (d\DoorType = Default_Door) And (d\DoorType = One_Sided_Door) Then
+					d\SoundCHN = PlaySound2(OpenDoorSFX(Default_Door, Rand(0, 2)), Camera, d\OBJ)
+				Else
+					If (d\Locked = 2) And (d\DoorType = Big_Door) Then
+						d\SoundCHN = PlaySound2(BigDoorErrorSFX[Rand(0, 2)], Camera, d\OBJ)
+					Else
+						d\SoundCHN = PlaySound2(OpenDoorSFX(d\DoorType, Rand(0, 2)), Camera, d\OBJ)
+					EndIf
+				EndIf
+			EndIf
+		Else
+			If (d\DoorType <> Office_Door) And (d\DoorType <> Wooden_Door) Then
+				If (d\DoorType = Default_Door) And (d\DoorType = One_Sided_Door) Then
+					d\SoundCHN = PlaySound2(CloseDoorSFX(Default_Door, Rand(0, 2)), Camera, d\OBJ)
+				Else
+					d\SoundCHN = PlaySound2(CloseDoorSFX(d\DoorType, Rand(0, 2)), Camera, d\OBJ)
+				EndIf
 			EndIf
 		EndIf
-	Else
-		If d\DoorType <> Default_Door And d\DoorType <> One_Sided_Door Then
-			d\SoundCHN = PlaySound2(CloseDoorSFX(d\DoorType, Rand(0, 2)), Camera, d\OBJ)
-		Else
-			d\SoundCHN = PlaySound2(CloseDoorSFX(Default_Door, Rand(0, 2)), Camera, d\OBJ)
-		EndIf
 	EndIf
-	UpdateSoundOrigin(d\SoundCHN, Camera, d\OBJ)				
 End Function
 
 Function RemoveDoor(d.Doors)
@@ -7533,6 +7540,14 @@ Function FillRoom(r.Rooms)
 			RotateEntity(r\Objects[9 * 2 + 1], 10.0, 0.0 - 180.0, 0.0)
 			EntityPickMode(r\Objects[9 * 2 + 1], 1, False)
 			EntityRadius(r\Objects[9 * 2 + 1], 0.1)
+			
+			r\Objects[22] = CreateSprite()
+			PositionEntity(r\Objects[22], r\x + 958.5 * RoomScale, r\y + 762.5 * RoomScale, r\z + 670.0 * RoomScale)
+			ScaleSprite(r\Objects[22], 0.015, 0.015)
+			EntityTexture(r\Objects[22], t\LightSpriteID[1])
+			EntityBlend(r\Objects[22], 3)
+			HideEntity(r\Objects[22])
+			EntityParent(r\Objects[22], r\OBJ)
 			
 			; ~ Camera in the room itself
 			sc.SecurityCams = CreateSecurityCam(r\x - 159.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 929.0 * RoomScale, r, True, r\x - 231.489 * RoomScale, r\y + 760.0 * RoomScale, r\z + 255.744 * RoomScale)

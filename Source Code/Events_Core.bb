@@ -8704,9 +8704,9 @@ Function UpdateEvents()
 						
 						e\room\NPC[0] = Curr049
 						e\room\NPC[0]\HideFromNVG = False
-						e\room\NPC[0]\PathX = EntityX(e\room\NPC[0]\Collider)
-						e\room\NPC[0]\PathZ = EntityZ(e\room\NPC[0]\Collider)
-						e\room\NPC[0]\State = 5.0
+						e\room\NPC[0]\PathX = EntityX(me\Collider)
+						e\room\NPC[0]\PathZ = EntityZ(me\Collider)
+						e\room\NPC[0]\State = 5.0 : e\room\NPC[0]\PrevState = 2
 						
 						e\EventState2 = 1.0
 					ElseIf e\EventState2 = 1.0
@@ -8725,12 +8725,15 @@ Function UpdateEvents()
 								For i = 0 To 1
 									e\room\RoomDoors[i]\Locked = 1
 									If (Not e\room\RoomDoors[i]\Open) Then
-										PlaySound_Strict(LoadTempSound("SFX\Door\DoorOpen079.ogg"))
 										UseDoor(e\room\RoomDoors[i], True)
 									EndIf
 								Next
+								If e\room\NPC[0]\Reload = 0.0 Then
+									PlaySound_Strict(LoadTempSound("SFX\Door\DoorOpen079.ogg"))
+									e\room\NPC[0]\DropSpeed = 0.0
+									e\room\NPC[0]\Reload = 1.0
+								EndIf
 							EndIf
-							e\room\NPC[0]\DropSpeed = 0.0
 						EndIf
 						
 						If e\room\NPC[0]\State <> 5.0 Then e\EventState2 = 7.0
@@ -8892,6 +8895,18 @@ Function UpdateEvents()
 								EntityAlpha(GetChild(PlayerRoom\Adjacent[i]\OBJ, 2), 0.0)
 							EndIf
 						Next
+						
+						If e\EventState4 > 0.0 And e\EventState4 < 200.0 Then
+							e\EventState4 = e\EventState4 + fps\Factor[0]
+						Else
+							e\EventState4 = e\EventState4 + fps\Factor[0]
+							If e\EventState4 < 250.0 Then
+								ShowEntity(e\room\Objects[22])
+							Else
+								HideEntity(e\room\Objects[22]) 
+								If e\EventState4 > 300.0 Then e\EventState4 = 200.0
+							EndIf
+						EndIf
 					Else
 						For i = 0 To 14
 							If e\room\Objects[i] <> 0 And i <> 7 Then

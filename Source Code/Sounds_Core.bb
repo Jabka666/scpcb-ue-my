@@ -199,6 +199,9 @@ Function PauseSounds()
 		If d\SoundCHN <> 0 Then
 			If ChannelPlaying(d\SoundCHN) Then PauseChannel(d\SoundCHN)
 		EndIf
+		If d\SoundCHN2 <> 0 Then
+			If ChannelPlaying(d\SoundCHN2) Then PauseChannel(d\SoundCHN2)
+		EndIf
 	Next
 	
 	If AmbientSFXCHN <> 0 Then
@@ -299,6 +302,9 @@ Function ResumeSounds()
 		If d\SoundCHN <> 0 Then
 			If ChannelPlaying(d\SoundCHN) Then ResumeChannel(d\SoundCHN)
 		EndIf
+		If d\SoundCHN2 <> 0 Then
+			If ChannelPlaying(d\SoundCHN2) Then ResumeChannel(d\SoundCHN2)
+		EndIf
 	Next
 	
 	If AmbientSFXCHN <> 0 Then
@@ -396,6 +402,9 @@ Function KillSounds()
 	For d.Doors = Each Doors
 		If d\SoundCHN <> 0 Then
 			If ChannelPlaying(d\SoundCHN) Then StopChannel(d\SoundCHN)
+		EndIf
+		If d\SoundCHN2 <> 0 Then
+			If ChannelPlaying(d\SoundCHN2) Then StopChannel(d\SoundCHN2)
 		EndIf
 	Next
 	
