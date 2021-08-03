@@ -7542,7 +7542,7 @@ Function FillRoom(r.Rooms)
 			EntityRadius(r\Objects[9 * 2 + 1], 0.1)
 			
 			r\Objects[22] = CreateSprite()
-			PositionEntity(r\Objects[22], r\x + 958.5 * RoomScale, r\y + 762.5 * RoomScale, r\z + 670.0 * RoomScale)
+			PositionEntity(r\Objects[22], r\x + 958.5 * RoomScale, r\y + 762.5 * RoomScale, r\z + 669.0 * RoomScale)
 			ScaleSprite(r\Objects[22], 0.015, 0.015)
 			EntityTexture(r\Objects[22], t\LightSpriteID[1])
 			EntityBlend(r\Objects[22], 3)
