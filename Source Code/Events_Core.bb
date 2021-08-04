@@ -8833,29 +8833,31 @@ Function UpdateEvents()
 					EndIf
 					
 					If e\room\NPC[0] <> Null Then
-						If e\EventState2 < 7.0 Then
-							If e\EventState2 > 2.0 Then
-								If Abs(EntityY(e\room\RoomDoors[0]\FrameOBJ) - EntityY(e\room\NPC[0]\Collider)) > 1.0 Then
-									If Abs(EntityY(e\room\RoomDoors[0]\FrameOBJ) - EntityY(me\Collider)) < 1.0 Then
-										If e\room\RoomDoors[0]\Open Then
-											e\room\RoomDoors[0]\FastOpen = 1
+						If PlayerRoom = e\room Then
+							If e\EventState2 < 7.0 Then
+								If e\EventState2 > 2.0 Then
+									If Abs(EntityY(e\room\RoomDoors[0]\FrameOBJ) - EntityY(e\room\NPC[0]\Collider)) > 1.0 Then
+										If Abs(EntityY(e\room\RoomDoors[0]\FrameOBJ) - EntityY(me\Collider)) < 1.0 Then
+											If e\room\RoomDoors[0]\Open Then
+												e\room\RoomDoors[0]\FastOpen = 1
+												UseDoor(e\room\RoomDoors[0], True)
+												PlaySound_Strict(LoadTempSound("SFX\Door\DoorClose079.ogg"))
+											EndIf
+										EndIf
+									Else
+										If (Not e\room\RoomDoors[0]\Open) Then
+											e\room\RoomDoors[0]\FastOpen = 0
 											UseDoor(e\room\RoomDoors[0], True)
-											PlaySound_Strict(LoadTempSound("SFX\Door\DoorClose079.ogg"))
+											PlaySound_Strict(LoadTempSound("SFX\Door\DoorOpen079.ogg"))
 										EndIf
 									EndIf
-								Else
-									If (Not e\room\RoomDoors[0]\Open) Then
-										e\room\RoomDoors[0]\FastOpen = 0
-										UseDoor(e\room\RoomDoors[0], True)
-										PlaySound_Strict(LoadTempSound("SFX\Door\DoorOpen079.ogg"))
-									EndIf
 								EndIf
-							EndIf
-						Else
-							If (Not e\room\RoomDoors[0]\Open) Then
-								e\room\RoomDoors[0]\FastOpen = 0
-								UseDoor(e\room\RoomDoors[0], True)
-								PlaySound_Strict(LoadTempSound("SFX\Door\DoorOpen079.ogg"))
+							Else
+								If (Not e\room\RoomDoors[0]\Open) Then
+									e\room\RoomDoors[0]\FastOpen = 0
+									UseDoor(e\room\RoomDoors[0], True)
+									PlaySound_Strict(LoadTempSound("SFX\Door\DoorOpen079.ogg"))
+								EndIf
 							EndIf
 						EndIf
 					EndIf
