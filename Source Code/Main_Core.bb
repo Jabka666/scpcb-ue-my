@@ -3536,11 +3536,7 @@ Function UpdateGUI()
 		ItemAmount = 0
 		IsMouseOn = -1
 		For n = 0 To OtherSize - 1
-			If ScaledMouseX() > x And ScaledMouseX() < x + INVENTORY_GFX_SIZE Then
-				If ScaledMouseY() > y And ScaledMouseY() < y + INVENTORY_GFX_SIZE Then
-					IsMouseOn = n
-				EndIf
-			EndIf
+			If MouseOn(x, y, INVENTORY_GFX_SIZE, INVENTORY_GFX_SIZE) Then IsMouseOn = n
 			
 			If IsMouseOn = n Then
 				MouseSlot = n
@@ -3683,11 +3679,7 @@ Function UpdateGUI()
 		ItemAmount = 0
 		IsMouseOn = -1
 		For n = 0 To MaxItemAmount - 1
-			If ScaledMouseX() > x And ScaledMouseX() < x + INVENTORY_GFX_SIZE Then
-				If ScaledMouseY() > y And ScaledMouseY() < y + INVENTORY_GFX_SIZE Then
-					IsMouseOn = n
-				EndIf
-			EndIf
+			If MouseOn(x, y, INVENTORY_GFX_SIZE, INVENTORY_GFX_SIZE) Then IsMouseOn = n
 			
 			If IsMouseOn = n Then
 				MouseSlot = n
@@ -5835,11 +5827,7 @@ Function RenderGUI()
 		
 		IsMouseOn = -1
 		For n = 0 To OtherSize - 1
-			If ScaledMouseX() > x And ScaledMouseX() < x + INVENTORY_GFX_SIZE Then
-				If ScaledMouseY() > y And ScaledMouseY() < y + INVENTORY_GFX_SIZE Then
-					IsMouseOn = n
-				EndIf
-			EndIf
+			If MouseOn(x, y, INVENTORY_GFX_SIZE, INVENTORY_GFX_SIZE) Then IsMouseOn = n
 			
 			If IsMouseOn = n Then
 				MouseSlot = n
@@ -5892,11 +5880,7 @@ Function RenderGUI()
 		
 		IsMouseOn = -1
 		For n = 0 To MaxItemAmount - 1
-			If ScaledMouseX() > x And ScaledMouseX() < x + INVENTORY_GFX_SIZE Then
-				If ScaledMouseY() > y And ScaledMouseY() < y + INVENTORY_GFX_SIZE Then
-					IsMouseOn = n
-				EndIf
-			EndIf
+			If MouseOn(x, y, INVENTORY_GFX_SIZE, INVENTORY_GFX_SIZE) Then IsMouseOn = n
 			
 			If Inventory(n) <> Null Then
 				Color(200, 200, 200)
