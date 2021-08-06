@@ -6828,14 +6828,14 @@ Function UpdateEvents()
 							Next
 						EndIf
 						
-						If e\room\RoomDoors[1]\Open = True
+						If e\room\RoomDoors[1]\Open Then
 							e\EventState = 1.0
 							GiveAchievement(Achv205)
 						EndIf
 					Else
 						ShouldPlay = 16
 						If e\EventState < 65.0 Then
-							If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[0], True), EntityZ(me\Collider), EntityZ(e\room\Objects[0], True)) < 4.0 Then
+							If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[0], True), EntityZ(me\Collider), EntityZ(e\room\Objects[0], True)) < 4.0 And (Not chs\NoTarget) Then
 								PlaySound_Strict(LoadTempSound("SFX\SCP\205\Enter.ogg"))
 								
 								e\EventState = Max(e\EventState, 65.0)
@@ -6849,12 +6849,12 @@ Function UpdateEvents()
 								SetAnimTime(e\room\Objects[4], 434.0)
 								SetAnimTime(e\room\Objects[5], 434.0)
 								
-								e\room\RoomDoors[0]\Open = False
+								If e\room\RoomDoors[0]\Open Then UseDoor(e\room\RoomDoors[0], True)
 							EndIf
 							
 							If e\EventState > 7.0 Then
 								If Rand(0, 300) = 1 Then
-									e\room\RoomDoors[0]\Open = (Not e\room\RoomDoors[0]\Open)
+									UseDoor(e\room\RoomDoors[0], True)
 								EndIf
 							EndIf 
 							e\EventState2 = e\EventState2 + fps\Factor[0]							
