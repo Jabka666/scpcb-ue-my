@@ -2914,68 +2914,12 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 	Return(State)
 End Function
 
-Function UseDoorItem(item.Items)
-	Select item\ItemTemplate\TempName
-		Case "key6"
-			;[Block]
-			Return(1)
-		Case "key0"
-			;[Block]
-			Return(2)
-			;[End Block]
-		Case "key1"
-			;[Block]
-			Return(3)
-			;[End Block]
-		Case "key2"
-			;[Block]
-			Return(4)
-			;[End Block]
-		Case "key3"
-			;[Block]
-			Return(5)
-			;[End Block]
-		Case "key4"
-			;[Block]
-			Return(6)
-			;[End Block]
-		Case "key5"
-			;[Block]
-			Return(7)
-			;[End Block]
-		Case "keyomni"
-			;[Block]
-			Return(8)
-			;[End Block]
-		Case "scp005"
-			;[Block]
-			Return(9)
-			;[End Block]
-		Case "hand"
-			;[Block]
-			Return(-1)
-			;[End Block]
-		Case "hand2"
-			;[Block]
-			Return(-2)
-			;[End Block]
-		Case "scp860"
-			;[Block]
-			Return(-3)
-			;[End Block]
-		Default
-			;[Block]
-			Return(0)
-			;[End Block]
-	End Select
-End Function
-
 Function UseDoor(d.Doors, Scripted% = False, PlaySFX% = True)
 	Local Temp%
 	
 	If (Not Scripted) Then
 		If SelectedItem <> Null Then
-			Temp = UseDoorItem(SelectedItem)
+			Temp = GetUsingItem(SelectedItem)
 		EndIf
 		
 		If d\KeyCard > 0 Then

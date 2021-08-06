@@ -471,7 +471,7 @@ Function GetStepSound(Entity%)
 	Local mat.Materials
 	Local Picker%, Brush%, Texture%, Name$
 	
-	Picker = LinePick(EntityX(Entity), EntityY(Entity), EntityZ(Entity), 0, -1, 0)
+	Picker = LinePick(EntityX(Entity), EntityY(Entity), EntityZ(Entity), 0.0, -1.0, 0.0)
 	If Picker <> 0 Then
 		If GetEntityType(Picker) <> HIT_MAP Then Return(0)
 		Brush = GetSurfaceBrush(GetSurface(Picker, CountSurfaces(Picker)))
