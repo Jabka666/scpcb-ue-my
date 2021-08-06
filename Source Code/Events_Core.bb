@@ -905,7 +905,7 @@ Function UpdateEvents()
 							CreateMsg("Saving is only permitted on clickable monitors scattered throughout the facility.", 6.0)
 						EndIf
 						
-						Curr173\Idle = 0
+						Curr173\Idle = 1
 						
 						While e\room\RoomDoors[1]\OpenState < 180.0
 							e\room\RoomDoors[1]\OpenState = Min(180.0, e\room\RoomDoors[1]\OpenState + 0.8)
@@ -1026,11 +1026,16 @@ Function UpdateEvents()
 										me\LightBlink = 3.0
 										PlaySound2(StoneDragSFX, Camera, Curr173\Collider)
 										PointEntity(Curr173\Collider, e\room\NPC[2]\Collider)
-										If EntityY(me\Collider) < 320.0 * RoomScale Then me\BlinkTimer = -10.0
 									EndIf
 									PositionEntity(Curr173\Collider, e\room\x - 96.0 * RoomScale, 0.31, e\room\z + 592.0 * RoomScale, True)
 									ResetEntity(Curr173\Collider)
 									RotateEntity(Curr173\Collider, 0.0, 190.0, 0.0)
+									
+									If me\LightBlink > 0.0 Then
+										Curr173\Idle = 0
+									Else
+										Curr173\Idle = 1
+									EndIf
 									
 									If e\room\NPC[2]\State <> 1.0 And me\KillTimer >= 0.0 Then
 										If EntityZ(e\room\NPC[2]\Collider) < e\room\z - 1150.0 * RoomScale Then
@@ -1042,9 +1047,10 @@ Function UpdateEvents()
 											If EntityDistanceSquared(Curr173\Collider, me\Collider) < 6.25 And Abs(EntityY(me\Collider) - EntityY(Curr173\Collider)) < 1.0 Then
 												PositionEntity(Curr173\Collider, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 											Else
-												PositionEntity(Curr173\Collider, 0.0, 0.0, 0.0)
+												PositionEntity(Curr173\Collider, 0.0, -500.0, 0.0)
 											EndIf
 											ResetEntity(Curr173\Collider)
+											Curr173\Idle = 0
 											CreateMsg("Hold " + key\Name[key\SPRINT] + " to run.", 6.0)
 										EndIf
 									EndIf

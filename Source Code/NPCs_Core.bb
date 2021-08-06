@@ -808,7 +808,11 @@ Function UpdateNPCs()
 										Else
 											If Rand(400) = 1 Then RotateEntity(n\Collider, 0.0, Rnd(360.0), 10.0)
 											TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider) + 90.0) * n\Speed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider) + 90.0) * n\Speed * fps\Factor[0])
-											If (Not chs\NoTarget) Then n\Angle = Rnd(-120.0, 120.0)
+											If me\LightBlink =< 0.0 And (Not chs\NoTarget) Then
+												n\Angle = Rnd(-120.0, 120.0)
+											Else
+												n\Angle = 0.0
+											EndIf
 										EndIf
 									EndIf
 								EndIf
