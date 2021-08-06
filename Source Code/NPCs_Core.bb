@@ -592,7 +592,7 @@ Function UpdateNPCs()
 	
 	Local n.NPCs, n2.NPCs, d.Doors, de.Decals, r.Rooms, e.Events, w.Waypoints, p.Particles, wp.WayPoints, wayPointCloseToPlayer.WayPoints
 	Local i%, j%, Dist#, Dist2#, Angle#, x#, x2#, y#, z#, z2#, PrevFrame#, PlayerSeeAble%, RN$
-	Local Target%, Pvt%, Pick%, GroupName$, PrevDist#, NewDist#
+	Local Target%, Pvt%, Pick%, PrevDist#, NewDist#
 	
 	For n.NPCs = Each NPCs
 		; ~ A variable to determine if the NPC is in the facility or not
@@ -4624,12 +4624,7 @@ Function UpdateNPCs()
 												msg\DeathMsg = msg\DeathMsg + "Class-B amnestics due to Incident 1499-E. The Class D subject involved in the event "
 												msg\DeathMsg = msg\DeathMsg + "died shortly after being shot by Agent [DATA REDACTED]."
 											Else
-												If Rand(2) = 1 Then
-													GroupName = "Nine-Tailed Fox"
-												Else
-													GroupName = "See No Evil"
-												EndIf
-												msg\DeathMsg = "An unidentified male and a deceased Class D subject were discovered in [DATA REDACTED] by the " + GroupName + ". "
+												msg\DeathMsg = "An unidentified male and a deceased Class D subject were discovered in [DATA REDACTED] by the Nine-Tailed Fox. "
 												msg\DeathMsg = msg\DeathMsg + "The man was described as highly agitated and seemed to only speak Russian. "
 												msg\DeathMsg = msg\DeathMsg + "He's been taken into a temporary holding area at [DATA REDACTED] while waiting for a translator to arrive."
 											EndIf
@@ -4654,12 +4649,7 @@ Function UpdateNPCs()
 												msg\DeathMsg = msg\DeathMsg + "Class-B amnestics due to Incident 1499-E. The Class D subject involved in the event "
 												msg\DeathMsg = msg\DeathMsg + "died shortly after being shot by Agent [DATA REDACTED]."
 											Else
-												If Rand(2) = 1 Then
-													GroupName = "Nine-Tailed Fox"
-												Else
-													GroupName = "See No Evil"
-												EndIf
-												msg\DeathMsg = "An unidentified male and a deceased Class D subject were discovered in [DATA REDACTED] by the " + GroupName + ". "
+												msg\DeathMsg = "An unidentified male and a deceased Class D subject were discovered in [DATA REDACTED] by the Nine-Tailed Fox. "
 												msg\DeathMsg = msg\DeathMsg + "The man was described as highly agitated and seemed to only speak Russian. "
 												msg\DeathMsg = msg\DeathMsg + "He's been taken into a temporary holding area at [DATA REDACTED] while waiting for a translator to arrive."
 											EndIf
@@ -4873,12 +4863,7 @@ Function UpdateNPCs()
 										PlaySound_Strict(DamageSFX[Rand(5, 8)])
 										InjurePlayer(Rnd(0.4, 1.0), 1.0 + (1.0 * SelectedDifficulty\AggressiveNPCs), 0.0, Rnd(0.1, 0.25), 0.2)
 										If me\Injuries > 3.0 Then
-											If Rand(2) = 1 Then
-												GroupName = "Nine-Tailed Fox"
-											Else
-												GroupName = "See No Evil"
-											EndIf
-											msg\DeathMsg = SubjectName + ". Cause of death: multiple lacerations and severe blunt force trauma caused by [DATA REDACTED], who was infected with SCP-008. Said subject was located by " + GroupName + " and terminated."
+											msg\DeathMsg = SubjectName + ". Cause of death: multiple lacerations and severe blunt force trauma caused by [DATA REDACTED], who was infected with SCP-008. Said subject was located by Nine-Tailed Fox and terminated."
 											Kill(True)
 										EndIf
 									Else

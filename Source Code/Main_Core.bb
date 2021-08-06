@@ -3353,7 +3353,7 @@ Function UpdateGUI()
 	Local e.Events, it.Items, r.Rooms
 	Local Temp%, x%, y%, z%, i%
 	Local x2#, ProjY#, Scale#, Pvt%
-	Local n%, xTemp%, yTemp%, StrTemp$, GroupName$
+	Local n%, xTemp%, yTemp%, StrTemp$
 	
 	If I_294\Using Then Update294()
 	
@@ -9616,7 +9616,6 @@ Function Update008()
 	Local r.Rooms, e.Events, p.Particles, de.Decals
 	Local PrevI008Timer#, i%
 	Local TeleportForInfect% = True
-	Local GroupName$
 	
 	If PlayerRoom\RoomTemplate\Name = "cont2_860_1"
 		If forest_event\EventState = 1.0 Then TeleportForInfect = False
@@ -9723,12 +9722,7 @@ Function Update008()
 						PlayerRoom\NPC[0]\Sound = LoadSound_Strict("SFX\SCP\008\KillScientist2.ogg")
 						PlayerRoom\NPC[0]\SoundCHN = PlaySound_Strict(PlayerRoom\NPC[0]\Sound)
 						
-						If Rand(2) = 1 Then
-							GroupName = "Nine-Tailed Fox"
-						Else
-							GroupName = "See No Evil"
-						EndIf
-						msg\DeathMsg = SubjectName + " found ingesting Dr. [DATA REDACTED] at Sector [DATA REDACTED]. Subject was immediately terminated by " + GroupName + " and sent for autopsy. "
+						msg\DeathMsg = SubjectName + " found ingesting Dr. [DATA REDACTED] at Sector [DATA REDACTED]. Subject was immediately terminated by Nine-Tailed Fox and sent for autopsy. "
 						msg\DeathMsg = msg\DeathMsg + "SCP-008 infection was confirmed, after which the body was incinerated."
 						Kill()
 						de.Decals = CreateDecal(3, EntityX(PlayerRoom\NPC[0]\Collider), 544.0 * RoomScale + 0.01, EntityZ(PlayerRoom\NPC[0]\Collider), 90.0, Rnd(360.0), 0.0, 0.8)
@@ -9771,12 +9765,7 @@ Function Update008()
 					Else
 						msg\DeathMsg = msg\DeathMsg + "B"
 					EndIf
-					If Rand(2) = 1 Then
-						GroupName = "Nine-Tailed Fox"
-					Else
-						GroupName = "See No Evil"
-					EndIf
-					msg\DeathMsg = msg\DeathMsg + ". Subject was immediately terminated by " + GroupName + " and sent for autopsy. "
+					msg\DeathMsg = msg\DeathMsg + ". Subject was immediately terminated by Nine-Tailed Fox and sent for autopsy. "
 					msg\DeathMsg = msg\DeathMsg + "SCP-008 infection was confirmed, after which the body was incinerated."
 				Else
 					msg\DeathMsg = ""

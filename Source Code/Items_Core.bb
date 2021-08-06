@@ -1425,9 +1425,17 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 			Local Level% = Right(item\ItemTemplate\TempName, 1)
 			
 			Select Setting
-				Case ROUGH, COARSE
+				Case ROUGH
 					;[Block]
 					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
+					;[End Block]
+				Case COARSE
+					;[Block]
+					If Level = 0 Then
+						d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
+					Else
+						it2.Items = CreateItem("Level " + (Level - 1) + " Key Card", "key" + (Level - 1), x, y, z)
+					EndIf
 					;[End Block]
 				Case ONETOONE
 					;[Block]

@@ -832,7 +832,7 @@ Function UpdateEvents()
 	Local Dist#, i%, Temp%, Pvt%, StrTemp$, j%, k%
 	Local CurrTrigger$ = "", fDir#, Scale#, Tex%, t1%, Name$
 	Local x#, y#, z#, xTemp#, yTemp#, b%, BT%, SF%, TexName$
-	Local Angle#, GroupName$
+	Local Angle#
 	
 	CurrStepSFX = 0
 	
