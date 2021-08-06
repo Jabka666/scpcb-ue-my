@@ -3509,7 +3509,7 @@ Function UpdateGUI()
 		EndIf
 	EndIf
 	
-	Local PrevOtherOpen.Items
+	Local PrevOtherOpen.Items, PrevItem.Items
 	Local OtherSize%, OtherAmount%
 	Local IsEmpty%
 	Local IsMouseOn%
@@ -3644,15 +3644,27 @@ Function UpdateGUI()
 				Else
 					If PrevOtherOpen\SecondInv[MouseSlot] = Null Then
 						For z = 0 To OtherSize - 1
-							If PrevOtherOpen\SecondInv[z] = SelectedItem Then PrevOtherOpen\SecondInv[z] = Null
+							If PrevOtherOpen\SecondInv[z] = SelectedItem Then
+								PrevOtherOpen\SecondInv[z] = Null
+								Exit
+							EndIf
 						Next
 						PrevOtherOpen\SecondInv[MouseSlot] = SelectedItem
 						SelectedItem = Null
 					ElseIf PrevOtherOpen\SecondInv[MouseSlot] <> SelectedItem
+						PrevItem = PrevOtherOpen\SecondInv[MouseSlot]
+						
 						Select SelectedItem\ItemTemplate\TempName
 							Default
 								;[Block]
-								CreateMsg("You can't combine these two items.", 6.0)
+								For z = 0 To MaxItemAmount - 1
+									If PrevOtherOpen\SecondInv[z] = SelectedItem Then
+										PrevOtherOpen\SecondInv[z] = PrevItem
+										Exit
+									EndIf
+								Next
+								PrevOtherOpen\SecondInv[MouseSlot] = SelectedItem
+								SelectedItem = Null
 								;[End Block]
 						End Select					
 					EndIf
@@ -3708,9 +3720,13 @@ Function UpdateGUI()
 			Else
 				If IsMouseOn = n And mo\MouseHit1 Then
 					For z = 0 To MaxItemAmount - 1
-						If Inventory(z) = SelectedItem Then Inventory(z) = Null
+						If Inventory(z) = SelectedItem Then
+							Inventory(z) = Null
+							Exit
+						EndIf
 					Next
 					Inventory(n) = SelectedItem
+					SelectedItem = Null
 				EndIf
 			EndIf					
 			
@@ -3790,11 +3806,16 @@ Function UpdateGUI()
 				Else
 					If Inventory(MouseSlot) = Null Then
 						For z = 0 To MaxItemAmount - 1
-							If Inventory(z) = SelectedItem Then Inventory(z) = Null
+							If Inventory(z) = SelectedItem Then
+								Inventory(z) = Null
+								Exit
+							EndIf
 						Next
 						Inventory(MouseSlot) = SelectedItem
 						SelectedItem = Null
 					ElseIf Inventory(MouseSlot) <> SelectedItem
+						PrevItem = Inventory(MouseSlot)
+						
 						Select SelectedItem\ItemTemplate\TempName
 							Case "paper", "key0", "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "playcard", "mastercard", "oldpaper", "badge", "ticket", "25ct", "coin", "key", "scp860", "scp500pill", "scp500pilldeath", "scp005"
 								;[Block]
@@ -3837,7 +3858,14 @@ Function UpdateGUI()
 											EndIf
 										EndIf
 									Else
-										CreateMsg("You can't combine these two items.", 6.0)
+										For z = 0 To MaxItemAmount - 1
+											If Inventory(z) = SelectedItem Then
+												Inventory(z) = PrevItem
+												Exit
+											EndIf
+										Next
+										Inventory(MouseSlot) = SelectedItem
+										SelectedItem = Null
 									EndIf
 								ElseIf Inventory(MouseSlot)\ItemTemplate\TempName = "wallet" Then
 									; ~ Add an item to clipboard
@@ -3872,10 +3900,24 @@ Function UpdateGUI()
 											CreateMsg("You put " + added\ItemTemplate\Name + " into the wallet.", 6.0)
 										EndIf
 									Else
-										CreateMsg("You can't combine these two items.", 6.0)
+										For z = 0 To MaxItemAmount - 1
+											If Inventory(z) = SelectedItem Then
+												Inventory(z) = PrevItem
+												Exit
+											EndIf
+										Next
+										Inventory(MouseSlot) = SelectedItem
+										SelectedItem = Null
 									EndIf
 								Else
-									CreateMsg("You can't combine these two items.", 6.0)
+									For z = 0 To MaxItemAmount - 1
+										If Inventory(z) = SelectedItem Then
+											Inventory(z) = PrevItem
+											Exit
+										EndIf
+									Next
+									Inventory(MouseSlot) = SelectedItem
+									SelectedItem = Null
 								EndIf
 								SelectedItem = Null
 								;[End Block]
@@ -3928,7 +3970,14 @@ Function UpdateGUI()
 										;[End Block]
 									Default
 										;[Block]
-										CreateMsg("You can't combine these two items.", 6.0)
+										For z = 0 To MaxItemAmount - 1
+											If Inventory(z) = SelectedItem Then
+												Inventory(z) = PrevItem
+												Exit
+											EndIf
+										Next
+										Inventory(MouseSlot) = SelectedItem
+										SelectedItem = Null
 										;[End Block]
 								End Select
 								;[End Block]
@@ -3981,7 +4030,14 @@ Function UpdateGUI()
 										;[End Block]
 									Default
 										;[Block]
-										CreateMsg("You can't combine these two items.", 6.0)
+										For z = 0 To MaxItemAmount - 1
+											If Inventory(z) = SelectedItem Then
+												Inventory(z) = PrevItem
+												Exit
+											EndIf
+										Next
+										Inventory(MouseSlot) = SelectedItem
+										SelectedItem = Null
 										;[End Block]
 								End Select
 								;[End Block]
@@ -4025,7 +4081,14 @@ Function UpdateGUI()
 										;[End Block]
 									Default
 										;[Block]
-										CreateMsg("You can't combine these two items.", 6.0)
+										For z = 0 To MaxItemAmount - 1
+											If Inventory(z) = SelectedItem Then
+												Inventory(z) = PrevItem
+												Exit
+											EndIf
+										Next
+										Inventory(MouseSlot) = SelectedItem
+										SelectedItem = Null
 										;[End Block]
 								End Select
 								;[End Block]
@@ -4078,13 +4141,27 @@ Function UpdateGUI()
 										;[End Block]
 									Default
 										;[Block]
-										CreateMsg("You can't combine these two items.", 6.0)
+										For z = 0 To MaxItemAmount - 1
+											If Inventory(z) = SelectedItem Then
+												Inventory(z) = PrevItem
+												Exit
+											EndIf
+										Next
+										Inventory(MouseSlot) = SelectedItem
+										SelectedItem = Null
 										;[End Block]
 								End Select
 								;[End Block]
 							Default
 								;[Block]
-								CreateMsg("You can't combine these two items.", 6.0)
+								For z = 0 To MaxItemAmount - 1
+									If Inventory(z) = SelectedItem Then
+										Inventory(z) = PrevItem
+										Exit
+									EndIf
+								Next
+								Inventory(MouseSlot) = SelectedItem
+								SelectedItem = Null
 								;[End Block]
 						End Select					
 					EndIf
