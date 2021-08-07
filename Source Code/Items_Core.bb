@@ -743,7 +743,7 @@ End Function
 
 Function PickItem(item.Items)
 	If wi\HazmatSuit > 0 Then
-		CreateMsg("You cannot pick up any items while wearing a hazmat suit.", 6.0)
+		CreateMsg("You cannot pick up any items while wearing a hazmat suit.")
 		Return
 	EndIf
 	If InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor SelectedDoor <> Null Lor SelectedScreen <> Null Then Return
@@ -816,12 +816,12 @@ Function PickItem(item.Items)
 						;[End Block]
 					Case "veryfinevest"
 						;[Block]
-						CreateMsg("The vest is too heavy to pick up.", 6.0)
+						CreateMsg("The vest is too heavy to pick up.")
 						Return
 						;[End Block]
 					Case "corrvest"
 						;[Block]
-						CreateMsg(Chr(34) + "I won't pick up that!" + Chr(34), 6.0)
+						CreateMsg(Chr(34) + "I won't pick up that!" + Chr(34))
 						Return
 						;[End Block]
 					Case "firstaid", "finefirstaid", "veryfinefirstaid", "firstaid2"
@@ -848,10 +848,10 @@ Function PickItem(item.Items)
 						Next
 						
 						If CanPickItem = 0 Then
-							CreateMsg("You are not able to wear two hazmat suits at the same time.", 6.0)
+							CreateMsg("You are not able to wear two hazmat suits at the same time.")
 							Return
 						ElseIf CanPickItem = 2 Then
-							CreateMsg("You are not able to wear a vest and a hazmat suit at the same time.", 6.0)
+							CreateMsg("You are not able to wear a vest and a hazmat suit at the same time.")
 							Return
 						Else
 							SelectedItem = item
@@ -873,10 +873,10 @@ Function PickItem(item.Items)
 						Next
 						
 						If CanPickItem = 0 Then
-							CreateMsg("You are not able to wear two vests at the same time.", 6.0)
+							CreateMsg("You are not able to wear two vests at the same time.")
 							Return
 						ElseIf CanPickItem = 2 Then
-							CreateMsg("You are not able to wear a vest and a hazmat suit at the same time.", 6.0)
+							CreateMsg("You are not able to wear a vest and a hazmat suit at the same time.")
 							Return
 						Else
 							SelectedItem = item
@@ -897,7 +897,7 @@ Function PickItem(item.Items)
 			EndIf
 		Next
 	Else
-		CreateMsg("You cannot carry any more items.", 6.0)
+		CreateMsg("You cannot carry any more items.")
 	EndIf
 	
 	CatchErrors("PickItem")
@@ -905,7 +905,7 @@ End Function
 
 Function DropItem(item.Items, PlayDropSound% = True)
 	If wi\HazmatSuit > 0 Then
-		CreateMsg("You cannot drop any items while wearing a hazmat suit.", 6.0)
+		CreateMsg("You cannot drop any items while wearing a hazmat suit.")
 		Return
 	EndIf
 	
@@ -989,10 +989,10 @@ End Function
 
 Function CanUseItem%(CanUseWithGasMask%, CanUseWithEyewear%)
 	If (Not CanUseWithGasMask) And (wi\GasMask > 0 Lor I_1499\Using > 0) Then
-		CreateMsg("You can't use that item while wearing a gas mask.", 6.0)
+		CreateMsg("You can't use that item while wearing a gas mask.")
 		Return(False)
 	ElseIf (Not CanUseWithEyewear) And (wi\NightVision > 0 Lor wi\SCRAMBLE)
-		CreateMsg("You can't use that item while wearing headgear.", 6.0)
+		CreateMsg("You can't use that item while wearing headgear.")
 		Return(False)
 	EndIf
 	Return(True)
@@ -1001,23 +1001,23 @@ End Function
 ; ~ Maybe re-work?
 Function PreventItemOverlapping%(GasMask% = False, NVG% = False, SCP1499% = False, Helmet% = False, SCRAMBLE% = False)
 	If (Not GasMask) And wi\GasMask > 0 Then
-		CreateMsg("You need to take off the gas mask in order to use that item.", 6.0)
+		CreateMsg("You need to take off the gas mask in order to use that item.")
 		SelectedItem = Null
 		Return(True)
 	ElseIf (Not SCP1499) And I_1499\Using > 0
-		CreateMsg("You need to take off SCP-1499 in order to use that item.", 6.0)
+		CreateMsg("You need to take off SCP-1499 in order to use that item.")
 		SelectedItem = Null
 		Return(True)
 	ElseIf (Not NVG) And wi\NightVision > 0 Then
-		CreateMsg("You need to take off the goggles in order to use that item.", 6.0)
+		CreateMsg("You need to take off the goggles in order to use that item.")
 		SelectedItem = Null
 		Return(True)
 	ElseIf (Not Helmet) And wi\BallisticHelmet
-		CreateMsg("You need to take off the helmet in order to use that item.", 6.0)
+		CreateMsg("You need to take off the helmet in order to use that item.")
 		SelectedItem = Null
 		Return(True)
 	ElseIf (Not SCRAMBLE) And wi\SCRAMBLE
-		CreateMsg("You need to take off the gear in order to use that item.", 6.0)
+		CreateMsg("You need to take off the gear in order to use that item.")
 		SelectedItem = Null
 		Return(True)
 	EndIf
@@ -1026,7 +1026,7 @@ End Function
 
 Function IsDoubleItem%(Variable, ID, Msg$)
 	If Variable > 0 And Variable <> ID Then
-		CreateMsg("You are not able to wear two " + Msg + " at the same time.", 6.0)
+		CreateMsg("You are not able to wear two " + Msg + " at the same time.")
 		SelectedItem = Null
 		Return(True)
 	EndIf

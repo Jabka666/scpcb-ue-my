@@ -1,5 +1,21 @@
 Const SavePath$ = "Saves\"
 
+Global AutoSaveTimer#
+
+Function UpdateAutoSave()
+	If (Not CanSave) Lor (Not me\Playable) Lor me\Zombie Lor SelectedDifficulty\SaveType <> SAVEANYWHERE Lor (Not opt\AutoSaveEnabled) Then Return
+	
+	If AutoSaveTimer =< 0.0 Then
+		AutoSaveTimer = 70.0 * 120.0
+		SaveGame(SavePath + CurrSave + "\")
+	Else
+		AutoSaveTimer = AutoSaveTimer - fps\Factor[0]
+		If AutoSaveTimer =< 70.0 * 5.0 Then
+			CreateHintMsg("Auto save in: " + Str(Int(AutoSaveTimer / 70.0)) + "..")
+		EndIf
+	EndIf
+End Function
+
 Function SaveGame(File$)
 	CatchErrors("Uncaught (SaveGame)")
 	
@@ -489,7 +505,7 @@ Function SaveGame(File$)
 			PlaySound_Strict(LoadTempSound("SFX\General\Save1.ogg"))
 		EndIf
 		
-		CreateMsg("Game progress saved.", 6.0)
+		CreateHintMsg("Game progress saved.")
 	EndIf
 	
 	CatchErrors("SaveGame")

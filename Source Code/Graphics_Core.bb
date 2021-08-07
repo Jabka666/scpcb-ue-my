@@ -192,9 +192,9 @@ Function UpdateWorld2()
 					If Power = 0 Then ; ~ This NVG or SCRAMBLE can't be used
 						HasBattery = 0
 						If wi\SCRAMBLE Then
-							CreateMsg("The batteries in this gear died.", 6.0)
+							CreateMsg("The batteries in this gear died.")
 						Else
-							CreateMsg("The batteries in these night vision goggles died.", 6.0)
+							CreateMsg("The batteries in these night vision goggles died.")
 						EndIf
 						wi\IsNVGBlinking = True
 						me\BlinkTimer = -1.0
@@ -524,7 +524,7 @@ Function GetScreenshot()
 	FI_Save(13, fiBuffer, "Screenshots\Screenshot" + ScreenshotCount + ".png", 0)
 	FI_Unload(fiBuffer)
 	FreeBank(Bank)
-	If (Not MainMenuOpen) Then CreateMsg("Screenshot Taken.", 6.0)
+	If (Not MainMenuOpen) Then CreateMsg("Screenshot Taken.")
 	PlaySound_Strict(LoadTempSound("SFX\General\Screenshot.ogg"))
 	ScreenshotCount = ScreenshotCount + 1
 End Function

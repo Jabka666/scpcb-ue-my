@@ -374,6 +374,8 @@ Function UpdateMainMenu()
 						
 						If UpdateMainMenuTick(x + (20 * MenuScale), y + ((180 + 30 * i) * MenuScale), (SelectedDifficulty = difficulties[i]), difficulties[i]\Locked) Then SelectedDifficulty = difficulties[i]
 						
+						If SelectedDifficulty\SaveType <> SAVEANYWHERE Then opt\AutoSaveEnabled = False
+						
 						If PrevSelectedDifficulty <> SelectedDifficulty Then
 							If PrevSelectedDifficulty = difficulties[ESOTERIC] Then
 								mm\ShouldDeleteGadgets = True
@@ -863,6 +865,10 @@ Function UpdateMainMenu()
 							y = y + (30 * MenuScale)
 							
 							opt\AchvMsgEnabled = UpdateMainMenuTick(x, y, opt\AchvMsgEnabled)
+							
+							y = y + (30 * MenuScale)
+							
+							opt\AutoSaveEnabled = UpdateMainMenuTick(x, y, opt\AutoSaveEnabled, SelectedDifficulty\SaveType <> SAVEANYWHERE)
 							
 							y = y + (30 * MenuScale)
 							
@@ -1623,6 +1629,14 @@ Function RenderMainMenu()
 						Text(x, y + (5 * MenuScale), "Achievement popups:")
 						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AchievementPopups)
+						EndIf
+						
+						y = y + (30 * MenuScale)
+						
+						Color(255 - (155 * SelectedDifficulty\SaveType <> SAVEANYWHERE), 255 - (155 * SelectedDifficulty\SaveType <> SAVEANYWHERE), 255 - (155 * SelectedDifficulty\SaveType <> SAVEANYWHERE))
+						Text(x, y + (5 * MenuScale), "Enable auto save:")
+						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
+							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AutoSave)
 						EndIf
 						
 						y = y + (30 * MenuScale)
@@ -3169,12 +3183,13 @@ Const Tooltip_ConsoleOnError% = 23
 Const Tooltip_AchievementPopups% = 24
 Const Tooltip_FPS% = 25
 Const Tooltip_FrameLimit% = 26
-Const Tooltip_SmoothHUD% = 27
-Const Tooltip_StartupVideos% = 28
-Const Tooltip_Launcher% = 29
-Const Tooltip_Subtitles% = 30
-Const Tooltip_SubtitlesColor% = 31
-Const Tooltip_ResetOptions% = 32
+Const Tooltip_AutoSave% = 27
+Const Tooltip_SmoothHUD% = 28
+Const Tooltip_StartupVideos% = 29
+Const Tooltip_Launcher% = 30
+Const Tooltip_Subtitles% = 31
+Const Tooltip_SubtitlesColor% = 32
+Const Tooltip_ResetOptions% = 33
 ;[End Block]
 
 Function RenderOptionsTooltip(x%, y%, Width%, Height%, Option%, Value# = 0.0)
@@ -3218,10 +3233,6 @@ Function RenderOptionsTooltip(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 			R = 255 : G = 255
 			Txt2 = "Current value: " + Int(Value * 100.0) + "% (default is 100%)"
 			;[End Block]
-		Case Tooltip_TextureLODBias
-			;[Block]
-			Txt = Chr(34) + "Texture LOD Bias" + Chr(34) + " affects the distance at which texture detail will change to prevent aliasing. Change this option if textures flicker or look too blurry."
-			;[End Block]
 		Case Tooltip_ParticleAmount
 			;[Block]
 			Txt = "Determines the amount of particles that can be rendered per tick."
@@ -3243,6 +3254,10 @@ Function RenderOptionsTooltip(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 					Txt2 = "All particles are rendered."
 					;[End Block]
 			End Select
+			;[End Block]
+		Case Tooltip_TextureLODBias
+			;[Block]
+			Txt = Chr(34) + "Texture LOD Bias" + Chr(34) + " affects the distance at which texture detail will change to prevent aliasing. Change this option if textures flicker or look too blurry."
 			;[End Block]
 		Case Tooltip_SaveTexturesInVRAM
 			;[Block]
@@ -3336,6 +3351,12 @@ Function RenderOptionsTooltip(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 		Case Tooltip_AchievementPopups
 			;[Block]
 			Txt = "Displays a pop-up notification when an achievement is unlocked."
+			;[End Block]
+		Case Tooltip_AutoSave
+			;[Block]
+			Txt = "Automatically saves the game every 2 minutes."
+			R = 255 : G = 255
+			Txt2 = "This option only works with " + Chr(34) + "Save anywhere" + Chr(34) + " save type."
 			;[End Block]
 		Case Tooltip_FPS
 			;[Block]

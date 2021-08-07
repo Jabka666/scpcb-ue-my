@@ -3985,27 +3985,27 @@ Function UpdateNPCs()
 									Select Rand(6)
 										Case 1
 											;[Block]
-											CreateMsg("You feel something breathing right next to you.", 6.0)
+											CreateMsg("You feel something breathing right next to you.")
 											;[End Block]
 										Case 2
 											;[Block]
-											CreateMsg(Chr(34) + "It feels like something's in this room with me." + Chr(34), 6.0)
+											CreateMsg(Chr(34) + "It feels like something's in this room with me." + Chr(34))
 											;[End Block]
 										Case 3
 											;[Block]
-											CreateMsg("You feel like something is here with you, but you don't see anything.", 6.0)
+											CreateMsg("You feel like something is here with you, but you don't see anything.")
 											;[End Block]
 										Case 4
 											;[Block]
-											CreateMsg(Chr(34) + "Is my mind playing tricks on me or is there someone else here?" + Chr(34), 6.0)
+											CreateMsg(Chr(34) + "Is my mind playing tricks on me or is there someone else here?" + Chr(34))
 											;[End Block]
 										Case 5
 											;[Block]
-											CreateMsg("You feel like something is following you.", 6.0)
+											CreateMsg("You feel like something is following you.")
 											;[End Block]
 										Case 6
 											;[Block]
-											CreateMsg("You can feel something near you, but you are unable to see it. Perhaps its time is now.", 6.0)
+											CreateMsg("You can feel something near you, but you are unable to see it. Perhaps its time is now.")
 											;[End Block]
 									End Select
 									n\Reload = 70.0 * 20.0
@@ -4093,19 +4093,19 @@ Function UpdateNPCs()
 												Select Rand(4)
 													Case 1
 														;[Block]
-														CreateMsg("You feel exhausted.", 6.0)
+														CreateMsg("You feel exhausted.")
 														;[End Block]
 													Case 2
 														;[Block]
-														CreateMsg(Chr(34) + "Could really go for a nap now..." + Chr(34), 6.0)
+														CreateMsg(Chr(34) + "Could really go for a nap now..." + Chr(34))
 														;[End Block]
 													Case 3
 														;[Block]
-														CreateMsg(Chr(34) + "If I wasn't in this situation I would take a nap somewhere." + Chr(34), 6.0)
+														CreateMsg(Chr(34) + "If I wasn't in this situation I would take a nap somewhere." + Chr(34))
 														;[End Block]
 													Case 4
 														;[Block]
-														CreateMsg("You feel restless.", 6.0)
+														CreateMsg("You feel restless.")
 														;[End Block]
 												End Select
 											EndIf
@@ -7002,7 +7002,7 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 		End Select	
 		
 		If msg\Timer < 70.0 * 5.0 Then
-			CreateMsg(ShotMessageUpdate, 6.0)
+			CreateMsg(ShotMessageUpdate)
 		EndIf
 		
 		If me\Injuries >= 6.0 Then Kill(True)

@@ -900,9 +900,9 @@ Function UpdateEvents()
 						e\room\RoomDoors[2]\Open = True
 						
 						If SelectedDifficulty\SaveType = SAVEANYWHERE Then
-							CreateMsg("Press " + key\Name[key\SAVE] + " to save.", 6.0)
+							CreateHintMsg("Press " + key\Name[key\SAVE] + " to save.")
 						ElseIf SelectedDifficulty\SaveType = SAVEONSCREENS Then
-							CreateMsg("Saving is only permitted on clickable monitors scattered throughout the facility.", 6.0)
+							CreateHintMsg("Saving is only permitted on clickable monitors scattered throughout the facility.")
 						EndIf
 						
 						Curr173\Idle = 1
@@ -1051,7 +1051,7 @@ Function UpdateEvents()
 											EndIf
 											ResetEntity(Curr173\Collider)
 											Curr173\Idle = 0
-											CreateMsg("Hold " + key\Name[key\SPRINT] + " to run.", 6.0)
+											CreateHintMsg("Hold " + key\Name[key\SPRINT] + " to run.")
 										EndIf
 									EndIf
 								EndIf
@@ -1211,7 +1211,7 @@ Function UpdateEvents()
 									me\DropSpeed = 0.0
 									me\Playable = True
 									
-									CreateMsg("Pick up the paper on the desk.", 6.0)
+									CreateHintMsg("Pick up the paper on the desk.")
 									
 									e\EventState3 = 15.0
 								EndIf
@@ -1219,7 +1219,7 @@ Function UpdateEvents()
 								RotateEntity(me\Collider, 0.0, EntityYaw(Camera), 0.0)
 							ElseIf e\EventState3 < 40.0
 								If Inventory(0) <> Null Then
-									CreateMsg("Press " + key\Name[key\INVENTORY] + " to open the inventory.", 6.0)
+									CreateHintMsg("Press " + key\Name[key\INVENTORY] + " to open the inventory.")
 									e\EventState3 = 40.0
 									Exit
 								EndIf
@@ -1841,7 +1841,7 @@ Function UpdateEvents()
 							
 							If IntroSFX[3] <> 0 Then
 								If (EntityVisible(Curr173\OBJ, Camera) And EntityInView(Curr173\OBJ, Camera)) Lor (EntityVisible(Curr173\OBJ2, Camera) And EntityInView(Curr173\OBJ2, Camera)) Then
-									CreateMsg("Press " + key\Name[key\BLINK] + " to blink.", 6.0)
+									CreateHintMsg("Press " + key\Name[key\BLINK] + " to blink.")
 									PlaySound_Strict(IntroSFX[3])
 									FreeSound_Strict(IntroSFX[3]) : IntroSFX[3] = 0
 								EndIf
@@ -3387,12 +3387,12 @@ Function UpdateEvents()
 							If I_294\Using Then mo\MouseHit1 = False
 						ElseIf e\EventState2 = 1.0 And (Not Inserted) And (Not me\UsedMastercard) Then
 							I_294\Using = False
-							CreateMsg("You need to insert another Quarter in order to use this machine.", 6.0)
+							CreateMsg("You need to insert another Quarter in order to use this machine.")
 						ElseIf (Not Inserted) And (Not me\UsedMastercard) Then
 							I_294\Using = False
-							CreateMsg("You need to insert two Quarters in order to use this machine.", 6.0)
+							CreateMsg("You need to insert two Quarters in order to use this machine.")
 						ElseIf me\UsedMastercard
-							CreateMsg("You don't have enough funds to use this machine.", 6.0)
+							CreateMsg("You don't have enough funds to use this machine.")
 						EndIf
 					EndIf
 				EndIf
@@ -4982,7 +4982,7 @@ Function UpdateEvents()
 							Animate2(e\room\Objects[2], AnimTime(e\room\Objects[2]), 339.0, 487.0, 1.0)
 							If InteractObject(e\room\Objects[2], 2.25) Then
 								If ItemAmount >= MaxItemAmount Then
-									CreateMsg("You cannot carry any more items.", 6.0)
+									CreateMsg("You cannot carry any more items.")
 								Else
 									SelectedItem = CreateItem("Drawing", "paper", 0.0, 0.0, 0.0)
 									EntityType(SelectedItem\Collider, HIT_ITEM)
@@ -5770,7 +5770,7 @@ Function UpdateEvents()
 										If e\EventState3 > 70.0 * 1.0 And e\EventState3 - fps\Factor[0] =< 70.0 * 1.0 Then
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech1.ogg"))
 										ElseIf e\EventState3 > 70.0 * 13.0 And e\EventState3 - fps\Factor[0] =< 70.0 * 13.0
-											CreateMsg("You start pushing your nails into your wrist, drawing blood.", 6.0)
+											CreateMsg("You start pushing your nails into your wrist, drawing blood.")
 											InjurePlayer(0.5)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech2.ogg"))
 										ElseIf e\EventState3 > 70.0 * 31.0 And e\EventState3 - fps\Factor[0] =< 70.0 * 31.0
@@ -5778,11 +5778,11 @@ Function UpdateEvents()
 											EntityTexture(e\room\Objects[4], Tex)
 											DeleteSingleTextureEntryFromCache(Tex)
 											
-											CreateMsg("You tear open your left wrist and start writing on the composition with your blood.", 6.0)
+											CreateMsg("You tear open your left wrist and start writing on the composition with your blood.")
 											me\Injuries = Max(me\Injuries, 1.5)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech" + Rand(3, 4) + ".ogg"))
 										ElseIf e\EventState3 > 70.0 * 49.0 And e\EventState3 - fps\Factor[0] =< 70.0 * 49.0
-											CreateMsg("You push your fingers deeper into the wound.", 6.0)
+											CreateMsg("You push your fingers deeper into the wound.")
 											InjurePlayer(0.3)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech5.ogg"))
 										ElseIf e\EventState3 > 70.0 * 63.0 And e\EventState3 - fps\Factor[0] =< 70.0 * 63.0
@@ -5797,7 +5797,7 @@ Function UpdateEvents()
 											EntityTexture(e\room\Objects[4], Tex)
 											DeleteSingleTextureEntryFromCache(Tex)
 											
-											CreateMsg("You rip the wound wide open. Grabbing scoops of blood pouring out.", 6.0)
+											CreateMsg("You rip the wound wide open. Grabbing scoops of blood pouring out.")
 											InjurePlayer(0.8)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech7.ogg"))
 											If (Not me\Crouch) Then SetCrouch(True)
@@ -7659,7 +7659,7 @@ Function UpdateEvents()
 											
 											If wi\HazmatSuit = 0 Then
 												InjurePlayer(0.3, 1.0, 400.0)
-												CreateMsg("The window shattered and a piece of glass cut your arm.", 6.0)
+												CreateMsg("The window shattered and a piece of glass cut your arm.")
 											EndIf
 											PlaySound2(LoadTempSound("SFX\General\GlassBreak.ogg"), Camera, e\room\Objects[0]) 
 											
@@ -8034,7 +8034,7 @@ Function UpdateEvents()
 									Case COARSE
 										;[Block]
 										me\Injuries = 4.0
-										CreateMsg("You notice countless small incisions all around your body. They are bleeding heavily.", 6.0)
+										CreateMsg("You notice countless small incisions all around your body. They are bleeding heavily.")
 										;[End Block]
 									Case ONETOONE
 										;[Block]
@@ -8122,7 +8122,7 @@ Function UpdateEvents()
 									e\EventState = 3.0	
 									PlaySound_Strict(e\Sound2)
 									
-									CreateMsg("Something is growing all around your body.", 6.0)
+									CreateMsg("Something is growing all around your body.")
 								Else
 									e\EventState = 4.0
 									e\EventState3 = 70.0 * 30.0
@@ -8142,34 +8142,34 @@ Function UpdateEvents()
 									Select Rand(3)
 										Case 1
 											;[Block]
-											CreateMsg("Ears are growing all over your body.", 6.0)
+											CreateMsg("Ears are growing all over your body.")
 											;[End Block]
 										Case 2
 											;[Block]
-											CreateMsg("Ear-like organs are growing all over your body.", 6.0)
+											CreateMsg("Ear-like organs are growing all over your body.")
 											;[End Block]
 										Case 3
 											;[Block]
-											CreateMsg("Ears are growing all over your body. They are crawling on your skin.", 6.0)
+											CreateMsg("Ears are growing all over your body. They are crawling on your skin.")
 											;[End Block]
 									End Select
 								ElseIf e\EventState2 > 600.0 And e\EventState2 - fps\Factor[0] =< 600.0
 									Select Rand(4)
 										Case 1
 											;[Block]
-											CreateMsg("It is becoming difficult to breathe.", 6.0)
+											CreateMsg("It is becoming difficult to breathe.")
 											;[End Block]
 										Case 2
 											;[Block]
-											CreateMsg("You have excellent hearing now. Also, you are dying.", 6.0)
+											CreateMsg("You have excellent hearing now. Also, you are dying.")
 											;[End Block]
 										Case 3
 											;[Block]
-											CreateMsg("The ears are growing inside your body.", 6.0)
+											CreateMsg("The ears are growing inside your body.")
 											;[End Block]
 										Case 4
 											;[Block]
-											CreateMsg(Chr(34) + "Can't... Breathe..." + Chr(34), 6.0)
+											CreateMsg(Chr(34) + "Can't... Breathe..." + Chr(34))
 											;[End Block]
 									End Select
 								EndIf
@@ -8577,7 +8577,7 @@ Function UpdateEvents()
 								Else
 									PlaySound_Strict(LoadTempSound("SFX\SCP\1162\BodyHorrorExchange" + Rand(1, 4) + ".ogg"))
 									me\LightFlash = 5.0
-									CreateMsg("You feel a sudden overwhelming pain in your chest.", 6.0)
+									CreateMsg("You feel a sudden overwhelming pain in your chest.")
 								EndIf
 								Exit
 							EndIf
@@ -8606,7 +8606,7 @@ Function UpdateEvents()
 							Else
 								PlaySound_Strict(LoadTempSound("SFX\SCP\1162\BodyHorrorExchange" + Rand(1, 4) + ".ogg"))
 								me\LightFlash = 5.0
-								CreateMsg("You notice something moving in your pockets and a sudden pain in your chest.", 6.0)
+								CreateMsg("You notice something moving in your pockets and a sudden pain in your chest.")
 							EndIf
 							e\EventState2 = 0.0
 						EndIf
@@ -9078,7 +9078,7 @@ Function UpdateEvents()
 						EndIf
 					Else
 						If InteractObject(e\room\Objects[1], 0.49) Then
-							CreateMsg("You feel a cold breeze next to your body.", 6.0)
+							CreateMsg("You feel a cold breeze next to your body.")
 							InjurePlayer(Rnd(-0.5, 0.3))
 							me\Bloodloss = 0.0
 							PlaySound_Strict(LoadTempSound("SFX\SCP\Joke\Quack.ogg"))
@@ -9140,7 +9140,7 @@ Function UpdateEvents()
 				If PlayerRoom = e\room Then
 					UpdateButton(e\room\Objects[2])
 					If ClosestButton = e\room\Objects[2] And mo\MouseHit1 Then
-						CreateMsg("The elevator appears to be broken.", 6.0)
+						CreateMsg("The elevator appears to be broken.")
 						PlaySound2(ButtonSFX2, Camera, e\room\Objects[2])
 						mo\MouseHit1 = False
 					EndIf
@@ -9194,7 +9194,7 @@ Function UpdateEvents()
 								
 								; ~ Touching the SCP-409
 								If InteractObject(e\room\Objects[3], 0.64) Then
-									CreateMsg("You touched SCP-409.", 6.0)
+									CreateMsg("You touched SCP-409.")
 									me\BlurTimer = 2000.0
 									I_409\Timer = 0.001
 									GiveAchievement(Achv409)

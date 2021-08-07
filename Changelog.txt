@@ -16,18 +16,20 @@ General:
 - Added subtitles.
 - Added FOV.
 - Added Apollyon difficulty.
-- Added extreme other factors.
+- Added extreme difficulty factor.
 - To obtain a new difficulty, the previous one must be completed.
 - The Keter difficulty achievement will be saved after beating the one.
-- Added ability to earase words faster.
+- Added ability to erase words faster.
 - Added inventory size scaling with difficulty and custom inventory options.
 - Removed Antialiased Text.
 - Anti-aliasing option is automatically disabled for non-fullscreen modes.
-- Added loading screen scaling.
+- Loading screen images now scaled correctly.
 - Added screenshot key.
+- Added auto save option.
 - Added more easter eggs.
+- Added frame to hint messages.
 - Converted most files to PNG.
-- Converted most X file to B3D.
+- Converted most X files to B3D.
 - Renamed most files.
 - Combined room converters.
 - Optimized game.
