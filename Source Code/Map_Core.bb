@@ -4437,6 +4437,14 @@ Function FillRoom(r.Rooms)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			;[End Block]
+		Case "room2c_lcz"
+			;[Block]
+			d.Doors = CreateDoor(r\x + 256.0 * RoomScale, r\y, r\z - 576.0 * RoomScale, 90.0, r, False, Default_Door, 3)
+			d\AutoClose = False : d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.165, True)
+			FreeEntity(d\OBJ2) : d\OBJ2 = 0
+			;[End Block]
 		Case "room2_test_lcz"
 			;[Block]
 			; ~ Doors
