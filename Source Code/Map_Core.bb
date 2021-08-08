@@ -3117,8 +3117,6 @@ Function UseDoor(d.Doors, Scripted% = False, PlaySFX% = True)
 				EndIf
 			EndIf
 		EndIf
-	Else
-		If d\DoorType = Wooden_Door Lor d\DoorType = Office_Door Then Return
 	EndIf
 	
 	If d\DoorType = Elevator_Door Then
