@@ -3170,6 +3170,9 @@ Function RemoveDoor(d.Doors)
 	For i = 0 To 1
 		If d\Buttons[i] <> 0 Then FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
 	Next
+	For i = 0 To 1
+		If d\ElevatorPanel[i] <> 0 Then FreeEntity(d\ElevatorPanel[i]) : d\ElevatorPanel[i] = 0
+	Next
 	If d\FrameOBJ <> 0 Then FreeEntity(d\FrameOBJ) : d\FrameOBJ = 0
 	Delete(d)
 End Function
