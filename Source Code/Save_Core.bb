@@ -11,7 +11,7 @@ Function UpdateAutoSave()
 	Else
 		AutoSaveTimer = AutoSaveTimer - fps\Factor[0]
 		If AutoSaveTimer =< 70.0 * 5.0 Then
-			CreateHintMsg("Auto save in: " + Str(Int(AutoSaveTimer / 70.0)) + "..")
+			CreateHintMsg("Auto save in: " + Str(Int(Ceil(AutoSaveTimer) / 70.0)) + "..")
 		EndIf
 	EndIf
 End Function
