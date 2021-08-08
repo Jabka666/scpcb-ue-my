@@ -289,7 +289,7 @@ Global t.Textures = New Textures
 
 ; ~ Objects Constants
 ;[Block]
-Const MaxNPCModelIDAmount% = 34
+Const MaxNPCModelIDAmount% = 33
 Const MaxDTextures% = 15
 Const MaxButtonModelIDAmount% = 5
 Const MaxDoorModelIDAmount% = 13
@@ -8337,8 +8337,6 @@ Function LoadEntities()
 	o\NPCModelID[NPCTypeMTF] = LoadAnimMesh_Strict("GFX\npcs\MTF.b3d") ; ~ MTF
 	
 	o\NPCModelID[NPCTypeNazi] = LoadAnimMesh_Strict("GFX\npcs\nazi_officer.b3d") ; ~ Nazi Officer
-	
-	o\NPCModelID[NPCTypeVehicle] = LoadAnimMesh_Strict("GFX\npcs\vehicle.b3d") ; ~ Vehicle
 	
 	For i = 0 To MaxNPCModelIDAmount - 1
 		HideEntity(o\NPCModelID[i])

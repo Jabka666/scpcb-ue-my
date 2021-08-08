@@ -5,16 +5,16 @@ Const NPCType008_1% = 0, NPCType035_Tentacle% = 1, NPCType049% = 2, NPCType049_2
 Const NPCType106% = 6, NPCType173% = 7, NPCType372% = 8, NPCType513_1% = 9, NPCType860_2% = 10, NPCType939% = 11
 Const NPCType966% = 12, NPCType1499_1% = 13
 
-Const NPCTypeApache% = 14, NPCTypeClerk% = 15, NPCTypeD% = 16, NPCTypeGuard% = 17, NPCTypeMTF% = 18, NPCTypeVehicle% = 19
+Const NPCTypeApache% = 14, NPCTypeClerk% = 15, NPCTypeD% = 16, NPCTypeGuard% = 17, NPCTypeMTF% = 18
 
 ; ~ Placeholder
-Const NPCType205_Demon% = 20, NPCType205_Demon2% = 21, NPCType205_Demon3% = 22, NPCType205_Woman% = 23
-Const NPCType1048% = 24, NPCType1048_A% = 25
+Const NPCType205_Demon% = 19, NPCType205_Demon2% = 20, NPCType205_Demon3% = 21, NPCType205_Woman% = 22
+Const NPCType1048% = 23, NPCType1048_A% = 24
 
-Const NPCTypeDuck% = 26, NPCTypeCI% = 27, NPCTypeNazi% = 28
+Const NPCTypeDuck% = 25, NPCTypeCI% = 26, NPCTypeNazi% = 27
 
 ; ~ Objects
-Const NPCTypeApache_Rotor% = 29, NPCTypeApache_Rotor2% = 30, NPCType173_Box% = 31, NPCType173_Head% = 32, NPCType682_Arm% = 33
+Const NPCTypeApache_Rotor% = 28, NPCTypeApache_Rotor2% = 29, NPCType173_Box% = 30, NPCType173_Head% = 31, NPCType682_Arm% = 32
 
 ; ~ Hybrid (NPC, but doesn't need a model)
 Const NPCtype035% = 33
@@ -525,24 +525,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0)
 			
 			n\CollRadius = 0.32
-			;[End Block]
-		Case NPCTypeVehicle
-			;[Block]
-			n\NVGName = "Vehicle"
-			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, 0.32)
-			EntityType(n\Collider, HIT_PLAYER)
-			
-			n\OBJ = CopyEntity(o\NPCModelID[NPCTypeVehicle])
-			
-			Temp = GetINIFloat(NPCsFile, "Vehicle", "Scale") / MeshWidth(n\OBJ)
-			ScaleEntity(n\OBJ, Temp, Temp, Temp)
-			
-			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0)
-			
-			n\Speed = GetINIFloat(NPCsFile, "Vehicle", "Speed") / 100.0
-			
-			n\CollRadius = 0.72
 			;[End Block]
 	End Select
 	
@@ -4951,44 +4933,6 @@ Function UpdateNPCs()
 				RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
 				PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.2, EntityZ(n\Collider))
 				;[End Block]
-			Case NPCTypeVehicle 
-				;[Block]
-				Select n\State
-					Case 0.0 ; ~ Idles
-						;[Block]
-						n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
-						;[End Block]
-					Case 1.0 ; ~ Moves
-						;[Block]
-						n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
-						Animate2(n\OBJ, AnimTime(n\OBJ), 1.0, 20.0, n\CurrSpeed * 18.0)
-						;[End Block]
-				End Select
-				
-				If n\State = 0.0 Then
-					If (Not n\Sound) Then
-						n\Sound = LoadSound_Strict("SFX\Character\Vehicle\Idle.ogg")
-					EndIf
-					If n\Sound2 <> 0 Then
-						FreeSound_Strict(n\Sound2) : n\Sound2 = 0
-					EndIf
-					n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider, 11.5, 1.0)
-				Else
-					If (Not n\Sound2) Then
-						n\Sound2 = LoadSound_Strict("SFX\Character\Vehicle\Move.ogg")
-					EndIf
-					If n\Sound <> 0 Then
-						FreeSound_Strict(n\Sound) : n\Sound = 0
-					EndIf
-					n\SoundCHN2 = LoopSound2(n\Sound2, n\SoundCHN2, Camera, n\Collider, 11.5, 1.0)
-				EndIf
-				
-				MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
-				
-				PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.32, EntityZ(n\Collider))
-				
-				RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider), 0.0)
-				;[End Block]
 		End Select
 		
 		If n\IsDead Then EntityType(n\Collider, HIT_DEAD)
@@ -7210,11 +7154,6 @@ Function ConsoleSpawnNPC(Name$, NPCState$ = "")
 			;[Block]
 			n.NPCs = CreateNPC(NPCTypeClerk, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			ConsoleMsg = "Clerk spawned."
-			;[End Block]
-		Case "vehicle", "truck"
-			;[Block]
-			n.NPCs = CreateNPC(NPCTypeVehicle, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = "Vehicle spawned."
 			;[End Block]
 		Default 
 			;[Block]

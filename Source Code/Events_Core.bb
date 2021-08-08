@@ -1428,19 +1428,6 @@ Function UpdateEvents()
 								EndIf
 							EndIf
 							
-							If e\room\NPC[11] <> Null Then
-								If e\room\NPC[11]\State = 0.0 Then
-									If DistanceSquared(EntityX(me\Collider), EntityX(e\room\OBJ, True) - 6688.0 * RoomScale, EntityZ(me\Collider), EntityZ(e\room\OBJ, True) - 1252.0 * RoomScale) < 6.25 Then
-										e\room\NPC[11]\State = 1.0
-									EndIf
-								Else
-									If EntityX(e\room\NPC[11]\Collider) > EntityX(e\room\OBJ, True) - 2000.0 * RoomScale Then
-										e\room\NPC[11]\State = 0.0
-										RemoveNPC(e\room\NPC[11])
-									EndIf
-								EndIf
-							EndIf
-							
 							e\room\NPC[5]\SoundCHN = LoopSound2(e\room\NPC[5]\Sound, e\room\NPC[5]\SoundCHN, Camera, e\room\NPC[5]\OBJ, 2.0, 0.5)
 							
 							If e\EventStr <> "" And e\EventStr <> "Done" Then
@@ -1804,20 +1791,13 @@ Function UpdateEvents()
 								e\room\NPC[10] = CreateNPC(NPCTypeGuard, e\room\x - 4200.0 * RoomScale, 1.0, e\room\z - 3900.0 * RoomScale)
 								e\room\NPC[10]\State = 7.0
 								
-								e\room\NPC[11] = CreateNPC(NPCTypeVehicle, e\room\x - 7200.0 * RoomScale, -0.6, e\room\z - 3075.0 * RoomScale)
-								e\room\NPC[11]\State = 0.0
-								
-								For i = 8 To 11
+								For i = 8 To 10
 									PositionEntity(Pvt, EntityX(e\room\NPC[i]\Collider), EntityY(e\room\NPC[i]\Collider), EntityZ(e\room\NPC[i]\Collider))
 									EntityPick(Pvt, 20.0)
-									If PickedEntity() <> 0
+									If PickedEntity() <> 0 Then
 										PositionEntity(e\room\NPC[i]\Collider, PickedX(), PickedY(), PickedZ(), True)
 										AlignToVector(e\room\NPC[i]\Collider, -PickedNX(), -PickedNY(), -PickedNZ(), 3.0)
-										If i < 11 Then
-											RotateEntity(e\room\NPC[i]\Collider, 0.0, 90.0, 0.0)
-										Else
-											RotateEntity(e\room\NPC[i]\Collider, 0.0, -90.0, 0.0)
-										EndIf
+										RotateEntity(e\room\NPC[i]\Collider, 0.0, 90.0, 0.0)
 									EndIf
 								Next
 								FreeEntity(Pvt)
