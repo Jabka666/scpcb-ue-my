@@ -6709,97 +6709,7 @@ Function FillRoom(r.Rooms)
 								;[End Block]
 							Case ItemChance < 40 ; ~ 40% chance for a document
 								;[Block]
-								TempStr = "Document SCP-"
-								Select Rand(22)
-									Case 1
-										;[Block]
-										TempStr = TempStr + "005"
-										;[End Block]
-									Case 2
-										;[Block]
-										TempStr = TempStr + "008"
-										;[End Block]
-									Case 3
-										;[Block]
-										TempStr = TempStr + "012"
-										;[End Block]
-									Case 4
-										;[Block]
-										TempStr = TempStr + "035"
-										;[End Block]
-									Case 5
-										;[Block]
-										TempStr = TempStr + "049"
-										;[End Block]
-									Case 6
-										;[Block]
-										TempStr = TempStr + "096"
-										;[End Block]
-									Case 7
-										;[Block]
-										TempStr = TempStr + "106"
-										;[End Block]
-									Case 8
-										;[Block]
-										TempStr = TempStr + "173"
-										;[End Block]
-									Case 9
-										;[Block]
-										TempStr = TempStr + "205"
-										;[End Block]
-									Case 10
-										;[Block]
-										TempStr = TempStr + "409"
-										;[End Block]
-									Case 11
-										;[Block]
-										TempStr = TempStr + "513"
-										;[End Block]
-									Case 12
-										;[Block]
-										TempStr = TempStr + "682"
-										;[End Block]
-									Case 13
-										;[Block]
-										TempStr = TempStr + "714"
-										;[End Block]
-									Case 14
-										;[Block]
-										TempStr = TempStr + "860"
-										;[End Block]
-									Case 15
-										;[Block]
-										TempStr = TempStr + "860-1"
-										;[End Block]
-									Case 16
-										;[Block]
-										TempStr = TempStr + "895"
-										;[End Block]
-									Case 17
-										;[Block]
-										TempStr = TempStr + "939"
-										;[End Block]
-									Case 18
-										;[Block]
-										TempStr = TempStr + "966"
-										;[End Block]
-									Case 19
-										;[Block]
-										TempStr = TempStr + "970"
-										;[End Block]
-									Case 20
-										;[Block]
-										TempStr = TempStr + "1048"
-										;[End Block]
-									Case 21
-										;[Block]
-										TempStr = TempStr + "1162"
-										;[End Block]
-									Case 22
-										;[Block]
-										TempStr = TempStr + "1499"
-										;[End Block]
-								End Select
+								TempStr = "Document SCP-" + GetRandDocument()
 								TempStr2 = "paper"
 								;[End Block]
 							Case ItemChance >= 40 And ItemChance < 45 ; ~ 5% chance for a key card
@@ -7252,7 +7162,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\Objects[1], r\x, r\y, r\z)
 			EntityParent(r\Objects[1], r\OBJ)
 			;[End Block]
-		Case "cont2c_1162"
+		Case "cont2c_1162_arc"
 			;[Block]
 			d.Doors = CreateDoor(r\x + 248.0 * RoomScale, r\y, r\z - 736.0 * RoomScale, 90.0, r, False, Default_Door, 2)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.031, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
@@ -7267,7 +7177,7 @@ Function FillRoom(r.Rooms)
 			sc\Angle = 225.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			
-			it.Items = CreateItem("Document SCP-1162", "paper", r\x + 863.227 * RoomScale, r\y + 152.0 * RoomScale, r\z - 953.0 * RoomScale)
+			it.Items = CreateItem("Document SCP-1162-ARC", "paper", r\x + 863.227 * RoomScale, r\y + 152.0 * RoomScale, r\z - 953.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case "cont2_500_1499"
@@ -8589,7 +8499,7 @@ Function CreateMap()
 	SetRoom("room2_elevator", ROOM2, Floor(0.85 * Float(Room2Amount[0])), MinPos, MaxPos)
 	SetRoom("room2_storage_2", ROOM2, Floor(0.9 * Float(Room2Amount[0])), MinPos, MaxPos)
 	
-	MapRoom(ROOM2C, Floor(0.5 * Float(Room2CAmount[0]))) = "cont2c_1162"
+	MapRoom(ROOM2C, Floor(0.5 * Float(Room2CAmount[0]))) = "cont2c_1162_arc"
 	
 	MapRoom(ROOM3, Floor(Rnd(0.2, 0.8) * Float(Room3Amount[0]))) = "room3_storage"
 	

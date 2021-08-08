@@ -4533,7 +4533,7 @@ Function UpdateGUI()
 								;[Block]
 								If SelectedItem\State = 0.0 Then
 									CreateMsg(Chr(34) + "Hey, I remember this movie!" + Chr(34))
-									PlaySound_Strict(LoadTempSound("SFX\SCP\1162\NostalgiaCancer" + Rand(1, 5) + ".ogg"))
+									PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\NostalgiaCancer" + Rand(1, 5) + ".ogg"))
 									SelectedItem\State = 1.0
 								EndIf
 								;[End Block]
@@ -5312,7 +5312,7 @@ Function UpdateGUI()
 				Case "badge"
 					;[Block]
 					If SelectedItem\State = 0.0 Then
-						PlaySound_Strict(LoadTempSound("SFX\SCP\1162\NostalgiaCancer" + Rand(6, 10) + ".ogg"))
+						PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\NostalgiaCancer" + Rand(6, 10) + ".ogg"))
 						Select SelectedItem\ItemTemplate\Name
 							Case "Old Badge"
 								;[Block]
@@ -5326,7 +5326,7 @@ Function UpdateGUI()
 				Case "key"
 					;[Block]
 					If SelectedItem\State = 0.0 Then
-						PlaySound_Strict(LoadTempSound("SFX\SCP\1162\NostalgiaCancer" + Rand(6, 10) + ".ogg"))
+						PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\NostalgiaCancer" + Rand(6, 10) + ".ogg"))
 						
 						CreateMsg(Chr(34) + "Isn't this the key to that old shack? The one where I... No, it can't be." + Chr(34))					
 					EndIf
@@ -5342,7 +5342,7 @@ Function UpdateGUI()
 								me\BlurTimer = 1000.0
 								
 								CreateMsg(Chr(34) + "Why does this seem so familiar?" + Chr(34))
-								PlaySound_Strict(LoadTempSound("SFX\SCP\1162\NostalgiaCancer" + Rand(6, 10) + ".ogg"))
+								PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\NostalgiaCancer" + Rand(6, 10) + ".ogg"))
 								SelectedItem\state = 1.0
 								;[End Block]
 						End Select
@@ -5351,7 +5351,7 @@ Function UpdateGUI()
 				Case "coin"
 					;[Block]
 					If SelectedItem\State = 0.0 Then
-						PlaySound_Strict(LoadTempSound("SFX\SCP\1162\NostalgiaCancer" + Rand(1, 5) + ".ogg"))
+						PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\NostalgiaCancer" + Rand(1, 5) + ".ogg"))
 						
 						SelectedItem\State = 1.0
 					EndIf

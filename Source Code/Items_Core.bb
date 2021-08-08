@@ -129,7 +129,7 @@ Function InitItemTemplates()
 	CreateItemTemplate("Document SCP-970", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_paper.png", ItemsPath + "doc_970.png", 0.003, 0)
 	CreateItemTemplate("Document SCP-1048", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_paper.png", ItemsPath + "doc_1048.png", 0.003, 0)
 	CreateItemTemplate("Document SCP-1123", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_paper.png", ItemsPath + "doc_1123.png", 0.003, 0)
-	CreateItemTemplate("Document SCP-1162", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_paper.png", ItemsPath + "doc_1162.png", 0.003, 0)
+	CreateItemTemplate("Document SCP-1162-ARC", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_paper.png", ItemsPath + "doc_1162_ARC.png", 0.003, 0)
 	CreateItemTemplate("Document SCP-1499", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_paper.png", ItemsPath + "doc_1499.png", 0.003, 0)
 	
 	CreateItemTemplate("Incident Report SCP-1048-A", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_paper.png", ItemsPath + "doc_IR_1048_a.png", 0.003, 0)
@@ -438,7 +438,7 @@ Function GetRandDocument$()
 			;[End Block]
 		Case 20
 			;[Block]
-			Return("1162")
+			Return("1162-ARC")
 			;[End Block]
 		Case 21
 			;[Block]
@@ -940,7 +940,7 @@ Function DropItem(item.Items, PlayDropSound% = True)
 	CatchErrors("DropItem")
 End Function
 
-Function IsItemGoodFor1162%(itt.ItemTemplates)
+Function IsItemGoodFor1162ARC%(itt.ItemTemplates)
 	Select itt\TempName
 		Case "key0", "key1", "key2", "key3"
 			;[Block]

@@ -66,7 +66,7 @@ Const e_1048_a% = 58
 Const e_room4_2_hcz% = 59
 Const e_room2_gw_2% = 60, e_gateway% = 61
 Const e_cont2_500_1499% = 62
-Const e_cont2c_1162% = 63
+Const e_cont2c_1162_arc% = 63
 Const e_room2_sl% = 64
 Const e_096_spawn% = 65
 Const e_room2_medibay_lcz% = 66, e_room2_medibay_ez% = 67
@@ -336,9 +336,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_cont2_500_1499)
 			;[End Block]
-		Case "cont2c_1162"
+		Case "cont2c_1162_arc"
 			;[Block]
-			Return(e_cont2c_1162)
+			Return(e_cont2c_1162_arc)
 			;[End Block]
 		Case "room2_sl"
 			;[Block]
@@ -631,7 +631,7 @@ Function InitEvents()
 	
 	CreateEvent("dimension_1499", "dimension_1499", 0)
 	
-	CreateEvent("cont2c_1162", "cont2c_1162", 0)
+	CreateEvent("cont2c_1162_arc", "cont2c_1162_arc", 0)
 	
 	CreateEvent("cont2_500_1499", "cont2_500_1499", 0)
 	
@@ -8369,7 +8369,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_cont2c_1162
+			Case e_cont2c_1162_arc
 				;[Block]
 				; ~ e\EventState: A variable to determine the "nostalgia" items
 				; ~ 0.0 = No nostalgia item
@@ -8393,18 +8393,18 @@ Function UpdateEvents()
 					
 					e\EventState = 0.0
 					
-					Local Pick1162% = True
+					Local Pick1162ARC% = True
 					Local pp% = CreatePivot(e\room\OBJ)
 					
 					PositionEntity(pp, 976.0, 128.0, -640.0)
 					
 					For it.Items = Each Items
 						If (Not it\Picked) Then
-							If EntityDistanceSquared(it\Collider, e\room\Objects[0]) < 0.5625 Then Pick1162 = False
+							If EntityDistanceSquared(it\Collider, e\room\Objects[0]) < 0.5625 Then Pick1162ARC = False
 						EndIf
 					Next
 					
-					If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 0.5625 And Pick1162
+					If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 0.5625 And Pick1162ARC
 						ga\DrawHandIcon = True
 						If mo\MouseHit1 Then GrabbedEntity = e\room\Objects[0]
 					EndIf
@@ -8488,7 +8488,7 @@ Function UpdateEvents()
 						Local ShouldCreateItem% = False
 						
 						For itt.ItemTemplates = Each ItemTemplates
-							If IsItemGoodFor1162(itt) Then
+							If IsItemGoodFor1162ARC(itt) Then
 								Select Inventory(e\EventState2)\ItemTemplate\TempName
 									Case "key"
 										;[Block]
@@ -8542,10 +8542,10 @@ Function UpdateEvents()
 								it.Items = CreateItem(itt\Name, itt\TempName, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
 								EntityType(it\Collider, HIT_ITEM)
 								
-								PlaySound_Strict(LoadTempSound("SFX\SCP\1162\Exchange" + Rand(0, 4) + ".ogg"))
+								PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\Exchange" + Rand(0, 4) + ".ogg"))
 								e\EventState3 = 0.0
 								
-								GiveAchievement(Achv1162)
+								GiveAchievement(Achv1162_ARC)
 								mo\MouseHit1 = False
 								Exit
 							EndIf
@@ -8560,22 +8560,22 @@ Function UpdateEvents()
 						de.Decals = CreateDecal(3, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, 0.75)
 						FreeEntity(Pvt)
 						For itt.ItemTemplates = Each ItemTemplates
-							If IsItemGoodFor1162(itt) And Rand(6) = 1 Then
+							If IsItemGoodFor1162ARC(itt) And Rand(6) = 1 Then
 								it.Items = CreateItem(itt\Name, itt\TempName, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
 								EntityType(it\Collider, HIT_ITEM)
 								
-								GiveAchievement(Achv1162)
+								GiveAchievement(Achv1162_ARC)
 								mo\MouseHit1 = False
 								e\EventState3 = 0.0
 								If me\Injuries > 15.0
-									msg\DeathMsg = "A dead Class D subject was discovered within the containment chamber of SCP-1162."
+									msg\DeathMsg = "A dead Class D subject was discovered within the containment chamber of SCP-1162-ARC."
 									msg\DeathMsg = msg\DeathMsg + " An autopsy revealed that his right lung was missing, which suggests"
-									msg\DeathMsg = msg\DeathMsg + " interaction with SCP-1162."
-									PlaySound_Strict(LoadTempSound("SFX\SCP\1162\BodyHorrorExchange" + Rand(1, 4) + ".ogg"))
+									msg\DeathMsg = msg\DeathMsg + " interaction with SCP-1162-ARC."
+									PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(1, 4) + ".ogg"))
 									me\LightFlash = 5.0
 									Kill(True)
 								Else
-									PlaySound_Strict(LoadTempSound("SFX\SCP\1162\BodyHorrorExchange" + Rand(1, 4) + ".ogg"))
+									PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(1, 4) + ".ogg"))
 									me\LightFlash = 5.0
 									CreateMsg("You feel a sudden overwhelming pain in your chest.")
 								EndIf
@@ -8585,7 +8585,7 @@ Function UpdateEvents()
 					; ~ Trade with nostalgia item
 					ElseIf e\EventState3 >= 3.0
 						If e\EventState3 < 3.1
-							PlaySound_Strict(LoadTempSound("SFX\SCP\1162\Exchange" + Rand(0, 4) + ".ogg"))
+							PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\Exchange" + Rand(0, 4) + ".ogg"))
 							RemoveWearableItems(Inventory(e\EventState2))
 							RemoveItem(Inventory(e\EventState2))
 						Else
@@ -8597,14 +8597,14 @@ Function UpdateEvents()
 							de.Decals = CreateDecal(3, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, 0.75)
 							FreeEntity(Pvt)
 							If me\Injuries > 15.0
-								msg\DeathMsg = "A dead Class D subject was discovered within the containment chamber of SCP-1162."
+								msg\DeathMsg = "A dead Class D subject was discovered within the containment chamber of SCP-1162-ARC."
 								msg\DeathMsg = msg\DeathMsg + " An autopsy revealed that his right lung was missing, which suggests"
-								msg\DeathMsg = msg\DeathMsg + " interaction with SCP-1162."
-								PlaySound_Strict(LoadTempSound("SFX\SCP\1162\BodyHorrorExchange" + Rand(1, 4) + ".ogg"))
+								msg\DeathMsg = msg\DeathMsg + " interaction with SCP-1162-ARC."
+								PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(1, 4) + ".ogg"))
 								me\LightFlash = 5.0
 								Kill(True)
 							Else
-								PlaySound_Strict(LoadTempSound("SFX\SCP\1162\BodyHorrorExchange" + Rand(1, 4) + ".ogg"))
+								PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(1, 4) + ".ogg"))
 								me\LightFlash = 5.0
 								CreateMsg("You notice something moving in your pockets and a sudden pain in your chest.")
 							EndIf
@@ -8635,7 +8635,7 @@ Function UpdateEvents()
 						End Select
 						EntityType(it\Collider, HIT_ITEM)
 						
-						GiveAchievement(Achv1162)
+						GiveAchievement(Achv1162_ARC)
 						mo\MouseHit1 = False
 						e\EventState3 = 0.0
 					EndIf
