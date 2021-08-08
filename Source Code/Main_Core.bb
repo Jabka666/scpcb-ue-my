@@ -86,21 +86,15 @@ EndIf
 If opt\DisplayMode = 1 Then
 	Graphics3DExt(DesktopWidth(), DesktopHeight(), 0, 4)
 	
-	If (Not opt\LauncherEnabled) Then
-		opt\RealGraphicWidth = DesktopWidth() : opt\GraphicWidth = DesktopWidth()
-		opt\RealGraphicHeight = DesktopHeight() : opt\GraphicHeight = DesktopHeight()
-	EndIf
+	opt\RealGraphicWidth = DesktopWidth()
+	opt\RealGraphicHeight = DesktopHeight()
 	
 	opt\AspectRatio = (Float(opt\GraphicWidth) / Float(opt\GraphicHeight)) / (Float(opt\RealGraphicWidth) / Float(opt\RealGraphicHeight))
 Else
-	Graphics3DExt(opt\GraphicWidth, opt\GraphicHeight, 0, (opt\DisplayMode = 2) + 1)
-	
-	If (Not opt\LauncherEnabled) Then
-		opt\RealGraphicWidth = opt\GraphicWidth
-		opt\RealGraphicHeight = opt\GraphicHeight
-	EndIf
-	
 	opt\AspectRatio = 1.0
+	opt\RealGraphicWidth = opt\GraphicWidth
+	opt\RealGraphicHeight = opt\GraphicHeight
+	Graphics3DExt(opt\GraphicWidth, opt\GraphicHeight, 0, (opt\DisplayMode = 2) + 1)
 EndIf
 
 ; ~ Viewport
@@ -9384,7 +9378,7 @@ Function Render294()
 	Temp = True
 	If PlayerRoom\SoundCHN <> 0 Then Temp = False
 	
-	Text(x + 907, y + 185, I_294\ToInput, True, True)
+	Text(x + 907 * MenuScale, y + 185 * MenuScale, I_294\ToInput, True, True)
 	
 	If Temp Then
 		If mo\MouseHit2 Lor (Not I_294\Using) Then 

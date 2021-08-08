@@ -484,8 +484,8 @@ Function LoadOptionsINI()
 	
 	opt\SaveTexturesInVRAM = GetINIInt(OptionFile, "Graphics", "Save Textures In VRAM", True)
 	
-	opt\FOV = GetINIFloat(OptionFile, "Graphics", "FOV", 74.0)
-	opt\CurrFOV = opt\FOV - 40.0
+	opt\FOV = GetINIFloat(OptionFile, "Graphics", "FOV", 60.0)
+	opt\CurrFOV = opt\FOV - 54.0
 	
 	opt\Anisotropic = GetINIInt(OptionFile, "Graphics", "Anisotropic Filtering", 4)
 	
@@ -732,8 +732,8 @@ Function ResetOptionsINI()
 	
 	opt\SaveTexturesInVRAM = True
 	
-	opt\CurrFOV = 34.0 ; ~ Don't forget to decrease by "40.0"
-	opt\FOV = 74.0
+	opt\CurrFOV = 20.0 ; ~ Don't forget to decrease by "54.0"
+	opt\FOV = 60.0
 	
 	opt\Anisotropic = 4
 	
