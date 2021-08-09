@@ -8674,16 +8674,20 @@ Function InitNewGame()
 		EntityParent(d\OBJ, 0)
 		If d\DoorType = Default_Door Lor d\DoorType = One_Sided_Door Lor d\DoorType = SCP_914_Door Then
 			MoveEntity(d\OBJ, 0.0, 0.0, 8.0 * RoomScale)
-		ElseIf d\DoorType = OfficeDoor Then
-			MoveEntity(d\OBJ, 92.0 * RoomScale, 0.0, 0.0)
+		ElseIf d\DoorType = Office_Door Lor d\DoorType = Wooden_Door
+			MoveEntity(d\OBJ, (((d\DoorType = Office_Door) * 92.0) + ((d\DoorType = Wooden_Door) * 70.0)) * RoomScale, 0.0, 0.0)
 		EndIf
-		If d\OBJ2 <> 0 Then EntityParent(d\OBJ2, 0)
-		If d\OBJ2 <> 0 And (d\DoorType = Default_Door Lor d\DoorType = One_Sided_Door) Then
-			MoveEntity(d\OBJ2, 0.0, 0.0, 8.0 * RoomScale)
+		If d\OBJ2 <> 0 Then
+			EntityParent(d\OBJ2, 0)
+			If d\DoorType = Default_Door Lor d\DoorType = One_Sided_Door Lor d\DoorType = SCP_914_Door Then
+				MoveEntity(d\OBJ2, 0.0, 0.0, 8.0 * RoomScale)
+			EndIf
 		EndIf
 		If d\FrameOBJ <> 0 Then EntityParent(d\FrameOBJ, 0)
-		If d\Buttons[0] <> 0 Then EntityParent(d\Buttons[0], 0)
-		If d\Buttons[1] <> 0 Then EntityParent(d\Buttons[1], 0)
+		For i = 0 To 1
+			If d\Buttons[i] <> 0 Then EntityParent(d\Buttons[i], 0)
+			If d\ElevatorPanel[i] <> 0 Then EntityParent(d\ElevatorPanel[i], 0)
+		Next
 	Next
 	
 	For it.Items = Each Items
@@ -8793,8 +8797,10 @@ Function InitLoadGame()
 		EntityParent(d\OBJ, 0)
 		If d\OBJ2 <> 0 Then EntityParent(d\OBJ2, 0)
 		If d\FrameOBJ <> 0 Then EntityParent(d\FrameOBJ, 0)
-		If d\Buttons[0] <> 0 Then EntityParent(d\Buttons[0], 0)
-		If d\Buttons[1] <> 0 Then EntityParent(d\Buttons[1], 0)
+		For i = 0 To 1
+			If d\Buttons[i] <> 0 Then EntityParent(d\Buttons[i], 0)
+			If d\ElevatorPanel[i] <> 0 Then EntityParent(d\ElevatorPanel[i], 0)
+		Next
 	Next
 	
 	For sc.SecurityCams = Each SecurityCams

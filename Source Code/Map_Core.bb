@@ -2274,17 +2274,21 @@ Function UpdateDoors()
 			d\Dist = xDist + zDist
 			
 			If d\Dist > HideDistance * 2.0 Then
-				If d\OBJ <> 0 Then HideEntity(d\OBJ)
 				If d\FrameOBJ <> 0 Then HideEntity(d\FrameOBJ)
+				If d\OBJ <> 0 Then HideEntity(d\OBJ)
 				If d\OBJ2 <> 0 Then HideEntity(d\OBJ2)
-				If d\Buttons[0] <> 0 Then HideEntity(d\Buttons[0])
-				If d\Buttons[1] <> 0 Then HideEntity(d\Buttons[1])				
+				For i = 0 To 1
+					If d\Buttons[i] <> 0 Then HideEntity(d\Buttons[i])
+					If d\ElevatorPanel[i] <> 0 Then HideEntity(d\ElevatorPanel[i])
+				Next			
 			Else
-				If d\OBJ <> 0 Then ShowEntity(d\OBJ)
 				If d\FrameOBJ <> 0 Then ShowEntity(d\FrameOBJ)
+				If d\OBJ <> 0 Then ShowEntity(d\OBJ)
 				If d\OBJ2 <> 0 Then ShowEntity(d\OBJ2)
-				If d\Buttons[0] <> 0 Then ShowEntity(d\Buttons[0])
-				If d\Buttons[1] <> 0 Then ShowEntity(d\Buttons[1])
+				For i = 0 To 1
+					If d\Buttons[i] <> 0 Then ShowEntity(d\Buttons[i])
+					If d\ElevatorPanel[i] <> 0 Then ShowEntity(d\ElevatorPanel[i])
+				Next
 			EndIf
 		Next
 		UpdateDoorsTimer = 30.0
@@ -2444,10 +2448,10 @@ Function UpdateDoors()
 								EndIf
 							EndIf
 							;[End Block]
-						Case Wooden_Door
+						Case Office_Door, Wooden_Door
 							;[Block]
-							d\OpenState = CurveValue(0.0, d\OpenState, 40.0) - (fps\Factor[0] * 0.01)
-							RotateEntity(d\OBJ, 0.0, PlayerRoom\Angle + d\Angle + (d\OpenState / 2.5), 0.0)
+							d\OpenState = 0.0
+							RotateEntity(d\OBJ, 0.0, PlayerRoom\Angle + d\Angle, 0.0)
 							;[End Block]
 						Case One_Sided_Door
 							;[Block]
@@ -3169,8 +3173,6 @@ Function RemoveDoor(d.Doors)
 	If d\OBJ2 <> 0 Then FreeEntity(d\OBJ2) : d\OBJ2 = 0
 	For i = 0 To 1
 		If d\Buttons[i] <> 0 Then FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
-	Next
-	For i = 0 To 1
 		If d\ElevatorPanel[i] <> 0 Then FreeEntity(d\ElevatorPanel[i]) : d\ElevatorPanel[i] = 0
 	Next
 	If d\FrameOBJ <> 0 Then FreeEntity(d\FrameOBJ) : d\FrameOBJ = 0
@@ -6224,7 +6226,7 @@ Function FillRoom(r.Rooms)
 		Case "room1_dead_end_lcz", "room1_dead_end_ez"
 			;[Block]
 			r\RoomDoors.Doors[0] = CreateDoor(r\x, r\y, r\z + 1202.0 * RoomScale, r\y, r, False, Big_Door)
-			r\RoomDoors[0]\AutoClose = False
+			r\RoomDoors[0]\AutoClose = False : r\RoomDoors[0]\MTFClose = False : r\RoomDoors[0]\DisableWaypoint = True
 			For i = 0 To 1
 				FreeEntity(r\RoomDoors[0]\Buttons[i]) : r\RoomDoors[0]\Buttons[i] = 0
 			Next
