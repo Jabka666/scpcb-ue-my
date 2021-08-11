@@ -8252,9 +8252,8 @@ Function LoadEntities()
 	Cls()
 	SetBuffer(BackBuffer())
 	
-	For i = 0 To 1
-		t\ParticleTextureID[i] = LoadTexture_Strict("GFX\smoke(" + (i + 1) + ").png", 1 + 2, DeleteAllTextures)
-	Next
+	t\ParticleTextureID[0] = LoadTexture_Strict("GFX\smoke(1).png", 1 + 2, DeleteAllTextures)
+	t\ParticleTextureID[1] = LoadAnimTexture_Strict("GFX\smoke(2).png", 1 + 2, 256, 256, 0, 4, DeleteAllTextures)
 	t\ParticleTextureID[2] = LoadTexture_Strict("GFX\flash.png", 1 + 2, DeleteAllTextures)
 	t\ParticleTextureID[3] = LoadTexture_Strict("GFX\dust.png", 1 + 2, DeleteAllTextures)
 	t\ParticleTextureID[4] = LoadTexture_Strict("GFX\npcs\hg.pt", 1 + 2, DeleteAllTextures)

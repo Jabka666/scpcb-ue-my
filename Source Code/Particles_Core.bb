@@ -13,9 +13,12 @@ Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTi
 	p.Particles = New Particles
 	p\OBJ = CreateSprite()
 	PositionEntity(p\OBJ, x, y, z, True)
-	EntityTexture(p\OBJ, t\ParticleTextureID[ID])
+	If ID = 1 Then
+		EntityTexture(p\OBJ, t\ParticleTextureID[ID], Rand(0, 3))
+	Else
+		EntityTexture(p\OBJ, t\ParticleTextureID[ID])
+	EndIf
 	RotateEntity(p\OBJ, 0.0, 0.0, Rnd(360.0))
-	EntityFX(p\OBJ, 1 + 8)
 	SpriteViewMode(p\OBJ, 3)
 	
 	Select ID
