@@ -289,3 +289,4 @@ Bug Fixes:
 - Fixed font inside Burnt Note with Dr. Maynard's access code.
 - Fixed smoke doesn't interact with fog.
 - Fixed wrong decal blend in Pocket Dimension.
+- Fixed a bug where auto closing is applied for locked doors.
