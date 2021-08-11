@@ -3,15 +3,20 @@ Const SavePath$ = "Saves\"
 Global AutoSaveTimer#
 
 Function UpdateAutoSave()
-	If (Not CanSave) Lor (Not me\Playable) Lor me\Zombie Lor SelectedDifficulty\SaveType <> SAVEANYWHERE Lor (Not opt\AutoSaveEnabled) Then Return
-	
-	If AutoSaveTimer =< 0.0 Then
-		AutoSaveTimer = 70.0 * 120.0
-		SaveGame(SavePath + CurrSave + "\")
-	Else
-		AutoSaveTimer = AutoSaveTimer - fps\Factor[0]
+	If me\KillTimer < 0.0 Lor (Not CanSave) Lor (Not me\Playable) Lor me\Zombie Lor SelectedDifficulty\SaveType <> SAVEANYWHERE Lor (Not opt\AutoSaveEnabled) Then
 		If AutoSaveTimer =< 70.0 * 5.0 Then
-			CreateHintMsg("Auto save in: " + Str(Int(Ceil(AutoSaveTimer) / 70.0)) + "..")
+			CreateHintMsg("Auto save canceled!")
+			AutoSaveTimer = 70.0 * 120.0
+			Return
+		EndIf
+	Else
+		If AutoSaveTimer =< 0.0 Then
+			SaveGame(SavePath + CurrSave + "\")
+		Else
+			AutoSaveTimer = AutoSaveTimer - fps\Factor[0]
+			If AutoSaveTimer =< 70.0 * 5.0 Then
+				CreateHintMsg("Auto save in: " + Str(Int(Ceil(AutoSaveTimer) / 70.0)) + "..")
+			EndIf
 		EndIf
 	EndIf
 End Function
@@ -503,8 +508,8 @@ Function SaveGame(File$)
 			PlaySound_Strict(LoadTempSound("SFX\General\Save2.ogg"))
 		Else
 			PlaySound_Strict(LoadTempSound("SFX\General\Save1.ogg"))
+			AutoSaveTimer = 70.0 * 120.0
 		EndIf
-		
 		CreateHintMsg("Game progress saved.")
 	EndIf
 	

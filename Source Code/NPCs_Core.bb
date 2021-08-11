@@ -624,7 +624,7 @@ Function UpdateNPCs()
 								n\PrevX = EntityX(n\Collider)
 								n\PrevZ = EntityZ(n\Collider)				
 								
-								If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And (Not wi\IsNVGBlinking) And (EntityInView(n\OBJ, Camera) Lor EntityInView(n\OBJ2, Camera)) And me\LightBlink =< 0.0 Then
+								If PlayerSees173(n) Then
 									Move = False
 								EndIf
 							EndIf
@@ -1533,7 +1533,7 @@ Function UpdateNPCs()
 							;[Block]
 							If (Dist < PowTwo(HideDistance * 2.0)) And n\Idle = 0 And PlayerInReachableRoom(True) Then
 								n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider)
-								PlayerSeeAble = MeNPCSeesPlayer(n)
+								PlayerSeeAble = NPCSeesPlayer(n)
 								If PlayerSeeAble = 1 Lor n\State2 > 0.0 And (Not chs\NoTarget) Then ; ~ Player is visible for SCP-049's sight
 									GiveAchievement(Achv049)
 									
@@ -1861,7 +1861,7 @@ Function UpdateNPCs()
 							If n\Sound <> 0 Then
 								n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider)
 							EndIf
-							PlayerSeeAble = MeNPCSeesPlayer(n, True)
+							PlayerSeeAble = NPCSeesPlayer(n, True)
 							If PlayerSeeAble = 1 Then
 								n\State = 2.0
 								n\PathStatus = 0
@@ -1985,7 +1985,7 @@ Function UpdateNPCs()
 					
 					n\BlinkTimer = 1.0
 					
-					PlayerSeeAble = MeNPCSeesPlayer(n)
+					PlayerSeeAble = NPCSeesPlayer(n)
 					
 					Select n\State
 						Case 0.0 ; ~ Just lies
@@ -4685,7 +4685,7 @@ Function UpdateNPCs()
 					
 					n\BlinkTimer = 1.0
 					
-					PlayerSeeAble = MeNPCSeesPlayer(n)
+					PlayerSeeAble = NPCSeesPlayer(n)
 					
 					Select n\State
 						Case 0.0 ; ~ Lying next to the wall
@@ -5270,7 +5270,7 @@ Function UpdateMTFUnit(n.NPCs)
 					EndIf
 				EndIf
 				
-				Local Temp% = MeNPCSeesPlayer(n)
+				Local Temp% = NPCSeesPlayer(n)
 				
 				If chs\NoTarget Then Temp = False
 				
@@ -5310,7 +5310,7 @@ Function UpdateMTFUnit(n.NPCs)
 				If Curr173\Idle < 2 Then
 					Local SoundVol173# = Max(Min((Distance(EntityX(Curr173\Collider), Curr173\PrevX, EntityZ(Curr173\Collider), Curr173\PrevZ) * 2.5), 1.0), 0.0)
 					
-					If OtherNPCSeesMeNPC(Curr173, n) Lor (SoundVol173 > 0.0 And EntityDistanceSquared(n\Collider, Curr173\Collider) < 36.0) Then
+					If NPCSeesNPC(Curr173, n) Lor (SoundVol173 > 0.0 And EntityDistanceSquared(n\Collider, Curr173\Collider) < 36.0) Then
 						If EntityVisible(n\Collider, Curr173\Collider) Lor SoundVol173 > 0.0 Then							
 							n\State = 2.0
 							n\EnemyX = EntityX(Curr173\Collider, True)
@@ -5328,7 +5328,7 @@ Function UpdateMTFUnit(n.NPCs)
 				EndIf
 				
 				If Curr106\State =< 0 Then
-					If OtherNPCSeesMeNPC(Curr106, n) Lor EntityDistanceSquared(n\Collider, Curr106\Collider) < 9.0 Then
+					If NPCSeesNPC(Curr106, n) Lor EntityDistanceSquared(n\Collider, Curr106\Collider) < 9.0 Then
 						If EntityVisible(n\Collider, Curr106\Collider) Then
 							n\State = 4.0
 							n\EnemyX = EntityX(Curr106\Collider, True)
@@ -5347,7 +5347,7 @@ Function UpdateMTFUnit(n.NPCs)
 				EndIf
 				
 				If Curr096 <> Null Then
-					If OtherNPCSeesMeNPC(Curr096, n) Then
+					If NPCSeesNPC(Curr096, n) Then
 						If EntityVisible(n\Collider, Curr096\Collider) Then
 							n\State = 8.0
 							n\EnemyX = EntityX(Curr096\Collider, True)
@@ -5365,7 +5365,7 @@ Function UpdateMTFUnit(n.NPCs)
 				EndIf
 				
 				If Curr049 <> Null Then
-					If OtherNPCSeesMeNPC(Curr049, n) Then
+					If NPCSeesNPC(Curr049, n) Then
 						If EntityVisible(n\Collider, Curr049\Collider)
 							n\State = 4.0
 							n\EnemyX = EntityX(Curr049\Collider, True)
@@ -5385,7 +5385,7 @@ Function UpdateMTFUnit(n.NPCs)
 				
 				For n2.NPCs = Each NPCs
 					If n2\NPCType = NPCType049_2 And (Not n2\IsDead)
-						If OtherNPCSeesMeNPC(n2, n) Then
+						If NPCSeesNPC(n2, n) Then
 							If EntityVisible(n\Collider, n2\Collider)
 								n\State = 9.0
 								n\EnemyX = EntityX(n2\Collider, True)
@@ -5404,7 +5404,7 @@ Function UpdateMTFUnit(n.NPCs)
 							EndIf
 						EndIf
 					ElseIf n2\NPCType = NPCType008_1 And (Not n2\IsDead)
-						If OtherNPCSeesMeNPC(n2, n) Then
+						If NPCSeesNPC(n2, n) Then
 							If EntityVisible(n\Collider, n2\Collider)
 								n\State = 9.0
 								n\EnemyX = EntityX(n2\Collider, True)
@@ -5420,7 +5420,7 @@ Function UpdateMTFUnit(n.NPCs)
 							EndIf
 						EndIf
 					ElseIf n2\NPCType = NPCType035_Tentacle And (Not n2\IsDead)
-						If OtherNPCSeesMeNPC(n2, n) Then
+						If NPCSeesNPC(n2, n) Then
 							If EntityVisible(n\Collider, n2\Collider)
 								n\State = 9.0
 								n\EnemyX = EntityX(n2\Collider, True)
@@ -5442,7 +5442,7 @@ Function UpdateMTFUnit(n.NPCs)
 				;[Block]
 				n\Speed = 0.015
 				n\State2 = n\State2 - fps\Factor[0]
-				If MeNPCSeesPlayer(n) = 1 Then
+				If NPCSeesPlayer(n) = 1 Then
 					; ~ If close enough, start shooting at the player
 					Local DetectDistance# = EntityDistanceSquared(n\Collider, me\Collider)
 					
@@ -5657,7 +5657,7 @@ Function UpdateMTFUnit(n.NPCs)
 				; ~ B3D doesn't do short-circuit evaluation, so this retarded nesting is an optimization
 				If Curr173\Idle < 2 Then
 					SoundVol173 = Max(Min((Distance(EntityX(Curr173\Collider), Curr173\PrevX, EntityZ(Curr173\Collider), Curr173\PrevZ) * 2.5), 1.0), 0.0)
-					If OtherNPCSeesMeNPC(Curr173, n) Lor (SoundVol173 > 0.0 And EntityDistanceSquared(n\Collider, Curr173\Collider) < 36.0) Then
+					If NPCSeesNPC(Curr173, n) Lor (SoundVol173 > 0.0 And EntityDistanceSquared(n\Collider, Curr173\Collider) < 36.0) Then
 						If EntityVisible(n\Collider, Curr173\Collider) Lor SoundVol173 > 0.0 Then	
 							n\State = 2.0
 							n\EnemyX = EntityX(Curr173\Collider, True)
@@ -5675,7 +5675,7 @@ Function UpdateMTFUnit(n.NPCs)
 				EndIf
 				
 				If Curr106\State =< 0 Then
-					If OtherNPCSeesMeNPC(Curr106, n) Lor EntityDistanceSquared(n\Collider, Curr106\Collider) < 9.0 Then
+					If NPCSeesNPC(Curr106, n) Lor EntityDistanceSquared(n\Collider, Curr106\Collider) < 9.0 Then
 						If EntityVisible(n\Collider, Curr106\Collider) Then
 							n\State = 4.0
 							n\EnemyX = EntityX(Curr106\Collider, True)
@@ -5696,7 +5696,7 @@ Function UpdateMTFUnit(n.NPCs)
 				EndIf
 				
 				If Curr096 <> Null Then
-					If OtherNPCSeesMeNPC(Curr096, n) Then
+					If NPCSeesNPC(Curr096, n) Then
 						If EntityVisible(n\Collider, Curr096\Collider) Then
 							n\State = 8.0
 							n\EnemyX = EntityX(Curr096\Collider, True)
@@ -5716,7 +5716,7 @@ Function UpdateMTFUnit(n.NPCs)
 				EndIf
 				
 				If Curr049 <> Null Then
-					If OtherNPCSeesMeNPC(Curr049, n) Then
+					If NPCSeesNPC(Curr049, n) Then
 						If EntityVisible(n\Collider, Curr049\Collider)
 							n\State = 4.0
 							n\EnemyX = EntityX(Curr049\Collider, True)
@@ -5736,7 +5736,7 @@ Function UpdateMTFUnit(n.NPCs)
 				
 				For n2.NPCs = Each NPCs
 					If n2\NPCType = NPCType049_2 And (Not n2\IsDead)
-						If OtherNPCSeesMeNPC(n2, n) Then
+						If NPCSeesNPC(n2, n) Then
 							If EntityVisible(n\Collider, n2\Collider)
 								n\State = 9.0
 								n\EnemyX = EntityX(n2\Collider, True)
@@ -5755,7 +5755,7 @@ Function UpdateMTFUnit(n.NPCs)
 							EndIf
 						EndIf
 					ElseIf n2\NPCType = NPCType008_1 And (Not n2\IsDead)
-						If OtherNPCSeesMeNPC(n2, n) Then
+						If NPCSeesNPC(n2, n) Then
 							If EntityVisible(n\Collider, n2\Collider)
 								n\State = 9.0
 								n\EnemyX = EntityX(n2\Collider, True)
@@ -5771,7 +5771,7 @@ Function UpdateMTFUnit(n.NPCs)
 							EndIf
 						EndIf
 					ElseIf n2\NPCType = NPCType035_Tentacle And (Not n2\IsDead)
-						If OtherNPCSeesMeNPC(n2, n) Then
+						If NPCSeesNPC(n2, n) Then
 							If EntityVisible(n\Collider, n2\Collider)
 								n\State = 9.0
 								n\EnemyX = EntityX(n2\Collider, True)
@@ -5999,7 +5999,7 @@ Function UpdateMTFUnit(n.NPCs)
 				n\Speed = 0.03
 				n\State2 = n\State2 - fps\Factor[0]
 				If n\State2 > 0.0 Then
-					If OtherNPCSeesMeNPC(n\Target, n)
+					If NPCSeesNPC(n\Target, n)
 						n\State2 = 70.0 * 15.0
 					EndIf
 					
@@ -6825,7 +6825,7 @@ Function FindPath(n.NPCs, x#, y#, z#)
 	EndIf
 End Function
 
-Function OtherNPCSeesMeNPC%(n.NPCs, n2.NPCs)
+Function NPCSeesNPC%(n.NPCs, n2.NPCs)
 	If n2\BlinkTimer =< 0.0 Then Return(False)
 	
 	If EntityDistanceSquared(n2\Collider, n\Collider) < 36.0 Then
@@ -6836,7 +6836,7 @@ Function OtherNPCSeesMeNPC%(n.NPCs, n2.NPCs)
 	Return(False)
 End Function
 
-Function MeNPCSeesPlayer%(n.NPCs, DisableSoundOnCrouch% = False)
+Function NPCSeesPlayer%(n.NPCs, DisableSoundOnCrouch% = False)
 	; ~ Return values:
 	; ~ 0: Player is not detected anyhow
 	; ~ 1: Player is detected by vision
@@ -6871,6 +6871,16 @@ Function MeNPCSeesPlayer%(n.NPCs, DisableSoundOnCrouch% = False)
 		; ~ Spots the player if he's either in view or making a loud sound
 		If me\SndVolume > 1.0 Then Return(2)
 		Return(3)
+	EndIf
+End Function
+
+Function PlayerSees173%(n.NPCs)
+	If n <> Null Then
+		If (n\Idle <> 0) Lor ((me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And (Not wi\IsNVGBlinking) And (EntityInView(n\OBJ, Camera) Lor EntityInView(n\OBJ2, Camera)) And (me\LightBlink =< 0.0)) Then
+			Return(True)
+		Else
+			Return(False)
+		EndIf
 	EndIf
 End Function
 

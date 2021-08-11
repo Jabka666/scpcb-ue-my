@@ -122,6 +122,7 @@ Rooms:
 		- System unit.
 		- Yucca bush.
 		- Computer mouse.
+		- Water cooler.
 	- Improved SCP-895's model and image.
 	- Improved chair model.
 	- Added observation room for SCP-914's containment chamber.

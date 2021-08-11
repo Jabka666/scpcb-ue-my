@@ -178,6 +178,17 @@ Function Find860Angle#(n.NPCs, fr.Forest)
 	EndIf		
 End Function
 
+Function IsInsideArea%(Pvt%, Dist#)
+	If Abs(EntityX(me\Collider) - EntityX(Pvt, True)) < Dist + (0.015 * fps\Factor[0]) Then
+		If Abs(EntityZ(me\Collider) - EntityZ(Pvt, True)) < Dist + (0.015 * fps\Factor[0]) Then
+			If Abs(EntityY(me\Collider) - EntityY(Pvt, True)) < Dist + (0.015 * fps\Factor[0]) Then
+				Return(True)
+			EndIf
+		EndIf
+	EndIf
+	Return(False)
+End Function
+
 Function CreateLine%(x1#, y1#, z1#, x2#, y2#, z2#, Mesh% = 0)
 	Local Surf%, Verts%
 	
@@ -357,7 +368,7 @@ End Function
 Function CheckTriggers$()
 	Local i%
 	
-	If PlayerRoom\TriggerboxAmount = 0 Then
+	If PlayerRoom\TriggerBoxAmount = 0 Then
 		Return
 	Else
 		For i = 0 To PlayerRoom\TriggerBoxAmount - 1

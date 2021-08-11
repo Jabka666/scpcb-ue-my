@@ -7551,7 +7551,7 @@ Function UpdateEvents()
 								e\EventState = Max(e\EventState, 70.0 * 12.0)
 							ElseIf Dist > 1.96
 								; ~ If the player moves a bit further and blinks, SCP-173 attacks
-								If e\EventState > 70.0 * 12.0 And (me\BlinkTimer =< -10.0 Lor me\LightBlink > 0.0 Lor (Not EntityInView(Curr173\OBJ, Camera) And (Not EntityInView(Curr173\OBJ2, Camera)))) Then
+								If e\EventState > 70.0 * 12.0 And (Not PlayerSees173(Curr173)) Then
 									If EntityDistanceSquared(Curr173\Collider, e\room\Objects[0]) > 25.0 Then
 										; ~ Remove event, if SCP-173 is far away from the room (perhaps because the player left and SCP-173 moved to some other room?) 
 										RemoveEvent(e)
@@ -7613,9 +7613,7 @@ Function UpdateEvents()
 							EndIf											
 							e\EventState = 1.0
 						ElseIf e\EventState = 1.0
-							If EntityDistanceSquared(e\room\Objects[1], me\Collider) < 9.61 Then
-								e\SoundCHN = LoopSound2(AlarmSFX[0], e\SoundCHN, Camera, e\room\Objects[0], 5.0)
-							EndIf
+							e\SoundCHN = LoopSound2(AlarmSFX[0], e\SoundCHN, Camera, e\room\Objects[0], 5.0)
 							
 							If (MilliSecs2() Mod 1000) < 500 Then
 								ShowEntity(e\room\Objects[5]) 
@@ -7624,14 +7622,15 @@ Function UpdateEvents()
 							EndIf
 							
 							Dist = EntityDistanceSquared(me\Collider, e\room\Objects[0])
-							If Dist < 4.0 Then 
-								e\room\RoomDoors[0]\Locked = 1
-								e\room\RoomDoors[1]\Locked = 1
+							If Dist < 4.0 Then
+								For i = 0 To 1
+									e\room\RoomDoors[i]\Locked = 1
+								Next
 								
 								If e\EventState2 = 0.0 Then
 									ShowEntity(e\room\Objects[2])
 									If EntityDistanceSquared(Curr173\Collider, e\room\Objects[4]) < 9.0 Then
-										If me\BlinkTimer < -10.0 Lor me\LightBlink > 0.0 Lor ((Not EntityInView(Curr173\OBJ, Camera) And (Not EntityInView(Curr173\OBJ2, Camera)))) And Curr173\Idle = 0 Then
+										If (Not PlayerSees173(Curr173)) Then
 											PositionEntity(Curr173\Collider, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True), True)
 											ResetEntity(Curr173\Collider)
 											
@@ -7668,9 +7667,9 @@ Function UpdateEvents()
 							EndIf		
 						Else
 							HideEntity(e\room\Objects[5])
-							e\room\RoomDoors[0]\Locked = 0
-							e\room\RoomDoors[1]\Locked = 0
-							e\room\RoomDoors[2]\Locked = 0
+							For i = 0 To 2
+								e\room\RoomDoors[i]\Locked = 0
+							Next
 							
 							RotateEntity(e\room\Levers[0], CurveAngle(1.0, EntityPitch(e\room\Levers[0], True), 15.0), EntityYaw(e\room\Levers[0], True), 0.0, True)
 						EndIf
@@ -8726,7 +8725,7 @@ Function UpdateEvents()
 					ElseIf e\EventState2 = 3.0
 						If e\room\NPC[0]\State <> 5.0 Then e\EventState2 = 7.0
 						
-						If MeNPCSeesPlayer(e\room\NPC[0], True) = 2 Then e\EventState2 = 4.0
+						If NPCSeesPlayer(e\room\NPC[0], True) = 2 Then e\EventState2 = 4.0
 						
 						If e\room\NPC[0]\PathStatus <> 1 Then
 							If e\room\NPC[0]\PathTimer = 0.0 Then
@@ -8804,7 +8803,7 @@ Function UpdateEvents()
 							EndIf
 						Next
 					ElseIf e\EventState2 = 6.0
-						If MeNPCSeesPlayer(e\room\NPC[0], True) = 1 Lor e\room\NPC[0]\State2 > 0.0 Lor e\room\NPC[0]\LastSeen > 0
+						If NPCSeesPlayer(e\room\NPC[0], True) = 1 Lor e\room\NPC[0]\State2 > 0.0 Lor e\room\NPC[0]\LastSeen > 0
 							e\EventState2 = 7.0
 						Else
 							; ~ Still playing the Music for SCP-049 (in the real, SCP-049's State will be set to 2, causing it to stop playing the chasing track)

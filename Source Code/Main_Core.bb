@@ -1024,12 +1024,14 @@ Function UpdateConsole%()
 					;[Block]
 					Curr173\Idle = 3 ; ~ This phenominal comment is brought to you by PolyFox. His absolute wisdom in this fatigue of knowledge brought about a new era of SCP-173 state checks.
 					HideEntity(Curr173\OBJ)
+					HideEntity(Curr173\OBJ2)
 					HideEntity(Curr173\Collider)
 					;[End Block]
 				Case "enable173"
 					;[Block]
 					Curr173\Idle = 0
 					ShowEntity(Curr173\OBJ)
+					ShowEntity(Curr173\OBJ2)
 					ShowEntity(Curr173\Collider)
 					;[End Block]
 				Case "disable106"
@@ -1048,20 +1050,22 @@ Function UpdateConsole%()
 				Case "disable966"
 					;[Block]
 					For n.NPCs = Each NPCs
-						If n\NPCType = NPCType966
+						If n\NPCType = NPCType966 Then
 							n\State = -1.0
 							HideEntity(n\Collider)
 							HideEntity(n\OBJ)
+							Exit
 						EndIf
 					Next
 					;[End Block]
 				Case "enable966"
 					;[Block]
 					For n.NPCs = Each NPCs
-						If n\NPCType = NPCType966
+						If n\NPCType = NPCType966 Then
 							n\State = 0.0
 							ShowEntity(n\Collider)
 							If WearinNightVision > 0 Then ShowEntity(n\OBJ)
+							Exit
 						EndIf
 					Next
 					;[End Block]
@@ -1299,9 +1303,9 @@ Function UpdateConsole%()
 								If e\room\NPC[i] <> Null Then RemoveNPC(e\room\NPC[i])
 								If i < 2 Then FreeEntity(e\room\Objects[i]) : e\room\Objects[i] = 0
 							Next
+							If Curr173\Idle = 1 Then Curr173\Idle = 0
 							PositionEntity(Curr173\Collider, 0.0, 0.0, 0.0)
 							ResetEntity(Curr173\Collider)
-							ShowEntity(Curr173\OBJ)
 							RemoveEvent(e)
 							Exit
 						EndIf
@@ -1547,9 +1551,9 @@ Function UpdateConsole%()
 								If e\room\NPC[i] <> Null Then RemoveNPC(e\room\NPC[i])
 								If i < 2 Then FreeEntity(e\room\Objects[i]) : e\room\Objects[i] = 0
 							Next
+							If Curr173\Idle = 1 Then Curr173\Idle = 0
 							PositionEntity(Curr173\Collider, 0.0, 0.0, 0.0)
 							ResetEntity(Curr173\Collider)
-							ShowEntity(Curr173\OBJ)
 							RemoveEvent(e)
 							Exit
 						EndIf
@@ -5620,138 +5624,153 @@ Function RenderDebugHUD()
 	Color(255, 255, 255)
 	SetFont(fo\FontID[Font_Console])
 	
-	If chs\DebugHUD = 1 Then
-		Text(x, y, "Room: " + PlayerRoom\RoomTemplate\Name)
-		Text(x, y + (20 * MenuScale), "Room Coordinates: (" + Floor(EntityX(PlayerRoom\OBJ) / 8.0 + 0.5) + ", " + Floor(EntityZ(PlayerRoom\OBJ) / 8.0 + 0.5) + ", Angle: " + PlayerRoom\Angle + ")")
-		For ev.Events = Each Events
-			If ev\room = PlayerRoom Then
-				Text(x, y + (40 * MenuScale), "Room Event: " + ev\EventName + ", ID: " + ev\EventID) 
-				Text(x, y + (60 * MenuScale), "State: " + ev\EventState)
-				Text(x, y + (80 * MenuScale), "State2: " + ev\EventState2)   
-				Text(x, y + (100 * MenuScale), "State3: " + ev\EventState3)
-				Text(x, y + (120 * MenuScale), "State4: " + ev\EventState4)
-				Text(x, y + (140 * MenuScale), "Str: "+ ev\EventStr)
-				Exit
-			EndIf
-		Next
-		If PlayerRoom\RoomTemplate\Name = "dimension_1499" Then
-			Text(x, y + (180 * MenuScale), "Current Chunk X / Z: (" + (Int((EntityX(me\Collider) + 20) / 40)) + ", "+(Int((EntityZ(me\Collider) + 20) / 40)) + ")")
-			
-			Local CH_Amount% = 0
-			
-			For ch.Chunk = Each Chunk
-				CH_Amount = CH_Amount + 1
+	Select chs\DebugHUD
+		Case 1
+			;[Block]
+			Text(x, y, "Room: " + PlayerRoom\RoomTemplate\Name)
+			Text(x, y + (20 * MenuScale), "Room Coordinates: (" + Floor(EntityX(PlayerRoom\OBJ) / 8.0 + 0.5) + ", " + Floor(EntityZ(PlayerRoom\OBJ) / 8.0 + 0.5) + ", Angle: " + PlayerRoom\Angle + ")")
+			For ev.Events = Each Events
+				If ev\room = PlayerRoom Then
+					Text(x, y + (40 * MenuScale), "Room Event: " + ev\EventName + ", ID: " + ev\EventID) 
+					Text(x, y + (60 * MenuScale), "State: " + ev\EventState)
+					Text(x, y + (80 * MenuScale), "State2: " + ev\EventState2)   
+					Text(x, y + (100 * MenuScale), "State3: " + ev\EventState3)
+					Text(x, y + (120 * MenuScale), "State4: " + ev\EventState4)
+					Text(x, y + (140 * MenuScale), "Str: "+ ev\EventStr)
+					Exit
+				EndIf
 			Next
-			Text(x, y + (200 * MenuScale), "Current Chunk Amount: " + CH_Amount)
-		Else
-			Text(x, y + (200 * MenuScale), "Current Room Position: (" + PlayerRoom\x + ", " + PlayerRoom\y + ", " + PlayerRoom\z + ")")
-		EndIf
-		
-		If SelectedMonitor <> Null Then
-			Text(x, y + (240 * MenuScale), "Current Monitor: " + SelectedMonitor\ScrOBJ)
-		Else
-			Text(x, y + (240 * MenuScale), "Current Monitor: Null")
-		EndIf
-		
-		If SelectedItem <> Null Then
-			Text(x, y + (280 * MenuScale), "Current Button: " + SelectedItem\ItemTemplate\Name)
-		Else
-			Text(x, y + (280 * MenuScale), "Current Button: Null")
-		EndIf
-		
-		Text(x, y + (320 * MenuScale), "Date and Time: " + CurrentDate() + ", " + CurrentTime())
-		Text(x, y + (340 * MenuScale), "Video memory: " + ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)) + " MB/" + (TotalVidMem() / 1024) + " MB" + Chr(10))
-		Text(x, y + (360 * MenuScale), "Global memory status: " + ((TotalPhys() / 1024) - (AvailPhys() / 1024)) + " MB/" + (TotalPhys() / 1024) + " MB")
-		Text(x, y + (380 * MenuScale), "Triangles Rendered: " + CurrTrisAmount)
-		Text(x, y + (400 * MenuScale), "Active Textures: " + ActiveTextures())	
-	ElseIf chs\DebugHUD = 2
-		Text(x, y, "Player Position: (" + f2s(EntityX(me\Collider), 1) + ", " + f2s(EntityY(me\Collider), 1) + ", " + f2s(EntityZ(me\Collider), 1) + ")")
-		Text(x, y + (20 * MenuScale), "Player Rotation: (" + f2s(EntityPitch(me\Collider), 1) + ", " + f2s(EntityYaw(me\Collider), 1) + ", " + f2s(EntityRoll(me\Collider), 1) + ")")
-		
-		Text(x, y + (60 * MenuScale), "Injuries: " + me\Injuries)
-		Text(x, y + (80 * MenuScale), "Bloodloss: " + me\Bloodloss)
-		
-		Text(x, y + (120 * MenuScale), "Blur Timer: " + me\BlurTimer)
-		Text(x, y + (140 * MenuScale), "Light Blink: " + me\LightBlink)
-		Text(x, y + (160 * MenuScale), "Light Flash: " + me\LightFlash)
-		
-		Text(x, y + (200 * MenuScale), "Blink Frequency: " + me\BLINKFREQ)
-		Text(x, y + (220 * MenuScale), "Blink Timer: " + me\BlinkTimer)
-		Text(x, y + (240 * MenuScale), "Blink Effect: " + me\BlinkEffect)
-		Text(x, y + (260 * MenuScale), "Blink Effect Timer: " + me\BlinkEffectTimer)
-		Text(x, y + (280 * MenuScale), "Eye Irritation: " + me\EyeIrritation)
-		Text(x, y + (300 * MenuScale), "Eye Stuck: " + me\EyeStuck)
-		
-		Text(x, y + (340 * MenuScale), "Stamina: " + me\Stamina)
-		Text(x, y + (360 * MenuScale), "Stamina Effect: " + me\StaminaEffect)
-		Text(x, y + (380 * MenuScale), "Stamina Effect Timer: " + me\StaminaEffectTimer)
-		
-		Text(x, y + (420 * MenuScale), "Deaf Timer: " + me\DeafTimer)
-		
-		Text(x + (380 * MenuScale), y, "Kill Timer: " + me\KillTimer)
-		Text(x + (380 * MenuScale), y + (20 * MenuScale), "Death Timer: " + me\DeathTimer)
-		Text(x + (380 * MenuScale), y + (40 * MenuScale), "Fall Timer: " + me\FallTimer)
-		
-		Text(x + (380 * MenuScale), y + (80 * MenuScale), "Heal Timer: " + me\HealTimer)
-		
-		Text(x + (380 * MenuScale), y + (120 * MenuScale), "Heart Beat Timer: " + me\HeartBeatTimer)
-		
-		Text(x + (380 * MenuScale), y + (160 * MenuScale), "Explosion Timer: " + me\ExplosionTimer)
-		
-		Text(x + (380 * MenuScale), y + (200 * MenuScale), "Current Speed: " + me\CurrSpeed)
-		
-		Text(x + (380 * MenuScale), y + (240 * MenuScale), "Camera Shake Timer: " + me\CameraShakeTimer)
-		Text(x + (380 * MenuScale), y + (260 * MenuScale), "Current Camera Zoom: " + me\CurrCameraZoom)
-		
-		Text(x + (380 * MenuScale), y + (300 * MenuScale), "Vomit Timer: " + me\VomitTimer)
-		
-		If me\Playable Then
-			Text(x + (380 * MenuScale), y + (340 * MenuScale), "Is Playable: True")
-		Else
-			Text(x + (380 * MenuScale), y + (340 * MenuScale), "Is Playable: False")
-		EndIf
-		
-		Text(x + (380 * MenuScale), y + (380 * MenuScale), "Refined Items: " + me\RefinedItems)
-		Text(x + (380 * MenuScale), y + (400 * MenuScale), "Funds: " + me\Funds)
-	ElseIf chs\DebugHUD = 3
-		If Curr049 <> Null Then
-			Text(x, y, "SCP-049 Position: (" + f2s(EntityX(Curr049\OBJ), 2) + ", " + f2s(EntityY(Curr049\OBJ), 2) + ", " + f2s(EntityZ(Curr049\OBJ), 2) + ")")
-			Text(x, y + (20 * MenuScale), "SCP-049 Idle: " + Curr049\Idle)
-			Text(x, y + (40 * MenuScale), "SCP-049 State: " + Curr049\State)
-		EndIf
-		If Curr096 <> Null Then
-			Text(x, y + (60 * MenuScale), "SCP-096 Position: (" + f2s(EntityX(Curr096\OBJ), 2) + ", " + f2s(EntityY(Curr096\OBJ), 2) + ", " + f2s(EntityZ(Curr096\OBJ), 2) + ")")
-			Text(x, y + (80 * MenuScale), "SCP-096 Idle: " + Curr096\Idle)
-			Text(x, y + (100 * MenuScale), "SCP-096 State: " + Curr096\State)
-		EndIf
-		If Curr106 <> Null Then
-			Text(x, y + (120 * MenuScale), "SCP-106 Position: (" + f2s(EntityX(Curr106\OBJ), 2) + ", " + f2s(EntityY(Curr106\OBJ), 2) + ", " + f2s(EntityZ(Curr106\OBJ), 2) + ")")
-			Text(x, y + (140 * MenuScale), "SCP-106 Idle: " + Curr106\Idle)
-			Text(x, y + (160 * MenuScale), "SCP-106 State: " + Curr106\State)
-		EndIf
-		If Curr173 <> Null Then
-			Text(x, y + (180 * MenuScale), "SCP-173 Position: (" + f2s(EntityX(Curr173\OBJ), 2) + ", " + f2s(EntityY(Curr173\OBJ), 2) + ", " + f2s(EntityZ(Curr173\OBJ), 2) + ")")
-			Text(x, y + (200 * MenuScale), "SCP-173 Idle: " + Curr173\Idle)
-			Text(x, y + (220 * MenuScale), "SCP-173 State: " + Curr173\State)
-		EndIf
-		
-		Text(x, y + (260 * MenuScale), "Pills Taken: " + I_500\Taken)
-		
-		Text(x, y + (300 * MenuScale), "SCP-008 Infection: " + I_008\Timer)
-		Text(x, y + (320 * MenuScale), "SCP-409 Crystallization: " + I_409\Timer)
-		Text(x, y + (340 * MenuScale), "SCP-427 State (Secs): " + Int(I_427\Timer / 70.0))
-		For i = 0 To 5
-			Text(x, y + ((360 + (20 * i)) * MenuScale), "SCP-1025 State " + i + ": " + I_1025\State[i])
-		Next
-		
-		If I_005\ChanceToSpawn = 1 Then
-			Text(x, y + (500 * MenuScale), "SCP-005 Spawned in the Chamber!")
-		ElseIf I_005\ChanceToSpawn = 2
-			Text(x, y + (500 * MenuScale), "SCP-005 Spawned in Dr.Maynard's Office!")
-		ElseIf I_005\ChanceToSpawn = 3
-			Text(x, y + (500 * MenuScale), "SCP-005 Spawned in SCP-409's Containment Chamber!")
-		EndIf
-	EndIf
+			If PlayerRoom\RoomTemplate\Name = "dimension_1499" Then
+				Text(x, y + (180 * MenuScale), "Current Chunk X / Z: (" + (Int((EntityX(me\Collider) + 20) / 40)) + ", "+(Int((EntityZ(me\Collider) + 20) / 40)) + ")")
+				
+				Local CH_Amount% = 0
+				
+				For ch.Chunk = Each Chunk
+					CH_Amount = CH_Amount + 1
+				Next
+				Text(x, y + (200 * MenuScale), "Current Chunk Amount: " + CH_Amount)
+			Else
+				Text(x, y + (200 * MenuScale), "Current Room Position: (" + PlayerRoom\x + ", " + PlayerRoom\y + ", " + PlayerRoom\z + ")")
+			EndIf
+			
+			If SelectedMonitor <> Null Then
+				Text(x, y + (240 * MenuScale), "Current Monitor: " + SelectedMonitor\ScrOBJ)
+			Else
+				Text(x, y + (240 * MenuScale), "Current Monitor: Null")
+			EndIf
+			
+			If SelectedItem <> Null Then
+				Text(x, y + (280 * MenuScale), "Current Button: " + SelectedItem\ItemTemplate\Name)
+			Else
+				Text(x, y + (280 * MenuScale), "Current Button: Null")
+			EndIf
+			
+			Text(x, y + (320 * MenuScale), "Current Floor: " + PlayerElevatorFloor)
+			Text(x, y + (340 * MenuScale), "Room floor: " + FindFloor())
+			If PlayerInsideElevator Then
+				Text(x, y + (360 * MenuScale), "Player is inside elevator: True")
+			Else
+				Text(x, y + (360 * MenuScale), "Player is inside elevator: False")
+			EndIf
+			
+			Text(x, y + (400 * MenuScale), "Date and Time: " + CurrentDate() + ", " + CurrentTime())
+			Text(x, y + (420 * MenuScale), "Video memory: " + ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)) + " MB/" + (TotalVidMem() / 1024) + " MB" + Chr(10))
+			Text(x, y + (440 * MenuScale), "Global memory status: " + ((TotalPhys() / 1024) - (AvailPhys() / 1024)) + " MB/" + (TotalPhys() / 1024) + " MB")
+			Text(x, y + (460 * MenuScale), "Triangles Rendered: " + CurrTrisAmount)
+			Text(x, y + (480 * MenuScale), "Active Textures: " + ActiveTextures())
+			;[End Block]
+		Case 2
+			;[Block]
+			Text(x, y, "Player Position: (" + f2s(EntityX(me\Collider), 1) + ", " + f2s(EntityY(me\Collider), 1) + ", " + f2s(EntityZ(me\Collider), 1) + ")")
+			Text(x, y + (20 * MenuScale), "Player Rotation: (" + f2s(EntityPitch(me\Collider), 1) + ", " + f2s(EntityYaw(me\Collider), 1) + ", " + f2s(EntityRoll(me\Collider), 1) + ")")
+			
+			Text(x, y + (60 * MenuScale), "Injuries: " + me\Injuries)
+			Text(x, y + (80 * MenuScale), "Bloodloss: " + me\Bloodloss)
+			
+			Text(x, y + (120 * MenuScale), "Blur Timer: " + me\BlurTimer)
+			Text(x, y + (140 * MenuScale), "Light Blink: " + me\LightBlink)
+			Text(x, y + (160 * MenuScale), "Light Flash: " + me\LightFlash)
+			
+			Text(x, y + (200 * MenuScale), "Blink Frequency: " + me\BLINKFREQ)
+			Text(x, y + (220 * MenuScale), "Blink Timer: " + me\BlinkTimer)
+			Text(x, y + (240 * MenuScale), "Blink Effect: " + me\BlinkEffect)
+			Text(x, y + (260 * MenuScale), "Blink Effect Timer: " + me\BlinkEffectTimer)
+			Text(x, y + (280 * MenuScale), "Eye Irritation: " + me\EyeIrritation)
+			Text(x, y + (300 * MenuScale), "Eye Stuck: " + me\EyeStuck)
+			
+			Text(x, y + (340 * MenuScale), "Stamina: " + me\Stamina)
+			Text(x, y + (360 * MenuScale), "Stamina Effect: " + me\StaminaEffect)
+			Text(x, y + (380 * MenuScale), "Stamina Effect Timer: " + me\StaminaEffectTimer)
+			
+			Text(x, y + (420 * MenuScale), "Deaf Timer: " + me\DeafTimer)
+			
+			Text(x + (380 * MenuScale), y, "Kill Timer: " + me\KillTimer)
+			Text(x + (380 * MenuScale), y + (20 * MenuScale), "Death Timer: " + me\DeathTimer)
+			Text(x + (380 * MenuScale), y + (40 * MenuScale), "Fall Timer: " + me\FallTimer)
+			
+			Text(x + (380 * MenuScale), y + (80 * MenuScale), "Heal Timer: " + me\HealTimer)
+			
+			Text(x + (380 * MenuScale), y + (120 * MenuScale), "Heart Beat Timer: " + me\HeartBeatTimer)
+			
+			Text(x + (380 * MenuScale), y + (160 * MenuScale), "Explosion Timer: " + me\ExplosionTimer)
+			
+			Text(x + (380 * MenuScale), y + (200 * MenuScale), "Current Speed: " + me\CurrSpeed)
+			
+			Text(x + (380 * MenuScale), y + (240 * MenuScale), "Camera Shake Timer: " + me\CameraShakeTimer)
+			Text(x + (380 * MenuScale), y + (260 * MenuScale), "Current Camera Zoom: " + me\CurrCameraZoom)
+			
+			Text(x + (380 * MenuScale), y + (300 * MenuScale), "Vomit Timer: " + me\VomitTimer)
+			
+			If me\Playable Then
+				Text(x + (380 * MenuScale), y + (340 * MenuScale), "Is Playable: True")
+			Else
+				Text(x + (380 * MenuScale), y + (340 * MenuScale), "Is Playable: False")
+			EndIf
+			
+			Text(x + (380 * MenuScale), y + (380 * MenuScale), "Refined Items: " + me\RefinedItems)
+			Text(x + (380 * MenuScale), y + (400 * MenuScale), "Funds: " + me\Funds)
+			;[End Block]
+		Case 3
+			;[Block]
+			If Curr049 <> Null Then
+				Text(x, y, "SCP-049 Position: (" + f2s(EntityX(Curr049\OBJ), 2) + ", " + f2s(EntityY(Curr049\OBJ), 2) + ", " + f2s(EntityZ(Curr049\OBJ), 2) + ")")
+				Text(x, y + (20 * MenuScale), "SCP-049 Idle: " + Curr049\Idle)
+				Text(x, y + (40 * MenuScale), "SCP-049 State: " + Curr049\State)
+			EndIf
+			If Curr096 <> Null Then
+				Text(x, y + (60 * MenuScale), "SCP-096 Position: (" + f2s(EntityX(Curr096\OBJ), 2) + ", " + f2s(EntityY(Curr096\OBJ), 2) + ", " + f2s(EntityZ(Curr096\OBJ), 2) + ")")
+				Text(x, y + (80 * MenuScale), "SCP-096 Idle: " + Curr096\Idle)
+				Text(x, y + (100 * MenuScale), "SCP-096 State: " + Curr096\State)
+			EndIf
+			If Curr106 <> Null Then
+				Text(x, y + (120 * MenuScale), "SCP-106 Position: (" + f2s(EntityX(Curr106\OBJ), 2) + ", " + f2s(EntityY(Curr106\OBJ), 2) + ", " + f2s(EntityZ(Curr106\OBJ), 2) + ")")
+				Text(x, y + (140 * MenuScale), "SCP-106 Idle: " + Curr106\Idle)
+				Text(x, y + (160 * MenuScale), "SCP-106 State: " + Curr106\State)
+			EndIf
+			If Curr173 <> Null Then
+				Text(x, y + (180 * MenuScale), "SCP-173 Position: (" + f2s(EntityX(Curr173\OBJ), 2) + ", " + f2s(EntityY(Curr173\OBJ), 2) + ", " + f2s(EntityZ(Curr173\OBJ), 2) + ")")
+				Text(x, y + (200 * MenuScale), "SCP-173 Idle: " + Curr173\Idle)
+				Text(x, y + (220 * MenuScale), "SCP-173 State: " + Curr173\State)
+			EndIf
+			
+			Text(x, y + (260 * MenuScale), "Pills Taken: " + I_500\Taken)
+			
+			Text(x, y + (300 * MenuScale), "SCP-008 Infection: " + I_008\Timer)
+			Text(x, y + (320 * MenuScale), "SCP-409 Crystallization: " + I_409\Timer)
+			Text(x, y + (340 * MenuScale), "SCP-427 State (Secs): " + Int(I_427\Timer / 70.0))
+			For i = 0 To 5
+				Text(x, y + ((360 + (20 * i)) * MenuScale), "SCP-1025 State " + i + ": " + I_1025\State[i])
+			Next
+			
+			If I_005\ChanceToSpawn = 1 Then
+				Text(x, y + (500 * MenuScale), "SCP-005 Spawned in the Chamber!")
+			ElseIf I_005\ChanceToSpawn = 2
+				Text(x, y + (500 * MenuScale), "SCP-005 Spawned in Dr.Maynard's Office!")
+			ElseIf I_005\ChanceToSpawn = 3
+				Text(x, y + (500 * MenuScale), "SCP-005 Spawned in SCP-409's Containment Chamber!")
+			EndIf
+			;[End Block]
+	End Select
 	SetFont(fo\FontID[Font_Default])
 End Function
 
