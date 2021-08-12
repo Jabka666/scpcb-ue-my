@@ -5715,8 +5715,8 @@ Function FillRoom(r.Rooms)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
-			sc.SecurityCams = CreateSecurityCam(r\x, r\y + 704.0 * RoomScale, r\z + 863.0 * RoomScale, r)
-			sc\Angle = 180.0 : sc\Turn = 45.0
+			sc.SecurityCams = CreateSecurityCam(r\x + 184.0 * RoomScale, r\y + 704.0 * RoomScale, r\z + 952.0 * RoomScale, r)
+			sc\Angle = 130.0 : sc\Turn = 40.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			
 			it.Items = CreateItem("Gas Mask", "gasmask", r\x + 736.0 * RoomScale, r\y + 176.0 * RoomScale, r\z + 544.0 * RoomScale)
