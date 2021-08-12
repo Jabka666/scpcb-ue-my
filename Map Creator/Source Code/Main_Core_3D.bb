@@ -55,9 +55,13 @@ LoadMaterials("..\Data\materials.ini")
 
 Const RoomScale# = 8.0 / 2048.0
 
-Const MapSize% = 18
+Const MapGridSize% = 18
 
-Dim MapTemp%(MapSize + 1, MapSize + 1)
+Type MapGrid
+	Field Grid%[(MapGridSize + 1) ^ 2]
+End Type
+
+Global CurrGrid.MapGrid
 
 Global ZoneTransValue1% = 13, ZoneTransValue2% = 7
 
@@ -76,52 +80,69 @@ Global CurrSelectedRoom.Rooms
 
 ; ~ Objects Constants
 ;[Block]
-Const MaxButtonModelIDAmount% = 1
-Const MaxDoorModelIDAmount% = 4
+Const MaxButtonModelIDAmount% = 2
+Const MaxDoorModelIDAmount% = 5
 Const MaxLeverModelIDAmount% = 2
+Const MaxMiscModelIDAmount% = 1
 ;[End Block]
 
 Type Objects
 	Field ButtonModelID[MaxButtonModelIDAmount]
 	Field DoorModelID[MaxDoorModelIDAmount]
 	Field LeverModelID[MaxLeverModelIDAmount]
+	Field MiscModelID%[MaxMiscModelIDAmount]
 End Type
 
 Global o.Objects = New Objects
 
 ChangeDir("..")
 
-Local i%
+Function LoadEntities()
+	Local i%
 
-; ~ [BUTTONS]
+	; ~ [BUTTONS]
+	
+	o\ButtonModelID[0] = LoadMesh_Strict("GFX\map\Props\Button.b3d") ; ~ Button
+	
+	o\ButtonModelID[1] = LoadMesh_Strict("GFX\map\Props\ButtonKeycard.b3d") ; ~ Keycard Button
+	
+	For i = 0 To MaxButtonModelIDAmount - 1
+		HideEntity(o\ButtonModelID[i])
+	Next
+	
+	; ~ [DOORS]
+	
+	o\DoorModelID[0] = LoadMesh_Strict("GFX\map\Props\Door01.x") ; ~ Default Door
+	
+	o\DoorModelID[1] = LoadMesh_Strict("GFX\map\Props\ContDoorLeft.x") ; ~ Big Door Left
+	
+	o\DoorModelID[2] = LoadMesh_Strict("GFX\map\Props\ContDoorRight.x") ; ~ Big Door Right
+	
+	o\DoorModelID[3] = LoadMesh_Strict("GFX\map\Props\DoorFrame.b3d") ; ~ Door Frame
+	
+	o\DoorModelID[4] = LoadMesh_Strict("GFX\map\Props\ContDoorFrame.b3d") ; ~ Big Door Frame
+	
+	For i = 0 To MaxDoorModelIDAmount - 1
+		HideEntity(o\DoorModelID[i])
+	Next
+	
+	; ~ [LEVERS]
+	
+	o\LeverModelID[0] = LoadMesh_Strict("GFX\map\Props\LeverBase.b3d") ; ~ Lever Base
+	
+	o\LeverModelID[1] = LoadMesh_Strict("GFX\map\Props\LeverHandle.b3d") ; ~ Lever Handle
+	
+	For i = 0 To MaxLeverModelIDAmount - 1
+		HideEntity(o\LeverModelID[i])
+	Next
+	
+	; ~ [MISC]
+	
+	o\MiscModelID[0] = LoadRMesh("GFX\map\scp_860_1_wall.rmesh", Null)
+	HideEntity(o\MiscModelID[0])
+End Function
 
-o\ButtonModelID[0] = LoadMesh_Strict("GFX\map\Props\Button.b3d") ; ~ Button
-HideEntity(o\ButtonModelID[0])
-
-; ~ [DOORS]
-
-o\DoorModelID[0] = LoadMesh_Strict("GFX\map\Props\Door01.x") ; ~ Default Door
-
-o\DoorModelID[1] = LoadMesh_Strict("GFX\map\Props\DoorFrame.b3d") ; ~ Door Frame
-
-o\DoorModelID[2] = LoadMesh_Strict("GFX\map\Props\contdoorleft.x") ; ~ Big Door Left
-
-o\DoorModelID[3] = LoadMesh_Strict("GFX\map\Props\contdoorright.x") ; ~ Big Door Right
-
-For i = 0 To 3
-	HideEntity(o\DoorModelID[i])
-Next
-
-; ~ [LEVERS]
-
-o\LeverModelID[0] = LoadMesh_Strict("GFX\map\Props\LeverBase.b3d") ; ~ Lever Base
-
-o\LeverModelID[1] = LoadMesh_Strict("GFX\map\Props\LeverHandle.b3d") ; ~ Lever Handle
-
-For i = 0 To 1
-	HideEntity(o\LeverModelID[i])
-Next
-
+LoadEntities()
 LoadRoomTemplateMeshes()
 
 DeleteTextureEntriesFromCache(DeleteMapTextures)
@@ -158,7 +179,7 @@ Global Faster% = False
 Global Slower% = False
 Global IsRemote% = True
 
-PositionEntity(Camera, (MapSize / 2.0) * 8.0, 1.0, MapSize * 8.0)
+PositionEntity(Camera, (MapGridSize / 2.0) * 8.0, 1.0, MapGridSize * 8.0)
 RotateEntity(Camera, 0.0, 180.0, 0.0)
 MXS = 180.0
 
@@ -225,11 +246,10 @@ Repeat
 			DeleteSingleTextureEntryFromCache(r\OverlayTex)
 			Delete(r)
 		Next
-		For x = 0 To MapSize
-			For y = 0 To MapSize
-				MapTemp(x, y) = 0
-			Next
-		Next
+		If CurrGrid <> Null Then
+			Delete(CurrGrid) : CurrGrid = Null
+		EndIf
+		CurrGrid = New MapGrid
 		
 		f = ReadFile("CONFIG_MAPINIT.SI")
 		
@@ -260,7 +280,7 @@ Repeat
 					
 					For rt.RoomTemplates = Each RoomTemplates
 						If Lower(rt\Name) = Name Then
-							r = PlaceRoom(Name, MapSize - x, y, GetZone(y), rt\Shape, eName, eProb)
+							r = PlaceRoom(Name, MapGridSize - x, y, GetZone(y), rt\Shape, eName, eProb)
 							r\GridX = x
 							r\GridZ = y
 							
@@ -272,7 +292,7 @@ Repeat
 							
 							TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 							
-							MapTemp(MapSize - x, y) = 1
+							CurrGrid\Grid[(MapGridSize - x) + (y * MapGridSize)] = 1
 							
 							Exit
 						EndIf
@@ -281,7 +301,7 @@ Repeat
 					Local IsSelRoom% = ReadByte(f)
 					
 					If IsSelRoom Then
-						PositionEntity(Camera, (MapSize - x) * 8.0, 1.0, y * 8.0)
+						PositionEntity(Camera, (MapGridSize - x) * 8.0, 1.0, y * 8.0)
 						RotateEntity(Camera, 0.0, Angle, 0.0)
 						MXS = -Angle
 						MYS = 0.0
@@ -792,23 +812,50 @@ Type Props
 End Type
 
 Function CheckForPropModel%(File$)
-	If Instr(File, Lower("Button.")) <> 0 Then ; ~ Check for "Button"
-		Return(CopyEntity(o\ButtonModelID[0]))
-	ElseIf Instr(File, Lower("Door01")) <> 0 ; ~ Check for "Door01"
-		Return(CopyEntity(o\DoorModelID[0]))
-	ElseIf Instr(File, Lower("\DoorFrame")) <> 0 ; ~ Check for "DoorFrame"
-		Return(CopyEntity(o\DoorModelID[1]))
-	ElseIf Instr(File, Lower("ContDoorLeft")) <> 0 ; ~ Check for "ContDoorLeft"
-		Return(CopyEntity(o\DoorModelID[2]))
-	ElseIf Instr(File, Lower("ContDoorRight")) <> 0 ; ~ Check for "ContDoorRight"
-		Return(CopyEntity(o\DoorModelID[3]))
-	ElseIf Instr(File, Lower("LeverBase")) <> 0 ; ~ Check for "LeverBase"
-		Return(CopyEntity(o\LeverModelID[0]))
-	ElseIf Instr(File, Lower("LeverHandle")) <> 0 ; ~ Check for "LeverHandle"
-		Return(CopyEntity(o\LeverModelID[1]))
-	Else
-		Return(LoadMesh_Strict(File))
-	EndIf
+	Local Path$ = "GFX\map\Props\"
+	
+	Select File
+		Case Path + "button.b3d"
+			;[Block]
+			Return(CopyEntity(o\ButtonModelID[0]))
+			;[End Block]
+		Case Path + "buttonkeycard.b3d"
+			;[Block]
+			Return(CopyEntity(o\ButtonModelID[1]))
+			;[End Block]
+		Case Path + "door01.b3d"
+			;[Block]
+			Return(CopyEntity(o\DoorModelID[0]))
+			;[End Block]
+		Case Path + "contdoorleft.b3d"
+			;[Block]
+			Return(CopyEntity(o\DoorModelID[1]))
+			;[End Block]
+		Case Path + "contdoorright.b3d"
+			;[Block]
+			Return(CopyEntity(o\DoorModelID[2]))
+			;[End Block]
+		Case Path + "doorframe.b3d"
+			;[Block]
+			Return(CopyEntity(o\DoorModelID[3]))
+			;[End Block]
+		Case Path + "contdoorframe.b3d"
+			;[Block]
+			Return(CopyEntity(o\DoorModelID[4]))
+			;[End Block]
+		Case Path + "leverbase.b3d"
+			;[Block]
+			Return(CopyEntity(o\LeverModelID[0]))
+			;[End Block]
+		Case Path + "leverhandle.b3d"
+			;[Block]
+			Return(CopyEntity(o\LeverModelID[1]))
+			;[End Block]
+		Default
+			;[Block]
+			Return(LoadMesh_Strict(File))
+			;[End Block]
+	End Select
 End Function
 
 Function CreatePropOBJ%(File$)
@@ -878,7 +925,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 				PositionEntity(r\OBJ, x, y, z)
 				
 				If Name = "scp-860-1 door" Then
-					r\ForestWallOBJ = LoadRMesh("..\GFX\map\wall_opt.rmesh", Null)
+					r\ForestWallOBJ = CopyEntity(o\MiscModelID[0])
 					ScaleEntity(r\ForestWallOBJ, RoomScale, RoomScale, RoomScale)
 					PositionEntity(r\ForestWallOBJ, x, y, z, True)
 					EntityParent(r\ForestWallOBJ, r\OBJ)

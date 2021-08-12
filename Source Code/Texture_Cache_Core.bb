@@ -12,7 +12,7 @@ Type TextureInCache
 End Type
 
 Function LoadTextureCheckingIfInCache(TexName$, TexFlags% = 1, DeleteType% = DeleteMapTextures)
-	Local tic.TextureInCache, mat.Materials
+	Local tic.TextureInCache
 	Local CurrPath$
 	
 	For tic.TextureInCache = Each TextureInCache
@@ -37,7 +37,7 @@ Function LoadTextureCheckingIfInCache(TexName$, TexFlags% = 1, DeleteType% = Del
 End Function
 
 Function LoadAnimTextureCheckingIfInCache(TexName$, TexFlags% = 1, Width%, Height%, FirstFrame%, Count%, DeleteType% = DeleteMapTextures)
-	Local tic.TextureInCache, mat.Materials
+	Local tic.TextureInCache
 	Local CurrPath$
 	
 	For tic.TextureInCache = Each TextureInCache
@@ -119,7 +119,7 @@ Function IsTexAlpha%(Tex%, Name$ = "") ; ~ Detect transparency in textures
 			Exit
 		EndIf
 	Next
-	Return(1 + (2 * (Temp <> False)) + (4 * (Temp2 <> False)))
+	Return(1 + (2 * (Temp <> 0)) + (4 * (Temp2 <> 0)))
 End Function
 
 ; ~ This is supposed to be the only texture that will be outside the TextureCache system

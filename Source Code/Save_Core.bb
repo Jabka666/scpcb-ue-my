@@ -3,7 +3,9 @@ Const SavePath$ = "Saves\"
 Global AutoSaveTimer#
 
 Function UpdateAutoSave()
-	If me\KillTimer < 0.0 Lor (Not CanSave) Lor (Not me\Playable) Lor me\Zombie Lor SelectedDifficulty\SaveType <> SAVEANYWHERE Lor (Not opt\AutoSaveEnabled) Then
+	If SelectedDifficulty\SaveType <> SAVEANYWHERE Lor (Not opt\AutoSaveEnabled) Then Return
+	
+	If me\KillTimer < 0.0 Lor (Not CanSave) Lor (Not me\Playable) Lor me\Zombie Then
 		If AutoSaveTimer =< 70.0 * 5.0 Then
 			CreateHintMsg("Auto save canceled!")
 			AutoSaveTimer = 70.0 * 120.0

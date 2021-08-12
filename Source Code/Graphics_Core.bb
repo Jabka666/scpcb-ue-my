@@ -524,7 +524,7 @@ Function GetScreenshot()
 	FI_Save(13, fiBuffer, "Screenshots\Screenshot" + ScreenshotCount + ".png", 0)
 	FI_Unload(fiBuffer)
 	FreeBank(Bank)
-	If (Not MainMenuOpen) Then CreateMsg("Screenshot Taken.")
+	If (Not MainMenuOpen) Then CreateHintMsg("Screenshot Taken.")
 	PlaySound_Strict(LoadTempSound("SFX\General\Screenshot.ogg"))
 	ScreenshotCount = ScreenshotCount + 1
 End Function

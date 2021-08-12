@@ -1007,7 +1007,7 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 	fr\DetailMesh[1] = LoadMesh_Strict("GFX\map\Props\rock1.b3d")
 	fr\DetailMesh[2] = LoadMesh_Strict("GFX\map\Props\rock2.b3d")
 	fr\DetailMesh[3] = LoadMesh_Strict("GFX\map\Props\tree2.b3d")
-	fr\DetailMesh[4] = LoadRMesh("GFX\map\wall_opt.rmesh", Null)
+	fr\DetailMesh[4] = LoadRMesh("GFX\map\scp_860_1_wall.rmesh", Null)
 	
 	For i = ROOM1 To ROOM4
 		HideEntity(fr\TileMesh[i])
@@ -1240,7 +1240,7 @@ Function PlaceMapCreatorForest(fr.Forest, x#, y#, z#, r.Rooms)
 	fr\DetailMesh[1] = LoadMesh_Strict("GFX\map\Props\rock1.b3d")
 	fr\DetailMesh[2] = LoadMesh_Strict("GFX\map\Props\rock2.b3d")
 	fr\DetailMesh[3] = LoadMesh_Strict("GFX\map\Props\tree2.b3d")
-	fr\DetailMesh[4] = LoadRMesh("GFX\map\wall_opt.rmesh", Null)
+	fr\DetailMesh[4] = LoadRMesh("GFX\map\scp_860_1_wall.rmesh", Null)
 	
 	For i = ROOM1 To ROOM4
 		HideEntity(fr\TileMesh[i])
@@ -2183,7 +2183,7 @@ Function CreateDoor.Doors(x#, y#, z#, Angle#, room.Rooms, Open% = False, DoorTyp
 	d\FrameOBJ = CopyEntity(o\DoorModelID[FrameID])
 	; ~ Determine the frame scale
 	If DoorType = Wooden_Door Then
-		ScaleX = 45.0 * RoomScale : ScaleY = 43.8 * RoomScale : ScaleZ = 80.0 * RoomScale
+		ScaleX = 45.0 * RoomScale : ScaleY = 44.0 * RoomScale : ScaleZ = 80.0 * RoomScale
 	ElseIf DoorType = Big_Door
 		ScaleX = 55.0 * RoomScale : ScaleY = 55.0 * RoomScale : ScaleZ = 55.0 * RoomScale
 	Else
@@ -2453,7 +2453,7 @@ Function UpdateDoors()
 						Case Office_Door, Wooden_Door
 							;[Block]
 							d\OpenState = 0.0
-							RotateEntity(d\OBJ, 0.0, PlayerRoom\Angle + d\Angle, 0.0)
+							RotateEntity(d\OBJ, 0.0, EntityYaw(d\FrameOBJ), 0.0)
 							;[End Block]
 						Case One_Sided_Door
 							;[Block]
@@ -2490,7 +2490,7 @@ Function UpdateDoors()
 					If d\DoorType = Default_Door Lor d\DoorType = One_Sided_Door Lor d\DoorType = SCP_914_Door Then
 						MoveEntity(d\OBJ, 0.0, 0.0, 8.0 * RoomScale)
 					ElseIf d\DoorType = Office_Door Lor d\DoorType = Wooden_Door
-						MoveEntity(d\OBJ, (((d\DoorType = Office_Door) * 92.0) + ((d\DoorType = Wooden_Door) * 70.0)) * RoomScale, 0.0, 0.0)
+						MoveEntity(d\OBJ, (((d\DoorType = Office_Door) * 92.0) + ((d\DoorType = Wooden_Door) * 68.0)) * RoomScale, 0.0, 0.0)
 					EndIf
 					If d\OBJ2 <> 0 Then
 						PositionEntity(d\OBJ2, EntityX(d\FrameOBJ, True), EntityY(d\FrameOBJ, True), EntityZ(d\FrameOBJ, True))
