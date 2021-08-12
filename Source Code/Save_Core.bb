@@ -348,6 +348,7 @@ Function SaveGame(File$)
 		
 		WriteFloat(f, EntityX(do\OBJ, True))
 		WriteFloat(f, EntityZ(do\OBJ, True))
+		WriteFloat(f, EntityYaw(do\OBJ, True))
 		
 		If do\OBJ2 <> 0 Then
 			WriteFloat(f, EntityX(do\OBJ2, True))
@@ -1030,6 +1031,7 @@ Function LoadGame(File$)
 		
 		Local OBJX# = ReadFloat(f)
 		Local OBJZ# = ReadFloat(f)
+		Local OBJYaw# = ReadFloat(f)
 		
 		Local OBJ2X# = ReadFloat(f)
 		Local OBJ2Z# = ReadFloat(f)
@@ -1052,6 +1054,7 @@ Function LoadGame(File$)
 				do\MTFClose = MTFClose
 				
 				PositionEntity(do\OBJ, OBJX, y, OBJZ, True)
+				RotateEntity(do\OBJ, 0.0, OBJYaw, 0.0, True)
 				If do\OBJ2 <> 0 Then PositionEntity(do\OBJ2, OBJ2X, y, OBJ2Z, True)
 				Exit
 			EndIf
@@ -1787,6 +1790,7 @@ Function LoadGameQuick(File$)
 		
 		Local OBJX# = ReadFloat(f)
 		Local OBJZ# = ReadFloat(f)
+		Local OBJYaw# = ReadFloat(f)
 		
 		Local OBJ2X# = ReadFloat(f)
 		Local OBJ2Z# = ReadFloat(f)
@@ -1809,6 +1813,7 @@ Function LoadGameQuick(File$)
 				do\MTFClose = MTFClose
 				
 				PositionEntity(do\OBJ, OBJX, EntityY(do\OBJ), OBJZ, True)
+				RotateEntity(do\OBJ, 0.0, OBJYaw, 0.0, True)
 				If do\OBJ2 <> 0 Then PositionEntity(do\OBJ2, OBJ2X, EntityY(do\OBJ2), OBJ2Z, True)
 				Exit
 			EndIf
