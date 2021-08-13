@@ -2632,24 +2632,28 @@ Function UpdateNPCs()
 						;[End Block]
 					Case 15.0 ; ~ Inside vehicle (idle)
 						;[Block]
-						ShowEntity(n\OBJ2)
-						
-						If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2)
-						n\SoundCHN = LoopSound2(VehicleSFX[0], n\SoundCHN, Camera, n\OBJ2, 13.0, 1.0)
-						
-						n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
+						If n\OBJ2 <> 0 Then
+							ShowEntity(n\OBJ2)
+							
+							If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2)
+							n\SoundCHN = LoopSound2(VehicleSFX[0], n\SoundCHN, Camera, n\OBJ2, 13.0, 1.0)
+							
+							n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
+						EndIf
 						;[End Block]
 					Case 16.0 ; ~ Inside vehicle (driving)
 						;[Block]
-						ShowEntity(n\OBJ2)
-						
-						If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN)
-						n\SoundCHN2 = LoopSound2(VehicleSFX[1], n\SoundCHN2, Camera, n\OBJ2, 13.0, 1.0)
-						
-						n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
-						Animate2(n\OBJ2, AnimTime(n\OBJ2), 1.0, 20.0, n\CurrSpeed * 5.0)
-						
-						MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+						If n\OBJ2 <> 0 Then
+							ShowEntity(n\OBJ2)
+							
+							If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN)
+							n\SoundCHN2 = LoopSound2(VehicleSFX[1], n\SoundCHN2, Camera, n\OBJ2, 13.0, 1.0)
+							
+							n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
+							Animate2(n\OBJ2, AnimTime(n\OBJ2), 1.0, 20.0, n\CurrSpeed * 5.0)
+							
+							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+						EndIf
 						;[End Block]
 					Default
 						;[Block]
@@ -2678,7 +2682,7 @@ Function UpdateNPCs()
 				RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider) + 180.0, 0.0)
 				
 				If n\OBJ2 <> 0 Then
-					PositionEntity(n\OBJ2, EntityX(n\Collider), EntityY(n\Collider) - 0.32, EntityZ(n\Collider))
+					PositionEntity(n\OBJ2, EntityX(n\Collider), EntityY(n\Collider) - 0.2, EntityZ(n\Collider))
 					RotateEntity(n\OBJ2, 0.0, EntityYaw(n\Collider), 0.0)
 				EndIf
 				;[End Block]
