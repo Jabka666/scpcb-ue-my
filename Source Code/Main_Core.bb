@@ -2567,13 +2567,15 @@ Function MainLoop()
 		UpdateAutoSave()
 		If KeyHit(key\SAVE) Then
 			If SelectedDifficulty\SaveType = SAVEANYWHERE Then
-				RN = PlayerRoom\RoomTemplate\Name
-				If RN = "cont1_173_intro" Lor RN = "gate_b" Lor RN = "gate_a"
-					CreateHintMsg("You can't save in this location.")
-				ElseIf (Not CanSave) Lor QuickLoadPercent > -1
-					CreateHintMsg("You can't save at this moment.")
-					If QuickLoadPercent > -1 Then
-						CreateHintMsg(msg\HintTxt + " (game is loading)")
+				If (Not CanSave) Lor QuickLoadPercent > -1
+					RN = PlayerRoom\RoomTemplate\Name
+					If RN = "cont1_173_intro" Lor RN = "gate_b" Lor RN = "gate_a"
+						CreateHintMsg("You can't save in this location.")
+					Else
+						CreateHintMsg("You can't save at this moment.")
+						If QuickLoadPercent > -1 Then
+							CreateHintMsg(msg\HintTxt + " (game is loading)")
+						EndIf
 					EndIf
 				Else
 					SaveGame(SavePath + CurrSave + "\")

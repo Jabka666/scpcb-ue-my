@@ -2239,7 +2239,10 @@ Function UpdateEvents()
 				EndIf
 				
 				If PlayerRoom <> e\room Then
-					RemoveEvent(e)		
+					CanSave = True
+					RemoveEvent(e)
+				Else
+					CanSave = False
 				EndIf	
 				;[End Block]
 			Case e_butt_ghost
@@ -9613,6 +9616,7 @@ Function UpdateEndings()
 						RenderLoading(90, "ENDING STUFF")
 						
 						SecondaryLightOn = True
+						CanSave = False
 						
 						CreateConsoleMsg("")
 						CreateConsoleMsg("WARNING! Teleporting away from this area may cause bugs or crashing.", 255, 0, 0)
@@ -9965,6 +9969,7 @@ Function UpdateEndings()
 						If (Not Curr106\Contained) Then PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\106Escape.ogg"))
 						
 						SecondaryLightOn = True
+						CanSave = False
 						
 						HideDistance = 35.0
 						
