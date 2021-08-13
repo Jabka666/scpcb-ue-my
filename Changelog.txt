@@ -143,6 +143,7 @@ Rooms:
 - Added Light Containment Zone medical bay.
 - Added new Heavy Containment Zone tunnel.
 - Added new Entrance Zone offices.
+- Rebalanced some keycard buttons.
 
 Items:
 - Added rusty texture for memorable coin.

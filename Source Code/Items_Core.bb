@@ -2411,59 +2411,81 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 	If it2 <> Null Then EntityType(it2\Collider, HIT_ITEM)
 End Function
 
+; ~ Key Items Constants
+;[Block]
+Const KEY_CARD_6% = 1
+Const KEY_CARD_0% = 2
+Const KEY_CARD_1% = 3
+Const KEY_CARD_2% = 4
+Const KEY_CARD_3% = 5
+Const KEY_CARD_4% = 6
+Const KEY_CARD_5% = 7
+Const KEY_CARD_OMNI% = 8
+Const KEY_005% = 9
+Const KEY_HAND_WHITE% = -1
+Const KEY_HAND_BLACK% = -2
+Const KEY_HAND_YELLOW% = -3
+Const KEY_860% = -4
+Const KEY_MISC% = 0
+;[End Block]
+
 ; ~ Only for "UseDoor" function
 Function GetUsingItem(item.Items)
 	Select item\ItemTemplate\TempName
 		Case "key6"
 			;[Block]
-			Return(1)
+			Return(KEY_CARD_6)
 		Case "key0"
 			;[Block]
-			Return(2)
+			Return(KEY_CARD_0)
 			;[End Block]
 		Case "key1"
 			;[Block]
-			Return(3)
+			Return(KEY_CARD_1)
 			;[End Block]
 		Case "key2"
 			;[Block]
-			Return(4)
+			Return(KEY_CARD_2)
 			;[End Block]
 		Case "key3"
 			;[Block]
-			Return(5)
+			Return(KEY_CARD_3)
 			;[End Block]
 		Case "key4"
 			;[Block]
-			Return(6)
+			Return(KEY_CARD_4)
 			;[End Block]
 		Case "key5"
 			;[Block]
-			Return(7)
+			Return(KEY_CARD_5)
 			;[End Block]
 		Case "keyomni"
 			;[Block]
-			Return(8)
+			Return(KEY_CARD_OMNI)
 			;[End Block]
 		Case "scp005"
 			;[Block]
-			Return(9)
+			Return(KEY_005)
 			;[End Block]
 		Case "hand"
 			;[Block]
-			Return(-1)
+			Return(KEY_HAND_WHITE)
 			;[End Block]
 		Case "hand2"
 			;[Block]
-			Return(-2)
+			Return(KEY_HAND_BLACK)
+			;[End Block]
+		Case "hand3"
+			;[Block]
+			Return(KEY_HAND_YELLOW)
 			;[End Block]
 		Case "scp860"
 			;[Block]
-			Return(-3)
+			Return(KEY_860)
 			;[End Block]
 		Default
 			;[Block]
-			Return(0)
+			Return(KEY_MISC)
 			;[End Block]
 	End Select
 End Function
