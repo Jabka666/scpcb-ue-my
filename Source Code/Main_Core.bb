@@ -888,45 +888,7 @@ Function UpdateConsole%()
 					;[End Block]
 				Case "heal"
 					;[Block]
-					me\Injuries = 0.0
-					me\Bloodloss = 0.0
-					
-					me\BlurTimer = 0.0
-					
-					I_008\Timer = 0.0
-					I_409\Timer = 0.0
-					
-					me\DeafTimer = 0.0
-					me\DeathTimer = 0.0
-					
-					me\Stamina = 100.0
-					
-					For i = 0 To 5
-						I_1025\State[i] = 0.0
-					Next
-					
-					If I_427\Timer >= 70.0 * 360.0 Then I_427\Timer = 0.0
-					
-					For e.Events = Each Events
-						If e\EventID = e_1048_a Then
-							If PlayerRoom = e\room Then me\BlinkTimer = -10.0
-							If e\room\Objects[0] <> 0 Then
-								FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
-							EndIf
-							RemoveEvent(e)
-							Exit
-						EndIf
-					Next
-					
-					If me\BlinkEffect > 1.0 Then 
-						me\BlinkEffect = 1.0
-						me\BlinkEffectTimer = 0.0
-					EndIf
-					
-					If me\StaminaEffect > 1.0 Then
-						me\StaminaEffect = 1.0
-						me\StaminaEffectTimer = 0.0
-					EndIf
+					ResetNegativeStats()
 					;[End Block]
 				Case "teleport"
 					;[Block]
@@ -1174,35 +1136,7 @@ Function UpdateConsole%()
 					;[End Block]
 				Case "revive", "undead", "resurrect"
 					;[Block]
-					me\DropSpeed = -0.1
-					me\HeadDropSpeed = 0.0
-					me\Shake = 0.0
-					me\CurrSpeed = 0.0
-					
-					me\HeartBeatVolume = 0.0
-					
-					me\CameraShake = 0.0
-					me\LightFlash = 0.0
-					me\BlurTimer = 0.0
-					
-					me\FallTimer = 0.0
-					MenuOpen = False
-					
-					ClearCheats()
-					
-					; ~ If death by SCP-173, enable GodMode, prevent instant death again -- Salvage
-					If Curr173\Idle = 1 Then
-						CreateConsoleMsg("Death by SCP-173 causes GodMode to be enabled!")
-						chs\GodMode = True
-						Curr173\Idle = 0
-					Else
-						chs\GodMode = False
-					EndIf
-					
-					ShowEntity(me\Collider)
-					
-					me\KillTimer = 0.0
-					me\KillAnim = 0
+					ResetNegativeStats(True)
 					;[End Block]
 				Case "noclip", "fly"
 					;[Block]
@@ -2043,7 +1977,7 @@ End Type
 Global I_714.SCP714 = New SCP714
 
 Type SCP1025
-	Field State#[6]
+	Field State#[8]
 End Type
 
 Global I_1025.SCP1025 = New SCP1025
@@ -2739,6 +2673,76 @@ Function NullSelectedStuff()
 	GrabbedEntity = 0
 End Function
 
+Function ResetNegativeStats(Revive% = False)
+	Local e.Events
+	Local i%
+	
+	me\Injuries = 0.0
+	me\Bloodloss = 0.0
+	
+	me\BlurTimer = 0.0
+	me\LightFlash = 0.0
+	me\LightBlink = 0.0
+	me\CameraShake = 0.0
+	
+	me\DeafTimer = 0.0
+	
+	me\DeathTimer = 0.0
+	
+	me\VomitTimer = 0.0
+	me\HeartBeatVolume = 0.0
+	
+	If me\BlinkEffect > 1.0 Then 
+		me\BlinkEffect = 1.0
+		me\BlinkEffectTimer = 0.0
+	EndIf
+	
+	If me\StaminaEffect > 1.0 Then
+		me\StaminaEffect = 1.0
+		me\StaminaEffectTimer = 0.0
+	EndIf
+	me\Stamina = 100.0
+	
+	For i = 0 To 6
+		I_1025\State[i] = 0.0
+	Next
+	
+	If I_427\Timer >= 70.0 * 360.0 Then I_427\Timer = 0.0
+	I_008\Timer = 0.0
+	I_409\Timer = 0.0
+	
+	If Revive Then
+		ClearCheats()
+		
+		; ~ If death by SCP-173 or SCP-106, enable GodMode, prevent instant death again -- Salvage
+		If Curr173 <> Null Then
+			If Curr173\Idle = 1 Then
+				CreateConsoleMsg("Death by SCP-173 causes GodMode to be enabled!")
+				chs\GodMode = True
+				Curr173\Idle = 0
+			EndIf
+		ElseIf Curr106 <> Null
+			If EntityDistanceSquared(me\Collider, Curr173\Collider) < 4.0 Then
+				CreateConsoleMsg("Death by SCP-173 causes GodMode to be enabled!")
+				chs\GodMode = True
+			EndIf
+		EndIf
+		
+		me\DropSpeed = -0.1
+		me\HeadDropSpeed = 0.0
+		me\Shake = 0.0
+		me\CurrSpeed = 0.0
+		
+		me\FallTimer = 0.0
+		MenuOpen = False
+		
+		ShowEntity(me\Collider)
+		
+		me\KillTimer = 0.0
+		me\KillAnim = 0
+	EndIf
+End Function
+
 Function SetCrouch(NewCrouch%)
 	Local Temp%
 	
@@ -3313,7 +3317,9 @@ Function UpdateMouseLook()
 		EntityTexture(t\OverlayID[0], t\OverlayTextureID[0])
 	EndIf
 	
-	For i = 0 To 5
+	Local Factor1025# = fps\Factor[0] * I_1025\State[7]
+	
+	For i = 0 To 6
 		If I_1025\State[i] > 0.0 Then
 			Select i
 				Case 0 ; ~ Common cold
@@ -3327,7 +3333,7 @@ Function UpdateMouseLook()
 							EndIf
 						EndIf
 					EndIf
-					me\Stamina = me\Stamina - (fps\Factor[0] * 0.3)
+					me\Stamina = me\Stamina - (Factor1025 * 0.3)
 					;[End Block]
 				Case 1 ; ~ Chicken pox
 					;[Block]
@@ -3344,18 +3350,18 @@ Function UpdateMouseLook()
 							EndIf
 						EndIf
 					EndIf
-					me\Stamina = me\Stamina - (fps\Factor[0] * 0.1)
+					me\Stamina = me\Stamina - (Factor1025 * 0.1)
 					;[End Block]
 				Case 3 ; ~ Appendicitis
 					; ~ 0.035 / sec = 2.1 / min
 					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then
-						I_1025\State[i] = I_1025\State[i] + (fps\Factor[0] * 0.0005)
+						I_1025\State[i] = I_1025\State[i] + (Factor1025 * 0.0005)
 					EndIf
 					If I_1025\State[i] > 20.0 Then
-						If I_1025\State[i] - fps\Factor[0] =< 20.0 Then CreateMsg("The pain in your stomach is becoming unbearable.")
-						me\Stamina = me\Stamina - (fps\Factor[0] * 0.3)
+						If I_1025\State[i] - Factor1025 =< 20.0 Then CreateMsg("The pain in your stomach is becoming unbearable.")
+						me\Stamina = me\Stamina - (Factor1025 * 0.3)
 					ElseIf I_1025\State[i] > 10.0
-						If I_1025\State[i] - fps\Factor[0] =< 10.0 Then CreateMsg("Your stomach is aching.")
+						If I_1025\State[i] - Factor1025 =< 10.0 Then CreateMsg("Your stomach is aching.")
 					EndIf
 					;[End Block]
 				Case 4 ; ~ Asthma
@@ -3374,7 +3380,7 @@ Function UpdateMouseLook()
 				Case 5 ; ~ Cardiac arrest
 					;[Block]
 					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then
-						I_1025\State[i] = I_1025\State[i] + (fps\Factor[0] * 0.35)
+						I_1025\State[i] = I_1025\State[i] + (Factor1025 * 0.35)
 					EndIf
 					
 					; ~ 35 / sec
@@ -3389,6 +3395,16 @@ Function UpdateMouseLook()
 					Else
 						me\HeartBeatRate = Max(me\HeartBeatRate, 70.0 + I_1025\State[i])
 						me\HeartBeatVolume = 1.0
+					EndIf
+					;[End Block]
+				Case 6 ; ~ Secondary polycythemia
+					;[Block]
+					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then
+						I_1025\State[i] = I_1025\State[i] + 0.00025 * Factor1025 * (100.0 / I_1025\State[i])
+					EndIf
+					me\Stamina = Min(100.0, me\Stamina + (90.0 - me\Stamina) * I_1025\State[i] * Factor1025 * 0.00008)
+					If I_1025\State[i] > 15.0 And I_1025\State[i] - Factor1025 =< 15.0 Then
+						CreateMsg("You begin feeling energetic.")
 					EndIf
 					;[End Block]
 			End Select 
@@ -4320,7 +4336,7 @@ Function UpdateGUI()
 						me\DeathTimer = 0.0
 						me\Stamina = 100.0
 						
-						For i = 0 To 5
+						For i = 0 To 6
 							I_1025\State[i] = 0.0
 						Next
 						
@@ -4533,27 +4549,33 @@ Function UpdateGUI()
 					;[End Block]
 				Case "ticket"
 					;[Block]
-					If (Not SelectedItem\ItemTemplate\Img) Then
-						Select SelectedItem\ItemTemplate\Name
-							Case "Movie Ticket"
-								;[Block]
-								If SelectedItem\State = 0.0 Then
-									CreateMsg(Chr(34) + "Hey, I remember this movie!" + Chr(34))
-									PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\NostalgiaCancer" + Rand(1, 5) + ".ogg"))
-									SelectedItem\State = 1.0
-								EndIf
-								;[End Block]
-						End Select
+					If SelectedItem\State = 0.0 Then
+						CreateMsg(Chr(34) + "Hey, I remember this movie!" + Chr(34))
+						PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\NostalgiaCancer" + Rand(1, 5) + ".ogg"))
+						SelectedItem\State = 1.0
 					EndIf
 					;[End Block]
 				Case "scp1025"
 					;[Block]
-					GiveAchievement(Achv1025) 
-					If (Not SelectedItem\ItemTemplate\Img) Then
-						SelectedItem\State = Rand(0.0, 5.0)
+					If SelectedItem\State3 = 0.0 Then
+						If (Not I_714\Using) And wi\GasMask <> 3 And wi\HazmatSuit <> 3 Then
+							If SelectedItem\State = 7.0 Then
+								If I_008\Timer = 0.0 Then I_008\Timer = 1.0
+							Else
+								I_1025\State[SelectedItem\State] = Max(1.0, I_1025\State[SelectedItem\State])
+								I_1025\State[7] = 1 + (SelectedItem\State2 = 2.0) * 2.0 ; ~ 3x as fast if VERYFINE
+							EndIf
+						EndIf
+						If Rand(3 - (SelectedItem\State2 <> 2.0) * SelectedItem\State2) = 1 Then ; ~ Higher chance for good illness if FINE, lower change for good illness if COARSE
+							SelectedItem\State = 6.0
+						Else
+							SelectedItem\State = Rand(0, 7)
+						EndIf
+						SelectedItem\State3 = 1.0
 					EndIf
-					
-					If (Not I_714\Using) And wi\GasMask <> 3 And wi\HazmatSuit <> 3 Then I_1025\State[SelectedItem\State] = Max(1.0, I_1025\State[SelectedItem\State])
+				Case "book"
+					;[Block]
+					CreateMsg(Chr(34) + "I really don't have the time for that right now..." + Chr(34))
 					;[End Block]
 				Case "cup"
 					;[Block]
@@ -5494,42 +5516,44 @@ Function UpdateGUI()
 			If mo\MouseHit2 Then
 				EntityAlpha(t\OverlayID[5], 0.0)
 				
-				Local IN$ = SelectedItem\ItemTemplate\TempName
-				
-				If IN = "firstaid" Lor IN = "finefirstaid" Lor IN = "firstaid2"
-					SelectedItem\State = 0.0
-				ElseIf IN = "vest" Lor IN = "finevest"
-					SelectedItem\State = 0.0
-					If (Not wi\BallisticVest) Then
-						DropItem(SelectedItem, False)
-					EndIf
-				ElseIf IN = "hazmatsuit" Lor IN = "hazmatsuit2" Lor IN = "hazmatsuit3"
-					SelectedItem\State = 0.0
-					If wi\HazmatSuit = 0 Then
-						DropItem(SelectedItem, False)
-					EndIf
-				ElseIf IN = "scp1499" Lor IN = "super1499" Lor IN = "gasmask" Lor IN = "supergasmask" Lor IN = "gasmask3" Lor IN = "helmet"
-					SelectedItem\State = 0.0
-				ElseIf IN = "nvg" Lor IN = "supernvg" Lor IN = "finenvg" Lor IN = "scramble"
-					SelectedItem\State3 = 0.0
-				EndIf
-				
+				Select SelectedItem\ItemTemplate\TempName
+					Case "firstaid", "finefirstaid", "firstaid2", "scp1499", "super1499", "gasmask", "supergasmask", "gasmask3", "helmet"
+						;[Block]
+						SelectedItem\State = 0.0
+						;[End Block]
+					Case "vest", "finevest"
+						;[Block]
+						SelectedItem\State = 0.0
+						If (Not wi\BallisticVest) Then
+							DropItem(SelectedItem, False)
+						EndIf
+						;[End Block]
+					Case "hazmatsuit", "hazmatsuit2", "hazmatsuit3"
+						;[Block]
+						SelectedItem\State = 0.0
+						If wi\HazmatSuit = 0 Then
+							DropItem(SelectedItem, False)
+						EndIf
+						;[End Block]
+					Case "nvg", "supernvg", "finenvg", "scramble", "scp1025"
+						;[Block]
+						SelectedItem\State3 = 0.0
+						;[End Block]
+				End Select
 				If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 				SelectedItem = Null
 			EndIf
-		EndIf		
-	EndIf
-	
-	If SelectedItem = Null Then
-		For i = 0 To 6
-			If RadioCHN[i] <> 0 Then 
-				If ChannelPlaying(RadioCHN[i]) Then PauseChannel(RadioCHN[i])
+		Else
+			For i = 0 To 6
+				If RadioCHN[i] <> 0 Then 
+					If ChannelPlaying(RadioCHN[i]) Then PauseChannel(RadioCHN[i])
+				EndIf
+			Next
+			
+			If LowBatteryCHN[0] <> 0 Then
+				If ChannelPlaying(LowBatteryCHN[0]) Then StopChannel(LowBatteryCHN[0])
 			EndIf
-		Next
-		
-		If LowBatteryCHN[0] <> 0 Then
-			If ChannelPlaying(LowBatteryCHN[0]) Then StopChannel(LowBatteryCHN[0])
-		EndIf
+		EndIf		
 	EndIf
 	
 	For it.Items = Each Items
@@ -5539,7 +5563,7 @@ Function UpdateGUI()
 					;[Block]
 					it\State = 0.0
 					;[End Block]
-				Case "nvg", "supernvg", "finenvg", "scramble"
+				Case "nvg", "supernvg", "finenvg", "scramble", "scp1025"
 					;[Block]
 					it\State3 = 0.0
 					;[End Block]
@@ -5760,16 +5784,16 @@ Function RenderDebugHUD()
 			Text(x, y + (300 * MenuScale), "SCP-008 Infection: " + I_008\Timer)
 			Text(x, y + (320 * MenuScale), "SCP-409 Crystallization: " + I_409\Timer)
 			Text(x, y + (340 * MenuScale), "SCP-427 State (Secs): " + Int(I_427\Timer / 70.0))
-			For i = 0 To 5
+			For i = 0 To 7
 				Text(x, y + ((360 + (20 * i)) * MenuScale), "SCP-1025 State " + i + ": " + I_1025\State[i])
 			Next
 			
 			If I_005\ChanceToSpawn = 1 Then
-				Text(x, y + (500 * MenuScale), "SCP-005 Spawned in the Chamber!")
+				Text(x, y + (540 * MenuScale), "SCP-005 Spawned in the Chamber!")
 			ElseIf I_005\ChanceToSpawn = 2
-				Text(x, y + (500 * MenuScale), "SCP-005 Spawned in Dr.Maynard's Office!")
+				Text(x, y + (540 * MenuScale), "SCP-005 Spawned in Dr.Maynard's Office!")
 			ElseIf I_005\ChanceToSpawn = 3
-				Text(x, y + (500 * MenuScale), "SCP-005 Spawned in SCP-409's Containment Chamber!")
+				Text(x, y + (540 * MenuScale), "SCP-005 Spawned in SCP-409's Containment Chamber!")
 			EndIf
 			;[End Block]
 	End Select
@@ -6205,7 +6229,7 @@ Function RenderGUI()
 						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					EndIf
 					;[End Block]
-				Case "paper", "ticket"
+				Case "paper"
 					;[Block]
 					If I_035\Sad = 1 Then
 						If SelectedItem\ItemTemplate\Name = "Document SCP-035" Then
@@ -6242,11 +6266,6 @@ Function RenderGUI()
 								Color(255, 255, 255)
 								SetBuffer(BackBuffer())
 								;[End Block]
-							Case "Movie Ticket"
-								;[Block]
-								; ~ Don't resize because it messes up the masking
-								SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
-								;[End Block]
 							Case "Document SCP-035"
 								;[Block]
 								If I_035\Sad <> 0 Then
@@ -6266,9 +6285,20 @@ Function RenderGUI()
 					EndIf
 					DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\Img) / 2)
 					;[End Block]
+				Case "ticket"
+					;[Block]
+					If (Not SelectedItem\ItemTemplate\Img) Then
+						; ~ Don't resize because it messes up the masking
+						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
+						SelectedItem\ItemTemplate\Img = ResizeImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						
+						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
+					EndIf
+					DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\Img) / 2)
+					;[End Block]
 				Case "scp1025"
 					;[Block]
-					GiveAchievement(Achv1025) 
+					GiveAchievement(Achv1025)
 					If (Not SelectedItem\ItemTemplate\Img) Then
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\items\1025\1025(" + Int(SelectedItem\State) + ").png")	
 						SelectedItem\ItemTemplate\Img = ResizeImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
@@ -6696,16 +6726,19 @@ Function RenderGUI()
 							EndIf
 						Next
 					EndIf
-				EndIf			
+				EndIf
 			EndIf
 			
 			If mo\MouseHit2 Then
-				IN = SelectedItem\ItemTemplate\TempName
-				If IN = "scp1025" Then
-					If SelectedItem\ItemTemplate\Img <> 0 Then
-						FreeImage(SelectedItem\ItemTemplate\Img) : SelectedItem\ItemTemplate\Img = 0
-					EndIf
-				EndIf
+				; ~ Reset SCP-1025
+				Select SelectedItem\ItemTemplate\TempName
+					Case "scp1025"
+						;[Block]
+						If SelectedItem\ItemTemplate\Img <> 0 Then
+							FreeImage(SelectedItem\ItemTemplate\Img) : SelectedItem\ItemTemplate\Img = 0
+						EndIf
+						;[End Block]
+				End Select
 			EndIf
 		EndIf		
 	EndIf
@@ -9385,8 +9418,8 @@ Function Use427()
 			If me\Bloodloss > 0.0 And me\Injuries =< 1.0 Then me\Bloodloss = Max(me\Bloodloss - (fps\Factor[0] * 0.001), 0.0)
 			If I_008\Timer > 0.0 Then I_008\Timer = Max(I_008\Timer - (fps\Factor[0] * 0.001), 0.0)
 			If I_409\Timer > 0.0 Then I_409\Timer = Max(I_409\Timer - (fps\Factor[0] * 0.003), 0.0)
-			For i = 0 To 5
-				If I_1025\State[i] > 0.0 Then I_1025\State[i] = Max(I_1025\State[i] - (fps\Factor[0] * 0.001), 0.0)
+			For i = 0 To 6
+				If I_1025\State[i] > 0.0 Then I_1025\State[i] = Max(I_1025\State[i] - (0.001 * fps\Factor[0] * I_1025\State[7]), 0.0)
 			Next
 			If (Not I_427\Sound[0]) Then I_427\Sound[0] = LoadSound_Strict("SFX\SCP\427\Effect.ogg")
 			If (Not ChannelPlaying(I_427\SoundCHN[0])) Then I_427\SoundCHN[0] = PlaySound_Strict(I_427\Sound[0])

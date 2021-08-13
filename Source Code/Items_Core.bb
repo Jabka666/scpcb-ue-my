@@ -257,6 +257,8 @@ Function InitItemTemplates()
 	CreateItemTemplate("Heavy Ballistic Vest", "finevest", ItemsPath + "ballistic_vest.b3d", ItemsPath + "INV_ballistic_vest.png", "", 0.022, 2)
 	CreateItemTemplate("Corrosive Ballistic Vest", "corrvest", ItemsPath + "ballistic_vest.b3d", ItemsPath + "INV_ballistic_vest.png", "", 0.02, 2, ItemsPath + "ballistic_vest_corrosive.png")
 	
+	CreateItemTemplate("Book", "book", ItemsPath + "scp_1025.b3d", ItemsPath + "INV_book.png", "", 0.07, 0, ItemsPath + "book.png")
+	
 	CreateItemTemplate("Cigarette", "cigarette", ItemsPath + "scp_420_j.b3d", ItemsPath + "INV_scp_420_j.png", "", 0.0004, 2)
 	
 	CreateItemTemplate("Cup", "cup", ItemsPath + "cup.b3d", ItemsPath + "INV_cup.png", "", 0.04, 2)
@@ -2283,19 +2285,19 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 					;[Block]
 					it2.Items = CreateItem("Cup", "cup", x, y, z)
 					it2\Name = item\Name
-					it2\R = 255 - item\R : it2\G = 255 - item\G : it2\B = 255 - item\B
+					it2\R = 255.0 - item\R : it2\G = 255.0 - item\G : it2\B = 255.0 - item\B
 					;[End Block]
 				Case FINE
 					;[Block]
 					it2.Items = CreateItem("Cup", "cup", x, y, z)
 					it2\Name = item\Name : it2\State = 1.0
-					it2\R = Min(item\R * Rnd(0.9, 1.1), 255) : it2\G = Min(item\G * Rnd(0.9, 1.1), 255) : it2\B = Min(item\B * Rnd(0.9, 1.1), 255)
+					it2\R = Min(item\R * Rnd(0.9, 1.1), 255.0) : it2\G = Min(item\G * Rnd(0.9, 1.1), 255.0) : it2\B = Min(item\B * Rnd(0.9, 1.1), 255.0)
 					;[End Block]
 				Case VERYFINE
 					;[Block]
 					it2.Items = CreateItem("Cup", "cup", x, y, z)
 					it2\Name = item\Name : it2\State = Max(it2\State * 2.0, 2.0)	
-					it2\R = Min(item\R * Rnd(0.5, 1.5), 255) : it2\G = Min(item\G * Rnd(0.5, 1.5), 255) : it2\B = Min(item\B * Rnd(0.5, 1.5), 255)
+					it2\R = Min(item\R * Rnd(0.5, 1.5), 255.0) : it2\G = Min(item\G * Rnd(0.5, 1.5), 255.0) : it2\B = Min(item\B * Rnd(0.5, 1.5), 255.0)
 					If Rand(5) = 1 Then me\ExplosionTimer = 135.0
 					;[End Block]
 			End Select	
@@ -2321,6 +2323,54 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
+		Case "scp1025"
+			Remove = False
+			Select Setting
+				Case ROUGH
+					;[Block]
+					If item\State2 > 0.0 Then
+						item\State2 = -1.0
+					Else
+						d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
+						Remove = True
+					EndIf
+					;[End Block]
+				Case COARSE
+					;[Block]
+					item\State2 = Max(-1.0, item\State2 - 1.0)
+					;[End Block]
+				Case ONETOONE
+					;[Block]
+					it2.Items = CreateItem("Book", "book", x, y, z)
+					;[End Block]
+				Case FINE
+					;[Block]
+					item\State2 = Min(1.0, item\State2 + 1.0)
+					;[End Block]
+				Case VERYFINE
+					;[Block]
+					item\State2 = 2.0
+					;[End Block]
+			End Select
+		Case "book"
+			Select Setting
+				Case ROUGH, COARSE
+					;[Block]
+					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
+					;[End Block]
+				Case ONETOONE
+					;[Block]
+					If Rand(3) = 1 Then
+						it2.Items = CreateItem("SCP-1025", "scp1025", x, y, z) ; ~ I know that this can be exploited to get a SCP-1025 reset, but this effort makes it seem fair to me -- Salvage
+					Else
+						Remove = False
+					EndIf
+					;[End Block]
+				Case FINE, VERYFINE
+					;[Block]
+					Remove = False
+					;[End Block]
+			End Select
 		Default
 			;[Block]
 			Select Setting

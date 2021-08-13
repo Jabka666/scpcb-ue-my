@@ -89,7 +89,7 @@ Function SaveGame(File$)
 	
 	WriteString(f, msg\DeathMsg)
 	
-	For i = 0 To 5
+	For i = 0 To 7
 		WriteFloat(f, I_1025\State[i])
 	Next
 	
@@ -584,7 +584,7 @@ Function LoadGame(File$)
 	
 	msg\DeathMsg = ReadString(f)
 	
-	For i = 0 To 5
+	For i = 0 To 7
 		I_1025\State[i] = ReadFloat(f)
 	Next
 	
@@ -1463,7 +1463,7 @@ Function LoadGameQuick(File$)
 	
 	msg\DeathMsg = ReadString(f)
 	
-	For i = 0 To 5
+	For i = 0 To 7
 		I_1025\State[i] = ReadFloat(f)
 	Next
 	
