@@ -300,8 +300,9 @@ Function InitItemTemplates()
 	CreateItemTemplate("Radio Transceiver", "veryfineradio", ItemsPath + "radio.b3d", ItemsPath + "INV_radio.png", ItemsPath + "radio_HUD.png", 1.0, 1)
 	CreateItemTemplate("Radio Transceiver", "18vradio", ItemsPath + "radio.b3d", ItemsPath + "INV_radio.png", ItemsPath + "radio_HUD.png", 1.02, 1)
 	
-	CreateItemTemplate("Severed Hand", "hand", ItemsPath + "severed_hand.b3d", ItemsPath + "INV_severed_hand.png", "", 0.03, 2)
+	CreateItemTemplate("Severed Hand", "hand", ItemsPath + "severed_hand.b3d", ItemsPath + "INV_severed_hand(1).png", "", 0.03, 2)
 	CreateItemTemplate("Black Severed Hand", "hand2", ItemsPath + "severed_hand.b3d", ItemsPath + "INV_severed_hand(2).png", "", 0.03, 2, ItemsPath + "severed_hand(2).png")
+	CreateItemTemplate("Severed Hand", "hand3", ItemsPath + "severed_hand.b3d", ItemsPath + "INV_severed_hand(3).png", "", 0.03, 2, ItemsPath + "severed_hand(3).png")
 	
 	CreateItemTemplate("S-NAV Navigator", "nav", ItemsPath + "navigator.b3d", ItemsPath + "INV_navigator.png", ItemsPath + "navigator_HUD.png", 0.0008, 1)
 	CreateItemTemplate("S-NAV Navigator Ultimate", "navulti", ItemsPath + "navigator.b3d", ItemsPath + "INV_navigator.png", ItemsPath + "navigator_HUD.png", 0.0008, 1)
@@ -1380,7 +1381,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
-		Case "hand", "hand2"
+		Case "hand", "hand2", "hand3"
 			;[Block]
 			Select Setting
 				Case ROUGH, COARSE
@@ -1390,9 +1391,23 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 				Case ONETOONE, FINE, VERYFINE
 					;[Block]
 					If item\ItemTemplate\TempName = "hand" Then
-						it2.Items = CreateItem("Black Severed Hand", "hand2", x, y, z)
+						If Rand(2) = 1 Then
+							it2.Items = CreateItem("Black Severed Hand", "hand2", x, y, z)
+						Else
+							it2.Items = CreateItem("Severed Hand", "hand3", x, y, z)
+						EndIf
+					ElseIf item\ItemTemplate\TempName = "hand2"
+						If Rand(2) = 1 Then
+							it2.Items = CreateItem("Severed Hand", "hand", x, y, z)
+						Else
+							it2.Items = CreateItem("Severed Hand", "hand3", x, y, z)
+						EndIf
 					Else
-						it2.Items = CreateItem("Severed Hand", "hand", x, y, z)
+						If Rand(2) = 1 Then
+							it2.Items = CreateItem("Severed Hand", "hand", x, y, z)
+						Else
+							it2.Items = CreateItem("Black Severed Hand", "hand2", x, y, z)
+						EndIf
 					EndIf
 					;[End Block]
 			End Select

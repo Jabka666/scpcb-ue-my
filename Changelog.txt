@@ -63,6 +63,8 @@ SCPs:
 - Added SCP-205's document.
 - Added new SCP-035's emotion.
 - Many changes to SCP-914:
+	- Added SCP-1025 refinements.
+	- Added a very special book.
 	- Added Blank Document.
 	- Added ability to downgrade Keycards.
 	- Added a bad and a super battery.
@@ -70,9 +72,11 @@ SCPs:
 	- Added worse and better clipboards and wallets.
 	- Added a new sound for knob.
 	- Added corrosive vest.
+	- Added another hand.
 	- Improved image.
 	- Replaced the doors by one-sided ones.
 	- Removed paper strips.
+	- And a lot of other improvements!
 - Added bloody SCP-096 texture after killing someone.
 	- Also improved chase theme.
 	- Added own containment chamber.
