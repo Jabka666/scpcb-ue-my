@@ -1729,9 +1729,8 @@ Function UpdateEvents()
 								EndIf
 								
 								If DistanceSquared(EntityX(me\Collider), EntityX(e\room\OBJ), EntityZ(me\Collider), EntityZ(e\room\OBJ)) < 16.0 Then
-									For i = 1 To 2
-										If e\room\RoomDoors[i]\Open Then UseDoor(e\room\RoomDoors[i], True)
-									Next
+									If e\room\RoomDoors[2]\Open Then UseDoor(e\room\RoomDoors[2], True)
+									UseDoor(e\room\RoomDoors[1], True)
 									For i = 3 To 4
 										e\room\NPC[i]\State = 0.0
 									Next
