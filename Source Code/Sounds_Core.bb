@@ -752,6 +752,8 @@ Global ApacheSFX%
 Global CurrStepSFX%
 Dim StepSFX%(5, 1, 7) ; ~ (Normal / Metal, Walk / Run, ID)
 
+Global VehicleSFX%[2]
+
 Global ExplosionSFX%
 
 Global RadioCHN%[7]
@@ -931,6 +933,8 @@ Function LoadSounds()
 			StepSFX(5, 0, i) = LoadSound_Strict("SFX\Step\SCP\StepMetal" + (i + 1) + ".ogg")
 		EndIf
 	Next
+	VehicleSFX[0] = LoadSound_Strict("SFX\Character\Vehicle\Idle.ogg")
+	VehicleSFX[1] = LoadSound_Strict("SFX\Character\Vehicle\Move.ogg")
 	
 	MissSFX = LoadSound_Strict("SFX\General\Miss.ogg")
 	

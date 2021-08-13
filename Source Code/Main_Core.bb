@@ -289,7 +289,7 @@ Global t.Textures = New Textures
 
 ; ~ Objects Constants
 ;[Block]
-Const MaxNPCModelIDAmount% = 33
+Const MaxNPCModelIDAmount% = 34
 Const MaxDTextures% = 15
 Const MaxButtonModelIDAmount% = 5
 Const MaxDoorModelIDAmount% = 13
@@ -8342,6 +8342,8 @@ Function LoadEntities()
 	
 	o\NPCModelID[NPCTypeApache_Rotor2] = LoadAnimMesh_Strict("GFX\npcs\apache_rotor(2).b3d") ; ~ Helicopter's Rotor #2
 	
+	o\NPCModelID[NPCTypeVehicle] = LoadAnimMesh_Strict("GFX\npcs\vehicle.b3d") ; ~ Vehicle
+	
 	o\NPCModelID[NPCTypeCI] = LoadAnimMesh_Strict("GFX\npcs\CI.b3d") ; ~ CI
 	
 	o\NPCModelID[NPCTypeClerk] = LoadAnimMesh_Strict("GFX\npcs\clerk.b3d") ; ~ Clerk
@@ -8406,9 +8408,6 @@ Function LoadEntities()
 		Tex = LoadTexture_Strict("GFX\npcs\D_9341.png")
 		EntityTexture(o\DTextures[7], Tex)
 		DeleteSingleTextureEntryFromCache(Tex)
-	Else
-		; ~ Remove the model because intro scene is disabled
-		If o\DTextures[7] <> 0 Then FreeEntity(o\DTextures[7]) : o\DTextures[7] = 0
 	EndIf
 	
 	; ~ Body # 1

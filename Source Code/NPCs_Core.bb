@@ -14,10 +14,7 @@ Const NPCType1048% = 23, NPCType1048_A% = 24
 Const NPCTypeDuck% = 25, NPCTypeCI% = 26, NPCTypeNazi% = 27
 
 ; ~ Objects
-Const NPCTypeApache_Rotor% = 28, NPCTypeApache_Rotor2% = 29, NPCType173_Box% = 30, NPCType173_Head% = 31, NPCType682_Arm% = 32
-
-; ~ Hybrid (NPC, but doesn't need a model)
-Const NPCtype035% = 33
+Const NPCTypeApache_Rotor% = 28, NPCTypeApache_Rotor2% = 29, NPCTypeVehicle% = 30, NPCType173_Box% = 31, NPCType173_Head% = 32, NPCType682_Arm% = 33
 ;[End Block]
 
 Type NPCs
@@ -61,7 +58,8 @@ Type NPCs
 	Field IdleTimer#
 	Field SoundCHN_IsStream%, SoundCHN2_IsStream%
 	Field FallingPickDistance#
-	Field UseEarphones% = False
+	Field HasEarphones% = False
+	Field HasAsset% = False
 	Field Contained% = False
 End Type
 
@@ -159,7 +157,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			Temp = GetINIFloat(NPCsFile, "Guard", "Scale") / 2.5
 			
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
-			
 			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0)
 			
 			n\Speed = GetINIFloat(NPCsFile, "Guard", "Speed") / 100.0
@@ -199,36 +196,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			
 			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0)
-			
-			n\Speed = GetINIFloat(NPCsFile, "Class D", "Speed") / 100.0
-			
-			n\CollRadius = 0.32
-			;[End Block]
-		Case NPCtype035
-			;[Block]
-			n\NVGName = "Human"
-			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, 0.32)
-			EntityType(n\Collider, HIT_PLAYER)
-			
-			n\OBJ = CopyEntity(o\NPCModelID[NPCTypeD])
-			
-			Temp = GetINIFloat(NPCsFile, "Class D", "Scale") / MeshWidth(n\OBJ)
-			ScaleEntity(n\OBJ, Temp, Temp, Temp)
-			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0)
-			
-			Tex = LoadTexture_Strict("GFX\npcs\scp_035_victim.png")
-			EntityTexture(n\OBJ, Tex)
-			DeleteSingleTextureEntryFromCache(Tex)
-			
-			If I_035\Sad <> 0 Then
-				n\OBJ2 = LoadMesh_Strict("GFX\npcs\scp_035_sad.b3d")
-			Else
-				n\OBJ2 = LoadMesh_Strict("GFX\npcs\scp_035_smile.b3d")
-			EndIf
-			ScaleEntity(n\OBJ2, Temp, Temp, Temp)
-			PositionEntity(n\OBJ2, EntityX(n\OBJ), EntityY(n\OBJ) + 0.85, EntityZ(n\OBJ) - 0.095)
-			EntityParent(n\OBJ2, FindChild(n\OBJ, "Bip01_Head"))
 			
 			n\Speed = GetINIFloat(NPCsFile, "Class D", "Speed") / 100.0
 			
@@ -539,6 +506,60 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 	NPCSpeedChange(n)
 	
 	Return(n)
+End Function
+
+Function CreateNPCAsset%(n.NPCs)
+	Local Temp#, Tex%
+	
+	Select n\NPCType
+		Case NPCTypeGuard
+			;[Block]
+			n\OBJ2 = CopyEntity(o\NPCModelID[NPCTypeVehicle])
+			Temp = GetINIFloat(NPCsFile, "Guard", "Scale") / 2.5
+			Temp = (Temp + 1.664) / MeshWidth(n\OBJ2)
+			ScaleEntity(n\OBJ2, Temp, Temp, Temp)
+			MeshCullBox(n\OBJ2, -MeshWidth(n\OBJ2), -MeshHeight(n\OBJ2), -MeshDepth(n\OBJ2), MeshWidth(n\OBJ2) * 2.0, MeshHeight(n\OBJ2) * 2.0, MeshDepth(n\OBJ2) * 2.0)
+			HideEntity(n\OBJ2)
+			;[End Block]
+		Case NPCTypeD
+			;[Block]
+			Local Save%
+			
+			Tex = LoadTexture_Strict("GFX\npcs\scp_035_victim.png")
+			EntityTexture(n\OBJ, Tex)
+			DeleteSingleTextureEntryFromCache(Tex)
+			
+			Save = False
+			If n\OBJ2 <> 0 Then
+				EntityParent(n\OBJ2, 0)
+				
+				Local x# = EntityX(n\OBJ2)
+				Local y# = EntityY(n\OBJ2)
+				Local z# = EntityZ(n\OBJ2)
+				Local Pitch# = EntityPitch(n\OBJ2)
+				Local Yaw# = EntityYaw(n\OBJ2)
+				Local Roll# = EntityRoll(n\OBJ2)
+				
+				FreeEntity(n\OBJ2) : n\OBJ2 = 0
+				
+				Save = True
+			Else
+				If I_035\Sad <> 0 Then
+					n\OBJ2 = LoadMesh_Strict("GFX\npcs\scp_035_sad.b3d")
+					If Save Then
+						RotateEntity(n\OBJ2, Pitch, Yaw, Roll)
+						PositionEntity(n\OBJ2, x, y, z)
+					EndIf
+				Else
+					n\OBJ2 = LoadMesh_Strict("GFX\npcs\scp_035_smile.b3d")
+				EndIf
+			EndIf
+			Temp = GetINIFloat(NPCsFile, "Class D", "Scale") / MeshWidth(n\OBJ)
+			ScaleEntity(n\OBJ2, Temp, Temp, Temp)
+			If (Not Save) Then PositionEntity(n\OBJ2, EntityX(n\OBJ), EntityY(n\OBJ) + 0.85, EntityZ(n\OBJ) - 0.095)
+			EntityParent(n\OBJ2, FindChild(n\OBJ, "Bip01_Head"))
+			;[End Block]
+	End Select
 End Function
 
 Function RemoveNPC(n.NPCs)
@@ -2388,7 +2409,7 @@ Function UpdateNPCs()
 						;[End Block]
 					Case 7.0 ; ~ Just walking
 						;[Block]
-						If n\UseEarphones Then
+						If n\HasEarphones Then
 							AnimateNPC(n, 623.0, 747.0, 0.2)
 						Else
 							AnimateNPC(n, 77.0, 201.0, 0.2)
@@ -2399,7 +2420,7 @@ Function UpdateNPCs()
 						;[End Block]
 					Case 9.0 ; ~ Looks at the player
 						;[Block]
-						If n\UseEarphones Then
+						If n\HasEarphones Then
 							AnimateNPC(n, 623.0, 747.0, 0.2)
 						Else
 							AnimateNPC(n, 77.0, 201.0, 0.2)
@@ -2419,7 +2440,7 @@ Function UpdateNPCs()
 						;[End Block]
 					Case 11.0 ; ~ Trying to find the player and kill
 						;[Block]
-						If n\UseEarphones Then
+						If n\HasEarphones Then
 							If n\Frame < 787.0 Lor (n\Frame > 824.0 And n\Frame < 867.0) Lor (n\Frame > 870.0 And n\Frame < 884.0) Lor n\Frame > 939.0
 								AnimateNPC(n, 927.0, 939.0, 0.2, False)
 								If n\Frame >= 883.0 Then SetNPCFrame(n, 884.0)
@@ -2475,13 +2496,13 @@ Function UpdateNPCs()
 								EndIf
 								
 								If n\Reload > 0.0 And n\Reload =< 7.0
-									If n\UseEarphones Then
+									If n\HasEarphones Then
 										AnimateNPC(n, 867.0, 870.0, 0.35)
 									Else
 										AnimateNPC(n, 245.0, 248.0, 0.35)
 									EndIf
 								Else
-									If n\UseEarphones Then
+									If n\HasEarphones Then
 										If n\Frame < 884.0 Then
 											AnimateNPC(n, 884.0, 926.0, 0.35)
 										EndIf
@@ -2502,7 +2523,7 @@ Function UpdateNPCs()
 											n\PathLocation = n\PathLocation + 1
 										EndIf
 									Else
-										If n\UseEarphones Then
+										If n\HasEarphones Then
 											AnimateNPC(n, 787.0, 823.0, n\CurrSpeed * 40.0)
 										Else
 											AnimateNPC(n, 39.0, 76.0, n\CurrSpeed * 40.0)
@@ -2543,7 +2564,7 @@ Function UpdateNPCs()
 									EndIf
 									
 									If n\PathTimer = 1.0 Then
-										If n\UseEarphones Then
+										If n\HasEarphones Then
 											AnimateNPC(n, 787.0, 823.0, n\CurrSpeed * 40.0)
 										Else
 											AnimateNPC(n, 39.0, 76.0, n\CurrSpeed * 40.0)
@@ -2640,6 +2661,27 @@ Function UpdateNPCs()
 							PlaySound2(StepSFX(4, 0, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.5, 0.7))
 						EndIf
 						;[End Block]
+					Case 15.0 ; ~ Inside vehicle (idle)
+						;[Block]
+						ShowEntity(n\OBJ2)
+						
+						If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2)
+						n\SoundCHN = LoopSound2(VehicleSFX[0], n\SoundCHN, Camera, n\OBJ2, 13.0, 1.0)
+						
+						n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
+						;[End Block]
+					Case 16.0 ; ~ Inside vehicle (driving)
+						;[Block]
+						ShowEntity(n\OBJ2)
+						
+						If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN)
+						n\SoundCHN2 = LoopSound2(VehicleSFX[1], n\SoundCHN2, Camera, n\OBJ2, 13.0, 1.0)
+						
+						n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
+						Animate2(n\OBJ2, AnimTime(n\OBJ2), 1.0, 20.0, n\CurrSpeed * 5.0)
+						
+						MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+						;[End Block]
 					Default
 						;[Block]
 						If Rand(400) = 1 Then n\PrevState = Rand(-30, 30)
@@ -2664,8 +2706,12 @@ Function UpdateNPCs()
 				
 				n\Reload = Max(0.0, n\Reload - fps\Factor[0])
 				PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.2, EntityZ(n\Collider))
-				
 				RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider) + 180.0, 0.0)
+				
+				If n\OBJ2 <> 0 Then
+					PositionEntity(n\OBJ2, EntityX(n\Collider), EntityY(n\Collider) - 0.32, EntityZ(n\Collider))
+					RotateEntity(n\OBJ2, 0.0, EntityYaw(n\Collider), 0.0)
+				EndIf
 				;[End Block]
 			Case NPCTypeMTF
 				;[Block]

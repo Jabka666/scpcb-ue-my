@@ -1308,7 +1308,7 @@ Function UpdateEvents()
 							EndIf
 						ElseIf e\EventState3 < 800.0
 							e\EventState3 = e\EventState3 + fps\Factor[0] / 4.0
-							If e\room\NPC[5]\State <> 11.0
+							If e\room\NPC[5]\State <> 11.0 Then
 								If EntityDistanceSquared(e\room\NPC[3]\Collider, e\room\NPC[5]\Collider) > 25.0 And EntityDistanceSquared(e\room\NPC[4]\Collider, e\room\NPC[5]\Collider)
 									If EntityDistanceSquared(e\room\NPC[5]\Collider, me\Collider) < 12.25
 										For i = 3 To 5
@@ -1422,8 +1422,21 @@ Function UpdateEvents()
 									If EntityX(e\room\NPC[8]\Collider) < EntityX(e\room\OBJ, True) - 7100.0 * RoomScale Then
 										For i = 8 To 10
 											e\room\NPC[i]\State = 0.0
-											If e\room\NPC[i] <> Null Then RemoveNPC(e\room\NPC[i])
+											RemoveNPC(e\room\NPC[i])
 										Next
+									EndIf
+								EndIf
+							EndIf
+							
+							If e\room\NPC[11] <> Null Then
+								If e\room\NPC[11]\State = 15.0 Then
+									If DistanceSquared(EntityX(me\Collider), EntityX(e\room\OBJ, True) - 6688.0 * RoomScale, EntityZ(me\Collider), EntityZ(e\room\OBJ, True) - 1252.0 * RoomScale) < 6.25 Then
+										e\room\NPC[11]\State = 16.0
+									EndIf
+								Else
+									If EntityX(e\room\NPC[11]\Collider) > EntityX(e\room\OBJ, True) - 2000.0 * RoomScale
+										e\room\NPC[11]\State = 15.0
+										RemoveNPC(e\room\NPC[11])
 									EndIf
 								EndIf
 							EndIf
@@ -1767,7 +1780,7 @@ Function UpdateEvents()
 								RotateEntity(e\room\NPC[5]\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
 								e\room\NPC[5]\State = 7.0
 								e\room\NPC[5]\Sound2 = LoadSound_Strict("SFX\Room\Intro\Guard\PlayerEscape.ogg")
-								e\room\NPC[5]\UseEarphones = True
+								e\room\NPC[5]\HasEarphones = True
 								
 								e\room\NPC[6] = CreateNPC(NPCTypeD, e\room\x - 3712.0 * RoomScale, -0.3, e\room\z - 2208.0 * RoomScale)
 								ChangeNPCTextureID(e\room\NPC[6], 3)
@@ -1791,13 +1804,21 @@ Function UpdateEvents()
 								e\room\NPC[10] = CreateNPC(NPCTypeGuard, e\room\x - 4200.0 * RoomScale, 1.0, e\room\z - 3900.0 * RoomScale)
 								e\room\NPC[10]\State = 7.0
 								
-								For i = 8 To 10
+								e\room\NPC[11] = CreateNPC(NPCTypeGuard, e\room\x - 7200.0 * RoomScale, -0.6, e\room\z - 3075.0 * RoomScale)
+								e\room\NPC[11]\State = 15.0 : e\room\NPC[11]\HasAsset = True
+								CreateNPCAsset(e\room\NPC[11])
+								
+								For i = 8 To 11
 									PositionEntity(Pvt, EntityX(e\room\NPC[i]\Collider), EntityY(e\room\NPC[i]\Collider), EntityZ(e\room\NPC[i]\Collider))
 									EntityPick(Pvt, 20.0)
 									If PickedEntity() <> 0 Then
 										PositionEntity(e\room\NPC[i]\Collider, PickedX(), PickedY(), PickedZ(), True)
 										AlignToVector(e\room\NPC[i]\Collider, -PickedNX(), -PickedNY(), -PickedNZ(), 3.0)
-										RotateEntity(e\room\NPC[i]\Collider, 0.0, 90.0, 0.0)
+										If i < 11 Then
+											RotateEntity(e\room\NPC[i]\Collider, 0.0, 90.0, 0.0)
+										Else
+											RotateEntity(e\room\NPC[i]\Collider, 0.0, -90.0, 0.0)
+										EndIf
 									EndIf
 								Next
 								FreeEntity(Pvt)
@@ -3713,7 +3734,6 @@ Function UpdateEvents()
 							SetNPCFrame(e\room\NPC[0], 19.0)
 							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 180.0, 0.0)
 							MoveEntity(e\room\NPC[0]\Collider, 0.0, 0.0, -0.5)
-							FreeEntity(e\room\NPC[0]\OBJ2) : e\room\NPC[0]\OBJ2 = 0
 						EndIf
 						
 						If e\room\NPC[1] = Null Then
@@ -5842,8 +5862,9 @@ Function UpdateEvents()
 					
 					If e\EventState = 0.0 Then
 						If EntityDistanceSquared(me\Collider, e\room\Objects[3]) < 4.0 Then
-							e\room\NPC[0] = CreateNPC(NPCType035, EntityX(e\room\Objects[4], True), 0.5, EntityZ(e\room\Objects[4], True))
-							e\room\NPC[0]\State = 6.0
+							e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[4], True), 0.5, EntityZ(e\room\Objects[4], True))
+							e\room\NPC[0]\State = 6.0 : e\room\NPC[0]\HasAsset = True
+							CreateNPCAsset(e\room\NPC[0])
 							SetNPCFrame(e\room\NPC[0], 501.0)
 							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
 							
@@ -5942,22 +5963,7 @@ Function UpdateEvents()
 												Next
 												DeleteSingleTextureEntryFromCache(Tex)
 												
-												EntityParent(e\room\NPC[0]\OBJ2, 0)
-												
-												Local PrevMaskX# = EntityX(e\room\NPC[0]\OBJ2)
-												Local PrevMaskY# = EntityY(e\room\NPC[0]\OBJ2)
-												Local PrevMaskZ# = EntityZ(e\room\NPC[0]\OBJ2)
-												Local PrevMaskPitch# = EntityPitch(e\room\NPC[0]\OBJ2)
-												Local PrevMaskYaw# = EntityYaw(e\room\NPC[0]\OBJ2)
-												Local PrevMaskRoll# = EntityRoll(e\room\NPC[0]\OBJ2)
-												
-												FreeEntity(e\room\NPC[0]\OBJ2) : e\room\NPC[0]\OBJ2 = 0
-												e\room\NPC[0]\OBJ2 = LoadMesh_Strict("GFX\npcs\scp_035_sad.b3d")
-												Scale = GetINIFloat(NPCsFile, "Class D", "Scale") / MeshWidth(e\room\NPC[0]\OBJ)
-												ScaleEntity(e\room\NPC[0]\OBJ2, Scale, Scale, Scale)
-												PositionEntity(e\room\NPC[0]\OBJ2, PrevMaskX, PrevMaskY, PrevMaskZ)
-												RotateEntity(e\room\NPC[0]\OBJ2, PrevMaskPitch, PrevMaskYaw, PrevMaskRoll)
-												EntityParent(e\room\NPC[0]\OBJ2, FindChild(e\room\NPC[0]\OBJ, "Bip01_Head"))
+												CreateNPCAsset(e\room\NPC[0])
 												
 												e\EventState = 70.0 * 60.0
 											EndIf

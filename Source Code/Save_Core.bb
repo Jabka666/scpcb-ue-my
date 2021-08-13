@@ -234,7 +234,6 @@ Function SaveGame(File$)
 		
 		WriteFloat(f, AnimTime(n\OBJ))
 		
-		WriteByte(f, n\UseEarphones)
 		WriteByte(f, n\Contained)
 		WriteByte(f, n\IsDead)
 		WriteFloat(f, n\PathX)
@@ -245,6 +244,7 @@ Function SaveGame(File$)
 		WriteFloat(f, n\ModelScaleY)
 		WriteFloat(f, n\ModelScaleZ)
 		WriteInt(f, n\TextureID)
+		WriteByte(f, n\HasAsset)
 	Next
 	
 	WriteInt(f, 632)
@@ -748,7 +748,6 @@ Function LoadGame(File$)
 		End Select
 		
 		n\Frame = Frame
-		n\UseEarphones = ReadByte(f)
 		n\Contained = ReadByte(f)
 		n\IsDead = ReadByte(f)
 		n\PathX = ReadFloat(f)
@@ -769,6 +768,8 @@ Function LoadGame(File$)
 			ChangeNPCTextureID(n.NPCs, n\TextureID - 1)
 			SetAnimTime(n\OBJ, Frame)
 		EndIf
+		n\HasAsset = ReadByte(f)
+		If n\HasAsset Then CreateNPCAsset(n)
 	Next
 	
 	For n.NPCs = Each NPCs
@@ -1629,7 +1630,6 @@ Function LoadGameQuick(File$)
 		End Select		
 		
 		n\Frame = Frame
-		n\UseEarphones = ReadByte(f)
 		n\Contained = ReadByte(f)
 		n\IsDead = ReadByte(f)
 		n\PathX = ReadFloat(f)
@@ -1650,6 +1650,8 @@ Function LoadGameQuick(File$)
 			ChangeNPCTextureID(n.NPCs, n\TextureID - 1)
 			SetAnimTime(n\OBJ, Frame)
 		EndIf
+		n\HasAsset = ReadByte(f)
+		If n\HasAsset Then CreateNPCAsset(n)
 	Next
 	
 	For n.NPCs = Each NPCs
