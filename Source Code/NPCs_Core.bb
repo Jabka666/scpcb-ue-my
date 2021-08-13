@@ -58,7 +58,6 @@ Type NPCs
 	Field IdleTimer#
 	Field SoundCHN_IsStream%, SoundCHN2_IsStream%
 	Field FallingPickDistance#
-	Field HasEarphones% = False
 	Field HasAsset% = False
 	Field Contained% = False
 End Type
@@ -2409,22 +2408,15 @@ Function UpdateNPCs()
 						;[End Block]
 					Case 7.0 ; ~ Just walking
 						;[Block]
-						If n\HasEarphones Then
-							AnimateNPC(n, 623.0, 747.0, 0.2)
-						Else
-							AnimateNPC(n, 77.0, 201.0, 0.2)
-						EndIf
+						AnimateNPC(n, 77.0, 201.0, 0.2)
 						;[End Block]
 					Case 8.0 ; ~ Idles
 						;[Block]
 						;[End Block]
 					Case 9.0 ; ~ Looks at the player
 						;[Block]
-						If n\HasEarphones Then
-							AnimateNPC(n, 623.0, 747.0, 0.2)
-						Else
-							AnimateNPC(n, 77.0, 201.0, 0.2)
-						EndIf
+						AnimateNPC(n, 77.0, 201.0, 0.2)
+						
 						n\BoneToManipulate = "head"
 						n\ManipulateBone = True
 						n\ManipulationType = 0
@@ -2440,16 +2432,9 @@ Function UpdateNPCs()
 						;[End Block]
 					Case 11.0 ; ~ Trying to find the player and kill
 						;[Block]
-						If n\HasEarphones Then
-							If n\Frame < 787.0 Lor (n\Frame > 824.0 And n\Frame < 867.0) Lor (n\Frame > 870.0 And n\Frame < 884.0) Lor n\Frame > 939.0
-								AnimateNPC(n, 927.0, 939.0, 0.2, False)
-								If n\Frame >= 883.0 Then SetNPCFrame(n, 884.0)
-							EndIf
-						Else
-							If n\Frame < 39.0 Lor (n\Frame > 76.0 And n\Frame < 245.0) Lor (n\Frame > 248.0 And n\Frame < 302.0) Lor n\Frame > 344.0
-								AnimateNPC(n, 345.0, 357.0, 0.2, False)
-								If n\Frame >= 356.0 Then SetNPCFrame(n, 302.0)
-							EndIf
+						If n\Frame < 39.0 Lor (n\Frame > 76.0 And n\Frame < 245.0) Lor (n\Frame > 248.0 And n\Frame < 302.0) Lor n\Frame > 344.0
+							AnimateNPC(n, 345.0, 357.0, 0.2, False)
+							If n\Frame >= 356.0 Then SetNPCFrame(n, 302.0)
 						EndIf
 						
 						If me\KillTimer >= 0.0 Then
@@ -2496,20 +2481,10 @@ Function UpdateNPCs()
 								EndIf
 								
 								If n\Reload > 0.0 And n\Reload =< 7.0
-									If n\HasEarphones Then
-										AnimateNPC(n, 867.0, 870.0, 0.35)
-									Else
-										AnimateNPC(n, 245.0, 248.0, 0.35)
-									EndIf
+									AnimateNPC(n, 245.0, 248.0, 0.35)
 								Else
-									If n\HasEarphones Then
-										If n\Frame < 884.0 Then
-											AnimateNPC(n, 884.0, 926.0, 0.35)
-										EndIf
-									Else
-										If n\Frame < 302.0 Then
-											AnimateNPC(n, 302.0, 344.0, 0.35)
-										EndIf
+									If n\Frame < 302.0 Then
+										AnimateNPC(n, 302.0, 344.0, 0.35)
 									EndIf
 								EndIf
 								
@@ -2523,11 +2498,8 @@ Function UpdateNPCs()
 											n\PathLocation = n\PathLocation + 1
 										EndIf
 									Else
-										If n\HasEarphones Then
-											AnimateNPC(n, 787.0, 823.0, n\CurrSpeed * 40.0)
-										Else
-											AnimateNPC(n, 39.0, 76.0, n\CurrSpeed * 40.0)
-										EndIf
+										AnimateNPC(n, 39.0, 76.0, n\CurrSpeed * 40.0)
+										
 										n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
 										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 										
@@ -2564,11 +2536,8 @@ Function UpdateNPCs()
 									EndIf
 									
 									If n\PathTimer = 1.0 Then
-										If n\HasEarphones Then
-											AnimateNPC(n, 787.0, 823.0, n\CurrSpeed * 40.0)
-										Else
-											AnimateNPC(n, 39.0, 76.0, n\CurrSpeed * 40.0)
-										EndIf
+										AnimateNPC(n, 39.0, 76.0, n\CurrSpeed * 40.0)
+										
 										n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
 										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 									EndIf
@@ -7434,7 +7403,7 @@ Function FinishWalking(n.NPCs, StartFrame#, EndFrame#, Speed#)
 	EndIf
 End Function
 
-Function ChangeNPCTextureID(n.NPCs, TextureID%) ; ~ Works only for Class D model
+Function ChangeNPCTextureID(n.NPCs, TextureID%)
 	Local Temp#
 	
 	If n = Null Then
@@ -7444,15 +7413,7 @@ Function ChangeNPCTextureID(n.NPCs, TextureID%) ; ~ Works only for Class D model
 	EndIf
 	
 	n\TextureID = TextureID + 1
-	
-	If n\OBJ <> 0 Then FreeEntity(n\OBJ)
-	n\OBJ = CopyEntity(o\DTextures[TextureID])
-	
-	Temp = GetINIFloat(NPCsFile, "Class D", "Scale") / MeshWidth(n\OBJ)
-	ScaleEntity(n\OBJ, Temp, Temp, Temp)
-	MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0)
-	
-	SetNPCFrame(n, n\Frame)
+	EntityTexture(n\OBJ, t\NPCTextureID[TextureID])
 End Function
 
 ;~IDEal Editor Parameters:

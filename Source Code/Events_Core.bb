@@ -1615,8 +1615,8 @@ Function UpdateEvents()
 									RemoveNPC(e\room\NPC[7])
 								EndIf
 								
-								; ~ Remove D-9341 model / texture
-								If o\DTextures[8] <> 0 Then FreeEntity(o\DTextures[8]) : o\DTextures[8] = 0
+								; ~ Remove D-9341 texture
+								If t\NPCTextureID[8] <> 0 Then DeleteSingleTextureEntryFromCache(t\NPCTextureID[8]) : t\NPCTextureID[8] = 0
 								
 								For i = 3 To 4
 									If ChannelPlaying(e\room\NPC[i]\SoundCHN) Then StopChannel(e\room\NPC[i]\SoundCHN)
@@ -1689,46 +1689,48 @@ Function UpdateEvents()
 									e\room\NPC[4]\State = 9.0
 								EndIf
 							Else
-								e\room\NPC[3]\State3 = Max(e\room\NPC[3]\State3 + fps\Factor[0], 50.0)
-								If e\room\NPC[3]\State3 >= 70.0 * 8.0 And e\room\NPC[3]\State3 - fps\Factor[0] < 70.0 * 8.0 And e\room\NPC[3]\State = 9.0 Then
-									If e\room\NPC[3]\State2 < 2.0 Then
-										If ChannelPlaying(e\room\NPC[3]\SoundCHN) Then StopChannel(e\room\NPC[3]\SoundCHN)
-										If e\room\NPC[3]\Sound <> 0 Then
-											FreeSound_Strict(e\room\NPC[3]\Sound) : e\room\NPC[3]\Sound = 0
+								If e\room\RoomDoors[2]\Open Then
+									e\room\NPC[3]\State3 = Max(e\room\NPC[3]\State3 + fps\Factor[0], 50.0)
+									If e\room\NPC[3]\State3 >= 70.0 * 8.0 And e\room\NPC[3]\State3 - fps\Factor[0] < 70.0 * 8.0 And e\room\NPC[3]\State = 9.0 Then
+										If e\room\NPC[3]\State2 < 2.0 Then
+											If ChannelPlaying(e\room\NPC[3]\SoundCHN) Then StopChannel(e\room\NPC[3]\SoundCHN)
+											If e\room\NPC[3]\Sound <> 0 Then
+												FreeSound_Strict(e\room\NPC[3]\Sound) : e\room\NPC[3]\Sound = 0
+											EndIf
+											
+											e\room\NPC[3]\Sound = LoadSound_Strict("SFX\Room\Intro\Guard\Ulgrin\EscortRefuse" + Rand(1, 2) + ".ogg")
+											e\room\NPC[3]\SoundCHN = PlaySound2(e\room\NPC[3]\Sound, Camera, e\room\NPC[3]\Collider)
+											e\room\NPC[3]\State2 = 3.0 : e\room\NPC[3]\State3 = 50.0
+										ElseIf e\room\NPC[3]\State2 = 3.0
+											If ChannelPlaying(e\room\NPC[3]\SoundCHN) Then StopChannel(e\room\NPC[3]\SoundCHN)
+											If e\room\NPC[3]\Sound <> 0 Then
+												FreeSound_Strict(e\room\NPC[3]\Sound) : e\room\NPC[3]\Sound = 0
+											EndIf
+											
+											e\room\NPC[3]\Sound = LoadSound_Strict("SFX\Room\Intro\Guard\Ulgrin\EscortPissedOff" + Rand(1, 2) + ".ogg")
+											e\room\NPC[3]\SoundCHN = PlaySound2(e\room\NPC[3]\Sound, Camera, e\room\NPC[3]\Collider)
+											e\room\NPC[3]\State2 = 4.0 : e\room\NPC[3]\State3 = 50.0
+										ElseIf e\room\NPC[3]\State2 = 4.0
+											If ChannelPlaying(e\room\NPC[3]\SoundCHN) Then StopChannel(e\room\NPC[3]\SoundCHN)
+											If e\room\NPC[3]\Sound <> 0 Then
+												FreeSound_Strict(e\room\NPC[3]\Sound) : e\room\NPC[3]\Sound = 0
+											EndIf
+											
+											e\room\NPC[3]\Sound = LoadSound_Strict("SFX\Room\Intro\Guard\Ulgrin\EscortKill" + Rand(1, 2) + ".ogg")
+											e\room\NPC[3]\SoundCHN = PlaySound2(e\room\NPC[3]\Sound, Camera, e\room\NPC[3]\Collider)
+											e\room\NPC[3]\State2 = 5.0 : e\room\NPC[3]\State3 = 50.0 + (70.0 * 2.5)
+										ElseIf e\room\NPC[3]\State2 = 5.0
+											For i = 3 To 4
+												e\room\NPC[i]\State = 11.0 : e\room\NPC[i]\State3 = 1.0
+											Next
+											UseDoor(e\room\RoomDoors[2], True)
 										EndIf
-										
-										e\room\NPC[3]\Sound = LoadSound_Strict("SFX\Room\Intro\Guard\Ulgrin\EscortRefuse" + Rand(1, 2) + ".ogg")
-										e\room\NPC[3]\SoundCHN = PlaySound2(e\room\NPC[3]\Sound, Camera, e\room\NPC[3]\Collider)
-										e\room\NPC[3]\State2 = 3.0 : e\room\NPC[3]\State3 = 50.0
-									ElseIf e\room\NPC[3]\State2 = 3.0
-										If ChannelPlaying(e\room\NPC[3]\SoundCHN) Then StopChannel(e\room\NPC[3]\SoundCHN)
-										If e\room\NPC[3]\Sound <> 0 Then
-											FreeSound_Strict(e\room\NPC[3]\Sound) : e\room\NPC[3]\Sound = 0
-										EndIf
-										
-										e\room\NPC[3]\Sound = LoadSound_Strict("SFX\Room\Intro\Guard\Ulgrin\EscortPissedOff" + Rand(1, 2) + ".ogg")
-										e\room\NPC[3]\SoundCHN = PlaySound2(e\room\NPC[3]\Sound, Camera, e\room\NPC[3]\Collider)
-										e\room\NPC[3]\State2 = 4.0 : e\room\NPC[3]\State3 = 50.0
-									ElseIf e\room\NPC[3]\State2 = 4.0
-										If ChannelPlaying(e\room\NPC[3]\SoundCHN) Then StopChannel(e\room\NPC[3]\SoundCHN)
-										If e\room\NPC[3]\Sound <> 0 Then
-											FreeSound_Strict(e\room\NPC[3]\Sound) : e\room\NPC[3]\Sound = 0
-										EndIf
-										
-										e\room\NPC[3]\Sound = LoadSound_Strict("SFX\Room\Intro\Guard\Ulgrin\EscortKill" + Rand(1, 2) + ".ogg")
-										e\room\NPC[3]\SoundCHN = PlaySound2(e\room\NPC[3]\Sound, Camera, e\room\NPC[3]\Collider)
-										e\room\NPC[3]\State2 = 5.0 : e\room\NPC[3]\State3 = 50.0 + (70.0 * 2.5)
-									ElseIf e\room\NPC[3]\State2 = 5.0
-										For i = 3 To 4
-											e\room\NPC[i]\State = 11.0 : e\room\NPC[i]\State3 = 1.0
-										Next
-										UseDoor(e\room\RoomDoors[2], True)
 									EndIf
 								EndIf
 								
 								If DistanceSquared(EntityX(me\Collider), EntityX(e\room\OBJ), EntityZ(me\Collider), EntityZ(e\room\OBJ)) < 16.0 Then
 									For i = 1 To 2
-										UseDoor(e\room\RoomDoors[i], True)
+										If e\room\RoomDoors[i]\Open Then UseDoor(e\room\RoomDoors[i], True)
 									Next
 									For i = 3 To 4
 										e\room\NPC[i]\State = 0.0
@@ -1780,7 +1782,6 @@ Function UpdateEvents()
 								RotateEntity(e\room\NPC[5]\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
 								e\room\NPC[5]\State = 7.0
 								e\room\NPC[5]\Sound2 = LoadSound_Strict("SFX\Room\Intro\Guard\PlayerEscape.ogg")
-								e\room\NPC[5]\HasEarphones = True
 								
 								e\room\NPC[6] = CreateNPC(NPCTypeD, e\room\x - 3712.0 * RoomScale, -0.3, e\room\z - 2208.0 * RoomScale)
 								ChangeNPCTextureID(e\room\NPC[6], 3)
@@ -5132,9 +5133,7 @@ Function UpdateEvents()
 							e\Sound = LoadSound_Strict("SFX\Character\Guard\096ServerRoom2.ogg")
 							e\SoundCHN = PlaySound2(e\Sound, Camera, Curr096\OBJ)
 							
-							Tex = LoadTexture_Strict("GFX\npcs\scp_096_bloody.png")
-							EntityTexture(Curr096\OBJ, Tex)
-							DeleteSingleTextureEntryFromCache(Tex)
+							ChangeNPCTextureID(Curr096, 15)
 							
 							Curr096\CurrSpeed = 0.0
 							

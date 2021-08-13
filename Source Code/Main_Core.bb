@@ -267,6 +267,7 @@ Const MaxMonitorTextureIDAmount% = 5
 Const MaxOverlayTextureIDAmount% = 11
 Const MaxOverlayIDAmount% = 11
 Const MaxDecalTextureIDAmount% = 20
+Const MaxNPCTextureIDAmount% = 16
 Const MaxParticleTextureIDAmount% = 8
 Const MaxLightSpriteIDAmount% = 3
 Const MaxIconIDAmount% = 6
@@ -277,6 +278,7 @@ Type Textures
 	Field MiscTextureID%[MaxMiscTextureIDAmount]
 	Field MonitorTextureID%[MaxMonitorTextureIDAmount]
 	Field DecalTextureID%[MaxDecalTextureIDAmount]
+	Field NPCTextureID%[MaxNPCTextureIDAmount]
 	Field ParticleTextureID%[MaxParticleTextureIDAmount]
 	Field LightSpriteID%[MaxLightSpriteIDAmount]
 	Field IconID%[MaxIconIDAmount]
@@ -290,7 +292,6 @@ Global t.Textures = New Textures
 ; ~ Objects Constants
 ;[Block]
 Const MaxNPCModelIDAmount% = 34
-Const MaxDTextures% = 15
 Const MaxButtonModelIDAmount% = 5
 Const MaxDoorModelIDAmount% = 13
 Const MaxLeverModelIDAmount% = 2
@@ -302,7 +303,6 @@ Const MaxMiscModelIDAmount% = 2
 
 Type Objects
 	Field NPCModelID%[MaxNPCModelIDAmount]
-	Field DTextures%[MaxDTextures]
 	Field ButtonModelID%[MaxButtonModelIDAmount]
 	Field DoorModelID%[MaxDoorModelIDAmount]
 	Field LeverModelID%[MaxLeverModelIDAmount]
@@ -8284,6 +8284,40 @@ Function LoadEntities()
 		t\MiscTextureID[i] = LoadTexture_Strict("GFX\map\textures\elevator_panel_" + (i - 20) + ".png", 1, DeleteAllTextures) ; ~ Elevator arrows
 	Next
 	
+	t\NPCTextureID[0] = LoadTexture_Strict("GFX\npcs\Gonzales.png", 1, DeleteAllTextures) ; ~ Gonzales
+	
+	t\NPCTextureID[1] = LoadTexture_Strict("GFX\npcs\D_9341(2).png", 1, DeleteAllTextures) ; ~ SCP-970's corpse
+	
+	t\NPCTextureID[2] = LoadTexture_Strict("GFX\npcs\scientist.png", 1, DeleteAllTextures) ; ~ Scientist
+	
+	t\NPCTextureID[3] = LoadTexture_Strict("GFX\npcs\Franklin.png", 1, DeleteAllTextures) ; ~ Franklin
+	
+	t\NPCTextureID[4] = LoadTexture_Strict("GFX\npcs\janitor.png", 1, DeleteAllTextures) ; ~ Janitor # 1
+	
+	t\NPCTextureID[5] = LoadTexture_Strict("GFX\npcs\Maynard.png", 1, DeleteAllTextures) ; ~ Maynard
+	
+	t\NPCTextureID[6] = LoadTexture_Strict("GFX\npcs\class_d(2).png", 1, DeleteAllTextures) ; ~ Afro-American Class-D
+	
+	If opt\IntroEnabled Then
+		t\NPCTextureID[7] = LoadTexture_Strict("GFX\npcs\D_9341.png", 1, DeleteAllTextures) ; ~ D-9341
+	EndIf
+	
+	t\NPCTextureID[8] = LoadTexture_Strict("GFX\npcs\body.png", 1, DeleteAllTextures) ; ~ Body # 1
+	
+	t\NPCTextureID[9] = LoadTexture_Strict("GFX\npcs\body(2).png", 1, DeleteAllTextures) ; ~ Body # 2
+	
+	t\NPCTextureID[10] = LoadTexture_Strict("GFX\npcs\janitor(2).png", 1, DeleteAllTextures) ; ~ Janitor # 2
+	
+	t\NPCTextureID[11] = LoadTexture_Strict("GFX\npcs\scp_008_1_victim.png", 1, DeleteAllTextures) ; ~ SCP-008-1's victim
+	
+	t\NPCTextureID[12] = LoadTexture_Strict("GFX\npcs\body(3).png", 1, DeleteAllTextures) ; ~ SCP-409's victim
+	
+	t\NPCTextureID[13] = LoadTexture_Strict("GFX\npcs\scp_939_victim.png", 1, DeleteAllTextures) ; ~ SCP-939's victim # 2
+	
+	t\NPCTextureID[14] = LoadTexture_Strict("GFX\npcs\scp_939_victim(2).png", 1, DeleteAllTextures) ; ~ SCP-939's victim # 1
+	
+	t\NPCTextureID[15] = LoadTexture_Strict("GFX\npcs\scp_096_bloody.png", 1, DeleteAllTextures) ; ~ SCP-096 bloody texture
+	
 	LoadMaterials(MaterialsFile)
 	
 	RenderLoading(25, "MODELS")
@@ -8361,89 +8395,6 @@ Function LoadEntities()
 	For i = 0 To MaxNPCModelIDAmount - 1
 		HideEntity(o\NPCModelID[i])
 	Next
-	
-	; ~ NPCTypeD - different models with different textures (loaded using "CopyEntity") -- ENDSHN
-	For i = 0 To MaxDTextures - 1
-		o\DTextures[i] = CopyEntity(o\NPCModelID[NPCTypeD])
-		HideEntity(o\DTextures[i])
-	Next
-	
-	; ~ Gonzales
-	Tex = LoadTexture_Strict("GFX\npcs\Gonzales.png")
-	EntityTexture(o\DTextures[0], Tex)
-	DeleteSingleTextureEntryFromCache(Tex)
-	
-	; ~ SCP-970's corpse
-	Tex = LoadTexture_Strict("GFX\npcs\D_9341(2).png")
-	EntityTexture(o\DTextures[1], Tex)
-	DeleteSingleTextureEntryFromCache(Tex)
-	
-	; ~ Scientist
-	Tex = LoadTexture_Strict("GFX\npcs\scientist.png")
-	EntityTexture(o\DTextures[2], Tex)
-	DeleteSingleTextureEntryFromCache(Tex)
-	
-	; ~ Franklin
-	Tex = LoadTexture_Strict("GFX\npcs\Franklin.png")
-	EntityTexture(o\DTextures[3], Tex)
-	DeleteSingleTextureEntryFromCache(Tex)
-	
-	; ~ Janitor # 1
-	Tex = LoadTexture_Strict("GFX\npcs\janitor.png")
-	EntityTexture(o\DTextures[4], Tex)
-	DeleteSingleTextureEntryFromCache(Tex)
-	
-	; ~ Maynard
-	Tex = LoadTexture_Strict("GFX\npcs\Maynard.png")
-	EntityTexture(o\DTextures[5], Tex)
-	DeleteSingleTextureEntryFromCache(Tex)
-	
-	; ~ Afro-American Class-D
-	Tex = LoadTexture_Strict("GFX\npcs\class_d(2).png")
-	EntityTexture(o\DTextures[6], Tex)
-	DeleteSingleTextureEntryFromCache(Tex)
-	
-	If opt\IntroEnabled Then
-		; ~ D-9341
-		Tex = LoadTexture_Strict("GFX\npcs\D_9341.png")
-		EntityTexture(o\DTextures[7], Tex)
-		DeleteSingleTextureEntryFromCache(Tex)
-	EndIf
-	
-	; ~ Body # 1
-	Tex = LoadTexture_Strict("GFX\npcs\body.png")
-	EntityTexture(o\DTextures[8], Tex)
-	DeleteSingleTextureEntryFromCache(Tex)
-	
-	; ~ Body # 2
-	Tex = LoadTexture_Strict("GFX\npcs\body(2).png")
-	EntityTexture(o\DTextures[9], Tex)
-	DeleteSingleTextureEntryFromCache(Tex)
-	
-	; ~ Janitor # 2
-	Tex = LoadTexture_Strict("GFX\npcs\janitor(2).png")
-	EntityTexture(o\DTextures[10], Tex)
-	DeleteSingleTextureEntryFromCache(Tex)
-	
-	; ~ SCP-008-1's victim
-	Tex = LoadTexture_Strict("GFX\npcs\scp_008_1_victim.png")
-	EntityTexture(o\DTextures[11], Tex)
-	DeleteSingleTextureEntryFromCache(Tex)
-	
-	; ~ SCP-409's victim
-	Tex = LoadTexture_Strict("GFX\npcs\body(3).png")
-	EntityTexture(o\DTextures[12], Tex)
-	DeleteSingleTextureEntryFromCache(Tex)
-	
-	; ~ SCP-939's victim # 2
-	Tex = LoadTexture_Strict("GFX\npcs\scp_939_victim.png")
-	EntityTexture(o\DTextures[13], Tex)
-	DeleteSingleTextureEntryFromCache(Tex)
-	
-	; ~ SCP-939's victim # 1
-	Tex = LoadTexture_Strict("GFX\npcs\scp_939_victim(2).png")
-	EntityTexture(o\DTextures[14], Tex)
-	DeleteSingleTextureEntryFromCache(Tex)
 	
 	; ~ [BUTTONS]
 	

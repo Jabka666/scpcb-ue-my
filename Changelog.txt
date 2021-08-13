@@ -201,6 +201,7 @@ Mechanics and effects:
 - Added green frame for positive effects and red frame for negative effects.
 - Added slightly blackout while reading a document or note.
 - Added bloody overlay.
+- Added more D-9341 sounds into the intro sequence.
 - Improved white smoke.
 
 Map Creator:
