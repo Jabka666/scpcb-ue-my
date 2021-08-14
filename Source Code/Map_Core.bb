@@ -2289,6 +2289,7 @@ Function UpdateDoors()
 		If (d\Dist < HideDistance * 2.0) Lor (d\IsElevatorDoor > 0) Then ; ~ Make elevator doors update everytime because if not, this can cause a bug where the elevators suddenly won't work, most noticeable in room2_mt -- ENDSHN
 			; ~ Automatically disable d\AutoClose if the door is locked because if not, this can cause a locked door to be closed and player get stuck -- Jabka
 			If d\AutoClose And d\Locked > 0 Then d\AutoClose = False
+			
 			If (d\OpenState >= 180.0 Lor d\OpenState =< 0.0) And (Not GrabbedEntity) Then
 				For i = 0 To 1
 					If d\Buttons[i] <> 0 Then
@@ -2350,9 +2351,6 @@ Function UpdateDoors()
 							RotateEntity(d\OBJ, 0.0, PlayerRoom\Angle + d\Angle + (d\OpenState / 2.5), 0.0)
 							If d\DoorType = Office_Door Then
 								Animate2(d\OBJ, AnimTime(d\OBJ), 1.0, 41.0, 1.2, False)
-								For i = 0 To 1
-									FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
-								Next
 							EndIf
 							;[End Block]
 						Case One_Sided_Door
@@ -2446,7 +2444,7 @@ Function UpdateDoors()
 							d\OpenState = Max(0.0, d\OpenState - (fps\Factor[0] * 2.0 * (d\FastOpen + 1)))
 							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fps\Factor[0]) * (d\FastOpen + 1) / 80.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * fps\Factor[0] / 80.0, 0.0, 0.0)
-							;[End Block]	
+							;[End Block]
 						Case SCP_914_Door ; ~ Used for SCP-914 only
 							;[Block]
 							d\OpenState = Min(180.0, d\OpenState - (fps\Factor[0] * 1.4))
@@ -2887,7 +2885,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 End Function
 
 Function UseDoor(d.Doors, Scripted% = False, PlaySFX% = True)
-	Local Temp%
+	Local Temp%, i%
 	
 	If (Not Scripted) Then
 		If SelectedItem <> Null Then
@@ -3101,6 +3099,12 @@ Function UseDoor(d.Doors, Scripted% = False, PlaySFX% = True)
 	If d\Open Then
 		If d\LinkedDoor <> Null Then d\LinkedDoor\TimerState = d\LinkedDoor\Timer
 		d\TimerState = d\Timer
+		
+		If d\DoorType = Office_Door Then
+			For i = 0 To 1
+				If d\Buttons[i] <> 0 Then FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
+			Next
+		EndIf
 	EndIf
 	
 	If PlaySFX Then
@@ -3830,6 +3834,20 @@ Function UpdateLever%(OBJ%, Locked% = False)
 	Else
 		Return(False)
 	EndIf	
+End Function
+
+Function CreateRedLight%(x#, y#, z#, Parent% = 0)
+	Local Sprite%
+	
+	Sprite = CreateSprite()
+	PositionEntity(Sprite, x, y, z)
+	ScaleSprite(Sprite, 0.015, 0.015)
+	EntityTexture(Sprite, t\LightSpriteID[1])
+	EntityBlend(Sprite, 3)
+	HideEntity(Sprite)
+	EntityParent(Sprite, Parent)
+	
+	Return(Sprite)
 End Function
 
 Function FillRoom(r.Rooms)
@@ -7306,13 +7324,7 @@ Function FillRoom(r.Rooms)
 			EntityPickMode(r\Objects[9 * 2 + 1], 1, False)
 			EntityRadius(r\Objects[9 * 2 + 1], 0.1)
 			
-			r\Objects[22] = CreateSprite()
-			PositionEntity(r\Objects[22], r\x + 958.5 * RoomScale, r\y + 762.5 * RoomScale, r\z + 669.0 * RoomScale)
-			ScaleSprite(r\Objects[22], 0.015, 0.015)
-			EntityTexture(r\Objects[22], t\LightSpriteID[1])
-			EntityBlend(r\Objects[22], 3)
-			HideEntity(r\Objects[22])
-			EntityParent(r\Objects[22], r\OBJ)
+			r\Objects[22] = CreateRedLight(r\x + 958.5 * RoomScale, r\y + 762.5 * RoomScale, r\z + 669.0 * RoomScale, r\OBJ)
 			
 			; ~ Camera in the room itself
 			sc.SecurityCams = CreateSecurityCam(r\x - 159.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 929.0 * RoomScale, r, True, r\x - 231.489 * RoomScale, r\y + 760.0 * RoomScale, r\z + 255.744 * RoomScale)
