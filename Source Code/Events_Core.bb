@@ -4935,7 +4935,7 @@ Function UpdateEvents()
 						ScaleEntity(e\room\Objects[2], 0.05, 0.05, 0.05)
 						SetAnimTime(e\room\Objects[2], 488.0)
 						
-						Local ImgPath$ = ItemsPath + "1048\1048(" + Rand(0, 25) + ").png"
+						Local ImgPath$ = ItemsPath + "1048\1048(" + Rand(1, 25) + ").png"
 						Local itt.ItemTemplates
 						
 						For itt.ItemTemplates = Each ItemTemplates
@@ -4958,7 +4958,7 @@ Function UpdateEvents()
 							BT = GetBrushTexture(b, 0)
 							TexName = StripPath(TextureName(BT))
 							
-							If Lower(TexName) = "1048(0).png" Then
+							If Lower(TexName) = "1048(1).png" Then
 								PaintSurface(SF, Brush)
 							EndIf
 							FreeBrush(b)
