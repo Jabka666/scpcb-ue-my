@@ -4839,12 +4839,8 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\Objects[4], r\x - 384.0 * RoomScale, r\y - 4985.0 * RoomScale, r\z + 752.0 * RoomScale)
 			
 			; ~ Red light
-			r\Objects[5] = CreateSprite()
-			PositionEntity(r\Objects[5], r\x - 622.0 * RoomScale, r\y - 4735.0 * RoomScale, r\z + 672.5 * RoomScale)
-			ScaleSprite(r\Objects[5], 0.02, 0.02)
-			EntityTexture(r\Objects[5], t\LightSpriteID[1])
-			EntityBlend(r\Objects[5], 3)
-			HideEntity(r\Objects[5])
+			
+			r\Objects[5] = CreateRedLight(r\x - 622.0 * RoomScale, r\y - 4735.0 * RoomScale, r\z + 672.5 * RoomScale)
 			
 			; ~ Spawnpoint for the scientist used in the "SCP-008-1's scene"
 			r\Objects[6] = CreatePivot()
@@ -5442,12 +5438,7 @@ Function FillRoom(r.Rooms)
 			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[2], r\x - 360.0 * RoomScale, r\y - 130.0 * RoomScale, r\z + 456.0 * RoomScale)
 			
-			r\Objects[3] = CreateSprite()
-			PositionEntity(r\Objects[3], r\x - 43.5 * RoomScale, r\y - 574.0 * RoomScale, r\z - 362.0 * RoomScale)
-			ScaleSprite(r\Objects[3], 0.015, 0.015)
-			EntityTexture(r\Objects[3], t\LightSpriteID[1])
-			EntityBlend(r\Objects[3], 3)
-			HideEntity(r\Objects[3])
+			r\Objects[3] = CreateRedLight(r\x - 43.5 * RoomScale, r\y - 574.0 * RoomScale, r\z - 362.0 * RoomScale)
 			
 			For i = 2 To 3
 				EntityParent(r\Objects[i], r\OBJ)
@@ -6217,12 +6208,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\Objects[3], r\x, r\y + 0.8, r\z)
 			HideEntity(r\Objects[3])
 			
-			r\Objects[4] = CreateSprite()
-			PositionEntity(r\Objects[4], r\x - 32.0 * RoomScale, r\y + 568.0 * RoomScale, r\z)
-			ScaleSprite(r\Objects[4], 0.03, 0.03)
-			EntityTexture(r\Objects[4], t\LightSpriteID[1])
-			EntityBlend(r\Objects[4], 3)
-			HideEntity(r\Objects[4])
+			r\Objects[4] = CreateRedLight(r\x - 32.0 * RoomScale, r\y + 568.0 * RoomScale, r\z)
 			
 			r\Objects[5] = CreatePivot()
 			PositionEntity(r\Objects[5], r\x, r\y, r\z - 800.0 * RoomScale)
