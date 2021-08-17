@@ -580,6 +580,8 @@ Function UpdateConsole%()
 							CreateConsoleMsg("- crystal [value]") 
 							CreateConsoleMsg("- teleport [room name]")
 							CreateConsoleMsg("- spawnitem [item name]")
+							CreateConsoleMsg("- giveachievement [ID / All]")
+							CreateConsoleMsg("- codes")
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("Use " + Chr(34) + "help [command name]" + Chr(34) + " to get more information about a command.")
 							CreateConsoleMsg("******************************")
@@ -607,7 +609,7 @@ Function UpdateConsole%()
 							;[End Block]
 						Case "noblink", "nb"
 							;[Block]
-							CreateConsoleMsg("HELP - noblonk")
+							CreateConsoleMsg("HELP - noblink")
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("Toggles NoBlink, unless a valid parameter")
 							CreateConsoleMsg("is specified (on / off).")
@@ -824,11 +826,26 @@ Function UpdateConsole%()
 							CreateConsoleMsg("Example: crystal 52")
 							CreateConsoleMsg("******************************")
 							;[End Block]
-						Case "resetfunds" 
+						Case "resetfunds"
 							;[Block]
 							CreateConsoleMsg("HELP - resetfunds")
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("Resets your Mastercard funds.")
+							CreateConsoleMsg("******************************")
+						Case "giveachievement"
+							;[Block]
+							CreateConsoleMsg("HELP - giveachievement")
+							CreateConsoleMsg("******************************")
+							CreateConsoleMsg("Grants any achievement you want.")
+							CreateConsoleMsg("You can guess the ID by counting in the achievements menu (starts at 0).")
+							CreateConsoleMsg("You can also use " + Chr(34) + "all" + Chr(34) + " to immediately unlock every achievement.")
+							CreateConsoleMsg("******************************")
+							;[End Block]
+						Case "codes" 
+							;[Block]
+							CreateConsoleMsg("HELP - codes")
+							CreateConsoleMsg("******************************")
+							CreateConsoleMsg("Displays access codes for this save.")
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Default
@@ -1573,10 +1590,17 @@ Function UpdateConsole%()
 						StrTemp = ""
 					EndIf
 					
-					If Int(StrTemp) >= 0 And Int(StrTemp) < MAXACHIEVEMENTS Then
+					If StrTemp = "all" Then
+						For i = 0 To MAXACHIEVEMENTS-1
+							achv\Achievement[i] = True
+						Next
+						CreateConsoleMsg("All the achievements have been unlocked.")
+					EndIf
+					
+					If Int(StrTemp) >= 0 And Int(StrTemp) < MAXACHIEVEMENTS And StrTemp <> "all" Then
 						achv\Achievement[Int(StrTemp)] = True
-						CreateConsoleMsg("Achievemt " + achv\AchievementStrings[Int(StrTemp)] + " unlocked.")
-					Else
+						CreateConsoleMsg("Achievement " + achv\AchievementStrings[Int(StrTemp)] + " unlocked.")
+					ElseIf StrTemp <> "all"
 						CreateConsoleMsg("Achievement with ID " + Int(StrTemp) + " doesn't exist.", 255, 0, 0)
 					EndIf
 					;[End Block]
@@ -1598,6 +1622,23 @@ Function UpdateConsole%()
 				Case "resetfunds"
 					;[Block]
 					me\Funds = Rand(0, 6)
+					;[End Block]
+				Case "codes"
+					;[Block]
+					Temp = ((Int(AccessCode) * 3) Mod 10000)
+					If Temp < 1000 Then Temp = Temp + 1000
+					
+					CreateConsoleMsg("Access Codes:")
+					CreateConsoleMsg("")
+					CreateConsoleMsg("Dr Maynard: "+AccessCode)
+					CreateConsoleMsg("Dr Harp: 7816")
+					;CreateConsoleMsg("Dr Gears: 1311") // Removed since Gears office is locked
+					CreateConsoleMsg("Dr L: 1234")
+					CreateConsoleMsg("O5 Council Office: 2411")
+					CreateConsoleMsg("Maintenance Tunnel: "+Temp)
+					CreateConsoleMsg(Chr(34) + "cont1_035" + Chr(34) + " storage room: 5731")
+					CreateConsoleMsg("")
+					CreateConsoleMsg("All the others doors don't have a code.")
 					;[End Block]
 				Default
 					;[Block]
@@ -10034,6 +10075,5 @@ Function InteractObject%(OBJ%, Dist#, Arrow% = False, ArrowID% = 0, MouseDown_% 
 	EndIf
 	Return(False)
 End Function
-
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D
