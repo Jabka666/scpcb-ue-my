@@ -5540,6 +5540,12 @@ Function UpdateGUI()
 						RemoveItem(SelectedItem)
 					EndIf
 					;[End Block]
+				Case "scp1123"
+					;[Block]
+					Use1123(1)
+					
+					SelectedItem = Null
+					;[End Block]
 				Default
 					;[Block]
 					; ~ Check if the item is an inventory-type object
