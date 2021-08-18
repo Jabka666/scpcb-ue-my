@@ -1872,7 +1872,6 @@ Function UpdateLauncher(lnchr.Launcher)
 	
 	; ~ TODO: Get rid of these lines
 	MenuWhite = LoadImage_Strict("GFX\menu\menu_white.png")
-	MenuGray = LoadImage_Strict("GFX\menu\menu_gray.png")
 	MenuBlack = LoadImage_Strict("GFX\menu\menu_black.png")	
 	MaskImage(MenuBlack, 255, 255, 0)
 	
