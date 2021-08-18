@@ -94,6 +94,7 @@ SCPs:
 - Improved SCP-106's texture.
 - Improved anomalyous ducks texture.
 - Added breath sound for SCP-008-1.
+- SCP-1123 can be picked up.
 
 NPCs:
 - Improved D-Class animations.
@@ -123,10 +124,10 @@ Rooms:
 - Added one-sided and office doors.
 - Improved rooms design.
 	- Added new props:
-		- System unit.
-		- Yucca bush.
-		- Computer mouse.
-		- Water cooler.
+		- System unit;
+		- Yucca bush;
+		- Computer mouse;
+		- Water cooler;
 	- Improved SCP-895's model and image.
 	- Improved chair model.
 	- Added observation room for SCP-914's containment chamber.
@@ -168,16 +169,16 @@ Items:
 Ingame:
 - Improved console:
 	- Added new commands:
-		- 106retreat.
-		- money or rich.
-		- doorcontrol.
-		- unlockcheckpoints.
-		- resetfunds.
-		- newyear.
-		- noblink or nb.
-		- debughud (game/player/scps).
-		- clear.
-		- codes.
+		- 106retreat;
+		- money or rich;
+		- doorcontrol;
+		- unlockcheckpoints;
+		- resetfunds;
+		- newyear;
+		- noblink or nb;
+		- debughud (game/player/scps);
+		- clear;
+		- codes;
 	- Added more names for NPCs.
 	- Improved font.
 	- Renamed some item names (each item has own ID now).

@@ -771,7 +771,7 @@ Function PickItem(item.Items)
 				Select item\ItemTemplate\TempName
 					Case "scp1123"
 						;[Block]
-						Use1123(0)
+						Use1123(False)
 						;[End Block]
 					Case "killbat"
 						;[Block]
@@ -2399,49 +2399,48 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 	If it2 <> Null Then EntityType(it2\Collider, HIT_ITEM)
 End Function
 
-; // Made a function for SCP-1123 so we don't have to use duplicate code (since picking it up and using it does the same thing)
-Function Use1123(state%)
-	;temp:  0 = stay alive
-	;		1 = die
+; ~ Made a function for SCP-1123 so we don't have to use duplicate code (since picking it up and using it does the same thing)
+Function Use1123%(Use% = False)
+	; ~ Temp:	; ~		False: Stay alive
+	; ~		True: Die
 	
-	;state: 0 = pickup 1123
-	;		1 = use 1123
+	; ~ State:	; ~		False: Pick up SCP-1123
+	; ~		True: Use SCP-1123
 	
-	Local temp%, e.Events
+	Local e.Events
+	Local Temp%
 	
 	If (Not I_714\Using) And wi\GasMask <> 3 And wi\HazmatSuit <> 3 Then
-		
 		me\LightFlash = 3.0
 		PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))
 		
-		temp = 1 ; // The event occured (kill)
+		Temp = True ; ~ The event occured (kill)
 		
 		For e.Events = Each Events
-			If e\EventName = "cont2_1123" Then
+			If e\EventID = e_cont2_1123 Then
 				If PlayerRoom = e\room Then
-					If e\EventState < 1.0 Then ; // The event didn't occur and the player is in the room (starts the event)
+					If e\EventState < 1.0 Then ; ~ The event didn't occur and the player is in the room (starts the event)
 						e\EventState = 1.0
-						temp = 0
+						Temp = False
 						Exit
 					Else
-						temp = 1 ; // The player is currently in the event (kill)
+						Temp = True ; ~ The player is currently in the event (kill)
 					EndIf
 				Else
-					temp = 1 ; // The event didn't occur and the player isn't in the room (kill)
+					Temp = True ; ~ The event didn't occur and the player isn't in the room (kill)
 				EndIf
 			EndIf
 		Next
 	Else
-		If state = 1 Then
-			CreateMSG("You use the skull but nothing happens.")
+		If Use Then
+			CreateMsg("You touched the skull, but nothing happened.")
 		EndIf
 	EndIf
 	
-	
-	If temp Then
+	If Temp Then
 		msg\DeathMSG = SubjectName + " was shot dead after attempting to attack a member of Nine-Tailed Fox. Surveillance tapes show that the subject had been"
 		msg\DeathMSG = msg\DeathMSG + " wandering around the site approximately 9 minutes prior, shouting the phrase " + Chr(34) + "get rid of the four pests" + Chr(34)
-		msg\DeathMSG = msg\DeathMSG + " in chinese. SCP-1123 was found in [REDACTED] nearby, suggesting the subject had come into physical contact with it.
+		msg\DeathMSG = msg\DeathMSG + " in chinese. SCP-1123 was found in [REDACTED] nearby, suggesting the subject had come into physical contact with it."
 		Kill()
 		Return
 	EndIf

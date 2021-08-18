@@ -3897,13 +3897,13 @@ Function FillRoom(r.Rooms)
 		Case "room2c_gw_lcz"
 			;[Block]
 			; ~ Doors
-			d.Doors = CreateDoor(r\x + 816.0 * RoomScale, r\y, r\z - 352.0 * RoomScale, 0.0, r)
+			d.Doors = CreateDoor(r\x + 815.0 * RoomScale, r\y, r\z - 352.0 * RoomScale, 0.0, r)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.07, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
-			d.Doors = CreateDoor(r\x + 352.0 * RoomScale, r\y, r\z - 816.0 * RoomScale, 90.0, r)
+			d.Doors = CreateDoor(r\x + 352.0 * RoomScale, r\y, r\z - 815.0 * RoomScale, 90.0, r)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.07, True)
@@ -3947,13 +3947,13 @@ Function FillRoom(r.Rooms)
 		Case "room2c_gw_2_lcz"
 			;[Block]
 			; ~ Doors
-			d.Doors = CreateDoor(r\x + 816.0 * RoomScale, r\y, r\z - 352.0 * RoomScale, 180.0, r, True)
+			d.Doors = CreateDoor(r\x + 815.0 * RoomScale, r\y, r\z - 352.0 * RoomScale, 180.0, r, True)
 			d\Locked = 1 : d\MTFClose = False
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) + 0.07, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) - 0.07, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
-			d.Doors = CreateDoor(r\x + 352.0 * RoomScale, r\y, r\z - 816.0 * RoomScale, 90.0, r, True)
+			d.Doors = CreateDoor(r\x + 352.0 * RoomScale, r\y, r\z - 815.0 * RoomScale, 90.0, r, True)
 			d\Locked = 1 : d\MTFClose = False
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) - 0.07, True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.07, True)
@@ -3976,13 +3976,13 @@ Function FillRoom(r.Rooms)
 		Case "room2c_gw_ez"
 			;[Block]
 			; ~ Doors
-			d.Doors = CreateDoor(r\x + 816.0 * RoomScale, r\y, r\z - 352.0 * RoomScale, 0.0, r)
+			d.Doors = CreateDoor(r\x + 815.0 * RoomScale, r\y, r\z - 352.0 * RoomScale, 0.0, r)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.07, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
-			d.Doors = CreateDoor(r\x + 352.0 * RoomScale, r\y, r\z - 816.0 * RoomScale, 90.0, r)
+			d.Doors = CreateDoor(r\x + 352.0 * RoomScale, r\y, r\z - 815.0 * RoomScale, 90.0, r)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.07, True)

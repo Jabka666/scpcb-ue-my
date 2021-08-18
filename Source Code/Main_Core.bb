@@ -1630,12 +1630,12 @@ Function UpdateConsole%()
 					
 					CreateConsoleMsg("Access Codes:")
 					CreateConsoleMsg("")
-					CreateConsoleMsg("Dr Maynard: "+AccessCode)
-					CreateConsoleMsg("Dr Harp: 7816")
-					;CreateConsoleMsg("Dr Gears: 1311") // Removed since Gears office is locked
-					CreateConsoleMsg("Dr L: 1234")
+					CreateConsoleMsg("Dr. Maynard: " + AccessCode)
+					CreateConsoleMsg("Dr. Harp: 7816")
+					;CreateConsoleMsg("Dr Gears: 1311") ~ Removed since Gears office is locked
+					CreateConsoleMsg("Dr. L.: 1234")
 					CreateConsoleMsg("O5 Council Office: 2411")
-					CreateConsoleMsg("Maintenance Tunnel: "+Temp)
+					CreateConsoleMsg("Maintenance Tunnel: " + Temp)
 					CreateConsoleMsg(Chr(34) + "cont1_035" + Chr(34) + " storage room: 5731")
 					CreateConsoleMsg("")
 					CreateConsoleMsg("All the others doors don't have a code.")
@@ -5542,8 +5542,7 @@ Function UpdateGUI()
 					;[End Block]
 				Case "scp1123"
 					;[Block]
-					Use1123(1)
-					
+					Use1123(True)
 					SelectedItem = Null
 					;[End Block]
 				Default
@@ -10081,5 +10080,6 @@ Function InteractObject%(OBJ%, Dist#, Arrow% = False, ArrowID% = 0, MouseDown_% 
 	EndIf
 	Return(False)
 End Function
+
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D
