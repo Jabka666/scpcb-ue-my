@@ -270,7 +270,7 @@ Const MaxDecalTextureIDAmount% = 20
 Const MaxNPCTextureIDAmount% = 16
 Const MaxParticleTextureIDAmount% = 8
 Const MaxLightSpriteIDAmount% = 3
-Const MaxIconIDAmount% = 6
+Const MaxIconIDAmount% = 7
 Const MaxImageIDAmount% = 8
 ;[End Block]
 
@@ -5652,7 +5652,12 @@ Function RenderHUD()
 	Color(255, 255, 255)
 	Rect(x - (51 * MenuScale), y - MenuScale, 32 * MenuScale, 32 * MenuScale, False)
 	
-	DrawImage(t\IconID[3], x - (50 * MenuScale), y)
+	If me\BlinkTimer < 0
+		DrawImage(t\IconID[4], x - (50 * MenuScale), y)
+	Else
+		DrawImage(t\IconID[3], x - (50 * MenuScale), y)
+	EndIf
+	
 	
 	y = opt\GraphicHeight - (55 * MenuScale)
 	
@@ -5926,7 +5931,7 @@ Function RenderGUI()
 		
 		FreeEntity(Temp)
 		
-		DrawImage(t\IconID[4], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - 32, mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - 32)
+		DrawImage(t\IconID[5], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - 32, mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - 32)
 	EndIf
 	
 	If ClosestItem <> Null And (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And SelectedDoor = Null And SelectedScreen = Null And (Not MenuOpen) And (Not ConsoleOpen) And SelectedDifficulty\OtherFactors <> EXTREME Then
@@ -5937,7 +5942,7 @@ Function RenderGUI()
 		If PitchValue > 90.0 And PitchValue =< 180.0 Then PitchValue = 90.0
 		If PitchValue > 180.0 And PitchValue < 270.0 Then PitchValue = 270.0
 		
-		DrawImage(t\IconID[5], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - 32, mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - 32)
+		DrawImage(t\IconID[6], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - 32, mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - 32)
 	EndIf
 	
 	If (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And SelectedDoor = Null And SelectedScreen = Null And (Not MenuOpen) And (Not ConsoleOpen) And SelectedDifficulty\OtherFactors <> EXTREME Then
@@ -5964,7 +5969,7 @@ Function RenderGUI()
 						x = x - 69
 						;[End Block]
 				End Select
-				DrawImage(t\IconID[4], x, y)
+				DrawImage(t\IconID[5], x, y)
 				Color(0, 0, 0)
 				Rect(x + 4, y + 4, 56, 56)
 				DrawImage(ga\ArrowIMG[i], x + 21, y + 21)
@@ -8110,10 +8115,12 @@ Function LoadEntities()
 	t\IconID[1] = ResizeImage2(t\IconID[1], MenuScale, MenuScale)
 	t\IconID[2] = LoadImage_Strict("GFX\crouch_icon.png")
 	t\IconID[2] = ResizeImage2(t\IconID[2], MenuScale, MenuScale)
-	t\IconID[3] = LoadImage_Strict("GFX\blink_icon.png")
-	t\IconID[3] = ResizeImage2(t\IconID[3], MenuScale, MenuScale)
-	For i = 4 To 5
-		t\IconID[i] = LoadImage_Strict("GFX\hand_symbol(" + (i - 3) + ").png")
+	For i = 3 To 4
+		t\IconID[i] = LoadImage_Strict("GFX\blink_icon(" + (i - 2) + ").png")
+		t\IconID[i] = ResizeImage2(t\IconID[i], MenuScale, MenuScale)
+	Next
+	For i = 5 To 6
+		t\IconID[i] = LoadImage_Strict("GFX\hand_symbol(" + (i - 4) + ").png")
 		t\IconID[i] = ResizeImage2(t\IconID[i], MenuScale, MenuScale)
 	Next
 	
