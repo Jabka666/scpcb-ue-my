@@ -5946,7 +5946,7 @@ Function RenderGUI()
 	EndIf
 	
 	If (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And SelectedDoor = Null And SelectedScreen = Null And (Not MenuOpen) And (Not ConsoleOpen) And SelectedDifficulty\OtherFactors <> EXTREME Then
-		If ga\DrawHandIcon Then DrawImage(t\IconID[4], mo\Viewport_Center_X - 32, mo\Viewport_Center_Y - 32)
+		If ga\DrawHandIcon Then DrawImage(t\IconID[5], mo\Viewport_Center_X - 32, mo\Viewport_Center_Y - 32)
 		For i = 0 To 3
 			If ga\DrawArrowIcon[i] Then
 				x = mo\Viewport_Center_X - 32
