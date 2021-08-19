@@ -5623,7 +5623,7 @@ Function UpdateGUI()
 End Function
 
 Function RenderHUD()
-	Local x%, y%, Width%, Height%, IconID%
+	Local x%, y%, Width%, Height%, WalkIconID%, BlinkIconID%
 	
 	Width = 200 * MenuScale
 	Height = 20 * MenuScale
@@ -5652,12 +5652,12 @@ Function RenderHUD()
 	Color(255, 255, 255)
 	Rect(x - (51 * MenuScale), y - MenuScale, 32 * MenuScale, 32 * MenuScale, False)
 	
-	If me\BlinkTimer < 0
-		DrawImage(t\IconID[4], x - (50 * MenuScale), y)
+	If me\BlinkTimer < 0.0
+		BlinkIconID = 4
 	Else
-		DrawImage(t\IconID[3], x - (50 * MenuScale), y)
+		BlinkIconID = 3
 	EndIf
-	
+	DrawImage(t\IconID[BlinkIconID], x - (50 * MenuScale), y)
 	
 	y = opt\GraphicHeight - (55 * MenuScale)
 	
@@ -5682,13 +5682,13 @@ Function RenderHUD()
 	Color(255, 255, 255)
 	Rect(x - (51 * MenuScale), y - MenuScale, 32 * MenuScale, 32 * MenuScale, False)
 	If me\Crouch Then
-		IconID = 2
+		WalkIconID = 2
 	ElseIf (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) And me\CurrSpeed > 0.0 And (Not chs\NoClip) And me\Stamina > 0.0 Then
-		IconID = 1
+		WalkIconID = 1
 	Else
-		IconID = 0
+		WalkIconID = 0
 	EndIf
-	DrawImage(t\IconID[IconID], x - (50 * MenuScale), y)
+	DrawImage(t\IconID[WalkIconID], x - (50 * MenuScale), y)
 End Function
 
 Function RenderDebugHUD()

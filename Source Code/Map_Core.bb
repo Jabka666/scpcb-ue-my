@@ -2250,7 +2250,7 @@ End Function
 
 Function UpdateDoors()
 	Local p.Particles, d.Doors
-	Local x#, z#, Dist#, i%
+	Local x#, z#, Dist#, i%, FindButton%
 	
 	If UpdateDoorsTimer =< 0.0 Then
 		For d.Doors = Each Doors
@@ -2290,7 +2290,10 @@ Function UpdateDoors()
 			; ~ Automatically disable d\AutoClose if the door is locked because if not, this can cause a locked door to be closed and player get stuck -- Jabka
 			If d\AutoClose And d\Locked > 0 Then d\AutoClose = False
 			
-			If (d\OpenState >= 180.0 Lor d\OpenState =< 0.0) And (Not GrabbedEntity) Then
+			FindButton = True
+			If d\Open And ((d\DoorType = Office_Door) Lor (d\DoorType = Wooden_Door)) Then FindButton = False
+			
+			If ((d\OpenState >= 180.0 Lor d\OpenState =< 0.0) And FindButton) And (Not GrabbedEntity) Then
 				For i = 0 To 1
 					If d\Buttons[i] <> 0 Then
 						If Abs(EntityX(me\Collider) - EntityX(d\Buttons[i], True)) < 1.0 Then 
@@ -3096,12 +3099,6 @@ Function UseDoor(d.Doors, Scripted% = False, PlaySFX% = True)
 	If d\Open Then
 		If d\LinkedDoor <> Null Then d\LinkedDoor\TimerState = d\LinkedDoor\Timer
 		d\TimerState = d\Timer
-		
-		If d\DoorType = Office_Door Then
-			For i = 0 To 1
-				If d\Buttons[i] <> 0 Then FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
-			Next
-		EndIf
 	EndIf
 	
 	If PlaySFX Then
@@ -3883,12 +3880,8 @@ Function FillRoom(r.Rooms)
 				PlaceForest(fr, r\x, r\y + 30.0, r\z, r)
 			EndIf
 			
-			it.Items = CreateItem("Document SCP-860-1", "paper", r\x + 672.0 * RoomScale, r\y + 176.0 * RoomScale, r\z + 335.0 * RoomScale)
-			RotateEntity(it\Collider, 0.0, r\Angle + 10.0, 0.0)
-			EntityParent(it\Collider, r\OBJ)
-			
-			it.Items = CreateItem("Document SCP-860", "paper", r\x + 1152.0 * RoomScale, r\y + 176.0 * RoomScale, r\z - 384.0 * RoomScale)
-			RotateEntity(it\Collider, 0.0, r\Angle + 170.0, 0.0)
+			it.Items = CreateItem("Document SCP-860-1", "paper", r\x + 1158.0 * RoomScale, r\y + 250.0 * RoomScale, r\z - 17.0 * RoomScale)
+			RotateEntity(it\Collider, 0.0, r\Angle, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case "room2c_gw_lcz"
@@ -6746,7 +6739,7 @@ Function FillRoom(r.Rooms)
 			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Leaflet", "paper", r\x - 553.0 * RoomScale, r\y + 820.0 * RoomScale, r\z + 715.0 * RoomScale)
+			it.Items = CreateItem("Leaflet", "paper", r\x - 756.0 * RoomScale, r\y + 920.0 * RoomScale, r\z + 521.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case "dimension_106"
