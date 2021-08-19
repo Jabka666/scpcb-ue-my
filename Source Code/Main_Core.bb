@@ -9546,7 +9546,7 @@ Function UpdateMTF()
 			Next
 			
 			If entrance <> Null Then 
-				If Abs(EntityZ(entrance\OBJ) - EntityZ(me\Collider)) < 30.0 Then
+				If me\Zone = 2 Then
 					If PlayerInReachableRoom() Then
 						PlayAnnouncement("SFX\Character\MTF\Announc.ogg")
 					EndIf
