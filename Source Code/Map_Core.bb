@@ -6712,21 +6712,29 @@ Function FillRoom(r.Rooms)
 			
 			; ~ Nazi position near the player's cell
 			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x - 139.0 * RoomScale, r\y + 877.0 * RoomScale, r\z + 655.0 * RoomScale)
+			PositionEntity(r\Objects[1], r\x - 139.0 * RoomScale, r\y + 910.0 * RoomScale, r\z + 655.0 * RoomScale)
 			
 			; ~ Player's position inside the cell
 			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], r\x - 818.0 * RoomScale, r\y + 849.0 * RoomScale, r\z + 736.0 * RoomScale)
+			PositionEntity(r\Objects[2], r\x - 818.0 * RoomScale, r\y + 850.0 * RoomScale, r\z + 736.0 * RoomScale)
 			
 			; ~ Player's position after leaving the cell
 			r\Objects[3] = CreatePivot()
-			PositionEntity(r\Objects[3], r\x + 828.0 * RoomScale, r\y + 849.0 * RoomScale, r\z + 592.0 * RoomScale)
+			PositionEntity(r\Objects[3], r\x + 828.0 * RoomScale, r\y + 850.0 * RoomScale, r\z + 592.0 * RoomScale)
 			
 			; ~ Nazi position before the shooting
 			r\Objects[4] = CreatePivot()
-			PositionEntity(r\Objects[4], r\x - 706.0 * RoomScale, r\y + 877.0 * RoomScale, r\z - 845.0 * RoomScale)	
+			PositionEntity(r\Objects[4], r\x - 706.0 * RoomScale, r\y + 910.0 * RoomScale, r\z - 845.0 * RoomScale)	
 			
-			For i = 0 To 4
+			; ~ Nazi position while start shooting
+			r\Objects[5] = CreatePivot()
+			PositionEntity(r\Objects[5], r\x - 575.0 * RoomScale, r\y + 910.0 * RoomScale, r\z - 402.0 * RoomScale)
+			
+			; ~ Player's position befor the shooting
+			r\Objects[6] = CreatePivot()
+			PositionEntity(r\Objects[6], r\x - 468.0 * RoomScale, r\y + 850.0 * RoomScale, r\z - 273.0 * RoomScale)
+			
+			For i = 0 To 6
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			

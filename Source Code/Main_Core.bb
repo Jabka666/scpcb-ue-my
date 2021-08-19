@@ -652,7 +652,7 @@ Function UpdateConsole%()
 							CreateConsoleMsg("making everything else transparent.")
 							CreateConsoleMsg("******************************")
 							;[End Block]
-						Case "spawnitem"
+						Case "spawnitem", "si", "giveitem"
 							;[Block]
 							CreateConsoleMsg("HELP - spawnitem")
 							CreateConsoleMsg("******************************")
@@ -907,7 +907,7 @@ Function UpdateConsole%()
 					;[Block]
 					ResetNegativeStats()
 					;[End Block]
-				Case "teleport"
+				Case "teleport", "tp"
 					;[Block]
 					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 					
@@ -927,7 +927,7 @@ Function UpdateConsole%()
 					
 					If PlayerRoom\RoomTemplate\Name <> StrTemp Then CreateConsoleMsg("Room not found.", 255, 0, 0)
 					;[End Block]
-				Case "spawnitem"
+				Case "spawnitem", "si", "giveitem"
 					;[Block]
 					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 					Temp = False 

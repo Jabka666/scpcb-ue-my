@@ -177,7 +177,7 @@ Ingame:
 		- newyear;
 		- noblink or nb;
 		- debughud (game/player/scps);
-		- clear;
+		- clear or cls;
 		- codes;
 	- Added more names for NPCs.
 	- Improved font.

@@ -7262,19 +7262,22 @@ Function UpdateEvents()
 						EndIf
 						
 						If e\room\RoomDoors[3]\Open Then
-							;PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Horror.ogg"))
 							e\room\NPC[0]\State = 3.0
 							PointEntity(e\room\NPC[0]\Collider, me\Collider)
 							AnimateNPC(e\room\NPC[0], 27.0, 54.0, 0.5, False)
 							If e\room\NPC[0]\Frame >= 54.0 Then
-								e\EventState = 5.0
-								e\EventState2 = 0.0
-								PositionEntity(me\Collider, EntityX(e\room\OBJ, True), 0.3, EntityZ(e\room\OBJ, True) - 160.0 * RoomScale, True)
-								ResetEntity(me\Collider)									
+								PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Horror.ogg"))
+								
 								me\BlinkTimer = -10.0
 								me\BlurTimer = 500.0
 								me\Injuries = 1.5
 								me\Bloodloss = 70.0
+								
+								PositionEntity(me\Collider, EntityX(e\room\OBJ, True), 0.3, EntityZ(e\room\OBJ, True), True)
+								ResetEntity(me\Collider)									
+								
+								e\EventState = 5.0
+								e\EventState2 = 0.0
 							EndIf
 						EndIf
 					ElseIf e\EventState = 5.0
@@ -7285,21 +7288,15 @@ Function UpdateEvents()
 								e\room\RoomDoors[i]\Locked = 2
 							Next
 							
-							x = (EntityX(e\room\RoomDoors[2]\FrameOBJ, True) + EntityX(e\room\RoomDoors[3]\FrameOBJ, True)) / 2.0
-							y = EntityY(e\room\Objects[3], True)
-							z = (EntityZ(e\room\RoomDoors[2]\FrameOBJ, True) + EntityZ(e\room\RoomDoors[2]\FrameOBJ, True)) / 2.0
-							PositionEntity(me\Collider, x, y, z, True)
-							ResetEntity(me\Collider)
-							
-							x = (EntityX(me\Collider, True) + EntityX(e\room\RoomDoors[3]\FrameOBJ, True)) / 2.0
-							z = (EntityZ(me\Collider, True) + EntityZ(e\room\RoomDoors[3]\FrameOBJ, True)) / 2.0
-							
-							PositionEntity(e\room\NPC[0]\Collider, x, y + 0.2, z)
+							PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[5], True), EntityY(e\room\Objects[5], True), EntityZ(e\room\Objects[5], True))
 							ResetEntity(e\room\NPC[0]\Collider)
 							
 							me\Injuries = 1.5
 							me\Bloodloss = 70.0
 							me\BlinkTimer = -10.0
+							
+							PositionEntity(me\Collider, EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True), EntityZ(e\room\Objects[6], True), True)
+							ResetEntity(me\Collider)
 							
 							de.Decals = CreateDecal(3, EntityX(me\Collider), e\room\y + 512.0 * RoomScale + 0.005, EntityZ(me\Collider), 90.0, Rnd(360.0), 0.0, 0.5)
 							
