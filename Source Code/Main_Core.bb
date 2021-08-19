@@ -5743,7 +5743,7 @@ Function RenderDebugHUD()
 			EndIf
 			
 			Text(x, y + (320 * MenuScale), "Current Floor: " + PlayerElevatorFloor)
-			Text(x, y + (340 * MenuScale), "Room floor: " + FindFloor())
+			Text(x, y + (340 * MenuScale), "Room floor: " + ToElevatorFloor)
 			If PlayerInsideElevator Then
 				Text(x, y + (360 * MenuScale), "Player is inside elevator: True")
 			Else

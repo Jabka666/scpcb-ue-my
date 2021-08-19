@@ -194,7 +194,7 @@ Mechanics and effects:
 - Added bullet decals.
 - Added new SCP-079 face images.
 - Added crouch sound.
-- Added walk icon.
+- Added walk and closed eye icons.
 - Added smoothed HUD bars.
 - Added idle gas mask breathing.
 - Improved glass break and elevator beep sounds.
