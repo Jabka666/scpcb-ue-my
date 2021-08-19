@@ -129,7 +129,7 @@ Rooms:
 		- Computer mouse;
 		- Water cooler;
 	- Improved SCP-895's model and image.
-	- Improved chair model.
+	- Improved office seat model.
 	- Added observation room for SCP-914's containment chamber.
 	- Added observation room signs.
 	- Improved SCP-035's containment chamber.
@@ -298,3 +298,4 @@ Bug Fixes:
 - Fixed smoke doesn't interact with fog.
 - Fixed wrong decal blend in Pocket Dimension.
 - Fixed a bug where auto closing is applied for locked doors.
+- Fixed some item positions near the glass.
