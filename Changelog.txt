@@ -270,7 +270,7 @@ Bug Fixes:
 	- Fixed MTFs not announcing blinking or the presence of SCP-049-2.
 	- Fixed missing P90 texture on the scope.
 	- Fixed MTF SCP-049-2 voicelines not having a radio filter.
-	- Fixed MTF spawning triggers not inside Entrance Zone. 
+	- Fixed MTF spawning triggers outside Entrance Zone. 
 - Fixed keycard, origami, SCP-513-1 models.
 - Fixed breath sound while wearing SCP-714.
 - Fixed and reworked the "revive" command.
