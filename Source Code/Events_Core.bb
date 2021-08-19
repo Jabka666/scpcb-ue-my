@@ -7018,6 +7018,8 @@ Function UpdateEvents()
 				;[Block]
 				; ~ e\EventState: Is the player in the forest
 				
+				; ~ e\EventState2: Which side of the door did the player enter from
+				
 				; ~ e\EventState3: SCP-860-2 spawn timer
 				
 				Local fr.Forest = e\room\fr
@@ -7136,6 +7138,8 @@ Function UpdateEvents()
 								; ~ Determine the locked door
 								fr\ForestDoors[0]\Locked = 2
 								fr\ForestDoors[1]\Locked = 1
+								
+								e\EventState2 = 1.0
 							Else
 								PositionEntity(me\Collider, EntityX(fr\ForestDoors[1]\FrameOBJ, True), EntityY(fr\ForestDoors[1]\FrameOBJ, True) + EntityY(me\Collider, True) + 0.5, EntityZ(fr\ForestDoors[1]\FrameOBJ, True), True)
 								RotateEntity(me\Collider, 0.0, EntityYaw(fr\ForestDoors[1]\FrameOBJ, True) - 180.0, 0.0, True)
@@ -7144,6 +7148,8 @@ Function UpdateEvents()
 								; ~ Determine the locked door
 								fr\ForestDoors[0]\Locked = 1
 								fr\ForestDoors[1]\Locked = 2
+								
+								e\EventState2 = 0.0
 							EndIf
 							FreeEntity(Pvt)
 							ResetEntity(me\Collider)
@@ -7550,7 +7556,7 @@ Function UpdateEvents()
 							; ~ Start a timer for SCP-173 breaking through the window
 							e\EventState = e\EventState + 1.0
 							Dist = EntityDistanceSquared(me\Collider, e\room\Objects[1])
-							If Dist < 1.21 Then
+							If Dist < 1.0 Then
 								; ~ If close, increase the timer so that SCP-173 is ready to attack
 								e\EventState = Max(e\EventState, 70.0 * 12.0)
 							ElseIf Dist > 1.96
@@ -7945,7 +7951,7 @@ Function UpdateEvents()
 						If GrabbedEntity = e\room\Objects[i] Then
 							If (Not EntityInView(e\room\Objects[i], Camera)) Then
 								GrabbedEntity = 0
-							ElseIf EntityDistanceSquared(e\room\Objects[i], Camera) > 1.21
+							ElseIf EntityDistanceSquared(e\room\Objects[i], Camera) > 1.0
 								GrabbedEntity = 0
 							EndIf
 						EndIf

@@ -184,7 +184,7 @@ Ingame:
 	- Renamed some item names (each item has own ID now).
 	- Reworked "asd" command.
 	- Removed unnecessary console commands.
-	- Added short names for "notarget" (nt) and "infinitestamina" (is) commands.
+	- Added short names for some commands.
 - Added music for SCP-106's containment chamber and Maintenance Tunnels.
 
 Mechanics and effects:

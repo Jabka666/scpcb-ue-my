@@ -655,7 +655,7 @@ Function UpdateItems()
 			
 			If i\Dist < HideDist Then
 				ShowEntity(i\Collider)
-				If i\Dist < 1.44 Then
+				If i\Dist < 1.0 Then
 					If ClosestItem = Null Then
 						If EntityInView(i\Model, Camera) Then
 							If EntityVisible(i\Collider, Camera) Then

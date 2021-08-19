@@ -1260,7 +1260,7 @@ Function UpdateNPCs()
 									
 									AnimateNPC(n, 2.0, 193.0, 0.7)
 									
-									If Dist > 1.21 Then 
+									If Dist > 1.0 Then 
 										n\CurrSpeed = CurveValue(n\Speed * 2.0, n\CurrSpeed, 15.0)
 									Else
 										n\CurrSpeed = 0.0
@@ -1502,7 +1502,7 @@ Function UpdateNPCs()
 				
 				Dist = EntityDistanceSquared(me\Collider, n\Collider)
 				
-				n\BlinkTimer = 1.0
+				UpdateNPCBlinking(n)
 				
 				If n\Idle > 0.1 Then
 					If PlayerRoom\RoomTemplate\Name <> "cont2_049" Then
@@ -2003,7 +2003,7 @@ Function UpdateNPCs()
 					
 					PrevFrame = n\Frame
 					
-					n\BlinkTimer = 1.0
+					UpdateNPCBlinking(n)
 					
 					PlayerSeeAble = NPCSeesPlayer(n)
 					
@@ -2398,7 +2398,7 @@ Function UpdateNPCs()
 						
 						AnimateNPC(n, 1.0, 38.0, n\CurrSpeed * 40.0)
 						
-						If Dist > 4.0 Lor Dist < 1.21 Then
+						If Dist > 4.0 Lor Dist < 1.0 Then
 							n\CurrSpeed = CurveValue(n\Speed * Sgn(Sqr(Dist) - 1.5) * 0.75, n\CurrSpeed, 10.0)
 						Else
 							n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 10.0)
@@ -2851,7 +2851,7 @@ Function UpdateNPCs()
 									n\State2 = 0.0
 								EndIf
 							Else
-								If EntityDistanceSquared(n\Collider, n\Path[0]\OBJ) > 1.21 Then
+								If EntityDistanceSquared(n\Collider, n\Path[0]\OBJ) > 1.0 Then
 									PointEntity(n\OBJ, n\Path[0]\OBJ)
 									RotateEntity(n\Collider, CurveAngle(EntityPitch(n\OBJ), EntityPitch(n\Collider), 15.0), CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 15.0), 0.0, True)
 									n\CurrSpeed = CurveValue(0.05 * Max((7.0 - Sqr(Dist)) / 7.0, 0.0), n\CurrSpeed, 15.0)
@@ -3526,7 +3526,7 @@ Function UpdateNPCs()
 							RotateEntity(n\Collider, 0.0, Angle - 90.0, 0.0, True)
 							
 							; ~ If close enough to attack or already attacking, play the attack anim
-							If (Dist < 1.21 Lor (n\Frame > 451.0 And n\Frame < 493.0) Lor me\KillTimer < 0.0) Then
+							If (Dist < 1.0 Lor (n\Frame > 451.0 And n\Frame < 493.0) Lor me\KillTimer < 0.0) Then
 								msg\DeathMsg = ""
 								
 								n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
@@ -3712,7 +3712,7 @@ Function UpdateNPCs()
 											PlaySound2(StepSFX(1, 1, Rand(0, 7)), Camera, n\Collider, 12.0)
 										EndIf										
 										
-										If DistanceSquared(n\EnemyX, EntityX(n\Collider), n\EnemyZ, EntityZ(n\Collider)) < 1.21 Then ; ~ Player is visible
+										If DistanceSquared(n\EnemyX, EntityX(n\Collider), n\EnemyZ, EntityZ(n\Collider)) < 1.0 Then ; ~ Player is visible
 											SetNPCFrame(n, 18.0)
 										EndIf
 									Else
@@ -3827,7 +3827,7 @@ Function UpdateNPCs()
 						
 						If Rand(700) = 1 Then PlaySound2(LoadTempSound("SFX\SCP\066\Eric" + Rand(1, 3) + ".ogg"), Camera, n\Collider, 8.0)
 						
-						If Dist < 1.21 + PowTwo(n\LastDist) Then n\State = Rand(2.0, 3.0)
+						If Dist < 1.0 + PowTwo(n\LastDist) Then n\State = Rand(2.0, 3.0)
 						;[End Block]
 					Case 2.0 ; ~ Rolls towards the player and make a sound, and then escape	
 						;[Block]
@@ -3982,7 +3982,7 @@ Function UpdateNPCs()
 						If wi\NightVision = 0 Then
 							HideEntity(n\OBJ)
 							If (Not chs\Notarget) Then
-								If Dist < 1.21 And n\Reload =< 0.0 And msg\Timer =< 0.0 Then
+								If Dist < 1.0 And n\Reload =< 0.0 And msg\Timer =< 0.0 Then
 									Select Rand(6)
 										Case 1
 											;[Block]
@@ -4702,7 +4702,7 @@ Function UpdateNPCs()
 					
 					PrevFrame = n\Frame
 					
-					n\BlinkTimer = 1.0
+					UpdateNPCBlinking(n)
 					
 					PlayerSeeAble = NPCSeesPlayer(n)
 					
@@ -4733,7 +4733,7 @@ Function UpdateNPCs()
 								n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
 								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 								
-								If Dist < 1.21 Then
+								If Dist < 1.0 Then
 									If Abs(DeltaYaw(n\Collider, me\Collider)) =< 60.0 Then
 										n\State = 4.0
 									EndIf
@@ -5062,15 +5062,12 @@ Function UpdateMTFUnit(n.NPCs)
 	
 	n\MaxGravity = 0.03
 	
-	n\BlinkTimer = n\BlinkTimer - fps\Factor[0]
-	If n\BlinkTimer =< -5.0 Then 
+	UpdateNPCBlinking(n)
+	If n\BlinkTimer =< 0.0 Then 
 		; ~ Only play the "blinking" sound clip if searching / containing SCP-173
 		If n\State = 2.0 Then
-			If EntityDistanceSquared(Curr173\Collider, n\Collider) < 64.0 Then
-				PlayMTFSound(LoadTempSound("SFX\Character\MTF\173\BLINKING.ogg"), n)
-			EndIf
+			PlayMTFSound(LoadTempSound("SFX\Character\MTF\173\BLINKING.ogg"), n)
 		EndIf
-		n\BlinkTimer = 70.0 * Rnd(10.0, 15.0)
 	EndIf	
 	
 	n\Reload = n\Reload - fps\Factor[0]
@@ -5227,7 +5224,7 @@ Function UpdateMTFUnit(n.NPCs)
 							
 							NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 							
-							If NewDist < 1.21 And n\Path[n\PathLocation]\door <> Null Then
+							If NewDist < 1.0 And n\Path[n\PathLocation]\door <> Null Then
 								; ~ Open the door and make it automatically close after 5 seconds
 								If (Not n\Path[n\PathLocation]\door\Open) Then
 									PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\DoorType, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
@@ -5237,7 +5234,7 @@ Function UpdateMTFUnit(n.NPCs)
 								If n\Path[n\PathLocation]\door\MTFClose Then n\Path[n\PathLocation]\door\TimerState = 70.0 * 5.0
 							EndIf
 							
-							If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.21)) Then
+							If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then
 								n\PathLocation = n\PathLocation + 1
 							EndIf
 						EndIf
@@ -5270,7 +5267,7 @@ Function UpdateMTFUnit(n.NPCs)
 							EndIf
 							FinishWalking(n, 488.0, 522.0, n\Speed * 26.0)
 							n\CurrSpeed = 0.0
-						ElseIf EntityDistanceSquared(n\Collider, n\MTFLeader\Collider) > 1.21 Then
+						ElseIf EntityDistanceSquared(n\Collider, n\MTFLeader\Collider) > 1.0 Then
 							PointEntity(n\Collider, n\MTFLeader\Collider)
 							RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 							
@@ -5604,7 +5601,7 @@ Function UpdateMTFUnit(n.NPCs)
 								
 								NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 								
-								If NewDist < 1.21 And n\Path[n\PathLocation]\door <> Null Then
+								If NewDist < 1.0 And n\Path[n\PathLocation]\door <> Null Then
 									; ~ Open the door and make it automatically close after 5 seconds
 									If (Not n\Path[n\PathLocation]\door\Open) Then
 										PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\DoorType, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
@@ -5614,7 +5611,7 @@ Function UpdateMTFUnit(n.NPCs)
 									If n\Path[n\PathLocation]\door\MTFClose Then n\Path[n\PathLocation]\door\TimerState = 70.0 * 5.0
 								EndIf
 								
-								If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.21)) Then
+								If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then
 									n\PathLocation = n\PathLocation + 1
 								EndIf
 							EndIf
@@ -5828,7 +5825,7 @@ Function UpdateMTFUnit(n.NPCs)
 						n\State2 = 70.0 * 15.0
 						n\PathTimer = 0.0
 						
-						Local TempDist# = 1.21
+						Local TempDist# = 1.0
 						
 						If n\MTFLeader <> Null Then TempDist = 4.0
 						If Curr173Dist < TempDist Then
@@ -5905,7 +5902,7 @@ Function UpdateMTFUnit(n.NPCs)
 									
 									NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 									
-									If NewDist < 1.21 And n\Path[n\PathLocation]\door <> Null Then
+									If NewDist < 1.0 And n\Path[n\PathLocation]\door <> Null Then
 										; ~ Open the door and make it automatically close after 5 seconds
 										If (Not n\Path[n\PathLocation]\door\Open) Then
 											PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\DoorType, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
@@ -5915,7 +5912,7 @@ Function UpdateMTFUnit(n.NPCs)
 										If n\Path[n\PathLocation]\door\MTFClose Then n\Path[n\PathLocation]\door\TimerState = 70.0 * 5.0
 									EndIf
 									
-									If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.21)) Then
+									If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then
 										n\PathLocation = n\PathLocation + 1
 									EndIf
 								EndIf
@@ -6119,7 +6116,7 @@ Function UpdateMTFUnit(n.NPCs)
 									If n\Path[n\PathLocation]\door\MTFClose Then n\Path[n\PathLocation]\door\TimerState = 70.0 * 5.0
 								EndIf
 								
-								If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.21)) Then
+								If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then
 									n\PathLocation = n\PathLocation + 1
 								EndIf
 							EndIf
@@ -6289,7 +6286,7 @@ Function UpdateMTFUnit(n.NPCs)
 							
 							NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 							
-							If NewDist < 1.21 And n\Path[n\PathLocation]\door <> Null Then
+							If NewDist < 1.0 And n\Path[n\PathLocation]\door <> Null Then
 								; ~ Open the door and make it automatically close after 5 seconds
 								If (Not n\Path[n\PathLocation]\door\Open) Then
 									PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\DoorType, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
@@ -6299,7 +6296,7 @@ Function UpdateMTFUnit(n.NPCs)
 								If n\Path[n\PathLocation]\door\MTFClose Then n\Path[n\PathLocation]\door\TimerState = 70.0 * 5.0
 							EndIf
 							
-							If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.21)) Then
+							If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then
 								n\PathLocation = n\PathLocation + 1
 							EndIf
 						EndIf
@@ -6309,7 +6306,7 @@ Function UpdateMTFUnit(n.NPCs)
 						If n\MTFLeader = Null Then
 							FinishWalking(n, 488.0, 522.0, n\Speed * 26.0)
 							n\CurrSpeed = 0.0
-						ElseIf EntityDistanceSquared(n\Collider, n\MTFLeader\Collider) > 1.21 Then
+						ElseIf EntityDistanceSquared(n\Collider, n\MTFLeader\Collider) > 1.0 Then
 							PointEntity(n\Collider, n\MTFLeader\Collider)
 							RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 							
@@ -6431,7 +6428,7 @@ Function UpdateMTFUnit(n.NPCs)
 								
 								NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 								
-								If NewDist < 1.21 And n\Path[n\PathLocation]\door <> Null Then
+								If NewDist < 1.0 And n\Path[n\PathLocation]\door <> Null Then
 									If (Not n\Path[n\PathLocation]\door\Open) Then
 										PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\DoorType, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
 										PlayMTFSound(MTFSFX[0], n)
@@ -6440,7 +6437,7 @@ Function UpdateMTFUnit(n.NPCs)
 									If n\Path[n\PathLocation]\door\MTFClose Then n\Path[n\PathLocation]\door\TimerState = 70.0 * 5.0
 								EndIf
 								
-								If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.21)) Then
+								If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then
 									n\PathLocation = n\PathLocation + 1
 								EndIf
 							EndIf
@@ -6538,7 +6535,7 @@ Function UpdateMTFUnit(n.NPCs)
 									NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 									
 									; ~ Open the door and make it automatically close after 5 seconds
-									If NewDist < 1.21 And n\Path[n\PathLocation]\door <> Null Then
+									If NewDist < 1.0 And n\Path[n\PathLocation]\door <> Null Then
 										If (Not n\Path[n\PathLocation]\door\Open)
 											PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\DoorType, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
 											PlayMTFSound(MTFSFX[0], n)
@@ -6549,7 +6546,7 @@ Function UpdateMTFUnit(n.NPCs)
 										EndIf
 									EndIf
 									
-									If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.21)) Then
+									If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then
 										n\PathLocation = n\PathLocation + 1
 									EndIf
 								EndIf
@@ -6900,6 +6897,14 @@ Function PlayerSees173%(n.NPCs)
 		Else
 			Return(False)
 		EndIf
+	EndIf
+End Function
+
+Function UpdateNPCBlinking%(n.NPCs)
+	If n\BlinkTimer > 0.0 Then
+		n\BlinkTimer = n\BlinkTimer - fps\Factor[0]
+	Else
+		n\BlinkTimer = 70.0 * Rnd(10.0, 15.0)
 	EndIf
 End Function
 
