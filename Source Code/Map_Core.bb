@@ -7601,6 +7601,17 @@ Function FillRoom(r.Rooms)
 				EntityParent(it\Collider, r\OBJ)	
 			EndIf
 			;[End Block]
+		Case "room2_ic"
+			;[Block]
+			d.Doors = CreateDoor(r\x - 896.0 * RoomScale, r\y, r\z, 90.0, r, True, Elevator_Door)
+			
+			it.Items = CreateItem("Cup", "cup", r\x - 100.0 * RoomScale, r\y + 230.0 * RoomScale, r\z - 24.0 * RoomScale, 200, 200, 200)
+			it\Name = "Cup of Water"
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Empty Cup", "emptycup", r\x + 143.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 966.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			;[End Block]
 	End Select
 	
 	For lt.LightTemplates = Each LightTemplates
