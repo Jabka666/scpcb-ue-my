@@ -186,5 +186,49 @@ Function UpdateEmitters()
 	EndIf	
 End Function
 
+Function UpdateDust()
+	Local p.Particles
+	Local i%, Pvt%
+	
+	If opt\ParticleAmount > 0 Then
+		; ~ Create a single dust particles
+		If Rand(35 + (35 * (opt\ParticleAmount = 1))) = 1 Then
+			Pvt = CreatePivot()
+			
+			PositionEntity(Pvt, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True))
+			RotateEntity(Pvt, 0.0, Rnd(360.0), 0.0)
+			If Rand(2) = 1 Then
+				MoveEntity(Pvt, 0.0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
+			Else
+				MoveEntity(Pvt, 0.0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
+			EndIf
+			
+			p.Particles = CreateParticle(3, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 0.002, 0.0, 300.0)
+			p\Speed = 0.001 : p\SizeChange = -0.00001
+			RotateEntity(p\Pvt, Rnd(-20.0, 20.0), Rnd(360.0), 0.0)
+			FreeEntity(Pvt)
+		EndIf
+		
+		; ~ Create extra dust particles while the camera is shaking
+		If me\BigCameraShake > 0.0 Then
+			For i = 0 To 5 + (5 * (opt\ParticleAmount - 1))
+				Pvt = CreatePivot()
+				PositionEntity(Pvt, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True))
+				RotateEntity(Pvt, 0.0, Rnd(360.0), 0.0)
+				If Rand(2) = 1 Then
+					MoveEntity(Pvt, 0.0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
+				Else
+					MoveEntity(Pvt, 0.0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
+				EndIf
+				
+				p.Particles = CreateParticle(3, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 0.002, 0.0, 300.0)
+				p\Speed = 0.001 : p\SizeChange = -0.00001
+				RotateEntity(p\Pvt, Rnd(-20.0, 20.0), Rnd(360.0), 0.0)
+				FreeEntity(Pvt)
+			Next
+		EndIf
+	EndIf
+End Function
+
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D

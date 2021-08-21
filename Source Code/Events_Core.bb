@@ -1102,7 +1102,7 @@ Function UpdateEvents()
 							e\Sound2 = LoadSound_Strict("SFX\Alarm\Alarm2_" + Int(e\EventState3) + ".ogg")
 							e\SoundCHN2 = PlaySound_Strict(e\Sound2)
 						Else
-							If Int(e\EventState3) = 8.0 Then me\CameraShake = 1.0
+							If Int(e\EventState3) = 8.0 Then me\BigCameraShake = 1.0
 						EndIf
 					EndIf
 					If ((e\EventState Mod 600.0 > 300.0) And ((e\EventState + fps\Factor[0]) Mod 600.0 < 300.0)) Then
@@ -2067,7 +2067,7 @@ Function UpdateEvents()
 								EndIf
 								
 								If e\EventState > 14080.0 And e\EventState - fps\Factor[0] < 14080.0 Then PlaySound_Strict(IntroSFX[Rand(8, 10)])
-								me\CameraShake = 3.0
+								me\BigCameraShake = 3.0
 							ElseIf e\EventState < 14200.0
 								Animate2(e\room\NPC[1]\OBJ, AnimTime(e\room\NPC[1]\OBJ), 678.0, 711.0, 0.5, False)
 								
@@ -2092,7 +2092,7 @@ Function UpdateEvents()
 									Curr173\Idle = 0
 								EndIf
 								If e\EventState > 14100.0 And e\EventState - fps\Factor[0] < 14100.0 Then PlaySound_Strict(IntroSFX[6])
-								If e\EventState < 14150.0 Then me\CameraShake = 5.0
+								If e\EventState < 14150.0 Then me\BigCameraShake = 5.0
 							Else
 								Animate2(e\room\NPC[2]\OBJ, AnimTime(e\room\NPC[2]\OBJ), 735.0, 779.0, 0.5, False)
 								If e\EventState > 14300.0 Then 
@@ -2106,7 +2106,7 @@ Function UpdateEvents()
 						ElseIf e\EventState < 30000.0
 							e\EventState = Min(e\EventState + fps\Factor[0], 30000.0)
 							If e\EventState < 20100.0 Then
-								me\CameraShake = 2.0
+								me\BigCameraShake = 2.0
 							Else
 								If e\EventState < 20200.0 Then
 									If e\EventState > 20105.0 And e\EventState - fps\Factor[0] < 20105.0 Then 
@@ -2129,7 +2129,7 @@ Function UpdateEvents()
 										ResetEntity(Curr173\Collider)
 										PointEntity(Curr173\Collider, e\room\NPC[0]\Collider)
 									EndIf
-									me\BlinkTimer = -10.0 : me\LightBlink = 1.0 : me\CameraShake = 3.0
+									me\BlinkTimer = -10.0 : me\LightBlink = 1.0 : me\BigCameraShake = 3.0
 								ElseIf e\EventState < 20300.0
 									PointEntity(e\room\NPC[0]\Collider, Curr173\Collider)
 									e\room\NPC[0]\State = 2.0
@@ -2139,7 +2139,7 @@ Function UpdateEvents()
 									If e\EventState - fps\Factor[0] < 20300.0 Then
 										me\BlinkTimer = -10.0
 										me\LightBlink = 1.0
-										me\CameraShake = 3.0
+										me\BigCameraShake = 3.0
 										PlaySound_Strict(IntroSFX[Rand(8, 10)])
 										
 										If e\room\NPC[0]\Sound <> 0 Then
@@ -3596,34 +3596,14 @@ Function UpdateEvents()
 							e\EventState = 3.0
 						EndIf
 					ElseIf e\EventState < 70.0 * 13.0
-						If me\CameraShake > 0.0 Then
-							If opt\ParticleAmount > 0 Then
-								For i = 0 To 5 + (5 * (opt\ParticleAmount - 1))
-									Pvt = CreatePivot()
-									PositionEntity(Pvt, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True))
-									RotateEntity(Pvt, 0.0, Rnd(360.0), 0.0)
-									If Rand(2) = 1 Then
-										MoveEntity(Pvt, 0.0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
-									Else
-										MoveEntity(Pvt, 0.0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
-									EndIf
-									
-									p.Particles = CreateParticle(3, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 0.002, 0.0, 300.0)
-									p\Speed = 0.001 : p\SizeChange = -0.00001
-									RotateEntity(p\Pvt, Rnd(-20.0, 20.0), Rnd(360.0), 0.0)
-									FreeEntity(Pvt)
-								Next
-							EndIf
-						EndIf
-						
 						e\EventState = e\EventState + fps\Factor[0]
 						If e\EventState > 70.0 * 6.7 And e\EventState < 70.0 * 7.4 Then
-							me\CameraShake = 7.4 - (e\EventState / 70.0)
+							me\BigCameraShake = 7.4 - (e\EventState / 70.0)
 							If e\room\NPC[0] <> Null Then
 								RemoveNPC(e\room\NPC[0]) : e\room\NPC[0] = Null
 							EndIf
 						ElseIf e\EventState > 70.0 * 8.6 And e\EventState < 70.0 * 10.6
-							me\CameraShake = 10.6 - (e\EventState / 70.0)
+							me\BigCameraShake = 10.6 - (e\EventState / 70.0)
 						ElseIf e\EventState >= 70.0 * 13.0
 							RemoveEvent(e)
 						EndIf
@@ -5509,7 +5489,7 @@ Function UpdateEvents()
 											do\Open = False
 											do\OpenState = 0.0
 											me\BlurTimer = 100.0
-											me\CameraShake = 3.0											
+											me\BigCameraShake = 3.0											
 										EndIf
 									EndIf
 									Exit
@@ -7813,27 +7793,8 @@ Function UpdateEvents()
 					
 					If e\EventState < 70.0 * 17.0 Then
 						If e\EventState + fps\Factor[0] >= 70.0 * 17.0 Then LoadEventSound(e, "SFX\SCP\682\Roar.ogg") : e\SoundCHN = PlaySound_Strict(e\Sound)
-						If e\EventState > (70.0 * 17.0) - (70.0 * 3.0) Then me\CameraShake = 0.5
-						If e\EventState < (70.0 * 17.0) - (70.0 * 7.5) And e\EventState > (70.0 * 17.0) - (70.0 * 11.0) Then me\CameraShake = 2.0
-						If me\CameraShake > 0.0 Then
-							If opt\ParticleAmount > 0 Then
-								For i = 0 To 5 + (5 * (opt\ParticleAmount - 1))
-									Pvt = CreatePivot()
-									PositionEntity(Pvt, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True))
-									RotateEntity(Pvt, 0.0, Rnd(360.0), 0.0)
-									If Rand(2) = 1 Then
-										MoveEntity(Pvt, 0.0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
-									Else
-										MoveEntity(Pvt, 0.0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
-									EndIf
-									
-									p.Particles = CreateParticle(3, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 0.002, 0.0, 300.0)
-									p\Speed = 0.001 : p\SizeChange = -0.00001
-									RotateEntity(p\Pvt, Rnd(-20.0, 20.0), Rnd(360.0), 0.0)
-									FreeEntity(Pvt)
-								Next
-							EndIf
-						EndIf
+						If e\EventState > (70.0 * 17.0) - (70.0 * 3.0) Then me\BigCameraShake = 0.5
+						If e\EventState < (70.0 * 17.0) - (70.0 * 7.5) And e\EventState > (70.0 * 17.0) - (70.0 * 11.0) Then me\BigCameraShake = 2.0
 						If e\EventState < 70.0 * 1.0 Then 
 							If e\Sound <> 0 Then FreeSound_Strict(e\Sound) 
 							RemoveEvent(e)
@@ -10396,18 +10357,18 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 		EndIf
 		
 		If EventState > 70.0 * 1.9 And EventState < (70.0 * 2.0) + fps\Factor[0]
-			me\CameraShake = 7.0
+			me\BigCameraShake = 7.0
 		ElseIf EventState > 70.0 * 4.2 And EventState < (70.0 * 4.25) + fps\Factor[0]
-			me\CameraShake = 1.0
+			me\BigCameraShake = 1.0
 		ElseIf EventState > 70.0 * 5.9 And EventState < (70.0 * 5.95) + fps\Factor[0]
-			me\CameraShake = 1.0
+			me\BigCameraShake = 1.0
 		ElseIf EventState > 70.0 * 7.25 And EventState < (70.0 * 7.3) + fps\Factor[0]
-			me\CameraShake = 1.0
+			me\BigCameraShake = 1.0
 			d\FastOpen = True : d\Open = True
 			Curr096\State = 4.0
 			Curr096\LastSeen = 1.0
 		ElseIf EventState > 70.0 * 8.1 And EventState < 70.0 * 8.15 + fps\Factor[0]
-			me\CameraShake = 1.0
+			me\BigCameraShake = 1.0
 		EndIf
 		
 		If EventState =< 70.0 * 8.1 Then

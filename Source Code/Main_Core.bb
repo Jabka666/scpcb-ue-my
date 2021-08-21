@@ -162,7 +162,7 @@ Type Player
 	Field Playable%, PlayTime%
 	Field BlinkTimer#, BLINKFREQ#, BlinkEffect#, BlinkEffectTimer#, EyeIrritation#, EyeStuck#
 	Field Stamina#, StaminaEffect#, StaminaEffectTimer#
-	Field CameraShakeTimer#, Shake#, CameraShake#
+	Field CameraShakeTimer#, Shake#, CameraShake#, BigCameraShake#
 	Field Vomit%, VomitTimer#, Regurgitate%
 	Field HeartBeatRate#, HeartBeatTimer#, HeartBeatVolume#
 	Field Injuries#, Bloodloss#, PrevInjuries#, PrevBloodloss#, HealTimer#
@@ -3177,6 +3177,7 @@ Function UpdateMouseLook()
 	Local i%
 	
 	me\CameraShake = Max(me\CameraShake - (fps\Factor[0] / 10.0), 0.0)
+	me\BigCameraShake = Max(me\BigCameraShake - (fps\Factor[0] / 10.0), 0.0)
 	
 	CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / (Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * (Float(opt\RealGraphicWidth) / Float(opt\RealGraphicHeight)))) / 2.0)))
 	me\CurrCameraZoom = Max(me\CurrCameraZoom - fps\Factor[0], 0.0)
@@ -3216,7 +3217,9 @@ Function UpdateMouseLook()
 		If CameraPitch > 70.0 Then CameraPitch = 70.0
 		If CameraPitch < -70.0 Then CameraPitch = -70.0
 		
-		RotateEntity(Camera, WrapAngle(CameraPitch + Rnd(-me\CameraShake, me\CameraShake)), WrapAngle(EntityYaw(me\Collider) + Rnd(-me\CameraShake, me\CameraShake)), Roll) ; ~ Pitch the user's camera up and down
+		Local ShakeTimer# = me\CameraShake + me\BigCameraShake
+		
+		RotateEntity(Camera, WrapAngle(CameraPitch + Rnd(-ShakeTimer, ShakeTimer)), WrapAngle(EntityYaw(me\Collider) + Rnd(-ShakeTimer, ShakeTimer)), Roll) ; ~ Pitch the user's camera up and down
 		
 		If PlayerRoom\RoomTemplate\Name = "dimension_106" Then
 			If EntityY(me\Collider) < 2000.0 * RoomScale Lor EntityY(me\Collider) > 2608.0 * RoomScale Then
@@ -3256,24 +3259,7 @@ Function UpdateMouseLook()
 		EndIf
 	EndIf
 	
-	If opt\ParticleAmount = 2 Then
-		If Rand(35) = 1 Then
-			Local Pvt% = CreatePivot()
-			
-			PositionEntity(Pvt, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True))
-			RotateEntity(Pvt, 0.0, Rnd(360.0), 0.0)
-			If Rand(2) = 1 Then
-				MoveEntity(Pvt, 0.0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
-			Else
-				MoveEntity(Pvt, 0.0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
-			EndIf
-			
-			p.Particles = CreateParticle(3, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 0.002, 0.0, 300.0)
-			p\Speed = 0.001 : p\SizeChange = -0.00001
-			RotateEntity(p\Pvt, Rnd(-20.0, 20.0), Rnd(360.0), 0.0)
-			FreeEntity(Pvt)
-		EndIf
-	EndIf
+	UpdateDust()
 	
 	; ~ Limit the mouse's movement. Using this method produces smoother mouselook movement than centering the mouse each loop
 	If (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And SelectedDoor = Null And SelectedScreen = Null Then
@@ -9637,12 +9623,12 @@ Function UpdateExplosion()
 			If me\ExplosionTimer - fps\Factor[0] < 5.0 Then
 				ExplosionSFX = LoadSound_Strict("SFX\Ending\gateb\Nuke1.ogg")
 				PlaySound_Strict(ExplosionSFX)
-				me\CameraShake = 10.0
+				me\BigCameraShake = 10.0
 				me\ExplosionTimer = 5.0
 			EndIf
-			me\CameraShake = CurveValue(me\ExplosionTimer / 60.0, me\CameraShake, 50.0)
+			me\BigCameraShake = CurveValue(me\ExplosionTimer / 60.0, me\BigCameraShake, 50.0)
 		Else
-			me\CameraShake = Min((me\ExplosionTimer / 20.0), 20.0)
+			me\BigCameraShake = Min((me\ExplosionTimer / 20.0), 20.0)
 			If me\ExplosionTimer - fps\Factor[0] < 140.0 Then
 				me\BlinkTimer = 1.0
 				ExplosionSFX = LoadSound_Strict("SFX\Ending\gateb\Nuke2.ogg")

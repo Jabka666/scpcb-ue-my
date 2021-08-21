@@ -3856,7 +3856,7 @@ Function UpdateNPCs()
 												n\SoundCHN2 = PlaySound2(n\Sound2, Camera, n\Collider)
 												me\DeafTimer = 70.0 * (45.0 + (15.0 * SelectedDifficulty\AggressiveNPCs))
 												me\Deaf = True
-												me\CameraShake = 10.0
+												me\BigCameraShake = 10.0
 												;[End Block]
 											Case 2
 												;[Block]
@@ -3877,7 +3877,7 @@ Function UpdateNPCs()
 											Case 4
 												;[Block]
 												If (Not PlayerRoom\RoomTemplate\DisableDecals) Then
-													me\CameraShake = 5.0
+													me\BigCameraShake = 5.0
 													de.Decals = CreateDecal(1, EntityX(n\Collider), 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, 0.3)
 													PlaySound_Strict(LoadTempSound("SFX\General\BodyFall.ogg"))
 													If DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider)) < 0.64 Then

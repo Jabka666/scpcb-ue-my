@@ -1379,6 +1379,9 @@ Function LoadGameQuick(File$)
 	me\DeafTimer = 0.0
 	me\Playable = True
 	msg\Txt = ""
+	msg\Timer = 0.0
+	msg\HintTxt = ""
+	msg\HintTimer = 0.0
 	me\SelectedEnding = -1
 	
 	PositionEntity(me\Collider, 0.0, 1000.0, 0.0, True)
@@ -1394,6 +1397,7 @@ Function LoadGameQuick(File$)
 	me\HeartBeatVolume = 0.0
 	
 	me\CameraShake = 0.0
+	me\BigCameraShake = 0.0
 	me\Shake = 0.0
 	me\LightFlash = 0.0
 	me\BlurTimer = 0.0
