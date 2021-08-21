@@ -2690,7 +2690,7 @@ Function UpdateNPCs()
 				;[Block]
 				UpdateMTFUnit(n)
 				;[End Block]
-			Case NPCTypeD, NPCTypeClerk, NPCtype035
+			Case NPCTypeD, NPCTypeClerk
 				;[Block]
 				RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), EntityRoll(n\Collider), True)
 				

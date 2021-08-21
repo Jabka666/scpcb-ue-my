@@ -69,17 +69,17 @@ Const e_cont2_500_1499% = 62
 Const e_cont2c_1162_arc% = 63
 Const e_room2_sl% = 64
 Const e_096_spawn% = 65
-Const e_room2_medibay_lcz% = 66, e_room2_medibay_ez% = 67
-Const e_dimension_1499% = 68
-Const e_room2_shaft% = 69
-Const e_room4_ic% = 70
-Const e_room2_bio% = 71
-Const e_cont2_409% = 72
-Const e_cont1_005% = 73
-Const e_gate_b_entrance% = 74
-Const e_gate_b% = 75
-Const e_gate_a_entrance% = 76
-Const e_gate_a% = 77
+Const e_room2_medibay% = 66
+Const e_dimension_1499% = 67
+Const e_room2_shaft% = 68
+Const e_room4_ic% = 69
+Const e_room2_bio% = 70
+Const e_cont2_409% = 71
+Const e_cont1_005% = 72
+Const e_gate_b_entrance% = 73
+Const e_gate_b% = 74
+Const e_gate_a_entrance% = 75
+Const e_gate_a% = 76
 ;[End Block]
 
 Function FindEventID%(EventName$)
@@ -348,13 +348,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_096_spawn)
 			;[End Block]
-		Case "room2_medibay_lcz"
+		Case "room2_medibay"
 			;[Block]
-			Return(e_room2_medibay_lcz)
-			;[End Block]
-		Case "room2_medibay_ez"
-			;[Block]
-			Return(e_room2_medibay_ez)
+			Return(e_room2_medibay)
 			;[End Block]
 		Case "dimension_1499"
 			;[Block]
@@ -637,8 +633,7 @@ Function InitEvents()
 	
 	CreateEvent("room2_sl", "room2_sl", 0)
 	
-	CreateEvent("room2_medibay_lcz", "room2_medibay_lcz", 0)
-	CreateEvent("room2_medibay_ez", "room2_medibay_ez", 0)
+	CreateEvent("room2_medibay", "room2_medibay", 0)
 	
 	CreateEvent("room2_shaft", "room2_shaft", 0)
 	
@@ -9042,36 +9037,30 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_room2_medibay_lcz, e_room2_medibay_ez
+			Case e_room2_medibay
 				;[Block]
-				; ~ Hiding / Showing the props in this room
-				If PlayerRoom <> e\room Then
-					HideEntity(e\room\Objects[0])
-				Else
-					ShowEntity(e\room\Objects[0])
+				If PlayerRoom = e\room Then
+					If e\EventState = 0.0 Then
+						e\room\NPC[0] = CreateNPC(NPCType008_1, EntityX(e\room\Objects[0], True), 0.5, EntityZ(e\room\Objects[0], True))
+						e\room\NPC[0]\State = 0.0
+						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle - 90.0, 0.0)
+						e\EventState = 1.0
+					EndIf
 					
-					If e\EventID = e_room2_medibay_ez Then
-						If e\EventState = 0.0 Then
-							e\room\NPC[0] = CreateNPC(NPCType008_1, EntityX(e\room\Objects[1], True), 0.5, EntityZ(e\room\Objects[1], True))
-							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle - 90.0, 0.0)
-							e\EventState = 1.0
+					If EntityDistanceSquared(e\room\NPC[0]\Collider, me\Collider) < 1.44 Then
+						If e\EventState2 = 0.0 Then
+							me\LightBlink = 10.0
+							PlaySound_Strict(LightSFX)
+							e\room\NPC[0]\State = 1.0
+							e\EventState2 = 1.0
 						EndIf
+					EndIf
 						
-						If EntityDistanceSquared(e\room\NPC[0]\Collider, me\Collider) < 1.44 Then
-							If e\EventState2 = 0.0 Then
-								me\LightBlink = 10.0
-								PlaySound_Strict(LightSFX)
-								e\room\NPC[0]\State = 1.0
-								e\EventState2 = 1.0
-							EndIf
-						EndIf
-					Else
-						If InteractObject(e\room\Objects[1], 0.49) Then
-							CreateMsg("You feel a cold breeze next to your body.")
-							InjurePlayer(Rnd(-0.5, 0.3))
-							me\Bloodloss = 0.0
-							PlaySound_Strict(LoadTempSound("SFX\SCP\Joke\Quack.ogg"))
-						EndIf
+					If InteractObject(e\room\Objects[1], 0.49) Then
+						CreateMsg("You feel a cold breeze next to your body.")
+						InjurePlayer(Rnd(-0.2, -0.05))
+						me\Bloodloss = 0.0
+						PlaySound_Strict(LoadTempSound("SFX\SCP\Joke\Quack.ogg"))
 					EndIf
 				EndIf
 				;[End Block]

@@ -3852,7 +3852,7 @@ Function FillRoom(r.Rooms)
 	Local xTemp#, yTemp#, zTemp#, xTemp2%, yTemp2%, zTemp2%, SF%, b%, Name$
 	Local t1%, Tex%, Screen%, Scale#
 	Local i%, k%, Temp%, Temp3%, Angle#
-	Local TempStr$, TempStr2$, TempStr3$
+	Local ItemName$, ItemTempName$
 	
 	Select r\RoomTemplate\Name
 		Case "cont2_860_1"
@@ -6215,16 +6215,6 @@ Function FillRoom(r.Rooms)
 			For i = 0 To 6
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
-			
-			For r2.Rooms = Each Rooms
-				If r2 <> r Then
-					If r2\RoomTemplate\Name = "room2_tesla_lcz" Lor r2\RoomTemplate\Name = "room2_tesla_hcz" Lor r2\RoomTemplate\Name = "room2_tesla_ez" Then
-						r\Objects[7] = CopyEntity(r2\Objects[7], r\OBJ) ; ~ Don't load the mesh again
-						Exit
-					EndIf
-				EndIf
-			Next
-			If (Not r\Objects[7])Then r\Objects[7] = LoadMesh_Strict("GFX\map\Props\tesla_caution.b3d", r\OBJ)
 			;[End Block]
 		Case "room2_6_lcz"
 			;[Block]
@@ -6596,7 +6586,7 @@ Function FillRoom(r.Rooms)
 			For xTemp2 = 0 To 1
 				For yTemp2 = 0 To 2
 					For zTemp2 = 0 To 2
-						TempStr = "9V Battery" : TempStr2 = "bat"
+						ItemName = "9V Battery" : ItemTempName = "bat"
 						
 						Local ItemChance% = Rand(-10, 100)
 						
@@ -6607,39 +6597,39 @@ Function FillRoom(r.Rooms)
 								;[End Block]
 							Case ItemChance < 40 ; ~ 40% chance for a document
 								;[Block]
-								TempStr = "Document SCP-" + GetRandDocument()
-								TempStr2 = "paper"
+								ItemName = "Document SCP-" + GetRandDocument()
+								ItemTempName = "paper"
 								;[End Block]
 							Case ItemChance >= 40 And ItemChance < 45 ; ~ 5% chance for a key card
 								;[Block]
 								Temp3 = Rand(0, 2)
-								TempStr = "Level " + Str(Temp3) + " Key Card"
-								TempStr2 = "key" + Str(Temp3)
+								ItemName = "Level " + Str(Temp3) + " Key Card"
+								ItemTempName = "key" + Str(Temp3)
 								;[End Block]
 							Case ItemChance >= 45 And ItemChance < 50 ; ~ 5% chance for a medkit
 								;[Block]
-								TempStr = "First Aid Kit"
-								TempStr2 = "firstaid"
+								ItemName = "First Aid Kit"
+								ItemTempName = "firstaid"
 								;[End Block]
 							Case ItemChance >= 50 And ItemChance < 60 ; ~ 10% chance for a battery
 								;[Block]
-								TempStr = "9V Battery"
-								TempStr2 = "bat"
+								ItemName = "9V Battery"
+								ItemTempName = "bat"
 								;[End Block]
-							Case ItemChance >= 60 And ItemChance < 70 ; ~ 10% chance for an SNAV
+							Case ItemChance >= 60 And ItemChance < 70 ; ~ 10% chance for an S-NAV
 								;[Block]
-								TempStr = "S-NAV Navigator"
-								TempStr2 = "nav"
+								ItemName = "S-NAV Navigator"
+								ItemTempName = "nav"
 								;[End Block]
 							Case ItemChance >= 70 And ItemChance < 85 ; ~ 15% chance for a radio
 								;[Block]
-								TempStr = "Radio Transceiver"
-								TempStr2 = "radio"
+								ItemName = "Radio Transceiver"
+								ItemTempName = "radio"
 								;[End Block]
 							Case ItemChance >= 85 And ItemChance < 95 ; ~ 10% chance for a clipboard
 								;[Block]
-								TempStr = "Clipboard"
-								TempStr2 = "clipboard"
+								ItemName = "Clipboard"
+								ItemTempName = "clipboard"
 								;[End Block]
 							Case ItemChance >= 95 And ItemChance =< 100 ; ~ 5% chance for misc
 								;[Block]
@@ -6647,18 +6637,18 @@ Function FillRoom(r.Rooms)
 								Select Temp3
 									Case 1 ; ~ Playing card
 										;[Block]
-										TempStr = "Playing Card"
-										TempStr2 = "playcard"
+										ItemName = "Playing Card"
+										ItemTempName = "playcard"
 										;[End Block]
 									Case 2 ; ~ Mastercard
 										;[Block]
-										TempStr = "Mastercard"
-										TempStr2 = Lower(TempStr)
+										ItemName = "Mastercard"
+										ItemTempName = Lower(ItemName)
 										;[End Block]
 									Case 3 ; ~ Origami
 										;[Block]
-										TempStr = "Origami"
-										TempStr2 = Lower(TempStr)
+										ItemName = "Origami"
+										ItemTempName = Lower(ItemName)
 										;[End Block]
 								End Select
 								;[End Block]
@@ -6667,7 +6657,7 @@ Function FillRoom(r.Rooms)
 						yTemp = 96.0 + 96.0 * yTemp2
 						zTemp = 480.0 - 352.0 * zTemp2 + Rnd(-96.0, 96.0)
 						
-						it.Items = CreateItem(TempStr, TempStr2, r\x + xTemp * RoomScale, r\y + yTemp * RoomScale, r\z + zTemp * RoomScale)
+						it.Items = CreateItem(ItemName, ItemTempName, r\x + xTemp * RoomScale, r\y + yTemp * RoomScale, r\z + zTemp * RoomScale)
 						EntityParent(it\Collider, r\OBJ)							
 					Next
 				Next
@@ -7527,60 +7517,56 @@ Function FillRoom(r.Rooms)
 			it.Items = CreateItem("Ballistic Helmet", "helmet", r\x + 980.0 * RoomScale, r\y + 250.0 * RoomScale, r\z + 300.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "room2_medibay_lcz", "room2_medibay_ez"
+		Case "room2_medibay"
 			;[Block]
-			d.Doors = CreateDoor(r\x - 264.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 90.0, r, False, Default_Door, KEY_CARD_3)
-			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.031, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
-			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.031, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
+			; ~ Doors
+			d.Doors = CreateDoor(r\x - 256.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 90.0, r, False, Default_Door, KEY_CARD_3)
 			
-			For r2.Rooms = Each Rooms
-				If r2 <> r Then
-					If r2\RoomTemplate\Name = "room2_medibay_lcz" Lor r2\RoomTemplate\Name = "room2_medibay_ez" Then
-						r\Objects[0] = CopyEntity(r2\Objects[0], r\OBJ) ; ~ Don't load the mesh again
-						Exit
-					EndIf
-				EndIf
+			d.Doors = CreateDoor(r\x - 512.0 * RoomScale, r\y, r\z + 378.0 * RoomScale, 0.0, r, False, Office_Door)
+			
+			d.Doors = CreateDoor(r\x - 1024.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 270.0, r, False, Default_Door, KEY_CARD_3)
+			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			FreeEntity(d\OBJ2) : d\OBJ2 = 0
+			
+			; ~ Zombie spawnpoint
+			r\Objects[0] = CreatePivot()
+			PositionEntity(r\Objects[0], r\x - 820.0 * RoomScale, r\y + 500.0 * RoomScale, r\z - 464.0 * RoomScale)
+			
+			; ~ Orange duck
+			r\Objects[1] = CopyEntity(o\NPCModelID[NPCTypeDuck])
+			Tex = LoadTexture_Strict("GFX\npcs\duck(4).png")
+			EntityTexture(r\Objects[1], Tex)
+			DeleteSingleTextureEntryFromCache(Tex)
+			ScaleEntity(r\Objects[1], 0.07, 0.07, 0.07)
+			PositionEntity(r\Objects[1], r\x - 910.0 * RoomScale, r\y + 144.0 * RoomScale, r\z - 778.0 * RoomScale)				
+			TurnEntity(r\Objects[1], 6.0, 180.0, 0.0)
+			
+			For i = 0 To 1
+				EntityParent(r\Objects[i], r\OBJ)
 			Next
-			If (Not r\Objects[0]) Then r\Objects[0] = LoadMesh_Strict("GFX\map\medibay_props.b3d", r\OBJ)
-			EntityType(r\Objects[0], HIT_MAP)
-			EntityPickMode(r\Objects[0], 2)
-			
-			If r\RoomTemplate\Name = "room2_medibay_lcz" Then
-				r\Objects[1] = CopyEntity(o\NPCModelID[NPCTypeDuck])
-				Tex = LoadTexture_Strict("GFX\npcs\duck(4).png")
-				EntityTexture(r\Objects[1], Tex)
-				DeleteSingleTextureEntryFromCache(Tex)
-				ScaleEntity(r\Objects[1], 0.07, 0.07, 0.07)
-				PositionEntity(r\Objects[1], r\x - 910.0 * RoomScale, r\y + 144.0 * RoomScale, r\z - 778.0 * RoomScale)				
-				TurnEntity(r\Objects[1], 6.0, 180.0, 0.0)
-				EntityParent(r\Objects[1], r\OBJ)
-			Else
-				r\Objects[1] = CreatePivot()
-				PositionEntity(r\Objects[1], r\x - 820.0 * RoomScale, r\y, r\z - 318.0 * RoomScale)
-				EntityParent(r\Objects[1], r\OBJ)
-			EndIf
 			
 			If Rand(2) = 1 Then
-				it.Items = CreateItem("Syringe", "syringe", r\x - 340.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 52.3 * RoomScale)
-				RotateEntity(it\Collider, 0.0, Rnd(100.0, 110.0), 0.0)
-				EntityParent(it\Collider, r\OBJ)
+				ItemName = "Syringe"
+				ItemTempName = "syringe"
 			Else
-				it.Items = CreateItem("Syringe", "syringeinf", r\x - 340.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 52.3 * RoomScale)
-				RotateEntity(it\Collider, 0.0, Rnd(100.0, 110.0), 0.0)
-				EntityParent(it\Collider, r\OBJ)
+				ItemName = "Syringe"
+				ItemTempName = "syringeinf"
 			EndIf
+			it.Items = CreateItem(ItemName, ItemTempName, r\x - 923.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 96.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
 			
 			If Rand(2) = 1 Then
-				it.Items = CreateItem("Syringe", "syringe", r\x - 340.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 97.3 * RoomScale)
-				RotateEntity(it\Collider, 0.0, Rnd(250.0, 260.0), 0.0)
-				EntityParent(it\Collider, r\OBJ)
+				ItemName = "Syringe"
+				ItemTempName = "syringe"
 			Else
-				it.Items = CreateItem("Syringe", "syringeinf", r\x - 340.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 97.3 * RoomScale)
-				RotateEntity(it\Collider, 0.0, Rnd(250.0, 260.0), 0.0)
-				EntityParent(it\Collider, r\OBJ)
+				ItemName = "Syringe"
+				ItemTempName = "syringeinf"
 			EndIf
+			it.Items = CreateItem(ItemName, ItemTempName, r\x - 907.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 159.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("First Aid Kit", "firstaid", r\x - 506.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 322.0 * RoomScale)
+			it.Items = CreateItem("First Aid Kit", "firstaid", r\x - 333.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 123.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)	
 			;[End Block]
 		Case "cont1_005"
@@ -8378,7 +8364,6 @@ Function CreateMap()
 	SetRoom("room2_sl", ROOM2, Floor(0.5 * Float(Room2Amount[0])), MinPos, MaxPos)
 	SetRoom("cont2_012", ROOM2, Floor(0.55 * Float(Room2Amount[0])), MinPos, MaxPos)
 	SetRoom("cont2_500_1499", ROOM2, Floor(0.6 * Float(Room2Amount[0])), MinPos, MaxPos)
-	SetRoom("room2_medibay_lcz", ROOM2, Floor(0.7 * Float(Room2Amount[0])), MinPos, MaxPos)
 	SetRoom("cont2_1123", ROOM2, Floor(0.75 * Float(Room2Amount[0])), MinPos, MaxPos)
 	SetRoom("room2_elevator", ROOM2, Floor(0.85 * Float(Room2Amount[0])), MinPos, MaxPos)
 	SetRoom("room2_storage_2", ROOM2, Floor(0.9 * Float(Room2Amount[0])), MinPos, MaxPos)
@@ -8438,7 +8423,7 @@ Function CreateMap()
 	SetRoom("room2_office", ROOM2, MinPos + Floor(0.5 * Room2Amount[2]), MinPos, MaxPos)	
 	SetRoom("room2_office_2", ROOM2, MinPos + Floor(0.55 * Room2Amount[2]), MinPos, MaxPos)	
 	SetRoom("cont2_860_1", ROOM2, MinPos + Floor(0.6 * Room2Amount[2]), MinPos, MaxPos)
-	SetRoom("room2_medibay_ez", ROOM2, MinPos + Floor(0.7 * Float(Room2Amount[2])), MinPos, MaxPos)
+	SetRoom("room2_medibay", ROOM2, MinPos + Floor(0.7 * Float(Room2Amount[2])), MinPos, MaxPos)
 	SetRoom("room2_scientists_2", ROOM2, MinPos + Floor(0.8 * Room2Amount[2]), MinPos, MaxPos)
 	SetRoom("room2_2_ez", ROOM2, MinPos + Floor(0.9 * Float(Room2Amount[2])), MinPos, MaxPos)
 	
