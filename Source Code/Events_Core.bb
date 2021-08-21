@@ -827,7 +827,7 @@ Function UpdateEvents()
 	Local Dist#, i%, Temp%, Pvt%, StrTemp$, j%, k%
 	Local CurrTrigger$ = "", fDir#, Scale#, Tex%, t1%, Name$
 	Local x#, y#, z#, xTemp#, yTemp#, b%, BT%, SF%, TexName$
-	Local Angle#
+	Local Angle#, RoomExists%
 	
 	CurrStepSFX = 0
 	
@@ -2657,11 +2657,17 @@ Function UpdateEvents()
 				;[End Block]
 			Case e_gate_b_entrance
 				;[Block]
-				If PlayerRoom = e\room Then 
-					e\EventState3 = 1.0
+				If PlayerRoom = e\room Then
+					RoomExists = False
 					For r.Rooms = Each Rooms
-						If r\RoomTemplate\Name = "room2c_ec" Then e\EventState3 = 0.0 : Exit
+						If r\RoomTemplate\Name = "room2c_ec" Then
+							RoomExists = True
+							Exit
+						EndIf
 					Next
+					If (Not RoomExists) Then
+						e\EventState3 = 1.0
+					EndIf
 					
 					If (Not RemoteDoorOn) Then
 						e\room\RoomDoors[1]\Locked = 1
@@ -2699,11 +2705,17 @@ Function UpdateEvents()
 				;[End Block]
 			Case e_gate_a_entrance
 				;[Block]
-				If PlayerRoom = e\room Then 
-					e\EventState3 = 1.0
+				If PlayerRoom = e\room Then
+					RoomExists = False
 					For r.Rooms = Each Rooms
-						If r\RoomTemplate\Name = "room2c_ec" Then e\EventState3 = 0.0 : Exit
+						If r\RoomTemplate\Name = "room2c_ec" Then
+							RoomExists = True
+							Exit
+						EndIf
 					Next
+					If (Not RoomExists) Then
+						e\EventState3 = 1.0
+					EndIf
 					
 					If (Not RemoteDoorOn) Then
 						e\room\RoomDoors[1]\Locked = 1

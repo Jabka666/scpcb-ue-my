@@ -209,6 +209,7 @@ Mechanics and effects:
 - Added bloody overlay.
 - Added more D-9341 sounds into the intro sequence.
 - Improved white smoke.
+- Added miss sound for NPCs.
 
 Map Creator:
 - Sorted rooms by zones.
