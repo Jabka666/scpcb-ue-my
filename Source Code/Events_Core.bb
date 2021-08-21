@@ -2660,7 +2660,7 @@ Function UpdateEvents()
 				If PlayerRoom = e\room Then 
 					e\EventState3 = 1.0
 					For r.Rooms = Each Rooms
-						If r\RoomTemplate\Name = "room2c_ec" Then e\EventState3 = 0.0
+						If r\RoomTemplate\Name = "room2c_ec" Then e\EventState3 = 0.0 : Exit
 					Next
 					
 					If (Not RemoteDoorOn) Then
@@ -2702,7 +2702,7 @@ Function UpdateEvents()
 				If PlayerRoom = e\room Then 
 					e\EventState3 = 1.0
 					For r.Rooms = Each Rooms
-						If r\RoomTemplate\Name = "room2c_ec" Then e\EventState3 = 0.0
+						If r\RoomTemplate\Name = "room2c_ec" Then e\EventState3 = 0.0 : Exit
 					Next
 					
 					If (Not RemoteDoorOn) Then
