@@ -5098,6 +5098,7 @@ Function UpdateMTFUnit(n.NPCs)
 										If EntityX(n\Collider, True) - r\x < 15.0 Then
 											If r\RoomDoors[1]\Open Then UseDoor(r\RoomDoors[1], True)
 											Curr173\IsDead = True
+											Exit
 										EndIf
 									EndIf
 								Next
@@ -7038,8 +7039,8 @@ Function MoveToPocketDimension()
 			
 			PlayerRoom = r
 			
-			Return
 			Exit
+			Return
 		EndIf
 	Next		
 End Function

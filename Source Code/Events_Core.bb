@@ -4739,7 +4739,7 @@ Function UpdateEvents()
 					
 					If EntityY(me\Collider, True) > 4.0 Then
 						For r.Rooms = Each Rooms
-							If r <> e\room
+							If r <> e\room Then
 								HideEntity(r\OBJ)
 							EndIf
 						Next
