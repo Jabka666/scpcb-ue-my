@@ -515,7 +515,7 @@ Function CreateNPCAsset%(n.NPCs)
 			;[Block]
 			n\OBJ2 = CopyEntity(o\NPCModelID[NPCTypeVehicle])
 			Temp = GetINIFloat(NPCsFile, "Guard", "Scale") / 2.5
-			Temp = (Temp + 1.664) / MeshWidth(n\OBJ2)
+			Temp = (Temp + 1.68) / MeshWidth(n\OBJ2)
 			ScaleEntity(n\OBJ2, Temp, Temp, Temp)
 			MeshCullBox(n\OBJ2, -MeshWidth(n\OBJ2), -MeshHeight(n\OBJ2), -MeshDepth(n\OBJ2), MeshWidth(n\OBJ2) * 2.0, MeshHeight(n\OBJ2) * 2.0, MeshDepth(n\OBJ2) * 2.0)
 			HideEntity(n\OBJ2)
@@ -2635,6 +2635,8 @@ Function UpdateNPCs()
 						If n\OBJ2 <> 0 Then
 							ShowEntity(n\OBJ2)
 							
+							AnimateNPC(n, 623.0, 642.0, 0.3)
+							
 							If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2)
 							n\SoundCHN = LoopSound2(VehicleSFX[0], n\SoundCHN, Camera, n\OBJ2, 13.0, 1.0)
 							
@@ -2646,10 +2648,12 @@ Function UpdateNPCs()
 						If n\OBJ2 <> 0 Then
 							ShowEntity(n\OBJ2)
 							
+							AnimateNPC(n, 623.0, 642.0, 0.3)
+							
 							If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN)
 							n\SoundCHN2 = LoopSound2(VehicleSFX[1], n\SoundCHN2, Camera, n\OBJ2, 13.0, 1.0)
 							
-							n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
+							n\CurrSpeed = CurveValue(n\Speed * 0.9, n\CurrSpeed, 20.0)
 							Animate2(n\OBJ2, AnimTime(n\OBJ2), 1.0, 20.0, n\CurrSpeed * 5.0)
 							
 							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
@@ -2678,12 +2682,16 @@ Function UpdateNPCs()
 				EndIf
 				
 				n\Reload = Max(0.0, n\Reload - fps\Factor[0])
-				PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.2, EntityZ(n\Collider))
-				RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider) + 180.0, 0.0)
 				
 				If n\OBJ2 <> 0 Then
 					PositionEntity(n\OBJ2, EntityX(n\Collider), EntityY(n\Collider) - 0.2, EntityZ(n\Collider))
 					RotateEntity(n\OBJ2, 0.0, EntityYaw(n\Collider), 0.0)
+					
+					PositionEntity(n\OBJ, EntityX(n\OBJ2) + 1.75, EntityY(n\OBJ2) + 0.33, EntityZ(n\OBJ2) + 0.42)
+					RotateEntity(n\OBJ, 0.0, EntityYaw(n\OBJ2) + 180.0, 0.0)
+				Else
+					PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.2, EntityZ(n\Collider))
+					RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider) + 180.0, 0.0)
 				EndIf
 				;[End Block]
 			Case NPCTypeMTF
