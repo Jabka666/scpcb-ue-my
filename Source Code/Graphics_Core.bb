@@ -243,7 +243,7 @@ Function UpdateWorld2()
 	EndIf
 End Function
 
-Const BRIGHTNESS# = 45.0
+Const BRIGHTNESS# = 40.0
 
 Global CurrTrisAmount%
 
@@ -259,9 +259,7 @@ Function RenderWorld2(Tween#)
 	ElseIf wi\NightVision = 3
 		AmbientLight(255.0, 255.0, 255.0)
 	ElseIf PlayerRoom <> Null
-		If PlayerRoom\RoomTemplate\Name <> "room_173_intro" And PlayerRoom\RoomTemplate\Name <> "gate_b" And PlayerRoom\RoomTemplate\Name <> "gate_a" Then
-			AmbientLight(BRIGHTNESS, BRIGHTNESS, BRIGHTNESS)
-		EndIf
+		AmbientLight(BRIGHTNESS, BRIGHTNESS, BRIGHTNESS)
 	EndIf
 	
 	CameraViewport(Camera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)
@@ -451,20 +449,25 @@ Function PlayStartupVideos()
 	EndIf
 	
 	Local MovieFile$, i%
+	Local StartupPath$ = "GFX\menu\"
 	
-	For i = 0 To 2
+	For i = 0 To 3
 		Select i
 			Case 0
 				;[Block]
-				MovieFile = "GFX\menu\startup_Undertow"
+				MovieFile = StartupPath + "startup_Undertow"
 				;[End Block]
 			Case 1
 				;[Block]
-				MovieFile = "GFX\menu\startup_TSS"
+				MovieFile = StartupPath + "startup_TSS"
 				;[End Block]
 			Case 2
 				;[Block]
-				MovieFile = "GFX\menu\startup_UET"
+				MovieFile = StartupPath + "startup_UET"
+				;[End Block]
+			Case 3
+				;[Block]
+				MovieFile = StartupPath + "startup_Warning"
 				;[End Block]
 		End Select
 		

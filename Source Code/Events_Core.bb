@@ -4902,6 +4902,7 @@ Function UpdateEvents()
 						e\room\Objects[2] =	CopyEntity(o\NPCModelID[NPCTypeDuck])
 						ScaleEntity(e\room\Objects[2], 0.07, 0.07, 0.07)
 						Tex = LoadTexture_Strict("GFX\npcs\duck(3).png")
+						TextureBlend(Tex, 5)
 						EntityTexture(e\room\Objects[2], Tex)
 						DeleteSingleTextureEntryFromCache(Tex)
 						PositionEntity(e\room\Objects[2], EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
@@ -5417,6 +5418,7 @@ Function UpdateEvents()
 								;[Block]
 								If (Not t\MiscTextureID[14]) Then
 									Tex = LoadTexture_Strict("GFX\npcs\scp_173_H.png")
+									TextureBlend(Tex, 5)
 									EntityTexture(Curr173\OBJ, Tex)
 									EntityTexture(Curr173\OBJ2, Tex)
 									DeleteSingleTextureEntryFromCache(Tex)
@@ -5773,6 +5775,7 @@ Function UpdateEvents()
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech2.ogg"))
 										ElseIf e\EventState3 > 70.0 * 31.0 And e\EventState3 - fps\Factor[0] =< 70.0 * 31.0
 											Tex = LoadTexture_Strict("GFX\map\textures\scp-012_1.png")
+											TextureBlend(Tex, 5)
 											EntityTexture(e\room\Objects[4], Tex)
 											DeleteSingleTextureEntryFromCache(Tex)
 											
@@ -5785,6 +5788,7 @@ Function UpdateEvents()
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech5.ogg"))
 										ElseIf e\EventState3 > 70.0 * 63.0 And e\EventState3 - fps\Factor[0] =< 70.0 * 63.0
 											Tex = LoadTexture_Strict("GFX\map\textures\scp-012_2.png")
+											TextureBlend(Tex, 5)
 											EntityTexture(e\room\Objects[4], Tex)	
 											DeleteSingleTextureEntryFromCache(Tex)
 											
@@ -5792,6 +5796,7 @@ Function UpdateEvents()
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech6.ogg"))
 										ElseIf e\EventState3 > 70.0 * 74.0 And e\EventState3 - fps\Factor[0] =< 70.0 * 74.0
 											Tex = LoadTexture_Strict("GFX\map\textures\scp-012_3.png")
+											TextureBlend(Tex, 5)
 											EntityTexture(e\room\Objects[4], Tex)
 											DeleteSingleTextureEntryFromCache(Tex)
 											
@@ -5943,6 +5948,7 @@ Function UpdateEvents()
 												I_035\Sad = 1
 												
 												Tex = LoadTexture_Strict("GFX\map\textures\label035_sad.png")
+												TextureBlend(Tex, 5)
 												For i = 2 To CountSurfaces(e\room\Objects[9])
 													SF = GetSurface(e\room\Objects[9], i)
 													b = GetSurfaceBrush(SF)
@@ -9300,6 +9306,7 @@ Function UpdateDimension1499()
 						n\PrevState = 2 : n\Angle = 270.0
 						RotateEntity(n\Collider, 0.0, n\Angle, 0.0)
 						Tex = LoadTexture_Strict("GFX\npcs\scp_1499_1_king.png")
+						TextureBlend(Tex, 5)
 						EntityTexture(n\OBJ, Tex)
 						DeleteSingleTextureEntryFromCache(Tex)
 						e\room\NPC[0] = n
