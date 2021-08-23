@@ -93,7 +93,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			If (Left(CurrentDate(), 7) = "31 Oct ") Then
 				t\MiscTextureID[14] = True
 				TexFestive = LoadTexture_Strict("GFX\npcs\scp_173_H.png")
-				TextureBlend(TexFestive, 5)
 				EntityTexture(n\OBJ, TexFestive)
 				EntityTexture(n\OBJ2, TexFestive)
 				DeleteSingleTextureEntryFromCache(TexFestive)
@@ -103,7 +102,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			If (Left(CurrentDate(), 7) = "01 Jan ") Then
 				t\MiscTextureID[15] = True
 				TexFestive = LoadTexture_Strict("GFX\npcs\scp_173_NY.png")
-				TextureBlend(TexFestive, 5)
 				EntityTexture(n\OBJ, TexFestive)
 				EntityTexture(n\OBJ2, TexFestive)
 				DeleteSingleTextureEntryFromCache(TexFestive)
@@ -527,7 +525,6 @@ Function CreateNPCAsset%(n.NPCs)
 			Local Save%
 			
 			Tex = LoadTexture_Strict("GFX\npcs\scp_035_victim.png")
-			TextureBlend(Tex, 5)
 			EntityTexture(n\OBJ, Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
 			

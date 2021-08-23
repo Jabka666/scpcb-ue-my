@@ -25,7 +25,7 @@ Function InitFastResize()
 	AddTriangle(SF, 3, 2, 1)
 	EntityFX(SPR, 17)
 	ScaleEntity(SPR, 4096.0 / Float(opt\RealGraphicWidth), 4096.0 / Float(opt\RealGraphicHeight), 1.0)
-	PositionEntity(SPR, 0, 0, 1.0001)
+	PositionEntity(SPR, 0.0, 0.0, 1.0001)
 	EntityOrder(SPR, -100001)
 	EntityBlend(SPR, 1)
 	FresizeImage = SPR
@@ -243,7 +243,7 @@ Function UpdateWorld2()
 	EndIf
 End Function
 
-Const BRIGHTNESS# = 40.0
+Const BRIGHTNESS# = 45.0
 
 Global CurrTrisAmount%
 

@@ -399,9 +399,9 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 					EndIf
 				EndIf
 				If Tex[j] <> 0 Then
-					If Temp1i = 1 Then TextureBlend(Tex[j], 5)
+					If Temp1i = 1 Then TextureBlend(Tex[j], 2)
 					If Instr(Lower(Temp1s), "_lm") <> 0 Then
-						TextureBlend(Tex[j], 3)
+						TextureBlend(Tex[j], 2)
 					EndIf
 					IsAlpha = 2
 					If Temp1i = 3 Then IsAlpha = 1
@@ -4936,7 +4936,6 @@ Function FillRoom(r.Rooms)
 			r\Objects[9] = LoadMesh_Strict("GFX\map\Props\cont1_035_label.b3d")
 			If I_035\Sad <> 0 Then
 				Tex = LoadTexture_Strict("GFX\map\textures\label035_sad.png")
-				TextureBlend(Tex, 5)
 				For i = 2 To CountSurfaces(r\Objects[9])
 					SF = GetSurface(r\Objects[9], i)
 					b = GetSurfaceBrush(SF)
@@ -5588,7 +5587,6 @@ Function FillRoom(r.Rooms)
 			r\Objects[3] = CopyEntity(o\NPCModelID[NPCTypeDuck])
 			ScaleEntity(r\Objects[3], 0.07, 0.07, 0.07)
 			Tex = LoadTexture_Strict("GFX\npcs\duck(2).png")
-			TextureBlend(Tex, 5)
 			EntityTexture(r\Objects[3], Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
 			PositionEntity(r\Objects[3], r\x + 928.0 * RoomScale, r\y - 640.0 * RoomScale, r\z + 704.0 * RoomScale)
@@ -6313,7 +6311,6 @@ Function FillRoom(r.Rooms)
 			r\RoomDoors[4]\Locked = 1 : r\RoomDoors[4]\MTFClose = False	
 			
 			Tex = LoadTexture_Strict("GFX\map\textures\Door02.jpg")
-			TextureBlend(Tex, 5)
 			For zTemp = 0 To 1
 				d.Doors = CreateDoor(r\x - 5760.0 * RoomScale, r\y, r\z + ((320.0 + (896.0 * zTemp)) * RoomScale), 0.0, r)
 				d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
@@ -7166,9 +7163,7 @@ Function FillRoom(r.Rooms)
 			Scale = RoomScale * 4.5 * 0.4
 			
 			r\Textures[0] = LoadAnimTexture_Strict("GFX\SL_monitors_checkpoint.png", 1, 512, 512, 0, 4, DeleteAllTextures)
-			TextureBlend(r\Textures[0], 5)
 			r\Textures[1] = LoadAnimTexture_Strict("GFX\Sl_monitors.png", 1, 512, 512, 0, 10, DeleteAllTextures)
-			TextureBlend(r\Textures[1], 5)
 			
 			; ~ Monitor Objects
 			For i = 0 To 14
@@ -7538,7 +7533,6 @@ Function FillRoom(r.Rooms)
 			; ~ Orange duck
 			r\Objects[1] = CopyEntity(o\NPCModelID[NPCTypeDuck])
 			Tex = LoadTexture_Strict("GFX\npcs\duck(4).png")
-			TextureBlend(Tex, 5)
 			EntityTexture(r\Objects[1], Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
 			ScaleEntity(r\Objects[1], 0.07, 0.07, 0.07)
