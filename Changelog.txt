@@ -15,6 +15,7 @@ General:
 - Added Unicode support.
 - Added subtitles.
 - Added FOV.
+- Added warning startup video.
 - Added Apollyon difficulty.
 - Added extreme difficulty factor.
 - To obtain a new difficulty, the previous one must be completed.
