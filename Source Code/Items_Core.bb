@@ -655,7 +655,7 @@ Function UpdateItems()
 			
 			If i\Dist < HideDist Then
 				ShowEntity(i\Collider)
-				If i\Dist < 1.0 Then
+				If i\Dist < 1.44 Then
 					If ClosestItem = Null Then
 						If EntityInView(i\Model, Camera) Then
 							If EntityVisible(i\Collider, Camera) Then
@@ -679,7 +679,7 @@ Function UpdateItems()
 					If ShouldEntitiesFall Then
 						Pick = LinePick(EntityX(i\Collider), EntityY(i\Collider), EntityZ(i\Collider), 0.0, -10.0, 0.0)
 						If Pick Then
-							i\DropSpeed = i\DropSpeed - 0.0004 * fps\Factor[0]
+							i\DropSpeed = i\DropSpeed - (0.0004 * fps\Factor[0])
 							TranslateEntity(i\Collider, i\xSpeed * fps\Factor[0], i\DropSpeed * fps\Factor[0], i\zSpeed * fps\Factor[0])
 							If i\WontColl Then ResetEntity(i\Collider)
 						Else
