@@ -2566,7 +2566,7 @@ Function UpdateElevatorPanel%(d.Doors)
 		Else
 			If ToElevatorFloor = LowerFloor Then
 				TextureID = 23
-			ElseIf ToElevatorFloor = UpperFloor
+			Else
 				TextureID = 22
 			EndIf
 		EndIf
@@ -2578,7 +2578,7 @@ Function UpdateElevatorPanel%(d.Doors)
 		Else
 			If ToElevatorFloor = LowerFloor Then
 				TextureID = 22
-			ElseIf ToElevatorFloor = UpperFloor
+			Else
 				TextureID = 23
 			EndIf
 		EndIf
