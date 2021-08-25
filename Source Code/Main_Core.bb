@@ -5531,17 +5531,19 @@ Function UpdateGUI()
 					Use1123(True)
 					SelectedItem = Null
 					;[End Block]
+				Case "nav", "nav300", "nav310", "navulti", "key0", "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "scp860", "hand", "hand2", "hand3", "25ct", "scp005", "key", "coin", "mastercard", "paper"
+					;[Block]
+					; ~ Skip this line
+					;[End Block]
 				Default
 					;[Block]
 					; ~ Check if the item is an inventory-type object
-					If SelectedItem\InvSlots > 0 Then
-						mo\DoubleClick = False
-						mo\MouseHit1 = False
-						mo\MouseDown1 = False
-						mo\LastMouseHit1 = False
-						OtherOpen = SelectedItem
-						SelectedItem = Null
-					EndIf
+					If SelectedItem\InvSlots > 0 Then OtherOpen = SelectedItem
+					mo\DoubleClick = False
+					mo\MouseHit1 = False
+					mo\MouseDown1 = False
+					mo\LastMouseHit1 = False
+					SelectedItem = Null
 					;[End Block]
 			End Select
 			
@@ -6322,17 +6324,6 @@ Function RenderGUI()
 					EndIf
 					DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\Img) / 2)
 					;[End Block]
-				Case "ticket"
-					;[Block]
-					If (Not SelectedItem\ItemTemplate\Img) Then
-						; ~ Don't resize because it messes up the masking
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
-						SelectedItem\ItemTemplate\Img = ResizeImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
-						
-						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
-					EndIf
-					DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\Img) / 2)
-					;[End Block]
 				Case "scp1025"
 					;[Block]
 					GiveAchievement(Achv1025)
@@ -6695,17 +6686,7 @@ Function RenderGUI()
 						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					EndIf
 					;[End Block]
-				Case "badge"
-					;[Block]
-					If (Not SelectedItem\ItemTemplate\Img) Then
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
-						
-						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
-					EndIf
-					
-					DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\Img) / 2)
-					;[End Block]
-				Case "oldpaper"
+				Case "badge", "oldpaper", "ticket"
 					;[Block]
 					If (Not SelectedItem\ItemTemplate\Img) Then
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
@@ -6748,12 +6729,12 @@ Function RenderGUI()
 				If SelectedItem\ItemTemplate\Img <> 0 Then
 					Local IN$ = SelectedItem\ItemTemplate\TempName
 					
-					If IN = "paper" Lor IN = "badge" Lor IN = "oldpaper" Lor IN = "ticket" Then
+					If IN = "paper" Lor IN = "badge" Lor IN = "oldpaper" Lor IN = "ticket" Lor IN = "scp1025" Then
 						For a_it.Items = Each Items
 							If a_it <> SelectedItem
 								Local IN2$ = a_it\ItemTemplate\Tempname
 								
-								If IN2 = "paper" Lor IN2 = "badge" Lor IN2 = "oldpaper" Lor IN2 = "ticket" Then
+								If IN2 = "paper" Lor IN2 = "badge" Lor IN2 = "oldpaper" Lor IN2 = "ticket" Lor IN2 = "scp1025" Then
 									If a_it\ItemTemplate\Img <> 0 Then
 										If a_it\ItemTemplate\Img <> SelectedItem\ItemTemplate\Img Then
 											FreeImage(a_it\ItemTemplate\Img) : a_it\ItemTemplate\Img = 0
@@ -6764,18 +6745,6 @@ Function RenderGUI()
 						Next
 					EndIf
 				EndIf
-			EndIf
-			
-			If mo\MouseHit2 Then
-				; ~ Reset SCP-1025
-				Select SelectedItem\ItemTemplate\TempName
-					Case "scp1025"
-						;[Block]
-						If SelectedItem\ItemTemplate\Img <> 0 Then
-							FreeImage(SelectedItem\ItemTemplate\Img) : SelectedItem\ItemTemplate\Img = 0
-						EndIf
-						;[End Block]
-				End Select
 			EndIf
 		EndIf		
 	EndIf

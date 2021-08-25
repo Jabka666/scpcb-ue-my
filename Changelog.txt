@@ -302,3 +302,4 @@ Bug Fixes:
 - Fixed wrong decal blend in Pocket Dimension.
 - Fixed a bug where auto closing is applied for locked doors.
 - Fixed some item positions near the glass.
+- Fixed ability to select an item without any effect.
