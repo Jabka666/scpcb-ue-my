@@ -783,7 +783,7 @@ Function QuickLoadEvents()
 					e\EventStr = "Load1"
 				ElseIf e\EventStr = "Load1"
 					QuickLoadPercent = 30
-					I_1499\Sky = CreateSky("GFX\map\sky\1499sky")
+					I_1499\Sky = CreateSky("GFX\map\textures\1499sky")
 					e\EventStr = 1
 				Else
 					If Int(e\EventStr) < 16
@@ -9579,7 +9579,7 @@ Function UpdateEndings()
 						
 						RenderLoading(60, "ENDING STUFF")
 						
-						Sky = CreateSky("GFX\map\sky\sky")
+						Sky = CreateSky("GFX\map\textures\sky")
 						RotateEntity(Sky, 0.0, e\room\Angle - 90.0, 0.0)
 						
 						ResetEntity(me\Collider)
@@ -9911,7 +9911,7 @@ Function UpdateEndings()
 						
 						RenderLoading(30, "ENDING STUFF")
 						
-						Sky = CreateSky("GFX\map\sky\sky")
+						Sky = CreateSky("GFX\map\textures\sky")
 						RotateEntity(Sky, 0.0, e\room\Angle, 0.0)
 						
 						RenderLoading(60, "ENDING STUFF")
