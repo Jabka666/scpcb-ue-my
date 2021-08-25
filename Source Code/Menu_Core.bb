@@ -3388,7 +3388,7 @@ Function RenderOptionsTooltip(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 			;[End Block]
 		Case Tooltip_Subtitles
 			;[Block]
-			Txt = "Displays current dialogs in the text form. (WIP)"
+			Txt = "Displays current dialogs in the text form. Currently unfinished and unstable. Not recommened to use!"
 			R = 255
 			Txt2 = "This option cannot be changed in-game."
 			;[End Block]
