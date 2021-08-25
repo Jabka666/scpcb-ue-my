@@ -92,7 +92,7 @@ SCPs:
 - Added new achievment image for SCP-1048.
 - Added 4th SCP-939 on the area.
 - Changed SCP-372's model.
-- Improved SCP-106's texture.
+- Improved SCP-106's texture and animations.
 - Improved anomalyous ducks texture.
 - Added breath sound for SCP-008-1.
 - SCP-1123 can be picked up.

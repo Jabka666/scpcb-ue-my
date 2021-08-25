@@ -2635,11 +2635,9 @@ Function UpdateEvents()
 							ResetEntity(e\room\NPC[0]\Collider)
 							
 							AnimateNPC(e\room\NPC[0], 41.0, 58.0, 0.1, False)
-							
-							AnimateNPC(Curr106, 206.0, 112.0, -1.0, False)
-						Else
-							AnimateNPC(Curr106, 112.0, 206.0, 1.5, False)
 						EndIf
+						AnimateNPC(Curr106, 495.0, 604.0, 0.7, False)
+						
 						me\CurrSpeed = Min(me\CurrSpeed - (me\CurrSpeed * (0.15 / EntityDistance(e\room\NPC[0]\Collider, me\Collider)) * fps\Factor[0]), me\CurrSpeed)
 						If e\EventState > 100.0 Then
 							PositionEntity(Curr106\OBJ, EntityX(Curr106\Collider), -100.0, EntityZ(Curr106\Collider), True)
