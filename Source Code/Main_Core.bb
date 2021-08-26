@@ -266,7 +266,7 @@ Const MaxMiscTextureIDAmount% = 24
 Const MaxMonitorTextureIDAmount% = 5
 Const MaxOverlayTextureIDAmount% = 11
 Const MaxOverlayIDAmount% = 11
-Const MaxDecalTextureIDAmount% = 20
+Const MaxDecalTextureIDAmount% = 21
 Const MaxNPCTextureIDAmount% = 16
 Const MaxParticleTextureIDAmount% = 8
 Const MaxLightSpriteIDAmount% = 3
@@ -8304,6 +8304,8 @@ Function LoadEntities()
 	t\DecalTextureID[18] = LoadTexture_Strict("GFX\decal_scp_427.png", 1 + 2, DeleteAllTextures)
 	
 	t\DecalTextureID[19] = LoadTexture_Strict("GFX\decal_scp_409.png", 1 + 2, DeleteAllTextures)
+	
+	t\DecalTextureID[20] = LoadTexture_Strict("GFX\decal_water.png", 1 + 2, DeleteAllTextures)
 	
 	t\MonitorTextureID[0] = LoadTexture_Strict("GFX\monitor_overlay.png", 1, DeleteAllTextures)
 	For i = 1 To 3

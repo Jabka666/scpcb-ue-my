@@ -7484,27 +7484,25 @@ Function FillRoom(r.Rooms)
 				EntityParent(it\Collider, r\OBJ)	
 			EndIf
 			;[End Block]
-		Case "room2_storage_2"
+		Case "room2_js"
 			;[Block]
-			d.Doors = CreateDoor(r\x + 272.0 * RoomScale, r\y, r\z + 576.0 * RoomScale, 90.0, r, False, Default_Door, KEY_CARD_0)
-			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) + 0.061, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
-			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) - 0.061, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
+			d.Doors = CreateDoor(r\x + 288.0 * RoomScale, r\y, r\z + 576.0 * RoomScale, 90.0, r, False, Default_Door, KEY_CARD_0)
 			
-			sc.SecurityCams = CreateSecurityCam(r\x + 980.0 * RoomScale, r\y + 515.0 * RoomScale, r\z + 100.0 * RoomScale, r)
+			sc.SecurityCams = CreateSecurityCam(r\x + 1646.0 * RoomScale, r\y + 435.0 * RoomScale, r\z + 143.0 * RoomScale, r)
 			sc\Angle = 30.0 : sc\Turn = 30.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			
-			it.Items = CreateItem("Level 1 Key Card", "key1", r\x + 468.0 * RoomScale, r\y + 160.0 * RoomScale, r\z + 980.0 * RoomScale)
+			de.Decals = CreateDecal(20, r\x + 137.0 * RoomScale, r\y + 0.005, r\z + 156.0 * RoomScale, 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.8), 1.0)
+			EntityParent(de\OBJ, r\OBJ)
+			
+			it.Items = CreateItem("Level 1 Key Card", "key1", r\x + 1715.0 * RoomScale, r\y + 250.0 * RoomScale, r\z + 718.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Origami", "origami", r\x + 460.0 * RoomScale, r\y + 250.0 * RoomScale, r\z + 80.0 * RoomScale)
+			it.Items = CreateItem("Origami", "origami", r\x + 1467.0 * RoomScale, r\y + 250.0 * RoomScale, r\z + 1041.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("9V Battery", "bat", r\x + 900.0 * RoomScale, r\y + 250.0 * RoomScale, r\z + 80.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
-			
-			it.Items = CreateItem("Ballistic Helmet", "helmet", r\x + 980.0 * RoomScale, r\y + 250.0 * RoomScale, r\z + 300.0 * RoomScale)
+			it.Items = CreateItem("9V Battery", "bat", r\x + 1714.0 * RoomScale, r\y + 250.0 * RoomScale, r\z + 936.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case "room2_medibay"
@@ -8368,7 +8366,7 @@ Function CreateMap()
 	SetRoom("cont2_500_1499", ROOM2, Floor(0.6 * Float(Room2Amount[0])), MinPos, MaxPos)
 	SetRoom("cont2_1123", ROOM2, Floor(0.75 * Float(Room2Amount[0])), MinPos, MaxPos)
 	SetRoom("room2_elevator", ROOM2, Floor(0.85 * Float(Room2Amount[0])), MinPos, MaxPos)
-	SetRoom("room2_storage_2", ROOM2, Floor(0.9 * Float(Room2Amount[0])), MinPos, MaxPos)
+	SetRoom("room2_js", ROOM2, Floor(0.9 * Float(Room2Amount[0])), MinPos, MaxPos)
 	
 	MapRoom(ROOM2C, Floor(0.5 * Float(Room2CAmount[0]))) = "cont2c_1162_arc"
 	
