@@ -124,9 +124,7 @@
 		Andre Pari ("ADMClef")
 		Dawid Mleczko ("Mleczyk76")
 		Yuri Novikov ("BayanForce")
-		C45
 		slend
-		Stefan Koch ("Salvage")
 		Samuel ("Soylien")
 		Egor Oleynik ("Chumnaya Karkusa")
 		
@@ -150,6 +148,8 @@
 		BerkeliumΛsset
 		EpicDasherFR
 		Dmitriy Sazanov ("Dmitriy-Bars")
+		C45
+		Stefan Koch ("Salvage")
 
 *Mod Testers
 
@@ -158,6 +158,8 @@
 		[dataexpunded]
 		ALeKS GM
 		rus_hunter
+		Vladislav Sofonov ("Onmane")
+		Nerrow
 
 *Some Materials Taken From:
 
