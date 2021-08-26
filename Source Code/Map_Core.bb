@@ -7492,7 +7492,7 @@ Function FillRoom(r.Rooms)
 			sc\Angle = 30.0 : sc\Turn = 30.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			
-			de.Decals = CreateDecal(20, r\x + 137.0 * RoomScale, r\y + 0.005, r\z + 156.0 * RoomScale, 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.8), 1.0)
+			de.Decals = CreateDecal(20, r\x + 103.0 * RoomScale, r\y + 0.005, r\z + 161.0 * RoomScale, 90.0, Rnd(360.0), 0.0, Rnd(0.8, 1.0), 1.0)
 			EntityParent(de\OBJ, r\OBJ)
 			
 			it.Items = CreateItem("Level 1 Key Card", "key1", r\x + 1715.0 * RoomScale, r\y + 250.0 * RoomScale, r\z + 718.0 * RoomScale)
