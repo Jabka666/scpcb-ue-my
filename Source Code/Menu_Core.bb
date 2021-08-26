@@ -645,6 +645,10 @@ Function UpdateMainMenu()
 								;[End Block]
 						End Select
 						TextureAnisotropic(opt\AnisotropicLevel)
+						
+						y = y + (35 * MenuScale)
+						
+						opt\Atmosphere = UpdateMainMenuTick(x, y, opt\Atmosphere)
 						;[End Block]
 					ElseIf mm\MainMenuTab = MainMenuTab_Options_Audio
 						;[Block]
@@ -1378,7 +1382,7 @@ Function RenderMainMenu()
 				
 				If mm\MainMenuTab = MainMenuTab_Options_Graphics
 					;[Block]
-					Height = 400 * MenuScale
+					Height = 440 * MenuScale
 					RenderFrame(x - (20 * MenuScale), y, Width, Height)
 					
 					y = y + (20 * MenuScale)
@@ -1459,6 +1463,18 @@ Function RenderMainMenu()
 					Text(x, y, "Anisotropic filtering:")
 					If (MouseOn(x + (290 * MenuScale), y - (9 * MenuScale), 164 * MenuScale, 20) And mm\OnSliderID = 0) Lor mm\OnSliderID = 4
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AnisotropicFiltering)
+					EndIf
+					
+					y = y + (35 * MenuScale)
+					
+					Color(255, 255, 255)
+					If opt\Atmosphere Then
+						Text(x, y + (5 * MenuScale), "Atmosphere: Bright")
+					Else
+						Text(x, y + (5 * MenuScale), "Atmosphere: Dark")
+					EndIf
+					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0
+						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Atmosphere)
 					EndIf
 					;[End Block]
 				ElseIf mm\MainMenuTab = MainMenuTab_Options_Audio
@@ -3153,30 +3169,31 @@ Const Tooltip_ParticleAmount% = 6
 Const Tooltip_SaveTexturesInVRAM% = 7
 Const Tooltip_FOV% = 8
 Const Tooltip_AnisotropicFiltering% = 9
+Const Tooltip_Atmosphere% = 10
 ;[End Block]
 
 ; ~ Audio Tooltips Constants
 ;[Block]
-Const Tooltip_MusicVolume% = 10
-Const Tooltip_SoundVolume% = 11
-Const Tooltip_SoundAutoRelease% = 12
-Const Tooltip_UserTracks% = 13
-Const Tooltip_UserTracksMode% = 14
-Const Tooltip_UserTrackScan% = 15
+Const Tooltip_MusicVolume% = 11
+Const Tooltip_SoundVolume% = 12
+Const Tooltip_SoundAutoRelease% = 13
+Const Tooltip_UserTracks% = 14
+Const Tooltip_UserTracksMode% = 15
+Const Tooltip_UserTrackScan% = 16
 ;[End Block]
 
 ; ~ Controls Tooltips Constants
 ;[Block]
-Const Tooltip_MouseSensitivity% = 16
-Const Tooltip_MouseInvert% = 17
-Const Tooltip_MouseSmoothing% = 18
-Const Tooltip_ControlConfiguration% = 19
+Const Tooltip_MouseSensitivity% = 17
+Const Tooltip_MouseInvert% = 18
+Const Tooltip_MouseSmoothing% = 19
+Const Tooltip_ControlConfiguration% = 20
 ;[End Block]
 
 ; ~ Advanced Tooltips Constants
 ;[Block]
-Const Tooltip_HUD% = 20
-Const Tooltip_Console% = 21
+Const Tooltip_HUD% = 21
+Const Tooltip_Console% = 22
 Const Tooltip_ConsoleOnError% = 23
 Const Tooltip_AchievementPopups% = 24
 Const Tooltip_FPS% = 25
@@ -3272,6 +3289,12 @@ Function RenderOptionsTooltip(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 		Case Tooltip_AnisotropicFiltering
 			;[Block]
 			Txt = Chr(34) + "Anisotropic filtering" + Chr(34) + " enhances the image quality of textures on surfaces that are at oblique viewing angles with respect to the camera."
+			;[End Block]
+		Case Tooltip_Atmosphere
+			;[Block]
+			Txt = "Changes the atmosphere to dark or bright. The bright atmosphere is more comfortable to play in a daylight. In turn, the dark one is better for a night playing."
+			R = 255
+			Txt2 = "This option cannot be changed in-game."
 			;[End Block]
 			; ~ [AUDIO]
 		Case Tooltip_MusicVolume

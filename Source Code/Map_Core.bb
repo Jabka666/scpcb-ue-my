@@ -399,9 +399,9 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 					EndIf
 				EndIf
 				If Tex[j] <> 0 Then
-					If Temp1i = 1 Then TextureBlend(Tex[j], 2)
+					If Temp1i = 1 Then TextureBlend(Tex[j], 2 + (3 * opt\Atmosphere))
 					If Instr(Lower(Temp1s), "_lm") <> 0 Then
-						TextureBlend(Tex[j], 2)
+						TextureBlend(Tex[j], 2 + (1 * opt\Atmosphere))
 					EndIf
 					IsAlpha = 2
 					If Temp1i = 3 Then IsAlpha = 1
@@ -5587,6 +5587,7 @@ Function FillRoom(r.Rooms)
 			r\Objects[3] = CopyEntity(o\NPCModelID[NPCTypeDuck])
 			ScaleEntity(r\Objects[3], 0.07, 0.07, 0.07)
 			Tex = LoadTexture_Strict("GFX\npcs\duck(2).png")
+			If opt\Atmosphere Then TextureBlend(Tex, 5)
 			EntityTexture(r\Objects[3], Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
 			PositionEntity(r\Objects[3], r\x + 928.0 * RoomScale, r\y - 640.0 * RoomScale, r\z + 704.0 * RoomScale)
@@ -6311,6 +6312,7 @@ Function FillRoom(r.Rooms)
 			r\RoomDoors[4]\Locked = 1 : r\RoomDoors[4]\MTFClose = False	
 			
 			Tex = LoadTexture_Strict("GFX\map\textures\Door02.jpg")
+			If opt\Atmosphere Then TextureBlend(Tex, 5)
 			For zTemp = 0 To 1
 				d.Doors = CreateDoor(r\x - 5760.0 * RoomScale, r\y, r\z + ((320.0 + (896.0 * zTemp)) * RoomScale), 0.0, r)
 				d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
@@ -7524,6 +7526,7 @@ Function FillRoom(r.Rooms)
 			; ~ Orange duck
 			r\Objects[1] = CopyEntity(o\NPCModelID[NPCTypeDuck])
 			Tex = LoadTexture_Strict("GFX\npcs\duck(4).png")
+			If opt\Atmosphere Then TextureBlend(Tex, 5)
 			EntityTexture(r\Objects[1], Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
 			ScaleEntity(r\Objects[1], 0.07, 0.07, 0.07)

@@ -406,6 +406,7 @@ Type Options
 	Field TextureDetails%, TextureDetailsLevel#
 	Field FOV#, CurrFOV#
 	Field Anisotropic%, AnisotropicLevel%
+	Field Atmosphere%
 	; ~ [AUDIO]
 	Field MusicVolume#, PrevMusicVolume#, CurrMusicVolume#
 	Field EnableUserTracks%
@@ -511,6 +512,8 @@ Function LoadOptionsINI()
 			opt\AnisotropicLevel = 16
 			;[End Block]
 	End Select
+	
+	opt\Atmosphere = GetINIInt(OptionFile, "Graphics", "Atmosphere", False)
 	
 	; ~ [AUDIO]
 	
@@ -630,6 +633,8 @@ Function SaveOptionsINI(SaveGlobal% = False)
 	
 	PutINIValue(OptionFile, "Graphics", "Anisotropic Filtering", opt\Anisotropic)
 	
+	PutINIValue(OptionFile, "Graphics", "Atmosphere", opt\Atmosphere)
+	
 	; ~ [AUDIO]
 	
 	PutINIValue(OptionFile, "Audio", "Music Volume", opt\MusicVolume)
@@ -736,6 +741,8 @@ Function ResetOptionsINI()
 	opt\CurrFOV = opt\FOV - 40.0
 	
 	opt\Anisotropic = 4
+	
+	opt\Atmosphere = False
 	
 	; ~ [AUDIO]
 	

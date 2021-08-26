@@ -47,11 +47,13 @@ Function CreateItemTemplate.ItemTemplates(Name$, TempName$, OBJPath$, InvImgPath
 		For it2.ItemTemplates = Each ItemTemplates
 			If it2\TexPath = TexturePath And it2\Tex <> 0 Then
 				Texture = it2\Tex
+				If opt\Atmosphere Then TextureBlend(Texture, 5)
 				Exit
 			EndIf
 		Next
 		If (Not Texture) Then
 			Texture = LoadTexture_Strict(TexturePath, TexFlags)
+			If opt\Atmosphere Then TextureBlend(Texture, 5)
 			it\TexPath = TexturePath
 		EndIf
 		EntityTexture(it\OBJ, Texture)
