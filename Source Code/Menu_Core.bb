@@ -3375,7 +3375,7 @@ Function RenderOptionsTooltip(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 			;[End Block]
 		Case Tooltip_AutoSave
 			;[Block]
-			Txt = "Automatically saves the game every 2 minutes."
+			Txt = "Automatically saves the game every 2 minutes. Press " + Chr(34) + key\Name[key\SAVE] + Chr(34) + " to cancel auto save."
 			R = 255 : G = 255
 			Txt2 = "This option only works with " + Chr(34) + "Save anywhere" + Chr(34) + " save type."
 			;[End Block]

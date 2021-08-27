@@ -2543,10 +2543,9 @@ Function MainLoop()
 			EndIf
 		EndIf
 		
-		UpdateAutoSave()
 		If KeyHit(key\SAVE) Then
 			If SelectedDifficulty\SaveType = SAVEANYWHERE Then
-				If (Not CanSave) Lor QuickLoadPercent > -1
+				If (Not CanSave) Lor QuickLoadPercent > -1 Then
 					RN = PlayerRoom\RoomTemplate\Name
 					If RN = "cont1_173_intro" Lor RN = "gate_b" Lor RN = "gate_a"
 						CreateHintMsg("You can't save in this location.")
@@ -2557,7 +2556,11 @@ Function MainLoop()
 						EndIf
 					EndIf
 				Else
-					SaveGame(SavePath + CurrSave + "\")
+					If AutoSaveTimer =< 70.0 * 5.0 Then
+						CancelAutoSave()
+					Else
+						SaveGame(SavePath + CurrSave + "\")
+					EndIf
 				EndIf
 			ElseIf SelectedDifficulty\SaveType = SAVEONSCREENS
 				If SelectedScreen = Null And SelectedMonitor = Null Then
@@ -2589,6 +2592,7 @@ Function MainLoop()
 			EndIf
 			If mo\MouseHit2 Then SelectedMonitor = Null
 		EndIf
+		UpdateAutoSave()
 		
 		If KeyHit(key\CONSOLE) Then
 			If opt\CanOpenConsole Then

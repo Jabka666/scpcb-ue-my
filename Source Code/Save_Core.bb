@@ -2,12 +2,9 @@ Const SavePath$ = "Saves\"
 
 Global AutoSaveTimer#
 
-Function UpdateAutoSave()
-	If SelectedDifficulty\SaveType <> SAVEANYWHERE Lor (Not opt\AutoSaveEnabled) Lor me\KillTimer < 0.0 Lor (Not CanSave) Lor (Not me\Playable) Lor me\Zombie Then
-		If AutoSaveTimer <> 70.0 * 120.0 Then AutoSaveTimer = 70.0 * 120.0
-		If AutoSaveTimer =< 70.0 * 5.0 Then
-			CreateHintMsg("Auto save is canceled!")
-		EndIf
+Function UpdateAutoSave%()
+	If (Not opt\AutoSaveEnabled) Lor SelectedDifficulty\SaveType <> SAVEANYWHERE Lor me\KillTimer < 0.0 Lor (Not CanSave) Lor (Not me\Playable) Lor me\Zombie Then
+		CancelAutoSave()
 		Return
 	EndIf
 	
@@ -21,14 +18,19 @@ Function UpdateAutoSave()
 	EndIf
 End Function
 
+Function CancelAutoSave%()
+	If AutoSaveTimer =< 70.0 * 5.0 Then
+		CreateHintMsg("Auto save is canceled!")
+	EndIf
+	If AutoSaveTimer <> 70.0 * 120.0 Then AutoSaveTimer = 70.0 * 120.0
+End Function
+
 Function SaveGame(File$)
 	CatchErrors("Uncaught (SaveGame)")
 	
-	If (Not me\Playable) Lor me\Zombie Then Return ; ~ Don't save if the player can't move at all
+	If (Not me\Playable) Lor me\Zombie Lor me\KillTimer < 0.0 Then Return ; ~ Don't save if the player can't move at all
 	
 	If me\DropSpeed > 0.02 * fps\Factor[0] Lor me\DropSpeed < (-0.02) * fps\Factor[0] Then Return
-	
-	If me\KillTimer < 0.0 Then Return
 	
 	Local n.NPCs, r.Rooms, do.Doors
 	Local x%, y%, i%, Temp%
