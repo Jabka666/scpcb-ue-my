@@ -5452,9 +5452,9 @@ Function FillRoom(r.Rooms)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
-			r\Objects[4] = LoadMesh_Strict("GFX\map\Props\012.b3d")
+			r\Objects[4] = LoadMesh_Strict("GFX\map\Props\scp_012.b3d")
 			ScaleEntity(r\Objects[4], RoomScale, RoomScale, RoomScale)
-			PositionEntity(r\Objects[4], r\x - 360.0 * RoomScale, r\y - 130.0 * RoomScale, r\z + 456.0 * RoomScale)
+			PositionEntity(r\Objects[4], r\x - 360.0 * RoomScale, r\y - 180.0 * RoomScale, r\z + 456.0 * RoomScale)
 			EntityParent(r\Objects[4], r\Objects[2])
 			
 			it.Items = CreateItem("Document SCP-012", "paper", r\x - 56.0 * RoomScale, r\y - 576.0 * RoomScale, r\z - 408.0 * RoomScale)
