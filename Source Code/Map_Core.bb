@@ -3769,7 +3769,7 @@ Function UpdateScreens()
 					If mo\MouseUp1 Then 
 						SelectedScreen = s
 						s\Img = LoadImage_Strict("GFX\map\screens\" + s\ImgPath)
-						s\Img = ResizeImage2(s\Img, MenuScale, MenuScale)
+						s\Img = ScaleImage2(s\Img, MenuScale, MenuScale)
 						MaskImage(s\Img, 255, 0, 255)
 						PlaySound_Strict(ButtonSFX)
 						mo\MouseUp1 = False
@@ -7438,13 +7438,9 @@ Function FillRoom(r.Rooms)
 		Case "cont2_409"
 			;[Block]
 			; ~ Elevators' doors
-			r\RoomDoors.Doors[0] = CreateDoor(r\x + 264.0 * RoomScale, r\y, r\z + 655.0 * RoomScale, -90.0, r, True, Elevator_Door)
-			PositionEntity(r\RoomDoors[0]\Buttons[0], EntityX(r\RoomDoors[0]\Buttons[0], True) - 0.031, EntityY(r\RoomDoors[0]\Buttons[0], True), EntityZ(r\RoomDoors[0]\Buttons[0], True), True)
-			PositionEntity(r\RoomDoors[0]\Buttons[1], EntityX(r\RoomDoors[0]\Buttons[1], True) + 0.031, EntityY(r\RoomDoors[0]\Buttons[1], True), EntityZ(r\RoomDoors[0]\Buttons[1], True), True)							
+			r\RoomDoors.Doors[0] = CreateDoor(r\x + 256.0 * RoomScale, r\y, r\z + 655.0 * RoomScale, -90.0, r, True, Elevator_Door)
 			
-			r\RoomDoors.Doors[1] = CreateDoor(r\x - 2328.0 * RoomScale, r\y - 4256.0 * RoomScale, r\z - 648.0 * RoomScale, -90.0, r, False, Elevator_Door)
-			PositionEntity(r\RoomDoors[1]\Buttons[0], EntityX(r\RoomDoors[1]\Buttons[0], True) - 0.031, EntityY(r\RoomDoors[1]\Buttons[1], True), EntityZ(r\RoomDoors[1]\Buttons[0], True), True)
-			PositionEntity(r\RoomDoors[1]\Buttons[1], EntityX(r\RoomDoors[1]\Buttons[1], True) + 0.031, EntityY(r\RoomDoors[1]\Buttons[1], True), EntityZ(r\RoomDoors[1]\Buttons[1], True), True)					
+			r\RoomDoors.Doors[1] = CreateDoor(r\x - 2336.0 * RoomScale, r\y - 4256.0 * RoomScale, r\z - 648.0 * RoomScale, -90.0, r, False, Elevator_Door)
 			
 			; ~ A door to the containment chamber	
 			r\RoomDoors.Doors[2] = CreateDoor(r\x - 4336.0 * RoomScale, r\y - 4256.0 * RoomScale, r\z + 1560.0 * RoomScale, 0.0, r, False, Default_Door, KEY_CARD_4)
@@ -7453,10 +7449,10 @@ Function FillRoom(r.Rooms)
 			
 			; ~ Elevator pivots
 			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x + 552.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 656.0 * RoomScale)
+			PositionEntity(r\Objects[0], r\x + 560.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 656.0 * RoomScale)
 			
 			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x - 2040.0 * RoomScale, r\y - 4011.0 * RoomScale, r\z - 648.0 * RoomScale)
+			PositionEntity(r\Objects[1], r\x - 2032.0 * RoomScale, r\y - 4011.0 * RoomScale, r\z - 648.0 * RoomScale)
 			
 			; ~ Class-D spawn
 			r\Objects[2] = CreatePivot()

@@ -130,11 +130,11 @@ AppTitle("SCP - Containment Breach Ultimate Edition v" + VersionNumber)
 If opt\PlayStartup Then PlayStartupVideos()
 
 Global CursorIMG% = LoadImage_Strict("GFX\cursor.png")
-CursorIMG = ResizeImage2(CursorIMG, MenuScale, MenuScale)
+CursorIMG = ScaleImage2(CursorIMG, MenuScale, MenuScale)
 
 Global SelectedLoadingScreen.LoadingScreens, LoadingScreenAmount%, LoadingScreenText%
 Global LoadingBack% = LoadImage_Strict("LoadingScreens\loading_back.png")
-LoadingBack = ResizeImage2(LoadingBack, MenuScale, MenuScale)
+LoadingBack = ScaleImage2(LoadingBack, MenuScale, MenuScale)
 
 InitLoadingScreens("LoadingScreens\loading_screens.ini")
 
@@ -6302,7 +6302,7 @@ Function RenderGUI()
 							Case "Document SCP-372"
 								;[Block]
 								SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
-								SelectedItem\ItemTemplate\Img = ResizeImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+								SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 								
 								SetBuffer(ImageBuffer(SelectedItem\ItemTemplate\Img))
 								Color(37, 45, 137)
@@ -6320,12 +6320,12 @@ Function RenderGUI()
 								Else
 									SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
 								EndIf
-								SelectedItem\ItemTemplate\Img = ResizeImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+								SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 								;[End Block]
 							Default 
 								;[Block]
 								SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
-								SelectedItem\ItemTemplate\Img = ResizeImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+								SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 								;[End Block]
 						End Select
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
@@ -6337,7 +6337,7 @@ Function RenderGUI()
 					GiveAchievement(Achv1025)
 					If (Not SelectedItem\ItemTemplate\Img) Then
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\items\1025\1025(" + (Int(SelectedItem\State) + 1) + ").png")	
-						SelectedItem\ItemTemplate\Img = ResizeImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 						
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
@@ -6698,7 +6698,7 @@ Function RenderGUI()
 					;[Block]
 					If (Not SelectedItem\ItemTemplate\Img) Then
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
-						SelectedItem\ItemTemplate\Img = ResizeImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 						
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
@@ -8089,22 +8089,22 @@ Function LoadEntities()
 	RenderLoading(10, "ICONS")
 	
 	t\IconID[0] = LoadImage_Strict("GFX\walk_icon.png")
-	t\IconID[0] = ResizeImage2(t\IconID[0], MenuScale, MenuScale)
+	t\IconID[0] = ScaleImage2(t\IconID[0], MenuScale, MenuScale)
 	t\IconID[1] = LoadImage_Strict("GFX\sprint_icon.png")
-	t\IconID[1] = ResizeImage2(t\IconID[1], MenuScale, MenuScale)
+	t\IconID[1] = ScaleImage2(t\IconID[1], MenuScale, MenuScale)
 	t\IconID[2] = LoadImage_Strict("GFX\crouch_icon.png")
-	t\IconID[2] = ResizeImage2(t\IconID[2], MenuScale, MenuScale)
+	t\IconID[2] = ScaleImage2(t\IconID[2], MenuScale, MenuScale)
 	For i = 3 To 4
 		t\IconID[i] = LoadImage_Strict("GFX\blink_icon(" + (i - 2) + ").png")
-		t\IconID[i] = ResizeImage2(t\IconID[i], MenuScale, MenuScale)
+		t\IconID[i] = ScaleImage2(t\IconID[i], MenuScale, MenuScale)
 	Next
 	For i = 5 To 6
 		t\IconID[i] = LoadImage_Strict("GFX\hand_symbol(" + (i - 4) + ").png")
-		t\IconID[i] = ResizeImage2(t\IconID[i], MenuScale, MenuScale)
+		t\IconID[i] = ScaleImage2(t\IconID[i], MenuScale, MenuScale)
 	Next
 	
 	QuickLoadIcon = LoadImage_Strict("GFX\menu\QuickLoading.png")
-	QuickLoadIcon = ResizeImage2(QuickLoadIcon, MenuScale, MenuScale)
+	QuickLoadIcon = ScaleImage2(QuickLoadIcon, MenuScale, MenuScale)
 	
 	For i = 0 To MAXACHIEVEMENTS - 1
 		Local Loc2% = GetINISectionLocation(AchievementsFile, "a" + Str(i))
@@ -8115,40 +8115,40 @@ Function LoadEntities()
 		Local Image$ = GetINIString2(AchievementsFile, Loc2, "AchvImage") 
 		
 		achv\AchvIMG[i] = LoadImage_Strict("GFX\menu\achievements\" + Image + ".png")
-		achv\AchvIMG[i] = ResizeImage2(achv\AchvIMG[i], opt\GraphicHeight / 768.0, opt\GraphicHeight / 768.0)
+		achv\AchvIMG[i] = ScaleImage2(achv\AchvIMG[i], opt\GraphicHeight / 768.0, opt\GraphicHeight / 768.0)
 		BufferDirty(ImageBuffer(achv\AchvIMG[i]))
 	Next
 	
 	achv\AchvLocked = LoadImage_Strict("GFX\menu\achievements\AchvLocked.png")
-	achv\AchvLocked = ResizeImage2(achv\AchvLocked, opt\GraphicHeight / 768.0, opt\GraphicHeight / 768.0)
+	achv\AchvLocked = ScaleImage2(achv\AchvLocked, opt\GraphicHeight / 768.0, opt\GraphicHeight / 768.0)
 	BufferDirty(ImageBuffer(achv\AchvLocked))
 	
 	RenderLoading(15, "IMAGES")
 	
 	t\ImageID[0] = LoadImage_Strict("GFX\menu\pause_menu.png")
-	t\ImageID[0] = ResizeImage2(t\ImageID[0], MenuScale, MenuScale)
+	t\ImageID[0] = ScaleImage2(t\ImageID[0], MenuScale, MenuScale)
 	MaskImage(t\ImageID[0], 255, 255, 0)
 	
 	If (Not opt\SmoothHUD) Then
 		t\ImageID[1] = LoadImage_Strict("GFX\blink_meter(2).png")
-		t\ImageID[1] = ResizeImage2(t\ImageID[1], MenuScale, MenuScale)
+		t\ImageID[1] = ScaleImage2(t\ImageID[1], MenuScale, MenuScale)
 		
 		For i = 2 To 3
 			t\ImageID[i] = LoadImage_Strict("GFX\stamina_meter(" + (i - 1) + ").png")
-			t\ImageID[i] = ResizeImage2(t\ImageID[i], MenuScale, MenuScale)
+			t\ImageID[i] = ScaleImage2(t\ImageID[i], MenuScale, MenuScale)
 		Next
 	EndIf
 	
 	t\ImageID[4] = LoadImage_Strict("GFX\keypad_HUD.png")
-	t\ImageID[4] = ResizeImage2(t\ImageID[4], MenuScale, MenuScale)
+	t\ImageID[4] = ScaleImage2(t\ImageID[4], MenuScale, MenuScale)
 	MaskImage(t\ImageID[4], 255, 0, 255)
 	
 	t\ImageID[5] = LoadImage_Strict("GFX\scp_294_panel.png")
-	t\ImageID[5] = ResizeImage2(t\ImageID[5], MenuScale, MenuScale)
+	t\ImageID[5] = ScaleImage2(t\ImageID[5], MenuScale, MenuScale)
 	MaskImage(t\ImageID[5], 255, 0, 255)
 	
 	t\ImageID[6] = LoadImage_Strict("GFX\night_vision_goggles_battery.png")
-	t\ImageID[6] = ResizeImage2(t\ImageID[6], MenuScale, MenuScale)
+	t\ImageID[6] = ScaleImage2(t\ImageID[6], MenuScale, MenuScale)
 	MaskImage(t\ImageID[6], 255, 0, 255)
 	
 	t\ImageID[7] = CreateImage(opt\GraphicWidth, opt\GraphicHeight)

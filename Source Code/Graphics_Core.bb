@@ -52,7 +52,7 @@ Function Graphics3DExt%(Width%, Height%, Depth% = 32, Mode% = 2)
 	AntiAlias(opt\AntiAliasing)
 End Function
 
-Function ResizeImage2%(SrcImage%, ScaleX#, ScaleY#, ExactSize% = False)
+Function ScaleImage2%(SrcImage%, ScaleX#, ScaleY#, ExactSize% = False)
 	Local SrcWidth%, SrcHeight%
 	Local DestWidth%, DestHeight%
 	Local ScratchImage%, DestImage%
@@ -64,7 +64,7 @@ Function ResizeImage2%(SrcImage%, ScaleX#, ScaleY#, ExactSize% = False)
 	SrcHeight = ImageHeight(SrcImage)
 	
 	; ~ Calculate the width and height of the dest image, or the scale
-	If ExactSize = False
+	If (Not ExactSize) Then
 		DestWidth = Floor(SrcWidth * ScaleX)
 		DestHeight = Floor(SrcHeight * ScaleY)
 	Else
