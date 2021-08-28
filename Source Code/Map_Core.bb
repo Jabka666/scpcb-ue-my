@@ -4031,6 +4031,8 @@ Function FillRoom(r.Rooms)
 					r\RoomDoors.Doors[1] = CreateDoor(r\x + 1544.0 * RoomScale, r\y, r\z - 64.0 * RoomScale, -90.0, r, False, Elevator_Door)
 					PositionEntity(r\RoomDoors[1]\Buttons[0], EntityX(r\RoomDoors[1]\Buttons[0], True) - 0.22, EntityY(r\RoomDoors[1]\Buttons[0], True), EntityZ(r\RoomDoors[1]\Buttons[0], True), True)
 					PositionEntity(r\RoomDoors[1]\Buttons[1], EntityX(r\RoomDoors[1]\Buttons[1], True) + 0.031, EntityY(r\RoomDoors[1]\Buttons[1], True), EntityZ(r\RoomDoors[1]\Buttons[1], True), True)
+					PositionEntity(r\RoomDoors[1]\ElevatorPanel[0], EntityX(r\RoomDoors[1]\ElevatorPanel[0], True) + 0.031, EntityY(r\RoomDoors[1]\ElevatorPanel[0], True), EntityZ(r\RoomDoors[1]\ElevatorPanel[0], True), True)
+					PositionEntity(r\RoomDoors[1]\ElevatorPanel[1], EntityX(r\RoomDoors[1]\ElevatorPanel[1], True) - 0.22, EntityY(r\RoomDoors[1]\ElevatorPanel[1], True), EntityZ(r\RoomDoors[1]\ElevatorPanel[1], True), True)
 					
 					r2\Objects[1] = CreatePivot()
 					PositionEntity(r2\Objects[1], r\x + 1848.0 * RoomScale, r\y, r\z - 64.0 * RoomScale)
@@ -4130,6 +4132,8 @@ Function FillRoom(r.Rooms)
 					r\RoomDoors.Doors[1] = CreateDoor(r\x - 5424.0 * RoomScale, r\y, r\z - 1380.0 * RoomScale, 0.0, r, False, Elevator_Door)
 					PositionEntity(r\RoomDoors[1]\Buttons[0], EntityX(r\RoomDoors[1]\Buttons[0], True), EntityY(r\RoomDoors[1]\Buttons[0], True), EntityZ(r\RoomDoors[1]\Buttons[0], True) + 0.031, True)
 					PositionEntity(r\RoomDoors[1]\Buttons[1], EntityX(r\RoomDoors[1]\Buttons[1], True), EntityY(r\RoomDoors[1]\Buttons[1], True), EntityZ(r\RoomDoors[1]\Buttons[1], True) - 0.031, True)
+					PositionEntity(r\RoomDoors[1]\ElevatorPanel[0], EntityX(r\RoomDoors[1]\ElevatorPanel[0], True), EntityY(r\RoomDoors[1]\ElevatorPanel[0], True), EntityZ(r\RoomDoors[1]\ElevatorPanel[0], True) - 0.031, True)
+					PositionEntity(r\RoomDoors[1]\ElevatorPanel[1], EntityX(r\RoomDoors[1]\ElevatorPanel[1], True), EntityY(r\RoomDoors[1]\ElevatorPanel[1], True), EntityZ(r\RoomDoors[1]\ElevatorPanel[1], True) + 0.031, True)
 					
 					r2\Objects[1] = CreatePivot()
 					PositionEntity(r2\Objects[1], r\x - 5424.0 * RoomScale, r\y, r\z - 1068.0 * RoomScale)		
@@ -4642,12 +4646,12 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "room2_cafeteria"
 			;[Block]
-			d.Doors = CreateDoor(r\x + 1712.0 * RoomScale, r\y - 384.0 * RoomScale, r\z - 1024.0 * RoomScale, 0.0, r, False, Default_Door)
+			d.Doors = CreateDoor(r\x + 1712.0 * RoomScale, r\y - 384.0 * RoomScale, r\z - 1024.0 * RoomScale, 0.0, r, False, Default_Door, KEY_CARD_3)
 			d\Locked = 1 : d\MTFClose = False : d\DisableWaypoint = True
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
-			d.Doors = CreateDoor(r\x - 464.0 * RoomScale, r\y - 384.0 * RoomScale, r\z - 1024.0 * RoomScale, 0.0, r, False, Default_Door)
+			d.Doors = CreateDoor(r\x - 464.0 * RoomScale, r\y - 384.0 * RoomScale, r\z - 1024.0 * RoomScale, 0.0, r, False, Default_Door, KEY_CARD_3)
 			d\Locked = 1 : d\MTFClose = False : d\DisableWaypoint = True
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
