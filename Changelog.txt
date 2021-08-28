@@ -1,4 +1,5 @@
 v1.0.0
+~ This changelog continues original game.
 
 Launcher:
 - Added YouTube, Discord and ModDB icons.
