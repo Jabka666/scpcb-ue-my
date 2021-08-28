@@ -2558,32 +2558,28 @@ Function UpdateElevatorPanel%(d.Doors)
 	; ~ 22 = UP
 	; ~ 23 = DOWN
 	
-	If d\IsElevatorDoor = 3 Then
-		TextureID = 21
-	Else
-		If d\IsElevatorDoor = 2 Then
-			If PlayerElevatorFloor = LowerFloor Then
-				TextureID = 22
-			ElseIf PlayerElevatorFloor = UpperFloor
+	If PlayerInsideElevator Then
+		If PlayerElevatorFloor = LowerFloor Then
+			TextureID = 22
+		ElseIf PlayerElevatorFloor = UpperFloor
+			TextureID = 23
+		Else
+			If ToElevatorFloor = LowerFloor Then
 				TextureID = 23
 			Else
-				If ToElevatorFloor = LowerFloor Then
-					TextureID = 23
-				Else
-					TextureID = 22
-				EndIf
+				TextureID = 22
 			EndIf
-		ElseIf d\IsElevatorDoor = 1 Then
-			If PlayerElevatorFloor = LowerFloor Then
-				TextureID = 23
-			ElseIf PlayerElevatorFloor = UpperFloor
+		EndIf
+	Else
+		If PlayerElevatorFloor = LowerFloor Then
+			TextureID = 23
+		ElseIf PlayerElevatorFloor = UpperFloor
+			TextureID = 22
+		Else
+			If ToElevatorFloor = LowerFloor Then
 				TextureID = 22
 			Else
-				If ToElevatorFloor = LowerFloor Then
-					TextureID = 22
-				Else
-					TextureID = 23
-				EndIf
+				TextureID = 23
 			EndIf
 		EndIf
 	EndIf
