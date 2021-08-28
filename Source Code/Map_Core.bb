@@ -2558,28 +2558,32 @@ Function UpdateElevatorPanel%(d.Doors)
 	; ~ 22 = UP
 	; ~ 23 = DOWN
 	
-	If PlayerInsideElevator Then
-		If PlayerElevatorFloor = LowerFloor Then
-			TextureID = 22
-		ElseIf PlayerElevatorFloor = UpperFloor
-			TextureID = 23
-		Else
-			If ToElevatorFloor = LowerFloor Then
-				TextureID = 23
-			Else
-				TextureID = 22
-			EndIf
-		EndIf
+	If d\IsElevatorDoor = 3 Then
+		TextureID = 21
 	Else
-		If PlayerElevatorFloor = LowerFloor Then
-			TextureID = 23
-		ElseIf PlayerElevatorFloor = UpperFloor
-			TextureID = 22
-		Else
-			If ToElevatorFloor = LowerFloor Then
+		If d\IsElevatorDoor = 2 Then
+			If PlayerElevatorFloor = LowerFloor Then
+				TextureID = 22
+			ElseIf PlayerElevatorFloor = UpperFloor
+				TextureID = 23
+			Else
+				If ToElevatorFloor = LowerFloor Then
+					TextureID = 23
+				Else
+					TextureID = 22
+				EndIf
+			EndIf
+		ElseIf d\IsElevatorDoor = 1 Then
+			If PlayerElevatorFloor = LowerFloor Then
+				TextureID = 23
+			ElseIf PlayerElevatorFloor = UpperFloor
 				TextureID = 22
 			Else
-				TextureID = 23
+				If ToElevatorFloor = LowerFloor Then
+					TextureID = 22
+				Else
+					TextureID = 23
+				EndIf
 			EndIf
 		EndIf
 	EndIf
@@ -2593,7 +2597,7 @@ Function ClearElevatorPanelTexture%(d.Doors)
 	Local i%
 	
 	For i = 0 To 1
-		EntityTexture(d\ElevatorPanel[i], t\MiscTextureID[21])
+		If d\ElevatorPanel[i] <> 0 Then EntityTexture(d\ElevatorPanel[i], t\MiscTextureID[21])
 	Next
 End Function
 
@@ -2619,12 +2623,14 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 		door1\Locked = 0
 		If (ClosestButton = door2\Buttons[0] Lor ClosestButton = door2\Buttons[1]) And mo\MouseHit1 Then
 			UseDoor(door1, True)
+			UpdateElevatorPanel(door2)
 		EndIf
 	ElseIf door2\Open And (Not door1\Open) And door2\OpenState = 180.0
 		State = 1.0
 		door2\Locked = 0
 		If (ClosestButton = door1\Buttons[0] Lor ClosestButton = door1\Buttons[1]) And mo\MouseHit1 Then
 			UseDoor(door2, True)
+			UpdateElevatorPanel(door1)
 		EndIf
 	ElseIf Abs(door1\OpenState - door2\OpenState) < 0.2
 		door1\IsElevatorDoor = 2
@@ -2662,6 +2668,8 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 					EndIf
 					
 					me\CameraShake = Sin(Abs(State) / 3.0) * 0.3
+					
+					UpdateElevatorPanel(door1)
 				EndIf
 				
 				If State < -500.0 Then
@@ -2778,6 +2786,8 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 					EndIf
 					
 					me\CameraShake = Sin(Abs(State) / 3.0) * 0.3
+					
+					UpdateElevatorPanel(door2)
 				EndIf	
 				
 				If State > 500.0 Then
@@ -3087,10 +3097,6 @@ Function UseDoor(d.Doors, Scripted% = False, PlaySFX% = True)
 				EndIf
 			EndIf
 		EndIf
-	EndIf
-	
-	If d\DoorType = Elevator_Door Then
-		If d\IsElevatorDoor <> 0 And d\IsElevatorDoor <> 3 Then UpdateElevatorPanel(d)
 	EndIf
 	
 	d\Open = (Not d\Open)

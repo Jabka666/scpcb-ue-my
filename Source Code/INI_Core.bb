@@ -584,7 +584,7 @@ Function LoadOptionsINI()
 	
 	opt\LauncherEnabled = GetINIInt(OptionFile, "Advanced", "Launcher Enabled", True)
 	
-	opt\EnableSubtitles = GetINIInt(OptionFile, "Advanced", "Enable Subtitles", True)
+	opt\EnableSubtitles = GetINIInt(OptionFile, "Advanced", "Enable Subtitles", False)
 	
 	opt\SubColorR = GetINIInt(OptionFile, "Advanced", "Subtitles Color R", 255)
 	
