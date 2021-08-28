@@ -4642,6 +4642,16 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "room2_cafeteria"
 			;[Block]
+			d.Doors = CreateDoor(r\x + 1712.0 * RoomScale, r\y - 384.0 * RoomScale, r\z - 1024.0 * RoomScale, 0.0, r, False, Default_Door)
+			d\Locked = 1 : d\MTFClose = False : d\DisableWaypoint = True
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			FreeEntity(d\OBJ2) : d\OBJ2 = 0
+			
+			d.Doors = CreateDoor(r\x - 464.0 * RoomScale, r\y - 384.0 * RoomScale, r\z - 1024.0 * RoomScale, 0.0, r, False, Default_Door)
+			d\Locked = 1 : d\MTFClose = False : d\DisableWaypoint = True
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			FreeEntity(d\OBJ2) : d\OBJ2 = 0
+			
 			; ~ SCP-294
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x + 1847.0 * RoomScale, r\y - 240.0 * RoomScale, r\z - 321.0 * RoomScale)
