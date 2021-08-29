@@ -5332,7 +5332,7 @@ Function UpdateEvents()
 						Select e\EventState 
 							Case 2.0
 								;[Block]
-								i = Rand(MaxItemAmount)
+								i = Rand(0, MaxItemAmount - 1)
 								If Inventory(i) <> Null Then
 									RemoveWearableItems(Inventory(e\EventState2))
 									RemoveItem(Inventory(i))
