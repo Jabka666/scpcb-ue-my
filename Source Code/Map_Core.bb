@@ -8388,7 +8388,6 @@ Function CreateMap()
 	SetRoom("cont2_500_1499", ROOM2, Floor(0.6 * Float(Room2Amount[0])), MinPos, MaxPos)
 	SetRoom("cont2_1123", ROOM2, Floor(0.75 * Float(Room2Amount[0])), MinPos, MaxPos)
 	SetRoom("room2_elevator", ROOM2, Floor(0.85 * Float(Room2Amount[0])), MinPos, MaxPos)
-	SetRoom("room2_js", ROOM2, Floor(0.9 * Float(Room2Amount[0])), MinPos, MaxPos)
 	
 	MapRoom(ROOM2C, Floor(0.5 * Float(Room2CAmount[0]))) = "cont2c_1162_arc"
 	
@@ -8447,7 +8446,7 @@ Function CreateMap()
 	SetRoom("cont2_860_1", ROOM2, MinPos + Floor(0.6 * Room2Amount[2]), MinPos, MaxPos)
 	SetRoom("room2_medibay", ROOM2, MinPos + Floor(0.7 * Float(Room2Amount[2])), MinPos, MaxPos)
 	SetRoom("room2_scientists_2", ROOM2, MinPos + Floor(0.8 * Room2Amount[2]), MinPos, MaxPos)
-	SetRoom("room2_2_ez", ROOM2, MinPos + Floor(0.9 * Float(Room2Amount[2])), MinPos, MaxPos)
+	SetRoom("room2_ic", ROOM2, MinPos + Floor(0.9 * Float(Room2Amount[2])), MinPos, MaxPos)
 	
 	MapRoom(ROOM2C, Room2CAmount[0] + Room2CAmount[1]) = "room2c_ec"	
 	MapRoom(ROOM2C, Room2CAmount[0] + Room2CAmount[1] + 1) = "room2c_gw_ez"		
