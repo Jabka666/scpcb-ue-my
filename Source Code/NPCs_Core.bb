@@ -6904,10 +6904,10 @@ End Function
 
 Function PlayerSees173%(n.NPCs)
 	If n <> Null Then
-		If (n\Idle <> 0) Lor ((me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And (Not wi\IsNVGBlinking) And (EntityInView(n\OBJ, Camera) Lor EntityInView(n\OBJ2, Camera)) And (me\LightBlink =< 0.0)) Then
-			Return(True)
-		Else
+		If (Not chs\NoTarget) Lor (n\Idle <> 0) And (wi\IsNVGBlinking Lor (Not (EntityInView(n\OBJ, Camera) Lor EntityInView(n\OBJ2, Camera))) Lor (me\LightBlink > 0.0 And wi\NightVision = 0) Lor (me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0)) Then
 			Return(False)
+		Else
+			Return(True)
 		EndIf
 	EndIf
 End Function
