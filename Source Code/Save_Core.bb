@@ -179,6 +179,8 @@ Function SaveGame(File$)
 	
 	WriteFloat(f, MTFTimer)
 	
+	WriteFloat(f, TakeOffTimer)
+	
 	For x = 0 To MapGridSize - 1
 		For y = 0 To MapGridSize - 1
 			WriteByte(f, CurrMapGrid\Grid[x + (y * MapGridSize)])
@@ -664,6 +666,8 @@ Function LoadGame(File$)
 	I_714\Using = ReadByte(f)
 	
 	MTFTimer = ReadFloat(f)
+	
+	TakeOffTimer = ReadFloat(f)
 	
 	CurrMapGrid.MapGrid = New MapGrid
 	For x = 0 To MapGridSize - 1
@@ -1548,6 +1552,8 @@ Function LoadGameQuick(File$)
 	I_714\Using = ReadByte(f)
 	
 	MTFTimer = ReadFloat(f)
+	
+	TakeOffTimer = ReadFloat(f)
 	
 	For x = 0 To MapGridSize - 1
 		For y = 0 To MapGridSize - 1
