@@ -2500,7 +2500,7 @@ Function MainLoop()
 		UpdateGUI()
 		
 		If KeyHit(key\INVENTORY) And SelectedDoor = Null And SelectedScreen = Null And (Not I_294\Using) Then
-			If me\Playable And (Not me\Zombie) And (Not I_294\Using) And me\VomitTimer >= 0.0 And me\KillTimer >= 0.0 And me\SelectedEnding = -1 Then
+			If me\Playable And (Not me\Zombie) And me\VomitTimer >= 0.0 And me\KillTimer >= 0.0 And me\SelectedEnding = -1 Then
 				Local W$ = ""
 				Local V# = 0.0
 				
@@ -3615,6 +3615,7 @@ Function UpdateGUI()
 		SelectedDoor = Null
 		SelectedScreen = Null
 		SelectedMonitor = Null
+		I_294\Using = False
 		If SelectedItem <> Null Then
 			If Instr(SelectedItem\ItemTemplate\TempName, "vest") Lor Instr(SelectedItem\ItemTemplate\TempName, "hazmatsuit") Then
 				If wi\BallisticVest = 0 And wi\HazmatSuit = 0 Then DropItem(SelectedItem)

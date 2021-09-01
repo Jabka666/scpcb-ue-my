@@ -176,6 +176,7 @@ Function SaveGame(File$)
 	WriteByte(f, I_427\Using)
 	WriteFloat(f, I_427\Timer)
 	WriteByte(f, I_714\Using)
+	WriteByte(f, I_294\Using)
 	
 	WriteFloat(f, MTFTimer)
 	
@@ -664,6 +665,7 @@ Function LoadGame(File$)
 	I_427\Using = ReadByte(f)
 	I_427\Timer = ReadFloat(f)
 	I_714\Using = ReadByte(f)
+	I_294\Using = ReadByte(f)
 	
 	MTFTimer = ReadFloat(f)
 	
@@ -1550,6 +1552,7 @@ Function LoadGameQuick(File$)
 	I_427\Using = ReadByte(f)
 	I_427\Timer = ReadFloat(f)
 	I_714\Using = ReadByte(f)
+	I_294\Using = ReadByte(f)
 	
 	MTFTimer = ReadFloat(f)
 	
