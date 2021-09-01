@@ -6326,11 +6326,11 @@ Function UpdateEvents()
 						If e\EventState = 0.0 Then
 							n.NPCs = CreateNPC(NPCType049_2, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True))
 							PointEntity(n\Collider, e\room\OBJ)
-							TurnEntity(n\Collider, 0.0, 190.0, 0.0)
+							TurnEntity(n\Collider, 0.0, e\room\Angle, 0.0)
 							
 							n.NPCs = CreateNPC(NPCType049_2, EntityX(e\room\Objects[5], True), EntityY(e\room\Objects[5], True), EntityZ(e\room\Objects[5], True))
 							PointEntity(n\Collider, e\room\OBJ)
-							TurnEntity(n\Collider, 0.0, 20.0, 0.0)
+							TurnEntity(n\Collider, 0.0, e\room\Angle + 60.0, 0.0)
 							
 							If Curr049 <> Null Then
 								e\room\NPC[0] = Curr049
