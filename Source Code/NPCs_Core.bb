@@ -2173,48 +2173,52 @@ Function UpdateNPCs()
 							;[End Block]
 						Case 4.0 ; ~ Attacks
 							;[Block]
-							If n\Frame < 66.0 Then
-								AnimateNPC(n, 2.0, 65.0, 0.7, False)
-								If n\Frame >= 23.0 And PrevFrame < 23.0 Then
-									If Dist < 0.49 Then
-										If Abs(DeltaYaw(n\Collider, me\Collider)) =< 60.0
-											PlaySound2(DamageSFX[Rand(5, 8)], Camera, n\Collider)
-											InjurePlayer(Rnd(0.4, 1.0), 0.0, 0.0, Rnd(0.1, 0.25), 0.2)
-											
-											If me\Injuries > 3.0 Then
-												msg\DeathMsg = SubjectName + ". Cause of death: multiple lacerations and severe blunt force trauma caused by an instance of SCP-049-2."
-												Kill(True)
+							If me\KillTimer >= 0.0 Then
+								If n\Frame < 66.0 Then
+									AnimateNPC(n, 2.0, 65.0, 0.7, False)
+									If n\Frame >= 23.0 And PrevFrame < 23.0 Then
+										If Dist < 0.49 Then
+											If Abs(DeltaYaw(n\Collider, me\Collider)) =< 60.0
+												PlaySound2(DamageSFX[Rand(5, 8)], Camera, n\Collider)
+												InjurePlayer(Rnd(0.4, 1.0), 0.0, 0.0, Rnd(0.1, 0.25), 0.2)
+												
+												If me\Injuries > 3.0 Then
+													msg\DeathMsg = SubjectName + ". Cause of death: multiple lacerations and severe blunt force trauma caused by an instance of SCP-049-2."
+													Kill(True)
+												EndIf
+											Else
+												PlaySound2(MissSFX, Camera, n\Collider)
 											EndIf
 										Else
-											PlaySound2(MissSFX, Camera, n\Collider)
+											PlaySound2(MissSFX, Camera, n\Collider, 2.5)
 										EndIf
-									Else
-										PlaySound2(MissSFX, Camera, n\Collider, 2.5)
+									ElseIf n\Frame >= 64.0
+										n\State = 2.0
 									EndIf
-								ElseIf n\Frame >= 64.0
-									n\State = 2.0
+								Else
+									AnimateNPC(n, 66.0, 132.0, 0.7, False)
+									If n\Frame >= 90.0 And PrevFrame < 90.0 Then
+										If Dist < 0.49 Then
+											If Abs(DeltaYaw(n\Collider, me\Collider)) =< 60.0 Then
+												PlaySound2(DamageSFX[Rand(5, 8)], Camera, n\Collider)
+												InjurePlayer(Rnd(0.4, 1.0), 0.0, 0.0, Rnd(0.1, 0.25), 0.2)
+												
+												If me\Injuries > 3.0 Then
+													msg\DeathMsg = SubjectName + ". Cause of death: multiple lacerations and severe blunt force trauma caused by an instance of SCP-049-2."
+													Kill(True)
+												EndIf
+											Else
+												PlaySound2(MissSFX, Camera, n\Collider)
+											EndIf
+										Else
+											PlaySound2(MissSFX, Camera, n\Collider, 2.5)
+										EndIf
+									ElseIf n\Frame >= 131.0
+										n\State = 2.0
+									EndIf
 								EndIf
 							Else
-								AnimateNPC(n, 66.0, 132.0, 0.7, False)
-								If n\Frame >= 90.0 And PrevFrame < 90.0 Then
-									If Dist < 0.49 Then
-										If Abs(DeltaYaw(n\Collider, me\Collider)) =< 60.0 Then
-											PlaySound2(DamageSFX[Rand(5, 8)], Camera, n\Collider)
-											InjurePlayer(Rnd(0.4, 1.0), 0.0, 0.0, Rnd(0.1, 0.25), 0.2)
-											
-											If me\Injuries > 3.0 Then
-												msg\DeathMsg = SubjectName + ". Cause of death: multiple lacerations and severe blunt force trauma caused by an instance of SCP-049-2."
-												Kill(True)
-											EndIf
-										Else
-											PlaySound2(MissSFX, Camera, n\Collider)
-										EndIf
-									Else
-										PlaySound2(MissSFX, Camera, n\Collider, 2.5)
-									EndIf
-								ElseIf n\Frame >= 131.0
-									n\State = 2.0
-								EndIf
+								n\State = 3.0
 							EndIf
 							;[End Block]
 					End Select
@@ -4750,7 +4754,8 @@ Function UpdateNPCs()
 								n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
 								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 								
-								If Dist < 1.0 Then
+								
+								If Dist < 0.49 Then
 									If Abs(DeltaYaw(n\Collider, me\Collider)) =< 60.0 Then
 										n\State = 4.0
 									EndIf
@@ -4874,32 +4879,36 @@ Function UpdateNPCs()
 							;[End Block]
 						Case 4.0 ; ~ Attacks
 							;[Block]
-							AnimateNPC(n, 126.0, 165.0, 0.6, False)
-							If n\Frame >= 146.0 And PrevFrame < 146.0 Then
-								If Dist < 0.49 Then
-									If Abs(DeltaYaw(n\Collider, me\Collider)) =< 60.0 Then
-										PlaySound_Strict(DamageSFX[Rand(5, 8)])
-										InjurePlayer(Rnd(0.4, 1.0), 1.0 + (1.0 * SelectedDifficulty\AggressiveNPCs), 0.0, Rnd(0.1, 0.25), 0.2)
-										If me\Injuries > 3.0 Then
-											msg\DeathMsg = SubjectName + ". Cause of death: multiple lacerations and severe blunt force trauma caused by [DATA REDACTED], who was infected with SCP-008. Said subject was located by Nine-Tailed Fox and terminated."
-											Kill(True)
+							If me\KillTimer >= 0.0 Then
+								AnimateNPC(n, 126.0, 165.0, 0.6, False)
+								If n\Frame >= 146.0 And PrevFrame < 146.0 Then
+									If Dist < 0.49 Then
+										If Abs(DeltaYaw(n\Collider, me\Collider)) =< 60.0 Then
+											PlaySound_Strict(DamageSFX[Rand(5, 8)])
+											InjurePlayer(Rnd(0.4, 1.0), 1.0 + (1.0 * SelectedDifficulty\AggressiveNPCs), 0.0, Rnd(0.1, 0.25), 0.2)
+											If me\Injuries > 3.0 Then
+												msg\DeathMsg = SubjectName + ". Cause of death: multiple lacerations and severe blunt force trauma caused by [DATA REDACTED], who was infected with SCP-008. Said subject was located by Nine-Tailed Fox and terminated."
+												Kill(True)
+											EndIf
+										Else
+											PlaySound2(MissSFX, Camera, n\Collider)
 										EndIf
 									Else
-										PlaySound2(MissSFX, Camera, n\Collider)
+										PlaySound2(MissSFX, Camera, n\Collider, 2.5)
 									EndIf
-								Else
-									PlaySound2(MissSFX, Camera, n\Collider, 2.5)
-								EndIf
-							ElseIf n\Frame >= 164.0
-								If EntityDistanceSquared(n\Collider, me\Collider) < 0.64
-									If (Abs(DeltaYaw(n\Collider, me\Collider)) =< 60.0)
-										SetNPCFrame(n, 126.0)
+								ElseIf n\Frame >= 164.0
+									If EntityDistanceSquared(n\Collider, me\Collider) < 0.64
+										If (Abs(DeltaYaw(n\Collider, me\Collider)) =< 60.0)
+											SetNPCFrame(n, 126.0)
+										Else
+											n\State = 2.0
+										EndIf
 									Else
 										n\State = 2.0
 									EndIf
-								Else
-									n\State = 2.0
 								EndIf
+							Else
+								n\State = 3.0
 							EndIf
 							;[End Block]
 						Case 5.0 ; ~ Idling
