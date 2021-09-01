@@ -4638,14 +4638,8 @@ Function FillRoom(r.Rooms)
 			r\RoomDoors[0]\MTFClose = False
 			
 			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x + 888.0 * RoomScale, r\y + 240.0 * RoomScale, r\z, True)
-			
-			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x + 1024.0 * RoomScale, r\y + 120.0 * RoomScale, r\z, True)
-			
-			For i = 0 To 1
-				EntityParent(r\Objects[i], r\OBJ)
-			Next
+			PositionEntity(r\Objects[0], r\x + 1024.0 * RoomScale, r\y + 120.0 * RoomScale, r\z, True)
+			EntityParent(r\Objects[0], r\OBJ)
 			;[End Block]
 		Case "room2_cafeteria"
 			;[Block]
@@ -7618,6 +7612,9 @@ Function FillRoom(r.Rooms)
 		Case "room2_ic"
 			;[Block]
 			d.Doors = CreateDoor(r\x - 896.0 * RoomScale, r\y, r\z, 90.0, r, True, Elevator_Door)
+			
+			r\Objects[0] = CreatePivot()
+			PositionEntity(r\Objects[0], r\x + 888.0 * RoomScale, r\y + 240.0 * RoomScale, r\z, True)
 			
 			it.Items = CreateItem("Cup", "cup", r\x - 100.0 * RoomScale, r\y + 230.0 * RoomScale, r\z - 24.0 * RoomScale, 200, 200, 200)
 			it\Name = "Cup of Water"

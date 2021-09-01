@@ -26,7 +26,8 @@ Const e_room2_cafeteria% = 11
 Const e_room2c_ec% = 12
 Const e_room2_closets% = 13
 Const e_room2_6_lcz_173% = 14
-Const e_room2_elevator% = 15, e_room2_elevator_2% = 16
+Const e_room2_elevator% = 15
+Const e_room2_ic% = 16
 Const e_room2_2_lcz% = 17
 Const e_room2_nuke% = 18
 Const e_room2_2_ez% = 19, e_room2_3_ez% = 20, e_room2_ez_035% = 21
@@ -148,9 +149,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room2_elevator)
 			;[End Block]
-		Case "room2_elevator_2"
+		Case "room2_ic"
 			;[Block]
-			Return(e_room2_elevator_2)
+			Return(e_room2_ic)
 			;[End Block]
 		Case "room2_2_lcz"
 			;[Block]
@@ -3584,9 +3585,9 @@ Function UpdateEvents()
 				Else
 					If e\EventState = 1.0 Then
 						If e\room\Dist < 4.0 Lor Rand(700) = 1 Then 
-							e\room\NPC[0]\EnemyX = EntityX(e\room\Objects[1], True)
-							e\room\NPC[0]\EnemyY = EntityY(e\room\Objects[1], True)
-							e\room\NPC[0]\EnemyZ = EntityZ(e\room\Objects[1], True)
+							e\room\NPC[0]\EnemyX = EntityX(e\room\Objects[0], True)
+							e\room\NPC[0]\EnemyY = EntityY(e\room\Objects[0], True)
+							e\room\NPC[0]\EnemyZ = EntityZ(e\room\Objects[0], True)
 							
 							e\EventState = 2.0
 						EndIf
@@ -3597,7 +3598,7 @@ Function UpdateEvents()
 							e\room\NPC[0]\State = 5.0 : e\room\NPC[0]\State3 = 0.0
 						EndIf
 						
-						If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\Objects[1]) < 4.0 Then
+						If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\Objects[0]) < 4.0 Then
 							UseDoor(e\room\RoomDoors[0], True)
 							e\room\RoomDoors[0]\IsElevatorDoor = 0
 							
@@ -3620,7 +3621,7 @@ Function UpdateEvents()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_room2_elevator_2
+			Case e_room2_ic
 				;[Block]
 				If PlayerRoom = e\room Then
 					de.Decals = CreateDecal(3, EntityX(e\room\Objects[0], True), e\room\y + 0.005, EntityZ(e\room\Objects[0], True), 90.0, Rnd(360.0), 0.0)
