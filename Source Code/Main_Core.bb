@@ -8064,9 +8064,6 @@ Function LoadEntities()
 	
 	DeInitMainMenuAssets()
 	
-	MaxItemAmount = SelectedDifficulty\InventorySlots
-	Dim Inventory.Items(MaxItemAmount - 1)
-	
 	SoundEmitter = CreatePivot()
 	
 	me\Collider = CreatePivot()
@@ -8680,6 +8677,9 @@ Function InitStats()
 	EndIf
 	
 	ReadDifficultyFile()
+	
+	MaxItemAmount = SelectedDifficulty\InventorySlots
+	Dim Inventory.Items(MaxItemAmount - 1)
 End Function
 
 Function InitNewGame()
