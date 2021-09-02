@@ -1801,7 +1801,7 @@ Function UpdateEvents()
 								e\room\NPC[10]\State = 7.0
 								
 								e\room\NPC[11] = CreateNPC(NPCTypeGuard, e\room\x - 7200.0 * RoomScale, -0.6, e\room\z - 3075.0 * RoomScale)
-								e\room\NPC[11]\State = 15.0 : e\room\NPC[11]\HasAsset = True
+								e\room\NPC[11]\State = 15.0
 								CreateNPCAsset(e\room\NPC[11])
 								
 								For i = 8 To 11
@@ -3733,6 +3733,7 @@ Function UpdateEvents()
 							SetNPCFrame(e\room\NPC[0], 19.0)
 							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 180.0, 0.0)
 							MoveEntity(e\room\NPC[0]\Collider, 0.0, 0.0, -0.5)
+							ChangeNPCTextureID(e\room\NPC[0], 15)
 						EndIf
 						
 						If e\room\NPC[1] = Null Then
@@ -5138,7 +5139,7 @@ Function UpdateEvents()
 							e\Sound = LoadSound_Strict("SFX\Character\Guard\096ServerRoom2.ogg")
 							e\SoundCHN = PlaySound2(e\Sound, Camera, Curr096\OBJ)
 							
-							ChangeNPCTextureID(Curr096, 15)
+							ChangeNPCTextureID(Curr096, 16)
 							
 							Curr096\CurrSpeed = 0.0
 							
@@ -5871,8 +5872,9 @@ Function UpdateEvents()
 					If e\EventState = 0.0 Then
 						If EntityDistanceSquared(me\Collider, e\room\Objects[3]) < 4.0 Then
 							e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[4], True), 0.5, EntityZ(e\room\Objects[4], True))
-							e\room\NPC[0]\State = 6.0 : e\room\NPC[0]\HasAsset = True
+							e\room\NPC[0]\State = 6.0
 							CreateNPCAsset(e\room\NPC[0])
+							ChangeNPCTextureID(e\room\NPC[0], 15)
 							SetNPCFrame(e\room\NPC[0], 501.0)
 							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
 							

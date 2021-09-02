@@ -267,7 +267,7 @@ Const MaxMonitorTextureIDAmount% = 5
 Const MaxOverlayTextureIDAmount% = 11
 Const MaxOverlayIDAmount% = 11
 Const MaxDecalTextureIDAmount% = 21
-Const MaxNPCTextureIDAmount% = 16
+Const MaxNPCTextureIDAmount% = 17
 Const MaxParticleTextureIDAmount% = 8
 Const MaxLightSpriteIDAmount% = 3
 Const MaxIconIDAmount% = 7
@@ -8387,10 +8387,12 @@ Function LoadEntities()
 	
 	t\NPCTextureID[14] = LoadTexture_Strict("GFX\npcs\scp_939_victim(2).png", 1, DeleteAllTextures) ; ~ SCP-939's victim # 1
 	
-	t\NPCTextureID[15] = LoadTexture_Strict("GFX\npcs\scp_096_bloody.png", 1, DeleteAllTextures) ; ~ SCP-096 bloody texture
+	t\NPCTextureID[15] = LoadTexture_Strict("GFX\npcs\scp_035_victim.png", 1, DeleteAllTextures) ; ~ SCP-035's victim
+	
+	t\NPCTextureID[16] = LoadTexture_Strict("GFX\npcs\scp_096_bloody.png", 1, DeleteAllTextures) ; ~ SCP-096 bloody texture
 	
 	If opt\Atmosphere Then
-		For i = 0 To 15
+		For i = 0 To MaxNPCTextureIDAmount - 1
 			If t\NPCTextureID[i] <> 0 Then TextureBlend(t\NPCTextureID[i], 5)
 		Next
 	EndIf

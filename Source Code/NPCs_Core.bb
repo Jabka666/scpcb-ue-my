@@ -526,11 +526,6 @@ Function CreateNPCAsset%(n.NPCs)
 			;[Block]
 			Local Save%
 			
-			Tex = LoadTexture_Strict("GFX\npcs\scp_035_victim.png")
-			If opt\Atmosphere Then TextureBlend(Tex, 5)
-			EntityTexture(n\OBJ, Tex)
-			DeleteSingleTextureEntryFromCache(Tex)
-			
 			Save = False
 			If n\OBJ2 <> 0 Then
 				EntityParent(n\OBJ2, 0)
@@ -562,6 +557,8 @@ Function CreateNPCAsset%(n.NPCs)
 			EntityParent(n\OBJ2, FindChild(n\OBJ, "Bip01_Head"))
 			;[End Block]
 	End Select
+	
+	n\HasAsset = True
 End Function
 
 Function RemoveNPC(n.NPCs)
