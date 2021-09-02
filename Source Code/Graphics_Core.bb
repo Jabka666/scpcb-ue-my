@@ -140,7 +140,7 @@ Function RenderGamma()
 	
 	; ~ Not by any means a perfect solution
 	; ~ Not even proper gamma correction but it's a nice looking alternative that works in windowed mode
-	If opt\ScreenGamma >= 1.0 Then
+	If opt\ScreenGamma > 1.0 Then
 		CopyRect(0, 0, opt\RealGraphicWidth, opt\RealGraphicHeight, 2048.0 - opt\RealGraphicWidth / 2, 2048.0 - opt\RealGraphicHeight / 2, BackBuffer(), TextureBuffer(FresizeTexture))
 		EntityBlend(FresizeImage, 1)
 		ClsColor(0, 0, 0)
@@ -150,7 +150,7 @@ Function RenderGamma()
 		EntityBlend(FresizeImage, 3)
 		EntityAlpha(FresizeImage, opt\ScreenGamma - 1.0)
 		ScaleRender((-1.0) / Float(opt\RealGraphicWidth), 1.0 / Float(opt\RealGraphicWidth), 4096.0 / Float(opt\RealGraphicWidth), 4096.0 / Float(opt\RealGraphicWidth))
-	Else ; ~ Maybe optimize this if it's too slow, alternatively give players the option to disable gamma
+	ElseIf opt\ScreenGamma < 1.0 ; ~ Maybe optimize this if it's too slow, alternatively give players the option to disable gamma
 		CopyRect(0, 0, opt\RealGraphicWidth, opt\RealGraphicHeight, 2048.0 - opt\RealGraphicWidth / 2, 2048.0 - opt\RealGraphicHeight / 2, BackBuffer(), TextureBuffer(FresizeTexture))
 		EntityBlend(FresizeImage, 1)
 		ClsColor(0, 0, 0)
