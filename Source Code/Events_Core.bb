@@ -30,57 +30,57 @@ Const e_room2_elevator% = 15
 Const e_room2_ic% = 16
 Const e_room2_2_lcz% = 17
 Const e_room2_nuke% = 18
-Const e_room2_2_ez% = 19, e_room2_3_ez% = 20, e_room2_ez_035% = 21
-Const e_room2_tesla% = 22
-Const e_trick% = 23
-Const e_room2_mt% = 24
-Const e_room2_2_hcz_106% = 25
-Const e_room2_4_hcz_106% = 26, e_room2_4_hcz% = 27
-Const e_room3_hcz_duck% = 28, e_room3_hcz_1048% = 29
-Const e_room2_scientists_2% = 30
-Const e_room2_servers_hcz% = 31
-Const e_room2_storage% = 32
-Const e_door_closing% = 33
-Const e_room3_2_ez% = 34
-Const e_room3_storage% = 35
-Const e_room3_2_hcz% = 36
-Const e_room4_lcz% = 37
-Const e_cont2_012% = 38
-Const e_cont1_035% = 39
-Const e_cont2_049% = 40
-Const e_cont1_079% = 41
-Const e_cont1_106% = 42
-Const e_cont1_205% = 43
-Const e_cont2_860_1% = 44
-Const e_cont3_966% = 45
-Const e_cont2_1123% = 46
-Const e_room2_test_hcz% = 47, e_room2_test_lcz_173% = 48
-Const e_room2_6_hcz_smoke% = 49, e_room2_6_hcz% = 50
-Const e_room2_5_hcz_106% = 51
-Const e_toilet_guard% = 52
-Const e_cont2_008% = 53
-Const e_106_victim% = 54
-Const e_106_sinkhole% = 55
-Const e_682_roar% = 56
-Const e_cont1_914% = 57
-Const e_1048_a% = 58
-Const e_room4_2_hcz% = 59
-Const e_room2_gw_2% = 60, e_gateway% = 61
-Const e_cont2_500_1499% = 62
-Const e_cont2c_1162_arc% = 63
-Const e_room2_sl% = 64
-Const e_096_spawn% = 65
-Const e_room2_medibay% = 66
-Const e_dimension_1499% = 67
-Const e_room2_shaft% = 68
-Const e_room4_ic% = 69
-Const e_room2_bio% = 70
-Const e_cont2_409% = 71
-Const e_cont1_005% = 72
-Const e_gate_b_entrance% = 73
-Const e_gate_b% = 74
-Const e_gate_a_entrance% = 75
-Const e_gate_a% = 76
+Const e_room2_2_ez% = 19, e_room2_ez_035% = 20
+Const e_room2_tesla% = 21
+Const e_trick% = 22
+Const e_room2_mt% = 23
+Const e_room2_2_hcz_106% = 24
+Const e_room2_4_hcz_106% = 25, e_room2_4_hcz% = 26
+Const e_room3_hcz_duck% = 27, e_room3_hcz_1048% = 29
+Const e_room2_scientists_2% = 29
+Const e_room2_servers_hcz% = 30
+Const e_room2_storage% = 31
+Const e_door_closing% = 32
+Const e_room3_2_ez% = 33
+Const e_room3_storage% = 34
+Const e_room3_2_hcz% = 35
+Const e_room4_lcz% = 36
+Const e_cont2_012% = 37
+Const e_cont1_035% = 38
+Const e_cont2_049% = 39
+Const e_cont1_079% = 40
+Const e_cont1_106% = 41
+Const e_cont1_205% = 42
+Const e_cont2_860_1% = 43
+Const e_cont3_966% = 44
+Const e_cont2_1123% = 45
+Const e_room2_test_hcz% = 46, e_room2_test_lcz_173% = 47
+Const e_room2_6_hcz_smoke% = 48, e_room2_6_hcz% = 49
+Const e_room2_5_hcz_106% = 50
+Const e_toilet_guard% = 51
+Const e_cont2_008% = 52
+Const e_106_victim% = 53
+Const e_106_sinkhole% = 54
+Const e_682_roar% = 55
+Const e_cont1_914% = 56
+Const e_1048_a% = 57
+Const e_room4_2_hcz% = 58
+Const e_room2_gw_2% = 59, e_gateway% = 60
+Const e_cont2_500_1499% = 61
+Const e_cont2c_1162_arc% = 62
+Const e_room2_sl% = 63
+Const e_096_spawn% = 64
+Const e_room2_medibay% = 65
+Const e_dimension_1499% = 66
+Const e_room2_shaft% = 67
+Const e_room4_ic% = 68
+Const e_room2_bio% = 69
+Const e_cont2_409% = 70
+Const e_cont1_005% = 71
+Const e_gate_b_entrance% = 72
+Const e_gate_b% = 73
+Const e_gate_a_entrance% = 74
+Const e_gate_a% = 75
 ;[End Block]
 
 Function FindEventID%(EventName$)
@@ -164,10 +164,6 @@ Function FindEventID%(EventName$)
 		Case "room2_2_ez"
 			;[Block]
 			Return(e_room2_2_ez)
-			;[End Block]
-		Case "room2_3_ez"
-			;[Block]
-			Return(e_room2_3_ez)
 			;[End Block]
 		Case "room2_ez_035"
 			;[Block]
@@ -520,9 +516,6 @@ Function InitEvents()
 	CreateEvent("room3_hcz_duck", "room3_hcz", 0)
 	CreateEvent("room3_hcz_1048", "room3_hcz", 1)
 	
-	; ~ The event that causes the door to open by itself in "room2_3_ez"
-	CreateEvent("room2_3_ez", "room2_3_ez", 0, 1.0)	
-	
 	CreateEvent("room2_servers_hcz", "room2_servers_hcz", 0)	
 	
 	CreateEvent("room3_2_ez", "room3_2_ez", 0)	
@@ -777,9 +770,10 @@ Function QuickLoadEvents()
 		Case e_dimension_1499
 			;[Block]
 			If e\EventState = 0.0 Then
-				If e\EventStr = "Load0"
+				If e\EventStr = "Load0" Then
 					QuickLoadPercent = 10
 					e\room\Objects[0] = LoadMesh_Strict("GFX\map\dimension1499\1499plane.b3d")
+					DebugLog("TRIGGERED QUICK")
 					HideEntity(e\room\Objects[0])
 					e\EventStr = "Load1"
 				ElseIf e\EventStr = "Load1"
@@ -787,7 +781,7 @@ Function QuickLoadEvents()
 					I_1499\Sky = CreateSky("GFX\map\textures\1499sky")
 					e\EventStr = 1
 				Else
-					If Int(e\EventStr) < 16
+					If Int(e\EventStr) < 16 Then
 						QuickLoadPercent = QuickLoadPercent + 2
 						e\room\Objects[Int(e\EventStr)] = LoadMesh_Strict("GFX\map\dimension1499\1499object" + (Int(e\EventStr)) + ".b3d")
 						HideEntity(e\room\Objects[Int(e\EventStr)])
@@ -3695,20 +3689,6 @@ Function UpdateEvents()
 						Temp = Rand(1, 4)
 						PositionEntity(e\room\Objects[0], EntityX(e\room\Objects[Temp], True), EntityY(e\room\Objects[Temp], True), EntityZ(e\room\Objects[Temp], True), True)
 						RotateEntity(e\room\Objects[0], 0.0, Rnd(360.0), 0.0)
-					EndIf
-				EndIf
-				;[End Block]
-			Case e_room2_3_ez
-				;[Block]
-				If PlayerRoom = e\room Then
-					e\EventState = e\EventState + fps\Factor[0]
-					If e\EventState > 700.0 Then
-						If EntityDistanceSquared(e\room\RoomDoors[0]\OBJ, me\Collider) > 0.25 Then 
-							If (Not EntityInView(e\room\RoomDoors[0]\OBJ, Camera)) Then
-								e\room\RoomDoors[0]\Open = False
-								RemoveEvent(e)
-							EndIf
-						EndIf
 					EndIf
 				EndIf
 				;[End Block]
@@ -9096,7 +9076,6 @@ Function UpdateEvents()
 					If e\Sound2 <> 0 Then
 						FreeSound_Strict(e\Sound2) : e\Sound2 = 0
 					EndIf
-					HideEntity(e\room\OBJ)
 				EndIf
 				;[End Block]
 			Case e_room2_shaft
@@ -9240,7 +9219,7 @@ Function UpdateDimension1499()
 	Local Tex%, Temp%, Scale#, x%, y%, i%, j%
 	
 	For e.Events = Each Events
-		If e\EventID = e_dimension_1499
+		If e\EventID = e_dimension_1499 Then
 			; ~ e\EventState: If player entered dimension (will be resetted after the player leaves it)
 			; ~ 0: The player never entered SCP-1499
 			; ~ 1: The player had already entered the dimension at least once
@@ -9251,9 +9230,9 @@ Function UpdateDimension1499()
 			; ~ e\EventState3: Variable used for the SCP-1499's church event
 			
 			If PlayerRoom = e\room Then
-				If e\EventState < 2.0
+				If e\EventState < 2.0 Then
 					; ~ SCP-1499's random generator
-					If e\EventState = 0.0
+					If e\EventState = 0.0 Then
 						If e\EventStr = "" And QuickLoadPercent = -1
 							QuickLoadPercent = 0
 							QuickLoad_CurrEvent = e
@@ -9338,7 +9317,7 @@ Function UpdateDimension1499()
 								Scale = GetINIFloat(NPCsFile, "SCP-1499-1", "Scale") / 4.0 * Rnd(0.8, 1.0)
 								ScaleEntity(du\OBJ, Scale, Scale, Scale)
 								EntityFX(du\OBJ, 1)
-								du\Anim = Rand(0, 1)
+								du\Anim = Rand(False, True)
 								PositionEntity(du\OBJ, Max(Min((e\room\x + (1887.0 - ((2560.0 / 7.0) * x)) * RoomScale) + Rnd(-0.5, 0.5), e\room\x + 1887.0 * RoomScale), e\room\x - 873.0 * RoomScale), e\room\y, Max(Min((e\room\z + (1796.0 - (384.0 * y)) * RoomScale) + Rnd(-0.5, 0.5), e\room\z + 1796.0 * RoomScale), e\room\z + 1028.0 * RoomScale))
 								RotateEntity(du\OBJ, 0.0, 270.0, 0.0)
 								EntityAutoFade(du\OBJ, 25.0, 39.0)
@@ -9357,7 +9336,7 @@ Function UpdateDimension1499()
 								Scale = GetINIFloat(NPCsFile, "SCP-1499-1", "Scale") / 4.0 * Rnd(0.8, 1.0)
 								ScaleEntity(du\OBJ, Scale, Scale, Scale)
 								EntityFX(du\OBJ, 1)
-								du\Anim = Rand(0, 1)
+								du\Anim = Rand(False, True)
 								PositionEntity(du\OBJ, Max(Min((e\room\x + (1375.0 - ((2048.0 / 6.0) * x)) * RoomScale) + Rnd(-0.5, 0.5), e\room\x + 1375.0 * RoomScale), e\room\x - 873.0 * RoomScale), e\room\y, Max(Min((e\room\z + (3588.0 - (384.0 * y)) * RoomScale) + Rnd(-0.5, 0.5), e\room\z + 3588.0 * RoomScale), e\room\z + 2820.0 * RoomScale))
 								RotateEntity(du\OBJ, 0.0, 270.0, 0.0)
 								EntityAutoFade(du\OBJ, 25.0, 39.0)
@@ -9384,19 +9363,19 @@ Function UpdateDimension1499()
 					HideEntity(r\OBJ)
 				Next
 				ShowEntity(e\room\OBJ)
-				If QuickLoadPercent = 100 Lor QuickLoadPercent = -1
+				If QuickLoadPercent = 100 Lor QuickLoadPercent = -1 Then
 					UpdateChunks(e\room, 15)
 					ShowEntity(I_1499\Sky)
 					Update1499Sky()
 					ShouldPlay = 18
-					If EntityY(me\Collider) < 800.0
+					If EntityY(me\Collider) < 800.0 Then
 						PositionEntity(me\Collider, EntityX(me\Collider), 800.5, EntityZ(me\Collider), True)
 						ResetEntity(me\Collider)
 					EndIf
 					; ~ A hacky fix to make items not fall that are in SCP-1499's dimension
 					For it.Items = Each Items
-						If EntityY(it\Collider) > 750.0
-							If EntityY(it\Collider) < 800.0
+						If EntityY(it\Collider) > 750.0 Then
+							If EntityY(it\Collider) < 800.0 Then
 								PositionEntity(it\Collider, EntityX(it\Collider), 800.5, EntityZ(it\Collider))
 								ResetEntity(it\Collider)
 							EndIf
@@ -9411,10 +9390,10 @@ Function UpdateDimension1499()
 									Animate2(du\OBJ, AnimTime(du\OBJ), 362.0, 402.0, 0.2, False)
 								Else
 									Temp = Rand(False, True)
-									If (Not Temp) Then
-										SetAnimTime(du\OBJ, 321.0)
-									Else
+									If Temp Then
 										SetAnimTime(du\OBJ, 362.0)
+									Else
+										SetAnimTime(du\OBJ, 321.0)
 									EndIf
 								EndIf
 							Else
@@ -9424,10 +9403,10 @@ Function UpdateDimension1499()
 									Animate2(du\OBJ, AnimTime(du\OBJ), 454.0, 498.0, 0.2, False)
 								Else
 									Temp = Rand(False, True)
-									If (Not Temp) Then
-										SetAnimTime(du\OBJ, 413.0)
-									Else
+									If Temp Then
 										SetAnimTime(du\OBJ, 454.0)
+									Else
+										SetAnimTime(du\OBJ, 413.0)
 									EndIf
 								EndIf
 							EndIf
@@ -9436,13 +9415,13 @@ Function UpdateDimension1499()
 								If AnimTime(du\OBJ) =< 411.5 And AnimTime(du\OBJ) > 320.5 Then
 									Animate2(du\OBJ, AnimTime(du\OBJ), 403.0, 412.0, 0.2, False)
 								Else
-									Animate2(du\OBJ, AnimTime(du\OBJ), 296.0, 320.0, 0.2, True)
+									Animate2(du\OBJ, AnimTime(du\OBJ), 296.0, 320.0, 0.2)
 								EndIf
 							Else
 								If AnimTime(du\OBJ) =< 507.5 And AnimTime(du\OBJ) > 320.5 Then
 									Animate2(du\OBJ, AnimTime(du\OBJ), 499.0, 508.0, 0.2, False)
 								Else
-									Animate2(du\OBJ, AnimTime(du\OBJ), 296.0, 320.0, 0.2, True)
+									Animate2(du\OBJ, AnimTime(du\OBJ), 296.0, 320.0, 0.2)
 								EndIf
 							EndIf
 							
@@ -9470,14 +9449,14 @@ Function UpdateDimension1499()
 						If e\room\NPC[0]\Frame > 854.5 Then
 							For i = 2 To 5
 								If i = 2
-									If e\room\NPC[i]\Sound <> 0 Then 
+									If e\room\NPC[i]\Sound <> 0 Then
 										FreeSound_Strict(e\room\NPC[i]\Sound) : e\room\NPC[i]\Sound = 0
 									EndIf
 									e\room\NPC[i]\Sound = LoadSound_Strict("SFX\SCP\1499\Triggered.ogg")
 									e\room\NPC[i]\SoundCHN = PlaySound2(e\room\NPC[i]\Sound, Camera, e\room\NPC[i]\Collider, 50.0)
 								EndIf
 								e\room\NPC[i]\State = 1.0
-								e\room\NPC[i]\Frame = 203.0
+								SetNPCFrame(e\room\NPC[i], 203.0)
 							Next
 							e\EventState3 = 70.0 * 30.0
 						EndIf
@@ -9511,7 +9490,7 @@ Function UpdateDimension1499()
 						EndIf
 					EndIf
 					
-					If EntityDistanceSquared(me\Collider, e\room\OBJ) > 1600.0
+					If EntityDistanceSquared(me\Collider, e\room\OBJ) > 1600.0 Then
 						For du.Dummy1499_1 = Each Dummy1499_1
 							HideEntity(du\OBJ)
 						Next
@@ -9526,7 +9505,7 @@ Function UpdateDimension1499()
 				CurrStepSFX = 0
 				PlayerFallingPickDistance = 0.0
 			Else
-				If e\EventState = 2.0
+				If e\EventState = 2.0 Then
 					If e\SoundCHN <> 0 Then
 						StopStream_Strict(e\SoundCHN)
 						StopChannel(e\SoundCHN2)
@@ -9536,7 +9515,7 @@ Function UpdateDimension1499()
 					HideEntity(I_1499\Sky)
 					HideChunks()
 					For n.NPCs = Each NPCs
-						If n\NPCType = NPCType1499_1
+						If n\NPCType = NPCType1499_1 Then
 							RemoveNPC(n)
 						EndIf
 					Next
@@ -9551,7 +9530,6 @@ Function UpdateDimension1499()
 					If e\Sound2 <> 0 Then
 						FreeSound_Strict(e\Sound2) : e\Sound2 = 0
 					EndIf
-					HideEntity(e\room\OBJ)
 				EndIf
 			EndIf
 		EndIf

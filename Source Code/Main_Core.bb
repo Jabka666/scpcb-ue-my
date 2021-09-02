@@ -8866,7 +8866,7 @@ Function InitLoadGame()
 	
 	For e.Events = Each Events
 		; ~ Loading the necessary stuff for dimension_1499, but this will only be done if the player is in this dimension already
-		If e\EventID = e_dimension_1499
+		If e\EventID = e_dimension_1499 Then
 			If e\EventState = 2.0 Then
 				RenderLoading(91)
 				e\room\Objects[0] = CreatePlane()
@@ -10008,8 +10008,8 @@ Function UpdateLeave1499()
 				Next
 				For it.Items = Each Items
 					it\DistTimer = 0.0
-					If it\ItemTemplate\TempName = "scp1499" Lor it\ItemTemplate\TempName = "super1499"
-						If EntityY(it\Collider) >= EntityY(r1499\OBJ) - 5.0
+					If it\ItemTemplate\TempName = "scp1499" Lor it\ItemTemplate\TempName = "super1499" Then
+						If EntityY(it\Collider) >= EntityY(r1499\OBJ) - 5.0 Then
 							PositionEntity(it\Collider, I_1499\PrevX, I_1499\PrevY + (EntityY(it\Collider) - EntityY(r1499\OBJ)), I_1499\PrevZ)
 							ResetEntity(it\Collider)
 							Exit

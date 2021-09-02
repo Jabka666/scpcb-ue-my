@@ -5822,8 +5822,9 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "room2_3_ez"
 			;[Block]
-			r\RoomDoors.Doors[0] = CreateDoor(r\x - 1056.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 290.0 * RoomScale, 90.0, r, True)
-			r\RoomDoors[0]\AutoClose = False
+			d.Doors = CreateDoor(r\x - 1056.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 290.0 * RoomScale, 90.0, r, False, Default_Door, KEY_CARD_3)
+			
+			d.Doors = CreateDoor(r\x - 1056.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 736.0 * RoomScale, 270.0, r, True, One_Sided_Door, KEY_CARD_3)
 			
 			If Rand(2) = 1 Then 
 				it.Items = CreateItem("Mobile Task Forces", "paper", r\x + 744.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 944.0 * RoomScale)
@@ -7354,7 +7355,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(r\Levers[0], r\x + 205.0 * RoomScale, r\y + 200.0 * RoomScale, r\z + 2287.0 * RoomScale)
 			EntityParent(r\Levers[0], r\OBJ)
 			
-			r\Levers[1] = LoadMesh_Strict("GFX\map\Dimension1499\1499object0_cull.b3d", r\OBJ)
+			r\Levers[1] = LoadMesh_Strict("GFX\map\dimension1499\1499object0_cull.b3d", r\OBJ)
 			EntityType(r\Levers[1], HIT_MAP)
 			EntityAlpha(r\Levers[1], 0.0)
 			;[End Block]
@@ -8928,7 +8929,7 @@ Function CreateChunkParts(r.Rooms)
 				
 				chp\OBJ[j] = CopyEntity(r\Objects[OBJ_ID])
 				If Lower(Yaw) = "random"
-					chp\RandomYaw[j] = Rnd(360)
+					chp\RandomYaw[j] = Rnd(360.0)
 					RotateEntity(chp\OBJ[j], 0.0, chp\RandomYaw[j], 0.0)
 				Else
 					RotateEntity(chp\OBJ[j], 0.0, Float(Yaw), 0.0)
@@ -9014,7 +9015,7 @@ Function UpdateChunks(r.Rooms, ChunkPartAmount%, SpawnNPCs% = True)
 		Next
 		If (Not ChunkFound) Then
 			CurrChunkData = CHUNKDATA[Abs((((x + 32) / 40) Mod 64) * 64) + (Abs(((z + 32) / 40) Mod 64))]
-			ch2 = CreateChunk(CurrChunkData, x, y, z)
+			ch2.Chunk = CreateChunk(CurrChunkData, x, y, z)
 			ch2\IsSpawnChunk = False
 		EndIf
 		x = x + 40.0
@@ -9025,7 +9026,7 @@ Function UpdateChunks(r.Rooms, ChunkPartAmount%, SpawnNPCs% = True)
 	Until z > ChunkMaxDistance + (ChunkZ * 40.0)
 	
 	For ch.Chunk = Each Chunk
-		If (Not ch\IsSpawnChunk)
+		If (Not ch\IsSpawnChunk) Then
 			If DistanceSquared(EntityX(me\Collider), EntityX(ch\ChunkPivot), EntityZ(me\Collider), EntityZ(ch\ChunkPivot)) > PowTwo(ChunkMaxDistance)
 				FreeEntity(ch\ChunkPivot) : ch\ChunkPivot = 0
 				Delete(ch)

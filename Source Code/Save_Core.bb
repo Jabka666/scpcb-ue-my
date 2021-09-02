@@ -116,8 +116,8 @@ Function SaveGame(File$)
 				WriteByte(f, SelectedDifficulty\AggressiveNPCs)
 				WriteByte(f, SelectedDifficulty\SaveType)
 				WriteByte(f, SelectedDifficulty\OtherFactors)
-				WriteByte(f, SelectedDifficulty\InventorySlots)
 			EndIf
+			WriteByte(f, SelectedDifficulty\InventorySlots)
 		EndIf
 	Next
 	
@@ -293,7 +293,7 @@ Function SaveGame(File$)
 		
 		For i = 0 To 9
 			If r\Levers[i] <> 0 Then
-				If EntityPitch(r\Levers[i], True) > 0 Then
+				If EntityPitch(r\Levers[i], True) > 0.0 Then
 					WriteByte(f, 1)
 				Else
 					WriteByte(f, 0)
@@ -613,8 +613,11 @@ Function LoadGame(File$)
 		SelectedDifficulty\AggressiveNPCs = ReadByte(f)
 		SelectedDifficulty\SaveType	= ReadByte(f)
 		SelectedDifficulty\OtherFactors = ReadByte(f)
-		SelectedDifficulty\InventorySlots = ReadByte(f)
 	EndIf
+	SelectedDifficulty\InventorySlots = ReadByte(f)
+	
+	MaxItemAmount = SelectedDifficulty\InventorySlots
+	Dim Inventory.Items(MaxItemAmount - 1)
 	
 	MonitorTimer = ReadFloat(f)
 	
@@ -1346,7 +1349,7 @@ Function LoadGame(File$)
 		Next
 	Next
 	
-	If PlayerRoom\RoomTemplate\Name = "dimension_1499"
+	If PlayerRoom\RoomTemplate\Name = "dimension_1499" Then
 		me\BlinkTimer = -1.0
 		ShouldEntitiesFall = False
 		PlayerRoom = I_1499\PrevRoom
@@ -1500,8 +1503,11 @@ Function LoadGameQuick(File$)
 		SelectedDifficulty\AggressiveNPCs = ReadByte(f)
 		SelectedDifficulty\SaveType	= ReadByte(f)
 		SelectedDifficulty\OtherFactors = ReadByte(f)
-		SelectedDifficulty\InventorySlots = ReadByte(f)
 	EndIf
+	SelectedDifficulty\InventorySlots = ReadByte(f)
+	
+	MaxItemAmount = SelectedDifficulty\InventorySlots
+	Dim Inventory.Items(MaxItemAmount - 1)
 	
 	MonitorTimer = ReadFloat(f)
 	
