@@ -744,7 +744,6 @@ Function LoadGame(File$)
 		n\Texture = ReadString(f)
 		If n\Texture <> "" Then
 			Tex = LoadTexture_Strict(n\Texture)
-			If opt\Atmosphere Then TextureBlend(Tex, 5)
 			EntityTexture(n\OBJ, Tex)
 		EndIf
 		
@@ -1637,7 +1636,6 @@ Function LoadGameQuick(File$)
 		n\Texture = ReadString(f)
 		If n\Texture <> "" Then
 			Tex = LoadTexture_Strict(n\Texture)
-			If opt\Atmosphere Then TextureBlend(Tex, 5)
 			EntityTexture(n\OBJ, Tex)
 		EndIf
 		

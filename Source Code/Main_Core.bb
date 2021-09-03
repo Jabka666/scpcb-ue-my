@@ -1075,7 +1075,6 @@ Function UpdateConsole%()
 					t\MiscTextureID[14] = (Not t\MiscTextureID[14])
 					If t\MiscTextureID[14] Then
 						Tex = LoadTexture_Strict("GFX\npcs\scp_173_H.png", 1)
-						If opt\Atmosphere Then TextureBlend(Tex, 5)
 						EntityTexture(Curr173\OBJ, Tex)
 						EntityTexture(Curr173\OBJ2, Tex)
 						DeleteSingleTextureEntryFromCache(Tex)
@@ -1083,7 +1082,6 @@ Function UpdateConsole%()
 					Else
 						If t\MiscTextureID[15] Then t\MiscTextureID[15] = (Not t\MiscTextureID[15])
 						Tex2 = LoadTexture_Strict("GFX\npcs\scp_173.png", 1)
-						If opt\Atmosphere Then TextureBlend(Tex2, 5)
 						EntityTexture(Curr173\OBJ, Tex2)
 						EntityTexture(Curr173\OBJ2, Tex2)
 						DeleteSingleTextureEntryFromCache(Tex2)
@@ -1095,7 +1093,6 @@ Function UpdateConsole%()
 					t\MiscTextureID[15] = (Not t\MiscTextureID[15])
 					If t\MiscTextureID[15] Then
 						Tex = LoadTexture_Strict("GFX\npcs\scp_173_NY.png", 1)
-						If opt\Atmosphere Then TextureBlend(Tex, 5)
 						EntityTexture(Curr173\OBJ, Tex)
 						EntityTexture(Curr173\OBJ2, Tex)
 						DeleteSingleTextureEntryFromCache(Tex)
@@ -1103,7 +1100,6 @@ Function UpdateConsole%()
 					Else
 						If t\MiscTextureID[14] Then t\MiscTextureID[14] = (Not t\MiscTextureID[14])
 						Tex2 = LoadTexture_Strict("GFX\npcs\scp_173.png", 1)
-						If opt\Atmosphere Then TextureBlend(Tex2, 5)
 						EntityTexture(Curr173\OBJ, Tex2)
 						EntityTexture(Curr173\OBJ2, Tex2)
 						DeleteSingleTextureEntryFromCache(Tex2)
@@ -8155,7 +8151,7 @@ Function LoadEntities()
 	LoadMissingTexture()
 	
 	AmbientLightRoomTex = CreateTextureUsingCacheSystem(2, 2)
-	TextureBlend(AmbientLightRoomTex, 3 + (2 * opt\Atmosphere))
+	TextureBlend(AmbientLightRoomTex, 3)
 	SetBuffer(TextureBuffer(AmbientLightRoomTex))
 	ClsColor(0, 0, 0)
 	Cls()
@@ -8344,17 +8340,10 @@ Function LoadEntities()
 		t\MiscTextureID[i] = LoadTexture_Strict("GFX\map\textures\camera(" + (i - 17) + ").png", 1, DeleteAllTextures)
 	Next
 	
-	If opt\Atmosphere Then
-		For i = 16 To 19
-			TextureBlend(t\MiscTextureID[i], 5)
-		Next
-	EndIf
-	
 	t\MiscTextureID[20] = LoadTexture_Strict("GFX\fog_night_vision_goggles.png", 1, DeleteAllTextures) ; ~ FOG IN NIGHT VISION GOGGLES
 	
 	For i = 21 To 23
 		t\MiscTextureID[i] = LoadTexture_Strict("GFX\map\textures\elevator_panel_" + (i - 20) + ".png", 1, DeleteAllTextures) ; ~ Elevator arrows
-		If opt\Atmosphere Then TextureBlend(t\MiscTextureID[i], 5)
 	Next
 	
 	t\NPCTextureID[0] = LoadTexture_Strict("GFX\npcs\Gonzales.png", 1, DeleteAllTextures) ; ~ Gonzales
@@ -8390,12 +8379,6 @@ Function LoadEntities()
 	t\NPCTextureID[15] = LoadTexture_Strict("GFX\npcs\scp_035_victim.png", 1, DeleteAllTextures) ; ~ SCP-035's victim
 	
 	t\NPCTextureID[16] = LoadTexture_Strict("GFX\npcs\scp_096_bloody.png", 1, DeleteAllTextures) ; ~ SCP-096 bloody texture
-	
-	If opt\Atmosphere Then
-		For i = 0 To MaxNPCTextureIDAmount - 1
-			If t\NPCTextureID[i] <> 0 Then TextureBlend(t\NPCTextureID[i], 5)
-		Next
-	EndIf
 	
 	LoadMaterials(MaterialsFile)
 	
@@ -8873,7 +8856,6 @@ Function InitLoadGame()
 				
 				Local PlaneTex% = LoadTexture_Strict("GFX\map\Dimension1499\grit3.jpg")
 				
-				If opt\Atmosphere Then TextureBlend(PlaneTex, 5)
 				EntityTexture(e\room\Objects[0], PlaneTex)
 				DeleteSingleTextureEntryFromCache(PlaneTex)
 				PositionEntity(e\room\Objects[0], 0.0, EntityY(e\room\OBJ), 0.0)
