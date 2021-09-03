@@ -7288,7 +7288,7 @@ Function UpdateEvents()
 							PositionEntity(me\Collider, EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True), EntityZ(e\room\Objects[6], True), True)
 							ResetEntity(me\Collider)
 							
-							de.Decals = CreateDecal(3, EntityX(me\Collider), e\room\y + 512.0 * RoomScale + 0.005, EntityZ(me\Collider), 90.0, Rnd(360.0), 0.0, 0.5)
+							de.Decals = CreateDecal(3, EntityX(me\Collider, True), e\room\y + 769.0 * RoomScale + 0.005, EntityZ(me\Collider, True), 90.0, Rnd(360.0), 0.0, 0.5)
 							
 							e\room\NPC[0]\Sound = LoadSound_Strict("SFX\SCP\1123\Officer3.ogg")
 							
