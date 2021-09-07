@@ -3862,18 +3862,19 @@ Function FillRoom(r.Rooms)
 	Select r\RoomTemplate\Name
 		Case "cont2_860_1"
 			;[Block]
-			; ~ Doors to observation booth
+			; ~ Doors to observation room
 			d.Doors = CreateDoor(r\x + 928.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 0.0, r, False, Default_Door, KEY_MISC, "GEAR")
 			d\Locked = 1
 			
 			d.Doors = CreateDoor(r\x + 928.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 0.0, r, True, Default_Door, KEY_MISC, "GEAR")
 			d\Locked = 1 : d\MTFClose = False
 			
-			; ~ Doors to the room itself
+			; ~ Doors to SCP-860-1's door itself
 			d.Doors = CreateDoor(r\x + 416.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 0.0, r, False, Default_Door, KEY_CARD_3)
 			
 			d.Doors = CreateDoor(r\x + 416.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 0.0, r, False, Default_Door, KEY_CARD_3)
 			
+			; ~ SCP-860-1's door
 			r\RoomDoors.Doors[0] = CreateDoor(r\x + 184.0 * RoomScale, r\y, r\z, 0.0, r, False, Wooden_Door, KEY_860)
 			r\RoomDoors[0]\Locked = 1 : r\RoomDoors[0]\DisableWaypoint = True
 			
