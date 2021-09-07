@@ -9539,11 +9539,6 @@ Function UpdateEndings()
 			Case e_gate_b
 				;[Block]
 				If PlayerRoom = e\room Then
-					For r.Rooms = Each Rooms
-						HideEntity(r\OBJ)
-					Next					
-					ShowEntity(e\room\OBJ)
-					
 					If e\EventState = 0.0 Then
 						RenderLoading(0, "ENDING STUFF")
 						
@@ -9578,7 +9573,6 @@ Function UpdateEndings()
 						RenderLoading(90, "ENDING STUFF")
 						
 						SecondaryLightOn = True
-						CanSave = False
 						
 						CreateConsoleMsg("")
 						CreateConsoleMsg("WARNING! Teleporting away from this area may cause bugs or crashing.", 255, 0, 0)
@@ -9589,6 +9583,13 @@ Function UpdateEndings()
 						RenderLoading(100)
 					Else
 						UpdateSky()
+						
+						CanSave = False
+						
+						For r.Rooms = Each Rooms
+							HideEntity(r\OBJ)
+						Next					
+						ShowEntity(e\room\OBJ)
 						
 						If e\EventState < 2.0 And me\SelectedEnding = -1 Then 
 							If e\room\NPC[0]\State = 2.0 Then
@@ -9850,11 +9851,6 @@ Function UpdateEndings()
 			Case e_gate_a
 				;[Block]
 				If PlayerRoom = e\room Then 
-					For r.Rooms = Each Rooms
-						HideEntity(r\OBJ)
-					Next					
-					ShowEntity(e\room\OBJ)
-					
 					If e\EventState = 0.0 Then
 						RenderLoading(0, "ENDING STUFF")
 						
@@ -9931,7 +9927,6 @@ Function UpdateEndings()
 						If (Not Curr106\Contained) Then PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\106Escape.ogg"))
 						
 						SecondaryLightOn = True
-						CanSave = False
 						
 						HideDistance = 35.0
 						
@@ -9943,7 +9938,16 @@ Function UpdateEndings()
 						
 						RenderLoading(100)
 					Else
+						UpdateSky()
+						
+						CanSave = False
+						
 						ShouldPlay = 17
+						
+						For r.Rooms = Each Rooms
+							HideEntity(r\OBJ)
+						Next					
+						ShowEntity(e\room\OBJ)
 						
 						e\EventState = e\EventState + fps\Factor[0]
 						
@@ -9957,8 +9961,6 @@ Function UpdateEndings()
 								EndIf
 							EndIf
 						Next
-						
-						UpdateSky()
 						
 						If e\EventState >= 350.0 Then
 							If (Not Curr106\Contained) Then
