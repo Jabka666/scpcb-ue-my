@@ -495,7 +495,6 @@ Function InitEvents()
 	
 	CreateEvent("room2_2_lcz", "room2_2_lcz", 0, 1.0)
 	
-	CreateEvent("room2_elevator_2", "room2_elevator", 0)
 	CreateEvent("room2_elevator", "room2_elevator", Rand(1, 2))
 	
 	CreateEvent("room3_storage", "room3_storage", 0)
@@ -654,6 +653,8 @@ Function InitEvents()
 	CreateEvent("cont2_409", "cont2_409", 0)
 	
 	CreateEvent("cont1_005", "cont1_005", 0)
+	
+	CreateEvent("room2_ic", "room2_ic", 0)
 End Function
 
 Global QuickLoadIcon%
