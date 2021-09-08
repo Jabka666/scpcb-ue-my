@@ -2552,7 +2552,7 @@ Function MainLoop()
 						EndIf
 					EndIf
 				Else
-					If AutoSaveTimer =< 70.0 * 5.0 Then
+					If as\Timer =< 70.0 * 5.0 Then
 						CancelAutoSave()
 					Else
 						SaveGame(SavePath + CurrSave + "\")
@@ -8653,7 +8653,7 @@ Function InitStats()
 	me\Playable = True : me\SelectedEnding = -1
 	
 	HideDistance = 15.0
-	AutoSaveTimer = 70.0 * 120.0
+	as\Timer = 70.0 * 120.0
 	
 	If opt\DebugMode Then
 		InitCheats()
@@ -9002,7 +9002,8 @@ Function NullGame(PlayButtonSFX% = True)
 	ConsoleInput = ""
 	ConsoleOpen = False
 	
-	AutoSaveTimer = 0.0
+	Delete(as)
+	as.AutoSave = New AutoSave
 	
 	ShouldPlay = 0
 	

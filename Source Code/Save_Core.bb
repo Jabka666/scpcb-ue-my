@@ -1,6 +1,11 @@
 Const SavePath$ = "Saves\"
 
-Global AutoSaveTimer#
+Type AutoSave
+	Field Amount%
+	Field Timer#
+End Type
+
+Global as.AutoSave = New AutoSave
 
 Function UpdateAutoSave%()
 	If (Not opt\AutoSaveEnabled) Lor SelectedDifficulty\SaveType <> SAVEANYWHERE Lor me\KillTimer < 0.0 Lor (Not CanSave) Lor (Not me\Playable) Lor me\Zombie Then
@@ -8,21 +13,23 @@ Function UpdateAutoSave%()
 		Return
 	EndIf
 	
-	If AutoSaveTimer =< 0.0 Then
-		SaveGame(SavePath + CurrSave + "\")
+	If as\Timer =< 0.0 Then
+		SaveGame(SavePath + CurrSave + "_" + as\Amount + "\")
+		as\Amount = as\Amount + 1
+		If as\Amount >= 5 Then as\Amount = 0
 	Else
-		AutoSaveTimer = AutoSaveTimer - fps\Factor[0]
-		If AutoSaveTimer =< 70.0 * 5.0 Then
-			CreateHintMsg("Auto save in: " + Str(Int(Ceil(AutoSaveTimer) / 70.0)) + "..")
+		as\Timer = as\Timer - fps\Factor[0]
+		If as\Timer =< 70.0 * 5.0 Then
+			CreateHintMsg("Auto save in: " + Str(Int(Ceil(as\Timer) / 70.0)) + "..")
 		EndIf
 	EndIf
 End Function
 
 Function CancelAutoSave%()
-	If AutoSaveTimer =< 70.0 * 5.0 Then
+	If as\Timer =< 70.0 * 5.0 Then
 		CreateHintMsg("Auto save is canceled!")
 	EndIf
-	If AutoSaveTimer <> 70.0 * 120.0 Then AutoSaveTimer = 70.0 * 120.0
+	If as\Timer <> 70.0 * 120.0 Then as\Timer = 70.0 * 120.0
 End Function
 
 Function SaveGame(File$)
@@ -514,7 +521,7 @@ Function SaveGame(File$)
 			PlaySound_Strict(LoadTempSound("SFX\General\Save2.ogg"))
 		Else
 			PlaySound_Strict(LoadTempSound("SFX\General\Save1.ogg"))
-			AutoSaveTimer = 70.0 * 120.0
+			If as\Timer <> 70.0 * 120.0 Then as\Timer = 70.0 * 120.0
 		EndIf
 		CreateHintMsg("Game progress saved.")
 	EndIf
