@@ -6,7 +6,6 @@ Type Difficulty
 	Field OtherFactors%
 	Field Customizable%
 	Field R%, G%, B%
-	Field Locked%
 	Field InventorySlots%
 End Type
 
@@ -39,66 +38,6 @@ Function SetDifficultyColor(ID%, R%, G%, B%)
 	difficulties[ID]\B = B
 End Function
 
-Function InitDifficultyColor()
-	SetDifficultyColor(SAFE, 120, 150, 50) ; ~ SAFE is default, so don't change the color
-	SetDifficultyColor(EUCLID, 200 - (100 * difficulties[EUCLID]\Locked), 200 - (100 * difficulties[EUCLID]\Locked), 0)
-	SetDifficultyColor(KETER, 200 - (100 * difficulties[KETER]\Locked), 0, 0)
-	SetDifficultyColor(APOLLYON, 150 - (50 * difficulties[APOLLYON]\Locked), 150 - (50 * difficulties[APOLLYON]\Locked), 150 - (50 * difficulties[APOLLYON]\Locked))
-	SetDifficultyColor(ESOTERIC, 200, 50, 200) ; ~ ESOTERIC is hidden difficulty, so don't change the color
-End Function
-
-Function WriteDifficultyFile()
-	Local File$, i%
-	
-	File = WriteFile(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon howl.cb")
-	For i = SAFE To ESOTERIC
-		WriteByte(File, difficulties[i]\Locked)
-	Next
-	WriteByte(File, achv\Achievement[33])
-	CloseFile(File)
-End Function
-
-Function ReadDifficultyFile()
-	; ~ Go out of function immediately if the secret file wasn't created!
-	If FileType(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon howl.cb") <> 1 Then Return
-	
-	Local File$, i%
-	
-	File = OpenFile(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon howl.cb")
-	For i = SAFE To ESOTERIC
-		difficulties[i]\Locked = ReadByte(File)
-	Next
-	achv\Achievement[33] = ReadByte(File)
-	CloseFile(File)
-End Function
-
-Function UnlockDifficulties()
-	Select SelectedDifficulty\Name
-		Case "Safe"
-			;[Block]
-			If difficulties[EUCLID]\Locked Then difficulties[EUCLID]\Locked = False
-			;[End Block]
-		Case "Euclid"
-			;[Block]
-			If difficulties[KETER]\Locked Then difficulties[KETER]\Locked = False
-			;[End Block]
-		Case "Keter"
-			;[Block]
-			If difficulties[APOLLYON]\Locked Then
-				difficulties[APOLLYON]\Locked = False
-				GiveAchievement(AchvKeter)
-			EndIf
-			;[End Block]
-		Case "Apollyon"
-			;[Block]
-			If difficulties[ESOTERIC]\Locked Then difficulties[ESOTERIC]\Locked = False
-			;[End Block]
-	End Select
-	
-	WriteDifficultyFile()
-	InitDifficultyColor()
-End Function
-
 difficulties[SAFE] = New Difficulty
 difficulties[SAFE]\Name = "Safe"
 difficulties[SAFE]\Description = "The game can be saved any time. However, as in the case of SCP Objects, a Safe classification doesn't mean that handling it doesn't pose a threat."
@@ -106,7 +45,7 @@ difficulties[SAFE]\AggressiveNPCs = False
 difficulties[SAFE]\InventorySlots = 10
 difficulties[SAFE]\SaveType = SAVEANYWHERE
 difficulties[SAFE]\OtherFactors = EASY
-difficulties[SAFE]\Locked = False
+SetDifficultyColor(SAFE, 120, 150, 50)
 
 difficulties[EUCLID] = New Difficulty
 difficulties[EUCLID]\Name = "Euclid"
@@ -116,7 +55,7 @@ difficulties[EUCLID]\AggressiveNPCs = False
 difficulties[EUCLID]\InventorySlots = 6
 difficulties[EUCLID]\SaveType = SAVEONSCREENS
 difficulties[EUCLID]\OtherFactors = NORMAL
-difficulties[EUCLID]\Locked = True
+SetDifficultyColor(EUCLID, 200, 200, 0)
 
 difficulties[KETER] = New Difficulty
 difficulties[KETER]\Name = "Keter"
@@ -126,7 +65,7 @@ difficulties[KETER]\AggressiveNPCs = True
 difficulties[KETER]\InventorySlots = 4
 difficulties[KETER]\SaveType = SAVEONQUIT
 difficulties[KETER]\OtherFactors = HARD
-difficulties[KETER]\Locked = True
+SetDifficultyColor(KETER, 200, 0, 0)
 
 difficulties[APOLLYON] = New Difficulty
 difficulties[APOLLYON]\Name = "Apollyon"
@@ -136,7 +75,7 @@ difficulties[APOLLYON]\AggressiveNPCs = True
 difficulties[APOLLYON]\InventorySlots = 2
 difficulties[APOLLYON]\SaveType = NOSAVES
 difficulties[APOLLYON]\OtherFactors = EXTREME
-difficulties[APOLLYON]\Locked = True
+SetDifficultyColor(APOLLYON, 150, 150, 150)
 
 difficulties[ESOTERIC] = New Difficulty
 difficulties[ESOTERIC]\Name = "Esoteric"
@@ -145,10 +84,7 @@ difficulties[ESOTERIC]\InventorySlots = 10
 difficulties[ESOTERIC]\Customizable = True
 difficulties[ESOTERIC]\SaveType = SAVEANYWHERE
 difficulties[ESOTERIC]\OtherFactors = EASY
-difficulties[ESOTERIC]\Locked = True
-
-ReadDifficultyFile()
-InitDifficultyColor()
+SetDifficultyColor(ESOTERIC, 200, 50, 200)
 
 SelectedDifficulty = difficulties[SAFE]
 

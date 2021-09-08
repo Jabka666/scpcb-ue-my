@@ -2166,6 +2166,25 @@ Function LoadGameQuick(File$)
 	CatchErrors("LoadGameQuick")
 End Function
 
+Function SaveAchievementsFile()
+	Local File$
+	
+	File = WriteFile(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon howl.cb")
+	WriteByte(File, achv\Achievement[AchvKeter])
+	CloseFile(File)
+End Function
+
+Function LoadAchievementsFile()
+	; ~ Go out of function immediately if the file doesn't exist!
+	If FileType(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon howl.cb") <> 1 Then Return
+	
+	Local File$
+	
+	File = OpenFile(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon howl.cb")
+	achv\Achievement[AchvKeter] = ReadByte(File)
+	CloseFile(File)
+End Function
+
 Global SaveMSG$
 
 Global CurrSave$

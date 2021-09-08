@@ -336,7 +336,7 @@ Function UpdateMainMenu()
 					y = 376 * MenuScale
 					
 					Width = 580 * MenuScale
-					Height = (310 + (35 * (Not difficulties[ESOTERIC]\Locked))) * MenuScale
+					Height = 345 * MenuScale
 					
 					CurrSave = UpdateMainMenuInputBox(x + (150 * MenuScale), y + (15 * MenuScale), 200 * MenuScale, 30 * MenuScale, CurrSave, 1, 15)
 					If SelectedInputBox = 1 Then
@@ -364,15 +364,10 @@ Function UpdateMainMenu()
 					
 					opt\IntroEnabled = UpdateMainMenuTick(x + (280 * MenuScale), y + (110 * MenuScale), opt\IntroEnabled)	
 					
-					If difficulties[ESOTERIC]\Locked Then
-						n = APOLLYON
-					Else
-						n = ESOTERIC
-					EndIf
-					For i = SAFE To n
+					For i = SAFE To ESOTERIC
 						Local PrevSelectedDifficulty.Difficulty = SelectedDifficulty
 						
-						If UpdateMainMenuTick(x + (20 * MenuScale), y + ((180 + 30 * i) * MenuScale), (SelectedDifficulty = difficulties[i]), difficulties[i]\Locked) Then SelectedDifficulty = difficulties[i]
+						If UpdateMainMenuTick(x + (20 * MenuScale), y + ((180 + 30 * i) * MenuScale), (SelectedDifficulty = difficulties[i])) Then SelectedDifficulty = difficulties[i]
 						
 						If SelectedDifficulty\SaveType <> SAVEANYWHERE Then opt\AutoSaveEnabled = False
 						
@@ -419,12 +414,12 @@ Function UpdateMainMenu()
 						EndIf
 					EndIf
 					
-					If UpdateMainMenuButton(x, y + Height + (20 * MenuScale), 160 * MenuScale, (65 + (10 * (Not difficulties[ESOTERIC]\Locked))) * MenuScale, "Load map", False) Then
+					If UpdateMainMenuButton(x, y + Height + (20 * MenuScale), 160 * MenuScale, 75 * MenuScale, "Load map", False) Then
 						mm\MainMenuTab = MainMenuTab_Load_Map
 						LoadSavedMaps()
 					EndIf
 					
-					If UpdateMainMenuButton(x + (420 * MenuScale), y + Height + (20 * MenuScale), 160 * MenuScale, (65 + (10 * (Not difficulties[ESOTERIC]\Locked))) * MenuScale, "START", False) Then
+					If UpdateMainMenuButton(x + (420 * MenuScale), y + Height + (20 * MenuScale), 160 * MenuScale, 75 * MenuScale, "START", False) Then
 						If CurrSave = "" Then CurrSave = "untitled"
 						
 						If RandomSeed = "" Then
@@ -1172,7 +1167,7 @@ Function RenderMainMenu()
 				
 				y = y + Height + (20 * MenuScale)
 				Width = 580 * MenuScale
-				Height = (310 + (35 * (Not difficulties[ESOTERIC]\Locked))) * MenuScale
+				Height = 345 * MenuScale
 				
 				RenderFrame(x, y, Width, Height)				
 				
@@ -1202,18 +1197,13 @@ Function RenderMainMenu()
 				Text(x + (20 * MenuScale), y + (115 * MenuScale), "Enable intro sequence:")
 				
 				Text(x + (20 * MenuScale), y + (155 * MenuScale), "Difficulty:")
-				If difficulties[ESOTERIC]\Locked Then
-					n = APOLLYON
-				Else
-					n = ESOTERIC
-				EndIf
-				For i = SAFE To n
+				For i = SAFE To ESOTERIC
 					Color(difficulties[i]\R, difficulties[i]\G, difficulties[i]\B)
 					Text(x + (60 * MenuScale), y + ((185 + 30 * i) * MenuScale), difficulties[i]\Name)
 				Next
 				
 				Color(255, 255, 255)
-				RenderFrame(x + (150 * MenuScale), y + (170 * MenuScale), 410 * MenuScale, (125 + (35 * (Not difficulties[ESOTERIC]\Locked))) * MenuScale)
+				RenderFrame(x + (150 * MenuScale), y + (170 * MenuScale), 410 * MenuScale, 160 * MenuScale)
 				
 				If SelectedDifficulty\Customizable Then
 					; ~ Save type

@@ -7734,7 +7734,10 @@ Function UpdateEnding()
 	GiveAchievement(Achv055)
 	If ((Not UsedConsole) Lor opt\DebugMode) And SelectedMap = "" Then
 		GiveAchievement(AchvConsole)
-		UnlockDifficulties()
+		If SelectedDifficulty\Name = "Keter" Then
+			GiveAchievement(AchvKeter)
+			SaveAchievementsFile()
+		EndIf
 	EndIf
 	
 	ShouldPlay = 66
@@ -8661,7 +8664,7 @@ Function InitStats()
 		ClearCheats()
 	EndIf
 	
-	ReadDifficultyFile()
+	LoadAchievementsFile()
 	
 	MaxItemAmount = SelectedDifficulty\InventorySlots
 	Dim Inventory.Items(MaxItemAmount - 1)
