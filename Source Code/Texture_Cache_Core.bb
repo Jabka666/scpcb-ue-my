@@ -146,7 +146,7 @@ Function CheckForTexture%(Tex%, TexFlags% = 1)
 	Texture = LoadTextureCheckingIfInCache(Name, TexFlags, DeleteMapTextures)
 	If Texture <> 0 Then
 		If ((TexFlags Shr 1) Mod 2) = 0 Then
-			TextureBlend(Texture, 2)
+			TextureBlend(Texture, 2 + (3 * opt\Atmosphere))
 		Else
 			TextureBlend(Texture, 1)
 		EndIf
