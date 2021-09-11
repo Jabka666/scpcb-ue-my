@@ -5507,7 +5507,7 @@ Function UpdateEvents()
 					If e\EventState3 = 0.0 And Curr173\Idle = 0 Then
 						If me\BlinkTimer < -10.0 Then 
 							Temp = Rand(0, 2)
-							PositionEntity(Curr173\Collider, EntityX(e\room\Objects[Temp], True), EntityY(e\room\Objects[Temp], True), EntityZ(e\room\Objects[Temp], True))
+							PositionEntity(Curr173\Collider, EntityX(e\room\Objects[Temp], True), EntityY(e\room\Objects[Temp], True), EntityZ(e\room\Objects[Temp], True), True)
 							ResetEntity(Curr173\Collider)
 							e\EventState3 = 1.0
 						EndIf

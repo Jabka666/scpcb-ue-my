@@ -253,8 +253,8 @@ Function SaveGame(File$)
 		WriteFloat(f, n\ModelScaleX)
 		WriteFloat(f, n\ModelScaleY)
 		WriteFloat(f, n\ModelScaleZ)
-		WriteInt(f, n\TextureID)
 		WriteByte(f, n\HasAsset)
+		WriteByte(f, n\TextureID)
 	Next
 	
 	WriteInt(f, 632)
@@ -780,13 +780,13 @@ Function LoadGame(File$)
 			ScaleEntity(n\OBJ, n\ModelScaleX, n\ModelScaleY, n\ModelScaleZ)
 			SetAnimTime(n\OBJ, Frame)
 		EndIf
-		n\TextureID = ReadInt(f)
+		n\HasAsset = ReadByte(f)
+		If n\HasAsset Then CreateNPCAsset(n)
+		n\TextureID = ReadByte(f)
 		If n\TextureID > 0 Then
 			ChangeNPCTextureID(n.NPCs, n\TextureID - 1)
 			SetAnimTime(n\OBJ, Frame)
 		EndIf
-		n\HasAsset = ReadByte(f)
-		If n\HasAsset Then CreateNPCAsset(n)
 	Next
 	
 	For n.NPCs = Each NPCs
@@ -1673,13 +1673,13 @@ Function LoadGameQuick(File$)
 			ScaleEntity(n\OBJ, n\ModelScaleX, n\ModelScaleY, n\ModelScaleZ)
 			SetAnimTime(n\OBJ, Frame)
 		EndIf
-		n\TextureID = ReadInt(f)
+		n\HasAsset = ReadByte(f)
+		If n\HasAsset Then CreateNPCAsset(n)
+		n\TextureID = ReadByte(f)
 		If n\TextureID > 0 Then
 			ChangeNPCTextureID(n.NPCs, n\TextureID - 1)
 			SetAnimTime(n\OBJ, Frame)
 		EndIf
-		n\HasAsset = ReadByte(f)
-		If n\HasAsset Then CreateNPCAsset(n)
 	Next
 	
 	For n.NPCs = Each NPCs
