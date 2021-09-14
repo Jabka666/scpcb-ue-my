@@ -540,16 +540,16 @@ Function CreateNPCAsset%(n.NPCs)
 				FreeEntity(n\OBJ2) : n\OBJ2 = 0
 				
 				Save = True
-			Else
-				If I_035\Sad <> 0 Then
-					n\OBJ2 = LoadMesh_Strict("GFX\npcs\scp_035_sad.b3d")
-					If Save Then
-						RotateEntity(n\OBJ2, Pitch, Yaw, Roll)
-						PositionEntity(n\OBJ2, x, y, z)
-					EndIf
-				Else
-					n\OBJ2 = LoadMesh_Strict("GFX\npcs\scp_035_smile.b3d")
+			EndIf
+			
+			If I_035\Sad <> 0 Then
+				n\OBJ2 = LoadMesh_Strict("GFX\npcs\scp_035_sad.b3d")
+				If Save Then
+					RotateEntity(n\OBJ2, Pitch, Yaw, Roll)
+					PositionEntity(n\OBJ2, x, y, z)
 				EndIf
+			Else
+				n\OBJ2 = LoadMesh_Strict("GFX\npcs\scp_035_smile.b3d")
 			EndIf
 			Temp = GetINIFloat(NPCsFile, "Class D", "Scale") / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ2, Temp, Temp, Temp)
