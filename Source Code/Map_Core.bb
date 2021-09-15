@@ -8937,7 +8937,7 @@ Function CreateChunkParts(r.Rooms)
 			chp\Amount = Int(StrTemp)
 			For j = 0 To Int(StrTemp)
 				Local OBJ_ID% = GetINIString2(File, Loc, "obj" + j)
-				Local x$ = GetINIString2(File, Loc, "obj" + j +" -x")
+				Local x$ = GetINIString2(File, Loc, "obj" + j + "-x")
 				Local z$ = GetINIString2(File, Loc, "obj" + j + "-z")
 				Local Yaw$ = GetINIString2(File, Loc, "obj" + j + "-yaw")
 				
