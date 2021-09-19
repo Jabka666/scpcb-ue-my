@@ -2370,13 +2370,12 @@ Function MainLoop()
 			me\BlurTimer = Max(me\BlurTimer - fps\Factor[0], 0.0)
 		EndIf
 		
-		Local DarkA# = 0.0
+		UpdateDark()
 		
 		If (Not MenuOpen)  Then
 			If me\Sanity < 0.0 Then
 				If me\RestoreSanity Then me\Sanity = Min(me\Sanity + fps\Factor[0], 0.0)
 				If me\Sanity < -200.0 Then 
-					DarkA = Max(Min((-me\Sanity - 200.0) / 700.0, 0.6), DarkA)
 					If me\KillTimer >= 0.0 Then 
 						me\HeartBeatVolume = Min(Abs(me\Sanity + 20.00) / 500.0, 1.0)
 						me\HeartBeatRate = Max(70.0 + Abs(me\Sanity + 200.0) / 6.0, me\HeartBeatRate)
@@ -2389,21 +2388,12 @@ Function MainLoop()
 				me\EyeStuck = Max(me\EyeStuck - fps\Factor[0], 0.0)
 				
 				If me\EyeStuck < 9000.0 Then me\BlurTimer = Max(me\BlurTimer, (9000.0 - me\EyeStuck) * 0.5)
-				If me\EyeStuck < 6000.0 Then DarkA = Min(Max(DarkA, (6000.0 - me\EyeStuck) / 5000.0), 1.0)
 				If me\EyeStuck < 9000.0 And me\EyeStuck + fps\Factor[0] >= 9000.0 Then 
 					CreateMsg("The eyedrops are causing your eyes to tear up.")
 				EndIf
 			EndIf
 			
 			If me\BlinkTimer < 0.0 Then
-				If me\BlinkTimer > -5.0 Then
-					DarkA = Max(DarkA, Sin(Abs(me\BlinkTimer * 18.0)))
-				ElseIf me\BlinkTimer > -15.0
-					DarkA = 1.0
-				Else
-					DarkA = Max(DarkA, Abs(Sin(me\BlinkTimer * 18.0)))
-				EndIf
-				
 				If me\BlinkTimer =< -20.0 Then
 					; ~ Randomizes the frequency of blinking. Scales with difficulty
 					Select SelectedDifficulty\OtherFactors
@@ -2432,7 +2422,6 @@ Function MainLoop()
 				If wi\NightVision = 0 And (Not wi\SCRAMBLE) Then
 					If me\EyeIrritation > 0.0 Then me\BlinkTimer = me\BlinkTimer - Min(me\EyeIrritation / 100.0 + 1.0, 4.0) * fps\Factor[0]
 				EndIf
-				DarkA = Max(DarkA, 0.0)
 			EndIf
 			
 			me\EyeIrritation = Max(0.0, me\EyeIrritation - fps\Factor[0])
@@ -2444,11 +2433,6 @@ Function MainLoop()
 			EndIf
 			
 			me\LightBlink = Max(me\LightBlink - (fps\Factor[0] / 35.0), 0.0)
-			If me\LightBlink > 0.0 And wi\NightVision = 0 Then DarkA = Min(Max(DarkA, me\LightBlink * Rnd(0.3, 0.8)), 1.0)
-			
-			If I_294\Using Then DarkA = 1.0
-			
-			If wi\NightVision = 0 Then DarkA = Max((1.0 - SecondaryLightOn) * 0.9, DarkA)
 			
 			If me\KillTimer < 0.0 Then
 				NullSelectedStuff()
@@ -2458,7 +2442,6 @@ Function MainLoop()
 					MenuOpen = True 
 					If me\SelectedEnding <> -1 Then me\EndingTimer = Min(me\KillTimer, -0.1)
 				EndIf
-				DarkA = Max(DarkA, Min(Abs(me\KillTimer / 400.0), 1.0))
 			Else
 				HideEntity(t\OverlayID[9])
 			EndIf
@@ -2472,18 +2455,7 @@ Function MainLoop()
 				NullSelectedStuff()
 				me\BlurTimer = Abs(me\FallTimer * 10.0)
 				me\FallTimer = me\FallTimer - fps\Factor[0]
-				DarkA = Max(DarkA, Min(Abs(me\FallTimer / 400.0), 1.0))				
 			EndIf
-			
-			If SelectedItem <> Null And (Not InvOpen) And OtherOpen = Null Then
-				If IsItemInFocus() Then
-					DarkA = Max(DarkA, 0.5)
-				EndIf
-			EndIf
-			
-			If SelectedScreen <> Null Then DarkA = Max(DarkA, 0.5)
-			
-			EntityAlpha(t\OverlayID[5], DarkA)	
 		EndIf
 		
 		If me\LightFlash > 0.0 Then
@@ -3447,6 +3419,52 @@ Function UpdateMouseLook()
 	Next
 	
 	CatchErrors("UpdateMouseLook")
+End Function
+
+Function UpdateDark()
+	Local DarkAlpha# = 0.0
+	
+	If me\Sanity < -200.0 Then DarkAlpha = Max(Min((-me\Sanity - 200.0) / 700.0, 0.6), DarkAlpha)
+	
+	If me\EyeStuck > 0.0 Then 
+		If me\EyeStuck < 6000.0 Then DarkAlpha = Min(Max(DarkAlpha, (6000.0 - me\EyeStuck) / 5000.0), 1.0)
+	EndIf
+		
+	If me\BlinkTimer < 0.0 Then
+		If me\BlinkTimer > -5.0 Then
+			DarkAlpha = Max(DarkAlpha, Sin(Abs(me\BlinkTimer * 18.0)))
+		ElseIf me\BlinkTimer > -15.0
+			DarkAlpha = 1.0
+		Else
+			DarkAlpha = Max(DarkAlpha, Abs(Sin(me\BlinkTimer * 18.0)))
+		EndIf
+	Else
+		DarkAlpha = Max(DarkAlpha, 0.0)
+	EndIf
+	
+	If me\LightBlink > 0.0 And wi\NightVision = 0 Then DarkAlpha = Min(Max(DarkAlpha, me\LightBlink * Rnd(0.3, 0.8)), 1.0)
+	
+	If I_294\Using Then DarkAlpha = 1.0
+	
+	If wi\NightVision = 0 Then DarkAlpha = Max((1.0 - SecondaryLightOn) * 0.9, DarkAlpha)
+	
+	If me\KillTimer < 0.0 Then DarkAlpha = Max(DarkAlpha, Min(Abs(me\KillTimer / 400.0), 1.0))
+	If me\FallTimer < 0.0 Then DarkAlpha = Max(DarkAlpha, Min(Abs(me\FallTimer / 400.0), 1.0))				
+	
+	If SelectedItem <> Null And (Not InvOpen) And OtherOpen = Null Then
+		If IsItemInFocus() Then
+			DarkAlpha = Max(DarkAlpha, 0.5)
+		EndIf
+	EndIf
+	
+	If SelectedScreen <> Null Lor SelectedDoor <> Null Then DarkAlpha = Max(DarkAlpha, 0.5)
+	
+	If DarkAlpha <> 0.0 Then
+		ShowEntity(t\OverlayID[5])
+	Else
+		HideEntity(t\OverlayID[5])
+	EndIf
+	EntityAlpha(t\OverlayID[5], DarkAlpha)
 End Function
 
 ; ~ Navigator Constants
@@ -5556,8 +5574,6 @@ Function UpdateGUI()
 			End Select
 			
 			If mo\MouseHit2 Then
-				EntityAlpha(t\OverlayID[5], 0.0)
-				
 				Select SelectedItem\ItemTemplate\TempName
 					Case "firstaid", "finefirstaid", "firstaid2", "scp1499", "super1499", "gasmask", "supergasmask", "gasmask3", "helmet"
 						;[Block]
@@ -8215,10 +8231,6 @@ Function LoadEntities()
 	EntityOrder(t\OverlayID[4], -1003)
 	MoveEntity(t\OverlayID[4], 0.0, 0.0, 1.0)
 	
-	For i = 1 To 4
-		HideEntity(t\OverlayID[i])
-	Next
-	
 	t\OverlayTextureID[5] = CreateTextureUsingCacheSystem(1024, 1024, 1 + 2) ; ~ DARK
 	SetBuffer(TextureBuffer(t\OverlayTextureID[5]))
 	Cls()
@@ -8280,7 +8292,7 @@ Function LoadEntities()
 	EntityOrder(t\OverlayID[10], -1000)
 	MoveEntity(t\OverlayID[10], 0.0, 0.0, 1.0)
 	
-	For i = 7 To 10
+	For i = 1 To 10
 		HideEntity(t\OverlayID[i])
 	Next
 	
