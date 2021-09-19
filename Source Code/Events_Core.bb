@@ -9216,13 +9216,13 @@ Type Dummy1499_1
 End Type
 
 Function UpdateDimension1499()
-	Local e.Events, n.NPCs, n2.NPCs, r.Rooms, it.Items, du.Dummy1499_1
+	Local e.Events, n.NPCs, r.Rooms, it.Items, du.Dummy1499_1
 	Local Tex%, Temp%, Scale#, x%, y%, i%, j%
 	
 	For e.Events = Each Events
 		If e\EventID = e_dimension_1499 Then
 			; ~ e\EventState: If player entered dimension (will be resetted after the player leaves it)
-			; ~ 0: The player never entered SCP-1499
+			; ~ 0: The player never entered SCP-1499's dimension
 			; ~ 1: The player had already entered the dimension at least once
 			; ~ 2: The player is in dimension
 			
@@ -9234,7 +9234,7 @@ Function UpdateDimension1499()
 				If e\EventState < 2.0 Then
 					; ~ SCP-1499's random generator
 					If e\EventState = 0.0 Then
-						If e\EventStr = "" And QuickLoadPercent = -1
+						If e\EventStr = "" And QuickLoadPercent = -1 Then
 							QuickLoadPercent = 0
 							QuickLoad_CurrEvent = e
 							e\EventStr = "Load0"
@@ -9250,60 +9250,54 @@ Function UpdateDimension1499()
 							For j = -1 To 1
 								If i <> 0 And j <> 0 Then
 									n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + (0.75 * i), EntityY(me\Collider) + 0.05, EntityZ(me\Collider) + (0.75 * j))
+									n\State = 2.0
 									PointEntity(n\Collider, me\Collider)
 									RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0)
-									n\State = 2.0
 								ElseIf i <> 0 Lor j <> 0 Then
 									n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + i, EntityY(me\Collider) + 0.05, EntityZ(me\Collider) + j)
+									n\State = 2.0
 									PointEntity(n\Collider, me\Collider)
 									RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0)
-									n\State = 2.0
 								EndIf
 							Next
 						Next
 						e\EventState2 = 5.0
 					EndIf
 					If e\EventState3 < 70.0 * 30.0 Then
+						; ~ King
+						e\room\NPC.NPCs[0] = CreateNPC(NPCType1499_1, e\room\x - 1917.0 * RoomScale, e\room\y + 1904.0 * RoomScale, e\room\z + 2308.0 * RoomScale)
+						e\room\NPC[0]\PrevState = 2 : e\room\NPC[0]\Angle = 270.0
+						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\NPC[0]\Angle, 0.0)
+						Tex = LoadTexture_Strict("GFX\npcs\scp_1499_1_king.png")
+						If opt\Atmosphere Then TextureBlend(Tex, 5)
+						EntityTexture(e\room\NPC[0]\OBJ, Tex)
+						DeleteSingleTextureEntryFromCache(Tex)
+						; ~ Guard next to king
+						e\room\NPC.NPCs[1] = CreateNPC(NPCType1499_1, e\room\x - 1917.0 * RoomScale, e\room\y + 1904.0 * RoomScale, e\room\z + 2052.0 * RoomScale)
+						e\room\NPC[1]\PrevState = 1 : e\room\NPC[1]\Angle = 270.0
+						RotateEntity(e\room\NPC[1]\Collider, 0.0, e\room\NPC[1]\Angle, 0.0)
 						; ~ Guards at the entrance to church
-						n.NPCs = CreateNPC(NPCType1499_1, e\room\x + 4055.0 * RoomScale, e\room\y + 240.0 * RoomScale, e\room\z + 1884.0 * RoomScale)
-						n\PrevState = 3 : n\Angle = 270.0
-						RotateEntity(n\Collider, 0.0, n\Angle, 0.0)
-						n2.NPCs = CreateNPC(NPCType1499_1, e\room\x + 4055.0 * RoomScale, e\room\y + 240.0 * RoomScale, e\room\z + 2876.0 * RoomScale)
-						n2\PrevState = 3 : n2\Angle = 270.0
-						RotateEntity(n2\Collider, 0.0, n2\Angle, 0.0)
-						n\Target = n2
-						n2\Target = n
-						e\room\NPC[2] = n
-						e\room\NPC[3] = n2
+						e\room\NPC.NPCs[2] = CreateNPC(NPCType1499_1, e\room\x + 4055.0 * RoomScale, e\room\y + 240.0 * RoomScale, e\room\z + 1884.0 * RoomScale)
+						e\room\NPC[2]\PrevState = 3 : e\room\NPC[2]\Angle = 270.0
+						RotateEntity(e\room\NPC[2]\Collider, 0.0, e\room\NPC[2]\Angle, 0.0)
+						e\room\NPC.NPCs[3] = CreateNPC(NPCType1499_1, e\room\x + 4055.0 * RoomScale, e\room\y + 240.0 * RoomScale, e\room\z + 2876.0 * RoomScale)
+						e\room\NPC[3]\PrevState = 3 : e\room\NPC[3]\Angle = 270.0
+						RotateEntity(e\room\NPC[3]\Collider, 0.0, e\room\NPC[3]\Angle, 0.0)
+						e\room\NPC[2]\Target = e\room\NPC[3]
+						e\room\NPC[3]\Target = e\room\NPC[2]
 						; ~ More guards
-						n.NPCs = CreateNPC(NPCType1499_1, e\room\x - 1877.0 * RoomScale, e\room\y + 192.0 * RoomScale, e\room\z + 1071.0 * RoomScale)
-						n\PrevState = 3 : n\Angle = 270.0
-						RotateEntity(n\Collider, 0.0, n\Angle, 0.0)
-						n2.NPCs = CreateNPC(NPCType1499_1, e\room\x - 1877.0 * RoomScale, e\room\y + 192.0 * RoomScale, e\room\z + 3503.0 * RoomScale)
-						n2\PrevState = 3 : n2\Angle = 270.0
-						RotateEntity(n2\Collider, 0.0, n2\Angle, 0.0)
-						n\Target = n2
-						n2\Target = n
-						e\room\NPC[4] = n
-						e\room\NPC[5] = n2
+						e\room\NPC.NPCs[4] = CreateNPC(NPCType1499_1, e\room\x - 1877.0 * RoomScale, e\room\y + 192.0 * RoomScale, e\room\z + 1071.0 * RoomScale)
+						e\room\NPC[4]\PrevState = 3 : e\room\NPC[4]\Angle = 270.0
+						RotateEntity(e\room\NPC[4]\Collider, 0.0, e\room\NPC[4]\Angle, 0.0)
+						e\room\NPC.NPCs[5] = CreateNPC(NPCType1499_1, e\room\x - 1877.0 * RoomScale, e\room\y + 192.0 * RoomScale, e\room\z + 3503.0 * RoomScale)
+						e\room\NPC[5]\PrevState = 3 : e\room\NPC[5]\Angle = 270.0
+						RotateEntity(e\room\NPC[5]\Collider, 0.0, e\room\NPC[5]\Angle, 0.0)
+						e\room\NPC[4]\Target = e\room\NPC[5]
+						e\room\NPC[5]\Target = e\room\NPC[4]
 						; ~ Guard at stairs
 						n.NPCs = CreateNPC(NPCType1499_1, e\room\x - 2761.0 * RoomScale, e\room\y + 240.0 * RoomScale, e\room\z + 3204.0 * RoomScale)
 						n\PrevState = 1 : n\Angle = 180.0 : n\Speed = 0.0
 						RotateEntity(n\Collider, 0.0, n\Angle, 0.0)
-						; ~ King
-						n.NPCs = CreateNPC(NPCType1499_1, e\room\x - 1917.0 * RoomScale, e\room\y + 1904.0 * RoomScale, e\room\z + 2308.0 * RoomScale)
-						n\PrevState = 2 : n\Angle = 270.0
-						RotateEntity(n\Collider, 0.0, n\Angle, 0.0)
-						Tex = LoadTexture_Strict("GFX\npcs\scp_1499_1_king.png")
-						If opt\Atmosphere Then TextureBlend(Tex, 5)
-						EntityTexture(n\OBJ, Tex)
-						DeleteSingleTextureEntryFromCache(Tex)
-						e\room\NPC[0] = n
-						; ~ Guard next to king
-						n.NPCs = CreateNPC(NPCType1499_1, e\room\x - 1917.0 * RoomScale, e\room\y + 1904.0 * RoomScale, e\room\z + 2052.0 * RoomScale)
-						n\PrevState = 1 : n\Angle = 270.0
-						RotateEntity(n\Collider, 0.0, n\Angle, 0.0)
-						e\room\NPC[1] = n
 						; ~ SCP-1499-1 instances praying in church
 						; ~ Zone 1
 						For x = 0 To 7
@@ -9344,12 +9338,11 @@ Function UpdateDimension1499()
 							Next
 						Next
 					Else
-						HideEntity(e\room\Levers[1])
+						HideEntity(e\room\Objects[17])
 					EndIf
 					
 					For i = 0 To 14
 						n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(-20.0, 20.0), EntityY(me\Collider) + 0.1, EntityZ(me\Collider) + Rnd(-20.0, 20.0))
-						If Rand(2) = 1 Then n\State2 = 1500.0
 						n\Angle = Rnd(360.0) : n\State2 = 0.0
 						If EntityDistanceSquared(n\Collider, me\Collider) < 100.0 Then
 							n\State = 2.0
@@ -9367,7 +9360,7 @@ Function UpdateDimension1499()
 				If QuickLoadPercent = 100 Lor QuickLoadPercent = -1 Then
 					UpdateChunks(e\room, 15)
 					ShowEntity(I_1499\Sky)
-					Update1499Sky()
+					UpdateSky(I_1499\Sky)
 					ShouldPlay = 18
 					If EntityY(me\Collider) < 800.0 Then
 						PositionEntity(me\Collider, EntityX(me\Collider), 800.5, EntityZ(me\Collider), True)
@@ -9384,7 +9377,7 @@ Function UpdateDimension1499()
 					Next
 					For du.Dummy1499_1 = Each Dummy1499_1
 						If e\EventState3 < 70.0 * 30.0 Then
-							If (Not du\Anim) Then
+							If du\Anim Then
 								If AnimTime(du\OBJ) =< 360.5 Then
 									Animate2(du\OBJ, AnimTime(du\OBJ), 321.0, 361.0, 0.2, False)
 								ElseIf AnimTime(du\OBJ) > 361.5 And AnimTime(du\OBJ) =< 401.5 Then
@@ -9412,7 +9405,7 @@ Function UpdateDimension1499()
 								EndIf
 							EndIf
 						Else
-							If (Not du\Anim) Then
+							If du\Anim Then
 								If AnimTime(du\OBJ) =< 411.5 And AnimTime(du\OBJ) > 320.5 Then
 									Animate2(du\OBJ, AnimTime(du\OBJ), 403.0, 412.0, 0.2, False)
 								Else
@@ -9449,7 +9442,7 @@ Function UpdateDimension1499()
 					ElseIf e\EventState3 = 70.0 * 20.0
 						If e\room\NPC[0]\Frame > 854.5 Then
 							For i = 2 To 5
-								If i = 2
+								If i = 2 Then
 									If e\room\NPC[i]\Sound <> 0 Then
 										FreeSound_Strict(e\room\NPC[i]\Sound) : e\room\NPC[i]\Sound = 0
 									EndIf
@@ -9464,7 +9457,7 @@ Function UpdateDimension1499()
 					EndIf
 					
 					If e\room\NPC[0] <> Null Then
-						ShowEntity(e\room\Levers[1])
+						ShowEntity(e\room\Objects[17])
 						If e\EventState3 < 70.0 * 30.0 Then
 							ShouldPlay = 66
 							If NowPlaying = 66 Then
@@ -9475,7 +9468,7 @@ Function UpdateDimension1499()
 								EndIf
 							EndIf
 							If e\Sound2 <> 0 Then
-								e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\Levers[0], 10.0, opt\MusicVolume)
+								e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\Objects[16], 10.0, opt\MusicVolume)
 							EndIf
 						Else
 							ShouldPlay = 19
@@ -9589,7 +9582,7 @@ Function UpdateEndings()
 						
 						RenderLoading(100)
 					Else
-						UpdateSky()
+						UpdateSky(Sky)
 						
 						CanSave = False
 						
@@ -9945,7 +9938,7 @@ Function UpdateEndings()
 						
 						RenderLoading(100)
 					Else
-						UpdateSky()
+						UpdateSky(Sky)
 						
 						CanSave = False
 						

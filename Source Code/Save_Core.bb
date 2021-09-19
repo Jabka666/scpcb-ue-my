@@ -189,8 +189,8 @@ Function SaveGame(File$)
 	
 	WriteFloat(f, TakeOffTimer)
 	
-	For x = 0 To MapGridSize - 1
-		For y = 0 To MapGridSize - 1
+	For x = 0 To MapGridSize
+		For y = 0 To MapGridSize
 			WriteByte(f, CurrMapGrid\Grid[x + (y * MapGridSize)])
 			WriteByte(f, CurrMapGrid\Found[x + (y * MapGridSize)])
 		Next
@@ -682,8 +682,8 @@ Function LoadGame(File$)
 	TakeOffTimer = ReadFloat(f)
 	
 	CurrMapGrid.MapGrid = New MapGrid
-	For x = 0 To MapGridSize - 1
-		For y = 0 To MapGridSize - 1
+	For x = 0 To MapGridSize
+		For y = 0 To MapGridSize
 			CurrMapGrid\Grid[x + (y * MapGridSize)] = ReadByte(f)
 			CurrMapGrid\Found[x + (y * MapGridSize)] = ReadByte(f)
 		Next
@@ -936,7 +936,7 @@ Function LoadGame(File$)
 	
 	Local Zone%, ShouldSpawnDoor%
 	
-	For y = 0 To MapGridSize - 1
+	For y = MapGridSize To 0 Step -1
 		If y < I_Zone\Transition[1] - (SelectedMap = "") Then
 			Zone = 3
 		ElseIf y >= I_Zone\Transition[1] - (SelectedMap = "") And y < I_Zone\Transition[0] - (SelectedMap = "")
@@ -944,7 +944,7 @@ Function LoadGame(File$)
 		Else
 			Zone = 1
 		EndIf
-		For x = 0 To MapGridSize - 1
+		For x = MapGridSize To 0 Step -1
 			If CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile Then
 				For r.Rooms = Each Rooms
 					r\Angle = WrapAngle(r\Angle)
@@ -981,7 +981,7 @@ Function LoadGame(File$)
 								;[End Block]
 						End Select
 						If ShouldSpawnDoor Then
-							If x + 1 < MapGridSize + 1
+							If x + 1 < MapGridSize + 1 Then
 								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile Then
 									do.Doors = CreateDoor(Float(x) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Float(y) * RoomSpacing, 90.0, r, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
 									r\AdjDoor[0] = do
@@ -1021,7 +1021,7 @@ Function LoadGame(File$)
 								;[End Block]
 						End Select
 						If ShouldSpawnDoor
-							If y + 1 < MapGridSize + 1
+							If y + 1 < MapGridSize + 1 Then
 								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile Then
 									do.Doors = CreateDoor(Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + (RoomSpacing / 2.0), 0.0, r, Max(Rand(-3, 1), 0), ((Zone - 1) Mod 2) * 2)
 									r\AdjDoor[3] = do
@@ -1571,8 +1571,8 @@ Function LoadGameQuick(File$)
 	
 	TakeOffTimer = ReadFloat(f)
 	
-	For x = 0 To MapGridSize - 1
-		For y = 0 To MapGridSize - 1
+	For x = 0 To MapGridSize
+		For y = 0 To MapGridSize
 			CurrMapGrid\Grid[x + (y * MapGridSize)] = ReadByte(f)
 			CurrMapGrid\Found[x + (y * MapGridSize)] = ReadByte(f)
 		Next
@@ -2591,7 +2591,7 @@ Function LoadMap(File$)
 	Local ShouldSpawnDoor% = False
 	Local d.Doors
 	
-	For y = 0 To MapGridSize - 1
+	For y = MapGridSize To 0 Step -1
 		If y < I_Zone\Transition[1] Then
 			Zone = 3
 		ElseIf y >= I_Zone\Transition[1] And y < I_Zone\Transition[0]
@@ -2599,7 +2599,7 @@ Function LoadMap(File$)
 		Else
 			Zone = 1
 		EndIf
-		For x = 0 To MapGridSize - 1
+		For x = MapGridSize To 0 Step -1
 			If CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile Then
 				For r.Rooms = Each Rooms
 					r\Angle = WrapAngle(r\Angle)
@@ -2673,21 +2673,22 @@ Function LoadMap(File$)
 		Next
 	Next
 	
+	; ~ Spawn some rooms outside the map
+	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 1500.0, RoomSpacing, "gate_b")
+	CreateEvent("gate_b", "gate_b", 0)
+	
+	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 500.0, RoomSpacing, "gate_a")
+	CreateEvent("gate_a", "gate_a", 0)
+	
+	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 0.0, (MapGridSize - 1) * RoomSpacing, "dimension_106")
+	CreateEvent("dimension_106", "dimension_106", 0) 
+	
 	If opt\IntroEnabled Then
-		r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 0.0, (MapGridSize + 2) * RoomSpacing, "cont1_173_intro")
+		r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 0.0, (MapGridSize - 1) * RoomSpacing, "cont1_173_intro")
 		CreateEvent("cont1_173_intro", "cont1_173_intro", 0)
 	EndIf
 	
-	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize + 2) * RoomSpacing, 0.0, (MapGridSize + 2) * RoomSpacing, "dimension_106")
-	CreateEvent("dimension_106", "dimension_106", 0)   
-	
-	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, RoomSpacing * (-10.0), "gate_b")
-	CreateEvent("gate_b", "gate_b", 0)
-	
-	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, RoomSpacing * (-2.0), "gate_a")
-	CreateEvent("gate_a", "gate_a", 0)
-	
-	r.Rooms = CreateRoom(0, ROOM1, RoomSpacing * (-2.0), 800.0, 0.0, "dimension_1499")
+	r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 800.0, 0.0, "dimension_1499")
 	CreateEvent("dimension_1499", "dimension_1499", 0)
 	
 	For r.Rooms = Each Rooms

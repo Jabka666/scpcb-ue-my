@@ -7365,13 +7365,13 @@ Function FillRoom(r.Rooms)
 			;[End Block]
 		Case "dimension_1499"
 			;[Block]
-			r\Levers[0] = CreatePivot()
-			PositionEntity(r\Levers[0], r\x + 205.0 * RoomScale, r\y + 200.0 * RoomScale, r\z + 2287.0 * RoomScale)
-			EntityParent(r\Levers[0], r\OBJ)
+			r\Objects[16] = CreatePivot()
+			PositionEntity(r\Objects[16], r\x + 205.0 * RoomScale, r\y + 200.0 * RoomScale, r\z + 2287.0 * RoomScale)
+			EntityParent(r\Objects[16], r\OBJ)
 			
-			r\Levers[1] = LoadMesh_Strict("GFX\map\dimension1499\1499object0_cull.b3d", r\OBJ)
-			EntityType(r\Levers[1], HIT_MAP)
-			EntityAlpha(r\Levers[1], 0.0)
+			r\Objects[17] = LoadMesh_Strict("GFX\map\dimension1499\1499object0_cull.b3d", r\OBJ)
+			EntityType(r\Objects[17], HIT_MAP)
+			EntityAlpha(r\Objects[17], 0.0)
 			;[End Block]
 		Case "room4_ic"
 			;[Block]
@@ -8052,7 +8052,7 @@ Function CreateMap()
 	EndIf
 	CurrMapGrid = New MapGrid
 	
-	x = Floor(MapGridSize / 2)
+	x = MapGridSize / 2
 	y = MapGridSize - 2
 	
 	For i = y To MapGridSize - 1
@@ -8062,9 +8062,9 @@ Function CreateMap()
 	Repeat
 		Width = Rand(10, 15)
 		
-		If x > MapGridSize * 0.6 Then
+		If x > Ceil(MapGridSize * 0.6) Then
 			Width = -Width
-		ElseIf x > MapGridSize * 0.4
+		ElseIf x > Ceil(MapGridSize * 0.4)
 			x = x - (Width / 2)
 		EndIf
 		
@@ -8121,7 +8121,7 @@ Function CreateMap()
 		y = y - Height
 	Until y < 2
 	
-	Local Room1Amount%[3], Room2Amount%[3], Room2CAmount%[3], Room3Amount%[3], Room4Amount%[3]
+	Local Room1Amount%[ZONEAMOUNT], Room2Amount%[ZONEAMOUNT], Room2CAmount%[ZONEAMOUNT], Room3Amount%[ZONEAMOUNT], Room4Amount%[ZONEAMOUNT]
 	
 	; ~ Count the amount of rooms
 	For y = 1 To MapGridSize - 1
@@ -8474,7 +8474,7 @@ Function CreateMap()
 	; ~ [GENERATE OTHER ROOMS]
 	
 	Temp = 0
-	For y = MapGridSize - 1 To 1 Step - 1
+	For y = MapGridSize - 1 To 1 Step -1
 		If y < (MapGridSize / 3) + 1 Then
 			Zone = 3
 		ElseIf y < MapGridSize * (2.0 / 3.0)
@@ -8490,7 +8490,7 @@ Function CreateMap()
 					r.Rooms = CreateRoom(Zone, ROOM2, x * RoomSpacing, 0.0, y * RoomSpacing, "room2_checkpoint_hcz_ez")
 				EndIf
 			ElseIf CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile				
-				Temp = Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1) + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1) + Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1)
+				Temp = Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1.0)
 				Select Temp
 					Case 1 ; ~ Generate ROOM1
 						;[Block]
@@ -8672,12 +8672,12 @@ Function CreateMap()
 	
 	For y = 0 To MapGridSize
 		For x = 0 To MapGridSize
-			CurrMapGrid\Grid[x + (y * MapGridSize)] = Min(CurrMapGrid\Grid[x + (y * MapGridSize)], 1)
+			CurrMapGrid\Grid[x + (y * MapGridSize)] = Min(CurrMapGrid\Grid[x + (y * MapGridSize)], 1.0)
 		Next
 	Next
 	
 	; ~ Create the doors between rooms
-	For y = 0 To MapGridSize - 1
+	For y = MapGridSize To 0 Step -1
 		If y < I_Zone\Transition[1] - 1 Then
 			Zone = 3
 		ElseIf y >= I_Zone\Transition[1] - 1 And y < I_Zone\Transition[0] - 1 Then
@@ -8685,7 +8685,7 @@ Function CreateMap()
 		Else
 			Zone = 1
 		EndIf
-		For x = 0 To MapGridSize - 1
+		For x = MapGridSize To 0 Step -1
 			If CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile Then
 				If Zone = 2 Then
 					Temp = Heavy_Door
@@ -8722,7 +8722,7 @@ Function CreateMap()
 						If ShouldSpawnDoor Then
 							If x + 1 < MapGridSize + 1
 								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile Then
-									d.Doors = CreateDoor(Float(x) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Float(y) * RoomSpacing, 90.0, r, Max(Rand(-3, 1), 0), Temp)
+									d.Doors = CreateDoor(Float(x) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Float(y) * RoomSpacing, 90.0, r, Max(Rand(-3, 1), 0.0), Temp)
 									r\AdjDoor[0] = d
 								EndIf
 							EndIf
@@ -8754,7 +8754,7 @@ Function CreateMap()
 						If ShouldSpawnDoor
 							If y + 1 < MapGridSize + 1
 								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile Then
-									d.Doors = CreateDoor(Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + (RoomSpacing / 2.0), 0.0, r, Max(Rand(-3, 1), 0), Temp)
+									d.Doors = CreateDoor(Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + (RoomSpacing / 2.0), 0.0, r, Max(Rand(-3, 1), 0.0), Temp)
 									r\AdjDoor[3] = d
 								EndIf
 							EndIf
