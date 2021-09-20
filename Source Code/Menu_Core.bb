@@ -63,7 +63,6 @@ Global ga.GameAssets = New GameAssets
 Function LoadGameAssets()
 	Local i%
 	
-	; ~ TODO: Make as one image
 	For i = 0 To 3
 		ga\ArrowIMG[i] = LoadImage_Strict("GFX\menu\arrow.png")
 		RotateImage(ga\ArrowIMG[i], i * 90.0)
@@ -1876,7 +1875,6 @@ Function UpdateLauncher(lnchr.Launcher)
 	fo\FontID[Font_Default] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 16, True)
 	SetFont(fo\FontID[Font_Default])
 	
-	; ~ TODO: Get rid of these lines
 	MenuWhite = LoadImage_Strict("GFX\menu\menu_white.png")
 	MenuBlack = LoadImage_Strict("GFX\menu\menu_black.png")	
 	MaskImage(MenuBlack, 255, 255, 0)
