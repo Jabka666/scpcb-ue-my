@@ -4925,7 +4925,7 @@ Function UpdateEvents()
 						
 						For itt.ItemTemplates = Each ItemTemplates
 							If itt\Name = "Drawing" Then
-								If itt\Img <> 0 Then FreeImage(itt\Img)	: itt\Img = 0
+								If itt\Img <> 0 Then FreeImage(itt\Img) : itt\Img = 0
 								itt\Img = LoadImage_Strict(ImgPath)
 								MaskImage(itt\Img, 255, 0, 255)
 								itt\ImgPath = ImgPath
@@ -4935,7 +4935,7 @@ Function UpdateEvents()
 						
 						Tex = LoadTexture_Strict(ImgPath)
 						
-						Local Brush% = LoadBrush_Strict(ImgPath, 1)
+						Local Brush% = LoadBrush_Strict(ImgPath)
 						
 						For i = 1 To CountSurfaces(e\room\Objects[2])
 							SF = GetSurface(e\room\Objects[2], i)
@@ -4943,7 +4943,7 @@ Function UpdateEvents()
 							BT = GetBrushTexture(b, 0)
 							TexName = StripPath(TextureName(BT))
 							
-							If Lower(TexName) = "1048(1).png" Then
+							If Lower(TexName) <> "scp_1048.png" Then
 								PaintSurface(SF, Brush)
 							EndIf
 							FreeBrush(b)

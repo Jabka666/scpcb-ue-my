@@ -387,7 +387,7 @@ Function LoadAnimTexture_Strict(File$, Flags%, Width%, Height%, FirstFrame%, Cou
 	Return(Tmp) 
 End Function   
 
-Function LoadBrush_Strict(File$, Flags%, u# = 1.0, v# = 1.0)
+Function LoadBrush_Strict(File$, Flags% = 1, u# = 1.0, v# = 1.0)
 	Local Tmp%
 	
 	If (Not Tmp) Then
