@@ -4235,19 +4235,16 @@ Function FillRoom(r.Rooms)
 		Case "cont1_079"
 			;[Block]
 			; ~ Doors
-			d.Doors = CreateDoor(r\x - 1648.0 * RoomScale, r\y - 10688.0 * RoomScale, r\z - 260.0 * RoomScale, 90.0, r, False, Big_Door, KEY_CARD_4)
-			PositionEntity(d\Buttons[1], r\x - 1418.0 * RoomScale, r\y - 10490.0 * RoomScale, r\z - 26.0 * RoomScale, True) 
-			PositionEntity(d\Buttons[0], r\x - 1894.0 * RoomScale, r\y - 10490.0 * RoomScale, r\z - 503.0 * RoomScale, True)
+			d.Doors = CreateDoor(r\x - 1648.0 * RoomScale, r\y - 10688.0 * RoomScale, r\z - 256.0 * RoomScale, 90.0, r, False, Big_Door, KEY_CARD_4)
+			PositionEntity(d\Buttons[0], r\x - 1894.0 * RoomScale, EntityY(d\Buttons[0], True), r\z - 701.0 * RoomScale, True)
+			PositionEntity(d\Buttons[1], r\x - 1418.0 * RoomScale, EntityY(d\Buttons[1], True), r\z - 26.0 * RoomScale, True) 
 			
-			r\RoomDoors.Doors[0] = CreateDoor(r\x - 1484.0 * RoomScale, r\y - 10688.0 * RoomScale, r\z + 1205.0 * RoomScale, 90.0, r, False, Big_Door, KEY_CARD_4)
-			PositionEntity(r\RoomDoors[0]\Buttons[1], r\x - 1700.0 * RoomScale, r\y - 10490.0 * RoomScale, r\z + 777.5 * RoomScale, True)
-			RotateEntity(r\RoomDoors[0]\Buttons[1], 0.0, 90.0, 0.0)
-			PositionEntity(r\RoomDoors[0]\Buttons[0], r\x - 1216.0 * RoomScale, r\y - 10490.0 * RoomScale, r\z + 1502.0 * RoomScale, True) 
-			RotateEntity(r\RoomDoors[0]\Buttons[0], 0.0, -90.0, 0.0)
+			r\RoomDoors.Doors[0] = CreateDoor(r\x - 1648.0 * RoomScale, r\y - 10688.0 * RoomScale, r\z + 1230.0 * RoomScale, 90.0, r, False, Big_Door, KEY_CARD_4)
+			PositionEntity(r\RoomDoors[0]\Buttons[0], r\x - 1894.0 * RoomScale, EntityY(r\RoomDoors[0]\Buttons[0], True), r\z + 1675.0 * RoomScale, True)
+			RotateEntity(r\RoomDoors[0]\Buttons[0], 0.0, EntityYaw(r\RoomDoors[0]\Buttons[0], True) + 180.0, 0.0, True)
+			PositionEntity(r\RoomDoors[0]\Buttons[1], r\x - 1418.0 * RoomScale, EntityY(r\RoomDoors[0]\Buttons[1], True), r\z + 1562.0 * RoomScale, True)
 			
-			d.Doors = CreateDoor(r\x - 1216.0 * RoomScale, r\y - 10688.0 * RoomScale, r\z + 888.0 * RoomScale, 0.0, r, False, Default_Door, KEY_HAND_WHITE)
-			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.061, True)
-			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.061, True)
+			d.Doors = CreateDoor(r\x - 1202.0 * RoomScale, r\y - 10688.0 * RoomScale, r\z + 872.0 * RoomScale, 0.0, r, False, Default_Door, KEY_HAND_WHITE)
 			
 			d.Doors = CreateDoor(r\x, r\y, r\z + 64.0 * RoomScale, 0.0, r, False, Heavy_Door, KEY_CARD_4)
 			d\Locked = 1 : d\MTFClose = False : d\DisableWaypoint = True
@@ -4274,6 +4271,7 @@ Function FillRoom(r.Rooms)
 			EntityTexture(r\Objects[1], t\MiscTextureID[6])
 			HideEntity(r\Objects[1])
 			
+			; ~ Dead guard spawnpoint
 			r\Objects[2] = CreatePivot()
 			PositionEntity(r\Objects[2], r\x - 2260.0 * RoomScale, r\y - 10688.0 * RoomScale, r\z + 1000.0 * RoomScale)
 			
