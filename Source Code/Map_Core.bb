@@ -5558,7 +5558,7 @@ Function FillRoom(r.Rooms)
 			r\RoomDoors[0]\Locked = 1
 			
 			r\RoomDoors.Doors[1] = CreateDoor(r\x - 224.0 * RoomScale, r\y, r\z + 736.0 * RoomScale, 90.0, r, True)
-			r\RoomDoors[0]\Locked = 1
+			r\RoomDoors[1]\Locked = 1
 			
 			For k = 0 To 2
 				r\Objects[k * 2] = CopyEntity(o\LeverModelID[0])

@@ -5057,7 +5057,7 @@ Function UpdateEvents()
 							; ~ Checking at which side the player is
 							If EntityDistanceSquared(me\Collider, e\room\RoomDoors[0]\FrameOBJ) < EntityDistanceSquared(me\Collider, e\room\RoomDoors[1]\FrameOBJ)
 								AnimateNPC(Curr096, 521.0, 555.0, 0.25, False)
-								If Curr096\Frame >= 554.5
+								If Curr096\Frame >= 554.5 Then
 									e\EventState = 70.0 * 10.0
 									Curr096\Frame = 677.0
 									SetNPCFrame(Curr096, Curr096\Frame)
@@ -5067,7 +5067,7 @@ Function UpdateEvents()
 								EndIf
 							Else
 								AnimateNPC(Curr096, 556.0, 590.0, 0.25, False)
-								If Curr096\Frame >= 589.5
+								If Curr096\Frame >= 589.5 Then
 									e\EventState = 70.0 * 10.0
 									Curr096\Frame = 677.0
 									SetNPCFrame(Curr096, Curr096\Frame)
@@ -5208,14 +5208,16 @@ Function UpdateEvents()
 					If e\EventState3 > 0.0 Then e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\Objects[5], 6.0, e\EventState3)
 					
 					If (Not Temp) And x And z Then
-						e\room\RoomDoors[0]\Locked = 0
-						e\room\RoomDoors[1]\Locked = 0
+						For i = 0 To 1
+							e\room\RoomDoors[i]\Locked = 0
+						Next
 					Else
 						If Rand(200) < 5 Then me\LightBlink = Rnd(0.5, 1.0)
 						
 						For i = 0 To 1
-							If e\room\RoomDoors[i]\Open Then 
-								UseDoor(e\room\RoomDoors[i], True) 
+							If e\room\RoomDoors[i]\Open Then
+								UseDoor(e\room\RoomDoors[i], True)
+								e\room\RoomDoors[i]\Locked = 1
 							EndIf
 						Next
 					EndIf
