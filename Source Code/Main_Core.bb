@@ -9199,8 +9199,8 @@ Function Update294()
 	
 	If Temp Then
 		If mo\MouseHit1 Then
-			xTemp = Floor((ScaledMouseX() - x - 228) / 35.5)
-			yTemp = Floor((ScaledMouseY() - y - 342) / 36.5)
+			xTemp = Floor((ScaledMouseX() - x - (228 * MenuScale)) / (35.5 * MenuScale))
+			yTemp = Floor((ScaledMouseY() - y - (342 * MenuScale)) / (36.5 * MenuScale))
 			
 			If yTemp >= 0 And yTemp < 5 Then
 				If xTemp >= 0 And xTemp < 10 Then PlaySound_Strict(ButtonSFX)
@@ -9210,14 +9210,14 @@ Function Update294()
 			
 			Temp = False
 			
-			Select yTemp
+			Select Int(yTemp)
 				Case 0
 					;[Block]
 					StrTemp = ((xTemp + 1) Mod 10)
 					;[End Block]
 				Case 1
 					;[Block]
-					Select xTemp
+					Select Int(xTemp)
 						Case 0
 							;[Block]
 							StrTemp = "Q"
@@ -9262,7 +9262,7 @@ Function Update294()
 					;[End Block]
 				Case 2
 					;[Block]
-					Select xTemp
+					Select Int(xTemp)
 						Case 0
 							;[Block]
 							StrTemp = "A"
@@ -9306,7 +9306,7 @@ Function Update294()
 					End Select
 				Case 3
 					;[Block]
-					Select xTemp
+					Select Int(xTemp)
 						Case 0
 							;[Block]
 							StrTemp = "Z"
@@ -9345,7 +9345,7 @@ Function Update294()
 							;[End Block]
 						Case 9
 							;[Block]
-							I_294\ToInput = Left(I_294\ToInput, Max(Len(I_294\ToInput) - 1, 0))
+							I_294\ToInput = Left(I_294\ToInput, Max(Len(I_294\ToInput) - 1, 0.0))
 							;[End Block]
 					End Select
 				Case 4
@@ -9450,7 +9450,7 @@ Function Render294()
 	Temp = True
 	If PlayerRoom\SoundCHN <> 0 Then Temp = False
 	
-	Text(x + 907 * MenuScale, y + 185 * MenuScale, I_294\ToInput, True, True)
+	Text(x + (907 * MenuScale), y + (185 * MenuScale), I_294\ToInput, True, True)
 	
 	If Temp Then
 		If mo\MouseHit2 Lor (Not I_294\Using) Then 
