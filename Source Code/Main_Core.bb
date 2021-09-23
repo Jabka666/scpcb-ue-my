@@ -152,6 +152,7 @@ fo\FontID[Font_Console] = LoadFont_Strict("GFX\fonts\Andale\Andale Mono.ttf", 16
 SetFont(fo\FontID[Font_Default_Big])
 
 Global BlinkMeterIMG% = LoadImage_Strict("GFX\blink_meter(1).png")
+BlinkMeterIMG = ScaleImage2(BlinkMeterIMG, MenuScale, MenuScale)
 
 RenderLoading(0, "MAIN CORE")
 
@@ -5943,7 +5944,7 @@ Function RenderGUI()
 		
 		FreeEntity(Temp)
 		
-		DrawImage(t\IconID[5], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - 32, mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - 32)
+		DrawImage(t\IconID[5], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - (32 * MenuScale), mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - (32 * MenuScale))
 	EndIf
 	
 	If ClosestItem <> Null And (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And SelectedDoor = Null And SelectedScreen = Null And (Not MenuOpen) And (Not ConsoleOpen) And SelectedDifficulty\OtherFactors <> EXTREME Then
@@ -5954,37 +5955,37 @@ Function RenderGUI()
 		If PitchValue > 90.0 And PitchValue =< 180.0 Then PitchValue = 90.0
 		If PitchValue > 180.0 And PitchValue < 270.0 Then PitchValue = 270.0
 		
-		DrawImage(t\IconID[6], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - 32, mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - 32)
+		DrawImage(t\IconID[6], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - (32 * MenuScale), mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - (32 * MenuScale))
 	EndIf
 	
 	If (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And SelectedDoor = Null And SelectedScreen = Null And (Not MenuOpen) And (Not ConsoleOpen) And SelectedDifficulty\OtherFactors <> EXTREME Then
-		If ga\DrawHandIcon Then DrawImage(t\IconID[5], mo\Viewport_Center_X - 32, mo\Viewport_Center_Y - 32)
+		If ga\DrawHandIcon Then DrawImage(t\IconID[5], mo\Viewport_Center_X - (32 * MenuScale), mo\Viewport_Center_Y - (32 * MenuScale))
 		For i = 0 To 3
 			If ga\DrawArrowIcon[i] Then
-				x = mo\Viewport_Center_X - 32
-				y = mo\Viewport_Center_Y - 32		
+				x = mo\Viewport_Center_X - (32 * MenuScale)
+				y = mo\Viewport_Center_Y - (32 * MenuScale)
 				Select i
 					Case 0
 						;[Block]
-						y = y - 69
+						y = y - (69 * MenuScale)
 						;[End Block]
 					Case 1
 						;[Block]
-						x = x + 69
+						x = x + (69 * MenuScale)
 						;[End Block]
 					Case 2
 						;[Block]
-						y = y + 69
+						y = y + (69 * MenuScale)
 						;[End Block]
 					Case 3
 						;[Block]
-						x = x - 69
+						x = x - (69 * MenuScale)
 						;[End Block]
 				End Select
 				DrawImage(t\IconID[5], x, y)
 				Color(0, 0, 0)
-				Rect(x + 4, y + 4, 56, 56)
-				DrawImage(ga\ArrowIMG[i], x + 21, y + 21)
+				Rect(x + (4 * MenuScale), y + (4 * MenuScale), 56 * MenuScale, 56 * MenuScale)
+				DrawImage(ga\ArrowIMG[i], x + (21 * MenuScale), y + (21 * MenuScale))
 			EndIf
 		Next
 	EndIf
@@ -6265,10 +6266,10 @@ Function RenderGUI()
 						
 						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
-						Width = 300
-						Height = 20
+						Width = 300 * MenuScale
+						Height = 20 * MenuScale
 						x = mo\Viewport_Center_X - (Width / 2)
-						y = mo\Viewport_Center_Y + 80
+						y = mo\Viewport_Center_Y + (80 * MenuScale)
 						
 						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State3)
 					EndIf
@@ -6284,10 +6285,10 @@ Function RenderGUI()
 					Else
 						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
-						Width = 300
-						Height = 20
+						Width = 300 * MenuScale
+						Height = 20 * MenuScale
 						x = mo\Viewport_Center_X - (Width / 2)
-						y = mo\Viewport_Center_Y + 80
+						y = mo\Viewport_Center_Y + (80 * MenuScale)
 						
 						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					EndIf
@@ -6447,10 +6448,10 @@ Function RenderGUI()
 					If wi\BallisticVest = 0 Then
 						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
-						Width = 300
-						Height = 20
+						Width = 300 * MenuScale
+						Height = 20 * MenuScale
 						x = mo\Viewport_Center_X - (Width / 2)
-						y = mo\Viewport_Center_Y + 80
+						y = mo\Viewport_Center_Y + (80 * MenuScale)
 						
 						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					EndIf
@@ -6459,10 +6460,10 @@ Function RenderGUI()
 					;[Block]
 					DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 					
-					Width = 300
-					Height = 20
+					Width = 300 * MenuScale
+					Height = 20 * MenuScale
 					x = mo\Viewport_Center_X - (Width / 2)
-					y = mo\Viewport_Center_Y + 80
+					y = mo\Viewport_Center_Y + (80 * MenuScale)
 					
 					RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					;[End Block]
@@ -6486,10 +6487,10 @@ Function RenderGUI()
 						
 						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
-						Width = 300
-						Height = 20
+						Width = 300 * MenuScale
+						Height = 20 * MenuScale
 						x = mo\Viewport_Center_X - (Width / 2)
-						y = mo\Viewport_Center_Y + 80
+						y = mo\Viewport_Center_Y + (80 * MenuScale)
 						
 						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					EndIf
@@ -6702,10 +6703,10 @@ Function RenderGUI()
 						
 						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
-						Width = 300
-						Height = 20
+						Width = 300 * MenuScale
+						Height = 20 * MenuScale
 						x = mo\Viewport_Center_X - (Width / 2)
-						y = mo\Viewport_Center_Y + 80
+						y = mo\Viewport_Center_Y + (80 * MenuScale)
 						
 						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					EndIf
@@ -6726,10 +6727,10 @@ Function RenderGUI()
 					If (Not PreventItemOverlapping(False, False, False, True)) Then
 						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
-						Width = 300
-						Height = 20
+						Width = 300 * MenuScale
+						Height = 20 * MenuScale
 						x = mo\Viewport_Center_X - (Width / 2)
-						y = mo\Viewport_Center_Y + 80
+						y = mo\Viewport_Center_Y + (80 * MenuScale)
 						
 						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					EndIf
@@ -6739,10 +6740,10 @@ Function RenderGUI()
 					If (Not PreventItemOverlapping(False, False, False, False, True)) Then
 						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
 						
-						Width = 300
-						Height = 20
+						Width = 300 * MenuScale
+						Height = 20 * MenuScale
 						x = mo\Viewport_Center_X - (Width / 2)
-						y = mo\Viewport_Center_Y + 80
+						y = mo\Viewport_Center_Y + (80 * MenuScale)
 						
 						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State3)
 					EndIf

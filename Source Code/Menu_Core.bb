@@ -65,6 +65,7 @@ Function LoadGameAssets()
 	
 	For i = 0 To 3
 		ga\ArrowIMG[i] = LoadImage_Strict("GFX\menu\arrow.png")
+		ga\ArrowIMG[i] = ScaleImage2(ga\ArrowIMG[i], MenuScale, MenuScale)
 		RotateImage(ga\ArrowIMG[i], i * 90.0)
 		HandleImage(ga\ArrowIMG[i], 0, 0)
 	Next
@@ -1045,6 +1046,7 @@ Function RenderMainMenu()
 	CatchErrors("Uncaught (RenderMainMenu")
 	
 	Local x%, y%, Width%, Height%, Temp%, i%, n%
+	Local TempStr$, TempStr2$
 	
 	Color(0, 0, 0)
 	
@@ -1210,21 +1212,22 @@ Function RenderMainMenu()
 					Select SelectedDifficulty\SaveType
 						Case SAVEANYWHERE
 							;[Block]
-							Text(x + (200 * MenuScale), y + (186 * MenuScale), "Save type: Save anywhere")
+							TempStr = "Save anywhere"
 							;[End Block]
 						Case SAVEONSCREENS
 							;[Block]
-							Text(x + (200 * MenuScale), y + (186 * MenuScale), "Save type: Save on screens")
+							TempStr = "Save on screens"
 							;[End Block]
 						Case SAVEONQUIT
 							;[Block]
-							Text(x + (200 * MenuScale), y + (186 * MenuScale), "Save type: Save on quit")
+							TempStr = "Save on quit"
 							;[End Block]
 						Case NOSAVES
 							;[Block]
-							Text(x + (200 * MenuScale), y + (186 * MenuScale), "Save type: No saves")
+							TempStr = "No saves"
 							;[End Block]
 					End Select
+					Text(x + (200 * MenuScale), y + (186 * MenuScale), "Save type: " + TempStr)
 					
 					; ~ Agressive NPCs
 					Color(255, 255, 255)
@@ -1243,21 +1246,22 @@ Function RenderMainMenu()
 					Select SelectedDifficulty\OtherFactors
 						Case EASY
 							;[Block]
-							Text(x + (200 * MenuScale), y + (276 * MenuScale), "Other difficulty factors: Easy")
+							TempStr2 = "Easy"
 							;[End Block]
 						Case NORMAL
 							;[Block]
-							Text(x + (200 * MenuScale), y + (276 * MenuScale), "Other difficulty factors: Normal")
+							TempStr2 = "Normal"
 							;[End Block]
 						Case HARD
 							;[Block]
-							Text(x + (200 * MenuScale), y + (276 * MenuScale), "Other difficulty factors: Hard")
+							TempStr2 = "Hard"
 							;[End Block]
 						Case EXTREME
 							;[Block]
-							Text(x + (200 * MenuScale), y + (276 * MenuScale), "Other difficulty factors: Extreme")
+							TempStr2 = "Extreme"
 							;[End Block]
 					End Select
+					Text(x + (200 * MenuScale), y + (276 * MenuScale), "Other difficulty factors: " + TempStr2)
 				Else
 					RowText(SelectedDifficulty\Description, x + (160 * MenuScale), y + (180 * MenuScale), 390 * MenuScale, 200 * MenuScale)					
 				EndIf
@@ -1378,7 +1382,7 @@ Function RenderMainMenu()
 					
 					Color(255, 255, 255)				
 					Text(x, y + (5 * MenuScale), "Enable bump mapping:")	
-					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0
+					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_BumpMapping)
 					EndIf
 					
@@ -1386,7 +1390,7 @@ Function RenderMainMenu()
 					
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "VSync:")
-					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0
+					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_VSync)
 					EndIf
 					
@@ -1394,7 +1398,7 @@ Function RenderMainMenu()
 					
 					Color(255 - (155 * (opt\DisplayMode <> 0)), 255 - (155 * (opt\DisplayMode <> 0)), 255 - (155 * (opt\DisplayMode <> 0)))
 					Text(x, y + (5 * MenuScale), "Anti-aliasing:")
-					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0
+					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AntiAliasing)
 					EndIf
 					
@@ -1402,7 +1406,7 @@ Function RenderMainMenu()
 					
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Enable room lights:")
-					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0
+					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_RoomLights)
 					EndIf
 					
@@ -1410,7 +1414,7 @@ Function RenderMainMenu()
 					
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Screen gamma:")
-					If MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20) And mm\OnSliderID = 0
+					If MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ScreenGamma, opt\ScreenGamma)
 					EndIf
 					
@@ -1418,7 +1422,7 @@ Function RenderMainMenu()
 					
 					Color(255, 255, 255)
 					Text(x, y, "Particle amount:")
-					If (MouseOn(x + (290 * MenuScale), y - (9 * MenuScale), 164 * MenuScale, 20) And mm\OnSliderID = 0) Lor mm\OnSliderID = 2
+					If (MouseOn(x + (290 * MenuScale), y - (9 * MenuScale), 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 2 Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ParticleAmount, opt\ParticleAmount)
 					EndIf
 					
@@ -1426,7 +1430,7 @@ Function RenderMainMenu()
 					
 					Color(255, 255, 255)
 					Text(x, y, "Texture LOD Bias:")
-					If (MouseOn(x + (290 * MenuScale), y - (9 * MenuScale), 164 * MenuScale, 20) And mm\OnSliderID = 0) Lor mm\OnSliderID = 3
+					If (MouseOn(x + (290 * MenuScale), y - (9 * MenuScale), 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 3 Then
 						RenderOptionsTooltip(tX, tY, tW, tH + (100 * MenuScale), Tooltip_TextureLODBias)
 					EndIf
 					
@@ -1434,7 +1438,7 @@ Function RenderMainMenu()
 					
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Save textures in the VRAM:")
-					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0
+					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SaveTexturesInVRAM)
 					EndIf
 					
@@ -1442,7 +1446,7 @@ Function RenderMainMenu()
 					
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Field of view:")
-					If MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20) And mm\OnSliderID = 0
+					If MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FOV)
 					EndIf
 					
@@ -1450,7 +1454,7 @@ Function RenderMainMenu()
 					
 					Color(255, 255, 255)
 					Text(x, y, "Anisotropic filtering:")
-					If (MouseOn(x + (290 * MenuScale), y - (9 * MenuScale), 164 * MenuScale, 20) And mm\OnSliderID = 0) Lor mm\OnSliderID = 4
+					If (MouseOn(x + (290 * MenuScale), y - (9 * MenuScale), 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 4 Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AnisotropicFiltering)
 					EndIf
 					
@@ -1458,11 +1462,12 @@ Function RenderMainMenu()
 					
 					Color(255, 255, 255)
 					If opt\Atmosphere Then
-						Text(x, y + (5 * MenuScale), "Atmosphere: Bright")
+						TempStr = "Bright"
 					Else
-						Text(x, y + (5 * MenuScale), "Atmosphere: Dark")
+						TempStr = "Dark"
 					EndIf
-					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0
+					Text(x, y + (5 * MenuScale), "Atmosphere: " + TempStr)
+					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Atmosphere)
 					EndIf
 					;[End Block]
@@ -1479,7 +1484,7 @@ Function RenderMainMenu()
 					
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Music volume:")
-					If MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20)
+					If MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MusicVolume, opt\MusicVolume)
 					EndIf
 					
@@ -1487,7 +1492,7 @@ Function RenderMainMenu()
 					
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Sound volume:")
-					If MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20)
+					If MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SoundVolume, opt\PrevSFXVolume)
 					EndIf
 					
@@ -1495,14 +1500,14 @@ Function RenderMainMenu()
 					
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Sound auto-release:")
-					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
+					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then
 						RenderOptionsTooltip(tX, tY, tW, tH + (220 * MenuScale), Tooltip_SoundAutoRelease)
 					EndIf
 					y = y + (30 * MenuScale)
 					
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Enable user tracks:")
-					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
+					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTracks)
 					EndIf
 					
@@ -1512,14 +1517,15 @@ Function RenderMainMenu()
 						Color(255, 255, 255)
 						Text(x, y + (5 * MenuScale), "User track mode:")
 						If opt\UserTrackMode
-							Text(x + (330 * MenuScale), y + (5 * MenuScale), "Repeat")
+							TempStr = "Repeat"
 						Else
-							Text(x + (330 * MenuScale), y + (5 * MenuScale), "Random")
+							TempStr = "Random"
 						EndIf
-						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
+						Text(x + (330 * MenuScale), y + (5 * MenuScale), TempStr)
+						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTracksMode)
 						EndIf
-						If MouseOn(x, y + (30 * MenuScale), 210 * MenuScale, 30 * MenuScale)
+						If MouseOn(x, y + (30 * MenuScale), 210 * MenuScale, 30 * MenuScale) Then
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTrackScan)
 						EndIf
 						If UserTrackCheck > 0 Then
@@ -1536,7 +1542,7 @@ Function RenderMainMenu()
 					
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Mouse sensitivity:")
-					If MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20)
+					If MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseSensitivity, opt\MouseSensitivity)
 					EndIf
 					
@@ -1544,7 +1550,7 @@ Function RenderMainMenu()
 					
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Invert mouse Y-axis:")
-					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
+					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseInvert)
 					EndIf
 					
@@ -1552,7 +1558,7 @@ Function RenderMainMenu()
 					
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Mouse smoothing:")
-					If MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20)
+					If MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseSmoothing, opt\MouseSmoothing)
 					EndIf
 					
@@ -1586,7 +1592,7 @@ Function RenderMainMenu()
 					
 					Text(x + (260 * MenuScale), y + (105 * MenuScale), "Take Screenshot:")
 					
-					If MouseOn(x, y, Width - (40 * MenuScale), 120 * MenuScale)
+					If MouseOn(x, y, Width - (40 * MenuScale), 120 * MenuScale) Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ControlConfiguration)
 					EndIf
 					;[End Block]
@@ -1605,7 +1611,7 @@ Function RenderMainMenu()
 						
 						Color(255, 255, 255)				
 						Text(x, y + (5 * MenuScale), "Show HUD:")	
-						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
+						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_HUD)
 						EndIf
 						
@@ -1613,7 +1619,7 @@ Function RenderMainMenu()
 						
 						Color(255, 255, 255)
 						Text(x, y + (5 * MenuScale), "Enable console:")
-						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
+						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Console)
 						EndIf
 						
@@ -1622,7 +1628,7 @@ Function RenderMainMenu()
 						If opt\CanOpenConsole Then
 							Color(255, 255, 255)
 							Text(x, y + (5 * MenuScale), "Open console on error:")
-							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
+							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then
 								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ConsoleOnError)
 							EndIf
 						EndIf
@@ -1631,7 +1637,7 @@ Function RenderMainMenu()
 						
 						Color(255, 255, 255)
 						Text(x, y + (5 * MenuScale), "Achievement popups:")
-						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
+						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AchievementPopups)
 						EndIf
 						
@@ -1639,7 +1645,7 @@ Function RenderMainMenu()
 						
 						Color(255 - (155 * SelectedDifficulty\SaveType <> SAVEANYWHERE), 255 - (155 * SelectedDifficulty\SaveType <> SAVEANYWHERE), 255 - (155 * SelectedDifficulty\SaveType <> SAVEANYWHERE))
 						Text(x, y + (5 * MenuScale), "Enable auto save:")
-						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
+						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AutoSave)
 						EndIf
 						
@@ -1647,7 +1653,7 @@ Function RenderMainMenu()
 						
 						Color(255, 255, 255)
 						Text(x, y + (5 * MenuScale), "Show FPS:")
-						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
+						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FPS)
 						EndIf
 						
@@ -1656,15 +1662,15 @@ Function RenderMainMenu()
 						Color(255, 255, 255)
 						Text(x, y + (5 * MenuScale), "Frame limit:")
 						Color(255, 255, 255)
+						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then
+							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FrameLimit, opt\FrameLimit)
+						EndIf
 						If opt\CurrFrameLimit > 0.0 Then
 							Color(255, 255, 0)
 							Text(x, y + (45 * MenuScale), opt\FrameLimit + " FPS")
-						EndIf
-						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FrameLimit, opt\FrameLimit)
-						EndIf
-						If MouseOn(x + (130 * MenuScale), y + (40 * MenuScale), 164 * MenuScale, 20)
-							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FrameLimit, opt\FrameLimit)
+							If MouseOn(x + (130 * MenuScale), y + (40 * MenuScale), 164 * MenuScale, 20 * MenuScale) Then
+								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FrameLimit, opt\FrameLimit)
+							EndIf
 						EndIf
 					Else
 						y = y + (20 * MenuScale)
@@ -1672,7 +1678,7 @@ Function RenderMainMenu()
 						If opt\HUDEnabled Then
 							Color(255, 255, 255)
 							Text(x, y + (5 * MenuScale), "Smooth HUD:")
-							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
+							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then
 								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SmoothHUD)
 							EndIf
 						EndIf
@@ -1681,7 +1687,7 @@ Function RenderMainMenu()
 						
 						Color(255, 255, 255)
 						Text(x, y + (5 * MenuScale), "Play startup videos:")
-						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
+						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_StartupVideos)
 						EndIf
 						
@@ -1689,7 +1695,7 @@ Function RenderMainMenu()
 						
 						Color(255, 255, 255)
 						Text(x, y + (5 * MenuScale), "Use launcher:")
-						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
+						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Launcher)
 						EndIf
 						
@@ -1697,7 +1703,7 @@ Function RenderMainMenu()
 						
 						Color(255, 255, 255)
 						Text(x, y + (5 * MenuScale), "Enable Subtitles:")
-						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
+						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Subtitles)
 						EndIf
 						
@@ -1711,7 +1717,7 @@ Function RenderMainMenu()
 						y = y + (5 * MenuScale)
 						
 						If opt\EnableSubtitles Then
-							If MouseOn(x + (230 * MenuScale), y, 147 * MenuScale, 147 * MenuScale)
+							If MouseOn(x + (230 * MenuScale), y, 147 * MenuScale, 147 * MenuScale) Then
 								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
 							EndIf
 						EndIf
@@ -1721,7 +1727,7 @@ Function RenderMainMenu()
 						If opt\EnableSubtitles Then
 							Color(255, 255, 255)
 							Text(x, y + (5 * MenuScale), "RED COLOR:")
-							If MouseOn(x + (125 * MenuScale), y, 40 * MenuScale, 20 * MenuScale)
+							If MouseOn(x + (125 * MenuScale), y, 40 * MenuScale, 20 * MenuScale) Then
 								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
 							EndIf
 						EndIf
@@ -1731,7 +1737,7 @@ Function RenderMainMenu()
 						If opt\EnableSubtitles Then
 							Color(255, 255, 255)
 							Text(x, y + (5 * MenuScale), "GREEN COLOR:")
-							If MouseOn(x + (125 * MenuScale), y, 40 * MenuScale, 20 * MenuScale)
+							If MouseOn(x + (125 * MenuScale), y, 40 * MenuScale, 20 * MenuScale) Then
 								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
 							EndIf
 						EndIf
@@ -1741,14 +1747,14 @@ Function RenderMainMenu()
 						If opt\EnableSubtitles Then
 							Color(255, 255, 255)
 							Text(x, y + (5 * MenuScale), "BLUE COLOR:")
-							If MouseOn(x + (125 * MenuScale), y, 40 * MenuScale, 20 * MenuScale)
+							If MouseOn(x + (125 * MenuScale), y, 40 * MenuScale, 20 * MenuScale) Then
 								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
 							EndIf
 						EndIf
 						
 						y = y + (40 * MenuScale)
 						
-						If MouseOn(x, y, 170 * MenuScale, 30 * MenuScale)
+						If MouseOn(x, y, 170 * MenuScale, 30 * MenuScale) Then
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ResetOptions)
 						EndIf
 						
@@ -1814,7 +1820,7 @@ Function RenderMainMenu()
 							EndIf
 							Text(x + (20 * MenuScale), y + (45 * MenuScale), SavedMapsAuthor(i - 1))
 							
-							If MouseOn(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale) Lor MouseOn(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale)
+							If MouseOn(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale) Lor MouseOn(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale) Then
 								RenderMapCreatorTooltip(tX, tY, tW, tH, SavedMaps(i - 1))
 							EndIf
 							y = y + (80 * MenuScale)
@@ -2355,7 +2361,7 @@ Function RenderLoading(Percent%, Assets$ = "")
 	DeleteMenuGadgets()
 End Function
 
-Function RenderTiledImageRect(Img%, SrcX%, SrcY%, SrcWidth#, SrcHeight#, x%, y%, Width%, Height%)
+Function RenderTiledImageRect(Img%, SrcX%, SrcY%, SrcWidth%, SrcHeight%, x%, y%, Width%, Height%)
 	Local x2% = x
 	
 	While x2 < x + Width
@@ -2380,8 +2386,8 @@ Function RenderFrame(x%, y%, Width%, Height%, xOffset% = 0, yOffset% = 0, Locked
 	Else
 		IMG = MenuWhite
 	EndIf
-	RenderTiledImageRect(IMG, xOffset, (y Mod (256 * MenuScale)), 512 * MenuScale, 512 * MenuScale, x, y, Width, Height)
-	RenderTiledImageRect(MenuBlack, yOffset, (y Mod (256 * MenuScale)), 512 * MenuScale, 512 * MenuScale, x + (3 * MenuScale), y + (3 * MenuScale), Width - (6 * MenuScale), Height - (6 * MenuScale))	
+	RenderTiledImageRect(IMG, xOffset, yOffset, 512, 512, x, y, Width, Height)
+	RenderTiledImageRect(MenuBlack, xOffset, yOffset, 512, 512, x + (3 * MenuScale), y + (3 * MenuScale), Width - (6 * MenuScale), Height - (6 * MenuScale))	
 End Function
 
 Function RenderBar(Img%, x%, y%, Width%, Height%, Value1#, Value2# = 100.0, R% = 100, G% = 100, B% = 100)
@@ -2390,9 +2396,9 @@ Function RenderBar(Img%, x%, y%, Width%, Height%, Value1#, Value2# = 100.0, R% =
 	Rect(x, y, Width + (4 * MenuScale), Height, False)
 	If opt\SmoothHUD Then
 		Color(R, G, B)	
-		Rect(x + (3 * MenuScale), y + (3 * MenuScale), Float((Width - (2 * MenuScale)) * (Value1 / Value2)), 14 * MenuScale)	
+		Rect(x + (3 * MenuScale), y + (3 * MenuScale), Float((Width - (2 * MenuScale)) * (Value1 / Value2)), Height - (6 * MenuScale))	
 	Else
-		For i = 1 To Int(((Width - (2 * MenuScale)) * ((Value1 / Value2) / 10.0)))
+		For i = 1 To Int(((Width - (2 * MenuScale)) * ((Value1 / Value2) / 10.0)) / MenuScale)
 			DrawImage(Img, x + ((3 + (10 * (i - 1))) * MenuScale), y + (3 * MenuScale))
 		Next
 	EndIf
@@ -2575,7 +2581,7 @@ Function RenderMenuTicks()
 		EndIf
 		
 		Color(255, 255, 255)
-		RenderTiledImageRect(IMG, (mt\x Mod (256 * MenuScale)), (mt\y Mod (256 * MenuScale)), 512 * MenuScale, 512 * MenuScale, mt\x, mt\y, Width, Height)
+		RenderTiledImageRect(IMG, (mt\x Mod 256), (mt\y Mod 256), 512, 512, mt\x, mt\y, Width, Height)
 		
 		Local Highlight% = MouseOn(mt\x, mt\y, Width, Height)
 		
@@ -2593,7 +2599,7 @@ Function RenderMenuTicks()
 			Else
 				Color(200, 200, 200)
 			EndIf
-			RenderTiledImageRect(IMG, (mt\x Mod (256 * MenuScale)), (mt\y Mod (256 * MenuScale)), 512 * MenuScale, 512 * MenuScale, mt\x + 4, mt\y + 4, Width - 8, Height - 8)
+			RenderTiledImageRect(IMG, (mt\x Mod 256), (mt\y Mod 256), 512, 512, mt\x + 4, mt\y + 4, Width - 8, Height - 8)
 		EndIf
 		Color(255, 255, 255)
 	Next
@@ -2787,7 +2793,7 @@ Function RenderMenuInputBoxes()
 			Color(50, 50, 50)
 		EndIf
 		
-		Rect(mib\x + (2 * MenuScale), mib\y + (2 * MenuScale), mib\Width - (4 * MenuScale), mib\Height - (4 * MenuScale))
+		Rect(mib\x + (3 * MenuScale), mib\y + (3 * MenuScale), mib\Width - (6 * MenuScale), mib\Height - (6 * MenuScale))
 		Color(255, 255, 255)	
 		
 		If SelectedInputBox = mib\ID Then
@@ -2830,7 +2836,7 @@ Function UpdateMainMenuSlideBar#(x%, y%, Width%, Value#, TextLeft$ = "LOW", Text
 	
 	If mo\MouseDown1 And mm\OnSliderID = 0 Then
 		If ScaledMouseX() >= x And ScaledMouseX() =< x + Width + 14 And ScaledMouseY() >= y And ScaledMouseY() =< y + 20 Then
-			Value = Min(Max((ScaledMouseX() - x) * 100 / Width, 0), 100)
+			Value = Min(Max((ScaledMouseX() - x) * 100 / Width, 0.0), 100.0)
 		EndIf
 	EndIf
 	Return(Value)
@@ -2841,9 +2847,9 @@ Function RenderMenuSlideBars()
 	
 	For msb.MenuSlideBar = Each MenuSlideBar
 		Color(255, 255, 255)
-		Rect(msb\x, msb\y, msb\Width + 14, 20, False)
+		Rect(msb\x, msb\y, msb\Width + (14 * MenuScale), 20 * MenuScale, False)
 		
-		DrawImage(BlinkMeterIMG, msb\x + msb\Width * msb\Value / 100.0 + 3, msb\y + 3)
+		DrawImage(BlinkMeterIMG, msb\x + msb\Width * msb\Value / 100.0 + (3 * MenuScale), msb\y + (3 * MenuScale))
 		
 		Color(170, 170, 170)
 		Text(msb\x - (50 * MenuScale), msb\y + (4 * MenuScale), msb\TextLeft)					
@@ -2892,9 +2898,9 @@ Function UpdateMainMenuSlider3(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$)
 	EndIf
 	
 	If ID = mm\OnSliderID Then
-		If ScaledMouseX() =< x + 8
+		If ScaledMouseX() =< x + (8 * MenuScale) Then
 			Value = 0
-		ElseIf ScaledMouseX() >= x + (Width / 2) And ScaledMouseX() =< x + (Width / 2) + 8
+		ElseIf (ScaledMouseX() >= x + (Width / 2)) And (ScaledMouseX() =< x + (Width / 2) + (8 * MenuScale))
 			Value = 1
 		ElseIf ScaledMouseX() >= x + Width
 			Value = 2
@@ -2932,19 +2938,19 @@ Function UpdateMainMenuSlider5(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$,
 	EndIf
 	
 	If mo\MouseDown1 Then
-		If ScaledMouseX() >= x And ScaledMouseX() =< x + Width + 14 And ScaledMouseY() >= y - 8 And ScaledMouseY() =< y + 10
+		If (ScaledMouseX() >= x) And (ScaledMouseX() =< x + Width + (14 * MenuScale)) And (ScaledMouseY() >= y - (8 * MenuScale)) And (ScaledMouseY() =< y + (10 * MenuScale)) Then
 			mm\OnSliderID = ID
 		EndIf
 	EndIf
 	
 	If ID = mm\OnSliderID Then
-		If (ScaledMouseX() =< x + 8)
+		If ScaledMouseX() =< x + (8 * MenuScale) Then
 			Value = 0
-		ElseIf ScaledMouseX() >= x + (Width / 4) And ScaledMouseX() =< x + (Width / 4) + 8
+		ElseIf (ScaledMouseX() >= x + (Width / 4)) And (ScaledMouseX() =< x + (Width / 4) + (8 * MenuScale))
 			Value = 1
-		ElseIf ScaledMouseX() >= x + (Width / 2) And ScaledMouseX() =< x + (Width / 2) + 8
+		ElseIf (ScaledMouseX() >= x + (Width / 2)) And (ScaledMouseX() =< x + (Width / 2) + (8 * MenuScale))
 			Value = 2
-		ElseIf ScaledMouseX() >= x + (Width * 0.75) And ScaledMouseX() =< x + (Width * 0.75) + 8
+		ElseIf (ScaledMouseX() >= x + (Width * 0.75)) And (ScaledMouseX() =< x + (Width * 0.75) + (8 * MenuScale))
 			Value = 3
 		ElseIf ScaledMouseX() >= x + Width
 			Value = 4
@@ -2963,36 +2969,36 @@ Function RenderMenuSliders()
 			Else
 				Color(200, 200, 200)
 			EndIf
-			Rect(ms\x, ms\y, ms\Width + 14, 10)
-			Rect(ms\x, ms\y - 8, 4, 9, True)
-			Rect(ms\x + (ms\Width / 2) + 5, ms\y - 8, 4, 9)
-			Rect(ms\x + ms\Width + 10, ms\y - 8, 4, 9)
+			Rect(ms\x, ms\y, ms\Width + (14 * MenuScale), 10 * MenuScale)
+			Rect(ms\x, ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale)
+			Rect(ms\x + (ms\Width / 2) + (5 * MenuScale), ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale)
+			Rect(ms\x + ms\Width + (10 * MenuScale), ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale)
 			
 			If ms\ID <> mm\OnSliderID Then
-				If ScaledMouseX() >= ms\x And ScaledMouseX() =< ms\x + ms\Width + 14 And ScaledMouseY() >= ms\y - 8 And ScaledMouseY() =< ms\y + 10
+				If (ScaledMouseX() >= ms\x) And (ScaledMouseX() =< ms\x + ms\Width + (14 * MenuScale)) And (ScaledMouseY() >= ms\y - (8 * MenuScale)) And (ScaledMouseY() =< ms\y + (10 * MenuScale)) Then
 					Color(0, 200, 0)
-					Rect(ms\x, ms\y, ms\Width + 14, 10, False)
-					Rect(ms\x, ms\y - 8, 4, 9, False)
-					Rect(ms\x + (ms\Width / 2) + 5, ms\y - 8, 4, 9, False)
-					Rect(ms\x + ms\Width + 10, ms\y - 8, 4, 9, False)
+					Rect(ms\x, ms\y, ms\Width + (14 * MenuScale), 10 * MenuScale, False)
+					Rect(ms\x, ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale, False)
+					Rect(ms\x + (ms\Width / 2) + (5 * MenuScale), ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale, False)
+					Rect(ms\x + ms\Width + (10 * MenuScale), ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale, False)
 				EndIf
 			EndIf
 			
 			If ms\Value = 0 Then
-				DrawImage(BlinkMeterIMG, ms\x, ms\y - 8)
+				DrawImage(BlinkMeterIMG, ms\x, ms\y - (8 * MenuScale))
 			ElseIf ms\Value = 1
-				DrawImage(BlinkMeterIMG, ms\x + (ms\Width / 2) + 3, ms\y - 8)
+				DrawImage(BlinkMeterIMG, ms\x + (ms\Width / 2) + (3 * MenuScale), ms\y - (8 * MenuScale))
 			Else
-				DrawImage(BlinkMeterIMG, ms\x + ms\Width + 6, ms\y - 8)
+				DrawImage(BlinkMeterIMG, ms\x + ms\Width + (6 * MenuScale), ms\y - (8 * MenuScale))
 			EndIf
 			
 			Color(170, 170, 170)
 			If ms\Value = 0 Then
-				Text(ms\x + 2, ms\y + 12, ms\Val1, True)
+				Text(ms\x + (2 * MenuScale), ms\y + (12 * MenuScale), ms\Val1, True)
 			ElseIf ms\Value = 1
-				Text(ms\x + (ms\Width / 2) + 7, ms\y + 12, ms\Val2, True)
+				Text(ms\x + (ms\Width / 2) + (7 * MenuScale), ms\y + (12 * MenuScale), ms\Val2, True)
 			Else
-				Text(ms\x + ms\Width + 12, ms\y + 12, ms\Val3, True)
+				Text(ms\x + ms\Width + (12 * MenuScale), ms\y + (12 * MenuScale), ms\Val3, True)
 			EndIf
 		ElseIf ms\Amount = 5
 			If ms\ID = mm\OnSliderID Then
@@ -3000,48 +3006,48 @@ Function RenderMenuSliders()
 			Else
 				Color(200, 200, 200)
 			EndIf
-			Rect(ms\x, ms\y, ms\Width + 14, 10)
-			Rect(ms\x, ms\y - 8, 4, 9)
-			Rect(ms\x + (ms\Width / 4) + 2.5, ms\y - 8, 4, 9)
-			Rect(ms\x + (ms\Width / 2) + 5, ms\y - 8, 4, 9)
-			Rect(ms\x + (ms\Width * 0.75) + 7.5, ms\y - 8, 4, 9)
-			Rect(ms\x + ms\Width + 10, ms\y - 8, 4, 9)
+			Rect(ms\x, ms\y, ms\Width + (14 * MenuScale), 10 * MenuScale)
+			Rect(ms\x, ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale)
+			Rect(ms\x + (ms\Width / 4) + (2.5 * MenuScale), ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale)
+			Rect(ms\x + (ms\Width / 2) + (5 * MenuScale), ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale)
+			Rect(ms\x + (ms\Width * 0.75) + (7.5 * MenuScale), ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale)
+			Rect(ms\x + ms\Width + (10 * MenuScale), ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale)
 			
 			If ms\ID <> mm\OnSliderID Then
-				If (ScaledMouseX() >= ms\x) And (ScaledMouseX() =< ms\x + ms\Width + 14) And (ScaledMouseY() >= ms\y - 8) And (ScaledMouseY() =< ms\y + 10)
+				If (ScaledMouseX() >= ms\x) And (ScaledMouseX() =< ms\x + ms\Width + (14 * MenuScale)) And (ScaledMouseY() >= ms\y - (8 * MenuScale)) And (ScaledMouseY() =< ms\y + (10 * MenuScale)) Then
 					Color(0, 200, 0)
-					Rect(ms\x, ms\y, ms\Width + 14, 10, False)
-					Rect(ms\x, ms\y - 8, 4, 9, False)
-					Rect(ms\x + (ms\Width / 4) + 2.5, ms\y - 8, 4, 9, False)
-					Rect(ms\x + (ms\Width / 2) + 5, ms\y - 8, 4, 9, False)
-					Rect(ms\x + (ms\Width * 0.75) + 7.5, ms\y - 8, 4, 9, False)
-					Rect(ms\x + ms\Width + 10, ms\y - 8, 4, 9, False)
+					Rect(ms\x, ms\y, ms\Width + (14 * MenuScale), 10 * MenuScale, False)
+					Rect(ms\x, ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale, False)
+					Rect(ms\x + (ms\Width / 4) + (2.5 * MenuScale), ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale, False)
+					Rect(ms\x + (ms\Width / 2) + (5 * MenuScale), ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale, False)
+					Rect(ms\x + (ms\Width * 0.75) + (7.5 * MenuScale), ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale, False)
+					Rect(ms\x + ms\Width + (10 * MenuScale), ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale, False)
 				EndIf
 			EndIf
 			
 			If ms\Value = 0 Then
-				DrawImage(BlinkMeterIMG, ms\x, ms\y - 8)
+				DrawImage(BlinkMeterIMG, ms\x, ms\y - (8 * MenuScale))
 			ElseIf ms\Value = 1
-				DrawImage(BlinkMeterIMG, ms\x + (ms\Width / 4) + 1.5, ms\y - 8)
+				DrawImage(BlinkMeterIMG, ms\x + (ms\Width / 4) + (1.5 * MenuScale), ms\y - (8 * MenuScale))
 			ElseIf ms\Value = 2
-				DrawImage(BlinkMeterIMG, ms\x + (ms\Width / 2) + 3, ms\y - 8)
+				DrawImage(BlinkMeterIMG, ms\x + (ms\Width / 2) + (3 * MenuScale), ms\y - (8 * MenuScale))
 			ElseIf ms\Value = 3
-				DrawImage(BlinkMeterIMG, ms\x + (ms\Width * 0.75) + 4.5, ms\y - 8)
+				DrawImage(BlinkMeterIMG, ms\x + (ms\Width * 0.75) + (4.5 * MenuScale), ms\y - (8 * MenuScale))
 			Else
-				DrawImage(BlinkMeterIMG, ms\x + ms\Width + 6, ms\y - 8)
+				DrawImage(BlinkMeterIMG, ms\x + ms\Width + (6 * MenuScale), ms\y - (8 * MenuScale))
 			EndIf
 			
 			Color(170, 170, 170)
 			If ms\Value = 0 Then
-				Text(ms\x + 2, ms\y + 12, ms\Val1, True)
+				Text(ms\x + (2 * MenuScale), ms\y + (12 * MenuScale), ms\Val1, True)
 			ElseIf ms\Value = 1
-				Text(ms\x + (ms\Width / 4) + 4.5, ms\y + 12, ms\Val2, True)
+				Text(ms\x + (ms\Width / 4) + (4.5 * MenuScale), ms\y + (12 * MenuScale), ms\Val2, True)
 			ElseIf ms\Value = 2
-				Text(ms\x + (ms\Width / 2) + 7, ms\y + 12, ms\Val3, True)
+				Text(ms\x + (ms\Width / 2) + (7 * MenuScale), ms\y + (12 * MenuScale), ms\Val3, True)
 			ElseIf ms\Value = 3
-				Text(ms\x + (ms\Width * 0.75) + 9.5, ms\y + 12, ms\Val4, True)
+				Text(ms\x + (ms\Width * 0.75) + (9.5 * MenuScale), ms\y + (12 * MenuScale), ms\Val4, True)
 			Else
-				Text(ms\x + ms\Width + 12, ms\y + 12, ms\Val5, True)
+				Text(ms\x + ms\Width + (12 * MenuScale), ms\y + (12 * MenuScale), ms\Val5, True)
 			EndIf
 		EndIf
 	Next
