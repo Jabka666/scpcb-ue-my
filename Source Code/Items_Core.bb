@@ -1133,12 +1133,13 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
-		Case "clipboard"
+		Case "clipboard", "wallet"
 			;[Block]
 			Select Setting
 				Case ROUGH
 					;[Block]
 					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
+					ClearSecondInv(item, 0)
 					;[End Block]
 				Case COARSE
 					;[Block]
@@ -1168,46 +1169,7 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case VERYFINE
 					;[Block]
-					Remove = False
-					;[End Block]
-			End Select
-			;[End Block]
-		Case "wallet"
-			;[Block]
-			Select Setting
-				Case ROUGH
-					;[Block]
-					d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-					;[End Block]
-				Case COARSE
-					;[Block]
-					If item\InvSlots > 5 Then
-						item\InvSlots = item\InvSlots - 5
-						ClearSecondInv(item, item\InvSlots)
-					ElseIf item\InvSlots = 5
-						item\InvSlots = 1
-						ClearSecondInv(item, 1)
-					Else
-						d.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.12, 0.8)
-						ClearSecondInv(item, 0)
-					EndIf
-					Remove = False
-				Case ONETOONE
-					;[Block]
-					Remove = False
-					;[End Block]
-				Case FINE
-					;[Block]
-					If item\InvSlots = 1 Then
-						item\InvSlots = 5
-					Else
-						item\InvSlots = Min(20.0, item\InvSlots + 5.0)
-					EndIf
-					Remove = False
-					;[End Block]
-				Case VERYFINE
-					;[Block]
-					Remove = False
+					item\InvSlots = 20.0
 					;[End Block]
 			End Select
 			;[End Block]
