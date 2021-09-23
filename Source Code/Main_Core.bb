@@ -8146,7 +8146,7 @@ Function LoadEntities()
 	t\ImageID[0] = ScaleImage2(t\ImageID[0], MenuScale, MenuScale)
 	MaskImage(t\ImageID[0], 255, 255, 0)
 	
-	If (Not opt\SmoothHUD) Then
+	If (Not opt\SmoothBars) Then
 		t\ImageID[1] = LoadImage_Strict("GFX\blink_meter(2).png")
 		t\ImageID[1] = ScaleImage2(t\ImageID[1], MenuScale, MenuScale)
 		

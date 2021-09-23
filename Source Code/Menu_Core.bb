@@ -894,7 +894,7 @@ Function UpdateMainMenu()
 						Else
 							y = y + (20 * MenuScale)
 							
-							If opt\HUDEnabled Then opt\SmoothHUD = UpdateMainMenuTick(x, y, opt\SmoothHUD)
+							opt\SmoothBars = UpdateMainMenuTick(x, y, opt\SmoothBars)
 							
 							y = y + (30 * MenuScale)
 							
@@ -1675,12 +1675,10 @@ Function RenderMainMenu()
 					Else
 						y = y + (20 * MenuScale)
 						
-						If opt\HUDEnabled Then
-							Color(255, 255, 255)
-							Text(x, y + (5 * MenuScale), "Smooth HUD:")
-							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then
-								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SmoothHUD)
-							EndIf
+						Color(255, 255, 255)
+						Text(x, y + (5 * MenuScale), "Smooth Bars:")
+						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then
+							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SmoothBars)
 						EndIf
 						
 						y = y + (30 * MenuScale)
@@ -2394,7 +2392,7 @@ Function RenderBar(Img%, x%, y%, Width%, Height%, Value1#, Value2# = 100.0, R% =
 	Local i%
 	
 	Rect(x, y, Width + (4 * MenuScale), Height, False)
-	If opt\SmoothHUD Then
+	If opt\SmoothBars Then
 		Color(R, G, B)	
 		Rect(x + (3 * MenuScale), y + (3 * MenuScale), Float((Width - (2 * MenuScale)) * (Value1 / Value2)), Height - (6 * MenuScale))	
 	Else
@@ -3193,7 +3191,7 @@ Const Tooltip_AchievementPopups% = 24
 Const Tooltip_FPS% = 25
 Const Tooltip_FrameLimit% = 26
 Const Tooltip_AutoSave% = 27
-Const Tooltip_SmoothHUD% = 28
+Const Tooltip_SmoothBars% = 28
 Const Tooltip_StartupVideos% = 29
 Const Tooltip_Launcher% = 30
 Const Tooltip_Subtitles% = 31
@@ -3385,9 +3383,9 @@ Function RenderOptionsTooltip(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 				Txt2 = "Usually, 60 FPS or higher is preferred. If you are noticing excessive stuttering at this setting, try lowering it to make your framerate more consistent."
 			EndIf
 			;[End Block]
-		Case Tooltip_SmoothHUD
+		Case Tooltip_SmoothBars
 			;[Block]
-			Txt = "Changes the HUD style to Dynamic or Classic one."
+			Txt = "Makes the bars moving smoother."
 			R = 255
 			Txt2 = "This option cannot be changed in-game."
 			;[End Block]

@@ -417,7 +417,7 @@ Type Options
 	Field AchvMsgEnabled%
 	Field CanOpenConsole%
 	Field HUDEnabled%
-	Field SmoothHUD%
+	Field SmoothBars%
 	Field ShowFPS%
 	Field ConsoleOpening%
 	Field FrameLimit%, CurrFrameLimit#
@@ -578,7 +578,7 @@ Function LoadOptionsINI()
 	opt\FrameLimit = GetINIInt(OptionFile, "Advanced", "Frame Limit", 0.0)
 	opt\CurrFrameLimit = (opt\FrameLimit - 19.0) / 100.0
 	
-	opt\SmoothHUD = GetINIInt(OptionFile, "Advanced", "Smooth HUD", True)
+	opt\SmoothBars = GetINIInt(OptionFile, "Advanced", "Smooth Bars", True)
 	
 	opt\PlayStartup = GetINIInt(OptionFile, "Advanced", "Play Startup Videos", True)
 	
@@ -693,7 +693,7 @@ Function SaveOptionsINI(SaveGlobal% = False)
 	
 	PutINIValue(OptionFile, "Advanced", "Frame Limit", opt\FrameLimit)
 	
-	PutINIValue(OptionFile, "Advanced", "Smooth HUD", opt\SmoothHUD)
+	PutINIValue(OptionFile, "Advanced", "Smooth Bars", opt\SmoothBars)
 	
 	PutINIValue(OptionFile, "Advanced", "Play Startup Videos", opt\PlayStartup)
 	
@@ -805,7 +805,7 @@ Function ResetOptionsINI()
 	opt\CurrFrameLimit = 0.0
 	opt\FrameLimit = 0
 	
-	opt\SmoothHUD = True
+	opt\SmoothBars = True
 	
 	opt\PlayStartup = True
 	
