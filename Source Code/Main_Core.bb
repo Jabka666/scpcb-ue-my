@@ -3534,7 +3534,7 @@ Function UpdateGUI()
 			CameraProject(Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) + MeshHeight(o\ButtonModelID[0]) * 0.015, EntityZ(ClosestButton, True))
 			ProjY = ProjectedY()
 			CameraProject(Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) - MeshHeight(o\ButtonModelID[0]) * 0.015, EntityZ(ClosestButton, True))
-			Scale = (ProjectedY() - ProjY) / 462.0
+			Scale = (ProjectedY() - ProjY) / (462.0 * MenuScale)
 			
 			x = mo\Viewport_Center_X - ImageWidth(t\ImageID[4]) * (Scale / 2)
 			y = mo\Viewport_Center_Y - ImageHeight(t\ImageID[4]) * (Scale / 2)	
@@ -3548,16 +3548,16 @@ Function UpdateGUI()
 				EndIf
 			EndIf
 			
-			x = x + (44 * Scale)
-			y = y + (249 * Scale)
+			x = x + (44 * MenuScale * Scale)
+			y = y + (249 * MenuScale * Scale)
 			
 			For n = 0 To 3
 				For i = 0 To 2
-					xTemp = x + Int(58.5 * Scale * n)
-					yTemp = y + (67.0 * Scale) * i
+					xTemp = x + ((58.5 * MenuScale * Scale) * n)
+					yTemp = y + ((67 * MenuScale * Scale) * i)
 					
 					Temp = False
-					If MouseOn(xTemp, yTemp, 54 * Scale, 65 * Scale) And msg\KeyPadMsg = "" Then
+					If MouseOn(xTemp, yTemp, 54 * MenuScale * Scale, 65 * MenuScale * Scale) And msg\KeyPadMsg = "" Then
 						If mo\MouseUp1 Then 
 							PlaySound_Strict(ButtonSFX)
 							
@@ -6034,16 +6034,12 @@ Function RenderGUI()
 			
 			SetFont(fo\FontID[Font_Digital])
 			If msg\KeyPadMsg <> "" Then 
-				If (msg\KeyPadTimer Mod 70.0) < 35.0 Then Text(mo\Viewport_Center_X, y + (124 * Scale), msg\KeyPadMsg, True, True)
+				If (msg\KeyPadTimer Mod 70.0) < 35.0 Then Text(mo\Viewport_Center_X, y + (124 * MenuScale * Scale), msg\KeyPadMsg, True, True)
 			Else
-				Text(mo\Viewport_Center_X, y + (70 * Scale), "ACCESS CODE: ", True, True)	
+				Text(mo\Viewport_Center_X, y + (70 * MenuScale * Scale), "ACCESS CODE: ", True, True)	
 				SetFont(fo\FontID[Font_Digital_Big])
-				Text(mo\Viewport_Center_X, y + (124 * Scale), msg\KeyPadInput, True, True)
+				Text(mo\Viewport_Center_X, y + (124 * MenuScale * Scale), msg\KeyPadInput, True, True)
 			EndIf
-			
-			x = x + (44 * Scale)
-			y = y + (249 * Scale)
-			
 			If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 		EndIf
 	EndIf
