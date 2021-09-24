@@ -3664,7 +3664,7 @@ Function UpdateGUI()
 		
 		Local TempX% = 0
 		
-		x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * 10 / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
+		x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * 10 / 2 + INVENTORY_GFX_SPACING * (10 / 2 - 1)) / 2
 		y = mo\Viewport_Center_Y - INVENTORY_GFX_SIZE * (Float(OtherSize) / 10 * 2 - 1) - INVENTORY_GFX_SPACING
 		
 		ItemAmount = 0
@@ -3791,7 +3791,7 @@ Function UpdateGUI()
 						Select SelectedItem\ItemTemplate\TempName
 							Default
 								;[Block]
-								For z = 0 To MaxItemAmount - 1
+								For z = 0 To OtherSize - 1
 									If PrevOtherOpen\SecondInv[z] = SelectedItem Then
 										PrevOtherOpen\SecondInv[z] = PrevItem
 										Exit
