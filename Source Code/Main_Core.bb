@@ -9199,156 +9199,158 @@ Function Update294()
 			yTemp = Floor((ScaledMouseY() - y - (342 * MenuScale)) / (36.5 * MenuScale))
 			
 			If yTemp >= 0 And yTemp < 5 Then
-				If xTemp >= 0 And xTemp < 10 Then PlaySound_Strict(ButtonSFX)
-			EndIf
-			
-			StrTemp = ""
-			
-			Temp = False
-			
-			Select Int(yTemp)
-				Case 0
-					;[Block]
-					StrTemp = ((xTemp + 1) Mod 10)
-					;[End Block]
-				Case 1
-					;[Block]
-					Select Int(xTemp)
+				If xTemp >= 0 And xTemp < 10 Then
+					PlaySound_Strict(ButtonSFX)
+					
+					StrTemp = ""
+					
+					Temp = False
+					
+					Select Int(yTemp)
 						Case 0
 							;[Block]
-							StrTemp = "Q"
+							StrTemp = ((xTemp + 1) Mod 10)
 							;[End Block]
 						Case 1
 							;[Block]
-							StrTemp = "W"
+							Select Int(xTemp)
+								Case 0
+									;[Block]
+									StrTemp = "Q"
+									;[End Block]
+								Case 1
+									;[Block]
+									StrTemp = "W"
+									;[End Block]
+								Case 2
+									;[Block]
+									StrTemp = "E"
+									;[End Block]
+								Case 3
+									;[Block]
+									StrTemp = "R"
+									;[End Block]
+								Case 4
+									;[Block]
+									StrTemp = "T"
+									;[End Block]
+								Case 5
+									;[Block]
+									StrTemp = "Y"
+									;[End Block]
+								Case 6
+									;[Block]
+									StrTemp = "U"
+									;[End Block]
+								Case 7
+									;[Block]
+									StrTemp = "I"
+									;[End Block]
+								Case 8
+									;[Block]
+									StrTemp = "O"
+									;[End Block]
+								Case 9
+									;[Block]
+									StrTemp = "P"
+									;[End Block]
+							End Select
 							;[End Block]
 						Case 2
 							;[Block]
-							StrTemp = "E"
-							;[End Block]
+							Select Int(xTemp)
+								Case 0
+									;[Block]
+									StrTemp = "A"
+									;[End Block]
+								Case 1
+									;[Block]
+									StrTemp = "S"
+									;[End Block]
+								Case 2
+									;[Block]
+									StrTemp = "D"
+									;[End Block]
+								Case 3
+									;[Block]
+									StrTemp = "F"
+									;[End Block]
+								Case 4
+									;[Block]
+									StrTemp = "G"
+									;[End Block]
+								Case 5
+									;[Block]
+									StrTemp = "H"
+									;[End Block]
+								Case 6
+									;[Block]
+									StrTemp = "J"
+									;[End Block]
+								Case 7
+									;[Block]
+									StrTemp = "K"
+									;[End Block]
+								Case 8
+									;[Block]
+									StrTemp = "L"
+									;[End Block]
+								Case 9 ; ~ Dispense
+									;[Block]
+									Temp = True
+									;[End Block]
+							End Select
 						Case 3
 							;[Block]
-							StrTemp = "R"
-							;[End Block]
+							Select Int(xTemp)
+								Case 0
+									;[Block]
+									StrTemp = "Z"
+									;[End Block]
+								Case 1
+									;[Block]
+									StrTemp = "X"
+									;[End Block]
+								Case 2
+									;[Block]
+									StrTemp = "C"
+									;[End Block]
+								Case 3
+									;[Block]
+									StrTemp = "V"
+									;[End Block]
+								Case 4
+									;[Block]
+									StrTemp = "B"
+									;[End Block]
+								Case 5
+									;[Block]
+									StrTemp = "N"
+									;[End Block]
+								Case 6
+									;[Block]
+									StrTemp = "M"
+									;[End Block]
+								Case 7
+									;[Block]
+									StrTemp = "-"
+									;[End Block]
+								Case 8
+									;[Block]
+									StrTemp = " "
+									;[End Block]
+								Case 9
+									;[Block]
+									I_294\ToInput = Left(I_294\ToInput, Max(Len(I_294\ToInput) - 1, 0.0))
+									;[End Block]
+							End Select
 						Case 4
-							;[Block]
-							StrTemp = "T"
-							;[End Block]
-						Case 5
-							;[Block]
-							StrTemp = "Y"
-							;[End Block]
-						Case 6
-							;[Block]
-							StrTemp = "U"
-							;[End Block]
-						Case 7
-							;[Block]
-							StrTemp = "I"
-							;[End Block]
-						Case 8
-							;[Block]
-							StrTemp = "O"
-							;[End Block]
-						Case 9
-							;[Block]
-							StrTemp = "P"
-							;[End Block]
-					End Select
-					;[End Block]
-				Case 2
-					;[Block]
-					Select Int(xTemp)
-						Case 0
-							;[Block]
-							StrTemp = "A"
-							;[End Block]
-						Case 1
-							;[Block]
-							StrTemp = "S"
-							;[End Block]
-						Case 2
-							;[Block]
-							StrTemp = "D"
-							;[End Block]
-						Case 3
-							;[Block]
-							StrTemp = "F"
-							;[End Block]
-						Case 4
-							;[Block]
-							StrTemp = "G"
-							;[End Block]
-						Case 5
-							;[Block]
-							StrTemp = "H"
-							;[End Block]
-						Case 6
-							;[Block]
-							StrTemp = "J"
-							;[End Block]
-						Case 7
-							;[Block]
-							StrTemp = "K"
-							;[End Block]
-						Case 8
-							;[Block]
-							StrTemp = "L"
-							;[End Block]
-						Case 9 ; ~ Dispense
-							;[Block]
-							Temp = True
-							;[End Block]
-					End Select
-				Case 3
-					;[Block]
-					Select Int(xTemp)
-						Case 0
-							;[Block]
-							StrTemp = "Z"
-							;[End Block]
-						Case 1
-							;[Block]
-							StrTemp = "X"
-							;[End Block]
-						Case 2
-							;[Block]
-							StrTemp = "C"
-							;[End Block]
-						Case 3
-							;[Block]
-							StrTemp = "V"
-							;[End Block]
-						Case 4
-							;[Block]
-							StrTemp = "B"
-							;[End Block]
-						Case 5
-							;[Block]
-							StrTemp = "N"
-							;[End Block]
-						Case 6
-							;[Block]
-							StrTemp = "M"
-							;[End Block]
-						Case 7
-							;[Block]
-							StrTemp = "-"
-							;[End Block]
-						Case 8
 							;[Block]
 							StrTemp = " "
 							;[End Block]
-						Case 9
-							;[Block]
-							I_294\ToInput = Left(I_294\ToInput, Max(Len(I_294\ToInput) - 1, 0.0))
-							;[End Block]
 					End Select
-				Case 4
-					;[Block]
-					StrTemp = " "
-					;[End Block]
-			End Select
+				EndIf
+			EndIf
 			
 			I_294\ToInput = I_294\ToInput + StrTemp
 			
