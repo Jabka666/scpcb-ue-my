@@ -5555,7 +5555,7 @@ Function UpdateGUI()
 					;[End Block]
 				Case "scp1123"
 					;[Block]
-					Use1123(True)
+					Use1123()
 					SelectedItem = Null
 					;[End Block]
 				Case "nav300", "navulti", "key0", "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "scp860", "hand", "hand2", "hand3", "25ct", "scp005", "key", "coin", "mastercard", "paper"

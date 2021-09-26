@@ -773,7 +773,8 @@ Function PickItem(item.Items)
 				Select item\ItemTemplate\TempName
 					Case "scp1123"
 						;[Block]
-						Use1123(False)
+						Use1123()
+						If (Not I_714\Using) And wi\GasMask <> 3 And wi\HazmatSuit <> 3 Then Return
 						;[End Block]
 					Case "killbat"
 						;[Block]
@@ -2364,12 +2365,10 @@ Function Use914(item.Items, Setting%, x#, y#, z#)
 End Function
 
 ; ~ Made a function for SCP-1123 so we don't have to use duplicate code (since picking it up and using it does the same thing)
-Function Use1123%(Use% = False)
-	; ~ Temp:	; ~		False: Stay alive
+Function Use1123%()
+	; ~ Temp:
+	; ~		False: Stay alive
 	; ~		True: Die
-	
-	; ~ State:	; ~		False: Pick up SCP-1123
-	; ~		True: Use SCP-1123
 	
 	Local e.Events
 	Local Temp%
@@ -2378,27 +2377,20 @@ Function Use1123%(Use% = False)
 		me\LightFlash = 3.0
 		PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))
 		
-		Temp = True ; ~ The event occured (kill)
-		
+		Temp = True
 		For e.Events = Each Events
 			If e\EventID = e_cont2_1123 Then
 				If PlayerRoom = e\room Then
-					If e\EventState < 1.0 Then ; ~ The event didn't occur and the player is in the room (starts the event)
+					If e\EventState < 1.0 Then ; ~ Start the event
 						e\EventState = 1.0
 						Temp = False
 						Exit
-					Else
-						Temp = True ; ~ The player is currently in the event (kill)
 					EndIf
-				Else
-					Temp = True ; ~ The event didn't occur and the player isn't in the room (kill)
 				EndIf
 			EndIf
 		Next
 	Else
-		If Use Then
-			CreateMsg("You touched the skull, but nothing happened.")
-		EndIf
+		CreateMsg("You touched the skull, but nothing happened.")
 	EndIf
 	
 	If Temp Then
@@ -2406,7 +2398,6 @@ Function Use1123%(Use% = False)
 		msg\DeathMSG = msg\DeathMSG + " wandering around the site approximately 9 minutes prior, shouting the phrase " + Chr(34) + "get rid of the four pests" + Chr(34)
 		msg\DeathMSG = msg\DeathMSG + " in chinese. SCP-1123 was found in [REDACTED] nearby, suggesting the subject had come into physical contact with it."
 		Kill()
-		Return
 	EndIf
 End Function
 

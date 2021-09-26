@@ -1181,10 +1181,7 @@ Function RenderMainMenu()
 					Text(x + (20 * MenuScale), y + (65 * MenuScale), "Map seed:")
 				Else
 					Text(x + (20 * MenuScale), y + (65 * MenuScale), "Selected map:")
-					Color(255, 255, 255)
-					Rect(x + (150 * MenuScale), y + (55 * MenuScale), 200 * MenuScale, 30 * MenuScale)
-					Color(0, 0, 0)
-					Rect(x + (152 * MenuScale), y + (57 * MenuScale), 196 * MenuScale, 26 * MenuScale)
+					RenderFrame(x + (150 * MenuScale), y + (55 * MenuScale), 200 * MenuScale, 30 * MenuScale, (x Mod 256), (y Mod 256))
 					
 					Color(255, 0, 0)
 					If Len(SelectedMap) > 15 Then
@@ -2456,7 +2453,7 @@ Function RenderMenuButtons()
 	Local mb.MenuButton
 	
 	For mb.MenuButton = Each MenuButton
-		RenderFrame(mb\x, mb\y, mb\Width, mb\Height, 0, 0, mb\Locked)
+		RenderFrame(mb\x, mb\y, mb\Width, mb\Height, (mb\x Mod 256), (mb\y Mod 256), mb\Locked)
 		If MouseOn(mb\x, mb\y, mb\Width, mb\Height) Then
 			Color(30, 30, 30)
 			Rect(mb\x + (3 * MenuScale), mb\y + (3 * MenuScale), mb\Width - (6 * MenuScale), mb\Height - (6 * MenuScale))	
@@ -2784,16 +2781,14 @@ Function RenderMenuInputBoxes()
 	
 	For mib.MenuInputBox = Each MenuInputBox
 		Color(255, 255, 255)
-		RenderTiledImageRect(MenuWhite, (mib\x Mod (256 * MenuScale)), (mib\y Mod (256 * MenuScale)), 512 * MenuScale, 512 * MenuScale, mib\x, mib\y, mib\Width, mib\Height)
-		Color(0, 0, 0)
+		RenderFrame(mib\x, mib\y, mib\Width, mib\Height, (mib\x Mod 256), (mib\y Mod 256))
 		
 		If MouseOn(mib\x, mib\y, mib\Width, mib\Height) Then
 			Color(50, 50, 50)
+			Rect(mib\x + (3 * MenuScale), mib\y + (3 * MenuScale), mib\Width - (6 * MenuScale), mib\Height - (6 * MenuScale))
 		EndIf
 		
-		Rect(mib\x + (3 * MenuScale), mib\y + (3 * MenuScale), mib\Width - (6 * MenuScale), mib\Height - (6 * MenuScale))
 		Color(255, 255, 255)	
-		
 		If SelectedInputBox = mib\ID Then
 			If (MilliSecs2() Mod 800) < 400 Then Rect(mib\x + (mib\Width / 2) - (StringWidth(mib\Txt) / 2) + StringWidth(Left(mib\Txt, CursorPos)), mib\y + (mib\Height / 2) - (5 * MenuScale), 2 * MenuScale, 12 * MenuScale)
 		EndIf	

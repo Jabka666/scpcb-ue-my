@@ -11,6 +11,12 @@ General:
 - Tiny overlay optimization.
 - Renamed "Smooth HUD" option to "Smooth Bars".
 
+Menu:
+- Improved input boxes design.
+
+SCPs:
+- Improved SCP-1123's event.
+
 Rooms:
 - Removed "room2_7_hcz".
 - Changed "096_spawn" event rooms (from "room2_2_hcz" to "room2_3_hcz").
@@ -64,10 +70,12 @@ Bug Fixes:
 - Fixed items in the wallet/clipboard aren't clickable/hard to click.
 - Fixed ticket model.
 - Fixed missing textures in "room3_storage".
+- Fixed SCP-1162's label wasn't renamed to "SCP-1162-ARC".
 
 - Tiny fix for "room2_shaft."
 - Tiny fix for item positions in "room2_3_ez".
 - Tiny fixes for 4K resolution.
+- Tiny fix for monitor saving.
 
 v1.0.0
 ~ This version continues original game.
