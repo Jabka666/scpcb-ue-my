@@ -124,9 +124,9 @@ Function SaveGame(File$)
 				WriteByte(f, SelectedDifficulty\SaveType)
 				WriteByte(f, SelectedDifficulty\OtherFactors)
 			EndIf
-			WriteByte(f, SelectedDifficulty\InventorySlots)
 		EndIf
 	Next
+	WriteByte(f, SelectedDifficulty\InventorySlots)
 	
 	WriteFloat(f, MonitorTimer)
 	
@@ -456,7 +456,7 @@ Function SaveGame(File$)
 		WriteFloat(f, it\State3)
 		WriteByte(f, it\Picked)
 		
-		If SelectedItem = it Then 
+		If SelectedItem = it Then
 			WriteByte(f, 1) 
 		Else
 			WriteByte(f, 0)

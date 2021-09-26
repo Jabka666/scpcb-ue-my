@@ -8076,9 +8076,9 @@ Function LoadEntities()
 	Local b%, t1%, SF%
 	Local Name$, Test%, File$
 	
-	RenderLoading(0, "PLAYER")
-	
 	DeInitMainMenuAssets()
+	
+	RenderLoading(0, "PLAYER")
 	
 	SoundEmitter = CreatePivot()
 	
@@ -8691,9 +8691,6 @@ Function InitStats()
 	EndIf
 	
 	LoadAchievementsFile()
-	
-	MaxItemAmount = SelectedDifficulty\InventorySlots
-	Dim Inventory.Items(MaxItemAmount - 1)
 End Function
 
 Function InitNewGame()
@@ -8706,6 +8703,9 @@ Function InitNewGame()
 	LoadSounds()
 	
 	InitStats()
+	
+	MaxItemAmount = SelectedDifficulty\InventorySlots
+	Dim Inventory.Items(MaxItemAmount - 1)
 	
 	RenderLoading(50, "STATS")
 	
@@ -8959,9 +8959,6 @@ Function NullGame(PlayButtonSFX% = True)
 	
 	UsedConsole = False
 	
-	ItemAmount = 0
-	MaxItemAmount = 0
-	
 	DoorTempID = 0
 	RoomTempID = 0
 	
@@ -9062,6 +9059,9 @@ Function NullGame(PlayButtonSFX% = True)
 	For i = 0 To MaxItemAmount - 1
 		If Inventory(i) <> Null Then Inventory(i) = Null
 	Next
+	ItemAmount = 0
+	MaxItemAmount = 0
+	
 	If SelectedItem <> Null Then SelectedItem = Null
 	
 	Delete(bk)
