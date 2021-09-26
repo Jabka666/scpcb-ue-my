@@ -300,7 +300,7 @@ Function RenderWorld2(Tween#)
 			If HasBattery = 1 Then PlusY = 40
 			
 			Text(mo\Viewport_Center_X, (20 + PlusY) * MenuScale, "REFRESHING DATA IN", True, False)
-			Text(mo\Viewport_Center_X, (60 + PlusY) * MenuScale, Max(f2s(wi\NVGTimer / 60.0, 1), 0.0), True, False)
+			Text(mo\Viewport_Center_X, (60 + PlusY) * MenuScale, Max(RoundFloat(wi\NVGTimer / 60.0, 1), 0.0), True, False)
 			Text(mo\Viewport_Center_X, (100 + PlusY) * MenuScale, "SECONDS", True, False)
 			
 			Local Temp% = CreatePivot()
@@ -343,7 +343,7 @@ Function RenderWorld2(Tween#)
 						
 						If (Not wi\IsNVGBlinking) Then
 							Text(mo\Viewport_Center_X + (xValue * mo\Viewport_Center_X), mo\Viewport_Center_Y - (yValue * mo\Viewport_Center_Y), np\NVGName, True, True)
-							Text(mo\Viewport_Center_X + (xValue * mo\Viewport_Center_X), mo\Viewport_Center_Y - (yValue * mo\Viewport_Center_Y) + (30 * MenuScale), f2s(Sqr(Dist), 1) + " m", True, True)
+							Text(mo\Viewport_Center_X + (xValue * mo\Viewport_Center_X), mo\Viewport_Center_Y - (yValue * mo\Viewport_Center_Y) + (30 * MenuScale), RoundFloat(Sqr(Dist), 1) + " m", True, True)
 						EndIf
 					EndIf
 				EndIf

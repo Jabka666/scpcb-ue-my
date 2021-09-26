@@ -5771,8 +5771,8 @@ Function RenderDebugHUD()
 			;[End Block]
 		Case 2
 			;[Block]
-			Text(x, y, "Player Position: (" + f2s(EntityX(me\Collider), 1) + ", " + f2s(EntityY(me\Collider), 1) + ", " + f2s(EntityZ(me\Collider), 1) + ")")
-			Text(x, y + (20 * MenuScale), "Player Rotation: (" + f2s(EntityPitch(me\Collider), 1) + ", " + f2s(EntityYaw(me\Collider), 1) + ", " + f2s(EntityRoll(me\Collider), 1) + ")")
+			Text(x, y, "Player Position: (" + RoundFloat(EntityX(me\Collider), 1) + ", " + RoundFloat(EntityY(me\Collider), 1) + ", " + RoundFloat(EntityZ(me\Collider), 1) + ")")
+			Text(x, y + (20 * MenuScale), "Player Rotation: (" + RoundFloat(EntityPitch(me\Collider), 1) + ", " + RoundFloat(EntityYaw(me\Collider), 1) + ", " + RoundFloat(EntityRoll(me\Collider), 1) + ")")
 			
 			Text(x, y + (60 * MenuScale), "Injuries: " + me\Injuries)
 			Text(x, y + (80 * MenuScale), "Bloodloss: " + me\Bloodloss)
@@ -5823,22 +5823,22 @@ Function RenderDebugHUD()
 		Case 3
 			;[Block]
 			If Curr049 <> Null Then
-				Text(x, y, "SCP-049 Position: (" + f2s(EntityX(Curr049\OBJ), 2) + ", " + f2s(EntityY(Curr049\OBJ), 2) + ", " + f2s(EntityZ(Curr049\OBJ), 2) + ")")
+				Text(x, y, "SCP-049 Position: (" + RoundFloat(EntityX(Curr049\OBJ), 2) + ", " + RoundFloat(EntityY(Curr049\OBJ), 2) + ", " + RoundFloat(EntityZ(Curr049\OBJ), 2) + ")")
 				Text(x, y + (20 * MenuScale), "SCP-049 Idle: " + Curr049\Idle)
 				Text(x, y + (40 * MenuScale), "SCP-049 State: " + Curr049\State)
 			EndIf
 			If Curr096 <> Null Then
-				Text(x, y + (60 * MenuScale), "SCP-096 Position: (" + f2s(EntityX(Curr096\OBJ), 2) + ", " + f2s(EntityY(Curr096\OBJ), 2) + ", " + f2s(EntityZ(Curr096\OBJ), 2) + ")")
+				Text(x, y + (60 * MenuScale), "SCP-096 Position: (" + RoundFloat(EntityX(Curr096\OBJ), 2) + ", " + RoundFloat(EntityY(Curr096\OBJ), 2) + ", " + RoundFloat(EntityZ(Curr096\OBJ), 2) + ")")
 				Text(x, y + (80 * MenuScale), "SCP-096 Idle: " + Curr096\Idle)
 				Text(x, y + (100 * MenuScale), "SCP-096 State: " + Curr096\State)
 			EndIf
 			If Curr106 <> Null Then
-				Text(x, y + (120 * MenuScale), "SCP-106 Position: (" + f2s(EntityX(Curr106\OBJ), 2) + ", " + f2s(EntityY(Curr106\OBJ), 2) + ", " + f2s(EntityZ(Curr106\OBJ), 2) + ")")
+				Text(x, y + (120 * MenuScale), "SCP-106 Position: (" + RoundFloat(EntityX(Curr106\OBJ), 2) + ", " + RoundFloat(EntityY(Curr106\OBJ), 2) + ", " + RoundFloat(EntityZ(Curr106\OBJ), 2) + ")")
 				Text(x, y + (140 * MenuScale), "SCP-106 Idle: " + Curr106\Idle)
 				Text(x, y + (160 * MenuScale), "SCP-106 State: " + Curr106\State)
 			EndIf
 			If Curr173 <> Null Then
-				Text(x, y + (180 * MenuScale), "SCP-173 Position: (" + f2s(EntityX(Curr173\OBJ), 2) + ", " + f2s(EntityY(Curr173\OBJ), 2) + ", " + f2s(EntityZ(Curr173\OBJ), 2) + ")")
+				Text(x, y + (180 * MenuScale), "SCP-173 Position: (" + RoundFloat(EntityX(Curr173\OBJ), 2) + ", " + RoundFloat(EntityY(Curr173\OBJ), 2) + ", " + RoundFloat(EntityZ(Curr173\OBJ), 2) + ")")
 				Text(x, y + (200 * MenuScale), "SCP-173 Idle: " + Curr173\Idle)
 				Text(x, y + (220 * MenuScale), "SCP-173 State: " + Curr173\State)
 			EndIf

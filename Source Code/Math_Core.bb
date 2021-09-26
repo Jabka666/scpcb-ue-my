@@ -70,8 +70,8 @@ Function MilliSecs2%()
 	Return(RetVal)
 End Function
 
-Function f2s$(n#, Count%)
-	Return(Left(n, Len(Int(n)) + Count + 1))
+Function RoundFloat#(n#, Count%)
+	Return(Float(Left(n, Len(Str(Int(n))) + Count + 1)))
 End Function
 
 Function Chance%(Percent%)
