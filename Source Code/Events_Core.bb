@@ -3579,7 +3579,7 @@ Function UpdateEvents()
 					EndIf
 				Else
 					If e\EventState = 1.0 Then
-						If e\room\Dist < 4.0 Lor Rand(700) = 1 Then 
+						If e\room\Dist < 5.0 Then
 							e\room\NPC[0]\EnemyX = EntityX(e\room\Objects[0], True)
 							e\room\NPC[0]\EnemyY = EntityY(e\room\Objects[0], True)
 							e\room\NPC[0]\EnemyZ = EntityZ(e\room\Objects[0], True)
@@ -3596,6 +3596,9 @@ Function UpdateEvents()
 						If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\Objects[0]) < 4.0 Then
 							UseDoor(e\room\RoomDoors[0], True)
 							e\room\RoomDoors[0]\IsElevatorDoor = 0
+							For i = 0 To 1
+								EntityTexture(e\room\RoomDoors[0]\ElevatorPanel[i], t\MiscTextureID[23])
+							Next
 							
 							PlaySound_Strict(LoadTempSound("SFX\Room\ElevatorDeath.ogg"))
 							
@@ -3611,6 +3614,9 @@ Function UpdateEvents()
 						ElseIf e\EventState > 70.0 * 8.6 And e\EventState < 70.0 * 10.6
 							me\BigCameraShake = 10.6 - (e\EventState / 70.0)
 						ElseIf e\EventState >= 70.0 * 13.0
+							For i = 0 To 1
+								EntityTexture(e\room\RoomDoors[0]\ElevatorPanel[i], t\MiscTextureID[21])
+							Next
 							RemoveEvent(e)
 						EndIf
 					EndIf
