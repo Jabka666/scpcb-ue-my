@@ -2293,6 +2293,7 @@ Function MainLoop()
 					TimeCheckpointMonitors()
 					UpdateVomit()
 				EndIf
+				UpdateMonitorSaving()
 			EndIf
 			UpdateDecals()
 			UpdateMTF()
@@ -2300,7 +2301,6 @@ Function MainLoop()
 			UpdateItems()
 			UpdateParticles()
 			Use427()
-			UpdateMonitorSaving()
 		EndIf
 		
 		Local CurrFogColor$ = ""

@@ -3599,7 +3599,7 @@ Function UpdateMonitorSaving()
 	Local sc.SecurityCams
 	Local Close% = False
 	
-	If SelectedDifficulty\SaveType <> SAVEONSCREENS Then Return
+If SelectedDifficulty\SaveType <> SAVEONSCREENS Lor InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor SelectedDoor <> Null Lor SelectedScreen <> Null Then Return
 	
 	For sc.SecurityCams = Each SecurityCams
 		If sc\AllowSaving And sc\Screen Then
