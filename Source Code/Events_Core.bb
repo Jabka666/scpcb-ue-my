@@ -774,7 +774,6 @@ Function QuickLoadEvents()
 				If e\EventStr = "Load0" Then
 					QuickLoadPercent = 10
 					e\room\Objects[0] = LoadMesh_Strict("GFX\map\dimension1499\1499plane.b3d")
-					DebugLog("TRIGGERED QUICK")
 					HideEntity(e\room\Objects[0])
 					e\EventStr = "Load1"
 				ElseIf e\EventStr = "Load1"
@@ -793,17 +792,7 @@ Function QuickLoadEvents()
 						e\EventStr = 17
 					ElseIf Int(e\EventStr) = 17
 						QuickLoadPercent = 100
-						x = EntityX(e\room\OBJ)
-						z = EntityZ(e\room\OBJ)
 						
-						Local ch.Chunk
-						
-						For i = -2 To 0 Step 2
-							ch.Chunk = CreateChunk(-1, x * (i * 2.5), EntityY(e\room\OBJ), z, True)
-						Next
-						For i = -2 To 0 Step 2
-							ch.Chunk = CreateChunk(-1, x * (i * 2.5), EntityY(e\room\OBJ), z - 40.0, True)
-						Next
 						e\EventState = 2.0
 						e\EventStr = 18
 					EndIf

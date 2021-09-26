@@ -8884,36 +8884,17 @@ Function InitLoadGame()
 		; ~ Loading the necessary stuff for dimension_1499, but this will only be done if the player is in this dimension already
 		If e\EventID = e_dimension_1499 Then
 			If e\EventState = 2.0 Then
-				RenderLoading(91)
-				e\room\Objects[0] = CreatePlane()
+				e\room\Objects[0] = LoadMesh_Strict("GFX\map\dimension1499\1499plane.b3d")
+				HideEntity(e\room\Objects[0])
 				
-				Local PlaneTex% = LoadTexture_Strict("GFX\map\Dimension1499\grit3.jpg")
-				
-				If opt\Atmosphere Then TextureBlend(PlaneTex, 5)
-				EntityTexture(e\room\Objects[0], PlaneTex)
-				DeleteSingleTextureEntryFromCache(PlaneTex)
-				PositionEntity(e\room\Objects[0], 0.0, EntityY(e\room\OBJ), 0.0)
-				EntityType(e\room\Objects[0], HIT_MAP)
-				RenderLoading(92)
 				I_1499\Sky = CreateSky("GFX\map\sky\1499sky")
-				RenderLoading(93)
+				
 				For i = 1 To 15
 					e\room\Objects[i] = LoadMesh_Strict("GFX\map\Dimension1499\1499object" + i + ".b3d")
 					HideEntity(e\room\Objects[i])
 				Next
-				RenderLoading(96)
+				
 				CreateChunkParts(e\room)
-				RenderLoading(97)
-				x = EntityX(e\room\OBJ)
-				z = EntityZ(e\room\OBJ)
-				
-				Local ch.Chunk
-				
-				For i = -2 To 2 Step 2
-					ch.Chunk = CreateChunk(-1, x * (i * 2.5), EntityY(e\room\OBJ), z)
-				Next
-				RenderLoading(98)
-				UpdateChunks(e\room, 15, False)
 				Exit
 			EndIf
 		EndIf
