@@ -1441,8 +1441,8 @@ Type RoomTemplates
 	Field Commonness%, Large%
 	Field DisableDecals%
 	Field TempTriggerBoxAmount%
-	Field TempTriggerBox%[128]
-	Field TempTriggerBoxName$[128]
+	Field TempTriggerBox%[8]
+	Field TempTriggerBoxName$[8]
 	Field DisableOverlapCheck% = True
 	Field MinX#, MinY#, MinZ#
 	Field MaxX#, MaxY#, MaxZ#
