@@ -2674,21 +2674,21 @@ Function LoadMap(File$)
 	Next
 	
 	; ~ Spawn some rooms outside the map
-	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 1500.0, RoomSpacing, "gate_b")
+	r.Rooms = CreateRoom(0, ROOM1, 0.0, 1500.0, -(RoomSpacing * 2), "gate_b")
 	CreateEvent("gate_b", "gate_b", 0)
 	
-	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 500.0, RoomSpacing, "gate_a")
+	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, -(RoomSpacing * 2), "gate_a")
 	CreateEvent("gate_a", "gate_a", 0)
 	
-	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 0.0, (MapGridSize - 1) * RoomSpacing, "dimension_106")
+	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize + 2) * RoomSpacing, 0.0, (MapGridSize + 2) * RoomSpacing, "dimension_106")
 	CreateEvent("dimension_106", "dimension_106", 0) 
 	
 	If opt\IntroEnabled Then
-		r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 0.0, (MapGridSize - 1) * RoomSpacing, "cont1_173_intro")
+		r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 0.0, (MapGridSize + 2) * RoomSpacing, "cont1_173_intro")
 		CreateEvent("cont1_173_intro", "cont1_173_intro", 0)
 	EndIf
 	
-	r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 800.0, 0.0, "dimension_1499")
+	r.Rooms = CreateRoom(0, ROOM1, -(RoomSpacing * 2), 800.0, 0.0, "dimension_1499")
 	CreateEvent("dimension_1499", "dimension_1499", 0)
 	
 	For r.Rooms = Each Rooms
