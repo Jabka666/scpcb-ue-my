@@ -7793,20 +7793,17 @@ Function UpdateRooms()
 					Exit
 				EndIf
 			Next
-			If chs\DebugHUD <> 0 Then
-				If r\TriggerBoxAmount > 0 Then
-					For i = 0 To r\TriggerBoxAmount - 1
+			
+			If r\TriggerBoxAmount > 0 Then
+				For i = 0 To r\TriggerBoxAmount - 1
+					If chs\DebugHUD <> 0 Then
 						EntityColor(r\TriggerBoxes[i]\OBJ, 255, 255, 0)
 						EntityAlpha(r\TriggerBoxes[i]\OBJ, 0.2)
-					Next
-				EndIf
-			Else
-				If r\TriggerBoxAmount > 0 Then
-					For i = 0 To r\TriggerBoxAmount - 1
+					Else
 						EntityColor(r\TriggerBoxes[i]\OBJ, 255, 255, 255)
 						EntityAlpha(r\TriggerBoxes[i]\OBJ, 0.0)
-					Next
-				EndIf
+					EndIf
+				Next
 			EndIf
 		EndIf
 	Next
