@@ -3531,9 +3531,9 @@ Function UpdateGUI()
 			PointEntity(Camera, ClosestButton)
 			FreeEntity(Pvt)
 			
-			CameraProject(Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) + MeshHeight(o\ButtonModelID[0]) * 0.015, EntityZ(ClosestButton, True))
+			CameraProject(Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) + (MeshHeight(o\ButtonModelID[0]) * 0.015), EntityZ(ClosestButton, True))
 			ProjY = ProjectedY()
-			CameraProject(Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) - MeshHeight(o\ButtonModelID[0]) * 0.015, EntityZ(ClosestButton, True))
+			CameraProject(Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) - (MeshHeight(o\ButtonModelID[0]) * 0.015), EntityZ(ClosestButton, True))
 			Scale = (ProjectedY() - ProjY) / (462.0 * MenuScale)
 			
 			x = mo\Viewport_Center_X - ImageWidth(t\ImageID[4]) * (Scale / 2)
@@ -3664,8 +3664,8 @@ Function UpdateGUI()
 		
 		Local TempX% = 0
 		
-		x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * 10 / 2 + INVENTORY_GFX_SPACING * (10 / 2 - 1)) / 2
-		y = mo\Viewport_Center_Y - INVENTORY_GFX_SIZE * (Float(OtherSize) / 10 * 2 - 1) - INVENTORY_GFX_SPACING
+		x = mo\Viewport_Center_X - ((INVENTORY_GFX_SIZE * 10 / 2) + (INVENTORY_GFX_SPACING * ((10 / 2) - 1))) / 2
+		y = mo\Viewport_Center_Y - (INVENTORY_GFX_SIZE * ((Float(OtherSize) / (10 * 2)) - 1)) - INVENTORY_GFX_SPACING
 		
 		ItemAmount = 0
 		IsMouseOn = -1
@@ -3709,7 +3709,7 @@ Function UpdateGUI()
 			If TempX = 5 Then 
 				TempX = 0
 				y = y + (INVENTORY_GFX_SIZE * 2)
-				x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * 10 / 2 + INVENTORY_GFX_SPACING * (10 / 2 - 1.0)) / 2
+				x = mo\Viewport_Center_X - ((INVENTORY_GFX_SIZE * 10 / 2) + (INVENTORY_GFX_SPACING * ((10 / 2) - 1))) / 2
 			EndIf
 		Next
 		
@@ -3814,12 +3814,12 @@ Function UpdateGUI()
 	ElseIf InvOpen Then
 		SelectedDoor = Null
 		
-		x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
+		x = mo\Viewport_Center_X - ((INVENTORY_GFX_SIZE * MaxItemAmount / 2) + (INVENTORY_GFX_SPACING * ((MaxItemAmount / 2) - 1))) / 2
 		y = mo\Viewport_Center_Y - INVENTORY_GFX_SIZE - INVENTORY_GFX_SPACING
 		
 		If MaxItemAmount = 2 Then
 			y = y + INVENTORY_GFX_SIZE
-			x = x - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING) / 2
+			x = x - ((INVENTORY_GFX_SIZE * MaxItemAmount / 2) + INVENTORY_GFX_SPACING) / 2
 		EndIf
 		
 		ItemAmount = 0
@@ -3865,9 +3865,9 @@ Function UpdateGUI()
 			EndIf					
 			
 			x = x + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING
-			If MaxItemAmount >= 4 And n = MaxItemAmount / 2 - 1 Then 
-				y = y + INVENTORY_GFX_SIZE * 2 
-				x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
+			If MaxItemAmount >= 4 And n = (MaxItemAmount / 2) - 1 Then 
+				y = y + (INVENTORY_GFX_SIZE * 2) 
+				x = mo\Viewport_Center_X - ((INVENTORY_GFX_SIZE * MaxItemAmount / 2) + (INVENTORY_GFX_SPACING * ((MaxItemAmount / 2) - 1))) / 2
 			EndIf
 		Next
 		
@@ -5888,10 +5888,13 @@ Function RenderGUI()
 							If (Not e\Img) Then
 								If me\BlinkTimer > -5.0 And Rand(30) = 1 Then
 									PlaySound_Strict(DripSFX[Rand(0, 5)])
-									If (Not e\Img) Then e\Img = LoadImage_Strict("GFX\npcs\scp_106_face.png")
+									If (Not e\Img) Then
+										e\Img = LoadImage_Strict("GFX\npcs\scp_106_face.png")
+										e\Img = ScaleImage2(e\Img, MenuScale, MenuScale)
+									EndIf
 								EndIf
 							Else
-								DrawImage(e\Img, mo\Viewport_Center_X - Rand(390, 310), mo\Viewport_Center_Y - Rand(290, 310))
+								DrawImage(e\Img, mo\Viewport_Center_X - (Rand(390, 310) * MenuScale), mo\Viewport_Center_Y - (Rand(290, 310) * MenuScale))
 							EndIf
 						Else
 							If e\Img <> 0 Then
@@ -5906,12 +5909,13 @@ Function RenderGUI()
 							If me\BlinkTimer > -5.0 Then
 								If (Not e\Img) Then
 									e\Img = LoadImage_Strict("GFX\kneel_mortal.png")
+									e\Img = ScaleImage2(e\Img, MenuScale, MenuScale)
 									If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN)
 									e\SoundCHN = PlaySound_Strict(e\Sound)
 								EndIf
 							EndIf
 						Else
-							DrawImage(e\Img, mo\Viewport_Center_X - Rand(390, 310), mo\Viewport_Center_Y - Rand(290, 310))
+							DrawImage(e\Img, mo\Viewport_Center_X - (Rand(390, 310) * MenuScale), mo\Viewport_Center_Y - (Rand(290, 310) * MenuScale))
 						EndIf
 					Else
 						If e\Img <> 0 Then
@@ -6024,9 +6028,9 @@ Function RenderGUI()
 			PointEntity(Camera, ClosestButton)
 			FreeEntity(Pvt)
 			
-			CameraProject(Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) + MeshHeight(o\ButtonModelID[0]) * 0.015, EntityZ(ClosestButton, True))
+			CameraProject(Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) + (MeshHeight(o\ButtonModelID[0]) * 0.015), EntityZ(ClosestButton, True))
 			ProjY = ProjectedY()
-			CameraProject(Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) - MeshHeight(o\ButtonModelID[0]) * 0.015, EntityZ(ClosestButton, True))
+			CameraProject(Camera, EntityX(ClosestButton, True), EntityY(ClosestButton, True) - (MeshHeight(o\ButtonModelID[0]) * 0.015), EntityZ(ClosestButton, True))
 			Scale = (ProjectedY() - ProjY) / 462.0
 			
 			x = mo\Viewport_Center_X - ImageWidth(t\ImageID[4]) * (Scale / 2)
@@ -6062,8 +6066,8 @@ Function RenderGUI()
 		
 		Local TempX% = 0
 		
-		x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * 10 / 2 + INVENTORY_GFX_SPACING * (10 / 2 - 1)) / 2
-		y = mo\Viewport_Center_Y - INVENTORY_GFX_SIZE * (Float(OtherSize) / 10 * 2 - 1) - INVENTORY_GFX_SPACING
+		x = mo\Viewport_Center_X - ((INVENTORY_GFX_SIZE * 10 / 2) + (INVENTORY_GFX_SPACING * ((10 / 2) - 1))) / 2
+		y = mo\Viewport_Center_Y - (INVENTORY_GFX_SIZE * ((Float(OtherSize) / 10 * 2) - 1)) - INVENTORY_GFX_SPACING
 		
 		IsMouseOn = -1
 		For n = 0 To OtherSize - 1
@@ -6080,12 +6084,12 @@ Function RenderGUI()
 			If OtherOpen = Null Then Exit
 			
 			If OtherOpen\SecondInv[n] <> Null Then
-				If (IsMouseOn = n Lor SelectedItem <> OtherOpen\SecondInv[n]) Then DrawImage(OtherOpen\SecondInv[n]\InvImg, x + INVENTORY_GFX_SIZE / 2 - 32, y + INVENTORY_GFX_SIZE / 2 - 32)
+				If (IsMouseOn = n Lor SelectedItem <> OtherOpen\SecondInv[n]) Then DrawImage(OtherOpen\SecondInv[n]\InvImg, x + (INVENTORY_GFX_SIZE / 2) - 32, y + (INVENTORY_GFX_SIZE / 2) - 32)
 			EndIf
 			If OtherOpen\SecondInv[n] <> Null And SelectedItem <> OtherOpen\SecondInv[n] Then
 				If IsMouseOn = n Then
 					Color(255, 255, 255)	
-					Text(x + INVENTORY_GFX_SIZE / 2, y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - 15, OtherOpen\SecondInv[n]\ItemTemplate\Name, True)				
+					Text(x + (INVENTORY_GFX_SIZE / 2), y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - 15, OtherOpen\SecondInv[n]\ItemTemplate\Name, True)				
 				EndIf
 			EndIf					
 			
@@ -6093,29 +6097,29 @@ Function RenderGUI()
 			TempX = TempX + 1
 			If TempX = 5 Then 
 				TempX = 0
-				y = y + INVENTORY_GFX_SIZE * 2 
-				x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * 10 / 2 + INVENTORY_GFX_SPACING * (10 / 2 - 1.0)) / 2
+				y = y + (INVENTORY_GFX_SIZE * 2)
+				x = mo\Viewport_Center_X - ((INVENTORY_GFX_SIZE * 10 / 2) + (INVENTORY_GFX_SPACING * ((10 / 2) - 1))) / 2
 			EndIf
 		Next
 		
 		If SelectedItem <> Null Then
 			If mo\MouseDown1 Then
 				If MouseSlot = 66 Then
-					DrawImage(SelectedItem\InvImg, ScaledMouseX() - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, ScaledMouseY() - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+					DrawImage(SelectedItem\InvImg, ScaledMouseX() - (ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2), ScaledMouseY() - (ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2))
 				ElseIf SelectedItem <> PrevOtherOpen\SecondInv[MouseSlot]
-					DrawImage(SelectedItem\InvImg, ScaledMouseX() - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, ScaledMouseY() - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+					DrawImage(SelectedItem\InvImg, ScaledMouseX() - (ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2), ScaledMouseY() - (ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2))
 				EndIf
 			EndIf
 		EndIf
 		
 		If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	ElseIf InvOpen Then
-		x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2
+		x = mo\Viewport_Center_X - ((INVENTORY_GFX_SIZE * MaxItemAmount / 2) + (INVENTORY_GFX_SPACING * ((MaxItemAmount / 2) - 1))) / 2
 		y = mo\Viewport_Center_Y - INVENTORY_GFX_SIZE - INVENTORY_GFX_SPACING
 		
 		If MaxItemAmount = 2 Then
 			y = y + INVENTORY_GFX_SIZE
-			x = x - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING) / 2
+			x = x - ((INVENTORY_GFX_SIZE * MaxItemAmount / 2) + INVENTORY_GFX_SPACING) / 2
 		EndIf
 		
 		IsMouseOn = -1
@@ -6216,24 +6220,24 @@ Function RenderGUI()
 					If SelectedItem = Null Then
 						SetFont(fo\FontID[Font_Default])
 						Color(255, 255, 255)	
-						Text(x + INVENTORY_GFX_SIZE / 2, y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - 15, Inventory(n)\Name, True)	
+						Text(x + (INVENTORY_GFX_SIZE / 2), y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - 15, Inventory(n)\Name, True)	
 					EndIf
 				EndIf
 			EndIf					
 			
 			x = x + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING
-			If MaxItemAmount >= 4 And n = MaxItemAmount / 2 - 1 Then 
-				y = y + INVENTORY_GFX_SIZE * 2 
-				x = mo\Viewport_Center_X - (INVENTORY_GFX_SIZE * MaxItemAmount / 2 + INVENTORY_GFX_SPACING * (MaxItemAmount / 2 - 1)) / 2 
+			If MaxItemAmount >= 4 And n = (MaxItemAmount / 2) - 1 Then 
+				y = y + (INVENTORY_GFX_SIZE * 2) 
+				x = mo\Viewport_Center_X - ((INVENTORY_GFX_SIZE * MaxItemAmount / 2) + (INVENTORY_GFX_SPACING * ((MaxItemAmount / 2) - 1))) / 2
 			EndIf
 		Next
 		
 		If SelectedItem <> Null Then
 			If mo\MouseDown1 Then
 				If MouseSlot = 66 Then
-					DrawImage(SelectedItem\InvImg, ScaledMouseX() - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, ScaledMouseY() - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+					DrawImage(SelectedItem\InvImg, ScaledMouseX() - (ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2), ScaledMouseY() - (ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2))
 				ElseIf SelectedItem <> Inventory(MouseSlot)
-					DrawImage(SelectedItem\InvImg, ScaledMouseX() - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, ScaledMouseY() - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+					DrawImage(SelectedItem\InvImg, ScaledMouseX() - (ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2), ScaledMouseY() - (ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2))
 				EndIf
 			EndIf
 		EndIf
@@ -6260,7 +6264,7 @@ Function RenderGUI()
 								;[End Block]
 						End Select
 						
-						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - (ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2), mo\Viewport_Center_Y - (ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2))
 						
 						Width = 300 * MenuScale
 						Height = 20 * MenuScale
@@ -6272,14 +6276,14 @@ Function RenderGUI()
 					;[End Block]
 				Case "key0", "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "scp860", "hand", "hand2", "hand3", "25ct", "scp005", "key", "coin", "mastercard"
 					;[Block]
-					DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+					DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - (ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2), mo\Viewport_Center_Y - (ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2))
 					;[End Block]
 				Case "firstaid", "finefirstaid", "firstaid2"
 					;[Block]
 					If me\Bloodloss = 0.0 And me\Injuries = 0.0 Then
 						Return
 					Else
-						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - (ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2), mo\Viewport_Center_Y - (ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2))
 						
 						Width = 300 * MenuScale
 						Height = 20 * MenuScale
@@ -6343,7 +6347,7 @@ Function RenderGUI()
 						End Select
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
-					DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\Img) / 2)
+					DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - (ImageWidth(SelectedItem\ItemTemplate\Img) / 2), mo\Viewport_Center_Y - (ImageHeight(SelectedItem\ItemTemplate\Img) / 2))
 					;[End Block]
 				Case "scp1025"
 					;[Block]
@@ -6355,7 +6359,7 @@ Function RenderGUI()
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
-					DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\Img) / 2)
+					DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - (ImageWidth(SelectedItem\ItemTemplate\Img) / 2), mo\Viewport_Center_Y - (ImageHeight(SelectedItem\ItemTemplate\Img) / 2))
 					;[End Block]
 				Case "radio", "18vradio", "fineradio", "veryfineradio"
 					;[Block]
@@ -6442,7 +6446,7 @@ Function RenderGUI()
 				Case "hazmatsuit", "hazmatsuit2", "hazmatsuit3"
 					;[Block]
 					If wi\BallisticVest = 0 Then
-						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - (ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2), mo\Viewport_Center_Y - (ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2))
 						
 						Width = 300 * MenuScale
 						Height = 20 * MenuScale
@@ -6454,7 +6458,7 @@ Function RenderGUI()
 					;[End Block]
 				Case "vest", "finevest"
 					;[Block]
-					DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+					DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - (ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2), mo\Viewport_Center_Y - (ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2))
 					
 					Width = 300 * MenuScale
 					Height = 20 * MenuScale
@@ -6481,7 +6485,7 @@ Function RenderGUI()
 								;[End Block]
 						End Select
 						
-						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - (ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2), mo\Viewport_Center_Y - (ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2))
 						
 						Width = 300 * MenuScale
 						Height = 20 * MenuScale
@@ -6498,12 +6502,12 @@ Function RenderGUI()
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
-					x = opt\GraphicWidth - ImageWidth(SelectedItem\ItemTemplate\Img) * 0.5 + 20.0
-					y = opt\GraphicHeight - ImageHeight(SelectedItem\ItemTemplate\Img) * 0.4 - 85.0
+					x = opt\GraphicWidth - (ImageWidth(SelectedItem\ItemTemplate\Img) * 0.5) + 20.0
+					y = opt\GraphicHeight - (ImageHeight(SelectedItem\ItemTemplate\Img) * 0.4) - 85.0
 					
 					Local PlayerX%, PlayerZ%
 					
-					DrawImage(SelectedItem\ItemTemplate\Img, x - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, y - ImageHeight(SelectedItem\ItemTemplate\Img) / 2 + 85)
+					DrawImage(SelectedItem\ItemTemplate\Img, x - (ImageWidth(SelectedItem\ItemTemplate\Img) / 2), y - (ImageHeight(SelectedItem\ItemTemplate\Img) / 2) + 85)
 					
 					SetFont(fo\FontID[Font_Digital])
 					
@@ -6523,13 +6527,13 @@ Function RenderGUI()
 						EndIf
 					Else
 						If (SelectedItem\State > 0.0 Lor (SelectedItem\ItemTemplate\TempName = "nav300" Lor SelectedItem\ItemTemplate\TempName = "navulti")) And (Rnd(CoffinDistance + 15.0) > 1.0 Lor PlayerRoom\RoomTemplate\Name <> "cont1_895") Then
-							PlayerX = Floor((EntityX(PlayerRoom\OBJ) + 8.0) / 8.0 + 0.5)
-							PlayerZ = Floor((EntityZ(PlayerRoom\OBJ) + 8.0) / 8.0 + 0.5)
+							PlayerX = Floor(((EntityX(PlayerRoom\OBJ) + 8.0) / 8.0) + 0.5)
+							PlayerZ = Floor(((EntityZ(PlayerRoom\OBJ) + 8.0) / 8.0) + 0.5)
 							
 							SetBuffer(ImageBuffer(t\ImageID[7]))
 							
 							Local xx% = x - ImageWidth(SelectedItem\ItemTemplate\Img) / 2
-							Local yy% = y - ImageHeight(SelectedItem\ItemTemplate\Img) / 2 + 85
+							Local yy% = y - (ImageHeight(SelectedItem\ItemTemplate\Img) / 2) + 85
 							
 							DrawImage(SelectedItem\ItemTemplate\Img, xx, yy)
 							
@@ -6697,7 +6701,7 @@ Function RenderGUI()
 								;[End Block]
 						End Select
 						
-						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - (ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2), mo\Viewport_Center_Y - (ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2))
 						
 						Width = 300 * MenuScale
 						Height = 20 * MenuScale
@@ -6716,12 +6720,12 @@ Function RenderGUI()
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
-					DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\Img) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\Img) / 2)
+					DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - (ImageWidth(SelectedItem\ItemTemplate\Img) / 2), mo\Viewport_Center_Y - (ImageHeight(SelectedItem\ItemTemplate\Img) / 2))
 					;[End Block]
 				Case "helmet"
 					;[Block]
 					If (Not PreventItemOverlapping(False, False, False, True)) Then
-						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - (ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2), mo\Viewport_Center_Y - (ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2))
 						
 						Width = 300 * MenuScale
 						Height = 20 * MenuScale
@@ -6734,7 +6738,7 @@ Function RenderGUI()
 				Case "scramble"
 					;[Block]
 					If (Not PreventItemOverlapping(False, False, False, False, True)) Then
-						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2)
+						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - (ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2), mo\Viewport_Center_Y - (ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2))
 						
 						Width = 300 * MenuScale
 						Height = 20 * MenuScale
@@ -7660,15 +7664,15 @@ Function RenderMenu()
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Frame limit:")
 					Color(255, 255, 255)
-					If opt\CurrFrameLimit > 0.0 Then
-						Color(255, 255, 0)
-						Text(x, y + (45 * MenuScale), opt\FrameLimit + " FPS")
-					EndIf
 					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FrameLimit, opt\FrameLimit)
 					EndIf
-					If MouseOn(x + (150 * MenuScale), y + (40 * MenuScale), 114 * MenuScale, 20)
-						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FrameLimit, opt\FrameLimit)
+					If opt\CurrFrameLimit > 0.0 Then
+						Color(255, 255, 0)
+						Text(x, y + (45 * MenuScale), opt\FrameLimit + " FPS")
+						If MouseOn(x + (150 * MenuScale), y + (40 * MenuScale), 114 * MenuScale, 20)
+							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FrameLimit, opt\FrameLimit)
+						EndIf
 					EndIf
 					;[End Block]
 			End Select
@@ -9600,7 +9604,6 @@ Function UpdateMTF()
 						If (Left(Inventory(i)\ItemTemplate\Name, 4) = "SCP-") And (Left(Inventory(i)\ItemTemplate\Name, 7) <> "SCP-035") And (Left(Inventory(i)\ItemTemplate\Name, 7) <> "SCP-093")
 							PlayAnnouncement("SFX\Character\MTF\ThreatAnnouncPossession.ogg")
 							MTFTimer = 25000.0
-							Return
 							Exit
 						EndIf
 					EndIf
@@ -9760,7 +9763,7 @@ Function Update008()
 	Local PrevI008Timer#, i%
 	Local TeleportForInfect% = True
 	
-	If PlayerRoom\RoomTemplate\Name = "cont2_860_1"
+	If PlayerRoom\RoomTemplate\Name = "cont2_860_1" Then
 		If forest_event\EventState = 1.0 Then TeleportForInfect = False
 	ElseIf PlayerRoom\RoomTemplate\Name = "dimension_1499" Lor PlayerRoom\RoomTemplate\Name = "dimension_106" Lor PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a"
 		TeleportForInfect = False
@@ -10051,7 +10054,7 @@ Function CheckForPlayerInFacility()
 	
 	If EntityY(me\Collider) > 100.0 Then Return(0)
 	If EntityY(me\Collider) < -10.0 Then Return(2)
-	If EntityY(me\Collider) > 7.0 And EntityY(me\Collider) =< 100.0 Then Return(2)
+	If (EntityY(me\Collider) > 7.0) And (EntityY(me\Collider) =< 100.0) Then Return(2)
 	Return(1)
 End Function
 
