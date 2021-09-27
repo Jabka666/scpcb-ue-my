@@ -8890,7 +8890,8 @@ Function InitLoadGame()
 				I_1499\Sky = CreateSky("GFX\map\sky\1499sky")
 				
 				For i = 1 To 15
-					e\room\Objects[i] = LoadMesh_Strict("GFX\map\Dimension1499\1499object" + i + ".b3d")
+					e\room\Objects[i] = LoadRMesh("GFX\map\dimension1499\dimension_1499_object(" + i + ").rmesh", Null)
+					ScaleEntity(e\room\Objects[i], RoomScale, RoomScale, RoomScale)
 					HideEntity(e\room\Objects[i])
 				Next
 				

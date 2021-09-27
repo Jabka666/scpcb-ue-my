@@ -783,7 +783,8 @@ Function QuickLoadEvents()
 				Else
 					If Int(e\EventStr) < 16 Then
 						QuickLoadPercent = QuickLoadPercent + 2
-						e\room\Objects[Int(e\EventStr)] = LoadMesh_Strict("GFX\map\dimension1499\1499object" + (Int(e\EventStr)) + ".b3d")
+						e\room\Objects[Int(e\EventStr)] = LoadRMesh("GFX\map\dimension1499\dimension_1499_object(" + (Int(e\EventStr)) + ").rmesh", Null)
+						ScaleEntity(e\room\Objects[Int(e\EventStr)], RoomScale, RoomScale, RoomScale)
 						HideEntity(e\room\Objects[Int(e\EventStr)])
 						e\EventStr = Int(e\EventStr) + 1
 					ElseIf Int(e\EventStr) = 16
@@ -5634,7 +5635,7 @@ Function UpdateEvents()
 							PlayerFallingPickDistance = 0.0
 							
 							If EntityY(me\Collider) < -6400.0 * RoomScale And me\KillTimer >= 0.0 And me\FallTimer >= 0.0 Then
-								PlaySound_Strict(LoadTempSound("SFX\Room\dimension_106\Impact.ogg"))
+								PlaySound_Strict(LoadTempSound("SFX\Room\PocketDimension\Impact.ogg"))
 								me\KillTimer = -1.0
 							EndIf
 						EndIf
