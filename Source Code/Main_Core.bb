@@ -2957,6 +2957,7 @@ Function UpdateMoving()
 		If chs\NoClip Then 
 			me\Shake = 0.0
 			me\CurrSpeed = 0.0
+			me\Crouch = False
 			
 			RotateEntity(me\Collider, WrapAngle(EntityPitch(Camera)), WrapAngle(EntityYaw(Camera)), 0.0)
 			
