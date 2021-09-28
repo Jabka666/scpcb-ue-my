@@ -292,6 +292,7 @@ Mechanics and effects:
 - Added more D-9341 sounds into the intro sequence.
 - Improved white smoke.
 - Added miss sound for NPCs.
+- NVG protects eyes from the gas.
 
 Map Creator:
 - Sorted rooms by zones.
