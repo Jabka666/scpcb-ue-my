@@ -2744,8 +2744,8 @@ Function ResetNegativeStats(Revive% = False)
 				Curr173\Idle = 0
 			EndIf
 		ElseIf Curr106 <> Null
-			If EntityDistanceSquared(me\Collider, Curr173\Collider) < 4.0 Then
-				CreateConsoleMsg("Death by SCP-173 causes GodMode to be enabled!")
+			If EntityDistanceSquared(me\Collider, Curr106\Collider) < 4.0 Then
+				CreateConsoleMsg("Death by SCP-106 causes GodMode to be enabled!")
 				chs\GodMode = True
 			EndIf
 		EndIf
