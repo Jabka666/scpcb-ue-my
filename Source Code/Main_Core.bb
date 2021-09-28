@@ -8897,6 +8897,19 @@ Function InitLoadGame()
 				Next
 				
 				CreateChunkParts(e\room)
+				
+				x = EntityX(e\room\OBJ)
+				z = EntityZ(e\room\OBJ)
+				
+				Local ch.Chunk
+				
+				For i = -2 To 0 Step 2
+					ch.Chunk = CreateChunk(-1, x * (i * 2.5), EntityY(e\room\OBJ), z, True)
+				Next
+				For i = -2 To 0 Step 2
+					ch.Chunk = CreateChunk(-1, x * (i * 2.5), EntityY(e\room\OBJ), z - 40.0, True)
+				Next
+				
 				Exit
 			EndIf
 		EndIf

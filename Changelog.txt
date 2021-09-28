@@ -3,7 +3,7 @@ v1.0.1
 General:
 - Finished "SL_monitors.png" file.
 - Optimized the game while using 100% of gamma.
-- Optimized "room4_2_hcz", "room2_ez" and "cont_079".
+- Optimized some rooms a little bit.
 - Reworked bright atmosphere mode.
 - Improved auto save system. If you saved badly, you can return to the previous save.
 - Unlocked all difficulties.
@@ -49,7 +49,7 @@ Bug Fixes:
 - Fixed a bug where SCP-173 can stuck inside an office seat in SCP-008's containment chamber.
 - Fixed "room2_3_ez"'s design.
 - Fixed missing ambient sound in "room2_ez" and "room2_2_ez".
-- Fixed electric box collision in "cont2_008" and "cont1_205".
+- Fixed electric box collision in "cont2_008", "cont1_096" and "cont1_205".
 - Fixed blood decal position under guard in SCP-895's containment chamber. 
 - Fixed blood decal position under player in SCP-1123's containment chamber.
 - Fixed ability to save the game on endings. 
@@ -71,6 +71,7 @@ Bug Fixes:
 - Fixed ticket model.
 - Fixed missing textures in "room3_storage".
 - Fixed SCP-1162's label wasn't renamed to "SCP-1162-ARC".
+- Fixed crouching in NoClip mode.
 
 - Tiny fix for "room2_shaft."
 - Tiny fix for item positions in "room2_3_ez".
