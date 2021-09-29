@@ -1998,8 +1998,6 @@ Function UpdateLauncher(lnchr.Launcher)
 		
 		If UpdateLauncherButton(LauncherWidth - 300, LauncherHeight - 105, 150, 30, "REPORT A BUG!", False, False) Then
 			ExecFile("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition/news/bug-reports1")
-			Quit = True
-			Exit
 		EndIf
 		
 		If UpdateLauncherButton(LauncherWidth - 300, LauncherHeight - 50, 150, 30, "SEE CHANGELOG", False, False) Then
