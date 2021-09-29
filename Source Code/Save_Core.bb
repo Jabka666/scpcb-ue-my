@@ -2674,10 +2674,10 @@ Function LoadMap(File$)
 	Next
 	
 	; ~ Spawn some rooms outside the map
-	r.Rooms = CreateRoom(0, ROOM1, 0.0, 1500.0, -(RoomSpacing * 2), "gate_b")
+	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, -(RoomSpacing) * 10, "gate_b")
 	CreateEvent("gate_b", "gate_b", 0)
 	
-	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, -(RoomSpacing * 2), "gate_a")
+	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, -(RoomSpacing) * 2, "gate_a")
 	CreateEvent("gate_a", "gate_a", 0)
 	
 	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize + 2) * RoomSpacing, 0.0, (MapGridSize + 2) * RoomSpacing, "dimension_106")
