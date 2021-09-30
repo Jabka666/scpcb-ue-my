@@ -72,6 +72,7 @@ Bug Fixes:
 - Fixed missing textures in "room3_storage".
 - Fixed SCP-1162's label wasn't renamed to "SCP-1162-ARC".
 - Fixed crouching in NoClip mode.
+- Fixed doors in "cont1_173".
 
 - Tiny fix for "room2_shaft" and "room2_js".
 - Tiny fix for item positions in "room2_3_ez".
