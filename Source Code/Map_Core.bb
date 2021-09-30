@@ -5892,7 +5892,7 @@ Function FillRoom(r.Rooms)
 			d\Locked = 1 : d\MTFClose = False
 			
 			d.Doors = CreateDoor(r\x - 640.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 64.0 * RoomScale, 90.0, r)
-			d\Locked = 1 : d\MTFClose = False
+			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			
 			d.Doors = CreateDoor(r\x + 1264.0 * RoomScale, r\y + 383.9 * RoomScale, r\z + 312.0 * RoomScale, 180.0, r, True, One_Sided_Door)
@@ -5901,7 +5901,7 @@ Function FillRoom(r.Rooms)
 			PositionEntity(d\Buttons[1], r\x + 1120.0 * RoomScale, EntityY(d\Buttons[1], True), r\z + 302.0 * RoomScale, True)
 			
 			d.Doors = CreateDoor(r\x, r\y, r\z + 1184.0 * RoomScale, 0.0, r, False, Default_Door, KEY_CARD_3)
-			d\Locked = 1 : d\MTFClose = False
+			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			
 			r\Objects[0] = LoadRMesh("GFX\map\IntroDesk_opt.rmesh", Null)
