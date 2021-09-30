@@ -3589,7 +3589,7 @@ Function UpdateEvents%()
 							e\EventState = 2.0
 						EndIf
 					ElseIf e\EventState = 2.0
-						If EntityDistanceSquared(e\room\NPC[0]\Collider, me\Collider) < 12.25 And (Not chs\NoTarget) Then
+						If EntityDistanceSquared(e\room\NPC[0]\Collider, me\Collider) < 5.0625 And (Not chs\NoTarget) Then
 							e\room\NPC[0]\State = 1.0 : e\room\NPC[0]\State3 = 1.0
 						Else
 							e\room\NPC[0]\State = 5.0 : e\room\NPC[0]\State3 = 0.0
