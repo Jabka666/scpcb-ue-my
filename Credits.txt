@@ -127,7 +127,8 @@
 		slend
 		Samuel ("Ayylien/Soylien")
 		Egor Oleynik ("Chumnaya Karkusa")
-		
+		EpicDasherFR
+
 
 *Development Helpers
 		
@@ -146,7 +147,6 @@
 		Vladislav Borisevich ("Vane Brain")
 		Dmitry Petrov ("Ne4to")
 		BerkeliumΛsset
-		EpicDasherFR
 		Dmitriy Sazanov ("Dmitriy-Bars")
 		C45
 		Stefan Koch ("Salvage")
