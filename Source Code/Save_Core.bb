@@ -32,7 +32,7 @@ Function CancelAutoSave%()
 	If as\Timer <> 70.0 * 120.0 Then as\Timer = 70.0 * 120.0
 End Function
 
-Function SaveGame(File$)
+Function SaveGame%(File$)
 	CatchErrors("Uncaught (SaveGame)")
 	
 	If (Not me\Playable) Lor me\Zombie Lor me\KillTimer < 0.0 Then Return ; ~ Don't save if the player can't move at all
@@ -529,7 +529,7 @@ Function SaveGame(File$)
 	CatchErrors("SaveGame")
 End Function
 
-Function LoadGame(File$)
+Function LoadGame%(File$)
 	CatchErrors("Uncaught (LoadGame)")
 	
 	Local r.Rooms, n.NPCs, do.Doors, rt.RoomTemplates
@@ -1383,7 +1383,7 @@ Function LoadGame(File$)
 	CatchErrors("LoadGame")
 End Function
 
-Function LoadGameQuick(File$)
+Function LoadGameQuick%(File$)
 	CatchErrors("Uncaught (LoadGameQuick)")
 	
 	Local r.Rooms, n.NPCs, do.Doors
@@ -2168,7 +2168,7 @@ Function LoadGameQuick(File$)
 	CatchErrors("LoadGameQuick")
 End Function
 
-Function SaveAchievementsFile()
+Function SaveAchievementsFile%()
 	Local File$
 	
 	File = WriteFile(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon howl.cb")
@@ -2176,7 +2176,7 @@ Function SaveAchievementsFile()
 	CloseFile(File)
 End Function
 
-Function LoadAchievementsFile()
+Function LoadAchievementsFile%()
 	; ~ Go out of function immediately if the file doesn't exist!
 	If FileType(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon howl.cb") <> 1 Then Return
 	
@@ -2201,7 +2201,7 @@ Global SavedMapsAmount% = 0
 Dim SavedMaps$(SavedMapsAmount)
 Dim SavedMapsAuthor$(SavedMapsAmount)
 
-Function LoadSavedGames()
+Function LoadSavedGames%()
 	CatchErrors("Uncaught (LoadSaveGames)")
 	
 	Local i%, myDir%, File$, j%
@@ -2268,7 +2268,7 @@ End Function
 
 Const MapCreatorPath$ = "Map Creator\Maps\"
 
-Function LoadSavedMaps()
+Function LoadSavedMaps%()
 	CatchErrors("Uncaught (LoadSavedMaps)")
 	
 	Local i%, Dir, File$
@@ -2325,7 +2325,7 @@ Function LoadSavedMaps()
 	CatchErrors("LoadSavedMaps")
 End Function
 
-Function LoadMap(File$)
+Function LoadMap%(File$)
 	CatchErrors("Uncaught (LoadMap)")
 	
 	Local r.Rooms, rt.RoomTemplates, e.Events	

@@ -11,7 +11,7 @@ Type TextureInCache
 	Field TexDeleteType%
 End Type
 
-Function LoadTextureCheckingIfInCache(TexName$, TexFlags% = 1, DeleteType% = DeleteMapTextures)
+Function LoadTextureCheckingIfInCache%(TexName$, TexFlags% = 1, DeleteType% = DeleteMapTextures)
 	Local tic.TextureInCache
 	Local CurrPath$
 	
@@ -36,7 +36,7 @@ Function LoadTextureCheckingIfInCache(TexName$, TexFlags% = 1, DeleteType% = Del
 	Return(tic\Tex)
 End Function
 
-Function LoadAnimTextureCheckingIfInCache(TexName$, TexFlags% = 1, Width%, Height%, FirstFrame%, Count%, DeleteType% = DeleteMapTextures)
+Function LoadAnimTextureCheckingIfInCache%(TexName$, TexFlags% = 1, Width%, Height%, FirstFrame%, Count%, DeleteType% = DeleteMapTextures)
 	Local tic.TextureInCache
 	Local CurrPath$
 	
@@ -61,7 +61,7 @@ Function LoadAnimTextureCheckingIfInCache(TexName$, TexFlags% = 1, Width%, Heigh
 	Return(tic\Tex)
 End Function
 
-Function DeleteTextureEntriesFromCache(DeleteType%)
+Function DeleteTextureEntriesFromCache%(DeleteType%)
 	Local tic.TextureInCache, mat.Materials
 	
 	For tic.TextureInCache = Each TextureInCache
@@ -76,7 +76,7 @@ Function DeleteTextureEntriesFromCache(DeleteType%)
 	Next
 End Function
 
-Function DeleteSingleTextureEntryFromCache(Texture%)
+Function DeleteSingleTextureEntryFromCache%(Texture%)
 	Local tic.TextureInCache
 	
 	For tic.TextureInCache = Each TextureInCache
@@ -87,7 +87,7 @@ Function DeleteSingleTextureEntryFromCache(Texture%)
 	Next
 End Function
 
-Function CreateTextureUsingCacheSystem(Width%, Height%, TexFlags% = 1, Frames% = 1, DeleteType% = DeleteAllTextures)
+Function CreateTextureUsingCacheSystem%(Width%, Height%, TexFlags% = 1, Frames% = 1, DeleteType% = DeleteAllTextures)
 	Local tic.TextureInCache
 	
 	tic.TextureInCache = New TextureInCache
@@ -125,7 +125,7 @@ End Function
 ; ~ This is supposed to be the only texture that will be outside the TextureCache system
 Global MissingTexture%
 
-Function LoadMissingTexture()
+Function LoadMissingTexture%()
 	MissingTexture = CreateTexture(2, 2, 1)
 	TextureBlend(MissingTexture, 3)
 	SetBuffer(TextureBuffer(MissingTexture))

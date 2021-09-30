@@ -45,7 +45,7 @@ Function LoopSound2%(SoundHandle%, SoundCHN%, Cam%, Entity%, Range# = 10.0, Volu
 	Return(SoundCHN)
 End Function
 
-Function UpdateSoundOrigin(SoundCHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, SFXVolume% = True)
+Function UpdateSoundOrigin%(SoundCHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, SFXVolume% = True)
 	Range = Max(Range, 1.0)
 	
 	If Volume > 0.0 Then
@@ -64,7 +64,7 @@ Function UpdateSoundOrigin(SoundCHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.
 	EndIf
 End Function
 
-Function PlayMTFSound(SoundHandle%, n.NPCs)
+Function PlayMTFSound%(SoundHandle%, n.NPCs)
 	If n <> Null Then
 		n\SoundCHN = PlaySound2(SoundHandle, Camera, n\Collider, 8.0)	
 	EndIf
@@ -84,7 +84,7 @@ Function PlayMTFSound(SoundHandle%, n.NPCs)
 	EndIf 
 End Function
 
-Function LoadEventSound(e.Events, File$, Number% = 0)
+Function LoadEventSound%(e.Events, File$, Number% = 0)
 	If Number = 0 Then
 		If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
 		e\Sound = LoadSound_Strict(File)
@@ -100,7 +100,7 @@ Function LoadEventSound(e.Events, File$, Number% = 0)
 	EndIf
 End Function
 
-Function LoadTempSound(File$)
+Function LoadTempSound%(File$)
 	Local TempSound%
 	
 	If TempSounds[TempSoundIndex] <> 0 Then FreeSound_Strict(TempSounds[TempSoundIndex])
@@ -110,7 +110,7 @@ Function LoadTempSound(File$)
 	Return(TempSound)
 End Function
 
-Function UpdateMusic()
+Function UpdateMusic%()
 	If ConsoleFlush Then
 		If (Not ChannelPlaying(ConsoleMusPlay)) Then ConsoleMusPlay = PlaySound_Strict(ConsoleMusFlush)
 	ElseIf (Not PlayCustomMusic)
@@ -143,7 +143,7 @@ Function UpdateMusic()
 	EndIf
 End Function 
 
-Function PauseSounds()
+Function PauseSounds%()
 	Local e.Events, n.NPCs, d.Doors
 	Local i%
 	
@@ -246,7 +246,7 @@ Function PauseSounds()
 	EndIf
 End Function
 
-Function ResumeSounds()
+Function ResumeSounds%()
 	Local e.Events, n.NPCs, d.Doors
 	Local i%
 	
@@ -347,7 +347,7 @@ Function ResumeSounds()
 	EndIf
 End Function
 
-Function KillSounds()
+Function KillSounds%()
 	Local e.Events, n.NPCs, d.Doors, snd.Sound, sub.Subtitles
 	Local i%
 	
@@ -467,7 +467,7 @@ Function KillSounds()
 	Delete Each Subtitles
 End Function
 
-Function GetStepSound(Entity%)
+Function GetStepSound%(Entity%)
 	Local mat.Materials
 	Local Picker%, Brush%, Texture%, Name$
 	
@@ -523,7 +523,7 @@ Function GetStepSound(Entity%)
 	Return(0)
 End Function
 
-Function PlayAnnouncement(File$) ; ~ This function streams the announcement currently playing
+Function PlayAnnouncement%(File$) ; ~ This function streams the announcement currently playing
 	If IntercomStreamCHN <> 0 Then
 		StopStream_Strict(IntercomStreamCHN)
 		IntercomStreamCHN = 0
@@ -532,7 +532,7 @@ Function PlayAnnouncement(File$) ; ~ This function streams the announcement curr
 	IntercomStreamCHN = StreamSound_Strict(File, opt\SFXVolume, 0)
 End Function
 
-Function UpdateStreamSounds()
+Function UpdateStreamSounds%()
 	If fps\Factor[0] > 0.0 Then
 		If IntercomStreamCHN <> 0 Then
 			SetStreamVolume_Strict(IntercomStreamCHN, opt\SFXVolume)
@@ -549,7 +549,7 @@ Function UpdateStreamSounds()
 	EndIf
 End Function
 
-Function ControlSoundVolume()
+Function ControlSoundVolume%()
 	Local snd.Sound
 	Local i%
 	
@@ -560,7 +560,7 @@ Function ControlSoundVolume()
 	Next
 End Function
 
-Function UpdateDeaf()
+Function UpdateDeaf%()
 	If me\DeafTimer > 0.0 Then
 		me\DeafTimer = me\DeafTimer - fps\Factor[0]
 		opt\SFXVolume = 0.0
@@ -766,7 +766,7 @@ Global UserTrackCheck% = 0, UserTrackCheck2% = 0
 Global UserTrackMusicAmount% = 0, CurrUserTrack%, UserTrackFlag% = False
 Global UserTrackName$[256]
 
-Function LoadSounds()
+Function LoadSounds%()
 	Local i%
 	
 	RenderLoading(45, "SOUNDS")

@@ -102,7 +102,7 @@ End Function
 
 Const ItemsPath$ = "GFX\items\"
 
-Function InitItemTemplates()
+Function InitItemTemplates%()
 	Local it.ItemTemplates, it2.ItemTemplates
 	
 	; ~ [PAPER]
@@ -553,7 +553,7 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 	Return(i)
 End Function
 
-Function RemoveItem(i.Items)
+Function RemoveItem%(i.Items)
 	CatchErrors("Uncaught (RemoveItem)")
 	
 	Local n%
@@ -579,7 +579,7 @@ Function RemoveItem(i.Items)
 	CatchErrors("RemoveItem")
 End Function
 
-Function RemoveWearableItems(item.Items)
+Function RemoveWearableItems%(item.Items)
 	CatchErrors("Uncaught (RemoveWearableItems)")
 	
 	Select item\ItemTemplate\TempName
@@ -625,7 +625,7 @@ Function RemoveWearableItems(item.Items)
 	CatchErrors("RemoveWearableItems")
 End Function
 
-Function ClearSecondInv(item.Items, From% = 0)
+Function ClearSecondInv%(item.Items, From% = 0)
 	Local i%
 	
 	For i = From To 19
@@ -634,7 +634,7 @@ Function ClearSecondInv(item.Items, From% = 0)
 	Next
 End Function
 
-Function UpdateItems()
+Function UpdateItems%()
 	CatchErrors("Uncaught (UpdateItems)")
 	
 	Local i.Items, i2.Items, np.NPCs
@@ -746,7 +746,7 @@ Function UpdateItems()
 	EndIf
 End Function
 
-Function PickItem(item.Items)
+Function PickItem%(item.Items)
 	If wi\HazmatSuit > 0 Then
 		CreateMsg("You cannot pick up any items while wearing a hazmat suit.")
 		Return
@@ -897,7 +897,7 @@ Function PickItem(item.Items)
 	CatchErrors("PickItem")
 End Function
 
-Function DropItem(item.Items, PlayDropSound% = True)
+Function DropItem%(item.Items, PlayDropSound% = True)
 	If wi\HazmatSuit > 0 Then
 		CreateMsg("You cannot drop any items while wearing a hazmat suit.")
 		Return
@@ -1036,7 +1036,7 @@ Const FINE% = 1
 Const VERYFINE% = 2
 ;[End Block]
 
-Function Use914(item.Items, Setting%, x#, y#, z#)
+Function Use914%(item.Items, Setting%, x#, y#, z#)
 	me\RefinedItems = me\RefinedItems + 1
 	
 	Local it.Items, it2.Items, it3.Items, it4.Items, it5.Items, d.Decals, n.NPCs
@@ -2420,7 +2420,7 @@ Const KEY_MISC% = 0
 ;[End Block]
 
 ; ~ Only for "UseDoor" function
-Function GetUsingItem(item.Items)
+Function GetUsingItem%(item.Items)
 	Select item\ItemTemplate\TempName
 		Case "key6"
 			;[Block]

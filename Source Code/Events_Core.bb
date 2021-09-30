@@ -465,7 +465,7 @@ Function CreateEvent.Events(EventName$, RoomName$, ID%, Prob# = 0.0)
 	Return(Null)
 End Function
 
-Function InitEvents()
+Function InitEvents%()
 	If opt\IntroEnabled Then CreateEvent("cont1_173_intro", "cont1_173_intro", 0)
 	CreateEvent("cont1_173", "cont1_173", 0)
 	
@@ -662,7 +662,7 @@ Global QuickLoadPercent% = -1
 Global QuickLoadPercent_DisplayTimer# = 0.0
 Global QuickLoad_CurrEvent.Events
 
-Function UpdateQuickLoading()
+Function UpdateQuickLoading%()
 	If QuickLoadPercent > -1 Then
 		If QuickLoadPercent > 99 Then
 			If QuickLoadPercent_DisplayTimer < 70.0 Then
@@ -679,7 +679,7 @@ Function UpdateQuickLoading()
 	EndIf
 End Function
 
-Function RenderQuickLoading()
+Function RenderQuickLoading%()
 	If QuickLoadPercent > -1 Then
 		MidHandle(QuickLoadIcon)
 		DrawImage(QuickLoadIcon, opt\GraphicWidth - 90, opt\GraphicHeight - 150)
@@ -689,7 +689,7 @@ Function RenderQuickLoading()
 	EndIf
 End Function
 
-Function QuickLoadEvents()
+Function QuickLoadEvents%()
 	CatchErrors("Uncaught (QuickLoadEvents)")
 	
 	If QuickLoad_CurrEvent = Null Then
@@ -817,7 +817,7 @@ Function QuickLoadEvents()
 	CatchErrors("QuickLoadEvents: Event Name: " + Chr(34) + e\EventName + Chr(34) + ", ID: " + e\EventID)
 End Function
 
-Function UpdateEvents()
+Function UpdateEvents%()
 	CatchErrors("Uncaught (UpdateEvents)")
 	
 	Local p.Particles, n.NPCs, r.Rooms, e.Events, e2.Events, de.Decals, du.Dummy1499_1, w.Waypoints
@@ -9225,7 +9225,7 @@ Type Dummy1499_1
 	Field OBJ%
 End Type
 
-Function UpdateDimension1499()
+Function UpdateDimension1499%()
 	Local e.Events, n.NPCs, r.Rooms, it.Items, du.Dummy1499_1
 	Local Tex%, Temp%, Scale#, x%, y%, i%, j%
 	
@@ -9540,7 +9540,7 @@ Function UpdateDimension1499()
 	Next
 End Function
 
-Function UpdateEndings()
+Function UpdateEndings%()
 	Local e.Events, e2.Events, n.NPCs, r.Rooms, p.Particles, de.Decals, em.Emitters
 	Local Dist#, i%, Pvt%, Temp%, xTemp#, zTemp#, Angle#, OBJ%
 	
@@ -10325,7 +10325,7 @@ Function UpdateEndings()
 	UpdateExplosion()
 End Function
 
-Function RemoveEvent(e.Events)
+Function RemoveEvent%(e.Events)
 	If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
 	If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
 	If e\Sound3 <> 0 Then FreeSound_Strict(e\Sound3) : e\Sound3 = 0

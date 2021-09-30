@@ -1,4 +1,4 @@
-Function GenerateSeedNumber(Seed$)
+Function GenerateSeedNumber%(Seed$)
 	Local Temp% = 0
 	Local Shift% = 0
 	Local i%

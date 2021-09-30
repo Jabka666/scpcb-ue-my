@@ -182,7 +182,7 @@ End Function
 
 Global UpdateRoomLightsTimer# = 0.0
 
-Function UpdateRoomLights(Cam%)
+Function UpdateRoomLights%(Cam%)
 	If opt\EnableRoomLights And SecondaryLightOn > 0.5 And Cam = Camera Then
 		UpdateRoomLightsTimer = UpdateRoomLightsTimer + fps\Factor[0]
 		If UpdateRoomLightsTimer >= 8.0 Then
@@ -191,7 +191,7 @@ Function UpdateRoomLights(Cam%)
 	EndIf
 End Function
 
-Function RenderRoomLights(Cam%)
+Function RenderRoomLights%(Cam%)
 	Local r.Rooms, i%, Random#, Alpha#, Dist#
 	
 	For r.Rooms = Each Rooms
@@ -302,7 +302,7 @@ End Function
 
 Global AmbientLightRoomTex%, AmbientLightRoomVal%
 
-Function AmbientLightRooms(Value% = 0)
+Function AmbientLightRooms%(Value% = 0)
 	If Value = AmbientLightRoomVal Then Return
 	AmbientLightRoomVal = Value
 	
@@ -317,7 +317,7 @@ End Function
 
 Const RoomScale# = 8.0 / 2048.0
 
-Function LoadRMesh(File$, rt.RoomTemplates)
+Function LoadRMesh%(File$, rt.RoomTemplates)
 	CatchErrors("Uncaught (LoadRMesh)")
 	
 	Local mat.Materials
@@ -784,7 +784,7 @@ Const Return_Chance% = 27
 Const Center% = 5
 ;[End Block]
 
-Function GenForestGrid(fr.Forest)
+Function GenForestGrid%(fr.Forest)
 	CatchErrors("Uncaught (GenForestGrid)")
 	
 	Local LastForestID%
@@ -959,7 +959,7 @@ Const ROOM3% = 3
 Const ROOM4% = 4
 ;[End Block]
 
-Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
+Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	CatchErrors("Uncaught (PlaceForest)")
 	
 	Local tX%, tY%
@@ -1196,7 +1196,7 @@ Function PlaceForest(fr.Forest, x#, y#, z#, r.Rooms)
 	CatchErrors("PlaceForest")
 End Function
 
-Function PlaceMapCreatorForest(fr.Forest, x#, y#, z#, r.Rooms)
+Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	CatchErrors("Uncaught (PlaceMapCreatorForest)")
 	
 	Local tX%, tY%
@@ -1374,7 +1374,7 @@ Function PlaceMapCreatorForest(fr.Forest, x#, y#, z#, r.Rooms)
 	CatchErrors("PlaceMapCreatorForest")
 End Function
 
-Function DestroyForest(fr.Forest, RemoveGrid% = True)
+Function DestroyForest%(fr.Forest, RemoveGrid% = True)
 	CatchErrors("Uncaught (DestroyForest)")
 	
 	Local tX%, tY%, i%
@@ -1402,7 +1402,7 @@ Function DestroyForest(fr.Forest, RemoveGrid% = True)
 	CatchErrors("DestroyForest")
 End Function
 
-Function UpdateForest(fr.Forest, Ent%)
+Function UpdateForest%(fr.Forest, Ent%)
 	CatchErrors("Uncaught (UpdateForest)")
 	
 	Local tX%, tY%
@@ -1459,7 +1459,7 @@ Function CreateRoomTemplate.RoomTemplates(MeshPath$)
 	Return(rt)
 End Function
 
-Function LoadRoomTemplates(File$)
+Function LoadRoomTemplates%(File$)
 	CatchErrors("Uncaught (LoadRoomTemplates)")
 	
 	Local TemporaryString$, i%
@@ -1528,7 +1528,7 @@ Function LoadRoomTemplates(File$)
 	CatchErrors("LoadRoomTemplates")
 End Function
 
-Function LoadRoomMesh(rt.RoomTemplates)
+Function LoadRoomMesh%(rt.RoomTemplates)
 	If Instr(rt\OBJPath, ".rmesh") <> 0 Then ; ~ File is .rmesh
 		rt\OBJ = LoadRMesh(rt\OBJPath, rt)
 	ElseIf Instr(rt\OBJPath, ".b3d") <> 0 ; ~ File is .b3d
@@ -1619,7 +1619,7 @@ Type MTGrid
 	Field waypoints.WayPoints[MTGridSize ^ 2]
 End Type
 
-Function UpdateMT(mt.MTGrid)
+Function UpdateMT%(mt.MTGrid)
 	CatchErrors("Uncaught (UpdateMT)")
 	
 	Local tX%, tY%
@@ -1644,7 +1644,7 @@ Function UpdateMT(mt.MTGrid)
 	CatchErrors("UpdateMT")
 End Function
 
-Function PlaceMapCreatorMT(r.Rooms)
+Function PlaceMapCreatorMT%(r.Rooms)
 	CatchErrors("Uncaught (PlaceMapCreatorMT)")
 	
 	Local dr.Doors, it.Items, wayp.WayPoints
@@ -1930,7 +1930,7 @@ Function CreateWaypoint.WayPoints(x#, y#, z#, door.Doors, room.Rooms)
 	Return(w)
 End Function
 
-Function InitWayPoints(LoadingStart% = 55)
+Function InitWayPoints%(LoadingStart% = 55)
 	Local d.Doors, w.WayPoints, w2.WayPoints, r.Rooms, ClosestRoom.Rooms
 	Local x#, y#, z#
 	Local Temper% = MilliSecs2()
@@ -2046,7 +2046,7 @@ Function InitWayPoints(LoadingStart% = 55)
 	Next
 End Function
 
-Function RemoveWaypoint(w.WayPoints)
+Function RemoveWaypoint%(w.WayPoints)
 	FreeEntity(w\OBJ) : w\OBJ = 0
 	Delete(w)
 End Function
@@ -2067,7 +2067,7 @@ Function CreateButton%(ButtonID%, x#, y#, z#, Pitch# = 0.0, Yaw# = 0.0, Roll# = 
 	Return(OBJ)
 End Function
 
-Function UpdateButton(OBJ%)
+Function UpdateButton%(OBJ%)
 	Local Dist# = EntityDistanceSquared(me\Collider, OBJ)
 	
 	If Dist < 0.64 Then
@@ -2261,7 +2261,7 @@ Function CreateDoor.Doors(x#, y#, z#, Angle#, room.Rooms, Open% = False, DoorTyp
 	Return(d)
 End Function
 
-Function UpdateDoors()
+Function UpdateDoors%()
 	Local p.Particles, d.Doors
 	Local x#, z#, Dist#, i%, FindButton%
 	
@@ -2903,7 +2903,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 	Return(State)
 End Function
 
-Function UseDoor(d.Doors, Scripted% = False, PlaySFX% = True)
+Function UseDoor%(d.Doors, Scripted% = False, PlaySFX% = True)
 	Local Temp%, i%
 	
 	If (Not Scripted) Then
@@ -3147,7 +3147,7 @@ Function UseDoor(d.Doors, Scripted% = False, PlaySFX% = True)
 	EndIf
 End Function
 
-Function RemoveDoor(d.Doors)
+Function RemoveDoor%(d.Doors)
 	Local i%
 	
 	If d\OBJ <> 0 Then FreeEntity(d\OBJ) : d\OBJ = 0
@@ -3201,7 +3201,7 @@ Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#, Size# = 1.0, A
 	Return(d)
 End Function
 
-Function UpdateDecals()
+Function UpdateDecals%()
 	Local d.Decals
 	
 	For d.Decals = Each Decals
@@ -3325,7 +3325,7 @@ Function CreateSecurityCam.SecurityCams(x1#, y1#, z1#, r.Rooms, Screen% = False,
 	Return(sc)
 End Function
 
-Function UpdateSecurityCams()
+Function UpdateSecurityCams%()
 	CatchErrors("Uncaught (UpdateSecurityCams)")
 	
 	Local sc.SecurityCams
@@ -3527,7 +3527,7 @@ Function UpdateSecurityCams()
 	Next
 End Function
 
-Function RenderSecurityCams()
+Function RenderSecurityCams%()
 	CatchErrors("Uncaught (RenderSecurityCams)")
 	
 	Local sc.SecurityCams
@@ -3595,7 +3595,7 @@ Function RenderSecurityCams()
 	Cls()
 End Function
 
-Function UpdateMonitorSaving()
+Function UpdateMonitorSaving%()
 	Local sc.SecurityCams
 	Local Close% = False
 	
@@ -3640,7 +3640,7 @@ If SelectedDifficulty\SaveType <> SAVEONSCREENS Lor InvOpen Lor I_294\Using Lor 
 	Next
 End Function
 
-Function UpdateCheckpointMonitors(LCZ% = True)
+Function UpdateCheckpointMonitors%(LCZ% = True)
 	Local i%, SF%, b%, t1%
 	Local Entity%, Name$
 	
@@ -3685,7 +3685,7 @@ End Function
 Global MonitorTimer# = 0.0, MonitorTimer2# = 0.0
 Global UpdateCheckpoint1%, UpdateCheckpoint2%
 
-Function TurnCheckpointMonitorsOff(LCZ% = True)
+Function TurnCheckpointMonitorsOff%(LCZ% = True)
 	Local i%, SF%, b%, t1%
 	Local Entity%, Name$
 	
@@ -3717,7 +3717,7 @@ Function TurnCheckpointMonitorsOff(LCZ% = True)
 	Next
 End Function
 
-Function TimeCheckpointMonitors()
+Function TimeCheckpointMonitors%()
 	If UpdateCheckpoint1 Then
 		If MonitorTimer < 100.0
 			MonitorTimer = Min(MonitorTimer + fps\Factor[0], 100.0)
@@ -3768,7 +3768,7 @@ Function CreateScreen.Screens(x#, y#, z#, ImgPath$, r.Rooms)
 	Return(s)
 End Function
 
-Function UpdateScreens()
+Function UpdateScreens%()
 	If InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor SelectedDoor <> Null Lor SelectedScreen <> Null Then Return
 	
 	Local s.Screens
@@ -3859,7 +3859,7 @@ Function CreateRedLight%(x#, y#, z#, Parent% = 0)
 	Return(Sprite)
 End Function
 
-Function FillRoom(r.Rooms)
+Function FillRoom%(r.Rooms)
 	CatchErrors("Uncaught (FillRoom)")
 	
 	Local d.Doors, d2.Doors, sc.SecurityCams, de.Decals, r2.Rooms, sc2.SecurityCams, tw.TempWayPoints, fr.Forest
@@ -7688,7 +7688,7 @@ Function FillRoom(r.Rooms)
 	CatchErrors("FillRoom (" + r\RoomTemplate\Name + ")")
 End Function
 
-Function UpdateRooms()
+Function UpdateRooms%()
 	CatchErrors("Uncaught (UpdateRooms)")
 	
 	Local Dist#, i%, j%, r.Rooms
@@ -7841,7 +7841,7 @@ Function UpdateRooms()
 	CatchErrors("UpdateRooms")
 End Function
 
-Function IsRoomAdjacent(this.Rooms, that.Rooms)
+Function IsRoomAdjacent%(this.Rooms, that.Rooms)
 	Local i%
 	
 	If this = Null Then Return(False)
@@ -7878,7 +7878,7 @@ Function SetRoom%(RoomName$, RoomType%, RoomPosition%, MinPos%, MaxPos%) ; ~ Pla
 	EndIf
 End Function
 
-Function PreventRoomOverlap(r.Rooms)
+Function PreventRoomOverlap%(r.Rooms)
 	If r\RoomTemplate\DisableOverlapCheck Then Return
 	
 	Local r2.Rooms, r3.Rooms
@@ -8028,7 +8028,7 @@ Const MapGrid_Tile% = 1
 Const MapGrid_CheckpointTile% = 255
 ;[End Block]
 
-Function CreateMap()
+Function CreateMap%()
 	Local r.Rooms, r2.Rooms, d.Doors
 	Local x%, y%, Temp%, Temp2
 	Local i%, x2%, y2%
@@ -8794,7 +8794,7 @@ Function CreateMap()
 	Next
 End Function
 
-Function LoadTerrain(HeightMap%, yScale# = 0.7, t1%, t2%, Mask%)
+Function LoadTerrain%(HeightMap%, yScale# = 0.7, t1%, t2%, Mask%)
 	; ~ Load the HeightMap
 	If (Not HeightMap) Then RuntimeError("HeightMap Image " + HeightMap + " not found.")
 	
@@ -8893,7 +8893,7 @@ Include "Source Code\Sky_Core.bb"
 
 Global CHUNKDATA%[64 ^ 2]
 
-Function SetChunkDataValues()
+Function SetChunkDataValues%()
 	Local StrTemp$, i%, j%
 	
 	StrTemp = ""
@@ -8915,7 +8915,7 @@ Type ChunkPart
 	Field ID%
 End Type
 
-Function CreateChunkParts(r.Rooms)
+Function CreateChunkParts%(r.Rooms)
 	Local chp.ChunkPart, chp2.ChunkPart
 	Local File$ = "Data\1499chunks.ini"
 	Local ChunkAmount% = GetINIInt(File, "general", "count")
@@ -9000,7 +9000,7 @@ End Function
 
 Const ChunkMaxDistance# = 120.0
 
-Function UpdateChunks(r.Rooms, ChunkPartAmount%, SpawnNPCs% = True)
+Function UpdateChunks%(r.Rooms, ChunkPartAmount%, SpawnNPCs% = True)
 	Local ch.Chunk, ch2.Chunk, n.NPCs
 	Local StrTemp$, i%, j%, x#, z#, y#
 	Local ChunkX#, ChunkZ#
@@ -9114,7 +9114,7 @@ Function UpdateChunks(r.Rooms, ChunkPartAmount%, SpawnNPCs% = True)
 	
 End Function
 
-Function HideChunks()
+Function HideChunks%()
 	Local ch.Chunk, i%
 	
 	For ch.Chunk = Each Chunk
@@ -9129,7 +9129,7 @@ Function HideChunks()
 	Next
 End Function
 
-Function DeleteChunks()
+Function DeleteChunks%()
 	Delete Each Chunk
 	Delete Each ChunkPart
 End Function

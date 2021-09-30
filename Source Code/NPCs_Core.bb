@@ -561,7 +561,7 @@ Function CreateNPCAsset%(n.NPCs)
 	n\HasAsset = True
 End Function
 
-Function RemoveNPC(n.NPCs)
+Function RemoveNPC%(n.NPCs)
 	If n = Null Then Return
 	
 	If n\OBJ2 <> 0 Then FreeEntity(n\OBJ2) : n\OBJ2 = 0
@@ -591,7 +591,7 @@ End Function
 
 Global TakeOffTimer#
 
-Function UpdateNPCs()
+Function UpdateNPCs%()
 	CatchErrors("Uncaught (UpdateNPCs)")
 	
 	Local n.NPCs, n2.NPCs, d.Doors, de.Decals, r.Rooms, e.Events, w.Waypoints, p.Particles, wp.WayPoints, wayPointCloseToPlayer.WayPoints
@@ -5070,7 +5070,7 @@ Function UpdateNPCs()
 	UpdateCameraCheck()
 End Function
 
-Function UpdateMTFUnit(n.NPCs)
+Function UpdateMTFUnit%(n.NPCs)
 	Local r.Rooms, p.Particles, n2.NPCs, wp.WayPoints, wayPointCloseToPlayer.WayPoints
 	Local x#, y#, z#
 	Local PrevDist#, NewDist#
@@ -6656,7 +6656,7 @@ Function UpdateMTFUnit(n.NPCs)
 	EndIf
 End Function
 
-Function TeleportCloser(n.NPCs)
+Function TeleportCloser%(n.NPCs)
 	Local ClosestDist# = 0.0
 	Local closestWaypoint.WayPoints
 	Local w.WayPoints
@@ -6702,7 +6702,7 @@ Function TeleportCloser(n.NPCs)
 	EndIf
 End Function
 
-Function FindPath(n.NPCs, x#, y#, z#)
+Function FindPath%(n.NPCs, x#, y#, z#)
 	Local Temp%, Dist#, Dist2#
 	Local xTemp#, yTemp#, zTemp#
 	Local w.WayPoints, StartPoint.WayPoints, EndPoint.WayPoints, Smallest.WayPoints  
@@ -6932,7 +6932,7 @@ Function UpdateNPCBlinking%(n.NPCs)
 	EndIf
 End Function
 
-Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False)  
+Function Shoot%(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False)  
 	Local p.Particles, de.Decals, n.NPCs
 	Local Pvt%, ShotMessageUpdate$, i%
 	
@@ -7041,7 +7041,7 @@ Function Shoot(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False
 	EndIf
 End Function
 
-Function MoveToPocketDimension()
+Function MoveToPocketDimension%()
 	Local r.Rooms
 	
 	For r.Rooms = Each Rooms
@@ -7088,7 +7088,7 @@ Function FindFreeNPCID%()
 	Wend
 End Function
 
-Function ForceSetNPCID(n.NPCs, NewID%)
+Function ForceSetNPCID%(n.NPCs, NewID%)
 	Local n2.NPCs
 	
 	n\ID = NewID
@@ -7100,7 +7100,7 @@ Function ForceSetNPCID(n.NPCs, NewID%)
 	Next
 End Function
 
-Function ConsoleSpawnNPC(Name$, NPCState$ = "")
+Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 	Local n.NPCs
 	Local ConsoleMsg$
 	
@@ -7226,7 +7226,7 @@ Function ConsoleSpawnNPC(Name$, NPCState$ = "")
 	CreateConsoleMsg(ConsoleMsg)
 End Function
 
-Function ManipulateNPCBones()
+Function ManipulateNPCBones%()
 	Local n.NPCs
 	Local MaxValue#, MinValue#, Offset#, Smooth#
 	Local i%, Bone%, Pvt%, BoneName$
@@ -7289,7 +7289,7 @@ Function ManipulateNPCBones()
 	Next
 End Function
 
-Function NPCSpeedChange(n.NPCs)
+Function NPCSpeedChange%(n.NPCs)
 	Select n\NPCType
 		Case NPCType173, NPCType106, NPCType096, NPCType049, NPCType939, NPCTypeMTF
 			Select SelectedDifficulty\OtherFactors
@@ -7351,7 +7351,7 @@ Function CheckForNPCInFacility%(n.NPCs)
 	Return(True)
 End Function
 
-Function SetNPCFrame(n.NPCs, Frame#)
+Function SetNPCFrame%(n.NPCs, Frame#)
 	If Abs(n\Frame - Frame) < 0.001 Then Return
 	
 	SetAnimTime(n\OBJ, Frame)
@@ -7359,7 +7359,7 @@ Function SetNPCFrame(n.NPCs, Frame#)
 	n\Frame = Frame
 End Function
 
-Function AnimateNPC(n.NPCs, FirstFrame#, LastFrame#, Speed#, Loop% = True)
+Function AnimateNPC%(n.NPCs, FirstFrame#, LastFrame#, Speed#, Loop% = True)
 	Local NewTime#, Temp%
 	
 	If Speed > 0.0 Then 
@@ -7421,9 +7421,9 @@ Function Animate2#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = True
 	SetAnimTime(Entity, NewTime)
 	
 	Return(NewTime)
-End Function 
+End Function
 
-Function FinishWalking(n.NPCs, StartFrame#, EndFrame#, Speed#)
+Function FinishWalking%(n.NPCs, StartFrame#, EndFrame#, Speed#)
 	Local CenterFrame#
 	
 	If n <> Null Then
@@ -7436,7 +7436,7 @@ Function FinishWalking(n.NPCs, StartFrame#, EndFrame#, Speed#)
 	EndIf
 End Function
 
-Function ChangeNPCTextureID(n.NPCs, TextureID%)
+Function ChangeNPCTextureID%(n.NPCs, TextureID%)
 	Local Temp#
 	
 	If n = Null Then

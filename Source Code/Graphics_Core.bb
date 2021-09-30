@@ -1,7 +1,7 @@
 Global FresizeImage%, FresizeTexture%, FresizeTexture2%
 Global FresizeCam%
 
-Function InitFastResize()
+Function InitFastResize%()
 	; ~ Create Camera
 	Local Cam% = CreateCamera()
 	
@@ -108,7 +108,7 @@ Function ScaleImage2%(SrcImage%, ScaleX#, ScaleY#, ExactSize% = False)
 	Return(DestImage)
 End Function
 
-Function ScaleRender(x#, y#, hScale# = 1.0, vScale# = 1.0)
+Function ScaleRender%(x#, y#, hScale# = 1.0, vScale# = 1.0)
 	If Camera <> 0 Then HideEntity(Camera)
 	WireFrame(0)
 	ShowEntity(FresizeImage)
@@ -122,7 +122,7 @@ Function ScaleRender(x#, y#, hScale# = 1.0, vScale# = 1.0)
 	If Camera <> 0 Then ShowEntity(Camera)
 End Function
 
-Function RenderGamma()
+Function RenderGamma%()
 	If opt\DisplayMode = 1 Then
 		If opt\RealGraphicWidth <> opt\GraphicWidth Lor opt\RealGraphicHeight <> opt\GraphicHeight Then
 			SetBuffer(TextureBuffer(FresizeTexture))
@@ -174,7 +174,7 @@ Function RenderGamma()
 	EntityAlpha(FresizeImage, 1.0)
 End Function
 
-Function UpdateWorld2()
+Function UpdateWorld2%()
 	Local np.NPCs
 	Local i%
 	
@@ -247,7 +247,7 @@ Const BRIGHTNESS# = 45.0
 
 Global CurrTrisAmount%
 
-Function RenderWorld2(Tween#)
+Function RenderWorld2%(Tween#)
 	Local np.NPCs
 	Local i%, k%, l%
 	
@@ -394,7 +394,7 @@ End Function
 Global ArkBlurImage%, ArkBlurTexture%, ArkSw%, ArkSh%
 Global ArkBlurCam%
 
-Function CreateBlurImage()
+Function CreateBlurImage%()
 	; ~ Create blur Camera
 	Local Cam% = CreateCamera()
 	
@@ -431,12 +431,12 @@ Function CreateBlurImage()
 	EntityTexture(SPR, ArkBlurTexture)
 End Function
 
-Function RenderBlur(Power#)
+Function RenderBlur%(Power#)
 	EntityAlpha(ArkBlurImage, Power)
 	CopyRect(0, 0, ArkSw, ArkSh, 2048.0 - (ArkSw / 2), 2048.0 - (ArkSh / 2), BackBuffer(), TextureBuffer(ArkBlurTexture))
 End Function
 
-Function PlayStartupVideos()
+Function PlayStartupVideos%()
 	HidePointer()
 	
 	Local ScaledGraphicHeight%
@@ -501,7 +501,7 @@ While FileType("Screenshots\Screenshot" + ScreenshotCount + ".png") = 1
 	ScreenshotCount = ScreenshotCount + 1
 Wend
 
-Function GetScreenshot()
+Function GetScreenshot%()
 	Local x%, y%
 	
 	If FileType("Screenshots\") <> 2 Then

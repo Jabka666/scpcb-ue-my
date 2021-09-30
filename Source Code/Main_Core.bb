@@ -1666,11 +1666,9 @@ Function UpdateConsole%()
 	SetFont(fo\FontID[Font_Default])
 End Function
 
-Function RenderConsole()
-	If (Not opt\CanOpenConsole) Then
-		Return
-	EndIf
-	
+Function RenderConsole%()
+	If (Not opt\CanOpenConsole) Then Return
+		
 	If ConsoleOpen Then
 		Local cm.ConsoleMsg
 		Local InBar%, InBox%
@@ -1740,7 +1738,7 @@ Function RenderConsole()
 	SetFont(fo\FontID[Font_Default])
 End Function
 
-Function ClearConsole()
+Function ClearConsole%()
 	Local c.ConsoleMsg
 	
 	For c.ConsoleMsg = Each ConsoleMsg
@@ -1787,14 +1785,14 @@ End Type
 
 Global msg.Messages = New Messages
 
-Function CreateMsg(Txt$, Sec# = 6.0)
+Function CreateMsg%(Txt$, Sec# = 6.0)
 	If SelectedDifficulty\OtherFactors = EXTREME Then Return
 	
 	msg\Txt = Txt
 	msg\Timer = 70.0 * Sec
 End Function
 
-Function UpdateMessages()
+Function UpdateMessages%()
 	If SelectedDifficulty\OtherFactors = EXTREME Then Return
 	
 	If msg\Timer > 0.0 Then
@@ -1804,7 +1802,7 @@ Function UpdateMessages()
 	EndIf
 End Function
 
-Function RenderMessages()
+Function RenderMessages%()
 	If SelectedDifficulty\OtherFactors = EXTREME Then Return
 	
 	If msg\Timer > 0.0 Then
@@ -1839,14 +1837,14 @@ Function RenderMessages()
 	EndIf
 End Function
 
-Function CreateHintMsg(Txt$, Sec# = 6.0)
+Function CreateHintMsg%(Txt$, Sec# = 6.0)
 	If SelectedDifficulty\OtherFactors = EXTREME Then Return
 	
 	msg\HintTxt = Txt
 	msg\HintTimer = 70.0 * Sec
 End Function
 
-Function UpdateHintMessages()
+Function UpdateHintMessages%()
 	If SelectedDifficulty\OtherFactors = EXTREME Then Return
 	
 	Local Scale# = opt\GraphicHeight / 768.0
@@ -1874,7 +1872,7 @@ Function UpdateHintMessages()
 	
 End Function
 
-Function RenderHintMessages()
+Function RenderHintMessages%()
 	If SelectedDifficulty\OtherFactors = EXTREME Then Return
 	
 	Local Scale# = opt\GraphicHeight / 768.0
@@ -2052,7 +2050,7 @@ End Type
 
 Global I_Zone.MapZones = New MapZones
 
-Function CatchErrors(Location$)
+Function CatchErrors%(Location$)
 	InitErrorMsgs(6)
 	SetErrorMsg(0, "An error occured in SCP - Containment Breach Ultimate Edition v" + VersionNumber)
 	SetErrorMsg(1, "Map Seed: " + RandomSeed)
@@ -2112,20 +2110,7 @@ Repeat
 	EndIf
 Forever
 
-; ~ Fog Constants
-;[Block]
-Const FogColorLCZ$ = "005005005"
-Const FogColorHCZ$ = "007002002"
-Const FogColorEZ$ = "007007012"
-Const FogColorStorageTunnels$ = "002007000"
-Const FogColorOutside$ = "255255255"
-Const FogColorDimension_1499$ = "096097104"
-Const FogColorPD$ = "000000000"
-Const FogColorPDTrench$ = "038055047"
-Const FogColorForest$ = "098133162"
-;[End Block]
-
-Function MainLoop()
+Function MainLoop%()
 	CatchErrors("Uncaught (MainLoop)")
 	
 	Local e.Events, r.Rooms
@@ -2245,29 +2230,11 @@ Function MainLoop()
 		UpdateCheckpoint2 = False
 		
 		If (Not MenuOpen) And (Not ConsoleOpen) And me\EndingTimer >= 0.0 Then
-			LightVolume = CurveValue(TempLightVolume, LightVolume, 50.0)
-			If PlayerRoom\RoomTemplate\Name = "cont1_173_intro" Lor PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTempLate\Name = "gate_a" Then
-				CameraFogMode(Camera, 0)
-				CameraFogRange(Camera, 5.0, 30.0)
-				CameraRange(Camera, 0.01, 60.0)
-				HideEntity(t\OverlayID[0])
-			Else
-				CameraFogMode(Camera, 1)
-				CameraFogRange(Camera, opt\CameraFogNear * LightVolume, opt\CameraFogFar * LightVolume)
-				CameraRange(Camera, 0.01, Min(opt\CameraFogFar * LightVolume * 1.5, 28.0))
-				ShowEntity(t\OverlayID[0])
-			EndIf
-			For r.Rooms = Each Rooms
-				For i = 0 To r\MaxLights - 1
-					If r\Lights[i] <> 0 Then
-						EntityAutoFade(r\LightSprites[i], opt\CameraFogNear * LightVolume, opt\CameraFogFar * LightVolume)
-					EndIf
-				Next
-			Next
 			me\SndVolume = CurveValue(0.0, me\SndVolume, 5.0)
 			
 			CanSave = True
 			UpdateDeaf()
+			UpdateFog()
 			UpdateEmitters()
 			If PlayerRoom\RoomTemplate\Name = "dimension_1499" And QuickLoadPercent > 0 And QuickLoadPercent < 100 Then ShouldEntitiesFall = False
 			UpdateMouseLook()
@@ -2302,58 +2269,6 @@ Function MainLoop()
 			UpdateParticles()
 			Use427()
 		EndIf
-		
-		Local CurrFogColor$ = ""
-		
-		If PlayerRoom <> Null Then
-			If PlayerRoom\RoomTemplate\Name = "room3_storage" And EntityY(me\Collider) < -4100.0 * RoomScale Then
-				CurrFogColor = FogColorStorageTunnels
-			ElseIf PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a" Then
-				CurrFogColor = FogColorOutside
-			ElseIf PlayerRoom\RoomTemplate\Name = "dimension_1499"
-				CurrFogColor = FogColorDimension_1499
-			ElseIf PlayerRoom\RoomTemplate\Name = "cont2_860_1"
-				If forest_event\EventState = 1.0 Then CurrFogColor = FogColorForest
-			ElseIf PlayerRoom\RoomTemplate\Name = "dimension_106"
-				For e.Events = Each Events
-					If e\EventID = e_dimension_106 Then
-						If EntityY(me\Collider) > 2608.0 * RoomScale Lor e\EventState2 > 1.0 Then
-							CurrFogColor = FogColorPDTrench
-						ElseIf EntityY(me\Collider) >= 2000.0 * RoomScale And EntityY(me\Collider) =< 2608.0 * RoomScale
-							CurrFogColor = FogColorHCZ
-						Else
-							CurrFogColor = FogColorPD
-						EndIf
-						Exit
-					EndIf
-				Next
-			ElseIf PlayerRoom\RoomTemplate\Name = "room2_mt" And (EntityY(me\Collider, True) >= 8.0 And EntityY(me\Collider, True) =< 12.0) Then
-				CurrFogColor = FogColorHCZ
-			EndIf
-		EndIf
-		If CurrFogColor = "" Then
-			Select me\Zone
-				Case 0
-					;[Block]
-					CurrFogColor = FogColorLCZ
-					;[End Block]
-				Case 1
-					;[Block]
-					CurrFogColor = FogColorHCZ
-					;[End Block]
-				Case 2
-					;[Block]
-					CurrFogColor = FogColorEZ
-					;[End Block]
-			End Select
-		EndIf
-		
-		Local FogColorR% = Left(CurrFogColor, 3)
-		Local FogColorG% = Mid(CurrFogColor, 4, 3)
-		Local FogColorB% = Right(CurrFogColor, 3)
-		
-		CameraFogColor(Camera, FogColorR, FogColorG, FogColorB)
-		CameraClsColor(Camera, FogColorR, FogColorG, FogColorB)
 		
 		If chs\InfiniteStamina Then me\Stamina = 100.0
 		If chs\NoBlink Then me\BlinkTimer = me\BLINKFREQ
@@ -2637,7 +2552,7 @@ Function MainLoop()
 	CatchErrors("MainLoop")
 End Function
 
-Function Kill(IsBloody% = False)
+Function Kill%(IsBloody% = False)
 	If chs\GodMode Then Return
 	
 	If BreathCHN <> 0 Then
@@ -2667,13 +2582,13 @@ Function Kill(IsBloody% = False)
 	EndIf
 End Function
 
-Function StopMouseMovement()
+Function StopMouseMovement%()
 	MouseXSpeed() : MouseYSpeed() : MouseZSpeed()
 	mo\Mouse_X_Speed_1 = 0.0
 	mo\Mouse_Y_Speed_1 = 0.0
 End Function
 
-Function ResetInput()
+Function ResetInput%()
 	FlushKeys()
 	FlushMouse()
 	mo\MouseHit1 = False
@@ -2684,7 +2599,7 @@ Function ResetInput()
 	Input_ResetTime = 10.0
 End Function
 
-Function NullSelectedStuff()
+Function NullSelectedStuff%()
 	InvOpen = False
 	I_294\Using = False
 	SelectedDoor = Null
@@ -2695,7 +2610,7 @@ Function NullSelectedStuff()
 	GrabbedEntity = 0
 End Function
 
-Function ResetNegativeStats(Revive% = False)
+Function ResetNegativeStats%(Revive% = False)
 	Local e.Events
 	Local i%
 	
@@ -2765,7 +2680,7 @@ Function ResetNegativeStats(Revive% = False)
 	EndIf
 End Function
 
-Function SetCrouch(NewCrouch%)
+Function SetCrouch%(NewCrouch%)
 	Local Temp%
 	
 	If me\Stamina > 0.0 Then 
@@ -2782,13 +2697,13 @@ Function SetCrouch(NewCrouch%)
 	EndIf
 End Function
 
-Function InjurePlayer(Injuries_#, Infection# = 0.0, BlurTimer_# = 0.0, VestFactor# = 0.0, HelmetFactor# = 0.0)
+Function InjurePlayer%(Injuries_#, Infection# = 0.0, BlurTimer_# = 0.0, VestFactor# = 0.0, HelmetFactor# = 0.0)
 	If Injuries_ <> 0.0 Then me\Injuries = me\Injuries + Injuries_ - ((wi\BallisticVest = 1) * VestFactor) - ((wi\BallisticVest = 2) * VestFactor * 1.35) - (me\Crouch * wi\BallisticHelmet * HelmetFactor)
 	If BlurTimer_ <> 0.0 And Injuries_ <> 0.0 Then me\BlurTimer = BlurTimer_
 	If Infection <> 0.0 Then I_008\Timer = I_008\Timer + (Infection * (wi\HazmatSuit = 0))
 End Function
 
-Function UpdateMoving()
+Function UpdateMoving%()
 	CatchErrors("Uncaught (UpdateMoving)")
 	
 	Local de.Decals
@@ -3152,7 +3067,7 @@ Function UpdateMoving()
 	CatchErrors("UpdateMoving")
 End Function
 
-Function UpdateMouseLook()
+Function UpdateMouseLook%()
 	CatchErrors("Uncaught (UpdateMouseLook)")
 	
 	Local p.Particles
@@ -3423,7 +3338,7 @@ Function UpdateMouseLook()
 	CatchErrors("UpdateMouseLook")
 End Function
 
-Function UpdateDark()
+Function UpdateDark%()
 	Local DarkAlpha# = 0.0
 	
 	If me\Sanity < -200.0 Then DarkAlpha = Max(Min((-me\Sanity - 200.0) / 700.0, 0.6), DarkAlpha)
@@ -3469,6 +3384,98 @@ Function UpdateDark()
 	EntityAlpha(t\OverlayID[5], DarkAlpha)
 End Function
 
+; ~ Fog Constants
+;[Block]
+Const FogColorLCZ$ = "005005005"
+Const FogColorHCZ$ = "007002002"
+Const FogColorEZ$ = "007007012"
+Const FogColorStorageTunnels$ = "002007000"
+Const FogColorOutside$ = "255255255"
+Const FogColorDimension_1499$ = "096097104"
+Const FogColorPD$ = "000000000"
+Const FogColorPDTrench$ = "038055047"
+Const FogColorForest$ = "098133162"
+;[End Block]
+
+Global CurrFogColorR#, CurrFogColorG#, CurrFogColorB#
+
+Function UpdateFog%()
+	Local r.Rooms, e.Events
+	Local i%
+	
+	LightVolume = CurveValue(TempLightVolume, LightVolume, 50.0)
+	If PlayerRoom\RoomTemplate\Name = "cont1_173_intro" Lor PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTempLate\Name = "gate_a" Then
+		CameraFogMode(Camera, 0)
+		CameraFogRange(Camera, 5.0, 30.0)
+		CameraRange(Camera, 0.01, 60.0)
+		HideEntity(t\OverlayID[0])
+	Else
+		CameraFogMode(Camera, 1)
+		CameraFogRange(Camera, opt\CameraFogNear * LightVolume, opt\CameraFogFar * LightVolume)
+		CameraRange(Camera, 0.01, Min(opt\CameraFogFar * LightVolume * 1.5, 28.0))
+		ShowEntity(t\OverlayID[0])
+	EndIf
+	For r.Rooms = Each Rooms
+		For i = 0 To r\MaxLights - 1
+			If r\Lights[i] <> 0 Then
+				EntityAutoFade(r\LightSprites[i], opt\CameraFogNear * LightVolume, opt\CameraFogFar * LightVolume)
+			EndIf
+		Next
+	Next
+	
+	Local CurrFogColor$ = ""
+	
+	If PlayerRoom <> Null Then
+		If PlayerRoom\RoomTemplate\Name = "room3_storage" And EntityY(me\Collider) < -4100.0 * RoomScale Then
+			CurrFogColor = FogColorStorageTunnels
+		ElseIf PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a" Then
+			CurrFogColor = FogColorOutside
+		ElseIf PlayerRoom\RoomTemplate\Name = "dimension_1499"
+			CurrFogColor = FogColorDimension_1499
+		ElseIf PlayerRoom\RoomTemplate\Name = "cont2_860_1"
+			If forest_event\EventState = 1.0 Then CurrFogColor = FogColorForest
+		ElseIf PlayerRoom\RoomTemplate\Name = "dimension_106"
+			For e.Events = Each Events
+				If e\EventID = e_dimension_106 Then
+					If EntityY(me\Collider) > 2608.0 * RoomScale Lor e\EventState2 > 1.0 Then
+						CurrFogColor = FogColorPDTrench
+					ElseIf EntityY(me\Collider) >= 2000.0 * RoomScale And EntityY(me\Collider) =< 2608.0 * RoomScale
+						CurrFogColor = FogColorHCZ
+					Else
+						CurrFogColor = FogColorPD
+					EndIf
+					Exit
+				EndIf
+			Next
+		ElseIf PlayerRoom\RoomTemplate\Name = "room2_mt" And (EntityY(me\Collider, True) >= 8.0 And EntityY(me\Collider, True) =< 12.0) Then
+			CurrFogColor = FogColorHCZ
+		EndIf
+	EndIf
+	If CurrFogColor = "" Then
+		Select me\Zone
+			Case 0
+				;[Block]
+				CurrFogColor = FogColorLCZ
+				;[End Block]
+			Case 1
+				;[Block]
+				CurrFogColor = FogColorHCZ
+				;[End Block]
+			Case 2
+				;[Block]
+				CurrFogColor = FogColorEZ
+				;[End Block]
+		End Select
+	EndIf
+	
+	CurrFogColorR = CurveValue(Left(CurrFogColor, 3), CurrFogColorR, 100.0)
+	CurrFogColorG = CurveValue(Mid(CurrFogColor, 4, 3), CurrFogColorG, 100.0)
+	CurrFogColorB = CurveValue(Right(CurrFogColor, 3), CurrFogColorB, 100.0)
+	
+	CameraFogColor(Camera, CurrFogColorR, CurrFogColorG, CurrFogColorB)
+	CameraClsColor(Camera, CurrFogColorR, CurrFogColorG, CurrFogColorB)
+End Function
+
 ; ~ Navigator Constants
 ;[Block]
 Const NAV_WIDTH% = 287
@@ -3481,7 +3488,7 @@ Const INVENTORY_GFX_SIZE% = 70
 Const INVENTORY_GFX_SPACING% = 35
 ;[End Block]
 
-Function UpdateGUI()
+Function UpdateGUI%()
 	CatchErrors("Uncaught (UpdateGUI)")
 	
 	Local e.Events, it.Items, r.Rooms
@@ -5636,7 +5643,7 @@ Function UpdateGUI()
 	CatchErrors("UpdateGUI")
 End Function
 
-Function RenderHUD()
+Function RenderHUD%()
 	Local x%, y%, Width%, Height%, WalkIconID%, BlinkIconID%
 	
 	Width = 200 * MenuScale
@@ -5705,7 +5712,7 @@ Function RenderHUD()
 	DrawImage(t\IconID[WalkIconID], x - (50 * MenuScale), y)
 End Function
 
-Function RenderDebugHUD()
+Function RenderDebugHUD%()
 	Local ev.Events, ch.Chunk
 	Local x%, y%, i%
 	
@@ -5865,7 +5872,7 @@ Function RenderDebugHUD()
 	SetFont(fo\FontID[Font_Default])
 End Function
 
-Function RenderGUI()
+Function RenderGUI%()
 	CatchErrors("Uncaught (RenderGUI)")
 	
 	Local e.Events, it.Items, a_it.Items
@@ -6778,7 +6785,7 @@ Function RenderGUI()
 	CatchErrors("RenderGUI")
 End Function
 
-Function UpdateMenu()
+Function UpdateMenu%()
 	CatchErrors("Uncaught (UpdateMenu)")
 	
 	Local r.Rooms
@@ -7322,7 +7329,7 @@ Function UpdateMenu()
 	CatchErrors("UpdateMenu")
 End Function
 
-Function RenderMenu()
+Function RenderMenu%()
 	CatchErrors("Uncaught (RenderMenu)")
 	
 	Local x%, y%, Width%, Height%, i%
@@ -7743,7 +7750,7 @@ Const Ending_B1% = 2
 Const Ending_B2% = 3
 ;[End Block]
 
-Function UpdateEnding()
+Function UpdateEnding%()
 	Local x%, y%, Width%, Height%, i%
 	
 	fps\Factor[0] = 0.0
@@ -7837,7 +7844,7 @@ Function UpdateEnding()
 	EndIf
 End Function
 
-Function RenderEnding()
+Function RenderEnding%()
 	ShowPointer()
 	
 	Local itt.ItemTemplates, r.Rooms
@@ -7941,7 +7948,7 @@ Type CreditsLine
 	Field Stay%
 End Type
 
-Function InitCredits()
+Function InitCredits%()
 	Local cl.CreditsLine
 	Local File% = OpenFile("Credits.txt")
 	Local l$
@@ -7951,7 +7958,7 @@ Function InitCredits()
 	
 	If (Not me\CreditsScreen) Then me\CreditsScreen = LoadImage_Strict("GFX\menu\credits_screen.png")
 	
-	InitLoadingTextColor()
+	InitLoadingTextColor(255, 255, 255)
 	
 	Repeat
 		l = ReadLine(File)
@@ -7963,7 +7970,7 @@ Function InitCredits()
 	me\CreditsTimer = 0.0
 End Function
 
-Function UpdateCredits()
+Function UpdateCredits%()
 	Local cl.CreditsLine, LastCreditLine.CreditsLine, ltc.LoadingTextColor
 	Local Credits_Y# = (me\EndingTimer + 2000.0) / 2 + (opt\GraphicHeight + 10.0)
 	Local ID%
@@ -8005,7 +8012,7 @@ Function UpdateCredits()
 	EndIf
 End Function
 
-Function RenderCredits()
+Function RenderCredits%()
 	Local cl.CreditsLine, LastCreditLine.CreditsLine
 	Local Credits_Y# = (me\EndingTimer + 2000.0) / 2 + (opt\GraphicHeight + 10.0)
 	Local ID%
@@ -8074,7 +8081,7 @@ Function RenderCredits()
 	EndIf
 End Function
 
-Function LoadEntities()
+Function LoadEntities%()
 	CatchErrors("Uncaught (LoadEntities)")
 	
 	Local i%, Tex%
@@ -8683,7 +8690,7 @@ Function LoadEntities()
 	CatchErrors("LoadEntities")
 End Function
 
-Function InitStats()
+Function InitStats%()
 	me\Playable = True : me\SelectedEnding = -1
 	
 	HideDistance = 15.0
@@ -8698,7 +8705,7 @@ Function InitStats()
 	LoadAchievementsFile()
 End Function
 
-Function InitNewGame()
+Function InitNewGame%()
 	CatchErrors("Uncaught (InitNewGame)")
 	
 	Local de.Decals, d.Doors, it.Items, r.Rooms, sc.SecurityCams, e.Events, rt.RoomTemplates, tw.TempWayPoints
@@ -8851,7 +8858,7 @@ Function InitNewGame()
 	CatchErrors("InitNewGame")
 End Function
 
-Function InitLoadGame()
+Function InitLoadGame%()
 	CatchErrors("Uncaught (InitLoadGame)")
 	
 	Local d.Doors, sc.SecurityCams, rt.RoomTemplates, e.Events
@@ -8938,7 +8945,7 @@ Function InitLoadGame()
 	CatchErrors("InitLoadGame")
 End Function
 
-Function NullGame(PlayButtonSFX% = True)
+Function NullGame%(PlayButtonSFX% = True)
 	CatchErrors("Uncaught (NullGame)")
 	
 	Local itt.ItemTemplates, s.Screens, lt.LightTemplates, d.Doors, m.Materials, de.Decals, sc.SecurityCams
@@ -9181,7 +9188,7 @@ End Function
 
 Const SCP294File$ = "Data\SCP-294.ini"
 
-Function Update294()
+Function Update294%()
 	Local it.Items
 	Local x#, y#, xTemp%, yTemp%, StrTemp$, Temp%
 	Local Sep1%, Sep2%, Alpha#, Glow%
@@ -9435,7 +9442,7 @@ Function Update294()
 	EndIf
 End Function
 
-Function Render294()
+Function Render294%()
 	Local x#, y#, xTemp%, yTemp%, Temp%
 	
 	ShowPointer()
@@ -9463,7 +9470,7 @@ Function Render294()
 	EndIf
 End Function
 
-Function Use427()
+Function Use427%()
 	Local de.Decals, e.Events
 	Local i%, Pvt%, TempCHN%
 	Local PrevI427Timer# = I_427\Timer
@@ -9538,7 +9545,7 @@ Function Use427()
 	EndIf
 End Function
 
-Function UpdateMTF()
+Function UpdateMTF%()
 	If PlayerRoom\RoomTemplate\Name = "gate_a_entrance" Then Return
 	
 	Local r.Rooms, n.NPCs
@@ -9616,7 +9623,7 @@ Function UpdateMTF()
 	EndIf
 End Function
 
-Function UpdateCameraCheck()
+Function UpdateCameraCheck%()
 	If MTFCameraCheckTimer > 0.0 And MTFCameraCheckTimer < 70.0 * 90.0 Then
 		MTFCameraCheckTimer = MTFCameraCheckTimer + fps\Factor[0]
 	ElseIf MTFCameraCheckTimer >= 70.0 * 90.0
@@ -9635,7 +9642,7 @@ Function UpdateCameraCheck()
 	EndIf
 End Function
 
-Function UpdateExplosion()
+Function UpdateExplosion%()
 	Local p.Particles
 	Local i%
 	
@@ -9673,7 +9680,7 @@ Function UpdateExplosion()
 	EndIf
 End Function
 
-Function UpdateVomit()
+Function UpdateVomit%()
 	CatchErrors("Uncaught (UpdateVomit)")
 	
 	Local de.Decals
@@ -9754,7 +9761,7 @@ Function UpdateVomit()
 	CatchErrors("UpdateVomit")
 End Function
 
-Function Update008()
+Function Update008%()
 	Local r.Rooms, e.Events, p.Particles, de.Decals
 	Local PrevI008Timer#, i%
 	Local TeleportForInfect% = True
@@ -9920,7 +9927,7 @@ Function Update008()
 	EndIf
 End Function
 
-Function Update409()
+Function Update409%()
 	Local PrevI409Timer# = I_409\Timer
 	
 	If I_409\Timer > 0.0 Then
@@ -9987,7 +9994,7 @@ Function Update409()
 	EndIf
 End Function
 
-Function UpdateLeave1499()
+Function UpdateLeave1499%()
 	Local r.Rooms, it.Items, r2.Rooms, r1499.Rooms
 	Local i%
 	
@@ -10043,7 +10050,7 @@ Function UpdateLeave1499()
 	EndIf
 End Function
 
-Function CheckForPlayerInFacility()
+Function CheckForPlayerInFacility%()
 	; ~ False (= 0): Player is not in facility (mostly meant for "dimension_1499")
 	; ~ True (= 1): Player is in facility
 	; ~ 2: Player is in tunnels (maintenance tunnels / SCP-049's tunnels / SCP-939's storage room, etc...)
@@ -10054,7 +10061,7 @@ Function CheckForPlayerInFacility()
 	Return(1)
 End Function
 
-Function TeleportEntity(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = False, PickRange# = 2.0, Dir% = False)
+Function TeleportEntity%(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = False, PickRange# = 2.0, Dir% = False)
 	Local Pvt%, Pick#
 	; ~ Dir = 0 - towards the floor (default)
 	; ~ Dir = 1 - towrads the ceiling (mostly for PD decal after leaving dimension)

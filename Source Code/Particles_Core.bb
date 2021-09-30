@@ -53,7 +53,7 @@ Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTi
 	Return(p)
 End Function
 	
-Function UpdateParticles()
+Function UpdateParticles%()
 	Local p.Particles
 	
 	For p.Particles = Each Particles
@@ -80,7 +80,7 @@ Function UpdateParticles()
 	Next
 End Function
 	
-Function RemoveParticle(p.Particles)
+Function RemoveParticle%(p.Particles)
 	FreeEntity(p\OBJ) : p\OBJ = 0
 	FreeEntity(p\Pvt) : p\Pvt = 0
 	Delete(p)
@@ -137,7 +137,7 @@ Function CreateEmitter.Emitters(x#, y#, z#, EmitterType%)
 	Return(e)
 End Function
 
-Function UpdateEmitters()
+Function UpdateEmitters%()
 	Local e.Emitters, p.Particles
 	Local InSmoke% = False
 	
@@ -186,7 +186,7 @@ Function UpdateEmitters()
 	EndIf	
 End Function
 
-Function UpdateDust()
+Function UpdateDust%()
 	Local p.Particles
 	Local i%, Pvt%
 	

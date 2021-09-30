@@ -443,7 +443,7 @@ End Type
 
 Global opt.Options = New Options
 
-Function LoadOptionsINI()
+Function LoadOptionsINI%()
 	; ~ [GRAPHICS]
 	
 	opt\BumpEnabled = GetINIInt(OptionFile, "Graphics", "Enable Bump Mapping", True)
@@ -610,7 +610,7 @@ Function LoadOptionsINI()
 	opt\DebugMode = GetINIInt(OptionFile, "Global", "Debug Mode", False)
 End Function
 
-Function SaveOptionsINI(SaveGlobal% = False)
+Function SaveOptionsINI%(SaveGlobal% = False)
 	; ~ [GRAPHICS]
 	
 	PutINIValue(OptionFile, "Graphics", "Enable Bump Mapping", opt\BumpEnabled)
@@ -718,7 +718,7 @@ Function SaveOptionsINI(SaveGlobal% = False)
 	EndIf
 End Function
 
-Function ResetOptionsINI()
+Function ResetOptionsINI%()
 	; ~ [GRAPHICS]
 	
 	opt\BumpEnabled = True

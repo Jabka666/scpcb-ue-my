@@ -1,4 +1,4 @@
-Function CreateSky(FileName$, Parent% = 0)
+Function CreateSky%(FileName$, Parent% = 0)
 	Local Sky%, Face%, Direction$, Vert%
 	Local s%, x%, y%, z%, u%, v%
 
@@ -28,7 +28,7 @@ Function CreateSky(FileName$, Parent% = 0)
 	Return(Sky)
 End Function
 
-Function UpdateSky(SkyOBJ%)
+Function UpdateSky%(SkyOBJ%)
 	PositionEntity(SkyOBJ, EntityX(Camera), EntityY(Camera), EntityZ(Camera), True)
 End Function
 

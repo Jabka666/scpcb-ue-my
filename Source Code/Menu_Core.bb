@@ -25,7 +25,7 @@ MenuGray = LoadImage_Strict("GFX\menu\menu_gray.png")
 MenuBlack = LoadImage_Strict("GFX\menu\menu_black.png")
 MaskImage(MenuBlack, 255, 255, 0)
 
-Function InitMainMenuAssets()
+Function InitMainMenuAssets%()
 	mma\BackGround = LoadImage_Strict("GFX\menu\back.png")
 	mma\BackGround = ScaleImage2(mma\BackGround, MenuScale, MenuScale)
 	
@@ -42,7 +42,7 @@ Function InitMainMenuAssets()
 	mm\MainMenuBlinkTimer[1] = 1.0
 End Function
 
-Function DeInitMainMenuAssets()
+Function DeInitMainMenuAssets%()
 	If mma\BackGround <> 0 Then FreeImage(mma\BackGround) : mma\BackGround = 0
 	If mma\SECURE_CONTAIN_PROTECT <> 0 Then FreeImage(mma\SECURE_CONTAIN_PROTECT) : mma\SECURE_CONTAIN_PROTECT = 0
 	If mma\SCP173 <> 0 Then FreeImage(mma\SCP173) : mma\SCP173 = 0
@@ -60,18 +60,12 @@ End Type
 
 Global ga.GameAssets = New GameAssets
 
-Function LoadGameAssets()
-	Local i%
-	
-	For i = 0 To 3
-		ga\ArrowIMG[i] = LoadImage_Strict("GFX\menu\arrow.png")
-		ga\ArrowIMG[i] = ScaleImage2(ga\ArrowIMG[i], MenuScale, MenuScale)
-		RotateImage(ga\ArrowIMG[i], i * 90.0)
-		HandleImage(ga\ArrowIMG[i], 0, 0)
-	Next
-End Function
-
-LoadGameAssets()
+For i = 0 To 3
+	ga\ArrowIMG[i] = LoadImage_Strict("GFX\menu\arrow.png")
+	ga\ArrowIMG[i] = ScaleImage2(ga\ArrowIMG[i], MenuScale, MenuScale)
+	RotateImage(ga\ArrowIMG[i], i * 90.0)
+	HandleImage(ga\ArrowIMG[i], 0, 0)
+Next
 
 Global RandomSeed$
 
@@ -95,7 +89,7 @@ Const MainMenuTab_Options_Controls% = 6
 Const MainMenuTab_Options_Advanced% = 7
 ;[End Block]
 
-Function UpdateMainMenu()
+Function UpdateMainMenu%()
 	CatchErrors("Uncaught (UpdateMainMenu")
 	
 	Local x%, y%, Width%, Height%, Temp%, i%, n%, j%, g%
@@ -1042,7 +1036,7 @@ Function UpdateMainMenu()
 	CatchErrors("UpdateMainMenu")
 End Function
 
-Function RenderMainMenu()
+Function RenderMainMenu%()
 	CatchErrors("Uncaught (RenderMainMenu")
 	
 	Local x%, y%, Width%, Height%, Temp%, i%, n%
@@ -1861,7 +1855,7 @@ End Function
 Const LauncherWidth% = 640
 Const LauncherHeight% = 480
 
-Function UpdateLauncher(lnchr.Launcher)
+Function UpdateLauncher%(lnchr.Launcher)
 	Local i%, n%
 	
 	MenuScale = 1
@@ -2047,7 +2041,7 @@ Type LoadingScreens
 	Field Txt$[5], TxtAmount%
 End Type
 
-Function InitLoadingScreens(File$)
+Function InitLoadingScreens%(File$)
 	Local TemporaryString$, i%
 	Local ls.LoadingScreens
 	Local f% = OpenFile(File)
@@ -2111,18 +2105,19 @@ Type LoadingTextColor
 	Field ChangeColor%
 End Type
 
-Function InitLoadingTextColor()
+Function InitLoadingTextColor.LoadingTextColor(R%, G%, B%)
 	Local ltc.LoadingTextColor
 	
 	ltc.LoadingTextColor = New LoadingTextColor
-	ltc\R = 255.0 : ltc\G = 255.0 : ltc\B = 255.0
+	ltc\R = R : ltc\G = G : ltc\B = B
+	Return(ltc)
 End Function
 
-Function DeInitLoadingTextColor(ltc.LoadingTextColor)
+Function DeInitLoadingTextColor%(ltc.LoadingTextColor)
 	Delete(ltc)
 End Function
 
-Function RenderLoadingText(x%, y%, AlignX% = False, AlignY% = False)
+Function RenderLoadingText%(x%, y%, AlignX% = False, AlignY% = False)
 	Local ltc.LoadingTextColor
 	
 	For ltc.LoadingTextColor = Each LoadingTextColor
@@ -2147,12 +2142,13 @@ Function RenderLoadingText(x%, y%, AlignX% = False, AlignY% = False)
 	Next
 End Function
 
-Function RenderLoading(Percent%, Assets$ = "")
+Function RenderLoading%(Percent%, Assets$ = "")
 	Local x%, y%, Temp%, FirstLoop%
 	Local ls.LoadingScreens, ltc.LoadingTextColor
 	
 	If Percent = 0 Then
 		LoadingScreenText = 0
+		InitLoadingTextColor(255, 255, 255)
 		
 		Temp = Rand(1, LoadingScreenAmount)
 		For ls.LoadingScreens = Each LoadingScreens
@@ -2168,8 +2164,6 @@ Function RenderLoading(Percent%, Assets$ = "")
 	EndIf	
 	
 	FirstLoop = True
-	
-	InitLoadingTextColor()
 	
 	Repeat 
 		ClsColor(0, 0, 0)
@@ -2354,7 +2348,7 @@ Function RenderLoading(Percent%, Assets$ = "")
 	DeleteMenuGadgets()
 End Function
 
-Function RenderTiledImageRect(Img%, SrcX%, SrcY%, SrcWidth%, SrcHeight%, x%, y%, Width%, Height%)
+Function RenderTiledImageRect%(Img%, SrcX%, SrcY%, SrcWidth%, SrcHeight%, x%, y%, Width%, Height%)
 	Local x2% = x
 	
 	While x2 < x + Width
@@ -2370,7 +2364,7 @@ Function RenderTiledImageRect(Img%, SrcX%, SrcY%, SrcWidth%, SrcHeight%, x%, y%,
 	Wend
 End Function
 
-Function RenderFrame(x%, y%, Width%, Height%, xOffset% = 0, yOffset% = 0, Locked% = False)
+Function RenderFrame%(x%, y%, Width%, Height%, xOffset% = 0, yOffset% = 0, Locked% = False)
 	Local IMG%
 	
 	Color(255, 255, 255)
@@ -2383,7 +2377,7 @@ Function RenderFrame(x%, y%, Width%, Height%, xOffset% = 0, yOffset% = 0, Locked
 	RenderTiledImageRect(MenuBlack, xOffset, yOffset, 512, 512, x + (3 * MenuScale), y + (3 * MenuScale), Width - (6 * MenuScale), Height - (6 * MenuScale))	
 End Function
 
-Function RenderBar(Img%, x%, y%, Width%, Height%, Value1#, Value2# = 100.0, R% = 100, G% = 100, B% = 100)
+Function RenderBar%(Img%, x%, y%, Width%, Height%, Value1#, Value2# = 100.0, R% = 100, G% = 100, B% = 100)
 	Local i%
 	
 	Rect(x, y, Width + (4 * MenuScale), Height, False)
@@ -2447,7 +2441,7 @@ Function UpdateMainMenuButton%(x%, y%, Width%, Height%, Txt$, BigFont% = True, W
 	Return(Clicked)
 End Function
 
-Function RenderMenuButtons()
+Function RenderMenuButtons%()
 	Local mb.MenuButton
 	
 	For mb.MenuButton = Each MenuButton
@@ -2558,7 +2552,7 @@ Function UpdateMainMenuTick%(x%, y%, Selected%, Locked% = False)
 	Return(Selected)
 End Function
 
-Function RenderMenuTicks()
+Function RenderMenuTicks%()
 	Local mt.MenuTick
 	Local Width%, Height%
 	Local IMG%
@@ -2643,7 +2637,7 @@ Type MenuPalette
 	Field x%, y%, Width%, Height%
 End Type
 
-Function UpdateMainMenuPalette(Img%, x%, y%)
+Function UpdateMainMenuPalette%(Img%, x%, y%)
 	Local mp.MenuPalette
 	Local PaletteExists% = False
 	
@@ -2669,7 +2663,7 @@ Function UpdateMainMenuPalette(Img%, x%, y%)
 	EndIf
 End Function
 
-Function RenderMenuPalettes()
+Function RenderMenuPalettes%()
 	Local mp.MenuPalette
 	
 	For mp.MenuPalette = Each MenuPalette
@@ -2774,7 +2768,7 @@ Function UpdateMainMenuInputBox$(x%, y%, Width%, Height%, Txt$, ID% = 0, MaxChr%
 	Return(Txt)
 End Function
 
-Function RenderMenuInputBoxes()
+Function RenderMenuInputBoxes%()
 	Local mib.MenuInputBox
 	
 	For mib.MenuInputBox = Each MenuInputBox
@@ -2833,7 +2827,7 @@ Function UpdateMainMenuSlideBar#(x%, y%, Width%, Value#, TextLeft$ = "LOW", Text
 	Return(Value)
 End Function
 
-Function RenderMenuSlideBars()
+Function RenderMenuSlideBars%()
 	Local msb.MenuSlideBar
 	
 	For msb.MenuSlideBar = Each MenuSlideBar
@@ -2856,7 +2850,7 @@ Type MenuSlider
 	Field Amount%
 End Type
 
-Function UpdateMainMenuSlider3(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$)
+Function UpdateMainMenuSlider3%(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$)
 	Local ms.MenuSlider, currSlider.MenuSlider
 	Local Slider3Exists% = False
 	
@@ -2900,7 +2894,7 @@ Function UpdateMainMenuSlider3(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$)
 	Return(Value)
 End Function
 
-Function UpdateMainMenuSlider5(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$, Val4$, Val5$)
+Function UpdateMainMenuSlider5%(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$, Val4$, Val5$)
 	Local ms.MenuSlider, currSlider.MenuSlider
 	Local Slider5Exists% = False
 	
@@ -2950,7 +2944,7 @@ Function UpdateMainMenuSlider5(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$,
 	Return(Value)
 End Function
 
-Function RenderMenuSliders()
+Function RenderMenuSliders%()
 	Local ms.MenuSlider
 	
 	For ms.MenuSlider = Each MenuSlider
@@ -3044,7 +3038,7 @@ Function RenderMenuSliders()
 	Next
 End Function
 
-Function DeleteMenuGadgets()
+Function DeleteMenuGadgets%()
 	Delete Each MenuButton
 	Delete Each MenuPalette
 	Delete Each MenuTick
@@ -3053,7 +3047,7 @@ Function DeleteMenuGadgets()
 	Delete Each MenuSlider
 End Function
 
-Function RowText(Txt$, x%, y%, W%, H%, Align% = False, Leading# = 1.0)
+Function RowText%(Txt$, x%, y%, W%, H%, Align% = False, Leading# = 1.0)
 	; ~ Display A$ starting at x, y - no wider than W and no taller than H (all in pixels)
 	; ~ Leading is optional extra vertical spacing in pixels
 	
@@ -3104,7 +3098,7 @@ Function RowText(Txt$, x%, y%, W%, H%, Align% = False, Leading# = 1.0)
 	EndIf
 End Function
 
-Function GetLineAmount(Txt$, W%, H%, Leading# = 1.0)
+Function GetLineAmount%(Txt$, W%, H%, Leading# = 1.0)
 	; ~ Display A$ no wider than W and no taller than H (all in pixels)
 	; ~ Leading is optional extra vertical spacing in pixels
 	
@@ -3192,7 +3186,7 @@ Const Tooltip_SubtitlesColor% = 32
 Const Tooltip_ResetOptions% = 33
 ;[End Block]
 
-Function RenderOptionsTooltip(x%, y%, Width%, Height%, Option%, Value# = 0.0)
+Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 	Local fX# = x + (6.0 * MenuScale)
 	Local fY# = y + (6.0 * MenuScale)
 	Local fW# = Width - (12.0 * MenuScale)
@@ -3424,7 +3418,7 @@ Function RenderOptionsTooltip(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 	EndIf
 End Function
 
-Function RenderMapCreatorTooltip(x%, y%, Width%, Height%, MapName$)
+Function RenderMapCreatorTooltip%(x%, y%, Width%, Height%, MapName$)
 	Local fX# = x + (6.0 * MenuScale)
 	Local fY# = y + (6.0 * MenuScale)
 	Local fW# = Width - (12.0 * MenuScale)

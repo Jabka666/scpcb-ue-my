@@ -10,6 +10,7 @@ General:
 - Decreased colored fog brightness.
 - Tiny overlay optimization.
 - Renamed "Smooth HUD" option to "Smooth Bars".
+- The fog began to change more smoothly.
 
 Menu:
 - Improved input boxes design.

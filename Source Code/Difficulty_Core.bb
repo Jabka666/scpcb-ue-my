@@ -32,7 +32,7 @@ Const HARD% = 2
 Const EXTREME% = 3
 ;[End Block]
 
-Function SetDifficultyColor(ID%, R%, G%, B%)
+Function SetDifficultyColor%(ID%, R%, G%, B%)
 	difficulties[ID]\R = R
 	difficulties[ID]\G = G
 	difficulties[ID]\B = B

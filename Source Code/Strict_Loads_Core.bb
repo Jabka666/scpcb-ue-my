@@ -13,7 +13,7 @@ Type Sound
 	Field ReleaseTime%
 End Type
 
-Function AutoReleaseSounds()
+Function AutoReleaseSounds%()
 	Local snd.Sound
 	
 	For snd.Sound = Each Sound
@@ -113,7 +113,7 @@ Function PlaySound_Strict%(SoundHandle%)
 	Return(0)
 End Function
 
-Function LoadSound_Strict(File$)
+Function LoadSound_Strict%(File$)
 	Local snd.Sound
 	
 	snd.Sound = New Sound
@@ -134,7 +134,7 @@ Function LoadSound_Strict(File$)
 	Return(Handle(snd))
 End Function
 
-Function FreeSound_Strict(SoundHandle%)
+Function FreeSound_Strict%(SoundHandle%)
 	Local snd.Sound = Object.Sound(SoundHandle)
 	
 	If snd <> Null Then
@@ -152,7 +152,7 @@ End Type
 Const Mode% = 2
 Const TwoD% = 8192
 
-Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode% = Mode)
+Function StreamSound_Strict%(File$, Volume# = 1.0, CustomMode% = Mode)
 	If FileType(File) <> 1 Then
 		CreateConsoleMsg("Sound " + Chr(34) + File + Chr(34) + " not found.")
 		If opt\ConsoleOpening And opt\CanOpenConsole Then
@@ -177,7 +177,7 @@ Function StreamSound_Strict(File$, Volume# = 1.0, CustomMode% = Mode)
 	Return(Handle(st))
 End Function
 
-Function StopStream_Strict(StreamHandle%)
+Function StopStream_Strict%(StreamHandle%)
 	Local st.Stream = Object.Stream(StreamHandle)
 	
 	If st = Null Then
@@ -193,7 +193,7 @@ Function StopStream_Strict(StreamHandle%)
 	Delete(st)
 End Function
 
-Function SetStreamVolume_Strict(StreamHandle%, Volume#)
+Function SetStreamVolume_Strict%(StreamHandle%, Volume#)
 	Local st.Stream = Object.Stream(StreamHandle)
 	
 	If st = Null Then
@@ -207,7 +207,7 @@ Function SetStreamVolume_Strict(StreamHandle%, Volume#)
 	ChannelVolume(st\CHN, Volume * 1.0)
 End Function
 
-Function SetStreamPaused_Strict(StreamHandle%, Paused%)
+Function SetStreamPaused_Strict%(StreamHandle%, Paused%)
 	Local st.Stream = Object.Stream(StreamHandle)
 	
 	If st = Null Then
@@ -225,7 +225,7 @@ Function SetStreamPaused_Strict(StreamHandle%, Paused%)
 	EndIf
 End Function
 
-Function IsStreamPlaying_Strict(StreamHandle%)
+Function IsStreamPlaying_Strict%(StreamHandle%)
 	Local st.Stream = Object.Stream(StreamHandle)
 	
 	If st = Null Then
@@ -239,7 +239,7 @@ Function IsStreamPlaying_Strict(StreamHandle%)
 	Return(ChannelPlaying(st\CHN))
 End Function
 
-Function SetStreamPan_Strict(StreamHandle%, Pan#)
+Function SetStreamPan_Strict%(StreamHandle%, Pan#)
 	Local st.Stream = Object.Stream(StreamHandle)
 	
 	If st = Null Then
@@ -253,7 +253,7 @@ Function SetStreamPan_Strict(StreamHandle%, Pan#)
 	ChannelPan(st\CHN, Pan)
 End Function
 
-Function UpdateStreamSoundOrigin(StreamHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0)
+Function UpdateStreamSoundOrigin%(StreamHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0)
 	Range = Max(Range, 1.0)
 	
 	If Volume > 0.0 Then
@@ -274,7 +274,7 @@ Function UpdateStreamSoundOrigin(StreamHandle%, Cam%, Entity%, Range# = 10.0, Vo
 	EndIf
 End Function
 
-Function LoadMesh_Strict(File$, Parent% = 0)
+Function LoadMesh_Strict%(File$, Parent% = 0)
 	Local Tmp%, i%, SF%, b%, t1%, t2%, Texture%
 	Local TexAlpha% = 0
 	
@@ -329,7 +329,7 @@ Function LoadMesh_Strict(File$, Parent% = 0)
 	Return(Tmp)
 End Function
 
-Function LoadAnimMesh_Strict(File$, Parent% = 0)
+Function LoadAnimMesh_Strict%(File$, Parent% = 0)
 	Local Tmp%, i%, SF%, b%, t1%, Texture%
 	Local TexAlpha% = 0
 	
@@ -365,7 +365,7 @@ Function LoadAnimMesh_Strict(File$, Parent% = 0)
 End Function   
 
 ; ~ Don't use in LoadRMesh, as Reg does this manually there. If you wanna fuck around with the logic in that function, be my guest 
-Function LoadTexture_Strict(File$, Flags% = 1, TexDeleteType% = DeleteMapTextures)
+Function LoadTexture_Strict%(File$, Flags% = 1, TexDeleteType% = DeleteMapTextures)
 	Local Tmp%
 	
 	If (Not Tmp) Then
@@ -376,7 +376,7 @@ Function LoadTexture_Strict(File$, Flags% = 1, TexDeleteType% = DeleteMapTexture
 	Return(Tmp) 
 End Function
 
-Function LoadAnimTexture_Strict(File$, Flags%, Width%, Height%, FirstFrame%, Count%, TexDeleteType% = DeleteMapTextures)
+Function LoadAnimTexture_Strict%(File$, Flags%, Width%, Height%, FirstFrame%, Count%, TexDeleteType% = DeleteMapTextures)
 	Local Tmp%
 	
 	If (Not Tmp) Then
@@ -387,7 +387,7 @@ Function LoadAnimTexture_Strict(File$, Flags%, Width%, Height%, FirstFrame%, Cou
 	Return(Tmp) 
 End Function   
 
-Function LoadBrush_Strict(File$, Flags% = 1, u# = 1.0, v# = 1.0)
+Function LoadBrush_Strict%(File$, Flags% = 1, u# = 1.0, v# = 1.0)
 	Local Tmp%
 	
 	If (Not Tmp) Then
@@ -398,7 +398,7 @@ Function LoadBrush_Strict(File$, Flags% = 1, u# = 1.0, v# = 1.0)
 	Return(Tmp)
 End Function 
 
-Function LoadFont_Strict(File$ = "Tahoma", Height% = 13, IgnoreScaling% = False)
+Function LoadFont_Strict%(File$ = "Tahoma", Height% = 13, IgnoreScaling% = False)
 	Local Tmp%
 	
 	If (Not Tmp) Then
@@ -409,7 +409,7 @@ Function LoadFont_Strict(File$ = "Tahoma", Height% = 13, IgnoreScaling% = False)
 	Return(Tmp)
 End Function
 
-Function LoadImage_Strict(File$)
+Function LoadImage_Strict%(File$)
 	Local Tmp%
 	
 	If (Not Tmp) Then
@@ -420,7 +420,7 @@ Function LoadImage_Strict(File$)
 	Return(Tmp)
 End Function
 
-Function LoadAnimImage_Strict(File$, Width%, Height%, FirstFrame%, Count%)
+Function LoadAnimImage_Strict%(File$, Width%, Height%, FirstFrame%, Count%)
 	Local Tmp%
 	
 	If (Not Tmp) Then

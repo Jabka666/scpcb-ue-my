@@ -23,7 +23,7 @@ Const AchvO5% = 37, AchvPD% = 38, AchvSNAV% = 39, AchvTesla% = 40
 
 Const AchievementsFile$ = "Data\Achievements.ini"
 
-Function GiveAchievement(AchvName%, ShowMessage% = True)
+Function GiveAchievement%(AchvName%, ShowMessage% = True)
 	If achv\Achievement[AchvName] <> True Then
 		achv\Achievement[AchvName] = True
 		If opt\AchvMsgEnabled And ShowMessage Then
@@ -35,7 +35,7 @@ Function GiveAchievement(AchvName%, ShowMessage% = True)
 	EndIf
 End Function
 
-Function AchievementTooltip(AchvNo%)
+Function AchievementTooltip%(AchvNo%)
 	Local Scale# = opt\GraphicHeight / 768.0
 
 	SetFont(fo\FontID[Font_Digital])
@@ -60,7 +60,7 @@ Function AchievementTooltip(AchvNo%)
 	Text(ScaledMouseX() + (20 * MenuScale) + (Width / 2), ScaledMouseY() + (55 * MenuScale), achv\AchievementDescs[AchvNo], True, True)
 End Function
 
-Function DrawAchvIMG(x%, y%, AchvNo%)
+Function DrawAchvIMG%(x%, y%, AchvNo%)
 	Local Row%
 	Local Scale# = opt\GraphicHeight / 768.0
 	Local SeparationConst2# = 76.0 * Scale
@@ -102,7 +102,7 @@ Function CreateAchievementMsg.AchievementMsg(ID%, Txt$)
 	Return(amsg)
 End Function
 
-Function UpdateAchievementMsg()
+Function UpdateAchievementMsg%()
 	Local amsg.AchievementMsg, amsg2.AchievementMsg
 	Local Scale# = opt\GraphicHeight / 768.0
 	Local Width% = 264.0 * Scale
@@ -131,7 +131,7 @@ Function UpdateAchievementMsg()
 	Next
 End Function
 
-Function RenderAchievementMsg()
+Function RenderAchievementMsg%()
 	Local amsg.AchievementMsg, amsg2.AchievementMsg
 	Local Scale# = opt\GraphicHeight / 768.0
 	Local Width% = 264.0 * Scale

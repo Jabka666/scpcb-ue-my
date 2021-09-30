@@ -7,7 +7,7 @@ Type Materials
 	Field StepSound%
 End Type
 
-Function ApplyBumpMap(Texture%)
+Function ApplyBumpMap%(Texture%)
 	TextureBlend(Texture, 6)
 	TextureBumpEnvMat(Texture, 0, 0, 0.012)
 	TextureBumpEnvMat(Texture, 0, 1, 0.012)
@@ -19,7 +19,7 @@ End Function
 
 Const MaterialsFile$ = "Data\materials.ini"
 
-Function LoadMaterials(File$)
+Function LoadMaterials%(File$)
 	CatchErrors("Uncaught (LoadMaterials)")
 	
 	Local TemporaryString$

@@ -11,7 +11,7 @@ Type Subtitles
 	Field Timer#[THIRD_PERSON + 1]
 End Type
 
-Function UpdateSubtitles()
+Function UpdateSubtitles%()
 	If (Not opt\EnableSubtitles) Then Return
 	
 	Local sub.Subtitles
@@ -30,7 +30,7 @@ Function UpdateSubtitles()
 	Next
 End Function
 
-Function RenderSubtitles()
+Function RenderSubtitles%()
 	If (Not opt\EnableSubtitles) Then Return
 	
 	Local sub.Subtitles
@@ -51,7 +51,7 @@ End Function
 
 Const SubtitlesFile$ = "Data\subtitles.ini"
 
-Function ShowSubtitles(Name$)
+Function ShowSubtitles%(Name$)
 	CatchErrors("Uncaught (ShowSubtitles)")
 	
 	If (Not opt\EnableSubtitles) Then Return
