@@ -3051,7 +3051,7 @@ Function RowText%(Txt$, x%, y%, W%, H%, Align% = False, Leading# = 1.0)
 	; ~ Display A$ starting at x, y - no wider than W and no taller than H (all in pixels)
 	; ~ Leading is optional extra vertical spacing in pixels
 	
-	If H < 1 Then H = 4096
+	If H < 1 Then H = SMALLEST_POWER_TWO
 	
 	Local LinesShown% = 0
 	Local Height% = StringHeight(Txt) + Leading
@@ -3102,7 +3102,7 @@ Function GetLineAmount%(Txt$, W%, H%, Leading# = 1.0)
 	; ~ Display A$ no wider than W and no taller than H (all in pixels)
 	; ~ Leading is optional extra vertical spacing in pixels
 	
-	If H < 1 Then H = 4096
+	If H < 1 Then H = SMALLEST_POWER_TWO
 	
 	Local LinesShown% = 0
 	Local Height% = StringHeight(Txt) + Leading

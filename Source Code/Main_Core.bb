@@ -3476,12 +3476,6 @@ Function UpdateFog%()
 	CameraClsColor(Camera, CurrFogColorR, CurrFogColorG, CurrFogColorB)
 End Function
 
-; ~ Navigator Constants
-;[Block]
-Const NAV_WIDTH% = 287
-Const NAV_HEIGHT% = 256
-;[End Block]
-
 ; ~ Iventory Constants
 ;[Block]
 Const INVENTORY_GFX_SIZE% = 70
@@ -4749,20 +4743,11 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "radio", "18vradio", "fineradio", "veryfineradio"
 					;[Block]
-					If (Not SelectedItem\ItemTemplate\Img) Then
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
-						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
-					EndIf
-					
 					If SelectedItem\ItemTemplate\TempName <> "fineradio" And SelectedItem\ItemTemplate\TempName <> "veryfineradio" Then SelectedItem\State = Max(0.0, SelectedItem\State - fps\Factor[0] * 0.004)
 					
 					; ~ RadioState[5] = Has the "use the number keys" -message been shown yet (True / False)
 					; ~ RadioState[6] = A timer for the "code channel"
 					; ~ RadioState[7] = Another timer for the "code channel"
-					
-					x = opt\GraphicWidth - ImageWidth(SelectedItem\ItemTemplate\Img)
-					y = opt\GraphicHeight - ImageHeight(SelectedItem\ItemTemplate\Img)
-					
 					If SelectedItem\State > 0.0 Lor (SelectedItem\ItemTemplate\TempName = "fineradio" Lor SelectedItem\ItemTemplate\TempName = "veryfineradio") Then
 						If RadioState[5] = 0.0 Then 
 							CreateMsg("Use the numbered keys 1 through 5 to cycle between various channels.")
@@ -5049,9 +5034,6 @@ Function UpdateGUI%()
 									If (Not ChannelPlaying(RadioCHN[5])) Then RadioCHN[5] = PlaySound_Strict(RadioStatic)
 									;[End Block]
 							End Select 
-							
-							x = x + 66
-							y = y + 419
 							
 							If SelectedItem\ItemTemplate\TempName = "veryfineradio" Then
 								If ChannelPlaying(RadioCHN[5]) Then PauseChannel(RadioCHN[5])
@@ -5880,6 +5862,8 @@ Function RenderGUI%()
 	Local x1#, x2#, x3#, y1#, y2#, y3#, z2#, ProjY#, Scale#, Pvt%
 	Local n%, xTemp%, yTemp%, StrTemp$
 	Local Width%, Height%
+	Local NAV_WIDTH% = 287 * MenuScale
+	Local NAV_HEIGHT% = 256 * MenuScale
 	
 	If MenuOpen Lor ConsoleOpen Lor SelectedDoor <> Null Lor InvOpen Lor OtherOpen <> Null Lor me\EndingTimer < 0.0 Then
 		ShowPointer()
@@ -6376,7 +6360,8 @@ Function RenderGUI%()
 					; ~ RadioState[7] = Another timer for the "code channel"
 					
 					If (Not SelectedItem\ItemTemplate\Img) Then
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
+						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
+						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
@@ -6415,19 +6400,19 @@ Function RenderGUI%()
 									;[End Block]
 							End Select 
 							
-							x = x + 66
-							y = y + 419
+							x = x + (66 * MenuScale)
+							y = y + (419 * MenuScale)
 							
 							Color(30, 30, 30)
 							
 							If SelectedItem\ItemTemplate\TempName = "radio" Lor SelectedItem\ItemTemplate\TempName = "18vradio" Then
 								For i = 0 To 4
-									Rect(x, y + (8 * i), 43 - (i * 6), 4, Ceil(SelectedItem\State / 20.0) > 4 - i)
+									Rect(x, y + ((8 * i) * MenuScale), (43 * MenuScale) - ((i * 6) * MenuScale), 4 * MenuScale, Ceil(SelectedItem\State / 20.0) > 4 - i )
 								Next
 							EndIf	
 							
 							SetFont(fo\FontID[Font_Digital])
-							Text(x + 60, y, "CHN")	
+							Text(x + (60 * MenuScale), y, "CHN")	
 							
 							If SelectedItem\ItemTemplate\TempName = "veryfineradio" Then
 								StrTemp = ""
@@ -6436,16 +6421,16 @@ Function RenderGUI%()
 								Next
 								
 								SetFont(fo\FontID[Font_Digital_Big])
-								Text(x + 97, y + 16, Rand(0, 9), True, True)
+								Text(x + (97 * MenuScale), y + (16 * MenuScale), Rand(0, 9), True, True)
 							Else
 								SetFont(fo\FontID[Font_Digital_Big])
-								Text(x + 97, y + 16, Int(SelectedItem\State2 + 1.0), True, True)
+								Text(x + (97 * MenuScale), y + (16 * MenuScale), Int(SelectedItem\State2 + 1.0), True, True)
 							EndIf
 							
 							SetFont(fo\FontID[Font_Digital])
 							If StrTemp <> "" Then
 								StrTemp = Right(Left(StrTemp, (Int(MilliSecs2() / 300) Mod Len(StrTemp))), 10)
-								Text(x + 32, y + 33, StrTemp)
+								Text(x + (32 * MenuScale), y + (33 * MenuScale), StrTemp)
 							EndIf
 							SetFont(fo\FontID[Font_Default])
 						EndIf
@@ -6506,16 +6491,17 @@ Function RenderGUI%()
 				Case "nav", "nav300", "nav310", "navulti"
 					;[Block]
 					If (Not SelectedItem\ItemTemplate\Img) Then
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
+						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
+						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
-					x = opt\GraphicWidth - (ImageWidth(SelectedItem\ItemTemplate\Img) * 0.5) + 20.0
-					y = opt\GraphicHeight - (ImageHeight(SelectedItem\ItemTemplate\Img) * 0.4) - 85.0
+					x = opt\GraphicWidth - (ImageWidth(SelectedItem\ItemTemplate\Img) * (0.5 * MenuScale)) + (20.0 * MenuScale)
+					y = opt\GraphicHeight - (ImageHeight(SelectedItem\ItemTemplate\Img) * (0.4 * MenuScale)) - (85.0 * MenuScale)
 					
 					Local PlayerX%, PlayerZ%
 					
-					DrawImage(SelectedItem\ItemTemplate\Img, x - (ImageWidth(SelectedItem\ItemTemplate\Img) / 2), y - (ImageHeight(SelectedItem\ItemTemplate\Img) / 2) + 85)
+					DrawImage(SelectedItem\ItemTemplate\Img, x - (ImageWidth(SelectedItem\ItemTemplate\Img) / 2), y - (ImageHeight(SelectedItem\ItemTemplate\Img) / 2) + (85 * MenuScale))
 					
 					SetFont(fo\FontID[Font_Digital])
 					
@@ -6530,8 +6516,8 @@ Function RenderGUI%()
 					If (Not NavWorks) Then
 						If (MilliSecs2() Mod 800) < 200 Then
 							Color(200, 0, 0)
-							Text(x, y + (NAV_HEIGHT / 2) - 80, "ERROR 06", True)
-							Text(x, y + (NAV_HEIGHT / 2) - 60, "LOCATION UNKNOWN", True)						
+							Text(x, y + (NAV_HEIGHT / 2) - (80 * MenuScale), "ERROR 06", True)
+							Text(x, y + (NAV_HEIGHT / 2) - (60 * MenuScale), "LOCATION UNKNOWN", True)						
 						EndIf
 					Else
 						If (SelectedItem\State > 0.0 Lor (SelectedItem\ItemTemplate\TempName = "nav300" Lor SelectedItem\ItemTemplate\TempName = "navulti")) And (Rnd(CoffinDistance + 15.0) > 1.0 Lor PlayerRoom\RoomTemplate\Name <> "cont1_895") Then
@@ -6540,47 +6526,47 @@ Function RenderGUI%()
 							
 							SetBuffer(ImageBuffer(t\ImageID[7]))
 							
-							Local xx% = x - ImageWidth(SelectedItem\ItemTemplate\Img) / 2
-							Local yy% = y - (ImageHeight(SelectedItem\ItemTemplate\Img) / 2) + 85
+							Local xx% = x - (ImageWidth(SelectedItem\ItemTemplate\Img) / 2)
+							Local yy% = y - (ImageHeight(SelectedItem\ItemTemplate\Img) / 2) + (85 * MenuScale)
 							
 							DrawImage(SelectedItem\ItemTemplate\Img, xx, yy)
 							
-							x = x - 12.0 + (((EntityX(me\Collider) - 4.0) + 8.0) Mod 8.0) * 3.0
-							y = y + 12.0 - (((EntityZ(me\Collider) - 4.0) + 8.0) Mod 8.0) * 3.0
+							x = x - (12.0 * MenuScale) + ((((EntityX(me\Collider) - 4.0) + 8.0) Mod 8.0) * (3.0 * MenuScale))
+							y = y + (12.0 * MenuScale) - ((((EntityZ(me\Collider) - 4.0) + 8.0) Mod 8.0) * (3.0 * MenuScale))
 							For x2 = Max(0.0, PlayerX - 6) To Min(MapGridSize, PlayerX + 6)
 								For z2 = Max(0.0, PlayerZ - 6) To Min(MapGridSize, PlayerZ + 6)
 									If CoffinDistance > 16.0 Lor Rnd(16.0) < CoffinDistance Then 
 										If CurrMapGrid\Grid[x2 + (z2 * MapGridSize)] > MapGrid_NoTile And (CurrMapGrid\Found[x2 + (z2 * MapGridSize)] > MapGrid_NoTile Lor SelectedItem\ItemTemplate\TempName = "nav310" Lor SelectedItem\ItemTemplate\TempName = "navulti") Then
-											Local DrawX% = x + (PlayerX - 1 - x2) * 24, DrawY% = y - (PlayerZ - 1 - z2) * 24
+											Local DrawX% = x + (PlayerX - 1 - x2) * (24 * MenuScale), DrawY% = y - (PlayerZ - 1 - z2) * (24 * MenuScale)
 											
 											Color(30, 30, 30)
 											If x2 + 1.0 =< MapGridSize Then
 												If CurrMapGrid\Grid[(x2 + 1) + (z2 * MapGridSize)] = MapGrid_NoTile
-													Rect(DrawX - 12, DrawY - 12, 1, 24)
+													Rect(DrawX - (12 * MenuScale), DrawY - (12 * MenuScale), MenuScale, 24 * MenuScale)
 												EndIf
 											Else
-												Rect(DrawX - 12, DrawY - 12, 1, 24)
+												Rect(DrawX - (12 * MenuScale), DrawY - (12 * MenuScale), MenuScale, 24 * MenuScale)
 											EndIf
 											If x2 - 1.0 >= 0.0 Then
 												If CurrMapGrid\Grid[(x2 - 1) + (z2 * MapGridSize)] = MapGrid_NoTile
-													Rect(DrawX + 12, DrawY - 12, 1, 24)
+													Rect(DrawX + (12 * MenuScale), DrawY - (12 * MenuScale), MenuScale, 24 * MenuScale)
 												EndIf
 											Else
-												Rect(DrawX + 12, DrawY - 12, 1, 24)
+												Rect(DrawX + (12 * MenuScale), DrawY - (12 * MenuScale), MenuScale, 24 * MenuScale)
 											EndIf
 											If z2 - 1.0 >= 0.0 Then
 												If CurrMapGrid\Grid[x2 + ((z2 - 1) * MapGridSize)] = MapGrid_NoTile
-													Rect(DrawX - 12, DrawY - 12, 24, 1)
+													Rect(DrawX - (12 * MenuScale), DrawY - (12 * MenuScale), 24 * MenuScale, MenuScale)
 												EndIf
 											Else
-												Rect(DrawX - 12, DrawY - 12, 24, 1)
+												Rect(DrawX - (12 * MenuScale), DrawY - (12 * MenuScale), 24 * MenuScale, MenuScale)
 											EndIf
 											If z2 + 1.0 =< MapGridSize Then
 												If CurrMapGrid\Grid[x2 + ((z2 + 1) * MapGridSize)] = MapGrid_NoTile
-													Rect(DrawX - 12, DrawY + 12, 24, 1)
+													Rect(DrawX - (12 * MenuScale), DrawY + (12 * MenuScale), 24 * MenuScale, MenuScale)
 												EndIf
 											Else
-												Rect(DrawX - 12, DrawY + 12, 24, 1)
+												Rect(DrawX - (12 * MenuScale), DrawY + (12 * MenuScale), 24 * MenuScale, MenuScale)
 											EndIf
 										EndIf
 									EndIf
@@ -6588,16 +6574,16 @@ Function RenderGUI%()
 							Next
 							
 							SetBuffer(BackBuffer())
-							DrawImageRect(t\ImageID[7], xx + 80, yy + 70, xx + 80, yy + 70, 270, 230)
+							DrawImageRect(t\ImageID[7], xx + (80 * MenuScale), yy + (70 * MenuScale), xx + (80 * MenuScale), yy + (70 * MenuScale), 270 * MenuScale, 230 * MenuScale)
 							If SelectedItem\ItemTemplate\TempName = "nav" Lor SelectedItem\ItemTemplate\TempName = "nav300" Then
 								Color(100, 0, 0)
 							Else
 								Color(30, 30, 30)
 							EndIf
-							Rect(xx + 80, yy + 70, 270, 230, False)
+							Rect(xx + (80 * MenuScale), yy + (70 * MenuScale), 270 * MenuScale, 230 * MenuScale, False)
 							
-							x = opt\GraphicWidth - ImageWidth(SelectedItem\ItemTemplate\Img) * 0.5 + 20.0
-							y = opt\GraphicHeight - ImageHeight(SelectedItem\ItemTemplate\Img) * 0.4 - 85.0
+							x = opt\GraphicWidth - (ImageWidth(SelectedItem\ItemTemplate\Img) * (0.5 * MenuScale)) + (20.0 * MenuScale)
+							y = opt\GraphicHeight - (ImageHeight(SelectedItem\ItemTemplate\Img) * (0.4 * MenuScale)) - (85.0 * MenuScale)
 							
 							If SelectedItem\ItemTemplate\TempName = "nav" Lor SelectedItem\ItemTemplate\TempName = "nav300" Then 
 								Color(100, 0, 0)
@@ -6606,13 +6592,13 @@ Function RenderGUI%()
 							EndIf
 							If ((MilliSecs2() Mod 800) < 200) Then
 								If SelectedItem\ItemTemplate\TempName = "nav" Lor SelectedItem\ItemTemplate\TempName = "nav300" Then
-									Text(x - NAV_WIDTH / 2 + 10, y - NAV_HEIGHT / 2 + 10, "MAP DATABASE OFFLINE")
+									Text(x - (NAV_WIDTH / 2) + (10 * MenuScale), y - (NAV_HEIGHT / 2) + (10 * MenuScale), "MAP DATABASE OFFLINE")
 								EndIf
 								
 								YawValue = EntityYaw(me\Collider) - 90.0
-								x1 = x + Cos(YawValue) * 6.0 : y1 = y - Sin(YawValue) * 6.0
-								x2 = x + Cos(YawValue - 140.0) * 5.0 : y2 = y - Sin(YawValue - 140.0) * 5.0				
-								x3 = x + Cos(YawValue + 140.0) * 5.0 : y3 = y - Sin(YawValue + 140.0) * 5.0
+								x1 = x + Cos(YawValue) * (6.0 * MenuScale) : y1 = y - Sin(YawValue) * (6.0 * MenuScale)
+								x2 = x + Cos(YawValue - 140.0) * (5.0 * MenuScale) : y2 = y - Sin(YawValue - 140.0) * (5.0 * MenuScale)
+								x3 = x + Cos(YawValue + 140.0) * (5.0 * MenuScale) : y3 = y - Sin(YawValue + 140.0) * (5.0 * MenuScale)
 								
 								Line(x1, y1, x2, y2)
 								Line(x1, y1, x3, y3)
@@ -6627,8 +6613,8 @@ Function RenderGUI%()
 									If Dist < 900.0 Then
 										Dist = Sqr(Ceil(Dist / 8.0) * 8.0) ; ~ This is probably done to disguise SCP-173's teleporting behavior
 										Color(100, 0, 0)
-										Oval(x - (Dist * 3), y - 7 - (Dist * 3), Dist * 6, Dist * 6, False)
-										Text(x - (NAV_WIDTH / 2) + 10, y - (NAV_HEIGHT / 2) + 30, "SCP-173")
+										Oval(x - (Dist * (3 * MenuScale)), y - (7 * MenuScale) - (Dist * (3 * MenuScale)), Dist * (6 * MenuScale), Dist * (6 * MenuScale), False)
+										Text(x - (NAV_WIDTH / 2) + (10 * MenuScale), y - (NAV_HEIGHT / 2) + (30 * MenuScale), "SCP-173")
 										SCPs_Found = SCPs_Found + 1
 									EndIf
 								EndIf
@@ -6637,8 +6623,8 @@ Function RenderGUI%()
 									If Dist < 900.0 Then
 										Dist = Sqr(Dist)
 										Color(100, 0, 0)
-										Oval(x - (Dist * 1.5), y - 7 - (Dist * 1.5), Dist * 3, Dist * 3, False)
-										Text(x - (NAV_WIDTH / 2) + 10, y - (NAV_HEIGHT / 2) + 30 + (20 * SCPs_Found), "SCP-106")
+										Oval(x - (Dist * (1.5 * MenuScale)), y - (7 * MenuScale) - (Dist * (1.5 * MenuScale)), Dist * (3 * MenuScale), Dist * (3 * MenuScale), False)
+										Text(x - (NAV_WIDTH / 2) + (10 * MenuScale), y - (NAV_HEIGHT / 2) + (30 * MenuScale) + ((20 * SCPs_Found) * MenuScale), "SCP-106")
 										SCPs_Found = SCPs_Found + 1
 									EndIf
 								EndIf
@@ -6647,8 +6633,8 @@ Function RenderGUI%()
 									If Dist < 900.0 Then
 										Dist = Sqr(Dist)
 										Color(100, 0, 0)
-										Oval(x - (Dist * 1.5), y - 7 - (Dist * 1.5), Dist * 3, Dist * 3, False)
-										Text(x - (NAV_WIDTH / 2) + 10, y - (NAV_HEIGHT / 2) + 30 + (20 * SCPs_Found), "SCP-096")
+										Oval(x - (Dist * (1.5 * MenuScale)), y - (7 * MenuScale) - (Dist * (1.5 * MenuScale)), Dist * (3 * MenuScale), Dist * (3 * MenuScale), False)
+										Text(x - (NAV_WIDTH / 2) + (10 * MenuScale), y - (NAV_HEIGHT / 2) + (30 * MenuScale) + ((20 * SCPs_Found) * MenuScale), "SCP-096")
 										SCPs_Found = SCPs_Found + 1
 									EndIf
 								EndIf
@@ -6658,8 +6644,8 @@ Function RenderGUI%()
 										If Dist < 900.0 Then
 											Dist = Sqr(Dist)
 											Color(100, 0, 0)
-											Oval(x - (Dist * 1.5), y - 7 - (Dist * 1.5), Dist * 3, Dist * 3, False)
-											Text(x - (NAV_WIDTH / 2) + 10, y - (NAV_HEIGHT / 2) + 30 + (20 * SCPs_Found), "SCP-049")
+											Oval(x - (Dist * (1.5 * MenuScale)), y - (7 * MenuScale) - (Dist * (1.5 * MenuScale)), Dist * (3 * MenuScale), Dist * (3 * MenuScale), False)
+											Text(x - (NAV_WIDTH / 2) + (10 * MenuScale), y - (NAV_HEIGHT / 2) + (30 * MenuScale) + ((20 * SCPs_Found) * MenuScale), "SCP-049")
 											SCPs_Found = SCPs_Found + 1
 										EndIf
 									EndIf
@@ -6668,8 +6654,8 @@ Function RenderGUI%()
 									If CoffinDistance < 8.0 Then
 										Dist = Rnd(4.0, 8.0)
 										Color(100, 0, 0)
-										Oval(x - (Dist * 1.5), y - 7.0 - (Dist * 1.5), Dist * 3, Dist * 3, False)
-										Text(x - (NAV_WIDTH / 2) + 10, y - (NAV_HEIGHT / 2) + 30 + (20 * SCPs_Found), "SCP-895")
+										Oval(x - (Dist * (1.5 * MenuScale)), y - (7 * MenuScale) - (Dist * (1.5 * MenuScale)), Dist * (3 * MenuScale), Dist * (3 * MenuScale), False)
+										Text(x - (NAV_WIDTH / 2) + (10 * MenuScale), y - (NAV_HEIGHT / 2) + (30 * MenuScale) + ((20 * SCPs_Found) * MenuScale), "SCP-895")
 									EndIf
 								EndIf
 							EndIf
@@ -6677,9 +6663,9 @@ Function RenderGUI%()
 							Color(30, 30, 30)
 							If SelectedItem\ItemTemplate\TempName = "nav" Lor SelectedItem\ItemTemplate\TempName = "nav300" Then
 								Color(100, 0, 0)
-								xTemp = x - (NAV_WIDTH / 2) + 196.0
-								yTemp = y - (NAV_HEIGHT / 2) + 10.0
-								Rect(xTemp, yTemp, 80, 20, False)
+								xTemp = x - (NAV_WIDTH / 2) + (196.0 * MenuScale)
+								yTemp = y - (NAV_HEIGHT / 2) + (10.0 * MenuScale)
+								Rect(xTemp, yTemp, 80 * MenuScale, 20 * MenuScale, False)
 								
 								; ~ Battery
 								If SelectedItem\State =< 20.0 Then
@@ -6688,7 +6674,7 @@ Function RenderGUI%()
 									Color(30, 30, 30)
 								EndIf
 								For i = 1 To Min(Ceil(SelectedItem\State / 10.0), 10.0)
-									Rect(xTemp + (i * 8) - 6, yTemp + 4, 4, 12)
+									Rect(xTemp + ((i * 8) * MenuScale) - (6 * MenuScale), yTemp + (4 * MenuScale), 4 * MenuScale, 12 * MenuScale)
 								Next
 								SetFont(fo\FontID[Font_Digital])
 							EndIf
@@ -8240,7 +8226,7 @@ Function LoadEntities%()
 	EntityOrder(t\OverlayID[4], -1003)
 	MoveEntity(t\OverlayID[4], 0.0, 0.0, 1.0)
 	
-	t\OverlayTextureID[5] = CreateTextureUsingCacheSystem(1024, 1024, 1 + 2) ; ~ DARK
+	t\OverlayTextureID[5] = CreateTextureUsingCacheSystem(SMALLEST_POWER_TWO_HALF, SMALLEST_POWER_TWO_HALF, 1 + 2) ; ~ DARK
 	SetBuffer(TextureBuffer(t\OverlayTextureID[5]))
 	Cls()
 	SetBuffer(BackBuffer())
@@ -8252,7 +8238,7 @@ Function LoadEntities%()
 	MoveEntity(t\OverlayID[5], 0.0, 0.0, 1.0)
 	EntityAlpha(t\OverlayID[5], 0.0)
 	
-	t\OverlayTextureID[6] = CreateTextureUsingCacheSystem(1024, 1024, 1 + 2) ; ~ LIGHT
+	t\OverlayTextureID[6] = CreateTextureUsingCacheSystem(SMALLEST_POWER_TWO_HALF, SMALLEST_POWER_TWO_HALF, 1 + 2) ; ~ LIGHT
 	SetBuffer(TextureBuffer(t\OverlayTextureID[6]))
 	ClsColor(255, 255, 255)
 	Cls()

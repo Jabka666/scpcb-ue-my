@@ -1,6 +1,9 @@
 Global FresizeImage%, FresizeTexture%, FresizeTexture2%
 Global FresizeCam%
 
+Global SMALLEST_POWER_TWO#
+Global SMALLEST_POWER_TWO_HALF#
+
 Function InitFastResize%()
 	; ~ Create Camera
 	Local Cam% = CreateCamera()
@@ -24,15 +27,15 @@ Function InitFastResize%()
 	AddTriangle(SF, 0, 1, 2)
 	AddTriangle(SF, 3, 2, 1)
 	EntityFX(SPR, 17)
-	ScaleEntity(SPR, 4096.0 / Float(opt\RealGraphicWidth), 4096.0 / Float(opt\RealGraphicHeight), 1.0)
+	ScaleEntity(SPR, SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicHeight), 1.0)
 	PositionEntity(SPR, 0.0, 0.0, 1.0001)
 	EntityOrder(SPR, -100001)
 	EntityBlend(SPR, 1)
 	FresizeImage = SPR
 	
 	; ~ Create texture
-	FresizeTexture = CreateTexture(4096.0, 4096.0, 1 + 256)
-	FresizeTexture2 = CreateTexture(4096.0, 4096.0, 1 + 256)
+	FresizeTexture = CreateTexture(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO, 1 + 256)
+	FresizeTexture2 = CreateTexture(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO, 1 + 256)
 	TextureBlend(FresizeTexture2, 3)
 	SetBuffer(TextureBuffer(FresizeTexture2))
 	ClsColor(0, 0, 0)
@@ -48,6 +51,11 @@ Function Graphics3DExt%(Width%, Height%, Depth% = 32, Mode% = 2)
 	Graphics3D(Width, Height, Depth, Mode)
 	TextureFilter("", 8192) ; ~ This turns on Anisotropic filtering for textures
 	TextureAnisotropic(opt\AnisotropicLevel)
+	SMALLEST_POWER_TWO = 512.0
+	While SMALLEST_POWER_TWO < Width Lor SMALLEST_POWER_TWO < Height
+		SMALLEST_POWER_TWO = SMALLEST_POWER_TWO * 2.0
+	Wend
+	SMALLEST_POWER_TWO_HALF = SMALLEST_POWER_TWO / 2.0
 	InitFastResize()
 	AntiAlias(opt\AntiAliasing)
 End Function
@@ -128,11 +136,11 @@ Function RenderGamma%()
 			SetBuffer(TextureBuffer(FresizeTexture))
 			ClsColor(0, 0, 0)
 			Cls()
-			CopyRect(0, 0, opt\GraphicWidth, opt\GraphicHeight, 2048.0 - mo\Viewport_Center_X, 2048.0 - mo\Viewport_Center_Y, BackBuffer(), TextureBuffer(FresizeTexture))
+			CopyRect(0, 0, opt\GraphicWidth, opt\GraphicHeight, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_X, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_Y, BackBuffer(), TextureBuffer(FresizeTexture))
 			SetBuffer(BackBuffer())
 			ClsColor(0, 0, 0)
 			Cls()
-			ScaleRender(0, 0, 4096.0 / Float(opt\GraphicWidth) * opt\AspectRatio, 4096.0 / Float(opt\GraphicWidth) * opt\AspectRatio)
+			ScaleRender(0, 0, SMALLEST_POWER_TWO / Float(opt\GraphicWidth) * opt\AspectRatio, SMALLEST_POWER_TWO / Float(opt\GraphicWidth) * opt\AspectRatio)
 			; ~ Might want to replace Float(opt\GraphicWidth) with Max(opt\GraphicWidth, opt\GraphicHeight) if portrait sizes cause issues
 			; ~ Everyone uses landscape so it's probably a non-issue
 		EndIf
@@ -141,21 +149,21 @@ Function RenderGamma%()
 	; ~ Not by any means a perfect solution
 	; ~ Not even proper gamma correction but it's a nice looking alternative that works in windowed mode
 	If opt\ScreenGamma > 1.0 Then
-		CopyRect(0, 0, opt\RealGraphicWidth, opt\RealGraphicHeight, 2048.0 - opt\RealGraphicWidth / 2, 2048.0 - opt\RealGraphicHeight / 2, BackBuffer(), TextureBuffer(FresizeTexture))
+		CopyRect(0, 0, opt\RealGraphicWidth, opt\RealGraphicHeight, SMALLEST_POWER_TWO_HALF - opt\RealGraphicWidth / 2, SMALLEST_POWER_TWO_HALF - opt\RealGraphicHeight / 2, BackBuffer(), TextureBuffer(FresizeTexture))
 		EntityBlend(FresizeImage, 1)
 		ClsColor(0, 0, 0)
 		Cls()
-		ScaleRender((-1.0) / Float(opt\RealGraphicWidth), 1.0 / Float(opt\RealGraphicWidth), 4096.0 / Float(opt\RealGraphicWidth), 4096.0 / Float(opt\RealGraphicWidth))
+		ScaleRender((-1.0) / Float(opt\RealGraphicWidth), 1.0 / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth))
 		EntityFX(FresizeImage, 1 + 32)
 		EntityBlend(FresizeImage, 3)
 		EntityAlpha(FresizeImage, opt\ScreenGamma - 1.0)
-		ScaleRender((-1.0) / Float(opt\RealGraphicWidth), 1.0 / Float(opt\RealGraphicWidth), 4096.0 / Float(opt\RealGraphicWidth), 4096.0 / Float(opt\RealGraphicWidth))
+		ScaleRender((-1.0) / Float(opt\RealGraphicWidth), 1.0 / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth))
 	ElseIf opt\ScreenGamma < 1.0 ; ~ Maybe optimize this if it's too slow, alternatively give players the option to disable gamma
-		CopyRect(0, 0, opt\RealGraphicWidth, opt\RealGraphicHeight, 2048.0 - opt\RealGraphicWidth / 2, 2048.0 - opt\RealGraphicHeight / 2, BackBuffer(), TextureBuffer(FresizeTexture))
+		CopyRect(0, 0, opt\RealGraphicWidth, opt\RealGraphicHeight, SMALLEST_POWER_TWO_HALF - opt\RealGraphicWidth / 2, SMALLEST_POWER_TWO_HALF - opt\RealGraphicHeight / 2, BackBuffer(), TextureBuffer(FresizeTexture))
 		EntityBlend(FresizeImage, 1)
 		ClsColor(0, 0, 0)
 		Cls()
-		ScaleRender((-1.0) / Float(opt\RealGraphicWidth), 1.0 / Float(opt\RealGraphicWidth), 4096.0 / Float(opt\RealGraphicWidth), 4096.0 / Float(opt\RealGraphicWidth))
+		ScaleRender((-1.0) / Float(opt\RealGraphicWidth), 1.0 / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth))
 		EntityFX(FresizeImage, 1 + 32)
 		EntityBlend(FresizeImage, 2)
 		EntityAlpha(FresizeImage, 1.0)
@@ -163,7 +171,7 @@ Function RenderGamma%()
 		ClsColor(255 * opt\ScreenGamma, 255 * opt\ScreenGamma, 255 * opt\ScreenGamma)
 		Cls()
 		SetBuffer(BackBuffer())
-		ScaleRender((-1.0) / Float(opt\RealGraphicWidth), 1.0 / Float(opt\RealGraphicWidth), 4096.0 / Float(opt\RealGraphicWidth), 4096.0 / Float(opt\RealGraphicWidth))
+		ScaleRender((-1.0) / Float(opt\RealGraphicWidth), 1.0 / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth))
 		SetBuffer(TextureBuffer(FresizeTexture2))
 		ClsColor(0, 0, 0)
 		Cls()
@@ -420,20 +428,20 @@ Function CreateBlurImage%()
 	AddTriangle(SF, 0, 1, 2)
 	AddTriangle(SF, 3, 2, 1)
 	EntityFX(SPR, 17)
-	ScaleEntity(SPR, 4096.0 / Float(ArkSw), 4096.0 / Float(ArkSw), 1.0)
+	ScaleEntity(SPR, SMALLEST_POWER_TWO / Float(ArkSw), SMALLEST_POWER_TWO / Float(ArkSw), 1.0)
 	PositionEntity(SPR, 0, 0, 1.0001)
 	EntityOrder(SPR, -100000)
 	EntityBlend(SPR, 1)
 	ArkBlurImage = SPR
 	
 	; ~ Create blur texture
-	ArkBlurTexture = CreateTextureUsingCacheSystem(4096.0, 4096.0, 0)
+	ArkBlurTexture = CreateTextureUsingCacheSystem(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO, 0)
 	EntityTexture(SPR, ArkBlurTexture)
 End Function
 
 Function RenderBlur%(Power#)
 	EntityAlpha(ArkBlurImage, Power)
-	CopyRect(0, 0, ArkSw, ArkSh, 2048.0 - (ArkSw / 2), 2048.0 - (ArkSh / 2), BackBuffer(), TextureBuffer(ArkBlurTexture))
+	CopyRect(0, 0, ArkSw, ArkSh, SMALLEST_POWER_TWO_HALF - (ArkSw / 2), SMALLEST_POWER_TWO_HALF - (ArkSh / 2), BackBuffer(), TextureBuffer(ArkBlurTexture))
 End Function
 
 Function PlayStartupVideos%()

@@ -682,10 +682,10 @@ End Function
 Function RenderQuickLoading%()
 	If QuickLoadPercent > -1 Then
 		MidHandle(QuickLoadIcon)
-		DrawImage(QuickLoadIcon, opt\GraphicWidth - 90, opt\GraphicHeight - 150)
+		DrawImage(QuickLoadIcon, opt\GraphicWidth - (90 * MenuScale), opt\GraphicHeight - (150 * MenuScale))
 		Color(255, 255, 255)
 		SetFont(fo\FontID[Font_Default])
-		Text(opt\GraphicWidth - 100, opt\GraphicHeight - 90, "LOADING: " + QuickLoadPercent + "%", 1)
+		Text(opt\GraphicWidth - (100 * MenuScale), opt\GraphicHeight - (90 * MenuScale), "LOADING: " + QuickLoadPercent + "%", True)
 	EndIf
 End Function
 
