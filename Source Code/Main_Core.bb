@@ -6404,8 +6404,8 @@ Function RenderGUI%()
 							x = x + (66 * MenuScale)
 							y = y + (419 * MenuScale)
 							
+							; ~ Battery
 							Color(30, 30, 30)
-							
 							If SelectedItem\ItemTemplate\TempName = "radio" Lor SelectedItem\ItemTemplate\TempName = "18vradio" Then
 								For i = 0 To 4
 									Rect(x, y + ((8 * i) * MenuScale), (43 * MenuScale) - ((i * 6) * MenuScale), 4 * MenuScale, Ceil(SelectedItem\State / 20.0) > 4 - i )
@@ -6497,7 +6497,7 @@ Function RenderGUI%()
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
-					x = opt\GraphicWidth - (ImageWidth(SelectedItem\ItemTemplate\Img) * (0.5 * MenuScale)) + (20.0 * MenuScale)
+					x = opt\GraphicWidth - (ImageWidth(SelectedItem\ItemTemplate\Img) / 2) + (20.0 * MenuScale)
 					y = opt\GraphicHeight - (ImageHeight(SelectedItem\ItemTemplate\Img) * (0.4 * MenuScale)) - (85.0 * MenuScale)
 					
 					Local PlayerX%, PlayerZ%
@@ -6583,7 +6583,7 @@ Function RenderGUI%()
 							EndIf
 							Rect(xx + (80 * MenuScale), yy + (70 * MenuScale), 270 * MenuScale, 230 * MenuScale, False)
 							
-							x = opt\GraphicWidth - (ImageWidth(SelectedItem\ItemTemplate\Img) * (0.5 * MenuScale)) + (20.0 * MenuScale)
+							x = opt\GraphicWidth - (ImageWidth(SelectedItem\ItemTemplate\Img) / 2) + (20.0 * MenuScale)
 							y = opt\GraphicHeight - (ImageHeight(SelectedItem\ItemTemplate\Img) * (0.4 * MenuScale)) - (85.0 * MenuScale)
 							
 							If SelectedItem\ItemTemplate\TempName = "nav" Lor SelectedItem\ItemTemplate\TempName = "nav300" Then 

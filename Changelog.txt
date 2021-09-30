@@ -11,6 +11,7 @@ General:
 - Tiny overlay optimization.
 - Renamed "Smooth HUD" option to "Smooth Bars".
 - The fog began to change more smoothly.
+- Hopyfully optimized game on different resolutions.
 
 Menu:
 - Improved input boxes design.
@@ -79,6 +80,7 @@ Bug Fixes:
 - Tiny fix for item positions in "room2_3_ez".
 - Tiny fixes for 4K resolution.
 - Tiny fix for monitor saving.
+- Tiny fix for selected items.
 
 v1.0.0
 ~ This version continues original game.
