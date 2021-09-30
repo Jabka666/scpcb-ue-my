@@ -2300,7 +2300,7 @@ Function UpdateNPCs%()
 										ElseIf PlayerRoom\RoomTemplate\Name = "gate_b"
 											msg\DeathMsg = Chr(34) + "Agent G. to control. Eliminated a Class D escapee in Gate B's courtyard." + Chr(34)
 										Else
-											msg\DeathMsg = ""
+											msg\DeathMsg = SubjectName + ". Terminated by Agent [REDACTED]."
 										EndIf
 										
 										PlaySound2(GunshotSFX, Camera, n\Collider, 35.0)

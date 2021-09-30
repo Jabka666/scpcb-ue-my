@@ -26,6 +26,9 @@ Rooms:
 - Removed "room2_3_ez" event.
 - Some props are brighter now.
 
+Ingame:
+- Added death message for guard.
+
 Map Creator:
 - Sorted rooms list.
 
