@@ -2605,6 +2605,7 @@ Function NullSelectedStuff%()
 	SelectedDoor = Null
 	SelectedScreen = Null
 	SelectedMonitor = Null
+	SelectedItem = Null
 	OtherOpen = Null
 	ClosestButton = 0
 	GrabbedEntity = 0
