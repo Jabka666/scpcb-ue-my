@@ -9879,7 +9879,7 @@ Function Update008%()
 					
 					If opt\ParticleAmount > 0 Then
 						If Rand(50) = 1 Then
-							p.Particles = CreateParticle(6, EntityX(PlayerRoom\NPC[0]\Collider), EntityY(PlayerRoom\NPC[0]\Collider), EntityZ(PlayerRoom\NPC[0]\Collider), Rnd(0.05, 0.1), 0.15, 200)
+							p.Particles = CreateParticle(6, EntityX(PlayerRoom\NPC[0]\Collider), EntityY(PlayerRoom\NPC[0]\Collider), EntityZ(PlayerRoom\NPC[0]\Collider), Rnd(0.05, 0.1), 0.15, 200.0)
 							p\Speed = 0.01 : p\SizeChange = 0.01 : p\Alpha = 0.5 : p\AlphaChange = -0.01
 							RotateEntity(p\Pvt, Rnd(360.0), Rnd(360.0), 0.0)
 						EndIf
