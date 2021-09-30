@@ -3477,12 +3477,6 @@ Function UpdateFog%()
 	CameraClsColor(Camera, CurrFogColorR, CurrFogColorG, CurrFogColorB)
 End Function
 
-; ~ Iventory Constants
-;[Block]
-Const INVENTORY_GFX_SIZE% = 70
-Const INVENTORY_GFX_SPACING% = 35
-;[End Block]
-
 Function UpdateGUI%()
 	CatchErrors("Uncaught (UpdateGUI)")
 	
@@ -3651,6 +3645,8 @@ Function UpdateGUI%()
 	Local IsEmpty%
 	Local IsMouseOn%
 	Local ClosedInv%
+	Local INVENTORY_GFX_SIZE% = 70 * MenuScale
+	Local INVENTORY_GFX_SPACING% = 35 * MenuScale
 	
 	If OtherOpen <> Null Then
 		PrevOtherOpen = OtherOpen
@@ -3668,7 +3664,7 @@ Function UpdateGUI%()
 		Local TempX% = 0
 		
 		x = mo\Viewport_Center_X - ((INVENTORY_GFX_SIZE * 10 / 2) + (INVENTORY_GFX_SPACING * ((10 / 2) - 1))) / 2
-		y = mo\Viewport_Center_Y - (INVENTORY_GFX_SIZE * ((Float(OtherSize) / (10 * 2)) - 1)) - INVENTORY_GFX_SPACING
+		y = mo\Viewport_Center_Y - (INVENTORY_GFX_SIZE * ((OtherSize / 10 * 2) - 1)) - INVENTORY_GFX_SPACING
 		
 		ItemAmount = 0
 		IsMouseOn = -1
@@ -6046,6 +6042,8 @@ Function RenderGUI%()
 	Local IsEmpty%
 	Local IsMouseOn%
 	Local ClosedInv%
+	Local INVENTORY_GFX_SIZE% = 70 * MenuScale
+	Local INVENTORY_GFX_SPACING% = 35 * MenuScale
 	
 	If OtherOpen <> Null Then
 		PrevOtherOpen = OtherOpen
@@ -6060,7 +6058,7 @@ Function RenderGUI%()
 		Local TempX% = 0
 		
 		x = mo\Viewport_Center_X - ((INVENTORY_GFX_SIZE * 10 / 2) + (INVENTORY_GFX_SPACING * ((10 / 2) - 1))) / 2
-		y = mo\Viewport_Center_Y - (INVENTORY_GFX_SIZE * ((Float(OtherSize) / 10 * 2) - 1)) - INVENTORY_GFX_SPACING
+		y = mo\Viewport_Center_Y - (INVENTORY_GFX_SIZE * ((OtherSize / 10 * 2) - 1)) - INVENTORY_GFX_SPACING
 		
 		IsMouseOn = -1
 		For n = 0 To OtherSize - 1
@@ -6069,7 +6067,7 @@ Function RenderGUI%()
 			If IsMouseOn = n Then
 				MouseSlot = n
 				Color(255, 0, 0)
-				Rect(x - 1, y - 1, INVENTORY_GFX_SIZE + 2, INVENTORY_GFX_SIZE + 2)
+				Rect(x - MenuScale, y - MenuScale, INVENTORY_GFX_SIZE + (2 * MenuScale), INVENTORY_GFX_SIZE + (2 * MenuScale))
 			EndIf
 			
 			RenderFrame(x, y, INVENTORY_GFX_SIZE, INVENTORY_GFX_SIZE, (x Mod 64), (x Mod 64))
@@ -6077,12 +6075,12 @@ Function RenderGUI%()
 			If OtherOpen = Null Then Exit
 			
 			If OtherOpen\SecondInv[n] <> Null Then
-				If (IsMouseOn = n Lor SelectedItem <> OtherOpen\SecondInv[n]) Then DrawImage(OtherOpen\SecondInv[n]\InvImg, x + (INVENTORY_GFX_SIZE / 2) - 32, y + (INVENTORY_GFX_SIZE / 2) - 32)
+				If (IsMouseOn = n Lor SelectedItem <> OtherOpen\SecondInv[n]) Then DrawImage(OtherOpen\SecondInv[n]\InvImg, x + (INVENTORY_GFX_SIZE / 2) - (32 * MenuScale), y + (INVENTORY_GFX_SIZE / 2) - (32 * MenuScale))
 			EndIf
 			If OtherOpen\SecondInv[n] <> Null And SelectedItem <> OtherOpen\SecondInv[n] Then
 				If IsMouseOn = n Then
 					Color(255, 255, 255)	
-					Text(x + (INVENTORY_GFX_SIZE / 2), y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - 15, OtherOpen\SecondInv[n]\ItemTemplate\Name, True)				
+					Text(x + (INVENTORY_GFX_SIZE / 2), y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - (15 * MenuScale), OtherOpen\SecondInv[n]\ItemTemplate\Name, True)				
 				EndIf
 			EndIf					
 			
@@ -6120,83 +6118,86 @@ Function RenderGUI%()
 			If MouseOn(x, y, INVENTORY_GFX_SIZE, INVENTORY_GFX_SIZE) Then IsMouseOn = n
 			
 			If Inventory(n) <> Null Then
+				Local ShouldDrawRect% = False
+				
 				Color(200, 200, 200)
 				Select Inventory(n)\ItemTemplate\TempName 
 					Case "gasmask"
 						;[Block]
-						If wi\GasMask = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						If wi\GasMask = 1 Then ShouldDrawRect = True
 						;[End Block]
 					Case "supergasmask"
 						;[Block]
-						If wi\GasMask = 2 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						If wi\GasMask = 2 Then ShouldDrawRect = True
 						;[End Block]
 					Case "gasmask3"
 						;[Block]
-						If wi\GasMask = 3 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						If wi\GasMask = 3 Then ShouldDrawRect = True
 						;[End Block]
 					Case "hazmatsuit"
 						;[Block]
-						If wi\HazmatSuit = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						If wi\HazmatSuit = 1 Then ShouldDrawRect = True
 						;[End Block]
 					Case "hazmatsuit2"
 						;[Block]
-						If wi\HazmatSuit = 2 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						If wi\HazmatSuit = 2 Then ShouldDrawRect = True
 						;[End Block]
 					Case "hazmatsuit3
 						;[Block]"
-						If wi\HazmatSuit = 3 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)	
+						If wi\HazmatSuit = 3 Then ShouldDrawRect = True	
 						;[End Block]
 					Case "vest"
 						;[Block]
-						If wi\BallisticVest = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						If wi\BallisticVest = 1 Then ShouldDrawRect = True
 						;[End Block]
 					Case "finevest"
 						;[Block]
-						If wi\BallisticVest = 2 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						If wi\BallisticVest = 2 Then ShouldDrawRect = True
 						;[End Block]
 					Case "helmet"
 						;[Block]
-						If wi\BallisticHelmet Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						If wi\BallisticHelmet Then ShouldDrawRect = True
 						;[End Block]
 					Case "scp714"
 						;[Block]
-						If I_714\Using Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						If I_714\Using Then ShouldDrawRect = True
 						;[End Block]
 					Case "nvg"
 						;[Block]
-						If wi\NightVision = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						If wi\NightVision = 1 Then ShouldDrawRect = True
 						;[End Block]
 					Case "supernvg"
 						;[Block]
-						If wi\NightVision = 2 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						If wi\NightVision = 2 Then ShouldDrawRect = True
 						;[End Block]
 					Case "finenvg"
 						;[Block]
-						If wi\NightVision = 3 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						If wi\NightVision = 3 Then ShouldDrawRect = True
 						;[End Block]
 					Case "scramble"
 						;[Block]
-						If wi\SCRAMBLE Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						If wi\SCRAMBLE Then ShouldDrawRect = True
 						;[End Block]
 					Case "scp1499"
 						;[Block]
-						If I_1499\Using = 1 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						If I_1499\Using = 1 Then ShouldDrawRect = True
 						;[End Block]
 					Case "super1499"
 						;[Block]
-						If I_1499\Using = 2 Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						If I_1499\Using = 2 Then ShouldDrawRect = True
 						;[End Block]
 					Case "scp427"
 						;[Block]
-						If I_427\Using Then Rect(x - 3, y - 3, INVENTORY_GFX_SIZE + 6, INVENTORY_GFX_SIZE + 6)
+						If I_427\Using Then ShouldDrawRect = True
 						;[End Block]
 				End Select
+				If ShouldDrawRect Then Rect(x - (3 * MenuScale), y - (3 * MenuScale), INVENTORY_GFX_SIZE + (6 * MenuScale), INVENTORY_GFX_SIZE + (6 * MenuScale))
 			EndIf
 			
 			If IsMouseOn = n Then
 				MouseSlot = n
 				Color(255, 0, 0)
-				Rect(x - 1, y - 1, INVENTORY_GFX_SIZE + 2, INVENTORY_GFX_SIZE + 2)
+				Rect(x - MenuScale, y - MenuScale, INVENTORY_GFX_SIZE + (2 * MenuScale), INVENTORY_GFX_SIZE + (2 * MenuScale))
 			EndIf
 			
 			Color(255, 255, 255)
@@ -6204,7 +6205,7 @@ Function RenderGUI%()
 			
 			If Inventory(n) <> Null Then
 				If IsMouseOn = n Lor SelectedItem <> Inventory(n) Then 
-					DrawImage(Inventory(n)\InvImg, x + (INVENTORY_GFX_SIZE / 2) - 32, y + (INVENTORY_GFX_SIZE / 2) - 32)
+					DrawImage(Inventory(n)\InvImg, x + (INVENTORY_GFX_SIZE / 2) - (32 * MenuScale), y + (INVENTORY_GFX_SIZE / 2) - (32 * MenuScale))
 				EndIf
 			EndIf
 			
@@ -6213,7 +6214,7 @@ Function RenderGUI%()
 					If SelectedItem = Null Then
 						SetFont(fo\FontID[Font_Default])
 						Color(255, 255, 255)	
-						Text(x + (INVENTORY_GFX_SIZE / 2), y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - 15, Inventory(n)\Name, True)	
+						Text(x + (INVENTORY_GFX_SIZE / 2), y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - (15 * MenuScale), Inventory(n)\Name, True)	
 					EndIf
 				EndIf
 			EndIf					

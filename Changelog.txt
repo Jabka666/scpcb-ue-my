@@ -81,6 +81,7 @@ Bug Fixes:
 - Tiny fixes for 4K resolution.
 - Tiny fix for monitor saving.
 - Tiny fix for selected items.
+- Tiny fix for credits.
 
 v1.0.0
 ~ This version continues original game.

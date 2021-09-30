@@ -75,6 +75,7 @@ Function CreateItemTemplate.ItemTemplates(Name$, TempName$, OBJPath$, InvImgPath
 	Next
 	If (Not it\InvImg) Then
 		it\InvImg = LoadImage_Strict(InvImgPath)
+		it\InvImg = ScaleImage2(it\InvImg, MenuScale, MenuScale)
 		it\InvImgPath = InvImgPath
 		MaskImage(it\InvImg, 255, 0, 255)
 	EndIf
@@ -82,6 +83,7 @@ Function CreateItemTemplate.ItemTemplates(Name$, TempName$, OBJPath$, InvImgPath
 	If InvImgPath2 <> "" Then
 		If (Not it\InvImg2) Then
 			it\InvImg2 = LoadImage_Strict(InvImgPath2)
+			it\InvImg2 = ScaleImage2(it\InvImg2, MenuScale, MenuScale)
 			MaskImage(it\InvImg2, 255, 0, 255)
 		EndIf
 	Else
@@ -1171,6 +1173,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case VERYFINE
 					;[Block]
 					item\InvSlots = 20.0
+					Remove = False
 					;[End Block]
 			End Select
 			;[End Block]
