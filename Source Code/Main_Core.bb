@@ -56,13 +56,6 @@ End Type
 
 Global mo.Mouse = New Mouse
 
-mo\Mouselook_X_Inc = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the X axis
-mo\Mouselook_Y_Inc = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the Y axis
-mo\Mouse_Left_Limit = 250
-mo\Mouse_Right_Limit = GraphicsWidth() - 250
-mo\Mouse_Top_Limit = 150
-mo\Mouse_Bottom_Limit = GraphicsHeight() - 150 ; ~ As above
-
 Type Launcher
 	Field TotalGFXModes%
 	Field GFXModes%
@@ -97,11 +90,18 @@ Else
 	Graphics3DExt(opt\GraphicWidth, opt\GraphicHeight, 0, (opt\DisplayMode = 2) + 1)
 EndIf
 
+Global MenuScale# = opt\GraphicHeight / 1024.0
+
+mo\Mouselook_X_Inc = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the X axis
+mo\Mouselook_Y_Inc = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the Y axis
+mo\Mouse_Left_Limit = 250 * MenuScale
+mo\Mouse_Right_Limit = opt\GraphicWidth - mo\Mouse_Left_Limit
+mo\Mouse_Top_Limit = 150 * MenuScale
+mo\Mouse_Bottom_Limit = opt\GraphicHeight - mo\Mouse_Top_Limit ; ~ As above
+
 ; ~ Viewport
 mo\Viewport_Center_X = opt\GraphicWidth / 2
 mo\Viewport_Center_Y = opt\GraphicHeight / 2
-	
-Global MenuScale# = opt\GraphicHeight / 1024.0
 
 SetBuffer(BackBuffer())
 
@@ -3161,7 +3161,7 @@ Function UpdateMouseLook%()
 	
 	; ~ Limit the mouse's movement. Using this method produces smoother mouselook movement than centering the mouse each loop
 	If (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And SelectedDoor = Null And SelectedScreen = Null Then
-		If (MouseX() > mo\Mouse_Right_Limit) Lor (MouseX() < mo\Mouse_Left_Limit) Lor (MouseY() > mo\Mouse_Bottom_Limit) Lor (MouseY() < mo\Mouse_Top_Limit)
+		If (ScaledMouseX() > mo\Mouse_Right_Limit) Lor (ScaledMouseX() < mo\Mouse_Left_Limit) Lor (ScaledMouseY() > mo\Mouse_Bottom_Limit) Lor (ScaledMouseY() < mo\Mouse_Top_Limit)
 			MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 		EndIf
 	EndIf
