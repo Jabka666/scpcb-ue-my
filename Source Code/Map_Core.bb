@@ -3967,12 +3967,12 @@ Function FillRoom%(r.Rooms)
 			
 			d.Doors = CreateDoor(r\x - 736.0 * RoomScale, r\y, r\z - 104.0 * RoomScale, 0.0, r)
 			d\Locked = 1
-			PositionEntity(d\Buttons[0], r\x - 288.0 * RoomScale, EntityY(d\Buttons[0], True), r\z - 634.0 * RoomScale, True)
+			PositionEntity(d\Buttons[0], r\x - 288.0 * RoomScale, EntityY(d\Buttons[0], True), r\z - 632.0 * RoomScale, True)
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			
 			d2.Doors = CreateDoor(r\x + 104.0 * RoomScale, r\y, r\z + 736.0 * RoomScale, 270.0, r)
 			d2\Locked = 1
-			PositionEntity(d2\Buttons[0], r\x + 634.0 * RoomScale, EntityY(d2\Buttons[0], True), r\z + 288.0 * RoomScale, True)
+			PositionEntity(d2\Buttons[0], r\x + 632.0 * RoomScale, EntityY(d2\Buttons[0], True), r\z + 288.0 * RoomScale, True)
 			RotateEntity(d2\Buttons[0], 0.0, 90.0, 0.0, True)
 			FreeEntity(d2\Buttons[1]) : d2\Buttons[1] = 0
 			
