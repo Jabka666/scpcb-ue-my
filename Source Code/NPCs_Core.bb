@@ -905,7 +905,7 @@ Function UpdateNPCs%()
 					If n\Idle = 0 And Spawn106 Then
 						If n\State =< 0.0 Then
 							If EntityY(n\Collider) < EntityY(me\Collider) - 20.0 - 0.55 Then
-								If Not PlayerRoom\RoomTemplate\DisableDecals Then
+								If (Not PlayerRoom\RoomTemplate\DisableDecals) Then
 									de.Decals = CreateDecal(0, EntityX(me\Collider), 0.01, EntityZ(me\Collider), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
 									de\SizeChange = 0.001
 								EndIf

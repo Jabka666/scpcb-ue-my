@@ -6,7 +6,8 @@ General:
 Bug Fixes:
 - Fixed button positions in "room2C_gw_2_lcz".
 - Fixed MAV while entering the SCP-970 loop again.
-- Fixed electric box collision in "room2_6_hcz"
+- Fixed electric box collision and ventilation grate lighting in "room2_6_hcz".
+- Fixed SCP-500-01 amount in SCP-500.
 
 - Hopefully fixed mouse movement.
 

@@ -2377,7 +2377,6 @@ Function MainLoop%()
 		If me\LightFlash > 0.0 Then
 			ShowEntity(t\OverlayID[6])
 			EntityAlpha(t\OverlayID[6], Max(Min(me\LightFlash + Rnd(-0.2, 0.2), 1.0), 0.0))
-			EntityColor(t\OverlayID[6], 255.0, 255.0, 255.0)
 			me\LightFlash = Max(me\LightFlash - (fps\Factor[0] / 70.0), 0.0)
 		Else
 			HideEntity(t\OverlayID[6])
@@ -5514,9 +5513,9 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "scp500"
 					;[Block]
-					If I_500\Taken < Rand(10) Then
+					If I_500\Taken < Rand(20) Then
 						If ItemAmount < MaxItemAmount Then
-							For i = 0 To ItemAmount
+							For i = 0 To MaxItemAmount - 1
 								If Inventory(i) = Null Then
 									Inventory(i) = CreateItem("SCP-500-01", "scp500pill", 0.0, 0.0, 0.0)
 									Inventory(i)\Picked = True
@@ -5525,18 +5524,15 @@ Function UpdateGUI%()
 									HideEntity(Inventory(i)\Collider)
 									EntityType(Inventory(i)\Collider, HIT_ITEM)
 									EntityParent(Inventory(i)\Collider, 0)
-									
-									msg\Txt = "You took SCP-500-01 from the bottle."
-									msg\Timer = 70.0 * 6.0
-									
-									I_500\Taken = I_500\Taken + 1
 									Exit
 								EndIf
 							Next
+							CreateMsg("You took SCP-500-01 from the bottle.")
+							I_500\Taken = I_500\Taken + 1
 						Else
-							msg\Txt = "You can't carry any more items."
-							msg\Timer = 70.0 * 6.0				
+							CreateMsg("You cannot carry any more items.")
 						EndIf
+						SelectedItem = Null
 					Else
 						I_500\Taken = 0
 						RemoveItem(SelectedItem)

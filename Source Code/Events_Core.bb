@@ -3947,7 +3947,7 @@ Function UpdateEvents%()
 						If e\room\NPC[0]\Frame = 60.0 Then
 							e\room\NPC[0]\IsDead = True
 							e\EventStr = "Step2"
-							SetNPCFrame(e\room\NPC[0], 57)
+							SetNPCFrame(e\room\NPC[0], 57.0)
 						EndIf
 					ElseIf e\EventStr = "Step2"
 						AnimateNPC(e\room\NPC[0], 57.0, 60.0, 0.5, False)
@@ -4071,8 +4071,8 @@ Function UpdateEvents%()
 						; ~ 2 = left
 						; ~ 3 = down
 						
-						iX = MTGridSize / 2 + Rand(-2, 2)
-						iY = MTGridSize / 2 + Rand(-2, 2)
+						iX = (MTGridSize) / 2 + Rand(-2, 2)
+						iY = (MTGridSize) / 2 + Rand(-2, 2)
 						
 						e\room\mt\Grid[iX + (iY * MTGridSize)] = 1
 						
