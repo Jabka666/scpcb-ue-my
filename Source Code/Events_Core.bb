@@ -5333,7 +5333,7 @@ Function UpdateEvents%()
 								;[Block]
 								i = Rand(0, MaxItemAmount - 1)
 								If Inventory(i) <> Null Then
-									RemoveWearableItems(Inventory(e\EventState2))
+									RemoveWearableItems(Inventory(i))
 									RemoveItem(Inventory(i))
 								EndIf
 								;[End Block]
@@ -5382,7 +5382,7 @@ Function UpdateEvents%()
 								;[Block]
 								i = Rand(0, MaxItemAmount - 1)
 								If Inventory(i) <> Null Then
-									RemoveWearableItems(Inventory(e\EventState2))
+									RemoveWearableItems(Inventory(i))
 									RemoveItem(Inventory(i))
 								EndIf
 								Inventory(i) = CreateItem("Strange Note", "paper", 1.0, 1.0, 1.0)
@@ -5413,12 +5413,14 @@ Function UpdateEvents%()
 								;[Block]
 							Case 60.0
 								;[Block]
-								If (Not t\MiscTextureID[14]) Then
-									Tex = LoadTexture_Strict("GFX\npcs\scp_173_H.png")
-									If opt\Atmosphere Then TextureBlend(Tex, 5)
-									EntityTexture(Curr173\OBJ, Tex)
-									EntityTexture(Curr173\OBJ2, Tex)
-									DeleteSingleTextureEntryFromCache(Tex)
+								If Curr173 <> Null Then
+									If (Not t\MiscTextureID[14]) Then
+										Tex = LoadTexture_Strict("GFX\npcs\scp_173_H.png")
+										If opt\Atmosphere Then TextureBlend(Tex, 5)
+										EntityTexture(Curr173\OBJ, Tex)
+										EntityTexture(Curr173\OBJ2, Tex)
+										DeleteSingleTextureEntryFromCache(Tex)
+									EndIf
 								EndIf
 								;[End Block]
 						End Select
