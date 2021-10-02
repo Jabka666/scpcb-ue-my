@@ -136,12 +136,12 @@ For i = 1 To 2
 	Next
 Next
 
-Const MapSize% = 18
+Const MapGridSize% = 18
 
-Dim Map.RoomTemplates(MapSize, MapSize)
-Dim MapAngle%(MapSize, MapSize)
-Dim MapEvent$(MapSize, MapSize)
-Dim MapEventProb#(MapSize, MapSize)
+Dim Map.RoomTemplates(MapGridSize, MapGridSize)
+Dim MapAngle%(MapGridSize, MapGridSize)
+Dim MapEvent$(MapGridSize, MapGridSize)
+Dim MapEventProb#(MapGridSize, MapGridSize)
 
 Const ForestGridSize% = 9
 Dim ForestPlace.RoomTemplates(ForestGridSize, ForestGridSize)
@@ -456,8 +456,8 @@ Repeat
 		
 		; ~ Facility grid
 		If CurrMapGrid = 0 Then
-			For x = 0 To MapSize
-				For y = 0 To MapSize
+			For x = 0 To MapGridSize
+				For y = 0 To MapGridSize
 					If y < ZoneTransValue2 Then
 						Color(255, 255, 125)
 					ElseIf y = ZoneTransValue2
@@ -470,19 +470,19 @@ Repeat
 						Color(255, 255, 255)
 					EndIf
 					
-					Rect(Float(Width) / Float(MapSize + 1) * x, Float(Height) / Float(MapSize + 1) * y, (Float(Width) / Float(MapSize + 1)), (Float(Height) / Float(MapSize + 1)), True)
+					Rect(Float(Width) / Float(MapGridSize + 1) * x, Float(Height) / Float(MapGridSize + 1) * y, (Float(Width) / Float(MapGridSize + 1)), (Float(Height) / Float(MapGridSize + 1)), True)
 					
 					Local PrevSelectedX% = Grid_SelectedX, PrevSelectedY% = Grid_SelectedY
 					
-					If (MouseX() - GadgetX(Map_2D)) > (Float(Width) / Float(MapSize + 1) * x + GadgetX(WinHandle)) And (MouseX() - GadgetX(Map_2D)) < ((Float(Width) / Float(MapSize + 1) * x) + (Float(Width) / Float(MapSize + 1)) + GadgetX(WinHandle))
+					If (MouseX() - GadgetX(Map_2D)) > (Float(Width) / Float(MapGridSize + 1) * x + GadgetX(WinHandle)) And (MouseX() - GadgetX(Map_2D)) < ((Float(Width) / Float(MapGridSize + 1) * x) + (Float(Width) / Float(MapGridSize + 1)) + GadgetX(WinHandle))
 						Local Offset% = 45
 						
-						If (MouseY() - GadgetY(Map_2D)) > (Float(Height) / Float(MapSize + 1) * y + GadgetY(WinHandle) + Offset) And (MouseY() - GadgetY(Map_2D)) < ((Float(Height) / Float(MapSize + 1) * y) + (Float(Height) / Float(MapSize + 1)) + GadgetY(WinHandle) + Offset)
+						If (MouseY() - GadgetY(Map_2D)) > (Float(Height) / Float(MapGridSize + 1) * y + GadgetY(WinHandle) + Offset) And (MouseY() - GadgetY(Map_2D)) < ((Float(Height) / Float(MapGridSize + 1) * y) + (Float(Height) / Float(MapGridSize + 1)) + GadgetY(WinHandle) + Offset)
 							Color(200, 200, 200)
-							Rect(Float(Width) / Float(MapSize + 1) * x, Float(Height) / Float(MapSize + 1) * y, (Float(Width) / Float(MapSize + 1)), (Float(Height) / Float(MapSize + 1)), True)
+							Rect(Float(Width) / Float(MapGridSize + 1) * x, Float(Height) / Float(MapGridSize + 1) * y, (Float(Width) / Float(MapGridSize + 1)), (Float(Height) / Float(MapGridSize + 1)), True)
 							If Map(x, y) = Null And SelectedGadgetItem(ListBox) > -1
-								x2 = Float(Width) / Float(MapSize + 1)
-								y2 = Float(Height) / Float(MapSize + 1)
+								x2 = Float(Width) / Float(MapGridSize + 1)
+								y2 = Float(Height) / Float(MapGridSize + 1)
 								DrawImage(PlusIcon, (x2 * x) + (x2 / 2.0) + 0.5, (y2 * y) + (y2 / 2.0) + 0.5)
 							EndIf
 							If MouseHit1 Then
@@ -620,15 +620,15 @@ Repeat
 						
 					If Grid_SelectedX = x And Grid_SelectedY = y Then
 						Color(150, 150, 150)
-						Rect(Float(Width) / Float(MapSize + 1) * x, Float(Height) / Float(MapSize + 1) * y, (Float(Width) / Float(MapSize + 1)), (Float(Height) / Float(MapSize + 1)), True)
+						Rect(Float(Width) / Float(MapGridSize + 1) * x, Float(Height) / Float(MapGridSize + 1) * y, (Float(Width) / Float(MapGridSize + 1)), (Float(Height) / Float(MapGridSize + 1)), True)
 					EndIf
 					
 					If Map(x, y) = Null Then
 						Color(90, 90, 90)
-						Rect(Float(Width) / Float(MapSize + 1) * x + 1, Float(Height) / Float(MapSize + 1) * y + 1, (Float(Width) / Float(MapSize + 1)) - 1, (Float(Height) / Float(MapSize + 1)) - 1, False)
+						Rect(Float(Width) / Float(MapGridSize + 1) * x + 1, Float(Height) / Float(MapGridSize + 1) * y + 1, (Float(Width) / Float(MapGridSize + 1)) - 1, (Float(Height) / Float(MapGridSize + 1)) - 1, False)
 					Else
-						x2 = Float(Width) / Float(MapSize + 1)
-						y2 = Float(Height) / Float(MapSize + 1)
+						x2 = Float(Width) / Float(MapGridSize + 1)
+						y2 = Float(Height) / Float(MapGridSize + 1)
 						DrawImage(MapIcons(Map(x, y)\Shape, Floor(MapAngle(x, y) / 90)), (x2 * x) + (x2 / 2.0) + 0.5, (y2 * y) + (y2 / 2.0) + 0.5)
 						
 						If Grid_SelectedX = x And Grid_SelectedY = y Then
@@ -658,27 +658,27 @@ Repeat
 								Local PrevAngle% = MapAngle(Grid_SelectedX, Grid_SelectedY)
 								
 								; ~ Left
-								If (MouseX() - GadgetX(Map_2D)) < (Float(Width) / Float(MapSize + 1) * Grid_SelectedX + GadgetX(WinHandle))
+								If (MouseX() - GadgetX(Map_2D)) < (Float(Width) / Float(MapGridSize + 1) * Grid_SelectedX + GadgetX(WinHandle))
 									MapAngle(Grid_SelectedX, Grid_SelectedY) = 90
 								EndIf
 								; ~ Right
-								If (MouseX() - GadgetX(Map_2D)) > ((Float(Width) / Float(MapSize + 1) * Grid_SelectedX) + (Float(Width) / Float(MapSize + 1)) + GadgetX(WinHandle))
+								If (MouseX() - GadgetX(Map_2D)) > ((Float(Width) / Float(MapGridSize + 1) * Grid_SelectedX) + (Float(Width) / Float(MapGridSize + 1)) + GadgetX(WinHandle))
 									MapAngle(Grid_SelectedX, Grid_SelectedY) = 270
 								EndIf
 								; ~ Up
 								Offset = 45
-								If (MouseY() - GadgetY(Map_2D)) < (Float(Height) / Float(MapSize + 1) * Grid_SelectedY + GadgetY(WinHandle) + Offset)
+								If (MouseY() - GadgetY(Map_2D)) < (Float(Height) / Float(MapGridSize + 1) * Grid_SelectedY + GadgetY(WinHandle) + Offset)
 									MapAngle(Grid_SelectedX, Grid_SelectedY) = 180
 								EndIf
 								; ~ Down
-								If (MouseY() - GadgetY(Map_2D)) > ((Float(Height) / Float(MapSize + 1) * Grid_SelectedY) + (Float(Height) / Float(MapSize + 1)) + GadgetY(WinHandle) + Offset)
+								If (MouseY() - GadgetY(Map_2D)) > ((Float(Height) / Float(MapGridSize + 1) * Grid_SelectedY) + (Float(Height) / Float(MapGridSize + 1)) + GadgetY(WinHandle) + Offset)
 									MapAngle(Grid_SelectedX, Grid_SelectedY) = 0
 								EndIf
 								
-								Local Width2% = Float(Width) / Float(MapSize + 1) / 2.0
-								Local Height2% = Float(Height) / Float(MapSize + 1) / 2.0
+								Local Width2% = Float(Width) / Float(MapGridSize + 1) / 2.0
+								Local Height2% = Float(Height) / Float(MapGridSize + 1) / 2.0
 								
-								DrawImage(Arrows[Floor(MapAngle(Grid_SelectedX, Grid_SelectedY) / 90)], Float(Width) / Float(MapSize + 1) * Grid_SelectedX + Width2, Float(Height) / Float(MapSize + 1) * Grid_SelectedY + Height2)
+								DrawImage(Arrows[Floor(MapAngle(Grid_SelectedX, Grid_SelectedY) / 90)], Float(Width) / Float(MapGridSize + 1) * Grid_SelectedX + Width2, Float(Height) / Float(MapGridSize + 1) * Grid_SelectedY + Height2)
 								If PrevAngle <> MapAngle(Grid_SelectedX, Grid_SelectedY) Then
 									ChangeGridGadget = True
 									If MapEvent(Grid_SelectedX, Grid_SelectedY) <> "" And MapEvent(Grid_SelectedX, Grid_SelectedY) <> "[none]" Then
@@ -1249,8 +1249,8 @@ Repeat
 		If EventSource() = ResetZoneTrans Then
 			SetGadgetText(ZoneTrans1, 5)
 			SetGadgetText(ZoneTrans2, 11)
-			ZoneTransValue1 = (MapSize) - Int(TextFieldText(ZoneTrans1))
-			ZoneTransValue2 = (MapSize) - Int(TextFieldText(ZoneTrans2))
+			ZoneTransValue1 = (MapGridSize) - Int(TextFieldText(ZoneTrans1))
+			ZoneTransValue2 = (MapGridSize) - Int(TextFieldText(ZoneTrans2))
 		EndIf
 		If EventSource() = ZoneTrans1 Then
 			SetGadgetText(ZoneTrans1, Int(TextFieldText(ZoneTrans1)))
@@ -1259,10 +1259,10 @@ Repeat
 			SetGadgetText(ZoneTrans2, Int(TextFieldText(ZoneTrans2)))
 		EndIf
 		If EventSource() = ApplyZoneTrans Then
-			SetGadgetText(ZoneTrans2, Int(Min(Max(Int(TextFieldText(ZoneTrans2)), Int(TextFieldText(ZoneTrans1)) + 2), MapSize - 1)))
+			SetGadgetText(ZoneTrans2, Int(Min(Max(Int(TextFieldText(ZoneTrans2)), Int(TextFieldText(ZoneTrans1)) + 2), MapGridSize - 1)))
 			SetGadgetText(ZoneTrans1, Int(Min(Max(Int(TextFieldText(ZoneTrans1)), 1), Int(TextFieldText(ZoneTrans2)) - 2)))
-			ZoneTransValue1 = MapSize - Int(TextFieldText(ZoneTrans1))
-			ZoneTransValue2 = MapSize - Int(TextFieldText(ZoneTrans2))
+			ZoneTransValue1 = MapGridSize - Int(TextFieldText(ZoneTrans1))
+			ZoneTransValue2 = MapGridSize - Int(TextFieldText(ZoneTrans2))
 		EndIf
 		If EventSource() = OK Then ; ~ When "OK" is pressed
 			ClearGadgetItems(ListBox)
@@ -1646,8 +1646,8 @@ Function EraseMap()
 		SetGadgetText(Event_Prob_Label, "Event chance: " + (SliderValue(Event_Prob) + 1) + "%")
 	EndIf
 	
-	For x = 0 To MapSize
-		For y = 0 To MapSize
+	For x = 0 To MapGridSize
+		For y = 0 To MapGridSize
 			Map(x, y) = Null
 			MapAngle(x, y) = 0
 			MapEvent(x, y) = ""
@@ -1695,8 +1695,8 @@ Function LoadMap(File$)
 		SetGadgetText(Descr_Text, MapDescription)
 		ZoneTransValue1 = ReadByte(f)
 		ZoneTransValue2 = ReadByte(f)
-		SetGadgetText(ZoneTrans1, (MapSize) - ZoneTransValue1)
-		SetGadgetText(ZoneTrans2, (MapSize) - ZoneTransValue2)
+		SetGadgetText(ZoneTrans1, (MapGridSize) - ZoneTransValue1)
+		SetGadgetText(ZoneTrans2, (MapGridSize) - ZoneTransValue2)
 		
 		Local RoomAmount% = ReadInt(f) ; ~ Amount of rooms
 		Local ForestAmount% = ReadInt(f) ; ~ Amount of forest pieces
@@ -1797,8 +1797,8 @@ Function SaveMap(File$, StreamTopRgm% = False, Old% = 0)
 		WriteByte(f, ZoneTransValue2)
 		; ~ Facility room amount
 		Temp = 0
-		For x = 0 To MapSize
-			For y = 0 To MapSize
+		For x = 0 To MapGridSize
+			For y = 0 To MapGridSize
 				If Map(x, y) <> Null Then
 					Temp = Temp + 1
 				EndIf
@@ -1831,8 +1831,8 @@ Function SaveMap(File$, StreamTopRgm% = False, Old% = 0)
 		WriteInt(f, CurrMapGrid)
 	EndIf
 	
-	For x = 0 To MapSize
-		For y = 0 To MapSize
+	For x = 0 To MapGridSize
+		For y = 0 To MapGridSize
 			If Map(x, y) <> Null
 				WriteByte(f, x)
 				WriteByte(f, y)

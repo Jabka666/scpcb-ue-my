@@ -17,7 +17,7 @@ End Function
 Const ZONEAMOUNT% = 3
 
 Function GetZone%(y%)
-	Return(Min(Floor((Float(MapSize - y) / MapSize * ZONEAMOUNT)), ZONEAMOUNT - 1))
+	Return(Min(Floor((Float(MapGridSize - y) / MapGridSize * ZONEAMOUNT)), ZONEAMOUNT - 1))
 End Function
 
 Global Mesh_MinX#, Mesh_MinY#, Mesh_MinZ#

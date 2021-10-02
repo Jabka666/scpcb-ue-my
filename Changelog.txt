@@ -12,6 +12,8 @@ Bug Fixes:
 - Fixed MAV while entering the SCP-970 loop again.
 - Fixed electric box collision and ventilation grate lighting in "room2_6_hcz".
 - Fixed SCP-500-01 amount in SCP-500.
+- Fixed MAV in "cont_914" (the bug manifests itself while entering the "room2_nuke" for some reason).
+- Fixed wrong zone sections for Map Creator.
 
 - Hopefully fixed mouse movement.
 
