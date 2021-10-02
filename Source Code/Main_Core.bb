@@ -2336,7 +2336,7 @@ Function MainLoop%()
 			Else
 				me\BlinkTimer = me\BlinkTimer - (fps\Factor[0] * 0.6 * me\BlinkEffect)
 				If wi\NightVision = 0 And (Not wi\SCRAMBLE) Then
-					If me\EyeIrritation > 0.0 Then me\BlinkTimer = me\BlinkTimer - Min(me\EyeIrritation / 100.0 + 1.0, 4.0) * fps\Factor[0]
+					If me\EyeIrritation > 0.0 Then me\BlinkTimer = me\BlinkTimer - Min((me\EyeIrritation / 100.0) + 1.0, 4.0) * fps\Factor[0]
 				EndIf
 			EndIf
 			
@@ -3179,7 +3179,6 @@ Function UpdateMouseLook%()
 		EndIf
 		
 		ShowEntity(t\OverlayID[1])
-		If wi\GasMaskFogTimer > 0.0 Then ShowEntity(t\OverlayID[10])
 		
 		If ChannelPlaying(BreathCHN) Then
 			wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + (fps\Factor[0] * 2.0), 100.0)
@@ -3194,7 +3193,10 @@ Function UpdateMouseLook%()
 				wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.32))
 			EndIf
 		EndIf
-		EntityAlpha(t\OverlayID[10], Min(((wi\GasMaskFogTimer * 0.2) ^ 2.0) / 1000.0, 0.45))
+		If wi\GasMaskFogTimer > 0.0 Then
+			ShowEntity(t\OverlayID[10])
+			EntityAlpha(t\OverlayID[10], Min(((wi\GasMaskFogTimer * 0.2) ^ 2.0) / 1000.0, 0.45))
+		EndIf
 	Else
 		If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN)
 		wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.32))
@@ -3379,10 +3381,10 @@ Function UpdateDark%()
 	
 	If DarkAlpha <> 0.0 Then
 		ShowEntity(t\OverlayID[5])
+		EntityAlpha(t\OverlayID[5], DarkAlpha)
 	Else
 		HideEntity(t\OverlayID[5])
 	EndIf
-	EntityAlpha(t\OverlayID[5], DarkAlpha)
 End Function
 
 ; ~ Fog Constants

@@ -1,7 +1,12 @@
 v1.0.2
 
+General:
+- Tiny code optimizations.
+
 Bug Fixes:
 - Fixed button positions in "room2C_gw_2_lcz".
+- Fixed MAV while entering the SCP-970 loop again.
+- Fixed electric box collision in "room2_6_hcz"
 
 - Hopefully fixed mouse movement.
 
@@ -65,11 +70,11 @@ Bug Fixes:
 - Fixed blood decal position under guard in SCP-895's containment chamber. 
 - Fixed blood decal position under player in SCP-1123's containment chamber.
 - Fixed ability to save the game on endings. 
-- Fixed game crash in SCP-035's containment chamber.
+- Fixed MAV in SCP-035's containment chamber.
 - Fixes for SCP-1499's dimension.
     - Fixed double first chunk.
     - Fixed chunk objects spawn.
-    - Fixed game crash in SCP-1499's dimension.
+    - Fixed MAV in SCP-1499's dimension.
 - Fixed the game doesn't load door positions properly.
 - Fixed doors in "room2_servers_hcz".
 - Fixed SCP-1048's paper texture.
