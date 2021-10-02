@@ -3,6 +3,10 @@ v1.0.2
 General:
 - Tiny code optimizations.
 
+Mechanics and effects:
+- The tesla gate stops NPCs.
+    - Also kills MTF.
+
 Bug Fixes:
 - Fixed button positions in "room2C_gw_2_lcz".
 - Fixed MAV while entering the SCP-970 loop again.

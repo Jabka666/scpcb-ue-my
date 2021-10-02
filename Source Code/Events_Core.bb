@@ -820,7 +820,7 @@ End Function
 Function UpdateEvents%()
 	CatchErrors("Uncaught (UpdateEvents)")
 	
-	Local p.Particles, n.NPCs, r.Rooms, e.Events, e2.Events, de.Decals, du.Dummy1499_1, w.Waypoints
+	Local p.Particles, n.NPCs, n2.NPCs, r.Rooms, e.Events, e2.Events, de.Decals, du.Dummy1499_1, w.Waypoints
 	Local it.Items, it2.Items, em.Emitters, sc.SecurityCams, sc2.SecurityCams, wayp.Waypoints, do.Doors
 	Local Dist#, i%, Temp%, Pvt%, StrTemp$, j%, k%
 	Local CurrTrigger$ = "", fDir#, Scale#, Tex%, t1%, Name$
@@ -3747,6 +3747,8 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_room2_tesla
 				;[Block]
+				Local ActivateTesla% = False
+				
 				Temp = True
 				If e\EventState2 > 70.0 * 3.5 And e\EventState2 < 70.0 * 90.0 Then Temp = False
 				If Temp And EntityY(me\Collider, True) > EntityY(e\room\OBJ, True) And EntityY(me\Collider, True) < 4.0 Then
@@ -3768,11 +3770,8 @@ Function UpdateEvents%()
 							For i = 0 To 2
 								If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[i], True), EntityZ(me\Collider), EntityZ(e\room\Objects[i], True)) < PowTwo(300.0 * RoomScale) Then
 									; ~ Play the activation sound
-									If me\KillTimer >= 0.0 Then 
-										me\SndVolume = Max(8.0, me\SndVolume)
-										StopChannel(e\SoundCHN)
-										e\SoundCHN = PlaySound2(TeslaActivateSFX, Camera, e\room\Objects[3], 4.0, 0.5)
-										e\EventState = 1.0
+									If me\KillTimer >= 0.0 Then
+										ActivateTesla = True
 										Exit
 									EndIf
 								EndIf
@@ -3813,40 +3812,6 @@ Function UpdateEvents%()
 						Else
 							HideEntity(e\room\Objects[4])
 						EndIf
-						
-						If Curr106\State < -10.0 And e\EventState = 0.0 Then 
-							For i = 0 To 2
-								If DistanceSquared(EntityX(Curr106\Collider), EntityX(e\room\Objects[i], True), EntityZ(Curr106\Collider), EntityZ(e\room\Objects[i], True)) < PowTwo(300.0 * RoomScale) Then
-									; ~ Play the activation sound
-									If me\KillTimer >= 0.0 Then 
-										StopChannel(e\SoundCHN)
-										e\SoundCHN = PlaySound2(TeslaActivateSFX, Camera, e\room\Objects[3], 4.0, 0.5)
-										HideEntity(e\room\Objects[4])
-										e\EventState = 1.0
-										Curr106\State = 70.0 * 60.0 * Rnd(10.0, 13.0)
-										GiveAchievement(AchvTesla)
-										Exit
-									EndIf
-								EndIf
-							Next
-						EndIf
-						
-						For n.NPCs = Each NPCs
-							If (n\NPCType = NPCType049_2 Lor n\NPCType = NPCType008_1) And (Not n\IsDead) Then
-								For i = 0 To 2
-									If DistanceSquared(EntityX(n\Collider), EntityX(e\room\Objects[i], True), EntityZ(n\Collider), EntityZ(e\room\Objects[i], True)) < PowTwo(300.0 * RoomScale) Then
-										; ~ Play the activation sound
-										If me\KillTimer >= 0.0 Then 
-											StopChannel(e\SoundCHN)
-											e\SoundCHN = PlaySound2(TeslaActivateSFX, Camera, e\room\Objects[3], 4.0, 0.5)
-											HideEntity(e\room\Objects[4])
-											e\EventState = 1.0
-											Exit
-										EndIf
-									EndIf
-								Next
-							EndIf
-						Next
 					Else
 						e\EventState = e\EventState + fps\Factor[0]
 						If e\EventState =< 40.0 Then
@@ -3875,34 +3840,6 @@ Function UpdateEvents%()
 								EndIf
 								
 								If e\EventStr = "Step1" Then e\room\NPC[0]\State = 3.0
-									
-								If Curr106\State < -10.0 Then
-									For i = 0 To 2
-										If DistanceSquared(EntityX(Curr106\Collider), EntityX(e\room\Objects[i], True), EntityZ(Curr106\Collider), EntityZ(e\room\Objects[i], True)) < PowTwo(250.0 * RoomScale) Then
-											If PlayerRoom = e\room Then me\LightFlash = 0.3
-											If opt\ParticleAmount > 0 Then
-												For i = 0 To 5 + (5 * (opt\ParticleAmount - 1))
-													p.Particles = CreateParticle(0, EntityX(Curr106\Collider, True), EntityY(Curr106\Collider, True), EntityZ(Curr106\Collider, True), 0.015, -0.2, 250.0)
-													p\Size = 0.03 : p\Gravity = -0.2 : p\LifeTime = 200.0 : p\SizeChange = 0.005 : p\Speed = 0.001
-													RotateEntity(p\Pvt, Rnd(360.0), Rnd(360.0), 0.0, True)
-												Next
-											EndIf
-											Curr106\State = -20000.0
-											TranslateEntity(Curr106\Collider, 0.0, -50.0, 0.0, True)
-										EndIf
-									Next								
-								EndIf
-								
-								For n.NPCs = Each NPCs
-									If (n\NPCType = NPCType049_2 Lor n\NPCType = NPCType008_1) And (Not n\IsDead) Then
-										For i = 0 To 2
-											If DistanceSquared(EntityX(n\Collider), EntityX(e\room\Objects[i], True), EntityZ(n\Collider), EntityZ(e\room\Objects[i], True)) < PowTwo(250.0 * RoomScale) Then
-												n\IsDead = True
-												Exit
-											EndIf
-										Next	
-									EndIf
-								Next
 								
 								For i = 3 To 4
 									HideEntity(e\room\Objects[i])
@@ -3924,6 +3861,18 @@ Function UpdateEvents%()
 							EndIf
 						EndIf
 					EndIf
+					For n.NPCs = Each NPCs
+						Select n\NPCType
+							Case NPCType008_1, NPCType049_2, NPCTypeMTF
+								;[Block]
+								TriggerTeslaGateOnNPCs(e, n)
+								;[End Block]
+							Case NPCType049, NPCType096, NPCType106
+								;[Block]
+								TriggerTeslaGateOnNPCs(e, n, False)
+								;[End Block]
+						End Select
+					Next
 				Else
 					HideEntity(e\room\Objects[4])
 				EndIf
@@ -3933,10 +3882,7 @@ Function UpdateEvents%()
 						If e\EventState = 0.0 Then
 							For i = 0 To 2
 								If DistanceSquared(EntityX(e\room\NPC[0]\Collider), EntityX(e\room\Objects[i], True), EntityZ(e\room\NPC[0]\Collider), EntityZ(e\room\Objects[i], True)) < PowTwo(400.0 * RoomScale)
-									StopChannel(e\SoundCHN)
-									e\SoundCHN = PlaySound2(TeslaActivateSFX, Camera, e\room\Objects[3], 4.0, 0.5)
-									HideEntity(e\room\Objects[4])
-									e\EventState = 1.0
+									ActivateTesla = True
 									Exit
 								EndIf
 							Next
@@ -3972,6 +3918,14 @@ Function UpdateEvents%()
 					EndIf
 				EndIf
 				
+				If ActivateTesla Then
+					me\SndVolume = Max(8.0, me\SndVolume)
+					StopChannel(e\SoundCHN)
+					e\SoundCHN = PlaySound2(TeslaActivateSFX, Camera, e\room\Objects[3], 4.0, 0.5)
+					HideEntity(e\room\Objects[4])
+					e\EventState = 1.0
+				EndIf
+				
 				If PlayerRoom\RoomTemplate\Name <> "dimension_106" And PlayerRoom\RoomTemplate\Name <> "cont2_860_1" Then
 					If e\EventState2 = 0.0 Then
 						If e\EventState3 =< 0.0 Then 
@@ -3997,6 +3951,14 @@ Function UpdateEvents%()
 							e\EventState3 = e\EventState3 - fps\Factor[0]
 						EndIf
 					Else
+						For n.NPCs = Each NPCs
+							If n\NPCType = NPCTypeMTF Then
+								If n\IsDead Then
+									e\EventState2 = 0.0
+									Exit
+								EndIf
+							EndIf
+						Next
 						If e\EventState2 >= 70.0 * 92.0 And e\EventState2 - fps\Factor[0] < 70.0 * 92.0
 							PlayAnnouncement("SFX\Character\MTF\Tesla" + Rand(1, 3) + ".ogg")
 						EndIf
@@ -5243,7 +5205,8 @@ Function UpdateEvents%()
 							e\room\RoomDoors[4]\Locked = 1
 						Else
 							For n.NPCs = Each NPCs
-								If n\NPCType = NPCTypeMTF Then 
+								If n\NPCType = NPCTypeMTF Then
+									If n\IsDead Then Exit
 									If EntityDistanceSquared(me\Collider, Curr173\OBJ) < 64.0 Then 
 										e\room\RoomDoors[1]\Locked = 1
 										e\room\RoomDoors[4]\Locked = 1
