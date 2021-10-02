@@ -7853,7 +7853,7 @@ Function UpdateEvents%()
 									
 									If e\SoundCHN2 <> 0 Then e\SoundCHN2 = 0
 									If (Rotation > -94.0 And Rotation < -86.0) Lor (Rotation > -44.0 And Rotation < -36.0) Lor (Rotation > -4.0 And Rotation < 4.0) Lor (Rotation > 36.0 And Rotation < 44.0) Lor (Rotation > 86.0 And Rotation < 94.0) Then
-										If (Not e\SoundCHN) Then e\SoundCHN = PlaySound2(KnobSFX[Rand(1, 2)], Camera, e\room\Objects[1], 2.0, 0.5)
+										If (Not e\SoundCHN) Then e\SoundCHN = PlaySound2(KnobSFX[Rand(0, 1)], Camera, e\room\Objects[1], 2.0, 0.5)
 									Else
 										If e\SoundCHN <> 0 Then e\SoundCHN = 0
 									EndIf
@@ -7889,7 +7889,7 @@ Function UpdateEvents%()
 						EndIf
 						RotateEntity(e\room\Objects[1], 0.0, 0.0, CurveValue(Angle, EntityRoll(e\room\Objects[1]), 20.0))
 						If (Not e\SoundCHN2) Then
-							If Angle = -90.0 Lor Angle = -40.0 Lor Angle = -1.0 Lor Angle = 0.0 Lor Angle = 40.0 Lor Angle = 90.0 Then e\SoundCHN2 = PlaySound2(KnobSFX[Rand(1, 2)], Camera, e\room\Objects[1], 2.0, 0.5)
+							If Angle = -90.0 Lor Angle = -40.0 Lor Angle = -1.0 Lor Angle = 0.0 Lor Angle = 40.0 Lor Angle = 90.0 Then e\SoundCHN2 = PlaySound2(KnobSFX[Rand(0, 1)], Camera, e\room\Objects[1], 2.0, 0.5)
 						EndIf
 					EndIf
 					
