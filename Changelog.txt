@@ -14,6 +14,7 @@ Bug Fixes:
 - Fixed SCP-500-01 amount in SCP-500.
 - Fixed MAV in "cont_914" (the bug manifests itself while entering the "room2_nuke" for some reason).
 - Fixed wrong zone sections for Map Creator.
+- Fixed custom map shows a random seed in the menu.
 
 - Hopefully fixed mouse movement.
 

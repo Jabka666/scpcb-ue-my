@@ -1175,7 +1175,7 @@ Function RenderMainMenu%()
 					Text(x + (20 * MenuScale), y + (65 * MenuScale), "Map seed:")
 				Else
 					Text(x + (20 * MenuScale), y + (65 * MenuScale), "Selected map:")
-					RenderFrame(x + (150 * MenuScale), y + (55 * MenuScale), 200 * MenuScale, 30 * MenuScale, (x Mod 256), (y Mod 256))
+					RenderFrame(x + (150 * MenuScale), y + (55 * MenuScale), 200 * MenuScale, 30 * MenuScale, (x Mod 256), (y Mod 256), True)
 					
 					Color(255, 0, 0)
 					If Len(SelectedMap) > 15 Then

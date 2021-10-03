@@ -8686,11 +8686,6 @@ Function CreateMap%()
 		EndIf
 		For x = MapGridSize To 0 Step -1
 			If CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile Then
-				If Zone = 2 Then
-					Temp = Heavy_Door
-				Else
-					Temp = Default_Door
-				EndIf
 				For r.Rooms = Each Rooms
 					r\Angle = WrapAngle(r\Angle)
 					If Int(r\x / RoomSpacing) = x And Int(r\z / RoomSpacing) = y Then
@@ -8721,7 +8716,7 @@ Function CreateMap%()
 						If ShouldSpawnDoor Then
 							If x + 1 < MapGridSize + 1
 								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile Then
-									d.Doors = CreateDoor(Float(x) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Float(y) * RoomSpacing, 90.0, r, Max(Rand(-3, 1), 0.0), Temp)
+									d.Doors = CreateDoor(Float(x) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Float(y) * RoomSpacing, 90.0, r, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
 									r\AdjDoor[0] = d
 								EndIf
 							EndIf
@@ -8753,7 +8748,7 @@ Function CreateMap%()
 						If ShouldSpawnDoor
 							If y + 1 < MapGridSize + 1
 								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile Then
-									d.Doors = CreateDoor(Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + (RoomSpacing / 2.0), 0.0, r, Max(Rand(-3, 1), 0.0), Temp)
+									d.Doors = CreateDoor(Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + (RoomSpacing / 2.0), 0.0, r, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
 									r\AdjDoor[3] = d
 								EndIf
 							EndIf

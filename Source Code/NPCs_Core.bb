@@ -5079,11 +5079,11 @@ Function UpdateMTFUnit%(n.NPCs)
 	If n\IsDead Then
 		n\BlinkTimer = -1.0
 		SetNPCFrame(n, 532.0)
-		If n\SoundCHN2 <> 0 Then
-			If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2)
-		EndIf
 		If n\SoundCHN <> 0 Then
 			If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN)
+		EndIf
+		If n\SoundCHN2 <> 0 Then
+			If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2)
 		EndIf
 	Else
 		n\MaxGravity = 0.03

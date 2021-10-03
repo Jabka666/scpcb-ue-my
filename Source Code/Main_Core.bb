@@ -2051,9 +2051,20 @@ End Type
 Global I_Zone.MapZones = New MapZones
 
 Function CatchErrors%(Location$)
+	Local TempStr$
+	
 	InitErrorMsgs(6)
 	SetErrorMsg(0, "An error occured in SCP - Containment Breach Ultimate Edition v" + VersionNumber)
-	SetErrorMsg(1, "Map Seed: " + RandomSeed)
+	If SelectedMap = "" Then
+		TempStr = "Map seed: " + RandomSeed
+	Else
+		If Len(SelectedMap) > 15 Then
+			TempStr = "Selected map: " + Left(SelectedMap, 14) + "..."
+		Else
+			TempStr = "Selected map: " + SelectedMap
+		EndIf
+	EndIf
+	SetErrorMsg(1, TempStr)
 	SetErrorMsg(2, "Date and time: " + CurrentDate() + " at " + CurrentTime() + Chr(10) + "OS: " + SystemProperty("os") + " " + (32 + (GetEnv("ProgramFiles(X86)") <> 0) * 32) + " bit (Build: " + SystemProperty("osbuild") + ")" + Chr(10))
 	SetErrorMsg(3, "Video memory: " + ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)) + " MB/" + (TotalVidMem() / 1024) + " MB" + Chr(10))
 	SetErrorMsg(4, "Global memory status: " + ((TotalPhys() / 1024) - (AvailPhys() / 1024)) + " MB/" + (TotalPhys() / 1024) + " MB" + Chr(10))
@@ -7319,6 +7330,7 @@ Function RenderMenu%()
 	CatchErrors("Uncaught (RenderMenu)")
 	
 	Local x%, y%, Width%, Height%, i%
+	Local TempStr$
 	
 	If (Not InFocus()) Then ; ~ Game is out of focus then pause the game
 		MenuOpen = True
@@ -7368,7 +7380,16 @@ Function RenderMenu%()
 			SetFont(fo\FontID[Font_Default])
 			Text(x, y, "Difficulty: " + SelectedDifficulty\Name)
 			Text(x, y + (20 * MenuScale), "Save: " + CurrSave)
-			Text(x, y + (40 * MenuScale), "Map seed: " + RandomSeed)
+			If SelectedMap = "" Then
+				TempStr = "Map seed: " + RandomSeed
+			Else
+				If Len(SelectedMap) > 15 Then
+					TempStr = "Selected map: " + Left(SelectedMap, 14) + "..."
+				Else
+					TempStr = "Selected map: " + SelectedMap
+				EndIf
+			EndIf
+			Text(x, y + (40 * MenuScale), TempStr)
 		ElseIf mm\AchievementsMenu =< 0 And OptionsMenu > 0 And QuitMsg =< 0 And me\KillTimer >= 0.0
 			Color(0, 255, 0)
 			If OptionsMenu = 1
