@@ -3481,9 +3481,9 @@ Function UpdateFog%()
 		End Select
 	EndIf
 	
-	CurrFogColorR = CurveValue(Left(CurrFogColor, 3), CurrFogColorR, 100.0)
-	CurrFogColorG = CurveValue(Mid(CurrFogColor, 4, 3), CurrFogColorG, 100.0)
-	CurrFogColorB = CurveValue(Right(CurrFogColor, 3), CurrFogColorB, 100.0)
+	CurrFogColorR = CurveValue(Left(CurrFogColor, 3), CurrFogColorR, 50.0)
+	CurrFogColorG = CurveValue(Mid(CurrFogColor, 4, 3), CurrFogColorG, 50.0)
+	CurrFogColorB = CurveValue(Right(CurrFogColor, 3), CurrFogColorB, 50.0)
 	
 	CameraFogColor(Camera, CurrFogColorR, CurrFogColorG, CurrFogColorB)
 	CameraClsColor(Camera, CurrFogColorR, CurrFogColorG, CurrFogColorB)
@@ -8037,7 +8037,7 @@ Function RenderCredits%()
 	Color(255, 255, 255)
 	For cl.CreditsLine = Each CreditsLine
 		cl\ID = ID
-		If Left(cl\Txt, 1) = "*"
+		If Left(cl\Txt, 1) = "*" Then
 			SetFont(fo\FontID[Font_Credits_Big])
 			If (Not cl\Stay) Then Text(mo\Viewport_Center_X, Credits_Y + (24 * cl\ID * MenuScale), Right(cl\Txt, Len(cl\Txt) - 1), True)
 		ElseIf Left(cl\Txt, 1) = "/"
@@ -9559,7 +9559,7 @@ Function UpdateMTF%()
 	Local Dist#, i%
 	
 	If MTFTimer = 0.0 Then
-		If Rand(30) = 1 And PlayerRoom\RoomTemplate\Name <> "dimension_1499" Then
+		If Rand(200) = 1 And PlayerRoom\RoomTemplate\Name <> "dimension_1499" Then
 			Local entrance.Rooms = Null
 			
 			For r.Rooms = Each Rooms

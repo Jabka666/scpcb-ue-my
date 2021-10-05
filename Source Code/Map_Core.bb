@@ -8797,7 +8797,8 @@ Function LoadTerrain%(HeightMap%, yScale# = 0.7, t1%, t2%, Mask%)
 	If (Not HeightMap) Then RuntimeError("HeightMap Image " + HeightMap + " not found.")
 	
 	; ~ Store HeightMap dimensions
-	Local x% = ImageWidth(HeightMap) - 1, y = ImageHeight(HeightMap) - 1
+	Local x% = ImageWidth(HeightMap) - 1
+	Local y% = ImageHeight(HeightMap) - 1
 	Local lx%, ly%, Index%
 	
 	; ~ Load texture and lightmaps
