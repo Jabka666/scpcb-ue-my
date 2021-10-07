@@ -663,7 +663,7 @@ Function UpdateConsole%()
 							CreateConsoleMsg("Example: spawnitem Key Card Omni")
 							CreateConsoleMsg("******************************")
 							;[End Block]
-						Case "spawn"
+						Case "spawn", "s"
 							;[Block]
 							CreateConsoleMsg("HELP - spawn")
 							CreateConsoleMsg("******************************")
@@ -1275,7 +1275,7 @@ Function UpdateConsole%()
 					opt\CameraFogFar = Float(Right(Args, Len(Args) - Instr(Args, " ")))
 					CreateConsoleMsg("Near set to: " + opt\CameraFogNear + ", far set to: " + opt\CameraFogFar)
 					;[End Block]
-				Case "spawn"
+				Case "spawn", "s"
 					;[Block]
 					Args = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 					StrTemp = Piece(Args, 1)

@@ -18,7 +18,7 @@ Type MainMenuAssets
 	Field Palette%
 End Type
 
-Global mma.MainMenuAssets = New MainMenuAssets
+Global mma.MainMenuAssets
 
 MenuWhite = LoadImage_Strict("GFX\menu\menu_white.png")
 MenuGray = LoadImage_Strict("GFX\menu\menu_gray.png")
@@ -26,6 +26,8 @@ MenuBlack = LoadImage_Strict("GFX\menu\menu_black.png")
 MaskImage(MenuBlack, 255, 255, 0)
 
 Function InitMainMenuAssets%()
+	mma.MainMenuAssets = New MainMenuAssets
+	
 	mma\BackGround = LoadImage_Strict("GFX\menu\back.png")
 	mma\BackGround = ScaleImage2(mma\BackGround, MenuScale, MenuScale)
 	
@@ -43,13 +45,7 @@ Function InitMainMenuAssets%()
 End Function
 
 Function DeInitMainMenuAssets%()
-	If mma\BackGround <> 0 Then FreeImage(mma\BackGround) : mma\BackGround = 0
-	If mma\SECURE_CONTAIN_PROTECT <> 0 Then FreeImage(mma\SECURE_CONTAIN_PROTECT) : mma\SECURE_CONTAIN_PROTECT = 0
-	If mma\SCP173 <> 0 Then FreeImage(mma\SCP173) : mma\SCP173 = 0
-	If mma\Palette <> 0 Then FreeImage(mma\Palette) : mma\Palette = 0
-	
-	mm\MainMenuBlinkTimer[0] = 0.0
-	mm\MainMenuBlinkTimer[1] = 0.0
+	Delete(mma)
 End Function
 
 Type GameAssets
@@ -145,16 +141,10 @@ Function UpdateMainMenu%()
 		
 		If Rand(300) = 1 Then
 			mm\MainMenuBlinkTimer[0] = Rnd(4000.0, 8000.0)
-			mm\MainMenuBlinkDuration[0] = Rand(200, 500)
+			mm\MainMenuBlinkDuration[0] = Rnd(200.0, 500.0)
 		EndIf
 		
 		mm\MainMenuBlinkTimer[1] = mm\MainMenuBlinkTimer[1] - fps\Factor[0]
-		If mm\MainMenuBlinkTimer[1] < mm\MainMenuBlinkDuration[1] Then
-			If mm\MainMenuBlinkTimer[1] < 0.0 Then
-				mm\MainMenuBlinkTimer[1] = Rnd(700.0, 800.0)
-				mm\MainMenuBlinkDuration[1] = Rand(10, 35)
-			EndIf
-		EndIf
 		
 		If (Not mo\MouseDown1) Then mm\OnSliderID = 0
 		
@@ -1042,8 +1032,6 @@ Function RenderMainMenu%()
 	Local x%, y%, Width%, Height%, Temp%, i%, n%
 	Local TempStr$, TempStr2$
 	
-	Color(0, 0, 0)
-	
 	If (Not mm\OnPalette) Then
 		ShowPointer()
 	Else
@@ -1062,6 +1050,8 @@ Function RenderMainMenu%()
 		Color(50, 50, 50)
 		Text(mm\MainMenuStrX + Rand(-5, 5), mm\MainMenuStrY + Rand(-5, 5), mm\MainMenuStr, True)
 		If mm\MainMenuBlinkTimer[1] < 0.0 Then
+			mm\MainMenuBlinkTimer[1] = Rnd(700.0, 800.0)
+			mm\MainMenuBlinkDuration[1] = Rnd(10.0, 35.0)
 			mm\MainMenuStrX = Rand(700, 1000) * MenuScale
 			mm\MainMenuStrY = Rand(100, 600) * MenuScale
 			

@@ -7140,7 +7140,7 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 	Local ConsoleMsg$
 	
 	Select Name 
-		Case "008", "008zombie", "008-1", "infectedhuman", "humaninfected", "scp008-1", "scp-008-1", "scp0081", "0081", "scp-0081"
+		Case "008", "008zombie", "008-1", "infectedhuman", "humaninfected", "scp008-1", "scp-008-1", "scp0081", "0081", "scp-0081", "008_1", "scp_008_1"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType008_1, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			n\State = 1.0
@@ -7153,7 +7153,7 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			If Curr049 = Null Then Curr049 = n
 			ConsoleMsg = "SCP-049 spawned."
 			;[End Block]
-		Case "049-2", "0492", "scp-049-2", "scp049-2", "049zombie", "curedhuman", "scp0492", "scp-0492"
+		Case "049-2", "0492", "scp-049-2", "scp049-2", "049zombie", "curedhuman", "scp0492", "scp-0492", "049_2", "scp_049_2"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType049_2, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			n\State = 1.0
