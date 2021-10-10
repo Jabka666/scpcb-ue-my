@@ -1829,9 +1829,9 @@ Function UpdateNPCs%()
 								
 								If n\CurrSpeed > 0.005 Then
 									If (PrevFrame < 361.0 And n\Frame >= 361.0) Lor (PrevFrame < 377.0 And n\Frame >= 377.0) Then
-										PlaySound2(StepSFX(5, 0, Rand(4, 6)), Camera, n\Collider, 8.0, Rnd(0.8, 1.0))						
+										PlaySound2(Step2SFX[Rand(3, 5)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))						
 									ElseIf (PrevFrame < 431.0 And n\Frame >= 431.0) Lor (PrevFrame < 447.0 And n\Frame >= 447.0)
-										PlaySound2(StepSFX(5, 0, Rand(4, 6)), Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
+										PlaySound2(Step2SFX[Rand(3, 5)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
 									EndIf
 								EndIf
 								
@@ -1975,15 +1975,15 @@ Function UpdateNPCs%()
 							
 							If n\CurrSpeed > 0.005 Then
 								If (PrevFrame < 361.0 And n\Frame >= 361.0) Lor (PrevFrame < 377.0 And n\Frame >= 377.0) Then
-									PlaySound2(StepSFX(5, 0, Rand(4, 6)), Camera, n\Collider, 8.0, Rnd(0.8, 1.0))						
+									PlaySound2(Step2SFX[Rand(3, 5)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))						
 								ElseIf (PrevFrame < 431.0 And n\Frame >= 431.0) Lor (PrevFrame < 447.0 And n\Frame >= 447.0)
-									PlaySound2(StepSFX(5, 0, Rand(4, 6)), Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
+									PlaySound2(Step2SFX[Rand(3, 5)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
 								EndIf
 							EndIf
 							
 							If n\SoundCHN2 <> 0 Then
 								If ChannelPlaying(n\SoundCHN2) Then
-									UpdateSoundOrigin(n\SoundCHN2,Camera,n\OBJ)
+									UpdateSoundOrigin(n\SoundCHN2, Camera, n\OBJ)
 								EndIf
 							EndIf
 							;[End Block]
@@ -2223,7 +2223,7 @@ Function UpdateNPCs%()
 					; ~ Loop the walk sound
 					If n\CurrSpeed > 0.005 Then
 						If (PrevFrame < 970.0 And n\Frame >= 970.0) Lor (PrevFrame < 1012.0 And n\Frame >= 1012.0) Then
-							PlaySound2(StepSFX(4, 0, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
+							PlaySound2(Step2SFX[Rand(3, 5)], Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
 						EndIf
 					EndIf
 					
@@ -2554,9 +2554,9 @@ Function UpdateNPCs%()
 								EndIf
 								
 								If PrevFrame < 43.0 And n\Frame >= 43.0 Then
-									PlaySound2(StepSFX(4, 0, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.5, 0.7))						
+									PlaySound2(Step2SFX[Rand(3, 5)], Camera, n\Collider, 8.0, Rnd(0.5, 0.7))						
 								ElseIf PrevFrame < 61.0 And n\Frame >= 61.0
-									PlaySound2(StepSFX(4, 0, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.5, 0.7))
+									PlaySound2(Step2SFX[Rand(3, 5)], Camera, n\Collider, 8.0, Rnd(0.5, 0.7))
 								EndIf
 							EndIf
 						Else
@@ -2635,9 +2635,9 @@ Function UpdateNPCs%()
 						EndIf
 						
 						If PrevFrame < 43.0 And n\Frame >= 43.0 Then
-							PlaySound2(StepSFX(4, 0, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.5, 0.7))						
+							PlaySound2(Step2SFX[Rand(3, 5)], Camera, n\Collider, 8.0, Rnd(0.5, 0.7))						
 						ElseIf PrevFrame < 61.0 And n\Frame >= 61.0
-							PlaySound2(StepSFX(4, 0, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.5, 0.7))
+							PlaySound2(Step2SFX[Rand(3, 5)], Camera, n\Collider, 8.0, Rnd(0.5, 0.7))
 						EndIf
 						;[End Block]
 					Case 15.0 ; ~ Inside vehicle (idle)
@@ -2681,9 +2681,9 @@ Function UpdateNPCs%()
 				
 				If n\CurrSpeed > 0.01 Then
 					If PrevFrame < 5.0 And n\Frame >= 5.0 Then
-						PlaySound2(StepSFX(4, 0, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.5, 0.7))						
+						PlaySound2(Step2SFX[Rand(3, 5)], Camera, n\Collider, 8.0, Rnd(0.5, 0.7))						
 					ElseIf PrevFrame < 23.0 And n\Frame >= 23.0
-						PlaySound2(StepSFX(4, 0, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.5, 0.7))						
+						PlaySound2(Step2SFX[Rand(3, 5)], Camera, n\Collider, 8.0, Rnd(0.5, 0.7))						
 					EndIf
 				EndIf
 				
@@ -3324,7 +3324,7 @@ Function UpdateNPCs%()
 								Next
 								
 								If EntityY(n\Collider) > -100.0 Then
-									PlaySound2(StepSFX(3, 0, Rand(0, 2)), Camera, n\Collider, 15.0, 0.5)
+									PlaySound2(Step2SFX[Rand(0, 2)], Camera, n\Collider, 15.0, 0.5)
 									
 									If ForestNPCData[2] <> 1.0 Then ForestNPCData[2] = 0.0
 									
@@ -3411,12 +3411,12 @@ Function UpdateNPCs%()
 								Else
 									If n\Frame =< 199.0 Then
 										AnimateNPC(n, 2.0, 199.0, 0.5, False)
-										If n\Frame = 199.0 Then SetNPCFrame(n, 298.0) : PlaySound2(StepSFX(3, 0, Rand(0, 2)), Camera, n\Collider, 15.0)
+										If n\Frame = 199.0 Then SetNPCFrame(n, 298.0) : PlaySound2(Step2SFX[Rand(0, 2)], Camera, n\Collider, 15.0)
 									ElseIf n\Frame =< 297.0
 										PointEntity(n\Collider, me\Collider)
 										
 										AnimateNPC(n, 200.0, 297.0, 0.5, False)
-										If n\Frame = 297.0 Then SetNPCFrame(n, 298.0) : PlaySound2(StepSFX(3, 0, Rand(0, 2)), Camera, n\Collider, 15.0)
+										If n\Frame = 297.0 Then SetNPCFrame(n, 298.0) : PlaySound2(Step2SFX[Rand(0, 2)], Camera, n\Collider, 15.0)
 									Else
 										Angle = CurveAngle(PointDirection(EntityX(n\Collider), EntityZ(n\Collider), EntityX(me\Collider), EntityZ(me\Collider)), EntityYaw(n\Collider) + 90.0, 20.0)
 										
@@ -3529,7 +3529,7 @@ Function UpdateNPCs%()
 							EndIf
 							
 							If (PrevFrame < 533.0 And n\Frame >= 533.0) Lor (PrevFrame > 568.0 And n\Frame < 2.0) Then
-								PlaySound2(StepSFX(3, 0, Rand(0, 2)), Camera, n\Collider, 15.0, 0.6)
+								PlaySound2(Step2SFX[Rand(0, 2)], Camera, n\Collider, 15.0, 0.6)
 							EndIf
 							;[End Block]
 						Case 3.0 ; ~ Runs towards the player and attacks
@@ -3563,7 +3563,7 @@ Function UpdateNPCs%()
 								AnimateNPC(n, 298.0, 316.0, n\CurrSpeed * 10.0)
 								
 								If (PrevFrame < 307.0 And n\Frame >= 307.0) Then
-									PlaySound2(StepSFX(3, 0, Rand(0, 2)), Camera, n\Collider, 10.0)
+									PlaySound2(Step2SFX[Rand(0, 2)], Camera, n\Collider, 10.0)
 								EndIf
 							EndIf
 							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
@@ -3655,7 +3655,7 @@ Function UpdateNPCs%()
 							AnimateNPC(n, 644.0, 683.0, 28.0 * n\CurrSpeed)
 							
 							If (PrevFrame < 664.0 And n\Frame >= 664.0) Lor (PrevFrame > 673.0 And n\Frame < 654.0) Then
-								PlaySound2(StepSFX(5, 0, Rand(0, 3)), Camera, n\Collider, 12.0)
+								PlaySound2(Step2SFX[Rand(6, 12)], Camera, n\Collider, 12.0)
 								If Rand(10) = 1 Then
 									Temp = False
 									If (Not n\SoundCHN) Then 
@@ -4240,7 +4240,7 @@ Function UpdateNPCs%()
 									EndIf
 									
 									If (PrevFrame < 604.0 And n\Frame >= 604.0) Lor (PrevFrame < 627.0 And n\Frame >= 627.0) Then
-										PlaySound2(StepSFX(5, 0, Rand(0, 3)), Camera, n\Collider, 7.0, Rnd(0.5, 0.7))
+										PlaySound2(Step2SFX[Rand(6, 12)], Camera, n\Collider, 7.0, Rnd(0.5, 0.7))
 									EndIf
 									
 									RotateEntity(n\Collider, 0.0, CurveAngle(n\Angle, EntityYaw(n\Collider), 10.0), 0.0)
@@ -6616,9 +6616,9 @@ Function UpdateMTFUnit%(n.NPCs)
 			
 			If n\CurrSpeed > 0.01 Then
 				If PrevFrame > 500.0 And n\Frame < 495.0 Then
-					PlaySound2(StepSFX(4, 0, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.5, 0.7))
+					PlaySound2(Step2SFX[Rand(3, 5)], Camera, n\Collider, 8.0, Rnd(0.5, 0.7))
 				ElseIf PrevFrame < 505.0 And n\Frame >= 505.0
-					PlaySound2(StepSFX(4, 0, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.5, 0.7))
+					PlaySound2(Step2SFX[Rand(3, 5)], Camera, n\Collider, 8.0, Rnd(0.5, 0.7))
 				EndIf
 			EndIf
 			
@@ -6917,7 +6917,8 @@ Function NPCSeesPlayer%(n.NPCs, DisableSoundOnCrouch% = False)
 	EndIf
 End Function
 
-Function TriggerTeslaGateOnNPCs%(e.Events, n.NPCs, IsDead% = True)
+Function TriggerTeslaGateOnNPCs%(e.Events, n.NPCs)
+	Local de.Decals, p.Particles
 	Local i%
 	
 	If n <> Null Then
@@ -6939,12 +6940,58 @@ Function TriggerTeslaGateOnNPCs%(e.Events, n.NPCs, IsDead% = True)
 						If DistanceSquared(EntityX(n\Collider), EntityX(e\room\Objects[i], True), EntityZ(n\Collider), EntityZ(e\room\Objects[i], True)) < PowTwo(250.0 * RoomScale) Then
 							If PlayerRoom = e\room Then me\LightFlash = 0.3
 							n\CurrSpeed = 0.0
-							If IsDead Then n\IsDead = True
+							If n\NPCType <> NPCType106 And n\NPCType <> NPCType049 And n\NPCType <> NPCType096 Then n\IsDead = True
+							Select n\NPCType
+								Case NPCType106
+									;[Block]
+									If n\State3 = 0.0 Then
+										GiveAchievement(AchvTesla)
+										n\State3 = 1.0
+										n\Idle = 1
+									EndIf
+									;[End Block]
+							End Select
 							Exit
 						EndIf
 					Next
 				EndIf
 			EndIf
+			Select n\NPCType
+				Case NPCType106
+					;[Block]
+					If n\State3 > 0.0 Then
+						If n\State3 = 1.0 Then 
+							SetNPCFrame(n, 259.0)
+							LoadEventSound(e, "SFX\Ending\GateA\106Retreat.ogg", 1)
+							e\SoundCHN2 = PlaySound2(e\Sound2, Camera, n\Collider, 10.0)
+							
+							de.Decals = CreateDecal(0, EntityX(n\Collider), e\room\y + 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.8, 1.0))
+							de\SizeChange = 0.004 : de\Timer = 90000.0
+						EndIf
+						
+						AnimateNPC(n, 259.0, 110.0, -0.1, False)
+						
+						If opt\ParticleAmount > 0 Then
+							If Rand(20 - (10 * (opt\ParticleAmount - 1))) = 1 Then
+								p.Particles = CreateParticle(0, EntityX(n\OBJ, True) + (Rnd(-0.1, 0.1)), EntityY(n\OBJ, True) + Rnd(0.4, 0.9), EntityZ(n\OBJ) + (Rnd(-0.1, 0.1)), 0.06, -0.002, 40.0)
+								p\Speed = 0.005 : p\Alpha = 0.8 : p\AlphaChange = -0.01
+								RotateEntity(p\Pvt, -Rnd(70.0, 110.0), Rnd(360.0), 0.0)
+							EndIf									
+						EndIf
+						
+						n\State3 = n\State3 + fps\Factor[0]
+						If n\State3 > 1000.0 Then
+							n\State = 70.0 * 60.0 * Rnd(10.0, 13.0)
+							n\State3 = 0.0
+							n\Idle = 0
+							If e\Sound2 <> 0 Then 
+								FreeSound_Strict(e\Sound2) : e\Sound2 = 0
+							EndIf
+							PositionEntity(n\Collider, 0.0, 500.0, 0.0)
+						EndIf
+					EndIf
+					;[End Block]
+			End Select
 		EndIf
 	EndIf
 End Function

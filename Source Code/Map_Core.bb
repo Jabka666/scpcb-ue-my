@@ -3206,7 +3206,7 @@ Function UpdateDecals%()
 	
 	For d.Decals = Each Decals
 		If d\SizeChange <> 0.0 Then
-			d\Size = d\Size + d\SizeChange * fps\Factor[0]
+			d\Size = d\Size + (d\SizeChange * fps\Factor[0])
 			ScaleSprite(d\OBJ, d\Size, d\Size)
 			
 			Select d\ID
@@ -3239,6 +3239,18 @@ Function UpdateDecals%()
 		
 		If d\LifeTime > 0.0 Then
 			d\LifeTime = Max(d\LifeTime - fps\Factor[0], 5.0)
+		EndIf
+		
+		If (EntityDistanceSquared(d\OBJ, me\Collider) < PowTwo(d\Size)) And (EntityPitch(d\OBJ) = 90.0) Then
+			Select d\ID
+				Case 0
+					;[Block]
+					CurrStepSFX = 1
+					;[End Block]
+				Case 2, 3, 4, 5, 6, 7, 16, 17, 18, 20
+					CurrStepSFX = 3
+					;[End Block]
+			End Select
 		EndIf
 		
 		If d\Size =< 0.0 Lor d\Alpha =< 0.0 Lor d\LifeTime = 5.0 Then
@@ -4957,29 +4969,9 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[8], r\x + 176.0 * RoomScale, r\y + 0.5, r\z - 144.0 * RoomScale)	
 			
 			r\Objects[9] = LoadMesh_Strict("GFX\map\Props\cont1_035_label.b3d")
-			If I_035\Sad <> 0 Then
-				Tex = LoadTexture_Strict("GFX\map\textures\label035_sad.png")
-				For i = 2 To CountSurfaces(r\Objects[9])
-					SF = GetSurface(r\Objects[9], i)
-					b = GetSurfaceBrush(SF)
-					If b <> 0 Then
-						t1 = GetBrushTexture(b, 0)
-						If t1 <> 0 Then
-							Name = StripPath(TextureName(t1))
-							If Lower(Name) <> "cable_black.jpg"
-								BrushTexture(b, Tex, 0, 0)
-								PaintSurface(SF, b)
-							EndIf
-							If Name <> "" Then DeleteSingleTextureEntryFromCache(t1)
-						EndIf
-						FreeBrush(b)
-					EndIf
-				Next
-				DeleteSingleTextureEntryFromCache(Tex)
-			EndIf
+			Update035Label(r\Objects[9])
 			ScaleEntity(r\Objects[9], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[9], r\x - 30.0 * RoomScale, r\y + 230.0 * RoomScale, r\z - 704.0 * RoomScale)
-			RotateEntity(r\Objects[9], 0.0, 180.0, 0.0)
 			
 			For i = 7 To 9
 				EntityParent(r\Objects[i], r\OBJ)
@@ -5076,7 +5068,7 @@ Function FillRoom%(r.Rooms)
 				Else
 					yTemp = 3.0
 				EndIf
-				de.Decals = CreateDecal(0, r\x + xTemp * RoomScale, r\y + yTemp * RoomScale + 0.005, r\z + zTemp * RoomScale, 90.0, Rnd(360.0), 0.0, Scale, Rnd(0.6, 0.8), 1)
+				de.Decals = CreateDecal(0, r\x + xTemp * RoomScale, r\y + yTemp * RoomScale + 0.005, r\z + zTemp * RoomScale, 90.00001, Rnd(360.0), 0.0, Scale, Rnd(0.6, 0.8), 1)
 				EntityParent(de\OBJ, r\OBJ)
 			Next
 			

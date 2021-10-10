@@ -2862,7 +2862,10 @@ Function UpdateMoving%()
 						TempCHN = PlaySound_Strict(StepSFX(2, 0, Rand(0, 2)))
 						ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.4)) * opt\SFXVolume)
 					ElseIf CurrStepSFX = 2
-						TempCHN = PlaySound_Strict(StepSFX(3, 0, Rand(0, 2)))
+						TempCHN = PlaySound_Strict(Step2SFX[Rand(0, 2)])
+						ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.4)) * opt\SFXVolume)
+					ElseIf CurrStepSFX = 3
+						TempCHN = PlaySound_Strict(Step2SFX[Rand(13, 14)])
 						ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.4)) * opt\SFXVolume)
 					EndIf
 				EndIf	
@@ -2977,7 +2980,9 @@ Function UpdateMoving%()
 					ElseIf CurrStepSFX = 1
 						PlaySound_Strict(StepSFX(2, 0, Rand(0, 2)))
 					ElseIf CurrStepSFX = 2
-						PlaySound_Strict(StepSFX(3, 0, Rand(0, 2)))
+						PlaySound_Strict(Step2SFX[Rand(0, 2)])
+					ElseIf CurrStepSFX = 3
+						PlaySound_Strict(Step2SFX[Rand(13, 14)])
 					EndIf
 					me\SndVolume = Max(3.0, me\SndVolume)
 				EndIf

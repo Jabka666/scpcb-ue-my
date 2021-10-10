@@ -820,7 +820,7 @@ End Function
 Function UpdateEvents%()
 	CatchErrors("Uncaught (UpdateEvents)")
 	
-	Local p.Particles, n.NPCs, n2.NPCs, r.Rooms, e.Events, e2.Events, de.Decals, du.Dummy1499_1, w.Waypoints
+	Local p.Particles, n.NPCs, r.Rooms, e.Events, e2.Events, de.Decals, du.Dummy1499_1, w.Waypoints
 	Local it.Items, it2.Items, em.Emitters, sc.SecurityCams, sc2.SecurityCams, wayp.Waypoints, do.Doors
 	Local Dist#, i%, Temp%, Pvt%, StrTemp$, j%, k%
 	Local CurrTrigger$ = "", fDir#, Scale#, Tex%, t1%, Name$
@@ -3863,13 +3863,9 @@ Function UpdateEvents%()
 					EndIf
 					For n.NPCs = Each NPCs
 						Select n\NPCType
-							Case NPCType008_1, NPCType049_2, NPCTypeMTF
+							Case NPCType008_1, NPCType049_2, NPCType049, NPCType096, NPCType106
 								;[Block]
 								TriggerTeslaGateOnNPCs(e, n)
-								;[End Block]
-							Case NPCType049, NPCType096, NPCType106
-								;[Block]
-								TriggerTeslaGateOnNPCs(e, n, False)
 								;[End Block]
 						End Select
 					Next
@@ -3951,14 +3947,6 @@ Function UpdateEvents%()
 							e\EventState3 = e\EventState3 - fps\Factor[0]
 						EndIf
 					Else
-						For n.NPCs = Each NPCs
-							If n\NPCType = NPCTypeMTF Then
-								If n\IsDead Then
-									e\EventState2 = 0.0
-									Exit
-								EndIf
-							EndIf
-						Next
 						If e\EventState2 >= 70.0 * 92.0 And e\EventState2 - fps\Factor[0] < 70.0 * 92.0
 							PlayAnnouncement("SFX\Character\MTF\Tesla" + Rand(1, 3) + ".ogg")
 						EndIf
@@ -5206,7 +5194,6 @@ Function UpdateEvents%()
 						Else
 							For n.NPCs = Each NPCs
 								If n\NPCType = NPCTypeMTF Then
-									If n\IsDead Then Exit
 									If EntityDistanceSquared(me\Collider, Curr173\OBJ) < 64.0 Then 
 										e\room\RoomDoors[1]\Locked = 1
 										e\room\RoomDoors[4]\Locked = 1
@@ -5910,25 +5897,7 @@ Function UpdateEvents%()
 												
 												I_035\Sad = 1
 												
-												Tex = LoadTexture_Strict("GFX\map\textures\label035_sad.png")
-												For i = 2 To CountSurfaces(e\room\Objects[9])
-													SF = GetSurface(e\room\Objects[9], i)
-													b = GetSurfaceBrush(SF)
-													If b <> 0 Then
-														t1 = GetBrushTexture(b, 0)
-														If t1 <> 0 Then
-															Name = StripPath(TextureName(t1))
-															If Lower(Name) <> "cable_black.jpg" Then
-																BrushTexture(b, Tex, 0, 0)
-																PaintSurface(SF, b)
-															EndIf
-															If Name <> "" Then DeleteSingleTextureEntryFromCache(t1)
-														EndIf
-														FreeBrush(b)
-													EndIf
-												Next
-												DeleteSingleTextureEntryFromCache(Tex)
-												
+												Update035Label(e\room\Objects[9])
 												CreateNPCAsset(e\room\NPC[0])
 												
 												e\EventState = 70.0 * 60.0
@@ -7636,7 +7605,7 @@ Function UpdateEvents%()
 								PlaySound_Strict(LeverSFX)
 							Else
 								p.Particles = CreateParticle(1, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), 0.02, -0.12)
-								p\SizeChange = 0.012 :  p\AlphaChange = -0.015
+								p\SizeChange = 0.012 : p\AlphaChange = -0.015
 								RotateEntity(p\Pvt, -90.0, 0.0, 0.0, True)
 								TurnEntity(p\Pvt, Rnd(-26.0, 26.0), Rnd(-26.0, 26.0), Rnd(360.0))
 							EndIf		
@@ -7729,7 +7698,6 @@ Function UpdateEvents%()
 					EndIf
 					Dist = DistanceSquared(EntityX(me\Collider), EntityX(e\room\OBJ), EntityZ(me\Collider), EntityZ(e\room\OBJ))
 					If Dist < 4.0 Then
-						CurrStepSFX = 1
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, Max(Sqr(Dist) * 50.0, 1.0))	
 						me\CrouchState = (2.0 - Sqr(Dist)) / 2.0
 						
@@ -7761,7 +7729,7 @@ Function UpdateEvents%()
 						EndIf
 					EndIf
 				Else
-					e\EventState2 = 0.0
+					If e\EventState2 <> 0.0 Then e\EventState2 = 0.0
 				EndIf
 				;[End Block]
 			Case e_682_roar
@@ -10354,6 +10322,35 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 		EventState = EventState + (fps\Factor[0] * 1.4)
 	EndIf
 	Return(EventState)
+End Function
+
+Function Update035Label%(OBJ%)
+	Local Tex%, i%
+	Local SF%, b%, t1%, Name$
+	
+	If I_035\Sad <> 0 Then
+		Tex = LoadTexture_Strict("GFX\map\textures\label035_sad.png")
+	Else
+		Tex = LoadTexture_Strict("GFX\map\textures\label035_smile.png")
+	EndIf
+	If opt\Atmosphere Then TextureBlend(Tex, 5)
+	For i = 2 To CountSurfaces(OBJ)
+		SF = GetSurface(OBJ, i)
+		b = GetSurfaceBrush(SF)
+		If b <> 0 Then
+			t1 = GetBrushTexture(b, 0)
+			If t1 <> 0 Then
+				Name = StripPath(TextureName(t1))
+				If Lower(Name) <> "cable_white.jpg" Then
+					BrushTexture(b, Tex, 0, 0)
+					PaintSurface(SF, b)
+				EndIf
+				If Name <> "" Then DeleteSingleTextureEntryFromCache(t1)
+			EndIf
+			FreeBrush(b)
+		EndIf
+	Next
+	DeleteSingleTextureEntryFromCache(Tex)
 End Function
 
 ;~IDEal Editor Parameters:

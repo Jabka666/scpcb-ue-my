@@ -750,7 +750,9 @@ Global MachineSFX%
 Global ApacheSFX%
 
 Global CurrStepSFX%
-Dim StepSFX%(5, 1, 7) ; ~ (Normal / Metal, Walk / Run, ID)
+Dim StepSFX%(2, 1, 7) ; ~ (Normal / Metal, Walk / Run, ID)
+
+Global Step2SFX%[15]
 
 Global VehicleSFX%[2]
 
@@ -926,13 +928,18 @@ Function LoadSounds%()
 		StepSFX(1, 1, i) = LoadSound_Strict("SFX\Step\RunMetal" + (i + 1) + ".ogg")
 		If i < 3 Then
 			StepSFX(2, 0, i) = LoadSound_Strict("SFX\Step\StepPD" + (i + 1) + ".ogg")
-			StepSFX(3, 0, i) = LoadSound_Strict("SFX\Step\StepForest" + (i + 1) + ".ogg")
-			StepSFX(4, 0, i) = LoadSound_Strict("SFX\Character\MTF\Step" + (i + 1) + ".ogg")
-		EndIf
-		If i < 7 Then
-			StepSFX(5, 0, i) = LoadSound_Strict("SFX\Step\SCP\StepMetal" + (i + 1) + ".ogg")
 		EndIf
 	Next
+	For i = 3 To 5
+		Step2SFX[i] = LoadSound_Strict("SFX\Character\MTF\Step" + (i - 2) + ".ogg")
+	Next
+	For i = 6 To 12
+		Step2SFX[i] = LoadSound_Strict("SFX\Step\SCP\StepMetal" + (i - 5) + ".ogg")
+	Next
+	For i = 13 To 14
+		Step2SFX[i] = LoadSound_Strict("SFX\Step\StepFluid" + (i - 12) + ".ogg")
+	Next
+	
 	VehicleSFX[0] = LoadSound_Strict("SFX\Character\Vehicle\Idle.ogg")
 	VehicleSFX[1] = LoadSound_Strict("SFX\Character\Vehicle\Move.ogg")
 	

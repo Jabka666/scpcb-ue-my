@@ -2,10 +2,11 @@ v1.0.2
 
 General:
 - Tiny code optimizations.
+- Added fluid step sounds.
 
 Mechanics and effects:
 - The tesla gate stops NPCs.
-    - Also kills MTF.
+- Improved SCP-106's retreat in the tesla gate.
 
 Bug Fixes:
 - Fixed button positions in "room2C_gw_2_lcz".
