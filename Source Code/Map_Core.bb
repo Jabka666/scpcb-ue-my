@@ -7803,12 +7803,12 @@ Function UpdateRooms%()
 		EndIf
 	Next
 	
-	CurrMapGrid\Found[Floor(EntityX(PlayerRoom\OBJ) / 8.0) + (Floor(EntityZ(PlayerRoom\OBJ) / 8.0) * MapGridSize)] = MapGrid_Tile
-	PlayerRoom\Found = True
-	
 	TempLightVolume = Max(TempLightVolume / 5.0, 0.8)
 	
 	If PlayerRoom <> Null Then
+		CurrMapGrid\Found[Floor(EntityX(PlayerRoom\OBJ) / 8.0) + (Floor(EntityZ(PlayerRoom\OBJ) / 8.0) * MapGridSize)] = MapGrid_Tile
+		PlayerRoom\Found = True
+		
 		EntityAlpha(GetChild(PlayerRoom\OBJ, 2), 1.0)
 		For i = 0 To 3
 			If PlayerRoom\Adjacent[i] <> Null Then
