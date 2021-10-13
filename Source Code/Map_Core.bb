@@ -72,7 +72,8 @@ Function CreatePropOBJ%(File$)
 	
 	p.Props = New Props
 	p\File = File
-	p\OBJ = CheckForPropModel(File) ; ~ A hacky optimization (just copy models that loaded as variable). Also fixes wrong models folder if the CBRE was used
+	; ~ A hacky optimization (just copy models that loaded as variable). Also fixes wrong models folder if the CBRE was used
+	p\OBJ = CheckForPropModel(File)
 	Return(p\OBJ)
 End Function
 
@@ -1565,7 +1566,6 @@ Global RemoteDoorOn% = True
 Const MaxRoomLights% = 32
 Const MaxRoomEmitters% = 8
 Const MaxRoomObjects% = 30
-Const MaxRoomDoors% = 7
 
 Type Rooms
 	Field Zone%
@@ -1585,13 +1585,13 @@ Type Rooms
 	Field LightIntensity#[MaxRoomLights]
 	Field LightSprites%[MaxRoomLights]	
 	Field Objects%[MaxRoomObjects]
-	Field ObjectsHidden%
 	Field Levers%[10]
-	Field RoomDoors.Doors[MaxRoomDoors]
+	Field RoomDoors.Doors[7]
 	Field NPC.NPCs[12]
 	Field mt.MTGrid
 	Field Adjacent.Rooms[4]
 	Field AdjDoor.Doors[4]
+	Field NonFreeAble%[10]
 	Field Textures%[10]
 	Field MaxLights% = 0
 	Field LightSpriteHidden%[MaxRoomLights]
@@ -7683,44 +7683,6 @@ Function FillRoom%(r.Rooms)
 	CatchErrors("FillRoom (" + r\RoomTemplate\Name + ")")
 End Function
 
-Function HideRoomObjects%(r.Rooms)
-	Local i%
-	
-	If (Not r\ObjectsHidden) Then
-		For i = 0 To MaxRoomObjects - 1
-			If r\Objects[i] <> 0 Then HideEntity(r\Objects[i])
-		Next
-		r\ObjectsHidden = True
-	EndIf
-End Function
-
-Function ShowRoomObjects%(r.Rooms)
-	Local i%
-	
-	If r\ObjectsHidden Then
-		For i = 0 To MaxRoomObjects - 1
-			If r\Objects[i] <> 0 Then ShowEntity(r\Objects[i])
-		Next
-		r\ObjectsHidden = False
-	EndIf
-End Function
-
-Function HideRoomDoors%(r.Rooms)
-	Local i%, j%
-	
-	For i = 0 To MaxRoomDoors - 1
-		If r\RoomDoors[i] <> Null Then
-			If r\RoomDoors[i]\FrameOBJ <> 0 Then HideEntity(r\RoomDoors[i]\FrameOBJ)
-			If r\RoomDoors[i]\OBJ <> 0 Then HideEntity(r\RoomDoors[i]\OBJ)
-			If r\RoomDoors[i]\OBJ2 <> 0 Then HideEntity(r\RoomDoors[i]\OBJ2)
-			For j = 0 To 1
-				If r\RoomDoors[i]\Buttons[j] <> 0 Then HideEntity(r\RoomDoors[i]\Buttons[j])
-				If r\RoomDoors[i]\ElevatorPanel[j] <> 0 Then HideEntity(r\RoomDoors[i]\ElevatorPanel[j])
-			Next
-		EndIf
-	Next
-End Function
-
 Function UpdateRooms%()
 	CatchErrors("Uncaught (UpdateRooms)")
 	
@@ -7814,11 +7776,8 @@ Function UpdateRooms%()
 		
 		If Hide Then
 			HideEntity(r\OBJ)
-			HideRoomDoors(r)
-			HideRoomObjects(r)
 		Else
 			ShowEntity(r\OBJ)
-			ShowRoomObjects(r)
 			For i = 0 To MaxRoomLights - 1
 				If r\Lights[i] <> 0 Then
 					Dist = EntityDistanceSquared(me\Collider, r\Lights[i])
@@ -7853,28 +7812,21 @@ Function UpdateRooms%()
 		EntityAlpha(GetChild(PlayerRoom\OBJ, 2), 1.0)
 		For i = 0 To 3
 			If PlayerRoom\Adjacent[i] <> Null Then
-				If PlayerRoom\AdjDoor[i] <> Null Then
+				If PlayerRoom\AdjDoor[i] <> Null
+					x = Abs(EntityX(me\Collider, True) - EntityX(PlayerRoom\AdjDoor[i]\FrameOBJ, True))
+					z = Abs(EntityZ(me\Collider, True) - EntityZ(PlayerRoom\AdjDoor[i]\FrameOBJ, True))
 					If PlayerRoom\AdjDoor[i]\OpenState = 0.0 Then
-						HideRoomDoors(PlayerRoom\Adjacent[i])
-						HideRoomObjects(PlayerRoom\Adjacent[i])
 						EntityAlpha(GetChild(PlayerRoom\Adjacent[i]\OBJ, 2), 0.0)
 					ElseIf (Not EntityInView(PlayerRoom\AdjDoor[i]\FrameOBJ, Camera))
-						HideRoomDoors(PlayerRoom\Adjacent[i])
-						HideRoomObjects(PlayerRoom\Adjacent[i])
 						EntityAlpha(GetChild(PlayerRoom\Adjacent[i]\OBJ, 2), 0.0)
 					Else
-						ShowRoomObjects(PlayerRoom\Adjacent[i])
 						EntityAlpha(GetChild(PlayerRoom\Adjacent[i]\OBJ, 2), 1.0)
 					EndIf
 				EndIf
 				
 				For j = 0 To 3
 					If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null Then
-						If PlayerRoom\Adjacent[i]\Adjacent[j] <> PlayerRoom Then
-							HideRoomDoors(PlayerRoom\Adjacent[i])
-							HideRoomObjects(PlayerRoom\Adjacent[i])
-							EntityAlpha(GetChild(PlayerRoom\Adjacent[i]\Adjacent[j]\OBJ, 2), 0.0)
-						EndIf
+						If PlayerRoom\Adjacent[i]\Adjacent[j] <> PlayerRoom Then EntityAlpha(GetChild(PlayerRoom\Adjacent[i]\Adjacent[j]\OBJ, 2), 0.0)
 					EndIf
 				Next
 			EndIf
