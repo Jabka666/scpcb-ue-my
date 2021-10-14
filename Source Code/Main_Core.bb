@@ -7788,6 +7788,7 @@ Function UpdateEnding%()
 		
 		If (Not me\EndingScreen) Then
 			me\EndingScreen = LoadImage_Strict("GFX\menu\ending_screen.png")
+			me\EndingScreen = ScaleImage2(me\EndingScreen, MenuScale, MenuScale)
 			
 			ShouldPlay = 23
 			opt\CurrMusicVolume = opt\MusicVolume
@@ -7872,14 +7873,14 @@ Function RenderEnding%()
 	If me\EndingTimer < -200.0 Then
 		If me\EndingTimer > -700.0 Then 
 			If Rand(1, 150) < Min((Abs(me\EndingTimer) - 200.0), 155.0) Then
-				DrawImage(me\EndingScreen, mo\Viewport_Center_X - 400, mo\Viewport_Center_Y - 400)
+				DrawImage(me\EndingScreen, mo\Viewport_Center_X - (400 * MenuScale), mo\Viewport_Center_Y - (400 * MenuScale))
 			Else
 				Color(0, 0, 0)
 				Rect(100, 100, opt\GraphicWidth - 200, opt\GraphicHeight - 200)
 				Color(255, 255, 255)
 			EndIf
 		Else
-			DrawImage(me\EndingScreen, mo\Viewport_Center_X - 400, mo\Viewport_Center_Y - 400)
+			DrawImage(me\EndingScreen, mo\Viewport_Center_X - (400 * MenuScale), mo\Viewport_Center_Y - (400 * MenuScale))
 			
 			If me\EndingTimer < -1000.0 And me\EndingTimer > -2000.0 Then
 				Width = ImageWidth(t\ImageID[0])
@@ -7962,7 +7963,10 @@ Function InitCredits%()
 	fo\FontID[Font_Credits] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 21)
 	fo\FontID[Font_Credits_Big] = LoadFont_Strict("GFX\fonts\cour\Courier New.ttf", 35)
 	
-	If (Not me\CreditsScreen) Then me\CreditsScreen = LoadImage_Strict("GFX\menu\credits_screen.png")
+	If (Not me\CreditsScreen) Then
+		me\CreditsScreen = LoadImage_Strict("GFX\menu\credits_screen.png")
+		me\CreditsScreen = ScaleImage2(me\CreditsScreen, MenuScale, MenuScale)
+	EndIf
 	
 	InitLoadingTextColor(255, 255, 255)
 	
@@ -8027,7 +8031,7 @@ Function RenderCredits%()
 	Cls()
 	
 	If Rand(1, 300) > 1 Then
-		DrawImage(me\CreditsScreen, mo\Viewport_Center_X - 400, mo\Viewport_Center_Y - 400)
+		DrawImage(me\CreditsScreen, mo\Viewport_Center_X - (400 * MenuScale), mo\Viewport_Center_Y - (400 * MenuScale))
 	EndIf
 	
 	ID = 0

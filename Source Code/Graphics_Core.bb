@@ -367,7 +367,7 @@ Function RenderWorld2%(Tween#)
 			Color(55, 55, 55)
 		EndIf
 		For k = 0 To 10
-			Rect(45, mo\Viewport_Center_Y - (k * 20), 54, 10)
+			Rect(45 * MenuScale, mo\Viewport_Center_Y - ((k * 20) * MenuScale), 54 * MenuScale, 10 * MenuScale)
 		Next
 		If wi\NightVision = 2
 			Color(0, 0, 255)
@@ -377,9 +377,9 @@ Function RenderWorld2%(Tween#)
 			Color(255, 255, 255)
 		EndIf
 		For l = 0 To Min(Floor((Power + 50) * 0.01), 11)
-			Rect(45, mo\Viewport_Center_Y - (l * 20), 54, 10)
+			Rect(45 * MenuScale, mo\Viewport_Center_Y - ((l * 20) * MenuScale), 54 * MenuScale, 10 * MenuScale)
 		Next
-		DrawImage(t\ImageID[6], 40, mo\Viewport_Center_Y + 30)
+		DrawImage(t\ImageID[6], 40 * MenuScale, mo\Viewport_Center_Y + (30 * MenuScale))
 	EndIf
 	
 	; ~ Render sprites
