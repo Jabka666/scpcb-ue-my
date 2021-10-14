@@ -173,15 +173,7 @@ Function UpdateEmitters%()
 			Kill()
 		EndIf
 		
-		If me\KillTimer >= 0.0 Then 
-			If Rand(150) = 1 Then
-				If (Not CoughCHN) Then
-					CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
-				Else
-					If (Not ChannelPlaying(CoughCHN)) Then CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
-				EndIf
-			EndIf
-		EndIf
+		UpdateCough(150)
 		me\EyeIrritation = me\EyeIrritation + (fps\Factor[0] * 4.0)
 	EndIf	
 End Function

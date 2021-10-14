@@ -2714,6 +2714,18 @@ Function InjurePlayer%(Injuries_#, Infection# = 0.0, BlurTimer_# = 0.0, VestFact
 	If Infection <> 0.0 Then I_008\Timer = I_008\Timer + (Infection * (wi\HazmatSuit = 0))
 End Function
 
+Function UpdateCough%(Chance_%)
+	If me\KillTimer >= 0.0 Then 
+		If Rand(Chance_) = 1 Then
+			If (Not CoughCHN) Then
+				CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
+			Else
+				If (Not ChannelPlaying(CoughCHN)) Then CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
+			EndIf
+		EndIf
+	EndIf
+End Function
+
 Function UpdateMoving%()
 	CatchErrors("Uncaught (UpdateMoving)")
 	
@@ -3267,13 +3279,7 @@ Function UpdateMouseLook%()
 				Case 0 ; ~ Common cold
 					;[Block]
 					If fps\Factor[0] > 0.0 Then 
-						If Rand(1000) = 1 Then
-							If (Not CoughCHN) Then
-								CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
-							Else
-								If (Not ChannelPlaying(CoughCHN)) Then CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
-							EndIf
-						EndIf
+						UpdateCough(1000)
 					EndIf
 					me\Stamina = me\Stamina - (Factor1025 * 0.3)
 					;[End Block]
@@ -3284,13 +3290,7 @@ Function UpdateMouseLook%()
 				Case 2 ; ~ Cancer of the lungs
 					;[Block]
 					If fps\Factor[0] > 0.0 Then 
-						If Rand(800) = 1 Then
-							If (Not CoughCHN) Then
-								CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
-							Else
-								If (Not ChannelPlaying(CoughCHN)) Then CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
-							EndIf
-						EndIf
+						UpdateCough(800)
 					EndIf
 					me\Stamina = me\Stamina - (Factor1025 * 0.1)
 					;[End Block]
@@ -3309,13 +3309,7 @@ Function UpdateMouseLook%()
 				Case 4 ; ~ Asthma
 					;[Block]
 					If me\Stamina < 35.0 Then
-						If Rand(Int(140.0 + me\Stamina * 8.0)) = 1 Then
-							If (Not CoughCHN) Then
-								CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
-							Else
-								If (Not ChannelPlaying(CoughCHN)) Then CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
-							EndIf
-						EndIf
+						UpdateCough(Int(140.0 + me\Stamina * 8.0))
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0 + me\Stamina * 15.0)
 					EndIf
 					;[End Block]
