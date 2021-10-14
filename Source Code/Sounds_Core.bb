@@ -930,6 +930,9 @@ Function LoadSounds%()
 			StepSFX(2, 0, i) = LoadSound_Strict("SFX\Step\StepPD" + (i + 1) + ".ogg")
 		EndIf
 	Next
+	For i = 0 To 2
+		Step2SFX[i] = LoadSound_Strict("SFX\Step\StepForest" + (i + 1) + ".ogg")
+	Next
 	For i = 3 To 5
 		Step2SFX[i] = LoadSound_Strict("SFX\Character\MTF\Step" + (i - 2) + ".ogg")
 	Next

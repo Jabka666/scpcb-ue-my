@@ -72,8 +72,7 @@ Function CreatePropOBJ%(File$)
 	
 	p.Props = New Props
 	p\File = File
-	; ~ A hacky optimization (just copy models that loaded as variable). Also fixes wrong models folder if the CBRE was used
-	p\OBJ = CheckForPropModel(File)
+	p\OBJ = CheckForPropModel(File) ; ~ A hacky optimization (just copy models that loaded as variable). Also fixes wrong models folder if the CBRE was used
 	Return(p\OBJ)
 End Function
 
@@ -1591,7 +1590,6 @@ Type Rooms
 	Field mt.MTGrid
 	Field Adjacent.Rooms[4]
 	Field AdjDoor.Doors[4]
-	Field NonFreeAble%[10]
 	Field Textures%[10]
 	Field MaxLights% = 0
 	Field LightSpriteHidden%[MaxRoomLights]
@@ -3382,10 +3380,10 @@ Function UpdateSecurityCams%()
 				Else
 					If sc\Turn > 0.0 Then
 						If (Not sc\Dir) Then
-							sc\CurrAngle = sc\CurrAngle + 0.2 * fps\Factor[0]
+							sc\CurrAngle = sc\CurrAngle + (0.2 * fps\Factor[0])
 							If sc\CurrAngle > sc\Turn * 1.3 Then sc\Dir = True
 						Else
-							sc\CurrAngle = sc\CurrAngle - 0.2 * fps\Factor[0]
+							sc\CurrAngle = sc\CurrAngle - (0.2 * fps\Factor[0])
 							If sc\CurrAngle < (-sc\Turn) * 1.3 Then sc\Dir = False
 						EndIf
 					EndIf

@@ -2747,9 +2747,9 @@ Function UpdateMoving%()
 	EndIf
 	
 	If me\CurrSpeed > 0.0 Then
-		me\Stamina = Min(me\Stamina + 0.15 * fps\Factor[0] / 1.25, 100.0)
+		me\Stamina = Min(me\Stamina + (0.15 * fps\Factor[0] / 1.25), 100.0)
 	Else
-		me\Stamina = Min(me\Stamina + 0.15 * fps\Factor[0] * 1.25, 100.0)
+		me\Stamina = Min(me\Stamina + (0.15 * fps\Factor[0] * 1.25), 100.0)
 	EndIf
 	
 	If me\StaminaEffectTimer > 0.0 Then
@@ -2812,7 +2812,7 @@ Function UpdateMoving%()
 			If (me\Playable And (KeyDown(key\MOVEMENT_DOWN) Xor KeyDown(key\MOVEMENT_UP)) Lor (KeyDown(key\MOVEMENT_RIGHT) Xor KeyDown(key\MOVEMENT_LEFT))) Lor me\ForceMove > 0.0 Then
 				If (Not me\Crouch) And (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) And me\Stamina > 0.0 And (Not me\Zombie) Then
 					Sprint = 2.5
-					me\Stamina = me\Stamina - fps\Factor[0] * 0.4 * me\StaminaEffect
+					me\Stamina = me\Stamina - (fps\Factor[0] * 0.4 * me\StaminaEffect)
 					If me\Stamina =< 0.0 Then me\Stamina = -20.0
 				EndIf
 				
@@ -2992,12 +2992,12 @@ Function UpdateMoving%()
 					Local Pick# = LinePick(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0.0, -PlayerFallingPickDistance, 0.0)
 					
 					If Pick Then
-						me\DropSpeed = Min(Max(me\DropSpeed - 0.006 * fps\Factor[0], -2.0), 0.0)
+						me\DropSpeed = Min(Max(me\DropSpeed - (0.006 * fps\Factor[0]), -2.0), 0.0)
 					Else
 						me\DropSpeed = 0.0
 					EndIf
 				Else
-					me\DropSpeed = Min(Max(me\DropSpeed - 0.006 * fps\Factor[0], -2.0), 0.0)
+					me\DropSpeed = Min(Max(me\DropSpeed - (0.006 * fps\Factor[0]), -2.0), 0.0)
 				EndIf
 			EndIf
 			PlayerFallingPickDistance = 10.0
@@ -3444,7 +3444,7 @@ Function UpdateFog%()
 	Local CurrFogColor$ = ""
 	
 	If PlayerRoom <> Null Then
-		If PlayerRoom\RoomTemplate\Name = "room3_storage" And EntityY(me\Collider) < -4100.0 * RoomScale Then
+		If PlayerRoom\RoomTemplate\Name = "room3_storage" And EntityY(me\Collider) < (-4100.0) * RoomScale Then
 			CurrFogColor = FogColorStorageTunnels
 		ElseIf PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a" Then
 			CurrFogColor = FogColorOutside
@@ -9663,7 +9663,7 @@ Function UpdateExplosion%()
 		me\ExplosionTimer = me\ExplosionTimer + fps\Factor[0]
 		If me\ExplosionTimer < 140.0 Then
 			If me\ExplosionTimer - fps\Factor[0] < 5.0 Then
-				ExplosionSFX = LoadSound_Strict("SFX\Ending\gateb\Nuke1.ogg")
+				ExplosionSFX = LoadSound_Strict("SFX\Ending\GateB\Nuke1.ogg")
 				PlaySound_Strict(ExplosionSFX)
 				me\BigCameraShake = 10.0
 				me\ExplosionTimer = 5.0
@@ -9673,7 +9673,7 @@ Function UpdateExplosion%()
 			me\BigCameraShake = Min((me\ExplosionTimer / 20.0), 20.0)
 			If me\ExplosionTimer - fps\Factor[0] < 140.0 Then
 				me\BlinkTimer = 1.0
-				ExplosionSFX = LoadSound_Strict("SFX\Ending\gateb\Nuke2.ogg")
+				ExplosionSFX = LoadSound_Strict("SFX\Ending\GateB\Nuke2.ogg")
 				PlaySound_Strict(ExplosionSFX)				
 				For i = 0 To (10 + (10 * (opt\ParticleAmount + 1)))
 					p.Particles = CreateParticle(0, EntityX(me\Collider) + Rnd(-0.5, 0.5), EntityY(me\Collider) - Rnd(0.2, 1.5), EntityZ(me\Collider) + Rnd(-0.5, 0.5), Rnd(0.2, 0.6), 0.0, 350.0)	
