@@ -7615,6 +7615,7 @@ Function FillRoom%(r.Rooms)
 		Case "room2_ic"
 			;[Block]
 			d.Doors = CreateDoor(r\x - 896.0 * RoomScale, r\y, r\z, 90.0, r, True, Elevator_Door)
+			d\Locked = 1 : d\MTFClose = False
 			
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x - 1200.0 * RoomScale, r\y + 240.0 * RoomScale, r\z, True)
