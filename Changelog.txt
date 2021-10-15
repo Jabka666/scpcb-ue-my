@@ -8,6 +8,9 @@ Mechanics and effects:
 - The tesla gate stops NPCs.
 - Improved SCP-106's retreat in the tesla gate.
 
+Rooms:
+- Opened two doors in "cont2_427_714_860_1025"
+
 Bug Fixes:
 - Fixed button positions in "room2C_gw_2_lcz".
 - Fixed MAV while entering the SCP-970 loop again.
@@ -16,8 +19,11 @@ Bug Fixes:
 - Fixed MAV in "cont_914" (the bug manifests itself while entering the "room2_nuke" for some reason).
 - Fixed wrong zone sections for Map Creator.
 - Fixed custom map shows a random seed in the menu.
+- Fixed elevator door in "room2_ic".
 
 - Hopefully fixed mouse movement.
+
+- Tiny fixes for re-scaling.
 
 v1.0.1
 
