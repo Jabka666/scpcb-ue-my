@@ -3239,13 +3239,19 @@ Function UpdateDecals%()
 			d\LifeTime = Max(d\LifeTime - fps\Factor[0], 5.0)
 		EndIf
 		
-		If (EntityDistanceSquared(d\OBJ, me\Collider) < PowTwo(d\Size)) And (EntityPitch(d\OBJ) = 90.0) Then
+		Local Dist# = EntityDistanceSquared(d\OBJ, me\Collider)
+		
+		If (Dist < PowTwo(d\Size)) And (EntityPitch(d\OBJ) = 90.0) Then
 			Select d\ID
 				Case 0
 					;[Block]
-					CurrStepSFX = 1
+					If d\FX <> 1 Then
+						CurrStepSFX = 1
+						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, Max(Sqr(Dist) * 50.0, 1.0))
+					EndIf
 					;[End Block]
 				Case 2, 3, 4, 5, 6, 7, 16, 17, 18, 20
+					;[Block]
 					CurrStepSFX = 3
 					;[End Block]
 			End Select
@@ -5066,7 +5072,7 @@ Function FillRoom%(r.Rooms)
 				Else
 					yTemp = 3.0
 				EndIf
-				de.Decals = CreateDecal(0, r\x + xTemp * RoomScale, r\y + yTemp * RoomScale + 0.005, r\z + zTemp * RoomScale, 90.00001, Rnd(360.0), 0.0, Scale, Rnd(0.6, 0.8), 1)
+				de.Decals = CreateDecal(0, r\x + xTemp * RoomScale, r\y + yTemp * RoomScale + 0.005, r\z + zTemp * RoomScale, 90.0, Rnd(360.0), 0.0, Scale, Rnd(0.6, 0.8), 1)
 				EntityParent(de\OBJ, r\OBJ)
 			Next
 			

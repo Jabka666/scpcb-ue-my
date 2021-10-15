@@ -7706,8 +7706,6 @@ Function UpdateEvents%()
 								PlaySound_Strict(LoadTempSound("SFX\Room\SinkholeFall.ogg"))
 							EndIf
 							
-							me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, Max(Sqr(Dist) * 50.0, 1.0))
-							
 							x = CurveValue(EntityX(e\room\OBJ), EntityX(me\Collider), 10.0)
 							y = CurveValue(EntityY(e\room\OBJ) - e\EventState2, EntityY(me\Collider), 25.0)
 							z = CurveValue(EntityZ(e\room\OBJ), EntityZ(me\Collider), 10.0)
