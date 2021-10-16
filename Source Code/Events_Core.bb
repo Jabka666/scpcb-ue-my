@@ -5502,7 +5502,10 @@ Function UpdateEvents%()
 					If EntityY(me\Collider) < (-4600.0) * RoomScale Then
 						GiveAchievement(Achv939)
 						
-						If wi\GasMask = 0 Then me\BlurTimer = Min(me\BlurTimer + (fps\Factor[0] * 1.05), 1000.0)
+						If wi\GasMask = 0 Then
+							me\BlurTimer = Min(me\BlurTimer + (fps\Factor[0] * 1.05), 1000.0)
+							If me\BlurTimer >= 500.0 Then UpdateCough(1000)
+						EndIf
 						
 						ShouldPlay = 7
 						
