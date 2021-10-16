@@ -7698,7 +7698,6 @@ Function UpdateEvents%()
 					EndIf
 					Dist = DistanceSquared(EntityX(me\Collider), EntityX(e\room\OBJ), EntityZ(me\Collider), EntityZ(e\room\OBJ))
 					If Dist < 4.0 Then
-						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, Max(Sqr(Dist) * 50.0, 1.0))	
 						me\CrouchState = (2.0 - Sqr(Dist)) / 2.0
 						
 						If Dist < 0.25 Then
@@ -9117,23 +9116,57 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_cont1_005
 				;[Block]
-				If (Not Curr106\Contained) Then 
+				If (Not Curr106\Contained) And I_005\ChanceToSpawn = 1 Then 
 					If PlayerRoom = e\room Then
-						If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 1.69 Then
-							If e\EventState = 0.0 And I_005\ChanceToSpawn <> 3 Then
+						If e\EventState = 0.0 Then
+							If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 1.69 Then
 								PlaySound_Strict(HorrorSFX[10])
 								
 								de.Decals = CreateDecal(0, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True), 0.0, e\room\Angle + 360.0, Rnd(360.0), 0.1, 0.01)
 								de\SizeChange = 0.003 : de\AlphaChange = 0.005 : de\Timer = 90000.0
 								
+								de.Decals = CreateDecal(0, EntityX(e\room\RoomDoors[0]\FrameOBJ, True), EntityY(e\room\RoomDoors[0]\FrameOBJ, True) + 0.005, EntityZ(e\room\RoomDoors[0]\FrameOBJ, True), 90.0, e\room\Angle + 360.0, Rnd(360.0), 0.1, 0.01)
+								de\SizeChange = 0.003 : de\AlphaChange = 0.005 : de\Timer = 90000.0
+								
 								PositionEntity(Curr106\Collider, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True))
 								Curr106\State = -11.0
 								ShowEntity(Curr106\OBJ)
+								
 								e\EventState = 1.0
-							Else
-								RemoveEvent(e)
+							EndIf
+						Else
+							Dist = DistanceSquared(EntityX(me\Collider), EntityX(e\room\RoomDoors[0]\FrameOBJ), EntityZ(me\Collider), EntityZ(e\room\RoomDoors[0]\FrameOBJ))
+							If Dist < 4.0 Then
+								me\CrouchState = (2.0 - Sqr(Dist)) / 2.0
+								
+								If Dist < 0.16 Then
+									If e\EventState2 = 0.0 Then
+										PlaySound_Strict(LoadTempSound("SFX\Room\SinkholeFall.ogg"))
+									EndIf
+									
+									x = CurveValue(EntityX(e\room\RoomDoors[0]\FrameOBJ), EntityX(me\Collider), 10.0)
+									y = CurveValue(EntityY(e\room\RoomDoors[0]\FrameOBJ) - e\EventState2, EntityY(me\Collider), 25.0)
+									z = CurveValue(EntityZ(e\room\RoomDoors[0]\FrameOBJ), EntityZ(me\Collider), 10.0)
+									PositionEntity(me\Collider, x, y, z, True)
+									
+									me\DropSpeed = 0.0
+									
+									ResetEntity(me\Collider)
+									
+									e\EventState2 = Min(e\EventState2 + fps\Factor[0] / 200.0, 2.0)
+									
+									me\LightBlink = Min(e\EventState2 * 5.0, 10.0)
+									If wi\NightVision > 0 Then
+										If e\EventState2 >= 0.2 Then me\BlinkTimer = -10.0
+									EndIf
+									me\BlurTimer = e\EventState2 * 500.0
+									
+									If e\EventState2 = 2.0 Then MoveToPocketDimension()
+								EndIf
 							EndIf
 						EndIf
+					Else
+						If e\EventState2 <> 0.0 Then e\EventState2 = 0.0
 					EndIf
 				Else
 					RemoveEvent(e)

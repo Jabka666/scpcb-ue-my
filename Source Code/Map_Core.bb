@@ -7588,7 +7588,7 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case "cont1_005"
 			;[Block]
-			d.Doors = CreateDoor(r\x, r\y, r\z - 640.0 * RoomScale, 0.0, r, False, Default_Door, KEY_CARD_4)
+			r\RoomDoors.Doors[0] = CreateDoor(r\x, r\y, r\z - 640.0 * RoomScale, 0.0, r, False, Default_Door, KEY_CARD_4)
 			
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x, r\y + 76.0 * RoomScale, r\z - 210.0 * RoomScale)

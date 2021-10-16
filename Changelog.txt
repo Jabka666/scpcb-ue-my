@@ -3,11 +3,13 @@ v1.0.2
 General:
 - Tiny code optimizations.
 - Added fluid step sounds.
+- Nerfed SCP-005's chamber event.
 
 Mechanics and effects:
 - The tesla gate stops NPCs.
 - Improved SCP-106's retreat in the tesla gate.
 - Added slow effect for SCP-106's decals.
+- Added player's cough sounds in "room3_storage" area.
 
 Rooms:
 - Opened two doors in "cont2_427_714_860_1025"
