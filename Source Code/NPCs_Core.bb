@@ -1829,9 +1829,9 @@ Function UpdateNPCs%()
 								
 								If n\CurrSpeed > 0.005 Then
 									If (PrevFrame < 361.0 And n\Frame >= 361.0) Lor (PrevFrame < 377.0 And n\Frame >= 377.0) Then
-										PlaySound2(Step2SFX[Rand(3, 5)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))						
+										PlaySound2(Step2SFX[Rand(10, 12)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))						
 									ElseIf (PrevFrame < 431.0 And n\Frame >= 431.0) Lor (PrevFrame < 447.0 And n\Frame >= 447.0)
-										PlaySound2(Step2SFX[Rand(3, 5)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
+										PlaySound2(Step2SFX[Rand(10, 12)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
 									EndIf
 								EndIf
 								
@@ -1975,9 +1975,9 @@ Function UpdateNPCs%()
 							
 							If n\CurrSpeed > 0.005 Then
 								If (PrevFrame < 361.0 And n\Frame >= 361.0) Lor (PrevFrame < 377.0 And n\Frame >= 377.0) Then
-									PlaySound2(Step2SFX[Rand(3, 5)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))						
+									PlaySound2(Step2SFX[Rand(10, 12)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))						
 								ElseIf (PrevFrame < 431.0 And n\Frame >= 431.0) Lor (PrevFrame < 447.0 And n\Frame >= 447.0)
-									PlaySound2(Step2SFX[Rand(3, 5)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
+									PlaySound2(Step2SFX[Rand(10, 12)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
 								EndIf
 							EndIf
 							
@@ -3655,7 +3655,7 @@ Function UpdateNPCs%()
 							AnimateNPC(n, 644.0, 683.0, 28.0 * n\CurrSpeed)
 							
 							If (PrevFrame < 664.0 And n\Frame >= 664.0) Lor (PrevFrame > 673.0 And n\Frame < 654.0) Then
-								PlaySound2(Step2SFX[Rand(6, 12)], Camera, n\Collider, 12.0)
+								PlaySound2(Step2SFX[Rand(6, 9)], Camera, n\Collider, 12.0)
 								If Rand(10) = 1 Then
 									Temp = False
 									If (Not n\SoundCHN) Then 
@@ -4240,7 +4240,7 @@ Function UpdateNPCs%()
 									EndIf
 									
 									If (PrevFrame < 604.0 And n\Frame >= 604.0) Lor (PrevFrame < 627.0 And n\Frame >= 627.0) Then
-										PlaySound2(Step2SFX[Rand(6, 12)], Camera, n\Collider, 7.0, Rnd(0.5, 0.7))
+										PlaySound2(Step2SFX[Rand(6, 9)], Camera, n\Collider, 7.0, Rnd(0.5, 0.7))
 									EndIf
 									
 									RotateEntity(n\Collider, 0.0, CurveAngle(n\Angle, EntityYaw(n\Collider), 10.0), 0.0)
