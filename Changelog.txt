@@ -4,12 +4,14 @@ General:
 - Tiny code optimizations.
 - Added fluid step sounds.
 - Nerfed SCP-005's chamber event.
+- Improved SCP-939's texture.
 
 Mechanics and effects:
 - The tesla gate stops NPCs.
 - Improved SCP-106's retreat in the tesla gate.
 - Added slow effect for SCP-106's decals.
 - Added player's cough sounds in "room3_storage" area.
+    - Also the green gas in "room3_storage" kills the player.
 
 Rooms:
 - Opened two doors in "cont2_427_714_860_1025"
@@ -23,6 +25,7 @@ Bug Fixes:
 - Fixed wrong zone sections for Map Creator.
 - Fixed custom map shows a random seed in the menu.
 - Fixed elevator door in "room2_ic".
+- Fixed GodMode doesn't protect from Pocket Dimension flying columns.
 
 - Hopefully fixed mouse movement.
 

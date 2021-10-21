@@ -3007,29 +3007,31 @@ Function UpdateEvents%()
 								
 								e\EventState3 = 0.0
 								
-								For i = 9 To 10
-									Dist = DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[i], True), EntityZ(me\Collider), EntityZ(e\room\Objects[i], True))
-									If Dist < 36.0 Then 
-										If Dist < PowTwo(100.0 * RoomScale) Then
-											Pvt = CreatePivot()
-											PositionEntity(Pvt, EntityX(e\room\Objects[i], True), EntityY(me\Collider), EntityZ(e\room\Objects[i], True))
-											PointEntity(Pvt, me\Collider)
-											RotateEntity(Pvt, 0.0, Int(EntityYaw(Pvt) / 90.0) * 90.0, 0.0, True)
-											MoveEntity(Pvt, 0.0, 0.0, 100.0 * RoomScale)
-											PositionEntity(me\Collider, EntityX(Pvt), EntityY(me\Collider), EntityZ(Pvt))
-											FreeEntity(Pvt)
-											
-											If me\KillTimer = 0.0 Then
-												msg\DeathMsg = "In addition to the decomposed appearance typical of SCP-106's victims, the body exhibits injuries that have not been observed before: "
-												msg\DeathMsg = msg\DeathMsg + "massive skull fracture, three broken ribs, fractured shoulder and multiple heavy lacerations."
+								If (Not chs\GodMode) Then
+									For i = 9 To 10
+										Dist = DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[i], True), EntityZ(me\Collider), EntityZ(e\room\Objects[i], True))
+										If Dist < 36.0 Then 
+											If Dist < PowTwo(100.0 * RoomScale) Then
+												Pvt = CreatePivot()
+												PositionEntity(Pvt, EntityX(e\room\Objects[i], True), EntityY(me\Collider), EntityZ(e\room\Objects[i], True))
+												PointEntity(Pvt, me\Collider)
+												RotateEntity(Pvt, 0.0, Int(EntityYaw(Pvt) / 90.0) * 90.0, 0.0, True)
+												MoveEntity(Pvt, 0.0, 0.0, 100.0 * RoomScale)
+												PositionEntity(me\Collider, EntityX(Pvt), EntityY(me\Collider), EntityZ(Pvt))
+												FreeEntity(Pvt)
 												
-												PlaySound_Strict(LoadTempSound("SFX\Room\PocketDimension\Impact.ogg"))
-												me\KillTimer = -1.0
+												If me\KillTimer = 0.0 Then
+													msg\DeathMsg = "In addition to the decomposed appearance typical of SCP-106's victims, the body exhibits injuries that have not been observed before: "
+													msg\DeathMsg = msg\DeathMsg + "massive skull fracture, three broken ribs, fractured shoulder and multiple heavy lacerations."
+													
+													PlaySound_Strict(LoadTempSound("SFX\Room\PocketDimension\Impact.ogg"))
+													me\KillTimer = -1.0
+												EndIf
 											EndIf
+											If Float(e\EventStr) < 1000.0 Then e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\Objects[i], 6.0)
 										EndIf
-										If Float(e\EventStr) < 1000.0 Then e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\Objects[i], 6.0)
-									EndIf
-								Next
+									Next
+								EndIf
 								
 								Pvt = CreatePivot()
 								PositionEntity(Pvt, EntityX(e\room\Objects[8], True) - 1536.0 * RoomScale, e\room\y + 500.0 * RoomScale, EntityZ(e\room\Objects[8], True) + 608.0 * RoomScale)
@@ -5503,8 +5505,9 @@ Function UpdateEvents%()
 						GiveAchievement(Achv939)
 						
 						If wi\GasMask = 0 Then
-							me\BlurTimer = Min(me\BlurTimer + (fps\Factor[0] * 1.05), 1000.0)
+							me\BlurTimer = Min(me\BlurTimer + (fps\Factor[0] * 1.05), 1500.0)
 							If me\BlurTimer >= 500.0 Then UpdateCough(1000)
+							If me\BlurTimer >= 1500.0 Then Kill(False)
 						EndIf
 						
 						ShouldPlay = 7
