@@ -2016,7 +2016,7 @@ Function UpdateNPCs%()
 							;[Block]
 							If n\Frame <> 1.0 Then SetNPCFrame(n, 1.0)
 							
-							If Rand(1000) = 1 Then
+							If Rand(2000) = 1 Then
 								If Dist < 25.0 Then
 									n\State = 1.0
 								EndIf
