@@ -283,8 +283,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0)
 			
-			SetAnimTime(n\OBJ, 107.0)
-			
 			n\Speed = GetINIFloat(NPCsFile, "SCP-049-2", "Speed") / 100.0
 			
 			n\Sound = LoadSound_Strict("SFX\SCP\049_2\Breath.ogg")
@@ -596,7 +594,7 @@ Function UpdateNPCs%()
 	
 	Local n.NPCs, n2.NPCs, d.Doors, de.Decals, r.Rooms, e.Events, w.Waypoints, p.Particles, wp.WayPoints, wayPointCloseToPlayer.WayPoints
 	Local i%, j%, Dist#, Dist2#, Angle#, x#, x2#, y#, z#, z2#, PrevFrame#, PlayerSeeAble%, RN$
-	Local Target%, Pvt%, Pick%, PrevDist#, NewDist#
+	Local Target%, Pvt%, Pick%, PrevDist#, NewDist#, Attack%
 	
 	For n.NPCs = Each NPCs
 		; ~ A variable to determine if the NPC is in the facility or not
@@ -2005,9 +2003,9 @@ Function UpdateNPCs%()
 				; ~ n\State2: A timer used for the player detection
 				
 				If (Not n\IsDead) Then
-					Dist = EntityDistanceSquared(n\Collider, me\Collider)
-					
 					PrevFrame = n\Frame
+					
+					Dist = EntityDistanceSquared(n\Collider, me\Collider)
 					
 					UpdateNPCBlinking(n)
 					
@@ -2016,23 +2014,21 @@ Function UpdateNPCs%()
 					Select n\State
 						Case 0.0 ; ~ Just lies
 							;[Block]
-							AnimateNPC(n, 719.0, 777.0, 0.2, False)
+							If n\Frame <> 1.0 Then SetNPCFrame(n, 1.0)
 							
-							If n\Frame = 777.0 Then
-								If Rand(700) = 1 Then
-									If Dist < 25.0 Then
-										SetNPCFrame(n, 719.0)
-									EndIf
+							If Rand(1000) = 1 Then
+								If Dist < 25.0 Then
+									n\State = 1.0
 								EndIf
 							EndIf
 							;[End Block]
 						Case 1.0 ; ~ Stands up
 							;[Block]
-							If n\Frame >= 682.0 Then 
-								AnimateNPC(n, 926.0, 935.0, 0.3, False)
-								If n\Frame = 935.0 Then n\State = 2.0
-							Else
-								AnimateNPC(n, 155.0, 682.0, 1.1, False)
+							AnimateNPC(n, 1.0, 556.0, 1.0, False)
+							If n\Frame >= 556.0 Then n\State = 2.0
+							
+							If (PrevFrame < 288.0 And n\Frame >= 288.0) Lor (PrevFrame < 350.0 And n\Frame >= 350.0) Then
+								PlaySound2(Step2SFX[Rand(3, 5)], Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
 							EndIf
 							;[End Block]
 						Case 2.0 ; ~ Player is visible, tries to kill
@@ -2046,18 +2042,18 @@ Function UpdateNPCs%()
 								PointEntity(n\OBJ, me\Collider)
 								RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 20.0), 0.0)
 								
-								AnimateNPC(n, 936.0, 1017.0, n\CurrSpeed * 60.0)
+								If n\Frame < 713.0 Then
+									AnimateNPC(n, 705, 713.0, 0.4, False)
+								Else
+									AnimateNPC(n, 714.0, 794.0, n\CurrSpeed * 60.0)
+								EndIf
 								n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 								
 								If Dist < 0.49 Then
 									If Abs(DeltaYaw(n\Collider, me\Collider)) =< 60.0 Then
+										SetNPCFrame(n, 795.0)
 										n\State = 4.0
-										If Rand(2) = 1 Then
-											SetNPCFrame(n, 2.0)
-										Else
-											SetNPCFrame(n, 66.0)
-										EndIf
 									EndIf
 								EndIf
 								
@@ -2085,7 +2081,11 @@ Function UpdateNPCs%()
 									PointEntity(n\OBJ, n\Path[n\PathLocation]\OBJ)
 									RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 20.0), 0.0)
 									
-									AnimateNPC(n, 936.0, 1017.0, n\CurrSpeed * 60.0)
+									If n\Frame < 713.0 Then
+										AnimateNPC(n, 705, 713.0, 0.4, False)
+									Else
+										AnimateNPC(n, 714.0, 794.0, n\CurrSpeed * 60.0)
+									EndIf
 									n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 									MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 									
@@ -2122,8 +2122,9 @@ Function UpdateNPCs%()
 							Else
 								; ~ No path, stands still
 								If n\CurrSpeed =< 0.001 Then
-									AnimateNPC(n, 778.0, 926.0, 0.1)
-									n\CurrSpeed = 0.0
+									AnimateNPC(n, 557.0, 704.0, 0.1)
+									
+									n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 10.0)
 									
 									n\PathTimer = n\PathTimer - fps\Factor[0]
 									If n\PathTimer < 70.0 * 5.0
@@ -2163,7 +2164,7 @@ Function UpdateNPCs%()
 									EndIf
 								Else
 									n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 20.0)
-									AnimateNPC(n, 936.0, 1017.0, n\CurrSpeed * 60.0)
+									AnimateNPC(n, 795.0, 813.0, 0.7, False)
 									MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 								EndIf
 							EndIf
@@ -2171,30 +2172,35 @@ Function UpdateNPCs%()
 						Case 4.0 ; ~ Attacks
 							;[Block]
 							If me\KillTimer >= 0.0 Then
-								If n\Frame < 66.0 Then
-									AnimateNPC(n, 2.0, 65.0, 0.7, False)
-									If n\Frame >= 23.0 And PrevFrame < 23.0 Then
-										If Dist < 0.49 Then
-											If Abs(DeltaYaw(n\Collider, me\Collider)) =< 60.0
-												PlaySound2(DamageSFX[Rand(5, 8)], Camera, n\Collider)
-												InjurePlayer(Rnd(0.4, 1.0), 0.0, 0.0, Rnd(0.1, 0.25), 0.2)
-												
-												If me\Injuries > 3.0 Then
-													msg\DeathMsg = SubjectName + ". Cause of death: multiple lacerations and severe blunt force trauma caused by an instance of SCP-049-2."
-													Kill(True)
-												EndIf
-											Else
-												PlaySound2(MissSFX, Camera, n\Collider)
-											EndIf
+								Attack = False
+								If n\Frame =< 813.0 Then
+									AnimateNPC(n, 795.0, 813.0, 0.7, False)
+									If n\Frame >= 813.0 Then
+										If Rand(2) = 1 Then
+											SetNPCFrame(n, 814.0)
 										Else
-											PlaySound2(MissSFX, Camera, n\Collider, 2.5)
+											SetNPCFrame(n, 879.0)
 										EndIf
-									ElseIf n\Frame >= 64.0
-										n\State = 2.0
 									EndIf
 								Else
-									AnimateNPC(n, 66.0, 132.0, 0.7, False)
-									If n\Frame >= 90.0 And PrevFrame < 90.0 Then
+									If n\Frame < 879.0 Then
+										AnimateNPC(n, 814.0, 878.0, 0.4, False)
+										If n\Frame >= 839.0 And PrevFrame < 839.0 Then
+											Attack = True
+										ElseIf n\Frame >= 878.0
+											SetNPCFrame(n, 705.0)
+											n\State = 2.0
+										EndIf
+									Else
+										AnimateNPC(n, 879.0, 943.0, 0.4, False)
+										If n\Frame >= 900.0 And PrevFrame < 900.0 Then
+											Attack = True
+										ElseIf n\Frame >= 943.0
+											SetNPCFrame(n, 705.0)
+											n\State = 2.0
+										EndIf
+									EndIf
+									If Attack Then
 										If Dist < 0.49 Then
 											If Abs(DeltaYaw(n\Collider, me\Collider)) =< 60.0 Then
 												PlaySound2(DamageSFX[Rand(5, 8)], Camera, n\Collider)
@@ -2210,8 +2216,6 @@ Function UpdateNPCs%()
 										Else
 											PlaySound2(MissSFX, Camera, n\Collider, 2.5)
 										EndIf
-									ElseIf n\Frame >= 131.0
-										n\State = 2.0
 									EndIf
 								EndIf
 							Else
@@ -2222,7 +2226,7 @@ Function UpdateNPCs%()
 					
 					; ~ Loop the walk sound
 					If n\CurrSpeed > 0.005 Then
-						If (PrevFrame < 970.0 And n\Frame >= 970.0) Lor (PrevFrame < 1012.0 And n\Frame >= 1012.0) Then
+						If (PrevFrame < 733.0 And n\Frame >= 733.0) Lor (PrevFrame < 773.0 And n\Frame >= 773.0) Then
 							PlaySound2(Step2SFX[Rand(3, 5)], Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
 						EndIf
 					EndIf
@@ -2239,7 +2243,7 @@ Function UpdateNPCs%()
 							FreeSound_Strict(n\Sound) : n\Sound = 0
 						EndIf
 					EndIf
-					AnimateNPC(n, 1035.0, 1072.0, 0.3, False)
+					AnimateNPC(n, 944.0, 982.0, 0.2, False)
 				EndIf
 				
 				PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.2, EntityZ(n\Collider))
