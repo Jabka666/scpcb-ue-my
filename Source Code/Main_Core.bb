@@ -8718,7 +8718,7 @@ End Function
 Function InitNewGame%()
 	CatchErrors("Uncaught (InitNewGame)")
 	
-	Local de.Decals, d.Doors, it.Items, r.Rooms, sc.SecurityCams, e.Events, rt.RoomTemplates, tw.TempWayPoints
+	Local de.Decals, d.Doors, it.Items, r.Rooms, sc.SecurityCams, e.Events, rt.RoomTemplates, tw.TempWayPoints, ts.TempScreens
 	Local i%
 	
 	LoadEntities()
@@ -8825,6 +8825,10 @@ Function InitNewGame%()
 	
 	For tw.TempWayPoints = Each TempWayPoints
 		Delete(tw)
+	Next
+	
+	For ts.TempScreens = Each TempScreens
+		Delete(ts)
 	Next
 	
 	RenderLoading(85, "EVENTS")
@@ -8958,7 +8962,7 @@ End Function
 Function NullGame%(PlayButtonSFX% = True)
 	CatchErrors("Uncaught (NullGame)")
 	
-	Local itt.ItemTemplates, s.Screens, lt.LightTemplates, d.Doors, m.Materials, de.Decals, sc.SecurityCams
+	Local itt.ItemTemplates, s.Screens, ts.TempScreens, lt.LightTemplates, d.Doors, m.Materials, de.Decals, sc.SecurityCams
 	Local wp.WayPoints, twp.TempWayPoints, r.Rooms, it.Items, pr.Props, c.ConsoleMsg, n.NPCs, em.Emitters
 	Local rt.RoomTemplates, p.Particles, e.Events, sub.Subtitles
 	Local i%, x%, y%, Lvl%
@@ -9071,6 +9075,10 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	For s.Screens = Each Screens
 		Delete(s)
+	Next
+	
+	For ts.TempScreens = Each TempScreens
+		Delete(ts)
 	Next
 	
 	For i = 0 To MaxItemAmount - 1
