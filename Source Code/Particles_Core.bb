@@ -5,6 +5,7 @@ Type Particles
 	Field RChange#, GChange#, BChange#, AlphaChange#
 	Field SizeChange#
 	Field LifeTime#
+	Field Dist#
 End Type 
 
 Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTime# = 200.0)
@@ -56,26 +57,41 @@ End Function
 Function UpdateParticles%()
 	Local p.Particles
 	
+	If UpdateTimer =< 0.0 Then
+		For p.Particles = Each Particles
+			Local xDist# = Abs(EntityX(me\Collider) - EntityX(p\Pvt, True))
+			Local zDist# = Abs(EntityZ(me\Collider) - EntityZ(p\Pvt, True))
+			
+			p\Dist = xDist + zDist
+			
+			If p\Dist > HideDistance * 2.0 Then
+				If p <> Null Then RemoveParticle(p)
+			EndIf
+		Next
+	EndIf
+	
 	For p.Particles = Each Particles
-		MoveEntity(p\Pvt, 0.0, 0.0, (p\Speed * fps\Factor[0]))
-		If p\Gravity <> 0.0 Then p\ySpeed = p\ySpeed - (p\Gravity * fps\Factor[0])
-		TranslateEntity(p\Pvt, 0.0, (p\ySpeed * fps\Factor[0]), 0.0, True)
-		
-		PositionEntity(p\OBJ, EntityX(p\Pvt, True), EntityY(p\Pvt, True), EntityZ(p\Pvt, True), True)
-		
-		If p\AlphaChange <> 0.0 Then
-			p\Alpha = Min(Max(p\Alpha + (p\AlphaChange * fps\Factor[0]), 0.0), 1.0)
-			EntityAlpha(p\OBJ, p\Alpha)		
-		EndIf
-		
-		If p\SizeChange <> 0.0 Then 
-			p\Size = p\Size + (p\SizeChange * fps\Factor[0])
-			ScaleSprite(p\OBJ, p\Size, p\Size)
-		EndIf
-		
-		p\LifeTime = p\LifeTime - fps\Factor[0]
-		If p\LifeTime =< 0.0 Lor p\Size < 0.00001 Lor p\Alpha =< 0.0 Then
-			RemoveParticle(p)
+		If p\Dist =< HideDistance * 2.0 Then
+			MoveEntity(p\Pvt, 0.0, 0.0, (p\Speed * fps\Factor[0]))
+			If p\Gravity <> 0.0 Then p\ySpeed = p\ySpeed - (p\Gravity * fps\Factor[0])
+			TranslateEntity(p\Pvt, 0.0, (p\ySpeed * fps\Factor[0]), 0.0, True)
+			
+			PositionEntity(p\OBJ, EntityX(p\Pvt, True), EntityY(p\Pvt, True), EntityZ(p\Pvt, True), True)
+			
+			If p\AlphaChange <> 0.0 Then
+				p\Alpha = Min(Max(p\Alpha + (p\AlphaChange * fps\Factor[0]), 0.0), 1.0)
+				EntityAlpha(p\OBJ, p\Alpha)		
+			EndIf
+			
+			If p\SizeChange <> 0.0 Then 
+				p\Size = p\Size + (p\SizeChange * fps\Factor[0])
+				ScaleSprite(p\OBJ, p\Size, p\Size)
+			EndIf
+			
+			p\LifeTime = p\LifeTime - fps\Factor[0]
+			If p\LifeTime =< 0.0 Lor p\Size < 0.00001 Lor p\Alpha =< 0.0 Then
+				RemoveParticle(p)
+			EndIf
 		EndIf
 	Next
 End Function
