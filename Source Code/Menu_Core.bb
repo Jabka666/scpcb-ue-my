@@ -71,7 +71,7 @@ Global SelectedMap$
 
 LoadSavedGames()
 
-Const VersionNumber$ = "1.0.2"
+Const VersionNumber$ = "1.0.3"
 
 ; ~ Main Menu Tabs Constants
 ;[Block]
