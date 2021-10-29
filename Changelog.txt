@@ -1,3 +1,9 @@
+v1.0.3
+
+General:
+- Optimized game.
+- Tiny improvement for "cabient_c.b3d" model.
+
 v1.0.2
 
 General:
