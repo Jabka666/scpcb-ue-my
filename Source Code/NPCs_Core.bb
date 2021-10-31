@@ -2694,6 +2694,9 @@ Function UpdateNPCs%()
 				If n\Frame > 286.5 And n\Frame < 288.5 Then
 					n\IsDead = True
 				EndIf
+				If AnimTime(n\OBJ) > 286.5 And AnimTime(n\OBJ) < 288.5 Then
+					n\IsDead = True
+				EndIf
 				
 				n\Reload = Max(0.0, n\Reload - fps\Factor[0])
 				
