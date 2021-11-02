@@ -4,6 +4,9 @@ General:
 - Optimized game.
 - Tiny improvement for "cabient_c.b3d" model.
 
+Bug Fixes:
+- Fixed "IsDead" parameter for guard.
+
 v1.0.2
 
 General:
