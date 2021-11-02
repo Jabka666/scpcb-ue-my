@@ -377,34 +377,34 @@ Function SaveGame%(File$)
 	
 	WriteInt(f, 1845)
 	
-	Local d.Decals
+	Local de.Decals
 	
 	Temp = 0
-	For d.Decals = Each Decals
+	For de.Decals = Each Decals
 		Temp = Temp + 1
 	Next	
 	WriteInt(f, Temp)
-	For d.Decals = Each Decals
-		WriteInt(f, d\ID)
+	For de.Decals = Each Decals
+		WriteInt(f, de\ID)
 		
-		WriteFloat(f, EntityX(d\OBJ, True))
-		WriteFloat(f, EntityY(d\OBJ, True))
-		WriteFloat(f, EntityZ(d\OBJ, True))
+		WriteFloat(f, EntityX(de\OBJ, True))
+		WriteFloat(f, EntityY(de\OBJ, True))
+		WriteFloat(f, EntityZ(de\OBJ, True))
 		
-		WriteFloat(f, EntityPitch(d\OBJ, True))
-		WriteFloat(f, EntityYaw(d\OBJ, True))
-		WriteFloat(f, EntityRoll(d\OBJ, True))
+		WriteFloat(f, EntityPitch(de\OBJ, True))
+		WriteFloat(f, EntityYaw(de\OBJ, True))
+		WriteFloat(f, EntityRoll(de\OBJ, True))
 		
-		WriteFloat(f, d\Size)
-		WriteFloat(f, d\Alpha)
-		WriteByte(f, d\FX)
-		WriteByte(f, d\BlendMode)
-		WriteByte(f, d\R) : WriteByte(f, d\G) : WriteByte(f, d\B)
+		WriteFloat(f, de\Size)
+		WriteFloat(f, de\Alpha)
+		WriteByte(f, de\FX)
+		WriteByte(f, de\BlendMode)
+		WriteByte(f, de\R) : WriteByte(f, de\G) : WriteByte(f, de\B)
 		
-		WriteFloat(f, d\Timer)
-		WriteFloat(f, d\LifeTime)
-		WriteFloat(f, d\SizeChange)
-		WriteFloat(f, d\AlphaChange)
+		WriteFloat(f, de\Timer)
+		WriteFloat(f, de\LifeTime)
+		WriteFloat(f, de\SizeChange)
+		WriteFloat(f, de\AlphaChange)
 	Next
 	
 	Local e.Events
@@ -1081,11 +1081,11 @@ Function LoadGame%(File$)
 	
 	If ReadInt(f) <> 1845 Then RuntimeError("Couldn't load the game, save file corrupted (error 3)")
 	
-	Local d.Decals
+	Local de.Decals
 	
-	For d.Decals = Each Decals
-		FreeEntity(d\OBJ)
-		Delete(d)
+	For de.Decals = Each Decals
+		FreeEntity(de\OBJ)
+		Delete(de)
 	Next
 	
 	Temp = ReadInt(f)
@@ -1099,7 +1099,7 @@ Function LoadGame%(File$)
 		Local Yaw# = ReadFloat(f)
 		Local Roll# = ReadFloat(f)
 		
-		d.Decals = CreateDecal(ID, x, y, z, Pitch, Yaw, Roll)
+		de.Decals = CreateDecal(ID, x, y, z, Pitch, Yaw, Roll)
 		
 		Local Size# = ReadFloat(f)
 		Local Alpha# = ReadFloat(f)
@@ -1107,24 +1107,28 @@ Function LoadGame%(File$)
 		Local BlendMode% = ReadByte(f)
 		Local Red% = ReadByte(f), Green% = ReadByte(f), Blue% = ReadByte(f)
 		
-		d\Timer = ReadFloat(f)
-		d\LifeTime = ReadFloat(f)
-		d\SizeChange = ReadFloat(f)
-		d\AlphaChange = ReadFloat(f)
+		Local DecalTimer# = ReadFloat(f)
+		Local LifeTime# = ReadFloat(f)
+		Local SizeChange# = ReadFloat(f)
+		Local AlphaChange# = ReadFloat(f)
 		
-		For d.Decals = Each Decals
-			If EntityX(d\OBJ, True) = x And EntityY(d\OBJ, True) = y And EntityZ(d\OBJ, True) = z Then
-				d\Size = Size
-				d\Alpha = Alpha
-				d\FX = FX
-				d\BlendMode = BlendMode
-				d\R = Red : d\G = Green : d\B = Blue
+		For de.Decals = Each Decals
+			If EntityX(de\OBJ, True) = x And EntityY(de\OBJ, True) = y And EntityZ(de\OBJ, True) = z Then
+				de\Size = Size
+				de\Alpha = Alpha
+				de\FX = FX
+				de\BlendMode = BlendMode
+				de\R = Red : de\G = Green : de\B = Blue
+				de\Timer = DecalTimer
+				de\LifeTime = LifeTime
+				de\SizeChange = SizeChange
+				de\AlphaChange = AlphaChange
 				
-				ScaleSprite(d\OBJ, Size, Size)
-				EntityAlpha(d\OBJ, Alpha)
-				EntityFX(d\OBJ, FX)
-				EntityBlend(d\OBJ, BlendMode)
-				If Red <> 0 Lor Green <> 0 Lor Blue <> 0 Then EntityColor(d\OBJ, Red, Green, Blue)
+				ScaleSprite(de\OBJ, Size, Size)
+				EntityAlpha(de\OBJ, Alpha)
+				EntityFX(de\OBJ, FX)
+				EntityBlend(de\OBJ, BlendMode)
+				If Red <> 0 Lor Green <> 0 Lor Blue <> 0 Then EntityColor(de\OBJ, Red, Green, Blue)
 				Exit
 			EndIf
 		Next
@@ -1852,11 +1856,11 @@ Function LoadGameQuick%(File$)
 	
 	If ReadInt(f) <> 1845 Then RuntimeError("Couldn't load the game, save file corrupted (error 3)")
 	
-	Local d.Decals
+	Local de.Decals
 	
-	For d.Decals = Each Decals
-		FreeEntity(d\OBJ)
-		Delete(d)
+	For de.Decals = Each Decals
+		FreeEntity(de\OBJ)
+		Delete(de)
 	Next
 	
 	Temp = ReadInt(f)
@@ -1870,7 +1874,7 @@ Function LoadGameQuick%(File$)
 		Local Yaw# = ReadFloat(f)
 		Local Roll# = ReadFloat(f)
 		
-		d.Decals = CreateDecal(ID, x, y, z, Pitch, Yaw, Roll)
+		de.Decals = CreateDecal(ID, x, y, z, Pitch, Yaw, Roll)
 		
 		Local Size# = ReadFloat(f)
 		Local Alpha# = ReadFloat(f)
@@ -1878,24 +1882,28 @@ Function LoadGameQuick%(File$)
 		Local BlendMode% = ReadByte(f)
 		Local Red% = ReadByte(f), Green% = ReadByte(f), Blue% = ReadByte(f)
 		
-		d\Timer = ReadFloat(f)
-		d\LifeTime = ReadFloat(f)
-		d\SizeChange = ReadFloat(f)
-		d\AlphaChange = ReadFloat(f)
+		Local DecalTimer# = ReadFloat(f)
+		Local LifeTime# = ReadFloat(f)
+		Local SizeChange# = ReadFloat(f)
+		Local AlphaChange# = ReadFloat(f)
 		
-		For d.Decals = Each Decals
-			If EntityX(d\OBJ, True) = x And EntityY(d\OBJ, True) = y And EntityZ(d\OBJ, True) = z Then
-				d\Size = Size
-				d\Alpha = Alpha
-				d\FX = FX
-				d\BlendMode = BlendMode
-				d\R = Red : d\G = Green : d\B = Blue
+		For de.Decals = Each Decals
+			If EntityX(de\OBJ, True) = x And EntityY(de\OBJ, True) = y And EntityZ(de\OBJ, True) = z Then
+				de\Size = Size
+				de\Alpha = Alpha
+				de\FX = FX
+				de\BlendMode = BlendMode
+				de\R = Red : de\G = Green : de\B = Blue
+				de\Timer = DecalTimer
+				de\LifeTime = LifeTime
+				de\SizeChange = SizeChange
+				de\AlphaChange = AlphaChange
 				
-				ScaleSprite(d\OBJ, Size, Size)
-				EntityAlpha(d\OBJ, Alpha)
-				EntityFX(d\OBJ, FX)
-				EntityBlend(d\OBJ, BlendMode)
-				If Red <> 0 Lor Green <> 0 Lor Blue <> 0 Then EntityColor(d\OBJ, Red, Green, Blue)
+				ScaleSprite(de\OBJ, Size, Size)
+				EntityAlpha(de\OBJ, Alpha)
+				EntityFX(de\OBJ, FX)
+				EntityBlend(de\OBJ, BlendMode)
+				If Red <> 0 Lor Green <> 0 Lor Blue <> 0 Then EntityColor(de\OBJ, Red, Green, Blue)
 				Exit
 			EndIf
 		Next

@@ -8719,7 +8719,8 @@ End Function
 Function InitNewGame%()
 	CatchErrors("Uncaught (InitNewGame)")
 	
-	Local de.Decals, d.Doors, it.Items, r.Rooms, sc.SecurityCams, e.Events, rt.RoomTemplates, tw.TempWayPoints, ts.TempScreens
+	Local de.Decals, d.Doors, it.Items, r.Rooms, sc.SecurityCams, e.Events, rt.RoomTemplates
+	Local twp.TempWayPoints, ts.TempScreens
 	Local i%
 	
 	LoadEntities()
@@ -8824,8 +8825,8 @@ Function InitNewGame%()
 		If rt\OBJ <> 0 Then FreeEntity(rt\OBJ) : rt\OBJ = 0
 	Next	
 	
-	For tw.TempWayPoints = Each TempWayPoints
-		Delete(tw)
+	For twp.TempWayPoints = Each TempWayPoints
+		Delete(twp)
 	Next
 	
 	For ts.TempScreens = Each TempScreens
@@ -8963,9 +8964,10 @@ End Function
 Function NullGame%(PlayButtonSFX% = True)
 	CatchErrors("Uncaught (NullGame)")
 	
-	Local itt.ItemTemplates, s.Screens, ts.TempScreens, lt.LightTemplates, d.Doors, m.Materials, de.Decals, sc.SecurityCams
-	Local wp.WayPoints, twp.TempWayPoints, r.Rooms, it.Items, pr.Props, c.ConsoleMsg, n.NPCs, em.Emitters
-	Local rt.RoomTemplates, p.Particles, e.Events, sub.Subtitles
+	Local itt.ItemTemplates, s.Screens, lt.LightTemplates, d.Doors, m.Materials, de.Decals, sc.SecurityCams, e.Events
+	Local wp.WayPoints, r.Rooms, it.Items, pr.Props, c.ConsoleMsg, n.NPCs, em.Emitters, rt.RoomTemplates, p.Particles, sub.Subtitles
+	Local twp.TempWayPoints, ts.TempScreens
+	
 	Local i%, x%, y%, Lvl%
 	
 	KillSounds()

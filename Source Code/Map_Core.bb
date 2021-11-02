@@ -58,7 +58,7 @@ Function CheckForPropModel%(File$)
 	End Select
 End Function
 
-Function CreatePropOBJ%(File$)
+Function CreateProp%(File$)
 	Local p.Props
 	
 	; ~ A hacky way to use .b3d format
@@ -705,7 +705,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 				;[Block]
 				File = ReadString(f)
 				If File <> "" Then
-					Local Model% = CreatePropOBJ("GFX\map\Props\" + File)
+					Local Model% = CreateProp("GFX\map\Props\" + File)
 					
 					Temp1 = ReadFloat(f) : Temp2 = ReadFloat(f) : Temp3 = ReadFloat(f)
 					PositionEntity(Model, Temp1, Temp2, Temp3)
@@ -1910,7 +1910,7 @@ End Function
 
 Type TempWayPoints
 	Field x#, y#, z#
-	Field roomtemplate.RoomTemplates
+	Field RoomTemplate.RoomTemplates
 End Type
 
 Type WayPoints
@@ -3175,100 +3175,96 @@ Type Decals
 End Type
 
 Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#, Size# = 1.0, Alpha# = 1.0, FX% = 0, BlendMode% = 1, R% = 0, G% = 0, B% = 0)
-	Local d.Decals
+	Local de.Decals
 	
-	d.Decals = New Decals
-	d\ID = ID
-	d\Size = Size
-	d\Alpha = Alpha
-	d\FX = FX : d\BlendMode = BlendMode
-	d\R = R : d\G = G : d\B = B
-	d\MaxSize = 1.0
+	de.Decals = New Decals
+	de\ID = ID
+	de\Size = Size
+	de\Alpha = Alpha
+	de\FX = FX : de\BlendMode = BlendMode
+	de\R = R : de\G = G : de\B = B
+	de\MaxSize = 1.0
 	
-	d\OBJ = CreateSprite()
-	PositionEntity(d\OBJ, x, y, z)
-	ScaleSprite(d\OBJ, Size, Size)
-	RotateEntity(d\OBJ, Pitch, Yaw, Roll)
-	EntityTexture(d\OBJ, t\DecalTextureID[ID])
-	EntityAlpha(d\OBJ, Alpha)
-	EntityFX(d\OBJ, FX)
-	EntityBlend(d\OBJ, BlendMode)
-	SpriteViewMode(d\OBJ, 2)
-	If R <> 0 Lor G <> 0 Lor B <> 0 Then EntityColor(d\OBJ, R, G, B)
+	de\OBJ = CreateSprite()
+	PositionEntity(de\OBJ, x, y, z)
+	ScaleSprite(de\OBJ, Size, Size)
+	RotateEntity(de\OBJ, Pitch, Yaw, Roll)
+	EntityTexture(de\OBJ, t\DecalTextureID[ID])
+	EntityAlpha(de\OBJ, Alpha)
+	EntityFX(de\OBJ, FX)
+	EntityBlend(de\OBJ, BlendMode)
+	SpriteViewMode(de\OBJ, 2)
+	If R <> 0 Lor G <> 0 Lor B <> 0 Then EntityColor(de\OBJ, R, G, B)
 	
 	If (Not t\DecalTextureID[ID]) Then
-		CreateConsoleMsg("Decal Texture ID: " + ID + " not found.")
-		If opt\ConsoleOpening And opt\CanOpenConsole Then
-			ConsoleOpen = True
-		EndIf
-		Return(Null)
+		RuntimeError("Decal Texture ID: " + ID + " not found.")
 	EndIf
-	Return(d)
+	Return(de)
 End Function
 
 Function UpdateDecals%()
-	Local d.Decals
+	Local de.Decals
 	
 	If UpdateTimer =< 0.0 Then
-		For d.Decals = Each Decals
-			Local xDist# = Abs(EntityX(me\Collider) - EntityX(d\OBJ, True))
-			Local zDist# = Abs(EntityZ(me\Collider) - EntityZ(d\OBJ, True))
+		For de.Decals = Each Decals
+			Local xDist# = Abs(EntityX(me\Collider) - EntityX(de\OBJ, True))
+			Local zDist# = Abs(EntityZ(me\Collider) - EntityZ(de\OBJ, True))
 			
-			d\Dist = xDist + zDist
+			de\Dist = xDist + zDist
 			
-			If d\Dist > HideDistance * 2.0 Then
-				If d\OBJ <> 0 Then HideEntity(d\OBJ)
+			If de\Dist > HideDistance * 2.0 Then
+				If de\OBJ <> 0 Then HideEntity(de\OBJ)
 			Else
-				If d\OBJ <> 0 Then ShowEntity(d\OBJ)
+				If de\OBJ <> 0 Then ShowEntity(de\OBJ)
 			EndIf
 		Next
 	EndIf
 	
-	For d.Decals = Each Decals
-		If d\Dist =< HideDistance * 2.0 Then
-			If d\SizeChange <> 0.0 Then
-				d\Size = d\Size + (d\SizeChange * fps\Factor[0])
-				ScaleSprite(d\OBJ, d\Size, d\Size)
+	For de.Decals = Each Decals
+		If de\Dist =< HideDistance * 2.0 Then
+			If de\SizeChange <> 0.0 Then
+				de\Size = de\Size + (de\SizeChange * fps\Factor[0])
+				ScaleSprite(de\OBJ, de\Size, de\Size)
 				
-				Select d\ID
+				Select de\ID
 					Case 0
 						;[Block]
-						If d\Timer =< 0.0 Then
+						If de\Timer =< 0.0 Then
 							Local Angle# = Rnd(360.0)
-							Local Temp# = Rnd(d\Size)
+							Local Temp# = Rnd(de\Size)
 							Local d2.Decals
 							
-							d2.Decals = CreateDecal(1, EntityX(d\OBJ) + Cos(Angle) * Temp, EntityY(d\OBJ) - 0.0005, EntityZ(d\OBJ) + Sin(Angle) * Temp, EntityPitch(d\OBJ), EntityYaw(d\OBJ), EntityRoll(d\OBJ), Rnd(0.1, 0.5))
+							d2.Decals = CreateDecal(1, EntityX(de\OBJ) + Cos(Angle) * Temp, EntityY(de\OBJ) - 0.0005, EntityZ(de\OBJ) + Sin(Angle) * Temp, EntityPitch(de\OBJ), EntityYaw(de\OBJ), EntityRoll(de\OBJ), Rnd(0.1, 0.5))
 							PlaySound2(DecaySFX[Rand(1, 3)], Camera, d2\OBJ, 10.0, Rnd(0.1, 0.5))
-							d\Timer = Rnd(50.0, 100.0)
+							de\Timer = Rnd(50.0, 100.0)
 						Else
-							d\Timer = d\Timer - fps\Factor[0]
+							de\Timer = de\Timer - fps\Factor[0]
 						EndIf
 						;[End Block]
 				End Select
 				
-				If d\Size >= d\MaxSize Then
-					d\SizeChange = 0.0
-					d\Size = d\MaxSize
+				If de\Size >= de\MaxSize Then
+					de\SizeChange = 0.0
+					de\Size = de\MaxSize
 				EndIf
 			EndIf
 			
-			If d\AlphaChange <> 0.0 Then
-				d\Alpha = Min(d\Alpha + (fps\Factor[0] * d\AlphaChange), 1.0)
-				EntityAlpha(d\OBJ, d\Alpha)
+			If de\AlphaChange <> 0.0 Then
+				de\Alpha = Min(de\Alpha + (fps\Factor[0] * de\AlphaChange), 1.0)
+				EntityAlpha(de\OBJ, de\Alpha)
 			EndIf
 			
-			If d\LifeTime > 0.0 Then
-				d\LifeTime = Max(d\LifeTime - fps\Factor[0], 5.0)
+			If de\LifeTime > 0.0 Then
+				de\LifeTime = Max(de\LifeTime - fps\Factor[0], 5.0)
 			EndIf
 			
-			Local Dist# = EntityDistanceSquared(d\OBJ, me\Collider)
+			Local Dist# = EntityDistanceSquared(de\OBJ, me\Collider)
 			
-			If (Dist < PowTwo(d\Size)) And (EntityPitch(d\OBJ) = 90.0) Then
-				Select d\ID
+			If (Dist < PowTwo(de\Size)) And (EntityPitch(de\OBJ) = 90.0) Then
+				Select de\ID
 					Case 0
 						;[Block]
-						If d\FX <> 1 Then
+						If de\FX <> 1 Then
 							CurrStepSFX = 1
 							me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, Max(Sqr(Dist) * 50.0, 1.0))
 						EndIf
@@ -3280,9 +3276,9 @@ Function UpdateDecals%()
 				End Select
 			EndIf
 			
-			If d\Size =< 0.0 Lor d\Alpha =< 0.0 Lor d\LifeTime = 5.0 Then
-				FreeEntity(d\OBJ) : d\OBJ = 0
-				Delete(d)
+			If de\Size =< 0.0 Lor de\Alpha =< 0.0 Lor de\LifeTime = 5.0 Then
+				FreeEntity(de\OBJ) : de\OBJ = 0
+				Delete(de)
 			EndIf
 		EndIf
 	Next
@@ -3928,8 +3924,9 @@ End Function
 Function FillRoom%(r.Rooms)
 	CatchErrors("Uncaught (FillRoom)")
 	
-	Local d.Doors, d2.Doors, sc.SecurityCams, de.Decals, r2.Rooms, sc2.SecurityCams, tw.TempWayPoints, fr.Forest
-	Local it.Items, it2.Items, em.Emitters, w.WayPoints, w2.WayPoints, lt.LightTemplates, ts.TempScreens
+	Local d.Doors, d2.Doors, sc.SecurityCams, de.Decals, r2.Rooms, sc2.SecurityCams, fr.Forest
+	Local it.Items, it2.Items, em.Emitters, w.WayPoints, w2.WayPoints, lt.LightTemplates
+	Local twp.TempWayPoints, ts.TempScreens
 	Local xTemp#, yTemp#, zTemp#, xTemp2%, yTemp2%, zTemp2%, SF%, b%, Name$
 	Local t1%, Tex%, Screen%, Scale#
 	Local i%, k%, Temp%, Temp3%, Angle#
@@ -7707,9 +7704,9 @@ Function FillRoom%(r.Rooms)
 		EndIf
 	Next
 	
-	For tw.TempWayPoints = Each TempWayPoints
-		If tw\roomtemplate = r\RoomTemplate Then
-			CreateWaypoint(r\x + tw\x, r\y + tw\y, r\z + tw\z, Null, r)
+	For twp.TempWayPoints = Each TempWayPoints
+		If twp\RoomTemplate = r\RoomTemplate Then
+			CreateWaypoint(r\x + twp\x, r\y + twp\y, r\z + twp\z, Null, r)
 		EndIf
 	Next
 	
