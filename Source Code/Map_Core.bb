@@ -3199,65 +3199,63 @@ Function UpdateDecals%()
 	Local de.Decals
 	
 	For de.Decals = Each Decals
-		If de\Dist =< HideDistance * 2.0 Then
-			If de\SizeChange <> 0.0 Then
-				de\Size = de\Size + (de\SizeChange * fps\Factor[0])
-				ScaleSprite(de\OBJ, de\Size, de\Size)
-				
-				Select de\ID
-					Case 0
-						;[Block]
-						If de\Timer =< 0.0 Then
-							Local Angle# = Rnd(360.0)
-							Local Temp# = Rnd(de\Size)
-							Local de2.Decals
-							
-							de2.Decals = CreateDecal(1, EntityX(de\OBJ) + Cos(Angle) * Temp, EntityY(de\OBJ) - 0.0005, EntityZ(de\OBJ) + Sin(Angle) * Temp, EntityPitch(de\OBJ), EntityYaw(de\OBJ), EntityRoll(de\OBJ), Rnd(0.1, 0.5))
-							PlaySound2(DecaySFX[Rand(1, 3)], Camera, de2\OBJ, 10.0, Rnd(0.1, 0.5))
-							de\Timer = Rnd(50.0, 100.0)
-						Else
-							de\Timer = de\Timer - fps\Factor[0]
-						EndIf
-						;[End Block]
-				End Select
-				
-				If de\Size >= de\MaxSize Then
-					de\SizeChange = 0.0
-					de\Size = de\MaxSize
-				EndIf
-			EndIf
+		If de\SizeChange <> 0.0 Then
+			de\Size = de\Size + (de\SizeChange * fps\Factor[0])
+			ScaleSprite(de\OBJ, de\Size, de\Size)
 			
-			If de\AlphaChange <> 0.0 Then
-				de\Alpha = Min(de\Alpha + (fps\Factor[0] * de\AlphaChange), 1.0)
-				EntityAlpha(de\OBJ, de\Alpha)
-			EndIf
+			Select de\ID
+				Case 0
+					;[Block]
+					If de\Timer =< 0.0 Then
+						Local Angle# = Rnd(360.0)
+						Local Temp# = Rnd(de\Size)
+						Local de2.Decals
+						
+						de2.Decals = CreateDecal(1, EntityX(de\OBJ) + Cos(Angle) * Temp, EntityY(de\OBJ) - 0.0005, EntityZ(de\OBJ) + Sin(Angle) * Temp, EntityPitch(de\OBJ), EntityYaw(de\OBJ), EntityRoll(de\OBJ), Rnd(0.1, 0.5))
+						PlaySound2(DecaySFX[Rand(1, 3)], Camera, de2\OBJ, 10.0, Rnd(0.1, 0.5))
+						de\Timer = Rnd(50.0, 100.0)
+					Else
+						de\Timer = de\Timer - fps\Factor[0]
+					EndIf
+					;[End Block]
+			End Select
 			
-			If de\LifeTime > 0.0 Then
-				de\LifeTime = Max(de\LifeTime - fps\Factor[0], 5.0)
+			If de\Size >= de\MaxSize Then
+				de\SizeChange = 0.0
+				de\Size = de\MaxSize
 			EndIf
-			
-			Local Dist# = EntityDistanceSquared(de\OBJ, me\Collider)
-			
-			If (Dist < PowTwo(de\Size)) And (EntityPitch(de\OBJ) = 90.0) Then
-				Select de\ID
-					Case 0
-						;[Block]
-						If de\FX <> 1 Then
-							CurrStepSFX = 1
-							me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, Max(Sqr(Dist) * 50.0, 1.0))
-						EndIf
-						;[End Block]
-					Case 2, 3, 4, 5, 6, 7, 16, 17, 18, 20
-						;[Block]
-						CurrStepSFX = 3
-						;[End Block]
-				End Select
-			EndIf
-			
-			If de\Size =< 0.0 Lor de\Alpha =< 0.0 Lor de\LifeTime = 5.0 Then
-				FreeEntity(de\OBJ) : de\OBJ = 0
-				Delete(de)
-			EndIf
+		EndIf
+		
+		If de\AlphaChange <> 0.0 Then
+			de\Alpha = Min(de\Alpha + (fps\Factor[0] * de\AlphaChange), 1.0)
+			EntityAlpha(de\OBJ, de\Alpha)
+		EndIf
+		
+		If de\LifeTime > 0.0 Then
+			de\LifeTime = Max(de\LifeTime - fps\Factor[0], 5.0)
+		EndIf
+		
+		Local Dist# = EntityDistanceSquared(de\OBJ, me\Collider)
+		
+		If (Dist < PowTwo(de\Size)) And (EntityPitch(de\OBJ) = 90.0) Then
+			Select de\ID
+				Case 0
+					;[Block]
+					If de\FX <> 1 Then
+						CurrStepSFX = 1
+						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, Max(Sqr(Dist) * 50.0, 1.0))
+					EndIf
+					;[End Block]
+				Case 2, 3, 4, 5, 6, 7, 16, 17, 18, 20
+					;[Block]
+					CurrStepSFX = 3
+					;[End Block]
+			End Select
+		EndIf
+		
+		If de\Size =< 0.0 Lor de\Alpha =< 0.0 Lor de\LifeTime = 5.0 Then
+			FreeEntity(de\OBJ) : de\OBJ = 0
+			Delete(de)
 		EndIf
 	Next
 End Function
