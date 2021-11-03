@@ -2279,7 +2279,6 @@ Function MainLoop%()
 			UpdateItems()
 			UpdateParticles()
 			Use427()
-			UpdateObjectsTimer()
 		EndIf
 		
 		If chs\InfiniteStamina Then me\Stamina = 100.0
