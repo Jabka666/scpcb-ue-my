@@ -2234,21 +2234,29 @@ Function UpdateDoors%()
 			d\Dist = xDist + zDist
 			
 			If d\Dist > HideDistance * 2.0 Then
-				If d\FrameOBJ <> 0 Then HideEntity(d\FrameOBJ)
-				If d\OBJ <> 0 Then HideEntity(d\OBJ)
-				If d\OBJ2 <> 0 Then HideEntity(d\OBJ2)
-				For i = 0 To 1
-					If d\Buttons[i] <> 0 Then HideEntity(d\Buttons[i])
-					If d\ElevatorPanel[i] <> 0 Then HideEntity(d\ElevatorPanel[i])
-				Next			
+				If d\FrameOBJ <> 0 Then
+					If (Not EntityHidden(d\FrameOBJ)) Then
+						HideEntity(d\FrameOBJ)
+						If d\OBJ <> 0 Then HideEntity(d\OBJ)
+						If d\OBJ2 <> 0 Then HideEntity(d\OBJ2)
+						For i = 0 To 1
+							If d\Buttons[i] <> 0 Then HideEntity(d\Buttons[i])
+							If d\ElevatorPanel[i] <> 0 Then HideEntity(d\ElevatorPanel[i])
+						Next
+					EndIf
+				EndIf
 			Else
-				If d\FrameOBJ <> 0 Then ShowEntity(d\FrameOBJ)
-				If d\OBJ <> 0 Then ShowEntity(d\OBJ)
-				If d\OBJ2 <> 0 Then ShowEntity(d\OBJ2)
-				For i = 0 To 1
-					If d\Buttons[i] <> 0 Then ShowEntity(d\Buttons[i])
-					If d\ElevatorPanel[i] <> 0 Then ShowEntity(d\ElevatorPanel[i])
-				Next
+				If d\FrameOBJ <> 0 Then
+					If EntityHidden(d\FrameOBJ) Then
+						ShowEntity(d\FrameOBJ)
+						If d\OBJ <> 0 Then ShowEntity(d\OBJ)
+						If d\OBJ2 <> 0 Then ShowEntity(d\OBJ2)
+						For i = 0 To 1
+							If d\Buttons[i] <> 0 Then ShowEntity(d\Buttons[i])
+							If d\ElevatorPanel[i] <> 0 Then ShowEntity(d\ElevatorPanel[i])
+						Next
+					EndIf
+				EndIf
 			EndIf
 		Next
 		UpdateDoorsTimer = 30.0

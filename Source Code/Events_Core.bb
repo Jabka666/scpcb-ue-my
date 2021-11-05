@@ -736,9 +736,9 @@ Function QuickLoadEvents%()
 					QuickLoadPercent = 70
 					e\EventStr = "Load6"
 				ElseIf e\EventStr = "Load6"
-					HideEntity(e\room\Objects[3])
-					HideEntity(e\room\Objects[4])
-					HideEntity(e\room\Objects[5])
+					For i = 3 To 6
+						HideEntity(e\room\Objects[i])
+					Next
 					QuickLoadPercent = 100
 					e\EventStr = "LoadDone"
 				EndIf
@@ -6744,12 +6744,6 @@ Function UpdateEvents%()
 							e\EventStr = "Load0"
 						EndIf
 						
-						If e\room\Objects[3] <> 0 Then
-							For i = 3 To 6
-								HideEntity(e\room\Objects[i])
-							Next
-						EndIf
-						
 						If e\room\RoomDoors[1]\Open Then
 							e\EventState = 1.0
 							GiveAchievement(Achv205)
@@ -6763,9 +6757,9 @@ Function UpdateEvents%()
 								e\EventState = Max(e\EventState, 65.0)
 								
 								For i = 3 To 5
-									ShowEntity(e\room\Objects[i])
+									If EntityHidden(e\room\Objects[i]) Then ShowEntity(e\room\Objects[i])
 								Next
-								HideEntity(e\room\Objects[6])
+								If (Not EntityHidden(e\room\Objects[6])) Then HideEntity(e\room\Objects[6])
 								
 								SetAnimTime(e\room\Objects[3], 492.0)
 								SetAnimTime(e\room\Objects[4], 434.0)
@@ -6785,34 +6779,34 @@ Function UpdateEvents%()
 						Select e\EventState
 							Case 1.0
 								;[Block]
-								ShowEntity(e\room\Objects[1])
+								If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
 								For i = 3 To 5
-									HideEntity(e\room\Objects[i])
+									If (Not EntityHidden(e\room\Objects[i])) Then HideEntity(e\room\Objects[i])
 								Next
 								; ~ Sitting
-								ShowEntity(e\room\Objects[6])
+								If EntityHidden(e\room\Objects[6]) Then ShowEntity(e\room\Objects[6])
 								Animate2(e\room\Objects[6], AnimTime(e\room\Objects[6]), 526.0, 530.0, 0.2)
 								If e\EventState2 > 70.0 * 20.0 Then e\EventState = e\EventState + 1.0
 								;[End Block]
 							Case 3.0
 								;[Block]
-								ShowEntity(e\room\Objects[1])
+								If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
 								For i = 3 To 5
-									HideEntity(e\room\Objects[i])
+									If (Not EntityHidden(e\room\Objects[i])) Then HideEntity(e\room\Objects[i])
 								Next
 								; ~ Laying down
-								ShowEntity(e\room\Objects[6])
+								If EntityHidden(e\room\Objects[6]) Then ShowEntity(e\room\Objects[6])
 								Animate2(e\room\Objects[6], AnimTime(e\room\Objects[6]), 377.0, 525.0, 0.2)
 								If e\EventState2 > 70.0 * 30.0 Then e\EventState = e\EventState + 1.0
 								;[End Block]
 							Case 5.0
 								;[Block]
-								ShowEntity(e\room\Objects[1])
+								If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
 								For i = 3 To 5
-									HideEntity(e\room\Objects[i])
+									If (Not EntityHidden(e\room\Objects[i])) Then HideEntity(e\room\Objects[i])
 								Next
 								; ~ Standing
-								ShowEntity(e\room\Objects[6])
+								If EntityHidden(e\room\Objects[6]) Then ShowEntity(e\room\Objects[6])
 								Animate2(e\room\Objects[6], AnimTime(e\room\Objects[6]), 228.0, 376.0, 0.2)
 								If e\EventState2 > 70.0 * 40.0 Then 
 									e\EventState = e\EventState + 1.0
@@ -6821,12 +6815,12 @@ Function UpdateEvents%()
 								;[End Block]
 							Case 7.0
 								;[Block]
-								ShowEntity(e\room\Objects[1])
+								If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
 								For i = 3 To 4
-									HideEntity(e\room\Objects[i])
+									If (Not EntityHidden(e\room\Objects[i])) Then HideEntity(e\room\Objects[i])
 								Next
 								For i = 5 To 6
-									ShowEntity(e\room\Objects[i])
+									If EntityHidden(e\room\Objects[i]) Then ShowEntity(e\room\Objects[i])
 								Next
 								; ~ Sexy demon pose
 								Animate2(e\room\Objects[5], AnimTime(e\room\Objects[5]), 500.0, 648.0, 0.2)
@@ -6837,10 +6831,10 @@ Function UpdateEvents%()
 								;[End Block]
 							Case 9.0
 								;[Block]
-								ShowEntity(e\room\Objects[1])
-								HideEntity(e\room\Objects[3])
+								If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
+								If (Not EntityHidden(e\room\Objects[3])) Then HideEntity(e\room\Objects[3])
 								For i = 4 To 6
-									ShowEntity(e\room\Objects[i])
+									If EntityHidden(e\room\Objects[i]) Then ShowEntity(e\room\Objects[i])
 								Next
 								; ~ Idle
 								Animate2(e\room\Objects[4], AnimTime(e\room\Objects[4]), 2.0, 200.0, 0.2)
@@ -6853,9 +6847,9 @@ Function UpdateEvents%()
 								;[End Block]
 							Case 11.0
 								;[Block]
-								ShowEntity(e\room\Objects[1])
+								If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
 								For i = 3 To 6
-									ShowEntity(e\room\Objects[i])
+									If EntityHidden(e\room\Objects[i]) Then ShowEntity(e\room\Objects[i])
 								Next
 								
 								; ~ Idle
@@ -6867,9 +6861,9 @@ Function UpdateEvents%()
 								;[End Block]
 							Case 13.0
 								;[Block]
-								ShowEntity(e\room\Objects[1])
+								If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
 								For i = 3 To 6
-									ShowEntity(e\room\Objects[i])
+									If EntityHidden(e\room\Objects[i]) Then ShowEntity(e\room\Objects[i])
 								Next
 								If AnimTime(e\room\Objects[6]) <> 227.0 Then SetAnimTime(e\room\Objects[6], 227.0)
 								
@@ -6879,7 +6873,7 @@ Function UpdateEvents%()
 								;[End Block]
 							Case 66.0
 								;[Block]
-								ShowEntity(e\room\Objects[1])
+								If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
 								Animate2(e\room\Objects[3], AnimTime(e\room\Objects[3]), 492.0, 534.0, 0.1, False)
 								Animate2(e\room\Objects[4], AnimTime(e\room\Objects[4]), 434.0, 466.0, 0.1, False)
 								Animate2(e\room\Objects[5], AnimTime(e\room\Objects[5]), 434.0, 494.0, 0.1, False)
@@ -6889,7 +6883,7 @@ Function UpdateEvents%()
 										e\EventState = 67.0
 										e\EventState2 = 0.0									
 										e\EventState3 = 0.0
-										HideEntity(e\room\Objects[1])
+										If (Not EntityHidden(e\room\Objects[1])) Then HideEntity(e\room\Objects[1])
 									EndIf
 								EndIf
 								;[End Block]
@@ -6922,12 +6916,12 @@ Function UpdateEvents%()
 								If Rand(3) = 1 Then
 									HideEntity(e\room\Objects[1])
 								Else
-									ShowEntity(e\room\Objects[1])
+									If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
 								EndIf
 								
 								e\EventState3 = e\EventState3 + fps\Factor[0]
 								If e\EventState3 > 50.0 Then
-									ShowEntity(e\room\Objects[1])
+									If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
 									e\EventState = e\EventState + 1.0
 									e\EventState3 = 0.0
 								EndIf
@@ -6936,7 +6930,7 @@ Function UpdateEvents%()
 					EndIf
 				ElseIf e\room\Objects[3] <> 0
 					For i = 3 To 6
-						HideEntity(e\room\Objects[i])
+						If (Not EntityHidden(e\room\Objects[i])) Then HideEntity(e\room\Objects[i])
 					Next
 				Else
 					e\EventState = 0.0
