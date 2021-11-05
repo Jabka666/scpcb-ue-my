@@ -3708,9 +3708,13 @@ Function UpdateGUI%()
 			Else
 				If IsMouseOn = n And mo\MouseHit1 Then
 					For z = 0 To OtherSize - 1
-						If OtherOpen\SecondInv[z] = SelectedItem Then OtherOpen\SecondInv[z] = Null
+						If OtherOpen\SecondInv[z] = SelectedItem Then
+							OtherOpen\SecondInv[z] = Null
+							Exit
+						EndIf
 					Next
 					OtherOpen\SecondInv[n] = SelectedItem
+					SelectedItem = Null
 				EndIf
 			EndIf					
 			
