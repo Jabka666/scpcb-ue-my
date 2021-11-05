@@ -1188,7 +1188,7 @@ Function UpdateEvents%()
 										y = (y + 0.2) + (0.302 + 0.6 - (y + 0.2)) * Max((e\EventState3 - 10.0) / 4.0, 0.0) 
 									EndIf
 									
-									z = z + (EntityZ(e\room\OBJ) + 104.0 * RoomScale - z) * Min(Max((e\EventState3 - 3) / 5.0, 0.0), 1.0)
+									z = z + (EntityZ(e\room\OBJ) + 104.0 * RoomScale - z) * Min(Max((e\EventState3 - 3.0) / 5.0, 0.0), 1.0)
 									
 									; ~ I'm sorry you have to see this
 									RotateEntity(Camera, (-70.0) + 70.0 * Min(Max((e\EventState3 - 3.0) / 5.0, 0.0), 1.0) + Sin(e\EventState3 * 12.857) * 5.0, (-60.0) * Max((e\EventState3 - 10.0) / 4.0, 0.0), Sin(e\EventState3 * 25.7) * 8.0)
@@ -3757,11 +3757,7 @@ Function UpdateEvents%()
 					If e\EventState = 0.0 Then
 						If e\room\Dist < 8.0 Then
 							HideEntity(e\room\Objects[3])
-							If (MilliSecs2() Mod 1500) < 800 Then
-								ShowEntity(e\room\Objects[4])
-							Else
-								HideEntity(e\room\Objects[4])
-							EndIf			
+							UpdateRedLight(e\room\Objects[4], 1500, 800)
 							
 							If (Not e\SoundCHN) Then ; ~ Humming when the player isn't close
 								e\SoundCHN = PlaySound2(TeslaIdleSFX, Camera, e\room\Objects[3], 4.0, 0.5)
@@ -3818,11 +3814,8 @@ Function UpdateEvents%()
 						e\EventState = e\EventState + fps\Factor[0]
 						If e\EventState =< 40.0 Then
 							HideEntity(e\room\Objects[3])
-							If (MilliSecs2() Mod 100) < 50 Then
-								ShowEntity(e\room\Objects[4])
-							Else
-								HideEntity(e\room\Objects[4])
-							EndIf
+							
+							UpdateRedLight(e\room\Objects[4], 100, 50)
 						Else
 							If e\room\Dist < 2.0 Then
 								If e\EventState - fps\Factor[0] =< 40.0 Then PlaySound_Strict(TeslaShockSFX)	
@@ -5709,7 +5702,7 @@ Function UpdateEvents%()
 									
 									me\HeartBeatRate = 150.0
 									me\HeartBeatVolume = Max(3.0 - Sqr(Dist), 0.0) / 3.0
-									me\BlurVolume = Max((2.0 - Sqr(Dist)) * (e\EventState3 / 800.0)*(Sin(Float(MilliSecs2()) / 20.0 + 1.0)), me\BlurVolume)
+									me\BlurVolume = Max((2.0 - Sqr(Dist)) * (e\EventState3 / 800.0) * (Sin(Float(MilliSecs2()) / 20.0 + 1.0)), me\BlurVolume)
 									me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs2()) / 20.0) + 1.0) * 8.0 * Max((3.0 - Sqr(Dist)), 0.0))
 									
 									If BreathCHN <> 0 Then
@@ -7565,11 +7558,7 @@ Function UpdateEvents%()
 						ElseIf e\EventState = 1.0
 							e\SoundCHN = LoopSound2(AlarmSFX[0], e\SoundCHN, Camera, e\room\Objects[0], 5.0)
 							
-							If (MilliSecs2() Mod 1000) < 500 Then
-								ShowEntity(e\room\Objects[5]) 
-							Else
-								HideEntity(e\room\Objects[5])
-							EndIf
+							UpdateRedLight(e\room\Objects[5], 1000, 500)
 							
 							Dist = EntityDistanceSquared(me\Collider, e\room\Objects[0])
 							If Dist < 4.0 Then

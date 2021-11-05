@@ -2370,7 +2370,7 @@ Function MainLoop%()
 					If me\SelectedEnding <> -1 Then me\EndingTimer = Min(me\KillTimer, -0.1)
 				EndIf
 			Else
-				HideEntity(t\OverlayID[9])
+				If (Not EntityHidden(t\OverlayID[9])) Then HideEntity(t\OverlayID[9])
 			EndIf
 			
 			If me\FallTimer < 0.0 Then
@@ -2386,11 +2386,11 @@ Function MainLoop%()
 		EndIf
 		
 		If me\LightFlash > 0.0 Then
-			ShowEntity(t\OverlayID[6])
+			If EntityHidden(t\OverlayID[6]) Then ShowEntity(t\OverlayID[6])
 			EntityAlpha(t\OverlayID[6], Max(Min(me\LightFlash + Rnd(-0.2, 0.2), 1.0), 0.0))
 			me\LightFlash = Max(me\LightFlash - (fps\Factor[0] / 70.0), 0.0)
 		Else
-			HideEntity(t\OverlayID[6])
+			If (Not EntityHidden(t\OverlayID[6])) Then HideEntity(t\OverlayID[6])
 		EndIf
 		
 		UpdateWorld2()
@@ -2574,7 +2574,9 @@ Function Kill%(IsBloody% = False)
 	EndIf
 	
 	If me\KillTimer >= 0.0 Then
-		If IsBloody Then ShowEntity(t\OverlayID[9])
+		If IsBloody Then
+			If EntityHidden(t\OverlayID[9]) Then ShowEntity(t\OverlayID[9])
+		EndIf
 		
 		me\KillAnim = Rand(0, 1)
 		PlaySound_Strict(DamageSFX[0])
@@ -2744,10 +2746,10 @@ Function UpdateMoving%()
 			msg\DeathMsg = "A Class D jumpsuit found in [DATA REDACTED]. Upon further examination, the jumpsuit was found to be filled with 12.5 kilograms of blue ash-like substance. "
 			msg\DeathMsg = msg\DeathMsg + "Chemical analysis of the substance remains non-conclusive. Most likely related to SCP-914."
 			Kill()
-			ShowEntity(t\OverlayID[0])
+			If EntityHidden(t\OverlayID[0]) Then ShowEntity(t\OverlayID[0])
 		Else
 			me\BlurTimer = 500.0		
-			HideEntity(t\OverlayID[0])
+			If (Not EntityHidden(t\OverlayID[0])) Then HideEntity(t\OverlayID[0])
 		EndIf
 	EndIf
 	
@@ -3152,7 +3154,7 @@ Function UpdateMouseLook%()
 			EndIf
 		EndIf
 	Else
-		HideEntity(me\Collider)
+		If (Not EntityHidden(me\Collider)) Then HideEntity(me\Collider)
 		PositionEntity(Camera, EntityX(me\Head), EntityY(me\Head), EntityZ(me\Head))
 		
 		Local CollidedFloor% = False
@@ -3205,7 +3207,7 @@ Function UpdateMouseLook%()
 			EndIf
 		EndIf
 		
-		ShowEntity(t\OverlayID[1])
+		If EntityHidden(t\OverlayID[1]) Then ShowEntity(t\OverlayID[1])
 		
 		If ChannelPlaying(BreathCHN) Then
 			wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + (fps\Factor[0] * 2.0), 100.0)
@@ -3221,14 +3223,14 @@ Function UpdateMouseLook%()
 			EndIf
 		EndIf
 		If wi\GasMaskFogTimer > 0.0 Then
-			ShowEntity(t\OverlayID[10])
+			If EntityHidden(t\OverlayID[10]) Then ShowEntity(t\OverlayID[10])
 			EntityAlpha(t\OverlayID[10], Min(((wi\GasMaskFogTimer * 0.2) ^ 2.0) / 1000.0, 0.45))
 		EndIf
 	Else
 		If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN)
 		wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.32))
-		HideEntity(t\OverlayID[1])
-		HideEntity(t\OverlayID[10])
+		If (Not EntityHidden(t\OverlayID[1])) Then HideEntity(t\OverlayID[1])
+		If (Not EntityHidden(t\OverlayID[10])) Then HideEntity(t\OverlayID[10])
 	EndIf
 	
 	If wi\HazmatSuit > 0 Then
@@ -3238,19 +3240,19 @@ Function UpdateMouseLook%()
 		If (Not I_714\Using) Then
 			If wi\HazmatSuit = 2 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fps\Factor[0])
 		EndIf
-		ShowEntity(t\OverlayID[2])
+		If EntityHidden(t\OverlayID[2]) Then ShowEntity(t\OverlayID[2])
 	Else
-		HideEntity(t\OverlayID[2])
+		If (Not EntityHidden(t\OverlayID[2])) Then HideEntity(t\OverlayID[2])
 	EndIf
 	
 	If wi\BallisticHelmet Then
-		ShowEntity(t\OverlayID[8])
+		If EntityHidden(t\OverlayID[8]) Then ShowEntity(t\OverlayID[8])
 	Else
-		HideEntity(t\OverlayID[8])
+		If (Not EntityHidden(t\OverlayID[8])) Then HideEntity(t\OverlayID[8])
 	EndIf
 	
 	If wi\NightVision > 0 Lor wi\SCRAMBLE Then
-		ShowEntity(t\OverlayID[4])
+		If EntityHidden(t\OverlayID[4]) Then ShowEntity(t\OverlayID[4])
 		If wi\NightVision = 2 Then
 			EntityColor(t\OverlayID[4], 0.0, 100.0, 255.0)
 			AmbientLightRooms(15)
@@ -3267,7 +3269,7 @@ Function UpdateMouseLook%()
 		EntityTexture(t\OverlayID[0], t\MiscTextureID[20])
 	Else
 		AmbientLightRooms(0)
-		HideEntity(t\OverlayID[4])
+		If (Not EntityHidden(t\OverlayID[4])) Then HideEntity(t\OverlayID[4])
 		EntityTexture(t\OverlayID[0], t\OverlayTextureID[0])
 	EndIf
 	
@@ -3389,10 +3391,10 @@ Function UpdateDark%()
 	If SelectedScreen <> Null Lor SelectedDoor <> Null Then DarkAlpha = Max(DarkAlpha, 0.5)
 	
 	If DarkAlpha <> 0.0 Then
-		ShowEntity(t\OverlayID[5])
+		If EntityHidden(t\OverlayID[5]) Then ShowEntity(t\OverlayID[5])
 		EntityAlpha(t\OverlayID[5], DarkAlpha)
 	Else
-		HideEntity(t\OverlayID[5])
+		If (Not EntityHidden(t\OverlayID[5])) Then HideEntity(t\OverlayID[5])
 	EndIf
 End Function
 
@@ -3420,12 +3422,12 @@ Function UpdateFog%()
 		CameraFogMode(Camera, 0)
 		CameraFogRange(Camera, 5.0, 30.0)
 		CameraRange(Camera, 0.01, 60.0)
-		HideEntity(t\OverlayID[0])
+		If (Not EntityHidden(t\OverlayID[0])) Then HideEntity(t\OverlayID[0])
 	Else
 		CameraFogMode(Camera, 1)
 		CameraFogRange(Camera, opt\CameraFogNear * LightVolume, opt\CameraFogFar * LightVolume)
 		CameraRange(Camera, 0.01, Min(opt\CameraFogFar * LightVolume * 1.5, 28.0))
-		ShowEntity(t\OverlayID[0])
+		If EntityHidden(t\OverlayID[0]) Then ShowEntity(t\OverlayID[0])
 	EndIf
 	For r.Rooms = Each Rooms
 		For i = 0 To r\MaxLights - 1
@@ -9797,7 +9799,7 @@ Function Update008%()
 	EndIf
 	
 	If I_008\Timer > 0.0 Then
-		ShowEntity(t\OverlayID[3])
+		If EntityHidden(t\OverlayID[3]) Then ShowEntity(t\OverlayID[3])
 		If I_008\Timer < 93.0 Then
 			PrevI008Timer = I_008\Timer
 			If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then
@@ -9947,7 +9949,7 @@ Function Update008%()
 		EndIf
 	Else
 		If I_008\Revert Then I_008\Revert = False
-		HideEntity(t\OverlayID[3])
+		If (Not EntityHidden(t\OverlayID[3])) Then HideEntity(t\OverlayID[3])
 	EndIf
 End Function
 
@@ -9955,7 +9957,7 @@ Function Update409%()
 	Local PrevI409Timer# = I_409\Timer
 	
 	If I_409\Timer > 0.0 Then
-		ShowEntity(t\OverlayID[7])
+		If EntityHidden(t\OverlayID[7]) Then ShowEntity(t\OverlayID[7])
 		
 		If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then
 			If I_409\Revert Then
@@ -10014,7 +10016,7 @@ Function Update409%()
 		EndIf
 	Else
 		If I_409\Revert Then I_409\Revert = False
-		HideEntity(t\OverlayID[7])	
+		If (Not EntityHidden(t\OverlayID[7])) Then HideEntity(t\OverlayID[7])	
 	EndIf
 End Function
 
