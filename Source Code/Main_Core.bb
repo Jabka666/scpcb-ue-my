@@ -2259,7 +2259,7 @@ Function MainLoop%()
 			Else
 				UpdateDoors()
 				UpdateScreens()
-				UpdateRoomLights(Camera)
+				UpdateRoomLights()
 				If PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a"Then
 					If QuickLoadPercent = -1 Lor QuickLoadPercent = 100
 						UpdateEndings()
@@ -2528,14 +2528,6 @@ Function MainLoop%()
 	If MainMenuOpen Then Return
 	
 	If fps\Factor[0] > 0.0 And PlayerRoom\RoomTemplate\Name <> "dimension_1499" Then RenderSecurityCams()
-	
-	If (Not MenuOpen) And (Not ConsoleOpen) And me\EndingTimer >= 0.0 Then
-		If PlayerRoom <> Null Then
-			If PlayerRoom\RoomTemplate\Name <> "dimension_1499" Then
-				RenderRoomLights(Camera)
-			EndIf
-		EndIf
-	EndIf
 	
 	RenderWorld2(Max(0.0, 1.0 + (fps\Accumulator / TICK_DURATION)))
 	

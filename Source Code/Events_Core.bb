@@ -1138,7 +1138,7 @@ Function UpdateEvents%()
 						If e\EventState3 < 170.0 Then
 							If e\EventState3 = 1.0 Then
 								PositionEntity(Camera, x, y, z)
-								HideEntity(me\Collider)
+								If (Not EntityHidden(me\Collider)) Then HideEntity(me\Collider)
 								PositionEntity(me\Collider, x, 0.302, z)
 								RotateEntity(Camera, -70.0, 0.0, 0.0)								
 								
@@ -1193,14 +1193,14 @@ Function UpdateEvents%()
 									; ~ I'm sorry you have to see this
 									RotateEntity(Camera, (-70.0) + 70.0 * Min(Max((e\EventState3 - 3.0) / 5.0, 0.0), 1.0) + Sin(e\EventState3 * 12.857) * 5.0, (-60.0) * Max((e\EventState3 - 10.0) / 4.0, 0.0), Sin(e\EventState3 * 25.7) * 8.0)
 									PositionEntity(Camera, x, y, z)
-									HideEntity(me\Collider)
+									If (Not EntityHidden(me\Collider)) Then HideEntity(me\Collider)
 									PositionEntity(me\Collider, x, 0.302, z)	
 									me\DropSpeed = 0.0
 									me\Playable = False
 								Else
 									PositionEntity(me\Collider, EntityX(me\Collider), 0.302, EntityZ(me\Collider))
 									ResetEntity(me\Collider)
-									ShowEntity(me\Collider)
+									If EntityHidden(me\Collider) Then ShowEntity(me\Collider)
 									me\DropSpeed = 0.0
 									me\Playable = True
 									
@@ -2813,9 +2813,9 @@ Function UpdateEvents%()
 				
 				If PlayerRoom = e\room Then
 					For r.Rooms = Each Rooms
-						HideEntity(r\OBJ)
+						If (Not EntityHidden(r\OBJ)) Then HideEntity(r\OBJ)
 					Next
-					ShowEntity(e\room\OBJ)
+					If EntityHidden(e\room\OBJ) Then ShowEntity(e\room\OBJ)
 					
 					PlayerFallingPickDistance = 0.0
 					
@@ -2858,12 +2858,12 @@ Function UpdateEvents%()
 							MoveEntity(Curr106\Collider, 0.0, 0.0, 6.0 - Sin(e\EventState / 10.0))
 							AnimateNPC(Curr106, 55.0, 104.0, 0.5)
 							RotateEntity(Curr106\Collider, 0.0, Angle + 90.0, 0.0)
-							Curr106\Idle = 1
-							ShowEntity(Curr106\OBJ)
-							ShowEntity(Curr106\Collider)
+							If EntityHidden(Curr106\OBJ) Then
+								ShowEntity(Curr106\OBJ)
+								ShowEntity(Curr106\Collider)
+							EndIf
 							ResetEntity(Curr106\Collider)
-							Curr106\GravityMult = 0.0
-							Curr106\DropSpeed = 0.0
+							Curr106\Idle = 1 : Curr106\GravityMult = 0.0 : Curr106\DropSpeed = 0.0
 							PositionEntity(Curr106\OBJ, EntityX(Curr106\Collider), EntityY(Curr106\Collider) - 0.15, EntityZ(Curr106\Collider))
 							RotateEntity(Curr106\OBJ, 0.0, EntityYaw(Curr106\Collider), 0.0)
 							
@@ -2908,7 +2908,7 @@ Function UpdateEvents%()
 							If EntityY(me\Collider) > 6.0 Then
 								ShouldPlay = 15
 								
-								ShowEntity(e\room\Objects[18])
+								If EntityHidden(e\room\Objects[18]) Then ShowEntity(e\room\Objects[18])
 								
 								If EntityX(e\room\Objects[18], True) < EntityX(e\room\Objects[8], True) - 4000.0 * RoomScale Then
 									e\SoundCHN2 = PlaySound_Strict(e\Sound2)
@@ -2993,16 +2993,16 @@ Function UpdateEvents%()
 									ResetEntity(me\Collider)
 								EndIf
 							Else
-								HideEntity(e\room\Objects[18])
+								If (Not EntityHidden(e\room\Objects[18])) Then HideEntity(e\room\Objects[18])
 								If e\EventState4 = 1.0 Then
-									ShowEntity(e\room\Objects[17])
+									If EntityHidden(e\room\Objects[17]) Then ShowEntity(e\room\Objects[17])
 									PointEntity(e\room\Objects[17], me\Collider)
 									TurnEntity(e\room\Objects[17], 0.0, 180.0, 0.0)
 								ElseIf e\EventState4 = 2.0
-									ShowEntity(e\room\Objects[19])
+									If EntityHidden(e\room\Objects[19]) Then ShowEntity(e\room\Objects[19])
 								Else
-									HideEntity(e\room\Objects[17])
-									HideEntity(e\room\Objects[19])
+									If (Not EntityHidden(e\room\Objects[17])) Then HideEntity(e\room\Objects[17])
+									If (Not EntityHidden(e\room\Objects[19])) Then HideEntity(e\room\Objects[19])
 								EndIf
 								
 								e\EventState3 = 0.0
@@ -3312,8 +3312,10 @@ Function UpdateEvents%()
 							TurnEntity(Curr106\Collider, 0.0, Sin(MilliSecs2() / 20.0) * 6.0, 0, True)
 							MoveEntity(Curr106\Collider, 0.0, 0.0, Sin(MilliSecs2() / 15.0) * 0.06)
 							
-							ShowEntity(Curr106\OBJ)
-							ShowEntity(Curr106\Collider)
+							If EntityHidden(Curr106\OBJ) Then
+								ShowEntity(Curr106\OBJ)
+								ShowEntity(Curr106\Collider)
+							EndIf
 							ResetEntity(Curr106\Collider)
 							Curr106\GravityMult = 0.0 : Curr106\DropSpeed = 0.0
 							PositionEntity(Curr106\OBJ, EntityX(Curr106\Collider), EntityY(Curr106\Collider) - 0.15, EntityZ(Curr106\Collider))
@@ -3354,7 +3356,7 @@ Function UpdateEvents%()
 						EndIf 
 					EndIf
 				Else
-					HideEntity(e\room\OBJ)
+					If (Not EntityHidden(e\room\OBJ)) Then HideEntity(e\room\OBJ)
 					e\EventState = 0.0
 					e\EventState2 = 0.0
 					e\EventState3 = 0.0
@@ -3756,7 +3758,7 @@ Function UpdateEvents%()
 				If Temp And EntityY(me\Collider, True) > EntityY(e\room\OBJ, True) And EntityY(me\Collider, True) < 4.0 Then
 					If e\EventState = 0.0 Then
 						If e\room\Dist < 8.0 Then
-							HideEntity(e\room\Objects[3])
+							If (Not EntityHidden(e\room\Objects[3])) Then HideEntity(e\room\Objects[3])
 							UpdateRedLight(e\room\Objects[4], 1500, 800)
 							
 							If (Not e\SoundCHN) Then ; ~ Humming when the player isn't close
@@ -3808,12 +3810,12 @@ Function UpdateEvents%()
 								EndIf
 							EndIf
 						Else
-							HideEntity(e\room\Objects[4])
+							If (Not EntityHidden(e\room\Objects[4])) Then HideEntity(e\room\Objects[4])
 						EndIf
 					Else
 						e\EventState = e\EventState + fps\Factor[0]
 						If e\EventState =< 40.0 Then
-							HideEntity(e\room\Objects[3])
+							If (Not EntityHidden(e\room\Objects[3])) Then HideEntity(e\room\Objects[3])
 							
 							UpdateRedLight(e\room\Objects[4], 100, 50)
 						Else
@@ -3837,12 +3839,12 @@ Function UpdateEvents%()
 								If e\EventStr = "Step1" Then e\room\NPC[0]\State = 3.0
 								
 								For i = 3 To 4
-									HideEntity(e\room\Objects[i])
+									If (Not EntityHidden(e\room\Objects[i])) Then HideEntity(e\room\Objects[i])
 								Next
 								
 								If Rand(5) < 5 Then 
 									PositionTexture(t\MiscTextureID[13], 0.0, Rnd(0.0, 1.0))
-									ShowEntity(e\room\Objects[3])
+									If EntityHidden(e\room\Objects[3]) Then ShowEntity(e\room\Objects[3])
 									If e\room\Dist < 6.0 Then LightVolume = TempLightVolume * Rnd(1.5, 2.0)
 								EndIf
 							Else
@@ -3850,7 +3852,7 @@ Function UpdateEvents%()
 									StopChannel(e\SoundCHN)	
 									e\SoundCHN = PlaySound2(TeslaPowerUpSFX, Camera, e\room\Objects[3], 4.0, 0.5)
 								EndIf 
-								HideEntity(e\room\Objects[3])
+								If (Not EntityHidden(e\room\Objects[3])) Then HideEntity(e\room\Objects[3])
 								
 								If e\EventState > 150.0 Then e\EventState = 0.0
 							EndIf
@@ -3865,7 +3867,7 @@ Function UpdateEvents%()
 						End Select
 					Next
 				Else
-					HideEntity(e\room\Objects[4])
+					If (Not EntityHidden(e\room\Objects[4])) Then HideEntity(e\room\Objects[4])
 				EndIf
 				
 				If e\room\NPC[0] <> Null Then
@@ -3913,7 +3915,7 @@ Function UpdateEvents%()
 					me\SndVolume = Max(8.0, me\SndVolume)
 					StopChannel(e\SoundCHN)
 					e\SoundCHN = PlaySound2(TeslaActivateSFX, Camera, e\room\Objects[3], 4.0, 0.5)
-					HideEntity(e\room\Objects[4])
+					If (Not EntityHidden(e\room\Objects[4])) Then HideEntity(e\room\Objects[4])
 					e\EventState = 1.0
 				EndIf
 				
@@ -4672,7 +4674,7 @@ Function UpdateEvents%()
 					If EntityY(me\Collider, True) > 4.0 Then
 						For r.Rooms = Each Rooms
 							If r <> e\room Then
-								HideEntity(r\OBJ)
+								If (Not EntityHidden(r\OBJ)) Then HideEntity(r\OBJ)
 							EndIf
 						Next
 						EntityAlpha(GetChild(e\room\OBJ, 2), 0.0)
@@ -4715,7 +4717,7 @@ Function UpdateEvents%()
 						For iY = 0 To MTGridSize - 1
 							For iX = 0 To MTGridSize - 1
 								If e\room\mt\Entities[iX + (iY * MTGridSize)] <> 0 Then
-									HideEntity(e\room\mt\Entities[iX + (iY * MTGridSize)])
+									If (Not EntityHidden(e\room\mt\Entities[iX + (iY * MTGridSize)])) Then HideEntity(e\room\mt\Entities[iX + (iY * MTGridSize)])
 								EndIf
 							Next
 						Next
@@ -4730,8 +4732,8 @@ Function UpdateEvents%()
 						If e\room\mt\Meshes[0] <> 0 Then
 							For iY = 0 To MTGridSize - 1
 								For iX = 0 To MTGridSize - 1
-									If e\room\mt\Entities[iX + (iY * MTGridSize)] <> 0
-										HideEntity(e\room\mt\Entities[iX + (iY * MTGridSize)])
+									If e\room\mt\Entities[iX + (iY * MTGridSize)] <> 0 Then
+										If (Not EntityHidden(e\room\mt\Entities[iX + (iY * MTGridSize)])) Then HideEntity(e\room\mt\Entities[iX + (iY * MTGridSize)])
 									EndIf
 								Next
 							Next
@@ -5670,20 +5672,14 @@ Function UpdateEvents%()
 							If (Not e\Sound2) Then LoadEventSound(e, "SFX\Music\012.ogg", 1)
 							
 							If e\EventState < 90.0 Then e\EventState = CurveValue(90.0, e\EventState, 500)
-							PositionEntity(e\room\Objects[2], EntityX(e\room\Objects[2], True), (-130 - 448 * Sin(e\EventState)) * RoomScale, EntityZ(e\room\Objects[2], True), True)
+							PositionEntity(e\room\Objects[2], EntityX(e\room\Objects[2], True), (-130.0 - (448.0 * Sin(e\EventState))) * RoomScale, EntityZ(e\room\Objects[2], True), True)
 							
 							If e\EventState2 > 0.0 And e\EventState2 < 200.0 Then
 								e\EventState2 = e\EventState2 + fps\Factor[0]
-								RotateEntity(e\room\Objects[1], CurveValue(85.0, EntityPitch(e\room\Objects[1]), 5), EntityYaw(e\room\Objects[1]), 0.0)
-							Else
-								e\EventState2 = e\EventState2 + fps\Factor[0]
-								If e\EventState2 < 250.0 Then
-									ShowEntity(e\room\Objects[3])
-								Else
-									HideEntity(e\room\Objects[3]) 
-									If e\EventState2 > 300.0 Then e\EventState2 = 200.0
-								EndIf
+								RotateEntity(e\room\Objects[1], CurveValue(85.0, EntityPitch(e\room\Objects[1]), 5.0), EntityYaw(e\room\Objects[1]), 0.0)
 							EndIf
+							
+							UpdateRedLight(e\room\Objects[3], 100, 50)
 							
 							If (Not I_714\Using) And wi\GasMask <> 3 And wi\HazmatSuit <> 3 Then
 								If EntityVisible(e\room\Objects[2], Camera) Then 							
@@ -6394,7 +6390,7 @@ Function UpdateEvents%()
 								UpdateDoorsTimer = 0.0
 								UpdateDoors()
 								UpdateRooms()
-								ShowEntity(me\Collider)
+								If EntityHidden(me\Collider) Then ShowEntity(me\Collider)
 								me\DropSpeed = 0.0
 								me\BlinkTimer = -10.0
 								me\FallTimer = 0.0
@@ -6497,7 +6493,7 @@ Function UpdateEvents%()
 								If IsStreamPlaying_Strict(e\SoundCHN3) Then
 									If Rand(4) = 1 Then
 										EntityTexture(e\room\Objects[1], t\MiscTextureID[Rand(1, 6)])
-										ShowEntity(e\room\Objects[1])
+										If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
 									ElseIf Rand(10) = 1 
 										HideEntity(e\room\Objects[1])							
 									EndIf							
@@ -6506,7 +6502,7 @@ Function UpdateEvents%()
 										StopStream_Strict(e\SoundCHN3) : e\SoundCHN3 = 0
 									EndIf
 									EntityTexture(e\room\Objects[1], t\MiscTextureID[0])
-									ShowEntity(e\room\Objects[1])
+									If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
 									e\EventState = e\EventState + fps\Factor[0]
 								EndIf
 							Else
@@ -6523,11 +6519,11 @@ Function UpdateEvents%()
 								If (Not IsStreamPlaying_Strict(e\SoundCHN3)) Then
 									e\SoundCHN3 = 0
 									EntityTexture(e\room\Objects[1], t\MiscTextureID[0])
-									ShowEntity(e\room\Objects[1])
+									If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
 								Else
 									If Rand(4) = 1 Then
 										EntityTexture(e\room\Objects[1], t\MiscTextureID[Rand(1, 6)])
-										ShowEntity(e\room\Objects[1])
+										If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
 									ElseIf Rand(10) = 1 
 										HideEntity(e\room\Objects[1])							
 									EndIf
@@ -6660,7 +6656,7 @@ Function UpdateEvents%()
 									ShouldPlay = 10
 									
 									PositionEntity(Curr106\Collider, EntityX(e\room\Objects[5], True), ((-6628.0) + 108.0 * (Min(e\EventState3 - 2500.0, 800.0) / 320.0)) * RoomScale, EntityZ(e\room\Objects[5], True))
-									HideEntity(Curr106\OBJ2)
+									If (Not EntityHidden(Curr106\OBJ2)) Then HideEntity(Curr106\OBJ2)
 									
 									RotateEntity(Curr106\Collider, 0.0, EntityYaw(e\room\Objects[5], True) + 180.0, 0.0, True)
 									Curr106\State = -11.0 : Curr106\Idle = 1
@@ -6964,9 +6960,9 @@ Function UpdateEvents%()
 						Curr106\Idle = 1
 						
 						For r.Rooms = Each Rooms
-							HideEntity(r\OBJ)
+							If (Not EntityHidden(r\OBJ)) Then HideEntity(r\OBJ)
 						Next
-						ShowEntity(e\room\OBJ)
+						If EntityHidden(e\room\OBJ) Then ShowEntity(e\room\OBJ)
 						
 						UpdateForest(fr, me\Collider)
 						
@@ -7035,7 +7031,9 @@ Function UpdateEvents%()
 						CameraFogRange(Camera, 0.5, 8.0)
 					Else
 						If (Not Curr106\Contained) Then Curr106\Idle = 0
-						If fr\Forest_Pivot <> 0 Then HideEntity(fr\Forest_Pivot)
+						If fr\Forest_Pivot <> 0 Then
+							If (Not EntityHidden(fr\Forest_Pivot)) Then HideEntity(fr\Forest_Pivot)
+						EndIf
 						; ~ Reset the doors after leaving the forest
 						For i = 0 To 1
 							If fr\ForestDoors[i]\Open Then fr\ForestDoors[i]\Open = False
@@ -7043,7 +7041,7 @@ Function UpdateEvents%()
 						Next
 						
 						If e\room\RoomDoors[0]\Open Then
-							ShowEntity(fr.Forest\Forest_Pivot)
+							If EntityHidden(fr\Forest_Pivot) Then ShowEntity(fr\Forest_Pivot)
 							
 							me\BlinkTimer = -10.0
 							
@@ -7095,7 +7093,9 @@ Function UpdateEvents%()
 					EndIf
 				Else
 					If fr <> Null Then
-						If fr\Forest_Pivot <> 0 Then HideEntity(fr\Forest_Pivot)
+						If fr\Forest_Pivot <> 0 Then
+							If (Not EntityHidden(fr\Forest_Pivot)) Then HideEntity(fr\Forest_Pivot)
+						EndIf
 					Else
 						RemoveEvent(e)
 					EndIf
@@ -7436,7 +7436,7 @@ Function UpdateEvents%()
 						ResetEntity(Curr106\Collider)
 						PositionEntity(Curr106\OBJ, EntityX(Curr106\Collider), EntityY(Curr106\Collider) - 0.15, EntityZ(Curr106\Collider))
 						RotateEntity(Curr106\OBJ, 0.0, EntityYaw(Curr106\Collider), 0.0)
-						ShowEntity(Curr106\OBJ)
+						If EntityHidden(Curr106\OBJ) Then ShowEntity(Curr106\OBJ)
 					ElseIf e\EventState > 180.0 And e\EventState < 300.0 Then
 						Curr106\State = -10.0 : Curr106\Idle = 0 : Curr106\PathTimer = 70.0 * 10.0 : Curr106\PathStatus = 0 : Curr106\PathLocation = 0
 						PositionEntity(Curr106\Collider, EntityX(e\room\OBJ, True), -3.0, EntityZ(e\room\OBJ, True), True)
@@ -7485,7 +7485,7 @@ Function UpdateEvents%()
 								DeleteSingleTextureEntryFromCache(GlassTex)
 							EndIf
 							
-							ShowEntity(e\room\Objects[2])
+							If EntityHidden(e\room\Objects[2]) Then ShowEntity(e\room\Objects[2])
 							; ~ Start a timer for SCP-173 breaking through the window
 							e\EventState = e\EventState + 1.0
 							Dist = EntityDistanceSquared(me\Collider, e\room\Objects[1])
@@ -7567,7 +7567,7 @@ Function UpdateEvents%()
 								Next
 								
 								If e\EventState2 = 0.0 Then
-									ShowEntity(e\room\Objects[2])
+									If EntityHidden(e\room\Objects[2]) Then ShowEntity(e\room\Objects[2])
 									If EntityDistanceSquared(Curr173\Collider, e\room\Objects[4]) < 9.0 Then
 										If (Not PlayerSees173(Curr173)) Then
 											PositionEntity(Curr173\Collider, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True), True)
@@ -7605,7 +7605,7 @@ Function UpdateEvents%()
 								TurnEntity(p\Pvt, Rnd(-26.0, 26.0), Rnd(-26.0, 26.0), Rnd(360.0))
 							EndIf		
 						Else
-							HideEntity(e\room\Objects[5])
+							If (Not EntityHidden(e\room\Objects[5])) Then HideEntity(e\room\Objects[5])
 							For i = 0 To 2
 								e\room\RoomDoors[i]\Locked = 0
 							Next
@@ -8783,13 +8783,18 @@ Function UpdateEvents%()
 					If Abs(EntityY(e\room\RoomDoors[0]\FrameOBJ) - EntityY(me\Collider)) > 1.0 Then
 						For i = 0 To 14
 							If e\room\Objects[i] <> 0 And i <> 7 Then
-								ShowEntity(e\room\Objects[i])
+								If EntityHidden(e\room\Objects[i]) Then ShowEntity(e\room\Objects[i])
 							EndIf
 						Next
 						For sc.SecurityCams = Each SecurityCams
 							If sc\room = e\room Then
-								If sc\ScrOBJ <> 0 Then ShowEntity(sc\ScrOBJ)
-								If sc\ScrOverlay <> 0 Then ShowEntity(sc\ScrOverlay)
+								If sc\ScrOBJ <> 0 Then
+									If EntityHidden(sc\ScrOBJ) Then
+										ShowEntity(sc\ScrOBJ)
+										If sc\ScrOverlay <> 0 Then ShowEntity(sc\ScrOverlay)
+										If sc\MonitorOBJ <> 0 Then ShowEntity(sc\MonitorOBJ)
+									EndIf
+								EndIf
 								Exit
 							EndIf
 						Next
@@ -8799,27 +8804,22 @@ Function UpdateEvents%()
 							EndIf
 						Next
 						
-						If e\EventState4 > 0.0 And e\EventState4 < 200.0 Then
-							e\EventState4 = e\EventState4 + fps\Factor[0]
-						Else
-							e\EventState4 = e\EventState4 + fps\Factor[0]
-							If e\EventState4 < 250.0 Then
-								ShowEntity(e\room\Objects[22])
-							Else
-								HideEntity(e\room\Objects[22]) 
-								If e\EventState4 > 300.0 Then e\EventState4 = 200.0
-							EndIf
-						EndIf
+						UpdateRedLight(e\room\Objects[22], 100, 50)
 					Else
 						For i = 0 To 14
 							If e\room\Objects[i] <> 0 And i <> 7 Then
-								HideEntity(e\room\Objects[i])
+								If (Not EntityHidden(e\room\Objects[i])) Then HideEntity(e\room\Objects[i])
 							EndIf
 						Next
 						For sc.SecurityCams = Each SecurityCams
 							If sc\room = e\room Then
-								If sc\ScrOBJ <> 0 Then HideEntity(sc\ScrOBJ)
-								If sc\ScrOverlay <> 0 Then HideEntity(sc\ScrOverlay)
+								If sc\ScrOBJ <> 0 Then
+									If (Not EntityHidden(sc\ScrOBJ)) Then
+										HideEntity(sc\ScrOBJ)
+										If sc\ScrOverlay <> 0 Then HideEntity(sc\ScrOverlay)
+										If sc\MonitorOBJ <> 0 Then HideEntity(sc\MonitorOBJ)
+									EndIf
+								EndIf
 								Exit
 							EndIf
 						Next
@@ -8980,7 +8980,7 @@ Function UpdateEvents%()
 				If PlayerRoom <> e\room Then
 					If e\room\Objects[0] <> 0 Then
 						For i = 1 To 15
-							HideEntity(e\room\Objects[i])
+							If (Not EntityHidden(e\room\Objects[i])) Then HideEntity(e\room\Objects[i])
 						Next
 					EndIf
 					If EntityY(me\Collider) > EntityY(e\room\OBJ) - 0.5 Then
@@ -8994,7 +8994,7 @@ Function UpdateEvents%()
 						e\SoundCHN = 0
 						e\SoundCHN2 = 0
 					EndIf
-					HideEntity(I_1499\Sky)
+					If (Not EntityHidden(I_1499\Sky)) Then HideEntity(I_1499\Sky)
 					HideChunks()
 					For n.NPCs = Each NPCs
 						If n\NPCType = NPCType1499_1 Then
@@ -9055,9 +9055,9 @@ Function UpdateEvents%()
 				;[Block]
 				; ~ Hiding / Showing the terrain in this room
 				If e\room\Dist < HideDistance Then
-					ShowEntity(e\room\Objects[0])
+					If EntityHidden(e\room\Objects[0]) Then ShowEntity(e\room\Objects[0])
 				Else
-					HideEntity(e\room\Objects[0])
+					If (Not EntityHidden(e\room\Objects[0])) Then HideEntity(e\room\Objects[0])
 				EndIf
 				;[End Block]
 			Case e_cont2_409
@@ -9307,7 +9307,7 @@ Function UpdateDimension1499%()
 							Next
 						Next
 					Else
-						HideEntity(e\room\Objects[17])
+						If (Not EntityHidden(e\room\Objects[17])) Then HideEntity(e\room\Objects[17])
 					EndIf
 					
 					For i = 0 To 14
@@ -9323,12 +9323,12 @@ Function UpdateDimension1499%()
 				CameraRange(Camera, 0.01, 90.0)
 				
 				For r.Rooms = Each Rooms
-					HideEntity(r\OBJ)
+					If (Not EntityHidden(r\OBJ)) Then HideEntity(r\OBJ)
 				Next
-				ShowEntity(e\room\OBJ)
+				If EntityHidden(e\room\OBJ) Then ShowEntity(e\room\OBJ)
 				If QuickLoadPercent = 100 Lor QuickLoadPercent = -1 Then
 					UpdateChunks(e\room, 15)
-					ShowEntity(I_1499\Sky)
+					If EntityHidden(I_1499\Sky) Then ShowEntity(I_1499\Sky)
 					UpdateSky(I_1499\Sky)
 					ShouldPlay = 18
 					If EntityY(me\Collider) < 800.0 Then
@@ -9426,7 +9426,7 @@ Function UpdateDimension1499%()
 					EndIf
 					
 					If e\room\NPC[0] <> Null Then
-						ShowEntity(e\room\Objects[17])
+						If EntityHidden(e\room\Objects[17]) Then ShowEntity(e\room\Objects[17])
 						If e\EventState3 < 70.0 * 30.0 Then
 							ShouldPlay = 66
 							If NowPlaying = 66 Then
@@ -9455,11 +9455,11 @@ Function UpdateDimension1499%()
 					
 					If EntityDistanceSquared(me\Collider, e\room\OBJ) > 1600.0 Then
 						For du.Dummy1499_1 = Each Dummy1499_1
-							HideEntity(du\OBJ)
+							If (Not EntityHidden(du\OBJ)) Then HideEntity(du\OBJ)
 						Next
 					Else
 						For du.Dummy1499_1 = Each Dummy1499_1
-							ShowEntity(du\OBJ)
+							If EntityHidden(du\OBJ) Then ShowEntity(du\OBJ)
 						Next
 					EndIf
 				Else
@@ -9475,7 +9475,7 @@ Function UpdateDimension1499%()
 						e\SoundCHN = 0
 						e\SoundCHN2 = 0
 					EndIf
-					HideEntity(I_1499\Sky)
+					If (Not EntityHidden(I_1499\Sky)) Then HideEntity(I_1499\Sky)
 					HideChunks()
 					For n.NPCs = Each NPCs
 						If n\NPCType = NPCType1499_1 Then
@@ -9556,9 +9556,9 @@ Function UpdateEndings%()
 						CanSave = False
 						
 						For r.Rooms = Each Rooms
-							HideEntity(r\OBJ)
+							If (Not EntityHidden(r\OBJ)) Then HideEntity(r\OBJ)
 						Next					
-						ShowEntity(e\room\OBJ)
+						If EntityHidden(e\room\OBJ) Then ShowEntity(e\room\OBJ)
 						
 						If e\EventState < 2.0 And me\SelectedEnding = -1 Then 
 							If e\room\NPC[0]\State = 2.0 Then
@@ -9815,6 +9815,8 @@ Function UpdateEndings%()
 							e\room\NPC[1]\State3 = 1.0
 						EndIf
 					EndIf
+				Else
+					If (Not EntityHidden(e\room\OBJ)) Then HideEntity(e\room\OBJ)
 				EndIf
 				;[End Block]
 			Case e_gate_a
@@ -9914,9 +9916,9 @@ Function UpdateEndings%()
 						ShouldPlay = 17
 						
 						For r.Rooms = Each Rooms
-							HideEntity(r\OBJ)
+							If (Not EntityHidden(r\OBJ)) Then HideEntity(r\OBJ)
 						Next					
-						ShowEntity(e\room\OBJ)
+						If EntityHidden(e\room\OBJ) Then ShowEntity(e\room\OBJ)
 						
 						e\EventState = e\EventState + fps\Factor[0]
 						
@@ -9945,7 +9947,7 @@ Function UpdateEndings%()
 									PlaySound_Strict(HorrorSFX[5])
 									PlaySound_Strict(DecaySFX[0])
 								ElseIf Curr106\State < 0.0
-									HideEntity(Curr106\OBJ2)
+									If (Not EntityHidden(Curr106\OBJ2)) Then HideEntity(Curr106\OBJ2)
 									Curr106\PathTimer = 70.0 * 100.0
 									
 									If Curr106\State3 = 0.0 Then
@@ -10035,7 +10037,7 @@ Function UpdateEndings%()
 												For i = 2 To 4 ; ~ Helicopters attack the player
 													e\room\NPC[i]\State = 2.0
 												Next
-												HideEntity(Curr106\OBJ)
+												If (Not EntityHidden(Curr106\OBJ)) Then HideEntity(Curr106\OBJ)
 											EndIf
 										Else
 											If Dist < 72.25 Then 
@@ -10078,7 +10080,7 @@ Function UpdateEndings%()
 									If Abs(EntityY(me\Collider) - EntityY(e\room\Objects[11], True)) < 1.0 Then
 										If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[11], True), EntityZ(me\Collider), EntityZ(e\room\Objects[11], True)) < 144.0 Then
 											Curr106\State = 100000.0
-											HideEntity(Curr106\OBJ)
+											If (Not EntityHidden(Curr106\OBJ)) Then HideEntity(Curr106\OBJ)
 											
 											; ~ MTF spawns at the tunnel entrance
 											For i = 5 To 8
@@ -10275,7 +10277,7 @@ Function UpdateEndings%()
 						EndIf
 					EndIf
 				Else
-					HideEntity(e\room\OBJ)
+					If (Not EntityHidden(e\room\OBJ)) Then HideEntity(e\room\OBJ)
 				EndIf
 				;[End Block]
 		End Select

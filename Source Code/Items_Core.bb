@@ -654,11 +654,13 @@ Function UpdateItems%()
 			If i\DistTimer < MilliSecs2() Then
 				i\Dist = EntityDistanceSquared(Camera, i\Collider)
 				i\DistTimer = MilliSecs2() + 700
-				If i\Dist < HideDist Then ShowEntity(i\Collider)
+				If i\Dist < HideDist Then
+					If EntityHidden(i\Collider) Then ShowEntity(i\Collider)
+				EndIf
 			EndIf
 			
 			If i\Dist < HideDist Then
-				ShowEntity(i\Collider)
+				If EntityHidden(i\Collider) Then ShowEntity(i\Collider)
 				If i\Dist < 1.44 Then
 					If ClosestItem = Null Then
 						If EntityInView(i\Model, Camera) Then
@@ -727,7 +729,7 @@ Function UpdateItems%()
 					DeletedItem = True
 				EndIf
 			Else
-				HideEntity(i\Collider)
+				If (Not EntityHidden(i\Collider)) Then HideEntity(i\Collider)
 			EndIf
 		Else
 			i\DropSpeed = 0.0

@@ -850,7 +850,7 @@ Function UpdateNPCs%()
 						PositionEntity(n\OBJ2, EntityX(n\Collider), EntityY(n\Collider) + 0.05 + Sin(MilliSecs2() * 0.08) * 0.02, EntityZ(n\Collider))
 						RotateEntity(n\OBJ2, 0.0, (EntityYaw(n\Collider) - 180.0) + n\Angle, 0.0)
 						
-						ShowEntity(n\OBJ3)
+						If EntityHidden(n\OBJ3) Then ShowEntity(n\OBJ3)
 						
 						PositionEntity(n\OBJ3, EntityX(n\Collider), EntityY(n\Collider) - 0.05 + Sin(MilliSecs2() * 0.08) * 0.02, EntityZ(n\Collider))
 						RotateEntity(n\OBJ3, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
@@ -860,10 +860,12 @@ Function UpdateNPCs%()
 			Case NPCType106
 				;[Block]
 				If n\Contained Lor PlayerRoom\RoomTemplate\Name = "gate_b" Then
-					n\Idle = 1
-					HideEntity(n\OBJ)
-					HideEntity(n\OBJ2)
-					PositionEntity(n\OBJ, 0.0, 500.0, 0.0, True)
+					If (Not EntityHidden(n\OBJ)) Then
+						n\Idle = 1
+						HideEntity(n\OBJ)
+						HideEntity(n\OBJ2)
+						PositionEntity(n\OBJ, 0.0, 500.0, 0.0, True)
+					EndIf
 				Else
 					Dist = EntityDistanceSquared(n\Collider, me\Collider)
 					
@@ -1137,19 +1139,19 @@ Function UpdateNPCs%()
 						MoveEntity(n\OBJ2, 0.0, 8.6 * 0.11, -1.5 * 0.11)
 						
 						If PlayerRoom\RoomTemplate\Name = "dimension_106" Lor PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a" Then
-							HideEntity(n\OBJ2)
+							If (Not EntityHidden(n\OBJ2)) Then HideEntity(n\OBJ2)
 						Else
 							If Dist < PowTwo(opt\CameraFogFar * LightVolume * 0.6) Then
-								HideEntity(n\OBJ2)
+								If (Not EntityHidden(n\OBJ2)) Then HideEntity(n\OBJ2)
 							Else
 								If n\State =< -10.0 Then
-									ShowEntity(n\OBJ2)
+									If EntityHidden(n\OBJ2) Then ShowEntity(n\OBJ2)
 									EntityAlpha(n\OBJ2, Min(Sqr(Dist) - opt\CameraFogFar * LightVolume * 0.6, 1.0))
 								EndIf
 							EndIf
 						EndIf						
 					Else
-						HideEntity(n\OBJ2)
+						If (Not EntityHidden(n\OBJ2)) Then HideEntity(n\OBJ2)
 					EndIf
 				EndIf
 				;[End Block]
@@ -1159,11 +1161,11 @@ Function UpdateNPCs%()
 				Angle = WrapAngle(DeltaYaw(n\Collider, me\Collider))
 				
 				If wi\SCRAMBLE And Dist < 256.0 And (Angle < 135.0 Lor Angle > 225.0) And EntityVisible(Camera, n\OBJ2) Then
-					ShowEntity(n\OBJ2)
+					If EntityHidden(n\OBJ2) Then ShowEntity(n\OBJ2)
 					ScaleSprite(n\OBJ2, Rnd(0.06, 0.08), Rnd(0.07, 0.09))
 					PositionEntity(n\OBJ2, Rnd(0.1) - 0.05, Rnd(0.1) - 0.05, Rnd(0.1) - 0.05)
 				Else
-					HideEntity(n\OBJ2)
+					If (Not EntityHidden(n\OBJ2)) Then HideEntity(n\OBJ2)
 				EndIf
 				
 				Select n\State
@@ -2647,7 +2649,7 @@ Function UpdateNPCs%()
 					Case 15.0 ; ~ Inside vehicle (idle)
 						;[Block]
 						If n\OBJ2 <> 0 Then
-							ShowEntity(n\OBJ2)
+							If EntityHidden(n\OBJ2) Then ShowEntity(n\OBJ2)
 							
 							AnimateNPC(n, 623.0, 642.0, 0.3)
 							
@@ -2660,7 +2662,7 @@ Function UpdateNPCs%()
 					Case 16.0 ; ~ Inside vehicle (driving)
 						;[Block]
 						If n\OBJ2 <> 0 Then
-							ShowEntity(n\OBJ2)
+							If EntityHidden(n\OBJ2) Then ShowEntity(n\OBJ2)
 							
 							AnimateNPC(n, 623.0, 642.0, 0.3)
 							
@@ -2780,8 +2782,10 @@ Function UpdateNPCs%()
 				;[Block]
 				If PlayerRoom\RoomTemplate\Name <> "dimension_106" Then 
 					If n\Idle Then
-						HideEntity(n\OBJ)
-						HideEntity(n\OBJ2)
+						If (Not EntityHidden(n\OBJ)) Then
+							HideEntity(n\OBJ)
+							HideEntity(n\OBJ2)
+						EndIf
 						If Rand(200) = 1 Then
 							For w.WayPoints = Each WayPoints
 								If w\room <> PlayerRoom Then
@@ -2792,8 +2796,10 @@ Function UpdateNPCs%()
 											PositionEntity(n\Collider, EntityX(w\OBJ, True), EntityY(w\OBJ, True) + 0.35, EntityZ(w\OBJ, True))
 											PositionEntity(n\OBJ, EntityX(w\OBJ, True), EntityY(w\OBJ, True) + 0.35, EntityZ(w\OBJ, True))
 											ResetEntity(n\Collider)
-											ShowEntity(n\OBJ)
-											ShowEntity(n\OBJ2)
+											If EntityHidden(n\OBJ) Then
+												ShowEntity(n\OBJ)
+												ShowEntity(n\OBJ2)
+											EndIf
 											
 											n\LastSeen = 0
 											
@@ -2946,9 +2952,9 @@ Function UpdateNPCs%()
 				RN = PlayerRoom\RoomTemplate\Name
 				If RN <> "dimension_106" And RN <> "dimension_1499" Then 
 					If n\Idle Then
-						HideEntity(n\OBJ)
+						If (Not EntityHidden(n\OBJ)) Then HideEntity(n\OBJ)
 						If Rand(50) = 1 And (me\BlinkTimer < -5.0 And me\BlinkTimer > -15.0) Then
-							ShowEntity(n\OBJ)
+							If EntityHidden(n\OBJ) Then ShowEntity(n\OBJ)
 							Angle = EntityYaw(me\Collider) + Rnd(-90.0, 90.0)
 							
 							Dist = Rnd(1.5, 2.0)
@@ -3248,14 +3254,7 @@ Function UpdateNPCs%()
 						; ~ The NPC was killed
 						AnimateNPC(n, 515.0, 551.0, 0.15, False)
 						If n\Frame >= 550.0 Then
-							If n\SoundCHN <> 0 Then
-								If ChannelPlaying(n\SoundCHN) = True Then StopChannel(n\SoundCHN)
-								If n\Sound <> 0 Then
-									FreeSound_Strict(n\Sound) : n\Sound = 0
-								EndIf
-							EndIf
-							HideEntity(n\OBJ)
-							HideEntity(n\Collider)
+							RemoveNPC(n)
 						EndIf
 					EndIf
 				EndIf
@@ -3273,30 +3272,30 @@ Function UpdateNPCs%()
 					Local fr.Forest = PlayerRoom\fr
 					
 					Dist = EntityDistanceSquared(me\Collider, n\Collider)
-					
-					If ForestNPC <> 0
-						If ForestNPCData[2] = 1.0
-							ShowEntity(ForestNPC)
+					If ForestNPC <> 0 Then
+						If ForestNPCData[2] = 1.0 Then
+							If EntityHidden(ForestNPC) Then ShowEntity(ForestNPC)
 							If n\State <> 1.0
 								If (me\BlinkTimer < -8.0 And me\BlinkTimer > -12.0) Lor (Not EntityInView(ForestNPC, Camera))
 									ForestNPCData[2] = 0.0
-									HideEntity(ForestNPC)
+									If (Not EntityHidden(ForestNPC)) Then HideEntity(ForestNPC)
 								EndIf
 							EndIf
 						Else
-							HideEntity(ForestNPC)
+							If (Not EntityHidden(ForestNPC)) Then HideEntity(ForestNPC)
 						EndIf
 					EndIf
 					
 					Select n\State
 						Case 0.0 ; ~ Idles (hidden)
 							;[Block]
-							HideEntity(n\Collider)
-							HideEntity(n\OBJ)
-							HideEntity(n\OBJ2)
-							
-							n\State2 = 0.0
-							PositionEntity(n\Collider, 0.0, -100.0, 0.0)
+							If (Not EntityHidden(n\Collider)) Then
+								HideEntity(n\Collider)
+								HideEntity(n\OBJ)
+								HideEntity(n\OBJ2)
+								PositionEntity(n\Collider, 0.0, -100.0, 0.0)
+								n\State2 = 0.0
+							EndIf
 							;[End Block]
 						Case 1.0 ; ~ Appears briefly behind the trees
 							;[Block]
@@ -3355,8 +3354,10 @@ Function UpdateNPCs%()
 									n\State2 = 0.0
 								EndIf
 							Else
-								ShowEntity(n\OBJ)
-								ShowEntity(n\Collider)
+								If EntityHidden(n\OBJ) Then
+									ShowEntity(n\OBJ)
+									ShowEntity(n\Collider)
+								EndIf
 								
 								PositionEntity(n\Collider, EntityX(n\Collider), EntityY(fr\Forest_Pivot, True) + 2.3, EntityZ(n\Collider))
 								
@@ -3377,7 +3378,7 @@ Function UpdateNPCs%()
 										Next
 										
 										If Rand(1, 860 - DocChance) = 1 Then
-											ShowEntity(ForestNPC)
+											If EntityHidden(ForestNPC) Then ShowEntity(ForestNPC)
 											ForestNPCData[2] = 1.0
 											If Rand(2) = 1
 												ForestNPCData[0] = 0.0
@@ -3447,8 +3448,10 @@ Function UpdateNPCs%()
 							;[End Block]
 						Case 2.0 ; ~ Appears on the path and starts to walk towards the player
 							;[Block]
-							ShowEntity(n\OBJ)
-							ShowEntity(n\Collider)
+							If EntityHidden(n\OBJ) Then
+								ShowEntity(n\OBJ)
+								ShowEntity(n\Collider)
+							EndIf
 							
 							PrevFrame = n\Frame
 							
@@ -3541,8 +3544,10 @@ Function UpdateNPCs%()
 							;[End Block]
 						Case 3.0 ; ~ Runs towards the player and attacks
 							;[Block]
-							ShowEntity(n\OBJ)
-							ShowEntity(n\Collider)
+							If EntityHidden(n\OBJ) Then
+								ShowEntity(n\OBJ)
+								ShowEntity(n\Collider)
+							EndIf
 							
 							PrevFrame = n\Frame
 							
@@ -3599,7 +3604,7 @@ Function UpdateNPCs%()
 						RotateEntity(n\OBJ, EntityPitch(n\Collider) - 90.0, EntityYaw(n\Collider), EntityRoll(n\Collider), True)
 						
 						If Dist > 64.0 Then
-							ShowEntity(n\OBJ2)
+							If EntityHidden(n\OBJ2) Then ShowEntity(n\OBJ2)
 							EntityAlpha(n\OBJ2, Min(Sqr(Dist) - 8.0, 1.0))
 							
 							PositionEntity(n\OBJ2, EntityX(n\OBJ), EntityY(n\OBJ) , EntityZ(n\OBJ))
@@ -3615,7 +3620,7 @@ Function UpdateNPCs%()
 							PositionEntity(n\OBJ2, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt))
 							FreeEntity(Pvt)
 						Else
-							HideEntity(n\OBJ2)
+							If (Not EntityHidden(n\OBJ2)) Then HideEntity(n\OBJ2)
 						EndIf
 					EndIf
 				EndIf
@@ -4005,7 +4010,7 @@ Function UpdateNPCs%()
 						RotateEntity(n\OBJ, -90.0, EntityYaw(n\Collider), 0.0)
 						
 						If wi\NightVision = 0 Then
-							HideEntity(n\OBJ)
+							If (Not EntityHidden(n\OBJ)) Then HideEntity(n\OBJ)
 							If (Not chs\Notarget) Then
 								If Dist < 1.0 And n\Reload =< 0.0 And msg\Timer =< 0.0 Then
 									Select Rand(6)
@@ -4039,7 +4044,7 @@ Function UpdateNPCs%()
 								n\Reload = n\Reload - fps\Factor[0]
 							EndIf
 						Else
-							ShowEntity(n\OBJ)
+							If EntityHidden(n\OBJ) Then ShowEntity(n\OBJ)
 						EndIf
 						
 						If n\State3 > 70.0 * 5.0 Then
@@ -4311,7 +4316,7 @@ Function UpdateNPCs%()
 								;[End Block]
 						End Select
 					Else
-						HideEntity(n\OBJ)
+						If (Not EntityHidden(n\OBJ)) Then HideEntity(n\OBJ)
 						If Rand(600) = 1 Then
 							TeleportCloser(n)
 						EndIf
@@ -4709,9 +4714,9 @@ Function UpdateNPCs%()
 					RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
 					PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.2, EntityZ(n\Collider))
 					
-					ShowEntity(n\OBJ)
+					If EntityHidden(n\OBJ) Then ShowEntity(n\OBJ)
 				Else
-					HideEntity(n\OBJ)
+					If (Not EntityHidden(n\OBJ)) Then HideEntity(n\OBJ)
 				EndIf
 				;[End Block]
 			Case NPCType008_1
@@ -4917,40 +4922,44 @@ Function UpdateNPCs%()
 							;[End Block]
 						Case 5.0 ; ~ Idling
 							;[Block]
-							HideEntity(n\OBJ)
-							HideEntity(n\Collider)
-							n\DropSpeed = 0.0
-							PositionEntity(n\Collider, 0.0, 500.0, 0.0)
-							ResetEntity(n\Collider)
+							If (Not EntityHidden(n\OBJ)) Then
+								HideEntity(n\OBJ)
+								HideEntity(n\Collider)
+								n\DropSpeed = 0.0
+								PositionEntity(n\Collider, 0.0, 500.0, 0.0)
+								ResetEntity(n\Collider)
+							EndIf
 							If n\Idle > 0
 								n\Idle = Max(n\Idle - (1 + (1 * SelectedDifficulty\AggressiveNPCs)) * fps\Factor[0], 0.0)
 							Else
 								If PlayerInReachableRoom() ; ~ Player is in a room where SCP-008-1 can teleport to
 									If Rand(50 - (20 * SelectedDifficulty\AggressiveNPCs)) = 1
-										ShowEntity(n\Collider)
-										ShowEntity(n\OBJ)
-										For w.Waypoints = Each WayPoints
-											If w\door = Null And w\room\Dist < HideDistance And Rand(3) = 1 Then
-												If EntityDistanceSquared(w\room\OBJ, n\Collider) < EntityDistanceSquared(me\Collider, n\Collider)
-													x = Abs(EntityX(n\Collider) - EntityX(w\OBJ, True))
-													If x < 12.0 And x > 4.0 Then
-														z = Abs(EntityZ(n\Collider) - EntityZ(w\OBJ, True))
-														If z < 12.0 And z > 4.0 Then
-															If w\room\Dist > 4.0
-																PositionEntity(n\Collider, EntityX(w\OBJ, True), EntityY(w\obj, True) + 0.35, EntityZ(w\OBJ, True))
-																ResetEntity(n\Collider)
-																n\PathStatus = 0
-																n\PathTimer = 0.0
-																n\PathLocation = 0
-																Exit
+										If EntityHidden(n\OBJ) Then
+											ShowEntity(n\OBJ)
+											ShowEntity(n\Collider)
+											For w.Waypoints = Each WayPoints
+												If w\door = Null And w\room\Dist < HideDistance And Rand(3) = 1 Then
+													If EntityDistanceSquared(w\room\OBJ, n\Collider) < EntityDistanceSquared(me\Collider, n\Collider)
+														x = Abs(EntityX(n\Collider) - EntityX(w\OBJ, True))
+														If x < 12.0 And x > 4.0 Then
+															z = Abs(EntityZ(n\Collider) - EntityZ(w\OBJ, True))
+															If z < 12.0 And z > 4.0 Then
+																If w\room\Dist > 4.0
+																	PositionEntity(n\Collider, EntityX(w\OBJ, True), EntityY(w\obj, True) + 0.35, EntityZ(w\OBJ, True))
+																	ResetEntity(n\Collider)
+																	n\PathStatus = 0
+																	n\PathTimer = 0.0
+																	n\PathLocation = 0
+																	Exit
+																EndIf
 															EndIf
 														EndIf
 													EndIf
 												EndIf
-											EndIf
-										Next
-										n\State = 2.0
-										n\State3 = 0.0
+											Next
+											n\State = 2.0
+											n\State3 = 0.0
+										EndIf
 									EndIf
 								EndIf
 							EndIf
@@ -6936,7 +6945,7 @@ Function TriggerTeslaGateOnNPCs%(e.Events, n.NPCs)
 						me\SndVolume = Max(8.0, me\SndVolume)
 						StopChannel(e\SoundCHN)
 						e\SoundCHN = PlaySound2(TeslaActivateSFX, Camera, e\room\Objects[3], 4.0, 0.5)
-						HideEntity(e\room\Objects[4])
+						If (Not EntityHidden(e\room\Objects[4])) Then HideEntity(e\room\Objects[4])
 						e\EventState = 1.0
 						Exit
 					EndIf
