@@ -4676,13 +4676,6 @@ Function UpdateEvents%()
 					EndIf
 					
 					If EntityY(me\Collider, True) > 4.0 Then
-						For r.Rooms = Each Rooms
-							If r <> e\room Then
-								If (Not EntityHidden(r\OBJ)) Then HideEntity(r\OBJ)
-							EndIf
-						Next
-						EntityAlpha(GetChild(e\room\OBJ, 2), 0.0)
-						
 						ShouldPlay = 29
 						
 						If e\EventState = 0.0 Then
