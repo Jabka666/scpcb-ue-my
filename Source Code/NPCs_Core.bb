@@ -60,6 +60,7 @@ Type NPCs
 	Field FallingPickDistance#
 	Field HasAsset% = False
 	Field Contained% = False
+	Field Dist#
 End Type
 
 Global Curr173.NPCs, Curr106.NPCs, Curr096.NPCs, Curr513_1.NPCs, Curr049.NPCs
@@ -595,6 +596,33 @@ Function UpdateNPCs%()
 	Local n.NPCs, n2.NPCs, d.Doors, de.Decals, r.Rooms, e.Events, w.Waypoints, p.Particles, wp.WayPoints, wayPointCloseToPlayer.WayPoints
 	Local i%, j%, Dist#, Dist2#, Angle#, x#, x2#, y#, z#, z2#, PrevFrame#, PlayerSeeAble%, RN$
 	Local Target%, Pvt%, Pick%, PrevDist#, NewDist#, Attack%
+	
+	If UpdateTimer =< 0.0 Then
+		For n.NPCs = Each NPCs
+			Local xDist# = Abs(EntityX(me\Collider) - EntityX(n\Collider, True))
+			Local zDist# = Abs(EntityZ(me\Collider) - EntityZ(n\Collider, True))
+			
+			n\Dist = xDist + zDist
+			
+			If n\Dist =< HideDistance Then
+				If n\OBJ <> 0 Then
+					If EntityHidden(n\OBJ) Then
+						ShowEntity(n\OBJ)
+						If n\OBJ2 <> 0 Then ShowEntity(n\OBJ2)
+						If n\OBJ3 <> 0 Then ShowEntity(n\OBJ2)
+					EndIf
+				EndIf
+			Else
+				If n\OBJ <> 0 Then
+					If (Not EntityHidden(n\OBJ)) Then
+						HideEntity(n\OBJ)
+						If n\OBJ2 <> 0 Then HideEntity(n\OBJ2)
+						If n\OBJ3 <> 0 Then HideEntity(n\OBJ2)
+					EndIf
+				EndIf
+			EndIf
+		Next
+	EndIf
 	
 	For n.NPCs = Each NPCs
 		; ~ A variable to determine if the NPC is in the facility or not

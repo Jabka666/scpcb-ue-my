@@ -290,7 +290,7 @@ Function SaveGame%(File$)
 			WriteByte(f, 0)
 		EndIf
 		
-		For i = 0 To 11
+		For i = 0 To MaxRoomNPCs - 1
 			If r\NPC[i] = Null Then
 				WriteInt(f, 0)
 			Else
@@ -298,7 +298,7 @@ Function SaveGame%(File$)
 			EndIf
 		Next
 		
-		For i = 0 To 9
+		For i = 0 To MaxRoomLevers - 1
 			If r\Levers[i] <> 0 Then
 				If EntityPitch(r\Levers[i], True) > 0.0 Then
 					WriteByte(f, 1)
@@ -840,7 +840,7 @@ Function LoadGame%(File$)
 		
 		If Temp2 = 1 Then PlayerRoom = r
 		
-		For x = 0 To 11
+		For x = 0 To MaxRoomNPCs - 1
 			ID = ReadInt(f)
 			If ID > 0 Then
 				For n.NPCs = Each NPCs
@@ -852,7 +852,7 @@ Function LoadGame%(File$)
 			EndIf
 		Next
 		
-		For x = 0 To 9
+		For x = 0 To MaxRoomLevers - 1
 			ID = ReadByte(f)
 			If ID = 2 Then
 				Exit
@@ -1382,7 +1382,7 @@ Function LoadGame%(File$)
 		EndIf
 	EndIf
 	
-	UpdateDoorsTimer = 0.0
+	UpdateTimer = 0.0
 	
 	CatchErrors("LoadGame")
 End Function
@@ -1732,7 +1732,7 @@ Function LoadGameQuick%(File$)
 			EndIf
 		Next
 		
-		For x = 0 To 11
+		For x = 0 To MaxRoomNPCs - 1
 			ID = ReadInt(f)
 			If ID > 0 Then
 				For n.NPCs = Each NPCs
@@ -1744,7 +1744,7 @@ Function LoadGameQuick%(File$)
 			EndIf
 		Next
 		
-		For x = 0 To 9
+		For x = 0 To MaxRoomLevers - 1
 			ID = ReadByte(f)
 			If ID = 2 Then
 				Exit
@@ -2091,7 +2091,7 @@ Function LoadGameQuick%(File$)
 		EndIf
 	EndIf
 	
-	UpdateDoorsTimer = 0.0
+	UpdateTimer = 0.0
 	
 	; ~ Free some entities that could potentially cause memory leaks (for the endings)
 	; ~ This is only required for the LoadGameQuick function, as the other one is from the menu where everything is already deleted anyways

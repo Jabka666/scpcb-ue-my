@@ -820,7 +820,7 @@ End Function
 Function UpdateEvents%()
 	CatchErrors("Uncaught (UpdateEvents)")
 	
-	Local p.Particles, n.NPCs, r.Rooms, e.Events, e2.Events, de.Decals, du.Dummy1499_1, w.Waypoints
+	Local p.Particles, n.NPCs, r.Rooms, e.Events, e2.Events, de.Decals, du.Dummy1499_1, w.Waypoints, pr.Props
 	Local it.Items, it2.Items, em.Emitters, sc.SecurityCams, sc2.SecurityCams, wayp.Waypoints, do.Doors
 	Local Dist#, i%, Temp%, Pvt%, StrTemp$, j%, k%
 	Local CurrTrigger$ = "", fDir#, Scale#, Tex%, t1%, Name$
@@ -2201,6 +2201,10 @@ Function UpdateEvents%()
 													If sc\room = e\room Then Delete(sc)
 												Next
 												
+												For pr.Props = Each Props
+													If pr\room = e\room Then Delete(pr)
+												Next
+												
 												ClearConsole()
 												
 												e\EventState2 = 1.0
@@ -3109,7 +3113,7 @@ Function UpdateEvents%()
 													
 													TeleportEntity(me\Collider, EntityX(r\Objects[0], True), 0.6, EntityZ(r\Objects[0], True), 0.3, True)
 													
-													UpdateDoorsTimer = 0.0
+													UpdateTimer = 0.0
 													UpdateDoors()
 													UpdateRooms()
 													Curr106\State = 10000.0 : Curr106\Idle = 0
@@ -3155,7 +3159,7 @@ Function UpdateEvents%()
 										
 										TeleportEntity(me\Collider, EntityX(r\Objects[10], True), 0.4, EntityZ(r\Objects[10], True), 0.3, True)
 										
-										UpdateDoorsTimer = 0.0
+										UpdateTimer = 0.0
 										UpdateDoors()
 										UpdateRooms()
 										Curr106\State = 10000.0 : Curr106\Idle = 0
@@ -3247,7 +3251,7 @@ Function UpdateEvents%()
 											
 											TeleportEntity(me\Collider, EntityX(r\OBJ, True), 0.4, EntityZ(r\OBJ, True), 0.3, True)
 											
-											UpdateDoorsTimer = 0.0
+											UpdateTimer = 0.0
 											UpdateDoors()
 											UpdateRooms()
 											Curr106\State = 10000.0 : Curr106\Idle = 0
@@ -3287,7 +3291,7 @@ Function UpdateEvents%()
 									;[End Block]
 							End Select 
 							
-							UpdateDoorsTimer = 0.0
+							UpdateTimer = 0.0
 							UpdateDoors()
 							UpdateRooms()
 						EndIf					
@@ -3345,7 +3349,7 @@ Function UpdateEvents%()
 								PositionEntity(me\Collider, EntityX(e\room\OBJ), 0.5, EntityZ(e\room\OBJ))
 								ResetEntity(me\Collider)
 								e\EventState2 = 0.0
-								UpdateDoorsTimer = 0.0
+								UpdateTimer = 0.0
 								UpdateDoors()
 								UpdateRooms()
 							Else ; ~ Somewhere else, must've fallen down
@@ -6387,7 +6391,7 @@ Function UpdateEvents%()
 							e\EventState = e\EventState - fps\Factor[0]
 							
 							If e\EventState =< (-70.0) * 4.0 Then 
-								UpdateDoorsTimer = 0.0
+								UpdateTimer = 0.0
 								UpdateDoors()
 								UpdateRooms()
 								If EntityHidden(me\Collider) Then ShowEntity(me\Collider)
@@ -6737,6 +6741,20 @@ Function UpdateEvents%()
 			Case e_cont1_205
 				;[Block]
 				If PlayerRoom = e\room Then
+					For sc.SecurityCams = Each SecurityCams
+						If sc\room = e\room Then
+							If sc\ScrOBJ <> 0 Then
+								If (Not EntityHidden(sc\OBJ)) Then
+									HideEntity(sc\OBJ)
+									If sc\CameraOBJ <> 0 Then HideEntity(sc\CameraOBJ)
+									If sc\ScrOverlay <> 0 Then HideEntity(sc\ScrOverlay)
+									If sc\MonitorOBJ <> 0 Then HideEntity(sc\MonitorOBJ)
+								EndIf
+							EndIf
+							Exit
+						EndIf
+					Next
+					
 					If e\EventState = 0.0 Lor e\EventStr <> "LoadDone" Then
 						If e\EventStr = "" And QuickLoadPercent = -1
 							QuickLoadPercent = 0
@@ -7011,7 +7029,7 @@ Function UpdateEvents%()
 								
 								ResetEntity(me\Collider)
 								
-								UpdateDoorsTimer = 0.0
+								UpdateTimer = 0.0
 								UpdateDoors()
 								
 								SecondaryLightOn = PrevSecondaryLightOn

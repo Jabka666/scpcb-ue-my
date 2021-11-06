@@ -2279,6 +2279,7 @@ Function MainLoop%()
 			UpdateItems()
 			UpdateParticles()
 			Use427()
+			UpdateDistanceTimer()
 		EndIf
 		
 		If chs\InfiniteStamina Then me\Stamina = 100.0
@@ -8701,7 +8702,7 @@ End Function
 Function InitStats%()
 	me\Playable = True : me\SelectedEnding = -1
 	
-	HideDistance = 15.0
+	HideDistance = 16.0
 	as\Timer = 70.0 * 120.0
 	
 	If opt\DebugMode Then
@@ -8717,7 +8718,7 @@ Function InitNewGame%()
 	CatchErrors("Uncaught (InitNewGame)")
 	
 	Local de.Decals, d.Doors, it.Items, r.Rooms, sc.SecurityCams, e.Events, rt.RoomTemplates
-	Local twp.TempWayPoints, ts.TempScreens
+	Local twp.TempWayPoints, ts.TempScreens, tp.TempProps
 	Local i%
 	
 	LoadEntities()
@@ -8828,6 +8829,10 @@ Function InitNewGame%()
 	
 	For ts.TempScreens = Each TempScreens
 		Delete(ts)
+	Next
+	
+	For tp.TempProps = Each TempProps
+		Delete(tp)
 	Next
 	
 	RenderLoading(85, "EVENTS")
@@ -8963,7 +8968,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	Local itt.ItemTemplates, s.Screens, lt.LightTemplates, d.Doors, m.Materials, de.Decals, sc.SecurityCams, e.Events
 	Local wp.WayPoints, r.Rooms, it.Items, pr.Props, c.ConsoleMsg, n.NPCs, em.Emitters, rt.RoomTemplates, p.Particles, sub.Subtitles
-	Local twp.TempWayPoints, ts.TempScreens
+	Local twp.TempWayPoints, ts.TempScreens, tp.TempProps
 	
 	Local i%, x%, y%, Lvl%
 	
@@ -9126,6 +9131,10 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	For pr.Props = Each Props
 		Delete(pr)
+	Next
+	
+	For tp.TempProps = Each TempProps
+		Delete(tp)
 	Next
 	
 	For de.Decals = Each Decals
