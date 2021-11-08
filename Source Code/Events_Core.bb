@@ -1801,6 +1801,8 @@ Function UpdateEvents%()
 								e\room\NPC[11]\State = 15.0
 								CreateNPCAsset(e\room\NPC[11])
 								
+								HideDistance = 35.0
+								
 								For i = 8 To 11
 									PositionEntity(Pvt, EntityX(e\room\NPC[i]\Collider), EntityY(e\room\NPC[i]\Collider), EntityZ(e\room\NPC[i]\Collider))
 									EntityPick(Pvt, 20.0)
@@ -2162,9 +2164,9 @@ Function UpdateEvents%()
 												z = EntityZ(r\OBJ, True) + 1312.0 * RoomScale
 												
 												PositionEntity(me\Collider, x  + (EntityX(me\Collider) - EntityX(e\room\OBJ)), y + EntityY(me\Collider) + 0.4, z + (EntityZ(me\Collider) - EntityZ(e\room\OBJ)))
-												me\DropSpeed = 0.0
 												ResetEntity(me\Collider)
 												
+												me\DropSpeed = 0.0
 												For i = 0 To 2
 													PositionEntity(e\room\NPC[i]\Collider, x + (EntityX(e\room\NPC[i]\Collider) - EntityX(e\room\OBJ)), y + EntityY(e\room\NPC[i]\Collider) + 0.4, z + (EntityZ(e\room\NPC[i]\Collider) - EntityZ(e\room\OBJ)))
 													ResetEntity(e\room\NPC[i]\Collider)
@@ -2205,6 +2207,10 @@ Function UpdateEvents%()
 													If pr\room = e\room Then Delete(pr)
 												Next
 												
+												UpdateTimer = 0.0
+												UpdateDoors()
+												UpdateRooms()
+												
 												ClearConsole()
 												
 												e\EventState2 = 1.0
@@ -2236,6 +2242,7 @@ Function UpdateEvents%()
 				
 				If PlayerRoom <> e\room Then
 					CanSave = True
+					HideDistance = 16.0
 					RemoveEvent(e)
 				Else
 					CanSave = False
