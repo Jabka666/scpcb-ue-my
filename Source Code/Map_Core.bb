@@ -7718,8 +7718,8 @@ Function HideRooms%(r.Rooms, AdjDoor.Doors = Null, NoCollision% = False)
 	
 	If (Not r\Hidden) Then
 		For sc.SecurityCams = Each SecurityCams
-			HideSecurityCams = False
-			If sc\room = r Then HideSecurityCams = True
+			HideSecurityCams = True
+			If sc\room <> r Then HideSecurityCams = False
 			If HideSecurityCams Then
 				If sc\OBJ <> 0 Then HideEntity(sc\OBJ)
 				If sc\CameraOBJ <> 0 Then HideEntity(sc\CameraOBJ)
@@ -7731,8 +7731,8 @@ Function HideRooms%(r.Rooms, AdjDoor.Doors = Null, NoCollision% = False)
 		Next
 		
 		For p.Props = Each Props
-			HideProps = False
-			If p\room = r Then HideProps = True
+			HideProps = True
+			If p\room <> r Then HideProps = False
 			If HideProps Then
 				If p\OBJ <> 0 Then
 					If CheckPropCollision(p\Name) Then
@@ -7745,10 +7745,10 @@ Function HideRooms%(r.Rooms, AdjDoor.Doors = Null, NoCollision% = False)
 		Next
 		
 		For d.Doors = Each Doors
-			HideDoors = False
-			If d\room = r Then HideDoors = True
+			HideDoors = True
+			If d\room <> r Then HideDoors = False
 			If AdjDoor <> Null Then
-				If d <> AdjDoor Then HideDoors = True
+				If d = AdjDoor Then HideDoors = False
 			EndIf
 			If HideDoors Then
 				If d\FrameOBJ <> 0 Then
@@ -7794,8 +7794,8 @@ Function ShowRooms%(r.Rooms, NoCollision% = False)
 	
 	If r\Hidden Then
 		For sc.SecurityCams = Each SecurityCams
-			ShowSecurityCams = False
-			If sc\room = r Then ShowSecurityCams = True
+			ShowSecurityCams = True
+			If sc\room <> r Then ShowSecurityCams = False
 			If ShowSecurityCams Then
 				If sc\OBJ <> 0 Then ShowEntity(sc\OBJ)
 				If sc\CameraOBJ <> 0 Then ShowEntity(sc\CameraOBJ)
@@ -7806,8 +7806,8 @@ Function ShowRooms%(r.Rooms, NoCollision% = False)
 		Next
 		
 		For p.Props = Each Props
-			ShowProps = False
-			If p\room = r Then ShowProps = True
+			ShowProps = True
+			If p\room <> r Then ShowProps = False
 			If ShowProps Then
 				If p\OBJ <> 0 Then
 					If CheckPropCollision(p\Name) Then
@@ -7820,8 +7820,8 @@ Function ShowRooms%(r.Rooms, NoCollision% = False)
 		Next
 		
 		For d.Doors = Each Doors
-			ShowDoors = False
-			If d\room = r Then ShowDoors = True
+			ShowDoors = True
+			If d\room <> r Then ShowDoors = False
 			If ShowDoors Then
 				If d\FrameOBJ <> 0 Then
 					EntityAlpha(d\FrameOBJ, 1.0)

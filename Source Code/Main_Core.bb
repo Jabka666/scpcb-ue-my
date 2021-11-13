@@ -4527,7 +4527,7 @@ Function UpdateGUI%()
 										me\Injuries = 0.5
 										CreateMsg("You took a painkiller, easing the pain slightly.")
 									Else
-										me\Injuries = 0.5
+										me\Injuries = me\Injuries - Rnd(0.0, 0.2)
 										CreateMsg("You took a painkiller, but it still hurts to walk.")
 									EndIf
 								EndIf
