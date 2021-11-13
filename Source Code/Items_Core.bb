@@ -901,16 +901,6 @@ Function PickItem%(item.Items)
 	CatchErrors("PickItem")
 End Function
 
-Function ShowEntity2(OBJ%)
-	DebugLog("Show!")
-	ShowEntity(OBJ)
-End Function
-
-Function HideEntity2(OBJ%)
-	DebugLog("Hide!")
-	HideEntity(OBJ)
-End Function
-
 Function DropItem%(item.Items, PlayDropSound% = True)
 	If wi\HazmatSuit > 0 Then
 		CreateMsg("You cannot drop any items while wearing a hazmat suit.")

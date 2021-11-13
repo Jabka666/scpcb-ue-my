@@ -13,20 +13,20 @@ Function UpdateAutoSave%()
 		Return
 	EndIf
 	
-	If as\Timer =< 0.0 Then
+	If as\Timer <= 0.0 Then
 		SaveGame(SavePath + CurrSave + "_" + as\Amount + "\")
 		as\Amount = as\Amount + 1
 		If as\Amount >= 5 Then as\Amount = 0
 	Else
 		as\Timer = as\Timer - fps\Factor[0]
-		If as\Timer =< 70.0 * 5.0 Then
+		If as\Timer <= 70.0 * 5.0 Then
 			CreateHintMsg("Auto save in: " + Str(Int(Ceil(as\Timer) / 70.0)) + "..")
 		EndIf
 	EndIf
 End Function
 
 Function CancelAutoSave%()
-	If as\Timer =< 70.0 * 5.0 Then
+	If as\Timer <= 70.0 * 5.0 Then
 		CreateHintMsg("Auto save is canceled!")
 	EndIf
 	If as\Timer <> 70.0 * 120.0 Then as\Timer = 70.0 * 120.0
@@ -281,7 +281,6 @@ Function SaveGame%(File$)
 		WriteFloat(f, r\z)
 		
 		WriteByte(f, r\Found)
-		
 		WriteInt(f, r\Zone)
 		
 		If PlayerRoom = r Then 
@@ -823,6 +822,7 @@ Function LoadGame%(File$)
 		
 		Local Found% = ReadByte(f)
 		Local Level% = ReadInt(f)
+		
 		Local Temp2% = ReadByte(f)		
 		
 		Angle = WrapAngle(Angle)
@@ -1720,6 +1720,7 @@ Function LoadGameQuick%(File$)
 		
 		Local Found% = ReadByte(f)
 		Local Level% = ReadInt(f)
+		
 		Local Temp2% = ReadByte(f)	
 		
 		If Angle >= 360.0
@@ -1798,7 +1799,7 @@ Function LoadGameQuick%(File$)
 			Delete(r\fr) : r\fr = Null
 		EndIf
 		
-		If Temp2 = 1 Then PlayerRoom = r.Rooms
+		If Temp2 = 1 Then PlayerRoom = r
 	Next
 	
 	For r.Rooms = Each Rooms
@@ -2390,7 +2391,7 @@ Function LoadMap%(File$)
 			
 			If r <> Null Then
 				If Prob > 0.0 Then
-					If Rnd(0.0, 1.0) =< Prob Then
+					If Rnd(0.0, 1.0) <= Prob Then
 						e.Events = New Events
 						e\EventName = Name
 						e\EventID = FindEventID(Name)
@@ -2575,7 +2576,7 @@ Function LoadMap%(File$)
 			
 			If r <> Null Then
 				If Prob > 0.0 Then
-					If Rnd(0.0, 1.0) =< Prob Then
+					If Rnd(0.0, 1.0) <= Prob Then
 						e.Events = New Events
 						e\EventName = Name
 						e\EventID = FindEventID(Name)

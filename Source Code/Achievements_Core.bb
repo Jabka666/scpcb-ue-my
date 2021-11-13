@@ -111,15 +111,13 @@ Function UpdateAchievementMsg%()
 	
 	For amsg.AchievementMsg = Each AchievementMsg
 		If amsg\MsgTime <> 0.0
-			If amsg\MsgTime > 0.0 And amsg\MsgTime < 70.0 * 7.0
+			If amsg\MsgTime > 0.0 And amsg\MsgTime < 70.0 * 7.0 Then
 				amsg\MsgTime = amsg\MsgTime + fps\Factor[1]
-				If amsg\MsgX > -Width
-					amsg\MsgX = Max(amsg\MsgX - (4.0 * fps\Factor[1]), -Width)
-				EndIf
+				If amsg\MsgX > -Width Then amsg\MsgX = Max(amsg\MsgX - (4.0 * fps\Factor[1]), -Width)
 			ElseIf amsg\MsgTime >= 70.0 * 7.0
 				amsg\MsgTime = -1.0
 			ElseIf amsg\MsgTime = -1.0
-				If amsg\MsgX < 0.0
+				If amsg\MsgX < 0.0 Then
 					amsg\MsgX = Min(amsg\MsgX + (4.0 * fps\Factor[1]), 0.0)
 				Else
 					amsg\MsgTime = 0.0
@@ -144,9 +142,7 @@ Function RenderAchievementMsg%()
 			y = 0
 			For amsg2.AchievementMsg = Each AchievementMsg
 				If amsg2 <> amsg Then
-					If amsg2\MsgID > amsg\MsgID Then
-						y = y + Height 
-					EndIf
+					If amsg2\MsgID > amsg\MsgID Then y = y + Height 
 				EndIf
 			Next
 			RenderFrame(x, y, Width, Height)

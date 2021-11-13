@@ -65,7 +65,7 @@ Function DeleteTextureEntriesFromCache%(DeleteType%)
 	Local tic.TextureInCache, mat.Materials
 	
 	For tic.TextureInCache = Each TextureInCache
-		If tic\TexDeleteType =< DeleteType
+		If tic\TexDeleteType <= DeleteType
 			If tic\Tex <> 0 Then FreeTexture(tic\Tex) : tic\Tex = 0
 			Delete(tic)
 		EndIf

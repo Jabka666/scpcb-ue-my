@@ -383,7 +383,7 @@ Function UpdateMainMenu%()
 							PlaySound_Strict(ButtonSFX)
 						ElseIf MouseOn(x + (160 * MenuScale), y + (240 * MenuScale), ImageWidth(ga\ArrowIMG[1]), ImageHeight(ga\ArrowIMG[1])) And mo\MouseHit1
 							SelectedDifficulty\InventorySlots = SelectedDifficulty\InventorySlots - 2
-							If SelectedDifficulty\InventorySlots =< 0 Then SelectedDifficulty\InventorySlots = 10
+							If SelectedDifficulty\InventorySlots <= 0 Then SelectedDifficulty\InventorySlots = 10
 							PlaySound_Strict(ButtonSFX)
 						EndIf
 						
@@ -463,7 +463,7 @@ Function UpdateMainMenu%()
 						y = y + (20 * MenuScale)
 						
 						For i = (1 + (5 * mm\CurrLoadGamePage)) To 5 + (5 * mm\CurrLoadGamePage)
-							If i =< SaveGameAmount Then
+							If i <= SaveGameAmount Then
 								If SaveMSG = "" Then
 									If SaveGameVersion(i - 1) <> VersionNumber Then
 										UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Load", False, False, True, 255, 0, 0)
@@ -975,7 +975,7 @@ Function UpdateMainMenu%()
 						x = x + (20 * MenuScale)
 						y = y + (20 * MenuScale)
 						For i = (1 + (5 * mm\CurrLoadGamePage)) To 5 + (5 * mm\CurrLoadGamePage)
-							If i =< SavedMapsAmount Then
+							If i <= SavedMapsAmount Then
 								If SaveMSG = "" Then
 									If UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Load", False) Then
 										SelectedMap = SavedMaps(i - 1)
@@ -1286,7 +1286,7 @@ Function RenderMainMenu%()
 					y = y + (20 * MenuScale)
 					
 					For i = (1 + (5 * mm\CurrLoadGamePage)) To 5 + (5 * mm\CurrLoadGamePage)
-						If i =< SaveGameAmount Then
+						If i <= SaveGameAmount Then
 							RenderFrame(x, y, 540 * MenuScale, 70 * MenuScale)
 							
 							If SaveGameVersion(i - 1) <> VersionNumber Then
@@ -1789,7 +1789,7 @@ Function RenderMainMenu%()
 					x = x + (20 * MenuScale)
 					y = y + (20 * MenuScale)
 					For i = (1 + (5 * mm\CurrLoadGamePage)) To 5 + (5 * mm\CurrLoadGamePage)
-						If i =< SavedMapsAmount Then
+						If i <= SavedMapsAmount Then
 							RenderFrame(x, y, 540 * MenuScale, 70 * MenuScale)
 							
 							If Len(SavedMaps(i - 1)) > 20 Then
@@ -2810,7 +2810,7 @@ Function UpdateMainMenuSlideBar#(x%, y%, Width%, Value#, TextLeft$ = "LOW", Text
 	EndIf
 	
 	If mo\MouseDown1 And mm\OnSliderID = 0 Then
-		If ScaledMouseX() >= x And ScaledMouseX() =< x + Width + 14 And ScaledMouseY() >= y And ScaledMouseY() =< y + 20 Then
+		If ScaledMouseX() >= x And ScaledMouseX() <= x + Width + 14 And ScaledMouseY() >= y And ScaledMouseY() <= y + 20 Then
 			Value = Min(Max((ScaledMouseX() - x) * 100 / Width, 0.0), 100.0)
 		EndIf
 	EndIf
@@ -2867,15 +2867,15 @@ Function UpdateMainMenuSlider3%(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$
 	EndIf
 	
 	If mo\MouseDown1 Then
-		If ScaledMouseX() >= x And ScaledMouseX() =< x + Width + 14 And ScaledMouseY() >= y - 8 And ScaledMouseY() =< y + 10
+		If ScaledMouseX() >= x And ScaledMouseX() <= x + Width + 14 And ScaledMouseY() >= y - 8 And ScaledMouseY() <= y + 10
 			mm\OnSliderID = ID
 		EndIf
 	EndIf
 	
 	If ID = mm\OnSliderID Then
-		If ScaledMouseX() =< x + (8 * MenuScale) Then
+		If ScaledMouseX() <= x + (8 * MenuScale) Then
 			Value = 0
-		ElseIf (ScaledMouseX() >= x + (Width / 2)) And (ScaledMouseX() =< x + (Width / 2) + (8 * MenuScale))
+		ElseIf (ScaledMouseX() >= x + (Width / 2)) And (ScaledMouseX() <= x + (Width / 2) + (8 * MenuScale))
 			Value = 1
 		ElseIf ScaledMouseX() >= x + Width
 			Value = 2
@@ -2913,19 +2913,19 @@ Function UpdateMainMenuSlider5%(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$
 	EndIf
 	
 	If mo\MouseDown1 Then
-		If (ScaledMouseX() >= x) And (ScaledMouseX() =< x + Width + (14 * MenuScale)) And (ScaledMouseY() >= y - (8 * MenuScale)) And (ScaledMouseY() =< y + (10 * MenuScale)) Then
+		If (ScaledMouseX() >= x) And (ScaledMouseX() <= x + Width + (14 * MenuScale)) And (ScaledMouseY() >= y - (8 * MenuScale)) And (ScaledMouseY() <= y + (10 * MenuScale)) Then
 			mm\OnSliderID = ID
 		EndIf
 	EndIf
 	
 	If ID = mm\OnSliderID Then
-		If ScaledMouseX() =< x + (8 * MenuScale) Then
+		If ScaledMouseX() <= x + (8 * MenuScale) Then
 			Value = 0
-		ElseIf (ScaledMouseX() >= x + (Width / 4)) And (ScaledMouseX() =< x + (Width / 4) + (8 * MenuScale))
+		ElseIf (ScaledMouseX() >= x + (Width / 4)) And (ScaledMouseX() <= x + (Width / 4) + (8 * MenuScale))
 			Value = 1
-		ElseIf (ScaledMouseX() >= x + (Width / 2)) And (ScaledMouseX() =< x + (Width / 2) + (8 * MenuScale))
+		ElseIf (ScaledMouseX() >= x + (Width / 2)) And (ScaledMouseX() <= x + (Width / 2) + (8 * MenuScale))
 			Value = 2
-		ElseIf (ScaledMouseX() >= x + (Width * 0.75)) And (ScaledMouseX() =< x + (Width * 0.75) + (8 * MenuScale))
+		ElseIf (ScaledMouseX() >= x + (Width * 0.75)) And (ScaledMouseX() <= x + (Width * 0.75) + (8 * MenuScale))
 			Value = 3
 		ElseIf ScaledMouseX() >= x + Width
 			Value = 4
@@ -2950,7 +2950,7 @@ Function RenderMenuSliders%()
 			Rect(ms\x + ms\Width + (10 * MenuScale), ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale)
 			
 			If ms\ID <> mm\OnSliderID Then
-				If (ScaledMouseX() >= ms\x) And (ScaledMouseX() =< ms\x + ms\Width + (14 * MenuScale)) And (ScaledMouseY() >= ms\y - (8 * MenuScale)) And (ScaledMouseY() =< ms\y + (10 * MenuScale)) Then
+				If (ScaledMouseX() >= ms\x) And (ScaledMouseX() <= ms\x + ms\Width + (14 * MenuScale)) And (ScaledMouseY() >= ms\y - (8 * MenuScale)) And (ScaledMouseY() <= ms\y + (10 * MenuScale)) Then
 					Color(0, 200, 0)
 					Rect(ms\x, ms\y, ms\Width + (14 * MenuScale), 10 * MenuScale, False)
 					Rect(ms\x, ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale, False)
@@ -2989,7 +2989,7 @@ Function RenderMenuSliders%()
 			Rect(ms\x + ms\Width + (10 * MenuScale), ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale)
 			
 			If ms\ID <> mm\OnSliderID Then
-				If (ScaledMouseX() >= ms\x) And (ScaledMouseX() =< ms\x + ms\Width + (14 * MenuScale)) And (ScaledMouseY() >= ms\y - (8 * MenuScale)) And (ScaledMouseY() =< ms\y + (10 * MenuScale)) Then
+				If (ScaledMouseX() >= ms\x) And (ScaledMouseX() <= ms\x + ms\Width + (14 * MenuScale)) And (ScaledMouseY() >= ms\y - (8 * MenuScale)) And (ScaledMouseY() <= ms\y + (10 * MenuScale)) Then
 					Color(0, 200, 0)
 					Rect(ms\x, ms\y, ms\Width + (14 * MenuScale), 10 * MenuScale, False)
 					Rect(ms\x, ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale, False)
@@ -3057,7 +3057,7 @@ Function RowText%(Txt$, x%, y%, W%, H%, Align% = False, Leading# = 1.0)
 		Local Extra% = 0 ; ~ We haven't ignored it yet
 		
 		; ~ Ignore final space if doing so would make a word fit at end of line:
-		If (StringWidth(s + Temp) > W) And (StringWidth(s + Trimmed) =< W) Then
+		If (StringWidth(s + Temp) > W) And (StringWidth(s + Trimmed) <= W) Then
 			Temp = Trimmed
 			Extra = 1
 		EndIf
@@ -3079,7 +3079,7 @@ Function RowText%(Txt$, x%, y%, W%, H%, Align% = False, Leading# = 1.0)
 		If ((LinesShown + 1) * Height) > H Then Exit ; ~ The next line would be too tall, so leave
 	Wend
 	
-	If (s <> "") And ((LinesShown + 1) =< H) Then
+	If (s <> "") And ((LinesShown + 1) <= H) Then
 		If Align Then
 			Text(x + (W / 2) - (StringWidth(s) / 2), y + (LinesShown * Height), s) ; ~ Print any remaining text if it'll fit vertically
 		Else
@@ -3108,7 +3108,7 @@ Function GetLineAmount%(Txt$, W%, H%, Leading# = 1.0)
 		Local Extra% = 0 ; ~ We haven't ignored it yet
 		
 		; ~ Ignore final space if doing so would make a word fit at end of line:
-		If (StringWidth(s + Temp) > W) And (StringWidth(s + Trimmed) =< W) Then
+		If (StringWidth(s + Temp) > W) And (StringWidth(s + Trimmed) <= W) Then
 			Temp = Trimmed
 			Extra = 1
 		EndIf

@@ -1063,7 +1063,7 @@ Function UpdateConsole%()
 					;[End Block]
 				Case "106retreat"
 					;[Block]
-					If Curr106\State =< 0.0 Then
+					If Curr106\State <= 0.0 Then
 						Curr106\State = Rnd(22000.0, 27000.0)
 						PositionEntity(Curr106\Collider, 0.0, 500.0, 0.0)
 						ResetEntity(Curr106\Collider)
@@ -2129,7 +2129,7 @@ Function MainLoop%()
 	
 	While fps\Accumulator > 0.0
 		fps\Accumulator = fps\Accumulator - TICK_DURATION
-		If fps\Accumulator =< 0.0 Then CaptureWorld()
+		If fps\Accumulator <= 0.0 Then CaptureWorld()
 		
 		If MenuOpen Lor ConsoleOpen Then fps\Factor[0] = 0.0
 		
@@ -2322,7 +2322,7 @@ Function MainLoop%()
 			EndIf
 			
 			If me\BlinkTimer < 0.0 Then
-				If me\BlinkTimer =< -20.0 Then
+				If me\BlinkTimer <= -20.0 Then
 					; ~ Randomizes the frequency of blinking. Scales with difficulty
 					Select SelectedDifficulty\OtherFactors
 						Case EASY
@@ -2455,7 +2455,7 @@ Function MainLoop%()
 						EndIf
 					EndIf
 				Else
-					If as\Timer =< 70.0 * 5.0 Then
+					If as\Timer <= 70.0 * 5.0 Then
 						CancelAutoSave()
 					Else
 						SaveGame(SavePath + CurrSave + "\")
@@ -2486,7 +2486,7 @@ Function MainLoop%()
 				CreateHintMsg("Quick saving is disabled.")
 			EndIf
 		ElseIf SelectedDifficulty\SaveType = SAVEONSCREENS And (SelectedScreen <> Null Lor SelectedMonitor <> Null)
-			If (msg\HintTxt <> "Game progress saved." And msg\HintTxt <> "You can't save in this location." And msg\HintTxt <> "You can't save at this moment.") Lor msg\HintTimer =< 0.0 Then
+			If (msg\HintTxt <> "Game progress saved." And msg\HintTxt <> "You can't save in this location." And msg\HintTxt <> "You can't save at this moment.") Lor msg\HintTimer <= 0.0 Then
 				CreateHintMsg("Press " + key\Name[key\SAVE] + " to save.")
 			EndIf
 			If mo\MouseHit2 Then SelectedMonitor = Null
@@ -2820,7 +2820,7 @@ Function UpdateMoving%()
 				If (Not me\Crouch) And (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) And me\Stamina > 0.0 And (Not me\Zombie) Then
 					Sprint = 2.5
 					me\Stamina = me\Stamina - (fps\Factor[0] * 0.4 * me\StaminaEffect)
-					If me\Stamina =< 0.0 Then me\Stamina = -20.0
+					If me\Stamina <= 0.0 Then me\Stamina = -20.0
 				EndIf
 				
 				If PlayerRoom\RoomTemplate\Name = "dimension_106" Then 
@@ -3021,7 +3021,7 @@ Function UpdateMoving%()
 		If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then
 			me\Bloodloss = Min(me\Bloodloss + (Min(me\Injuries, 3.5) / 300.0) * fps\Factor[0], 100.0)
 		EndIf
-		If Temp2 =< 60.0 And me\Bloodloss > 60.0 Then
+		If Temp2 <= 60.0 And me\Bloodloss > 60.0 Then
 			CreateMsg("You are feeling faint from the amount of blood you have lost.")
 		EndIf
 	EndIf
@@ -3076,7 +3076,7 @@ Function UpdateMoving%()
 	EndIf
 	
 	If me\HeartBeatVolume > 0.0 Then
-		If me\HeartBeatTimer =< 0.0 Then
+		If me\HeartBeatTimer <= 0.0 Then
 			TempCHN = PlaySound_Strict(HeartBeatSFX)
 			ChannelVolume(TempCHN, me\HeartBeatVolume * opt\SFXVolume)
 			
@@ -3295,10 +3295,10 @@ Function UpdateMouseLook%()
 						I_1025\State[i] = I_1025\State[i] + (Factor1025 * 0.0005)
 					EndIf
 					If I_1025\State[i] > 20.0 Then
-						If I_1025\State[i] - Factor1025 =< 20.0 Then CreateMsg("The pain in your stomach is becoming unbearable.")
+						If I_1025\State[i] - Factor1025 <= 20.0 Then CreateMsg("The pain in your stomach is becoming unbearable.")
 						me\Stamina = me\Stamina - (Factor1025 * 0.3)
 					ElseIf I_1025\State[i] > 10.0
-						If I_1025\State[i] - Factor1025 =< 10.0 Then CreateMsg("Your stomach is aching.")
+						If I_1025\State[i] - Factor1025 <= 10.0 Then CreateMsg("Your stomach is aching.")
 					EndIf
 					;[End Block]
 				Case 4 ; ~ Asthma
@@ -3334,7 +3334,7 @@ Function UpdateMouseLook%()
 						I_1025\State[i] = I_1025\State[i] + 0.00025 * Factor1025 * (100.0 / I_1025\State[i])
 					EndIf
 					me\Stamina = Min(100.0, me\Stamina + (90.0 - me\Stamina) * I_1025\State[i] * Factor1025 * 0.00008)
-					If I_1025\State[i] > 15.0 And I_1025\State[i] - Factor1025 =< 15.0 Then
+					If I_1025\State[i] > 15.0 And I_1025\State[i] - Factor1025 <= 15.0 Then
 						CreateMsg("You begin feeling energetic.")
 					EndIf
 					;[End Block]
@@ -3446,7 +3446,7 @@ Function UpdateFog%()
 				If e\EventID = e_dimension_106 Then
 					If EntityY(me\Collider) > 2608.0 * RoomScale Lor e\EventState2 > 1.0 Then
 						CurrFogColor = FogColorPDTrench
-					ElseIf EntityY(me\Collider) >= 2000.0 * RoomScale And EntityY(me\Collider) =< 2608.0 * RoomScale
+					ElseIf EntityY(me\Collider) >= 2000.0 * RoomScale And EntityY(me\Collider) <= 2608.0 * RoomScale
 						CurrFogColor = FogColorHCZ
 					Else
 						CurrFogColor = FogColorPD
@@ -3454,7 +3454,7 @@ Function UpdateFog%()
 					Exit
 				EndIf
 			Next
-		ElseIf PlayerRoom\RoomTemplate\Name = "room2_mt" And (EntityY(me\Collider, True) >= 8.0 And EntityY(me\Collider, True) =< 12.0) Then
+		ElseIf PlayerRoom\RoomTemplate\Name = "room2_mt" And (EntityY(me\Collider, True) >= 8.0 And EntityY(me\Collider, True) <= 12.0) Then
 			CurrFogColor = FogColorHCZ
 		EndIf
 	EndIf
@@ -3544,7 +3544,7 @@ Function UpdateGUI%()
 			
 			If msg\KeyPadMsg <> "" Then 
 				msg\KeyPadTimer = msg\KeyPadTimer - fps\Factor[0]
-				If msg\KeyPadTimer =< 0.0 Then
+				If msg\KeyPadTimer <= 0.0 Then
 					msg\KeyPadMsg = ""
 					SelectedDoor = Null
 					StopMouseMovement()
@@ -5049,7 +5049,7 @@ Function UpdateGUI%()
 								If (Not ChannelPlaying(RadioCHN[0])) Then RadioCHN[0] = PlaySound_Strict(RadioStatic)
 								RadioState[6] = RadioState[6] + fps\Factor[0]
 								Temp = Mid(Str(AccessCode), RadioState[8] + 1.0, 1)
-								If RadioState[6] - fps\Factor[0] =< RadioState[7] * 50.0 And RadioState[6] > RadioState[7] * 50.0 Then
+								If RadioState[6] - fps\Factor[0] <= RadioState[7] * 50.0 And RadioState[6] > RadioState[7] * 50.0 Then
 									PlaySound_Strict(RadioBuzz)
 									RadioState[7] = RadioState[7] + 1.0
 									If RadioState[7] >= Temp Then
@@ -5074,7 +5074,7 @@ Function UpdateGUI%()
 						EndIf
 						
 						If SelectedItem\ItemTemplate\TempName = "radio" Lor SelectedItem\ItemTemplate\TempName = "18vradio" Then
-							If SelectedItem\State =< 20.0 And ((MilliSecs2() Mod 800) < 200) Then
+							If SelectedItem\State <= 20.0 And ((MilliSecs2() Mod 800) < 200) Then
 								If (Not LowBatteryCHN[0]) Then
 									LowBatteryCHN[0] = PlaySound_Strict(LowBatterySFX[0])
 								ElseIf (Not ChannelPlaying(LowBatteryCHN[0])) Then
@@ -5292,7 +5292,7 @@ Function UpdateGUI%()
 					SelectedItem\State = Max(0.0, SelectedItem\State - fps\Factor[0] * 0.005)
 					
 					If SelectedItem\State > 0.0 Then
-						If SelectedItem\State =< 20.0 And ((MilliSecs2() Mod 800) < 200) Then
+						If SelectedItem\State <= 20.0 And ((MilliSecs2() Mod 800) < 200) Then
 							If (Not LowBatteryCHN[0]) Then
 								LowBatteryCHN[0] = PlaySound_Strict(LowBatterySFX[0])
 							ElseIf (Not ChannelPlaying(LowBatteryCHN[0])) Then
@@ -5668,7 +5668,7 @@ Function RenderHUD%()
 	
 	y = opt\GraphicHeight - (55 * MenuScale)
 	
-	If me\Stamina =< 25.0 Then
+	If me\Stamina <= 25.0 Then
 		RenderBar(t\ImageID[3], x, y, Width, Height, me\Stamina, 100.0, 50, 0, 0)
 	Else
 		RenderBar(t\ImageID[2], x, y, Width, Height, me\Stamina, 100.0, 50, 50, 50)
@@ -5936,10 +5936,10 @@ Function RenderGUI%()
 		PositionEntity(Temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 		PointEntity(Temp, ClosestButton)
 		YawValue = WrapAngle(EntityYaw(Camera) - EntityYaw(Temp))
-		If YawValue > 90.0 And YawValue =< 180.0 Then YawValue = 90.0
+		If YawValue > 90.0 And YawValue <= 180.0 Then YawValue = 90.0
 		If YawValue > 180.0 And YawValue < 270.0 Then YawValue = 270.0
 		PitchValue = WrapAngle(EntityPitch(Camera) - EntityPitch(Temp))
-		If PitchValue > 90.0 And PitchValue =< 180.0 Then PitchValue = 90.0
+		If PitchValue > 90.0 And PitchValue <= 180.0 Then PitchValue = 90.0
 		If PitchValue > 180.0 And PitchValue < 270.0 Then PitchValue = 270.0
 		
 		FreeEntity(Temp)
@@ -5949,10 +5949,10 @@ Function RenderGUI%()
 	
 	If ClosestItem <> Null And (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And SelectedDoor = Null And SelectedScreen = Null And (Not MenuOpen) And (Not ConsoleOpen) And SelectedDifficulty\OtherFactors <> EXTREME Then
 		YawValue = -DeltaYaw(Camera, ClosestItem\Collider)
-		If YawValue > 90.0 And YawValue =< 180.0 Then YawValue = 90.0
+		If YawValue > 90.0 And YawValue <= 180.0 Then YawValue = 90.0
 		If YawValue > 180.0 And YawValue < 270.0 Then YawValue = 270.0
 		PitchValue = -DeltaPitch(Camera, ClosestItem\Collider)
-		If PitchValue > 90.0 And PitchValue =< 180.0 Then PitchValue = 90.0
+		If PitchValue > 90.0 And PitchValue <= 180.0 Then PitchValue = 90.0
 		If PitchValue > 180.0 And PitchValue < 270.0 Then PitchValue = 270.0
 		
 		DrawImage(t\IconID[6], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - (32 * MenuScale), mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - (32 * MenuScale))
@@ -6549,7 +6549,7 @@ Function RenderGUI%()
 											Local DrawX% = x + (PlayerX - 1 - x2) * (24 * MenuScale), DrawY% = y - (PlayerZ - 1 - z2) * (24 * MenuScale)
 											
 											Color(30, 30, 30)
-											If x2 + 1.0 =< MapGridSize Then
+											If x2 + 1.0 <= MapGridSize Then
 												If CurrMapGrid\Grid[(x2 + 1) + (z2 * MapGridSize)] = MapGrid_NoTile
 													Rect(DrawX - (12 * MenuScale), DrawY - (12 * MenuScale), MenuScale, 24 * MenuScale)
 												EndIf
@@ -6570,7 +6570,7 @@ Function RenderGUI%()
 											Else
 												Rect(DrawX - (12 * MenuScale), DrawY - (12 * MenuScale), 24 * MenuScale, MenuScale)
 											EndIf
-											If z2 + 1.0 =< MapGridSize Then
+											If z2 + 1.0 <= MapGridSize Then
 												If CurrMapGrid\Grid[x2 + ((z2 + 1) * MapGridSize)] = MapGrid_NoTile
 													Rect(DrawX - (12 * MenuScale), DrawY + (12 * MenuScale), 24 * MenuScale, MenuScale)
 												EndIf
@@ -6677,7 +6677,7 @@ Function RenderGUI%()
 								Rect(xTemp, yTemp, 80 * MenuScale, 20 * MenuScale, False)
 								
 								; ~ Battery
-								If SelectedItem\State =< 20.0 Then
+								If SelectedItem\State <= 20.0 Then
 									Color(100, 0, 0)
 								Else
 									Color(30, 30, 30)
@@ -6821,9 +6821,9 @@ Function UpdateMenu%()
 		
 		If (Not mo\MouseDown1) Then mm\OnSliderID = 0
 		
-		If mm\AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg =< 0 Then
+		If mm\AchievementsMenu <= 0 And OptionsMenu <= 0 And QuitMsg <= 0 Then
 			; ~ Just save this line, ok?
-		ElseIf mm\AchievementsMenu =< 0 And OptionsMenu > 0 And QuitMsg =< 0 And me\KillTimer >= 0.0
+		ElseIf mm\AchievementsMenu <= 0 And OptionsMenu > 0 And QuitMsg <= 0 And me\KillTimer >= 0.0
 			If UpdateMainMenuButton(x + (101 * MenuScale), y + (460 * MenuScale), 230 * MenuScale, 60 * MenuScale, "Back") Then
 				mm\AchievementsMenu = 0
 				OptionsMenu = 0
@@ -7125,7 +7125,7 @@ Function UpdateMenu%()
 					EndIf
 					;[End Block]
 			End Select
-		ElseIf mm\AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg > 0 And me\KillTimer >= 0.0
+		ElseIf mm\AchievementsMenu <= 0 And OptionsMenu <= 0 And QuitMsg > 0 And me\KillTimer >= 0.0
 			Local QuitButton% = 60 
 			
 			If SelectedDifficulty\SaveType = SAVEONQUIT Lor SelectedDifficulty\SaveType = SAVEANYWHERE Then
@@ -7171,7 +7171,7 @@ Function UpdateMenu%()
 			EndIf
 			
 			If mm\AchievementsMenu > 0 Then
-				If mm\AchievementsMenu =< Floor(Float(MAXACHIEVEMENTS - 1) / 12.0) Then 
+				If mm\AchievementsMenu <= Floor(Float(MAXACHIEVEMENTS - 1) / 12.0) Then 
 					If UpdateMainMenuButton(x + (341 * MenuScale), y + (344 * MenuScale), 50 * MenuScale, 60 * MenuScale, ">") Then
 						mm\AchievementsMenu = mm\AchievementsMenu + 1
 						mm\ShouldDeleteGadgets = True
@@ -7188,7 +7188,7 @@ Function UpdateMenu%()
 		
 		y = y + (10 * MenuScale)
 		
-		If mm\AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg =< 0 Then
+		If mm\AchievementsMenu <= 0 And OptionsMenu <= 0 And QuitMsg <= 0 Then
 			If me\KillTimer >= 0.0 Then	
 				y = y + (72 * MenuScale)
 				
@@ -7374,7 +7374,7 @@ Function RenderMenu%()
 		Local Scale# = opt\GraphicHeight / 768.0
 		Local SeparationConst% = 76.0 * Scale
 		
-		If mm\AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg =< 0
+		If mm\AchievementsMenu <= 0 And OptionsMenu <= 0 And QuitMsg <= 0
 			SetFont(fo\FontID[Font_Default])
 			Text(x, y, "Difficulty: " + SelectedDifficulty\Name)
 			Text(x, y + (20 * MenuScale), "Save: " + CurrSave)
@@ -7388,7 +7388,7 @@ Function RenderMenu%()
 				EndIf
 			EndIf
 			Text(x, y + (40 * MenuScale), TempStr)
-		ElseIf mm\AchievementsMenu =< 0 And OptionsMenu > 0 And QuitMsg =< 0 And me\KillTimer >= 0.0
+		ElseIf mm\AchievementsMenu <= 0 And OptionsMenu > 0 And QuitMsg <= 0 And me\KillTimer >= 0.0
 			Color(0, 255, 0)
 			If OptionsMenu = 1
 				Rect(x - (10 * MenuScale), y - (5 * MenuScale), 110 * MenuScale, 40 * MenuScale, True)
@@ -7689,7 +7689,7 @@ Function RenderMenu%()
 					EndIf
 					;[End Block]
 			End Select
-		ElseIf mm\AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg > 0 And me\KillTimer >= 0.0
+		ElseIf mm\AchievementsMenu <= 0 And OptionsMenu <= 0 And QuitMsg > 0 And me\KillTimer >= 0.0
 			; ~ Just save this line, ok?
 		Else
 			If mm\AchievementsMenu > 0 Then
@@ -7715,7 +7715,7 @@ Function RenderMenu%()
 		
 		y = y + (10 * MenuScale)
 		
-		If mm\AchievementsMenu =< 0 And OptionsMenu =< 0 And QuitMsg =< 0 Then
+		If mm\AchievementsMenu <= 0 And OptionsMenu <= 0 And QuitMsg <= 0 Then
 			If me\KillTimer >= 0.0 Then	
 				y = y + (297 * MenuScale)
 				If SelectedDifficulty\SaveType <> NOSAVES Then
@@ -7799,7 +7799,7 @@ Function UpdateEnding%()
 		EndIf
 		
 		If me\EndingTimer > -700.0 Then 
-			If me\EndingTimer + fps\Factor[1] > -450.0 And me\EndingTimer =< -450.0 Then
+			If me\EndingTimer + fps\Factor[1] > -450.0 And me\EndingTimer <= -450.0 Then
 				PlaySound_Strict(LoadTempSound("SFX\Ending\Ending" + (me\SelectedEnding + 1) + ".ogg"))
 			EndIf			
 		Else
@@ -7842,7 +7842,7 @@ Function UpdateEnding%()
 					UpdateMenu()
 				EndIf
 			; ~ Credits
-			ElseIf me\EndingTimer =< -2000.0
+			ElseIf me\EndingTimer <= -2000.0
 				ShouldPlay = 24
 				UpdateCredits()
 			EndIf
@@ -7935,7 +7935,7 @@ Function RenderEnding%()
 					RenderMenu()
 				EndIf
 			; ~ Credits
-			ElseIf me\EndingTimer =< -2000.0
+			ElseIf me\EndingTimer <= -2000.0
 				RenderCredits()
 			EndIf
 		EndIf
@@ -8880,6 +8880,7 @@ Function InitLoadGame%()
 	CatchErrors("Uncaught (InitLoadGame)")
 	
 	Local d.Doors, sc.SecurityCams, rt.RoomTemplates, e.Events
+	Local twp.TempWayPoints, ts.TempScreens, tp.TempProps
 	Local i%, x#, z#
 	
 	InitStats()
@@ -8902,6 +8903,18 @@ Function InitLoadGame%()
 	
 	For rt.RoomTemplates = Each RoomTemplates
 		If rt\OBJ <> 0 Then FreeEntity(rt\OBJ) : rt\OBJ = 0
+	Next
+	
+	For twp.TempWayPoints = Each TempWayPoints
+		Delete(twp)
+	Next
+	
+	For ts.TempScreens = Each TempScreens
+		Delete(ts)
+	Next
+	
+	For tp.TempProps = Each TempProps
+		Delete(tp)
 	Next
 	
 	RenderLoading(85, "EVENTS")
@@ -9512,7 +9525,7 @@ Function Use427%()
 				EndIf
 			Next
 			If me\Injuries > 0.0 Then me\Injuries = Max(me\Injuries - (fps\Factor[0] * 0.0005), 0.0)
-			If me\Bloodloss > 0.0 And me\Injuries =< 1.0 Then me\Bloodloss = Max(me\Bloodloss - (fps\Factor[0] * 0.001), 0.0)
+			If me\Bloodloss > 0.0 And me\Injuries <= 1.0 Then me\Bloodloss = Max(me\Bloodloss - (fps\Factor[0] * 0.001), 0.0)
 			If I_008\Timer > 0.0 Then I_008\Timer = Max(I_008\Timer - (fps\Factor[0] * 0.001), 0.0)
 			If I_409\Timer > 0.0 Then I_409\Timer = Max(I_409\Timer - (fps\Factor[0] * 0.003), 0.0)
 			For i = 0 To 6
@@ -9614,17 +9627,17 @@ Function UpdateMTF%()
 			EndIf
 		EndIf
 	Else
-		If MTFTimer =< 70.0 * 120.0 Then
+		If MTFTimer <= 70.0 * 120.0 Then
 			MTFTimer = MTFTimer + fps\Factor[0]
 		ElseIf MTFTimer > 70.0 * 120.0 And MTFTimer < 10000.0
 			If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\AnnouncAfter1.ogg")
 			MTFTimer = 10000.0
-		ElseIf MTFTimer >= 10000.0 And MTFTimer =< 10000.0 + (70.0 * 120.0)
+		ElseIf MTFTimer >= 10000.0 And MTFTimer <= 10000.0 + (70.0 * 120.0)
 			MTFTimer = MTFTimer + fps\Factor[0]
 		ElseIf MTFTimer > 10000.0 + (70.0 * 120.0) And MTFTimer < 20000.0
 			If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\AnnouncAfter2.ogg")
 			MTFTimer = 20000.0
-		ElseIf MTFTimer >= 20000.0 And MTFTimer =< 20000.0 + (70.0 * 60.0)
+		ElseIf MTFTimer >= 20000.0 And MTFTimer <= 20000.0 + (70.0 * 60.0)
 			MTFTimer = MTFTimer + fps\Factor[0]
 		ElseIf MTFTimer > 20000.0 + (70.0 * 60.0) And MTFTimer < 25000.0
 			If PlayerInReachableRoom() Then
@@ -9641,7 +9654,7 @@ Function UpdateMTF%()
 				PlayAnnouncement("SFX\Character\MTF\ThreatAnnounc" + Rand(1, 3) + ".ogg")
 			EndIf
 			MTFTimer = 25000.0
-		ElseIf MTFTimer >= 25000.0 And MTFTimer =< 25000.0 + (70.0 * 60.0)
+		ElseIf MTFTimer >= 25000.0 And MTFTimer <= 25000.0 + (70.0 * 60.0)
 			MTFTimer = MTFTimer + fps\Factor[0]
 		ElseIf MTFTimer > 25000.0 + (70.0 * 60.0) And MTFTimer < 30000.0
 			If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\ThreatAnnouncFinal.ogg")
@@ -9819,30 +9832,30 @@ Function Update008%()
 			EntityAlpha(t\OverlayID[3], Min(((I_008\Timer * 0.2) ^ 2.0) / 1000.0, 0.5) * (Sin(MilliSecs2() / 8.0) + 2.0))
 			
 			For i = 0 To 6
-				If I_008\Timer > (i * 15.0) + 10.0 And PrevI008Timer =< (i * 15.0) + 10.0 Then
+				If I_008\Timer > (i * 15.0) + 10.0 And PrevI008Timer <= (i * 15.0) + 10.0 Then
 					If (Not I_008\Revert) Then PlaySound_Strict(LoadTempSound("SFX\SCP\008\Voices" + i + ".ogg"))
 				EndIf
 			Next
 			
-			If I_008\Timer > 20.0 And PrevI008Timer =< 20.0 Then
+			If I_008\Timer > 20.0 And PrevI008Timer <= 20.0 Then
 				If I_008\Revert Then
 					CreateMsg("You feel better.")
 				Else
 					CreateMsg("You feel kinda feverish.")
 				EndIf
-			ElseIf I_008\Timer > 40.0 And PrevI008Timer =< 40.0
+			ElseIf I_008\Timer > 40.0 And PrevI008Timer <= 40.0
 				If I_008\Revert Then
 					CreateMsg("Your nausea is fading.")
 				Else
 					CreateMsg("You feel nauseated.")
 				EndIf
-			ElseIf I_008\Timer > 60.0 And PrevI008Timer =< 60.0
+			ElseIf I_008\Timer > 60.0 And PrevI008Timer <= 60.0
 				If I_008\Revert Then
 					CreateMsg("The headache is fading.")
 				Else
 					CreateMsg("The nausea's getting worse.")
 				EndIf
-			ElseIf I_008\Timer > 80.0 And PrevI008Timer =< 80.0
+			ElseIf I_008\Timer > 80.0 And PrevI008Timer <= 80.0
 				If I_008\Revert Then
 					CreateMsg("You feel more energetic.")
 				Else
@@ -9913,7 +9926,7 @@ Function Update008%()
 						If AnimTime(PlayerRoom\NPC[0]\OBJ) >= 19.0 Then PlayerRoom\NPC[0]\State2 = 1.0
 					Else
 						Animate2(PlayerRoom\NPC[0]\OBJ, AnimTime(PlayerRoom\NPC[0]\OBJ), 19.0, 13.0, -0.3)
-						If AnimTime(PlayerRoom\NPC[0]\OBJ) =< 13.0 Then PlayerRoom\NPC[0]\State2 = 0.0
+						If AnimTime(PlayerRoom\NPC[0]\OBJ) <= 13.0 Then PlayerRoom\NPC[0]\State2 = 0.0
 					EndIf
 					
 					If opt\ParticleAmount > 0 Then
@@ -9970,31 +9983,31 @@ Function Update409%()
 		EntityAlpha(t\OverlayID[7], Min(((I_409\Timer * 0.2) ^ 2.0) / 1000.0, 0.5))
 		me\BlurTimer = Max(I_409\Timer * 3.0 * (2.0 - me\CrouchState), me\BlurTimer)
 		
-		If I_409\Timer > 40.0 And PrevI409Timer =< 40.0 Then
+		If I_409\Timer > 40.0 And PrevI409Timer <= 40.0 Then
 			If I_409\Revert Then
 				CreateMsg("Crystals are falling from the skin on your legs.")
 			Else
 				CreateMsg("Crystals are enveloping the skin on your legs.")
 			EndIf
-		ElseIf I_409\Timer > 55.0 And PrevI409Timer =< 55.0
+		ElseIf I_409\Timer > 55.0 And PrevI409Timer <= 55.0
 			If I_409\Revert Then
 				CreateMsg("Crystals are falling from your abdomen.")
 			Else
 				CreateMsg("Crystals are enveloping your abdomen.")
 			EndIf
-		ElseIf I_409\Timer > 70.0 And PrevI409Timer =< 70.0
+		ElseIf I_409\Timer > 70.0 And PrevI409Timer <= 70.0
 			If I_409\Revert Then
 				CreateMsg("Crystals are falling from your arms.")
 			Else
 				CreateMsg("Crystals are starting to envelop your arms.")
 			EndIf
-		ElseIf I_409\Timer > 85.0 And PrevI409Timer =< 85.0
+		ElseIf I_409\Timer > 85.0 And PrevI409Timer <= 85.0
 			If I_409\Revert Then
 				CreateMsg("Crystals starting to envelop your head.")
 			Else
 				CreateMsg("Crystals starting to envelop your head.")
 			EndIf
-		ElseIf I_409\Timer > 93.0 And PrevI409Timer =< 93.0
+		ElseIf I_409\Timer > 93.0 And PrevI409Timer <= 93.0
 			If (Not I_409\Revert) Then
 				PlaySound_Strict(DamageSFX[13])
 				me\Injuries = Max(me\Injuries, 2.0)
@@ -10084,7 +10097,7 @@ Function CheckForPlayerInFacility%()
 	
 	If EntityY(me\Collider) > 100.0 Then Return(0)
 	If EntityY(me\Collider) < -10.0 Then Return(2)
-	If (EntityY(me\Collider) > 7.0) And (EntityY(me\Collider) =< 100.0) Then Return(2)
+	If (EntityY(me\Collider) > 7.0) And (EntityY(me\Collider) <= 100.0) Then Return(2)
 	Return(1)
 End Function
 

@@ -76,7 +76,7 @@ End Function
 
 Function Chance%(Percent%)
 	; ~ Perform a chance given a probability
-	Return(Rand(0, 100) =< Percent)
+	Return(Rand(0, 100) <= Percent)
 End Function
 
 Function MoveForward%(Dir%, PathX%, PathY%, RetVal% = False)
@@ -100,7 +100,7 @@ Function TurnIfDeviating%(Max_Deviation_Distance_%, Pathx%, Center_%, Dir%, RetV
 	Local Current_Deviation% = Center_ - Pathx
 	Local Deviated% = False
 	
-	If (Dir = 0 And Current_Deviation >= Max_Deviation_Distance_) Lor (Dir = 2 And Current_Deviation =< -Max_Deviation_Distance_) Then
+	If (Dir = 0 And Current_Deviation >= Max_Deviation_Distance_) Lor (Dir = 2 And Current_Deviation <= -Max_Deviation_Distance_) Then
 		Dir = ((Dir + 2) Mod 4)
 		Deviated = True
 	EndIf
@@ -114,7 +114,7 @@ End Function
 Function ChangeAngleValueForCorrectBoneAssigning#(Value#)
 	Local Number#
 	
-	If Value =< 180.0 Then
+	If Value <= 180.0 Then
 		Number = Value
 	Else
 		Number = (-360.0) + Value
@@ -316,7 +316,7 @@ Function CalculateRoomExtents%(r.Rooms)
 End Function
 
 Function CheckRoomOverlap%(r1.Rooms, r2.Rooms)
-	If r1\MaxX =< r2\MinX Lor r1\MaxY =< r2\MinY Lor r1\MaxZ =< r2\MinZ Then Return(False)
+	If r1\MaxX <= r2\MinX Lor r1\MaxY <= r2\MinY Lor r1\MaxZ <= r2\MinZ Then Return(False)
 	If r1\MinX >= r2\MaxX Lor r1\MinY >= r2\MaxY Lor r1\MinZ >= r2\MaxZ Then Return(False)
 	
 	Return(True)

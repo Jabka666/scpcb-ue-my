@@ -206,7 +206,7 @@ Function UpdateWorld2%()
 						EndIf
 						wi\IsNVGBlinking = True
 						me\BlinkTimer = -1.0
-					ElseIf Power =< 100
+					ElseIf Power <= 100
 						HasBattery = 1
 					Else
 						HasBattery = 2
@@ -217,13 +217,13 @@ Function UpdateWorld2%()
 		Next
 		
 		If wi\NightVision = 2 Then
-			If wi\NVGTimer =< 0.0 Then
+			If wi\NVGTimer <= 0.0 Then
 				For np.NPCs = Each NPCs
 					np\NVGX = EntityX(np\Collider, True)
 					np\NVGY = EntityY(np\Collider, True)
 					np\NVGZ = EntityZ(np\Collider, True)
 				Next
-				If wi\NVGTimer =< -10.0 Then wi\NVGTimer = 600.0
+				If wi\NVGTimer <= -10.0 Then wi\NVGTimer = 600.0
 				wi\IsNVGBlinking = True
 			EndIf
 			wi\NVGTimer = wi\NVGTimer - fps\Factor[0]
@@ -282,7 +282,7 @@ Function RenderWorld2%(Tween#)
 					Power = Int(Inventory(i)\State)
 					If Power = 0 Then ; ~ This NVG or SCRAMBLE can't be used
 						HasBattery = 0
-					ElseIf Power =< 100
+					ElseIf Power <= 100
 						HasBattery = 1
 					Else
 						HasBattery = 2
@@ -330,7 +330,7 @@ Function RenderWorld2%(Tween#)
 						Local YawValue# = WrapAngle(EntityYaw(Camera) - EntityYaw(Temp))
 						Local xValue# = 0.0
 						
-						If YawValue > 90.0 And YawValue =< 180.0 Then
+						If YawValue > 90.0 And YawValue <= 180.0 Then
 							xValue = Sin(90.0) / 90.0 * YawValue
 						ElseIf YawValue > 180 And YawValue < 270.0
 							xValue = Sin(270.0) / YawValue * 270.0
@@ -341,7 +341,7 @@ Function RenderWorld2%(Tween#)
 						Local PitchValue# = WrapAngle(EntityPitch(Camera) - EntityPitch(Temp))
 						Local yValue# = 0.0
 						
-						If PitchValue > 90.0 And PitchValue =< 180.0 Then
+						If PitchValue > 90.0 And PitchValue <= 180.0 Then
 							yValue = Sin(90.0) / 90.0 * PitchValue
 						ElseIf PitchValue > 180.0 And PitchValue < 270
 							yValue = Sin(270.0) / PitchValue * 270.0

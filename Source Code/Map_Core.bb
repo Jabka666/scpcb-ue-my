@@ -1388,28 +1388,26 @@ Function DestroyForest%(fr.Forest, RemoveGrid% = True)
 	CatchErrors("DestroyForest")
 End Function
 
-Function UpdateForest%(fr.Forest, Ent%)
+Function UpdateForest%(fr.Forest)
 	CatchErrors("Uncaught (UpdateForest)")
 	
 	Local tX%, tY%
 	
-	If Abs(EntityY(Ent, True) - EntityY(fr\Forest_Pivot, True)) < 12.0 Then
-		For tX = 0 To ForestGridSize - 1
-			For tY = 0 To ForestGridSize - 1
-				If fr\TileEntities[tX + (tY * ForestGridSize)] <> 0 Then
-					If Abs(EntityX(Ent, True) - EntityX(fr\TileEntities[tX + (tY * ForestGridSize)], True)) < HideDistance Then
-						If Abs(EntityZ(Ent, True) - EntityZ(fr\TileEntities[tX + (tY * ForestGridSize)], True)) < HideDistance Then
-							If EntityHidden(fr\TileEntities[tX + (tY * ForestGridSize)]) Then ShowEntity(fr\TileEntities[tX + (tY * ForestGridSize)])
-						Else
-							If (Not EntityHidden(fr\TileEntities[tX + (tY * ForestGridSize)])) Then HideEntity(fr\TileEntities[tX + (tY * ForestGridSize)])
-						EndIf
+	For tX = 0 To ForestGridSize - 1
+		For tY = 0 To ForestGridSize - 1
+			If fr\TileEntities[tX + (tY * ForestGridSize)] <> 0 Then
+				If Abs(EntityX(me\Collider, True) - EntityX(fr\TileEntities[tX + (tY * ForestGridSize)], True)) < HideDistance Then
+					If Abs(EntityZ(me\Collider, True) - EntityZ(fr\TileEntities[tX + (tY * ForestGridSize)], True)) < HideDistance Then
+						If EntityHidden(fr\TileEntities[tX + (tY * ForestGridSize)]) Then ShowEntity(fr\TileEntities[tX + (tY * ForestGridSize)])
 					Else
 						If (Not EntityHidden(fr\TileEntities[tX + (tY * ForestGridSize)])) Then HideEntity(fr\TileEntities[tX + (tY * ForestGridSize)])
 					EndIf
+				Else
+					If (Not EntityHidden(fr\TileEntities[tX + (tY * ForestGridSize)])) Then HideEntity(fr\TileEntities[tX + (tY * ForestGridSize)])
 				EndIf
-			Next
+			EndIf
 		Next
-	EndIf
+	Next
 	
 	CatchErrors("UpdateForest")
 End Function
@@ -1836,6 +1834,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 				FillRoom(r)
 				
 				CalculateRoomExtents(r)
+				
 				Return(r)
 			EndIf
 		Next
@@ -1863,7 +1862,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 		For i = 0 To 4
 			If rt\Zone[i] = Zone And rt\Shape = RoomShape Then
 				Temp = Temp + rt\Commonness
-				If RandomRoom > Temp - rt\Commonness And RandomRoom =< Temp Then
+				If RandomRoom > Temp - rt\Commonness And RandomRoom <= Temp Then
 					r\RoomTemplate = rt
 					
 					If (Not rt\OBJ) Then LoadRoomMesh(rt)
@@ -1877,6 +1876,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 					FillRoom(r)
 					
 					CalculateRoomExtents(r)
+					
 					Return(r)	
 				EndIf
 			EndIf
@@ -1980,7 +1980,7 @@ Function InitWayPoints%(LoadingStart% = 55)
 				If w\room\MaxWayPointY = 0.0 Lor w2\room\MaxWayPointY = 0.0
 					CanCreateWayPoint = True
 				Else
-					If Abs(EntityY(w\OBJ) - EntityY(w2\OBJ)) =< w\room\MaxWayPointY
+					If Abs(EntityY(w\OBJ) - EntityY(w2\OBJ)) <= w\room\MaxWayPointY
 						CanCreateWayPoint = True
 					EndIf
 				EndIf
@@ -2134,7 +2134,7 @@ Function CreateDoor.Doors(x#, y#, z#, Angle#, room.Rooms, Open% = False, DoorTyp
 	; ~ (Keycard > 0) - KEY CARD
 	; ~ (Keycard = 0) - DEFAULT
 	; ~ (Keycard > -4 And Keycard < 0) - HAND
-	; ~ (Keycard =< -4) - KEY
+	; ~ (Keycard <= -4) - KEY
 	
 	d\KeyCard = Keycard 
 	
@@ -2250,7 +2250,7 @@ Function UpdateDoors%()
 	Local p.Particles, d.Doors
 	Local x#, z#, Dist#, i%, FindButton%
 	
-	If UpdateTimer =< 0.0 Then
+	If UpdateTimer <= 0.0 Then
 		For d.Doors = Each Doors
 			Local xDist# = Abs(EntityX(me\Collider) - EntityX(d\FrameOBJ, True))
 			Local zDist# = Abs(EntityZ(me\Collider) - EntityZ(d\FrameOBJ, True))
@@ -2263,14 +2263,14 @@ Function UpdateDoors%()
 	ClosestDoor = Null
 	
 	For d.Doors = Each Doors
-		If (d\Dist =< HideDistance) Lor (d\IsElevatorDoor > 0) Then ; ~ Make elevator doors update everytime because if not, this can cause a bug where the elevators suddenly won't work, most noticeable in room2_mt -- ENDSHN
+		If (d\Dist <= HideDistance) Lor (d\IsElevatorDoor > 0) Then ; ~ Make elevator doors update everytime because if not, this can cause a bug where the elevators suddenly won't work, most noticeable in room2_mt -- ENDSHN
 			; ~ Automatically disable d\AutoClose if the door is locked because if not, this can cause a locked door to be closed and player get stuck -- Jabka
 			If d\AutoClose And d\Locked > 0 Then d\AutoClose = False
 			
 			FindButton = True
 			If d\Open And ((d\DoorType = Office_Door) Lor (d\DoorType = Wooden_Door)) Then FindButton = False
 			
-			If ((d\OpenState >= 180.0 Lor d\OpenState =< 0.0) And FindButton) And (Not GrabbedEntity) Then
+			If ((d\OpenState >= 180.0 Lor d\OpenState <= 0.0) And FindButton) And (Not GrabbedEntity) Then
 				For i = 0 To 1
 					If d\Buttons[i] <> 0 Then
 						If Abs(EntityX(me\Collider) - EntityX(d\Buttons[i], True)) < 1.0 Then 
@@ -2352,7 +2352,7 @@ Function UpdateDoors%()
 					If d\OBJ2 <> 0 Then ResetEntity(d\OBJ2)
 					If d\TimerState > 0.0 Then
 						d\TimerState = Max(0.0, d\TimerState - fps\Factor[0])
-						If d\TimerState + fps\Factor[0] > 110.0 And d\TimerState =< 110.0 Then d\SoundCHN = PlaySound2(CautionSFX, Camera, d\OBJ)
+						If d\TimerState + fps\Factor[0] > 110.0 And d\TimerState <= 110.0 Then d\SoundCHN = PlaySound2(CautionSFX, Camera, d\OBJ)
 						
 						If d\TimerState = 0.0 Then 
 							d\Open = (Not d\Open)
@@ -2881,7 +2881,7 @@ Function UseDoor%(d.Doors, Scripted% = False, PlaySFX% = True)
 				PlaySound2(ButtonSFX, Camera, ClosestButton)
 				Return
 			Else
-				If Temp =< KEY_MISC Then
+				If Temp <= KEY_MISC Then
 					CreateMsg("A keycard is required to operate this door.")
 				Else
 					If Temp = KEY_CARD_6 Then
@@ -2910,7 +2910,7 @@ Function UseDoor%(d.Doors, Scripted% = False, PlaySFX% = True)
 				If (d\Locked <> 1) And (((Temp > KEY_MISC) And (Temp <> KEY_CARD_6) And (Temp >= d\KeyCard)) Lor (Temp = KEY_005)) Then
 					PlaySound2(KeyCardSFX1, Camera, ClosestButton)
 				Else
-					If Temp =< KEY_MISC Then
+					If Temp <= KEY_MISC Then
 						PlaySound2(ButtonSFX, Camera, ClosestButton)
 					Else
 						PlaySound2(KeyCardSFX2, Camera, ClosestButton)
@@ -3165,7 +3165,7 @@ End Function
 Function UpdateDecals%()
 	Local de.Decals
 	
-	If UpdateTimer =< 0.0 Then
+	If UpdateTimer <= 0.0 Then
 		For de.Decals = Each Decals
 			Local xDist# = Abs(EntityX(me\Collider) - EntityX(de\OBJ, True))
 			Local zDist# = Abs(EntityZ(me\Collider) - EntityZ(de\OBJ, True))
@@ -3175,7 +3175,7 @@ Function UpdateDecals%()
 	EndIf
 	
 	For de.Decals = Each Decals
-		If de\Dist =< HideDistance Then
+		If de\Dist <= HideDistance Then
 			If EntityHidden(de\OBJ) Then ShowEntity(de\OBJ)
 			If de\SizeChange <> 0.0 Then
 				de\Size = de\Size + (de\SizeChange * fps\Factor[0])
@@ -3184,7 +3184,7 @@ Function UpdateDecals%()
 				Select de\ID
 					Case 0
 						;[Block]
-						If de\Timer =< 0.0 Then
+						If de\Timer <= 0.0 Then
 							Local Angle# = Rnd(360.0)
 							Local Temp# = Rnd(de\Size)
 							Local de2.Decals
@@ -3231,7 +3231,7 @@ Function UpdateDecals%()
 				End Select
 			EndIf
 			
-			If de\Size =< 0.0 Lor de\Alpha =< 0.0 Lor de\LifeTime = 5.0 Then
+			If de\Size <= 0.0 Lor de\Alpha <= 0.0 Lor de\LifeTime = 5.0 Then
 				FreeEntity(de\OBJ) : de\OBJ = 0
 				Delete(de)
 			EndIf
@@ -3329,7 +3329,7 @@ Function UpdateSecurityCams%()
 	; ~ CoffinEffect = 2, SCP-079 can broadcast SCP-895 feed on this screen
 	; ~ CoffinEffect = 3, SCP-079 broadcasting SCP-895 feed
 	
-	If UpdateTimer =< 0.0 Then
+	If UpdateTimer <= 0.0 Then
 		For sc.SecurityCams = Each SecurityCams
 			Local xDist# = Abs(EntityX(me\Collider) - EntityX(sc\OBJ, True))
 			Local zDist# = Abs(EntityZ(me\Collider) - EntityZ(sc\OBJ, True))
@@ -3339,7 +3339,7 @@ Function UpdateSecurityCams%()
 	EndIf
 	
 	For sc.SecurityCams = Each SecurityCams
-		If sc\Dist =< HideDistance Then
+		If sc\Dist <= HideDistance Then
 			Local Close% = False
 			
 			If sc\room = Null Then
@@ -3828,7 +3828,7 @@ Function UpdateLever%(OBJ%, Locked% = False)
 				EndIf 
 				
 				If EntityPitch(OBJ, True) > 75.0 Then
-					If PrevPitch =< 75.0 Then PlaySound2(LeverSFX, Camera, OBJ, 1.0)
+					If PrevPitch <= 75.0 Then PlaySound2(LeverSFX, Camera, OBJ, 1.0)
 				ElseIf EntityPitch(OBJ, True) < -75.0
 					If PrevPitch >= -75.0 Then PlaySound2(LeverSFX, Camera, OBJ, 1.0)	
 				EndIf						
@@ -6107,7 +6107,7 @@ Function FillRoom%(r.Rooms)
 						zTemp = 636.0
 						;[End Block]
 				End Select
-				de.Decals = CreateDecal(Rand(16, 17), r\x + xTemp * RoomScale, r\y + 0.005, r\z + zTemp * RoomScale, 90.0, Rnd(360.0), 0.0, ((i =< 10) * Rnd(0.2, 0.25)) + ((i > 10) * Rnd(0.1, 0.17)))
+				de.Decals = CreateDecal(Rand(16, 17), r\x + xTemp * RoomScale, r\y + 0.005, r\z + zTemp * RoomScale, 90.0, Rnd(360.0), 0.0, ((i <= 10) * Rnd(0.2, 0.25)) + ((i > 10) * Rnd(0.1, 0.17)))
 				EntityParent(de\OBJ, r\OBJ)
 			Next
 			
@@ -6548,8 +6548,7 @@ Function FillRoom%(r.Rooms)
 			; ~ Chamber		
 			r\Objects[6] = LoadRMesh("GFX\map\cont1_106_box.rmesh", Null)
 			ScaleEntity(r\Objects[6], RoomScale, RoomScale, RoomScale)
-			EntityType(r\Objects[6], HIT_MAP)
-			EntityPickMode(r\Objects[6], 3)
+			EntityPickMode(r\Objects[6], 2)
 			PositionEntity(r\Objects[6], r\x + 692.0 * RoomScale, r\y - 8308.0 * RoomScale, r\z + 1032.0 * RoomScale)
 			
 			For i = 4 To 6
@@ -6646,7 +6645,7 @@ Function FillRoom%(r.Rooms)
 								ItemName = "Clipboard"
 								ItemTempName = "clipboard"
 								;[End Block]
-							Case ItemChance >= 95 And ItemChance =< 100 ; ~ 5% chance for misc
+							Case ItemChance >= 95 And ItemChance <= 100 ; ~ 5% chance for misc
 								;[Block]
 								Temp3 = Rand(1, 3)
 								Select Temp3
@@ -7713,8 +7712,8 @@ Function HideRooms%(r.Rooms, AdjDoor.Doors = Null, NoCollision% = False)
 	
 	If (Not r\Hidden) Then
 		For sc.SecurityCams = Each SecurityCams
-			HideSecurityCams = True
-			If sc\room <> r Then HideSecurityCams = False
+			HideSecurityCams = False
+			If sc\room = r Then HideSecurityCams = True
 			If HideSecurityCams Then
 				If sc\OBJ <> 0 Then HideEntity(sc\OBJ)
 				If sc\CameraOBJ <> 0 Then HideEntity(sc\CameraOBJ)
@@ -7726,8 +7725,8 @@ Function HideRooms%(r.Rooms, AdjDoor.Doors = Null, NoCollision% = False)
 		Next
 		
 		For p.Props = Each Props
-			HideProps = True
-			If p\room <> r Then HideProps = False
+			HideProps = False
+			If p\room = r Then HideProps = True
 			If HideProps Then
 				If p\OBJ <> 0 Then
 					If CheckPropCollision(p\Name) Then
@@ -7740,10 +7739,10 @@ Function HideRooms%(r.Rooms, AdjDoor.Doors = Null, NoCollision% = False)
 		Next
 		
 		For d.Doors = Each Doors
-			HideDoors = True
-			If d\room <> r Then HideDoors = False
+			HideDoors = False
+			If d\room = r Then HideDoors = True
 			If AdjDoor <> Null Then
-				If d = AdjDoor Then HideDoors = False
+				If d <> AdjDoor Then HideDoors = True
 			EndIf
 			If HideDoors Then
 				If d\FrameOBJ <> 0 Then
@@ -7789,8 +7788,8 @@ Function ShowRooms%(r.Rooms, NoCollision% = False)
 	
 	If r\Hidden Then
 		For sc.SecurityCams = Each SecurityCams
-			ShowSecurityCams = True
-			If sc\room <> r Then ShowSecurityCams = False
+			ShowSecurityCams = False
+			If sc\room = r Then ShowSecurityCams = True
 			If ShowSecurityCams Then
 				If sc\OBJ <> 0 Then ShowEntity(sc\OBJ)
 				If sc\CameraOBJ <> 0 Then ShowEntity(sc\CameraOBJ)
@@ -7801,8 +7800,8 @@ Function ShowRooms%(r.Rooms, NoCollision% = False)
 		Next
 		
 		For p.Props = Each Props
-			ShowProps = True
-			If p\room <> r Then ShowProps = False
+			ShowProps = False
+			If p\room = r Then ShowProps = True
 			If ShowProps Then
 				If p\OBJ <> 0 Then
 					If CheckPropCollision(p\Name) Then
@@ -7815,8 +7814,8 @@ Function ShowRooms%(r.Rooms, NoCollision% = False)
 		Next
 		
 		For d.Doors = Each Doors
-			ShowDoors = True
-			If d\room <> r Then ShowDoors = False
+			ShowDoors = False
+			If d\room = r Then ShowDoors = True
 			If ShowDoors Then
 				If d\FrameOBJ <> 0 Then
 					EntityAlpha(d\FrameOBJ, 1.0)
@@ -7869,7 +7868,7 @@ End Function
 Global UpdateTimer#
 
 Function UpdateDistanceTimer%()
-	If UpdateTimer =< 0.0 Then
+	If UpdateTimer <= 0.0 Then
 		UpdateTimer = 30.0
 	Else
 		UpdateTimer = UpdateTimer - fps\Factor[0]
@@ -8825,7 +8824,7 @@ Function CreateMap%()
 			Next
 			Flip()
 			If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
-		Until GetKey() <> 0 Lor MouseHit(1)
+		Until (GetKey() <> 0 Lor MouseHit(1))
 	EndIf
 	
 	For y = 0 To MapGridSize

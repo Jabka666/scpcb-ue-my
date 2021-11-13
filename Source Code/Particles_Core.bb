@@ -57,7 +57,7 @@ End Function
 Function UpdateParticles%()
 	Local p.Particles
 	
-	If UpdateTimer =< 0.0 Then
+	If UpdateTimer <= 0.0 Then
 		For p.Particles = Each Particles
 			Local xDist# = Abs(EntityX(me\Collider) - EntityX(p\OBJ, True))
 			Local zDist# = Abs(EntityZ(me\Collider) - EntityZ(p\OBJ, True))
@@ -67,7 +67,7 @@ Function UpdateParticles%()
 	EndIf
 		
 	For p.Particles = Each Particles
-		If p\Dist =< HideDistance Then
+		If p\Dist <= HideDistance Then
 			MoveEntity(p\Pvt, 0.0, 0.0, (p\Speed * fps\Factor[0]))
 			If p\Gravity <> 0.0 Then p\ySpeed = p\ySpeed - (p\Gravity * fps\Factor[0])
 			TranslateEntity(p\Pvt, 0.0, (p\ySpeed * fps\Factor[0]), 0.0, True)
@@ -85,9 +85,7 @@ Function UpdateParticles%()
 			EndIf
 			
 			p\LifeTime = p\LifeTime - fps\Factor[0]
-			If p\LifeTime =< 0.0 Lor p\Size < 0.00001 Lor p\Alpha =< 0.0 Then
-				RemoveParticle(p)
-			EndIf
+			If (p\LifeTime <= 0.0) Lor (p\Size < 0.00001) Lor (p\Alpha <= 0.0) Then RemoveParticle(p)
 		Else
 			RemoveParticle(p)
 		EndIf
