@@ -1550,9 +1550,9 @@ Function UpdateNPCs%()
 				Else
 					If n\Idle = 0.1 Then
 						If PlayerInReachableRoom() Then
-							For i = 0 To 3
+							For i = 0 To MaxRoomAdjacents - 1
 								If PlayerRoom\Adjacent[i] <> Null Then
-									For j = 0 To 3
+									For j = 0 To MaxRoomAdjacents - 1
 										If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null Then
 											TeleportEntity(n\Collider, PlayerRoom\Adjacent[i]\Adjacent[j]\x, 0.5, PlayerRoom\Adjacent[i]\Adjacent[j]\z, n\CollRadius, True)
 											Exit
@@ -1769,7 +1769,7 @@ Function UpdateNPCs%()
 												Local ClosestRoom.Rooms = PlayerRoom
 												Local CurrDist# = 0.0
 												
-												For i = 0 To 3
+												For i = 0 To MaxRoomAdjacents - 1
 													If PlayerRoom\Adjacent[i] <> Null Then
 														CurrDist = EntityDistanceSquared(PlayerRoom\Adjacent[i]\OBJ, n\Collider)
 														If CurrDist < ClosestDist Then
@@ -1802,12 +1802,12 @@ Function UpdateNPCs%()
 													ClosestDist = 10000.0 ; ~ Prevent the PlayerRoom to be considered the closest, so SCP-049 wouldn't try to find a path there
 													ClosestRoom.Rooms = PlayerRoom
 													CurrDist = 0.0
-													For i = 0 To 3
+													For i = 0 To MaxRoomAdjacents - 1
 														If PlayerRoom\Adjacent[i] <> Null Then
 															CurrDist = EntityDistanceSquared(PlayerRoom\Adjacent[i]\OBJ, n\Collider)
 															If CurrDist < ClosestDist Then
 																ClosestDist = CurrDist
-																For j = 0 To 3
+																For j = 0 To MaxRoomAdjacents - 1
 																	If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null Then
 																		If PlayerRoom\Adjacent[i]\Adjacent[j] <> PlayerRoom Then
 																			ClosestRoom = PlayerRoom\Adjacent[i]\Adjacent[j]
@@ -5076,7 +5076,7 @@ Function UpdateNPCs%()
 												UpdateGravity = True
 												Exit
 											EndIf
-											For i = 0 To 3
+											For i = 0 To MaxRoomAdjacents - 1
 												If IsRoomAdjacent(PlayerRoom\Adjacent[i], r) Then
 													UpdateGravity = True
 													Exit

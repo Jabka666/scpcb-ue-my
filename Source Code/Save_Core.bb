@@ -1312,7 +1312,7 @@ Function LoadGame%(File$)
 	CloseFile(f)
 	
 	For r.Rooms = Each Rooms
-		For i = 0 To 3
+		For i = 0 To MaxRoomAdjacents - 1
 			r\Adjacent[i] = Null
 		Next
 		
@@ -2701,7 +2701,7 @@ Function LoadMap%(File$)
 	CreateEvent("dimension_1499", "dimension_1499", 0)
 	
 	For r.Rooms = Each Rooms
-		For i = 0 To 3
+		For i = 0 To MaxRoomAdjacents - 1
 			r\Adjacent[i] = Null
 		Next
 		

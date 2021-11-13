@@ -879,7 +879,7 @@ Function UpdateEvents%()
 			Case e_cont1_173
 				;[Block]
 				If e\room\RoomDoors[5] = Null Then
-					For i = 0 To 3
+					For i = 0 To MaxRoomAdjacents - 1
 						If e\room\AdjDoor[i] <> Null Then
 							e\room\RoomDoors[5] = e\room\AdjDoor[i]
 							e\room\RoomDoors[5]\Open = True
@@ -8584,7 +8584,7 @@ Function UpdateEvents%()
 						Local Adj1% = -1
 						Local Adj2% = -1
 						
-						For i = 0 To 3
+						For i = 0 To MaxRoomAdjacents - 1
 							If e\room\AdjDoor[i] <> Null Then
 								If Adj1 = -1 Then
 									AdjDist1 = EntityDistanceSquared(e\room\Objects[7], e\room\AdjDoor[i]\FrameOBJ)
@@ -8806,11 +8806,6 @@ Function UpdateEvents%()
 									EndIf
 								EndIf
 								Exit
-							EndIf
-						Next
-						For i = 0 To 3
-							If PlayerRoom\Adjacent[i] <> Null Then
-								EntityAlpha(GetChild(PlayerRoom\Adjacent[i]\OBJ, 2), 0.0)
 							EndIf
 						Next
 						

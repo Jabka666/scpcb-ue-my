@@ -1547,12 +1547,18 @@ Global SecondaryLightOn# = True
 Global PrevSecondaryLightOn# = True
 Global RemoteDoorOn% = True
 
-Const MaxRoomLights% = 32
+; ~ Room Objects Constants
+;[Block]
 Const MaxRoomEmitters% = 8
+Const MaxRoomLights% = 32
 Const MaxRoomObjects% = 30
 Const MaxRoomLevers% = 10
 Const MaxRoomDoors% = 7
 Const MaxRoomNPCs% = 12
+Const MaxRoomAdjacents% = 4
+Const MaxRoomTextures% = 10
+Const MaxRoomTriggerBoxes% = 8
+;[End Block]
 
 Type Rooms
 	Field Zone%
@@ -1573,6 +1579,7 @@ Type Rooms
 	Field LightSprites2%[MaxRoomLights]
 	Field LightIntensity#[MaxRoomLights]
 	Field LightFlicker%[MaxRoomLights]
+	Field LightR#[MaxRoomLights], LightG#[MaxRoomLights], LightB#[MaxRoomLights]
 	Field MaxLights% = 0
 	Field Objects%[MaxRoomObjects]
 	Field Hidden%
@@ -1580,13 +1587,12 @@ Type Rooms
 	Field RoomDoors.Doors[MaxRoomDoors]
 	Field NPC.NPCs[MaxRoomNPCs]
 	Field mt.MTGrid
-	Field Adjacent.Rooms[4]
-	Field AdjDoor.Doors[4]
-	Field Textures%[10]
+	Field Adjacent.Rooms[MaxRoomAdjacents]
+	Field AdjDoor.Doors[MaxRoomAdjacents]
+	Field Textures%[MaxRoomTextures]
 	Field TriggerBoxAmount%
-	Field TriggerBoxes.TriggerBox[8]
+	Field TriggerBoxes.TriggerBox[MaxRoomTriggerBoxes]
 	Field MaxWayPointY#
-	Field LightR#[MaxRoomLights], LightG#[MaxRoomLights], LightB#[MaxRoomLights]
 	Field MinX#, MinY#, MinZ#
 	Field MaxX#, MaxY#, MaxZ#
 End Type 
@@ -7907,7 +7913,7 @@ Function UpdateRooms%()
 			EndIf
 			
 			If (Not FoundNewPlayerRoom) Then ; ~ It's likely that an adjacent room is the new player room, check for that
-				For i = 0 To 3
+				For i = 0 To MaxRoomAdjacents - 1
 					If PlayerRoom\Adjacent[i] <> Null Then
 						x = Abs(PlayerRoom\Adjacent[i]\x - EntityX(me\Collider, True))
 						If x < 4.0 Then
@@ -7954,7 +7960,7 @@ Function UpdateRooms%()
 			If IsRoomAdjacent(PlayerRoom, r) Then Hide = False
 		EndIf
 		If Hide Then
-			For i = 0 To 3
+			For i = 0 To MaxRoomAdjacents - 1
 				If IsRoomAdjacent(PlayerRoom\Adjacent[i], r) Then
 					Hide = False
 					Exit
@@ -7976,7 +7982,7 @@ Function UpdateRooms%()
 		PlayerRoom\Found = True
 		
 		ShowRooms(PlayerRoom)
-		For i = 0 To 3
+		For i = 0 To MaxRoomAdjacents - 1
 			If PlayerRoom\Adjacent[i] <> Null Then
 				If PlayerRoom\AdjDoor[i] <> Null Then
 					If PlayerRoom\AdjDoor[i]\OpenState = 0.0 Then
@@ -7988,7 +7994,7 @@ Function UpdateRooms%()
 					EndIf
 				EndIf
 				
-				For j = 0 To 3
+				For j = 0 To MaxRoomAdjacents - 1
 					If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null Then
 						If PlayerRoom\Adjacent[i]\Adjacent[j] <> PlayerRoom Then
 							HideRooms(PlayerRoom\Adjacent[i]\Adjacent[j], PlayerRoom\Adjacent[i]\AdjDoor[j])
@@ -8007,7 +8013,7 @@ Function IsRoomAdjacent%(this.Rooms, that.Rooms)
 	
 	If this = Null Then Return(False)
 	If this = that Then Return(True)
-	For i = 0 To 3
+	For i = 0 To MaxRoomAdjacents - 1
 		If that = this\Adjacent[i] Then Return(True)
 	Next
 	Return(False)
@@ -8921,10 +8927,9 @@ Function CreateMap%()
 	For r.Rooms = Each Rooms
 		r\Angle = WrapAngle(r\Angle)
 		SetupTriggerBoxes(r)
-		r\Adjacent[0] = Null
-		r\Adjacent[1] = Null
-		r\Adjacent[2] = Null
-		r\Adjacent[3] = Null
+		For i = 0 To MaxRoomAdjacents - 1
+			r\Adjacent[i] = Null
+		Next
 		For r2.Rooms = Each Rooms
 			If r <> r2 Then
 				If r2\z = r\z Then
