@@ -7695,13 +7695,13 @@ Function FillRoom%(r.Rooms)
 	CatchErrors("FillRoom (" + r\RoomTemplate\Name + ")")
 End Function
 
-Function HideRoomLights%(r.Rooms)
+Function HideRoomLights%(r.Rooms, HideLights% = True)
 	Local i%
 	
 	For i = 0 To r\MaxLights - 1
 		If r\Lights[i] <> 0 Then
-			If (Not EntityHidden(r\Lights[i])) Then
-				HideEntity(r\Lights[i])
+			If (Not EntityHidden(r\LightSprites[i])) Then
+				If HideLights Then HideEntity(r\Lights[i])
 				HideEntity(r\LightSprites[i])
 				If opt\EnableRoomLights Then HideEntity(r\LightSprites2[i])
 			EndIf
@@ -7711,7 +7711,7 @@ Function HideRoomLights%(r.Rooms)
 	Next
 End Function
 
-Function HideRooms%(r.Rooms, AdjDoor.Doors = Null, NoCollision% = False)
+Function HideRooms%(r.Rooms, AdjDoor.Doors = Null, NoCollision% = False, HideLights% = True)
 	Local sc.SecurityCams, p.Props, d.Doors
 	Local HideSecurityCams%, HideProps%, HideDoors%
 	Local i%
@@ -7770,7 +7770,7 @@ Function HideRooms%(r.Rooms, AdjDoor.Doors = Null, NoCollision% = False)
 			EndIf
 		Next
 		
-		HideRoomLights(r)
+		HideRoomLights(r, HideLights)
 		
 		For i = 0 To MaxRoomLevers - 1
 			If r\Levers[i] <> 0 Then HideEntity(r\Levers[i])
@@ -7986,9 +7986,9 @@ Function UpdateRooms%()
 			If PlayerRoom\Adjacent[i] <> Null Then
 				If PlayerRoom\AdjDoor[i] <> Null Then
 					If PlayerRoom\AdjDoor[i]\OpenState = 0.0 Then
-						HideRooms(PlayerRoom\Adjacent[i], PlayerRoom\AdjDoor[i])
+						HideRooms(PlayerRoom\Adjacent[i], PlayerRoom\AdjDoor[i], False)
 					ElseIf (Not EntityInView(PlayerRoom\AdjDoor[i]\FrameOBJ, Camera))
-						HideRooms(PlayerRoom\Adjacent[i], PlayerRoom\AdjDoor[i])
+						HideRooms(PlayerRoom\Adjacent[i], PlayerRoom\AdjDoor[i], False)
 					Else
 						ShowRooms(PlayerRoom\Adjacent[i])
 					EndIf
