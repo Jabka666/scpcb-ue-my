@@ -2795,7 +2795,10 @@ Function UpdateMoving%()
 	
 	For i = 0 To MaxItemAmount - 1
 		If Inventory(i) <> Null Then
-			If Inventory(i)\ItemTemplate\TempName = "finevest" Then me\Stamina = Min(me\Stamina, 60.0)
+			If Inventory(i)\ItemTemplate\TempName = "finevest" Then
+				me\Stamina = Min(me\Stamina, 60.0)
+				Exit
+			EndIf
 		EndIf
 	Next
 	
@@ -3981,6 +3984,7 @@ Function UpdateGUI%()
 														If Inventory(ri) = SelectedItem Then
 															Inventory(ri) = Null
 															PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
+															Exit
 														EndIf
 													Next
 													added = SelectedItem
@@ -4029,6 +4033,7 @@ Function UpdateGUI%()
 														If Inventory(ri) = SelectedItem Then
 															Inventory(ri) = Null
 															PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
+															Exit
 														EndIf
 													Next
 													added = SelectedItem
@@ -4651,7 +4656,7 @@ Function UpdateGUI%()
 						EndIf
 						
 						; ~ The state of refined items is more than 1.0 (fine setting increases it by 1, very fine doubles it)
-						x2 = SelectedItem\State + 1.0
+						x2 = SelectedItem\State
 						
 						Local Loc% = GetINISectionLocation(SCP294File, SelectedItem\Name)
 						
@@ -4679,10 +4684,10 @@ Function UpdateGUI%()
 						
 						me\DeathTimer = GetINIInt2(SCP294File, Loc, "Death Timer") * 70.0
 						
-						me\BlinkEffect = Float(GetINIString2(SCP294File, Loc, "Blink Effect", 1.0)) * x2
+						me\BlinkEffect = Float(GetINIString2(SCP294File, Loc, "Blink Effect", 1.0)) / x2
 						me\BlinkEffectTimer = Float(GetINIString2(SCP294File, Loc, "Blink Effect Timer", 1.0)) * x2
 						
-						me\StaminaEffect = Float(GetINIString2(SCP294File, Loc, "Stamina Effect", 1.0)) * x2
+						me\StaminaEffect = Float(GetINIString2(SCP294File, Loc, "Stamina Effect", 1.0)) / x2
 						me\StaminaEffectTimer = Float(GetINIString2(SCP294File, Loc, "Stamina Effect Timer", 1.0)) * x2
 						
 						StrTemp = GetINIString2(SCP294File, Loc, "Refuse Message")
@@ -8280,7 +8285,7 @@ Function LoadEntities%()
 	EntityTexture(t\OverlayID[7], t\OverlayTextureID[7])
 	EntityBlend(t\OverlayID[7], 3)
 	EntityFX(t\OverlayID[7], 1)
-	EntityOrder(t\OverlayID[7], -1001)
+	EntityOrder(t\OverlayID[7], -1003)
 	MoveEntity(t\OverlayID[7], 0.0, 0.0, 1.0)
 	
 	t\OverlayTextureID[8] = LoadTexture_Strict("GFX\helmet_overlay.png", 1, DeleteAllTextures) ; ~ HELMET
@@ -8307,10 +8312,13 @@ Function LoadEntities%()
 	EntityTexture(t\OverlayID[10], t\OverlayTextureID[10])
 	EntityBlend(t\OverlayID[10], 3)
 	EntityFX(t\OverlayID[10], 1)
-	EntityOrder(t\OverlayID[10], -1000)
+	EntityOrder(t\OverlayID[10], -1002)
 	MoveEntity(t\OverlayID[10], 0.0, 0.0, 1.0)
 	
 	For i = 0 To 10
+		If (Not opt\Atmosphere) Then
+			If i = 0 Lor i = 10 Then TextureBlend(t\OverlayTextureID[i], 5)
+		EndIf
 		HideEntity(t\OverlayID[i])
 	Next
 	
@@ -9444,6 +9452,7 @@ Function Update294%()
 					
 					it.Items = CreateItem("Cup", "cup", EntityX(PlayerRoom\Objects[1], True), EntityY(PlayerRoom\Objects[1], True), EntityZ(PlayerRoom\Objects[1], True), R, G, B, Alpha)
 					it\Name = "Cup of " + I_294\ToInput
+					it\State = 1.0
 					EntityType(it\Collider, HIT_ITEM)
 				Else
 					; ~ Out of range

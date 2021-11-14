@@ -9,6 +9,10 @@ General:
 Bug Fixes:
 - Fixed "IsDead" parameter for guard.
 - Fixed SCP-966's messages while using echo sound.
+- Fixes for SCP-294 drinks:
+    - Fixed wrong color of the drinks refined in SCP-914.
+    - Fixed multipliers for drinks effects.
+    - Fixed blink and stamina multipliers that were reducing player stats on Fine and Very Fine settings.
 
 v1.0.2
 
@@ -352,7 +356,7 @@ Map Creator:
 
 Bug Fixes:
 
-- Fixed sound for big containment doors locked by SCP-079.
+- Fixed a sound for big containment doors locked by SCP-079.
 - Fixed appearing of the gas from SCP-035's containment chamber in Maintenance Tunnels.
 - Fixes for SCP-1048-A:
 	- Fixed SCP-1048-A's scream being able to be heard anywhere.

@@ -2548,6 +2548,7 @@ Function UpdateEvents%()
 									If Inventory(i) <> Null Then
 										If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
 											Inventory(i)\State2 = 0.0
+											Exit
 										EndIf
 									EndIf
 								Next
