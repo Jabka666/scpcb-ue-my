@@ -5,6 +5,7 @@ General:
 - Tiny improvement for "cabient_c.b3d" model.
 - Tiny improvement for first aid kit.
 - Tiny optimization for SCP-106's box.
+- Improved gas mask fogging overlay.
 
 Bug Fixes:
 - Fixed "IsDead" parameter for guard.
@@ -13,6 +14,7 @@ Bug Fixes:
     - Fixed wrong color of the drinks refined in SCP-914.
     - Fixed multipliers for drinks effects.
     - Fixed blink and stamina multipliers that were reducing player stats on Fine and Very Fine settings.
+- Fixed vignette in Dark atmosphere mode.
 
 v1.0.2
 
