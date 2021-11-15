@@ -15,6 +15,7 @@ Bug Fixes:
     - Fixed multipliers for drinks effects.
     - Fixed blink and stamina multipliers that were reducing player stats on Fine and Very Fine settings.
 - Fixed vignette in Dark atmosphere mode.
+- Fixed an issue where Dr. Maynard's code could be the same as Dr. Harp's.
 
 v1.0.2
 

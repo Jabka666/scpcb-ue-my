@@ -2244,6 +2244,7 @@ Function MainLoop%()
 			me\SndVolume = CurveValue(0.0, me\SndVolume, 5.0)
 			
 			CanSave = True
+			UpdateDistanceTimer()
 			UpdateDeaf()
 			UpdateFog()
 			UpdateEmitters()
@@ -2279,7 +2280,6 @@ Function MainLoop%()
 			UpdateItems()
 			UpdateParticles()
 			Use427()
-			UpdateDistanceTimer()
 		EndIf
 		
 		If chs\InfiniteStamina Then me\Stamina = 100.0
@@ -8727,7 +8727,7 @@ Function InitNewGame%()
 	
 	Local de.Decals, d.Doors, it.Items, r.Rooms, sc.SecurityCams, e.Events, rt.RoomTemplates
 	Local twp.TempWayPoints, ts.TempScreens, tp.TempProps
-	Local i%
+	Local i%, Skip%
 	
 	LoadEntities()
 	LoadSounds()
@@ -8741,12 +8741,16 @@ Function InitNewGame%()
 	
 	me\BlinkTimer = -10.0 : me\BlinkEffect = 1.0 : me\Stamina = 100.0 : me\StaminaEffect = 1.0 : me\HeartBeatRate = 70.0 : me\Funds = Rand(0, 6)
 	
-	I_005\ChanceToSpawn = Rand(1, 3)
+	I_005\ChanceToSpawn = Rand(3)
 	
 	AccessCode = 0
-	For i = 0 To 3
-		AccessCode = AccessCode + Rand(1, 9) * (10 ^ i)
-	Next	
+	Repeat
+		For i = 0 To 3
+			AccessCode = AccessCode + (Rand(9) * (10 ^ i))
+		Next
+		Skip = False
+		If AccessCode <> 7816 And AccessCode <> 2411 Then Skip = True 
+	Until Skip
 	
 	RenderLoading(55, "ROOMS")
 	
