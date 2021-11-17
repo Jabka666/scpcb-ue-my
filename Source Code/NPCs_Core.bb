@@ -3303,7 +3303,18 @@ Function UpdateNPCs%()
 					If ForestNPC <> 0 Then
 						If ForestNPCData[2] = 1.0 Then
 							If EntityHidden(ForestNPC) Then ShowEntity(ForestNPC)
-							If n\State <> 1.0
+							If ForestNPCData[1] = 0.0 Then
+								If Rand(200) = 1 Then
+									ForestNPCData[1] = fps\Factor[0]
+									EntityTexture(ForestNPC, ForestNPCTex, ForestNPCData[0] + 1.0)
+								EndIf
+							ElseIf ForestNPCData[1] > 0.0 And ForestNPCData[1] < 5.0
+								ForestNPCData[1] = Min(ForestNPCData[1] + fps\Factor[0], 5.0)
+							Else
+								ForestNPCData[1] = 0.0
+								EntityTexture(ForestNPC, ForestNPCTex, ForestNPCData[0])
+							EndIf
+							If n\State <> 1.0 Then
 								If (me\BlinkTimer < -8.0 And me\BlinkTimer > -12.0) Lor (Not EntityInView(ForestNPC, Camera))
 									ForestNPCData[2] = 0.0
 									If (Not EntityHidden(ForestNPC)) Then HideEntity(ForestNPC)
@@ -3338,21 +3349,25 @@ Function UpdateNPCs%()
 								z = Floor((TFormedZ() + 6.0) / 12.0)
 								
 								; ~ Step through nearby cells
-								For x2 = Max(x - 1, 1) To Min(x + 1, ForestGridSize) Step 2
-									For z2 = Max(z - 1, 1) To Min(z + 1, ForestGridSize) Step 2
+								For x2 = Max(x - 1, 1.0) To Min(x + 1, ForestGridSize) Step 2
+									For z2 = Max(z - 1, 1.0) To Min(z + 1, ForestGridSize) Step 2
 										; ~ Choose an empty cell (not on the path)
 										If fr\Grid[(z2 * ForestGridSize) + x2] = 0 Then
 											; ~ Spawn the monster between the empty cell and the cell the player is in
-											TFormPoint(((x2 + x) / 2) * 12.0, 0, ((z2 + z) / 2) * 12.0, fr\Forest_Pivot, 0)
+											TFormPoint(((x2 + x) / 2.0) * 12.0, 0.0, ((z2 + z) / 2.0) * 12.0, fr\Forest_Pivot, 0)
+											
+											Pvt = CreatePivot()
+											PositionEntity(Pvt, TFormedX(), EntityY(fr\Forest_Pivot, True) + 2.3, TFormedZ())
 											
 											; ~ Keep searching for a more suitable cell
-											If EntityInView(n\Collider, Camera) Then
+											If EntityInView(Pvt, Camera) Then
 												PositionEntity(n\Collider, 0.0, -110.0, 0.0)
 											Else
-												PositionEntity(n\Collider, TFormedX(), EntityY(fr\Forest_Pivot, True) + 2.3, TFormedZ())
+												PositionEntity(n\Collider, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt))
 												x2 = ForestGridSize
-												Exit												
 											EndIf
+											FreeEntity(Pvt)
+											Exit
 										EndIf
 									Next
 								Next
@@ -3367,6 +3382,7 @@ Function UpdateNPCs%()
 											;[Block]
 											PointEntity(n\Collider, me\Collider)
 											SetNPCFrame(n, 2.0)
+											;[End Block]
 										Case 2
 											;[Block]
 											PointEntity(n\Collider, me\Collider)
@@ -3422,18 +3438,6 @@ Function UpdateNPCs%()
 										Else
 											ForestNPCData[2] = 2.0
 										EndIf
-									ElseIf ForestNPCData[2] = 1.0
-										If ForestNPCData[1] = 0.0
-											If Rand(200) = 1 Then
-												ForestNPCData[1] = fps\Factor[0]
-												EntityTexture(ForestNPC, ForestNPCTex, ForestNPCData[0] + 1.0)
-											EndIf
-										ElseIf ForestNPCData[1] > 0.0 And ForestNPCData[1] < 5.0
-											ForestNPCData[1] = Min(ForestNPCData[1] + fps\Factor[0], 5.0)
-										Else
-											ForestNPCData[1] = 0
-											EntityTexture(ForestNPC, ForestNPCTex, ForestNPCData[0])
-										EndIf
 									EndIf
 								EndIf
 								
@@ -3447,12 +3451,18 @@ Function UpdateNPCs%()
 								Else
 									If n\Frame <= 199.0 Then
 										AnimateNPC(n, 2.0, 199.0, 0.5, False)
-										If n\Frame = 199.0 Then SetNPCFrame(n, 298.0) : PlaySound2(Step2SFX[Rand(0, 2)], Camera, n\Collider, 15.0)
+										If n\Frame = 199.0 Then
+											PlaySound2(Step2SFX[Rand(0, 2)], Camera, n\Collider, 15.0)
+											SetNPCFrame(n, 298.0)
+										EndIf
 									ElseIf n\Frame <= 297.0
 										PointEntity(n\Collider, me\Collider)
 										
 										AnimateNPC(n, 200.0, 297.0, 0.5, False)
-										If n\Frame = 297.0 Then SetNPCFrame(n, 298.0) : PlaySound2(Step2SFX[Rand(0, 2)], Camera, n\Collider, 15.0)
+										If n\Frame = 297.0 Then
+											PlaySound2(Step2SFX[Rand(0, 2)], Camera, n\Collider, 15.0)
+											SetNPCFrame(n, 298.0)
+										EndIf
 									Else
 										Angle = CurveAngle(PointDirection(EntityX(n\Collider), EntityZ(n\Collider), EntityX(me\Collider), EntityZ(me\Collider)), EntityYaw(n\Collider) + 90.0, 20.0)
 										
@@ -3463,11 +3473,7 @@ Function UpdateNPCs%()
 										n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
 										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 										
-										If Dist > 225.0 Then
-											PositionEntity(n\Collider, 0.0, -110.0, 0.0)
-											n\State = 0.0
-											n\State2 = 0.0
-										EndIf
+										If Dist > 225.0 Then n\State = 0.0
 									EndIf									
 								EndIf
 							EndIf
@@ -3494,18 +3500,17 @@ Function UpdateNPCs%()
 								For x2 = Max(x - 1, 1) To Min(x + 1, ForestGridSize)
 									For z2 = Max(z - 1, 1) To Min(z + 1, ForestGridSize)
 										; ~ Find a nearby cell that's on the path and not the cell the player is in
-										If fr\Grid[(z2 * ForestGridSize) + x2] > 0 And (x2<>x Lor z2 <> z) And (x2 = x Lor z2 = z) Then
+										If fr\Grid[(z2 * ForestGridSize) + x2] > 0 And (x2 <> x Lor z2 <> z) And (x2 = x Lor z2 = z) Then
 											; ~ Transform the position of the cell back to world coordinates
 											TFormPoint(x2 * 12.0, 0.0, z2 * 12.0, fr\Forest_Pivot, 0)
 											
 											PositionEntity(n\Collider, TFormedX(), EntityY(fr\Forest_Pivot, True) + 1.0, TFormedZ())
-											
 											If EntityInView(n\Collider, Camera) Then
 												me\BlinkTimer = -10.0
 											Else
 												x2 = ForestGridSize
-												Exit
 											EndIf
+											Exit
 										EndIf
 									Next
 								Next
@@ -3559,14 +3564,10 @@ Function UpdateNPCs%()
 									EndIf
 								EndIf
 								
-								If Dist > 400.0 Then
-									n\State = 0.0
-									n\State2 = 0.0
-									PositionEntity(n\Collider, 0.0, -110.0, 0.0)
-								EndIf
+								If Dist > 400.0 Then n\State = 0.0
 							EndIf
 							
-							If (PrevFrame < 533.0 And n\Frame >= 533.0) Lor (PrevFrame > 568.0 And n\Frame < 2.0) Then
+							If (PrevFrame < 533.0 And n\Frame >= 533.0) Lor (PrevFrame < 568.0 And n\Frame >= 568.0) Then
 								PlaySound2(Step2SFX[Rand(0, 2)], Camera, n\Collider, 15.0, 0.6)
 							EndIf
 							;[End Block]
@@ -3592,7 +3593,7 @@ Function UpdateNPCs%()
 								AnimateNPC(n, 451.0, 493.0, 0.5, False)
 								
 								If (PrevFrame < 461.0 And n\Frame >= 461.0) Then 
-									If me\KillTimer >= 0.0 Then Kill(True) : me\KillAnim = 0
+									If me\KillTimer >= 0.0 Then Kill(True)
 									PlaySound_Strict(DamageSFX[11])
 								EndIf
 								If (PrevFrame < 476.0 And n\Frame >= 476.0) Then PlaySound_Strict(DamageSFX[12])
@@ -3608,7 +3609,7 @@ Function UpdateNPCs%()
 							EndIf
 							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 							
-							If chs\Notarget Then
+							If chs\NoTarget Then
 								If (PrevFrame < 315.0 And n\Frame >= 315.0) Lor (PrevFrame < 492.0 And n\Frame >= 492.0) Then
 									SetNPCFrame(n, 2.0)
 									n\State = 4.0

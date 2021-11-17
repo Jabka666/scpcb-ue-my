@@ -2366,7 +2366,7 @@ Function MainLoop%()
 				NullSelectedStuff()
 				me\BlurTimer = Abs(me\KillTimer * 5.0)
 				me\KillTimer = me\KillTimer - (fps\Factor[0] * 0.8)
-				If me\KillTimer < -360.0 Then 
+				If me\KillTimer < -360.0 Then
 					MenuOpen = True 
 					If me\SelectedEnding <> -1 Then me\EndingTimer = Min(me\KillTimer, -0.1)
 				EndIf
@@ -10058,13 +10058,12 @@ Function UpdateLeave1499%()
 				I_1499\x = EntityX(me\Collider)
 				I_1499\y = EntityY(me\Collider)
 				I_1499\z = EntityZ(me\Collider)
-				PositionEntity(me\Collider, I_1499\PrevX, I_1499\PrevY + 0.05, I_1499\PrevZ)
-				ResetEntity(me\Collider)
+				TeleportEntity(me\Collider, I_1499\PrevX, I_1499\PrevY + 0.05, I_1499\PrevZ)
 				PlayerRoom = r
 				UpdateDoors()
 				UpdateRooms()
-				If PlayerRoom\RoomTemplate\Name = "room3_storage"
-					If EntityY(me\Collider) < (-4600.0) * RoomScale
+				If PlayerRoom\RoomTemplate\Name = "room3_storage" Then
+					If EntityY(me\Collider) < (-4600.0) * RoomScale Then
 						For i = 0 To 3
 							PlayerRoom\NPC[i]\State = 2.0
 							PositionEntity(PlayerRoom\NPC[i]\Collider, EntityX(PlayerRoom\Objects[PlayerRoom\NPC[i]\State2], True), EntityY(PlayerRoom\Objects[PlayerRoom\NPC[i]\State2], True) + 0.2, EntityZ(PlayerRoom\Objects[PlayerRoom\NPC[i]\State2], True))
