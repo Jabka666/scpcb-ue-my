@@ -1363,23 +1363,12 @@ Function LoadGame%(File$)
 	If PlayerRoom\RoomTemplate\Name = "dimension_1499" Then
 		me\BlinkTimer = -1.0
 		ShouldEntitiesFall = False
-		PlayerRoom = I_1499\PrevRoom
-		UpdateDoors()
-		UpdateRooms()
-		For it.Items = Each Items
-			it\DistTimer = 0.0
-		Next
+		TeleportToRoom(I_1499\PrevRoom)
 	EndIf
 	
 	If me\Collider <> 0 Then
-		If PlayerRoom <> Null Then
-			ShowEntity(PlayerRoom\OBJ)
-		EndIf
 		ShowEntity(me\Collider)
 		TeleportEntity(me\Collider, EntityX(me\Collider), EntityY(me\Collider) + 0.5, EntityZ(me\Collider), 0.3, True)
-		If PlayerRoom <> Null Then
-			HideEntity(PlayerRoom\OBJ)
-		EndIf
 	EndIf
 	
 	UpdateTimer = 0.0
@@ -2082,14 +2071,8 @@ Function LoadGameQuick%(File$)
 	CloseFile(f)
 	
 	If me\Collider <> 0 Then
-		If PlayerRoom <> Null Then
-			ShowEntity(PlayerRoom\OBJ)
-		EndIf
 		ShowEntity(me\Collider)
 		TeleportEntity(me\Collider, EntityX(me\Collider), EntityY(me\Collider) + 0.5, EntityZ(me\Collider), 0.3, True)
-		If PlayerRoom <> Null Then
-			HideEntity(PlayerRoom\OBJ)
-		EndIf
 	EndIf
 	
 	UpdateTimer = 0.0
@@ -2172,7 +2155,7 @@ Function LoadGameQuick%(File$)
 	Next
 	
 	; ~ Resetting some stuff (those get changed when going to the endings)
-	HideDistance = 15.0
+	HideDistance = 16.0
 	
 	CatchErrors("LoadGameQuick")
 End Function

@@ -2239,6 +2239,9 @@ Function MainLoop%()
 		If (Not MenuOpen) And (Not ConsoleOpen) And me\EndingTimer >= 0.0 Then
 			me\SndVolume = CurveValue(0.0, me\SndVolume, 5.0)
 			
+			If PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a" Then
+				If HideDistance <> 16.0 Then HideDistance = 16.0
+			EndIf
 			CanSave = True
 			UpdateDistanceTimer()
 			UpdateDeaf()
@@ -2257,7 +2260,7 @@ Function MainLoop%()
 				UpdateDoors()
 				UpdateScreens()
 				UpdateRoomLights()
-				If PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a"Then
+				If PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a" Then
 					If QuickLoadPercent = -1 Lor QuickLoadPercent = 100
 						UpdateEndings()
 					EndIf

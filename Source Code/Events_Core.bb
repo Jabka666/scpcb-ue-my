@@ -1801,7 +1801,7 @@ Function UpdateEvents%()
 								e\room\NPC[11]\State = 15.0
 								CreateNPCAsset(e\room\NPC[11])
 								
-								HideDistance = 35.0
+								HideDistance = 60.0
 								
 								For i = 8 To 11
 									PositionEntity(Pvt, EntityX(e\room\NPC[i]\Collider), EntityY(e\room\NPC[i]\Collider), EntityZ(e\room\NPC[i]\Collider))
@@ -2236,7 +2236,6 @@ Function UpdateEvents%()
 				
 				If PlayerRoom <> e\room Then
 					CanSave = True
-					HideDistance = 16.0
 					RemoveEvent(e)
 				Else
 					CanSave = False
@@ -9882,7 +9881,7 @@ Function UpdateEndings%()
 						
 						SecondaryLightOn = True
 						
-						HideDistance = 35.0
+						HideDistance = 60.0
 						
 						CreateConsoleMsg("")
 						CreateConsoleMsg("WARNING! Teleporting away from this area may cause bugs or crashing.", 255, 0, 0)
