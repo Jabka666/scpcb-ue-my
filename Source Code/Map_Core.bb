@@ -1086,7 +1086,7 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 					
 					If (tY Mod 3) = 2 And (Not ItemPlaced[Floor(tY / 3)]) Then
 						ItemPlaced[Floor(tY / 3)] = True
-						it.Items = CreateItem("Log #" + Int(Floor(tY / 3) + 1), "paper", 0.0, 0.5, 0.0)
+						it.Items = CreateItem("Log #" + Int(Floor(tY / 3) + 1), "paper", (Tile_Type = ROOM2C + 1) * Sin(Angle + 45.0) * 3.0, 0.5, (Tile_Type = ROOM2C + 1) * Sin(Angle - 45.0) * 3.0)
 						EntityType(it\Collider, HIT_ITEM)
 						EntityParent(it\Collider, Tile_Entity)
 					EndIf
@@ -1117,6 +1117,13 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 										PositionEntity(Detail_Entity, lX * Tempf4 - (Tempf3 / 2.0), ColorRed() * 0.03 - Rnd(3.0, 3.2), lY * Tempf4 - (Tempf3 / 2.0), True)
 										RotateEntity(Detail_Entity, Rnd(-5.0, 5.0), Rnd(360.0), 0.0, True)
 										;[End Block]
+									Case 6 ; ~ Add a stump
+										;[Block]
+										Detail_Entity = CopyEntity(fr\DetailMesh[2])
+										Tempf2 = Rnd(0.1, 0.12)
+										ScaleEntity(Detail_Entity, Tempf2, Tempf2, Tempf2, True)
+										PositionEntity(Detail_Entity, lX * Tempf4 - (Tempf3 / 2.0), ColorRed() * 0.03 - 1.3, lY * Tempf4 - (Tempf3 / 2.0), True)
+										;[End Block]
 									Case 7 ; ~ Add a rock
 										;[Block]
 										Detail_Entity = CopyEntity(fr\DetailMesh[1])
@@ -1124,13 +1131,6 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 										PositionEntity(Detail_Entity, lX * Tempf4 - (Tempf3 / 2.0), ColorRed() * 0.03 - 1.3, lY * Tempf4 - (Tempf3 / 2.0), True)
 										EntityFX(Detail_Entity, 1)
 										RotateEntity(Detail_Entity, 0.0, Rnd(360.0), 0.0, True)
-										;[End Block]
-									Case 6 ; ~ Add a stump
-										;[Block]
-										Detail_Entity = CopyEntity(fr\DetailMesh[2])
-										Tempf2 = Rnd(0.1, 0.12)
-										ScaleEntity(Detail_Entity, Tempf2, Tempf2, Tempf2, True)
-										PositionEntity(Detail_Entity, lX * Tempf4 - (Tempf3 / 2.0), ColorRed() * 0.03 - 1.3, lY * Tempf4 - (Tempf3 / 2.0), True)
 										;[End Block]
 								End Select
 								If Detail_Entity <> 0 Then
@@ -1175,7 +1175,7 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 				RotateEntity(fr\DetailEntities[i], 0.0, 180.0 * i, 0.0)
 				EntityParent(fr\DetailEntities[i], fr\Forest_Pivot)
 				Exit
-			EndIf		
+			EndIf
 		Next		
 	Next
 	
@@ -1263,7 +1263,7 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 					
 					If (tY Mod 3) = 2 And (Not ItemPlaced[Floor(tY / 3)]) Then
 						ItemPlaced[Floor(tY / 3)] = True
-						it.Items = CreateItem("Log #" + Int(Floor(tY / 3) + 1), "paper", 0.0, 0.5, 0.0)
+						it.Items = CreateItem("Log #" + Int(Floor(tY / 3) + 1), "paper", (Tile_Type = ROOM2C + 1) * Sin(Angle + 45.0) * 3.0, 0.5, (Tile_Type = ROOM2C + 1) * Sin(Angle - 45.0) * 3.0)
 						EntityType(it\Collider, HIT_ITEM)
 						EntityParent(it\Collider, Tile_Entity)
 					EndIf
@@ -1295,6 +1295,13 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 										
 										RotateEntity(Detail_Entity, Rnd(-5.0, 5.0), Rnd(360.0), 0.0, True)
 										;[End Block]
+									Case 6 ; ~ Add a stump
+										;[Block]
+										Detail_Entity = CopyEntity(fr\DetailMesh[2])
+										Tempf2 = Rnd(0.1, 0.12)
+										ScaleEntity(Detail_Entity, Tempf2, Tempf2, Tempf2, True)
+										PositionEntity(Detail_Entity, lX * Tempf4 - (Tempf3 / 2.0), ColorRed() * 0.03 - 1.3, lY * Tempf4 - (Tempf3 / 2.0), True)
+										;[End Block]
 									Case 7 ; ~ Add a rock
 										;[Block]
 										Detail_Entity = CopyEntity(fr\DetailMesh[1])
@@ -1302,13 +1309,6 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 										PositionEntity(Detail_Entity, lX * Tempf4 - (Tempf3 / 2.0), ColorRed() * 0.03 - 1.3, lY * Tempf4 - (Tempf3 / 2.0), True)
 										EntityFX(Detail_Entity, 1)
 										RotateEntity(Detail_Entity, 0.0, Rnd(360.0), 0.0, True)
-										;[End Block]
-									Case 6 ; ~ Add a stump
-										;[Block]
-										Detail_Entity = CopyEntity(fr\DetailMesh[2])
-										Tempf2 = Rnd(0.1, 0.12)
-										ScaleEntity(Detail_Entity, Tempf2, Tempf2, Tempf2, True)
-										PositionEntity(Detail_Entity, lX * Tempf4 - (Tempf3 / 2.0), ColorRed() * 0.03 - 1.3, lY * Tempf4 - (Tempf3 / 2.0), True)
 										;[End Block]
 								End Select
 								
@@ -7879,6 +7879,18 @@ Function UpdateDistanceTimer%()
 	Else
 		UpdateTimer = UpdateTimer - fps\Factor[0]
 	EndIf
+End Function
+
+Function TeleportToRoom%(r.Rooms)
+	Local it.Items
+	
+	PlayerRoom = r
+	UpdateTimer = 0.0
+	For it.Items = Each Items
+		it\DistTimer = 0.0
+	Next
+	UpdateDoors()
+	UpdateRooms()
 End Function
 
 Function UpdateRooms%()

@@ -1030,7 +1030,7 @@ Function UpdateEvents%()
 										Curr173\Idle = 1
 									EndIf
 									
-									If e\room\NPC[2]\State <> 1.0 And me\KillTimer >= 0.0 Then
+									If e\room\NPC[2]\State <> 1.0 And (Not me\Terminated) Then
 										If EntityZ(e\room\NPC[2]\Collider) < e\room\z - 1150.0 * RoomScale Then
 											e\room\RoomDoors[5]\Open = False
 											me\LightBlink = 3.0
@@ -1129,7 +1129,7 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_cont1_173_intro
 				;[Block]
-				If me\KillTimer >= 0.0 And e\EventState2 = 0.0 Then
+				If (Not me\Terminated) And e\EventState2 = 0.0 Then
 					me\Zone = 0
 					If e\EventState3 > 0.0 Then
 						ShouldPlay = 13
@@ -2157,14 +2157,12 @@ Function UpdateEvents%()
 										
 										For r.Rooms = Each Rooms
 											If r\RoomTemplate\Name = "cont1_173" Then
-												PlayerRoom = r
-												
 												x = EntityX(r\OBJ, True) + 3712.0 * RoomScale
 												y = 384.0 * RoomScale
 												z = EntityZ(r\OBJ, True) + 1312.0 * RoomScale
 												
-												PositionEntity(me\Collider, x  + (EntityX(me\Collider) - EntityX(e\room\OBJ)), y + EntityY(me\Collider) + 0.4, z + (EntityZ(me\Collider) - EntityZ(e\room\OBJ)))
-												ResetEntity(me\Collider)
+												TeleportEntity(me\Collider, x  + (EntityX(me\Collider) - EntityX(e\room\OBJ)), y + EntityY(me\Collider) + 0.4, z + (EntityZ(me\Collider) - EntityZ(e\room\OBJ)))
+												TeleportToRoom(r)
 												
 												me\DropSpeed = 0.0
 												For i = 0 To 2
@@ -2207,10 +2205,6 @@ Function UpdateEvents%()
 													If pr\room = e\room Then Delete(pr)
 												Next
 												
-												UpdateTimer = 0.0
-												UpdateDoors()
-												UpdateRooms()
-												
 												ClearConsole()
 												
 												e\EventState2 = 1.0
@@ -2224,7 +2218,7 @@ Function UpdateEvents%()
 						EndIf
 					EndIf
 				Else
-					If me\KillTimer < 0.0 Then
+					If me\Terminated Then
 						If e\room\NPC[3] <> Null Then
 							If e\room\NPC[3]\State = 1.0 Lor e\room\NPC[3]\State = 11.0 Then 
 								LoadEventSound(e, "SFX\Room\Intro\Guard\Ulgrin\EscortTerminated.ogg")
@@ -3030,12 +3024,12 @@ Function UpdateEvents%()
 												PositionEntity(me\Collider, EntityX(Pvt), EntityY(me\Collider), EntityZ(Pvt))
 												FreeEntity(Pvt)
 												
-												If me\KillTimer = 0.0 Then
+												If (Not me\Terminated) Then
 													msg\DeathMsg = "In addition to the decomposed appearance typical of SCP-106's victims, the body exhibits injuries that have not been observed before: "
 													msg\DeathMsg = msg\DeathMsg + "massive skull fracture, three broken ribs, fractured shoulder and multiple heavy lacerations."
 													
 													PlaySound_Strict(LoadTempSound("SFX\Room\PocketDimension\Impact.ogg"))
-													me\KillTimer = -1.0
+													me\Terminated = True
 												EndIf
 											EndIf
 											If Float(e\EventStr) < 1000.0 Then e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\Objects[i], 6.0)
@@ -3113,15 +3107,11 @@ Function UpdateEvents%()
 													
 													me\BlinkTimer = -10.0 : me\LightBlink = 5.0 : me\BlurTimer = 1500.0
 													
-													PlayerRoom = r
-													
 													PlaySound_Strict(LoadTempSound("SFX\Room\PocketDimension\Exit.ogg"))
 													
 													TeleportEntity(me\Collider, EntityX(r\Objects[0], True), 0.6, EntityZ(r\Objects[0], True), 0.3, True)
+													TeleportToRoom(r)
 													
-													UpdateTimer = 0.0
-													UpdateDoors()
-													UpdateRooms()
 													Curr106\State = 10000.0 : Curr106\Idle = 0
 													
 													de.Decals = CreateDecal(0, EntityX(r\Objects[0], True), EntityY(r\Objects[0], True), EntityZ(r\Objects[0], True), 270.0, Rnd(360.0), 0.0)
@@ -3158,16 +3148,12 @@ Function UpdateEvents%()
 										
 										me\BlinkTimer = -10.0 : me\LightBlink = 5.0 : me\BlurTimer = 1500.0
 										
-										PlayerRoom = r
-										
 										SecondaryLightOn = PrevSecondaryLightOn
 										PrevSecondaryLightOn = 0.0
 										
 										TeleportEntity(me\Collider, EntityX(r\Objects[10], True), 0.4, EntityZ(r\Objects[10], True), 0.3, True)
+										TeleportToRoom(r)
 										
-										UpdateTimer = 0.0
-										UpdateDoors()
-										UpdateRooms()
 										Curr106\State = 10000.0 : Curr106\Idle = 0
 										
 										For e2.Events = Each Events
@@ -3184,12 +3170,12 @@ Function UpdateEvents%()
 									EndIf
 								Next
 							Else ; ~ The player is not at the exit, must've fallen down
-								If me\KillTimer >= 0.0 Then 
+								If (Not me\Terminated) Then 
 									PlaySound_Strict(HorrorSFX[8])
 									msg\DeathMsg = "In addition to the decomposed appearance typical of the victims of SCP-106, the subject seems to have suffered multiple heavy fractures to both of his legs."
+									me\BlurTimer = 3000.0
+									me\Terminated = True
 								EndIf
-								me\KillTimer = Min(-1.0, me\KillTimer)	
-								me\BlurTimer = 3000.0
 							EndIf
 						EndIf
 					ElseIf e\EventState2 = 0.0
@@ -3250,16 +3236,12 @@ Function UpdateEvents%()
 											
 											me\BlinkTimer = -10.0 : me\LightBlink = 5.0 : me\BlurTimer = 1500.0
 											
-											PlayerRoom = r
-											
 											SecondaryLightOn = PrevSecondaryLightOn
 											PrevSecondaryLightOn = 0.0
 											
 											TeleportEntity(me\Collider, EntityX(r\OBJ, True), 0.4, EntityZ(r\OBJ, True), 0.3, True)
+											TeleportToRoom(r)
 											
-											UpdateTimer = 0.0
-											UpdateDoors()
-											UpdateRooms()
 											Curr106\State = 10000.0 : Curr106\Idle = 0
 											
 											For e2.Events = Each Events
@@ -3359,9 +3341,11 @@ Function UpdateEvents%()
 								UpdateDoors()
 								UpdateRooms()
 							Else ; ~ Somewhere else, must've fallen down
-								If me\KillTimer >= 0.0 Then PlaySound_Strict(HorrorSFX[8])
-								me\KillTimer = Min(-1.0, me\KillTimer)	
-								me\BlurTimer = 3000.0
+								If (Not me\Terminated) Then
+									PlaySound_Strict(HorrorSFX[8])
+									me\BlurTimer = 3000.0
+									me\Terminated = True
+								EndIf
 							EndIf
 						EndIf 
 					EndIf
@@ -3780,7 +3764,7 @@ Function UpdateEvents%()
 							For i = 0 To 2
 								If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[i], True), EntityZ(me\Collider), EntityZ(e\room\Objects[i], True)) < PowTwo(300.0 * RoomScale) Then
 									; ~ Play the activation sound
-									If me\KillTimer >= 0.0 Then
+									If (Not me\Terminated) Then
 										ActivateTesla = True
 										Exit
 									EndIf
@@ -3835,7 +3819,7 @@ Function UpdateEvents%()
 								If e\EventState - fps\Factor[0] <= 40.0 Then PlaySound2(TeslaShockSFX, Camera, e\room\Objects[2])
 							EndIf
 							If e\EventState < 70.0 Then 
-								If me\KillTimer >= 0.0 Then 
+								If (Not me\Terminated) Then 
 									For i = 0 To 2
 										If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[i], True), EntityZ(me\Collider), EntityZ(e\room\Objects[i], True)) < PowTwo(250.0 * RoomScale) Then
 											me\LightFlash = 0.4
@@ -5602,9 +5586,9 @@ Function UpdateEvents%()
 							
 							PlayerFallingPickDistance = 0.0
 							
-							If EntityY(me\Collider) < -6400.0 * RoomScale And me\KillTimer >= 0.0 And me\FallTimer >= 0.0 Then
+							If EntityY(me\Collider) < -6400.0 * RoomScale And (Not me\Terminated) And me\FallTimer >= 0.0 Then
 								PlaySound_Strict(LoadTempSound("SFX\Room\PocketDimension\Impact.ogg"))
-								me\KillTimer = -1.0
+								me\Terminated = True
 							EndIf
 						EndIf
 					Else
@@ -6190,7 +6174,7 @@ Function UpdateEvents%()
 											InjurePlayer(fps\Factor[0] / 10000.0)
 										EndIf
 										
-										If me\KillTimer < 0.0 And me\Bloodloss >= 100.0 Then
+										If me\Terminated And me\Bloodloss >= 100.0 Then
 											msg\DeathMsg = "Class D " + SubjectName + " found dead inside SCP-035's containment chamber. "
 											msg\DeathMsg = msg\DeathMsg + "The subject exhibits heavy hemorrhaging of blood vessels around the eyes and inside the mouth and nose. "
 											msg\DeathMsg = msg\DeathMsg + "Sent for autopsy."
@@ -6450,7 +6434,7 @@ Function UpdateEvents%()
 						PointEntity(Camera, Pvt, EntityRoll(Camera))
 						FreeEntity(Pvt)
 						
-						If me\KillTimer < 0.0 Then
+						If me\Terminated Then
 							PlaySound_Strict(LoadTempSound("SFX\Character\MTF\049_2\TargetTerminated.ogg"))
 							RemoveEvent(e)
 						Else
@@ -7894,7 +7878,7 @@ Function UpdateEvents%()
 								Select Setting
 									Case ROUGH
 										;[Block]
-										me\KillTimer = Min(-1.0, me\KillTimer)
+										me\Terminated = True
 										me\BlinkTimer = -10.0
 										If e\SoundCHN <> 0 Then StopChannel(e\SoundCHN)
 										msg\DeathMsg = Chr(34) + "A heavily mutilated corpse found inside the output booth of SCP-914. DNA testing identified the corpse as Class D " + SubjectName + ". "
@@ -9563,7 +9547,7 @@ Function UpdateEndings%()
 						
 						For r.Rooms = Each Rooms
 							HideRooms(r)
-						Next					
+						Next
 						ShowRooms(e\room)
 						
 						If e\EventState < 2.0 And me\SelectedEnding = -1 Then 
@@ -9727,7 +9711,7 @@ Function UpdateEndings%()
 											PlaySound_Strict(LoadTempSound("SFX\Ending\GateB\Gunshot.ogg"))
 											
 											me\LightFlash = 20.0
-											me\KillTimer = -0.1
+											me\Terminated = True
 											msg\DeathMsg = ""
 											me\BlinkTimer = -10.0
 											
@@ -9919,12 +9903,12 @@ Function UpdateEndings%()
 						
 						CanSave = False
 						
-						ShouldPlay = 17
-						
 						For r.Rooms = Each Rooms
 							HideRooms(r)
-						Next					
+						Next
 						ShowRooms(e\room)
+						
+						ShouldPlay = 17
 						
 						e\EventState = e\EventState + fps\Factor[0]
 						
@@ -10160,7 +10144,7 @@ Function UpdateEndings%()
 									
 									me\BlurTimer = Sin(e\EventState3 * 0.7) * 1000.0
 									
-									If me\KillTimer = 0.0 Then 
+									If (Not me\Terminated) Then 
 										CameraZoom(Camera, 1.0 + Sin(e\EventState3 * 0.8) * 0.2)
 										
 										Dist = EntityDistanceSquared(me\Collider, e\room\Objects[11])
@@ -10204,7 +10188,7 @@ Function UpdateEndings%()
 											
 											me\CameraShake = CurveValue(2.0, me\CameraShake, 10.0)
 											me\LightFlash = CurveValue(2.0, me\LightFlash, 8.0)
-											me\KillTimer = -0.1
+											me\Terminated = True
 											msg\DeathMsg = ""
 											
 											RemoveEvent(e)
@@ -10270,7 +10254,7 @@ Function UpdateEndings%()
 											Next
 											
 											me\LightFlash = 20.0
-											me\KillTimer = -0.1
+											me\Terminated = True
 											msg\DeathMsg = ""
 											me\BlinkTimer = -10.0
 											

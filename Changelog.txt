@@ -3,7 +3,6 @@ v1.0.3
 General:
 - Optimized game.
 - Tiny improvement for "cabient_c.b3d" model.
-- Tiny improvement for first aid kit.
 - Tiny optimization for SCP-106's box.
 - Improved gas mask fogging overlay.
 
@@ -16,6 +15,10 @@ Bug Fixes:
     - Fixed blink and stamina multipliers that were reducing player stats on Fine and Very Fine settings.
 - Fixed vignette in Dark atmosphere mode.
 - Fixed an issue where Dr. Maynard's code could be the same as Dr. Harp's.
+- Fixed a first aid kit that damages the player if the injuries are < 0.5.
+- Fixed a bug where fog color was stored in memory every time.
+- Fixed incorrect position of Izumi logs in SCP-860-1.
+- Fixed the room counting system doesn't determine SCP-1499's dimension as a room.
 
 v1.0.2
 

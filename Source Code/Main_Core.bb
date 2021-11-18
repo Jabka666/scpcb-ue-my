@@ -157,7 +157,8 @@ BlinkMeterIMG = ScaleImage2(BlinkMeterIMG, MenuScale, MenuScale)
 RenderLoading(0, "MAIN CORE")
 
 Type Player
-	Field KillTimer#, KillAnim%, FallTimer#, DeathTimer#
+	Field Terminated# = False
+	Field KillAnim%, KillAnimTimer#, FallTimer#, DeathTimer#
 	Field Sanity#, RestoreSanity%
 	Field ForceMove#, ForceAngle#
 	Field Playable%, PlayTime%
@@ -874,7 +875,7 @@ Function UpdateConsole%()
 							;[End Block]
 					End Select
 					
-					me\KillTimer = -0.1
+					me\Terminated = True
 					;[End Block]
 				Case "noclipspeed"
 					;[Block]
@@ -915,12 +916,7 @@ Function UpdateConsole%()
 					For r.Rooms = Each Rooms
 						If r\RoomTemplate\Name = StrTemp Then
 							TeleportEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.7, EntityZ(r\OBJ))
-							UpdateDoors()
-							UpdateRooms()
-							For it.Items = Each Items
-								it\DistTimer = 0.0
-							Next
-							PlayerRoom = r
+							TeleportToRoom(r)
 							CreateConsoleMsg("Successfully teleported to: " + StrTemp + ".")
 							Exit
 						EndIf
@@ -1430,7 +1426,7 @@ Function UpdateConsole%()
 					;[End Block]
 				Case "kill", "suicide"
 					;[Block]
-					me\KillTimer = -1.0
+					me\Terminated = True
 					Select Rand(4)
 						Case 1
 							;[Block]
@@ -2304,7 +2300,7 @@ Function MainLoop%()
 			If me\Sanity < 0.0 Then
 				If me\RestoreSanity Then me\Sanity = Min(me\Sanity + fps\Factor[0], 0.0)
 				If me\Sanity < -200.0 Then 
-					If me\KillTimer >= 0.0 Then 
+					If (Not me\Terminated) Then 
 						me\HeartBeatVolume = Min(Abs(me\Sanity + 20.00) / 500.0, 1.0)
 						me\HeartBeatRate = Max(70.0 + Abs(me\Sanity + 200.0) / 6.0, me\HeartBeatRate)
 					EndIf
@@ -2362,16 +2358,19 @@ Function MainLoop%()
 			
 			me\LightBlink = Max(me\LightBlink - (fps\Factor[0] / 35.0), 0.0)
 			
-			If me\KillTimer < 0.0 Then
+			If me\Terminated Then
 				NullSelectedStuff()
-				me\BlurTimer = Abs(me\KillTimer * 5.0)
-				me\KillTimer = me\KillTimer - (fps\Factor[0] * 0.8)
-				If me\KillTimer < -360.0 Then
-					MenuOpen = True 
-					If me\SelectedEnding <> -1 Then me\EndingTimer = Min(me\KillTimer, -0.1)
+				me\BlurTimer = 1000.0
+				If me\SelectedEnding <> -1 Then
+					MenuOpen = True
+					me\EndingTimer = (-me\Terminated) * 0.1
+				Else
+					me\KillAnimTimer = me\KillAnimTimer - fps\Factor[0]
+					If me\KillAnimTimer =< 0.0 Then MenuOpen = True
 				EndIf
 			Else
 				If (Not EntityHidden(t\OverlayID[9])) Then HideEntity(t\OverlayID[9])
+				If me\KillAnimTimer <> 350.0 Then me\KillAnimTimer = 350.0
 			EndIf
 			
 			If me\FallTimer < 0.0 Then
@@ -2399,7 +2398,7 @@ Function MainLoop%()
 		UpdateGUI()
 		
 		If KeyHit(key\INVENTORY) And SelectedDoor = Null And SelectedScreen = Null And (Not I_294\Using) Then
-			If me\Playable And (Not me\Zombie) And me\VomitTimer >= 0.0 And me\KillTimer >= 0.0 And me\SelectedEnding = -1 Then
+			If me\Playable And (Not me\Zombie) And me\VomitTimer >= 0.0 And (Not me\Terminated) And me\SelectedEnding = -1 Then
 				Local W$ = ""
 				Local V# = 0.0
 				
@@ -2566,7 +2565,7 @@ Function Kill%(IsBloody% = False)
 		If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN)
 	EndIf
 	
-	If me\KillTimer >= 0.0 Then
+	If (Not me\Terminated) Then
 		If IsBloody Then
 			If EntityHidden(t\OverlayID[9]) Then ShowEntity(t\OverlayID[9])
 		EndIf
@@ -2579,7 +2578,7 @@ Function Kill%(IsBloody% = False)
 			LoadSavedGames()
 		EndIf
 		
-		me\KillTimer = Min(-1.0, me\KillTimer)
+		me\Terminated = True
 		ShowEntity(me\Head)
 		PositionEntity(me\Head, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True), True)
 		ResetEntity(me\Head)
@@ -2681,7 +2680,7 @@ Function ResetNegativeStats%(Revive% = False)
 		
 		ShowEntity(me\Collider)
 		
-		me\KillTimer = 0.0
+		me\Terminated = False
 		me\KillAnim = 0
 	EndIf
 End Function
@@ -2710,7 +2709,7 @@ Function InjurePlayer%(Injuries_#, Infection# = 0.0, BlurTimer_# = 0.0, VestFact
 End Function
 
 Function UpdateCough%(Chance_%)
-	If me\KillTimer >= 0.0 Then 
+	If (Not me\Terminated) Then 
 		If Rand(Chance_) = 1 Then
 			If (Not CoughCHN) Then
 				CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
@@ -2767,7 +2766,7 @@ Function UpdateMoving%()
 	
 	Local Temp#, Temp3%
 	
-	If me\KillTimer >= 0.0 Then
+	If (Not me\Terminated) Then
 		If PlayerRoom\RoomTemplate\Name <> "dimension_106" Then 
 			If (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) And (Not chs\NoClip) Then
 				If me\Stamina < 5.0 Then
@@ -2849,7 +2848,7 @@ Function UpdateMoving%()
 				Local TempCHN%
 				
 				If me\Playable Then me\Shake = ((me\Shake + fps\Factor[0] * Min(Sprint, 1.5) * 7.0) Mod 720.0)
-				If Temp < 180.0 And (me\Shake Mod 360.0) >= 180.0 And me\KillTimer >= 0.0 Then
+				If Temp < 180.0 And (me\Shake Mod 360.0) >= 180.0 And (Not me\Terminated) Then
 					If CurrStepSFX = 0 Then
 						Temp = GetStepSound(me\Collider)
 						
@@ -3105,7 +3104,7 @@ Function UpdateMouseLook%()
 	CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / (Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * (Float(opt\RealGraphicWidth) / Float(opt\RealGraphicHeight)))) / 2.0)))
 	me\CurrCameraZoom = Max(me\CurrCameraZoom - fps\Factor[0], 0.0)
 	
-	If me\KillTimer >= 0.0 And me\FallTimer >= 0.0 Then
+	If (Not me\Terminated) And me\FallTimer >= 0.0 Then
 		me\HeadDropSpeed = 0.0
 		
 		If IsNaN(EntityX(me\Collider)) Then
@@ -3195,7 +3194,7 @@ Function UpdateMouseLook%()
 		If (Not I_714\Using) Then
 			If wi\GasMask = 2 Lor I_1499\Using = 2 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fps\Factor[0])
 		EndIf
-		If me\KillTimer >= 0.0 Then
+		If (Not me\Terminated) Then
 			If (Not ChannelPlaying(BreathCHN)) Then
 				If (Not ChannelPlaying(BreathGasRelaxedCHN)) Then BreathGasRelaxedCHN = PlaySound_Strict(BreathGasRelaxedSFX)
 			Else
@@ -3375,7 +3374,7 @@ Function UpdateDark%()
 	
 	If wi\NightVision = 0 Then DarkAlpha = Max((1.0 - SecondaryLightOn) * 0.9, DarkAlpha)
 	
-	If me\KillTimer < 0.0 Then DarkAlpha = Max(DarkAlpha, Min(Abs(me\KillTimer / 400.0), 1.0))
+	If me\Terminated Then DarkAlpha = Max(DarkAlpha, Min(Abs(me\Terminated / 400.0), 1.0))
 	If me\FallTimer < 0.0 Then DarkAlpha = Max(DarkAlpha, Min(Abs(me\FallTimer / 400.0), 1.0))				
 	
 	If SelectedItem <> Null And (Not InvOpen) And OtherOpen = Null Then
@@ -3622,7 +3621,7 @@ Function UpdateGUI%()
 		If msg\KeyPadMsg <> "" Then msg\KeyPadMsg = ""
 	EndIf
 	
-	If KeyHit(1) And me\EndingTimer = 0.0 And me\SelectedEnding = -1 Then
+	If KeyHit(1) And me\EndingTimer >= 0.0 And me\SelectedEnding = -1 Then
 		If MenuOpen Then
 			ResumeSounds()
 			If OptionsMenu <> 0 Then SaveOptionsINI()
@@ -4532,7 +4531,7 @@ Function UpdateGUI%()
 										me\Injuries = 0.5
 										CreateMsg("You took a painkiller, easing the pain slightly.")
 									Else
-										me\Injuries = me\Injuries - Rnd(0.0, 0.2)
+										me\Injuries = me\Injuries / 2.0
 										CreateMsg("You took a painkiller, but it still hurts to walk.")
 									EndIf
 								EndIf
@@ -5359,12 +5358,7 @@ Function UpdateGUI%()
 											PositionEntity(me\Collider, I_1499\x, I_1499\y + 0.05, I_1499\z)
 										EndIf
 										ResetEntity(me\Collider)
-										UpdateDoors()
-										UpdateRooms()
-										For it.Items = Each Items
-											it\DistTimer = 0.0
-										Next
-										PlayerRoom = r
+										TeleportToRoom(r)
 										PlaySound_Strict(LoadTempSound("SFX\SCP\1499\Enter.ogg"))
 										I_1499\x = 0.0
 										I_1499\y = 0.0
@@ -5793,7 +5787,12 @@ Function RenderDebugHUD%()
 			
 			Text(x, y + (420 * MenuScale), "Deaf Timer: " + me\DeafTimer)
 			
-			Text(x + (380 * MenuScale), y, "Kill Timer: " + me\KillTimer)
+			If me\Terminated Then
+				Text(x + (380 * MenuScale), y, "Terminated: True")
+			Else
+				Text(x + (380 * MenuScale), y, "Terminated: False")
+			EndIf
+			
 			Text(x + (380 * MenuScale), y + (20 * MenuScale), "Death Timer: " + me\DeathTimer)
 			Text(x + (380 * MenuScale), y + (40 * MenuScale), "Fall Timer: " + me\FallTimer)
 			
@@ -6800,7 +6799,7 @@ Function UpdateMenu%()
 					EndIf	
 				EndIf
 			ElseIf me\StopHidingTimer < 40.0
-				If me\KillTimer >= 0.0 Then 
+				If (Not me\Terminated) Then 
 					me\StopHidingTimer = me\StopHidingTimer + fps\Factor[0]
 					If me\StopHidingTimer >= 40.0 Then
 						PlaySound_Strict(HorrorSFX[15])
@@ -6828,7 +6827,7 @@ Function UpdateMenu%()
 		
 		If mm\AchievementsMenu <= 0 And OptionsMenu <= 0 And QuitMsg <= 0 Then
 			; ~ Just save this line, ok?
-		ElseIf mm\AchievementsMenu <= 0 And OptionsMenu > 0 And QuitMsg <= 0 And me\KillTimer >= 0.0
+		ElseIf mm\AchievementsMenu <= 0 And OptionsMenu > 0 And QuitMsg <= 0 And (Not me\Terminated)
 			If UpdateMainMenuButton(x + (101 * MenuScale), y + (460 * MenuScale), 230 * MenuScale, 60 * MenuScale, "Back") Then
 				mm\AchievementsMenu = 0
 				OptionsMenu = 0
@@ -7130,7 +7129,7 @@ Function UpdateMenu%()
 					EndIf
 					;[End Block]
 			End Select
-		ElseIf mm\AchievementsMenu <= 0 And OptionsMenu <= 0 And QuitMsg > 0 And me\KillTimer >= 0.0
+		ElseIf mm\AchievementsMenu <= 0 And OptionsMenu <= 0 And QuitMsg > 0 And (Not me\Terminated)
 			Local QuitButton% = 60 
 			
 			If SelectedDifficulty\SaveType = SAVEONQUIT Lor SelectedDifficulty\SaveType = SAVEANYWHERE Then
@@ -7194,7 +7193,7 @@ Function UpdateMenu%()
 		y = y + (10 * MenuScale)
 		
 		If mm\AchievementsMenu <= 0 And OptionsMenu <= 0 And QuitMsg <= 0 Then
-			If me\KillTimer >= 0.0 Then	
+			If (Not me\Terminated) Then	
 				y = y + (72 * MenuScale)
 				
 				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "Resume", True, True) Then
@@ -7317,7 +7316,7 @@ Function UpdateMenu%()
 				y = y + (80 * MenuScale)
 			EndIf
 			
-			If me\KillTimer >= 0.0 And (Not MainMenuOpen) Then
+			If (Not me\Terminated) And (Not MainMenuOpen) Then
 				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "Quit") Then
 					QuitMsg = 1
 					mm\ShouldDeleteGadgets = True
@@ -7365,7 +7364,7 @@ Function RenderMenu%()
 			SetFont(fo\FontID[Font_Default_Big])
 			Text(x, y - (77 * MenuScale), "QUIT?", False, True)
 			SetFont(fo\FontID[Font_Default])
-		ElseIf me\KillTimer >= 0.0 Then
+		ElseIf (Not me\Terminated) Then
 			SetFont(fo\FontID[Font_Default_Big])
 			Text(x, y - (77 * MenuScale), "PAUSED", False, True)
 			SetFont(fo\FontID[Font_Default])
@@ -7393,7 +7392,7 @@ Function RenderMenu%()
 				EndIf
 			EndIf
 			Text(x, y + (40 * MenuScale), TempStr)
-		ElseIf mm\AchievementsMenu <= 0 And OptionsMenu > 0 And QuitMsg <= 0 And me\KillTimer >= 0.0
+		ElseIf mm\AchievementsMenu <= 0 And OptionsMenu > 0 And QuitMsg <= 0 And (Not me\Terminated)
 			Color(0, 255, 0)
 			If OptionsMenu = 1
 				Rect(x - (10 * MenuScale), y - (5 * MenuScale), 110 * MenuScale, 40 * MenuScale, True)
@@ -7694,7 +7693,7 @@ Function RenderMenu%()
 					EndIf
 					;[End Block]
 			End Select
-		ElseIf mm\AchievementsMenu <= 0 And OptionsMenu <= 0 And QuitMsg > 0 And me\KillTimer >= 0.0
+		ElseIf mm\AchievementsMenu <= 0 And OptionsMenu <= 0 And QuitMsg > 0 And (Not me\Terminated)
 			; ~ Just save this line, ok?
 		Else
 			If mm\AchievementsMenu > 0 Then
@@ -7721,7 +7720,7 @@ Function RenderMenu%()
 		y = y + (10 * MenuScale)
 		
 		If mm\AchievementsMenu <= 0 And OptionsMenu <= 0 And QuitMsg <= 0 Then
-			If me\KillTimer >= 0.0 Then	
+			If (Not me\Terminated) Then	
 				y = y + (297 * MenuScale)
 				If SelectedDifficulty\SaveType <> NOSAVES Then
 					y = y + (75 * MenuScale)
@@ -7732,7 +7731,7 @@ Function RenderMenu%()
 					y = y + (80 * MenuScale)
 				EndIf
 			EndIf
-			If me\KillTimer < 0.0 Then
+			If me\Terminated Then
 				SetFont(fo\FontID[Font_Default])
 				RowText(msg\DeathMsg, x, y, 430 * MenuScale, 600 * MenuScale)
 			EndIf
@@ -9086,7 +9085,9 @@ Function NullGame%(PlayButtonSFX% = True)
 	ShouldPlay = 0
 	
 	LightVolume = 0.0
-	
+	CurrFogColorR = 0.0
+	CurrFogColorG = 0.0
+	CurrFogColorB = 0.0
 	SecondaryLightOn = True
 	PrevSecondaryLightOn = True
 	RemoteDoorOn = True
@@ -9724,7 +9725,7 @@ Function UpdateExplosion%()
 			EndIf
 			me\LightFlash = Min((me\ExplosionTimer - 140.0) / 10.0, 5.0)
 			
-			If me\ExplosionTimer > 160.0 Then me\KillTimer = Min(me\KillTimer, -0.1)
+			If me\ExplosionTimer > 160.0 Then me\Terminated = True
 			If me\ExplosionTimer > 500.0 Then me\ExplosionTimer = 0.0
 			
 			; ~ A dirty workaround to prevent the collider from falling down into the facility once the nuke goes off, causing the UpdateEvents() function to be called again and crashing the game
@@ -9804,7 +9805,7 @@ Function UpdateVomit%()
 		If me\VomitTimer < -15.0 Then
 			FreeSound_Strict(VomitSFX)
 			me\VomitTimer = 0.0
-			If me\KillTimer >= 0.0 Then PlaySound_Strict(BreathSFX(0, 0))
+			If (Not me\Terminated) Then PlaySound_Strict(BreathSFX(0, 0))
 			me\Injuries = me\PrevInjuries
 			me\Bloodloss = me\PrevBloodloss
 			me\Vomit = False
@@ -9888,7 +9889,7 @@ Function Update008%()
 								r\NPC[0]\SoundCHN = PlaySound_Strict(r\NPC[0]\Sound)
 								ChangeNPCTextureID(r\NPC[0], 11)
 								r\NPC[0]\State = 6.0
-								PlayerRoom = r
+								TeleportToRoom(r)
 								Exit
 							EndIf
 						Next
@@ -9931,7 +9932,7 @@ Function Update008%()
 					ElseIf I_008\Timer > 96.0
 						me\BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 96.0), me\BlinkTimer), -10.0)
 					Else
-						me\KillTimer = Max(-350.0, me\KillTimer)
+						me\Terminated = True
 					EndIf
 					
 					If PlayerRoom\NPC[0]\State2 = 0.0 Then
@@ -10059,9 +10060,7 @@ Function UpdateLeave1499%()
 				I_1499\y = EntityY(me\Collider)
 				I_1499\z = EntityZ(me\Collider)
 				TeleportEntity(me\Collider, I_1499\PrevX, I_1499\PrevY + 0.05, I_1499\PrevZ)
-				PlayerRoom = r
-				UpdateDoors()
-				UpdateRooms()
+				TeleportToRoom(r)
 				If PlayerRoom\RoomTemplate\Name = "room3_storage" Then
 					If EntityY(me\Collider) < (-4600.0) * RoomScale Then
 						For i = 0 To 3

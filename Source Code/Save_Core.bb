@@ -8,7 +8,7 @@ End Type
 Global as.AutoSave = New AutoSave
 
 Function UpdateAutoSave%()
-	If (Not opt\AutoSaveEnabled) Lor SelectedDifficulty\SaveType <> SAVEANYWHERE Lor me\KillTimer < 0.0 Lor (Not CanSave) Lor (Not me\Playable) Lor me\Zombie Then
+	If (Not opt\AutoSaveEnabled) Lor SelectedDifficulty\SaveType <> SAVEANYWHERE Lor me\Terminated Lor (Not CanSave) Lor (Not me\Playable) Lor me\Zombie Then
 		CancelAutoSave()
 		Return
 	EndIf
@@ -35,7 +35,7 @@ End Function
 Function SaveGame%(File$)
 	CatchErrors("Uncaught (SaveGame)")
 	
-	If (Not me\Playable) Lor me\Zombie Lor me\KillTimer < 0.0 Then Return ; ~ Don't save if the player can't move at all
+	If (Not me\Playable) Lor me\Zombie Lor me\Terminated Then Return ; ~ Don't save if the player can't move at all
 	
 	If me\DropSpeed > 0.02 * fps\Factor[0] Lor me\DropSpeed < (-0.02) * fps\Factor[0] Then Return
 	
@@ -1425,7 +1425,7 @@ Function LoadGameQuick%(File$)
 	me\LightFlash = 0.0
 	me\BlurTimer = 0.0
 	
-	me\KillTimer = 0.0
+	me\Terminated = False
 	me\FallTimer = 0.0
 	MenuOpen = False
 	

@@ -788,7 +788,7 @@ Function UpdateNPCs%()
 									If Temp Then
 										n\Angle = DeltaYaw(n\Collider, Camera)
 										If Dist < 0.4225 Then
-											If me\KillTimer >= 0.0 And (Not chs\GodMode) Then
+											If (Not me\Terminated) And (Not chs\GodMode) Then
 												Select PlayerRoom\RoomTemplate\Name
 													Case "room2c_gw_lcz", "room2_closets", "cont1_895"
 														;[Block]
@@ -1003,7 +1003,7 @@ Function UpdateNPCs%()
 										PointEntity(n\OBJ, me\Collider)
 										RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0.0)
 										
-										If me\KillTimer >= 0.0 Then
+										If (Not me\Terminated) Then
 											PrevFrame = n\Frame
 											AnimateNPC(n, 284.0, 333.0, n\CurrSpeed * 43.0)
 											
@@ -1076,7 +1076,7 @@ Function UpdateNPCs%()
 										EndIf
 										AnimateNPC(n, 105.0, 110.0, 0.15, False)
 										
-										If me\KillTimer >= 0.0 And me\FallTimer >= 0.0 Then
+										If (Not me\Terminated) And me\FallTimer >= 0.0 Then
 											PointEntity(n\OBJ, me\Collider)
 											RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0.0)									
 											
@@ -1268,7 +1268,7 @@ Function UpdateNPCs%()
 						
 						If chs\NoTarget And n\Target = Null Then n\State = 5.0
 						
-						If me\KillTimer >= 0.0 Then
+						If (Not me\Terminated) Then
 							If MilliSecs2() > n\State3 Then
 								n\LastSeen = 0
 								If n\Target = Null Then
@@ -2201,7 +2201,7 @@ Function UpdateNPCs%()
 							;[End Block]
 						Case 4.0 ; ~ Attacks
 							;[Block]
-							If me\KillTimer >= 0.0 Then
+							If (Not me\Terminated) Then
 								Attack = False
 								If n\Frame <= 813.0 Then
 									AnimateNPC(n, 795.0, 813.0, 0.7, False)
@@ -2296,7 +2296,7 @@ Function UpdateNPCs%()
 							If n\Frame >= 356.0 Then SetNPCFrame(n, 302.0)
 						EndIf
 						
-						If me\KillTimer >= 0.0 Then
+						If (Not me\Terminated) Then
 							Dist = EntityDistanceSquared(n\Collider, me\Collider)
 							
 							Local ShootAccuracy# = 0.4 + 0.5 * SelectedDifficulty\AggressiveNPCs
@@ -2481,7 +2481,7 @@ Function UpdateNPCs%()
 							If n\Frame >= 356.0 Then SetNPCFrame(n, 302.0)
 						EndIf
 						
-						If me\KillTimer >= 0.0 Then
+						If (Not me\Terminated) Then
 							Dist = EntityDistanceSquared(n\Collider, me\Collider)
 							
 							Local SearchPlayer% = False
@@ -3117,7 +3117,7 @@ Function UpdateNPCs%()
 													
 													n\Reload = 5.0
 													
-													If me\KillTimer < 0.0 And n\State <> 3 Then
+													If me\Terminated And n\State <> 3 Then
 														If PlayerRoom\RoomTemplate\Name = "gate_b" Then
 															msg\DeathMsg = Chr(34) + "CH-2 to control. Shot down a runaway Class D at Gate B." + Chr(34)
 														Else
@@ -3585,7 +3585,7 @@ Function UpdateNPCs%()
 							RotateEntity(n\Collider, 0.0, Angle - 90.0, 0.0, True)
 							
 							; ~ If close enough to attack or already attacking, play the attack anim
-							If (Dist < 1.0 Lor (n\Frame > 451.0 And n\Frame < 493.0) Lor me\KillTimer < 0.0) Then
+							If (Dist < 1.0 Lor (n\Frame > 451.0 And n\Frame < 493.0) Lor me\Terminated) Then
 								msg\DeathMsg = ""
 								
 								n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
@@ -3593,7 +3593,7 @@ Function UpdateNPCs%()
 								AnimateNPC(n, 451.0, 493.0, 0.5, False)
 								
 								If (PrevFrame < 461.0 And n\Frame >= 461.0) Then 
-									If me\KillTimer >= 0.0 Then Kill(True)
+									If (Not me\Terminated) Then Kill(True)
 									PlaySound_Strict(DamageSFX[11])
 								EndIf
 								If (PrevFrame < 476.0 And n\Frame >= 476.0) Then PlaySound_Strict(DamageSFX[12])
@@ -4917,7 +4917,7 @@ Function UpdateNPCs%()
 							;[End Block]
 						Case 4.0 ; ~ Attacks
 							;[Block]
-							If me\KillTimer >= 0.0 Then
+							If (Not me\Terminated) Then
 								AnimateNPC(n, 126.0, 165.0, 0.6, False)
 								If n\Frame >= 146.0 And PrevFrame < 146.0 Then
 									If Dist < 0.49 Then
@@ -5540,11 +5540,11 @@ Function UpdateMTFUnit%(n.NPCs)
 							RotateEntity(n\Collider, 0.0, CurveAngle(Angle, EntityYaw(n\Collider), 10.0), 0.0, True)
 							n\Angle = EntityYaw(n\Collider)
 							
-							If n\Reload <= 0.0 And me\KillTimer = 0.0 Then
+							If n\Reload <= 0.0 And (Not me\Terminated) Then
 								If EntityVisible(n\Collider, Camera) Then
 									Angle = WrapAngle(Angle - EntityYaw(n\Collider))
 									If Angle < 5.0 Lor Angle > 355.0 Then 
-										Local PrevKillTimer# = me\KillTimer
+										Local PrevTerminated# = me\Terminated
 										
 										PlaySound2(GunshotSFX, Camera, n\Collider, 15.0)
 										
@@ -5561,9 +5561,9 @@ Function UpdateMTFUnit%(n.NPCs)
 										
 										msg\DeathMsg = SubjectName + ". Died of blood loss after being shot by Nine-Tailed Fox."
 										
-										If PrevKillTimer >= 0.0 And me\KillTimer < 0.0 Then
+										If (Not PrevTerminated) And me\Terminated Then
 											msg\DeathMsg = SubjectName + ". Terminated by Nine-Tailed Fox."
-											PlayMTFSound(LoadTempSound("SFX\Character\MTF\Targetterminated" + Rand(1, 4) + ".ogg"), n)
+											PlayMTFSound(LoadTempSound("SFX\Character\MTF\TargetTerminated" + Rand(1, 4) + ".ogg"), n)
 										EndIf
 									EndIf	
 								EndIf
@@ -6238,10 +6238,10 @@ Function UpdateMTFUnit%(n.NPCs)
 					
 					AnimateNPC(n, 346.0, 351.0, 0.2, False)
 					
-					If n\Reload <= 0.0 And me\KillTimer = 0.0 Then
+					If n\Reload <= 0.0 And (Not me\Terminated) Then
 						If EntityVisible(n\Collider, me\Collider) Then
 							If Abs(DeltaYaw(n\Collider, me\Collider)) < 50.0 Then
-								PrevKillTimer = me\KillTimer
+								PrevTerminated = me\Terminated
 								
 								PlaySound2(GunshotSFX, Camera, n\Collider, 15.0)
 								
@@ -6258,7 +6258,7 @@ Function UpdateMTFUnit%(n.NPCs)
 								
 								msg\DeathMsg = SubjectName + ". Died of blood loss after being shot by Nine-Tailed Fox."
 								
-								If PrevKillTimer >= 0.0 And me\KillTimer < 0.0 Then
+								If (Not PrevTerminated) And me\Terminated Then
 									msg\DeathMsg = Chr(34) + SubjectName + " was spotted in Gate A area and terminated. Incident needs an investigation." + Chr(34)
 									PlayMTFSound(LoadTempSound("SFX\Character\MTF\Targetterminated" + Rand(1, 4) + ".ogg"), n)
 								EndIf
@@ -6529,7 +6529,7 @@ Function UpdateMTFUnit%(n.NPCs)
 					;[Block]
 					n\Angle = CurveValue(0.0, n\Angle, 40.0)
 					
-					If me\KillTimer >= 0.0 Then
+					If (Not me\Terminated) Then
 						Dist = EntityDistanceSquared(n\Collider, me\Collider)
 						
 						SearchPlayer = False
@@ -6554,7 +6554,7 @@ Function UpdateMTFUnit%(n.NPCs)
 								n\State3 = Min(n\State3 + fps\Factor[0], 70.0 * 4.0)
 							Else
 								If n\Reload <= 0.0 Then
-									PrevKillTimer = me\KillTimer
+									PrevTerminated = me\Terminated
 									
 									PlaySound2(GunshotSFX, Camera, n\Collider, 15.0)
 									
@@ -6567,7 +6567,7 @@ Function UpdateMTFUnit%(n.NPCs)
 									
 									msg\DeathMsg = SubjectName + ". Died of blood loss after being shot by Nine-Tailed Fox."
 									
-									If PrevKillTimer >= 0.0 And me\KillTimer < 0.0 Then
+									If (Not PrevTerminated) And me\Terminated Then
 										msg\DeathMsg = Chr(34) + SubjectName + " was spotted in Gate A area and terminated. Incident needs an investigation." + Chr(34)
 										PlayMTFSound(LoadTempSound("SFX\Character\MTF\Targetterminated" + Rand(1, 4) + ".ogg"), n)
 									EndIf
@@ -7173,21 +7173,16 @@ Function MoveToPocketDimension%()
 	
 	For r.Rooms = Each Rooms
 		If r\RoomTemplate\Name = "dimension_106" Then
-			me\FallTimer = 0.0
-			UpdateDoors()
-			UpdateRooms()
 			ShowEntity(me\Collider)
 			PlaySound_Strict(Use914SFX)
 			PlaySound_Strict(OldManSFX[5])
-			PositionEntity(me\Collider, EntityX(r\OBJ), 0.8, EntityZ(r\OBJ))
-			me\DropSpeed = 0.0
-			ResetEntity(me\Collider)
 			
-			me\BlinkTimer = -10.0
+			TeleportEntity(me\Collider, EntityX(r\OBJ), 0.8, EntityZ(r\OBJ))
+			TeleportToRoom(r)
 			
+			me\BlinkTimer = -10.0 : me\FallTimer = 0.0 : me\DropSpeed = 0.0
 			InjurePlayer(0.5, 0.0, 1600.0)
 			
-			PlayerRoom = r
 			
 			Exit
 			Return
