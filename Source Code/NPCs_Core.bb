@@ -3360,14 +3360,16 @@ Function UpdateNPCs%()
 											PositionEntity(Pvt, TFormedX(), EntityY(fr\Forest_Pivot, True) + 2.3, TFormedZ())
 											
 											; ~ Keep searching for a more suitable cell
+											Temp = False
 											If EntityInView(Pvt, Camera) Then
 												PositionEntity(n\Collider, 0.0, -110.0, 0.0)
 											Else
 												PositionEntity(n\Collider, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt))
 												x2 = ForestGridSize
+												Temp = True
 											EndIf
 											FreeEntity(Pvt)
-											Exit
+											If Temp Then Exit
 										EndIf
 									Next
 								Next
@@ -3405,7 +3407,7 @@ Function UpdateNPCs%()
 								
 								PositionEntity(n\Collider, EntityX(n\Collider), EntityY(fr\Forest_Pivot, True) + 2.3, EntityZ(n\Collider))
 								
-								If ForestNPC <> 0
+								If ForestNPC <> 0 Then
 									If ForestNPCData[2] = 0.0 Then
 										Local DocChance% = 0
 										Local DocAmount% = 0
@@ -3509,8 +3511,8 @@ Function UpdateNPCs%()
 												me\BlinkTimer = -10.0
 											Else
 												x2 = ForestGridSize
+												Exit
 											EndIf
-											Exit
 										EndIf
 									Next
 								Next

@@ -150,6 +150,8 @@
 		Dmitriy Sazanov ("Dmitriy-Bars")
 		C45
 		Stefan Koch ("Salvage")
+		Quote
+
 
 *Mod Testers
 

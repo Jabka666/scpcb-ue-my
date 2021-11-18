@@ -8294,169 +8294,190 @@ Function UpdateEvents%()
 						EndIf
 					Next
 					
-					If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 0.5625 And Pick1162ARC
-						ga\DrawHandIcon = True
-						If mo\MouseHit1 Then GrabbedEntity = e\room\Objects[0]
-					EndIf
-					
-					If GrabbedEntity <> 0 Then
-						e\EventState2 = Rand(0, MaxItemAmount - 1)
-						If Inventory(e\EventState2) <> Null Then
-							; ~ Randomly picked item slot has an item in it, using this slot
-							e\EventState3 = 1.0
-						Else
-							; ~ Randomly picked item slot is empty, getting the first available slot
-							For i = 0 To MaxItemAmount - 1
-								Local IsSlotEmpty% = (Inventory((i + e\EventState2) Mod MaxItemAmount) = Null)
-								
-								If (Not IsSlotEmpty) Then
-									; ~ Successful
-									e\EventState2 = (i + e\EventState2) Mod MaxItemAmount
-								EndIf
-								
-								If Rand(8) = 1 Then
-									If IsSlotEmpty Then
-										e\EventState3 = 3.1
-									Else
-										e\EventState3 = 3.0
+					If Pick1162ARC Then
+						If InteractObject(e\room\Objects[0], 0.5625) Then
+							e\EventState2 = Rand(0, MaxItemAmount - 1)
+							If Inventory(e\EventState2) <> Null Then
+								; ~ Randomly picked item slot has an item in it, using this slot
+								e\EventState3 = 1.0
+							Else
+								; ~ Randomly picked item slot is empty, getting the first available slot
+								For i = 0 To MaxItemAmount - 1
+									Local IsSlotEmpty% = (Inventory((i + e\EventState2) Mod MaxItemAmount) = Null)
+									
+									If (Not IsSlotEmpty) Then
+										; ~ Successful
+										e\EventState2 = (i + e\EventState2) Mod MaxItemAmount
 									EndIf
 									
-									e\EventState = Rand(1, 5)
-									
-									; ~ Checking if the selected nostalgia item already exists or not
-									Local ItemName$ = ""
-									
-									Select e\EventState
-										Case 1.0
-											;[Block]
-											ItemName = "Lost Key"
-											;[End Block]
-										Case 2.0
-											;[Block]
-											ItemName = "Disciplinary Hearing DH-S-4137-17092"
-											;[End Block]
-										Case 3.0
-											;[Block]
-											ItemName = "Coin"
-											;[End Block]
-										Case 4.0
-											;[Block]
-											ItemName = "Movie Ticket"
-											;[End Block]
-										Case 5.0
-											;[Block]
-											ItemName = "Old Badge"
-											;[End Block]
-									End Select
-									
-									Local ItemExists% = False
-									
-									For it.Items = Each Items
-										If it\Name = ItemName Then
-											ItemExists = True
+									If Rand(8) = 1 Then
+										If IsSlotEmpty Then
+											e\EventState3 = 3.1
+										Else
+											e\EventState3 = 3.0
+										EndIf
+										
+										e\EventState = Rand(1, 5)
+										
+										; ~ Checking if the selected nostalgia item already exists or not
+										Local ItemName$ = ""
+										
+										Select e\EventState
+											Case 1.0
+												;[Block]
+												ItemName = "Lost Key"
+												;[End Block]
+											Case 2.0
+												;[Block]
+												ItemName = "Disciplinary Hearing DH-S-4137-17092"
+												;[End Block]
+											Case 3.0
+												;[Block]
+												ItemName = "Coin"
+												;[End Block]
+											Case 4.0
+												;[Block]
+												ItemName = "Movie Ticket"
+												;[End Block]
+											Case 5.0
+												;[Block]
+												ItemName = "Old Badge"
+												;[End Block]
+										End Select
+										
+										For it.Items = Each Items
+											If it\Name = ItemName Then
+												e\EventState3 = 1.0
+												e\EventState = 0.0
+												Exit
+											EndIf
+										Next
+										If (Not IsSlotEmpty) Then Exit
+									Else
+										If IsSlotEmpty Then
+											e\EventState3 = 2.0
+										Else
 											e\EventState3 = 1.0
-											e\EventState = 0.0
 											Exit
 										EndIf
-									Next
-									
-									If (Not ItemExists) And (Not IsSlotEmpty) Then Exit
-								Else
-									If IsSlotEmpty Then
-										e\EventState3 = 2.0
-									Else
-										e\EventState3 = 1.0
-										Exit
 									EndIf
+								Next
+							EndIf
+						EndIf
+						
+						; ~ Trade successful
+						If e\EventState3 = 1.0 Then
+							Local ShouldCreateItem% = False
+							
+							For itt.ItemTemplates = Each ItemTemplates
+								If IsItemGoodFor1162ARC(itt) Then
+									Select Inventory(e\EventState2)\ItemTemplate\TempName
+										Case "key"
+											;[Block]
+											If itt\TempName = "key0" Lor itt\TempName = "key1" And Rand(2) = 1
+												ShouldCreateItem = True
+											EndIf
+											;[End Block]
+										Case "paper", "oldpaper"
+											;[Block]
+											If itt\TempName = "paper" And Rand(12) = 1 Then
+												ShouldCreateItem = True
+											EndIf
+											;[End Block]
+										Case "gasmask", "gasmask3", "supergasmask", "hazmatsuit", "hazmatsuit2", "hazmatsuit3"
+											;[Block]
+											If itt\TempName = "gasmask" Lor itt\TempName = "gasmask3" Lor itt\TempName = "supergasmask" Lor itt\TempName = "hazmatsuit" Lor itt\TempName = "hazmatsuit2" Lor itt\TempName = "hazmatsuit3" And Rand(2) = 1 Then
+												ShouldCreateItem = True
+											EndIf
+											;[End Block]
+										Case "key0", "key1", "key2", "key3"
+											;[Block]
+											If itt\TempName = "key0" Lor itt\TempName = "key1" Lor itt\TempName = "key2" Lor itt\TempName = "key3" And Rand(6) = 1 Then
+												ShouldCreateItem = True
+											EndIf
+											;[End Block]
+										Case "mastercard", "playcard", "origami", "electronics"
+											;[Block]
+											If itt\TempName = "mastercard" Lor itt\TempName = "playcard" Lor itt\TempName = "origami" Lor itt\TempName = "electronics" And Rand(5) = 1 Then
+												ShouldCreateItem = True
+											EndIf
+											;[End Block]
+										Case "vest", "finevest"
+											;[Block]
+											If itt\TempName = "vest" Lor itt\TempName = "finevest" And Rand(1) = 1 Then
+												ShouldCreateItem = True
+											EndIf
+											;[End Block]
+										Default
+											;[Block]
+											If itt\TempName = "mastercard" Lor itt\TempName = "playcard" And Rand(6) = 1 Then
+												ShouldCreateItem = True
+											EndIf
+											;[End Block]
+									End Select
+								EndIf
+								
+								If ShouldCreateItem Then
+									RemoveWearableItems(Inventory(e\EventState2))
+									RemoveItem(Inventory(e\EventState2))
+									
+									it.Items = CreateItem(itt\Name, itt\TempName, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+									EntityType(it\Collider, HIT_ITEM)
+									
+									PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\Exchange" + Rand(0, 4) + ".ogg"))
+									e\EventState3 = 0.0
+									
+									GiveAchievement(Achv1162_ARC)
+									mo\MouseHit1 = False
+									Exit
 								EndIf
 							Next
-						EndIf
-					EndIf
-					
-					; ~ Trade successful
-					If e\EventState3 = 1.0 Then
-						Local ShouldCreateItem% = False
-						
-						For itt.ItemTemplates = Each ItemTemplates
-							If IsItemGoodFor1162ARC(itt) Then
-								Select Inventory(e\EventState2)\ItemTemplate\TempName
-									Case "key"
-										;[Block]
-										If itt\TempName = "key0" Lor itt\TempName = "key1" And Rand(2) = 1
-											ShouldCreateItem = True
-										EndIf
-										;[End Block]
-									Case "paper", "oldpaper"
-										;[Block]
-										If itt\TempName = "paper" And Rand(12) = 1 Then
-											ShouldCreateItem = True
-										EndIf
-										;[End Block]
-									Case "gasmask", "gasmask3", "supergasmask", "hazmatsuit", "hazmatsuit2", "hazmatsuit3"
-										;[Block]
-										If itt\TempName = "gasmask" Lor itt\TempName = "gasmask3" Lor itt\TempName = "supergasmask" Lor itt\TempName = "hazmatsuit" Lor itt\TempName = "hazmatsuit2" Lor itt\TempName = "hazmatsuit3" And Rand(2) = 1 Then
-											ShouldCreateItem = True
-										EndIf
-										;[End Block]
-									Case "key0", "key1", "key2", "key3"
-										;[Block]
-										If itt\TempName = "key0" Lor itt\TempName = "key1" Lor itt\TempName = "key2" Lor itt\TempName = "key3" And Rand(6) = 1 Then
-											ShouldCreateItem = True
-										EndIf
-										;[End Block]
-									Case "mastercard", "playcard", "origami", "electronics"
-										;[Block]
-										If itt\TempName = "mastercard" Lor itt\TempName = "playcard" Lor itt\TempName = "origami" Lor itt\TempName = "electronics" And Rand(5) = 1 Then
-											ShouldCreateItem = True
-										EndIf
-										;[End Block]
-									Case "vest", "finevest"
-										;[Block]
-										If itt\TempName = "vest" Lor itt\TempName = "finevest" And Rand(1) = 1 Then
-											ShouldCreateItem = True
-										EndIf
-										;[End Block]
-									Default
-										;[Block]
-										If itt\TempName = "mastercard" Lor itt\TempName = "playcard" And Rand(6) = 1 Then
-											ShouldCreateItem = True
-										EndIf
-										;[End Block]
-								End Select
-							EndIf
-							
-							If ShouldCreateItem Then
+						; ~ Trade not sucessful (player got in return to injuries a new item)
+						ElseIf e\EventState3 = 2.0
+							InjurePlayer(5.0)
+							Pvt = CreatePivot()
+							PositionEntity(Pvt, EntityX(me\Collider), EntityY(me\Collider) - 0.05, EntityZ(me\Collider))
+							TurnEntity(Pvt, 90.0, 0.0, 0.0)
+							EntityPick(Pvt, 0.3)
+							de.Decals = CreateDecal(3, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, 0.75)
+							FreeEntity(Pvt)
+							For itt.ItemTemplates = Each ItemTemplates
+								If IsItemGoodFor1162ARC(itt) And Rand(6) = 1 Then
+									it.Items = CreateItem(itt\Name, itt\TempName, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+									EntityType(it\Collider, HIT_ITEM)
+									
+									GiveAchievement(Achv1162_ARC)
+									mo\MouseHit1 = False
+									e\EventState3 = 0.0
+									If me\Injuries > 15.0
+										msg\DeathMsg = "A dead Class D subject was discovered within the containment chamber of SCP-1162-ARC."
+										msg\DeathMsg = msg\DeathMsg + " An autopsy revealed that his right lung was missing, which suggests"
+										msg\DeathMsg = msg\DeathMsg + " interaction with SCP-1162-ARC."
+										PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(1, 4) + ".ogg"))
+										me\LightFlash = 5.0
+										Kill(True)
+									Else
+										PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(1, 4) + ".ogg"))
+										me\LightFlash = 5.0
+										CreateMsg("You feel a sudden overwhelming pain in your chest.")
+									EndIf
+									Exit
+								EndIf
+							Next
+						; ~ Trade with nostalgia item
+						ElseIf e\EventState3 >= 3.0
+							If e\EventState3 < 3.1
+								PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\Exchange" + Rand(0, 4) + ".ogg"))
 								RemoveWearableItems(Inventory(e\EventState2))
 								RemoveItem(Inventory(e\EventState2))
-								
-								it.Items = CreateItem(itt\Name, itt\TempName, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
-								EntityType(it\Collider, HIT_ITEM)
-								
-								PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\Exchange" + Rand(0, 4) + ".ogg"))
-								e\EventState3 = 0.0
-								
-								GiveAchievement(Achv1162_ARC)
-								mo\MouseHit1 = False
-								Exit
-							EndIf
-						Next
-					; ~ Trade not sucessful (player got in return to injuries a new item)
-					ElseIf e\EventState3 = 2.0
-						InjurePlayer(5.0)
-						Pvt = CreatePivot()
-						PositionEntity(Pvt, EntityX(me\Collider), EntityY(me\Collider) - 0.05, EntityZ(me\Collider))
-						TurnEntity(Pvt, 90.0, 0.0, 0.0)
-						EntityPick(Pvt, 0.3)
-						de.Decals = CreateDecal(3, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, 0.75)
-						FreeEntity(Pvt)
-						For itt.ItemTemplates = Each ItemTemplates
-							If IsItemGoodFor1162ARC(itt) And Rand(6) = 1 Then
-								it.Items = CreateItem(itt\Name, itt\TempName, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
-								EntityType(it\Collider, HIT_ITEM)
-								
-								GiveAchievement(Achv1162_ARC)
-								mo\MouseHit1 = False
-								e\EventState3 = 0.0
+							Else
+								InjurePlayer(5.0)
+								Pvt = CreatePivot()
+								PositionEntity(Pvt, EntityX(me\Collider), EntityY(me\Collider) - 0.05, EntityZ(me\Collider))
+								TurnEntity(Pvt, 90.0, 0.0, 0.0)
+								EntityPick(Pvt, 0.3)
+								de.Decals = CreateDecal(3, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, 0.75)
+								FreeEntity(Pvt)
 								If me\Injuries > 15.0
 									msg\DeathMsg = "A dead Class D subject was discovered within the containment chamber of SCP-1162-ARC."
 									msg\DeathMsg = msg\DeathMsg + " An autopsy revealed that his right lung was missing, which suggests"
@@ -8467,69 +8488,41 @@ Function UpdateEvents%()
 								Else
 									PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(1, 4) + ".ogg"))
 									me\LightFlash = 5.0
-									CreateMsg("You feel a sudden overwhelming pain in your chest.")
+									CreateMsg("You notice something moving in your pockets and a sudden pain in your chest.")
 								EndIf
-								Exit
+								e\EventState2 = 0.0
 							EndIf
-						Next
-					; ~ Trade with nostalgia item
-					ElseIf e\EventState3 >= 3.0
-						If e\EventState3 < 3.1
-							PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\Exchange" + Rand(0, 4) + ".ogg"))
-							RemoveWearableItems(Inventory(e\EventState2))
-							RemoveItem(Inventory(e\EventState2))
-						Else
-							InjurePlayer(5.0)
-							Pvt = CreatePivot()
-							PositionEntity(Pvt, EntityX(me\Collider), EntityY(me\Collider) - 0.05, EntityZ(me\Collider))
-							TurnEntity(Pvt, 90.0, 0.0, 0.0)
-							EntityPick(Pvt, 0.3)
-							de.Decals = CreateDecal(3, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, 0.75)
-							FreeEntity(Pvt)
-							If me\Injuries > 15.0
-								msg\DeathMsg = "A dead Class D subject was discovered within the containment chamber of SCP-1162-ARC."
-								msg\DeathMsg = msg\DeathMsg + " An autopsy revealed that his right lung was missing, which suggests"
-								msg\DeathMsg = msg\DeathMsg + " interaction with SCP-1162-ARC."
-								PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(1, 4) + ".ogg"))
-								me\LightFlash = 5.0
-								Kill(True)
-							Else
-								PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(1, 4) + ".ogg"))
-								me\LightFlash = 5.0
-								CreateMsg("You notice something moving in your pockets and a sudden pain in your chest.")
-							EndIf
-							e\EventState2 = 0.0
+							
+							Select e\EventState
+								Case 1.0
+									;[Block]
+									it.Items = CreateItem("Lost Key", "key", EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+									;[End Block]
+								Case 2.0
+									;[Block]
+									it.Items = CreateItem("Disciplinary Hearing DH-S-4137-17092", "oldpaper", EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+									;[End Block]
+								Case 3.0
+									;[Block]
+									it.Items = CreateItem("Coin", "coin", EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+									;[End Block]
+								Case 4.0
+									;[Block]
+									it.Items = CreateItem("Movie Ticket", "ticket", EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+									;[End Block]
+								Case 5.0
+									;[Block]
+									it.Items = CreateItem("Old Badge", "badge", EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+									;[End Block]
+							End Select
+							EntityType(it\Collider, HIT_ITEM)
+							
+							GiveAchievement(Achv1162_ARC)
+							mo\MouseHit1 = False
+							e\EventState3 = 0.0
 						EndIf
-						
-						Select e\EventState
-							Case 1.0
-								;[Block]
-								it.Items = CreateItem("Lost Key", "key", EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
-								;[End Block]
-							Case 2.0
-								;[Block]
-								it.Items = CreateItem("Disciplinary Hearing DH-S-4137-17092", "oldpaper", EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
-								;[End Block]
-							Case 3.0
-								;[Block]
-								it.Items = CreateItem("Coin", "coin", EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
-								;[End Block]
-							Case 4.0
-								;[Block]
-								it.Items = CreateItem("Movie Ticket", "ticket", EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
-								;[End Block]
-							Case 5.0
-								;[Block]
-								it.Items = CreateItem("Old Badge", "badge", EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
-								;[End Block]
-						End Select
-						EntityType(it\Collider, HIT_ITEM)
-						
-						GiveAchievement(Achv1162_ARC)
-						mo\MouseHit1 = False
-						e\EventState3 = 0.0
+						FreeEntity(pp)
 					EndIf
-					FreeEntity(pp)
 				EndIf
 				;[End Block]
 			Case e_room2_sl
@@ -8959,7 +8952,7 @@ Function UpdateEvents%()
 						
 					If InteractObject(e\room\Objects[1], 0.49) Then
 						CreateMsg("You feel a cold breeze next to your body.")
-						InjurePlayer(Rnd(-0.2, -0.05))
+						me\Injuries = Max(0.0, me\Injuries - Rnd(0.3))
 						me\Bloodloss = 0.0
 						PlaySound_Strict(LoadTempSound("SFX\SCP\Joke\Quack.ogg"))
 					EndIf

@@ -3028,8 +3028,6 @@ Function UpdateMoving%()
 		EndIf
 	EndIf
 	
-	If me\Injuries < 0.0 Then me\Injuries = 0.0
-	
 	Update008()
 	Update409()
 	
@@ -3404,6 +3402,7 @@ Const FogColorDimension_1499$ = "096097104"
 Const FogColorPD$ = "000000000"
 Const FogColorPDTrench$ = "038055047"
 Const FogColorForest$ = "098133162"
+Const FogColorForestChase$ = "032044054"
 ;[End Block]
 
 Global CurrFogColorR#, CurrFogColorG#, CurrFogColorB#
@@ -3442,7 +3441,17 @@ Function UpdateFog%()
 		ElseIf PlayerRoom\RoomTemplate\Name = "dimension_1499"
 			CurrFogColor = FogColorDimension_1499
 		ElseIf PlayerRoom\RoomTemplate\Name = "cont2_860_1"
-			If forest_event\EventState = 1.0 Then CurrFogColor = FogColorForest
+			If forest_event\EventState = 1.0 Then
+				If forest_event\room\NPC[0] <> Null Then
+					If forest_event\room\NPC[0]\State >= 2.0 Then
+						CurrFogColor = FogColorForestChase
+					Else
+						CurrFogColor = FogColorForest
+					EndIf
+				Else
+					CurrFogColor = FogColorForest
+				EndIf
+			EndIf
 		ElseIf PlayerRoom\RoomTemplate\Name = "dimension_106"
 			For e.Events = Each Events
 				If e\EventID = e_dimension_106 Then

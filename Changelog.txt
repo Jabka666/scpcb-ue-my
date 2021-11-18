@@ -19,6 +19,10 @@ Bug Fixes:
 - Fixed a bug where fog color was stored in memory every time.
 - Fixed incorrect position of Izumi logs in SCP-860-1.
 - Fixed the room counting system doesn't determine SCP-1499's dimension as a room.
+- Fixed ticket model.
+- Fixed missing SCP-860-1's dark fog color.
+- Fixed ability to use SCP-1162 while using inventory.
+- Fixed SCP-1162 that kills the player even if he has any item.
 
 v1.0.2
 
