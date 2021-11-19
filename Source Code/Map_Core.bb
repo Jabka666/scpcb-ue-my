@@ -933,6 +933,42 @@ Function GenForestGrid%(fr.Forest)
 		Next
 	Next
 	
+	If opt\DebugMode Then
+		Local x%, y%
+		
+		Repeat
+			Cls()
+			i = ForestGridSize - 1
+			For x = 0 To ForestGridSize - 1
+				For y = 0 To ForestGridSize - 1
+					If fr\Grid[x + (y * ForestGridSize)] = 0 Then
+						Color(50, 50, 50)
+						Rect((i * 32) * MenuScale, (y * 32) * MenuScale, 30 * MenuScale, 30 * MenuScale)
+					Else
+						Color(255, 255, 255)
+						Rect((i * 32) * MenuScale, (y * 32) * MenuScale, 30 * MenuScale, 30 * MenuScale)
+					EndIf
+				Next
+				i = i - 1
+			Next
+			
+			i = ForestGridSize - 1
+			For x = 0 To ForestGridSize - 1
+				For y = 0 To ForestGridSize - 1
+					If MouseOn((i * 32) * MenuScale, (y * 32) * MenuScale, 32 * MenuScale, 32 * MenuScale) Then
+						Color(255, 0, 0)
+					Else
+						Color(0, 0, 0)
+					EndIf
+					Text(((i * 32) + 2) * MenuScale, ((y * 32) + 2) * MenuScale, fr\Grid[x + (y * ForestGridSize)])
+				Next
+				i = i - 1
+			Next
+			Flip()
+			If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+		Until (GetKey() <> 0 Lor MouseHit(1))
+	EndIf
+	
 	CatchErrors("GenForestGrid")
 End Function
 
@@ -1024,9 +1060,9 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 						
 						If fr\Grid[((tY + 1) * ForestGridSize) + tX] > 0 Then
 							Angle = 180.0
-						ElseIf fr\Grid[(tY * ForestGridSize) + tX - 1] > 0
+						ElseIf fr\Grid[(tY * ForestGridSize) + (tX - 1)] > 0
 							Angle = 270.0
-						ElseIf fr\Grid[(tY * ForestGridSize) + tX + 1] > 0
+						ElseIf fr\Grid[(tY * ForestGridSize) + (tX + 1)] > 0
 							Angle = 90.0
 						Else
 							Angle = 0.0
@@ -1076,6 +1112,9 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 					Case 4
 						;[Block]
 						Tile_Entity = CopyEntity(fr\TileMesh[ROOM4])	
+						
+						Angle = (fr\Grid[(tY * ForestGridSize) + tX] Mod 4) * 90.0
+						
 						Tile_Type = ROOM4 + 1
 						;[End Block]
 				End Select
@@ -1253,7 +1292,7 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 				If Tile_Type = 6 Then
 					Tile_Type = 2
 				EndIf
-				Angle = (fr\Grid[(tY * ForestGridSize) + tX] Mod 4.0) * 90.0
+				Angle = (fr\Grid[(tY * ForestGridSize) + tX] Mod 4) * 90.0
 				
 				Tile_Entity = CopyEntity(fr\TileMesh[Tile_Type - 1])
 				
@@ -8823,12 +8862,12 @@ Function CreateMap%()
 					EndIf
 				Next
 				i = i - 1
-			Next	
+			Next
 			
 			i = MapGridSize - 1
 			For x = 0 To MapGridSize - 1
 				For y = 0 To MapGridSize - 1
-					If ScaledMouseX() > (i * 32) * MenuScale And ScaledMouseX() < ((i * 32) + 32) * MenuScale And ScaledMouseY() > (y * 32) * MenuScale And ScaledMouseY() < ((y * 32) + 32) * MenuScale Then
+					If MouseOn((i * 32) * MenuScale, (y * 32) * MenuScale, 32 * MenuScale, 32 * MenuScale) Then
 						Color(255, 0, 0)
 						Text(((i * 32) + 2) * MenuScale, ((y * 32) + 2) * MenuScale, CurrMapGrid\Grid[x + (y * MapGridSize)] + " " + CurrMapGrid\RoomName[x + (y * MapGridSize)])
 					Else

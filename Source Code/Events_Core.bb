@@ -6987,7 +6987,7 @@ Function UpdateEvents%()
 						If e\room\NPC[0] <> Null Then
 							If e\room\NPC[0]\State = 0.0 Lor EntityDistanceSquared(me\Collider, e\room\NPC[0]\Collider) > 400.0 Then
 								e\EventState3 = e\EventState3 + (1.0 + me\CurrSpeed) * fps\Factor[0]
-								If (e\EventState3 Mod 500.0) < 10.0 And ((e\EventState3 - fps\Factor[0]) Mod 500.0) > 490.0 Then
+								If (e\EventState3 Mod 500.0) < 10.0 And ((e\EventState3 - (1.0 + me\CurrSpeed) * fps\Factor[0]) Mod 500.0) > 490.0 Then
 									If e\EventState3 > 3000.0 - (500.0 * SelectedDifficulty\AggressiveNPCs) And Rnd(10000 + (500.0 * SelectedDifficulty\AggressiveNPCs)) < e\EventState3
 										e\room\NPC[0]\State = 2.0
 										PositionEntity(e\room\NPC[0]\Collider, 0.0, -110.0, 0.0)
