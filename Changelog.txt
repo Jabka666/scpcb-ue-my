@@ -17,10 +17,13 @@ Bug Fixes:
 - Fixed an issue where Dr. Maynard's code could be the same as Dr. Harp's.
 - Fixed a first aid kit that damages the player if the injuries are < 0.5.
 - Fixed a bug where fog color was stored in memory every time.
-- Fixed incorrect position of Izumi logs in SCP-860-1.
 - Fixed the room counting system doesn't determine SCP-1499's dimension as a room.
 - Fixed ticket model.
-- Fixed missing SCP-860-1's dark fog color.
+- Fixes for SCP-860-1:
+    - Fixed missing dark fog color.
+    - Fixed Izumi sprite shifting one pixel to the left when blinking.
+    - Fixed incorrect position of Izumi logs.
+    - Fixed calculation of previous EventState3 value to prevent SCP-860-2's spawn from being skipped.
 - Fixed ability to use SCP-1162 while using inventory.
 - Fixed SCP-1162 that kills the player even if he has any item.
 
