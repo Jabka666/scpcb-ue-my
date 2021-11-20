@@ -4145,13 +4145,7 @@ Function UpdateNPCs%()
 										me\BlurTimer = Float(((Sin(MilliSecs2() / 50.0) + 1.0) * 200.0) / Sqr(Dist))
 										
 										If (Not I_714\Using) And wi\GasMask <> 3 And wi\HazmatSuit <> 3 And Dist < 256.0 Then
-											me\BlinkEffect = Max(me\BlinkEffect, 1.5)
-											me\BlinkEffectTimer = 1000.0
-											
-											me\StaminaEffect = 2.0
-											me\StaminaEffectTimer = 1000.0
-											
-											If msg\Timer <= 0.0 Then
+											If msg\Timer <= 0.0 And me\StaminaEffect < 1.5 Then
 												Select Rand(4)
 													Case 1
 														;[Block]
@@ -4171,7 +4165,12 @@ Function UpdateNPCs%()
 														;[End Block]
 												End Select
 											EndIf
-										EndIf							
+											me\BlinkEffect = Max(me\BlinkEffect, 1.5)
+											me\BlinkEffectTimer = 1000.0
+											
+											me\StaminaEffect = 2.0
+											me\StaminaEffectTimer = 1000.0
+										EndIf			
 									EndIf
 								EndIf
 								;[End Block]
@@ -7184,7 +7183,6 @@ Function MoveToPocketDimension%()
 			
 			me\BlinkTimer = -10.0 : me\FallTimer = 0.0 : me\DropSpeed = 0.0
 			InjurePlayer(0.5, 0.0, 1600.0)
-			
 			
 			Exit
 			Return

@@ -352,7 +352,6 @@ Function InitItemTemplates%()
 				For it2.ItemTemplates = Each ItemTemplates
 					If it2 <> it And it2\Tex = it\Tex Then
 						it2\Tex = 0
-						Exit
 					EndIf
 				Next
 			EndIf
@@ -362,7 +361,7 @@ Function InitItemTemplates%()
 End Function 
 
 Function GetRandDocument$()
-	Select Rand(0, 21)
+	Select Rand(0, 20)
 		Case 0
 			;[Block]
 			Return("005")
@@ -374,10 +373,6 @@ Function GetRandDocument$()
 		Case 2
 			;[Block]
 			Return("012")
-			;[End Block]
-		Case 3
-			;[Block]
-			Return("035")
 			;[End Block]
 		Case 4
 			;[Block]

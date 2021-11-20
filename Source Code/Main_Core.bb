@@ -2436,9 +2436,9 @@ Function MainLoop%()
 							If InvOpen Then
 								CreateHintMsg("Double click on the document to view it.")
 								e\EventState3 = 50.0
+								Exit
 							EndIf
 						EndIf
-						Exit
 					EndIf
 				Next
 			EndIf
@@ -3753,7 +3753,10 @@ Function UpdateGUI%()
 					SelectedItem\DropSpeed = 0.0
 					SelectedItem\Picked = False
 					For z = 0 To OtherSize - 1
-						If OtherOpen\SecondInv[z] = SelectedItem Then OtherOpen\SecondInv[z] = Null
+						If OtherOpen\SecondInv[z] = SelectedItem Then
+							OtherOpen\SecondInv[z] = Null
+							Exit
+						EndIf
 					Next
 					
 					IsEmpty = True
@@ -7932,7 +7935,7 @@ Function RenderEnding%()
 					
 					Local SCPsEncountered% = 1
 					
-					For i = 0 To 30
+					For i = Achv005 To Achv1499
 						SCPsEncountered = SCPsEncountered + achv\Achievement[i]
 					Next
 					
@@ -9278,14 +9281,14 @@ Function Update294%()
 					
 					Temp = False
 					
-					Select Int(yTemp)
+					Select yTemp
 						Case 0
 							;[Block]
 							StrTemp = ((xTemp + 1) Mod 10)
 							;[End Block]
 						Case 1
 							;[Block]
-							Select Int(xTemp)
+							Select xTemp
 								Case 0
 									;[Block]
 									StrTemp = "Q"

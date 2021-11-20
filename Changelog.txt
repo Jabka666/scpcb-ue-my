@@ -446,7 +446,7 @@ Bug Fixes:
 - Fixed double corrosion decal in the Emily Ross event.
 - Fixed menu buttons has wrong width and height.
 - Fixed Omni Key Card achievement image.
-- Fixed font inside Burnt Note with Dr. Maynard's access code.
+- Fixed text font for Burnt Note with Dr. Maynard's access code.
 - Fixed smoke doesn't interact with fog.
 - Fixed wrong decal blend in Pocket Dimension.
 - Fixed a bug where auto closing is applied for locked doors.
