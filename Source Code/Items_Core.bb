@@ -513,6 +513,7 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 		i\G = G
 		i\B = B
 		i\A = A
+		i\State = 1.0
 		
 		Local Liquid% = CopyEntity(o\MiscModelID[0])
 		
@@ -2253,6 +2254,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[Block]
 					it2.Items = CreateItem("Cup", "cup", x, y, z, 255.0 - item\R, 255.0 - item\G, 255.0 - item\B)
 					it2\Name = item\Name
+					it2\State = item\State
 					;[End Block]
 				Case FINE
 					;[Block]

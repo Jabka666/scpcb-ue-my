@@ -3427,7 +3427,7 @@ Function UpdateSecurityCams%()
 							EndIf
 						EndIf
 						PositionEntity(sc\CameraOBJ, EntityX(sc\OBJ, True), EntityY(sc\OBJ, True) - 0.083, EntityZ(sc\OBJ, True))
-						RotateEntity(sc\CameraOBJ, EntityPitch(sc\CameraOBJ), sc\room\Angle + sc\Angle + Max(Min(sc\CurrAngle, sc\Turn), -sc\Turn), 0)
+						RotateEntity(sc\CameraOBJ, EntityPitch(sc\CameraOBJ), sc\room\Angle + sc\Angle + Max(Min(sc\CurrAngle, sc\Turn), -sc\Turn), 0.0)
 						
 						If (MilliSecs2() Mod 1200) < 800 Then
 							EntityTexture(sc\CameraOBJ, t\MiscTextureID[19])

@@ -7920,8 +7920,12 @@ Function RenderEnding%()
 					Local RoomAmount% = 0, RoomsFound% = 0
 					
 					For r.Rooms = Each Rooms
-						RoomAmount = RoomAmount + 1
-						RoomsFound = RoomsFound + r\Found
+						Local RN$ = r\RoomTemplate\Name
+						
+						If RN <> "gate_a" And RN <> "gate_b" And RN <> "dimension_106" And RN <> "dimension_1499" Then 
+							RoomAmount = RoomAmount + 1
+							RoomsFound = RoomsFound + r\Found
+						EndIf
 					Next
 					
 					Local DocAmount% = 0, DocsFound% = 0
@@ -9472,7 +9476,6 @@ Function Update294%()
 					
 					it.Items = CreateItem("Cup", "cup", EntityX(PlayerRoom\Objects[1], True), EntityY(PlayerRoom\Objects[1], True), EntityZ(PlayerRoom\Objects[1], True), R, G, B, Alpha)
 					it\Name = "Cup of " + I_294\ToInput
-					it\State = 1.0
 					EntityType(it\Collider, HIT_ITEM)
 				Else
 					; ~ Out of range

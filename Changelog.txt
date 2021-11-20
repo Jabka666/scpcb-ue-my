@@ -26,6 +26,7 @@ Bug Fixes:
     - Fixed calculation of previous EventState3 value to prevent SCP-860-2's spawn from being skipped.
 - Fixed ability to use SCP-1162 while using inventory.
 - Fixed SCP-1162 that kills the player even if he has any item.
+- Fixed non-facility rooms contributing to "Rooms found" parameter.
 
 v1.0.2
 

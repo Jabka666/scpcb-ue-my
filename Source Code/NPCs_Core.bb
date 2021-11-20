@@ -4197,7 +4197,7 @@ Function UpdateNPCs%()
 								;[End Block]
 							Case 5.0, 6.0, 8.0 ; ~ Walking or chasing
 								;[Block]
-								If n\Frame < 580.0 And n\Frame > 214.0
+								If n\Frame < 580.0 And n\Frame > 214.0 Then
 									AnimateNPC(n, 556.0, 580.0, 0.25, False)
 								Else
 									If n\CurrSpeed > 0.0 Then
