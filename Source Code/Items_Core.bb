@@ -460,7 +460,6 @@ Type Items
 	Field State#, State2#, State3#
 	Field Picked%, Dropped%
 	Field InvImg%
-	Field WontColl% = False
 	Field xSpeed#, zSpeed#
 	Field SecondInv.Items[20]
 	Field ID%
@@ -496,8 +495,6 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 			Exit
 		EndIf
 	Next 
-	
-	i\WontColl = False
 	
 	If i\ItemTemplate = Null Then RuntimeError("Item template not found (" + Name + ", " + TempName + ")")
 	
@@ -683,7 +680,6 @@ Function UpdateItems%()
 						If Pick Then
 							i\DropSpeed = i\DropSpeed - (0.0004 * fps\Factor[0])
 							TranslateEntity(i\Collider, i\xSpeed * fps\Factor[0], i\DropSpeed * fps\Factor[0], i\zSpeed * fps\Factor[0])
-							If i\WontColl Then ResetEntity(i\Collider)
 						Else
 							i\DropSpeed = 0.0
 							i\xSpeed = 0.0
