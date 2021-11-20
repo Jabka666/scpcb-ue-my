@@ -3356,20 +3356,14 @@ Function UpdateNPCs%()
 											; ~ Spawn the monster between the empty cell and the cell the player is in
 											TFormPoint(((x2 + x) / 2.0) * 12.0, 0.0, ((z2 + z) / 2.0) * 12.0, fr\Forest_Pivot, 0)
 											
-											Pvt = CreatePivot()
-											PositionEntity(Pvt, TFormedX(), EntityY(fr\Forest_Pivot, True) + 2.3, TFormedZ())
-											
 											; ~ Keep searching for a more suitable cell
-											Temp = False
-											If EntityInView(Pvt, Camera) Then
+											PositionEntity(n\Collider, TFormedX(), EntityY(fr\Forest_Pivot, True) + 2.3, TFormedZ())
+											If EntityInView(n\Collider, Camera) Then
 												PositionEntity(n\Collider, 0.0, -110.0, 0.0)
 											Else
-												PositionEntity(n\Collider, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt))
 												x2 = ForestGridSize
-												Temp = True
+												Exit
 											EndIf
-											FreeEntity(Pvt)
-											If Temp Then Exit
 										EndIf
 									Next
 								Next
