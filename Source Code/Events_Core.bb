@@ -6724,8 +6724,8 @@ Function UpdateEvents%()
 					For sc.SecurityCams = Each SecurityCams
 						If sc\room = e\room Then
 							If sc\ScrOBJ <> 0 Then
-								If (Not EntityHidden(sc\OBJ)) Then
-									HideEntity(sc\OBJ)
+								If (Not EntityHidden(sc\BaseOBJ)) Then
+									HideEntity(sc\BaseOBJ)
 									If sc\CameraOBJ <> 0 Then HideEntity(sc\CameraOBJ)
 									If sc\ScrOverlay <> 0 Then HideEntity(sc\ScrOverlay)
 									If sc\MonitorOBJ <> 0 Then HideEntity(sc\MonitorOBJ)

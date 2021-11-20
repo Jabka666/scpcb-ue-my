@@ -3289,8 +3289,7 @@ End Function
 Global ScreenTexs%[2]
 
 Type SecurityCams
-	Field OBJ%, MonitorOBJ%, Pvt%
-	Field CameraOBJ%
+	Field BaseOBJ%, CameraOBJ%, MonitorOBJ%, Pvt%
 	Field ScrOBJ%, ScrWidth#, ScrHeight#
 	Field Screen%, Cam%, ScrTexture%, ScrOverlay%
 	Field Angle#, Turn#, CurrAngle#
@@ -3313,9 +3312,9 @@ Function CreateSecurityCam.SecurityCams(x1#, y1#, z1#, r.Rooms, Screen% = False,
 	Local sc.SecurityCams
 	
 	sc.SecurityCams = New SecurityCams
-	sc\OBJ = CopyEntity(o\CamModelID[0])
-	ScaleEntity(sc\OBJ, 0.0015, 0.0015, 0.0015)
-	PositionEntity(sc\OBJ, x1, y1, z1)
+	sc\BaseOBJ = CopyEntity(o\CamModelID[0])
+	ScaleEntity(sc\BaseOBJ, 0.0015, 0.0015, 0.0015)
+	PositionEntity(sc\BaseOBJ, x1, y1, z1)
 	sc\CameraOBJ = CopyEntity(o\CamModelID[1])
 	ScaleEntity(sc\CameraOBJ, 0.01, 0.01, 0.01)
 	
@@ -3356,7 +3355,7 @@ Function CreateSecurityCam.SecurityCams(x1#, y1#, z1#, r.Rooms, Screen% = False,
 	EndIf
 	
 	If r <> Null Then 
-		EntityParent(sc\OBJ, r\OBJ)
+		EntityParent(sc\BaseOBJ, r\OBJ)
 		If Screen Then
 			If sc\ScrOBJ <> 0 Then EntityParent(sc\ScrOBJ, r\OBJ)
 		EndIf
@@ -3376,8 +3375,8 @@ Function UpdateSecurityCams%()
 	
 	If UpdateTimer <= 0.0 Then
 		For sc.SecurityCams = Each SecurityCams
-			Local xDist# = Abs(EntityX(me\Collider) - EntityX(sc\OBJ, True))
-			Local zDist# = Abs(EntityZ(me\Collider) - EntityZ(sc\OBJ, True))
+			Local xDist# = Abs(EntityX(me\Collider) - EntityX(sc\BaseOBJ, True))
+			Local zDist# = Abs(EntityZ(me\Collider) - EntityZ(sc\BaseOBJ, True))
 			
 			sc\Dist = xDist + zDist
 		Next
@@ -3408,14 +3407,14 @@ Function UpdateSecurityCams%()
 							EndIf
 						EndIf
 						If (Not sc\Pvt) Then
-							sc\Pvt = CreatePivot(sc\OBJ)
+							sc\Pvt = CreatePivot(sc\BaseOBJ)
 							EntityParent(sc\Pvt, 0) ; ~ Sets position and rotation of the pivot to the cam object
 						EndIf
 						PointEntity(sc\Pvt, Camera)
 						
 						RotateEntity(sc\CameraOBJ, CurveAngle(EntityPitch(sc\Pvt), EntityPitch(sc\CameraOBJ), 75.0), CurveAngle(EntityYaw(sc\Pvt), EntityYaw(sc\CameraOBJ), 75.0), 0.0)
 						
-						PositionEntity(sc\CameraOBJ, EntityX(sc\OBJ, True), EntityY(sc\OBJ, True) - 0.083, EntityZ(sc\OBJ, True))
+						PositionEntity(sc\CameraOBJ, EntityX(sc\BaseOBJ, True), EntityY(sc\BaseOBJ, True) - 0.083, EntityZ(sc\BaseOBJ, True))
 					Else
 						If sc\Turn > 0.0 Then
 							If (Not sc\Dir) Then
@@ -3426,7 +3425,7 @@ Function UpdateSecurityCams%()
 								If sc\CurrAngle < (-sc\Turn) * 1.3 Then sc\Dir = False
 							EndIf
 						EndIf
-						PositionEntity(sc\CameraOBJ, EntityX(sc\OBJ, True), EntityY(sc\OBJ, True) - 0.083, EntityZ(sc\OBJ, True))
+						PositionEntity(sc\CameraOBJ, EntityX(sc\BaseOBJ, True), EntityY(sc\BaseOBJ, True) - 0.083, EntityZ(sc\BaseOBJ, True))
 						RotateEntity(sc\CameraOBJ, EntityPitch(sc\CameraOBJ), sc\room\Angle + sc\Angle + Max(Min(sc\CurrAngle, sc\Turn), -sc\Turn), 0.0)
 						
 						If (MilliSecs2() Mod 1200) < 800 Then
@@ -6607,7 +6606,7 @@ Function FillRoom%(r.Rooms)
 			TurnEntity(sc\ScrOBJ, 0.0, -10.0, 0.0)
 			
 			r\Objects[7] = sc\CameraOBJ
-			r\Objects[8] = sc\OBJ
+			r\Objects[8] = sc\BaseOBJ
 			
 			; ~ Security camera inside the observation room
 			sc.SecurityCams = CreateSecurityCam(r\x - 1439.0 * RoomScale, r\y - 7664.0 * RoomScale, r\z + 1709.0 * RoomScale, r)
@@ -7760,7 +7759,7 @@ Function HideRooms%(r.Rooms, AdjDoor.Doors = Null, NoCollision% = False, HideLig
 			HideSecurityCams = True
 			If sc\room <> r Then HideSecurityCams = False
 			If HideSecurityCams Then
-				If sc\OBJ <> 0 Then HideEntity(sc\OBJ)
+				If sc\BaseOBJ <> 0 Then HideEntity(sc\BaseOBJ)
 				If sc\CameraOBJ <> 0 Then HideEntity(sc\CameraOBJ)
 				If sc\MonitorOBJ <> 0 Then HideEntity(sc\MonitorOBJ)
 				If sc\ScrOBJ <> 0 Then HideEntity(sc\ScrOBJ)
@@ -7836,7 +7835,7 @@ Function ShowRooms%(r.Rooms, NoCollision% = False)
 			ShowSecurityCams = True
 			If sc\room <> r Then ShowSecurityCams = False
 			If ShowSecurityCams Then
-				If sc\OBJ <> 0 Then ShowEntity(sc\OBJ)
+				If sc\BaseOBJ <> 0 Then ShowEntity(sc\BaseOBJ)
 				If sc\CameraOBJ <> 0 Then ShowEntity(sc\CameraOBJ)
 				If sc\MonitorOBJ <> 0 Then ShowEntity(sc\MonitorOBJ)
 				If sc\ScrOBJ <> 0 Then ShowEntity(sc\ScrOBJ)

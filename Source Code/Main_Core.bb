@@ -8810,8 +8810,9 @@ Function InitNewGame%()
 	Next
 	
 	For sc.SecurityCams = Each SecurityCams
-		sc\Angle = EntityYaw(sc\OBJ) + sc\Angle
-		EntityParent(sc\OBJ, 0)
+		sc\Angle = EntityYaw(sc\BaseOBJ) + sc\Angle
+		EntityParent(sc\BaseOBJ, 0)
+		If sc\MonitorOBJ <> 0 Then EntityParent(sc\MonitorOBJ, 0)
 	Next	
 	
 	For r.Rooms = Each Rooms
@@ -8927,8 +8928,9 @@ Function InitLoadGame%()
 	Next
 	
 	For sc.SecurityCams = Each SecurityCams
-		sc\Angle = EntityYaw(sc\OBJ) + sc\Angle
-		EntityParent(sc\OBJ, 0)
+		sc\Angle = EntityYaw(sc\BaseOBJ) + sc\Angle
+		EntityParent(sc\BaseOBJ, 0)
+		If sc\MonitorOBJ <> 0 Then EntityParent(sc\MonitorOBJ, 0)
 	Next
 	
 	For rt.RoomTemplates = Each RoomTemplates
