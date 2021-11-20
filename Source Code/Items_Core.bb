@@ -374,75 +374,75 @@ Function GetRandDocument$()
 			;[Block]
 			Return("012")
 			;[End Block]
-		Case 4
+		Case 3
 			;[Block]
 			Return("049")
 			;[End Block]
-		Case 5
+		Case 4
 			;[Block]
 			Return("096")
 			;[End Block]
-		Case 6
+		Case 5
 			;[Block]
 			Return("106")
 			;[End Block]
-		Case 7
+		Case 6
 			;[Block]
 			Return("173")
 			;[End Block]
-		Case 8
+		Case 7
 			;[Block]
 			Return("205")
 			;[End Block]
-		Case 9
+		Case 8
 			;[Block]
 			Return("409")
 			;[End Block]
-		Case 10
+		Case 9
 			;[Block]
 			Return("513")
 			;[End Block]
-		Case 11
+		Case 10
 			;[Block]
 			Return("682")
 			;[Block]
-		Case 12
+		Case 11
 			;[Block]
 			Return("714")
 			;[End Block]
-		Case 13
+		Case 12
 			;[Block]
 			Return("860")
 			;[End Block]
-		Case 14
+		Case 13
 			;[Block]
 			Return("860-1")
 			;[End Block]
-		Case 15
+		Case 14
 			;[Block]
 			Return("895")
 			;[End Block]
-		Case 16
+		Case 15
 			;[Block]
 			Return("939")
 			;[End Block]
-		Case 17
+		Case 16
 			;[Block]
 			Return("966")
 			;[End Block]
-		Case 18
+		Case 17
 			;[Block]
 			Return("970")
 			;[End Block]
-		Case 19
+		Case 18
 			;[Block]
 			Return("1048")
 			;[End Block]
-		Case 20
+		Case 19
 			;[Block]
 			Return("1162-ARC")
 			;[End Block]
-		Case 21
+		Case 20
 			;[Block]
 			Return("1499")
 			;[End Block]
