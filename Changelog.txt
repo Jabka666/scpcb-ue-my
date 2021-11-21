@@ -27,6 +27,7 @@ Bug Fixes:
 - Fixed ability to use SCP-1162 while using inventory.
 - Fixed SCP-1162 that kills the player even if he has any item.
 - Fixed non-facility rooms contributing to "Rooms found" parameter.
+- Fixed untitled save files not correctly being named after the second one.
 
 v1.0.2
 

@@ -933,42 +933,6 @@ Function GenForestGrid%(fr.Forest)
 		Next
 	Next
 	
-	If opt\DebugMode Then
-		Local x%, y%
-		
-		Repeat
-			Cls()
-			i = ForestGridSize - 1
-			For x = 0 To ForestGridSize - 1
-				For y = 0 To ForestGridSize - 1
-					If fr\Grid[x + (y * ForestGridSize)] = 0 Then
-						Color(50, 50, 50)
-						Rect((i * 32) * MenuScale, (y * 32) * MenuScale, 30 * MenuScale, 30 * MenuScale)
-					Else
-						Color(255, 255, 255)
-						Rect((i * 32) * MenuScale, (y * 32) * MenuScale, 30 * MenuScale, 30 * MenuScale)
-					EndIf
-				Next
-				i = i - 1
-			Next
-			
-			i = ForestGridSize - 1
-			For x = 0 To ForestGridSize - 1
-				For y = 0 To ForestGridSize - 1
-					If MouseOn((i * 32) * MenuScale, (y * 32) * MenuScale, 32 * MenuScale, 32 * MenuScale) Then
-						Color(255, 0, 0)
-					Else
-						Color(0, 0, 0)
-					EndIf
-					Text(((i * 32) + 2) * MenuScale, ((y * 32) + 2) * MenuScale, fr\Grid[x + (y * ForestGridSize)])
-				Next
-				i = i - 1
-			Next
-			Flip()
-			If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
-		Until (GetKey() <> 0 Lor MouseHit(1))
-	EndIf
-	
 	CatchErrors("GenForestGrid")
 End Function
 
@@ -1217,6 +1181,40 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 			EndIf
 		Next		
 	Next
+	
+	If opt\DebugMode Then
+		Repeat
+			Cls()
+			i = ForestGridSize - 1
+			For x = 0 To ForestGridSize - 1
+				For y = 0 To ForestGridSize - 1
+					If fr\Grid[x + (y * ForestGridSize)] = 0 Then
+						Color(50, 50, 50)
+						Rect((i * 32) * MenuScale, (y * 32) * MenuScale, 30 * MenuScale, 30 * MenuScale)
+					Else
+						Color(255, 255, 255)
+						Rect((i * 32) * MenuScale, (y * 32) * MenuScale, 30 * MenuScale, 30 * MenuScale)
+					EndIf
+				Next
+				i = i - 1
+			Next
+			
+			i = ForestGridSize - 1
+			For x = 0 To ForestGridSize - 1
+				For y = 0 To ForestGridSize - 1
+					If MouseOn((i * 32) * MenuScale, (y * 32) * MenuScale, 32 * MenuScale, 32 * MenuScale) Then
+						Color(255, 0, 0)
+					Else
+						Color(0, 0, 0)
+					EndIf
+					Text(((i * 32) + 2) * MenuScale, ((y * 32) + 2) * MenuScale, fr\Grid[x + (y * ForestGridSize)])
+				Next
+				i = i - 1
+			Next
+			Flip()
+			If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+		Until (GetKey() <> 0 Lor MouseHit(1))
+	EndIf
 	
 	CatchErrors("PlaceForest")
 End Function

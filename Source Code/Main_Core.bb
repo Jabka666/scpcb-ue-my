@@ -2460,7 +2460,7 @@ Function MainLoop%()
 					If as\Timer <= 70.0 * 5.0 Then
 						CancelAutoSave()
 					Else
-						SaveGame(SavePath + CurrSave + "\")
+						SaveGame(CurrSave\Name)
 					EndIf
 				EndIf
 			ElseIf SelectedDifficulty\SaveType = SAVEONSCREENS
@@ -2481,7 +2481,7 @@ Function MainLoop%()
 							me\Playable = True
 							me\DropSpeed = 0.0
 						EndIf
-						SaveGame(SavePath + CurrSave + "\")
+						SaveGame(CurrSave\Name)
 					EndIf
 				EndIf
 			Else
@@ -2576,9 +2576,7 @@ Function Kill%(IsBloody% = False)
 		me\KillAnim = Rand(0, 1)
 		PlaySound_Strict(DamageSFX[0])
 		If SelectedDifficulty\SaveType = NOSAVES Then
-			DeleteFile(CurrentDir() + SavePath + CurrSave + "\save.cb") 
-			DeleteDir(SavePath + CurrSave)
-			LoadSavedGames()
+			DeleteGame(CurrSave)
 		EndIf
 		
 		me\Terminated = True
@@ -7157,9 +7155,9 @@ Function UpdateMenu%()
 					QuitButton = 140
 					If UpdateMainMenuButton(x, y + (60 * MenuScale), 430 * MenuScale, 60 * MenuScale, "Save & Quit") Then
 						me\DropSpeed = 0.0
-						SaveGame(SavePath + CurrSave + "\")
+						SaveGame(CurrSave\Name)
 						NullGame()
-						CurrSave = ""
+						CurrSave = Null
 						ResetInput()
 						Return
 					EndIf
@@ -7168,7 +7166,7 @@ Function UpdateMenu%()
 			
 			If UpdateMainMenuButton(x, y + (QuitButton * MenuScale), 430 * MenuScale, 60 * MenuScale, "Quit") Then
 				NullGame()
-				CurrSave = ""
+				CurrSave = Null
 				ResetInput()
 				Return
 			EndIf
@@ -7227,7 +7225,7 @@ Function UpdateMenu%()
 							RenderLoading(0, "GAME FILES")
 							
 							MenuOpen = False
-							LoadGameQuick(SavePath + CurrSave + "\")
+							LoadGameQuick(CurrSave\Name)
 							
 							MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 							HidePointer()
@@ -7286,7 +7284,7 @@ Function UpdateMenu%()
 							RenderLoading(0, "GAME FILES")
 							
 							MenuOpen = False
-							LoadGameQuick(SavePath + CurrSave + "\")
+							LoadGameQuick(CurrSave\Name)
 							
 							MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 							HidePointer()
@@ -7324,7 +7322,7 @@ Function UpdateMenu%()
 				EndIf
 				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "Quit to Menu") Then
 					NullGame()
-					CurrSave = ""
+					CurrSave = Null
 					ResetInput()
 					Return
 				EndIf
@@ -7396,7 +7394,7 @@ Function RenderMenu%()
 		If mm\AchievementsMenu <= 0 And OptionsMenu <= 0 And QuitMsg <= 0
 			SetFont(fo\FontID[Font_Default])
 			Text(x, y, "Difficulty: " + SelectedDifficulty\Name)
-			Text(x, y + (20 * MenuScale), "Save: " + CurrSave)
+			Text(x, y + (20 * MenuScale), "Save: " + CurrSave\Name)
 			If SelectedMap = "" Then
 				TempStr = "Map seed: " + RandomSeed
 			Else
@@ -8039,7 +8037,7 @@ Function UpdateCredits%()
 		NullGame(False)
 		StopStream_Strict(MusicCHN)
 		ShouldPlay = 21
-		CurrSave = ""
+		CurrSave = Null
 		ResetInput()
 	EndIf
 End Function

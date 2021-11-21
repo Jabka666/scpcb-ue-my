@@ -69,8 +69,6 @@ Global SelectedInputBox%, CursorPos% = -1
 
 Global SelectedMap$
 
-LoadSavedGames()
-
 Const VersionNumber$ = "1.0.3"
 
 ; ~ Main Menu Tabs Constants
@@ -88,8 +86,9 @@ Const MainMenuTab_Options_Advanced% = 7
 Function UpdateMainMenu%()
 	CatchErrors("Uncaught (UpdateMainMenu")
 	
+	Local sv.Save, snd.Sound
 	Local x%, y%, Width%, Height%, Temp%, i%, n%, j%, g%
-	Local Dir%, File$, Test%, snd.Sound
+	Local Dir%, File$, Test%
 	
 	While fps\Accumulator > 0.0
 		fps\Accumulator = fps\Accumulator - TICK_DURATION
@@ -241,6 +240,8 @@ Function UpdateMainMenu%()
 									Next							
 								EndIf
 							EndIf
+							LoadSavedGames()
+							CurrSave = New Save
 							mm\MainMenuTab = MainMenuTab_New_Game
 						EndIf
 						;[End Block]
@@ -286,11 +287,17 @@ Function UpdateMainMenu%()
 					Case MainMenuTab_New_Game
 						;[Block]
 						PutINIValue(OptionFile, "Global", "Enable Intro", opt\IntroEnabled)
+						For sv.Save = Each Save
+							Delete(sv)
+						Next
 						mm\MainMenuTab = MainMenuTab_Default
 						;[End Block]
 					Case MainMenuTab_Load_Game
 						;[Block]
 						mm\CurrLoadGamePage = 0
+						For sv.Save = Each Save
+							Delete(sv)
+						Next
 						mm\MainMenuTab = MainMenuTab_Default
 						;[End Block]
 					Case MainMenuTab_Options_Graphics, MainMenuTab_Options_Audio, MainMenuTab_Options_Controls, MainMenuTab_Options_Advanced ; ~ Save the options
@@ -322,19 +329,19 @@ Function UpdateMainMenu%()
 					Width = 580 * MenuScale
 					Height = 345 * MenuScale
 					
-					CurrSave = UpdateMainMenuInputBox(x + (150 * MenuScale), y + (15 * MenuScale), 200 * MenuScale, 30 * MenuScale, CurrSave, 1, 15)
+					CurrSave\Name = UpdateMainMenuInputBox(x + (150 * MenuScale), y + (15 * MenuScale), 200 * MenuScale, 30 * MenuScale, CurrSave\Name, 1, 15)
 					If SelectedInputBox = 1 Then
-						CurrSave = Replace(CurrSave, ":", "")
-						CurrSave = Replace(CurrSave, ".", "")
-						CurrSave = Replace(CurrSave, "/", "")
-						CurrSave = Replace(CurrSave, "\", "")
-						CurrSave = Replace(CurrSave, "<", "")
-						CurrSave = Replace(CurrSave, ">", "")
-						CurrSave = Replace(CurrSave, "|", "")
-						CurrSave = Replace(CurrSave, "?", "")
-						CurrSave = Replace(CurrSave, Chr(34), "")
-						CurrSave = Replace(CurrSave, "*", "")
-						CursorPos = Min(CursorPos, Len(CurrSave))
+						CurrSave\Name = Replace(CurrSave\Name, ":", "")
+						CurrSave\Name = Replace(CurrSave\Name, ".", "")
+						CurrSave\Name = Replace(CurrSave\Name, "/", "")
+						CurrSave\Name = Replace(CurrSave\Name, "\", "")
+						CurrSave\Name = Replace(CurrSave\Name, "<", "")
+						CurrSave\Name = Replace(CurrSave\Name, ">", "")
+						CurrSave\Name = Replace(CurrSave\Name, "|", "")
+						CurrSave\Name = Replace(CurrSave\Name, "?", "")
+						CurrSave\Name = Replace(CurrSave\Name, Chr(34), "")
+						CurrSave\Name = Replace(CurrSave\Name, "*", "")
+						CursorPos = Min(CursorPos, Len(CurrSave\Name))
 					EndIf
 					
 					If SelectedMap = "" Then
@@ -404,7 +411,7 @@ Function UpdateMainMenu%()
 					EndIf
 					
 					If UpdateMainMenuButton(x + (420 * MenuScale), y + Height + (20 * MenuScale), 160 * MenuScale, 75 * MenuScale, "START", False) Then
-						If CurrSave = "" Then CurrSave = "untitled"
+						If CurrSave\Name = "" Then CurrSave\Name = "untitled"
 						
 						If RandomSeed = "" Then
 							RandomSeed = Abs(MilliSecs2())
@@ -412,13 +419,28 @@ Function UpdateMainMenu%()
 						
 						SeedRnd(GenerateSeedNumber(RandomSeed))
 						
-						Local SameFound% = False
+						Local SameFound% = 0
+						Local LowestPossible% = 2
 						
-						For i = 1 To SaveGameAmount
-							If SaveGames(i - 1) = CurrSave Then SameFound = SameFound + 1
+						For sv.Save = Each Save
+							If (CurrSave <> sv And CurrSave\Name = sv\Name) Then
+								SameFound = 1
+								Exit
+							EndIf
 						Next
 						
-						If SameFound > 0 Then CurrSave = CurrSave + " (" + (SameFound + 1) + ")"
+						While SameFound = 1
+							SameFound = 2
+							For sv.Save = Each Save
+								If (sv\Name = (CurrSave\Name + " (" + LowestPossible + ")")) Then
+									LowestPossible = LowestPossible + 1
+									SameFound = 1
+									Exit
+								EndIf
+							Next
+						Wend
+						
+						If SameFound = 2 Then CurrSave\Name = CurrSave\Name + " (" + LowestPossible + ")"
 						
 						InitNewGame()
 						MainMenuOpen = False
@@ -436,7 +458,7 @@ Function UpdateMainMenu%()
 					Width = 580 * MenuScale
 					Height = 296 * MenuScale
 					
-					If mm\CurrLoadGamePage < Ceil(Float(SaveGameAmount) / 5.0) - 1 And SaveMSG = "" Then 
+					If mm\CurrLoadGamePage < Ceil(Float(SaveGameAmount) / 5.0) - 1 And DelSave = Null Then 
 						If UpdateMainMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">") Then
 							mm\CurrLoadGamePage = mm\CurrLoadGamePage + 1
 							mm\ShouldDeleteGadgets = True
@@ -444,7 +466,7 @@ Function UpdateMainMenu%()
 					Else
 						UpdateMainMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">", True, False, True)
 					EndIf
-					If mm\CurrLoadGamePage > 0 And SaveMSG = "" Then
+					If mm\CurrLoadGamePage > 0 And DelSave = Null Then
 						If UpdateMainMenuButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<") Then
 							mm\CurrLoadGamePage = mm\CurrLoadGamePage - 1
 							mm\ShouldDeleteGadgets = True
@@ -462,54 +484,55 @@ Function UpdateMainMenu%()
 						x = x + (20 * MenuScale)
 						y = y + (20 * MenuScale)
 						
-						For i = (1 + (5 * mm\CurrLoadGamePage)) To 5 + (5 * mm\CurrLoadGamePage)
-							If i <= SaveGameAmount Then
-								If SaveMSG = "" Then
-									If SaveGameVersion(i - 1) <> VersionNumber Then
+						CurrSave = First Save
+						
+						For i = 0 To 4 + (5 * mm\CurrLoadGamePage)
+							If i > 0 Then CurrSave = After CurrSave
+							If i >= (5 * mm\CurrLoadGamePage) Then
+								If DelSave = Null Then
+									If CurrSave\Version <> VersionNumber Then
 										UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Load", False, False, True, 255, 0, 0)
 									Else
 										If UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Load", False) Then
 											LoadEntities()
 											LoadSounds()
-											LoadGame(SavePath + SaveGames(i - 1) + "\")
+											LoadGame(CurrSave\Name)
 											InitLoadGame()
-											CurrSave = SaveGames(i - 1)
 											MainMenuOpen = False
 											mm\ShouldDeleteGadgets = True
+											Exit
 										EndIf
 									EndIf
-										
+									
 									If UpdateMainMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Delete", False) Then
-										SaveMSG = SaveGames(i - 1)
+										DelSave = CurrSave
 										Exit
 									EndIf
 								Else
-									If SaveGameVersion(i - 1) <> VersionNumber Then
+									If CurrSave\Version <> VersionNumber Then
 										UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Load", False, False, True, 255, 0, 0)
 									Else
 										UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Load", False, False, True)
 									EndIf
 									UpdateMainMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Delete", False, False, True)
 								EndIf
+								If CurrSave = Last Save Then
+									Exit
+								EndIf
 								y = y + (80 * MenuScale)
-							Else
-								Exit
 							EndIf
 						Next
 						
-						If SaveMSG <> "" Then
+						If DelSave <> Null Then
 							x = 740 * MenuScale
 							y = 376 * MenuScale
 							
 							If UpdateMainMenuButton(x + (50 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Yes", False) Then
-								DeleteFile(CurrentDir() + SavePath + SaveMSG + "\save.cb")
-								DeleteDir(CurrentDir() + SavePath + SaveMSG)
-								SaveMSG = ""
-								LoadSavedGames()
+								DeleteGame(DelSave)
 								mm\ShouldDeleteGadgets = True
 							EndIf
 							If UpdateMainMenuButton(x + (250 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, "No", False) Then
-								SaveMSG = ""
+								DelSave = Null
 								mm\ShouldDeleteGadgets = True
 							EndIf
 						EndIf
@@ -1285,28 +1308,32 @@ Function RenderMainMenu%()
 					x = x + (20 * MenuScale)
 					y = y + (20 * MenuScale)
 					
-					For i = (1 + (5 * mm\CurrLoadGamePage)) To 5 + (5 * mm\CurrLoadGamePage)
-						If i <= SaveGameAmount Then
+					CurrSave = First Save
+					
+					For i = 0 To 4 + (5 * mm\CurrLoadGamePage)
+						If i > 0 Then CurrSave = After CurrSave
+						If i >= (5 * mm\CurrLoadGamePage) Then
 							RenderFrame(x, y, 540 * MenuScale, 70 * MenuScale)
 							
-							If SaveGameVersion(i - 1) <> VersionNumber Then
+							If CurrSave\Version <> VersionNumber Then
 								Color(255, 0, 0)
 							Else
 								Color(255, 255, 255)
 							EndIf
 							
-							Text(x + (20 * MenuScale), y + (10 * MenuScale), SaveGames(i - 1))
-							Text(x + (20 * MenuScale), y + (28 * MenuScale), SaveGameTime(i - 1))
-							Text(x + (120 * MenuScale), y + (28 * MenuScale), SaveGameDate(i - 1))
-							Text(x + (20 * MenuScale), y + (46 * MenuScale), SaveGameVersion(i - 1))
+							Text(x + (20 * MenuScale), y + (10 * MenuScale), CurrSave\Name)
+							Text(x + (20 * MenuScale), y + (28 * MenuScale), CurrSave\Time)
+							Text(x + (120 * MenuScale), y + (28 * MenuScale), CurrSave\Date)
+							Text(x + (20 * MenuScale), y + (46 * MenuScale), CurrSave\Version)
 							
+							If CurrSave = Last Save Then
+								Exit
+							EndIf
 							y = y + (80 * MenuScale)
-						Else
-							Exit
 						EndIf
 					Next
 					
-					If SaveMSG <> "" Then
+					If DelSave <> Null Then
 						x = 740 * MenuScale
 						y = 376 * MenuScale
 						RenderFrame(x, y, 420 * MenuScale, 200 * MenuScale)

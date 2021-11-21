@@ -1,3 +1,14 @@
+Type Save
+	Field Name$
+	Field Time$
+	Field Date$
+	Field Version$
+End Type
+
+Global CurrSave.Save
+Global DelSave.Save
+Global SaveGameAmount%
+
 Const SavePath$ = "Saves\"
 
 Type AutoSave
@@ -14,7 +25,7 @@ Function UpdateAutoSave%()
 	EndIf
 	
 	If as\Timer <= 0.0 Then
-		SaveGame(SavePath + CurrSave + "_" + as\Amount + "\")
+		SaveGame(CurrSave\Name + "_" + as\Amount)
 		as\Amount = as\Amount + 1
 		If as\Amount >= 5 Then as\Amount = 0
 	Else
@@ -44,12 +55,16 @@ Function SaveGame%(File$)
 	
 	GameSaved = True
 	
+	File = SavePath + File
+	
 	CreateDir(File)
 	
-	Local f% = WriteFile(File + "save.cb")
+	Local f% = WriteFile(File + "\save.cb")
 	
 	WriteString(f, CurrentTime())
 	WriteString(f, CurrentDate())
+	
+	WriteString(f, VersionNumber)
 	
 	WriteInt(f, me\PlayTime)
 	
@@ -65,8 +80,6 @@ Function SaveGame%(File$)
 	
 	WriteFloat(f, EntityPitch(me\Collider))
 	WriteFloat(f, EntityYaw(me\Collider))
-	
-	WriteString(f, VersionNumber)
 	
 	WriteFloat(f, me\BlinkTimer)
 	WriteFloat(f, me\BLINKFREQ)
@@ -533,7 +546,7 @@ Function LoadGame%(File$)
 	
 	Local r.Rooms, n.NPCs, do.Doors, rt.RoomTemplates
 	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, Tex%, ID%
-	Local f% = ReadFile(File + "save.cb")
+	Local f% = ReadFile(SavePath + File + "\save.cb")
 	
 	me\DropSpeed = 0.0
 	
@@ -541,6 +554,9 @@ Function LoadGame%(File$)
 	
 	StrTemp = ReadString(f)
 	StrTemp = ReadString(f)
+	
+	StrTemp = ReadString(f)
+	If StrTemp <> VersionNumber Then RuntimeError("The save files of v" + StrTemp + " aren't compatible with SCP - Containment Breach Ultimate Edition v" + VersionNumber + ".")
 	
 	me\PlayTime = ReadInt(f)
 	
@@ -561,9 +577,6 @@ Function LoadGame%(File$)
 	x = ReadFloat(f)
 	y = ReadFloat(f)
 	RotateEntity(me\Collider, x, y, 0.0)
-	
-	StrTemp = ReadString(f)
-	If StrTemp <> VersionNumber Then RuntimeError("The save files of v" + StrTemp + " aren't compatible with SCP - Containment Breach Ultimate Edition v" + VersionNumber + ".")
 	
 	me\BlinkTimer = ReadFloat(f)
 	me\BLINKFREQ = ReadFloat(f)
@@ -1383,7 +1396,7 @@ Function LoadGameQuick%(File$)
 	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, ID%, Tex%
 	Local SF%, b%, t1%
 	Local Player_X#, Player_Y#, Player_Z#
-	Local f% = ReadFile(File + "save.cb")
+	Local f% = ReadFile(SavePath + File + "\save.cb")
 	
 	GameSaved = True
 	me\Zombie = False
@@ -1401,6 +1414,11 @@ Function LoadGameQuick%(File$)
 	
 	StrTemp = ReadString(f)
 	StrTemp = ReadString(f)
+	
+	StrTemp = ReadString(f)
+	If StrTemp <> VersionNumber Then RuntimeError("The save files of v" + StrTemp + " aren't compatible with SCP - Containment Breach Ultimate Edition v" + VersionNumber + ".")
+	
+	me\PlayTime = ReadInt(f)
 	
 	me\DropSpeed = -0.1
 	me\HeadDropSpeed = 0.0
@@ -1425,8 +1443,6 @@ Function LoadGameQuick%(File$)
 	
 	HideEntity(me\Collider)
 	
-	me\PlayTime = ReadInt(f)
-	
 	x = ReadFloat(f)
 	y = ReadFloat(f)
 	z = ReadFloat(f)	
@@ -1445,9 +1461,6 @@ Function LoadGameQuick%(File$)
 	x = ReadFloat(f)
 	y = ReadFloat(f)
 	RotateEntity(me\Collider, x, y, 0.0)
-	
-	StrTemp = ReadString(f)
-	If StrTemp <> VersionNumber Then RuntimeError("The save files of v" + StrTemp + " aren't compatible with SCP - Containment Breach Ultimate Edition v" + VersionNumber + ".")
 	
 	me\BlinkTimer = ReadFloat(f)
 	me\BLINKFREQ = ReadFloat(f)
@@ -2179,16 +2192,6 @@ Function LoadAchievementsFile%()
 	CloseFile(File)
 End Function
 
-Global SaveMSG$
-
-Global CurrSave$
-Global SaveGameAmount%
-
-Dim SaveGames$(SaveGameAmount) 
-Dim SaveGameTime$(SaveGameAmount)
-Dim SaveGameDate$(SaveGameAmount)
-Dim SaveGameVersion$(SaveGameAmount)
-
 Global SavedMapsAmount% = 0
 Dim SavedMaps$(SavedMapsAmount)
 Dim SavedMapsAuthor$(SavedMapsAmount)
@@ -2196,66 +2199,61 @@ Dim SavedMapsAuthor$(SavedMapsAmount)
 Function LoadSavedGames%()
 	CatchErrors("Uncaught (LoadSaveGames)")
 	
-	Local i%, myDir%, File$, j%
+	Local sv.Save, newsv.Save
 	
+	For sv.Save = Each Save
+		Delete(sv)
+	Next
 	SaveGameAmount = 0
+	
 	If FileType(SavePath) = 1 Then RuntimeError("Can't create dir " + Chr(34) + SavePath + Chr(34))
 	If FileType(SavePath) = 0 Then CreateDir(SavePath)
-	myDir = ReadDir(SavePath) 
-	Repeat 
-		File = NextFile(myDir) 
-		If File = "" Then Exit 
-		If FileType(SavePath + "\" + File) = 2 Then 
-			If File <> "." And File <> ".." Then 
-				If FileType(SavePath + File + "\save.cb") > 0 Then
-					SaveGameAmount = SaveGameAmount + 1
-				EndIf
-			EndIf
-		EndIf 
-	Forever 
-	CloseDir(myDir)
 	
-	Dim SaveGames$(SaveGameAmount) 
+	Local MyDir% = ReadDir(SavePath)
 	
-	myDir = ReadDir(SavePath) 
-	i = 0
-	Repeat 
-		File = NextFile(myDir) 
-		If File = "" Then Exit 
-		If FileType(SavePath + "\" + File) = 2 Then 
-			If File <> "." And File <> ".." Then 
-				If FileType(SavePath + File + "\save.cb") > 0 Then
-					SaveGames(i) = File
-					i = i + 1
-				EndIf
-			EndIf
-		EndIf 
-	Forever 
-	CloseDir(myDir)
+	NextFile(MyDir) : NextFile(MyDir) ; ~ Skipping "." and ".."
 	
-	Dim SaveGameTime$(SaveGameAmount)
-	Dim SaveGameDate$(SaveGameAmount)
-	Dim SaveGameVersion$(SaveGameAmount)
-	For i = 1 To SaveGameAmount
-		Local f% = ReadFile(SavePath + SaveGames(i - 1) + "\save.cb")
-		
-		SaveGameTime(i - 1) = ReadString(f)
-		SaveGameDate(i - 1) = ReadString(f)
-		; ~ Skip all data until the VersionVersion number
-		ReadInt(f)
-		For j = 0 To 5
-			ReadFloat(f)
-		Next
-		ReadString(f)
-		ReadFloat(f)
-		ReadFloat(f)
-		; ~ End Skip
-		SaveGameVersion(i - 1) = ReadString(f)
-		
-		CloseFile(f)
-	Next
+	Local File$ = NextFile(MyDir)
+	
+	While File <> ""
+		If FileType(SavePath + File) = 2 Then 
+			Local f% = ReadFile(SavePath + File + "\save.cb")
+			
+			newsv.Save = New Save
+			newsv\Name = File
+			
+			newsv\Time = ReadString(f)
+			newsv\Date = ReadString(f)
+			newsv\Version = ReadString(f)
+			
+			CloseFile(f)
+			SaveGameAmount = SaveGameAmount + 1
+		EndIf
+		File = NextFile(MyDir)
+	Wend
+	CloseDir(MyDir)
 	
 	CatchErrors("LoadSaveGames")
+End Function
+
+Function DeleteGame(sv.Save)
+	sv\Name = SavePath + sv\Name + "\"
+	
+	Local DelDir% = ReadDir(sv\Name)
+	
+	If DelDir <> 0 Then
+		NextFile(DelDir) : NextFile(DelDir) ; ~ Skipping "." and ".."
+		
+		Local File$ = NextFile(DelDir)
+		
+		While File <> ""
+			DeleteFile(sv\Name + File)
+			File = NextFile(DelDir)
+		Wend
+		CloseDir(DelDir)
+		DeleteDir(sv\Name)
+	EndIf
+	Delete(sv)
 End Function
 
 Const MapCreatorPath$ = "Map Creator\Maps\"
