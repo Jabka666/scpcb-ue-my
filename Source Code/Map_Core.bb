@@ -756,7 +756,6 @@ Type Forest
 	Field Forest_Pivot%
 	Field ForestDoors.Doors[2]
 	Field DetailEntities%[2]
-	Field ID%
 End Type
 
 ; ~ Forest Constants
@@ -773,16 +772,11 @@ Const Center% = 5
 Function GenForestGrid%(fr.Forest)
 	CatchErrors("Uncaught (GenForestGrid)")
 	
-	Local LastForestID%
+	Local Door1Pos%, Door2Pos%
+	Local i%, j%
 	
-	fr\ID = LastForestID + 1
-	LastForestID = LastForestID + 1
-	
-	Local Door1_Pos%, Door2_Pos%
-	Local i%, j%, n%, LeftMost%, RightMost%
-	
-	Door1_Pos = Rand(3, 7)
-	Door2_Pos = Rand(3, 7)
+	Door1Pos = Rand(3, 7)
+	Door2Pos = Rand(3, 7)
 	
 	; ~ Clear the grid
 	For i = 0 To ForestGridSize - 1
@@ -792,13 +786,13 @@ Function GenForestGrid%(fr.Forest)
 	Next
 	
 	; ~ Set the position of the concrete and doors
-	fr\Grid[Door1_Pos] = 3
-	fr\Grid[((ForestGridSize - 1) * ForestGridSize) + Door2_Pos] = 3
+	fr\Grid[Door1Pos] = 3
+	fr\Grid[((ForestGridSize - 1) * ForestGridSize) + Door2Pos] = 3
 	
 	; ~ Generate the path
-	Local PathX% = Door2_Pos
+	Local PathX% = Door2Pos
 	Local PathY% = 1
-	Local Dir% = 1
+	Local Dir% = 1 ; ~ 0 = left, 1 = up, 2 = right
 	
 	fr\Grid[((ForestGridSize - 1 - PathY) * ForestGridSize) + PathX] = 1
 	
@@ -831,7 +825,7 @@ Function GenForestGrid%(fr.Forest)
 				PathY = MoveForward(Dir, PathX, PathY, True)
 			EndIf
 		EndIf
-		;~ Add our position to the grid
+		; ~ Add our position to the grid
 		fr\Grid[((ForestGridSize - 1 - PathY) * ForestGridSize) + PathX] = 1
 	Wend
 	; ~ Finally, bring the path back to the door now that we have reached the end
@@ -842,10 +836,10 @@ Function GenForestGrid%(fr.Forest)
 		fr\Grid[((ForestGridSize - 1 - PathY) * ForestGridSize) + PathX] = 1
 	Wend
 	
-	If PathX <> Door1_Pos Then
+	If PathX <> Door1Pos Then
 		Dir = 0
-		If Door1_Pos > PathX Then Dir = 2
-		While PathX <> Door1_Pos
+		If Door1Pos > PathX Then Dir = 2
+		While PathX <> Door1Pos
 			PathX = MoveForward(Dir, PathX, PathY)
 			PathY = MoveForward(Dir, PathX, PathY, True)
 			fr\Grid[((ForestGridSize - 1 - PathY) * ForestGridSize) + PathX] = 1
@@ -853,81 +847,72 @@ Function GenForestGrid%(fr.Forest)
 	EndIf
 	
 	; ~ Attempt to create new branches
-	Local New_Y%, Temp_Y%, New_X%
-	Local Branch_Type%, Branch_Pos%
+	Local NewY%, TempY%, NewX%
+	Local BranchPos%, LeftMost%, RightMost%
 	
-	New_Y = -3 ; ~ Used for counting off. Branches will only be considered once every 4 units so as to avoid potentially too many branches
-	While New_Y < ForestGridSize - 6
-		New_Y = New_Y + 4
-		Temp_Y = New_Y
-		New_X = 0
+	NewY = -3 ; ~ Used for counting off; branches will only be considered once every 4 units so as to avoid potentially too many branches
+	While NewY < ForestGridSize - 6
+		NewY = NewY + 4
+		TempY = NewY
+		NewX = 0 
 		If Chance(Branch_Chance) Then
-			Branch_Type = -1
 			; ~ Create a branch at this spot
 			; ~ Determine if on left or on right
-			Branch_Pos = 2 * Rand(0, 1)
+			BranchPos = 2 * Rand(0, 1)
 			; ~ Get leftmost or rightmost path in this row
-			LeftMost = ForestGridSize
+			LeftMost = ForestGridSize - 1
 			RightMost = 0
-			For i = 0 To ForestGridSize
-				If fr\Grid[((ForestGridSize - 1 - New_Y) * ForestGridSize) + i] = 1 Then
+			For i = 0 To ForestGridSize - 1
+				If fr\Grid[((ForestGridSize - 1 - NewY) * ForestGridSize) + i] = 1 Then
 					If i < LeftMost Then LeftMost = i
 					If i > RightMost Then RightMost = i
 				EndIf
 			Next
-			If Branch_Pos = 0 Then
-				New_X = LeftMost - 1
+			If BranchPos = 0 Then
+				NewX = LeftMost - 1
 			Else
-				New_X = RightMost + 1
+				NewX = RightMost + 1
 			EndIf
-			; ~ Before creating a branch make sure there are no 1's above or below
-			If (Temp_Y <> 0 And fr\Grid[((ForestGridSize - 1 - Temp_Y + 1) * ForestGridSize) + New_X] = 1) Lor fr\Grid[((ForestGridSize - 1 - Temp_Y - 1) * ForestGridSize) + New_X] = 1 Then
-				Exit ; ~ Break simply to stop creating the branch
-			EndIf
-			fr\Grid[((ForestGridSize - 1 - Temp_Y) * ForestGridSize) + New_X] = Branch_Type ; ~ Make 4s so you don't confuse your branch for a path; will be changed later
-			If Branch_Pos = 0 Then
-				New_X = LeftMost - 2
-			Else
-				New_X = RightMost + 2
-			EndIf
-			fr\Grid[((ForestGridSize - 1 - Temp_Y) * ForestGridSize) + New_X] = Branch_Type ; ~ Branch out twice to avoid creating an unwanted 2x2 path with the real path
-			i = 2
-			While i < Branch_Max_Life
-				i = i + 1
-				If Chance(Branch_Die_Chance) Then
-					Exit
-				EndIf
-				If Rand(0, 3) = 0 Then ; ~ Have a higher chance to go up to confuse the player
-					If Branch_Pos = 0 Then
-						New_X = New_X - 1
-					Else
-						New_X = New_X + 1
-					EndIf
+			; ~ Before creating a branch make sure it won't pass the border and there are no 1's above or below
+			If NewX >= 0 And NewX < ForestGridSize And fr\Grid[((ForestGridSize - 1 - TempY - 1) * ForestGridSize) + NewX] <> 1 And fr\Grid[((ForestGridSize - 1 - TempY + 1) * ForestGridSize) + NewX] <> 1 Then
+				fr\Grid[((ForestGridSize - 1 - TempY) * ForestGridSize) + NewX] = -1 ; ~ Make -1s so you don't confuse your branch for a path; will be changed later
+				If BranchPos = 0 Then
+					NewX = LeftMost - 2
 				Else
-					Temp_Y = Temp_Y + 1
+					NewX = RightMost + 2
 				EndIf
-				
-				; ~ Before creating a branch make sure there are no 1's above or below
-				n = ((ForestGridSize - 1 - Temp_Y + 1) * ForestGridSize) + New_X
-				If n < ForestGridSize - 1 Then 
-					If Temp_Y <> 0 And fr\Grid[n] = 1 Then Exit
+				; ~ Before continuing the branch make sure it won't pass the border
+				If NewX >= 0 And NewX < ForestGridSize Then
+					fr\Grid[((ForestGridSize - 1 - TempY) * ForestGridSize) + NewX] = -1 ; ~ Branch out twice to avoid creating an unwanted 2x2 path with the real path
+					i = 2
+					While i < Branch_Max_Life
+						i = i + 1
+						If Chance(Branch_Die_Chance) Then Exit
+						If Rand(0, 3) = 0 Then ; ~ Have a higher chance to go up to confuse the player
+							If BranchPos = 0 Then
+								NewX = NewX - 1
+							Else
+								NewX = NewX + 1
+							EndIf
+						Else
+							TempY = TempY + 1
+						EndIf
+						
+						; ~ before continuing the branch make sure it won't pass the border and there are no 1's above
+						If NewX < 0 Lor NewX >= ForestGridSize Lor fr\Grid[((ForestGridSize - 1 - TempY - 1) * ForestGridSize) + NewX] = 1 Then Exit
+						
+						fr\Grid[((ForestGridSize - 1 - TempY) * ForestGridSize) + NewX] = -1 ; ~ Make -1s so you don't confuse your branch for a path; will be changed later
+						If TempY >= ForestGridSize - 2 Then Exit
+					Wend
 				EndIf
-				n = ((ForestGridSize - 1 - Temp_Y - 1) * ForestGridSize) + New_X
-				If n > 0 Then 
-					If fr\Grid[n] = 1 Then Exit
-				EndIf
-				fr\Grid[((ForestGridSize - 1 - Temp_Y) * ForestGridSize) + New_X] = Branch_Type ; ~ Make 4s so you don't confuse your branch for a path; will be changed later
-				If Temp_Y >= ForestGridSize - 2 Then Exit
-			Wend
+			EndIf
 		EndIf
 	Wend
 	
-	; ~ Change branches from 4s to 1s (they were 4s so that they didn't accidently create a 2x2 path unintentionally)
-	For i = 0 To ForestGridSize - 1
+	; ~ Change branches from -1s to 1s
+	For i = 1 To ForestGridSize - 2
 		For j = 0 To ForestGridSize - 1
 			If fr\Grid[(i * ForestGridSize) + j] = -1 Then
-				fr\Grid[(i * ForestGridSize) + j] = 1
-			ElseIf fr\Grid[(i * ForestGridSize) + j] = -2
 				fr\Grid[(i * ForestGridSize) + j] = 1
 			EndIf
 		Next
@@ -1006,7 +991,7 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	Tempf1 = Tile_Size / Tempf3
 	
 	For tX = 0 To ForestGridSize - 1
-		For tY = 0 To ForestGridSize - 1
+		For tY = 1 To ForestGridSize - 2
 			If fr\Grid[(tY * ForestGridSize) + tX] = 1 Then 
 				Tile_Type = 0
 				If tX + 1 < ForestGridSize Then Tile_Type = (fr\Grid[(tY * ForestGridSize) + tX + 1] > 0)
@@ -1164,7 +1149,7 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	; ~ Place the wall		
 	For i = 0 To 1
 		tY = i * (ForestGridSize - 1)
-		For tX = 0 To ForestGridSize - 1
+		For tX = 3 To ForestGridSize - 3
 			If fr\Grid[(tY * ForestGridSize) + tX] = 3 Then
 				fr\DetailEntities[i] = CopyEntity(fr\DetailMesh[3])
 				ScaleEntity(fr\DetailEntities[i], RoomScale, RoomScale, RoomScale)
@@ -1182,7 +1167,7 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 		Next		
 	Next
 	
-	If opt\DebugMode Then
+	;If opt\DebugMode Then
 		Repeat
 			Cls()
 			i = ForestGridSize - 1
@@ -1214,7 +1199,7 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 			Flip()
 			If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 		Until (GetKey() <> 0 Lor MouseHit(1))
-	EndIf
+	;EndIf
 	
 	CatchErrors("PlaceForest")
 End Function
@@ -1280,7 +1265,7 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	Tempf1 = Tile_Size / Tempf3
 	
 	For tX = 0 To ForestGridSize - 1
-		For tY = 0 To ForestGridSize - 1
+		For tY = 1 To ForestGridSize - 2
 			If fr\Grid[(tY * ForestGridSize) + tX] > 0 Then 
 				Tile_Type = 0
 				
