@@ -10,9 +10,9 @@ Bug Fixes:
 - Fixed "IsDead" parameter for guard.
 - Fixed SCP-966's messages while using echo sound.
 - Fixes for SCP-294 drinks:
-    - Fixed wrong color of the drinks refined in SCP-914.
-    - Fixed multipliers for drinks effects.
-    - Fixed blink and stamina multipliers that were reducing player stats on Fine and Very Fine settings.
+    	- Fixed wrong color of the drinks refined in SCP-914.
+    	- Fixed multipliers for drinks effects.
+    	- Fixed blink and stamina multipliers that were reducing player stats on Fine and Very Fine settings.
 - Fixed vignette in Dark atmosphere mode.
 - Fixed an issue where Dr. Maynard's code could be the same as Dr. Harp's.
 - Fixed a first aid kit that damages the player if the injuries are < 0.5.
@@ -20,10 +20,11 @@ Bug Fixes:
 - Fixed the room counting system doesn't determine SCP-1499's dimension as a room.
 - Fixed ticket model.
 - Fixes for SCP-860-1:
-    - Fixed missing dark fog color.
-    - Fixed Izumi sprite shifting one pixel to the left when blinking.
-    - Fixed incorrect position of Izumi logs.
-    - Fixed calculation of previous EventState3 value to prevent SCP-860-2's spawn from being skipped.
+    	- Fixed missing dark fog color.
+    	- Fixed Izumi sprite shifting one pixel to the left when blinking.
+    	- Fixed incorrect position of Izumi logs.
+    	- Fixed calculation of previous EventState3 value to prevent SCP-860-2's spawn from being skipped.
+	- Fixed SCP-860-1 branches wrapping around the grid border and creating unreachable tiles.
 - Fixed ability to use SCP-1162 while using inventory.
 - Fixed SCP-1162 that kills the player even if he has any item.
 - Fixed non-facility rooms contributing to "Rooms found" parameter.
@@ -42,7 +43,7 @@ Mechanics and effects:
 - Improved SCP-106's retreat in the tesla gate.
 - Added slow effect for SCP-106's decals.
 - Added player's cough sounds in "room3_storage" area.
-    - Also the green gas in "room3_storage" kills the player.
+	- Also the green gas in "room3_storage" kills the player.
 
 Rooms:
 - Opened two doors in "cont2_427_714_860_1025"
@@ -124,17 +125,17 @@ Bug Fixes:
 - Fixed ability to save the game on endings. 
 - Fixed MAV in SCP-035's containment chamber.
 - Fixes for SCP-1499's dimension.
-    - Fixed double first chunk.
-    - Fixed chunk objects spawn.
-    - Fixed MAV in SCP-1499's dimension.
+	- Fixed double first chunk.
+    	- Fixed chunk objects spawn.
+    	- Fixed MAV in SCP-1499's dimension.
 - Fixed the game doesn't load door positions properly.
 - Fixed doors in "room2_servers_hcz".
 - Fixed SCP-1048's paper texture.
 - Fixed refinements for clipboard and wallet.
 - Fixed wrong interface scaling.
 - Fixes for SCP-294:
-    - Fixed keypad isn't accurate.
-    - Fixed duplicate buttons.
+    	- Fixed keypad isn't accurate.
+    	- Fixed duplicate buttons.
 - Fixed keypad button interface isn't accurate.
 - Fixed items in the wallet/clipboard aren't clickable/hard to click.
 - Fixed ticket model.
