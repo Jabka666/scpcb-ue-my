@@ -888,6 +888,7 @@ Function PickItem%(item.Items)
 				Exit
 			EndIf
 		Next
+		me\SndVolume = Max(1.5, me\SndVolume)
 	Else
 		CreateMsg("You cannot carry any more items.")
 	EndIf

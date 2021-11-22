@@ -2697,13 +2697,16 @@ Function SetCrouch%(NewCrouch%)
 		If NewCrouch <> me\Crouch Then 
 			PlaySound_Strict(CrouchSFX)
 			me\Stamina = me\Stamina - Rnd(8.0, 16.0)
+			me\SndVolume = Max(1.0, me\SndVolume)
+			
+			If me\Stamina < 10.0 Then
+				Temp = 0
+				If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp = 1
+				If (Not ChannelPlaying(BreathCHN)) Then BreathCHN = PlaySound_Strict(BreathSFX((Temp), 0))
+			EndIf
+			
+			me\Crouch = NewCrouch
 		EndIf
-		If me\Stamina < 10.0 Then
-			Temp = 0
-			If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp = 1
-			If (Not ChannelPlaying(BreathCHN)) Then BreathCHN = PlaySound_Strict(BreathSFX((Temp), 0))
-		EndIf
-		me\Crouch = NewCrouch
 	EndIf
 End Function
 
@@ -2854,6 +2857,12 @@ Function UpdateMoving%()
 				
 				If me\Playable Then me\Shake = ((me\Shake + fps\Factor[0] * Min(Sprint, 1.5) * 7.0) Mod 720.0)
 				If Temp < 180.0 And (me\Shake Mod 360.0) >= 180.0 And (Not me\Terminated) Then
+					If Sprint = 2.5 Then
+						me\SndVolume = Max(4.0, me\SndVolume)
+					Else
+						me\SndVolume = Max(2.5 - (me\Crouch * 0.6), me\SndVolume)
+					EndIf
+					
 					If CurrStepSFX = 0 Then
 						Temp = GetStepSound(me\Collider)
 						
@@ -2863,12 +2872,10 @@ Function UpdateMoving%()
 							Temp3 = 0
 						EndIf
 						
-						If Sprint = 1.0 Then
-							me\SndVolume = Max(4.0, me\SndVolume)
+						If Sprint = 2.5 Then
 							TempCHN = PlaySound_Strict(StepSFX(Temp, 0, Rand(0, 7 - Temp3)))
 							ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume)
 						Else
-							me\SndVolume = Max(2.5 - (me\Crouch * 0.6), me\SndVolume)
 							TempCHN = PlaySound_Strict(StepSFX(Temp, 1 - (Temp3 / 5), Rand(0, 7 - Temp3)))
 							ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume)
 						EndIf
