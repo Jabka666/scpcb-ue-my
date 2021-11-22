@@ -29,6 +29,7 @@ Bug Fixes:
 - Fixed SCP-1162 that kills the player even if he has any item.
 - Fixed non-facility rooms contributing to "Rooms found" parameter.
 - Fixed untitled save files not correctly being named after the second one.
+- Fixed "EscortTerminated" sound not working mos of the time.
 
 v1.0.2
 

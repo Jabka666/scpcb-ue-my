@@ -1149,6 +1149,7 @@ Function UpdateEvents%()
 								PlaySound_Strict(IntroSFX[Rand(8, 10)])
 								me\BlurTimer = 1000.0
 								me\LightFlash = 1.0
+								me\Playable = False
 								
 								CreateConsoleMsg("")
 								CreateConsoleMsg("WARNING! Using the console commands or teleporting away from the intro scene may cause bugs or crashing.", 255, 0, 0)
@@ -1194,7 +1195,6 @@ Function UpdateEvents%()
 									If (Not EntityHidden(me\Collider)) Then HideEntity(me\Collider)
 									PositionEntity(me\Collider, x, 0.302, z)	
 									me\DropSpeed = 0.0
-									me\Playable = False
 								Else
 									PositionEntity(me\Collider, EntityX(me\Collider), 0.302, EntityZ(me\Collider))
 									ResetEntity(me\Collider)
@@ -1714,14 +1714,17 @@ Function UpdateEvents%()
 											For i = 3 To 4
 												e\room\NPC[i]\State = 11.0 : e\room\NPC[i]\State3 = 1.0
 											Next
-											UseDoor(e\room\RoomDoors[2], True)
+											For i = 2 To 3
+												UseDoor(e\room\RoomDoors[i], True)
+											Next
 										EndIf
 									EndIf
 								EndIf
 								
 								If DistanceSquared(EntityX(me\Collider), EntityX(e\room\OBJ), EntityZ(me\Collider), EntityZ(e\room\OBJ)) < 16.0 Then
-									If e\room\RoomDoors[2]\Open Then UseDoor(e\room\RoomDoors[2], True)
-									UseDoor(e\room\RoomDoors[1], True)
+									For i = 1 To 2
+										UseDoor(e\room\RoomDoors[i], True)
+									Next
 									For i = 3 To 4
 										e\room\NPC[i]\State = 0.0
 									Next
@@ -2216,12 +2219,19 @@ Function UpdateEvents%()
 						EndIf
 					EndIf
 				Else
-					If me\Terminated Then
-						If e\room\NPC[3] <> Null Then
-							If e\room\NPC[3]\State = 1.0 Lor e\room\NPC[3]\State = 11.0 Then 
-								LoadEventSound(e, "SFX\Room\Intro\Guard\Ulgrin\EscortTerminated.ogg")
-								PlaySound_Strict(e\Sound)
+					Temp = False
+					For i = 3 To 5
+						If e\room\NPC[i] <> Null Then
+							If e\room\NPC[i]\State = 1.0 Lor e\room\NPC[i]\State = 11.0 Then
+								Temp = True
+								Exit
 							EndIf
+						EndIf
+					Next
+					If me\Terminated Then
+						If Temp Then
+							LoadEventSound(e, "SFX\Room\Intro\Guard\Ulgrin\EscortTerminated.ogg")
+							PlaySound_Strict(e\Sound)
 						EndIf
 					EndIf
 					

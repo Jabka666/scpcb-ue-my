@@ -1616,7 +1616,6 @@ Function UpdateNPCs%()
 															If Inventory(i)\State2 < 3.0 Then
 																Inventory(i)\State2 = Inventory(i)\State2 + 1.0
 																TakeOffTimer = 250.0
-																me\BlurTimer = 250.0
 																me\CameraShake = 2.0
 															Else
 																RemoveItem(Inventory(i))
