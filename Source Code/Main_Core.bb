@@ -2281,9 +2281,6 @@ Function MainLoop%()
 			Use427()
 		EndIf
 		
-		If chs\InfiniteStamina Then me\Stamina = 100.0
-		If chs\NoBlink Then me\BlinkTimer = me\BLINKFREQ
-		
 		If fps\Factor[0] = 0.0 Then
 			UpdateWorld(0.0)
 		Else
@@ -2291,15 +2288,22 @@ Function MainLoop%()
 			ManipulateNPCBones()
 		EndIf
 		
-		me\BlurVolume = Min(CurveValue(0.0, me\BlurVolume, 20.0), 0.95)
-		If me\BlurTimer > 0.0 Then
-			me\BlurVolume = Max(Min(0.95, me\BlurTimer / 1000.0), me\BlurVolume)
-			me\BlurTimer = Max(me\BlurTimer - fps\Factor[0], 0.0)
-		EndIf
-		
-		UpdateDark()
-		
-		If (Not MenuOpen)  Then
+		If (Not MenuOpen) Then
+			If chs\InfiniteStamina Then
+				If me\Stamina <> 100.0 Then me\Stamina = 100.0
+			EndIf
+			If chs\NoBlink Then
+				If me\BlinkTimer <> me\BLINKFREQ Then me\BlinkTimer = me\BLINKFREQ
+			EndIf
+			
+			UpdateDark()
+			
+			me\BlurVolume = Min(CurveValue(0.0, me\BlurVolume, 20.0), 0.95)
+			If me\BlurTimer > 0.0 Then
+				me\BlurVolume = Max(Min(0.95, me\BlurTimer / 1000.0), me\BlurVolume)
+				me\BlurTimer = Max(me\BlurTimer - fps\Factor[0], 0.0)
+			EndIf
+			
 			If me\Sanity < 0.0 Then
 				If me\RestoreSanity Then me\Sanity = Min(me\Sanity + fps\Factor[0], 0.0)
 				If me\Sanity < -200.0 Then 
@@ -2386,14 +2390,14 @@ Function MainLoop%()
 				me\BlurTimer = Abs(me\FallTimer * 10.0)
 				me\FallTimer = me\FallTimer - fps\Factor[0]
 			EndIf
-		EndIf
-		
-		If me\LightFlash > 0.0 Then
-			If EntityHidden(t\OverlayID[6]) Then ShowEntity(t\OverlayID[6])
-			EntityAlpha(t\OverlayID[6], Max(Min(me\LightFlash + Rnd(-0.2, 0.2), 1.0), 0.0))
-			me\LightFlash = Max(me\LightFlash - (fps\Factor[0] / 70.0), 0.0)
-		Else
-			If (Not EntityHidden(t\OverlayID[6])) Then HideEntity(t\OverlayID[6])
+			
+			If me\LightFlash > 0.0 Then
+				If EntityHidden(t\OverlayID[6]) Then ShowEntity(t\OverlayID[6])
+				EntityAlpha(t\OverlayID[6], Max(Min(me\LightFlash + Rnd(-0.2, 0.2), 1.0), 0.0))
+				me\LightFlash = Max(me\LightFlash - (fps\Factor[0] / 70.0), 0.0)
+			Else
+				If (Not EntityHidden(t\OverlayID[6])) Then HideEntity(t\OverlayID[6])
+			EndIf
 		EndIf
 		
 		UpdateWorld2()
@@ -3347,7 +3351,9 @@ Function UpdateMouseLook%()
 End Function
 
 Function UpdateDark%()
-	Local DarkAlpha# = 0.0
+	Local DarkAlpha#
+	
+	If DarkAlpha <> 0.0 Then DarkAlpha = 0.0
 	
 	If me\Sanity < -200.0 Then DarkAlpha = Max(Min((-me\Sanity - 200.0) / 700.0, 0.6), DarkAlpha)
 	
@@ -3363,8 +3369,6 @@ Function UpdateDark%()
 		Else
 			DarkAlpha = Max(DarkAlpha, Abs(Sin(me\BlinkTimer * 18.0)))
 		EndIf
-	Else
-		DarkAlpha = Max(DarkAlpha, 0.0)
 	EndIf
 	
 	If me\LightBlink > 0.0 And wi\NightVision = 0 Then DarkAlpha = Min(Max(DarkAlpha, me\LightBlink * Rnd(0.3, 0.8)), 1.0)

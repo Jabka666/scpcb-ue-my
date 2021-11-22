@@ -30,6 +30,7 @@ Bug Fixes:
 - Fixed non-facility rooms contributing to "Rooms found" parameter.
 - Fixed untitled save files not correctly being named after the second one.
 - Fixed "EscortTerminated" sound not working mos of the time.
+- Fixed a bug due to which the pause didn't stop some timers and effects.
 
 v1.0.2
 

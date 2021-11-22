@@ -429,7 +429,7 @@ Function CreateBlurImage%()
 	AddTriangle(SF, 3, 2, 1)
 	EntityFX(SPR, 17)
 	ScaleEntity(SPR, SMALLEST_POWER_TWO / Float(ArkSw), SMALLEST_POWER_TWO / Float(ArkSw), 1.0)
-	PositionEntity(SPR, 0, 0, 1.0001)
+	PositionEntity(SPR, 0.0, 0.0, 1.0001)
 	EntityOrder(SPR, -100000)
 	EntityBlend(SPR, 1)
 	ArkBlurImage = SPR
