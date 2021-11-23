@@ -35,6 +35,8 @@ Bug Fixes:
 - Fixed incorrect sound volumes for sprinting and walking.
 - Fixed certain NPCs sometimes appearing on the navigator and the blue night vision goggles' interface when they're not supposed to.
 
+- Tiny fix for SCP-372's AI.
+
 v1.0.2
 
 General:

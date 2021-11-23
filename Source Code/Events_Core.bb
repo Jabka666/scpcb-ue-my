@@ -1681,7 +1681,9 @@ Function UpdateEvents%()
 								EndIf
 							Else
 								If e\room\RoomDoors[2]\Open Then
-									e\room\NPC[3]\State3 = Max(e\room\NPC[3]\State3 + fps\Factor[0], 50.0)
+									Temp = 1.0
+									If SelectedItem <> Null Then Temp = 3.0
+									e\room\NPC[3]\State3 = Max(e\room\NPC[3]\State3 + fps\Factor[0] / Temp, 50.0)
 									If e\room\NPC[3]\State3 >= 70.0 * 8.0 And e\room\NPC[3]\State3 - fps\Factor[0] < 70.0 * 8.0 And e\room\NPC[3]\State = 9.0 Then
 										If e\room\NPC[3]\State2 < 2.0 Then
 											If ChannelPlaying(e\room\NPC[3]\SoundCHN) Then StopChannel(e\room\NPC[3]\SoundCHN)
@@ -1722,9 +1724,8 @@ Function UpdateEvents%()
 								EndIf
 								
 								If DistanceSquared(EntityX(me\Collider), EntityX(e\room\OBJ), EntityZ(me\Collider), EntityZ(e\room\OBJ)) < 16.0 Then
-									For i = 1 To 2
-										UseDoor(e\room\RoomDoors[i], True)
-									Next
+									UseDoor(e\room\RoomDoors[1], True)
+									If e\room\RoomDoors[2]\Open Then UseDoor(e\room\RoomDoors[2], True)
 									For i = 3 To 4
 										e\room\NPC[i]\State = 0.0
 									Next
