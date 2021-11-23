@@ -33,6 +33,7 @@ Bug Fixes:
 - Fixed "EscortTerminated" sound not working mos of the time.
 - Fixed a bug due to which the pause didn't stop some timers and effects.
 - Fixed incorrect sound volumes for sprinting and walking.
+- Fixed certain NPCs sometimes appearing on the navigator and the blue night vision goggles' interface when they're not supposed to.
 
 v1.0.2
 

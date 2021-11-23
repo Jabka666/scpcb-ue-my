@@ -2989,15 +2989,17 @@ Function UpdateNPCs%()
 							n\Idle = 0
 							n\State = Rnd(20.0, 60.0)
 							
-							If Rand(300) = 1 Then PlaySound2(RustleSFX[Rand(0, 5)], Camera, n\OBJ, 8.0, Rnd(0.0, 0.2))
+							If Rand(300) = 1 Then PlaySound2(RustleSFX[Rand(0, 5)], Camera, n\Collider, 8.0, Rnd(0.0, 0.2))
 						EndIf
-					Else
+					EndIf
+					
+					If n\Idle = 0 Then
 						PositionEntity(n\OBJ, EntityX(n\Collider) + Rnd(-0.005, 0.005), EntityY(n\Collider) + 0.3 + 0.1 * Sin(MilliSecs2() / 2.0), EntityZ(n\Collider) + Rnd(-0.005, 0.005))
 						RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider), ((MilliSecs2() / 5.0) Mod 360.0))
 						
 						AnimateNPC(n, 1.0, 300.0, Rnd(0.8, 2.5))
 						
-						If EntityInView(n\OBJ, Camera) Then
+						If EntityInView(n\OBJ, Camera) And (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) Then
 							GiveAchievement(Achv372)
 							
 							If Rand(30) = 1 Then 
@@ -3023,7 +3025,10 @@ Function UpdateNPCs%()
 							MoveEntity(n\Collider, 0.0, 0.0, 0.03 * fps\Factor[0])
 						EndIf
 						n\State = n\State - (fps\Factor[0] * 0.8)
-						If n\State <= 0.0 Then n\Idle = 1	
+						If n\State <= 0.0 Then
+							n\Idle = 1
+							PositionEntity(n\Collider, 0.0, 500.0, 0.0)
+						EndIf
 					EndIf
 				EndIf
 				

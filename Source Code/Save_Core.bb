@@ -11,38 +11,6 @@ Global SaveGameAmount%
 
 Const SavePath$ = "Saves\"
 
-Type AutoSave
-	Field Amount%
-	Field Timer#
-End Type
-
-Global as.AutoSave = New AutoSave
-
-Function UpdateAutoSave%()
-	If (Not opt\AutoSaveEnabled) Lor SelectedDifficulty\SaveType <> SAVEANYWHERE Lor me\Terminated Lor (Not CanSave) Lor (Not me\Playable) Lor me\Zombie Then
-		CancelAutoSave()
-		Return
-	EndIf
-	
-	If as\Timer <= 0.0 Then
-		SaveGame(CurrSave\Name + "_" + as\Amount)
-		as\Amount = as\Amount + 1
-		If as\Amount >= 5 Then as\Amount = 0
-	Else
-		as\Timer = as\Timer - fps\Factor[0]
-		If as\Timer <= 70.0 * 5.0 Then
-			CreateHintMsg("Auto save in: " + Str(Int(Ceil(as\Timer) / 70.0)) + "..")
-		EndIf
-	EndIf
-End Function
-
-Function CancelAutoSave%()
-	If as\Timer <= 70.0 * 5.0 Then
-		CreateHintMsg("Auto save is canceled!")
-	EndIf
-	If as\Timer <> 70.0 * 120.0 Then as\Timer = 70.0 * 120.0
-End Function
-
 Function SaveGame%(File$)
 	CatchErrors("Uncaught (SaveGame)")
 	
@@ -268,6 +236,7 @@ Function SaveGame%(File$)
 		WriteFloat(f, n\ModelScaleZ)
 		WriteByte(f, n\HasAsset)
 		WriteByte(f, n\TextureID)
+		WriteByte(f, n\HideFromNVG)
 	Next
 	
 	WriteInt(f, 632)
@@ -799,6 +768,7 @@ Function LoadGame%(File$)
 			ChangeNPCTextureID(n.NPCs, n\TextureID - 1)
 			SetAnimTime(n\OBJ, Frame)
 		EndIf
+		n\HideFromNVG = ReadByte(f)
 	Next
 	
 	For n.NPCs = Each NPCs
@@ -1686,6 +1656,7 @@ Function LoadGameQuick%(File$)
 			ChangeNPCTextureID(n.NPCs, n\TextureID - 1)
 			SetAnimTime(n\OBJ, Frame)
 		EndIf
+		n\HideFromNVG = ReadByte(f)
 	Next
 	
 	For n.NPCs = Each NPCs
@@ -2171,6 +2142,38 @@ Function LoadGameQuick%(File$)
 	HideDistance = 16.0
 	
 	CatchErrors("LoadGameQuick")
+End Function
+
+Type AutoSave
+	Field Amount%
+	Field Timer#
+End Type
+
+Global as.AutoSave = New AutoSave
+
+Function UpdateAutoSave%()
+	If (Not opt\AutoSaveEnabled) Lor SelectedDifficulty\SaveType <> SAVEANYWHERE Lor me\Terminated Lor (Not CanSave) Lor (Not me\Playable) Lor me\Zombie Then
+		CancelAutoSave()
+		Return
+	EndIf
+	
+	If as\Timer <= 0.0 Then
+		SaveGame(CurrSave\Name + "_" + as\Amount)
+		as\Amount = as\Amount + 1
+		If as\Amount >= 5 Then as\Amount = 0
+	Else
+		as\Timer = as\Timer - fps\Factor[0]
+		If as\Timer <= 70.0 * 5.0 Then
+			CreateHintMsg("Auto save in: " + Str(Int(Ceil(as\Timer) / 70.0)) + "..")
+		EndIf
+	EndIf
+End Function
+
+Function CancelAutoSave%()
+	If as\Timer <= 70.0 * 5.0 Then
+		CreateHintMsg("Auto save is canceled!")
+	EndIf
+	If as\Timer <> 70.0 * 120.0 Then as\Timer = 70.0 * 120.0
 End Function
 
 Function SaveAchievementsFile%()
