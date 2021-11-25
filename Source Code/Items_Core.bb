@@ -1047,7 +1047,8 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(0, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
+					de.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1068,7 +1069,8 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(0, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
+					de.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1092,7 +1094,8 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH
 					;[Block]
-					de.Decals = CreateDecal(0, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
+					de.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
 					;[End Block]
 				Case COARSE
 					;[Block]
@@ -1121,7 +1124,8 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(0, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
+					de.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1138,7 +1142,8 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH
 					;[Block]
-					de.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
+					de.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
 					ClearSecondInv(item, 0)
 					;[End Block]
 				Case COARSE
@@ -1150,7 +1155,8 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						item\InvSlots = 1
 						ClearSecondInv(item, 1)
 					Else
-						de.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.12, 0.8)
+						de.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12, 0.8)
+						EntityParent(de\OBJ, PlayerRoom\OBJ)
 						ClearSecondInv(item, 0)
 					EndIf
 					Remove = False
@@ -1169,7 +1175,11 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case VERYFINE
 					;[Block]
-					item\InvSlots = 20.0
+					If item\InvSlots = 1 Then
+						item\InvSlots = 10
+					Else
+						item\InvSlots = Min(20.0, item\InvSlots + 10.0)
+					EndIf
 					Remove = False
 					;[End Block]
 			End Select
@@ -1180,6 +1190,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case ROUGH, COARSE
 					;[Block]
 					de.Decals = CreateDecal(0, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1208,6 +1219,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case ROUGH, COARSE
 					;[Block]
 					de.Decals = CreateDecal(0, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1340,6 +1352,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case ROUGH, COARSE
 					;[Block]
 					de.Decals = CreateDecal(3, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
 					;[End Block]
 				Case ONETOONE, FINE, VERYFINE
 					;[Block]
@@ -1371,6 +1384,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case ROUGH, COARSE
 					;[Block]
 					de.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1398,11 +1412,13 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case ROUGH
 					;[Block]
 					de.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
 					;[End Block]
 				Case COARSE
 					;[Block]
 					If Level = 0 Then
 						de.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
+						EntityParent(de\OBJ, PlayerRoom\OBJ)
 					Else
 						it2.Items = CreateItem("Level " + (Level - 1) + " Key Card", "key" + (Level - 1), x, y, z)
 					EndIf
@@ -1751,6 +1767,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case ROUGH, COARSE
 					;[Block]
 					de.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1805,6 +1822,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case ROUGH, COARSE
 					;[Block]
 					de.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1826,6 +1844,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case ROUGH
 					;[Block]
 					de.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
 					;[End Block]
 				Case COARSE
 					;[Block]
@@ -1919,6 +1938,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						If n\NPCType = NPCType513_1 Then RemoveNPC(n)
 					Next
 					de.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
 					;[End Block]
 				Case ONETOONE, FINE, VERYFINE
 					;[Block]
@@ -1932,6 +1952,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case ROUGH, COARSE
 					;[Block]
 					de.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1953,6 +1974,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case ROUGH, COARSE
 					;[Block]
 					de.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1974,6 +1996,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case ROUGH
 					;[Block]
 					de.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
 					;[End Block]
 				Case COARSE
 					;[Block]
@@ -2047,6 +2070,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case ROUGH, COARSE
 					;[Block]
 					de.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -2072,6 +2096,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case ROUGH, COARSE
 					;[Block]
 					de.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -2089,6 +2114,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case ROUGH, COARSE
 					;[Block]
 					de.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -2106,6 +2132,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case ROUGH, COARSE
 					;[Block]
 					de.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -2131,6 +2158,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case ROUGH
 					;[Block]
 					de.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
 					;[End Block]
 				Case COARSE
 					;[Block]
@@ -2175,6 +2203,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case ROUGH, COARSE
 					;[Block]
 					de.Decals = CreateDecal(0, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -2200,6 +2229,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case ROUGH, COARSE
 					;[Block]
 					de.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -2232,6 +2262,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case ROUGH
 					;[Block]
 					de.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
 					;[End Block]
 				Case COARSE
 					;[Block]
@@ -2248,6 +2279,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case ROUGH, COARSE
 					;[Block]
 					de.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -2276,6 +2308,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case ROUGH
 					;[Block]
 					de.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
 					;[End Block]
 				Case COARSE
 					;[Block]
@@ -2300,6 +2333,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						item\State2 = -1.0
 					Else
 						de.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
+						EntityParent(de\OBJ, PlayerRoom\OBJ)
 						Remove = True
 					EndIf
 					;[End Block]
@@ -2325,6 +2359,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case ROUGH, COARSE
 					;[Block]
 					de.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -2345,6 +2380,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case ROUGH, COARSE
 					;[Block]
 					de.Decals = CreateDecal(0, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
 					;[End Block]
 				Case ONETOONE, FINE, VERYFINE
 					;[Block]

@@ -2857,12 +2857,6 @@ Function UpdateMoving%()
 				
 				If me\Playable Then me\Shake = ((me\Shake + fps\Factor[0] * Min(Sprint, 1.5) * 7.0) Mod 720.0)
 				If Temp < 180.0 And (me\Shake Mod 360.0) >= 180.0 And (Not me\Terminated) Then
-					If Sprint = 2.5 Then
-						me\SndVolume = Max(4.0, me\SndVolume)
-					Else
-						me\SndVolume = Max(2.5 - (me\Crouch * 0.6), me\SndVolume)
-					EndIf
-					
 					If CurrStepSFX = 0 Then
 						Temp = GetStepSound(me\Collider)
 						
@@ -2874,21 +2868,22 @@ Function UpdateMoving%()
 						
 						If Sprint = 2.5 Then
 							TempCHN = PlaySound_Strict(StepSFX(Temp, 0, Rand(0, 7 - Temp3)))
-							ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume)
 						Else
 							TempCHN = PlaySound_Strict(StepSFX(Temp, 1 - (Temp3 / 5), Rand(0, 7 - Temp3)))
-							ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume)
 						EndIf
 					ElseIf CurrStepSFX = 1
 						TempCHN = PlaySound_Strict(StepSFX(2, 0, Rand(0, 2)))
-						ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.4)) * opt\SFXVolume)
 					ElseIf CurrStepSFX = 2
 						TempCHN = PlaySound_Strict(Step2SFX[Rand(0, 2)])
-						ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.4)) * opt\SFXVolume)
 					ElseIf CurrStepSFX = 3
 						TempCHN = PlaySound_Strict(Step2SFX[Rand(13, 14)])
-						ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.4)) * opt\SFXVolume)
 					EndIf
+					If Sprint = 2.5 Then
+						me\SndVolume = Max(4.0, me\SndVolume)
+					Else
+						me\SndVolume = Max(2.5 - (me\Crouch * 0.6), me\SndVolume)
+					EndIf
+					ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume)
 				EndIf	
 			EndIf
 		Else
@@ -3052,6 +3047,7 @@ Function UpdateMoving%()
 			
 			de.Decals = CreateDecal(Rand(16, 17), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.03, 0.08) * Min(me\Injuries, 2.5))
 			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + Rnd(0.008, 0.009)
+			EntityParent(de\OBJ, PlayerRoom\OBJ)
 			TempCHN = PlaySound_Strict(DripSFX[Rand(0, 2)])
 			ChannelVolume(TempCHN, Rnd(0.0, 0.8) * opt\SFXVolume)
 			ChannelPitch(TempCHN, Rand(20000, 30000))
@@ -8830,8 +8826,14 @@ Function InitNewGame%()
 		Next
 		
 		If (Not r\RoomTemplate\DisableDecals) Then
-			If Rand(4) = 1 Then de.Decals = CreateDecal(Rand(2, 3), EntityX(r\OBJ) + Rnd(- 2.0, 2.0), r\y + 0.005, EntityZ(r\OBJ) + Rnd(-2.0, 2.0), 90.0, Rnd(360.0), 0.0, Rnd(0.1, 0.4), Rnd(0.85, 0.95))
-			If Rand(4) = 1 Then de.Decals = CreateDecal(0, EntityX(r\OBJ) + Rnd(-2.0, 2.0), r\y + 0.005, EntityZ(r\OBJ) + Rnd(-2.0, 2.0), 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.7, 0.85))
+			If Rand(4) = 1 Then
+				de.Decals = CreateDecal(Rand(2, 3), EntityX(r\OBJ) + Rnd(- 2.0, 2.0), r\y + 0.005, EntityZ(r\OBJ) + Rnd(-2.0, 2.0), 90.0, Rnd(360.0), 0.0, Rnd(0.1, 0.4), Rnd(0.85, 0.95))
+				EntityParent(de\OBJ, r\OBJ)
+			EndIf
+			If Rand(4) = 1 Then
+				de.Decals = CreateDecal(0, EntityX(r\OBJ) + Rnd(-2.0, 2.0), r\y + 0.005, EntityZ(r\OBJ) + Rnd(-2.0, 2.0), 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.7, 0.85))
+				EntityParent(de\OBJ, PlayerRoom\OBJ)
+			EndIf
 		EndIf
 		
 		If r\RoomTemplate\Name = "cont1_173" And (Not opt\IntroEnabled) Then 
@@ -9612,7 +9614,8 @@ Function Use427%()
 			TurnEntity(Pvt, 90.0, 0.0, 0.0)
 			EntityPick(Pvt, 0.3)
 			de.Decals = CreateDecal(18, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.03, 0.08) * 2.0)
-			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + 0.009 
+			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + 0.009
+			EntityParent(de\OBJ, PlayerRoom\OBJ)
 			TempCHN = PlaySound_Strict(DripSFX[Rand(0, 2)])
 			ChannelVolume(TempCHN, Rnd(0.0, 0.8) * opt\SFXVolume)
 			ChannelPitch(TempCHN, Rand(20000, 30000))
@@ -9825,6 +9828,7 @@ Function UpdateVomit%()
 			EntityPick(Pvt, 0.3)
 			de.Decals = CreateDecal(5, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, 180.0, 0.0, 0.001, 1.0, 0, 1, 0, Rand(200, 255), 0)
 			de\SizeChange = 0.001 : de\MaxSize = 0.6
+			EntityParent(de\OBJ, PlayerRoom\OBJ)
 			FreeEntity(Pvt)
 			me\Vomit = True
 		EndIf
@@ -9958,6 +9962,7 @@ Function Update008%()
 						msg\DeathMsg = msg\DeathMsg + "SCP-008 infection was confirmed, after which the body was incinerated."
 						Kill()
 						de.Decals = CreateDecal(3, EntityX(PlayerRoom\NPC[0]\Collider), 544.0 * RoomScale + 0.01, EntityZ(PlayerRoom\NPC[0]\Collider), 90.0, Rnd(360.0), 0.0, 0.8)
+						EntityParent(de\OBJ, PlayerRoom\OBJ)
 					ElseIf I_008\Timer > 96.0
 						me\BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 96.0), me\BlinkTimer), -10.0)
 					Else

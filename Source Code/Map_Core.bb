@@ -1624,6 +1624,7 @@ End Type
 Global PlayerRoom.Rooms
 
 Const MTGridSize% = 19 ; ~ Same size as the main map itself (better for the map creator)
+Const MTGridY# = 8.0
 
 Type MTGrid
 	Field Grid%[MTGridSize ^ 2]
@@ -1683,55 +1684,55 @@ Function PlaceMapCreatorMT%(r.Rooms)
 				
 				RotateEntity(Tile_Entity, 0.0, Angle, 0.0)
 				ScaleEntity(Tile_Entity, RoomScale, RoomScale, RoomScale, True)
-				PositionEntity(Tile_Entity, r\x + (x * 2.0), r\y + 8.0, r\z + (y * 2.0), True)
+				PositionEntity(Tile_Entity, r\x + (x * 2.0), r\y + MTGridY, r\z + (y * 2.0), True)
 				
 				Select Tile_Type
 					Case ROOM1 + 1, ROOM2 + 1
 						;[Block]
-						AddLight(Null, r\x + (x * 2.0), r\y + 8.0 + (372.0 * RoomScale), r\z + (y * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
+						AddLight(Null, r\x + (x * 2.0), r\y + MTGridY + (372.0 * RoomScale), r\z + (y * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
 						;[End Block]
 					Case ROOM2C + 1, ROOM3 + 1, ROOM4 + 1
 						;[Block]
-						AddLight(Null, r\x + (x * 2.0), r\y + 8.0 + (416.0 * RoomScale), r\z + (y * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
+						AddLight(Null, r\x + (x * 2.0), r\y + MTGridY + (416.0 * RoomScale), r\z + (y * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
 						;[End Block]
 					Case ROOM4 + 2
 						;[Block]
-						dr.Doors = CreateDoor(r\x + (x * 2.0) + (Cos(EntityYaw(Tile_Entity, True)) * 240.0 * RoomScale), r\y + 8.0, r\z + (y * 2.0) + (Sin(EntityYaw(Tile_Entity, True)) * 240.0 * RoomScale), EntityYaw(Tile_Entity, True) - 90.0, Null, False, Elevator_Door)
+						dr.Doors = CreateDoor(r\x + (x * 2.0) + (Cos(EntityYaw(Tile_Entity, True)) * 240.0 * RoomScale), r\y + MTGridY, r\z + (y * 2.0) + (Sin(EntityYaw(Tile_Entity, True)) * 240.0 * RoomScale), EntityYaw(Tile_Entity, True) - 90.0, Null, False, Elevator_Door)
 						PositionEntity(dr\Buttons[0], EntityX(dr\Buttons[0], True) + (Cos(EntityYaw(Tile_Entity, True)) * 0.05), EntityY(dr\Buttons[0], True), EntityZ(dr\Buttons[0], True) + (Sin(EntityYaw(Tile_Entity, True)) * 0.05), True)
 						PositionEntity(dr\Buttons[1], EntityX(dr\Buttons[1], True) + (Cos(EntityYaw(Tile_Entity, True)) * 0.05), EntityY(dr\Buttons[1], True), EntityZ(dr\Buttons[1], True) + (Sin(EntityYaw(Tile_Entity, True)) * 0.031), True)
 						PositionEntity(dr\ElevatorPanel[0], EntityX(dr\ElevatorPanel[0], True) + (Cos(EntityYaw(Tile_Entity, True)) * 0.05), EntityY(dr\ElevatorPanel[0], True), EntityZ(dr\ElevatorPanel[0], True) + (Sin(EntityYaw(Tile_Entity, True)) * 0.05), True)
 						PositionEntity(dr\ElevatorPanel[1], EntityX(dr\ElevatorPanel[1], True) + (Cos(EntityYaw(Tile_Entity, True)) * 0.05), EntityY(dr\ElevatorPanel[1], True) + 0.1, EntityZ(dr\ElevatorPanel[1], True) + (Sin(EntityYaw(Tile_Entity, True)) * (-0.18)), True)
 						RotateEntity(dr\ElevatorPanel[1], EntityPitch(dr\ElevatorPanel[1], True) + 45.0, EntityYaw(dr\ElevatorPanel[1], True), EntityRoll(dr\ElevatorPanel[1], True), True)
 						
-						AddLight(Null, r\x + (x * 2.0) + (Cos(EntityYaw(Tile_Entity, True)) * 555.0 * RoomScale), r\y + 8.0 + (469.0 * RoomScale), r\z + (y * 2.0) + (Sin(EntityYaw(Tile_Entity, True)) * 555.0 * RoomScale), 2, 600.0 * RoomScale, 255, 255, 255)
+						AddLight(Null, r\x + (x * 2.0) + (Cos(EntityYaw(Tile_Entity, True)) * 555.0 * RoomScale), r\y + MTGridY + (469.0 * RoomScale), r\z + (y * 2.0) + (Sin(EntityYaw(Tile_Entity, True)) * 555.0 * RoomScale), 2, 600.0 * RoomScale, 255, 255, 255)
 						
 						Local TempInt2% = CreatePivot()
 						
 						RotateEntity(TempInt2, 0.0, EntityYaw(Tile_Entity, True) + 180.0, 0.0, True)
-						PositionEntity(TempInt2, r\x + (x * 2.0) + (Cos(EntityYaw(Tile_Entity, True)) * 552.0 * RoomScale), r\y + 8.0 + (240.0 * RoomScale), r\z + (y * 2.0) + (Sin(EntityYaw(Tile_Entity, True)) * 552.0 * RoomScale))
+						PositionEntity(TempInt2, r\x + (x * 2.0) + (Cos(EntityYaw(Tile_Entity, True)) * 552.0 * RoomScale), r\y + MTGridY + (240.0 * RoomScale), r\z + (y * 2.0) + (Sin(EntityYaw(Tile_Entity, True)) * 552.0 * RoomScale))
 						If r\RoomDoors[1] = Null Then
 							r\RoomDoors[1] = dr
 							r\Objects[3] = TempInt2
-							PositionEntity(r\Objects[0], r\x + (x * 2.0), r\y + 8.0, r\z + (y * 2.0), True)
+							PositionEntity(r\Objects[0], r\x + (x * 2.0), r\y + MTGridY, r\z + (y * 2.0), True)
 						ElseIf r\RoomDoors[1] <> Null And r\RoomDoors[3] = Null Then
 							r\RoomDoors[3] = dr
 							r\Objects[5] = TempInt2
-							PositionEntity(r\Objects[1], r\x + (x * 2.0), r\y + 8.0, r\z + (y * 2.0), True)
+							PositionEntity(r\Objects[1], r\x + (x * 2.0), r\y + MTGridY, r\z + (y * 2.0), True)
 						EndIf
 						;[End Block]
 					Case ROOM4 + 3
 						;[Block]
-						AddLight(Null, r\x + (x * 2.0) - (Sin(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale), r\y + 8.0 + (396.0 * RoomScale), r\z + (y * 2.0) + (Cos(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale), 2, 500.0 * RoomScale, 255, 200, 200)
-						it.Items = CreateItem("SCP-500-01", "scp500pill", r\x + (x * 2.0) + (Cos(EntityYaw(Tile_Entity, True)) * (-208.0) * RoomScale) - (Sin(EntityYaw(Tile_Entity, True)) * 1226.0 * RoomScale), r\y + 8.0 + (90.0 * RoomScale), r\z + (y * 2.0) + (Sin(EntityYaw(Tile_Entity, True)) * (-208.0) * RoomScale) + (Cos(EntityYaw(Tile_Entity, True)) * 1226.0 * RoomScale))
+						AddLight(Null, r\x + (x * 2.0) - (Sin(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale), r\y + MTGridY + (396.0 * RoomScale), r\z + (y * 2.0) + (Cos(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale), 2, 500.0 * RoomScale, 255, 200, 200)
+						it.Items = CreateItem("SCP-500-01", "scp500pill", r\x + (x * 2.0) + (Cos(EntityYaw(Tile_Entity, True)) * (-208.0) * RoomScale) - (Sin(EntityYaw(Tile_Entity, True)) * 1226.0 * RoomScale), r\y + MTGridY + (90.0 * RoomScale), r\z + (y * 2.0) + (Sin(EntityYaw(Tile_Entity, True)) * (-208.0) * RoomScale) + (Cos(EntityYaw(Tile_Entity, True)) * 1226.0 * RoomScale))
 						EntityType(it\Collider, HIT_ITEM)
 						
-						it.Items = CreateItem("Night Vision Goggles", "nvg", r\x + (x * 2.0) - (Sin(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale), r\y + 8.0 + (90.0 * RoomScale),  r\z + (y * 2.0) + (Cos(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale))
+						it.Items = CreateItem("Night Vision Goggles", "nvg", r\x + (x * 2.0) - (Sin(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale), r\y + MTGridY + (90.0 * RoomScale),  r\z + (y * 2.0) + (Cos(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale))
 						EntityType(it\Collider, HIT_ITEM)
 						;[End Block]
 				End Select
 				
 				r\mt\Entities[x + (y * MTGridSize)] = Tile_Entity
-				wayp = CreateWaypoint(r\x + (x * 2.0), r\y + 8.2, r\z + (y * 2.0), Null, r)
+				wayp = CreateWaypoint(r\x + (x * 2.0), r\y + MTGridY + 0.2, r\z + (y * 2.0), Null, r)
 				r\mt\waypoints[x + (y * MTGridSize)] = wayp
 				
 				If y < MTGridSize - 1 Then
@@ -3220,6 +3221,7 @@ Function UpdateDecals%()
 							Local de2.Decals
 							
 							de2.Decals = CreateDecal(1, EntityX(de\OBJ) + Cos(Angle) * Temp, EntityY(de\OBJ) - 0.0005, EntityZ(de\OBJ) + Sin(Angle) * Temp, EntityPitch(de\OBJ), EntityYaw(de\OBJ), EntityRoll(de\OBJ), Rnd(0.1, 0.5))
+							EntityParent(de2\OBJ, GetParent(de\OBJ))
 							PlaySound2(DecaySFX[Rand(1, 3)], Camera, de2\OBJ, 10.0, Rnd(0.1, 0.5))
 							de\Timer = Rnd(50.0, 100.0)
 						Else
@@ -4812,10 +4814,10 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(d\Buttons[1], 0.0, 90.0, 0.0, True)
 			
 			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x + 2640.0 * RoomScale, r\y - 2496.0 * RoomScale, r\z + 400.0 * RoomScale)
+			PositionEntity(r\Objects[0], r\x + 2640.0 * RoomScale, r\y + MTGridY, r\z + 400.0 * RoomScale)
 			
 			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x - 4336.0 * RoomScale, r\y - 2496.0 * RoomScale, r\z - 2512.0 * RoomScale)
+			PositionEntity(r\Objects[1], r\x - 4336.0 * RoomScale, r\y + MTGridY, r\z - 2512.0 * RoomScale)
 			
 			r\Objects[2] = CreatePivot()
 			PositionEntity(r\Objects[2], r\x + 560.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 656.0 * RoomScale)
@@ -7734,6 +7736,7 @@ Function HideRoomLights%(r.Rooms, HideLights% = True)
 	Next
 End Function
 
+; ~ TODO: Fix collisions (EntityAlpha)
 Function HideRooms%(r.Rooms, AdjDoor.Doors = Null, NoCollision% = False, HideLights% = True)
 	Local sc.SecurityCams, p.Props, d.Doors
 	Local HideSecurityCams%, HideProps%, HideDoors%
@@ -7775,16 +7778,19 @@ Function HideRooms%(r.Rooms, AdjDoor.Doors = Null, NoCollision% = False, HideLig
 			EndIf
 			If HideDoors Then
 				If d\FrameOBJ <> 0 Then
-					EntityAlpha(d\FrameOBJ, 0.0)
-					If NoCollision Then HideEntity(d\FrameOBJ)
+					;EntityAlpha(d\FrameOBJ, 0.0)
+					;If NoCollision Then HideEntity(d\FrameOBJ)
+					HideEntity(d\FrameOBJ)
 				EndIf
 				If d\OBJ <> 0 Then
-					EntityAlpha(d\OBJ, 0.0)
-					If NoCollision Then HideEntity(d\OBJ)
+					;EntityAlpha(d\OBJ, 0.0)
+					;If NoCollision Then HideEntity(d\OBJ)
+					HideEntity(d\OBJ)
 				EndIf
 				If d\OBJ2 <> 0 Then
-					EntityAlpha(d\OBJ2, 0.0)
-					If NoCollision Then HideEntity(d\OBJ2)
+					;EntityAlpha(d\OBJ2, 0.0)
+					;If NoCollision Then HideEntity(d\OBJ2)
+					HideEntity(d\OBJ2)
 				EndIf
 				For i = 0 To 1
 					If d\Buttons[i] <> 0 Then HideEntity(d\Buttons[i])
@@ -7803,8 +7809,9 @@ Function HideRooms%(r.Rooms, AdjDoor.Doors = Null, NoCollision% = False, HideLig
 			If r\Objects[i] <> 0 Then HideEntity(r\Objects[i])
 		Next
 		
-		EntityAlpha(GetChild(r\OBJ, 2), 0.0)
-		If NoCollision Then HideEntity(r\OBJ)
+		;EntityAlpha(GetChild(r\OBJ, 2), 0.0)
+		;If NoCollision Then HideEntity(r\OBJ)
+		HideEntity(r\OBJ)
 		
 		r\Hidden = True
 	EndIf
@@ -7847,16 +7854,19 @@ Function ShowRooms%(r.Rooms, NoCollision% = False)
 			If d\room <> r Then ShowDoors = False
 			If ShowDoors Then
 				If d\FrameOBJ <> 0 Then
-					EntityAlpha(d\FrameOBJ, 1.0)
-					If NoCollision Then ShowEntity(d\FrameOBJ)
+					;EntityAlpha(d\FrameOBJ, 1.0)
+					;If NoCollision Then ShowEntity(d\FrameOBJ)
+					ShowEntity(d\FrameOBJ)
 				EndIf
 				If d\OBJ <> 0 Then
-					EntityAlpha(d\OBJ, 1.0)
-					If NoCollision Then ShowEntity(d\OBJ)
+					;EntityAlpha(d\OBJ, 1.0)
+					;If NoCollision Then ShowEntity(d\OBJ)
+					ShowEntity(d\OBJ)
 				EndIf
 				If d\OBJ2 <> 0 Then
-					EntityAlpha(d\OBJ2, 1.0)
-					If NoCollision Then ShowEntity(d\OBJ2)
+					;EntityAlpha(d\OBJ2, 1.0)
+					;If NoCollision Then ShowEntity(d\OBJ2)
+					ShowEntity(d\OBJ2)
 				EndIf
 				For i = 0 To 1
 					If d\Buttons[i] <> 0 Then ShowEntity(d\Buttons[i])
@@ -7873,8 +7883,9 @@ Function ShowRooms%(r.Rooms, NoCollision% = False)
 			If r\Objects[i] <> 0 Then ShowEntity(r\Objects[i])
 		Next
 		
-		EntityAlpha(GetChild(r\OBJ, 2), 1.0)
-		If NoCollision Then ShowEntity(r\OBJ)
+		;EntityAlpha(GetChild(r\OBJ, 2), 1.0)
+		;If NoCollision Then ShowEntity(r\OBJ)
+		ShowEntity(r\OBJ)
 		
 		If r\TriggerBoxAmount > 0 Then
 			For i = 0 To r\TriggerBoxAmount - 1

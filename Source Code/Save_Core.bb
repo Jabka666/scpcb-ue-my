@@ -1067,7 +1067,7 @@ Function LoadGame%(File$)
 	Local de.Decals
 	
 	For de.Decals = Each Decals
-		FreeEntity(de\OBJ)
+		FreeEntity(de\OBJ) : de\OBJ = 0
 		Delete(de)
 	Next
 	
@@ -1833,7 +1833,7 @@ Function LoadGameQuick%(File$)
 	Local de.Decals
 	
 	For de.Decals = Each Decals
-		FreeEntity(de\OBJ)
+		FreeEntity(de\OBJ) : de\OBJ = 0
 		Delete(de)
 	Next
 	

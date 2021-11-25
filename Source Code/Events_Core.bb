@@ -2390,6 +2390,7 @@ Function UpdateEvents%()
 						If (Not Curr106\Contained) And e\EventID = e_cont1_895_106 And e\EventState2 = 0.0 Then
 							de.Decals = CreateDecal(0, EntityX(e\room\Objects[1], True), e\room\y - 1531.0 * RoomScale, EntityZ(e\room\Objects[1], True), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
 							de\SizeChange = 0.001
+							EntityParent(de\OBJ, e\room\OBJ)
 							
 							PositionEntity(Curr106\Collider, EntityX(e\room\Objects[1], True), e\room\y - 1541.0 * RoomScale, EntityZ(e\room\Objects[1], True))
 							SetNPCFrame(Curr106, 110.0)
@@ -2449,6 +2450,7 @@ Function UpdateEvents%()
 									e\SoundCHN = PlaySound_Strict(e\Sound)
 									
 									de.Decals = CreateDecal(3, EntityX(e\room\OBJ), e\room\y - 1531.0 * RoomScale, EntityZ(e\room\OBJ), 90.0, Rnd(360.0), 0.0, 0.4)
+									EntityParent(de\OBJ, e\room\OBJ)
 									
 									it.Items = CreateItem("Unknown Note", "paper", EntityX(e\room\OBJ), e\room\y - 1526.0 * RoomScale, EntityZ(e\room\OBJ))
 									EntityType(it\Collider, HIT_ITEM)
@@ -2625,6 +2627,7 @@ Function UpdateEvents%()
 						If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\OBJ) < 2.25 Then
 							de.Decals = CreateDecal(0, EntityX(e\room\OBJ), e\room\y + 0.005, EntityZ(e\room\OBJ), 90.0, Rnd(360.0), 0.0, 0.05)
 							de\SizeChange = 0.008 : de\Timer = 10000.0
+							EntityParent(de\OBJ, e\room\OBJ)
 							e\EventState = 3.0
 						EndIf					
 					Else
@@ -3123,6 +3126,7 @@ Function UpdateEvents%()
 													Curr106\State = 10000.0 : Curr106\Idle = 0
 													
 													de.Decals = CreateDecal(0, EntityX(r\Objects[0], True), EntityY(r\Objects[0], True), EntityZ(r\Objects[0], True), 270.0, Rnd(360.0), 0.0)
+													EntityParent(de\OBJ, e\room\OBJ)
 													TeleportEntity(de\OBJ, EntityX(r\Objects[0], True), EntityY(r\Objects[0], True) + 0.6, EntityZ(r\Objects[0], True), 0.0, True, 4.0, True)
 													
 													For e2.Events = Each Events
@@ -3634,6 +3638,7 @@ Function UpdateEvents%()
 				;[Block]
 				If PlayerRoom = e\room Then
 					de.Decals = CreateDecal(3, EntityX(e\room\Objects[0], True), e\room\y + 0.005, EntityZ(e\room\Objects[0], True), 90.0, Rnd(360.0), 0.0)
+					EntityParent(de\OBJ, e\room\OBJ)
 					
 					e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[0], True), e\room\y + 0.5, EntityZ(e\room\Objects[0], True))
 					e\room\NPC[0]\State = 8.0
@@ -4206,7 +4211,7 @@ Function UpdateEvents%()
 											If e\room\mt\Grid[(iX + 1) + (iY * MTGridSize)] > 0 And e\room\mt\Grid[(iX - 1) + (iY * MTGridSize)] > 0 Then ; ~ Horizontal
 												TempInt = CopyEntity(Meshes[e\room\mt\Grid[iX + (iY * MTGridSize)] - 1])
 												
-												AddLight(Null, e\room\x + (iX * 2.0), e\room\y + 8.0 + (372.0 * RoomScale), e\room\z + (iY * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
+												AddLight(Null, e\room\x + (iX * 2.0), e\room\y + MTGridY + (372.0 * RoomScale), e\room\z + (iY * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
 												
 												TempInt2 = Rand(0, 1)
 												RotateEntity(TempInt, 0.0, (TempInt2 * 180.0) + 90.0, 0.0)
@@ -4215,7 +4220,7 @@ Function UpdateEvents%()
 											ElseIf e\room\mt\Grid[iX + ((iY + 1) * MTGridSize)] > 0 And e\room\mt\Grid[iX + ((iY - 1) * MTGridSize)] > 0 Then ; ~ Vertical
 												TempInt = CopyEntity(Meshes[e\room\mt\Grid[iX + (iY * MTGridSize)] - 1])
 												
-												AddLight(Null, e\room\x + (iX * 2.0), e\room\y + 8.0 + (372.0 * RoomScale), e\room\z + (iY * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
+												AddLight(Null, e\room\x + (iX * 2.0), e\room\y + MTGridY + (372.0 * RoomScale), e\room\z + (iY * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
 												
 												TempInt2 = Rand(0, 1)
 												RotateEntity(TempInt, 0.0, TempInt2 * 180.0, 0.0)
@@ -4223,7 +4228,7 @@ Function UpdateEvents%()
 											Else
 												TempInt = CopyEntity(Meshes[e\room\mt\Grid[iX + (iY * MTGridSize)]])
 												
-												AddLight(Null, e\room\x + (iX * 2.0), e\room\y + 8.0 + (416.0 * RoomScale), e\room\z + (iY * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
+												AddLight(Null, e\room\x + (iX * 2.0), e\room\y + MTGridY + (416.0 * RoomScale), e\room\z + (iY * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
 												
 												iA = e\room\mt\Grid[iX + ((iY + 1) * MTGridSize)]
 												iB = e\room\mt\Grid[iX + ((iY - 1) * MTGridSize)]
@@ -4283,41 +4288,41 @@ Function UpdateEvents%()
 									End Select
 									
 									ScaleEntity(TempInt, RoomScale, RoomScale, RoomScale, True)
-									PositionEntity(TempInt, e\room\x + (iX * 2.0), e\room\y + 8.0, e\room\z + (iY * 2.0), True)
+									PositionEntity(TempInt, e\room\x + (iX * 2.0), e\room\y + MTGridY, e\room\z + (iY * 2.0), True)
 									
 									Select e\room\mt\Grid[iX + (iY * MTGridSize)]
 										Case ROOM1 + 1
 											;[Block]
-											AddLight(Null, e\room\x + (iX * 2.0), e\room\y + 8.0 + (372.0 * RoomScale), e\room\z + (iY * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
+											AddLight(Null, e\room\x + (iX * 2.0), e\room\y + MTGridY + (372.0 * RoomScale), e\room\z + (iY * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
 											;[End Block]
 										Case ROOM2C + 1, ROOM3 + 1
 											;[Block]
-											AddLight(Null, e\room\x + (iX * 2.0), e\room\y + 8.0 + (416.0 * RoomScale), e\room\z + (iY * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
+											AddLight(Null, e\room\x + (iX * 2.0), e\room\y + MTGridY + (416.0 * RoomScale), e\room\z + (iY * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
 											;[End Block]
 										Case ROOM4 + 3
 											;[Block]
-											AddLight(Null, e\room\x + (iX * 2.0) - (Sin(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 16.0 * RoomScale), e\room\y + 8.0 + (396.0 * RoomScale), e\room\z + (iY * 2.0) + (Cos(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(TempInt, True)) * 16.0 * RoomScale), 2, 500.0 * RoomScale, 255, 200, 200)
-											it.Items = CreateItem("SCP-500-01", "scp500pill", e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * (-208.0) * RoomScale) - (Sin(EntityYaw(TempInt, True)) * 1226.0 * RoomScale), e\room\y + 8.0 + (90.0 * RoomScale), e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * (-208.0) * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 1226.0 * RoomScale))
+											AddLight(Null, e\room\x + (iX * 2.0) - (Sin(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 16.0 * RoomScale), e\room\y + MTGridY + (396.0 * RoomScale), e\room\z + (iY * 2.0) + (Cos(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(TempInt, True)) * 16.0 * RoomScale), 2, 500.0 * RoomScale, 255, 200, 200)
+											it.Items = CreateItem("SCP-500-01", "scp500pill", e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * (-208.0) * RoomScale) - (Sin(EntityYaw(TempInt, True)) * 1226.0 * RoomScale), e\room\y + MTGridY + (90.0 * RoomScale), e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * (-208.0) * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 1226.0 * RoomScale))
 											EntityType(it\Collider, HIT_ITEM)
 											
-											it.Items = CreateItem("Night Vision Goggles", "nvg", e\room\x + (iX * 2.0) - (Sin(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 16.0 * RoomScale), e\room\y + 8.0 + (90.0 * RoomScale), e\room\z + (iY * 2.0) + (Cos(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(TempInt, True)) * 16.0 * RoomScale))
+											it.Items = CreateItem("Night Vision Goggles", "nvg", e\room\x + (iX * 2.0) - (Sin(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 16.0 * RoomScale), e\room\y + MTGridY + (90.0 * RoomScale), e\room\z + (iY * 2.0) + (Cos(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(TempInt, True)) * 16.0 * RoomScale))
 											EntityType(it\Collider, HIT_ITEM)
 											;[End Block]
 									End Select
 									
 									If e\room\mt\Grid[iX + (iY * MTGridSize)] = 6 Lor e\room\mt\Grid[iX + (iY * MTGridSize)] = 5 Then
-										dr.Doors = CreateDoor(e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 240.0 * RoomScale), e\room\y + 8.0, e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 240.0 * RoomScale), EntityYaw(TempInt, True) - 90.0, Null, False, Elevator_Door)
+										dr.Doors = CreateDoor(e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 240.0 * RoomScale), e\room\y + MTGridY, e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 240.0 * RoomScale), EntityYaw(TempInt, True) - 90.0, Null, False, Elevator_Door)
 										PositionEntity(dr\Buttons[0], EntityX(dr\Buttons[0], True) + (Cos(EntityYaw(TempInt, True)) * 0.05), EntityY(dr\Buttons[0], True), EntityZ(dr\Buttons[0], True) + (Sin(EntityYaw(TempInt, True)) * 0.05), True)
 										PositionEntity(dr\Buttons[1], EntityX(dr\Buttons[1], True) + (Cos(EntityYaw(TempInt, True)) * 0.05), EntityY(dr\Buttons[1], True), EntityZ(dr\Buttons[1], True) + (Sin(EntityYaw(TempInt, True)) * 0.031), True)
 										PositionEntity(dr\ElevatorPanel[0], EntityX(dr\ElevatorPanel[0], True) + (Cos(EntityYaw(TempInt, True)) * 0.05), EntityY(dr\ElevatorPanel[0], True), EntityZ(dr\ElevatorPanel[0], True) + (Sin(EntityYaw(TempInt, True)) * 0.05), True)
 										PositionEntity(dr\ElevatorPanel[1], EntityX(dr\ElevatorPanel[1], True) + (Cos(EntityYaw(TempInt, True)) * 0.05), EntityY(dr\ElevatorPanel[1], True) + 0.1, EntityZ(dr\ElevatorPanel[1], True) + (Sin(EntityYaw(TempInt, True)) * (-0.18)), True)
 										RotateEntity(dr\ElevatorPanel[1], EntityPitch(dr\ElevatorPanel[1], True) + 45.0, EntityYaw(dr\ElevatorPanel[1], True), EntityRoll(dr\ElevatorPanel[1], True), True)
 										
-										AddLight(Null, e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 555.0 * RoomScale), e\room\y + 8.0 + (469.0 * RoomScale), e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 555.0 * RoomScale), 2, 600.0 * RoomScale, 255, 255, 255)
+										AddLight(Null, e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 555.0 * RoomScale), e\room\y + MTGridY + (469.0 * RoomScale), e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 555.0 * RoomScale), 2, 600.0 * RoomScale, 255, 255, 255)
 										
 										TempInt2 = CreatePivot()
 										RotateEntity(TempInt2, 0.0, EntityYaw(TempInt, True) + 180.0, 0.0, True)
-										PositionEntity(TempInt2, e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 552.0 * RoomScale), e\room\y + 8.0 + (240.0 * RoomScale), e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 552.0 * RoomScale))
+										PositionEntity(TempInt2, e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 552.0 * RoomScale), e\room\y + MTGridY + (240.0 * RoomScale), e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 552.0 * RoomScale))
 										If e\room\mt\Grid[iX + (iY * MTGridSize)] = 6 Then
 											If e\room\RoomDoors[1] <> Null Then
 												RemoveDoor(dr)
@@ -4327,7 +4332,7 @@ Function UpdateEvents%()
 											EndIf
 											If (Not e\room\Objects[3]) Then
 												e\room\Objects[3] = TempInt2
-												PositionEntity(e\room\Objects[1], e\room\x + (iX * 2.0), e\room\y + 38.0, e\room\z + (iY * 2.0), True)
+												PositionEntity(e\room\Objects[1], e\room\x + (iX * 2.0), EntityY(e\room\Objects[1], True), e\room\z + (iY * 2.0), True)
 											Else
 												FreeEntity(TempInt2)
 											EndIf
@@ -4340,7 +4345,7 @@ Function UpdateEvents%()
 											EndIf
 											If (Not e\room\Objects[5]) Then
 												e\room\Objects[5] = TempInt2
-												PositionEntity(e\room\Objects[0], e\room\x + (iX * 2.0), e\room\y + 8.0, e\room\z + (iY * 2.0), True)
+												PositionEntity(e\room\Objects[0], e\room\x + (iX * 2.0), EntityY(e\room\Objects[0], True), e\room\z + (iY * 2.0), True)
 											Else
 												FreeEntity(TempInt2)
 											EndIf
@@ -4349,7 +4354,7 @@ Function UpdateEvents%()
 									
 									e\room\mt\Entities[iX + (iY * MTGridSize)] = TempInt
 									
-									wayp.WayPoints = CreateWaypoint(e\room\x + (iX * 2.0), e\room\y + 8.2, e\room\z + (iY * 2.0), Null, e\room)
+									wayp.WayPoints = CreateWaypoint(e\room\x + (iX * 2.0), e\room\y + MTGridY + 0.2, e\room\z + (iY * 2.0), Null, e\room)
 									
 									e\room\mt\waypoints[iX + (iY * MTGridSize)] = wayp
 									
@@ -4453,8 +4458,8 @@ Function UpdateEvents%()
 							e\room\mt\Meshes[i] = Meshes[i]
 						Next
 						
-						PositionEntity(e\room\Objects[0], e\room\x + (FirstX * 2.0), e\room\y + 8.0, e\room\z + (FirstY * 2.0), True)
-						PositionEntity(e\room\Objects[1], e\room\x + (LastX * 2.0), e\room\y + 8.0, e\room\z + (LastY * 2.0), True)
+						PositionEntity(e\room\Objects[0], e\room\x + (FirstX * 2.0), EntityY(e\room\Objects[0], True), e\room\z + (FirstY * 2.0), True)
+						PositionEntity(e\room\Objects[1], e\room\x + (LastX * 2.0), EntityY(e\room\Objects[1], True), e\room\z + (LastY * 2.0), True)
 					ElseIf (Not e\room\mt\Meshes[0]) Then
 						; ~ Place the tunnels
 						For i = 0 To 6
@@ -4476,13 +4481,13 @@ Function UpdateEvents%()
 											;[Block]
 											If e\room\mt\Grid[(iX + 1) + ((iY) * MTGridSize)] > 0 And e\room\mt\Grid[(iX - 1) + ((iY) * MTGridSize)] > 0 Then ; ~ Horizontal
 												TempInt = CopyEntity(Meshes[e\room\mt\Grid[iX + (iY * MTGridSize)] - 1])
-												AddLight(Null, e\room\x + (iX * 2.0), e\room\y + 8.0 + (372.0 * RoomScale), e\room\z + (iY * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
+												AddLight(Null, e\room\x + (iX * 2.0), e\room\y + MTGridY + (372.0 * RoomScale), e\room\z + (iY * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
 											ElseIf e\room\mt\Grid[(iX) + ((iY + 1) * MTGridSize)] > 0 And e\room\mt\Grid[(iX) + ((iY - 1) * MTGridSize)] > 0 Then ; ~ Vertical
 												TempInt = CopyEntity(Meshes[e\room\mt\Grid[iX + (iY * MTGridSize)] - 1])
-												AddLight(Null, e\room\x + (iX * 2.0), e\room\y + 8.0 + (372.0 * RoomScale), e\room\z + (iY * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
+												AddLight(Null, e\room\x + (iX * 2.0), e\room\y + MTGridY + (372.0 * RoomScale), e\room\z + (iY * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
 											Else
 												TempInt = CopyEntity(Meshes[e\room\mt\Grid[iX + (iY * MTGridSize)]])
-												AddLight(Null, e\room\x + (iX * 2.0), e\room\y + 8.0 + (416.0 * RoomScale), e\room\z + (iY * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
+												AddLight(Null, e\room\x + (iX * 2.0), e\room\y + MTGridY + (416.0 * RoomScale), e\room\z + (iY * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
 											EndIf
 											;[End Block]
 										Case ROOM2C + 1, ROOM3 + 1
@@ -4498,36 +4503,36 @@ Function UpdateEvents%()
 									ScaleEntity(TempInt, RoomScale, RoomScale, RoomScale, True)
 									
 									RotateEntity(TempInt, 0.0, e\room\mt\Angles[iX + (iY * MTGridSize)] * 90.0, 0.0)
-									PositionEntity(TempInt, e\room\x + (iX * 2.0), e\room\y + 8.0, e\room\z + (iY * 2.0), True)
+									PositionEntity(TempInt, e\room\x + (iX * 2.0), e\room\y + MTGridY, e\room\z + (iY * 2.0), True)
 									
 									Select e\room\mt\Grid[iX + (iY * MTGridSize)]
 										Case ROOM1 + 1, ROOM4 + 1, ROOM4 + 2
 											;[Block]
-											AddLight(Null, e\room\x + (iX * 2.0), e\room\y + 8.0 + (372.0 * RoomScale), e\room\z + (iY * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
+											AddLight(Null, e\room\x + (iX * 2.0), e\room\y + MTGridY + (372.0 * RoomScale), e\room\z + (iY * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
 											;[End Block]
 										Case ROOM2C + 1, ROOM3 + 1
 											;[Block]
-											AddLight(Null, e\room\x + (iX * 2.0), e\room\y + 8.0 + (416.0 * RoomScale), e\room\z + (iY * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
+											AddLight(Null, e\room\x + (iX * 2.0), e\room\y + MTGridY + (416.0 * RoomScale), e\room\z + (iY * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
 											;[End Block]
 										Case ROOM4 + 3
 											;[Block]
-											AddLight(Null, e\room\x + (iX * 2.0) - (Sin(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 16.0 * RoomScale), e\room\y + 8.0 + (396.0 * RoomScale), e\room\z + (iY * 2.0) + (Cos(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(TempInt, True)) * 16.0 * RoomScale), 2, 500.0 * RoomScale, 255, 200, 200)
+											AddLight(Null, e\room\x + (iX * 2.0) - (Sin(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 16.0 * RoomScale), e\room\y + MTGridY + (396.0 * RoomScale), e\room\z + (iY * 2.0) + (Cos(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(TempInt, True)) * 16.0 * RoomScale), 2, 500.0 * RoomScale, 255, 200, 200)
 											;[End Block]
 									End Select
 									
 									If e\room\mt\Grid[iX + (iY * MTGridSize)] = 6 Lor e\room\mt\Grid[iX + (iY * MTGridSize)] = 5 Then
-										dr.Doors = CreateDoor(e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 240.0 * RoomScale), e\room\y + 8.0, e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 240.0 * RoomScale), EntityYaw(TempInt, True) - 90.0, Null, False, Elevator_Door)
+										dr.Doors = CreateDoor(e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 240.0 * RoomScale), e\room\y + MTGridY, e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 240.0 * RoomScale), EntityYaw(TempInt, True) - 90.0, Null, False, Elevator_Door)
 										PositionEntity(dr\Buttons[0], EntityX(dr\Buttons[0], True) + (Cos(EntityYaw(TempInt, True)) * 0.05), EntityY(dr\Buttons[0], True), EntityZ(dr\Buttons[0], True) + (Sin(EntityYaw(TempInt, True)) * 0.05), True)
 										PositionEntity(dr\Buttons[1], EntityX(dr\Buttons[1], True) + (Cos(EntityYaw(TempInt, True)) * 0.05), EntityY(dr\Buttons[1], True), EntityZ(dr\Buttons[1], True) + (Sin(EntityYaw(TempInt, True)) * 0.031), True)
 										PositionEntity(dr\ElevatorPanel[0], EntityX(dr\ElevatorPanel[0], True) + (Cos(EntityYaw(TempInt, True)) * 0.05), EntityY(dr\ElevatorPanel[0], True), EntityZ(dr\ElevatorPanel[0], True) + (Sin(EntityYaw(TempInt, True)) * 0.05), True)
 										PositionEntity(dr\ElevatorPanel[1], EntityX(dr\ElevatorPanel[1], True) + (Cos(EntityYaw(TempInt, True)) * 0.05), EntityY(dr\ElevatorPanel[1], True) + 0.1, EntityZ(dr\ElevatorPanel[1], True) + (Sin(EntityYaw(TempInt, True)) * (-0.18)), True)
 										RotateEntity(dr\ElevatorPanel[1], EntityPitch(dr\ElevatorPanel[1], True) + 45.0, EntityYaw(dr\ElevatorPanel[1], True), EntityRoll(dr\ElevatorPanel[1], True), True)
 										
-										AddLight(Null, e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 555.0 * RoomScale), e\room\y + 8.0 + (469.0 * RoomScale), e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 555.0 * RoomScale), 2, 600.0 * RoomScale, 255, 255, 255)
+										AddLight(Null, e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 555.0 * RoomScale), e\room\y + MTGridY + (469.0 * RoomScale), e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 555.0 * RoomScale), 2, 600.0 * RoomScale, 255, 255, 255)
 										
 										TempInt2 = CreatePivot()
 										RotateEntity(TempInt2, 0.0, EntityYaw(TempInt, True) + 180.0, 0.0, True)
-										PositionEntity(TempInt2, e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 552.0 * RoomScale), e\room\y + 8.0 + (240.0 * RoomScale), e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 552.0 * RoomScale))
+										PositionEntity(TempInt2, e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 552.0 * RoomScale), e\room\y + MTGridY + (240.0 * RoomScale), e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 552.0 * RoomScale))
 										If e\room\mt\Grid[iX + (iY * MTGridSize)] = 6 Then
 											If e\room\RoomDoors[1] <> Null Then
 												RemoveDoor(dr)
@@ -4537,7 +4542,7 @@ Function UpdateEvents%()
 											EndIf
 											If (Not e\room\Objects[3]) Then
 												e\room\Objects[3] = TempInt2
-												PositionEntity(e\room\Objects[1], e\room\x + (iX * 2.0), e\room\y + 8.0, e\room\z + (iY * 2.0), True)
+												PositionEntity(e\room\Objects[1], e\room\x + (iX * 2.0), EntityY(e\room\Objects[1], True), e\room\z + (iY * 2.0), True)
 											Else
 												FreeEntity(TempInt2)
 											EndIf
@@ -4550,7 +4555,7 @@ Function UpdateEvents%()
 											EndIf
 											If (Not e\room\Objects[5]) Then
 												e\room\Objects[5] = TempInt2
-												PositionEntity(e\room\Objects[0], e\room\x + (iX * 2.0), e\room\y + 8.0, e\room\z + (iY * 2.0), True)
+												PositionEntity(e\room\Objects[0], e\room\x + (iX * 2.0), EntityY(e\room\Objects[0], True), e\room\z + (iY * 2.0), True)
 											Else
 												FreeEntity(TempInt2)
 											EndIf
@@ -4559,7 +4564,7 @@ Function UpdateEvents%()
 									
 									e\room\mt\Entities[iX + (iY * MTGridSize)] = TempInt
 									
-									wayp.WayPoints = CreateWaypoint(e\room\x + (iX * 2.0), e\room\y + 8.2, e\room\z + (iY * 2.0), Null, e\room)
+									wayp.WayPoints = CreateWaypoint(e\room\x + (iX * 2.0), e\room\y + MTGridY + 0.2, e\room\z + (iY * 2.0), Null, e\room)
 									
 									e\room\mt\waypoints[iX + (iY * MTGridSize)] = wayp
 									
@@ -4687,6 +4692,7 @@ Function UpdateEvents%()
 							If (Not Curr106\Contained) Then 	
 								de.Decals = CreateDecal(0, EntityX(e\room\Objects[Temp], True), EntityY(e\room\Objects[Temp], True) + 0.005, EntityZ(e\room\Objects[Temp], True), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
 								de\SizeChange = 0.001
+								EntityParent(de\OBJ, e\room\OBJ)
 								
 								PositionEntity(Curr106\Collider, EntityX(e\room\Objects[Temp], True), EntityY(me\Collider, True) - 3.0, EntityZ(e\room\Objects[Temp], True))
 								SetNPCFrame(Curr106, 110.0)
@@ -4783,11 +4789,13 @@ Function UpdateEvents%()
 							me\BlurTimer = 800.0
 							de.Decals = CreateDecal(0, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True), 0.0, e\room\Angle - 90.0, Rnd(360.0), 0.1, 0.01)
 							de\SizeChange = 0.003 : de\AlphaChange = 0.005 : de\Timer = 90000.0
+							EntityParent(de\OBJ, e\room\OBJ)
 						EndIf
 						
 						If (e\EventState / 250.0) > 0.65 And ((e\EventState - fps\Factor[0] * 0.7) / 250.0) <= 0.65 Then
 							de.Decals = CreateDecal(0, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True), EntityZ(e\room\Objects[3], True), 0.0, e\room\Angle + 90.0, Rnd(360.0), 0.1, 0.01)
 							de\SizeChange = 0.003 : de\AlphaChange = 0.005 : de\Timer = 90000.0
+							EntityParent(de\OBJ, e\room\OBJ)
 						EndIf						
 						If e\EventState > 250.0 Then Curr106\Idle = 0 : RemoveEvent(e)
 					EndIf
@@ -5078,15 +5086,20 @@ Function UpdateEvents%()
 								If e\room\Angle = 0.0 Lor e\room\Angle = 180.0 Then
 									de.Decals = CreateDecal(Rand(2, 3), e\room\x - Rnd(197.0, 199.0) * Cos(e\room\Angle) * RoomScale, e\room\y + 1.0, e\room\z + (140.0 * (i - 3)) * RoomScale, 0.0, e\room\Angle + 90.0, Rnd(360.0), Rnd(0.8, 0.85))
 									de\SizeChange = 0.001
+									EntityParent(de\OBJ, e\room\OBJ)
 									de.Decals = CreateDecal(Rand(2, 3), e\room\x - Rnd(197.0, 199.0) * Cos(e\room\Angle) * RoomScale, e\room\y + 1.0, e\room\z + (140.0 * (i - 3)) * RoomScale, 0.0, e\room\Angle - 90.0, Rnd(360.0), Rnd(0.8, 0.85))
 									de\SizeChange = 0.001
+									EntityParent(de\OBJ, e\room\OBJ)
 								Else
 									de.Decals = CreateDecal(Rand(2, 3), e\room\x + (140.0 * (i - 3)) * RoomScale, e\room\y + 1.0, e\room\z - Rnd(197.0, 199.0) * Sin(e\room\Angle) * RoomScale - Rnd(0.001, 0.003), 0.0, e\room\Angle + 90.0, Rnd(360.0), Rnd(0.8, 0.85))
 									de\SizeChange = 0.001
+									EntityParent(de\OBJ, e\room\OBJ)
 									de.Decals = CreateDecal(Rand(2, 3), e\room\x + (140.0 * (i - 3)) * RoomScale, e\room\y + 1.0, e\room\z - Rnd(197.0, 199.0) * Sin(e\room\Angle) * RoomScale - Rnd(0.001, 0.003), 0.0, e\room\Angle - 90.0, Rnd(360.0), Rnd(0.8, 0.85))
 									de\SizeChange = 0.001
+									EntityParent(de\OBJ, e\room\OBJ)
 								EndIf
 								de.Decals = CreateDecal(Rand(2, 3), EntityX(e\room\NPC[0]\Collider) + Rnd(-2.0, 2.0), e\room\y + 0.005, EntityZ(e\room\NPC[0]\Collider) + Rnd(-2.0, 2.0), 90.0, Rnd(360.0), 0.0)
+								EntityParent(de\OBJ, e\room\OBJ)
 							Next
 							
 							Curr096\State = 5.0
@@ -5286,6 +5299,7 @@ Function UpdateEvents%()
 							Case 10.0
 								;[Block]
 								de.Decals = CreateDecal(3, EntityX(e\room\OBJ) + Cos(e\room\Angle - 90.0) * 760.0 * RoomScale, e\room\y + 0.005, EntityZ(e\room\OBJ) + Sin(e\room\Angle - 90.0) * 760.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
+								EntityParent(de\OBJ, e\room\OBJ)
 								;[End Block]
 							Case 14.0
 								;[Block]
@@ -5336,6 +5350,7 @@ Function UpdateEvents%()
 								For i = 0 To 3
 									de.Decals = CreateDecal(7, e\room\x + Rnd(-2.0, 2.0), e\room\y + 700.0 * RoomScale, e\room\z + Rnd(-2.0, 2.0), 270.0, Rnd(360.0), 0.0, 0.05)
 									de\SizeChange = 0.0005
+									EntityParent(de\OBJ, e\room\OBJ)
 								Next
 								;[End Block]
 							Case 40.0
@@ -5746,6 +5761,7 @@ Function UpdateEvents%()
 											
 											de.Decals = CreateDecal(7, EntityX(me\Collider), e\room\y - 768.0 * RoomScale + 0.005, EntityZ(me\Collider), 90.0, Rnd(360.0), 0.0, 0.1)
 											de\MaxSize = 0.45 : de\SizeChange = 0.0002
+											EntityParent(de\OBJ, e\room\OBJ)
 										ElseIf e\EventState3 > 70.0 * 85.0 And e\EventState3 - fps\Factor[0] <= 70.0 * 85.0	
 											msg\DeathMsg = SubjectName + " found in a pool of blood next to SCP-012. Subject seems to have ripped open his wrists and written three extra "
 											msg\DeathMsg = msg\DeathMsg + "lines to the composition before dying of blood loss."
@@ -6660,6 +6676,7 @@ Function UpdateEvents%()
 									If e\EventState3 - fps\Factor[0] < 2500.0 Then 
 										de.Decals = CreateDecal(0, EntityX(e\room\Objects[5], True), e\room\y - 6392.0 * RoomScale, EntityZ(e\room\Objects[5], True), 90.0, 0.0, Rnd(360.0), 0.1, 0.01) 
 										de\Timer = 90000.0 : de\AlphaChange = 0.005 : de\SizeChange = 0.003
+										EntityParent(de\OBJ, e\room\OBJ)
 										
 										If e\SoundCHN2 <> 0 Then
 											If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2)
@@ -7241,6 +7258,7 @@ Function UpdateEvents%()
 							ResetEntity(me\Collider)
 							
 							de.Decals = CreateDecal(3, EntityX(me\Collider, True), e\room\y + 769.0 * RoomScale + 0.005, EntityZ(me\Collider, True), 90.0, Rnd(360.0), 0.0, 0.5)
+							EntityParent(de\OBJ, e\room\OBJ)
 							
 							e\room\NPC[0]\Sound = LoadSound_Strict("SFX\SCP\1123\Officer3.ogg")
 							
@@ -7415,6 +7433,7 @@ Function UpdateEvents%()
 					If e\room\Dist < 3.0 Lor Rand(7000) = 1 Then
 						e\EventState = 2.0
 						de.Decals = CreateDecal(1, EntityX(e\room\OBJ), e\room\y + 445.0 * RoomScale, EntityZ(e\room\OBJ), -90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.7, 0.85))
+						EntityParent(de\OBJ, e\room\OBJ)
 						
 						PlaySound_Strict(HorrorSFX[10])
 					ElseIf e\room\Dist > 8.0
@@ -7445,6 +7464,7 @@ Function UpdateEvents%()
 						PositionEntity(Curr106\Collider, EntityX(e\room\OBJ, True), -3.0, EntityZ(e\room\OBJ, True), True)
 						de.Decals = CreateDecal(0, EntityX(e\room\OBJ, True), e\room\y + 0.005, EntityZ(e\room\OBJ, True), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
 						de\SizeChange = 0.01
+						EntityParent(de\OBJ, e\room\OBJ)
 						e\EventState = 300.0
 					ElseIf e\EventState < 800.0
 						If EntityY(Curr106\Collider) >= EntityY(me\Collider) - 0.05 Then
@@ -7533,7 +7553,7 @@ Function UpdateEvents%()
 					ElseIf e\room\Dist < 4.0 And me\SndVolume > 1.0
 						If e\EventState2 = 0.0 Then
 							de.Decals = CreateDecal(3, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True), 0.0, e\room\Angle + 270.0, 0.0, 0.3)
-							
+							EntityParent(de\OBJ, e\room\OBJ)
 							e\EventState2 = 1.0
 						EndIf
 						If (Not e\SoundCHN2) Then
@@ -7626,6 +7646,7 @@ Function UpdateEvents%()
 						If e\EventState = 0.0 Then
 							de.Decals = CreateDecal(0, EntityX(e\room\OBJ), e\room\y + 798.0 * RoomScale, EntityZ(e\room\OBJ), -90.0, Rnd(360.0), 0.0, 0.5, 0.8)
 							de\SizeChange = 0.0015
+							EntityParent(de\OBJ, e\room\OBJ)
 							PlaySound_Strict(DecaySFX[3])
 							e\EventState = 1.0
 						EndIf
@@ -7669,6 +7690,7 @@ Function UpdateEvents%()
 									PlaySound2(e\Sound, Camera, e\room\NPC[0]\Collider)
 									
 									de.Decals = CreateDecal(0, EntityX(e\room\OBJ), e\room\y + 0.005, EntityZ(e\room\OBJ), 90.0, Rnd(360.0), 0.0, 0.4, 0.8)
+									EntityParent(de\OBJ, e\room\OBJ)
 								EndIf
 								
 								If e\EventState > 400.0 Then
@@ -7686,7 +7708,7 @@ Function UpdateEvents%()
 				;[Block]
 				If e\EventState = 0.0 Then
 					de.Decals = CreateDecal(0, EntityX(e\room\OBJ) + Rnd(-0.5, 0.5), e\room\y + 0.005, EntityZ(e\room\OBJ) + Rnd(-0.5, 0.5), 90.0, Rnd(360.0), 0.0, 2.5)
-					
+					EntityParent(de\OBJ, e\room\OBJ)
 					e\EventState = 1.0
 				ElseIf PlayerRoom = e\room
 					If (Not e\Sound) Then
@@ -8252,6 +8274,7 @@ Function UpdateEvents%()
 							LoadEventSound(e, "SFX\Character\Scientist\EmilyScream.ogg")
 							e\SoundCHN = PlaySound2(e\Sound, Camera, e\room\Objects[0], 100.0, 1.0)
 							de.Decals = CreateDecal(0, EntityX(e\room\Objects[0], True), e\room\y + 0.005, EntityZ(e\room\Objects[0], True), 90.0, Rnd(360.0), 0.0, 0.8, 0.8)
+							EntityParent(de\OBJ, e\room\OBJ)
 							e\EventState = 1.0
 						ElseIf e\EventState = 1.0
 							If (Not ChannelPlaying(e\SoundCHN)) Then
@@ -8448,6 +8471,7 @@ Function UpdateEvents%()
 							TurnEntity(Pvt, 90.0, 0.0, 0.0)
 							EntityPick(Pvt, 0.3)
 							de.Decals = CreateDecal(3, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, 0.75)
+							EntityParent(de\OBJ, e\room\OBJ)
 							FreeEntity(Pvt)
 							For itt.ItemTemplates = Each ItemTemplates
 								If IsItemGoodFor1162ARC(itt) And Rand(6) = 1 Then
@@ -8485,6 +8509,7 @@ Function UpdateEvents%()
 								TurnEntity(Pvt, 90.0, 0.0, 0.0)
 								EntityPick(Pvt, 0.3)
 								de.Decals = CreateDecal(3, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, 0.75)
+								EntityParent(de\OBJ, e\room\OBJ)
 								FreeEntity(Pvt)
 								If me\Injuries > 15.0
 									msg\DeathMsg = "A dead Class D subject was discovered within the containment chamber of SCP-1162-ARC."
@@ -9110,9 +9135,11 @@ Function UpdateEvents%()
 								
 								de.Decals = CreateDecal(0, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True), 0.0, e\room\Angle + 360.0, Rnd(360.0), 0.1, 0.01)
 								de\SizeChange = 0.003 : de\AlphaChange = 0.005 : de\Timer = 90000.0
+								EntityParent(de\OBJ, e\room\OBJ)
 								
 								de.Decals = CreateDecal(0, EntityX(e\room\RoomDoors[0]\FrameOBJ, True), EntityY(e\room\RoomDoors[0]\FrameOBJ, True) + 0.005, EntityZ(e\room\RoomDoors[0]\FrameOBJ, True), 90.0, e\room\Angle + 360.0, Rnd(360.0), 0.1, 0.01)
 								de\SizeChange = 0.003 : de\AlphaChange = 0.005 : de\Timer = 90000.0
+								EntityParent(de\OBJ, e\room\OBJ)
 								
 								PositionEntity(Curr106\Collider, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True))
 								Curr106\State = -11.0
@@ -9929,6 +9956,7 @@ Function UpdateEndings%()
 								If e\EventState - fps\Factor[0] < 350.0
 									de.Decals = CreateDecal(0, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True) + 0.01, EntityZ(e\room\Objects[3], True), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
 									de\SizeChange = 0.001
+									EntityParent(de\OBJ, e\room\OBJ)
 									
 									PositionEntity(Curr106\Collider, EntityX(e\room\Objects[3], True), EntityY(me\Collider) - 3.0, EntityZ(e\room\Objects[3], True), True)
 									SetNPCFrame(Curr106, 110.0)
@@ -9983,6 +10011,7 @@ Function UpdateEndings%()
 												If ((e\EventState - fps\Factor[0]) Mod 100.0) <= 50.0 And (e\EventState Mod 100.0) > 50.0 Then
 													de.Decals = CreateDecal(0, EntityX(Curr106\Collider, True), EntityY(e\room\Objects[3], True) + 0.01, EntityZ(Curr106\Collider, True), 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
 													de\SizeChange = 0.004 : de\Timer = 90000.0
+													EntityParent(de\OBJ, e\room\OBJ)
 												EndIf
 											EndIf
 										EndIf
@@ -10011,7 +10040,8 @@ Function UpdateEndings%()
 											If fps\Factor[0] > 0.0 Then
 												If ((e\EventState - fps\Factor[0]) Mod 160.0) <= 50.0 And (e\EventState Mod 160.0) > 50.0 Then
 													de.Decals = CreateDecal(0, EntityX(Curr106\Collider, True), EntityY(e\room\Objects[3], True) + 0.01, EntityZ(Curr106\Collider, True), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
-													de\SizeChange = 0.004 : de\Timer = 90000.0	
+													de\SizeChange = 0.004 : de\Timer = 90000.0
+													EntityParent(de\OBJ, e\room\OBJ)
 												EndIf
 											EndIf
 											
