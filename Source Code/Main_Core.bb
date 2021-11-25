@@ -3751,11 +3751,11 @@ Function UpdateGUI%()
 					If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 					ShowEntity(SelectedItem\Collider)
 					PositionEntity(SelectedItem\Collider, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
-					RotateEntity(SelectedItem\Collider, EntityPitch(Camera), EntityYaw(Camera), 0.0)
+					RotateEntity(SelectedItem\Collider, EntityPitch(Camera), EntityYaw(Camera) + Rnd(-20.0, 20.0), 0.0)
 					MoveEntity(SelectedItem\Collider, 0.0, -0.1, 0.1)
-					RotateEntity(SelectedItem\Collider, 0.0, Rnd(360.0), 0.0)
+					RotateEntity(SelectedItem\Collider, 0.0, EntityYaw(Camera) + Rnd(-110.0, 110.0), 0.0)
 					ResetEntity(SelectedItem\Collider)
-					SelectedItem\DropSpeed = 0.0
+					SelectedItem\Dropped = 1
 					SelectedItem\Picked = False
 					For z = 0 To OtherSize - 1
 						If OtherOpen\SecondInv[z] = SelectedItem Then
@@ -3985,7 +3985,7 @@ Function UpdateGUI%()
 							Case "paper", "key0", "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "playcard", "mastercard", "oldpaper", "badge", "ticket", "25ct", "coin", "key", "scp860", "scp500pill", "scp500pilldeath", "scp005"
 								;[Block]
 								If Inventory(MouseSlot)\ItemTemplate\TempName = "clipboard" Then
-									; ~ Add an item to clipboard
+									; ~ Add an item to wallet
 									Local added.Items = Null
 									Local b$ = SelectedItem\ItemTemplate\TempName
 									Local c%, ri%

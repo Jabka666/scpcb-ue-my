@@ -694,29 +694,31 @@ Function UpdateItems%()
 					EndIf
 				EndIf
 				
-				If i\Dist < HideDist * 0.04 Then
-					For i2.Items = Each Items
-						If i <> i2 And (Not i2\Picked) And i2\Dist < HideDist * 0.04 Then
-							xTemp = EntityX(i2\Collider, True) - EntityX(i\Collider, True)
-							yTemp = EntityY(i2\Collider, True) - EntityY(i\Collider, True)
-							zTemp = EntityZ(i2\Collider, True) - EntityZ(i\Collider, True)
-							
-							ed = (xTemp ^ 2) + (zTemp ^ 2)
-							If ed < 0.07 And Abs(yTemp) < 0.25 Then
-								; ~ Items are too close together, push away
-								xTemp = xTemp * (0.07 - ed)
-								zTemp = zTemp * (0.07 - ed)
+				If PlayerRoom\RoomTemplate\Name <> "room2_storage" Then
+					If i\Dist < HideDist * 0.04 Then
+						For i2.Items = Each Items
+							If i <> i2 And (Not i2\Picked) And i2\Dist < HideDist * 0.04 Then
+								xTemp = EntityX(i2\Collider, True) - EntityX(i\Collider, True)
+								yTemp = EntityY(i2\Collider, True) - EntityY(i\Collider, True)
+								zTemp = EntityZ(i2\Collider, True) - EntityZ(i\Collider, True)
 								
-								While Abs(xTemp) + Abs(zTemp) < 0.001
-									xTemp = xTemp + Rnd(-0.002, 0.002)
-									zTemp = zTemp + Rnd(-0.002, 0.002)
-								Wend
-								
-								TranslateEntity(i2\Collider, xTemp, 0.0, zTemp)
-								TranslateEntity(i\Collider, -xTemp, 0.0, -zTemp)
+								ed = (xTemp ^ 2) + (zTemp ^ 2)
+								If ed < 0.07 And Abs(yTemp) < 0.25 Then
+									; ~ Items are too close together, push away
+									xTemp = xTemp * (0.07 - ed)
+									zTemp = zTemp * (0.07 - ed)
+									
+									While Abs(xTemp) + Abs(zTemp) < 0.001
+										xTemp = xTemp + Rnd(-0.002, 0.002)
+										zTemp = zTemp + Rnd(-0.002, 0.002)
+									Wend
+									
+									TranslateEntity(i2\Collider, xTemp, 0.0, zTemp)
+									TranslateEntity(i\Collider, -xTemp, 0.0, -zTemp)
+								EndIf
 							EndIf
-						EndIf
-					Next
+						Next
+					EndIf
 				EndIf
 				If EntityY(i\Collider) < -60.0 Then 
 					RemoveItem(i)
@@ -923,10 +925,10 @@ Function DropItem%(item.Items, PlayDropSound% = True)
 	For n = 0 To MaxItemAmount - 1
 		If Inventory(n) = item Then
 			Inventory(n) = Null
-			ItemAmount = ItemAmount - 1
 			Exit
 		EndIf
 	Next
+	ItemAmount = ItemAmount - 1
 	
 	RemoveWearableItems(item)
 	

@@ -5212,7 +5212,7 @@ Function UpdateEvents%()
 						e\EventState2 = e\EventState2 - fps\Factor[0]
 					EndIf
 					
-					TFormPoint(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0.0, e\room\OBJ)
+					TFormPoint(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0, e\room\OBJ)
 					
 					Temp = 0
 					If TFormedX() > 730.0 Then
@@ -5220,7 +5220,7 @@ Function UpdateEvents%()
 						
 						me\LightBlink = 2.0
 						UpdateWorld()
-						TFormPoint(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0.0, e\room\OBJ)
+						TFormPoint(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0, e\room\OBJ)
 						
 						For i = 1 To 2
 							e\room\RoomDoors[i]\Open = e\room\RoomDoors[i + 2]\Open
@@ -5269,16 +5269,18 @@ Function UpdateEvents%()
 						e\EventState = e\EventState + 1.0
 						For it.Items = Each Items
 							If EntityDistanceSquared(it\Collider, me\Collider) < 25.0 Then
-								TFormPoint(EntityX(it\Collider), EntityY(it\Collider), EntityZ(it\Collider), 0.0, e\room\OBJ)
+								TFormPoint(EntityX(it\Collider), EntityY(it\Collider), EntityZ(it\Collider), 0, e\room\OBJ)
 								x = TFormedX() : y = TFormedY() : z = TFormedZ()
-								If TFormedX() > 264.0 Then
-									TFormPoint(x - 1024.0, y, z, e\room\OBJ, 0)
-									PositionEntity(it\Collider, TFormedX(), TFormedY(), TFormedZ())
-									ResetEntity(it\Collider)
-								ElseIf TFormedX() < -264.0
-									TFormPoint(x + 1024.0, y, z, e\room\OBJ, 0)
-									PositionEntity(it\Collider, TFormedX(), TFormedY(), TFormedZ())
-									ResetEntity(it\Collider)
+								If z >= -290.0 And z <= 560.0 Then
+									If x >= 264.0 And x <= 760.0 Then
+										TFormPoint(x - 1024.0, y, z, e\room\OBJ, 0)
+										PositionEntity(it\Collider, TFormedX(), TFormedY(), TFormedZ())
+										ResetEntity(it\Collider)
+									ElseIf x <= -264.0 And x >= -760
+										TFormPoint(x + 1024.0, y, z, e\room\OBJ, 0)
+										PositionEntity(it\Collider, TFormedX(), TFormedY(), TFormedZ())
+										ResetEntity(it\Collider)
+									EndIf
 								EndIf
 							EndIf
 						Next
@@ -5344,6 +5346,9 @@ Function UpdateEvents%()
 								Inventory(i) = CreateItem("Strange Note", "paper", 1.0, 1.0, 1.0)
 								HideEntity(Inventory(i)\Collider)
 								Inventory(i)\Picked = True
+								Inventory(i)\ItemTemplate\Found = True
+								EntityType(Inventory(i)\Collider, HIT_ITEM)
+								ItemAmount = ItemAmount + 1
 								;[End Block]
 							Case 35.0
 								;[Block]
@@ -5367,7 +5372,7 @@ Function UpdateEvents%()
 								If e\room\NPC[1] <> Null Then
 									RemoveNPC(e\room\NPC[1]) : e\room\NPC[1] = Null
 								EndIf
-								;[Block]
+								;[End block]
 							Case 60.0
 								;[Block]
 								If Curr173 <> Null Then
@@ -5403,21 +5408,31 @@ Function UpdateEvents%()
 						EndIf
 						
 						For it.Items = Each Items
-							If (it\Dropped = 1 And Abs(TFormedX()) < 264.0) Lor it\Dropped = -1 Then
+							If it\Dropped = 1 Lor it\Dropped = -1 Then
 								TFormPoint(EntityX(it\Collider), EntityY(it\Collider), EntityZ(it\Collider), 0, e\room\OBJ)
 								x = TFormedX() : y = TFormedY() : z = TFormedZ()
 								
-								If it\Dropped = 1 Then
-									For i = - 1 To 1 Step 2
-										TFormPoint(x + 1024.0 * i, y, z, e\room\OBJ, 0)
-										it2.Items = CreateItem(it\Name, it\ItemTemplate\TempName, TFormedX(), EntityY(it\Collider), TFormedZ())
-										EntityType(it2\Collider, HIT_ITEM)
+								If it\Dropped = 1 And Abs(x) < 264.0 Then
+									For i = -1 To 1 Step 2
+										TFormPoint(x + (1024.0 * i), y, z, e\room\OBJ, 0)
+										it2.Items = CreateItem(it\Name, it\ItemTemplate\TempName, TFormedX(), EntityY(it\Collider), TFormedZ(), it\R, it\G, it\B, it\A)
+										it2\State = it\State : it2\State2 = it\State2 : it2\State3 = it\State3
+										If it\InvSlots > 0 Then
+											it2\InvSlots = it\InvSlots
+											For j = 0 To it\InvSlots - 1
+												it2\SecondInv[j] = it\SecondInv[j]
+											Next
+											SetAnimTime(it2\Model, AnimTime(it\Model))
+											it2\InvImg = it\InvImg
+										EndIf
 										RotateEntity(it2\Collider, EntityPitch(it\Collider), EntityYaw(it\Collider), 0.0)
+										EntityType(it2\Collider, HIT_ITEM)
 									Next
-								Else
+								ElseIf it\Dropped = -1
 									For it2.Items = Each Items
-										If it2 <> it And it2\Dist < 225.0 Then
-											TFormPoint(EntityX(it2\Collider), EntityY(it2\Collider), EntityZ(it2\Collider), 0.0, e\room\OBJ)
+										If it2 <> it And it2\Dist < 225.0 And it2\ItemTemplate = it\ItemTemplate Then
+											TFormPoint(EntityX(it2\Collider), EntityY(it2\Collider), EntityZ(it2\Collider), 0, e\room\OBJ)
+											If TFormedZ() = z Then RemoveItem(it2)
 										EndIf
 									Next
 								EndIf
@@ -5427,16 +5442,12 @@ Function UpdateEvents%()
 					EndIf
 				EndIf
 				
-				If e\EventState > 26.0 Then
+				If e\EventState >= 26.0 Then
 					If Abs(EntityX(me\Collider) - e\room\x) < 8.0 Then
 						If Abs(EntityZ(me\Collider) - e\room\z) < 8.0 Then
-							If (Not e\Sound) Then
-								e\Sound = LoadSound_Strict("SFX\SCP\970\Corpse.ogg")
-							EndIf
+							If (Not e\Sound) Then e\Sound = LoadSound_Strict("SFX\SCP\970\Corpse.ogg")
 							e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\NPC[0]\OBJ)
-							If e\EventState < 30.0 Then
-								LightVolume = TempLightVolume * 0.4
-							ElseIf e\EventState > 60.0
+							If e\EventState > 60.0 Then
 								AnimateNPC(e\room\NPC[0], 80.0, 61.0, -0.02, False)
 								e\room\NPC[0]\DropSpeed = 0.0
 								y = CurveValue(1.5 + Sin(Float(MilliSecs2()) / 20.0) * 0.1, EntityY(e\room\NPC[0]\Collider), 50.0)
