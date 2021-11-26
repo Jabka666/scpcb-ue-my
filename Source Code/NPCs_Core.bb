@@ -1604,15 +1604,14 @@ Function UpdateNPCs%()
 									
 									If Dist < 0.25 Then
 										If wi\HazmatSuit > 0 Then
-											TakeOffTimer = TakeOffTimer + (fps\Factor[0] * 2.5)
-											If TakeOffTimer > 250.0 And TakeOffTimer - (fps\Factor[0] * 2.5) <= 250.0 And n\PrevState <> 3 Then
+											TakeOffTimer = TakeOffTimer + (fps\Factor[0] * 1.5)
+											If TakeOffTimer > 100.0 And TakeOffTimer - (fps\Factor[0] * 1.5) <= 100.0 And (Not ChannelPlaying(n\SoundCHN2)) Then
 												If n\SoundCHN2 <> 0 Then StopChannel(n\SoundCHN2)
 												n\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\049\TakeOffHazmat.ogg"))
-												n\PrevState = 3
 											ElseIf TakeOffTimer >= 500.0
 												For i = 0 To MaxItemAmount - 1
 													If Inventory(i) <> Null Then
-														If Instr(Inventory(i)\ItemTemplate\TempName, "hazmatsuit") And wi\HazmatSuit < 3 Then
+														If Instr(Inventory(i)\ItemTemplate\TempName, "hazmatsuit") And wi\HazmatSuit <> 3 Then
 															If Inventory(i)\State2 < 3.0 Then
 																Inventory(i)\State2 = Inventory(i)\State2 + 1.0
 																TakeOffTimer = 250.0
@@ -1620,6 +1619,9 @@ Function UpdateNPCs%()
 															Else
 																RemoveItem(Inventory(i))
 																wi\HazmatSuit = 0
+																PlaySound_Strict(PickSFX[2])
+																CreateMsg("The hazmat suit was destroyed.")
+																TakeOffTimer = 0.0
 															EndIf
 															Exit
 														EndIf
@@ -1627,19 +1629,19 @@ Function UpdateNPCs%()
 												Next
 											EndIf
 										ElseIf I_714\Using Then
-											TakeOffTimer = TakeOffTimer + (fps\Factor[0] * 2.5)
-											If TakeOffTimer > 250.0 And TakeOffTimer - (fps\Factor[0] * 2.5) <= 250.0 And n\PrevState <> 3 Then
+											TakeOffTimer = TakeOffTimer + (fps\Factor[0] * 1.5)
+											If TakeOffTimer > 100.0 And TakeOffTimer - (fps\Factor[0] * 1.5) <= 100.0 And (Not ChannelPlaying(n\SoundCHN2)) Then
 												If n\SoundCHN2 <> 0 Then
 													If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2)
 												EndIf
 												n\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\049\714Equipped.ogg"))
-												n\PrevState = 3
 											ElseIf TakeOffTimer >= 500.0
 												I_714\Using = False
+												PlaySound_Strict(PickSFX[3])
+												CreateMsg("The ring was forcibly removed.")
+												TakeOffTimer = 0.0
 											EndIf
 										Else
-											TakeOffTimer = 0.0
-											me\BlurTimer = 500.0
 											me\CurrCameraZoom = 20.0
 											
 											If (Not chs\GodMode) Then
@@ -1663,12 +1665,12 @@ Function UpdateNPCs%()
 											EndIf										
 										EndIf
 									Else
-										If TakeOffTimer <> 0.0 Then TakeOffTimer = 0.0
+										If TakeOffTimer > 0.0 Then
+											TakeOffTimer = Max(TakeOffTimer - fps\Factor[0], 0.0)
+										EndIf
 										
 										n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
-										
-										If n\PrevState = 3 Then n\PrevState = 2
 										
 										If Dist < 9.0 Then
 											AnimateNPC(n, Max(Min(AnimTime(n\OBJ), 428.0), 387.0), 463.0, n\CurrSpeed * 38.0)

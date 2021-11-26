@@ -399,7 +399,7 @@ Function RenderWorld2%(Tween#)
 	Color(255, 255, 255)
 End Function
 
-Global ArkBlurImage%, ArkBlurTexture%, ArkSw%, ArkSh%
+Global ArkBlurImage%, ArkBlurTexture%
 Global ArkBlurCam%
 
 Function CreateBlurImage%()
@@ -413,9 +413,7 @@ Function CreateBlurImage%()
 	MoveEntity(Cam, 0, 0, 10000)
 	ArkBlurCam = Cam
 	
-	ArkSw = opt\GraphicWidth
-	ArkSh = opt\GraphicHeight
-	CameraViewport(Cam, 0, 0, ArkSw, ArkSh)
+	CameraViewport(Cam, 0, 0, opt\GraphicWidth, opt\GraphicHeight)
 	
 	; ~ Create sprite
 	Local SPR% = CreateMesh(Cam)
@@ -428,7 +426,7 @@ Function CreateBlurImage%()
 	AddTriangle(SF, 0, 1, 2)
 	AddTriangle(SF, 3, 2, 1)
 	EntityFX(SPR, 17)
-	ScaleEntity(SPR, SMALLEST_POWER_TWO / Float(ArkSw), SMALLEST_POWER_TWO / Float(ArkSw), 1.0)
+	ScaleEntity(SPR, SMALLEST_POWER_TWO / Float(opt\GraphicWidth), SMALLEST_POWER_TWO / Float(opt\GraphicWidth), 1.0)
 	PositionEntity(SPR, 0.0, 0.0, 1.0001)
 	EntityOrder(SPR, -100000)
 	EntityBlend(SPR, 1)
@@ -441,7 +439,7 @@ End Function
 
 Function RenderBlur%(Power#)
 	EntityAlpha(ArkBlurImage, Power)
-	CopyRect(0, 0, ArkSw, ArkSh, SMALLEST_POWER_TWO_HALF - (ArkSw / 2), SMALLEST_POWER_TWO_HALF - (ArkSh / 2), BackBuffer(), TextureBuffer(ArkBlurTexture))
+	CopyRect(0, 0, opt\GraphicWidth, opt\GraphicHeight, SMALLEST_POWER_TWO_HALF - (opt\GraphicWidth / 2), SMALLEST_POWER_TWO_HALF - (opt\GraphicHeight / 2), BackBuffer(), TextureBuffer(ArkBlurTexture))
 End Function
 
 Function PlayStartupVideos%()
