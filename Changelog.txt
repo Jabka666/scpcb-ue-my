@@ -399,7 +399,6 @@ Bug Fixes:
 	- Fixed head poking out of its box when recontained by the MTFs.
 	- Fixed distance on S-NAV Ultimate.
 	- Fixed SCP-173 not breaking the glass in the Light Containment Zone test room event if the player looked away.
-- Fixed items not pushing each other away in SCP-970's room.
 - Fixed breath sound while using "noclip" command.
 - Fixed button sound not working when not using launcher.
 - Fixed annoying secondary lighting lever in the Electrical Center.
@@ -412,7 +411,7 @@ Bug Fixes:
 - Fixed button positions.
 - Fixed message being moved down if selecting a document, while a clipboard/wallet is open.
 - Fixed brightness of the buttons guarded by 4-digit pass code.
-- Fixed type door types in checkpoints-endrooms.
+- Fixed door types in HCZ checkpoints-endrooms.
 - Fixed SCP-1162-ARC doesn't remove overlays.
 - Fixed SCP-860-1 generation.
 - Fixed the Gate A bug where SCP-106 spawns constantly.
