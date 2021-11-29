@@ -71,7 +71,7 @@ Function MilliSecs2%()
 End Function
 
 Function RoundFloat#(n#, Count%)
-	Return(Float(Left(n, Len(Str(Int(n))) + Count + 1)))
+	Return(Float(Left(n, Len(Int(Str(n))) + Count + 1)))
 End Function
 
 Function Chance%(Percent%)

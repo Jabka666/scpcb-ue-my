@@ -3363,11 +3363,13 @@ Function UpdateEvents%()
 					EndIf
 				Else
 					HideRooms(e\room)
-					e\EventState = 0.0
-					e\EventState2 = 0.0
-					e\EventState3 = 0.0
-					e\EventState4 = 0.0
-					e\EventStr = Float(0.0)
+					If e\EventState <> 0.0 Then
+						e\EventState = 0.0
+						e\EventState2 = 0.0
+						e\EventState3 = 0.0
+						e\EventState4 = 0.0
+						e\EventStr = Float(0.0)
+					EndIf
 				EndIf
 				;[End Block]
 			Case e_room2_cafeteria
@@ -5626,15 +5628,19 @@ Function UpdateEvents%()
 							EndIf
 						EndIf
 					Else
-						e\EventState = 0.0
-						For i = 0 To 3
-							If e\room\NPC[i] <> Null Then e\room\NPC[i]\State = 66
-						Next
+						If e\EventState <> 0.0 Then e\EventState = 0.0
+						If e\room\NPC[0] <> Null Then
+							For i = 0 To 3
+								If e\room\NPC[i]\State <> 66.0 Then e\room\NPC[i]\State = 66.0
+							Next
+						EndIf
 					EndIf
 				Else
-					For i = 0 To 3
-						If e\room\NPC[i] <> Null Then e\room\NPC[i]\State = 66
-					Next
+					If e\room\NPC[0] <> Null Then
+						For i = 0 To 3
+							If e\room\NPC[i]\State <> 66.0 Then e\room\NPC[i]\State = 66.0
+						Next
+					EndIf
 				EndIf 
 				;[End Block]
 			Case e_room3_2_hcz
@@ -7727,34 +7733,31 @@ Function UpdateEvents%()
 					Else
 						e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\OBJ, 4.5, 1.5)
 					EndIf
+					
 					Dist = DistanceSquared(EntityX(me\Collider), EntityX(e\room\OBJ), EntityZ(me\Collider), EntityZ(e\room\OBJ))
-					If Dist < 4.0 Then
-						me\CrouchState = (2.0 - Sqr(Dist)) / 2.0
-						
-						If Dist < 0.25 Then
-							If e\EventState2 = 0.0 Then
-								PlaySound_Strict(LoadTempSound("SFX\Room\SinkholeFall.ogg"))
-							EndIf
-							
-							x = CurveValue(EntityX(e\room\OBJ), EntityX(me\Collider), 10.0)
-							y = CurveValue(EntityY(e\room\OBJ) - e\EventState2, EntityY(me\Collider), 25.0)
-							z = CurveValue(EntityZ(e\room\OBJ), EntityZ(me\Collider), 10.0)
-							PositionEntity(me\Collider, x, y, z, True)
-							
-							me\DropSpeed = 0.0
-							
-							ResetEntity(me\Collider)
-							
-							e\EventState2 = Min(e\EventState2 + fps\Factor[0] / 200.0, 2.0)
-							
-							me\LightBlink = Min(e\EventState2 * 5.0, 10.0)
-							If wi\NightVision > 0 Then
-								If e\EventState2 >= 0.2 Then me\BlinkTimer = -10.0
-							EndIf
-							me\BlurTimer = e\EventState2 * 500.0
-							
-							If e\EventState2 = 2.0 Then MoveToPocketDimension()
+					If Dist < 0.25 Then
+						If e\EventState2 = 0.0 Then
+							PlaySound_Strict(LoadTempSound("SFX\Room\SinkholeFall.ogg"))
 						EndIf
+						
+						x = CurveValue(EntityX(e\room\OBJ), EntityX(me\Collider), 10.0)
+						y = CurveValue(EntityY(e\room\OBJ) - e\EventState2, EntityY(me\Collider), 25.0)
+						z = CurveValue(EntityZ(e\room\OBJ), EntityZ(me\Collider), 10.0)
+						PositionEntity(me\Collider, x, y, z, True)
+						
+						me\DropSpeed = 0.0
+						
+						ResetEntity(me\Collider)
+						
+						e\EventState2 = Min(e\EventState2 + fps\Factor[0] / 200.0, 2.0)
+						
+						me\LightBlink = Min(e\EventState2 * 5.0, 10.0)
+						If wi\NightVision > 0 Then
+							If e\EventState2 >= 0.2 Then me\BlinkTimer = -10.0
+						EndIf
+						me\BlurTimer = e\EventState2 * 500.0
+						
+						If e\EventState2 = 2.0 Then MoveToPocketDimension()
 					EndIf
 				Else
 					If e\EventState2 <> 0.0 Then e\EventState2 = 0.0
@@ -7857,7 +7860,7 @@ Function UpdateEvents%()
 							EndIf
 						EndIf
 					Else
-						GrabbedEntity = 0
+						If GrabbedEntity <> 0 Then GrabbedEntity = 0
 					EndIf
 					
 					Local Setting%
@@ -7896,6 +7899,7 @@ Function UpdateEvents%()
 							ElseIf EntityDistanceSquared(e\room\Objects[i], Camera) > 1.0
 								GrabbedEntity = 0
 							EndIf
+							Exit
 						EndIf
 					Next
 					
@@ -8321,7 +8325,7 @@ Function UpdateEvents%()
 				; ~ 3.1 = player got a memorial item + injuries (because he didn't had any item in his inventory before)
 				
 				If PlayerRoom = e\room Then
-					GrabbedEntity = 0
+					If GrabbedEntity <> 0 Then GrabbedEntity = 0
 					
 					e\EventState = 0.0
 					
@@ -8579,8 +8583,8 @@ Function UpdateEvents%()
 				
 				If PlayerRoom = e\room Then
 					If e\EventState = 0.0 Then
-						e\EventState = 1.0
 						If e\EventState2 = 0.0 Then e\EventState2 = (-70.0) * 5.0
+						e\EventState = 1.0
 					EndIf
 				EndIf
 				

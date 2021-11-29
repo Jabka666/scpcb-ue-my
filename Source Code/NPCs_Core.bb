@@ -5155,6 +5155,7 @@ Function UpdateMTFUnit%(n.NPCs)
 			n\Idle = n\Idle - fps\Factor[0]
 			If n\Idle <= 0.0 Then n\Idle = 0.0
 		Else
+			Dist = EntityDistanceSquared(me\Collider, n\Collider)
 			Select Int(n\State) ; ~ What is this MTF doing
 				Case 0.0 ; ~ Wandering around
 					;[Block]
@@ -6531,8 +6532,6 @@ Function UpdateMTFUnit%(n.NPCs)
 					n\Angle = CurveValue(0.0, n\Angle, 40.0)
 					
 					If (Not me\Terminated) Then
-						Dist = EntityDistanceSquared(n\Collider, me\Collider)
-						
 						SearchPlayer = False
 						
 						If Dist < 36.0 And EntityVisible(n\Collider, me\Collider) And (Not chs\NoTarget) Then
@@ -6986,7 +6985,6 @@ Function TriggerTeslaGateOnNPCs%(e.Events, n.NPCs)
 						If DistanceSquared(EntityX(n\Collider), EntityX(e\room\Objects[i], True), EntityZ(n\Collider), EntityZ(e\room\Objects[i], True)) < PowTwo(250.0 * RoomScale) Then
 							If PlayerRoom = e\room Then me\LightFlash = 0.3
 							n\CurrSpeed = 0.0
-							If n\NPCType <> NPCType106 And n\NPCType <> NPCType049 And n\NPCType <> NPCType096 Then n\IsDead = True
 							Select n\NPCType
 								Case NPCType106
 									;[Block]
@@ -6995,6 +6993,14 @@ Function TriggerTeslaGateOnNPCs%(e.Events, n.NPCs)
 										n\State3 = 1.0
 										n\Idle = 1
 									EndIf
+									;[End Block]
+								Case NPCType049, NPCType096
+									;[Block]
+									; ~ Skip
+									;[End Block]
+								Default
+									;[Block]
+									n\IsDead = True
 									;[End Block]
 							End Select
 							Exit

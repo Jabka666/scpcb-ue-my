@@ -8,7 +8,7 @@ If FileSize("FreeImage.dll") = 0 Then InitErrorStr = InitErrorStr + "FreeImage.d
 
 If Len(InitErrorStr) > 0 Then RuntimeError("The following DLLs were not found in the game directory:" + Chr(13) + Chr(10) + Chr(13) + Chr(10) + InitErrorStr)
 
-Include "Source Code\Keys_Core.bb"
+Include "Source Code\KeyBinds_Core.bb"
 Include "Source Code\INI_Core.bb"
 Include "Source Code\Math_Core.bb"
 Include "Source Code\Strict_Loads_Core.bb"
@@ -1794,7 +1794,10 @@ Function UpdateMessages%()
 	If msg\Timer > 0.0 Then
 		msg\Timer = msg\Timer - fps\Factor[0]
 	Else
-		If msg\Txt <> "" Then msg\Txt = ""
+		If msg\Timer <> 0.0 Then
+			msg\Txt = ""
+			msg\Timer = 0.0
+		EndIf
 	EndIf
 End Function
 
@@ -1961,8 +1964,7 @@ Include "Source Code\Menu_Core.bb"
 InitMainMenuAssets()
 MainMenuOpen = True
 
-FlushKeys()
-FlushMouse()
+ResetInput()
 
 RenderLoading(100)
 
