@@ -115,12 +115,10 @@ Function UpdateMainMenu%()
 			mo\MouseHit2 = MouseHit(2)
 		EndIf
 		
-		If (Not mo\MouseDown1) And (Not mo\MouseHit1) Then GrabbedEntity = 0
-		
 		If mm\ShouldDeleteGadgets
 			DeleteMenuGadgets()
 		EndIf
-		mm\ShouldDeleteGadgets = False
+		If mm\ShouldDeleteGadgets Then mm\ShouldDeleteGadgets = False
 		
 		UpdateMusic()
 		If opt\EnableSFXRelease Then AutoReleaseSounds()
