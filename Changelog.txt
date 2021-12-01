@@ -7,6 +7,7 @@ General:
 - Improved gas mask fogging overlay.
 - Added sound volume for crouching and picking the items up, so NPCs can hear your activity.
 - Added new messages when SCP-049 destroys the hazmat suit or removes the ring from the player.
+- Added smoke particles for all NPCs hit by the Tesla Gate.
 
 Bug Fixes:
 - Fixed "IsDead" parameter for guard.
