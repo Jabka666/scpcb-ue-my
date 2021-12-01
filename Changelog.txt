@@ -43,6 +43,7 @@ Bug Fixes:
 	- Fixed Strange Note from SCP-970 falling through floor when dropped.
 - Fixed SCP-294 sometimes giving the wrong drink.
 - Fixed removal voice lines being spammable by repeatedly approaching and backing away from SCP-049.
+- Fixed MAV after killing the SCP-035's tentacle.
 
 - Tiny fix for SCP-372's AI.
 

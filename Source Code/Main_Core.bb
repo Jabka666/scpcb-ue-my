@@ -1794,10 +1794,7 @@ Function UpdateMessages%()
 	If msg\Timer > 0.0 Then
 		msg\Timer = msg\Timer - fps\Factor[0]
 	Else
-		If msg\Timer <> 0.0 Then
-			msg\Txt = ""
-			msg\Timer = 0.0
-		EndIf
+		msg\Timer = 0.0 : msg\Txt = ""
 	EndIf
 End Function
 
@@ -2144,7 +2141,7 @@ Function MainLoop%()
 			Local PrevMouseDown1% = mo\MouseDown1
 			
 			mo\MouseDown1 = MouseDown(1)
-			If PrevMouseDown1 = True And (Not mo\MouseDown1) Then 
+			If PrevMouseDown1 And (Not mo\MouseDown1) Then 
 				mo\MouseUp1 = True 
 			Else
 				mo\MouseUp1 = False
@@ -2153,14 +2150,12 @@ Function MainLoop%()
 			mo\MouseHit2 = MouseHit(2)
 		EndIf
 		
-		If (Not mo\MouseDown1) And (Not mo\MouseHit1) Then
-			If GrabbedEntity <> 0 Then GrabbedEntity = 0
-		EndIf
+		If (Not mo\MouseDown1) And (Not mo\MouseHit1) Then GrabbedEntity = 0
 		
 		If mm\ShouldDeleteGadgets Then
 			DeleteMenuGadgets()
 		EndIf
-		If mm\ShouldDeleteGadgets Then mm\ShouldDeleteGadgets = False
+		mm\ShouldDeleteGadgets = False
 		
 		UpdateMusic()
 		If opt\EnableSFXRelease Then AutoReleaseSounds()
@@ -2364,7 +2359,7 @@ Function MainLoop%()
 			If me\BlinkEffectTimer > 0.0 Then
 				me\BlinkEffectTimer = me\BlinkEffectTimer - (fps\Factor[0] / 70.0)
 			Else
-				If me\BlinkEffect <> 1.0 Then me\BlinkEffect = 1.0
+				me\BlinkEffect = 1.0
 			EndIf
 			
 			me\LightBlink = Max(me\LightBlink - (fps\Factor[0] / 35.0), 0.0)
@@ -2773,7 +2768,7 @@ Function UpdateMoving%()
 	If me\StaminaEffectTimer > 0.0 Then
 		me\StaminaEffectTimer = me\StaminaEffectTimer - (fps\Factor[0] / 70.0)
 	Else
-		If me\StaminaEffect <> 1.0 Then me\StaminaEffect = 1.0
+		me\StaminaEffect = 1.0
 	EndIf
 	
 	Local Temp#, Temp3%
@@ -3637,9 +3632,9 @@ Function UpdateGUI%()
 			SelectedDoor = Null
 		EndIf
 	Else
-		If msg\KeyPadInput <> "" Then msg\KeyPadInput = ""
-		If msg\KeyPadTimer <> 0.0 Then msg\KeyPadTimer = 0.0
-		If msg\KeyPadMsg <> "" Then msg\KeyPadMsg = ""
+		msg\KeyPadInput = ""
+		msg\KeyPadTimer = 0.0
+		msg\KeyPadMsg = ""
 	EndIf
 	
 	If KeyHit(1) And me\EndingTimer >= 0.0 And me\SelectedEnding = -1 Then
@@ -4707,10 +4702,10 @@ Function UpdateGUI%()
 						
 						me\DeathTimer = GetINIInt2(SCP294File, Loc, "Death Timer") * 70.0
 						
-						me\BlinkEffect = Float(GetINIString2(SCP294File, Loc, "Blink Effect", 1.0)) / x2
+						me\BlinkEffect = Float(GetINIString2(SCP294File, Loc, "Blink Effect", 1.0)) * x2
 						me\BlinkEffectTimer = Float(GetINIString2(SCP294File, Loc, "Blink Effect Timer", 1.0)) * x2
 						
-						me\StaminaEffect = Float(GetINIString2(SCP294File, Loc, "Stamina Effect", 1.0)) / x2
+						me\StaminaEffect = Float(GetINIString2(SCP294File, Loc, "Stamina Effect", 1.0)) * x2
 						me\StaminaEffectTimer = Float(GetINIString2(SCP294File, Loc, "Stamina Effect Timer", 1.0)) * x2
 						
 						StrTemp = GetINIString2(SCP294File, Loc, "Refuse Message")
@@ -8836,7 +8831,7 @@ Function InitNewGame%()
 			EndIf
 			If Rand(4) = 1 Then
 				de.Decals = CreateDecal(0, EntityX(r\OBJ) + Rnd(-2.0, 2.0), r\y + 0.005, EntityZ(r\OBJ) + Rnd(-2.0, 2.0), 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.7, 0.85))
-				EntityParent(de\OBJ, PlayerRoom\OBJ)
+				EntityParent(de\OBJ, r\OBJ)
 			EndIf
 		EndIf
 		

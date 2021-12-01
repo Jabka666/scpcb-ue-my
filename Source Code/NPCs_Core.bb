@@ -2364,12 +2364,11 @@ Function UpdateNPCs%()
 							EndIf
 							
 							n\ManipulateBone = True
+							n\BoneToManipulate = "Chest"
 							
 							If n\State2 = 10.0 Then ; ~ Hacky way of applying spine pitch to specific guards.
-								n\BoneToManipulate = "Chest"
 								n\ManipulationType = 3
 							Else
-								n\BoneToManipulate = "Chest"
 								n\ManipulationType = 0
 							EndIf
 						Else
@@ -3176,6 +3175,7 @@ Function UpdateNPCs%()
 				;[End Block]
 			Case NPCType035_Tentacle
 				;[Block]
+				
 				Dist = EntityDistanceSquared(n\Collider, me\Collider)
 				
 				If Dist < PowTwo(HideDistance) Then
@@ -3288,7 +3288,12 @@ Function UpdateNPCs%()
 						; ~ The NPC was killed
 						AnimateNPC(n, 515.0, 551.0, 0.15, False)
 						If n\Frame >= 550.0 Then
-							RemoveNPC(n)
+							HideEntity(n\OBJ)
+							HideEntity(n\Collider)
+							If n\Sound <> 0 Then
+								FreeSound_Strict(n\Sound) : n\Sound = 0
+								StopChannel(n\SoundCHN) : n\SoundCHN = 0
+							EndIf
 						EndIf
 					EndIf
 				EndIf
@@ -6962,11 +6967,12 @@ Function NPCSeesPlayer%(n.NPCs, DisableSoundOnCrouch% = False)
 	EndIf
 End Function
 
-Function TriggerTeslaGateOnNPCs%(e.Events, n.NPCs)
-	Local de.Decals, p.Particles
+Function TriggerTeslaGateOnNPCs%(e.Events)
+	Local n.NPCs, de.Decals, p.Particles
 	Local i%
 	
-	If n <> Null Then
+	For n.NPCs = Each NPCs
+		If (n\NPCType = NPCType513_1) Lor (n\NPCType = NPCType372) Lor (n\NPCType = NPCType966) Then Return
 		If (Not n\IsDead) Then
 			If e\EventState = 0.0 Then
 				For i = 0 To 2
@@ -6984,7 +6990,7 @@ Function TriggerTeslaGateOnNPCs%(e.Events, n.NPCs)
 					For i = 0 To 2
 						If DistanceSquared(EntityX(n\Collider), EntityX(e\room\Objects[i], True), EntityZ(n\Collider), EntityZ(e\room\Objects[i], True)) < PowTwo(250.0 * RoomScale) Then
 							If PlayerRoom = e\room Then me\LightFlash = 0.3
-							n\CurrSpeed = 0.0
+							n\CurrSpeed = 0.0 : n\IgnorePlayer = True ; ~ Used as a placeholder
 							Select n\NPCType
 								Case NPCType106
 									;[Block]
@@ -6994,7 +7000,7 @@ Function TriggerTeslaGateOnNPCs%(e.Events, n.NPCs)
 										n\Idle = 1
 									EndIf
 									;[End Block]
-								Case NPCType049, NPCType096
+								Case NPCType049, NPCType096, NPCType173, NPCType066, NPCType1499_1
 									;[Block]
 									; ~ Skip
 									;[End Block]
@@ -7008,6 +7014,7 @@ Function TriggerTeslaGateOnNPCs%(e.Events, n.NPCs)
 					Next
 				EndIf
 			EndIf
+			
 			Select n\NPCType
 				Case NPCType106
 					;[Block]
@@ -7021,15 +7028,7 @@ Function TriggerTeslaGateOnNPCs%(e.Events, n.NPCs)
 							de\SizeChange = 0.004 : de\Timer = 90000.0
 						EndIf
 						
-						AnimateNPC(n, 259.0, 110.0, -0.1, False)
-						
-						If opt\ParticleAmount > 0 Then
-							If Rand(20 - (10 * (opt\ParticleAmount - 1))) = 1 Then
-								p.Particles = CreateParticle(0, EntityX(n\OBJ, True) + (Rnd(-0.1, 0.1)), EntityY(n\OBJ, True) + Rnd(0.4, 0.9), EntityZ(n\OBJ) + (Rnd(-0.1, 0.1)), 0.06, -0.002, 40.0)
-								p\Speed = 0.005 : p\Alpha = 0.8 : p\AlphaChange = -0.01
-								RotateEntity(p\Pvt, -Rnd(70.0, 110.0), Rnd(360.0), 0.0)
-							EndIf									
-						EndIf
+						AnimateNPC(n, 259.0, 110.0, 0.1, False)
 						
 						n\State3 = n\State3 + fps\Factor[0]
 						If n\State3 > 1000.0 Then
@@ -7044,17 +7043,25 @@ Function TriggerTeslaGateOnNPCs%(e.Events, n.NPCs)
 					EndIf
 					;[End Block]
 			End Select
+			If n\IgnorePlayer Then
+				If opt\ParticleAmount > 0 Then
+					If Rand(10 - (5 * (opt\ParticleAmount - 1))) = 1 Then
+						p.Particles = CreateParticle(0, EntityX(n\OBJ, True) + (Rnd(-0.15, 0.15)), EntityY(n\OBJ, True) + Rnd(0.3, 0.9), EntityZ(n\OBJ) + (Rnd(-0.15, 0.15)), 0.06, -0.001)
+						p\Speed = 0.005 : p\Alpha = 0.8 : p\AlphaChange = -0.01
+						RotateEntity(p\Pvt, -Rnd(70.0, 110.0), Rnd(360.0), 0.0)
+					EndIf
+				EndIf
+				n\IgnorePlayer = False
+			EndIf
 		EndIf
-	EndIf
+	Next
 End Function
 
 Function PlayerSees173%(n.NPCs)
-	If n <> Null Then
-		If (Not chs\NoTarget) And (wi\IsNVGBlinking Lor (Not (EntityInView(n\OBJ, Camera) Lor EntityInView(n\OBJ2, Camera))) Lor (me\LightBlink > 0.0 And wi\NightVision = 0) Lor (me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0)) Then
-			Return(False)
-		Else
-			Return(True)
-		EndIf
+	If (Not chs\NoTarget) And (wi\IsNVGBlinking Lor (Not (EntityInView(n\OBJ, Camera) Lor EntityInView(n\OBJ2, Camera))) Lor (me\LightBlink > 0.0 And wi\NightVision = 0) Lor (me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0)) Then
+		Return(False)
+	Else
+		Return(True)
 	EndIf
 End Function
 

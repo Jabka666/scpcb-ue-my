@@ -883,6 +883,11 @@ Function PickItem%(item.Items)
 				item\Dropped = -1
 				
 				item\ItemTemplate\Found = True
+				If item\InvSlots > 0 Then
+					For z = 0 To item\InvSlots - 1
+						If item\SecondInv[z] <> Null Then item\SecondInv[z]\ItemTemplate\Found = True
+					Next
+				EndIf
 				ItemAmount = ItemAmount + 1
 				
 				Inventory(n) = item

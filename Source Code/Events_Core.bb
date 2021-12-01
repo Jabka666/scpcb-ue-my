@@ -3363,13 +3363,11 @@ Function UpdateEvents%()
 					EndIf
 				Else
 					HideRooms(e\room)
-					If e\EventState <> 0.0 Then
-						e\EventState = 0.0
-						e\EventState2 = 0.0
-						e\EventState3 = 0.0
-						e\EventState4 = 0.0
-						e\EventStr = Float(0.0)
-					EndIf
+					e\EventState = 0.0
+					e\EventState2 = 0.0
+					e\EventState3 = 0.0
+					e\EventState4 = 0.0
+					e\EventStr = Float(0.0)
 				EndIf
 				;[End Block]
 			Case e_room2_cafeteria
@@ -3552,7 +3550,7 @@ Function UpdateEvents%()
 							TeleportEntity(it\Collider, EntityX(it\Collider), EntityY(it\Collider), EntityZ(it\Collider), -0.02, True, 10.0)
 							For i = 0 To 1
 								it2.Items = CreateItem("Quarter", "25ct", 0.0, 0.0, 0.0)
-								it2\Picked = True : it2\Dropped = -1 : it2\ItemTemplate\Found = True
+								it2\Picked = True : it2\Dropped = -1
 								it\SecondInv[i] = it2
 								HideEntity(it2\Collider)
 								EntityType(it2\Collider, HIT_ITEM)
@@ -3867,14 +3865,8 @@ Function UpdateEvents%()
 							EndIf
 						EndIf
 					EndIf
-					For n.NPCs = Each NPCs
-						Select n\NPCType
-							Case NPCType008_1, NPCType049_2, NPCType049, NPCType096, NPCType106
-								;[Block]
-								TriggerTeslaGateOnNPCs(e, n)
-								;[End Block]
-						End Select
-					Next
+					
+					TriggerTeslaGateOnNPCs(e)
 				Else
 					If (Not EntityHidden(e\room\Objects[4])) Then HideEntity(e\room\Objects[4])
 				EndIf
@@ -5628,17 +5620,17 @@ Function UpdateEvents%()
 							EndIf
 						EndIf
 					Else
-						If e\EventState <> 0.0 Then e\EventState = 0.0
+						e\EventState = 0.0
 						If e\room\NPC[0] <> Null Then
 							For i = 0 To 3
-								If e\room\NPC[i]\State <> 66.0 Then e\room\NPC[i]\State = 66.0
+								e\room\NPC[i]\State = 66.0
 							Next
 						EndIf
 					EndIf
 				Else
 					If e\room\NPC[0] <> Null Then
 						For i = 0 To 3
-							If e\room\NPC[i]\State <> 66.0 Then e\room\NPC[i]\State = 66.0
+							e\room\NPC[i]\State = 66.0
 						Next
 					EndIf
 				EndIf 
@@ -7760,7 +7752,7 @@ Function UpdateEvents%()
 						If e\EventState2 = 2.0 Then MoveToPocketDimension()
 					EndIf
 				Else
-					If e\EventState2 <> 0.0 Then e\EventState2 = 0.0
+					e\EventState2 = 0.0
 				EndIf
 				;[End Block]
 			Case e_682_roar
@@ -7860,7 +7852,7 @@ Function UpdateEvents%()
 							EndIf
 						EndIf
 					Else
-						If GrabbedEntity <> 0 Then GrabbedEntity = 0
+						GrabbedEntity = 0
 					EndIf
 					
 					Local Setting%
@@ -8325,7 +8317,7 @@ Function UpdateEvents%()
 				; ~ 3.1 = player got a memorial item + injuries (because he didn't had any item in his inventory before)
 				
 				If PlayerRoom = e\room Then
-					If GrabbedEntity <> 0 Then GrabbedEntity = 0
+					GrabbedEntity = 0
 					
 					e\EventState = 0.0
 					

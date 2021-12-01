@@ -4,7 +4,7 @@ Type MainMenu
 	Field MainMenuStr$, MainMenuStrX%, MainMenuStrY%
 	Field MainMenuTab%, PrevMainMenuTab%
 	Field ShouldDeleteGadgets%
-	Field CurrLoadGamePage%
+	Field CurrMenuPage%
 	Field OnSliderID%, OnPalette%
 	Field AchievementsMenu%
 End Type
@@ -66,6 +66,7 @@ Next
 Global RandomSeed$
 
 Global SelectedInputBox%, CursorPos% = -1
+Global SelectedMapActionMsg$
 
 Global SelectedMap$
 
@@ -106,7 +107,7 @@ Function UpdateMainMenu%()
 			Local PrevMouseDown1% = mo\MouseDown1
 			
 			mo\MouseDown1 = MouseDown(1)
-			If PrevMouseDown1 = True And (Not mo\MouseDown1) Then 
+			If PrevMouseDown1 And (Not mo\MouseDown1) Then 
 				mo\MouseUp1 = True 
 			Else
 				mo\MouseUp1 = False
@@ -118,7 +119,7 @@ Function UpdateMainMenu%()
 		If mm\ShouldDeleteGadgets
 			DeleteMenuGadgets()
 		EndIf
-		If mm\ShouldDeleteGadgets Then mm\ShouldDeleteGadgets = False
+		mm\ShouldDeleteGadgets = False
 		
 		UpdateMusic()
 		If opt\EnableSFXRelease Then AutoReleaseSounds()
@@ -292,7 +293,7 @@ Function UpdateMainMenu%()
 						;[End Block]
 					Case MainMenuTab_Load_Game
 						;[Block]
-						mm\CurrLoadGamePage = 0
+						mm\CurrMenuPage = 0
 						For sv.Save = Each Save
 							Delete(sv)
 						Next
@@ -305,14 +306,14 @@ Function UpdateMainMenu%()
 						UserTrackCheck = 0
 						UserTrackCheck2 = 0
 						
-						mm\CurrLoadGamePage = 0
+						mm\CurrMenuPage = 0
 						AntiAlias(opt\AntiAliasing)
 						mm\MainMenuTab = MainMenuTab_Default
 						;[End Block]
 					Case MainMenuTab_Load_Map ; ~ Move back to the "New Game" tab
 						;[Block]
 						mm\MainMenuTab = MainMenuTab_New_Game
-						mm\CurrLoadGamePage = 0
+						mm\CurrMenuPage = 0
 						mo\MouseHit1 = False
 						;[End Block]
 				End Select
@@ -456,25 +457,25 @@ Function UpdateMainMenu%()
 					Width = 580 * MenuScale
 					Height = 296 * MenuScale
 					
-					If mm\CurrLoadGamePage < Ceil(Float(SaveGameAmount) / 5.0) - 1 And DelSave = Null Then 
+					If mm\CurrMenuPage < Ceil(Float(SaveGameAmount) / 5.0) - 1 And DelSave = Null Then 
 						If UpdateMainMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">") Then
-							mm\CurrLoadGamePage = mm\CurrLoadGamePage + 1
+							mm\CurrMenuPage = mm\CurrMenuPage + 1
 							mm\ShouldDeleteGadgets = True
 						EndIf
 					Else
 						UpdateMainMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">", True, False, True)
 					EndIf
-					If mm\CurrLoadGamePage > 0 And DelSave = Null Then
+					If mm\CurrMenuPage > 0 And DelSave = Null Then
 						If UpdateMainMenuButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<") Then
-							mm\CurrLoadGamePage = mm\CurrLoadGamePage - 1
+							mm\CurrMenuPage = mm\CurrMenuPage - 1
 							mm\ShouldDeleteGadgets = True
 						EndIf
 					Else
 						UpdateMainMenuButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<", True, False, True)
 					EndIf
 					
-					If mm\CurrLoadGamePage > Ceil(Float(SaveGameAmount) / 5.0) - 1 Then
-						mm\CurrLoadGamePage = mm\CurrLoadGamePage - 1
+					If mm\CurrMenuPage > Ceil(Float(SaveGameAmount) / 5.0) - 1 Then
+						mm\CurrMenuPage = mm\CurrMenuPage - 1
 						mm\ShouldDeleteGadgets = True
 					EndIf
 					
@@ -484,9 +485,9 @@ Function UpdateMainMenu%()
 						
 						CurrSave = First Save
 						
-						For i = 0 To 4 + (5 * mm\CurrLoadGamePage)
+						For i = 0 To 4 + (5 * mm\CurrMenuPage)
 							If i > 0 Then CurrSave = After CurrSave
-							If i >= (5 * mm\CurrLoadGamePage) Then
+							If i >= (5 * mm\CurrMenuPage) Then
 								If DelSave = Null Then
 									If CurrSave\Version <> VersionNumber Then
 										UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Load", False, False, True, 255, 0, 0)
@@ -536,6 +537,79 @@ Function UpdateMainMenu%()
 						EndIf
 					EndIf
 					;[End Block]
+				Case MainMenuTab_Load_Map
+					;[Block]
+					x = 159 * MenuScale
+					y = 376 * MenuScale
+					
+					Width = 580 * MenuScale
+					Height = 350 * MenuScale
+					
+					If mm\CurrMenuPage < Ceil(Float(SavedMapsAmount) / 5.0) - 1 Then 
+						If UpdateMainMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">") Then
+							mm\CurrMenuPage = mm\CurrMenuPage + 1
+							mm\ShouldDeleteGadgets = True
+						EndIf
+					Else
+						UpdateMainMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">", True, False, True)
+					EndIf
+					If mm\CurrMenuPage > 0 Then
+						If UpdateMainMenuButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<") Then
+							mm\CurrMenuPage = mm\CurrMenuPage - 1
+							mm\ShouldDeleteGadgets = True
+						EndIf
+					Else
+						UpdateMainMenuButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<", True, False, True)
+					EndIf
+					
+					If mm\CurrMenuPage > Ceil(Float(SavedMapsAmount) / 5.0) - 1 Then
+						mm\CurrMenuPage = mm\CurrMenuPage - 1
+						mm\ShouldDeleteGadgets = True
+					EndIf
+					
+					If SavedMapsAmount > 0 Then 
+						x = x + (20 * MenuScale)
+						y = y + (20 * MenuScale)
+						For i = (1 + (5 * mm\CurrMenuPage)) To 5 + (5 * mm\CurrMenuPage)
+							If i <= SavedMapsAmount Then
+								If SelectedMapActionMsg = "" Then
+									If UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Load", False) Then
+										SelectedMap = SavedMaps(i - 1)
+										mm\MainMenuTab = MainMenuTab_New_Game
+										mm\ShouldDeleteGadgets = True
+									EndIf
+									
+									If UpdateMainMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Delete", False) Then
+										SelectedMapActionMsg = SavedMaps(i - 1)
+										Exit
+									EndIf
+								Else
+									UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Load", False, False, True)
+									UpdateMainMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Delete", False, False, True)
+								EndIf
+								y = y + (80 * MenuScale)
+							Else
+								Exit
+							EndIf
+						Next
+						
+						If SelectedMapActionMsg <> "" Then
+							x = 740 * MenuScale
+							y = 376 * MenuScale
+							
+							If UpdateMainMenuButton(x + (50 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Yes", False) Then
+								DeleteFile(CurrentDir() + MapCreatorPath + SelectedMapActionMsg)
+								SelectedMapActionMsg = ""
+								LoadSavedMaps()
+								mm\ShouldDeleteGadgets = True
+							EndIf
+							If UpdateMainMenuButton(x + (250 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, "No", False) Then
+								SelectedMapActionMsg = ""
+								mm\ShouldDeleteGadgets = True
+							EndIf
+						EndIf
+					EndIf
+					;[End Block]
 				Case MainMenuTab_Options_Graphics, MainMenuTab_Options_Audio, MainMenuTab_Options_Controls, MainMenuTab_Options_Advanced
 					;[Block]
 					x = 159 * MenuScale
@@ -557,483 +631,411 @@ Function UpdateMainMenu%()
 						UserTrackCheck2 = 0
 					EndIf
 					
-					If mm\MainMenuTab = MainMenuTab_Options_Graphics
-						;[Block]
-						y = y + (20 * MenuScale)
-						
-						opt\BumpEnabled = UpdateMainMenuTick(x, y, opt\BumpEnabled)
-						
-						y = y + (30 * MenuScale)
-						
-						opt\VSync = UpdateMainMenuTick(x, y, opt\VSync)
-						
-						y = y + (30 * MenuScale)
-						
-						opt\AntiAliasing = UpdateMainMenuTick(x, y, opt\AntiAliasing, opt\DisplayMode <> 0)
-						
-						y = y + (30 * MenuScale)
-						
-						opt\EnableRoomLights = UpdateMainMenuTick(x, y, opt\EnableRoomLights)
-						
-						y = y + (40 * MenuScale)
-						
-						opt\ScreenGamma = UpdateMainMenuSlideBar(x, y, 150 * MenuScale, opt\ScreenGamma * 50.0) / 50.0
-						
-						y = y + (45 * MenuScale)
-						
-						opt\ParticleAmount = UpdateMainMenuSlider3(x, y, 150 * MenuScale, opt\ParticleAmount, 2, "MINIMAL", "REDUCED", "FULL")
-						
-						y = y + (45 * MenuScale)
-						
-						opt\TextureDetails = UpdateMainMenuSlider5(x, y, 150 * MenuScale, opt\TextureDetails, 3, "0.8", "0.4", "0.0", "-0.4", "-0.8")
-						Select opt\TextureDetails
-							Case 0
-								;[Block]
-								opt\TextureDetailsLevel = 0.8
-								;[End Block]
-							Case 1
-								;[Block]
-								opt\TextureDetailsLevel = 0.4
-								;[End Block]
-							Case 2
-								;[Block]
-								opt\TextureDetailsLevel = 0.0
-								;[End Block]
-							Case 3
-								;[Block]
-								opt\TextureDetailsLevel = -0.4
-								;[End Block]
-							Case 4
-								;[Block]
-								opt\TextureDetailsLevel = -0.8
-								;[End Block]
-						End Select
-						TextureLodBias(opt\TextureDetailsLevel)
-						
-						y = y + (35 * MenuScale)
-						
-						opt\SaveTexturesInVRAM = UpdateMainMenuTick(x, y, opt\SaveTexturesInVRAM)
-						
-						y = y + (40 * MenuScale)
-						
-						opt\CurrFOV = (UpdateMainMenuSlideBar(x, y, 150 * MenuScale, opt\CurrFOV * 2.0) / 2.0)
-						opt\FOV = opt\CurrFOV + 40
-						
-						y = y + (45 * MenuScale)
-						
-						opt\Anisotropic = UpdateMainMenuSlider5(x, y, 150 * MenuScale, opt\Anisotropic, 4, "Trilinear", "2x", "4x", "8x", "16x")
-						Select opt\Anisotropic
-							Case 0
-								;[Block]
-								opt\AnisotropicLevel = 0
-								;[End Block]
-							Case 1
-								;[Block]
-								opt\AnisotropicLevel = 2
-								;[End Block]
-							Case 2
-								;[Block]
-								opt\AnisotropicLevel = 4
-								;[End Block]
-							Case 3
-								;[Block]
-								opt\AnisotropicLevel = 8
-								;[End Block]
-							Case 4
-								;[Block]
-								opt\AnisotropicLevel = 16
-								;[End Block]
-						End Select
-						TextureAnisotropic(opt\AnisotropicLevel)
-						
-						y = y + (35 * MenuScale)
-						
-						opt\Atmosphere = UpdateMainMenuTick(x, y, opt\Atmosphere)
-						;[End Block]
-					ElseIf mm\MainMenuTab = MainMenuTab_Options_Audio
-						;[Block]
-						y = y + (20 * MenuScale)
-						
-						opt\MusicVolume = UpdateMainMenuSlideBar(x, y, 150 * MenuScale, opt\MusicVolume * 100.0) / 100.0
-						
-						y = y + (40 * MenuScale)
-						
-						opt\PrevSFXVolume = UpdateMainMenuSlideBar(x, y, 150 * MenuScale, opt\SFXVolume * 100.0) / 100.0
-						opt\SFXVolume = opt\PrevSFXVolume
-						
-						y = y + (40 * MenuScale)
-						
-						opt\EnableSFXRelease = UpdateMainMenuTick(x, y, opt\EnableSFXRelease)
-						If opt\PrevEnableSFXRelease <> opt\EnableSFXRelease
-							If opt\EnableSFXRelease Then
-								For snd.Sound = Each Sound
-									For i = 0 To 31
-										If snd\Channels[i] <> 0 Then
-											If ChannelPlaying(snd\Channels[i]) Then
-												StopChannel(snd\Channels[i])
-											EndIf
-										EndIf
-									Next
-									If snd\InternalHandle <> 0 Then
-										FreeSound(snd\InternalHandle)
-										snd\InternalHandle = 0
-									EndIf
-									snd\ReleaseTime = 0
-								Next
-							Else
-								For snd.Sound = Each Sound
-									If snd\InternalHandle = 0 Then snd\InternalHandle = LoadSound(snd\Name)
-								Next
-							EndIf
-							opt\PrevEnableSFXRelease = opt\EnableSFXRelease
-						EndIf
-						
-						y = y + (30 * MenuScale)
-						
-						Local PrevEnableUserTracks% = opt\EnableUserTracks
-						
-						opt\EnableUserTracks = UpdateMainMenuTick(x, y, opt\EnableUserTracks)
-						
-						If PrevEnableUserTracks Then
-							If PrevEnableUserTracks <> opt\EnableUserTracks Then
-								mm\ShouldDeleteGadgets = True
-							EndIf
-						EndIf
-						
-						If opt\EnableUserTracks Then
-							y = y + (30 * MenuScale)
-							
-							opt\UserTrackMode = UpdateMainMenuTick(x, y, opt\UserTrackMode)
-							
-							If UpdateMainMenuButton(x - (290 * MenuScale), y + (30 * MenuScale), 210 * MenuScale, 30 * MenuScale, "Scan for User Tracks", False)
-								UserTrackCheck = 0
-								UserTrackCheck2 = 0
-								
-								Dir = ReadDir("SFX\Radio\UserTracks\")
-								Repeat
-									File = NextFile(Dir)
-									If File = "" Then Exit
-									If FileType("SFX\Radio\UserTracks\" + File) = 1 Then
-										UserTrackCheck = UserTrackCheck + 1
-										Test = LoadSound("SFX\Radio\UserTracks\" + File)
-										If Test <> 0 Then
-											UserTrackCheck2 = UserTrackCheck2 + 1
-										EndIf
-										FreeSound(Test)
-									EndIf
-								Forever
-								CloseDir(Dir)
-							EndIf
-						Else
-							UserTrackCheck = 0
-						EndIf
-						;[End Block]
-					ElseIf mm\MainMenuTab = MainMenuTab_Options_Controls
-						;[Block]
-						y = y + (20 * MenuScale)
-						
-						opt\MouseSensitivity = (UpdateMainMenuSlideBar(x, y, 150 * MenuScale, (opt\MouseSensitivity + 0.5) * 100.0) / 100.0) - 0.5
-						
-						y = y + (40 * MenuScale)
-						
-						opt\InvertMouse = UpdateMainMenuTick(x, y, opt\InvertMouse)
-						
-						y = y + (40 * MenuScale)
-						
-						opt\MouseSmoothing = UpdateMainMenuSlideBar(x, y, 150 * MenuScale, (opt\MouseSmoothing) * 50.0) / 50.0
-						
-						y = y + 70 * MenuScale
-						
-						UpdateMainMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_UP, 210.0)], 3)		
-						
-						UpdateMainMenuInputBox(x - (150 * MenuScale), y + (20 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_LEFT, 210.0)], 4)	
-						
-						UpdateMainMenuInputBox(x - (150 * MenuScale), y + (40 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_DOWN, 210.0)], 5)				
-						
-						UpdateMainMenuInputBox(x - (150 * MenuScale), y + (60 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_RIGHT, 210.0)], 6)	
-						
-						UpdateMainMenuInputBox(x - (150 * MenuScale), y + (80 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SPRINT, 210.0)], 7)
-						
-						UpdateMainMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CROUCH, 210.0)], 8)
-						
-						UpdateMainMenuInputBox(x + (140 * MenuScale), y + (20 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\BLINK, 210.0)], 9)
-						
-						UpdateMainMenuInputBox(x + (140 * MenuScale), y + (40 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\INVENTORY, 210.0)], 10)
-						
-						UpdateMainMenuInputBox(x + (140 * MenuScale), y + (60 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SAVE, 210.0)], 11)
-						
-						If opt\CanOpenConsole Then UpdateMainMenuInputBox(x + (140 * MenuScale), y + (80 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210.0)], 12)
-						
-						UpdateMainMenuInputBox(x + (140 * MenuScale), y + (100 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, 210.0)], 13)
-						
-						Local TempKey%
-						
-						For i = 0 To 227
-							If KeyHit(i) Then
-								TempKey = i
-								Exit
-							EndIf
-						Next
-						If TempKey <> 0 Then
-							Select SelectedInputBox
-								Case 3
-									;[Block]
-									key\MOVEMENT_UP = TempKey
-									;[End Block]
-								Case 4
-									;[Block]
-									key\MOVEMENT_LEFT = TempKey
-									;[End Block]
-								Case 5
-									;[Block]
-									key\MOVEMENT_DOWN = TempKey
-									;[End Block]
-								Case 6
-									;[Block]
-									key\MOVEMENT_RIGHT = TempKey
-									;[End Block]
-								Case 7
-									;[Block]
-									key\SPRINT = TempKey
-									;[End Block]
-								Case 8
-									;[Block]
-									key\CROUCH = TempKey
-									;[End Block]
-								Case 9
-									;[Block]
-									key\BLINK = TempKey
-									;[End Block]
-								Case 10
-									;[Block]
-									key\INVENTORY = TempKey
-									;[End Block]
-								Case 11
-									;[Block]
-									key\SAVE = TempKey
-									;[End Block]
-								Case 12
-									;[Block]
-									key\CONSOLE = TempKey
-									;[End Block]
-								Case 13
-									;[Block]
-									key\SCREENSHOT = TempKey
-									;[End Block]
-							End Select
-							SelectedInputBox = 0
-						EndIf
-						;[End Block]
-					ElseIf mm\MainMenuTab = MainMenuTab_Options_Advanced
-						;[Block]
-						Height = 340 * MenuScale
-						
-						If mm\CurrLoadGamePage = 0 Then 
-							If UpdateMainMenuButton(x - (310 * MenuScale) + Width - (30 * MenuScale), y + Height + (5 * MenuScale), 30 * MenuScale, 30 * MenuScale, ">", False) Then
-								mm\CurrLoadGamePage = mm\CurrLoadGamePage + 1
-								mm\ShouldDeleteGadgets = True
-							EndIf
-						Else
-							UpdateMainMenuButton(x - (310 * MenuScale) + Width - (30 * MenuScale), y + Height + (5 * MenuScale), 30 * MenuScale, 30 * MenuScale, ">", False, False, True)
-						EndIf
-						If mm\CurrLoadGamePage = 1 Then
-							If UpdateMainMenuButton(x - (310 * MenuScale), y + Height + (5 * MenuScale), 30 * MenuScale, 30 * MenuScale, "<", False) Then
-								mm\CurrLoadGamePage = mm\CurrLoadGamePage - 1
-								mm\ShouldDeleteGadgets = True
-							EndIf
-						Else
-							UpdateMainMenuButton(x - (310 * MenuScale), y + Height + (5 * MenuScale), 30 * MenuScale, 30 * MenuScale, "<", False, False, True)
-						EndIf
-						
-						If mm\CurrLoadGamePage = 0 Then
+					Select mm\MainMenuTab
+						Case MainMenuTab_Options_Graphics
+							;[Block]
 							y = y + (20 * MenuScale)
 							
-							opt\HUDEnabled = UpdateMainMenuTick(x, y, opt\HUDEnabled)
+							opt\BumpEnabled = UpdateMainMenuTick(x, y, opt\BumpEnabled)
 							
 							y = y + (30 * MenuScale)
 							
-							Local PrevCanOpenConsole% = opt\CanOpenConsole
-							
-							opt\CanOpenConsole = UpdateMainMenuTick(x, y, opt\CanOpenConsole)
-							
-							If PrevCanOpenConsole Then
-								If PrevCanOpenConsole <> opt\CanOpenConsole
-									mm\ShouldDeleteGadgets = True
-								EndIf
-							EndIf
+							opt\VSync = UpdateMainMenuTick(x, y, opt\VSync)
 							
 							y = y + (30 * MenuScale)
 							
-							If opt\CanOpenConsole Then opt\ConsoleOpening = UpdateMainMenuTick(x, y, opt\ConsoleOpening)
+							opt\AntiAliasing = UpdateMainMenuTick(x, y, opt\AntiAliasing, opt\DisplayMode <> 0)
 							
 							y = y + (30 * MenuScale)
 							
-							opt\AchvMsgEnabled = UpdateMainMenuTick(x, y, opt\AchvMsgEnabled)
-							
-							y = y + (30 * MenuScale)
-							
-							opt\AutoSaveEnabled = UpdateMainMenuTick(x, y, opt\AutoSaveEnabled, SelectedDifficulty\SaveType <> SAVEANYWHERE)
-							
-							y = y + (30 * MenuScale)
-							
-							opt\ShowFPS = UpdateMainMenuTick(x, y, opt\ShowFPS)
-							
-							y = y + (30 * MenuScale)
-							
-							Local PrevCurrFrameLimit% = opt\CurrFrameLimit > 0.0
-							
-							If UpdateMainMenuTick(x, y, opt\CurrFrameLimit > 0.0) Then
-								opt\CurrFrameLimit = UpdateMainMenuSlideBar(x - (160 * MenuScale), y + (40 * MenuScale), 150 * MenuScale, opt\CurrFrameLimit * 99.0) / 99.0
-								opt\CurrFrameLimit = Max(opt\CurrFrameLimit, 0.01)
-								opt\FrameLimit = 19 + (opt\CurrFrameLimit * 100.0)
-							Else
-								opt\CurrFrameLimit = 0.0
-								opt\FrameLimit = 0
-							EndIf
-							
-							If PrevCurrFrameLimit Then
-								If PrevCurrFrameLimit <> opt\CurrFrameLimit Then
-									mm\ShouldDeleteGadgets = True
-								EndIf
-							EndIf
-						Else
-							y = y + (20 * MenuScale)
-							
-							opt\SmoothBars = UpdateMainMenuTick(x, y, opt\SmoothBars)
-							
-							y = y + (30 * MenuScale)
-							
-							opt\PlayStartup = UpdateMainMenuTick(x, y, opt\PlayStartup)
-							
-							y = y + (30 * MenuScale)
-							
-							opt\LauncherEnabled = UpdateMainMenuTick(x, y, opt\LauncherEnabled)
-							
-							y = y + (30 * MenuScale)
-							
-							Local PrevEnableSubtitles% = opt\EnableSubtitles
-							
-							opt\EnableSubtitles = UpdateMainMenuTick(x, y, opt\EnableSubtitles)
-							
-							If PrevEnableSubtitles Then
-								If PrevEnableSubtitles <> opt\EnableSubtitles
-									mm\ShouldDeleteGadgets = True
-								EndIf
-							EndIf
-							
-							y = y + (35 * MenuScale)
-							
-							If opt\EnableSubtitles Then UpdateMainMenuPalette(mma\Palette, x - (63 * MenuScale), y)
-							
-							y = y + (30 * MenuScale)
-							
-							If opt\EnableSubtitles Then
-								opt\SubColorR = UpdateMainMenuInputBox(x - (165 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorR), 14, 3)
-								If SelectedInputBox = 14 Then
-									If opt\SubColorR > 255 Then opt\SubColorR = 255
-								EndIf
-							EndIf
-							
-							y = y + (30 * MenuScale)
-							
-							If opt\EnableSubtitles Then
-								opt\SubColorG = UpdateMainMenuInputBox(x - (165 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorG), 15, 3)
-								If SelectedInputBox = 15 Then
-									If opt\SubColorG > 255 Then opt\SubColorG = 255
-								EndIf
-							EndIf
-							
-							y = y + (30 * MenuScale)
-							
-							If opt\EnableSubtitles Then
-								opt\SubColorB = UpdateMainMenuInputBox(x - (165 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorB), 16, 3)
-								If SelectedInputBox = 16 Then
-									If opt\SubColorB > 255 Then opt\SubColorB = 255
-								EndIf
-							EndIf
+							opt\EnableRoomLights = UpdateMainMenuTick(x, y, opt\EnableRoomLights)
 							
 							y = y + (40 * MenuScale)
 							
-							If UpdateMainMenuButton(x - (290 * MenuScale), y, 165 * MenuScale, 30 * MenuScale, "RESET OPTIONS", False) Then
-								ResetOptionsINI()
-								SaveOptionsINI(True)
+							opt\ScreenGamma = UpdateMainMenuSlideBar(x, y, 150 * MenuScale, opt\ScreenGamma * 50.0) / 50.0
+							
+							y = y + (45 * MenuScale)
+							
+							opt\ParticleAmount = UpdateMainMenuSlider3(x, y, 150 * MenuScale, opt\ParticleAmount, 2, "MINIMAL", "REDUCED", "FULL")
+							
+							y = y + (45 * MenuScale)
+							
+							opt\TextureDetails = UpdateMainMenuSlider5(x, y, 150 * MenuScale, opt\TextureDetails, 3, "0.8", "0.4", "0.0", "-0.4", "-0.8")
+							Select opt\TextureDetails
+								Case 0
+									;[Block]
+									opt\TextureDetailsLevel = 0.8
+									;[End Block]
+								Case 1
+									;[Block]
+									opt\TextureDetailsLevel = 0.4
+									;[End Block]
+								Case 2
+									;[Block]
+									opt\TextureDetailsLevel = 0.0
+									;[End Block]
+								Case 3
+									;[Block]
+									opt\TextureDetailsLevel = -0.4
+									;[End Block]
+								Case 4
+									;[Block]
+									opt\TextureDetailsLevel = -0.8
+									;[End Block]
+							End Select
+							TextureLodBias(opt\TextureDetailsLevel)
+							
+							y = y + (35 * MenuScale)
+							
+							opt\SaveTexturesInVRAM = UpdateMainMenuTick(x, y, opt\SaveTexturesInVRAM)
+							
+							y = y + (40 * MenuScale)
+							
+							opt\CurrFOV = (UpdateMainMenuSlideBar(x, y, 150 * MenuScale, opt\CurrFOV * 2.0) / 2.0)
+							opt\FOV = opt\CurrFOV + 40
+							
+							y = y + (45 * MenuScale)
+							
+							opt\Anisotropic = UpdateMainMenuSlider5(x, y, 150 * MenuScale, opt\Anisotropic, 4, "Trilinear", "2x", "4x", "8x", "16x")
+							Select opt\Anisotropic
+								Case 0
+									;[Block]
+									opt\AnisotropicLevel = 0
+									;[End Block]
+								Case 1
+									;[Block]
+									opt\AnisotropicLevel = 2
+									;[End Block]
+								Case 2
+									;[Block]
+									opt\AnisotropicLevel = 4
+									;[End Block]
+								Case 3
+									;[Block]
+									opt\AnisotropicLevel = 8
+									;[End Block]
+								Case 4
+									;[Block]
+									opt\AnisotropicLevel = 16
+									;[End Block]
+							End Select
+							TextureAnisotropic(opt\AnisotropicLevel)
+							
+							y = y + (35 * MenuScale)
+							
+							opt\Atmosphere = UpdateMainMenuTick(x, y, opt\Atmosphere)
+							;[End Block]
+						Case MainMenuTab_Options_Audio
+							;[Block]
+							y = y + (20 * MenuScale)
+							
+							opt\MusicVolume = UpdateMainMenuSlideBar(x, y, 150 * MenuScale, opt\MusicVolume * 100.0) / 100.0
+							
+							y = y + (40 * MenuScale)
+							
+							opt\PrevSFXVolume = UpdateMainMenuSlideBar(x, y, 150 * MenuScale, opt\SFXVolume * 100.0) / 100.0
+							opt\SFXVolume = opt\PrevSFXVolume
+							
+							y = y + (40 * MenuScale)
+							
+							opt\EnableSFXRelease = UpdateMainMenuTick(x, y, opt\EnableSFXRelease)
+							If opt\PrevEnableSFXRelease <> opt\EnableSFXRelease
+								If opt\EnableSFXRelease Then
+									For snd.Sound = Each Sound
+										For i = 0 To 31
+											If snd\Channels[i] <> 0 Then
+												If ChannelPlaying(snd\Channels[i]) Then
+													StopChannel(snd\Channels[i])
+												EndIf
+											EndIf
+										Next
+										If snd\InternalHandle <> 0 Then
+											FreeSound(snd\InternalHandle)
+											snd\InternalHandle = 0
+										EndIf
+										snd\ReleaseTime = 0
+									Next
+								Else
+									For snd.Sound = Each Sound
+										If snd\InternalHandle = 0 Then snd\InternalHandle = LoadSound(snd\Name)
+									Next
+								EndIf
+								opt\PrevEnableSFXRelease = opt\EnableSFXRelease
 							EndIf
-						EndIf
-						;[End Block]
-					EndIf
-					;[End Block]
-				Case MainMenuTab_Load_Map
-					;[Block]
-					x = 159 * MenuScale
-					y = 376 * MenuScale
-					
-					Width = 580 * MenuScale
-					Height = 350 * MenuScale
-					
-					If mm\CurrLoadGamePage < Ceil(Float(SavedMapsAmount) / 5.0) - 1 Then 
-						If UpdateMainMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">") Then
-							mm\CurrLoadGamePage = mm\CurrLoadGamePage + 1
-							mm\ShouldDeleteGadgets = True
-						EndIf
-					Else
-						UpdateMainMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">", True, False, True)
-					EndIf
-					If mm\CurrLoadGamePage > 0 Then
-						If UpdateMainMenuButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<") Then
-							mm\CurrLoadGamePage = mm\CurrLoadGamePage - 1
-							mm\ShouldDeleteGadgets = True
-						EndIf
-					Else
-						UpdateMainMenuButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<", True, False, True)
-					EndIf
-					
-					If mm\CurrLoadGamePage > Ceil(Float(SavedMapsAmount) / 5.0) - 1 Then
-						mm\CurrLoadGamePage = mm\CurrLoadGamePage - 1
-						mm\ShouldDeleteGadgets = True
-					EndIf
-					
-					If SavedMapsAmount > 0 Then 
-						x = x + (20 * MenuScale)
-						y = y + (20 * MenuScale)
-						For i = (1 + (5 * mm\CurrLoadGamePage)) To 5 + (5 * mm\CurrLoadGamePage)
-							If i <= SavedMapsAmount Then
-								If SaveMSG = "" Then
-									If UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Load", False) Then
-										SelectedMap = SavedMaps(i - 1)
-										mm\MainMenuTab = MainMenuTab_New_Game
+							
+							y = y + (30 * MenuScale)
+							
+							Local PrevEnableUserTracks% = opt\EnableUserTracks
+							
+							opt\EnableUserTracks = UpdateMainMenuTick(x, y, opt\EnableUserTracks)
+							
+							If PrevEnableUserTracks Then
+								If PrevEnableUserTracks <> opt\EnableUserTracks Then
+									mm\ShouldDeleteGadgets = True
+								EndIf
+							EndIf
+							
+							If opt\EnableUserTracks Then
+								y = y + (30 * MenuScale)
+								
+								opt\UserTrackMode = UpdateMainMenuTick(x, y, opt\UserTrackMode)
+								
+								If UpdateMainMenuButton(x - (290 * MenuScale), y + (30 * MenuScale), 210 * MenuScale, 30 * MenuScale, "Scan for User Tracks", False)
+									UserTrackCheck = 0
+									UserTrackCheck2 = 0
+									
+									Dir = ReadDir("SFX\Radio\UserTracks\")
+									Repeat
+										File = NextFile(Dir)
+										If File = "" Then Exit
+										If FileType("SFX\Radio\UserTracks\" + File) = 1 Then
+											UserTrackCheck = UserTrackCheck + 1
+											Test = LoadSound("SFX\Radio\UserTracks\" + File)
+											If Test <> 0 Then
+												UserTrackCheck2 = UserTrackCheck2 + 1
+											EndIf
+											FreeSound(Test)
+										EndIf
+									Forever
+									CloseDir(Dir)
+								EndIf
+							Else
+								UserTrackCheck = 0
+							EndIf
+							;[End Block]
+						Case MainMenuTab_Options_Controls
+							;[Block]
+							y = y + (20 * MenuScale)
+							
+							opt\MouseSensitivity = (UpdateMainMenuSlideBar(x, y, 150 * MenuScale, (opt\MouseSensitivity + 0.5) * 100.0) / 100.0) - 0.5
+							
+							y = y + (40 * MenuScale)
+							
+							opt\InvertMouse = UpdateMainMenuTick(x, y, opt\InvertMouse)
+							
+							y = y + (40 * MenuScale)
+							
+							opt\MouseSmoothing = UpdateMainMenuSlideBar(x, y, 150 * MenuScale, (opt\MouseSmoothing) * 50.0) / 50.0
+							
+							y = y + 70 * MenuScale
+							
+							UpdateMainMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_UP, 210.0)], 3)		
+							
+							UpdateMainMenuInputBox(x - (150 * MenuScale), y + (20 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_LEFT, 210.0)], 4)	
+							
+							UpdateMainMenuInputBox(x - (150 * MenuScale), y + (40 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_DOWN, 210.0)], 5)				
+							
+							UpdateMainMenuInputBox(x - (150 * MenuScale), y + (60 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_RIGHT, 210.0)], 6)	
+							
+							UpdateMainMenuInputBox(x - (150 * MenuScale), y + (80 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SPRINT, 210.0)], 7)
+							
+							UpdateMainMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CROUCH, 210.0)], 8)
+							
+							UpdateMainMenuInputBox(x + (140 * MenuScale), y + (20 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\BLINK, 210.0)], 9)
+							
+							UpdateMainMenuInputBox(x + (140 * MenuScale), y + (40 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\INVENTORY, 210.0)], 10)
+							
+							UpdateMainMenuInputBox(x + (140 * MenuScale), y + (60 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SAVE, 210.0)], 11)
+							
+							If opt\CanOpenConsole Then UpdateMainMenuInputBox(x + (140 * MenuScale), y + (80 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210.0)], 12)
+							
+							UpdateMainMenuInputBox(x + (140 * MenuScale), y + (100 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, 210.0)], 13)
+							
+							Local TempKey%
+							
+							For i = 0 To 227
+								If KeyHit(i) Then
+									TempKey = i
+									Exit
+								EndIf
+							Next
+							If TempKey <> 0 Then
+								Select SelectedInputBox
+									Case 3
+										;[Block]
+										key\MOVEMENT_UP = TempKey
+										;[End Block]
+									Case 4
+										;[Block]
+										key\MOVEMENT_LEFT = TempKey
+										;[End Block]
+									Case 5
+										;[Block]
+										key\MOVEMENT_DOWN = TempKey
+										;[End Block]
+									Case 6
+										;[Block]
+										key\MOVEMENT_RIGHT = TempKey
+										;[End Block]
+									Case 7
+										;[Block]
+										key\SPRINT = TempKey
+										;[End Block]
+									Case 8
+										;[Block]
+										key\CROUCH = TempKey
+										;[End Block]
+									Case 9
+										;[Block]
+										key\BLINK = TempKey
+										;[End Block]
+									Case 10
+										;[Block]
+										key\INVENTORY = TempKey
+										;[End Block]
+									Case 11
+										;[Block]
+										key\SAVE = TempKey
+										;[End Block]
+									Case 12
+										;[Block]
+										key\CONSOLE = TempKey
+										;[End Block]
+									Case 13
+										;[Block]
+										key\SCREENSHOT = TempKey
+										;[End Block]
+								End Select
+								SelectedInputBox = 0
+							EndIf
+							;[End Block]
+						Case MainMenuTab_Options_Advanced
+							;[Block]
+							Height = 340 * MenuScale
+							
+							If mm\CurrMenuPage = 0 Then 
+								If UpdateMainMenuButton(x - (310 * MenuScale) + Width - (30 * MenuScale), y + Height + (5 * MenuScale), 30 * MenuScale, 30 * MenuScale, ">", False) Then
+									mm\CurrMenuPage = mm\CurrMenuPage + 1
+									mm\ShouldDeleteGadgets = True
+								EndIf
+							Else
+								UpdateMainMenuButton(x - (310 * MenuScale) + Width - (30 * MenuScale), y + Height + (5 * MenuScale), 30 * MenuScale, 30 * MenuScale, ">", False, False, True)
+							EndIf
+							If mm\CurrMenuPage = 1 Then
+								If UpdateMainMenuButton(x - (310 * MenuScale), y + Height + (5 * MenuScale), 30 * MenuScale, 30 * MenuScale, "<", False) Then
+									mm\CurrMenuPage = mm\CurrMenuPage - 1
+									mm\ShouldDeleteGadgets = True
+								EndIf
+							Else
+								UpdateMainMenuButton(x - (310 * MenuScale), y + Height + (5 * MenuScale), 30 * MenuScale, 30 * MenuScale, "<", False, False, True)
+							EndIf
+							
+							If mm\CurrMenuPage = 0 Then
+								y = y + (20 * MenuScale)
+								
+								opt\HUDEnabled = UpdateMainMenuTick(x, y, opt\HUDEnabled)
+								
+								y = y + (30 * MenuScale)
+								
+								Local PrevCanOpenConsole% = opt\CanOpenConsole
+								
+								opt\CanOpenConsole = UpdateMainMenuTick(x, y, opt\CanOpenConsole)
+								
+								If PrevCanOpenConsole Then
+									If PrevCanOpenConsole <> opt\CanOpenConsole
 										mm\ShouldDeleteGadgets = True
 									EndIf
-									
-									If UpdateMainMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Delete", False) Then
-										SaveMSG = SavedMaps(i - 1)
-										Exit
-									EndIf
-								Else
-									UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Load", False, False, True)
-									UpdateMainMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Delete", False, False, True)
 								EndIf
-								y = y + (80 * MenuScale)
+								
+								y = y + (30 * MenuScale)
+								
+								If opt\CanOpenConsole Then opt\ConsoleOpening = UpdateMainMenuTick(x, y, opt\ConsoleOpening)
+								
+								y = y + (30 * MenuScale)
+								
+								opt\AchvMsgEnabled = UpdateMainMenuTick(x, y, opt\AchvMsgEnabled)
+								
+								y = y + (30 * MenuScale)
+								
+								opt\AutoSaveEnabled = UpdateMainMenuTick(x, y, opt\AutoSaveEnabled, SelectedDifficulty\SaveType <> SAVEANYWHERE)
+								
+								y = y + (30 * MenuScale)
+								
+								opt\ShowFPS = UpdateMainMenuTick(x, y, opt\ShowFPS)
+								
+								y = y + (30 * MenuScale)
+								
+								Local PrevCurrFrameLimit% = opt\CurrFrameLimit > 0.0
+								
+								If UpdateMainMenuTick(x, y, opt\CurrFrameLimit > 0.0) Then
+									opt\CurrFrameLimit = UpdateMainMenuSlideBar(x - (160 * MenuScale), y + (40 * MenuScale), 150 * MenuScale, opt\CurrFrameLimit * 99.0) / 99.0
+									opt\CurrFrameLimit = Max(opt\CurrFrameLimit, 0.01)
+									opt\FrameLimit = 19 + (opt\CurrFrameLimit * 100.0)
+								Else
+									opt\CurrFrameLimit = 0.0
+									opt\FrameLimit = 0
+								EndIf
+								
+								If PrevCurrFrameLimit Then
+									If PrevCurrFrameLimit <> opt\CurrFrameLimit Then
+										mm\ShouldDeleteGadgets = True
+									EndIf
+								EndIf
 							Else
-								Exit
+								y = y + (20 * MenuScale)
+								
+								opt\SmoothBars = UpdateMainMenuTick(x, y, opt\SmoothBars)
+								
+								y = y + (30 * MenuScale)
+								
+								opt\PlayStartup = UpdateMainMenuTick(x, y, opt\PlayStartup)
+								
+								y = y + (30 * MenuScale)
+								
+								opt\LauncherEnabled = UpdateMainMenuTick(x, y, opt\LauncherEnabled)
+								
+								y = y + (30 * MenuScale)
+								
+								Local PrevEnableSubtitles% = opt\EnableSubtitles
+								
+								opt\EnableSubtitles = UpdateMainMenuTick(x, y, opt\EnableSubtitles)
+								
+								If PrevEnableSubtitles Then
+									If PrevEnableSubtitles <> opt\EnableSubtitles
+										mm\ShouldDeleteGadgets = True
+									EndIf
+								EndIf
+								
+								y = y + (35 * MenuScale)
+								
+								If opt\EnableSubtitles Then UpdateMainMenuPalette(mma\Palette, x - (63 * MenuScale), y)
+								
+								y = y + (30 * MenuScale)
+								
+								If opt\EnableSubtitles Then
+									opt\SubColorR = UpdateMainMenuInputBox(x - (165 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorR), 14, 3)
+									If SelectedInputBox = 14 Then
+										If opt\SubColorR > 255 Then opt\SubColorR = 255
+									EndIf
+								EndIf
+								
+								y = y + (30 * MenuScale)
+								
+								If opt\EnableSubtitles Then
+									opt\SubColorG = UpdateMainMenuInputBox(x - (165 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorG), 15, 3)
+									If SelectedInputBox = 15 Then
+										If opt\SubColorG > 255 Then opt\SubColorG = 255
+									EndIf
+								EndIf
+								
+								y = y + (30 * MenuScale)
+								
+								If opt\EnableSubtitles Then
+									opt\SubColorB = UpdateMainMenuInputBox(x - (165 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorB), 16, 3)
+									If SelectedInputBox = 16 Then
+										If opt\SubColorB > 255 Then opt\SubColorB = 255
+									EndIf
+								EndIf
+								
+								y = y + (40 * MenuScale)
+								
+								If UpdateMainMenuButton(x - (290 * MenuScale), y, 165 * MenuScale, 30 * MenuScale, "RESET OPTIONS", False) Then
+									ResetOptionsINI()
+									SaveOptionsINI(True)
+								EndIf
 							EndIf
-						Next
-						
-						If SaveMSG <> "" Then
-							x = 740 * MenuScale
-							y = 376 * MenuScale
-							
-							If UpdateMainMenuButton(x + (50 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Yes", False) Then
-								DeleteFile(CurrentDir() + MapCreatorPath + SaveMSG)
-								SaveMSG = ""
-								LoadSavedMaps()
-								mm\ShouldDeleteGadgets = True
-							EndIf
-							If UpdateMainMenuButton(x + (250 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, "No", False) Then
-								SaveMSG = ""
-								mm\ShouldDeleteGadgets = True
-							EndIf
-						EndIf
-					EndIf
+							;[End Block]
+					End Select
 					;[End Block]
 			End Select
 		EndIf
@@ -1296,7 +1298,7 @@ Function RenderMainMenu%()
 				
 				RenderFrame(x + (60 * MenuScale), y + (440 * MenuScale), Width - (120 * MenuScale), 50 * MenuScale)
 				
-				Text(x + (Width / 2), y + (465 * MenuScale), "Page " + Int(Max((mm\CurrLoadGamePage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SaveGameAmount) / 5.0))), 1)), True, True)
+				Text(x + (Width / 2), y + (465 * MenuScale), "Page " + Int(Max((mm\CurrMenuPage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SaveGameAmount) / 5.0))), 1)), True, True)
 				
 				SetFont(fo\FontID[Font_Default])
 				
@@ -1308,9 +1310,9 @@ Function RenderMainMenu%()
 					
 					CurrSave = First Save
 					
-					For i = 0 To 4 + (5 * mm\CurrLoadGamePage)
+					For i = 0 To 4 + (5 * mm\CurrMenuPage)
 						If i > 0 Then CurrSave = After CurrSave
-						If i >= (5 * mm\CurrLoadGamePage) Then
+						If i >= (5 * mm\CurrMenuPage) Then
 							RenderFrame(x, y, 540 * MenuScale, 70 * MenuScale)
 							
 							If CurrSave\Version <> VersionNumber Then
@@ -1610,9 +1612,9 @@ Function RenderMainMenu%()
 					
 					RenderFrame(x + (15 * MenuScale), y + Height + (5 * MenuScale), Width - (70 * MenuScale), 30 * MenuScale)	
 					
-					Text(x + (Width / 2), y + Height + (20 * MenuScale), "Page " + Int(Max((mm\CurrLoadGamePage + 1), 1)) + "/2", True, True)
+					Text(x + (Width / 2), y + Height + (20 * MenuScale), "Page " + Int(Max((mm\CurrMenuPage + 1), 1)) + "/2", True, True)
 					
-					If mm\CurrLoadGamePage = 0 Then
+					If mm\CurrMenuPage = 0 Then
 						y = y + (20 * MenuScale)
 						
 						Color(255, 255, 255)				
@@ -1804,7 +1806,7 @@ Function RenderMainMenu%()
 				
 				RenderFrame(x + (60 * MenuScale), y + (440 * MenuScale), Width - (120 * MenuScale), 50 * MenuScale)
 				
-				Text(x + (Width / 2), y + (465 * MenuScale), "Page " + Int(Max((mm\CurrLoadGamePage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SavedMapsAmount) / 5.0))), 1)), True, True)
+				Text(x + (Width / 2), y + (465 * MenuScale), "Page " + Int(Max((mm\CurrMenuPage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SavedMapsAmount) / 5.0))), 1)), True, True)
 				
 				SetFont(fo\FontID[Font_Default])
 				
@@ -1813,7 +1815,7 @@ Function RenderMainMenu%()
 				Else
 					x = x + (20 * MenuScale)
 					y = y + (20 * MenuScale)
-					For i = (1 + (5 * mm\CurrLoadGamePage)) To 5 + (5 * mm\CurrLoadGamePage)
+					For i = (1 + (5 * mm\CurrMenuPage)) To 5 + (5 * mm\CurrMenuPage)
 						If i <= SavedMapsAmount Then
 							RenderFrame(x, y, 540 * MenuScale, 70 * MenuScale)
 							
@@ -1833,7 +1835,7 @@ Function RenderMainMenu%()
 						EndIf
 					Next
 					
-					If SaveMSG <> "" Then
+					If SelectedMapActionMsg <> "" Then
 						x = 740 * MenuScale
 						y = 376 * MenuScale
 						RenderFrame(x, y, 420 * MenuScale, 200 * MenuScale)
