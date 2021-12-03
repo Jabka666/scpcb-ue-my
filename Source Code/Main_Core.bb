@@ -1592,7 +1592,7 @@ Function UpdateConsole%()
 					EndIf
 					
 					If StrTemp = "all" Then
-						For i = 0 To MAXACHIEVEMENTS-1
+						For i = 0 To MAXACHIEVEMENTS - 1
 							achv\Achievement[i] = True
 						Next
 						CreateConsoleMsg("All the achievements have been unlocked.")
@@ -2366,17 +2366,17 @@ Function MainLoop%()
 			
 			If me\Terminated Then
 				NullSelectedStuff()
-				me\BlurTimer = 1000.0
+				me\BlurTimer = me\KillAnimTimer * 5.0
 				If me\SelectedEnding <> -1 Then
 					MenuOpen = True
 					me\EndingTimer = (-me\Terminated) * 0.1
 				Else
-					me\KillAnimTimer = me\KillAnimTimer - fps\Factor[0]
-					If me\KillAnimTimer =< 0.0 Then MenuOpen = True
+					me\KillAnimTimer = me\KillAnimTimer + fps\Factor[0]
+					If me\KillAnimTimer >= 400.0 Then MenuOpen = True
 				EndIf
 			Else
 				If (Not EntityHidden(t\OverlayID[9])) Then HideEntity(t\OverlayID[9])
-				If me\KillAnimTimer <> 350.0 Then me\KillAnimTimer = 350.0
+				me\KillAnimTimer = 0.0
 			EndIf
 			
 			If me\FallTimer < 0.0 Then
@@ -3178,12 +3178,6 @@ Function UpdateMouseLook%()
 			
 			me\HeadDropSpeed = me\HeadDropSpeed - (0.002 * fps\Factor[0])
 		EndIf
-		
-		If opt\InvertMouse Then
-			TurnEntity(Camera, (-MouseYSpeed()) * 0.05 * fps\Factor[0], (-MouseXSpeed()) * 0.15 * fps\Factor[0], 0.0)
-		Else
-			TurnEntity(Camera, MouseYSpeed() * 0.05 * fps\Factor[0], (-MouseXSpeed()) * 0.15 * fps\Factor[0], 0.0)
-		EndIf
 	EndIf
 	
 	UpdateDust()
@@ -3273,81 +3267,7 @@ Function UpdateMouseLook%()
 		EntityTexture(t\OverlayID[0], t\OverlayTextureID[0])
 	EndIf
 	
-	Local Factor1025# = fps\Factor[0] * I_1025\State[7]
-	
-	For i = 0 To 6
-		If I_1025\State[i] > 0.0 Then
-			Select i
-				Case 0 ; ~ Common cold
-					;[Block]
-					If fps\Factor[0] > 0.0 Then 
-						UpdateCough(1000)
-					EndIf
-					me\Stamina = me\Stamina - (Factor1025 * 0.3)
-					;[End Block]
-				Case 1 ; ~ Chicken pox
-					;[Block]
-					If Rand(9000) = 1 Then CreateMsg("Your skin is feeling itchy.")
-					;[End Block]
-				Case 2 ; ~ Cancer of the lungs
-					;[Block]
-					If fps\Factor[0] > 0.0 Then 
-						UpdateCough(800)
-					EndIf
-					me\Stamina = me\Stamina - (Factor1025 * 0.1)
-					;[End Block]
-				Case 3 ; ~ Appendicitis
-					; ~ 0.035 / sec = 2.1 / min
-					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then
-						I_1025\State[i] = I_1025\State[i] + (Factor1025 * 0.0005)
-					EndIf
-					If I_1025\State[i] > 20.0 Then
-						If I_1025\State[i] - Factor1025 <= 20.0 Then CreateMsg("The pain in your stomach is becoming unbearable.")
-						me\Stamina = me\Stamina - (Factor1025 * 0.3)
-					ElseIf I_1025\State[i] > 10.0
-						If I_1025\State[i] - Factor1025 <= 10.0 Then CreateMsg("Your stomach is aching.")
-					EndIf
-					;[End Block]
-				Case 4 ; ~ Asthma
-					;[Block]
-					If me\Stamina < 35.0 Then
-						UpdateCough(Int(140.0 + me\Stamina * 8.0))
-						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0 + me\Stamina * 15.0)
-					EndIf
-					;[End Block]
-				Case 5 ; ~ Cardiac arrest
-					;[Block]
-					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then
-						I_1025\State[i] = I_1025\State[i] + (Factor1025 * 0.35)
-					EndIf
-					
-					; ~ 35 / sec
-					If I_1025\State[i] > 110.0 Then
-						me\HeartBeatRate = 0.0
-						me\BlurTimer = Max(me\BlurTimer, 500.0)
-						If I_1025\State[i] > 140.0 Then 
-							msg\DeathMsg = Chr(34) + "He died of a cardiac arrest after reading SCP-1025, that's for sure. Is there such a thing as psychosomatic cardiac arrest, or does SCP-1025 have some "
-							msg\DeathMsg = msg\DeathMsg + "anomalous properties we are not yet aware of?" + Chr(34)
-							Kill()
-						EndIf
-					Else
-						me\HeartBeatRate = Max(me\HeartBeatRate, 70.0 + I_1025\State[i])
-						me\HeartBeatVolume = 1.0
-					EndIf
-					;[End Block]
-				Case 6 ; ~ Secondary polycythemia
-					;[Block]
-					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then
-						I_1025\State[i] = I_1025\State[i] + 0.00025 * Factor1025 * (100.0 / I_1025\State[i])
-					EndIf
-					me\Stamina = Min(100.0, me\Stamina + (90.0 - me\Stamina) * I_1025\State[i] * Factor1025 * 0.00008)
-					If I_1025\State[i] > 15.0 And I_1025\State[i] - Factor1025 <= 15.0 Then
-						CreateMsg("You begin feeling energetic.")
-					EndIf
-					;[End Block]
-			End Select 
-		EndIf
-	Next
+	Update1025()
 	
 	CatchErrors("UpdateMouseLook")
 End Function
@@ -4702,10 +4622,10 @@ Function UpdateGUI%()
 						
 						me\DeathTimer = GetINIInt2(SCP294File, Loc, "Death Timer") * 70.0
 						
-						me\BlinkEffect = Float(GetINIString2(SCP294File, Loc, "Blink Effect", 1.0)) * x2
+						me\BlinkEffect = Float(GetINIString2(SCP294File, Loc, "Blink Effect", 1.0)) ^ x2
 						me\BlinkEffectTimer = Float(GetINIString2(SCP294File, Loc, "Blink Effect Timer", 1.0)) * x2
 						
-						me\StaminaEffect = Float(GetINIString2(SCP294File, Loc, "Stamina Effect", 1.0)) * x2
+						me\StaminaEffect = Float(GetINIString2(SCP294File, Loc, "Stamina Effect", 1.0)) ^ x2
 						me\StaminaEffectTimer = Float(GetINIString2(SCP294File, Loc, "Stamina Effect Timer", 1.0)) * x2
 						
 						StrTemp = GetINIString2(SCP294File, Loc, "Refuse Message")
@@ -5648,6 +5568,8 @@ Function UpdateGUI%()
 End Function
 
 Function RenderHUD%()
+	If me\Terminated Then Return
+	
 	Local x%, y%, Width%, Height%, WalkIconID%, BlinkIconID%
 	
 	Width = 200 * MenuScale
@@ -7149,7 +7071,7 @@ Function UpdateMenu%()
 					;[End Block]
 			End Select
 		ElseIf mm\AchievementsMenu <= 0 And OptionsMenu <= 0 And QuitMsg > 0 And (Not me\Terminated)
-			Local QuitButton% = 60 
+			Local QuitButton% = 85
 			
 			If SelectedDifficulty\SaveType = SAVEONQUIT Lor SelectedDifficulty\SaveType = SAVEANYWHERE Then
 				Local RN$ = PlayerRoom\RoomTemplate\Name
@@ -7158,8 +7080,8 @@ Function UpdateMenu%()
 				If RN = "cont1_173_intro" Lor RN = "gate_b" Lor RN = "gate_a" Then AbleToSave = False
 				If (Not CanSave) Then AbleToSave = False
 				If AbleToSave Then
-					QuitButton = 140
-					If UpdateMainMenuButton(x, y + (60 * MenuScale), 430 * MenuScale, 60 * MenuScale, "Save & Quit") Then
+					QuitButton = 160
+					If UpdateMainMenuButton(x, y + (85 * MenuScale), 430 * MenuScale, 60 * MenuScale, "Save & Quit") Then
 						me\DropSpeed = 0.0
 						SaveGame(CurrSave\Name)
 						NullGame()
@@ -7177,7 +7099,7 @@ Function UpdateMenu%()
 				Return
 			EndIf
 			
-			If UpdateMainMenuButton(x + (101 * MenuScale), y + 344 * MenuScale, 230 * MenuScale, 60 * MenuScale, "Back") Then
+			If UpdateMainMenuButton(x + (101 * MenuScale), y + 385 * MenuScale, 230 * MenuScale, 60 * MenuScale, "Back") Then
 				mm\AchievementsMenu = 0
 				OptionsMenu = 0
 				QuitMsg = 0
@@ -7185,7 +7107,7 @@ Function UpdateMenu%()
 				mm\ShouldDeleteGadgets = True
 			EndIf
 		Else
-			If UpdateMainMenuButton(x + (101 * MenuScale), y + 344 * MenuScale, 230 * MenuScale, 60 * MenuScale, "Back") Then
+			If UpdateMainMenuButton(x + (101 * MenuScale), y + 345 * MenuScale, 230 * MenuScale, 60 * MenuScale, "Back") Then
 				mm\AchievementsMenu = 0
 				OptionsMenu = 0
 				QuitMsg = 0
@@ -7195,13 +7117,13 @@ Function UpdateMenu%()
 			
 			If mm\AchievementsMenu > 0 Then
 				If mm\AchievementsMenu <= Floor(Float(MAXACHIEVEMENTS - 1) / 12.0) Then 
-					If UpdateMainMenuButton(x + (341 * MenuScale), y + (344 * MenuScale), 50 * MenuScale, 60 * MenuScale, ">") Then
+					If UpdateMainMenuButton(x + (341 * MenuScale), y + (345 * MenuScale), 50 * MenuScale, 60 * MenuScale, ">") Then
 						mm\AchievementsMenu = mm\AchievementsMenu + 1
 						mm\ShouldDeleteGadgets = True
 					EndIf
 				EndIf
 				If mm\AchievementsMenu > 1 Then
-					If UpdateMainMenuButton(x + (41 * MenuScale), y + (344 * MenuScale), 50 * MenuScale, 60 * MenuScale, "<") Then
+					If UpdateMainMenuButton(x + (41 * MenuScale), y + (345 * MenuScale), 50 * MenuScale, 60 * MenuScale, "<") Then
 						mm\AchievementsMenu = mm\AchievementsMenu - 1
 						mm\ShouldDeleteGadgets = True
 					EndIf
@@ -7213,7 +7135,7 @@ Function UpdateMenu%()
 		
 		If mm\AchievementsMenu <= 0 And OptionsMenu <= 0 And QuitMsg <= 0 Then
 			If (Not me\Terminated) Then	
-				y = y + (72 * MenuScale)
+				y = y + (75 * MenuScale)
 				
 				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "Resume", True, True) Then
 					MenuOpen = False
@@ -7282,7 +7204,7 @@ Function UpdateMenu%()
 				
 				y = y + (75 * MenuScale)
 			Else
-				y = y + (104 * MenuScale)
+				y = y + (75 * MenuScale)
 				
 				If SelectedDifficulty\SaveType <> NOSAVES Then
 					If GameSaved Then
@@ -7324,7 +7246,7 @@ Function UpdateMenu%()
 					Else
 						UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "Load Game", True, False, True)
 					EndIf
-					y = y + (80 * MenuScale)
+					y = y + (75 * MenuScale)
 				EndIf
 				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "Quit to Menu") Then
 					NullGame()
@@ -7332,7 +7254,7 @@ Function UpdateMenu%()
 					ResetInput()
 					Return
 				EndIf
-				y = y + (80 * MenuScale)
+				y = y + (75 * MenuScale)
 			EndIf
 			
 			If (Not me\Terminated) And (Not MainMenuOpen) Then
@@ -7739,18 +7661,11 @@ Function RenderMenu%()
 		y = y + (10 * MenuScale)
 		
 		If mm\AchievementsMenu <= 0 And OptionsMenu <= 0 And QuitMsg <= 0 Then
-			If (Not me\Terminated) Then	
-				y = y + (297 * MenuScale)
+			If me\Terminated Then	
+				y = y + (165 * MenuScale)
 				If SelectedDifficulty\SaveType <> NOSAVES Then
 					y = y + (75 * MenuScale)
 				EndIf
-			Else
-				y = y + (184 * MenuScale)
-				If SelectedDifficulty\SaveType <> NOSAVES Then
-					y = y + (80 * MenuScale)
-				EndIf
-			EndIf
-			If me\Terminated Then
 				SetFont(fo\FontID[Font_Default])
 				RowText(msg\DeathMsg, x, y, 430 * MenuScale, 600 * MenuScale)
 			EndIf
@@ -8045,6 +7960,7 @@ Function UpdateCredits%()
 		ShouldPlay = 21
 		CurrSave = Null
 		ResetInput()
+		Return
 	EndIf
 End Function
 
@@ -10079,6 +9995,84 @@ Function Update409%()
 	EndIf
 End Function
 
+Function Update1025%()
+	Local i%
+	Local Factor1025# = fps\Factor[0] * I_1025\State[7]
+	
+	For i = 0 To 6
+		If I_1025\State[i] > 0.0 Then
+			Select i
+				Case 0 ; ~ Common cold
+					;[Block]
+					If fps\Factor[0] > 0.0 Then 
+						UpdateCough(1000)
+					EndIf
+					me\Stamina = me\Stamina - (Factor1025 * 0.3)
+					;[End Block]
+				Case 1 ; ~ Chicken pox
+					;[Block]
+					If Rand(9000) = 1 Then CreateMsg("Your skin is feeling itchy.")
+					;[End Block]
+				Case 2 ; ~ Cancer of the lungs
+					;[Block]
+					If fps\Factor[0] > 0.0 Then 
+						UpdateCough(800)
+					EndIf
+					me\Stamina = me\Stamina - (Factor1025 * 0.1)
+					;[End Block]
+				Case 3 ; ~ Appendicitis
+					; ~ 0.035 / sec = 2.1 / min
+					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then
+						I_1025\State[i] = I_1025\State[i] + (Factor1025 * 0.0005)
+					EndIf
+					If I_1025\State[i] > 20.0 Then
+						If I_1025\State[i] - Factor1025 <= 20.0 Then CreateMsg("The pain in your stomach is becoming unbearable.")
+						me\Stamina = me\Stamina - (Factor1025 * 0.3)
+					ElseIf I_1025\State[i] > 10.0
+						If I_1025\State[i] - Factor1025 <= 10.0 Then CreateMsg("Your stomach is aching.")
+					EndIf
+					;[End Block]
+				Case 4 ; ~ Asthma
+					;[Block]
+					If me\Stamina < 35.0 Then
+						UpdateCough(Int(140.0 + me\Stamina * 8.0))
+						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0 + me\Stamina * 15.0)
+					EndIf
+					;[End Block]
+				Case 5 ; ~ Cardiac arrest
+					;[Block]
+					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then
+						I_1025\State[i] = I_1025\State[i] + (Factor1025 * 0.35)
+					EndIf
+					
+					; ~ 35 / sec
+					If I_1025\State[i] > 110.0 Then
+						me\HeartBeatRate = 0.0
+						me\BlurTimer = Max(me\BlurTimer, 500.0)
+						If I_1025\State[i] > 140.0 Then 
+							msg\DeathMsg = Chr(34) + "He died of a cardiac arrest after reading SCP-1025, that's for sure. Is there such a thing as psychosomatic cardiac arrest, or does SCP-1025 have some "
+							msg\DeathMsg = msg\DeathMsg + "anomalous properties we are not yet aware of?" + Chr(34)
+							Kill()
+						EndIf
+					Else
+						me\HeartBeatRate = Max(me\HeartBeatRate, 70.0 + I_1025\State[i])
+						me\HeartBeatVolume = 1.0
+					EndIf
+					;[End Block]
+				Case 6 ; ~ Secondary polycythemia
+					;[Block]
+					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then
+						I_1025\State[i] = I_1025\State[i] + 0.00025 * Factor1025 * (100.0 / I_1025\State[i])
+					EndIf
+					me\Stamina = Min(100.0, me\Stamina + (90.0 - me\Stamina) * I_1025\State[i] * Factor1025 * 0.00008)
+					If I_1025\State[i] > 15.0 And I_1025\State[i] - Factor1025 <= 15.0 Then
+						CreateMsg("You begin feeling energetic.")
+					EndIf
+					;[End Block]
+			End Select 
+		EndIf
+	Next
+End Function
 Function UpdateLeave1499%()
 	Local r.Rooms, it.Items, r2.Rooms, r1499.Rooms
 	Local i%

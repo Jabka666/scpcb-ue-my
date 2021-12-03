@@ -5539,9 +5539,7 @@ Function UpdateMTFUnit%(n.NPCs)
 					n\State2 = n\State2 - fps\Factor[0]
 					If NPCSeesPlayer(n) = 1 Then
 						; ~ If close enough, start shooting at the player
-						Local DetectDistance# = EntityDistanceSquared(n\Collider, me\Collider)
-						
-						If DetectDistance < 49.0 Then
+						If Dist < 25.0 Then
 							Local Angle# = VectorYaw(EntityX(me\Collider) - EntityX(n\Collider), 0.0, EntityZ(me\Collider) - EntityZ(n\Collider))
 							
 							RotateEntity(n\Collider, 0.0, CurveAngle(Angle, EntityYaw(n\Collider), 10.0), 0.0, True)
@@ -5561,7 +5559,7 @@ Function UpdateMTFUnit%(n.NPCs)
 										PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 										MoveEntity(Pvt, 0.0632, 0.84925, 0.5451)
 										
-										Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((25.0 / Sqr(DetectDistance)) * (1.0 / Sqr(DetectDistance))), True)
+										Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((25.0 / Sqr(Dist)) * (1.0 / Sqr(Dist))), True)
 										n\Reload = 7.0
 										
 										FreeEntity(Pvt)
