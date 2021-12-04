@@ -168,7 +168,7 @@ Function GetINIFloat2#(File$, Section$, Parameter$, DefaultValue# = 0.0)
 	Return(Float(GetINIString2(File, Section, Parameter, DefaultValue)))
 End Function
 
-Function GetINISectionLocation%(File$, Section$)
+Function GetINISectionLocation%(File$, Section$, SetInput294% = False)
 	Local Temp%
 	Local f% = ReadFile(File)
 	
@@ -181,14 +181,15 @@ Function GetINISectionLocation%(File$, Section$)
 		
 		n = n + 1
 		If Left(StrTemp, 1) = "[" Then
-			StrTemp = Lower(StrTemp)
-			Temp = Instr(StrTemp, Section)
-			If Temp > 0 Then
+			Temp = Instr(Lower(StrTemp), Section)
+			While Temp > 0
 				If (Mid(StrTemp, Temp - 1, 1) = "[" Lor Mid(StrTemp, Temp - 1, 1) = "|") And (Mid(StrTemp, Temp + Len(Section), 1) = "]" Lor Mid(StrTemp, Temp + Len(Section), 1) = "|") Then
 					CloseFile(f)
+					If SetInput294 Then I_294\ToInput = Mid(StrTemp, Temp, Len(Section))
 					Return(n)
 				EndIf
-			EndIf
+				Temp = Instr(Lower(StrTemp), Section, Temp + Len(Section) + 1)
+			Wend
 		EndIf
 	Wend
 	

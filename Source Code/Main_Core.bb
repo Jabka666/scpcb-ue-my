@@ -4586,17 +4586,14 @@ Function UpdateGUI%()
 				Case "cup"
 					;[Block]
 					If CanUseItem(False, True) Then
-						SelectedItem\Name = Trim(Lower(SelectedItem\Name))
-						If Left(SelectedItem\Name, Min(6, Len(SelectedItem\Name))) = "cup of" Then
-							SelectedItem\Name = Right(SelectedItem\Name, Len(SelectedItem\Name) - 7)
-						ElseIf Left(SelectedItem\Name, Min(8, Len(SelectedItem\Name))) = "a cup of" 
-							SelectedItem\Name = Right(SelectedItem\Name, Len(SelectedItem\Name) - 9)
+						StrTemp = Trim(Lower(SelectedItem\name))
+						If Left(StrTemp, 6) = "cup of" Then
+							StrTemp = Right(StrTemp, Len(StrTemp) - 7)
+						ElseIf Left(StrTemp, 8) = "a cup of" 
+							StrTemp = Right(StrTemp, Len(StrTemp) - 9)
 						EndIf
 						
-						; ~ The state of refined items is more than 1.0 (fine setting increases it by 1, very fine doubles it)
-						x2 = SelectedItem\State
-						
-						Local Loc% = GetINISectionLocation(SCP294File, SelectedItem\Name)
+						Local Loc% = GetINISectionLocation(SCP294File, StrTemp)
 						
 						StrTemp = GetINIString2(SCP294File, Loc, "Message")
 						If StrTemp <> "" Then CreateMsg(StrTemp)
@@ -4605,8 +4602,12 @@ Function UpdateGUI%()
 							msg\DeathMsg = GetINIString2(SCP294File, Loc, "Death Message")
 							If GetINIInt2(SCP294File, Loc, "Lethal") Then Kill()
 						EndIf
-						me\BlurTimer = GetINIInt2(SCP294File, Loc, "Blur") * 70.0
-						If me\VomitTimer = 0.0 Then me\VomitTimer = GetINIInt2(SCP294File, Loc, "Vomit")
+						me\BlurTimer = Max(GetINIInt2(SCP294File, Loc, "Blur") * 70.0, 0.0)
+						If me\VomitTimer = 0.0 Then
+							me\VomitTimer = GetINIInt2(SCP294File, Loc, "Vomit")
+						Else
+							me\VomitTimer = Min(me\VomitTimer, GetINIInt2(SCP294File, Loc, "Vomit"))
+						EndIf
 						me\CameraShakeTimer = GetINIString2(SCP294File, Loc, "Camera Shake")
 						me\Injuries = Max(me\Injuries + GetINIInt2(SCP294File, Loc, "Damage"), 0.0)
 						me\Bloodloss = Max(me\Bloodloss + GetINIInt2(SCP294File, Loc, "Blood Loss"), 0.0)
@@ -4620,14 +4621,20 @@ Function UpdateGUI%()
 						
 						If GetINIInt2(SCP294File, Loc, "Crystallization") Then I_409\Timer = 1.0
 						
-						me\DeathTimer = GetINIInt2(SCP294File, Loc, "Death Timer") * 70.0
+						If me\DeathTimer = 0.0 Then
+							me\DeathTimer = GetINIInt2(SCP294File, Loc, "Death Timer") * 70.0
+						Else
+							me\DeathTimer = Min(me\DeathTimer, GetINIInt2(SCP294File, Loc, "Death Timer") * 70.0)
+						EndIf
 						
-						me\BlinkEffect = Float(GetINIString2(SCP294File, Loc, "Blink Effect", 1.0)) ^ x2
-						me\BlinkEffectTimer = Float(GetINIString2(SCP294File, Loc, "Blink Effect Timer", 1.0)) * x2
-						
-						me\StaminaEffect = Float(GetINIString2(SCP294File, Loc, "Stamina Effect", 1.0)) ^ x2
-						me\StaminaEffectTimer = Float(GetINIString2(SCP294File, Loc, "Stamina Effect Timer", 1.0)) * x2
-						
+						StrTemp = GetINIString2(SCP294File, Loc, "Blink Effect")
+						If StrTemp <> "" Then me\BlinkEffect = Float(StrTemp) ^ SelectedItem\state
+						StrTemp = GetINIString2(SCP294File, Loc, "Blink Effect Timer")
+						If StrTemp <> "" Then me\BlinkEffectTimer = Float(StrTemp) * SelectedItem\state
+						StrTemp = GetINIString2(SCP294File, Loc, "Stamina Effect")
+						If StrTemp <> "" Then me\StaminaEffect = Float(StrTemp) ^ SelectedItem\state
+						StrTemp = GetINIString2(SCP294File, Loc, "Stamina Effect Timer")
+						If StrTemp <> "" Then me\StaminaEffectTimer = Float(StrTemp) * SelectedItem\state
 						StrTemp = GetINIString2(SCP294File, Loc, "Refuse Message")
 						If StrTemp <> "" Then
 							CreateMsg(StrTemp)
@@ -9203,13 +9210,13 @@ Function Update294%()
 			xTemp = Floor((ScaledMouseX() - x - (228 * MenuScale)) / (35.5 * MenuScale))
 			yTemp = Floor((ScaledMouseY() - y - (342 * MenuScale)) / (36.5 * MenuScale))
 			
+			Temp = False
+			
 			If yTemp >= 0 And yTemp < 5 Then
 				If xTemp >= 0 And xTemp < 10 Then
 					PlaySound_Strict(ButtonSFX)
 					
 					StrTemp = ""
-					
-					Temp = False
 					
 					Select yTemp
 						Case 0
@@ -9359,8 +9366,6 @@ Function Update294%()
 			
 			I_294\ToInput = I_294\ToInput + StrTemp
 			
-			I_294\ToInput = Left(I_294\ToInput, Min(Len(I_294\ToInput), 15))
-			
 			If Temp And I_294\ToInput <> "" Then ; ~ Dispense
 				I_294\ToInput = Trim(Lower(I_294\ToInput))
 				If Left(I_294\ToInput, Min(7, Len(I_294\ToInput))) = "cup of " Then
@@ -9370,7 +9375,7 @@ Function Update294%()
 				EndIf
 				
 				If I_294\ToInput <> "" Then
-					Local Loc% = GetINISectionLocation(SCP294File, I_294\ToInput)
+					Local Loc% = GetINISectionLocation(SCP294File, I_294\ToInput, True)
 				EndIf
 				
 				If Loc > 0 Then
@@ -9453,7 +9458,7 @@ Function Render294%()
 	Temp = True
 	If PlayerRoom\SoundCHN <> 0 Then Temp = False
 	
-	Text(x + (907 * MenuScale), y + (185 * MenuScale), I_294\ToInput, True, True)
+	Text(x + (905 * MenuScale), y + (185 * MenuScale), Right(I_294\ToInput, 13), True, True)
 	
 	If Temp Then
 		If mo\MouseHit2 Lor (Not I_294\Using) Then 
@@ -9686,7 +9691,7 @@ Function UpdateVomit%()
 	Local Pvt%
 	
 	If me\CameraShakeTimer > 0.0 Then
-		me\CameraShakeTimer = me\CameraShakeTimer - (fps\Factor[0] / 70.0)
+		me\CameraShakeTimer = Max(me\CameraShakeTimer - (fps\Factor[0] / 70.0), 0.0)
 		me\CameraShake = 2.0
 	EndIf
 	
@@ -10073,6 +10078,7 @@ Function Update1025%()
 		EndIf
 	Next
 End Function
+
 Function UpdateLeave1499%()
 	Local r.Rooms, it.Items, r2.Rooms, r1499.Rooms
 	Local i%
