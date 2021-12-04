@@ -291,15 +291,15 @@ Function CalculateRoomExtents%(r.Rooms)
 	
 	; ~ Convert from the rooms local space to world space
 	TFormVector(r\RoomTemplate\MinX, r\RoomTemplate\MinY, r\RoomTemplate\MinZ, r\OBJ, 0)
-	r\MinX = TFormedX() + ShrinkAmount + r\x
-	r\MinY = TFormedY() + ShrinkAmount
-	r\MinZ = TFormedZ() + ShrinkAmount + r\z
+	r\MinX = TFormedX() + r\x
+	r\MinY = TFormedY()
+	r\MinZ = TFormedZ() + r\z
 	
 	; ~ Convert from the rooms local space to world space
 	TFormVector(r\RoomTemplate\MaxX, r\RoomTemplate\MaxY, r\RoomTemplate\MaxZ, r\OBJ, 0)
-	r\MaxX = TFormedX() - ShrinkAmount + r\x
-	r\MaxY = TFormedY() - ShrinkAmount
-	r\MaxZ = TFormedZ() - ShrinkAmount + r\z
+	r\MaxX = TFormedX() - r\x
+	r\MaxY = TFormedY()
+	r\MaxZ = TFormedZ() - r\z
 	
 	If r\MinX > r\MaxX Then
 		Local TempX# = r\MaxX
@@ -313,6 +313,10 @@ Function CalculateRoomExtents%(r.Rooms)
 		r\MaxZ = r\MinZ
 		r\MinZ = TempZ
 	EndIf
+	
+	r\MinX = r\MinX + ShrinkAmount : r\MaxX = r\MaxX - ShrinkAmount
+	r\MinY = r\MinY + ShrinkAmount : r\MaxY = r\MaxY - ShrinkAmount
+	r\MinZ = r\MinZ + ShrinkAmount : r\MaxZ = r\MaxZ - ShrinkAmount
 End Function
 
 Function CheckRoomOverlap%(r1.Rooms, r2.Rooms)

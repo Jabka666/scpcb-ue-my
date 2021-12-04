@@ -4627,6 +4627,7 @@ Function UpdateGUI%()
 							me\DeathTimer = Min(me\DeathTimer, GetINIInt2(SCP294File, Loc, "Death Timer") * 70.0)
 						EndIf
 						
+						; ~ The state of refined items is more than 1.0 (fine setting increases it by 1, very fine doubles it)
 						StrTemp = GetINIString2(SCP294File, Loc, "Blink Effect")
 						If StrTemp <> "" Then me\BlinkEffect = Float(StrTemp) ^ SelectedItem\state
 						StrTemp = GetINIString2(SCP294File, Loc, "Blink Effect Timer")
