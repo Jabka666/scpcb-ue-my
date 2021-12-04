@@ -3047,7 +3047,7 @@ Function UpdateMoving%()
 			de.Decals = CreateDecal(Rand(16, 17), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.03, 0.08) * Min(me\Injuries, 2.5))
 			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + Rnd(0.008, 0.009)
 			EntityParent(de\OBJ, PlayerRoom\OBJ)
-			TempCHN = PlaySound_Strict(DripSFX[Rand(0, 2)])
+			TempCHN = PlaySound_Strict(DripSFX[Rand(0, 3)])
 			ChannelVolume(TempCHN, Rnd(0.0, 0.8) * opt\SFXVolume)
 			ChannelPitch(TempCHN, Rand(20000, 30000))
 			
@@ -5836,7 +5836,7 @@ Function RenderGUI%()
 						If me\BlinkTimer < -3.0 And me\BlinkTimer > -10.0 Then
 							If (Not e\Img) Then
 								If me\BlinkTimer > -5.0 And Rand(30) = 1 Then
-									PlaySound_Strict(DripSFX[Rand(0, 5)])
+									PlaySound_Strict(DripSFX[Rand(0, 3)])
 									If (Not e\Img) Then
 										e\Img = LoadImage_Strict("GFX\npcs\scp_106_face.png")
 										e\Img = ScaleImage2(e\Img, MenuScale, MenuScale)
@@ -9535,7 +9535,7 @@ Function Use427%()
 			de.Decals = CreateDecal(18, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.03, 0.08) * 2.0)
 			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + 0.009
 			EntityParent(de\OBJ, PlayerRoom\OBJ)
-			TempCHN = PlaySound_Strict(DripSFX[Rand(0, 2)])
+			TempCHN = PlaySound_Strict(DripSFX[Rand(0, 3)])
 			ChannelVolume(TempCHN, Rnd(0.0, 0.8) * opt\SFXVolume)
 			ChannelPitch(TempCHN, Rand(20000, 30000))
 			FreeEntity(Pvt)

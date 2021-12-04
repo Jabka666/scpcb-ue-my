@@ -9110,7 +9110,7 @@ Function SetChunkDataValues%()
 	
 	For i = 0 To 63
 		For j = 0 To 63
-			CHUNKDATA[(i * 64) + j] = Rand(0, GetINIInt("Data\1499chunks.ini", "general", "count"))
+			CHUNKDATA[i + (j * 64)] = Rand(0, GetINIInt("Data\1499chunks.ini", "general", "count"))
 		Next
 	Next
 	
@@ -9233,7 +9233,7 @@ Function UpdateChunks%(r.Rooms, ChunkPartAmount%, SpawnNPCs% = True)
 			EndIf
 		Next
 		If (Not ChunkFound) Then
-			CurrChunkData = CHUNKDATA[Abs((((x + 32) / 40) Mod 64) * 64) + (Abs(((z + 32) / 40) Mod 64))]
+			CurrChunkData = CHUNKDATA[Abs(((x + 32) / 40) Mod 64) + Abs((((z + 32) / 40) Mod 64) * 64)]
 			ch2.Chunk = CreateChunk(CurrChunkData, x, y, z)
 			ch2\IsSpawnChunk = False
 		EndIf
