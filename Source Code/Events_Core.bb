@@ -9566,6 +9566,8 @@ Function UpdateEndings%()
 						
 						SecondaryLightOn = True
 						
+						HideDistance = 60.0
+						
 						CreateConsoleMsg("")
 						CreateConsoleMsg("WARNING! Teleporting away from this area may cause bugs or crashing.", 255, 0, 0)
 						CreateConsoleMsg("")
