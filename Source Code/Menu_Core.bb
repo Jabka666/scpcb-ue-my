@@ -346,7 +346,7 @@ Function UpdateMainMenu%()
 					If SelectedMap = "" Then
 						RandomSeed = UpdateMainMenuInputBox(x + (150 * MenuScale), y + (55 * MenuScale), 200 * MenuScale, 30 * MenuScale, RandomSeed, 2, 15)	
 					Else
-						If UpdateMainMenuButton(x + (370 * MenuScale), y + (55 * MenuScale), 120 * MenuScale, 30 * MenuScale, "Deselect", False) Then
+						If UpdateMainMenuButton(x + (370 * MenuScale), y + (55 * MenuScale), 120 * MenuScale, 30 * MenuScale, "DESELECT", False) Then
 							mm\ShouldDeleteGadgets = True
 							SelectedMap = ""
 						EndIf
@@ -696,7 +696,7 @@ Function UpdateMainMenu%()
 							
 							y = y + (45 * MenuScale)
 							
-							opt\Anisotropic = UpdateMainMenuSlider5(x, y, 150 * MenuScale, opt\Anisotropic, 4, "Trilinear", "2x", "4x", "8x", "16x")
+							opt\Anisotropic = UpdateMainMenuSlider5(x, y, 150 * MenuScale, opt\Anisotropic, 4, "TRILINEAR", "2x", "4x", "8x", "16x")
 							Select opt\Anisotropic
 								Case 0
 									;[Block]
@@ -1183,7 +1183,6 @@ Function RenderMainMenu%()
 				
 				Text(x + (20 * MenuScale), y + (25 * MenuScale), "Name:")
 				
-				Color(255, 255, 255)
 				If SelectedMap = "" Then
 					TempStr = "Map seed:"
 				Else
@@ -1197,7 +1196,8 @@ Function RenderMainMenu%()
 						TempStr2 = SelectedMap
 					EndIf
 					Text(x + (250 * MenuScale), y + (70 * MenuScale), TempStr2, True, True)
-				EndIf	
+				EndIf
+				Color(255, 255, 255)
 				Text(x + (20 * MenuScale), y + (65 * MenuScale), TempStr)
 				
 				Color(255, 255, 255)
@@ -3506,4 +3506,5 @@ Function RenderMapCreatorTooltip%(x%, y%, Width%, Height%, MapName$)
 End Function
 
 ;~IDEal Editor Parameters:
+;~F#27B
 ;~C#Blitz3D

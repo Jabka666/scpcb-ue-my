@@ -2250,6 +2250,7 @@ Function MainLoop%()
 			UpdateMouseLook()
 			UpdateMoving()
 			InFacility = CheckForPlayerInFacility()
+			CurrStepSFX = 0
 			If PlayerRoom\RoomTemplate\Name = "dimension_1499"
 				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100
 					UpdateDimension1499()

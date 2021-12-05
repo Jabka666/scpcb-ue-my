@@ -827,8 +827,6 @@ Function UpdateEvents%()
 	Local x#, y#, z#, xTemp#, yTemp#, b%, BT%, SF%, TexName$
 	Local Angle#, RoomExists%
 	
-	CurrStepSFX = 0
-	
 	UpdateRooms()
 	
 	For e.Events = Each Events
