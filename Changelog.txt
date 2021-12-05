@@ -52,6 +52,14 @@ Bug Fixes:
 - Fixed removal voice lines being spammable by repeatedly approaching and backing away from SCP-049.
 - Fixed MAV after killing the SCP-035's tentacle.
 - Fixed an ability to move the head after death.
+- Fixed MAV in Pocket Dimension.
+- Fixed 4th blood drop sound not playing.
+- Fixes for pause menu:
+	- Fixed "YOU DIED" screen sometimes appearing in place of "THE END" screen.
+	- Fixed being able to unpause for one frame while dead.
+	- Fixed mouse click not working in credits.
+	- Fixed credits lines moves too fast and not smoothly.
+	- Fixed the wrong menu would appear for one frame when switching menus, or components of one menu would stay on the screen for one frame when switching menus.
 
 - Tiny fix for SCP-372's AI.
 - Tiny fixes for location of the pause menu buttons.

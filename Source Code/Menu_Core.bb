@@ -404,7 +404,7 @@ Function UpdateMainMenu%()
 						EndIf
 					EndIf
 					
-					If UpdateMainMenuButton(x, y + Height + (20 * MenuScale), 160 * MenuScale, 75 * MenuScale, "Load map", False) Then
+					If UpdateMainMenuButton(x, y + Height + (20 * MenuScale), 160 * MenuScale, 75 * MenuScale, "LOAD MAP", False) Then
 						mm\MainMenuTab = MainMenuTab_Load_Map
 						LoadSavedMaps()
 					EndIf
@@ -490,9 +490,9 @@ Function UpdateMainMenu%()
 							If i >= (5 * mm\CurrMenuPage) Then
 								If DelSave = Null Then
 									If CurrSave\Version <> VersionNumber Then
-										UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Load", False, False, True, 255, 0, 0)
+										UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "LOAD", False, False, True, 255, 0, 0)
 									Else
-										If UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Load", False) Then
+										If UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "LOAD", False) Then
 											LoadEntities()
 											LoadSounds()
 											LoadGame(CurrSave\Name)
@@ -503,17 +503,17 @@ Function UpdateMainMenu%()
 										EndIf
 									EndIf
 									
-									If UpdateMainMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Delete", False) Then
+									If UpdateMainMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "DELETE", False) Then
 										DelSave = CurrSave
 										Exit
 									EndIf
 								Else
 									If CurrSave\Version <> VersionNumber Then
-										UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Load", False, False, True, 255, 0, 0)
+										UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "LOAD", False, False, True, 255, 0, 0)
 									Else
-										UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Load", False, False, True)
+										UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "LOAD", False, False, True)
 									EndIf
-									UpdateMainMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Delete", False, False, True)
+									UpdateMainMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "DELETE", False, False, True)
 								EndIf
 								If CurrSave = Last Save Then
 									Exit
@@ -526,11 +526,11 @@ Function UpdateMainMenu%()
 							x = 740 * MenuScale
 							y = 376 * MenuScale
 							
-							If UpdateMainMenuButton(x + (50 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Yes", False) Then
+							If UpdateMainMenuButton(x + (50 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, "YES", False) Then
 								DeleteGame(DelSave)
 								mm\ShouldDeleteGadgets = True
 							EndIf
-							If UpdateMainMenuButton(x + (250 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, "No", False) Then
+							If UpdateMainMenuButton(x + (250 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, "NO", False) Then
 								DelSave = Null
 								mm\ShouldDeleteGadgets = True
 							EndIf
@@ -573,19 +573,19 @@ Function UpdateMainMenu%()
 						For i = (1 + (5 * mm\CurrMenuPage)) To 5 + (5 * mm\CurrMenuPage)
 							If i <= SavedMapsAmount Then
 								If SelectedMapActionMsg = "" Then
-									If UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Load", False) Then
+									If UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "LOAD", False) Then
 										SelectedMap = SavedMaps(i - 1)
 										mm\MainMenuTab = MainMenuTab_New_Game
 										mm\ShouldDeleteGadgets = True
 									EndIf
 									
-									If UpdateMainMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Delete", False) Then
+									If UpdateMainMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "DELETE", False) Then
 										SelectedMapActionMsg = SavedMaps(i - 1)
 										Exit
 									EndIf
 								Else
-									UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Load", False, False, True)
-									UpdateMainMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Delete", False, False, True)
+									UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "LOAD", False, False, True)
+									UpdateMainMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "DELETE", False, False, True)
 								EndIf
 								y = y + (80 * MenuScale)
 							Else
@@ -597,13 +597,13 @@ Function UpdateMainMenu%()
 							x = 740 * MenuScale
 							y = 376 * MenuScale
 							
-							If UpdateMainMenuButton(x + (50 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, "Yes", False) Then
+							If UpdateMainMenuButton(x + (50 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, "YES", False) Then
 								DeleteFile(CurrentDir() + MapCreatorPath + SelectedMapActionMsg)
 								SelectedMapActionMsg = ""
 								LoadSavedMaps()
 								mm\ShouldDeleteGadgets = True
 							EndIf
-							If UpdateMainMenuButton(x + (250 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, "No", False) Then
+							If UpdateMainMenuButton(x + (250 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, "NO", False) Then
 								SelectedMapActionMsg = ""
 								mm\ShouldDeleteGadgets = True
 							EndIf
@@ -1185,18 +1185,20 @@ Function RenderMainMenu%()
 				
 				Color(255, 255, 255)
 				If SelectedMap = "" Then
-					Text(x + (20 * MenuScale), y + (65 * MenuScale), "Map seed:")
+					TempStr = "Map seed:"
 				Else
-					Text(x + (20 * MenuScale), y + (65 * MenuScale), "Selected map:")
+					TempStr = "Selected map:"
 					RenderFrame(x + (150 * MenuScale), y + (55 * MenuScale), 200 * MenuScale, 30 * MenuScale, (x Mod 256), (y Mod 256), True)
 					
 					Color(255, 0, 0)
 					If Len(SelectedMap) > 15 Then
-						Text(x + (250 * MenuScale), y + (70 * MenuScale), Left(SelectedMap, 14) + "...", True, True)
+						TempStr2 = Left(SelectedMap, 14) + "..."
 					Else
-						Text(x + (250 * MenuScale), y + (70 * MenuScale), SelectedMap, True, True)
+						TempStr2 = SelectedMap
 					EndIf
+					Text(x + (250 * MenuScale), y + (70 * MenuScale), TempStr2, True, True)
 				EndIf	
+				Text(x + (20 * MenuScale), y + (65 * MenuScale), TempStr)
 				
 				Color(255, 255, 255)
 				Text(x + (20 * MenuScale), y + (115 * MenuScale), "Enable intro sequence:")
@@ -1250,22 +1252,22 @@ Function RenderMainMenu%()
 					Select SelectedDifficulty\OtherFactors
 						Case EASY
 							;[Block]
-							TempStr2 = "Easy"
+							TempStr = "Easy"
 							;[End Block]
 						Case NORMAL
 							;[Block]
-							TempStr2 = "Normal"
+							TempStr = "Normal"
 							;[End Block]
 						Case HARD
 							;[Block]
-							TempStr2 = "Hard"
+							TempStr = "Hard"
 							;[End Block]
 						Case EXTREME
 							;[Block]
-							TempStr2 = "Extreme"
+							TempStr = "Extreme"
 							;[End Block]
 					End Select
-					Text(x + (200 * MenuScale), y + (276 * MenuScale), "Other difficulty factors: " + TempStr2)
+					Text(x + (200 * MenuScale), y + (276 * MenuScale), "Other difficulty factors: " + TempStr)
 				Else
 					RowText(SelectedDifficulty\Description, x + (160 * MenuScale), y + (180 * MenuScale), 390 * MenuScale, 200 * MenuScale)					
 				EndIf
@@ -1298,7 +1300,7 @@ Function RenderMainMenu%()
 				
 				RenderFrame(x + (60 * MenuScale), y + (440 * MenuScale), Width - (120 * MenuScale), 50 * MenuScale)
 				
-				Text(x + (Width / 2), y + (465 * MenuScale), "Page " + Int(Max((mm\CurrMenuPage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SaveGameAmount) / 5.0))), 1)), True, True)
+				Text(x + (Width / 2), y + (465 * MenuScale), "PAGE " + Int(Max((mm\CurrMenuPage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SaveGameAmount) / 5.0))), 1)), True, True)
 				
 				SetFont(fo\FontID[Font_Default])
 				
@@ -1612,7 +1614,7 @@ Function RenderMainMenu%()
 					
 					RenderFrame(x + (15 * MenuScale), y + Height + (5 * MenuScale), Width - (70 * MenuScale), 30 * MenuScale)	
 					
-					Text(x + (Width / 2), y + Height + (20 * MenuScale), "Page " + Int(Max((mm\CurrMenuPage + 1), 1)) + "/2", True, True)
+					Text(x + (Width / 2), y + Height + (20 * MenuScale), "PAGE " + Int(Max((mm\CurrMenuPage + 1), 1)) + "/2", True, True)
 					
 					If mm\CurrMenuPage = 0 Then
 						y = y + (20 * MenuScale)
@@ -1806,7 +1808,7 @@ Function RenderMainMenu%()
 				
 				RenderFrame(x + (60 * MenuScale), y + (440 * MenuScale), Width - (120 * MenuScale), 50 * MenuScale)
 				
-				Text(x + (Width / 2), y + (465 * MenuScale), "Page " + Int(Max((mm\CurrMenuPage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SavedMapsAmount) / 5.0))), 1)), True, True)
+				Text(x + (Width / 2), y + (465 * MenuScale), "PAGE " + Int(Max((mm\CurrMenuPage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SavedMapsAmount) / 5.0))), 1)), True, True)
 				
 				SetFont(fo\FontID[Font_Default])
 				

@@ -60,7 +60,7 @@ Function AchievementTooltip%(AchvNo%)
 	Text(ScaledMouseX() + (20 * MenuScale) + (Width / 2), ScaledMouseY() + (55 * MenuScale), achv\AchievementDescs[AchvNo], True, True)
 End Function
 
-Function DrawAchvIMG%(x%, y%, AchvNo%)
+Function RenderAchvIMG%(x%, y%, AchvNo%)
 	Local Row%
 	Local Scale# = opt\GraphicHeight / 768.0
 	Local SeparationConst2# = 76.0 * Scale

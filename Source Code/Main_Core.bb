@@ -3557,7 +3557,7 @@ Function UpdateGUI%()
 		msg\KeyPadMsg = ""
 	EndIf
 	
-	If KeyHit(1) And me\EndingTimer >= 0.0 And me\SelectedEnding = -1 Then
+	If KeyHit(1) And me\EndingTimer >= 0.0 And me\SelectedEnding = -1 And me\KillAnimTimer <= 400.0 Then
 		If MenuOpen Then
 			ResumeSounds()
 			If OptionsMenu <> 0 Then SaveOptionsINI()
@@ -6774,10 +6774,8 @@ Function UpdateMenu%()
 		
 		If (Not mo\MouseDown1) Then mm\OnSliderID = 0
 		
-		If mm\AchievementsMenu <= 0 And OptionsMenu <= 0 And QuitMsg <= 0 Then
-			; ~ Just save this line, ok?
-		ElseIf mm\AchievementsMenu <= 0 And OptionsMenu > 0 And QuitMsg <= 0 And (Not me\Terminated)
-			If UpdateMainMenuButton(x + (101 * MenuScale), y + (460 * MenuScale), 230 * MenuScale, 60 * MenuScale, "Back") Then
+		If mm\AchievementsMenu <= 0 And OptionsMenu > 0 And QuitMsg <= 0 Then
+			If UpdateMainMenuButton(x + (101 * MenuScale), y + (460 * MenuScale), 230 * MenuScale, 60 * MenuScale, "BACK") Then
 				mm\AchievementsMenu = 0
 				OptionsMenu = 0
 				QuitMsg = 0
@@ -7078,7 +7076,7 @@ Function UpdateMenu%()
 					EndIf
 					;[End Block]
 			End Select
-		ElseIf mm\AchievementsMenu <= 0 And OptionsMenu <= 0 And QuitMsg > 0 And (Not me\Terminated)
+		ElseIf mm\AchievementsMenu <= 0 And OptionsMenu <= 0 And QuitMsg > 0
 			Local QuitButton% = 85
 			
 			If SelectedDifficulty\SaveType = SAVEONQUIT Lor SelectedDifficulty\SaveType = SAVEANYWHERE Then
@@ -7089,7 +7087,7 @@ Function UpdateMenu%()
 				If (Not CanSave) Then AbleToSave = False
 				If AbleToSave Then
 					QuitButton = 160
-					If UpdateMainMenuButton(x, y + (85 * MenuScale), 430 * MenuScale, 60 * MenuScale, "Save & Quit") Then
+					If UpdateMainMenuButton(x, y + (85 * MenuScale), 430 * MenuScale, 60 * MenuScale, "SAVE & QUIT") Then
 						me\DropSpeed = 0.0
 						SaveGame(CurrSave\Name)
 						NullGame()
@@ -7100,22 +7098,22 @@ Function UpdateMenu%()
 				EndIf
 			EndIf
 			
-			If UpdateMainMenuButton(x, y + (QuitButton * MenuScale), 430 * MenuScale, 60 * MenuScale, "Quit") Then
+			If UpdateMainMenuButton(x, y + (QuitButton * MenuScale), 430 * MenuScale, 60 * MenuScale, "QUIT") Then
 				NullGame()
 				CurrSave = Null
 				ResetInput()
 				Return
 			EndIf
 			
-			If UpdateMainMenuButton(x + (101 * MenuScale), y + 385 * MenuScale, 230 * MenuScale, 60 * MenuScale, "Back") Then
+			If UpdateMainMenuButton(x + (101 * MenuScale), y + 385 * MenuScale, 230 * MenuScale, 60 * MenuScale, "BACK") Then
 				mm\AchievementsMenu = 0
 				OptionsMenu = 0
 				QuitMsg = 0
 				mo\MouseHit1 = False
 				mm\ShouldDeleteGadgets = True
 			EndIf
-		Else
-			If UpdateMainMenuButton(x + (101 * MenuScale), y + 345 * MenuScale, 230 * MenuScale, 60 * MenuScale, "Back") Then
+		ElseIf mm\AchievementsMenu > 0 And OptionsMenu <= 0 And QuitMsg <= 0
+			If UpdateMainMenuButton(x + (101 * MenuScale), y + 345 * MenuScale, 230 * MenuScale, 60 * MenuScale, "BACK") Then
 				mm\AchievementsMenu = 0
 				OptionsMenu = 0
 				QuitMsg = 0
@@ -7137,15 +7135,13 @@ Function UpdateMenu%()
 					EndIf
 				EndIf
 			EndIf
-		EndIf
-		
-		y = y + (10 * MenuScale)
-		
-		If mm\AchievementsMenu <= 0 And OptionsMenu <= 0 And QuitMsg <= 0 Then
-			If (Not me\Terminated) Then	
+		Else
+			y = y + (10 * MenuScale)
+			
+			If (Not me\Terminated) Lor me\SelectedEnding <> - 1 Then	
 				y = y + (75 * MenuScale)
 				
-				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "Resume", True, True) Then
+				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "RESUME", True, True) Then
 					MenuOpen = False
 					ResumeSounds()
 					StopMouseMovement()
@@ -7157,7 +7153,7 @@ Function UpdateMenu%()
 				
 				If SelectedDifficulty\SaveType <> NOSAVES Then
 					If GameSaved Then
-						If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "Load Game") Then
+						If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "LOAD GAME") Then
 							RenderLoading(0, "GAME FILES")
 							
 							MenuOpen = False
@@ -7193,30 +7189,35 @@ Function UpdateMenu%()
 							Return
 						EndIf
 					Else
-						UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "Load Game", True, False, True)
+						UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "LOAD GAME", True, False, True)
 					EndIf
 					y = y + (75 * MenuScale)
 				EndIf
 				
-				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "Achievements") Then 
+				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "ACHIEVEMENTS") Then 
 					mm\AchievementsMenu = 1
 					mm\ShouldDeleteGadgets = True
 				EndIf
 				
 				y = y + (75 * MenuScale)
 				
-				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "Options") Then 
+				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "OPTIONS") Then 
 					OptionsMenu = 1
 					mm\ShouldDeleteGadgets = True
 				EndIf
 				
 				y = y + (75 * MenuScale)
+				
+				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "QUIT") Then
+					QuitMsg = 1
+					mm\ShouldDeleteGadgets = True
+				EndIf
 			Else
 				y = y + (75 * MenuScale)
 				
 				If SelectedDifficulty\SaveType <> NOSAVES Then
 					If GameSaved Then
-						If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "Load Game") Then
+						If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "LOAD GAME") Then
 							RenderLoading(0, "GAME FILES")
 							
 							MenuOpen = False
@@ -7252,23 +7253,15 @@ Function UpdateMenu%()
 							Return
 						EndIf
 					Else
-						UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "Load Game", True, False, True)
+						UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "LOAD GAME", True, False, True)
 					EndIf
 					y = y + (75 * MenuScale)
 				EndIf
-				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "Quit to Menu") Then
+				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "QUIT TO MENU") Then
 					NullGame()
 					CurrSave = Null
 					ResetInput()
 					Return
-				EndIf
-				y = y + (75 * MenuScale)
-			EndIf
-			
-			If (Not me\Terminated) And (Not MainMenuOpen) Then
-				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "Quit") Then
-					QuitMsg = 1
-					mm\ShouldDeleteGadgets = True
 				EndIf
 			EndIf
 		EndIf
@@ -7298,50 +7291,29 @@ Function RenderMenu%()
 		
 		Color(255, 255, 255)
 		
+		If mm\AchievementsMenu > 0 Then
+			TempStr = "ACHIEVEMENTS"
+		ElseIf OptionsMenu > 0 Then
+			TempStr = "OPTIONS"
+		ElseIf QuitMsg > 0 Then
+			TempStr = "QUIT?"
+		ElseIf (Not me\Terminated) Lor me\SelectedEnding <> -1
+			TempStr = "PAUSED"
+		Else
+			TempStr = "YOU DIED"
+		EndIf		
+		SetFont(fo\FontID[Font_Default_Big])
+		Text(x + (Width / 2) + (40 * MenuScale), y + (30 * MenuScale), TempStr, True)
+		SetFont(fo\FontID[Font_Default])
+		
 		x = x + (132 * MenuScale)
 		y = y + (122 * MenuScale)
 		
-		If mm\AchievementsMenu > 0 Then
-			SetFont(fo\FontID[Font_Default_Big])
-			Text(x, y - (77 * MenuScale), "ACHIEVEMENTS", False, True)
-			SetFont(fo\FontID[Font_Default])
-		ElseIf OptionsMenu > 0 Then
-			SetFont(fo\FontID[Font_Default_Big])
-			Text(x, y - (77 * MenuScale), "OPTIONS", False, True)
-			SetFont(fo\FontID[Font_Default])
-		ElseIf QuitMsg > 0 Then
-			SetFont(fo\FontID[Font_Default_Big])
-			Text(x, y - (77 * MenuScale), "QUIT?", False, True)
-			SetFont(fo\FontID[Font_Default])
-		ElseIf (Not me\Terminated) Then
-			SetFont(fo\FontID[Font_Default_Big])
-			Text(x, y - (77 * MenuScale), "PAUSED", False, True)
-			SetFont(fo\FontID[Font_Default])
-		Else
-			SetFont(fo\FontID[Font_Default_Big])
-			Text(x, y - (77 * MenuScale), "YOU DIED", False, True)
-			SetFont(fo\FontID[Font_Default])
-		EndIf		
-		
-		Local AchvXIMG% = x + (22.0 * MenuScale)
+		Local AchvXIMG% = x + (22 * MenuScale)
 		Local Scale# = opt\GraphicHeight / 768.0
-		Local SeparationConst% = 76.0 * Scale
+		Local SeparationConst% = 76 * Scale
 		
-		If mm\AchievementsMenu <= 0 And OptionsMenu <= 0 And QuitMsg <= 0
-			SetFont(fo\FontID[Font_Default])
-			Text(x, y, "Difficulty: " + SelectedDifficulty\Name)
-			Text(x, y + (20 * MenuScale), "Save: " + CurrSave\Name)
-			If SelectedMap = "" Then
-				TempStr = "Map seed: " + RandomSeed
-			Else
-				If Len(SelectedMap) > 15 Then
-					TempStr = "Selected map: " + Left(SelectedMap, 14) + "..."
-				Else
-					TempStr = "Selected map: " + SelectedMap
-				EndIf
-			EndIf
-			Text(x, y + (40 * MenuScale), TempStr)
-		ElseIf mm\AchievementsMenu <= 0 And OptionsMenu > 0 And QuitMsg <= 0 And (Not me\Terminated)
+		If mm\AchievementsMenu <= 0 And OptionsMenu > 0 And QuitMsg <= 0 Then
 			Color(0, 255, 0)
 			If OptionsMenu = 1
 				Rect(x - (10 * MenuScale), y - (5 * MenuScale), 110 * MenuScale, 40 * MenuScale, True)
@@ -7642,13 +7614,13 @@ Function RenderMenu%()
 					EndIf
 					;[End Block]
 			End Select
-		ElseIf mm\AchievementsMenu <= 0 And OptionsMenu <= 0 And QuitMsg > 0 And (Not me\Terminated)
+		ElseIf mm\AchievementsMenu <= 0 And OptionsMenu <= 0 And QuitMsg > 0
 			; ~ Just save this line, ok?
-		Else
+		ElseIf mm\AchievementsMenu > 0 And OptionsMenu <= 0 And QuitMsg <= 0
 			If mm\AchievementsMenu > 0 Then
 				For i = 0 To 11
 					If i + ((mm\AchievementsMenu - 1) * 12) < MAXACHIEVEMENTS Then
-						DrawAchvIMG(AchvXIMG, y + ((i / 4) * 120 * MenuScale), i + ((mm\AchievementsMenu - 1) * 12))
+						RenderAchvIMG(AchvXIMG, y + ((i / 4) * 120 * MenuScale), i + ((mm\AchievementsMenu - 1) * 12))
 					Else
 						Exit
 					EndIf
@@ -7664,20 +7636,30 @@ Function RenderMenu%()
 					EndIf
 				Next
 			EndIf
-		EndIf
-		
-		y = y + (10 * MenuScale)
-		
-		If mm\AchievementsMenu <= 0 And OptionsMenu <= 0 And QuitMsg <= 0 Then
-			If me\Terminated Then	
-				y = y + (165 * MenuScale)
+		Else
+			SetFont(fo\FontID[Font_Default])
+			Text(x, y, "Difficulty: " + SelectedDifficulty\Name)
+			Text(x, y + (20 * MenuScale), "Save: " + CurrSave\Name)
+			If SelectedMap = "" Then
+				TempStr = "Map seed: " + RandomSeed
+			Else
+				If Len(SelectedMap) > 15 Then
+					TempStr = "Selected map: " + Left(SelectedMap, 14) + "..."
+				Else
+					TempStr = "Selected map: " + SelectedMap
+				EndIf
+			EndIf
+			Text(x, y + (40 * MenuScale), TempStr)
+			
+			If me\Terminated And me\SelectedEnding = -1 Then
+				y = y + (175 * MenuScale)
 				If SelectedDifficulty\SaveType <> NOSAVES Then
 					y = y + (75 * MenuScale)
 				EndIf
 				SetFont(fo\FontID[Font_Default])
 				RowText(msg\DeathMsg, x, y, 430 * MenuScale, 600 * MenuScale)
 			EndIf
-		EndIf
+		EndIf	
 		
 		RenderMenuButtons()
 		RenderMenuTicks()
@@ -7755,7 +7737,7 @@ Function UpdateEnding%()
 				x = mo\Viewport_Center_X - (Width / 2)
 				y = mo\Viewport_Center_Y - (Height / 2)
 				
-				If mm\AchievementsMenu = 0 Then 
+				If mm\AchievementsMenu =< 0 Then 
 					x = x + (132 * MenuScale)
 					y = y + (122 * MenuScale)
 					
@@ -7840,7 +7822,7 @@ Function RenderEnding%()
 				Text(x + (Width / 2) + (40 * MenuScale), y + (20 * MenuScale), "THE END", True)
 				SetFont(fo\FontID[Font_Default])
 				
-				If mm\AchievementsMenu = 0 Then 
+				If mm\AchievementsMenu =< 0 Then 
 					x = x + (132 * MenuScale)
 					y = y + (122 * MenuScale)
 					
@@ -7958,7 +7940,7 @@ Function UpdateCredits%()
 		EndIf
 	EndIf
 	
-	If GetKey() <> 0 Then me\CreditsTimer = -1.0
+	If GetKey() <> 0 Lor MouseHit(1) Then me\CreditsTimer = -1.0
 	
 	If me\CreditsTimer = -1.0 Then
 		DeInitLoadingTextColor(ltc)
@@ -8014,7 +7996,7 @@ Function RenderCredits%()
 			Color(Max(Min(-me\CreditsTimer, 255.0), 0.0), Max(Min(-me\CreditsTimer, 255.0), 0.0), Max(Min(-me\CreditsTimer, 255.0), 0.0))
 		EndIf
 	EndIf
-	If me\CreditsTimer <> 0.0
+	If me\CreditsTimer <> 0.0 Then
 		For cl.CreditsLine = Each CreditsLine
 			If cl\Stay Then
 				SetFont(fo\FontID[Font_Credits])
@@ -8029,6 +8011,8 @@ Function RenderCredits%()
 	
 	RenderLoadingText(20 * MenuScale, opt\GraphicHeight - (35 * MenuScale))
 	
+	Flip(True)
+	
 	If me\CreditsTimer = -1.0 Then
 		FreeFont(fo\FontID[Font_Credits])
 		FreeFont(fo\FontID[Font_Credits_Big])
@@ -8038,6 +8022,7 @@ Function RenderCredits%()
 		If me\EndingScreen <> 0 Then
 			FreeImage(me\EndingScreen) : me\EndingScreen = 0
 		EndIf
+		Return
 	EndIf
 End Function
 
