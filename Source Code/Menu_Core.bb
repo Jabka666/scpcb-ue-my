@@ -94,27 +94,7 @@ Function UpdateMainMenu%()
 	While fps\Accumulator > 0.0
 		fps\Accumulator = fps\Accumulator - TICK_DURATION
 		
-		If Input_ResetTime > 0.0 Then
-			Input_ResetTime = Max(Input_ResetTime - fps\Factor[0], 0.0)
-		Else
-			mo\DoubleClick = False
-			mo\MouseHit1 = MouseHit(1)
-			If mo\MouseHit1 Then
-				If MilliSecs2() - mo\LastMouseHit1 < 800 Then mo\DoubleClick = True
-				mo\LastMouseHit1 = MilliSecs2()
-			EndIf
-			
-			Local PrevMouseDown1% = mo\MouseDown1
-			
-			mo\MouseDown1 = MouseDown(1)
-			If PrevMouseDown1 And (Not mo\MouseDown1) Then 
-				mo\MouseUp1 = True 
-			Else
-				mo\MouseUp1 = False
-			EndIf
-			
-			mo\MouseHit2 = MouseHit(2)
-		EndIf
+		UpdateMouseInput()
 		
 		If mm\ShouldDeleteGadgets
 			DeleteMenuGadgets()
@@ -3506,5 +3486,5 @@ Function RenderMapCreatorTooltip%(x%, y%, Width%, Height%, MapName$)
 End Function
 
 ;~IDEal Editor Parameters:
-;~F#27B
+;~F#267
 ;~C#Blitz3D
