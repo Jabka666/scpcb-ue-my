@@ -1094,6 +1094,7 @@ Function UpdateNPCs%()
 												Else
 													PlaySound_Strict(OldManSFX[3])
 													me\FallTimer = Min(-1.0, me\FallTimer)
+													ShowEntity(me\Head)
 													PositionEntity(me\Head, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True), True)
 													ResetEntity(me\Head)
 													RotateEntity(me\Head, 0.0, EntityYaw(Camera) + Rnd(-45.0, 45.0), 0.0)
@@ -7185,6 +7186,7 @@ Function MoveToPocketDimension%()
 	
 	For r.Rooms = Each Rooms
 		If r\RoomTemplate\Name = "dimension_106" Then
+			HideEntity(me\Head)
 			ShowEntity(me\Collider)
 			PlaySound_Strict(Use914SFX)
 			PlaySound_Strict(OldManSFX[5])

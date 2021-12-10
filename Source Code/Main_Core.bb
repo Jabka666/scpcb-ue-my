@@ -2663,6 +2663,7 @@ Function ResetNegativeStats%(Revive% = False)
 		me\FallTimer = 0.0
 		MenuOpen = False
 		
+		HideEntity(me\Head)
 		ShowEntity(me\Collider)
 		
 		me\Terminated = False
@@ -2754,27 +2755,23 @@ Function UpdateMoving%()
 	
 	Local Temp#, Temp3%
 	
-	If (Not me\Terminated) Then
-		If PlayerRoom\RoomTemplate\Name <> "dimension_106" Then 
-			If (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) And (Not chs\NoClip) Then
-				If me\Stamina < 5.0 Then
-					Temp = 0
+	If (Not me\Terminated) And (Not chs\NoClip) And (PlayerRoom\RoomTemplate\Name <> "dimension_106") And (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) Then
+		If me\Stamina < 5.0 Then
+			Temp = 0
+			If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp = 1
+			If (Not ChannelPlaying(BreathCHN)) Then BreathCHN = PlaySound_Strict(BreathSFX((Temp), 0))
+		ElseIf me\Stamina < 40.0
+			If (Not BreathCHN) Then
+				Temp = 0.0
+				If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp = 1
+				BreathCHN = PlaySound_Strict(BreathSFX((Temp), Rand(1, 3)))
+				ChannelVolume(BreathCHN, Min((70.0 - me\Stamina) / 70.0, 1.0) * opt\SFXVolume)
+			Else
+				If (Not ChannelPlaying(BreathCHN)) Then
+					Temp = 0.0
 					If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp = 1
-					If (Not ChannelPlaying(BreathCHN)) Then BreathCHN = PlaySound_Strict(BreathSFX((Temp), 0))
-				ElseIf me\Stamina < 40.0
-					If (Not BreathCHN) Then
-						Temp = 0.0
-						If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp = 1
-						BreathCHN = PlaySound_Strict(BreathSFX((Temp), Rand(1, 3)))
-						ChannelVolume(BreathCHN, Min((70.0 - me\Stamina) / 70.0, 1.0) * opt\SFXVolume)
-					Else
-						If (Not ChannelPlaying(BreathCHN)) Then
-							Temp = 0.0
-							If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp = 1
-							BreathCHN = PlaySound_Strict(BreathSFX((Temp), Rand(1, 3)))
-							ChannelVolume(BreathCHN, Min((70.0 - me\Stamina) / 70.0, 1.0) * opt\SFXVolume)		
-						EndIf
-					EndIf
+					BreathCHN = PlaySound_Strict(BreathSFX((Temp), Rand(1, 3)))
+					ChannelVolume(BreathCHN, Min((70.0 - me\Stamina) / 70.0, 1.0) * opt\SFXVolume)		
 				EndIf
 			EndIf
 		EndIf

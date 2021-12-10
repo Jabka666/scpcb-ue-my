@@ -6395,20 +6395,20 @@ Function UpdateEvents%()
 				If e\EventState < 0.0 Then
 					If e\EventState > (-70.0) * 4.0 Then
 						If me\FallTimer >= 0.0 Then 
-							me\FallTimer = Min(-1.0, me\FallTimer)
+							ShowEntity(me\Head)
 							PositionEntity(me\Head, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True), True)
 							ResetEntity(me\Head)
 							RotateEntity(me\Head, 0.0, EntityYaw(Camera) + Rnd(-45.0, 45.0), 0.0)
+							me\FallTimer = Min(-1.0, me\FallTimer)
 						ElseIf me\FallTimer < -230.0
-							me\FallTimer = -231.0
-							me\BlinkTimer = 0.0
 							e\EventState = e\EventState - fps\Factor[0]
 							
 							If e\EventState <= (-70.0) * 4.0 Then 
 								UpdateTimer = 0.0
 								UpdateDoors()
 								UpdateRooms()
-								If EntityHidden(me\Collider) Then ShowEntity(me\Collider)
+								HideEntity(me\Head)
+								ShowEntity(me\Collider)
 								me\DropSpeed = 0.0
 								me\BlinkTimer = -10.0
 								me\FallTimer = 0.0
@@ -6450,14 +6450,11 @@ Function UpdateEvents%()
 								
 								me\Zombie = True
 							EndIf
+							me\BlinkTimer = 0.0 : me\FallTimer = -231.0
 						EndIf
 					Else
-						me\BlurTimer = 800.0
-						me\ForceMove = 0.5
-						me\Injuries = Max(2.0, me\Injuries)
-						me\Bloodloss = 0.0
-						I_008\Timer = 0.0
-						I_409\Timer = 0.0
+						me\BlurTimer = 800.0 : me\ForceMove = 0.5 : me\Injuries = Max(2.0, me\Injuries) : me\Bloodloss = 0.0
+						I_008\Timer = 0.0 : I_409\Timer = 0.0
 						
 						Pvt = CreatePivot()
 						PositionEntity(Pvt, EntityX(e\room\NPC[1]\Collider), EntityY(e\room\NPC[1]\Collider) + 0.2, EntityZ(e\room\NPC[1]\Collider))

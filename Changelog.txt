@@ -29,7 +29,6 @@ Bug Fixes:
 - Fixed an issue where Dr. Maynard's code could be the same as Dr. Harp's.
 - Fixed a first aid kit that damages the player if the injuries are < 0.5.
 - Fixed a bug where fog color was stored in memory every time.
-- Fixed the room counting system doesn't determine SCP-1499's dimension as a room.
 - Fixed ticket model.
 - Fixes for SCP-860-1:
     	- Fixed missing dark fog color.
@@ -37,8 +36,9 @@ Bug Fixes:
     	- Fixed incorrect position of Izumi logs.
     	- Fixed calculation of previous EventState3 value to prevent SCP-860-2's spawn from being skipped.
 	- Fixed SCP-860-1 branches wrapping around the grid border and creating unreachable tiles.
-- Fixed ability to use SCP-1162 while using inventory.
-- Fixed SCP-1162 that kills the player even if he has any item.
+- Fixes for SCP-1162-ARC:
+	- Fixed ability to use SCP-1162-ARC while using inventory.
+	- Fixed SCP-1162-ARC that kills the player even if he has any item.
 - Fixed non-facility rooms contributing to "Rooms found" parameter.
 - Fixed untitled save files not correctly being named after the second one.
 - Fixed "EscortTerminated" sound not working mos of the time.
@@ -64,6 +64,7 @@ Bug Fixes:
 	- Fixed credits lines moves too fast and not smoothly.
 	- Fixed the wrong menu would appear for one frame when switching menus, or components of one menu would stay on the screen for one frame when switching menus.
 - Fixed normal step sounds not working after steepping on decals in the ending areas.
+- Fixed an invisible collider being left wherever the player last fell or died.
 
 - Tiny fix for SCP-372's AI.
 - Tiny fixes for location of the pause menu buttons.
