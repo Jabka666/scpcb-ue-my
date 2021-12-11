@@ -44,8 +44,8 @@ Global MenuOpen% = True
 
 Const ROOM1% = 0, ROOM2% = 1, ROOM2C% = 2, ROOM3% = 3, ROOM4% = 4
 
-Global Font1% = LoadFont_Strict("..\GFX\fonts\cour\Courier New.ttf", 16)
-Global ConsoleFont% = LoadFont_Strict("..\GFX\fonts\Andale\Andale Mono.ttf", 16)
+Global Font1% = LoadFont_Strict("..\GFX\fonts\Courier New.ttf", 16)
+Global ConsoleFont% = LoadFont_Strict("..\GFX\fonts\Andale Mono.ttf", 16)
 
 Global RoomTempID%
 

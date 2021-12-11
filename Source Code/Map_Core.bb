@@ -1267,7 +1267,7 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	Tempf1 = Tile_Size / Tempf3
 	
 	For tX = 0 To ForestGridSize - 1
-		For tY = 1 To ForestGridSize - 2
+		For tY = 0 To ForestGridSize - 1
 			If fr\Grid[(tY * ForestGridSize) + tX] > 0 Then 
 				Tile_Type = 0
 				

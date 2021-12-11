@@ -2109,11 +2109,7 @@ Repeat
 		EndIf
 	EndIf
 	
-	If (Not opt\VSync) Then
-		Flip(False)
-	Else
-		Flip(True)
-	EndIf
+	Flip(opt\VSync)
 Forever
 
 Function MainLoop%()
@@ -2170,11 +2166,9 @@ Function MainLoop%()
 				
 				If PlayerRoom\RoomTemplate\Name = "cont1_173_intro" Then 
 					me\Zone = 4
-				ElseIf PlayerRoom\RoomTemplate\Name = "cont2_860_1"
-					If forest_event\EventState = 1.0 Then
-						me\Zone = 5
-						PositionEntity(SoundEmitter, EntityX(SoundEmitter), 30.0, EntityZ(SoundEmitter))
-					EndIf
+				ElseIf forest_event <> Null And forest_event\EventState = 1.0
+					me\Zone = 5
+					PositionEntity(SoundEmitter, EntityX(SoundEmitter), 30.0, EntityZ(SoundEmitter))
 				EndIf
 				
 				CurrAmbientSFX = Rand(0, AmbientSFXAmount[me\Zone] - 1)
@@ -3341,7 +3335,7 @@ Function UpdateFog%()
 	Local i%
 	
 	LightVolume = CurveValue(TempLightVolume, LightVolume, 50.0)
-	If PlayerRoom\RoomTemplate\Name = "cont1_173_intro" Lor PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTempLate\Name = "gate_a" Then
+	If PlayerRoom\RoomTemplate\Name = "cont1_173_intro" Lor PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a" Then
 		CameraFogMode(Camera, 0)
 		CameraFogRange(Camera, 5.0, 30.0)
 		CameraRange(Camera, 0.01, 60.0)
@@ -3369,18 +3363,6 @@ Function UpdateFog%()
 			CurrFogColor = FogColorOutside
 		ElseIf PlayerRoom\RoomTemplate\Name = "dimension_1499"
 			CurrFogColor = FogColorDimension_1499
-		ElseIf PlayerRoom\RoomTemplate\Name = "cont2_860_1"
-			If forest_event\EventState = 1.0 Then
-				If forest_event\room\NPC[0] <> Null Then
-					If forest_event\room\NPC[0]\State >= 2.0 Then
-						CurrFogColor = FogColorForestChase
-					Else
-						CurrFogColor = FogColorForest
-					EndIf
-				Else
-					CurrFogColor = FogColorForest
-				EndIf
-			EndIf
 		ElseIf PlayerRoom\RoomTemplate\Name = "dimension_106"
 			For e.Events = Each Events
 				If e\EventID = e_dimension_106 Then
@@ -3396,6 +3378,16 @@ Function UpdateFog%()
 			Next
 		ElseIf PlayerRoom\RoomTemplate\Name = "room2_mt" And (EntityY(me\Collider, True) >= 8.0 And EntityY(me\Collider, True) <= 12.0) Then
 			CurrFogColor = FogColorHCZ
+		ElseIf forest_event <> Null And forest_event\EventState = 1.0
+			If forest_event\room\NPC[0] <> Null Then
+				If forest_event\room\NPC[0]\State >= 2.0 Then
+					CurrFogColor = FogColorForestChase
+				Else
+					CurrFogColor = FogColorForest
+				EndIf
+			Else
+				CurrFogColor = FogColorForest
+			EndIf
 		EndIf
 	EndIf
 	If CurrFogColor = "" Then
@@ -6236,9 +6228,7 @@ Function RenderGUI%()
 					;[End Block]
 				Case "firstaid", "finefirstaid", "firstaid2"
 					;[Block]
-					If me\Bloodloss = 0.0 And me\Injuries = 0.0 Then
-						Return
-					Else
+					If me\Bloodloss <> 0.0 Lor me\Injuries <> 0.0 Then
 						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - (ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2), mo\Viewport_Center_Y - (ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2))
 						
 						Width = 300 * MenuScale
@@ -6473,8 +6463,8 @@ Function RenderGUI%()
 					
 					If PlayerRoom\RoomTemplate\Name = "dimension_106" Lor PlayerRoom\RoomTemplate\Name = "dimension_1499" Then
 						NavWorks = False
-					ElseIf PlayerRoom\RoomTemplate\Name = "cont2_860_1" Then
-						If forest_event\EventState = 1.0 Then NavWorks = False
+					ElseIf forest_event <> Null And forest_event\EventState = 1.0
+						NavWorks = False
 					EndIf
 					
 					If (Not NavWorks) Then
@@ -6714,13 +6704,14 @@ Function RenderGUI%()
 					
 					If IN = "paper" Lor IN = "badge" Lor IN = "oldpaper" Lor IN = "ticket" Lor IN = "scp1025" Then
 						For a_it.Items = Each Items
-							If a_it <> SelectedItem
+							If a_it <> SelectedItem Then
 								Local IN2$ = a_it\ItemTemplate\Tempname
 								
 								If IN2 = "paper" Lor IN2 = "badge" Lor IN2 = "oldpaper" Lor IN2 = "ticket" Lor IN2 = "scp1025" Then
 									If a_it\ItemTemplate\Img <> 0 Then
 										If a_it\ItemTemplate\Img <> SelectedItem\ItemTemplate\Img Then
 											FreeImage(a_it\ItemTemplate\Img) : a_it\ItemTemplate\Img = 0
+											Exit
 										EndIf
 									EndIf
 								EndIf
@@ -9759,9 +9750,10 @@ Function Update008%()
 	Local PrevI008Timer#, i%
 	Local TeleportForInfect% = True
 	
-	If PlayerRoom\RoomTemplate\Name = "cont2_860_1" Then
-		If forest_event\EventState = 1.0 Then TeleportForInfect = False
-	ElseIf PlayerRoom\RoomTemplate\Name = "dimension_1499" Lor PlayerRoom\RoomTemplate\Name = "dimension_106" Lor PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a"
+	
+	If PlayerRoom\RoomTemplate\Name = "dimension_1499" Lor PlayerRoom\RoomTemplate\Name = "dimension_106" Lor PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a"
+		TeleportForInfect = False
+	ElseIf forest_event <> Null And forest_event\EventState = 1.0
 		TeleportForInfect = False
 	EndIf
 	

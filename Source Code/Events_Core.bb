@@ -36,7 +36,7 @@ Const e_trick% = 22
 Const e_room2_mt% = 23
 Const e_room2_2_hcz_106% = 24
 Const e_room2_4_hcz_106% = 25, e_room2_4_hcz% = 26
-Const e_room3_hcz_duck% = 27, e_room3_hcz_1048% = 29
+Const e_room3_hcz_duck% = 27, e_room3_hcz_1048% = 28
 Const e_room2_scientists_2% = 29
 Const e_room2_servers_hcz% = 30
 Const e_room2_storage% = 31
@@ -84,7 +84,7 @@ Const e_gate_a% = 75
 ;[End Block]
 
 Function FindEventID%(EventName$)
-	Select EventName
+	Select Lower(EventName)
 		Case "cont1_173"
 			;[Block]
 			Return(e_cont1_173)
@@ -396,7 +396,7 @@ Function FindEventID%(EventName$)
 	End Select
 End Function
 
-Function FindEventType%(e.Events)
+Function FindForestEvent%(e.Events)
 	Select e\EventID
 		Case e_cont2_860_1
 			;[Block]
@@ -435,7 +435,7 @@ Function CreateEvent.Events(EventName$, RoomName$, ID%, Prob# = 0.0)
 					e.Events = New Events
 					e\EventName = EventName
 					e\EventID = FindEventID(EventName)
-					FindEventType(e)
+					FindForestEvent(e)
 					e\room = r
 					Return(e)
 				EndIf
@@ -456,7 +456,7 @@ Function CreateEvent.Events(EventName$, RoomName$, ID%, Prob# = 0.0)
 					e.Events = New Events
 					e\EventName = EventName
 					e\EventID = FindEventID(EventName)
-					FindEventType(e)
+					FindForestEvent(e)
 					e\room = r
 				EndIf
 			EndIf
@@ -3137,7 +3137,6 @@ Function UpdateEvents%()
 														EndIf
 													Next
 													Exit
-													Return
 												EndIf
 											Next
 										EndIf
@@ -3176,7 +3175,6 @@ Function UpdateEvents%()
 											EndIf
 										Next
 										Exit
-										Return
 									EndIf
 								Next
 							Else ; ~ The player is not at the exit, must've fallen down
@@ -3264,7 +3262,6 @@ Function UpdateEvents%()
 												EndIf
 											Next
 											Exit
-											Return
 										EndIf
 									Next
 									;[End Block]
@@ -5223,7 +5220,7 @@ Function UpdateEvents%()
 							e\room\RoomDoors[i + 2]\Open = False
 							e\room\RoomDoors[i + 2]\OpenState = 0.0
 							PositionEntity(e\room\RoomDoors[i + 2]\OBJ, EntityX(e\room\RoomDoors[0]\OBJ), EntityY(e\room\RoomDoors[0]\OBJ), EntityZ(e\room\RoomDoors[0]\OBJ))
-							PositionEntity(e\room\RoomDoors[i + 2]\OBJ2, EntityX(e\room\RoomDoors[0]\OBJ2), EntityY(e\room\RoomDoors[0]\OBJ2), EntityZ(e\room\RoomDoors[0]\OBJ2))							
+							PositionEntity(e\room\RoomDoors[i + 2]\OBJ2, EntityX(e\room\RoomDoors[0]\OBJ2), EntityY(e\room\RoomDoors[0]\OBJ2), EntityZ(e\room\RoomDoors[0]\OBJ2))
 						Next	
 						
 						TFormPoint(TFormedX() - 1024.0, TFormedY(), TFormedZ(), e\room\OBJ, 0)
@@ -6738,14 +6735,12 @@ Function UpdateEvents%()
 						If e\SoundCHN3 <> 0 Then
 							If ChannelPlaying(e\SoundCHN3) Then StopChannel(e\SoundCHN3)
 						EndIf
-					ElseIf PlayerRoom\RoomTemplate\Name = "cont2_860_1" Then
-						If forest_event\EventState = 1.0 Then
-							If forest_event\SoundCHN2 <> 0 Then
-								If ChannelPlaying(forest_event\SoundCHN2) Then StopChannel(forest_event\SoundCHN2)
-							EndIf
-							If forest_event\SoundCHN3 <> 0 Then
-								If ChannelPlaying(forest_event\SoundCHN3) Then StopChannel(forest_event\SoundCHN3)
-							EndIf
+					ElseIf forest_event <> Null And forest_event\EventState = 1.0
+						If e\SoundCHN2 <> 0 Then
+							If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2)
+						EndIf
+						If e\SoundCHN3 <> 0 Then
+							If ChannelPlaying(e\SoundCHN3) Then StopChannel(e\SoundCHN3)
 						EndIf
 					EndIf
 				EndIf

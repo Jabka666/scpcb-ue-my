@@ -593,7 +593,7 @@ Global TakeOffTimer#
 Function UpdateNPCs%()
 	CatchErrors("Uncaught (UpdateNPCs)")
 	
-	Local n.NPCs, n2.NPCs, d.Doors, de.Decals, r.Rooms, e.Events, w.Waypoints, p.Particles, wp.WayPoints, wayPointCloseToPlayer.WayPoints
+	Local n.NPCs, n2.NPCs, d.Doors, de.Decals, r.Rooms, e.Events, w.WayPoints, p.Particles, wp.WayPoints, wayPointCloseToPlayer.WayPoints
 	Local i%, j%, Dist#, Dist2#, Angle#, x#, x2#, y#, z#, z2#, PrevFrame#, PlayerSeeAble%, RN$
 	Local Target%, Pvt%, Pick%, PrevDist#, NewDist#, Attack%
 	
@@ -729,7 +729,7 @@ Function UpdateNPCs%()
 								If Dist > 2500.0 Then
 									If Rand(70) = 1 Then
 										If PlayerRoom\RoomTemplate\Name <> "gate_b" And PlayerRoom\RoomTemplate\Name <> "gate_a" And PlayerRoom\RoomTemplate\Name <> "dimension_106" Then
-											For w.Waypoints = Each WayPoints
+											For w.WayPoints = Each WayPoints
 												If w\door = Null And Rand(5) = 1 Then
 													x = Abs(EntityX(me\Collider) - EntityX(w\OBJ, True))
 													If x < 25.0 And x > 15.0 Then
@@ -901,8 +901,8 @@ Function UpdateNPCs%()
 					
 					; ~ Checking if SCP-106 is allowed to spawn
 					If PlayerRoom\RoomTemplate\Name = "dimension_1499" Then Spawn106 = False
-					If PlayerRoom\RoomTemplate\Name = "cont2_860_1" Then
-						If forest_event\EventState = 1.0 Then Spawn106 = False
+					If forest_event <> Null And forest_event\EventState = 1.0
+						Spawn106 = False
 					EndIf
 					If PlayerRoom\RoomTemplate\Name = "cont2_049" And EntityY(me\Collider) <= -2848.0 * RoomScale Then
 						Spawn106 = False
@@ -2098,7 +2098,7 @@ Function UpdateNPCs%()
 							;[End Block]
 						Case 3.0 ; ~ Player isn't visible, tries to find
 							;[Block]
-							If PlayerSeeAble = 1 And (Not chs\Notarget) Then
+							If PlayerSeeAble = 1 And (Not chs\NoTarget) Then
 								n\State = 2.0
 							EndIf
 							
@@ -3308,7 +3308,7 @@ Function UpdateNPCs%()
 				;[End Block]
 			Case NPCType860_2
 				;[Block]
-				If PlayerRoom\RoomTemplate\Name = "cont2_860_1" Then
+				If forest_event <> Null And forest_event\EventState = 1.0 Then
 					Local fr.Forest = PlayerRoom\fr
 					
 					Dist = EntityDistanceSquared(me\Collider, n\Collider)
@@ -3562,7 +3562,7 @@ Function UpdateNPCs%()
 								
 								If Dist < 20.25 Lor n\State3 > Rnd(200.0, 250.0) Then
 									n\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\860\Cancer" + Rand(3, 5) + ".ogg"), Camera, n\Collider)
-									If (Not chs\Notarget) Then
+									If (Not chs\NoTarget) Then
 										n\State = 3.0
 									Else
 										If (PrevFrame < 492.0 And n\Frame >= 492.0) Lor (PrevFrame < 568.0 And n\Frame >= 568.0) Then
@@ -3630,7 +3630,7 @@ Function UpdateNPCs%()
 							
 							AnimateNPC(n, 2.0, 199.0, 0.5)
 							
-							If (Not chs\Notarget) Then n\State = 3.0
+							If (Not chs\NoTarget) Then n\State = 3.0
 							;[End Block]
 					End Select
 					
@@ -5055,8 +5055,8 @@ Function UpdateNPCs%()
 						
 						If n\InFacility = 1 Then
 							If PlayerRoom\RoomTemplate\Name <> "cont1_173_intro" Then
-								If PlayerRoom\RoomTemplate\Name = "cont2_860_1" Then
-									If forest_event\EventState = 1.0 Then UpdateGravity = True
+								If forest_event <> Null And forest_event\EventState = 1.0 Then
+									UpdateGravity = True
 								EndIf
 							Else
 								UpdateGravity = True
@@ -7198,7 +7198,6 @@ Function MoveToPocketDimension%()
 			InjurePlayer(0.5, 0.0, 1600.0)
 			
 			Exit
-			Return
 		EndIf
 	Next		
 End Function
@@ -7453,8 +7452,8 @@ Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False)
 		Return(False)
 	EndIf
 	; ~ Player is in SCP-860-1's test room and inside the forest, returning false
-	If RN = "cont2_860_1" Then
-		If forest_event\EventState = 1.0 Then Return(False)
+	If forest_event <> Null And forest_event\EventState = 1.0 Then
+		Return(False)
 	EndIf
 	
 	If (Not CanSpawnIn049Chamber) Then

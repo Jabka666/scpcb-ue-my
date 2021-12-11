@@ -396,7 +396,6 @@ Function SaveGame%(File$)
 	Next	
 	WriteInt(f, Temp)
 	For e.Events = Each Events
-		WriteString(f, e\EventName)
 		WriteByte(f, e\EventID)
 		WriteFloat(f, e\EventState)
 		WriteFloat(f, e\EventState2)	
@@ -769,9 +768,7 @@ Function LoadGame%(File$)
 			SetAnimTime(n\OBJ, Frame)
 		EndIf
 		n\HideFromNVG = ReadByte(f)
-	Next
-	
-	For n.NPCs = Each NPCs
+		
 		If n\TargetID <> 0 Then
 			Local n2.NPCs
 			
@@ -906,12 +903,9 @@ Function LoadGame%(File$)
 			DestroyForest(r\fr)
 			Delete(r\fr) : r\fr = Null
 		EndIf
-	Next
-	
-	For r.Rooms = Each Rooms
+		
 		If r\x = r1499_x And r\z = r1499_z
 			I_1499\PrevRoom = r
-			Exit
 		EndIf
 	Next
 	
@@ -1123,7 +1117,6 @@ Function LoadGame%(File$)
 	For i = 1 To Temp
 		e.Events = New Events
 		
-		e\EventName = ReadString(f)
 		e\EventID = ReadByte(f)
 		e\EventState = ReadFloat(f)
 		e\EventState2 = ReadFloat(f)		
@@ -1138,7 +1131,7 @@ Function LoadGame%(File$)
 			EndIf
 		Next
 		e\EventStr = ReadString(f)
-		FindEventType(e)
+		FindForestEvent(e)
 		
 		; ~ Reset e_dimension_1499
 		If e\EventID = e_dimension_1499 Then
@@ -1657,9 +1650,7 @@ Function LoadGameQuick%(File$)
 			SetAnimTime(n\OBJ, Frame)
 		EndIf
 		n\HideFromNVG = ReadByte(f)
-	Next
-	
-	For n.NPCs = Each NPCs
+		
 		If n\TargetID <> 0 Then
 			Local n2.NPCs
 			
@@ -1773,12 +1764,9 @@ Function LoadGameQuick%(File$)
 		EndIf
 		
 		If Temp2 = 1 Then PlayerRoom = r
-	Next
-	
-	For r.Rooms = Each Rooms
+		
 		If r\x = r1499_x And r\z = r1499_z
 			I_1499\PrevRoom = r
-			Exit
 		EndIf
 	Next
 	
@@ -1895,7 +1883,6 @@ Function LoadGameQuick%(File$)
 	Temp = ReadInt(f)
 	For i = 1 To Temp
 		e.Events = New Events
-		e\EventName = ReadString(f)
 		e\EventID = ReadByte(f)
 		e\EventState = ReadFloat(f)
 		e\EventState2 = ReadFloat(f)
@@ -1910,7 +1897,8 @@ Function LoadGameQuick%(File$)
 			EndIf
 		Next	
 		e\EventStr = ReadString(f)
-		FindEventType(e)
+		FindForestEvent(e)
+		
 		If e\EventID = e_cont1_173 Then
 			; ~ A hacky fix for the case that the intro objects aren't loaded when they should
 			; ~ Altough I'm too lazy to add those objects there because at the time where you can save, those objects are already in the ground anyway -- ENDSHN
@@ -2379,14 +2367,14 @@ Function LoadMap%(File$)
 						e.Events = New Events
 						e\EventName = Name
 						e\EventID = FindEventID(Name)
-						FindEventType(e)
+						FindForestEvent(e)
 						e\room = r   
 					EndIf
 				ElseIf Prob = 0.0 And Name <> "" Then
 					e.Events = New Events
 					e\EventName = Name
 					e\EventID = FindEventID(Name)
-					FindEventType(e)
+					FindForestEvent(e)
 					e\room = r  
 				EndIf
 			EndIf
@@ -2564,14 +2552,14 @@ Function LoadMap%(File$)
 						e.Events = New Events
 						e\EventName = Name
 						e\EventID = FindEventID(Name)
-						FindEventType(e)
+						FindForestEvent(e)
 						e\room = r   
 					EndIf
 				ElseIf Prob = 0.0 And Name <> "" Then
 					e.Events = New Events
 					e\EventName = Name
 					e\EventID = FindEventID(Name)
-					FindEventType(e)
+					FindForestEvent(e)
 					e\room = r
 				EndIf
 			EndIf
