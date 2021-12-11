@@ -2166,9 +2166,11 @@ Function MainLoop%()
 				
 				If PlayerRoom\RoomTemplate\Name = "cont1_173_intro" Then 
 					me\Zone = 4
-				ElseIf forest_event <> Null And forest_event\EventState = 1.0
-					me\Zone = 5
-					PositionEntity(SoundEmitter, EntityX(SoundEmitter), 30.0, EntityZ(SoundEmitter))
+				ElseIf forest_event <> Null
+					If forest_event\EventState = 1.0 Then
+						me\Zone = 5
+						PositionEntity(SoundEmitter, EntityX(SoundEmitter), 30.0, EntityZ(SoundEmitter))
+					EndIf
 				EndIf
 				
 				CurrAmbientSFX = Rand(0, AmbientSFXAmount[me\Zone] - 1)
@@ -3378,15 +3380,17 @@ Function UpdateFog%()
 			Next
 		ElseIf PlayerRoom\RoomTemplate\Name = "room2_mt" And (EntityY(me\Collider, True) >= 8.0 And EntityY(me\Collider, True) <= 12.0) Then
 			CurrFogColor = FogColorHCZ
-		ElseIf forest_event <> Null And forest_event\EventState = 1.0
-			If forest_event\room\NPC[0] <> Null Then
-				If forest_event\room\NPC[0]\State >= 2.0 Then
-					CurrFogColor = FogColorForestChase
+		ElseIf forest_event <> Null
+			If forest_event\EventState = 1.0 Then
+				If forest_event\room\NPC[0] <> Null Then
+					If forest_event\room\NPC[0]\State >= 2.0 Then
+						CurrFogColor = FogColorForestChase
+					Else
+						CurrFogColor = FogColorForest
+					EndIf
 				Else
 					CurrFogColor = FogColorForest
 				EndIf
-			Else
-				CurrFogColor = FogColorForest
 			EndIf
 		EndIf
 	EndIf
@@ -6463,8 +6467,8 @@ Function RenderGUI%()
 					
 					If PlayerRoom\RoomTemplate\Name = "dimension_106" Lor PlayerRoom\RoomTemplate\Name = "dimension_1499" Then
 						NavWorks = False
-					ElseIf forest_event <> Null And forest_event\EventState = 1.0
-						NavWorks = False
+					ElseIf forest_event <> Null
+						If forest_event\EventState = 1.0 Then NavWorks = False
 					EndIf
 					
 					If (Not NavWorks) Then
@@ -9753,8 +9757,8 @@ Function Update008%()
 	
 	If PlayerRoom\RoomTemplate\Name = "dimension_1499" Lor PlayerRoom\RoomTemplate\Name = "dimension_106" Lor PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a"
 		TeleportForInfect = False
-	ElseIf forest_event <> Null And forest_event\EventState = 1.0
-		TeleportForInfect = False
+	ElseIf forest_event <> Null
+		If forest_event\EventState = 1.0 Then TeleportForInfect = False
 	EndIf
 	
 	If I_008\Timer > 0.0 Then

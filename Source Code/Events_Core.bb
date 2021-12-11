@@ -6735,12 +6735,14 @@ Function UpdateEvents%()
 						If e\SoundCHN3 <> 0 Then
 							If ChannelPlaying(e\SoundCHN3) Then StopChannel(e\SoundCHN3)
 						EndIf
-					ElseIf forest_event <> Null And forest_event\EventState = 1.0
-						If e\SoundCHN2 <> 0 Then
-							If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2)
-						EndIf
-						If e\SoundCHN3 <> 0 Then
-							If ChannelPlaying(e\SoundCHN3) Then StopChannel(e\SoundCHN3)
+					ElseIf forest_event <> Null
+						If forest_event\EventState = 1.0 Then
+							If e\SoundCHN2 <> 0 Then
+								If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2)
+							EndIf
+							If e\SoundCHN3 <> 0 Then
+								If ChannelPlaying(e\SoundCHN3) Then StopChannel(e\SoundCHN3)
+							EndIf
 						EndIf
 					EndIf
 				EndIf
