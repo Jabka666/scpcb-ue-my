@@ -241,7 +241,7 @@ Function UpdateMainMenu%()
 						;[Block]
 						Txt = "QUIT"
 						If Temp Then
-							StopChannel(CurrMusicStream)
+							StopStream_Strict(MusicCHN)
 							End()
 						EndIf
 						;[End Block]
@@ -2134,7 +2134,7 @@ Function RenderLoadingText%(x%, y%, AlignX% = False, AlignY% = False)
 			ltc\G = Min(ltc\G + 3.0, 255.0)
 			ltc\B = Min(ltc\B + 3.0, 255.0)
 		EndIf
-		SetFont(fo\FontID[Default_Font])
+		SetFont(fo\FontID[Font_Default])
 		Color(ltc\R, ltc\G, ltc\B)
 		Text(x, y, "PRESS ANY KEY TO CONTINUE", AlignX, AlignY)
 	Next
@@ -2209,13 +2209,11 @@ Function RenderLoading%(Percent%, Assets$ = "")
 		Text(x + (Width / 2), opt\GraphicHeight - (70 * MenuScale), Percent + "%", True, True)
 		
 		If SelectedLoadingScreen\Title = "CWM" Then
-			If (Not ShortLoading) Then 
-				If FirstLoop Then 
-					If Percent = 0 Then
-						PlaySound_Strict(LoadTempSound("SFX\SCP\990\cwm1.cwm"))
-					ElseIf Percent = 100
-						PlaySound_Strict(LoadTempSound("SFX\SCP\990\cwm2.cwm"))
-					EndIf
+			If FirstLoop Then 
+				If Percent = 0 Then
+					PlaySound_Strict(LoadTempSound("SFX\SCP\990\cwm1.cwm"))
+				ElseIf Percent = 100
+					PlaySound_Strict(LoadTempSound("SFX\SCP\990\cwm2.cwm"))
 				EndIf
 			EndIf
 			

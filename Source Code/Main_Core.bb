@@ -1040,7 +1040,7 @@ Function UpdateConsole%()
 						If n\NPCType = NPCType966 Then
 							n\State = 0.0
 							ShowEntity(n\Collider)
-							If WearinNightVision > 0 Then ShowEntity(n\OBJ)
+							If wi\NightVision > 0 Then ShowEntity(n\OBJ)
 							Exit
 						EndIf
 					Next
