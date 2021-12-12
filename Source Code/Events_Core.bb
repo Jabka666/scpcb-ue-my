@@ -801,8 +801,6 @@ Function QuickLoadEvents%()
 						
 						For i = -2 To 0 Step 2
 							ch.Chunk = CreateChunk(-1, x * (i * 2.5), EntityY(e\room\OBJ), z, True)
-						Next
-						For i = -2 To 0 Step 2
 							ch.Chunk = CreateChunk(-1, x * (i * 2.5), EntityY(e\room\OBJ), z - 40.0, True)
 						Next
 						
@@ -820,8 +818,8 @@ End Function
 Function UpdateEvents%()
 	CatchErrors("Uncaught (UpdateEvents)")
 	
-	Local p.Particles, n.NPCs, r.Rooms, e.Events, e2.Events, de.Decals, du.Dummy1499_1, w.Waypoints, pr.Props
-	Local it.Items, it2.Items, em.Emitters, sc.SecurityCams, sc2.SecurityCams, wayp.Waypoints, do.Doors
+	Local p.Particles, n.NPCs, r.Rooms, e.Events, e2.Events, de.Decals, du.Dummy1499_1, w.WayPoints, pr.Props
+	Local it.Items, it2.Items, em.Emitters, sc.SecurityCams, sc2.SecurityCams, wayp.WayPoints, do.Doors
 	Local Dist#, i%, Temp%, Pvt%, StrTemp$, j%, k%
 	Local CurrTrigger$ = "", fDir#, Scale#, Tex%, t1%, Name$
 	Local x#, y#, z#, xTemp#, yTemp#, b%, BT%, SF%, TexName$
@@ -1284,11 +1282,11 @@ Function UpdateEvents%()
 											UseDoor(e\room\RoomDoors[5], True)
 											
 											em.Emitters = CreateEmitter(PlayerRoom\x - (2976.0 + 1024.0) * RoomScale, PlayerRoom\y + 373.0 * RoomScale, PlayerRoom\z + 204.0 * RoomScale, 0)
-											em\RandAngle = 7.0 : em\Speed = 0.03 : em\SizeChange = 0.003 : em\Room = PlayerRoom
+											em\RandAngle = 7.0 : em\Speed = 0.03 : em\SizeChange = 0.003 : em\room = PlayerRoom
 											TurnEntity(em\OBJ, 90.0, 0.0, 0.0, True)
 											
 											em.Emitters = CreateEmitter(PlayerRoom\x - (3168.0 + 1024.0) * RoomScale, PlayerRoom\y + 373.0 * RoomScale, PlayerRoom\z + 204.0 * RoomScale, 0)
-											em\RandAngle = 7.0 : em\Speed = 0.03 : em\SizeChange = 0.003 : em\Room = PlayerRoom
+											em\RandAngle = 7.0 : em\Speed = 0.03 : em\SizeChange = 0.003 : em\room = PlayerRoom
 											TurnEntity(em\OBJ, 90.0, 0.0, 0.0, True)
 										EndIf
 										me\EyeIrritation = Max(me\EyeIrritation + fps\Factor[0] * 4.0, 1.0)
@@ -1801,7 +1799,7 @@ Function UpdateEvents%()
 								e\room\NPC[11]\State = 15.0
 								CreateNPCAsset(e\room\NPC[11])
 								
-								HideDistance = 60.0
+								HideDistance = 68.0
 								
 								For i = 8 To 11
 									PositionEntity(Pvt, EntityX(e\room\NPC[i]\Collider), EntityY(e\room\NPC[i]\Collider), EntityZ(e\room\NPC[i]\Collider))
@@ -2185,7 +2183,7 @@ Function UpdateEvents%()
 													EndIf
 												Next
 												
-												For w.Waypoints = Each WayPoints
+												For w.WayPoints = Each WayPoints
 													If w\room = e\room Then 
 														FreeEntity(w\OBJ)
 														Delete(w)
@@ -5353,7 +5351,7 @@ Function UpdateEvents%()
 								;[End Block]
 							Case 50.0
 								;[Block]
-								e\room\NPC[1] = CreateNPC(NPCTypeGuard, EntityX(e\room\OBJ) + Cos(e\room\Angle + 90.0) * 600.0 * RoomScale, 0.35, EntityZ(e\room\OBJ) + Sin(e\room\Angle + 90.0) * 600.0 * roomScale)
+								e\room\NPC[1] = CreateNPC(NPCTypeGuard, EntityX(e\room\OBJ) + Cos(e\room\Angle + 90.0) * 600.0 * RoomScale, 0.35, EntityZ(e\room\OBJ) + Sin(e\room\Angle + 90.0) * 600.0 * RoomScale)
 								e\room\NPC[1]\State = 7.0
 								;[End Block]
 							Case 52.0
@@ -6844,10 +6842,11 @@ Function UpdateEvents%()
 								;[Block]
 								If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
 								For i = 3 To 4
-									If (Not EntityHidden(e\room\Objects[i])) Then HideEntity(e\room\Objects[i])
-								Next
-								For i = 5 To 6
-									If EntityHidden(e\room\Objects[i]) Then ShowEntity(e\room\Objects[i])
+									If i < 5 Then
+										If (Not EntityHidden(e\room\Objects[i])) Then HideEntity(e\room\Objects[i])
+									Else
+										If EntityHidden(e\room\Objects[i]) Then ShowEntity(e\room\Objects[i])
+									EndIf
 								Next
 								; ~ Sexy demon pose
 								Animate2(e\room\Objects[5], AnimTime(e\room\Objects[5]), 500.0, 648.0, 0.2)
@@ -8872,7 +8871,7 @@ Function UpdateEvents%()
 							Next
 							
 							For r.Rooms = Each Rooms
-								If r\RoomTemplate\Name = "room2_checkpoint_lcz_hcz"
+								If r\RoomTemplate\Name = "room2_checkpoint_lcz_hcz" Then
 									If r\Dist < 10.0 Then
 										e\EventState = 2.0
 										Exit
@@ -8885,7 +8884,7 @@ Function UpdateEvents%()
 						EndIf
 						
 						For e2.Events = Each Events
-							If e2\EventID = e_room2_servers_hcz
+							If e2\EventID = e_room2_servers_hcz Then
 								If e2\EventState = 0.0
 									e\EventState = 2.0
 									Exit
@@ -9560,7 +9559,7 @@ Function UpdateEndings%()
 						
 						SecondaryLightOn = True
 						
-						HideDistance = 60.0
+						HideDistance = 68.0
 						
 						CreateConsoleMsg("")
 						CreateConsoleMsg("WARNING! Teleporting away from this area may cause bugs or crashing.", 255, 0, 0)
@@ -9780,7 +9779,7 @@ Function UpdateEndings%()
 											e\room\NPC[3]\EnemyZ = EntityZ(e\room\Objects[4], True)
 											
 											em.Emitters = CreateEmitter(EntityX(e\room\NPC[3]\Collider), EntityY(e\room\NPC[3]\Collider), EntityZ(e\room\NPC[3]\Collider), 0)
-											em\Room = PlayerRoom : em\RandAngle = 45.0 : em\Gravity = -0.18 : em\LifeTime = 400.0 : em\SizeChange = Rnd(0.005, 0.007) : em\AlphaChange = -0.004
+											em\room = PlayerRoom : em\RandAngle = 45.0 : em\Gravity = -0.18 : em\LifeTime = 400.0 : em\SizeChange = Rnd(0.005, 0.007) : em\AlphaChange = -0.004
 											TurnEntity(em\OBJ, (-80.0) + 20.0 * i, 0.0, 0.0)
 											EntityParent(em\OBJ, e\room\NPC[3]\Collider)
 											
@@ -9864,19 +9863,12 @@ Function UpdateEndings%()
 							PointEntity(e\room\NPC[i]\Collider, e\room\Objects[3])
 						Next
 						
-						For i = 5 To 6
-							e\room\NPC[i] = CreateNPC(NPCTypeMTF, EntityX(e\room\Objects[i + 2], True), EntityY(e\room\Objects[i + 2], True), EntityZ(e\room\Objects[i + 2], True))
+						For i = 5 To 8
+							e\room\NPC[i] = CreateNPC(NPCTypeMTF, EntityX(e\room\Objects[i + ((i < 7) * 2)], True) + ((i > 6) * 0.8), EntityY(e\room\Objects[i + ((i < 7) * 2)], True), EntityZ(e\room\Objects[i + ((i < 7) * 2)], True) + ((i > 6) * 0.8))
 							e\room\NPC[i]\State = 5.0
 							e\room\NPC[i]\PrevState = 1	
 							PointEntity(e\room\NPC[i]\Collider, e\room\Objects[3])
 						Next
-						
-						For i = 7 To 8
-							e\room\NPC[i] = CreateNPC(NPCTypeMTF, EntityX(e\room\Objects[i], True) + 0.8, EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True) + 0.8)
-							e\room\NPC[i]\State = 5.0
-							e\room\NPC[i]\PrevState = 1
-							PointEntity(e\room\NPC[i]\Collider, e\room\Objects[3])
-						Next	
 						
 						If Curr106\Contained Then
 							e\room\RoomDoors[2]\Locked = 1
@@ -9918,7 +9910,7 @@ Function UpdateEndings%()
 						
 						SecondaryLightOn = True
 						
-						HideDistance = 60.0
+						HideDistance = 68.0
 						
 						CreateConsoleMsg("")
 						CreateConsoleMsg("WARNING! Teleporting away from this area may cause bugs or crashing.", 255, 0, 0)
@@ -10082,6 +10074,13 @@ Function UpdateEndings%()
 														ElseIf e\EventState2 < 70.0 * 14.3
 															me\CameraShake = 0.5
 															me\LightFlash = 0.3 + EntityInView(e\room\Objects[10], Camera) * 0.5
+															
+															If (Not (me\Terminated Lor chs\GodMode)) Then
+																If EntityDistanceSquared(me\Collider, Curr106\Collider) < 1.44 Then
+																	PlaySound_Strict(LoadTempSound("SFX\SCP\294\burn.ogg"))
+																	Kill(True)
+																EndIf
+															EndIf
 														EndIf
 													EndIf
 												EndIf

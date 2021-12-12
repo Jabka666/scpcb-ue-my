@@ -2127,7 +2127,7 @@ Function LoadGameQuick%(File$)
 	Next
 	
 	; ~ Resetting some stuff (those get changed when going to the endings)
-	HideDistance = 16.0
+	HideDistance = 17.0
 	
 	CatchErrors("LoadGameQuick")
 End Function

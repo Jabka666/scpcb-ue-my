@@ -2065,7 +2065,7 @@ Function UpdateNPCs%()
 							;[End Block]
 						Case 2.0 ; ~ Player is visible, tries to kill
 							;[Block]
-							If PlayerSeeAble = 1 Lor n\State2 > 0.0 And (Not chs\Notarget) Then
+							If PlayerSeeAble = 1 Lor n\State2 > 0.0 And (Not chs\NoTarget) Then
 								If PlayerSeeAble = 1 Then
 									n\State2 = 70.0 * 2.0
 								Else
@@ -2130,7 +2130,7 @@ Function UpdateNPCs%()
 												If ((n\Path[n\PathLocation]\door\Locked > 0 Lor n\Path[n\PathLocation]\door\KeyCard > 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open)) Then
 													Temp = False
 												Else
-													If (Not n\Path[n\PathLocation]\door\Open) Then UseDoor(n\Path[n\PathLocation]\Door, True)
+													If (Not n\Path[n\PathLocation]\door\Open) Then UseDoor(n\Path[n\PathLocation]\door, True)
 												EndIf
 											EndIf
 											If n\Path[n\PathLocation]\door\OpenState >= 180.0
@@ -3864,7 +3864,7 @@ Function UpdateNPCs%()
 							AnimateNPC(n, 451.0, 612.0, 0.2)
 							
 							If n\State2 < MilliSecs2() Then
-								For w.Waypoints = Each WayPoints
+								For w.WayPoints = Each WayPoints
 									If w\door = Null Then
 										If Abs(EntityX(w\OBJ, True) - EntityX(n\Collider)) < 4.0 Then
 											If Abs(EntityZ(w\OBJ, True) - EntityZ(n\Collider)) < 4.0 Then
@@ -4050,7 +4050,7 @@ Function UpdateNPCs%()
 						
 						If wi\NightVision = 0 Then
 							If (Not EntityHidden(n\OBJ)) Then HideEntity(n\OBJ)
-							If (Not chs\Notarget) Then
+							If (Not chs\NoTarget) Then
 								If Dist < 1.0 And n\Reload <= 0.0 And msg\Timer <= 0.0 Then
 									Select Rand(6)
 										Case 1
@@ -4145,7 +4145,7 @@ Function UpdateNPCs%()
 									EndIf
 								EndIf
 								
-								If (Not chs\Notarget) Then
+								If (Not chs\NoTarget) Then
 									Angle = VectorYaw(EntityX(me\Collider) - EntityX(n\Collider), 0.0, EntityZ(me\Collider) - EntityZ(n\Collider))
 									RotateEntity(n\Collider, 0.0, CurveAngle(Angle, EntityYaw(n\Collider), 20.0), 0.0)
 									
@@ -4198,7 +4198,7 @@ Function UpdateNPCs%()
 									EndIf
 								EndIf
 								
-								If (Not chs\Notarget) Then
+								If (Not chs\NoTarget) Then
 									Angle = VectorYaw(EntityX(me\Collider) - EntityX(n\Collider), 0.0, EntityZ(me\Collider) - EntityZ(n\Collider))
 									RotateEntity(n\Collider, 0.0, CurveAngle(Angle, EntityYaw(n\Collider), 20.0), 0.0)
 								EndIf
@@ -4788,7 +4788,7 @@ Function UpdateNPCs%()
 							;[End Block]
 						Case 2.0 ; ~ Player is visible, tries to kill
 							;[Block]
-							If PlayerSeeAble = 1 Lor n\State2 > 0.0 And (Not chs\Notarget) Then
+							If PlayerSeeAble = 1 Lor n\State2 > 0.0 And (Not chs\NoTarget) Then
 								If PlayerSeeAble = 1 Then
 									n\State2 = 70.0 * 2.0
 								Else
@@ -4817,7 +4817,7 @@ Function UpdateNPCs%()
 							;[End Block]
 						Case 3.0 ; ~ Player isn't visible, tries to find
 							;[Block]
-							If PlayerSeeAble = 1 And (Not chs\Notarget) Then
+							If PlayerSeeAble = 1 And (Not chs\NoTarget) Then
 								n\State = 2.0
 							EndIf
 							
@@ -4845,7 +4845,7 @@ Function UpdateNPCs%()
 												If ((n\Path[n\PathLocation]\door\Locked > 0 Lor n\Path[n\PathLocation]\door\KeyCard > 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open)) Then
 													Temp = False
 												Else
-													If (Not n\Path[n\PathLocation]\door\Open) Then UseDoor(n\Path[n\PathLocation]\Door, True)
+													If (Not n\Path[n\PathLocation]\door\Open) Then UseDoor(n\Path[n\PathLocation]\door, True)
 												EndIf
 											EndIf
 											If n\Path[n\PathLocation]\door\OpenState >= 180.0
@@ -4975,7 +4975,7 @@ Function UpdateNPCs%()
 										If EntityHidden(n\OBJ) Then
 											ShowEntity(n\OBJ)
 											ShowEntity(n\Collider)
-											For w.Waypoints = Each WayPoints
+											For w.WayPoints = Each WayPoints
 												If w\door = Null And w\room\Dist < HideDistance And Rand(3) = 1 Then
 													If EntityDistanceSquared(w\room\OBJ, n\Collider) < EntityDistanceSquared(me\Collider, n\Collider)
 														x = Abs(EntityX(n\Collider) - EntityX(w\OBJ, True))
@@ -4983,7 +4983,7 @@ Function UpdateNPCs%()
 															z = Abs(EntityZ(n\Collider) - EntityZ(w\OBJ, True))
 															If z < 12.0 And z > 4.0 Then
 																If w\room\Dist > 4.0
-																	PositionEntity(n\Collider, EntityX(w\OBJ, True), EntityY(w\obj, True) + 0.35, EntityZ(w\OBJ, True))
+																	PositionEntity(n\Collider, EntityX(w\OBJ, True), EntityY(w\OBJ, True) + 0.35, EntityZ(w\OBJ, True))
 																	ResetEntity(n\Collider)
 																	n\PathStatus = 0
 																	n\PathTimer = 0.0
@@ -5704,7 +5704,7 @@ Function UpdateMTFUnit%(n.NPCs)
 									EndIf
 									FinishWalking(n, 488.0, 522.0, n\Speed * 26.0)
 									If Rand(1, 35) = 1 Then
-										For wp.Waypoints = Each WayPoints
+										For wp.WayPoints = Each WayPoints
 											If Rand(3) = 1 Then
 												If EntityDistanceSquared(wp\OBJ, n\Collider) < 36.0 Then
 													n\EnemyX = EntityX(wp\OBJ, True)
@@ -6862,17 +6862,17 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 							If gTemp < w\connected[i]\Gcost Then
 								w\connected[i]\Gcost = gTemp
 								w\connected[i]\Fcost = w\connected[i]\Gcost + w\connected[i]\Hcost
-								w\connected[i]\Parent = w
+								w\connected[i]\parent = w
 							EndIf
 						Else
 							w\connected[i]\Hcost = Abs(EntityX(w\connected[i]\OBJ, True) - EntityX(EndPoint\OBJ, True)) + Abs(EntityZ(w\connected[i]\OBJ, True) - EntityZ(EndPoint\OBJ, True))
-							gTemp = w\Gcost + w\dist[i]
+							gTemp = w\Gcost + w\Dist[i]
 							If n\NPCType = NPCTypeMTF Then
 								If w\connected[i]\door = Null Then gTemp = gTemp + 0.5
 							EndIf
 							w\connected[i]\Gcost = gTemp
 							w\connected[i]\Fcost = w\Gcost + w\Hcost
-							w\connected[i]\Parent = w
+							w\connected[i]\parent = w
 							w\connected[i]\State = 1
 						EndIf            
 					EndIf
@@ -6880,14 +6880,14 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 			Next
 		Else
 			If EndPoint\State > 0 Then
-				StartPoint\Parent = Null
+				StartPoint\parent = Null
 				EndPoint\State = 2
 				Exit
 			EndIf
 		EndIf
 		
 		If EndPoint\State > 0 Then
-			StartPoint\Parent = Null
+			StartPoint\parent = Null
 			EndPoint\State = 2
 			Exit
 		EndIf
@@ -6900,16 +6900,16 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 		
 		Repeat
 			Length = Length + 1
-			CurrPoint = CurrPoint\Parent
+			CurrPoint = CurrPoint\parent
 			If Length > 20 Then
-				TwentiethPoint = TwentiethPoint\Parent
+				TwentiethPoint = TwentiethPoint\parent
 			EndIf
 		Until CurrPoint = Null
 		
 		CurrPoint.WayPoints = EndPoint
 		While TwentiethPoint <> Null
 			Length = Min(Length - 1, 19.0)
-			TwentiethPoint = TwentiethPoint\Parent
+			TwentiethPoint = TwentiethPoint\parent
 			n\Path[Length] = TwentiethPoint
 		Wend
 		
@@ -7453,7 +7453,7 @@ Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False)
 	If RN = "dimension_106" Lor RN = "dimension_1499" Lor RN = "cont1_173_intro" Lor RN = "gate_b" Lor RN = "gate_a" Then
 		Return(False)
 	EndIf
-	; ~ Player is in SCP-860-1's test room and inside the forest, returning false
+	; ~ Player is in SCP-860-1, returning false
 	If forest_event <> Null Then
 		If forest_event\EventState = 1.0 Then Return(False)
 	EndIf

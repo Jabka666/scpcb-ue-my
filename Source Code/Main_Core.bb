@@ -2079,9 +2079,9 @@ Repeat
 	EndIf
 	fps\PrevTime = fps\CurrTime
 	
-	If opt\Framelimit > 0.0 Then
+	If opt\FrameLimit > 0.0 Then
 		Local LoopDelay% = MilliSecs2()
-		Local WaitingTime% = (1000.0 / opt\Framelimit) - (MilliSecs2() - LoopDelay)
+		Local WaitingTime% = (1000.0 / opt\FrameLimit) - (MilliSecs2() - LoopDelay)
 		
 		Delay(WaitingTime)
 	EndIf
@@ -2214,8 +2214,8 @@ Function MainLoop%()
 		If (Not MenuOpen) And (Not ConsoleOpen) And me\EndingTimer >= 0.0 Then
 			me\SndVolume = CurveValue(0.0, me\SndVolume, 5.0)
 			
-			If PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a" Then
-				If HideDistance <> 16.0 Then HideDistance = 16.0
+			If PlayerRoom\RoomTemplate\Name <> "gate_b" And PlayerRoom\RoomTemplate\Name <> "gate_a" Then
+				HideDistance = 17.0
 			EndIf
 			CanSave = True
 			UpdateDistanceTimer()
@@ -3352,6 +3352,8 @@ Function UpdateFog%()
 		For i = 0 To r\MaxLights - 1
 			If r\Lights[i] <> 0 Then
 				EntityAutoFade(r\LightSprites[i], opt\CameraFogNear * LightVolume, opt\CameraFogFar * LightVolume)
+			Else
+				Exit
 			EndIf
 		Next
 	Next
@@ -4584,7 +4586,7 @@ Function UpdateGUI%()
 				Case "cup"
 					;[Block]
 					If CanUseItem(False, True) Then
-						StrTemp = Trim(Lower(SelectedItem\name))
+						StrTemp = Trim(Lower(SelectedItem\Name))
 						If Left(StrTemp, 6) = "cup of" Then
 							StrTemp = Right(StrTemp, Len(StrTemp) - 7)
 						ElseIf Left(StrTemp, 8) = "a cup of" 
@@ -4627,13 +4629,13 @@ Function UpdateGUI%()
 						
 						; ~ The state of refined items is more than 1.0 (fine setting increases it by 1, very fine doubles it)
 						StrTemp = GetINIString2(SCP294File, Loc, "Blink Effect")
-						If StrTemp <> "" Then me\BlinkEffect = Float(StrTemp) ^ SelectedItem\state
+						If StrTemp <> "" Then me\BlinkEffect = Float(StrTemp) ^ SelectedItem\State
 						StrTemp = GetINIString2(SCP294File, Loc, "Blink Effect Timer")
-						If StrTemp <> "" Then me\BlinkEffectTimer = Float(StrTemp) * SelectedItem\state
+						If StrTemp <> "" Then me\BlinkEffectTimer = Float(StrTemp) * SelectedItem\State
 						StrTemp = GetINIString2(SCP294File, Loc, "Stamina Effect")
-						If StrTemp <> "" Then me\StaminaEffect = Float(StrTemp) ^ SelectedItem\state
+						If StrTemp <> "" Then me\StaminaEffect = Float(StrTemp) ^ SelectedItem\State
 						StrTemp = GetINIString2(SCP294File, Loc, "Stamina Effect Timer")
-						If StrTemp <> "" Then me\StaminaEffectTimer = Float(StrTemp) * SelectedItem\state
+						If StrTemp <> "" Then me\StaminaEffectTimer = Float(StrTemp) * SelectedItem\State
 						StrTemp = GetINIString2(SCP294File, Loc, "Refuse Message")
 						If StrTemp <> "" Then
 							CreateMsg(StrTemp)
@@ -5366,7 +5368,7 @@ Function UpdateGUI%()
 								
 								CreateMsg(Chr(34) + "Why does this seem so familiar?" + Chr(34))
 								PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\NostalgiaCancer" + Rand(6, 10) + ".ogg"))
-								SelectedItem\state = 1.0
+								SelectedItem\State = 1.0
 								;[End Block]
 						End Select
 					EndIf
@@ -6709,7 +6711,7 @@ Function RenderGUI%()
 					If IN = "paper" Lor IN = "badge" Lor IN = "oldpaper" Lor IN = "ticket" Lor IN = "scp1025" Then
 						For a_it.Items = Each Items
 							If a_it <> SelectedItem Then
-								Local IN2$ = a_it\ItemTemplate\Tempname
+								Local IN2$ = a_it\ItemTemplate\TempName
 								
 								If IN2 = "paper" Lor IN2 = "badge" Lor IN2 = "oldpaper" Lor IN2 = "ticket" Lor IN2 = "scp1025" Then
 									If a_it\ItemTemplate\Img <> 0 Then
@@ -8638,7 +8640,7 @@ End Function
 Function InitStats%()
 	me\Playable = True : me\SelectedEnding = -1
 	
-	HideDistance = 16.0
+	HideDistance = 17.0
 	as\Timer = 70.0 * 120.0
 	
 	If opt\DebugMode Then
@@ -8727,7 +8729,11 @@ Function InitNewGame%()
 	
 	For r.Rooms = Each Rooms
 		For i = 0 To MaxRoomLights - 1
-			If r\Lights[i] <> 0 Then EntityParent(r\Lights[i], 0)
+			If r\Lights[i] <> 0 Then
+				EntityParent(r\Lights[i], 0)
+			Else
+				Exit
+			EndIf
 		Next
 		
 		If (Not r\RoomTemplate\DisableDecals) Then
@@ -8889,11 +8895,8 @@ Function InitLoadGame%()
 				
 				For i = -2 To 0 Step 2
 					ch.Chunk = CreateChunk(-1, x * (i * 2.5), EntityY(e\room\OBJ), z, True)
-				Next
-				For i = -2 To 0 Step 2
 					ch.Chunk = CreateChunk(-1, x * (i * 2.5), EntityY(e\room\OBJ), z - 40.0, True)
 				Next
-				
 				Exit
 			EndIf
 		EndIf
