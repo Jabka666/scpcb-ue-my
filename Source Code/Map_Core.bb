@@ -101,7 +101,7 @@ Function CreateProp.Props(Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, Scale
 	p\Name = Name
 	p\room = room
 	
-	If (Not p\OBJ) Then p\OBJ = CheckForPropModel(Name) ; ~ A hacky optimization (just copy models that loaded as variable). Also fixes wrong models folder if the CBRE was used
+	If (Not p\OBJ) Then p\OBJ = CheckForPropModel(Name) ; ~ A hacky optimization (just copy models that loaded as variable). Also fixes models folder if the CBRE was used
 	PositionEntity(p\OBJ, x, y, z)
 	If room <> Null Then
 		EntityParent(p\OBJ, room\OBJ)
@@ -1606,7 +1606,6 @@ Type Rooms
 	Field LightR#[MaxRoomLights], LightG#[MaxRoomLights], LightB#[MaxRoomLights]
 	Field MaxLights% = 0
 	Field Objects%[MaxRoomObjects]
-	Field Hidden%
 	Field Levers%[MaxRoomLevers]
 	Field RoomDoors.Doors[MaxRoomDoors]
 	Field NPC.NPCs[MaxRoomNPCs]
@@ -2436,7 +2435,7 @@ Function UpdateDoors%()
 										RotateEntity(Pvt, 0.0, Rnd(360.0), 0.0)
 										
 										p.Particles = CreateParticle(3, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 0.002, 0.0, 300.0)
-										p\Speed = 0.005 : p\SizeChange = -0.00001 : p\Size = 0.01 : p\Alphachange = -0.01
+										p\Speed = 0.005 : p\SizeChange = -0.00001 : p\Size = 0.01 : p\AlphaChange = -0.01
 										RotateEntity(p\Pvt, Rnd(-20.0, 20.0), Rnd(360.0), 0.0)
 										ScaleSprite(p\OBJ, p\Size, p\Size)
 										EntityOrder(p\OBJ, -1)
@@ -7738,12 +7737,12 @@ Function HideRoomLights%(r.Rooms, HideLights% = True)
 End Function
 
 ; ~ TODO: Fix collisions (EntityAlpha)
-Function HideRooms%(r.Rooms, AdjDoor.Doors = Null, NoCollision% = False, HideLights% = True)
+Function HideRooms%(r.Rooms, HideLights% = True);, NoCollision% = False, HideLights% = True)
 	Local sc.SecurityCams, p.Props, d.Doors
 	Local HideSecurityCams%, HideProps%, HideDoors%
 	Local i%
 	
-	If (Not r\Hidden) Then
+	If (Not EntityHidden(r\OBJ)) Then
 		For sc.SecurityCams = Each SecurityCams
 			HideSecurityCams = True
 			If sc\room <> r Then HideSecurityCams = False
@@ -7774,9 +7773,6 @@ Function HideRooms%(r.Rooms, AdjDoor.Doors = Null, NoCollision% = False, HideLig
 		For d.Doors = Each Doors
 			HideDoors = True
 			If d\room <> r Then HideDoors = False
-			If AdjDoor <> Null Then
-				If d = AdjDoor Then HideDoors = False
-			EndIf
 			If HideDoors Then
 				If d\FrameOBJ <> 0 Then
 					;EntityAlpha(d\FrameOBJ, 0.0)
@@ -7813,17 +7809,15 @@ Function HideRooms%(r.Rooms, AdjDoor.Doors = Null, NoCollision% = False, HideLig
 		;EntityAlpha(GetChild(r\OBJ, 2), 0.0)
 		;If NoCollision Then HideEntity(r\OBJ)
 		HideEntity(r\OBJ)
-		
-		r\Hidden = True
 	EndIf
 End Function
 
-Function ShowRooms%(r.Rooms, NoCollision% = False)
+Function ShowRooms%(r.Rooms);, NoCollision% = False)
 	Local sc.SecurityCams, p.Props, d.Doors
 	Local ShowSecurityCams%, ShowProps%, ShowDoors%
 	Local i%
 	
-	If r\Hidden Then
+	If EntityHidden(r\OBJ) Then
 		For sc.SecurityCams = Each SecurityCams
 			ShowSecurityCams = True
 			If sc\room <> r Then ShowSecurityCams = False
@@ -7899,8 +7893,6 @@ Function ShowRooms%(r.Rooms, NoCollision% = False)
 				EndIf
 			Next
 		EndIf
-		
-		r\Hidden = False
 	EndIf
 	
 	RenderRoomLights(r)
@@ -8016,9 +8008,9 @@ Function UpdateRooms%()
 		EndIf
 		
 		If Hide Then
-			HideRooms(r, Null, True)
+			HideRooms(r, True)
 		Else
-			ShowRooms(r, True)
+			ShowRooms(r)
 		EndIf
 	Next
 	
@@ -8033,9 +8025,9 @@ Function UpdateRooms%()
 			If PlayerRoom\Adjacent[i] <> Null Then
 				If PlayerRoom\AdjDoor[i] <> Null Then
 					If PlayerRoom\AdjDoor[i]\OpenState = 0.0 Then
-						HideRooms(PlayerRoom\Adjacent[i], PlayerRoom\AdjDoor[i], False)
+						HideRooms(PlayerRoom\Adjacent[i], False)
 					ElseIf (Not EntityInView(PlayerRoom\AdjDoor[i]\FrameOBJ, Camera))
-						HideRooms(PlayerRoom\Adjacent[i], PlayerRoom\AdjDoor[i], False)
+						HideRooms(PlayerRoom\Adjacent[i], False)
 					Else
 						ShowRooms(PlayerRoom\Adjacent[i])
 					EndIf
@@ -8044,7 +8036,7 @@ Function UpdateRooms%()
 				For j = 0 To MaxRoomAdjacents - 1
 					If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null Then
 						If PlayerRoom\Adjacent[i]\Adjacent[j] <> PlayerRoom Then
-							HideRooms(PlayerRoom\Adjacent[i]\Adjacent[j], PlayerRoom\Adjacent[i]\AdjDoor[j])
+							HideRooms(PlayerRoom\Adjacent[i]\Adjacent[j], False)
 						EndIf
 					EndIf
 				Next

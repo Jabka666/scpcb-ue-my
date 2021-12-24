@@ -5202,6 +5202,9 @@ Function UpdateEvents%()
 					TFormPoint(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0, e\room\OBJ)
 					
 					Temp = 0
+					
+					Local src.Doors, dest.Doors
+					
 					If TFormedX() > 730.0 Then
 						GiveAchievement(Achv970)
 						
@@ -5210,15 +5213,22 @@ Function UpdateEvents%()
 						TFormPoint(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0, e\room\OBJ)
 						
 						For i = 1 To 2
-							e\room\RoomDoors[i]\Open = e\room\RoomDoors[i + 2]\Open
-							e\room\RoomDoors[i]\OpenState = e\room\RoomDoors[i + 2]\OpenState
-							PositionEntity(e\room\RoomDoors[i]\OBJ, EntityX(e\room\RoomDoors[i + 2]\OBJ), EntityY(e\room\RoomDoors[i + 2]\OBJ), EntityZ(e\room\RoomDoors[i + 2]\OBJ))
-							PositionEntity(e\room\RoomDoors[i]\OBJ2, EntityX(e\room\RoomDoors[i + 2]\OBJ2), EntityY(e\room\RoomDoors[i + 2]\OBJ2), EntityZ(e\room\RoomDoors[i + 2]\OBJ2))							
+							src.Doors = e\room\RoomDoors[i + 2]
+							dest.Doors = e\room\RoomDoors[i]
 							
-							e\room\RoomDoors[i + 2]\Open = False
-							e\room\RoomDoors[i + 2]\OpenState = 0.0
-							PositionEntity(e\room\RoomDoors[i + 2]\OBJ, EntityX(e\room\RoomDoors[0]\OBJ), EntityY(e\room\RoomDoors[0]\OBJ), EntityZ(e\room\RoomDoors[0]\OBJ))
-							PositionEntity(e\room\RoomDoors[i + 2]\OBJ2, EntityX(e\room\RoomDoors[0]\OBJ2), EntityY(e\room\RoomDoors[0]\OBJ2), EntityZ(e\room\RoomDoors[0]\OBJ2))
+							dest\Open = src\Open
+							dest\OpenState = src\OpenState
+							EntityParent(dest\OBJ, dest\FrameOBJ) : EntityParent(src\OBJ, src\FrameOBJ)
+							EntityParent(dest\OBJ2, dest\FrameOBJ) : EntityParent(src\OBJ2, src\FrameOBJ)
+							
+							PositionEntity(dest\OBJ, EntityX(src\OBJ), EntityY(src\OBJ), EntityZ(src\OBJ))
+							PositionEntity(dest\OBJ2, EntityX(src\OBJ2), EntityY(src\OBJ2), EntityZ(src\OBJ2))							
+							
+							EntityParent(dest\OBJ, 0) : EntityParent(src\OBJ, 0)
+							EntityParent(dest\OBJ2, 0) : EntityParent(src\OBJ2, 0)
+							
+							src\Open = False
+							src\OpenState = 0.0
 						Next	
 						
 						TFormPoint(TFormedX() - 1024.0, TFormedY(), TFormedZ(), e\room\OBJ, 0)
@@ -5234,15 +5244,22 @@ Function UpdateEvents%()
 						TFormPoint(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0, e\room\OBJ)
 						
 						For i = 1 To 2
-							e\room\RoomDoors[i + 2]\Open = e\room\RoomDoors[i]\Open
-							e\room\RoomDoors[i + 2]\OpenState = e\room\RoomDoors[i]\OpenState
-							PositionEntity(e\room\RoomDoors[i + 2]\OBJ, EntityX(e\room\RoomDoors[i]\OBJ), EntityY(e\room\RoomDoors[i]\OBJ), EntityZ(e\room\RoomDoors[i]\OBJ))
-							PositionEntity(e\room\RoomDoors[i + 2]\OBJ2, EntityX(e\room\RoomDoors[i]\OBJ2), EntityY(e\room\RoomDoors[i]\OBJ2), EntityZ(e\room\RoomDoors[i]\OBJ2))							
+							src.Doors = e\room\RoomDoors[i]
+							dest.Doors = e\room\RoomDoors[i + 2]
 							
-							e\room\RoomDoors[i]\Open = False
-							e\room\RoomDoors[i]\OpenState = 0.0
-							PositionEntity(e\room\RoomDoors[i]\OBJ, EntityX(e\room\RoomDoors[0]\OBJ), EntityY(e\room\RoomDoors[0]\OBJ), EntityZ(e\room\RoomDoors[0]\OBJ))
-							PositionEntity(e\room\RoomDoors[i]\OBJ2, EntityX(e\room\RoomDoors[0]\OBJ2), EntityY(e\room\RoomDoors[0]\OBJ2), EntityZ(e\room\RoomDoors[0]\OBJ2))							
+							dest\Open = src\Open
+							dest\OpenState = src\OpenState
+							EntityParent(dest\OBJ, dest\FrameOBJ) : EntityParent(src\OBJ, src\FrameOBJ)
+							EntityParent(dest\OBJ2, dest\FrameOBJ) : EntityParent(src\OBJ2, src\FrameOBJ)
+							
+							PositionEntity(dest\OBJ, EntityX(src\OBJ), EntityY(src\OBJ), EntityZ(src\OBJ))
+							PositionEntity(dest\OBJ2, EntityX(src\OBJ2), EntityY(src\OBJ2), EntityZ(src\OBJ2))							
+							
+							EntityParent(dest\OBJ, 0) : EntityParent(src\OBJ, 0)
+							EntityParent(dest\OBJ2, 0) : EntityParent(src\OBJ2, 0)
+							
+							src\Open = False
+							src\OpenState = 0.0	
 						Next
 						
 						TFormPoint(TFormedX() + 1024.0, TFormedY(), TFormedZ(), e\room\OBJ, 0)

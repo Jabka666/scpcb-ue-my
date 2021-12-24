@@ -1343,8 +1343,14 @@ Function LoadGame%(File$)
 	EndIf
 	
 	If me\Collider <> 0 Then
+		If PlayerRoom <> Null Then
+			ShowEntity(PlayerRoom\OBJ)
+		EndIf
 		ShowEntity(me\Collider)
 		TeleportEntity(me\Collider, EntityX(me\Collider), EntityY(me\Collider) + 0.5, EntityZ(me\Collider), 0.3, True)
+		If PlayerRoom <> Null Then
+			HideEntity(PlayerRoom\OBJ)
+		EndIf
 	EndIf
 	
 	UpdateTimer = 0.0
@@ -2043,8 +2049,14 @@ Function LoadGameQuick%(File$)
 	CloseFile(f)
 	
 	If me\Collider <> 0 Then
+		If PlayerRoom <> Null Then
+			ShowEntity(PlayerRoom\OBJ)
+		EndIf
 		ShowEntity(me\Collider)
 		TeleportEntity(me\Collider, EntityX(me\Collider), EntityY(me\Collider) + 0.5, EntityZ(me\Collider), 0.3, True)
+		If PlayerRoom <> Null Then
+			HideEntity(PlayerRoom\OBJ)
+		EndIf
 	EndIf
 	
 	UpdateTimer = 0.0

@@ -3484,5 +3484,4 @@ Function RenderMapCreatorTooltip%(x%, y%, Width%, Height%, MapName$)
 End Function
 
 ;~IDEal Editor Parameters:
-;~F#267
 ;~C#Blitz3D
