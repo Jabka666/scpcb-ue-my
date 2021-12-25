@@ -7736,8 +7736,8 @@ Function HideRoomLights%(r.Rooms, HideLights% = True)
 	Next
 End Function
 
-; ~ TODO: Fix collisions (EntityAlpha)
-Function HideRooms%(r.Rooms, HideLights% = True);, NoCollision% = False, HideLights% = True)
+; ~ TODO: Fix collisions (EntityAlpha) and adjacent doors
+Function HideRooms%(r.Rooms, HideLights% = True)
 	Local sc.SecurityCams, p.Props, d.Doors
 	Local HideSecurityCams%, HideProps%, HideDoors%
 	Local i%
@@ -7774,21 +7774,9 @@ Function HideRooms%(r.Rooms, HideLights% = True);, NoCollision% = False, HideLig
 			HideDoors = True
 			If d\room <> r Then HideDoors = False
 			If HideDoors Then
-				If d\FrameOBJ <> 0 Then
-					;EntityAlpha(d\FrameOBJ, 0.0)
-					;If NoCollision Then HideEntity(d\FrameOBJ)
-					HideEntity(d\FrameOBJ)
-				EndIf
-				If d\OBJ <> 0 Then
-					;EntityAlpha(d\OBJ, 0.0)
-					;If NoCollision Then HideEntity(d\OBJ)
-					HideEntity(d\OBJ)
-				EndIf
-				If d\OBJ2 <> 0 Then
-					;EntityAlpha(d\OBJ2, 0.0)
-					;If NoCollision Then HideEntity(d\OBJ2)
-					HideEntity(d\OBJ2)
-				EndIf
+				If d\FrameOBJ <> 0 Then HideEntity(d\FrameOBJ)
+				If d\OBJ <> 0 Then HideEntity(d\OBJ)
+				If d\OBJ2 <> 0 Then HideEntity(d\OBJ2)
 				For i = 0 To 1
 					If d\Buttons[i] <> 0 Then HideEntity(d\Buttons[i])
 					If d\ElevatorPanel[i] <> 0 Then HideEntity(d\ElevatorPanel[i])
@@ -7806,13 +7794,11 @@ Function HideRooms%(r.Rooms, HideLights% = True);, NoCollision% = False, HideLig
 			If r\Objects[i] <> 0 Then HideEntity(r\Objects[i])
 		Next
 		
-		;EntityAlpha(GetChild(r\OBJ, 2), 0.0)
-		;If NoCollision Then HideEntity(r\OBJ)
 		HideEntity(r\OBJ)
 	EndIf
 End Function
 
-Function ShowRooms%(r.Rooms);, NoCollision% = False)
+Function ShowRooms%(r.Rooms)
 	Local sc.SecurityCams, p.Props, d.Doors
 	Local ShowSecurityCams%, ShowProps%, ShowDoors%
 	Local i%
@@ -7848,21 +7834,9 @@ Function ShowRooms%(r.Rooms);, NoCollision% = False)
 			ShowDoors = True
 			If d\room <> r Then ShowDoors = False
 			If ShowDoors Then
-				If d\FrameOBJ <> 0 Then
-					;EntityAlpha(d\FrameOBJ, 1.0)
-					;If NoCollision Then ShowEntity(d\FrameOBJ)
-					ShowEntity(d\FrameOBJ)
-				EndIf
-				If d\OBJ <> 0 Then
-					;EntityAlpha(d\OBJ, 1.0)
-					;If NoCollision Then ShowEntity(d\OBJ)
-					ShowEntity(d\OBJ)
-				EndIf
-				If d\OBJ2 <> 0 Then
-					;EntityAlpha(d\OBJ2, 1.0)
-					;If NoCollision Then ShowEntity(d\OBJ2)
-					ShowEntity(d\OBJ2)
-				EndIf
+				If d\FrameOBJ <> 0 Then ShowEntity(d\FrameOBJ)
+				If d\OBJ <> 0 Then ShowEntity(d\OBJ)
+				If d\OBJ2 <> 0 Then ShowEntity(d\OBJ2)
 				For i = 0 To 1
 					If d\Buttons[i] <> 0 Then ShowEntity(d\Buttons[i])
 					If d\ElevatorPanel[i] <> 0 Then ShowEntity(d\ElevatorPanel[i])
@@ -7878,8 +7852,6 @@ Function ShowRooms%(r.Rooms);, NoCollision% = False)
 			If r\Objects[i] <> 0 Then ShowEntity(r\Objects[i])
 		Next
 		
-		;EntityAlpha(GetChild(r\OBJ, 2), 1.0)
-		;If NoCollision Then ShowEntity(r\OBJ)
 		ShowEntity(r\OBJ)
 		
 		If r\TriggerBoxAmount > 0 Then

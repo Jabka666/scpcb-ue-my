@@ -51,6 +51,7 @@ Bug Fixes:
 	- Fixed "clones" of main hallway items seemingly vanishing after SCP-970 teleports the player (e.g. clipboards losing their items).
 	- Fixed cloned items not removing after teleporing by SCP-970.
 	- Fixed Strange Note from SCP-970 falling through floor when dropped.
+	- Fixed glitched doors movement.
 - Fixed SCP-294 sometimes giving the wrong drink.
 - Fixed removal voice lines being spammable by repeatedly approaching and backing away from SCP-049.
 - Fixed MAV after killing the SCP-035's tentacle.

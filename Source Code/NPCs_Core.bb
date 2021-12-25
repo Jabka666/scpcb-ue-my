@@ -60,7 +60,7 @@ Type NPCs
 	Field FallingPickDistance#
 	Field HasAsset% = False
 	Field Contained% = False
-	Field Dist#
+	Field Dist#, Hidden%
 End Type
 
 Global Curr173.NPCs, Curr106.NPCs, Curr096.NPCs, Curr513_1.NPCs, Curr049.NPCs
@@ -590,6 +590,26 @@ End Function
 
 Global TakeOffTimer#
 
+Function HideNPCs%(n.NPCs)
+	If (Not n\Hidden) Then
+		If n\OBJ <> 0 Then EntityAlpha(n\OBJ, 0.0)
+		If n\OBJ2 <> 0 Then EntityAlpha(n\OBJ2, 0.0)
+		If n\OBJ3 <> 0 Then EntityAlpha(n\OBJ3, 0.0)
+		
+		n\Hidden = True
+	EndIf
+End Function
+
+Function ShowNPCs%(n.NPCs)
+	If n\Hidden Then
+		If n\OBJ <> 0 Then EntityAlpha(n\OBJ, 1.0)
+		If n\OBJ2 <> 0 Then EntityAlpha(n\OBJ2, 1.0)
+		If n\OBJ3 <> 0 Then EntityAlpha(n\OBJ3, 1.0)
+		
+		n\Hidden = False
+	EndIf
+End Function
+
 Function UpdateNPCs%()
 	CatchErrors("Uncaught (UpdateNPCs)")
 	
@@ -605,21 +625,9 @@ Function UpdateNPCs%()
 			n\Dist = xDist + zDist
 			
 			If n\Dist <= HideDistance Then
-				If n\OBJ <> 0 Then
-					If EntityHidden(n\OBJ) Then
-						ShowEntity(n\OBJ)
-						If n\OBJ2 <> 0 Then ShowEntity(n\OBJ2)
-						If n\OBJ3 <> 0 Then ShowEntity(n\OBJ2)
-					EndIf
-				EndIf
+				ShowNPCs(n)
 			Else
-				If n\OBJ <> 0 Then
-					If (Not EntityHidden(n\OBJ)) Then
-						HideEntity(n\OBJ)
-						If n\OBJ2 <> 0 Then HideEntity(n\OBJ2)
-						If n\OBJ3 <> 0 Then HideEntity(n\OBJ2)
-					EndIf
-				EndIf
+				HideNPCs(n)
 			EndIf
 		Next
 	EndIf
