@@ -6800,63 +6800,9 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[1] = CreateDoor(r\x, r\y + 2048.0 * RoomScale, r\z + 32.0 + 1024.0 * RoomScale, 180.0, r, False, Heavy_Door)
 			r\RoomDoors[1]\AutoClose = False
 			
-			Local Entity%
-			Local Hallway% = LoadRMesh("GFX\map\dimension_106_2.rmesh", Null) ; ~ The tunnels in the first room
-			
-			r\Objects[8] = LoadRMesh("GFX\map\pocketdimension3_opt.rmesh", Null) ; ~ The room with the throne, moving pillars etc 
-			
-			r\Objects[9] = LoadRMesh("GFX\map\pocketdimension4_opt.rmesh", Null) ; ~ The flying pillar
-			
-			r\Objects[10] = CopyEntity(r\Objects[9])
-			
-			r\Objects[11] = LoadRMesh("GFX\map\dimension_106_5.rmesh", Null) ; ~ The pillar room
-			
-			Local Terrain% = LoadMesh_Strict("GFX\map\pocketdimensionterrain.b3d")
-			
-			ScaleEntity(Terrain, RoomScale, RoomScale, RoomScale, True)
-			PositionEntity(Terrain, r\x, r\y + 29440.0, r\z, True)
-			
-			For k = 0 To -1
-				Select k
-					Case 0
-						;[Block]
-						Entity = Hallway 
-						;[End Block]
-					Case 1
-						;[Block]
-						Entity = r\Objects[8]
-						;[End Block]
-					Case 2
-						;[Block]
-						Entity = r\Objects[9]
-						;[End Block]
-					Case 3
-						;[Block]
-						Entity = r\Objects[10]
-						;[End Block]
-					Case 4
-						;[Block]
-						Entity = r\Objects[11]
-						;[End Block]
-				End Select 
-			Next
-			
-			For i = 8 To 11
-				ScaleEntity(r\Objects[i], RoomScale, RoomScale, RoomScale)
-				EntityType(r\Objects[i], HIT_MAP)
-				EntityPickMode(r\Objects[i], 2)
-				PositionEntity(r\Objects[i], r\x, r\y, r\z + 32.0, True)
-			Next
-			
-			ScaleEntity(Terrain, RoomScale, RoomScale, RoomScale)
-			EntityType(Terrain, HIT_MAP)
-			EntityPickMode(Terrain, 3)
-			PositionEntity(Terrain, r\x, r\y + 2944.0 * RoomScale, r\z + 32.0, True)			
-			
 			de.Decals = CreateDecal(13, r\x - (1536.0 * RoomScale), r\y + 0.02, r\z + 608.0 * RoomScale + 32.0, 90.0, 0.0, 0.0, 0.8, 1.0, 1 + 8, 2)
 			
-			ScaleEntity(r\Objects[10], RoomScale * 1.5, RoomScale * 2.0, RoomScale * 1.5, True)			
-			PositionEntity(r\Objects[11], r\x, r\y, r\z + 64.0, True)	
+			Local Hallway% = LoadRMesh("GFX\map\dimension_106_2.rmesh", Null) ; ~ The tunnels in the first room
 			
 			For i = 1 To 8
 				r\Objects[i - 1] = CopyEntity(Hallway)
@@ -6873,6 +6819,22 @@ Function FillRoom%(r.Rooms)
 				If i < 6 Then 
 					de.Decals = CreateDecal(i + 7, r\x + Cos(Angle) * (512.0 * RoomScale) * 3.0, r\y + 0.02, r\z + Sin(Angle) * (512.0 * RoomScale) * 3.0, 90.0, Angle - 90.0, 0.0, 0.5, 1.0, 1 + 8, 2)
 				EndIf				
+			Next
+			FreeEntity(Hallway)
+			
+			r\Objects[8] = LoadRMesh("GFX\map\pocketdimension3_opt.rmesh", Null) ; ~ The room with the throne, moving pillars etc 
+			
+			r\Objects[9] = LoadRMesh("GFX\map\pocketdimension4_opt.rmesh", Null) ; ~ The flying pillar
+			
+			r\Objects[10] = CopyEntity(r\Objects[9])
+			
+			r\Objects[11] = LoadRMesh("GFX\map\dimension_106_5.rmesh", Null) ; ~ The pillar room
+			
+			For i = 8 To 11
+				ScaleEntity(r\Objects[i], RoomScale * ((i <> 10) + ((i = 10) * 1.5)), RoomScale * ((i <> 10) + ((i = 10) * 2.0)), RoomScale * ((i <> 10) + ((i = 10) * 1.5)))
+				EntityType(r\Objects[i], HIT_MAP)
+				EntityPickMode(r\Objects[i], 2)
+				PositionEntity(r\Objects[i], r\x, r\y, r\z + 32.0 + (32.0 * (i = 11)), True)
 			Next
 			
 			For i = 12 To 16
@@ -6910,31 +6872,35 @@ Function FillRoom%(r.Rooms)
 			EntityTexture(r\Objects[17], Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
 			PositionEntity(r\Objects[17], EntityX(r\Objects[8], True), r\y + 1376.0 * RoomScale, EntityZ(r\Objects[8], True) - 2848.0 * RoomScale)
+			RotateEntity(r\Objects[17], 0.0, 180.0, 0.0)
 			ScaleSprite(r\Objects[17], 0.03, 0.03)
 			EntityBlend(r\Objects[17], 3)
 			EntityFX(r\Objects[17], 1 + 8)
 			SpriteViewMode(r\Objects[17], 2)
-			HideEntity(r\Objects[17])
 			
-			r\Objects[18] = CreateSprite()
-			ScaleSprite(r\Objects[18], 8.0, 8.0)
-			EntityTexture(r\Objects[18], r\Textures[0])
-			EntityOrder(r\Objects[18], 100)
-			EntityBlend(r\Objects[18], 2)
-			EntityFX(r\Objects[18], 1 + 8)
-			SpriteViewMode(r\Objects[18], 2)
-			HideEntity(r\Objects[18])
+			r\Objects[18] = LoadMesh_Strict("GFX\map\throne_wall.b3d")
+			PositionEntity(r\Objects[18], EntityX(r\Objects[8], True), r\y, EntityZ(r\Objects[8], True) - 864.5 * RoomScale)
+			ScaleEntity(r\Objects[18], RoomScale / 2.04, RoomScale, RoomScale)
+			EntityPickMode(r\Objects[18], 2)
+			EntityType(r\Objects[18], HIT_MAP)
+			EntityParent(r\Objects[18], r\OBJ)
 			
-			r\Objects[19] = LoadMesh_Strict("GFX\map\throne_wall.b3d")
-			PositionEntity(r\Objects[19], EntityX(r\Objects[8], True), r\y, EntityZ(r\Objects[8], True) - 864.5 * RoomScale)
-			ScaleEntity(r\Objects[19], RoomScale / 2.04, RoomScale, RoomScale)
-			EntityPickMode(r\Objects[19], 2)
-			EntityType(r\Objects[19], HIT_MAP)
-			EntityParent(r\Objects[19], r\OBJ)
-			HideEntity(r\Objects[19])
+			r\Objects[19] = CreateSprite()
+			ScaleSprite(r\Objects[19], 8.0, 8.0)
+			EntityTexture(r\Objects[19], r\Textures[0])
+			EntityOrder(r\Objects[19], 100)
+			EntityBlend(r\Objects[19], 2)
+			EntityFX(r\Objects[19], 1 + 8)
+			SpriteViewMode(r\Objects[19], 2)
 			
-			FreeEntity(Entity)
-			FreeEntity(Hallway)
+			r\Objects[20] = LoadMesh_Strict("GFX\map\pocketdimensionterrain.b3d")
+			ScaleEntity(r\Objects[20], RoomScale, RoomScale, RoomScale)
+			EntityType(r\Objects[20], HIT_MAP)
+			PositionEntity(r\Objects[20], r\x, r\y + 2944.0 * RoomScale, r\z + 32.0, True)
+			
+			For i = 17 To 20
+				HideEntity(r\Objects[i])
+			Next
 			
 			it.Items = CreateItem("Burnt Note", "paper", EntityX(r\OBJ), r\y + 0.5, EntityZ(r\OBJ) + 3.5)
 			;[End Block]
@@ -7786,13 +7752,13 @@ Function HideRooms%(r.Rooms, HideLights% = True)
 		
 		HideRoomLights(r, HideLights)
 		
-		For i = 0 To MaxRoomLevers - 1
-			If r\Levers[i] <> 0 Then HideEntity(r\Levers[i])
-		Next
+		;For i = 0 To MaxRoomLevers - 1
+		;	If r\Levers[i] <> 0 Then HideEntity(r\Levers[i])
+		;Next
 		
-		For i = 0 To MaxRoomObjects - 1
-			If r\Objects[i] <> 0 Then HideEntity(r\Objects[i])
-		Next
+		;For i = 0 To MaxRoomObjects - 1
+		;	If r\Objects[i] <> 0 Then HideEntity(r\Objects[i])
+		;Next
 		
 		HideEntity(r\OBJ)
 	EndIf
@@ -7844,13 +7810,13 @@ Function ShowRooms%(r.Rooms)
 			EndIf
 		Next
 		
-		For i = 0 To MaxRoomLevers - 1
-			If r\Levers[i] <> 0 Then ShowEntity(r\Levers[i])
-		Next
+		;For i = 0 To MaxRoomLevers - 1
+		;	If r\Levers[i] <> 0 Then ShowEntity(r\Levers[i])
+		;Next
 		
-		For i = 0 To MaxRoomObjects - 1
-			If r\Objects[i] <> 0 Then ShowEntity(r\Objects[i])
-		Next
+		;For i = 0 To MaxRoomObjects - 1
+		;	If r\Objects[i] <> 0 Then ShowEntity(r\Objects[i])
+		;Next
 		
 		ShowEntity(r\OBJ)
 		

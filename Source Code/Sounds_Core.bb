@@ -467,6 +467,16 @@ Function KillSounds%()
 	Delete Each Subtitles
 End Function
 
+Function StopBreathSound%()
+	If BreathCHN <> 0 Then
+		If ChannelPlaying(BreathCHN) Then StopChannel(BreathCHN)
+	EndIf
+	
+	If BreathGasRelaxedCHN <> 0 Then
+		If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN)
+	EndIf
+End Function
+
 Function GetStepSound%(Entity%)
 	Local mat.Materials
 	Local Picker%, Brush%, Texture%, Name$

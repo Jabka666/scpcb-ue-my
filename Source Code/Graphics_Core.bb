@@ -442,6 +442,11 @@ Function RenderBlur%(Power#)
 	CopyRect(0, 0, opt\GraphicWidth, opt\GraphicHeight, SMALLEST_POWER_TWO_HALF - (opt\GraphicWidth / 2), SMALLEST_POWER_TWO_HALF - (opt\GraphicHeight / 2), BackBuffer(), TextureBuffer(ArkBlurTexture))
 End Function
 
+Function FreeBlur%()
+	If ArkBlurCam <> 0 Then ArkBlurCam = 0
+	If ArkBlurTexture <> 0 Then DeleteSingleTextureEntryFromCache(ArkBlurTexture)
+End Function
+
 Function PlayStartupVideos%()
 	HidePointer()
 	

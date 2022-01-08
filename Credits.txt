@@ -195,9 +195,6 @@ by "xthevilecorruptor"
 		SCP-035 is based on "SCP-035 - Possessive Mask",
 by "Kain Pathos Crow"
 
-		SCP-ES-045 is base on "Anna's Doll",
-by "WSullivan"
-
 		SCP-049 is based on "SCP-049 - Plague Doctor",
 by "Gabriel Jade"
 
@@ -219,20 +216,8 @@ by "Lt Masipag"
 		SCP-173 is based on "SCP-173 - The Sculpture",
 by "Lt Masipag"
 
-		SCP-178 is based on "SCP-178 - "3-D" Specs",
-by "Dr. Wartheim"
-
 		SCP-205 is based on "SCP-205 - Shadow Lamps", 
 by "Sorts"
-
-		SCP-207 is based on "SCP-207 - Cola Bottles", 
-by "Aeish"
-
-		SCP-215 is based on "SCP-215 - Paranoia-Inducing Spectacles",
-by "MalcolmMacLean"
-
-		SCP-268 is based on "SCP-268 - Invisibility Cap",
-by "Pair Of Ducks"
 
 		SCP-294 is based on "SCP-294 - The Coffee Machine",
 by "far2"
@@ -285,16 +270,13 @@ by "Freudian"
 		SCP-1025 is based on "SCP-1025 - Encyclopedia of Diseases",
 by "Lasergoose"
 
-		SCP-1033-RU is based on "SCP-1033-RU - Universal Defender",
-author unknown
-
 		SCP-1048 is based on "SCP-1048 - Builder Bear",
 by "Researcher Dios"
 
 		SCP-1123 is based on "SCP-1123 - Atrocity Skull",
 by "sandrewswann"
 
-		SCP-1162 is based on "SCP-1162 - A Hole in the Wall",
+		SCP-1162-ARC is based on "SCP-1162-ARC - A Hole in the Wall",
 by "Dedaluminus"
 
 		SCP-1499 is based on "SCP-1499 - The Gas Mask",

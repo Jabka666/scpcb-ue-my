@@ -343,6 +343,7 @@ Rooms:
 - Rebalanced some keycard buttons.
 
 Items:
+- Added 3D models for SCP-860, Lost Key and coins.
 - Added rusty texture for memorable coin.
 - Added SCRAMBLE Gear.
 - Added low battery sound for S-NAV, Radio Transceiver and Night Vision Goggles.

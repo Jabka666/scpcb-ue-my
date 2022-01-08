@@ -5,7 +5,6 @@ Type Achievements
 	Field AchievementStrings$[MAXACHIEVEMENTS]
 	Field AchievementDescs$[MAXACHIEVEMENTS]
 	Field AchvIMG%[MAXACHIEVEMENTS]
-	Field AchvPDDone%
 	Field AchvLocked%
 End Type
 
@@ -110,7 +109,7 @@ Function UpdateAchievementMsg%()
 	Local x%, y%
 	
 	For amsg.AchievementMsg = Each AchievementMsg
-		If amsg\MsgTime <> 0.0
+		If amsg\MsgTime <> 0.0 Then
 			If amsg\MsgTime > 0.0 And amsg\MsgTime < 70.0 * 7.0 Then
 				amsg\MsgTime = amsg\MsgTime + fps\Factor[1]
 				If amsg\MsgX > -Width Then amsg\MsgX = Max(amsg\MsgX - (4.0 * fps\Factor[1]), -Width)

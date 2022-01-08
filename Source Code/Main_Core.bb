@@ -2092,7 +2092,7 @@ Repeat
 	If MainMenuOpen Then
 		UpdateMainMenu()
 	Else
-		MainLoop()
+		UpdateGame()
 	EndIf
 	
 	RenderGamma()
@@ -2112,8 +2112,8 @@ Repeat
 	Flip(opt\VSync)
 Forever
 
-Function MainLoop%()
-	CatchErrors("Uncaught (MainLoop)")
+Function UpdateGame%()
+	CatchErrors("Uncaught (UpdateGame)")
 	
 	Local e.Events, r.Rooms
 	Local i%
@@ -2218,35 +2218,32 @@ Function MainLoop%()
 				HideDistance = 17.0
 			EndIf
 			CanSave = True
+			UpdateFog()
 			UpdateDistanceTimer()
 			UpdateDeaf()
-			UpdateFog()
 			UpdateEmitters()
 			If PlayerRoom\RoomTemplate\Name = "dimension_1499" And QuickLoadPercent > 0 And QuickLoadPercent < 100 Then ShouldEntitiesFall = False
 			UpdateMouseLook()
 			UpdateMoving()
+			UpdateVomit()
 			InFacility = CheckForPlayerInFacility()
 			CurrStepSFX = 0
 			If PlayerRoom\RoomTemplate\Name = "dimension_1499"
-				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100
-					UpdateDimension1499()
-				EndIf
+				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateDimension1499()
 				UpdateLeave1499()
+			ElseIf PlayerRoom\RoomTemplate\Name = "dimension_106"
+				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateDimension106()
 			Else
 				UpdateDoors()
 				UpdateScreens()
 				UpdateRoomLights()
 				If PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a" Then
-					If QuickLoadPercent = -1 Lor QuickLoadPercent = 100
-						UpdateEndings()
-					EndIf
+					If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateEndings()
 				Else
-					If QuickLoadPercent = -1 Lor QuickLoadPercent = 100
-						UpdateEvents()
-					EndIf
-					TimeCheckpointMonitors()
-					UpdateVomit()
+					UpdateRooms()
+					If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateEvents()
 				EndIf
+				TimeCheckpointMonitors()
 				UpdateMonitorSaving()
 			EndIf
 			UpdateDecals()
@@ -2510,6 +2507,12 @@ Function MainLoop%()
 	; ~ Go out of function immediately if the game has been quit
 	If MainMenuOpen Then Return
 	
+	RenderGame()
+	
+	CatchErrors("UpdateGame")
+End Function
+
+Function RenderGame%()
 	If fps\Factor[0] > 0.0 And PlayerRoom\RoomTemplate\Name <> "dimension_1499" Then RenderSecurityCams()
 	
 	RenderWorld2(Max(0.0, 1.0 + (fps\Accumulator / TICK_DURATION)))
@@ -2533,20 +2536,12 @@ Function MainLoop%()
 	RenderQuickLoading()
 	
 	RenderAchievementMsg()
-	
-	CatchErrors("MainLoop")
 End Function
 
 Function Kill%(IsBloody% = False)
 	If chs\GodMode Then Return
 	
-	If BreathCHN <> 0 Then
-		If ChannelPlaying(BreathCHN) Then StopChannel(BreathCHN)
-	EndIf
-	
-	If BreathGasRelaxedCHN <> 0 Then
-		If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN)
-	EndIf
+	StopBreathSound()
 	
 	If (Not me\Terminated) Then
 		If IsBloody Then
@@ -2688,9 +2683,9 @@ Function SetCrouch%(NewCrouch%)
 End Function
 
 Function InjurePlayer%(Injuries_#, Infection# = 0.0, BlurTimer_# = 0.0, VestFactor# = 0.0, HelmetFactor# = 0.0)
-	If Injuries_ <> 0.0 Then me\Injuries = me\Injuries + Injuries_ - ((wi\BallisticVest = 1) * VestFactor) - ((wi\BallisticVest = 2) * VestFactor * 1.35) - (me\Crouch * wi\BallisticHelmet * HelmetFactor)
-	If BlurTimer_ <> 0.0 And Injuries_ <> 0.0 Then me\BlurTimer = BlurTimer_
-	If Infection <> 0.0 Then I_008\Timer = I_008\Timer + (Infection * (wi\HazmatSuit = 0))
+	me\Injuries = me\Injuries + Injuries_ - ((wi\BallisticVest = 1) * VestFactor) - ((wi\BallisticVest = 2) * VestFactor * 1.35) - (me\Crouch * wi\BallisticHelmet * HelmetFactor)
+	me\BlurTimer = me\BlurTimer + BlurTimer_
+	I_008\Timer = I_008\Timer + (Infection * (wi\HazmatSuit = 0))
 End Function
 
 Function UpdateCough%(Chance_%)
@@ -3370,9 +3365,9 @@ Function UpdateFog%()
 		ElseIf PlayerRoom\RoomTemplate\Name = "dimension_106"
 			For e.Events = Each Events
 				If e\EventID = e_dimension_106 Then
-					If EntityY(me\Collider) > 2608.0 * RoomScale Lor e\EventState2 > 1.0 Then
+					If e\EventState2 = PD_TrenchesRoom Lor e\EventState2 = PD_TowerRoom Then
 						CurrFogColor = FogColorPDTrench
-					ElseIf EntityY(me\Collider) >= 2000.0 * RoomScale And EntityY(me\Collider) <= 2608.0 * RoomScale
+					ElseIf e\EventState2 = PD_FakeTunnelRoom
 						CurrFogColor = FogColorHCZ
 					Else
 						CurrFogColor = FogColorPD
@@ -5828,60 +5823,6 @@ Function RenderGUI%()
 		HidePointer()
 	EndIf 	
 	
-	If PlayerRoom\RoomTemplate\Name = "dimension_106" Then
-		For e.Events = Each Events
-			If PlayerRoom = e\room Then
-				If Float(e\EventStr) < 1000.0 Then
-					If e\EventState > 600.0 Then
-						If me\BlinkTimer < -3.0 And me\BlinkTimer > -10.0 Then
-							If (Not e\Img) Then
-								If me\BlinkTimer > -5.0 And Rand(30) = 1 Then
-									PlaySound_Strict(DripSFX[Rand(0, 3)])
-									If (Not e\Img) Then
-										e\Img = LoadImage_Strict("GFX\npcs\scp_106_face.png")
-										e\Img = ScaleImage2(e\Img, MenuScale, MenuScale)
-									EndIf
-								EndIf
-							Else
-								DrawImage(e\Img, mo\Viewport_Center_X - (Rand(390, 310) * MenuScale), mo\Viewport_Center_Y - (Rand(290, 310) * MenuScale))
-							EndIf
-						Else
-							If e\Img <> 0 Then
-								FreeImage(e\Img) : e\Img = 0
-							EndIf
-						EndIf
-						Exit
-					EndIf
-				Else
-					If me\BlinkTimer < -3.0 And me\BlinkTimer > -10.0 Then
-						If (Not e\Img) Then
-							If me\BlinkTimer > -5.0 Then
-								If (Not e\Img) Then
-									e\Img = LoadImage_Strict("GFX\kneel_mortal.png")
-									e\Img = ScaleImage2(e\Img, MenuScale, MenuScale)
-									If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN)
-									e\SoundCHN = PlaySound_Strict(e\Sound)
-								EndIf
-							EndIf
-						Else
-							DrawImage(e\Img, mo\Viewport_Center_X - (Rand(390, 310) * MenuScale), mo\Viewport_Center_Y - (Rand(290, 310) * MenuScale))
-						EndIf
-					Else
-						If e\Img <> 0 Then
-							FreeImage(e\Img) : e\Img = 0
-						EndIf
-						If me\BlinkTimer < -3.0 Then
-							If (Not ChannelPlaying(e\SoundCHN)) Then e\SoundCHN = PlaySound_Strict(e\Sound)
-						Else
-							If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN)
-						EndIf
-					EndIf
-					Exit
-				EndIf
-			EndIf
-		Next
-	EndIf
-	
 	If I_294\Using Then Render294()
 	
 	If ClosestButton <> 0 And (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And SelectedDoor = Null And SelectedScreen = Null And (Not MenuOpen) And (Not ConsoleOpen) And SelectedDifficulty\OtherFactors <> EXTREME Then
@@ -6898,6 +6839,7 @@ Function UpdateMenu%()
 					y = y + (35 * MenuScale)
 					
 					opt\Atmosphere = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\Atmosphere, True)
+					;[End Block]
 				Case 2 ; ~ Audio
 					;[Block]
 					y = y + (50 * MenuScale)
@@ -7415,7 +7357,6 @@ Function RenderMenu%()
 					If (MouseOn(x + (270 * MenuScale), y - (9 * MenuScale), 114 * MenuScale, 20) And mm\OnSliderID = 0) Lor mm\OnSliderID = 4
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AnisotropicFiltering)
 					EndIf
-					;[End Block]
 					
 					y = y + (35 * MenuScale)
 					
@@ -7428,6 +7369,7 @@ Function RenderMenu%()
 					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Atmosphere)
 					EndIf
+					;[End Block]
 				Case 2 ; ~ Audio
 					;[Block]
 					SetFont(fo\FontID[Font_Default])
@@ -7704,13 +7646,7 @@ Function UpdateEnding%()
 	ShouldPlay = 66
 	
 	If me\EndingTimer < -200.0 Then
-		If BreathCHN <> 0 Then
-			If ChannelPlaying(BreathCHN) Then StopChannel(BreathCHN) : me\Stamina = 100.0
-		EndIf
-		
-		If BreathGasRelaxedCHN <> 0 Then
-			If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN)
-		EndIf
+		StopBreathSound() : me\Stamina = 100.0
 		
 		If (Not me\EndingScreen) Then
 			me\EndingScreen = LoadImage_Strict("GFX\menu\ending_screen.png")
@@ -8126,13 +8062,13 @@ Function LoadEntities%()
 	
 	LoadMissingTexture()
 	
-	AmbientLightRoomTex = CreateTextureUsingCacheSystem(2, 2)
+	AmbientLightRoomTex = CreateTextureUsingCacheSystem(1, 1)
 	TextureBlend(AmbientLightRoomTex, 3)
 	SetBuffer(TextureBuffer(AmbientLightRoomTex))
 	ClsColor(0, 0, 0)
 	Cls()
 	SetBuffer(BackBuffer())
-	AmbientLightRoomVal = 255
+	AmbientLightRoomVal = 0
 	
 	ScreenTexs[0] = CreateTextureUsingCacheSystem(512, 512, 1)
 	ScreenTexs[1] = CreateTextureUsingCacheSystem(512, 512, 1)
@@ -9163,7 +9099,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	ClearWorld()
 	ResetTimingAccumulator()
 	If Camera <> 0 Then Camera = 0
-	If ArkBlurCam <> 0 Then ArkBlurCam = 0
+	FreeBlur()
 	If Sky <> 0 Then Sky = 0
 	InitFastResize()
 	

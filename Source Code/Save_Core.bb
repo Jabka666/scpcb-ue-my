@@ -150,7 +150,6 @@ Function SaveGame%(File$)
 	For i = 0 To MAXACHIEVEMENTS - 1
 		WriteByte(f, achv\Achievement[i])
 	Next
-	WriteByte(f, achv\AchvPDDone)
 	WriteInt(f, me\RefinedItems)
 	
 	If UsedConsole Then
@@ -643,7 +642,6 @@ Function LoadGame%(File$)
 	For i = 0 To MAXACHIEVEMENTS - 1
 		achv\Achievement[i] = ReadByte(f)
 	Next
-	achv\AchvPDDone = ReadByte(f)
 	me\RefinedItems = ReadInt(f)
 	
 	If ReadInt(f) <> 994 Then UsedConsole = True
@@ -1528,7 +1526,6 @@ Function LoadGameQuick%(File$)
 	For i = 0 To MAXACHIEVEMENTS - 1
 		achv\Achievement[i] = ReadByte(f)
 	Next
-	achv\AchvPDDone = ReadByte(f)
 	me\RefinedItems = ReadInt(f)
 	
 	If ReadInt(f) <> 994 Then UsedConsole = True
