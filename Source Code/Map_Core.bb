@@ -151,7 +151,7 @@ Function AddLight%(room.Rooms, x#, y#, z#, lType%, Range#, R%, G%, B%)
 				EntityParent(room\LightSprites2[i], room\OBJ)
 				HideEntity(room\LightSprites2[i])
 				
-				room\LightIntensity[i] = (R + G + B) / 255.0 / 3.0
+				room\LightIntensity[i] = (R + G + B) / 255.0 / (3.0 - ((Not opt\Atmosphere) * 1.0))
 				room\LightFlicker[i] = Rand(1, 10)
 				room\LightR[i] = R
 				room\LightG[i] = G
@@ -386,9 +386,9 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 					EndIf
 				EndIf
 				If Tex[j] <> 0 Then
-					If Temp1i = 1 Then TextureBlend(Tex[j], 2)
+					If Temp1i = 1 Then TextureBlend(Tex[j], 2 + (3 * opt\Atmosphere))
 					If Instr(Lower(Temp1s), "_lm") <> 0 Then
-						TextureBlend(Tex[j], 2 + (3 * opt\Atmosphere))
+						TextureBlend(Tex[j], 2)
 					EndIf
 					IsAlpha = 2
 					If Temp1i = 3 Then IsAlpha = 1

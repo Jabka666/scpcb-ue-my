@@ -251,7 +251,7 @@ Function UpdateWorld2%()
 	EndIf
 End Function
 
-Const BRIGHTNESS# = 45.0
+Const BRIGHTNESS# = 30.0
 
 Global CurrTrisAmount%
 
@@ -267,7 +267,7 @@ Function RenderWorld2%(Tween#)
 	ElseIf wi\NightVision = 3
 		AmbientLight(255.0, 255.0, 255.0)
 	ElseIf PlayerRoom <> Null
-		AmbientLight(BRIGHTNESS, BRIGHTNESS, BRIGHTNESS)
+		AmbientLight(BRIGHTNESS - ((Not opt\Atmosphere) * 10.0), BRIGHTNESS - ((Not opt\Atmosphere) * 10.0), BRIGHTNESS - ((Not opt\Atmosphere) * 10.0))
 	EndIf
 	
 	CameraViewport(Camera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)

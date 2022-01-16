@@ -8206,9 +8206,6 @@ Function LoadEntities%()
 	MoveEntity(t\OverlayID[10], 0.0, 0.0, 1.0)
 	
 	For i = 0 To 10
-		If (Not opt\Atmosphere) Then
-			If i = 0 Lor i = 10 Then TextureBlend(t\OverlayTextureID[i], 5)
-		EndIf
 		HideEntity(t\OverlayID[i])
 	Next
 	
