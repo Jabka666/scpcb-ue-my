@@ -3262,7 +3262,7 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 			;[End Block]
 		Case Tooltip_Atmosphere
 			;[Block]
-			Txt = "Changes the atmosphere to dark or bright. The bright atmosphere is more comfortable to play in a daylight. In turn, the dark one is better for a night playing."
+			Txt = "Changes the atmosphere to dark or bright. The bright atmosphere is more comfortable to play in a daylight and better for making a video. In turn, the dark one is better for a night playing."
 			R = 255
 			Txt2 = "This option cannot be changed in-game."
 			;[End Block]
