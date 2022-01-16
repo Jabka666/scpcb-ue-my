@@ -25,7 +25,6 @@ Bug Fixes:
     	- Fixed wrong color of the drinks refined in SCP-914.
     	- Fixed multipliers for drinks effects.
     	- Fixed blink and stamina multipliers that were reducing player stats on Fine and Very Fine settings.
-- Fixed vignette in Dark atmosphere mode.
 - Fixed an issue where Dr. Maynard's code could be the same as Dr. Harp's.
 - Fixed a first aid kit that damages the player if the injuries are < 0.5.
 - Fixed a bug where fog color was stored in memory every time.
