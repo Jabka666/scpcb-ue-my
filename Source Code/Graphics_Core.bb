@@ -267,7 +267,7 @@ Function RenderWorld2%(Tween#)
 	ElseIf wi\NightVision = 3
 		AmbientLight(255.0, 255.0, 255.0)
 	ElseIf PlayerRoom <> Null
-		AmbientLight(BRIGHTNESS - ((Not opt\Atmosphere) * 10.0), BRIGHTNESS - ((Not opt\Atmosphere) * 10.0), BRIGHTNESS - ((Not opt\Atmosphere) * 10.0))
+		AmbientLight(BRIGHTNESS, BRIGHTNESS, BRIGHTNESS)
 	EndIf
 	
 	CameraViewport(Camera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)
