@@ -514,7 +514,7 @@ Function LoadOptionsINI%()
 			;[End Block]
 	End Select
 	
-	opt\Atmosphere = GetINIInt(OptionFile, "Graphics", "Atmosphere", False)
+	opt\Atmosphere = GetINIInt(OptionFile, "Graphics", "Atmosphere", True)
 	
 	; ~ [AUDIO]
 	
@@ -743,7 +743,7 @@ Function ResetOptionsINI%()
 	
 	opt\Anisotropic = 4
 	
-	opt\Atmosphere = False
+	opt\Atmosphere = True
 	
 	; ~ [AUDIO]
 	
