@@ -8734,7 +8734,7 @@ Function UpdateDimension106%()
 						EndIf
 						
 						Dist = EntityDistanceSquared(me\Collider, e\room\OBJ)	
-						If Dist > PowTwo(1700.0 * RoomScale) Then Teleport = True
+						If Dist > PowTwo(1600.0 * RoomScale) Then Teleport = True
 						;[End Block]
 					Case PD_FourWayRoom
 						;[Block]
@@ -8999,36 +8999,34 @@ Function UpdateDimension106%()
 						;[End Block]
 					Case PD_FakeTunnelRoom
 						;[Block]
-						If e\EventState3 > 0.0 Then
-							CurrStepSFX = 0
-							ShouldPlay = 1
+						CurrStepSFX = 0
+						ShouldPlay = 1
+						
+						GiveAchievement(AchvPD)
+						
+						UpdateDoors()
+						
+						If e\EventState3 = 0.0 And (e\room\RoomDoors[0]\OpenState > 150.0 Lor e\room\RoomDoors[1]\OpenState > 150.0) Then
+							PlaySound_Strict(LoadTempSound("SFX\Horror\Horror16.ogg"))
+							me\BlurTimer = 800.0
+							e\EventState3 = 1.0
+						EndIf
+						If EntityY(me\Collider) < 5.0 Then 
+							PositionEntity(me\Collider, EntityX(me\Collider, True), EntityY(me\Collider, True) - 500.0 * RoomScale, EntityZ(me\Collider, True))
+							ResetEntity(me\Collider)
 							
-							GiveAchievement(AchvPD)
+							For i = 0 To 1
+								e\room\RoomDoors[i]\Open = False
+								e\room\RoomDoors[i]\OpenState = 0.0
+							Next
 							
-							UpdateDoors()
+							achv\Achievement[AchvPD] = False
 							
-							If e\EventState3 = 1.0 And (e\room\RoomDoors[0]\OpenState > 150.0 Lor e\room\RoomDoors[1]\OpenState > 150.0) Then
-								PlaySound_Strict(LoadTempSound("SFX\Horror\Horror16.ogg"))
-								me\BlurTimer = 800.0
-								e\EventState3 = 2.0
-							EndIf
-							If EntityY(me\Collider) < 5.0 Then 
-								PositionEntity(me\Collider, EntityX(me\Collider, True), EntityY(me\Collider, True) - 500.0 * RoomScale, EntityZ(me\Collider, True))
-								ResetEntity(me\Collider)
-								
-								For i = 0 To 1
-									e\room\RoomDoors[i]\Open = False
-									e\room\RoomDoors[i]\OpenState = 0.0
-								Next
-								
-								achv\Achievement[AchvPD] = False
-								
-								LoadEventSound(e, "SFX\Room\PocketDimension\Rumble.ogg")
-								LoadEventSound(e, "SFX\Room\PocketDimension\PrisonVoices.ogg", 1)
-								
-								e\EventState3 = 0.0
-								e\EventState2 = PD_FourWayRoom
-							EndIf
+							LoadEventSound(e, "SFX\Room\PocketDimension\Rumble.ogg")
+							LoadEventSound(e, "SFX\Room\PocketDimension\PrisonVoices.ogg", 1)
+							
+							e\EventState3 = 0.0
+							e\EventState2 = PD_FourWayRoom
 						EndIf
 						;[End Block]
 					Case PD_TowerRoom
@@ -9061,8 +9059,8 @@ Function UpdateDimension106%()
 							
 							If Rand(750) = 1 And e\EventState3 > 12.0 Then
 								me\BlinkTimer = -10.0
-								e\EventState3 = e\EventState3 - 1.0
 								PlaySound_Strict(HorrorSFX[8])
+								e\EventState3 = e\EventState3 - 1.0
 							EndIf
 							
 							If e\EventState3 = 12.0 Then
@@ -9240,7 +9238,7 @@ Function UpdateDimension106%()
 							PositionEntity(me\Collider, EntityX(e\room\Objects[8], True), e\room\y + 2288.0 * RoomScale, EntityZ(e\room\Objects[8], True))
 							ResetEntity(me\Collider)
 							
-							e\EventState3 = 1.0
+							e\EventState3 = 0.0
 							e\EventState2 = PD_FakeTunnelRoom
 							;[End Block]
 					End Select 

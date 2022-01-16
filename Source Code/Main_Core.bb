@@ -5821,7 +5821,31 @@ Function RenderGUI%()
 		ShowPointer()
 	Else
 		HidePointer()
-	EndIf 	
+	EndIf
+	
+	If PlayerRoom\RoomTemplate\Name = "dimension_106" Then
+		For e.Events = Each Events
+			If e\room = PlayerRoom Then
+				If e\EventState2 = PD_ThroneRoom Then
+					If me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0 Then
+						If (Not e\Img) Then
+							If (ChannelPlaying(e\SoundCHN)) Then StopChannel(e\SoundCHN)
+							If Rand(30) = 1 Then PlaySound_Strict(e\Sound2)
+							e\Img = LoadImage_Strict("GFX\kneel_mortal.png")
+							e\Img = ScaleImage2(e\Img, MenuScale, MenuScale)
+						Else
+							DrawImage(e\Img, mo\Viewport_Center_X - (Rand(390, 310) * MenuScale), mo\Viewport_Center_Y - (Rand(290, 310) * MenuScale))
+							If (Not ChannelPlaying(e\SoundCHN)) Then e\SoundCHN = PlaySound_Strict(e\Sound)
+						EndIf
+					Else
+						If e\Img <> 0 Then FreeImage(e\Img) : e\Img = 0
+						If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN)
+					EndIf
+				EndIf
+				Exit
+			EndIf
+		Next
+	EndIf
 	
 	If I_294\Using Then Render294()
 	

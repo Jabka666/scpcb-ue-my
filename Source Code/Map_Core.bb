@@ -7752,9 +7752,13 @@ Function HideRooms%(r.Rooms, HideLights% = True)
 		
 		HideRoomLights(r, HideLights)
 		
-		;For i = 0 To MaxRoomLevers - 1
-		;	If r\Levers[i] <> 0 Then HideEntity(r\Levers[i])
-		;Next
+		For i = 0 To MaxRoomLevers - 1
+			If r\Levers[i] <> 0 Then
+				HideEntity(r\Levers[i])
+			Else
+				Exit
+			EndIf
+		Next
 		
 		;For i = 0 To MaxRoomObjects - 1
 		;	If r\Objects[i] <> 0 Then HideEntity(r\Objects[i])
@@ -7810,9 +7814,13 @@ Function ShowRooms%(r.Rooms)
 			EndIf
 		Next
 		
-		;For i = 0 To MaxRoomLevers - 1
-		;	If r\Levers[i] <> 0 Then ShowEntity(r\Levers[i])
-		;Next
+		For i = 0 To MaxRoomLevers - 1
+			If r\Levers[i] <> 0 Then
+				ShowEntity(r\Levers[i])
+			Else
+				Exit
+			EndIf
+		Next
 		
 		;For i = 0 To MaxRoomObjects - 1
 		;	If r\Objects[i] <> 0 Then ShowEntity(r\Objects[i])
