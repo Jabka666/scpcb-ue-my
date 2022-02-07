@@ -1,15 +1,3 @@
-Local InitErrorStr$ = ""
-
-If FileSize("FMod.dll") = 0 Then InitErrorStr = InitErrorStr + "FMod.dll" + Chr(13) + Chr(10)
-If FileSize("dplayx.dll") = 0 Then InitErrorStr = InitErrorStr + "dplayx.dll" + Chr(13) + Chr(10)
-If FileSize("d3dim700.dll") = 0 Then InitErrorStr = InitErrorStr + "d3dim700.dll" + Chr(13) + Chr(10)
-If FileSize("BlitzMovie.dll") = 0 Then InitErrorStr = InitErrorStr + "BlitzMovie.dll" + Chr(13) + Chr(10)
-If FileSize("FreeImage.dll") = 0 Then InitErrorStr = InitErrorStr + "FreeImage.dll" + Chr(13) + Chr(10)
-
-If Len(InitErrorStr) > 0 Then RuntimeError("The following DLLs were not found in the game directory:" + Chr(13) + Chr(10) + Chr(13) + Chr(10) + InitErrorStr)
-
-Include "Source Code\KeyBinds_Core.bb"
-Include "Source Code\INI_Core.bb"
 Include "Source Code\Math_Core.bb"
 Include "Source Code\Strict_Loads_Core.bb"
 
@@ -2262,14 +2250,8 @@ Function UpdateGame%()
 		EndIf
 		
 		If (Not MenuOpen) Then
-			If chs\InfiniteStamina Then
-				If me\Stamina <> 100.0 Then me\Stamina = 100.0
-			EndIf
-			If chs\NoBlink Then
-				If me\BlinkTimer <> me\BLINKFREQ Then me\BlinkTimer = me\BLINKFREQ
-			EndIf
-			
-			UpdateDark()
+			If chs\InfiniteStamina Then me\Stamina = 100.0
+			If chs\NoBlink Then me\BlinkTimer = me\BLINKFREQ
 			
 			me\BlurVolume = Min(CurveValue(0.0, me\BlurVolume, 20.0), 0.95)
 			If me\BlurTimer > 0.0 Then
@@ -2277,9 +2259,12 @@ Function UpdateGame%()
 				me\BlurTimer = Max(me\BlurTimer - fps\Factor[0], 0.0)
 			EndIf
 			
+			Local DarkAlpha# = 0.0
+			
 			If me\Sanity < 0.0 Then
 				If me\RestoreSanity Then me\Sanity = Min(me\Sanity + fps\Factor[0], 0.0)
-				If me\Sanity < -200.0 Then 
+				If me\Sanity < -200.0 Then
+					DarkAlpha = Max(Min((-me\Sanity - 200.0) / 700.0, 0.6), DarkAlpha)
 					If (Not me\Terminated) Then 
 						me\HeartBeatVolume = Min(Abs(me\Sanity + 20.00) / 500.0, 1.0)
 						me\HeartBeatRate = Max(70.0 + Abs(me\Sanity + 200.0) / 6.0, me\HeartBeatRate)
@@ -2292,12 +2277,21 @@ Function UpdateGame%()
 				me\EyeStuck = Max(me\EyeStuck - fps\Factor[0], 0.0)
 				
 				If me\EyeStuck < 9000.0 Then me\BlurTimer = Max(me\BlurTimer, (9000.0 - me\EyeStuck) * 0.5)
+				If me\EyeStuck < 6000.0 Then DarkAlpha = Min(Max(DarkAlpha, (6000.0 - me\EyeStuck) / 5000.0), 1.0)
 				If me\EyeStuck < 9000.0 And me\EyeStuck + fps\Factor[0] >= 9000.0 Then 
 					CreateMsg("The eyedrops are causing your eyes to tear up.")
 				EndIf
 			EndIf
 			
 			If me\BlinkTimer < 0.0 Then
+				If me\BlinkTimer > -5.0 Then
+					DarkAlpha = Max(DarkAlpha, Sin(Abs(me\BlinkTimer * 18.0)))
+				ElseIf me\BlinkTimer > -15.0
+					DarkAlpha = 1.0
+				Else
+					DarkAlpha = Max(DarkAlpha, Abs(Sin(me\BlinkTimer * 18.0)))
+				EndIf
+				
 				If me\BlinkTimer <= -20.0 Then
 					; ~ Randomizes the frequency of blinking. Scales with difficulty
 					Select SelectedDifficulty\OtherFactors
@@ -2337,6 +2331,11 @@ Function UpdateGame%()
 			EndIf
 			
 			me\LightBlink = Max(me\LightBlink - (fps\Factor[0] / 35.0), 0.0)
+			If me\LightBlink > 0.0 And wi\NightVision = 0 Then DarkAlpha = Min(Max(DarkAlpha, me\LightBlink * Rnd(0.3, 0.8)), 1.0)
+			
+			If I_294\Using Then DarkAlpha = 1.0
+			
+			If wi\NightVision = 0 Then DarkAlpha = Max((1.0 - SecondaryLightOn) * 0.9, DarkAlpha)
 			
 			If me\Terminated Then
 				NullSelectedStuff()
@@ -2348,6 +2347,7 @@ Function UpdateGame%()
 					me\KillAnimTimer = me\KillAnimTimer + fps\Factor[0]
 					If me\KillAnimTimer >= 400.0 Then MenuOpen = True
 				EndIf
+				DarkAlpha = Max(DarkAlpha, Min(Abs(me\Terminated / 400.0), 1.0))
 			Else
 				If (Not EntityHidden(t\OverlayID[9])) Then HideEntity(t\OverlayID[9])
 				me\KillAnimTimer = 0.0
@@ -2362,6 +2362,7 @@ Function UpdateGame%()
 				NullSelectedStuff()
 				me\BlurTimer = Abs(me\FallTimer * 10.0)
 				me\FallTimer = me\FallTimer - fps\Factor[0]
+				DarkAlpha = Max(DarkAlpha, Min(Abs(me\FallTimer / 400.0), 1.0))
 			EndIf
 			
 			If me\LightFlash > 0.0 Then
@@ -2370,6 +2371,21 @@ Function UpdateGame%()
 				me\LightFlash = Max(me\LightFlash - (fps\Factor[0] / 70.0), 0.0)
 			Else
 				If (Not EntityHidden(t\OverlayID[6])) Then HideEntity(t\OverlayID[6])
+			EndIf
+			
+			If SelectedItem <> Null And (Not InvOpen) And OtherOpen = Null Then
+				If IsItemInFocus() Then
+					DarkAlpha = Max(DarkAlpha, 0.5)
+				EndIf
+			EndIf
+			
+			If SelectedScreen <> Null Lor SelectedDoor <> Null Then DarkAlpha = Max(DarkAlpha, 0.5)
+			
+			If DarkAlpha <> 0.0 Then
+				If EntityHidden(t\OverlayID[5]) Then ShowEntity(t\OverlayID[5])
+				EntityAlpha(t\OverlayID[5], DarkAlpha)
+			Else
+				If (Not EntityHidden(t\OverlayID[5])) Then HideEntity(t\OverlayID[5])
 			EndIf
 		EndIf
 		
@@ -3263,52 +3279,6 @@ Function UpdateMouseLook%()
 	Update1025()
 	
 	CatchErrors("UpdateMouseLook")
-End Function
-
-Function UpdateDark%()
-	Local DarkAlpha#
-	
-	If DarkAlpha <> 0.0 Then DarkAlpha = 0.0
-	
-	If me\Sanity < -200.0 Then DarkAlpha = Max(Min((-me\Sanity - 200.0) / 700.0, 0.6), DarkAlpha)
-	
-	If me\EyeStuck > 0.0 Then 
-		If me\EyeStuck < 6000.0 Then DarkAlpha = Min(Max(DarkAlpha, (6000.0 - me\EyeStuck) / 5000.0), 1.0)
-	EndIf
-		
-	If me\BlinkTimer < 0.0 Then
-		If me\BlinkTimer > -5.0 Then
-			DarkAlpha = Max(DarkAlpha, Sin(Abs(me\BlinkTimer * 18.0)))
-		ElseIf me\BlinkTimer > -15.0
-			DarkAlpha = 1.0
-		Else
-			DarkAlpha = Max(DarkAlpha, Abs(Sin(me\BlinkTimer * 18.0)))
-		EndIf
-	EndIf
-	
-	If me\LightBlink > 0.0 And wi\NightVision = 0 Then DarkAlpha = Min(Max(DarkAlpha, me\LightBlink * Rnd(0.3, 0.8)), 1.0)
-	
-	If I_294\Using Then DarkAlpha = 1.0
-	
-	If wi\NightVision = 0 Then DarkAlpha = Max((1.0 - SecondaryLightOn) * 0.9, DarkAlpha)
-	
-	If me\Terminated Then DarkAlpha = Max(DarkAlpha, Min(Abs(me\Terminated / 400.0), 1.0))
-	If me\FallTimer < 0.0 Then DarkAlpha = Max(DarkAlpha, Min(Abs(me\FallTimer / 400.0), 1.0))				
-	
-	If SelectedItem <> Null And (Not InvOpen) And OtherOpen = Null Then
-		If IsItemInFocus() Then
-			DarkAlpha = Max(DarkAlpha, 0.5)
-		EndIf
-	EndIf
-	
-	If SelectedScreen <> Null Lor SelectedDoor <> Null Then DarkAlpha = Max(DarkAlpha, 0.5)
-	
-	If DarkAlpha <> 0.0 Then
-		If EntityHidden(t\OverlayID[5]) Then ShowEntity(t\OverlayID[5])
-		EntityAlpha(t\OverlayID[5], DarkAlpha)
-	Else
-		If (Not EntityHidden(t\OverlayID[5])) Then HideEntity(t\OverlayID[5])
-	EndIf
 End Function
 
 ; ~ Fog Constants
