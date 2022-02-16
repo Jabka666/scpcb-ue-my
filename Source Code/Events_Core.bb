@@ -74,13 +74,12 @@ Const e_room2_medibay% = 65
 Const e_dimension_1499% = 66
 Const e_room2_shaft% = 67
 Const e_room4_ic% = 68
-Const e_room2_bio% = 69
-Const e_cont2_409% = 70
-Const e_cont1_005% = 71
-Const e_gate_b_entrance% = 72
-Const e_gate_b% = 73
-Const e_gate_a_entrance% = 74
-Const e_gate_a% = 75
+Const e_cont2_409% = 69
+Const e_cont1_005% = 70
+Const e_gate_b_entrance% = 71
+Const e_gate_b% = 72
+Const e_gate_a_entrance% = 73
+Const e_gate_a% = 74
 ;[End Block]
 
 Function FindEventID%(EventName$)
@@ -360,10 +359,6 @@ Function FindEventID%(EventName$)
 		Case "room4_ic"
 			;[Block]
 			Return(e_room4_ic)
-			;[End Block]
-		Case "room2_bio"
-			;[Block]
-			Return(e_room2_bio)
 			;[End Block]
 		Case "cont2_409"
 			;[Block]
@@ -647,8 +642,6 @@ Function InitEvents%()
 	CreateEvent("room2_4_hcz_106", "room2_4_hcz", 0, 0.07 + (0.1 * SelectedDifficulty\AggressiveNPCs))
 	
 	CreateEvent("room4_ic", "room4_ic", 0)
-	
-	CreateEvent("room2_bio", "room2_bio", 0)
 	
 	CreateEvent("cont2_409", "cont2_409", 0)
 	
@@ -8519,15 +8512,6 @@ Function UpdateEvents%()
 						Exit
 					EndIf
 				Next
-				;[End Block]
-			Case e_room2_bio
-				;[Block]
-				; ~ Hiding / Showing the terrain in this room
-				If e\room\Dist < HideDistance Then
-					If EntityHidden(e\room\Objects[0]) Then ShowEntity(e\room\Objects[0])
-				Else
-					If (Not EntityHidden(e\room\Objects[0])) Then HideEntity(e\room\Objects[0])
-				EndIf
 				;[End Block]
 			Case e_cont2_409
 				;[Block]

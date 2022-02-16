@@ -23,11 +23,7 @@ Global fo.Fonts = New Fonts
 Global ButtonSFX% = LoadSound_Strict("SFX\Interact\Button.ogg")
 Global ButtonSFX2% = LoadSound_Strict("SFX\Interact\Button2.ogg")
 
-Global WireFrameState%
-
 Global MenuWhite%, MenuGray%, MenuBlack%
-
-LoadOptionsINI()
 
 Type Mouse
 	Field MouseHit1%, MouseHit2%
@@ -78,6 +74,10 @@ Else
 	Graphics3DExt(opt\GraphicWidth, opt\GraphicHeight, 0, (opt\DisplayMode = 2) + 1)
 EndIf
 
+Const VersionNumber$ = "1.0.3"
+
+AppTitle("SCP - Containment Breach Ultimate Edition v" + VersionNumber)
+
 Global MenuScale# = opt\GraphicHeight / 1024.0
 
 mo\Mouselook_X_Inc = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the X axis
@@ -109,11 +109,10 @@ Global fps.FramesPerSeconds = New FramesPerSeconds
 
 SeedRnd(MilliSecs2())
 
+Global WireFrameState%
+
 Global GameSaved%
-
 Global CanSave% = True
-
-AppTitle("SCP - Containment Breach Ultimate Edition v" + VersionNumber)
 
 If opt\PlayStartup Then PlayStartupVideos()
 
@@ -2033,25 +2032,19 @@ End Type
 
 Global I_Zone.MapZones = New MapZones
 
+InitErrorMsgs(11)
+SetErrorMsg(0, "An error occured in SCP - Containment Breach Ultimate Edition v" + VersionNumber)
+
+SetErrorMsg(1, "Date and time: " + CurrentDate() + " at " + CurrentTime())
+SetErrorMsg(2, "OS: " + SystemProperty("os") + " " + SystemProperty("os") + " " + (32 + (GetEnv("ProgramFiles(X86)") <> 0) * 32) + " bit (Build: " + SystemProperty("osbuild") + ")")
+SetErrorMsg(3, "CPU: " + Trim(SystemProperty("cpuname")) + " (Arch: " + SystemProperty("cpuarch") + ", " + GetEnv("NUMBER_OF_PROCESSORS") + " Threads)")
+SetErrorMsg(4, "GPU: " + GfxDriverName(CountGfxDrivers()) + " (" + ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)) + " MB/" + (TotalVidMem() / 1024) + " MB)")
+SetErrorMsg(5, "Global memory status: " + ((TotalPhys() / 1024) - (AvailPhys() / 1024)) + " MB/" + (TotalPhys() / 1024) + " MB" + Chr(10))
+
+SetErrorMsg(10, Chr(10) + "Please take a screenshot of this error and send it To us!") 
+
 Function CatchErrors%(Location$)
-	Local TempStr$
-	
-	InitErrorMsgs(6)
-	SetErrorMsg(0, "An error occured in SCP - Containment Breach Ultimate Edition v" + VersionNumber)
-	If SelectedMap = "" Then
-		TempStr = "Map seed: " + RandomSeed
-	Else
-		If Len(SelectedMap) > 15 Then
-			TempStr = "Selected map: " + Left(SelectedMap, 14) + "..."
-		Else
-			TempStr = "Selected map: " + SelectedMap
-		EndIf
-	EndIf
-	SetErrorMsg(1, TempStr)
-	SetErrorMsg(2, "Date and time: " + CurrentDate() + " at " + CurrentTime() + Chr(10) + "OS: " + SystemProperty("os") + " " + (32 + (GetEnv("ProgramFiles(X86)") <> 0) * 32) + " bit (Build: " + SystemProperty("osbuild") + ")" + Chr(10))
-	SetErrorMsg(3, "Video memory: " + ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)) + " MB/" + (TotalVidMem() / 1024) + " MB" + Chr(10))
-	SetErrorMsg(4, "Global memory status: " + ((TotalPhys() / 1024) - (AvailPhys() / 1024)) + " MB/" + (TotalPhys() / 1024) + " MB" + Chr(10))
-	SetErrorMsg(5, "Error located in: " + Location + Chr(10) + Chr(10) + "Please take a screenshot of this error and send it to us!") 
+	SetErrorMsg(9, "Error located in: " + Location)
 End Function
 
 Repeat
@@ -2103,8 +2096,27 @@ Forever
 Function UpdateGame%()
 	CatchErrors("Uncaught (UpdateGame)")
 	
-	Local e.Events, r.Rooms
-	Local i%
+	Local e.Events, ev.Events, r.Rooms
+	Local i%, TempStr$
+	
+	If SelectedMap = "" Then
+		TempStr = "Map seed: " + RandomSeed
+	Else
+		If Len(SelectedMap) > 15 Then
+			TempStr = "Selected map: " + Left(SelectedMap, 14) + "..."
+		Else
+			TempStr = "Selected map: " + SelectedMap
+		EndIf
+	EndIf
+	SetErrorMsg(6, TempStr)
+	SetErrorMsg(7, "Room: " + PlayerRoom\RoomTemplate\Name)
+	
+	For ev.Events = Each Events
+		If ev\room = PlayerRoom Then
+			SetErrorMsg(8, "Room event: " + ev\EventID + " ("  + ev\EventState + ", " + ev\EventState2 + ", " + ev\EventState3 + ", " + ev\EventState4 + ")" + Chr(10))
+			Exit
+		EndIf
+	Next
 	
 	While fps\Accumulator > 0.0
 		fps\Accumulator = fps\Accumulator - TICK_DURATION
@@ -3891,7 +3903,6 @@ Function UpdateGUI%()
 														EndIf
 													Next
 													added = SelectedItem
-													SelectedItem = Null
 													Exit
 												EndIf
 											EndIf
@@ -3915,7 +3926,6 @@ Function UpdateGUI%()
 											EndIf
 										Next
 										Inventory(MouseSlot) = SelectedItem
-										SelectedItem = Null
 									EndIf
 								ElseIf Inventory(MouseSlot)\ItemTemplate\TempName = "wallet" Then
 									; ~ Add an item to clipboard
@@ -3940,7 +3950,6 @@ Function UpdateGUI%()
 														EndIf
 													Next
 													added = SelectedItem
-													SelectedItem = Null
 													Exit
 												EndIf
 											EndIf
@@ -3958,7 +3967,6 @@ Function UpdateGUI%()
 											EndIf
 										Next
 										Inventory(MouseSlot) = SelectedItem
-										SelectedItem = Null
 									EndIf
 								Else
 									For z = 0 To MaxItemAmount - 1
@@ -3968,7 +3976,6 @@ Function UpdateGUI%()
 										EndIf
 									Next
 									Inventory(MouseSlot) = SelectedItem
-									SelectedItem = Null
 								EndIf
 								SelectedItem = Null
 								;[End Block]
@@ -5678,8 +5685,8 @@ Function RenderDebugHUD%()
 			;[End Block]
 		Case 2
 			;[Block]
-			Text(x, y, "Player Position: (" + RoundFloat(EntityX(me\Collider), 1) + ", " + RoundFloat(EntityY(me\Collider), 1) + ", " + RoundFloat(EntityZ(me\Collider), 1) + ")")
-			Text(x, y + (20 * MenuScale), "Player Rotation: (" + RoundFloat(EntityPitch(me\Collider), 1) + ", " + RoundFloat(EntityYaw(me\Collider), 1) + ", " + RoundFloat(EntityRoll(me\Collider), 1) + ")")
+			Text(x, y, "Player Position: (" + FloatToString(EntityX(me\Collider), 1) + ", " + FloatToString(EntityY(me\Collider), 1) + ", " + FloatToString(EntityZ(me\Collider), 1) + ")")
+			Text(x, y + (20 * MenuScale), "Player Rotation: (" + FloatToString(EntityPitch(me\Collider), 1) + ", " + FloatToString(EntityYaw(me\Collider), 1) + ", " + FloatToString(EntityRoll(me\Collider), 1) + ")")
 			
 			Text(x, y + (60 * MenuScale), "Injuries: " + me\Injuries)
 			Text(x, y + (80 * MenuScale), "Bloodloss: " + me\Bloodloss)
@@ -5735,22 +5742,22 @@ Function RenderDebugHUD%()
 		Case 3
 			;[Block]
 			If Curr049 <> Null Then
-				Text(x, y, "SCP-049 Position: (" + RoundFloat(EntityX(Curr049\OBJ), 2) + ", " + RoundFloat(EntityY(Curr049\OBJ), 2) + ", " + RoundFloat(EntityZ(Curr049\OBJ), 2) + ")")
+				Text(x, y, "SCP-049 Position: (" + FloatToString(EntityX(Curr049\OBJ), 2) + ", " + FloatToString(EntityY(Curr049\OBJ), 2) + ", " + FloatToString(EntityZ(Curr049\OBJ), 2) + ")")
 				Text(x, y + (20 * MenuScale), "SCP-049 Idle: " + Curr049\Idle)
 				Text(x, y + (40 * MenuScale), "SCP-049 State: " + Curr049\State)
 			EndIf
 			If Curr096 <> Null Then
-				Text(x, y + (60 * MenuScale), "SCP-096 Position: (" + RoundFloat(EntityX(Curr096\OBJ), 2) + ", " + RoundFloat(EntityY(Curr096\OBJ), 2) + ", " + RoundFloat(EntityZ(Curr096\OBJ), 2) + ")")
+				Text(x, y + (60 * MenuScale), "SCP-096 Position: (" + FloatToString(EntityX(Curr096\OBJ), 2) + ", " + FloatToString(EntityY(Curr096\OBJ), 2) + ", " + FloatToString(EntityZ(Curr096\OBJ), 2) + ")")
 				Text(x, y + (80 * MenuScale), "SCP-096 Idle: " + Curr096\Idle)
 				Text(x, y + (100 * MenuScale), "SCP-096 State: " + Curr096\State)
 			EndIf
 			If Curr106 <> Null Then
-				Text(x, y + (120 * MenuScale), "SCP-106 Position: (" + RoundFloat(EntityX(Curr106\OBJ), 2) + ", " + RoundFloat(EntityY(Curr106\OBJ), 2) + ", " + RoundFloat(EntityZ(Curr106\OBJ), 2) + ")")
+				Text(x, y + (120 * MenuScale), "SCP-106 Position: (" + FloatToString(EntityX(Curr106\OBJ), 2) + ", " + FloatToString(EntityY(Curr106\OBJ), 2) + ", " + FloatToString(EntityZ(Curr106\OBJ), 2) + ")")
 				Text(x, y + (140 * MenuScale), "SCP-106 Idle: " + Curr106\Idle)
 				Text(x, y + (160 * MenuScale), "SCP-106 State: " + Curr106\State)
 			EndIf
 			If Curr173 <> Null Then
-				Text(x, y + (180 * MenuScale), "SCP-173 Position: (" + RoundFloat(EntityX(Curr173\OBJ), 2) + ", " + RoundFloat(EntityY(Curr173\OBJ), 2) + ", " + RoundFloat(EntityZ(Curr173\OBJ), 2) + ")")
+				Text(x, y + (180 * MenuScale), "SCP-173 Position: (" + FloatToString(EntityX(Curr173\OBJ), 2) + ", " + FloatToString(EntityY(Curr173\OBJ), 2) + ", " + FloatToString(EntityZ(Curr173\OBJ), 2) + ")")
 				Text(x, y + (200 * MenuScale), "SCP-173 Idle: " + Curr173\Idle)
 				Text(x, y + (220 * MenuScale), "SCP-173 State: " + Curr173\State)
 			EndIf
@@ -5784,8 +5791,6 @@ Function RenderGUI%()
 	Local x1#, x2#, x3#, y1#, y2#, y3#, z2#, ProjY#, Scale#, Pvt%
 	Local n%, xTemp%, yTemp%, StrTemp$
 	Local Width%, Height%
-	Local NAV_WIDTH% = 287 * MenuScale
-	Local NAV_HEIGHT% = 256 * MenuScale
 	
 	If MenuOpen Lor ConsoleOpen Lor SelectedDoor <> Null Lor InvOpen Lor OtherOpen <> Null Lor me\EndingTimer < 0.0 Then
 		ShowPointer()
@@ -6391,14 +6396,21 @@ Function RenderGUI%()
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
+					Local NAV_WIDTH% = 287 * MenuScale
+					Local NAV_HEIGHT% = 256 * MenuScale
+					
 					x = opt\GraphicWidth - (ImageWidth(SelectedItem\ItemTemplate\Img) / 2) + (20.0 * MenuScale)
-					y = opt\GraphicHeight - (ImageHeight(SelectedItem\ItemTemplate\Img) * (0.4 * MenuScale)) - (85.0 * MenuScale)
+					y = opt\GraphicHeight - (ImageHeight(SelectedItem\ItemTemplate\Img) * (0.4 * MenuScale)) - (85 * MenuScale)
 					
 					Local PlayerX%, PlayerZ%
 					
 					DrawImage(SelectedItem\ItemTemplate\Img, x - (ImageWidth(SelectedItem\ItemTemplate\Img) / 2), y - (ImageHeight(SelectedItem\ItemTemplate\Img) / 2) + (85 * MenuScale))
 					
 					SetFont(fo\FontID[Font_Digital])
+					
+					Local Offline% = False
+					
+					If SelectedItem\ItemTemplate\TempName = "nav" Lor SelectedItem\ItemTemplate\TempName = "nav300" Then Offline = True
 					
 					Local NavWorks% = True
 					
@@ -6416,8 +6428,8 @@ Function RenderGUI%()
 						EndIf
 					Else
 						If (SelectedItem\State > 0.0 Lor (SelectedItem\ItemTemplate\TempName = "nav300" Lor SelectedItem\ItemTemplate\TempName = "navulti")) And (Rnd(CoffinDistance + 15.0) > 1.0 Lor PlayerRoom\RoomTemplate\Name <> "cont1_895") Then
-							PlayerX = Floor(((EntityX(PlayerRoom\OBJ) + 8.0) / 8.0) + 0.5)
-							PlayerZ = Floor(((EntityZ(PlayerRoom\OBJ) + 8.0) / 8.0) + 0.5)
+							PlayerX = Floor(EntityX(me\Collider) / RoomSpacing + 0.5)
+							PlayerZ = Floor(EntityZ(me\Collider) / RoomSpacing + 0.5)
 							
 							SetBuffer(ImageBuffer(t\ImageID[7]))
 							
@@ -6426,43 +6438,20 @@ Function RenderGUI%()
 							
 							DrawImage(SelectedItem\ItemTemplate\Img, xx, yy)
 							
-							x = x - (12.0 * MenuScale) + ((((EntityX(me\Collider) - 4.0) + 8.0) Mod 8.0) * (3.0 * MenuScale))
-							y = y + (12.0 * MenuScale) - ((((EntityZ(me\Collider) - 4.0) + 8.0) Mod 8.0) * (3.0 * MenuScale))
-							For x2 = Max(0.0, PlayerX - 6) To Min(MapGridSize, PlayerX + 6)
-								For z2 = Max(0.0, PlayerZ - 6) To Min(MapGridSize, PlayerZ + 6)
+							x = x - (12 * MenuScale) + ((EntityX(me\Collider) - 4.0) Mod RoomSpacing) * (3 * MenuScale)
+							y = y + (12 * MenuScale) - ((EntityZ(me\Collider) - 4.0) Mod RoomSpacing) * (3 * MenuScale)
+							For x2 = Max(1.0, PlayerX - 6) To Min(MapGridSize - 1, PlayerX + 6)
+								For z2 = Max(1.0, PlayerZ - 6) To Min(MapGridSize - 1, PlayerZ + 6)
 									If CoffinDistance > 16.0 Lor Rnd(16.0) < CoffinDistance Then 
-										If CurrMapGrid\Grid[x2 + (z2 * MapGridSize)] > MapGrid_NoTile And (CurrMapGrid\Found[x2 + (z2 * MapGridSize)] > MapGrid_NoTile Lor SelectedItem\ItemTemplate\TempName = "nav310" Lor SelectedItem\ItemTemplate\TempName = "navulti") Then
-											Local DrawX% = x + (PlayerX - 1 - x2) * (24 * MenuScale), DrawY% = y - (PlayerZ - 1 - z2) * (24 * MenuScale)
+										If CurrMapGrid\Grid[x2 + (z2 * MapGridSize)] > MapGrid_NoTile And (CurrMapGrid\Found[x2 + (z2 * MapGridSize)] > MapGrid_NoTile Lor (Not Offline)) Then
+											Local DrawX% = x + (PlayerX - x2) * (24 * MenuScale), DrawY% = y - (PlayerZ - z2) * (24 * MenuScale) 
 											
 											Color(30, 30, 30)
-											If x2 + 1.0 <= MapGridSize Then
-												If CurrMapGrid\Grid[(x2 + 1) + (z2 * MapGridSize)] = MapGrid_NoTile
-													Rect(DrawX - (12 * MenuScale), DrawY - (12 * MenuScale), MenuScale, 24 * MenuScale)
-												EndIf
-											Else
-												Rect(DrawX - (12 * MenuScale), DrawY - (12 * MenuScale), MenuScale, 24 * MenuScale)
-											EndIf
-											If x2 - 1.0 >= 0.0 Then
-												If CurrMapGrid\Grid[(x2 - 1) + (z2 * MapGridSize)] = MapGrid_NoTile
-													Rect(DrawX + (12 * MenuScale), DrawY - (12 * MenuScale), MenuScale, 24 * MenuScale)
-												EndIf
-											Else
-												Rect(DrawX + (12 * MenuScale), DrawY - (12 * MenuScale), MenuScale, 24 * MenuScale)
-											EndIf
-											If z2 - 1.0 >= 0.0 Then
-												If CurrMapGrid\Grid[x2 + ((z2 - 1) * MapGridSize)] = MapGrid_NoTile
-													Rect(DrawX - (12 * MenuScale), DrawY - (12 * MenuScale), 24 * MenuScale, MenuScale)
-												EndIf
-											Else
-												Rect(DrawX - (12 * MenuScale), DrawY - (12 * MenuScale), 24 * MenuScale, MenuScale)
-											EndIf
-											If z2 + 1.0 <= MapGridSize Then
-												If CurrMapGrid\Grid[x2 + ((z2 + 1) * MapGridSize)] = MapGrid_NoTile
-													Rect(DrawX - (12 * MenuScale), DrawY + (12 * MenuScale), 24 * MenuScale, MenuScale)
-												EndIf
-											Else
-												Rect(DrawX - (12 * MenuScale), DrawY + (12 * MenuScale), 24 * MenuScale, MenuScale)
-											EndIf
+											If CurrMapGrid\Grid[(x2 + 1) + (z2 * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - (12 * MenuScale), DrawY - (12 * MenuScale), MenuScale, 24 * MenuScale)
+											If CurrMapGrid\Grid[(x2 - 1) + (z2 * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX + (12 * MenuScale), DrawY - (12 * MenuScale), MenuScale, 24 * MenuScale)
+											
+											If CurrMapGrid\Grid[x2 + ((z2 - 1) * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - (12 * MenuScale), DrawY - (12 * MenuScale), 24 * MenuScale, MenuScale)
+											If CurrMapGrid\Grid[x2 + ((z2 + 1) * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - (12 * MenuScale), DrawY + (12 * MenuScale), 24 * MenuScale, MenuScale)
 										EndIf
 									EndIf
 								Next
@@ -6470,7 +6459,7 @@ Function RenderGUI%()
 							
 							SetBuffer(BackBuffer())
 							DrawImageRect(t\ImageID[7], xx + (80 * MenuScale), yy + (70 * MenuScale), xx + (80 * MenuScale), yy + (70 * MenuScale), 270 * MenuScale, 230 * MenuScale)
-							If SelectedItem\ItemTemplate\TempName = "nav" Lor SelectedItem\ItemTemplate\TempName = "nav300" Then
+							If Offline Then
 								Color(100, 0, 0)
 							Else
 								Color(30, 30, 30)
@@ -6480,15 +6469,13 @@ Function RenderGUI%()
 							x = opt\GraphicWidth - (ImageWidth(SelectedItem\ItemTemplate\Img) / 2) + (20.0 * MenuScale)
 							y = opt\GraphicHeight - (ImageHeight(SelectedItem\ItemTemplate\Img) * (0.4 * MenuScale)) - (85.0 * MenuScale)
 							
-							If SelectedItem\ItemTemplate\TempName = "nav" Lor SelectedItem\ItemTemplate\TempName = "nav300" Then 
+							If Offline Then 
 								Color(100, 0, 0)
 							Else
 								Color(30, 30, 30)
 							EndIf
 							If ((MilliSecs2() Mod 800) < 200) Then
-								If SelectedItem\ItemTemplate\TempName = "nav" Lor SelectedItem\ItemTemplate\TempName = "nav300" Then
-									Text(x - (NAV_WIDTH / 2) + (10 * MenuScale), y - (NAV_HEIGHT / 2) + (10 * MenuScale), "MAP DATABASE OFFLINE")
-								EndIf
+								If Offline Then Text(x - (NAV_WIDTH / 2) + (10 * MenuScale), y - (NAV_HEIGHT / 2) + (10 * MenuScale), "MAP DATABASE OFFLINE")
 								
 								YawValue = EntityYaw(me\Collider) - 90.0
 								x1 = x + Cos(YawValue) * (6.0 * MenuScale) : y1 = y - Sin(YawValue) * (6.0 * MenuScale)
@@ -6556,10 +6543,10 @@ Function RenderGUI%()
 							EndIf
 							
 							Color(30, 30, 30)
-							If SelectedItem\ItemTemplate\TempName = "nav" Lor SelectedItem\ItemTemplate\TempName = "nav300" Then
+							If Offline Then
 								Color(100, 0, 0)
-								xTemp = x - (NAV_WIDTH / 2) + (196.0 * MenuScale)
-								yTemp = y - (NAV_HEIGHT / 2) + (10.0 * MenuScale)
+								xTemp = x - (NAV_WIDTH / 2) + (196 * MenuScale)
+								yTemp = y - (NAV_HEIGHT / 2) + (10 * MenuScale)
 								Rect(xTemp, yTemp, 80 * MenuScale, 20 * MenuScale, False)
 								
 								; ~ Battery

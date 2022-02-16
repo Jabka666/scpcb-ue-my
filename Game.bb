@@ -39,6 +39,8 @@ EndIf
 Include "Source Code\KeyBinds_Core.bb"
 Include "Source Code\INI_Core.bb"
 
+LoadOptionsINI()
+
 Include "Source Code\Main_Core.bb"
 
 ;~IDEal Editor Parameters:

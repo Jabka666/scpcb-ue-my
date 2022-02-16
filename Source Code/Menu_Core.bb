@@ -70,8 +70,6 @@ Global SelectedMapActionMsg$
 
 Global SelectedMap$
 
-Const VersionNumber$ = "1.0.3"
-
 ; ~ Main Menu Tabs Constants
 ;[Block]
 Const MainMenuTab_Default% = 0
@@ -467,6 +465,7 @@ Function UpdateMainMenu%()
 						
 						For i = 0 To 4 + (5 * mm\CurrMenuPage)
 							If i > 0 Then CurrSave = After CurrSave
+							If CurrSave = Null Then Exit
 							If i >= (5 * mm\CurrMenuPage) Then
 								If DelSave = Null Then
 									If CurrSave\Version <> VersionNumber Then
@@ -1294,6 +1293,7 @@ Function RenderMainMenu%()
 					
 					For i = 0 To 4 + (5 * mm\CurrMenuPage)
 						If i > 0 Then CurrSave = After CurrSave
+						If CurrSave = Null Then Exit
 						If i >= (5 * mm\CurrMenuPage) Then
 							RenderFrame(x, y, 540 * MenuScale, 70 * MenuScale)
 							

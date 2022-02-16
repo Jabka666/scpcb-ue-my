@@ -7369,12 +7369,9 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(r\Objects[0], 0.0, 0.0, 0.0)
 			;[End Block]
 		Case "room2_bio"
-			;[Block]	
-			r\Objects[0] = LoadMesh_Strict("GFX\map\room2bio_terrain.b3d")
-			ScaleEntity(r\Objects[0], RoomScale, RoomScale, RoomScale)
-			RotateEntity(r\Objects[0], 0.0, r\Angle, 0.0)
-			PositionEntity(r\Objects[0], r\x, r\y - 1.0 * RoomScale, r\z)	
-			EntityParent(r\Objects[0], r\OBJ)
+			;[Block]
+			d.Doors = CreateDoor(r\x + 232.0 * RoomScale, r\y, r\z - 768.0 * RoomScale, 90.0, r, False, Office_Door)
+			d\Locked = 1 : d\MTFClose = False
 			
 			sc.SecurityCams = CreateSecurityCam(r\x - 475.0 * RoomScale, r\y + 385.0 * RoomScale, r\z + 305.0 * RoomScale, r)
 			sc\Angle = 225.0 : sc\Turn = 30.0
