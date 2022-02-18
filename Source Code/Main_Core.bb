@@ -2,7 +2,7 @@ Include "Source Code\Math_Core.bb"
 Include "Source Code\Strict_Loads_Core.bb"
 
 Const MaxFontIDAmount% = 8
-; ~ Font IDs Constants
+; ~ Fonts ID Constants
 ;[Block]
 Const Font_Default% = 0
 Const Font_Default_Big% = 1
@@ -2410,7 +2410,7 @@ Function UpdateGame%()
 				Local W$ = ""
 				Local V# = 0.0
 				
-				If SelectedItem <> Null
+				If SelectedItem <> Null Then
 					W = SelectedItem\ItemTemplate\TempName
 					V = SelectedItem\State
 					; ~ Reset SCP-1025
@@ -2450,7 +2450,7 @@ Function UpdateGame%()
 		EndIf
 		
 		If KeyHit(key\SAVE) Then
-			If SelectedDifficulty\SaveType = SAVEANYWHERE Then
+			If SelectedDifficulty\SaveType = SAVE_ANYWHERE Then
 				If (Not CanSave) Lor QuickLoadPercent > -1 Then
 					RN = PlayerRoom\RoomTemplate\Name
 					If RN = "cont1_173_intro" Lor RN = "gate_b" Lor RN = "gate_a"
@@ -2468,7 +2468,7 @@ Function UpdateGame%()
 						SaveGame(CurrSave\Name)
 					EndIf
 				EndIf
-			ElseIf SelectedDifficulty\SaveType = SAVEONSCREENS
+			ElseIf SelectedDifficulty\SaveType = SAVE_ON_SCREENS
 				If SelectedScreen = Null And SelectedMonitor = Null Then
 					CreateHintMsg("Saving is only permitted on clickable monitors scattered throughout the facility.")
 				Else
@@ -2492,7 +2492,7 @@ Function UpdateGame%()
 			Else
 				CreateHintMsg("Quick saving is disabled.")
 			EndIf
-		ElseIf SelectedDifficulty\SaveType = SAVEONSCREENS And (SelectedScreen <> Null Lor SelectedMonitor <> Null)
+		ElseIf SelectedDifficulty\SaveType = SAVE_ON_SCREENS And (SelectedScreen <> Null Lor SelectedMonitor <> Null)
 			If (msg\HintTxt <> "Game progress saved." And msg\HintTxt <> "You can't save in this location." And msg\HintTxt <> "You can't save at this moment.") Lor msg\HintTimer <= 0.0 Then
 				CreateHintMsg("Press " + key\Name[key\SAVE] + " to save.")
 			EndIf
@@ -2578,7 +2578,7 @@ Function Kill%(IsBloody% = False)
 		
 		me\KillAnim = Rand(0, 1)
 		PlaySound_Strict(DamageSFX[0])
-		If SelectedDifficulty\SaveType = NOSAVES Then
+		If SelectedDifficulty\SaveType = NO_SAVES Then
 			DeleteGame(CurrSave)
 		EndIf
 		
@@ -3041,7 +3041,7 @@ Function UpdateMoving%()
 			TurnEntity(Pvt, 90.0, 0.0, 0.0)
 			EntityPick(Pvt, 0.3)
 			
-			de.Decals = CreateDecal(Rand(16, 17), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.03, 0.08) * Min(me\Injuries, 2.5))
+			de.Decals = CreateDecal(Rand(DECAL_BLOOD_DROP_1, DECAL_BLOOD_DROP_2), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.03, 0.08) * Min(me\Injuries, 2.5))
 			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + Rnd(0.008, 0.009)
 			EntityParent(de\OBJ, PlayerRoom\OBJ)
 			TempCHN = PlaySound_Strict(DripSFX[Rand(0, 3)])
@@ -6972,7 +6972,7 @@ Function UpdateMenu%()
 					
 					y = y + (30 * MenuScale)
 					
-					opt\AutoSaveEnabled = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\AutoSaveEnabled, SelectedDifficulty\SaveType <> SAVEANYWHERE)
+					opt\AutoSaveEnabled = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\AutoSaveEnabled, SelectedDifficulty\SaveType <> SAVE_ANYWHERE)
 					
 					y = y + (30 * MenuScale)
 					
@@ -7001,7 +7001,7 @@ Function UpdateMenu%()
 		ElseIf mm\AchievementsMenu <= 0 And OptionsMenu <= 0 And QuitMsg > 0
 			Local QuitButton% = 85
 			
-			If SelectedDifficulty\SaveType = SAVEONQUIT Lor SelectedDifficulty\SaveType = SAVEANYWHERE Then
+			If SelectedDifficulty\SaveType = SAVE_ON_QUIT Lor SelectedDifficulty\SaveType = SAVE_ANYWHERE Then
 				Local RN$ = PlayerRoom\RoomTemplate\Name
 				Local AbleToSave% = True
 				
@@ -7073,7 +7073,7 @@ Function UpdateMenu%()
 				
 				y = y + (75 * MenuScale)
 				
-				If SelectedDifficulty\SaveType <> NOSAVES Then
+				If SelectedDifficulty\SaveType <> NO_SAVES Then
 					If GameSaved Then
 						If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "LOAD GAME") Then
 							RenderLoading(0, "GAME FILES")
@@ -7137,7 +7137,7 @@ Function UpdateMenu%()
 			Else
 				y = y + (75 * MenuScale)
 				
-				If SelectedDifficulty\SaveType <> NOSAVES Then
+				If SelectedDifficulty\SaveType <> NO_SAVES Then
 					If GameSaved Then
 						If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "LOAD GAME") Then
 							RenderLoading(0, "GAME FILES")
@@ -7505,7 +7505,7 @@ Function RenderMenu%()
 					
 					y = y + (30 * MenuScale)
 					
-					Color(255 - (155 * SelectedDifficulty\SaveType <> SAVEANYWHERE), 255 - (155 * SelectedDifficulty\SaveType <> SAVEANYWHERE), 255 - (155 * SelectedDifficulty\SaveType <> SAVEANYWHERE))
+					Color(255 - (155 * SelectedDifficulty\SaveType <> SAVE_ANYWHERE), 255 - (155 * SelectedDifficulty\SaveType <> SAVE_ANYWHERE), 255 - (155 * SelectedDifficulty\SaveType <> SAVE_ANYWHERE))
 					Text(x, y + (5 * MenuScale), "Enable auto save:")
 					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AutoSave)
@@ -7575,7 +7575,7 @@ Function RenderMenu%()
 			
 			If me\Terminated And me\SelectedEnding = -1 Then
 				y = y + (175 * MenuScale)
-				If SelectedDifficulty\SaveType <> NOSAVES Then
+				If SelectedDifficulty\SaveType <> NO_SAVES Then
 					y = y + (75 * MenuScale)
 				EndIf
 				SetFont(fo\FontID[Font_Default])
@@ -7597,7 +7597,7 @@ Function RenderMenu%()
 	CatchErrors("RenderMenu")
 End Function
 
-; ~ Ending IDs Constants
+; ~ Endings ID Constants
 ;[Block]
 Const Ending_A1% = 0
 Const Ending_A2% = 1
@@ -8171,27 +8171,27 @@ Function LoadEntities%()
 	Next
 	t\LightSpriteID[2] = LoadTexture_Strict("GFX\light_sprite.png", 1, DeleteAllTextures)
 	
-	For i = 0 To 7
+	For i = DECAL_CORROSIVE_1 To DECAL_BLOOD_6
 		t\DecalTextureID[i] = LoadTexture_Strict("GFX\decal(" + (i + 1) + ").png", 1 + 2, DeleteAllTextures)
 	Next
 	
-	For i = 8 To 13
+	For i = DECAL_PD_1 To DECAL_PD_6
 		t\DecalTextureID[i] = LoadTexture_Strict("GFX\decal_pd(" + (i - 7) + ").png", 1 + 2, DeleteAllTextures)	
 	Next
 	
-	For i = 14 To 15
+	For i = DECAL_BULLET_HOLE_1 To DECAL_BULLET_HOLE_2
 		t\DecalTextureID[i] = LoadTexture_Strict("GFX\bullet_hole(" + (i - 13) + ").png", 1 + 2, DeleteAllTextures)	
 	Next
 	
-	For i = 16 To 17
+	For i = DECAL_BLOOD_DROP_1 To DECAL_BLOOD_DROP_2
 		t\DecalTextureID[i] = LoadTexture_Strict("GFX\blood_drop(" + (i - 15) + ").png", 1 + 2, DeleteAllTextures)
 	Next
 	
-	t\DecalTextureID[18] = LoadTexture_Strict("GFX\decal_scp_427.png", 1 + 2, DeleteAllTextures)
+	t\DecalTextureID[DECAL_427] = LoadTexture_Strict("GFX\decal_scp_427.png", 1 + 2, DeleteAllTextures)
 	
-	t\DecalTextureID[19] = LoadTexture_Strict("GFX\decal_scp_409.png", 1 + 2, DeleteAllTextures)
+	t\DecalTextureID[DECAL_409] = LoadTexture_Strict("GFX\decal_scp_409.png", 1 + 2, DeleteAllTextures)
 	
-	t\DecalTextureID[20] = LoadTexture_Strict("GFX\decal_water.png", 1 + 2, DeleteAllTextures)
+	t\DecalTextureID[DECAL_WATER] = LoadTexture_Strict("GFX\decal_water.png", 1 + 2, DeleteAllTextures)
 	
 	t\MonitorTextureID[0] = LoadTexture_Strict("GFX\monitor_overlay.png", 1, DeleteAllTextures)
 	For i = 1 To 3
@@ -8652,11 +8652,11 @@ Function InitNewGame%()
 		
 		If (Not r\RoomTemplate\DisableDecals) Then
 			If Rand(4) = 1 Then
-				de.Decals = CreateDecal(Rand(2, 3), EntityX(r\OBJ) + Rnd(- 2.0, 2.0), r\y + 0.005, EntityZ(r\OBJ) + Rnd(-2.0, 2.0), 90.0, Rnd(360.0), 0.0, Rnd(0.1, 0.4), Rnd(0.85, 0.95))
+				de.Decals = CreateDecal(Rand(DECAL_BLOOD_1, DECAL_BLOOD_2), EntityX(r\OBJ) + Rnd(- 2.0, 2.0), r\y + 0.005, EntityZ(r\OBJ) + Rnd(-2.0, 2.0), 90.0, Rnd(360.0), 0.0, Rnd(0.1, 0.4), Rnd(0.85, 0.95))
 				EntityParent(de\OBJ, r\OBJ)
 			EndIf
 			If Rand(4) = 1 Then
-				de.Decals = CreateDecal(0, EntityX(r\OBJ) + Rnd(-2.0, 2.0), r\y + 0.005, EntityZ(r\OBJ) + Rnd(-2.0, 2.0), 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.7, 0.85))
+				de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(r\OBJ) + Rnd(-2.0, 2.0), r\y + 0.005, EntityZ(r\OBJ) + Rnd(-2.0, 2.0), 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.7, 0.85))
 				EntityParent(de\OBJ, r\OBJ)
 			EndIf
 		EndIf
@@ -9431,7 +9431,7 @@ Function Use427%()
 			PositionEntity(Pvt, EntityX(me\Collider) + Rnd(-0.05, 0.05), EntityY(me\Collider) - 0.05, EntityZ(me\Collider) + Rnd(-0.05, 0.05))
 			TurnEntity(Pvt, 90.0, 0.0, 0.0)
 			EntityPick(Pvt, 0.3)
-			de.Decals = CreateDecal(18, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.03, 0.08) * 2.0)
+			de.Decals = CreateDecal(DECAL_427, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.03, 0.08) * 2.0)
 			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + 0.009
 			EntityParent(de\OBJ, PlayerRoom\OBJ)
 			TempCHN = PlaySound_Strict(DripSFX[Rand(0, 3)])
@@ -9568,7 +9568,7 @@ Function UpdateExplosion%()
 				ExplosionSFX = LoadSound_Strict("SFX\Ending\GateB\Nuke2.ogg")
 				PlaySound_Strict(ExplosionSFX)				
 				For i = 0 To (10 + (10 * (opt\ParticleAmount + 1)))
-					p.Particles = CreateParticle(0, EntityX(me\Collider) + Rnd(-0.5, 0.5), EntityY(me\Collider) - Rnd(0.2, 1.5), EntityZ(me\Collider) + Rnd(-0.5, 0.5), Rnd(0.2, 0.6), 0.0, 350.0)	
+					p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, EntityX(me\Collider) + Rnd(-0.5, 0.5), EntityY(me\Collider) - Rnd(0.2, 1.5), EntityZ(me\Collider) + Rnd(-0.5, 0.5), Rnd(0.2, 0.6), 0.0, 350.0)	
 					RotateEntity(p\Pvt, -90.0, 0.0, 0.0, True)
 					p\Speed = Rnd(0.05, 0.07)
 				Next
@@ -9644,7 +9644,7 @@ Function UpdateVomit%()
 			PositionEntity(Pvt, EntityX(Camera), EntityY(me\Collider) - 0.05, EntityZ(Camera))
 			TurnEntity(Pvt, 90.0, 0.0, 0.0)
 			EntityPick(Pvt, 0.3)
-			de.Decals = CreateDecal(5, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, 180.0, 0.0, 0.001, 1.0, 0, 1, 0, Rand(200, 255), 0)
+			de.Decals = CreateDecal(DECAL_BLOOD_4, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, 180.0, 0.0, 0.001, 1.0, 0, 1, 0, Rand(200, 255), 0)
 			de\SizeChange = 0.001 : de\MaxSize = 0.6
 			EntityParent(de\OBJ, PlayerRoom\OBJ)
 			FreeEntity(Pvt)
@@ -9780,7 +9780,7 @@ Function Update008%()
 						msg\DeathMsg = SubjectName + " found ingesting Dr. [DATA REDACTED] at Sector [DATA REDACTED]. Subject was immediately terminated by Nine-Tailed Fox and sent for autopsy. "
 						msg\DeathMsg = msg\DeathMsg + "SCP-008 infection was confirmed, after which the body was incinerated."
 						Kill()
-						de.Decals = CreateDecal(3, EntityX(PlayerRoom\NPC[0]\Collider), 544.0 * RoomScale + 0.01, EntityZ(PlayerRoom\NPC[0]\Collider), 90.0, Rnd(360.0), 0.0, 0.8)
+						de.Decals = CreateDecal(DECAL_BLOOD_2, EntityX(PlayerRoom\NPC[0]\Collider), 544.0 * RoomScale + 0.01, EntityZ(PlayerRoom\NPC[0]\Collider), 90.0, Rnd(360.0), 0.0, 0.8)
 						EntityParent(de\OBJ, PlayerRoom\OBJ)
 					ElseIf I_008\Timer > 96.0
 						me\BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 96.0), me\BlinkTimer), -10.0)
@@ -9798,7 +9798,7 @@ Function Update008%()
 					
 					If opt\ParticleAmount > 0 Then
 						If Rand(50) = 1 Then
-							p.Particles = CreateParticle(6, EntityX(PlayerRoom\NPC[0]\Collider), EntityY(PlayerRoom\NPC[0]\Collider), EntityZ(PlayerRoom\NPC[0]\Collider), Rnd(0.05, 0.1), 0.15, 200.0)
+							p.Particles = CreateParticle(PARTICLE_BLOOD, EntityX(PlayerRoom\NPC[0]\Collider), EntityY(PlayerRoom\NPC[0]\Collider), EntityZ(PlayerRoom\NPC[0]\Collider), Rnd(0.05, 0.1), 0.15, 200.0)
 							p\Speed = 0.01 : p\SizeChange = 0.01 : p\Alpha = 0.5 : p\AlphaChange = -0.01
 							RotateEntity(p\Pvt, Rnd(360.0), Rnd(360.0), 0.0)
 						EndIf

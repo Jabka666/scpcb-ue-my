@@ -1,4 +1,4 @@
-; ~ NPC IDs Constants
+; ~ NPCs ID Constants
 ;[Block]
 ; ~ Main
 Const NPCType008_1% = 0, NPCType035_Tentacle% = 1, NPCType049% = 2, NPCType049_2% = 3, NPCType066% = 4, NPCType096% = 5
@@ -942,7 +942,7 @@ Function UpdateNPCs%()
 						If n\State <= 0.0 Then
 							If EntityY(n\Collider) < EntityY(me\Collider) - 20.0 - 0.55 Then
 								If (Not PlayerRoom\RoomTemplate\DisableDecals) Then
-									de.Decals = CreateDecal(0, EntityX(me\Collider), 0.01, EntityZ(me\Collider), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
+									de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(me\Collider), 0.01, EntityZ(me\Collider), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
 									de\SizeChange = 0.001
 								EndIf
 								
@@ -1319,7 +1319,7 @@ Function UpdateNPCs%()
 													TurnEntity(Pvt, 90.0, 0.0, 0.0)
 													EntityPick(Pvt, 0.3)
 													
-													de.Decals = CreateDecal(Rand(16, 17), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.2, 0.6))
+													de.Decals = CreateDecal(Rand(DECAL_BLOOD_DROP_1, DECAL_BLOOD_DROP_2), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.2, 0.6))
 												Next
 												FreeEntity(Pvt)
 											EndIf
@@ -2389,7 +2389,7 @@ Function UpdateNPCs%()
 						AnimateNPC(n, 245.0, 248.0, 0.35)
 						If n\Reload = 0.0 Then
 							PlaySound2(GunshotSFX, Camera, n\Collider, 15.0)
-							p.Particles = CreateParticle(2, EntityX(n\OBJ, True), EntityY(n\OBJ, True), EntityZ(n\OBJ, True), 0.2, 0.0, 5.0)
+							p.Particles = CreateParticle(PARTICLE_FLASH, EntityX(n\OBJ, True), EntityY(n\OBJ, True), EntityZ(n\OBJ, True), 0.2, 0.0, 5.0)
 							PositionEntity(p\Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 							RotateEntity(p\Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
 							MoveEntity(p\Pvt, 0.0632, 0.84925, 0.5451)
@@ -3955,7 +3955,7 @@ Function UpdateNPCs%()
 												;[Block]
 												If (Not PlayerRoom\RoomTemplate\DisableDecals) Then
 													me\BigCameraShake = 5.0
-													de.Decals = CreateDecal(1, EntityX(n\Collider), 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, 0.3)
+													de.Decals = CreateDecal(DECAL_CORROSIVE_2, EntityX(n\Collider), 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, 0.3)
 													PlaySound_Strict(LoadTempSound("SFX\General\BodyFall.ogg"))
 													If DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider)) < 0.64 Then
 														InjurePlayer(Rnd(0.3, 0.5), 0.0, 200.0)
@@ -6299,7 +6299,7 @@ Function UpdateMTFUnit%(n.NPCs)
 						PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 						MoveEntity(Pvt,0.0632, 0.84925, 0.5451)
 						
-						p.Particles = CreateParticle(2, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), Rnd(0.08, 0.1), 0.0, 5.0)
+						p.Particles = CreateParticle(PARTICLE_FLASH, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), Rnd(0.08, 0.1), 0.0, 5.0)
 						p\AlphaChange = -0.15
 						TurnEntity(p\OBJ, 0.0, 0.0, Rnd(360.0))
 						
@@ -6450,7 +6450,7 @@ Function UpdateMTFUnit%(n.NPCs)
 								PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 								MoveEntity(Pvt, 0.0632, 0.84925, 0.5451)
 								
-								p.Particles = CreateParticle(2, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), Rnd(0.08, 0.1), 0.0, 5.0)
+								p.Particles = CreateParticle(PARTICLE_FLASH, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), Rnd(0.08, 0.1), 0.0, 5.0)
 								p\AlphaChange = -0.15
 								TurnEntity(p\OBJ, 0.0, 0.0, Rnd(360.0))
 								If n\Target\HP > 0 Then
@@ -7033,7 +7033,7 @@ Function TriggerTeslaGateOnNPCs%(e.Events)
 							LoadEventSound(e, "SFX\Ending\GateA\106Retreat.ogg", 1)
 							e\SoundCHN2 = PlaySound2(e\Sound2, Camera, n\Collider, 10.0)
 							
-							de.Decals = CreateDecal(0, EntityX(n\Collider), e\room\y + 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.8, 1.0))
+							de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(n\Collider), e\room\y + 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.8, 1.0))
 							de\SizeChange = 0.004 : de\Timer = 90000.0
 						EndIf
 						
@@ -7055,7 +7055,7 @@ Function TriggerTeslaGateOnNPCs%(e.Events)
 			If n\IgnorePlayer Then
 				If opt\ParticleAmount > 0 Then
 					If Rand(10 - (5 * (opt\ParticleAmount - 1))) = 1 Then
-						p.Particles = CreateParticle(0, EntityX(n\OBJ, True) + (Rnd(-0.15, 0.15)), EntityY(n\OBJ, True) + Rnd(0.3, 0.9), EntityZ(n\OBJ) + (Rnd(-0.15, 0.15)), 0.06, -0.001)
+						p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, EntityX(n\OBJ, True) + (Rnd(-0.15, 0.15)), EntityY(n\OBJ, True) + Rnd(0.3, 0.9), EntityZ(n\OBJ) + (Rnd(-0.15, 0.15)), 0.06, -0.001)
 						p\Speed = 0.005 : p\Alpha = 0.8 : p\AlphaChange = -0.01
 						RotateEntity(p\Pvt, -Rnd(70.0, 110.0), Rnd(360.0), 0.0)
 					EndIf
@@ -7086,7 +7086,7 @@ Function Shoot%(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = Fals
 	Local p.Particles, de.Decals, n.NPCs
 	Local Pvt%, ShotMessageUpdate$, i%
 	
-	p.Particles = CreateParticle(2, x, y, z, Rnd(0.08, 0.1), 0.0, 5.0)
+	p.Particles = CreateParticle(PARTICLE_FLASH, x, y, z, Rnd(0.08, 0.1), 0.0, 5.0)
 	p\AlphaChange = -0.15
 	TurnEntity(p\OBJ, 0.0, 0.0, Rnd(360.0))
 	
@@ -7171,17 +7171,17 @@ Function Shoot%(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = Fals
 			PlaySound2(Gunshot3SFX, Camera, Pvt, 0.4, Rnd(0.8, 1.0))
 			
 			If Particles Then 
-				p.Particles = CreateParticle(0, PickedX(), PickedY(), PickedZ(), 0.03, 0.0, 80.0)
+				p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, PickedX(), PickedY(), PickedZ(), 0.03, 0.0, 80.0)
 				p\Speed = 0.001 : p\SizeChange = 0.003 : p\Alpha = 0.8 : p\AlphaChange = -0.01
 				RotateEntity(p\Pvt, EntityPitch(Pvt) - 180.0, EntityYaw(Pvt), 0)
 				
 				For i = 0 To Rand(2, 3)
-					p.Particles = CreateParticle(0, PickedX(), PickedY(), PickedZ(), 0.006, 0.003, 80.0)
+					p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, PickedX(), PickedY(), PickedZ(), 0.006, 0.003, 80.0)
 					p\Speed = 0.02 : p\Alpha = 0.8 : p\AlphaChange = -0.01
 					RotateEntity(p\Pvt, EntityPitch(Pvt) + Rnd(170.0, 190.0), EntityYaw(Pvt) + Rnd(-10.0, 10.0), 0)	
 				Next
 				
-				de.Decals = CreateDecal(Rand(14, 15), PickedX(), PickedY() + Rnd(-0.05, 0.05), PickedZ(), Rnd(-4.0, 4.0), Rnd(-4.0, 4.0), Rnd(-4.0, 4.0), Rnd(0.028, 0.034), 1.0, 1, 2)
+				de.Decals = CreateDecal(Rand(DECAL_BULLET_HOLE_1, DECAL_BULLET_HOLE_2), PickedX(), PickedY() + Rnd(-0.05, 0.05), PickedZ(), Rnd(-4.0, 4.0), Rnd(-4.0, 4.0), Rnd(-4.0, 4.0), Rnd(0.028, 0.034), 1.0, 1, 2)
 				de\LifeTime = 70.0 * 20.0
 				AlignToVector(de\OBJ, -PickedNX(), -PickedNY(), -PickedNZ(), 3)
 				MoveEntity(de\OBJ, 0.0, 0.0, -0.001)

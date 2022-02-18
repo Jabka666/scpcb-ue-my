@@ -337,7 +337,7 @@ Function UpdateMainMenu%()
 						
 						If UpdateMainMenuTick(x + (20 * MenuScale), y + ((180 + 30 * i) * MenuScale), (SelectedDifficulty = difficulties[i])) Then SelectedDifficulty = difficulties[i]
 						
-						If SelectedDifficulty\SaveType <> SAVEANYWHERE Then opt\AutoSaveEnabled = False
+						If SelectedDifficulty\SaveType <> SAVE_ANYWHERE Then opt\AutoSaveEnabled = False
 						
 						If PrevSelectedDifficulty <> SelectedDifficulty Then
 							If PrevSelectedDifficulty = difficulties[ESOTERIC] Then
@@ -349,10 +349,10 @@ Function UpdateMainMenu%()
 					If SelectedDifficulty\Customizable Then
 						; ~ Save type
 						If MouseOn(x + (160 * MenuScale), y + (180 * MenuScale), ImageWidth(ga\ArrowIMG[1]), ImageHeight(ga\ArrowIMG[1])) And mo\MouseHit1 Then
-							If SelectedDifficulty\SaveType  < NOSAVES Then
+							If SelectedDifficulty\SaveType  < NO_SAVES Then
 								SelectedDifficulty\SaveType = SelectedDifficulty\SaveType + 1
 							Else
-								SelectedDifficulty\SaveType = SAVEANYWHERE
+								SelectedDifficulty\SaveType = SAVE_ANYWHERE
 							EndIf
 							PlaySound_Strict(ButtonSFX)
 						EndIf
@@ -926,7 +926,7 @@ Function UpdateMainMenu%()
 								
 								y = y + (30 * MenuScale)
 								
-								opt\AutoSaveEnabled = UpdateMainMenuTick(x, y, opt\AutoSaveEnabled, SelectedDifficulty\SaveType <> SAVEANYWHERE)
+								opt\AutoSaveEnabled = UpdateMainMenuTick(x, y, opt\AutoSaveEnabled, SelectedDifficulty\SaveType <> SAVE_ANYWHERE)
 								
 								y = y + (30 * MenuScale)
 								
@@ -1195,19 +1195,19 @@ Function RenderMainMenu%()
 					; ~ Save type
 					DrawImage(ga\ArrowIMG[1], x + (160 * MenuScale), y + (180 * MenuScale))
 					Select SelectedDifficulty\SaveType
-						Case SAVEANYWHERE
+						Case SAVE_ANYWHERE
 							;[Block]
 							TempStr = "Save anywhere"
 							;[End Block]
-						Case SAVEONSCREENS
+						Case SAVE_ON_SCREENS
 							;[Block]
 							TempStr = "Save on screens"
 							;[End Block]
-						Case SAVEONQUIT
+						Case SAVE_ON_QUIT
 							;[Block]
 							TempStr = "Save on quit"
 							;[End Block]
-						Case NOSAVES
+						Case NO_SAVES
 							;[Block]
 							TempStr = "No saves"
 							;[End Block]
@@ -1634,7 +1634,7 @@ Function RenderMainMenu%()
 							
 							y = y + (30 * MenuScale)
 							
-							Color(255 - (155 * SelectedDifficulty\SaveType <> SAVEANYWHERE), 255 - (155 * SelectedDifficulty\SaveType <> SAVEANYWHERE), 255 - (155 * SelectedDifficulty\SaveType <> SAVEANYWHERE))
+							Color(255 - (155 * SelectedDifficulty\SaveType <> SAVE_ANYWHERE), 255 - (155 * SelectedDifficulty\SaveType <> SAVE_ANYWHERE), 255 - (155 * SelectedDifficulty\SaveType <> SAVE_ANYWHERE))
 							Text(x, y + (5 * MenuScale), "Enable auto save:")
 							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then
 								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AutoSave)

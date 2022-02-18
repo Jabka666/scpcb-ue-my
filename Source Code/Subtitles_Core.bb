@@ -1,4 +1,4 @@
-; ~ Subtitles IDs constants
+; ~ Subtitles ID constants
 ;[Block]
 Const ANNOUNCEMENT% = 0
 Const FIRST_PERSON% = 1

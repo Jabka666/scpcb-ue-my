@@ -496,7 +496,7 @@ Function SaveGame%(File$)
 	CloseFile(f)
 	
 	If (Not MenuOpen) And (Not MainMenuOpen) Then
-		If SelectedDifficulty\SaveType = SAVEONSCREENS Then
+		If SelectedDifficulty\SaveType = SAVE_ON_SCREENS Then
 			PlaySound_Strict(LoadTempSound("SFX\General\Save2.ogg"))
 		Else
 			PlaySound_Strict(LoadTempSound("SFX\General\Save1.ogg"))
@@ -2149,7 +2149,7 @@ End Type
 Global as.AutoSave = New AutoSave
 
 Function UpdateAutoSave%()
-	If (Not opt\AutoSaveEnabled) Lor SelectedDifficulty\SaveType <> SAVEANYWHERE Lor me\Terminated Lor (Not CanSave) Lor (Not me\Playable) Lor me\Zombie Then
+	If (Not opt\AutoSaveEnabled) Lor SelectedDifficulty\SaveType <> SAVE_ANYWHERE Lor me\Terminated Lor (Not CanSave) Lor (Not me\Playable) Lor me\Zombie Then
 		CancelAutoSave()
 		Return
 	EndIf

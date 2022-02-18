@@ -1,3 +1,21 @@
+; ~ Particles ID Constants
+;[Block]
+Const PARTICLE_BLACK_SMOKE% = 0
+Const PARTICLE_WHITE_SMOKE% = 1
+
+Const PARTICLE_FLASH% = 2
+
+Const PARTICLE_DUST% = 3
+
+Const PARTICLE_HG% = 4
+
+Const PARTICLE_SUN% = 5
+
+Const PARTICLE_BLOOD% = 6
+
+Const PARTICLE_SPARK% = 7
+;[End Block]
+
 Type Particles
 	Field OBJ%, Pvt%
 	Field Alpha#, Size#
@@ -14,7 +32,7 @@ Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTi
 	p.Particles = New Particles
 	p\OBJ = CreateSprite()
 	PositionEntity(p\OBJ, x, y, z, True)
-	If ID = 1 Then
+	If ID = PARTICLE_WHITE_SMOKE Then
 		EntityTexture(p\OBJ, t\ParticleTextureID[ID], Rand(0, 3))
 	Else
 		EntityTexture(p\OBJ, t\ParticleTextureID[ID])
@@ -23,12 +41,12 @@ Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTi
 	SpriteViewMode(p\OBJ, 3)
 	
 	Select ID
-		Case 0, 1, 3, 6
+		Case PARTICLE_BLACK_SMOKE, PARTICLE_WHITE_SMOKE, PARTICLE_DUST, PARTICLE_BLOOD
 			;[Block]
 			EntityFX(p\OBJ, 1)
 			EntityBlend(p\OBJ, 1)
 			;[End Block]
-		Case 2, 4, 5, 7
+		Case PARTICLE_FLASH, PARTICLE_HG, PARTICLE_SUN, PARTICLE_SPARK
 			;[Block]
 			EntityFX(p\OBJ, 1 + 8)
 			EntityBlend(p\OBJ, 3)
@@ -44,13 +62,8 @@ Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTi
 	p\Size = Size
 	ScaleSprite(p\OBJ, p\Size, p\Size)
 	
-	If (Not t\ParticleTextureID[ID]) Then
-		CreateConsoleMsg("Particle Texture ID: " + ID + " not found.")
-		If opt\ConsoleOpening And opt\CanOpenConsole Then
-			ConsoleOpen = True
-		EndIf
-		Return(Null)
-	EndIf
+	If (Not t\ParticleTextureID[ID]) Then RuntimeError("Particle Texture ID: " + ID + " not found.")
+	
 	Return(p)
 End Function
 	
@@ -155,7 +168,7 @@ Function UpdateEmitters%()
 	
 	For e.Emitters = Each Emitters
 		If fps\Factor[0] > 0.0 And (PlayerRoom = e\room Lor e\room\Dist < 8.0) Then
-			p.Particles = CreateParticle(0, EntityX(e\OBJ, True), EntityY(e\OBJ, True), EntityZ(e\OBJ, True), e\Size, e\Gravity, e\LifeTime)
+			p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, EntityX(e\OBJ, True), EntityY(e\OBJ, True), EntityZ(e\OBJ, True), e\Size, e\Gravity, e\LifeTime)
 			p\Speed = e\Speed
 			RotateEntity(p\Pvt, EntityPitch(e\OBJ, True), EntityYaw(e\OBJ, True), EntityRoll(e\OBJ, True), True)
 			TurnEntity(p\Pvt, Rnd(-e\RandAngle, e\RandAngle), Rnd(-e\RandAngle, e\RandAngle), 0.0)
@@ -195,7 +208,7 @@ Function UpdateDust%()
 	Local i%, Pvt%
 	
 	If opt\ParticleAmount > 0 Then
-		; ~ Create a single dust particles
+		; ~ Create a single dust particle
 		If Rand(35 + (35 * (opt\ParticleAmount = 1))) = 1 Then
 			Pvt = CreatePivot()
 			
@@ -207,7 +220,7 @@ Function UpdateDust%()
 				MoveEntity(Pvt, 0.0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
 			EndIf
 			
-			p.Particles = CreateParticle(3, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 0.002, 0.0, 300.0)
+			p.Particles = CreateParticle(PARTICLE_DUST, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 0.002, 0.0, 300.0)
 			p\Speed = 0.001 : p\SizeChange = -0.00001
 			RotateEntity(p\Pvt, Rnd(-20.0, 20.0), Rnd(360.0), 0.0)
 			FreeEntity(Pvt)
@@ -225,7 +238,7 @@ Function UpdateDust%()
 					MoveEntity(Pvt, 0.0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
 				EndIf
 				
-				p.Particles = CreateParticle(3, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 0.002, 0.0, 300.0)
+				p.Particles = CreateParticle(PARTICLE_DUST, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 0.002, 0.0, 300.0)
 				p\Speed = 0.001 : p\SizeChange = -0.00001
 				RotateEntity(p\Pvt, Rnd(-20.0, 20.0), Rnd(360.0), 0.0)
 				FreeEntity(Pvt)
