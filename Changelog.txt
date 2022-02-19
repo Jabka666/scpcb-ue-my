@@ -13,7 +13,7 @@ NPCs:
 - Decreased detect distance for MTF.
 
 Rooms:
-- Tiny improvement for "cabient_c.b3d" model.
+- Tiny improvement for "cabient_c.b3d" and "garbage_bin.b3d" models.
 - Tiny optimization for SCP-106's box.
 
 Menu:
