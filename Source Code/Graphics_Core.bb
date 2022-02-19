@@ -490,7 +490,7 @@ Function PlayStartupVideos%()
 		EndIf
 		Movie = OpenMovie(MovieFile + ".avi")
 		
-		Local SplashScreenAudio% = StreamSound_Strict(MovieFile + ".ogg", opt\SFXVolume, 0)
+		Local SplashScreenAudio% = StreamSound_Strict(MovieFile + ".ogg", opt\SFXVolume * opt\MasterVolume, 0)
 		
 		Repeat
 			Cls()

@@ -2784,13 +2784,13 @@ Function UpdateMoving%()
 				Temp = 0.0
 				If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp = 1
 				BreathCHN = PlaySound_Strict(BreathSFX((Temp), Rand(1, 3)))
-				ChannelVolume(BreathCHN, Min((70.0 - me\Stamina) / 70.0, 1.0) * opt\SFXVolume)
+				ChannelVolume(BreathCHN, Min((70.0 - me\Stamina) / 70.0, 1.0) * opt\SFXVolume * opt\MasterVolume)
 			Else
 				If (Not ChannelPlaying(BreathCHN)) Then
 					Temp = 0.0
 					If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp = 1
 					BreathCHN = PlaySound_Strict(BreathSFX((Temp), Rand(1, 3)))
-					ChannelVolume(BreathCHN, Min((70.0 - me\Stamina) / 70.0, 1.0) * opt\SFXVolume)		
+					ChannelVolume(BreathCHN, Min((70.0 - me\Stamina) / 70.0, 1.0) * opt\SFXVolume * opt\MasterVolume)		
 				EndIf
 			EndIf
 		EndIf
@@ -2879,7 +2879,7 @@ Function UpdateMoving%()
 					Else
 						me\SndVolume = Max(2.5 - (me\Crouch * 0.6), me\SndVolume)
 					EndIf
-					ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume)
+					ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume * opt\MasterVolume)
 				EndIf	
 			EndIf
 		Else
@@ -3045,7 +3045,7 @@ Function UpdateMoving%()
 			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + Rnd(0.008, 0.009)
 			EntityParent(de\OBJ, PlayerRoom\OBJ)
 			TempCHN = PlaySound_Strict(DripSFX[Rand(0, 3)])
-			ChannelVolume(TempCHN, Rnd(0.0, 0.8) * opt\SFXVolume)
+			ChannelVolume(TempCHN, Rnd(0.0, 0.8) * opt\SFXVolume * opt\MasterVolume)
 			ChannelPitch(TempCHN, Rand(20000, 30000))
 			
 			FreeEntity(Pvt)
@@ -3082,7 +3082,7 @@ Function UpdateMoving%()
 	If me\HeartBeatVolume > 0.0 Then
 		If me\HeartBeatTimer <= 0.0 Then
 			TempCHN = PlaySound_Strict(HeartBeatSFX)
-			ChannelVolume(TempCHN, me\HeartBeatVolume * opt\SFXVolume)
+			ChannelVolume(TempCHN, me\HeartBeatVolume * opt\SFXVolume * opt\MasterVolume)
 			
 			me\HeartBeatTimer = 70.0 * (60.0 / Max(me\HeartBeatRate, 1.0))
 		Else
@@ -6825,12 +6825,15 @@ Function UpdateMenu%()
 					;[Block]
 					y = y + (50 * MenuScale)
 					
-					opt\MusicVolume = (UpdateMainMenuSlideBar(x + (270 * MenuScale), y, 100 * MenuScale, opt\MusicVolume * 100.0) / 100.0)
+					opt\MasterVolume = UpdateMainMenuSlideBar(x + (270 * MenuScale), y, 100 * MenuScale, opt\MasterVolume * 100.0) / 100.0
 					
 					y = y + (40 * MenuScale)
 					
-					opt\PrevSFXVolume = (UpdateMainMenuSlideBar(x + (270 * MenuScale), y, 100 * MenuScale, opt\SFXVolume * 100.0) / 100.0)
-					If (Not me\Deaf) Then opt\SFXVolume = opt\PrevSFXVolume
+					opt\MusicVolume = UpdateMainMenuSlideBar(x + (270 * MenuScale), y, 100 * MenuScale, opt\MusicVolume * 100.0) / 100.0
+					
+					y = y + (40 * MenuScale)
+					
+					opt\SFXVolume = UpdateMainMenuSlideBar(x + (270 * MenuScale), y, 100 * MenuScale, opt\SFXVolume * 100.0) / 100.0
 					
 					y = y + (40 * MenuScale)
 					
@@ -7358,6 +7361,14 @@ Function RenderMenu%()
 					y = y + (50 * MenuScale)
 					
 					Color(255, 255, 255)
+					Text(x, y + (5 * MenuScale), "Master volume:")
+					If MouseOn(x + (250 * MenuScale), y, 114 * MenuScale, 20)
+						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MasterVolume, opt\MasterVolume)
+					EndIf
+					
+					y = y + (40 * MenuScale)
+					
+					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Music volume:")
 					If MouseOn(x + (250 * MenuScale), y, 114 * MenuScale, 20)
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MusicVolume, opt\MusicVolume)
@@ -7368,7 +7379,7 @@ Function RenderMenu%()
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Sound volume:")
 					If MouseOn(x + (250 * MenuScale), y, 114 * MenuScale, 20)
-						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SoundVolume, opt\PrevSFXVolume)
+						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SoundVolume, opt\SFXVolume)
 					EndIf
 					
 					y = y + (40 * MenuScale)
@@ -7636,7 +7647,7 @@ Function UpdateEnding%()
 			ShouldPlay = 23
 			opt\CurrMusicVolume = opt\MusicVolume
 			StopStream_Strict(MusicCHN)
-			MusicCHN = StreamSound_Strict("SFX\Music\" + Music[23] + ".ogg", opt\CurrMusicVolume, 0)
+			MusicCHN = StreamSound_Strict("SFX\Music\" + Music[23] + ".ogg", opt\CurrMusicVolume * opt\MasterVolume, 0)
 			NowPlaying = ShouldPlay
 			
 			PlaySound_Strict(LightSFX)
@@ -7675,7 +7686,7 @@ Function UpdateEnding%()
 						Next
 						StopStream_Strict(MusicCHN)
 						MusicCHN = StreamSound_Strict("SFX\Music\" + Music[NowPlaying] + ".ogg", 0.0, Mode)
-						SetStreamVolume_Strict(MusicCHN, 1.0 * opt\MusicVolume)
+						SetStreamVolume_Strict(MusicCHN, opt\MusicVolume * opt\MasterVolume)
 						me\EndingTimer = -2000.0
 						mm\ShouldDeleteGadgets = True
 						ResetInput()
@@ -8925,9 +8936,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	MTFTimer = 0.0
 	
-	Delete(achv)
-	achv.Achievements = New Achievements
-	
 	ConsoleInput = ""
 	ConsoleOpen = False
 	
@@ -9068,8 +9076,8 @@ Function NullGame%(PlayButtonSFX% = True)
 	QuitMsg = -1
 	mm\AchievementsMenu = -1
 	
-	opt\MusicVolume = opt\PrevMusicVolume
-	opt\SFXVolume = opt\PrevSFXVolume
+	Delete(achv)
+	achv.Achievements = New Achievements
 	
 	Delete Each AchievementMsg
 	CurrAchvMSGID = 0
@@ -9435,7 +9443,7 @@ Function Use427%()
 			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + 0.009
 			EntityParent(de\OBJ, PlayerRoom\OBJ)
 			TempCHN = PlaySound_Strict(DripSFX[Rand(0, 3)])
-			ChannelVolume(TempCHN, Rnd(0.0, 0.8) * opt\SFXVolume)
+			ChannelVolume(TempCHN, Rnd(0.0, 0.8) * opt\SFXVolume * opt\MasterVolume)
 			ChannelPitch(TempCHN, Rand(20000, 30000))
 			FreeEntity(Pvt)
 			me\BlurTimer = 800.0

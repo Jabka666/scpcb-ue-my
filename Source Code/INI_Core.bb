@@ -409,10 +409,10 @@ Type Options
 	Field Anisotropic%, AnisotropicLevel%
 	Field Atmosphere%
 	; ~ [AUDIO]
-	Field MusicVolume#, PrevMusicVolume#, CurrMusicVolume#
+	Field MasterVolume#, MusicVolume#, CurrMusicVolume#
 	Field EnableUserTracks%
 	Field UserTrackMode%
-	Field SFXVolume#, PrevSFXVolume#
+	Field SFXVolume#
 	Field EnableSFXRelease%, PrevEnableSFXRelease%
 	; ~ [ADVANCED]
 	Field AchvMsgEnabled%
@@ -518,12 +518,12 @@ Function LoadOptionsINI%()
 	
 	; ~ [AUDIO]
 	
+	opt\MasterVolume = GetINIFloat(OptionFile, "Audio", "Master Volume", 0.5)
+	
 	opt\MusicVolume = GetINIFloat(OptionFile, "Audio", "Music Volume", 0.5)
-	opt\PrevMusicVolume = opt\MusicVolume
 	opt\CurrMusicVolume = 1.0
 	
 	opt\SFXVolume = GetINIFloat(OptionFile, "Audio", "Sound Volume", 0.5)
-	opt\PrevSFXVolume = opt\SFXVolume
 	
 	opt\EnableSFXRelease = GetINIInt(OptionFile, "Audio", "SFX Release", True)
 	opt\PrevEnableSFXRelease = opt\EnableSFXRelease
@@ -613,7 +613,7 @@ End Function
 
 Function SaveOptionsINI%(SaveGlobal% = False)
 	; ~ [GRAPHICS]
-	
+	;[Block]
 	PutINIValue(OptionFile, "Graphics", "Enable Bump Mapping", opt\BumpEnabled)
 	
 	PutINIValue(OptionFile, "Graphics", "VSync", opt\VSync)
@@ -635,21 +635,25 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	PutINIValue(OptionFile, "Graphics", "Anisotropic Filtering", opt\Anisotropic)
 	
 	PutINIValue(OptionFile, "Graphics", "Atmosphere", opt\Atmosphere)
+	;[End Block]
 	
 	; ~ [AUDIO]
+	;[Block]
+	PutINIValue(OptionFile, "Audio", "Master Volume", opt\MasterVolume)
 	
 	PutINIValue(OptionFile, "Audio", "Music Volume", opt\MusicVolume)
 	
-	PutINIValue(OptionFile, "Audio", "Sound Volume", opt\PrevSFXVolume)
+	PutINIValue(OptionFile, "Audio", "Sound Volume", opt\SFXVolume)
 	
 	PutINIValue(OptionFile, "Audio", "SFX Release", opt\EnableSFXRelease)
 	
 	PutINIValue(OptionFile, "Audio", "Enable User Tracks", opt\EnableUserTracks)
 	
 	PutINIValue(OptionFile, "Audio", "User Track Setting", opt\UserTrackMode)
+	;[End Block]
 	
 	; ~ [CONTROLS]
-	
+	;[Block]
 	PutINIValue(OptionFile, "Controls", "Mouse Sensitivity", opt\MouseSensitivity)
 	
 	PutINIValue(OptionFile, "Controls", "Invert Mouse By Y-Axis", opt\InvertMouse)
@@ -677,9 +681,10 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	PutINIValue(OptionFile, "Controls", "Console Key", key\CONSOLE)
 	
 	PutINIValue(OptionFile, "Controls", "Screenshot Key", key\SCREENSHOT)
+	;[End Block]
 	
 	; ~ [ADVANCED]
-	
+	;[Block]
 	PutINIValue(OptionFile, "Advanced", "Enable HUD", opt\HUDEnabled)
 	
 	PutINIValue(OptionFile, "Advanced", "Enable Console", opt\CanOpenConsole)
@@ -707,16 +712,18 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	PutINIValue(OptionFile, "Advanced", "Subtitles Color G", opt\SubColorG)
 	
 	PutINIValue(OptionFile, "Advanced", "Subtitles Color B", opt\SubColorB)
+	;[End Block]
 	
+	; ~ [GLOBAL]
+	;[Block]
 	If SaveGlobal Then
-		; ~ [GLOBAL]
-		
 		PutINIValue(OptionFile, "Global", "Camera Fog Near", opt\CameraFogNear)
 		
 		PutINIValue(OptionFile, "Global", "Camera Fog Far", opt\CameraFogFar)
 		
 		PutINIValue(OptionFile, "Global", "Enable Intro", opt\IntroEnabled)
 	EndIf
+	;[End Block]
 End Function
 
 Function ResetOptionsINI%()
@@ -747,11 +754,11 @@ Function ResetOptionsINI%()
 	
 	; ~ [AUDIO]
 	
+	opt\MasterVolume = 0.5
+	
 	opt\MusicVolume = 0.5
-	opt\PrevMusicVolume = 0.5
 	
 	opt\SFXVolume = 0.5
-	opt\PrevSFXVolume = 0.5
 	
 	opt\EnableSFXRelease = True
 	

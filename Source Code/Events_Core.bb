@@ -822,19 +822,19 @@ Function UpdateEvents%()
 		If fps\Factor[0] > 0.0 Then
 			If e\SoundCHN <> 0 Then
 				If e\SoundCHN_IsStream Then
-					SetStreamVolume_Strict(e\SoundCHN, opt\SFXVolume)
+					SetStreamVolume_Strict(e\SoundCHN, opt\SFXVolume * opt\MasterVolume)
 				EndIf
 			EndIf
 			
 			If e\SoundCHN2 <> 0 Then
 				If e\SoundCHN2_IsStream Then
-					SetStreamVolume_Strict(e\SoundCHN2, opt\SFXVolume)
+					SetStreamVolume_Strict(e\SoundCHN2, opt\SFXVolume * opt\MasterVolume)
 				EndIf
 			EndIf
 			
 			If e\SoundCHN3 <> 0 Then
 				If e\SoundCHN3_IsStream Then
-					SetStreamVolume_Strict(e\SoundCHN3, opt\SFXVolume)
+					SetStreamVolume_Strict(e\SoundCHN3, opt\SFXVolume * opt\MasterVolume)
 				EndIf
 			EndIf
 		EndIf
@@ -1131,7 +1131,7 @@ Function UpdateEvents%()
 								opt\CurrMusicVolume = opt\MusicVolume
 								
 								StopStream_Strict(MusicCHN)
-								MusicCHN = StreamSound_Strict("SFX\Music\" + Music[13] + ".ogg", opt\CurrMusicVolume, Mode)
+								MusicCHN = StreamSound_Strict("SFX\Music\" + Music[13] + ".ogg", opt\CurrMusicVolume * opt\MasterVolume, Mode)
 								NowPlaying = ShouldPlay
 								
 								PlaySound_Strict(IntroSFX[Rand(8, 10)])
@@ -5928,7 +5928,7 @@ Function UpdateEvents%()
 									GiveAchievement(Achv079)
 									e\EventState = 3.0
 									e\EventState2 = 1.0
-									e\SoundCHN3 = StreamSound_Strict("SFX\SCP\079\Speech.ogg", opt\SFXVolume, 0.0)
+									e\SoundCHN3 = StreamSound_Strict("SFX\SCP\079\Speech.ogg", opt\SFXVolume * opt\MasterVolume, 0.0)
 									e\SoundCHN3_IsStream = True
 								EndIf							
 							ElseIf e\EventState < 2000.0 Then
@@ -5953,7 +5953,7 @@ Function UpdateEvents%()
 									If e\SoundCHN3 <> 0 Then
 										StopStream_Strict(e\SoundCHN3) : e\SoundCHN3 = 0 
 									EndIf
-									e\SoundCHN3 = StreamSound_Strict("SFX\SCP\079\Refuse.ogg", opt\SFXVolume, 0.0)
+									e\SoundCHN3 = StreamSound_Strict("SFX\SCP\079\Refuse.ogg", opt\SFXVolume * opt\MasterVolume, 0.0)
 								EndIf
 							EndIf
 						Else
@@ -5981,7 +5981,7 @@ Function UpdateEvents%()
 						If e\SoundCHN3 <> 0 Then
 							StopStream_Strict(e\SoundCHN3) : e\SoundCHN3 = 0
 						EndIf
-						e\SoundCHN3 = StreamSound_Strict("SFX\SCP\079\GateB.ogg", opt\SFXVolume, 0.0)
+						e\SoundCHN3 = StreamSound_Strict("SFX\SCP\079\GateB.ogg", opt\SFXVolume * opt\MasterVolume, 0.0)
 						e\SoundCHN3_IsStream = True
 						e\EventState2 = 2.0
 						
@@ -9698,7 +9698,7 @@ Function UpdateEndings%()
 							ElseIf e\EventState > 70.0 * 35.0 And e\EventState < 70.0 * 36.5	
 								me\CameraShake = 1.5		
 								If e\EventState - fps\Factor[0] <= 70.0 * 35.0 Then
-									e\SoundCHN = StreamSound_Strict("SFX\Ending\GateB\DetonatingAlphaWarheads.ogg", opt\SFXVolume, 0.0)
+									e\SoundCHN = StreamSound_Strict("SFX\Ending\GateB\DetonatingAlphaWarheads.ogg", opt\SFXVolume * opt\MasterVolume, 0.0)
 									e\SoundCHN_IsStream = True
 								EndIf									
 							ElseIf e\EventState > 70.0 * 39.5 And e\EventState < 70.0 * 39.8		
@@ -9720,7 +9720,7 @@ Function UpdateEndings%()
 						If e\EventState >= 70.0 * 45.0 Then
 							If e\EventState < 70.0 * 75.0 Then
 								If (Not e\SoundCHN2) Then
-									e\SoundCHN2 = StreamSound_Strict("SFX\Ending\GateB\Siren.ogg", opt\SFXVolume, Mode)
+									e\SoundCHN2 = StreamSound_Strict("SFX\Ending\GateB\Siren.ogg", opt\SFXVolume * opt\MasterVolume, Mode)
 									e\SoundCHN2_IsStream = True
 								EndIf
 							Else

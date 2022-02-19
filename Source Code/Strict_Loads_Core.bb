@@ -74,7 +74,7 @@ Function PlaySound_Strict%(SoundHandle%)
 					If opt\EnableSubtitles Then
 						If snd\HasSubtitles Then ShowSubtitles(snd\Name)
 					EndIf
-					ChannelVolume(snd\Channels[i], opt\SFXVolume)
+					ChannelVolume(snd\Channels[i], opt\SFXVolume * opt\MasterVolume)
 					snd\ReleaseTime = MilliSecs2() + 5000 ; ~ Release after 5 seconds
 					Return(snd\Channels[i])
 				EndIf
@@ -104,7 +104,7 @@ Function PlaySound_Strict%(SoundHandle%)
 				If opt\EnableSubtitles Then 
 					If snd\HasSubtitles Then ShowSubtitles(snd\Name)
 				EndIf
-				ChannelVolume(snd\Channels[i], opt\SFXVolume)
+				ChannelVolume(snd\Channels[i], opt\SFXVolume * opt\MasterVolume)
 				snd\ReleaseTime = MilliSecs2() + 5000 ; ~ Release after 5 seconds
 				Return(snd\Channels[i])
 			EndIf
@@ -262,7 +262,7 @@ Function UpdateStreamSoundOrigin%(StreamHandle%, Cam%, Entity%, Range# = 10.0, V
 		If 1.0 - Dist > 0.0 And 1.0 - Dist < 1.0 Then
 			Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 			
-			SetStreamVolume_Strict(StreamHandle, Volume * (1.0 - Dist) * opt\SFXVolume)
+			SetStreamVolume_Strict(StreamHandle, Volume * (1.0 - Dist) * opt\SFXVolume * opt\MasterVolume)
 			SetStreamPan_Strict(StreamHandle, PanValue)
 		Else
 			SetStreamVolume_Strict(StreamHandle, 0.0)

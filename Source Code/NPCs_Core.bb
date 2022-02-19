@@ -1271,7 +1271,7 @@ Function UpdateNPCs%()
 								n\SoundCHN2 = StreamSound_Strict("SFX\Music\096Chase.ogg", 0)
 								n\SoundCHN2_IsStream = 2
 							Else
-								SetStreamVolume_Strict(n\SoundCHN2, Min(Max(8.0 - Sqr(Dist), 0.6), 1.0) * opt\SFXVolume)
+								SetStreamVolume_Strict(n\SoundCHN2, Min(Max(8.0 - Sqr(Dist), 0.6), 1.0) * opt\SFXVolume * opt\MasterVolume)
 							EndIf
 						EndIf
 						

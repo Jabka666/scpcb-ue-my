@@ -708,12 +708,15 @@ Function UpdateMainMenu%()
 							;[Block]
 							y = y + (20 * MenuScale)
 							
+							opt\MasterVolume = UpdateMainMenuSlideBar(x, y, 150 * MenuScale, opt\MasterVolume * 100.0) / 100.0
+							
+							y = y + (40 * MenuScale)
+							
 							opt\MusicVolume = UpdateMainMenuSlideBar(x, y, 150 * MenuScale, opt\MusicVolume * 100.0) / 100.0
 							
 							y = y + (40 * MenuScale)
 							
-							opt\PrevSFXVolume = UpdateMainMenuSlideBar(x, y, 150 * MenuScale, opt\SFXVolume * 100.0) / 100.0
-							opt\SFXVolume = opt\PrevSFXVolume
+							opt\SFXVolume = UpdateMainMenuSlideBar(x, y, 150 * MenuScale, opt\SFXVolume * 100.0) / 100.0
 							
 							y = y + (40 * MenuScale)
 							
@@ -1465,13 +1468,21 @@ Function RenderMainMenu%()
 					Case MainMenuTab_Options_Audio
 						;[Block]
 						If opt\EnableUserTracks Then
-							Height = 240 * MenuScale
+							Height = 280 * MenuScale
 						Else
-							Height = 170 * MenuScale
+							Height = 210 * MenuScale
 						EndIf
 						RenderFrame(x - (20 * MenuScale), y, Width, Height)	
 						
 						y = y + (20 * MenuScale)
+						
+						Color(255, 255, 255)
+						Text(x, y + (5 * MenuScale), "Master volume:")
+						If MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) Then
+							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MasterVolume, opt\MasterVolume)
+						EndIf
+						
+						y = y + (40 * MenuScale)
 						
 						Color(255, 255, 255)
 						Text(x, y + (5 * MenuScale), "Music volume:")
@@ -1484,7 +1495,7 @@ Function RenderMainMenu%()
 						Color(255, 255, 255)
 						Text(x, y + (5 * MenuScale), "Sound volume:")
 						If MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) Then
-							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SoundVolume, opt\PrevSFXVolume)
+							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SoundVolume, opt\SFXVolume)
 						EndIf
 						
 						y = y + (40 * MenuScale)
@@ -3144,37 +3155,38 @@ Const Tooltip_Atmosphere% = 10
 
 ; ~ Audio Tooltips Constants
 ;[Block]
-Const Tooltip_MusicVolume% = 11
-Const Tooltip_SoundVolume% = 12
-Const Tooltip_SoundAutoRelease% = 13
-Const Tooltip_UserTracks% = 14
-Const Tooltip_UserTracksMode% = 15
-Const Tooltip_UserTrackScan% = 16
+Const Tooltip_MasterVolume% = 11
+Const Tooltip_MusicVolume% = 12
+Const Tooltip_SoundVolume% = 13
+Const Tooltip_SoundAutoRelease% = 14
+Const Tooltip_UserTracks% = 15
+Const Tooltip_UserTracksMode% = 16
+Const Tooltip_UserTrackScan% = 17
 ;[End Block]
 
 ; ~ Controls Tooltips Constants
 ;[Block]
-Const Tooltip_MouseSensitivity% = 17
-Const Tooltip_MouseInvert% = 18
-Const Tooltip_MouseSmoothing% = 19
-Const Tooltip_ControlConfiguration% = 20
+Const Tooltip_MouseSensitivity% = 18
+Const Tooltip_MouseInvert% = 19
+Const Tooltip_MouseSmoothing% = 20
+Const Tooltip_ControlConfiguration% = 21
 ;[End Block]
 
 ; ~ Advanced Tooltips Constants
 ;[Block]
-Const Tooltip_HUD% = 21
-Const Tooltip_Console% = 22
-Const Tooltip_ConsoleOnError% = 23
-Const Tooltip_AchievementPopups% = 24
-Const Tooltip_FPS% = 25
-Const Tooltip_FrameLimit% = 26
-Const Tooltip_AutoSave% = 27
-Const Tooltip_SmoothBars% = 28
-Const Tooltip_StartupVideos% = 29
-Const Tooltip_Launcher% = 30
-Const Tooltip_Subtitles% = 31
-Const Tooltip_SubtitlesColor% = 32
-Const Tooltip_ResetOptions% = 33
+Const Tooltip_HUD% = 22
+Const Tooltip_Console% = 23
+Const Tooltip_ConsoleOnError% = 24
+Const Tooltip_AchievementPopups% = 25
+Const Tooltip_FPS% = 26
+Const Tooltip_FrameLimit% = 27
+Const Tooltip_AutoSave% = 28
+Const Tooltip_SmoothBars% = 29
+Const Tooltip_StartupVideos% = 30
+Const Tooltip_Launcher% = 31
+Const Tooltip_Subtitles% = 32
+Const Tooltip_SubtitlesColor% = 33
+Const Tooltip_ResetOptions% = 34
 ;[End Block]
 
 Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
@@ -3267,6 +3279,12 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 			Txt2 = "This option cannot be changed in-game."
 			;[End Block]
 			; ~ [AUDIO]
+		Case Tooltip_MasterVolume
+			;[Block]
+			Txt = "Adjusts the master volume of sounds. Sliding the bar fully to the left will mute all sounds."
+			R = 255 : G = 255
+			Txt2 = "Current value: " + Int(Value * 100.0) + "% (default is 50%)"
+			;[End Block]
 		Case Tooltip_MusicVolume
 			;[Block]
 			Txt = "Adjusts the volume of background music. Sliding the bar fully to the left will mute all music."

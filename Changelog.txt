@@ -6,6 +6,7 @@ General:
 - Added sound volume for crouching and picking the items up, so NPCs can hear your activity.
 - Added smoke particles for all NPCs hit by the Tesla Gate.
 - The HUD will be hidden when the player dies.
+- Added master volume option.
 
 NPCs:
 - Added new messages when SCP-049 destroys the hazmat suit or removes the ring from the player.
@@ -35,6 +36,7 @@ Bug Fixes:
     	- Fixed incorrect position of Izumi logs.
     	- Fixed calculation of previous EventState3 value to prevent SCP-860-2's spawn from being skipped.
 	- Fixed SCP-860-1 branches wrapping around the grid border and creating unreachable tiles.
+	- Fixed MAV on the forest created by the Map Creator.
 - Fixes for SCP-1162-ARC:
 	- Fixed ability to use SCP-1162-ARC while using inventory.
 	- Fixed SCP-1162-ARC that kills the player even if he has any item.
@@ -67,7 +69,8 @@ Bug Fixes:
 - Fixed an invisible collider being left wherever the player last fell or died.
 - Fixed fonts in Map Creator.
 - Fixed a bug where SCP-1048 event is applied for Dr. L.'s office.
-- Fixed MAV in SCP-860-1 loaded by the Map Creator.
+- Fixed "room2_js" overlapping with adjacent rooms.
+- Fixed MAV after deleting saved game.
 
 - Tiny fix for SCP-372's AI.
 - Tiny fixes for location of the pause menu buttons.
