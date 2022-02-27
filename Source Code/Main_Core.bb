@@ -8675,7 +8675,11 @@ Function InitNewGame%()
 			AccessCode = AccessCode + (Rand(9) * (10 ^ i))
 		Next
 		Skip = False
-		If AccessCode <> 7816 And AccessCode <> 2411 Then Skip = True 
+		If AccessCode <> 7816 And AccessCode <> 2411 Then 
+			Skip = True
+		Else
+			AccessCode = 0
+		EndIf
 	Until Skip
 	
 	RenderLoading(55, "ROOMS")
