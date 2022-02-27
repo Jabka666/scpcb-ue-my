@@ -70,7 +70,7 @@ Global SelectedMapActionMsg$
 
 Global SelectedMap$
 
-; ~ Main Menu Tabs Constants
+; ~ Main Menu Tab Constants
 ;[Block]
 Const MainMenuTab_Default% = 0
 Const MainMenuTab_New_Game% = 1
@@ -81,6 +81,21 @@ Const MainMenuTab_Options_Audio% = 5
 Const MainMenuTab_Options_Controls% = 6
 Const MainMenuTab_Options_Advanced% = 7
 ;[End Block]
+
+Function ChangeOptionTab%(Page%, MainMenu% = True)
+	If MainMenu Then
+		mm\MainMenuTab = Page
+	Else
+		OptionsMenu = Page
+	EndIf
+	mm\CurrMenuPage = 0
+	mm\ShouldDeleteGadgets = True
+End Function
+
+Function ChangePage%(Page%)
+	mm\CurrMenuPage = Page
+	mm\ShouldDeleteGadgets = True
+End Function
 
 Function UpdateMainMenu%()
 	CatchErrors("Uncaught (UpdateMainMenu")
@@ -125,7 +140,7 @@ Function UpdateMainMenu%()
 		If (Not mo\MouseDown1) Then mm\OnSliderID = 0
 		
 		If mm\PrevMainMenuTab <> mm\MainMenuTab Then
-			DeleteMenuGadgets()
+			DeleteMenuGadgets() : mm\CurrMenuPage = 0
 		EndIf
 		mm\PrevMainMenuTab = mm\MainMenuTab
 		
@@ -436,26 +451,16 @@ Function UpdateMainMenu%()
 					Height = 296 * MenuScale
 					
 					If mm\CurrMenuPage < Ceil(Float(SaveGameAmount) / 5.0) - 1 And DelSave = Null Then 
-						If UpdateMainMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">") Then
-							mm\CurrMenuPage = mm\CurrMenuPage + 1
-							mm\ShouldDeleteGadgets = True
-						EndIf
+						If UpdateMainMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">") Then ChangePage(mm\CurrMenuPage + 1)
 					Else
 						UpdateMainMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">", True, False, True)
 					EndIf
 					If mm\CurrMenuPage > 0 And DelSave = Null Then
-						If UpdateMainMenuButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<") Then
-							mm\CurrMenuPage = mm\CurrMenuPage - 1
-							mm\ShouldDeleteGadgets = True
-						EndIf
+						If UpdateMainMenuButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<") Then ChangePage(mm\CurrMenuPage - 1)
 					Else
 						UpdateMainMenuButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<", True, False, True)
 					EndIf
-					
-					If mm\CurrMenuPage > Ceil(Float(SaveGameAmount) / 5.0) - 1 Then
-						mm\CurrMenuPage = mm\CurrMenuPage - 1
-						mm\ShouldDeleteGadgets = True
-					EndIf
+					If mm\CurrMenuPage > Ceil(Float(SaveGameAmount) / 5.0) - 1 Then ChangePage(mm\CurrMenuPage - 1)
 					
 					If SaveGameAmount <> 0 Then
 						x = x + (20 * MenuScale)
@@ -525,26 +530,16 @@ Function UpdateMainMenu%()
 					Height = 350 * MenuScale
 					
 					If mm\CurrMenuPage < Ceil(Float(SavedMapsAmount) / 5.0) - 1 Then 
-						If UpdateMainMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">") Then
-							mm\CurrMenuPage = mm\CurrMenuPage + 1
-							mm\ShouldDeleteGadgets = True
-						EndIf
+						If UpdateMainMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">") Then ChangePage(mm\CurrMenuPage + 1)
 					Else
 						UpdateMainMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">", True, False, True)
 					EndIf
 					If mm\CurrMenuPage > 0 Then
-						If UpdateMainMenuButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<") Then
-							mm\CurrMenuPage = mm\CurrMenuPage - 1
-							mm\ShouldDeleteGadgets = True
-						EndIf
+						If UpdateMainMenuButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<") Then ChangePage(mm\CurrMenuPage - 1)
 					Else
 						UpdateMainMenuButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<", True, False, True)
 					EndIf
-					
-					If mm\CurrMenuPage > Ceil(Float(SavedMapsAmount) / 5.0) - 1 Then
-						mm\CurrMenuPage = mm\CurrMenuPage - 1
-						mm\ShouldDeleteGadgets = True
-					EndIf
+					If mm\CurrMenuPage > Ceil(Float(SavedMapsAmount) / 5.0) - 1 Then ChangePage(mm\CurrMenuPage - 1)
 					
 					If SavedMapsAmount > 0 Then 
 						x = x + (20 * MenuScale)
@@ -597,10 +592,10 @@ Function UpdateMainMenu%()
 					Width = 580 * MenuScale
 					Height = 60 * MenuScale
 					
-					If UpdateMainMenuButton(x + (20 * MenuScale), y + (15 * MenuScale), Width / 5, Height / 2, "GRAPHICS", False) Then mm\MainMenuTab = MainMenuTab_Options_Graphics
-					If UpdateMainMenuButton(x + (160 * MenuScale), y + (15 * MenuScale), Width / 5, Height / 2, "AUDIO", False) Then mm\MainMenuTab = MainMenuTab_Options_Audio
-					If UpdateMainMenuButton(x + (300 * MenuScale), y + (15 * MenuScale), Width / 5, Height / 2, "CONTROLS", False) Then mm\MainMenuTab = MainMenuTab_Options_Controls
-					If UpdateMainMenuButton(x + (440 * MenuScale), y + (15 * MenuScale), Width / 5, Height / 2, "ADVANCED", False) Then mm\MainMenuTab = MainMenuTab_Options_Advanced
+					If UpdateMainMenuButton(x + (20 * MenuScale), y + (15 * MenuScale), Width / 5, Height / 2, "GRAPHICS", False) Then ChangeOptionTab(MainMenuTab_Options_Graphics)
+					If UpdateMainMenuButton(x + (160 * MenuScale), y + (15 * MenuScale), Width / 5, Height / 2, "AUDIO", False) Then ChangeOptionTab(MainMenuTab_Options_Audio)
+					If UpdateMainMenuButton(x + (300 * MenuScale), y + (15 * MenuScale), Width / 5, Height / 2, "CONTROLS", False) Then ChangeOptionTab(MainMenuTab_Options_Controls)
+					If UpdateMainMenuButton(x + (440 * MenuScale), y + (15 * MenuScale), Width / 5, Height / 2, "ADVANCED", False) Then ChangeOptionTab(MainMenuTab_Options_Advanced)
 					
 					x = x + (310 * MenuScale)
 					y = y + (70 * MenuScale)
@@ -787,98 +782,119 @@ Function UpdateMainMenu%()
 							;[End Block]
 						Case MainMenuTab_Options_Controls
 							;[Block]
-							y = y + (20 * MenuScale)
-							
-							opt\MouseSensitivity = (UpdateMainMenuSlideBar(x, y, 150 * MenuScale, (opt\MouseSensitivity + 0.5) * 100.0) / 100.0) - 0.5
-							
-							y = y + (40 * MenuScale)
-							
-							opt\InvertMouse = UpdateMainMenuTick(x, y, opt\InvertMouse)
-							
-							y = y + (40 * MenuScale)
-							
-							opt\MouseSmoothing = UpdateMainMenuSlideBar(x, y, 150 * MenuScale, (opt\MouseSmoothing) * 50.0) / 50.0
-							
-							y = y + 70 * MenuScale
-							
-							UpdateMainMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_UP, 210.0)], 3)		
-							
-							UpdateMainMenuInputBox(x - (150 * MenuScale), y + (20 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_LEFT, 210.0)], 4)	
-							
-							UpdateMainMenuInputBox(x - (150 * MenuScale), y + (40 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_DOWN, 210.0)], 5)				
-							
-							UpdateMainMenuInputBox(x - (150 * MenuScale), y + (60 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_RIGHT, 210.0)], 6)	
-							
-							UpdateMainMenuInputBox(x - (150 * MenuScale), y + (80 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SPRINT, 210.0)], 7)
-							
-							UpdateMainMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CROUCH, 210.0)], 8)
-							
-							UpdateMainMenuInputBox(x + (140 * MenuScale), y + (20 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\BLINK, 210.0)], 9)
-							
-							UpdateMainMenuInputBox(x + (140 * MenuScale), y + (40 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\INVENTORY, 210.0)], 10)
-							
-							UpdateMainMenuInputBox(x + (140 * MenuScale), y + (60 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SAVE, 210.0)], 11)
-							
-							If opt\CanOpenConsole Then UpdateMainMenuInputBox(x + (140 * MenuScale), y + (80 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210.0)], 12)
-							
-							UpdateMainMenuInputBox(x + (140 * MenuScale), y + (100 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, 210.0)], 13)
-							
-							Local TempKey%
-							
-							For i = 0 To 227
-								If KeyHit(i) Then
-									TempKey = i
-									Exit
+							If mm\CurrMenuPage = 0 Then
+								y = y + (20 * MenuScale)
+								
+								opt\MouseSensitivity = (UpdateMainMenuSlideBar(x, y, 150 * MenuScale, (opt\MouseSensitivity + 0.5) * 100.0) / 100.0) - 0.5
+								
+								y = y + (40 * MenuScale)
+								
+								opt\InvertMouseX = UpdateMainMenuTick(x, y, opt\InvertMouseX)
+								
+								y = y + (40 * MenuScale)
+								
+								opt\InvertMouseY = UpdateMainMenuTick(x, y, opt\InvertMouseY)
+								
+								y = y + (40 * MenuScale)
+								
+								opt\MouseSmoothing = UpdateMainMenuSlideBar(x, y, 150 * MenuScale, (opt\MouseSmoothing) * 50.0) / 50.0
+								
+								y = y + (40 * MenuScale)
+								
+								If UpdateMainMenuButton(x - (290 * MenuScale), y, 240 * MenuScale, 30 * MenuScale, "CONTROL CONFIGURATION", False) Then ChangePage(1)
+							Else
+								y = y + (20 * MenuScale)
+								
+								UpdateMainMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_UP, 210.0)], 3)		
+								UpdateMainMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CROUCH, 210.0)], 8)
+								
+								y = y + (20 * MenuScale)
+								
+								UpdateMainMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_LEFT, 210.0)], 4)	
+								UpdateMainMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\BLINK, 210.0)], 9)
+								
+								y = y + (20 * MenuScale)
+								
+								UpdateMainMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_DOWN, 210.0)], 5)				
+								UpdateMainMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\INVENTORY, 210.0)], 10)
+								
+								y = y + (20 * MenuScale)
+								
+								UpdateMainMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_RIGHT, 210.0)], 6)	
+								UpdateMainMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SAVE, 210.0)], 11)
+								
+								y = y + (20 * MenuScale)
+								
+								UpdateMainMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SPRINT, 210.0)], 7)
+								UpdateMainMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, 210.0)], 12)
+								
+								If opt\CanOpenConsole Then
+									y = y + (20 * MenuScale)
+									
+									UpdateMainMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210.0)], 13)
 								EndIf
-							Next
-							If TempKey <> 0 Then
-								Select SelectedInputBox
-									Case 3
-										;[Block]
-										key\MOVEMENT_UP = TempKey
-										;[End Block]
-									Case 4
-										;[Block]
-										key\MOVEMENT_LEFT = TempKey
-										;[End Block]
-									Case 5
-										;[Block]
-										key\MOVEMENT_DOWN = TempKey
-										;[End Block]
-									Case 6
-										;[Block]
-										key\MOVEMENT_RIGHT = TempKey
-										;[End Block]
-									Case 7
-										;[Block]
-										key\SPRINT = TempKey
-										;[End Block]
-									Case 8
-										;[Block]
-										key\CROUCH = TempKey
-										;[End Block]
-									Case 9
-										;[Block]
-										key\BLINK = TempKey
-										;[End Block]
-									Case 10
-										;[Block]
-										key\INVENTORY = TempKey
-										;[End Block]
-									Case 11
-										;[Block]
-										key\SAVE = TempKey
-										;[End Block]
-									Case 12
-										;[Block]
-										key\CONSOLE = TempKey
-										;[End Block]
-									Case 13
-										;[Block]
-										key\SCREENSHOT = TempKey
-										;[End Block]
-								End Select
-								SelectedInputBox = 0
+								
+								Local TempKey%
+								
+								For i = 0 To 227
+									If KeyHit(i) Then
+										TempKey = i
+										Exit
+									EndIf
+								Next
+								If TempKey <> 0 Then
+									Select SelectedInputBox
+										Case 3
+											;[Block]
+											key\MOVEMENT_UP = TempKey
+											;[End Block]
+										Case 4
+											;[Block]
+											key\MOVEMENT_LEFT = TempKey
+											;[End Block]
+										Case 5
+											;[Block]
+											key\MOVEMENT_DOWN = TempKey
+											;[End Block]
+										Case 6
+											;[Block]
+											key\MOVEMENT_RIGHT = TempKey
+											;[End Block]
+										Case 7
+											;[Block]
+											key\SPRINT = TempKey
+											;[End Block]
+										Case 8
+											;[Block]
+											key\CROUCH = TempKey
+											;[End Block]
+										Case 9
+											;[Block]
+											key\BLINK = TempKey
+											;[End Block]
+										Case 10
+											;[Block]
+											key\INVENTORY = TempKey
+											;[End Block]
+										Case 11
+											;[Block]
+											key\SAVE = TempKey
+											;[End Block]
+										Case 12
+											;[Block]
+											key\CONSOLE = TempKey
+											;[End Block]
+										Case 13
+											;[Block]
+											key\SCREENSHOT = TempKey
+											;[End Block]
+									End Select
+									SelectedInputBox = 0
+								EndIf
+								
+								y = y + (40 * MenuScale)
+								
+								If UpdateMainMenuButton(x - (290 * MenuScale), y, 240 * MenuScale, 30 * MenuScale, "BACK", False) Then ChangePage(0)
 							EndIf
 							;[End Block]
 						Case MainMenuTab_Options_Advanced
@@ -886,18 +902,12 @@ Function UpdateMainMenu%()
 							Height = 340 * MenuScale
 							
 							If mm\CurrMenuPage = 0 Then 
-								If UpdateMainMenuButton(x - (310 * MenuScale) + Width - (30 * MenuScale), y + Height + (5 * MenuScale), 30 * MenuScale, 30 * MenuScale, ">", False) Then
-									mm\CurrMenuPage = mm\CurrMenuPage + 1
-									mm\ShouldDeleteGadgets = True
-								EndIf
+								If UpdateMainMenuButton(x - (310 * MenuScale) + Width - (30 * MenuScale), y + Height + (5 * MenuScale), 30 * MenuScale, 30 * MenuScale, ">", False) Then ChangePage(mm\CurrMenuPage + 1)
 							Else
 								UpdateMainMenuButton(x - (310 * MenuScale) + Width - (30 * MenuScale), y + Height + (5 * MenuScale), 30 * MenuScale, 30 * MenuScale, ">", False, False, True)
 							EndIf
 							If mm\CurrMenuPage = 1 Then
-								If UpdateMainMenuButton(x - (310 * MenuScale), y + Height + (5 * MenuScale), 30 * MenuScale, 30 * MenuScale, "<", False) Then
-									mm\CurrMenuPage = mm\CurrMenuPage - 1
-									mm\ShouldDeleteGadgets = True
-								EndIf
+								If UpdateMainMenuButton(x - (310 * MenuScale), y + Height + (5 * MenuScale), 30 * MenuScale, 30 * MenuScale, "<", False) Then ChangePage(mm\CurrMenuPage - 1)
 							Else
 								UpdateMainMenuButton(x - (310 * MenuScale), y + Height + (5 * MenuScale), 30 * MenuScale, 30 * MenuScale, "<", False, False, True)
 							EndIf
@@ -1537,65 +1547,80 @@ Function RenderMainMenu%()
 						;[End Block]
 					Case MainMenuTab_Options_Controls
 						;[Block]
-						Height = 310 * MenuScale
-						RenderFrame(x - (20 * MenuScale), y, Width, Height)	
-						
+						Height = (230 - ((mm\CurrMenuPage = 1) * (20 + (20 * (Not opt\CanOpenConsole))))) * MenuScale
+						RenderFrame(x - (20 * MenuScale), y, Width, Height)
 						y = y + (20 * MenuScale)
-						
-						Color(255, 255, 255)
-						Text(x, y + (5 * MenuScale), "Mouse sensitivity:")
-						If MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) Then
-							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseSensitivity, opt\MouseSensitivity)
-						EndIf
-						
-						y = y + (40 * MenuScale)
-						
-						Color(255, 255, 255)
-						Text(x, y + (5 * MenuScale), "Invert mouse Y-axis:")
-						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then
-							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseInvert)
-						EndIf
-						
-						y = y + (40 * MenuScale)
-						
-						Color(255, 255, 255)
-						Text(x, y + (5 * MenuScale), "Mouse smoothing:")
-						If MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) Then
-							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseSmoothing, opt\MouseSmoothing)
-						EndIf
-						
-						Color(255, 255, 255)
-						
-						y = y + (40 * MenuScale)
-						
-						Text(x, y + (5 * MenuScale), "Control configuration:")
-						
-						y = y + (30 * MenuScale)
-						
-						Text(x, y + (5 * MenuScale), "Move Forward:")
-						
-						Text(x, y + (25 * MenuScale), "Strafe Left:")
-						
-						Text(x, y + (45 * MenuScale), "Move Backward:")
-						
-						Text(x, y + (65 * MenuScale), "Strafe Right:")
-						
-						Text(x, y + (85 * MenuScale), "Sprint:")
-						
-						Text(x + (260 * MenuScale), y + (5 * MenuScale), "Crouch:")
-						
-						Text(x + (260 * MenuScale), y + (25 * MenuScale), "Manual Blink:")
-						
-						Text(x + (260 * MenuScale), y + (45 * MenuScale), "Inventory:")
-						
-						Text(x + (260 * MenuScale), y + (65 * MenuScale), "Quick Save:")
-						
-						If opt\CanOpenConsole Then Text(x + (260 * MenuScale), y + (85 * MenuScale), "Console:")
-						
-						Text(x + (260 * MenuScale), y + (105 * MenuScale), "Take Screenshot:")
-						
-						If MouseOn(x, y, Width - (40 * MenuScale), 120 * MenuScale) Then
-							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ControlConfiguration)
+						If mm\CurrMenuPage = 0 Then
+							Color(255, 255, 255)
+							Text(x, y + (5 * MenuScale), "Mouse sensitivity:")
+							If MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) Then
+								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseSensitivity, opt\MouseSensitivity)
+							EndIf
+							
+							y = y + (40 * MenuScale)
+							
+							Color(255, 255, 255)
+							Text(x, y + (5 * MenuScale), "Invert mouse X-axis:")
+							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then
+								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseInvertX)
+							EndIf
+							
+							y = y + (40 * MenuScale)
+							
+							Color(255, 255, 255)
+							Text(x, y + (5 * MenuScale), "Invert mouse Y-axis:")
+							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then
+								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseInvertY)
+							EndIf
+							
+							y = y + (40 * MenuScale)
+							
+							Color(255, 255, 255)
+							Text(x, y + (5 * MenuScale), "Mouse smoothing:")
+							If MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) Then
+								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseSmoothing, opt\MouseSmoothing)
+							EndIf
+							
+							y = y + (40 * MenuScale)
+							
+							If MouseOn(x, y, 240 * MenuScale, 30 * MenuScale) Then
+								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ControlConfiguration)
+							EndIf
+						Else
+							Color(255, 255, 255)
+							
+							Text(x, y + (5 * MenuScale), "Move Forward:")
+							Text(x + (260 * MenuScale), y, "Crouch:")
+							
+							y = y + (20 * MenuScale)
+							
+							Text(x, y + (5 * MenuScale), "Strafe Left:")
+							Text(x + (260 * MenuScale), y, "Manual Blink:")
+							
+							y = y + (20 * MenuScale)
+							
+							Text(x, y + (5 * MenuScale), "Move Backward:")
+							Text(x + (260 * MenuScale), y, "Inventory:")
+							
+							y = y + (20 * MenuScale)
+							
+							Text(x, y + (5 * MenuScale), "Strafe Right:")
+							Text(x + (260 * MenuScale), y, "Quick Save:")
+							
+							y = y + (20 * MenuScale)
+							
+							Text(x, y + (5 * MenuScale), "Sprint:")
+							Text(x + (260 * MenuScale), y, "Take Screenshot:")
+							
+							If opt\CanOpenConsole Then
+								y = y + (20 * MenuScale)
+								
+								Text(x, y + (5 * MenuScale), "Console:")
+							EndIf
+							
+							If MouseOn(x, y - ((80 + (20 * opt\CanOpenConsole)) * MenuScale), Width - (40 * MenuScale), (100 + (20 * opt\CanOpenConsole)) * MenuScale) Then
+								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ControlConfiguration)
+							EndIf
 						EndIf
 						;[End Block]
 					Case MainMenuTab_Options_Advanced
@@ -3167,26 +3192,27 @@ Const Tooltip_UserTrackScan% = 17
 ; ~ Controls Tooltips Constants
 ;[Block]
 Const Tooltip_MouseSensitivity% = 18
-Const Tooltip_MouseInvert% = 19
-Const Tooltip_MouseSmoothing% = 20
-Const Tooltip_ControlConfiguration% = 21
+Const Tooltip_MouseInvertX% = 19
+Const Tooltip_MouseInvertY% = 20
+Const Tooltip_MouseSmoothing% = 21
+Const Tooltip_ControlConfiguration% = 22
 ;[End Block]
 
 ; ~ Advanced Tooltips Constants
 ;[Block]
-Const Tooltip_HUD% = 22
-Const Tooltip_Console% = 23
-Const Tooltip_ConsoleOnError% = 24
-Const Tooltip_AchievementPopups% = 25
-Const Tooltip_FPS% = 26
-Const Tooltip_FrameLimit% = 27
-Const Tooltip_AutoSave% = 28
-Const Tooltip_SmoothBars% = 29
-Const Tooltip_StartupVideos% = 30
-Const Tooltip_Launcher% = 31
-Const Tooltip_Subtitles% = 32
-Const Tooltip_SubtitlesColor% = 33
-Const Tooltip_ResetOptions% = 34
+Const Tooltip_HUD% = 23
+Const Tooltip_Console% = 24
+Const Tooltip_ConsoleOnError% = 25
+Const Tooltip_AchievementPopups% = 26
+Const Tooltip_FPS% = 27
+Const Tooltip_FrameLimit% = 28
+Const Tooltip_AutoSave% = 29
+Const Tooltip_SmoothBars% = 30
+Const Tooltip_StartupVideos% = 31
+Const Tooltip_Launcher% = 32
+Const Tooltip_Subtitles% = 33
+Const Tooltip_SubtitlesColor% = 34
+Const Tooltip_ResetOptions% = 35
 ;[End Block]
 
 Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
@@ -3330,7 +3356,11 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 			R = 255 : G = 255
 			Txt2 = "Current value: " + Int((0.5 + Value) * 100.0) + "% (default is 50%)"
 			;[End Block]
-		Case Tooltip_MouseInvert
+		Case Tooltip_MouseInvertX
+			;[Block]
+			Txt = Chr(34) + "Invert mouse X-axis" + Chr(34) + " is self-explanatory."
+			;[End Block]
+		Case Tooltip_MouseInvertY
 			;[Block]
 			Txt = Chr(34) + "Invert mouse Y-axis" + Chr(34) + " is self-explanatory."
 			;[End Block]

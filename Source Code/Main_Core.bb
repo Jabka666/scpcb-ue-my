@@ -3145,9 +3145,13 @@ Function UpdateMouseLook%()
 		RotateEntity(Camera, 0.0, EntityYaw(me\Collider), Roll * 0.5)
 		
 		; ~ Update the smoothing que to smooth the movement of the mouse
-		mo\Mouse_X_Speed_1 = CurveValue(MouseXSpeed() * (opt\MouseSensitivity + 0.6) , mo\Mouse_X_Speed_1, (6.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing)
+		If opt\InvertMouseX Then
+			mo\Mouse_X_Speed_1 = CurveValue(-MouseXSpeed() * (opt\MouseSensitivity + 0.6), mo\Mouse_X_Speed_1, (6.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing)
+		Else
+			mo\Mouse_X_Speed_1 = CurveValue(MouseXSpeed() * (opt\MouseSensitivity + 0.6), mo\Mouse_X_Speed_1, (6.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing)
+		EndIf
 		If IsNaN(mo\Mouse_X_Speed_1) Then mo\Mouse_X_Speed_1 = 0.0
-		If opt\InvertMouse Then
+		If opt\InvertMouseY Then
 			mo\Mouse_Y_Speed_1 = CurveValue(-MouseYSpeed() * (opt\MouseSensitivity + 0.6), mo\Mouse_Y_Speed_1, (6.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing)
 		Else
 			mo\Mouse_Y_Speed_1 = CurveValue(MouseYSpeed() * (opt\MouseSensitivity + 0.6), mo\Mouse_Y_Speed_1, (6.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing)
@@ -3539,10 +3543,10 @@ Function UpdateGUI%()
 			ResumeSounds()
 			If OptionsMenu <> 0 Then SaveOptionsINI()
 			StopMouseMovement()
+			mm\ShouldDeleteGadgets = True
 		Else
 			PauseSounds()
 		EndIf
-		mm\ShouldDeleteGadgets = True
 		MenuOpen = (Not MenuOpen)
 		
 		mm\AchievementsMenu = 0
@@ -4456,7 +4460,8 @@ Function UpdateGUI%()
 											;[End Block]
 										Case 2
 											;[Block]
-											opt\InvertMouse = (Not opt\InvertMouse)
+											opt\InvertMouseX = (Not opt\InvertMouseX)
+											opt\InvertMouseY = (Not opt\InvertMouseY)
 											CreateMsg("You suddenly find it very difficult to turn your head.")
 											;[End Block]
 										Case 3
@@ -6654,6 +6659,14 @@ Function RenderGUI%()
 	CatchErrors("RenderGUI")
 End Function
 
+; ~ Menu Tab Options Constants
+;[Block]
+Const MenuTab_Options_Graphics% = 1
+Const MenuTab_Options_Audio% = 2
+Const MenuTab_Options_Controls% = 3
+Const MenuTab_Options_Advanced% = 4
+;[End Block]
+
 Function UpdateMenu%()
 	CatchErrors("Uncaught (UpdateMenu)")
 	
@@ -6683,7 +6696,7 @@ Function UpdateMenu%()
 		EndIf
 		
 		InvOpen = False
-		ConsoleOpen = False
+		If ConsoleOpen Then ConsoleOpen = False : mm\ShouldDeleteGadgets = True
 		
 		Width = ImageWidth(t\ImageID[0])
 		Height = ImageHeight(t\ImageID[0])
@@ -6709,25 +6722,13 @@ Function UpdateMenu%()
 				mm\ShouldDeleteGadgets = True
 			EndIf
 			
-			If UpdateMainMenuButton(x - (5 * MenuScale), y, 100 * MenuScale, 30 * MenuScale, "GRAPHICS", False) Then
-				OptionsMenu = 1
-				mm\ShouldDeleteGadgets = True
-			EndIf
-			If UpdateMainMenuButton(x + (105 * MenuScale), y, 100 * MenuScale, 30 * MenuScale, "AUDIO", False) Then
-				OptionsMenu = 2
-				mm\ShouldDeleteGadgets = True
-			EndIf
-			If UpdateMainMenuButton(x + (215 * MenuScale), y, 100 * MenuScale, 30 * MenuScale, "CONTROLS", False) Then
-				OptionsMenu = 3
-				mm\ShouldDeleteGadgets = True
-			EndIf
-			If UpdateMainMenuButton(x + (325 * MenuScale), y, 100 * MenuScale, 30 * MenuScale, "ADVANCED", False) Then
-				OptionsMenu = 4
-				mm\ShouldDeleteGadgets = True
-			EndIf
+			If UpdateMainMenuButton(x - (5 * MenuScale), y, 100 * MenuScale, 30 * MenuScale, "GRAPHICS", False) Then ChangeOptionTab(MenuTab_Options_Graphics, False)
+			If UpdateMainMenuButton(x + (105 * MenuScale), y, 100 * MenuScale, 30 * MenuScale, "AUDIO", False) Then ChangeOptionTab(MenuTab_Options_Audio, False)
+			If UpdateMainMenuButton(x + (215 * MenuScale), y, 100 * MenuScale, 30 * MenuScale, "CONTROLS", False) Then ChangeOptionTab(MenuTab_Options_Controls, False)
+			If UpdateMainMenuButton(x + (325 * MenuScale), y, 100 * MenuScale, 30 * MenuScale, "ADVANCED", False) Then ChangeOptionTab(MenuTab_Options_Advanced, False)
 			
 			Select OptionsMenu
-				Case 1 ; ~ Graphics
+				Case MenuTab_Options_Graphics
 					;[Block]
 					y = y + (50 * MenuScale)
 					
@@ -6821,7 +6822,7 @@ Function UpdateMenu%()
 					
 					opt\Atmosphere = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\Atmosphere, True)
 					;[End Block]
-				Case 2 ; ~ Audio
+				Case MenuTab_Options_Audio
 					;[Block]
 					y = y + (50 * MenuScale)
 					
@@ -6851,103 +6852,139 @@ Function UpdateMenu%()
 						UpdateMainMenuButton(x, y + (30 * MenuScale), 210 * MenuScale, 30 * MenuScale, "Scan for User Tracks", False, False, True)
 					EndIf
 					;[End Block]
-				Case 3 ; ~ Controls
+				Case MenuTab_Options_Controls
 					;[Block]
-					y = y + (50 * MenuScale)
-					
-					opt\MouseSensitivity = (UpdateMainMenuSlideBar(x + (270 * MenuScale), y, 100 * MenuScale, (opt\MouseSensitivity + 0.5) * 100.0) / 100.0) - 0.5
-					
-					y = y + (40 * MenuScale)
-					
-					opt\InvertMouse = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\InvertMouse)
-					
-					y = y + 40 * MenuScale
-					
-					opt\MouseSmoothing = UpdateMainMenuSlideBar(x + (270 * MenuScale), y, 100 * MenuScale, (opt\MouseSmoothing) * 50.0) / 50.0
-					
-					y = y + (70 * MenuScale)
-					
-					UpdateMainMenuInputBox(x + (200 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_UP, 210.0)], 3)		
-					
-					UpdateMainMenuInputBox(x + (200 * MenuScale), y + (20 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_LEFT, 210.0)], 4)	
-					
-					UpdateMainMenuInputBox(x + (200 * MenuScale), y + (40 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_DOWN, 210.0)], 5)				
-					
-					UpdateMainMenuInputBox(x + (200 * MenuScale), y + (60 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_RIGHT, 210.0)], 6)
-					
-					UpdateMainMenuInputBox(x + (200 * MenuScale), y + (80 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SPRINT, 210.0)], 7)
-					
-					UpdateMainMenuInputBox(x + (200 * MenuScale), y + (100 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CROUCH, 210.0)], 8)
-					
-					UpdateMainMenuInputBox(x + (200 * MenuScale), y + (120 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\BLINK, 210.0)], 9)				
-					
-					UpdateMainMenuInputBox(x + (200 * MenuScale), y + (140 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\INVENTORY, 210.0)], 10)
-					
-					UpdateMainMenuInputBox(x + (200 * MenuScale), y + (160 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SAVE, 210.0)], 11)	
-					
-					If opt\CanOpenConsole Then UpdateMainMenuInputBox(x + (200 * MenuScale), y + 180 * MenuScale, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210.0)], 12)
-					
-					UpdateMainMenuInputBox(x + (200 * MenuScale), y + (200 * MenuScale), 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, 210.0)], 13)
-					
-					Local TempKey%
-					
-					For i = 0 To 227
-						If KeyHit(i) Then
-							TempKey = i
-							Exit
+					If mm\CurrMenuPage = 0 Then
+						y = y + (50 * MenuScale)
+						
+						opt\MouseSensitivity = (UpdateMainMenuSlideBar(x + (270 * MenuScale), y, 100 * MenuScale, (opt\MouseSensitivity + 0.5) * 100.0) / 100.0) - 0.5
+						
+						y = y + (40 * MenuScale)
+						
+						opt\InvertMouseX = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\InvertMouseX)
+						
+						y = y + (40 * MenuScale)
+						
+						opt\InvertMouseY = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\InvertMouseY)
+						
+						y = y + (40 * MenuScale)
+						
+						opt\MouseSmoothing = UpdateMainMenuSlideBar(x + (270 * MenuScale), y, 100 * MenuScale, (opt\MouseSmoothing) * 50.0) / 50.0
+						
+						y = y + (40 * MenuScale)
+						
+						If UpdateMainMenuButton(x, y, 240 * MenuScale, 30 * MenuScale, "CONTROL CONFIGURATION", False) Then ChangePage(1)
+					Else
+						y = y + (80 * MenuScale)
+						
+						UpdateMainMenuInputBox(x + (200 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_UP, 210.0)], 3)		
+						
+						y = y + (20 * MenuScale)
+						
+						UpdateMainMenuInputBox(x + (200 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_LEFT, 210.0)], 4)	
+						
+						y = y + (20 * MenuScale)
+						
+						UpdateMainMenuInputBox(x + (200 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_DOWN, 210.0)], 5)				
+						
+						y = y + (20 * MenuScale)
+						
+						UpdateMainMenuInputBox(x + (200 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_RIGHT, 210.0)], 6)
+						
+						y = y + (20 * MenuScale)
+						
+						UpdateMainMenuInputBox(x + (200 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SPRINT, 210.0)], 7)
+						
+						y = y + (20 * MenuScale)
+						
+						UpdateMainMenuInputBox(x + (200 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CROUCH, 210.0)], 8)
+						
+						y = y + (20 * MenuScale)
+						
+						UpdateMainMenuInputBox(x + (200 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\BLINK, 210.0)], 9)				
+						
+						y = y + (20 * MenuScale)
+						
+						UpdateMainMenuInputBox(x + (200 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\INVENTORY, 210.0)], 10)
+						
+						y = y + (20 * MenuScale)
+						
+						UpdateMainMenuInputBox(x + (200 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SAVE, 210.0)], 11)	
+						
+						y = y + (20 * MenuScale)
+						
+						UpdateMainMenuInputBox(x + (200 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, 210.0)], 12)
+						
+						If opt\CanOpenConsole Then
+							y = y + (20 * MenuScale)
+							
+							UpdateMainMenuInputBox(x + (200 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210.0)], 13)
 						EndIf
-					Next
-					If TempKey <> 0 Then
-						Select SelectedInputBox
-							Case 3
-								;[Block]
-								key\MOVEMENT_UP = TempKey
-								;[End Block]
-							Case 4
-								;[Block]
-								key\MOVEMENT_LEFT = TempKey
-								;[End Block]
-							Case 5
-								;[Block]
-								key\MOVEMENT_DOWN = TempKey
-								;[End Block]
-							Case 6
-								;[Block]
-								key\MOVEMENT_RIGHT = TempKey
-								;[End Block]
-							Case 7
-								;[Block]
-								key\SPRINT = TempKey
-								;[End Block]
-							Case 8
-								;[Block]
-								key\CROUCH = TempKey
-								;[End Block]
-							Case 9
-								;[Block]
-								key\BLINK = TempKey
-								;[End Block]
-							Case 10
-								;[Block]
-								key\INVENTORY = TempKey
-								;[End Block]
-							Case 11
-								;[Block]
-								key\SAVE = TempKey
-								;[End Block]
-							Case 12
-								;[Block]
-								key\CONSOLE = TempKey
-								;[End Block]
-							Case 13
-								;[Block]
-								key\SCREENSHOT = TempKey
-								;[End Block]
-						End Select
-						SelectedInputBox = 0
+						
+						Local TempKey%
+						
+						For i = 0 To 227
+							If KeyHit(i) Then
+								TempKey = i
+								Exit
+							EndIf
+						Next
+						If TempKey <> 0 Then
+							Select SelectedInputBox
+								Case 3
+									;[Block]
+									key\MOVEMENT_UP = TempKey
+									;[End Block]
+								Case 4
+									;[Block]
+									key\MOVEMENT_LEFT = TempKey
+									;[End Block]
+								Case 5
+									;[Block]
+									key\MOVEMENT_DOWN = TempKey
+									;[End Block]
+								Case 6
+									;[Block]
+									key\MOVEMENT_RIGHT = TempKey
+									;[End Block]
+								Case 7
+									;[Block]
+									key\SPRINT = TempKey
+									;[End Block]
+								Case 8
+									;[Block]
+									key\CROUCH = TempKey
+									;[End Block]
+								Case 9
+									;[Block]
+									key\BLINK = TempKey
+									;[End Block]
+								Case 10
+									;[Block]
+									key\INVENTORY = TempKey
+									;[End Block]
+								Case 11
+									;[Block]
+									key\SAVE = TempKey
+									;[End Block]
+								Case 12
+									;[Block]
+									key\CONSOLE = TempKey
+									;[End Block]
+								Case 13
+									;[Block]
+									key\SCREENSHOT = TempKey
+									;[End Block]
+							End Select
+							SelectedInputBox = 0
+						EndIf
+						
+						y = y + (40 * MenuScale)
+						
+						If UpdateMainMenuButton(x, y, 240 * MenuScale, 30 * MenuScale, "BACK", False) Then ChangePage(0)
 					EndIf
 					;[End Block]
-				Case 4 ; ~ Advanced
+				Case MenuTab_Options_Advanced
 					;[Block]
 					y = y + (50 * MenuScale)
 					
@@ -7126,10 +7163,7 @@ Function UpdateMenu%()
 				
 				y = y + (75 * MenuScale)
 				
-				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "OPTIONS") Then 
-					OptionsMenu = 1
-					mm\ShouldDeleteGadgets = True
-				EndIf
+				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "OPTIONS") Then ChangeOptionTab(MenuTab_Options_Graphics, False)
 				
 				y = y + (75 * MenuScale)
 				
@@ -7240,13 +7274,13 @@ Function RenderMenu%()
 		
 		If mm\AchievementsMenu <= 0 And OptionsMenu > 0 And QuitMsg <= 0 Then
 			Color(0, 255, 0)
-			If OptionsMenu = 1
+			If OptionsMenu = MenuTab_Options_Graphics
 				Rect(x - (10 * MenuScale), y - (5 * MenuScale), 110 * MenuScale, 40 * MenuScale, True)
-			ElseIf OptionsMenu = 2
+			ElseIf OptionsMenu = MenuTab_Options_Audio
 				Rect(x + (100 * MenuScale), y - (5 * MenuScale), 110 * MenuScale, 40 * MenuScale, True)
-			ElseIf OptionsMenu = 3
+			ElseIf OptionsMenu = MenuTab_Options_Controls
 				Rect(x + (210 * MenuScale), y - (5 * MenuScale), 110 * MenuScale, 40 * MenuScale, True)
-			ElseIf OptionsMenu = 4
+			ElseIf OptionsMenu = MenuTab_Options_Advanced
 				Rect(x + (320 * MenuScale), y - (5 * MenuScale), 110 * MenuScale, 40 * MenuScale, True)
 			EndIf
 			
@@ -7257,7 +7291,7 @@ Function RenderMenu%()
 			
 			Color(255, 255, 255)
 			Select OptionsMenu
-				Case 1 ; ~ Graphics
+				Case MenuTab_Options_Graphics
 					;[Block]
 					SetFont(fo\FontID[Font_Default])
 					
@@ -7297,7 +7331,7 @@ Function RenderMenu%()
 					
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Screen gamma:")
-					If MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20) And mm\OnSliderID = 0
+					If MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ScreenGamma, opt\ScreenGamma)
 					EndIf
 					
@@ -7305,7 +7339,7 @@ Function RenderMenu%()
 					
 					Color(255, 255, 255)
 					Text(x, y, "Particle amount:")
-					If (MouseOn(x + (270 * MenuScale), y - (9 * MenuScale), 114 * MenuScale, 20) And mm\OnSliderID = 0) Lor mm\OnSliderID = 2
+					If (MouseOn(x + (270 * MenuScale), y - (9 * MenuScale), 114 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 2
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ParticleAmount, opt\ParticleAmount)
 					EndIf
 					
@@ -7313,7 +7347,7 @@ Function RenderMenu%()
 					
 					Color(255, 255, 255)
 					Text(x, y, "Texture LOD Bias:")
-					If (MouseOn(x + (270 * MenuScale), y - (9 * MenuScale), 114 * MenuScale, 20) And mm\OnSliderID = 0) Lor mm\OnSliderID = 3
+					If (MouseOn(x + (270 * MenuScale), y - (9 * MenuScale), 114 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 3
 						RenderOptionsTooltip(tX, tY, tW, tH + 100 * MenuScale, Tooltip_TextureLODBias)
 					EndIf
 					
@@ -7330,7 +7364,7 @@ Function RenderMenu%()
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Field of view:")
 					Color(255, 255, 0)
-					If MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20) And mm\OnSliderID = 0
+					If MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FOV)
 					EndIf
 					
@@ -7338,7 +7372,7 @@ Function RenderMenu%()
 					
 					Color(255, 255, 255)
 					Text(x, y, "Anisotropic filtering:")
-					If (MouseOn(x + (270 * MenuScale), y - (9 * MenuScale), 114 * MenuScale, 20) And mm\OnSliderID = 0) Lor mm\OnSliderID = 4
+					If (MouseOn(x + (270 * MenuScale), y - (9 * MenuScale), 114 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 4
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AnisotropicFiltering)
 					EndIf
 					
@@ -7346,15 +7380,16 @@ Function RenderMenu%()
 					
 					Color(100, 100, 100)
 					If opt\Atmosphere Then
-						Text(x, y + (5 * MenuScale), "Atmosphere: Bright")
+						TempStr = "Bright"
 					Else
-						Text(x, y + (5 * MenuScale), "Atmosphere: Dark")
+						TempStr = "Dark"
 					EndIf
+					Text(x, y + (5 * MenuScale), "Atmosphere: " + TempStr)
 					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Atmosphere)
 					EndIf
 					;[End Block]
-				Case 2 ; ~ Audio
+				Case MenuTab_Options_Audio
 					;[Block]
 					SetFont(fo\FontID[Font_Default])
 					
@@ -7362,7 +7397,7 @@ Function RenderMenu%()
 					
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Master volume:")
-					If MouseOn(x + (250 * MenuScale), y, 114 * MenuScale, 20)
+					If MouseOn(x + (250 * MenuScale), y, 114 * MenuScale, 20 * MenuScale)
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MasterVolume, opt\MasterVolume)
 					EndIf
 					
@@ -7370,7 +7405,7 @@ Function RenderMenu%()
 					
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Music volume:")
-					If MouseOn(x + (250 * MenuScale), y, 114 * MenuScale, 20)
+					If MouseOn(x + (250 * MenuScale), y, 114 * MenuScale, 20 * MenuScale)
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MusicVolume, opt\MusicVolume)
 					EndIf
 					
@@ -7378,7 +7413,7 @@ Function RenderMenu%()
 					
 					Color(255, 255, 255)
 					Text(x, y + (5 * MenuScale), "Sound volume:")
-					If MouseOn(x + (250 * MenuScale), y, 114 * MenuScale, 20)
+					If MouseOn(x + (250 * MenuScale), y, 114 * MenuScale, 20 * MenuScale)
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SoundVolume, opt\SFXVolume)
 					EndIf
 					
@@ -7404,10 +7439,11 @@ Function RenderMenu%()
 						Color(255, 255, 255)
 						Text(x, y + (5 * MenuScale), "User track mode:")
 						If opt\UserTrackMode Then
-							Text(x + (310 * MenuScale), y + 5 * MenuScale, "Repeat")
+							TempStr = "Repeat"
 						Else
-							Text(x + (310 * MenuScale), y + 5 * MenuScale, "Random")
+							TempStr = "Random"
 						EndIf
+						Text(x + (310 * MenuScale), y + (5 * MenuScale), TempStr)
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTracksMode)
 						EndIf
@@ -7416,67 +7452,102 @@ Function RenderMenu%()
 						EndIf
 					EndIf
 					;[End Block]
-				Case 3 ; ~ Controls
+				Case MenuTab_Options_Controls
 					;[Block]
 					SetFont(fo\FontID[Font_Default])
 					y = y + (50 * MenuScale)
-					
-					Color(255, 255, 255)
-					Text(x, y + (5 * MenuScale), "Mouse sensitivity:")
-					If MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20)
-						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseSensitivity, opt\MouseSensitivity)
-					EndIf
-					
-					y = y + (40 * MenuScale)
-					
-					Color(255, 255, 255)
-					Text(x, y + (5 * MenuScale), "Invert mouse Y-axis:")
-					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
-						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseInvert)
-					EndIf
-					
-					y = y + (40 * MenuScale)
-					
-					Color(255, 255, 255)
-					Text(x, y + (5 * MenuScale), "Mouse smoothing:")
-					If MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20)
-						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseSmoothing, opt\MouseSmoothing)
-					EndIf
-					
-					y = y + (40 * MenuScale)
-					
-					Color(255, 255, 255)
-					Text(x, y + (5 * MenuScale), "Control configuration:")
-					
-					y = y + (30 * MenuScale)
-					
-					Text(x, y + (5 * MenuScale), "Move Forward:")
-					
-					Text(x, y + (25 * MenuScale), "Strafe Left:")
-					
-					Text(x, y + (45 * MenuScale), "Move Backward:")
-					
-					Text(x, y + (65 * MenuScale), "Strafe Right:")
-					
-					Text(x, y + (85 * MenuScale), "Sprint:")
-					
-					Text(x, y + (105 * MenuScale), "Crouch:")
-					
-					Text(x, y + (125 * MenuScale), "Manual Blink:")
-					
-					Text(x, y + (145 * MenuScale), "Inventory:")
-					
-					Text(x, y + (165 * MenuScale), "Quick Save:")
-					
-					If opt\CanOpenConsole Then Text(x, y + (185 * MenuScale), "Console:")
-					
-					Text(x, y + (205 * MenuScale), "Take Screenshot:")
-					
-					If MouseOn(x, y, 310 * MenuScale, 220 * MenuScale)
-						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ControlConfiguration)
+					If mm\CurrMenuPage = 0 Then 
+						Color(255, 255, 255)
+						Text(x, y + (5 * MenuScale), "Mouse sensitivity:")
+						If MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20 * MenuScale)
+							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseSensitivity, opt\MouseSensitivity)
+						EndIf
+						
+						y = y + (40 * MenuScale)
+						
+						Color(255, 255, 255)
+						Text(x, y + (5 * MenuScale), "Invert mouse X-axis:")
+						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
+							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseInvertX)
+						EndIf
+						
+						y = y + (40 * MenuScale)
+						
+						Color(255, 255, 255)
+						Text(x, y + (5 * MenuScale), "Invert mouse Y-axis:")
+						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale)
+							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseInvertY)
+						EndIf
+						
+						y = y + (40 * MenuScale)
+						
+						Color(255, 255, 255)
+						Text(x, y + (5 * MenuScale), "Mouse smoothing:")
+						If MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20 * MenuScale)
+							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseSmoothing, opt\MouseSmoothing)
+						EndIf
+						
+						y = y + (40 * MenuScale)
+						
+						If MouseOn(x, y, 240 * MenuScale, 30 * MenuScale) Then
+							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ControlConfiguration)
+						EndIf
+					Else
+						Color(255, 255, 255)
+						Text(x, y + (5 * MenuScale), "Control configuration:")
+						
+						y = y + (30 * MenuScale)
+						
+						Text(x, y + (5 * MenuScale), "Move Forward:")
+						
+						y = y + (20 * MenuScale)
+						
+						Text(x, y + (5 * MenuScale), "Strafe Left:")
+						
+						y = y + (20 * MenuScale)
+						
+						Text(x, y + (5 * MenuScale), "Move Backward:")
+						
+						y = y + (20 * MenuScale)
+						
+						Text(x, y + (5 * MenuScale), "Strafe Right:")
+						
+						y = y + (20 * MenuScale)
+						
+						Text(x, y + (5 * MenuScale), "Sprint:")
+						
+						y = y + (20 * MenuScale)
+						
+						Text(x, y + (5 * MenuScale), "Crouch:")
+						
+						y = y + (20 * MenuScale)
+						
+						Text(x, y + (5 * MenuScale), "Manual Blink:")
+						
+						y = y + (20 * MenuScale)
+						
+						Text(x, y + (5 * MenuScale), "Inventory:")
+						
+						y = y + (20 * MenuScale)
+						
+						Text(x, y + (5 * MenuScale), "Quick Save:")
+						
+						y = y + (20 * MenuScale)
+						
+						Text(x, y + (5 * MenuScale), "Take Screenshot:")
+						
+						If opt\CanOpenConsole Then
+							y = y + (20 * MenuScale)
+							
+							Text(x, y + (5 * MenuScale), "Console:")
+						EndIf
+						
+						If MouseOn(x, y - ((180 + (20 * opt\CanOpenConsole)) * MenuScale), 310 * MenuScale, ((200 + (20 * opt\CanOpenConsole)) * MenuScale))
+							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ControlConfiguration)
+						EndIf
 					EndIf
 					;[End Block]
-				Case 4 ; ~ Advanced
+				Case MenuTab_Options_Advanced
 					;[Block]
 					SetFont(fo\FontID[Font_Default])
 					
@@ -7541,7 +7612,7 @@ Function RenderMenu%()
 					If opt\CurrFrameLimit > 0.0 Then
 						Color(255, 255, 0)
 						Text(x, y + (45 * MenuScale), opt\FrameLimit + " FPS")
-						If MouseOn(x + (150 * MenuScale), y + (40 * MenuScale), 114 * MenuScale, 20)
+						If MouseOn(x + (150 * MenuScale), y + (40 * MenuScale), 114 * MenuScale, 20 * MenuScale)
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FrameLimit, opt\FrameLimit)
 						EndIf
 					EndIf
@@ -8389,23 +8460,23 @@ Function LoadEntities%()
 	
 	; ~ [DOORS]
 	
-	o\DoorModelID[Default_Door] = LoadMesh_Strict("GFX\map\Props\Door01.x") ; ~ Default Door
+	o\DoorModelID[DEFAULT_DOOR] = LoadMesh_Strict("GFX\map\Props\Door01.x") ; ~ Default Door
 	
-	o\DoorModelID[Elevator_Door] = LoadMesh_Strict("GFX\map\Props\ElevatorDoor.b3d") ; ~ Elevator Door
+	o\DoorModelID[ELEVATOR_DOOR] = LoadMesh_Strict("GFX\map\Props\ElevatorDoor.b3d") ; ~ Elevator Door
 	
-	o\DoorModelID[Heavy_Door] = LoadMesh_Strict("GFX\map\Props\HeavyDoor1.x") ; ~ Heavy Door #1
+	o\DoorModelID[HEAVY_DOOR] = LoadMesh_Strict("GFX\map\Props\HeavyDoor1.x") ; ~ Heavy Door #1
 	
-	o\DoorModelID[Big_Door] = LoadMesh_Strict("GFX\map\Props\contdoorleft.x") ; ~ Big Door Left
+	o\DoorModelID[BIG_DOOR] = LoadMesh_Strict("GFX\map\Props\contdoorleft.x") ; ~ Big Door Left
 	
-	o\DoorModelID[Office_Door] = LoadAnimMesh_Strict("GFX\map\Props\officedoor.b3d") ; ~ Office Door
+	o\DoorModelID[OFFICE_DOOR] = LoadAnimMesh_Strict("GFX\map\Props\officedoor.b3d") ; ~ Office Door
 	
-	o\DoorModelID[Wooden_Door] = LoadMesh_Strict("GFX\map\Props\DoorWooden.b3d") ; ~ Wooden Door
+	o\DoorModelID[WOODEN_DOOR] = LoadMesh_Strict("GFX\map\Props\DoorWooden.b3d") ; ~ Wooden Door
 	
-	o\DoorModelID[One_Sided_Door] = LoadMesh_Strict("GFX\map\Props\Door02.x") ; ~ One-sided Door
+	o\DoorModelID[ONE_SIDED_DOOR] = LoadMesh_Strict("GFX\map\Props\Door02.x") ; ~ One-sided Door
 	
-	o\DoorModelID[Heavy_Door + 5] = LoadMesh_Strict("GFX\map\Props\HeavyDoor2.x") ; ~ Heavy Door #2
+	o\DoorModelID[HEAVY_DOOR + 5] = LoadMesh_Strict("GFX\map\Props\HeavyDoor2.x") ; ~ Heavy Door #2
 	
-	o\DoorModelID[Big_Door + 5] = LoadMesh_Strict("GFX\map\Props\contdoorright.x") ; ~ Big Door Right
+	o\DoorModelID[BIG_DOOR + 5] = LoadMesh_Strict("GFX\map\Props\contdoorright.x") ; ~ Big Door Right
 	
 	o\DoorModelID[9] = LoadMesh_Strict("GFX\map\Props\DoorFrame.b3d") ; ~ Door Frame
 	
@@ -8623,14 +8694,14 @@ Function InitNewGame%()
 	
 	For d.Doors = Each Doors
 		EntityParent(d\OBJ, 0)
-		If d\DoorType = Default_Door Lor d\DoorType = One_Sided_Door Lor d\DoorType = SCP_914_Door Then
+		If d\DoorType = DEFAULT_DOOR Lor d\DoorType = ONE_SIDED_DOOR Lor d\DoorType = SCP_914_DOOR Then
 			MoveEntity(d\OBJ, 0.0, 0.0, 8.0 * RoomScale)
-		ElseIf d\DoorType = Office_Door Lor d\DoorType = Wooden_Door
-			MoveEntity(d\OBJ, (((d\DoorType = Office_Door) * 92.0) + ((d\DoorType = Wooden_Door) * 70.0)) * RoomScale, 0.0, 0.0)
+		ElseIf d\DoorType = OFFICE_DOOR Lor d\DoorType = WOODEN_DOOR
+			MoveEntity(d\OBJ, (((d\DoorType = OFFICE_DOOR) * 92.0) + ((d\DoorType = WOODEN_DOOR) * 70.0)) * RoomScale, 0.0, 0.0)
 		EndIf
 		If d\OBJ2 <> 0 Then
 			EntityParent(d\OBJ2, 0)
-			If d\DoorType = Default_Door Lor d\DoorType = One_Sided_Door Lor d\DoorType = SCP_914_Door Then
+			If d\DoorType = DEFAULT_DOOR Lor d\DoorType = ONE_SIDED_DOOR Lor d\DoorType = SCP_914_DOOR Then
 				MoveEntity(d\OBJ2, 0.0, 0.0, 8.0 * RoomScale)
 			EndIf
 		EndIf

@@ -429,7 +429,7 @@ Type Options
 	Field SubColorR%, SubColorG%, SubColorB%
 	; ~ [CONTROLS]
 	Field MouseSmoothing#
-	Field InvertMouse%
+	Field InvertMouseX%, InvertMouseY%
 	Field MouseSensitivity#
 	; ~ [GLOBAL]
 	Field AspectRatio#
@@ -536,7 +536,9 @@ Function LoadOptionsINI%()
 	
 	opt\MouseSensitivity = GetINIFloat(OptionFile, "Controls", "Mouse Sensitivity", 0.0)
 	
-	opt\InvertMouse = GetINIInt(OptionFile, "Controls", "Invert Mouse By Y-Axis", False)
+	opt\InvertMouseX = GetINIInt(OptionFile, "Controls", "Invert Mouse By X-Axis", False)
+	
+	opt\InvertMouseY = GetINIInt(OptionFile, "Controls", "Invert Mouse By Y-Axis", False)
 	
 	opt\MouseSmoothing = GetINIFloat(OptionFile, "Controls", "Mouse Smoothing", 1.0)
 	
@@ -656,7 +658,9 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	;[Block]
 	PutINIValue(OptionFile, "Controls", "Mouse Sensitivity", opt\MouseSensitivity)
 	
-	PutINIValue(OptionFile, "Controls", "Invert Mouse By Y-Axis", opt\InvertMouse)
+	PutINIValue(OptionFile, "Controls", "Invert Mouse By X-Axis", opt\InvertMouseX)
+	
+	PutINIValue(OptionFile, "Controls", "Invert Mouse By Y-Axis", opt\InvertMouseY)
 	
 	PutINIValue(OptionFile, "Controls", "Mouse Smoothing", opt\MouseSmoothing)
 	
@@ -770,7 +774,9 @@ Function ResetOptionsINI%()
 	
 	opt\MouseSensitivity = 0.0
 	
-	opt\InvertMouse = False
+	opt\InvertMouseX = False
+	
+	opt\InvertMouseY = False
 	
 	opt\MouseSmoothing = 1.0
 	

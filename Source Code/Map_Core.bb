@@ -7355,7 +7355,7 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case "room2_4_lcz"
 			;[Block]
-			d.Doors = CreateDoor(r\x + 768.0 * RoomScale, r\y, r\z - 827.5 * RoomScale, 90.0, r, False, Default_Door)
+			d.Doors = CreateDoor(r\x + 768.0 * RoomScale, r\y, r\z - 827.5 * RoomScale, 90.0, r, False, DEFAULT_DOOR)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.1, True)
@@ -7367,7 +7367,7 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case "room2c_maintenance"
 			;[Block]
-			d.Doors = CreateDoor(r\x - 272.0 * RoomScale, r\y, r\z - 768.0 * RoomScale, 90.0, r, False, Heavy_Door, KEY_CARD_3)
+			d.Doors = CreateDoor(r\x - 272.0 * RoomScale, r\y, r\z - 768.0 * RoomScale, 90.0, r, False, HEAVY_DOOR, KEY_CARD_3)
 			d\Locked = 1 : d\MTFClose = False : d\DisableWaypoint = True
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			
@@ -7391,7 +7391,7 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case "room4_ic"
 			;[Block]
-			d.Doors = CreateDoor(r\x + 704.0 * RoomScale, r\y, r\z - 336.0 * RoomScale, 0.0, r, False, Office_Door)
+			d.Doors = CreateDoor(r\x + 704.0 * RoomScale, r\y, r\z - 336.0 * RoomScale, 0.0, r, False, OFFICE_DOOR)
 			
 			r\Objects[0] = CopyEntity(o\MonitorModelID[1], r\OBJ)
 			PositionEntity(r\Objects[0], r\x - 700.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 290.0 * RoomScale, True)
@@ -7400,7 +7400,7 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case "room2_bio"
 			;[Block]
-			d.Doors = CreateDoor(r\x + 232.0 * RoomScale, r\y, r\z - 768.0 * RoomScale, 90.0, r, False, Office_Door)
+			d.Doors = CreateDoor(r\x + 234.0 * RoomScale, r\y, r\z - 768.0 * RoomScale, 90.0, r, False, OFFICE_DOOR)
 			d\Locked = 1 : d\MTFClose = False
 			
 			sc.SecurityCams = CreateSecurityCam(r\x - 475.0 * RoomScale, r\y + 385.0 * RoomScale, r\z + 305.0 * RoomScale, r)
@@ -7409,9 +7409,9 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case "room2_office_2"
 			;[Block]
-			d.Doors = CreateDoor(r\x + 240.0 * RoomScale, r\y, r\z, 90.0, r, False, OFFICE_DOOR)
+			d.Doors = CreateDoor(r\x + 234.0 * RoomScale, r\y, r\z, 90.0, r, False, OFFICE_DOOR)
 			
-			r\Objects[0] = LoadMesh_Strict("GFX\map\room2offices5_hb.b3d", r\OBJ)
+			r\Objects[0] = LoadMesh_Strict("GFX\map\room2_office_2_hb.b3d", r\OBJ)
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
 			EntityAlpha(r\Objects[0], 0.0)
@@ -7987,7 +7987,7 @@ Function UpdateRooms%()
 		EndIf
 	Next
 	
-	TempLightVolume = Max(TempLightVolume / 5.0, 0.8)
+	TempLightVolume = Max(TempLightVolume / 4.5, 1.0)
 	
 	If PlayerRoom <> Null Then
 		CurrMapGrid\Found[Floor(EntityX(PlayerRoom\OBJ) / 8.0) + (Floor(EntityZ(PlayerRoom\OBJ) / 8.0) * MapGridSize)] = MapGrid_Tile

@@ -7404,7 +7404,8 @@ Function UpdateEvents%()
 										;[End Block]
 									Case ONETOONE
 										;[Block]
-										opt\InvertMouse = (Not opt\InvertMouse)
+										opt\InvertMouseX = (Not opt\InvertMouseX)
+										opt\InvertMouseY = (Not opt\InvertMouseY)
 										;[End Block]
 									Case FINE, VERYFINE
 										;[Block]

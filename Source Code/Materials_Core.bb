@@ -9,10 +9,10 @@ End Type
 
 Function ApplyBumpMap%(Texture%)
 	TextureBlend(Texture, 6)
-	TextureBumpEnvMat(Texture, 0, 0, 0.012)
-	TextureBumpEnvMat(Texture, 0, 1, 0.012)
-	TextureBumpEnvMat(Texture, 1, 0, -0.012)
-	TextureBumpEnvMat(Texture, 1, 1, -0.012)
+	TextureBumpEnvMat(Texture, 0, 0, -0.012)
+	TextureBumpEnvMat(Texture, 0, 1, -0.012)
+	TextureBumpEnvMat(Texture, 1, 0, 0.012)
+	TextureBumpEnvMat(Texture, 1, 1, 0.012)
 	TextureBumpEnvOffset(Texture, 0.5)
 	TextureBumpEnvScale(Texture, 1.0)
 End Function
@@ -36,7 +36,7 @@ Function LoadMaterials%(File$)
 			If opt\BumpEnabled Then
 				StrTemp = GetINIString(File, TemporaryString, "bump")
 				If StrTemp <> "" Then 
-					mat\Bump =  LoadTexture_Strict(StrTemp)
+					mat\Bump =  LoadTexture_Strict(StrTemp, 256)
 					ApplyBumpMap(mat\Bump)
 				EndIf
 			EndIf
