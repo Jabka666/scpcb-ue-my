@@ -1,20 +1,10 @@
-; ~ NPCs ID Constants
+; ~ NPC ID Constants
 ;[Block]
-; ~ Main
 Const NPCType008_1% = 0, NPCType035_Tentacle% = 1, NPCType049% = 2, NPCType049_2% = 3, NPCType066% = 4, NPCType096% = 5
 Const NPCType106% = 6, NPCType173% = 7, NPCType372% = 8, NPCType513_1% = 9, NPCType860_2% = 10, NPCType939% = 11
 Const NPCType966% = 12, NPCType1499_1% = 13
 
 Const NPCTypeApache% = 14, NPCTypeClerk% = 15, NPCTypeD% = 16, NPCTypeGuard% = 17, NPCTypeMTF% = 18
-
-; ~ Placeholder
-Const NPCType205_Demon% = 19, NPCType205_Demon2% = 20, NPCType205_Demon3% = 21, NPCType205_Woman% = 22
-Const NPCType1048% = 23, NPCType1048_A% = 24
-
-Const NPCTypeDuck% = 25, NPCTypeCI% = 26, NPCTypeNazi% = 27
-
-; ~ Objects
-Const NPCTypeApache_Rotor% = 28, NPCTypeApache_Rotor2% = 29, NPCTypeVehicle% = 30, NPCType173_Box% = 31, NPCType173_Head% = 32, NPCType682_Arm% = 33
 ;[End Block]
 
 Type NPCs
@@ -63,8 +53,6 @@ Type NPCs
 	Field Dist#, Hidden%
 End Type
 
-Global Curr173.NPCs, Curr106.NPCs, Curr096.NPCs, Curr513_1.NPCs, Curr049.NPCs
-
 Const NPCsFile$ = "Data\NPCs.ini"
 
 Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
@@ -87,12 +75,12 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityType(n\Collider, HIT_PLAYER)
 			n\Gravity = True
 			
-			n\OBJ = CopyEntity(o\NPCModelID[NPCType173])
-			n\OBJ2 = CopyEntity(o\NPCModelID[NPCType173_Head])
+			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_173_MODEL])
+			n\OBJ2 = CopyEntity(n_I\NPCModelID[NPC_173_HEAD_MODEL])
 			
 			; ~ On Halloween set Jack-o'-lantern texture
 			If (Left(CurrentDate(), 7) = "31 Oct ") Then
-				t\MiscTextureID[14] = True
+				n_I\IsHalloween = True
 				TexFestive = LoadTexture_Strict("GFX\npcs\scp_173_H.png")
 				If opt\Atmosphere Then TextureBlend(TexFestive, 5)
 				EntityTexture(n\OBJ, TexFestive)
@@ -102,7 +90,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			; ~ On New Year set cookie texture
 			If (Left(CurrentDate(), 7) = "01 Jan ") Then
-				t\MiscTextureID[15] = True
+				n_I\IsNewYear = True
 				TexFestive = LoadTexture_Strict("GFX\npcs\scp_173_NY.png")
 				If opt\Atmosphere Then TextureBlend(TexFestive, 5)
 				EntityTexture(n\OBJ, TexFestive)
@@ -116,7 +104,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\Speed = GetINIFloat(NPCsFile, "SCP-173", "Speed") / 100.0
 			
-			n\OBJ3 = CopyEntity(o\NPCModelID[NPCType173_Box])
+			n\OBJ3 = CopyEntity(n_I\NPCModelID[NPC_173_BOX_MODEL])
 			ScaleEntity(n\OBJ3, RoomScale, RoomScale, RoomScale)
 			HideEntity(n\OBJ3)
 			
@@ -131,7 +119,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityRadius(n\Collider, 0.2)
 			EntityType(n\Collider, HIT_PLAYER)
 			
-			n\OBJ = CopyEntity(o\NPCModelID[NPCType106])
+			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_106_MODEL])
 			
 			Temp = GetINIFloat(NPCsFile, "SCP-106", "Scale") / 2.2
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
@@ -154,7 +142,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityRadius(n\Collider, 0.2)
 			EntityType(n\Collider, HIT_PLAYER)
 			
-			n\OBJ = CopyEntity(o\NPCModelID[NPCTypeGuard])
+			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_GUARD_MODEL])
 			
 			Temp = GetINIFloat(NPCsFile, "Guard", "Scale") / 2.5
 			
@@ -170,7 +158,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityRadius(n\Collider, 0.2)
 			EntityType(n\Collider, HIT_PLAYER)
 			
-			n\OBJ = CopyEntity(o\NPCModelID[NPCTypeMTF])
+			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_MTF_MODEL])
 			
 			Temp = GetINIFloat(NPCsFile, "MTF", "Scale") / 2.5
 			
@@ -192,7 +180,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityRadius(n\Collider, 0.32)
 			EntityType(n\Collider, HIT_PLAYER)
 			
-			n\OBJ = CopyEntity(o\NPCModelID[NPCTypeD])
+			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_CLASS_D_MODEL])
 			
 			Temp = GetINIFloat(NPCsFile, "Class D", "Scale") / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
@@ -209,7 +197,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.2)
 			
-			n\OBJ = CopyEntity(o\NPCModelID[NPCType372])
+			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_372_MODEL])
 			
 			Temp = GetINIFloat(NPCsFile, "SCP-372", "Scale") / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
@@ -219,7 +207,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\NVGName = "SCP-513-1"
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.2)
-			n\OBJ = CopyEntity(o\NPCModelID[NPCType513_1])
+			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_513_1_MODEL])
 			
 			n\OBJ2 = CopyEntity(n\OBJ)
 			EntityAlpha(n\OBJ2, 0.6)
@@ -235,7 +223,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityRadius(n\Collider, 0.26)
 			EntityType(n\Collider, HIT_PLAYER)
 			
-			n\OBJ = CopyEntity(o\NPCModelID[NPCType096])
+			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_096_MODEL])
 			
 			n\Speed = GetINIFloat(NPCsFile, "SCP-096", "Speed") / 100.0
 			
@@ -259,7 +247,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityRadius(n\Collider, 0.2)
 			EntityType(n\Collider, HIT_PLAYER)
 			
-			n\OBJ = CopyEntity(o\NPCModelID[NPCType049])
+			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_049_MODEL])
 			
 			n\Speed = GetINIFloat(NPCsFile, "SCP-049", "Speed") / 100.0
 			
@@ -277,7 +265,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityRadius(n\Collider, 0.2)
 			EntityType(n\Collider, HIT_PLAYER)
 			
-			n\OBJ = CopyEntity(o\NPCModelID[NPCType049_2])
+			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_049_2_MODEL])
 			
 			Temp = GetINIFloat(NPCsFile, "SCP-049-2", "Scale") / 2.5
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
@@ -298,9 +286,9 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.2)
 			
-			n\OBJ = CopyEntity(o\NPCModelID[NPCTypeApache])
+			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_APACHE_MODEL])
 			
-			n\OBJ2 = CopyEntity(o\NPCModelID[NPCTypeApache_Rotor])
+			n\OBJ2 = CopyEntity(n_I\NPCModelID[NPC_APACHE_ROTOR_1_MODEL])
 			EntityParent(n\OBJ2, n\OBJ)
 			
 			For i = -1 To 1 Step 2
@@ -310,7 +298,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 				EntityAlpha(Rotor2, 0.5)
 			Next
 			
-			n\OBJ3 = CopyEntity(o\NPCModelID[NPCTypeApache_Rotor2])
+			n\OBJ3 = CopyEntity(n_I\NPCModelID[NPC_APACHE_ROTOR_2_MODEL])
 			EntityParent(n\OBJ3, n\OBJ)
 			PositionEntity(n\OBJ3, 0.0, 2.15, -5.48)
 			
@@ -328,7 +316,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 				
 				PositionEntity(LightSprite, 1.65 * i, 1.17, 0.0, -0.25)
 				ScaleSprite(LightSprite, 0.13, 0.13)
-				EntityTexture(LightSprite, t\LightSpriteID[0])
+				EntityTexture(LightSprite, misc_I\LightSpriteID[LIGHT_SPRITE_DEFAULT])
 				EntityBlend(LightSprite, 3)
 				EntityFX(LightSprite, 1 + 8)				
 			Next
@@ -342,7 +330,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\Collider = CreatePivot()
 			
-			n\OBJ = CopyEntity(o\NPCModelID[NPCType035_Tentacle])
+			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_035_TENTACLE_MODEL])
 			
 			Temp = GetINIFloat(NPCsFile, "SCP-035's Tentacle", "Scale") / 10.0
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
@@ -357,7 +345,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.25)
 			EntityType(n\Collider, HIT_PLAYER)
-			n\OBJ = CopyEntity(o\NPCModelID[NPCType860_2])
+			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_860_2_MODEL])
 			
 			EntityFX(n\OBJ, 1)
 			
@@ -391,7 +379,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityRadius(n\Collider, 0.3)
 			EntityType(n\Collider, HIT_PLAYER)
 			
-			n\OBJ = CopyEntity(o\NPCModelID[NPCType939])
+			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_939_MODEL])
 			Temp = GetINIFloat(NPCsFile, "SCP-939", "Scale") / 2.5
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)	
 			
@@ -406,7 +394,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityRadius(n\Collider, 0.2)
 			EntityType(n\Collider, HIT_PLAYER)
 			
-			n\OBJ = CopyEntity(o\NPCModelID[NPCType066])
+			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_066_MODEL])
 			
 			Temp = GetINIFloat(NPCsFile, "SCP-066", "Scale") / 2.5
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
@@ -424,7 +412,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\Collider = CreatePivot()
 			EntityRadius n\Collider,0.2
 			
-			n\OBJ = CopyEntity(o\NPCModelID[NPCType966])
+			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_966_MODEL])
 			EntityFX(n\OBJ, 1)
 			
 			Temp = GetINIFloat(NPCsFile, "SCP-966", "Scale") / 40.0
@@ -443,7 +431,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityRadius(n\Collider, 0.2)
 			EntityType(n\Collider, HIT_PLAYER)
 			
-			n\OBJ = CopyEntity(o\NPCModelID[NPCType1499_1])
+			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_1499_1_MODEL])
 			
 			Temp = GetINIFloat(NPCsFile, "SCP-1499-1", "Scale") / 4.0 * Rnd(0.8, 1.0)
 			
@@ -460,7 +448,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityRadius(n\Collider, 0.2)
 			EntityType(n\Collider, HIT_PLAYER)
 			
-			n\OBJ = CopyEntity(o\NPCModelID[NPCType008_1])
+			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_008_1_MODEL])
 			
 			Temp = GetINIFloat(NPCsFile, "SCP-008-1", "Scale") / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
@@ -482,7 +470,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityRadius(n\Collider, 0.32)
 			EntityType(n\Collider, HIT_PLAYER)
 			
-			n\OBJ = CopyEntity(o\NPCModelID[NPCTypeClerk])
+			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_CLERK_MODEL])
 			
 			Temp = GetINIFloat(NPCsFile, "Clerk", "Scale") / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
@@ -514,7 +502,7 @@ Function CreateNPCAsset%(n.NPCs)
 	Select n\NPCType
 		Case NPCTypeGuard
 			;[Block]
-			n\OBJ2 = CopyEntity(o\NPCModelID[NPCTypeVehicle])
+			n\OBJ2 = CopyEntity(n_I\NPCModelID[NPC_VEHICLE_MODEL])
 			Temp = GetINIFloat(NPCsFile, "Guard", "Scale") / 2.5
 			Temp = (Temp + 1.68) / MeshWidth(n\OBJ2)
 			ScaleEntity(n\OBJ2, Temp, Temp, Temp)
@@ -639,7 +627,7 @@ Function UpdateNPCs%()
 		Select n\NPCType
 			Case NPCType173
 				;[Block]
-				If Curr173\Idle <> 3 And PlayerRoom\RoomTemplate\Name <> "gate_b" Lor PlayerRoom\RoomTemplate\Name <> "gate_a" Then
+				If n_I\Curr173\Idle <> 3 And PlayerRoom\RoomTemplate\Name <> "gate_b" Lor PlayerRoom\RoomTemplate\Name <> "gate_a" Then
 					Dist = EntityDistanceSquared(n\Collider, me\Collider)		
 					
 					n\State3 = 1.0
@@ -5180,13 +5168,13 @@ Function UpdateMTFUnit%(n.NPCs)
 						If n\MTFLeader <> Null Then ; ~ I'll follow the leader
 							n\PathStatus = FindPath(n, EntityX(n\MTFLeader\Collider, True), EntityY(n\MTFLeader\Collider, True) + 0.1, EntityZ(n\MTFLeader\Collider, True)) ; ~ Whatever you say boss
 						Else ; ~ I am the leader
-							If Curr173\Idle <> 2 Then
-								If (Not Curr173\IsDead) And Curr173\Idle = 3 Then
+							If n_I\Curr173\Idle <> 2 Then
+								If (Not n_I\Curr173\IsDead) And n_I\Curr173\Idle = 3 Then
 									For r.Rooms = Each Rooms
 										If r\RoomTemplate\Name = "cont1_173" Then
 											If EntityX(n\Collider, True) - r\x < 15.0 Then
 												If r\RoomDoors[1]\Open Then UseDoor(r\RoomDoors[1], True)
-												Curr173\IsDead = True
+												n_I\Curr173\IsDead = True
 												Exit
 											EndIf
 										EndIf
@@ -5203,8 +5191,8 @@ Function UpdateMTFUnit%(n.NPCs)
 							Else
 								Local Tmp% = False
 								
-								If EntityDistanceSquared(n\Collider, Curr173\Collider) > 16.0 Then
-									If (Not EntityVisible(n\Collider, Curr173\Collider))
+								If EntityDistanceSquared(n\Collider, n_I\Curr173\Collider) > 16.0 Then
+									If (Not EntityVisible(n\Collider, n_I\Curr173\Collider))
 										Tmp = True
 									EndIf
 								EndIf
@@ -5221,7 +5209,7 @@ Function UpdateMTFUnit%(n.NPCs)
 												FoundChamber = True
 											EndIf
 											
-											If Curr173\Idle = 3 And DistanceSquared(EntityX(Pvt), EntityX(n\Collider), EntityZ(Pvt), EntityZ(n\Collider)) > 16.0 Then
+											If n_I\Curr173\Idle = 3 And DistanceSquared(EntityX(Pvt), EntityX(n\Collider), EntityZ(Pvt), EntityZ(n\Collider)) > 16.0 Then
 												If r\RoomDoors[1]\Open Then UseDoor(r\RoomDoors[1], True)
 											EndIf
 											
@@ -5237,8 +5225,8 @@ Function UpdateMTFUnit%(n.NPCs)
 												n\PathZ = EntityZ(r\OBJ, True) + 1692.0 * RoomScale
 												Exit
 											Else
-												Curr173\Idle = 3
-												Curr173\Target = Null
+												n_I\Curr173\Idle = 3
+												n_I\Curr173\Target = Null
 												If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 												n\Sound = LoadSound_Strict("SFX\Character\MTF\173\Cont" + Rand(1, 4) + ".ogg")
 												PlayMTFSound(n\Sound, n)
@@ -5248,9 +5236,9 @@ Function UpdateMTFUnit%(n.NPCs)
 										EndIf
 									Next
 								Else
-									x = EntityX(Curr173\Collider)
+									x = EntityX(n_I\Curr173\Collider)
 									y = 0.1
-									z = EntityZ(Curr173\Collider)
+									z = EntityZ(n_I\Curr173\Collider)
 								EndIf
 							EndIf
 							If n\PathX = 0 Then n\PathStatus = FindPath(n, x, y, z) ; ~ We're going to this room for no particular reason
@@ -5413,15 +5401,15 @@ Function UpdateMTFUnit%(n.NPCs)
 					EndIf
 					
 					; ~ B3D doesn't do short-circuit evaluation, so this retarded nesting is an optimization
-					If Curr173\Idle < 2 Then
-						Local SoundVol173# = Max(Min((Distance(EntityX(Curr173\Collider), Curr173\PrevX, EntityZ(Curr173\Collider), Curr173\PrevZ) * 2.5), 1.0), 0.0)
+					If n_I\Curr173\Idle < 2 Then
+						Local SoundVol173# = Max(Min((Distance(EntityX(n_I\Curr173\Collider), n_I\Curr173\PrevX, EntityZ(n_I\Curr173\Collider), n_I\Curr173\PrevZ) * 2.5), 1.0), 0.0)
 						
-						If NPCSeesNPC(Curr173, n) Lor (SoundVol173 > 0.0 And EntityDistanceSquared(n\Collider, Curr173\Collider) < 36.0) Then
-							If EntityVisible(n\Collider, Curr173\Collider) Lor SoundVol173 > 0.0 Then							
+						If NPCSeesNPC(n_I\Curr173, n) Lor (SoundVol173 > 0.0 And EntityDistanceSquared(n\Collider, n_I\Curr173\Collider) < 36.0) Then
+							If EntityVisible(n\Collider, n_I\Curr173\Collider) Lor SoundVol173 > 0.0 Then							
 								n\State = 2.0
-								n\EnemyX = EntityX(Curr173\Collider, True)
-								n\EnemyY = EntityY(Curr173\Collider, True)
-								n\EnemyZ = EntityZ(Curr173\Collider, True)
+								n\EnemyX = EntityX(n_I\Curr173\Collider, True)
+								n\EnemyY = EntityY(n_I\Curr173\Collider, True)
+								n\EnemyZ = EntityZ(n_I\Curr173\Collider, True)
 								n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
 								n\State3 = 0.0
 								n\PathTimer = 0.0
@@ -5433,18 +5421,18 @@ Function UpdateMTFUnit%(n.NPCs)
 						EndIf
 					EndIf
 					
-					If Curr106\State <= 0 Then
-						If NPCSeesNPC(Curr106, n) Lor EntityDistanceSquared(n\Collider, Curr106\Collider) < 9.0 Then
-							If EntityVisible(n\Collider, Curr106\Collider) Then
+					If n_I\Curr106\State <= 0 Then
+						If NPCSeesNPC(n_I\Curr106, n) Lor EntityDistanceSquared(n\Collider, n_I\Curr106\Collider) < 9.0 Then
+							If EntityVisible(n\Collider, n_I\Curr106\Collider) Then
 								n\State = 4.0
-								n\EnemyX = EntityX(Curr106\Collider, True)
-								n\EnemyY = EntityY(Curr106\Collider, True)
-								n\EnemyZ = EntityZ(Curr106\Collider, True)
+								n\EnemyX = EntityX(n_I\Curr106\Collider, True)
+								n\EnemyY = EntityY(n_I\Curr106\Collider, True)
+								n\EnemyZ = EntityZ(n_I\Curr106\Collider, True)
 								n\State2 = 70.0 * 15.0
 								n\State3 = 0.0
 								n\PathTimer = 0.0
 								n\PathStatus = 0
-								n\Target = Curr106
+								n\Target = n_I\Curr106
 								If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 								n\Sound = LoadSound_Strict("SFX\Character\MTF\106\Spotted" + Rand(1, 3) + ".ogg")
 								PlayMTFSound(n\Sound, n)
@@ -5452,13 +5440,13 @@ Function UpdateMTFUnit%(n.NPCs)
 						EndIf
 					EndIf
 					
-					If Curr096 <> Null Then
-						If NPCSeesNPC(Curr096, n) Then
-							If EntityVisible(n\Collider, Curr096\Collider) Then
+					If n_I\Curr096 <> Null Then
+						If NPCSeesNPC(n_I\Curr096, n) Then
+							If EntityVisible(n\Collider, n_I\Curr096\Collider) Then
 								n\State = 8.0
-								n\EnemyX = EntityX(Curr096\Collider, True)
-								n\EnemyY = EntityY(Curr096\Collider, True)
-								n\EnemyZ = EntityZ(Curr096\Collider, True)
+								n\EnemyX = EntityX(n_I\Curr096\Collider, True)
+								n\EnemyY = EntityY(n_I\Curr096\Collider, True)
+								n\EnemyZ = EntityZ(n_I\Curr096\Collider, True)
 								n\State2 = 70.0 * 15.0
 								n\State3 = 0.0
 								n\PathTimer = 0.0
@@ -5470,18 +5458,18 @@ Function UpdateMTFUnit%(n.NPCs)
 						EndIf
 					EndIf
 					
-					If Curr049 <> Null Then
-						If NPCSeesNPC(Curr049, n) Then
-							If EntityVisible(n\Collider, Curr049\Collider)
+					If n_I\Curr049 <> Null Then
+						If NPCSeesNPC(n_I\Curr049, n) Then
+							If EntityVisible(n\Collider, n_I\Curr049\Collider)
 								n\State = 4.0
-								n\EnemyX = EntityX(Curr049\Collider, True)
-								n\EnemyY = EntityY(Curr049\Collider, True)
-								n\EnemyZ = EntityZ(Curr049\Collider, True)
+								n\EnemyX = EntityX(n_I\Curr049\Collider, True)
+								n\EnemyY = EntityY(n_I\Curr049\Collider, True)
+								n\EnemyZ = EntityZ(n_I\Curr049\Collider, True)
 								n\State2 = 70.0 * 15.0
 								n\State3 = 0.0
 								n\PathTimer = 0.0
 								n\PathStatus = 0
-								n\Target = Curr049
+								n\Target = n_I\Curr049
 								If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 								n\Sound = LoadSound_Strict("SFX\Character\MTF\049\Spotted" + Rand(1, 5) + ".ogg")
 								PlayMTFSound(n\Sound, n)
@@ -5759,14 +5747,14 @@ Function UpdateMTFUnit%(n.NPCs)
 					EndIf
 					
 					; ~ B3D doesn't do short-circuit evaluation, so this retarded nesting is an optimization
-					If Curr173\Idle < 2 Then
-						SoundVol173 = Max(Min((Distance(EntityX(Curr173\Collider), Curr173\PrevX, EntityZ(Curr173\Collider), Curr173\PrevZ) * 2.5), 1.0), 0.0)
-						If NPCSeesNPC(Curr173, n) Lor (SoundVol173 > 0.0 And EntityDistanceSquared(n\Collider, Curr173\Collider) < 36.0) Then
-							If EntityVisible(n\Collider, Curr173\Collider) Lor SoundVol173 > 0.0 Then	
+					If n_I\Curr173\Idle < 2 Then
+						SoundVol173 = Max(Min((Distance(EntityX(n_I\Curr173\Collider), n_I\Curr173\PrevX, EntityZ(n_I\Curr173\Collider), n_I\Curr173\PrevZ) * 2.5), 1.0), 0.0)
+						If NPCSeesNPC(n_I\Curr173, n) Lor (SoundVol173 > 0.0 And EntityDistanceSquared(n\Collider, n_I\Curr173\Collider) < 36.0) Then
+							If EntityVisible(n\Collider, n_I\Curr173\Collider) Lor SoundVol173 > 0.0 Then	
 								n\State = 2.0
-								n\EnemyX = EntityX(Curr173\Collider, True)
-								n\EnemyY = EntityY(Curr173\Collider, True)
-								n\EnemyZ = EntityZ(Curr173\Collider, True)
+								n\EnemyX = EntityX(n_I\Curr173\Collider, True)
+								n\EnemyY = EntityY(n_I\Curr173\Collider, True)
+								n\EnemyZ = EntityZ(n_I\Curr173\Collider, True)
 								n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
 								If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 								n\Sound = LoadSound_Strict("SFX\Character\MTF\173\Spotted3.ogg")
@@ -5778,18 +5766,18 @@ Function UpdateMTFUnit%(n.NPCs)
 						EndIf
 					EndIf
 					
-					If Curr106\State <= 0 Then
-						If NPCSeesNPC(Curr106, n) Lor EntityDistanceSquared(n\Collider, Curr106\Collider) < 9.0 Then
-							If EntityVisible(n\Collider, Curr106\Collider) Then
+					If n_I\Curr106\State <= 0 Then
+						If NPCSeesNPC(n_I\Curr106, n) Lor EntityDistanceSquared(n\Collider, n_I\Curr106\Collider) < 9.0 Then
+							If EntityVisible(n\Collider, n_I\Curr106\Collider) Then
 								n\State = 4.0
-								n\EnemyX = EntityX(Curr106\Collider, True)
-								n\EnemyY = EntityY(Curr106\Collider, True)
-								n\EnemyZ = EntityZ(Curr106\Collider, True)
+								n\EnemyX = EntityX(n_I\Curr106\Collider, True)
+								n\EnemyY = EntityY(n_I\Curr106\Collider, True)
+								n\EnemyZ = EntityZ(n_I\Curr106\Collider, True)
 								n\State2 = 70.0 * 15.0
 								n\State3 = 0.0
 								n\PathTimer = 0.0
 								n\PathStatus = 0
-								n\Target = Curr106
+								n\Target = n_I\Curr106
 								If n\MTFLeader = Null Then
 									If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 									n\Sound = LoadSound_Strict("SFX\Character\MTF\106\Spotted4.ogg")
@@ -5799,13 +5787,13 @@ Function UpdateMTFUnit%(n.NPCs)
 						EndIf
 					EndIf
 					
-					If Curr096 <> Null Then
-						If NPCSeesNPC(Curr096, n) Then
-							If EntityVisible(n\Collider, Curr096\Collider) Then
+					If n_I\Curr096 <> Null Then
+						If NPCSeesNPC(n_I\Curr096, n) Then
+							If EntityVisible(n\Collider, n_I\Curr096\Collider) Then
 								n\State = 8.0
-								n\EnemyX = EntityX(Curr096\Collider, True)
-								n\EnemyY = EntityY(Curr096\Collider, True)
-								n\EnemyZ = EntityZ(Curr096\Collider, True)
+								n\EnemyX = EntityX(n_I\Curr096\Collider, True)
+								n\EnemyY = EntityY(n_I\Curr096\Collider, True)
+								n\EnemyZ = EntityZ(n_I\Curr096\Collider, True)
 								n\State2 = 70.0 * 15.0
 								n\State3 = 0.0
 								n\PathTimer = 0.0
@@ -5819,18 +5807,18 @@ Function UpdateMTFUnit%(n.NPCs)
 						EndIf
 					EndIf
 					
-					If Curr049 <> Null Then
-						If NPCSeesNPC(Curr049, n) Then
-							If EntityVisible(n\Collider, Curr049\Collider)
+					If n_I\Curr049 <> Null Then
+						If NPCSeesNPC(n_I\Curr049, n) Then
+							If EntityVisible(n\Collider, n_I\Curr049\Collider)
 								n\State = 4.0
-								n\EnemyX = EntityX(Curr049\Collider, True)
-								n\EnemyY = EntityY(Curr049\Collider, True)
-								n\EnemyZ = EntityZ(Curr049\Collider, True)
+								n\EnemyX = EntityX(n_I\Curr049\Collider, True)
+								n\EnemyY = EntityY(n_I\Curr049\Collider, True)
+								n\EnemyZ = EntityZ(n_I\Curr049\Collider, True)
 								n\State2 = 70.0 * 15.0
 								n\State3 = 0.0
 								n\PathTimer = 0.0
 								n\PathStatus = 0
-								n\Target = Curr049
+								n\Target = n_I\Curr049
 								If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 								n\Sound = LoadSound_Strict("SFX\Character\MTF\049\Spotted" + Rand(1, 5) + ".ogg")
 								PlayMTFSound(n\Sound, n)
@@ -5895,7 +5883,7 @@ Function UpdateMTFUnit%(n.NPCs)
 					;[End Block]
 				Case 2.0 ; ~ Searching for / Looking at SCP-173
 					;[Block]
-					If Curr173\Idle = 2 Then
+					If n_I\Curr173\Idle = 2 Then
 						n\State = 0.0
 					Else
 						For n2.NPCs = Each NPCs
@@ -5906,10 +5894,10 @@ Function UpdateMTFUnit%(n.NPCs)
 							EndIf
 						Next
 						
-						Local Curr173Dist# = DistanceSquared(EntityX(n\Collider, True), EntityX(Curr173\Collider, True), EntityZ(n\Collider, True), EntityZ(Curr173\Collider, True))
+						Local Curr173Dist# = DistanceSquared(EntityX(n\Collider, True), EntityX(n_I\Curr173\Collider, True), EntityZ(n\Collider, True), EntityZ(n_I\Curr173\Collider, True))
 						
 						If Curr173Dist < 25.0 Then
-							If Curr173\Idle <> 2 Then Curr173\Idle = 1
+							If n_I\Curr173\Idle <> 2 Then n_I\Curr173\Idle = 1
 							n\State2 = 70.0 * 15.0
 							n\PathTimer = 0.0
 							
@@ -5920,21 +5908,21 @@ Function UpdateMTFUnit%(n.NPCs)
 								If n\MTFLeader = Null Then
 									n\State3 = n\State3 + fps\Factor[0]
 									If n\State3 >= 70.0 * 15.0 Then
-										Curr173\Idle = 2
-										If n\MTFLeader = Null Then Curr173\Target = n
+										n_I\Curr173\Idle = 2
+										If n\MTFLeader = Null Then n_I\Curr173\Target = n
 										If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 										n\Sound = LoadSound_Strict("SFX\Character\MTF\173\Box" + Rand(1, 3) + ".ogg")
 										PlayMTFSound(n\Sound, n)
 									EndIf
 								EndIf
-								PositionEntity(n\OBJ, EntityX(Curr173\Collider, True), EntityY(Curr173\Collider, True), EntityZ(Curr173\Collider, True), True)
+								PositionEntity(n\OBJ, EntityX(n_I\Curr173\Collider, True), EntityY(n_I\Curr173\Collider, True), EntityZ(n_I\Curr173\Collider, True), True)
 								PointEntity(n\Collider, n\OBJ)
 								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 								n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 								FinishWalking(n, 488.0, 522.0, n\Speed * 26.0)
 								RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 							Else
-								PositionEntity(n\OBJ, EntityX(Curr173\Collider, True), EntityY(Curr173\Collider, True), EntityZ(Curr173\Collider, True), True)
+								PositionEntity(n\OBJ, EntityX(n_I\Curr173\Collider, True), EntityY(n_I\Curr173\Collider, True), EntityZ(n_I\Curr173\Collider, True), True)
 								PointEntity(n\Collider, n\OBJ)
 								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 								n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
@@ -5945,9 +5933,9 @@ Function UpdateMTFUnit%(n.NPCs)
 								AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 							EndIf
 						Else
-							If Curr173\Idle <> 2 Then Curr173\Idle = 0
+							If n_I\Curr173\Idle <> 2 Then n_I\Curr173\Idle = 0
 							If n\PathTimer <= 0.0 Then ; ~ Update path
-								n\PathStatus = FindPath(n, EntityX(Curr173\Collider, True), EntityY(Curr173\Collider, True) + 0.1, EntityZ(Curr173\Collider, True))
+								n\PathStatus = FindPath(n, EntityX(n_I\Curr173\Collider, True), EntityY(n_I\Curr173\Collider, True) + 0.1, EntityZ(n_I\Curr173\Collider, True))
 								n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6 seconds
 							ElseIf n\PathTimer <= 70.0 * 2.5 Then
 								n\PathTimer = n\PathTimer - fps\Factor[0]
@@ -6410,7 +6398,7 @@ Function UpdateMTFUnit%(n.NPCs)
 						EndIf
 					EndIf
 					
-					If (Not EntityVisible(n\Collider, Curr096\Collider)) Lor EntityDistanceSquared(n\Collider, Curr096\Collider) > 36.0 Then
+					If (Not EntityVisible(n\Collider, n_I\Curr096\Collider)) Lor EntityDistanceSquared(n\Collider, n_I\Curr096\Collider) > 36.0 Then
 						n\State = 0.0
 					EndIf
 					;[End Block]
@@ -7259,7 +7247,7 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			;[Block]
 			n.NPCs = CreateNPC(NPCType049, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			n\State = 1.0
-			If Curr049 = Null Then Curr049 = n
+			If n_I\Curr049 = Null Then n_I\Curr049 = n
 			ConsoleMsg = "SCP-049 spawned."
 			;[End Block]
 		Case "049-2", "0492", "scp-049-2", "scp049-2", "049zombie", "curedhuman", "scp0492", "scp-0492", "049_2", "scp_049_2"
@@ -7277,7 +7265,7 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			;[Block]
 			n.NPCs = CreateNPC(NPCType096, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			n\State = 5.0
-			If Curr096 = Null Then Curr096 = n
+			If n_I\Curr096 = Null Then n_I\Curr096 = n
 			ConsoleMsg = "SCP-096 spawned."
 			;[End Block]
 		Case "106", "scp106", "scp-106", "larry", "oldman"
@@ -7289,8 +7277,8 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 		Case "173", "scp173", "scp-173", "statue", "sculpture"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType173, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			Curr173 = n
-			If Curr173\Idle = 3 Then Curr173\Idle = 0
+			n_I\Curr173 = n
+			If n_I\Curr173\Idle = 3 Then n_I\Curr173\Idle = 0
 			ConsoleMsg = "SCP-173 spawned."
 			;[End Block]
 		Case "372", "scp372", "scp-372", "pj", "jumper"
@@ -7590,7 +7578,7 @@ Function ChangeNPCTextureID%(n.NPCs, TextureID%)
 	EndIf
 	
 	n\TextureID = TextureID + 1
-	EntityTexture(n\OBJ, t\NPCTextureID[TextureID])
+	EntityTexture(n\OBJ, n_I\NPCTextureID[TextureID])
 End Function
 
 ;~IDEal Editor Parameters:

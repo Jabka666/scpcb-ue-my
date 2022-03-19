@@ -109,7 +109,7 @@ Function SaveGame%(File$)
 	Next
 	WriteByte(f, SelectedDifficulty\InventorySlots)
 	
-	WriteFloat(f, MonitorTimer)
+	WriteFloat(f, mon_I\MonitorTimer)
 	
 	WriteFloat(f, me\Sanity)
 	
@@ -605,7 +605,7 @@ Function LoadGame%(File$)
 	MaxItemAmount = SelectedDifficulty\InventorySlots
 	Dim Inventory.Items(MaxItemAmount - 1)
 	
-	MonitorTimer = ReadFloat(f)
+	mon_I\MonitorTimer = ReadFloat(f)
 	
 	me\Sanity = ReadFloat(f)
 	
@@ -681,23 +681,23 @@ Function LoadGame%(File$)
 		Select NPCType
 			Case NPCType173
 				;[Block]
-				Curr173 = n
+				n_I\Curr173 = n
 				;[End Block]
 			Case NPCType106
 				;[Block]
-				Curr106 = n
+				n_I\Curr106 = n
 				;[End Block]
 			Case NPCType096
 				;[Block]
-				Curr096 = n
+				n_I\Curr096 = n
 				;[End Block]
 			Case NPCType513_1
 				;[Block]
-				Curr513_1 = n
+				n_I\Curr513_1 = n
 				;[End Block]
 			Case NPCType049
 				;[Block]
-				Curr049 = n
+				n_I\Curr049 = n
 				;[End Block]
 		End Select
 		
@@ -762,7 +762,7 @@ Function LoadGame%(File$)
 		If n\HasAsset Then CreateNPCAsset(n)
 		n\TextureID = ReadByte(f)
 		If n\TextureID > 0 Then
-			ChangeNPCTextureID(n.NPCs, n\TextureID - 1)
+			ChangeNPCTextureID(n, n\TextureID - 1)
 			SetAnimTime(n\OBJ, Frame)
 		EndIf
 		n\HideFromNVG = ReadByte(f)
@@ -1489,7 +1489,7 @@ Function LoadGameQuick%(File$)
 	MaxItemAmount = SelectedDifficulty\InventorySlots
 	Dim Inventory.Items(MaxItemAmount - 1)
 	
-	MonitorTimer = ReadFloat(f)
+	mon_I\MonitorTimer = ReadFloat(f)
 	
 	me\Sanity = ReadFloat(f)
 	
@@ -1568,23 +1568,23 @@ Function LoadGameQuick%(File$)
 		Select NPCType
 			Case NPCType173
 				;[Block]
-				Curr173 = n
+				n_I\Curr173 = n
 				;[End Block]
 			Case NPCType106
 				;[Block]
-				Curr106 = n
+				n_I\Curr106 = n
 				;[End Block]
 			Case NPCType096
 				;[Block]
-				Curr096 = n
+				n_I\Curr096 = n
 				;[End Block]
 			Case NPCType513_1
 				;[Block]
-				Curr513_1 = n
+				n_I\Curr513_1 = n
 				;[End Block]
 			Case NPCType049
 				;[Block]
-				Curr049 = n
+				n_I\Curr049 = n
 				;[End Block]
 		End Select
 		
@@ -1649,7 +1649,7 @@ Function LoadGameQuick%(File$)
 		If n\HasAsset Then CreateNPCAsset(n)
 		n\TextureID = ReadByte(f)
 		If n\TextureID > 0 Then
-			ChangeNPCTextureID(n.NPCs, n\TextureID - 1)
+			ChangeNPCTextureID(n, n\TextureID - 1)
 			SetAnimTime(n\OBJ, Frame)
 		EndIf
 		n\HideFromNVG = ReadByte(f)

@@ -1,21 +1,3 @@
-; ~ Particles ID Constants
-;[Block]
-Const PARTICLE_BLACK_SMOKE% = 0
-Const PARTICLE_WHITE_SMOKE% = 1
-
-Const PARTICLE_FLASH% = 2
-
-Const PARTICLE_DUST% = 3
-
-Const PARTICLE_HG% = 4
-
-Const PARTICLE_SUN% = 5
-
-Const PARTICLE_BLOOD% = 6
-
-Const PARTICLE_SPARK% = 7
-;[End Block]
-
 Type Particles
 	Field OBJ%, Pvt%
 	Field Alpha#, Size#
@@ -33,9 +15,9 @@ Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTi
 	p\OBJ = CreateSprite()
 	PositionEntity(p\OBJ, x, y, z, True)
 	If ID = PARTICLE_WHITE_SMOKE Then
-		EntityTexture(p\OBJ, t\ParticleTextureID[ID], Rand(0, 3))
+		EntityTexture(p\OBJ, p_I\ParticleTextureID[ID], Rand(0, 3))
 	Else
-		EntityTexture(p\OBJ, t\ParticleTextureID[ID])
+		EntityTexture(p\OBJ, p_I\ParticleTextureID[ID])
 	EndIf
 	RotateEntity(p\OBJ, 0.0, 0.0, Rnd(360.0))
 	SpriteViewMode(p\OBJ, 3)
@@ -46,7 +28,7 @@ Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTi
 			EntityFX(p\OBJ, 1)
 			EntityBlend(p\OBJ, 1)
 			;[End Block]
-		Case PARTICLE_FLASH, PARTICLE_HG, PARTICLE_SUN, PARTICLE_SPARK
+		Case PARTICLE_FLASH, PARTICLE_SHADOW, PARTICLE_SUN, PARTICLE_SPARK
 			;[Block]
 			EntityFX(p\OBJ, 1 + 8)
 			EntityBlend(p\OBJ, 3)
@@ -62,7 +44,7 @@ Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTi
 	p\Size = Size
 	ScaleSprite(p\OBJ, p\Size, p\Size)
 	
-	If (Not t\ParticleTextureID[ID]) Then RuntimeError("Particle Texture ID: " + ID + " not found.")
+	If (Not p_I\ParticleTextureID[ID]) Then RuntimeError("Particle Texture ID: " + ID + " not found.")
 	
 	Return(p)
 End Function

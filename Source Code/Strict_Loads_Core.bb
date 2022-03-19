@@ -384,7 +384,7 @@ Function LoadAnimTexture_Strict%(File$, Flags%, Width%, Height%, FirstFrame%, Co
 		Tmp = LoadAnimTextureCheckingIfInCache(File, Flags, Width, Height, FirstFrame, Count, TexDeleteType)
 		If (Not Tmp) Then RuntimeError("Failed to load Animated Texture: " + Chr(34) + File + Chr(34))
 	EndIf
-	Return(Tmp) 
+	Return(Tmp)
 End Function   
 
 Function LoadBrush_Strict%(File$, Flags% = 1, u# = 1.0, v# = 1.0)
