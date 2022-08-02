@@ -2510,6 +2510,10 @@ Function RenderGame%()
 	
 	RenderWorld2(Max(0.0, 1.0 + (fps\Accumulator / TICK_DURATION)))
 	
+	If (Not MenuOpen) And (Not InvOpen) And (OtherOpen = Null) And (d_I\SelectedDoor = Null) And (Not ConsoleOpen) And (Not I_294\Using) And (SelectedScreen = Null) And me\EndingTimer >= 0.0 Then
+		RenderRoomLights(Camera)
+	EndIf
+	
 	RenderBlur(me\BlurVolume)
 	
 	RenderGUI()

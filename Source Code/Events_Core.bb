@@ -6238,9 +6238,9 @@ Function UpdateEvents%()
 						n_I\Curr106\Idle = 1
 						
 						For r.Rooms = Each Rooms
-							HideRooms(r)
+							HideEntity(r\OBJ)
 						Next
-						ShowRooms(e\room)
+						ShowEntity(e\room\OBJ)
 						
 						UpdateForest(fr)
 						
@@ -8471,9 +8471,9 @@ Function UpdateDimension106%()
 			
 			If PlayerRoom = e\room Then
 				For r.Rooms = Each Rooms
-					HideRooms(r)
+					HideEntity(r\OBJ)
 				Next
-				ShowRooms(e\room)
+				ShowEntity(e\room\OBJ)
 				
 				PlayerFallingPickDistance = 0.0
 				CurrStepSFX = 1
@@ -9043,7 +9043,7 @@ Function UpdateDimension106%()
 					UpdateRooms()
 				EndIf
 			Else
-				HideRooms(e\room)
+				HideEntity(e\room\OBJ)
 				e\EventState = 0.0
 				e\EventState3 = 0.0
 				e\EventState2 = PD_StartRoom
@@ -9196,9 +9196,9 @@ Function UpdateDimension1499%()
 				CameraRange(Camera, 0.01, 90.0)
 				
 				For r.Rooms = Each Rooms
-					HideRooms(r)
+					HideEntity(r\OBJ)
 				Next
-				ShowRooms(e\room)
+				ShowEntity(e\room\OBJ)
 				If QuickLoadPercent = 100 Lor QuickLoadPercent = -1 Then
 					UpdateChunks(e\room, 15)
 					If EntityHidden(I_1499\Sky) Then ShowEntity(I_1499\Sky)
@@ -9431,9 +9431,9 @@ Function UpdateEndings%()
 						CanSave = False
 						
 						For r.Rooms = Each Rooms
-							HideRooms(r)
+							HideEntity(r\OBJ)
 						Next
-						ShowRooms(e\room)
+						ShowEntity(e\room\OBJ)
 						
 						If e\EventState < 2.0 And me\SelectedEnding = -1 Then 
 							If e\room\NPC[0]\State = 2.0 Then
@@ -9691,7 +9691,7 @@ Function UpdateEndings%()
 						EndIf
 					EndIf
 				Else
-					HideRooms(e\room)
+					HideEntity(e\room\OBJ)
 				EndIf
 				;[End Block]
 			Case e_gate_a
@@ -9782,9 +9782,9 @@ Function UpdateEndings%()
 						CanSave = False
 						
 						For r.Rooms = Each Rooms
-							HideRooms(r)
+							HideEntity(r\OBJ)
 						Next
-						ShowRooms(e\room)
+						ShowEntity(e\room\OBJ)
 						
 						ShouldPlay = 17
 						
@@ -10155,7 +10155,7 @@ Function UpdateEndings%()
 						EndIf
 					EndIf
 				Else
-					HideRooms(e\room)
+					HideEntity(e\room\OBJ)
 				EndIf
 				;[End Block]
 		End Select

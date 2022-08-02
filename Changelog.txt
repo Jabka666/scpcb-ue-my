@@ -7,7 +7,6 @@ General:
 - Added smoke particles for all NPCs hit by the Tesla Gate.
 - The HUD will be hidden when the player dies.
 - Added «Master volume» and «Invert mouse by X-axis» options.
-- Made the game a bit brighter.
 
 NPCs:
 - Added new messages when SCP-049 destroys the hazmat suit or removes the ring from the player.
@@ -30,7 +29,7 @@ Bug Fixes:
     	- Fixed multipliers for drinks effects.
     	- Fixed blink and stamina multipliers that were reducing player stats on Fine and Very Fine settings.
 - Fixed an issue where Dr. Maynard's code could be the same as Dr. Harp's.
-- Fixed a first aid kit that damages the player if the injuries are < 0.5.
+- Fixed the first aid kit that damages the player if the injuries are < 0.5.
 - Fixed a bug where fog color was stored in memory every time.
 - Fixed ticket model.
 - Fixes for SCP-860-1:

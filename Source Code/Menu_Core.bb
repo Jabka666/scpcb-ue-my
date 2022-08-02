@@ -2206,7 +2206,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 		
 		If Percent > 20 Then UpdateMusic()
 		
-		If Percent > (100 / SelectedLoadingScreen\TxtAmount) * (LoadingScreenText + 1) Then
+		If Percent > (100.0 / SelectedLoadingScreen\TxtAmount) * (LoadingScreenText + 1) Then
 			LoadingScreenText = LoadingScreenText + 1
 		EndIf
 		

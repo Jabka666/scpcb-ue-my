@@ -50,7 +50,6 @@ Type NPCs
 	Field FallingPickDistance#
 	Field HasAsset% = False
 	Field Contained% = False
-	Field Dist#, Hidden%
 End Type
 
 Const NPCsFile$ = "Data\NPCs.ini"
@@ -578,47 +577,12 @@ End Function
 
 Global TakeOffTimer#
 
-Function HideNPCs%(n.NPCs)
-	If (Not n\Hidden) Then
-		If n\OBJ <> 0 Then EntityAlpha(n\OBJ, 0.0)
-		If n\OBJ2 <> 0 Then EntityAlpha(n\OBJ2, 0.0)
-		If n\OBJ3 <> 0 Then EntityAlpha(n\OBJ3, 0.0)
-		
-		n\Hidden = True
-	EndIf
-End Function
-
-Function ShowNPCs%(n.NPCs)
-	If n\Hidden Then
-		If n\OBJ <> 0 Then EntityAlpha(n\OBJ, 1.0)
-		If n\OBJ2 <> 0 Then EntityAlpha(n\OBJ2, 1.0)
-		If n\OBJ3 <> 0 Then EntityAlpha(n\OBJ3, 1.0)
-		
-		n\Hidden = False
-	EndIf
-End Function
-
 Function UpdateNPCs%()
 	CatchErrors("Uncaught (UpdateNPCs)")
 	
 	Local n.NPCs, n2.NPCs, d.Doors, de.Decals, r.Rooms, e.Events, w.WayPoints, p.Particles, wp.WayPoints, wayPointCloseToPlayer.WayPoints
 	Local i%, j%, Dist#, Dist2#, Angle#, x#, x2#, y#, z#, z2#, PrevFrame#, PlayerSeeAble%, RN$
 	Local Target%, Pvt%, Pick%, PrevDist#, NewDist#, Attack%
-	
-	If UpdateTimer <= 0.0 Then
-		For n.NPCs = Each NPCs
-			Local xDist# = Abs(EntityX(me\Collider) - EntityX(n\Collider, True))
-			Local zDist# = Abs(EntityZ(me\Collider) - EntityZ(n\Collider, True))
-			
-			n\Dist = xDist + zDist
-			
-			If n\Dist <= HideDistance Then
-				ShowNPCs(n)
-			Else
-				HideNPCs(n)
-			EndIf
-		Next
-	EndIf
 	
 	For n.NPCs = Each NPCs
 		; ~ A variable to determine if the NPC is in the facility or not

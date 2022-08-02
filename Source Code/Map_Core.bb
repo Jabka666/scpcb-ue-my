@@ -25,62 +25,48 @@ End Type
 
 Function CheckForPropModel%(File$)
 	Local Path$ = "GFX\map\Props\"
+	Local Format$ = ".b3d"
 	
 	Select File
-		Case Path + "button.b3d"
+		Case Path + "button" + Format
 			;[Block]
 			Return(CopyEntity(d_I\ButtonModelID[BUTTON_DEFAULT]))
 			;[End Block]
-		Case Path + "buttonkeycard.b3d"
+		Case Path + "buttonkeycard" + Format
 			;[Block]
 			Return(CopyEntity(d_I\ButtonModelID[BUTTON_KEYCARD]))
 			;[End Block]
-		Case Path + "door01.b3d"
+		Case Path + "door01" + Format
 			;[Block]
 			Return(CopyEntity(d_I\DoorModelID[DOOR_DEFAULT_MODEL]))
 			;[End Block]
-		Case Path + "contdoorleft.b3d"
+		Case Path + "contdoorleft" + Format
 			;[Block]
 			Return(CopyEntity(d_I\DoorModelID[DOOR_BIG_MODEL_1]))
 			;[End Block]
-		Case Path + "contdoorright.b3d"
+		Case Path + "contdoorright" + Format
 			;[Block]
 			Return(CopyEntity(d_I\DoorModelID[DOOR_BIG_MODEL_2]))
 			;[End Block]
-		Case Path + "doorframe.b3d"
+		Case Path + "doorframe" + Format
 			;[Block]
-			Return(CopyEntity(d_I\DoorModelID[DOOR_DEFAULT_FRAME_MODEL]))
+			Return(CopyEntity(d_I\DoorFrameModelID[DOOR_DEFAULT_FRAME_MODEL]))
 			;[End Block]
-		Case Path + "contdoorframe.b3d"
+		Case Path + "contdoorframe" + Format
 			;[Block]
-			Return(CopyEntity(d_I\DoorModelID[DOOR_BIG_FRAME_MODEL]))
+			Return(CopyEntity(d_I\DoorFrameModelID[DOOR_BIG_FRAME_MODEL]))
 			;[End Block]
-		Case Path + "leverbase.b3d"
+		Case Path + "leverbase" + Format
 			;[Block]
 			Return(CopyEntity(lvr_I\LeverModelID[LEVER_BASE_MODEL]))
 			;[End Block]
-		Case Path + "leverhandle.b3d"
+		Case Path + "leverhandle" + Format
 			;[Block]
 			Return(CopyEntity(lvr_I\LeverModelID[LEVER_HANDLE_MODEL]))
 			;[End Block]
 		Default
 			;[Block]
 			Return(LoadMesh_Strict(File))
-			;[End Block]
-	End Select
-End Function
-
-Function CheckPropCollision%(Name$)
-	Local Path$ = "GFX\map\Props\"
-	
-	Select Name
-		Case Path + "shelves_a.b3d", Path + "shelves_b.b3d", Path + "table_a.b3d", Path + "table_b.b3d"
-			;[Block]
-			Return(True)
-			;[End Block]
-		Default
-			;[Block]
-			Return(False)
 			;[End Block]
 	End Select
 End Function
@@ -114,6 +100,26 @@ Function CreateProp.Props(Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, Scale
 	Return(p)
 End Function
 
+Function HideProps%(room.Rooms)
+	Local p.Props
+	
+	For p.Props = Each Props
+		If p\room = room Then
+			HideEntity(p\OBJ)
+		EndIf
+	Next
+End Function
+
+Function ShowProps%(room.Rooms)
+	Local p.Props
+	
+	For p.Props = Each Props
+		If p\room = room Then
+			ShowEntity(p\OBJ)
+		EndIf
+	Next
+End Function
+
 Global LightVolume#, TempLightVolume#
 
 Function AddLight%(room.Rooms, x#, y#, z#, lType%, Range#, R%, G%, B%)
@@ -133,11 +139,9 @@ Function AddLight%(room.Rooms, x#, y#, z#, lType%, Range#, R%, G%, B%)
 				PositionEntity(room\LightSprites[i], x, y, z)
 				ScaleSprite(room\LightSprites[i], 0.13 , 0.13)
 				EntityTexture(room\LightSprites[i], misc_I\LightSpriteID[LIGHT_SPRITE_DEFAULT])
-				EntityFX(room\LightSprites[i], 1 + 8)
 				EntityBlend(room\LightSprites[i], 3)
 				EntityColor(room\LightSprites[i], R, G, B)
 				EntityParent(room\LightSprites[i], room\OBJ)
-				HideEntity(room\LightSprites[i])
 				
 				room\LightSprites2[i] = CreateSprite()
 				PositionEntity(room\LightSprites2[i], x, y, z)
@@ -146,10 +150,12 @@ Function AddLight%(room.Rooms, x#, y#, z#, lType%, Range#, R%, G%, B%)
 				EntityBlend(room\LightSprites2[i], 3)
 				EntityOrder(room\LightSprites2[i], -1)
 				EntityColor(room\LightSprites2[i], R, G, B)
-				EntityFX(room\LightSprites2[i], 1 + 8)
-				RotateEntity(room\LightSprites2[i], 0.0, 0.0, Rnd(360.0))
 				EntityParent(room\LightSprites2[i], room\OBJ)
+				EntityFX(room\LightSprites2[i], 1)
+				RotateEntity(room\LightSprites2[i], 0.0, 0.0, Rnd(360.0))
+				SpriteViewMode(room\LightSprites2[i], 1)
 				HideEntity(room\LightSprites2[i])
+				room\LightSpriteHidden[i] = True
 				
 				room\LightIntensity[i] = (R + G + B) / 255.0 / 3.0
 				room\LightFlicker[i] = Rand(1, 10)
@@ -220,28 +226,36 @@ Function UpdateRoomLights%()
 	EndIf
 End Function
 
-Function RenderRoomLights%(r.Rooms)
-	Local i%, Random#, Alpha#, Dist#
+Function RenderRoomLights(Cam%)
+	Local r.Rooms, i, Random#, Alpha#, Dist#
 	
-	For i = 0 To r\MaxLights - 1
-		If r\Lights[i] <> 0 Then
-			If SecondaryLightOn > 0.5 Then
-				If UpdateRoomLightsTimer = 0.0 Then
-					Dist = EntityDistanceSquared(Camera, r\Lights[i])
-					If Dist < PowTwo(HideDistance) Then
-						TempLightVolume = TempLightVolume + r\LightIntensity[i] * r\LightIntensity[i] * ((HideDistance - Sqr(Dist)) / HideDistance)						
-					EndIf
-					If Dist < 72.25 Then
-						If EntityHidden(r\Lights[i]) Then ShowEntity(r\Lights[i])
-						If EntityVisible(Camera, r\Lights[i]) Then
-							If EntityHidden(r\LightSprites[i]) Then ShowEntity(r\LightSprites[i])
-							If opt\EnableRoomLights Then
-								Alpha = 1.0 - Max(Min(((EntityDistance(Camera, r\Lights[i]) + 0.5) / 7.5), 1.0), 0.0)
-								
-								If Alpha > 0.0 Then
-									If EntityHidden(r\LightSprites2[i]) Then ShowEntity(r\LightSprites2[i])
-									EntityAlpha(r\LightSprites2[i], Max(3.0 * (BRIGHTNESS / 255.0) * (r\LightIntensity[i] / 2.0), 1.0) * Alpha)
-									
+	For r.Rooms = Each Rooms
+		If r\Dist < HideDistance * 0.7 Lor r = PlayerRoom Then
+			For i = 0 To r\MaxLights - 1
+				If r\Lights[i] <> 0 Then
+					If opt\EnableRoomLights And SecondaryLightOn > 0.5 And Cam = Camera Then
+						EntityOrder(r\LightSprites2[i], -1)
+						If UpdateRoomLightsTimer = 0.0 Then
+							ShowEntity(r\LightSprites[i])
+							
+							If EntityDistanceSquared(Cam, r\Lights[i]) < 72.25 Then
+								If r\LightHidden[i] Then
+									ShowEntity(r\Lights[i])
+									r\LightHidden[i] = False
+								EndIf
+							Else
+								If (Not r\LightHidden[i]) Then
+									HideEntity(r\Lights[i])
+									r\LightHidden[i] = True
+								EndIf
+							EndIf
+							
+							If EntityDistanceSquared(Cam%,r\LightSprites2[i]) < 72.25 Then
+								If EntityVisible(Cam, r\Lights[i]) Then
+									If r\LightSpriteHidden[i] Then
+										ShowEntity(r\LightSprites2[i])
+										r\LightSpriteHidden[i] = False
+									EndIf
 									If PlayerRoom\RoomTemplate\Name = "cont1_173_intro" Then
 										Random = Rnd(0.38, 0.42)
 									Else
@@ -254,35 +268,71 @@ Function RenderRoomLights%(r.Rooms)
 										EndIf
 									EndIf
 									ScaleSprite(r\LightSprites2[i], Random, Random)
+									
+									Alpha = 1.0 - Max(Min(((EntityDistance(Camera, r\Lights[i]) + 0.5) / 7.5), 1.0), 0.0)
+									
+									If Alpha > 0.0 Then
+										EntityAlpha(r\LightSprites2[i], Max(3.0 * (BRIGHTNESS / 255.0) * (r\LightIntensity[i] / 2.0), 1.0) * Alpha)
+									Else
+										; ~ Instead of rendering the sprite invisible, just hiding it if the player is far away from it
+										If (Not r\LightSpriteHidden[i]) Then
+											HideEntity(r\LightSprites2[i])
+											r\LightSpriteHidden[i] = True
+										EndIf
+									EndIf
 								Else
-									; ~ Instead of rendering the sprite invisible, just hiding it if the player is far away from it
-									If (Not EntityHidden(r\LightSprites2[i])) Then HideEntity(r\LightSprites2[i])
+									If (Not r\LightSpriteHidden[i]) Then
+										HideEntity(r\LightSprites2[i])
+										r\LightSpriteHidden[i] = True
+									EndIf
 								EndIf
 							Else
-								; ~ The additional sprites option is disable, hide the sprites
-								If (Not EntityHidden(r\LightSprites2[i])) Then HideEntity(r\LightSprites2[i])
+								If (Not r\LightSpriteHidden[i]) Then
+									HideEntity(r\LightSprites2[i])
+									r\LightSpriteHidden[i] = True
+								EndIf
 							EndIf
 						Else
-							; ~ Hide the sprites, because they aren't visible
-							If (Not EntityHidden(r\LightSprites[i])) Then
-								HideEntity(r\LightSprites[i])
-								If opt\EnableRoomLights Then HideEntity(r\LightSprites2[i])
+							If EntityDistanceSquared(Cam, r\LightSprites2[i]) < 72.25 Then
+								If PlayerRoom\RoomTemplate\Name = "cont1_173_intro" Then
+									Random# = Rnd(0.38,0.42)
+								Else
+									If r\LightFlicker[i] < 5 Then
+										Random = Rnd(0.38, 0.42)
+									ElseIf r\LightFlicker[i] > 4 And r\LightFlicker[i] < 10 Then
+										Random = Rnd(0.35, 0.45)
+									Else
+										Random = Rnd(0.3, 0.5)
+									EndIf
+								EndIf
+								If (Not r\LightSpriteHidden[i]) Then
+									ScaleSprite(r\LightSprites2[i], Random, Random)
+								EndIf
 							EndIf
 						EndIf
-					Else
-						; ~ Hide the sprites, because they are too far
-						If (Not EntityHidden(r\Lights[i])) Then
-							HideEntity(r\Lights[i])
+					ElseIf Cam = Camera Then
+						If SecondaryLightOn =< 0.5 Then
 							HideEntity(r\LightSprites[i])
-							If opt\EnableRoomLights Then HideEntity(r\LightSprites2[i])
+						Else
+							ShowEntity(r\LightSprites[i])
 						EndIf
+						
+						If (Not r\LightHidden[i]) Then
+							HideEntity(r\Lights[i])
+							r\LightHidden[i] = True
+						EndIf
+						If (Not r\LightSpriteHidden[i]) Then
+							HideEntity(r\LightSprites2[i])
+							r\LightSpriteHidden[i] = True
+						EndIf
+					Else
+						; ~ This will make the lightsprites not glitch through the wall when they are rendered by the cameras
+						EntityOrder(r\LightSprites2[i], 0)
 					EndIf
+				Else
+					Exit
 				EndIf
-			Else
-				HideRoomLights(r)
-			EndIf
-		Else
-			Exit
+			Next
 		EndIf
 	Next
 End Function
@@ -1599,6 +1649,7 @@ Type Rooms
 	Field SoundEmitterRange#[MaxRoomEmitters]
 	Field SoundEmitterCHN%[MaxRoomEmitters]
 	Field Lights%[MaxRoomLights]
+	Field LightSpriteHidden%[MaxRoomLights], LightHidden%[MaxRoomLights]
 	Field LightSprites%[MaxRoomLights]
 	Field LightSprites2%[MaxRoomLights]
 	Field LightIntensity#[MaxRoomLights]
@@ -2147,7 +2198,7 @@ Function CreateDoor.Doors(x#, y#, z#, Angle#, room.Rooms, Open% = False, DoorTyp
 	CreateCollBox(d\OBJ)
 	EntityParent(d\OBJ, Parent)
 	
-	If (DoorType <> OFFICE_DOOR) And (DoorType <> WOODEN_DOOR) Then
+	If DoorType <> OFFICE_DOOR And DoorType <> WOODEN_DOOR Then
 		d\OBJ2 = CopyEntity(d_I\DoorModelID[DoorModelID_2])
 		ScaleEntity(d\OBJ2, DoorScaleX, DoorScaleY, DoorScaleZ)
 		PositionEntity(d\OBJ2, x, y, z)
@@ -3501,6 +3552,8 @@ Function RenderSecurityCams%()
 									EndIf
 									Cls()
 									
+									RenderRoomLights(sc\Cam)
+									
 									SetBuffer(BackBuffer())
 									RenderWorld()
 									CopyRect(0, 0, 512, 512, 0, 0, BackBuffer(), TextureBuffer(sc_I\ScreenTexs[sc\ScrTexture]))
@@ -3517,6 +3570,8 @@ Function RenderSecurityCams%()
 										ShowEntity(sc_I\CoffinCam\Cam)
 									EndIf
 									Cls()
+									
+									RenderRoomLights(sc_I\CoffinCam\Cam)
 									
 									SetBuffer(BackBuffer())
 									RenderWorld()
@@ -7595,164 +7650,6 @@ Function FillRoom%(r.Rooms)
 	CatchErrors("FillRoom (" + r\RoomTemplate\Name + ")")
 End Function
 
-Function HideRoomLights%(r.Rooms, HideLights% = True)
-	Local i%
-	
-	For i = 0 To r\MaxLights - 1
-		If r\Lights[i] <> 0 Then
-			If (Not EntityHidden(r\LightSprites[i])) Then
-				If HideLights Then HideEntity(r\Lights[i])
-				HideEntity(r\LightSprites[i])
-				If opt\EnableRoomLights Then HideEntity(r\LightSprites2[i])
-			EndIf
-		Else
-			Exit
-		EndIf
-	Next
-End Function
-
-; ~ TODO: Fix collisions (EntityAlpha) and adjacent doors
-Function HideRooms%(r.Rooms, HideLights% = True)
-	Local sc.SecurityCams, p.Props, d.Doors
-	Local HideSecurityCams%, HideProps%, HideDoors%
-	Local i%
-	
-	If (Not EntityHidden(r\OBJ)) Then
-		For sc.SecurityCams = Each SecurityCams
-			HideSecurityCams = True
-			If sc\room <> r Then HideSecurityCams = False
-			If HideSecurityCams Then
-				If sc\BaseOBJ <> 0 Then HideEntity(sc\BaseOBJ)
-				If sc\CameraOBJ <> 0 Then HideEntity(sc\CameraOBJ)
-				If sc\MonitorOBJ <> 0 Then HideEntity(sc\MonitorOBJ)
-				If sc\ScrOBJ <> 0 Then HideEntity(sc\ScrOBJ)
-				If sc\ScrOverlay <> 0 Then HideEntity(sc\ScrOverlay)
-				If sc\Cam <> 0 Then HideEntity(sc\Cam)
-			EndIf
-		Next
-		
-		For p.Props = Each Props
-			HideProps = True
-			If p\room <> r Then HideProps = False
-			If HideProps Then
-				If p\OBJ <> 0 Then
-					If CheckPropCollision(p\Name) Then
-						EntityAlpha(p\OBJ, 0.0)
-					Else
-						HideEntity(p\OBJ)
-					EndIf
-				EndIf
-			EndIf
-		Next
-		
-		For d.Doors = Each Doors
-			HideDoors = True
-			If d\room <> r Then HideDoors = False
-			If HideDoors Then
-				If d\FrameOBJ <> 0 Then HideEntity(d\FrameOBJ)
-				If d\OBJ <> 0 Then HideEntity(d\OBJ)
-				If d\OBJ2 <> 0 Then HideEntity(d\OBJ2)
-				For i = 0 To 1
-					If d\Buttons[i] <> 0 Then HideEntity(d\Buttons[i])
-					If d\ElevatorPanel[i] <> 0 Then HideEntity(d\ElevatorPanel[i])
-				Next
-			EndIf
-		Next
-		
-		HideRoomLights(r, HideLights)
-		
-		For i = 0 To MaxRoomLevers - 1
-			If r\Levers[i] <> 0 Then
-				HideEntity(r\Levers[i])
-			Else
-				Exit
-			EndIf
-		Next
-		
-		;For i = 0 To MaxRoomObjects - 1
-		;	If r\Objects[i] <> 0 Then HideEntity(r\Objects[i])
-		;Next
-		
-		HideEntity(r\OBJ)
-	EndIf
-End Function
-
-Function ShowRooms%(r.Rooms)
-	Local sc.SecurityCams, p.Props, d.Doors
-	Local ShowSecurityCams%, ShowProps%, ShowDoors%
-	Local i%
-	
-	If EntityHidden(r\OBJ) Then
-		For sc.SecurityCams = Each SecurityCams
-			ShowSecurityCams = True
-			If sc\room <> r Then ShowSecurityCams = False
-			If ShowSecurityCams Then
-				If sc\BaseOBJ <> 0 Then ShowEntity(sc\BaseOBJ)
-				If sc\CameraOBJ <> 0 Then ShowEntity(sc\CameraOBJ)
-				If sc\MonitorOBJ <> 0 Then ShowEntity(sc\MonitorOBJ)
-				If sc\ScrOBJ <> 0 Then ShowEntity(sc\ScrOBJ)
-				If sc\ScrOverlay <> 0 Then ShowEntity(sc\ScrOverlay)
-			EndIf
-		Next
-		
-		For p.Props = Each Props
-			ShowProps = True
-			If p\room <> r Then ShowProps = False
-			If ShowProps Then
-				If p\OBJ <> 0 Then
-					If CheckPropCollision(p\Name) Then
-						EntityAlpha(p\OBJ, 1.0)
-					Else
-						ShowEntity(p\OBJ)
-					EndIf
-				EndIf
-			EndIf
-		Next
-		
-		For d.Doors = Each Doors
-			ShowDoors = True
-			If d\room <> r Then ShowDoors = False
-			If ShowDoors Then
-				If d\FrameOBJ <> 0 Then ShowEntity(d\FrameOBJ)
-				If d\OBJ <> 0 Then ShowEntity(d\OBJ)
-				If d\OBJ2 <> 0 Then ShowEntity(d\OBJ2)
-				For i = 0 To 1
-					If d\Buttons[i] <> 0 Then ShowEntity(d\Buttons[i])
-					If d\ElevatorPanel[i] <> 0 Then ShowEntity(d\ElevatorPanel[i])
-				Next
-			EndIf
-		Next
-		
-		For i = 0 To MaxRoomLevers - 1
-			If r\Levers[i] <> 0 Then
-				ShowEntity(r\Levers[i])
-			Else
-				Exit
-			EndIf
-		Next
-		
-		;For i = 0 To MaxRoomObjects - 1
-		;	If r\Objects[i] <> 0 Then ShowEntity(r\Objects[i])
-		;Next
-		
-		ShowEntity(r\OBJ)
-		
-		If r\TriggerBoxAmount > 0 Then
-			For i = 0 To r\TriggerBoxAmount - 1
-				If chs\DebugHUD <> 0 Then
-					EntityColor(r\TriggerBoxes[i]\OBJ, 255, 255, 0)
-					EntityAlpha(r\TriggerBoxes[i]\OBJ, 0.2)
-				Else
-					EntityColor(r\TriggerBoxes[i]\OBJ, 255, 255, 255)
-					EntityAlpha(r\TriggerBoxes[i]\OBJ, 0.0)
-				EndIf
-			Next
-		EndIf
-	EndIf
-	
-	RenderRoomLights(r)
-End Function
-
 Global UpdateTimer#
 
 Function UpdateDistanceTimer%()
@@ -7821,6 +7718,8 @@ Function UpdateRooms%()
 					EndIf
 				Next
 			EndIf
+		Else
+			FoundNewPlayerRoom = True ; ~ PlayerRoom stays the same when you're high up, or deep down
 		EndIf
 	EndIf
 	
@@ -7863,9 +7762,31 @@ Function UpdateRooms%()
 		EndIf
 		
 		If Hide Then
-			HideRooms(r, True)
+			HideEntity(r\OBJ)
 		Else
-			ShowRooms(r)
+			ShowEntity(r\OBJ)
+			
+			For i = 0 To MaxRoomLights - 1
+				If r\Lights[i] <> 0 Then
+					Dist = EntityDistanceSquared(Camera, r\Lights[i])
+					If Dist < PowTwo(HideDistance) Then
+						TempLightVolume = TempLightVolume + r\LightIntensity[i] * r\LightIntensity[i] * ((HideDistance - Sqr(Dist)) / HideDistance)						
+					EndIf
+				Else
+					Exit
+				EndIf
+			Next
+			If r\TriggerBoxAmount > 0 Then
+				For i = 0 To r\TriggerBoxAmount - 1
+					If chs\DebugHUD <> 0 Then
+						EntityColor(r\TriggerBoxes[i]\OBJ, 255, 255, 0)
+						EntityAlpha(r\TriggerBoxes[i]\OBJ, 0.2)
+					Else
+						EntityColor(r\TriggerBoxes[i]\OBJ, 255, 255, 255)
+						EntityAlpha(r\TriggerBoxes[i]\OBJ, 0.0)
+					EndIf
+				Next
+			EndIf
 		EndIf
 	Next
 	
@@ -7875,23 +7796,28 @@ Function UpdateRooms%()
 		CurrMapGrid\Found[Floor(EntityX(PlayerRoom\OBJ) / 8.0) + (Floor(EntityZ(PlayerRoom\OBJ) / 8.0) * MapGridSize)] = MapGrid_Tile
 		PlayerRoom\Found = True
 		
-		ShowRooms(PlayerRoom)
+		EntityAlpha(GetChild(PlayerRoom\OBJ, 2), 1.0)
+		ShowProps(PlayerRoom)
 		For i = 0 To MaxRoomAdjacents - 1
 			If PlayerRoom\Adjacent[i] <> Null Then
 				If PlayerRoom\AdjDoor[i] <> Null Then
 					If PlayerRoom\AdjDoor[i]\OpenState = 0.0 Then
-						HideRooms(PlayerRoom\Adjacent[i], False)
+						EntityAlpha(GetChild(PlayerRoom\Adjacent[i]\OBJ, 2), 0.0)
+						HideProps(PlayerRoom\Adjacent[i])
 					ElseIf (Not EntityInView(PlayerRoom\AdjDoor[i]\FrameOBJ, Camera))
-						HideRooms(PlayerRoom\Adjacent[i], False)
+						EntityAlpha(GetChild(PlayerRoom\Adjacent[i]\OBJ, 2), 0.0)
+						HideProps(PlayerRoom\Adjacent[i])
 					Else
-						ShowRooms(PlayerRoom\Adjacent[i])
+						EntityAlpha(GetChild(PlayerRoom\Adjacent[i]\OBJ, 2), 1.0)
+						ShowProps(PlayerRoom\Adjacent[i])
 					EndIf
 				EndIf
 				
 				For j = 0 To MaxRoomAdjacents - 1
 					If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null Then
 						If PlayerRoom\Adjacent[i]\Adjacent[j] <> PlayerRoom Then
-							HideRooms(PlayerRoom\Adjacent[i]\Adjacent[j], False)
+							EntityAlpha(GetChild(PlayerRoom\Adjacent[i]\Adjacent[j]\OBJ, 2), 0.0)
+							HideProps(PlayerRoom\Adjacent[i]\Adjacent[j])
 						EndIf
 					EndIf
 				Next
@@ -8803,7 +8729,7 @@ Function CreateMap%()
 								ShouldSpawnDoor = True
 								;[End Block]
 						End Select
-						If ShouldSpawnDoor
+						If ShouldSpawnDoor Then
 							If y + 1 < MapGridSize + 1
 								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile Then
 									d.Doors = CreateDoor(Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + (RoomSpacing / 2.0), 0.0, r, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)

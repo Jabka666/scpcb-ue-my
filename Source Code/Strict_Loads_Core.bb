@@ -172,7 +172,7 @@ Function StreamSound_Strict%(File$, Volume# = 1.0, CustomMode% = Mode)
 		EndIf
 		Return(-1)
 	EndIf
-	ChannelVolume(st\CHN, Volume * 1.0)
+	ChannelVolume(st\CHN, Volume)
 	
 	Return(Handle(st))
 End Function
@@ -204,7 +204,7 @@ Function SetStreamVolume_Strict%(StreamHandle%, Volume#)
 		CreateConsoleMsg("Failed to set stream Sound volume: Return value " + st\CHN)
 		Return
 	EndIf
-	ChannelVolume(st\CHN, Volume * 1.0)
+	ChannelVolume(st\CHN, Volume)
 End Function
 
 Function SetStreamPaused_Strict%(StreamHandle%, Paused%)
