@@ -8436,7 +8436,30 @@ Function Update294%()
 						PlayerRoom\SoundCHN = PlaySound_Strict(LoadTempSound(StrTemp))
 					EndIf
 					
-					If me\UsedMastercard Then PlaySound_Strict(LoadTempSound("SFX\SCP\294\PullMasterCard.ogg"))
+					If me\UsedMastercard Then
+						PlaySound_Strict(LoadTempSound("SFX\SCP\294\PullMasterCard.ogg"))
+						
+						Local i%
+						
+						If ItemAmount < MaxItemAmount Then
+							For i = 0 To MaxItemAmount - 1
+								If Inventory(i) = Null Then
+									Inventory(i) = CreateItem("Mastercard", "mastercard", 1.0, 1.0, 1.0)
+									Inventory(i)\Picked = True
+									Inventory(i)\Dropped = -1
+									Inventory(i)\ItemTemplate\Found = True
+									HideEntity(Inventory(i)\Collider)
+									EntityType(Inventory(i)\Collider, HIT_ITEM)
+									EntityParent(Inventory(i)\Collider, 0)
+									Exit
+								EndIf
+							Next
+						Else
+							it.Items = CreateItem("Mastercard", "mastercard", EntityX(me\Collider), EntityY(me\Collider) + 0.3, EntityZ(me\Collider))
+							it\ItemTemplate\Found = True
+							EntityType(it\Collider, HIT_ITEM)
+						EndIf
+					EndIf
 					
 					If GetINIInt2(SCP294File, Loc, "Explosion") Then 
 						me\ExplosionTimer = 135.0

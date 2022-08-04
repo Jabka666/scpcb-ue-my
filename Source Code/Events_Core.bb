@@ -2624,14 +2624,17 @@ Function UpdateEvents%()
 									PlaySound_Strict(LoadTempSound("SFX\SCP\294\coin_drop.ogg"))
 									Inserted = True
 								ElseIf SelectedItem\ItemTemplate\TempName = "mastercard"
-									If me\Funds <> 0 Then
+									If me\Funds > 0 Then
 										me\Funds = me\Funds - 1
-										e\EventState2 = 2.0
+										
 										PlaySound_Strict(LoadTempSound("SFX\SCP\294\InsertMasterCard.ogg"))
+										
+										e\EventState2 = 2.0
+										
 										Inserted = True
+										RemoveItem(SelectedItem)
 									EndIf
 									me\UsedMastercard = True
-									SelectedItem = Null
 								EndIf
 							EndIf
 						EndIf
