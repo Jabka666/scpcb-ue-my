@@ -8,6 +8,9 @@ General:
 - The HUD will be hidden when the player dies.
 - Added «Master volume» and «Invert mouse by X-axis» options.
 
+Mechanics and effects:
+- Blinking reduces blur.
+
 NPCs:
 - Added new messages when SCP-049 destroys the hazmat suit or removes the ring from the player.
 - Decreased detect distance for MTF.

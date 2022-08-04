@@ -2290,6 +2290,7 @@ Function UpdateGame%()
 							;[End Block]
 					End Select 
 					me\BlinkTimer = me\BLINKFREQ
+					me\BlurTimer = me\BlurTimer - Rnd(50.0, 100.0)
 				EndIf
 				me\BlinkTimer = me\BlinkTimer - fps\Factor[0]
 			Else
