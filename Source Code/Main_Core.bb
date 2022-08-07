@@ -2290,7 +2290,7 @@ Function UpdateGame%()
 							;[End Block]
 					End Select 
 					me\BlinkTimer = me\BLINKFREQ
-					me\BlurTimer = me\BlurTimer - Rnd(50.0, 100.0)
+					If PlayerRoom\RoomTemplate\Name <> "room3_storage" And EntityY(me\Collider) > (-4100.0) * RoomScale Then me\BlurTimer = me\BlurTimer - Rnd(50.0, 100.0)
 				EndIf
 				me\BlinkTimer = me\BlinkTimer - fps\Factor[0]
 			Else
@@ -6017,7 +6017,7 @@ Function RenderGUI%()
 						;[Block]
 						If wi\HazmatSuit = 2 Then ShouldDrawRect = True
 						;[End Block]
-					Case "hazmatsuit3
+					Case "hazmatsuit3"
 						;[Block]"
 						If wi\HazmatSuit = 3 Then ShouldDrawRect = True	
 						;[End Block]
@@ -7670,7 +7670,7 @@ Function UpdateEnding%()
 	GiveAchievement(Achv055)
 	If ((Not UsedConsole) Lor opt\DebugMode) And SelectedMap = "" Then
 		GiveAchievement(AchvConsole)
-		If SelectedDifficulty\Name = "Keter" Then
+		If SelectedDifficulty\Name = "Keter" Lor SelectedDifficulty\Name = "Apollyon" Then
 			GiveAchievement(AchvKeter)
 			SaveAchievementsFile()
 		EndIf
