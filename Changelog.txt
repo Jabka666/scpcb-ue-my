@@ -78,6 +78,7 @@ Bug Fixes:
 - Fixed MAV after deleting saved game.
 - Fixed a console input box that is rendered through pause menu.
 - Fixed a bug where SCP-294 didn't remove a master card from inventory while using.
+- Fixed SCP-008 and SCP-409 cups resetting their effects.
 
 - Tiny fix for SCP-372's AI.
 - Tiny fixes for location of the pause menu buttons.
