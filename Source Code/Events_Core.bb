@@ -3911,7 +3911,7 @@ Function UpdateEvents%()
 							e\EventState = 2.0
 							
 							If (Not n_I\Curr106\Contained) Then 	
-								de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\Objects[Temp], True), EntityY(e\room\Objects[Temp], True) + 0.005, EntityZ(e\room\Objects[Temp], True), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
+								de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\Objects[Temp], True), EntityY(e\room\Objects[Temp], True) + 0.02, EntityZ(e\room\Objects[Temp], True), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
 								de\SizeChange = 0.001
 								EntityParent(de\OBJ, e\room\OBJ)
 								
@@ -4758,10 +4758,11 @@ Function UpdateEvents%()
 					If EntityY(me\Collider) < (-4600.0) * RoomScale Then
 						GiveAchievement(Achv939)
 						
-						If wi\GasMask = 0 Then
+						If wi\GasMask = 0 And HazmatSuit = 0 Then
 							me\BlurTimer = Min(me\BlurTimer + (fps\Factor[0] * 1.05), 1500.0)
 							If me\BlurTimer >= 500.0 Then UpdateCough(1000)
 							If me\BlurTimer >= 1500.0 Then Kill(False)
+							msg\DeathMsg = "Class D found dead in Storage Area 6 having suffocated on the gas leak that happened during the breach. A repair team has been sent after recontainment of all four (4) SCP-939 specimens was completed."
 						EndIf
 						
 						ShouldPlay = 7
