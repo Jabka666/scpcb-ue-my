@@ -1,6 +1,5 @@
 Include "Source Code\Math_Core.bb"
 Include "Source Code\Strict_Loads_Core.bb"
-Include "Source Code\IniControler.bb"
 
 Const MaxFontIDAmount% = 8
 ; ~ Fonts ID Constants
@@ -3883,8 +3882,6 @@ Function UpdateGUI%()
 											EndIf
 										Next
 										If SelectedItem <> Null Then
-											CreateMsg("The paperclip is not strong enough to hold any more items.")
-										Else
 											If added\ItemTemplate\TempName = "paper" Lor added\ItemTemplate\TempName = "oldpaper" Then
 												CreateMsg("This document was added to the clipboard.")
 											ElseIf added\ItemTemplate\TempName = "badge"
@@ -3892,6 +3889,8 @@ Function UpdateGUI%()
 											Else
 												CreateMsg("The " + added\ItemTemplate\Name + " was added to the clipboard.")
 											EndIf
+										Else
+											CreateMsg("The paperclip is not strong enough to hold any more items.")
 										EndIf
 									Else
 										For z = 0 To MaxItemAmount - 1
@@ -3930,9 +3929,9 @@ Function UpdateGUI%()
 											EndIf
 										Next
 										If SelectedItem <> Null Then
-											CreateMsg("The wallet is full.")
-										Else
 											CreateMsg("You put " + added\ItemTemplate\Name + " into the wallet.")
+										Else
+											CreateMsg("The wallet is full.")
 										EndIf
 									Else
 										For z = 0 To MaxItemAmount - 1
