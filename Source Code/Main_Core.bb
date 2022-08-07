@@ -2290,7 +2290,7 @@ Function UpdateGame%()
 							;[End Block]
 					End Select 
 					me\BlinkTimer = me\BLINKFREQ
-					If PlayerRoom\RoomTemplate\Name <> "room3_storage" And EntityY(me\Collider) > (-4100.0) * RoomScale Then me\BlurTimer = me\BlurTimer - Rnd(50.0, 100.0)
+					If PlayerRoom\RoomTemplate\Name <> "room3_storage" And EntityY(me\Collider) > (-4100.0) * RoomScale Then me\BlurTimer = me\BlurTimer - Rnd(0.0, 50.0)
 				EndIf
 				me\BlinkTimer = me\BlinkTimer - fps\Factor[0]
 			Else

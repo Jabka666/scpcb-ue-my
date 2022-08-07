@@ -4758,11 +4758,13 @@ Function UpdateEvents%()
 					If EntityY(me\Collider) < (-4600.0) * RoomScale Then
 						GiveAchievement(Achv939)
 						
-						If wi\GasMask = 0 And HazmatSuit = 0 Then
+						If wi\GasMask = 0 And wi\HazmatSuit = 0 Then
 							me\BlurTimer = Min(me\BlurTimer + (fps\Factor[0] * 1.05), 1500.0)
 							If me\BlurTimer >= 500.0 Then UpdateCough(1000)
-							If me\BlurTimer >= 1500.0 Then Kill(False)
-							msg\DeathMsg = "Class D found dead in Storage Area 6 having suffocated on the gas leak that happened during the breach. A repair team has been sent after recontainment of all four (4) SCP-939 specimens was completed."
+							If me\BlurTimer >= 1500.0 Then
+								Kill(False)
+								msg\DeathMsg = SubjectName + " found dead in Storage Area 6 having suffocated on the gas leak that happened during the breach. A repair team has been sent after recontainment of all four (4) SCP-939 specimens was completed."
+							EndIf
 						EndIf
 						
 						ShouldPlay = 7
