@@ -1590,7 +1590,7 @@ Function UpdateNPCs%()
 												Next
 											EndIf
 										ElseIf I_714\Using Then
-											TakeOffTimer = TakeOffTimer + (fps\Factor[0] * 1.5)
+											TakeOffTimer = Min(TakeOffTimer + (fps\Factor[0] * 1.5), 500.0)
 											If TakeOffTimer > 100.0 And TakeOffTimer - (fps\Factor[0] * 1.5) <= 100.0 And (Not ChannelPlaying(n\SoundCHN2)) Then
 												If n\SoundCHN2 <> 0 Then
 													If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2)
