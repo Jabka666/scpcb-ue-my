@@ -1,5 +1,6 @@
 Include "Source Code\Math_Core.bb"
 Include "Source Code\Strict_Loads_Core.bb"
+Include "Source Code\IniControler.bb"
 
 Const MaxFontIDAmount% = 8
 ; ~ Fonts ID Constants
