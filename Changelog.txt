@@ -76,7 +76,8 @@ Bug Fixes:
 - Fixed a bug where SCP-1048 event is applied for Dr. L.'s office.
 - Fixed «room2_js» overlapping with adjacent rooms.
 - Fixed MAV after deleting saved game.
-- Fixed a bug where console input box rendered through pause menu.
+- Fixed a console input box that is rendered through pause menu.
+- Fixed a bug where SCP-294 didn't remove a master card from inventory while using.
 
 - Tiny fix for SCP-372's AI.
 - Tiny fixes for location of the pause menu buttons.

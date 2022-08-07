@@ -3100,8 +3100,8 @@ Function OpenCloseDoor%(d.Doors, PlaySFX% = True)
 		DoorType = DEFAULT_DOOR
 	EndIf
 	
-	Local SoundOpen% = OpenDoorSFX(d\DoorType, DoorType)
-	Local SoundClose% = CloseDoorSFX(d\DoorType, DoorType)
+	Local SoundOpen% = OpenDoorSFX(d\DoorType, SoundRand)
+	Local SoundClose% = CloseDoorSFX(d\DoorType, SoundRand)
 	
 	If d\Locked = 2 Then SoundOpen = BigDoorErrorSFX[Rand(0, 2)]
 	
