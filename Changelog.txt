@@ -84,6 +84,7 @@ Bug Fixes:
 - Tiny fix for SCP-372's AI.
 - Tiny fixes for location of the pause menu buttons.
 - Tiny fix for heavy hazmat suit icon.
+- Tiny fix for SCP-106 decals deceleration speed.
 
 v1.0.2
 
