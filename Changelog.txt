@@ -7,6 +7,7 @@ General:
 - Added smoke particles for all NPCs hit by the Tesla Gate.
 - The HUD will be hidden when the player dies.
 - Added «Master volume» and «Invert mouse by X-axis» options.
+- Renamed «Enable room lights» option to «Advanced room lighting».
 
 Mechanics and effects:
 - Blinking reduces blur.

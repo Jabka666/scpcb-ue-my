@@ -622,7 +622,7 @@ Function UpdateMainMenu%()
 							
 							y = y + (30 * MenuScale)
 							
-							opt\EnableRoomLights = UpdateMainMenuTick(x, y, opt\EnableRoomLights)
+							opt\AdvancedRoomLights = UpdateMainMenuTick(x, y, opt\AdvancedRoomLights)
 							
 							y = y + (40 * MenuScale)
 							
@@ -1409,7 +1409,7 @@ Function RenderMainMenu%()
 						y = y + (30 * MenuScale)
 						
 						Color(255, 255, 255)
-						Text(x, y + (5 * MenuScale), "Enable room lights:")
+						Text(x, y + (5 * MenuScale), "Advanced room lighting:")
 						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_RoomLights)
 						EndIf

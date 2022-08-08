@@ -139,21 +139,21 @@ Function AddLight%(room.Rooms, x#, y#, z#, lType%, Range#, R%, G%, B%)
 				PositionEntity(room\LightSprites[i], x, y, z)
 				ScaleSprite(room\LightSprites[i], 0.13 , 0.13)
 				EntityTexture(room\LightSprites[i], misc_I\LightSpriteID[LIGHT_SPRITE_DEFAULT])
+				EntityFX(room\LightSprites[i], 1 + 8)
 				EntityBlend(room\LightSprites[i], 3)
 				EntityColor(room\LightSprites[i], R, G, B)
 				EntityParent(room\LightSprites[i], room\OBJ)
-				EntityFX(room\LightSprites[i], 1 + 8)
 				HideEntity(room\LightSprites[i])
 				
 				room\LightSprites2[i] = CreateSprite()
 				PositionEntity(room\LightSprites2[i], x, y, z)
-				ScaleSprite(room\LightSprites2[i], 0.6, 0.6)
+				ScaleSprite(room\LightSprites2[i], Rnd(0.36, 0.4), Rnd(0.36, 0.4))
 				EntityTexture(room\LightSprites2[i], misc_I\AdvancedLightSprite)
+				EntityFX(room\LightSprites2[i], 1 + 8)
 				EntityBlend(room\LightSprites2[i], 3)
 				EntityOrder(room\LightSprites2[i], -1)
 				EntityColor(room\LightSprites2[i], R, G, B)
 				EntityParent(room\LightSprites2[i], room\OBJ)
-				EntityFX(room\LightSprites2[i], 1 + 8)
 				RotateEntity(room\LightSprites2[i], 0.0, 0.0, Rnd(360.0))
 				SpriteViewMode(room\LightSprites2[i], 1)
 				HideEntity(room\LightSprites2[i])
@@ -227,7 +227,7 @@ Function UpdateRoomLights%()
 End Function
 
 Function RenderRoomLights%(Cam%)
-	Local r.Rooms, i%, Random#, Alpha#, Dist#
+	Local r.Rooms, i%, Random#, Alpha#
 	
 	For r.Rooms = Each Rooms
 		If r\Dist < HideDistance * 0.7 Lor r = PlayerRoom Then
@@ -236,16 +236,12 @@ Function RenderRoomLights%(Cam%)
 					If SecondaryLightOn > 0.5 Then
 						If Cam = Camera Then ; ~ The lights are rendered by player's cam
 							If UpdateRoomLightsTimer = 0.0 Then
-								Dist = EntityDistanceSquared(Camera, r\Lights[i])
-								If Dist < PowTwo(HideDistance) Then
-									TempLightVolume = TempLightVolume + r\LightIntensity[i] * r\LightIntensity[i] * ((HideDistance - Sqr(Dist)) / HideDistance)						
-								EndIf
-								If Dist < 72.25 Then
+								If EntityDistanceSquared(Camera, r\Lights[i]) < 72.25 Then
 									If EntityHidden(r\Lights[i]) Then ShowEntity(r\Lights[i])
 									If EntityVisible(Camera, r\Lights[i]) Then
 										If EntityHidden(r\LightSprites[i]) Then ShowEntity(r\LightSprites[i])
 										
-										If opt\EnableRoomLights Then
+										If opt\AdvancedRoomLights Then
 											Alpha = 1.0 - Max(Min(((EntityDistance(Camera, r\Lights[i]) + 0.5) / 7.5), 1.0), 0.0)
 											
 											If Alpha > 0.0 Then
@@ -253,7 +249,7 @@ Function RenderRoomLights%(Cam%)
 												EntityOrder(r\LightSprites2[i], -1)
 												EntityAlpha(r\LightSprites2[i], Max(3.0 * (BRIGHTNESS / 255.0) * (r\LightIntensity[i] / 2.0), 1.0) * Alpha)
 												
-												Random = Rnd(0.38, 0.42)
+												Random = Rnd(0.36, 0.4)
 												ScaleSprite(r\LightSprites2[i], Random, Random)
 											Else
 												; ~ Instead of rendering the sprite invisible, just hiding it if the player is far away from it
@@ -267,7 +263,7 @@ Function RenderRoomLights%(Cam%)
 										; ~ Hide the sprites, because they aren't visible
 										If (Not EntityHidden(r\LightSprites[i])) Then
 											HideEntity(r\LightSprites[i])
-											If opt\EnableRoomLights Then HideEntity(r\LightSprites2[i])
+											If opt\AdvancedRoomLights Then HideEntity(r\LightSprites2[i])
 										EndIf
 									EndIf
 								Else
@@ -275,13 +271,13 @@ Function RenderRoomLights%(Cam%)
 									If (Not EntityHidden(r\Lights[i])) Then
 										HideEntity(r\Lights[i])
 										HideEntity(r\LightSprites[i])
-										If opt\EnableRoomLights Then HideEntity(r\LightSprites2[i])
+										If opt\AdvancedRoomLights Then HideEntity(r\LightSprites2[i])
 									EndIf
 								EndIf
 							EndIf
 						Else
 							; ~ This will make the lightsprites not glitch through the wall when they are rendered by the cameras
-							If opt\EnableRoomLights Then EntityOrder(r\LightSprites2[i], 0)
+							If opt\AdvancedRoomLights Then EntityOrder(r\LightSprites2[i], 0)
 						EndIf
 					Else
 						Return ; ~ The lights off
@@ -7722,6 +7718,16 @@ Function UpdateRooms%()
 		Else
 			ShowEntity(r\OBJ)
 			
+			For i = 0 To MaxRoomLights - 1
+				If r\Lights[i] <> 0 Then
+					Dist = EntityDistanceSquared(Camera, r\Lights[i])
+					If Dist < PowTwo(HideDistance) Then
+						TempLightVolume = TempLightVolume + r\LightIntensity[i] * r\LightIntensity[i] * ((HideDistance - Sqr(Dist)) / HideDistance)						
+					EndIf
+				Else
+					Exit
+				EndIf
+			Next
 			If r\TriggerBoxAmount > 0 Then
 				For i = 0 To r\TriggerBoxAmount - 1
 					If chs\DebugHUD <> 0 Then

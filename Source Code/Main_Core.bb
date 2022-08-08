@@ -2290,7 +2290,7 @@ Function UpdateGame%()
 							;[End Block]
 					End Select 
 					me\BlinkTimer = me\BLINKFREQ
-					If PlayerRoom\RoomTemplate\Name <> "room3_storage" And EntityY(me\Collider) > (-4100.0) * RoomScale Then me\BlurTimer = me\BlurTimer - Rnd(0.0, 50.0)
+					If PlayerRoom\RoomTemplate\Name <> "room3_storage" And EntityY(me\Collider) > (-4100.0) * RoomScale Then me\BlurTimer = me\BlurTimer - Rnd(0.0, 100.0)
 				EndIf
 				me\BlinkTimer = me\BlinkTimer - fps\Factor[0]
 			Else
@@ -6716,7 +6716,7 @@ Function UpdateMenu%()
 					
 					y = y + (30 * MenuScale)
 					
-					opt\EnableRoomLights = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\EnableRoomLights)
+					opt\AdvancedRoomLights = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\AdvancedRoomLights)
 					
 					y = y + (40 * MenuScale)
 					
@@ -7294,7 +7294,7 @@ Function RenderMenu%()
 					y = y + (30 * MenuScale)
 					
 					Color(255, 255, 255)
-					Text(x, y + (5 * MenuScale), "Enable room lights:")
+					Text(x, y + (5 * MenuScale), "Advanced room lighting:")
 					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_RoomLights)
 					EndIf
