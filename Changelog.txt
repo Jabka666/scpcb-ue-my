@@ -28,10 +28,13 @@ Menu:
 Bug Fixes:
 - Fixed «IsDead» parameter for guard.
 - Fixed SCP-966's messages while using echo sound.
-- Fixes for SCP-294 drinks:
+- Fixes for SCP-294:
     	- Fixed wrong color of the drinks refined in SCP-914.
     	- Fixed multipliers for drinks effects.
     	- Fixed blink and stamina multipliers that were reducing player stats on Fine and Very Fine settings.
+	- Fixed a bug where SCP-294 didn't remove a master card from inventory while using.
+	- Fixed SCP-008 and SCP-409 cups resetting their effects.
+	- Fixed SCP-294 sometimes giving the wrong drink.
 - Fixed an issue where Dr. Maynard's code could be the same as Dr. Harp's.
 - Fixed the first aid kit that damages the player if the injuries are < 0.5.
 - Fixed a bug where fog color was stored in memory every time.
@@ -59,7 +62,6 @@ Bug Fixes:
 	- Fixed cloned items not removing after teleporing by SCP-970.
 	- Fixed Strange Note from SCP-970 falling through floor when dropped.
 	- Fixed glitched doors movement.
-- Fixed SCP-294 sometimes giving the wrong drink.
 - Fixed removal voice lines being spammable by repeatedly approaching and backing away from SCP-049.
 - Fixed MAV after killing the SCP-035's tentacle.
 - Fixed an ability to move the head after death.
@@ -78,8 +80,7 @@ Bug Fixes:
 - Fixed «room2_js» overlapping with adjacent rooms.
 - Fixed MAV after deleting saved game.
 - Fixed a console input box that is rendered through pause menu.
-- Fixed a bug where SCP-294 didn't remove a master card from inventory while using.
-- Fixed SCP-008 and SCP-409 cups resetting their effects.
+- Fixed MAV while trying to use a clipboard or wallet.
 
 - Tiny fix for SCP-372's AI.
 - Tiny fixes for location of the pause menu buttons.
