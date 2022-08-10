@@ -531,10 +531,6 @@ Function PickItem%(item.Items)
 						;[Block]
 						GiveAchievement(Achv148)
 						;[End Block]
-					Case "scp513"
-						;[Block]
-						GiveAchievement(Achv513)
-						;[End Block]
 					Case "scp860"
 						;[Block]
 						GiveAchievement(Achv860)
