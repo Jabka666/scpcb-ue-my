@@ -9,6 +9,7 @@ General:
 - Added «Master volume» and «Invert mouse by X-axis» options.
 - Renamed «Enable room lights» option to «Advanced room lighting».
 - SCP-005 can no longer be placed into the wallet.
+- The player must use SCP-513 to get the achievement.
 
 Mechanics and effects:
 - Blinking reduces blur.
