@@ -8,6 +8,7 @@ General:
 - The HUD will be hidden when the player dies.
 - Added «Master volume» and «Invert mouse by X-axis» options.
 - Renamed «Enable room lights» option to «Advanced room lighting».
+- SCP-005 can no longer be placed into the wallet.
 
 Mechanics and effects:
 - Blinking reduces blur.
