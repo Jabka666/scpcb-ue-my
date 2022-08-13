@@ -380,6 +380,7 @@ Function LoadMonitors%()
 	mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY] = LoadTexture_Strict("GFX\monitor_overlay.png", 1, DeleteAllTextures)
 	For i = MONITOR_LOCKDOWN_1_OVERLAY To MONITOR_LOCKDOWN_3_OVERLAY
 		mon_I\MonitorOverlayID[i] = LoadTexture_Strict("GFX\map\textures\lockdown_screen(" + i + ").png", 1, DeleteAllTextures)
+		If opt\Atmosphere Then TextureBlend(mon_I\MonitorOverlayID[i], 5)
 	Next
 	mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_4_OVERLAY] = CreateTextureUsingCacheSystem(1, 1)
 	SetBuffer(TextureBuffer(mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_4_OVERLAY]))
