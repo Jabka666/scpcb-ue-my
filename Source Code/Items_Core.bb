@@ -2003,6 +2003,70 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
+		Case "scp500"
+			;[Block]
+			Select Setting
+				Case ROUGH, COARSE
+					;[Block]
+					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					;[End Block]
+				Case ONETOONE
+					;[Block]
+					it2.Items = CreateItem("SCP-500-01", "scp500pill", x, y, z)
+					
+					If Rand(2) = 1 Then
+						it3.Items = CreateItem("SCP-500-01", "scp500pill", x, y, z)
+						EntityType(it3\Collider, HIT_ITEM)
+					EndIf
+					
+					If Rand(3) = 1 Then
+						it4.Items = CreateItem("SCP-500-01", "scp500pill", x, y, z)
+						EntityType(it4\Collider, HIT_ITEM)
+					EndIf
+					
+					If Rand(4) = 1 Then
+						it5.Items = CreateItem("SCP-500-01", "scp500pill", x, y, z)
+						EntityType(it5\Collider, HIT_ITEM)
+					EndIf
+					;[End Block]
+				Case FINE
+					;[Block]
+					NO427Spawn = False
+					
+					For it3.Items = Each Items
+						If it3\ItemTemplate\TempName = "scp427" Then
+							NO427Spawn = True
+							Exit
+						EndIf
+					Next
+					If (Not NO427Spawn) Then
+						it2.Items = CreateItem("SCP-427", "scp427", x, y, z)
+					Else
+						it2.Items = CreateItem("Upgraded Pill", "scp500pilldeath", x, y, z)
+					EndIf
+					;[End Block]
+				Case VERYFINE
+					;[Block]
+					it2.Items = CreateItem("Upgraded Pill", "scp500pilldeath", x, y, z)
+					
+					If Rand(2) = 1 Then
+						it3.Items = CreateItem("Upgraded Pill", "scp500pilldeath", x, y, z)
+						EntityType(it3\Collider, HIT_ITEM)
+					EndIf
+					
+					If Rand(3) = 1 Then
+						it4.Items = CreateItem("Upgraded Pill", "scp500pilldeath", x, y, z)
+						EntityType(it4\Collider, HIT_ITEM)
+					EndIf
+					
+					If Rand(4) = 1 Then
+						it5.Items = CreateItem("Upgraded Pill", "scp500pilldeath", x, y, z)
+						EntityType(it5\Collider, HIT_ITEM)
+					EndIf
+					;[End Block]
+			End Select
+			;[End Block]
 		Case "origami"
 			Select Setting
 				Case ROUGH
