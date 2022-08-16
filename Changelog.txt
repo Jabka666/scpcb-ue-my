@@ -26,6 +26,7 @@ Rooms:
 - Made the rooms a bit brighter.
 - Added new death message for «room3_storage» area.
 - Added new room in the Entrance Zone.
+- Reduced SCP-005 spawnrate inside containment chamber.
 
 Menu:
 - Made capitalization for buttons text.

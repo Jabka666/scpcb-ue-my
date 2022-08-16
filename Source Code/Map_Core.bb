@@ -4573,7 +4573,7 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			If I_005\ChanceToSpawn = 2 Then 
+			If I_005\ChanceToSpawn >= 5 And I_005\ChanceToSpawn =< 10 Then 
 				it.Items = CreateItem("SCP-005", "scp005",  r\x + 736.0 * RoomScale, r\y + 224.0 * RoomScale, r\z + 755.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
@@ -7416,7 +7416,7 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			If I_005\ChanceToSpawn = 3 Then
+			If I_005\ChanceToSpawn >= 2 And I_005\ChanceToSpawn =< 4 Then
 				it.Items = CreateItem("SCP-005", "scp005", r\x - 5050.0 * RoomScale, r\y - 4416.0 * RoomScale, r\z + 1728.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)	
 			EndIf
@@ -7522,7 +7522,7 @@ Function FillRoom%(r.Rooms)
 			If I_005\ChanceToSpawn = 1 Then
 				it.Items = CreateItem("SCP-005", "scp005", r\x, r\y + 255.0 * RoomScale, r\z - 210.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
-			ElseIf I_005\ChanceToSpawn = 2
+			ElseIf I_005\ChanceToSpawn >= 5 And I_005\ChanceToSpawn =< 10
 				it.Items = CreateItem("Note from Maynard", "paper", r\x, r\y + 255.0 * RoomScale, r\z - 210.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)	
 			EndIf
