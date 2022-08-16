@@ -24,6 +24,7 @@ Rooms:
 - Tiny optimization for SCP-106's box.
 - Made the rooms a bit brighter.
 - Added new death message for «room3_storage» area.
+- Added new room in the Entrance Zone.
 
 Menu:
 - Made capitalization for buttons text.
@@ -92,6 +93,7 @@ Bug Fixes:
 - Tiny fixes for location of the pause menu buttons.
 - Tiny fix for heavy hazmat suit icon.
 - Tiny fix for SCP-106 decals deceleration speed.
+- Tiny fix for «room3_4_ez» room.
 
 v1.0.2
 
