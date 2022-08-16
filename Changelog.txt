@@ -93,7 +93,7 @@ Bug Fixes:
 - Tiny fixes for location of the pause menu buttons.
 - Tiny fix for heavy hazmat suit icon.
 - Tiny fix for SCP-106 decals deceleration speed.
-- Tiny fix for «room3_4_ez» room.
+- Tiny fixes for some rooms.
 
 v1.0.2
 
