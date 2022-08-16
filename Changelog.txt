@@ -11,6 +11,7 @@ General:
 - SCP-005 can no longer be placed into the wallet.
 - The player must use SCP-513 to get the achievement.
 - Added refinement for SCP-500.
+- Updated TSS startup video.
 
 Mechanics and effects:
 - Blinking reduces blur.
