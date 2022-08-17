@@ -91,6 +91,7 @@ Bug Fixes:
 - Fixed upgraded NVG killing earlier around SCP-895.
 - Fixed MAV in «NO SAVE» mode.
 - Fixed empty sound in "DoorBudge1.ogg".
+- Fixed NPCs AI not being able to find correct waypoint on stairs.
 
 - Tiny fix for SCP-372's AI.
 - Tiny fixes for location of the pause menu buttons.
