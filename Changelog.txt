@@ -43,7 +43,7 @@ Bug Fixes:
 	- Fixed SCP-008 and SCP-409 cups resetting their effects.
 	- Fixed SCP-294 sometimes giving the wrong drink.
 - Fixed an issue where Dr. Maynard's code could be the same as Dr. Harp's.
-- Fixed the first aid kit that damages the player if the injuries are < 0.5.
+- Fixed the first aid kit that deals damage to the player if injuries are less than 0.5.
 - Fixed a bug where fog color was stored in memory every time.
 - Fixed ticket model.
 - Fixes for SCP-860-1:
@@ -90,6 +90,7 @@ Bug Fixes:
 - Fixed MAV while trying to use a clipboard or wallet.
 - Fixed upgraded NVG killing earlier around SCP-895.
 - Fixed MAV in «NO SAVE» mode.
+- Fixed empty sound in "DoorBudge1.ogg".
 
 - Tiny fix for SCP-372's AI.
 - Tiny fixes for location of the pause menu buttons.
