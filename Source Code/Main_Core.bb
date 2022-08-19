@@ -999,15 +999,19 @@ Function UpdateConsole%()
 					;[End Block]
 				Case "disable049" 
 					;[Block]
-					n_I\Curr049\Idle = 1
-					HideEntity(n_I\Curr049\Collider)
-					HideEntity(n_I\Curr049\OBJ)
+					If n_I\Curr049 <> Null Then
+						n_I\Curr049\Idle = 1
+						HideEntity(n_I\Curr049\Collider)
+						HideEntity(n_I\Curr049\OBJ)
+					EndIf
 					;[End Block]
 				Case "enable049"
 					;[Block]
-					n_I\Curr049\Idle = 0
-					ShowEntity(n_I\Curr049\Collider)
-					ShowEntity(n_I\Curr049\OBJ)
+					If n_I\Curr049 <> Null Then
+						n_I\Curr049\Idle = 0
+						ShowEntity(n_I\Curr049\Collider)
+						ShowEntity(n_I\Curr049\OBJ)
+					EndIf
 					;[End Block]
 				Case "106retreat"
 					;[Block]
