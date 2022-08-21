@@ -2621,7 +2621,7 @@ Function UpdateEvents%()
 								If SelectedItem\ItemTemplate\TempName = "25ct" Lor SelectedItem\ItemTemplate\TempName = "coin" Then
 									RemoveItem(SelectedItem)
 									e\EventState2 = e\EventState2 + 1.0
-									PlaySound_Strict(LoadTempSound("SFX\SCP\294\coin_drop.ogg"))
+									PlaySound_Strict(LoadTempSound("SFX\SCP\294\CoinDrop.ogg"))
 									Inserted = True
 								ElseIf SelectedItem\ItemTemplate\TempName = "mastercard"
 									If me\Funds > 0 Then
