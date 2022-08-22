@@ -1567,7 +1567,6 @@ Function UpdateNPCs%()
 										If wi\HazmatSuit > 0 Then
 											TakeOffTimer = Min(TakeOffTimer + (fps\Factor[0] * 1.5), 500.0)
 											If TakeOffTimer > 100.0 And TakeOffTimer - (fps\Factor[0] * 1.5) <= 100.0 And (Not ChannelPlaying(n\SoundCHN2)) Then
-												If n\SoundCHN2 <> 0 Then StopChannel(n\SoundCHN2)
 												n\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\049\TakeOffHazmat.ogg"))
 											ElseIf TakeOffTimer >= 500.0
 												For i = 0 To MaxItemAmount - 1
@@ -1592,9 +1591,6 @@ Function UpdateNPCs%()
 										ElseIf I_714\Using Then
 											TakeOffTimer = Min(TakeOffTimer + (fps\Factor[0] * 1.5), 500.0)
 											If TakeOffTimer > 100.0 And TakeOffTimer - (fps\Factor[0] * 1.5) <= 100.0 And (Not ChannelPlaying(n\SoundCHN2)) Then
-												If n\SoundCHN2 <> 0 Then
-													If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2)
-												EndIf
 												n\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\049\714Equipped.ogg"))
 											ElseIf TakeOffTimer >= 500.0
 												I_714\Using = False

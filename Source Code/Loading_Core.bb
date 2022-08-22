@@ -1555,17 +1555,10 @@ Function InitNewGame%()
 	I_005\ChanceToSpawn = Rand(10)
 	
 	AccessCode = 0
-	Repeat
-		For i = 0 To 3
-			AccessCode = AccessCode + (Rand(9) * (10 ^ i))
-		Next
-		Skip = False
-		If AccessCode <> 7816 And AccessCode <> 2411 Then 
-			Skip = True
-		Else
-			AccessCode = 0
-		EndIf
-	Until Skip
+	For i = 0 To 3
+		AccessCode = AccessCode + (Rand(9) * (10 ^ i))
+	Next
+	If AccessCode = 7816 Lor AccessCode = 2411 Then AccessCode = AccessCode + 1
 	
 	RenderLoading(55, "ROOMS")
 	

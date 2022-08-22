@@ -706,19 +706,6 @@ Global PickSFX%[4]
 
 Global AmbientSFXCHN%, CurrAmbientSFX%
 Global AmbientSFXAmount%[6]
-; ~ 0 = Light Containment Zone
-; ~ 1 = Heavy Containment Zone
-; ~ 2 = Entrance Zone
-; ~ 3 = General
-; ~ 4 = Pre-Breach
-; ~ 5 = SCP-860-1
-
-AmbientSFXAmount[0] = 8 
-AmbientSFXAmount[1] = 11
-AmbientSFXAmount[2] = 12
-AmbientSFXAmount[3] = 15 
-AmbientSFXAmount[4] = 5
-AmbientSFXAmount[5] = 10
 
 Dim AmbientSFX%(5, 15)
 
@@ -783,16 +770,16 @@ Function LoadSounds%()
 	RenderLoading(45, "SOUNDS")
 	
 	For i = 0 To 2
-		OpenDoorSFX(Default_Door, i) = LoadSound_Strict("SFX\Door\DoorOpen" + (i + 1) + ".ogg") ; ~ Also one-sided door
-		CloseDoorSFX(Default_Door, i) = LoadSound_Strict("SFX\Door\DoorClose" + (i + 1) + ".ogg") ; ~ Also one-sided door
-		OpenDoorSFX(Elevator_Door, i) = LoadSound_Strict("SFX\Door\ElevatorOpen" + (i + 1) + ".ogg")
-		CloseDoorSFX(Elevator_Door, i) = LoadSound_Strict("SFX\Door\ElevatorClose" + (i + 1) + ".ogg")
-		OpenDoorSFX(Heavy_Door, i) = LoadSound_Strict("SFX\Door\Door2Open" + (i + 1) + ".ogg")
-		CloseDoorSFX(Heavy_Door, i) = LoadSound_Strict("SFX\Door\Door2Close" + (i + 1) + ".ogg")
-		OpenDoorSFX(Big_Door, i) = LoadSound_Strict("SFX\Door\BigDoorOpen" + (i + 1) + ".ogg")
-		CloseDoorSFX(Big_Door, i) = LoadSound_Strict("SFX\Door\BigDoorClose" + (i + 1) + ".ogg")
-		OpenDoorSFX(Office_Door, i) = LoadSound_Strict("SFX\Door\OfficeDoorOpen" + (i + 1) + ".ogg")
-		OpenDoorSFX(Wooden_Door, i) = LoadSound_Strict("SFX\Door\WoodenDoorOpen" + (i + 1) + ".ogg")
+		OpenDoorSFX(DEFAULT_DOOR, i) = LoadSound_Strict("SFX\Door\DoorOpen" + (i + 1) + ".ogg") ; ~ Also one-sided door
+		CloseDoorSFX(DEFAULT_DOOR, i) = LoadSound_Strict("SFX\Door\DoorClose" + (i + 1) + ".ogg") ; ~ Also one-sided door
+		OpenDoorSFX(ELEVATOR_DOOR, i) = LoadSound_Strict("SFX\Door\ElevatorOpen" + (i + 1) + ".ogg")
+		CloseDoorSFX(ELEVATOR_DOOR, i) = LoadSound_Strict("SFX\Door\ElevatorClose" + (i + 1) + ".ogg")
+		OpenDoorSFX(HEAVY_DOOR, i) = LoadSound_Strict("SFX\Door\Door2Open" + (i + 1) + ".ogg")
+		CloseDoorSFX(HEAVY_DOOR, i) = LoadSound_Strict("SFX\Door\Door2Close" + (i + 1) + ".ogg")
+		OpenDoorSFX(BIG_DOOR, i) = LoadSound_Strict("SFX\Door\BigDoorOpen" + (i + 1) + ".ogg")
+		CloseDoorSFX(BIG_DOOR, i) = LoadSound_Strict("SFX\Door\BigDoorClose" + (i + 1) + ".ogg")
+		OpenDoorSFX(OFFICE_DOOR, i) = LoadSound_Strict("SFX\Door\OfficeDoorOpen" + (i + 1) + ".ogg")
+		OpenDoorSFX(WOODEN_DOOR, i) = LoadSound_Strict("SFX\Door\WoodenDoorOpen" + (i + 1) + ".ogg")
 		BigDoorErrorSFX[i] = LoadSound_Strict("SFX\Door\BigDoorError" + (i + 1) + ".ogg")
 	Next
 	
@@ -869,10 +856,16 @@ Function LoadSounds%()
 		PickSFX[i] = LoadSound_Strict("SFX\Interact\PickItem" + i + ".ogg")
 	Next
 	
-	AmbientSFXAmount[0] = 11
+	; ~ 0 = Light Containment Zone
+	; ~ 1 = Heavy Containment Zone
+	; ~ 2 = Entrance Zone
+	; ~ 3 = General
+	; ~ 4 = Pre-Breach
+	; ~ 5 = SCP-860-1
+	AmbientSFXAmount[0] = 8 
 	AmbientSFXAmount[1] = 11
 	AmbientSFXAmount[2] = 12
-	AmbientSFXAmount[3] = 15
+	AmbientSFXAmount[3] = 15 
 	AmbientSFXAmount[4] = 5
 	AmbientSFXAmount[5] = 10
 	
