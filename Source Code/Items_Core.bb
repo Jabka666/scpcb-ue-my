@@ -37,7 +37,6 @@ Function CreateItemTemplate.ItemTemplates(Name$, TempName$, OBJPath$, InvImgPath
 			it\OBJ = LoadMesh_Strict(OBJPath)
 			it\IsAnim = False
 		EndIf
-		it\OBJPath = OBJPath
 	EndIf
 	it\OBJPath = OBJPath
 	

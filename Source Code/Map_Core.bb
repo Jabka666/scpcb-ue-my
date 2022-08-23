@@ -1128,12 +1128,20 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 				End Select
 				
 				If Tile_Type > 0 Then 
-					Local ItemPlaced%[4]
+					Local ItemPlaced%[4], iX#, iZ#
 					Local it.Items = Null
 					
 					If (tY Mod 3) = 2 And (Not ItemPlaced[Floor(tY / 3)]) Then
 						ItemPlaced[Floor(tY / 3)] = True
-						it.Items = CreateItem("Log #" + Int(Floor(tY / 3) + 1), "paper", (Tile_Type = ROOM2C + 1) * Sin(Angle + 45.0) * 3.0, 0.5, (Tile_Type = ROOM2C + 1) * Sin(Angle - 45.0) * 3.0)
+						
+						If Tile_Type = ROOM1 + 1 Then
+							iX = 1.0 : iZ = 0.0
+						ElseIf Tile_Type = ROOM2C + 1
+							iX = 4.0 : iZ = -1.0
+						Else
+							iX = 0.0 : iZ = 0.0
+						EndIf
+						it.Items = CreateItem("Log #" + Int(Floor(tY / 3) + 1), "paper", iX, 0.5, iZ)
 						EntityType(it\Collider, HIT_ITEM)
 						EntityParent(it\Collider, Tile_Entity)
 					EndIf
@@ -1305,12 +1313,20 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 				Tile_Entity = CopyEntity(fr\TileMesh[Tile_Type - 1])
 				
 				If Tile_Type > 0 Then 
-					Local ItemPlaced%[4]
+					Local ItemPlaced%[4], iX#, iZ#
 					Local it.Items = Null
 					
 					If (tY Mod 3) = 2 And (Not ItemPlaced[Floor(tY / 3)]) Then
 						ItemPlaced[Floor(tY / 3)] = True
-						it.Items = CreateItem("Log #" + Int(Floor(tY / 3) + 1), "paper", (Tile_Type = ROOM2C + 1) * Sin(Angle + 45.0) * 3.0, 0.5, (Tile_Type = ROOM2C + 1) * Sin(Angle - 45.0) * 3.0)
+						
+						If Tile_Type = ROOM1 + 1 Then
+							iX = 1.0 : iZ = 0.0
+						ElseIf Tile_Type = ROOM2C + 1
+							iX = 4.0 : iZ = -1.0
+						Else
+							iX = 0.0 : iZ = 0.0
+						EndIf
+						it.Items = CreateItem("Log #" + Int(Floor(tY / 3) + 1), "paper", iX, 0.5, iZ)
 						EntityType(it\Collider, HIT_ITEM)
 						EntityParent(it\Collider, Tile_Entity)
 					EndIf
