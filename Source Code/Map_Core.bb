@@ -790,6 +790,7 @@ Const Branch_Die_Chance% = 18
 Const Max_Deviation_Distance% = 3
 Const Return_Chance% = 27
 Const Center% = 5
+Const MinDoorPos% = 3, MaxDoorPos% = 7
 ;[End Block]
 
 Function GenForestGrid%(fr.Forest)
@@ -798,8 +799,8 @@ Function GenForestGrid%(fr.Forest)
 	Local Door1Pos%, Door2Pos%
 	Local i%, j%
 	
-	Door1Pos = Rand(3, 7)
-	Door2Pos = Rand(3, 7)
+	Door1Pos = Rand(MinDoorPos, MaxDoorPos)
+	Door2Pos = Rand(MinDoorPos, MaxDoorPos)
 	
 	; ~ Clear the grid
 	For i = 0 To ForestGridSize - 1
@@ -1128,24 +1129,6 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 				End Select
 				
 				If Tile_Type > 0 Then 
-					Local ItemPlaced%[4], iX#, iZ#
-					Local it.Items = Null
-					
-					If (tY Mod 3) = 2 And (Not ItemPlaced[Floor(tY / 3)]) Then
-						ItemPlaced[Floor(tY / 3)] = True
-						
-						If Tile_Type = ROOM1 + 1 Then
-							iX = 1.0 : iZ = 0.0
-						ElseIf Tile_Type = ROOM2C + 1
-							iX = 4.0 : iZ = -1.0
-						Else
-							iX = 0.0 : iZ = 0.0
-						EndIf
-						it.Items = CreateItem("Log #" + Int(Floor(tY / 3) + 1), "paper", iX, 0.5, iZ)
-						EntityType(it\Collider, HIT_ITEM)
-						EntityParent(it\Collider, Tile_Entity)
-					EndIf
-					
 					; ~ Place trees and other details
 					; ~ Only placed on spots where the value of the heightmap is above 100
 					SetBuffer(ImageBuffer(hMap[Tile_Type - 1]))
@@ -1197,9 +1180,28 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 					Next
 					SetBuffer(BackBuffer())
 					
+					ScaleEntity(Tile_Entity, Tempf1, Tempf1, Tempf1)
+					
+					Local ItemPlaced%[4], iX#, iZ#
+					Local it.Items = Null
+					
+					If (tY Mod 3) = 2 And (Not ItemPlaced[Floor(tY / 3)]) Then
+						ItemPlaced[Floor(tY / 3)] = True
+						
+						If Tile_Type = ROOM1 + 1 Then
+							iX = 0.4 : iZ = 0.0
+						ElseIf Tile_Type = ROOM2C + 1
+							iX = 1.7 : iZ = -1.0
+						Else
+							iX = 0.0 : iZ = 0.0
+						EndIf
+						it.Items = CreateItem("Log #" + Int(Floor(tY / 3) + 1), "paper", iX, 0.2, iZ)
+						EntityType(it\Collider, HIT_ITEM)
+						EntityParent(it\Collider, Tile_Entity)
+					EndIf
+					
 					TurnEntity(Tile_Entity, 0.0, Angle, 0.0)
 					PositionEntity(Tile_Entity, x + (tX * Tile_Size), y, z + (tY * Tile_Size), True)
-					ScaleEntity(Tile_Entity, Tempf1, Tempf1, Tempf1)
 					EntityType(Tile_Entity, HIT_MAP)
 					EntityFX(Tile_Entity, 1)
 					EntityParent(Tile_Entity, fr\Forest_Pivot)
@@ -1216,7 +1218,7 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	; ~ Place the wall		
 	For i = 0 To 1
 		tY = i * (ForestGridSize - 1)
-		For tX = 3 To ForestGridSize - 3
+		For tX = MaxDoorPos To MinDoorPos
 			If fr\Grid[(tY * ForestGridSize) + tX] = 3 Then
 				fr\DetailEntities[i] = CopyEntity(fr\DetailMesh[3])
 				ScaleEntity(fr\DetailEntities[i], RoomScale, RoomScale, RoomScale)
@@ -1313,24 +1315,6 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 				Tile_Entity = CopyEntity(fr\TileMesh[Tile_Type - 1])
 				
 				If Tile_Type > 0 Then 
-					Local ItemPlaced%[4], iX#, iZ#
-					Local it.Items = Null
-					
-					If (tY Mod 3) = 2 And (Not ItemPlaced[Floor(tY / 3)]) Then
-						ItemPlaced[Floor(tY / 3)] = True
-						
-						If Tile_Type = ROOM1 + 1 Then
-							iX = 1.0 : iZ = 0.0
-						ElseIf Tile_Type = ROOM2C + 1
-							iX = 4.0 : iZ = -1.0
-						Else
-							iX = 0.0 : iZ = 0.0
-						EndIf
-						it.Items = CreateItem("Log #" + Int(Floor(tY / 3) + 1), "paper", iX, 0.5, iZ)
-						EntityType(it\Collider, HIT_ITEM)
-						EntityParent(it\Collider, Tile_Entity)
-					EndIf
-					
 					; ~ Place trees and other details
 					; ~ Only placed on spots where the value of the heightmap is above 100
 					SetBuffer(ImageBuffer(hMap[Tile_Type - 1]))
@@ -1384,9 +1368,28 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 					Next
 					SetBuffer(BackBuffer())
 					
+					ScaleEntity(Tile_Entity, Tempf1, Tempf1, Tempf1)
+					
+					Local ItemPlaced%[4], iX#, iZ#
+					Local it.Items = Null
+					
+					If (tY Mod 3) = 2 And (Not ItemPlaced[Floor(tY / 3)]) Then
+						ItemPlaced[Floor(tY / 3)] = True
+						
+						If Tile_Type = ROOM1 + 1 Then
+							iX = 0.4 : iZ = 0.0
+						ElseIf Tile_Type = ROOM2C + 1
+							iX = 1.7 : iZ = -1.0
+						Else
+							iX = 0.0 : iZ = 0.0
+						EndIf
+						it.Items = CreateItem("Log #" + Int(Floor(tY / 3) + 1), "paper", iX, 0.2, iZ)
+						EntityType(it\Collider, HIT_ITEM)
+						EntityParent(it\Collider, Tile_Entity)
+					EndIf
+					
 					TurnEntity(Tile_Entity, 0.0, Angle, 0.0)
 					PositionEntity(Tile_Entity, x + (tX * Tile_Size), y, z + (tY * Tile_Size), True)
-					ScaleEntity(Tile_Entity, Tempf1, Tempf1, Tempf1)
 					EntityType(Tile_Entity, HIT_MAP)
 					EntityFX(Tile_Entity, 1)
 					EntityParent(Tile_Entity, fr\Forest_Pivot)
