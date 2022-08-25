@@ -1218,7 +1218,7 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	; ~ Place the wall		
 	For i = 0 To 1
 		tY = i * (ForestGridSize - 1)
-		For tX = MaxDoorPos To MinDoorPos
+		For tX = MinDoorPos To MaxDoorPos
 			If fr\Grid[(tY * ForestGridSize) + tX] = 3 Then
 				fr\DetailEntities[i] = CopyEntity(fr\DetailMesh[3])
 				ScaleEntity(fr\DetailEntities[i], RoomScale, RoomScale, RoomScale)

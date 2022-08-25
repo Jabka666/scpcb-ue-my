@@ -93,6 +93,7 @@ Bug Fixes:
 - Fixed empty sound in "DoorBudge1.ogg".
 - Fixed NPCs AI not being able to find correct waypoint on stairs.
 - Fixed MAV while using "disable/enable049" commands.
+- Fixed a bug causing Logs inside SCP-860-1 to have a wrong scale after loading the game.
 
 - Tiny fix for SCP-372's AI.
 - Tiny fixes for location of the pause menu buttons.
