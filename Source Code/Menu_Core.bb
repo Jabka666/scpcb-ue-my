@@ -2379,12 +2379,12 @@ Function RenderTiledImageRect%(Img%, SrcX%, SrcY%, SrcWidth%, SrcHeight%, x%, y%
 	Local x2% = x
 	
 	While x2 < x + Width
+		If x2 + SrcWidth > x + Width Then SrcWidth = (x + Width) - x2
+		
 		Local y2% = y
 		
 		While y2 < y + Height
-			If x2 + SrcWidth > x + Width Then SrcWidth = SrcWidth - Max((x2 + SrcWidth) - (x + Width), 1.0)
-			If y2 + SrcHeight > y + Height Then SrcHeight = SrcHeight - Max((y2 + SrcHeight) - (y + Height), 1.0)
-			DrawImageRect(Img, x2, y2, SrcX, SrcY, SrcWidth, SrcHeight)
+			DrawImageRect(Img, x2, y2, SrcX, SrcY, SrcWidth, Min((y + Height) - y2, SrcHeight))
 			y2 = y2 + SrcHeight
 		Wend
 		x2 = x2 + SrcWidth
