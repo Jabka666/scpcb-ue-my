@@ -6863,7 +6863,7 @@ Function UpdateEvents%()
 											HideEntity(e\room\Objects[2])
 											
 											If wi\HazmatSuit = 0 Then
-												InjurePlayer(0.3, 1.0, 400.0)
+												InjurePlayer(0.3, 0.001, 500.0)
 												CreateMsg("The window shattered and a piece of glass cut your arm.")
 											EndIf
 											PlaySound2(LoadTempSound("SFX\General\GlassBreak.ogg"), Camera, e\room\Objects[0]) 
@@ -6878,7 +6878,7 @@ Function UpdateEvents%()
 								EndIf
 								
 								If me\Bloodloss > 0.0 And I_008\Timer = 0.0 Then
-									InjurePlayer(0.0, 1.0)
+									InjurePlayer(0.0, 0.001)
 								EndIf
 							EndIf
 							
@@ -8346,14 +8346,14 @@ Function UpdateEvents%()
 							e\Sound = LoadSound_Strict("SFX\General\SparkShort.ogg")
 							
 							e\EventState = 1.0
-						ElseIf e\EventState = 1.0 Then 
+						Else
 							If I_409\Timer = 0.0 Then
 								If EntityDistanceSquared(me\Collider, e\room\NPC[0]\Collider) < 0.64 Then
 									I_409\Timer = 0.001
 									GiveAchievement(Achv409)
 								EndIf
 								
-								; ~ Touching the SCP-409
+								; ~ Touching SCP-409
 								If InteractObject(e\room\Objects[3], 0.64) Then
 									CreateMsg("You touched SCP-409.")
 									me\BlurTimer = 2000.0
@@ -8363,17 +8363,19 @@ Function UpdateEvents%()
 							EndIf
 						EndIf
 						
-						If Rand(50) = 1 Then
-							PlaySound2(e\Sound, Camera, e\room\Objects[4], 3.0, 0.4)
-							
-							If opt\ParticleAmount > 0 Then
-								For i = 0 To (2 + (1 * (opt\ParticleAmount - 1)))
-									p.Particles = CreateParticle(PARTICLE_SPARK, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True), 0.002, 0.0, 25.0)
-									p\Speed = Rnd(0.005, 0.03) : p\Size = Rnd(0.005, 0.0075) : p\AlphaChange = -0.05
-									RotateEntity(p\Pvt, Rnd(-20.0, 0.0), e\room\Angle, 0.0)
-									ScaleSprite(p\OBJ, p\Size, p\Size)
-								Next
-							EndIf	
+						If EntityDistanceSquared(me\Collider, e\room\Objects[4]) < 25.0 Then
+							If Rand(50) = 1 Then
+								PlaySound2(e\Sound, Camera, e\room\Objects[4], 3.0, 0.4)
+								
+								If opt\ParticleAmount > 0 Then
+									For i = 0 To (2 + (1 * (opt\ParticleAmount - 1)))
+										p.Particles = CreateParticle(PARTICLE_SPARK, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True), 0.002, 0.0, 25.0)
+										p\Speed = Rnd(0.005, 0.03) : p\Size = Rnd(0.005, 0.0075) : p\AlphaChange = -0.05
+										RotateEntity(p\Pvt, Rnd(-20.0, 0.0), e\room\Angle, 0.0)
+										ScaleSprite(p\OBJ, p\Size, p\Size)
+									Next
+								EndIf	
+							EndIf
 						EndIf
 					EndIf
 					e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)

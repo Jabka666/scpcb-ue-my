@@ -7437,9 +7437,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[1] = CreateDoor(r\x - 2336.0 * RoomScale, r\y - 4256.0 * RoomScale, r\z - 648.0 * RoomScale, -90.0, r, False, ELEVATOR_DOOR)
 			
 			; ~ A door to the containment chamber	
-			r\RoomDoors.Doors[2] = CreateDoor(r\x - 4336.0 * RoomScale, r\y - 4256.0 * RoomScale, r\z + 1560.0 * RoomScale, 0.0, r, False, DEFAULT_DOOR, KEY_CARD_4)
-			PositionEntity(r\RoomDoors[2]\Buttons[0], EntityX(r\RoomDoors[2]\Buttons[0], True), EntityY(r\RoomDoors[2]\Buttons[1], True), EntityZ(r\RoomDoors[2]\Buttons[0], True) + 0.061, True)
-			PositionEntity(r\RoomDoors[2]\Buttons[1], EntityX(r\RoomDoors[2]\Buttons[1], True), EntityY(r\RoomDoors[2]\Buttons[1], True), EntityZ(r\RoomDoors[2]\Buttons[1], True) - 0.061, True)					
+			r\RoomDoors.Doors[2] = CreateDoor(r\x - 4352.0 * RoomScale, r\y - 4256.0 * RoomScale, r\z + 1368.0 * RoomScale, 0.0, r, False, DEFAULT_DOOR, KEY_CARD_4)
 			
 			; ~ Elevator pivots
 			r\Objects[0] = CreatePivot()
@@ -7450,33 +7448,33 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ Class-D spawn
 			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], r\x - 4951.0 * RoomScale, r\y - 4491.0 * RoomScale, r\z + 1836.0 * RoomScale)
+			PositionEntity(r\Objects[2], r\x - 4858.0 * RoomScale, r\y - 4491.0 * RoomScale, r\z + 1729.0 * RoomScale)
 			
 			; ~ Touching pivot
 			r\Objects[3] = CreatePivot()
-			PositionEntity(r\Objects[3], r\x - 4885.0 * RoomScale, r\y - 4326.0 * RoomScale, r\z + 2243.0 * RoomScale)
+			PositionEntity(r\Objects[3], r\x - 4917.0 * RoomScale, r\y - 4310.0 * RoomScale, r\z + 2095.0 * RoomScale)
 			
 			; ~ Sparks pivot
 			r\Objects[4] = CreatePivot()
-			PositionEntity(r\Objects[4], r\x - 4468.0 * RoomScale, r\y - 4066.0 * RoomScale, r\z - 1937.0 * RoomScale)
+			PositionEntity(r\Objects[4], r\x - 4523.0 * RoomScale, r\y - 4060.0 * RoomScale, r\z - 2097.0 * RoomScale)
 			
 			For i = 0 To 4
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
-			sc.SecurityCams = CreateSecurityCam(r\x - 3624.0 * RoomScale, r\y - 3840.0 * RoomScale, r\z + 2256.0 * RoomScale, r)
+			sc.SecurityCams = CreateSecurityCam(r\x - 3635.0 * RoomScale, r\y - 3840.0 * RoomScale, r\z + 1729.0 * RoomScale, r)
 			sc\Angle = 100.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			
-			de.Decals = CreateDecal(DECAL_409, r\x - 4951.0 * RoomScale, r\y - 4495.0 * RoomScale, r\z + 1700.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.65, 0.8)
+			de.Decals = CreateDecal(DECAL_409, r\x - 4858.0 * RoomScale, r\y - 4495.0 * RoomScale, r\z + 1655.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.65, 0.8)
 			EntityParent(de\OBJ, r\OBJ)
 			
-			it.Items = CreateItem("Document SCP-409", "paper", r\x - 3595.0 * RoomScale, r\y - 4336.0 * RoomScale, r\z + 2242.0 * RoomScale)
+			it.Items = CreateItem("Document SCP-409", "paper", r\x - 4105.0 * RoomScale, r\y - 4336.0 * RoomScale, r\z + 2207.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
 			If I_005\ChanceToSpawn >= 2 And I_005\ChanceToSpawn =< 4 Then
-				it.Items = CreateItem("SCP-005", "scp005", r\x - 5050.0 * RoomScale, r\y - 4416.0 * RoomScale, r\z + 1728.0 * RoomScale)
+				it.Items = CreateItem("SCP-005", "scp005", r\x - 5000.0 * RoomScale, r\y - 4416.0 * RoomScale, r\z + 1728.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)	
 			EndIf
 			;[End Block]
