@@ -848,11 +848,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
-					If Rand(10) = 1 Then
-						it2.Items = CreateItem("Ballistic Helmet", "helmet", x, y, z)
-					Else
-						Remove = False
-					EndIf
+					it2.Items = CreateItem("Ballistic Helmet", "helmet", x, y, z)
 					;[End Block]
 				Case FINE
 					;[Block]
@@ -1627,7 +1623,12 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 		Case "nav", "nav300", "nav310", "navulti"
 			;[Block]
 			Select Setting
-				Case ROUGH, COARSE
+				Case ROUGH
+					;[Block]
+					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					;[End Block]
+				Case COARSE
 					;[Block]
 					it2.Items = CreateItem("Electronical Components", "electronics", x, y, z)
 					;[End Block]
@@ -1654,7 +1655,12 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 		Case "radio", "18vradio", "fineradio", "veryfineradio"
 			;[Block]
 			Select Setting
-				Case ROUGH, COARSE
+				Case ROUGH
+					;[Block]
+					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					;[End Block]
+				Case COARSE
 					;[Block]
 					it2.Items = CreateItem("Electronical Components", "electronics", x, y, z)
 					;[End Block]
@@ -1746,6 +1752,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case COARSE
 					;[Block]
 					it2.Items = CreateItem("4.5V Battery", "badbat", x, y, z)
+					;[End Block]
 				Case ONETOONE
 					;[Block]
 					Remove = False
@@ -1803,6 +1810,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case COARSE
 					;[Block]
 					it2.Items = CreateItem("9V Battery", "bat", x, y, z)
+					;[End Block]
 				Case ONETOONE, FINE, VERYFINE
 					;[Block]
 					it2.Items = CreateItem("Strange Battery", "killbat", x, y, z)
@@ -1931,7 +1939,9 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					it2.Items = CreateItem("Electronical Components", "electronics", x, y, z)	
 					;[End Block]
 				Case FINE
+					;[Block]
 					it2.Items = CreateItem("Syringe", "syringeinf", x, y, z)
+					;[End Block]
 				Case VERYFINE
 					;[Block]
 					If Rand(2) = 1 Then
