@@ -787,7 +787,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 	Local Remove% = True, i%
 	
 	Select item\ItemTemplate\TempName
-		Case "gasmask", "gasmask3"
+		Case "gasmask", "supergasmask", "gasmask3"
 			;[Block]
 			Select Setting
 				Case ROUGH, COARSE

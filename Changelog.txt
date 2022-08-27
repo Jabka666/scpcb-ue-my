@@ -19,6 +19,7 @@ Mechanics and effects:
 NPCs:
 - Added new messages when SCP-049 destroys the hazmat suit or removes the ring from the player.
 - Decreased detect distance for MTF.
+- Tiny rebalance for MTF's shooting.
 
 Rooms:
 - Tiny improvement for «cabient_c.b3d» and «garbage_bin.b3d» models.
