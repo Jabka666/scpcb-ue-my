@@ -2107,80 +2107,78 @@ Function UpdateGame%()
 		
 		UpdateStreamSounds()
 		
-		If ga\DrawHandIcon Then ga\DrawHandIcon = False
-		For i = 0 To 3
-			If ga\DrawArrowIcon[i] Then ga\DrawArrowIcon[i] = False
-		Next
-		
-		me\RestoreSanity = True
-		ShouldEntitiesFall = True
-		
-		If fps\Factor[0] > 0.0 And PlayerRoom\RoomTemplate\Name <> "dimension_1499" Then UpdateSecurityCams()
-		
 		If (Not MenuOpen) And (Not ConsoleOpen) And me\EndingTimer >= 0.0 Then
-			ShouldPlay = Min(me\Zone, 2.0)
-		EndIf
-		
-		If PlayerRoom\RoomTemplate\Name <> "dimension_106" And PlayerRoom\RoomTemplate\Name <> "gate_b" And PlayerRoom\RoomTemplate\Name <> "gate_a" And (Not MenuOpen) And (Not ConsoleOpen) Then 
-			If Rand(1500) = 1 Then
-				For i = 0 To 5
-					If AmbientSFX(i, CurrAmbientSFX) <> 0 Then
-						If (Not ChannelPlaying(AmbientSFXCHN)) Then FreeSound_Strict(AmbientSFX(i, CurrAmbientSFX)) : AmbientSFX(i, CurrAmbientSFX) = 0
-					EndIf			
-				Next
-				
-				PositionEntity(SoundEmitter, EntityX(Camera) + Rnd(-1.0, 1.0), 0.0, EntityZ(Camera) + Rnd(-1.0, 1.0))
-				
-				If Rand(3) = 1 Then me\Zone = 3
-				
-				If PlayerRoom\RoomTemplate\Name = "cont1_173_intro" Then 
-					me\Zone = 4
-				ElseIf forest_event <> Null
-					If forest_event\EventState = 1.0 Then
-						me\Zone = 5
-						PositionEntity(SoundEmitter, EntityX(SoundEmitter), 30.0, EntityZ(SoundEmitter))
-					EndIf
-				EndIf
-				
-				CurrAmbientSFX = Rand(0, AmbientSFXAmount[me\Zone] - 1)
-				
-				Select me\Zone
-					Case 0, 1, 2
-						;[Block]
-						If (Not AmbientSFX(me\Zone, CurrAmbientSFX)) Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Zone" + (me\Zone + 1) + "\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
-						;[End Block]
-					Case 3
-						;[Block]
-						If (Not AmbientSFX(me\Zone, CurrAmbientSFX)) Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\General\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
-						;[End Block]
-					Case 4
-						;[Block]
-						If (Not AmbientSFX(me\Zone, CurrAmbientSFX)) Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Pre-breach\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
-						;[End Block]
-					Case 5
-						;[Block]
-						If (Not AmbientSFX(me\Zone, CurrAmbientSFX)) Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Forest\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
-						;[End Block]
-				End Select
-				
-				AmbientSFXCHN = PlaySound2(AmbientSFX(me\Zone, CurrAmbientSFX), Camera, SoundEmitter)
-			EndIf
-			UpdateSoundOrigin(AmbientSFXCHN, Camera, SoundEmitter)
+			If ga\DrawHandIcon Then ga\DrawHandIcon = False
+			For i = 0 To 3
+				If ga\DrawArrowIcon[i] Then ga\DrawArrowIcon[i] = False
+			Next
 			
-			If Rand(50000) = 3 Then
-				Local RN$ = PlayerRoom\RoomTemplate\Name
+			me\RestoreSanity = True
+			ShouldEntitiesFall = True
+			
+			If PlayerRoom\RoomTemplate\Name <> "dimension_1499" Then UpdateSecurityCams()
+			
+			ShouldPlay = Min(me\Zone, 2.0)
+			
+			If PlayerRoom\RoomTemplate\Name <> "dimension_106" And PlayerRoom\RoomTemplate\Name <> "gate_b" And PlayerRoom\RoomTemplate\Name <> "gate_a" Then 
+				If Rand(1500) = 1 Then
+					For i = 0 To 5
+						If AmbientSFX(i, CurrAmbientSFX) <> 0 Then
+							If (Not ChannelPlaying(AmbientSFXCHN)) Then FreeSound_Strict(AmbientSFX(i, CurrAmbientSFX)) : AmbientSFX(i, CurrAmbientSFX) = 0
+						EndIf			
+					Next
+					
+					PositionEntity(SoundEmitter, EntityX(Camera) + Rnd(-1.0, 1.0), 0.0, EntityZ(Camera) + Rnd(-1.0, 1.0))
+					
+					If Rand(3) = 1 Then me\Zone = 3
+					
+					If PlayerRoom\RoomTemplate\Name = "cont1_173_intro" Then 
+						me\Zone = 4
+					ElseIf forest_event <> Null
+						If forest_event\EventState = 1.0 Then
+							me\Zone = 5
+							PositionEntity(SoundEmitter, EntityX(SoundEmitter), 30.0, EntityZ(SoundEmitter))
+						EndIf
+					EndIf
+					
+					CurrAmbientSFX = Rand(0, AmbientSFXAmount[me\Zone] - 1)
+					
+					Select me\Zone
+						Case 0, 1, 2
+							;[Block]
+							If (Not AmbientSFX(me\Zone, CurrAmbientSFX)) Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Zone" + (me\Zone + 1) + "\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
+							;[End Block]
+						Case 3
+							;[Block]
+							If (Not AmbientSFX(me\Zone, CurrAmbientSFX)) Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\General\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
+							;[End Block]
+						Case 4
+							;[Block]
+							If (Not AmbientSFX(me\Zone, CurrAmbientSFX)) Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Pre-breach\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
+							;[End Block]
+						Case 5
+							;[Block]
+							If (Not AmbientSFX(me\Zone, CurrAmbientSFX)) Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Forest\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
+							;[End Block]
+					End Select
+					
+					AmbientSFXCHN = PlaySound2(AmbientSFX(me\Zone, CurrAmbientSFX), Camera, SoundEmitter)
+				EndIf
+				UpdateSoundOrigin(AmbientSFXCHN, Camera, SoundEmitter)
 				
-				If RN <> "cont2_860_1" And RN <> "cont2_1123" And RN <> "cont1_173_intro" And RN <> "dimension_1499" And RN <> "dimension_106" Then
-					If fps\Factor[0] > 0.0 Then me\LightBlink = Rnd(1.0, 2.0)
-					PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(1, 8) + ".ogg"))
-				EndIf 
+				If Rand(50000) = 3 Then
+					Local RN$ = PlayerRoom\RoomTemplate\Name
+					
+					If RN <> "cont2_860_1" And RN <> "cont2_1123" And RN <> "cont1_173_intro" And RN <> "dimension_1499" And RN <> "dimension_106" Then
+						me\LightBlink = Rnd(1.0, 2.0)
+						PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(1, 8) + ".ogg"))
+					EndIf 
+				EndIf
 			EndIf
-		EndIf
-		
-		mon_I\UpdateCheckpoint1 = False
-		mon_I\UpdateCheckpoint2 = False
-		
-		If (Not MenuOpen) And (Not ConsoleOpen) And me\EndingTimer >= 0.0 Then
+			
+			mon_I\UpdateCheckpoint1 = False
+			mon_I\UpdateCheckpoint2 = False
+			
 			me\SndVolume = CurveValue(0.0, me\SndVolume, 5.0)
 			
 			If PlayerRoom\RoomTemplate\Name <> "gate_b" And PlayerRoom\RoomTemplate\Name <> "gate_a" Then
@@ -2221,16 +2219,7 @@ Function UpdateGame%()
 			UpdateItems()
 			UpdateParticles()
 			Use427()
-		EndIf
-		
-		If fps\Factor[0] = 0.0 Then
-			UpdateWorld(0.0)
-		Else
-			UpdateWorld()
-			ManipulateNPCBones()
-		EndIf
-		
-		If (Not MenuOpen) Then
+			
 			If chs\InfiniteStamina Then me\Stamina = 100.0
 			If chs\NoBlink Then me\BlinkTimer = me\BLINKFREQ
 			
@@ -2294,7 +2283,7 @@ Function UpdateGame%()
 							;[End Block]
 					End Select 
 					me\BlinkTimer = me\BLINKFREQ
-					If PlayerRoom\RoomTemplate\Name <> "room3_storage" And EntityY(me\Collider) > (-4100.0) * RoomScale Then me\BlurTimer = me\BlurTimer - Rnd(0.0, 100.0)
+					If PlayerRoom\RoomTemplate\Name <> "room3_storage" Lor EntityY(me\Collider) > (-4100.0) * RoomScale Then me\BlurTimer = me\BlurTimer - Rnd(0.0, 150.0)
 				EndIf
 				me\BlinkTimer = me\BlinkTimer - fps\Factor[0]
 			Else
@@ -2369,6 +2358,13 @@ Function UpdateGame%()
 			Else
 				If (Not EntityHidden(t\OverlayID[5])) Then HideEntity(t\OverlayID[5])
 			EndIf
+		EndIf
+		
+		If fps\Factor[0] = 0.0 Then
+			UpdateWorld(0.0)
+		Else
+			UpdateWorld()
+			ManipulateNPCBones()
 		EndIf
 		
 		UpdateWorld2()
@@ -6666,8 +6662,8 @@ Function UpdateMenu%()
 					If me\StopHidingTimer >= 40.0 Then
 						PlaySound_Strict(HorrorSFX[15])
 						CreateMsg("STOP HIDING!")
-						MenuOpen = False
 						mm\ShouldDeleteGadgets = True
+						MenuOpen = False
 						Return
 					EndIf
 				EndIf
@@ -7083,10 +7079,10 @@ Function UpdateMenu%()
 				y = y + (75 * MenuScale)
 				
 				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "RESUME", True, True) Then
-					MenuOpen = False
 					ResumeSounds()
 					StopMouseMovement()
 					DeleteMenuGadgets()
+					MenuOpen = False
 					Return
 				EndIf
 				
@@ -7097,7 +7093,6 @@ Function UpdateMenu%()
 						If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "LOAD GAME") Then
 							RenderLoading(0, "GAME FILES")
 							
-							MenuOpen = False
 							LoadGameQuick(CurrSave\Name)
 							
 							MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
@@ -7127,6 +7122,7 @@ Function UpdateMenu%()
 							fps\Factor[0] = 0.0
 							
 							ResetInput()
+							MenuOpen = False
 							Return
 						EndIf
 					Else
@@ -7158,7 +7154,6 @@ Function UpdateMenu%()
 						If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "LOAD GAME") Then
 							RenderLoading(0, "GAME FILES")
 							
-							MenuOpen = False
 							LoadGameQuick(CurrSave\Name)
 							
 							MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
@@ -7188,6 +7183,7 @@ Function UpdateMenu%()
 							fps\Factor[0] = 0.0
 							
 							ResetInput()
+							MenuOpen = False
 							Return
 						EndIf
 					Else
@@ -9182,16 +9178,14 @@ Function UpdateLeave1499%()
 				I_1499\z = EntityZ(me\Collider)
 				TeleportEntity(me\Collider, I_1499\PrevX, I_1499\PrevY + 0.05, I_1499\PrevZ)
 				TeleportToRoom(r)
-				If PlayerRoom\RoomTemplate\Name = "room3_storage" Then
-					If EntityY(me\Collider) < (-4600.0) * RoomScale Then
-						For i = 0 To 3
-							PlayerRoom\NPC[i]\State = 2.0
-							PositionEntity(PlayerRoom\NPC[i]\Collider, EntityX(PlayerRoom\Objects[PlayerRoom\NPC[i]\State2], True), EntityY(PlayerRoom\Objects[PlayerRoom\NPC[i]\State2], True) + 0.2, EntityZ(PlayerRoom\Objects[PlayerRoom\NPC[i]\State2], True))
-							ResetEntity(PlayerRoom\NPC[i]\Collider)
-							PlayerRoom\NPC[i]\State2 = PlayerRoom\NPC[i]\State2 + 1.0
-							If PlayerRoom\NPC[i]\State2 > PlayerRoom\NPC[i]\PrevState Then PlayerRoom\NPC[i]\State2 = (PlayerRoom\NPC[i]\PrevState - 3)
-						Next
-					EndIf
+				If PlayerRoom\RoomTemplate\Name = "room3_storage" And EntityY(me\Collider) < (-4600.0) * RoomScale Then
+					For i = 0 To 3
+						PlayerRoom\NPC[i]\State = 2.0
+						PositionEntity(PlayerRoom\NPC[i]\Collider, EntityX(PlayerRoom\Objects[PlayerRoom\NPC[i]\State2], True), EntityY(PlayerRoom\Objects[PlayerRoom\NPC[i]\State2], True) + 0.2, EntityZ(PlayerRoom\Objects[PlayerRoom\NPC[i]\State2], True))
+						ResetEntity(PlayerRoom\NPC[i]\Collider)
+						PlayerRoom\NPC[i]\State2 = PlayerRoom\NPC[i]\State2 + 1.0
+						If PlayerRoom\NPC[i]\State2 > PlayerRoom\NPC[i]\PrevState Then PlayerRoom\NPC[i]\State2 = (PlayerRoom\NPC[i]\PrevState - 3)
+					Next
 				EndIf
 				For r2.Rooms = Each Rooms
 					If r2\RoomTemplate\Name = "dimension_1499" Then

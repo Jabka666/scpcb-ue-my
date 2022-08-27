@@ -268,50 +268,6 @@ Function UpdateMainMenu%()
 				PutINIValue(OptionFile, "Graphics", "Anti-Aliasing", opt\AntiAliasing)
 			EndIf
 		Else
-			x = 159 * MenuScale
-			y = 286 * MenuScale
-			
-			Width = 400 * MenuScale
-			Height = 70 * MenuScale
-			
-			If UpdateMainMenuButton(x + Width + (20 * MenuScale), y, (580 * MenuScale) - Width - (20 * MenuScale), Height, "BACK", False) Lor KeyDown(1) Then 
-				Select mm\MainMenuTab
-					Case MainMenuTab_New_Game
-						;[Block]
-						PutINIValue(OptionFile, "Global", "Enable Intro", opt\IntroEnabled)
-						For sv.Save = Each Save
-							Delete(sv)
-						Next
-						mm\MainMenuTab = MainMenuTab_Default
-						;[End Block]
-					Case MainMenuTab_Load_Game
-						;[Block]
-						mm\CurrMenuPage = 0
-						For sv.Save = Each Save
-							Delete(sv)
-						Next
-						mm\MainMenuTab = MainMenuTab_Default
-						;[End Block]
-					Case MainMenuTab_Options_Graphics, MainMenuTab_Options_Audio, MainMenuTab_Options_Controls, MainMenuTab_Options_Advanced ; ~ Save the options
-						;[Block]
-						SaveOptionsINI()
-						
-						UserTrackCheck = 0
-						UserTrackCheck2 = 0
-						
-						mm\CurrMenuPage = 0
-						AntiAlias(opt\AntiAliasing)
-						mm\MainMenuTab = MainMenuTab_Default
-						;[End Block]
-					Case MainMenuTab_Load_Map ; ~ Move back to the "New Game" tab
-						;[Block]
-						mm\MainMenuTab = MainMenuTab_New_Game
-						mm\CurrMenuPage = 0
-						mo\MouseHit1 = False
-						;[End Block]
-				End Select
-			EndIf
-			
 			Select mm\MainMenuTab
 				Case MainMenuTab_New_Game
 					;[Block]
@@ -435,11 +391,12 @@ Function UpdateMainMenu%()
 						If SameFound = 2 Then CurrSave\Name = CurrSave\Name + " (" + LowestPossible + ")"
 						
 						InitNewGame()
-						MainMenuOpen = False
-						FlushKeys()
-						FlushMouse()
+						ResetInput()
 						
 						PutINIValue(OptionFile, "Global", "Enable Intro", opt\IntroEnabled)
+						
+						MainMenuOpen = False
+						Return
 					EndIf
 					;[End Block]
 				Case MainMenuTab_Load_Game
@@ -481,9 +438,9 @@ Function UpdateMainMenu%()
 											LoadSounds()
 											LoadGame(CurrSave\Name)
 											InitLoadGame()
-											MainMenuOpen = False
 											mm\ShouldDeleteGadgets = True
-											Exit
+											MainMenuOpen = False
+											Return
 										EndIf
 									EndIf
 									
@@ -1030,6 +987,54 @@ Function UpdateMainMenu%()
 					End Select
 					;[End Block]
 			End Select
+			
+			x = 159 * MenuScale
+			y = 286 * MenuScale
+			
+			Width = 400 * MenuScale
+			Height = 70 * MenuScale
+			
+			If UpdateMainMenuButton(x + Width + (20 * MenuScale), y, (580 * MenuScale) - Width - (20 * MenuScale), Height, "BACK", False) Lor KeyDown(1) Then 
+				Select mm\MainMenuTab
+					Case MainMenuTab_New_Game
+						;[Block]
+						PutINIValue(OptionFile, "Global", "Enable Intro", opt\IntroEnabled)
+						For sv.Save = Each Save
+							Delete(sv)
+						Next
+						mm\MainMenuTab = MainMenuTab_Default
+						;[End Block]
+					Case MainMenuTab_Load_Game
+						;[Block]
+						mm\CurrMenuPage = 0
+						For sv.Save = Each Save
+							Delete(sv)
+						Next
+						mm\MainMenuTab = MainMenuTab_Default
+						;[End Block]
+					Case MainMenuTab_Options_Graphics, MainMenuTab_Options_Audio, MainMenuTab_Options_Controls, MainMenuTab_Options_Advanced ; ~ Save the options
+						;[Block]
+						SaveOptionsINI()
+						
+						UserTrackCheck = 0
+						UserTrackCheck2 = 0
+						
+						mm\CurrMenuPage = 0
+						AntiAlias(opt\AntiAliasing)
+						mm\MainMenuTab = MainMenuTab_Default
+						;[End Block]
+					Case MainMenuTab_Load_Map ; ~ Move back to the "New Game" tab
+						;[Block]
+						mm\MainMenuTab = MainMenuTab_New_Game
+						mm\CurrMenuPage = 0
+						mo\MouseHit1 = False
+						;[End Block]
+					Default
+						;[Block]
+						mm\MainMenuTab = MainMenuTab_Default
+						;[End Block]
+				End Select
+			EndIf
 		EndIf
 	Wend
 	
@@ -2181,6 +2186,8 @@ Function RenderLoading%(Percent%, Assets$ = "")
 	Local x%, y%, Temp%, FirstLoop%
 	Local ls.LoadingScreens, ltc.LoadingTextColor
 	
+	HidePointer()
+	
 	If Percent = 0 Then
 		LoadingScreenText = 0
 		InitLoadingTextColor(255, 255, 255)
@@ -2347,8 +2354,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 			Color(255, 255, 255)
 			Text(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), "LOADING ASSETS: " + Assets, True, True)
 			
-			FlushKeys()
-			FlushMouse()
+			ResetInput()
 		Else
 			If FirstLoop And SelectedLoadingScreen\Title <> "CWM" Then PlaySound_Strict(LoadTempSound(("SFX\Horror\Horror8.ogg")))
 			RenderLoadingText(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), True, True)

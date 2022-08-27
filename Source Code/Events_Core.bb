@@ -8348,7 +8348,7 @@ Function UpdateEvents%()
 							e\EventState = 1.0
 						Else
 							If I_409\Timer = 0.0 Then
-								If EntityDistanceSquared(me\Collider, e\room\NPC[0]\Collider) < 0.64 Then
+								If EntityDistanceSquared(me\Collider, e\room\NPC[0]\Collider) < 0.4225 Then
 									I_409\Timer = 0.001
 									GiveAchievement(Achv409)
 								EndIf
