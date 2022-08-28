@@ -1172,9 +1172,9 @@ Function UpdateNPCs%()
 							If n\State3 = -1.0
 								AnimateNPC(n, 936.0, 1263.0, 0.1, False)
 								If n\Frame >= 1262.9
-									n\State = 5.0
-									n\State3 = 0.0
 									SetNPCFrame(n, 312.0)
+									n\State3 = 0.0
+									n\State = 5.0
 								EndIf
 							Else
 								AnimateNPC(n, 936.0, 1263.0, 0.1)
@@ -1200,8 +1200,8 @@ Function UpdateNPCs%()
 										
 										StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0
 										n\Sound = 0
-										n\State = 1.0
 										n\State3 = 0.0
+										n\State = 1.0
 									EndIf
 								EndIf
 							EndIf
@@ -1371,7 +1371,10 @@ Function UpdateNPCs%()
 						If n\State = 1.0 Then ; ~ Get up
 							If n\Frame < 312.0 Then
 								AnimateNPC(n, 193.0, 311.0, 0.3, False)
-								If n\Frame > 310.9 Then n\State = 2.0 : SetNPCFrame(n, 737.0)
+								If n\Frame > 310.9 Then
+									SetNPCFrame(n, 737.0)
+									n\State = 2.0
+								EndIf
 							ElseIf n\Frame >= 312.0 And n\Frame <= 422.0
 								AnimateNPC(n, 312.0, 422.0, 0.3, False)
 								If n\Frame > 421.9 Then SetNPCFrame(n, 677.0)
@@ -1813,7 +1816,7 @@ Function UpdateNPCs%()
 									EndIf
 								EndIf
 								
-								If n\CurrSpeed > 0.005 Then
+								If n\CurrSpeed > 0.005
 									If (PrevFrame < 361.0 And n\Frame >= 361.0) Lor (PrevFrame < 377.0 And n\Frame >= 377.0) Then
 										PlaySound2(Step2SFX[Rand(10, 12)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))						
 									ElseIf (PrevFrame < 431.0 And n\Frame >= 431.0) Lor (PrevFrame < 447.0 And n\Frame >= 447.0)
@@ -2960,11 +2963,9 @@ Function UpdateNPCs%()
 						If EntityInView(n\OBJ, Camera) And (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) Then
 							GiveAchievement(Achv372)
 							
-							If Rand(30) = 1 Then 
-								If (Not ChannelPlaying(n\SoundCHN)) Then
-									If EntityVisible(Camera, n\OBJ) Then 
-										n\SoundCHN = PlaySound2(RustleSFX[Rand(0, 5)], Camera, n\OBJ, 8.0, 0.3)
-									EndIf
+							If Rand(30) = 1 Then
+								If EntityVisible(Camera, n\OBJ) Then 
+									If (Not ChannelPlaying(n\SoundCHN)) Then n\SoundCHN = PlaySound2(RustleSFX[Rand(0, 5)], Camera, n\OBJ, 8.0, 0.3)
 								EndIf
 							EndIf
 							
@@ -3212,7 +3213,7 @@ Function UpdateNPCs%()
 													InjurePlayer(Rnd(1.0, 1.5), 0.0, 100.0, Rnd(0.1, 0.55), 0.2)
 													
 													If me\Injuries > 3.0 Then
-														If PlayerRoom\RoomTemplate\Name = "room2offices" Then
+														If PlayerRoom\RoomTemplate\Name = "room2_ez" Then
 															msg\DeathMsg = Chr(34) + "One large and highly active tentacle-like appendage seems "
 															msg\DeathMsg = msg\DeathMsg + "to have grown outside the dead body of a scientist within office area [DATA REDACTED]. It's level of aggression is "
 															msg\DeathMsg = msg\DeathMsg + "unlike anything we've seen before - it looks like it has "
@@ -3638,7 +3639,7 @@ Function UpdateNPCs%()
 							If n\Frame >= 644.0 And n\Frame < 683.0 Then
 								n\CurrSpeed = CurveValue(n\Speed * 0.05, n\CurrSpeed, 10.0)
 								AnimateNPC(n, 644.0, 683.0, 28.0 * n\CurrSpeed * 4.0, False)
-								If n\Frame >= 682 Then SetNPCFrame(n, 175.0)
+								If n\Frame >= 682.0 Then SetNPCFrame(n, 175.0)
 							Else
 								n\CurrSpeed = CurveValue(0, n\CurrSpeed, 5.0)
 								AnimateNPC(n, 175.0, 297.0, 0.22, False)
@@ -3966,7 +3967,7 @@ Function UpdateNPCs%()
 						EndIf
 					Else
 						n\SoundCHN = PlaySound2(n\Sound, Camera, n\Collider, 20.0)
-					EndIf					
+					EndIf
 				EndIf
 				
 				If n\State3 > 0.0 Then
@@ -4007,7 +4008,7 @@ Function UpdateNPCs%()
 						If wi\NightVision = 0 Then
 							If (Not EntityHidden(n\OBJ)) Then HideEntity(n\OBJ)
 							If (Not chs\NoTarget) Then
-								If Dist < 1.0 And n\Reload <= 0.0 And msg\Timer <= 0.0 Then
+								If Dist < 1.0 And n\Reload <= 0.0 Then
 									Select Rand(6)
 										Case 1
 											;[Block]
@@ -4087,7 +4088,6 @@ Function UpdateNPCs%()
 								EndIf
 								
 								n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 10.0)
-								
 								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed)
 								;[End Block]
 							Case 1.0, 2.0 ; ~ Echo
@@ -4109,7 +4109,7 @@ Function UpdateNPCs%()
 										me\BlurTimer = Float(((Sin(MilliSecs2() / 50.0) + 1.0) * 200.0) / Sqr(Dist))
 										
 										If (Not I_714\Using) And wi\GasMask <> 3 And wi\HazmatSuit <> 3 And Dist < 256.0 Then
-											If msg\Timer <= 0.0 And me\StaminaEffect < 1.5 Then
+											If me\StaminaEffect < 1.5 Then
 												Select Rand(4)
 													Case 1
 														;[Block]
@@ -4161,14 +4161,10 @@ Function UpdateNPCs%()
 								;[End Block]
 							Case 5.0, 6.0, 8.0 ; ~ Walking or chasing
 								;[Block]
-								If n\Frame < 580.0 And n\Frame > 214.0 Then
+								If n\Frame > 213.0 And n\Frame < 580.0 Then
 									AnimateNPC(n, 556.0, 580.0, 0.25, False)
 								Else
-									If n\CurrSpeed > 0.0 Then
-										AnimateNPC(n, 580.0, 628.0, n\CurrSpeed * 25.0)
-									Else
-										AnimateNPC(n, 2.0, 214.0, 0.25)
-									EndIf
+									AnimateNPC(n, 580.0, 628.0, n\CurrSpeed * 25.0)
 									
 									; ~ Chasing the player
 									If n\State = 8.0 And Dist < 1024.0 And (Not chs\NoTarget) Then
@@ -4263,8 +4259,8 @@ Function UpdateNPCs%()
 									n\LastSeen = 1
 								EndIf
 								
-								If n\Frame > 557.0 Then
-									AnimateNPC(n, 628, 652, 0.25, False)
+								If n\Frame > 556.0 Then
+									AnimateNPC(n, 628.0, 652.0, 0.25, False)
 									If n\Frame > 651.0
 										Select Rand(3)
 											Case 1
