@@ -4500,7 +4500,7 @@ Function UpdateGUI%()
 						me\EyeStuck = 10000.0
 						me\BlurTimer = 1000.0
 						
-						CreateMsg("You used the eyedrops. Your eyes feel very moisturized.")
+						CreateMsg("You used the eyedrops. Your eyes feel extremely moisturized.")
 						
 						RemoveItem(SelectedItem)
 					EndIf
