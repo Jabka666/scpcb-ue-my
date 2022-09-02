@@ -102,6 +102,7 @@ Bug Fixes:
 - Tiny fix for heavy hazmat suit icon.
 - Tiny fix for SCP-106 decals deceleration speed.
 - Tiny fixes for some rooms.
+- Tiny fix for RedVision eyedrops texture.
 
 v1.0.2
 
