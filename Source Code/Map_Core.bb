@@ -2357,7 +2357,7 @@ Function UpdateDoors%()
 					If d\AutoClose And RemoteDoorOn Then
 						If EntityDistanceSquared(Camera, d\OBJ) < 4.41 Then
 							If (Not I_714\Using) And wi\GasMask <> 3 And wi\HazmatSuit <> 3 Then PlaySound_Strict(HorrorSFX[7])
-							UseDoor(d, True) : d\AutoClose = False
+							OpenCloseDoor(d) : d\AutoClose = False
 						EndIf
 					EndIf				
 				EndIf
@@ -2586,14 +2586,14 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 		State = -1.0
 		door1\Locked = 0
 		If (d_I\ClosestButton = door2\Buttons[0] Lor d_I\ClosestButton = door2\Buttons[1]) And mo\MouseHit1 Then
-			UseDoor(door1, True)
+			OpenCloseDoor(door1)
 			UpdateElevatorPanel(door2)
 		EndIf
 	ElseIf door2\Open And (Not door1\Open) And door2\OpenState = 180.0
 		State = 1.0
 		door2\Locked = 0
 		If (d_I\ClosestButton = door1\Buttons[0] Lor d_I\ClosestButton = door1\Buttons[1]) And mo\MouseHit1 Then
-			UseDoor(door2, True)
+			OpenCloseDoor(door2)
 			UpdateElevatorPanel(door1)
 		EndIf
 	ElseIf Abs(door1\OpenState - door2\OpenState) < 0.2
@@ -2732,7 +2732,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 							EndIf
 						EndIf
 					Next
-					UseDoor(door2, True, (Not PlayerInsideElevator))
+					OpenCloseDoor(door2, (Not PlayerInsideElevator))
 					door1\Open = False
 					
 					; ~ Return to default panel texture
@@ -2844,7 +2844,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 							EndIf
 						EndIf
 					Next
-					UseDoor(door1, True, (Not PlayerInsideElevator))
+					OpenCloseDoor(door1, (Not PlayerInsideElevator))
 					door2\Open = False
 					
 					; ~ Return to default panel texture
@@ -2858,207 +2858,205 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 	Return(State)
 End Function
 
-Function UseDoor%(d.Doors, Scripted% = False, PlaySFX% = True)
+Function UseDoor%(d.Doors, PlaySFX% = True)
 	Local Temp%, i%
 	
-	If (Not Scripted) Then
-		If SelectedItem <> Null Then
-			Temp = GetUsingItem(SelectedItem)
-		EndIf
-		
-		If d\KeyCard > KEY_MISC Then
-			If SelectedItem = Null Then
+	If SelectedItem <> Null Then
+		Temp = GetUsingItem(SelectedItem)
+	EndIf
+	
+	If d\KeyCard > KEY_MISC Then
+		If SelectedItem = Null Then
+			CreateMsg("A keycard is required to operate this door.")
+			PlaySound2(ButtonSFX, Camera, d_I\ClosestButton)
+			Return
+		Else
+			If Temp <= KEY_MISC Then
 				CreateMsg("A keycard is required to operate this door.")
-				PlaySound2(ButtonSFX, Camera, d_I\ClosestButton)
-				Return
 			Else
-				If Temp <= KEY_MISC Then
-					CreateMsg("A keycard is required to operate this door.")
+				If Temp = KEY_CARD_6 Then
+					CreateMsg("The keycard was inserted into the slot. UNKNOWN ERROR! " + Chr(34) + "Do" + Chr(Rand(48, 122)) + "s th" + Chr(Rand(48, 122)) + " B" + Chr(Rand(48, 122)) + "ack " + Chr(Rand(48, 122)) + "oon howl? " + Chr(Rand(48, 122)) + "es. N" + Chr(Rand(48, 122)) + ". Ye" + Chr(Rand(48, 122)) + ". " + Chr(Rand(48, 122)) + "o." + Chr(34))
 				Else
-					If Temp = KEY_CARD_6 Then
-						CreateMsg("The keycard was inserted into the slot. UNKNOWN ERROR! " + Chr(34) + "Do" + Chr(Rand(48, 122)) + "s th" + Chr(Rand(48, 122)) + " B" + Chr(Rand(48, 122)) + "ack " + Chr(Rand(48, 122)) + "oon howl? " + Chr(Rand(48, 122)) + "es. N" + Chr(Rand(48, 122)) + ". Ye" + Chr(Rand(48, 122)) + ". " + Chr(Rand(48, 122)) + "o." + Chr(34))
-					Else
-						If d\Locked = 1 Then
-							If Temp = KEY_005 Then
-								CreateMsg("You hold the key close to the slot, but nothing happened.")
-							Else
-								CreateMsg("The keycard was inserted into the slot, but nothing happened.")
-							EndIf
-						Else
-							If Temp = KEY_005 Then
-								CreateMsg("You hold the key close to the slot.")
-							Else
-								If Temp < d\KeyCard Then
-									CreateMsg("A keycard with security clearance " + (d\KeyCard - 2) + " or higher is required to operate this door.")
-								Else
-									CreateMsg("The keycard was inserted into the slot.")
-								EndIf
-							EndIf
-						EndIf
-					EndIf
-					SelectedItem = Null
-				EndIf
-				If (d\Locked <> 1) And (((Temp > KEY_MISC) And (Temp <> KEY_CARD_6) And (Temp >= d\KeyCard)) Lor (Temp = KEY_005)) Then
-					PlaySound2(KeyCardSFX1, Camera, d_I\ClosestButton)
-				Else
-					If Temp <= KEY_MISC Then
-						PlaySound2(ButtonSFX, Camera, d_I\ClosestButton)
-					Else
-						PlaySound2(KeyCardSFX2, Camera, d_I\ClosestButton)
-					EndIf
-					Return
-				EndIf
-			EndIf
-		ElseIf d\KeyCard > KEY_HAND_YELLOW And d\KeyCard < KEY_MISC
-			If SelectedItem = Null Then
-				CreateMsg("You placed your palm onto the scanner. The scanner reads: " + Chr(34) + "DNA doesn't match known sample. Access denied." + Chr(34))
-				PlaySound2(ScannerSFX2, Camera, d_I\ClosestButton)
-				Return
-			Else
-				If ((Temp >= KEY_MISC) Lor (Temp < KEY_HAND_YELLOW)) And (Temp <> KEY_005) Then
-					CreateMsg("You placed your palm onto the scanner. The scanner reads: " + Chr(34) + "DNA doesn't match known sample. Access denied." + Chr(34))
-				Else
-					If (d\KeyCard <> Temp) And (Temp <> KEY_005) Then
-						CreateMsg("You placed the palm of the hand onto the scanner. The scanner reads: " + Chr(34) + "DNA doesn't match known sample. Access denied." + Chr(34))
-					Else
-						If d\Locked = 1 Then
-							If Temp = KEY_005 Then
-								CreateMsg("You hold the key onto the scanner, but nothing happened.")
-							Else
-								CreateMsg("You placed the palm of the hand onto the scanner, but nothing happened")
-							EndIf
-						Else
-							If Temp = KEY_005 Then
-								CreateMsg("You hold the key onto the scanner. The scanner reads: " + Chr(34) + "Unknown DNA verified. ERROR! Access granted." + Chr(34))
-							Else
-								CreateMsg("You placed the palm of the hand onto the scanner. The scanner reads: " + Chr(34) + "DNA verified. Access granted." + Chr(34))
-							EndIf
-						EndIf
-					EndIf
-					SelectedItem = Null
-				EndIf
-				If (d\Locked = 0) And ((Temp = d\KeyCard) Lor (Temp = KEY_005)) Then
-					PlaySound2(ScannerSFX1, Camera, d_I\ClosestButton)
-				Else
-					PlaySound2(ScannerSFX2, Camera, d_I\ClosestButton)
-					Return
-				EndIf
-			EndIf
-		ElseIf d\Code <> ""
-			If SelectedItem = Null Then
-				If (d\Locked = 0) And (d\Code <> "GEAR") And (d\Code = msg\KeyPadInput) Then
-					PlaySound2(ScannerSFX1, Camera, d_I\ClosestButton)
-				Else
-					PlaySound2(ScannerSFX2, Camera, d_I\ClosestButton)
-					Return
-				EndIf
-			Else
-				If Temp = KEY_005 Then
 					If d\Locked = 1 Then
-						CreateMsg("You hold the key close to the keypad, but nothing happened.")
+						If Temp = KEY_005 Then
+							CreateMsg("You hold the key close to the slot, but nothing happened.")
+						Else
+							CreateMsg("The keycard was inserted into the slot, but nothing happened.")
+						EndIf
 					Else
-						CreateMsg("You hold the key close to the keypad.")
+						If Temp = KEY_005 Then
+							CreateMsg("You hold the key close to the slot.")
+						Else
+							If Temp < d\KeyCard Then
+								CreateMsg("A keycard with security clearance " + (d\KeyCard - 2) + " or higher is required to operate this door.")
+							Else
+								CreateMsg("The keycard was inserted into the slot.")
+							EndIf
+						EndIf
 					EndIf
 				EndIf
 				SelectedItem = Null
-				
-				If (d\Locked = 0) And (d\Code <> "GEAR") And (Temp = KEY_005) Then
-					PlaySound2(ScannerSFX1, Camera, d_I\ClosestButton)
+			EndIf
+			If (d\Locked <> 1) And (((Temp > KEY_MISC) And (Temp <> KEY_CARD_6) And (Temp >= d\KeyCard)) Lor (Temp = KEY_005)) Then
+				PlaySound2(KeyCardSFX1, Camera, d_I\ClosestButton)
+			Else
+				If Temp <= KEY_MISC Then
+					PlaySound2(ButtonSFX, Camera, d_I\ClosestButton)
 				Else
-					PlaySound2(ScannerSFX2, Camera, d_I\ClosestButton)
-					Return
+					PlaySound2(KeyCardSFX2, Camera, d_I\ClosestButton)
+				EndIf
+				Return
+			EndIf
+		EndIf
+	ElseIf d\KeyCard > KEY_HAND_YELLOW And d\KeyCard < KEY_MISC
+		If SelectedItem = Null Then
+			CreateMsg("You placed your palm onto the scanner. The scanner reads: " + Chr(34) + "DNA doesn't match known sample. Access denied." + Chr(34))
+			PlaySound2(ScannerSFX2, Camera, d_I\ClosestButton)
+			Return
+		Else
+			If ((Temp >= KEY_MISC) Lor (Temp < KEY_HAND_YELLOW)) And (Temp <> KEY_005) Then
+				CreateMsg("You placed your palm onto the scanner. The scanner reads: " + Chr(34) + "DNA doesn't match known sample. Access denied." + Chr(34))
+			Else
+				If (d\KeyCard <> Temp) And (Temp <> KEY_005) Then
+					CreateMsg("You placed the palm of the hand onto the scanner. The scanner reads: " + Chr(34) + "DNA doesn't match known sample. Access denied." + Chr(34))
+				Else
+					If d\Locked = 1 Then
+						If Temp = KEY_005 Then
+							CreateMsg("You hold the key onto the scanner, but nothing happened.")
+						Else
+							CreateMsg("You placed the palm of the hand onto the scanner, but nothing happened")
+						EndIf
+					Else
+						If Temp = KEY_005 Then
+							CreateMsg("You hold the key onto the scanner. The scanner reads: " + Chr(34) + "Unknown DNA verified. ERROR! Access granted." + Chr(34))
+						Else
+							CreateMsg("You placed the palm of the hand onto the scanner. The scanner reads: " + Chr(34) + "DNA verified. Access granted." + Chr(34))
+						EndIf
+					EndIf
+				EndIf
+				SelectedItem = Null
+			EndIf
+			If (d\Locked = 0) And ((Temp = d\KeyCard) Lor (Temp = KEY_005)) Then
+				PlaySound2(ScannerSFX1, Camera, d_I\ClosestButton)
+			Else
+				PlaySound2(ScannerSFX2, Camera, d_I\ClosestButton)
+				Return
+			EndIf
+		EndIf
+	ElseIf d\Code <> ""
+		If SelectedItem = Null Then
+			If (d\Locked = 0) And (d\Code <> "GEAR") And (d\Code = msg\KeyPadInput) Then
+				PlaySound2(ScannerSFX1, Camera, d_I\ClosestButton)
+			Else
+				PlaySound2(ScannerSFX2, Camera, d_I\ClosestButton)
+				Return
+			EndIf
+		Else
+			If Temp = KEY_005 Then
+				If d\Locked = 1 Then
+					CreateMsg("You hold the key close to the keypad, but nothing happened.")
+				Else
+					CreateMsg("You hold the key close to the keypad.")
 				EndIf
 			EndIf
+			SelectedItem = Null
 			
-			If d\Code = Str(AccessCode) Then
-				GiveAchievement(AchvMaynard)
-			ElseIf d\Code = "7816"
-				GiveAchievement(AchvHarp)
-			ElseIf d\Code = "2411"
-				GiveAchievement(AchvO5)
-			EndIf	
-		Else
-			If d\DoorType = WOODEN_DOOR Lor d\DoorType = OFFICE_DOOR Then
-				If d\Locked > 0 Then
-					If SelectedItem = Null Then
+			If (d\Locked = 0) And (d\Code <> "GEAR") And (Temp = KEY_005) Then
+				PlaySound2(ScannerSFX1, Camera, d_I\ClosestButton)
+			Else
+				PlaySound2(ScannerSFX2, Camera, d_I\ClosestButton)
+				Return
+			EndIf
+		EndIf
+		
+		If d\Code = Str(AccessCode) Then
+			GiveAchievement(AchvMaynard)
+		ElseIf d\Code = "7816"
+			GiveAchievement(AchvHarp)
+		ElseIf d\Code = "2411"
+			GiveAchievement(AchvO5)
+		EndIf	
+	Else
+		If d\DoorType = WOODEN_DOOR Lor d\DoorType = OFFICE_DOOR Then
+			If d\Locked > 0 Then
+				If SelectedItem = Null Then
+					CreateMsg("The door will not budge.")
+					If d\DoorType = OFFICE_DOOR Then
+						PlaySound2(DoorBudgeSFX1, Camera, d_I\ClosestButton)
+					Else
+						PlaySound2(DoorBudgeSFX2, Camera, d_I\ClosestButton)
+					EndIf
+				Else
+					If (Temp > KEY_860) And (Temp <> KEY_005) Then
 						CreateMsg("The door will not budge.")
+					Else
+						If d\Locked = 2 Lor ((Temp <> d\KeyCard) And (Temp <> KEY_005)) Then
+							CreateMsg("You tried to unlock the door, but nothing happened.")
+						Else
+							CreateMsg("You unlocked the door.")
+							d\Locked = 0
+						EndIf
+						SelectedItem = Null
+					EndIf
+					If (Temp > KEY_860) And (Temp <> KEY_005) Then
 						If d\DoorType = OFFICE_DOOR Then
 							PlaySound2(DoorBudgeSFX1, Camera, d_I\ClosestButton)
 						Else
 							PlaySound2(DoorBudgeSFX2, Camera, d_I\ClosestButton)
 						EndIf
 					Else
-						If (Temp > KEY_860) And (Temp <> KEY_005) Then
-							CreateMsg("The door will not budge.")
-						Else
-							If d\Locked = 2 Lor ((Temp <> d\KeyCard) And (Temp <> KEY_005)) Then
-								CreateMsg("You tried to unlock the door, but nothing happened.")
-							Else
-								CreateMsg("You unlocked the door.")
-								d\Locked = 0
-							EndIf
-							SelectedItem = Null
-						EndIf
-						If (Temp > KEY_860) And (Temp <> KEY_005) Then
-							If d\DoorType = OFFICE_DOOR Then
-								PlaySound2(DoorBudgeSFX1, Camera, d_I\ClosestButton)
-							Else
-								PlaySound2(DoorBudgeSFX2, Camera, d_I\ClosestButton)
-							EndIf
-						Else
-							PlaySound2(DoorLockSFX, Camera, d_I\ClosestButton)
-						EndIf
+						PlaySound2(DoorLockSFX, Camera, d_I\ClosestButton)
 					EndIf
-					Return
 				EndIf
-			ElseIf d\DoorType = ELEVATOR_DOOR
-				If d\Locked = 1 Then
-					If (Not d\IsElevatorDoor > 0) Then
-						CreateMsg("The elevator appears to be broken.")
-						PlaySound2(ButtonSFX2, Camera, d_I\ClosestButton)
-					Else
-						If d\IsElevatorDoor = 1 Then
-							CreateMsg("You called the elevator.")
-						ElseIf d\IsElevatorDoor = 3
-							CreateMsg("The elevator is already on this floor.")
-						ElseIf msg\Txt <> "You called the elevator."
-							Select Rand(10)
-								Case 1
-									;[Block]
-									CreateMsg("Stop spamming the button.")
-									;[End Block]
-								Case 2
-									;[Block]
-									CreateMsg("Pressing it harder doesn't make the elevator come faster.")
-									;[End Block]
-								Case 3
-									;[Block]
-									CreateMsg("If you continue pressing this button I will generate a Memory Access Violation.")
-									;[End Block]
-								Default
-									;[Block]
-									CreateMsg("You already called the elevator.")
-									;[End Block]
-							End Select
-						Else
-							CreateMsg("You already called the elevator.")
-						EndIf
-						PlaySound2(ButtonSFX, Camera, d_I\ClosestButton)
-					EndIf
-					Return
-				EndIf
-			Else
-				If d\Locked = 1 Then
-					If d\Open Then
-						CreateMsg("You pushed the button but nothing happened.")
-					Else
-						CreateMsg("The door appears to be locked.")
-					EndIf
+				Return
+			EndIf
+		ElseIf d\DoorType = ELEVATOR_DOOR
+			If d\Locked = 1 Then
+				If (Not d\IsElevatorDoor > 0) Then
+					CreateMsg("The elevator appears to be broken.")
 					PlaySound2(ButtonSFX2, Camera, d_I\ClosestButton)
-					Return
 				Else
+					If d\IsElevatorDoor = 1 Then
+						CreateMsg("You called the elevator.")
+					ElseIf d\IsElevatorDoor = 3
+						CreateMsg("The elevator is already on this floor.")
+					ElseIf msg\Txt <> "You called the elevator."
+						Select Rand(10)
+							Case 1
+								;[Block]
+								CreateMsg("Stop spamming the button.")
+								;[End Block]
+							Case 2
+								;[Block]
+								CreateMsg("Pressing it harder doesn't make the elevator come faster.")
+								;[End Block]
+							Case 3
+								;[Block]
+								CreateMsg("If you continue pressing this button I will generate a Memory Access Violation.")
+								;[End Block]
+							Default
+								;[Block]
+								CreateMsg("You already called the elevator.")
+								;[End Block]
+						End Select
+					Else
+						CreateMsg("You already called the elevator.")
+					EndIf
 					PlaySound2(ButtonSFX, Camera, d_I\ClosestButton)
 				EndIf
+				Return
+			EndIf
+		Else
+			If d\Locked = 1 Then
+				If d\Open Then
+					CreateMsg("You pushed the button but nothing happened.")
+				Else
+					CreateMsg("The door appears to be locked.")
+				EndIf
+				PlaySound2(ButtonSFX2, Camera, d_I\ClosestButton)
+				Return
+			Else
+				PlaySound2(ButtonSFX, Camera, d_I\ClosestButton)
 			EndIf
 		EndIf
 	EndIf

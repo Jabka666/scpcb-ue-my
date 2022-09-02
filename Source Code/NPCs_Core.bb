@@ -725,7 +725,7 @@ Function UpdateNPCs%()
 																	
 																	If EntityPick(Pvt, 0.5) = d\Buttons[i] Then 
 																		PlaySound_Strict(LoadTempSound("SFX\Door\DoorOpen173.ogg"))
-																		UseDoor(d, True)
+																		OpenCloseDoor(d, True)
 																	EndIf
 																	FreeEntity(Pvt)
 																EndIf
@@ -1625,9 +1625,7 @@ Function UpdateNPCs%()
 											EndIf										
 										EndIf
 									Else
-										If TakeOffTimer > 0.0 Then
-											TakeOffTimer = Max(TakeOffTimer - fps\Factor[0], 0.0)
-										EndIf
+										If TakeOffTimer > 0.0 Then TakeOffTimer = Max(TakeOffTimer - fps\Factor[0], 0.0)
 										
 										n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
@@ -1654,49 +1652,12 @@ Function UpdateNPCs%()
 											EndIf
 										Wend
 										If n\Path[n\PathLocation] <> Null Then
-											; ~ Closes doors behind him
-											If n\PathLocation > 0 Then
-												If n\Path[n\PathLocation - 1] <> Null Then
-													If n\Path[n\PathLocation - 1]\door <> Null Then
-														If (Not n\Path[n\PathLocation - 1]\door\IsElevatorDoor > 0) Then
-															If EntityDistanceSquared(n\Path[n\PathLocation - 1]\OBJ, n\Collider) > 0.09 Then
-																If (n\Path[n\PathLocation - 1]\door\MTFClose) And (n\Path[n\PathLocation - 1]\door\OpenState = 180.0) And (n\Path[n\PathLocation - 1]\door\Buttons[0] <> 0 Lor n\Path[n\PathLocation - 1]\door\Buttons[1] <> 0) Then
-																	UseDoor(n\Path[n\PathLocation - 1]\door, True)
-																EndIf
-															EndIf
-														EndIf
-													EndIf
-												EndIf
-											EndIf
-											
 											n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 											PointEntity(n\OBJ, n\Path[n\PathLocation]\OBJ)
 											RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0.0)
 											MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 											
-											; ~ Opens doors in front of him
-											Dist2 = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-											If Dist2 < 0.36 Then
-												Temp = True
-												If n\Path[n\PathLocation]\door <> Null Then
-													If (Not n\Path[n\PathLocation]\door\IsElevatorDoor > 0) Then
-														If (n\Path[n\PathLocation]\door\Locked > 0 Lor n\Path[n\PathLocation]\door\KeyCard <> 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open) Then
-															Temp = False
-														Else
-															If (Not n\Path[n\PathLocation]\door\Open) And (n\Path[n\PathLocation]\door\Buttons[0] <> 0 Lor n\Path[n\PathLocation]\door\Buttons[1] <> 0) Then
-																UseDoor(n\Path[n\PathLocation]\door, True)
-															EndIf
-														EndIf
-													EndIf
-												EndIf
-												If Dist2 < 0.04 And Temp Then
-													n\PathLocation = n\PathLocation + 1
-												ElseIf Dist2 < 0.25 And (Not Temp)
-													; ~ Breaking up the path when the door in front of SCP-049 cannot be operated by himself
-													n\PathStatus = 0
-													n\PathTimer = 0.0
-												EndIf
-											EndIf
+											UseDoorNPC(n)
 											
 											AnimateNPC(n, Max(Min(AnimTime(n\OBJ), 358.0), 346.0), 393.0, n\CurrSpeed * 38.0)
 											
@@ -1915,30 +1876,7 @@ Function UpdateNPCs%()
 										RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0.0)
 										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 										
-										; ~ Closes doors behind him
-										If n\PathLocation > 0 Then
-											If n\Path[n\PathLocation - 1] <> Null Then
-												If n\Path[n\PathLocation - 1]\door <> Null Then
-													If n\Path[n\PathLocation - 1]\door\KeyCard = 0 Then
-														If EntityDistanceSquared(n\Path[n\PathLocation - 1]\OBJ, n\Collider) > 0.09 Then
-															If n\Path[n\PathLocation - 1]\door\Open Then UseDoor(n\Path[n\PathLocation - 1]\door, True)
-														EndIf
-													EndIf
-												EndIf
-											EndIf
-										EndIf
-										
-										; ~ Opens doors in front of him
-										Dist2 = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-										If Dist2 < 0.36 Then
-											If n\Path[n\PathLocation]\door <> Null Then
-												If (Not n\Path[n\PathLocation]\door\Open) Then UseDoor(n\Path[n\PathLocation]\door, True)
-											EndIf
-										EndIf
-										
-										If Dist2 < 0.04 Then
-											n\PathLocation = n\PathLocation + 1
-										EndIf
+										UseDoorNPC(n)
 										
 										AnimateNPC(n, Max(Min(AnimTime(n\OBJ), 358.0), 346.0), 393.0, n\CurrSpeed * 38.0)
 									EndIf
@@ -2072,43 +2010,15 @@ Function UpdateNPCs%()
 									PointEntity(n\OBJ, n\Path[n\PathLocation]\OBJ)
 									RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 20.0), 0.0)
 									
+									n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 									If n\Frame < 713.0 Then
 										AnimateNPC(n, 705, 713.0, 0.4, False)
 									Else
 										AnimateNPC(n, 714.0, 794.0, n\CurrSpeed * 60.0)
 									EndIf
-									n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 									MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 									
-									; ~ Opens doors in front of him
-									Dist2 = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-									If Dist2 < 0.36 Then
-										Temp = True
-										If n\Path[n\PathLocation]\door <> Null
-											If (Not n\Path[n\PathLocation]\door\IsElevatorDoor > 0)
-												If ((n\Path[n\PathLocation]\door\Locked > 0 Lor n\Path[n\PathLocation]\door\KeyCard > 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open)) Then
-													Temp = False
-												Else
-													If (Not n\Path[n\PathLocation]\door\Open) Then UseDoor(n\Path[n\PathLocation]\door, True)
-												EndIf
-											EndIf
-											If n\Path[n\PathLocation]\door\OpenState >= 180.0
-												n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
-											Else
-												n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 20.0)
-											EndIf
-										Else
-											n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
-										EndIf
-										If Dist2 < 0.04 And Temp Then
-											n\PathLocation = n\PathLocation + 1
-										ElseIf Dist2 < 0.25 And (Not Temp)
-											n\PathStatus = 0
-											n\PathTimer = 0.0
-										EndIf
-									Else
-										n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
-									EndIf
+									UseDoorNPC(n)
 								EndIf
 							Else
 								; ~ No path, stands still
@@ -3894,7 +3804,7 @@ Function UpdateNPCs%()
 													If d\Locked = 0 And d\KeyCard = 0 And d\Code = "" Then
 														If Abs(EntityX(d\FrameOBJ) - EntityX(n\Collider)) < 16.0 Then
 															If Abs(EntityZ(d\FrameOBJ) - EntityZ(n\Collider)) < 16.0 Then
-																UseDoor(d, True)
+																OpenCloseDoor(d, True)
 															EndIf
 														EndIf
 													EndIf
@@ -4189,29 +4099,7 @@ Function UpdateNPCs%()
 												Else
 													n\Angle = VectorYaw(EntityX(n\Path[n\PathLocation]\OBJ, True) - EntityX(n\Collider), 0.0, EntityZ(n\Path[n\PathLocation]\OBJ, True) - EntityZ(n\Collider))
 													
-													Dist2 = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-													
-													Temp = True
-													If Dist2 < 0.64 Then 
-														If n\Path[n\PathLocation]\door <> Null Then
-															If (Not n\Path[n\PathLocation]\door\IsElevatorDoor > 0)
-																If (n\Path[n\PathLocation]\door\Locked > 0 Lor n\Path[n\PathLocation]\door\KeyCard <> 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open) Then
-																	Temp = False
-																Else
-																	If (Not n\Path[n\PathLocation]\door\Open) And (n\Path[n\PathLocation]\door\Buttons[0] <> 0 Lor n\Path[n\PathLocation]\door\Buttons[1] <> 0) Then
-																		UseDoor(n\Path[n\PathLocation]\door, True)
-																	EndIf
-																EndIf
-															EndIf
-														EndIf
-														If Dist2 < 0.09 Then n\PathLocation = n\PathLocation + 1
-													EndIf
-													
-													If (Not Temp) Then
-														n\PathStatus = 0
-														n\PathLocation = 0
-														n\PathTimer = 40.0 * 10.0
-													EndIf
+													UseDoorNPC(n)
 												EndIf
 												
 												n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
@@ -4784,39 +4672,12 @@ Function UpdateNPCs%()
 									PointEntity(n\OBJ, n\Path[n\PathLocation]\OBJ)
 									RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 20.0), 0.0)
 									
-									AnimateNPC(n, 64.0, 93.0, n\CurrSpeed * 30.0)
 									n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
+									
+									AnimateNPC(n, 64.0, 93.0, n\CurrSpeed * 30.0)
 									MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 									
-									; ~ Opens doors in front of him
-									Dist2 = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-									If Dist2 < 0.36 Then
-										Temp = True
-										If n\Path[n\PathLocation]\door <> Null
-											If (Not n\Path[n\PathLocation]\door\IsElevatorDoor > 0)
-												If ((n\Path[n\PathLocation]\door\Locked > 0 Lor n\Path[n\PathLocation]\door\KeyCard > 0 Lor n\Path[n\PathLocation]\door\Code <> "") And (Not n\Path[n\PathLocation]\door\Open)) Then
-													Temp = False
-												Else
-													If (Not n\Path[n\PathLocation]\door\Open) Then UseDoor(n\Path[n\PathLocation]\door, True)
-												EndIf
-											EndIf
-											If n\Path[n\PathLocation]\door\OpenState >= 180.0
-												n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
-											Else
-												n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 20.0)
-											EndIf
-										Else
-											n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
-										EndIf
-										If Dist2 < 0.04 And Temp Then
-											n\PathLocation = n\PathLocation + 1
-										ElseIf Dist2 < 0.25 And (Not Temp)
-											n\PathStatus = 0
-											n\PathTimer = 0.0
-										EndIf
-									Else
-										n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
-									EndIf
+									UseDoorNPC(n)
 								EndIf
 							Else
 								; ~ No path, stands still
@@ -5129,7 +4990,7 @@ Function UpdateMTFUnit%(n.NPCs)
 									For r.Rooms = Each Rooms
 										If r\RoomTemplate\Name = "cont1_173" Then
 											If EntityX(n\Collider, True) - r\x < 15.0 Then
-												If r\RoomDoors[1]\Open Then UseDoor(r\RoomDoors[1], True)
+												If r\RoomDoors[1]\Open Then OpenCloseDoor(r\RoomDoors[1])
 												n_I\Curr173\IsDead = True
 												Exit
 											EndIf
@@ -5166,7 +5027,7 @@ Function UpdateMTFUnit%(n.NPCs)
 											EndIf
 											
 											If n_I\Curr173\Idle = 3 And DistanceSquared(EntityX(Pvt), EntityX(n\Collider), EntityZ(Pvt), EntityZ(n\Collider)) > 16.0 Then
-												If r\RoomDoors[1]\Open Then UseDoor(r\RoomDoors[1], True)
+												If r\RoomDoors[1]\Open Then OpenCloseDoor(r\RoomDoors[1])
 											EndIf
 											
 											FreeEntity(Pvt)
@@ -5258,15 +5119,7 @@ Function UpdateMTFUnit%(n.NPCs)
 								
 								NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 								
-								If NewDist < 1.0 And n\Path[n\PathLocation]\door <> Null Then
-									; ~ Open the door and make it automatically close after 5 seconds
-									If (Not n\Path[n\PathLocation]\door\Open) Then
-										PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\DoorType, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
-										PlayMTFSound(MTFSFX[0], n)
-									EndIf
-									n\Path[n\PathLocation]\door\Open = True
-									If n\Path[n\PathLocation]\door\MTFClose Then n\Path[n\PathLocation]\door\TimerState = 70.0 * 5.0
-								EndIf
+								If NewDist < 1.0 Then UseDoorNPC(n)
 								
 								If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then
 									n\PathLocation = n\PathLocation + 1
@@ -5635,12 +5488,7 @@ Function UpdateMTFUnit%(n.NPCs)
 									
 									If NewDist < 1.0 And n\Path[n\PathLocation]\door <> Null Then
 										; ~ Open the door and make it automatically close after 5 seconds
-										If (Not n\Path[n\PathLocation]\door\Open) Then
-											PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\DoorType, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
-											PlayMTFSound(MTFSFX[0], n)
-										EndIf
-										n\Path[n\PathLocation]\door\Open = True
-										If n\Path[n\PathLocation]\door\MTFClose Then n\Path[n\PathLocation]\door\TimerState = 70.0 * 5.0
+										
 									EndIf
 									
 									If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then
@@ -5934,15 +5782,7 @@ Function UpdateMTFUnit%(n.NPCs)
 										
 										NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 										
-										If NewDist < 1.0 And n\Path[n\PathLocation]\door <> Null Then
-											; ~ Open the door and make it automatically close after 5 seconds
-											If (Not n\Path[n\PathLocation]\door\Open) Then
-												PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\DoorType, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
-												PlayMTFSound(MTFSFX[0], n)
-											EndIf
-											n\Path[n\PathLocation]\door\Open = True
-											If n\Path[n\PathLocation]\door\MTFClose Then n\Path[n\PathLocation]\door\TimerState = 70.0 * 5.0
-										EndIf
+										If NewDist < 1.0 Then UseDoorNPC(n)
 										
 										If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then
 											n\PathLocation = n\PathLocation + 1
@@ -6139,14 +5979,7 @@ Function UpdateMTFUnit%(n.NPCs)
 									
 									NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 									
-									If NewDist < 4.0 And n\Path[n\PathLocation]\door <> Null Then
-										If (Not n\Path[n\PathLocation]\door\Open) Then
-											PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\DoorType, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
-											PlayMTFSound(MTFSFX[0], n)
-										EndIf
-										n\Path[n\PathLocation]\door\Open = True
-										If n\Path[n\PathLocation]\door\MTFClose Then n\Path[n\PathLocation]\door\TimerState = 70.0 * 5.0
-									EndIf
+									If NewDist < 4.0 And n\Path[n\PathLocation]\door <> Null Then UseDoorNPC(n)
 									
 									If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then
 										n\PathLocation = n\PathLocation + 1
@@ -6318,15 +6151,7 @@ Function UpdateMTFUnit%(n.NPCs)
 								
 								NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 								
-								If NewDist < 1.0 And n\Path[n\PathLocation]\door <> Null Then
-									; ~ Open the door and make it automatically close after 5 seconds
-									If (Not n\Path[n\PathLocation]\door\Open) Then
-										PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\DoorType, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
-										PlayMTFSound(MTFSFX[0], n)
-									EndIf
-									n\Path[n\PathLocation]\door\Open = True
-									If n\Path[n\PathLocation]\door\MTFClose Then n\Path[n\PathLocation]\door\TimerState = 70.0 * 5.0
-								EndIf
+								If NewDist < 1.0 Then UseDoorNPC(n)
 								
 								If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then
 									n\PathLocation = n\PathLocation + 1
@@ -6460,14 +6285,7 @@ Function UpdateMTFUnit%(n.NPCs)
 									
 									NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 									
-									If NewDist < 1.0 And n\Path[n\PathLocation]\door <> Null Then
-										If (Not n\Path[n\PathLocation]\door\Open) Then
-											PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\DoorType, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
-											PlayMTFSound(MTFSFX[0], n)
-										EndIf
-										n\Path[n\PathLocation]\door\Open = True
-										If n\Path[n\PathLocation]\door\MTFClose Then n\Path[n\PathLocation]\door\TimerState = 70.0 * 5.0
-									EndIf
+									If NewDist < 1.0 Then UseDoorNPC(n)
 									
 									If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then
 										n\PathLocation = n\PathLocation + 1
@@ -6565,16 +6383,7 @@ Function UpdateMTFUnit%(n.NPCs)
 										NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 										
 										; ~ Open the door and make it automatically close after 5 seconds
-										If NewDist < 1.0 And n\Path[n\PathLocation]\door <> Null Then
-											If (Not n\Path[n\PathLocation]\door\Open)
-												PlaySound2(OpenDoorSFX(n\Path[n\PathLocation]\door\DoorType, Rand(0, 2)), Camera, n\Path[n\PathLocation]\door\OBJ)
-												PlayMTFSound(MTFSFX[0], n)
-											EndIf
-											n\Path[n\PathLocation]\door\Open = True
-											If n\Path[n\PathLocation]\door\MTFClose
-												n\Path[n\PathLocation]\door\TimerState = 70.0 * 5.0
-											EndIf
-										EndIf
+										If NewDist < 1.0 Then UseDoorNPC(n)
 										
 										If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then
 											n\PathLocation = n\PathLocation + 1
@@ -7419,6 +7228,42 @@ Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False)
 	EndIf
 	; ~ Return true, this means player is in reachable room
 	Return(True)
+End Function
+
+Function UseDoorNPC%(n.NPCs, PlaySFX% = True)
+	If n\NPCType = NPCTypeMTF Then
+		If n\Path[n\PathLocation]\door <> Null Then
+			If (Not n\Path[n\PathLocation]\door\Open) Then
+				OpenCloseDoor(n\Path[n\PathLocation]\door, PlaySFX)
+				If PlaySFX Then PlayMTFSound(MTFSFX[0], n)
+				If n\Path[n\PathLocation]\door\MTFClose Then n\Path[n\PathLocation]\door\TimerState = 70.0 * 5.0
+			EndIf
+		EndIf
+	Else
+		Local Dist# = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
+		
+		If Dist < 0.36 Then
+			Local Temp% = True
+			
+			If n\Path[n\PathLocation]\door <> Null Then
+				If (Not n\Path[n\PathLocation]\door\Open) And (n\Path[n\PathLocation]\door\IsElevatorDoor > 0 Lor n\Path[n\PathLocation]\door\Locked > 0 Lor n\Path[n\PathLocation]\door\KeyCard <> 0 Lor n\Path[n\PathLocation]\door\Code <> "" Lor (Not n\Path[n\PathLocation]\door\Buttons[0]) Lor (Not n\Path[n\PathLocation]\door\Buttons[1])) Then
+					Temp = False
+				Else
+					If (Not n\Path[n\PathLocation]\door\Open) Then
+						OpenCloseDoor(n\Path[n\PathLocation]\door, PlaySFX)
+						If n\NPCType = NPCType049 Then n\Path[n\PathLocation]\door\TimerState = 70.0 * 5.0
+					EndIf
+				EndIf
+			EndIf
+			If Dist < 0.04 And Temp Then
+				n\PathLocation = n\PathLocation + 1
+			ElseIf Dist < 0.25 And (Not Temp)
+				; ~ Breaking up the path when the door in front of NPC cannot be operated by himself
+				n\PathStatus = 0
+				n\PathTimer = 0.0
+			EndIf
+		EndIf
+	EndIf	
 End Function
 
 Function CheckForNPCInFacility%(n.NPCs)

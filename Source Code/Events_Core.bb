@@ -1032,7 +1032,7 @@ Function UpdateEvents%()
 										e\room\NPC[i]\State = 9.0
 									Next
 									
-									UseDoor(e\room\RoomDoors[5], True)
+									OpenCloseDoor(e\room\RoomDoors[5])
 								EndIf
 							Else
 								If e\room\NPC[3]\Sound2 <> 0 Then
@@ -1057,7 +1057,7 @@ Function UpdateEvents%()
 										e\room\NPC[3]\PathStatus = FindPath(e\room\NPC[3], PlayerRoom\x - 320.0 * RoomScale, 0.3, PlayerRoom\z - 704.0 * RoomScale)
 										e\room\NPC[4]\PathStatus = FindPath(e\room\NPC[4], PlayerRoom\x - 320.0 * RoomScale, 0.3, PlayerRoom\z - 704.0 * RoomScale)
 										
-										UseDoor(e\room\RoomDoors[5], True)
+										OpenCloseDoor(e\room\RoomDoors[5])
 										
 										e\EventState3 = 710.0
 									EndIf
@@ -1081,7 +1081,7 @@ Function UpdateEvents%()
 									ElseIf e\EventState3 > 630.0
 										PositionEntity(me\Collider, EntityX(me\Collider), EntityY(me\Collider), Min(EntityZ(me\Collider), EntityZ(e\room\OBJ, True) + 490.0 * RoomScale))
 										If e\room\RoomDoors[5]\Open Then 
-											UseDoor(e\room\RoomDoors[5], True)
+											OpenCloseDoor(e\room\RoomDoors[5])
 											
 											em.Emitters = CreateEmitter(PlayerRoom\x - (2976.0 + 1024.0) * RoomScale, PlayerRoom\y + 373.0 * RoomScale, PlayerRoom\z + 204.0 * RoomScale, 0)
 											em\RandAngle = 7.0 : em\Speed = 0.03 : em\SizeChange = 0.003 : em\room = PlayerRoom
@@ -1192,9 +1192,7 @@ Function UpdateEvents%()
 								Else
 									If EntityZ(e\room\NPC[6]\Collider) > EntityZ(e\room\OBJ, True) - 64.0 * RoomScale Then
 										RotateEntity(e\room\NPC[6]\Collider, 0.0, CurveAngle(90.0, EntityYaw(e\room\NPC[6]\Collider), 15.0), 0.0)
-										If e\room\RoomDoors[6]\Open Then 
-											UseDoor(e\room\RoomDoors[6], True)
-										EndIf
+										If e\room\RoomDoors[6]\Open Then OpenCloseDoor(e\room\RoomDoors[6])
 										If e\room\RoomDoors[6]\OpenState < 1.0 Then e\room\NPC[6]\State = 0.0
 									EndIf
 								EndIf
@@ -1422,7 +1420,7 @@ Function UpdateEvents%()
 								
 								e\EventState3 = 905.0
 								
-								UseDoor(e\room\RoomDoors[3], True)
+								OpenCloseDoor(e\room\RoomDoors[3])
 								
 								e\room\NPC[1] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[1], True), 0.5, EntityZ(e\room\Objects[1], True))
 								PointEntity(e\room\NPC[1]\Collider, e\room\Objects[5])
@@ -1458,7 +1456,7 @@ Function UpdateEvents%()
 										
 										PickItem(SelectedItem)
 										
-										UseDoor(e\room\RoomDoors[2], True)
+										OpenCloseDoor(e\room\RoomDoors[2])
 										e\EventState3 = 910.0
 										e\room\NPC[3]\State3 = 0.0
 										SetNPCFrame(e\room\NPC[3], 608.0)
@@ -1512,15 +1510,15 @@ Function UpdateEvents%()
 												e\room\NPC[i]\State = 11.0 : e\room\NPC[i]\State3 = 1.0
 											Next
 											For i = 2 To 3
-												UseDoor(e\room\RoomDoors[i], True)
+												OpenCloseDoor(e\room\RoomDoors[i])
 											Next
 										EndIf
 									EndIf
 								EndIf
 								
 								If DistanceSquared(EntityX(me\Collider), EntityX(e\room\OBJ), EntityZ(me\Collider), EntityZ(e\room\OBJ)) < 16.0 Then
-									UseDoor(e\room\RoomDoors[1], True)
-									If e\room\RoomDoors[2]\Open Then UseDoor(e\room\RoomDoors[2], True)
+									OpenCloseDoor(e\room\RoomDoors[1])
+									If e\room\RoomDoors[2]\Open Then OpenCloseDoor(e\room\RoomDoors[2])
 									For i = 3 To 4
 										e\room\NPC[i]\State = 0.0
 									Next
@@ -1691,11 +1689,11 @@ Function UpdateEvents%()
 										e\Sound = LoadSound_Strict("SFX\Room\Intro\Scientist\Franklin\Refuse3.ogg")
 										e\SoundCHN = PlaySound_Strict(e\Sound)
 										
-										UseDoor(e\room\RoomDoors[1], True)
+										OpenCloseDoor(e\room\RoomDoors[1])
 									ElseIf e\EventState > 1000.0
 										e\room\NPC[0]\State = 1.0 : e\room\NPC[0]\State2 = 10.0 : e\room\NPC[0]\State3 = 1.0
 										e\room\NPC[3]\State = 11.0
-										UseDoor(e\room\RoomDoors[2], True)
+										OpenCloseDoor(e\room\RoomDoors[2])
 										e\EventState2 = 1.0
 										Exit
 									EndIf
@@ -1705,7 +1703,7 @@ Function UpdateEvents%()
 									EndIf
 								ElseIf Temp = True
 									e\EventState = 10000.0
-									UseDoor(e\room\RoomDoors[1], True)
+									OpenCloseDoor(e\room\RoomDoors[1])
 								EndIf
 							EndIf
 							
@@ -1742,7 +1740,7 @@ Function UpdateEvents%()
 								
 								PositionEntity(me\Collider, Max(EntityX(me\Collider), EntityX(e\room\OBJ) + 352.0 * RoomScale), EntityY(me\Collider), EntityZ(me\Collider))
 							ElseIf e\EventState >= 10440.0 And e\EventState - fps\Factor[0] < 10440.0
-								UseDoor(e\room\RoomDoors[1], True)
+								OpenCloseDoor(e\room\RoomDoors[1])
 								PlaySound_Strict(IntroSFX[3])
 							ElseIf e\EventState >= 10740.0 And e\EventState - fps\Factor[0] < 10740.0
 								If e\Sound <> 0 Then
@@ -2837,7 +2835,7 @@ Function UpdateEvents%()
 						EndIf
 						
 						If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\Objects[0]) < 4.0 Then
-							UseDoor(e\room\RoomDoors[0], True)
+							OpenCloseDoor(e\room\RoomDoors[0])
 							e\room\RoomDoors[0]\IsElevatorDoor = 0
 							For i = 0 To 1
 								EntityTexture(e\room\RoomDoors[0]\ElevatorPanel[i], d_I\ElevatorPanelTextureID[ELEVATOR_PANEL_DOWN])
@@ -4197,7 +4195,7 @@ Function UpdateEvents%()
 					If PlayerRoom = e\room Then
 						; ~ Close the doors when the player enters the room
 						For i = 0 To 1
-							UseDoor(e\room\RoomDoors[i], True)
+							OpenCloseDoor(e\room\RoomDoors[i])
 						Next
 						
 						If n_I\Curr096 <> Null Then
@@ -4332,7 +4330,7 @@ Function UpdateEvents%()
 					Else
 						If e\EventState >= 70.0 * 40.0 And e\EventState - fps\Factor[0] < 70.0 * 40.0 Then ; ~ Open them again to let the player in
 							For i = 0 To 1
-								UseDoor(e\room\RoomDoors[i], True)
+								OpenCloseDoor(e\room\RoomDoors[i])
 							Next
 							If e\Sound <> 0 Then
 								FreeSound_Strict(e\Sound) : e\Sound = 0
@@ -4400,7 +4398,7 @@ Function UpdateEvents%()
 						
 						For i = 0 To 1
 							If e\room\RoomDoors[i]\Open Then
-								UseDoor(e\room\RoomDoors[i], True)
+								OpenCloseDoor(e\room\RoomDoors[i])
 								e\room\RoomDoors[i]\Locked = 1
 							EndIf
 						Next
@@ -4927,7 +4925,7 @@ Function UpdateEvents%()
 								PlaySound_Strict(HorrorSFX[7])
 								PlaySound2(LeverSFX, Camera, e\room\RoomDoors[0]\OBJ)
 								
-								UseDoor(e\room\RoomDoors[0], True)
+								OpenCloseDoor(e\room\RoomDoors[0])
 								
 								e\EventState = 1.0
 							EndIf
@@ -5332,9 +5330,7 @@ Function UpdateEvents%()
 									e\room\RoomDoors[2]\Locked = 1
 									
 									For i = 0 To 1
-										If (Not e\room\RoomDoors[i]\Open) Then 
-											UseDoor(e\room\RoomDoors[i], True)
-										EndIf
+										If (Not e\room\RoomDoors[i]\Open) Then OpenCloseDoor(e\room\RoomDoors[i])
 									Next
 									
 									If e\EventState3 = 0.0 Then
@@ -5382,12 +5378,12 @@ Function UpdateEvents%()
 										For i = 0 To 2
 											e\room\RoomDoors[i]\Locked = 0										
 										Next
-										UseDoor(e\room\RoomDoors[1], True)
+										OpenCloseDoor(e\room\RoomDoors[1])
 										For do.Doors = Each Doors
 											If do\DoorType = HEAVY_DOOR Then
 												If Abs(EntityX(e\room\OBJ) - EntityX(do\FrameOBJ, True)) < 4.5 Then 
 													If Abs(EntityZ(e\room\OBJ) - EntityZ(do\FrameOBJ, True)) < 4.5 Then 
-														UseDoor(do, True)
+														OpenCloseDoor(do)
 														Exit
 													EndIf
 												EndIf
@@ -5601,7 +5597,7 @@ Function UpdateEvents%()
 										ResetEntity(e\room\NPC[0]\Collider)
 										PlaySound2(ElevatorBeepSFX, Camera, e\room\Objects[i], 4.0)
 										e\room\RoomDoors[i]\Locked = 0
-										UseDoor(e\room\RoomDoors[i], True)
+										OpenCloseDoor(e\room\RoomDoors[i])
 										e\room\RoomDoors[i - 1]\Open = False
 										e\room\RoomDoors[i]\Open = True
 										e\room\NPC[0]\PathStatus = FindPath(e\room\NPC[0], EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
@@ -6040,12 +6036,12 @@ Function UpdateEvents%()
 								SetAnimTime(e\room\Objects[4], 434.0)
 								SetAnimTime(e\room\Objects[5], 434.0)
 								
-								If e\room\RoomDoors[0]\Open Then UseDoor(e\room\RoomDoors[0], True)
+								If e\room\RoomDoors[0]\Open Then OpenCloseDoor(e\room\RoomDoors[0])
 							EndIf
 							
 							If e\EventState > 7.0 Then
-								If Rand(0, 300) = 1 Then
-									UseDoor(e\room\RoomDoors[0], True)
+								If Rand(300) = 1 Then
+									OpenCloseDoor(e\room\RoomDoors[0])
 								EndIf
 							EndIf 
 							e\EventState2 = e\EventState2 + fps\Factor[0]							
@@ -6449,7 +6445,7 @@ Function UpdateEvents%()
 						EndIf
 						
 						If e\EventState2 > 1000.0 Then
-							If (Not e\room\RoomDoors[1]\Open) Then UseDoor(e\room\RoomDoors[1], True)
+							If (Not e\room\RoomDoors[1]\Open) Then OpenCloseDoor(e\room\RoomDoors[1])
 							
 							If e\EventState2 >= 1040.0 And e\EventState2 - fps\Factor[0] < 1040.0 Then 
 								PlaySound2(LoadTempSound("SFX\SCP\1123\Officer1.ogg"), Camera, e\room\NPC[0]\OBJ)
@@ -7452,7 +7448,7 @@ Function UpdateEvents%()
 							EndIf
 							e\Sound = LoadSound_Strict("SFX\Door\Airlock.ogg")
 							For i = 0 To 1
-								UseDoor(e\room\RoomDoors[i], True)
+								OpenCloseDoor(e\room\RoomDoors[i])
 							Next
 							PlaySound_Strict(AlarmSFX[3])
 						ElseIf EntityDistanceSquared(e\room\Objects[0], me\Collider) > 5.76
@@ -7511,9 +7507,7 @@ Function UpdateEvents%()
 							e\EventState2 = 0.0
 							e\EventState3 = 1.0
 							For i = 0 To 1
-								If (Not e\room\RoomDoors[i]\Open) Then
-									UseDoor(e\room\RoomDoors[i], True)
-								EndIf
+								If (Not e\room\RoomDoors[i]\Open) Then OpenCloseDoor(e\room\RoomDoors[i])
 							Next
 						EndIf
 					EndIf
@@ -7909,9 +7903,7 @@ Function UpdateEvents%()
 							If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\RoomDoors[0]\FrameOBJ) < 25.0
 								For i = 0 To 1
 									e\room\RoomDoors[i]\Locked = 1
-									If (Not e\room\RoomDoors[i]\Open) Then
-										UseDoor(e\room\RoomDoors[i], True)
-									EndIf
+									If (Not e\room\RoomDoors[i]\Open) Then OpenCloseDoor(e\room\RoomDoors[i])
 								Next
 								If e\room\NPC[0]\Reload = 0.0 Then
 									PlaySound_Strict(LoadTempSound("SFX\Door\DoorOpen079.ogg"))
@@ -8025,14 +8017,14 @@ Function UpdateEvents%()
 										If Abs(EntityY(e\room\RoomDoors[0]\FrameOBJ) - EntityY(me\Collider)) < 1.0 Then
 											If e\room\RoomDoors[0]\Open Then
 												e\room\RoomDoors[0]\FastOpen = 1
-												UseDoor(e\room\RoomDoors[0], True)
+												OpenCloseDoor(e\room\RoomDoors[0])
 												PlaySound_Strict(LoadTempSound("SFX\Door\DoorClose079.ogg"))
 											EndIf
 										EndIf
 									Else
 										If (Not e\room\RoomDoors[0]\Open) Then
 											e\room\RoomDoors[0]\FastOpen = 0
-											UseDoor(e\room\RoomDoors[0], True)
+											OpenCloseDoor(e\room\RoomDoors[0])
 											PlaySound_Strict(LoadTempSound("SFX\Door\DoorOpen079.ogg"))
 										EndIf
 									EndIf
@@ -8040,7 +8032,7 @@ Function UpdateEvents%()
 							Else
 								If (Not e\room\RoomDoors[0]\Open) Then
 									e\room\RoomDoors[0]\FastOpen = 0
-									UseDoor(e\room\RoomDoors[0], True)
+									OpenCloseDoor(e\room\RoomDoors[0])
 									PlaySound_Strict(LoadTempSound("SFX\Door\DoorOpen079.ogg"))
 								EndIf
 							EndIf
