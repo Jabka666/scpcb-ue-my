@@ -28,6 +28,7 @@ Rooms:
 - Added new death message for «room3_storage» area.
 - Added new room in the Entrance Zone.
 - Reduced SCP-005 spawnrate inside containment chamber.
+- O5 Council Room code is now randomized.
 
 Menu:
 - Made capitalization for buttons text.
@@ -96,6 +97,7 @@ Bug Fixes:
 - Fixed MAV while using "disable/enable049" commands.
 - Fixed a bug causing Logs inside SCP-860-1 to have a wrong scale after loading the game.
 - Fixed drawing a white or black texture on menu assets.
+- Fixed Burnt Note scaling.
 
 - Tiny fix for SCP-372's AI.
 - Tiny fixes for location of the pause menu buttons.

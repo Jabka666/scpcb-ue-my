@@ -237,8 +237,6 @@ Global SoundTransmission%
 
 Global MainMenuOpen%, MenuOpen%, InvOpen%
 
-Global AccessCode%
-
 RenderLoading(10, "DIFFICULTY CORE")
 
 Include "Source Code\Difficulty_Core.bb"
@@ -1578,22 +1576,18 @@ Function UpdateConsole%()
 					;[End Block]
 				Case "resetfunds"
 					;[Block]
-					me\Funds = Rand(0, 6)
+					me\Funds = Rand(6)
 					;[End Block]
 				Case "codes"
 					;[Block]
-					Temp = ((Int(AccessCode) * 3) Mod 10000)
-					If Temp < 1000 Then Temp = Temp + 1000
-					
 					CreateConsoleMsg("Access Codes:")
 					CreateConsoleMsg("")
-					CreateConsoleMsg("Dr. Maynard: " + AccessCode)
-					CreateConsoleMsg("Dr. Harp: 7816")
-					;CreateConsoleMsg("Dr Gears: 1311") ~ Removed since Gears office is locked
-					CreateConsoleMsg("Dr. L.: 1234")
-					CreateConsoleMsg("O5 Council Office: 2411")
-					CreateConsoleMsg("Maintenance Tunnel: " + Temp)
-					CreateConsoleMsg(Chr(34) + "cont1_035" + Chr(34) + " storage room: 5731")
+					CreateConsoleMsg("Dr. Maynard: " + CODE_DR_MAYNARD)
+					CreateConsoleMsg("Dr. Harp: " + CODE_DR_HARP)
+					CreateConsoleMsg("Dr. L.: " + CODE_DR_L)
+					CreateConsoleMsg("O5 Council Office: " + CODE_O5_COUNCIL)
+					CreateConsoleMsg("Maintenance Tunnel: " + CODE_MAINTENANCE_TUNNELS)
+					CreateConsoleMsg("SCP-035's Containment Chamber Storage Room: " + CODE_CONT1_035)
 					CreateConsoleMsg("")
 					CreateConsoleMsg("All the others doors don't have a code.")
 					;[End Block]
@@ -1609,9 +1603,7 @@ Function UpdateConsole%()
 		
 		For cm.ConsoleMsg = Each ConsoleMsg
 			Count = Count + 1
-			If Count > 1000 Then
-				Delete(cm)
-			EndIf
+			If Count > 1000 Then Delete(cm)
 		Next
 	EndIf
 	
@@ -4952,7 +4944,7 @@ Function UpdateGUI%()
 								ResumeChannel(RadioCHN[0])
 								If (Not ChannelPlaying(RadioCHN[0])) Then RadioCHN[0] = PlaySound_Strict(RadioStatic)
 								RadioState[6] = RadioState[6] + fps\Factor[0]
-								Temp = Mid(Str(AccessCode), RadioState[8] + 1.0, 1)
+								Temp = Mid(Str(CODE_DR_MAYNARD), RadioState[8] + 1.0, 1)
 								If RadioState[6] - fps\Factor[0] <= RadioState[7] * 50.0 And RadioState[6] > RadioState[7] * 50.0 Then
 									PlaySound_Strict(RadioBuzz)
 									RadioState[7] = RadioState[7] + 1.0
@@ -6176,11 +6168,22 @@ Function RenderGUI%()
 							Case "Burnt Note" 
 								;[Block]
 								SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\items\note_Maynard.png")
+								SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 								SetBuffer(ImageBuffer(SelectedItem\ItemTemplate\Img))
 								Color(0, 0, 0)
 								SetFont(fo\FontID[Font_Default])
-								Text(277, 469, AccessCode, True, True)
-								Color(255, 255, 255)
+								Text(277 * MenuScale, 469 * MenuScale, CODE_DR_MAYNARD, True, True)
+								SetBuffer(BackBuffer())
+								;[End Block]
+							Case "Unknown Note"
+								;[Block]
+								SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
+								SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+								
+								SetBuffer(ImageBuffer(SelectedItem\ItemTemplate\Img))
+								Color(50, 50, 50)
+								SetFont(fo\FontID[Font_Journal])
+								Text(300 * MenuScale, 295 * MenuScale, CODE_O5_COUNCIL, True, True)
 								SetBuffer(BackBuffer())
 								;[End Block]
 							Case "Document SCP-372"
@@ -6191,10 +6194,7 @@ Function RenderGUI%()
 								SetBuffer(ImageBuffer(SelectedItem\ItemTemplate\Img))
 								Color(37, 45, 137)
 								SetFont(fo\FontID[Font_Journal])
-								Temp = ((Int(AccessCode) * 3) Mod 10000)
-								If Temp < 1000 Then Temp = Temp + 1000
-								Text(383 * MenuScale, 734 * MenuScale, Temp, True, True)
-								Color(255, 255, 255)
+								Text(383 * MenuScale, 734 * MenuScale, CODE_MAINTENANCE_TUNNELS, True, True)
 								SetBuffer(BackBuffer())
 								;[End Block]
 							Case "Document SCP-035"

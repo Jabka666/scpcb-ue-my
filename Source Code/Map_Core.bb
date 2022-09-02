@@ -2858,6 +2858,15 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 	Return(State)
 End Function
 
+Global CODE_DR_MAYNARD%, CODE_O5_COUNCIL%, CODE_MAINTENANCE_TUNNELS%
+; ~ Doors Code Constants
+;[Block]
+Const CODE_DR_HARP% = 7816
+Const CODE_DR_L% = 2411
+Const CODE_CONT1_035% = 5731
+Const CODE_LOCKED$ = "GEAR"
+;[End Block]
+
 Function UseDoor%(d.Doors, PlaySFX% = True)
 	Local Temp%, i%
 	
@@ -2945,7 +2954,7 @@ Function UseDoor%(d.Doors, PlaySFX% = True)
 		EndIf
 	ElseIf d\Code <> ""
 		If SelectedItem = Null Then
-			If (d\Locked = 0) And (d\Code <> "GEAR") And (d\Code = msg\KeyPadInput) Then
+			If (d\Locked = 0) And (d\Code <> LOCKED_CODE) And (d\Code = msg\KeyPadInput) Then
 				PlaySound2(ScannerSFX1, Camera, d_I\ClosestButton)
 			Else
 				PlaySound2(ScannerSFX2, Camera, d_I\ClosestButton)
@@ -2961,7 +2970,7 @@ Function UseDoor%(d.Doors, PlaySFX% = True)
 			EndIf
 			SelectedItem = Null
 			
-			If (d\Locked = 0) And (d\Code <> "GEAR") And (Temp = KEY_005) Then
+			If (d\Locked = 0) And (d\Code <> CODE_LOCKED) And (Temp = KEY_005) Then
 				PlaySound2(ScannerSFX1, Camera, d_I\ClosestButton)
 			Else
 				PlaySound2(ScannerSFX2, Camera, d_I\ClosestButton)
@@ -2969,11 +2978,11 @@ Function UseDoor%(d.Doors, PlaySFX% = True)
 			EndIf
 		EndIf
 		
-		If d\Code = Str(AccessCode) Then
+		If d\Code = Str(CODE_DR_MAYNARD) Then
 			GiveAchievement(AchvMaynard)
-		ElseIf d\Code = "7816"
+		ElseIf d\Code = CODE_DR_HARP
 			GiveAchievement(AchvHarp)
-		ElseIf d\Code = "2411"
+		ElseIf d\Code = CODE_O5_COUNCIL
 			GiveAchievement(AchvO5)
 		EndIf	
 	Else
@@ -3876,10 +3885,10 @@ Function FillRoom%(r.Rooms)
 		Case "cont2_860_1"
 			;[Block]
 			; ~ Doors to observation room
-			d.Doors = CreateDoor(r\x + 928.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 0.0, r, False, DEFAULT_DOOR, KEY_MISC, "GEAR")
+			d.Doors = CreateDoor(r\x + 928.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 0.0, r, False, DEFAULT_DOOR, KEY_MISC, CODE_LOCKED)
 			d\Locked = 1
 			
-			d.Doors = CreateDoor(r\x + 928.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 0.0, r, True, DEFAULT_DOOR, KEY_MISC, "GEAR")
+			d.Doors = CreateDoor(r\x + 928.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 0.0, r, True, DEFAULT_DOOR, KEY_MISC, CODE_LOCKED)
 			d\Locked = 1 : d\MTFClose = False
 			
 			; ~ Doors to SCP-860-1's door itself
@@ -4166,7 +4175,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[3] = CreateDoor(r\x + 4352.0 * RoomScale, r\y, r\z + 498.0 * RoomScale, 0.0, r)
 			r\RoomDoors[3]\AutoClose = False
 			
-			r\RoomDoors.Doors[4] = CreateDoor(r\x + 3248.0 * RoomScale, r\y - 928.0 * RoomScale, r\z + 6400.0 * RoomScale, 0.0, r, False, ONE_SIDED_DOOR, KEY_MISC, "GEAR")
+			r\RoomDoors.Doors[4] = CreateDoor(r\x + 3248.0 * RoomScale, r\y - 928.0 * RoomScale, r\z + 6400.0 * RoomScale, 0.0, r, False, ONE_SIDED_DOOR, KEY_MISC, CODE_LOCKED)
 			r\RoomDoors[4]\Locked = 1
 			FreeEntity(r\RoomDoors[4]\Buttons[1]) : r\RoomDoors[4]\Buttons[1] = 0	
 			
@@ -4309,7 +4318,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors[1]\LinkedDoor = r\RoomDoors[0]
 			
 			If CurrMapGrid\Grid[Floor(r\x / RoomSpacing) + ((Floor(r\z / RoomSpacing) - 1) * MapGridSize)] = MapGrid_NoTile Then
-				d.Doors = CreateDoor(r\x, r\y, r\z - 1026.0 * RoomScale, 0.0, r, False, HEAVY_DOOR, KEY_MISC, "GEAR")
+				d.Doors = CreateDoor(r\x, r\y, r\z - 1026.0 * RoomScale, 0.0, r, False, HEAVY_DOOR, KEY_MISC, CODE_LOCKED)
 				d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 				FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			EndIf
@@ -4351,7 +4360,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors[1]\LinkedDoor = r\RoomDoors[0]
 			
 			If CurrMapGrid\Grid[Floor(r\x / RoomSpacing) + ((Floor(r\z / RoomSpacing) - 1) * MapGridSize)] = MapGrid_NoTile Then
-				d.Doors = CreateDoor(r\x, r\y, r\z - 1026.0 * RoomScale, 0.0, r, False, DEFAULT_DOOR, KEY_MISC, "GEAR")
+				d.Doors = CreateDoor(r\x, r\y, r\z - 1026.0 * RoomScale, 0.0, r, False, DEFAULT_DOOR, KEY_MISC, CODE_LOCKED)
 				d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 				FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 				FreeEntity(d\OBJ2) : d\OBJ2 = 0
@@ -4584,14 +4593,14 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case "room2_scientists"
 			;[Block]
-			d.Doors = CreateDoor(r\x + 256.0 * RoomScale, r\y, r\z + 448.0 * RoomScale, 270.0, r, False, DEFAULT_DOOR, KEY_MISC, Str(AccessCode))
+			d.Doors = CreateDoor(r\x + 256.0 * RoomScale, r\y, r\z + 448.0 * RoomScale, 270.0, r, False, DEFAULT_DOOR, KEY_MISC, Str(CODE_DR_MAYNARD))
 			
-			d.Doors = CreateDoor(r\x - 448.0 * RoomScale, r\y, r\z, 270.0, r, False, DEFAULT_DOOR, KEY_MISC, "GEAR")
+			d.Doors = CreateDoor(r\x - 448.0 * RoomScale, r\y, r\z, 270.0, r, False, DEFAULT_DOOR, KEY_MISC, CODE_LOCKED)
 			d\Locked = 1 : d\MTFClose = False : d\DisableWaypoint = True
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
-			d.Doors = CreateDoor(r\x + 256.0 * RoomScale, r\y, r\z - 576.0 * RoomScale, 270.0, r, False, DEFAULT_DOOR, KEY_MISC, "7816")
+			d.Doors = CreateDoor(r\x + 256.0 * RoomScale, r\y, r\z - 576.0 * RoomScale, 270.0, r, False, DEFAULT_DOOR, KEY_MISC, Str(CODE_DR_HARP))
 			
 			it.Items = CreateItem("Mysterious Note", "paper", r\x + 736.0 * RoomScale, r\y + 224.0 * RoomScale, r\z + 544.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)	
@@ -4619,7 +4628,7 @@ Function FillRoom%(r.Rooms)
 			;[Block]
 			d.Doors = CreateDoor(r\x + 256.0 * RoomScale, r\y, r\z, 270.0, r, False, DEFAULT_DOOR, KEY_CARD_5)
 			
-			r\RoomDoors.Doors[0] = CreateDoor(r\x - 448.0 * RoomScale, r\y, r\z, 90.0, r, False, DEFAULT_DOOR, KEY_MISC, "1234")
+			r\RoomDoors.Doors[0] = CreateDoor(r\x - 448.0 * RoomScale, r\y, r\z, 90.0, r, False, DEFAULT_DOOR, KEY_MISC, CODE_DR_L)
 			r\RoomDoors[0]\MTFClose = False : r\RoomDoors[0]\DisableWaypoint = True
 			FreeEntity(r\RoomDoors[0]\Buttons[1]) : r\RoomDoors[0]\Buttons[1] = 0
 			
@@ -4761,9 +4770,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\RoomDoors.Doors[2] = CreateDoor(r\x - 256.0 * RoomScale, r\y, r\z - 656.0 * RoomScale, 90.0, r, True, ELEVATOR_DOOR)
 			
-			Temp = ((Int(AccessCode) * 3) Mod 10000)
-			If Temp < 1000 Then Temp = Temp + 1000
-			d.Doors = CreateDoor(r\x, r\y, r\z, 0.0, r, False, BIG_DOOR, KEY_MISC, Temp)
+			d.Doors = CreateDoor(r\x, r\y, r\z, 0.0, r, False, BIG_DOOR, KEY_MISC, CODE_MAINTENANCE_TUNNELS)
 			PositionEntity(d\Buttons[0], r\x + 230.0 * RoomScale, EntityY(d\Buttons[1], True), r\z - 384.0 * RoomScale, True)
 			RotateEntity(d\Buttons[0], 0.0, -90.0, 0.0, True)
 			PositionEntity(d\Buttons[1], r\x - 230.0 * RoomScale, EntityY(d\Buttons[1], True), r\z + 384.0 * RoomScale, True)		
@@ -4909,7 +4916,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[2] = CreateDoor(r\x + 384.0 * RoomScale, r\y, r\z - 672.0 * RoomScale, 180.0, r, False, DEFAULT_DOOR, KEY_CARD_5)
 			
 			; ~ Door to the storage room
-			r\RoomDoors.Doors[3] = CreateDoor(r\x + 768.0 * RoomScale, r\y, r\z + 512.0 * RoomScale, 90.0, r, False, DEFAULT_DOOR, KEY_MISC, "5731")
+			r\RoomDoors.Doors[3] = CreateDoor(r\x + 768.0 * RoomScale, r\y, r\z + 512.0 * RoomScale, 90.0, r, False, DEFAULT_DOOR, KEY_MISC, Str(CODE_CONT1_035))
 			
 			For i = 0 To 1
 				r\Objects[i * 2] = CopyEntity(lvr_I\LeverModelID[LEVER_BASE_MODEL])
@@ -7377,7 +7384,7 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case "room1_o5"
 			;[Block]
-			d.Doors = CreateDoor(r\x, r\y, r\z - 240.0 * RoomScale, 0.0, r, False, DEFAULT_DOOR, KEY_MISC, "2411")
+			d.Doors = CreateDoor(r\x, r\y, r\z - 240.0 * RoomScale, 0.0, r, False, DEFAULT_DOOR, KEY_MISC, CODE_O5_COUNCIL)
 			
 			it.Items = CreateItem("Field Agent Log #235-001-CO5", "paper", r\x, r\y + 200.0 * RoomScale, r\z + 870.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)

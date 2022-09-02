@@ -1554,11 +1554,17 @@ Function InitNewGame%()
 	
 	I_005\ChanceToSpawn = Rand(10)
 	
-	AccessCode = 0
+	CODE_DR_MAYNARD = 0
 	For i = 0 To 3
-		AccessCode = AccessCode + (Rand(9) * (10 ^ i))
+		CODE_DR_MAYNARD = CODE_DR_MAYNARD + (Rand(9) * (10 ^ i))
 	Next
-	If AccessCode = 7816 Lor AccessCode = 2411 Then AccessCode = AccessCode + 1
+	If CODE_DR_MAYNARD = CODE_DR_HARP Lor CODE_DR_MAYNARD = CODE_O5_COUNCIL Then CODE_DR_MAYNARD = CODE_DR_MAYNARD + 1
+	
+	CODE_O5_COUNCIL = ((Int(CODE_DR_MAYNARD) * 2) Mod 10000)
+	If CODE_O5_COUNCIL < 1000 Then CODE_O5_COUNCIL = CODE_O5_COUNCIL + 1000
+	
+	CODE_MAINTENANCE_TUNNELS = ((Int(CODE_DR_MAYNARD) * 3) Mod 10000)
+	If CODE_MAINTENANCE_TUNNELS < 1000 Then CODE_MAINTENANCE_TUNNELS = CODE_MAINTENANCE_TUNNELS + 1000
 	
 	RenderLoading(55, "ROOMS")
 	
