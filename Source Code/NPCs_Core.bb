@@ -5486,10 +5486,7 @@ Function UpdateMTFUnit%(n.NPCs)
 									
 									NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 									
-									If NewDist < 1.0 And n\Path[n\PathLocation]\door <> Null Then
-										; ~ Open the door and make it automatically close after 5 seconds
-										
-									EndIf
+									If NewDist < 1.0 Then UseDoorNPC(n)
 									
 									If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then
 										n\PathLocation = n\PathLocation + 1
@@ -5820,13 +5817,7 @@ Function UpdateMTFUnit%(n.NPCs)
 								n\PathLocation = n\PathLocation + 1
 							EndIf
 						Else
-							If n\Path[n\PathLocation]\door <> Null Then
-								If (Not n\Path[n\PathLocation]\door\Open) Then
-									n\Path[n\PathLocation]\door\Open = True
-									n\Path[n\PathLocation]\door\TimerState = 70.0 * 8.0
-									PlayMTFSound(MTFSFX[0], n)
-								EndIf
-							EndIf
+							UseDoorNPC(n)
 							
 							If Dist < PowTwo(HideDistance) Then 
 								PointEntity(n\OBJ, n\Path[n\PathLocation]\OBJ)
@@ -5979,7 +5970,7 @@ Function UpdateMTFUnit%(n.NPCs)
 									
 									NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 									
-									If NewDist < 4.0 And n\Path[n\PathLocation]\door <> Null Then UseDoorNPC(n)
+									If NewDist < 4.0 Then UseDoorNPC(n)
 									
 									If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then
 										n\PathLocation = n\PathLocation + 1
@@ -6382,7 +6373,6 @@ Function UpdateMTFUnit%(n.NPCs)
 										
 										NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 										
-										; ~ Open the door and make it automatically close after 5 seconds
 										If NewDist < 1.0 Then UseDoorNPC(n)
 										
 										If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then
@@ -6414,8 +6404,8 @@ Function UpdateMTFUnit%(n.NPCs)
 									EndIf
 									
 									If n\PathTimer = 1.0 Then
-										AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 40.0)
 										n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
+										AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 40.0)
 										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 									EndIf
 								EndIf
