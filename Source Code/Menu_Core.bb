@@ -464,14 +464,14 @@ Function UpdateMainMenu%()
 						Next
 						
 						If DelSave <> Null Then
-							x = 740 * MenuScale
+							x = 739 * MenuScale
 							y = 376 * MenuScale
 							
-							If UpdateMainMenuButton(x + (50 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, "YES", False) Then
+							If UpdateMainMenuButton(x + (74 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, "YES", False) Then
 								DeleteGame(DelSave)
 								mm\ShouldDeleteGadgets = True
 							EndIf
-							If UpdateMainMenuButton(x + (250 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, "NO", False) Then
+							If UpdateMainMenuButton(x + (246 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, "NO", False) Then
 								DelSave = Null
 								mm\ShouldDeleteGadgets = True
 							EndIf
@@ -486,12 +486,12 @@ Function UpdateMainMenu%()
 					Width = 580 * MenuScale
 					Height = 350 * MenuScale
 					
-					If mm\CurrMenuPage < Ceil(Float(SavedMapsAmount) / 5.0) - 1 Then 
+					If mm\CurrMenuPage < Ceil(Float(SavedMapsAmount) / 5.0) - 1 And SelectedMapActionMsg = "" Then 
 						If UpdateMainMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">") Then ChangePage(mm\CurrMenuPage + 1)
 					Else
 						UpdateMainMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">", True, False, True)
 					EndIf
-					If mm\CurrMenuPage > 0 Then
+					If mm\CurrMenuPage > 0 And SelectedMapActionMsg = "" Then
 						If UpdateMainMenuButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<") Then ChangePage(mm\CurrMenuPage - 1)
 					Else
 						UpdateMainMenuButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<", True, False, True)
@@ -525,16 +525,16 @@ Function UpdateMainMenu%()
 						Next
 						
 						If SelectedMapActionMsg <> "" Then
-							x = 740 * MenuScale
+							x = 739 * MenuScale
 							y = 376 * MenuScale
 							
-							If UpdateMainMenuButton(x + (50 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, "YES", False) Then
+							If UpdateMainMenuButton(x + (74 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, "YES", False) Then
 								DeleteFile(CurrentDir() + MapCreatorPath + SelectedMapActionMsg)
 								SelectedMapActionMsg = ""
 								LoadSavedMaps()
 								mm\ShouldDeleteGadgets = True
 							EndIf
-							If UpdateMainMenuButton(x + (250 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, "NO", False) Then
+							If UpdateMainMenuButton(x + (246 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, "NO", False) Then
 								SelectedMapActionMsg = ""
 								mm\ShouldDeleteGadgets = True
 							EndIf
@@ -994,46 +994,50 @@ Function UpdateMainMenu%()
 			Width = 400 * MenuScale
 			Height = 70 * MenuScale
 			
-			If UpdateMainMenuButton(x + Width + (20 * MenuScale), y, (580 * MenuScale) - Width - (20 * MenuScale), Height, "BACK", False) Lor KeyDown(1) Then 
-				Select mm\MainMenuTab
-					Case MainMenuTab_New_Game
-						;[Block]
-						PutINIValue(OptionFile, "Global", "Enable Intro", opt\IntroEnabled)
-						For sv.Save = Each Save
-							Delete(sv)
-						Next
-						mm\MainMenuTab = MainMenuTab_Default
-						;[End Block]
-					Case MainMenuTab_Load_Game
-						;[Block]
-						mm\CurrMenuPage = 0
-						For sv.Save = Each Save
-							Delete(sv)
-						Next
-						mm\MainMenuTab = MainMenuTab_Default
-						;[End Block]
-					Case MainMenuTab_Options_Graphics, MainMenuTab_Options_Audio, MainMenuTab_Options_Controls, MainMenuTab_Options_Advanced ; ~ Save the options
-						;[Block]
-						SaveOptionsINI()
-						
-						UserTrackCheck = 0
-						UserTrackCheck2 = 0
-						
-						mm\CurrMenuPage = 0
-						AntiAlias(opt\AntiAliasing)
-						mm\MainMenuTab = MainMenuTab_Default
-						;[End Block]
-					Case MainMenuTab_Load_Map ; ~ Move back to the "New Game" tab
-						;[Block]
-						mm\MainMenuTab = MainMenuTab_New_Game
-						mm\CurrMenuPage = 0
-						mo\MouseHit1 = False
-						;[End Block]
-					Default
-						;[Block]
-						mm\MainMenuTab = MainMenuTab_Default
-						;[End Block]
-				End Select
+			If SelectedMapActionMsg = "" And DelSave = Null Then
+				If UpdateMainMenuButton(x + Width + (20 * MenuScale), y, (580 * MenuScale) - Width - (20 * MenuScale), Height, "BACK", False) Lor KeyDown(1) Then 
+					Select mm\MainMenuTab
+						Case MainMenuTab_New_Game
+							;[Block]
+							PutINIValue(OptionFile, "Global", "Enable Intro", opt\IntroEnabled)
+							For sv.Save = Each Save
+								Delete(sv)
+							Next
+							mm\MainMenuTab = MainMenuTab_Default
+							;[End Block]
+						Case MainMenuTab_Load_Game
+							;[Block]
+							mm\CurrMenuPage = 0
+							For sv.Save = Each Save
+								Delete(sv)
+							Next
+							mm\MainMenuTab = MainMenuTab_Default
+							;[End Block]
+						Case MainMenuTab_Options_Graphics, MainMenuTab_Options_Audio, MainMenuTab_Options_Controls, MainMenuTab_Options_Advanced ; ~ Save the options
+							;[Block]
+							SaveOptionsINI()
+							
+							UserTrackCheck = 0
+							UserTrackCheck2 = 0
+							
+							mm\CurrMenuPage = 0
+							AntiAlias(opt\AntiAliasing)
+							mm\MainMenuTab = MainMenuTab_Default
+							;[End Block]
+						Case MainMenuTab_Load_Map ; ~ Move back to the "New Game" tab
+							;[Block]
+							mm\MainMenuTab = MainMenuTab_New_Game
+							mm\CurrMenuPage = 0
+							mo\MouseHit1 = False
+							;[End Block]
+						Default
+							;[Block]
+							mm\MainMenuTab = MainMenuTab_Default
+							;[End Block]
+					End Select
+				EndIf
+			Else
+				UpdateMainMenuButton(x + Width + (20 * MenuScale), y, (580 * MenuScale) - Width - (20 * MenuScale), Height, "BACK", False, False, True)
 			EndIf
 		EndIf
 	Wend
@@ -1334,7 +1338,7 @@ Function RenderMainMenu%()
 					Next
 					
 					If DelSave <> Null Then
-						x = 740 * MenuScale
+						x = 739 * MenuScale
 						y = 376 * MenuScale
 						RenderFrame(x, y, 420 * MenuScale, 200 * MenuScale)
 						RowText("Are you sure you want to delete this save?", x + (20 * MenuScale), y + (15 * MenuScale), 400 * MenuScale, 200 * MenuScale)
@@ -1636,7 +1640,7 @@ Function RenderMainMenu%()
 						
 						RenderFrame(x + (15 * MenuScale), y + Height + (5 * MenuScale), Width - (70 * MenuScale), 30 * MenuScale)	
 						
-						Text(x + (Width / 2), y + Height + (20 * MenuScale), "PAGE " + Int(Max((mm\CurrMenuPage + 1), 1)) + "/2", True, True)
+						Text(x + (Width / 2), y + Height + (20 * MenuScale), "PAGE " + (mm\CurrMenuPage + 1) + "/2", True, True)
 						
 						If mm\CurrMenuPage = 0 Then
 							y = y + (20 * MenuScale)
@@ -1860,7 +1864,7 @@ Function RenderMainMenu%()
 					Next
 					
 					If SelectedMapActionMsg <> "" Then
-						x = 740 * MenuScale
+						x = 739 * MenuScale
 						y = 376 * MenuScale
 						RenderFrame(x, y, 420 * MenuScale, 200 * MenuScale)
 						RowText("Are you sure you want to delete this map?", x + (20 * MenuScale), y + (15 * MenuScale), 400 * MenuScale, 200 * MenuScale)

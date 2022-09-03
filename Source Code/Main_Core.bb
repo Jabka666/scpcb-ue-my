@@ -7055,16 +7055,20 @@ Function UpdateMenu%()
 			
 			If mm\AchievementsMenu > 0 Then
 				If mm\AchievementsMenu <= Floor(Float(MAXACHIEVEMENTS - 1) / 12.0) Then 
-					If UpdateMainMenuButton(x + (341 * MenuScale), y + (345 * MenuScale), 50 * MenuScale, 60 * MenuScale, ">") Then
+					If UpdateMainMenuButton(x + (341 * MenuScale), y + (345 * MenuScale), 60 * MenuScale, 60 * MenuScale, ">") Then
 						mm\AchievementsMenu = mm\AchievementsMenu + 1
 						mm\ShouldDeleteGadgets = True
 					EndIf
+				Else
+					UpdateMainMenuButton(x + (341 * MenuScale), y + (345 * MenuScale), 60 * MenuScale, 60 * MenuScale, ">", True, False, True)
 				EndIf
 				If mm\AchievementsMenu > 1 Then
-					If UpdateMainMenuButton(x + (41 * MenuScale), y + (345 * MenuScale), 50 * MenuScale, 60 * MenuScale, "<") Then
+					If UpdateMainMenuButton(x + (31 * MenuScale), y + (345 * MenuScale), 60 * MenuScale, 60 * MenuScale, "<") Then
 						mm\AchievementsMenu = mm\AchievementsMenu - 1
 						mm\ShouldDeleteGadgets = True
 					EndIf
+				Else
+					UpdateMainMenuButton(x + (31 * MenuScale), y + (345 * MenuScale), 60 * MenuScale, 60 * MenuScale, "<", True, False, True)
 				EndIf
 			EndIf
 		Else
@@ -7232,7 +7236,7 @@ Function RenderMenu%()
 			TempStr = "YOU DIED"
 		EndIf		
 		SetFont(fo\FontID[Font_Default_Big])
-		Text(x + (Width / 2) + (40 * MenuScale), y + (30 * MenuScale), TempStr, True)
+		Text(x + (Width / 2) + (47 * MenuScale), y + (48 * MenuScale), TempStr, True, True)
 		SetFont(fo\FontID[Font_Default])
 		
 		x = x + (132 * MenuScale)
@@ -7706,26 +7710,22 @@ Function UpdateEnding%()
 			EndIf			
 		Else
 			If me\EndingTimer < -1000.0 And me\EndingTimer > -2000.0 Then
-				Width = ImageWidth(t\ImageID[0])
-				Height = ImageHeight(t\ImageID[0])
-				x = mo\Viewport_Center_X - (Width / 2)
-				y = mo\Viewport_Center_Y - (Height / 2)
-				
 				If mm\AchievementsMenu =< 0 Then 
-					x = x + (132 * MenuScale)
-					y = y + (122 * MenuScale)
-					
+					Width = ImageWidth(t\ImageID[0])
+					Height = ImageHeight(t\ImageID[0])
 					x = mo\Viewport_Center_X - (Width / 2)
 					y = mo\Viewport_Center_Y - (Height / 2)
-					x = x + (Width / 2)
-					y = y + Height - (100 * MenuScale)
+					x = x + (132 * MenuScale)
+					y = y + (432 * MenuScale)
 					
-					If UpdateMainMenuButton(x - (170 * MenuScale), y - (200 * MenuScale), 430 * MenuScale, 60 * MenuScale, "ACHIEVEMENTS", True) Then
+					If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "ACHIEVEMENTS", True) Then
 						mm\AchievementsMenu = 1
 						mm\ShouldDeleteGadgets = True
 					EndIf
 					
-					If UpdateMainMenuButton(x - (170 * MenuScale), y - (100 * MenuScale), 430 * MenuScale, 60 * MenuScale, "MAIN MENU", True)
+					y = y + 75 * MenuScale
+					
+					If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "MAIN MENU", True)
 						ShouldPlay = 24
 						NowPlaying = ShouldPlay
 						For i = 0 To 9
@@ -7793,7 +7793,7 @@ Function RenderEnding%()
 				
 				Color(255, 255, 255)
 				SetFont(fo\FontID[Font_Default_Big])
-				Text(x + (Width / 2) + (40 * MenuScale), y + (20 * MenuScale), "THE END", True)
+				Text(x + (Width / 2) + (47 * MenuScale), y + (48 * MenuScale), "THE END", True, True)
 				SetFont(fo\FontID[Font_Default])
 				
 				If mm\AchievementsMenu =< 0 Then 
