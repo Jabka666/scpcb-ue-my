@@ -2877,8 +2877,8 @@ Function RenderMenuSlideBars%()
 		DrawImage(BlinkMeterIMG, msb\x + msb\Width * msb\Value / 100.0 + (3 * MenuScale), msb\y + (3 * MenuScale))
 		
 		Color(170, 170, 170)
-		Text(msb\x - (34 * MenuScale), msb\y, msb\TextLeft)					
-		Text(msb\x + msb\Width + (38 * MenuScale), msb\y + (4 * MenuScale), msb\TextRight)	
+		Text(msb\x - (50 * MenuScale), msb\y + (5 * MenuScale), msb\TextLeft)					
+		Text(msb\x + msb\Width + (34 * MenuScale), msb\y + (5 * MenuScale), msb\TextRight)	
 	Next
 End Function
 
