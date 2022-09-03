@@ -97,6 +97,11 @@ Function ChangePage%(Page%)
 	mm\ShouldDeleteGadgets = True
 End Function
 
+If opt\DisplayMode <> 0 Then
+	opt\AntiAliasing = False
+	PutINIValue(OptionFile, "Graphics", "Anti-Aliasing", opt\AntiAliasing)
+EndIf
+
 Function UpdateMainMenu%()
 	CatchErrors("Uncaught (UpdateMainMenu")
 	
@@ -262,11 +267,6 @@ Function UpdateMainMenu%()
 				
 				UpdateMainMenuButton(x, y, Width, Height, Txt)
 			Next
-			
-			If opt\AntiAliasing And opt\DisplayMode <> 0 Then
-				opt\AntiAliasing = False
-				PutINIValue(OptionFile, "Graphics", "Anti-Aliasing", opt\AntiAliasing)
-			EndIf
 		Else
 			Select mm\MainMenuTab
 				Case MainMenuTab_New_Game
