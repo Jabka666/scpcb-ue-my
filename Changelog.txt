@@ -115,6 +115,8 @@ Bug Fixes:
 - Fixed wrong SCP-409 texture.
 - Fixed an ability to select a book.
 - Fixed «RedVision» eyedrops texture saying «ReVision».
+- Fixed "Stream channel not found" error spamming in console.
+- Fixed Gate A that is visible from Gate B.
 
 - Tiny fix for SCP-372's AI.
 - Tiny fixes for location of the pause menu buttons.
