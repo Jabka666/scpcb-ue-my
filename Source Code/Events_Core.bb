@@ -629,47 +629,6 @@ Function UpdateEvents%()
 	Local Angle#, RoomExists%
 	
 	For e.Events = Each Events
-		If fps\Factor[0] > 0.0 Then
-			If e\SoundCHN <> 0 Then
-				If e\SoundCHN_IsStream Then
-					SetStreamVolume_Strict(e\SoundCHN, opt\SFXVolume * opt\MasterVolume)
-				EndIf
-			EndIf
-			
-			If e\SoundCHN2 <> 0 Then
-				If e\SoundCHN2_IsStream Then
-					SetStreamVolume_Strict(e\SoundCHN2, opt\SFXVolume * opt\MasterVolume)
-				EndIf
-			EndIf
-			
-			If e\SoundCHN3 <> 0 Then
-				If e\SoundCHN3_IsStream Then
-					SetStreamVolume_Strict(e\SoundCHN3, opt\SFXVolume * opt\MasterVolume)
-				EndIf
-			EndIf
-		EndIf
-		If (Not PlayerInReachableRoom()) Then
-			If PlayerRoom\RoomTemplate\Name <> "gate_b" And PlayerRoom\RoomTemplate\Name <> "gate_a" And PlayerRoom\RoomTemplate\Name <> "dimension_1499" Then
-				If e\SoundCHN <> 0 And e\SoundCHN_IsStream Then
-					StopStream_Strict(e\SoundCHN)
-					e\SoundCHN = 0
-					e\SoundCHN_IsStream = 0
-				EndIf
-				
-				If e\SoundCHN2 <> 0 And e\SoundCHN2_IsStream Then
-					StopStream_Strict(e\SoundCHN2)
-					e\SoundCHN2 = 0
-					e\SoundCHN2_IsStream = 0
-				EndIf
-				
-				If e\SoundCHN3 <> 0 And e\SoundCHN3_IsStream Then
-					StopStream_Strict(e\SoundCHN3)
-					e\SoundCHN3 = 0
-					e\SoundCHN3_IsStream = 0
-				EndIf
-			EndIf
-		EndIf
-		
 		Select e\EventID
 			Case e_cont1_173
 				;[Block]
@@ -941,7 +900,7 @@ Function UpdateEvents%()
 								opt\CurrMusicVolume = opt\MusicVolume
 								
 								StopStream_Strict(MusicCHN)
-								MusicCHN = StreamSound_Strict("SFX\Music\" + Music[13] + ".ogg", opt\CurrMusicVolume * opt\MasterVolume, Mode)
+								MusicCHN = StreamSound_Strict("SFX\Music\" + Music[13] + ".ogg", opt\CurrMusicVolume * opt\MasterVolume)
 								NowPlaying = ShouldPlay
 								
 								PlaySound_Strict(IntroSFX[Rand(8, 10)])
@@ -2151,8 +2110,8 @@ Function UpdateEvents%()
 				EndIf
 				e\EventState = e\room\RoomDoors[0]\Open
 				
-				If ChannelPlaying(e\SoundCHN) Then UpdateSoundOrigin(e\SoundCHN, Camera, e\room\RoomDoors[0]\OBJ)
-				If ChannelPlaying(e\SoundCHN2) Then UpdateSoundOrigin(e\SoundCHN2, Camera, e\room\RoomDoors[1]\OBJ)
+				UpdateSoundOrigin(e\SoundCHN, Camera, e\room\RoomDoors[0]\OBJ)
+				UpdateSoundOrigin(e\SoundCHN2, Camera, e\room\RoomDoors[1]\OBJ)
 				;[End Block]
 			Case e_cont1_895, e_cont1_895_106
 				;[Block]
@@ -4322,8 +4281,7 @@ Function UpdateEvents%()
 							Next
 							
 							n_I\Curr096\State = 5.0
-							StopStream_Strict(n_I\Curr096\SoundCHN)
-							n_I\Curr096\SoundCHN = 0
+							StopStream_Strict(n_I\Curr096\SoundCHN) : n_I\Curr096\SoundCHN = 0 : n_I\Curr096\SoundCHN_IsStream = False
 							
 							RemoveNPC(e\room\NPC[0]) : e\room\NPC[0] = Null
 						EndIf
@@ -4362,9 +4320,7 @@ Function UpdateEvents%()
 							EndIf	
 						EndIf
 					EndIf
-					If ChannelPlaying(e\SoundCHN) Then
-						UpdateSoundOrigin(e\SoundCHN, Camera, n_I\Curr096\OBJ)
-					EndIf
+					UpdateSoundOrigin(e\SoundCHN, Camera, n_I\Curr096\OBJ)
 				ElseIf PlayerRoom = e\room
 					Temp = UpdateLever(e\room\Objects[1]) ; ~ Power switch
 					x = UpdateLever(e\room\Objects[3]) ; ~ Fuel pump
@@ -4853,9 +4809,7 @@ Function UpdateEvents%()
 									;[End Block]
 							End Select
 							
-							If ChannelPlaying(e\SoundCHN2) Then
-								UpdateSoundOrigin(e\SoundCHN2, Camera, e\room\RoomDoors[4]\OBJ, 400.0)
-							EndIf
+							UpdateSoundOrigin(e\SoundCHN2, Camera, e\room\RoomDoors[4]\OBJ, 400.0)
 							
 							PlayerFallingPickDistance = 0.0
 							
@@ -5740,47 +5694,53 @@ Function UpdateEvents%()
 									GiveAchievement(Achv079)
 									e\EventState = 3.0
 									e\EventState2 = 1.0
-									e\SoundCHN3 = StreamSound_Strict("SFX\SCP\079\Speech.ogg", opt\SFXVolume * opt\MasterVolume, 0.0)
+									
+									If e\SoundCHN3 <> 0 Then
+										StopStream_Strict(e\SoundCHN3) : e\SoundCHN3 = 0 : e\SoundCHN3_IsStream = False
+									EndIf
+									e\SoundCHN3 = StreamSound_Strict("SFX\SCP\079\Speech.ogg", opt\SFXVolume * opt\MasterVolume, 0)
 									e\SoundCHN3_IsStream = True
 								EndIf							
-							ElseIf e\EventState < 2000.0 Then
+							ElseIf e\EventState < 6000.0 Then
+								If e\SoundCHN3 <> 0 Then
+									If IsStreamPlaying_Strict(e\SoundCHN3) Then
+										If Rand(4) = 1 Then
+											EntityTexture(e\room\Objects[1], mon_I\MonitorOverlayID[Rand(MONITOR_079_OVERLAY_2, MONITOR_079_OVERLAY_7)])
+											If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
+										ElseIf Rand(10) = 1 
+											If (Not EntityHidden(e\room\Objects[1])) Then HideEntity(e\room\Objects[1])							
+										EndIf							
+									Else
+										StopStream_Strict(e\SoundCHN3) : e\SoundCHN3 = 0 : e\SoundCHN3_IsStream = False
+										EntityTexture(e\room\Objects[1], mon_I\MonitorOverlayID[MONITOR_079_OVERLAY_1])
+										If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
+									EndIf
+								EndIf
+								e\EventState = e\EventState + fps\Factor[0]
+							Else
+								If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 6.25 Then 
+									If e\SoundCHN3 <> 0 Then
+										StopStream_Strict(e\SoundCHN3) : e\SoundCHN3 = 0 : e\SoundCHN3_IsStream = False
+									EndIf
+									e\SoundCHN3 = StreamSound_Strict("SFX\SCP\079\Refuse.ogg", opt\SFXVolume * opt\MasterVolume, 0)
+									e\SoundCHN3_IsStream = True
+									
+									e\EventState = 10001.0
+								EndIf
+							EndIf
+						Else
+							If e\SoundCHN3 <> 0 Then
 								If IsStreamPlaying_Strict(e\SoundCHN3) Then
 									If Rand(4) = 1 Then
 										EntityTexture(e\room\Objects[1], mon_I\MonitorOverlayID[Rand(MONITOR_079_OVERLAY_2, MONITOR_079_OVERLAY_7)])
 										If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
 									ElseIf Rand(10) = 1 
 										If (Not EntityHidden(e\room\Objects[1])) Then HideEntity(e\room\Objects[1])							
-									EndIf							
-								Else
-									If e\SoundCHN3 <> 0 Then
-										StopStream_Strict(e\SoundCHN3) : e\SoundCHN3 = 0
 									EndIf
+								Else
+									StopStream_Strict(e\SoundCHN3) : e\SoundCHN3 = 0 : e\SoundCHN3_IsStream = False
 									EntityTexture(e\room\Objects[1], mon_I\MonitorOverlayID[MONITOR_079_OVERLAY_1])
 									If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
-									e\EventState = e\EventState + fps\Factor[0]
-								EndIf
-							Else
-								If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 6.25 Then 
-									e\EventState = 10001.0
-									If e\SoundCHN3 <> 0 Then
-										StopStream_Strict(e\SoundCHN3) : e\SoundCHN3 = 0 
-									EndIf
-									e\SoundCHN3 = StreamSound_Strict("SFX\SCP\079\Refuse.ogg", opt\SFXVolume * opt\MasterVolume, 0.0)
-								EndIf
-							EndIf
-						Else
-							If e\SoundCHN3 <> 0 Then
-								If (Not IsStreamPlaying_Strict(e\SoundCHN3)) Then
-									e\SoundCHN3 = 0
-									EntityTexture(e\room\Objects[1], mon_I\MonitorOverlayID[MONITOR_079_OVERLAY_1])
-									If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
-								Else
-									If Rand(4) = 1 Then
-										EntityTexture(e\room\Objects[1], mon_I\MonitorOverlayID[Rand(MONITOR_079_OVERLAY_2, MONITOR_079_OVERLAY_7)])
-										If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
-									ElseIf Rand(10) = 1 
-										If (Not EntityHidden(e\room\Objects[1])) Then HideEntity(e\room\Objects[1])							
-									EndIf
 								EndIf
 							EndIf
 						EndIf
@@ -5791,17 +5751,18 @@ Function UpdateEvents%()
 				If e\EventState2 = 1.0 Then
 					If RemoteDoorOn Then 	
 						If e\SoundCHN3 <> 0 Then
-							StopStream_Strict(e\SoundCHN3) : e\SoundCHN3 = 0
+							StopStream_Strict(e\SoundCHN3) : e\SoundCHN3 = 0 : e\SoundCHN3_IsStream = False
 						EndIf
-						e\SoundCHN3 = StreamSound_Strict("SFX\SCP\079\GateB.ogg", opt\SFXVolume * opt\MasterVolume, 0.0)
+						e\SoundCHN3 = StreamSound_Strict("SFX\SCP\079\GateB.ogg", opt\SFXVolume * opt\MasterVolume, 0)
 						e\SoundCHN3_IsStream = True
-						e\EventState2 = 2.0
 						
 						For e2.Events = Each Events
 							If e2\EventID = e_gate_b_entrance Lor e2\EventID = e_gate_a_entrance Then
 								e2\EventState3 = 1.0
 							EndIf
 						Next
+						
+						e\EventState2 = 2.0
 					EndIf	
 				EndIf
 				;[End Block]
@@ -6927,9 +6888,7 @@ Function UpdateEvents%()
 								PlaySound_Strict(DecaySFX[2])
 							EndIf
 							
-							If ChannelPlaying(e\SoundCHN) Then
-								UpdateSoundOrigin(e\SoundCHN, Camera, e\room\OBJ)
-							EndIf
+							UpdateSoundOrigin(e\SoundCHN, Camera, e\room\OBJ)
 							
 							e\room\NPC[0]\FallingPickDistance = 0.0
 							EntityType(e\room\NPC[0]\Collider, HIT_PLAYER)
@@ -7282,9 +7241,7 @@ Function UpdateEvents%()
 								e\SoundCHN = PlaySound_Strict(e\Sound)
 							EndIf
 							
-							If ChannelPlaying(e\SoundCHN) Then
-								UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[0], 6.0)
-							EndIf
+							UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[0], 6.0)
 							
 							Local Volume# = Max(1.0 - Abs(PrevFrame - 600.0) / 100.0, 0.0)
 							
@@ -7513,9 +7470,9 @@ Function UpdateEvents%()
 					EndIf
 					
 					If BrokenDoor Then
-						If ChannelPlaying(e\SoundCHN2) Then UpdateSoundOrigin(e\SoundCHN2, Camera, e\room\Objects[1], 5.0)
+						UpdateSoundOrigin(e\SoundCHN2, Camera, e\room\Objects[1], 5.0)
 					EndIf
-					If ChannelPlaying(e\SoundCHN) Then UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[0], 5.0)
+					UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[0], 5.0)
 				Else
 					e\EventState3 = 0.0
 				EndIf
@@ -8260,10 +8217,10 @@ Function UpdateEvents%()
 				EndIf
 				If e\EventState = 2.0 Then
 					If e\SoundCHN <> 0 Then
-						StopStream_Strict(e\SoundCHN)
-						StopChannel(e\SoundCHN2)
-						e\SoundCHN = 0
-						e\SoundCHN2 = 0
+						StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
+					EndIf
+					If e\SoundCHN2 <> 0 Then
+						StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
 					EndIf
 					If (Not EntityHidden(I_1499\Sky)) Then HideEntity(I_1499\Sky)
 					HideChunks()
@@ -9305,20 +9262,20 @@ Function UpdateDimension1499%()
 							If NowPlaying = 66 Then
 								If (Not e\SoundCHN) Then
 									e\Sound2 = LoadSound_Strict("SFX\Music\HaveMercyOnMe(Choir).ogg")
-									e\SoundCHN = StreamSound_Strict("SFX\Music\HaveMercyOnMe(NoChoir).ogg", opt\MusicVolume)
+									e\SoundCHN = StreamSound_Strict("SFX\Music\HaveMercyOnMe(NoChoir).ogg", opt\MusicVolume * opt\MasterVolume)
 									e\SoundCHN_IsStream = True
 								EndIf
 							EndIf
 							If e\Sound2 <> 0 Then
-								e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\Objects[16], 10.0, opt\MusicVolume)
+								e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\Objects[16], 10.0, opt\MusicVolume * opt\MasterVolume)
 							EndIf
 						Else
 							ShouldPlay = 19
 							If e\SoundCHN <> 0 Then
-								StopStream_Strict(e\SoundCHN)
-								StopChannel(e\SoundCHN2)
-								e\SoundCHN = 0
-								e\SoundCHN2 = 0
+								StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
+							EndIf
+							If e\SoundCHN2 <> 0 Then
+								StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
 							EndIf
 							If e\Sound2 <> 0 Then
 								FreeSound_Strict(e\Sound2) : e\Sound2 = 0
@@ -9343,10 +9300,10 @@ Function UpdateDimension1499%()
 			Else
 				If e\EventState = 2.0 Then
 					If e\SoundCHN <> 0 Then
-						StopStream_Strict(e\SoundCHN)
-						StopChannel(e\SoundCHN2)
-						e\SoundCHN = 0
-						e\SoundCHN2 = 0
+						StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
+					EndIf
+					If e\SoundCHN2 <> 0 Then
+						StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
 					EndIf
 					If (Not EntityHidden(I_1499\Sky)) Then HideEntity(I_1499\Sky)
 					HideChunks()
@@ -9509,7 +9466,7 @@ Function UpdateEndings%()
 							ElseIf e\EventState > 70.0 * 35.0 And e\EventState < 70.0 * 36.5	
 								me\CameraShake = 1.5		
 								If e\EventState - fps\Factor[0] <= 70.0 * 35.0 Then
-									e\SoundCHN = StreamSound_Strict("SFX\Ending\GateB\DetonatingAlphaWarheads.ogg", opt\SFXVolume * opt\MasterVolume, 0.0)
+									e\SoundCHN = StreamSound_Strict("SFX\Ending\GateB\DetonatingAlphaWarheads.ogg", opt\SFXVolume * opt\MasterVolume, 0)
 									e\SoundCHN_IsStream = True
 								EndIf									
 							ElseIf e\EventState > 70.0 * 39.5 And e\EventState < 70.0 * 39.8		
@@ -9531,15 +9488,19 @@ Function UpdateEndings%()
 						If e\EventState >= 70.0 * 45.0 Then
 							If e\EventState < 70.0 * 75.0 Then
 								If (Not e\SoundCHN2) Then
-									e\SoundCHN2 = StreamSound_Strict("SFX\Ending\GateB\Siren.ogg", opt\SFXVolume * opt\MasterVolume, Mode)
+									e\SoundCHN2 = StreamSound_Strict("SFX\Ending\GateB\Siren.ogg", opt\SFXVolume * opt\MasterVolume)
 									e\SoundCHN2_IsStream = True
 								EndIf
 							Else
 								If me\SelectedEnding = -1 Then
 									ShouldPlay = 66
 									
-									StopStream_Strict(e\SoundCHN)
-									StopStream_Strict(e\SoundCHN2)
+									If e\SoundCHN <> 0 Then
+										StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
+									EndIf
+									If e\SoundCHN2 <> 0 Then
+										StopStream_Strict(e\SoundCHN2) : e\SoundCHN2 = 0 : e\SoundCHN2_IsStream = False
+									EndIf
 									
 									Temp = True
 									For e2.Events = Each Events
@@ -9880,9 +9841,6 @@ Function UpdateEndings%()
 											n_I\Curr106\PathTimer = 70.0 * 200.0
 											If n_I\Curr106\State3 = 0.0 Then 
 												SetNPCFrame(n_I\Curr106, 259.0)
-												If e\Sound <> 0 Then 
-													FreeSound_Strict(e\Sound) : e\Sound = 0
-												EndIf
 												LoadEventSound(e, "SFX\Ending\GateA\106Retreat.ogg")
 												e\SoundCHN = PlaySound2(e\Sound, Camera, n_I\Curr106\Collider, 35.0)
 											EndIf
@@ -9917,26 +9875,24 @@ Function UpdateEndings%()
 													e\EventState2 = 1.0
 												ElseIf e\EventState2 > 0.0
 													e\EventState2 = e\EventState2 + fps\Factor[0]
-													If e\EventState2 >= 70.0 * 7.5 Then
-														If e\EventState2 - fps\Factor[0] < 70.0 * 7.5 Then
-															p.Particles = CreateParticle(PARTICLE_SUN, EntityX(n_I\Curr106\OBJ, True), EntityY(n_I\Curr106\OBJ, True) + 0.4, EntityZ(n_I\Curr106\OBJ, True), 7.0, 0.0, 470.0)
-															p\Speed = 0.0 : p\Alpha = 1.0
-															EntityParent(p\Pvt, n_I\Curr106\Collider, True)
-															
-															p.Particles = CreateParticle(PARTICLE_SUN, EntityX(e\room\Objects[10], True), EntityY(e\room\Objects[10], True), EntityZ(e\room\Objects[10], True), 2.0, 0.0, 470.0)
-															p\Speed = 0.0 : p\Alpha = 1.0
-															RotateEntity(p\Pvt, EntityPitch(e\room\Objects[10], True), EntityYaw(e\room\Objects[10], True), 0.0, True)
-															MoveEntity(p\Pvt, 0.0, 92.0 * RoomScale, 512.0 * RoomScale)
-															EntityParent(p\Pvt, e\room\Objects[10], True)
-														ElseIf e\EventState2 < 70.0 * 14.3
-															me\CameraShake = 0.5
-															me\LightFlash = 0.3 + EntityInView(e\room\Objects[10], Camera) * 0.5
-															
-															If (Not (me\Terminated Lor chs\GodMode)) Then
-																If EntityDistanceSquared(me\Collider, n_I\Curr106\Collider) < 1.44 Then
-																	PlaySound_Strict(LoadTempSound("SFX\SCP\294\burn.ogg"))
-																	Kill(True)
-																EndIf
+													If e\EventState2 >= 70.0 * 7.5 And e\EventState2 - fps\Factor[0] < 70.0 * 7.5 Then
+														p.Particles = CreateParticle(PARTICLE_SUN, EntityX(n_I\Curr106\OBJ, True), EntityY(n_I\Curr106\OBJ, True) + 0.4, EntityZ(n_I\Curr106\OBJ, True), 7.0, 0.0, 470.0)
+														p\Speed = 0.0 : p\Alpha = 1.0
+														EntityParent(p\Pvt, n_I\Curr106\Collider, True)
+														
+														p.Particles = CreateParticle(PARTICLE_SUN, EntityX(e\room\Objects[10], True), EntityY(e\room\Objects[10], True), EntityZ(e\room\Objects[10], True), 2.0, 0.0, 470.0)
+														p\Speed = 0.0 : p\Alpha = 1.0
+														RotateEntity(p\Pvt, EntityPitch(e\room\Objects[10], True), EntityYaw(e\room\Objects[10], True), 0.0, True)
+														MoveEntity(p\Pvt, 0.0, 92.0 * RoomScale, 512.0 * RoomScale)
+														EntityParent(p\Pvt, e\room\Objects[10], True)
+													ElseIf e\EventState2 < 70.0 * 14.3
+														me\CameraShake = 0.5
+														me\LightFlash = 0.3 + EntityInView(e\room\Objects[10], Camera) * 0.5
+														
+														If (Not (me\Terminated Lor chs\GodMode)) Then
+															If EntityDistanceSquared(me\Collider, n_I\Curr106\Collider) < 1.44 Then
+																PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
+																Kill(True)
 															EndIf
 														EndIf
 													EndIf

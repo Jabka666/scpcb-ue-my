@@ -553,18 +553,22 @@ Function RemoveNPC%(n.NPCs)
 	If n\OBJ2 <> 0 Then FreeEntity(n\OBJ2) : n\OBJ2 = 0
 	If n\OBJ3 <> 0 Then FreeEntity(n\OBJ3) : n\OBJ3 = 0
 	
-	If (Not n\SoundCHN_IsStream)
-		If n\SoundCHN <> 0 And ChannelPlaying(n\SoundCHN) Then
+	If n\SoundCHN <> 0 Then
+		If (Not n\SoundCHN_IsStream) Then
 			StopChannel(n\SoundCHN)
+		Else
+			StopStream_Strict(n\SoundCHN)
 		EndIf
-	Else
-		If n\SoundCHN <> 0 Then StopStream_Strict(n\SoundCHN)
+		n\SoundCHN = 0
 	EndIf
 	
-	If (Not n\SoundCHN2_IsStream) Then
-		If (n\SoundCHN2 <> 0 And ChannelPlaying(n\SoundCHN2)) Then StopChannel(n\SoundCHN2)
-	Else
-		If n\SoundCHN2 <> 0 Then StopStream_Strict(n\SoundCHN2)
+	If n\SoundCHN2 <> 0 Then
+		If (Not n\SoundCHN2_IsStream) Then
+			StopChannel(n\SoundCHN2)
+		Else
+			StopStream_Strict(n\SoundCHN2)
+		EndIf
+		n\SoundCHN2 = 0
 	EndIf
 	
 	If n\Collider <> 0 Then FreeEntity(n\Collider) : n\Collider = 0	
@@ -1165,9 +1169,8 @@ Function UpdateNPCs%()
 							If (Not n\SoundCHN) Then
 								n\SoundCHN = StreamSound_Strict("SFX\Music\096.ogg", 0)
 								n\SoundCHN_IsStream = True
-							Else
-								UpdateStreamSoundOrigin(n\SoundCHN, Camera, n\Collider, 8.0, 1.0)
 							EndIf
+							UpdateStreamSoundOrigin(n\SoundCHN, Camera, n\Collider, 8.0, 1.0)
 							
 							If n\State3 = -1.0
 								AnimateNPC(n, 936.0, 1263.0, 0.1, False)
@@ -1198,8 +1201,9 @@ Function UpdateNPCs%()
 										
 										SetNPCFrame(n, 194.0)
 										
-										StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0
+										StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0 : n\SoundCHN_IsStream = False
 										n\Sound = 0
+										
 										n\State3 = 0.0
 										n\State = 1.0
 									EndIf
@@ -1215,13 +1219,12 @@ Function UpdateNPCs%()
 							If (Not n\SoundCHN) Then
 								n\SoundCHN = StreamSound_Strict("SFX\SCP\096\Scream.ogg", 0)
 								n\SoundCHN_IsStream = True
-							Else
-								UpdateStreamSoundOrigin(n\SoundCHN, Camera, n\Collider, 7.5, 1.0)
 							EndIf
+							UpdateStreamSoundOrigin(n\SoundCHN, Camera, n\Collider, 7.5, 1.0)
 							
 							If (Not n\SoundCHN2) Then
 								n\SoundCHN2 = StreamSound_Strict("SFX\Music\096Chase.ogg", 0)
-								n\SoundCHN2_IsStream = 2
+								n\SoundCHN2_IsStream = True
 							Else
 								SetStreamVolume_Strict(n\SoundCHN2, Min(Max(8.0 - Sqr(Dist), 0.6), 1.0) * opt\SFXVolume * opt\MasterVolume)
 							EndIf
@@ -1364,9 +1367,8 @@ Function UpdateNPCs%()
 						If (Not n\SoundCHN) Then
 							n\SoundCHN = StreamSound_Strict("SFX\Music\096Angered.ogg", 0)
 							n\SoundCHN_IsStream = True
-						Else
-							UpdateStreamSoundOrigin(n\SoundCHN, Camera, n\Collider, 10.0, 1.0)
 						EndIf
+						UpdateStreamSoundOrigin(n\SoundCHN, Camera, n\Collider, 10.0, 1.0)
 						
 						If n\State = 1.0 Then ; ~ Get up
 							If n\Frame < 312.0 Then
@@ -1380,7 +1382,10 @@ Function UpdateNPCs%()
 								If n\Frame > 421.9 Then SetNPCFrame(n, 677.0)
 							Else
 								AnimateNPC(n, 677.0, 736.0, 0.3, False)
-								If n\Frame > 735.9 Then n\State = 2.0 : SetNPCFrame(n, 737.0)
+								If n\Frame > 735.9 Then
+									SetNPCFrame(n, 737.0)
+									n\State = 2.0
+								EndIf
 							EndIf
 						ElseIf n\State = 2.0
 							AnimateNPC(n, 677.0, 737.0, 0.3, False)
@@ -1390,8 +1395,8 @@ Function UpdateNPCs%()
 							If n\State2 > 70.0 * 26.0 Then
 								AnimateNPC(n, 823.0, 847.0, n\Speed * 8.0, False)
 								If n\Frame > 846.9 Then
+									StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0 : n\SoundCHN_IsStream = False
 									n\State = 4.0
-									StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0
 								EndIf
 							Else
 								AnimateNPC(n, 1471.0, 1556.0, 0.4)
@@ -1408,9 +1413,8 @@ Function UpdateNPCs%()
 							If (Not n\SoundCHN) Then
 								n\SoundCHN = StreamSound_Strict("SFX\Music\096.ogg", 0)
 								n\SoundCHN_IsStream = True
-							Else
-								UpdateStreamSoundOrigin(n\SoundCHN, Camera, n\Collider, 14.0, 1.0)
 							EndIf
+							UpdateStreamSoundOrigin(n\SoundCHN, Camera, n\Collider, 14.0, 1.0)
 							
 							If n\Frame >= 422.0 Then
 								n\State2 = n\State2 + fps\Factor[0]
@@ -1470,8 +1474,10 @@ Function UpdateNPCs%()
 										me\CurrCameraZoom = 10.0
 										
 										If n\Frame >= 422.0 Then SetNPCFrame(n, 677.0)
-										StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0
+										
+										StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0 : n\SoundCHN_IsStream = False
 										n\Sound = 0
+										
 										n\State = 2.0
 									EndIf
 								EndIf
@@ -1785,11 +1791,7 @@ Function UpdateNPCs%()
 									EndIf
 								EndIf
 								
-								If n\SoundCHN2 <> 0 Then
-									If ChannelPlaying(n\SoundCHN2) Then
-										UpdateSoundOrigin(n\SoundCHN2, Camera, n\OBJ)
-									EndIf
-								EndIf
+								UpdateSoundOrigin(n\SoundCHN2, Camera, n\OBJ)
 							ElseIf n\Idle = 0
 								If n\SoundCHN <> 0 Then
 									If ChannelPlaying(n\SoundCHN) Then
@@ -1908,11 +1910,7 @@ Function UpdateNPCs%()
 								EndIf
 							EndIf
 							
-							If n\SoundCHN2 <> 0 Then
-								If ChannelPlaying(n\SoundCHN2) Then
-									UpdateSoundOrigin(n\SoundCHN2, Camera, n\OBJ)
-								EndIf
-							EndIf
+							UpdateSoundOrigin(n\SoundCHN2, Camera, n\OBJ)
 							;[End Block]
 					End Select
 				EndIf
@@ -3887,8 +3885,8 @@ Function UpdateNPCs%()
 					me\HeartBeatVolume = Max(me\HeartBeatVolume, Min(n\State3 / 1000.0, 1.0))
 				EndIf
 				
+				UpdateSoundOrigin(n\SoundCHN2, Camera, n\Collider, 20.0, 1.0, False)
 				If ChannelPlaying(n\SoundCHN2) Then
-					UpdateSoundOrigin(n\SoundCHN2, Camera, n\Collider, 20.0, 1.0, False)
 					me\BlurTimer = Max((5.0 - (Sqr(Dist)) * 300.0), 0.0)
 				EndIf
 				
@@ -4583,9 +4581,7 @@ Function UpdateNPCs%()
 							;[End Block]
 					End Select
 					
-					If n\SoundCHN <> 0 And ChannelPlaying(n\SoundCHN) Then
-						UpdateSoundOrigin(n\SoundCHN, Camera, n\Collider, 20.0)
-					EndIf
+					UpdateSoundOrigin(n\SoundCHN, Camera, n\Collider, 20.0)
 					
 					MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 					
