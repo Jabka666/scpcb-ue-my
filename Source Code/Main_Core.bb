@@ -6885,12 +6885,12 @@ Function UpdateMenu%()
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMainMenuInputBox(x + (200 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, 210.0)], 12)
+						UpdateMainMenuInputBox(x + (200 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, 210.0)], 13)
 						
 						If opt\CanOpenConsole Then
 							y = y + (20 * MenuScale)
 							
-							UpdateMainMenuInputBox(x + (200 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210.0)], 13)
+							UpdateMainMenuInputBox(x + (200 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210.0)], 12)
 						EndIf
 						
 						Local TempKey%

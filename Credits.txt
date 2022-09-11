@@ -10,9 +10,7 @@
 		Sam Lynch ("InnocentSam")
 		Shaun Gaylard ("ENDSHN")
 
-
 *3D Modellers
-
 		
 		Joonas Rikkonen ("Regalis")
 		Apocryphos
@@ -36,7 +34,6 @@
 		Tom Malinowski
 		Vladislav Borisevich ("Vane Brain")
 
-
 *Sound Effects and Music
 
 		Joonas Rikkonen ("Regalis")
@@ -53,7 +50,6 @@
 		Vladislav Borisevich ("Vane Brain")
 		Walach
 
-
 *Voice Actors
 
 		Aaron Mckee ("TheVolgun")
@@ -66,7 +62,6 @@
 		Moonstiee
 		SolidBaker
 		Tallfellow
-
 
 *Graphics and Sprites
 
@@ -82,7 +77,6 @@
 		Shaun Gaylard ("ENDSHN")
 		Vladislav Borisevich ("Vane Brain")
 
-
 *Writers
 
 		Joonas Rikkonen ("Regalis")
@@ -91,7 +85,6 @@
 		Irontaco
 		Steelpoint
 		Vladislav Borisevich ("Vane Brain")
-
 
 *Testers
 
@@ -105,7 +98,6 @@
 		TheHappyJammer
 		Zadrakos
 
-
 *Others
 
 		Agent G
@@ -117,7 +109,6 @@
 		Turtle Sandwich/Catnipbuddy
 		/v/ and everyone in the SCP-CB forum
 
-
 *Mod Creators
 
 		Nikita Sidorov ("Jabka")
@@ -128,7 +119,6 @@
 		Samuel ("Ayylien/Soylien")
 		Egor Oleynik ("Chumnaya Karkusa")
 		EpicDasherFR
-
 
 *Development Helpers
 		
@@ -156,7 +146,6 @@
 		ZiYueCommentary
 		Snoe
 
-
 *Mod Testers
 
 		Alexey Krasnov ("TaskeWSH")
@@ -182,7 +171,6 @@
 		www.scpfoundation.ru
 
 *The game is based on the works of the SCP Foundation community.
-
 
 		The SCP-CB logo and SCP logo are based on the logo created,
 by "far2"

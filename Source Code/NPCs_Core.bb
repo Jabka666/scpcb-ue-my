@@ -1153,7 +1153,7 @@ Function UpdateNPCs%()
 				Dist = EntityDistanceSquared(me\Collider, n\Collider)
 				Angle = WrapAngle(DeltaYaw(n\Collider, me\Collider))
 				
-				If wi\SCRAMBLE And Dist < 256.0 And (Angle < 135.0 Lor Angle > 225.0) And EntityVisible(Camera, n\OBJ2) Then
+				If wi\SCRAMBLE And Dist < PowTwo(opt\CameraFogFar * LightVolume) And (Angle < 135.0 Lor Angle > 225.0) And EntityVisible(Camera, n\OBJ2) Then
 					If EntityHidden(n\OBJ2) Then ShowEntity(n\OBJ2)
 					ScaleSprite(n\OBJ2, Rnd(0.06, 0.08), Rnd(0.07, 0.09))
 					PositionEntity(n\OBJ2, Rnd(0.1) - 0.05, Rnd(0.1) - 0.05, Rnd(0.1) - 0.05)
@@ -1193,19 +1193,21 @@ Function UpdateNPCs%()
 							EndIf
 							
 							If (Not chs\NoTarget) Then
-								If (Not wi\SCRAMBLE) And (Angle < 135.0 Lor Angle > 225.0) And (EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera)) Then
-									If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And me\LightBlink <= 0.0
-										PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"))
-										
-										me\CurrCameraZoom = 10.0
-										
-										SetNPCFrame(n, 194.0)
-										
-										StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0 : n\SoundCHN_IsStream = False
-										n\Sound = 0
-										
-										n\State3 = 0.0
-										n\State = 1.0
+								If Dist < PowTwo(opt\CameraFogFar * LightVolume) Then
+									If (Not wi\SCRAMBLE) And (Angle < 135.0 Lor Angle > 225.0) And (EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera)) Then
+										If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And me\LightBlink <= 0.0
+											PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"))
+											
+											me\CurrCameraZoom = 10.0
+											
+											SetNPCFrame(n, 194.0)
+											
+											StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0 : n\SoundCHN_IsStream = False
+											n\Sound = 0
+											
+											n\State3 = 0.0
+											n\State = 1.0
+										EndIf
 									EndIf
 								EndIf
 							EndIf
@@ -1467,18 +1469,20 @@ Function UpdateNPCs%()
 							EndIf
 							
 							If (Not chs\NoTarget) Then
-								If (Not wi\SCRAMBLE) And (Angle < 135.0 Lor Angle > 225.0) And (EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera)) Then
-									If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And me\LightBlink <= 0.0
-										PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"))
-										
-										me\CurrCameraZoom = 10.0
-										
-										If n\Frame >= 422.0 Then SetNPCFrame(n, 677.0)
-										
-										StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0 : n\SoundCHN_IsStream = False
-										n\Sound = 0
-										
-										n\State = 2.0
+								If Dist < PowTwo(opt\CameraFogFar * LightVolume) Then
+									If (Not wi\SCRAMBLE) And (Angle < 135.0 Lor Angle > 225.0) And (EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera)) Then
+										If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And me\LightBlink <= 0.0
+											PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"))
+											
+											me\CurrCameraZoom = 10.0
+											
+											If n\Frame >= 422.0 Then SetNPCFrame(n, 677.0)
+											
+											StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0 : n\SoundCHN_IsStream = False
+											n\Sound = 0
+											
+											n\State = 2.0
+										EndIf
 									EndIf
 								EndIf
 							EndIf
@@ -6744,8 +6748,16 @@ Function TriggerTeslaGateOnNPCs%(e.Events)
 									;[Block]
 									If n\State3 = 0.0 Then
 										GiveAchievement(AchvTesla)
-										n\State3 = 1.0
+										
+										SetNPCFrame(n, 259.0)
+										LoadEventSound(e, "SFX\Ending\GateA\106Retreat.ogg", 1)
+										e\SoundCHN2 = PlaySound2(e\Sound2, Camera, n\Collider, 10.0)
+										
+										de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(n\Collider), e\room\y + 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.8, 1.0))
+										de\SizeChange = 0.004 : de\Timer = 90000.0
+										
 										n\Idle = 1
+										n\State3 = 1.0
 									EndIf
 									;[End Block]
 								Case NPCType049, NPCType096, NPCType173, NPCType066, NPCType1499_1
@@ -6767,26 +6779,18 @@ Function TriggerTeslaGateOnNPCs%(e.Events)
 				Case NPCType106
 					;[Block]
 					If n\State3 > 0.0 Then
-						If n\State3 = 1.0 Then 
-							SetNPCFrame(n, 259.0)
-							LoadEventSound(e, "SFX\Ending\GateA\106Retreat.ogg", 1)
-							e\SoundCHN2 = PlaySound2(e\Sound2, Camera, n\Collider, 10.0)
-							
-							de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(n\Collider), e\room\y + 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.8, 1.0))
-							de\SizeChange = 0.004 : de\Timer = 90000.0
-						EndIf
-						
-						AnimateNPC(n, 259.0, 110.0, 0.1, False)
+						AnimateNPC(n, 259.0, 110.0, -0.1, False)
 						
 						n\State3 = n\State3 + fps\Factor[0]
-						If n\State3 > 1000.0 Then
-							n\State = 70.0 * 60.0 * Rnd(10.0, 13.0)
-							n\State3 = 0.0
-							n\Idle = 0
+						If n\State3 > 1200.0 Then
 							If e\Sound2 <> 0 Then 
 								FreeSound_Strict(e\Sound2) : e\Sound2 = 0
 							EndIf
 							PositionEntity(n\Collider, 0.0, 500.0, 0.0)
+							
+							n\Idle = 0
+							n\State = 70.0 * 60.0 * Rnd(10.0, 13.0)
+							n\State3 = 0.0
 						EndIf
 					EndIf
 					;[End Block]

@@ -1,3 +1,13 @@
+v1.0.31
+
+General:
+- Removed extra spacing in credits.
+
+Bug fixes:
+- Fixed a bug with console bind.
+- Fixed SCP-096 triggering while his face is hidden by fog.
+- Fixed SCP-106 animation when getting hit by the Tesla Gate.
+
 v1.0.3
 
 General:
@@ -30,6 +40,8 @@ Mechanics and effects:
 
 NPCs:
 - Added new messages when SCP-049 destroys the hazmat suit or removes the ring from the player.
+
+- Changed SCP-049 eyes glow to blue.
 
 - Tiny rebalance for MTF's shooting.
 
@@ -115,7 +127,7 @@ Bug Fixes:
 - Fixed wrong SCP-409 texture.
 - Fixed an ability to select a book.
 - Fixed «RedVision» eyedrops texture saying «ReVision».
-- Fixed "Stream channel not found" error spamming in console.
+- Fixed «Stream channel not found» error spamming in console.
 - Fixed Gate A that is visible from Gate B.
 
 - Tiny fix for SCP-372's AI.
