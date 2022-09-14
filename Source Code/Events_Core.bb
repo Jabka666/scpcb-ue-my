@@ -488,7 +488,7 @@ Function RenderQuickLoading%()
 		DrawImage(QuickLoadIcon, opt\GraphicWidth - (90 * MenuScale), opt\GraphicHeight - (150 * MenuScale))
 		Color(255, 255, 255)
 		SetFont(fo\FontID[Font_Default])
-		Text(opt\GraphicWidth - (100 * MenuScale), opt\GraphicHeight - (90 * MenuScale), "LOADING: " + QuickLoadPercent + "%", True)
+		Text(opt\GraphicWidth - (100 * MenuScale), opt\GraphicHeight - (90 * MenuScale), GetLocalString("loading", "loading") + QuickLoadPercent + "%", True)
 	EndIf
 End Function
 
@@ -688,9 +688,9 @@ Function UpdateEvents%()
 						e\room\RoomDoors[2]\Open = True
 						
 						If SelectedDifficulty\SaveType = SAVE_ANYWHERE Then
-							CreateHintMsg("Press " + key\Name[key\SAVE] + " to save.")
+							CreateHintMsg(Format(GetLocalString("misc", "save"), key\Name[key\SAVE]))
 						ElseIf SelectedDifficulty\SaveType = SAVE_ON_SCREENS Then
-							CreateHintMsg("Saving is only permitted on clickable monitors scattered throughout the facility.")
+							CreateHintMsg(GetLocalString("misc", "save.euclid"))
 						EndIf
 						
 						n_I\Curr173\Idle = 1
@@ -839,7 +839,7 @@ Function UpdateEvents%()
 											EndIf
 											ResetEntity(n_I\Curr173\Collider)
 											n_I\Curr173\Idle = 0
-											CreateHintMsg("Hold " + key\Name[key\SPRINT] + " to run.")
+											CreateHintMsg(Format(GetLocalString("misc", "run"), key\Name[key\SPRINT]))
 										EndIf
 									EndIf
 								EndIf
@@ -950,7 +950,7 @@ Function UpdateEvents%()
 								me\Playable = False
 								
 								CreateConsoleMsg("")
-								CreateConsoleMsg("WARNING! Using the console commands or teleporting away from the intro scene may cause bugs or crashing.", 255, 0, 0)
+								CreateConsoleMsg(GetLocalString("misc", "warning"), 255, 0, 0)
 								CreateConsoleMsg("")
 								
 								PositionEntity(n_I\Curr173\Collider, EntityX(e\room\Objects[5], True), 0.5, EntityZ(e\room\Objects[5], True))
@@ -1000,7 +1000,7 @@ Function UpdateEvents%()
 									me\DropSpeed = 0.0
 									me\Playable = True
 									
-									CreateHintMsg("Pick up the paper on the desk.")
+									CreateHintMsg(GetLocalString("misc", "paper"))
 									
 									e\EventState3 = 15.0
 								EndIf
@@ -1008,7 +1008,7 @@ Function UpdateEvents%()
 								RotateEntity(me\Collider, 0.0, EntityYaw(Camera), 0.0)
 							ElseIf e\EventState3 < 40.0
 								If Inventory(0) <> Null Then
-									CreateHintMsg("Press " + key\Name[key\INVENTORY] + " to open the inventory.")
+									CreateHintMsg(Format(GetLocalString("misc", "openinv"), key\Name[key\INVENTORY]))
 									e\EventState3 = 40.0
 									Exit
 								EndIf
@@ -1634,7 +1634,7 @@ Function UpdateEvents%()
 							
 							If IntroSFX[3] <> 0 Then
 								If (EntityVisible(n_I\Curr173\OBJ, Camera) And EntityInView(n_I\Curr173\OBJ, Camera)) Lor (EntityVisible(n_I\Curr173\OBJ2, Camera) And EntityInView(n_I\Curr173\OBJ2, Camera)) Then
-									CreateHintMsg("Press " + key\Name[key\BLINK] + " to blink.")
+									CreateHintMsg(GetLocalString("misc", "blink"))
 									PlaySound_Strict(IntroSFX[3])
 									FreeSound_Strict(IntroSFX[3]) : IntroSFX[3] = 0
 								EndIf
@@ -2300,12 +2300,11 @@ Function UpdateEvents%()
 							
 							If me\Sanity < -1000.0 Then
 								If wi\NightVision > 1 Then
-									msg\DeathMsg = Chr(34) + "Class D viewed SCP-895 through a pair of digital night vision goggles, presumably enhanced by SCP-914. It might be possible that the subject "
-									msg\DeathMsg = msg\DeathMsg + "was able to resist the memetic effects partially through these goggles. The goggles have been stored for further study." + Chr(34)
+									msg\DeathMsg = GetLocalString("death", "895.nvg.914")
 								ElseIf wi\SCRAMBLE
-									msg\DeathMsg = Chr(34) + "Class D viewed SCP-895 through an apparatus called " + Chr(34) + "SCRAMBLE Gear" + Chr(34) + ", killing him." + Chr(34)
+									msg\DeathMsg = GetLocalString("death", "895.nvg.096")
 								Else
-									msg\DeathMsg = Chr(34) + "Class D viewed SCP-895 through a pair of digital night vision goggles, killing him." + Chr(34)
+									msg\DeathMsg = GetLocalString("death", "895.nvg")
 								EndIf
 								EntityTexture(t\OverlayID[4], t\OverlayTextureID[4])
 								If me\VomitTimer < -10.0 Then Kill()
@@ -2645,12 +2644,12 @@ Function UpdateEvents%()
 							If I_294\Using Then mo\MouseHit1 = False
 						ElseIf e\EventState2 = 1.0 And (Not Inserted) And (Not me\UsedMastercard) Then
 							I_294\Using = False
-							CreateMsg("You need to insert another Quarter in order to use this machine.")
+							CreateMsg(GetLocalString("misc", "294.another"))
 						ElseIf (Not Inserted) And (Not me\UsedMastercard) Then
 							I_294\Using = False
-							CreateMsg("You need to insert two Quarters in order to use this machine.")
+							CreateMsg(GetLocalString("misc", "294.two"))
 						ElseIf me\UsedMastercard
-							CreateMsg("You don't have enough funds to use this machine.")
+							CreateMsg(GetLocalString("misc", "294.funds"))
 						EndIf
 					EndIf
 				EndIf
@@ -3065,7 +3064,7 @@ Function UpdateEvents%()
 											me\LightFlash = 0.4
 											me\CameraShake = 1.0
 											Kill()
-											msg\DeathMsg = SubjectName + " killed by the Tesla Gate at [DATA REDACTED]."
+											msg\DeathMsg = Format(GetLocalString("death", "tesla"), SubjectName)
 										EndIf
 									Next
 								EndIf
@@ -4149,7 +4148,7 @@ Function UpdateEvents%()
 							Animate2(e\room\Objects[2], AnimTime(e\room\Objects[2]), 339.0, 487.0, 1.0)
 							If InteractObject(e\room\Objects[2], 2.25) Then
 								If ItemAmount >= MaxItemAmount Then
-									CreateMsg("You cannot carry any more items.")
+									CreateMsg(GetLocalString("misc", "cantcarry"))
 								Else
 									SelectedItem = CreateItem("Drawing", "paper", 0.0, 0.0, 0.0)
 									EntityType(SelectedItem\Collider, HIT_ITEM)
@@ -4762,7 +4761,7 @@ Function UpdateEvents%()
 							me\BlurTimer = Min(me\BlurTimer + (fps\Factor[0] * 1.05), 1500.0)
 							If me\BlurTimer >= 500.0 Then UpdateCough(1000)
 							If me\BlurTimer >= 1500.0 Then Kill(False)
-							msg\DeathMsg = "Class D found dead in Storage Area 6 having suffocated on the gas leak that happened during the breach. A repair team has been sent after recontainment of all four (4) SCP-939 specimens was completed."
+							msg\DeathMsg = GetLocalString("death", "939.gas")
 						EndIf
 						
 						ShouldPlay = 7
@@ -4972,7 +4971,7 @@ Function UpdateEvents%()
 										If e\EventState3 > 70.0 * 1.0 And e\EventState3 - fps\Factor[0] <= 70.0 * 1.0 Then
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech1.ogg"))
 										ElseIf e\EventState3 > 70.0 * 13.0 And e\EventState3 - fps\Factor[0] <= 70.0 * 13.0
-											CreateMsg("You start pushing your nails into your wrist, drawing blood.")
+											CreateMsg(GetLocalString("misc", "0121"))
 											InjurePlayer(0.5)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech2.ogg"))
 										ElseIf e\EventState3 > 70.0 * 31.0 And e\EventState3 - fps\Factor[0] <= 70.0 * 31.0
@@ -4981,11 +4980,11 @@ Function UpdateEvents%()
 											EntityTexture(e\room\Objects[4], Tex)
 											DeleteSingleTextureEntryFromCache(Tex)
 											
-											CreateMsg("You tear open your left wrist and start writing on the composition with your blood.")
+											CreateMsg(GetLocalString("misc", "0122"))
 											me\Injuries = Max(me\Injuries, 1.5)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech" + Rand(3, 4) + ".ogg"))
 										ElseIf e\EventState3 > 70.0 * 49.0 And e\EventState3 - fps\Factor[0] <= 70.0 * 49.0
-											CreateMsg("You push your fingers deeper into the wound.")
+											CreateMsg(GetLocalString("misc", "0123"))
 											InjurePlayer(0.3)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech5.ogg"))
 										ElseIf e\EventState3 > 70.0 * 63.0 And e\EventState3 - fps\Factor[0] <= 70.0 * 63.0
@@ -5002,7 +5001,7 @@ Function UpdateEvents%()
 											EntityTexture(e\room\Objects[4], Tex)
 											DeleteSingleTextureEntryFromCache(Tex)
 											
-											CreateMsg("You rip the wound wide open. Grabbing scoops of blood pouring out.")
+											CreateMsg(GetLocalString("misc", "0126"))
 											InjurePlayer(0.8)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech7.ogg"))
 											If (Not me\Crouch) Then SetCrouch(True)
@@ -5011,8 +5010,7 @@ Function UpdateEvents%()
 											de\MaxSize = 0.45 : de\SizeChange = 0.0002
 											EntityParent(de\OBJ, e\room\OBJ)
 										ElseIf e\EventState3 > 70.0 * 85.0 And e\EventState3 - fps\Factor[0] <= 70.0 * 85.0	
-											msg\DeathMsg = SubjectName + " found in a pool of blood next to SCP-012. Subject seems to have ripped open his wrists and written three extra "
-											msg\DeathMsg = msg\DeathMsg + "lines to the composition before dying of blood loss."
+											msg\DeathMsg = Format(GetLocalString("death", "012"), SubjectName)
 											Kill(True)
 										EndIf
 										
@@ -5447,9 +5445,7 @@ Function UpdateEvents%()
 										EndIf
 										
 										If me\Terminated And me\Bloodloss >= 100.0 Then
-											msg\DeathMsg = "Class D " + SubjectName + " found dead inside SCP-035's containment chamber. "
-											msg\DeathMsg = msg\DeathMsg + "The subject exhibits heavy hemorrhaging of blood vessels around the eyes and inside the mouth and nose. "
-											msg\DeathMsg = msg\DeathMsg + "Sent for autopsy."
+											msg\DeathMsg = Format(GetLocalString("death", "035"), SubjectName)
 										EndIf
 									EndIf
 								EndIf
@@ -6177,10 +6173,7 @@ Function UpdateEvents%()
 								;[Block]
 								If (Not chs\NoTarget) Then
 									If Rand(150) = 1 Then
-										msg\DeathMsg = "The SCP-205 cycle seems to have resumed its normal course after the anomalies observed during "
-										msg\DeathMsg = msg\DeathMsg + "[DATA REDACTED]. The body of " + SubjectName + " was discovered inside the chamber. "
-										msg\DeathMsg = msg\DeathMsg + "The subject exhibits signs of blunt force trauma typical for personnel who have "
-										msg\DeathMsg = msg\DeathMsg + "entered the chamber when the lights are off."
+										msg\DeathMsg = Format(GetLocalString("death", "205"), SubjectName)
 										
 										InjurePlayer(Rnd(0.4, 0.8), 0.0, 300.0)
 										PlaySound_Strict(DamageSFX[Rand(2, 3)])
@@ -6862,7 +6855,7 @@ Function UpdateEvents%()
 											
 											If wi\HazmatSuit = 0 Then
 												InjurePlayer(0.3, 1.0, 400.0)
-												CreateMsg("The window shattered and a piece of glass cut your arm.")
+												CreateMsg(GetLocalString("misc", "008.173"))
 											EndIf
 											PlaySound2(LoadTempSound("SFX\General\GlassBreak.ogg"), Camera, e\room\Objects[0]) 
 											
@@ -7171,9 +7164,7 @@ Function UpdateEvents%()
 										me\Terminated = True
 										me\BlinkTimer = -10.0
 										If e\SoundCHN <> 0 Then StopChannel(e\SoundCHN)
-										msg\DeathMsg = Chr(34) + "A heavily mutilated corpse found inside the output booth of SCP-914. DNA testing identified the corpse as Class D " + SubjectName + ". "
-										msg\DeathMsg = msg\DeathMsg + "The subject had obviously been " + Chr(34) + "refined" + Chr(34) + " by SCP-914 on the " + Chr(34) + "Rough" + Chr(34) + " setting, but we are still confused as to how he "
-										msg\DeathMsg = msg\DeathMsg + "ended up inside the intake booth and who or what wound the key." + Chr(34)
+										msg\DeathMsg = Format(GetLocalString("death", "914"), SubjectName)
 										;[End Block]
 									Case COARSE
 										;[Block]
@@ -7214,7 +7205,7 @@ Function UpdateEvents%()
 									Case COARSE
 										;[Block]
 										me\Injuries = 4.0
-										CreateMsg("You notice countless small incisions all around your body. They are bleeding heavily.")
+										CreateMsg(GetLocalString("misc", "914"))
 										;[End Block]
 									Case ONETOONE
 										;[Block]
@@ -7303,7 +7294,7 @@ Function UpdateEvents%()
 									e\EventState = 3.0	
 									PlaySound_Strict(e\Sound2)
 									
-									CreateMsg("Something is growing all around your body.")
+									CreateMsg(GetLocalString("misc", "1048a"))
 								Else
 									e\EventState = 4.0
 									e\EventState3 = 70.0 * 30.0
@@ -7323,42 +7314,41 @@ Function UpdateEvents%()
 									Select Rand(3)
 										Case 1
 											;[Block]
-											CreateMsg("Ears are growing all over your body.")
+											CreateMsg(GetLocalString("misc", "1048a1"))
 											;[End Block]
 										Case 2
 											;[Block]
-											CreateMsg("Ear-like organs are growing all over your body.")
+											CreateMsg(GetLocalString("misc", "1048a2"))
 											;[End Block]
 										Case 3
 											;[Block]
-											CreateMsg("Ears are growing all over your body. They are crawling on your skin.")
+											CreateMsg(GetLocalString("misc", "1048a3"))
 											;[End Block]
 									End Select
 								ElseIf e\EventState2 > 600.0 And e\EventState2 - fps\Factor[0] <= 600.0
 									Select Rand(4)
 										Case 1
 											;[Block]
-											CreateMsg("It is becoming difficult to breathe.")
+											CreateMsg(GetLocalString("misc", "1048a4"))
 											;[End Block]
 										Case 2
 											;[Block]
-											CreateMsg("You have excellent hearing now. Also, you are dying.")
+											CreateMsg(GetLocalString("misc", "1048a5"))
 											;[End Block]
 										Case 3
 											;[Block]
-											CreateMsg("The ears are growing inside your body.")
+											CreateMsg(GetLocalString("misc", "1048a6"))
 											;[End Block]
 										Case 4
 											;[Block]
-											CreateMsg(Chr(34) + "Can't... Breathe..." + Chr(34))
+											CreateMsg(GetLocalString("misc", "1048a7"))
 											;[End Block]
 									End Select
 								EndIf
 							EndIf
 							
 							If e\EventState2 > 70.0 * 15.0 Then
-								msg\DeathMsg = "A dead body covered in ears was found in [DATA REDACTED]. Subject was presumably attacked by an instance of SCP-1048-A and suffocated to death by the ears. "
-								msg\DeathMsg = msg\DeathMsg + "Body was sent for autopsy."
+								msg\DeathMsg = GetLocalString("death", "1048a")
 								Kill()
 							EndIf
 							
@@ -7743,16 +7733,14 @@ Function UpdateEvents%()
 									mo\MouseHit1 = False
 									e\EventState3 = 0.0
 									If me\Injuries > 15.0
-										msg\DeathMsg = "A dead Class D subject was discovered within the containment chamber of SCP-1162-ARC."
-										msg\DeathMsg = msg\DeathMsg + " An autopsy revealed that his right lung was missing, which suggests"
-										msg\DeathMsg = msg\DeathMsg + " interaction with SCP-1162-ARC."
+										msg\DeathMsg = GetLocalString("death", "1162")
 										PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(1, 4) + ".ogg"))
 										me\LightFlash = 5.0
 										Kill(True)
 									Else
 										PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(1, 4) + ".ogg"))
 										me\LightFlash = 5.0
-										CreateMsg("You feel a sudden overwhelming pain in your chest.")
+										CreateMsg(GetLocalString("misc", "1162"))
 									EndIf
 									Exit
 								EndIf
@@ -7773,16 +7761,14 @@ Function UpdateEvents%()
 								EntityParent(de\OBJ, e\room\OBJ)
 								FreeEntity(Pvt)
 								If me\Injuries > 15.0
-									msg\DeathMsg = "A dead Class D subject was discovered within the containment chamber of SCP-1162-ARC."
-									msg\DeathMsg = msg\DeathMsg + " An autopsy revealed that his right lung was missing, which suggests"
-									msg\DeathMsg = msg\DeathMsg + " interaction with SCP-1162-ARC."
+									msg\DeathMsg = GetLocalString("death", "1162")
 									PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(1, 4) + ".ogg"))
 									me\LightFlash = 5.0
 									Kill(True)
 								Else
 									PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(1, 4) + ".ogg"))
 									me\LightFlash = 5.0
-									CreateMsg("You notice something moving in your pockets and a sudden pain in your chest.")
+									CreateMsg(GetLocalString("misc", "11622"))
 								EndIf
 								e\EventState2 = 0.0
 							EndIf
@@ -8245,7 +8231,7 @@ Function UpdateEvents%()
 					EndIf
 						
 					If InteractObject(e\room\Objects[1], 0.49) Then
-						CreateMsg("You feel a cold breeze next to your body.")
+						CreateMsg(GetLocalString("misc", "freeze"))
 						me\Injuries = Max(0.0, me\Injuries - Rnd(0.3))
 						me\Bloodloss = 0.0
 						PlaySound_Strict(LoadTempSound("SFX\SCP\Joke\Quack.ogg"))
@@ -8305,7 +8291,7 @@ Function UpdateEvents%()
 				If PlayerRoom = e\room Then
 					UpdateButton(e\room\Objects[2])
 					If d_I\ClosestButton = e\room\Objects[2] And mo\MouseHit1 Then
-						CreateMsg("The elevator appears to be broken.")
+						CreateMsg(GetLocalString("Elevator", "broken"))
 						PlaySound2(ButtonSFX2, Camera, e\room\Objects[2])
 						mo\MouseHit1 = False
 					EndIf
@@ -8353,7 +8339,7 @@ Function UpdateEvents%()
 								
 								; ~ Touching the SCP-409
 								If InteractObject(e\room\Objects[3], 0.64) Then
-									CreateMsg("You touched SCP-409.")
+									CreateMsg(GetLocalString("misc", "409"))
 									me\BlurTimer = 2000.0
 									I_409\Timer = 0.001
 									GiveAchievement(Achv409)
@@ -8561,8 +8547,7 @@ Function UpdateDimension106%()
 										FreeEntity(Pvt)
 										
 										If (Not me\Terminated) Then
-											msg\DeathMsg = "In addition to the decomposed appearance typical of SCP-106's victims, the body exhibits injuries that have not been observed before: "
-											msg\DeathMsg = msg\DeathMsg + "massive skull fracture, three broken ribs, fractured shoulder and multiple heavy lacerations."
+											msg\DeathMsg = GetLocalString("death", "106")
 											
 											PlaySound_Strict(LoadTempSound("SFX\Room\PocketDimension\Impact.ogg"))
 											me\Terminated = True
@@ -8585,7 +8570,7 @@ Function UpdateDimension106%()
 							Else ; ~ The player is not at the exit, must've fallen down
 								If (Not me\Terminated) Then 
 									PlaySound_Strict(HorrorSFX[8])
-									msg\DeathMsg = "In addition to the decomposed appearance typical of the victims of SCP-106, the subject seems to have suffered multiple heavy fractures to both of his legs."
+									msg\DeathMsg = GetLocalString("misc", "1062")
 									me\BlurTimer = 3000.0
 									me\Terminated = True
 								EndIf
@@ -8880,7 +8865,7 @@ Function UpdateDimension106%()
 							Else ; ~ Somewhere else, must've fallen down
 								If (Not me\Terminated) Then 
 									PlaySound_Strict(HorrorSFX[8])
-									msg\DeathMsg = "In addition to the decomposed appearance typical of the victims of SCP-106, the subject seems to have suffered multiple heavy fractures to both of his legs."
+									msg\DeathMsg = GetLocalString("misc", "1062")
 									me\BlurTimer = 3000.0
 									me\Terminated = True
 								EndIf
@@ -9386,7 +9371,7 @@ Function UpdateEndings%()
 				;[Block]
 				If PlayerRoom = e\room Then
 					If e\EventState = 0.0 Then
-						RenderLoading(0, "ENDING STUFF")
+						RenderLoading(0, GetLocalString("loading", "ending"))
 						
 						For n.NPCs = Each NPCs
 							If n <> n_I\Curr106 And n <> n_I\Curr173 Then  
@@ -9408,7 +9393,7 @@ Function UpdateEndings%()
 						RotateEntity(e\room\Objects[0], 0.0, e\room\Angle, 0.0, True)
 						PositionEntity(e\room\Objects[0], e\room\x + 4356.0 * RoomScale, e\room\y - 1017.0 * RoomScale, e\room\z + 2588.0 * RoomScale, True)
 						
-						RenderLoading(60, "ENDING STUFF")
+						RenderLoading(60, GetLocalString("loading", "ending"))
 						
 						Sky = CreateSky("GFX\map\textures\sky")
 						RotateEntity(Sky, 0.0, e\room\Angle - 90.0, 0.0)
@@ -9416,14 +9401,14 @@ Function UpdateEndings%()
 						ResetEntity(me\Collider)
 						RotateEntity(me\Collider, 0.0, EntityYaw(me\Collider) + (e\room\Angle + 180.0), 0.0)
 						
-						RenderLoading(90, "ENDING STUFF")
+						RenderLoading(90, GetLocalString("loading", "ending"))
 						
 						SecondaryLightOn = True
 						
 						HideDistance = 68.0
 						
 						CreateConsoleMsg("")
-						CreateConsoleMsg("WARNING! Teleporting away from this area may cause bugs or crashing.", 255, 0, 0)
+						CreateConsoleMsg(GetLocalString("misc", "telewarn"), 255, 0, 0)
 						CreateConsoleMsg("")
 						
 						e\EventState = 1.0
@@ -9702,7 +9687,7 @@ Function UpdateEndings%()
 				;[Block]
 				If PlayerRoom = e\room Then 
 					If e\EventState = 0.0 Then
-						RenderLoading(0, "ENDING STUFF")
+						RenderLoading(0, GetLocalString("loading", "ending"))
 						
 						For n.NPCs = Each NPCs
 							If n <> n_I\Curr106 And n <> n_I\Curr173 Then  
@@ -9738,12 +9723,12 @@ Function UpdateEndings%()
 							ResetEntity(e\room\NPC[5]\Collider)
 						EndIf
 						
-						RenderLoading(30, "ENDING STUFF")
+						RenderLoading(30, GetLocalString("loading", "ending"))
 						
 						Sky = CreateSky("GFX\map\textures\sky")
 						RotateEntity(Sky, 0.0, e\room\Angle, 0.0)
 						
-						RenderLoading(60, "ENDING STUFF")
+						RenderLoading(60, GetLocalString("loading", "ending"))
 						
 						e\room\Objects[0] = LoadRMesh("GFX\map\gate_a_tunnel.rmesh", Null)
 						PositionEntity(e\room\Objects[0], EntityX(e\room\OBJ, True), EntityY(e\room\OBJ, True), EntityZ(e\room\OBJ, True))
@@ -9774,7 +9759,7 @@ Function UpdateEndings%()
 						HideDistance = 68.0
 						
 						CreateConsoleMsg("")
-						CreateConsoleMsg("WARNING! Teleporting away from this area may cause bugs or crashing.", 255, 0, 0)
+						CreateConsoleMsg(GetLocalString("misc", "telewarn"), 255, 0, 0)
 						CreateConsoleMsg("")
 						
 						e\EventState = 1.0

@@ -5,6 +5,7 @@ Global ItemAmount%, MaxItemAmount%
 Global LastItemID%
 
 Type ItemTemplates
+	Field DisplayName$
 	Field Name$
 	Field TempName$
 	Field Sound%
@@ -17,7 +18,7 @@ Type ItemTemplates
 	Field Tex%, TexPath$
 End Type 
 
-Function CreateItemTemplate.ItemTemplates(Name$, TempName$, OBJPath$, InvImgPath$, ImgPath$, Scale#, SoundID%, TexturePath$ = "", InvImgPath2$ = "", HasAnim% = False, TexFlags% = 9)
+Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPath$, InvImgPath$, ImgPath$, Scale#, SoundID%, TexturePath$ = "", InvImgPath2$ = "", HasAnim% = False, TexFlags% = 9)
 	Local it.ItemTemplates, it2.ItemTemplates
 	
 	it.ItemTemplates = New ItemTemplates
@@ -92,6 +93,7 @@ Function CreateItemTemplate.ItemTemplates(Name$, TempName$, OBJPath$, InvImgPath
 	
 	it\ImgPath = ImgPath
 	
+	it\DisplayName = DisplayName
 	it\TempName = TempName
 	it\Name = Name
 	
@@ -192,6 +194,7 @@ Function GetRandDocument$()
 End Function
 
 Type Items
+	Field DisplayName$
 	Field Name$
 	Field Collider%, Model%
 	Field ItemTemplate.ItemTemplates
@@ -231,6 +234,7 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 			EntityRadius(i\Collider, 0.01)
 			EntityPickMode(i\Collider, 1, False)
 			i\Model = CopyEntity(it\OBJ, i\Collider)
+			i\DisplayName = it\DisplayName
 			i\Name = it\Name
 			ShowEntity(i\Collider)
 			ShowEntity(i\Model)
@@ -490,7 +494,7 @@ End Function
 
 Function PickItem%(item.Items)
 	If wi\HazmatSuit > 0 Then
-		CreateMsg("You cannot pick up any items while wearing a hazmat suit.")
+		CreateMsg(GetLocalString("misc", "pick.suit"))
 		Return
 	EndIf
 	
@@ -523,8 +527,7 @@ Function PickItem%(item.Items)
 						;[Block]
 						me\LightFlash = 1.0
 						PlaySound_Strict(IntroSFX[Rand(8, 10)])
-						msg\DeathMsg = SubjectName + " found dead inside SCP-914's output booth next to what appears to be an ordinary nine-volt battery. The subject is covered in severe "
-						msg\DeathMsg = msg\DeathMsg + "electrical burns, and assumed to be killed via an electrical shock caused by the battery. The battery has been stored for further study."
+						msg\DeathMsg = Format(GetLocalString("death", "killbat"), SubjectName)
 						Kill()
 						;[End Block]
 					Case "scp148"
@@ -553,12 +556,12 @@ Function PickItem%(item.Items)
 						;[End Block]
 					Case "veryfinevest"
 						;[Block]
-						CreateMsg("The vest is too heavy to pick up.")
+						CreateMsg(GetLocalString("misc", "vfvest"))
 						Return
 						;[End Block]
 					Case "corrvest"
 						;[Block]
-						CreateMsg(Chr(34) + "I won't pick up that!" + Chr(34))
+						CreateMsg(GetLocalString("misc", "corrvest"))
 						Return
 						;[End Block]
 					Case "firstaid", "finefirstaid", "veryfinefirstaid", "firstaid2"
@@ -585,10 +588,10 @@ Function PickItem%(item.Items)
 						Next
 						
 						If CanPickItem = 0 Then
-							CreateMsg("You are not able to wear two hazmat suits at the same time.")
+							CreateMsg(GetLocalString("misc", "twosuit"))
 							Return
 						ElseIf CanPickItem = 2 Then
-							CreateMsg("You are not able to wear a vest and a hazmat suit at the same time.")
+							CreateMsg(GetLocalString("misc", "vestsuit"))
 							Return
 						Else
 							SelectedItem = item
@@ -610,10 +613,10 @@ Function PickItem%(item.Items)
 						Next
 						
 						If CanPickItem = 0 Then
-							CreateMsg("You are not able to wear two vests at the same time.")
+							CreateMsg(GetLocalString("misc", "twosuit"))
 							Return
 						ElseIf CanPickItem = 2 Then
-							CreateMsg("You are not able to wear a vest and a hazmat suit at the same time.")
+							CreateMsg(GetLocalString("misc", "vestsuit"))
 							Return
 						Else
 							SelectedItem = item
@@ -640,7 +643,7 @@ Function PickItem%(item.Items)
 		Next
 		me\SndVolume = Max(1.5, me\SndVolume)
 	Else
-		CreateMsg("You cannot carry any more items.")
+		CreateMsg(GetLocalString("misc", "cantcarry"))
 	EndIf
 	
 	CatchErrors("PickItem")
@@ -648,7 +651,7 @@ End Function
 
 Function DropItem%(item.Items, PlayDropSound% = True)
 	If wi\HazmatSuit > 0 Then
-		CreateMsg("You cannot drop any items while wearing a hazmat suit.")
+		CreateMsg(GetLocalString("misc", "drop.suit"))
 		Return
 	EndIf
 	
@@ -732,10 +735,10 @@ End Function
 
 Function CanUseItem%(CanUseWithGasMask%, CanUseWithEyewear%)
 	If (Not CanUseWithGasMask) And (wi\GasMask > 0 Lor I_1499\Using > 0) Then
-		CreateMsg("You can't use that item while wearing a gas mask.")
+		CreateMsg(GetLocalString("misc", "mask.use"))
 		Return(False)
 	ElseIf (Not CanUseWithEyewear) And (wi\NightVision > 0 Lor wi\SCRAMBLE)
-		CreateMsg("You can't use that item while wearing headgear.")
+		CreateMsg(GetLocalString("misc", "gear.use"))
 		Return(False)
 	EndIf
 	Return(True)
@@ -744,23 +747,23 @@ End Function
 ; ~ Maybe re-work?
 Function PreventItemOverlapping%(GasMask% = False, NVG% = False, SCP1499% = False, Helmet% = False, SCRAMBLE% = False)
 	If (Not GasMask) And wi\GasMask > 0 Then
-		CreateMsg("You need to take off the gas mask in order to use that item.")
+		CreateMsg(GetLocalString("misc", "mask.use.off"))
 		SelectedItem = Null
 		Return(True)
 	ElseIf (Not SCP1499) And I_1499\Using > 0
-		CreateMsg("You need to take off SCP-1499 in order to use that item.")
+		CreateMsg(GetLocalString("misc", "1499.use.off"))
 		SelectedItem = Null
 		Return(True)
 	ElseIf (Not NVG) And wi\NightVision > 0 Then
-		CreateMsg("You need to take off the goggles in order to use that item.")
+		CreateMsg(GetLocalString("misc", "goggle.use.off"))
 		SelectedItem = Null
 		Return(True)
 	ElseIf (Not Helmet) And wi\BallisticHelmet
-		CreateMsg("You need to take off the helmet in order to use that item.")
+		CreateMsg(GetLocalString("misc", "helmet.use.off"))
 		SelectedItem = Null
 		Return(True)
 	ElseIf (Not SCRAMBLE) And wi\SCRAMBLE
-		CreateMsg("You need to take off the gear in order to use that item.")
+		CreateMsg(GetLocalString("misc", "gear.use.off"))
 		SelectedItem = Null
 		Return(True)
 	EndIf
@@ -769,7 +772,7 @@ End Function
 
 Function IsDoubleItem%(Variable, ID, Msg$)
 	If Variable > 0 And Variable <> ID Then
-		CreateMsg("You are not able to wear two " + Msg + " at the same time.")
+		CreateMsg(Format(GetLocalString("misc", "weartwo"), Msg))
 		SelectedItem = Null
 		Return(True)
 	EndIf
@@ -2176,13 +2179,11 @@ Function Use1123%()
 			EndIf
 		Next
 	Else
-		CreateMsg("You touched the skull, but nothing happened.")
+		CreateMsg(GetLocalString("misc", "skull.nothappend"))
 	EndIf
 	
 	If Temp Then
-		msg\DeathMsg = SubjectName + " was shot dead after attempting to attack a member of Nine-Tailed Fox. Surveillance tapes show that the subject had been"
-		msg\DeathMsg = msg\DeathMsg + " wandering around the site approximately 9 minutes prior, shouting the phrase " + Chr(34) + "get rid of the four pests" + Chr(34)
-		msg\DeathMsg = msg\DeathMsg + " in chinese. SCP-1123 was found in [REDACTED] nearby, suggesting the subject had come into physical contact with it."
+		msg\DeathMsg = Format(GetLocalString("death", "1123"), SubjectName)
 		Kill()
 	EndIf
 End Function

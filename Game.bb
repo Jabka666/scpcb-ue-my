@@ -17,8 +17,27 @@ Function CheckForDlls%()
 	If FileSize("d3dim700.dll") = 0 Then InitErrorStr = InitErrorStr + "d3dim700.dll" + Chr(13) + Chr(10)
 	If FileSize("BlitzMovie.dll") = 0 Then InitErrorStr = InitErrorStr + "BlitzMovie.dll" + Chr(13) + Chr(10)
 	If FileSize("FreeImage.dll") = 0 Then InitErrorStr = InitErrorStr + "FreeImage.dll" + Chr(13) + Chr(10)
+	If FileSize("IniControler.dll") = 0 Then InitErrorStr = InitErrorStr + "IniControler.dll" + Chr(13) + Chr(10)
 	
 	If Len(InitErrorStr) > 0 Then RuntimeError("The following DLLs were not found in the game directory:" + Chr(13) + Chr(10) + Chr(13) + Chr(10) + InitErrorStr)
+End Function
+
+Type Language
+	Field CurrentLanguage$
+	Field LanguagePath$
+End Type
+
+Global lang.Language = New Language
+
+IniWriteBuffer_("Data\local.ini", 1)
+Function SetLanguage(Language$)
+	If Language = "UserLanguage" Then
+		lang\CurrentLanguage$ = GetUserLanguage()
+	Else 
+		lang\CurrentLanguage$ = Language
+	EndIf
+	lang\LanguagePath$ = "Localization\" + lang\CurrentLanguage$
+	IniWriteBuffer_(lang\LanguagePath + "\Data\local.ini", 1)
 End Function
 
 CheckForDlls()
@@ -40,6 +59,11 @@ Include "Source Code\KeyBinds_Core.bb"
 Include "Source Code\INI_Core.bb"
 
 LoadOptionsINI()
+
+SetLanguage(GetINIString(OptionFile, "Global", "Language"))
+
+Global SplitSpace$
+If Int(GetLocalString("global", "splitwithspace")) Then SplitSpace = " " Else SplitSpace = ""
 
 Include "Source Code\Main_Core.bb"
 

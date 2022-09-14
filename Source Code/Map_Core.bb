@@ -1,8 +1,8 @@
-RenderLoading(45, "MATERIALS CORE")
+RenderLoading(45, GetLocalString("loading", "core.mat"))
 
 Include "Source Code\Materials_Core.bb"
 
-RenderLoading(50, "TEXTURE CACHE CORE")
+RenderLoading(50, GetLocalString("loading", "core.texcache"))
 
 Include "Source Code\Texture_Cache_Core.bb"
 
@@ -2880,30 +2880,30 @@ Function UseDoor%(d.Doors, Scripted% = False, PlaySFX% = True)
 		
 		If d\KeyCard > KEY_MISC Then
 			If SelectedItem = Null Then
-				CreateMsg("A keycard is required to operate this door.")
+				CreateMsg(GetLocalString("map", "key.require"))
 				PlaySound2(ButtonSFX, Camera, d_I\ClosestButton)
 				Return
 			Else
 				If Temp <= KEY_MISC Then
-					CreateMsg("A keycard is required to operate this door.")
+					CreateMsg(GetLocalString("map", "key.require"))
 				Else
 					If Temp = KEY_CARD_6 Then
-						CreateMsg("The keycard was inserted into the slot. UNKNOWN ERROR! " + Chr(34) + "Do" + Chr(Rand(48, 122)) + "s th" + Chr(Rand(48, 122)) + " B" + Chr(Rand(48, 122)) + "ack " + Chr(Rand(48, 122)) + "oon howl? " + Chr(Rand(48, 122)) + "es. N" + Chr(Rand(48, 122)) + ". Ye" + Chr(Rand(48, 122)) + ". " + Chr(Rand(48, 122)) + "o." + Chr(34))
+						CreateMsg(GetLocalString("map", "key.card6"))
 					Else
 						If d\Locked = 1 Then
 							If Temp = KEY_005 Then
-								CreateMsg("You hold the key close to the slot, but nothing happened.")
+								CreateMsg(GetLocalString("map", "key.nothappend.005"))
 							Else
-								CreateMsg("The keycard was inserted into the slot, but nothing happened.")
+								CreateMsg(GetLocalString("map", "key.nothappend"))
 							EndIf
 						Else
 							If Temp = KEY_005 Then
-								CreateMsg("You hold the key close to the slot.")
+								CreateMsg(GetLocalString("map", "key.005"))
 							Else
 								If Temp < d\KeyCard Then
-									CreateMsg("A keycard with security clearance " + (d\KeyCard - 2) + " or higher is required to operate this door.")
+									CreateMsg(Format(GetLocalString("map", "key.higher"), d\KeyCard - 2))
 								Else
-									CreateMsg("The keycard was inserted into the slot.")
+									CreateMsg(GetLocalString("map", "slot"))
 								EndIf
 							EndIf
 						EndIf
@@ -2923,27 +2923,27 @@ Function UseDoor%(d.Doors, Scripted% = False, PlaySFX% = True)
 			EndIf
 		ElseIf d\KeyCard > KEY_HAND_YELLOW And d\KeyCard < KEY_MISC
 			If SelectedItem = Null Then
-				CreateMsg("You placed your palm onto the scanner. The scanner reads: " + Chr(34) + "DNA doesn't match known sample. Access denied." + Chr(34))
+				CreateMsg(GetLocalString("map", "dna.denied"))
 				PlaySound2(ScannerSFX2, Camera, d_I\ClosestButton)
 				Return
 			Else
 				If ((Temp >= KEY_MISC) Lor (Temp < KEY_HAND_YELLOW)) And (Temp <> KEY_005) Then
-					CreateMsg("You placed your palm onto the scanner. The scanner reads: " + Chr(34) + "DNA doesn't match known sample. Access denied." + Chr(34))
+					CreateMsg(GetLocalString("map", "dna.denied"))
 				Else
 					If (d\KeyCard <> Temp) And (Temp <> KEY_005) Then
-						CreateMsg("You placed the palm of the hand onto the scanner. The scanner reads: " + Chr(34) + "DNA doesn't match known sample. Access denied." + Chr(34))
+						CreateMsg(GetLocalString("map", "dna.denied"))
 					Else
 						If d\Locked = 1 Then
 							If Temp = KEY_005 Then
-								CreateMsg("You hold the key onto the scanner, but nothing happened.")
+								CreateMsg(GetLocalString("map", "dna,nothappend.005"))
 							Else
-								CreateMsg("You placed the palm of the hand onto the scanner, but nothing happened")
+								CreateMsg(GetLocalString("map", "dna.nothappend"))
 							EndIf
 						Else
 							If Temp = KEY_005 Then
-								CreateMsg("You hold the key onto the scanner. The scanner reads: " + Chr(34) + "Unknown DNA verified. ERROR! Access granted." + Chr(34))
+								CreateMsg(GetLocalString("map", "dna.granted.005"))
 							Else
-								CreateMsg("You placed the palm of the hand onto the scanner. The scanner reads: " + Chr(34) + "DNA verified. Access granted." + Chr(34))
+								CreateMsg(GetLocalString("map", "dna.granted"))
 							EndIf
 						EndIf
 					EndIf
@@ -2967,9 +2967,9 @@ Function UseDoor%(d.Doors, Scripted% = False, PlaySFX% = True)
 			Else
 				If Temp = KEY_005 Then
 					If d\Locked = 1 Then
-						CreateMsg("You hold the key close to the keypad, but nothing happened.")
+						CreateMsg(GetLocalString("map", "keypad.nothappend.005"))
 					Else
-						CreateMsg("You hold the key close to the keypad.")
+						CreateMsg(GetLocalString("map", "keypad.nothappend"))
 					EndIf
 				EndIf
 				SelectedItem = Null
@@ -2993,7 +2993,7 @@ Function UseDoor%(d.Doors, Scripted% = False, PlaySFX% = True)
 			If d\DoorType = WOODEN_DOOR Lor d\DoorType = OFFICE_DOOR Then
 				If d\Locked > 0 Then
 					If SelectedItem = Null Then
-						CreateMsg("The door will not budge.")
+						CreateMsg(GetLocalString("map", "wood.wontbudge"))
 						If d\DoorType = OFFICE_DOOR Then
 							PlaySound2(DoorBudgeSFX1, Camera, d_I\ClosestButton)
 						Else
@@ -3001,12 +3001,12 @@ Function UseDoor%(d.Doors, Scripted% = False, PlaySFX% = True)
 						EndIf
 					Else
 						If (Temp > KEY_860) And (Temp <> KEY_005) Then
-							CreateMsg("The door will not budge.")
+							CreateMsg(GetLocalString("map", "wood.wontbudge"))
 						Else
 							If d\Locked = 2 Lor ((Temp <> d\KeyCard) And (Temp <> KEY_005)) Then
-								CreateMsg("You tried to unlock the door, but nothing happened.")
+								CreateMsg(GetLocalString("map", "wood.nothappend.005"))
 							Else
-								CreateMsg("You unlocked the door.")
+								CreateMsg(GetLocalString("map", "wood.unlock"))
 								d\Locked = 0
 							EndIf
 							SelectedItem = Null
@@ -3026,34 +3026,34 @@ Function UseDoor%(d.Doors, Scripted% = False, PlaySFX% = True)
 			ElseIf d\DoorType = ELEVATOR_DOOR
 				If d\Locked = 1 Then
 					If (Not d\IsElevatorDoor > 0) Then
-						CreateMsg("The elevator appears to be broken.")
+						CreateMsg(GetLocalString("Elevator", "broken"))
 						PlaySound2(ButtonSFX2, Camera, d_I\ClosestButton)
 					Else
 						If d\IsElevatorDoor = 1 Then
-							CreateMsg("You called the elevator.")
+							CreateMsg(GetLocalString("Elevator", "called"))
 						ElseIf d\IsElevatorDoor = 3
-							CreateMsg("The elevator is already on this floor.")
-						ElseIf msg\Txt <> "You called the elevator."
+							CreateMsg(GetLocalString("Elevator", "on"))
+						ElseIf msg\Txt <> GetLocalString("Elevator", "called")
 							Select Rand(10)
 								Case 1
 									;[Block]
-									CreateMsg("Stop spamming the button.")
+									CreateMsg(GetLocalString("Elevator", "stop"))
 									;[End Block]
 								Case 2
 									;[Block]
-									CreateMsg("Pressing it harder doesn't make the elevator come faster.")
+									CreateMsg(GetLocalString("Elevator", "faster"))
 									;[End Block]
 								Case 3
 									;[Block]
-									CreateMsg("If you continue pressing this button I will generate a Memory Access Violation.")
+									CreateMsg(GetLocalString("Elevator", "mav"))
 									;[End Block]
 								Default
 									;[Block]
-									CreateMsg("You already called the elevator.")
+									CreateMsg(GetLocalString("Elevator", "already"))
 									;[End Block]
 							End Select
 						Else
-							CreateMsg("You already called the elevator.")
+							CreateMsg(GetLocalString("Elevator", "already"))
 						EndIf
 						PlaySound2(ButtonSFX, Camera, d_I\ClosestButton)
 					EndIf
@@ -3062,9 +3062,9 @@ Function UseDoor%(d.Doors, Scripted% = False, PlaySFX% = True)
 			Else
 				If d\Locked = 1 Then
 					If d\Open Then
-						CreateMsg("You pushed the button but nothing happened.")
+						CreateMsg(GetLocalString("map", "button.nothappend"))
 					Else
-						CreateMsg("The door appears to be locked.")
+						CreateMsg(GetLocalString("map", "button.locked"))
 					EndIf
 					PlaySound2(ButtonSFX2, Camera, d_I\ClosestButton)
 					Return
@@ -3425,8 +3425,7 @@ Function UpdateSecurityCams%()
 						EndIf
 						
 						If me\Sanity < -1000.0 Then 
-							msg\DeathMsg = Chr(34) + "What we know is that he died of cardiac arrest. My guess is that it was caused by SCP-895, although it has never been observed affecting video equipment from this far before. "
-							msg\DeathMsg = msg\DeathMsg + "Further testing is needed to determine whether SCP-895's " + Chr(34) + "Red Zone" + Chr(34) + " is increasing." + Chr(34)
+							msg\DeathMsg = GetLocalString("death", "895")
 							
 							If me\VomitTimer < -10.0 Then Kill()
 						EndIf

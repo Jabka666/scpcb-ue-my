@@ -25,6 +25,10 @@ Global ButtonSFX2% = LoadSound_Strict("SFX\Interact\Button2.ogg")
 
 Global MenuWhite%, MenuGray%, MenuBlack%
 
+MenuWhite = LoadImage_Strict("GFX\menu\menu_white.png")
+MenuGray = LoadImage_Strict("GFX\menu\menu_gray.png")
+MenuBlack = LoadImage_Strict("GFX\menu\menu_black.png")
+
 Type Mouse
 	Field MouseHit1%, MouseHit2%
 	Field MouseDown1%
@@ -76,7 +80,7 @@ EndIf
 
 Const VersionNumber$ = "1.0.3"
 
-AppTitle("SCP - Containment Breach Ultimate Edition v" + VersionNumber)
+AppTitle(Format(GetLocalString("misc", "title"), VersionNumber))
 
 Global MenuScale# = opt\GraphicHeight / 1024.0
 
@@ -141,7 +145,7 @@ SetFont(fo\FontID[Font_Default_Big])
 Global BlinkMeterIMG% = LoadImage_Strict("GFX\blink_meter(1).png")
 BlinkMeterIMG = ScaleImage2(BlinkMeterIMG, MenuScale, MenuScale)
 
-RenderLoading(0, "MAIN CORE")
+RenderLoading(0, GetLocalString("loading", "core.main"))
 
 Type Player
 	Field Terminated# = False
@@ -187,7 +191,7 @@ End Type
 
 Global wi.WearableItems = New WearableItems
 
-RenderLoading(5, "ACHIEVEMENTS CORE")
+RenderLoading(5, GetLocalString("loading", "core.achv"))
 
 Include "Source Code\Achievements_Core.bb"
 
@@ -239,7 +243,7 @@ Global MainMenuOpen%, MenuOpen%, InvOpen%
 
 Global AccessCode%
 
-RenderLoading(10, "DIFFICULTY CORE")
+RenderLoading(10, GetLocalString("loading", "core.diff"))
 
 Include "Source Code\Difficulty_Core.bb"
 
@@ -299,6 +303,14 @@ Function CreateConsoleMsg%(Txt$, R% = -1, G% = -1, B% = -1, IsCommand% = False)
 	If c\R < 0 Then c\R = ConsoleR
 	If c\G < 0 Then c\G = ConsoleG
 	If c\B < 0 Then c\B = ConsoleB
+End Function
+
+Function CreateConsoleMultiMsg(Txt$, R% = -1, G% = -1, B% = -1, IsCommand% = False)
+	While Find(Txt, "\n") <> -1 
+		CreateConsoleMsg(Left(Txt, Find(Txt, "\n")), R, G, B, IsCommand)
+		Txt = Right(Txt, Len(Txt) - Find(Txt, "\n") - 2)
+	Wend
+	CreateConsoleMsg(Txt, R, G, B, IsCommand)
 End Function
 
 Function UpdateConsole%()
@@ -473,7 +485,7 @@ Function UpdateConsole%()
 					Select StrTemp
 						Case "1", ""
 							;[Block]
-							CreateConsoleMsg("LIST OF COMMANDS - PAGE 1 / 3")
+							CreateConsoleMsg(GetLocalString("console", "help1.1"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("- ending")
 							CreateConsoleMsg("- notarget")
@@ -493,13 +505,13 @@ Function UpdateConsole%()
 							CreateConsoleMsg("- money")
 							CreateConsoleMsg("- debughud")
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Use " + Chr(34) + "help 2 / 3" + Chr(34) + " to find more commands.")
-							CreateConsoleMsg("Use " + Chr(34) + "help [command name]" + Chr(34) + " to get more information about a command.")
+							CreateConsoleMsg(GetLocalString("console", "help1.2"))
+							CreateConsoleMsg(GetLocalString("console", "help.command"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "2"
 							;[Block]
-							CreateConsoleMsg("LIST OF COMMANDS - PAGE 2 / 3")
+							CreateConsoleMsg(GetLocalString("console", "help2.1"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("- reset096")
 							CreateConsoleMsg("- reset372")
@@ -518,13 +530,13 @@ Function UpdateConsole%()
 							CreateConsoleMsg("- disablenuke")
 							CreateConsoleMsg("- resetfunds")
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Use " + Chr(34) + "help 3 / 3" + Chr(34) + " to find more commands.")
-							CreateConsoleMsg("Use " + Chr(34) + "help [command name]" + Chr(34) + " to get more information about a command.")
+							CreateConsoleMsg(GetLocalString("console", "help2.2"))
+							CreateConsoleMsg(GetLocalString("console", "help.command"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "3"
 							;[Block]
-							CreateConsoleMsg("LIST OF COMMANDS - PAGE 3 / 3")
+							CreateConsoleMsg(GetLocalString("console", "help3.1"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("- playmusic [clip + .wav / .ogg]")
 							CreateConsoleMsg("- camerafog [near] [far]")
@@ -537,63 +549,48 @@ Function UpdateConsole%()
 							CreateConsoleMsg("- giveachievement [ID / All]")
 							CreateConsoleMsg("- codes")
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Use " + Chr(34) + "help [command name]" + Chr(34) + " to get more information about a command.")
+							CreateConsoleMsg(GetLocalString("console", "help.command"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "camerafog"
 							;[Block]
-							CreateConsoleMsg("HELP - camerafog")
+							CreateConsoleMsg(GetLocalString("console", "help.camerafog.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Sets the draw distance of the fog.")
-							CreateConsoleMsg("The fog begins generating at 'CameraFogNear' units")
-							CreateConsoleMsg("away from the camera and becomes completely opaque")
-							CreateConsoleMsg("at 'CameraFogFar' units away from the camera.")
-							CreateConsoleMsg("Example: camerafog 20 40")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.camerafog"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "noclip", "fly"
 							;[Block]
-							CreateConsoleMsg("HELP - noclip")
+							CreateConsoleMsg(GetLocalString("console", "help.noclip.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Toggles NoClip, unless a valid parameter")
-							CreateConsoleMsg("is specified (on / off).")
-							CreateConsoleMsg("Allows the camera to move in any direction while")
-							CreateConsoleMsg("by passing collision.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.noclip"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "noblink", "nb"
 							;[Block]
-							CreateConsoleMsg("HELP - noblink")
+							CreateConsoleMsg(GetLocalString("console", "help.noblink.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Toggles NoBlink, unless a valid parameter")
-							CreateConsoleMsg("is specified (on / off).")
-							CreateConsoleMsg("Removes player's blinking.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.noblink"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "godmode", "god"
 							;[Block]
-							CreateConsoleMsg("HELP - godmode")
+							CreateConsoleMsg(GetLocalString("console", "help.god.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Toggles GodMode, unless a valid parameter")
-							CreateConsoleMsg("is specified (on / off).")
-							CreateConsoleMsg("Prevents player death under normal circumstances.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.god"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "infinitestamina", "is"
 							;[Block]
-							CreateConsoleMsg("HELP - infinitestamina")
+							CreateConsoleMsg(GetLocalString("console", "help.is.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Toggles InfiniteStamina, unless a valid parameter")
-							CreateConsoleMsg("is specified (on / off).")
-							CreateConsoleMsg("Increases player's stamina to infinite value.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.is"))
 							CreateConsoleMsg("******************************")
 						Case "notarget", "nt"
 							;[Block]
-							CreateConsoleMsg("HELP - notarget")
+							CreateConsoleMsg(GetLocalString("console", "help.nt.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Toggles NoTarget, unless a valid parameter")
-							CreateConsoleMsg("is specified (on / off).")
-							CreateConsoleMsg("Makes player to be invisible for NPCs.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.nt"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "wireframe", "wf"
@@ -883,13 +880,19 @@ Function UpdateConsole%()
 					For itt.ItemTemplates = Each ItemTemplates
 						If Lower(itt\Name) = StrTemp Then
 							Temp = True
-							CreateConsoleMsg(itt\Name + " spawned.")
+							CreateConsoleMsg(itt\DisplayName + " spawned.")
+							it.Items = CreateItem(itt\Name, itt\TempName, EntityX(me\Collider), EntityY(Camera, True), EntityZ(me\Collider))
+							EntityType(it\Collider, HIT_ITEM)
+							Exit
+						ElseIf Lower(itt\DisplayName) = StrTemp Then
+							Temp = True
+							CreateConsoleMsg(itt\DisplayName + " spawned.")
 							it.Items = CreateItem(itt\Name, itt\TempName, EntityX(me\Collider), EntityY(Camera, True), EntityZ(me\Collider))
 							EntityType(it\Collider, HIT_ITEM)
 							Exit
 						ElseIf Lower(itt\TempName) = StrTemp Then
 							Temp = True
-							CreateConsoleMsg(itt\Name + " spawned.")
+							CreateConsoleMsg(itt\DisplayName + " spawned.")
 							it.Items = CreateItem(itt\Name, itt\TempName, EntityX(me\Collider), EntityY(Camera, True), EntityZ(me\Collider))
 							EntityType(it\Collider, HIT_ITEM)
 							Exit
