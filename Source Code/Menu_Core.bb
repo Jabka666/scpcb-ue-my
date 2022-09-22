@@ -882,11 +882,11 @@ Function UpdateMainMenu%()
 											;[End Block]
 										Case 12
 											;[Block]
-											key\CONSOLE = TempKey
+											key\SCREENSHOT = TempKey
 											;[End Block]
 										Case 13
 											;[Block]
-											key\SCREENSHOT = TempKey
+											key\CONSOLE = TempKey
 											;[End Block]
 									End Select
 									SelectedInputBox = 0
