@@ -1,9 +1,11 @@
 v1.0.31
 
 General:
+- Added a new feature that allows the player name a savegame with non-latin characters, like chinese, russian and etc.
+
 - Removed extra spacing in credits.
+
 - Finally made the «Bright mode» similar to original game.
-- Added a new feature that allows you name a savegame with non-latin characters, like chinese, russian and etc.
 
 Menu:
 - Added degree symbol for FOV value.
@@ -12,6 +14,8 @@ Bug fixes:
 - Fixed a bug with console bind.
 - Fixed SCP-096 triggering while his face is hidden by fog.
 - Fixed SCP-106 animation when getting hit by the Tesla Gate.
+- Fixed windows textures for some rooms.
+- Fixed the office door appearing to freeze in weird ways when leaving the room instantly.
 
 - Tiny fix for dead guard position in the starting location.
 
@@ -136,6 +140,7 @@ Bug Fixes:
 - Fixed «RedVision» eyedrops texture saying «ReVision».
 - Fixed «Stream channel not found» error spamming in console.
 - Fixed Gate A that is visible from Gate B.
+- Fixed an ability to press on the «BACK» button while deleting save game.
 
 - Tiny fix for SCP-372's AI.
 - Tiny fixes for location of the pause menu buttons.

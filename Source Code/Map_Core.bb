@@ -2319,7 +2319,7 @@ Function UpdateDoors%()
 						Case OFFICE_DOOR, WOODEN_DOOR
 							;[Block]
 							d\OpenState = CurveValue(180.0, d\OpenState, 40.0) + (fps\Factor[0] * 0.01)
-							RotateEntity(d\OBJ, 0.0, PlayerRoom\Angle + d\Angle + (d\OpenState / 2.5), 0.0)
+							RotateEntity(d\OBJ, 0.0, d\room\Angle + d\Angle + (d\OpenState / 2.5), 0.0)
 							If d\DoorType = OFFICE_DOOR Then
 								Animate2(d\OBJ, AnimTime(d\OBJ), 1.0, 41.0, 1.2, False)
 							EndIf
@@ -7111,7 +7111,7 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case "room3_office"
 			;[Block]			
-			d.Doors = CreateDoor(r\x + 768.0 * RoomScale, r\y, r\z + 234.0 * RoomScale, 180.0, r, False, OFFICE_DOOR)
+			d.Doors = CreateDoor(r\x + 768.0 * RoomScale, r\y, r\z + 234.0 * RoomScale, 180.0, r, True, OFFICE_DOOR)
 			
 			r\Objects[0] = LoadMesh_Strict("GFX\map\room3_office_hb.b3d", r\OBJ)
 			EntityPickMode(r\Objects[0], 2)
