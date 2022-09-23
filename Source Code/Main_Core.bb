@@ -1,5 +1,6 @@
 Include "Source Code\Math_Core.bb"
 Include "Source Code\Strict_Loads_Core.bb"
+Include "Source Code\BlitzEncode.bb"
 
 Const MaxFontIDAmount% = 8
 ; ~ Fonts ID Constants
@@ -7608,7 +7609,7 @@ Function RenderMenu%()
 		Else
 			SetFont(fo\FontID[Font_Default])
 			Text(x, y, "Difficulty: " + SelectedDifficulty\Name)
-			Text(x, y + (20 * MenuScale), "Save: " + CurrSave\Name)
+			Text(x, y + (20 * MenuScale), "Save: " + ConvertANSItoUTF8(CurrSave\Name))
 			If SelectedMap = "" Then
 				TempStr = "Map seed: " + RandomSeed
 			Else
