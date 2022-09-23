@@ -7614,9 +7614,9 @@ Function RenderMenu%()
 				TempStr = "Map seed: " + RandomSeed
 			Else
 				If Len(SelectedMap) > 15 Then
-					TempStr = "Selected map: " + Left(SelectedMap, 14) + "..."
+					TempStr = "Selected map: " + Left(ConvertANSItoUTF8(SelectedMap), 14) + "..."
 				Else
-					TempStr = "Selected map: " + SelectedMap
+					TempStr = "Selected map: " + ConvertANSItoUTF8(SelectedMap)
 				EndIf
 			EndIf
 			Text(x, y + (40 * MenuScale), TempStr)
