@@ -2,11 +2,14 @@ v1.0.31
 
 General:
 - Removed extra spacing in credits.
+- Finally made the «Bright mode» similar to original game.
 
 Bug fixes:
 - Fixed a bug with console bind.
 - Fixed SCP-096 triggering while his face is hidden by fog.
 - Fixed SCP-106 animation when getting hit by the Tesla Gate.
+
+- Tiny fix for dead guard position in the starting location.
 
 v1.0.3
 

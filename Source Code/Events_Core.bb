@@ -1416,9 +1416,10 @@ Function UpdateEvents%()
 										PickItem(SelectedItem)
 										
 										OpenCloseDoor(e\room\RoomDoors[2])
-										e\EventState3 = 910.0
 										e\room\NPC[3]\State3 = 0.0
 										SetNPCFrame(e\room\NPC[3], 608.0)
+										
+										e\EventState3 = 910.0
 									EndIf
 								EndIf
 							EndIf
@@ -1473,18 +1474,18 @@ Function UpdateEvents%()
 											Next
 										EndIf
 									EndIf
-								EndIf
-								
-								If DistanceSquared(EntityX(me\Collider), EntityX(e\room\OBJ), EntityZ(me\Collider), EntityZ(e\room\OBJ)) < 16.0 Then
-									OpenCloseDoor(e\room\RoomDoors[1])
-									If e\room\RoomDoors[2]\Open Then OpenCloseDoor(e\room\RoomDoors[2])
-									For i = 3 To 4
-										e\room\NPC[i]\State = 0.0
-									Next
-									
-									If ChannelPlaying(e\room\NPC[3]\SoundCHN) Then StopChannel(e\room\NPC[3]\SoundCHN)
-									
-									e\EventState3 = 0.0
+									If DistanceSquared(EntityX(me\Collider), EntityX(e\room\OBJ), EntityZ(me\Collider), EntityZ(e\room\OBJ)) < 16.0 Then
+										For i = 1 To 2
+											OpenCloseDoor(e\room\RoomDoors[i])
+										Next
+										For i = 3 To 4
+											e\room\NPC[i]\State = 0.0
+										Next
+										
+										If ChannelPlaying(e\room\NPC[3]\SoundCHN) Then StopChannel(e\room\NPC[3]\SoundCHN)
+										
+										e\EventState3 = 0.0
+									EndIf
 								EndIf
 							EndIf
 						EndIf
@@ -1970,19 +1971,12 @@ Function UpdateEvents%()
 						EndIf
 					EndIf
 				Else
-					Temp = False
-					For i = 3 To 5
-						If e\room\NPC[i] <> Null Then
-							If e\room\NPC[i]\State = 1.0 Lor e\room\NPC[i]\State = 11.0 Then
-								Temp = True
-								Exit
-							EndIf
-						EndIf
-					Next
 					If me\Terminated Then
-						If Temp Then
-							LoadEventSound(e, "SFX\Room\Intro\Guard\Ulgrin\EscortTerminated.ogg")
-							PlaySound_Strict(e\Sound)
+						If e\room\NPC[3] <> Null Then
+							If e\room\NPC[3]\State = 1.0 Lor e\room\NPC[3]\State = 11.0 Then
+								LoadEventSound(e, "SFX\Room\Intro\Guard\Ulgrin\EscortTerminated.ogg")
+								PlaySound_Strict(e\Sound)
+							EndIf
 						EndIf
 					EndIf
 					
@@ -9150,7 +9144,7 @@ Function UpdateDimension1499%()
 				EndIf
 				
 				CameraFogRange(Camera, 40.0, 80.0)
-				CameraRange(Camera, 0.01, 90.0)
+				CameraRange(Camera, 0.05, 90.0)
 				
 				For r.Rooms = Each Rooms
 					HideEntity(r\OBJ)

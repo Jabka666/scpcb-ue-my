@@ -3298,7 +3298,7 @@ Function CreateSecurityCam.SecurityCams(x1#, y1#, z1#, r.Rooms, Screen% = False,
 		
 		sc\Cam = CreateCamera()
 		CameraViewport(sc\Cam, 0, 0, 512, 512)
-		CameraRange(sc\Cam, 0.01, 8.0)
+		CameraRange(sc\Cam, 0.05, 8.0)
 		CameraZoom(sc\Cam, 0.8)
 		HideEntity(sc\Cam)	
 	EndIf
@@ -5906,7 +5906,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[1], r\x + 448.0 * RoomScale, r\y, r\z + 192.0 * RoomScale)
 			
 			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], EntityX(r\OBJ) - 400.0 * RoomScale, r\y + 440.0 * RoomScale, EntityZ(r\OBJ) + 1322.0 * RoomScale)
+			PositionEntity(r\Objects[2], EntityX(r\OBJ) - 200.0 * RoomScale, r\y + 440.0 * RoomScale, EntityZ(r\OBJ) + 1322.0 * RoomScale)
 			
 			r\Objects[3] = CreatePivot()
 			PositionEntity(r\Objects[3], EntityX(r\OBJ) + 1000.0 * RoomScale, r\y + 120.0 * RoomScale, EntityZ(r\OBJ) + 666.0 * RoomScale)
