@@ -1,36 +1,76 @@
+v1.0.31
+
+General:
+- Removed extra spacing in credits.
+
+Bug fixes:
+- Fixed a bug with console bind.
+- Fixed SCP-096 triggering while his face is hidden by fog.
+- Fixed SCP-106 animation when getting hit by the Tesla Gate.
+
 v1.0.3
 
 General:
-- Optimized game.
-- Improved gas mask fogging overlay.
 - Added sound volume for crouching and picking the items up, so NPCs can hear your activity.
 - Added smoke particles for all NPCs hit by the Tesla Gate.
+
+- Improved gas mask fogging overlay.
+
+- Updated TSS startup video.
+
 - The HUD will be hidden when the player dies.
+- SCP-005 can no longer be placed into the wallet.
+- The player must use SCP-513 to get an achievement.
+- SCP-914 changes:
+	- Added new refinement for SCP-500.
+	- SCP-914 is now slightly rebalanced;
+	
+- Optimized game.
+
+Menu:
 - Added «Master volume» and «Invert mouse by X-axis» options.
-- Made the game a bit brighter.
+- Added «CONTROL CONFIGURATION» button.
+
+- Renamed «Enable room lights» option to «Advanced room lighting».
+
+- Made capitalization for buttons text.
+
+Mechanics and effects:
+- Blinking reduces blur.
 
 NPCs:
 - Added new messages when SCP-049 destroys the hazmat suit or removes the ring from the player.
+
+- Changed SCP-049 eyes glow to blue.
+
+- Tiny rebalance for MTF's shooting.
+
 - Decreased detect distance for MTF.
 
 Rooms:
-- Tiny improvement for «cabient_c.b3d» and «garbage_bin.b3d» models.
-- Tiny optimization for SCP-106's box.
-- Made the rooms a bit brighter.
+- Added new death message for «room3_storage» area.
+- Added new room in the Entrance Zone.
 
-Menu:
-- Made capitalization for buttons text.
-- Added «CONTROL CONFIGURATION» button.
+- Tiny improvement for «cabient_c.b3d» and «garbage_bin.b3d» models.
+
+- Made the rooms a bit brighter.
+- Reduced SCP-005 spawnrate inside containment chamber.
+- O5 Council Room code is now randomized.
 
 Bug Fixes:
 - Fixed «IsDead» parameter for guard.
-- Fixed SCP-966's messages while using echo sound.
-- Fixes for SCP-294 drinks:
+- Fixes for SCP-966:
+	- Fixed messages while using echo sound.
+	- Fixed an issue where SCP-966 had one extra frame of idle animation while chasing the player.
+- Fixes for SCP-294:
     	- Fixed wrong color of the drinks refined in SCP-914.
     	- Fixed multipliers for drinks effects.
     	- Fixed blink and stamina multipliers that were reducing player stats on Fine and Very Fine settings.
+	- Fixed a bug where SCP-294 didn't remove a master card from inventory while using.
+	- Fixed SCP-008 and SCP-409 cups resetting their effects.
+	- Fixed SCP-294 sometimes giving the wrong drink.
 - Fixed an issue where Dr. Maynard's code could be the same as Dr. Harp's.
-- Fixed a first aid kit that damages the player if the injuries are < 0.5.
+- Fixed the first aid kit that deals damage to the player if injuries are less than 0.5.
 - Fixed a bug where fog color was stored in memory every time.
 - Fixed ticket model.
 - Fixes for SCP-860-1:
@@ -39,7 +79,7 @@ Bug Fixes:
     	- Fixed incorrect position of Izumi logs.
     	- Fixed calculation of previous EventState3 value to prevent SCP-860-2's spawn from being skipped.
 	- Fixed SCP-860-1 branches wrapping around the grid border and creating unreachable tiles.
-	- Fixed MAV on the forest created by the Map Creator.
+	- Fixed a bug causing Logs inside SCP-860-1 to have a wrong scale after loading the game.
 - Fixes for SCP-1162-ARC:
 	- Fixed ability to use SCP-1162-ARC while using inventory.
 	- Fixed SCP-1162-ARC that kills the player even if he has any item.
@@ -56,11 +96,8 @@ Bug Fixes:
 	- Fixed cloned items not removing after teleporing by SCP-970.
 	- Fixed Strange Note from SCP-970 falling through floor when dropped.
 	- Fixed glitched doors movement.
-- Fixed SCP-294 sometimes giving the wrong drink.
 - Fixed removal voice lines being spammable by repeatedly approaching and backing away from SCP-049.
-- Fixed MAV after killing the SCP-035's tentacle.
 - Fixed an ability to move the head after death.
-- Fixed MAV in Pocket Dimension.
 - Fixed 4th blood drop sound not playing.
 - Fixes for pause menu:
 	- Fixed «YOU DIED» screen sometimes appearing in place of «THE END» screen.
@@ -68,31 +105,55 @@ Bug Fixes:
 	- Fixed mouse click not working in credits.
 	- Fixed credits lines moves too fast and not smoothly.
 	- Fixed the wrong menu would appear for one frame when switching menus, or components of one menu would stay on the screen for one frame when switching menus.
+	- Fixed drawing a white or black texture on menu assets.
+- Fixed MAVs:
+	- Fixed MAV after deleting saved game.
+	- Fixed MAV while playing in «NO SAVE» mode.
+	- Fixed MAV after using "disable/enable049" commands.
+	- Fixed MAV while trying to use a clipboard or wallet.
+	- Fixed MAV on the forest created by the Map Creator.
+	- Fixed MAV after killing SCP-035's tentacle.
+	- Fixed MAV in the Pocket Dimension.
 - Fixed normal step sounds not working after steepping on decals in the ending areas.
 - Fixed an invisible collider being left wherever the player last fell or died.
 - Fixed fonts in Map Creator.
 - Fixed a bug where SCP-1048 event is applied for Dr. L.'s office.
 - Fixed «room2_js» overlapping with adjacent rooms.
-- Fixed MAV after deleting saved game.
-- Fixed a bug where console input box rendered through pause menu.
+- Fixed a console input box that is rendered through pause menu.
+- Fixed upgraded NVG killing earlier around SCP-895.
+- Fixed empty sound in "DoorBudge1.ogg".
+- Fixed NPCs AI not being able to find correct waypoint on stairs.
+- Fixed Burnt Note scaling.
+- Fixed wrong SCP-409 texture.
+- Fixed an ability to select a book.
+- Fixed «RedVision» eyedrops texture saying «ReVision».
+- Fixed «Stream channel not found» error spamming in console.
+- Fixed Gate A that is visible from Gate B.
 
 - Tiny fix for SCP-372's AI.
 - Tiny fixes for location of the pause menu buttons.
+- Tiny fix for heavy hazmat suit icon.
+- Tiny fix for SCP-106 decals deceleration speed.
+- Tiny fixes for some rooms.
 
 v1.0.2
 
 General:
-- Tiny code optimizations.
-- Added fluid step sounds.
-- Nerfed SCP-005's chamber event.
 - Improved SCP-939's texture.
 
+- Tiny code optimizations.
+
+- Nerfed SCP-005's chamber event.
+
 Mechanics and effects:
-- The tesla gate stops NPCs.
-- Improved SCP-106's retreat in the tesla gate.
+- Added fluid step sounds.
 - Added slow effect for SCP-106's decals.
 - Added player's cough sounds in «room3_storage» area.
 	- Also the green gas kills the player.
+
+- Improved SCP-106's retreat animation in the tesla gate.
+
+- The tesla gate stops NPCs.
 
 Rooms:
 - Opened two doors in «cont2_427_714_860_1025».
@@ -115,17 +176,23 @@ Bug Fixes:
 v1.0.1
 
 General:
-- Finished «SL_monitors.png» file.
+- Improved auto save system. If you saved badly, you can return to the previous save.
+
+- Renamed «Smooth HUD» option to «Smooth Bars».
+
+- Reworked bright atmosphere mode.
+
 - Optimized the game while using 100% of gamma.
 - Optimized some rooms a little bit.
-- Reworked bright atmosphere mode.
-- Improved auto save system. If you saved badly, you can return to the previous save.
+
+- Hopyfully optimized game on different resolutions.
+
+- Tiny overlay optimization.
+
+- Finished «SL_monitors.png» file.
 - Unlocked all difficulties.
 - Decreased colored fog brightness.
-- Tiny overlay optimization.
-- Renamed «Smooth HUD» option to «Smooth Bars».
 - The fog began to change more smoothly.
-- Hopyfully optimized game on different resolutions.
 
 Menu:
 - Improved input boxes design.
@@ -135,9 +202,11 @@ Events:
 
 Rooms:
 - Removed «room2_7_hcz».
-- Changed «096_spawn» event rooms (from «room2_2_hcz» to «room2_3_hcz»).
-- Separated «room2_elevator» and «room2_elevator_2» events.
 - Removed «room2_3_ez» event.
+
+- Changed «096_spawn» event rooms (from «room2_2_hcz» to «room2_3_hcz»).
+
+- Separated «room2_elevator» and «room2_elevator_2» events.
 - Some props are brighter now.
 
 Ingame:
@@ -155,7 +224,10 @@ Bug Fixes:
 - Fixed «room2_ic» can't be spawned on the map.
 - Fixed SCP-173's AI.
 - Fixed SCP-409's achievement can't be reached by interacting with crystallized Class-D.
-- Fixed MAV while entering the SCP-970 loop.
+- Fixed MAVs:
+	- Fixed MAV while entering the SCP-970 loop.
+	- Fixed MAV in SCP-035's containment chamber.
+	- Fixed MAV in SCP-1499's dimension.
 - Fixed missing door in «room2_checkpoint_lcz_hcz» and «room2_checkpoint_hcz_ez».
 - Fixed a bug where SCP-714 and hazmat suit  sometimes don't defend the player from SCP-049. 
 - Fixed a bug where you can't exit from SCP-294's overlay.
@@ -172,11 +244,9 @@ Bug Fixes:
 - Fixed blood decal position under guard in SCP-895's containment chamber. 
 - Fixed blood decal position under player in SCP-1123's containment chamber.
 - Fixed ability to save the game on endings. 
-- Fixed MAV in SCP-035's containment chamber.
-- Fixes for SCP-1499's dimension.
+- Fixes for SCP-1499's dimension:
 	- Fixed double first chunk.
     	- Fixed chunk objects spawn.
-    	- Fixed MAV in SCP-1499's dimension.
 - Fixed the game doesn't load door positions properly.
 - Fixed doors in «room2_servers_hcz».
 - Fixed SCP-1048's paper texture.
@@ -195,7 +265,7 @@ Bug Fixes:
 
 - Tiny fix for «room2_shaft», «cont1_914», «room2_ic» and «room2_js».
 - Tiny fix for item positions in «room2_3_ez».
-- Tiny fixes for 4K resolution.
+- Tiny fixes for 4K resolutions.
 - Tiny fix for monitor saving.
 - Tiny fix for selected items.
 - Tiny fix for credits.
@@ -206,11 +276,13 @@ v1.0.0
 Launcher:
 - Added YouTube, Discord and ModDB icons.
 - Added Resolution Selection button.
+- Added «REPORT A BUG!» and «SEE CHANGELOG» buttons.
+
 - Removed Check for updates feature.
 - Removed 16-Bit mode.
 - Removed Graphics Driver Selection, which did not actually change anything anyways.
+
 - Improved game icon.
-- Added «REPORT A BUG!» and «SEE CHANGELOG» buttons.
 
 General:
 - Added anisotropic filtering.
@@ -221,22 +293,27 @@ General:
 - Added warning startup video.
 - Added Apollyon difficulty.
 - Added extreme difficulty factor.
-- To obtain a new difficulty, the previous one must be completed.
-- The Keter difficulty achievement will be saved after beating the one.
-- Added ability to erase words faster.
-- Added inventory size scaling with difficulty and custom inventory options.
-- Removed Antialiased Text.
-- Anti-aliasing option is automatically disabled for non-fullscreen modes.
-- Loading screen images now scaled correctly.
 - Added screenshot key.
 - Added auto save option.
 - Added more easter eggs.
 - Added frame to hint messages.
-- Converted most files to PNG.
-- Converted most X files to B3D.
+- Added ability to erase words faster.
+- Added inventory size scaling with difficulty and custom inventory options.
+
+- Removed Antialiased Text.
+
 - Renamed most files.
-- Combined room converters.
+
 - Optimized game.
+
+- Converted most files to .PNG.
+- Converted most .X files to .B3D.
+
+- To obtain a new difficulty, the previous one must be completed.
+- The Keter difficulty achievement will be saved after beating the one.
+- Anti-aliasing option is automatically disabled for non-fullscreen modes.
+- Loading screen images now scaled correctly.
+- Combined room converters.
 
 Menu:
 - Added delete button for custom maps menu.
@@ -244,8 +321,6 @@ Menu:
 - Added a sound when clicking on disabled checkboxes or buttons in menus.
 - Added gray color for locked checkboxes and buttons.
 - Added some space between the page indicator and the next/previous page buttons on the load game screen.
-- Using the «Esc» button has «BACK» button effect.
-- Changed the name of the «Custom» difficulty to «Esoteric».
 - Added button to restore all settings to standard values.
 - Added new loading screen images:
 	- Keycard.
@@ -255,13 +330,40 @@ Menu:
 	- Anomalyous ducks.
 	- Locking devices.
 	- SCP-008, SCP-148, SCP-1048, SCP-1048-A.
+
+- Improved console:
+	- Added new commands:
+		- 106retreat;
+		- money or rich;
+		- doorcontrol;
+		- unlockcheckpoints;
+		- resetfunds;
+		- newyear;
+		- noblink or nb;
+		- debughud (game/player/scps);
+		- clear or cls;
+		- codes;
+	- Added more names for NPCs.
+	- Added short names for some commands.
+
+	- Removed unnecessary console commands.
+
+	- Improved font.
+
+	- Renamed some item names (each item has own ID now).
+
+	- Reworked «Asd» command.
+	
+- Removed unnecesary files.
+
 - Improved SCP-682 and Night Vision Goggles loading screens.
 - Improved loading screen itself.
-- Removed unnecesary files.
+
+- Using the «ESC» button has «BACK» button effect.
+- Changed the name of the «Custom» difficulty to «Esoteric».
 
 NPCs:
 - Added new SCP-1048 drawings.
-- (Re-)Added SCP-173's head rotating.
 - Added two new diseases to SCP-1025: «Secondary Polycythemia» and the «Cannibal Plague».
 	- Also overhauled the design of its pages.
 - Added SCP-205's document.
@@ -277,39 +379,48 @@ NPCs:
 	- Added a new sound for knob.
 	- Added corrosive vest.
 	- Added another hand.
-	- Improved image.
-	- Replaced the doors by one-sided ones.
+
 	- Removed paper strips.
-	- And a lot of other improvements!
+
+	- Improved image.
+
+	- Replaced the doors by one-sided ones.
 - Added bloody SCP-096 texture after killing someone.
-	- Also improved chase theme.
 	- Added own containment chamber.
+	- Also improved chase theme.
 - Added SCP-005 and SCP-409.
 - Added SCP-500.
-- Nerfed SCP-500-01.
-- Changed SCP-049's model.
-	- Also changed eyes to blue.
-- Improved SCP-049-2 AI.
-- Renamed SCP-1162 to SCP-1162-ARC.
 - Added new SCP-294 drinks.
 - Added new achievment image for SCP-1048.
 - Added 4th SCP-939 on the area.
-- Changed SCP-372's model.
-- Improved SCP-106's texture and animations.
-- Improved anomalyous ducks texture.
 - Added breath sound for SCP-008-1.
-- SCP-1123 can be picked up.
-- Improved D-Class animations.
-- Added earphones for guard listening to music.
-- Improved MTF AI.
-- Combined SCP-1048 and SCP-1048 Pen models.
-- Combined texture for SCP-173's cell.
 - Added orange healing duck.
 - Added new janitor, scientist and body textures.
-- Improved guard and SCP-049-2 helmet texture.
-- Improved CI model.	
 - Added bullet miss sound.
 - Added badges for personnel.
+- Added earphones for guard listening to music.
+- (Re-)Added SCP-173's head rotating.
+
+- Improved SCP-049-2 AI.
+- Improved SCP-106's texture and animations.
+- Improved anomalyous ducks texture.
+- Improved D-Class animations.
+- Improved MTF AI.
+- Improved guard and SCP-049-2 helmet texture.
+- Improved CI model.	
+
+- Nerfed SCP-500-01.
+
+- Changed SCP-049's model.
+	- Also changed eyes to blue.
+- Changed SCP-372's model.
+
+- Renamed SCP-1162 to SCP-1162-ARC.
+
+- Combined SCP-1048 and SCP-1048 Pen models.
+- Combined texture for SCP-173's cell.
+
+- SCP-1123 can be picked up.
 
 Rooms:
 - Added glow to buttons.
@@ -318,34 +429,41 @@ Rooms:
 - Added unique elevator buttons.
 - Added elevator panels showing the floor that you are going to.
 - Added a colored fog depending on the player's area.
-- Improved bump textures.
-- Removed light cones.
-- Removed quick loading from the Surveillance Room, SCP-939 area and SCP-966's containment chamber.
 - Added O5 Council office.
 - Added Entrance Zone endroom.
 - Added one-sided and office doors.
+- Added music for SCP-106's containment chamber and Maintenance Tunnels.
+
+- Removed light cones.
+- Removed quick loading from the Surveillance Room, SCP-939 area and SCP-966's containment chamber.
+
+- Improved bump textures.
 - Improved rooms design.
 	- Added new props:
 		- System unit;
 		- Yucca bush;
 		- Computer mouse;
 		- Water cooler;
-	- Improved SCP-895's model and image.
-	- Improved office seat model.
 	- Added observation room for SCP-914's containment chamber.
 	- Added observation room signs.
-	- Improved SCP-035's containment chamber.
-	- Changed some rooms to Heavy Containment Zone style.
 	- Added more interactable doors.
 	- Added new textures.
 	- Added elevator to SCP-008, SCP-079 and SCP-106's containment chambers.
+	- Added vehicle in the intro sequence.
+	- Added save monitor in the Surveillance Room.
+	- Added checkpoint monitor in Information Center Room.
+	- Added Light Containment Zone medical bay.
+	- Added new Heavy Containment Zone tunnel.
+	- Added new Entrance Zone offices.
+
+	- Improved SCP-895's model and image.
+	- Improved office seat model.
+	- Improved SCP-035's containment chamber.
+
+	- Changed some rooms to Heavy Containment Zone style.
+
 - Renamed all rooms.
-- Added vehicle in the intro sequence.
-- Added save monitor in the Surveillance Room.
-- Added checkpoint monitor in Information Center Room.
-- Added Light Containment Zone medical bay.
-- Added new Heavy Containment Zone tunnel.
-- Added new Entrance Zone offices.
+
 - Rebalanced some keycard buttons.
 
 Items:
@@ -353,42 +471,23 @@ Items:
 - Added rusty texture for memorable coin.
 - Added SCRAMBLE Gear.
 - Added low battery sound for S-NAV, Radio Transceiver and Night Vision Goggles.
-- The Master Card can be used in SCP-294.
-- The Hazmat Suit is now hunched over when put off.
-	- Also added unique overlay.
-- All electronics has a random charge.
 - Added Ballistic Helmet.
 - Added bloody texture for papers and notes.
 - Added infected syringes.
 - Added Level 0 Key Card and Level 6 Key Card.
-- Rebalanced the S-NAVs.
-- Ballistic vest reduces damage from NPCs.
 - Added new sounds for Night Vision Goggles.
 - Added 3D models for coins and Lost Key.
 - Added messages for eye drops.
+
+- Rebalanced the S-NAVs.
+
+- The Master Card can be used in SCP-294.
+- The Hazmat Suit is now hunched over when put off.
+	- Also added unique overlay.
+- All electronics has a random charge.
+- Ballistic vest reduces damage from NPCs.
 - Equipping a wearable item is now delayed by a timer.
 - Keys, badges and SCP-500-01 can be put in a wallet.
-
-Ingame:
-- Improved console:
-	- Added new commands:
-		- 106retreat;
-		- money or rich;
-		- doorcontrol;
-		- unlockcheckpoints;
-		- resetfunds;
-		- newyear;
-		- noblink or nb;
-		- debughud (game/player/scps);
-		- clear or cls;
-		- codes;
-	- Added more names for NPCs.
-	- Improved font.
-	- Renamed some item names (each item has own ID now).
-	- Reworked «Asd» command.
-	- Removed unnecessary console commands.
-	- Added short names for some commands.
-- Added music for SCP-106's containment chamber and Maintenance Tunnels.
 
 Mechanics and effects:
 - Added dust effect while player's camera is shaking.
@@ -400,19 +499,21 @@ Mechanics and effects:
 - Added walk and closed eye icons.
 - Added smoothed HUD bars.
 - Added idle gas mask breathing.
-- Improved glass break and elevator beep sounds.
-- Added ability to swap items in inventory.
-- Inventory, save screens, code doors and SCP-294 don't stop the game anymore.
 - Added wet effect for gas mask.
+- Added ability to swap items in inventory.
+- Added green indicator for positive effects and more negative indicators.
+- Added slightly blackout while reading a document or note.
+- Added bloody overlay.
+- Added more D-9341 sounds into the intro sequence. Also added tiny blur.
+- Added miss sound for NPCs.
+
+- Improved glass break and elevator beep sounds.
+- Improved white smoke texture.
+
+- Inventory, save screens, code doors and SCP-294 don't stop the game anymore.
 - Crouching reduces stamina.
 - Battery charges are now randomized.
 - The tesla gate lights up the surrounding rooms.
-- Added green frame for positive effects and red frame for negative effects.
-- Added slightly blackout while reading a document or note.
-- Added bloody overlay.
-- Added more D-9341 sounds into the intro sequence.
-- Improved white smoke.
-- Added miss sound for NPCs.
 - NVG protects eyes from the gas.
 
 Map Creator:
@@ -487,7 +588,7 @@ Bug Fixes:
 - Fixed ability to open menu and inventory while cutscenes.
 - Fixed SCP-096 can't be triggered through the glass.
 - Fixed missing waypoints.
-- Fixed save errors in SCP-1499 dimension and SCP-205's containment chamber.
+- Fixed MAVs in SCP-1499 dimension and SCP-205's containment chamber after loading a save file.
 - Fixed blink and stamina timers not being saved.
 - Fixed item positions.
 - Fixed paper texture on the spawned clipboard.

@@ -44,7 +44,9 @@ Function SaveGame%(File$)
 	WriteFloat(f, EntityY(me\Head))
 	WriteFloat(f, EntityZ(me\Head))
 	
-	WriteString(f, Str(AccessCode))
+	WriteString(f, Str(CODE_DR_MAYNARD))
+	WriteString(f, Str(CODE_O5_COUNCIL))
+	WriteString(f, Str(CODE_MAINTENANCE_TUNNELS))
 	
 	WriteFloat(f, EntityPitch(me\Collider))
 	WriteFloat(f, EntityYaw(me\Collider))
@@ -539,7 +541,9 @@ Function LoadGame%(File$)
 	PositionEntity(me\Head, x, y + 0.05, z)
 	ResetEntity(me\Head)
 	
-	AccessCode = Int(ReadString(f))
+	CODE_DR_MAYNARD = Int(ReadString(f))
+	CODE_O5_COUNCIL = Int(ReadString(f))
+	CODE_MAINTENANCE_TUNNELS = Int(ReadString(f))
 	
 	x = ReadFloat(f)
 	y = ReadFloat(f)
@@ -1423,7 +1427,9 @@ Function LoadGameQuick%(File$)
 	PositionEntity(me\Head, x, y + 0.05, z)
 	ResetEntity(me\Head)
 	
-	AccessCode = Int(ReadString(f))
+	CODE_DR_MAYNARD = Int(ReadString(f))
+	CODE_O5_COUNCIL = Int(ReadString(f))
+	CODE_MAINTENANCE_TUNNELS = Int(ReadString(f))
 	
 	x = ReadFloat(f)
 	y = ReadFloat(f)

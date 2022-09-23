@@ -482,13 +482,12 @@ Function PlayStartupVideos%()
 				;[End Block]
 		End Select
 		
-		Local Movie% = OpenMovie(MovieFile + ".avi")
+		Local Movie% = OpenMovie(MovieFile + ".wmv")
 		
 		If (Not Movie) Then
 			PutINIValue(OptionFile, "Advanced", "Play Startup Videos", 0)
 			RuntimeError("Movie " + Chr(34) + MovieFile + Chr(34) + " not found.")
 		EndIf
-		Movie = OpenMovie(MovieFile + ".avi")
 		
 		Local SplashScreenAudio% = StreamSound_Strict(MovieFile + ".ogg", opt\SFXVolume * opt\MasterVolume, 0)
 		

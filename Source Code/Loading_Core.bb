@@ -220,6 +220,12 @@ Function LoadDoors%()
 	d_I\ElevatorPanelTextureID[ELEVATOR_PANEL_UP] = LoadTexture_Strict("GFX\map\textures\elevator_panel_up.png", 1, DeleteAllTextures)
 	d_I\ElevatorPanelTextureID[ELEVATOR_PANEL_IDLE] = LoadTexture_Strict("GFX\map\textures\elevator_panel_idle.png", 1, DeleteAllTextures)
 	
+	If opt\Atmosphere Then
+		For i = ELEVATOR_PANEL_DOWN To ELEVATOR_PANEL_IDLE
+			TextureBlend(d_I\ElevatorPanelTextureID[i], 5)
+		Next
+	EndIf
+	
 	d_I\ButtonModelID[BUTTON_DEFAULT_MODEL] = LoadMesh_Strict("GFX\map\Props\Button.b3d")
 	
 	d_I\ButtonModelID[BUTTON_KEYCARD_MODEL] = LoadMesh_Strict("GFX\map\Props\ButtonKeycard.b3d")
@@ -236,6 +242,12 @@ Function LoadDoors%()
 	
 	d_I\ButtonTextureID[BUTTON_GREEN_TEXTURE] = LoadTexture_Strict("GFX\map\textures\keypad.jpg", 1, DeleteAllTextures)
 	d_I\ButtonTextureID[BUTTON_RED_TEXTURE] = LoadTexture_Strict("GFX\map\textures\keypad_locked.png", 1, DeleteAllTextures)
+	
+	If opt\Atmosphere Then
+		For i = BUTTON_GREEN_TEXTURE To BUTTON_RED_TEXTURE
+			TextureBlend(d_I\ButtonTextureID[i], 5)
+		Next
+	EndIf
 End Function
 
 Const MaxLeverModelIDAmount% = 2
@@ -309,6 +321,7 @@ Function LoadSecurityCams%()
 	
 	For i = CAM_HEAD_DEFAULT_TEXTURE To CAM_HEAD_RED_LIGHT_TEXTURE
 		sc_I\CamTextureID[i] = LoadTexture_Strict("GFX\map\textures\camera(" + (i + 1) + ").png", 1, DeleteAllTextures)
+		If opt\Atmosphere Then TextureBlend(sc_I\CamTextureID[i], 5)
 	Next
 End Function
 
@@ -367,6 +380,7 @@ Function LoadMonitors%()
 	mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY] = LoadTexture_Strict("GFX\monitor_overlay.png", 1, DeleteAllTextures)
 	For i = MONITOR_LOCKDOWN_1_OVERLAY To MONITOR_LOCKDOWN_3_OVERLAY
 		mon_I\MonitorOverlayID[i] = LoadTexture_Strict("GFX\map\textures\lockdown_screen(" + i + ").png", 1, DeleteAllTextures)
+		If opt\Atmosphere Then TextureBlend(mon_I\MonitorOverlayID[i], 5)
 	Next
 	mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_4_OVERLAY] = CreateTextureUsingCacheSystem(1, 1)
 	SetBuffer(TextureBuffer(mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_4_OVERLAY]))
@@ -539,6 +553,15 @@ Function LoadNPCs%()
 	n_I\NPCTextureID[NPC_CLASS_D_VICTIM_939_2_TEXTURE] = LoadTexture_Strict("GFX\npcs\scp_939_victim(2).png", 1, DeleteAllTextures)
 	
 	n_I\NPCTextureID[NPC_096_BLOODY_TEXTURE] = LoadTexture_Strict("GFX\npcs\scp_096_bloody.png", 1, DeleteAllTextures)
+	
+	If opt\Atmosphere Then
+		For i = NPC_CLASS_D_GONZALES_TEXTURE To NPC_096_BLOODY_TEXTURE
+			Local Skip% = False
+			
+			If (Not opt\IntroEnabled) And i = NPC_CLASS_D_D9341_TEXTURE Then Skip = True
+			If (Not Skip) Then TextureBlend(n_I\NPCTextureID[i], 5)
+		Next
+	EndIf
 End Function
 
 Const MaxMTModelIDAmount% = 7
@@ -727,9 +750,9 @@ Function LoadItems%()
 	
 	CreateItemTemplate("Leaflet", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_note.png", ItemsPath + "leaflet.png", 0.003, 0, ItemsPath + "note.png")
 	
-	CreateItemTemplate("Log #1", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_note.png", ItemsPath + "note_forest.png", 0.004, 0, ItemsPath + "note.png")
-	CreateItemTemplate("Log #2", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_note.png", ItemsPath + "note_forest(2).png", 0.004, 0, ItemsPath + "note.png")
-	CreateItemTemplate("Log #3", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_note.png", ItemsPath + "note_forest(3).png", 0.004, 0, ItemsPath + "note.png")
+	CreateItemTemplate("Log #1", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_note.png", ItemsPath + "note_forest.png", 0.002, 0, ItemsPath + "note.png")
+	CreateItemTemplate("Log #2", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_note.png", ItemsPath + "note_forest(2).png", 0.002, 0, ItemsPath + "note.png")
+	CreateItemTemplate("Log #3", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_note.png", ItemsPath + "note_forest(3).png", 0.002, 0, ItemsPath + "note.png")
 	
 	CreateItemTemplate("Movie Ticket", "ticket", ItemsPath + "badge.b3d", ItemsPath + "INV_ticket.png", ItemsPath + "ticket_HUD.png", 0.0001, 0, ItemsPath + "ticket.png", "", 0, 1 + 2 + 8)
 	
@@ -1529,20 +1552,19 @@ Function InitNewGame%()
 	
 	me\BlinkTimer = -10.0 : me\BlinkEffect = 1.0 : me\Stamina = 100.0 : me\StaminaEffect = 1.0 : me\HeartBeatRate = 70.0 : me\Funds = Rand(0, 6)
 	
-	I_005\ChanceToSpawn = Rand(3)
+	I_005\ChanceToSpawn = Rand(10)
 	
-	AccessCode = 0
-	Repeat
-		For i = 0 To 3
-			AccessCode = AccessCode + (Rand(9) * (10 ^ i))
-		Next
-		Skip = False
-		If AccessCode <> 7816 And AccessCode <> 2411 Then 
-			Skip = True
-		Else
-			AccessCode = 0
-		EndIf
-	Until Skip
+	CODE_DR_MAYNARD = 0
+	For i = 0 To 3
+		CODE_DR_MAYNARD = CODE_DR_MAYNARD + (Rand(9) * (10 ^ i))
+	Next
+	If CODE_DR_MAYNARD = CODE_DR_HARP Lor CODE_DR_MAYNARD = CODE_O5_COUNCIL Then CODE_DR_MAYNARD = CODE_DR_MAYNARD + 1
+	
+	CODE_O5_COUNCIL = ((Int(CODE_DR_MAYNARD) * 2) Mod 10000)
+	If CODE_O5_COUNCIL < 1000 Then CODE_O5_COUNCIL = CODE_O5_COUNCIL + 1000
+	
+	CODE_MAINTENANCE_TUNNELS = ((Int(CODE_DR_MAYNARD) * 3) Mod 10000)
+	If CODE_MAINTENANCE_TUNNELS < 1000 Then CODE_MAINTENANCE_TUNNELS = CODE_MAINTENANCE_TUNNELS + 1000
 	
 	RenderLoading(55, "ROOMS")
 	
