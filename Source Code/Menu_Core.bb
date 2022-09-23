@@ -3292,7 +3292,7 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 			;[Block]
 			Txt = Chr(34) + "Field of view" + Chr(34) + " is the amount of game view that is on display during a game."
 			R = 255 : G = 255
-			Txt2 = "Current value: " + Int(opt\FOV) + "� (default is 60�)"
+			Txt2 = "Current value: " + Int(opt\FOV) + "° (default is 60°)"
 			;[End Block]
 		Case Tooltip_AnisotropicFiltering
 			;[Block]
