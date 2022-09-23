@@ -1,5 +1,6 @@
 Include "Source Code\Math_Core.bb"
 Include "Source Code\Strict_Loads_Core.bb"
+Include "Source Code\BlitzEncode.bb"
 
 Const MaxFontIDAmount% = 8
 ; ~ Fonts ID Constants
@@ -7622,7 +7623,7 @@ Function RenderMenu%()
 			If CurrSave = Null Then
 				TempStr = "[DATA REDACTED]"
 			Else
-				TempStr = CurrSave\Name
+				TempStr = ConvertANSItoUTF8(CurrSave\Name)
 			EndIf
 			Text(x, y + (20 * MenuScale), "Save: " + TempStr)
 			
@@ -7630,9 +7631,9 @@ Function RenderMenu%()
 				TempStr = "Map seed: " + RandomSeed
 			Else
 				If Len(SelectedMap) > 15 Then
-					TempStr = "Selected map: " + Left(SelectedMap, 14) + "..."
+					TempStr = "Selected map: " + Left(ConvertANSItoUTF8(SelectedMap), 14) + "..."
 				Else
-					TempStr = "Selected map: " + SelectedMap
+					TempStr = "Selected map: " + ConvertANSItoUTF8(SelectedMap)
 				EndIf
 			EndIf
 			Text(x, y + (40 * MenuScale), TempStr)
