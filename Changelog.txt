@@ -3,6 +3,10 @@ v1.0.31
 General:
 - Removed extra spacing in credits.
 - Finally made the «Bright mode» similar to original game.
+- Added a new feature that allows you name a savegame with non-latin characters, like chinese, russian and etc.
+
+Menu:
+- Added degree symbol for FOV value.
 
 Bug fixes:
 - Fixed a bug with console bind.
