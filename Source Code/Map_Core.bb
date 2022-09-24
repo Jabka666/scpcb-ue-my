@@ -120,6 +120,26 @@ Function ShowProps%(room.Rooms)
 	Next
 End Function
 
+Function HideAlphaProps%(room.Rooms)
+	Local p.Props
+	
+	For p.Props = Each Props
+		If p\room = room Then
+			EntityAlpha(p\OBJ, 0.0)
+		EndIf
+	Next
+End Function
+
+Function ShowAlphaProps%(room.Rooms)
+	Local p.Props
+	
+	For p.Props = Each Props
+		If p\room = room Then
+			EntityAlpha(p\OBJ, 1.0)
+		EndIf
+	Next
+End Function
+
 Global LightVolume#, TempLightVolume#
 
 Function AddLight%(room.Rooms, x#, y#, z#, lType%, Range#, R%, G%, B%)
@@ -139,28 +159,26 @@ Function AddLight%(room.Rooms, x#, y#, z#, lType%, Range#, R%, G%, B%)
 				PositionEntity(room\LightSprites[i], x, y, z)
 				ScaleSprite(room\LightSprites[i], 0.13 , 0.13)
 				EntityTexture(room\LightSprites[i], misc_I\LightSpriteID[LIGHT_SPRITE_DEFAULT])
+				EntityFX(room\LightSprites[i], 1 + 8)
 				EntityBlend(room\LightSprites[i], 3)
 				EntityColor(room\LightSprites[i], R, G, B)
 				EntityParent(room\LightSprites[i], room\OBJ)
-				EntityFX(room\LightSprites[i], 1 + 8)
 				HideEntity(room\LightSprites[i])
 				
 				room\LightSprites2[i] = CreateSprite()
 				PositionEntity(room\LightSprites2[i], x, y, z)
-				ScaleSprite(room\LightSprites2[i], 0.6, 0.6)
+				ScaleSprite(room\LightSprites2[i], Rnd(0.36, 0.4), Rnd(0.36, 0.4))
 				EntityTexture(room\LightSprites2[i], misc_I\AdvancedLightSprite)
+				EntityFX(room\LightSprites2[i], 1 + 8)
 				EntityBlend(room\LightSprites2[i], 3)
 				EntityOrder(room\LightSprites2[i], -1)
 				EntityColor(room\LightSprites2[i], R, G, B)
 				EntityParent(room\LightSprites2[i], room\OBJ)
-				EntityFX(room\LightSprites2[i], 1 + 8)
 				RotateEntity(room\LightSprites2[i], 0.0, 0.0, Rnd(360.0))
 				SpriteViewMode(room\LightSprites2[i], 1)
 				HideEntity(room\LightSprites2[i])
-				room\LightSpriteHidden[i] = True
 				
 				room\LightIntensity[i] = (R + G + B) / 255.0 / 3.0
-				room\LightFlicker[i] = Rand(1, 10)
 				room\LightR[i] = R
 				room\LightG[i] = G
 				room\LightB[i] = B
@@ -228,108 +246,61 @@ Function UpdateRoomLights%()
 	EndIf
 End Function
 
-Function RenderRoomLights(Cam%)
-	Local r.Rooms, i, Random#, Alpha#, Dist#
+Function RenderRoomLights%(Cam%)
+	Local r.Rooms, i%, Random#, Alpha#
 	
 	For r.Rooms = Each Rooms
 		If r\Dist < HideDistance * 0.7 Lor r = PlayerRoom Then
 			For i = 0 To r\MaxLights - 1
 				If r\Lights[i] <> 0 Then
-					If opt\EnableRoomLights And SecondaryLightOn > 0.5 And Cam = Camera Then
-						EntityOrder(r\LightSprites2[i], -1)
-						If UpdateRoomLightsTimer = 0.0 Then
-							ShowEntity(r\LightSprites[i])
-							
-							If EntityDistanceSquared(Cam, r\Lights[i]) < 72.25 Then
-								If r\LightHidden[i] Then
-									ShowEntity(r\Lights[i])
-									r\LightHidden[i] = False
-								EndIf
-							Else
-								If (Not r\LightHidden[i]) Then
-									HideEntity(r\Lights[i])
-									r\LightHidden[i] = True
-								EndIf
-							EndIf
-							
-							If EntityDistanceSquared(Cam%,r\LightSprites2[i]) < 72.25 Then
-								If EntityVisible(Cam, r\Lights[i]) Then
-									If r\LightSpriteHidden[i] Then
-										ShowEntity(r\LightSprites2[i])
-										r\LightSpriteHidden[i] = False
-									EndIf
-									If PlayerRoom\RoomTemplate\Name = "cont1_173_intro" Then
-										Random = Rnd(0.38, 0.42)
-									Else
-										If r\LightFlicker[i] < 5 Then
-											Random = Rnd(0.38, 0.42)
-										ElseIf r\LightFlicker[i] > 4 And r\LightFlicker[i] < 10 Then
-											Random = Rnd(0.35, 0.45)
+					If SecondaryLightOn > 0.5 Then
+						If Cam = Camera Then ; ~ The lights are rendered by player's cam
+							If UpdateRoomLightsTimer = 0.0 Then
+								If EntityDistanceSquared(Camera, r\Lights[i]) < 72.25 Then
+									If EntityHidden(r\Lights[i]) Then ShowEntity(r\Lights[i])
+									If EntityVisible(Camera, r\Lights[i]) Then
+										If EntityHidden(r\LightSprites[i]) Then ShowEntity(r\LightSprites[i])
+										
+										If opt\AdvancedRoomLights Then
+											Alpha = 1.0 - Max(Min(((EntityDistance(Camera, r\Lights[i]) + 0.5) / 7.5), 1.0), 0.0)
+											
+											If Alpha > 0.0 Then
+												If EntityHidden(r\LightSprites2[i]) Then ShowEntity(r\LightSprites2[i])
+												EntityOrder(r\LightSprites2[i], -1)
+												EntityAlpha(r\LightSprites2[i], Max(3.0 * (BRIGHTNESS / 255.0) * (r\LightIntensity[i] / 2.0), 1.0) * Alpha)
+												
+												Random = Rnd(0.36, 0.4)
+												ScaleSprite(r\LightSprites2[i], Random, Random)
+											Else
+												; ~ Instead of rendering the sprite invisible, just hiding it if the player is far away from it
+												If (Not EntityHidden(r\LightSprites2[i])) Then HideEntity(r\LightSprites2[i])
+											EndIf
 										Else
-											Random = Rnd(0.3, 0.5)
+											; ~ The additional sprites option is disable, hide the sprites
+											If (Not EntityHidden(r\LightSprites2[i])) Then HideEntity(r\LightSprites2[i])
 										EndIf
-									EndIf
-									ScaleSprite(r\LightSprites2[i], Random, Random)
-									
-									Alpha = 1.0 - Max(Min(((EntityDistance(Camera, r\Lights[i]) + 0.5) / 7.5), 1.0), 0.0)
-									
-									If Alpha > 0.0 Then
-										EntityAlpha(r\LightSprites2[i], Max(3.0 * (BRIGHTNESS / 255.0) * (r\LightIntensity[i] / 2.0), 1.0) * Alpha)
 									Else
-										; ~ Instead of rendering the sprite invisible, just hiding it if the player is far away from it
-										If (Not r\LightSpriteHidden[i]) Then
-											HideEntity(r\LightSprites2[i])
-											r\LightSpriteHidden[i] = True
+										; ~ Hide the sprites, because they aren't visible
+										If (Not EntityHidden(r\LightSprites[i])) Then
+											HideEntity(r\LightSprites[i])
+											If opt\AdvancedRoomLights Then HideEntity(r\LightSprites2[i])
 										EndIf
 									EndIf
 								Else
-									If (Not r\LightSpriteHidden[i]) Then
-										HideEntity(r\LightSprites2[i])
-										r\LightSpriteHidden[i] = True
+									; ~ Hide the sprites, because they are too far
+									If (Not EntityHidden(r\Lights[i])) Then
+										HideEntity(r\Lights[i])
+										HideEntity(r\LightSprites[i])
+										If opt\AdvancedRoomLights Then HideEntity(r\LightSprites2[i])
 									EndIf
-								EndIf
-							Else
-								If (Not r\LightSpriteHidden[i]) Then
-									HideEntity(r\LightSprites2[i])
-									r\LightSpriteHidden[i] = True
 								EndIf
 							EndIf
 						Else
-							If EntityDistanceSquared(Cam, r\LightSprites2[i]) < 72.25 Then
-								If PlayerRoom\RoomTemplate\Name = "cont1_173_intro" Then
-									Random# = Rnd(0.38,0.42)
-								Else
-									If r\LightFlicker[i] < 5 Then
-										Random = Rnd(0.38, 0.42)
-									ElseIf r\LightFlicker[i] > 4 And r\LightFlicker[i] < 10 Then
-										Random = Rnd(0.35, 0.45)
-									Else
-										Random = Rnd(0.3, 0.5)
-									EndIf
-								EndIf
-								If (Not r\LightSpriteHidden[i]) Then
-									ScaleSprite(r\LightSprites2[i], Random, Random)
-								EndIf
-							EndIf
-						EndIf
-					ElseIf Cam = Camera Then
-						If SecondaryLightOn =< 0.5 Then
-							HideEntity(r\LightSprites[i])
-						Else
-							ShowEntity(r\LightSprites[i])
-						EndIf
-						
-						If (Not r\LightHidden[i]) Then
-							HideEntity(r\Lights[i])
-							r\LightHidden[i] = True
-						EndIf
-						If (Not r\LightSpriteHidden[i]) Then
-							HideEntity(r\LightSprites2[i])
-							r\LightSpriteHidden[i] = True
+							; ~ This will make the lightsprites not glitch through the wall when they are rendered by the cameras
+							If opt\AdvancedRoomLights Then EntityOrder(r\LightSprites2[i], 0)
 						EndIf
 					Else
-						; ~ This will make the lightsprites not glitch through the wall when they are rendered by the cameras
-						EntityOrder(r\LightSprites2[i], 0)
+						Return ; ~ The lights off
 					EndIf
 				Else
 					Exit
@@ -819,6 +790,7 @@ Const Branch_Die_Chance% = 18
 Const Max_Deviation_Distance% = 3
 Const Return_Chance% = 27
 Const Center% = 5
+Const MinDoorPos% = 3, MaxDoorPos% = 7
 ;[End Block]
 
 Function GenForestGrid%(fr.Forest)
@@ -827,8 +799,8 @@ Function GenForestGrid%(fr.Forest)
 	Local Door1Pos%, Door2Pos%
 	Local i%, j%
 	
-	Door1Pos = Rand(3, 7)
-	Door2Pos = Rand(3, 7)
+	Door1Pos = Rand(MinDoorPos, MaxDoorPos)
+	Door2Pos = Rand(MinDoorPos, MaxDoorPos)
 	
 	; ~ Clear the grid
 	For i = 0 To ForestGridSize - 1
@@ -1157,16 +1129,6 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 				End Select
 				
 				If Tile_Type > 0 Then 
-					Local ItemPlaced%[4]
-					Local it.Items = Null
-					
-					If (tY Mod 3) = 2 And (Not ItemPlaced[Floor(tY / 3)]) Then
-						ItemPlaced[Floor(tY / 3)] = True
-						it.Items = CreateItem("Log #" + Int(Floor(tY / 3) + 1), "paper", (Tile_Type = ROOM2C + 1) * Sin(Angle + 45.0) * 3.0, 0.5, (Tile_Type = ROOM2C + 1) * Sin(Angle - 45.0) * 3.0)
-						EntityType(it\Collider, HIT_ITEM)
-						EntityParent(it\Collider, Tile_Entity)
-					EndIf
-					
 					; ~ Place trees and other details
 					; ~ Only placed on spots where the value of the heightmap is above 100
 					SetBuffer(ImageBuffer(hMap[Tile_Type - 1]))
@@ -1218,9 +1180,28 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 					Next
 					SetBuffer(BackBuffer())
 					
+					ScaleEntity(Tile_Entity, Tempf1, Tempf1, Tempf1)
+					
+					Local ItemPlaced%[4], iX#, iZ#
+					Local it.Items = Null
+					
+					If (tY Mod 3) = 2 And (Not ItemPlaced[Floor(tY / 3)]) Then
+						ItemPlaced[Floor(tY / 3)] = True
+						
+						If Tile_Type = ROOM1 + 1 Then
+							iX = 0.4 : iZ = 0.0
+						ElseIf Tile_Type = ROOM2C + 1
+							iX = 1.7 : iZ = -1.0
+						Else
+							iX = 0.0 : iZ = 0.0
+						EndIf
+						it.Items = CreateItem("Log #" + Int(Floor(tY / 3) + 1), "paper", iX, 0.2, iZ)
+						EntityType(it\Collider, HIT_ITEM)
+						EntityParent(it\Collider, Tile_Entity)
+					EndIf
+					
 					TurnEntity(Tile_Entity, 0.0, Angle, 0.0)
 					PositionEntity(Tile_Entity, x + (tX * Tile_Size), y, z + (tY * Tile_Size), True)
-					ScaleEntity(Tile_Entity, Tempf1, Tempf1, Tempf1)
 					EntityType(Tile_Entity, HIT_MAP)
 					EntityFX(Tile_Entity, 1)
 					EntityParent(Tile_Entity, fr\Forest_Pivot)
@@ -1237,7 +1218,7 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	; ~ Place the wall		
 	For i = 0 To 1
 		tY = i * (ForestGridSize - 1)
-		For tX = 3 To ForestGridSize - 3
+		For tX = MinDoorPos To MaxDoorPos
 			If fr\Grid[(tY * ForestGridSize) + tX] = 3 Then
 				fr\DetailEntities[i] = CopyEntity(fr\DetailMesh[3])
 				ScaleEntity(fr\DetailEntities[i], RoomScale, RoomScale, RoomScale)
@@ -1334,16 +1315,6 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 				Tile_Entity = CopyEntity(fr\TileMesh[Tile_Type - 1])
 				
 				If Tile_Type > 0 Then 
-					Local ItemPlaced%[4]
-					Local it.Items = Null
-					
-					If (tY Mod 3) = 2 And (Not ItemPlaced[Floor(tY / 3)]) Then
-						ItemPlaced[Floor(tY / 3)] = True
-						it.Items = CreateItem("Log #" + Int(Floor(tY / 3) + 1), "paper", (Tile_Type = ROOM2C + 1) * Sin(Angle + 45.0) * 3.0, 0.5, (Tile_Type = ROOM2C + 1) * Sin(Angle - 45.0) * 3.0)
-						EntityType(it\Collider, HIT_ITEM)
-						EntityParent(it\Collider, Tile_Entity)
-					EndIf
-					
 					; ~ Place trees and other details
 					; ~ Only placed on spots where the value of the heightmap is above 100
 					SetBuffer(ImageBuffer(hMap[Tile_Type - 1]))
@@ -1397,9 +1368,28 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 					Next
 					SetBuffer(BackBuffer())
 					
+					ScaleEntity(Tile_Entity, Tempf1, Tempf1, Tempf1)
+					
+					Local ItemPlaced%[4], iX#, iZ#
+					Local it.Items = Null
+					
+					If (tY Mod 3) = 2 And (Not ItemPlaced[Floor(tY / 3)]) Then
+						ItemPlaced[Floor(tY / 3)] = True
+						
+						If Tile_Type = ROOM1 + 1 Then
+							iX = 0.4 : iZ = 0.0
+						ElseIf Tile_Type = ROOM2C + 1
+							iX = 1.7 : iZ = -1.0
+						Else
+							iX = 0.0 : iZ = 0.0
+						EndIf
+						it.Items = CreateItem("Log #" + Int(Floor(tY / 3) + 1), "paper", iX, 0.2, iZ)
+						EntityType(it\Collider, HIT_ITEM)
+						EntityParent(it\Collider, Tile_Entity)
+					EndIf
+					
 					TurnEntity(Tile_Entity, 0.0, Angle, 0.0)
 					PositionEntity(Tile_Entity, x + (tX * Tile_Size), y, z + (tY * Tile_Size), True)
-					ScaleEntity(Tile_Entity, Tempf1, Tempf1, Tempf1)
 					EntityType(Tile_Entity, HIT_MAP)
 					EntityFX(Tile_Entity, 1)
 					EntityParent(Tile_Entity, fr\Forest_Pivot)
@@ -1651,11 +1641,9 @@ Type Rooms
 	Field SoundEmitterRange#[MaxRoomEmitters]
 	Field SoundEmitterCHN%[MaxRoomEmitters]
 	Field Lights%[MaxRoomLights]
-	Field LightSpriteHidden%[MaxRoomLights], LightHidden%[MaxRoomLights]
 	Field LightSprites%[MaxRoomLights]
 	Field LightSprites2%[MaxRoomLights]
 	Field LightIntensity#[MaxRoomLights]
-	Field LightFlicker%[MaxRoomLights]
 	Field LightR#[MaxRoomLights], LightG#[MaxRoomLights], LightB#[MaxRoomLights]
 	Field MaxLights% = 0
 	Field Objects%[MaxRoomObjects]
@@ -2369,7 +2357,7 @@ Function UpdateDoors%()
 					If d\AutoClose And RemoteDoorOn Then
 						If EntityDistanceSquared(Camera, d\OBJ) < 4.41 Then
 							If (Not I_714\Using) And wi\GasMask <> 3 And wi\HazmatSuit <> 3 Then PlaySound_Strict(HorrorSFX[7])
-							UseDoor(d, True) : d\AutoClose = False
+							OpenCloseDoor(d) : d\AutoClose = False
 						EndIf
 					EndIf				
 				EndIf
@@ -2467,9 +2455,7 @@ Function UpdateDoors%()
 					EndIf
 				EndIf
 			EndIf
-			If d\SoundCHN <> 0 Then
-				If ChannelPlaying(d\SoundCHN) Then UpdateSoundOrigin(d\SoundCHN, Camera, d\FrameOBJ)
-			EndIf
+			UpdateSoundOrigin(d\SoundCHN, Camera, d\FrameOBJ)
 			
 			If d\DoorType <> OFFICE_DOOR And d\DoorType <> WOODEN_DOOR Then
 				If d\Locked <> d\LockedUpdated Then
@@ -2598,14 +2584,14 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 		State = -1.0
 		door1\Locked = 0
 		If (d_I\ClosestButton = door2\Buttons[0] Lor d_I\ClosestButton = door2\Buttons[1]) And mo\MouseHit1 Then
-			UseDoor(door1, True)
+			OpenCloseDoor(door1)
 			UpdateElevatorPanel(door2)
 		EndIf
 	ElseIf door2\Open And (Not door1\Open) And door2\OpenState = 180.0
 		State = 1.0
 		door2\Locked = 0
 		If (d_I\ClosestButton = door1\Buttons[0] Lor d_I\ClosestButton = door1\Buttons[1]) And mo\MouseHit1 Then
-			UseDoor(door2, True)
+			OpenCloseDoor(door2)
 			UpdateElevatorPanel(door1)
 		EndIf
 	ElseIf Abs(door1\OpenState - door2\OpenState) < 0.2
@@ -2744,7 +2730,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 							EndIf
 						EndIf
 					Next
-					UseDoor(door2, True, (Not PlayerInsideElevator))
+					OpenCloseDoor(door2, (Not PlayerInsideElevator))
 					door1\Open = False
 					
 					; ~ Return to default panel texture
@@ -2856,7 +2842,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 							EndIf
 						EndIf
 					Next
-					UseDoor(door1, True, (Not PlayerInsideElevator))
+					OpenCloseDoor(door1, (Not PlayerInsideElevator))
 					door2\Open = False
 					
 					; ~ Return to default panel texture
@@ -2870,207 +2856,214 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 	Return(State)
 End Function
 
-Function UseDoor%(d.Doors, Scripted% = False, PlaySFX% = True)
+Global CODE_DR_MAYNARD%, CODE_O5_COUNCIL%, CODE_MAINTENANCE_TUNNELS%
+; ~ Doors Code Constants
+;[Block]
+Const CODE_DR_HARP% = 7816
+Const CODE_DR_L% = 2411
+Const CODE_CONT1_035% = 5731
+Const CODE_LOCKED$ = "GEAR"
+;[End Block]
+
+Function UseDoor%(d.Doors, PlaySFX% = True)
 	Local Temp%, i%
 	
-	If (Not Scripted) Then
-		If SelectedItem <> Null Then
-			Temp = GetUsingItem(SelectedItem)
-		EndIf
-		
-		If d\KeyCard > KEY_MISC Then
-			If SelectedItem = Null Then
+	If SelectedItem <> Null Then
+		Temp = GetUsingItem(SelectedItem)
+	EndIf
+	
+	If d\KeyCard > KEY_MISC Then
+		If SelectedItem = Null Then
+			CreateMsg(GetLocalString("map", "key.require"))
+			PlaySound2(ButtonSFX, Camera, d_I\ClosestButton)
+			Return
+		Else
+			If Temp <= KEY_MISC Then
 				CreateMsg(GetLocalString("map", "key.require"))
-				PlaySound2(ButtonSFX, Camera, d_I\ClosestButton)
-				Return
 			Else
-				If Temp <= KEY_MISC Then
-					CreateMsg(GetLocalString("map", "key.require"))
+				If Temp = KEY_CARD_6 Then
+					CreateMsg(GetLocalString("map", "key.card6"))
 				Else
-					If Temp = KEY_CARD_6 Then
-						CreateMsg(GetLocalString("map", "key.card6"))
-					Else
-						If d\Locked = 1 Then
-							If Temp = KEY_005 Then
-								CreateMsg(GetLocalString("map", "key.nothappend.005"))
-							Else
-								CreateMsg(GetLocalString("map", "key.nothappend"))
-							EndIf
-						Else
-							If Temp = KEY_005 Then
-								CreateMsg(GetLocalString("map", "key.005"))
-							Else
-								If Temp < d\KeyCard Then
-									CreateMsg(Format(GetLocalString("map", "key.higher"), d\KeyCard - 2))
-								Else
-									CreateMsg(GetLocalString("map", "slot"))
-								EndIf
-							EndIf
-						EndIf
-					EndIf
-					SelectedItem = Null
-				EndIf
-				If (d\Locked <> 1) And (((Temp > KEY_MISC) And (Temp <> KEY_CARD_6) And (Temp >= d\KeyCard)) Lor (Temp = KEY_005)) Then
-					PlaySound2(KeyCardSFX1, Camera, d_I\ClosestButton)
-				Else
-					If Temp <= KEY_MISC Then
-						PlaySound2(ButtonSFX, Camera, d_I\ClosestButton)
-					Else
-						PlaySound2(KeyCardSFX2, Camera, d_I\ClosestButton)
-					EndIf
-					Return
-				EndIf
-			EndIf
-		ElseIf d\KeyCard > KEY_HAND_YELLOW And d\KeyCard < KEY_MISC
-			If SelectedItem = Null Then
-				CreateMsg(GetLocalString("map", "dna.denied"))
-				PlaySound2(ScannerSFX2, Camera, d_I\ClosestButton)
-				Return
-			Else
-				If ((Temp >= KEY_MISC) Lor (Temp < KEY_HAND_YELLOW)) And (Temp <> KEY_005) Then
-					CreateMsg(GetLocalString("map", "dna.denied"))
-				Else
-					If (d\KeyCard <> Temp) And (Temp <> KEY_005) Then
-						CreateMsg(GetLocalString("map", "dna.denied"))
-					Else
-						If d\Locked = 1 Then
-							If Temp = KEY_005 Then
-								CreateMsg(GetLocalString("map", "dna,nothappend.005"))
-							Else
-								CreateMsg(GetLocalString("map", "dna.nothappend"))
-							EndIf
-						Else
-							If Temp = KEY_005 Then
-								CreateMsg(GetLocalString("map", "dna.granted.005"))
-							Else
-								CreateMsg(GetLocalString("map", "dna.granted"))
-							EndIf
-						EndIf
-					EndIf
-					SelectedItem = Null
-				EndIf
-				If (d\Locked = 0) And ((Temp = d\KeyCard) Lor (Temp = KEY_005)) Then
-					PlaySound2(ScannerSFX1, Camera, d_I\ClosestButton)
-				Else
-					PlaySound2(ScannerSFX2, Camera, d_I\ClosestButton)
-					Return
-				EndIf
-			EndIf
-		ElseIf d\Code <> ""
-			If SelectedItem = Null Then
-				If (d\Locked = 0) And (d\Code <> "GEAR") And (d\Code = msg\KeyPadInput) Then
-					PlaySound2(ScannerSFX1, Camera, d_I\ClosestButton)
-				Else
-					PlaySound2(ScannerSFX2, Camera, d_I\ClosestButton)
-					Return
-				EndIf
-			Else
-				If Temp = KEY_005 Then
 					If d\Locked = 1 Then
-						CreateMsg(GetLocalString("map", "keypad.nothappend.005"))
+						If Temp = KEY_005 Then
+							CreateMsg(GetLocalString("map", "key.nothappend.005"))
+						Else
+							CreateMsg(GetLocalString("map", "key.nothappend"))
+						EndIf
 					Else
-						CreateMsg(GetLocalString("map", "keypad.nothappend"))
+						If Temp = KEY_005 Then
+							CreateMsg(GetLocalString("map", "key.005"))
+						Else
+							If Temp < d\KeyCard Then
+								CreateMsg(Format(GetLocalString("map", "key.higher"), d\KeyCard - 2))
+							Else
+								CreateMsg(GetLocalString("map", "slot"))
+							EndIf
+						EndIf
 					EndIf
 				EndIf
 				SelectedItem = Null
-				
-				If (d\Locked = 0) And (d\Code <> "GEAR") And (Temp = KEY_005) Then
-					PlaySound2(ScannerSFX1, Camera, d_I\ClosestButton)
+			EndIf
+			If (d\Locked <> 1) And (((Temp > KEY_MISC) And (Temp <> KEY_CARD_6) And (Temp >= d\KeyCard)) Lor (Temp = KEY_005)) Then
+				PlaySound2(KeyCardSFX1, Camera, d_I\ClosestButton)
+			Else
+				If Temp <= KEY_MISC Then
+					PlaySound2(ButtonSFX, Camera, d_I\ClosestButton)
 				Else
-					PlaySound2(ScannerSFX2, Camera, d_I\ClosestButton)
-					Return
+					PlaySound2(KeyCardSFX2, Camera, d_I\ClosestButton)
+				EndIf
+				Return
+			EndIf
+		EndIf
+	ElseIf d\KeyCard > KEY_HAND_YELLOW And d\KeyCard < KEY_MISC
+		If SelectedItem = Null Then
+			CreateMsg(GetLocalString("map", "dna.denied"))
+			PlaySound2(ScannerSFX2, Camera, d_I\ClosestButton)
+			Return
+		Else
+			If ((Temp >= KEY_MISC) Lor (Temp < KEY_HAND_YELLOW)) And (Temp <> KEY_005) Then
+				CreateMsg(GetLocalString("map", "dna.denied"))
+			Else
+				If (d\KeyCard <> Temp) And (Temp <> KEY_005) Then
+					CreateMsg(GetLocalString("map", "dna.denied2"))
+				Else
+					If d\Locked = 1 Then
+						If Temp = KEY_005 Then
+							CreateMsg(GetLocalString("map", "key.nothappend.005"))
+						Else
+							CreateMsg(GetLocalString("map", "key.nothappend"))
+						EndIf
+					Else
+						If Temp = KEY_005 Then
+							CreateMsg(GetLocalString("map", "dna.granted.005"))
+						Else
+							CreateMsg(GetLocalString("map", "dna.granted"))
+						EndIf
+					EndIf
+				EndIf
+				SelectedItem = Null
+			EndIf
+			If (d\Locked = 0) And ((Temp = d\KeyCard) Lor (Temp = KEY_005)) Then
+				PlaySound2(ScannerSFX1, Camera, d_I\ClosestButton)
+			Else
+				PlaySound2(ScannerSFX2, Camera, d_I\ClosestButton)
+				Return
+			EndIf
+		EndIf
+	ElseIf d\Code <> ""
+		If SelectedItem = Null Then
+			If (d\Locked = 0) And (d\Code <> LOCKED_CODE) And (d\Code = msg\KeyPadInput) Then
+				PlaySound2(ScannerSFX1, Camera, d_I\ClosestButton)
+			Else
+				PlaySound2(ScannerSFX2, Camera, d_I\ClosestButton)
+				Return
+			EndIf
+		Else
+			If Temp = KEY_005 Then
+				If d\Locked = 1 Then
+					CreateMsg(GetLocalString("map", "keypad.nothappend.005"))
+				Else
+					CreateMsg(GetLocalString("map", "keypad.nothappend"))
 				EndIf
 			EndIf
+			SelectedItem = Null
 			
-			If d\Code = Str(AccessCode) Then
-				GiveAchievement(AchvMaynard)
-			ElseIf d\Code = "7816"
-				GiveAchievement(AchvHarp)
-			ElseIf d\Code = "2411"
-				GiveAchievement(AchvO5)
-			EndIf	
-		Else
-			If d\DoorType = WOODEN_DOOR Lor d\DoorType = OFFICE_DOOR Then
-				If d\Locked > 0 Then
-					If SelectedItem = Null Then
+			If (d\Locked = 0) And (d\Code <> CODE_LOCKED) And (Temp = KEY_005) Then
+				PlaySound2(ScannerSFX1, Camera, d_I\ClosestButton)
+			Else
+				PlaySound2(ScannerSFX2, Camera, d_I\ClosestButton)
+				Return
+			EndIf
+		EndIf
+		
+		If d\Code = Str(CODE_DR_MAYNARD) Then
+			GiveAchievement(AchvMaynard)
+		ElseIf d\Code = CODE_DR_HARP
+			GiveAchievement(AchvHarp)
+		ElseIf d\Code = CODE_O5_COUNCIL
+			GiveAchievement(AchvO5)
+		EndIf	
+	Else
+		If d\DoorType = WOODEN_DOOR Lor d\DoorType = OFFICE_DOOR Then
+			If d\Locked > 0 Then
+				If SelectedItem = Null Then
+					CreateMsg(GetLocalString("map", "wood.wontbudge"))
+					If d\DoorType = OFFICE_DOOR Then
+						PlaySound2(DoorBudgeSFX1, Camera, d_I\ClosestButton)
+					Else
+						PlaySound2(DoorBudgeSFX2, Camera, d_I\ClosestButton)
+					EndIf
+				Else
+					If (Temp > KEY_860) And (Temp <> KEY_005) Then
 						CreateMsg(GetLocalString("map", "wood.wontbudge"))
+					Else
+						If d\Locked = 2 Lor ((Temp <> d\KeyCard) And (Temp <> KEY_005)) Then
+							CreateMsg(GetLocalString("map", "wood.nothappend.005"))
+						Else
+							CreateMsg(GetLocalString("map", "wood.unlock"))
+							d\Locked = 0
+						EndIf
+						SelectedItem = Null
+					EndIf
+					If (Temp > KEY_860) And (Temp <> KEY_005) Then
 						If d\DoorType = OFFICE_DOOR Then
 							PlaySound2(DoorBudgeSFX1, Camera, d_I\ClosestButton)
 						Else
 							PlaySound2(DoorBudgeSFX2, Camera, d_I\ClosestButton)
 						EndIf
 					Else
-						If (Temp > KEY_860) And (Temp <> KEY_005) Then
-							CreateMsg(GetLocalString("map", "wood.wontbudge"))
-						Else
-							If d\Locked = 2 Lor ((Temp <> d\KeyCard) And (Temp <> KEY_005)) Then
-								CreateMsg(GetLocalString("map", "wood.nothappend.005"))
-							Else
-								CreateMsg(GetLocalString("map", "wood.unlock"))
-								d\Locked = 0
-							EndIf
-							SelectedItem = Null
-						EndIf
-						If (Temp > KEY_860) And (Temp <> KEY_005) Then
-							If d\DoorType = OFFICE_DOOR Then
-								PlaySound2(DoorBudgeSFX1, Camera, d_I\ClosestButton)
-							Else
-								PlaySound2(DoorBudgeSFX2, Camera, d_I\ClosestButton)
-							EndIf
-						Else
-							PlaySound2(DoorLockSFX, Camera, d_I\ClosestButton)
-						EndIf
+						PlaySound2(DoorLockSFX, Camera, d_I\ClosestButton)
 					EndIf
-					Return
 				EndIf
-			ElseIf d\DoorType = ELEVATOR_DOOR
-				If d\Locked = 1 Then
-					If (Not d\IsElevatorDoor > 0) Then
-						CreateMsg(GetLocalString("Elevator", "broken"))
-						PlaySound2(ButtonSFX2, Camera, d_I\ClosestButton)
-					Else
-						If d\IsElevatorDoor = 1 Then
-							CreateMsg(GetLocalString("Elevator", "called"))
-						ElseIf d\IsElevatorDoor = 3
-							CreateMsg(GetLocalString("Elevator", "on"))
-						ElseIf msg\Txt <> GetLocalString("Elevator", "called")
-							Select Rand(10)
-								Case 1
-									;[Block]
-									CreateMsg(GetLocalString("Elevator", "stop"))
-									;[End Block]
-								Case 2
-									;[Block]
-									CreateMsg(GetLocalString("Elevator", "faster"))
-									;[End Block]
-								Case 3
-									;[Block]
-									CreateMsg(GetLocalString("Elevator", "mav"))
-									;[End Block]
-								Default
-									;[Block]
-									CreateMsg(GetLocalString("Elevator", "already"))
-									;[End Block]
-							End Select
-						Else
-							CreateMsg(GetLocalString("Elevator", "already"))
-						EndIf
-						PlaySound2(ButtonSFX, Camera, d_I\ClosestButton)
-					EndIf
-					Return
-				EndIf
-			Else
-				If d\Locked = 1 Then
-					If d\Open Then
-						CreateMsg(GetLocalString("map", "button.nothappend"))
-					Else
-						CreateMsg(GetLocalString("map", "button.locked"))
-					EndIf
+				Return
+			EndIf
+		ElseIf d\DoorType = ELEVATOR_DOOR
+			If d\Locked = 1 Then
+				If (Not d\IsElevatorDoor > 0) Then
+					CreateMsg(GetLocalString("Elevator", "broken"))
 					PlaySound2(ButtonSFX2, Camera, d_I\ClosestButton)
-					Return
 				Else
+					If d\IsElevatorDoor = 1 Then
+						CreateMsg(GetLocalString("Elevator", "called"))
+					ElseIf d\IsElevatorDoor = 3
+						CreateMsg(GetLocalString("Elevator", "on"))
+					ElseIf msg\Txt <> GetLocalString("Elevator", "called")
+						Select Rand(10)
+							Case 1
+								;[Block]
+								CreateMsg(GetLocalString("Elevator", "stop"))
+								;[End Block]
+							Case 2
+								;[Block]
+								CreateMsg(GetLocalString("Elevator", "faster"))
+								;[End Block]
+							Case 3
+								;[Block]
+								CreateMsg(GetLocalString("Elevator", "mav"))
+								;[End Block]
+							Default
+								;[Block]
+								CreateMsg(GetLocalString("Elevator", "already"))
+								;[End Block]
+						End Select
+					Else
+						CreateMsg(GetLocalString("Elevator", "already"))
+					EndIf
 					PlaySound2(ButtonSFX, Camera, d_I\ClosestButton)
 				EndIf
+				Return
+			EndIf
+		Else
+			If d\Locked = 1 Then
+				If d\Open Then
+					CreateMsg(GetLocalString("map", "button.nothappend"))
+				Else
+					CreateMsg(GetLocalString("map", "button.locked"))
+				EndIf
+				PlaySound2(ButtonSFX2, Camera, d_I\ClosestButton)
+				Return
+			Else
+				PlaySound2(ButtonSFX, Camera, d_I\ClosestButton)
 			EndIf
 		EndIf
 	EndIf
@@ -3100,8 +3093,8 @@ Function OpenCloseDoor%(d.Doors, PlaySFX% = True)
 		DoorType = DEFAULT_DOOR
 	EndIf
 	
-	Local SoundOpen% = OpenDoorSFX(d\DoorType, DoorType)
-	Local SoundClose% = CloseDoorSFX(d\DoorType, DoorType)
+	Local SoundOpen% = OpenDoorSFX(d\DoorType, SoundRand)
+	Local SoundClose% = CloseDoorSFX(d\DoorType, SoundRand)
 	
 	If d\Locked = 2 Then SoundOpen = BigDoorErrorSFX[Rand(0, 2)]
 	
@@ -3219,13 +3212,14 @@ Function UpdateDecals%()
 			
 			Local Dist# = DistanceSquared(EntityX(me\Collider), EntityX(de\OBJ, True), EntityZ(me\Collider), EntityZ(de\OBJ, True))
 			Local ActualSize# = PowTwo(de\Size * 0.8)
+			
 			If (Dist < ActualSize) And (Int(EntityPitch(de\OBJ, True)) = 90.0) And (Abs((EntityY(me\Collider) - 0.3) - EntityY(de\OBJ, True)) < 0.05) Then
 				Select de\ID
 					Case 0
 						;[Block]
 						If de\FX <> 1 Then
 							CurrStepSFX = 1
-							me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, Max(100.0 - (Sqr(ActualSize - Dist)) * 50.0, 1.0))
+							me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, Max(100.0 - (Sqr(ActualSize - Dist)) * 15.0, 1.0))
 							me\CrouchState = Max(me\CrouchState, (ActualSize - Dist) / 2.0)
 						EndIf
 						;[End Block]
@@ -3383,7 +3377,7 @@ Function UpdateSecurityCams%()
 						PositionEntity(sc\CameraOBJ, EntityX(sc\BaseOBJ, True), EntityY(sc\BaseOBJ, True) - 0.083, EntityZ(sc\BaseOBJ, True))
 						RotateEntity(sc\CameraOBJ, EntityPitch(sc\CameraOBJ), sc\room\Angle + sc\Angle + Max(Min(sc\CurrAngle, sc\Turn), -sc\Turn), 0.0)
 						
-						If (MilliSecs2() Mod 1200) < 800 Then
+						If (MilliSecs2() Mod 1350) < 800 Then
 							EntityTexture(sc\CameraOBJ, sc_I\CamTextureID[CAM_HEAD_DEFAULT_TEXTURE])
 						Else
 							EntityTexture(sc\CameraOBJ, sc_I\CamTextureID[CAM_HEAD_RED_LIGHT_TEXTURE])
@@ -3888,10 +3882,10 @@ Function FillRoom%(r.Rooms)
 		Case "cont2_860_1"
 			;[Block]
 			; ~ Doors to observation room
-			d.Doors = CreateDoor(r\x + 928.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 0.0, r, False, DEFAULT_DOOR, KEY_MISC, "GEAR")
+			d.Doors = CreateDoor(r\x + 928.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 0.0, r, False, DEFAULT_DOOR, KEY_MISC, CODE_LOCKED)
 			d\Locked = 1
 			
-			d.Doors = CreateDoor(r\x + 928.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 0.0, r, True, DEFAULT_DOOR, KEY_MISC, "GEAR")
+			d.Doors = CreateDoor(r\x + 928.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 0.0, r, True, DEFAULT_DOOR, KEY_MISC, CODE_LOCKED)
 			d\Locked = 1 : d\MTFClose = False
 			
 			; ~ Doors to SCP-860-1's door itself
@@ -4178,7 +4172,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[3] = CreateDoor(r\x + 4352.0 * RoomScale, r\y, r\z + 498.0 * RoomScale, 0.0, r)
 			r\RoomDoors[3]\AutoClose = False
 			
-			r\RoomDoors.Doors[4] = CreateDoor(r\x + 3248.0 * RoomScale, r\y - 928.0 * RoomScale, r\z + 6400.0 * RoomScale, 0.0, r, False, ONE_SIDED_DOOR, KEY_MISC, "GEAR")
+			r\RoomDoors.Doors[4] = CreateDoor(r\x + 3248.0 * RoomScale, r\y - 928.0 * RoomScale, r\z + 6400.0 * RoomScale, 0.0, r, False, ONE_SIDED_DOOR, KEY_MISC, CODE_LOCKED)
 			r\RoomDoors[4]\Locked = 1
 			FreeEntity(r\RoomDoors[4]\Buttons[1]) : r\RoomDoors[4]\Buttons[1] = 0	
 			
@@ -4321,7 +4315,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors[1]\LinkedDoor = r\RoomDoors[0]
 			
 			If CurrMapGrid\Grid[Floor(r\x / RoomSpacing) + ((Floor(r\z / RoomSpacing) - 1) * MapGridSize)] = MapGrid_NoTile Then
-				d.Doors = CreateDoor(r\x, r\y, r\z - 1026.0 * RoomScale, 0.0, r, False, HEAVY_DOOR, KEY_MISC, "GEAR")
+				d.Doors = CreateDoor(r\x, r\y, r\z - 1026.0 * RoomScale, 0.0, r, False, HEAVY_DOOR, KEY_MISC, CODE_LOCKED)
 				d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 				FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			EndIf
@@ -4363,7 +4357,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors[1]\LinkedDoor = r\RoomDoors[0]
 			
 			If CurrMapGrid\Grid[Floor(r\x / RoomSpacing) + ((Floor(r\z / RoomSpacing) - 1) * MapGridSize)] = MapGrid_NoTile Then
-				d.Doors = CreateDoor(r\x, r\y, r\z - 1026.0 * RoomScale, 0.0, r, False, DEFAULT_DOOR, KEY_MISC, "GEAR")
+				d.Doors = CreateDoor(r\x, r\y, r\z - 1026.0 * RoomScale, 0.0, r, False, DEFAULT_DOOR, KEY_MISC, CODE_LOCKED)
 				d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 				FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 				FreeEntity(d\OBJ2) : d\OBJ2 = 0
@@ -4596,14 +4590,14 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case "room2_scientists"
 			;[Block]
-			d.Doors = CreateDoor(r\x + 256.0 * RoomScale, r\y, r\z + 448.0 * RoomScale, 270.0, r, False, DEFAULT_DOOR, KEY_MISC, Str(AccessCode))
+			d.Doors = CreateDoor(r\x + 256.0 * RoomScale, r\y, r\z + 448.0 * RoomScale, 270.0, r, False, DEFAULT_DOOR, KEY_MISC, Str(CODE_DR_MAYNARD))
 			
-			d.Doors = CreateDoor(r\x - 448.0 * RoomScale, r\y, r\z, 270.0, r, False, DEFAULT_DOOR, KEY_MISC, "GEAR")
+			d.Doors = CreateDoor(r\x - 448.0 * RoomScale, r\y, r\z, 270.0, r, False, DEFAULT_DOOR, KEY_MISC, CODE_LOCKED)
 			d\Locked = 1 : d\MTFClose = False : d\DisableWaypoint = True
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
-			d.Doors = CreateDoor(r\x + 256.0 * RoomScale, r\y, r\z - 576.0 * RoomScale, 270.0, r, False, DEFAULT_DOOR, KEY_MISC, "7816")
+			d.Doors = CreateDoor(r\x + 256.0 * RoomScale, r\y, r\z - 576.0 * RoomScale, 270.0, r, False, DEFAULT_DOOR, KEY_MISC, Str(CODE_DR_HARP))
 			
 			it.Items = CreateItem("Mysterious Note", "paper", r\x + 736.0 * RoomScale, r\y + 224.0 * RoomScale, r\z + 544.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)	
@@ -4622,7 +4616,7 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			If I_005\ChanceToSpawn = 2 Then 
+			If I_005\ChanceToSpawn >= 5 And I_005\ChanceToSpawn =< 10 Then 
 				it.Items = CreateItem("SCP-005", "scp005",  r\x + 736.0 * RoomScale, r\y + 224.0 * RoomScale, r\z + 755.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
@@ -4631,7 +4625,7 @@ Function FillRoom%(r.Rooms)
 			;[Block]
 			d.Doors = CreateDoor(r\x + 256.0 * RoomScale, r\y, r\z, 270.0, r, False, DEFAULT_DOOR, KEY_CARD_5)
 			
-			r\RoomDoors.Doors[0] = CreateDoor(r\x - 448.0 * RoomScale, r\y, r\z, 90.0, r, False, DEFAULT_DOOR, KEY_MISC, "1234")
+			r\RoomDoors.Doors[0] = CreateDoor(r\x - 448.0 * RoomScale, r\y, r\z, 90.0, r, False, DEFAULT_DOOR, KEY_MISC, CODE_DR_L)
 			r\RoomDoors[0]\MTFClose = False : r\RoomDoors[0]\DisableWaypoint = True
 			FreeEntity(r\RoomDoors[0]\Buttons[1]) : r\RoomDoors[0]\Buttons[1] = 0
 			
@@ -4773,9 +4767,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\RoomDoors.Doors[2] = CreateDoor(r\x - 256.0 * RoomScale, r\y, r\z - 656.0 * RoomScale, 90.0, r, True, ELEVATOR_DOOR)
 			
-			Temp = ((Int(AccessCode) * 3) Mod 10000)
-			If Temp < 1000 Then Temp = Temp + 1000
-			d.Doors = CreateDoor(r\x, r\y, r\z, 0.0, r, False, BIG_DOOR, KEY_MISC, Temp)
+			d.Doors = CreateDoor(r\x, r\y, r\z, 0.0, r, False, BIG_DOOR, KEY_MISC, CODE_MAINTENANCE_TUNNELS)
 			PositionEntity(d\Buttons[0], r\x + 230.0 * RoomScale, EntityY(d\Buttons[1], True), r\z - 384.0 * RoomScale, True)
 			RotateEntity(d\Buttons[0], 0.0, -90.0, 0.0, True)
 			PositionEntity(d\Buttons[1], r\x - 230.0 * RoomScale, EntityY(d\Buttons[1], True), r\z + 384.0 * RoomScale, True)		
@@ -4921,7 +4913,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[2] = CreateDoor(r\x + 384.0 * RoomScale, r\y, r\z - 672.0 * RoomScale, 180.0, r, False, DEFAULT_DOOR, KEY_CARD_5)
 			
 			; ~ Door to the storage room
-			r\RoomDoors.Doors[3] = CreateDoor(r\x + 768.0 * RoomScale, r\y, r\z + 512.0 * RoomScale, 90.0, r, False, DEFAULT_DOOR, KEY_MISC, "5731")
+			r\RoomDoors.Doors[3] = CreateDoor(r\x + 768.0 * RoomScale, r\y, r\z + 512.0 * RoomScale, 90.0, r, False, DEFAULT_DOOR, KEY_MISC, Str(CODE_CONT1_035))
 			
 			For i = 0 To 1
 				r\Objects[i * 2] = CopyEntity(lvr_I\LeverModelID[LEVER_BASE_MODEL])
@@ -5680,6 +5672,11 @@ Function FillRoom%(r.Rooms)
 			r\Objects[6] = CreatePivot()
 			PositionEntity(r\Objects[6], r\x + 754.0 * RoomScale, r\y - 1248.0 * RoomScale, r\z)
 			EntityParent(r\Objects[6], r\OBJ)
+			
+			r\Objects[7] = LoadMesh_Strict("GFX\map\room2_test_hcz_hb.b3d", r\OBJ)
+			EntityPickMode(r\Objects[7], 2)
+			EntityType(r\Objects[7], HIT_MAP)
+			EntityAlpha(r\Objects[7], 0.0)
 			
 			sc.SecurityCams = CreateSecurityCam(r\x + 744.0 * RoomScale, r\y - 856.0 * RoomScale, r\z + 236.0 * RoomScale, r)
 			sc\FollowPlayer = True
@@ -6579,6 +6576,11 @@ Function FillRoom%(r.Rooms)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
+			r\Objects[11] = LoadMesh_Strict("GFX\map\cont1_106_hb.b3d", r\OBJ)
+			EntityPickMode(r\Objects[11], 2)
+			EntityType(r\Objects[11], HIT_MAP)
+			EntityAlpha(r\Objects[11], 0.0)
+			
 			it.Items = CreateItem("Level 5 Key Card", "key5", r\x - 1275.0 * RoomScale, r\y - 7910.0 * RoomScale, r\z + 3106.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -7108,20 +7110,31 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case "room3_office"
 			;[Block]			
-			d.Doors = CreateDoor(r\x + 736.0 * RoomScale, r\y, r\z + 240.0 * RoomScale, 0.0, r, False, ONE_SIDED_DOOR, KEY_CARD_3)
-			PositionEntity(d\Buttons[0], r\x + 892.0 * RoomScale, EntityY(d\Buttons[0], True), r\z + 226.0 * RoomScale, True)
-			PositionEntity(d\Buttons[1], r\x + 892.0 * RoomScale, EntityY(d\Buttons[1], True), r\z + 253.0 * RoomScale, True)
+			d.Doors = CreateDoor(r\x + 768.0 * RoomScale, r\y, r\z + 234.0 * RoomScale, 180.0, r, False, OFFICE_DOOR)
 			
-			r\Objects[0] = LoadMesh_Strict("GFX\map\room3offices_hb.b3d", r\OBJ)
+			r\Objects[0] = LoadMesh_Strict("GFX\map\room3_office_hb.b3d", r\OBJ)
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
 			EntityAlpha(r\Objects[0], 0.0)
+			
+			de.Decals = CreateDecal(DECAL_WATER, r\x + 236.0 * RoomScale, r\y + 0.005, r\z - 68.0 * RoomScale, 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), 1.0)
+			EntityParent(de\OBJ, r\OBJ)
 			;[End Block]
 		Case "room2_office"
 			;[Block]
-			d.Doors = CreateDoor(r\x - 240.0 * RoomScale, r\y - 0.1 * RoomScale, r\z, 90.0, r)
-			PositionEntity(d\Buttons[0], r\x - 230.0 * RoomScale, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
-			PositionEntity(d\Buttons[1], r\x - 250.0 * RoomScale, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
+			d.Doors = CreateDoor(r\x - 244.0 * RoomScale, r\y, r\z, 90.0, r)
+			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.048, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.048, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
+			
+			d.Doors = CreateDoor(r\x - 1216.0 * RoomScale, r\y - 384.0 * RoomScale, r\z - 1024.0 * RoomScale, 0.0, r)
+			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			FreeEntity(d\OBJ2) : d\OBJ2 = 0
+			
+			d.Doors = CreateDoor(r\x - 1216.0 * RoomScale, r\y - 384.0 * RoomScale, r\z + 1024.0 * RoomScale, 180.0, r)
+			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
 			it.Items = CreateItem("Sticky Note", "paper", r\x - 991.0 * RoomScale, r\y - 242.0 * RoomScale, r\z + 904.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -7368,7 +7381,7 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case "room1_o5"
 			;[Block]
-			d.Doors = CreateDoor(r\x, r\y, r\z - 240.0 * RoomScale, 0.0, r, False, DEFAULT_DOOR, KEY_MISC, "2411")
+			d.Doors = CreateDoor(r\x, r\y, r\z - 240.0 * RoomScale, 0.0, r, False, DEFAULT_DOOR, KEY_MISC, CODE_O5_COUNCIL)
 			
 			it.Items = CreateItem("Field Agent Log #235-001-CO5", "paper", r\x, r\y + 200.0 * RoomScale, r\z + 870.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -7426,9 +7439,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[1] = CreateDoor(r\x - 2336.0 * RoomScale, r\y - 4256.0 * RoomScale, r\z - 648.0 * RoomScale, -90.0, r, False, ELEVATOR_DOOR)
 			
 			; ~ A door to the containment chamber	
-			r\RoomDoors.Doors[2] = CreateDoor(r\x - 4336.0 * RoomScale, r\y - 4256.0 * RoomScale, r\z + 1560.0 * RoomScale, 0.0, r, False, DEFAULT_DOOR, KEY_CARD_4)
-			PositionEntity(r\RoomDoors[2]\Buttons[0], EntityX(r\RoomDoors[2]\Buttons[0], True), EntityY(r\RoomDoors[2]\Buttons[1], True), EntityZ(r\RoomDoors[2]\Buttons[0], True) + 0.061, True)
-			PositionEntity(r\RoomDoors[2]\Buttons[1], EntityX(r\RoomDoors[2]\Buttons[1], True), EntityY(r\RoomDoors[2]\Buttons[1], True), EntityZ(r\RoomDoors[2]\Buttons[1], True) - 0.061, True)					
+			r\RoomDoors.Doors[2] = CreateDoor(r\x - 4352.0 * RoomScale, r\y - 4256.0 * RoomScale, r\z + 1368.0 * RoomScale, 0.0, r, False, DEFAULT_DOOR, KEY_CARD_4)
 			
 			; ~ Elevator pivots
 			r\Objects[0] = CreatePivot()
@@ -7439,33 +7450,33 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ Class-D spawn
 			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], r\x - 4951.0 * RoomScale, r\y - 4491.0 * RoomScale, r\z + 1836.0 * RoomScale)
+			PositionEntity(r\Objects[2], r\x - 4858.0 * RoomScale, r\y - 4491.0 * RoomScale, r\z + 1729.0 * RoomScale)
 			
 			; ~ Touching pivot
 			r\Objects[3] = CreatePivot()
-			PositionEntity(r\Objects[3], r\x - 4885.0 * RoomScale, r\y - 4326.0 * RoomScale, r\z + 2243.0 * RoomScale)
+			PositionEntity(r\Objects[3], r\x - 4917.0 * RoomScale, r\y - 4310.0 * RoomScale, r\z + 2095.0 * RoomScale)
 			
 			; ~ Sparks pivot
 			r\Objects[4] = CreatePivot()
-			PositionEntity(r\Objects[4], r\x - 4468.0 * RoomScale, r\y - 4066.0 * RoomScale, r\z - 1937.0 * RoomScale)
+			PositionEntity(r\Objects[4], r\x - 4523.0 * RoomScale, r\y - 4060.0 * RoomScale, r\z - 2097.0 * RoomScale)
 			
 			For i = 0 To 4
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
-			sc.SecurityCams = CreateSecurityCam(r\x - 3624.0 * RoomScale, r\y - 3840.0 * RoomScale, r\z + 2256.0 * RoomScale, r)
+			sc.SecurityCams = CreateSecurityCam(r\x - 3635.0 * RoomScale, r\y - 3840.0 * RoomScale, r\z + 1729.0 * RoomScale, r)
 			sc\Angle = 100.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			
-			de.Decals = CreateDecal(DECAL_409, r\x - 4951.0 * RoomScale, r\y - 4495.0 * RoomScale, r\z + 1700.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.65, 0.8)
+			de.Decals = CreateDecal(DECAL_409, r\x - 4858.0 * RoomScale, r\y - 4495.0 * RoomScale, r\z + 1655.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.65, 0.8)
 			EntityParent(de\OBJ, r\OBJ)
 			
-			it.Items = CreateItem("Document SCP-409", "paper", r\x - 3595.0 * RoomScale, r\y - 4336.0 * RoomScale, r\z + 2242.0 * RoomScale)
+			it.Items = CreateItem("Document SCP-409", "paper", r\x - 4105.0 * RoomScale, r\y - 4336.0 * RoomScale, r\z + 2207.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			If I_005\ChanceToSpawn = 3 Then
-				it.Items = CreateItem("SCP-005", "scp005", r\x - 5050.0 * RoomScale, r\y - 4416.0 * RoomScale, r\z + 1728.0 * RoomScale)
+			If I_005\ChanceToSpawn >= 2 And I_005\ChanceToSpawn =< 4 Then
+				it.Items = CreateItem("SCP-005", "scp005", r\x - 5000.0 * RoomScale, r\y - 4416.0 * RoomScale, r\z + 1728.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)	
 			EndIf
 			;[End Block]
@@ -7570,7 +7581,7 @@ Function FillRoom%(r.Rooms)
 			If I_005\ChanceToSpawn = 1 Then
 				it.Items = CreateItem("SCP-005", "scp005", r\x, r\y + 255.0 * RoomScale, r\z - 210.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
-			ElseIf I_005\ChanceToSpawn = 2
+			ElseIf I_005\ChanceToSpawn >= 5 And I_005\ChanceToSpawn =< 10
 				it.Items = CreateItem("Note from Maynard", "paper", r\x, r\y + 255.0 * RoomScale, r\z - 210.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)	
 			EndIf
@@ -7593,6 +7604,39 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("Empty Cup", "emptycup", r\x + 143.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 966.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
+			;[End Block]
+		Case "room3_ez"
+			;[Block]
+			d.Doors = CreateDoor(r\x + 605.0 * RoomScale, r\y, r\z - 234.0 * RoomScale, 0.0, r, False, OFFICE_DOOR)
+			
+			d.Doors = CreateDoor(r\x - 605.0 * RoomScale, r\y, r\z - 234.0 * RoomScale, 0.0, r, False, OFFICE_DOOR)
+			
+			r\Objects[0] = LoadMesh_Strict("GFX\map\room3_ez_hb.b3d", r\OBJ)
+			EntityPickMode(r\Objects[0], 2)
+			EntityType(r\Objects[0], HIT_MAP)
+			EntityAlpha(r\Objects[0], 0.0)
+			
+			sc.SecurityCams = CreateSecurityCam(r\x - 320.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 512.25 * RoomScale, r)
+			sc\Angle = 225.0 : sc\Turn = 45.0
+			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
+			
+			it.Items = CreateItem("9V Battery", "bat", r\x - 937.0 * RoomScale, r\y + 260.0 * RoomScale, r\z - 937.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Radio Transceiver", "radio", r\x + 712.0 * RoomScale, r\y + 165.0 * RoomScale, r\z - 797.0 * RoomScale)
+			it\State = Rnd(100.0)
+			EntityParent(it\Collider, r\OBJ)
+			
+			If Rand(4) = 1 Then
+				it.Items = CreateItem("Cup", "cup", r\x + 880.0 * RoomScale, r\y + 100.0 * RoomScale, r\z - 300.0 * RoomScale, 200, 200, 200)
+				it\Name = "Cup of Coffee"
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
+			
+			If Rand(2) = 1 Then
+				it.Items = CreateItem("Quarter", "25ct", r\x - 234.0 * RoomScale, r\y + 30.0 * RoomScale, r\z + 505.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
 			;[End Block]
 	End Select
 	
@@ -7764,8 +7808,10 @@ Function UpdateRooms%()
 		
 		If Hide Then
 			HideEntity(r\OBJ)
+			HideProps(r)
 		Else
 			ShowEntity(r\OBJ)
+			ShowProps(r)
 			
 			For i = 0 To MaxRoomLights - 1
 				If r\Lights[i] <> 0 Then
@@ -7798,19 +7844,19 @@ Function UpdateRooms%()
 		PlayerRoom\Found = True
 		
 		EntityAlpha(GetChild(PlayerRoom\OBJ, 2), 1.0)
-		ShowProps(PlayerRoom)
+		ShowAlphaProps(PlayerRoom)
 		For i = 0 To MaxRoomAdjacents - 1
 			If PlayerRoom\Adjacent[i] <> Null Then
 				If PlayerRoom\AdjDoor[i] <> Null Then
 					If PlayerRoom\AdjDoor[i]\OpenState = 0.0 Then
 						EntityAlpha(GetChild(PlayerRoom\Adjacent[i]\OBJ, 2), 0.0)
-						HideProps(PlayerRoom\Adjacent[i])
+						HideAlphaProps(PlayerRoom\Adjacent[i])
 					ElseIf (Not EntityInView(PlayerRoom\AdjDoor[i]\FrameOBJ, Camera))
 						EntityAlpha(GetChild(PlayerRoom\Adjacent[i]\OBJ, 2), 0.0)
-						HideProps(PlayerRoom\Adjacent[i])
+						HideAlphaProps(PlayerRoom\Adjacent[i])
 					Else
 						EntityAlpha(GetChild(PlayerRoom\Adjacent[i]\OBJ, 2), 1.0)
-						ShowProps(PlayerRoom\Adjacent[i])
+						ShowAlphaProps(PlayerRoom\Adjacent[i])
 					EndIf
 				EndIf
 				
@@ -7818,7 +7864,7 @@ Function UpdateRooms%()
 					If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null Then
 						If PlayerRoom\Adjacent[i]\Adjacent[j] <> PlayerRoom Then
 							EntityAlpha(GetChild(PlayerRoom\Adjacent[i]\Adjacent[j]\OBJ, 2), 0.0)
-							HideProps(PlayerRoom\Adjacent[i]\Adjacent[j])
+							HideAlphaProps(PlayerRoom\Adjacent[i]\Adjacent[j])
 						EndIf
 					EndIf
 				Next
@@ -8274,13 +8320,13 @@ Function CreateMap%()
 						Select True ; ~ See if adding some rooms is possible
 							Case CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] > MapGrid_NoTile
 								;[Block]
-								If (CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 2) + (y * MapGridSize)]) = 0 Then
-									If (CurrMapGrid\Grid[(x + 1) + ((y - 2) * MapGridSize)] + CurrMapGrid\Grid[(x + 2) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + ((y - 1) * MapGridSize)]) = 0 Then
+								If (CurrMapGrid\Grid[(x + 1) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 2) + (y * MapGridSize)]) = 0 Then
+									If (CurrMapGrid\Grid[(x + 1) + ((y - 2) * MapGridSize)] + CurrMapGrid\Grid[(x + 2) + ((y - 1) * MapGridSize)]) = 0 Then
 										CurrMapGrid\Grid[x + (y * MapGridSize)] = 2
 										CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] = 2
 										CurrMapGrid\Grid[(x + 1) + ((y - 1) * MapGridSize)] = 1
 										Temp = 1
-									ElseIf (CurrMapGrid\Grid[(x + 1) + ((y + 2) * MapGridSize)] + CurrMapGrid\Grid[(x + 2) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + ((y + 1) * MapGridSize)]) = 0 Then
+									ElseIf (CurrMapGrid\Grid[(x + 1) + ((y + 2) * MapGridSize)] + CurrMapGrid\Grid[(x + 2) + ((y + 1) * MapGridSize)]) = 0 Then
 										CurrMapGrid\Grid[x + (y * MapGridSize)] = 2
 										CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] = 2
 										CurrMapGrid\Grid[(x + 1) + ((y + 1) * MapGridSize)] = 1
@@ -8290,13 +8336,13 @@ Function CreateMap%()
 								;[End Block]
 							Case CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile
 								;[Block]
-								If (CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x - 2) + (y * MapGridSize)]) = 0 Then
-									If (CurrMapGrid\Grid[(x - 1) + ((y - 2) * MapGridSize)] + CurrMapGrid\Grid[(x - 2) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[(x - 1) + ((y - 1) * MapGridSize)]) = 0 Then
+								If (CurrMapGrid\Grid[(x - 1) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[(x - 1) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x - 2) + (y * MapGridSize)]) = 0 Then
+									If (CurrMapGrid\Grid[(x - 1) + ((y - 2) * MapGridSize)] + CurrMapGrid\Grid[(x - 2) + ((y - 1) * MapGridSize)]) = 0 Then
 										CurrMapGrid\Grid[x + (y * MapGridSize)] = 2
 										CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] = 2
 										CurrMapGrid\Grid[(x - 1) + ((y - 1) * MapGridSize)] = 1
 										Temp = 1
-									ElseIf (CurrMapGrid\Grid[(x - 1) + ((y + 2) * MapGridSize)] + CurrMapGrid\Grid[(x - 2) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x - 1) + ((y + 1) * MapGridSize)]) = 0 Then
+									ElseIf (CurrMapGrid\Grid[(x - 1) + ((y + 2) * MapGridSize)] + CurrMapGrid\Grid[(x - 2) + ((y + 1) * MapGridSize)]) = 0 Then
 										CurrMapGrid\Grid[x + (y * MapGridSize)] = 2
 										CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] = 2
 										CurrMapGrid\Grid[(x - 1) + ((y + 1) * MapGridSize)] = 1
@@ -8306,13 +8352,13 @@ Function CreateMap%()
 								;[End Block]
 							Case CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] > MapGrid_NoTile
 								;[Block]
-								If (CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] + CurrMapGrid\Grid[x + ((y + 2) * MapGridSize)]) = 0 Then
-									If (CurrMapGrid\Grid[(x - 2) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x - 1) + ((y + 2) * MapGridSize)] + CurrMapGrid\Grid[(x - 1) + ((y + 1) * MapGridSize)]) = 0 Then
+								If (CurrMapGrid\Grid[(x - 1) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[x + ((y + 2) * MapGridSize)]) = 0 Then
+									If (CurrMapGrid\Grid[(x - 2) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x - 1) + ((y + 2) * MapGridSize)]) = 0 Then
 										CurrMapGrid\Grid[x + (y * MapGridSize)] = 2
 										CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] = 2
 										CurrMapGrid\Grid[(x - 1) + ((y + 1) * MapGridSize)] = 1
 										Temp = 1
-									ElseIf (CurrMapGrid\Grid[(x + 2) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + ((y + 2) * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + ((y + 1) * MapGridSize)]) = 0 Then
+									ElseIf (CurrMapGrid\Grid[(x + 2) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + ((y + 2) * MapGridSize)]) = 0 Then
 										CurrMapGrid\Grid[x + (y * MapGridSize)] = 2
 										CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] = 2
 										CurrMapGrid\Grid[(x + 1) + ((y + 1) * MapGridSize)] = 1
@@ -8322,13 +8368,13 @@ Function CreateMap%()
 								;[End Block]
 							Case CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile
 								;[Block]
-								If (CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] + CurrMapGrid\Grid[x + ((y - 2) * MapGridSize)]) = 0 Then
-									If (CurrMapGrid\Grid[(x - 2) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[(x - 1) + ((y - 2) * MapGridSize)] + CurrMapGrid\Grid[(x - 1) + ((y - 1) * MapGridSize)]) = 0 Then
+								If (CurrMapGrid\Grid[(x - 1) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[x + ((y - 2) * MapGridSize)]) = 0 Then
+									If (CurrMapGrid\Grid[(x - 2) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[(x - 1) + ((y - 2) * MapGridSize)]) = 0 Then
 										CurrMapGrid\Grid[x + (y * MapGridSize)] = 2
 										CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] = 2
 										CurrMapGrid\Grid[(x - 1) + ((y - 1) * MapGridSize)] = 1
 										Temp = 1
-									ElseIf (CurrMapGrid\Grid[(x + 2) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + ((y - 2) * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + ((y - 1) * MapGridSize)]) = 0 Then
+									ElseIf (CurrMapGrid\Grid[(x + 2) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + ((y - 2) * MapGridSize)]) = 0 Then
 										CurrMapGrid\Grid[x + (y * MapGridSize)] = 2
 										CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] = 2
 										CurrMapGrid\Grid[(x + 1) + ((y - 1) * MapGridSize)] = 1
@@ -8440,7 +8486,7 @@ Function CreateMap%()
 	SetRoom("room2_office_3", ROOM2, MinPos + Floor(0.3 * Float(Room2Amount[2])), MinPos, MaxPos)
 	SetRoom("room2_bio", ROOM2, MinPos + Floor(0.35 * Float(Room2Amount[2])), MinPos, MaxPos)
 	SetRoom("room2_servers_ez", ROOM2, MinPos + Floor(0.4 * Room2Amount[2]), MinPos, MaxPos)	
-	SetRoom("room2offices", ROOM2, MinPos + Floor(0.45 * Room2Amount[2]), MinPos, MaxPos)
+	SetRoom("room2_ez", ROOM2, MinPos + Floor(0.45 * Room2Amount[2]), MinPos, MaxPos)
 	SetRoom("room2_office", ROOM2, MinPos + Floor(0.5 * Room2Amount[2]), MinPos, MaxPos)	
 	SetRoom("room2_office_2", ROOM2, MinPos + Floor(0.55 * Room2Amount[2]), MinPos, MaxPos)	
 	SetRoom("cont2_860_1", ROOM2, MinPos + Floor(0.6 * Room2Amount[2]), MinPos, MaxPos)
@@ -8587,7 +8633,7 @@ Function CreateMap%()
 	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 500.0, -(RoomSpacing ^ 2), "gate_b")
 	CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
 	
-	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 500.0, RoomSpacing, "gate_a")
+	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 500.0, RoomSpacing ^ 2, "gate_a")
 	CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
 	
 	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 0.0, (MapGridSize - 1) * RoomSpacing, "dimension_106")
@@ -8783,7 +8829,7 @@ Function LoadTerrain%(HeightMap%, yScale# = 0.7, t1%, t2%, Mask%)
 	; ~ Store HeightMap dimensions
 	Local x% = ImageWidth(HeightMap) - 1
 	Local y% = ImageHeight(HeightMap) - 1
-	Local lx%, ly%, Index%
+	Local lX%, lY%, Index%
 	
 	; ~ Load texture and lightmaps
 	If (Not t1) Then RuntimeError("Texture #1 " + Chr(34) + t1 + Chr(34) + " not found.")
@@ -8800,18 +8846,18 @@ Function LoadTerrain%(HeightMap%, yScale# = 0.7, t1%, t2%, Mask%)
 	Local Surf% = CreateSurface(Mesh)
 	
 	; ~ Create some verts for the terrain
-	For ly = 0 To y
-		For lx = 0 To x
-			AddVertex(Surf, lx, 0, ly, 1.0 / lx, 1.0 / ly)
+	For lY = 0 To y
+		For lX = 0 To x
+			AddVertex(Surf, lX, 0, lY, 1.0 / lX, 1.0 / lY)
 		Next
 	Next
 	RenderWorld()
 	
 	; ~ Connect the verts with faces
-	For ly = 0 To y - 1
-		For lx = 0 To x - 1
-			AddTriangle(Surf, lx + ((x + 1) * ly), lx + ((x + 1) * ly) + (x + 1), (lx + 1) + ((x + 1) * ly))
-			AddTriangle(Surf, (lx + 1) + ((x + 1) * ly), lx + ((x + 1) * ly) + (x + 1), (lx + 1) + ((x + 1) * ly) + (x + 1))
+	For lY = 0 To y - 1
+		For lX = 0 To x - 1
+			AddTriangle(Surf, lX + ((x + 1) * lY), lX + ((x + 1) * lY) + (x + 1), (lX + 1) + ((x + 1) * lY))
+			AddTriangle(Surf, (lX + 1) + ((x + 1) * lY), lX + ((x + 1) * lY) + (x + 1), (lX + 1) + ((x + 1) * lY) + (x + 1))
 		Next
 	Next
 	
@@ -8826,16 +8872,16 @@ Function LoadTerrain%(HeightMap%, yScale# = 0.7, t1%, t2%, Mask%)
 	LockBuffer(ImageBuffer(HeightMap))
 	LockBuffer(TextureBuffer(Mask))
 	
-	For lx = 0 To x
-		For ly = 0 To y
+	For lX = 0 To x
+		For lY = 0 To y
 			; ~ Using vertex alpha and two meshes instead of FE_ALPHAWHATEVER
 			; ~ It doesn't look perfect but it does the job
 			; ~ You might get better results by downscaling the mask to the same size as the heightmap
-			Local MaskX# = Min(lx * Float(TextureWidth(Mask)) / Float(ImageWidth(HeightMap)), TextureWidth(Mask) - 1)
-			Local MaskY# = TextureHeight(Mask) - Min(ly * Float(TextureHeight(Mask)) / Float(ImageHeight(HeightMap)), TextureHeight(Mask) - 1)
+			Local MaskX# = Min(lX * Float(TextureWidth(Mask)) / Float(ImageWidth(HeightMap)), TextureWidth(Mask) - 1)
+			Local MaskY# = TextureHeight(Mask) - Min(lY * Float(TextureHeight(Mask)) / Float(ImageHeight(HeightMap)), TextureHeight(Mask) - 1)
 			Local RGB%, RED%
 			
-			RGB = ReadPixelFast(Min(lx, x - 1.0), y - Min(ly, y - 1.0), ImageBuffer(HeightMap))
+			RGB = ReadPixelFast(Min(lX, x - 1.0), y - Min(lY, y - 1.0), ImageBuffer(HeightMap))
 			RED = (RGB And $FF0000) Shr 16 ; ~ Separate out the red
 			
 			Local Alpha# = (((ReadPixelFast(Max(MaskX -5.0, 5.0), Max(MaskY - 5.0, 5.0), TextureBuffer(Mask)) And $FF000000) Shr 24) / $FF)
@@ -8846,13 +8892,13 @@ Function LoadTerrain%(HeightMap%, yScale# = 0.7, t1%, t2%, Mask%)
 			Alpha = Alpha * 0.25
 			Alpha = Sqr(Alpha)
 			
-			Index = lx + ((x + 1) * ly)
+			Index = lX + ((x + 1) * lY)
 			VertexCoords(Surf, Index , VertexX(Surf, Index), RED * yScale, VertexZ(Surf, Index))
 			VertexCoords(Surf2, Index , VertexX(Surf2, Index), RED * yScale, VertexZ(Surf2, Index))
 			VertexColor(Surf2, Index, 255.0, 255.0, 255.0, Alpha)
 			; ~ Set the terrain texture coordinates
-			VertexTexCoords(Surf, Index, lx, -ly )
-			VertexTexCoords(Surf2, Index, lx, -ly) 
+			VertexTexCoords(Surf, Index, lX, -lY )
+			VertexTexCoords(Surf2, Index, lX, -lY) 
 		Next
 	Next
 	UnlockBuffer(TextureBuffer(Mask))

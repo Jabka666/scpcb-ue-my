@@ -38,7 +38,6 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPat
 			it\OBJ = LoadMesh_Strict(OBJPath)
 			it\IsAnim = False
 		EndIf
-		it\OBJPath = OBJPath
 	EndIf
 	it\OBJPath = OBJPath
 	
@@ -534,10 +533,6 @@ Function PickItem%(item.Items)
 						;[Block]
 						GiveAchievement(Achv148)
 						;[End Block]
-					Case "scp513"
-						;[Block]
-						GiveAchievement(Achv513)
-						;[End Block]
 					Case "scp860"
 						;[Block]
 						GiveAchievement(Achv860)
@@ -795,7 +790,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 	Local Remove% = True, i%
 	
 	Select item\ItemTemplate\TempName
-		Case "gasmask", "gasmask3"
+		Case "gasmask", "supergasmask", "gasmask3"
 			;[Block]
 			Select Setting
 				Case ROUGH, COARSE
@@ -856,11 +851,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
-					If Rand(10) = 1 Then
-						it2.Items = CreateItem("Ballistic Helmet", "helmet", x, y, z)
-					Else
-						Remove = False
-					EndIf
+					it2.Items = CreateItem("Ballistic Helmet", "helmet", x, y, z)
 					;[End Block]
 				Case FINE
 					;[Block]
@@ -1635,7 +1626,12 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 		Case "nav", "nav300", "nav310", "navulti"
 			;[Block]
 			Select Setting
-				Case ROUGH, COARSE
+				Case ROUGH
+					;[Block]
+					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					;[End Block]
+				Case COARSE
 					;[Block]
 					it2.Items = CreateItem("Electronical Components", "electronics", x, y, z)
 					;[End Block]
@@ -1662,7 +1658,12 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 		Case "radio", "18vradio", "fineradio", "veryfineradio"
 			;[Block]
 			Select Setting
-				Case ROUGH, COARSE
+				Case ROUGH
+					;[Block]
+					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					;[End Block]
+				Case COARSE
 					;[Block]
 					it2.Items = CreateItem("Electronical Components", "electronics", x, y, z)
 					;[End Block]
@@ -1754,6 +1755,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case COARSE
 					;[Block]
 					it2.Items = CreateItem("4.5V Battery", "badbat", x, y, z)
+					;[End Block]
 				Case ONETOONE
 					;[Block]
 					Remove = False
@@ -1811,6 +1813,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case COARSE
 					;[Block]
 					it2.Items = CreateItem("9V Battery", "bat", x, y, z)
+					;[End Block]
 				Case ONETOONE, FINE, VERYFINE
 					;[Block]
 					it2.Items = CreateItem("Strange Battery", "killbat", x, y, z)
@@ -1939,7 +1942,9 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					it2.Items = CreateItem("Electronical Components", "electronics", x, y, z)	
 					;[End Block]
 				Case FINE
+					;[Block]
 					it2.Items = CreateItem("Syringe", "syringeinf", x, y, z)
+					;[End Block]
 				Case VERYFINE
 					;[Block]
 					If Rand(2) = 1 Then
@@ -2007,6 +2012,70 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case VERYFINE
 					;[Block]
 					it2.Items = CreateItem("Upgraded Pill", "scp500pilldeath", x, y, z)
+					;[End Block]
+			End Select
+			;[End Block]
+		Case "scp500"
+			;[Block]
+			Select Setting
+				Case ROUGH, COARSE
+					;[Block]
+					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					;[End Block]
+				Case ONETOONE
+					;[Block]
+					it2.Items = CreateItem("SCP-500-01", "scp500pill", x, y, z)
+					
+					If Rand(2) = 1 Then
+						it3.Items = CreateItem("SCP-500-01", "scp500pill", x, y, z)
+						EntityType(it3\Collider, HIT_ITEM)
+					EndIf
+					
+					If Rand(3) = 1 Then
+						it4.Items = CreateItem("SCP-500-01", "scp500pill", x, y, z)
+						EntityType(it4\Collider, HIT_ITEM)
+					EndIf
+					
+					If Rand(4) = 1 Then
+						it5.Items = CreateItem("SCP-500-01", "scp500pill", x, y, z)
+						EntityType(it5\Collider, HIT_ITEM)
+					EndIf
+					;[End Block]
+				Case FINE
+					;[Block]
+					NO427Spawn = False
+					
+					For it3.Items = Each Items
+						If it3\ItemTemplate\TempName = "scp427" Then
+							NO427Spawn = True
+							Exit
+						EndIf
+					Next
+					If (Not NO427Spawn) Then
+						it2.Items = CreateItem("SCP-427", "scp427", x, y, z)
+					Else
+						it2.Items = CreateItem("Upgraded Pill", "scp500pilldeath", x, y, z)
+					EndIf
+					;[End Block]
+				Case VERYFINE
+					;[Block]
+					it2.Items = CreateItem("Upgraded Pill", "scp500pilldeath", x, y, z)
+					
+					If Rand(2) = 1 Then
+						it3.Items = CreateItem("Upgraded Pill", "scp500pilldeath", x, y, z)
+						EntityType(it3\Collider, HIT_ITEM)
+					EndIf
+					
+					If Rand(3) = 1 Then
+						it4.Items = CreateItem("Upgraded Pill", "scp500pilldeath", x, y, z)
+						EntityType(it4\Collider, HIT_ITEM)
+					EndIf
+					
+					If Rand(4) = 1 Then
+						it5.Items = CreateItem("Upgraded Pill", "scp500pilldeath", x, y, z)
+						EntityType(it5\Collider, HIT_ITEM)
+					EndIf
 					;[End Block]
 			End Select
 			;[End Block]

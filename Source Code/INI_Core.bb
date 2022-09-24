@@ -409,7 +409,7 @@ Type Options
 	Field AntiAliasing%
 	Field BumpEnabled%
 	Field SaveTexturesInVRAM%
-	Field EnableRoomLights%
+	Field AdvancedRoomLights%
 	Field VSync%
 	Field ScreenGamma#
 	Field TextureDetails%, TextureDetailsLevel#
@@ -462,7 +462,7 @@ Function LoadOptionsINI%()
 	
 	opt\AntiAliasing = GetINIInt(OptionFile, "Graphics", "Anti-Aliasing", True)
 	
-	opt\EnableRoomLights = GetINIInt(OptionFile, "Graphics", "Enable Room Lights", True)
+	opt\AdvancedRoomLights = GetINIInt(OptionFile, "Graphics", "Advanced Room Lighting", True)
 	
 	opt\ScreenGamma = GetINIFloat(OptionFile, "Graphics", "Screen Gamma", 1.0)
 	
@@ -633,7 +633,7 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	
 	PutINIValue(OptionFile, "Graphics", "Anti-Aliasing", opt\AntiAliasing)
 	
-	PutINIValue(OptionFile, "Graphics", "Enable Room Lights", opt\EnableRoomLights)
+	PutINIValue(OptionFile, "Graphics", "Advanced Room Lighting", opt\AdvancedRoomLights)
 	
 	PutINIValue(OptionFile, "Graphics", "Screen Gamma", opt\ScreenGamma)
 	
@@ -752,7 +752,7 @@ Function ResetOptionsINI%()
 	
 	If opt\DisplayMode = 0 Then opt\AntiAliasing = True
 	
-	opt\EnableRoomLights = True
+	opt\AdvancedRoomLights = True
 	
 	opt\ScreenGamma = 1.0
 	
