@@ -5113,7 +5113,7 @@ Function FillRoom%(r.Rooms)
 			sc\Angle = -45.0 : sc\Turn = 0.0
 			TurnEntity(sc\CameraOBJ, 30.0, 0.0, 0.0)
 			
-			it.Items = CreateItem("Night Vision Goggles", "nvg", r\x + 320.0 * RoomScale, r\y + 0.5, r\z + 704.0 * RoomScale)
+			it.Items = CreateItem("Night Vision Goggles", "nvg", r\x + 173.0 * RoomScale, r\y + 0.5, r\z + 631.0 * RoomScale)
 			it\State = Rnd(1000.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
