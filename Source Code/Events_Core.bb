@@ -1437,7 +1437,7 @@ Function UpdateEvents%()
 									Temp = 1.0
 									If SelectedItem <> Null Then Temp = 3.0
 									e\room\NPC[3]\State3 = Max(e\room\NPC[3]\State3 + fps\Factor[0] / Temp, 50.0)
-									If e\room\NPC[3]\State3 >= 70.0 * 8.0 And e\room\NPC[3]\State3 - fps\Factor[0] < 70.0 * 8.0 And e\room\NPC[3]\State = 9.0 Then
+									If e\room\NPC[3]\State3 >= 70.0 * 8.0 And e\room\NPC[3]\State3 - fps\Factor[0] / Temp < 70.0 * 8.0 And e\room\NPC[3]\State = 9.0 Then
 										If e\room\NPC[3]\State2 < 2.0 Then
 											If ChannelPlaying(e\room\NPC[3]\SoundCHN) Then StopChannel(e\room\NPC[3]\SoundCHN)
 											If e\room\NPC[3]\Sound <> 0 Then
