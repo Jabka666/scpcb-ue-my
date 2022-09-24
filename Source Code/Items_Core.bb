@@ -366,8 +366,7 @@ Function ClearSecondInv%(item.Items, From% = 0)
 	
 	For i = From To 19
 		If item\SecondInv[i] <> Null Then
-			RemoveItem(item\SecondInv[i])
-			item\SecondInv[i] = Null
+			RemoveItem(item\SecondInv[i]) : item\SecondInv[i] = Null
 		EndIf
 	Next
 End Function
