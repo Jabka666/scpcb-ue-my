@@ -20,6 +20,7 @@ Bug fixes:
 - Fixed SCP-106 animation when getting hit by the Tesla Gate.
 - Fixed windows textures for some rooms.
 - Fixed the office door appearing to freeze in weird ways when leaving the room instantly.
+- Fixed non-latin characters in loading screens not showing correctly.
 
 - Tiny fix for dead guard position in the starting location.
 - Tiny fix for map generation.
