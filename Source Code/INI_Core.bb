@@ -98,7 +98,7 @@ Function GetINIString$(File$, Section$, Parameter$, DefaultValue$ = "")
 End Function
 
 Function GetLocalString$(Section$, Parameter$)
-	Return IniGetBufferString_(lang\LanguagePath+"\Data\local.ini", Section, Parameter, IniGetBufferString_("Data\local.ini", Section, Parameter, Section+","+Parameter))
+	Return IniGetBufferString_(lang\LanguagePath + "\" + LanguageFile, Section, Parameter, IniGetBufferString_(LanguageFile, Section, Parameter, Section + "," + Parameter))
 End Function
 
 Function Format$(String$, Parameter$, Replace$ = "%s")

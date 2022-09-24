@@ -28,8 +28,9 @@ Type Language
 End Type
 
 Global lang.Language = New Language
+Const LanguageFile$ = "Data\local.ini"
 
-IniWriteBuffer_("Data\local.ini", 1)
+IniWriteBuffer_(LanguageFile, 1)
 Function SetLanguage(Language$)
 	If Language = "UserLanguage" Then
 		lang\CurrentLanguage$ = GetUserLanguage()
@@ -37,7 +38,7 @@ Function SetLanguage(Language$)
 		lang\CurrentLanguage$ = Language
 	EndIf
 	lang\LanguagePath$ = "Localization\" + lang\CurrentLanguage$
-	IniWriteBuffer_(lang\LanguagePath + "\Data\local.ini", 1)
+	IniWriteBuffer_(lang\LanguagePath + "\" + LanguageFile, 1)
 End Function
 
 CheckForDlls()

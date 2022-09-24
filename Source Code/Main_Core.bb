@@ -595,213 +595,196 @@ Function UpdateConsole%()
 							;[End Block]
 						Case "wireframe", "wf"
 							;[Block]
-							CreateConsoleMsg("HELP - wireframe")
+							CreateConsoleMsg(GetLocalString("console", "help.wf.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Toggles wireframe, unless a valid parameter")
-							CreateConsoleMsg("is specified (on / off).")
-							CreateConsoleMsg("Allows only the edges of geometry to be rendered,")
-							CreateConsoleMsg("making everything else transparent.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.wf"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "spawnitem", "si", "giveitem"
 							;[Block]
-							CreateConsoleMsg("HELP - spawnitem")
+							CreateConsoleMsg(GetLocalString("console", "help.si.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Spawns an item at the player's location.")
-							CreateConsoleMsg("Any name that can appear in your inventory")
-							CreateConsoleMsg("is a valid parameter.")
-							CreateConsoleMsg("Example: spawnitem Key Card Omni")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.si"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "spawn", "s"
 							;[Block]
-							CreateConsoleMsg("HELP - spawn")
+							CreateConsoleMsg(GetLocalString("console", "help.s.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Spawns an NPC at the player's location.")
-							CreateConsoleMsg("Valid parameters are:")
-							CreateConsoleMsg("008-1 / 049 / 049-2 / 066 / 096 / 106 / 173 / 860")
-							CreateConsoleMsg("/ 372 / 513-1 / 966 / 1499-1 / class-d / 939")
-							CreateConsoleMsg("/ guard / mtf / apache / tentacle / 1048_a/ 1048")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.s"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "reset372" 
 							;[Block]
-							CreateConsoleMsg("HELP - reset372")
+							CreateConsoleMsg(GetLocalString("console", "help.r372.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Returns SCP-372 to inactive state.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.r372"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "106retreat" 
 							;[Block]
-							CreateConsoleMsg("HELP - 106retreat")
+							CreateConsoleMsg(GetLocalString("console", "help.106r.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Returns SCP-106 to inactive state.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.106r"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "disable106"
 							;[Block]
-							CreateConsoleMsg("HELP - disable106")
+							CreateConsoleMsg(GetLocalString("console", "help.d106.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Removes SCP-106 from the map.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.d106"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "enable106"
 							;[Block]
-							CreateConsoleMsg("HELP - enable106")
+							CreateConsoleMsg(GetLocalString("console", "help.e106.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Returns SCP-106 to the map.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.e106"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "disable173"
 							;[Block]
-							CreateConsoleMsg("HELP - disable173")
+							CreateConsoleMsg(GetLocalString("console", "help.d173.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Removes SCP-173 from the map.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.d173"))
 							CreateConsoleMsg("******************************")	
 							;[End Block]
 						Case "enable173"
 							;[Block]
-							CreateConsoleMsg("HELP - enable173")
+							CreateConsoleMsg(GetLocalString("console", "help.e173.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Returns SCP-173 to the map.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.e173"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "reset096" 
 							;[Block]
-							CreateConsoleMsg("HELP - reset096")
+							CreateConsoleMsg(GetLocalString("console", "help.r096.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Returns SCP-096 to idle state.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.r096"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "doorcontrol" 
 							;[Block]
-							CreateConsoleMsg("HELP - enablecontrol")
+							CreateConsoleMsg(GetLocalString("console", "help.dc.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Turns on/off the Remote Door Control lever.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.dc"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "asd"
 							;[Block]
-							CreateConsoleMsg("HELP - asd")
+							CreateConsoleMsg(GetLocalString("console", "help.asd.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Activates all cheats.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.asd"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "unlockcheckpoints" 
 							;[Block]
-							CreateConsoleMsg("HELP - unlockcheckpoints")
+							CreateConsoleMsg(GetLocalString("console", "help.uc.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Unlocks all checkpoints.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.uc"))
 							CreateConsoleMsg("******************************")	
 							;[End Block]
 						Case "disable049"
 							;[Block]
-							CreateConsoleMsg("HELP - disable049")
+							CreateConsoleMsg(GetLocalString("console", "help.d049.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Removes SCP-049 from the map.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.d049"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "enable049"
 							;[Block]
-							CreateConsoleMsg("HELP - enable049")
+							CreateConsoleMsg(GetLocalString("console", "help.e049.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Returns SCP-049 to the map.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.e049"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "disable966"
 							;[Block]
-							CreateConsoleMsg("HELP - disable966")
+							CreateConsoleMsg(GetLocalString("console", "help.d966.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Removes SCP-966 from the map.")
-							CreateConsoleMsg("******************************")	
+							CreateConsoleMultiMsg(GetLocalString("console", "help.d966"))
+							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "enable966"
 							;[Block]
-							CreateConsoleMsg("HELP - enable966")
+							CreateConsoleMsg(GetLocalString("console", "help.e966.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Returns SCP-966 to the map.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.e966"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "revive", "undead", "resurrect"
 							;[Block]
-							CreateConsoleMsg("HELP - revive")
+							CreateConsoleMsg(GetLocalString("console", "help.revive.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Resets the player's death timer after the dying")
-							CreateConsoleMsg("animation triggers.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.revive"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "teleport"
 							;[Block]
-							CreateConsoleMsg("HELP - teleport")
+							CreateConsoleMsg(GetLocalString("console", "help.teleport.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Teleports the player to the first instance")
-							CreateConsoleMsg("of the specified room. Any room that appears")
-							CreateConsoleMsg("in rooms.ini is a valid parameter.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.teleport"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "stopsound", "stfu"
 							;[Block]
-							CreateConsoleMsg("HELP - stopsound")
+							CreateConsoleMsg(GetLocalString("console", "help.stfu.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Stops all currently playing sounds.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.stfu"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "weed", "scp-420-j", "420j", "scp420-j", "scp-420j", "420"
 							;[Block]
-							CreateConsoleMsg("HELP - weed")
+							CreateConsoleMsg(GetLocalString("console", "help.weed.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Generates dank memes.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.weed"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "playmusic"
 							;[Block]
-							CreateConsoleMsg("HELP - playmusic")
+							CreateConsoleMsg(GetLocalString("console", "help.pm.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Will play tracks in .ogg / .wav format")
-							CreateConsoleMsg("from " + Chr(34) + "SFX\Music\Custom\" + Chr(34) + ".")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.pm"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "infect"
 							;[Block]
-							CreateConsoleMsg("HELP - infect")
+							CreateConsoleMsg(GetLocalString("console", "help.infect.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("SCP-008 infects player.")
-							CreateConsoleMsg("Example: infect 80")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.infect"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "crystal" 
 							;[Block]
-							CreateConsoleMsg("HELP - crystal")
+							CreateConsoleMsg(GetLocalString("console", "help.crystal.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("SCP-409 crystallizes player.")
-							CreateConsoleMsg("Example: crystal 52")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.crystal"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "resetfunds"
 							;[Block]
-							CreateConsoleMsg("HELP - resetfunds")
+							CreateConsoleMsg(GetLocalString("console", "help.rf.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Resets your Mastercard funds.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.rf"))
 							CreateConsoleMsg("******************************")
+							;[End Block]
 						Case "giveachievement"
 							;[Block]
-							CreateConsoleMsg("HELP - giveachievement")
+							CreateConsoleMsg(GetLocalString("console", "help.ac.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Grants any achievement you want.")
-							CreateConsoleMsg("You can guess the ID by counting in the achievements menu (starts at 0).")
-							CreateConsoleMsg("You can also use " + Chr(34) + "all" + Chr(34) + " to immediately unlock every achievement.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.ac"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "codes" 
 							;[Block]
-							CreateConsoleMsg("HELP - codes")
+							CreateConsoleMsg(GetLocalString("console", "help.codes.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Displays access codes for this save.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.codes"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Default
 							;[Block]
-							CreateConsoleMsg("There is no help available for that command.", 255, 150, 0)
+							CreateConsoleMsg(GetLocalString("console", "help.no"), 255, 150, 0)
 							;[End Block]
 					End Select
 					;[End Block]
@@ -866,12 +849,12 @@ Function UpdateConsole%()
 						If r\RoomTemplate\Name = StrTemp Then
 							TeleportEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.7, EntityZ(r\OBJ))
 							TeleportToRoom(r)
-							CreateConsoleMsg("Successfully teleported to: " + StrTemp + ".")
+							CreateConsoleMsg(Format(GetLocalString("console", "tp.success"), StrTemp))
 							Exit
 						EndIf
 					Next
 					
-					If PlayerRoom\RoomTemplate\Name <> StrTemp Then CreateConsoleMsg("Room not found.", 255, 0, 0)
+					If PlayerRoom\RoomTemplate\Name <> StrTemp Then CreateConsoleMsg(GetLocalString("console", "tp.failed"), 255, 0, 0)
 					;[End Block]
 				Case "spawnitem", "si", "giveitem"
 					;[Block]
@@ -880,26 +863,26 @@ Function UpdateConsole%()
 					For itt.ItemTemplates = Each ItemTemplates
 						If Lower(itt\Name) = StrTemp Then
 							Temp = True
-							CreateConsoleMsg(itt\DisplayName + " spawned.")
+							CreateConsoleMsg(Format(GetLocalString("console", "si.success"), itt\DisplayName))
 							it.Items = CreateItem(itt\Name, itt\TempName, EntityX(me\Collider), EntityY(Camera, True), EntityZ(me\Collider))
 							EntityType(it\Collider, HIT_ITEM)
 							Exit
 						ElseIf Lower(itt\DisplayName) = StrTemp Then
 							Temp = True
-							CreateConsoleMsg(itt\DisplayName + " spawned.")
+							CreateConsoleMsg(Format(GetLocalString("console", "si.success"), itt\DisplayName))
 							it.Items = CreateItem(itt\Name, itt\TempName, EntityX(me\Collider), EntityY(Camera, True), EntityZ(me\Collider))
 							EntityType(it\Collider, HIT_ITEM)
 							Exit
 						ElseIf Lower(itt\TempName) = StrTemp Then
 							Temp = True
-							CreateConsoleMsg(itt\DisplayName + " spawned.")
+							CreateConsoleMsg(Format(GetLocalString("console", "si.success"), itt\DisplayName))
 							it.Items = CreateItem(itt\Name, itt\TempName, EntityX(me\Collider), EntityY(Camera, True), EntityZ(me\Collider))
 							EntityType(it\Collider, HIT_ITEM)
 							Exit
 						EndIf
 					Next
 					
-					If (Not Temp) Then CreateConsoleMsg("Item not found.", 255, 0, 0)
+					If (Not Temp) Then CreateConsoleMsg(GetLocalString("console", "si.failed"), 255, 0, 0)
 					;[End Block]
 				Case "wireframe", "wf"
 					;[Block]
@@ -921,9 +904,9 @@ Function UpdateConsole%()
 					End Select
 					
 					If WireFrameState Then
-						CreateConsoleMsg("WIREFRAME ON")
+						CreateConsoleMsg(GetLocalString("console", "wf.on"))
 					Else
-						CreateConsoleMsg("WIREFRAME OFF")	
+						CreateConsoleMsg(GetLocalString("console", "wf.off"))	
 					EndIf
 					
 					WireFrame(WireFrameState)
@@ -1015,11 +998,11 @@ Function UpdateConsole%()
 				Case "106retreat"
 					;[Block]
 					If n_I\Curr106\State <= 0.0 Then
-					n_I\Curr106\State = Rnd(22000.0, 27000.0)
-					PositionEntity(n_I\Curr106\Collider, 0.0, 500.0, 0.0)
-					ResetEntity(n_I\Curr106\Collider)
+						n_I\Curr106\State = Rnd(22000.0, 27000.0)
+						PositionEntity(n_I\Curr106\Collider, 0.0, 500.0, 0.0)
+						ResetEntity(n_I\Curr106\Collider)
 					Else
-						CreateConsoleMsg("SCP-106 is currently not active, so it cannot retreat.", 255, 150, 0)
+						CreateConsoleMsg(GetLocalString("console", "106r.failed"), 255, 150, 0)
 					EndIf
 					;[End Block]
 				Case "halloween"
@@ -1031,7 +1014,7 @@ Function UpdateConsole%()
 						EntityTexture(n_I\Curr173\OBJ, Tex)
 						EntityTexture(n_I\Curr173\OBJ2, Tex)
 						DeleteSingleTextureEntryFromCache(Tex)
-						CreateConsoleMsg("173 JACK-O-LANTERN ON")
+						CreateConsoleMsg(GetLocalString("console", "halloween.on"))
 					Else
 						If n_I\IsNewYear Then n_I\IsNewYear = (Not n_I\IsNewYear)
 						Tex2 = LoadTexture_Strict("GFX\npcs\scp_173.png", 1)
@@ -1039,7 +1022,7 @@ Function UpdateConsole%()
 						EntityTexture(n_I\Curr173\OBJ, Tex2)
 						EntityTexture(n_I\Curr173\OBJ2, Tex2)
 						DeleteSingleTextureEntryFromCache(Tex2)
-						CreateConsoleMsg("173 JACK-O-LANTERN OFF")
+						CreateConsoleMsg(GetLocalString("console", "halloween.off"))
 					EndIf
 					;[End Block]
 				Case "newyear" 
@@ -1051,7 +1034,7 @@ Function UpdateConsole%()
 						EntityTexture(n_I\Curr173\OBJ, Tex)
 						EntityTexture(n_I\Curr173\OBJ2, Tex)
 						DeleteSingleTextureEntryFromCache(Tex)
-						CreateConsoleMsg("173 COOKIE ON")
+						CreateConsoleMsg(GetLocalString("console", "newyear.on"))
 					Else
 						If n_I\IsHalloween Then n_I\IsHalloween = (Not n_I\IsHalloween)
 						Tex2 = LoadTexture_Strict("GFX\npcs\scp_173.png", 1)
@@ -1059,16 +1042,16 @@ Function UpdateConsole%()
 						EntityTexture(n_I\Curr173\OBJ, Tex2)
 						EntityTexture(n_I\Curr173\OBJ2, Tex2)
 						DeleteSingleTextureEntryFromCache(Tex2)
-						CreateConsoleMsg("173 COOKIE OFF")
+						CreateConsoleMsg(GetLocalString("console", "newyear.off"))
 					EndIf
 					;[End Block]
 				Case "sanic"
 					;[Block]
 					chs\SuperMan = (Not chs\SuperMan)
 					If chs\SuperMan = True Then
-						CreateConsoleMsg("GOTTA GO FAST")
+						CreateConsoleMsg(GetLocalString("console", "sanic.on"))
 					Else
-						CreateConsoleMsg("WHOA SLOW DOWN")
+						CreateConsoleMsg(GetLocalString("console", "sanic.off"))
 					EndIf
 					;[End Block]
 				Case "scp-420-j", "420", "weed", "scp420-j", "scp-420j", "420j"
@@ -1102,9 +1085,9 @@ Function UpdateConsole%()
 							;[End Block]
 					End Select	
 					If chs\GodMode Then
-						CreateConsoleMsg("GODMODE ON")
+						CreateConsoleMsg(GetLocalString("console", "god.on"))
 					Else
-						CreateConsoleMsg("GODMODE OFF")	
+						CreateConsoleMsg(GetLocalString("console", "god.off"))
 					EndIf
 					;[End Block]
 				Case "revive", "undead", "resurrect"
@@ -1138,9 +1121,9 @@ Function UpdateConsole%()
 					End Select
 					
 					If chs\NoClip Then
-						CreateConsoleMsg("NOCLIP ON")
+						CreateConsoleMsg(GetLocalString("console", "fly.on"))
 					Else
-						CreateConsoleMsg("NOCLIP OFF")
+						CreateConsoleMsg(GetLocalString("console", "fly.off"))
 					EndIf
 					
 					me\DropSpeed = 0.0
@@ -1164,9 +1147,9 @@ Function UpdateConsole%()
 							;[End Block]
 					End Select	
 					If chs\NoBlink Then
-						CreateConsoleMsg("NOBLINK ON")
+						CreateConsoleMsg(GetLocalString("console", "nb.on"))
 					Else
-						CreateConsoleMsg("NOBLINK OFF")	
+						CreateConsoleMsg(GetLocalString("console", "nb.off"))
 					EndIf
 					;[End Block]
 				Case "debughud"
@@ -1196,7 +1179,7 @@ Function UpdateConsole%()
 							;[End Block]
 						Default
 							;[Block]
-							CreateConsoleMsg("First, select the debug category.", 255, 150, 0)
+							CreateConsoleMsg(GetLocalString("console", "debug.cate"), 255, 150, 0)
 							;[End Block]
 					End Select
 					;[End Block]
@@ -1217,14 +1200,14 @@ Function UpdateConsole%()
 							Exit
 						EndIf
 					Next
-					CreateConsoleMsg("Stopped all sounds.")
+					CreateConsoleMsg(GetLocalString("console", "stfu"))
 					;[End Block]
 				Case "camerafog"
 					;[Block]
 					Args = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 					opt\CameraFogNear = Float(Left(Args, Len(Args) - Instr(Args, " ")))
 					opt\CameraFogFar = Float(Right(Args, Len(Args) - Instr(Args, " ")))
-					CreateConsoleMsg("Near set to: " + opt\CameraFogNear + ", far set to: " + opt\CameraFogFar)
+					CreateConsoleMsg(Format(Format(GetLocalString("console", "fog"), opt\CameraFogNear, "{0}"), opt\CameraFogFar, "{1}"))
 					;[End Block]
 				Case "spawn", "s"
 					;[Block]
@@ -1259,9 +1242,9 @@ Function UpdateConsole%()
 					End Select
 					
 					If chs\InfiniteStamina
-						CreateConsoleMsg("INFINITE STAMINA ON")
+						CreateConsoleMsg(GetLocalString("console", "is.on"))
 					Else
-						CreateConsoleMsg("INFINITE STAMINA OFF")	
+						CreateConsoleMsg(GetLocalString("console", "is.off"))	
 					EndIf
 					;[End Block]
 				Case "money", "rich"
@@ -1295,9 +1278,9 @@ Function UpdateConsole%()
 					End Select
 					
 					If RemoteDoorOn Then
-						CreateConsoleMsg("REMOTE DOOR CONTROL ENABLED")
+						CreateConsoleMsg(GetLocalString("console", "door.on"))
 					Else
-						CreateConsoleMsg("REMOTE DOOR CONTROL DISABLED")
+						CreateConsoleMsg(GetLocalString("console", "door.off"))
 					EndIf
 					
 					For e2.Events = Each Events
@@ -1324,7 +1307,7 @@ Function UpdateConsole%()
 						EndIf
 					Next
 					
-					CreateConsoleMsg("Checkpoints are now unlocked.")								
+					CreateConsoleMsg(GetLocalString("console", "uc"))								
 					;[End Block]
 				Case "disablenuke"
 					;[Block]
@@ -1353,7 +1336,7 @@ Function UpdateConsole%()
 									Exit
 								EndIf
 							Next
-							CreateConsoleMsg("Gate A is now unlocked.")	
+							CreateConsoleMsg(GetLocalString("console", "ue.a"))	
 							;[End Block]
 						Case "b"
 							;[Block]
@@ -1364,7 +1347,7 @@ Function UpdateConsole%()
 									Exit
 								EndIf
 							Next	
-							CreateConsoleMsg("Gate B is now unlocked.")	
+							CreateConsoleMsg(GetLocalString("console", "ue.b"))
 							;[End Block]
 						Default
 							;[Block]
@@ -1374,7 +1357,7 @@ Function UpdateConsole%()
 									e\room\RoomDoors[1]\Open = True
 								EndIf
 							Next
-							CreateConsoleMsg("Gate A and B are now unlocked.")	
+							CreateConsoleMsg(GetLocalString("console", "ue"))
 							;[End Block]
 					End Select
 					RemoteDoorOn = True
@@ -1385,23 +1368,19 @@ Function UpdateConsole%()
 					Select Rand(4)
 						Case 1
 							;[Block]
-							msg\DeathMsg = "[DATA REDACTED]"
+							msg\DeathMsg = ""
 							;[End Block]
 						Case 2
 							;[Block]
-							msg\DeathMsg = SubjectName + " found dead in Sector [DATA REDACTED]. "
-							msg\DeathMsg = msg\DeathMsg + "The subject appears to have attained no physical damage, and there is no visible indication as to what killed him. "
-							msg\DeathMsg = msg\DeathMsg + "Body was sent for autopsy."
+							msg\DeathMsg = Format(GetLocalString("death", "kill2"), SubjectName)
 							;[End Block]
 						Case 3
 							;[Block]
-							msg\DeathMsg = "EXCP_ACCESS_VIOLATION"
+							msg\DeathMsg = GetLocalString("death", "kill3")
 							;[End Block]
 						Case 4
 							;[Block]
-							msg\DeathMsg = SubjectName + " found dead in Sector [DATA REDACTED]. "
-							msg\DeathMsg = msg\DeathMsg + "The subject appears to have scribbled the letters " + Chr(34) + "kys" + Chr(34) + " in his own blood beside him. "
-							msg\DeathMsg = msg\DeathMsg + "No other signs of physical trauma or struggle can be observed. Body was sent for autopsy."
+							msg\DeathMsg = Format(GetLocalString("death", "kill4"), SubjectName)
 							;[End Block]
 					End Select
 					;[End Block]
@@ -1438,7 +1417,7 @@ Function UpdateConsole%()
 					PositionEntity(Camera, Float(StrTemp), Float(StrTemp2), Float(StrTemp3))
 					ResetEntity(me\Collider)
 					ResetEntity(Camera)
-					CreateConsoleMsg("Teleported to coordinates (X|Y|Z): " + EntityX(me\Collider) + "|" + EntityY(me\Collider) + "|" + EntityZ(me\Collider))
+					CreateConsoleMsg(Format(Format(Format(GetLocalString("console", "tele"), EntityX(me\Collider), "{0}"), EntityY(me\Collider), "{1}"), EntityZ(me\Collider), "{2}"))
 					;[End Block]
 				Case "asd"
 					;[Block]
@@ -1465,7 +1444,7 @@ Function UpdateConsole%()
 							Exit
 						EndIf
 					Next
-					CreateConsoleMsg("Stopped all sounds.")
+					CreateConsoleMsg(GetLocalString("console", "stas"))
 					;[End Block]
 				Case "notarget", "nt"
 					;[Block]
@@ -1487,14 +1466,14 @@ Function UpdateConsole%()
 					End Select
 					
 					If (Not chs\NoTarget) Then
-						CreateConsoleMsg("NOTARGET OFF")
+						CreateConsoleMsg(GetLocalString("console", "nt.off"))
 					Else
-						CreateConsoleMsg("NOTARGET ON")	
+						CreateConsoleMsg(GetLocalString("console", "nt.on"))
 					EndIf
 					;[End Block]
 				Case "spawnpumpkin", "pumpkin"
 					;[Block]
-					CreateConsoleMsg("What pumpkin?")
+					CreateConsoleMsg(GetLocalString("console", "pumpkin"))
 					;[End Block]
 				Case "teleport173"
 					;[Block]
@@ -1512,7 +1491,7 @@ Function UpdateConsole%()
 					Local PL_Room_Found% = False
 					
 					If StrTemp = "" Lor StrTemp2 = "" Lor StrTemp3 = "" Lor StrTemp4 = "" Then
-						CreateConsoleMsg("Too few parameters. This command requires 4.", 255, 150, 0)
+						CreateConsoleMsg(GetLocalString("console", "ses.failed"), 255, 150, 0)
 					Else
 						For e.Events = Each Events
 							If PlayerRoom = e\room
@@ -1528,13 +1507,13 @@ Function UpdateConsole%()
 								If Lower(StrTemp4) <> "keep" Then
 									e\EventState4 = Float(StrTemp4)
 								EndIf
-								CreateConsoleMsg("Changed event states from current player room to: " + e\EventState + "|" + e\EventState2 + "|" + e\EventState3 + "|" + e\EventState4)
+								CreateConsoleMsg(Format(Format(Format(Format(GetLocalString("console", "ses.success"), e\EventState, "{0}"), e\EventState2, "{1}"), e\EventState3, "{2}"), e\EventState4, "{3}"))
 								PL_Room_Found = True
 								Exit
 							EndIf
 						Next
 						If (Not PL_Room_Found) Then
-							CreateConsoleMsg("The current room doesn't has any event applied.", 255, 150, 0)
+							CreateConsoleMsg(GetLocalString("console", "ses.failed.apply"), 255, 150, 0)
 						EndIf
 					EndIf
 					;[End Block]
@@ -1550,14 +1529,14 @@ Function UpdateConsole%()
 						For i = 0 To MAXACHIEVEMENTS - 1
 							achv\Achievement[i] = True
 						Next
-						CreateConsoleMsg("All the achievements have been unlocked.")
+						CreateConsoleMsg(GetLocalString("console", "ga.all"))
 					EndIf
 					
 					If Int(StrTemp) >= 0 And Int(StrTemp) < MAXACHIEVEMENTS And StrTemp <> "all" Then
 						achv\Achievement[Int(StrTemp)] = True
-						CreateConsoleMsg("Achievement " + achv\AchievementStrings[Int(StrTemp)] + " unlocked.")
+						CreateConsoleMsg(Format(GetLocalString("console", "ga.success"), achv\AchievementStrings[Int(StrTemp)]))
 					ElseIf StrTemp <> "all"
-						CreateConsoleMsg("Achievement with ID " + Int(StrTemp) + " doesn't exist.", 255, 0, 0)
+						CreateConsoleMsg(Format(GetLocalString("console", "ga.failed"), Int(StrTemp)), 255, 0, 0)
 					EndIf
 					;[End Block]
 				Case "427state"
@@ -1584,21 +1563,21 @@ Function UpdateConsole%()
 					Temp = ((Int(AccessCode) * 3) Mod 10000)
 					If Temp < 1000 Then Temp = Temp + 1000
 					
-					CreateConsoleMsg("Access Codes:")
+					CreateConsoleMsg(GetLocalString("console", "codes1"))
 					CreateConsoleMsg("")
-					CreateConsoleMsg("Dr. Maynard: " + AccessCode)
-					CreateConsoleMsg("Dr. Harp: 7816")
+					CreateConsoleMsg(Format(GetLocalString("console", "codes2"), AccessCode))
+					CreateConsoleMsg(GetLocalString("console", "codes3"))
 					;CreateConsoleMsg("Dr Gears: 1311") ~ Removed since Gears office is locked
-					CreateConsoleMsg("Dr. L.: 1234")
-					CreateConsoleMsg("O5 Council Office: 2411")
-					CreateConsoleMsg("Maintenance Tunnel: " + Temp)
-					CreateConsoleMsg(Chr(34) + "cont1_035" + Chr(34) + " storage room: 5731")
+					CreateConsoleMsg(GetLocalString("console", "codes4"))
+					CreateConsoleMsg(GetLocalString("console", "codes5"))
+					CreateConsoleMsg(Format(GetLocalString("console", "codes6"), Temp))
+					CreateConsoleMsg(GetLocalString("console", "codes7"))
 					CreateConsoleMsg("")
-					CreateConsoleMsg("All the others doors don't have a code.")
+					CreateConsoleMsg(GetLocalString("console", "codes8"))
 					;[End Block]
 				Default
 					;[Block]
-					CreateConsoleMsg("Command not found.", 255, 0, 0)
+					CreateConsoleMsg(GetLocalString("console", "notfound"), 255, 0, 0)
 					;[End Block]
 			End Select
 			ConsoleInput = ""
@@ -1720,7 +1699,7 @@ Function ClearConsole%()
 	CreateConsoleMsg("  - spawn [NPC type]")
 End Function
 
-Const SubjectName$ = "Subject D-9341"
+Global SubjectName$ = GetLocalString("misc", "subject")
 
 Type Messages
 	Field Txt$
@@ -2001,18 +1980,18 @@ End Type
 Global I_Zone.MapZones = New MapZones
 
 InitErrorMsgs(11)
-SetErrorMsg(0, "An error occured in SCP - Containment Breach Ultimate Edition v" + VersionNumber)
+SetErrorMsg(0, Format(GetLocalString("error", "title"), VersionNumber))
 
-SetErrorMsg(1, "Date and time: " + CurrentDate() + " at " + CurrentTime())
-SetErrorMsg(2, "OS: " + SystemProperty("os") + " " + SystemProperty("os") + " " + (32 + (GetEnv("ProgramFiles(X86)") <> 0) * 32) + " bit (Build: " + SystemProperty("osbuild") + ")")
-SetErrorMsg(3, "CPU: " + Trim(SystemProperty("cpuname")) + " (Arch: " + SystemProperty("cpuarch") + ", " + GetEnv("NUMBER_OF_PROCESSORS") + " Threads)")
-SetErrorMsg(4, "GPU: " + GfxDriverName(CountGfxDrivers()) + " (" + ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)) + " MB/" + (TotalVidMem() / 1024) + " MB)")
-SetErrorMsg(5, "Global memory status: " + ((TotalPhys() / 1024) - (AvailPhys() / 1024)) + " MB/" + (TotalPhys() / 1024) + " MB" + Chr(10))
+SetErrorMsg(1, Format(Format(GetLocalString("error", "title"), CurrentDate(), "{0}"), CurrentTime(), "{1}"))
+SetErrorMsg(2, Format(Format(Format(GetLocalString("error", "os"), SystemProperty("os"), "{0}"), (32 + (GetEnv("ProgramFiles(X86)") <> 0) * 32), "{1}"), SystemProperty("osbuild"), "{2}"))
+SetErrorMsg(3, Format(Format(Format(GetLocalString("error", "cpu"), Trim(SystemProperty("cpuname")), "{0}"), SystemProperty("cpuarch"), "{1}"), GetEnv("NUMBER_OF_PROCESSORS"), "{2}"))
+SetErrorMsg(4, Format(Format(Format(GetLocalString("error", "gpu"), GfxDriverName(CountGfxDrivers()), "{0}"), ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)), "{1}"), (TotalVidMem() / 1024), "{2}"))
+SetErrorMsg(5, Format(Format(GetLocalString("error", "status"), ((TotalPhys() / 1024) - (AvailPhys() / 1024)), "{0}"), (TotalPhys() / 1024), "{1}") + Chr(10))
 
-SetErrorMsg(10, Chr(10) + "Please take a screenshot of this error and send it To us!") 
+SetErrorMsg(10, Chr(10) + GetLocalString("error", "shot")) 
 
 Function CatchErrors%(Location$)
-	SetErrorMsg(9, "Error located in: " + Location)
+	SetErrorMsg(9, Format(GetLocalString("error", "error"), Location))
 End Function
 
 Repeat
@@ -2068,20 +2047,20 @@ Function UpdateGame%()
 	Local i%, TempStr$
 	
 	If SelectedMap = "" Then
-		TempStr = "Map seed: " + RandomSeed
+		TempStr = GetLocalString("menu", "new.seed") + RandomSeed
 	Else
 		If Len(SelectedMap) > 15 Then
-			TempStr = "Selected map: " + Left(SelectedMap, 14) + "..."
+			TempStr = GetLocalString("menu", "new.map") + Left(SelectedMap, 14) + "..."
 		Else
-			TempStr = "Selected map: " + SelectedMap
+			TempStr = GetLocalString("menu", "new.map") + SelectedMap
 		EndIf
 	EndIf
 	SetErrorMsg(6, TempStr)
-	SetErrorMsg(7, "Room: " + PlayerRoom\RoomTemplate\Name)
+	SetErrorMsg(7, GetLocalString("misc", "room") + PlayerRoom\RoomTemplate\Name)
 	
 	For ev.Events = Each Events
 		If ev\room = PlayerRoom Then
-			SetErrorMsg(8, "Room event: " + ev\EventID + " ("  + ev\EventState + ", " + ev\EventState2 + ", " + ev\EventState3 + ", " + ev\EventState4 + ")" + Chr(10))
+			SetErrorMsg(8, Format(Format(Format(Format(Format(GetLocalString("misc", "event"), ev\EventID, "{0}"), ev\EventState, "{1}"), ev\EventState2, "{2}"), ev\EventState3, "{3}"), ev\EventState4, "{4}") + Chr(10))
 			Exit
 		EndIf
 	Next
@@ -2259,7 +2238,7 @@ Function UpdateGame%()
 				If me\EyeStuck < 9000.0 Then me\BlurTimer = Max(me\BlurTimer, (9000.0 - me\EyeStuck) * 0.5)
 				If me\EyeStuck < 6000.0 Then DarkAlpha = Min(Max(DarkAlpha, (6000.0 - me\EyeStuck) / 5000.0), 1.0)
 				If me\EyeStuck < 9000.0 And me\EyeStuck + fps\Factor[0] >= 9000.0 Then 
-					CreateMsg("The eyedrops are causing your eyes to tear up.")
+					CreateMsg(GetLocalString("misc", "eyedrop.tear"))
 				EndIf
 			EndIf
 			
@@ -2408,7 +2387,7 @@ Function UpdateGame%()
 					If e\EventID = e_cont1_173_intro Then
 						If e\EventState3 >= 40.0 And e\EventState3 < 50.0 Then
 							If InvOpen Then
-								CreateHintMsg("Double click on the document to view it.")
+								CreateHintMsg(GetLocalString("misc", "doc.click"))
 								e\EventState3 = 50.0
 								Exit
 							EndIf
@@ -2423,11 +2402,11 @@ Function UpdateGame%()
 				If (Not CanSave) Lor QuickLoadPercent > -1 Then
 					RN = PlayerRoom\RoomTemplate\Name
 					If RN = "cont1_173_intro" Lor RN = "gate_b" Lor RN = "gate_a"
-						CreateHintMsg("You can't save in this location.")
+						CreateHintMsg(GetLocalString("save", "failed.location"))
 					Else
-						CreateHintMsg("You can't save at this moment.")
+						CreateHintMsg(GetLocalString("save", "failed.now"))
 						If QuickLoadPercent > -1 Then
-							CreateHintMsg(msg\HintTxt + " (game is loading)")
+							CreateHintMsg(msg\HintTxt + GetLocalString("save", "failed.loading"))
 						EndIf
 					EndIf
 				Else
@@ -2439,15 +2418,15 @@ Function UpdateGame%()
 				EndIf
 			ElseIf SelectedDifficulty\SaveType = SAVE_ON_SCREENS
 				If SelectedScreen = Null And sc_I\SelectedMonitor = Null Then
-					CreateHintMsg("Saving is only permitted on clickable monitors scattered throughout the facility.")
+					CreateHintMsg(GetLocalString("save", "failed.screen"))
 				Else
 					RN = PlayerRoom\RoomTemplate\Name
 					If RN = "cont1_173_intro" Lor RN = "gate_b" Lor RN = "gate_a"
-						CreateHintMsg("You can't save in this location.")
+						CreateHintMsg(GetLocalString("save", "failed.location"))
 					ElseIf (Not CanSave) Lor QuickLoadPercent > -1
-						CreateHintMsg("You can't save at this moment.")
+						CreateHintMsg(GetLocalString("save", "failed.now"))
 						If QuickLoadPercent > -1 Then
-							CreateHintMsg(msg\HintTxt + " (game is loading)")
+							CreateHintMsg(msg\HintTxt + GetLocalString("save", "failed.loading"))
 						EndIf
 					Else
 						If SelectedScreen <> Null Then
@@ -2459,11 +2438,11 @@ Function UpdateGame%()
 					EndIf
 				EndIf
 			Else
-				CreateHintMsg("Quick saving is disabled.")
+				CreateHintMsg(GetLocalString("save", "disable"))
 			EndIf
 		ElseIf SelectedDifficulty\SaveType = SAVE_ON_SCREENS And (SelectedScreen <> Null Lor sc_I\SelectedMonitor <> Null)
-			If (msg\HintTxt <> "Game progress saved." And msg\HintTxt <> "You can't save in this location." And msg\HintTxt <> "You can't save at this moment.") Lor msg\HintTimer <= 0.0 Then
-				CreateHintMsg("Press " + key\Name[key\SAVE] + " to save.")
+			If (msg\HintTxt <> GetLocalString("save", "saved") And msg\HintTxt <> GetLocalString("save", "failed.location") And msg\HintTxt <> GetLocalString("save", "failed.now")) Lor msg\HintTimer <= 0.0 Then
+				CreateHintMsg(Format(GetLocalString("save", "save"), key\Name[key\SAVE]))
 			EndIf
 			If mo\MouseHit2 Then sc_I\SelectedMonitor = Null
 		EndIf
@@ -2636,13 +2615,13 @@ Function ResetNegativeStats%(Revive% = False)
 		; ~ If death by SCP-173 or SCP-106, enable GodMode, prevent instant death again -- Salvage
 		If n_I\Curr173 <> Null Then
 		If n_I\Curr173\Idle = 1 Then
-				CreateConsoleMsg("Death by SCP-173 causes GodMode to be enabled!")
+			CreateConsoleMsg(GetLocalString("console", "revive173"))
 				chs\GodMode = True
 				n_I\Curr173\Idle = 0
 			EndIf
 		ElseIf n_I\Curr106 <> Null
 			If EntityDistanceSquared(me\Collider, n_I\Curr106\Collider) < 4.0 Then
-				CreateConsoleMsg("Death by SCP-106 causes GodMode to be enabled!")
+				CreateConsoleMsg(GetLocalString("console", "revive106"))
 				chs\GodMode = True
 			EndIf
 		EndIf
@@ -2716,8 +2695,7 @@ Function UpdateMoving%()
 		me\CameraShake = Sin(chs\SuperManTimer / 5.0) * (chs\SuperManTimer / 1500.0)
 		
 		If chs\SuperManTimer > 70.0 * 50.0 Then
-			msg\DeathMsg = "A Class D jumpsuit found in [DATA REDACTED]. Upon further examination, the jumpsuit was found to be filled with 12.5 kilograms of blue ash-like substance. "
-			msg\DeathMsg = msg\DeathMsg + "Chemical analysis of the substance remains non-conclusive. Most likely related to SCP-914."
+			msg\DeathMsg = GetLocalString("console", "superman")
 			Kill()
 			If EntityHidden(t\OverlayID[0]) Then ShowEntity(t\OverlayID[0])
 		Else
@@ -3000,7 +2978,7 @@ Function UpdateMoving%()
 			me\Bloodloss = Min(me\Bloodloss + (Min(me\Injuries, 3.5) / 300.0) * fps\Factor[0], 100.0)
 		EndIf
 		If Temp2 <= 60.0 And me\Bloodloss > 60.0 Then
-			CreateMsg("You are feeling faint from the amount of blood you have lost.")
+			CreateMsg(GetLocalString("misc", "bloodloss"))
 		EndIf
 	EndIf
 	
@@ -3476,7 +3454,7 @@ Function UpdateGUI%()
 										d_I\SelectedDoor = Null
 										StopMouseMovement()
 									Else
-										msg\KeyPadMsg = "ACCESS DENIED"
+										msg\KeyPadMsg = GetLocalString("map", "denied")
 										msg\KeyPadTimer = 210.0
 										msg\KeyPadInput = ""	
 									EndIf
@@ -3743,7 +3721,7 @@ Function UpdateGUI%()
 							
 							If mo\DoubleClick And mo\DoubleClickSlot = n Then
 								If wi\HazmatSuit > 0 And (Not Instr(SelectedItem\ItemTemplate\TempName, "hazmatsuit")) Then
-									CreateMsg("You can't use any items while wearing a hazmat suit.")
+									CreateMsg(GetLocalString("misc", "suit.use"))
 									SelectedItem = Null
 									Return
 								EndIf
@@ -3785,12 +3763,12 @@ Function UpdateGUI%()
 					Select SelectedItem\ItemTemplate\TempName
 						Case "vest", "finevest", "hazmatsuit", "hazmatsuit2", "hazmatsuit3"
 							;[Block]
-							CreateHintMsg("Double click on this item to take it off.")
+							CreateHintMsg(GetLocalString("misc", "takeoff"))
 							;[End Block]
 						Case "scp1499", "super1499"
 							;[Block]
 							If I_1499\Using > 0 Then
-								CreateHintMsg("Double click on this item to take it off.")
+								CreateHintMsg(GetLocalString("misc", "takeoff"))
 							Else
 								DropItem(SelectedItem)
 								InvOpen = False
@@ -3799,7 +3777,7 @@ Function UpdateGUI%()
 						Case "gasmask", "gasmask3", "supergasmask"
 							;[Block]
 							If wi\GasMask > 0 Then
-								CreateHintMsg("Double click on this item to take it off.")
+								CreateHintMsg(GetLocalString("misc", "takeoff"))
 							Else
 								DropItem(SelectedItem)
 								InvOpen = False
@@ -3808,7 +3786,7 @@ Function UpdateGUI%()
 						Case "helmet"
 							;[Block]
 							If wi\BallisticHelmet Then
-								CreateHintMsg("Double click on this item to take it off.")
+								CreateHintMsg(GetLocalString("misc", "takeoff"))
 							Else
 								DropItem(SelectedItem)
 								InvOpen = False
@@ -3817,7 +3795,7 @@ Function UpdateGUI%()
 						Case "nvg", "supernvg", "finenvg"
 							;[Block]
 							If wi\NightVision > 0 Then
-								CreateHintMsg("Double click on this item to take it off.")
+								CreateHintMsg(GetLocalString("misc", "takeoff"))
 							Else
 								DropItem(SelectedItem)
 								InvOpen = False
@@ -3826,7 +3804,7 @@ Function UpdateGUI%()
 						Case "scramble"
 							;[Block]
 							If wi\SCRAMBLE Then
-								CreateHintMsg("Double click on this item to take it off.")
+								CreateHintMsg(GetLocalString("misc", "takeoff"))
 							Else
 								DropItem(SelectedItem)
 								InvOpen = False
@@ -3886,14 +3864,14 @@ Function UpdateGUI%()
 										Next
 										If SelectedItem <> Null Then
 											If added\ItemTemplate\TempName = "paper" Lor added\ItemTemplate\TempName = "oldpaper" Then
-												CreateMsg("This document was added to the clipboard.")
+												CreateMsg(GetLocalString("misc", "clipboard.paper"))
 											ElseIf added\ItemTemplate\TempName = "badge"
-												CreateMsg(added\ItemTemplate\Name + " was added to the clipboard.")
+												CreateMsg(Format(GetLocalString("misc", "clipboard.badge"), added\ItemTemplate\Name))
 											Else
-												CreateMsg("The " + added\ItemTemplate\Name + " was added to the clipboard.")
+												CreateMsg(Format(GetLocalString("misc", "clipboard.add"), added\ItemTemplate\Name))
 											EndIf
 										Else
-											CreateMsg("The paperclip is not strong enough to hold any more items.")
+											CreateMsg(GetLocalString("misc", "clipboard.full"))
 										EndIf
 									Else
 										For z = 0 To MaxItemAmount - 1
@@ -3932,9 +3910,9 @@ Function UpdateGUI%()
 											EndIf
 										Next
 										If SelectedItem <> Null Then
-											CreateMsg("You put " + added\ItemTemplate\Name + " into the wallet.")
+											CreateMsg(Format(GetLocalString("misc", "wallet.add"), added\ItemTemplate\Name))
 										Else
-											CreateMsg("The wallet is full.")
+											CreateMsg(GetLocalString("misc", "wallet.full"))
 										EndIf
 									Else
 										For z = 0 To MaxItemAmount - 1

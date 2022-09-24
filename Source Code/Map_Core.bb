@@ -4690,10 +4690,10 @@ Function FillRoom%(r.Rooms)
 			Next
 			
 			it.Items = CreateItem("Cup", "cup", r\x - 508.0 * RoomScale, r\y - 187.0 * RoomScale, r\z + 284.0 * RoomScale, 240, 175, 70)
-			EntityParent(it\Collider, r\OBJ) : it\Name = "Cup of Orange Juice"
+			EntityParent(it\Collider, r\OBJ) : it\Name = it\DisplayName = "Cup of Orange Juice"
 			
 			it.Items = CreateItem("Cup", "cup", r\x + 1412.0 * RoomScale, r\y - 187.0 * RoomScale, r\z - 716.0 * RoomScale, 87, 62, 45)
-			EntityParent(it\Collider, r\OBJ) : it\Name = "Cup of Coffee"
+			EntityParent(it\Collider, r\OBJ) : it\Name = it\DisplayName = "Cup of Coffee"
 			
 			it.Items = CreateItem("Empty Cup", "emptycup", r\x - 540.0 * RoomScale, r\y - 187.0 * RoomScale, r\z + 124.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
