@@ -2726,7 +2726,8 @@ Function UpdateInput$(aString$, MaxChr%)
 	Local Value% = GetKey()
 	Local Length% = Len(aString)
 	
-	If CursorPos = -1 Then CursorPos = Length
+	If (CursorPos < 0) And (CursorPos <> - 1) Then CursorPos = Length
+	If CursorPos < 0 Then CursorPos = 0
 	
 	If KeyHit(210) Then InsertMode = Not InsertMode ; ~ Insert key
 	If KeyHit(199) Then CursorPos = 0 ; ~ Home key
@@ -2761,6 +2762,8 @@ Function UpdateInput$(aString$, MaxChr%)
 			If ChrCanDisplay(Value) Then 
 				aString = TextInput(Left(aString, CursorPos)) + Mid(aString, CursorPos + 2)
 				CursorPos = CursorPos + 1
+			ElseIf Value = 8 Then ; ~ Backspace
+				aString = TextInput(Left(aString, CursorPos)) + Mid(aString, CursorPos + 1)
 			EndIf
 		Else
 			aString = TextInput(Left(aString, CursorPos)) + Mid(aString, CursorPos + 1)
@@ -2814,15 +2817,13 @@ Function UpdateMainMenuInputBox$(x%, y%, Width%, Height%, Txt$, ID% = 0, MaxChr%
 		If mo\MouseHit1 Then
 			SelectedInputBox = ID
 			FlushKeys()
-			CursorPos = -1
-			SelectedLength = 0
+			CursorPos = -2
 		EndIf
 	EndIf
 	
 	If (Not MouseOnBox) And mo\MouseHit1 And SelectedInputBox = ID Then
 		SelectedInputBox = 0
-		CursorPos = -1
-		SelectedLength = 0
+		CursorPos = -2
 	EndIf
 	
 	If SelectedInputBox = ID Then
@@ -2845,11 +2846,8 @@ Function RenderMenuInputBoxes%()
 		
 		Color(255, 255, 255)	
 		If SelectedInputBox = mib\ID Then
-			Color(46, 105, 158)
-			Rect(mib\x + (mib\Width / 2) - (StringWidth(mib\Txt) / 2) + StringWidth(Left(mib\Txt, CursorPos)), mib\y + (mib\Height / 2) - (5 * MenuScale), StringWidth(Mid(mib\Txt, CursorPos+1, SelectedLength)), 12 * MenuScale)
-			Color(255, 255, 255)
 			If ((MilliSecs2() Mod 800) < 400) Or KeyDown(205) Or KeyDown(203) Or InsertMode Then 
-				Rect(mib\x + (mib\Width / 2) - (StringWidth(mib\Txt) / 2) + StringWidth(Left(mib\Txt, CursorPos)), mib\y + (mib\Height / 2) - (5 * MenuScale), 2 * MenuScale, 12 * MenuScale)
+				Rect(mib\x + (mib\Width / 2) - (StringWidth(mib\Txt) / 2) + StringWidth(Left(mib\Txt, Max(CursorPos, 0))), mib\y + (mib\Height / 2) - (5 * MenuScale), 2 * MenuScale, 12 * MenuScale)
 			EndIf 
 		EndIf
 		
