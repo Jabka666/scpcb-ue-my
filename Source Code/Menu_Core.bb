@@ -2722,6 +2722,12 @@ Function RenderMenuPalettes%()
 	Next
 End Function
 
+Function ChrCanDisplay%(Char%)
+	Return((Char >= 32) And (Char <= 126))
+End Function
+
+Global PrevInputBoxCtrl%, InsertMode% = False
+
 Function UpdateInput$(aString$, MaxChr%)
 	Local Value% = GetKey()
 	Local Length% = Len(aString)
@@ -2733,11 +2739,11 @@ Function UpdateInput$(aString$, MaxChr%)
 	If KeyHit(199) Then CursorPos = 0 ; ~ Home key
 	If KeyHit(207) Then CursorPos = Length ; ~ End key
 	If KeyHit(211) Then ; ~ Delete key
-		aString = Left(aString, CursorPos) + Right(aString, Length - CursorPos - 1)
+		aString = Left(aString, CursorPos) + Right(aString, Max(Length - CursorPos - 1, 0.0))
 		CursorPos = CursorPos + 1
 	EndIf
 	
-	If KeyDown(29) Or KeyDown(157) Then ; ~ Control key
+	If KeyDown(29) Lor KeyDown(157) Then ; ~ Control key
 		If Value = 30 Then CursorPos = Length ; ~ Control & Right arrow
 		If Value = 31 Then CursorPos = 0 ; ~ Control & Left arrow
 		If Value = 3 Then SetClipboardContents(aString) ; ~ Control & C
@@ -2749,14 +2755,13 @@ Function UpdateInput$(aString$, MaxChr%)
 		Return(aString)
 	EndIf
 	
-	If Value = 30 Then CursorPos = CursorPos + 1 : PrevInputBoxCtrl = MilliSecs() : Return(aString)
-	If Value = 31 Then CursorPos = CursorPos - 1 : PrevInputBoxCtrl = MilliSecs() : Return(aString)
+	If Value = 30 Then CursorPos = CursorPos + 1 : PrevInputBoxCtrl = MilliSecs2() : Return(aString)
+	If Value = 31 Then CursorPos = CursorPos - 1 : PrevInputBoxCtrl = MilliSecs2() : Return(aString)
 
-	If KeyDown(205) And ((Millisecs() - PrevInputBoxCtrl) > 500) Then ; ~ Right arrow
-	debuglog Millisecs() - PrevInputBoxCtrl
+	If KeyDown(205) And ((MilliSecs2() - PrevInputBoxCtrl) > 500) Then ; ~ Right arrow
 		If (MilliSecs2() Mod 100) < 25 Then CursorPos = Min(CursorPos + 1, Length)
-	ElseIf KeyDown(203) And ((Millisecs() - PrevInputBoxCtrl) > 500) Then ; ~ Left arrow
-		If (MilliSecs2() Mod 100) < 25 Then CursorPos = Max(CursorPos - 1, 0)
+	ElseIf KeyDown(203) And ((MilliSecs2() - PrevInputBoxCtrl) > 500) Then ; ~ Left arrow
+		If (MilliSecs2() Mod 100) < 25 Then CursorPos = Max(CursorPos - 1, 0.0)
 	Else
 		If InsertMode Then
 			If ChrCanDisplay(Value) Then 
@@ -2775,10 +2780,6 @@ Function UpdateInput$(aString$, MaxChr%)
 		EndIf
 	EndIf
 	Return(aString)
-End Function
-
-Function ChrCanDisplay%(chr%)
-	Return (chr >= 32) And (chr <= 126)
 End Function
 
 Type MenuInputBox
@@ -2846,7 +2847,7 @@ Function RenderMenuInputBoxes%()
 		
 		Color(255, 255, 255)	
 		If SelectedInputBox = mib\ID Then
-			If ((MilliSecs2() Mod 800) < 400) Or KeyDown(205) Or KeyDown(203) Or InsertMode Then 
+			If ((MilliSecs2() Mod 800) < 400) Lor KeyDown(205) Lor KeyDown(203) Lor InsertMode Then 
 				Rect(mib\x + (mib\Width / 2) - (StringWidth(mib\Txt) / 2) + StringWidth(Left(mib\Txt, Max(CursorPos, 0))), mib\y + (mib\Height / 2) - (5 * MenuScale), 2 * MenuScale, 12 * MenuScale)
 			EndIf 
 		EndIf

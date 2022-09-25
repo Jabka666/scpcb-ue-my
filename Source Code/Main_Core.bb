@@ -119,8 +119,6 @@ If opt\PlayStartup Then PlayStartupVideos()
 Global CursorIMG% = LoadImage_Strict("GFX\cursor.png")
 CursorIMG = ScaleImage2(CursorIMG, MenuScale, MenuScale)
 
-Global PrevInputBoxCtrl%, InsertMode% = False
-
 Global SelectedLoadingScreen.LoadingScreens, LoadingScreenAmount%, LoadingScreenText%
 Global LoadingBack% = LoadImage_Strict("LoadingScreens\loading_back.png")
 LoadingBack = ScaleImage2(LoadingBack, MenuScale, MenuScale)
