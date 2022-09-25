@@ -2722,16 +2722,32 @@ Function RenderMenuPalettes%()
 	Next
 End Function
 
+Function ChrCanDisplay%(Char%)
+	Return((Char >= 32) And (Char <= 126))
+End Function
+
+Global PrevInputBoxCtrl%, InsertMode% = False
+
 Function UpdateInput$(aString$, MaxChr%)
 	Local Value% = GetKey()
 	Local Length% = Len(aString)
 	
-	If CursorPos = -1 Then CursorPos = Length
+	If (CursorPos < 0) And (CursorPos <> - 1) Then CursorPos = Length
+	If CursorPos < 0 Then CursorPos = 0
 	
-	If KeyDown(29) Then
-		If Value = 30 Then CursorPos = Length
-		If Value = 31 Then CursorPos = 0
-		If Value = 22 Then
+	If KeyHit(210) Then InsertMode = Not InsertMode ; ~ Insert key
+	If KeyHit(199) Then CursorPos = 0 ; ~ Home key
+	If KeyHit(207) Then CursorPos = Length ; ~ End key
+	If KeyHit(211) Then ; ~ Delete key
+		aString = Left(aString, CursorPos) + Right(aString, Max(Length - CursorPos - 1, 0.0))
+		CursorPos = CursorPos + 1
+	EndIf
+	
+	If KeyDown(29) Lor KeyDown(157) Then ; ~ Control key
+		If Value = 30 Then CursorPos = Length ; ~ Control & Right arrow
+		If Value = 31 Then CursorPos = 0 ; ~ Control & Left arrow
+		If Value = 3 Then SetClipboardContents(aString) ; ~ Control & C
+		If Value = 22 Then ; ~ Control & V
 			aString = Left(aString, CursorPos) + GetClipboardContents() + Right(aString, Length - CursorPos)
 			CursorPos = CursorPos + Len(aString) - Length
 			If MaxChr > 0 And MaxChr < Len(aString) Then aString = Left(aString, MaxChr) : CursorPos = MaxChr
@@ -2739,12 +2755,24 @@ Function UpdateInput$(aString$, MaxChr%)
 		Return(aString)
 	EndIf
 	
-	If Value = 30 Then
-		CursorPos = Min(CursorPos + 1, Length)
-	ElseIf Value = 31
-		CursorPos = Max(CursorPos - 1, 0)
+	If Value = 30 Then CursorPos = CursorPos + 1 : PrevInputBoxCtrl = MilliSecs2() : Return(aString)
+	If Value = 31 Then CursorPos = CursorPos - 1 : PrevInputBoxCtrl = MilliSecs2() : Return(aString)
+
+	If KeyDown(205) And ((MilliSecs2() - PrevInputBoxCtrl) > 500) Then ; ~ Right arrow
+		If (MilliSecs2() Mod 100) < 25 Then CursorPos = Min(CursorPos + 1, Length)
+	ElseIf KeyDown(203) And ((MilliSecs2() - PrevInputBoxCtrl) > 500) Then ; ~ Left arrow
+		If (MilliSecs2() Mod 100) < 25 Then CursorPos = Max(CursorPos - 1, 0.0)
 	Else
-		aString = TextInput(Left(aString, CursorPos)) + Mid(aString, CursorPos + 1)
+		If InsertMode Then
+			If ChrCanDisplay(Value) Then 
+				aString = TextInput(Left(aString, CursorPos)) + Mid(aString, CursorPos + 2)
+				CursorPos = CursorPos + 1
+			ElseIf Value = 8 Then ; ~ Backspace
+				aString = TextInput(Left(aString, CursorPos)) + Mid(aString, CursorPos + 1)
+			EndIf
+		Else
+			aString = TextInput(Left(aString, CursorPos)) + Mid(aString, CursorPos + 1)
+		EndIf 
 		CursorPos = CursorPos + Len(aString) - Length
 		If MaxChr > 0 And MaxChr < Len(aString) Then
 			aString = Left(aString, MaxChr)
@@ -2790,13 +2818,13 @@ Function UpdateMainMenuInputBox$(x%, y%, Width%, Height%, Txt$, ID% = 0, MaxChr%
 		If mo\MouseHit1 Then
 			SelectedInputBox = ID
 			FlushKeys()
-			CursorPos = -1
+			CursorPos = -2
 		EndIf
 	EndIf
 	
 	If (Not MouseOnBox) And mo\MouseHit1 And SelectedInputBox = ID Then
 		SelectedInputBox = 0
-		CursorPos = -1
+		CursorPos = -2
 	EndIf
 	
 	If SelectedInputBox = ID Then
@@ -2819,8 +2847,10 @@ Function RenderMenuInputBoxes%()
 		
 		Color(255, 255, 255)	
 		If SelectedInputBox = mib\ID Then
-			If (MilliSecs2() Mod 800) < 400 Then Rect(mib\x + (mib\Width / 2) - (StringWidth(mib\Txt) / 2) + StringWidth(Left(mib\Txt, CursorPos)), mib\y + (mib\Height / 2) - (5 * MenuScale), 2 * MenuScale, 12 * MenuScale)
-		EndIf	
+			If ((MilliSecs2() Mod 800) < 400) Lor KeyDown(205) Lor KeyDown(203) Lor InsertMode Then 
+				Rect(mib\x + (mib\Width / 2) - (StringWidth(mib\Txt) / 2) + StringWidth(Left(mib\Txt, Max(CursorPos, 0))), mib\y + (mib\Height / 2) - (5 * MenuScale), 2 * MenuScale, 12 * MenuScale)
+			EndIf 
+		EndIf
 		
 		Text(mib\x + (mib\Width / 2), mib\y + (mib\Height / 2), mib\Txt, True, True)
 	Next

@@ -2,6 +2,7 @@ v1.0.31
 
 General:
 - Added a new feature that allows the player name a savegame with non-latin characters, like chinese, russian and etc.
+- Added «Home» key, «End» key, «Delete» key and «Insert» key to switch insert mode. Abilty to hold left/right arrow to fast move cursor. Implement of Ctrl+C and Ctrl+V.
 
 - Removed extra spacing in credits.
 
