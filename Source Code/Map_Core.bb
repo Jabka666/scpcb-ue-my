@@ -5601,6 +5601,10 @@ Function FillRoom%(r.Rooms)
 			For i = 6 To 7
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
+			
+			r\Objects[8] = LoadMesh_Strict("GFX\map\room2_servers_hcz_hb.b3d", r\OBJ)
+			EntityPickMode(r\Objects[8], 2)
+			EntityAlpha(r\Objects[8], 0.0)
 			;[End Block]
 		Case "room3_2_ez"
 			;[Block]
@@ -5688,7 +5692,6 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[7] = LoadMesh_Strict("GFX\map\room2_test_hcz_hb.b3d", r\OBJ)
 			EntityPickMode(r\Objects[7], 2)
-			EntityType(r\Objects[7], HIT_MAP)
 			EntityAlpha(r\Objects[7], 0.0)
 			
 			sc.SecurityCams = CreateSecurityCam(r\x + 744.0 * RoomScale, r\y - 856.0 * RoomScale, r\z + 236.0 * RoomScale, r)
@@ -6591,7 +6594,6 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[11] = LoadMesh_Strict("GFX\map\cont1_106_hb.b3d", r\OBJ)
 			EntityPickMode(r\Objects[11], 2)
-			EntityType(r\Objects[11], HIT_MAP)
 			EntityAlpha(r\Objects[11], 0.0)
 			
 			it.Items = CreateItem("Level 5 Key Card", "key5", r\x - 1275.0 * RoomScale, r\y - 7910.0 * RoomScale, r\z + 3106.0 * RoomScale)
