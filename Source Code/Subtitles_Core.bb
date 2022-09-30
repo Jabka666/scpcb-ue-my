@@ -49,17 +49,14 @@ Function RenderSubtitles%()
 	Next
 End Function
 
-Const SubtitlesFile$ = "Data\subtitles.ini"
-
 Function ShowSubtitles%(Name$)
 	CatchErrors("Uncaught (ShowSubtitles)")
 	
 	If (Not opt\EnableSubtitles) Then Return
 	
 	Local sub.Subtitles, CurrSub.Subtitles
-	Local Loc% = GetINISectionLocation(SubtitlesFile, Name)
-	Local Person% = GetINIString2(SubtitlesFile, Loc, "Person")
-	Local LinesAmount% = GetINIInt2(SubtitlesFile, Loc, "LinesAmount")
+	Local Person% = Int(GetFileLocalString(SubtitlesFile, Name, "Person"))
+	Local LinesAmount% = Int(GetFileLocalString(SubtitlesFile, Name, "LinesAmount"))
 	Local SubID%, i%
 	
 	Select Person
@@ -93,12 +90,11 @@ Function ShowSubtitles%(Name$)
 		Else
 			sub.Subtitles = CurrSub.Subtitles
 		EndIf
-		sub\Txt[SubID] = GetINIString2(SubtitlesFile, Loc, "Txt" + i)
-		sub\Timer[SubID] = 70.0 * GetINIFloat2(SubtitlesFile, Loc, "Timer" + i)
+		sub\Txt[SubID] = GetFileLocalString(SubtitlesFile, Name, "Txt" + i)
+		sub\Timer[SubID] = 70.0 * Float(GetFileLocalString(SubtitlesFile, Name, "Timer" + i))
 	Next
 	
 	CatchErrors("ShowSubtitles")
 End Function
-
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D

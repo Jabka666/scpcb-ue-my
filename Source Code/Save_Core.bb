@@ -504,7 +504,7 @@ Function SaveGame%(File$)
 			PlaySound_Strict(LoadTempSound("SFX\General\Save1.ogg"))
 			If as\Timer <> 70.0 * 120.0 Then as\Timer = 70.0 * 120.0
 		EndIf
-		CreateHintMsg("Game progress saved.")
+		CreateHintMsg(GetLocalString("save", "saved"))
 	EndIf
 	
 	CatchErrors("SaveGame")
@@ -525,7 +525,7 @@ Function LoadGame%(File$)
 	StrTemp = ReadString(f)
 	
 	StrTemp = ReadString(f)
-	If StrTemp <> VersionNumber Then RuntimeError("The save files of v" + StrTemp + " aren't compatible with SCP - Containment Breach Ultimate Edition v" + VersionNumber + ".")
+	If StrTemp <> VersionNumber Then RuntimeError(Format(Format(GetLocalString("save", "imcompatible"), StrTemp, "{0}"), VersionNumber, "{1}"))
 	
 	me\PlayTime = ReadInt(f)
 	
@@ -671,7 +671,7 @@ Function LoadGame%(File$)
 		Next
 	Next
 	
-	If ReadInt(f) <> 113 Then RuntimeError("Couldn't load the game, save file corrupted (error 2.5)")
+	If ReadInt(f) <> 113 Then RuntimeError(GetLocalString("save", "corrupted25"))
 	
 	Temp = ReadInt(f)
 	For i = 1 To Temp
@@ -782,7 +782,7 @@ Function LoadGame%(File$)
 		EndIf
 	Next
 	
-	If ReadInt(f) <> 632 Then RuntimeError("Couldn't load the game, save file corrupted (error 1)")
+	If ReadInt(f) <> 632 Then RuntimeError(GetLocalString("save", "corrupted1"))
 	
 	bk\IsBroken = ReadByte(f)
 	bk\x = ReadFloat(f)
@@ -911,7 +911,7 @@ Function LoadGame%(File$)
 		EndIf
 	Next
 	
-	If ReadInt(f) <> 954 Then RuntimeError("Couldn't load the game, save file may be corrupted (error 2)")
+	If ReadInt(f) <> 954 Then RuntimeError(GetLocalString("save", "corrupted2"))
 	
 	Local Zone%, ShouldSpawnDoor%
 	
@@ -1058,7 +1058,7 @@ Function LoadGame%(File$)
 		Next		
 	Next
 	
-	If ReadInt(f) <> 1845 Then RuntimeError("Couldn't load the game, save file corrupted (error 3)")
+	If ReadInt(f) <> 1845 Then RuntimeError(GetLocalString("save", "corrupted3"))
 	
 	Local de.Decals
 	
@@ -1387,7 +1387,7 @@ Function LoadGameQuick%(File$)
 	StrTemp = ReadString(f)
 	
 	StrTemp = ReadString(f)
-	If StrTemp <> VersionNumber Then RuntimeError("The save files of v" + StrTemp + " aren't compatible with SCP - Containment Breach Ultimate Edition v" + VersionNumber + ".")
+	If StrTemp <> VersionNumber Then RuntimeError(Format(Format(GetLocalString("save", "imcompatible"), StrTemp, "{0}"), VersionNumber, "{1}"))
 	
 	me\PlayTime = ReadInt(f)
 	
@@ -1556,7 +1556,7 @@ Function LoadGameQuick%(File$)
 		Next
 	Next
 	
-	If ReadInt(f) <> 113 Then RuntimeError("Couldn't load the game, save file corrupted (error 2.5)")
+	If ReadInt(f) <> 113 Then RuntimeError(GetLocalString("save", "corrupted25"))
 	
 	For n.NPCs = Each NPCs
 		RemoveNPC(n)
@@ -1671,7 +1671,7 @@ Function LoadGameQuick%(File$)
 		EndIf
 	Next
 	
-	If ReadInt(f) <> 632 Then RuntimeError("Couldn't load the game, save file corrupted (error 1)")
+	If ReadInt(f) <> 632 Then RuntimeError(GetLocalString("save", "corrupted1"))
 	
 	bk\IsBroken = ReadByte(f)
 	bk\x = ReadFloat(f)
@@ -1779,7 +1779,7 @@ Function LoadGameQuick%(File$)
 		EndIf
 	Next
 	
-	If ReadInt(f) <> 954 Then RuntimeError("Couldn't load the game, save file may be corrupted (error 2)")
+	If ReadInt(f) <> 954 Then RuntimeError(GetLocalString("save", "corrupted2"))
 	
 	Temp = ReadInt(f)
 	
@@ -1825,7 +1825,7 @@ Function LoadGameQuick%(File$)
 		Next		
 	Next
 	
-	If ReadInt(f) <> 1845 Then RuntimeError("Couldn't load the game, save file corrupted (error 3)")
+	If ReadInt(f) <> 1845 Then RuntimeError(GetLocalString("save", "corrupted3"))
 	
 	Local de.Decals
 	
@@ -2167,14 +2167,14 @@ Function UpdateAutoSave%()
 	Else
 		as\Timer = as\Timer - fps\Factor[0]
 		If as\Timer <= 70.0 * 5.0 Then
-			CreateHintMsg("Auto save in: " + Str(Int(Ceil(as\Timer) / 70.0)) + "..")
+			CreateHintMsg(Format(GetLocalString("save", "autosave.in"),Str(Int(Ceil(as\Timer) / 70.0))))
 		EndIf
 	EndIf
 End Function
 
 Function CancelAutoSave%()
 	If as\Timer <= 70.0 * 5.0 Then
-		CreateHintMsg("Auto save is canceled!")
+		CreateHintMsg(GetLocalString("save", "autosave.canceled"))
 	EndIf
 	If as\Timer <> 70.0 * 120.0 Then as\Timer = 70.0 * 120.0
 End Function
@@ -2212,7 +2212,7 @@ Function LoadSavedGames%()
 	Next
 	SaveGameAmount = 0
 	
-	If FileType(SavePath) = 1 Then RuntimeError("Can't create dir " + Chr(34) + SavePath + Chr(34))
+	If FileType(SavePath) = 1 Then RuntimeError(Format(GetLocalString("save", "cantcreatedir"), SavePath))
 	If FileType(SavePath) = 0 Then CreateDir(SavePath)
 	
 	Local MyDir% = ReadDir(SavePath)
@@ -2309,7 +2309,7 @@ Function LoadSavedMaps%()
 						SavedMapsAuthor(i) = ReadLine(f)
 						CloseFile(f)
 					Else
-						SavedMapsAuthor(i) = "[Unknown]"
+						SavedMapsAuthor(i) = GetLocalString("save", "map.author.unknown")
 					EndIf
 					i = i + 1
 				EndIf

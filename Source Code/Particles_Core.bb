@@ -44,7 +44,7 @@ Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTi
 	p\Size = Size
 	ScaleSprite(p\OBJ, p\Size, p\Size)
 	
-	If (Not p_I\ParticleTextureID[ID]) Then RuntimeError("Particle Texture ID: " + ID + " not found.")
+	If (Not p_I\ParticleTextureID[ID]) Then RuntimeError(Format(GetLocalString("runerr", "particle"), ID))
 	
 	Return(p)
 End Function
@@ -176,7 +176,7 @@ Function UpdateEmitters%()
 	If InSmoke Then
 		If me\EyeIrritation > 70.0 * 6.0 Then me\BlurVolume = Max(me\BlurVolume, (me\EyeIrritation - (70.0 * 6.0)) / (70.0 * 24.0))
 		If me\EyeIrritation > 70.0 * 24.0 Then 
-			msg\DeathMsg = SubjectName + " found dead in [DATA REDACTED]. Cause of death: Suffocation due to decontamination gas."
+			msg\DeathMsg = Format(GetLocalString("death", "smoke"), SubjectName)
 			Kill()
 		EndIf
 		
@@ -230,4 +230,5 @@ Function UpdateDust%()
 End Function
 
 ;~IDEal Editor Parameters:
+;~B#B2
 ;~C#Blitz3D

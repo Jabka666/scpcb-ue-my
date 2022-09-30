@@ -98,6 +98,18 @@ Function GetINIString$(File$, Section$, Parameter$, DefaultValue$ = "")
 	Return(DefaultValue)
 End Function
 
+Function GetLocalString$(Section$, Parameter$)
+	Return GetFileLocalString(LanguageFile, Section, Parameter, Section + "," + Parameter)
+End Function
+
+Function GetFileLocalString$(File$, Name$, Key$, DefaultValue$ = "")
+	Return IniGetBufferString_(lang\LanguagePath + "\" + File, Name, Key, IniGetBufferString_(File, Name, Key, DefaultValue))
+End Function
+
+Function Format$(String$, Parameter$, Replace$ = "%s")
+	Return Replace(String$, Replace$, Parameter$)
+End Function
+
 Function GetINIInt%(File$, Section$, Parameter$, DefaultValue% = 0)
 	Local StrTemp$ = GetINIString(File, Section, Parameter, DefaultValue)
 	
@@ -142,7 +154,7 @@ Function GetINIString2$(File$, Start%, Parameter$, DefaultValue$ = "")
 			Return(DefaultValue)
 		EndIf
 	Wend
-	CloseFile(f)	
+	CloseFile(f)
 	Return(DefaultValue)
 End Function
 
@@ -594,6 +606,7 @@ Type Options
 	Field CameraFogFar#, StoredCameraFogFar#
 	Field IntroEnabled%
 	Field DebugMode%
+	Field Language$
 End Type
 
 Global opt.Options = New Options
@@ -765,6 +778,8 @@ Function LoadOptionsINI%()
 	opt\IntroEnabled = GetINIInt(OptionFile, "Global", "Enable Intro", True)
 	
 	opt\DebugMode = GetINIInt(OptionFile, "Global", "Debug Mode", False)
+	
+	opt\Language = GetINIString(OptionFile, "Global", "Language", "UserLanguage")
 End Function
 
 Function SaveOptionsINI%(SaveGlobal% = False)
@@ -881,6 +896,8 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 		
 		PutINIValue(OptionFile, "Global", "Enable Intro", opt\IntroEnabled)
 	EndIf
+	
+	PutINIValue(OptionFile, "Global", "Language", opt\Language)
 	;[End Block]
 End Function
 
@@ -994,6 +1011,8 @@ Function ResetOptionsINI%()
 	opt\CameraFogFar = 6.0
 	
 	opt\IntroEnabled = True
+	
+	opt\Language = "UserLanguage"
 End Function
 
 ;~IDEal Editor Parameters:

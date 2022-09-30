@@ -1,8 +1,8 @@
-RenderLoading(45, "MATERIALS CORE")
+RenderLoading(45, GetLocalString("loading", "core.mat"))
 
 Include "Source Code\Materials_Core.bb"
 
-RenderLoading(50, "TEXTURE CACHE CORE")
+RenderLoading(50, GetLocalString("loading", "core.texcache"))
 
 Include "Source Code\Texture_Cache_Core.bb"
 
@@ -351,7 +351,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 			Exit
 		EndIf
 	Next
-	If (Not f) Then RuntimeError("Error reading file " + Chr(34) + File + Chr(34))
+	If (Not f) Then RuntimeError(Format(GetLocalString("runerr", "file"), File))
 	
 	Local IsRMesh$ = ReadString(f)
 	
@@ -360,7 +360,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 	ElseIf IsRMesh = "RoomMesh.HasTriggerBox"
 		HasTriggerBox = True
 	Else
-		RuntimeError(Chr(34) + File + Chr(34) + " is Not RMESH (" + IsRMesh + ")")
+		RuntimeError(Format(Format(GetLocalString("runerr", "notrmesh"), File, "{0}"), IsRMesh, "{1}"))
 	EndIf
 	
 	File = StripFileName(File)
@@ -1582,12 +1582,12 @@ Function LoadRoomMesh%(rt.RoomTemplates)
 	If Instr(rt\OBJPath, ".rmesh") <> 0 Then ; ~ File is .rmesh
 		rt\OBJ = LoadRMesh(rt\OBJPath, rt)
 	ElseIf Instr(rt\OBJPath, ".b3d") <> 0 ; ~ File is .b3d
-		RuntimeError(".b3d rooms are no longer supported, please use the converter! Affected room: " + Chr(34) + rt\OBJPath + Chr(34))
+		RuntimeError(Format(GetLocalString("runerr", "b3d"), rt\OBJPath))
 	Else ; ~ File not found
-		RuntimeError("File: " + Chr(34) + rt\OBJPath + Chr(34) + " not found.")
+		RuntimeError(Format(GetLocalString("runerr", "notfound"), rt\OBJPath))
 	EndIf
 	
-	If (Not rt\OBJ) Then RuntimeError("Failed to load map file: " + Chr(34) + rt\OBJPath + Chr(34) + ".")
+	If (Not rt\OBJ) Then RuntimeError(Format(GetLocalString("runerr", "failedload"), rt\OBJPath))
 	
 	CalculateRoomTemplateExtents(rt)
 	
@@ -2874,30 +2874,30 @@ Function UseDoor%(d.Doors, PlaySFX% = True)
 	
 	If d\KeyCard > KEY_MISC Then
 		If SelectedItem = Null Then
-			CreateMsg("A keycard is required to operate this door.")
+			CreateMsg(GetLocalString("msg", "key.require"))
 			PlaySound2(ButtonSFX, Camera, d_I\ClosestButton)
 			Return
 		Else
 			If Temp <= KEY_MISC Then
-				CreateMsg("A keycard is required to operate this door.")
+				CreateMsg(GetLocalString("msg", "key.require"))
 			Else
 				If Temp = KEY_CARD_6 Then
-					CreateMsg("The keycard was inserted into the slot. UNKNOWN ERROR! " + Chr(34) + "Do" + Chr(Rand(48, 122)) + "s th" + Chr(Rand(48, 122)) + " B" + Chr(Rand(48, 122)) + "ack " + Chr(Rand(48, 122)) + "oon howl? " + Chr(Rand(48, 122)) + "es. N" + Chr(Rand(48, 122)) + ". Ye" + Chr(Rand(48, 122)) + ". " + Chr(Rand(48, 122)) + "o." + Chr(34))
+					CreateMsg(GetLocalString("msg", "key.card6"))
 				Else
 					If d\Locked = 1 Then
 						If Temp = KEY_005 Then
-							CreateMsg("You hold the key close to the slot, but nothing happened.")
+							CreateMsg(GetLocalString("msg", "key.nothappend.005"))
 						Else
-							CreateMsg("The keycard was inserted into the slot, but nothing happened.")
+							CreateMsg(GetLocalString("msg", "key.nothappend"))
 						EndIf
 					Else
 						If Temp = KEY_005 Then
-							CreateMsg("You hold the key close to the slot.")
+							CreateMsg(GetLocalString("msg", "key.005"))
 						Else
 							If Temp < d\KeyCard Then
-								CreateMsg("A keycard with security clearance " + (d\KeyCard - 2) + " or higher is required to operate this door.")
+								CreateMsg(Format(GetLocalString("msg", "key.higher"), d\KeyCard - 2))
 							Else
-								CreateMsg("The keycard was inserted into the slot.")
+								CreateMsg(GetLocalString("msg", "slot"))
 							EndIf
 						EndIf
 					EndIf
@@ -2917,27 +2917,27 @@ Function UseDoor%(d.Doors, PlaySFX% = True)
 		EndIf
 	ElseIf d\KeyCard > KEY_HAND_YELLOW And d\KeyCard < KEY_MISC
 		If SelectedItem = Null Then
-			CreateMsg("You placed your palm onto the scanner. The scanner reads: " + Chr(34) + "DNA doesn't match known sample. Access denied." + Chr(34))
+			CreateMsg(GetLocalString("msg", "dna.denied"))
 			PlaySound2(ScannerSFX2, Camera, d_I\ClosestButton)
 			Return
 		Else
 			If ((Temp >= KEY_MISC) Lor (Temp < KEY_HAND_YELLOW)) And (Temp <> KEY_005) Then
-				CreateMsg("You placed your palm onto the scanner. The scanner reads: " + Chr(34) + "DNA doesn't match known sample. Access denied." + Chr(34))
+				CreateMsg(GetLocalString("msg", "dna.denied"))
 			Else
 				If (d\KeyCard <> Temp) And (Temp <> KEY_005) Then
-					CreateMsg("You placed the palm of the hand onto the scanner. The scanner reads: " + Chr(34) + "DNA doesn't match known sample. Access denied." + Chr(34))
+					CreateMsg(GetLocalString("msg", "dna.denied2"))
 				Else
 					If d\Locked = 1 Then
 						If Temp = KEY_005 Then
-							CreateMsg("You hold the key onto the scanner, but nothing happened.")
+							CreateMsg(GetLocalString("msg", "key.nothappend.005"))
 						Else
-							CreateMsg("You placed the palm of the hand onto the scanner, but nothing happened")
+							CreateMsg(GetLocalString("msg", "key.nothappend"))
 						EndIf
 					Else
 						If Temp = KEY_005 Then
-							CreateMsg("You hold the key onto the scanner. The scanner reads: " + Chr(34) + "Unknown DNA verified. ERROR! Access granted." + Chr(34))
+							CreateMsg(GetLocalString("msg", "dna.granted.005"))
 						Else
-							CreateMsg("You placed the palm of the hand onto the scanner. The scanner reads: " + Chr(34) + "DNA verified. Access granted." + Chr(34))
+							CreateMsg(GetLocalString("msg", "dna.granted"))
 						EndIf
 					EndIf
 				EndIf
@@ -2961,9 +2961,9 @@ Function UseDoor%(d.Doors, PlaySFX% = True)
 		Else
 			If Temp = KEY_005 Then
 				If d\Locked = 1 Then
-					CreateMsg("You hold the key close to the keypad, but nothing happened.")
+					CreateMsg(GetLocalString("msg", "keypad.nothappend.005"))
 				Else
-					CreateMsg("You hold the key close to the keypad.")
+					CreateMsg(GetLocalString("msg", "keypad.nothappend"))
 				EndIf
 			EndIf
 			SelectedItem = Null
@@ -2987,7 +2987,7 @@ Function UseDoor%(d.Doors, PlaySFX% = True)
 		If d\DoorType = WOODEN_DOOR Lor d\DoorType = OFFICE_DOOR Then
 			If d\Locked > 0 Then
 				If SelectedItem = Null Then
-					CreateMsg("The door will not budge.")
+					CreateMsg(GetLocalString("msg", "wood.wontbudge"))
 					If d\DoorType = OFFICE_DOOR Then
 						PlaySound2(DoorBudgeSFX1, Camera, d_I\ClosestButton)
 					Else
@@ -2995,12 +2995,12 @@ Function UseDoor%(d.Doors, PlaySFX% = True)
 					EndIf
 				Else
 					If (Temp > KEY_860) And (Temp <> KEY_005) Then
-						CreateMsg("The door will not budge.")
+						CreateMsg(GetLocalString("msg", "wood.wontbudge"))
 					Else
 						If d\Locked = 2 Lor ((Temp <> d\KeyCard) And (Temp <> KEY_005)) Then
-							CreateMsg("You tried to unlock the door, but nothing happened.")
+							CreateMsg(GetLocalString("msg", "wood.nothappend.005"))
 						Else
-							CreateMsg("You unlocked the door.")
+							CreateMsg(GetLocalString("msg", "wood.unlock"))
 							d\Locked = 0
 						EndIf
 						SelectedItem = Null
@@ -3020,34 +3020,34 @@ Function UseDoor%(d.Doors, PlaySFX% = True)
 		ElseIf d\DoorType = ELEVATOR_DOOR
 			If d\Locked = 1 Then
 				If (Not d\IsElevatorDoor > 0) Then
-					CreateMsg("The elevator appears to be broken.")
+					CreateMsg(GetLocalString("elevator", "broken"))
 					PlaySound2(ButtonSFX2, Camera, d_I\ClosestButton)
 				Else
 					If d\IsElevatorDoor = 1 Then
-						CreateMsg("You called the elevator.")
+						CreateMsg(GetLocalString("elevator", "called"))
 					ElseIf d\IsElevatorDoor = 3
-						CreateMsg("The elevator is already on this floor.")
-					ElseIf msg\Txt <> "You called the elevator."
+						CreateMsg(GetLocalString("elevator", "on"))
+					ElseIf msg\Txt <> GetLocalString("elevator", "called")
 						Select Rand(10)
 							Case 1
 								;[Block]
-								CreateMsg("Stop spamming the button.")
+								CreateMsg(GetLocalString("elevator", "stop"))
 								;[End Block]
 							Case 2
 								;[Block]
-								CreateMsg("Pressing it harder doesn't make the elevator come faster.")
+								CreateMsg(GetLocalString("elevator", "faster"))
 								;[End Block]
 							Case 3
 								;[Block]
-								CreateMsg("If you continue pressing this button I will generate a Memory Access Violation.")
+								CreateMsg(GetLocalString("elevator", "mav"))
 								;[End Block]
 							Default
 								;[Block]
-								CreateMsg("You already called the elevator.")
+								CreateMsg(GetLocalString("elevator", "already"))
 								;[End Block]
 						End Select
 					Else
-						CreateMsg("You already called the elevator.")
+						CreateMsg(GetLocalString("elevator", "already"))
 					EndIf
 					PlaySound2(ButtonSFX, Camera, d_I\ClosestButton)
 				EndIf
@@ -3056,9 +3056,9 @@ Function UseDoor%(d.Doors, PlaySFX% = True)
 		Else
 			If d\Locked = 1 Then
 				If d\Open Then
-					CreateMsg("You pushed the button but nothing happened.")
+					CreateMsg(GetLocalString("msg", "button.nothappend"))
 				Else
-					CreateMsg("The door appears to be locked.")
+					CreateMsg(GetLocalString("msg", "button.locked"))
 				EndIf
 				PlaySound2(ButtonSFX2, Camera, d_I\ClosestButton)
 				Return
@@ -3153,7 +3153,7 @@ Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#, Size# = 1.0, A
 	SpriteViewMode(de\OBJ, 2)
 	If R <> 0 Lor G <> 0 Lor B <> 0 Then EntityColor(de\OBJ, R, G, B)
 	
-	If (Not de_I\DecalTextureID[ID]) Then RuntimeError("Decal Texture ID: " + ID + " not found.")
+	If (Not de_I\DecalTextureID[ID]) Then RuntimeError(Format(GetLocalString("runerr", "decals"), ID))
 	
 	Return(de)
 End Function
@@ -3419,8 +3419,7 @@ Function UpdateSecurityCams%()
 						EndIf
 						
 						If me\Sanity < -1000.0 Then 
-							msg\DeathMsg = Chr(34) + "What we know is that he died of cardiac arrest. My guess is that it was caused by SCP-895, although it has never been observed affecting video equipment from this far before. "
-							msg\DeathMsg = msg\DeathMsg + "Further testing is needed to determine whether SCP-895's " + Chr(34) + "Red Zone" + Chr(34) + " is increasing." + Chr(34)
+							msg\DeathMsg = GetLocalString("death", "895")
 							
 							If me\VomitTimer < -10.0 Then Kill()
 						EndIf
@@ -4697,10 +4696,10 @@ Function FillRoom%(r.Rooms)
 			Next
 			
 			it.Items = CreateItem("Cup", "cup", r\x - 508.0 * RoomScale, r\y - 187.0 * RoomScale, r\z + 284.0 * RoomScale, 240, 175, 70)
-			EntityParent(it\Collider, r\OBJ) : it\Name = "Cup of Orange Juice"
+			EntityParent(it\Collider, r\OBJ) : it\Name = it\DisplayName = GetLocalString("item", "cuporange")
 			
 			it.Items = CreateItem("Cup", "cup", r\x + 1412.0 * RoomScale, r\y - 187.0 * RoomScale, r\z - 716.0 * RoomScale, 87, 62, 45)
-			EntityParent(it\Collider, r\OBJ) : it\Name = "Cup of Coffee"
+			EntityParent(it\Collider, r\OBJ) : it\Name = it\DisplayName = GetLocalString("item", "cupcoffee")
 			
 			it.Items = CreateItem("Empty Cup", "emptycup", r\x - 540.0 * RoomScale, r\y - 187.0 * RoomScale, r\z + 124.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -8839,7 +8838,7 @@ End Function
 
 Function LoadTerrain%(HeightMap%, yScale# = 0.7, t1%, t2%, Mask%)
 	; ~ Load the HeightMap
-	If (Not HeightMap) Then RuntimeError("HeightMap Image " + HeightMap + " not found.")
+	If (Not HeightMap) Then RuntimeError(Format(GetLocalString("runerr", "heightmap"), HeightMap))
 	
 	; ~ Store HeightMap dimensions
 	Local x% = ImageWidth(HeightMap) - 1
@@ -8847,9 +8846,9 @@ Function LoadTerrain%(HeightMap%, yScale# = 0.7, t1%, t2%, Mask%)
 	Local lX%, lY%, Index%
 	
 	; ~ Load texture and lightmaps
-	If (Not t1) Then RuntimeError("Texture #1 " + Chr(34) + t1 + Chr(34) + " not found.")
-	If (Not t2) Then RuntimeError("Texture #2 " + Chr(34) + t2 + Chr(34) + " not found.")
-	If (Not Mask) Then RuntimeError("Mask image " + Chr(34) + Mask + Chr(34) + " not found.")
+	If (Not t1) Then RuntimeError(Format(GetLocalString("runerr", "tex1"), t1))
+	If (Not t2) Then RuntimeError(Format(GetLocalString("runerr", "tex2"), t2))
+	If (Not Mask) Then RuntimeError(Format(GetLocalString("runerr", "mask"), Mask))
 	
 	; ~ Auto scale the textures to the right size
 	If t1 Then ScaleTexture(t1, x / 4, y / 4)
@@ -8931,7 +8930,7 @@ Function LoadTerrain%(HeightMap%, yScale# = 0.7, t1%, t2%, Mask%)
 	Return(Mesh)
 End Function
 
-RenderLoading(55, "SKY CORE")
+RenderLoading(55, GetLocalString("loading", "core.sky"))
 
 Include "Source Code\Sky_Core.bb"
 

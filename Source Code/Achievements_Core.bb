@@ -23,14 +23,11 @@ Const AchvConsole% = 31, AchvHarp% = 32, AchvKeter% = 33, AchvKeyCard6% = 34, Ac
 Const AchvO5% = 37, AchvPD% = 38, AchvSNAV% = 39, AchvTesla% = 40
 ;[End Block]
 
-Const AchievementsFile$ = "Data\Achievements.ini"
-
 Function GiveAchievement%(AchvName%, ShowMessage% = True)
 	If achv\Achievement[AchvName] <> True Then
 		achv\Achievement[AchvName] = True
 		If opt\AchvMsgEnabled And ShowMessage Then
-			Local Loc2% = GetINISectionLocation(AchievementsFile, "a" + AchvName)
-			Local AchievementName$ = GetINIString2(AchievementsFile, Loc2, "AchvName")
+			Local AchievementName$ = GetFileLocalString(AchievementsFile, "a" + AchvName, "AchvName", "a" + AchvName + ",AchvName")
 			
 			CreateAchievementMsg(AchvName, AchievementName)
 		EndIf
@@ -155,7 +152,7 @@ Function RenderAchievementMsg%()
 			Rect(x + (10.0 * Scale), y + (10.0 * Scale), 64.0 * Scale, 64.0 * Scale, False)
 			Color(255, 255, 255)
 			SetFont(fo\FontID[Font_Default])
-			RowText("Achievement Unlocked - " + amsg\Txt, x + (84.0 * Scale), y + (10.0 * Scale), Width - (94.0 * Scale), y - (20.0 * Scale))
+			RowText(GetLocalString("msg", "achv.unlocked") + " - " + amsg\Txt, x + (84.0 * Scale), y + (10.0 * Scale), Width - (94.0 * Scale), y - (20.0 * Scale))
 		EndIf
 	Next
 End Function
