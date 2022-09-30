@@ -5601,6 +5601,10 @@ Function FillRoom%(r.Rooms)
 			For i = 6 To 7
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
+			
+			r\Objects[8] = LoadMesh_Strict("GFX\map\room2_servers_hcz_hb.b3d", r\OBJ)
+			EntityPickMode(r\Objects[8], 2)
+			EntityAlpha(r\Objects[8], 0.0)
 			;[End Block]
 		Case "room3_2_ez"
 			;[Block]
@@ -5688,7 +5692,6 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[7] = LoadMesh_Strict("GFX\map\room2_test_hcz_hb.b3d", r\OBJ)
 			EntityPickMode(r\Objects[7], 2)
-			EntityType(r\Objects[7], HIT_MAP)
 			EntityAlpha(r\Objects[7], 0.0)
 			
 			sc.SecurityCams = CreateSecurityCam(r\x + 744.0 * RoomScale, r\y - 856.0 * RoomScale, r\z + 236.0 * RoomScale, r)
@@ -6591,7 +6594,6 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[11] = LoadMesh_Strict("GFX\map\cont1_106_hb.b3d", r\OBJ)
 			EntityPickMode(r\Objects[11], 2)
-			EntityType(r\Objects[11], HIT_MAP)
 			EntityAlpha(r\Objects[11], 0.0)
 			
 			it.Items = CreateItem("Level 5 Key Card", "key5", r\x - 1275.0 * RoomScale, r\y - 7910.0 * RoomScale, r\z + 3106.0 * RoomScale)
@@ -7481,7 +7483,7 @@ Function FillRoom%(r.Rooms)
 			sc\Angle = 100.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			
-			de.Decals = CreateDecal(DECAL_409, r\x - 4858.0 * RoomScale, r\y - 4495.0 * RoomScale, r\z + 1655.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.65, 0.8)
+			de.Decals = CreateDecal(DECAL_409, r\x - 4858.0 * RoomScale, r\y - 4495.0 * RoomScale, r\z + 1655.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.85, 0.8)
 			EntityParent(de\OBJ, r\OBJ)
 			
 			it.Items = CreateItem("Document SCP-409", "paper", r\x - 4105.0 * RoomScale, r\y - 4336.0 * RoomScale, r\z + 2207.0 * RoomScale)
