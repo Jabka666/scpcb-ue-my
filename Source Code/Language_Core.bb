@@ -8,19 +8,19 @@ End Type
 
 Function LanguageSelector()
 	Local BasePath$ = "";GetEnv("AppData") + "\scpcb-ue\"
-	;DownloadFile("https://files.ziyuesinicization.site/cbue/list.txt", BasePath + "temp.txt")
+	;DownloadFile("https://files.ziyuesinicization.site/cbue/list.txt", BasePath + "temp.txt") ; ~ List of languages
 	Local File% = OpenFile("temp.txt")
 	If File <> 0 Then
 		While Not Eof(File)
 			l$ = ReadLine(File)
 			If l <> ""
 				lan.ListLanguage = New ListLanguage
-				lan\Name$ = ParseDomainTXT(l, "name")
+				lan\Name$ = ParseDomainTXT(l, "name") ; use anothor engine or download NetworkConnector in blitztoolbox(https://github.com/ZiYueCommentary/Blitz3D)
 				lan\ID$ = ParseDomainTXT(l, "id")
 				lan\Author$ = ParseDomainTXT(l, "author")
 				lan\LastModify$ = ParseDomainTXT(l, "mod")
 				lan\Flag$ = ParseDomainTXT(l, "flag")
-				;DownloadFile("https://files.ziyuesinicization.site/cbue/flags" + lan\Flag$, BasePath + "flags/" + lan\Flag$)
+				;DownloadFile("https://files.ziyuesinicization.site/cbue/flags" + lan\Flag$, BasePath + "flags/" + lan\Flag$) ; ~ Flags of languages
 			Else
 				Exit
 			EndIf
@@ -37,6 +37,7 @@ Function LanguageSelector()
 	Local LanguageIMG% = CreateImage(452, 254)
 	Local ButtonImages% = LoadAnimImage_Strict("GFX\menu\buttons.png", 21, 21, 0, 5)
 	Local SelectedLanguage$ = ""
+	Local RowTextContent$ = ""
 	
 	Repeat
 		mo\MouseHit1 = MouseHit(1)
@@ -47,9 +48,7 @@ Function LanguageSelector()
 		DrawImage(LanguageBG%, 0, 0)
 		Rect 479, 195, 140, 150
 		Color 0,0,0
-		If SelectedLanguage = "UserLanguage" And (Not FileType("Localization\"+SelectedLanguage) = 2) Then 
-			RowText(Format(GetLocalString("language", "user"), GetUserLanguage()), 482, 198, 137, 150)
-		EndIf
+		RowText(RowTextContent, 482, 198, 137, 150)
 		
 		If LinesAmount > 13 Then
 			y# = 200 - (20 * ScrollMenuHeight * ScrollBarY)
@@ -117,23 +116,24 @@ Function LanguageSelector()
 		
 		If SelectedLanguage != "" Then
 			If SelectedLanguage = "UserLanguage" And (Not FileType("Localization\"+SelectedLanguage) = 2) Then
-				If ButtonWithImage(479, LauncherHeight - 65 - 50, 140, 30, GetLocalString("misc", "download"), ButtonImages, 1) Then 
+				RowTextContent = Format(GetLocalString("language", "user"), GetUserLanguage())
+				If ButtonWithImage(479, LauncherHeight - 65 - 50, 140, 30, GetLocalString("language", "download"), ButtonImages, 1) Then 
 					Delay 100
 					Exit
 				EndIf
 			ElseIf FileType("Localization\"+SelectedLanguage) = 2
-				If ButtonWithImage(479, LauncherHeight - 65 - 50, 140, 30, GetLocalString("misc", "setting"), ButtonImages, 2) Then 
+				If ButtonWithImage(479, LauncherHeight - 65 - 50, 140, 30, GetLocalString("language", "setting"), ButtonImages, 2) Then 
 					Delay 100
 					Exit
 				EndIf
 			Else
-				If ButtonWithImage(479, LauncherHeight - 65 - 50, 140, 30, GetLocalString("misc", "download"), ButtonImages, 1) Then 
+				If ButtonWithImage(479, LauncherHeight - 65 - 50, 140, 30, GetLocalString("language", "download"), ButtonImages, 1) Then ; should download a zip and unzip it, wait for develop a unzip userlib
 					Delay 100
 					Exit
 				EndIf
 			EndIf
 		Else
-			If ButtonWithImage(479, LauncherHeight - 65 - 50, 140, 30, GetLocalString("misc", "contribute"), ButtonImages, 4) Then 
+			If ButtonWithImage(479, LauncherHeight - 65 - 50, 140, 30, GetLocalString("language", "contribute"), ButtonImages, 4) Then 
 				Exit
 			EndIf
 		EndIf
@@ -149,7 +149,7 @@ Function LanguageSelector()
 	mo\MouseHit1 = False
 	Delete Each ListLanguage
 	;DeleteDir(BasePath + "flags\")
-	If LanguageIMG != 0 Then FreeImage LanguageIMG
+	If LanguageIMG <> 0 Then FreeImage LanguageIMG
 End Function
 
 ; ~ Re-added

@@ -647,9 +647,9 @@ Function UpdateEvents%()
 						e\room\RoomDoors[2]\Open = True
 						
 						If SelectedDifficulty\SaveType = SAVE_ANYWHERE Then
-							CreateHintMsg(Format(GetLocalString("misc", "save"), key\Name[key\SAVE]))
+							CreateHintMsg(Format(GetLocalString("save", "save"), key\Name[key\SAVE]))
 						ElseIf SelectedDifficulty\SaveType = SAVE_ON_SCREENS Then
-							CreateHintMsg(GetLocalString("misc", "save.euclid"))
+							CreateHintMsg(GetLocalString("save", "failed.screen"))
 						EndIf
 						
 						n_I\Curr173\Idle = 1
@@ -798,7 +798,7 @@ Function UpdateEvents%()
 											EndIf
 											ResetEntity(n_I\Curr173\Collider)
 											n_I\Curr173\Idle = 0
-											CreateHintMsg(Format(GetLocalString("misc", "run"), key\Name[key\SPRINT]))
+											CreateHintMsg(Format(GetLocalString("msg", "run"), key\Name[key\SPRINT]))
 										EndIf
 									EndIf
 								EndIf
@@ -959,7 +959,7 @@ Function UpdateEvents%()
 									me\DropSpeed = 0.0
 									me\Playable = True
 									
-									CreateHintMsg(GetLocalString("misc", "paper"))
+									CreateHintMsg(GetLocalString("msg", "paper"))
 									
 									e\EventState3 = 15.0
 								EndIf
@@ -967,7 +967,7 @@ Function UpdateEvents%()
 								RotateEntity(me\Collider, 0.0, EntityYaw(Camera), 0.0)
 							ElseIf e\EventState3 < 40.0
 								If Inventory(0) <> Null Then
-									CreateHintMsg(Format(GetLocalString("misc", "openinv"), key\Name[key\INVENTORY]))
+									CreateHintMsg(Format(GetLocalString("msg", "openinv"), key\Name[key\INVENTORY]))
 									e\EventState3 = 40.0
 									Exit
 								EndIf
@@ -1591,7 +1591,7 @@ Function UpdateEvents%()
 							
 							If IntroSFX[3] <> 0 Then
 								If (EntityVisible(n_I\Curr173\OBJ, Camera) And EntityInView(n_I\Curr173\OBJ, Camera)) Lor (EntityVisible(n_I\Curr173\OBJ2, Camera) And EntityInView(n_I\Curr173\OBJ2, Camera)) Then
-									CreateHintMsg(GetLocalString("misc", "blink"))
+									CreateHintMsg(GetLocalString("msg", "blink"))
 									PlaySound_Strict(IntroSFX[3])
 									FreeSound_Strict(IntroSFX[3]) : IntroSFX[3] = 0
 								EndIf
@@ -2601,12 +2601,12 @@ Function UpdateEvents%()
 							If I_294\Using Then mo\MouseHit1 = False
 						ElseIf e\EventState2 = 1.0 And (Not Inserted) And (Not me\UsedMastercard) Then
 							I_294\Using = False
-							CreateMsg(GetLocalString("misc", "294.another"))
+							CreateMsg(GetLocalString("msg", "294.another"))
 						ElseIf (Not Inserted) And (Not me\UsedMastercard) Then
 							I_294\Using = False
-							CreateMsg(GetLocalString("misc", "294.two"))
+							CreateMsg(GetLocalString("msg", "294.two"))
 						ElseIf me\UsedMastercard
-							CreateMsg(GetLocalString("misc", "294.funds"))
+							CreateMsg(GetLocalString("msg", "294.funds"))
 						EndIf
 					EndIf
 				EndIf
@@ -3346,7 +3346,7 @@ Function UpdateEvents%()
 						Next
 						
 						If LastX = FirstX And LastY = FirstY Then
-							RuntimeError("The maintenance tunnels could not be generated properly!")
+							RuntimeError(GetLocalString("runerr", "mt"))
 						EndIf
 						
 						; ~ Place the tunnels
@@ -4105,7 +4105,7 @@ Function UpdateEvents%()
 							Animate2(e\room\Objects[2], AnimTime(e\room\Objects[2]), 339.0, 487.0, 1.0)
 							If InteractObject(e\room\Objects[2], 2.25) Then
 								If ItemAmount >= MaxItemAmount Then
-									CreateMsg(GetLocalString("misc", "cantcarry"))
+									CreateMsg(GetLocalString("msg", "cantcarry"))
 								Else
 									SelectedItem = CreateItem("Drawing", "paper", 0.0, 0.0, 0.0)
 									EntityType(SelectedItem\Collider, HIT_ITEM)
@@ -4925,7 +4925,7 @@ Function UpdateEvents%()
 										If e\EventState3 > 70.0 * 1.0 And e\EventState3 - fps\Factor[0] <= 70.0 * 1.0 Then
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech1.ogg"))
 										ElseIf e\EventState3 > 70.0 * 13.0 And e\EventState3 - fps\Factor[0] <= 70.0 * 13.0
-											CreateMsg(GetLocalString("misc", "0121"))
+											CreateMsg(GetLocalString("msg", "0121"))
 											InjurePlayer(0.5)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech2.ogg"))
 										ElseIf e\EventState3 > 70.0 * 31.0 And e\EventState3 - fps\Factor[0] <= 70.0 * 31.0
@@ -4934,11 +4934,11 @@ Function UpdateEvents%()
 											EntityTexture(e\room\Objects[4], Tex)
 											DeleteSingleTextureEntryFromCache(Tex)
 											
-											CreateMsg(GetLocalString("misc", "0122"))
+											CreateMsg(GetLocalString("msg", "0122"))
 											me\Injuries = Max(me\Injuries, 1.5)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech" + Rand(3, 4) + ".ogg"))
 										ElseIf e\EventState3 > 70.0 * 49.0 And e\EventState3 - fps\Factor[0] <= 70.0 * 49.0
-											CreateMsg(GetLocalString("misc", "0123"))
+											CreateMsg(GetLocalString("msg", "0123"))
 											InjurePlayer(0.3)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech5.ogg"))
 										ElseIf e\EventState3 > 70.0 * 63.0 And e\EventState3 - fps\Factor[0] <= 70.0 * 63.0
@@ -4955,7 +4955,7 @@ Function UpdateEvents%()
 											EntityTexture(e\room\Objects[4], Tex)
 											DeleteSingleTextureEntryFromCache(Tex)
 											
-											CreateMsg(GetLocalString("misc", "0126"))
+											CreateMsg(GetLocalString("msg", "0126"))
 											InjurePlayer(0.8)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech7.ogg"))
 											If (Not me\Crouch) Then SetCrouch(True)
@@ -6814,7 +6814,7 @@ Function UpdateEvents%()
 											
 											If wi\HazmatSuit = 0 Then
 												InjurePlayer(0.3, 0.001, 500.0)
-												CreateMsg(GetLocalString("misc", "008.173"))
+												CreateMsg(GetLocalString("msg", "008.173"))
 											EndIf
 											PlaySound2(LoadTempSound("SFX\General\GlassBreak.ogg"), Camera, e\room\Objects[0]) 
 											
@@ -7162,7 +7162,7 @@ Function UpdateEvents%()
 									Case COARSE
 										;[Block]
 										me\Injuries = 4.0
-										CreateMsg(GetLocalString("misc", "914"))
+										CreateMsg(GetLocalString("msg", "914"))
 										;[End Block]
 									Case ONETOONE
 										;[Block]
@@ -7249,7 +7249,7 @@ Function UpdateEvents%()
 									e\EventState = 3.0	
 									PlaySound_Strict(e\Sound2)
 									
-									CreateMsg(GetLocalString("misc", "1048a"))
+									CreateMsg(GetLocalString("msg", "1048a"))
 								Else
 									e\EventState = 4.0
 									e\EventState3 = 70.0 * 30.0
@@ -7269,34 +7269,34 @@ Function UpdateEvents%()
 									Select Rand(3)
 										Case 1
 											;[Block]
-											CreateMsg(GetLocalString("misc", "1048a1"))
+											CreateMsg(GetLocalString("msg", "1048a1"))
 											;[End Block]
 										Case 2
 											;[Block]
-											CreateMsg(GetLocalString("misc", "1048a2"))
+											CreateMsg(GetLocalString("msg", "1048a2"))
 											;[End Block]
 										Case 3
 											;[Block]
-											CreateMsg(GetLocalString("misc", "1048a3"))
+											CreateMsg(GetLocalString("msg", "1048a3"))
 											;[End Block]
 									End Select
 								ElseIf e\EventState2 > 600.0 And e\EventState2 - fps\Factor[0] <= 600.0
 									Select Rand(4)
 										Case 1
 											;[Block]
-											CreateMsg(GetLocalString("misc", "1048a4"))
+											CreateMsg(GetLocalString("msg", "1048a4"))
 											;[End Block]
 										Case 2
 											;[Block]
-											CreateMsg(GetLocalString("misc", "1048a5"))
+											CreateMsg(GetLocalString("msg", "1048a5"))
 											;[End Block]
 										Case 3
 											;[Block]
-											CreateMsg(GetLocalString("misc", "1048a6"))
+											CreateMsg(GetLocalString("msg", "1048a6"))
 											;[End Block]
 										Case 4
 											;[Block]
-											CreateMsg(GetLocalString("misc", "1048a7"))
+											CreateMsg(GetLocalString("msg", "1048a7"))
 											;[End Block]
 									End Select
 								EndIf
@@ -7693,7 +7693,7 @@ Function UpdateEvents%()
 									Else
 										PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(1, 4) + ".ogg"))
 										me\LightFlash = 5.0
-										CreateMsg(GetLocalString("misc", "1162"))
+										CreateMsg(GetLocalString("msg", "1162"))
 									EndIf
 									Exit
 								EndIf
@@ -7721,7 +7721,7 @@ Function UpdateEvents%()
 								Else
 									PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(1, 4) + ".ogg"))
 									me\LightFlash = 5.0
-									CreateMsg(GetLocalString("misc", "11622"))
+									CreateMsg(GetLocalString("msg", "11622"))
 								EndIf
 								e\EventState2 = 0.0
 							EndIf
@@ -8182,7 +8182,7 @@ Function UpdateEvents%()
 					EndIf
 						
 					If InteractObject(e\room\Objects[1], 0.49) Then
-						CreateMsg(GetLocalString("misc", "freeze"))
+						CreateMsg(GetLocalString("msg", "freeze"))
 						me\Injuries = Max(0.0, me\Injuries - Rnd(0.3))
 						me\Bloodloss = 0.0
 						PlaySound_Strict(LoadTempSound("SFX\SCP\Joke\Quack.ogg"))
@@ -8242,7 +8242,7 @@ Function UpdateEvents%()
 				If PlayerRoom = e\room Then
 					UpdateButton(e\room\Objects[2])
 					If d_I\ClosestButton = e\room\Objects[2] And mo\MouseHit1 Then
-						CreateMsg(GetLocalString("Elevator", "broken"))
+						CreateMsg(GetLocalString("elevator", "broken"))
 						PlaySound2(ButtonSFX2, Camera, e\room\Objects[2])
 						mo\MouseHit1 = False
 					EndIf
@@ -8290,7 +8290,7 @@ Function UpdateEvents%()
 								
 								; ~ Touching SCP-409
 								If InteractObject(e\room\Objects[3], 0.64) Then
-									CreateMsg(GetLocalString("misc", "409"))
+									CreateMsg(GetLocalString("msg", "409"))
 									me\BlurTimer = 2000.0
 									I_409\Timer = 0.001
 									GiveAchievement(Achv409)
@@ -8523,7 +8523,7 @@ Function UpdateDimension106%()
 							Else ; ~ The player is not at the exit, must've fallen down
 								If (Not me\Terminated) Then 
 									PlaySound_Strict(HorrorSFX[8])
-									msg\DeathMsg = GetLocalString("misc", "1062")
+									msg\DeathMsg = GetLocalString("msg", "1062")
 									me\BlurTimer = 3000.0
 									me\Terminated = True
 								EndIf
@@ -8818,7 +8818,7 @@ Function UpdateDimension106%()
 							Else ; ~ Somewhere else, must've fallen down
 								If (Not me\Terminated) Then 
 									PlaySound_Strict(HorrorSFX[8])
-									msg\DeathMsg = GetLocalString("misc", "1062")
+									msg\DeathMsg = GetLocalString("msg", "1062")
 									me\BlurTimer = 3000.0
 									me\Terminated = True
 								EndIf
@@ -9704,7 +9704,7 @@ Function UpdateEndings%()
 						RotateEntity(e\room\Objects[9], 0.0, 48.0, 0.0)
 						RotateEntity(e\room\Objects[10], 40.0, 0.0, 0.0)
 						
-						RenderLoading(90, "ENDING STUFF")
+						RenderLoading(90, GetLocalString("loading", "ending"))
 						
 						ResetEntity(me\Collider)
 						RotateEntity(me\Collider, 0.0, EntityYaw(me\Collider) + (e\room\Angle + 180.0), 0.0)

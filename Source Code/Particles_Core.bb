@@ -44,7 +44,7 @@ Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTi
 	p\Size = Size
 	ScaleSprite(p\OBJ, p\Size, p\Size)
 	
-	If (Not p_I\ParticleTextureID[ID]) Then RuntimeError("Particle Texture ID: " + ID + " not found.")
+	If (Not p_I\ParticleTextureID[ID]) Then RuntimeError(Format(GetLocalString("runerr", "particle"), ID))
 	
 	Return(p)
 End Function

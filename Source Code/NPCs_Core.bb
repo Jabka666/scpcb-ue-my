@@ -1589,7 +1589,7 @@ Function UpdateNPCs%()
 																RemoveItem(Inventory(i))
 																wi\HazmatSuit = 0
 																PlaySound_Strict(PickSFX[2])
-																CreateMsg(GetLocalString("npcs", "suit.destoryed"))
+																CreateMsg(GetLocalString("msg", "suit.destoryed"))
 																TakeOffTimer = 0.0
 															EndIf
 															Exit
@@ -1604,7 +1604,7 @@ Function UpdateNPCs%()
 											ElseIf TakeOffTimer >= 500.0
 												I_714\Using = False
 												PlaySound_Strict(PickSFX[3])
-												CreateMsg(GetLocalString("npcs", "ring.forceremoved"))
+												CreateMsg(GetLocalString("msg", "ring.forceremoved"))
 												TakeOffTimer = 0.0
 											EndIf
 										Else
@@ -3912,27 +3912,27 @@ Function UpdateNPCs%()
 									Select Rand(6)
 										Case 1
 											;[Block]
-											CreateMsg(GetLocalString("npcs", "9661"))
+											CreateMsg(GetLocalString("msg", "9661"))
 											;[End Block]
 										Case 2
 											;[Block]
-											CreateMsg(GetLocalString("npcs", "9662"))
+											CreateMsg(GetLocalString("msg", "9662"))
 											;[End Block]
 										Case 3
 											;[Block]
-											CreateMsg(GetLocalString("npcs", "9663"))
+											CreateMsg(GetLocalString("msg", "9663"))
 											;[End Block]
 										Case 4
 											;[Block]
-											CreateMsg(GetLocalString("npcs", "9664"))
+											CreateMsg(GetLocalString("msg", "9664"))
 											;[End Block]
 										Case 5
 											;[Block]
-											CreateMsg(GetLocalString("npcs", "9665"))
+											CreateMsg(GetLocalString("msg", "9665"))
 											;[End Block]
 										Case 6
 											;[Block]
-											CreateMsg(GetLocalString("npcs", "9666"))
+											CreateMsg(GetLocalString("msg", "9666"))
 											;[End Block]
 									End Select
 									n\Reload = 70.0 * 20.0
@@ -4013,19 +4013,19 @@ Function UpdateNPCs%()
 												Select Rand(4)
 													Case 1
 														;[Block]
-														CreateMsg(GetLocalString("npcs", "966.sleep1"))
+														CreateMsg(GetLocalString("msg", "966.sleep1"))
 														;[End Block]
 													Case 2
 														;[Block]
-														CreateMsg(GetLocalString("npcs", "966.sleep2"))
+														CreateMsg(GetLocalString("msg", "966.sleep2"))
 														;[End Block]
 													Case 3
 														;[Block]
-														CreateMsg(GetLocalString("npcs", "966.sleep3"))
+														CreateMsg(GetLocalString("msg", "966.sleep3"))
 														;[End Block]
 													Case 4
 														;[Block]
-														CreateMsg(GetLocalString("npcs", "966.sleep4"))
+														CreateMsg(GetLocalString("msg", "966.sleep4"))
 														;[End Block]
 												End Select
 											EndIf
@@ -6825,37 +6825,37 @@ Function Shoot%(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = Fals
 				me\Stamina = me\Stamina - Rnd(5.0)
 				InjurePlayer(Rnd(0.7, 0.9), 0.0, 650.0, Rnd(0.25, 0.5))
 				If wi\BallisticVest > 0 Then
-					ShotMessageUpdate = GetLocalString("npcs", "bullet.vest")
+					ShotMessageUpdate = GetLocalString("msg", "bullet.vest")
 				Else
-					ShotMessageUpdate = GetLocalString("npcs", "bullet.body")
+					ShotMessageUpdate = GetLocalString("msg", "bullet.body")
 				EndIf
 				;[End Block]
 			Case 11 ; ~ Left Leg
 				;[Block]
 				me\Stamina = me\Stamina - Rnd(10.0)
 				InjurePlayer(Rnd(0.5, 0.7), 0.0, 650.0)
-				ShotMessageUpdate = GetLocalString("npcs", "bullet.leg.left")
+				ShotMessageUpdate = GetLocalString("msg", "bullet.leg.left")
 				;[End Block]
 			Case 12 ; ~ Right Leg
 				;[Block]
 				me\Stamina = me\Stamina - Rnd(10.0)
 				InjurePlayer(Rnd(0.5, 0.7), 0.0, 650.0)
-				ShotMessageUpdate = GetLocalString("npcs", "bullet.leg.right")
+				ShotMessageUpdate = GetLocalString("msg", "bullet.leg.right")
 				;[End Block]
 			Case 13 ; ~ Left Arm
 				;[Block]
 				InjurePlayer(Rnd(0.5, 0.7), 0.0, 650.0)
-				ShotMessageUpdate = GetLocalString("npcs", "bullet.arm.left")
+				ShotMessageUpdate = GetLocalString("msg", "bullet.arm.left")
 				;[End Block]
 			Case 14 ; ~ Right Arm
 				;[Block]
 				InjurePlayer(Rnd(0.5, 0.7), 0.0, 650.0)
-				ShotMessageUpdate = GetLocalString("npcs", "bullet.arm.right")
+				ShotMessageUpdate = GetLocalString("msg", "bullet.arm.right")
 				;[End Block]
 			Case 15 ; ~ Neck
 				;[Block]
 				InjurePlayer(Rnd(1.0, 1.2), 0.0, 650.0)
-				ShotMessageUpdate = GetLocalString("npcs", "bullet.neck")
+				ShotMessageUpdate = GetLocalString("msg", "bullet.neck")
 				;[End Block]
 			Case 16, 17 ; ~ Helmet, Face or Head
 				;[Block]
@@ -6865,9 +6865,9 @@ Function Shoot%(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = Fals
 					For n.NPCs = Each NPCs
 						If n\NPCType = NPCTypeMTF Lor n\NPCType = NPCTypeApache Lor n\NPCType = NPCTypeGuard
 							If EntityInView(n\OBJ, Camera) Then
-								ShotMessageUpdate = GetLocalString("npcs", "bullet.face")
+								ShotMessageUpdate = GetLocalString("msg", "bullet.face")
 							Else
-								ShotMessageUpdate = GetLocalString("npcs", "bullet.head")
+								ShotMessageUpdate = GetLocalString("msg", "bullet.head")
 							EndIf
 							Kill(True)
 						EndIf
@@ -6976,113 +6976,113 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			;[Block]
 			n.NPCs = CreateNPC(NPCType008_1, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			n\State = 1.0
-			ConsoleMsg = GetLocalString("npcs", "spawn.008")
+			ConsoleMsg = GetLocalString("console", "spawn.008")
 			;[End Block]
 		Case "049", "scp049", "scp-049", "plaguedoctor"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType049, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			n\State = 1.0
 			If n_I\Curr049 = Null Then n_I\Curr049 = n
-			ConsoleMsg = GetLocalString("npcs", "spawn.049")
+			ConsoleMsg = GetLocalString("console", "spawn.049")
 			;[End Block]
 		Case "049-2", "0492", "scp-049-2", "scp049-2", "049zombie", "curedhuman", "scp0492", "scp-0492", "049_2", "scp_049_2"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType049_2, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			n\State = 1.0
-			ConsoleMsg = GetLocalString("npcs", "spawn.0492")
+			ConsoleMsg = GetLocalString("console", "spawn.0492")
 			;[End Block]
 		Case "066", "scp066", "scp-066", "eric"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType066, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = GetLocalString("npcs", "spawn.066")
+			ConsoleMsg = GetLocalString("console", "spawn.066")
 			;[End Block]
 		Case "096", "scp096", "scp-096", "shyguy"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType096, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			n\State = 5.0
 			If n_I\Curr096 = Null Then n_I\Curr096 = n
-			ConsoleMsg = GetLocalString("npcs", "spawn.096")
+			ConsoleMsg = GetLocalString("console", "spawn.096")
 			;[End Block]
 		Case "106", "scp106", "scp-106", "larry", "oldman"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType106, EntityX(me\Collider), EntityY(me\Collider) - 0.5, EntityZ(me\Collider))
 			n\State = -1.0
-			ConsoleMsg = GetLocalString("npcs", "spawn.106")
+			ConsoleMsg = GetLocalString("console", "spawn.106")
 			;[End Block]
 		Case "173", "scp173", "scp-173", "statue", "sculpture"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType173, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			n_I\Curr173 = n
 			If n_I\Curr173\Idle = 3 Then n_I\Curr173\Idle = 0
-			ConsoleMsg = GetLocalString("npcs", "spawn.173")
+			ConsoleMsg = GetLocalString("console", "spawn.173")
 			;[End Block]
 		Case "372", "scp372", "scp-372", "pj", "jumper"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType372, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = GetLocalString("npcs", "spawn.372")
+			ConsoleMsg = GetLocalString("console", "spawn.372")
 			;[End Block]
 		Case "513-1", "5131", "scp513-1", "scp-513-1", "bll", "scp-5131", "scp5131"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType513_1, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = GetLocalString("npcs", "spawn.5131")
+			ConsoleMsg = GetLocalString("console", "spawn.5131")
 			;[End Block]
 		Case "860-2", "8602", "scp860-2", "scp-860-2", "forestmonster", "scp8602"
 			;[Block]
-			CreateConsoleMsg(GetLocalString("npcs", "spawn.8602"), 255, 0, 0)
+			CreateConsoleMsg(GetLocalString("console", "spawn.8602"), 255, 0, 0)
 			;[End Block]
 		Case "939", "scp939", "scp-939"
-			CreateConsoleMsg(GetLocalString("npcs", "spawn.939"), 255, 0, 0)
+			CreateConsoleMsg(GetLocalString("console", "spawn.939"), 255, 0, 0)
 			;[End Block]
 		Case "966", "scp966", "scp-966", "sleepkiller"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType966, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = GetLocalString("npcs", "spawn.966")
+			ConsoleMsg = GetLocalString("console", "spawn.966")
 			;[End Block]
 		Case "1048-a", "scp1048-a", "scp-1048-a", "scp1048a", "scp-1048a", "earbear"
 			;[Block]
-			CreateConsoleMsg(GetLocalString("npcs", "spawn.1048a"), 255, 0, 0)
+			CreateConsoleMsg(GetLocalString("console", "spawn.1048a"), 255, 0, 0)
 			;[End Block]
 		Case "1048", "scp1048", "scp-1048", "scp-1048", "bear", "builderbear"
 			;[Block]
-			CreateConsoleMsg(GetLocalString("npcs", "spawn.1048"), 255, 0, 0)
+			CreateConsoleMsg(GetLocalString("console", "spawn.1048"), 255, 0, 0)
 			;[End Block]
 		Case "1499-1", "14991", "scp-1499-1", "scp1499-1", "scp-14991", "scp14991"
 			n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = GetLocalString("npcs", "spawn.14991")
+			ConsoleMsg = GetLocalString("console", "spawn.14991")
 			;[End Block]
 		Case "class-d", "classd", "d"
 			;[Block]
 			n.NPCs = CreateNPC(NPCTypeD, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = GetLocalString("npcs", "spawn.classd")
+			ConsoleMsg = GetLocalString("console", "spawn.classd")
 			;[End Block]
 		Case "guard"
 			;[Block]
 			n.NPCs = CreateNPC(NPCTypeGuard, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = GetLocalString("npcs", "spawn.guard")
+			ConsoleMsg = GetLocalString("console", "spawn.guard")
 			;[End Block]
 		Case "mtf", "ntf"
 			;[Block]
 			n.NPCs = CreateNPC(NPCTypeMTF, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = GetLocalString("npcs", "spawn.mtf")
+			ConsoleMsg = GetLocalString("console", "spawn.mtf")
 			;[End Block]
 		Case "apache", "helicopter"
 			;[Block]
 			n.NPCs = CreateNPC(NPCTypeApache, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = GetLocalString("npcs", "spawn.apache")
+			ConsoleMsg = GetLocalString("console", "spawn.apache")
 			;[End Block]
 		Case "tentacle", "scp035tentacle", "scp-035tentacle", "scp-035-tentacle", "scp035-tentacle"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType035_Tentacle, EntityX(me\Collider), EntityY(me\Collider) - 0.12, EntityZ(me\Collider))
-			ConsoleMsg = GetLocalString("npcs", "spawn.tentacle")
+			ConsoleMsg = GetLocalString("console", "spawn.tentacle")
 			;[End Block]
 		Case "clerk", "woman"
 			;[Block]
 			n.NPCs = CreateNPC(NPCTypeClerk, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = GetLocalString("npcs", "spawn.clerk")
+			ConsoleMsg = GetLocalString("console", "spawn.clerk")
 			;[End Block]
 		Default 
 			;[Block]
-			CreateConsoleMsg(GetLocalString("npcs", "spawn.notfound"), 255, 0, 0) : Return
+			CreateConsoleMsg(GetLocalString("console", "spawn.notfound"), 255, 0, 0) : Return
 			;[End Block]
 	End Select
 	
@@ -7105,7 +7105,7 @@ Function ManipulateNPCBones%()
 			If BoneName <> ""
 				Pvt = CreatePivot()
 				Bone = FindChild(n\OBJ, BoneName)
-				If (Not Bone) Then RuntimeError(Format(GetLocalString("npcs", "spawn.bone.notexist"), BoneName))
+				If (Not Bone) Then RuntimeError(Format(GetLocalString("runerr", "spawn.bone.notexist"), BoneName))
 				PositionEntity(Pvt, EntityX(Bone, True), EntityY(Bone, True), EntityZ(Bone, True))
 				Select n\ManipulationType
 					Case 0 ; ~ Looking at player
@@ -7343,7 +7343,7 @@ Function ChangeNPCTextureID%(n.NPCs, TextureID%)
 	Local Temp#
 	
 	If n = Null Then
-		CreateConsoleMsg(GetLocalString("npcs", "spawn.invaildtex"))
+		CreateConsoleMsg(GetLocalString("msg", "spawn.invaildtex"))
 		If opt\CanOpenConsole And opt\ConsoleOpening Then ConsoleOpen = True
 		Return
 	EndIf

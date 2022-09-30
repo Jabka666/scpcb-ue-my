@@ -1264,12 +1264,10 @@ Function LoadEntities%()
 	QuickLoadIcon = ScaleImage2(QuickLoadIcon, MenuScale, MenuScale)
 	
 	For i = 0 To MAXACHIEVEMENTS - 1
-		Local Loc2% = GetINISectionLocation(AchievementsFile, "a" + Str(i))
+		achv\AchievementStrings[i] = GetFileLocalString(AchievementsFile, "a" + Str(i), "AchvName", "a" + Str(i) + ",AchvName")
+		achv\AchievementDescs[i] = GetFileLocalString(AchievementsFile, "a" + Str(i), "AchvDesc", "a" + Str(i) + ",AchvDesc")
 		
-		achv\AchievementStrings[i] = GetINIString2(AchievementsFile, Loc2, "AchvName")
-		achv\AchievementDescs[i] = GetINIString2(AchievementsFile, Loc2, "AchvDesc")
-		
-		Local Image$ = GetINIString2(AchievementsFile, Loc2, "AchvImage") 
+		Local Image$ = GetFileLocalString(AchievementsFile, "a" + Str(i), "AchvImage", "a" + Str(i) + ",AchvImage") 
 		
 		achv\AchvIMG[i] = LoadImage_Strict("GFX\menu\achievements\" + Image + ".png")
 		achv\AchvIMG[i] = ScaleImage2(achv\AchvIMG[i], opt\GraphicHeight / 768.0, opt\GraphicHeight / 768.0)

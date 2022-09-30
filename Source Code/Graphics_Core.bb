@@ -200,9 +200,9 @@ Function UpdateWorld2%()
 					If Power = 0 Then ; ~ This NVG or SCRAMBLE can't be used
 						HasBattery = 0
 						If wi\SCRAMBLE Then
-							CreateMsg(GetLocalString("grap", "battery.died"))
+							CreateMsg(GetLocalString("msg", "battery.died"))
 						Else
-							CreateMsg(GetLocalString("grap", "battery.died.nvg"))
+							CreateMsg(GetLocalString("msg", "battery.died.nvg"))
 						EndIf
 						wi\IsNVGBlinking = True
 						me\BlinkTimer = -1.0
@@ -307,9 +307,9 @@ Function RenderWorld2%(Tween#)
 			
 			If HasBattery = 1 Then PlusY = 40
 			
-			Text(mo\Viewport_Center_X, (20 + PlusY) * MenuScale, GetLocalString("grap", "refresh"), True, False)
+			Text(mo\Viewport_Center_X, (20 + PlusY) * MenuScale, GetLocalString("msg", "refresh"), True, False)
 			Text(mo\Viewport_Center_X, (60 + PlusY) * MenuScale, Max(FloatToString(wi\NVGTimer / 60.0, 1), 0.0), True, False)
-			Text(mo\Viewport_Center_X, (100 + PlusY) * MenuScale, GetLocalString("grap", "refresh.sec"), True, False)
+			Text(mo\Viewport_Center_X, (100 + PlusY) * MenuScale, GetLocalString("msg", "refresh.sec"), True, False)
 			
 			Local Temp% = CreatePivot()
 			Local Temp2% = CreatePivot()
@@ -393,7 +393,7 @@ Function RenderWorld2%(Tween#)
 			Color(255, 0, 0)
 			SetFont(fo\FontID[Font_Digital])
 			
-			Text(mo\Viewport_Center_X, 20 * MenuScale, GetLocalString("grap", "battery.low"), True, False)
+			Text(mo\Viewport_Center_X, 20 * MenuScale, GetLocalString("msg", "battery.low"), True, False)
 		EndIf
 	EndIf
 	Color(255, 255, 255)
@@ -486,7 +486,7 @@ Function PlayStartupVideos%()
 		
 		If (Not Movie) Then
 			PutINIValue(OptionFile, "Advanced", "Play Startup Videos", 0)
-			RuntimeError("Movie " + Chr(34) + MovieFile + Chr(34) + " not found.")
+			RuntimeError(Format(GetLocalString("runerr", "movie"), MovieFile))
 		EndIf
 		
 		Local SplashScreenAudio% = StreamSound_Strict(MovieFile + ".ogg", opt\SFXVolume * opt\MasterVolume, 0)
@@ -537,7 +537,7 @@ Function GetScreenshot%()
 	FI_Save(13, fiBuffer, "Screenshots\Screenshot" + ScreenshotCount + ".png", 0)
 	FI_Unload(fiBuffer)
 	FreeBank(Bank)
-	If (Not MainMenuOpen) Then CreateHintMsg(GetLocalString("grap", "screenshot"))
+	If (Not MainMenuOpen) Then CreateHintMsg(GetLocalString("msg", "screenshot"))
 	PlaySound_Strict(LoadTempSound("SFX\General\Screenshot.ogg"))
 	ScreenshotCount = ScreenshotCount + 1
 End Function

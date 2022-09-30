@@ -361,7 +361,7 @@ Function UpdateMainMenu%()
 					EndIf
 					
 					If UpdateMainMenuButton(x + (420 * MenuScale), y + Height + (20 * MenuScale), 160 * MenuScale, 75 * MenuScale, GetLocalString("menu", "start"), False) Then
-						If CurrSave\Name = "" Then CurrSave\Name = GetLocalString("map", "untitled")
+						If CurrSave\Name = "" Then CurrSave\Name = GetLocalString("save", "untitled")
 						
 						If RandomSeed = "" Then
 							RandomSeed = Abs(MilliSecs2())
@@ -1648,7 +1648,7 @@ Function RenderMainMenu%()
 							y = y + (20 * MenuScale)
 							
 							Color(255, 255, 255)				
-							Text(x, y + (5 * MenuScale), GetLocalString("options", "hud"))	
+							Text(x, y + (5 * MenuScale), GetLocalString("options", "hud"))
 							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_HUD)
 							EndIf
@@ -2371,7 +2371,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 		
 		If Percent <> 100 Then
 			Color(255, 255, 255)
-			Text(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), GetLocalString("menu", "assets") + Assets, True, True)
+			Text(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), GetLocalString("loading", "assets") + Assets, True, True)
 			
 			ResetInput()
 		Else

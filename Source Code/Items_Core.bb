@@ -241,7 +241,7 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 		EndIf
 	Next 
 	
-	If i\ItemTemplate = Null Then RuntimeError("Item template not found (" + Name + ", " + TempName + ")")
+	If i\ItemTemplate = Null Then RuntimeError(Format(Format(GetLocalString("runerr", "item"), Name, "{0}"), TempName, "{1}"))
 	
 	ResetEntity(i\Collider)
 	PositionEntity(i\Collider, x, y, z, True)
@@ -493,7 +493,7 @@ End Function
 
 Function PickItem%(item.Items)
 	If wi\HazmatSuit > 0 Then
-		CreateMsg(GetLocalString("misc", "pick.suit"))
+		CreateMsg(GetLocalString("msg", "pick.suit"))
 		Return
 	EndIf
 	
@@ -551,12 +551,12 @@ Function PickItem%(item.Items)
 						;[End Block]
 					Case "veryfinevest"
 						;[Block]
-						CreateMsg(GetLocalString("misc", "vfvest"))
+						CreateMsg(GetLocalString("msg", "vfvest"))
 						Return
 						;[End Block]
 					Case "corrvest"
 						;[Block]
-						CreateMsg(GetLocalString("misc", "corrvest"))
+						CreateMsg(GetLocalString("msg", "corrvest"))
 						Return
 						;[End Block]
 					Case "firstaid", "finefirstaid", "veryfinefirstaid", "firstaid2"
@@ -583,10 +583,10 @@ Function PickItem%(item.Items)
 						Next
 						
 						If CanPickItem = 0 Then
-							CreateMsg(GetLocalString("misc", "twosuit"))
+							CreateMsg(GetLocalString("msg", "twosuit"))
 							Return
 						ElseIf CanPickItem = 2 Then
-							CreateMsg(GetLocalString("misc", "vestsuit"))
+							CreateMsg(GetLocalString("msg", "vestsuit"))
 							Return
 						Else
 							SelectedItem = item
@@ -608,10 +608,10 @@ Function PickItem%(item.Items)
 						Next
 						
 						If CanPickItem = 0 Then
-							CreateMsg(GetLocalString("misc", "twosuit"))
+							CreateMsg(GetLocalString("msg", "twosuit"))
 							Return
 						ElseIf CanPickItem = 2 Then
-							CreateMsg(GetLocalString("misc", "vestsuit"))
+							CreateMsg(GetLocalString("msg", "vestsuit"))
 							Return
 						Else
 							SelectedItem = item
@@ -638,7 +638,7 @@ Function PickItem%(item.Items)
 		Next
 		me\SndVolume = Max(1.5, me\SndVolume)
 	Else
-		CreateMsg(GetLocalString("misc", "cantcarry"))
+		CreateMsg(GetLocalString("msg", "cantcarry"))
 	EndIf
 	
 	CatchErrors("PickItem")
@@ -646,7 +646,7 @@ End Function
 
 Function DropItem%(item.Items, PlayDropSound% = True)
 	If wi\HazmatSuit > 0 Then
-		CreateMsg(GetLocalString("misc", "drop.suit"))
+		CreateMsg(GetLocalString("msg", "drop.suit"))
 		Return
 	EndIf
 	
@@ -730,10 +730,10 @@ End Function
 
 Function CanUseItem%(CanUseWithGasMask%, CanUseWithEyewear%)
 	If (Not CanUseWithGasMask) And (wi\GasMask > 0 Lor I_1499\Using > 0) Then
-		CreateMsg(GetLocalString("misc", "mask.use"))
+		CreateMsg(GetLocalString("msg", "mask.use"))
 		Return(False)
 	ElseIf (Not CanUseWithEyewear) And (wi\NightVision > 0 Lor wi\SCRAMBLE)
-		CreateMsg(GetLocalString("misc", "gear.use"))
+		CreateMsg(GetLocalString("msg", "gear.use"))
 		Return(False)
 	EndIf
 	Return(True)
@@ -742,23 +742,23 @@ End Function
 ; ~ Maybe re-work?
 Function PreventItemOverlapping%(GasMask% = False, NVG% = False, SCP1499% = False, Helmet% = False, SCRAMBLE% = False)
 	If (Not GasMask) And wi\GasMask > 0 Then
-		CreateMsg(GetLocalString("misc", "mask.use.off"))
+		CreateMsg(GetLocalString("msg", "mask.use.off"))
 		SelectedItem = Null
 		Return(True)
 	ElseIf (Not SCP1499) And I_1499\Using > 0
-		CreateMsg(GetLocalString("misc", "1499.use.off"))
+		CreateMsg(GetLocalString("msg", "1499.use.off"))
 		SelectedItem = Null
 		Return(True)
 	ElseIf (Not NVG) And wi\NightVision > 0 Then
-		CreateMsg(GetLocalString("misc", "goggle.use.off"))
+		CreateMsg(GetLocalString("msg", "goggle.use.off"))
 		SelectedItem = Null
 		Return(True)
 	ElseIf (Not Helmet) And wi\BallisticHelmet
-		CreateMsg(GetLocalString("misc", "helmet.use.off"))
+		CreateMsg(GetLocalString("msg", "helmet.use.off"))
 		SelectedItem = Null
 		Return(True)
 	ElseIf (Not SCRAMBLE) And wi\SCRAMBLE
-		CreateMsg(GetLocalString("misc", "gear.use.off"))
+		CreateMsg(GetLocalString("msg", "gear.use.off"))
 		SelectedItem = Null
 		Return(True)
 	EndIf
@@ -767,7 +767,7 @@ End Function
 
 Function IsDoubleItem%(Variable, ID, Msg$)
 	If Variable > 0 And Variable <> ID Then
-		CreateMsg(Format(GetLocalString("misc", "weartwo"), Msg))
+		CreateMsg(Format(GetLocalString("msg", "weartwo"), Msg))
 		SelectedItem = Null
 		Return(True)
 	EndIf
@@ -2248,7 +2248,7 @@ Function Use1123%()
 			EndIf
 		Next
 	Else
-		CreateMsg(GetLocalString("misc", "skull.nothappend"))
+		CreateMsg(GetLocalString("msg", "skull.nothappend"))
 	EndIf
 	
 	If Temp Then
