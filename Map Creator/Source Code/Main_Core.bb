@@ -12,7 +12,7 @@ SetPanelImage(PanelLoading, "Assets\map_logo.png")
 ; ~ Create a window to put the toolbar in
 Local WinHandle% = CreateWindow("SCP-CB Ultimate Edition Map Creator", GraphicsWidth() / 2 - ResWidth / 2, GraphicsHeight() / 2 - ResHeight / 2, ResWidth, ResHeight, 0, 13) 
 
-Global MainHwnd% = GetActiveWindow() ; ~ User32.dll
+Global MainHwnd% = api_GetActiveWindow() ; ~ User32.dll
 
 HideGadget(WinHandle)
 
@@ -302,15 +302,15 @@ SetStatusText(LoadingWindow, "Executing 3-D viewer...")
 ExecFile("Window3D.exe")
 
 Repeat
-	Local VWPRT% = FindWindow("Blitz Runtime Class", "MapCreator 3-D View") ; ~ User32.dll
+	Local VWPRT% = api_FindWindow("Blitz Runtime Class", "MapCreator 3-D View") ; ~ User32.dll
 	
 	ShowGadget(LoadingWindow)
 Until VWPRT <> 0
 SetStatusText(LoadingWindow, "Creating 3-D scene...")
 
-SetParent(VWPRT, MainHwnd) ; ~ User32.dll				
+api_SetParent(VWPRT, MainHwnd) ; ~ User32.dll				
 api_SetWindowPos(VWPRT, 0, 5, 30, 895, 560, 1) ; ~ User32.dll
-ShowWindow(VWPRT, 0) ; ~ User32.dll
+api_ShowWindow(VWPRT, 0) ; ~ User32.dll
 
 HideGadget(LoadingWindow)
 ShowGadget(WinHandle)
@@ -1143,7 +1143,7 @@ Repeat
 			Select EventData()
 				Case 0
 					;[Block]
-                 	ShowWindow(VWPRT ,0) ; ~ User32.dll
+                 	api_ShowWindow(VWPRT ,0) ; ~ User32.dll
                   	ShowGadget(ListBox)
 					ShowGadget(Event_Desc) 
 					ShowGadget(TxtBox)
@@ -1161,7 +1161,7 @@ Repeat
 					;[End Block]
 				Case 1
 					;[Block]
-					ShowWindow(VWPRT, 1) ; ~ User32.dll
+					api_ShowWindow(VWPRT, 1) ; ~ User32.dll
               		HideGadget(ListBox) 
 					HideGadget(Event_Desc) 
 					HideGadget(TxtBox) 

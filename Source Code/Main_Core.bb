@@ -2264,7 +2264,7 @@ Function UpdateGame%()
 							;[End Block]
 					End Select 
 					me\BlinkTimer = me\BLINKFREQ
-					If PlayerRoom\RoomTemplate\Name <> "room3_storage" Lor EntityY(me\Collider) > (-4100.0) * RoomScale Then me\BlurTimer = me\BlurTimer - Rnd(0.0, 150.0)
+					If PlayerRoom\RoomTemplate\Name <> "room3_storage" Lor EntityY(me\Collider) > (-4100.0) * RoomScale Then me\BlurTimer = Max(me\BlurTimer - Rnd(0.0, 150.0), 0.0)
 				EndIf
 				me\BlinkTimer = me\BlinkTimer - fps\Factor[0]
 			Else
@@ -3272,12 +3272,12 @@ Function UpdateFog%()
 	If PlayerRoom\RoomTemplate\Name = "cont1_173_intro" Lor PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a" Then
 		CameraFogMode(Camera, 0)
 		CameraFogRange(Camera, 5.0, 30.0)
-		CameraRange(Camera, 0.01, 60.0)
+		CameraRange(Camera, 0.05, 60.0)
 		If (Not EntityHidden(t\OverlayID[0])) Then HideEntity(t\OverlayID[0])
 	Else
 		CameraFogMode(Camera, 1)
 		CameraFogRange(Camera, opt\CameraFogNear * LightVolume, opt\CameraFogFar * LightVolume)
-		CameraRange(Camera, 0.01, Min(opt\CameraFogFar * LightVolume * 1.5, 28.0))
+		CameraRange(Camera, 0.05, Min(opt\CameraFogFar * LightVolume * 1.5, 28.0))
 		If EntityHidden(t\OverlayID[0]) Then ShowEntity(t\OverlayID[0])
 	EndIf
 	For r.Rooms = Each Rooms
@@ -7605,7 +7605,7 @@ Function RenderMenu%()
 			If CurrSave = Null Then
 				TempStr = GetLocalString("menu", "dataredacted")
 			Else
-				TempStr = CurrSave\Name
+				TempStr = ConvertANSItoUTF8(CurrSave\Name)
 			EndIf
 			Text(x, y + (20 * MenuScale), Format(GetLocalString("menu", "save"), TempStr))
 			
@@ -7613,9 +7613,9 @@ Function RenderMenu%()
 				TempStr = GetLocalString("menu", "new.seed") + RandomSeed
 			Else
 				If Len(SelectedMap) > 15 Then
-					TempStr = GetLocalString("menu", "new.map") + Left(SelectedMap, 14) + "..."
+					TempStr = GetLocalString("menu", "new.map") + Left(ConvertANSItoUTF8(SelectedMap), 14) + "..."
 				Else
-					TempStr = GetLocalString("menu", "new.map") + SelectedMap
+					TempStr = GetLocalString("menu", "new.map") + ConvertANSItoUTF8(SelectedMap)
 				EndIf
 			EndIf
 			Text(x, y + (40 * MenuScale), TempStr)

@@ -2319,7 +2319,7 @@ Function UpdateDoors%()
 						Case OFFICE_DOOR, WOODEN_DOOR
 							;[Block]
 							d\OpenState = CurveValue(180.0, d\OpenState, 40.0) + (fps\Factor[0] * 0.01)
-							RotateEntity(d\OBJ, 0.0, PlayerRoom\Angle + d\Angle + (d\OpenState / 2.5), 0.0)
+							RotateEntity(d\OBJ, 0.0, d\room\Angle + d\Angle + (d\OpenState / 2.5), 0.0)
 							If d\DoorType = OFFICE_DOOR Then
 								Animate2(d\OBJ, AnimTime(d\OBJ), 1.0, 41.0, 1.2, False)
 							EndIf
@@ -3298,7 +3298,7 @@ Function CreateSecurityCam.SecurityCams(x1#, y1#, z1#, r.Rooms, Screen% = False,
 		
 		sc\Cam = CreateCamera()
 		CameraViewport(sc\Cam, 0, 0, 512, 512)
-		CameraRange(sc\Cam, 0.01, 8.0)
+		CameraRange(sc\Cam, 0.05, 8.0)
 		CameraZoom(sc\Cam, 0.8)
 		HideEntity(sc\Cam)	
 	EndIf
@@ -4002,6 +4002,18 @@ Function FillRoom%(r.Rooms)
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.07, True)
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
+			
+			d.Doors = CreateDoor(r\x - 512.0 * RoomScale, r\y, r\z - 400.0 * RoomScale, 90.0, r, True, ONE_SIDED_DOOR)
+			d\Locked = 1 : d\MTFClose = False
+			For i = 0 To 1
+				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
+			Next
+			
+			d.Doors = CreateDoor(r\x + 400.0 * RoomScale, r\y, r\z + 512.0 * RoomScale, 180.0, r, True, ONE_SIDED_DOOR)
+			d\Locked = 1 : d\MTFClose = False
+			For i = 0 To 1
+				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
+			Next
 			
 			; ~ Security cameras inside
 			sc.SecurityCams = CreateSecurityCam(r\x + 512.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 384.0 * RoomScale, r, True, r\x + 668.0 * RoomScale, r\y + 1.1, r\z - 96.0 * RoomScale)
@@ -5100,7 +5112,7 @@ Function FillRoom%(r.Rooms)
 			sc\Angle = -45.0 : sc\Turn = 0.0
 			TurnEntity(sc\CameraOBJ, 30.0, 0.0, 0.0)
 			
-			it.Items = CreateItem("Night Vision Goggles", "nvg", r\x + 320.0 * RoomScale, r\y + 0.5, r\z + 704.0 * RoomScale)
+			it.Items = CreateItem("Night Vision Goggles", "nvg", r\x + 173.0 * RoomScale, r\y + 0.5, r\z + 631.0 * RoomScale)
 			it\State = Rnd(1000.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
@@ -5905,7 +5917,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[1], r\x + 448.0 * RoomScale, r\y, r\z + 192.0 * RoomScale)
 			
 			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], EntityX(r\OBJ) - 400.0 * RoomScale, r\y + 440.0 * RoomScale, EntityZ(r\OBJ) + 1322.0 * RoomScale)
+			PositionEntity(r\Objects[2], EntityX(r\OBJ) - 200.0 * RoomScale, r\y + 440.0 * RoomScale, EntityZ(r\OBJ) + 1322.0 * RoomScale)
 			
 			r\Objects[3] = CreatePivot()
 			PositionEntity(r\Objects[3], EntityX(r\OBJ) + 1000.0 * RoomScale, r\y + 120.0 * RoomScale, EntityZ(r\OBJ) + 666.0 * RoomScale)
@@ -7110,7 +7122,7 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case "room3_office"
 			;[Block]			
-			d.Doors = CreateDoor(r\x + 768.0 * RoomScale, r\y, r\z + 234.0 * RoomScale, 180.0, r, False, OFFICE_DOOR)
+			d.Doors = CreateDoor(r\x + 768.0 * RoomScale, r\y, r\z + 234.0 * RoomScale, 180.0, r, True, OFFICE_DOOR)
 			
 			r\Objects[0] = LoadMesh_Strict("GFX\map\room3_office_hb.b3d", r\OBJ)
 			EntityPickMode(r\Objects[0], 2)

@@ -361,7 +361,7 @@ Function UpdateMainMenu%()
 					EndIf
 					
 					If UpdateMainMenuButton(x + (420 * MenuScale), y + Height + (20 * MenuScale), 160 * MenuScale, 75 * MenuScale, GetLocalString("menu", "start"), False) Then
-						If CurrSave\Name = "" Then CurrSave\Name = GetLocalString("save", "untitled")
+						If CurrSave\Name = "" Then CurrSave\Name = ConvertUTF8toANSI(GetLocalString("save", "untitled"))
 						
 						If RandomSeed = "" Then
 							RandomSeed = Abs(MilliSecs2())
@@ -1193,10 +1193,10 @@ Function RenderMainMenu%()
 					RenderFrame(x + (150 * MenuScale), y + (55 * MenuScale), 200 * MenuScale, 30 * MenuScale, (x Mod 256), (y Mod 256), True)
 					
 					Color(255, 0, 0)
-					If Len(SelectedMap) > 15 Then
-						TempStr2 = Left(SelectedMap, 14) + "..."
+					If Len(ConvertANSItoUTF8(SelectedMap)) > 15 Then
+						TempStr2 = Left(ConvertANSItoUTF8(SelectedMap), 14) + "..."
 					Else
-						TempStr2 = SelectedMap
+						TempStr2 = ConvertANSItoUTF8(SelectedMap)
 					EndIf
 					Text(x + (250 * MenuScale), y + (70 * MenuScale), TempStr2, True, True)
 				EndIf
@@ -1327,7 +1327,7 @@ Function RenderMainMenu%()
 								Color(255, 255, 255)
 							EndIf
 							
-							Text(x + (20 * MenuScale), y + (10 * MenuScale), CurrSave\Name)
+							Text(x + (20 * MenuScale), y + (10 * MenuScale), ConvertANSItoUTF8(CurrSave\Name))
 							Text(x + (20 * MenuScale), y + (30 * MenuScale), CurrSave\Time)
 							Text(x + (120 * MenuScale), y + (30 * MenuScale), CurrSave\Date)
 							Text(x + (20 * MenuScale), y + (50 * MenuScale), CurrSave\Version)
@@ -1849,12 +1849,12 @@ Function RenderMainMenu%()
 						If i <= SavedMapsAmount Then
 							RenderFrame(x, y, 540 * MenuScale, 70 * MenuScale)
 							
-							If Len(SavedMaps(i - 1)) > 20 Then
-								Text(x + (20 * MenuScale), y + (15 * MenuScale), Left(SavedMaps(i - 1), 19) + "...")
+							If Len(ConvertANSItoUTF8(SavedMaps(i - 1))) > 20 Then
+								Text(x + (20 * MenuScale), y + (15 * MenuScale), Left(ConvertANSItoUTF8(SavedMaps(i - 1)), 19) + "...")
 							Else
-								Text(x + (20 * MenuScale), y + (15 * MenuScale), SavedMaps(i - 1))
+								Text(x + (20 * MenuScale), y + (15 * MenuScale), ConvertANSItoUTF8(SavedMaps(i - 1)))
 							EndIf
-							Text(x + (20 * MenuScale), y + (45 * MenuScale), SavedMapsAuthor(i - 1))
+							Text(x + (20 * MenuScale), y + (45 * MenuScale), ConvertANSItoUTF8(SavedMapsAuthor(i - 1)))
 							
 							If MouseOn(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale) Lor MouseOn(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale) Then
 								RenderMapCreatorTooltip(tX, tY, tW, tH, SavedMaps(i - 1))
@@ -2737,16 +2737,32 @@ Function RenderMenuPalettes%()
 	Next
 End Function
 
+Function ChrCanDisplay%(Char%)
+	Return((Char >= 32) And (Char <= 126))
+End Function
+
+Global PrevInputBoxCtrl%, InsertMode% = False
+
 Function UpdateInput$(aString$, MaxChr%)
 	Local Value% = GetKey()
 	Local Length% = Len(aString)
 	
-	If CursorPos = -1 Then CursorPos = Length
+	If (CursorPos < 0) And (CursorPos <> - 1) Then CursorPos = Length
+	If CursorPos < 0 Then CursorPos = 0
 	
-	If KeyDown(29) Then
-		If Value = 30 Then CursorPos = Length
-		If Value = 31 Then CursorPos = 0
-		If Value = 22 Then
+	If KeyHit(210) Then InsertMode = Not InsertMode ; ~ Insert key
+	If KeyHit(199) Then CursorPos = 0 ; ~ Home key
+	If KeyHit(207) Then CursorPos = Length ; ~ End key
+	If KeyHit(211) Then ; ~ Delete key
+		aString = Left(aString, CursorPos) + Right(aString, Max(Length - CursorPos - 1, 0.0))
+		CursorPos = CursorPos + 1
+	EndIf
+	
+	If KeyDown(29) Lor KeyDown(157) Then ; ~ Control key
+		If Value = 30 Then CursorPos = Length ; ~ Control & Right arrow
+		If Value = 31 Then CursorPos = 0 ; ~ Control & Left arrow
+		If Value = 3 Then SetClipboardContents(aString) ; ~ Control & C
+		If Value = 22 Then ; ~ Control & V
 			aString = Left(aString, CursorPos) + GetClipboardContents() + Right(aString, Length - CursorPos)
 			CursorPos = CursorPos + Len(aString) - Length
 			If MaxChr > 0 And MaxChr < Len(aString) Then aString = Left(aString, MaxChr) : CursorPos = MaxChr
@@ -2754,12 +2770,24 @@ Function UpdateInput$(aString$, MaxChr%)
 		Return(aString)
 	EndIf
 	
-	If Value = 30 Then
-		CursorPos = Min(CursorPos + 1, Length)
-	ElseIf Value = 31
-		CursorPos = Max(CursorPos - 1, 0)
+	If Value = 30 Then CursorPos = CursorPos + 1 : PrevInputBoxCtrl = MilliSecs2() : Return(aString)
+	If Value = 31 Then CursorPos = CursorPos - 1 : PrevInputBoxCtrl = MilliSecs2() : Return(aString)
+
+	If KeyDown(205) And ((MilliSecs2() - PrevInputBoxCtrl) > 500) Then ; ~ Right arrow
+		If (MilliSecs2() Mod 100) < 25 Then CursorPos = Min(CursorPos + 1, Length)
+	ElseIf KeyDown(203) And ((MilliSecs2() - PrevInputBoxCtrl) > 500) Then ; ~ Left arrow
+		If (MilliSecs2() Mod 100) < 25 Then CursorPos = Max(CursorPos - 1, 0.0)
 	Else
-		aString = TextInput(Left(aString, CursorPos)) + Mid(aString, CursorPos + 1)
+		If InsertMode Then
+			If ChrCanDisplay(Value) Then 
+				aString = TextInput(Left(aString, CursorPos)) + Mid(aString, CursorPos + 2)
+				CursorPos = CursorPos + 1
+			ElseIf Value = 8 Then ; ~ Backspace
+				aString = TextInput(Left(aString, CursorPos)) + Mid(aString, CursorPos + 1)
+			EndIf
+		Else
+			aString = TextInput(Left(aString, CursorPos)) + Mid(aString, CursorPos + 1)
+		EndIf 
 		CursorPos = CursorPos + Len(aString) - Length
 		If MaxChr > 0 And MaxChr < Len(aString) Then
 			aString = Left(aString, MaxChr)
@@ -2805,13 +2833,13 @@ Function UpdateMainMenuInputBox$(x%, y%, Width%, Height%, Txt$, ID% = 0, MaxChr%
 		If mo\MouseHit1 Then
 			SelectedInputBox = ID
 			FlushKeys()
-			CursorPos = -1
+			CursorPos = -2
 		EndIf
 	EndIf
 	
 	If (Not MouseOnBox) And mo\MouseHit1 And SelectedInputBox = ID Then
 		SelectedInputBox = 0
-		CursorPos = -1
+		CursorPos = -2
 	EndIf
 	
 	If SelectedInputBox = ID Then
@@ -2834,8 +2862,10 @@ Function RenderMenuInputBoxes%()
 		
 		Color(255, 255, 255)	
 		If SelectedInputBox = mib\ID Then
-			If (MilliSecs2() Mod 800) < 400 Then Rect(mib\x + (mib\Width / 2) - (StringWidth(mib\Txt) / 2) + StringWidth(Left(mib\Txt, CursorPos)), mib\y + (mib\Height / 2) - (5 * MenuScale), 2 * MenuScale, 12 * MenuScale)
-		EndIf	
+			If ((MilliSecs2() Mod 800) < 400) Lor KeyDown(205) Lor KeyDown(203) Lor InsertMode Then 
+				Rect(mib\x + (mib\Width / 2) - (StringWidth(mib\Txt) / 2) + StringWidth(Left(mib\Txt, Max(CursorPos, 0))), mib\y + (mib\Height / 2) - (5 * MenuScale), 2 * MenuScale, 12 * MenuScale)
+			EndIf 
+		EndIf
 		
 		Text(mib\x + (mib\Width / 2), mib\y + (mib\Height / 2), mib\Txt, True, True)
 	Next
@@ -3494,11 +3524,11 @@ Function RenderMapCreatorTooltip%(x%, y%, Width%, Height%, MapName$)
 	Local Txt$[6]
 	
 	If Right(MapName, 6) = "cbmap2" Then
-		Txt[0] = Left(MapName, Len(MapName) - 7)
+		Txt[0] = Left(ConvertANSItoUTF8(MapName), Len(ConvertANSItoUTF8(MapName)) - 7)
 		
 		Local f% = OpenFile("Map Creator\Maps\" + MapName)
-		Local Author$ = ReadLine(f)
-		Local Descr$ = ReadLine(f)
+		Local Author$ = ConvertANSItoUTF8(ReadLine(f))
+		Local Descr$ = ConvertANSItoUTF8(ReadLine(f))
 		
 		ReadByte(f)
 		ReadByte(f)
