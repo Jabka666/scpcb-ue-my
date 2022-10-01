@@ -460,7 +460,7 @@ Function PlayStartupVideos%()
 	EndIf
 	
 	Local MovieFile$, i%
-	Local StartupPath$ = "GFX\menu\"
+	Local StartupPath$ = "GFX\Menu\"
 	
 	For i = 0 To 3
 		Select i

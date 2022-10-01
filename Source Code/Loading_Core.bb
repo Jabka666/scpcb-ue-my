@@ -43,30 +43,30 @@ Function LoadDecals%()
 	de_I.DecalInstance = New DecalInstance
 	
 	For i = DECAL_CORROSIVE_1 To DECAL_CORROSIVE_2
-		de_I\DecalTextureID[i] = LoadTexture_Strict("GFX\decals\corrosive(" + i + ").png", 1 + 2, DeleteAllTextures)
+		de_I\DecalTextureID[i] = LoadTexture_Strict("GFX\Decals\corrosive(" + i + ").png", 1 + 2, DeleteAllTextures)
 	Next
 	
 	For i = DECAL_BLOOD_1 To DECAL_BLOOD_6
-		de_I\DecalTextureID[i] = LoadTexture_Strict("GFX\decals\blood(" + (i - DECAL_BLOOD_1) + ").png", 1 + 2, DeleteAllTextures)
+		de_I\DecalTextureID[i] = LoadTexture_Strict("GFX\Decals\blood(" + (i - DECAL_BLOOD_1) + ").png", 1 + 2, DeleteAllTextures)
 	Next
 	
 	For i = DECAL_PD_1 To DECAL_PD_6
-		de_I\DecalTextureID[i] = LoadTexture_Strict("GFX\decals\pd(" + (i - DECAL_PD_1) + ").png", 1 + 2, DeleteAllTextures)
+		de_I\DecalTextureID[i] = LoadTexture_Strict("GFX\Decals\pd(" + (i - DECAL_PD_1) + ").png", 1 + 2, DeleteAllTextures)
 	Next
 	
 	For i = DECAL_BULLET_HOLE_1 To DECAL_BULLET_HOLE_2
-		de_I\DecalTextureID[i] = LoadTexture_Strict("GFX\decals\bullet_hole(" + (i - DECAL_BULLET_HOLE_1) + ").png", 1 + 2, DeleteAllTextures)
+		de_I\DecalTextureID[i] = LoadTexture_Strict("GFX\Decals\bullet_hole(" + (i - DECAL_BULLET_HOLE_1) + ").png", 1 + 2, DeleteAllTextures)
 	Next
 	
 	For i = DECAL_BLOOD_DROP_1 To DECAL_BLOOD_DROP_2
-		de_I\DecalTextureID[i] = LoadTexture_Strict("GFX\decals\blood_drop(" + (i - DECAL_BLOOD_DROP_1) + ").png", 1 + 2, DeleteAllTextures)
+		de_I\DecalTextureID[i] = LoadTexture_Strict("GFX\Decals\blood_drop(" + (i - DECAL_BLOOD_DROP_1) + ").png", 1 + 2, DeleteAllTextures)
 	Next
 	
-	de_I\DecalTextureID[DECAL_409] = LoadTexture_Strict("GFX\decals\scp_409.png", 1 + 2, DeleteAllTextures)
+	de_I\DecalTextureID[DECAL_409] = LoadTexture_Strict("GFX\Decals\scp_409.png", 1 + 2, DeleteAllTextures)
 	
-	de_I\DecalTextureID[DECAL_427] = LoadTexture_Strict("GFX\decals\scp_427.png", 1 + 2, DeleteAllTextures)
+	de_I\DecalTextureID[DECAL_427] = LoadTexture_Strict("GFX\Decals\scp_427.png", 1 + 2, DeleteAllTextures)
 	
-	de_I\DecalTextureID[DECAL_WATER] = LoadTexture_Strict("GFX\decals\water.png", 1 + 2, DeleteAllTextures)
+	de_I\DecalTextureID[DECAL_WATER] = LoadTexture_Strict("GFX\Decals\water.png", 1 + 2, DeleteAllTextures)
 End Function
 
 Const MaxParticleTextureIDAmount% = 8
@@ -98,20 +98,20 @@ Const PARTICLE_SPARK% = 7
 Function LoadParticles%()
 	p_I.ParticleInstance = New ParticleInstance
 	
-	p_I\ParticleTextureID[PARTICLE_BLACK_SMOKE] = LoadTexture_Strict("GFX\particles\smoke(0).png", 1 + 2, DeleteAllTextures)
-	p_I\ParticleTextureID[PARTICLE_WHITE_SMOKE] = LoadAnimTexture_Strict("GFX\particles\smoke(1).png", 1 + 2, 256, 256, 0, 4, DeleteAllTextures)
+	p_I\ParticleTextureID[PARTICLE_BLACK_SMOKE] = LoadTexture_Strict("GFX\Particles\smoke(0).png", 1 + 2, DeleteAllTextures)
+	p_I\ParticleTextureID[PARTICLE_WHITE_SMOKE] = LoadAnimTexture_Strict("GFX\Particles\smoke(1).png", 1 + 2, 256, 256, 0, 4, DeleteAllTextures)
 	
-	p_I\ParticleTextureID[PARTICLE_FLASH] = LoadTexture_Strict("GFX\particles\flash.png", 1 + 2, DeleteAllTextures)
+	p_I\ParticleTextureID[PARTICLE_FLASH] = LoadTexture_Strict("GFX\Particles\flash.png", 1 + 2, DeleteAllTextures)
 	
-	p_I\ParticleTextureID[PARTICLE_DUST] = LoadTexture_Strict("GFX\particles\dust.png", 1 + 2, DeleteAllTextures)
+	p_I\ParticleTextureID[PARTICLE_DUST] = LoadTexture_Strict("GFX\Particles\dust.png", 1 + 2, DeleteAllTextures)
 	
-	p_I\ParticleTextureID[PARTICLE_SHADOW] = LoadTexture_Strict("GFX\npcs\hg.pt", 1 + 2, DeleteAllTextures)
+	p_I\ParticleTextureID[PARTICLE_SHADOW] = LoadTexture_Strict("GFX\NPCs\hg.pt", 1 + 2, DeleteAllTextures)
 	
-	p_I\ParticleTextureID[PARTICLE_SUN] = LoadTexture_Strict("GFX\map\textures\sun.png", 1 + 2, DeleteAllTextures)
+	p_I\ParticleTextureID[PARTICLE_SUN] = LoadTexture_Strict("GFX\Map\Textures\sun.png", 1 + 2, DeleteAllTextures)
 	
-	p_I\ParticleTextureID[PARTICLE_BLOOD] = LoadTexture_Strict("GFX\particles\blood.png", 1 + 2, DeleteAllTextures)
+	p_I\ParticleTextureID[PARTICLE_BLOOD] = LoadTexture_Strict("GFX\Particles\blood.png", 1 + 2, DeleteAllTextures)
 	
-	p_I\ParticleTextureID[PARTICLE_SPARK] = LoadTexture_Strict("GFX\particles\spark.png", 1 + 2, DeleteAllTextures)
+	p_I\ParticleTextureID[PARTICLE_SPARK] = LoadTexture_Strict("GFX\Particles\spark.png", 1 + 2, DeleteAllTextures)
 End Function
 
 Const MaxDoorModelIDAmount% = 9
@@ -181,44 +181,44 @@ Function LoadDoors%()
 	
 	d_I.DoorInstance = New DoorInstance
 	
-	d_I\DoorModelID[DOOR_DEFAULT_MODEL] = LoadMesh_Strict("GFX\map\Props\Door01.x")
+	d_I\DoorModelID[DOOR_DEFAULT_MODEL] = LoadMesh_Strict("GFX\Map\Props\Door01.x")
 	
-	d_I\DoorModelID[DOOR_ELEVATOR_MODEL] = LoadMesh_Strict("GFX\map\Props\ElevatorDoor.b3d")
+	d_I\DoorModelID[DOOR_ELEVATOR_MODEL] = LoadMesh_Strict("GFX\Map\Props\ElevatorDoor.b3d")
 	
-	d_I\DoorModelID[DOOR_HEAVY_MODEL_1] = LoadMesh_Strict("GFX\map\Props\HeavyDoor1.x")
-	d_I\DoorModelID[DOOR_HEAVY_MODEL_2] = LoadMesh_Strict("GFX\map\Props\HeavyDoor2.x")
+	d_I\DoorModelID[DOOR_HEAVY_MODEL_1] = LoadMesh_Strict("GFX\Map\Props\HeavyDoor1.x")
+	d_I\DoorModelID[DOOR_HEAVY_MODEL_2] = LoadMesh_Strict("GFX\Map\Props\HeavyDoor2.x")
 	
-	d_I\DoorModelID[DOOR_BIG_MODEL_1] = LoadMesh_Strict("GFX\map\Props\contdoorleft.x")
-	d_I\DoorModelID[DOOR_BIG_MODEL_2] = LoadMesh_Strict("GFX\map\Props\contdoorright.x")
+	d_I\DoorModelID[DOOR_BIG_MODEL_1] = LoadMesh_Strict("GFX\Map\Props\contdoorleft.x")
+	d_I\DoorModelID[DOOR_BIG_MODEL_2] = LoadMesh_Strict("GFX\Map\Props\contdoorright.x")
 	
-	d_I\DoorModelID[DOOR_OFFICE_MODEL] = LoadAnimMesh_Strict("GFX\map\Props\officedoor.b3d")
+	d_I\DoorModelID[DOOR_OFFICE_MODEL] = LoadAnimMesh_Strict("GFX\Map\Props\officedoor.b3d")
 	
-	d_I\DoorModelID[DOOR_WOODEN_MODEL] = LoadMesh_Strict("GFX\map\Props\DoorWooden.b3d")
+	d_I\DoorModelID[DOOR_WOODEN_MODEL] = LoadMesh_Strict("GFX\Map\Props\DoorWooden.b3d")
 	
-	d_I\DoorModelID[DOOR_ONE_SIDED_MODEL] = LoadMesh_Strict("GFX\map\Props\Door02.x")
+	d_I\DoorModelID[DOOR_ONE_SIDED_MODEL] = LoadMesh_Strict("GFX\Map\Props\Door02.x")
 	
 	For i = 0 To MaxDoorModelIDAmount - 1
 		HideEntity(d_I\DoorModelID[i])
 	Next
 	
-	d_I\DoorFrameModelID[DOOR_DEFAULT_FRAME_MODEL] = LoadMesh_Strict("GFX\map\Props\DoorFrame.b3d")
+	d_I\DoorFrameModelID[DOOR_DEFAULT_FRAME_MODEL] = LoadMesh_Strict("GFX\Map\Props\DoorFrame.b3d")
 	
-	d_I\DoorFrameModelID[DOOR_BIG_FRAME_MODEL] = LoadMesh_Strict("GFX\map\Props\ContDoorFrame.b3d")
+	d_I\DoorFrameModelID[DOOR_BIG_FRAME_MODEL] = LoadMesh_Strict("GFX\Map\Props\ContDoorFrame.b3d")
 	
-	d_I\DoorFrameModelID[DOOR_OFFICE_FRAME_MODEL] = LoadMesh_Strict("GFX\map\Props\officedoorframe.b3d")
+	d_I\DoorFrameModelID[DOOR_OFFICE_FRAME_MODEL] = LoadMesh_Strict("GFX\Map\Props\officedoorframe.b3d")
 	
-	d_I\DoorFrameModelID[DOOR_WOODEN_FRAME_MODEL] = LoadMesh_Strict("GFX\map\Props\DoorWoodenFrame.b3d")
+	d_I\DoorFrameModelID[DOOR_WOODEN_FRAME_MODEL] = LoadMesh_Strict("GFX\Map\Props\DoorWoodenFrame.b3d")
 	
 	For i = 0 To MaxDoorFrameModelIDAmount - 1
 		HideEntity(d_I\DoorFrameModelID[i])
 	Next
 	
-	d_I\ElevatorPanelModel = LoadMesh_Strict("GFX\map\Props\elevator_panel.b3d")
+	d_I\ElevatorPanelModel = LoadMesh_Strict("GFX\Map\Props\elevator_panel.b3d")
 	HideEntity(d_I\ElevatorPanelModel)
 	
-	d_I\ElevatorPanelTextureID[ELEVATOR_PANEL_DOWN] = LoadTexture_Strict("GFX\map\textures\elevator_panel_down.png", 1, DeleteAllTextures)
-	d_I\ElevatorPanelTextureID[ELEVATOR_PANEL_UP] = LoadTexture_Strict("GFX\map\textures\elevator_panel_up.png", 1, DeleteAllTextures)
-	d_I\ElevatorPanelTextureID[ELEVATOR_PANEL_IDLE] = LoadTexture_Strict("GFX\map\textures\elevator_panel_idle.png", 1, DeleteAllTextures)
+	d_I\ElevatorPanelTextureID[ELEVATOR_PANEL_DOWN] = LoadTexture_Strict("GFX\Map\Textures\elevator_panel_down.png", 1, DeleteAllTextures)
+	d_I\ElevatorPanelTextureID[ELEVATOR_PANEL_UP] = LoadTexture_Strict("GFX\Map\Textures\elevator_panel_up.png", 1, DeleteAllTextures)
+	d_I\ElevatorPanelTextureID[ELEVATOR_PANEL_IDLE] = LoadTexture_Strict("GFX\Map\Textures\elevator_panel_idle.png", 1, DeleteAllTextures)
 	
 	If opt\Atmosphere Then
 		For i = ELEVATOR_PANEL_DOWN To ELEVATOR_PANEL_IDLE
@@ -226,22 +226,22 @@ Function LoadDoors%()
 		Next
 	EndIf
 	
-	d_I\ButtonModelID[BUTTON_DEFAULT_MODEL] = LoadMesh_Strict("GFX\map\Props\Button.b3d")
+	d_I\ButtonModelID[BUTTON_DEFAULT_MODEL] = LoadMesh_Strict("GFX\Map\Props\Button.b3d")
 	
-	d_I\ButtonModelID[BUTTON_KEYCARD_MODEL] = LoadMesh_Strict("GFX\map\Props\ButtonKeycard.b3d")
+	d_I\ButtonModelID[BUTTON_KEYCARD_MODEL] = LoadMesh_Strict("GFX\Map\Props\ButtonKeycard.b3d")
 	
-	d_I\ButtonModelID[BUTTON_KEYPAD_MODEL] = LoadMesh_Strict("GFX\map\Props\ButtonCode.b3d")
+	d_I\ButtonModelID[BUTTON_KEYPAD_MODEL] = LoadMesh_Strict("GFX\Map\Props\ButtonCode.b3d")
 	
-	d_I\ButtonModelID[BUTTON_SCANNER_MODEL] = LoadMesh_Strict("GFX\map\Props\ButtonScanner.b3d")
+	d_I\ButtonModelID[BUTTON_SCANNER_MODEL] = LoadMesh_Strict("GFX\Map\Props\ButtonScanner.b3d")
 	
-	d_I\ButtonModelID[BUTTON_ELEVATOR_MODEL] = LoadMesh_Strict("GFX\map\Props\ButtonElevator.b3d")
+	d_I\ButtonModelID[BUTTON_ELEVATOR_MODEL] = LoadMesh_Strict("GFX\Map\Props\ButtonElevator.b3d")
 	
 	For i = 0 To MaxButtonModelIDAmount - 1
 		HideEntity(d_I\ButtonModelID[i])
 	Next
 	
-	d_I\ButtonTextureID[BUTTON_GREEN_TEXTURE] = LoadTexture_Strict("GFX\map\textures\keypad.jpg", 1, DeleteAllTextures)
-	d_I\ButtonTextureID[BUTTON_RED_TEXTURE] = LoadTexture_Strict("GFX\map\textures\keypad_locked.png", 1, DeleteAllTextures)
+	d_I\ButtonTextureID[BUTTON_GREEN_TEXTURE] = LoadTexture_Strict("GFX\Map\Textures\keypad.jpg", 1, DeleteAllTextures)
+	d_I\ButtonTextureID[BUTTON_RED_TEXTURE] = LoadTexture_Strict("GFX\Map\Textures\keypad_locked.png", 1, DeleteAllTextures)
 	
 	If opt\Atmosphere Then
 		For i = BUTTON_GREEN_TEXTURE To BUTTON_RED_TEXTURE
@@ -269,9 +269,9 @@ Function LoadLevers%()
 	
 	lvr_I.LeverInstance = New LeverInstance
 	
-	lvr_I\LeverModelID[LEVER_BASE_MODEL] = LoadMesh_Strict("GFX\map\Props\LeverBase.b3d")
+	lvr_I\LeverModelID[LEVER_BASE_MODEL] = LoadMesh_Strict("GFX\Map\Props\LeverBase.b3d")
 	
-	lvr_I\LeverModelID[LEVER_HANDLE_MODEL] = LoadMesh_Strict("GFX\map\Props\LeverHandle.b3d")
+	lvr_I\LeverModelID[LEVER_HANDLE_MODEL] = LoadMesh_Strict("GFX\Map\Props\LeverHandle.b3d")
 	
 	For i = 0 To MaxLeverModelIDAmount - 1
 		HideEntity(lvr_I\LeverModelID[i])
@@ -308,8 +308,8 @@ Function LoadSecurityCams%()
 	
 	sc_I.SecurityCamInstance = New SecurityCamInstance
 	
-	sc_I\CamModelID[CAM_BASE_MODEL] = LoadMesh_Strict("GFX\map\Props\CamBase.b3d")
-	sc_I\CamModelID[CAM_HEAD_MODEL] = LoadMesh_Strict("GFX\map\Props\CamHead.b3d")
+	sc_I\CamModelID[CAM_BASE_MODEL] = LoadMesh_Strict("GFX\Map\Props\CamBase.b3d")
+	sc_I\CamModelID[CAM_HEAD_MODEL] = LoadMesh_Strict("GFX\Map\Props\CamHead.b3d")
 	
 	For i = 0 To MaxCamModelIDAmount - 1
 		HideEntity(sc_I\CamModelID[i])
@@ -320,7 +320,7 @@ Function LoadSecurityCams%()
 	Next
 	
 	For i = CAM_HEAD_DEFAULT_TEXTURE To CAM_HEAD_RED_LIGHT_TEXTURE
-		sc_I\CamTextureID[i] = LoadTexture_Strict("GFX\map\textures\camera(" + (i + 1) + ").png", 1, DeleteAllTextures)
+		sc_I\CamTextureID[i] = LoadTexture_Strict("GFX\Map\Textures\camera(" + (i + 1) + ").png", 1, DeleteAllTextures)
 		If opt\Atmosphere Then TextureBlend(sc_I\CamTextureID[i], 5)
 	Next
 End Function
@@ -370,16 +370,16 @@ Function LoadMonitors%()
 	
 	mon_I.MonitorInstance = New MonitorInstance
 	
-	mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL] = LoadMesh_Strict("GFX\map\Props\monitor2.b3d")
-	mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL] = LoadMesh_Strict("GFX\map\Props\monitor_checkpoint.b3d")
+	mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL] = LoadMesh_Strict("GFX\Map\Props\monitor2.b3d")
+	mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL] = LoadMesh_Strict("GFX\Map\Props\monitor_checkpoint.b3d")
 	
 	For i = 0 To MaxMonitorModelIDAmount - 1
 		HideEntity(mon_I\MonitorModelID[i])
 	Next
 	
-	mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY] = LoadTexture_Strict("GFX\monitor_overlay.png", 1, DeleteAllTextures)
+	mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY] = LoadTexture_Strict("GFX\Overlays\monitor_overlay.png", 1, DeleteAllTextures)
 	For i = MONITOR_LOCKDOWN_1_OVERLAY To MONITOR_LOCKDOWN_3_OVERLAY
-		mon_I\MonitorOverlayID[i] = LoadTexture_Strict("GFX\map\textures\lockdown_screen(" + i + ").png", 1, DeleteAllTextures)
+		mon_I\MonitorOverlayID[i] = LoadTexture_Strict("GFX\Map\Textures\lockdown_screen(" + i + ").png", 1, DeleteAllTextures)
 		If opt\Atmosphere Then TextureBlend(mon_I\MonitorOverlayID[i], 5)
 	Next
 	mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_4_OVERLAY] = CreateTextureUsingCacheSystem(1, 1)
@@ -389,11 +389,11 @@ Function LoadMonitors%()
 	SetBuffer(BackBuffer())
 	
 	For i = MONITOR_079_OVERLAY_1 To MONITOR_079_OVERLAY_7
-		mon_I\MonitorOverlayID[i] = LoadTexture_Strict("GFX\scp_079_overlay(" + (i - 4) + ").png", 1, DeleteAllTextures)
+		mon_I\MonitorOverlayID[i] = LoadTexture_Strict("GFX\Overlays\scp_079_overlay(" + (i - 4) + ").png", 1, DeleteAllTextures)
 	Next
 	
 	For i = MONITOR_895_OVERLAY_1 To MONITOR_895_OVERLAY_6
-		mon_I\MonitorOverlayID[i] = LoadTexture_Strict("GFX\scp_895_overlay(" + (i - 11) + ").png", 1, DeleteAllTextures)
+		mon_I\MonitorOverlayID[i] = LoadTexture_Strict("GFX\Overlays\scp_895_overlay(" + (i - 11) + ").png", 1, DeleteAllTextures)
 	Next
 End Function
 
@@ -475,84 +475,84 @@ Function LoadNPCs%()
 	
 	n_I.NPCInstance = New NPCInstance
 	
-	n_I\NPCModelID[NPC_008_1_MODEL] = LoadAnimMesh_Strict("GFX\npcs\scp_008_1.b3d")
+	n_I\NPCModelID[NPC_008_1_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_008_1.b3d")
 	
-	n_I\NPCModelID[NPC_035_TENTACLE_MODEL] = LoadAnimMesh_Strict("GFX\npcs\scp_035_tentacle.b3d")
+	n_I\NPCModelID[NPC_035_TENTACLE_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_035_tentacle.b3d")
 	
-	n_I\NPCModelID[NPC_049_MODEL] = LoadAnimMesh_Strict("GFX\npcs\scp_049.b3d")
+	n_I\NPCModelID[NPC_049_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_049.b3d")
 	
-	n_I\NPCModelID[NPC_049_2_MODEL] = LoadAnimMesh_Strict("GFX\npcs\scp_049_2.b3d")
+	n_I\NPCModelID[NPC_049_2_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_049_2.b3d")
 	
-	n_I\NPCModelID[NPC_066_MODEL] = LoadAnimMesh_Strict("GFX\npcs\scp_066.b3d")
+	n_I\NPCModelID[NPC_066_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_066.b3d")
 	
-	n_I\NPCModelID[NPC_096_MODEL] = LoadAnimMesh_Strict("GFX\npcs\scp_096.b3d")
+	n_I\NPCModelID[NPC_096_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_096.b3d")
 	
-	n_I\NPCModelID[NPC_106_MODEL] = LoadAnimMesh_Strict("GFX\npcs\scp_106.b3d")
+	n_I\NPCModelID[NPC_106_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_106.b3d")
 	
-	n_I\NPCModelID[NPC_173_MODEL] = LoadMesh_Strict("GFX\npcs\scp_173_body.b3d")
-	n_I\NPCModelID[NPC_173_HEAD_MODEL] = LoadMesh_Strict("GFX\npcs\scp_173_head.b3d")
-	n_I\NPCModelID[NPC_173_BOX_MODEL] = LoadMesh_Strict("GFX\npcs\scp_173_box.b3d")
+	n_I\NPCModelID[NPC_173_MODEL] = LoadMesh_Strict("GFX\NPCs\scp_173_body.b3d")
+	n_I\NPCModelID[NPC_173_HEAD_MODEL] = LoadMesh_Strict("GFX\NPCs\scp_173_head.b3d")
+	n_I\NPCModelID[NPC_173_BOX_MODEL] = LoadMesh_Strict("GFX\NPCs\scp_173_box.b3d")
 	
-	n_I\NPCModelID[NPC_205_DEMON_1_MODEL] = LoadAnimMesh_Strict("GFX\npcs\scp_205_demon.b3d")
-	n_I\NPCModelID[NPC_205_DEMON_2_MODEL] = LoadAnimMesh_Strict("GFX\npcs\scp_205_demon(2).b3d")
-	n_I\NPCModelID[NPC_205_DEMON_3_MODEL] = LoadAnimMesh_Strict("GFX\npcs\scp_205_demon(3).b3d")
-	n_I\NPCModelID[NPC_205_WOMAN_MODEL] = LoadAnimMesh_Strict("GFX\npcs\scp_205_woman.b3d")
+	n_I\NPCModelID[NPC_205_DEMON_1_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_205_demon.b3d")
+	n_I\NPCModelID[NPC_205_DEMON_2_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_205_demon(2).b3d")
+	n_I\NPCModelID[NPC_205_DEMON_3_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_205_demon(3).b3d")
+	n_I\NPCModelID[NPC_205_WOMAN_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_205_woman.b3d")
 	
-	n_I\NPCModelID[NPC_372_MODEL] = LoadAnimMesh_Strict("GFX\npcs\scp_372.b3d")
+	n_I\NPCModelID[NPC_372_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_372.b3d")
 	
-	n_I\NPCModelID[NPC_513_1_MODEL] = LoadAnimMesh_Strict("GFX\npcs\scp_513_1.b3d")
+	n_I\NPCModelID[NPC_513_1_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_513_1.b3d")
 	
-	n_I\NPCModelID[NPC_860_2_MODEL] = LoadAnimMesh_Strict("GFX\npcs\scp_860_2.b3d")
+	n_I\NPCModelID[NPC_860_2_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_860_2.b3d")
 	
-	n_I\NPCModelID[NPC_939_MODEL] = LoadAnimMesh_Strict("GFX\npcs\scp_939.b3d")
+	n_I\NPCModelID[NPC_939_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_939.b3d")
 	
-	n_I\NPCModelID[NPC_966_MODEL] = LoadAnimMesh_Strict("GFX\npcs\scp_966.b3d")
+	n_I\NPCModelID[NPC_966_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_966.b3d")
 	
-	n_I\NPCModelID[NPC_1048_MODEL] = LoadAnimMesh_Strict("GFX\npcs\scp_1048.b3d")
-	n_I\NPCModelID[NPC_1048_A_MODEL] = LoadAnimMesh_Strict("GFX\npcs\scp_1048_a.b3d")
+	n_I\NPCModelID[NPC_1048_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_1048.b3d")
+	n_I\NPCModelID[NPC_1048_A_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_1048_a.b3d")
 	
-	n_I\NPCModelID[NPC_1499_1_MODEL] = LoadAnimMesh_Strict("GFX\npcs\scp_1499_1.b3d")
+	n_I\NPCModelID[NPC_1499_1_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_1499_1.b3d")
 	
-	n_I\NPCModelID[NPC_APACHE_MODEL] = LoadAnimMesh_Strict("GFX\npcs\apache.b3d")
-	n_I\NPCModelID[NPC_APACHE_ROTOR_1_MODEL] = LoadAnimMesh_Strict("GFX\npcs\apache_rotor.b3d")
-	n_I\NPCModelID[NPC_APACHE_ROTOR_2_MODEL] = LoadAnimMesh_Strict("GFX\npcs\apache_rotor(2).b3d")
+	n_I\NPCModelID[NPC_APACHE_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\apache.b3d")
+	n_I\NPCModelID[NPC_APACHE_ROTOR_1_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\apache_rotor.b3d")
+	n_I\NPCModelID[NPC_APACHE_ROTOR_2_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\apache_rotor(2).b3d")
 	
-	n_I\NPCModelID[NPC_CLERK_MODEL] = LoadAnimMesh_Strict("GFX\npcs\clerk.b3d")
+	n_I\NPCModelID[NPC_CLERK_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\clerk.b3d")
 	
-	n_I\NPCModelID[NPC_CLASS_D_MODEL] = LoadAnimMesh_Strict("GFX\npcs\class_d.b3d")
+	n_I\NPCModelID[NPC_CLASS_D_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\class_d.b3d")
 	
-	n_I\NPCModelID[NPC_DUCK_MODEL] = LoadAnimMesh_Strict("GFX\npcs\duck.b3d")
+	n_I\NPCModelID[NPC_DUCK_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\duck.b3d")
 	
-	n_I\NPCModelID[NPC_GUARD_MODEL] = LoadAnimMesh_Strict("GFX\npcs\guard.b3d")
+	n_I\NPCModelID[NPC_GUARD_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\guard.b3d")
 	
-	n_I\NPCModelID[NPC_MTF_MODEL] = LoadAnimMesh_Strict("GFX\npcs\MTF.b3d")
+	n_I\NPCModelID[NPC_MTF_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\MTF.b3d")
 	
-	n_I\NPCModelID[NPC_NAZI_MODEL] = LoadAnimMesh_Strict("GFX\npcs\nazi_officer.b3d")
+	n_I\NPCModelID[NPC_NAZI_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\nazi_officer.b3d")
 	
-	n_I\NPCModelID[NPC_VEHICLE_MODEL] = LoadAnimMesh_Strict("GFX\npcs\vehicle.b3d")
+	n_I\NPCModelID[NPC_VEHICLE_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\vehicle.b3d")
 	
 	For i = 0 To MaxNPCModelIDAmount - 1
 		HideEntity(n_I\NPCModelID[i])
 	Next
 	
-	n_I\NPCTextureID[NPC_CLASS_D_GONZALES_TEXTURE] = LoadTexture_Strict("GFX\npcs\Gonzales.png", 1, DeleteAllTextures)
-	n_I\NPCTextureID[NPC_CLASS_D_BENJAMIN_TEXTURE] = LoadTexture_Strict("GFX\npcs\D_9341(2).png", 1, DeleteAllTextures)
-	n_I\NPCTextureID[NPC_CLASS_D_SCIENTIST_TEXTURE] = LoadTexture_Strict("GFX\npcs\scientist.png", 1, DeleteAllTextures)
-	n_I\NPCTextureID[NPC_CLASS_D_FRANKLIN_TEXTURE] = LoadTexture_Strict("GFX\npcs\Franklin.png", 1, DeleteAllTextures)
-	n_I\NPCTextureID[NPC_CLASS_D_MAYNARD_TEXTURE] = LoadTexture_Strict("GFX\npcs\Maynard.png", 1, DeleteAllTextures)
-	n_I\NPCTextureID[NPC_CLASS_D_CLASS_D_TEXTURE] = LoadTexture_Strict("GFX\npcs\class_d(2).png", 1, DeleteAllTextures)
-	If opt\IntroEnabled Then n_I\NPCTextureID[NPC_CLASS_D_D9341_TEXTURE] = LoadTexture_Strict("GFX\npcs\D_9341.png", 1, DeleteAllTextures)
-	n_I\NPCTextureID[NPC_CLASS_D_BODY_1_TEXTURE] = LoadTexture_Strict("GFX\npcs\body.png", 1, DeleteAllTextures)
-	n_I\NPCTextureID[NPC_CLASS_D_BODY_2_TEXTURE] = LoadTexture_Strict("GFX\npcs\body(2).png", 1, DeleteAllTextures)
-	n_I\NPCTextureID[NPC_CLASS_D_JANITOR_1_TEXTURE] = LoadTexture_Strict("GFX\npcs\janitor.png", 1, DeleteAllTextures)
-	n_I\NPCTextureID[NPC_CLASS_D_JANITOR_2_TEXTURE] = LoadTexture_Strict("GFX\npcs\janitor(2).png", 1, DeleteAllTextures)
-	n_I\NPCTextureID[NPC_CLASS_D_VICTIM_008_TEXTURE] = LoadTexture_Strict("GFX\npcs\scp_008_1_victim.png", 1, DeleteAllTextures)
-	n_I\NPCTextureID[NPC_CLASS_D_VICTIM_035_TEXTURE] = LoadTexture_Strict("GFX\npcs\scp_035_victim.png", 1, DeleteAllTextures)
-	n_I\NPCTextureID[NPC_CLASS_D_VICTIM_409_TEXTURE] = LoadTexture_Strict("GFX\npcs\scp_409_victim.png", 1, DeleteAllTextures)
-	n_I\NPCTextureID[NPC_CLASS_D_VICTIM_939_1_TEXTURE] = LoadTexture_Strict("GFX\npcs\scp_939_victim.png", 1, DeleteAllTextures)
-	n_I\NPCTextureID[NPC_CLASS_D_VICTIM_939_2_TEXTURE] = LoadTexture_Strict("GFX\npcs\scp_939_victim(2).png", 1, DeleteAllTextures)
+	n_I\NPCTextureID[NPC_CLASS_D_GONZALES_TEXTURE] = LoadTexture_Strict("GFX\NPCs\Gonzales.png", 1, DeleteAllTextures)
+	n_I\NPCTextureID[NPC_CLASS_D_BENJAMIN_TEXTURE] = LoadTexture_Strict("GFX\NPCs\D_9341(2).png", 1, DeleteAllTextures)
+	n_I\NPCTextureID[NPC_CLASS_D_SCIENTIST_TEXTURE] = LoadTexture_Strict("GFX\NPCs\scientist.png", 1, DeleteAllTextures)
+	n_I\NPCTextureID[NPC_CLASS_D_FRANKLIN_TEXTURE] = LoadTexture_Strict("GFX\NPCs\Franklin.png", 1, DeleteAllTextures)
+	n_I\NPCTextureID[NPC_CLASS_D_MAYNARD_TEXTURE] = LoadTexture_Strict("GFX\NPCs\Maynard.png", 1, DeleteAllTextures)
+	n_I\NPCTextureID[NPC_CLASS_D_CLASS_D_TEXTURE] = LoadTexture_Strict("GFX\NPCs\class_d(2).png", 1, DeleteAllTextures)
+	If opt\IntroEnabled Then n_I\NPCTextureID[NPC_CLASS_D_D9341_TEXTURE] = LoadTexture_Strict("GFX\NPCs\D_9341.png", 1, DeleteAllTextures)
+	n_I\NPCTextureID[NPC_CLASS_D_BODY_1_TEXTURE] = LoadTexture_Strict("GFX\NPCs\body.png", 1, DeleteAllTextures)
+	n_I\NPCTextureID[NPC_CLASS_D_BODY_2_TEXTURE] = LoadTexture_Strict("GFX\NPCs\body(2).png", 1, DeleteAllTextures)
+	n_I\NPCTextureID[NPC_CLASS_D_JANITOR_1_TEXTURE] = LoadTexture_Strict("GFX\NPCs\janitor.png", 1, DeleteAllTextures)
+	n_I\NPCTextureID[NPC_CLASS_D_JANITOR_2_TEXTURE] = LoadTexture_Strict("GFX\NPCs\janitor(2).png", 1, DeleteAllTextures)
+	n_I\NPCTextureID[NPC_CLASS_D_VICTIM_008_TEXTURE] = LoadTexture_Strict("GFX\NPCs\scp_008_1_victim.png", 1, DeleteAllTextures)
+	n_I\NPCTextureID[NPC_CLASS_D_VICTIM_035_TEXTURE] = LoadTexture_Strict("GFX\NPCs\scp_035_victim.png", 1, DeleteAllTextures)
+	n_I\NPCTextureID[NPC_CLASS_D_VICTIM_409_TEXTURE] = LoadTexture_Strict("GFX\NPCs\scp_409_victim.png", 1, DeleteAllTextures)
+	n_I\NPCTextureID[NPC_CLASS_D_VICTIM_939_1_TEXTURE] = LoadTexture_Strict("GFX\NPCs\scp_939_victim.png", 1, DeleteAllTextures)
+	n_I\NPCTextureID[NPC_CLASS_D_VICTIM_939_2_TEXTURE] = LoadTexture_Strict("GFX\NPCs\scp_939_victim(2).png", 1, DeleteAllTextures)
 	
-	n_I\NPCTextureID[NPC_096_BLOODY_TEXTURE] = LoadTexture_Strict("GFX\npcs\scp_096_bloody.png", 1, DeleteAllTextures)
+	n_I\NPCTextureID[NPC_096_BLOODY_TEXTURE] = LoadTexture_Strict("GFX\NPCs\scp_096_bloody.png", 1, DeleteAllTextures)
 	
 	If opt\Atmosphere Then
 		For i = NPC_CLASS_D_GONZALES_TEXTURE To NPC_096_BLOODY_TEXTURE
@@ -598,25 +598,25 @@ Function LoadMisc%()
 	
 	misc_I.MiscInstance = New MiscInstance
 	
-	misc_I\MTModelID[MT_ROOM1] = LoadRMesh("GFX\map\mt1.rmesh", Null)
-	misc_I\MTModelID[MT_ROOM2] = LoadRMesh("GFX\map\mt2.rmesh", Null)
-	misc_I\MTModelID[MT_ROOM2C] = LoadRMesh("GFX\map\mt2C.rmesh", Null)
-	misc_I\MTModelID[MT_ROOM3] = LoadRMesh("GFX\map\mt3.rmesh", Null)
-	misc_I\MTModelID[MT_ROOM4] = LoadRMesh("GFX\map\mt4.rmesh", Null)
-	misc_I\MTModelID[MT_ELEVATOR] = LoadRMesh("GFX\map\mt_elevator.rmesh", Null)
-	misc_I\MTModelID[MT_GENERATOR] = LoadRMesh("GFX\map\mt_generator.rmesh", Null)
+	misc_I\MTModelID[MT_ROOM1] = LoadRMesh("GFX\Map\mt1.rmesh", Null)
+	misc_I\MTModelID[MT_ROOM2] = LoadRMesh("GFX\Map\mt2.rmesh", Null)
+	misc_I\MTModelID[MT_ROOM2C] = LoadRMesh("GFX\Map\mt2C.rmesh", Null)
+	misc_I\MTModelID[MT_ROOM3] = LoadRMesh("GFX\Map\mt3.rmesh", Null)
+	misc_I\MTModelID[MT_ROOM4] = LoadRMesh("GFX\Map\mt4.rmesh", Null)
+	misc_I\MTModelID[MT_ELEVATOR] = LoadRMesh("GFX\Map\mt_elevator.rmesh", Null)
+	misc_I\MTModelID[MT_GENERATOR] = LoadRMesh("GFX\Map\mt_generator.rmesh", Null)
 	
 	For i = 0 To MaxMTModelIDAmount - 1
 		HideEntity(misc_I\MTModelID[i])
 	Next
 	
-	misc_I\CupLiquid = LoadMesh_Strict("GFX\items\cup_liquid.b3d")
+	misc_I\CupLiquid = LoadMesh_Strict("GFX\Items\cup_liquid.b3d")
 	HideEntity(misc_I\CupLiquid)
 	
 	For i = LIGHT_SPRITE_DEFAULT To LIGHT_SPRITE_RED
-		misc_I\LightSpriteID[i] = LoadTexture_Strict("GFX\light(" + i + ").png", 1, DeleteAllTextures)
+		misc_I\LightSpriteID[i] = LoadTexture_Strict("GFX\Particles\light(" + i + ").png", 1, DeleteAllTextures)
 	Next
-	misc_I\AdvancedLightSprite = LoadTexture_Strict("GFX\advanced_light.png", 1, DeleteAllTextures)
+	misc_I\AdvancedLightSprite = LoadTexture_Strict("GFX\Particles\advanced_light.png", 1, DeleteAllTextures)
 End Function
 
 Function LoadMaterials%(File$)
@@ -651,7 +651,7 @@ Function LoadMaterials%(File$)
 	CatchErrors("LoadMaterials")
 End Function
 
-Const ItemsPath$ = "GFX\items\"
+Const ItemsPath$ = "GFX\Items\"
 
 Function LoadItems%()
 	Local it.ItemTemplates, it2.ItemTemplates
@@ -1246,22 +1246,22 @@ Function LoadEntities%()
 	
 	RenderLoading(5, "ICONS")
 	
-	t\IconID[0] = LoadImage_Strict("GFX\walk_icon.png")
+	t\IconID[0] = LoadImage_Strict("GFX\HUD\walk_icon.png")
 	t\IconID[0] = ScaleImage2(t\IconID[0], MenuScale, MenuScale)
-	t\IconID[1] = LoadImage_Strict("GFX\sprint_icon.png")
+	t\IconID[1] = LoadImage_Strict("GFX\HUD\sprint_icon.png")
 	t\IconID[1] = ScaleImage2(t\IconID[1], MenuScale, MenuScale)
-	t\IconID[2] = LoadImage_Strict("GFX\crouch_icon.png")
+	t\IconID[2] = LoadImage_Strict("GFX\HUD\crouch_icon.png")
 	t\IconID[2] = ScaleImage2(t\IconID[2], MenuScale, MenuScale)
 	For i = 3 To 4
-		t\IconID[i] = LoadImage_Strict("GFX\blink_icon(" + (i - 2) + ").png")
+		t\IconID[i] = LoadImage_Strict("GFX\HUD\blink_icon(" + (i - 2) + ").png")
 		t\IconID[i] = ScaleImage2(t\IconID[i], MenuScale, MenuScale)
 	Next
 	For i = 5 To 6
-		t\IconID[i] = LoadImage_Strict("GFX\hand_symbol(" + (i - 4) + ").png")
+		t\IconID[i] = LoadImage_Strict("GFX\HUD\hand_symbol(" + (i - 4) + ").png")
 		t\IconID[i] = ScaleImage2(t\IconID[i], MenuScale, MenuScale)
 	Next
 	
-	QuickLoadIcon = LoadImage_Strict("GFX\menu\QuickLoading.png")
+	QuickLoadIcon = LoadImage_Strict("GFX\Menu\QuickLoading.png")
 	QuickLoadIcon = ScaleImage2(QuickLoadIcon, MenuScale, MenuScale)
 	
 	For i = 0 To MAXACHIEVEMENTS - 1
@@ -1272,38 +1272,38 @@ Function LoadEntities%()
 		
 		Local Image$ = GetINIString2(AchievementsFile, Loc2, "AchvImage") 
 		
-		achv\AchvIMG[i] = LoadImage_Strict("GFX\menu\achievements\" + Image + ".png")
+		achv\AchvIMG[i] = LoadImage_Strict("GFX\Menu\achievements\" + Image + ".png")
 		achv\AchvIMG[i] = ScaleImage2(achv\AchvIMG[i], opt\GraphicHeight / 768.0, opt\GraphicHeight / 768.0)
 		BufferDirty(ImageBuffer(achv\AchvIMG[i]))
 	Next
 	
-	achv\AchvLocked = LoadImage_Strict("GFX\menu\achievements\AchvLocked.png")
+	achv\AchvLocked = LoadImage_Strict("GFX\Menu\achievements\AchvLocked.png")
 	achv\AchvLocked = ScaleImage2(achv\AchvLocked, opt\GraphicHeight / 768.0, opt\GraphicHeight / 768.0)
 	BufferDirty(ImageBuffer(achv\AchvLocked))
 	
-	t\ImageID[0] = LoadImage_Strict("GFX\menu\pause_menu.png")
+	t\ImageID[0] = LoadImage_Strict("GFX\Menu\pause_menu.png")
 	t\ImageID[0] = ScaleImage2(t\ImageID[0], MenuScale, MenuScale)
 	MaskImage(t\ImageID[0], 255, 255, 0)
 	
 	If (Not opt\SmoothBars) Then
-		t\ImageID[1] = LoadImage_Strict("GFX\blink_meter(2).png")
+		t\ImageID[1] = LoadImage_Strict("GFX\HUD\blink_meter(2).png")
 		t\ImageID[1] = ScaleImage2(t\ImageID[1], MenuScale, MenuScale)
 		
 		For i = 2 To 3
-			t\ImageID[i] = LoadImage_Strict("GFX\stamina_meter(" + (i - 1) + ").png")
+			t\ImageID[i] = LoadImage_Strict("GFX\HUD\stamina_meter(" + (i - 1) + ").png")
 			t\ImageID[i] = ScaleImage2(t\ImageID[i], MenuScale, MenuScale)
 		Next
 	EndIf
 	
-	t\ImageID[4] = LoadImage_Strict("GFX\keypad_HUD.png")
+	t\ImageID[4] = LoadImage_Strict("GFX\HUD\keypad_HUD.png")
 	t\ImageID[4] = ScaleImage2(t\ImageID[4], MenuScale, MenuScale)
 	MaskImage(t\ImageID[4], 255, 0, 255)
 	
-	t\ImageID[5] = LoadImage_Strict("GFX\scp_294_panel.png")
+	t\ImageID[5] = LoadImage_Strict("GFX\Overlays\scp_294_panel_overlay.png")
 	t\ImageID[5] = ScaleImage2(t\ImageID[5], MenuScale, MenuScale)
 	MaskImage(t\ImageID[5], 255, 0, 255)
 	
-	t\ImageID[6] = LoadImage_Strict("GFX\night_vision_goggles_battery.png")
+	t\ImageID[6] = LoadImage_Strict("GFX\HUD\night_vision_goggles_battery.png")
 	t\ImageID[6] = ScaleImage2(t\ImageID[6], MenuScale, MenuScale)
 	MaskImage(t\ImageID[6], 255, 0, 255)
 	
@@ -1324,7 +1324,7 @@ Function LoadEntities%()
 	CreateBlurImage()
 	CameraProjMode(ArkBlurCam, 0)
 	
-	t\OverlayTextureID[0] = LoadTexture_Strict("GFX\fog.png", 1, DeleteAllTextures) ; ~ FOG
+	t\OverlayTextureID[0] = LoadTexture_Strict("GFX\Overlays\fog.png", 1, DeleteAllTextures) ; ~ FOG
 	t\OverlayID[0] = CreateSprite(ArkBlurCam)
 	ScaleSprite(t\OverlayID[0], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
 	EntityTexture(t\OverlayID[0], t\OverlayTextureID[0])
@@ -1332,7 +1332,7 @@ Function LoadEntities%()
 	EntityOrder(t\OverlayID[0], -1000)
 	MoveEntity(t\OverlayID[0], 0.0, 0.0, 1.0)
 	
-	t\OverlayTextureID[1] = LoadTexture_Strict("GFX\gas_mask_overlay.png", 1, DeleteAllTextures) ; ~ GAS MASK
+	t\OverlayTextureID[1] = LoadTexture_Strict("GFX\Overlays\gas_mask_overlay.png", 1, DeleteAllTextures) ; ~ GAS MASK
 	t\OverlayID[1] = CreateSprite(ArkBlurCam)
 	ScaleSprite(t\OverlayID[1], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
 	EntityTexture(t\OverlayID[1], t\OverlayTextureID[1])
@@ -1341,7 +1341,7 @@ Function LoadEntities%()
 	EntityOrder(t\OverlayID[1], -1003)
 	MoveEntity(t\OverlayID[1], 0.0, 0.0, 1.0)
 	
-	t\OverlayTextureID[2] = LoadTexture_Strict("GFX\hazmat_suit_overlay.png", 1, DeleteAllTextures) ; ~ HAZMAT SUIT
+	t\OverlayTextureID[2] = LoadTexture_Strict("GFX\Overlays\hazmat_suit_overlay.png", 1, DeleteAllTextures) ; ~ HAZMAT SUIT
 	t\OverlayID[2] = CreateSprite(ArkBlurCam)
 	ScaleSprite(t\OverlayID[2], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
 	EntityTexture(t\OverlayID[2], t\OverlayTextureID[2])
@@ -1350,7 +1350,7 @@ Function LoadEntities%()
 	EntityOrder(t\OverlayID[2], -1003)
 	MoveEntity(t\OverlayID[2], 0, 0, 1.0)
 	
-	t\OverlayTextureID[3] = LoadTexture_Strict("GFX\scp_008_overlay.png", 1, DeleteAllTextures) ; ~ SCP-008
+	t\OverlayTextureID[3] = LoadTexture_Strict("GFX\Overlays\scp_008_overlay.png", 1, DeleteAllTextures) ; ~ SCP-008
 	t\OverlayID[3] = CreateSprite(ArkBlurCam)
 	ScaleSprite(t\OverlayID[3], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
 	EntityTexture(t\OverlayID[3], t\OverlayTextureID[3])
@@ -1359,7 +1359,7 @@ Function LoadEntities%()
 	EntityOrder(t\OverlayID[3], -1003)
 	MoveEntity(t\OverlayID[3], 0.0, 0.0, 1.0)
 	
-	t\OverlayTextureID[4] = LoadTexture_Strict("GFX\night_vision_goggles_overlay.png", 1, DeleteAllTextures) ; ~ NIGHT VISION GOGGLES
+	t\OverlayTextureID[4] = LoadTexture_Strict("GFX\Overlays\night_vision_goggles_overlay.png", 1, DeleteAllTextures) ; ~ NIGHT VISION GOGGLES
 	t\OverlayID[4] = CreateSprite(ArkBlurCam)
 	ScaleSprite(t\OverlayID[4], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
 	EntityTexture(t\OverlayID[4], t\OverlayTextureID[4])
@@ -1393,7 +1393,7 @@ Function LoadEntities%()
 	EntityOrder(t\OverlayID[6], -1002)
 	MoveEntity(t\OverlayID[6], 0.0, 0.0, 1.0)
 	
-	t\OverlayTextureID[7] = LoadTexture_Strict("GFX\scp_409_overlay.png", 1, DeleteAllTextures) ; ~ SCP-409
+	t\OverlayTextureID[7] = LoadTexture_Strict("GFX\Overlays\scp_409_overlay.png", 1, DeleteAllTextures) ; ~ SCP-409
 	t\OverlayID[7] = CreateSprite(ArkBlurCam)
 	ScaleSprite(t\OverlayID[7], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
 	EntityTexture(t\OverlayID[7], t\OverlayTextureID[7])
@@ -1402,7 +1402,7 @@ Function LoadEntities%()
 	EntityOrder(t\OverlayID[7], -1003)
 	MoveEntity(t\OverlayID[7], 0.0, 0.0, 1.0)
 	
-	t\OverlayTextureID[8] = LoadTexture_Strict("GFX\helmet_overlay.png", 1, DeleteAllTextures) ; ~ HELMET
+	t\OverlayTextureID[8] = LoadTexture_Strict("GFX\Overlays\helmet_overlay.png", 1, DeleteAllTextures) ; ~ HELMET
 	t\OverlayID[8] = CreateSprite(ArkBlurCam)
 	ScaleSprite(t\OverlayID[8], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
 	EntityTexture(t\OverlayID[8], t\OverlayTextureID[8])
@@ -1411,7 +1411,7 @@ Function LoadEntities%()
 	EntityOrder(t\OverlayID[8], -1003)
 	MoveEntity(t\OverlayID[8], 0.0, 0.0, 1.0)
 	
-	t\OverlayTextureID[9] = LoadTexture_Strict("GFX\bloody_overlay.png", 1, DeleteAllTextures) ; ~ BLOOD
+	t\OverlayTextureID[9] = LoadTexture_Strict("GFX\Overlays\bloody_overlay.png", 1, DeleteAllTextures) ; ~ BLOOD
 	t\OverlayID[9] = CreateSprite(ArkBlurCam)
 	ScaleSprite(t\OverlayID[9], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
 	EntityTexture(t\OverlayID[9], t\OverlayTextureID[9])
@@ -1420,7 +1420,7 @@ Function LoadEntities%()
 	EntityOrder(t\OverlayID[9], -1003)
 	MoveEntity(t\OverlayID[9], 0.0, 0.0, 1.0)
 	
-	t\OverlayTextureID[10] = LoadTexture_Strict("GFX\fog_gas_mask.png", 1, DeleteAllTextures) ; ~ FOG IN GAS MASK
+	t\OverlayTextureID[10] = LoadTexture_Strict("GFX\Overlays\fog_gas_mask.png", 1, DeleteAllTextures) ; ~ FOG IN GAS MASK
 	t\OverlayID[10] = CreateSprite(ArkBlurCam)
 	ScaleSprite(t\OverlayID[10], 1.0, Float(opt\GraphicHeight) / Float(opt\GraphicWidth))
 	EntityTexture(t\OverlayID[10], t\OverlayTextureID[10])
@@ -1432,8 +1432,8 @@ Function LoadEntities%()
 	For i = 0 To 10
 		HideEntity(t\OverlayID[i])
 	Next
-	t\OverlayTextureID[11] = LoadTexture_Strict("GFX\tesla_overlay.png", 1 + 2, DeleteAllTextures)
-	t\OverlayTextureID[12] = LoadTexture_Strict("GFX\fog_night_vision_goggles.png", 1, DeleteAllTextures)
+	t\OverlayTextureID[11] = LoadTexture_Strict("GFX\Overlays\tesla_overlay.png", 1 + 2, DeleteAllTextures)
+	t\OverlayTextureID[12] = LoadTexture_Strict("GFX\Overlays\fog_night_vision_goggles.png", 1, DeleteAllTextures)
 	
 	LoadDecals()
 	
@@ -1760,13 +1760,13 @@ Function InitLoadGame%()
 		; ~ Loading the necessary stuff for dimension_1499, but this will only be done if the player is in this dimension already
 		If e\EventID = e_dimension_1499 Then
 			If e\EventState = 2.0 Then
-				e\room\Objects[0] = LoadMesh_Strict("GFX\map\dimension1499\1499plane.b3d")
+				e\room\Objects[0] = LoadMesh_Strict("GFX\Map\dimension1499\1499plane.b3d")
 				HideEntity(e\room\Objects[0])
 				
-				I_1499\Sky = CreateSky("GFX\map\sky\1499sky")
+				I_1499\Sky = CreateSky("GFX\Map\sky\1499sky")
 				
 				For i = 1 To 15
-					e\room\Objects[i] = LoadRMesh("GFX\map\dimension1499\dimension_1499_object(" + i + ").rmesh", Null)
+					e\room\Objects[i] = LoadRMesh("GFX\Map\dimension1499\dimension_1499_object(" + i + ").rmesh", Null)
 					ScaleEntity(e\room\Objects[i], RoomScale, RoomScale, RoomScale)
 					HideEntity(e\room\Objects[i])
 				Next

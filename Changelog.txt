@@ -4,6 +4,7 @@ General:
 - Added a new feature that allows the player name a savegame with non-latin characters, like chinese, russian and etc.
 - Added «Home» key, «End» key, «Delete» key and «Insert» key to switch insert mode. Abilty to hold left/right arrow to fast move cursor. Implement of Ctrl+C and Ctrl+V.
 - Added a hitbox in "room2_servers_hcz" preventing SCP-096 to be triggered through the bloody windows.
+- Added some folders organization.
 
 - Finally made the «Bright mode» similar to original game.
 
@@ -33,6 +34,7 @@ Bug fixes:
 - Fixed windows textures for some rooms.
 - Fixed the office door appearing to freeze in weird ways when leaving the room instantly.
 - Fixed non-latin characters in loading screens not showing correctly.
+- Fixed checkpoint monitors not turning at all.
 
 - Tiny fix for dead guard position in the starting location.
 - Tiny fix for map generation.

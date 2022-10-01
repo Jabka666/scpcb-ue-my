@@ -24,7 +24,7 @@ Type TempProps
 End Type
 
 Function CheckForPropModel%(File$)
-	Local Path$ = "GFX\map\Props\"
+	Local Path$ = "GFX\Map\Props\"
 	Local Format$ = ".b3d"
 	
 	Select File
@@ -716,7 +716,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 					
 					tp.TempProps = New TempProps
 					tp\RoomTemplate = rt
-					tp\Name = "GFX\map\Props\" + File
+					tp\Name = "GFX\Map\Props\" + File
 					
 					tp\x = ReadFloat(f) * RoomScale
 					tp\y = ReadFloat(f) * RoomScale
@@ -1007,38 +1007,38 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	
 	; ~ Load assets
 	Local hMap%[ROOM4 + 1], Mask%[ROOM4 + 1]
-	Local GroundTexture% = LoadTexture_Strict("GFX\map\textures\forestfloor.jpg")
-	Local PathTexture% = LoadTexture_Strict("GFX\map\textures\forestpath.jpg")
+	Local GroundTexture% = LoadTexture_Strict("GFX\Map\Textures\forestfloor.jpg")
+	Local PathTexture% = LoadTexture_Strict("GFX\Map\Textures\forestpath.jpg")
 	
 	If opt\Atmosphere Then
 		TextureBlend(GroundTexture, 5)
 		TextureBlend(PathTexture, 5)
 	EndIf
 	
-	hMap[ROOM1] = LoadImage_Strict("GFX\map\forest\forest1h.png")
-	Mask[ROOM1] = LoadTexture_Strict("GFX\map\forest\forest1h_mask.png", 1 + 2)
+	hMap[ROOM1] = LoadImage_Strict("GFX\Map\Forest\forest1h.png")
+	Mask[ROOM1] = LoadTexture_Strict("GFX\Map\Forest\forest1h_mask.png", 1 + 2)
 	
-	hMap[ROOM2] = LoadImage_Strict("GFX\map\forest\forest2h.png")
-	Mask[ROOM2] = LoadTexture_Strict("GFX\map\forest\forest2h_mask.png", 1 + 2)
+	hMap[ROOM2] = LoadImage_Strict("GFX\Map\Forest\forest2h.png")
+	Mask[ROOM2] = LoadTexture_Strict("GFX\Map\Forest\forest2h_mask.png", 1 + 2)
 	
-	hMap[ROOM2C] = LoadImage_Strict("GFX\map\forest\forest2Ch.png")
-	Mask[ROOM2C] = LoadTexture_Strict("GFX\map\forest\forest2Ch_mask.png", 1 + 2)
+	hMap[ROOM2C] = LoadImage_Strict("GFX\Map\Forest\forest2Ch.png")
+	Mask[ROOM2C] = LoadTexture_Strict("GFX\Map\Forest\forest2Ch_mask.png", 1 + 2)
 	
-	hMap[ROOM3] = LoadImage_Strict("GFX\map\forest\forest3h.png")
-	Mask[ROOM3] = LoadTexture_Strict("GFX\map\forest\forest3h_mask.png", 1 + 2)
+	hMap[ROOM3] = LoadImage_Strict("GFX\Map\Forest\forest3h.png")
+	Mask[ROOM3] = LoadTexture_Strict("GFX\Map\Forest\forest3h_mask.png", 1 + 2)
 	
-	hMap[ROOM4] = LoadImage_Strict("GFX\map\forest\forest4h.png")
-	Mask[ROOM4] = LoadTexture_Strict("GFX\map\forest\forest4h_mask.png", 1 + 2)
+	hMap[ROOM4] = LoadImage_Strict("GFX\Map\Forest\forest4h.png")
+	Mask[ROOM4] = LoadTexture_Strict("GFX\Map\Forest\forest4h_mask.png", 1 + 2)
 	
 	For i = ROOM1 To ROOM4
 		fr\TileMesh[i] = LoadTerrain(hMap[i], 0.03, GroundTexture, PathTexture, Mask[i])
 	Next
 	
 	; ~ Detail meshes
-	fr\DetailMesh[0] = LoadMesh_Strict("GFX\map\Props\tree1.b3d")
-	fr\DetailMesh[1] = LoadMesh_Strict("GFX\map\Props\rock.b3d")
-	fr\DetailMesh[2] = LoadMesh_Strict("GFX\map\Props\tree2.b3d")
-	fr\DetailMesh[3] = LoadRMesh("GFX\map\scp_860_1_wall.rmesh", Null)
+	fr\DetailMesh[0] = LoadMesh_Strict("GFX\Map\Props\tree1.b3d")
+	fr\DetailMesh[1] = LoadMesh_Strict("GFX\Map\Props\rock.b3d")
+	fr\DetailMesh[2] = LoadMesh_Strict("GFX\Map\Props\tree2.b3d")
+	fr\DetailMesh[3] = LoadRMesh("GFX\Map\scp_860_1_wall.rmesh", Null)
 	
 	For i = ROOM1 To ROOM4
 		HideEntity(fr\TileMesh[i])
@@ -1256,38 +1256,38 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	
 	Local hMap%[ROOM4 + 1], Mask%[ROOM4 + 1]
 	; ~ Load assets
-	Local GroundTexture% = LoadTexture_Strict("GFX\map\textures\forestfloor.jpg")
-	Local PathTexture% = LoadTexture_Strict("GFX\map\textures\forestpath.jpg")
+	Local GroundTexture% = LoadTexture_Strict("GFX\Map\Textures\forestfloor.jpg")
+	Local PathTexture% = LoadTexture_Strict("GFX\Map\Textures\forestpath.jpg")
 	
 	If opt\Atmosphere Then
 		TextureBlend(GroundTexture, 5)
 		TextureBlend(PathTexture, 5)
 	EndIf
 	
-	hMap[ROOM1] = LoadImage_Strict("GFX\map\forest\forest1h.png")
-	Mask[ROOM1] = LoadTexture_Strict("GFX\map\forest\forest1h_mask.png", 1 + 2)
+	hMap[ROOM1] = LoadImage_Strict("GFX\Map\Forest\forest1h.png")
+	Mask[ROOM1] = LoadTexture_Strict("GFX\Map\Forest\forest1h_mask.png", 1 + 2)
 	
-	hMap[ROOM2] = LoadImage_Strict("GFX\map\forest\forest2h.png")
-	Mask[ROOM2] = LoadTexture_Strict("GFX\map\forest\forest2h_mask.png", 1 + 2)
+	hMap[ROOM2] = LoadImage_Strict("GFX\Map\Forest\forest2h.png")
+	Mask[ROOM2] = LoadTexture_Strict("GFX\Map\Forest\forest2h_mask.png", 1 + 2)
 	
-	hMap[ROOM2C] = LoadImage_Strict("GFX\map\forest\forest2Ch.png")
-	Mask[ROOM2C] = LoadTexture_Strict("GFX\map\forest\forest2Ch_mask.png", 1 + 2)
+	hMap[ROOM2C] = LoadImage_Strict("GFX\Map\Forest\forest2Ch.png")
+	Mask[ROOM2C] = LoadTexture_Strict("GFX\Map\Forest\forest2Ch_mask.png", 1 + 2)
 	
-	hMap[ROOM3] = LoadImage_Strict("GFX\map\forest\forest3h.png")
-	Mask[ROOM3] = LoadTexture_Strict("GFX\map\forest\forest3h_mask.png", 1 + 2)
+	hMap[ROOM3] = LoadImage_Strict("GFX\Map\Forest\forest3h.png")
+	Mask[ROOM3] = LoadTexture_Strict("GFX\Map\Forest\forest3h_mask.png", 1 + 2)
 	
-	hMap[ROOM4] = LoadImage_Strict("GFX\map\forest\forest4h.png")
-	Mask[ROOM4] = LoadTexture_Strict("GFX\map\forest\forest4h_mask.png", 1 + 2)
+	hMap[ROOM4] = LoadImage_Strict("GFX\Map\Forest\forest4h.png")
+	Mask[ROOM4] = LoadTexture_Strict("GFX\Map\Forest\forest4h_mask.png", 1 + 2)
 	
 	For i = ROOM1 To ROOM4
 		fr\TileMesh[i] = LoadTerrain(hMap[i], 0.03, GroundTexture, PathTexture, Mask[i])
 	Next
 	
 	; ~ Detail meshes
-	fr\DetailMesh[0] = LoadMesh_Strict("GFX\map\Props\tree1.b3d")
-	fr\DetailMesh[1] = LoadMesh_Strict("GFX\map\Props\rock.b3d")
-	fr\DetailMesh[2] = LoadMesh_Strict("GFX\map\Props\tree2.b3d")
-	fr\DetailMesh[3] = LoadRMesh("GFX\map\scp_860_1_wall.rmesh", Null)
+	fr\DetailMesh[0] = LoadMesh_Strict("GFX\Map\Props\tree1.b3d")
+	fr\DetailMesh[1] = LoadMesh_Strict("GFX\Map\Props\rock.b3d")
+	fr\DetailMesh[2] = LoadMesh_Strict("GFX\Map\Props\tree2.b3d")
+	fr\DetailMesh[3] = LoadRMesh("GFX\Map\scp_860_1_wall.rmesh", Null)
 	
 	For i = ROOM1 To ROOM4
 		HideEntity(fr\TileMesh[i])
@@ -1502,7 +1502,7 @@ Function CreateRoomTemplate.RoomTemplates(MeshPath$)
 	Local rt.RoomTemplates
 	
 	rt.RoomTemplates = New RoomTemplates
-	rt\OBJPath = "GFX\map\" + MeshPath
+	rt\OBJPath = "GFX\Map\" + MeshPath
 	rt\ID = RoomTempID
 	RoomTempID = RoomTempID + 1
 	
@@ -3700,22 +3700,22 @@ Function TurnCheckpointMonitorsOff%(LCZ% = True)
 		mon_I\MonitorTimer2 = 0.0
 	EndIf
 	
-	;For i = 2 To CountSurfaces(Entity)
-	;	SF = GetSurface(Entity, i)
-	;	b = GetSurfaceBrush(SF)
-	;	If b <> 0 Then
-	;		t1 = GetBrushTexture(b, 0)
-	;		If t1 <> 0 Then
-	;			Name = StripPath(TextureName(t1))
-	;			If Lower(Name) <> "monitor_overlay.png"
-	;				BrushTexture(b, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_4_OVERLAY], 0, 0)
-	;				PaintSurface(SF, b)
-	;			EndIf
-	;			If Name <> "" Then DeleteSingleTextureEntryFromCache(t1)
-	;		EndIf
-	;		FreeBrush(b)
-	;	EndIf
-	;Next
+	For i = 2 To CountSurfaces(Entity)
+		SF = GetSurface(Entity, i)
+		b = GetSurfaceBrush(SF)
+		If b <> 0 Then
+			t1 = GetBrushTexture(b, 0)
+			If t1 <> 0 Then
+				Name = StripPath(TextureName(t1))
+				If Lower(Name) <> "monitor_overlay.png"
+					BrushTexture(b, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_4_OVERLAY], 0, 0)
+					PaintSurface(SF, b)
+				EndIf
+				If Name <> "" Then DeleteSingleTextureEntryFromCache(t1)
+			EndIf
+			FreeBrush(b)
+		EndIf
+	Next
 End Function
 
 Function TimeCheckpointMonitors%()
@@ -3782,7 +3782,7 @@ Function UpdateScreens%()
 					ga\DrawHandIcon = True
 					If mo\MouseUp1 Then 
 						SelectedScreen = s
-						s\Img = LoadImage_Strict("GFX\map\screens\" + s\ImgPath)
+						s\Img = LoadImage_Strict("GFX\Map\Screens\" + s\ImgPath)
 						s\Img = ScaleImage2(s\Img, MenuScale, MenuScale)
 						MaskImage(s\Img, 255, 0, 255)
 						PlaySound_Strict(ButtonSFX)
@@ -4105,12 +4105,12 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[11], r\x - 4064.0 * RoomScale, r\y - 1248.0 * RoomScale, r\z - 1696.0 * RoomScale)
 			EntityParent(r\Objects[11], r\OBJ)
 			
-			r\Objects[13] = LoadMesh_Strict("GFX\map\gateawall1.b3d", r\OBJ)
+			r\Objects[13] = LoadMesh_Strict("GFX\Map\gateawall1.b3d", r\OBJ)
 			PositionEntity(r\Objects[13], r\x - 4308.0 * RoomScale, r\y - 1045.0 * RoomScale, r\z + 544.0 * RoomScale, True)
 			EntityColor(r\Objects[13], 25.0, 25.0, 25.0)
 			EntityType(r\Objects[13], HIT_MAP)
 			
-			r\Objects[14] = LoadMesh_Strict("GFX\map\gateawall2.b3d", r\OBJ)
+			r\Objects[14] = LoadMesh_Strict("GFX\Map\gateawall2.b3d", r\OBJ)
 			PositionEntity(r\Objects[14], r\x - 3820.0 * RoomScale, r\y - 1045.0 * RoomScale, r\z + 544.0 * RoomScale, True)	
 			EntityColor(r\Objects[14], 25.0, 25.0, 25.5)
 			EntityType(r\Objects[14], HIT_MAP)
@@ -4120,7 +4120,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[15], r\OBJ)
 			
 			; ~ Hit Box
-			r\Objects[16] = LoadMesh_Strict("GFX\map\gatea_hitbox1.b3d", r\OBJ)
+			r\Objects[16] = LoadMesh_Strict("GFX\Map\gatea_hitbox1.b3d", r\OBJ)
 			EntityPickMode(r\Objects[16], 2)
 			EntityType(r\Objects[16], HIT_MAP)
 			EntityAlpha(r\Objects[16], 0.0)
@@ -4241,7 +4241,7 @@ Function FillRoom%(r.Rooms)
 			TurnEntity(d\Buttons[0], 0.0, 90.0, 0.0)
 			
 			; ~ Hit Box
-			r\Objects[3] = LoadMesh_Strict("GFX\map\room372_hb.b3d", r\OBJ)
+			r\Objects[3] = LoadMesh_Strict("GFX\Map\room372_hb.b3d", r\OBJ)
 			EntityPickMode(r\Objects[3], 2)
 			EntityType(r\Objects[3], HIT_MAP)
 			EntityAlpha(r\Objects[3], 0.0)
@@ -4278,7 +4278,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\RoomDoors.Doors[2] = CreateDoor(r\x + 512.0 * RoomScale, r\y - 10240.0 * RoomScale, r\z - 256.0 * RoomScale, -90.0, r, False, ELEVATOR_DOOR)
 			
-			r\Objects[0] = LoadAnimMesh_Strict("GFX\map\Props\079.b3d")
+			r\Objects[0] = LoadAnimMesh_Strict("GFX\Map\Props\079.b3d")
 			ScaleEntity(r\Objects[0], 1.3, 1.3, 1.3)
 			PositionEntity(r\Objects[0], r\x + 166.0 * RoomScale, r\y - 10800.0 * RoomScale, r\z + 1606.0 * RoomScale)
 			TurnEntity(r\Objects[0], 0.0, -90.0, 0.0)
@@ -4457,7 +4457,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[1], r\x - 669.0 * RoomScale, r\y + 0.5, r\z - 16.0 * RoomScale)
 			
 			; ~ Glass panel
-			Tex = LoadTexture_Strict("GFX\map\textures\glass.png", 1 + 2)
+			Tex = LoadTexture_Strict("GFX\Map\Textures\glass.png", 1 + 2)
 			r\Objects[2] = CreateSprite()
 			EntityTexture(r\Objects[2], Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
@@ -4847,14 +4847,14 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[0], r\x - 62.0 * RoomScale, r\y - 4985.0 * RoomScale, r\z + 889.0 * RoomScale)
 			
 			; ~ The lid of the container
-			r\Objects[1] = LoadRMesh("GFX\map\008_2_opt.rmesh", Null)
+			r\Objects[1] = LoadRMesh("GFX\Map\008_2_opt.rmesh", Null)
 			ScaleEntity(r\Objects[1], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[1], r\x - 62.0 * RoomScale, r\y - 4954.0 * RoomScale, r\z + 945.0 * RoomScale)
 			RotateEntity(r\Objects[1], 85.0, 0.0, 0.0, True)
 			
 			r\Levers[0] = r\Objects[1]
 			
-			Tex = LoadTexture_Strict("GFX\map\textures\glass.png", 1 + 2)
+			Tex = LoadTexture_Strict("GFX\Map\Textures\glass.png", 1 + 2)
 			r\Objects[2] = CreateSprite()
 			EntityTexture(r\Objects[2], Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
@@ -4976,7 +4976,7 @@ Function FillRoom%(r.Rooms)
 			r\Objects[8] = CreatePivot()
 			PositionEntity(r\Objects[8], r\x + 176.0 * RoomScale, r\y + 0.5, r\z - 144.0 * RoomScale)	
 			
-			r\Objects[9] = LoadMesh_Strict("GFX\map\Props\cont1_035_label.b3d")
+			r\Objects[9] = LoadMesh_Strict("GFX\Map\Props\cont1_035_label.b3d")
 			Update035Label(r\Objects[9])
 			ScaleEntity(r\Objects[9], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[9], r\x - 30.0 * RoomScale, r\y + 230.0 * RoomScale, r\z - 704.0 * RoomScale)
@@ -5427,7 +5427,7 @@ Function FillRoom%(r.Rooms)
 					EndIf
 				EndIf
 			Next
-			If (Not r\Objects[0]) Then r\Objects[0] = LoadRMesh("GFX\map\room2_2_lcz_fan.rmesh", Null)
+			If (Not r\Objects[0]) Then r\Objects[0] = LoadRMesh("GFX\Map\room2_2_lcz_fan.rmesh", Null)
 			ScaleEntity(r\Objects[0], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[0], r\x - 270.0 * RoomScale, r\y + 528.0 * RoomScale, r\z)
 			EntityParent(r\Objects[0], r\OBJ)
@@ -5454,7 +5454,7 @@ Function FillRoom%(r.Rooms)
 			EntityPickMode(r\Objects[1], 1, False)
 			EntityRadius(r\Objects[1], 0.1)
 			
-			r\Objects[2] = LoadRMesh("GFX\map\cont2_012_box.rmesh", Null)
+			r\Objects[2] = LoadRMesh("GFX\Map\cont2_012_box.rmesh", Null)
 			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[2], r\x - 360.0 * RoomScale, r\y - 130.0 * RoomScale, r\z + 456.0 * RoomScale)
 			
@@ -5464,7 +5464,7 @@ Function FillRoom%(r.Rooms)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
-			r\Objects[4] = LoadMesh_Strict("GFX\map\Props\scp_012.b3d")
+			r\Objects[4] = LoadMesh_Strict("GFX\Map\Props\scp_012.b3d")
 			ScaleEntity(r\Objects[4], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[4], r\x - 360.0 * RoomScale, r\y - 180.0 * RoomScale, r\z + 456.0 * RoomScale)
 			EntityParent(r\Objects[4], r\Objects[2])
@@ -5602,7 +5602,7 @@ Function FillRoom%(r.Rooms)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
-			r\Objects[8] = LoadMesh_Strict("GFX\map\room2_servers_hcz_hb.b3d", r\OBJ)
+			r\Objects[8] = LoadMesh_Strict("GFX\Map\room2_servers_hcz_hb.b3d", r\OBJ)
 			EntityPickMode(r\Objects[8], 2)
 			EntityAlpha(r\Objects[8], 0.0)
 			;[End Block]
@@ -5619,7 +5619,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[3] = CopyEntity(n_I\NPCModelID[NPC_DUCK_MODEL])
 			ScaleEntity(r\Objects[3], 0.07, 0.07, 0.07)
-			Tex = LoadTexture_Strict("GFX\npcs\duck(2).png")
+			Tex = LoadTexture_Strict("GFX\NPCs\duck(2).png")
 			If opt\Atmosphere Then TextureBlend(Tex, 5)
 			EntityTexture(r\Objects[3], Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
@@ -5690,7 +5690,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[6], r\x + 754.0 * RoomScale, r\y - 1248.0 * RoomScale, r\z)
 			EntityParent(r\Objects[6], r\OBJ)
 			
-			r\Objects[7] = LoadMesh_Strict("GFX\map\room2_test_hcz_hb.b3d", r\OBJ)
+			r\Objects[7] = LoadMesh_Strict("GFX\Map\room2_test_hcz_hb.b3d", r\OBJ)
 			EntityPickMode(r\Objects[7], 2)
 			EntityAlpha(r\Objects[7], 0.0)
 			
@@ -5912,11 +5912,11 @@ Function FillRoom%(r.Rooms)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			
-			r\Objects[0] = LoadRMesh("GFX\map\IntroDesk_opt.rmesh", Null)
+			r\Objects[0] = LoadRMesh("GFX\Map\IntroDesk_opt.rmesh", Null)
 			ScaleEntity(r\Objects[0], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[0], r\x + 272.0 * RoomScale, r\y, r\z + 400.0 * RoomScale)
 			
-			r\Objects[1] = LoadRMesh("GFX\map\IntroDrawer_opt.rmesh", Null)
+			r\Objects[1] = LoadRMesh("GFX\Map\IntroDrawer_opt.rmesh", Null)
 			ScaleEntity(r\Objects[1], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[1], r\x + 448.0 * RoomScale, r\y, r\z + 192.0 * RoomScale)
 			
@@ -6295,10 +6295,10 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\RoomDoors[3]\Buttons[0], EntityX(r\RoomDoors[3]\Buttons[0], True) - 0.061, EntityY(r\RoomDoors[3]\Buttons[0], True), EntityZ(r\RoomDoors[3]\Buttons[0], True), True)
 			PositionEntity(r\RoomDoors[3]\Buttons[1], EntityX(r\RoomDoors[3]\Buttons[1], True) + 0.061, EntityY(r\RoomDoors[3]\Buttons[1], True), EntityZ(r\RoomDoors[3]\Buttons[1], True), True)
 			
-			r\Objects[0] = LoadMesh_Strict("GFX\map\Props\scp_914_key.b3d")
+			r\Objects[0] = LoadMesh_Strict("GFX\Map\Props\scp_914_key.b3d")
 			PositionEntity(r\Objects[0], r\x - 416.0 * RoomScale, r\y + 190.0 * RoomScale, r\z + 374.0 * RoomScale, True)
 			
-			r\Objects[1] = LoadMesh_Strict("GFX\map\Props\scp_914_knob.b3d")
+			r\Objects[1] = LoadMesh_Strict("GFX\Map\Props\scp_914_knob.b3d")
 			PositionEntity(r\Objects[1], r\x - 416.0 * RoomScale, r\y + 230.0 * RoomScale, r\z + 374.0 * RoomScale, True)
 			
 			For i = 0 To 1
@@ -6348,7 +6348,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[4] = CreateDoor(r\x - 4352.0 * RoomScale, r\y, r\z - 1248.0 * RoomScale, 90.0, r, True)
 			r\RoomDoors[4]\Locked = 1 : r\RoomDoors[4]\MTFClose = False	
 			
-			Tex = LoadTexture_Strict("GFX\map\textures\Door02.jpg")
+			Tex = LoadTexture_Strict("GFX\Map\Textures\Door02.jpg")
 			If opt\Atmosphere Then TextureBlend(Tex, 5)
 			For zTemp = 0 To 1
 				d.Doors = CreateDoor(r\x - 5760.0 * RoomScale, r\y, r\z + ((320.0 + (896.0 * zTemp)) * RoomScale), 0.0, r)
@@ -6558,7 +6558,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[5], r\x + 1088.0 * RoomScale, r\y - 6224.0 * RoomScale, r\z + 1824.0 * RoomScale) 
 			
 			; ~ Chamber		
-			r\Objects[6] = LoadRMesh("GFX\map\cont1_106_box.rmesh", Null)
+			r\Objects[6] = LoadRMesh("GFX\Map\cont1_106_box.rmesh", Null)
 			ScaleEntity(r\Objects[6], RoomScale, RoomScale, RoomScale)
 			EntityPickMode(r\Objects[6], 2)
 			PositionEntity(r\Objects[6], r\x + 692.0 * RoomScale, r\y - 8308.0 * RoomScale, r\z + 1032.0 * RoomScale)
@@ -6592,7 +6592,7 @@ Function FillRoom%(r.Rooms)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
-			r\Objects[11] = LoadMesh_Strict("GFX\map\cont1_106_hb.b3d", r\OBJ)
+			r\Objects[11] = LoadMesh_Strict("GFX\Map\cont1_106_hb.b3d", r\OBJ)
 			EntityPickMode(r\Objects[11], 2)
 			EntityAlpha(r\Objects[11], 0.0)
 			
@@ -6787,7 +6787,7 @@ Function FillRoom%(r.Rooms)
 			
 			de.Decals = CreateDecal(DECAL_PD_6, r\x - (1536.0 * RoomScale), r\y + 0.02, r\z + 608.0 * RoomScale + 32.0, 90.0, 0.0, 0.0, 0.8, 1.0, 1 + 8, 2)
 			
-			Local Hallway% = LoadRMesh("GFX\map\dimension_106_2.rmesh", Null) ; ~ The tunnels in the first room
+			Local Hallway% = LoadRMesh("GFX\Map\dimension_106_2.rmesh", Null) ; ~ The tunnels in the first room
 			
 			For i = 1 To 8
 				r\Objects[i - 1] = CopyEntity(Hallway)
@@ -6807,13 +6807,13 @@ Function FillRoom%(r.Rooms)
 			Next
 			FreeEntity(Hallway)
 			
-			r\Objects[8] = LoadRMesh("GFX\map\pocketdimension3_opt.rmesh", Null) ; ~ The room with the throne, moving pillars etc 
+			r\Objects[8] = LoadRMesh("GFX\Map\pocketdimension3_opt.rmesh", Null) ; ~ The room with the throne, moving pillars etc 
 			
-			r\Objects[9] = LoadRMesh("GFX\map\pocketdimension4_opt.rmesh", Null) ; ~ The flying pillar
+			r\Objects[9] = LoadRMesh("GFX\Map\pocketdimension4_opt.rmesh", Null) ; ~ The flying pillar
 			
 			r\Objects[10] = CopyEntity(r\Objects[9])
 			
-			r\Objects[11] = LoadRMesh("GFX\map\dimension_106_5.rmesh", Null) ; ~ The pillar room
+			r\Objects[11] = LoadRMesh("GFX\Map\dimension_106_5.rmesh", Null) ; ~ The pillar room
 			
 			For i = 8 To 11
 				ScaleEntity(r\Objects[i], RoomScale * ((i <> 10) + ((i = 10) * 1.5)), RoomScale * ((i <> 10) + ((i = 10) * 2.0)), RoomScale * ((i <> 10) + ((i = 10) * 1.5)))
@@ -6848,11 +6848,11 @@ Function FillRoom%(r.Rooms)
 				End Select 
 			Next
 			
-			r\Textures[0] = LoadTexture_Strict("GFX\npcs\pd_plane.png", 1 + 2, DeleteAllTextures)
+			r\Textures[0] = LoadTexture_Strict("GFX\NPCs\pd_plane.png", 1 + 2, DeleteAllTextures)
 			
-			r\Textures[1] = LoadTexture_Strict("GFX\npcs\pd_plane_eye.png", 1 + 2, DeleteAllTextures)
+			r\Textures[1] = LoadTexture_Strict("GFX\NPCs\pd_plane_eye.png", 1 + 2, DeleteAllTextures)
 			
-			Tex = LoadTexture_Strict("GFX\npcs\scp_106_eyes.png", 1, DeleteAllTextures)
+			Tex = LoadTexture_Strict("GFX\NPCs\scp_106_eyes.png", 1, DeleteAllTextures)
 			r\Objects[17] = CreateSprite()
 			EntityTexture(r\Objects[17], Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
@@ -6863,7 +6863,7 @@ Function FillRoom%(r.Rooms)
 			EntityFX(r\Objects[17], 1 + 8)
 			SpriteViewMode(r\Objects[17], 2)
 			
-			r\Objects[18] = LoadMesh_Strict("GFX\map\throne_wall.b3d")
+			r\Objects[18] = LoadMesh_Strict("GFX\Map\throne_wall.b3d")
 			PositionEntity(r\Objects[18], EntityX(r\Objects[8], True), r\y, EntityZ(r\Objects[8], True) - 864.5 * RoomScale)
 			ScaleEntity(r\Objects[18], RoomScale / 2.04, RoomScale, RoomScale)
 			EntityPickMode(r\Objects[18], 2)
@@ -6878,7 +6878,7 @@ Function FillRoom%(r.Rooms)
 			EntityFX(r\Objects[19], 1 + 8)
 			SpriteViewMode(r\Objects[19], 2)
 			
-			r\Objects[20] = LoadMesh_Strict("GFX\map\pocketdimensionterrain.b3d")
+			r\Objects[20] = LoadMesh_Strict("GFX\Map\pocketdimensionterrain.b3d")
 			ScaleEntity(r\Objects[20], RoomScale, RoomScale, RoomScale)
 			EntityType(r\Objects[20], HIT_MAP)
 			PositionEntity(r\Objects[20], r\x, r\y + 2944.0 * RoomScale, r\z + 32.0, True)
@@ -6966,7 +6966,7 @@ Function FillRoom%(r.Rooms)
 					EndIf
 				EndIf
 			Next
-			If (Not r\Objects[2]) Then r\Objects[2] = LoadRMesh("GFX\map\room2_gw_pipes.rmesh", Null)
+			If (Not r\Objects[2]) Then r\Objects[2] = LoadRMesh("GFX\Map\room2_gw_pipes.rmesh", Null)
 			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[2], r\x, r\y, r\z)
 			EntityParent(r\Objects[2], r\OBJ)
@@ -7044,7 +7044,7 @@ Function FillRoom%(r.Rooms)
 					EndIf
 				EndIf
 			Next
-			If (Not r\Objects[1]) Then r\Objects[1] = LoadRMesh("GFX\map\room3_gw_pipes.rmesh", Null)
+			If (Not r\Objects[1]) Then r\Objects[1] = LoadRMesh("GFX\Map\room3_gw_pipes.rmesh", Null)
 			ScaleEntity(r\Objects[1], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[1], r\x, r\y, r\z)
 			EntityParent(r\Objects[1], r\OBJ)
@@ -7127,7 +7127,7 @@ Function FillRoom%(r.Rooms)
 			;[Block]			
 			d.Doors = CreateDoor(r\x + 768.0 * RoomScale, r\y, r\z + 234.0 * RoomScale, 180.0, r, True, OFFICE_DOOR)
 			
-			r\Objects[0] = LoadMesh_Strict("GFX\map\room3_office_hb.b3d", r\OBJ)
+			r\Objects[0] = LoadMesh_Strict("GFX\Map\room3_office_hb.b3d", r\OBJ)
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
 			EntityAlpha(r\Objects[0], 0.0)
@@ -7172,8 +7172,8 @@ Function FillRoom%(r.Rooms)
 			
 			Scale = RoomScale * 4.5 * 0.4
 			
-			r\Textures[0] = LoadAnimTexture_Strict("GFX\SL_monitors_checkpoint.png", 1, 512, 512, 0, 4, DeleteAllTextures)
-			r\Textures[1] = LoadAnimTexture_Strict("GFX\Sl_monitors.png", 1, 512, 512, 0, 10, DeleteAllTextures)
+			r\Textures[0] = LoadAnimTexture_Strict("GFX\Overlays\SL_monitors_checkpoint.png", 1, 512, 512, 0, 4, DeleteAllTextures)
+			r\Textures[1] = LoadAnimTexture_Strict("GFX\Overlays\SL_monitors.png", 1, 512, 512, 0, 10, DeleteAllTextures)
 			
 			; ~ Monitor Objects
 			For i = 0 To 14
@@ -7351,7 +7351,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[16], r\x + 205.0 * RoomScale, r\y + 200.0 * RoomScale, r\z + 2287.0 * RoomScale)
 			EntityParent(r\Objects[16], r\OBJ)
 			
-			r\Objects[17] = LoadMesh_Strict("GFX\map\dimension1499\1499object0_cull.b3d", r\OBJ)
+			r\Objects[17] = LoadMesh_Strict("GFX\Map\dimension1499\1499object0_cull.b3d", r\OBJ)
 			EntityType(r\Objects[17], HIT_MAP)
 			EntityAlpha(r\Objects[17], 0.0)
 			;[End Block]
@@ -7377,7 +7377,7 @@ Function FillRoom%(r.Rooms)
 			;[Block]
 			d.Doors = CreateDoor(r\x + 234.0 * RoomScale, r\y, r\z, 90.0, r, False, OFFICE_DOOR)
 			
-			r\Objects[0] = LoadMesh_Strict("GFX\map\room2_office_2_hb.b3d", r\OBJ)
+			r\Objects[0] = LoadMesh_Strict("GFX\Map\room2_office_2_hb.b3d", r\OBJ)
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
 			EntityAlpha(r\Objects[0], 0.0)
@@ -7534,7 +7534,7 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ Orange duck
 			r\Objects[1] = CopyEntity(n_I\NPCModelID[NPC_DUCK_MODEL])
-			Tex = LoadTexture_Strict("GFX\npcs\duck(4).png")
+			Tex = LoadTexture_Strict("GFX\NPCs\duck(4).png")
 			If opt\Atmosphere Then TextureBlend(Tex, 5)
 			EntityTexture(r\Objects[1], Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
@@ -7626,7 +7626,7 @@ Function FillRoom%(r.Rooms)
 			
 			d.Doors = CreateDoor(r\x - 605.0 * RoomScale, r\y, r\z - 234.0 * RoomScale, 0.0, r, False, OFFICE_DOOR)
 			
-			r\Objects[0] = LoadMesh_Strict("GFX\map\room3_ez_hb.b3d", r\OBJ)
+			r\Objects[0] = LoadMesh_Strict("GFX\Map\room3_ez_hb.b3d", r\OBJ)
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
 			EntityAlpha(r\Objects[0], 0.0)

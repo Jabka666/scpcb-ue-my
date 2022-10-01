@@ -116,7 +116,7 @@ Global CanSave% = True
 
 If opt\PlayStartup Then PlayStartupVideos()
 
-Global CursorIMG% = LoadImage_Strict("GFX\cursor.png")
+Global CursorIMG% = LoadImage_Strict("GFX\Menu\cursor.png")
 CursorIMG = ScaleImage2(CursorIMG, MenuScale, MenuScale)
 
 Global SelectedLoadingScreen.LoadingScreens, LoadingScreenAmount%, LoadingScreenText%
@@ -129,16 +129,16 @@ InitLoadingScreens("LoadingScreens\loading_screens.ini")
 ; ~ Don't match their "internal name" (i.e. their display name in applications like Word and such)
 ; ~ As a workaround, I moved the files and renamed them so they
 ; ~ Can load without FastText
-fo\FontID[Font_Default] = LoadFont_Strict("GFX\fonts\Courier New.ttf", 16)
-fo\FontID[Font_Default_Big] = LoadFont_Strict("GFX\fonts\\Courier New.ttf", 52)
-fo\FontID[Font_Digital] = LoadFont_Strict("GFX\fonts\DS-Digital.ttf", 20)
-fo\FontID[Font_Digital_Big] = LoadFont_Strict("GFX\fonts\DS-Digital.ttf", 60)
-fo\FontID[Font_Journal] = LoadFont_Strict("GFX\fonts\Journal.ttf", 58)
-fo\FontID[Font_Console] = LoadFont_Strict("GFX\fonts\Andale Mono.ttf", 16)
+fo\FontID[Font_Default] = LoadFont_Strict("GFX\Fonts\Courier New.ttf", 16)
+fo\FontID[Font_Default_Big] = LoadFont_Strict("GFX\Fonts\\Courier New.ttf", 52)
+fo\FontID[Font_Digital] = LoadFont_Strict("GFX\Fonts\DS-Digital.ttf", 20)
+fo\FontID[Font_Digital_Big] = LoadFont_Strict("GFX\Fonts\DS-Digital.ttf", 60)
+fo\FontID[Font_Journal] = LoadFont_Strict("GFX\Fonts\Journal.ttf", 58)
+fo\FontID[Font_Console] = LoadFont_Strict("GFX\Fonts\Andale Mono.ttf", 16)
 
 SetFont(fo\FontID[Font_Default_Big])
 
-Global BlinkMeterIMG% = LoadImage_Strict("GFX\blink_meter(1).png")
+Global BlinkMeterIMG% = LoadImage_Strict("GFX\HUD\blink_meter(1).png")
 BlinkMeterIMG = ScaleImage2(BlinkMeterIMG, MenuScale, MenuScale)
 
 RenderLoading(0, "MAIN CORE")
@@ -1025,7 +1025,7 @@ Function UpdateConsole%()
 					;[Block]
 					n_I\IsHalloween = (Not n_I\IsHalloween)
 					If n_I\IsHalloween Then
-						Tex = LoadTexture_Strict("GFX\npcs\scp_173_H.png", 1)
+						Tex = LoadTexture_Strict("GFX\NPCs\scp_173_H.png", 1)
 						If opt\Atmosphere Then TextureBlend(Tex, 5)
 						EntityTexture(n_I\Curr173\OBJ, Tex)
 						EntityTexture(n_I\Curr173\OBJ2, Tex)
@@ -1033,7 +1033,7 @@ Function UpdateConsole%()
 						CreateConsoleMsg("173 JACK-O-LANTERN ON")
 					Else
 						If n_I\IsNewYear Then n_I\IsNewYear = (Not n_I\IsNewYear)
-						Tex2 = LoadTexture_Strict("GFX\npcs\scp_173.png", 1)
+						Tex2 = LoadTexture_Strict("GFX\NPCs\scp_173.png", 1)
 						If opt\Atmosphere Then TextureBlend(Tex2, 5)
 						EntityTexture(n_I\Curr173\OBJ, Tex2)
 						EntityTexture(n_I\Curr173\OBJ2, Tex2)
@@ -1045,7 +1045,7 @@ Function UpdateConsole%()
 					;[Block]
 					n_I\IsNewYear = (Not n_I\IsNewYear)
 					If n_I\IsNewYear Then
-						Tex = LoadTexture_Strict("GFX\npcs\scp_173_NY.png", 1)
+						Tex = LoadTexture_Strict("GFX\NPCs\scp_173_NY.png", 1)
 						If opt\Atmosphere Then TextureBlend(Tex, 5)
 						EntityTexture(n_I\Curr173\OBJ, Tex)
 						EntityTexture(n_I\Curr173\OBJ2, Tex)
@@ -1053,7 +1053,7 @@ Function UpdateConsole%()
 						CreateConsoleMsg("173 COOKIE ON")
 					Else
 						If n_I\IsHalloween Then n_I\IsHalloween = (Not n_I\IsHalloween)
-						Tex2 = LoadTexture_Strict("GFX\npcs\scp_173.png", 1)
+						Tex2 = LoadTexture_Strict("GFX\NPCs\scp_173.png", 1)
 						If opt\Atmosphere Then TextureBlend(Tex2, 5)
 						EntityTexture(n_I\Curr173\OBJ, Tex2)
 						EntityTexture(n_I\Curr173\OBJ2, Tex2)
@@ -5824,7 +5824,7 @@ Function RenderGUI%()
 						If (Not e\Img) Then
 							If (ChannelPlaying(e\SoundCHN)) Then StopChannel(e\SoundCHN)
 							If Rand(30) = 1 Then PlaySound_Strict(e\Sound2)
-							e\Img = LoadImage_Strict("GFX\kneel_mortal.png")
+							e\Img = LoadImage_Strict("GFX\Overlays\kneel_mortal.png")
 							e\Img = ScaleImage2(e\Img, MenuScale, MenuScale)
 						Else
 							DrawImage(e\Img, mo\Viewport_Center_X - (Rand(390, 310) * MenuScale), mo\Viewport_Center_Y - (Rand(290, 310) * MenuScale))
@@ -6222,7 +6222,7 @@ Function RenderGUI%()
 						Select SelectedItem\ItemTemplate\Name
 							Case "Burnt Note" 
 								;[Block]
-								SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\items\note_Maynard.png")
+								SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\Items\note_Maynard.png")
 								SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 								SetBuffer(ImageBuffer(SelectedItem\ItemTemplate\Img))
 								Color(0, 0, 0)
@@ -6255,7 +6255,7 @@ Function RenderGUI%()
 							Case "Document SCP-035"
 								;[Block]
 								If I_035\Sad <> 0 Then
-									SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\items\doc_035_sad.png")
+									SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\Items\doc_035_sad.png")
 								Else
 									SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
 								EndIf
@@ -6275,7 +6275,7 @@ Function RenderGUI%()
 					;[Block]
 					GiveAchievement(Achv1025)
 					If (Not SelectedItem\ItemTemplate\Img) Then
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\items\1025\1025(" + (Int(SelectedItem\State) + 1) + ").png")	
+						SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\Items\1025\1025(" + (Int(SelectedItem\State) + 1) + ").png")	
 						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 						
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
@@ -7751,7 +7751,7 @@ Function UpdateEnding%()
 		StopBreathSound() : me\Stamina = 100.0
 		
 		If (Not me\EndingScreen) Then
-			me\EndingScreen = LoadImage_Strict("GFX\menu\ending_screen.png")
+			me\EndingScreen = LoadImage_Strict("GFX\Menu\ending_screen.png")
 			me\EndingScreen = ScaleImage2(me\EndingScreen, MenuScale, MenuScale)
 			
 			ShouldPlay = 23
@@ -7924,11 +7924,11 @@ Function InitCredits%()
 	Local File% = OpenFile("Credits.txt")
 	Local l$
 	
-	fo\FontID[Font_Credits] = LoadFont_Strict("GFX\fonts\Courier New.ttf", 21)
-	fo\FontID[Font_Credits_Big] = LoadFont_Strict("GFX\fonts\Courier New.ttf", 35)
+	fo\FontID[Font_Credits] = LoadFont_Strict("GFX\Fonts\Courier New.ttf", 21)
+	fo\FontID[Font_Credits_Big] = LoadFont_Strict("GFX\Fonts\Courier New.ttf", 35)
 	
 	If (Not me\CreditsScreen) Then
-		me\CreditsScreen = LoadImage_Strict("GFX\menu\credits_screen.png")
+		me\CreditsScreen = LoadImage_Strict("GFX\Menu\credits_screen.png")
 		me\CreditsScreen = ScaleImage2(me\CreditsScreen, MenuScale, MenuScale)
 	EndIf
 	

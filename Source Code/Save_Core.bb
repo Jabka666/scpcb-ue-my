@@ -2089,7 +2089,7 @@ Function LoadGameQuick%(File$)
 				xTemp = EntityX(r\Objects[13], True)
 				zTemp = EntityZ(r\Objects[13], True)
 				FreeEntity(r\Objects[13])
-				r\Objects[13] = LoadMesh_Strict("GFX\map\gateawall1.b3d", r\OBJ)
+				r\Objects[13] = LoadMesh_Strict("GFX\Map\gateawall1.b3d", r\OBJ)
 				PositionEntity(r\Objects[13], xTemp, r\y - 1045.0 * RoomScale, zTemp, True)
 				EntityColor(r\Objects[13], 25.0, 25.0, 25.0)
 				EntityType(r\Objects[13], HIT_MAP)
@@ -2097,7 +2097,7 @@ Function LoadGameQuick%(File$)
 				xTemp = EntityX(r\Objects[14], True)
 				zTemp = EntityZ(r\Objects[14], True)
 				FreeEntity(r\Objects[14])
-				r\Objects[14] = LoadMesh_Strict("GFX\map\gateawall2.b3d", r\OBJ)
+				r\Objects[14] = LoadMesh_Strict("GFX\Map\gateawall2.b3d", r\OBJ)
 				PositionEntity(r\Objects[14], xTemp, r\y - 1045.0 * RoomScale, zTemp, True)	
 				EntityColor(r\Objects[14], 25.0, 25.0, 25.0)
 				EntityType(r\Objects[14], HIT_MAP)
@@ -2116,9 +2116,9 @@ Function LoadGameQuick%(File$)
 			EndIf
 		ElseIf r\RoomTemplate\Name = "cont1_035"
 			If I_035\Sad <> 0 Then
-				Tex = LoadTexture_Strict("GFX\map\textures\label035_sad.png")
+				Tex = LoadTexture_Strict("GFX\Map\Textures\label035_sad.png")
 			Else
-				Tex = LoadTexture_Strict("GFX\map\textures\label035_smile.png")
+				Tex = LoadTexture_Strict("GFX\Map\Textures\label035_smile.png")
 			EndIf
 			
 			For i = 2 To CountSurfaces(r\Objects[9])
