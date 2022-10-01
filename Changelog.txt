@@ -16,6 +16,8 @@ Rooms:
 Items:
 - Added a new gas mask variation: gas mask without fogging.
 
+- S-NAV 310 and blue NVG require now an 18V Battery.
+
 - Renamed some console item names.
 
 Menu:
