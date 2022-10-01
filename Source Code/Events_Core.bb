@@ -2875,7 +2875,7 @@ Function UpdateEvents%()
 					If e\EventState3 = 0.0 Then
 						e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[6], True), 0.55, EntityZ(e\room\Objects[6], True))
 						e\room\NPC[0]\State = 3.0
-						ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_BODY_2_TEXTURE)
+						ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_BODY_1_TEXTURE)
 						SetNPCFrame(e\room\NPC[0], 40.0)
 						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0)
 						e\EventState3 = 1.0
@@ -7342,7 +7342,7 @@ Function UpdateEvents%()
 				If e\room\Dist < 10.0 And e\room\Dist > 0.0 Then
 					e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\OBJ, True), 0.5, EntityZ(e\room\OBJ, True))
 					e\room\NPC[0]\State = 8.0
-					ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_BODY_1_TEXTURE)
+					ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_BODY_2_TEXTURE)
 					SetNPCFrame(e\room\NPC[0], 19.0)
 					RotateEntity(e\room\NPC[0]\Collider, 0.0, Rnd(360.0), 0.0, True)	
 					

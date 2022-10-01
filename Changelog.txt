@@ -35,6 +35,7 @@ Bug fixes:
 - Fixed the office door appearing to freeze in weird ways when leaving the room instantly.
 - Fixed non-latin characters in loading screens not showing correctly.
 - Fixed checkpoint monitors not turning at all.
+- Fixed wrong textures for Class-D model in «room2_nuke» and «room3_2_hcz».
 
 - Tiny fix for dead guard position in the starting location.
 - Tiny fix for map generation.
