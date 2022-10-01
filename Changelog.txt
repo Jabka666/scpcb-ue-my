@@ -10,6 +10,8 @@ General:
 Rooms:
 - Batteries on the map are now randomized.
 
+- Tiny corrections for rooms description.
+
 Items:
 - Added a new gas mask variation: gas mask without fogging.
 
@@ -24,7 +26,7 @@ Map Creator:
 - Made the Map Creator to be compatible with latest BlitzPlus version.
 
 Bug fixes:
-- Fixed a bug with Ulgrin not triggering on the player when he is reading a documents.
+- Fixed a bug with Ulgrin not triggering on the player when he is reading a document.
 - Fixed a bug with console bind.
 - Fixed SCP-096 triggering while his face is hidden by fog.
 - Fixed SCP-106 animation when getting hit by the Tesla Gate.
@@ -626,7 +628,7 @@ Bug Fixes:
 - Fixed room descriptions.
 - Fixed decals size not being saved correctly.
 - Fixed double corrosion decal in the Emily Ross event.
-- Fixed menu buttons has wrong width and height.
+- Fixed menu buttons have wrong width and height.
 - Fixed Omni Key Card achievement image.
 - Fixed text font for Burnt Note with Dr. Maynard's access code.
 - Fixed smoke doesn't interact with fog.
