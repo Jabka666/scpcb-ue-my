@@ -4020,7 +4020,7 @@ Function UpdateNPCs%()
 									If n\State3 < 900.0 Then
 										me\BlurTimer = Float(((Sin(MilliSecs2() / 50.0) + 1.0) * 200.0) / Sqr(Dist))
 										
-										If (Not I_714\Using) And wi\GasMask <> 3 And wi\HazmatSuit <> 3 And Dist < 256.0 Then
+										If (Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 3 And Dist < 256.0 Then
 											If me\StaminaEffect < 1.5 Then
 												Select Rand(4)
 													Case 1

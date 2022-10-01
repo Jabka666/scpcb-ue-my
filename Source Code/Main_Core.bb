@@ -2378,7 +2378,7 @@ Function UpdateGame%()
 						EndIf
 					EndIf
 				EndIf
-				If (W <> "vest" And W <> "finevest" And W <> "hazmatsuit" And W <> "hazmatsuit2" And W <> "hazmatsuit3") Lor V = 0.0 Lor V = 100.0
+				If (W <> "vest" And W <> "finevest" And W <> "hazmatsuit" And W <> "veryfinehazmatsuit" And W <> "hazmatsuit148") Lor V = 0.0 Lor V = 100.0
 					If InvOpen Then
 						StopMouseMovement()
 					Else
@@ -3179,7 +3179,7 @@ Function UpdateMouseLook%()
 	
 	If wi\GasMask > 0 Lor I_1499\Using > 0 Then
 		If (Not I_714\Using) And PlayerRoom\RoomTemplate\Name <> "dimension_106" Then
-			If wi\GasMask = 2 Lor I_1499\Using = 2 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fps\Factor[0])
+			If wi\GasMask = 3 Lor I_1499\Using = 2 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fps\Factor[0])
 		EndIf
 		If (Not me\Terminated) Then
 			If (Not ChannelPlaying(BreathCHN)) Then
@@ -3191,22 +3191,24 @@ Function UpdateMouseLook%()
 		
 		If EntityHidden(t\OverlayID[1]) Then ShowEntity(t\OverlayID[1])
 		
-		If ChannelPlaying(BreathCHN) Then
-			wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + (fps\Factor[0] * 2.0), 100.0)
-		Else
-			If wi\GasMask = 2 Lor I_1499\Using = 2 Then
-				If me\CurrSpeed > 0.0 And (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) Then
-					wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + (fps\Factor[0] * 0.2), 100.0)
+		If wi\GasMask <> 2 Then
+			If ChannelPlaying(BreathCHN) Then
+				wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + (fps\Factor[0] * 2.0), 100.0)
+			Else
+				If wi\GasMask = 3 Lor I_1499\Using = 2 Then
+					If me\CurrSpeed > 0.0 And (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) Then
+						wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + (fps\Factor[0] * 0.2), 100.0)
+					Else
+						wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.32))
+					EndIf
 				Else
 					wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.32))
 				EndIf
-			Else
-				wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.32))
 			EndIf
-		EndIf
-		If wi\GasMaskFogTimer > 0.0 Then
-			If EntityHidden(t\OverlayID[10]) Then ShowEntity(t\OverlayID[10])
-			EntityAlpha(t\OverlayID[10], Min(((wi\GasMaskFogTimer * 0.2) ^ 2.0) / 1000.0, 0.45))
+			If wi\GasMaskFogTimer > 0.0 Then
+				If EntityHidden(t\OverlayID[10]) Then ShowEntity(t\OverlayID[10])
+				EntityAlpha(t\OverlayID[10], Min(((wi\GasMaskFogTimer * 0.2) ^ 2.0) / 1000.0, 0.45))
+			EndIf
 		EndIf
 	Else
 		If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN)
@@ -3773,11 +3775,11 @@ Function UpdateGUI%()
 			If (Not mo\MouseDown1) Then
 				If MouseSlot = 66 Then
 					Select SelectedItem\ItemTemplate\TempName
-						Case "vest", "finevest", "hazmatsuit", "hazmatsuit2", "hazmatsuit3"
+						Case "vest", "finevest", "hazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
 							;[Block]
 							CreateHintMsg("Double click on this item to take it off.")
 							;[End Block]
-						Case "scp1499", "super1499"
+						Case "scp1499", "veryfine1499"
 							;[Block]
 							If I_1499\Using > 0 Then
 								CreateHintMsg("Double click on this item to take it off.")
@@ -3786,7 +3788,7 @@ Function UpdateGUI%()
 								InvOpen = False
 							EndIf
 							;[End Block]
-						Case "gasmask", "gasmask3", "supergasmask"
+						Case "gasmask", "finegasmask", "veryfinegasmask", "gasmask148"
 							;[Block]
 							If wi\GasMask > 0 Then
 								CreateHintMsg("Double click on this item to take it off.")
@@ -3804,7 +3806,7 @@ Function UpdateGUI%()
 								InvOpen = False
 							EndIf
 							;[End Block] 
-						Case "nvg", "supernvg", "finenvg"
+						Case "nvg", "veryfinenvg", "finenvg"
 							;[Block]
 							If wi\NightVision > 0 Then
 								CreateHintMsg("Double click on this item to take it off.")
@@ -3948,15 +3950,19 @@ Function UpdateGUI%()
 								EndIf
 								SelectedItem = Null
 								;[End Block]
-							Case "badbat"
+							Case "coarsebat"
 								;[Block]
 								Select Inventory(MouseSlot)\ItemTemplate\TempName
-									Case "nav", "nav310"
+									Case "nav"
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(50.0)
 										CreateMsg("You replaced the navigator's battery.")
+										;[End Block]
+									Case "nav310"
+										;[Block]
+										CreateMsg("The battery doesn't fit inside this navigator.")
 										;[End Block]
 									Case "navulti", "nav300"
 										;[Block]
@@ -3977,7 +3983,7 @@ Function UpdateGUI%()
 										;[Block]
 										CreateMsg("There seems to be no place for batteries in this radio.")
 										;[End Block]
-									Case "nvg", "supernvg"
+									Case "nvg"
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
@@ -3987,6 +3993,10 @@ Function UpdateGUI%()
 									Case "finenvg"
 										;[Block]
 										CreateMsg("There seems to be no place for batteries in these goggles.")
+										;[End Block]
+									Case "veryfinenvg"
+										;[Block]
+										CreateMsg("The battery doesn't fit inside these goggles.")
 										;[End Block]
 									Case "scramble"
 										;[Block]
@@ -4011,12 +4021,16 @@ Function UpdateGUI%()
 							Case "bat"
 								;[Block]
 								Select Inventory(MouseSlot)\ItemTemplate\TempName
-									Case "nav", "nav310"
+									Case "nav"
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(100.0)
 										CreateMsg("You replaced the navigator's battery.")
+										;[End Block]
+									Case "nav310"
+										;[Block]
+										CreateMsg("The battery doesn't fit inside this navigator.")
 										;[End Block]
 									Case "navulti", "nav300"
 										;[Block]
@@ -4037,7 +4051,7 @@ Function UpdateGUI%()
 										;[Block]
 										CreateMsg("There seems to be no place for batteries in this radio.")
 										;[End Block]
-									Case "nvg", "supernvg"
+									Case "nvg"
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
@@ -4047,6 +4061,10 @@ Function UpdateGUI%()
 									Case "finenvg"
 										;[Block]
 										CreateMsg("There seems to be no place for batteries in these goggles.")
+										;[End Block]
+									Case "veryfinenvg"
+										;[Block]
+										CreateMsg("The battery doesn't fit inside these goggles.")
 										;[End Block]
 									Case "scramble"
 										;[Block]
@@ -4071,9 +4089,16 @@ Function UpdateGUI%()
 							Case "finebat"
 								;[Block]
 								Select Inventory(MouseSlot)\ItemTemplate\TempName
-									Case "nav", "nav310"
+									Case "nav"
 										;[Block]
 										CreateMsg("The battery doesn't fit inside this navigator.")
+										;[End Block]
+									Case "nav310"
+										;[Block]
+										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
+										RemoveItem(SelectedItem)
+										Inventory(MouseSlot)\State = Rnd(200.0)
+										CreateMsg("You replaced the radio's battery.")
 										;[End Block]
 									Case "navulti", "nav300"
 										;[Block]
@@ -4094,13 +4119,20 @@ Function UpdateGUI%()
 										;[Block]
 										CreateMsg("There seems to be no place for batteries in this radio.")	
 										;[End Block]
-									Case "nvg", "supernvg"
+									Case "nvg"
 										;[Block]
 										CreateMsg("The battery doesn't fit inside these goggles.")
 										;[End Block]
 									Case "finenvg"
 										;[Block]
 										CreateMsg("There seems to be no place for batteries in these goggles.")
+										;[End Block]
+									Case "veryfinenvg"
+										;[Block]
+										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
+										RemoveItem(SelectedItem)
+										Inventory(MouseSlot)\State = Rnd(200.0)
+										CreateMsg("You replaced the radio's battery.")
 										;[End Block]
 									Case "scramble"
 										;[Block]
@@ -4122,12 +4154,16 @@ Function UpdateGUI%()
 							Case "superbat", "killbat"
 								;[Block]
 								Select Inventory(MouseSlot)\ItemTemplate\TempName
-									Case "nav", "nav310"
+									Case "nav"
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(1000.0)
 										CreateMsg("You replaced the navigator's battery.")
+										;[End Block]
+									Case "nav310"
+										;[Block]
+										CreateMsg("The battery doesn't fit inside this navigator.")
 										;[End Block]
 									Case "navulti", "nav300"
 										;[Block]
@@ -4148,7 +4184,7 @@ Function UpdateGUI%()
 										;[Block]
 										CreateMsg("There seems to be no place for batteries in this radio.")
 										;[End Block]
-									Case "nvg", "supernvg"
+									Case "nvg"
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
@@ -4158,6 +4194,10 @@ Function UpdateGUI%()
 									Case "finenvg"
 										;[Block]
 										CreateMsg("There seems to be no place for batteries in these goggles.")
+										;[End Block]
+									Case "veryfinenvg"
+										;[Block]
+										CreateMsg("The battery doesn't fit inside these goggles.")
 										;[End Block]
 									Case "scramble"
 										;[Block]
@@ -4203,7 +4243,7 @@ Function UpdateGUI%()
 	Else
 		If SelectedItem <> Null Then
 			Select SelectedItem\ItemTemplate\TempName
-				Case "nvg", "supernvg", "finenvg"
+				Case "nvg", "veryfinenvg", "finenvg"
 					;[Block]
 					If (Not PreventItemOverlapping(False, True)) Then
 						Select SelectedItem\ItemTemplate\TempName
@@ -4211,7 +4251,7 @@ Function UpdateGUI%()
 								;[Block]
 								If IsDoubleItem(wi\NightVision, 1, "pairs of goggles") Then Return
 								;[End Block]
-							Case "supernvg"
+							Case "veryfinenvg"
 								;[Block]
 								If IsDoubleItem(wi\NightVision, 2, "pairs of goggles") Then Return
 								;[End Block]
@@ -4240,7 +4280,7 @@ Function UpdateGUI%()
 										;[Block]
 										wi\NightVision = 1
 										;[End Block]
-									Case "supernvg"
+									Case "veryfinenvg"
 										;[Block]
 										wi\NightVision = 2
 										;[End Block]
@@ -4508,7 +4548,7 @@ Function UpdateGUI%()
 				Case "scp1025"
 					;[Block]
 					If SelectedItem\State3 = 0.0 Then
-						If (Not I_714\Using) And wi\GasMask <> 3 And wi\HazmatSuit <> 3 Then
+						If (Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 3 Then
 							If SelectedItem\State = 7.0 Then
 								If I_008\Timer = 0.0 Then I_008\Timer = 1.0
 							Else
@@ -5015,7 +5055,7 @@ Function UpdateGUI%()
 				Case "scp420j"
 					;[Block]
 					If CanUseItem(False, True) Then
-						If I_714\Using Lor wi\GasMask = 3 Lor wi\HazmatSuit = 3 Then
+						If I_714\Using Lor wi\GasMask = 4 Lor wi\HazmatSuit = 3 Then
 							CreateMsg(Chr(34) + "DUDE WTF THIS SHIT DOESN'T EVEN WORK." + Chr(34))
 						Else
 							CreateMsg(Chr(34) + "MAN DATS SUM GOOD ASS SHIT." + Chr(34))
@@ -5030,7 +5070,7 @@ Function UpdateGUI%()
 				Case "joint"
 					;[Block]
 					If CanUseItem(False, True) Then
-						If I_714\Using Lor wi\GasMask = 3 Lor wi\HazmatSuit = 3 Then
+						If I_714\Using Lor wi\GasMask = 4 Lor wi\HazmatSuit = 3 Then
 							CreateMsg(Chr(34) + "DUDE WTF THIS SHIT DOESN'T EVEN WORK." + Chr(34))
 						Else
 							CreateMsg(Chr(34) + "UH WHERE... WHAT WAS I DOING AGAIN... MAN I NEED TO TAKE A NAP..." + Chr(34))
@@ -5045,7 +5085,7 @@ Function UpdateGUI%()
 				Case "scp420s"
 					;[Block]
 					If CanUseItem(False, True) Then
-						If I_714\Using Lor wi\GasMask = 3 Lor wi\HazmatSuit = 3 Then
+						If I_714\Using Lor wi\GasMask = 4 Lor wi\HazmatSuit = 3 Then
 							CreateMsg(Chr(34) + "DUDE WTF THIS SHIT DOESN'T EVEN WORK." + Chr(34))
 						Else
 							CreateMsg(Chr(34) + "UUUUUUUUUUUUHHHHHHHHHHHH..." + Chr(34))
@@ -5069,7 +5109,7 @@ Function UpdateGUI%()
 					EndIf
 					SelectedItem = Null	
 					;[End Block]
-				Case "hazmatsuit", "hazmatsuit2", "hazmatsuit3"
+				Case "hazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
 					;[Block]
 					If wi\BallisticVest = 0 Then
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
@@ -5086,7 +5126,7 @@ Function UpdateGUI%()
 								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 								If SelectedItem\ItemTemplate\TempName = "hazmatsuit" Then
 									wi\HazmatSuit = 1
-								ElseIf SelectedItem\ItemTemplate\TempName = "hazmatsuit2"
+								ElseIf SelectedItem\ItemTemplate\TempName = "veryfinehazmatsuit"
 									wi\HazmatSuit = 2
 								Else
 									wi\HazmatSuit = 3
@@ -5131,7 +5171,7 @@ Function UpdateGUI%()
 						SelectedItem = Null
 					EndIf
 					;[End Block]
-				Case "gasmask", "supergasmask", "gasmask3"
+				Case "gasmask", "finegasmask", "veryfinegasmask", "gasmask148"
 					;[Block]
 					If (Not PreventItemOverlapping(True)) Then
 						Select SelectedItem\ItemTemplate\TempName
@@ -5139,13 +5179,17 @@ Function UpdateGUI%()
 								;[Block]
 								If IsDoubleItem(wi\GasMask, 1, "gas masks") Then Return
 								;[End Block]
-							Case "supergasmask"
+							Case "finegasmask"
 								;[Block]
 								If IsDoubleItem(wi\GasMask, 2, "gas masks") Then Return
 								;[End Block]
-							Case "gasmask3"
+							Case "veryfinegasmask"
 								;[Block]
 								If IsDoubleItem(wi\GasMask, 3, "gas masks") Then Return
+								;[End Block]
+							Case "gasmask148"
+								;[Block]
+								If IsDoubleItem(wi\GasMask, 4, "gas masks") Then Return
 								;[End Block]
 						End Select
 						
@@ -5166,15 +5210,20 @@ Function UpdateGUI%()
 										CreateMsg("You put on the gas mask.")
 										wi\GasMask = 1
 										;[End Block]
-									Case "supergasmask"
-										;[Block]
-										CreateMsg("You put on the gas mask and you can breathe easier.")
-										wi\GasMask = 2
-										;[End Block]
-									Case "gasmask3"
+									Case "finegasmask"
 										;[Block]
 										CreateMsg("You put on the gas mask.")
+										wi\GasMask = 2
+										;[End Block]
+									Case "veryfinegasmask"
+										;[Block]
+										CreateMsg("You put on the gas mask and you can breathe easier.")
 										wi\GasMask = 3
+										;[End Block]
+									Case "gasmask148"
+										;[Block]
+										CreateMsg("You put on the gas mask.")
+										wi\GasMask = 4
 										;[End Block]
 								End Select
 							EndIf
@@ -5197,7 +5246,7 @@ Function UpdateGUI%()
 						EndIf
 					EndIf
 					;[End Block]
-				Case "scp1499", "super1499"
+				Case "scp1499", "veryfine1499"
 					;[Block]
 					If (Not PreventItemOverlapping(False, False, True)) Then
 						Select SelectedItem\ItemTemplate\TempName
@@ -5205,7 +5254,7 @@ Function UpdateGUI%()
 								;[Block]
 								If IsDoubleItem(I_1499\Using, 1, "gas masks") Then Return
 								;[End Block]
-							Case "super1499"
+							Case "veryfine1499"
 								;[Block]
 								If IsDoubleItem(I_1499\Using, 2, "gas masks") Then Return
 								;[End Block]
@@ -5228,7 +5277,7 @@ Function UpdateGUI%()
 										CreateMsg("You put on the gas mask.")
 										I_1499\Using = 1
 										;[End Block]
-									Case "super1499"
+									Case "veryfine1499"
 										;[Block]
 										CreateMsg("You put on the gas mask and you can breathe easier.")
 										I_1499\Using = 2
@@ -5461,7 +5510,7 @@ Function UpdateGUI%()
 			
 			If mo\MouseHit2 Then
 				Select SelectedItem\ItemTemplate\TempName
-					Case "firstaid", "finefirstaid", "firstaid2", "scp1499", "super1499", "gasmask", "supergasmask", "gasmask3", "helmet"
+					Case "firstaid", "finefirstaid", "firstaid2", "scp1499", "veryfine1499", "gasmask", "finegasmask", "veryfinegasmask", "gasmask148", "helmet"
 						;[Block]
 						SelectedItem\State = 0.0
 						;[End Block]
@@ -5472,14 +5521,14 @@ Function UpdateGUI%()
 							DropItem(SelectedItem, False)
 						EndIf
 						;[End Block]
-					Case "hazmatsuit", "hazmatsuit2", "hazmatsuit3"
+					Case "hazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
 						;[Block]
 						SelectedItem\State = 0.0
 						If wi\HazmatSuit = 0 Then
 							DropItem(SelectedItem, False)
 						EndIf
 						;[End Block]
-					Case "nvg", "supernvg", "finenvg", "scramble", "scp1025"
+					Case "nvg", "veryfinenvg", "finenvg", "scramble", "scp1025"
 						;[Block]
 						SelectedItem\State3 = 0.0
 						;[End Block]
@@ -5503,11 +5552,11 @@ Function UpdateGUI%()
 	For it.Items = Each Items
 		If it <> SelectedItem Then
 			Select it\ItemTemplate\TempName
-				Case "firstaid", "finefirstaid", "firstaid2", "vest", "finevest", "hazmatsuit", "hazmatsuit2", "hazmatsuit3", "scp1499", "super1499", "gasmask", "supergasmask", "gasmask3", "helmet"
+				Case "firstaid", "finefirstaid", "firstaid2", "vest", "finevest", "hazmatsuit", "veryfinehazmatsuit", "hazmatsuit148", "scp1499", "veryfine1499", "gasmask", "finegasmask", "veryfinegasmask", "gasmask148", "helmet"
 					;[Block]
 					it\State = 0.0
 					;[End Block]
-				Case "nvg", "supernvg", "finenvg", "scramble", "scp1025"
+				Case "nvg", "veryfinenvg", "finenvg", "scramble", "scp1025"
 					;[Block]
 					it\State3 = 0.0
 					;[End Block]
@@ -5570,7 +5619,7 @@ Function RenderHUD%()
 	If PlayerRoom\RoomTemplate\Name = "dimension_106" Lor I_714\Using Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor wi\HazmatSuit = 1 Lor wi\BallisticVest = 2 Lor I_409\Timer >= 55.0 Then
 		Color(200, 0, 0)
 		Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
-	ElseIf chs\InfiniteStamina Lor me\StaminaEffect < 1.0 Lor wi\GasMask = 2 Lor I_1499\Using = 2 Lor wi\HazmatSuit = 2
+	ElseIf chs\InfiniteStamina Lor me\StaminaEffect < 1.0 Lor wi\GasMask = 3 Lor I_1499\Using = 2 Lor wi\HazmatSuit = 2
 		Color(0, 200, 0)
 		Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
 	EndIf
@@ -5995,23 +6044,27 @@ Function RenderGUI%()
 						;[Block]
 						If wi\GasMask = 1 Then ShouldDrawRect = True
 						;[End Block]
-					Case "supergasmask"
+					Case "veryfinegasmask"
 						;[Block]
 						If wi\GasMask = 2 Then ShouldDrawRect = True
 						;[End Block]
-					Case "gasmask3"
+					Case "veryfinegasmask"
 						;[Block]
 						If wi\GasMask = 3 Then ShouldDrawRect = True
+						;[End Block]
+					Case "gasmask148"
+						;[Block]
+						If wi\GasMask = 4 Then ShouldDrawRect = True
 						;[End Block]
 					Case "hazmatsuit"
 						;[Block]
 						If wi\HazmatSuit = 1 Then ShouldDrawRect = True
 						;[End Block]
-					Case "hazmatsuit2"
+					Case "veryfinehazmatsuit"
 						;[Block]
 						If wi\HazmatSuit = 2 Then ShouldDrawRect = True
 						;[End Block]
-					Case "hazmatsuit3"
+					Case "hazmatsuit148"
 						;[Block]"
 						If wi\HazmatSuit = 3 Then ShouldDrawRect = True	
 						;[End Block]
@@ -6035,7 +6088,7 @@ Function RenderGUI%()
 						;[Block]
 						If wi\NightVision = 1 Then ShouldDrawRect = True
 						;[End Block]
-					Case "supernvg"
+					Case "veryfinenvg"
 						;[Block]
 						If wi\NightVision = 2 Then ShouldDrawRect = True
 						;[End Block]
@@ -6051,7 +6104,7 @@ Function RenderGUI%()
 						;[Block]
 						If I_1499\Using = 1 Then ShouldDrawRect = True
 						;[End Block]
-					Case "super1499"
+					Case "veryfine1499"
 						;[Block]
 						If I_1499\Using = 2 Then ShouldDrawRect = True
 						;[End Block]
@@ -6109,7 +6162,7 @@ Function RenderGUI%()
 	Else
 		If SelectedItem <> Null Then
 			Select SelectedItem\ItemTemplate\TempName
-				Case "nvg", "supernvg", "finenvg"
+				Case "nvg", "veryfinenvg", "finenvg"
 					;[Block]
 					If (Not PreventItemOverlapping(False, True)) Then
 						Select SelectedItem\ItemTemplate\TempName
@@ -6117,7 +6170,7 @@ Function RenderGUI%()
 								;[Block]
 								If IsDoubleItem(wi\NightVision, 1, "pairs of goggles") Then Return
 								;[End Block]
-							Case "supernvg"
+							Case "veryfinenvg"
 								;[Block]
 								If IsDoubleItem(wi\NightVision, 2, "pairs of goggles") Then Return
 								;[End Block]
@@ -6313,7 +6366,7 @@ Function RenderGUI%()
 						EndIf
 					EndIf
 					;[End Block]
-				Case "hazmatsuit", "hazmatsuit2", "hazmatsuit3"
+				Case "hazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
 					;[Block]
 					If wi\BallisticVest = 0 Then
 						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - (ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2), mo\Viewport_Center_Y - (ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2))
@@ -6337,7 +6390,7 @@ Function RenderGUI%()
 					
 					RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					;[End Block]
-				Case "gasmask", "supergasmask", "gasmask3"
+				Case "gasmask", "finegasmask", "veryfinegasmask", "gasmask148"
 					;[Block]
 					If (Not PreventItemOverlapping(True)) Then
 						Select SelectedItem\ItemTemplate\TempName
@@ -6345,13 +6398,17 @@ Function RenderGUI%()
 								;[Block]
 								If IsDoubleItem(wi\GasMask, 1, "gas masks") Then Return
 								;[End Block]
-							Case "supergasmask"
+							Case "finegasmask"
 								;[Block]
 								If IsDoubleItem(wi\GasMask, 2, "gas masks") Then Return
 								;[End Block]
-							Case "gasmask3"
+							Case "veryfinegasmask"
 								;[Block]
 								If IsDoubleItem(wi\GasMask, 3, "gas masks") Then Return
+								;[End Block]
+							Case "gasmask148"
+								;[Block]
+								If IsDoubleItem(wi\GasMask, 4, "gas masks") Then Return
 								;[End Block]
 						End Select
 						
@@ -6540,7 +6597,7 @@ Function RenderGUI%()
 						EndIf
 					EndIf
 					;[End Block]
-				Case "scp1499", "super1499"
+				Case "scp1499", "veryfine1499"
 					;[Block]
 					If (Not PreventItemOverlapping(False, False, True)) Then
 						Select SelectedItem\ItemTemplate\TempName
@@ -6548,7 +6605,7 @@ Function RenderGUI%()
 								;[Block]
 								If IsDoubleItem(I_1499\Using, 1, "gas masks") Then Return
 								;[End Block]
-							Case "super1499"
+							Case "veryfine1499"
 								;[Block]
 								If IsDoubleItem(I_1499\Using, 2, "gas masks") Then Return
 								;[End Block]
@@ -9192,7 +9249,7 @@ Function UpdateLeave1499%()
 				Next
 				For it.Items = Each Items
 					it\DistTimer = 0.0
-					If it\ItemTemplate\TempName = "scp1499" Lor it\ItemTemplate\TempName = "super1499" Then
+					If it\ItemTemplate\TempName = "scp1499" Lor it\ItemTemplate\TempName = "veryfine1499" Then
 						If EntityY(it\Collider) >= EntityY(r1499\OBJ) - 5.0 Then
 							PositionEntity(it\Collider, I_1499\PrevX, I_1499\PrevY + (EntityY(it\Collider) - EntityY(r1499\OBJ)), I_1499\PrevZ)
 							ResetEntity(it\Collider)

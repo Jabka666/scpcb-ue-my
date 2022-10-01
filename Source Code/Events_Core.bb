@@ -2228,7 +2228,7 @@ Function UpdateEvents%()
 						
 						For i = 0 To MaxItemAmount - 1
 							If Inventory(i) <> Null Then
-								If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
+								If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "veryfinenvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
 									If Inventory(i)\State > 0.0 Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Then
 										HasBatteryFor895 = True
 										Exit
@@ -2236,7 +2236,7 @@ Function UpdateEvents%()
 								EndIf
 							EndIf
 						Next
-						If CoffinDistance < 4.0 And HasBatteryFor895 And (Not I_714\Using) And wi\GasMask <> 3 And wi\HazmatSuit <> 3 Then
+						If CoffinDistance < 4.0 And HasBatteryFor895 And (Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 3 Then
 							TurnEntity(me\Collider, 0.0, AngleDist(PointDirection(EntityX(me\Collider, True), EntityZ(me\Collider, True), EntityX(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True)) + 90.0 + Sin(WrapAngle(e\EventState3 / 10.0)), EntityYaw(me\Collider)) / 4.0, 0.0, True)
 							CameraPitch = (CameraPitch * 0.8) + (((-60.0) * Min(Max((2.0 - Distance(EntityX(me\Collider, True), EntityX(e\room\Objects[1], True), EntityZ(me\Collider, True), EntityZ(e\room\Objects[1], True))) / 2.0, 0.0), 1.0)) * 0.2)
 							
@@ -2266,7 +2266,7 @@ Function UpdateEvents%()
 									EntityTexture(t\OverlayID[4], mon_I\MonitorOverlayID[Rand(MONITOR_895_OVERLAY_1, MONITOR_895_OVERLAY_6)])
 									For i = 0 To MaxItemAmount - 1
 										If Inventory(i) <> Null Then
-											If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
+											If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "veryfinenvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
 												If Inventory(i)\State2 = 1.0 Then PlaySound_Strict(HorrorSFX[1])
 												Inventory(i)\State2 = 2.0
 												Exit
@@ -2282,7 +2282,7 @@ Function UpdateEvents%()
 									EntityTexture(t\OverlayID[4], mon_I\MonitorOverlayID[Rand(MONITOR_895_OVERLAY_1, MONITOR_895_OVERLAY_6)])
 									For i = 0 To MaxItemAmount - 1
 										If Inventory(i) <> Null Then
-											If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
+											If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "veryfinenvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
 												If Inventory(i)\State2 = 0.0 Then PlaySound_Strict(HorrorSFX[0])
 												Inventory(i)\State2 = 1.0
 												Exit
@@ -2294,7 +2294,7 @@ Function UpdateEvents%()
 								EntityTexture(t\OverlayID[4], t\OverlayTextureID[4])
 								For i = 0 To MaxItemAmount - 1
 									If Inventory(i) <> Null Then
-										If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
+										If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "veryfinenvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
 											Inventory(i)\State2 = 0.0
 											Exit
 										EndIf
@@ -4893,7 +4893,7 @@ Function UpdateEvents%()
 							
 							UpdateRedLight(e\room\Objects[3], 100, 50)
 							
-							If (Not I_714\Using) And wi\GasMask <> 3 And wi\HazmatSuit <> 3 Then
+							If (Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 3 Then
 								If EntityVisible(e\room\Objects[2], Camera) Then 							
 									e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\Objects[3], 10.0, e\EventState3 / (86.0 * 70.0))
 									
@@ -5381,7 +5381,7 @@ Function UpdateEvents%()
 										e\EventState2 = Min(e\EventState2 + (fps\Factor[0] / 6000.0), 1.0)
 										e\EventState3 = CurveValue(e\EventState2, e\EventState3, 50.0)
 										
-										If (Not I_714\Using) And wi\HazmatSuit <> 3 And wi\GasMask <> 3 Then
+										If (Not I_714\Using) And wi\HazmatSuit <> 3 And wi\GasMask <> 4 Then
 											me\Sanity = me\Sanity - (fps\Factor[0] * 1.1)
 											me\BlurTimer = Sin(MilliSecs2() / 10.0) * Abs(me\Sanity)
 										EndIf
@@ -5420,7 +5420,7 @@ Function UpdateEvents%()
 							e\EventState3 = Max(e\EventState3 - (fps\Factor[0] / 100.0), 0.0)
 						EndIf
 						
-						If e\EventState3 > 0.0 And (Not I_714\Using) And wi\HazmatSuit <> 3 And wi\GasMask <> 3 Then 
+						If e\EventState3 > 0.0 And (Not I_714\Using) And wi\HazmatSuit <> 3 And wi\GasMask <> 4 Then 
 							e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\OBJ, 10.0, e\EventState3)
 							e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\OBJ, 10.0, (e\EventState3 - 0.5) * 2.0)
 						EndIf
@@ -6353,7 +6353,7 @@ Function UpdateEvents%()
 			Case e_cont2_1123
 				;[Block]
 				If PlayerRoom = e\room Then
-					If (Not I_714\Using) And wi\HazmatSuit <> 3 And wi\GasMask <> 3 Then
+					If (Not I_714\Using) And wi\HazmatSuit <> 3 And wi\GasMask <> 4 Then
 						If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 0.81 Lor e\EventState > 0.0 Then
 							If e\EventState = 0.0 Then me\BlurTimer = 1000.0
 							me\CameraShake = 1.0
@@ -7623,9 +7623,9 @@ Function UpdateEvents%()
 												ShouldCreateItem = True
 											EndIf
 											;[End Block]
-										Case "gasmask", "gasmask3", "supergasmask", "hazmatsuit", "hazmatsuit2", "hazmatsuit3"
+										Case "gasmask", "finegasmask", "veryfinegasmask", "gasmask148", "hazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
 											;[Block]
-											If itt\TempName = "gasmask" Lor itt\TempName = "gasmask3" Lor itt\TempName = "supergasmask" Lor itt\TempName = "hazmatsuit" Lor itt\TempName = "hazmatsuit2" Lor itt\TempName = "hazmatsuit3" And Rand(2) = 1 Then
+											If itt\TempName = "gasmask" Lor itt\TempName = "finegasmask" Lor itt\TempName = "veryfinegasmask" Lor itt\TempName = "gasmask148" Lor itt\TempName = "hazmatsuit" Lor itt\TempName = "veryfinehazmatsuit" Lor itt\TempName = "hazmatsuit148" And Rand(2) = 1 Then
 												ShouldCreateItem = True
 											EndIf
 											;[End Block]

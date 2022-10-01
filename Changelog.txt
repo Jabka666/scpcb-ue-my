@@ -5,12 +5,20 @@ General:
 - Added «Home» key, «End» key, «Delete» key and «Insert» key to switch insert mode. Abilty to hold left/right arrow to fast move cursor. Implement of Ctrl+C and Ctrl+V.
 - Added a hitbox in "room2_servers_hcz" preventing SCP-096 to be triggered through the bloody windows.
 
-- Removed extra spacing in credits.
-
 - Finally made the «Bright mode» similar to original game.
+
+Rooms:
+- Batteries on the map are now randomized.
+
+Items:
+- Added a new gas mask variation: gas mask without fogging.
+
+- Renamed some console item names.
 
 Menu:
 - Added degree symbol for FOV value.
+
+- Removed extra spacing in credits.
 
 Map Creator:
 - Made the Map Creator to be compatible with latest BlitzPlus version.
