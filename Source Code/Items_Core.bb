@@ -237,7 +237,7 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 		EndIf
 	Next 
 	
-	If i\ItemTemplate = Null Then RuntimeError("Item template not found (" + Name + ", " + TempName + ")")
+	If i\ItemTemplate = Null Then RuntimeError("Item template (" + Name + ", " + TempName + ") not found.")
 	
 	ResetEntity(i\Collider)
 	PositionEntity(i\Collider, x, y, z, True)

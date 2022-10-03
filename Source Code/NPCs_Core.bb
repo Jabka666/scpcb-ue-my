@@ -7125,7 +7125,7 @@ Function ManipulateNPCBones%()
 			If BoneName <> ""
 				Pvt = CreatePivot()
 				Bone = FindChild(n\OBJ, BoneName)
-				If (Not Bone) Then RuntimeError("ERROR: NPC bone " + Chr(34) + BoneName + Chr(34) + " doesn't exist.")
+				If (Not Bone) Then RuntimeError("NPC bone " + Chr(34) + BoneName + Chr(34) + " doesn't exist.")
 				PositionEntity(Pvt, EntityX(Bone, True), EntityY(Bone, True), EntityZ(Bone, True))
 				Select n\ManipulationType
 					Case 0 ; ~ Looking at player

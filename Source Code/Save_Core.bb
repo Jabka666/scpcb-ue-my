@@ -671,7 +671,7 @@ Function LoadGame%(File$)
 		Next
 	Next
 	
-	If ReadInt(f) <> 113 Then RuntimeError("Couldn't load the game, save file corrupted (error 2.5)")
+	If ReadInt(f) <> 113 Then RuntimeError("Couldn't load the game, save file corrupted (error 2.5).")
 	
 	Temp = ReadInt(f)
 	For i = 1 To Temp
@@ -782,7 +782,7 @@ Function LoadGame%(File$)
 		EndIf
 	Next
 	
-	If ReadInt(f) <> 632 Then RuntimeError("Couldn't load the game, save file corrupted (error 1)")
+	If ReadInt(f) <> 632 Then RuntimeError("Couldn't load the game, save file corrupted (error 1).")
 	
 	bk\IsBroken = ReadByte(f)
 	bk\x = ReadFloat(f)
@@ -911,7 +911,7 @@ Function LoadGame%(File$)
 		EndIf
 	Next
 	
-	If ReadInt(f) <> 954 Then RuntimeError("Couldn't load the game, save file may be corrupted (error 2)")
+	If ReadInt(f) <> 954 Then RuntimeError("Couldn't load the game, save file may be corrupted (error 2).")
 	
 	Local Zone%, ShouldSpawnDoor%
 	
@@ -1058,7 +1058,7 @@ Function LoadGame%(File$)
 		Next		
 	Next
 	
-	If ReadInt(f) <> 1845 Then RuntimeError("Couldn't load the game, save file corrupted (error 3)")
+	If ReadInt(f) <> 1845 Then RuntimeError("Couldn't load the game, save file corrupted (error 3).")
 	
 	Local de.Decals
 	
@@ -1556,7 +1556,7 @@ Function LoadGameQuick%(File$)
 		Next
 	Next
 	
-	If ReadInt(f) <> 113 Then RuntimeError("Couldn't load the game, save file corrupted (error 2.5)")
+	If ReadInt(f) <> 113 Then RuntimeError("Couldn't load the game, save file corrupted (error 2.5).")
 	
 	For n.NPCs = Each NPCs
 		RemoveNPC(n)
@@ -1671,7 +1671,7 @@ Function LoadGameQuick%(File$)
 		EndIf
 	Next
 	
-	If ReadInt(f) <> 632 Then RuntimeError("Couldn't load the game, save file corrupted (error 1)")
+	If ReadInt(f) <> 632 Then RuntimeError("Couldn't load the game, save file corrupted (error 1).")
 	
 	bk\IsBroken = ReadByte(f)
 	bk\x = ReadFloat(f)
@@ -1779,7 +1779,7 @@ Function LoadGameQuick%(File$)
 		EndIf
 	Next
 	
-	If ReadInt(f) <> 954 Then RuntimeError("Couldn't load the game, save file may be corrupted (error 2)")
+	If ReadInt(f) <> 954 Then RuntimeError("Couldn't load the game, save file may be corrupted (error 2).")
 	
 	Temp = ReadInt(f)
 	
@@ -1825,7 +1825,7 @@ Function LoadGameQuick%(File$)
 		Next		
 	Next
 	
-	If ReadInt(f) <> 1845 Then RuntimeError("Couldn't load the game, save file corrupted (error 3)")
+	If ReadInt(f) <> 1845 Then RuntimeError("Couldn't load the game, save file corrupted (error 3).")
 	
 	Local de.Decals
 	
@@ -2212,7 +2212,7 @@ Function LoadSavedGames%()
 	Next
 	SaveGameAmount = 0
 	
-	If FileType(SavePath) = 1 Then RuntimeError("Can't create dir " + Chr(34) + SavePath + Chr(34))
+	If FileType(SavePath) = 1 Then RuntimeError("Can't create dir " + Chr(34) + SavePath + Chr(34) + ".")
 	If FileType(SavePath) = 0 Then CreateDir(SavePath)
 	
 	Local MyDir% = ReadDir(SavePath)

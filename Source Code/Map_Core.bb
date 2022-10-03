@@ -351,7 +351,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 			Exit
 		EndIf
 	Next
-	If (Not f) Then RuntimeError("Error reading file " + Chr(34) + File + Chr(34))
+	If (Not f) Then RuntimeError("Error reading file " + Chr(34) + File + Chr(34) + ".")
 	
 	Local IsRMesh$ = ReadString(f)
 	
@@ -360,7 +360,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 	ElseIf IsRMesh = "RoomMesh.HasTriggerBox"
 		HasTriggerBox = True
 	Else
-		RuntimeError(Chr(34) + File + Chr(34) + " is Not RMESH (" + IsRMesh + ")")
+		RuntimeError("File " + Chr(34) + File + Chr(34) + " is Not RMESH (" + IsRMesh + ").")
 	EndIf
 	
 	File = StripFileName(File)
@@ -1582,7 +1582,7 @@ Function LoadRoomMesh%(rt.RoomTemplates)
 	If Instr(rt\OBJPath, ".rmesh") <> 0 Then ; ~ File is .rmesh
 		rt\OBJ = LoadRMesh(rt\OBJPath, rt)
 	ElseIf Instr(rt\OBJPath, ".b3d") <> 0 ; ~ File is .b3d
-		RuntimeError(".b3d rooms are no longer supported, please use the converter! Affected room: " + Chr(34) + rt\OBJPath + Chr(34))
+		RuntimeError(".b3d rooms are no longer supported, please use the converter! Defective room: " + Chr(34) + rt\OBJPath + Chr(34) + ".")
 	Else ; ~ File not found
 		RuntimeError("File: " + Chr(34) + rt\OBJPath + Chr(34) + " not found.")
 	EndIf
@@ -8838,7 +8838,7 @@ End Function
 
 Function LoadTerrain%(HeightMap%, yScale# = 0.7, t1%, t2%, Mask%)
 	; ~ Load the HeightMap
-	If (Not HeightMap) Then RuntimeError("HeightMap Image " + HeightMap + " not found.")
+	If (Not HeightMap) Then RuntimeError("HeightMap image " + Chr(34) + HeightMap + Chr(34) + " not found.")
 	
 	; ~ Store HeightMap dimensions
 	Local x% = ImageWidth(HeightMap) - 1
