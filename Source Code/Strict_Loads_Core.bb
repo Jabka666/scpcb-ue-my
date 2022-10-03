@@ -164,7 +164,7 @@ Function StreamSound_Strict%(File$, Volume# = 1.0, CustomMode% = Mode)
 	st\CHN = PlayMusic(File, CustomMode + TwoD)
 	
 	If st\CHN = -1 Then
-		CreateConsoleMsg(Format(GetLocalString("runerr", "sound.stream.failed.n1"), File))
+		CreateConsoleMsg(Format(Format(GetLocalString("runerr", "sound.stream.failed.n1"), File, "{0}"), st\CHN, "{1}"))
 		If opt\ConsoleOpening And opt\CanOpenConsole Then
 			ConsoleOpen = True
 		EndIf

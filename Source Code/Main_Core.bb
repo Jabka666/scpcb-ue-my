@@ -14,12 +14,6 @@ Const Font_Credits% = 6
 Const Font_Credits_Big% = 7
 ;[End Block]
 
-Type Fonts
-	Field FontID%[MaxFontIDAmount]
-End Type
-
-Global fo.Fonts = New Fonts
-
 Global ButtonSFX% = LoadSound_Strict("SFX\Interact\Button.ogg")
 Global ButtonSFX2% = LoadSound_Strict("SFX\Interact\Button2.ogg")
 
@@ -7605,7 +7599,7 @@ Function RenderMenu%()
 			If CurrSave = Null Then
 				TempStr = GetLocalString("menu", "dataredacted")
 			Else
-				TempStr = ConvertANSItoUTF8(CurrSave\Name)
+				TempStr = ConvertToUTF8(CurrSave\Name)
 			EndIf
 			Text(x, y + (20 * MenuScale), Format(GetLocalString("menu", "save"), TempStr))
 			
@@ -7613,9 +7607,9 @@ Function RenderMenu%()
 				TempStr = GetLocalString("menu", "new.seed") + RandomSeed
 			Else
 				If Len(SelectedMap) > 15 Then
-					TempStr = GetLocalString("menu", "new.map") + Left(ConvertANSItoUTF8(SelectedMap), 14) + "..."
+					TempStr = GetLocalString("menu", "new.map") + Left(ConvertToUTF8(SelectedMap), 14) + "..."
 				Else
-					TempStr = GetLocalString("menu", "new.map") + ConvertANSItoUTF8(SelectedMap)
+					TempStr = GetLocalString("menu", "new.map") + ConvertToUTF8(SelectedMap)
 				EndIf
 			EndIf
 			Text(x, y + (40 * MenuScale), TempStr)
@@ -9247,5 +9241,5 @@ Function InteractObject%(OBJ%, Dist#, Arrow% = False, ArrowID% = 0, MouseDown_% 
 End Function
 
 ;~IDEal Editor Parameters:
-;~F#641
+;~F#63B
 ;~C#Blitz3D
