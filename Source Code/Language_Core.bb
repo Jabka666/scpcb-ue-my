@@ -7,15 +7,15 @@ Type ListLanguage
 End Type
 
 Function LanguageSelector()
-	Local BasePath$ = "";GetEnv("AppData") + "\scpcb-ue\"
+	Local BasePath$ = "";GetEnv("AppData") + "\scpcb-ue\temp\"
 	;DownloadFile("https://files.ziyuesinicization.site/cbue/list.txt", BasePath + "temp.txt") ; ~ List of languages
 	Local File% = OpenFile("temp.txt")
 	If File <> 0 Then
 		While Not Eof(File)
 			l$ = ReadLine(File)
 			If l <> ""
-				lan.ListLanguage = New ListLanguage
-				lan\Name$ = ParseDomainTXT(l, "name") ; use anothor engine or download NetworkConnector in blitztoolbox(https://github.com/ZiYueCommentary/Blitz3D)
+				Local lan.ListLanguage = New ListLanguage
+				lan\Name$ = ParseDomainTXT(l, "name")
 				lan\ID$ = ParseDomainTXT(l, "id")
 				lan\Author$ = ParseDomainTXT(l, "author")
 				lan\LastModify$ = ParseDomainTXT(l, "mod")
@@ -36,7 +36,7 @@ Function LanguageSelector()
 	Local LanguageBG% = LoadImage_Strict("GFX\menu\language.jpg")
 	Local LanguageIMG% = CreateImage(452, 254)
 	Local ButtonImages% = LoadAnimImage_Strict("GFX\menu\buttons.png", 21, 21, 0, 5)
-	Local SelectedLanguage$ = ""
+	Local SelectedLanguage.ListLanguage = Null
 	Local RowTextContent$ = ""
 	
 	Repeat
@@ -58,22 +58,22 @@ Function LanguageSelector()
 			For lan.ListLanguage = Each ListLanguage
 				Color(1, 0, 0)
 				If lan\Name$ = "UserLanguage" Then 
-					LimitTextWithImage(GetLocalString("language", "local"), 2, y# - 195, 432, LoadImage(BasePath + "flags\"+lan\flag$)) 
+					LimitTextWithImage(GetLocalString("language", "local"), 2, y# - 195, 432, LoadImage(BasePath + "flags\"+lan\Flag$)) 
 				Else 
-					LimitTextWithImage(lan\Name$ + "(" + lan\ID$ + ")", 2, y# - 195, 432, LoadImage(BasePath + "flags\"+lan\flag$))
+					LimitTextWithImage(lan\Name$ + "(" + lan\ID$ + ")", 2, y# - 195, 432, LoadImage(BasePath + "flags\"+lan\Flag$))
 				EndIf
 				If lan\Name$ = opt\Language Then
 					Color(200, 0, 0)
 					Rect(0, y - 195 - FontHeight() / 2, 430, 20, False)
 				EndIf
-				If lan\Name$ = SelectedLanguage Then
+				If (SelectedLanguage <> Null) And (lan\Name$ = SelectedLanguage\Name$) Then
 					Color(1, 0, 0)
 					Rect(0, y - 195 - FontHeight() / 2, 430, 20, False)
 				EndIf
 				If MouseOn(20, y - FontHeight() / 2, 432, 20) Then
 					Color(150, 150, 150)
 					Rect(0, y - 195 - FontHeight() / 2, 430, 20, False)
-					If mo\MouseHit1 Then SelectedLanguage = lan\Name$
+					If mo\MouseHit1 Then SelectedLanguage = lan
 				EndIf
 				y# = y# + 20
 				LinesAmount = LinesAmount + 1
@@ -91,22 +91,22 @@ Function LanguageSelector()
 			For lan.ListLanguage = Each ListLanguage
 				Color(0, 0, 0)
 				If lan\Name$ = "UserLanguage" Then 
-					LimitTextWithImage(GetLocalString("language", "local"), 21, y#, 432, LoadImage(BasePath + "flags\"+lan\flag$)) 
+					LimitTextWithImage(GetLocalString("language", "local"), 21, y#, 432, LoadImage(BasePath + "flags\"+lan\Flag$)) 
 				Else 
-					LimitTextWithImage(lan\Name$ + "(" + lan\ID$ + ")", 21, y#, 432, LoadImage(BasePath + "flags\"+lan\flag$))
+					LimitTextWithImage(lan\Name$ + "(" + lan\ID$ + ")", 21, y#, 432, LoadImage(BasePath + "flags\"+lan\Flag$))
 				EndIf
 				If lan\Name$ = opt\Language Then 
 					Color(200, 0, 0)
 					Rect(20, y - FontHeight() / 2, 430, 20, False)
 				EndIf
-				If lan\Name$ = SelectedLanguage Then
+				If (SelectedLanguage <> Null) And (lan\Name$ = SelectedLanguage\Name$) Then
 					Color(0, 0, 0)
 					Rect(20, y - FontHeight() / 2, 430, 20, False)
 				EndIf
 				If MouseOn(20, y - FontHeight() / 2, 432, 20) Then
 					Color(150, 150, 150)
 					Rect(20, y - FontHeight() / 2, 430, 20, False)
-					If mo\MouseHit1 Then SelectedLanguage = lan\Name$
+					If mo\MouseHit1 Then SelectedLanguage = lan
 				EndIf
 				y# = y# + 20
 				LinesAmount = LinesAmount + 1
@@ -114,22 +114,22 @@ Function LanguageSelector()
 			ScrollMenuHeight# = LinesAmount
 		EndIf
 		
-		If SelectedLanguage != "" Then
-			If SelectedLanguage = "UserLanguage" And (Not FileType("Localization\"+SelectedLanguage) = 2) Then
-				RowTextContent = Format(GetLocalString("language", "user"), GetUserLanguage())
-				If ButtonWithImage(479, LauncherHeight - 65 - 50, 140, 30, GetLocalString("language", "download"), ButtonImages, 1) Then 
-					Delay 100
-					Exit
+		If SelectedLanguage <> Null Then
+			If SelectedLanguage\Name = "English" Then
+				If ButtonWithImage(479, LauncherHeight - 65 - 50, 140, 30, GetLocalString("language", "setting"), ButtonImages, 2) Then
+					SetLanguage(SelectedLanguage\ID)
+					fo\FontID[Font_Default] = LoadFont_Strict("GFX\fonts\Courier New.ttf", 16, True)
+					AppTitle(GetLocalString("language", "title"))
 				EndIf
-			ElseIf FileType("Localization\"+SelectedLanguage) = 2
-				If ButtonWithImage(479, LauncherHeight - 65 - 50, 140, 30, GetLocalString("language", "setting"), ButtonImages, 2) Then 
-					Delay 100
-					Exit
+			ElseIf FileType("Localization\" + SelectedLanguage\ID) = 2 Then
+				If ButtonWithImage(479, LauncherHeight - 65 - 50, 140, 30, GetLocalString("language", "setting"), ButtonImages, 2) Then
+					SetLanguage(SelectedLanguage\ID)
+					fo\FontID[Font_Default] = LoadFont_Strict("GFX\fonts\Courier New.ttf", 16, True)
+					AppTitle(GetLocalString("language", "title"))
 				EndIf
 			Else
-				If ButtonWithImage(479, LauncherHeight - 65 - 50, 140, 30, GetLocalString("language", "download"), ButtonImages, 1) Then ; should download a zip and unzip it, wait for develop a unzip userlib
-					Delay 100
-					Exit
+				If ButtonWithImage(479, LauncherHeight - 65 - 50, 140, 30, GetLocalString("language", "download"), ButtonImages, 1) Then
+					; ~ todo
 				EndIf
 			EndIf
 		Else
@@ -150,6 +150,7 @@ Function LanguageSelector()
 	Delete Each ListLanguage
 	;DeleteDir(BasePath + "flags\")
 	If LanguageIMG <> 0 Then FreeImage LanguageIMG
+	AppTitle GetLocalString("launcher", "title")
 End Function
 
 ; ~ Re-added
@@ -241,7 +242,7 @@ Function Button%(x,y,width,height,txt$, disabled%=False)
 					Pushed = True
 					Color 50*0.6, 50*0.6, 50*0.6
 				Else
-					Color Min(50*1.2,255),Min(50*1.2,255),Min(50*1.2,255)
+					Color Min(50*1.2, 255), Min(50*1.2, 255), Min(50*1.2, 255)
 				EndIf
 			EndIf
 		EndIf

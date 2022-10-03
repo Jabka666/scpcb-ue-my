@@ -14,6 +14,10 @@ Type Language
 	Field LanguagePath$
 End Type
 
+Type Fonts
+	Field FontID%[MaxFontIDAmount]
+End Type
+
 Const LanguageFile$ = "Data\local.ini"
 Const SubtitlesFile$ = "Data\subtitles.ini"
 Const AchievementsFile$ = "Data\Achievements.ini"
@@ -27,21 +31,30 @@ Function CheckForDlls%() ; ~ Can't localized because IniControler.dll may not ex
 	If FileSize("BlitzMovie.dll") = 0 Then InitErrorStr = InitErrorStr + "BlitzMovie.dll" + Chr(13) + Chr(10)
 	If FileSize("FreeImage.dll") = 0 Then InitErrorStr = InitErrorStr + "FreeImage.dll" + Chr(13) + Chr(10)
 	If FileSize("IniControler.dll") = 0 Then InitErrorStr = InitErrorStr + "IniControler.dll" + Chr(13) + Chr(10)
-	If FileSize("BlitzEncode.dll") = 0 Then InitErrorStr = InitErrorStr + "BlitzEncode.dll" + Chr(13) + Chr(10)
 
 	If Len(InitErrorStr) > 0 Then RuntimeError("The following DLLs were not found in the game directory:" + Chr(13) + Chr(10) + Chr(13) + Chr(10) + InitErrorStr)
 End Function
 
 Function SetLanguage(Language$)
-	If Language = "UserLanguage" Then
+	IniClearBuffer(lang\LanguagePath + "\" + LanguageFile)
+	IniClearBuffer(lang\LanguagePath + "\" + SubtitlesFile)
+	IniClearBuffer(lang\LanguagePath + "\" + AchievementsFile)
+	If Language = "UserLanguage" Then 
 		lang\CurrentLanguage$ = GetUserLanguage()
-	Else 
+	Else
 		lang\CurrentLanguage$ = Language
 	EndIf
 	lang\LanguagePath$ = "Localization\" + lang\CurrentLanguage$
 	IniWriteBuffer_(lang\LanguagePath + "\" + LanguageFile, 1)
 	IniWriteBuffer_(lang\LanguagePath + "\" + SubtitlesFile, 1)
 	IniWriteBuffer_(lang\LanguagePath + "\" + AchievementsFile, 1)
+	opt\Language = Language
+	fo\FontID[Font_Default] = LoadFont_Strict("GFX\fonts\Courier New.ttf", 16)
+	fo\FontID[Font_Default_Big] = LoadFont_Strict("GFX\fonts\\Courier New.ttf", 52)
+	fo\FontID[Font_Digital] = LoadFont_Strict("GFX\fonts\DS-Digital.ttf", 20)
+	fo\FontID[Font_Digital_Big] = LoadFont_Strict("GFX\fonts\DS-Digital.ttf", 60)
+	fo\FontID[Font_Journal] = LoadFont_Strict("GFX\fonts\Journal.ttf", 58)
+	fo\FontID[Font_Console] = LoadFont_Strict("GFX\fonts\Andale Mono.ttf", 16)
 End Function
 
 CheckForDlls()
@@ -60,6 +73,7 @@ If FileType(GetEnv("AppData") + "\scpcb-ue\Data\options.ini") <> 1 Then
 EndIf
 
 Global lang.Language = New Language
+Global fo.Fonts = New Fonts
 
 IniWriteBuffer_(LanguageFile, 1)
 IniWriteBuffer_(SubtitlesFile, 1)

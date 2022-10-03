@@ -361,7 +361,7 @@ Function UpdateMainMenu%()
 					EndIf
 					
 					If UpdateMainMenuButton(x + (420 * MenuScale), y + Height + (20 * MenuScale), 160 * MenuScale, 75 * MenuScale, GetLocalString("menu", "start"), False) Then
-						If CurrSave\Name = "" Then CurrSave\Name = ConvertUTF8toANSI(GetLocalString("save", "untitled"))
+						If CurrSave\Name = "" Then CurrSave\Name = ConvertToANSI(GetLocalString("save", "untitled"))
 						
 						If RandomSeed = "" Then
 							RandomSeed = Abs(MilliSecs2())
@@ -1193,10 +1193,10 @@ Function RenderMainMenu%()
 					RenderFrame(x + (150 * MenuScale), y + (55 * MenuScale), 200 * MenuScale, 30 * MenuScale, (x Mod 256), (y Mod 256), True)
 					
 					Color(255, 0, 0)
-					If Len(ConvertANSItoUTF8(SelectedMap)) > 15 Then
-						TempStr2 = Left(ConvertANSItoUTF8(SelectedMap), 14) + "..."
+					If Len(ConvertToUTF8(SelectedMap)) > 15 Then
+						TempStr2 = Left(ConvertToUTF8(SelectedMap), 14) + "..."
 					Else
-						TempStr2 = ConvertANSItoUTF8(SelectedMap)
+						TempStr2 = ConvertToUTF8(SelectedMap)
 					EndIf
 					Text(x + (250 * MenuScale), y + (70 * MenuScale), TempStr2, True, True)
 				EndIf
@@ -1327,7 +1327,7 @@ Function RenderMainMenu%()
 								Color(255, 255, 255)
 							EndIf
 							
-							Text(x + (20 * MenuScale), y + (10 * MenuScale), ConvertANSItoUTF8(CurrSave\Name))
+							Text(x + (20 * MenuScale), y + (10 * MenuScale), ConvertToUTF8(CurrSave\Name))
 							Text(x + (20 * MenuScale), y + (30 * MenuScale), CurrSave\Time)
 							Text(x + (120 * MenuScale), y + (30 * MenuScale), CurrSave\Date)
 							Text(x + (20 * MenuScale), y + (50 * MenuScale), CurrSave\Version)
@@ -1849,12 +1849,12 @@ Function RenderMainMenu%()
 						If i <= SavedMapsAmount Then
 							RenderFrame(x, y, 540 * MenuScale, 70 * MenuScale)
 							
-							If Len(ConvertANSItoUTF8(SavedMaps(i - 1))) > 20 Then
-								Text(x + (20 * MenuScale), y + (15 * MenuScale), Left(ConvertANSItoUTF8(SavedMaps(i - 1)), 19) + "...")
+							If Len(ConvertToUTF8(SavedMaps(i - 1))) > 20 Then
+								Text(x + (20 * MenuScale), y + (15 * MenuScale), Left(ConvertToUTF8(SavedMaps(i - 1)), 19) + "...")
 							Else
-								Text(x + (20 * MenuScale), y + (15 * MenuScale), ConvertANSItoUTF8(SavedMaps(i - 1)))
+								Text(x + (20 * MenuScale), y + (15 * MenuScale), ConvertToUTF8(SavedMaps(i - 1)))
 							EndIf
-							Text(x + (20 * MenuScale), y + (45 * MenuScale), ConvertANSItoUTF8(SavedMapsAuthor(i - 1)))
+							Text(x + (20 * MenuScale), y + (45 * MenuScale), ConvertToUTF8(SavedMapsAuthor(i - 1)))
 							
 							If MouseOn(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale) Lor MouseOn(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale) Then
 								RenderMapCreatorTooltip(tX, tY, tW, tH, SavedMaps(i - 1))
@@ -3524,11 +3524,11 @@ Function RenderMapCreatorTooltip%(x%, y%, Width%, Height%, MapName$)
 	Local Txt$[6]
 	
 	If Right(MapName, 6) = "cbmap2" Then
-		Txt[0] = Left(ConvertANSItoUTF8(MapName), Len(ConvertANSItoUTF8(MapName)) - 7)
+		Txt[0] = Left(ConvertToUTF8(MapName), Len(ConvertToUTF8(MapName)) - 7)
 		
 		Local f% = OpenFile("Map Creator\Maps\" + MapName)
-		Local Author$ = ConvertANSItoUTF8(ReadLine(f))
-		Local Descr$ = ConvertANSItoUTF8(ReadLine(f))
+		Local Author$ = ConvertToUTF8(ReadLine(f))
+		Local Descr$ = ConvertToUTF8(ReadLine(f))
 		
 		ReadByte(f)
 		ReadByte(f)
