@@ -344,7 +344,7 @@ Function RemoveWearableItems%(item.Items)
 			;[Block]
 			I_714\Using = False
 			;[End Block]
-		Case "scp1499", "veryfine1499"
+		Case "scp1499", "fine1499"
 			;[Block]
 			I_1499\Using = 0
 			;[End Block]
@@ -812,7 +812,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
-		Case "scp1499", "veryfine1499"
+		Case "scp1499", "fine1499"
 			;[Block]
 			Select Setting
 				Case ROUGH, COARSE
@@ -826,7 +826,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case FINE
 					;[Block]
-					it2.Items = CreateItem("SCP-1499", "veryfine1499", x, y, z)
+					it2.Items = CreateItem("SCP-1499", "fine1499", x, y, z)
 					;[End Block]
 				Case VERYFINE
 					;[Block]
