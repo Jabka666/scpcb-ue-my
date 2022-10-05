@@ -3779,7 +3779,7 @@ Function UpdateGUI%()
 							;[Block]
 							CreateHintMsg("Double click on this item to take it off.")
 							;[End Block]
-						Case "scp1499", "veryfine1499"
+						Case "scp1499", "fine1499"
 							;[Block]
 							If I_1499\Using > 0 Then
 								CreateHintMsg("Double click on this item to take it off.")
@@ -5246,7 +5246,7 @@ Function UpdateGUI%()
 						EndIf
 					EndIf
 					;[End Block]
-				Case "scp1499", "veryfine1499"
+				Case "scp1499", "fine1499"
 					;[Block]
 					If (Not PreventItemOverlapping(False, False, True)) Then
 						Select SelectedItem\ItemTemplate\TempName
@@ -5254,7 +5254,7 @@ Function UpdateGUI%()
 								;[Block]
 								If IsDoubleItem(I_1499\Using, 1, "gas masks") Then Return
 								;[End Block]
-							Case "veryfine1499"
+							Case "fine1499"
 								;[Block]
 								If IsDoubleItem(I_1499\Using, 2, "gas masks") Then Return
 								;[End Block]
@@ -5277,7 +5277,7 @@ Function UpdateGUI%()
 										CreateMsg("You put on the gas mask.")
 										I_1499\Using = 1
 										;[End Block]
-									Case "veryfine1499"
+									Case "fine1499"
 										;[Block]
 										CreateMsg("You put on the gas mask and you can breathe easier.")
 										I_1499\Using = 2
@@ -5510,7 +5510,7 @@ Function UpdateGUI%()
 			
 			If mo\MouseHit2 Then
 				Select SelectedItem\ItemTemplate\TempName
-					Case "firstaid", "finefirstaid", "firstaid2", "scp1499", "veryfine1499", "gasmask", "finegasmask", "veryfinegasmask", "gasmask148", "helmet"
+					Case "firstaid", "finefirstaid", "firstaid2", "scp1499", "fine1499", "gasmask", "finegasmask", "veryfinegasmask", "gasmask148", "helmet"
 						;[Block]
 						SelectedItem\State = 0.0
 						;[End Block]
@@ -5552,7 +5552,7 @@ Function UpdateGUI%()
 	For it.Items = Each Items
 		If it <> SelectedItem Then
 			Select it\ItemTemplate\TempName
-				Case "firstaid", "finefirstaid", "firstaid2", "vest", "finevest", "hazmatsuit", "veryfinehazmatsuit", "hazmatsuit148", "scp1499", "veryfine1499", "gasmask", "finegasmask", "veryfinegasmask", "gasmask148", "helmet"
+				Case "firstaid", "finefirstaid", "firstaid2", "vest", "finevest", "hazmatsuit", "veryfinehazmatsuit", "hazmatsuit148", "scp1499", "fine1499", "gasmask", "finegasmask", "veryfinegasmask", "gasmask148", "helmet"
 					;[Block]
 					it\State = 0.0
 					;[End Block]
@@ -6104,7 +6104,7 @@ Function RenderGUI%()
 						;[Block]
 						If I_1499\Using = 1 Then ShouldDrawRect = True
 						;[End Block]
-					Case "veryfine1499"
+					Case "fine1499"
 						;[Block]
 						If I_1499\Using = 2 Then ShouldDrawRect = True
 						;[End Block]
@@ -6597,7 +6597,7 @@ Function RenderGUI%()
 						EndIf
 					EndIf
 					;[End Block]
-				Case "scp1499", "veryfine1499"
+				Case "scp1499", "fine1499"
 					;[Block]
 					If (Not PreventItemOverlapping(False, False, True)) Then
 						Select SelectedItem\ItemTemplate\TempName
@@ -6605,7 +6605,7 @@ Function RenderGUI%()
 								;[Block]
 								If IsDoubleItem(I_1499\Using, 1, "gas masks") Then Return
 								;[End Block]
-							Case "veryfine1499"
+							Case "fine1499"
 								;[Block]
 								If IsDoubleItem(I_1499\Using, 2, "gas masks") Then Return
 								;[End Block]
@@ -9249,7 +9249,7 @@ Function UpdateLeave1499%()
 				Next
 				For it.Items = Each Items
 					it\DistTimer = 0.0
-					If it\ItemTemplate\TempName = "scp1499" Lor it\ItemTemplate\TempName = "veryfine1499" Then
+					If it\ItemTemplate\TempName = "scp1499" Lor it\ItemTemplate\TempName = "fine1499" Then
 						If EntityY(it\Collider) >= EntityY(r1499\OBJ) - 5.0 Then
 							PositionEntity(it\Collider, I_1499\PrevX, I_1499\PrevY + (EntityY(it\Collider) - EntityY(r1499\OBJ)), I_1499\PrevZ)
 							ResetEntity(it\Collider)
