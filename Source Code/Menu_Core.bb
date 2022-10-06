@@ -1246,7 +1246,7 @@ Function RenderMainMenu%()
 					DrawImage(ga\ArrowIMG[3], x + (160 * MenuScale), y + 240 * MenuScale)
 					DrawImage(ga\ArrowIMG[1], x + ((400 + (Len(Str(SelectedDifficulty\InventorySlots)) * 5)) * MenuScale), y + 240 * MenuScale)
 					
-					Text(x + (200 * MenuScale), y + (246 * MenuScale), GetLocalString("menu", "new.invslots") + SelectedDifficulty\InventorySlots)
+					Text(x + (200 * MenuScale), y + (246 * MenuScale), Format(GetLocalString("menu", "new.invslots"), SelectedDifficulty\InventorySlots))
 					
 					; ~ Other factor's difficulty
 					DrawImage(ga\ArrowIMG[1], x + (160 * MenuScale), y + (270 * MenuScale))
@@ -1270,7 +1270,7 @@ Function RenderMainMenu%()
 							TempStr = GetLocalString("menu", "new.extreme")
 							;[End Block]
 					End Select
-					Text(x + (200 * MenuScale), y + (276 * MenuScale), GetLocalString("menu", "new.factors") + TempStr)
+					Text(x + (200 * MenuScale), y + (276 * MenuScale), Format(GetLocalString("menu", "new.factors"), TempStr))
 				Else
 					RowText(SelectedDifficulty\Description, x + (160 * MenuScale), y + (180 * MenuScale), 390 * MenuScale, 200 * MenuScale)					
 				EndIf
@@ -2371,7 +2371,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 		
 		If Percent <> 100 Then
 			Color(255, 255, 255)
-			Text(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), GetLocalString("loading", "assets") + Assets, True, True)
+			Text(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), Format(GetLocalString("loading", "assets"), Assets), True, True)
 			
 			ResetInput()
 		Else

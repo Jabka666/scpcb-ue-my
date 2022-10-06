@@ -1,3 +1,0 @@
-name=UserLanguage; id=UserLanguage; flag=world.png;
-name=English; id=en-US; author=Developer; mod=114514; flag=us.png;
-name=Simplified Chinese; id=zh-CN; author=ZiYueCommentary; mod=114514; flag=cn.png;

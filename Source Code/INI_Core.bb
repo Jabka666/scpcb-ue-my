@@ -1,4 +1,3 @@
-
 Type INIFile
 	Field Name$
 	Field Bank%
@@ -103,7 +102,7 @@ Function GetLocalString$(Section$, Parameter$)
 End Function
 
 Function GetFileLocalString$(File$, Name$, Key$, DefaultValue$ = "")
-	Return IniGetBufferString_(lang\LanguagePath + "\" + File, Name, Key, IniGetBufferString_(File, Name, Key, DefaultValue))
+	Return IniGetBufferString_(lang\LanguagePath + File, Name, key, IniGetBufferString_(File, Name, key, DefaultValue))
 End Function
 
 Function Format$(String$, Parameter$, Replace$ = "%s")
@@ -626,7 +625,7 @@ Function LoadOptionsINI%()
 	
 	opt\DebugMode = GetINIInt(OptionFile, "Global", "Debug Mode", False)
 	
-	opt\Language = GetINIString(OptionFile, "Global", "Language", "UserLanguage")
+	opt\Language = GetINIString(OptionFile, "Global", "Language", "en-US")
 End Function
 
 Function SaveOptionsINI%(SaveGlobal% = False)
@@ -859,7 +858,7 @@ Function ResetOptionsINI%()
 	
 	opt\IntroEnabled = True
 	
-	opt\Language = "UserLanguage"
+	opt\Language = "en-US"
 End Function
 
 ;~IDEal Editor Parameters:

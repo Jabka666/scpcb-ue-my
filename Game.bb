@@ -27,8 +27,7 @@ Function CheckForDlls%() ; ~ Can't localized because IniControler.dll may not ex
 	
 	If FileSize("FMod.dll") = 0 Then InitErrorStr = InitErrorStr + "FMod.dll" + Chr(13) + Chr(10)
 	If FileSize("dplayx.dll") = 0 Then InitErrorStr = InitErrorStr + "dplayx.dll" + Chr(13) + Chr(10)
-	If FileSize("d3dim700.dll") = 0 Then InitErrorStr = InitErrorStr + "d3dim700.dll" + Chr(13) + Chr(10)
-	If FileSize("BlitzMovie.dll") = 0 Then InitErrorStr = InitErrorStr + "BlitzMovie.dll" + Chr(13) + Chr(10)
+	If FileSize("d3dim700.dll") = 0 Then InitErrorStr = InitErrorStr + "d3dim700.dll" + Chr(13) + Chr(10) ; ~ Optional in fact
 	If FileSize("FreeImage.dll") = 0 Then InitErrorStr = InitErrorStr + "FreeImage.dll" + Chr(13) + Chr(10)
 	If FileSize("IniControler.dll") = 0 Then InitErrorStr = InitErrorStr + "IniControler.dll" + Chr(13) + Chr(10)
 
@@ -36,25 +35,12 @@ Function CheckForDlls%() ; ~ Can't localized because IniControler.dll may not ex
 End Function
 
 Function SetLanguage(Language$)
-	IniClearBuffer(lang\LanguagePath + "\" + LanguageFile)
-	IniClearBuffer(lang\LanguagePath + "\" + SubtitlesFile)
-	IniClearBuffer(lang\LanguagePath + "\" + AchievementsFile)
-	If Language = "UserLanguage" Then 
-		lang\CurrentLanguage$ = GetUserLanguage()
-	Else
-		lang\CurrentLanguage$ = Language
-	EndIf
-	lang\LanguagePath$ = "Localization\" + lang\CurrentLanguage$
-	IniWriteBuffer_(lang\LanguagePath + "\" + LanguageFile, 1)
-	IniWriteBuffer_(lang\LanguagePath + "\" + SubtitlesFile, 1)
-	IniWriteBuffer_(lang\LanguagePath + "\" + AchievementsFile, 1)
+	lang\CurrentLanguage$ = Language
+	lang\LanguagePath$ = "Localization\" + lang\CurrentLanguage$ + "\"
+	IniWriteBuffer_(lang\LanguagePath + LanguageFile, 1)
+	IniWriteBuffer_(lang\LanguagePath + SubtitlesFile, 1)
+	IniWriteBuffer_(lang\LanguagePath + AchievementsFile, 1)
 	opt\Language = Language
-	fo\FontID[Font_Default] = LoadFont_Strict("GFX\fonts\Courier New.ttf", 16)
-	fo\FontID[Font_Default_Big] = LoadFont_Strict("GFX\fonts\\Courier New.ttf", 52)
-	fo\FontID[Font_Digital] = LoadFont_Strict("GFX\fonts\DS-Digital.ttf", 20)
-	fo\FontID[Font_Digital_Big] = LoadFont_Strict("GFX\fonts\DS-Digital.ttf", 60)
-	fo\FontID[Font_Journal] = LoadFont_Strict("GFX\fonts\Journal.ttf", 58)
-	fo\FontID[Font_Console] = LoadFont_Strict("GFX\fonts\Andale Mono.ttf", 16)
 End Function
 
 CheckForDlls()

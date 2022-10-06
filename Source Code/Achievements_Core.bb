@@ -152,7 +152,7 @@ Function RenderAchievementMsg%()
 			Rect(x + (10.0 * Scale), y + (10.0 * Scale), 64.0 * Scale, 64.0 * Scale, False)
 			Color(255, 255, 255)
 			SetFont(fo\FontID[Font_Default])
-			RowText(GetLocalString("msg", "achv.unlocked") + " - " + amsg\Txt, x + (84.0 * Scale), y + (10.0 * Scale), Width - (94.0 * Scale), y - (20.0 * Scale))
+			RowText(Format(GetLocalString("msg", "achv.unlocked"), amsg\Txt), x + (84.0 * Scale), y + (10.0 * Scale), Width - (94.0 * Scale), y - (20.0 * Scale))
 		EndIf
 	Next
 End Function

@@ -7,9 +7,11 @@ Type ListLanguage
 End Type
 
 Function LanguageSelector()
-	Local BasePath$ = "";GetEnv("AppData") + "\scpcb-ue\temp\"
-	;DownloadFile("https://files.ziyuesinicization.site/cbue/list.txt", BasePath + "temp.txt") ; ~ List of languages
-	Local File% = OpenFile("temp.txt")
+	Local BasePath$ = GetEnv("AppData") + "\scpcb-ue\temp\"
+	If FileType(BasePath) <> 2 Then CreateDir(BasePath)
+	CreateDir(BasePath + "flags/")
+	DownloadFile("https://files.ziyuesinicization.site/cbue/list.txt", BasePath + "temp.txt") ; ~ List of languages
+	Local File% = OpenFile(BasePath + "temp.txt")
 	If File <> 0 Then
 		While Not Eof(File)
 			l$ = ReadLine(File)
@@ -20,13 +22,13 @@ Function LanguageSelector()
 				lan\Author$ = ParseDomainTXT(l, "author")
 				lan\LastModify$ = ParseDomainTXT(l, "mod")
 				lan\Flag$ = ParseDomainTXT(l, "flag")
-				;DownloadFile("https://files.ziyuesinicization.site/cbue/flags" + lan\Flag$, BasePath + "flags/" + lan\Flag$) ; ~ Flags of languages
+				DownloadFile("https://files.ziyuesinicization.site/cbue/flags/" + lan\Flag$, BasePath + "flags/" + lan\Flag$) ; ~ Flags of languages
 			Else
 				Exit
 			EndIf
 		Wend
 		CloseFile(File)
-		;DeleteFile(BasePath + "temp.txt")
+		DeleteFile(BasePath + "temp.txt")
 	EndIf
 	
 	AppTitle(GetLocalString("language", "title"))
@@ -37,18 +39,17 @@ Function LanguageSelector()
 	Local LanguageIMG% = CreateImage(452, 254)
 	Local ButtonImages% = LoadAnimImage_Strict("GFX\menu\buttons.png", 21, 21, 0, 5)
 	Local SelectedLanguage.ListLanguage = Null
-	Local RowTextContent$ = ""
 	
 	Repeat
 		mo\MouseHit1 = MouseHit(1)
+		Local x#, y#, LinesAmount%
 		
 		SetBuffer(BackBuffer())
 		Cls()
 		Color(255, 255, 255)
 		DrawImage(LanguageBG%, 0, 0)
-		Rect 479, 195, 140, 150
+		Rect 479, 195, 140, 100
 		Color 0,0,0
-		RowText(RowTextContent, 482, 198, 137, 150)
 		
 		If LinesAmount > 13 Then
 			y# = 200 - (20 * ScrollMenuHeight * ScrollBarY)
@@ -57,16 +58,12 @@ Function LanguageSelector()
 			DrawImage(LanguageBG, -20, -195)
 			For lan.ListLanguage = Each ListLanguage
 				Color(1, 0, 0)
-				If lan\Name$ = "UserLanguage" Then 
-					LimitTextWithImage(GetLocalString("language", "local"), 2, y# - 195, 432, LoadImage(BasePath + "flags\"+lan\Flag$)) 
-				Else 
-					LimitTextWithImage(lan\Name$ + "(" + lan\ID$ + ")", 2, y# - 195, 432, LoadImage(BasePath + "flags\"+lan\Flag$))
-				EndIf
-				If lan\Name$ = opt\Language Then
+				LimitTextWithImage(lan\Name$ + "(" + lan\ID$ + ")", 2, y# - 195, 432, LoadImage(BasePath + "flags\"+lan\Flag$))
+				If lan\ID$ = opt\Language Then
 					Color(200, 0, 0)
 					Rect(0, y - 195 - FontHeight() / 2, 430, 20, False)
 				EndIf
-				If (SelectedLanguage <> Null) And (lan\Name$ = SelectedLanguage\Name$) Then
+				If (SelectedLanguage <> Null) And (lan = SelectedLanguage) Then
 					Color(1, 0, 0)
 					Rect(0, y - 195 - FontHeight() / 2, 430, 20, False)
 				EndIf
@@ -90,16 +87,12 @@ Function LanguageSelector()
 			LinesAmount% = 0
 			For lan.ListLanguage = Each ListLanguage
 				Color(0, 0, 0)
-				If lan\Name$ = "UserLanguage" Then 
-					LimitTextWithImage(GetLocalString("language", "local"), 21, y#, 432, LoadImage(BasePath + "flags\"+lan\Flag$)) 
-				Else 
-					LimitTextWithImage(lan\Name$ + "(" + lan\ID$ + ")", 21, y#, 432, LoadImage(BasePath + "flags\"+lan\Flag$))
-				EndIf
-				If lan\Name$ = opt\Language Then 
+				LimitTextWithImage(lan\Name$ + "(" + lan\ID$ + ")", 21, y#, 432, LoadImage(BasePath + "flags\"+lan\Flag$))
+				If lan\ID$ = opt\Language Then 
 					Color(200, 0, 0)
 					Rect(20, y - FontHeight() / 2, 430, 20, False)
 				EndIf
-				If (SelectedLanguage <> Null) And (lan\Name$ = SelectedLanguage\Name$) Then
+				If (SelectedLanguage <> Null) And (lan = SelectedLanguage) Then
 					Color(0, 0, 0)
 					Rect(20, y - FontHeight() / 2, 430, 20, False)
 				EndIf
@@ -115,26 +108,35 @@ Function LanguageSelector()
 		EndIf
 		
 		If SelectedLanguage <> Null Then
-			If SelectedLanguage\Name = "English" Then
+			Color(0, 0, 0)
+			RowText(Format(Format(GetLocalString("language", "author"), SelectedLanguage\Author, "{0}"), SelectedLanguage\LastModify, "{1}"), 481, 197, 140, 100)
+			If (SelectedLanguage\Name = "English") Then
 				If ButtonWithImage(479, LauncherHeight - 65 - 50, 140, 30, GetLocalString("language", "setting"), ButtonImages, 2) Then
 					SetLanguage(SelectedLanguage\ID)
 					fo\FontID[Font_Default] = LoadFont_Strict("GFX\fonts\Courier New.ttf", 16, True)
 					AppTitle(GetLocalString("language", "title"))
 				EndIf
-			ElseIf FileType("Localization\" + SelectedLanguage\ID) = 2 Then
-				If ButtonWithImage(479, LauncherHeight - 65 - 50, 140, 30, GetLocalString("language", "setting"), ButtonImages, 2) Then
-					SetLanguage(SelectedLanguage\ID)
-					fo\FontID[Font_Default] = LoadFont_Strict("GFX\fonts\Courier New.ttf", 16, True)
-					AppTitle(GetLocalString("language", "title"))
+			ElseIf (FileType("Localization\" + SelectedLanguage\ID) = 2) Then
+				If SelectedLanguage\ID <> opt\Language Then
+					If ButtonWithImage(479, LauncherHeight - 65 - 50 - 50, 140, 30, GetLocalString("language", "uninstall"), ButtonImages, 3) Then
+						DeleteFolder("Localization\" + SelectedLanguage\ID)
+					EndIf
+					If ButtonWithImage(479, LauncherHeight - 65 - 50, 140, 30, GetLocalString("language", "setting"), ButtonImages, 2) Then
+						SetLanguage(SelectedLanguage\ID)
+						fo\FontID[Font_Default] = LoadFont_Strict("GFX\fonts\Courier New.ttf", 16, True)
+						AppTitle(GetLocalString("language", "title"))
+					EndIf
 				EndIf
 			Else
 				If ButtonWithImage(479, LauncherHeight - 65 - 50, 140, 30, GetLocalString("language", "download"), ButtonImages, 1) Then
-					; ~ todo
+					DownloadFile("https://files.ziyuesinicization.site/cbue/" + SelectedLanguage\ID + ".zip", BasePath + "/local.zip")
+					CreateDir("Localization\" + SelectedLanguage\ID)
+					Unzip(BasePath + "/local.zip", "Localization/" + SelectedLanguage\ID)
 				EndIf
 			EndIf
 		Else
 			If ButtonWithImage(479, LauncherHeight - 65 - 50, 140, 30, GetLocalString("language", "contribute"), ButtonImages, 4) Then 
-				Exit
+				ExecFile("https://gist.github.com/ZiYueCommentary/97424394a0daf69d3a1220253b0a1cbb#file-ue-contribute-md")
 			EndIf
 		EndIf
 		
@@ -148,8 +150,8 @@ Function LanguageSelector()
 	
 	mo\MouseHit1 = False
 	Delete Each ListLanguage
-	;DeleteDir(BasePath + "flags\")
 	If LanguageIMG <> 0 Then FreeImage LanguageIMG
+	DeleteFolder(BasePath) ; ~ Delete temp folder
 	AppTitle GetLocalString("launcher", "title")
 End Function
 
