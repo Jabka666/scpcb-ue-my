@@ -23,25 +23,20 @@ Function CheckForDlls%() ; ~ Can't localized because IniControler.dll may not ex
 	
 	If FileSize("FMod.dll") = 0 Then InitErrorStr = InitErrorStr + "FMod.dll" + Chr(13) + Chr(10)
 	If FileSize("dplayx.dll") = 0 Then InitErrorStr = InitErrorStr + "dplayx.dll" + Chr(13) + Chr(10)
-	If FileSize("d3dim700.dll") = 0 Then InitErrorStr = InitErrorStr + "d3dim700.dll" + Chr(13) + Chr(10)
-	If FileSize("BlitzMovie.dll") = 0 Then InitErrorStr = InitErrorStr + "BlitzMovie.dll" + Chr(13) + Chr(10)
+	If FileSize("d3dim700.dll") = 0 Then InitErrorStr = InitErrorStr + "d3dim700.dll" + Chr(13) + Chr(10) ; ~ Optional in fact
 	If FileSize("FreeImage.dll") = 0 Then InitErrorStr = InitErrorStr + "FreeImage.dll" + Chr(13) + Chr(10)
 	If FileSize("IniControler.dll") = 0 Then InitErrorStr = InitErrorStr + "IniControler.dll" + Chr(13) + Chr(10)
-	If FileSize("BlitzEncode.dll") = 0 Then InitErrorStr = InitErrorStr + "BlitzEncode.dll" + Chr(13) + Chr(10)
 
 	If Len(InitErrorStr) > 0 Then RuntimeError("The following DLLs were not found in the game directory:" + Chr(13) + Chr(10) + Chr(13) + Chr(10) + InitErrorStr)
 End Function
 
 Function SetLanguage(Language$)
-	If Language = "UserLanguage" Then
-		lang\CurrentLanguage$ = GetUserLanguage()
-	Else 
-		lang\CurrentLanguage$ = Language
-	EndIf
-	lang\LanguagePath$ = "Localization\" + lang\CurrentLanguage$
-	IniWriteBuffer_(lang\LanguagePath + "\" + LanguageFile, 1)
-	IniWriteBuffer_(lang\LanguagePath + "\" + SubtitlesFile, 1)
-	IniWriteBuffer_(lang\LanguagePath + "\" + AchievementsFile, 1)
+	lang\CurrentLanguage$ = Language
+	lang\LanguagePath$ = "Localization\" + lang\CurrentLanguage$ + "\"
+	IniWriteBuffer_(lang\LanguagePath + LanguageFile, 1)
+	IniWriteBuffer_(lang\LanguagePath + SubtitlesFile, 1)
+	IniWriteBuffer_(lang\LanguagePath + AchievementsFile, 1)
+	opt\Language = Language
 End Function
 
 CheckForDlls()

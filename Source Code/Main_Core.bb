@@ -1,6 +1,10 @@
 Include "Source Code\Math_Core.bb"
 Include "Source Code\Strict_Loads_Core.bb"
 
+Type Fonts
+	Field FontID%[MaxFontIDAmount]
+End Type
+
 Const MaxFontIDAmount% = 8
 ; ~ Fonts ID Constants
 ;[Block]
@@ -13,10 +17,6 @@ Const Font_Console% = 5
 Const Font_Credits% = 6
 Const Font_Credits_Big% = 7
 ;[End Block]
-
-Type Fonts
-	Field FontID%[MaxFontIDAmount]
-End Type
 
 Global fo.Fonts = New Fonts
 
@@ -7605,7 +7605,7 @@ Function RenderMenu%()
 			If CurrSave = Null Then
 				TempStr = GetLocalString("menu", "dataredacted")
 			Else
-				TempStr = ConvertANSItoUTF8(CurrSave\Name)
+				TempStr = ConvertToUTF8(CurrSave\Name)
 			EndIf
 			Text(x, y + (20 * MenuScale), Format(GetLocalString("menu", "save"), TempStr))
 			
@@ -7613,9 +7613,9 @@ Function RenderMenu%()
 				TempStr = GetLocalString("menu", "new.seed") + RandomSeed
 			Else
 				If Len(SelectedMap) > 15 Then
-					TempStr = GetLocalString("menu", "new.map") + Left(ConvertANSItoUTF8(SelectedMap), 14) + "..."
+					TempStr = GetLocalString("menu", "new.map") + Left(ConvertToUTF8(SelectedMap), 14) + "..."
 				Else
-					TempStr = GetLocalString("menu", "new.map") + ConvertANSItoUTF8(SelectedMap)
+					TempStr = GetLocalString("menu", "new.map") + ConvertToUTF8(SelectedMap)
 				EndIf
 			EndIf
 			Text(x, y + (40 * MenuScale), TempStr)
@@ -7847,7 +7847,7 @@ End Type
 
 Function InitCredits%()
 	Local cl.CreditsLine
-	Local File% = OpenFile("Credits.txt")
+	Local File% = OpenFile_Strict("Credits.txt")
 	Local l$
 	
 	fo\FontID[Font_Credits] = LoadFont_Strict("GFX\fonts\Courier New.ttf", 21)
