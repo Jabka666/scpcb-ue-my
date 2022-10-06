@@ -14,6 +14,10 @@ Type Language
 	Field LanguagePath$
 End Type
 
+Type Fonts
+	Field FontID%[MaxFontIDAmount]
+End Type
+
 Const LanguageFile$ = "Data\local.ini"
 Const SubtitlesFile$ = "Data\subtitles.ini"
 Const AchievementsFile$ = "Data\Achievements.ini"
@@ -55,6 +59,7 @@ If FileType(GetEnv("AppData") + "\scpcb-ue\Data\options.ini") <> 1 Then
 EndIf
 
 Global lang.Language = New Language
+Global fo.Fonts = New Fonts
 
 IniWriteBuffer_(LanguageFile, 1)
 IniWriteBuffer_(SubtitlesFile, 1)

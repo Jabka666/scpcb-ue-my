@@ -9247,5 +9247,5 @@ Function InteractObject%(OBJ%, Dist#, Arrow% = False, ArrowID% = 0, MouseDown_% 
 End Function
 
 ;~IDEal Editor Parameters:
-;~F#641
+;~F#63B
 ;~C#Blitz3D

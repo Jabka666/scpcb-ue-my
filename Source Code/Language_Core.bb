@@ -16,7 +16,7 @@ Function LanguageSelector()
 		While Not Eof(File)
 			l$ = ReadLine(File)
 			If l <> ""
-				lan.ListLanguage = New ListLanguage
+				Local lan.ListLanguage = New ListLanguage
 				lan\Name$ = ParseDomainTXT(l, "name")
 				lan\ID$ = ParseDomainTXT(l, "id")
 				lan\Author$ = ParseDomainTXT(l, "author")
@@ -244,7 +244,7 @@ Function Button%(x,y,width,height,txt$, disabled%=False)
 					Pushed = True
 					Color 50*0.6, 50*0.6, 50*0.6
 				Else
-					Color Min(50*1.2,255),Min(50*1.2,255),Min(50*1.2,255)
+					Color Min(50*1.2, 255), Min(50*1.2, 255), Min(50*1.2, 255)
 				EndIf
 			EndIf
 		EndIf
