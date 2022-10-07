@@ -8,7 +8,8 @@ End Type
 
 Function LanguageSelector()
 	Local BasePath$ = GetEnv("AppData") + "\scpcb-ue\temp\"
-	If FileType(BasePath) <> 2 Then CreateDir(BasePath)
+	If FileType(BasePath) <> 2 Then CreateDir(BasePath) ; Create temporary folder
+	If FileType("Localization\") <> 2 Then CreateDir("Localization\")
 	CreateDir(BasePath + "flags/")
 	DownloadFile("https://files.ziyuesinicization.site/cbue/list.txt", BasePath + "temp.txt") ; ~ List of languages
 	Local File% = OpenFile(BasePath + "temp.txt")
@@ -110,7 +111,9 @@ Function LanguageSelector()
 		If SelectedLanguage <> Null Then
 			Color(0, 0, 0)
 			RowText(Format(Format(GetLocalString("language", "author"), SelectedLanguage\Author, "{0}"), SelectedLanguage\LastModify, "{1}"), 481, 197, 140, 100)
-			If (SelectedLanguage\Name = "English") Then
+			If SelectedLanguage\ID = opt\Language Then
+				; ~ Do nothing
+			ElseIf (SelectedLanguage\Name = "English") Then
 				If ButtonWithImage(479, LauncherHeight - 65 - 50, 140, 30, GetLocalString("language", "setting"), ButtonImages, 2) Then
 					SetLanguage(SelectedLanguage\ID)
 					fo\FontID[Font_Default] = LoadFont_Strict("GFX\fonts\Courier New.ttf", 16, True)
@@ -151,7 +154,7 @@ Function LanguageSelector()
 	mo\MouseHit1 = False
 	Delete Each ListLanguage
 	If LanguageIMG <> 0 Then FreeImage LanguageIMG
-	DeleteFolder(BasePath) ; ~ Delete temp folder
+	DeleteFolder(BasePath) ; ~ Delete temporary folder
 	AppTitle GetLocalString("launcher", "title")
 End Function
 
