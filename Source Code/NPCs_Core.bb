@@ -579,7 +579,7 @@ Function RemoveNPC%(n.NPCs)
 	Delete(n)
 End Function
 
-Global TakeOffTimer#
+Global RemoveHazmatTimer#, Remove714Timer#
 
 Function UpdateNPCs%()
 	CatchErrors("Uncaught (UpdateNPCs)")
@@ -1052,7 +1052,7 @@ Function UpdateNPCs%()
 													Kill(True)
 												ElseIf PlayerRoom\RoomTemplate\Name = "gate_a"
 													msg\DeathMsg = Chr(34) + "SCP-106 was spotted in Gate A area, finally breaching the containment. After using the High-Intensity Discharge turret by personnel, object went into a pocket dimension. "
-													msg\DeathMsg = msg\DeathMsg + "Casualty is 1 (one) D-class personnel, identified by viewers as " + SubjectName + ", who also escaped from facility and encounters with object. "
+													msg\DeathMsg = msg\DeathMsg + "Casualty is one (1) D-class personnel, identified by viewers as " + SubjectName + ", who also escaped from facility and encounters with object. "
 													msg\DeathMsg = msg\DeathMsg + "Incident needs an investigation, containment procedures are restoring." + Chr(34)
 													Kill(True)
 												Else
@@ -1514,10 +1514,10 @@ Function UpdateNPCs%()
 					EndIf
 					n\DropSpeed = 0.0
 					If n\SoundCHN <> 0 Then
-						If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN)
+						StopChannel(n\SoundCHN) : n\SoundCHN = 0
 					EndIf
 					If n\SoundCHN2 <> 0 Then
-						If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2)
+						StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
 					EndIf
 					PositionEntity(n\Collider, 0.0, -500.0, 0.0)
 					ResetEntity(n\Collider)
@@ -1528,8 +1528,10 @@ Function UpdateNPCs%()
 								If PlayerRoom\Adjacent[i] <> Null Then
 									For j = 0 To MaxRoomAdjacents - 1
 										If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null Then
-											TeleportEntity(n\Collider, PlayerRoom\Adjacent[i]\Adjacent[j]\x, 0.5, PlayerRoom\Adjacent[i]\Adjacent[j]\z, n\CollRadius, True)
-											Exit
+											If PlayerRoom\Adjacent[i]\Adjacent[j] <> PlayerRoom Then
+												TeleportEntity(n\Collider, PlayerRoom\Adjacent[i]\Adjacent[j]\x, 0.5, PlayerRoom\Adjacent[i]\Adjacent[j]\z, n\CollRadius, True)
+												Exit
+											EndIf
 										EndIf
 									Next
 									Exit
@@ -1578,38 +1580,43 @@ Function UpdateNPCs%()
 									
 									If Dist < 0.25 Then
 										If wi\HazmatSuit > 0 Then
-											TakeOffTimer = Min(TakeOffTimer + (fps\Factor[0] * 1.5), 500.0)
-											If TakeOffTimer > 100.0 And TakeOffTimer - (fps\Factor[0] * 1.5) <= 100.0 And (Not ChannelPlaying(n\SoundCHN2)) Then
+											RemoveHazmatTimer = Min(RemoveHazmatTimer + (fps\Factor[0] * 1.5), 1460.0)
+											If RemoveHazmatTimer > 100.0 And RemoveHazmatTimer - (fps\Factor[0] * 1.5) <= 100.0 And (Not ChannelPlaying(n\SoundCHN2)) Then
 												n\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\049\TakeOffHazmat.ogg"))
-											ElseIf TakeOffTimer >= 500.0
-												For i = 0 To MaxItemAmount - 1
-													If Inventory(i) <> Null Then
-														If Instr(Inventory(i)\ItemTemplate\TempName, "hazmatsuit") And wi\HazmatSuit <> 3 Then
-															If Inventory(i)\State2 < 3.0 Then
-																Inventory(i)\State2 = Inventory(i)\State2 + 1.0
-																TakeOffTimer = 250.0
-																me\CameraShake = 2.0
-															Else
-																RemoveItem(Inventory(i))
-																wi\HazmatSuit = 0
-																PlaySound_Strict(PickSFX[2])
-																CreateMsg("The hazmat suit was destroyed.")
-																TakeOffTimer = 0.0
-															EndIf
-															Exit
+											ElseIf RemoveHazmatTimer >= 500.0
+												For i = 0 To 3
+													If RemoveHazmatTimer > 500.0 + (i * 240.0) And RemoveHazmatTimer - (fps\Factor[0] * 1.5) <= 500.0 + (i * 240.0) Then
+														me\CameraShake = 2.0
+														If i = 3 Then
+															For i = 0 To MaxItemAmount - 1
+																If Inventory(i) <> Null Then
+																	If Instr(Inventory(i)\ItemTemplate\TempName, "hazmatsuit") Then
+																		wi\HazmatSuit = 0 : DropItem(Inventory(i))
+																		CreateMsg("The hazmat suit was forcibly removed.")
+																		Exit
+																	EndIf
+																EndIf
+															Next
 														EndIf
 													EndIf
 												Next
 											EndIf
 										ElseIf I_714\Using Then
-											TakeOffTimer = Min(TakeOffTimer + (fps\Factor[0] * 1.5), 500.0)
-											If TakeOffTimer > 100.0 And TakeOffTimer - (fps\Factor[0] * 1.5) <= 100.0 And (Not ChannelPlaying(n\SoundCHN2)) Then
+											me\BlurTimer = me\BlurTimer + fps\Factor[0] * 2.5
+											Remove714Timer = Min(Remove714Timer + (fps\Factor[0] * 1.5), 500.0)
+											
+											If Remove714Timer > 100.0 And Remove714Timer - fps\Factor[0] * 1.5 <= 100.0 And (Not ChannelPlaying(n\SoundCHN2)) Then
 												n\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\049\714Equipped.ogg"))
-											ElseIf TakeOffTimer >= 500.0
-												I_714\Using = False
-												PlaySound_Strict(PickSFX[3])
-												CreateMsg("The ring was forcibly removed.")
-												TakeOffTimer = 0.0
+											ElseIf Remove714Timer >= 500.0
+												For i = 0 To MaxItemAmount - 1
+													If Inventory(i) <> Null Then
+														If Inventory(i)\ItemTemplate\TempName = "scp714" Then
+															I_714\Using = False : DropItem(Inventory(i))
+															CreateMsg("The ring was forcibly removed.")
+															Exit
+														EndIf
+													EndIf
+												Next
 											EndIf
 										Else
 											me\CurrCameraZoom = 20.0
@@ -1635,7 +1642,8 @@ Function UpdateNPCs%()
 											EndIf										
 										EndIf
 									Else
-										If TakeOffTimer > 0.0 Then TakeOffTimer = Max(TakeOffTimer - fps\Factor[0], 0.0)
+										RemoveHazmatTimer = Max(RemoveHazmatTimer - fps\Factor[0], 0.0)
+										Remove714Timer = Max(Remove714Timer - fps\Factor[0], 0.0)
 										
 										n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
@@ -1798,9 +1806,7 @@ Function UpdateNPCs%()
 								UpdateSoundOrigin(n\SoundCHN2, Camera, n\OBJ)
 							ElseIf n\Idle = 0
 								If n\SoundCHN <> 0 Then
-									If ChannelPlaying(n\SoundCHN) Then
-										StopChannel(n\SoundCHN)
-									EndIf
+									StopChannel(n\SoundCHN) : n\SoundCHN = 0
 								EndIf
 								If PlayerInReachableRoom(True) And InFacility = 1 Then ; ~ Player is in a room where SCP-049 can teleport to
 									If Rand(1, 3 - SelectedDifficulty\OtherFactors) = 1 Then

@@ -481,7 +481,7 @@ Function UpdateItems%()
 		DeletedItem = False
 	Next
 	
-	If ClosestItem <> Null Then
+	If ClosestItem <> Null And (Not me\Terminated) Then
 		If mo\MouseHit1 Then PickItem(ClosestItem)
 	EndIf
 End Function

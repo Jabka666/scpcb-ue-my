@@ -2925,19 +2925,19 @@ Function UseDoor%(d.Doors, PlaySFX% = True)
 				CreateMsg("You placed your palm onto the scanner. The scanner reads: " + Chr(34) + "DNA doesn't match known sample. Access denied." + Chr(34))
 			Else
 				If (d\KeyCard <> Temp) And (Temp <> KEY_005) Then
-					CreateMsg("You placed the palm of the hand onto the scanner. The scanner reads: " + Chr(34) + "DNA doesn't match known sample. Access denied." + Chr(34))
+					CreateMsg("You placed the palm onto the scanner. The scanner reads: " + Chr(34) + "DNA doesn't match known sample. Access denied." + Chr(34))
 				Else
 					If d\Locked = 1 Then
 						If Temp = KEY_005 Then
 							CreateMsg("You hold the key onto the scanner, but nothing happened.")
 						Else
-							CreateMsg("You placed the palm of the hand onto the scanner, but nothing happened")
+							CreateMsg("You placed the palm onto the scanner, but nothing happened.")
 						EndIf
 					Else
 						If Temp = KEY_005 Then
 							CreateMsg("You hold the key onto the scanner. The scanner reads: " + Chr(34) + "Unknown DNA verified. ERROR! Access granted." + Chr(34))
 						Else
-							CreateMsg("You placed the palm of the hand onto the scanner. The scanner reads: " + Chr(34) + "DNA verified. Access granted." + Chr(34))
+							CreateMsg("You placed the palm onto the scanner. The scanner reads: " + Chr(34) + "DNA verified. Access granted." + Chr(34))
 						EndIf
 					EndIf
 				EndIf
@@ -2952,7 +2952,7 @@ Function UseDoor%(d.Doors, PlaySFX% = True)
 		EndIf
 	ElseIf d\Code <> ""
 		If SelectedItem = Null Then
-			If (d\Locked = 0) And (d\Code <> LOCKED_CODE) And (d\Code = msg\KeyPadInput) Then
+			If (d\Locked = 0) And (d\Code <> CODE_LOCKED) And (d\Code = msg\KeyPadInput) Then
 				PlaySound2(ScannerSFX1, Camera, d_I\ClosestButton)
 			Else
 				PlaySound2(ScannerSFX2, Camera, d_I\ClosestButton)

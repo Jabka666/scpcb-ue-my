@@ -952,7 +952,7 @@ Function UpdateMainMenu%()
 								y = y + (30 * MenuScale)
 								
 								If opt\EnableSubtitles Then
-									opt\SubColorR = UpdateMainMenuInputBox(x - (165 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorR), 14, 3)
+									opt\SubColorR = UpdateMainMenuInputBox(x - (130 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorR), 14, 3)
 									If SelectedInputBox = 14 Then
 										If opt\SubColorR > 255 Then opt\SubColorR = 255
 									EndIf
@@ -961,7 +961,7 @@ Function UpdateMainMenu%()
 								y = y + (30 * MenuScale)
 								
 								If opt\EnableSubtitles Then
-									opt\SubColorG = UpdateMainMenuInputBox(x - (165 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorG), 15, 3)
+									opt\SubColorG = UpdateMainMenuInputBox(x - (130 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorG), 15, 3)
 									If SelectedInputBox = 15 Then
 										If opt\SubColorG > 255 Then opt\SubColorG = 255
 									EndIf
@@ -970,7 +970,7 @@ Function UpdateMainMenu%()
 								y = y + (30 * MenuScale)
 								
 								If opt\EnableSubtitles Then
-									opt\SubColorB = UpdateMainMenuInputBox(x - (165 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorB), 16, 3)
+									opt\SubColorB = UpdateMainMenuInputBox(x - (130 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorB), 16, 3)
 									If SelectedInputBox = 16 Then
 										If opt\SubColorB > 255 Then opt\SubColorB = 255
 									EndIf
@@ -1986,7 +1986,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 		Next
 		
 		opt\LauncherEnabled = UpdateLauncherTick(LauncherWidth - 185, LauncherHeight - 278, opt\LauncherEnabled)
-		Text(LauncherWidth - 155, LauncherHeight - 275, "Use launcher")
+		Text(LauncherWidth - 155, LauncherHeight - 275, "Use launcher:")
 		
 		Text(LauncherWidth - 185, LauncherHeight - 246, "Display Mode:")
 		
