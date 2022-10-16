@@ -45,7 +45,7 @@ Function SetDifficultyColor%(ID%, R%, G%, B%)
 End Function
 
 difficulties[SAFE] = New Difficulty
-difficulties[SAFE]\Name = "Safe"
+difficulties[SAFE]\Name = GetLocalString("menu", "new.safe")
 difficulties[SAFE]\Description = GetLocalString("msg", "diff.safe")
 difficulties[SAFE]\AggressiveNPCs = False
 difficulties[SAFE]\InventorySlots = 10
@@ -54,7 +54,7 @@ difficulties[SAFE]\OtherFactors = EASY
 SetDifficultyColor(SAFE, 120, 150, 50)
 
 difficulties[EUCLID] = New Difficulty
-difficulties[EUCLID]\Name = "Euclid"
+difficulties[EUCLID]\Name = GetLocalString("menu", "new.euclid")
 difficulties[EUCLID]\Description = GetLocalString("msg", "diff.euclid")
 difficulties[EUCLID]\AggressiveNPCs = False
 difficulties[EUCLID]\InventorySlots = 6
@@ -63,7 +63,7 @@ difficulties[EUCLID]\OtherFactors = NORMAL
 SetDifficultyColor(EUCLID, 200, 200, 0)
 
 difficulties[KETER] = New Difficulty
-difficulties[KETER]\Name = "Keter"
+difficulties[KETER]\Name = GetLocalString("menu", "new.keter")
 difficulties[KETER]\Description = GetLocalString("msg", "diff.keter")
 difficulties[KETER]\AggressiveNPCs = True
 difficulties[KETER]\InventorySlots = 4
@@ -72,7 +72,7 @@ difficulties[KETER]\OtherFactors = HARD
 SetDifficultyColor(KETER, 200, 0, 0)
 
 difficulties[APOLLYON] = New Difficulty
-difficulties[APOLLYON]\Name = "Apollyon"
+difficulties[APOLLYON]\Name = GetLocalString("menu", "new.apollyon")
 difficulties[APOLLYON]\Description = GetLocalString("msg", "diff.apollyon")
 difficulties[APOLLYON]\AggressiveNPCs = True
 difficulties[APOLLYON]\InventorySlots = 2
