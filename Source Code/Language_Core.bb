@@ -95,7 +95,7 @@ Function LanguageSelector%()
 			LinesAmount% = 0
 			For lan.ListLanguage = Each ListLanguage
 				Color(0, 0, 0)
-				LimitTextWithImage(lan\Name$ + "(" + lan\ID$ + ")", 21, y#, 432, LoadImage(BasePath + "flags\"+lan\Flag$))
+				LimitTextWithImage(lan\Name$ + "(" + lan\ID$ + ")", 21, y, 432, LoadImage(BasePath + "flags\" + lan\Flag))
 				If lan\ID$ = opt\Language Then 
 					Color(200, 0, 0)
 					Rect(20, y - FontHeight() / 2, 430, 20, False)
