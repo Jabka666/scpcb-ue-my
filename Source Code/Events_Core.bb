@@ -4277,6 +4277,8 @@ Function UpdateEvents%()
 							n_I\Curr096\State = 5.0
 							StopStream_Strict(n_I\Curr096\SoundCHN) : n_I\Curr096\SoundCHN = 0 : n_I\Curr096\SoundCHN_IsStream = False
 							
+							If EntityHidden(e\room\Objects[8]) Then ShowEntity(e\room\Objects[8])
+							
 							RemoveNPC(e\room\NPC[0]) : e\room\NPC[0] = Null
 						EndIf
 					Else
@@ -4319,6 +4321,8 @@ Function UpdateEvents%()
 					Temp = UpdateLever(e\room\Objects[1]) ; ~ Power switch
 					x = UpdateLever(e\room\Objects[3]) ; ~ Fuel pump
 					z = UpdateLever(e\room\Objects[5]) ; ~ Generator
+					
+					If EntityHidden(e\room\Objects[8]) Then ShowEntity(e\room\Objects[8])
 					
 					; ~ Fuel pump on
 					If x Then
