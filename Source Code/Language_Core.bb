@@ -6,24 +6,29 @@ Type ListLanguage
 	Field Flag$
 End Type
 
-Function LanguageSelector()
+Function LanguageSelector%()
 	Local BasePath$ = GetEnv("AppData") + "\scpcb-ue\temp\"
-	If FileType(BasePath) <> 2 Then CreateDir(BasePath) ; Create temporary folder
+	
+	If FileType(BasePath) <> 2 Then CreateDir(BasePath) ; ~ Create temporary folder
 	If FileType("Localization\") <> 2 Then CreateDir("Localization\")
 	CreateDir(BasePath + "flags/")
 	DownloadFile("https://files.ziyuesinicization.site/cbue/list.txt", BasePath + "temp.txt") ; ~ List of languages
+	
+	Local lan.ListLanguage
 	Local File% = OpenFile(BasePath + "temp.txt")
+	Local l$
+	
 	If File <> 0 Then
 		While Not Eof(File)
-			l$ = ReadLine(File)
-			If l <> ""
-				Local lan.ListLanguage = New ListLanguage
-				lan\Name$ = ParseDomainTXT(l, "name")
-				lan\ID$ = ParseDomainTXT(l, "id")
-				lan\Author$ = ParseDomainTXT(l, "author")
-				lan\LastModify$ = ParseDomainTXT(l, "mod")
-				lan\Flag$ = ParseDomainTXT(l, "flag")
-				DownloadFile("https://files.ziyuesinicization.site/cbue/flags/" + lan\Flag$, BasePath + "flags/" + lan\Flag$) ; ~ Flags of languages
+			l = ReadLine(File)
+			If l <> "" Then
+				lan.ListLanguage = New ListLanguage
+				lan\Name = ParseDomainTXT(l, "name")
+				lan\ID = ParseDomainTXT(l, "id")
+				lan\Author = ParseDomainTXT(l, "author")
+				lan\LastModify = ParseDomainTXT(l, "mod")
+				lan\Flag = ParseDomainTXT(l, "flag")
+				DownloadFile("https://files.ziyuesinicization.site/cbue/flags/" + lan\Flag, BasePath + "flags/" + lan\Flag) ; ~ Flags of languages
 			Else
 				Exit
 			EndIf
@@ -36,31 +41,33 @@ Function LanguageSelector()
 	SetBuffer(BackBuffer())
 	Cls()
 	Flip(True)
-	Local LanguageBG% = LoadImage_Strict("GFX\menu\language.jpg")
+	
+	Local LanguageBG% = LoadImage_Strict("GFX\Menu\Language.png")
 	Local LanguageIMG% = CreateImage(452, 254)
 	Local ButtonImages% = LoadAnimImage_Strict("GFX\menu\buttons.png", 21, 21, 0, 5)
 	Local SelectedLanguage.ListLanguage = Null
 	
 	Repeat
 		mo\MouseHit1 = MouseHit(1)
+		
 		Local x#, y#, LinesAmount%
 		
 		SetBuffer(BackBuffer())
 		Cls()
 		Color(255, 255, 255)
-		DrawImage(LanguageBG%, 0, 0)
-		Rect 479, 195, 140, 100
-		Color 0,0,0
+		DrawImage(LanguageBG, 0, 0)
+		Rect(479, 195, 140, 100)
+		Color(0, 0, 0)
 		
 		If LinesAmount > 13 Then
-			y# = 200 - (20 * ScrollMenuHeight * ScrollBarY)
+			y = 200 - (20 * ScrollMenuHeight * ScrollBarY)
 			LinesAmount% = 0
 			SetBuffer(ImageBuffer(LanguageIMG))
 			DrawImage(LanguageBG, -20, -195)
 			For lan.ListLanguage = Each ListLanguage
 				Color(1, 0, 0)
-				LimitTextWithImage(lan\Name$ + "(" + lan\ID$ + ")", 2, y# - 195, 432, LoadImage(BasePath + "flags\"+lan\Flag$))
-				If lan\ID$ = opt\Language Then
+				LimitTextWithImage(lan\Name + "(" + lan\ID + ")", 2, y# - 195, 432, LoadImage(BasePath + "flags\" + lan\Flag))
+				If lan\ID = opt\Language Then
 					Color(200, 0, 0)
 					Rect(0, y - 195 - FontHeight() / 2, 430, 20, False)
 				EndIf
@@ -73,15 +80,15 @@ Function LanguageSelector()
 					Rect(0, y - 195 - FontHeight() / 2, 430, 20, False)
 					If mo\MouseHit1 Then SelectedLanguage = lan
 				EndIf
-				y# = y# + 20
+				y = y + 20
 				LinesAmount = LinesAmount + 1
 			Next
 			SetBuffer(BackBuffer())
 			DrawImage(LanguageIMG, 20, 195)
 			Color(10, 10, 10)
 			Rect(452, 195, 20, 254, True)
-			ScrollMenuHeight# = LinesAmount - 12
-			ScrollBarY# = DrawScrollBar(452, 195, 20, 254, 452, 195 + (254 - (254 - 4 * ScrollMenuHeight)) * ScrollBarY, 20, 254 - (4 * ScrollMenuHeight), ScrollBarY, 1)
+			ScrollMenuHeight = LinesAmount - 12
+			ScrollBarY = RenderDownloadScrollBar(452, 195, 20, 254, 452, 195 + (254 - (254 - 4 * ScrollMenuHeight)) * ScrollBarY, 20, 254 - (4 * ScrollMenuHeight), ScrollBarY, 1)
 		Else
 			Color(0, 0, 0)
 			y# = 201
@@ -159,139 +166,140 @@ Function LanguageSelector()
 End Function
 
 ; ~ Re-added
-Global OnBar%
+Global OnScrollBar%
 Global ScrollBarY# = 0.0
 Global ScrollMenuHeight# = 0.0
 
-Function DrawScrollBar#(x, y, width, height, barx, bary, barwidth, barheight, bar#, dir = 0)
-	;0 = vaakasuuntainen, 1 = pystysuuntainen
-	Local MouseSpeedX = MouseXSpeed()
-	Local MouseSpeedY = MouseYSpeed()
+Function RenderDownloadScrollBar#(x%, y%, Width%, Height%, BarX%, BarY%, BarWidth%, BarHeight%, Bar#, Dir% = False)
+	Local MouseSpeedX# = MouseXSpeed()
+	Local MouseSpeedY# = MouseYSpeed()
 	
 	Color(0, 0, 0)
-	Button(barx, bary, barwidth, barheight, "")
+	RenderDownloadButton(BarX, BarY, BarWidth, BarHeight, "")
 	
-	If dir = 0 Then ;vaakasuunnassa
-		If height > 10 Then
+	If Dir = 0 Then ; ~ Horizontal
+		If Height > 10 Then
 			Color 250,250,250
-			Rect(barx + barwidth / 2, bary + 5*MenuScale, 2*MenuScale, barheight - 10)
-			Rect(barx + barwidth / 2 - 3*MenuScale, bary + 5*MenuScale, 2*MenuScale, barheight - 10)
-			Rect(barx + barwidth / 2 + 3*MenuScale, bary + 5*MenuScale, 2*MenuScale, barheight - 10)
+			Rect(BarX + (BarWidth / 2), BarY + (5 * MenuScale), 2 * MenuScale, BarHeight - 10)
+			Rect(BarX + (BarWidth / 2) - (3 * MenuScale), BarY + 5 * MenuScale, 2 * MenuScale, BarHeight - 10)
+			Rect(BarX + (BarWidth / 2) + (3 * MenuScale), BarY + 5 * MenuScale, 2 * MenuScale, BarHeight - 10)
 		EndIf
-	Else ;pystysuunnassa
-		If width > 10 Then
-			Color 250,250,250
-			Rect(barx + 4*MenuScale, bary + barheight / 2, barwidth - 10*MenuScale, 2*MenuScale)
-			Rect(barx + 4*MenuScale, bary + barheight / 2 - 3*MenuScale, barwidth - 10*MenuScale, 2*MenuScale)
-			Rect(barx + 4*MenuScale, bary + barheight / 2 + 3*MenuScale, barwidth - 10*MenuScale, 2*MenuScale)
+	Else ; ~ Vertical
+		If Width > 10 Then
+			Color(250, 250, 250)
+			Rect(BarX + (4 * MenuScale), BarY + (BarHeight / 2), BarWidth - (10 * MenuScale), 2 * MenuScale)
+			Rect(BarX + (4 * MenuScale), BarY + (BarHeight / 2) - (3 * MenuScale), BarWidth - (10 * MenuScale), 2 * MenuScale)
+			Rect(BarX + (4 * MenuScale), BarY + (BarHeight / 2) + (3 * MenuScale), BarWidth - (10 * MenuScale), 2 * MenuScale)
 		EndIf
 	EndIf
 	
-	If MouseX()>barx And MouseX()<barx+barwidth
-		If MouseY()>bary And MouseY()<bary+barheight
-			OnBar = True
+	If MouseX() > BarX And MouseX() < BarX + BarWidth
+		If MouseY() > BarY And MouseY() < BarY + BarHeight
+			OnScrollBar = True
 		Else
-			If (Not MouseDown(1))
-				OnBar = False
-			EndIf
+			If (Not MouseDown(1)) Then OnScrollBar = False
 		EndIf
 	Else
-		If (Not MouseDown(1))
-			OnBar = False
-		EndIf
+		If (Not MouseDown(1)) Then OnScrollBar = False
 	EndIf
 	
-	If MouseDown(1)
-		If OnBar
-			If dir = 0
-				Return Min(Max(bar + MouseSpeedX / Float(width - barwidth), 0), 1)
+	If MouseDown(1) Then
+		If OnScrollBar Then
+			If Dir Then
+				Return(Min(Max(Bar + MouseSpeedX / Float(Width - BarWidth), 0.0), 1.0))
 			Else
-				Return Min(Max(bar + MouseSpeedY / Float(height - barheight), 0), 1)
+				Return(Min(Max(Bar + MouseSpeedY / Float(Height - BarHeight), 0.0), 1.0))
 			EndIf
 		EndIf
 	EndIf
 	
-	Local MouseSpeedZ = MouseZSpeed()
+	Local MouseSpeedZ# = MouseZSpeed()
 	
-	If MouseSpeedZ<>0 Then ;Only for vertical scroll bars
-		Return Min(Max(bar - (MouseSpeedZ*3) / Float(height - barheight), 0), 1)
+	If MouseSpeedZ <> 0.0 Then ; ~ Only for vertical scroll bars
+		Return(Min(Max(Bar - (MouseSpeedZ * 3.0) / Float(Height - BarHeight), 0.0), 1.0))
     EndIf
 	
-	Return bar
+	Return(Bar)
 End Function
 
-; ~ Another reborn
-Function LimitText%(txt$, x%, y%, width%)
+Function LimitText%(Txt$, x%, y%, Width%)
 	Local TextLength%
 	Local UnFitting%
 	Local LetterWidth%
-	If txt = "" Or width = 0 Then Return 0
-	TextLength = StringWidth(txt)
-	UnFitting = TextLength - width
-	If UnFitting <= 0 Then ;mahtuu
-		Text(x, y, txt, 0, 0)
-	Else ;ei mahdu
-		LetterWidth = TextLength / Len(txt)
-		Text(x, y, Left(txt, Max(Len(txt) - UnFitting / LetterWidth - 4, 1)) + "...", 0, 0)
+	
+	If Txt = "" Or Width = 0 Then Return 0
+	TextLength = StringWidth(Txt)
+	UnFitting = TextLength - Width
+	If UnFitting <= 0 Then
+		Text(x, y, Txt, 0, 0)
+	Else
+		LetterWidth = TextLength / Len(Txt)
+		Text(x, y, Left(Txt, Max(Len(Txt) - UnFitting / LetterWidth - 4, 1)) + "...", 0, 0)
 	End If
 End Function
 
-Function Button%(x,y,width,height,txt$, disabled%=False)
-	Local Pushed = False
+Function RenderDownloadButton%(x%, y%, Width%, Height%, Txt$, Disabled% = False)
+	Local Pushed% = False
 	
-	Color 50, 50, 50
-	If Not disabled Then 
-		If MouseX() > x And MouseX() < x+width Then
-			If MouseY() > y And MouseY() < y+height Then
+	Color(50, 50, 50)
+	If (Not Disabled) Then 
+		If MouseX() > x And MouseX() < x + Width Then
+			If MouseY() > y And MouseY() < y + Height Then
 				If MouseDown(1) Then
 					Pushed = True
-					Color 50*0.6, 50*0.6, 50*0.6
+					Color(30, 30, 30)
 				Else
-					Color Min(50*1.2, 255), Min(50*1.2, 255), Min(50*1.2, 255)
+					Color(100, 100, 100)
 				EndIf
 			EndIf
 		EndIf
 	EndIf
 	
 	If Pushed Then 
-		Rect x,y,width,height
-		Color 133,130,125
-		Rect x+1*MenuScale,y+1*MenuScale,width-1*MenuScale,height-1*MenuScale,False	
-		Color 10,10,10
-		Rect x,y,width,height,False
-		Color 250,250,250
-		Line x,y+height-1*MenuScale,x+width-1*MenuScale,y+height-1*MenuScale
-		Line x+width-1*MenuScale,y,x+width-1*MenuScale,y+height-1*MenuScale
+		Rect(x, y, Width, Height)
+		Color(130, 130, 130)
+		Rect(x + 1, y + 1, Width - 1, Height - 1, False)	
+		Color(10, 10, 10)
+		Rect(x, y, Width, Height, False)
+		Color(255, 255, 255)
+		Line(x, y + Height - 1,x + Width - 1, y + Height - 1)
+		Line(x + Width - 1, y, x + Width - 1, y + Height - 1)
 	Else
-		Rect x,y,width,height
-		Color 133,130,125
-		Rect x,y,width-1*MenuScale,height-1*MenuScale,False	
-		Color 250,250,250
-		Rect x,y,width,height,False
-		Color 10,10,10
-		Line x,y+height-1,x+width-1,y+height-1
-		Line x+width-1,y,x+width-1,y+height-1		
+		Rect(x, y, Width, Height)
+		Color(130, 130, 130)
+		Rect(x, y, Width - 1, Height - 1, False)	
+		Color(255, 255, 255)
+		Rect(x, y, Width, Height, False)
+		Color(10, 10, 10)
+		Line(x, y + Height - 1, x + Width - 1, y + Height - 1)
+		Line(x + Width - 1, y, x + Width - 1, y + Height - 1)	
 	EndIf
 	
-	Color 255,255,255
-	If disabled Then Color(70, 70, 70)
-	Text x+width/2, y+height/2-1*MenuScale, txt, True, True
+	Color(255, 255, 255)
+	If Disabled Then Color(100, 100, 100)
+	Text(x + (Width / 2), y + (Height / 2) - 1, Txt, True, True)
 	
-	Color 0,0,0
+	Color(0, 0, 0)
 	
-	If Pushed And mo\MouseHit1 Then PlaySound_Strict(ButtonSFX) : Return True
+	If Pushed And mo\MouseHit1 Then
+		PlaySound_Strict(ButtonSFX)
+		Return(True)
+	EndIf
 End Function
 
-Function ButtonWithImage%(x, y, width, height, txt$, image%, frame% = 0)
-	txt = String(" ", ImageWidth(image)/8) + txt
-	Local result = UpdateLauncherButton(x, y, width, height, txt, False, False)
-	DrawImage(image, x + width / 2 - StringWidth(txt) / 2 - 3, y + (height / 2) - ImageHeight(image) / 2, frame)
-	Return result
+Function ButtonWithImage%(x%, y%, Width%, Height%, Txt$, Img%, Frame% = 0)
+	Txt = String(" ", ImageWidth(Img) / 8) + Txt
+	
+	Local Result% = UpdateLauncherButton(x, y, Width, Height, Txt, False, False)
+	
+	DrawImage(Img, x + (Width / 2) - (StringWidth(Txt) / 2) - 3, y + (Height / 2) - ImageHeight(Img) / 2, Frame)
+	Return(Result)
 End Function
 
-Function LimitTextWithImage(txt$, x, y, width, image%, frame% = 0)
-	DrawImage(image, x, y + StringHeight(txt) / 2 - ImageHeight(image) / 2 - 1, frame)
-	LimitText(txt, x + 3 + ImageWidth(image), y, width - ImageWidth(image) - 3)
+Function LimitTextWithImage(Txt$, x%, y%, Width%, Img%, Frame% = 0)
+	DrawImage(Img, x, y + (StringHeight(Txt) / 2) - (ImageHeight(Img) / 2) - 1, Frame)
+	LimitText(Txt, x + 3 + ImageWidth(Img), y, Width - ImageWidth(Img) - 3)
 End Function
+
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D

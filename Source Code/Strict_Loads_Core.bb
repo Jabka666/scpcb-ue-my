@@ -371,6 +371,7 @@ End Function
 ; ~ Don't use in LoadRMesh, as Reg does this manually there. If you wanna fuck around with the logic in that function, be my guest 
 Function LoadTexture_Strict%(File$, Flags% = 1, TexDeleteType% = DeleteMapTextures)
 	Local Tmp%
+	
 	If (FileType(lang\LanguagePath + File) = 1) Then 
 		Tmp = LoadTextureCheckingIfInCache(lang\LanguagePath + File, Flags, TexDeleteType)
 	EndIf
@@ -384,7 +385,8 @@ Function LoadTexture_Strict%(File$, Flags% = 1, TexDeleteType% = DeleteMapTextur
 End Function
 
 Function LoadTexture_Cache%(File$, Flags% = 1)
-	Local Tmp% 
+	Local Tmp%
+	
 	If (FileType(lang\LanguagePath + File) = 1) Then 
 		Tmp = LoadTexture(lang\LanguagePath + File, Flags)
 	EndIf
@@ -394,6 +396,7 @@ End Function
 
 Function OpenFile_Strict%(File$)
 	Local Tmp%
+	
 	If (FileType(lang\LanguagePath + File) = 1) Then 
 		Tmp = OpenFile(lang\LanguagePath + File)
 	EndIf
@@ -403,6 +406,7 @@ End Function
 
 Function LoadAnimTexture_Strict%(File$, Flags%, Width%, Height%, FirstFrame%, Count%, TexDeleteType% = DeleteMapTextures)
 	Local Tmp%
+	
 	If (FileType(lang\LanguagePath + File) = 1) Then 
 		Tmp = LoadAnimTextureCheckingIfInCache(lang\LanguagePath + File, Flags, Width, Height, FirstFrame, Count, TexDeleteType)
 	EndIf
@@ -428,6 +432,7 @@ End Function
 
 Function LoadFont_Strict%(File$, Height% = 13, IgnoreScaling% = False)
 	Local Tmp%
+	
 	If (FileType(lang\LanguagePath + File) = 1) Then 
 		Tmp = LoadFont(lang\LanguagePath + File, (Int(Height * (opt\GraphicHeight / 1024.0))) * (Not IgnoreScaling) + IgnoreScaling * Height)
 	EndIf
@@ -442,6 +447,7 @@ End Function
 
 Function LoadImage_Strict%(File$)
 	Local Tmp%
+	
 	If (FileType(lang\LanguagePath + File) = 1) Then 
 		Tmp = LoadImage(lang\LanguagePath + File)
 	EndIf
@@ -456,6 +462,7 @@ End Function
 
 Function LoadAnimImage_Strict%(File$, Width%, Height%, FirstFrame%, Count%)
 	Local Tmp%
+	
 	If (FileType(lang\LanguagePath + File) = 1) Then 
 		Tmp = LoadAnimImage(lang\LanguagePath + File, Width, Height, FirstFrame, Count)
 	EndIf

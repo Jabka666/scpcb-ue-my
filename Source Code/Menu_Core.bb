@@ -1926,7 +1926,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 	LauncherIMG[0] = LoadImage_Strict("GFX\menu\launcher.png")
 	LauncherIMG[1] = LoadImage_Strict("GFX\menu\arrow.png")
 	LauncherIMG[2] = LoadAnimImage_Strict("GFX\menu\launcher_media.png", 64, 64, 0, 3)
-	LauncherIMG[3] = LoadAnimImage_Strict("GFX\menu\language.png", 40, 40, 0, 2)
+	LauncherIMG[3] = LoadAnimImage_Strict("GFX\menu\language_button.png", 40, 40, 0, 2)
 	
 	RotateImage(LauncherIMG[1], -90.0)
 	MidHandle(LauncherIMG[1])
@@ -2874,11 +2874,9 @@ End Function
 Type MenuSlideBar
 	Field x%, y%, Width%
 	Field Value#
-	Field TextLeft$
-	Field TextRight$
 End Type
 
-Function UpdateMainMenuSlideBar#(x%, y%, Width%, Value#, ID%, TextLeft$ = "LOW", TextRight$ = "HIGH")
+Function UpdateMainMenuSlideBar#(x%, y%, Width%, Value#, ID%)
 	Local msb.MenuSlideBar, currSlideBar.MenuSlideBar
 	Local SlideBarExists% = False
 	
@@ -2894,8 +2892,6 @@ Function UpdateMainMenuSlideBar#(x%, y%, Width%, Value#, ID%, TextLeft$ = "LOW",
 		msb\y = y
 		msb\Width = Width
 		msb\Value = Value
-		msb\TextLeft = TextLeft
-		msb\TextRight = TextRight
 	Else
 		currSlideBar = msb
 		currSlideBar\Value = Value
@@ -2922,8 +2918,8 @@ Function RenderMenuSlideBars%()
 		DrawImage(BlinkMeterIMG, msb\x + msb\Width * msb\Value / 100.0 + (3 * MenuScale), msb\y + (3 * MenuScale))
 		
 		Color(170, 170, 170)
-		Text(msb\x - (50 * MenuScale), msb\y + (5 * MenuScale), msb\TextLeft)					
-		Text(msb\x + msb\Width + (34 * MenuScale), msb\y + (5 * MenuScale), msb\TextRight)	
+		Text(msb\x - (50 * MenuScale), msb\y + (5 * MenuScale), GetLocalString("options", "slider.low"))					
+		Text(msb\x + msb\Width + (34 * MenuScale), msb\y + (5 * MenuScale), GetLocalString("options", "slider.high"))	
 	Next
 End Function
 
