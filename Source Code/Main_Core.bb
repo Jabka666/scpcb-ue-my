@@ -3326,7 +3326,7 @@ Function UpdateFog%()
 					Exit
 				EndIf
 			Next
-		ElseIf PlayerRoom\RoomTemplate\Name = "room2_mt" And (EntityY(me\Collider, True) >= 8.0 And EntityY(me\Collider, True) <= 12.0) Then
+		ElseIf PlayerRoom\RoomTemplate\Name = "room2_mt" And (EntityY(me\Collider, True) >= 8.0 And EntityY(me\Collider, True) <= 12.0) Lor (PlayerRoom\RoomTemplate\Name = "cont2_409" And EntityY(me\Collider) < -3728.0 * RoomScale)  Lor (PlayerRoom\RoomTemplate\Name = "cont1_895" And EntityY(me\Collider) < -1200.0 * RoomScale) Then
 			CurrFogColor = FogColorHCZ
 		ElseIf forest_event <> Null
 			If forest_event\EventState = 1.0 Then
@@ -8709,7 +8709,7 @@ Function UpdateMTF%()
 			Next
 			
 			If entrance <> Null Then 
-				If me\Zone = 2 Then
+				If me\Zone = 2 And PlayerRoom\RoomTemplate\Name <> "cont1_895" Then
 					If PlayerInReachableRoom() Then
 						PlayAnnouncement("SFX\Character\MTF\Announc.ogg")
 					EndIf
