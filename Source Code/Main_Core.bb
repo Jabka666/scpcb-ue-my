@@ -3326,7 +3326,7 @@ Function UpdateFog%()
 					Exit
 				EndIf
 			Next
-		ElseIf PlayerRoom\RoomTemplate\Name = "room2_mt" And (EntityY(me\Collider, True) >= 8.0 And EntityY(me\Collider, True) <= 12.0) Lor (PlayerRoom\RoomTemplate\Name = "cont2_409" And EntityY(me\Collider) < -3728.0 * RoomScale)  Lor (PlayerRoom\RoomTemplate\Name = "cont1_895" And EntityY(me\Collider) < -1200.0 * RoomScale) Then
+		ElseIf (PlayerRoom\RoomTemplate\Name = "room2_mt" And (EntityY(me\Collider, True) >= 8.0 And EntityY(me\Collider, True) <= 12.0)) Lor (PlayerRoom\RoomTemplate\Name = "cont2_409" And EntityY(me\Collider) < (-3728.0) * RoomScale)  Lor (PlayerRoom\RoomTemplate\Name = "cont1_895" And EntityY(me\Collider) < (-1200.0) * RoomScale) Then
 			CurrFogColor = FogColorHCZ
 		ElseIf forest_event <> Null
 			If forest_event\EventState = 1.0 Then
