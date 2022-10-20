@@ -47,6 +47,7 @@ Bug fixes:
 - Fixed grammar a little bit.
 - Fixed an ability to pick up items when you died.
 - Fixed SCP-049 removing a hazmat suit and SCP-714 at the same time.
+- Fixed position of the SCP-895 pivot attracting player's camera while wearing night vision goggles.
 
 - Tiny fix for dead guard position in the starting location.
 - Tiny fix for map generation.
