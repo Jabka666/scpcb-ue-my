@@ -81,7 +81,7 @@ difficulties[APOLLYON]\OtherFactors = EXTREME
 SetDifficultyColor(APOLLYON, 150, 150, 150)
 
 difficulties[ESOTERIC] = New Difficulty
-difficulties[ESOTERIC]\Name = "Esoteric"
+difficulties[ESOTERIC]\Name = GetLocalString("menu", "new.esoteric")
 difficulties[ESOTERIC]\AggressiveNPCs = False
 difficulties[ESOTERIC]\InventorySlots = 10
 difficulties[ESOTERIC]\Customizable = True

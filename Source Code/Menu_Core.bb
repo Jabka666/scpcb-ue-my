@@ -954,7 +954,7 @@ Function UpdateMainMenu%()
 								y = y + (30 * MenuScale)
 								
 								If opt\EnableSubtitles Then
-									opt\SubColorR = UpdateMainMenuInputBox(x - (165 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorR), 14, 3)
+									opt\SubColorR = UpdateMainMenuInputBox(x - (135 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorR), 14, 3)
 									If SelectedInputBox = 14 Then
 										If opt\SubColorR > 255 Then opt\SubColorR = 255
 									EndIf
@@ -963,7 +963,7 @@ Function UpdateMainMenu%()
 								y = y + (30 * MenuScale)
 								
 								If opt\EnableSubtitles Then
-									opt\SubColorG = UpdateMainMenuInputBox(x - (165 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorG), 15, 3)
+									opt\SubColorG = UpdateMainMenuInputBox(x - (135 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorG), 15, 3)
 									If SelectedInputBox = 15 Then
 										If opt\SubColorG > 255 Then opt\SubColorG = 255
 									EndIf
@@ -972,7 +972,7 @@ Function UpdateMainMenu%()
 								y = y + (30 * MenuScale)
 								
 								If opt\EnableSubtitles Then
-									opt\SubColorB = UpdateMainMenuInputBox(x - (165 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorB), 16, 3)
+									opt\SubColorB = UpdateMainMenuInputBox(x - (135 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorB), 16, 3)
 									If SelectedInputBox = 16 Then
 										If opt\SubColorB > 255 Then opt\SubColorB = 255
 									EndIf
@@ -980,7 +980,7 @@ Function UpdateMainMenu%()
 								
 								y = y + (40 * MenuScale)
 								
-								If UpdateMainMenuButton(x - (290 * MenuScale), y, 165 * MenuScale, 30 * MenuScale, GetLocalString("options", "reset"), False) Then
+								If UpdateMainMenuButton(x - (290 * MenuScale), y, 195 * MenuScale, 30 * MenuScale, GetLocalString("options", "reset"), False) Then
 									ResetOptionsINI()
 									SaveOptionsINI(True)
 								EndIf
@@ -997,7 +997,7 @@ Function UpdateMainMenu%()
 			Height = 70 * MenuScale
 			
 			If SelectedMapActionMsg = "" And DelSave = Null Then
-				If UpdateMainMenuButton(x + Width + (20 * MenuScale), y, (580 * MenuScale) - Width - (20 * MenuScale), Height, "BACK", False) Lor KeyDown(1) Then 
+				If UpdateMainMenuButton(x + Width + (20 * MenuScale), y, (580 * MenuScale) - Width - (20 * MenuScale), Height, GetLocalString("menu", "back"), False) Lor KeyDown(1) Then 
 					Select mm\MainMenuTab
 						Case MainMenuTab_New_Game
 							;[Block]
@@ -1039,7 +1039,7 @@ Function UpdateMainMenu%()
 					End Select
 				EndIf
 			Else
-				UpdateMainMenuButton(x + Width + (20 * MenuScale), y, (580 * MenuScale) - Width - (20 * MenuScale), Height, "BACK", False, False, True)
+				UpdateMainMenuButton(x + Width + (20 * MenuScale), y, (580 * MenuScale) - Width - (20 * MenuScale), Height, GetLocalString("menu", "back"), False, False, True)
 			EndIf
 		EndIf
 	Wend
@@ -1209,7 +1209,7 @@ Function RenderMainMenu%()
 				Text(x + (20 * MenuScale), y + (155 * MenuScale), GetLocalString("menu", "new.diff"))
 				For i = SAFE To ESOTERIC
 					Color(difficulties[i]\R, difficulties[i]\G, difficulties[i]\B)
-					Text(x + (60 * MenuScale), y + ((185 + 30 * i) * MenuScale), difficulties[i]\Name)
+					Text(x + (50 * MenuScale), y + ((185 + 30 * i) * MenuScale), difficulties[i]\Name)
 				Next
 				
 				Color(255, 255, 255)
@@ -1272,7 +1272,7 @@ Function RenderMainMenu%()
 					End Select
 					Text(x + (200 * MenuScale), y + (276 * MenuScale), Format(GetLocalString("menu", "new.factors"), TempStr))
 				Else
-					RowText(SelectedDifficulty\Description, x + (160 * MenuScale), y + (180 * MenuScale), 390 * MenuScale, 200 * MenuScale)					
+					RowText(SelectedDifficulty\Description, x + (160 * MenuScale), y + (180 * MenuScale), 390 * MenuScale, 140 * MenuScale)					
 				EndIf
 				
 				SetFont(fo\FontID[Font_Default_Big])
@@ -1308,7 +1308,7 @@ Function RenderMainMenu%()
 				SetFont(fo\FontID[Font_Default])
 				
 				If SaveGameAmount = 0 Then
-					Text(x + (20 * MenuScale), y + (20 * MenuScale), GetLocalString("menu", "save.nosaves"))
+					RowText(GetLocalString("menu", "save.nosaves"), x + (20 * MenuScale), y + (20 * MenuScale), 540 * MenuScale, 390 * MenuScale)
 				Else
 					x = x + (20 * MenuScale)
 					y = y + (20 * MenuScale)
@@ -1841,7 +1841,7 @@ Function RenderMainMenu%()
 				SetFont(fo\FontID[Font_Default])
 				
 				If SavedMapsAmount = 0 Then
-					Text(x + (20 * MenuScale), y + (20 * MenuScale), GetLocalString("menu", "nomap"))
+					RowText(GetLocalString("menu", "nomap"), x + (20 * MenuScale), y + (20 * MenuScale), 540 * MenuScale, 390 * MenuScale)
 				Else
 					x = x + (20 * MenuScale)
 					y = y + (20 * MenuScale)
@@ -3583,6 +3583,4 @@ Function RenderMapCreatorTooltip%(x%, y%, Width%, Height%, MapName$)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#A4#F3#FB#100#116#157#191#196#197#1DE#1E0#1EB#1F1#1F3#1F5#202#206#227#22D#232
-;~B#233#23F#245#254#255#256#257#27A#2A2#2F9#325#382#401
 ;~C#Blitz3D
