@@ -3418,6 +3418,7 @@ Function UpdateGUI%()
 			PointEntity(Camera, d_I\ClosestButton)
 			FreeEntity(Pvt)
 			
+			CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / Tan((2.0 * ATan(Tan((60.0) / 2.0) * opt\RealGraphicWidth / opt\RealGraphicHeight)) / 2.0))
 			CameraProject(Camera, EntityX(d_I\ClosestButton, True), EntityY(d_I\ClosestButton, True) + (MeshHeight(d_I\ButtonModelID[BUTTON_DEFAULT_MODEL]) * 0.015), EntityZ(d_I\ClosestButton, True))
 			ProjY = ProjectedY()
 			CameraProject(Camera, EntityX(d_I\ClosestButton, True), EntityY(d_I\ClosestButton, True) - (MeshHeight(d_I\ButtonModelID[BUTTON_DEFAULT_MODEL]) * 0.015), EntityZ(d_I\ClosestButton, True))
