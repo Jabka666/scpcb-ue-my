@@ -61,23 +61,23 @@ Function LanguageSelector%()
 		
 		If LinesAmount > 13 Then
 			y = 200 - (20 * ScrollMenuHeight * ScrollBarY)
-			LinesAmount% = 0
+			LinesAmount = 0
 			SetBuffer(ImageBuffer(LanguageIMG))
 			DrawImage(LanguageBG, -20, -195)
 			For lan.ListLanguage = Each ListLanguage
-				Color(1, 0, 0)
-				LimitTextWithImage(lan\Name + "(" + lan\ID + ")", 2, y# - 195, 432, LoadImage(BasePath + "flags\" + lan\Flag))
+				Color(0, 0, 0)
+				LimitTextWithImage(lan\Name + "(" + lan\ID + ")", 2, y - 195, 432, LoadImage(BasePath + "flags\" + lan\Flag))
 				If lan\ID = opt\Language Then
 					Color(200, 0, 0)
-					Rect(0, y - 195 - FontHeight() / 2, 430, 20, False)
+					Rect(0, y - 195 - (FontHeight() / 2), 430, 20, False)
 				EndIf
-				If (SelectedLanguage <> Null) And (lan = SelectedLanguage) Then
+				If SelectedLanguage <> Null And lan = SelectedLanguage Then
 					Color(1, 0, 0)
-					Rect(0, y - 195 - FontHeight() / 2, 430, 20, False)
+					Rect(0, y - 195 - (FontHeight() / 2), 430, 20, False)
 				EndIf
-				If MouseOn(20, y - FontHeight() / 2, 432, 20) Then
+				If MouseOn(20, y - (FontHeight() / 2), 432, 20) Then
 					Color(150, 150, 150)
-					Rect(0, y - 195 - FontHeight() / 2, 430, 20, False)
+					Rect(0, y - 195 - (FontHeight() / 2), 430, 20, False)
 					If mo\MouseHit1 Then SelectedLanguage = lan
 				EndIf
 				y = y + 20
@@ -88,81 +88,81 @@ Function LanguageSelector%()
 			Color(10, 10, 10)
 			Rect(452, 195, 20, 254, True)
 			ScrollMenuHeight = LinesAmount - 12
-			ScrollBarY = RenderDownloadScrollBar(452, 195, 20, 254, 452, 195 + (254 - (254 - 4 * ScrollMenuHeight)) * ScrollBarY, 20, 254 - (4 * ScrollMenuHeight), ScrollBarY, 1)
+			ScrollBarY = UpdateLauncherScrollBar(452, 195, 20, 254, 452, 195 + (254 - (254 - (4 * ScrollMenuHeight))) * ScrollBarY, 20, 254 - (4 * ScrollMenuHeight), ScrollBarY, 1)
 		Else
 			Color(0, 0, 0)
-			y# = 201
-			LinesAmount% = 0
+			y = 201
+			LinesAmount = 0
 			For lan.ListLanguage = Each ListLanguage
 				Color(0, 0, 0)
-				LimitTextWithImage(lan\Name$ + "(" + lan\ID$ + ")", 21, y, 432, LoadImage(BasePath + "flags\" + lan\Flag))
-				If lan\ID$ = opt\Language Then 
+				LimitTextWithImage(lan\Name + "(" + lan\ID + ")", 21, y, 432, LoadImage(BasePath + "flags\" + lan\Flag))
+				If lan\ID = opt\Language Then 
 					Color(200, 0, 0)
-					Rect(20, y - FontHeight() / 2, 430, 20, False)
+					Rect(20, y - (FontHeight() / 2), 430, 20, False)
 				EndIf
-				If (SelectedLanguage <> Null) And (lan = SelectedLanguage) Then
+				If SelectedLanguage <> Null And lan = SelectedLanguage Then
 					Color(0, 0, 0)
-					Rect(20, y - FontHeight() / 2, 430, 20, False)
+					Rect(20, y - (FontHeight() / 2), 430, 20, False)
 				EndIf
-				If MouseOn(20, y - FontHeight() / 2, 432, 20) Then
+				If MouseOn(20, y - (FontHeight() / 2), 432, 20) Then
 					Color(150, 150, 150)
-					Rect(20, y - FontHeight() / 2, 430, 20, False)
+					Rect(20, y - (FontHeight() / 2), 430, 20, False)
 					If mo\MouseHit1 Then SelectedLanguage = lan
 				EndIf
-				y# = y# + 20
+				y = y + 20
 				LinesAmount = LinesAmount + 1
 			Next
-			ScrollMenuHeight# = LinesAmount
+			ScrollMenuHeight = LinesAmount
 		EndIf
 		
 		If SelectedLanguage <> Null Then
 			Color(0, 0, 0)
 			RowText(Format(Format(GetLocalString("language", "author"), SelectedLanguage\Author, "{0}"), SelectedLanguage\LastModify, "{1}"), 481, 197, 140, 100)
 			If SelectedLanguage\ID = opt\Language Then
-				; ~ Do nothing
-			ElseIf (SelectedLanguage\Name = "English") Then
-				If ButtonWithImage(479, LauncherHeight - 65 - 50, 140, 30, GetLocalString("language", "setting"), ButtonImages, 2) Then
+				; ~ Just save this line, okay?
+			ElseIf SelectedLanguage\Name = "English"
+				If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 140, 30, GetLocalString("language", "setting"), ButtonImages, 2) Then
 					SetLanguage(SelectedLanguage\ID)
 					fo\FontID[Font_Default] = LoadFont_Strict("GFX\fonts\Courier New.ttf", 16, True)
 					AppTitle(GetLocalString("language", "title"))
 				EndIf
-			ElseIf (FileType("Localization\" + SelectedLanguage\ID) = 2) Then
+			ElseIf FileType("Localization\" + SelectedLanguage\ID) = 2
 				If SelectedLanguage\ID <> opt\Language Then
-					If ButtonWithImage(479, LauncherHeight - 65 - 50 - 50, 140, 30, GetLocalString("language", "uninstall"), ButtonImages, 3) Then
+					If UpdateLauncherButtonWithImage(479, LauncherHeight - 165, 140, 30, GetLocalString("language", "uninstall"), ButtonImages, 3) Then
 						DeleteFolder("Localization\" + SelectedLanguage\ID)
 					EndIf
-					If ButtonWithImage(479, LauncherHeight - 65 - 50, 140, 30, GetLocalString("language", "setting"), ButtonImages, 2) Then
+					If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 140, 30, GetLocalString("language", "setting"), ButtonImages, 2) Then
 						SetLanguage(SelectedLanguage\ID)
 						fo\FontID[Font_Default] = LoadFont_Strict("GFX\fonts\Courier New.ttf", 16, True)
 						AppTitle(GetLocalString("language", "title"))
 					EndIf
 				EndIf
 			Else
-				If ButtonWithImage(479, LauncherHeight - 65 - 50, 140, 30, GetLocalString("language", "download"), ButtonImages, 1) Then
+				If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 140, 30, GetLocalString("language", "download"), ButtonImages, 1) Then
 					DownloadFile("https://files.ziyuesinicization.site/cbue/" + SelectedLanguage\ID + ".zip", BasePath + "/local.zip")
 					CreateDir("Localization\" + SelectedLanguage\ID)
 					Unzip(BasePath + "/local.zip", "Localization/" + SelectedLanguage\ID)
 				EndIf
 			EndIf
 		Else
-			If ButtonWithImage(479, LauncherHeight - 65 - 50, 140, 30, GetLocalString("language", "contribute"), ButtonImages, 4) Then 
+			If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 140, 30, GetLocalString("language", "contribute"), ButtonImages, 4) Then 
 				ExecFile("https://gist.github.com/ZiYueCommentary/97424394a0daf69d3a1220253b0a1cbb#file-ue-contribute-md")
 			EndIf
 		EndIf
 		
-		If ButtonWithImage(479, LauncherHeight - 65, 140, 30, GetLocalString("menu", "back"), ButtonImages, 0) Then 
+		If UpdateLauncherButtonWithImage(479, LauncherHeight - 65, 140, 30, GetLocalString("menu", "back"), ButtonImages, 0) Then 
 			Exit
 		EndIf
 		
 		Flip(True)
-		Delay(8)
 	Forever
 	
 	mo\MouseHit1 = False
 	Delete Each ListLanguage
-	If LanguageIMG <> 0 Then FreeImage LanguageIMG
+	FreeImage(LanguageIMG) : LanguageIMG = 0
+	FreeImage(LanguageBG) : LanguageBG = 0
 	DeleteFolder(BasePath) ; ~ Delete temporary folder
-	AppTitle GetLocalString("launcher", "title")
+	AppTitle(GetLocalString("launcher", "title"))
 End Function
 
 ; ~ Re-added
@@ -170,26 +170,26 @@ Global OnScrollBar%
 Global ScrollBarY# = 0.0
 Global ScrollMenuHeight# = 0.0
 
-Function RenderDownloadScrollBar#(x%, y%, Width%, Height%, BarX%, BarY%, BarWidth%, BarHeight%, Bar#, Dir% = False)
+Function UpdateLauncherScrollBar#(x%, y%, Width%, Height%, BarX%, BarY%, BarWidth%, BarHeight%, Bar#, Dir% = False)
 	Local MouseSpeedX# = MouseXSpeed()
 	Local MouseSpeedY# = MouseYSpeed()
 	
 	Color(0, 0, 0)
-	RenderDownloadButton(BarX, BarY, BarWidth, BarHeight, "")
+	UpdateLauncherDownloadButton(BarX, BarY, BarWidth, BarHeight, "")
 	
 	If Dir = 0 Then ; ~ Horizontal
 		If Height > 10 Then
 			Color 250,250,250
-			Rect(BarX + (BarWidth / 2), BarY + (5 * MenuScale), 2 * MenuScale, BarHeight - 10)
-			Rect(BarX + (BarWidth / 2) - (3 * MenuScale), BarY + 5 * MenuScale, 2 * MenuScale, BarHeight - 10)
-			Rect(BarX + (BarWidth / 2) + (3 * MenuScale), BarY + 5 * MenuScale, 2 * MenuScale, BarHeight - 10)
+			Rect(BarX + (BarWidth / 2), BarY + 5, 2, BarHeight - 10)
+			Rect(BarX + (BarWidth / 2) - 3, BarY + 5, 2, BarHeight - 10)
+			Rect(BarX + (BarWidth / 2) + 3, BarY + 5, 2 , BarHeight - 10)
 		EndIf
 	Else ; ~ Vertical
 		If Width > 10 Then
 			Color(250, 250, 250)
-			Rect(BarX + (4 * MenuScale), BarY + (BarHeight / 2), BarWidth - (10 * MenuScale), 2 * MenuScale)
-			Rect(BarX + (4 * MenuScale), BarY + (BarHeight / 2) - (3 * MenuScale), BarWidth - (10 * MenuScale), 2 * MenuScale)
-			Rect(BarX + (4 * MenuScale), BarY + (BarHeight / 2) + (3 * MenuScale), BarWidth - (10 * MenuScale), 2 * MenuScale)
+			Rect(BarX + 4, BarY + (BarHeight / 2), BarWidth - 10, 2)
+			Rect(BarX + 4, BarY + (BarHeight / 2) - 3, BarWidth - 10, 2)
+			Rect(BarX + 4, BarY + (BarHeight / 2) + 3, BarWidth - 10, 2)
 		EndIf
 	EndIf
 	
@@ -227,7 +227,7 @@ Function LimitText%(Txt$, x%, y%, Width%)
 	Local UnFitting%
 	Local LetterWidth%
 	
-	If Txt = "" Or Width = 0 Then Return 0
+	If Txt = "" Lor Width = 0 Then Return(0)
 	TextLength = StringWidth(Txt)
 	UnFitting = TextLength - Width
 	If UnFitting <= 0 Then
@@ -235,10 +235,10 @@ Function LimitText%(Txt$, x%, y%, Width%)
 	Else
 		LetterWidth = TextLength / Len(Txt)
 		Text(x, y, Left(Txt, Max(Len(Txt) - UnFitting / LetterWidth - 4, 1)) + "...", 0, 0)
-	End If
+	EndIf
 End Function
 
-Function RenderDownloadButton%(x%, y%, Width%, Height%, Txt$, Disabled% = False)
+Function UpdateLauncherDownloadButton%(x%, y%, Width%, Height%, Txt$, Disabled% = False)
 	Local Pushed% = False
 	
 	Color(50, 50, 50)
@@ -262,7 +262,7 @@ Function RenderDownloadButton%(x%, y%, Width%, Height%, Txt$, Disabled% = False)
 		Color(10, 10, 10)
 		Rect(x, y, Width, Height, False)
 		Color(255, 255, 255)
-		Line(x, y + Height - 1,x + Width - 1, y + Height - 1)
+		Line(x, y + Height - 1, x + Width - 1, y + Height - 1)
 		Line(x + Width - 1, y, x + Width - 1, y + Height - 1)
 	Else
 		Rect(x, y, Width, Height)
@@ -287,7 +287,7 @@ Function RenderDownloadButton%(x%, y%, Width%, Height%, Txt$, Disabled% = False)
 	EndIf
 End Function
 
-Function ButtonWithImage%(x%, y%, Width%, Height%, Txt$, Img%, Frame% = 0)
+Function UpdateLauncherButtonWithImage%(x%, y%, Width%, Height%, Txt$, Img%, Frame% = 0)
 	Txt = String(" ", ImageWidth(Img) / 8) + Txt
 	
 	Local Result% = UpdateLauncherButton(x, y, Width, Height, Txt, False, False)
@@ -296,7 +296,7 @@ Function ButtonWithImage%(x%, y%, Width%, Height%, Txt$, Img%, Frame% = 0)
 	Return(Result)
 End Function
 
-Function LimitTextWithImage(Txt$, x%, y%, Width%, Img%, Frame% = 0)
+Function LimitTextWithImage%(Txt$, x%, y%, Width%, Img%, Frame% = 0)
 	DrawImage(Img, x, y + (StringHeight(Txt) / 2) - (ImageHeight(Img) / 2) - 1, Frame)
 	LimitText(Txt, x + 3 + ImageWidth(Img), y, Width - ImageWidth(Img) - 3)
 End Function
