@@ -10,6 +10,8 @@ General:
 - Finally made the «Bright mode» similar to original game.
 
 Rooms:
+- Changed type of door button being used in the Heavy Containment Zone's deadend checkpoint rooms.
+
 - Batteries on the map are now randomized.
 
 - Improved SCP-096's containment chamber design.

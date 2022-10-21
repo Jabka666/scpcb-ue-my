@@ -4328,7 +4328,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors[1]\LinkedDoor = r\RoomDoors[0]
 			
 			If CurrMapGrid\Grid[Floor(r\x / RoomSpacing) + ((Floor(r\z / RoomSpacing) - 1) * MapGridSize)] = MapGrid_NoTile Then
-				d.Doors = CreateDoor(r\x, r\y, r\z - 1026.0 * RoomScale, 0.0, r, False, HEAVY_DOOR, KEY_MISC, CODE_LOCKED)
+				d.Doors = CreateDoor(r\x, r\y, r\z - 1026.0 * RoomScale, 0.0, r, False, HEAVY_DOOR)
 				d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 				FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			EndIf
@@ -4370,7 +4370,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors[1]\LinkedDoor = r\RoomDoors[0]
 			
 			If CurrMapGrid\Grid[Floor(r\x / RoomSpacing) + ((Floor(r\z / RoomSpacing) - 1) * MapGridSize)] = MapGrid_NoTile Then
-				d.Doors = CreateDoor(r\x, r\y, r\z - 1026.0 * RoomScale, 0.0, r, False, DEFAULT_DOOR, KEY_MISC, CODE_LOCKED)
+				d.Doors = CreateDoor(r\x, r\y, r\z - 1026.0 * RoomScale, 0.0, r)
 				d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 				FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 				FreeEntity(d\OBJ2) : d\OBJ2 = 0
