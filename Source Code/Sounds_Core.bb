@@ -813,7 +813,7 @@ Global UserTrackName$[256]
 Function LoadSounds%()
 	Local i%
 	
-	RenderLoading(45, "SOUNDS")
+	RenderLoading(45, GetLocalString("loading", "sounds"))
 	
 	For i = 0 To 2
 		OpenDoorSFX(DEFAULT_DOOR, i) = LoadSound_Strict("SFX\Door\DoorOpen" + (i + 1) + ".ogg") ; ~ Also one-sided door

@@ -136,7 +136,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCTypeGuard
 			;[Block]
-			n\NVGName = "Human"
+			n\NVGName = GetLocalString("npcs", "human")
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.2)
 			EntityType(n\Collider, HIT_PLAYER)
@@ -152,7 +152,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCTypeMTF
 			;[Block]
-			n\NVGName = "Human"
+			n\NVGName = GetLocalString("npcs", "human")
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.2)
 			EntityType(n\Collider, HIT_PLAYER)
@@ -174,7 +174,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCTypeD
 			;[Block]
-			n\NVGName = "Human"
+			n\NVGName = GetLocalString("npcs", "human")
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.32)
 			EntityType(n\Collider, HIT_PLAYER)
@@ -259,7 +259,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCType049_2
 			;[Block]
-			n\NVGName = "Human"
+			n\NVGName = GetLocalString("npcs", "human")
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.2)
 			EntityType(n\Collider, HIT_PLAYER)
@@ -279,7 +279,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCTypeApache
 			;[Block]
-			n\NVGName = "Apache Helicopter"
+			n\NVGName = GetLocalString("npcs", "apache")
 			n\GravityMult = 0.0
 			n\MaxGravity = 0.0
 			n\Collider = CreatePivot()
@@ -325,7 +325,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCType035_Tentacle
 			;[Block]
-			n\NVGName = "Unidentified"
+			n\NVGName = GetLocalString("npcs", "undefine")
 			
 			n\Collider = CreatePivot()
 			
@@ -339,7 +339,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCType860_2
 			;[Block]
-			n\NVGName = "Unidentified"
+			n\NVGName = GetLocalString("npcs", "undefine")
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.25)
@@ -425,7 +425,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCType1499_1
 			;[Block]
-			n\NVGName = "Unidentified"
+			n\NVGName = GetLocalString("npcs", "undefine")
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.2)
 			EntityType(n\Collider, HIT_PLAYER)
@@ -442,7 +442,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCType008_1
 			;[Block]
-			n\NVGName = "Human"
+			n\NVGName = GetLocalString("npcs", "human")
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.2)
 			EntityType(n\Collider, HIT_PLAYER)
@@ -464,7 +464,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCTypeClerk
 			;[Block]
-			n\NVGName = "Human"
+			n\NVGName = GetLocalString("npcs", "human")
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.32)
 			EntityType(n\Collider, HIT_PLAYER)
@@ -756,21 +756,19 @@ Function UpdateNPCs%()
 												Select PlayerRoom\RoomTemplate\Name
 													Case "room2c_gw_lcz", "room2_closets", "cont1_895"
 														;[Block]
-														msg\DeathMsg = SubjectName + ". Cause of death: Fatal cervical fracture. The surveillance tapes confirm that the subject was killed by SCP-173."	
+														msg\DeathMsg = Format(GetLocalString("death", "173.gw"), SubjectName)
 														;[End Block]
 													Case "cont1_173_intro"
 														;[Block]
-														msg\DeathMsg = SubjectName + ". Cause of death: Fatal cervical fracture. According to Security Chief Franklin who was present at SCP-173's containment "
-														msg\DeathMsg = msg\DeathMsg + "chamber during the breach, the subject was killed by SCP-173 as soon as the disruptions in the electrical network started."
+														msg\DeathMsg = Format(GetLocalString("death", "173.intro"), SubjectName)
 														;[End block]
 													Case "room2_6_lcz"
 														;[Block]
-														msg\DeathMsg = Chr(34) + "If I'm not mistaken, one of the main purposes of these rooms was to stop SCP-173 from moving further in the event of a containment breach. "
-														msg\DeathMsg = msg\DeathMsg + "So, who's brilliant idea was it to put A GODDAMN MAN-SIZED VENTILATION DUCT in there?" + Chr(34)
+														msg\DeathMsg = GetLocalString("death", "173.6")
 														;[End Block]
 													Default 
 														;[Block]
-														msg\DeathMsg = SubjectName + ". Cause of death: Fatal cervical fracture. Assumed to be attacked by SCP-173."
+														msg\DeathMsg = Format(GetLocalString("death", "173.default"), SubjectName)
 														;[End Block]
 												End Select
 												
@@ -1048,12 +1046,10 @@ Function UpdateNPCs%()
 												PlaySound_Strict(DamageSFX[1])
 												PlaySound_Strict(HorrorSFX[5])											
 												If PlayerRoom\RoomTemplate\Name = "dimension_106" Then
-													msg\DeathMsg = SubjectName + ". Body partially decomposed by what is assumed to be SCP-106's " + Chr(34) + "corrosion" + Chr(34) + " effect. Body disposed of via incineration."
+													msg\DeathMsg = Format(GetLocalString("death", "106.dimension"), SubjectName)
 													Kill(True)
 												ElseIf PlayerRoom\RoomTemplate\Name = "gate_a"
-													msg\DeathMsg = Chr(34) + "SCP-106 was spotted in Gate A area, finally breaching the containment. After using the High-Intensity Discharge turret by personnel, object went into a pocket dimension. "
-													msg\DeathMsg = msg\DeathMsg + "Casualty is one (1) D-class personnel, identified by viewers as " + SubjectName + ", who also escaped from facility and encounters with object. "
-													msg\DeathMsg = msg\DeathMsg + "Incident needs an investigation, containment procedures are restoring." + Chr(34)
+													msg\DeathMsg = Format(GetLocalString("death", "106.gatea"), SubjectName)
 													Kill(True)
 												Else
 													PlaySound_Strict(OldManSFX[3])
@@ -1268,7 +1264,7 @@ Function UpdateNPCs%()
 												Pvt = CreatePivot()
 												me\CameraShake = 30.0
 												me\BlurTimer = 2000.0
-												msg\DeathMsg = "A large amount of blood found in [DATA REDACTED]. DNA indentified as " + SubjectName + ". Most likely [DATA REDACTED] by SCP-096."
+												msg\DeathMsg = Format(GetLocalString("death", "096"), SubjectName)
 												Kill(True)
 												me\KillAnim = 1
 												For i = 0 To 6
@@ -1592,7 +1588,7 @@ Function UpdateNPCs%()
 																If Inventory(i) <> Null Then
 																	If Instr(Inventory(i)\ItemTemplate\TempName, "hazmatsuit") Then
 																		wi\HazmatSuit = 0 : DropItem(Inventory(i))
-																		CreateMsg("The hazmat suit was forcibly removed.")
+																		CreateMsg(GetLocalString("msg", "hazmat.forceremoved")
 																		Exit
 																	EndIf
 																EndIf
@@ -1612,7 +1608,7 @@ Function UpdateNPCs%()
 													If Inventory(i) <> Null Then
 														If Inventory(i)\ItemTemplate\TempName = "scp714" Then
 															I_714\Using = False : DropItem(Inventory(i))
-															CreateMsg("The ring was forcibly removed.")
+															CreateMsg(GetLocalString("msg", "ring.forceremoved")
 															Exit
 														EndIf
 													EndIf
@@ -1623,7 +1619,7 @@ Function UpdateNPCs%()
 											
 											If (Not chs\GodMode) Then
 												If PlayerRoom\RoomTemplate\Name = "cont2_049" Then
-													msg\DeathMsg = "Three (3) active instances of SCP-049-2 discovered in the tunnel outside SCP-049's containment chamber. Terminated by Nine-Tailed Fox."
+													msg\DeathMsg = GetLocalString("death", "0492")
 													For e.Events = Each Events
 														If e\EventID = e_cont2_049 Then
 															e\EventState = -1.0
@@ -1631,7 +1627,7 @@ Function UpdateNPCs%()
 														EndIf
 													Next
 												Else
-													msg\DeathMsg = "An active instance of SCP-049-2 was discovered in [REDACTED]. Terminated by Nine-Tailed Fox."
+													msg\DeathMsg = GetLocalString("death", "049")
 													Kill() : me\KillAnim = 0
 												EndIf
 												PlaySound_Strict(HorrorSFX[13])
@@ -2116,7 +2112,7 @@ Function UpdateNPCs%()
 												InjurePlayer(Rnd(0.4, 1.0), 0.0, 0.0, Rnd(0.1, 0.25), 0.2)
 												
 												If me\Injuries > 3.0 Then
-													msg\DeathMsg = SubjectName + ". Cause of death: multiple lacerations and severe blunt force trauma caused by an instance of SCP-049-2."
+													msg\DeathMsg = Format(GetLocalString("death", "0492killed"), SubjectName)
 													Kill(True)
 												EndIf
 											Else
@@ -2208,12 +2204,12 @@ Function UpdateNPCs%()
 										Local InstaKillPlayer% = False
 										
 										If PlayerRoom\RoomTemplate\Name = "cont1_173" Then 
-											msg\DeathMsg = SubjectName + ". Cause of death: Gunshot wound to the head. The surveillance tapes confirm that the subject was terminated by Agent Ulgrin shortly after the site lockdown was initiated."
+											msg\DeathMsg = Format(GetLocalString("death", "guard.173"), SubjectName)
 											InstaKillPlayer = True
 										ElseIf PlayerRoom\RoomTemplate\Name = "gate_b"
-											msg\DeathMsg = Chr(34) + "Agent G. to control. Eliminated a Class D escapee in Gate B's courtyard." + Chr(34)
+											msg\DeathMsg = GetLocalString("death", "guard.gateb")
 										Else
-											msg\DeathMsg = SubjectName + ". Terminated by Agent [REDACTED]."
+											msg\DeathMsg = Format(GetLocalString("death", "guard.default"), SubjectName)
 										EndIf
 										
 										PlaySound2(GunshotSFX, Camera, n\Collider, 35.0)
@@ -3000,9 +2996,9 @@ Function UpdateNPCs%()
 													
 													If me\Terminated And n\State <> 3 Then
 														If PlayerRoom\RoomTemplate\Name = "gate_b" Then
-															msg\DeathMsg = Chr(34) + "CH-2 to control. Shot down a runaway Class D at Gate B." + Chr(34)
+															msg\DeathMsg = GetLocalString("death", "apache.gateb")
 														Else
-															msg\DeathMsg = Chr(34) + "CH-2 to control. Shot down a runaway Class D at Gate A." + Chr(34)
+															msg\DeathMsg = GetLocalString("death", "apache.gatea")
 														EndIf
 													EndIf
 												EndIf
@@ -3132,16 +3128,9 @@ Function UpdateNPCs%()
 													
 													If me\Injuries > 3.0 Then
 														If PlayerRoom\RoomTemplate\Name = "room2_ez" Then
-															msg\DeathMsg = Chr(34) + "One large and highly active tentacle-like appendage seems "
-															msg\DeathMsg = msg\DeathMsg + "to have grown outside the dead body of a scientist within office area [DATA REDACTED]. It's level of aggression is "
-															msg\DeathMsg = msg\DeathMsg + "unlike anything we've seen before - it looks like it has "
-															msg\DeathMsg = msg\DeathMsg + "beaten some unfortunate Class D to death at some point during the breach." + Chr(34)
+															msg\DeathMsg = GetLocalString("death", "895.offices")
 														Else
-															msg\DeathMsg = Chr(34) + "We will need more than the regular cleaning team to take care of this. "
-															msg\DeathMsg = msg\DeathMsg + "Two large and highly active tentacle-like appendages seem "
-															msg\DeathMsg = msg\DeathMsg + "to have formed inside the chamber. Their level of aggression is "
-															msg\DeathMsg = msg\DeathMsg + "unlike anything we've seen before - it looks like they have "
-															msg\DeathMsg = msg\DeathMsg + "beaten some unfortunate Class D to death at some point during the breach." + Chr(34)
+															msg\DeathMsg = GetLocalString("death", "895.default")
 														EndIf
 														Kill(True)
 													EndIf
@@ -3641,8 +3630,7 @@ Function UpdateNPCs%()
 									EndIf
 									
 									If me\Injuries > 4.0 Then 
-										msg\DeathMsg = Chr(34) + "All four (4) escaped SCP-939 specimens have been captured and recontained successfully. "
-										msg\DeathMsg = msg\DeathMsg + "They made quite a mess at Storage Area 6. A cleaning team has been dispatched." + Chr(34)
+										msg\DeathMsg = GetLocalString("death", "939")
 										Kill(True)
 										If (Not chs\GodMode) Then n\State = 5.0
 									EndIf								
@@ -3930,27 +3918,27 @@ Function UpdateNPCs%()
 									Select Rand(6)
 										Case 1
 											;[Block]
-											CreateMsg("You feel something breathing right next to you.")
+											CreateMsg(GetLocalString("msg", "9661"))
 											;[End Block]
 										Case 2
 											;[Block]
-											CreateMsg(Chr(34) + "It feels like something's in this room with me." + Chr(34))
+											CreateMsg(GetLocalString("msg", "9662"))
 											;[End Block]
 										Case 3
 											;[Block]
-											CreateMsg("You feel like something is here with you, but you don't see anything.")
+											CreateMsg(GetLocalString("msg", "9663"))
 											;[End Block]
 										Case 4
 											;[Block]
-											CreateMsg(Chr(34) + "Is my mind playing tricks on me or is there someone else here?" + Chr(34))
+											CreateMsg(GetLocalString("msg", "9664"))
 											;[End Block]
 										Case 5
 											;[Block]
-											CreateMsg("You feel like something is following you.")
+											CreateMsg(GetLocalString("msg", "9665"))
 											;[End Block]
 										Case 6
 											;[Block]
-											CreateMsg("You can feel something near you, but you are unable to see it. Perhaps its time is now.")
+											CreateMsg(GetLocalString("msg", "9666"))
 											;[End Block]
 									End Select
 									n\Reload = 70.0 * 20.0
@@ -4031,19 +4019,19 @@ Function UpdateNPCs%()
 												Select Rand(4)
 													Case 1
 														;[Block]
-														CreateMsg("You feel exhausted.")
+														CreateMsg(GetLocalString("msg", "966.sleep1"))
 														;[End Block]
 													Case 2
 														;[Block]
-														CreateMsg(Chr(34) + "Could really go for a nap now..." + Chr(34))
+														CreateMsg(GetLocalString("msg", "966.sleep2"))
 														;[End Block]
 													Case 3
 														;[Block]
-														CreateMsg(Chr(34) + "If I wasn't in this situation I would take a nap somewhere." + Chr(34))
+														CreateMsg(GetLocalString("msg", "966.sleep3"))
 														;[End Block]
 													Case 4
 														;[Block]
-														CreateMsg("You feel restless.")
+														CreateMsg(GetLocalString("msg", "966.sleep4"))
 														;[End Block]
 												End Select
 											EndIf
@@ -4537,13 +4525,9 @@ Function UpdateNPCs%()
 										If me\Injuries > 10.0 Then
 											Kill(True)
 											If PlayerRoom\RoomTemplate\Name = "dimension_1499"
-												msg\DeathMsg = "All personnel situated within Evacuation Shelter LC-2 during the breach have been administered "
-												msg\DeathMsg = msg\DeathMsg + "Class-B amnestics due to Incident 1499-E. The Class D subject involved in the event "
-												msg\DeathMsg = msg\DeathMsg + "died shortly after being shot by Agent [DATA REDACTED]."
+												msg\DeathMsg = GetLocalString("death", "1499.dimension")
 											Else
-												msg\DeathMsg = "An unidentified male and a deceased Class D subject were discovered in [DATA REDACTED] by the Nine-Tailed Fox. "
-												msg\DeathMsg = msg\DeathMsg + "The man was described as highly agitated and seemed to only speak Russian. "
-												msg\DeathMsg = msg\DeathMsg + "He's been taken into a temporary holding area at [DATA REDACTED] while waiting for a translator to arrive."
+												msg\DeathMsg = GetLocalString("death", "1499")
 											EndIf
 										EndIf
 									EndIf
@@ -4562,13 +4546,9 @@ Function UpdateNPCs%()
 										If me\Injuries > 10.0 Then
 											Kill(True)
 											If PlayerRoom\RoomTemplate\Name = "dimension_1499"
-												msg\DeathMsg = "All personnel situated within Evacuation Shelter LC-2 during the breach have been administered "
-												msg\DeathMsg = msg\DeathMsg + "Class-B amnestics due to Incident 1499-E. The Class D subject involved in the event "
-												msg\DeathMsg = msg\DeathMsg + "died shortly after being shot by Agent [DATA REDACTED]."
+												msg\DeathMsg = GetLocalString("death", "1499.dimension")
 											Else
-												msg\DeathMsg = "An unidentified male and a deceased Class D subject were discovered in [DATA REDACTED] by the Nine-Tailed Fox. "
-												msg\DeathMsg = msg\DeathMsg + "The man was described as highly agitated and seemed to only speak Russian. "
-												msg\DeathMsg = msg\DeathMsg + "He's been taken into a temporary holding area at [DATA REDACTED] while waiting for a translator to arrive."
+												msg\DeathMsg = GetLocalString("death", "1499")
 											EndIf
 										EndIf
 									EndIf
@@ -4753,7 +4733,7 @@ Function UpdateNPCs%()
 											PlaySound_Strict(DamageSFX[Rand(5, 8)])
 											InjurePlayer(Rnd(0.4, 1.0), 1.0 + (1.0 * SelectedDifficulty\AggressiveNPCs), 0.0, Rnd(0.1, 0.25), 0.2)
 											If me\Injuries > 3.0 Then
-												msg\DeathMsg = SubjectName + ". Cause of death: multiple lacerations and severe blunt force trauma caused by [DATA REDACTED], who was infected with SCP-008. Said subject was located by Nine-Tailed Fox and terminated."
+												msg\DeathMsg = Format(GetLocalString("death", "008"), SubjectName)
 												Kill(True)
 											EndIf
 										Else
@@ -5378,10 +5358,10 @@ Function UpdateMTFUnit%(n.NPCs)
 										
 										FreeEntity(Pvt)
 										
-										msg\DeathMsg = SubjectName + ". Died of blood loss after being shot by Nine-Tailed Fox."
+										msg\DeathMsg = Format(GetLocalString("death", "ntf.blood"), SubjectName)
 										
 										If (Not PrevTerminated) And me\Terminated Then
-											msg\DeathMsg = SubjectName + ". Terminated by Nine-Tailed Fox."
+											msg\DeathMsg = Format(GetLocalString("death", "ntf.terminated"), SubjectName)
 											PlayMTFSound(LoadTempSound("SFX\Character\MTF\TargetTerminated" + Rand(1, 4) + ".ogg"), n)
 										EndIf
 									EndIf	
@@ -6046,10 +6026,10 @@ Function UpdateMTFUnit%(n.NPCs)
 								
 								FreeEntity(Pvt)
 								
-								msg\DeathMsg = SubjectName + ". Died of blood loss after being shot by Nine-Tailed Fox."
+								msg\DeathMsg = Format(GetLocalString("death", "ntf.blood"), SubjectName)
 								
 								If (Not PrevTerminated) And me\Terminated Then
-									msg\DeathMsg = Chr(34) + SubjectName + " was spotted in Gate A area and terminated. Incident needs an investigation." + Chr(34)
+									msg\DeathMsg = Format(GetLocalString("death", "ntf.gatea"), SubjectName)
 									PlayMTFSound(LoadTempSound("SFX\Character\MTF\Targetterminated" + Rand(1, 4) + ".ogg"), n)
 								EndIf
 							EndIf
@@ -6338,10 +6318,10 @@ Function UpdateMTFUnit%(n.NPCs)
 									Shoot(EntityX(Target), EntityY(Target), EntityZ(Target), ((25.0 / Sqr(Dist)) * (1.0 / Sqr(Dist))), True)
 									n\Reload = 7.0
 									
-									msg\DeathMsg = SubjectName + ". Died of blood loss after being shot by Nine-Tailed Fox."
+									msg\DeathMsg = Format(GetLocalString("death", "ntf.blood"), SubjectName)
 									
 									If (Not PrevTerminated) And me\Terminated Then
-										msg\DeathMsg = Chr(34) + SubjectName + " was spotted in Gate A area and terminated. Incident needs an investigation." + Chr(34)
+										msg\DeathMsg = Format(GetLocalString("death", "ntf.gatea"), SubjectName)
 										PlayMTFSound(LoadTempSound("SFX\Character\MTF\Targetterminated" + Rand(1, 4) + ".ogg"), n)
 									EndIf
 								EndIf
@@ -6851,37 +6831,37 @@ Function Shoot%(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = Fals
 				me\Stamina = me\Stamina - Rnd(5.0)
 				InjurePlayer(Rnd(0.7, 0.9), 0.0, 650.0, Rnd(0.25, 0.5))
 				If wi\BallisticVest > 0 Then
-					ShotMessageUpdate = "A bullet penetrated your vest."
+					ShotMessageUpdate = GetLocalString("msg", "bullet.vest")
 				Else
-					ShotMessageUpdate = "A bullet hit your body."
+					ShotMessageUpdate = GetLocalString("msg", "bullet.body")
 				EndIf
 				;[End Block]
 			Case 11 ; ~ Left Leg
 				;[Block]
 				me\Stamina = me\Stamina - Rnd(10.0)
 				InjurePlayer(Rnd(0.5, 0.7), 0.0, 650.0)
-				ShotMessageUpdate = "A bullet hit your left leg."
+				ShotMessageUpdate = GetLocalString("msg", "bullet.leg.left")
 				;[End Block]
 			Case 12 ; ~ Right Leg
 				;[Block]
 				me\Stamina = me\Stamina - Rnd(10.0)
 				InjurePlayer(Rnd(0.5, 0.7), 0.0, 650.0)
-				ShotMessageUpdate = "A bullet hit your right leg."
+				ShotMessageUpdate = GetLocalString("msg", "bullet.leg.right")
 				;[End Block]
 			Case 13 ; ~ Left Arm
 				;[Block]
 				InjurePlayer(Rnd(0.5, 0.7), 0.0, 650.0)
-				ShotMessageUpdate = "A bullet hit your left arm."
+				ShotMessageUpdate = GetLocalString("msg", "bullet.arm.left")
 				;[End Block]
 			Case 14 ; ~ Right Arm
 				;[Block]
 				InjurePlayer(Rnd(0.5, 0.7), 0.0, 650.0)
-				ShotMessageUpdate = "A bullet hit your right arm."
+				ShotMessageUpdate = GetLocalString("msg", "bullet.arm.right")
 				;[End Block]
 			Case 15 ; ~ Neck
 				;[Block]
 				InjurePlayer(Rnd(1.0, 1.2), 0.0, 650.0)
-				ShotMessageUpdate = "A bullet struck your neck, making you gasp."
+				ShotMessageUpdate = GetLocalString("msg", "bullet.neck")
 				;[End Block]
 			Case 16, 17 ; ~ Helmet, Face or Head
 				;[Block]
@@ -6891,9 +6871,9 @@ Function Shoot%(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = Fals
 					For n.NPCs = Each NPCs
 						If n\NPCType = NPCTypeMTF Lor n\NPCType = NPCTypeApache Lor n\NPCType = NPCTypeGuard
 							If EntityInView(n\OBJ, Camera) Then
-								ShotMessageUpdate = "A bullet hit your face."
+								ShotMessageUpdate = GetLocalString("msg", "bullet.face")
 							Else
-								ShotMessageUpdate = "A bullet hit your head."
+								ShotMessageUpdate = GetLocalString("msg", "bullet.head")
 							EndIf
 							Kill(True)
 						EndIf
@@ -7002,113 +6982,113 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			;[Block]
 			n.NPCs = CreateNPC(NPCType008_1, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			n\State = 1.0
-			ConsoleMsg = "SCP-008 infected human spawned."
+			ConsoleMsg = GetLocalString("console", "spawn.008")
 			;[End Block]
 		Case "049", "scp049", "scp-049", "plaguedoctor"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType049, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			n\State = 1.0
 			If n_I\Curr049 = Null Then n_I\Curr049 = n
-			ConsoleMsg = "SCP-049 spawned."
+			ConsoleMsg = GetLocalString("console", "spawn.049")
 			;[End Block]
 		Case "049-2", "0492", "scp-049-2", "scp049-2", "049zombie", "curedhuman", "scp0492", "scp-0492", "049_2", "scp_049_2"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType049_2, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			n\State = 1.0
-			ConsoleMsg = "SCP-049-2 spawned."
+			ConsoleMsg = GetLocalString("console", "spawn.0492")
 			;[End Block]
 		Case "066", "scp066", "scp-066", "eric"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType066, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = "SCP-066 spawned."
+			ConsoleMsg = GetLocalString("console", "spawn.066")
 			;[End Block]
 		Case "096", "scp096", "scp-096", "shyguy"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType096, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			n\State = 5.0
 			If n_I\Curr096 = Null Then n_I\Curr096 = n
-			ConsoleMsg = "SCP-096 spawned."
+			ConsoleMsg = GetLocalString("console", "spawn.096")
 			;[End Block]
 		Case "106", "scp106", "scp-106", "larry", "oldman"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType106, EntityX(me\Collider), EntityY(me\Collider) - 0.5, EntityZ(me\Collider))
 			n\State = -1.0
-			ConsoleMsg = "SCP-106 spawned."
+			ConsoleMsg = GetLocalString("console", "spawn.106")
 			;[End Block]
 		Case "173", "scp173", "scp-173", "statue", "sculpture"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType173, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			n_I\Curr173 = n
 			If n_I\Curr173\Idle = 3 Then n_I\Curr173\Idle = 0
-			ConsoleMsg = "SCP-173 spawned."
+			ConsoleMsg = GetLocalString("console", "spawn.173")
 			;[End Block]
 		Case "372", "scp372", "scp-372", "pj", "jumper"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType372, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = "SCP-372 spawned."
+			ConsoleMsg = GetLocalString("console", "spawn.372")
 			;[End Block]
 		Case "513-1", "5131", "scp513-1", "scp-513-1", "bll", "scp-5131", "scp5131"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType513_1, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = "SCP-513-1 spawned."
+			ConsoleMsg = GetLocalString("console", "spawn.5131")
 			;[End Block]
 		Case "860-2", "8602", "scp860-2", "scp-860-2", "forestmonster", "scp8602"
 			;[Block]
-			CreateConsoleMsg("SCP-860-2 cannot be spawned with the console. Sorry!", 255, 0, 0)
+			CreateConsoleMsg(GetLocalString("console", "spawn.8602"), 255, 0, 0)
 			;[End Block]
 		Case "939", "scp939", "scp-939"
-			CreateConsoleMsg("SCP-939 instances cannot be spawned with the console. Sorry!", 255, 0, 0)
+			CreateConsoleMsg(GetLocalString("console", "spawn.939"), 255, 0, 0)
 			;[End Block]
 		Case "966", "scp966", "scp-966", "sleepkiller"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType966, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = "SCP-966 instance spawned."
+			ConsoleMsg = GetLocalString("console", "spawn.966")
 			;[End Block]
 		Case "1048-a", "scp1048-a", "scp-1048-a", "scp1048a", "scp-1048a", "earbear"
 			;[Block]
-			CreateConsoleMsg("SCP-1048-A cannot be spawned with the console. Sorry!", 255, 0, 0)
+			CreateConsoleMsg(GetLocalString("console", "spawn.1048a"), 255, 0, 0)
 			;[End Block]
 		Case "1048", "scp1048", "scp-1048", "scp-1048", "bear", "builderbear"
 			;[Block]
-			CreateConsoleMsg("SCP-1048 cannot be spawned with the console. Sorry!", 255, 0, 0)
+			CreateConsoleMsg(GetLocalString("console", "spawn.1048"), 255, 0, 0)
 			;[End Block]
 		Case "1499-1", "14991", "scp-1499-1", "scp1499-1", "scp-14991", "scp14991"
 			n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = "SCP-1499-1 instance spawned."
+			ConsoleMsg = GetLocalString("console", "spawn.14991")
 			;[End Block]
 		Case "class-d", "classd", "d"
 			;[Block]
 			n.NPCs = CreateNPC(NPCTypeD, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = "D-Class spawned."
+			ConsoleMsg = GetLocalString("console", "spawn.classd")
 			;[End Block]
 		Case "guard"
 			;[Block]
 			n.NPCs = CreateNPC(NPCTypeGuard, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = "Guard spawned."
+			ConsoleMsg = GetLocalString("console", "spawn.guard")
 			;[End Block]
 		Case "mtf", "ntf"
 			;[Block]
 			n.NPCs = CreateNPC(NPCTypeMTF, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = "MTF unit spawned."
+			ConsoleMsg = GetLocalString("console", "spawn.mtf")
 			;[End Block]
 		Case "apache", "helicopter"
 			;[Block]
 			n.NPCs = CreateNPC(NPCTypeApache, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = "Apache spawned."
+			ConsoleMsg = GetLocalString("console", "spawn.apache")
 			;[End Block]
 		Case "tentacle", "scp035tentacle", "scp-035tentacle", "scp-035-tentacle", "scp035-tentacle"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType035_Tentacle, EntityX(me\Collider), EntityY(me\Collider) - 0.12, EntityZ(me\Collider))
-			ConsoleMsg = "SCP-035 tentacle spawned."
+			ConsoleMsg = GetLocalString("console", "spawn.tentacle")
 			;[End Block]
 		Case "clerk", "woman"
 			;[Block]
 			n.NPCs = CreateNPC(NPCTypeClerk, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = "Clerk spawned."
+			ConsoleMsg = GetLocalString("console", "spawn.clerk")
 			;[End Block]
 		Default 
 			;[Block]
-			CreateConsoleMsg("NPC type not found.", 255, 0, 0) : Return
+			CreateConsoleMsg(GetLocalString("console", "spawn.notfound"), 255, 0, 0) : Return
 			;[End Block]
 	End Select
 	
@@ -7131,7 +7111,7 @@ Function ManipulateNPCBones%()
 			If BoneName <> ""
 				Pvt = CreatePivot()
 				Bone = FindChild(n\OBJ, BoneName)
-				If (Not Bone) Then RuntimeError("NPC bone " + Chr(34) + BoneName + Chr(34) + " doesn't exist.")
+				If (Not Bone) Then RuntimeError(Format(GetLocalString("runerr", "spawn.bone.notexist"), BoneName))
 				PositionEntity(Pvt, EntityX(Bone, True), EntityY(Bone, True), EntityZ(Bone, True))
 				Select n\ManipulationType
 					Case 0 ; ~ Looking at player
@@ -7369,7 +7349,7 @@ Function ChangeNPCTextureID%(n.NPCs, TextureID%)
 	Local Temp#
 	
 	If n = Null Then
-		CreateConsoleMsg("Tried to change the texture of an invalid NPC!")
+		CreateConsoleMsg(GetLocalString("msg", "spawn.invaildtex"))
 		If opt\CanOpenConsole And opt\ConsoleOpening Then ConsoleOpen = True
 		Return
 	EndIf
@@ -7379,4 +7359,6 @@ Function ChangeNPCTextureID%(n.NPCs, TextureID%)
 End Function
 
 ;~IDEal Editor Parameters:
+;~B#2F2#2F6#2FA#2FE#414#417#4ED#645#64D#895#8F1#8F4#8F6#C0B#C0D#C8F#C91#E85#121F#1221
+;~B#1234#1236#130C#1585#1588#183E#1841#1971#1974
 ;~C#Blitz3D

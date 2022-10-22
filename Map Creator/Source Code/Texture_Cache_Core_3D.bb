@@ -31,7 +31,7 @@ Function LoadTextureCheckingIfInCache(TexName$, TexFlags% = 1, DeleteType% = Del
 	tic\TexName = StripPath(TexName)
 	tic\TexDeleteType = DeleteType
 	If (Not tic\Tex) Then
-		tic\Tex = LoadTexture(CurrPath, TexFlags)
+		tic\Tex = LoadTexture_Cache(CurrPath, TexFlags)
 	EndIf
 	Return(tic\Tex)
 End Function

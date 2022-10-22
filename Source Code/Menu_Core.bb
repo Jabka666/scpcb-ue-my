@@ -1,3 +1,5 @@
+Include "Source Code\Language_Core.bb"
+
 Type MainMenu
 	Field MainMenuBlinkTimer#[2]
 	Field MainMenuBlinkDuration#[2]
@@ -165,7 +167,7 @@ Function UpdateMainMenu%()
 				Select i
 					Case 0
 						;[Block]
-						Txt = "NEW GAME"
+						Txt = GetLocalString("menu", "new")
 						RandomSeed = ""
 						If Temp Then 
 							If opt\DebugMode Then
@@ -244,7 +246,7 @@ Function UpdateMainMenu%()
 						;[End Block]
 					Case 1
 						;[Block]
-						Txt = "LOAD GAME"
+						Txt = GetLocalString("menu", "load")
 						If Temp Then
 							LoadSavedGames()
 							mm\MainMenuTab = MainMenuTab_Load_Game
@@ -252,12 +254,12 @@ Function UpdateMainMenu%()
 						;[End Block]
 					Case 2
 						;[Block]
-						Txt = "OPTIONS"
+						Txt = GetLocalString("menu", "options")
 						If Temp Then mm\MainMenuTab = MainMenuTab_Options_Graphics
 						;[End Block]
 					Case 3
 						;[Block]
-						Txt = "QUIT"
+						Txt = GetLocalString("menu", "quit")
 						If Temp Then
 							StopStream_Strict(MusicCHN)
 							End()
@@ -295,7 +297,7 @@ Function UpdateMainMenu%()
 					If SelectedMap = "" Then
 						RandomSeed = UpdateMainMenuInputBox(x + (150 * MenuScale), y + (55 * MenuScale), 200 * MenuScale, 30 * MenuScale, RandomSeed, 2, 15)	
 					Else
-						If UpdateMainMenuButton(x + (370 * MenuScale), y + (55 * MenuScale), 120 * MenuScale, 30 * MenuScale, "DESELECT", False) Then
+						If UpdateMainMenuButton(x + (370 * MenuScale), y + (55 * MenuScale), 120 * MenuScale, 30 * MenuScale, GetLocalString("menu", "deselect"), False) Then
 							mm\ShouldDeleteGadgets = True
 							SelectedMap = ""
 						EndIf
@@ -319,47 +321,43 @@ Function UpdateMainMenu%()
 					
 					If SelectedDifficulty\Customizable Then
 						; ~ Save type
-						If MouseOn(x + (160 * MenuScale), y + (180 * MenuScale), ImageWidth(ga\ArrowIMG[1]), ImageHeight(ga\ArrowIMG[1])) And mo\MouseHit1 Then
+						If UpdateMainMenuButton(x + (160 * MenuScale), y + (180 * MenuScale), 20 * MenuScale, 20 * MenuScale, ">", False) Then
 							If SelectedDifficulty\SaveType  < NO_SAVES Then
 								SelectedDifficulty\SaveType = SelectedDifficulty\SaveType + 1
 							Else
 								SelectedDifficulty\SaveType = SAVE_ANYWHERE
 							EndIf
-							PlaySound_Strict(ButtonSFX)
 						EndIf
 						
 						; ~ Agressive NPCs
 						SelectedDifficulty\AggressiveNPCs = UpdateMainMenuTick(x + (160 * MenuScale), y + (210 * MenuScale), SelectedDifficulty\AggressiveNPCs)
 						
 						; ~ Inventory slots
-						If MouseOn(x + (410 * MenuScale), y + (240 * MenuScale), ImageWidth(ga\ArrowIMG[3]), ImageHeight(ga\ArrowIMG[3])) And mo\MouseHit1 Then
+						If UpdateMainMenuButton(x + (410 * MenuScale), y + (240 * MenuScale), 20 * MenuScale, 20 * MenuScale, "<", False) Then
 							SelectedDifficulty\InventorySlots = SelectedDifficulty\InventorySlots + 2
 							If SelectedDifficulty\InventorySlots > 10 Then SelectedDifficulty\InventorySlots = 2
-							PlaySound_Strict(ButtonSFX)
-						ElseIf MouseOn(x + (160 * MenuScale), y + (240 * MenuScale), ImageWidth(ga\ArrowIMG[1]), ImageHeight(ga\ArrowIMG[1])) And mo\MouseHit1
+						ElseIf UpdateMainMenuButton(x + (160 * MenuScale), y + (240 * MenuScale), 20 * MenuScale, 20 * MenuScale, ">", False)
 							SelectedDifficulty\InventorySlots = SelectedDifficulty\InventorySlots - 2
 							If SelectedDifficulty\InventorySlots <= 0 Then SelectedDifficulty\InventorySlots = 10
-							PlaySound_Strict(ButtonSFX)
 						EndIf
 						
 						; ~ Other factor's difficulty
-						If MouseOn(x + (160 * MenuScale), y + (270 * MenuScale), ImageWidth(ga\ArrowIMG[1]), ImageHeight(ga\ArrowIMG[1])) And mo\MouseHit1 Then
+						If UpdateMainMenuButton(x + (160 * MenuScale), y + (270 * MenuScale), 20 * MenuScale, 20 * MenuScale, ">", False) Then
 							If SelectedDifficulty\OtherFactors < EXTREME Then
 								SelectedDifficulty\OtherFactors = SelectedDifficulty\OtherFactors + 1
 							Else
 								SelectedDifficulty\OtherFactors = EASY
 							EndIf
-							PlaySound_Strict(ButtonSFX)
 						EndIf
 					EndIf
 					
-					If UpdateMainMenuButton(x, y + Height + (20 * MenuScale), 160 * MenuScale, 75 * MenuScale, "LOAD MAP", False) Then
+					If UpdateMainMenuButton(x, y + Height + (20 * MenuScale), 160 * MenuScale, 75 * MenuScale, GetLocalString("menu", "loadmap"), False) Then
 						mm\MainMenuTab = MainMenuTab_Load_Map
 						LoadSavedMaps()
 					EndIf
 					
-					If UpdateMainMenuButton(x + (420 * MenuScale), y + Height + (20 * MenuScale), 160 * MenuScale, 75 * MenuScale, "START", False) Then
-						If CurrSave\Name = "" Then CurrSave\Name = ConvertUTF8toANSI("untitled")
+					If UpdateMainMenuButton(x + (420 * MenuScale), y + Height + (20 * MenuScale), 160 * MenuScale, 75 * MenuScale, GetLocalString("menu", "start"), False) Then
+						If CurrSave\Name = "" Then CurrSave\Name = ConvertToANSI(GetLocalString("save", "untitled"))
 						
 						If RandomSeed = "" Then
 							RandomSeed = Abs(MilliSecs2())
@@ -431,9 +429,9 @@ Function UpdateMainMenu%()
 							If i >= (5 * mm\CurrMenuPage) Then
 								If DelSave = Null Then
 									If CurrSave\Version <> VersionNumber Then
-										UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "LOAD", False, False, True, 255, 0, 0)
+										UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "btnload"), False, False, True, 255, 0, 0)
 									Else
-										If UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "LOAD", False) Then
+										If UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "btnload"), False) Then
 											LoadEntities()
 											LoadSounds()
 											LoadGame(CurrSave\Name)
@@ -444,17 +442,17 @@ Function UpdateMainMenu%()
 										EndIf
 									EndIf
 									
-									If UpdateMainMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "DELETE", False) Then
+									If UpdateMainMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "delete"), False) Then
 										DelSave = CurrSave
 										Exit
 									EndIf
 								Else
 									If CurrSave\Version <> VersionNumber Then
-										UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "LOAD", False, False, True, 255, 0, 0)
+										UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "btnload"), False, False, True, 255, 0, 0)
 									Else
-										UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "LOAD", False, False, True)
+										UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "btnload"), False, False, True)
 									EndIf
-									UpdateMainMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "DELETE", False, False, True)
+									UpdateMainMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "delete"), False, False, True)
 								EndIf
 								If CurrSave = Last Save Then
 									Exit
@@ -467,11 +465,11 @@ Function UpdateMainMenu%()
 							x = 739 * MenuScale
 							y = 376 * MenuScale
 							
-							If UpdateMainMenuButton(x + (74 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, "YES", False) Then
+							If UpdateMainMenuButton(x + (74 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "yes"), False) Then
 								DeleteGame(DelSave)
 								mm\ShouldDeleteGadgets = True
 							EndIf
-							If UpdateMainMenuButton(x + (246 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, "NO", False) Then
+							If UpdateMainMenuButton(x + (246 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "no"), False) Then
 								DelSave = Null
 								mm\ShouldDeleteGadgets = True
 							EndIf
@@ -504,19 +502,19 @@ Function UpdateMainMenu%()
 						For i = (1 + (5 * mm\CurrMenuPage)) To 5 + (5 * mm\CurrMenuPage)
 							If i <= SavedMapsAmount Then
 								If SelectedMapActionMsg = "" Then
-									If UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "LOAD", False) Then
+									If UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "btnload"), False) Then
 										SelectedMap = SavedMaps(i - 1)
 										mm\MainMenuTab = MainMenuTab_New_Game
 										mm\ShouldDeleteGadgets = True
 									EndIf
 									
-									If UpdateMainMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "DELETE", False) Then
+									If UpdateMainMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "delete"), False) Then
 										SelectedMapActionMsg = SavedMaps(i - 1)
 										Exit
 									EndIf
 								Else
-									UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "LOAD", False, False, True)
-									UpdateMainMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, "DELETE", False, False, True)
+									UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "btnload"), False, False, True)
+									UpdateMainMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "delete"), False, False, True)
 								EndIf
 								y = y + (80 * MenuScale)
 							Else
@@ -528,13 +526,13 @@ Function UpdateMainMenu%()
 							x = 739 * MenuScale
 							y = 376 * MenuScale
 							
-							If UpdateMainMenuButton(x + (74 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, "YES", False) Then
+							If UpdateMainMenuButton(x + (74 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "yes"), False) Then
 								DeleteFile(CurrentDir() + MapCreatorPath + SelectedMapActionMsg)
 								SelectedMapActionMsg = ""
 								LoadSavedMaps()
 								mm\ShouldDeleteGadgets = True
 							EndIf
-							If UpdateMainMenuButton(x + (246 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, "NO", False) Then
+							If UpdateMainMenuButton(x + (246 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "no"), False) Then
 								SelectedMapActionMsg = ""
 								mm\ShouldDeleteGadgets = True
 							EndIf
@@ -549,10 +547,10 @@ Function UpdateMainMenu%()
 					Width = 580 * MenuScale
 					Height = 60 * MenuScale
 					
-					If UpdateMainMenuButton(x + (20 * MenuScale), y + (15 * MenuScale), Width / 5, Height / 2, "GRAPHICS", False) Then ChangeOptionTab(MainMenuTab_Options_Graphics)
-					If UpdateMainMenuButton(x + (160 * MenuScale), y + (15 * MenuScale), Width / 5, Height / 2, "AUDIO", False) Then ChangeOptionTab(MainMenuTab_Options_Audio)
-					If UpdateMainMenuButton(x + (300 * MenuScale), y + (15 * MenuScale), Width / 5, Height / 2, "CONTROLS", False) Then ChangeOptionTab(MainMenuTab_Options_Controls)
-					If UpdateMainMenuButton(x + (440 * MenuScale), y + (15 * MenuScale), Width / 5, Height / 2, "ADVANCED", False) Then ChangeOptionTab(MainMenuTab_Options_Advanced)
+					If UpdateMainMenuButton(x + (20 * MenuScale), y + (15 * MenuScale), Width / 5, Height / 2, GetLocalString("options", "grap"), False) Then ChangeOptionTab(MainMenuTab_Options_Graphics)
+					If UpdateMainMenuButton(x + (160 * MenuScale), y + (15 * MenuScale), Width / 5, Height / 2, GetLocalString("options", "audio"), False) Then ChangeOptionTab(MainMenuTab_Options_Audio)
+					If UpdateMainMenuButton(x + (300 * MenuScale), y + (15 * MenuScale), Width / 5, Height / 2, GetLocalString("options", "ctrl"), False) Then ChangeOptionTab(MainMenuTab_Options_Controls)
+					If UpdateMainMenuButton(x + (440 * MenuScale), y + (15 * MenuScale), Width / 5, Height / 2, GetLocalString("options", "avc"), False) Then ChangeOptionTab(MainMenuTab_Options_Advanced)
 					
 					x = x + (310 * MenuScale)
 					y = y + (70 * MenuScale)
@@ -587,7 +585,7 @@ Function UpdateMainMenu%()
 							
 							y = y + (45 * MenuScale)
 							
-							opt\ParticleAmount = UpdateMainMenuSlider3(x, y, 150 * MenuScale, opt\ParticleAmount, 2, "MINIMAL", "REDUCED", "FULL")
+							opt\ParticleAmount = UpdateMainMenuSlider3(x, y, 150 * MenuScale, opt\ParticleAmount, 2, GetLocalString("options", "min"), GetLocalString("options", "red"), GetLocalString("options", "full"))
 							
 							y = y + (45 * MenuScale)
 							
@@ -627,7 +625,7 @@ Function UpdateMainMenu%()
 							
 							y = y + (45 * MenuScale)
 							
-							opt\Anisotropic = UpdateMainMenuSlider5(x, y, 150 * MenuScale, opt\Anisotropic, 5, "TRILINEAR", "2x", "4x", "8x", "16x")
+							opt\Anisotropic = UpdateMainMenuSlider5(x, y, 150 * MenuScale, opt\Anisotropic, 5, GetLocalString("options", "tri"), "2x", "4x", "8x", "16x")
 							Select opt\Anisotropic
 								Case 0
 									;[Block]
@@ -714,7 +712,7 @@ Function UpdateMainMenu%()
 								
 								opt\UserTrackMode = UpdateMainMenuTick(x, y, opt\UserTrackMode)
 								
-								If UpdateMainMenuButton(x - (290 * MenuScale), y + (30 * MenuScale), 220 * MenuScale, 30 * MenuScale, "SCAN FOR USER TRACKS", False)
+								If UpdateMainMenuButton(x - (290 * MenuScale), y + (30 * MenuScale), 220 * MenuScale, 30 * MenuScale, GetLocalString("options", "scantracks"), False)
 									UserTrackCheck = 0
 									UserTrackCheck2 = 0
 									
@@ -758,7 +756,7 @@ Function UpdateMainMenu%()
 								
 								y = y + (40 * MenuScale)
 								
-								If UpdateMainMenuButton(x - (290 * MenuScale), y, 240 * MenuScale, 30 * MenuScale, "CONTROL CONFIGURATION", False) Then ChangePage(1)
+								If UpdateMainMenuButton(x - (290 * MenuScale), y, 240 * MenuScale, 30 * MenuScale, GetLocalString("options", "controlconfig"), False) Then ChangePage(1)
 							Else
 								y = y + (20 * MenuScale)
 								
@@ -851,7 +849,7 @@ Function UpdateMainMenu%()
 								
 								y = y + (40 * MenuScale)
 								
-								If UpdateMainMenuButton(x - (290 * MenuScale), y, 240 * MenuScale, 30 * MenuScale, "BACK", False) Then ChangePage(0)
+								If UpdateMainMenuButton(x - (290 * MenuScale), y, 240 * MenuScale, 30 * MenuScale, GetLocalString("menu", "back"), False) Then ChangePage(0)
 							EndIf
 							;[End Block]
 						Case MainMenuTab_Options_Advanced
@@ -952,7 +950,7 @@ Function UpdateMainMenu%()
 								y = y + (30 * MenuScale)
 								
 								If opt\EnableSubtitles Then
-									opt\SubColorR = UpdateMainMenuInputBox(x - (130 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorR), 14, 3)
+									opt\SubColorR = UpdateMainMenuInputBox(x - (135 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorR), 14, 3)
 									If SelectedInputBox = 14 Then
 										If opt\SubColorR > 255 Then opt\SubColorR = 255
 									EndIf
@@ -961,7 +959,7 @@ Function UpdateMainMenu%()
 								y = y + (30 * MenuScale)
 								
 								If opt\EnableSubtitles Then
-									opt\SubColorG = UpdateMainMenuInputBox(x - (130 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorG), 15, 3)
+									opt\SubColorG = UpdateMainMenuInputBox(x - (135 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorG), 15, 3)
 									If SelectedInputBox = 15 Then
 										If opt\SubColorG > 255 Then opt\SubColorG = 255
 									EndIf
@@ -970,7 +968,7 @@ Function UpdateMainMenu%()
 								y = y + (30 * MenuScale)
 								
 								If opt\EnableSubtitles Then
-									opt\SubColorB = UpdateMainMenuInputBox(x - (130 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorB), 16, 3)
+									opt\SubColorB = UpdateMainMenuInputBox(x - (135 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorB), 16, 3)
 									If SelectedInputBox = 16 Then
 										If opt\SubColorB > 255 Then opt\SubColorB = 255
 									EndIf
@@ -978,7 +976,7 @@ Function UpdateMainMenu%()
 								
 								y = y + (40 * MenuScale)
 								
-								If UpdateMainMenuButton(x - (290 * MenuScale), y, 165 * MenuScale, 30 * MenuScale, "RESET OPTIONS", False) Then
+								If UpdateMainMenuButton(x - (290 * MenuScale), y, 195 * MenuScale, 30 * MenuScale, GetLocalString("options", "reset"), False) Then
 									ResetOptionsINI()
 									SaveOptionsINI(True)
 								EndIf
@@ -995,7 +993,7 @@ Function UpdateMainMenu%()
 			Height = 70 * MenuScale
 			
 			If SelectedMapActionMsg = "" And DelSave = Null Then
-				If UpdateMainMenuButton(x + Width + (20 * MenuScale), y, (580 * MenuScale) - Width - (20 * MenuScale), Height, "BACK", False) Lor KeyDown(1) Then 
+				If UpdateMainMenuButton(x + Width + (20 * MenuScale), y, (580 * MenuScale) - Width - (20 * MenuScale), Height, GetLocalString("menu", "back"), False) Lor KeyDown(1) Then 
 					Select mm\MainMenuTab
 						Case MainMenuTab_New_Game
 							;[Block]
@@ -1037,7 +1035,7 @@ Function UpdateMainMenu%()
 					End Select
 				EndIf
 			Else
-				UpdateMainMenuButton(x + Width + (20 * MenuScale), y, (580 * MenuScale) - Width - (20 * MenuScale), Height, "BACK", False, False, True)
+				UpdateMainMenuButton(x + Width + (20 * MenuScale), y, (580 * MenuScale) - Width - (20 * MenuScale), Height, GetLocalString("menu", "back"), False, False, True)
 			EndIf
 		EndIf
 	Wend
@@ -1082,63 +1080,63 @@ Function RenderMainMenu%()
 			Select Rand(0, 23)
 				Case 0, 2, 3
 					;[Block]
-					mm\MainMenuStr = "DON'T BLINK"
+					mm\MainMenuStr = GetLocalString("menu", "dontblink")
 					;[End Block]
 				Case 4, 5
 					;[Block]
-					mm\MainMenuStr = "Secure. Contain. Protect."
+					mm\MainMenuStr = GetLocalString("menu", "scp")
 					;[End Block]
 				Case 6, 7, 8
 					;[Block]
-					mm\MainMenuStr = "You want happy endings? Fuck you."
+					mm\MainMenuStr = GetLocalString("menu", "happyending")
 					;[End Block]
 				Case 9, 10, 11
 					;[Block]
-					mm\MainMenuStr = "Sometimes we would have had time to scream."
+					mm\MainMenuStr = GetLocalString("menu", "scream")
 					;[End Block]
 				Case 12, 19
 					;[Block]
-					mm\MainMenuStr = "NIL"
+					mm\MainMenuStr = GetLocalString("menu", "nil")
 					;[End Block]
 				Case 13
 					;[Block]
-					mm\MainMenuStr = "NO"
+					mm\MainMenuStr = GetLocalString("menu", "menuno")
 					;[End Block]
 				Case 14
 					;[Block]
-					mm\MainMenuStr = "black white black white black white gray"
+					mm\MainMenuStr = GetLocalString("menu", "bwg")
 					;[End Block]
 				Case 15
 					;[Block]
-					mm\MainMenuStr = "Stone doesn't care"
+					mm\MainMenuStr = GetLocalString("menu", "173care")
 					;[End Block]
 				Case 16
 					;[Block]
-					mm\MainMenuStr = "9341"
+					mm\MainMenuStr = GetLocalString("menu", "9341")
 					;[End Block]
 				Case 17
 					;[Block]
-					mm\MainMenuStr = "It controls the doors"
+					mm\MainMenuStr = GetLocalString("menu", "079doors")
 					;[End Block]
 				Case 18
 					;[Block]
-					mm\MainMenuStr = "e8m106]af173o+079m895w914"
+					mm\MainMenuStr = GetLocalString("menu", "???")
 					;[End Block]
 				Case 20
 					;[Block]
-					mm\MainMenuStr = "It has taken over everything"
+					mm\MainMenuStr = GetLocalString("menu", "079king")
 					;[End Block]
 				Case 21
 					;[Block]
-					mm\MainMenuStr = "The spiral is growing"
+					mm\MainMenuStr = GetLocalString("menu", "spiral")
 					;[End Block]
 				Case 22
 					;[Block]
-					mm\MainMenuStr = Chr(34) + "Some kind of gestalt effect due to massive reality damage." + Chr(34)
+					mm\MainMenuStr = GetLocalString("menu", "damage")
 					;[End Block]
 				Case 23
 					;[Block]
-					mm\MainMenuStr = "Does the Black Moon howl? Yes. No. Yes. No."
+					mm\MainMenuStr = GetLocalString("menu", "howl")
 					;[End Block]
 			End Select
 		EndIf
@@ -1172,7 +1170,7 @@ Function RenderMainMenu%()
 				
 				Color(255, 255, 255)
 				SetFont(fo\FontID[Font_Default_Big])
-				Text(x + (Width / 2), y + (Height / 2), "NEW GAME", True, True)
+				Text(x + (Width / 2), y + (Height / 2), GetLocalString("menu", "new"), True, True)
 				
 				y = y + Height + (20 * MenuScale)
 				Width = 580 * MenuScale
@@ -1182,32 +1180,31 @@ Function RenderMainMenu%()
 				
 				SetFont(fo\FontID[Font_Default])
 				
-				Text(x + (20 * MenuScale), y + (25 * MenuScale), "Name:")
+				Text(x + (20 * MenuScale), y + (25 * MenuScale), GetLocalString("menu", "new.name"))
 				
 				If SelectedMap = "" Then
-					TempStr = "Map seed:"
+					TempStr = GetLocalString("menu", "new.seed")
 				Else
-					TempStr = "Selected map:"
+					TempStr = GetLocalString("menu", "new.map")
 					RenderFrame(x + (150 * MenuScale), y + (55 * MenuScale), 200 * MenuScale, 30 * MenuScale, (x Mod 256), (y Mod 256), True)
 					
 					Color(255, 0, 0)
-					If Len(ConvertANSItoUTF8(SelectedMap)) > 15 Then
-						TempStr2 = Left(ConvertANSItoUTF8(SelectedMap), 14) + "..."
+					If Len(ConvertToUTF8(SelectedMap)) > 15 Then
+						TempStr2 = Left(ConvertToUTF8(SelectedMap), 14) + "..."
 					Else
-						TempStr2 = ConvertANSItoUTF8(SelectedMap)
+						TempStr2 = ConvertToUTF8(SelectedMap)
 					EndIf
 					Text(x + (250 * MenuScale), y + (70 * MenuScale), TempStr2, True, True)
 				EndIf
 				Color(255, 255, 255)
 				Text(x + (20 * MenuScale), y + (65 * MenuScale), TempStr)
 				
-				Color(255, 255, 255)
-				Text(x + (20 * MenuScale), y + (115 * MenuScale), "Enable intro sequence:")
+				Text(x + (20 * MenuScale), y + (115 * MenuScale), GetLocalString("menu", "new.intro"))
 				
-				Text(x + (20 * MenuScale), y + (155 * MenuScale), "Difficulty:")
+				Text(x + (20 * MenuScale), y + (155 * MenuScale), GetLocalString("menu", "new.diff"))
 				For i = SAFE To ESOTERIC
 					Color(difficulties[i]\R, difficulties[i]\G, difficulties[i]\B)
-					Text(x + (60 * MenuScale), y + ((185 + 30 * i) * MenuScale), difficulties[i]\Name)
+					Text(x + (50 * MenuScale), y + ((185 + 30 * i) * MenuScale), difficulties[i]\Name)
 				Next
 				
 				Color(255, 255, 255)
@@ -1215,62 +1212,53 @@ Function RenderMainMenu%()
 				
 				If SelectedDifficulty\Customizable Then
 					; ~ Save type
-					DrawImage(ga\ArrowIMG[1], x + (160 * MenuScale), y + (180 * MenuScale))
 					Select SelectedDifficulty\SaveType
 						Case SAVE_ANYWHERE
 							;[Block]
-							TempStr = "Save anywhere"
+							TempStr = GetLocalString("menu", "new.saveany")
 							;[End Block]
 						Case SAVE_ON_SCREENS
 							;[Block]
-							TempStr = "Save on screens"
+							TempStr = GetLocalString("menu", "new.savescreen")
 							;[End Block]
 						Case SAVE_ON_QUIT
 							;[Block]
-							TempStr = "Save on quit"
+							TempStr = GetLocalString("menu", "new.savequit")
 							;[End Block]
 						Case NO_SAVES
 							;[Block]
-							TempStr = "No saves"
+							TempStr = GetLocalString("menu", "new.saveno")
 							;[End Block]
 					End Select
-					Text(x + (200 * MenuScale), y + (186 * MenuScale), "Save type: " + TempStr)
+					Text(x + (200 * MenuScale), y + (186 * MenuScale), GetLocalString("menu", "new.savetype") + TempStr)
 					
 					; ~ Agressive NPCs
-					Color(255, 255, 255)
-					Text(x + (200 * MenuScale), y + (215 * MenuScale), "Aggressive NPCs")
-					
+					Text(x + (200 * MenuScale), y + (215 * MenuScale), GetLocalString("menu", "new.dangernpc"))
 					; ~ Inventory slots
-					DrawImage(ga\ArrowIMG[3], x + (160 * MenuScale), y + 240 * MenuScale)
-					DrawImage(ga\ArrowIMG[1], x + ((400 + (Len(Str(SelectedDifficulty\InventorySlots)) * 5)) * MenuScale), y + 240 * MenuScale)
-					
-					Text(x + (200 * MenuScale), y + (246 * MenuScale), "Inventory slots: " + SelectedDifficulty\InventorySlots)
+					Text(x + (200 * MenuScale), y + (246 * MenuScale), Format(GetLocalString("menu", "new.invslots"), SelectedDifficulty\InventorySlots))
 					
 					; ~ Other factor's difficulty
-					DrawImage(ga\ArrowIMG[1], x + (160 * MenuScale), y + (270 * MenuScale))
-					
-					Color(255, 255, 255)
 					Select SelectedDifficulty\OtherFactors
 						Case EASY
 							;[Block]
-							TempStr = "Easy"
+							TempStr = GetLocalString("menu", "new.easy")
 							;[End Block]
 						Case NORMAL
 							;[Block]
-							TempStr = "Normal"
+							TempStr = GetLocalString("menu", "new.normal")
 							;[End Block]
 						Case HARD
 							;[Block]
-							TempStr = "Hard"
+							TempStr = GetLocalString("menu", "new.hard")
 							;[End Block]
 						Case EXTREME
 							;[Block]
-							TempStr = "Extreme"
+							TempStr = GetLocalString("menu", "new.extreme")
 							;[End Block]
 					End Select
-					Text(x + (200 * MenuScale), y + (276 * MenuScale), "Other difficulty factors: " + TempStr)
+					Text(x + (200 * MenuScale), y + (276 * MenuScale), Format(GetLocalString("menu", "new.factors"), TempStr))
 				Else
-					RowText(SelectedDifficulty\Description, x + (160 * MenuScale), y + (180 * MenuScale), 390 * MenuScale, 200 * MenuScale)					
+					RowText(SelectedDifficulty\Description, x + (160 * MenuScale), y + (180 * MenuScale), 390 * MenuScale, 140 * MenuScale)					
 				EndIf
 				
 				SetFont(fo\FontID[Font_Default_Big])
@@ -1291,7 +1279,7 @@ Function RenderMainMenu%()
 				
 				Color(255, 255, 255)
 				SetFont(fo\FontID[Font_Default_Big])
-				Text(x + (Width / 2), y + (Height / 2), "LOAD GAME", True, True)
+				Text(x + (Width / 2), y + (Height / 2), GetLocalString("menu", "load"), True, True)
 				
 				y = y + Height + (20 * MenuScale)
 				Width = 580 * MenuScale
@@ -1301,12 +1289,12 @@ Function RenderMainMenu%()
 				
 				RenderFrame(x + (60 * MenuScale), y + (440 * MenuScale), Width - (120 * MenuScale), 50 * MenuScale)
 				
-				Text(x + (Width / 2), y + (465 * MenuScale), "PAGE " + Int(Max((mm\CurrMenuPage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SaveGameAmount) / 5.0))), 1)), True, True)
+				Text(x + (Width / 2), y + (465 * MenuScale), Format(Format(GetLocalString("menu", "page"), Int(Max((mm\CurrMenuPage + 1), 1)), "{0}"), Int(Max((Int(Ceil(Float(SaveGameAmount) / 5.0))), 1)), "{1}"), True, True)
 				
 				SetFont(fo\FontID[Font_Default])
 				
 				If SaveGameAmount = 0 Then
-					Text(x + (20 * MenuScale), y + (20 * MenuScale), "No saved games.")
+					RowText(GetLocalString("menu", "save.nosaves"), x + (20 * MenuScale), y + (20 * MenuScale), 540 * MenuScale, 390 * MenuScale)
 				Else
 					x = x + (20 * MenuScale)
 					y = y + (20 * MenuScale)
@@ -1325,7 +1313,7 @@ Function RenderMainMenu%()
 								Color(255, 255, 255)
 							EndIf
 							
-							Text(x + (20 * MenuScale), y + (10 * MenuScale), ConvertANSItoUTF8(CurrSave\Name))
+							Text(x + (20 * MenuScale), y + (10 * MenuScale), ConvertToUTF8(CurrSave\Name))
 							Text(x + (20 * MenuScale), y + (30 * MenuScale), CurrSave\Time)
 							Text(x + (120 * MenuScale), y + (30 * MenuScale), CurrSave\Date)
 							Text(x + (20 * MenuScale), y + (50 * MenuScale), CurrSave\Version)
@@ -1341,7 +1329,7 @@ Function RenderMainMenu%()
 						x = 739 * MenuScale
 						y = 376 * MenuScale
 						RenderFrame(x, y, 420 * MenuScale, 200 * MenuScale)
-						RowText("Are you sure you want to delete this save?", x + (20 * MenuScale), y + (15 * MenuScale), 400 * MenuScale, 200 * MenuScale)
+						RowText(GetLocalString("menu", "save.delete?"), x + (20 * MenuScale), y + (15 * MenuScale), 400 * MenuScale, 200 * MenuScale)
 					EndIf
 				EndIf
 				;[End Block]
@@ -1355,7 +1343,7 @@ Function RenderMainMenu%()
 				
 				Color(255, 255, 255)
 				SetFont(fo\FontID[Font_Default_Big])
-				Text(x + (Width / 2), y + (Height / 2), "OPTIONS", True, True)
+				Text(x + (Width / 2), y + (Height / 2), GetLocalString("menu", "options"), True, True)
 				
 				y = y + Height + (20 * MenuScale)
 				Width = 580 * MenuScale
@@ -1394,7 +1382,7 @@ Function RenderMainMenu%()
 						y = y + (20 * MenuScale)
 						
 						Color(255, 255, 255)				
-						Text(x, y + (5 * MenuScale), "Enable bump mapping:")	
+						Text(x, y + (5 * MenuScale), GetLocalString("options", "bump"))	
 						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_BumpMapping)
 						EndIf
@@ -1402,7 +1390,7 @@ Function RenderMainMenu%()
 						y = y + (30 * MenuScale)
 						
 						Color(255, 255, 255)
-						Text(x, y + (5 * MenuScale), "VSync:")
+						Text(x, y + (5 * MenuScale), GetLocalString("options", "vsync"))
 						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_VSync)
 						EndIf
@@ -1410,7 +1398,7 @@ Function RenderMainMenu%()
 						y = y + (30 * MenuScale)
 						
 						Color(255 - (155 * (opt\DisplayMode <> 0)), 255 - (155 * (opt\DisplayMode <> 0)), 255 - (155 * (opt\DisplayMode <> 0)))
-						Text(x, y + (5 * MenuScale), "Anti-aliasing:")
+						Text(x, y + (5 * MenuScale), GetLocalString("options", "antialias"))
 						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AntiAliasing)
 						EndIf
@@ -1418,7 +1406,7 @@ Function RenderMainMenu%()
 						y = y + (30 * MenuScale)
 						
 						Color(255, 255, 255)
-						Text(x, y + (5 * MenuScale), "Advanced room lighting:")
+						Text(x, y + (5 * MenuScale), GetLocalString("options", "lights"))
 						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_RoomLights)
 						EndIf
@@ -1426,7 +1414,7 @@ Function RenderMainMenu%()
 						y = y + (40 * MenuScale)
 						
 						Color(255, 255, 255)
-						Text(x, y + (5 * MenuScale), "Screen gamma:")
+						Text(x, y + (5 * MenuScale), GetLocalString("options", "gamma"))
 						If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 1 Then
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ScreenGamma, opt\ScreenGamma)
 						EndIf
@@ -1434,7 +1422,7 @@ Function RenderMainMenu%()
 						y = y + (45 * MenuScale)
 						
 						Color(255, 255, 255)
-						Text(x, y, "Particle amount:")
+						Text(x, y, GetLocalString("options", "particle"))
 						If (MouseOn(x + (290 * MenuScale), y - (9 * MenuScale), 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 2 Then
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ParticleAmount, opt\ParticleAmount)
 						EndIf
@@ -1442,7 +1430,7 @@ Function RenderMainMenu%()
 						y = y + (45 * MenuScale)
 						
 						Color(255, 255, 255)
-						Text(x, y, "Texture LOD Bias:")
+						Text(x, y, GetLocalString("options", "lod"))
 						If (MouseOn(x + (290 * MenuScale), y - (9 * MenuScale), 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 3 Then
 							RenderOptionsTooltip(tX, tY, tW, tH + (100 * MenuScale), Tooltip_TextureLODBias)
 						EndIf
@@ -1450,7 +1438,7 @@ Function RenderMainMenu%()
 						y = y + (35 * MenuScale)
 						
 						Color(255, 255, 255)
-						Text(x, y + (5 * MenuScale), "Save textures in the VRAM:")
+						Text(x, y + (5 * MenuScale), GetLocalString("options", "vram"))
 						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SaveTexturesInVRAM)
 						EndIf
@@ -1458,7 +1446,7 @@ Function RenderMainMenu%()
 						y = y + (40 * MenuScale)
 						
 						Color(255, 255, 255)
-						Text(x, y + (5 * MenuScale), "Field of view:")
+						Text(x, y + (5 * MenuScale), GetLocalString("options", "fov"))
 						If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 4 Then
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FOV)
 						EndIf
@@ -1466,7 +1454,7 @@ Function RenderMainMenu%()
 						y = y + (45 * MenuScale)
 						
 						Color(255, 255, 255)
-						Text(x, y, "Anisotropic filtering:")
+						Text(x, y, GetLocalString("options", "filter"))
 						If (MouseOn(x + (290 * MenuScale), y - (9 * MenuScale), 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 5 Then
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AnisotropicFiltering)
 						EndIf
@@ -1475,11 +1463,11 @@ Function RenderMainMenu%()
 						
 						Color(255, 255, 255)
 						If opt\Atmosphere Then
-							TempStr = "Bright"
+							TempStr = GetLocalString("options", "atmo.bright")
 						Else
-							TempStr = "Dark"
+							TempStr = GetLocalString("options", "atmo.dark")
 						EndIf
-						Text(x, y + (5 * MenuScale), "Atmosphere: " + TempStr)
+						Text(x, y + (5 * MenuScale), GetLocalString("options", "atmo") + TempStr)
 						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Atmosphere)
 						EndIf
@@ -1496,7 +1484,7 @@ Function RenderMainMenu%()
 						y = y + (20 * MenuScale)
 						
 						Color(255, 255, 255)
-						Text(x, y + (5 * MenuScale), "Master volume:")
+						Text(x, y + (5 * MenuScale), GetLocalString("options", "mastervolume"))
 						If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 1 Then
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MasterVolume, opt\MasterVolume)
 						EndIf
@@ -1504,7 +1492,7 @@ Function RenderMainMenu%()
 						y = y + (40 * MenuScale)
 						
 						Color(255, 255, 255)
-						Text(x, y + (5 * MenuScale), "Music volume:")
+						Text(x, y + (5 * MenuScale), GetLocalString("options", "musicvolume"))
 						If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 2 Then
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MusicVolume, opt\MusicVolume)
 						EndIf
@@ -1512,7 +1500,7 @@ Function RenderMainMenu%()
 						y = y + (40 * MenuScale)
 						
 						Color(255, 255, 255)
-						Text(x, y + (5 * MenuScale), "Sound volume:")
+						Text(x, y + (5 * MenuScale), GetLocalString("options", "soundvolume"))
 						If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 3 Then
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SoundVolume, opt\SFXVolume)
 						EndIf
@@ -1520,14 +1508,14 @@ Function RenderMainMenu%()
 						y = y + (40 * MenuScale)
 						
 						Color(255, 255, 255)
-						Text(x, y + (5 * MenuScale), "Sound auto-release:")
+						Text(x, y + (5 * MenuScale), GetLocalString("options", "autorelease"))
 						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 							RenderOptionsTooltip(tX, tY, tW, tH + (220 * MenuScale), Tooltip_SoundAutoRelease)
 						EndIf
 						y = y + (30 * MenuScale)
 						
 						Color(255, 255, 255)
-						Text(x, y + (5 * MenuScale), "Enable user tracks:")
+						Text(x, y + (5 * MenuScale), GetLocalString("options", "enabletracks"))
 						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTracks)
 						EndIf
@@ -1536,11 +1524,11 @@ Function RenderMainMenu%()
 						
 						If opt\EnableUserTracks Then
 							Color(255, 255, 255)
-							Text(x, y + (5 * MenuScale), "User track mode:")
-							If opt\UserTrackMode Then
-								TempStr = "Repeat"
+							Text(x, y + (5 * MenuScale), GetLocalString("options", "trackmode"))
+							If opt\UserTrackMode
+								TempStr = GetLocalString("options", "track.repeat")
 							Else
-								TempStr = "Random"
+								TempStr = GetLocalString("options", "track.random")
 							EndIf
 							Text(x + (330 * MenuScale), y + (5 * MenuScale), TempStr)
 							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
@@ -1550,7 +1538,7 @@ Function RenderMainMenu%()
 								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTrackScan)
 							EndIf
 							If UserTrackCheck > 0 Then
-								Text(x, y + (100 * MenuScale), "User tracks found (" + UserTrackCheck2 + "/" + UserTrackCheck + " successfully loaded!)")
+								Text(x, y + (100 * MenuScale), Format(Format(GetLocalString("options", "track.found"), UserTrackCheck2, "{0}"), UserTrackCheck, "{1}"))
 							EndIf
 						EndIf
 						;[End Block]
@@ -1561,7 +1549,7 @@ Function RenderMainMenu%()
 						y = y + (20 * MenuScale)
 						If mm\CurrMenuPage = 0 Then
 							Color(255, 255, 255)
-							Text(x, y + (5 * MenuScale), "Mouse sensitivity:")
+							Text(x, y + (5 * MenuScale), GetLocalString("options", "mousesensitive"))
 							If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 1 Then
 								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseSensitivity, opt\MouseSensitivity)
 							EndIf
@@ -1569,7 +1557,7 @@ Function RenderMainMenu%()
 							y = y + (40 * MenuScale)
 							
 							Color(255, 255, 255)
-							Text(x, y + (5 * MenuScale), "Invert mouse X-axis:")
+							Text(x, y + (5 * MenuScale), GetLocalString("options", "invertx"))
 							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseInvertX)
 							EndIf
@@ -1577,7 +1565,7 @@ Function RenderMainMenu%()
 							y = y + (40 * MenuScale)
 							
 							Color(255, 255, 255)
-							Text(x, y + (5 * MenuScale), "Invert mouse Y-axis:")
+							Text(x, y + (5 * MenuScale), GetLocalString("options", "inverty"))
 							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseInvertY)
 							EndIf
@@ -1585,7 +1573,7 @@ Function RenderMainMenu%()
 							y = y + (40 * MenuScale)
 							
 							Color(255, 255, 255)
-							Text(x, y + (5 * MenuScale), "Mouse smoothing:")
+							Text(x, y + (5 * MenuScale), GetLocalString("options", "mousesmooth"))
 							If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 2 Then
 								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseSmoothing, opt\MouseSmoothing)
 							EndIf
@@ -1598,33 +1586,33 @@ Function RenderMainMenu%()
 						Else
 							Color(255, 255, 255)
 							
-							Text(x, y + (5 * MenuScale), "Move Forward:")
-							Text(x + (260 * MenuScale), y, "Crouch:")
+							Text(x, y + (5 * MenuScale), GetLocalString("options", "key.forward"))
+							Text(x + (260 * MenuScale), y, GetLocalString("options", "key.crouch"))
 							
 							y = y + (20 * MenuScale)
 							
-							Text(x, y + (5 * MenuScale), "Strafe Left:")
-							Text(x + (260 * MenuScale), y, "Manual Blink:")
+							Text(x, y + (5 * MenuScale), GetLocalString("options", "key.left"))
+							Text(x + (260 * MenuScale), y, GetLocalString("options", "key.blink"))
 							
 							y = y + (20 * MenuScale)
 							
-							Text(x, y + (5 * MenuScale), "Move Backward:")
-							Text(x + (260 * MenuScale), y, "Inventory:")
+							Text(x, y + (5 * MenuScale), GetLocalString("options", "key.backward"))
+							Text(x + (260 * MenuScale), y, GetLocalString("options", "key.inv"))
 							
 							y = y + (20 * MenuScale)
 							
-							Text(x, y + (5 * MenuScale), "Strafe Right:")
-							Text(x + (260 * MenuScale), y, "Quick Save:")
+							Text(x, y + (5 * MenuScale), GetLocalString("options", "key.right"))
+							Text(x + (260 * MenuScale), y, GetLocalString("options", "key.save"))
 							
 							y = y + (20 * MenuScale)
 							
-							Text(x, y + (5 * MenuScale), "Sprint:")
-							Text(x + (260 * MenuScale), y, "Take Screenshot:")
+							Text(x, y + (5 * MenuScale), GetLocalString("options", "key.sprint"))
+							Text(x + (260 * MenuScale), y, GetLocalString("options", "key.screenshot"))
 							
 							If opt\CanOpenConsole Then
 								y = y + (20 * MenuScale)
 								
-								Text(x, y + (5 * MenuScale), "Console:")
+								Text(x, y + (5 * MenuScale), GetLocalString("options", "key.console"))
 							EndIf
 							
 							If MouseOn(x, y - ((80 + (20 * opt\CanOpenConsole)) * MenuScale), Width - (40 * MenuScale), (100 + (20 * opt\CanOpenConsole)) * MenuScale) Then
@@ -1640,13 +1628,13 @@ Function RenderMainMenu%()
 						
 						RenderFrame(x + (15 * MenuScale), y + Height + (5 * MenuScale), Width - (70 * MenuScale), 30 * MenuScale)	
 						
-						Text(x + (Width / 2), y + Height + (20 * MenuScale), "PAGE " + (mm\CurrMenuPage + 1) + "/2", True, True)
+						Text(x + (Width / 2), y + Height + (20 * MenuScale), Format(Format(GetLocalString("menu", "page"), Int(Max((mm\CurrMenuPage + 1), 1)), "{0}"), "2", "{1}"), True, True)
 						
 						If mm\CurrMenuPage = 0 Then
 							y = y + (20 * MenuScale)
 							
 							Color(255, 255, 255)				
-							Text(x, y + (5 * MenuScale), "Show HUD:")	
+							Text(x, y + (5 * MenuScale), GetLocalString("options", "hud"))
 							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_HUD)
 							EndIf
@@ -1654,7 +1642,7 @@ Function RenderMainMenu%()
 							y = y + (30 * MenuScale)
 							
 							Color(255, 255, 255)
-							Text(x, y + (5 * MenuScale), "Enable console:")
+							Text(x, y + (5 * MenuScale), GetLocalString("options", "console"))
 							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Console)
 							EndIf
@@ -1663,7 +1651,7 @@ Function RenderMainMenu%()
 							
 							If opt\CanOpenConsole Then
 								Color(255, 255, 255)
-								Text(x, y + (5 * MenuScale), "Open console on error:")
+								Text(x, y + (5 * MenuScale), GetLocalString("options", "error"))
 								If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 									RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ConsoleOnError)
 								EndIf
@@ -1672,7 +1660,7 @@ Function RenderMainMenu%()
 							y = y + (30 * MenuScale)
 							
 							Color(255, 255, 255)
-							Text(x, y + (5 * MenuScale), "Achievement popups:")
+							Text(x, y + (5 * MenuScale), GetLocalString("options", "achipop"))
 							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AchievementPopups)
 							EndIf
@@ -1680,7 +1668,7 @@ Function RenderMainMenu%()
 							y = y + (30 * MenuScale)
 							
 							Color(255 - (155 * SelectedDifficulty\SaveType <> SAVE_ANYWHERE), 255 - (155 * SelectedDifficulty\SaveType <> SAVE_ANYWHERE), 255 - (155 * SelectedDifficulty\SaveType <> SAVE_ANYWHERE))
-							Text(x, y + (5 * MenuScale), "Enable auto save:")
+							Text(x, y + (5 * MenuScale), GetLocalString("options", "save"))
 							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AutoSave)
 							EndIf
@@ -1688,7 +1676,7 @@ Function RenderMainMenu%()
 							y = y + (30 * MenuScale)
 							
 							Color(255, 255, 255)
-							Text(x, y + (5 * MenuScale), "Show FPS:")
+							Text(x, y + (5 * MenuScale), GetLocalString("options", "fps"))
 							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FPS)
 							EndIf
@@ -1696,7 +1684,7 @@ Function RenderMainMenu%()
 							y = y + (30 * MenuScale)
 							
 							Color(255, 255, 255)
-							Text(x, y + (5 * MenuScale), "Frame limit:")
+							Text(x, y + (5 * MenuScale), GetLocalString("options", "frame"))
 							Color(255, 255, 255)
 							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FrameLimit, opt\FrameLimit)
@@ -1712,7 +1700,7 @@ Function RenderMainMenu%()
 							y = y + (20 * MenuScale)
 							
 							Color(255, 255, 255)
-							Text(x, y + (5 * MenuScale), "Smooth Bars:")
+							Text(x, y + (5 * MenuScale), GetLocalString("options", "bar"))
 							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then
 								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SmoothBars)
 							EndIf
@@ -1720,7 +1708,7 @@ Function RenderMainMenu%()
 							y = y + (30 * MenuScale)
 							
 							Color(255, 255, 255)
-							Text(x, y + (5 * MenuScale), "Play startup videos:")
+							Text(x, y + (5 * MenuScale), GetLocalString("options", "startvideo"))
 							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then
 								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_StartupVideos)
 							EndIf
@@ -1728,7 +1716,7 @@ Function RenderMainMenu%()
 							y = y + (30 * MenuScale)
 							
 							Color(255, 255, 255)
-							Text(x, y + (5 * MenuScale), "Use launcher:")
+							Text(x, y + (5 * MenuScale), GetLocalString("options", "launcher"))
 							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then
 								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Launcher)
 							EndIf
@@ -1736,7 +1724,7 @@ Function RenderMainMenu%()
 							y = y + (30 * MenuScale)
 							
 							Color(255, 255, 255)
-							Text(x, y + (5 * MenuScale), "Enable Subtitles:")
+							Text(x, y + (5 * MenuScale), GetLocalString("options", "subtitles"))
 							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then
 								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Subtitles)
 							EndIf
@@ -1745,7 +1733,7 @@ Function RenderMainMenu%()
 							
 							If opt\EnableSubtitles Then     
 								Color(255, 255, 255)
-								Text(x, y + (5 * MenuScale), "Subtitles Color:")  
+								Text(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color"))  
 							EndIf
 							
 							y = y + (5 * MenuScale)
@@ -1760,7 +1748,7 @@ Function RenderMainMenu%()
 							
 							If opt\EnableSubtitles Then
 								Color(255, 255, 255)
-								Text(x, y + (5 * MenuScale), "RED COLOR:")
+								Text(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.red"))
 								If MouseOn(x + (125 * MenuScale), y, 40 * MenuScale, 20 * MenuScale) Then
 									RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
 								EndIf
@@ -1770,7 +1758,7 @@ Function RenderMainMenu%()
 							
 							If opt\EnableSubtitles Then
 								Color(255, 255, 255)
-								Text(x, y + (5 * MenuScale), "GREEN COLOR:")
+								Text(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.green"))
 								If MouseOn(x + (125 * MenuScale), y, 40 * MenuScale, 20 * MenuScale) Then
 									RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
 								EndIf
@@ -1780,7 +1768,7 @@ Function RenderMainMenu%()
 							
 							If opt\EnableSubtitles Then
 								Color(255, 255, 255)
-								Text(x, y + (5 * MenuScale), "BLUE COLOR:")
+								Text(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.blue"))
 								If MouseOn(x + (125 * MenuScale), y, 40 * MenuScale, 20 * MenuScale) Then
 									RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
 								EndIf
@@ -1794,10 +1782,10 @@ Function RenderMainMenu%()
 							
 							If opt\EnableSubtitles Then
 								Color(opt\SubColorR, opt\SubColorG, opt\SubColorB)
-								Text(x - (20 * MenuScale) + (Width / 2), y + (115 * MenuScale), Chr(34) + "- Please, approach SCP-1-7-3 for testing." + Chr(34), True)
-								Text(x - (20 * MenuScale) + (Width / 2), y + (135 * MenuScale), Chr(34) + "- Oh, and by the way." + Chr(34), True)
-								Text(x - (20 * MenuScale) + (Width / 2), y + (155 * MenuScale), Chr(34) + "- You, stop!" + Chr(34), True)
-								Text(x - (20 * MenuScale) + (Width / 2), y + (175 * MenuScale), "[JORGE HAS BEEN EXPECTING YOU]", True)
+								Text(x - (20 * MenuScale) + (Width / 2), y + (115 * MenuScale), GetLocalString("options", "subtitles.example1"), True)
+								Text(x - (20 * MenuScale) + (Width / 2), y + (135 * MenuScale), GetLocalString("options", "subtitles.example2"), True)
+								Text(x - (20 * MenuScale) + (Width / 2), y + (155 * MenuScale), GetLocalString("options", "subtitles.example3"), True)
+								Text(x - (20 * MenuScale) + (Width / 2), y + (175 * MenuScale), GetLocalString("options", "subtitles.example4"), True)
 							EndIf
 						EndIf
 						;[End Block]
@@ -1819,7 +1807,7 @@ Function RenderMainMenu%()
 				
 				Color(255, 255, 255)
 				SetFont(fo\FontID[Font_Default_Big])
-				Text(x + (Width / 2), y + (Height / 2), "LOAD MAP", True, True)
+				Text(x + (Width / 2), y + (Height / 2), GetLocalString("menu", "loadmap"), True, True)
 				
 				y = y + Height + (20 * MenuScale)
 				Width = 580 * MenuScale
@@ -1834,12 +1822,12 @@ Function RenderMainMenu%()
 				
 				RenderFrame(x + (60 * MenuScale), y + (440 * MenuScale), Width - (120 * MenuScale), 50 * MenuScale)
 				
-				Text(x + (Width / 2), y + (465 * MenuScale), "PAGE " + Int(Max((mm\CurrMenuPage + 1), 1)) + "/" + Int(Max((Int(Ceil(Float(SavedMapsAmount) / 5.0))), 1)), True, True)
+				Text(x + (Width / 2), y + (465 * MenuScale), Format(Format(GetLocalString("menu", "page"), Int(Max((mm\CurrMenuPage + 1), 1)), "{0}"), Int(Max((Int(Ceil(Float(SavedMapsAmount) / 5.0))), 1)), "{1}"), True, True)
 				
 				SetFont(fo\FontID[Font_Default])
 				
 				If SavedMapsAmount = 0 Then
-					Text(x + (20 * MenuScale), y + (20 * MenuScale), "No saved maps. Use the Map Creator to create new maps.")
+					RowText(GetLocalString("menu", "nomap"), x + (20 * MenuScale), y + (20 * MenuScale), 540 * MenuScale, 390 * MenuScale)
 				Else
 					x = x + (20 * MenuScale)
 					y = y + (20 * MenuScale)
@@ -1847,12 +1835,12 @@ Function RenderMainMenu%()
 						If i <= SavedMapsAmount Then
 							RenderFrame(x, y, 540 * MenuScale, 70 * MenuScale)
 							
-							If Len(ConvertANSItoUTF8(SavedMaps(i - 1))) > 20 Then
-								Text(x + (20 * MenuScale), y + (15 * MenuScale), Left(ConvertANSItoUTF8(SavedMaps(i - 1)), 19) + "...")
+							If Len(ConvertToUTF8(SavedMaps(i - 1))) > 20 Then
+								Text(x + (20 * MenuScale), y + (15 * MenuScale), Left(ConvertToUTF8(SavedMaps(i - 1)), 19) + "...")
 							Else
-								Text(x + (20 * MenuScale), y + (15 * MenuScale), ConvertANSItoUTF8(SavedMaps(i - 1)))
+								Text(x + (20 * MenuScale), y + (15 * MenuScale), ConvertToUTF8(SavedMaps(i - 1)))
 							EndIf
-							Text(x + (20 * MenuScale), y + (45 * MenuScale), ConvertANSItoUTF8(SavedMapsAuthor(i - 1)))
+							Text(x + (20 * MenuScale), y + (45 * MenuScale), ConvertToUTF8(SavedMapsAuthor(i - 1)))
 							
 							If MouseOn(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale) Lor MouseOn(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale) Then
 								RenderMapCreatorTooltip(tX, tY, tW, tH, SavedMaps(i - 1))
@@ -1867,7 +1855,7 @@ Function RenderMainMenu%()
 						x = 739 * MenuScale
 						y = 376 * MenuScale
 						RenderFrame(x, y, 420 * MenuScale, 200 * MenuScale)
-						RowText("Are you sure you want to delete this map?", x + (20 * MenuScale), y + (15 * MenuScale), 400 * MenuScale, 200 * MenuScale)
+						RowText(GetLocalString("menu", "map.delete?"), x + (20 * MenuScale), y + (15 * MenuScale), 400 * MenuScale, 200 * MenuScale)
 					EndIf
 				EndIf
 				;[End Block]
@@ -1921,12 +1909,9 @@ Function UpdateLauncher%(lnchr.Launcher)
 	
 	Local LauncherIMG%[3]
 	
-	LauncherIMG[0] = LoadImage_Strict("GFX\Menu\launcher.png")
-	LauncherIMG[1] = LoadImage_Strict("GFX\Menu\arrow.png")
-	LauncherIMG[2] = LoadAnimImage_Strict("GFX\Menu\launcher_media.png", 64, 64, 0, 3)
-	
-	RotateImage(LauncherIMG[1], -90.0)
-	MidHandle(LauncherIMG[1])
+	LauncherIMG[0] = LoadImage_Strict("GFX\menu\launcher.png")
+	LauncherIMG[1] = LoadAnimImage_Strict("GFX\menu\launcher_media.png", 64, 64, 0, 3)
+	LauncherIMG[2] = LoadAnimImage_Strict("GFX\menu\language_button.png", 40, 40, 0, 2)
 	
 	For i = 1 To lnchr\TotalGFXModes
 		Local SameFound% = False
@@ -1947,7 +1932,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 		EndIf
 	Next
 	
-	AppTitle("SCP - Containment Breach Ultimate Edition Launcher")
+	AppTitle(GetLocalString("launcher", "title"))
 	
 	Local Quit% = False
 	
@@ -1962,7 +1947,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 		Color(255, 255, 255)
 		DrawImage(LauncherIMG[0], 0, 0)
 		
-		Text(LauncherWidth - 620, LauncherHeight - 305, "Resolution: ")
+		Text(LauncherWidth - 620, LauncherHeight - 305, GetLocalString("launcher", "resolution"))
 		
 		Local x% = LauncherWidth - 600
 		Local y% = LauncherHeight - 275
@@ -1986,64 +1971,75 @@ Function UpdateLauncher%(lnchr.Launcher)
 		Next
 		
 		opt\LauncherEnabled = UpdateLauncherTick(LauncherWidth - 185, LauncherHeight - 278, opt\LauncherEnabled)
-		Text(LauncherWidth - 155, LauncherHeight - 275, "Use launcher:")
+		Text(LauncherWidth - 155, LauncherHeight - 275, GetLocalString("launcher", "launcher"))
 		
-		Text(LauncherWidth - 185, LauncherHeight - 246, "Display Mode:")
+		Text(LauncherWidth - 185, LauncherHeight - 246, GetLocalString("launcher", "display"))
 		
 		Local Txt$
 		
 		Select opt\DisplayMode
 			Case 0
 				;[Block]
-				Txt = "Fullscreen"
+				Txt = GetLocalString("launcher", "display.fullscreen")
 				;[End Block]
 			Case 1
 				;[Block]
-				Txt = "Borderless"
+				Txt = GetLocalString("launcher", "display.borderless")
 				If lnchr\GFXModeWidths[lnchr\SelectedGFXMode] < DesktopWidth() Then
-					Text(LauncherWidth - 275, LauncherHeight - 68, "(upscaled to: " + DesktopWidth() + "x" + DesktopHeight() + ",32)")
+					Text(LauncherWidth - 275, LauncherHeight - 68, Format(Format(GetLocalString("launcher", "upscale"), DesktopWidth(), "{0}"), DesktopHeight(), "{1}"))
 				ElseIf lnchr\GFXModeWidths[lnchr\SelectedGFXMode] > DesktopWidth() Then
-					Text(LauncherWidth - 275, LauncherHeight - 68, "(downscaled to: " + DesktopWidth() + "x" + DesktopHeight() + ",32)")
+					Text(LauncherWidth - 275, LauncherHeight - 68, Format(Format(GetLocalString("launcher", "downscale"), DesktopWidth(), "{0}"), DesktopHeight(), "{1}"))
 				EndIf
 				;[End Block]
 			Case 2
 				;[Block]
-				Txt = "Windowed"
+				Txt = GetLocalString("launcher", "display.windowed")
 				;[End Block]
 		End Select
-		Text(LauncherWidth - 162, LauncherHeight - 133, "Current Resolution: " + lnchr\GFXModeWidths[lnchr\SelectedGFXMode] + "x" + lnchr\GFXModeHeights[lnchr\SelectedGFXMode] + ",32", True)
+		Text(LauncherWidth - 162, LauncherHeight - 133, Format(Format(GetLocalString("launcher", "currres"), lnchr\GFXModeWidths[lnchr\SelectedGFXMode], "{0}"), lnchr\GFXModeHeights[lnchr\SelectedGFXMode], "{1}"), True)
 		RenderFrame(LauncherWidth - 185, LauncherHeight - 226, 120, 30)
 		Text(515, 264, Txt, True)
-		If UpdateLauncherButton(LauncherWidth - 65, LauncherHeight - 226, 30, 30, "", False) Then
+		If UpdateLauncherButton(LauncherWidth - 65, LauncherHeight - 226, 30, 30, ">", False) Then
 			opt\DisplayMode = ((opt\DisplayMode + 1) Mod 3)
 		EndIf
-		DrawImage(LauncherIMG[1], LauncherWidth - 51, LauncherHeight - 212)
 		
 		If MouseOn(LauncherWidth - 620, LauncherHeight - 86, 64, 64) Then
 			Rect(LauncherWidth - 621, LauncherHeight - 87, 66, 66, False)
-			If mo\MouseHit1 Then ExecFile("https://discord.gg/n7KdW4u")
+			Text(LauncherWidth - 620 + (ImageWidth(LauncherIMG[1]) / 2), LauncherHeight - 106, "DISCORD", True)
+			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX) : ExecFile("https://discord.gg/n7KdW4u")
 		EndIf
-		DrawImage(LauncherIMG[2], LauncherWidth - 620, LauncherHeight - 86, 0)
+		DrawImage(LauncherIMG[1], LauncherWidth - 620, LauncherHeight - 86, 0)
 		If MouseOn(LauncherWidth - 510, LauncherHeight - 86, 64, 64) Then
 			Rect(LauncherWidth - 511, LauncherHeight - 87, 66, 66, False)
-			If mo\MouseHit1 Then ExecFile("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition")
+			Text(LauncherWidth - 510 + (ImageWidth(LauncherIMG[1]) / 2), LauncherHeight - 106, "MODDB", True)
+			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX) : ExecFile("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition")
 		EndIf
-		DrawImage(LauncherIMG[2], LauncherWidth - 510, LauncherHeight - 86, 1)
+		DrawImage(LauncherIMG[1], LauncherWidth - 510, LauncherHeight - 86, 1)
 		If MouseOn(LauncherWidth - 400, LauncherHeight - 86, 64, 64) Then
 			Rect(LauncherWidth - 401, LauncherHeight - 87, 66, 66, False)
-			If mo\MouseHit1 Then ExecFile("https://www.youtube.com/channel/UCPqWOCPfKooDnrLNzA67Acw")
+			Text(LauncherWidth - 400 + (ImageWidth(LauncherIMG[1]) / 2), LauncherHeight - 106, "YOUTUBE", True)
+			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX) : ExecFile("https://www.youtube.com/channel/UCPqWOCPfKooDnrLNzA67Acw")
 		EndIf
-		DrawImage(LauncherIMG[2], LauncherWidth - 400, LauncherHeight - 86, 2)
+		DrawImage(LauncherIMG[1], LauncherWidth - 400, LauncherHeight - 86, 2)
 		
-		If UpdateLauncherButton(LauncherWidth - 300, LauncherHeight - 105, 150, 30, "REPORT A BUG!", False, False) Then
+		If MouseOn(LauncherWidth - 185, LauncherHeight - 191, 40, 40) Then
+			DrawImage(LauncherIMG[2], LauncherWidth - 185, LauncherHeight - 191, 1)
+			Rect(LauncherWidth - 185, LauncherHeight - 191, 40, 40, False)
+			Text(LauncherWidth - 185 + 45, LauncherHeight - 171, GetLocalString("launcher", "language"), False, True)
+			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX) : LanguageSelector()
+		Else
+			DrawImage(LauncherIMG[2], LauncherWidth - 185, LauncherHeight - 191, 0)
+		EndIf
+		
+		If UpdateLauncherButton(LauncherWidth - 300, LauncherHeight - 105, 150, 30, GetLocalString("launcher", "report"), False, False) Then
 			ExecFile("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition/news/bug-reports1")
 		EndIf
 		
-		If UpdateLauncherButton(LauncherWidth - 300, LauncherHeight - 50, 150, 30, "SEE CHANGELOG", False, False) Then
+		If UpdateLauncherButton(LauncherWidth - 300, LauncherHeight - 50, 150, 30, GetLocalString("launcher", "changelog"), False, False) Then
 			ExecFile("Changelog.txt")
 		EndIf
 		
-		If UpdateLauncherButton(LauncherWidth - 120, LauncherHeight - 105, 100, 30, "LAUNCH", False, False) Then
+		If UpdateLauncherButton(LauncherWidth - 120, LauncherHeight - 105, 100, 30, GetLocalString("launcher", "launch"), False, False) Then
 			If opt\DisplayMode = 1 Then
 				opt\GraphicWidth = DesktopWidth()
 				opt\GraphicHeight = DesktopHeight()
@@ -2056,7 +2052,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 			Exit
 		EndIf
 		
-		If UpdateLauncherButton(LauncherWidth - 120, LauncherHeight - 50, 100, 30, "EXIT", False, False) Then
+		If UpdateLauncherButton(LauncherWidth - 120, LauncherHeight - 50, 100, 30, GetLocalString("launcher", "exit"), False, False) Then
 			Quit = True
 			Exit
 		EndIf
@@ -2182,7 +2178,7 @@ Function RenderLoadingText%(x%, y%, AlignX% = False, AlignY% = False)
 		EndIf
 		SetFont(fo\FontID[Font_Default])
 		Color(ltc\R, ltc\G, ltc\B)
-		Text(x, y, "PRESS ANY KEY TO CONTINUE", AlignX, AlignY)
+		Text(x, y, GetLocalString("menu", "anykey"), AlignX, AlignY)
 	Next
 End Function
 
@@ -2279,7 +2275,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 					Select Rand(2)
 						Case 1
 							;[Block]
-							SelectedLoadingScreen\Txt[0] = "It will happen on " + CurrentDate() + "."
+							SelectedLoadingScreen\Txt[0] = Format(GetLocalString("menu", "happend"), CurrentTime())
 							;[End Block]
 						Case 2
 							;[Block]
@@ -2290,26 +2286,26 @@ Function RenderLoading%(Percent%, Assets$ = "")
 					Select Rand(13)
 						Case 1
 							;[Block]
-							SelectedLoadingScreen\Txt[0] = "A very fine radio might prove to be useful."
+							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "9901")
 							;[End Block]
 						Case 2
 							;[Block]
-							SelectedLoadingScreen\Txt[0] = "ThIS PLaCE WiLL BUrN"
+							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "9902")
 							;[End Block]
 						Case 3
 							;[Block]
-							SelectedLoadingScreen\Txt[0] = "You cannot control it."
+							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "9903")
 							;[End Block]
 						Case 4
 							;[Block]
 							SelectedLoadingScreen\Txt[0] = "eof9nsd3jue4iwe1fgj"
 						Case 5
 							;[Block]
-							SelectedLoadingScreen\Txt[0] = "YOU NEED TO TRUST IT"
+							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "9904")
 							;[End Block]
 						Case 6 
 							;[Block]
-							SelectedLoadingScreen\Txt[0] = "Look my friend in the eye when you address him, isn't that the way of the gentleman?"
+							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "9905")
 							;[End Block]
 						Case 7
 							;[Block]
@@ -2317,7 +2313,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 							;[End Block]
 						Case 8, 9
 							;[Block]
-							SelectedLoadingScreen\Txt[0] = "Jorge has been expecting you."
+							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "9906")
 							;[End Block]
 						Case 10
 							;[Block]
@@ -2325,15 +2321,15 @@ Function RenderLoading%(Percent%, Assets$ = "")
 							;[End Block]
 						Case 11
 							;[Block]
-							SelectedLoadingScreen\Txt[0] = "Make her a member of the midnight crew."
+							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "9907")
 							;[End Block]
 						Case 12
 							;[Block]
-							SelectedLoadingScreen\Txt[0] = "Concluded that coming here was a mistake. We have to turn back."
+							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "9908")
 							;[End Block]
 						Case 13
 							;[Block]
-							SelectedLoadingScreen\Txt[0] = "This alloy contains the essence of my life."
+							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "9909")
 							;[End Block]
 					End Select
 				EndIf
@@ -2356,7 +2352,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 		
 		If Percent <> 100 Then
 			Color(255, 255, 255)
-			Text(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), "LOADING ASSETS: " + Assets, True, True)
+			Text(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), Format(GetLocalString("loading", "assets"), Assets), True, True)
 			
 			ResetInput()
 		Else
@@ -2859,11 +2855,9 @@ End Function
 Type MenuSlideBar
 	Field x%, y%, Width%
 	Field Value#
-	Field TextLeft$
-	Field TextRight$
 End Type
 
-Function UpdateMainMenuSlideBar#(x%, y%, Width%, Value#, ID%, TextLeft$ = "LOW", TextRight$ = "HIGH")
+Function UpdateMainMenuSlideBar#(x%, y%, Width%, Value#, ID%)
 	Local msb.MenuSlideBar, currSlideBar.MenuSlideBar
 	Local SlideBarExists% = False
 	
@@ -2879,8 +2873,6 @@ Function UpdateMainMenuSlideBar#(x%, y%, Width%, Value#, ID%, TextLeft$ = "LOW",
 		msb\y = y
 		msb\Width = Width
 		msb\Value = Value
-		msb\TextLeft = TextLeft
-		msb\TextRight = TextRight
 	Else
 		currSlideBar = msb
 		currSlideBar\Value = Value
@@ -2907,8 +2899,8 @@ Function RenderMenuSlideBars%()
 		DrawImage(BlinkMeterIMG, msb\x + msb\Width * msb\Value / 100.0 + (3 * MenuScale), msb\y + (3 * MenuScale))
 		
 		Color(170, 170, 170)
-		Text(msb\x - (50 * MenuScale), msb\y + (5 * MenuScale), msb\TextLeft)					
-		Text(msb\x + msb\Width + (34 * MenuScale), msb\y + (5 * MenuScale), msb\TextRight)	
+		Text(msb\x - (50 * MenuScale), msb\y + (5 * MenuScale), GetLocalString("options", "slider.low"))					
+		Text(msb\x + msb\Width + (34 * MenuScale), msb\y + (5 * MenuScale), GetLocalString("options", "slider.high"))	
 	Next
 End Function
 
@@ -3128,7 +3120,7 @@ Function RowText%(Txt$, x%, y%, W%, H%, Align% = False, Leading# = 1.0)
 	Local s$
 	
 	While Len(Txt) > 0
-		Local Space$ = Instr(Txt, " ")
+		Local Space$ = Instr(Txt, SplitSpace)
 		
 		If Space = 0 Then Space = Len(Txt)
 		
@@ -3179,7 +3171,7 @@ Function GetLineAmount%(Txt$, W%, H%, Leading# = 1.0)
 	Local s$
 	
 	While Len(Txt) > 0
-		Local Space$ = Instr(Txt, " ")
+		Local Space$ = Instr(Txt, SplitSpace)
 		
 		If Space = 0 Then Space = Len(Txt)
 		
@@ -3273,216 +3265,212 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 			; ~ [GRAPHICS]
 		Case Tooltip_BumpMapping
 			;[Block]
-			Txt = Chr(34) + "Bump mapping" + Chr(34) + " is used to simulate bumps and dents by distorting the lightmaps."
+			Txt = GetLocalString("tooltip", "bump")
 			R = 255
-			Txt2 = "This option cannot be changed in-game."
+			Txt2 = GetLocalString("tooltip", "cantchange")
 			;[End Block]
 		Case Tooltip_VSync
 			;[Block]
-			Txt = Chr(34) + "Vertical sync" + Chr(34) + " waits for the display to finish its current refresh cycle before calculating the next frame, preventing issues such as "
-			Txt = Txt + "screen tearing. This ties the game's frame rate to your display's refresh rate and may cause some input lag."
+			Txt = GetLocalString("tooltip", "vsync")
 			;[End Block]
 		Case Tooltip_AntiAliasing
 			;[Block]
-			Txt = Chr(34) + "Anti-Aliasing" + Chr(34) + " is used to smooth the rendered image before displaying in order to reduce aliasing around the edges of models."
+			Txt = GetLocalString("tooltip", "alias")
 			R = 255 : G = 255
-			Txt2 = "This option only takes effect in fullscreen."
+			Txt2 = GetLocalString("tooltip", "fullscreen")
 			;[End Block]
 		Case Tooltip_RoomLights
 			;[Block]
-			Txt = "Toggles the artificial lens flare effect generated over specific light sources."
+			Txt = GetLocalString("tooltip", "lights")
 			;[End Block]
 		Case Tooltip_ScreenGamma
 			;[Block]
-			Txt = Chr(34) + "Gamma correction" + Chr(34) + " is used to achieve a good brightness factor to balance out your display's gamma if the game appears either too dark or bright. "
-			Txt = Txt + "Setting it too high or low can cause the graphics to look less detailed."
+			Txt = GetLocalString("tooltip", "gamma1")
 			R = 255 : G = 255
-			Txt2 = "Current value: " + Int(Value * 100.0) + "% (default is 100%)"
+			Txt2 = Format(GetLocalString("tooltip", "gamma2"), Int(Value * 100.0))
 			;[End Block]
 		Case Tooltip_ParticleAmount
 			;[Block]
-			Txt = "Determines the amount of particles that can be rendered per tick."
+			Txt = GetLocalString("tooltip", "particle1")
 			Select Value
 				Case 0
 					;[Block]
 					R = 255
-					Txt2 = "Only smoke emitters will produce particles."
+					Txt2 = GetLocalString("tooltip", "particle2.1")
 					;[End Block]
 				Case 1
 					;[Block]
 					R = 255
 					G = 255
-					Txt2 = "Only a few particles will be rendered per tick."
+					Txt2 = GetLocalString("tooltip", "particle2.2")
 					;[End Block]
 				Case 2
 					;[Block]
 					G = 255
-					Txt2 = "All particles are rendered."
+					Txt2 = GetLocalString("tooltip", "particle2.3")
 					;[End Block]
 			End Select
 			;[End Block]
 		Case Tooltip_TextureLODBias
 			;[Block]
-			Txt = Chr(34) + "Texture LOD Bias" + Chr(34) + " affects the distance at which texture detail will change to prevent aliasing. Change this option if textures flicker or look too blurry."
+			Txt = GetLocalString("tooltip", "lod")
 			;[End Block]
 		Case Tooltip_SaveTexturesInVRAM
 			;[Block]
-			Txt = "Textures that are stored in the Video-RAM will load faster, but this also has negative effects on the texture quality as well."
+			Txt = GetLocalString("tooltip", "vram")
 			R = 255
-			Txt2 = "This option cannot be changed in-game."
+			Txt2 = GetLocalString("tooltip", "cantchange")
 			;[End Block]
 		Case Tooltip_FOV
 			;[Block]
-			Txt = Chr(34) + "Field of view" + Chr(34) + " is the amount of game view that is on display during a game."
+			Txt = GetLocalString("tooltip", "fov1")
 			R = 255 : G = 255
-			Txt2 = "Current value: " + Int(opt\FOV) + "° (default is 60°)"
+			Txt2 = Format(GetLocalString("tooltip", "fov2"), Int(opt\FOV))
 			;[End Block]
 		Case Tooltip_AnisotropicFiltering
 			;[Block]
-			Txt = Chr(34) + "Anisotropic filtering" + Chr(34) + " enhances the image quality of textures on surfaces that are at oblique viewing angles with respect to the camera."
+			Txt = GetLocalString("tooltip", "anisotropic")
 			;[End Block]
 		Case Tooltip_Atmosphere
 			;[Block]
-			Txt = "Changes the atmosphere to dark or bright. The bright atmosphere is more comfortable to play in a daylight and better for making a video. In turn, the dark one is better for a night playing."
+			Txt = GetLocalString("tooltip", "atmo")
 			R = 255
-			Txt2 = "This option cannot be changed in-game."
+			Txt2 = GetLocalString("tooltip", "cantchange")
 			;[End Block]
 			; ~ [AUDIO]
 		Case Tooltip_MasterVolume
 			;[Block]
-			Txt = "Adjusts the master volume of sounds. Sliding the bar fully to the left will mute all sounds."
+			Txt = GetLocalString("tooltip", "mastervolume")
 			R = 255 : G = 255
-			Txt2 = "Current value: " + Int(Value * 100.0) + "% (default is 50%)"
+			Txt2 = Format(GetLocalString("tooltip", "v50"), Int(Value * 100.0))
 			;[End Block]
 		Case Tooltip_MusicVolume
 			;[Block]
-			Txt = "Adjusts the volume of background music. Sliding the bar fully to the left will mute all music."
+			Txt = GetLocalString("tooltip", "musicvolume")
 			R = 255 : G = 255
-			Txt2 = "Current value: " + Int(Value * 100.0) + "% (default is 50%)"
+			Txt2 = Format(GetLocalString("tooltip", "v50"), Int(Value * 100.0))
 			;[End Block]
 		Case Tooltip_SoundVolume
 			;[Block]
-			Txt = "Adjusts the volume of sound effects. Sliding the bar fully to the left will mute all sounds."
+			Txt = GetLocalString("tooltip", "soundvolume")
 			R = 255 : G = 255
-			Txt2 = "Current value: " + Int(Value * 100.0) + "% (default is 50%)"
+			Txt2 = Format(GetLocalString("tooltip", "v50"), Int(Value * 100.0))
 			;[End Block]
 		Case Tooltip_SoundAutoRelease
 			;[Block]
-			Txt = Chr(34) + "Sound auto-release" + Chr(34) + " will free a sound from memory if it not used after 5 seconds. Prevents memory allocation issues."
+			Txt = GetLocalString("tooltip", "autorelease")
 			R = 255
-			Txt2 = "This option cannot be changed in-game."
+			Txt2 = GetLocalString("tooltip", "cantchange")
 			;[End Block]
 		Case Tooltip_UserTracks
 			;[Block]
-			Txt = "Toggles the ability to play custom tracks over channel 1 of the radio. These tracks are loaded from the " + Chr(34) + "SFX\Radio\UserTracks\" + Chr(34)
-			Txt = Txt + " directory. Press " + Chr(34) + "1" + Chr(34) + " when the radio is selected to change track."
+			Txt = GetLocalString("tooltip", "usertrack")
 			R = 255
-			Txt2 = "This option cannot be changed in-game."
+			Txt2 = GetLocalString("tooltip", "cantchange")
 			;[End Block]
 		Case Tooltip_UserTracksMode
 			;[Block]
-			Txt = "Sets the playing mode for the custom tracks. " + Chr(34) + "Repeat" + Chr(34) + " plays every file in alphabetical order. " + Chr(34) + "Random" + Chr(34) + " chooses the "
-			Txt = Txt + "Next track at random."
+			Txt = GetLocalString("tooltip", "trackmode")
 			R = 255 : G = 255
-			Txt2 = "Note that the random mode doesn't prevent previously played tracks from repeating."
+			Txt2 = GetLocalString("tooltip", "modenote")
 			;[End Block]
 		Case Tooltip_UserTrackScan
 			;[Block]
-			Txt = "Re-checks the user tracks directory for any new or removed sound files."
+			Txt = GetLocalString("tooltip", "scantrack")
 			R = 255
-			Txt2 = "This button cannot be used in-game."
+			Txt2 = GetLocalString("tooltip", "cantchangebtn")
 			;[End Block]
 			; ~ [CONTROLS]
 		Case Tooltip_MouseSensitivity
 			;[Block]
-			Txt = "Adjusts the speed of the mouse pointer."
+			Txt = GetLocalString("tooltip", "mousespeed")
 			R = 255 : G = 255
-			Txt2 = "Current value: " + Int((0.5 + Value) * 100.0) + "% (default is 50%)"
+			Txt2 = Format(GetLocalString("tooltip", "v0"), Int(Value * 100.0))
 			;[End Block]
 		Case Tooltip_MouseInvertX
 			;[Block]
-			Txt = Chr(34) + "Invert mouse X-axis" + Chr(34) + " is self-explanatory."
+			Txt = GetLocalString("tooltip", "invertx")
 			;[End Block]
 		Case Tooltip_MouseInvertY
 			;[Block]
-			Txt = Chr(34) + "Invert mouse Y-axis" + Chr(34) + " is self-explanatory."
+			Txt = GetLocalString("tooltip", "inverty")
 			;[End Block]
 		Case Tooltip_MouseSmoothing
 			;[Block]
-			Txt = "Adjusts the amount of smoothing of the mouse pointer."
+			Txt = GetLocalString("tooltip", "mousesmooth")
 			R = 255 : G = 255
-			Txt2 = "Current value: " + Int(Value * 100.0) + "% (default is 100%)"
+			Txt2 = Format(GetLocalString("tooltip", "gamma2"), Int(Value * 100.0))
 			;[End Block]
 		Case Tooltip_ControlConfiguration
 			;[Block]
-			Txt = "Configure the in-game control scheme."
+			Txt = GetLocalString("tooltip", "configcontrol")
 			;[End Block]
 			; ~ [ADVANCED]
 		Case Tooltip_HUD
 			;[Block]
-			Txt = "Displays the blink and stamina meters."
+			Txt = GetLocalString("tooltip", "hud")
 			;[End Block]
 		Case Tooltip_Console
 			;[Block]
-			Txt = "Toggles the use of the developer console. Can be used in-game by pressing " + key\Name[key\CONSOLE] + "."
+			Txt = Format(GetLocalString("tooltip", "console"), key\Name[key\CONSOLE])
 			;[End Block]
 		Case Tooltip_ConsoleOnError
 			;[Block]
-			Txt = Chr(34) + "Open console on error" + Chr(34) + " is self-explanatory."
+			Txt = GetLocalString("tooltip", "errorconsole")
 			;[End Block]
 		Case Tooltip_AchievementPopups
 			;[Block]
-			Txt = "Displays a pop-up notification when an achievement is unlocked."
+			Txt = GetLocalString("tooltip", "achipop")
 			;[End Block]
 		Case Tooltip_AutoSave
 			;[Block]
-			Txt = "Automatically saves the game every 2 minutes. Press " + Chr(34) + key\Name[key\SAVE] + Chr(34) + " to cancel auto save."
+			Txt = Format(GetLocalString("tooltip", "autosave"), key\Name[key\SAVE])
 			R = 255 : G = 255
-			Txt2 = "This option only works with " + Chr(34) + "Save anywhere" + Chr(34) + " save type."
+			Txt2 = GetLocalString("tooltip", "autosave.note")
 			;[End Block]
 		Case Tooltip_FPS
 			;[Block]
-			Txt = "Displays the frames per second counter at the top left-hand corner."
+			Txt = GetLocalString("tooltip", "fps")
 			;[End Block]
 		Case Tooltip_FrameLimit
 			;[Block]
-			Txt = "Limits the frame rate that the game can run at to a desired value."
+			Txt = GetLocalString("tooltip", "frame")
 			If Value > 0 And Value < 60 Then
 				R = 255 : G = 255
-				Txt2 = "Usually, 60 FPS or higher is preferred. If you are noticing excessive stuttering at this setting, try lowering it to make your framerate more consistent."
+				Txt2 = GetLocalString("tooltip", "frame.note")
 			EndIf
 			;[End Block]
 		Case Tooltip_SmoothBars
 			;[Block]
-			Txt = "Makes the bars moving smoother."
+			Txt = GetLocalString("tooltip", "bar")
 			R = 255
-			Txt2 = "This option cannot be changed in-game."
+			Txt2 = GetLocalString("tooltip", "cantchange")
 			;[End Block]
 		Case Tooltip_StartupVideos
 			;[Block]
-			Txt = Chr(34) + "Play startup videos" + Chr(34) + " is self-explanatory."
+			Txt = GetLocalString("tooltip", "startvideo")
 			R = 255
-			Txt2 = "This option cannot be changed in-game."
+			Txt2 = GetLocalString("tooltip", "cantchange")
 			;[End Block]
 		Case Tooltip_Launcher
 			;[Block]
-			Txt = Chr(34) + "Use launcher" + Chr(34) + " is self-explanatory."
+			Txt = GetLocalString("tooltip", "launcher")
 			R = 255
-			Txt2 = "This option cannot be changed in-game."
+			Txt2 = GetLocalString("tooltip", "cantchange")
 			;[End Block]
 		Case Tooltip_Subtitles
 			;[Block]
-			Txt = "Displays current dialogs in the text form. Currently unfinished and unstable. Not recommened to use!"
+			Txt = GetLocalString("tooltip", "subtitles")
 			R = 255
-			Txt2 = "This option cannot be changed in-game."
+			Txt2 = GetLocalString("tooltip", "cantchange")
 			;[End Block]
 		Case Tooltip_SubtitlesColor
 			;[Block]
-			Txt = Chr(34) + "Subtitles color" + Chr(34) + " is self-explanatory."
+			Txt = GetLocalString("tooltip", "subtitles.color")
 			;[End Block]
 		Case Tooltip_ResetOptions
 			;[Block]
-			Txt = Chr(34) + "Reset options" + Chr(34) + " is self-explanatory."
+			Txt = GetLocalString("tooltip", "reset")
 			;[End Block]
 	End Select
 	
@@ -3513,11 +3501,11 @@ Function RenderMapCreatorTooltip%(x%, y%, Width%, Height%, MapName$)
 	Local Txt$[6]
 	
 	If Right(MapName, 6) = "cbmap2" Then
-		Txt[0] = Left(ConvertANSItoUTF8(MapName), Len(ConvertANSItoUTF8(MapName)) - 7)
+		Txt[0] = Left(ConvertToUTF8(MapName), Len(ConvertToUTF8(MapName)) - 7)
 		
 		Local f% = OpenFile("Map Creator\Maps\" + MapName)
-		Local Author$ = ConvertANSItoUTF8(ReadLine(f))
-		Local Descr$ = ConvertANSItoUTF8(ReadLine(f))
+		Local Author$ = ConvertToUTF8(ReadLine(f))
+		Local Descr$ = ConvertToUTF8(ReadLine(f))
 		
 		ReadByte(f)
 		ReadByte(f)
@@ -3539,28 +3527,28 @@ Function RenderMapCreatorTooltip%(x%, y%, Width%, Height%, MapName$)
 		CloseFile(f)
 	Else
 		Txt[0] = Left(MapName, Len(MapName) - 6)
-		Author = "[Unknown]"
-		Descr = "[No description]"
+		Author = GetLocalString("creator", "unknown")
+		Descr = GetLocalString("creator", "nodesc")
 		rAmount = 0
 		HasForest = False
 		HasMT = False
 	EndIf
-	Txt[1] = "Made by: " + Author
-	Txt[2] = "Description: " + Descr
+	Txt[1] = GetLocalString("creator", "author") + Author
+	Txt[2] = GetLocalString("creator", "desc") + Descr
 	If rAmount > 0 Then
-		Txt[3] = "Room amount: " + rAmount
+		Txt[3] = GetLocalString("creator", "ramount") + rAmount
 	Else
-		Txt[3] = "Room amount: [Unknown]"
+		Txt[3] = GetLocalString("creator", "ramount.unknown")
 	EndIf
 	If HasForest Then
-		Txt[4] = "Has custom forest: Yes"
+		Txt[4] = GetLocalString("creator", "forest.yes")
 	Else
-		Txt[4] = "Has custom forest: No"
+		Txt[4] = GetLocalString("creator", "forest.no")
 	EndIf
 	If HasMT Then
-		Txt[5] = "Has custom maintenance tunnel: Yes"
+		Txt[5] = GetLocalString("creator", "tunnel.yes")
 	Else
-		Txt[5] = "Has custom maintenance tunnel: No"
+		Txt[5] = GetLocalString("creator", "tunnel.no")
 	EndIf
 	
 	Lines = GetLineAmount(Txt[2], fW, fH)

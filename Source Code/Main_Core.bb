@@ -1,6 +1,10 @@
 Include "Source Code\Math_Core.bb"
 Include "Source Code\Strict_Loads_Core.bb"
 
+Type Fonts
+	Field FontID%[MaxFontIDAmount]
+End Type
+
 Const MaxFontIDAmount% = 8
 ; ~ Fonts ID Constants
 ;[Block]
@@ -14,16 +18,23 @@ Const Font_Credits% = 6
 Const Font_Credits_Big% = 7
 ;[End Block]
 
-Type Fonts
-	Field FontID%[MaxFontIDAmount]
-End Type
-
 Global fo.Fonts = New Fonts
 
 Global ButtonSFX% = LoadSound_Strict("SFX\Interact\Button.ogg")
 Global ButtonSFX2% = LoadSound_Strict("SFX\Interact\Button2.ogg")
 
 Global MenuWhite%, MenuGray%, MenuBlack%
+
+MenuWhite = LoadImage_Strict("GFX\menu\menu_white.png")
+MenuGray = LoadImage_Strict("GFX\menu\menu_gray.png")
+MenuBlack = LoadImage_Strict("GFX\menu\menu_black.png")
+
+Global SplitSpace$
+If Int(GetLocalString("global", "splitwithspace")) Then
+	SplitSpace = " " 
+Else 
+	SplitSpace = ""
+EndIf
 
 Type Mouse
 	Field MouseHit1%, MouseHit2%
@@ -76,7 +87,7 @@ EndIf
 
 Const VersionNumber$ = "1.0.4"
 
-AppTitle("SCP - Containment Breach Ultimate Edition v" + VersionNumber)
+AppTitle(Format(GetLocalString("misc", "title"), VersionNumber))
 
 Global MenuScale# = opt\GraphicHeight / 1024.0
 
@@ -141,7 +152,7 @@ SetFont(fo\FontID[Font_Default_Big])
 Global BlinkMeterIMG% = LoadImage_Strict("GFX\HUD\blink_meter(1).png")
 BlinkMeterIMG = ScaleImage2(BlinkMeterIMG, MenuScale, MenuScale)
 
-RenderLoading(0, "MAIN CORE")
+RenderLoading(0, GetLocalString("loading", "core.main"))
 
 Type Player
 	Field Terminated# = False
@@ -187,7 +198,7 @@ End Type
 
 Global wi.WearableItems = New WearableItems
 
-RenderLoading(5, "ACHIEVEMENTS CORE")
+RenderLoading(5, GetLocalString("loading", "core.achv"))
 
 Include "Source Code\Achievements_Core.bb"
 
@@ -237,7 +248,7 @@ Global SoundTransmission%
 
 Global MainMenuOpen%, MenuOpen%, InvOpen%
 
-RenderLoading(10, "DIFFICULTY CORE")
+RenderLoading(10, GetLocalString("loading", "core.diff"))
 
 Include "Source Code\Difficulty_Core.bb"
 
@@ -297,6 +308,14 @@ Function CreateConsoleMsg%(Txt$, R% = -1, G% = -1, B% = -1, IsCommand% = False)
 	If c\R < 0 Then c\R = ConsoleR
 	If c\G < 0 Then c\G = ConsoleG
 	If c\B < 0 Then c\B = ConsoleB
+End Function
+
+Function CreateConsoleMultiMsg(Txt$, R% = -1, G% = -1, B% = -1, IsCommand% = False)
+	While Find(Txt, "\n") <> -1 
+		CreateConsoleMsg(Left(Txt, Find(Txt, "\n")), R, G, B, IsCommand)
+		Txt = Right(Txt, Len(Txt) - Find(Txt, "\n") - 2)
+	Wend
+	CreateConsoleMsg(Txt, R, G, B, IsCommand)
 End Function
 
 Function UpdateConsole%()
@@ -471,7 +490,7 @@ Function UpdateConsole%()
 					Select StrTemp
 						Case "1", ""
 							;[Block]
-							CreateConsoleMsg("LIST OF COMMANDS - PAGE 1 / 3")
+							CreateConsoleMsg(GetLocalString("console", "help1.1"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("- ending")
 							CreateConsoleMsg("- notarget")
@@ -491,13 +510,13 @@ Function UpdateConsole%()
 							CreateConsoleMsg("- money")
 							CreateConsoleMsg("- debughud")
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Use " + Chr(34) + "help 2 / 3" + Chr(34) + " to find more commands.")
-							CreateConsoleMsg("Use " + Chr(34) + "help [command name]" + Chr(34) + " to get more information about a command.")
+							CreateConsoleMsg(GetLocalString("console", "help1.2"))
+							CreateConsoleMsg(GetLocalString("console", "help.command"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "2"
 							;[Block]
-							CreateConsoleMsg("LIST OF COMMANDS - PAGE 2 / 3")
+							CreateConsoleMsg(GetLocalString("console", "help2.1"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("- reset096")
 							CreateConsoleMsg("- reset372")
@@ -516,13 +535,13 @@ Function UpdateConsole%()
 							CreateConsoleMsg("- disablenuke")
 							CreateConsoleMsg("- resetfunds")
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Use " + Chr(34) + "help 3 / 3" + Chr(34) + " to find more commands.")
-							CreateConsoleMsg("Use " + Chr(34) + "help [command name]" + Chr(34) + " to get more information about a command.")
+							CreateConsoleMsg(GetLocalString("console", "help2.2"))
+							CreateConsoleMsg(GetLocalString("console", "help.command"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "3"
 							;[Block]
-							CreateConsoleMsg("LIST OF COMMANDS - PAGE 3 / 3")
+							CreateConsoleMsg(GetLocalString("console", "help3.1"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("- playmusic [clip + .wav / .ogg]")
 							CreateConsoleMsg("- camerafog [near] [far]")
@@ -535,274 +554,242 @@ Function UpdateConsole%()
 							CreateConsoleMsg("- giveachievement [ID / All]")
 							CreateConsoleMsg("- codes")
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Use " + Chr(34) + "help [command name]" + Chr(34) + " to get more information about a command.")
+							CreateConsoleMsg(GetLocalString("console", "help.command"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "camerafog"
 							;[Block]
-							CreateConsoleMsg("HELP - camerafog")
+							CreateConsoleMsg(GetLocalString("console", "help.camerafog.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Sets the draw distance of the fog.")
-							CreateConsoleMsg("The fog begins generating at 'CameraFogNear' units")
-							CreateConsoleMsg("away from the camera and becomes completely opaque")
-							CreateConsoleMsg("at 'CameraFogFar' units away from the camera.")
-							CreateConsoleMsg("Example: camerafog 20 40")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.camerafog"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "noclip", "fly"
 							;[Block]
-							CreateConsoleMsg("HELP - noclip")
+							CreateConsoleMsg(GetLocalString("console", "help.noclip.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Toggles NoClip, unless a valid parameter")
-							CreateConsoleMsg("is specified (on / off).")
-							CreateConsoleMsg("Allows the camera to move in any direction while")
-							CreateConsoleMsg("by passing collision.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.noclip"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "noblink", "nb"
 							;[Block]
-							CreateConsoleMsg("HELP - noblink")
+							CreateConsoleMsg(GetLocalString("console", "help.noblink.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Toggles NoBlink, unless a valid parameter")
-							CreateConsoleMsg("is specified (on / off).")
-							CreateConsoleMsg("Removes player's blinking.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.noblink"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "godmode", "god"
 							;[Block]
-							CreateConsoleMsg("HELP - godmode")
+							CreateConsoleMsg(GetLocalString("console", "help.god.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Toggles GodMode, unless a valid parameter")
-							CreateConsoleMsg("is specified (on / off).")
-							CreateConsoleMsg("Prevents player death under normal circumstances.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.god"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "infinitestamina", "is"
 							;[Block]
-							CreateConsoleMsg("HELP - infinitestamina")
+							CreateConsoleMsg(GetLocalString("console", "help.is.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Toggles InfiniteStamina, unless a valid parameter")
-							CreateConsoleMsg("is specified (on / off).")
-							CreateConsoleMsg("Increases player's stamina to infinite value.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.is"))
 							CreateConsoleMsg("******************************")
 						Case "notarget", "nt"
 							;[Block]
-							CreateConsoleMsg("HELP - notarget")
+							CreateConsoleMsg(GetLocalString("console", "help.nt.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Toggles NoTarget, unless a valid parameter")
-							CreateConsoleMsg("is specified (on / off).")
-							CreateConsoleMsg("Makes player to be invisible for NPCs.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.nt"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "wireframe", "wf"
 							;[Block]
-							CreateConsoleMsg("HELP - wireframe")
+							CreateConsoleMsg(GetLocalString("console", "help.wf.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Toggles wireframe, unless a valid parameter")
-							CreateConsoleMsg("is specified (on / off).")
-							CreateConsoleMsg("Allows only the edges of geometry to be rendered,")
-							CreateConsoleMsg("making everything else transparent.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.wf"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "spawnitem", "si", "giveitem"
 							;[Block]
-							CreateConsoleMsg("HELP - spawnitem")
+							CreateConsoleMsg(GetLocalString("console", "help.si.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Spawns an item at the player's location.")
-							CreateConsoleMsg("Any name that can appear in your inventory")
-							CreateConsoleMsg("is a valid parameter.")
-							CreateConsoleMsg("Example: spawnitem Key Card Omni")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.si"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "spawn", "s"
 							;[Block]
-							CreateConsoleMsg("HELP - spawn")
+							CreateConsoleMsg(GetLocalString("console", "help.s.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Spawns an NPC at the player's location.")
-							CreateConsoleMsg("Valid parameters are:")
-							CreateConsoleMsg("008-1 / 049 / 049-2 / 066 / 096 / 106 / 173 / 860")
-							CreateConsoleMsg("/ 372 / 513-1 / 966 / 1499-1 / class-d / 939")
-							CreateConsoleMsg("/ guard / mtf / apache / tentacle / 1048_a/ 1048")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.s"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "reset372" 
 							;[Block]
-							CreateConsoleMsg("HELP - reset372")
+							CreateConsoleMsg(GetLocalString("console", "help.r372.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Returns SCP-372 to inactive state.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.r372"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "106retreat" 
 							;[Block]
-							CreateConsoleMsg("HELP - 106retreat")
+							CreateConsoleMsg(GetLocalString("console", "help.106r.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Returns SCP-106 to inactive state.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.106r"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "disable106"
 							;[Block]
-							CreateConsoleMsg("HELP - disable106")
+							CreateConsoleMsg(GetLocalString("console", "help.d106.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Removes SCP-106 from the map.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.d106"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "enable106"
 							;[Block]
-							CreateConsoleMsg("HELP - enable106")
+							CreateConsoleMsg(GetLocalString("console", "help.e106.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Returns SCP-106 to the map.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.e106"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "disable173"
 							;[Block]
-							CreateConsoleMsg("HELP - disable173")
+							CreateConsoleMsg(GetLocalString("console", "help.d173.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Removes SCP-173 from the map.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.d173"))
 							CreateConsoleMsg("******************************")	
 							;[End Block]
 						Case "enable173"
 							;[Block]
-							CreateConsoleMsg("HELP - enable173")
+							CreateConsoleMsg(GetLocalString("console", "help.e173.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Returns SCP-173 to the map.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.e173"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "reset096" 
 							;[Block]
-							CreateConsoleMsg("HELP - reset096")
+							CreateConsoleMsg(GetLocalString("console", "help.r096.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Returns SCP-096 to idle state.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.r096"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "doorcontrol" 
 							;[Block]
-							CreateConsoleMsg("HELP - enablecontrol")
+							CreateConsoleMsg(GetLocalString("console", "help.dc.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Turns on/off the Remote Door Control lever.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.dc"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "asd"
 							;[Block]
-							CreateConsoleMsg("HELP - asd")
+							CreateConsoleMsg(GetLocalString("console", "help.asd.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Activates all cheats.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.asd"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "unlockcheckpoints" 
 							;[Block]
-							CreateConsoleMsg("HELP - unlockcheckpoints")
+							CreateConsoleMsg(GetLocalString("console", "help.uc.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Unlocks all checkpoints.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.uc"))
 							CreateConsoleMsg("******************************")	
 							;[End Block]
 						Case "disable049"
 							;[Block]
-							CreateConsoleMsg("HELP - disable049")
+							CreateConsoleMsg(GetLocalString("console", "help.d049.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Removes SCP-049 from the map.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.d049"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "enable049"
 							;[Block]
-							CreateConsoleMsg("HELP - enable049")
+							CreateConsoleMsg(GetLocalString("console", "help.e049.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Returns SCP-049 to the map.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.e049"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "disable966"
 							;[Block]
-							CreateConsoleMsg("HELP - disable966")
+							CreateConsoleMsg(GetLocalString("console", "help.d966.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Removes SCP-966 from the map.")
-							CreateConsoleMsg("******************************")	
+							CreateConsoleMultiMsg(GetLocalString("console", "help.d966"))
+							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "enable966"
 							;[Block]
-							CreateConsoleMsg("HELP - enable966")
+							CreateConsoleMsg(GetLocalString("console", "help.e966.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Returns SCP-966 to the map.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.e966"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "revive", "undead", "resurrect"
 							;[Block]
-							CreateConsoleMsg("HELP - revive")
+							CreateConsoleMsg(GetLocalString("console", "help.revive.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Resets the player's death timer after the dying")
-							CreateConsoleMsg("animation triggers.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.revive"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "teleport"
 							;[Block]
-							CreateConsoleMsg("HELP - teleport")
+							CreateConsoleMsg(GetLocalString("console", "help.teleport.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Teleports the player to the first instance")
-							CreateConsoleMsg("of the specified room. Any room that appears")
-							CreateConsoleMsg("in rooms.ini is a valid parameter.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.teleport"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "stopsound", "stfu"
 							;[Block]
-							CreateConsoleMsg("HELP - stopsound")
+							CreateConsoleMsg(GetLocalString("console", "help.stfu.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Stops all currently playing sounds.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.stfu"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "weed", "scp-420-j", "420j", "scp420-j", "scp-420j", "420"
 							;[Block]
-							CreateConsoleMsg("HELP - weed")
+							CreateConsoleMsg(GetLocalString("console", "help.weed.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Generates dank memes.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.weed"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "playmusic"
 							;[Block]
-							CreateConsoleMsg("HELP - playmusic")
+							CreateConsoleMsg(GetLocalString("console", "help.pm.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Will play tracks in .ogg / .wav format")
-							CreateConsoleMsg("from " + Chr(34) + "SFX\Music\Custom\" + Chr(34) + ".")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.pm"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "infect"
 							;[Block]
-							CreateConsoleMsg("HELP - infect")
+							CreateConsoleMsg(GetLocalString("console", "help.infect.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("SCP-008 infects player.")
-							CreateConsoleMsg("Example: infect 80")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.infect"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "crystal" 
 							;[Block]
-							CreateConsoleMsg("HELP - crystal")
+							CreateConsoleMsg(GetLocalString("console", "help.crystal.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("SCP-409 crystallizes player.")
-							CreateConsoleMsg("Example: crystal 52")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.crystal"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "resetfunds"
 							;[Block]
-							CreateConsoleMsg("HELP - resetfunds")
+							CreateConsoleMsg(GetLocalString("console", "help.rf.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Resets your Mastercard funds.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.rf"))
 							CreateConsoleMsg("******************************")
+							;[End Block]
 						Case "giveachievement"
 							;[Block]
-							CreateConsoleMsg("HELP - giveachievement")
+							CreateConsoleMsg(GetLocalString("console", "help.ac.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Grants any achievement you want.")
-							CreateConsoleMsg("You can guess the ID by counting in the achievements menu (starts at 0).")
-							CreateConsoleMsg("You can also use " + Chr(34) + "all" + Chr(34) + " to immediately unlock every achievement.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.ac"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "codes" 
 							;[Block]
-							CreateConsoleMsg("HELP - codes")
+							CreateConsoleMsg(GetLocalString("console", "help.codes.title"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("Displays access codes for this save.")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.codes"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Default
 							;[Block]
-							CreateConsoleMsg("There is no help available for that command.", 255, 150, 0)
+							CreateConsoleMsg(GetLocalString("console", "help.no"), 255, 150, 0)
 							;[End Block]
 					End Select
 					;[End Block]
@@ -867,12 +854,12 @@ Function UpdateConsole%()
 						If r\RoomTemplate\Name = StrTemp Then
 							TeleportEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.7, EntityZ(r\OBJ))
 							TeleportToRoom(r)
-							CreateConsoleMsg("Successfully teleported to: " + StrTemp + ".")
+							CreateConsoleMsg(Format(GetLocalString("console", "tp.success"), StrTemp))
 							Exit
 						EndIf
 					Next
 					
-					If PlayerRoom\RoomTemplate\Name <> StrTemp Then CreateConsoleMsg("Room not found.", 255, 0, 0)
+					If PlayerRoom\RoomTemplate\Name <> StrTemp Then CreateConsoleMsg(GetLocalString("console", "tp.failed"), 255, 0, 0)
 					;[End Block]
 				Case "spawnitem", "si", "giveitem"
 					;[Block]
@@ -881,20 +868,26 @@ Function UpdateConsole%()
 					For itt.ItemTemplates = Each ItemTemplates
 						If Lower(itt\Name) = StrTemp Then
 							Temp = True
-							CreateConsoleMsg(itt\Name + " spawned.")
+							CreateConsoleMsg(Format(GetLocalString("console", "si.success"), itt\DisplayName))
+							it.Items = CreateItem(itt\Name, itt\TempName, EntityX(me\Collider), EntityY(Camera, True), EntityZ(me\Collider))
+							EntityType(it\Collider, HIT_ITEM)
+							Exit
+						ElseIf Lower(itt\DisplayName) = StrTemp Then
+							Temp = True
+							CreateConsoleMsg(Format(GetLocalString("console", "si.success"), itt\DisplayName))
 							it.Items = CreateItem(itt\Name, itt\TempName, EntityX(me\Collider), EntityY(Camera, True), EntityZ(me\Collider))
 							EntityType(it\Collider, HIT_ITEM)
 							Exit
 						ElseIf Lower(itt\TempName) = StrTemp Then
 							Temp = True
-							CreateConsoleMsg(itt\Name + " spawned.")
+							CreateConsoleMsg(Format(GetLocalString("console", "si.success"), itt\DisplayName))
 							it.Items = CreateItem(itt\Name, itt\TempName, EntityX(me\Collider), EntityY(Camera, True), EntityZ(me\Collider))
 							EntityType(it\Collider, HIT_ITEM)
 							Exit
 						EndIf
 					Next
 					
-					If (Not Temp) Then CreateConsoleMsg("Item not found.", 255, 0, 0)
+					If (Not Temp) Then CreateConsoleMsg(GetLocalString("console", "si.failed"), 255, 0, 0)
 					;[End Block]
 				Case "wireframe", "wf"
 					;[Block]
@@ -916,9 +909,9 @@ Function UpdateConsole%()
 					End Select
 					
 					If WireFrameState Then
-						CreateConsoleMsg("WIREFRAME ON")
+						CreateConsoleMsg(GetLocalString("console", "wf.on"))
 					Else
-						CreateConsoleMsg("WIREFRAME OFF")	
+						CreateConsoleMsg(GetLocalString("console", "wf.off"))	
 					EndIf
 					
 					WireFrame(WireFrameState)
@@ -1014,11 +1007,11 @@ Function UpdateConsole%()
 				Case "106retreat"
 					;[Block]
 					If n_I\Curr106\State <= 0.0 Then
-					n_I\Curr106\State = Rnd(22000.0, 27000.0)
-					PositionEntity(n_I\Curr106\Collider, 0.0, 500.0, 0.0)
-					ResetEntity(n_I\Curr106\Collider)
+						n_I\Curr106\State = Rnd(22000.0, 27000.0)
+						PositionEntity(n_I\Curr106\Collider, 0.0, 500.0, 0.0)
+						ResetEntity(n_I\Curr106\Collider)
 					Else
-						CreateConsoleMsg("SCP-106 is currently not active, so it cannot retreat.", 255, 150, 0)
+						CreateConsoleMsg(GetLocalString("console", "106r.failed"), 255, 150, 0)
 					EndIf
 					;[End Block]
 				Case "halloween"
@@ -1030,7 +1023,7 @@ Function UpdateConsole%()
 						EntityTexture(n_I\Curr173\OBJ, Tex)
 						EntityTexture(n_I\Curr173\OBJ2, Tex)
 						DeleteSingleTextureEntryFromCache(Tex)
-						CreateConsoleMsg("173 JACK-O-LANTERN ON")
+						CreateConsoleMsg(GetLocalString("console", "halloween.on"))
 					Else
 						If n_I\IsNewYear Then n_I\IsNewYear = (Not n_I\IsNewYear)
 						Tex2 = LoadTexture_Strict("GFX\NPCs\scp_173.png", 1)
@@ -1038,7 +1031,7 @@ Function UpdateConsole%()
 						EntityTexture(n_I\Curr173\OBJ, Tex2)
 						EntityTexture(n_I\Curr173\OBJ2, Tex2)
 						DeleteSingleTextureEntryFromCache(Tex2)
-						CreateConsoleMsg("173 JACK-O-LANTERN OFF")
+						CreateConsoleMsg(GetLocalString("console", "halloween.off"))
 					EndIf
 					;[End Block]
 				Case "newyear" 
@@ -1050,7 +1043,7 @@ Function UpdateConsole%()
 						EntityTexture(n_I\Curr173\OBJ, Tex)
 						EntityTexture(n_I\Curr173\OBJ2, Tex)
 						DeleteSingleTextureEntryFromCache(Tex)
-						CreateConsoleMsg("173 COOKIE ON")
+						CreateConsoleMsg(GetLocalString("console", "newyear.on"))
 					Else
 						If n_I\IsHalloween Then n_I\IsHalloween = (Not n_I\IsHalloween)
 						Tex2 = LoadTexture_Strict("GFX\NPCs\scp_173.png", 1)
@@ -1058,16 +1051,16 @@ Function UpdateConsole%()
 						EntityTexture(n_I\Curr173\OBJ, Tex2)
 						EntityTexture(n_I\Curr173\OBJ2, Tex2)
 						DeleteSingleTextureEntryFromCache(Tex2)
-						CreateConsoleMsg("173 COOKIE OFF")
+						CreateConsoleMsg(GetLocalString("console", "newyear.off"))
 					EndIf
 					;[End Block]
 				Case "sanic"
 					;[Block]
 					chs\SuperMan = (Not chs\SuperMan)
 					If chs\SuperMan = True Then
-						CreateConsoleMsg("GOTTA GO FAST")
+						CreateConsoleMsg(GetLocalString("console", "sanic.on"))
 					Else
-						CreateConsoleMsg("WHOA SLOW DOWN")
+						CreateConsoleMsg(GetLocalString("console", "sanic.off"))
 					EndIf
 					;[End Block]
 				Case "scp-420-j", "420", "weed", "scp420-j", "scp-420j", "420j"
@@ -1101,9 +1094,9 @@ Function UpdateConsole%()
 							;[End Block]
 					End Select	
 					If chs\GodMode Then
-						CreateConsoleMsg("GODMODE ON")
+						CreateConsoleMsg(GetLocalString("console", "god.on"))
 					Else
-						CreateConsoleMsg("GODMODE OFF")	
+						CreateConsoleMsg(GetLocalString("console", "god.off"))
 					EndIf
 					;[End Block]
 				Case "revive", "undead", "resurrect"
@@ -1137,9 +1130,9 @@ Function UpdateConsole%()
 					End Select
 					
 					If chs\NoClip Then
-						CreateConsoleMsg("NOCLIP ON")
+						CreateConsoleMsg(GetLocalString("console", "fly.on"))
 					Else
-						CreateConsoleMsg("NOCLIP OFF")
+						CreateConsoleMsg(GetLocalString("console", "fly.off"))
 					EndIf
 					
 					me\DropSpeed = 0.0
@@ -1163,9 +1156,9 @@ Function UpdateConsole%()
 							;[End Block]
 					End Select	
 					If chs\NoBlink Then
-						CreateConsoleMsg("NOBLINK ON")
+						CreateConsoleMsg(GetLocalString("console", "nb.on"))
 					Else
-						CreateConsoleMsg("NOBLINK OFF")	
+						CreateConsoleMsg(GetLocalString("console", "nb.off"))
 					EndIf
 					;[End Block]
 				Case "debughud"
@@ -1195,7 +1188,7 @@ Function UpdateConsole%()
 							;[End Block]
 						Default
 							;[Block]
-							CreateConsoleMsg("First, select the debug category.", 255, 150, 0)
+							CreateConsoleMsg(GetLocalString("console", "debug.cate"), 255, 150, 0)
 							;[End Block]
 					End Select
 					;[End Block]
@@ -1216,14 +1209,14 @@ Function UpdateConsole%()
 							Exit
 						EndIf
 					Next
-					CreateConsoleMsg("Stopped all sounds.")
+					CreateConsoleMsg(GetLocalString("console", "stfu"))
 					;[End Block]
 				Case "camerafog"
 					;[Block]
 					Args = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 					opt\CameraFogNear = Float(Left(Args, Len(Args) - Instr(Args, " ")))
 					opt\CameraFogFar = Float(Right(Args, Len(Args) - Instr(Args, " ")))
-					CreateConsoleMsg("Near set to: " + opt\CameraFogNear + ", far set to: " + opt\CameraFogFar)
+					CreateConsoleMsg(Format(Format(GetLocalString("console", "fog"), opt\CameraFogNear, "{0}"), opt\CameraFogFar, "{1}"))
 					;[End Block]
 				Case "spawn", "s"
 					;[Block]
@@ -1258,9 +1251,9 @@ Function UpdateConsole%()
 					End Select
 					
 					If chs\InfiniteStamina
-						CreateConsoleMsg("INFINITE STAMINA ON")
+						CreateConsoleMsg(GetLocalString("console", "is.on"))
 					Else
-						CreateConsoleMsg("INFINITE STAMINA OFF")	
+						CreateConsoleMsg(GetLocalString("console", "is.off"))	
 					EndIf
 					;[End Block]
 				Case "money", "rich"
@@ -1294,9 +1287,9 @@ Function UpdateConsole%()
 					End Select
 					
 					If RemoteDoorOn Then
-						CreateConsoleMsg("REMOTE DOOR CONTROL ENABLED")
+						CreateConsoleMsg(GetLocalString("console", "door.on"))
 					Else
-						CreateConsoleMsg("REMOTE DOOR CONTROL DISABLED")
+						CreateConsoleMsg(GetLocalString("console", "door.off"))
 					EndIf
 					
 					For e2.Events = Each Events
@@ -1323,7 +1316,7 @@ Function UpdateConsole%()
 						EndIf
 					Next
 					
-					CreateConsoleMsg("Checkpoints are now unlocked.")								
+					CreateConsoleMsg(GetLocalString("console", "uc"))								
 					;[End Block]
 				Case "disablenuke"
 					;[Block]
@@ -1352,7 +1345,7 @@ Function UpdateConsole%()
 									Exit
 								EndIf
 							Next
-							CreateConsoleMsg("Gate A is now unlocked.")	
+							CreateConsoleMsg(GetLocalString("console", "ue.a"))	
 							;[End Block]
 						Case "b"
 							;[Block]
@@ -1363,7 +1356,7 @@ Function UpdateConsole%()
 									Exit
 								EndIf
 							Next	
-							CreateConsoleMsg("Gate B is now unlocked.")	
+							CreateConsoleMsg(GetLocalString("console", "ue.b"))
 							;[End Block]
 						Default
 							;[Block]
@@ -1373,7 +1366,7 @@ Function UpdateConsole%()
 									e\room\RoomDoors[1]\Open = True
 								EndIf
 							Next
-							CreateConsoleMsg("Gate A and B are now unlocked.")	
+							CreateConsoleMsg(GetLocalString("console", "ue"))
 							;[End Block]
 					End Select
 					RemoteDoorOn = True
@@ -1384,23 +1377,19 @@ Function UpdateConsole%()
 					Select Rand(4)
 						Case 1
 							;[Block]
-							msg\DeathMsg = "[DATA REDACTED]"
+							msg\DeathMsg = ""
 							;[End Block]
 						Case 2
 							;[Block]
-							msg\DeathMsg = SubjectName + " found dead in Sector [DATA REDACTED]. "
-							msg\DeathMsg = msg\DeathMsg + "The subject appears to have attained no physical damage, and there is no visible indication as to what killed him. "
-							msg\DeathMsg = msg\DeathMsg + "Body was sent for autopsy."
+							msg\DeathMsg = Format(GetLocalString("death", "kill2"), SubjectName)
 							;[End Block]
 						Case 3
 							;[Block]
-							msg\DeathMsg = "EXCP_ACCESS_VIOLATION"
+							msg\DeathMsg = GetLocalString("death", "kill3")
 							;[End Block]
 						Case 4
 							;[Block]
-							msg\DeathMsg = SubjectName + " found dead in Sector [DATA REDACTED]. "
-							msg\DeathMsg = msg\DeathMsg + "The subject appears to have scribbled the letters " + Chr(34) + "kys" + Chr(34) + " in his own blood beside him. "
-							msg\DeathMsg = msg\DeathMsg + "No other signs of physical trauma or struggle can be observed. Body was sent for autopsy."
+							msg\DeathMsg = Format(GetLocalString("death", "kill4"), SubjectName)
 							;[End Block]
 					End Select
 					;[End Block]
@@ -1437,7 +1426,7 @@ Function UpdateConsole%()
 					PositionEntity(Camera, Float(StrTemp), Float(StrTemp2), Float(StrTemp3))
 					ResetEntity(me\Collider)
 					ResetEntity(Camera)
-					CreateConsoleMsg("Teleported to coordinates (X|Y|Z): " + EntityX(me\Collider) + "|" + EntityY(me\Collider) + "|" + EntityZ(me\Collider))
+					CreateConsoleMsg(Format(Format(Format(GetLocalString("console", "tele"), EntityX(me\Collider), "{0}"), EntityY(me\Collider), "{1}"), EntityZ(me\Collider), "{2}"))
 					;[End Block]
 				Case "asd"
 					;[Block]
@@ -1464,7 +1453,7 @@ Function UpdateConsole%()
 							Exit
 						EndIf
 					Next
-					CreateConsoleMsg("Stopped all sounds.")
+					CreateConsoleMsg(GetLocalString("console", "stas"))
 					;[End Block]
 				Case "notarget", "nt"
 					;[Block]
@@ -1486,14 +1475,14 @@ Function UpdateConsole%()
 					End Select
 					
 					If (Not chs\NoTarget) Then
-						CreateConsoleMsg("NOTARGET OFF")
+						CreateConsoleMsg(GetLocalString("console", "nt.off"))
 					Else
-						CreateConsoleMsg("NOTARGET ON")	
+						CreateConsoleMsg(GetLocalString("console", "nt.on"))
 					EndIf
 					;[End Block]
 				Case "spawnpumpkin", "pumpkin"
 					;[Block]
-					CreateConsoleMsg("What pumpkin?")
+					CreateConsoleMsg(GetLocalString("console", "pumpkin"))
 					;[End Block]
 				Case "teleport173"
 					;[Block]
@@ -1511,7 +1500,7 @@ Function UpdateConsole%()
 					Local PL_Room_Found% = False
 					
 					If StrTemp = "" Lor StrTemp2 = "" Lor StrTemp3 = "" Lor StrTemp4 = "" Then
-						CreateConsoleMsg("Too few parameters. This command requires 4.", 255, 150, 0)
+						CreateConsoleMsg(GetLocalString("console", "ses.failed"), 255, 150, 0)
 					Else
 						For e.Events = Each Events
 							If PlayerRoom = e\room
@@ -1527,13 +1516,13 @@ Function UpdateConsole%()
 								If Lower(StrTemp4) <> "keep" Then
 									e\EventState4 = Float(StrTemp4)
 								EndIf
-								CreateConsoleMsg("Changed event states from current player room to: " + e\EventState + "|" + e\EventState2 + "|" + e\EventState3 + "|" + e\EventState4)
+								CreateConsoleMsg(Format(Format(Format(Format(GetLocalString("console", "ses.success"), e\EventState, "{0}"), e\EventState2, "{1}"), e\EventState3, "{2}"), e\EventState4, "{3}"))
 								PL_Room_Found = True
 								Exit
 							EndIf
 						Next
 						If (Not PL_Room_Found) Then
-							CreateConsoleMsg("The current room doesn't has any event applied.", 255, 150, 0)
+							CreateConsoleMsg(GetLocalString("console", "ses.failed.apply"), 255, 150, 0)
 						EndIf
 					EndIf
 					;[End Block]
@@ -1549,14 +1538,14 @@ Function UpdateConsole%()
 						For i = 0 To MAXACHIEVEMENTS - 1
 							achv\Achievement[i] = True
 						Next
-						CreateConsoleMsg("All the achievements have been unlocked.")
+						CreateConsoleMsg(GetLocalString("console", "ga.all"))
 					EndIf
 					
 					If Int(StrTemp) >= 0 And Int(StrTemp) < MAXACHIEVEMENTS And StrTemp <> "all" Then
 						achv\Achievement[Int(StrTemp)] = True
-						CreateConsoleMsg("Achievement " + achv\AchievementStrings[Int(StrTemp)] + " unlocked.")
+						CreateConsoleMsg(Format(GetLocalString("console", "ga.success"), achv\AchievementStrings[Int(StrTemp)]))
 					ElseIf StrTemp <> "all"
-						CreateConsoleMsg("Achievement with ID " + Int(StrTemp) + " doesn't exist.", 255, 0, 0)
+						CreateConsoleMsg(Format(GetLocalString("console", "ga.failed"), Int(StrTemp)), 255, 0, 0)
 					EndIf
 					;[End Block]
 				Case "427state"
@@ -1572,7 +1561,7 @@ Function UpdateConsole%()
 					;[End Block]
 				Case "jorge"
 					;[Block]	
-					CreateConsoleMsg(Chr(74) + Chr(79) + Chr(82) + Chr(71) + Chr(69) + Chr(32) + Chr(72) + Chr(65) + Chr(83) + Chr(32) + Chr(66) + Chr(69) + Chr(69) + Chr(78) + Chr(32) + Chr(69) + Chr(88) + Chr(80) + Chr(69) + Chr(67) + Chr(84) + Chr(73) + Chr(78) + Chr(71) + Chr(32) + Chr(89) + Chr(79) + Chr(85) + Chr(46))
+					CreateConsoleMsg(GetLocalString("console", "jorge"))
 					;[End Block]
 				Case "resetfunds"
 					;[Block]
@@ -1580,20 +1569,20 @@ Function UpdateConsole%()
 					;[End Block]
 				Case "codes"
 					;[Block]
-					CreateConsoleMsg("Access Codes:")
+					CreateConsoleMsg(GetLocalString("console", "codes1"))
 					CreateConsoleMsg("")
-					CreateConsoleMsg("Dr. Maynard: " + CODE_DR_MAYNARD)
-					CreateConsoleMsg("Dr. Harp: " + CODE_DR_HARP)
-					CreateConsoleMsg("Dr. L.: " + CODE_DR_L)
-					CreateConsoleMsg("O5 Council Office: " + CODE_O5_COUNCIL)
-					CreateConsoleMsg("Maintenance Tunnel: " + CODE_MAINTENANCE_TUNNELS)
-					CreateConsoleMsg("SCP-035's Containment Chamber Storage Room: " + CODE_CONT1_035)
+					CreateConsoleMsg(Format(GetLocalString("console", "codes2"), CODE_DR_MAYNARD))
+					CreateConsoleMsg(Format(GetLocalString("console", "codes3"), CODE_DR_HARP))
+					CreateConsoleMsg(Format(GetLocalString("console", "codes4"), CODE_DR_L))
+					CreateConsoleMsg(Format(GetLocalString("console", "codes5"), CODE_O5_COUNCIL))
+					CreateConsoleMsg(Format(GetLocalString("console", "codes6"), CODE_MAINTENANCE_TUNNELS))
+					CreateConsoleMsg(Format(GetLocalString("console", "codes7"), CODE_CONT1_035))
 					CreateConsoleMsg("")
-					CreateConsoleMsg("All the others doors don't have a code.")
+					CreateConsoleMsg(GetLocalString("console", "codes8"))
 					;[End Block]
 				Default
 					;[Block]
-					CreateConsoleMsg("Command not found.", 255, 0, 0)
+					CreateConsoleMsg(GetLocalString("console", "notfound"), 255, 0, 0)
 					;[End Block]
 			End Select
 			ConsoleInput = ""
@@ -1713,7 +1702,7 @@ Function ClearConsole%()
 	CreateConsoleMsg("  - spawn [NPC type]")
 End Function
 
-Const SubjectName$ = "Subject D-9341"
+Global SubjectName$ = GetLocalString("misc", "subject")
 
 Type Messages
 	Field Txt$
@@ -1835,11 +1824,11 @@ End Function
 
 Global Camera%
 
-RenderLoading(15, "SUBTITLES CORE")
+RenderLoading(15, GetLocalString("loading", "core.subtitle"))
 
 Include "Source Code\Subtitles_Core.bb"
 
-RenderLoading(20, "SOUNDS CORE")
+RenderLoading(20, GetLocalString("loading", "core.sound"))
 
 Include "Source Code\Sounds_Core.bb"
 
@@ -1850,27 +1839,27 @@ Global InFacility% = True
 
 Global ForestNPC%, ForestNPCTex%, ForestNPCData#[3]
 
-RenderLoading(25, "ITEMS CORE")
+RenderLoading(25, GetLocalString("loading", "core.item"))
 
 Include "Source Code\Items_Core.bb"
 
-RenderLoading(30, "PARTICLES CORE")
+RenderLoading(30, GetLocalString("loading", "core.particle"))
 
 Include "Source Code\Particles_Core.bb"
 
-RenderLoading(35, "GRAPHICS CORE")
+RenderLoading(35, GetLocalString("loading", "core.grap"))
 
 Include "Source Code\Graphics_Core.bb"
 
-RenderLoading(40, "MAP CORE")
+RenderLoading(40, GetLocalString("loading", "core.map"))
 
 Include "Source Code\Map_Core.bb"
 
-RenderLoading(60, "NPCs CORE")
+RenderLoading(60, GetLocalString("loading", "core.npc"))
 
 Include "Source Code\NPCs_Core.bb"
 
-RenderLoading(65, "EVENTS CORE")
+RenderLoading(65, GetLocalString("loading", "core.event"))
 
 Include "Source Code\Events_Core.bb"
 
@@ -1898,11 +1887,11 @@ Global PlayerFallingPickDistance# = 10.0
 Global MTFCameraCheckTimer# = 0.0
 Global MTFCameraCheckDetected% = False
 
-RenderLoading(70, "SAVE CORE")
+RenderLoading(70, GetLocalString("loading", "core.save"))
 
 Include "Source Code\Save_Core.bb"
 
-RenderLoading(80, "MENU CORE")
+RenderLoading(80, GetLocalString("loading", "core.menu"))
 
 Include "Source Code\Menu_Core.bb"
 
@@ -1994,18 +1983,18 @@ End Type
 Global I_Zone.MapZones = New MapZones
 
 InitErrorMsgs(11)
-SetErrorMsg(0, "An error occured in SCP - Containment Breach Ultimate Edition v" + VersionNumber)
+SetErrorMsg(0, Format(GetLocalString("error", "title"), VersionNumber))
 
-SetErrorMsg(1, "Date and time: " + CurrentDate() + " at " + CurrentTime())
-SetErrorMsg(2, "OS: " + SystemProperty("os") + " " + SystemProperty("os") + " " + (32 + (GetEnv("ProgramFiles(X86)") <> 0) * 32) + " bit (Build: " + SystemProperty("osbuild") + ")")
-SetErrorMsg(3, "CPU: " + Trim(SystemProperty("cpuname")) + " (Arch: " + SystemProperty("cpuarch") + ", " + GetEnv("NUMBER_OF_PROCESSORS") + " Threads)")
-SetErrorMsg(4, "GPU: " + GfxDriverName(CountGfxDrivers()) + " (" + ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)) + " MB/" + (TotalVidMem() / 1024) + " MB)")
-SetErrorMsg(5, "Global memory status: " + ((TotalPhys() / 1024) - (AvailPhys() / 1024)) + " MB/" + (TotalPhys() / 1024) + " MB" + Chr(10))
+SetErrorMsg(1, Format(Format(GetLocalString("error", "date"), CurrentDate(), "{0}"), CurrentTime(), "{1}"))
+SetErrorMsg(2, Format(Format(Format(GetLocalString("error", "os"), SystemProperty("os"), "{0}"), (32 + (GetEnv("ProgramFiles(X86)") <> 0) * 32), "{1}"), SystemProperty("osbuild"), "{2}"))
+SetErrorMsg(3, Format(Format(Format(GetLocalString("error", "cpu"), Trim(SystemProperty("cpuname")), "{0}"), SystemProperty("cpuarch"), "{1}"), GetEnv("NUMBER_OF_PROCESSORS"), "{2}"))
+SetErrorMsg(4, Format(Format(Format(GetLocalString("error", "gpu"), GfxDriverName(CountGfxDrivers()), "{0}"), ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)), "{1}"), (TotalVidMem() / 1024), "{2}"))
+SetErrorMsg(5, Format(Format(GetLocalString("error", "status"), ((TotalPhys() / 1024) - (AvailPhys() / 1024)), "{0}"), (TotalPhys() / 1024), "{1}") + Chr(10))
 
-SetErrorMsg(10, Chr(10) + "Please take a screenshot of this error and send it To us!") 
+SetErrorMsg(10, Chr(10) + GetLocalString("error", "shot")) 
 
 Function CatchErrors%(Location$)
-	SetErrorMsg(9, "Error located in: " + Location)
+	SetErrorMsg(9, Format(GetLocalString("error", "error"), Location))
 End Function
 
 Repeat
@@ -2061,20 +2050,20 @@ Function UpdateGame%()
 	Local i%, TempStr$
 	
 	If SelectedMap = "" Then
-		TempStr = "Map seed: " + RandomSeed
+		TempStr = GetLocalString("menu", "new.seed") + RandomSeed
 	Else
 		If Len(SelectedMap) > 15 Then
-			TempStr = "Selected map: " + Left(SelectedMap, 14) + "..."
+			TempStr = GetLocalString("menu", "new.map") + Left(SelectedMap, 14) + "..."
 		Else
-			TempStr = "Selected map: " + SelectedMap
+			TempStr = GetLocalString("menu", "new.map") + SelectedMap
 		EndIf
 	EndIf
 	SetErrorMsg(6, TempStr)
-	SetErrorMsg(7, "Room: " + PlayerRoom\RoomTemplate\Name)
+	SetErrorMsg(7, GetLocalString("misc", "room") + PlayerRoom\RoomTemplate\Name)
 	
 	For ev.Events = Each Events
 		If ev\room = PlayerRoom Then
-			SetErrorMsg(8, "Room event: " + ev\EventID + " ("  + ev\EventState + ", " + ev\EventState2 + ", " + ev\EventState3 + ", " + ev\EventState4 + ")" + Chr(10))
+			SetErrorMsg(8, Format(Format(Format(Format(Format(GetLocalString("misc", "event"), ev\EventID, "{0}"), ev\EventState, "{1}"), ev\EventState2, "{2}"), ev\EventState3, "{3}"), ev\EventState4, "{4}") + Chr(10))
 			Exit
 		EndIf
 	Next
@@ -2241,7 +2230,7 @@ Function UpdateGame%()
 				If me\EyeStuck < 9000.0 Then me\BlurTimer = Max(me\BlurTimer, (9000.0 - me\EyeStuck) * 0.5)
 				If me\EyeStuck < 6000.0 Then DarkAlpha = Min(Max(DarkAlpha, (6000.0 - me\EyeStuck) / 5000.0), 1.0)
 				If me\EyeStuck < 9000.0 And me\EyeStuck + fps\Factor[0] >= 9000.0 Then 
-					CreateMsg("The eyedrops are causing your eyes to tear up.")
+					CreateMsg(GetLocalString("msg", "eyedrop.tear"))
 				EndIf
 			EndIf
 			
@@ -2397,7 +2386,7 @@ Function UpdateGame%()
 					If e\EventID = e_cont1_173_intro Then
 						If e\EventState3 >= 40.0 And e\EventState3 < 50.0 Then
 							If InvOpen Then
-								CreateHintMsg("Double click on the document to view it.")
+								CreateHintMsg(GetLocalString("msg", "doc.click"))
 								e\EventState3 = 50.0
 								Exit
 							EndIf
@@ -2412,11 +2401,11 @@ Function UpdateGame%()
 				If (Not CanSave) Lor QuickLoadPercent > -1 Then
 					RN = PlayerRoom\RoomTemplate\Name
 					If RN = "cont1_173_intro" Lor RN = "gate_b" Lor RN = "gate_a"
-						CreateHintMsg("You can't save in this location.")
+						CreateHintMsg(GetLocalString("save", "failed.location"))
 					Else
-						CreateHintMsg("You can't save at this moment.")
+						CreateHintMsg(GetLocalString("save", "failed.now"))
 						If QuickLoadPercent > -1 Then
-							CreateHintMsg(msg\HintTxt + " (game is loading)")
+							CreateHintMsg(msg\HintTxt + GetLocalString("save", "failed.loading"))
 						EndIf
 					EndIf
 				Else
@@ -2428,15 +2417,15 @@ Function UpdateGame%()
 				EndIf
 			ElseIf SelectedDifficulty\SaveType = SAVE_ON_SCREENS
 				If SelectedScreen = Null And sc_I\SelectedMonitor = Null Then
-					CreateHintMsg("Saving is only permitted on clickable monitors scattered throughout the facility.")
+					CreateHintMsg(GetLocalString("save", "failed.screen"))
 				Else
 					RN = PlayerRoom\RoomTemplate\Name
 					If RN = "cont1_173_intro" Lor RN = "gate_b" Lor RN = "gate_a"
-						CreateHintMsg("You can't save in this location.")
+						CreateHintMsg(GetLocalString("save", "failed.location"))
 					ElseIf (Not CanSave) Lor QuickLoadPercent > -1
-						CreateHintMsg("You can't save at this moment.")
+						CreateHintMsg(GetLocalString("save", "failed.now"))
 						If QuickLoadPercent > -1 Then
-							CreateHintMsg(msg\HintTxt + " (game is loading)")
+							CreateHintMsg(msg\HintTxt + GetLocalString("save", "failed.loading"))
 						EndIf
 					Else
 						If SelectedScreen <> Null Then
@@ -2448,11 +2437,11 @@ Function UpdateGame%()
 					EndIf
 				EndIf
 			Else
-				CreateHintMsg("Quick saving is disabled.")
+				CreateHintMsg(GetLocalString("save", "disable"))
 			EndIf
 		ElseIf SelectedDifficulty\SaveType = SAVE_ON_SCREENS And (SelectedScreen <> Null Lor sc_I\SelectedMonitor <> Null)
-			If (msg\HintTxt <> "Game progress saved." And msg\HintTxt <> "You can't save in this location." And msg\HintTxt <> "You can't save at this moment.") Lor msg\HintTimer <= 0.0 Then
-				CreateHintMsg("Press " + key\Name[key\SAVE] + " to save.")
+			If (msg\HintTxt <> GetLocalString("save", "saved") And msg\HintTxt <> GetLocalString("save", "failed.location") And msg\HintTxt <> GetLocalString("save", "failed.now")) Lor msg\HintTimer <= 0.0 Then
+				CreateHintMsg(Format(GetLocalString("save", "save"), key\Name[key\SAVE]))
 			EndIf
 			If mo\MouseHit2 Then sc_I\SelectedMonitor = Null
 		EndIf
@@ -2626,13 +2615,13 @@ Function ResetNegativeStats%(Revive% = False)
 		; ~ If death by SCP-173 or SCP-106, enable GodMode, prevent instant death again -- Salvage
 		If n_I\Curr173 <> Null Then
 		If n_I\Curr173\Idle = 1 Then
-				CreateConsoleMsg("Death by SCP-173 causes GodMode to be enabled!")
+			CreateConsoleMsg(GetLocalString("console", "revive173"))
 				chs\GodMode = True
 				n_I\Curr173\Idle = 0
 			EndIf
 		ElseIf n_I\Curr106 <> Null
 			If EntityDistanceSquared(me\Collider, n_I\Curr106\Collider) < 4.0 Then
-				CreateConsoleMsg("Death by SCP-106 causes GodMode to be enabled!")
+				CreateConsoleMsg(GetLocalString("console", "revive106"))
 				chs\GodMode = True
 			EndIf
 		EndIf
@@ -2706,8 +2695,7 @@ Function UpdateMoving%()
 		me\CameraShake = Sin(chs\SuperManTimer / 5.0) * (chs\SuperManTimer / 1500.0)
 		
 		If chs\SuperManTimer > 70.0 * 50.0 Then
-			msg\DeathMsg = "A Class D jumpsuit found in [DATA REDACTED]. Upon further examination, the jumpsuit was found to be filled with 12.5 kilograms of blue ash-like substance. "
-			msg\DeathMsg = msg\DeathMsg + "Chemical analysis of the substance remains non-conclusive. Most likely related to SCP-914."
+			msg\DeathMsg = GetLocalString("console", "superman")
 			Kill()
 			If EntityHidden(t\OverlayID[0]) Then ShowEntity(t\OverlayID[0])
 		Else
@@ -2990,7 +2978,7 @@ Function UpdateMoving%()
 			me\Bloodloss = Min(me\Bloodloss + (Min(me\Injuries, 3.5) / 300.0) * fps\Factor[0], 100.0)
 		EndIf
 		If Temp2 <= 60.0 And me\Bloodloss > 60.0 Then
-			CreateMsg("You are feeling faint from the amount of blood you have lost.")
+			CreateMsg(GetLocalString("msg", "bloodloss"))
 		EndIf
 	EndIf
 	
@@ -3098,7 +3086,7 @@ Function UpdateMouseLook%()
 		
 		If IsNaN(EntityX(me\Collider)) Then
 			PositionEntity(me\Collider, EntityX(Camera, True), EntityY(Camera, True) - 0.5, EntityZ(Camera, True), True)
-			CreateConsoleMsg("RESETTING COORDINATES! New coordinates: " + EntityX(me\Collider))				
+			CreateConsoleMsg(Format(GetLocalString("console", "xyz.reset"), EntityX(me\Collider)))		
 		EndIf
 		
 		Local Up# = (Sin(me\Shake) / (20.0 + me\CrouchState * 20.0)) * 0.6		
@@ -3469,7 +3457,7 @@ Function UpdateGUI%()
 										d_I\SelectedDoor = Null
 										StopMouseMovement()
 									Else
-										msg\KeyPadMsg = "ACCESS DENIED"
+										msg\KeyPadMsg = GetLocalString("msg", "denied")
 										msg\KeyPadTimer = 210.0
 										msg\KeyPadInput = ""	
 									EndIf
@@ -3736,7 +3724,7 @@ Function UpdateGUI%()
 							
 							If mo\DoubleClick And mo\DoubleClickSlot = n Then
 								If wi\HazmatSuit > 0 And (Not Instr(SelectedItem\ItemTemplate\TempName, "hazmatsuit")) Then
-									CreateMsg("You can't use any items while wearing a hazmat suit.")
+									CreateMsg(GetLocalString("msg", "suit.use"))
 									SelectedItem = Null
 									Return
 								EndIf
@@ -3778,12 +3766,12 @@ Function UpdateGUI%()
 					Select SelectedItem\ItemTemplate\TempName
 						Case "vest", "finevest", "hazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
 							;[Block]
-							CreateHintMsg("Double click on this item to take it off.")
+							CreateHintMsg(GetLocalString("msg", "takeoff"))
 							;[End Block]
 						Case "scp1499", "fine1499"
 							;[Block]
 							If I_1499\Using > 0 Then
-								CreateHintMsg("Double click on this item to take it off.")
+								CreateHintMsg(GetLocalString("msg", "takeoff"))
 							Else
 								DropItem(SelectedItem)
 								InvOpen = False
@@ -3792,7 +3780,7 @@ Function UpdateGUI%()
 						Case "gasmask", "finegasmask", "veryfinegasmask", "gasmask148"
 							;[Block]
 							If wi\GasMask > 0 Then
-								CreateHintMsg("Double click on this item to take it off.")
+								CreateHintMsg(GetLocalString("msg", "takeoff"))
 							Else
 								DropItem(SelectedItem)
 								InvOpen = False
@@ -3801,7 +3789,7 @@ Function UpdateGUI%()
 						Case "helmet"
 							;[Block]
 							If wi\BallisticHelmet Then
-								CreateHintMsg("Double click on this item to take it off.")
+								CreateHintMsg(GetLocalString("msg", "takeoff"))
 							Else
 								DropItem(SelectedItem)
 								InvOpen = False
@@ -3810,7 +3798,7 @@ Function UpdateGUI%()
 						Case "nvg", "veryfinenvg", "finenvg"
 							;[Block]
 							If wi\NightVision > 0 Then
-								CreateHintMsg("Double click on this item to take it off.")
+								CreateHintMsg(GetLocalString("msg", "takeoff"))
 							Else
 								DropItem(SelectedItem)
 								InvOpen = False
@@ -3819,7 +3807,7 @@ Function UpdateGUI%()
 						Case "scramble"
 							;[Block]
 							If wi\SCRAMBLE Then
-								CreateHintMsg("Double click on this item to take it off.")
+								CreateHintMsg(GetLocalString("msg", "takeoff"))
 							Else
 								DropItem(SelectedItem)
 								InvOpen = False
@@ -3879,14 +3867,14 @@ Function UpdateGUI%()
 											EndIf
 										Next
 										If SelectedItem <> Null Then
-											CreateMsg("The paperclip is not strong enough to hold any more items.")
+											CreateMsg(GetLocalString("msg", "clipboard.full"))
 										Else
 											If added\ItemTemplate\TempName = "paper" Lor added\ItemTemplate\TempName = "oldpaper" Then
-												CreateMsg("This document was added to the clipboard.")
+												CreateMsg(GetLocalString("msg", "clipboard.paper"))
 											ElseIf added\ItemTemplate\TempName = "badge"
-												CreateMsg(added\ItemTemplate\Name + " was added to the clipboard.")
+												CreateMsg(Format(GetLocalString("msg", "clipboard.badge"), added\ItemTemplate\Name))
 											Else
-												CreateMsg("The " + added\ItemTemplate\Name + " was added to the clipboard.")
+												CreateMsg(Format(GetLocalString("msg", "clipboard.add"), added\ItemTemplate\Name))
 											EndIf
 										EndIf
 									Else
@@ -3927,9 +3915,9 @@ Function UpdateGUI%()
 											EndIf
 										Next
 										If SelectedItem <> Null Then
-											CreateMsg("The wallet is full.")
+											CreateMsg(GetLocalString("msg", "wallet.full"))
 										Else
-											CreateMsg("You put " + added\ItemTemplate\Name + " into the wallet.")
+											CreateMsg(Format(GetLocalString("msg", "wallet.add"), added\ItemTemplate\Name))
 										EndIf
 									Else
 										For z = 0 To MaxItemAmount - 1
@@ -3959,52 +3947,52 @@ Function UpdateGUI%()
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(50.0)
-										CreateMsg("You replaced the navigator's battery.")
-										;[End Block]
-									Case "nav310"
+										CreateMsg(GetLocalString("msg", "nav.bat"))
+										;[End Block]		
+								  Case "nav310"
 										;[Block]
-										CreateMsg("The battery doesn't fit inside this navigator.")
+                    CreateMsg(GetLocalString("msg", "nav.bat.notfit"))
 										;[End Block]
 									Case "navulti", "nav300"
 										;[Block]
-										CreateMsg("There seems to be no place for batteries in this navigator.")
+										CreateMsg(GetLocalString("msg", "nav.bat.no"))
 										;[End Block]
 									Case "radio"
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(50.0)
-										CreateMsg("You replaced the radio's battery.")
+										CreateMsg(GetLocalString("msg", "radio.bat"))
 										;[End Block]
 									Case "18vradio"
 										;[Block]
-										CreateMsg("The battery doesn't fit inside this radio.")
+										CreateMsg(GetLocalString("msg", "radio.bat.notfit"))
 										;[End Block]
 									Case "fineradio", "veryfineradio"
 										;[Block]
-										CreateMsg("There seems to be no place for batteries in this radio.")
+										CreateMsg(GetLocalString("msg", "radio.bat.no"))
 										;[End Block]
 									Case "nvg"
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(500.0)
-										CreateMsg("You replaced the goggles' battery.")
+										CreateMsg(GetLocalString("msg", "nvg.bat"))
 										;[End Block]
 									Case "finenvg"
 										;[Block]
-										CreateMsg("There seems to be no place for batteries in these goggles.")
+										CreateMsg(GetLocalString("msg", "nvg.bat.no"))
 										;[End Block]
 									Case "veryfinenvg"
 										;[Block]
-										CreateMsg("The battery doesn't fit inside these goggles.")
+                    CreateMsg(GetLocalString("msg", nvg.bat.notfit))
 										;[End Block]
 									Case "scramble"
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(500.0)
-										CreateMsg("You replaced the gear's battery.")
+										CreateMsg(GetLocalString("msg", "gear.bat"))
 										;[End Block]
 									Default
 										;[Block]
@@ -4027,52 +4015,52 @@ Function UpdateGUI%()
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(100.0)
-										CreateMsg("You replaced the navigator's battery.")
+										CreateMsg(GetLocalString("msg", "nav.bat"))
 										;[End Block]
 									Case "nav310"
 										;[Block]
-										CreateMsg("The battery doesn't fit inside this navigator.")
+										CreateMsg(GetLocalString("msg", "nav.bat.notfit"))
 										;[End Block]
 									Case "navulti", "nav300"
 										;[Block]
-										CreateMsg("There seems to be no place for batteries in this navigator.")
+										CreateMsg(GetLocalString("msg", "nav.bat.no"))
 										;[End Block]
 									Case "radio"
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(100.0)
-										CreateMsg("You replaced the radio's battery.")
+										CreateMsg(GetLocalString("msg", "radio.bat"))
 										;[End Block]
 									Case "18vradio"
 										;[Block]
-										CreateMsg("The battery doesn't fit inside this radio.")
+										CreateMsg(GetLocalString("msg", "radio.bat.notfit"))
 										;[End Block]
 									Case "fineradio", "veryfineradio"
 										;[Block]
-										CreateMsg("There seems to be no place for batteries in this radio.")
+										CreateMsg(GetLocalString("msg", "radio.bat.no"))
 										;[End Block]
 									Case "nvg"
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(1000.0)
-										CreateMsg("You replaced the goggles' battery.")
+										CreateMsg(GetLocalString("msg", "nvg.bat"))
 										;[End Block]
 									Case "finenvg"
 										;[Block]
-										CreateMsg("There seems to be no place for batteries in these goggles.")
+										CreateMsg(GetLocalString("msg", "nvg.bat.no"))
 										;[End Block]
 									Case "veryfinenvg"
 										;[Block]
-										CreateMsg("The battery doesn't fit inside these goggles.")
+										CreateMsg(GetLocalString("msg", "nvg.bat.notfit"))
 										;[End Block]
 									Case "scramble"
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(1000.0)
-										CreateMsg("You replaced the gear's battery.")
+										CreateMsg(GetLocalString("msg", "gear.bat"))
 										;[End Block]
 									Default
 										;[Block]
@@ -4092,52 +4080,52 @@ Function UpdateGUI%()
 								Select Inventory(MouseSlot)\ItemTemplate\TempName
 									Case "nav"
 										;[Block]
-										CreateMsg("The battery doesn't fit inside this navigator.")
+										CreateMsg(GetLocalString("msg", "nav.bat.notfit"))
 										;[End Block]
 									Case "nav310"
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(200.0)
-										CreateMsg("You replaced the radio's battery.")
+										CreateMsg(GetLocalString("msg", "nav.bat"))
 										;[End Block]
 									Case "navulti", "nav300"
 										;[Block]
-										CreateMsg("There seems to be no place for batteries in this navigator.")
+										CreateMsg(GetLocalString("msg", "nav.bat.no"))
 										;[End Block]
 									Case "radio"
 										;[Block]
-										CreateMsg("The battery doesn't fit inside this radio.")
+										CreateMsg(GetLocalString("msg", "radio.bat.notfit"))
 										;[End Block]
 									Case "18vradio"
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(200.0)
-										CreateMsg("You replaced the radio's battery.")
+										CreateMsg(GetLocalString("msg", "radio.bat"))
 										;[End Block]
 									Case "fineradio", "veryfineradio"
 										;[Block]
-										CreateMsg("There seems to be no place for batteries in this radio.")	
+										CreateMsg(GetLocalString("msg", "radio.bat.no"))	
 										;[End Block]
 									Case "nvg"
 										;[Block]
-										CreateMsg("The battery doesn't fit inside these goggles.")
+										CreateMsg(GetLocalString("msg", "nvg.bat.notfit"))
 										;[End Block]
 									Case "finenvg"
 										;[Block]
-										CreateMsg("There seems to be no place for batteries in these goggles.")
+										CreateMsg(GetLocalString("msg", "nvg.bat.no"))
 										;[End Block]
 									Case "veryfinenvg"
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(200.0)
-										CreateMsg("You replaced the radio's battery.")
+										CreateMsg(GetLocalString("msg", "nvg.bat"))
 										;[End Block]
 									Case "scramble"
 										;[Block]
-										CreateMsg("The battery doesn't fit inside this gear.")
+										CreateMsg(GetLocalString("msg", "gear.bat.notfit"))
 										;[End Block]
 									Default
 										;[Block]
@@ -4160,52 +4148,52 @@ Function UpdateGUI%()
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(1000.0)
-										CreateMsg("You replaced the navigator's battery.")
+										CreateMsg(GetLocalString("msg", "nav.bat"))
 										;[End Block]
 									Case "nav310"
 										;[Block]
-										CreateMsg("The battery doesn't fit inside this navigator.")
+										CreateMsg(GetLocalString("msg", "nav.bat.nofit"))
 										;[End Block]
 									Case "navulti", "nav300"
 										;[Block]
-										CreateMsg("There seems to be no place for batteries in this navigator.")
+										CreateMsg(GetLocalString("msg", "nav.bat.no"))
 										;[End Block]
 									Case "radio"
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(1000.0)
-										CreateMsg("You replaced the radio's battery.")
+										CreateMsg(GetLocalString("msg", "radio.bat"))
 										;[End Block]
 									Case "18vradio"
 										;[Block]
-										CreateMsg("The battery doesn't fit inside this radio.")
+										CreateMsg(GetLocalString("msg", "radio.bat.notfit"))
 										;[End Block]
 									Case "fineradio", "veryfineradio"
 										;[Block]
-										CreateMsg("There seems to be no place for batteries in this radio.")
+										CreateMsg(GetLocalString("msg", "radio.bat.no"))
 										;[End Block]
 									Case "nvg"
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(10000.0)
-										CreateMsg("You replaced the goggles' battery.")
+										CreateMsg(GetLocalString("msg", "nvg.bat"))
 										;[End Block]
 									Case "finenvg"
 										;[Block]
-										CreateMsg("There seems to be no place for batteries in these goggles.")
+										CreateMsg(GetLocalString("msg", "nvg.bat.no"))
 										;[End Block]
 									Case "veryfinenvg"
 										;[Block]
-										CreateMsg("The battery doesn't fit inside these goggles.")
+										CreateMsg(GetLocalString("msg", "nvg.bat.nofit"))
 										;[End Block]
 									Case "scramble"
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(10000.0)
-										CreateMsg("You replaced the gear's battery.")
+										CreateMsg(GetLocalString("msg", "gear.bat"))
 										;[End Block]
 									Default
 										;[Block]
@@ -4250,15 +4238,15 @@ Function UpdateGUI%()
 						Select SelectedItem\ItemTemplate\TempName
 							Case "nvg"
 								;[Block]
-								If IsDoubleItem(wi\NightVision, 1, "pairs of goggles") Then Return
+								If IsDoubleItem(wi\NightVision, 1, GetLocalString("misc", "twonvg")) Then Return
 								;[End Block]
 							Case "veryfinenvg"
 								;[Block]
-								If IsDoubleItem(wi\NightVision, 2, "pairs of goggles") Then Return
+								If IsDoubleItem(wi\NightVision, 2, GetLocalString("misc", "twonvg")) Then Return
 								;[End Block]
 							Case "finenvg"
 								;[Block]
-								If IsDoubleItem(wi\NightVision, 3, "pairs of goggles") Then Return
+								If IsDoubleItem(wi\NightVision, 3, GetLocalString("misc", "twonvg")) Then Return
 								;[End Block]
 						End Select
 						
@@ -4270,12 +4258,12 @@ Function UpdateGUI%()
 							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 							
 							If wi\NightVision > 0 Then
-								CreateMsg("You removed the goggles.")
+								CreateMsg(GetLocalString("msg", "nvg.off"))
 								wi\NightVision = 0
 								opt\CameraFogFar = opt\StoredCameraFogFar
 								If SelectedItem\State > 0.0 Then PlaySound_Strict(NVGSFX[1])
 							Else
-								CreateMsg("You put on the goggles.")
+								CreateMsg(GetLocalString("msg", "nvg.on"))
 								Select SelectedItem\ItemTemplate\TempName
 									Case "nvg"
 										;[Block]
@@ -4314,13 +4302,13 @@ Function UpdateGUI%()
 						GiveAchievement(Achv500)
 						
 						If I_008\Timer > 0.0 Then
-							CreateMsg("You swallowed the pill. Your nausea is fading.")
+							CreateMsg(GetLocalString("msg", "pill.nausea"))
 							I_008\Revert = True
 						ElseIf I_409\Timer > 0.0 Then
-							CreateMsg("You swallowed the pill. Your body is getting warmer and the crystals are receding.")
+							CreateMsg(GetLocalString("msg", "pill.crystals"))
 							I_409\Revert = True
 						Else
-							CreateMsg("You swallowed the pill.")
+							CreateMsg(GetLocalString("msg", "pill"))
 						EndIf
 						
 						me\DeathTimer = 0.0
@@ -4343,7 +4331,7 @@ Function UpdateGUI%()
 						For e.Events = Each Events
 							If e\EventID = e_1048_a Then
 								If e\EventState2 > 0.0 Then
-									CreateMsg("You swallowed the pill. Ear-like organs are falling from your body.")
+									CreateMsg(GetLocalString("msg", "pill.ears"))
 									
 									If PlayerRoom = e\room Then me\BlinkTimer = -10.0
 									If e\room\Objects[0] <> 0 Then
@@ -4364,25 +4352,25 @@ Function UpdateGUI%()
 							Case 1
 								;[Block]
 								me\Injuries = 3.5
-								CreateMsg("You started bleeding heavily.")
+								CreateMsg(GetLocalString("msg", "bleed"))
 								;[End Block]
 							Case 2
 								;[Block]
 								me\Injuries = 0.0
 								me\Bloodloss = 0.0
-								CreateMsg("Your wounds are healing up rapidly.")
+								CreateMsg(GetLocalString("msg", "rapidly"))
 								;[End Block]
 							Case 3
 								;[Block]
 								me\Injuries = Max(0.0, me\Injuries - Rnd(0.5, 3.5))
 								me\Bloodloss = Max(0.0, me\Bloodloss - Rnd(10.0, 100.0))
-								CreateMsg("You feel much better.")
+								CreateMsg(GetLocalString("msg", "better"))
 								;[End Block]
 							Case 4
 								;[Block]
 								me\BlurTimer = 10000.0
 								me\Bloodloss = 0.0
-								CreateMsg("You feel nauseated.")
+								CreateMsg(GetLocalString("msg", "nausea"))
 								;[End Block]
 							Case 5
 								;[Block]
@@ -4392,7 +4380,7 @@ Function UpdateGUI%()
 								
 								If RoomName = "dimension_1499" Lor RoomName = "gate_b" Lor RoomName = "gate_a" Then
 									me\Injuries = 2.5
-									CreateMsg("You started bleeding heavily.")
+									CreateMsg(GetLocalString("msg", "bleed"))
 								Else
 									For r.Rooms = Each Rooms
 										If r\RoomTemplate\Name = "dimension_106" Then
@@ -4406,7 +4394,7 @@ Function UpdateGUI%()
 											Exit
 										EndIf
 									Next
-									CreateMsg("For some inexplicable reason, you find yourself inside the pocket dimension.")
+									CreateMsg(GetLocalString("msg", "aid.106"))
 								EndIf
 								;[End Block]
 						End Select
@@ -4416,7 +4404,7 @@ Function UpdateGUI%()
 				Case "firstaid", "finefirstaid", "firstaid2"
 					;[Block]
 					If me\Bloodloss = 0.0 And me\Injuries = 0.0 Then
-						CreateMsg("You don't need to use a first aid kit right now.")
+						CreateMsg(GetLocalString("msg", "aid.no"))
 						SelectedItem = Null
 						Return
 					Else
@@ -4430,32 +4418,32 @@ Function UpdateGUI%()
 								me\Bloodloss = 0.0
 								me\Injuries = Max(0.0, me\Injuries - 2.0)
 								If me\Injuries = 0.0 Then
-									CreateMsg("You bandaged the wounds and took a painkiller. You feel fine.")
+									CreateMsg(GetLocalString("msg", "aid.fine"))
 								ElseIf me\Injuries > 1.0
-									CreateMsg("You bandaged the wounds and took a painkiller, but you were not able to stop the bleeding.")
+									CreateMsg(GetLocalString("msg", "aid.bleed"))
 								Else
-									CreateMsg("You bandaged the wounds and took a painkiller, but you still feel sore.")
+									CreateMsg(GetLocalString("msg", "aid.sore"))
 								EndIf
 								RemoveItem(SelectedItem)
 							Else
 								me\Bloodloss = Max(0.0, me\Bloodloss - Rnd(10.0, 20.0))
 								If me\Injuries >= 2.5 Then
-									CreateMsg("The wounds were way too severe to staunch the bleeding completely.")
+									CreateMsg(GetLocalString("msg", "aid.toobad"))
 									me\Injuries = Max(2.5, me\Injuries - Rnd(0.3, 0.7))
 								ElseIf me\Injuries > 1.0
 									me\Injuries = Max(0.5, me\Injuries - Rnd(0.5, 1.0))
 									If me\Injuries > 1.0 Then
-										CreateMsg("You bandaged the wounds but were unable to staunch the bleeding completely.")
+										CreateMsg(GetLocalString("msg", "aid.toobad2"))
 									Else
-										CreateMsg("You managed to stop the bleeding.")
+										CreateMsg(GetLocalString("msg", "aid.stop"))
 									EndIf
 								Else
 									If me\Injuries > 0.5 Then
 										me\Injuries = 0.5
-										CreateMsg("You took a painkiller, easing the pain slightly.")
+										CreateMsg(GetLocalString("msg", "aid.slight"))
 									Else
 										me\Injuries = me\Injuries / 2.0
-										CreateMsg("You took a painkiller, but it still hurts to walk.")
+										CreateMsg(GetLocalString("msg", "aid.nowalk"))
 									EndIf
 								EndIf
 								
@@ -4464,18 +4452,18 @@ Function UpdateGUI%()
 										Case 1
 											;[Block]
 											chs\SuperMan = True
-											CreateMsg("You have becomed overwhelmedwithadrenalineholyshitWOOOOOO~!")
+											CreateMsg(GetLocalString("msg", "aid.super"))
 											;[End Block]
 										Case 2
 											;[Block]
 											opt\InvertMouseX = (Not opt\InvertMouseX)
 											opt\InvertMouseY = (Not opt\InvertMouseY)
-											CreateMsg("You suddenly find it very difficult to turn your head.")
+											CreateMsg(GetLocalString("msg", "aid.invert"))
 											;[End Block]
 										Case 3
 											;[Block]
 											me\BlurTimer = 5000.0
-											CreateMsg("You feel nauseated.")
+											CreateMsg(GetLocalString("msg", "nausea"))
 											;[End Block]
 										Case 4
 											;[Block]
@@ -4486,11 +4474,11 @@ Function UpdateGUI%()
 											;[Block]
 											me\Bloodloss = 0.0
 											me\Injuries = 0.0
-											CreateMsg("You bandaged the wounds. The bleeding stopped completely and you feel fine.")
+											CreateMsg(GetLocalString("msg", "aid.stopall"))
 											;[End Block]
 										Case 6
 											;[Block]
-											CreateMsg("You bandaged the wounds and blood started pouring heavily through the bandages.")
+											CreateMsg(GetLocalString("msg", "aid.through"))
 											me\Injuries = 3.5
 											;[End Block]
 									End Select
@@ -4507,7 +4495,7 @@ Function UpdateGUI%()
 						me\BlinkEffectTimer = Rnd(20.0, 30.0)
 						me\BlurTimer = 200.0
 						
-						CreateMsg("You used the eyedrops. Your eyes feel moisturized.")
+						CreateMsg(GetLocalString("msg", "eyedrop.moisturized"))
 						
 						RemoveItem(SelectedItem)
 					EndIf
@@ -4520,7 +4508,7 @@ Function UpdateGUI%()
 						me\Bloodloss = Max(me\Bloodloss - 1.0, 0.0)
 						me\BlurTimer = 200.0
 						
-						CreateMsg("You used the eyedrops. Your eyes feel very moisturized.")
+						CreateMsg(GetLocalString("msg", "eyedrop.moisturized.very"))
 						
 						RemoveItem(SelectedItem)
 					EndIf
@@ -4533,7 +4521,7 @@ Function UpdateGUI%()
 						me\EyeStuck = 10000.0
 						me\BlurTimer = 1000.0
 						
-						CreateMsg("You used the eyedrops. Your eyes feel extremely moisturized.")
+						CreateMsg(GetLocalString("msg", "eyedrop.moisturized.veryvery"))
 						
 						RemoveItem(SelectedItem)
 					EndIf
@@ -4566,7 +4554,7 @@ Function UpdateGUI%()
 					EndIf
 				Case "book"
 					;[Block]
-					CreateMsg(Chr(34) + "I really don't have the time for that right now..." + Chr(34))
+					CreateMsg(GetLocalString("msg", "redbook"))
 					SelectedItem = Null
 					;[End Block]
 				Case "cup"
@@ -4647,7 +4635,7 @@ Function UpdateGUI%()
 					me\StaminaEffect = 0.5
 					me\StaminaEffectTimer = 20.0
 					
-					CreateMsg("You injected yourself with the syringe and feel a slight adrenaline rush.")
+					CreateMsg(GetLocalString("msg", "syringe"))
 					
 					RemoveItem(SelectedItem)
 					;[End Block]
@@ -4657,7 +4645,7 @@ Function UpdateGUI%()
 					me\StaminaEffect = Rnd(0.5, 0.8)
 					me\StaminaEffectTimer = Rnd(20.0, 30.0)
 					
-					CreateMsg("You injected yourself with the syringe and feel an adrenaline rush.")
+					CreateMsg(GetLocalString("msg", "syringe2"))
 					
 					RemoveItem(SelectedItem)
 					;[End Block]
@@ -4669,17 +4657,17 @@ Function UpdateGUI%()
 							me\HealTimer = Rnd(40.0, 60.0)
 							me\StaminaEffect = 0.1
 							me\StaminaEffectTimer = 30.0
-							CreateMsg("You injected yourself with the syringe and feel a huge adrenaline rush.")
+							CreateMsg(GetLocalString("msg", "syringe3"))
 							;[End Block]
 						Case 2
 							;[Block]
 							chs\SuperMan = True
-							CreateMsg("You injected yourself with the syringe and feel a humongous adrenaline rush.")
+							CreateMsg(GetLocalString("msg", "syringe4"))
 							;[End Block]
 						Case 3
 							;[Block]
 							me\VomitTimer = 30.0
-							CreateMsg("You injected yourself with the syringe and feel a pain in your stomach.")
+							CreateMsg(GetLocalString("msg", "syringe5"))
 							;[End Block]
 					End Select
 					
@@ -4694,7 +4682,7 @@ Function UpdateGUI%()
 					; ~ RadioState[7] = Another timer for the "code channel"
 					If SelectedItem\State > 0.0 Lor (SelectedItem\ItemTemplate\TempName = "fineradio" Lor SelectedItem\ItemTemplate\TempName = "veryfineradio") Then
 						If RadioState[5] = 0.0 Then 
-							CreateMsg("Use the numbered keys 1 through 5 to cycle between various channels.")
+							CreateMsg(GetLocalString("msg", "radio"))
 							RadioState[5] = 1.0
 							RadioState[0] = -1.0
 						EndIf
@@ -5027,27 +5015,27 @@ Function UpdateGUI%()
 						Select Rand(6)
 							Case 1
 								;[Block]
-								CreateMsg(Chr(34) + "I don't have anything to light it with. Umm, what about that... Nevermind." + Chr(34))
+								CreateMsg(GetLocalString("msg", "cigarette1"))
 								;[End Block]
 							Case 2
 								;[Block]
-								CreateMsg("You are unable to get lit.")
+								CreateMsg(GetLocalString("msg", "cigarette2"))
 								;[End Block]
 							Case 3
 								;[Block]
-								CreateMsg(Chr(34) + "I quit that a long time ago." + Chr(34))
+								CreateMsg(GetLocalString("msg", "cigarette3"))
 								;[End Block]
 							Case 4
 								;[Block]
-								CreateMsg(Chr(34) + "Even if I wanted one, I have nothing to light it with." + Chr(34))
+								CreateMsg(GetLocalString("msg", "cigarette4"))
 								;[End Block]
 							Case 5
 								;[Block]
-								CreateMsg(Chr(34) + "Could really go for one now... Wish I had a lighter." + Chr(34))
+								CreateMsg(GetLocalString("msg", "cigarette5"))
 								;[End Block]
 							Case 6
 								;[Block]
-								CreateMsg(Chr(34) + "Don't plan on starting, even at a time like this." + Chr(34))
+								CreateMsg(GetLocalString("msg", "cigarette6"))
 								;[End Block]
 						End Select
 						RemoveItem(SelectedItem)
@@ -5057,9 +5045,9 @@ Function UpdateGUI%()
 					;[Block]
 					If CanUseItem(False, True) Then
 						If I_714\Using Lor wi\GasMask = 4 Lor wi\HazmatSuit = 3 Then
-							CreateMsg(Chr(34) + "DUDE WTF THIS SHIT DOESN'T EVEN WORK." + Chr(34))
+							CreateMsg(GetLocalString("msg", "420j.no"))
 						Else
-							CreateMsg(Chr(34) + "MAN DATS SUM GOOD ASS SHIT." + Chr(34))
+							CreateMsg(GetLocalString("msg", "420j.yeah"))
 							me\Injuries = Max(me\Injuries - 0.5, 0.0)
 							me\BlurTimer = 500.0
 							GiveAchievement(Achv420J)
@@ -5072,12 +5060,10 @@ Function UpdateGUI%()
 					;[Block]
 					If CanUseItem(False, True) Then
 						If I_714\Using Lor wi\GasMask = 4 Lor wi\HazmatSuit = 3 Then
-							CreateMsg(Chr(34) + "DUDE WTF THIS SHIT DOESN'T EVEN WORK." + Chr(34))
+							CreateMsg(GetLocalString("msg", "420j.no"))
 						Else
-							CreateMsg(Chr(34) + "UH WHERE... WHAT WAS I DOING AGAIN... MAN I NEED TO TAKE A NAP..." + Chr(34))
-							msg\DeathMsg = SubjectName + " found in a comatose state in [DATA REDACTED]. The subject was holding what appears to be a cigarette while smiling widely. "
-							msg\DeathMsg = msg\DeathMsg + "Chemical analysis of the cigarette has been inconclusive, although it seems to contain a high concentration of an unidentified chemical "
-							msg\DeathMsg = msg\DeathMsg + "whose molecular structure is remarkably similar to that of tetrahydrocannabinol."
+							CreateMsg(GetLocalString("msg", "420j.dead"))
+							msg\DeathMsg = Format(GetLocalString("death", "joint"), SubjectName)
 							Kill()						
 						EndIf
 						RemoveItem(SelectedItem)
@@ -5087,12 +5073,10 @@ Function UpdateGUI%()
 					;[Block]
 					If CanUseItem(False, True) Then
 						If I_714\Using Lor wi\GasMask = 4 Lor wi\HazmatSuit = 3 Then
-							CreateMsg(Chr(34) + "DUDE WTF THIS SHIT DOESN'T EVEN WORK." + Chr(34))
+							CreateMsg(GetLocalString("msg", "420j.no"))
 						Else
-							CreateMsg(Chr(34) + "UUUUUUUUUUUUHHHHHHHHHHHH..." + Chr(34))
-							msg\DeathMsg = SubjectName + " found in a comatose state in [DATA REDACTED]. The subject was holding what appears to be a cigarette while smiling widely. "
-							msg\DeathMsg = msg\DeathMsg + "Chemical analysis of the cigarette has been inconclusive, although it seems to contain a high concentration of an unidentified chemical "
-							msg\DeathMsg = msg\DeathMsg + "whose molecular structure is remarkably similar to that of tetrahydrocannabinol."
+							CreateMsg(GetLocalString("msg", "420s"))
+							msg\DeathMsg = Format(GetLocalString("death", "joint"), SubjectName)
 							Kill()						
 						EndIf
 						RemoveItem(SelectedItem)
@@ -5101,10 +5085,10 @@ Function UpdateGUI%()
 				Case "scp714"
 					;[Block]
 					If I_714\Using Then
-						CreateMsg("You removed the ring.")
+						CreateMsg(GetLocalString("msg", "714.off"))
 						I_714\Using = False
 					Else
-						CreateMsg("You put on the ring.")
+						CreateMsg(GetLocalString("msg", "714.on"))
 						GiveAchievement(Achv714)
 						I_714\Using = True
 					EndIf
@@ -5119,11 +5103,11 @@ Function UpdateGUI%()
 						
 						If SelectedItem\State = 100.0 Then
 							If wi\HazmatSuit > 0 Then
-								CreateMsg("You removed the hazmat suit.")
+								CreateMsg(GetLocalString("msg", "suit.off"))
 								wi\HazmatSuit = 0
 								DropItem(SelectedItem)
 							Else
-								CreateMsg("You put on the hazmat suit.")
+								CreateMsg(GetLocalString("msg", "suit.on"))
 								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 								If SelectedItem\ItemTemplate\TempName = "hazmatsuit" Then
 									wi\HazmatSuit = 1
@@ -5150,7 +5134,7 @@ Function UpdateGUI%()
 					
 					If SelectedItem\State = 100.0 Then
 						If wi\BallisticVest > 0 Then
-							CreateMsg("You removed the vest.")
+							CreateMsg(GetLocalString("msg", "vest.off"))
 							wi\BallisticVest = 0
 							DropItem(SelectedItem)
 						Else
@@ -5158,12 +5142,12 @@ Function UpdateGUI%()
 							Select SelectedItem\ItemTemplate\TempName
 								Case "vest"
 									;[Block]
-									CreateMsg("You put on the vest and feel slightly encumbered.")
+									CreateMsg(GetLocalString("msg", "vest.on.slight"))
 									wi\BallisticVest = 1
 									;[End Block]
 								Case "finevest"
 									;[Block]
-									CreateMsg("You put on the vest and feel heavily encumbered.")
+									CreateMsg(GetLocalString("msg", "vest.on.heavy"))
 									wi\BallisticVest = 2
 									;[End Block]
 							End Select
@@ -5178,15 +5162,15 @@ Function UpdateGUI%()
 						Select SelectedItem\ItemTemplate\TempName
 							Case "gasmask"
 								;[Block]
-								If IsDoubleItem(wi\GasMask, 1, "gas masks") Then Return
+								If IsDoubleItem(wi\GasMask, 1, GetLocalString("misc", "twomask")) Then Return
 								;[End Block]
 							Case "finegasmask"
 								;[Block]
-								If IsDoubleItem(wi\GasMask, 2, "gas masks") Then Return
+								If IsDoubleItem(wi\GasMask, 2, GetLocalString("misc", "twomask")) Then Return
 								;[End Block]
 							Case "veryfinegasmask"
 								;[Block]
-								If IsDoubleItem(wi\GasMask, 3, "gas masks") Then Return
+								If IsDoubleItem(wi\GasMask, 3, GetLocalString("misc", "twomask")) Then Return
 								;[End Block]
 							Case "gasmask148"
 								;[Block]
@@ -5202,28 +5186,28 @@ Function UpdateGUI%()
 							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 							
 							If wi\GasMask > 0 Then
-								CreateMsg("You removed the gas mask.")
+								CreateMsg(GetLocalString("msg", "mask.off"))
 								wi\GasMask = 0
 							Else
 								Select SelectedItem\ItemTemplate\TempName
 									Case "gasmask"
 										;[Block]
-										CreateMsg("You put on the gas mask.")
+										CreateMsg(GetLocalString("msg", "mask.on"))
 										wi\GasMask = 1
 										;[End Block]
 									Case "finegasmask"
 										;[Block]
-										CreateMsg("You put on the gas mask.")
+										CreateMsg(GetLocalString("msg", "mask.on.easy"))
 										wi\GasMask = 2
 										;[End Block]
 									Case "veryfinegasmask"
 										;[Block]
-										CreateMsg("You put on the gas mask and you can breathe easier.")
+										CreateMsg(GetLocalString("msg", "mask.on.easy"))
 										wi\GasMask = 3
 										;[End Block]
 									Case "gasmask148"
 										;[Block]
-										CreateMsg("You put on the gas mask.")
+										CreateMsg(GetLocalString("msg", "mask.on"))
 										wi\GasMask = 4
 										;[End Block]
 								End Select
@@ -5253,11 +5237,11 @@ Function UpdateGUI%()
 						Select SelectedItem\ItemTemplate\TempName
 							Case "scp1499"
 								;[Block]
-								If IsDoubleItem(I_1499\Using, 1, "gas masks") Then Return
+								If IsDoubleItem(I_1499\Using, 1, GetLocalString("misc", "twomask")) Then Return
 								;[End Block]
 							Case "fine1499"
 								;[Block]
-								If IsDoubleItem(I_1499\Using, 2, "gas masks") Then Return
+								If IsDoubleItem(I_1499\Using, 2, GetLocalString("misc", "twomask")) Then Return
 								;[End Block]
 						End Select
 						
@@ -5269,18 +5253,18 @@ Function UpdateGUI%()
 							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 							
 							If I_1499\Using > 0 Then
-								CreateMsg("You removed the gas mask.")
+								CreateMsg(GetLocalString("msg", "mask.off"))
 								I_1499\Using = 0
 							Else
 								Select SelectedItem\ItemTemplate\TempName
 									Case "scp1499"
 										;[Block]
-										CreateMsg("You put on the gas mask.")
+										CreateMsg(GetLocalString("msg", "mask.on"))
 										I_1499\Using = 1
 										;[End Block]
 									Case "fine1499"
 										;[Block]
-										CreateMsg("You put on the gas mask and you can breathe easier.")
+										CreateMsg(GetLocalString("msg", "mask.on.easy"))
 										I_1499\Using = 2
 										;[End Block]
 								End Select
@@ -5336,7 +5320,7 @@ Function UpdateGUI%()
 						Select SelectedItem\ItemTemplate\Name
 							Case "Old Badge"
 								;[Block]
-								CreateMsg(Chr(34) + "Huh? This guy looks just like me!" + Chr(34))
+								CreateMsg(GetLocalString("msg", "oldbadge"))
 								;[End Block]
 						End Select
 						
@@ -5348,7 +5332,7 @@ Function UpdateGUI%()
 					If SelectedItem\State = 0.0 Then
 						PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\NostalgiaCancer" + Rand(6, 10) + ".ogg"))
 						
-						CreateMsg(Chr(34) + "Isn't this the key to that old shack? The one where I... No, it can't be." + Chr(34))					
+						CreateMsg(GetLocalString("msg", "lostkey"))
 					EndIf
 					
 					SelectedItem\State = 1.0
@@ -5361,7 +5345,7 @@ Function UpdateGUI%()
 								;[Block]
 								me\BlurTimer = 1000.0
 								
-								CreateMsg(Chr(34) + "Why does this seem so familiar?" + Chr(34))
+								CreateMsg(GetLocalString("msg", "oldpaper"))
 								PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\NostalgiaCancer" + Rand(6, 10) + ".ogg"))
 								SelectedItem\State = 1.0
 								;[End Block]
@@ -5379,11 +5363,11 @@ Function UpdateGUI%()
 				Case "scp427"
 					;[Block]
 					If I_427\Using Then
-						CreateMsg("You closed the locket.")
+						CreateMsg(GetLocalString("msg", "427.off"))
 						I_427\Using = False
 					Else
 						GiveAchievement(Achv427)
-						CreateMsg("You opened the locket.")
+						CreateMsg(GetLocalString("msg", "427.on"))
 						I_427\Using = True
 					EndIf
 					SelectedItem = Null
@@ -5391,7 +5375,7 @@ Function UpdateGUI%()
 				Case "pill"
 					;[Block]
 					If CanUseItem(False, True) Then
-						CreateMsg("You swallowed the pill.")
+						CreateMsg(GetLocalString("msg", "pill"))
 						
 						RemoveItem(SelectedItem)
 					EndIf	
@@ -5399,7 +5383,7 @@ Function UpdateGUI%()
 				Case "scp500pilldeath"
 					;[Block]
 					If CanUseItem(False, True) Then
-						CreateMsg("You swallowed the pill.")
+						CreateMsg(GetLocalString("msg", "pill"))
 						
 						If I_427\Timer < 70.0 * 360.0 Then
 							I_427\Timer = 70.0 * 360.0
@@ -5410,7 +5394,7 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "syringeinf"
 					;[Block]
-					CreateMsg("You injected yourself the syringe.")
+					CreateMsg(GetLocalString("msg", "syringe6"))
 					
 					me\VomitTimer = 70.0 * 1.0
 					
@@ -5428,10 +5412,10 @@ Function UpdateGUI%()
 							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 							
 							If wi\BallisticHelmet Then
-								CreateMsg("You removed the helmet.")
+								CreateMsg(GetLocalString("msg", "helmet.off"))
 								wi\BallisticHelmet = False
 							Else
-								CreateMsg("You put on the helmet.")
+								CreateMsg(GetLocalString("msg", "helmet.on"))
 								wi\BallisticHelmet = True
 							EndIf
 							SelectedItem\State = 0.0
@@ -5450,10 +5434,10 @@ Function UpdateGUI%()
 							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 							
 							If wi\SCRAMBLE Then
-								CreateMsg("You removed the gear.")
+								CreateMsg(GetLocalString("msg", "gear.off"))
 								wi\SCRAMBLE = False
 							Else
-								CreateMsg("You put on the gear.")
+								CreateMsg(GetLocalString("msg", "gear.on"))
 								wi\SCRAMBLE = True
 							EndIf
 							SelectedItem\State3 = 0.0
@@ -5477,10 +5461,10 @@ Function UpdateGUI%()
 									Exit
 								EndIf
 							Next
-							CreateMsg("You took SCP-500-01 from the bottle.")
+							CreateMsg(GetLocalString("msg", "500"))
 							I_500\Taken = I_500\Taken + 1
 						Else
-							CreateMsg("You cannot carry any more items.")
+							CreateMsg(GetLocalString("msg", "cantcarry"))
 						EndIf
 						SelectedItem = Null
 					Else
@@ -5650,152 +5634,152 @@ Function RenderDebugHUD%()
 	Select chs\DebugHUD
 		Case 1
 			;[Block]
-			Text(x, y, "Room: " + PlayerRoom\RoomTemplate\Name)
-			Text(x, y + (20 * MenuScale), "Room Coordinates: (" + Floor(EntityX(PlayerRoom\OBJ) / 8.0 + 0.5) + ", " + Floor(EntityZ(PlayerRoom\OBJ) / 8.0 + 0.5) + ", Angle: " + PlayerRoom\Angle + ")")
+			Text(x, y, Format(GetLocalString("misc", "room"), PlayerRoom\RoomTemplate\Name))
+			Text(x, y + (20 * MenuScale), Format(Format(Format(GetLocalString("console", "debug1.xyz"), Floor(EntityX(PlayerRoom\OBJ) / 8.0 + 0.5), "{0}"), Floor(EntityZ(PlayerRoom\OBJ) / 8.0 + 0.5), "{1}"), PlayerRoom\Angle, "{2}"))
 			For ev.Events = Each Events
 				If ev\room = PlayerRoom Then
-					Text(x, y + (40 * MenuScale), "Room Event: " + ev\EventName + ", ID: " + ev\EventID) 
-					Text(x, y + (60 * MenuScale), "State: " + ev\EventState)
-					Text(x, y + (80 * MenuScale), "State2: " + ev\EventState2)   
-					Text(x, y + (100 * MenuScale), "State3: " + ev\EventState3)
-					Text(x, y + (120 * MenuScale), "State4: " + ev\EventState4)
-					Text(x, y + (140 * MenuScale), "Str: "+ ev\EventStr)
+					Text(x, y + (40 * MenuScale), Format(Format(GetLocalString("console", "debug1.event"), ev\EventName, "{0}"), ev\EventID, "{1}"))
+					Text(x, y + (60 * MenuScale), Format(GetLocalString("console", "debug1.state1"), ev\EventState))
+					Text(x, y + (80 * MenuScale), Format(GetLocalString("console", "debug1.state2"), ev\EventState2))
+					Text(x, y + (100 * MenuScale), Format(GetLocalString("console", "debug1.state3"), ev\EventState3))
+					Text(x, y + (120 * MenuScale), Format(GetLocalString("console", "debug1.state4"), ev\EventState4))
+					Text(x, y + (140 * MenuScale), Format(GetLocalString("console", "debug1.str"), ev\EventStr))
 					Exit
 				EndIf
 			Next
 			If PlayerRoom\RoomTemplate\Name = "dimension_1499" Then
-				Text(x, y + (180 * MenuScale), "Current Chunk X / Z: (" + (Int((EntityX(me\Collider) + 20) / 40)) + ", "+(Int((EntityZ(me\Collider) + 20) / 40)) + ")")
+				Text(x, y + (180 * MenuScale), Format(Format(GetLocalString("console", "debug1.chunkxyz"), (Int((EntityX(me\Collider) + 20) / 40)), "{0}"), (Int((EntityZ(me\Collider) + 20) / 40)), "{1}"))
 				
 				Local CH_Amount% = 0
 				
 				For ch.Chunk = Each Chunk
 					CH_Amount = CH_Amount + 1
 				Next
-				Text(x, y + (200 * MenuScale), "Current Chunk Amount: " + CH_Amount)
+				Text(x, y + (200 * MenuScale), Format(GetLocalString("console", "debug1.currchunk"), CH_Amount))
 			Else
-				Text(x, y + (200 * MenuScale), "Current Room Position: (" + PlayerRoom\x + ", " + PlayerRoom\y + ", " + PlayerRoom\z + ")")
+				Text(x, y + (200 * MenuScale), Format(Format(Format(GetLocalString("console", "debug1.currroom"), PlayerRoom\x, "{0}"), PlayerRoom\y, "{1}"), PlayerRoom\z, "{2}"))
 			EndIf
 			
 			If sc_I\SelectedMonitor <> Null Then
-				Text(x, y + (240 * MenuScale), "Current Monitor: " + sc_I\SelectedMonitor\ScrOBJ)
+				Text(x, y + (240 * MenuScale), Format(GetLocalString("console", "debug1.currmon"), sc_I\SelectedMonitor\ScrOBJ))
 			Else
-				Text(x, y + (240 * MenuScale), "Current Monitor: Null")
+				Text(x, y + (240 * MenuScale), Format(GetLocalString("console", "debug1.currmon"), "Null"))
 			EndIf
 			
 			If SelectedItem <> Null Then
-				Text(x, y + (280 * MenuScale), "Current Button: " + SelectedItem\ItemTemplate\Name)
+				Text(x, y + (280 * MenuScale), Format(GetLocalString("console", "debug1.currbtn"), SelectedItem\ItemTemplate\Name))
 			Else
-				Text(x, y + (280 * MenuScale), "Current Button: Null")
+				Text(x, y + (280 * MenuScale), Format(GetLocalString("console", "debug1.currbtn"), "Null"))
 			EndIf
 			
-			Text(x, y + (320 * MenuScale), "Current Floor: " + PlayerElevatorFloor)
-			Text(x, y + (340 * MenuScale), "Room floor: " + ToElevatorFloor)
+			Text(x, y + (320 * MenuScale), Format(GetLocalString("console", "debug1.currflo"), PlayerElevatorFloor))
+			Text(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug1.roomflo"), ToElevatorFloor))
 			If PlayerInsideElevator Then
-				Text(x, y + (360 * MenuScale), "Player is inside elevator: True")
+				Text(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug1.inelev"), "True"))
 			Else
-				Text(x, y + (360 * MenuScale), "Player is inside elevator: False")
+				Text(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug1.inelev"), "False"))
 			EndIf
 			
-			Text(x, y + (400 * MenuScale), "Date and Time: " + CurrentDate() + ", " + CurrentTime())
-			Text(x, y + (420 * MenuScale), "Video memory: " + ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)) + " MB/" + (TotalVidMem() / 1024) + " MB" + Chr(10))
-			Text(x, y + (440 * MenuScale), "Global memory status: " + ((TotalPhys() / 1024) - (AvailPhys() / 1024)) + " MB/" + (TotalPhys() / 1024) + " MB")
-			Text(x, y + (460 * MenuScale), "Triangles Rendered: " + CurrTrisAmount)
-			Text(x, y + (480 * MenuScale), "Active Textures: " + ActiveTextures())
+			Text(x, y + (400 * MenuScale), Format(Format(GetLocalString("console", "debug1.time"), CurrentDate(), "{0}"), CurrentTime(), "{1}"))
+			Text(x, y + (420 * MenuScale), Format(Format(GetLocalString("console", "debug1.vidmem"), ((TotalVidMem() / 1024) - (AvailVidMem() / 1024))), (TotalVidMem() / 1024)))
+			Text(x, y + (440 * MenuScale), Format(Format(GetLocalString("console", "debug1.glomem"), ((TotalPhys() / 1024) - (AvailPhys() / 1024))), (TotalPhys() / 1024)))
+			Text(x, y + (460 * MenuScale), Format(GetLocalString("console", "debug1.triamo"), CurrTrisAmount))
+			Text(x, y + (480 * MenuScale), Format(GetLocalString("console", "debug1.acttex"), ActiveTextures()))
 			;[End Block]
 		Case 2
 			;[Block]
-			Text(x, y, "Player Position: (" + FloatToString(EntityX(me\Collider), 1) + ", " + FloatToString(EntityY(me\Collider), 1) + ", " + FloatToString(EntityZ(me\Collider), 1) + ")")
-			Text(x, y + (20 * MenuScale), "Player Rotation: (" + FloatToString(EntityPitch(me\Collider), 1) + ", " + FloatToString(EntityYaw(me\Collider), 1) + ", " + FloatToString(EntityRoll(me\Collider), 1) + ")")
+			Text(x, y, Format(Format(Format(GetLocalString("console", "debug2.ppos"), FloatToString(EntityX(me\Collider), 1), "{0}"), FloatToString(EntityY(me\Collider), 1), "{1}"), FloatToString(EntityZ(me\Collider), 1), "{2}"))
+			Text(x, y + (20 * MenuScale), Format(Format(Format(GetLocalString("console", "debug2.proa"), FloatToString(EntityPitch(me\Collider), 1), "{0}"), FloatToString(EntityYaw(me\Collider), 1), "{1}"), FloatToString(EntityRoll(me\Collider), 1), "{2}"))
 			
-			Text(x, y + (60 * MenuScale), "Injuries: " + me\Injuries)
-			Text(x, y + (80 * MenuScale), "Bloodloss: " + me\Bloodloss)
+			Text(x, y + (60 * MenuScale), Format(GetLocalString("console", "debug2.injuries"), me\Injuries))
+			Text(x, y + (80 * MenuScale), Format(GetLocalString("console", "debug2.bloodloss"), me\Bloodloss))
 			
-			Text(x, y + (120 * MenuScale), "Blur Timer: " + me\BlurTimer)
-			Text(x, y + (140 * MenuScale), "Light Blink: " + me\LightBlink)
-			Text(x, y + (160 * MenuScale), "Light Flash: " + me\LightFlash)
+			Text(x, y + (120 * MenuScale), Format(GetLocalString("console", "debug2.blur"), me\BlurTimer))
+			Text(x, y + (140 * MenuScale), Format(GetLocalString("console", "debug2.blink"), me\LightBlink))
+			Text(x, y + (160 * MenuScale), Format(GetLocalString("console", "debug2.flash"), me\LightFlash))
 			
-			Text(x, y + (200 * MenuScale), "Blink Frequency: " + me\BLINKFREQ)
-			Text(x, y + (220 * MenuScale), "Blink Timer: " + me\BlinkTimer)
-			Text(x, y + (240 * MenuScale), "Blink Effect: " + me\BlinkEffect)
-			Text(x, y + (260 * MenuScale), "Blink Effect Timer: " + me\BlinkEffectTimer)
-			Text(x, y + (280 * MenuScale), "Eye Irritation: " + me\EyeIrritation)
-			Text(x, y + (300 * MenuScale), "Eye Stuck: " + me\EyeStuck)
+			Text(x, y + (200 * MenuScale), Format(GetLocalString("console", "debug2.freq"), me\BLINKFREQ))
+			Text(x, y + (220 * MenuScale), Format(GetLocalString("console", "debug2.timer"), me\BlinkTimer))
+			Text(x, y + (240 * MenuScale), Format(GetLocalString("console", "debug2.effect"), me\BlinkEffect))
+			Text(x, y + (260 * MenuScale), Format(GetLocalString("console", "debug2.efftim"), me\BlinkEffectTimer))
+			Text(x, y + (280 * MenuScale), Format(GetLocalString("console", "debug2.eyeirr"), me\EyeIrritation))
+			Text(x, y + (300 * MenuScale), Format(GetLocalString("console", "eyestuck"), me\EyeStuck))
 			
-			Text(x, y + (340 * MenuScale), "Stamina: " + me\Stamina)
-			Text(x, y + (360 * MenuScale), "Stamina Effect: " + me\StaminaEffect)
-			Text(x, y + (380 * MenuScale), "Stamina Effect Timer: " + me\StaminaEffectTimer)
+			Text(x, y + (340 * MenuScale), Format(GetLocalString("console", "stamina"), me\Stamina))
+			Text(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug2.stameff"), me\StaminaEffect))
+			Text(x, y + (380 * MenuScale), Format(GetLocalString("console", "debug2.stamtimer"), me\StaminaEffectTimer))
 			
-			Text(x, y + (420 * MenuScale), "Deaf Timer: " + me\DeafTimer)
+			Text(x, y + (420 * MenuScale), Format(GetLocalString("console", "debug2.deaf"), me\DeafTimer))
 			
 			If me\Terminated Then
-				Text(x + (380 * MenuScale), y, "Terminated: True")
+				Text(x + (380 * MenuScale), y, Format(GetLocalString("console", "debug2.terminated"), "True"))
 			Else
-				Text(x + (380 * MenuScale), y, "Terminated: False")
+				Text(x + (380 * MenuScale), y, Format(GetLocalString("console", "debug2.terminated"), "False"))
 			EndIf
 			
-			Text(x + (380 * MenuScale), y + (20 * MenuScale), "Death Timer: " + me\DeathTimer)
-			Text(x + (380 * MenuScale), y + (40 * MenuScale), "Fall Timer: " + me\FallTimer)
+			Text(x + (380 * MenuScale), y + (20 * MenuScale), Format(GetLocalString("console", "debug2.death"), me\DeathTimer))
+			Text(x + (380 * MenuScale), y + (40 * MenuScale), Format(GetLocalString("console", "debug2.fall"), me\FallTimer))
 			
-			Text(x + (380 * MenuScale), y + (80 * MenuScale), "Heal Timer: " + me\HealTimer)
+			Text(x + (380 * MenuScale), y + (80 * MenuScale), Format(GetLocalString("console", "debug2.heal"), me\HealTimer))
 			
-			Text(x + (380 * MenuScale), y + (120 * MenuScale), "Heart Beat Timer: " + me\HeartBeatTimer)
+			Text(x + (380 * MenuScale), y + (120 * MenuScale), Format(GetLocalString("console", "debug2.heartbeat"), me\HeartBeatTimer))
 			
-			Text(x + (380 * MenuScale), y + (160 * MenuScale), "Explosion Timer: " + me\ExplosionTimer)
+			Text(x + (380 * MenuScale), y + (160 * MenuScale), Format(GetLocalString("console", "debug2.explosion"), me\ExplosionTimer))
 			
-			Text(x + (380 * MenuScale), y + (200 * MenuScale), "Current Speed: " + me\CurrSpeed)
+			Text(x + (380 * MenuScale), y + (200 * MenuScale), Format(GetLocalString("console", "debug2.speed"), me\CurrSpeed))
 			
-			Text(x + (380 * MenuScale), y + (240 * MenuScale), "Camera Shake Timer: " + me\CameraShakeTimer)
-			Text(x + (380 * MenuScale), y + (260 * MenuScale), "Current Camera Zoom: " + me\CurrCameraZoom)
+			Text(x + (380 * MenuScale), y + (240 * MenuScale), Format(GetLocalString("console", "debug2.camshake"), me\CameraShakeTimer))
+			Text(x + (380 * MenuScale), y + (260 * MenuScale), Format(GetLocalString("console", "debug2.camzoom"), me\CurrCameraZoom))
 			
-			Text(x + (380 * MenuScale), y + (300 * MenuScale), "Vomit Timer: " + me\VomitTimer)
+			Text(x + (380 * MenuScale), y + (300 * MenuScale), Format(GetLocalString("console", "debug2.vomit"), me\VomitTimer))
 			
 			If me\Playable Then
-				Text(x + (380 * MenuScale), y + (340 * MenuScale), "Is Playable: True")
+				Text(x + (380 * MenuScale), y + (340 * MenuScale), Format(GetLocalString("console", "debug2.playable"), "True"))
 			Else
-				Text(x + (380 * MenuScale), y + (340 * MenuScale), "Is Playable: False")
+				Text(x + (380 * MenuScale), y + (340 * MenuScale), Format(GetLocalString("console", "debug2.playable"), "False"))
 			EndIf
 			
-			Text(x + (380 * MenuScale), y + (380 * MenuScale), "Refined Items: " + me\RefinedItems)
-			Text(x + (380 * MenuScale), y + (400 * MenuScale), "Funds: " + me\Funds)
+			Text(x + (380 * MenuScale), y + (380 * MenuScale), Format(GetLocalString("console", "debug2.refitems"), me\RefinedItems))
+			Text(x + (380 * MenuScale), y + (400 * MenuScale), Format(GetLocalString("console", "debug2.funds"), me\Funds))
 			;[End Block]
 		Case 3
 			;[Block]
 			If n_I\Curr049 <> Null Then
-			Text(x, y, "SCP-049 Position: (" + FloatToString(EntityX(n_I\Curr049\OBJ), 2) + ", " + FloatToString(EntityY(n_I\Curr049\OBJ), 2) + ", " + FloatToString(EntityZ(n_I\Curr049\OBJ), 2) + ")")
-			Text(x, y + (20 * MenuScale), "SCP-049 Idle: " + n_I\Curr049\Idle)
-			Text(x, y + (40 * MenuScale), "SCP-049 State: " + n_I\Curr049\State)
+				Text(x, y, Format(Format(Format(GetLocalString("console", "debug3.049pos"), FloatToString(EntityX(n_I\Curr049\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr049\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr049\OBJ), 2), "{2}"))
+				Text(x, y + (20 * MenuScale), Format(GetLocalString("console", "debug3.049idle"), n_I\Curr049\Idle))
+				Text(x, y + (40 * MenuScale), Format(GetLocalString("console", "debug3.049state"), n_I\Curr049\State))
 			EndIf
 			If n_I\Curr096 <> Null Then
-			Text(x, y + (60 * MenuScale), "SCP-096 Position: (" + FloatToString(EntityX(n_I\Curr096\OBJ), 2) + ", " + FloatToString(EntityY(n_I\Curr096\OBJ), 2) + ", " + FloatToString(EntityZ(n_I\Curr096\OBJ), 2) + ")")
-			Text(x, y + (80 * MenuScale), "SCP-096 Idle: " + n_I\Curr096\Idle)
-			Text(x, y + (100 * MenuScale), "SCP-096 State: " + n_I\Curr096\State)
+				Text(x, y + (60 * MenuScale), Format(Format(Format(GetLocalString("console", "debug3.096pos"), FloatToString(EntityX(n_I\Curr096\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr096\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr096\OBJ), 2), "{2}"))
+				Text(x, y + (80 * MenuScale), Format(GetLocalString("console", "debug3.096idle"), n_I\Curr096\Idle))
+				Text(x, y + (100 * MenuScale), Format(GetLocalString("console", "debug3.096state"), n_I\Curr096\State))
 			EndIf
 			If n_I\Curr106 <> Null Then
-			Text(x, y + (120 * MenuScale), "SCP-106 Position: (" + FloatToString(EntityX(n_I\Curr106\OBJ), 2) + ", " + FloatToString(EntityY(n_I\Curr106\OBJ), 2) + ", " + FloatToString(EntityZ(n_I\Curr106\OBJ), 2) + ")")
-			Text(x, y + (140 * MenuScale), "SCP-106 Idle: " + n_I\Curr106\Idle)
-			Text(x, y + (160 * MenuScale), "SCP-106 State: " + n_I\Curr106\State)
+				Text(x, y + (120 * MenuScale), Format(Format(Format(GetLocalString("console", "debug3.106pos"), FloatToString(EntityX(n_I\Curr106\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr106\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr106\OBJ), 2), "{2}"))
+				Text(x, y + (140 * MenuScale), Format(GetLocalString("console", "debug3.106idle"), n_I\Curr106\Idle))
+				Text(x, y + (160 * MenuScale), Format(GetLocalString("console", "debug3.106state"), n_I\Curr106\State))
 			EndIf
 			If n_I\Curr173 <> Null Then
-			Text(x, y + (180 * MenuScale), "SCP-173 Position: (" + FloatToString(EntityX(n_I\Curr173\OBJ), 2) + ", " + FloatToString(EntityY(n_I\Curr173\OBJ), 2) + ", " + FloatToString(EntityZ(n_I\Curr173\OBJ), 2) + ")")
-			Text(x, y + (200 * MenuScale), "SCP-173 Idle: " + n_I\Curr173\Idle)
-			Text(x, y + (220 * MenuScale), "SCP-173 State: " + n_I\Curr173\State)
+				Text(x, y + (180 * MenuScale), Format(Format(Format(GetLocalString("console", "debug3.173pos"), FloatToString(EntityX(n_I\Curr173\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr173\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr173\OBJ), 2), "{2}"))
+				Text(x, y + (200 * MenuScale), Format(GetLocalString("console", "debug3.173idle"), n_I\Curr173\Idle))
+				Text(x, y + (220 * MenuScale), Format(GetLocalString("console", "debug3.173state"), n_I\Curr173\State))
 			EndIf
 			
-			Text(x, y + (260 * MenuScale), "Pills Taken: " + I_500\Taken)
+			Text(x, y + (260 * MenuScale), Format(GetLocalString("console", "debug3.pill"), I_500\Taken))
 			
-			Text(x, y + (300 * MenuScale), "SCP-008 Infection: " + I_008\Timer)
-			Text(x, y + (320 * MenuScale), "SCP-409 Crystallization: " + I_409\Timer)
-			Text(x, y + (340 * MenuScale), "SCP-427 State (Secs): " + Int(I_427\Timer / 70.0))
+			Text(x, y + (300 * MenuScale), Format(GetLocalString("console", "debug3.008"), I_008\Timer))
+			Text(x, y + (320 * MenuScale), Format(GetLocalString("console", "debug3.409"), I_409\Timer))
+			Text(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug3.427"), Int(I_427\Timer / 70.0)))
 			For i = 0 To 7
-				Text(x, y + ((360 + (20 * i)) * MenuScale), "SCP-1025 State " + i + ": " + I_1025\State[i])
+				Text(x, y + ((360 + (20 * i)) * MenuScale), Format(Format(GetLocalString("console", "debug3.1025"), i, "{0}"), I_1025\State[i], "{1}"))
 			Next
 			
 			If I_005\ChanceToSpawn = 1 Then
-				Text(x, y + (540 * MenuScale), "SCP-005 Spawned in the Chamber!")
+				Text(x, y + (540 * MenuScale), GetLocalString("console", "debug3.005.chamber"))
 			ElseIf I_005\ChanceToSpawn >= 2 And I_005\ChanceToSpawn =< 4
-				Text(x, y + (540 * MenuScale), "SCP-005 Spawned in SCP-409's Containment Chamber!")
+				Text(x, y + (540 * MenuScale), GetLocalString("console", "debug3.005.409"))
 			ElseIf I_005\ChanceToSpawn >= 5 And I_005\ChanceToSpawn =< 10
-				Text(x, y + (540 * MenuScale), "SCP-005 Spawned in Dr.Maynard's Office!")
+				Text(x, y + (540 * MenuScale), GetLocalString("console", "debug3.005.maynard"))
 			EndIf
 			;[End Block]
 	End Select
@@ -5948,7 +5932,7 @@ Function RenderGUI%()
 			If msg\KeyPadMsg <> "" Then 
 				If (msg\KeyPadTimer Mod 70.0) < 35.0 Then Text(mo\Viewport_Center_X, y + (124 * MenuScale * Scale), msg\KeyPadMsg, True, True)
 			Else
-				Text(mo\Viewport_Center_X, y + (70 * MenuScale * Scale), "ACCESS CODE: ", True, True)	
+				Text(mo\Viewport_Center_X, y + (70 * MenuScale * Scale), GetLocalString("msg", "accesscode"), True, True)	
 				SetFont(fo\FontID[Font_Digital_Big])
 				Text(mo\Viewport_Center_X, y + (124 * MenuScale * Scale), msg\KeyPadInput, True, True)
 			EndIf
@@ -5999,7 +5983,7 @@ Function RenderGUI%()
 			If OtherOpen\SecondInv[n] <> Null And SelectedItem <> OtherOpen\SecondInv[n] Then
 				If IsMouseOn = n Then
 					Color(255, 255, 255)	
-					Text(x + (INVENTORY_GFX_SIZE / 2), y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - (15 * MenuScale), OtherOpen\SecondInv[n]\ItemTemplate\Name, True)				
+					Text(x + (INVENTORY_GFX_SIZE / 2), y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - (15 * MenuScale), OtherOpen\SecondInv[n]\ItemTemplate\DisplayName, True)				
 				EndIf
 			EndIf					
 			
@@ -6137,7 +6121,7 @@ Function RenderGUI%()
 					If SelectedItem = Null Then
 						SetFont(fo\FontID[Font_Default])
 						Color(255, 255, 255)	
-						Text(x + (INVENTORY_GFX_SIZE / 2), y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - (15 * MenuScale), Inventory(n)\Name, True)	
+						Text(x + (INVENTORY_GFX_SIZE / 2), y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - (15 * MenuScale), Inventory(n)\DisplayName, True)	
 					EndIf
 				EndIf
 			EndIf					
@@ -6308,26 +6292,25 @@ Function RenderGUI%()
 							Select Int(SelectedItem\State2)
 								Case 0
 									;[Block]
-									StrTemp = "        USER TRACK PLAYER - "
 									If (Not opt\EnableUserTracks) Then
-										StrTemp = StrTemp + "NOT ENABLED     "
+										StrTemp = Format(GetLocalString("radio", "usertrack"), GetLocalString("radio", "notenable"))
 									ElseIf UserTrackMusicAmount < 1
-										StrTemp = StrTemp + "NO TRACKS FOUND     "
+										StrTemp = Format(GetLocalString("radio", "usertrack"), GetLocalString("radio", "nofound"))
 									Else
-										If ChannelPlaying(RadioCHN[0]) Then StrTemp = StrTemp + Upper(UserTrackName[RadioState[0]]) + "          "
+										If ChannelPlaying(RadioCHN[0]) Then StrTemp = Format(GetLocalString("radio", "usertrack"), Upper(UserTrackName[RadioState[0]]) + "          ")
 									EndIf
 									;[End Block]
 								Case 1
 									;[Block]
-									StrTemp = "        WARNING - CONTAINMENT BREACH          "
+									StrTemp = GetLocalString("radio", "warn")
 									;[End Block]
 								Case 2
 									;[Block]
-									StrTemp = "        SCP Foundation On-Site Radio          "
+									StrTemp = GetLocalString("radio", "onsite")
 									;[End Block]
 								Case 3
 									;[Block]
-									StrTemp = "             EMERGENCY CHANNEL - RESERVED FOR COMMUNICATION IN THE EVENT OF A CONTAINMENT BREACH         "
+									StrTemp = GetLocalString("radio", "emergency")
 									;[End Block]
 							End Select 
 							
@@ -6343,7 +6326,7 @@ Function RenderGUI%()
 							EndIf	
 							
 							SetFont(fo\FontID[Font_Digital])
-							Text(x + (60 * MenuScale), y, "CHN")	
+							Text(x + (60 * MenuScale), y, GetLocalString("radio", "chn"))	
 							
 							If SelectedItem\ItemTemplate\TempName = "veryfineradio" Then
 								StrTemp = ""
@@ -6397,15 +6380,15 @@ Function RenderGUI%()
 						Select SelectedItem\ItemTemplate\TempName
 							Case "gasmask"
 								;[Block]
-								If IsDoubleItem(wi\GasMask, 1, "gas masks") Then Return
+								If IsDoubleItem(wi\GasMask, 1, GetLocalString("misc", "twomask")) Then Return
 								;[End Block]
 							Case "finegasmask"
 								;[Block]
-								If IsDoubleItem(wi\GasMask, 2, "gas masks") Then Return
+								If IsDoubleItem(wi\GasMask, 2, GetLocalString("misc", "twomask")) Then Return
 								;[End Block]
 							Case "veryfinegasmask"
 								;[Block]
-								If IsDoubleItem(wi\GasMask, 3, "gas masks") Then Return
+								If IsDoubleItem(wi\GasMask, 3, GetLocalString("misc", "twomask")) Then Return
 								;[End Block]
 							Case "gasmask148"
 								;[Block]
@@ -6458,8 +6441,8 @@ Function RenderGUI%()
 					If (Not NavWorks) Then
 						If (MilliSecs2() Mod 800) < 200 Then
 							Color(200, 0, 0)
-							Text(x, y + (NAV_HEIGHT / 2) - (80 * MenuScale), "ERROR 06", True)
-							Text(x, y + (NAV_HEIGHT / 2) - (60 * MenuScale), "LOCATION UNKNOWN", True)						
+							Text(x, y + (NAV_HEIGHT / 2) - (80 * MenuScale), GetLocalString("msg", "nav.error"), True)
+							Text(x, y + (NAV_HEIGHT / 2) - (60 * MenuScale), GetLocalString("msg", "nav.locunknown"), True)						
 						EndIf
 					Else
 						If (SelectedItem\State > 0.0 Lor (SelectedItem\ItemTemplate\TempName = "nav300" Lor SelectedItem\ItemTemplate\TempName = "navulti")) And (Rnd(CoffinDistance + 15.0) > 1.0 Lor PlayerRoom\RoomTemplate\Name <> "cont1_895") Then
@@ -6604,11 +6587,11 @@ Function RenderGUI%()
 						Select SelectedItem\ItemTemplate\TempName
 							Case "gasmask"
 								;[Block]
-								If IsDoubleItem(I_1499\Using, 1, "gas masks") Then Return
+								If IsDoubleItem(I_1499\Using, 1, GetLocalString("misc", "twomask")) Then Return
 								;[End Block]
 							Case "fine1499"
 								;[Block]
-								If IsDoubleItem(I_1499\Using, 2, "gas masks") Then Return
+								If IsDoubleItem(I_1499\Using, 2, GetLocalString("misc", "twomask")) Then Return
 								;[End Block]
 						End Select
 						
@@ -6716,7 +6699,7 @@ Function UpdateMenu%()
 					me\StopHidingTimer = me\StopHidingTimer + fps\Factor[0]
 					If me\StopHidingTimer >= 40.0 Then
 						PlaySound_Strict(HorrorSFX[15])
-						CreateMsg("STOP HIDING!")
+						CreateMsg(GetLocalString("msg", "stophiding"))
 						mm\ShouldDeleteGadgets = True
 						MenuOpen = False
 						Return
@@ -6739,7 +6722,7 @@ Function UpdateMenu%()
 		If (Not mo\MouseDown1) Then mm\OnSliderID = 0
 		
 		If mm\AchievementsMenu <= 0 And OptionsMenu > 0 And QuitMsg <= 0 Then
-			If UpdateMainMenuButton(x + (101 * MenuScale), y + (460 * MenuScale), 230 * MenuScale, 60 * MenuScale, "BACK") Then
+			If UpdateMainMenuButton(x + (101 * MenuScale), y + (460 * MenuScale), 230 * MenuScale, 60 * MenuScale, GetLocalString("menu", "back")) Then
 				mm\AchievementsMenu = 0
 				OptionsMenu = 0
 				QuitMsg = 0
@@ -6752,41 +6735,42 @@ Function UpdateMenu%()
 				mm\ShouldDeleteGadgets = True
 			EndIf
 			
-			If UpdateMainMenuButton(x - (5 * MenuScale), y, 100 * MenuScale, 30 * MenuScale, "GRAPHICS", False) Then ChangeOptionTab(MenuTab_Options_Graphics, False)
-			If UpdateMainMenuButton(x + (105 * MenuScale), y, 100 * MenuScale, 30 * MenuScale, "AUDIO", False) Then ChangeOptionTab(MenuTab_Options_Audio, False)
-			If UpdateMainMenuButton(x + (215 * MenuScale), y, 100 * MenuScale, 30 * MenuScale, "CONTROLS", False) Then ChangeOptionTab(MenuTab_Options_Controls, False)
-			If UpdateMainMenuButton(x + (325 * MenuScale), y, 100 * MenuScale, 30 * MenuScale, "ADVANCED", False) Then ChangeOptionTab(MenuTab_Options_Advanced, False)
+			If UpdateMainMenuButton(x - (5 * MenuScale), y, 100 * MenuScale, 30 * MenuScale, GetLocalString("options", "grap"), False) Then ChangeOptionTab(MenuTab_Options_Graphics, False)
+			If UpdateMainMenuButton(x + (105 * MenuScale), y, 100 * MenuScale, 30 * MenuScale, GetLocalString("options", "audio"), False) Then ChangeOptionTab(MenuTab_Options_Audio, False)
+			If UpdateMainMenuButton(x + (215 * MenuScale), y, 100 * MenuScale, 30 * MenuScale, GetLocalString("options", "ctrl"), False) Then ChangeOptionTab(MenuTab_Options_Controls, False)
+			If UpdateMainMenuButton(x + (325 * MenuScale), y, 100 * MenuScale, 30 * MenuScale, GetLocalString("options", "avc"), False) Then ChangeOptionTab(MenuTab_Options_Advanced, False)
 			
 			Select OptionsMenu
 				Case MenuTab_Options_Graphics
 					;[Block]
+					x = x + (270 * MenuScale)
 					y = y + (50 * MenuScale)
 					
-					opt\BumpEnabled = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\BumpEnabled, True)
+					opt\BumpEnabled = UpdateMainMenuTick(x, y, opt\BumpEnabled, True)
 					
 					y = y + (30 * MenuScale)
 					
-					opt\VSync = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\VSync)
+					opt\VSync = UpdateMainMenuTick(x, y, opt\VSync)
 					
 					y = y + (30 * MenuScale)
 					
-					opt\AntiAliasing = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\AntiAliasing, opt\DisplayMode <> 0)
+					opt\AntiAliasing = UpdateMainMenuTick(x, y, opt\AntiAliasing, opt\DisplayMode <> 0)
 					
 					y = y + (30 * MenuScale)
 					
-					opt\AdvancedRoomLights = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\AdvancedRoomLights)
+					opt\AdvancedRoomLights = UpdateMainMenuTick(x, y, opt\AdvancedRoomLights)
 					
 					y = y + (40 * MenuScale)
 					
-					opt\ScreenGamma = UpdateMainMenuSlideBar(x + (270 * MenuScale), y, 100 * MenuScale, opt\ScreenGamma * 50.0, 1) / 50.0
+					opt\ScreenGamma = UpdateMainMenuSlideBar(x, y, 100 * MenuScale, opt\ScreenGamma * 50.0, 1) / 50.0
 					
 					y = y + (45 * MenuScale)
 					
-					opt\ParticleAmount = UpdateMainMenuSlider3(x + (270 * MenuScale), y, 100 * MenuScale, opt\ParticleAmount, 2, "MINIMAL", "REDUCED", "FULL")
+					opt\ParticleAmount = UpdateMainMenuSlider3(x, y, 100 * MenuScale, opt\ParticleAmount, 2, "MINIMAL", "REDUCED", "FULL")
 					
 					y = y + (45 * MenuScale)
 					
-					opt\TextureDetails = UpdateMainMenuSlider5(x + (270 * MenuScale), y, 100 * MenuScale, opt\TextureDetails, 3, "0.8", "0.4", "0.0", "-0.4", "-0.8")
+					opt\TextureDetails = UpdateMainMenuSlider5(x, y, 100 * MenuScale, opt\TextureDetails, 3, "0.8", "0.4", "0.0", "-0.4", "-0.8")
 					Select opt\TextureDetails
 						Case 0
 							;[Block]
@@ -6813,17 +6797,17 @@ Function UpdateMenu%()
 					
 					y = y + (35 * MenuScale)
 					
-					opt\SaveTexturesInVRAM = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\SaveTexturesInVRAM, True)
+					opt\SaveTexturesInVRAM = UpdateMainMenuTick(x, y, opt\SaveTexturesInVRAM, True)
 					
 					y = y + (40 * MenuScale)
 					
-					opt\CurrFOV = UpdateMainMenuSlideBar(x + (270 * MenuScale), y, 100 * MenuScale, opt\CurrFOV * 2.0, 4) / 2.0
+					opt\CurrFOV = UpdateMainMenuSlideBar(x, y, 100 * MenuScale, opt\CurrFOV * 2.0, 4) / 2.0
 					opt\FOV = opt\CurrFOV + 40
 					CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * opt\RealGraphicWidth / opt\RealGraphicHeight)) / 2.0))
 					
 					y = y + (45 * MenuScale)
 					
-					opt\Anisotropic = UpdateMainMenuSlider5(x + (270 * MenuScale), y, 100 * MenuScale, opt\Anisotropic, 5, "Trilinear", "2x", "4x", "8x", "16x")
+					opt\Anisotropic = UpdateMainMenuSlider5(x, y, 100 * MenuScale, opt\Anisotropic, 5, "Trilinear", "2x", "4x", "8x", "16x")
 					Select opt\Anisotropic
 						Case 0
 							;[Block]
@@ -6850,105 +6834,108 @@ Function UpdateMenu%()
 					
 					y = y + (35 * MenuScale)
 					
-					opt\Atmosphere = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\Atmosphere, True)
+					opt\Atmosphere = UpdateMainMenuTick(x, y, opt\Atmosphere, True)
 					;[End Block]
 				Case MenuTab_Options_Audio
 					;[Block]
+					x = x + (270 * MenuScale)
 					y = y + (50 * MenuScale)
 					
-					opt\MasterVolume = UpdateMainMenuSlideBar(x + (270 * MenuScale), y, 100 * MenuScale, opt\MasterVolume * 100.0, 1) / 100.0
+					opt\MasterVolume = UpdateMainMenuSlideBar(x, y, 100 * MenuScale, opt\MasterVolume * 100.0, 1) / 100.0
 					
 					y = y + (40 * MenuScale)
 					
-					opt\MusicVolume = UpdateMainMenuSlideBar(x + (270 * MenuScale), y, 100 * MenuScale, opt\MusicVolume * 100.0, 2) / 100.0
+					opt\MusicVolume = UpdateMainMenuSlideBar(x, y, 100 * MenuScale, opt\MusicVolume * 100.0, 2) / 100.0
 					
 					y = y + (40 * MenuScale)
 					
-					opt\SFXVolume = UpdateMainMenuSlideBar(x + (270 * MenuScale), y, 100 * MenuScale, opt\SFXVolume * 100.0, 3) / 100.0
+					opt\SFXVolume = UpdateMainMenuSlideBar(x, y, 100 * MenuScale, opt\SFXVolume * 100.0, 3) / 100.0
 					
 					y = y + (40 * MenuScale)
 					
-					opt\EnableSFXRelease = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\EnableSFXRelease, True)
+					opt\EnableSFXRelease = UpdateMainMenuTick(x, y, opt\EnableSFXRelease, True)
 					
 					y = y + (30 * MenuScale)
 					
-					opt\EnableUserTracks = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\EnableUserTracks, True)
+					opt\EnableUserTracks = UpdateMainMenuTick(x, y, opt\EnableUserTracks, True)
 					
 					If opt\EnableUserTracks Then
 						y = y + (30 * MenuScale)
 						
-						opt\UserTrackMode = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\UserTrackMode)
+						opt\UserTrackMode = UpdateMainMenuTick(x, y, opt\UserTrackMode)
 						
-						UpdateMainMenuButton(x, y + (30 * MenuScale), 210 * MenuScale, 30 * MenuScale, "SCAN FOR USER TRACKS", False, False, True)
+						UpdateMainMenuButton(x - (270 * MenuScale), y + (30 * MenuScale), 210 * MenuScale, 30 * MenuScale, GetLocalString("options", "scantracks"), False, False, True)
 					EndIf
 					;[End Block]
 				Case MenuTab_Options_Controls
 					;[Block]
 					If mm\CurrMenuPage = 0 Then
+						x = x + (270 * MenuScale)
 						y = y + (50 * MenuScale)
 						
-						opt\MouseSensitivity = (UpdateMainMenuSlideBar(x + (270 * MenuScale), y, 100 * MenuScale, (opt\MouseSensitivity + 0.5) * 100.0, 1) / 100.0) - 0.5
+						opt\MouseSensitivity = (UpdateMainMenuSlideBar(x, y, 100 * MenuScale, (opt\MouseSensitivity + 0.5) * 100.0, 1) / 100.0) - 0.5
 						
 						y = y + (40 * MenuScale)
 						
-						opt\InvertMouseX = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\InvertMouseX)
+						opt\InvertMouseX = UpdateMainMenuTick(x, y, opt\InvertMouseX)
 						
 						y = y + (40 * MenuScale)
 						
-						opt\InvertMouseY = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\InvertMouseY)
+						opt\InvertMouseY = UpdateMainMenuTick(x, y, opt\InvertMouseY)
 						
 						y = y + (40 * MenuScale)
 						
-						opt\MouseSmoothing = UpdateMainMenuSlideBar(x + (270 * MenuScale), y, 100 * MenuScale, (opt\MouseSmoothing) * 50.0, 2) / 50.0
+						opt\MouseSmoothing = UpdateMainMenuSlideBar(x, y, 100 * MenuScale, (opt\MouseSmoothing) * 50.0, 2) / 50.0
 						
 						y = y + (40 * MenuScale)
 						
-						If UpdateMainMenuButton(x, y, 240 * MenuScale, 30 * MenuScale, "CONTROL CONFIGURATION", False) Then ChangePage(1)
+						If UpdateMainMenuButton(x - (270 * MenuScale), y, 240 * MenuScale, 30 * MenuScale, GetLocalString("options", "controlconfig"), False) Then ChangePage(1)
 					Else
+						x = x + (200 * MenuScale)
 						y = y + (80 * MenuScale)
 						
-						UpdateMainMenuInputBox(x + (200 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_UP, 210.0)], 3)		
+						UpdateMainMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_UP, 210.0)], 3)		
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMainMenuInputBox(x + (200 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_LEFT, 210.0)], 4)	
+						UpdateMainMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_LEFT, 210.0)], 4)	
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMainMenuInputBox(x + (200 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_DOWN, 210.0)], 5)				
+						UpdateMainMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_DOWN, 210.0)], 5)				
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMainMenuInputBox(x + (200 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_RIGHT, 210.0)], 6)
+						UpdateMainMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_RIGHT, 210.0)], 6)
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMainMenuInputBox(x + (200 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SPRINT, 210.0)], 7)
+						UpdateMainMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SPRINT, 210.0)], 7)
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMainMenuInputBox(x + (200 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CROUCH, 210.0)], 8)
+						UpdateMainMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CROUCH, 210.0)], 8)
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMainMenuInputBox(x + (200 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\BLINK, 210.0)], 9)				
+						UpdateMainMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\BLINK, 210.0)], 9)				
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMainMenuInputBox(x + (200 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\INVENTORY, 210.0)], 10)
+						UpdateMainMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\INVENTORY, 210.0)], 10)
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMainMenuInputBox(x + (200 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SAVE, 210.0)], 11)	
+						UpdateMainMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SAVE, 210.0)], 11)	
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMainMenuInputBox(x + (200 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, 210.0)], 13)
+						UpdateMainMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, 210.0)], 13)
 						
 						If opt\CanOpenConsole Then
 							y = y + (20 * MenuScale)
 							
-							UpdateMainMenuInputBox(x + (200 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210.0)], 12)
+							UpdateMainMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210.0)], 12)
 						EndIf
 						
 						Local TempKey%
@@ -7011,20 +6998,21 @@ Function UpdateMenu%()
 						
 						y = y + (40 * MenuScale)
 						
-						If UpdateMainMenuButton(x, y, 240 * MenuScale, 30 * MenuScale, "BACK", False) Then ChangePage(0)
+						If UpdateMainMenuButton(x - (200 * MenuScale), y, 240 * MenuScale, 30 * MenuScale, GetLocalString("menu", "back"), False) Then ChangePage(0)
 					EndIf
 					;[End Block]
 				Case MenuTab_Options_Advanced
 					;[Block]
+					x = x + (270 * MenuScale)
 					y = y + (50 * MenuScale)
 					
-					opt\HUDEnabled = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\HUDEnabled)
+					opt\HUDEnabled = UpdateMainMenuTick(x, y, opt\HUDEnabled)
 					
 					y = y + (30 * MenuScale)
 					
 					Local PrevCanOpenConsole% = opt\CanOpenConsole
 					
-					opt\CanOpenConsole = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\CanOpenConsole)
+					opt\CanOpenConsole = UpdateMainMenuTick(x, y, opt\CanOpenConsole)
 					
 					If PrevCanOpenConsole Then
 						If PrevCanOpenConsole <> opt\CanOpenConsole Then
@@ -7034,26 +7022,26 @@ Function UpdateMenu%()
 					
 					y = y + (30 * MenuScale)
 					
-					If opt\CanOpenConsole Then opt\ConsoleOpening = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\ConsoleOpening)
+					If opt\CanOpenConsole Then opt\ConsoleOpening = UpdateMainMenuTick(x, y, opt\ConsoleOpening)
 					
 					y = y + (30 * MenuScale)
 					
-					opt\AchvMsgEnabled = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\AchvMsgEnabled)
+					opt\AchvMsgEnabled = UpdateMainMenuTick(x, y, opt\AchvMsgEnabled)
 					
 					y = y + (30 * MenuScale)
 					
-					opt\AutoSaveEnabled = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\AutoSaveEnabled, SelectedDifficulty\SaveType <> SAVE_ANYWHERE)
+					opt\AutoSaveEnabled = UpdateMainMenuTick(x, y, opt\AutoSaveEnabled, SelectedDifficulty\SaveType <> SAVE_ANYWHERE)
 					
 					y = y + (30 * MenuScale)
 					
-					opt\ShowFPS = UpdateMainMenuTick(x + (270 * MenuScale), y, opt\ShowFPS)
+					opt\ShowFPS = UpdateMainMenuTick(x, y, opt\ShowFPS)
 					
 					y = y + (30 * MenuScale)
 					
 					Local PrevCurrFrameLimit% = opt\CurrFrameLimit > 0.0
 					
-					If UpdateMainMenuTick(x + (270 * MenuScale), y, opt\CurrFrameLimit > 0.0) Then
-						opt\CurrFrameLimit = UpdateMainMenuSlideBar(x + (150 * MenuScale), y + (40 * MenuScale), 100 * MenuScale, opt\CurrFrameLimit * 99.0, 1) / 99.0
+					If UpdateMainMenuTick(x, y, opt\CurrFrameLimit > 0.0) Then
+						opt\CurrFrameLimit = UpdateMainMenuSlideBar(x - (120 * MenuScale), y + (40 * MenuScale), 100 * MenuScale, opt\CurrFrameLimit * 99.0, 1) / 99.0
 						opt\CurrFrameLimit = Max(opt\CurrFrameLimit, 0.01)
 						opt\FrameLimit = 19 + (opt\CurrFrameLimit * 100.0)
 					Else
@@ -7079,7 +7067,7 @@ Function UpdateMenu%()
 				If (Not CanSave) Then AbleToSave = False
 				If AbleToSave Then
 					QuitButton = 160
-					If UpdateMainMenuButton(x, y + (85 * MenuScale), 430 * MenuScale, 60 * MenuScale, "SAVE & QUIT") Then
+					If UpdateMainMenuButton(x, y + (85 * MenuScale), 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "savequit")) Then
 						me\DropSpeed = 0.0
 						SaveGame(CurrSave\Name)
 						NullGame()
@@ -7090,14 +7078,14 @@ Function UpdateMenu%()
 				EndIf
 			EndIf
 			
-			If UpdateMainMenuButton(x, y + (QuitButton * MenuScale), 430 * MenuScale, 60 * MenuScale, "QUIT") Then
+			If UpdateMainMenuButton(x, y + (QuitButton * MenuScale), 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "quit")) Then
 				NullGame()
 				CurrSave = Null
 				ResetInput()
 				Return
 			EndIf
 			
-			If UpdateMainMenuButton(x + (101 * MenuScale), y + 385 * MenuScale, 230 * MenuScale, 60 * MenuScale, "BACK") Then
+			If UpdateMainMenuButton(x + (101 * MenuScale), y + 385 * MenuScale, 230 * MenuScale, 60 * MenuScale, GetLocalString("menu", "back")) Then
 				mm\AchievementsMenu = 0
 				OptionsMenu = 0
 				QuitMsg = 0
@@ -7105,7 +7093,7 @@ Function UpdateMenu%()
 				mm\ShouldDeleteGadgets = True
 			EndIf
 		ElseIf mm\AchievementsMenu > 0 And OptionsMenu <= 0 And QuitMsg <= 0
-			If UpdateMainMenuButton(x + (101 * MenuScale), y + 345 * MenuScale, 230 * MenuScale, 60 * MenuScale, "BACK") Then
+			If UpdateMainMenuButton(x + (101 * MenuScale), y + 345 * MenuScale, 230 * MenuScale, 60 * MenuScale, GetLocalString("menu", "back")) Then
 				mm\AchievementsMenu = 0
 				OptionsMenu = 0
 				QuitMsg = 0
@@ -7137,7 +7125,7 @@ Function UpdateMenu%()
 			If (Not me\Terminated) Lor me\SelectedEnding <> - 1 Then	
 				y = y + (75 * MenuScale)
 				
-				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "RESUME", True, True) Then
+				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "resume"), True, True) Then
 					ResumeSounds()
 					StopMouseMovement()
 					DeleteMenuGadgets()
@@ -7149,8 +7137,8 @@ Function UpdateMenu%()
 				
 				If SelectedDifficulty\SaveType <> NO_SAVES Then
 					If GameSaved Then
-						If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "LOAD GAME") Then
-							RenderLoading(0, "GAME FILES")
+						If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "load")) Then
+							RenderLoading(0, GetLocalString("loading", "files"))
 							
 							LoadGameQuick(CurrSave\Name)
 							
@@ -7185,23 +7173,23 @@ Function UpdateMenu%()
 							Return
 						EndIf
 					Else
-						UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "LOAD GAME", True, False, True)
+						UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "load"), True, False, True)
 					EndIf
 					y = y + (75 * MenuScale)
 				EndIf
 				
-				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "ACHIEVEMENTS") Then 
+				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "achievements")) Then 
 					mm\AchievementsMenu = 1
 					mm\ShouldDeleteGadgets = True
 				EndIf
 				
 				y = y + (75 * MenuScale)
 				
-				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "OPTIONS") Then ChangeOptionTab(MenuTab_Options_Graphics, False)
+				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "options")) Then ChangeOptionTab(MenuTab_Options_Graphics, False)
 				
 				y = y + (75 * MenuScale)
 				
-				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "QUIT") Then
+				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "quit")) Then
 					QuitMsg = 1
 					mm\ShouldDeleteGadgets = True
 				EndIf
@@ -7210,8 +7198,8 @@ Function UpdateMenu%()
 				
 				If SelectedDifficulty\SaveType <> NO_SAVES Then
 					If GameSaved Then
-						If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "LOAD GAME") Then
-							RenderLoading(0, "GAME FILES")
+						If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "load")) Then
+							RenderLoading(0, GetLocalString("loading", "files"))
 							
 							LoadGameQuick(CurrSave\Name)
 							
@@ -7246,11 +7234,11 @@ Function UpdateMenu%()
 							Return
 						EndIf
 					Else
-						UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "LOAD GAME", True, False, True)
+						UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "load"), True, False, True)
 					EndIf
 					y = y + (75 * MenuScale)
 				EndIf
-				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "QUIT TO MENU") Then
+				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "quitmenu")) Then
 					NullGame()
 					CurrSave = Null
 					ResetInput()
@@ -7285,15 +7273,15 @@ Function RenderMenu%()
 		Color(255, 255, 255)
 		
 		If mm\AchievementsMenu > 0 Then
-			TempStr = "ACHIEVEMENTS"
+			TempStr = GetLocalString("menu", "achievements")
 		ElseIf OptionsMenu > 0 Then
-			TempStr = "OPTIONS"
+			TempStr = GetLocalString("menu", "options")
 		ElseIf QuitMsg > 0 Then
-			TempStr = "QUIT?"
+			TempStr = GetLocalString("menu", "quit?")
 		ElseIf (Not me\Terminated) Lor me\SelectedEnding <> -1
-			TempStr = "PAUSED"
+			TempStr = GetLocalString("menu", "paused")
 		Else
-			TempStr = "YOU DIED"
+			TempStr = GetLocalString("menu", "died")
 		EndIf		
 		SetFont(fo\FontID[Font_Default_Big])
 		Text(x + (Width / 2) + (47 * MenuScale), y + (48 * MenuScale), TempStr, True, True)
@@ -7332,7 +7320,7 @@ Function RenderMenu%()
 					y = y + (50 * MenuScale)
 					
 					Color(100, 100, 100)
-					Text(x, y + (5 * MenuScale), "Enable bump mapping:")	
+					Text(x, y + (5 * MenuScale), GetLocalString("options", "bump"))	
 					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_BumpMapping)
 					EndIf
@@ -7340,7 +7328,7 @@ Function RenderMenu%()
 					y = y + (30 * MenuScale)
 					
 					Color(255, 255, 255)
-					Text(x, y + (5 * MenuScale), "VSync:")
+					Text(x, y + (5 * MenuScale), GetLocalString("options", "vsync"))
 					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_VSync)
 					EndIf
@@ -7348,7 +7336,7 @@ Function RenderMenu%()
 					y = y + (30 * MenuScale)
 					
 					Color(255 - (155 * (opt\DisplayMode <> 0)), 255 - (155 * (opt\DisplayMode <> 0)), 255 - (155 * (opt\DisplayMode <> 0)))
-					Text(x, y + (5 * MenuScale), "Anti-aliasing:")
+					Text(x, y + (5 * MenuScale), GetLocalString("options", "antialias"))
 					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AntiAliasing)
 					EndIf
@@ -7356,7 +7344,7 @@ Function RenderMenu%()
 					y = y + (30 * MenuScale)
 					
 					Color(255, 255, 255)
-					Text(x, y + (5 * MenuScale), "Advanced room lighting:")
+					Text(x, y + (5 * MenuScale), GetLocalString("options", "lights"))
 					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_RoomLights)
 					EndIf
@@ -7364,7 +7352,7 @@ Function RenderMenu%()
 					y = y + (40 * MenuScale)
 					
 					Color(255, 255, 255)
-					Text(x, y + (5 * MenuScale), "Screen gamma:")
+					Text(x, y + (5 * MenuScale), GetLocalString("options", "gamma"))
 					If (MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 1 Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ScreenGamma, opt\ScreenGamma)
 					EndIf
@@ -7372,7 +7360,7 @@ Function RenderMenu%()
 					y = y + (45 * MenuScale)
 					
 					Color(255, 255, 255)
-					Text(x, y, "Particle amount:")
+					Text(x, y, GetLocalString("options", "particle"))
 					If (MouseOn(x + (270 * MenuScale), y - (9 * MenuScale), 114 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 2 Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ParticleAmount, opt\ParticleAmount)
 					EndIf
@@ -7380,7 +7368,7 @@ Function RenderMenu%()
 					y = y + (45 * MenuScale)
 					
 					Color(255, 255, 255)
-					Text(x, y, "Texture LOD Bias:")
+					Text(x, y, GetLocalString("options", "lod"))
 					If (MouseOn(x + (270 * MenuScale), y - (9 * MenuScale), 114 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 3 Then
 						RenderOptionsTooltip(tX, tY, tW, tH + 100 * MenuScale, Tooltip_TextureLODBias)
 					EndIf
@@ -7388,7 +7376,7 @@ Function RenderMenu%()
 					y = y + (35 * MenuScale)
 					
 					Color(100, 100, 100)
-					Text(x, y + (5 * MenuScale), "Save textures in the VRAM:")	
+					Text(x, y + (5 * MenuScale), GetLocalString("options", "vram"))	
 					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SaveTexturesInVRAM)
 					EndIf
@@ -7396,7 +7384,7 @@ Function RenderMenu%()
 					y = y + (40 * MenuScale)
 					
 					Color(255, 255, 255)
-					Text(x, y + (5 * MenuScale), "Field of view:")
+					Text(x, y + (5 * MenuScale), GetLocalString("options", "fov"))
 					Color(255, 255, 0)
 					If (MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 4 Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FOV)
@@ -7405,7 +7393,7 @@ Function RenderMenu%()
 					y = y + (45 * MenuScale)
 					
 					Color(255, 255, 255)
-					Text(x, y, "Anisotropic filtering:")
+					Text(x, y, GetLocalString("options", "filter"))
 					If (MouseOn(x + (270 * MenuScale), y - (9 * MenuScale), 114 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 5 Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AnisotropicFiltering)
 					EndIf
@@ -7414,11 +7402,11 @@ Function RenderMenu%()
 					
 					Color(100, 100, 100)
 					If opt\Atmosphere Then
-						TempStr = "Bright"
+						TempStr = GetLocalString("options", "atmo.bright")
 					Else
-						TempStr = "Dark"
+						TempStr = GetLocalString("options", "atmo.dark")
 					EndIf
-					Text(x, y + (5 * MenuScale), "Atmosphere: " + TempStr)
+					Text(x, y + (5 * MenuScale), GetLocalString("options", "atmo") + TempStr)
 					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Atmosphere)
 					EndIf
@@ -7430,7 +7418,7 @@ Function RenderMenu%()
 					y = y + (50 * MenuScale)
 					
 					Color(255, 255, 255)
-					Text(x, y + (5 * MenuScale), "Master volume:")
+					Text(x, y + (5 * MenuScale), GetLocalString("options", "mastervolume"))
 					If (MouseOn(x + (250 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 1 Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MasterVolume, opt\MasterVolume)
 					EndIf
@@ -7438,7 +7426,7 @@ Function RenderMenu%()
 					y = y + (40 * MenuScale)
 					
 					Color(255, 255, 255)
-					Text(x, y + (5 * MenuScale), "Music volume:")
+					Text(x, y + (5 * MenuScale), GetLocalString("options", "musicvolume"))
 					If (MouseOn(x + (250 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 2 Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MusicVolume, opt\MusicVolume)
 					EndIf
@@ -7446,7 +7434,7 @@ Function RenderMenu%()
 					y = y + (40 * MenuScale)
 					
 					Color(255, 255, 255)
-					Text(x, y + (5 * MenuScale), "Sound volume:")
+					Text(x, y + (5 * MenuScale), GetLocalString("options", "soundvolume"))
 					If (MouseOn(x + (250 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 3 Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SoundVolume, opt\SFXVolume)
 					EndIf
@@ -7454,7 +7442,7 @@ Function RenderMenu%()
 					y = y + (40 * MenuScale)
 					
 					Color(100, 100, 100)
-					Text(x, y + (5 * MenuScale), "Sound auto-release:")
+					Text(x, y + (5 * MenuScale), GetLocalString("options", "autorelease"))
 					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 						RenderOptionsTooltip(tX, tY, tW, tH + 220 * MenuScale, Tooltip_SoundAutoRelease)
 					EndIf
@@ -7462,7 +7450,7 @@ Function RenderMenu%()
 					y = y + (30 * MenuScale)
 					
 					Color(100, 100, 100)
-					Text(x, y + (5 * MenuScale), "Enable user tracks:")
+					Text(x, y + (5 * MenuScale), GetLocalString("options", "enabletracks"))
 					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTracks)
 					EndIf
@@ -7471,17 +7459,17 @@ Function RenderMenu%()
 						y = y + (30 * MenuScale)
 						
 						Color(255, 255, 255)
-						Text(x, y + (5 * MenuScale), "User track mode:")
+						Text(x, y + (5 * MenuScale), GetLocalString("options", "trackmode"))
 						If opt\UserTrackMode Then
-							TempStr = "Repeat"
+							TempStr = GetLocalString("options", "track.repeat")
 						Else
-							TempStr = "Random"
+							TempStr = GetLocalString("options", "track.random")
 						EndIf
 						Text(x + (310 * MenuScale), y + (5 * MenuScale), TempStr)
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTracksMode)
 						EndIf
-						If MouseOn(x + (270 * MenuScale), y + 30 * MenuScale, 210 * MenuScale, 30 * MenuScale) And mm\OnSliderID = 0 Then
+						If MouseOn(x, y + (30 * MenuScale), 210 * MenuScale, 30 * MenuScale) And mm\OnSliderID = 0 Then
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTrackScan)
 						EndIf
 					EndIf
@@ -7492,7 +7480,7 @@ Function RenderMenu%()
 					y = y + (50 * MenuScale)
 					If mm\CurrMenuPage = 0 Then 
 						Color(255, 255, 255)
-						Text(x, y + (5 * MenuScale), "Mouse sensitivity:")
+						Text(x, y + (5 * MenuScale), GetLocalString("options", "mousesensitive"))
 						If (MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 1 Then
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseSensitivity, opt\MouseSensitivity)
 						EndIf
@@ -7500,7 +7488,7 @@ Function RenderMenu%()
 						y = y + (40 * MenuScale)
 						
 						Color(255, 255, 255)
-						Text(x, y + (5 * MenuScale), "Invert mouse X-axis:")
+						Text(x, y + (5 * MenuScale), GetLocalString("options", "invertx"))
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseInvertX)
 						EndIf
@@ -7508,7 +7496,7 @@ Function RenderMenu%()
 						y = y + (40 * MenuScale)
 						
 						Color(255, 255, 255)
-						Text(x, y + (5 * MenuScale), "Invert mouse Y-axis:")
+						Text(x, y + (5 * MenuScale), GetLocalString("options", "inverty"))
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseInvertY)
 						EndIf
@@ -7516,7 +7504,7 @@ Function RenderMenu%()
 						y = y + (40 * MenuScale)
 						
 						Color(255, 255, 255)
-						Text(x, y + (5 * MenuScale), "Mouse smoothing:")
+						Text(x, y + (5 * MenuScale), GetLocalString("options", "mousesmooth"))
 						If (MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 2 Then
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseSmoothing, opt\MouseSmoothing)
 						EndIf
@@ -7528,52 +7516,52 @@ Function RenderMenu%()
 						EndIf
 					Else
 						Color(255, 255, 255)
-						Text(x, y + (5 * MenuScale), "Control configuration:")
+						Text(x, y + (5 * MenuScale), GetLocalString("menu", "controlconfig"))
 						
 						y = y + (30 * MenuScale)
 						
-						Text(x, y + (5 * MenuScale), "Move Forward:")
+						Text(x, y + (5 * MenuScale), GetLocalString("options", "key.forward"))
 						
 						y = y + (20 * MenuScale)
 						
-						Text(x, y + (5 * MenuScale), "Strafe Left:")
+						Text(x, y + (5 * MenuScale), GetLocalString("options", "key.left"))
 						
 						y = y + (20 * MenuScale)
 						
-						Text(x, y + (5 * MenuScale), "Move Backward:")
+						Text(x, y + (5 * MenuScale), GetLocalString("options", "key.backward"))
 						
 						y = y + (20 * MenuScale)
 						
-						Text(x, y + (5 * MenuScale), "Strafe Right:")
+						Text(x, y + (5 * MenuScale), GetLocalString("options", "key.right"))
 						
 						y = y + (20 * MenuScale)
 						
-						Text(x, y + (5 * MenuScale), "Sprint:")
+						Text(x, y + (5 * MenuScale), GetLocalString("options", "key.sprint"))
 						
 						y = y + (20 * MenuScale)
 						
-						Text(x, y + (5 * MenuScale), "Crouch:")
+						Text(x, y + (5 * MenuScale), GetLocalString("options", "key.crouch"))
 						
 						y = y + (20 * MenuScale)
 						
-						Text(x, y + (5 * MenuScale), "Manual Blink:")
+						Text(x, y + (5 * MenuScale), GetLocalString("options", "key.blink"))
 						
 						y = y + (20 * MenuScale)
 						
-						Text(x, y + (5 * MenuScale), "Inventory:")
+						Text(x, y + (5 * MenuScale), GetLocalString("options", "key.inv"))
 						
 						y = y + (20 * MenuScale)
 						
-						Text(x, y + (5 * MenuScale), "Quick Save:")
+						Text(x, y + (5 * MenuScale), GetLocalString("options", "key.save"))
 						
 						y = y + (20 * MenuScale)
 						
-						Text(x, y + (5 * MenuScale), "Take Screenshot:")
+						Text(x, y + (5 * MenuScale), GetLocalString("options", "key.screenshot"))
 						
 						If opt\CanOpenConsole Then
 							y = y + (20 * MenuScale)
 							
-							Text(x, y + (5 * MenuScale), "Console:")
+							Text(x, y + (5 * MenuScale), GetLocalString("options", "key.console"))
 						EndIf
 						
 						If MouseOn(x, y - ((180 + (20 * opt\CanOpenConsole)) * MenuScale), 310 * MenuScale, ((200 + (20 * opt\CanOpenConsole)) * MenuScale))
@@ -7588,7 +7576,7 @@ Function RenderMenu%()
 					y = y + (50 * MenuScale)
 					
 					Color(255, 255, 255)			
-					Text(x, y + (5 * MenuScale), "Show HUD:")	
+					Text(x, y + (5 * MenuScale), GetLocalString("options", "hud"))
 					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_HUD)
 					EndIf
@@ -7596,7 +7584,7 @@ Function RenderMenu%()
 					y = y + (30 * MenuScale)
 					
 					Color(255, 255, 255)
-					Text(x, y + (5 * MenuScale), "Enable console:")
+					Text(x, y + (5 * MenuScale), GetLocalString("options", "console"))
 					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Console)
 					EndIf
@@ -7605,7 +7593,7 @@ Function RenderMenu%()
 					
 					If opt\CanOpenConsole Then
 						Color(255, 255, 255)
-						Text(x, y + (5 * MenuScale), "Open console on error:")
+						Text(x, y + (5 * MenuScale), GetLocalString("options", "error"))
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 							RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ConsoleOnError)
 						EndIf
@@ -7614,7 +7602,7 @@ Function RenderMenu%()
 					y = y + (30 * MenuScale)
 					
 					Color(255, 255, 255)
-					Text(x, y + (5 * MenuScale), "Achievement popups:")
+					Text(x, y + (5 * MenuScale), GetLocalString("options", "achipop"))
 					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AchievementPopups)
 					EndIf
@@ -7622,7 +7610,7 @@ Function RenderMenu%()
 					y = y + (30 * MenuScale)
 					
 					Color(255 - (155 * SelectedDifficulty\SaveType <> SAVE_ANYWHERE), 255 - (155 * SelectedDifficulty\SaveType <> SAVE_ANYWHERE), 255 - (155 * SelectedDifficulty\SaveType <> SAVE_ANYWHERE))
-					Text(x, y + (5 * MenuScale), "Enable auto save:")
+					Text(x, y + (5 * MenuScale), GetLocalString("options", "save"))
 					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AutoSave)
 					EndIf
@@ -7630,7 +7618,7 @@ Function RenderMenu%()
 					y = y + (30 * MenuScale)
 					
 					Color(255, 255, 255)
-					Text(x, y + (5 * MenuScale), "Show FPS:")
+					Text(x, y + (5 * MenuScale), GetLocalString("options", "fps"))
 					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FPS)
 					EndIf
@@ -7638,7 +7626,7 @@ Function RenderMenu%()
 					y = y + (30 * MenuScale)
 					
 					Color(255, 255, 255)
-					Text(x, y + (5 * MenuScale), "Frame limit:")
+					Text(x, y + (5 * MenuScale), GetLocalString("options", "frame"))
 					Color(255, 255, 255)
 					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FrameLimit, opt\FrameLimit)
@@ -7676,21 +7664,21 @@ Function RenderMenu%()
 			EndIf
 		Else
 			SetFont(fo\FontID[Font_Default])
-			Text(x, y, "Difficulty: " + SelectedDifficulty\Name)
+			Text(x, y, GetLocalString("menu", "new.diff") + SelectedDifficulty\Name)
 			If CurrSave = Null Then
-				TempStr = "[DATA REDACTED]"
+				TempStr = GetLocalString("menu", "dataredacted")
 			Else
-				TempStr = ConvertANSItoUTF8(CurrSave\Name)
+				TempStr = ConvertToUTF8(CurrSave\Name)
 			EndIf
-			Text(x, y + (20 * MenuScale), "Save: " + TempStr)
+			Text(x, y + (20 * MenuScale), Format(GetLocalString("menu", "save"), TempStr))
 			
 			If SelectedMap = "" Then
-				TempStr = "Map seed: " + RandomSeed
+				TempStr = GetLocalString("menu", "new.seed") + RandomSeed
 			Else
 				If Len(SelectedMap) > 15 Then
-					TempStr = "Selected map: " + Left(ConvertANSItoUTF8(SelectedMap), 14) + "..."
+					TempStr = GetLocalString("menu", "new.map") + Left(ConvertToUTF8(SelectedMap), 14) + "..."
 				Else
-					TempStr = "Selected map: " + ConvertANSItoUTF8(SelectedMap)
+					TempStr = GetLocalString("menu", "new.map") + ConvertToUTF8(SelectedMap)
 				EndIf
 			EndIf
 			Text(x, y + (40 * MenuScale), TempStr)
@@ -7778,14 +7766,14 @@ Function UpdateEnding%()
 					x = x + (132 * MenuScale)
 					y = y + (432 * MenuScale)
 					
-					If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "ACHIEVEMENTS", True) Then
+					If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "achievements"), True) Then
 						mm\AchievementsMenu = 1
 						mm\ShouldDeleteGadgets = True
 					EndIf
 					
 					y = y + 75 * MenuScale
 					
-					If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, "MAIN MENU", True)
+					If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "mainmenu"), True)
 						ShouldPlay = 24
 						NowPlaying = ShouldPlay
 						For i = 0 To 9
@@ -7853,7 +7841,7 @@ Function RenderEnding%()
 				
 				Color(255, 255, 255)
 				SetFont(fo\FontID[Font_Default_Big])
-				Text(x + (Width / 2) + (47 * MenuScale), y + (48 * MenuScale), "THE END", True, True)
+				Text(x + (Width / 2) + (47 * MenuScale), y + (48 * MenuScale), GetLocalString("menu", "end"), True, True)
 				SetFont(fo\FontID[Font_Default])
 				
 				If mm\AchievementsMenu =< 0 Then 
@@ -7892,11 +7880,11 @@ Function RenderEnding%()
 						AchievementsUnlocked = AchievementsUnlocked + achv\Achievement[i]
 					Next
 					
-					Text(x, y, "SCPs encountered: " + SCPsEncountered)
-					Text(x, y + (20 * MenuScale), "Achievements unlocked: " + AchievementsUnlocked + "/" + (MAXACHIEVEMENTS))
-					Text(x, y + (40 * MenuScale), "Rooms found: " + RoomsFound + "/" + RoomAmount)
-					Text(x, y + (60 * MenuScale), "Documents discovered: " + DocsFound + "/" + DocAmount)
-					Text(x, y + (80 * MenuScale), "Items refined in SCP-914: " + me\RefinedItems)
+					Text(x, y, Format(GetLocalString("menu", "end.scps"), SCPsEncountered))
+					Text(x, y + (20 * MenuScale), Format(Format(GetLocalString("menu", "end.achi"), AchievementsUnlocked, "{0}"), MAXACHIEVEMENTS, "{1}"))
+					Text(x, y + (40 * MenuScale), Format(Format(GetLocalString("menu", "end.room"), RoomsFound, "{0}"), RoomAmount, "{1}"))
+					Text(x, y + (60 * MenuScale), Format(Format(GetLocalString("menu", "end.doc"), DocsFound, "{0}"), DocAmount, "{1}"))
+					Text(x, y + (80 * MenuScale), Format(GetLocalString("menu", "end.914"), me\RefinedItems))
 				Else
 					RenderMenu()
 				EndIf
@@ -7922,7 +7910,7 @@ End Type
 
 Function InitCredits%()
 	Local cl.CreditsLine
-	Local File% = OpenFile("Credits.txt")
+	Local File% = OpenFile_Strict("Credits.txt")
 	Local l$
 	
 	fo\FontID[Font_Credits] = LoadFont_Strict("GFX\Fonts\Courier New.ttf", 21)
@@ -8550,10 +8538,11 @@ Function Update294%()
 					
 					it.Items = CreateItem("Cup", "cup", EntityX(PlayerRoom\Objects[1], True), EntityY(PlayerRoom\Objects[1], True), EntityZ(PlayerRoom\Objects[1], True), R, G, B, Alpha)
 					it\Name = "Cup of " + I_294\ToInput
+					it\DisplayName = Format(GetLocalString("item", "cupof"), I_294\ToInput)
 					EntityType(it\Collider, HIT_ITEM)
 				Else
 					; ~ Out of range
-					I_294\ToInput = "OUT OF RANGE"
+					I_294\ToInput = GetLocalString("misc", "ofr")
 					PlayerRoom\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\OutOfRange.ogg"))
 				EndIf
 			EndIf	
@@ -8565,10 +8554,10 @@ Function Update294%()
 			StopMouseMovement()
 		EndIf
 	Else ; ~ Playing a dispensing sound
-		If I_294\ToInput <> "OUT OF RANGE" Then I_294\ToInput = "DISPENSING..."
+		If I_294\ToInput <> GetLocalString("misc", "ofr") Then I_294\ToInput = GetLocalString("misc", "dispensing")
 		
 		If (Not ChannelPlaying(PlayerRoom\SoundCHN)) Then
-			If I_294\ToInput <> "OUT OF RANGE" Then
+			If I_294\ToInput <> GetLocalString("misc", "ofr") Then
 				I_294\Using = False
 				me\UsedMastercard = False
 				StopMouseMovement()
@@ -8609,7 +8598,7 @@ Function Render294%()
 		EndIf
 	Else ; ~ Playing a dispensing sound
 		If (Not ChannelPlaying(PlayerRoom\SoundCHN)) Then
-			If I_294\ToInput <> "OUT OF RANGE" Then
+			If I_294\ToInput <> GetLocalString("misc", "ofr") Then
 				HidePointer()
 			EndIf
 		EndIf
@@ -8644,9 +8633,9 @@ Function Use427%()
 				If (Not ChannelPlaying(I_427\SoundCHN[1])) Then I_427\SoundCHN[1] = PlaySound_Strict(I_427\Sound[1])
 			EndIf
 			If PrevI427Timer < 70.0 * 60.0 And I_427\Timer >= 70.0 * 60.0 Then
-				CreateMsg("You feel refreshed and energetic.")
+				CreateMsg(GetLocalString("msg", "freshener"))
 			ElseIf PrevI427Timer < 70.0 * 180.0 And I_427\Timer >= 70.0 * 180.0
-				CreateMsg("You feel gentle muscle spasms all over your body.")
+				CreateMsg(GetLocalString("msg", "gentlemuscle"))
 			EndIf
 		Else
 			For i = 0 To 1
@@ -8655,9 +8644,9 @@ Function Use427%()
 		EndIf
 	Else
 		If PrevI427Timer - fps\Factor[0] < 70.0 * 360.0 And I_427\Timer >= 70.0 * 360.0 Then
-			CreateMsg("Your muscles are swelling. You feel more powerful than ever.")
+			CreateMsg(GetLocalString("msg", "muscleswelling"))
 		ElseIf PrevI427Timer - fps\Factor[0] < 70.0 * 390.0 And I_427\Timer >= 70.0 * 390.0 Then
-			CreateMsg("You can't feel your legs. But you don't need legs anymore.")
+			CreateMsg(GetLocalString("msg", "nolegs"))
 		EndIf
 		I_427\Timer = I_427\Timer + fps\Factor[0]
 		If (Not I_427\Sound[0]) Then
@@ -8685,7 +8674,7 @@ Function Use427%()
 		EndIf
 		If I_427\Timer >= 70.0 * 420.0 Then
 			Kill()
-			msg\DeathMsg = Chr(34) + "Requesting support from MTF Nu-7. We need more firepower to take this thing down." + Chr(34)
+			msg\DeathMsg = GetLocalString("death", "morepower")
 		ElseIf I_427\Timer >= 70.0 * 390.0
 			If (Not me\Crouch) Then SetCrouch(True)
 		EndIf
@@ -8948,27 +8937,27 @@ Function Update008%()
 			
 			If I_008\Timer > 20.0 And PrevI008Timer <= 20.0 Then
 				If I_008\Revert Then
-					CreateMsg("You feel better.")
+					CreateMsg(GetLocalString("msg", "better2"))
 				Else
-					CreateMsg("You feel kinda feverish.")
+					CreateMsg(GetLocalString("msg", "feverish"))
 				EndIf
 			ElseIf I_008\Timer > 40.0 And PrevI008Timer <= 40.0
 				If I_008\Revert Then
-					CreateMsg("Your nausea is fading.")
+					CreateMsg(GetLocalString("msg", "nauseafading"))
 				Else
-					CreateMsg("You feel nauseated.")
+					CreateMsg(GetLocalString("msg", "nausea"))
 				EndIf
 			ElseIf I_008\Timer > 60.0 And PrevI008Timer <= 60.0
 				If I_008\Revert Then
-					CreateMsg("The headache is fading.")
+					CreateMsg(GetLocalString("msg", "headachefading"))
 				Else
-					CreateMsg("The nausea's getting worse.")
+					CreateMsg(GetLocalString("msg", "nauseaworse"))
 				EndIf
 			ElseIf I_008\Timer > 80.0 And PrevI008Timer <= 80.0
 				If I_008\Revert Then
-					CreateMsg("You feel more energetic.")
+					CreateMsg(GetLocalString("msg", "moreener"))
 				Else
-					CreateMsg("You feel very faint.")
+					CreateMsg(GetLocalString("msg", "faint"))
 				EndIf
 			ElseIf I_008\Timer >= 91.5
 				me\BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 91.5), me\BlinkTimer), -10.0)
@@ -9020,8 +9009,7 @@ Function Update008%()
 						PlayerRoom\NPC[0]\Sound = LoadSound_Strict("SFX\SCP\008\KillScientist2.ogg")
 						PlayerRoom\NPC[0]\SoundCHN = PlaySound_Strict(PlayerRoom\NPC[0]\Sound)
 						
-						msg\DeathMsg = SubjectName + " found ingesting Dr. [DATA REDACTED] at Sector [DATA REDACTED]. Subject was immediately terminated by Nine-Tailed Fox and sent for autopsy. "
-						msg\DeathMsg = msg\DeathMsg + "SCP-008 infection was confirmed, after which the body was incinerated."
+						msg\DeathMsg = Format(GetLocalString("death", "0081"), SubjectName)
 						Kill()
 						de.Decals = CreateDecal(DECAL_BLOOD_2, EntityX(PlayerRoom\NPC[0]\Collider), 544.0 * RoomScale + 0.01, EntityZ(PlayerRoom\NPC[0]\Collider), 90.0, Rnd(360.0), 0.0, 0.8)
 						EntityParent(de\OBJ, PlayerRoom\OBJ)
@@ -9056,16 +9044,14 @@ Function Update008%()
 				Kill()
 				me\BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 96.0), me\BlinkTimer), -10.0)
 				If PlayerRoom\RoomTemplate\Name = "dimension_1499" Then
-					msg\DeathMsg = "The whereabouts of SCP-1499 are still unknown, but a recon team has been dispatched to investigate reports of a violent attack to a church in the Russian town of [DATA REDACTED]."
+					msg\DeathMsg = GetLocalString("death", "14991")
 				ElseIf PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a" Then
-					msg\DeathMsg = SubjectName + " found wandering around Gate "
+					msg\DeathMsg = Format(GetLocalString("death", "008gate"), SubjectName, "{0}")
 					If PlayerRoom\RoomTemplate\Name = "gate_a" Then
-						msg\DeathMsg = msg\DeathMsg + "A"
+						msg\DeathMsg = Format(msg\DeathMsg, "A", "{1}")
 					Else
-						msg\DeathMsg = msg\DeathMsg + "B"
+						msg\DeathMsg = Format(msg\DeathMsg, "B", "{1}")
 					EndIf
-					msg\DeathMsg = msg\DeathMsg + ". Subject was immediately terminated by Nine-Tailed Fox and sent for autopsy. "
-					msg\DeathMsg = msg\DeathMsg + "SCP-008 infection was confirmed, after which the body was incinerated."
 				Else
 					msg\DeathMsg = ""
 				EndIf
@@ -9095,27 +9081,27 @@ Function Update409%()
 		
 		If I_409\Timer > 40.0 And PrevI409Timer <= 40.0 Then
 			If I_409\Revert Then
-				CreateMsg("Crystals are falling from the skin on your legs.")
+				CreateMsg(GetLocalString("msg", "409legs"))
 			Else
-				CreateMsg("Crystals are enveloping the skin on your legs.")
+				CreateMsg(GetLocalString("msg", "409legs2"))
 			EndIf
 		ElseIf I_409\Timer > 55.0 And PrevI409Timer <= 55.0
 			If I_409\Revert Then
-				CreateMsg("Crystals are falling from your abdomen.")
+				CreateMsg(GetLocalString("msg", "409abdomen"))
 			Else
-				CreateMsg("Crystals are enveloping your abdomen.")
+				CreateMsg(GetLocalString("msg", "409abdomen2"))
 			EndIf
 		ElseIf I_409\Timer > 70.0 And PrevI409Timer <= 70.0
 			If I_409\Revert Then
-				CreateMsg("Crystals are falling from your arms.")
+				CreateMsg(GetLocalString("msg", "409arms"))
 			Else
-				CreateMsg("Crystals are starting to envelop your arms.")
+				CreateMsg(GetLocalString("msg", "409arms2"))
 			EndIf
 		ElseIf I_409\Timer > 85.0 And PrevI409Timer <= 85.0
 			If I_409\Revert Then
-				CreateMsg("Crystals starting to envelop your head.")
+				CreateMsg(GetLocalString("msg", "409head"))
 			Else
-				CreateMsg("Crystals starting to envelop your head.")
+				CreateMsg(GetLocalString("msg", "409head"))
 			EndIf
 		ElseIf I_409\Timer > 93.0 And PrevI409Timer <= 93.0
 			If (Not I_409\Revert) Then
@@ -9134,8 +9120,7 @@ Function Update409%()
 			me\Stamina = Min(me\Stamina, 60.0)
 		EndIf
 		If I_409\Timer >= 96.9222 Then
-			msg\DeathMsg = "Pile of SCP-409 crystals found and, by comparing list of the dead, was found to be " + SubjectName + " who had physical contact with SCP-409. "
-			msg\DeathMsg = msg\DeathMsg + "Remains were incinerated along with crystal-infested areas of facility."
+			msg\DeathMsg = Format(GetLocalString("death", "409"), SubjectName)
 			Kill(True)
 		EndIf
 	Else
@@ -9160,7 +9145,7 @@ Function Update1025%()
 					;[End Block]
 				Case 1 ; ~ Chicken pox
 					;[Block]
-					If Rand(9000) = 1 Then CreateMsg("Your skin is feeling itchy.")
+					If Rand(9000) = 1 Then CreateMsg(GetLocalString("msg", "skinitchy"))
 					;[End Block]
 				Case 2 ; ~ Cancer of the lungs
 					;[Block]
@@ -9175,10 +9160,10 @@ Function Update1025%()
 						I_1025\State[i] = I_1025\State[i] + (Factor1025 * 0.0005)
 					EndIf
 					If I_1025\State[i] > 20.0 Then
-						If I_1025\State[i] - Factor1025 <= 20.0 Then CreateMsg("The pain in your stomach is becoming unbearable.")
+						If I_1025\State[i] - Factor1025 <= 20.0 Then CreateMsg(GetLocalString("msg", "stomachunbearable"))
 						me\Stamina = me\Stamina - (Factor1025 * 0.3)
 					ElseIf I_1025\State[i] > 10.0
-						If I_1025\State[i] - Factor1025 <= 10.0 Then CreateMsg("Your stomach is aching.")
+						If I_1025\State[i] - Factor1025 <= 10.0 Then CreateMsg(GetLocalString("msg", "stomachaching"))
 					EndIf
 					;[End Block]
 				Case 4 ; ~ Asthma
@@ -9199,8 +9184,7 @@ Function Update1025%()
 						me\HeartBeatRate = 0.0
 						me\BlurTimer = Max(me\BlurTimer, 500.0)
 						If I_1025\State[i] > 140.0 Then 
-							msg\DeathMsg = Chr(34) + "He died of a cardiac arrest after reading SCP-1025, that's for sure. Is there such a thing as psychosomatic cardiac arrest, or does SCP-1025 have some "
-							msg\DeathMsg = msg\DeathMsg + "anomalous properties we are not yet aware of?" + Chr(34)
+							msg\DeathMsg = GetLocalString("death", "1025")
 							Kill()
 						EndIf
 					Else
@@ -9215,7 +9199,7 @@ Function Update1025%()
 					EndIf
 					me\Stamina = Min(100.0, me\Stamina + (90.0 - me\Stamina) * I_1025\State[i] * Factor1025 * 0.00008)
 					If I_1025\State[i] > 15.0 And I_1025\State[i] - Factor1025 <= 15.0 Then
-						CreateMsg("You begin feeling energetic.")
+						CreateMsg(GetLocalString("msg", "energetic"))
 					EndIf
 					;[End Block]
 			End Select 
