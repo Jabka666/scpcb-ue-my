@@ -3339,19 +3339,19 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 			;[Block]
 			Txt = GetLocalString("tooltip", "mastervolume")
 			R = 255 : G = 255
-			Txt2 = Format(GetLocalString("tooltip", "default.value50"), Int(Value * 100.0))
+			Txt2 = Format(GetLocalString("tooltip", "default.value.50"), Int(Value * 100.0))
 			;[End Block]
 		Case Tooltip_MusicVolume
 			;[Block]
 			Txt = GetLocalString("tooltip", "musicvolume")
 			R = 255 : G = 255
-			Txt2 = Format(GetLocalString("tooltip", "default.value50"), Int(Value * 100.0))
+			Txt2 = Format(GetLocalString("tooltip", "default.value.50"), Int(Value * 100.0))
 			;[End Block]
 		Case Tooltip_SoundVolume
 			;[Block]
 			Txt = GetLocalString("tooltip", "soundvolume")
 			R = 255 : G = 255
-			Txt2 = Format(GetLocalString("tooltip", "default.value50"), Int(Value * 100.0))
+			Txt2 = Format(GetLocalString("tooltip", "default.value.50"), Int(Value * 100.0))
 			;[End Block]
 		Case Tooltip_SoundAutoRelease
 			;[Block]
@@ -3382,7 +3382,7 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 			;[Block]
 			Txt = GetLocalString("tooltip", "mousespeed")
 			R = 255 : G = 255
-			Txt2 = Format(GetLocalString("tooltip", "default.value0"), Int(Value * 100.0))
+			Txt2 = Format(GetLocalString("tooltip", "default.value.0"), Int(Value * 100.0))
 			;[End Block]
 		Case Tooltip_MouseInvertX
 			;[Block]
@@ -3396,7 +3396,7 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 			;[Block]
 			Txt = GetLocalString("tooltip", "mousesmooth")
 			R = 255 : G = 255
-			Txt2 = Format(GetLocalString("tooltip", "default.value100"), Int(Value * 100.0))
+			Txt2 = Format(GetLocalString("tooltip", "default.value.100"), Int(Value * 100.0))
 			;[End Block]
 		Case Tooltip_ControlConfiguration
 			;[Block]
