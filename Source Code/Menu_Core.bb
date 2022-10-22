@@ -321,37 +321,33 @@ Function UpdateMainMenu%()
 					
 					If SelectedDifficulty\Customizable Then
 						; ~ Save type
-						If MouseOn(x + (160 * MenuScale), y + (180 * MenuScale), ImageWidth(ga\ArrowIMG[1]), ImageHeight(ga\ArrowIMG[1])) And mo\MouseHit1 Then
+						If UpdateMainMenuButton(x + (160 * MenuScale), y + (180 * MenuScale), 20 * MenuScale, 20 * MenuScale, ">", False) Then
 							If SelectedDifficulty\SaveType  < NO_SAVES Then
 								SelectedDifficulty\SaveType = SelectedDifficulty\SaveType + 1
 							Else
 								SelectedDifficulty\SaveType = SAVE_ANYWHERE
 							EndIf
-							PlaySound_Strict(ButtonSFX)
 						EndIf
 						
 						; ~ Agressive NPCs
 						SelectedDifficulty\AggressiveNPCs = UpdateMainMenuTick(x + (160 * MenuScale), y + (210 * MenuScale), SelectedDifficulty\AggressiveNPCs)
 						
 						; ~ Inventory slots
-						If MouseOn(x + (410 * MenuScale), y + (240 * MenuScale), ImageWidth(ga\ArrowIMG[3]), ImageHeight(ga\ArrowIMG[3])) And mo\MouseHit1 Then
+						If UpdateMainMenuButton(x + (410 * MenuScale), y + (240 * MenuScale), 20 * MenuScale, 20 * MenuScale, "<", False) Then
 							SelectedDifficulty\InventorySlots = SelectedDifficulty\InventorySlots + 2
 							If SelectedDifficulty\InventorySlots > 10 Then SelectedDifficulty\InventorySlots = 2
-							PlaySound_Strict(ButtonSFX)
-						ElseIf MouseOn(x + (160 * MenuScale), y + (240 * MenuScale), ImageWidth(ga\ArrowIMG[1]), ImageHeight(ga\ArrowIMG[1])) And mo\MouseHit1
+						ElseIf UpdateMainMenuButton(x + (160 * MenuScale), y + (240 * MenuScale), 20 * MenuScale, 20 * MenuScale, ">", False)
 							SelectedDifficulty\InventorySlots = SelectedDifficulty\InventorySlots - 2
 							If SelectedDifficulty\InventorySlots <= 0 Then SelectedDifficulty\InventorySlots = 10
-							PlaySound_Strict(ButtonSFX)
 						EndIf
 						
 						; ~ Other factor's difficulty
-						If MouseOn(x + (160 * MenuScale), y + (270 * MenuScale), ImageWidth(ga\ArrowIMG[1]), ImageHeight(ga\ArrowIMG[1])) And mo\MouseHit1 Then
+						If UpdateMainMenuButton(x + (160 * MenuScale), y + (270 * MenuScale), 20 * MenuScale, 20 * MenuScale, ">", False) Then
 							If SelectedDifficulty\OtherFactors < EXTREME Then
 								SelectedDifficulty\OtherFactors = SelectedDifficulty\OtherFactors + 1
 							Else
 								SelectedDifficulty\OtherFactors = EASY
 							EndIf
-							PlaySound_Strict(ButtonSFX)
 						EndIf
 					EndIf
 					
@@ -954,7 +950,7 @@ Function UpdateMainMenu%()
 								y = y + (30 * MenuScale)
 								
 								If opt\EnableSubtitles Then
-									opt\SubColorR = UpdateMainMenuInputBox(x - (165 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorR), 14, 3)
+									opt\SubColorR = UpdateMainMenuInputBox(x - (135 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorR), 14, 3)
 									If SelectedInputBox = 14 Then
 										If opt\SubColorR > 255 Then opt\SubColorR = 255
 									EndIf
@@ -963,7 +959,7 @@ Function UpdateMainMenu%()
 								y = y + (30 * MenuScale)
 								
 								If opt\EnableSubtitles Then
-									opt\SubColorG = UpdateMainMenuInputBox(x - (165 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorG), 15, 3)
+									opt\SubColorG = UpdateMainMenuInputBox(x - (135 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorG), 15, 3)
 									If SelectedInputBox = 15 Then
 										If opt\SubColorG > 255 Then opt\SubColorG = 255
 									EndIf
@@ -972,7 +968,7 @@ Function UpdateMainMenu%()
 								y = y + (30 * MenuScale)
 								
 								If opt\EnableSubtitles Then
-									opt\SubColorB = UpdateMainMenuInputBox(x - (165 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorB), 16, 3)
+									opt\SubColorB = UpdateMainMenuInputBox(x - (135 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorB), 16, 3)
 									If SelectedInputBox = 16 Then
 										If opt\SubColorB > 255 Then opt\SubColorB = 255
 									EndIf
@@ -980,7 +976,7 @@ Function UpdateMainMenu%()
 								
 								y = y + (40 * MenuScale)
 								
-								If UpdateMainMenuButton(x - (290 * MenuScale), y, 165 * MenuScale, 30 * MenuScale, GetLocalString("options", "reset"), False) Then
+								If UpdateMainMenuButton(x - (290 * MenuScale), y, 195 * MenuScale, 30 * MenuScale, GetLocalString("options", "reset"), False) Then
 									ResetOptionsINI()
 									SaveOptionsINI(True)
 								EndIf
@@ -997,7 +993,7 @@ Function UpdateMainMenu%()
 			Height = 70 * MenuScale
 			
 			If SelectedMapActionMsg = "" And DelSave = Null Then
-				If UpdateMainMenuButton(x + Width + (20 * MenuScale), y, (580 * MenuScale) - Width - (20 * MenuScale), Height, "BACK", False) Lor KeyDown(1) Then 
+				If UpdateMainMenuButton(x + Width + (20 * MenuScale), y, (580 * MenuScale) - Width - (20 * MenuScale), Height, GetLocalString("menu", "back"), False) Lor KeyDown(1) Then 
 					Select mm\MainMenuTab
 						Case MainMenuTab_New_Game
 							;[Block]
@@ -1039,7 +1035,7 @@ Function UpdateMainMenu%()
 					End Select
 				EndIf
 			Else
-				UpdateMainMenuButton(x + Width + (20 * MenuScale), y, (580 * MenuScale) - Width - (20 * MenuScale), Height, "BACK", False, False, True)
+				UpdateMainMenuButton(x + Width + (20 * MenuScale), y, (580 * MenuScale) - Width - (20 * MenuScale), Height, GetLocalString("menu", "back"), False, False, True)
 			EndIf
 		EndIf
 	Wend
@@ -1203,13 +1199,12 @@ Function RenderMainMenu%()
 				Color(255, 255, 255)
 				Text(x + (20 * MenuScale), y + (65 * MenuScale), TempStr)
 				
-				Color(255, 255, 255)
 				Text(x + (20 * MenuScale), y + (115 * MenuScale), GetLocalString("menu", "new.intro"))
 				
 				Text(x + (20 * MenuScale), y + (155 * MenuScale), GetLocalString("menu", "new.diff"))
 				For i = SAFE To ESOTERIC
 					Color(difficulties[i]\R, difficulties[i]\G, difficulties[i]\B)
-					Text(x + (60 * MenuScale), y + ((185 + 30 * i) * MenuScale), difficulties[i]\Name)
+					Text(x + (50 * MenuScale), y + ((185 + 30 * i) * MenuScale), difficulties[i]\Name)
 				Next
 				
 				Color(255, 255, 255)
@@ -1217,7 +1212,6 @@ Function RenderMainMenu%()
 				
 				If SelectedDifficulty\Customizable Then
 					; ~ Save type
-					DrawImage(ga\ArrowIMG[1], x + (160 * MenuScale), y + (180 * MenuScale))
 					Select SelectedDifficulty\SaveType
 						Case SAVE_ANYWHERE
 							;[Block]
@@ -1239,19 +1233,11 @@ Function RenderMainMenu%()
 					Text(x + (200 * MenuScale), y + (186 * MenuScale), GetLocalString("menu", "new.savetype") + TempStr)
 					
 					; ~ Agressive NPCs
-					Color(255, 255, 255)
 					Text(x + (200 * MenuScale), y + (215 * MenuScale), GetLocalString("menu", "new.dangernpc"))
-					
 					; ~ Inventory slots
-					DrawImage(ga\ArrowIMG[3], x + (160 * MenuScale), y + 240 * MenuScale)
-					DrawImage(ga\ArrowIMG[1], x + ((400 + (Len(Str(SelectedDifficulty\InventorySlots)) * 5)) * MenuScale), y + 240 * MenuScale)
-					
 					Text(x + (200 * MenuScale), y + (246 * MenuScale), Format(GetLocalString("menu", "new.invslots"), SelectedDifficulty\InventorySlots))
 					
 					; ~ Other factor's difficulty
-					DrawImage(ga\ArrowIMG[1], x + (160 * MenuScale), y + (270 * MenuScale))
-					
-					Color(255, 255, 255)
 					Select SelectedDifficulty\OtherFactors
 						Case EASY
 							;[Block]
@@ -1272,7 +1258,7 @@ Function RenderMainMenu%()
 					End Select
 					Text(x + (200 * MenuScale), y + (276 * MenuScale), Format(GetLocalString("menu", "new.factors"), TempStr))
 				Else
-					RowText(SelectedDifficulty\Description, x + (160 * MenuScale), y + (180 * MenuScale), 390 * MenuScale, 200 * MenuScale)					
+					RowText(SelectedDifficulty\Description, x + (160 * MenuScale), y + (180 * MenuScale), 390 * MenuScale, 140 * MenuScale)					
 				EndIf
 				
 				SetFont(fo\FontID[Font_Default_Big])
@@ -1308,7 +1294,7 @@ Function RenderMainMenu%()
 				SetFont(fo\FontID[Font_Default])
 				
 				If SaveGameAmount = 0 Then
-					Text(x + (20 * MenuScale), y + (20 * MenuScale), GetLocalString("menu", "save.nosaves"))
+					RowText(GetLocalString("menu", "save.nosaves"), x + (20 * MenuScale), y + (20 * MenuScale), 540 * MenuScale, 390 * MenuScale)
 				Else
 					x = x + (20 * MenuScale)
 					y = y + (20 * MenuScale)
@@ -1841,7 +1827,7 @@ Function RenderMainMenu%()
 				SetFont(fo\FontID[Font_Default])
 				
 				If SavedMapsAmount = 0 Then
-					Text(x + (20 * MenuScale), y + (20 * MenuScale), GetLocalString("menu", "nomap"))
+					RowText(GetLocalString("menu", "nomap"), x + (20 * MenuScale), y + (20 * MenuScale), 540 * MenuScale, 390 * MenuScale)
 				Else
 					x = x + (20 * MenuScale)
 					y = y + (20 * MenuScale)
@@ -1924,12 +1910,8 @@ Function UpdateLauncher%(lnchr.Launcher)
 	Local LauncherIMG%[3]
 	
 	LauncherIMG[0] = LoadImage_Strict("GFX\menu\launcher.png")
-	LauncherIMG[1] = LoadImage_Strict("GFX\menu\arrow.png")
-	LauncherIMG[2] = LoadAnimImage_Strict("GFX\menu\launcher_media.png", 64, 64, 0, 3)
-	LauncherIMG[3] = LoadAnimImage_Strict("GFX\menu\language.png", 40, 40, 0, 2)
-	
-	RotateImage(LauncherIMG[1], -90.0)
-	MidHandle(LauncherIMG[1])
+	LauncherIMG[1] = LoadAnimImage_Strict("GFX\menu\launcher_media.png", 64, 64, 0, 3)
+	LauncherIMG[2] = LoadAnimImage_Strict("GFX\menu\language_button.png", 40, 40, 0, 2)
 	
 	For i = 1 To lnchr\TotalGFXModes
 		Local SameFound% = False
@@ -2017,40 +1999,39 @@ Function UpdateLauncher%(lnchr.Launcher)
 		Text(LauncherWidth - 162, LauncherHeight - 133, Format(Format(GetLocalString("launcher", "currres"), lnchr\GFXModeWidths[lnchr\SelectedGFXMode], "{0}"), lnchr\GFXModeHeights[lnchr\SelectedGFXMode], "{1}"), True)
 		RenderFrame(LauncherWidth - 185, LauncherHeight - 226, 120, 30)
 		Text(515, 264, Txt, True)
-		If UpdateLauncherButton(LauncherWidth - 65, LauncherHeight - 226, 30, 30, "", False) Then
+		If UpdateLauncherButton(LauncherWidth - 65, LauncherHeight - 226, 30, 30, ">", False) Then
 			opt\DisplayMode = ((opt\DisplayMode + 1) Mod 3)
 		EndIf
-		DrawImage(LauncherIMG[1], LauncherWidth - 51, LauncherHeight - 212)
 		
 		If MouseOn(LauncherWidth - 620, LauncherHeight - 86, 64, 64) Then
 			Rect(LauncherWidth - 621, LauncherHeight - 87, 66, 66, False)
-			Text(LauncherWidth - 620 + ImageWidth(LauncherIMG[2]) / 2, LauncherHeight - 86 - 20, "DISCORD", True)
+			Text(LauncherWidth - 620 + (ImageWidth(LauncherIMG[1]) / 2), LauncherHeight - 106, "DISCORD", True)
 			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX) : ExecFile("https://discord.gg/n7KdW4u")
 		EndIf
-		DrawImage(LauncherIMG[2], LauncherWidth - 620, LauncherHeight - 86, 0)
+		DrawImage(LauncherIMG[1], LauncherWidth - 620, LauncherHeight - 86, 0)
 		If MouseOn(LauncherWidth - 510, LauncherHeight - 86, 64, 64) Then
 			Rect(LauncherWidth - 511, LauncherHeight - 87, 66, 66, False)
-			Text(LauncherWidth - 510 + ImageWidth(LauncherIMG[2]) / 2, LauncherHeight - 86 - 20, "MODDB", True)
+			Text(LauncherWidth - 510 + (ImageWidth(LauncherIMG[1]) / 2), LauncherHeight - 106, "MODDB", True)
 			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX) : ExecFile("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition")
 		EndIf
-		DrawImage(LauncherIMG[2], LauncherWidth - 510, LauncherHeight - 86, 1)
+		DrawImage(LauncherIMG[1], LauncherWidth - 510, LauncherHeight - 86, 1)
 		If MouseOn(LauncherWidth - 400, LauncherHeight - 86, 64, 64) Then
 			Rect(LauncherWidth - 401, LauncherHeight - 87, 66, 66, False)
-			Text(LauncherWidth - 400 + ImageWidth(LauncherIMG[2]) / 2, LauncherHeight - 86 - 20, "YOUTUBE", True)
+			Text(LauncherWidth - 400 + (ImageWidth(LauncherIMG[1]) / 2), LauncherHeight - 106, "YOUTUBE", True)
 			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX) : ExecFile("https://www.youtube.com/channel/UCPqWOCPfKooDnrLNzA67Acw")
 		EndIf
-		DrawImage(LauncherIMG[2], LauncherWidth - 400, LauncherHeight - 86, 2)
+		DrawImage(LauncherIMG[1], LauncherWidth - 400, LauncherHeight - 86, 2)
 		
 		If MouseOn(LauncherWidth - 185, LauncherHeight - 191, 40, 40) Then
-			DrawImage(LauncherIMG[3], LauncherWidth - 185, LauncherHeight - 191, 1)
+			DrawImage(LauncherIMG[2], LauncherWidth - 185, LauncherHeight - 191, 1)
 			Rect(LauncherWidth - 185, LauncherHeight - 191, 40, 40, False)
-			Text(LauncherWidth - 185 + 45, LauncherHeight - 191 + 20, GetLocalString("launcher", "language"), False, True)
-		If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX) : LanguageSelector()
+			Text(LauncherWidth - 185 + 45, LauncherHeight - 171, GetLocalString("launcher", "language"), False, True)
+			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX) : LanguageSelector()
 		Else
-			DrawImage(LauncherIMG[3], LauncherWidth - 185, LauncherHeight - 191, 0)
-			EndIf
+			DrawImage(LauncherIMG[2], LauncherWidth - 185, LauncherHeight - 191, 0)
+		EndIf
 		
-			If UpdateLauncherButton(LauncherWidth - 300, LauncherHeight - 105, 150, 30, GetLocalString("launcher", "report"), False, False) Then
+		If UpdateLauncherButton(LauncherWidth - 300, LauncherHeight - 105, 150, 30, GetLocalString("launcher", "report"), False, False) Then
 			ExecFile("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition/news/bug-reports1")
 		EndIf
 		
@@ -2874,11 +2855,9 @@ End Function
 Type MenuSlideBar
 	Field x%, y%, Width%
 	Field Value#
-	Field TextLeft$
-	Field TextRight$
 End Type
 
-Function UpdateMainMenuSlideBar#(x%, y%, Width%, Value#, ID%, TextLeft$ = "LOW", TextRight$ = "HIGH")
+Function UpdateMainMenuSlideBar#(x%, y%, Width%, Value#, ID%)
 	Local msb.MenuSlideBar, currSlideBar.MenuSlideBar
 	Local SlideBarExists% = False
 	
@@ -2894,8 +2873,6 @@ Function UpdateMainMenuSlideBar#(x%, y%, Width%, Value#, ID%, TextLeft$ = "LOW",
 		msb\y = y
 		msb\Width = Width
 		msb\Value = Value
-		msb\TextLeft = TextLeft
-		msb\TextRight = TextRight
 	Else
 		currSlideBar = msb
 		currSlideBar\Value = Value
@@ -2922,8 +2899,8 @@ Function RenderMenuSlideBars%()
 		DrawImage(BlinkMeterIMG, msb\x + msb\Width * msb\Value / 100.0 + (3 * MenuScale), msb\y + (3 * MenuScale))
 		
 		Color(170, 170, 170)
-		Text(msb\x - (50 * MenuScale), msb\y + (5 * MenuScale), msb\TextLeft)					
-		Text(msb\x + msb\Width + (34 * MenuScale), msb\y + (5 * MenuScale), msb\TextRight)	
+		Text(msb\x - (50 * MenuScale), msb\y + (5 * MenuScale), GetLocalString("options", "slider.low"))					
+		Text(msb\x + msb\Width + (34 * MenuScale), msb\y + (5 * MenuScale), GetLocalString("options", "slider.high"))	
 	Next
 End Function
 
@@ -3408,7 +3385,7 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 			;[Block]
 			Txt = GetLocalString("tooltip", "mousespeed")
 			R = 255 : G = 255
-			Txt2 = Format(GetLocalString("tooltip", "v50"), Int(Value * 100.0))
+			Txt2 = Format(GetLocalString("tooltip", "v0"), Int(Value * 100.0))
 			;[End Block]
 		Case Tooltip_MouseInvertX
 			;[Block]
@@ -3587,6 +3564,4 @@ Function RenderMapCreatorTooltip%(x%, y%, Width%, Height%, MapName$)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#A4#F3#FB#100#116#157#191#196#197#1DE#1E0#1EB#1F1#1F3#1F5#202#206#227#22D#232
-;~B#233#23F#245#254#255#256#257#27A#2A2#2F9#325#382#401
 ;~C#Blitz3D

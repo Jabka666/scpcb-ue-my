@@ -30,9 +30,9 @@ Function CheckForDlls%() ; ~ Can't localized because IniControler.dll may not ex
 	If Len(InitErrorStr) > 0 Then RuntimeError("The following DLLs were not found in the game directory:" + Chr(13) + Chr(10) + Chr(13) + Chr(10) + InitErrorStr)
 End Function
 
-Function SetLanguage(Language$)
-	lang\CurrentLanguage$ = Language
-	lang\LanguagePath$ = "Localization\" + lang\CurrentLanguage$ + "\"
+Function SetLanguage%(Language$)
+	lang\CurrentLanguage = Language
+	lang\LanguagePath = "Localization\" + lang\CurrentLanguage + "\"
 	IniWriteBuffer_(lang\LanguagePath + LanguageFile, 1)
 	IniWriteBuffer_(lang\LanguagePath + SubtitlesFile, 1)
 	IniWriteBuffer_(lang\LanguagePath + AchievementsFile, 1)

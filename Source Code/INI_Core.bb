@@ -97,16 +97,16 @@ Function GetINIString$(File$, Section$, Parameter$, DefaultValue$ = "")
 	Return(DefaultValue)
 End Function
 
+Function GetFileLocalString$(File$, Name$, Key_$, DefaultValue$ = "")
+	Return(IniGetBufferString_(lang\LanguagePath + File, Name, Key_, IniGetBufferString_(File, Name, Key_, DefaultValue)))
+End Function
+
 Function GetLocalString$(Section$, Parameter$)
-	Return GetFileLocalString(LanguageFile, Section, Parameter, Section + "," + Parameter)
+	Return(GetFileLocalString(LanguageFile, Section, Parameter, Section + "," + Parameter))
 End Function
 
-Function GetFileLocalString$(File$, Name$, Key$, DefaultValue$ = "")
-	Return IniGetBufferString_(lang\LanguagePath + File, Name, key, IniGetBufferString_(File, Name, key, DefaultValue))
-End Function
-
-Function Format$(String$, Parameter$, Replace$ = "%s")
-	Return Replace(String$, Replace$, Parameter$)
+Function Format$(String_$, Parameter$, Replace_$ = "%s")
+	Return(Replace(String_, Replace_, Parameter))
 End Function
 
 Function GetINIInt%(File$, Section$, Parameter$, DefaultValue% = 0)
