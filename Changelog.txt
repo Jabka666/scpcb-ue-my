@@ -1,31 +1,62 @@
-v1.0.31
+v1.0.4
 
 General:
 - Added a new feature that allows the player name a savegame with non-latin characters, like chinese, russian and etc.
 - Added «Home» key, «End» key, «Delete» key and «Insert» key to switch insert mode. Abilty to hold left/right arrow to fast move cursor. Implement of Ctrl+C and Ctrl+V.
 - Added a hitbox in "room2_servers_hcz" preventing SCP-096 to be triggered through the bloody windows.
-
-- Removed extra spacing in credits.
+- Added some folders organization.
+- Added language selection.
 
 - Finally made the «Bright mode» similar to original game.
 
+Rooms:
+- Changed type of door button being used in the Heavy Containment Zone's deadend checkpoint rooms.
+
+- Batteries on the map are now randomized.
+
+- Improved SCP-096's containment chamber design.
+
+- Tiny corrections for rooms description.
+
+Items:
+- Added a new gas mask variation: gas mask without fogging.
+
+- S-NAV 310 and blue NVG require now an 18V Battery.
+
+- Renamed some console item names.
+
+- Tiny battery rebalance for SCRAMBLE Gear.
+
 Menu:
 - Added degree symbol for FOV value.
+
+- Removed extra spacing in credits.
+
+NPCs:
+- Hazmat suit and SCP-714 now fall to the ground when removed by SCP-049.
 
 Map Creator:
 - Made the Map Creator to be compatible with latest BlitzPlus version.
 
 Bug fixes:
-- Fixed a bug with Ulgrin not triggering on the player when he is reading a documents.
+- Fixed a bug with Ulgrin not triggering on the player when he is reading a document.
 - Fixed a bug with console bind.
 - Fixed SCP-096 triggering while his face is hidden by fog.
 - Fixed SCP-106 animation when getting hit by the Tesla Gate.
 - Fixed windows textures for some rooms.
 - Fixed the office door appearing to freeze in weird ways when leaving the room instantly.
 - Fixed non-latin characters in loading screens not showing correctly.
+- Fixed checkpoint monitors not turning at all.
+- Fixed wrong textures for Class-D model in «room2_nuke» and «room3_2_hcz».
+- Fixed grammar a little bit.
+- Fixed an ability to pick up items when you died.
+- Fixed SCP-049 removing a hazmat suit and SCP-714 at the same time.
+- Fixed position of the SCP-895 pivot attracting player's camera while wearing night vision goggles.
+- Fixed "ACCESS CODE" string going out of button image on different resolutions.
 
 - Tiny fix for dead guard position in the starting location.
 - Tiny fix for map generation.
+- Tiny fix for keypad slots.
 
 v1.0.3
 
@@ -618,7 +649,7 @@ Bug Fixes:
 - Fixed room descriptions.
 - Fixed decals size not being saved correctly.
 - Fixed double corrosion decal in the Emily Ross event.
-- Fixed menu buttons has wrong width and height.
+- Fixed menu buttons have wrong width and height.
 - Fixed Omni Key Card achievement image.
 - Fixed text font for Burnt Note with Dr. Maynard's access code.
 - Fixed smoke doesn't interact with fog.

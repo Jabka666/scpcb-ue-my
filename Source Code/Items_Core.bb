@@ -323,11 +323,11 @@ Function RemoveWearableItems%(item.Items)
 	CatchErrors("Uncaught (RemoveWearableItems)")
 	
 	Select item\ItemTemplate\TempName
-		Case "gasmask", "supergasmask", "gasmask3"
+		Case "gasmask", "finegasmask", "veryfinegasmask", "gasmask148"
 			;[Block]
 			wi\GasMask = 0
 			;[End Block]
-		Case "hazmatsuit",  "hazmatsuit2", "hazmatsuit3"
+		Case "hazmatsuit", "hazmatsuit148", "veryfinehazmatsuit"
 			;[Block]
 			wi\HazmatSuit = 0
 			SetAnimTime(item\Model, 4.0)
@@ -340,7 +340,7 @@ Function RemoveWearableItems%(item.Items)
 			;[Block]
 			wi\BallisticHelmet = False
 			;[End Block]
-		Case "nvg", "supernvg", "finenvg"
+		Case "nvg", "finenvg", "veryfinenvg"
 			;[Block]
 			If wi\NightVision > 0 Then opt\CameraFogFar = opt\StoredCameraFogFar : wi\NightVision = 0
 			;[End Block]
@@ -348,7 +348,7 @@ Function RemoveWearableItems%(item.Items)
 			;[Block]
 			I_714\Using = False
 			;[End Block]
-		Case "scp1499", "super1499"
+		Case "scp1499", "fine1499"
 			;[Block]
 			I_1499\Using = 0
 			;[End Block]
@@ -485,7 +485,7 @@ Function UpdateItems%()
 		DeletedItem = False
 	Next
 	
-	If ClosestItem <> Null Then
+	If ClosestItem <> Null And (Not me\Terminated) Then
 		If mo\MouseHit1 Then PickItem(ClosestItem)
 	EndIf
 End Function
@@ -519,7 +519,7 @@ Function PickItem%(item.Items)
 					Case "scp1123"
 						;[Block]
 						Use1123()
-						If (Not I_714\Using) And wi\GasMask <> 3 And wi\HazmatSuit <> 3 Then Return
+						If (Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 3 Then Return
 						;[End Block]
 					Case "killbat"
 						;[Block]
@@ -566,12 +566,12 @@ Function PickItem%(item.Items)
 						;[Block]
 						GiveAchievement(AchvSNAV)
 						;[End Block]
-					Case "hazmatsuit", "hazmatsuit2", "hazmatsuit3"
+					Case "hazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
 						;[Block]
 						CanPickItem = True
 						For z = 0 To MaxItemAmount - 1
 							If Inventory(z) <> Null Then
-								If Inventory(z)\ItemTemplate\TempName = "hazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "hazmatsuit2" Lor Inventory(z)\ItemTemplate\TempName = "hazmatsuit3" Then
+								If Inventory(z)\ItemTemplate\TempName = "hazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "veryfinehazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "hazmatsuit148" Then
 									CanPickItem = 0
 									Return
 								ElseIf Inventory(z)\ItemTemplate\TempName = "vest" Lor Inventory(z)\ItemTemplate\TempName = "finevest"
@@ -599,7 +599,7 @@ Function PickItem%(item.Items)
 								If Inventory(z)\ItemTemplate\TempName = "vest" Lor Inventory(z)\ItemTemplate\TempName = "finevest" Then
 									CanPickItem = 0
 									Return
-								ElseIf Inventory(z)\ItemTemplate\TempName = "hazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "hazmatsuit2" Lor Inventory(z)\ItemTemplate\TempName = "hazmatsuit3"
+								ElseIf Inventory(z)\ItemTemplate\TempName = "hazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "veryfinehazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "hazmatsuit148"
 									CanPickItem = 2
 									Return
 								EndIf
@@ -690,7 +690,7 @@ Function IsItemGoodFor1162ARC%(itt.ItemTemplates)
 			;[Block]
 			Return(True)
 			;[End Block]
-		Case "vest", "finevest","gasmask"
+		Case "vest", "finevest", "gasmask"
 			;[Block]
 			Return(True)
 			;[End Block]
@@ -789,7 +789,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 	Local Remove% = True, i%
 	
 	Select item\ItemTemplate\TempName
-		Case "gasmask", "supergasmask", "gasmask3"
+		Case "gasmask", "finegasmask", "veryfinegasmask", "gasmask148"
 			;[Block]
 			Select Setting
 				Case ROUGH, COARSE
@@ -805,13 +805,17 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						Remove = False
 					EndIf
 					;[End Block]
-				Case FINE, VERYFINE
+				Case FINE
 					;[Block]
-					it2.Items = CreateItem("Gas Mask", "supergasmask", x, y, z)
+					it2.Items = CreateItem("Gas Mask", "finegasmask", x, y, z)
+					;[End Block]
+				Case VERYFINE
+					;[Block]
+					it2.Items = CreateItem("Gas Mask", "veryfinegasmask", x, y, z)
 					;[End Block]
 			End Select
 			;[End Block]
-		Case "scp1499", "super1499"
+		Case "scp1499", "fine1499"
 			;[Block]
 			Select Setting
 				Case ROUGH, COARSE
@@ -825,7 +829,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case FINE
 					;[Block]
-					it2.Items = CreateItem("SCP-1499", "super1499", x, y, z)
+					it2.Items = CreateItem("SCP-1499", "fine1499", x, y, z)
 					;[End Block]
 				Case VERYFINE
 					;[Block]
@@ -927,7 +931,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
-		Case "nvg", "supernvg", "finenvg", "scramble"
+		Case "nvg", "veryfinenvg", "finenvg", "scramble"
 			;[Block]
 			Select Setting
 				Case ROUGH, COARSE
@@ -950,7 +954,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						it2.Items = CreateItem("SCRAMBLE Gear", "scramble", x, y, z)
 						it2\State = Rnd(0.0, 1000.0)
 					Else
-						it2.Items = CreateItem("Night Vision Goggles", "supernvg", x, y, z)
+						it2.Items = CreateItem("Night Vision Goggles", "veryfinenvg", x, y, z)
 						it2\State = Rnd(0.0, 1000.0)
 					EndIf
 					;[End Block]
@@ -1021,7 +1025,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case 2
 									;[Block]
-									it2.Items = CreateItem("Night Vision Goggles", "supernvg", x, y, z)
+									it2.Items = CreateItem("Night Vision Goggles", "veryfinenvg", x, y, z)
 									it2\State = Rnd(0.0, 1000.0)
 									;[End Block]
 								Case 3
@@ -1060,10 +1064,10 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						If it <> item And it\Collider <> 0 And (Not it\Picked) Then
 							If DistanceSquared(EntityX(it\Collider, True), x, EntityZ(it\Collider, True), z) < PowTwo(180.0 * RoomScale)
 								Select it\ItemTemplate\TempName
-									Case "gasmask", "supergasmask"
+									Case "gasmask", "finegasmask", "veryfinegasmask"
 										;[Block]
 										RemoveItem(it)
-										it2.Items = CreateItem("Heavy Gas Mask", "gasmask3", x, y, z)
+										it2.Items = CreateItem("Heavy Gas Mask", "gasmask148", x, y, z)
 										Exit
 										;[End Block]
 									Case "vest"
@@ -1072,10 +1076,10 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 										it2.Items = CreateItem("Heavy Ballistic Vest", "finevest", x, y, z)
 										Exit
 										;[End Block]
-									Case "hazmatsuit", "hazmatsuit2"
+									Case "hazmatsuit", "veryfinehazmatsuit"
 										;[Block]
 										RemoveItem(it)
-										it2.Items = CreateItem("Heavy Hazmat Suit", "hazmatsuit3", x, y, z)
+										it2.Items = CreateItem("Heavy Hazmat Suit", "hazmatsuit148", x, y, z)
 										Exit
 										;[End Block]
 								End Select
@@ -1721,7 +1725,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
-		Case "badbat"
+		Case "coarsebat"
 			;[Block]
 			Select Setting
 				Case ROUGH, COARSE
@@ -1753,7 +1757,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case COARSE
 					;[Block]
-					it2.Items = CreateItem("4.5V Battery", "badbat", x, y, z)
+					it2.Items = CreateItem("4.5V Battery", "coarsebat", x, y, z)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1778,7 +1782,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH
 					;[Block]
-					it2.Items = CreateItem("4.5V Battery", "badbat", x, y, z)
+					it2.Items = CreateItem("4.5V Battery", "coarsebat", x, y, z)
 					;[End Block]
 				Case COARSE
 					;[Block]
@@ -1807,7 +1811,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH
 					;[Block]
-					it2.Items = CreateItem("4.5V Battery", "badbat", x, y, z)
+					it2.Items = CreateItem("4.5V Battery", "coarsebat", x, y, z)
 					;[End Block]
 				Case COARSE
 					;[Block]
@@ -1845,7 +1849,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
-		Case "hazmatsuit", "hazmatsuit3"
+		Case "hazmatsuit", "hazmatsuit148"
 			;[Block]
 			Select Setting
 				Case ROUGH, COARSE
@@ -1859,11 +1863,11 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case FINE, VERYFINE
 					;[Block]
-					it2.Items = CreateItem("Hazmat Suit", "hazmatsuit2", x, y, z)
+					it2.Items = CreateItem("Hazmat Suit", "veryfinehazmatsuit", x, y, z)
 					;[End Block]
 			End Select
 			;[End Block]
-		Case "hazmatsuit2"
+		Case "veryfinehazmatsuit"
 			;[Block]
 			Select Setting
 				Case ROUGH, COARSE
@@ -2230,7 +2234,7 @@ Function Use1123%()
 	Local e.Events
 	Local Temp%
 	
-	If (Not I_714\Using) And wi\GasMask <> 3 And wi\HazmatSuit <> 3 Then
+	If (Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 3 Then
 		me\LightFlash = 3.0
 		PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))
 		
@@ -2337,6 +2341,43 @@ Function GetUsingItem%(item.Items)
 			Return(KEY_MISC)
 			;[End Block]
 	End Select
+End Function
+
+Function CreateRandomBattery.Items(x#, y#, z#)
+	Local BatteryName$, BatteryTempName$
+	Local BatteryChance%, RandomChance%
+	
+	Select SelectedDifficulty\OtherFactors
+		Case SAFE
+			;[Block]
+			BatteryChance = 10
+			;[End Block]
+		Case NORMAL
+			;[Block]
+			BatteryChance = 15
+			;[End Block]
+		Case HARD
+			;[Block]
+			BatteryChance = 20
+			;[End Block]
+		Case EXTREME
+			;[Block]
+			BatteryChance = 25
+			;[End Block]
+	End Select
+	
+	RandomChance = Rand(BatteryChance)
+	If RandomChance >= 1 And RandomChance <= 7 Then
+		BatteryName = "9V Battery"
+		BatteryTempName = "bat"
+	ElseIf RandomChance >= 8 And RandomChance < BatteryChance
+		BatteryName = "4.5V Battery"
+		BatteryTempName = "coarsebat"
+	Else
+		BatteryName = "18V Battery"
+		BatteryTempName = "finebat"
+	EndIf
+	Return(CreateItem(BatteryName, BatteryTempName, x, y, z))
 End Function
 
 ;~IDEal Editor Parameters:

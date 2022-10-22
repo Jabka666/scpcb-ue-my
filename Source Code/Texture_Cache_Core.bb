@@ -1,6 +1,6 @@
 ; ~ Texture Cache Constants
 ;[Block]
-Const MapTexturesFolder$ = "GFX\map\textures\"
+Const MapTexturesFolder$ = "GFX\Map\Textures\"
 
 Const DeleteMapTextures% = 0
 Const DeleteAllTextures% = 1

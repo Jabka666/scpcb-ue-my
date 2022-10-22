@@ -22,24 +22,24 @@ End Type
 
 Global mma.MainMenuAssets
 
-MenuWhite = LoadImage_Strict("GFX\menu\menu_white.png")
-MenuGray = LoadImage_Strict("GFX\menu\menu_gray.png")
-MenuBlack = LoadImage_Strict("GFX\menu\menu_black.png")
+MenuWhite = LoadImage_Strict("GFX\Menu\menu_white.png")
+MenuGray = LoadImage_Strict("GFX\Menu\menu_gray.png")
+MenuBlack = LoadImage_Strict("GFX\Menu\menu_black.png")
 MaskImage(MenuBlack, 255, 255, 0)
 
 Function InitMainMenuAssets%()
 	mma.MainMenuAssets = New MainMenuAssets
 	
-	mma\BackGround = LoadImage_Strict("GFX\menu\back.png")
+	mma\BackGround = LoadImage_Strict("GFX\Menu\back.png")
 	mma\BackGround = ScaleImage2(mma\BackGround, MenuScale, MenuScale)
 	
-	mma\SECURE_CONTAIN_PROTECT = LoadImage_Strict("GFX\menu\SCP_text.png")
+	mma\SECURE_CONTAIN_PROTECT = LoadImage_Strict("GFX\Menu\SCP_text.png")
 	mma\SECURE_CONTAIN_PROTECT = ScaleImage2(mma\SECURE_CONTAIN_PROTECT, MenuScale, MenuScale)
 	
-	mma\SCP173 = LoadImage_Strict("GFX\menu\scp_173_back.png")
+	mma\SCP173 = LoadImage_Strict("GFX\Menu\scp_173_back.png")
 	mma\SCP173 = ScaleImage2(mma\SCP173, MenuScale, MenuScale)
 	
-	mma\Palette = LoadImage_Strict("GFX\menu\palette.png")
+	mma\Palette = LoadImage_Strict("GFX\Menu\palette.png")
 	mma\Palette = ScaleImage2(mma\Palette, MenuScale, MenuScale)
 	
 	mm\MainMenuBlinkTimer[0] = 1.0
@@ -59,7 +59,7 @@ End Type
 Global ga.GameAssets = New GameAssets
 
 For i = 0 To 3
-	ga\ArrowIMG[i] = LoadImage_Strict("GFX\menu\arrow.png")
+	ga\ArrowIMG[i] = LoadImage_Strict("GFX\Menu\arrow.png")
 	ga\ArrowIMG[i] = ScaleImage2(ga\ArrowIMG[i], MenuScale, MenuScale)
 	RotateImage(ga\ArrowIMG[i], i * 90.0)
 	HandleImage(ga\ArrowIMG[i], 0, 0)
@@ -1900,11 +1900,11 @@ Function UpdateLauncher%(lnchr.Launcher)
 	opt\RealGraphicWidth = opt\GraphicWidth
 	opt\RealGraphicHeight = opt\GraphicHeight
 	
-	fo\FontID[Font_Default] = LoadFont_Strict("GFX\fonts\Courier New.ttf", 16, True)
+	fo\FontID[Font_Default] = LoadFont_Strict("GFX\Fonts\Courier New.ttf", 16, True)
 	SetFont(fo\FontID[Font_Default])
 	
-	MenuWhite = LoadImage_Strict("GFX\menu\menu_white.png")
-	MenuBlack = LoadImage_Strict("GFX\menu\menu_black.png")	
+	MenuWhite = LoadImage_Strict("GFX\Menu\menu_white.png")
+	MenuBlack = LoadImage_Strict("GFX\Menu\menu_black.png")	
 	MaskImage(MenuBlack, 255, 255, 0)
 	
 	Local LauncherIMG%[3]
