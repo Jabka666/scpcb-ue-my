@@ -4712,7 +4712,7 @@ Function UpdateEvents%()
 						If wi\GasMask = 0 And wi\HazmatSuit = 0 Then
 							me\BlurTimer = Min(me\BlurTimer + (fps\Factor[0] * 1.05), 1500.0)
 							If me\BlurTimer >= 500.0 Then UpdateCough(1000)
-							If me\BlurTimer >= 1500.0 Then 
+							If me\BlurTimer >= 1500.0 Then
 								Kill(False)
 								msg\DeathMsg = GetLocalString("death", "939.gas")
 							EndIf
@@ -4923,7 +4923,7 @@ Function UpdateEvents%()
 										If e\EventState3 > 70.0 * 1.0 And e\EventState3 - fps\Factor[0] <= 70.0 * 1.0 Then
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech1.ogg"))
 										ElseIf e\EventState3 > 70.0 * 13.0 And e\EventState3 - fps\Factor[0] <= 70.0 * 13.0
-											CreateMsg(GetLocalString("msg", "0121"))
+											CreateMsg(GetLocalString("msg", "012_1"))
 											InjurePlayer(0.5)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech2.ogg"))
 										ElseIf e\EventState3 > 70.0 * 31.0 And e\EventState3 - fps\Factor[0] <= 70.0 * 31.0
@@ -4932,11 +4932,11 @@ Function UpdateEvents%()
 											EntityTexture(e\room\Objects[4], Tex)
 											DeleteSingleTextureEntryFromCache(Tex)
 											
-											CreateMsg(GetLocalString("msg", "0122"))
+											CreateMsg(GetLocalString("msg", "012_2"))
 											me\Injuries = Max(me\Injuries, 1.5)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech" + Rand(3, 4) + ".ogg"))
 										ElseIf e\EventState3 > 70.0 * 49.0 And e\EventState3 - fps\Factor[0] <= 70.0 * 49.0
-											CreateMsg(GetLocalString("msg", "0123"))
+											CreateMsg(GetLocalString("msg", "012_3"))
 											InjurePlayer(0.3)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech5.ogg"))
 										ElseIf e\EventState3 > 70.0 * 63.0 And e\EventState3 - fps\Factor[0] <= 70.0 * 63.0
@@ -4953,7 +4953,7 @@ Function UpdateEvents%()
 											EntityTexture(e\room\Objects[4], Tex)
 											DeleteSingleTextureEntryFromCache(Tex)
 											
-											CreateMsg(GetLocalString("msg", "0126"))
+											CreateMsg(GetLocalString("msg", "012_4"))
 											InjurePlayer(0.8)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech7.ogg"))
 											If (Not me\Crouch) Then SetCrouch(True)
@@ -7247,7 +7247,7 @@ Function UpdateEvents%()
 									e\EventState = 3.0	
 									PlaySound_Strict(e\Sound2)
 									
-									CreateMsg(GetLocalString("msg", "1048a"))
+									CreateMsg(GetLocalString("msg", "1048a_1"))
 								Else
 									e\EventState = 4.0
 									e\EventState3 = 70.0 * 30.0
@@ -7267,34 +7267,34 @@ Function UpdateEvents%()
 									Select Rand(3)
 										Case 1
 											;[Block]
-											CreateMsg(GetLocalString("msg", "1048a1"))
+											CreateMsg(GetLocalString("msg", "1048a_2"))
 											;[End Block]
 										Case 2
 											;[Block]
-											CreateMsg(GetLocalString("msg", "1048a2"))
+											CreateMsg(GetLocalString("msg", "1048a_3"))
 											;[End Block]
 										Case 3
 											;[Block]
-											CreateMsg(GetLocalString("msg", "1048a3"))
+											CreateMsg(GetLocalString("msg", "1048a_4"))
 											;[End Block]
 									End Select
 								ElseIf e\EventState2 > 600.0 And e\EventState2 - fps\Factor[0] <= 600.0
 									Select Rand(4)
 										Case 1
 											;[Block]
-											CreateMsg(GetLocalString("msg", "1048a4"))
+											CreateMsg(GetLocalString("msg", "1048a_5"))
 											;[End Block]
 										Case 2
 											;[Block]
-											CreateMsg(GetLocalString("msg", "1048a5"))
+											CreateMsg(GetLocalString("msg", "1048a_6"))
 											;[End Block]
 										Case 3
 											;[Block]
-											CreateMsg(GetLocalString("msg", "1048a6"))
+											CreateMsg(GetLocalString("msg", "1048a_7"))
 											;[End Block]
 										Case 4
 											;[Block]
-											CreateMsg(GetLocalString("msg", "1048a7"))
+											CreateMsg(GetLocalString("msg", "1048a_8"))
 											;[End Block]
 									End Select
 								EndIf
@@ -7691,7 +7691,7 @@ Function UpdateEvents%()
 									Else
 										PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(1, 4) + ".ogg"))
 										me\LightFlash = 5.0
-										CreateMsg(GetLocalString("msg", "1162"))
+										CreateMsg(GetLocalString("msg", "1162_1"))
 									EndIf
 									Exit
 								EndIf
@@ -7719,7 +7719,7 @@ Function UpdateEvents%()
 								Else
 									PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(1, 4) + ".ogg"))
 									me\LightFlash = 5.0
-									CreateMsg(GetLocalString("msg", "11622"))
+									CreateMsg(GetLocalString("msg", "1162_2"))
 								EndIf
 								e\EventState2 = 0.0
 							EndIf
@@ -8180,7 +8180,7 @@ Function UpdateEvents%()
 					EndIf
 						
 					If InteractObject(e\room\Objects[1], 0.49) Then
-						CreateMsg(GetLocalString("msg", "freeze"))
+						CreateMsg(GetLocalString("msg", "breeze"))
 						me\Injuries = Max(0.0, me\Injuries - Rnd(0.3))
 						me\Bloodloss = 0.0
 						PlaySound_Strict(LoadTempSound("SFX\SCP\Joke\Quack.ogg"))
@@ -8498,7 +8498,7 @@ Function UpdateDimension106%()
 										FreeEntity(Pvt)
 										
 										If (Not me\Terminated) Then
-											msg\DeathMsg = GetLocalString("death", "106")
+											msg\DeathMsg = GetLocalString("death", "106_1")
 											
 											PlaySound_Strict(LoadTempSound("SFX\Room\PocketDimension\Impact.ogg"))
 											me\Terminated = True
@@ -8521,7 +8521,7 @@ Function UpdateDimension106%()
 							Else ; ~ The player is not at the exit, must've fallen down
 								If (Not me\Terminated) Then 
 									PlaySound_Strict(HorrorSFX[8])
-									msg\DeathMsg = GetLocalString("msg", "1062")
+									msg\DeathMsg = GetLocalString("msg", "106_2")
 									me\BlurTimer = 3000.0
 									me\Terminated = True
 								EndIf
@@ -8816,7 +8816,7 @@ Function UpdateDimension106%()
 							Else ; ~ Somewhere else, must've fallen down
 								If (Not me\Terminated) Then 
 									PlaySound_Strict(HorrorSFX[8])
-									msg\DeathMsg = GetLocalString("msg", "1062")
+									msg\DeathMsg = GetLocalString("msg", "106_2")
 									me\BlurTimer = 3000.0
 									me\Terminated = True
 								EndIf

@@ -490,7 +490,7 @@ Function UpdateConsole%()
 					Select StrTemp
 						Case "1", ""
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help1.1"))
+							CreateConsoleMsg(GetLocalString("console", "help_1.1"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("- ending")
 							CreateConsoleMsg("- notarget")
@@ -510,13 +510,13 @@ Function UpdateConsole%()
 							CreateConsoleMsg("- money")
 							CreateConsoleMsg("- debughud")
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg(GetLocalString("console", "help1.2"))
+							CreateConsoleMsg(GetLocalString("console", "help_1.2"))
 							CreateConsoleMsg(GetLocalString("console", "help.command"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "2"
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help2.1"))
+							CreateConsoleMsg(GetLocalString("console", "help_2.1"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("- reset096")
 							CreateConsoleMsg("- reset372")
@@ -535,13 +535,13 @@ Function UpdateConsole%()
 							CreateConsoleMsg("- disablenuke")
 							CreateConsoleMsg("- resetfunds")
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg(GetLocalString("console", "help2.2"))
+							CreateConsoleMsg(GetLocalString("console", "help_2.2"))
 							CreateConsoleMsg(GetLocalString("console", "help.command"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "3"
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help3.1"))
+							CreateConsoleMsg(GetLocalString("console", "help_3.1"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("- playmusic [clip + .wav / .ogg]")
 							CreateConsoleMsg("- camerafog [near] [far]")
@@ -1377,19 +1377,19 @@ Function UpdateConsole%()
 					Select Rand(4)
 						Case 1
 							;[Block]
-							msg\DeathMsg = ""
+							msg\DeathMsg = GetLocalString("death", "kill_1")
 							;[End Block]
 						Case 2
 							;[Block]
-							msg\DeathMsg = Format(GetLocalString("death", "kill2"), SubjectName)
+							msg\DeathMsg = Format(GetLocalString("death", "kill_2"), SubjectName)
 							;[End Block]
 						Case 3
 							;[Block]
-							msg\DeathMsg = GetLocalString("death", "kill3")
+							msg\DeathMsg = GetLocalString("death", "kill_3")
 							;[End Block]
 						Case 4
 							;[Block]
-							msg\DeathMsg = Format(GetLocalString("death", "kill4"), SubjectName)
+							msg\DeathMsg = Format(GetLocalString("death", "kill_4"), SubjectName)
 							;[End Block]
 					End Select
 					;[End Block]
@@ -1569,16 +1569,16 @@ Function UpdateConsole%()
 					;[End Block]
 				Case "codes"
 					;[Block]
-					CreateConsoleMsg(GetLocalString("console", "codes1"))
+					CreateConsoleMsg(GetLocalString("console", "codes_1"))
 					CreateConsoleMsg("")
-					CreateConsoleMsg(Format(GetLocalString("console", "codes2"), CODE_DR_MAYNARD))
-					CreateConsoleMsg(Format(GetLocalString("console", "codes3"), CODE_DR_HARP))
-					CreateConsoleMsg(Format(GetLocalString("console", "codes4"), CODE_DR_L))
-					CreateConsoleMsg(Format(GetLocalString("console", "codes5"), CODE_O5_COUNCIL))
-					CreateConsoleMsg(Format(GetLocalString("console", "codes6"), CODE_MAINTENANCE_TUNNELS))
-					CreateConsoleMsg(Format(GetLocalString("console", "codes7"), CODE_CONT1_035))
+					CreateConsoleMsg(Format(GetLocalString("console", "codes_2"), CODE_DR_MAYNARD))
+					CreateConsoleMsg(Format(GetLocalString("console", "codes_3"), CODE_DR_HARP))
+					CreateConsoleMsg(Format(GetLocalString("console", "codes_4"), CODE_DR_L))
+					CreateConsoleMsg(Format(GetLocalString("console", "codes_5"), CODE_O5_COUNCIL))
+					CreateConsoleMsg(Format(GetLocalString("console", "codes_6"), CODE_MAINTENANCE_TUNNELS))
+					CreateConsoleMsg(Format(GetLocalString("console", "codes_7"), CODE_CONT1_035))
 					CreateConsoleMsg("")
-					CreateConsoleMsg(GetLocalString("console", "codes8"))
+					CreateConsoleMsg(GetLocalString("console", "codes_8"))
 					;[End Block]
 				Default
 					;[Block]
@@ -3951,7 +3951,7 @@ Function UpdateGUI%()
 										;[End Block]		
 								  Case "nav310"
 										;[Block]
-                    CreateMsg(GetLocalString("msg", "nav.bat.notfit"))
+										CreateMsg(GetLocalString("msg", "nav.bat.notfit"))
 										;[End Block]
 									Case "navulti", "nav300"
 										;[Block]
@@ -3985,7 +3985,7 @@ Function UpdateGUI%()
 										;[End Block]
 									Case "veryfinenvg"
 										;[Block]
-                    CreateMsg(GetLocalString("msg", nvg.bat.notfit))
+										CreateMsg(GetLocalString("msg", "nvg.bat.notfit"))
 										;[End Block]
 									Case "scramble"
 										;[Block]
@@ -4140,7 +4140,7 @@ Function UpdateGUI%()
 										;[End Block]
 								End Select
 								;[End Block]
-							Case "superbat", "killbat"
+							Case "veryfinebat", "killbat"
 								;[Block]
 								Select Inventory(MouseSlot)\ItemTemplate\TempName
 									Case "nav"
@@ -4364,7 +4364,7 @@ Function UpdateGUI%()
 								;[Block]
 								me\Injuries = Max(0.0, me\Injuries - Rnd(0.5, 3.5))
 								me\Bloodloss = Max(0.0, me\Bloodloss - Rnd(10.0, 100.0))
-								CreateMsg(GetLocalString("msg", "better"))
+								CreateMsg(GetLocalString("msg", "better_1"))
 								;[End Block]
 							Case 4
 								;[Block]
@@ -4428,12 +4428,12 @@ Function UpdateGUI%()
 							Else
 								me\Bloodloss = Max(0.0, me\Bloodloss - Rnd(10.0, 20.0))
 								If me\Injuries >= 2.5 Then
-									CreateMsg(GetLocalString("msg", "aid.toobad"))
+									CreateMsg(GetLocalString("msg", "aid.toobad_1"))
 									me\Injuries = Max(2.5, me\Injuries - Rnd(0.3, 0.7))
 								ElseIf me\Injuries > 1.0
 									me\Injuries = Max(0.5, me\Injuries - Rnd(0.5, 1.0))
 									If me\Injuries > 1.0 Then
-										CreateMsg(GetLocalString("msg", "aid.toobad2"))
+										CreateMsg(GetLocalString("msg", "aid.toobad_2"))
 									Else
 										CreateMsg(GetLocalString("msg", "aid.stop"))
 									EndIf
@@ -4635,7 +4635,7 @@ Function UpdateGUI%()
 					me\StaminaEffect = 0.5
 					me\StaminaEffectTimer = 20.0
 					
-					CreateMsg(GetLocalString("msg", "syringe"))
+					CreateMsg(GetLocalString("msg", "syringe_1"))
 					
 					RemoveItem(SelectedItem)
 					;[End Block]
@@ -4645,7 +4645,7 @@ Function UpdateGUI%()
 					me\StaminaEffect = Rnd(0.5, 0.8)
 					me\StaminaEffectTimer = Rnd(20.0, 30.0)
 					
-					CreateMsg(GetLocalString("msg", "syringe2"))
+					CreateMsg(GetLocalString("msg", "syringe_2"))
 					
 					RemoveItem(SelectedItem)
 					;[End Block]
@@ -4657,17 +4657,17 @@ Function UpdateGUI%()
 							me\HealTimer = Rnd(40.0, 60.0)
 							me\StaminaEffect = 0.1
 							me\StaminaEffectTimer = 30.0
-							CreateMsg(GetLocalString("msg", "syringe3"))
+							CreateMsg(GetLocalString("msg", "syringe_3"))
 							;[End Block]
 						Case 2
 							;[Block]
 							chs\SuperMan = True
-							CreateMsg(GetLocalString("msg", "syringe4"))
+							CreateMsg(GetLocalString("msg", "syringe_4"))
 							;[End Block]
 						Case 3
 							;[Block]
 							me\VomitTimer = 30.0
-							CreateMsg(GetLocalString("msg", "syringe5"))
+							CreateMsg(GetLocalString("msg", "syringe_5"))
 							;[End Block]
 					End Select
 					
@@ -5015,27 +5015,27 @@ Function UpdateGUI%()
 						Select Rand(6)
 							Case 1
 								;[Block]
-								CreateMsg(GetLocalString("msg", "cigarette1"))
+								CreateMsg(GetLocalString("msg", "cigarette_1"))
 								;[End Block]
 							Case 2
 								;[Block]
-								CreateMsg(GetLocalString("msg", "cigarette2"))
+								CreateMsg(GetLocalString("msg", "cigarette_2"))
 								;[End Block]
 							Case 3
 								;[Block]
-								CreateMsg(GetLocalString("msg", "cigarette3"))
+								CreateMsg(GetLocalString("msg", "cigarette_3"))
 								;[End Block]
 							Case 4
 								;[Block]
-								CreateMsg(GetLocalString("msg", "cigarette4"))
+								CreateMsg(GetLocalString("msg", "cigarette_4"))
 								;[End Block]
 							Case 5
 								;[Block]
-								CreateMsg(GetLocalString("msg", "cigarette5"))
+								CreateMsg(GetLocalString("msg", "cigarette_5"))
 								;[End Block]
 							Case 6
 								;[Block]
-								CreateMsg(GetLocalString("msg", "cigarette6"))
+								CreateMsg(GetLocalString("msg", "cigarette_6"))
 								;[End Block]
 						End Select
 						RemoveItem(SelectedItem)
@@ -5394,7 +5394,7 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "syringeinf"
 					;[Block]
-					CreateMsg(GetLocalString("msg", "syringe6"))
+					CreateMsg(GetLocalString("msg", "syringe_6"))
 					
 					me\VomitTimer = 70.0 * 1.0
 					
@@ -5635,151 +5635,151 @@ Function RenderDebugHUD%()
 		Case 1
 			;[Block]
 			Text(x, y, Format(GetLocalString("misc", "room"), PlayerRoom\RoomTemplate\Name))
-			Text(x, y + (20 * MenuScale), Format(Format(Format(GetLocalString("console", "debug1.xyz"), Floor(EntityX(PlayerRoom\OBJ) / 8.0 + 0.5), "{0}"), Floor(EntityZ(PlayerRoom\OBJ) / 8.0 + 0.5), "{1}"), PlayerRoom\Angle, "{2}"))
+			Text(x, y + (20 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_1.xyz"), Floor(EntityX(PlayerRoom\OBJ) / 8.0 + 0.5), "{0}"), Floor(EntityZ(PlayerRoom\OBJ) / 8.0 + 0.5), "{1}"), PlayerRoom\Angle, "{2}"))
 			For ev.Events = Each Events
 				If ev\room = PlayerRoom Then
-					Text(x, y + (40 * MenuScale), Format(Format(GetLocalString("console", "debug1.event"), ev\EventName, "{0}"), ev\EventID, "{1}"))
-					Text(x, y + (60 * MenuScale), Format(GetLocalString("console", "debug1.state1"), ev\EventState))
-					Text(x, y + (80 * MenuScale), Format(GetLocalString("console", "debug1.state2"), ev\EventState2))
-					Text(x, y + (100 * MenuScale), Format(GetLocalString("console", "debug1.state3"), ev\EventState3))
-					Text(x, y + (120 * MenuScale), Format(GetLocalString("console", "debug1.state4"), ev\EventState4))
-					Text(x, y + (140 * MenuScale), Format(GetLocalString("console", "debug1.str"), ev\EventStr))
+					Text(x, y + (40 * MenuScale), Format(Format(GetLocalString("console", "debug_1.event"), ev\EventName, "{0}"), ev\EventID, "{1}"))
+					Text(x, y + (60 * MenuScale), Format(GetLocalString("console", "debug_1.state_1"), ev\EventState))
+					Text(x, y + (80 * MenuScale), Format(GetLocalString("console", "debug_1.state_2"), ev\EventState2))
+					Text(x, y + (100 * MenuScale), Format(GetLocalString("console", "debug_1.state_3"), ev\EventState3))
+					Text(x, y + (120 * MenuScale), Format(GetLocalString("console", "debug_1.state_4"), ev\EventState4))
+					Text(x, y + (140 * MenuScale), Format(GetLocalString("console", "debug_1.str"), ev\EventStr))
 					Exit
 				EndIf
 			Next
 			If PlayerRoom\RoomTemplate\Name = "dimension_1499" Then
-				Text(x, y + (180 * MenuScale), Format(Format(GetLocalString("console", "debug1.chunkxyz"), (Int((EntityX(me\Collider) + 20) / 40)), "{0}"), (Int((EntityZ(me\Collider) + 20) / 40)), "{1}"))
+				Text(x, y + (180 * MenuScale), Format(Format(GetLocalString("console", "debug_1.chunkxyz"), (Int((EntityX(me\Collider) + 20) / 40)), "{0}"), (Int((EntityZ(me\Collider) + 20) / 40)), "{1}"))
 				
 				Local CH_Amount% = 0
 				
 				For ch.Chunk = Each Chunk
 					CH_Amount = CH_Amount + 1
 				Next
-				Text(x, y + (200 * MenuScale), Format(GetLocalString("console", "debug1.currchunk"), CH_Amount))
+				Text(x, y + (200 * MenuScale), Format(GetLocalString("console", "debug_1.currchunk"), CH_Amount))
 			Else
-				Text(x, y + (200 * MenuScale), Format(Format(Format(GetLocalString("console", "debug1.currroom"), PlayerRoom\x, "{0}"), PlayerRoom\y, "{1}"), PlayerRoom\z, "{2}"))
+				Text(x, y + (200 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_1.currroom"), PlayerRoom\x, "{0}"), PlayerRoom\y, "{1}"), PlayerRoom\z, "{2}"))
 			EndIf
 			
 			If sc_I\SelectedMonitor <> Null Then
-				Text(x, y + (240 * MenuScale), Format(GetLocalString("console", "debug1.currmon"), sc_I\SelectedMonitor\ScrOBJ))
+				Text(x, y + (240 * MenuScale), Format(GetLocalString("console", "debug_1.currmon"), sc_I\SelectedMonitor\ScrOBJ))
 			Else
-				Text(x, y + (240 * MenuScale), Format(GetLocalString("console", "debug1.currmon"), "Null"))
+				Text(x, y + (240 * MenuScale), Format(GetLocalString("console", "debug_1.currmon"), "Null"))
 			EndIf
 			
 			If SelectedItem <> Null Then
-				Text(x, y + (280 * MenuScale), Format(GetLocalString("console", "debug1.currbtn"), SelectedItem\ItemTemplate\Name))
+				Text(x, y + (280 * MenuScale), Format(GetLocalString("console", "debug_1.currbtn"), SelectedItem\ItemTemplate\Name))
 			Else
-				Text(x, y + (280 * MenuScale), Format(GetLocalString("console", "debug1.currbtn"), "Null"))
+				Text(x, y + (280 * MenuScale), Format(GetLocalString("console", "debug_1.currbtn"), "Null"))
 			EndIf
 			
-			Text(x, y + (320 * MenuScale), Format(GetLocalString("console", "debug1.currflo"), PlayerElevatorFloor))
-			Text(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug1.roomflo"), ToElevatorFloor))
+			Text(x, y + (320 * MenuScale), Format(GetLocalString("console", "debug_1.currflo"), PlayerElevatorFloor))
+			Text(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug_1.roomflo"), ToElevatorFloor))
 			If PlayerInsideElevator Then
-				Text(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug1.inelev"), "True"))
+				Text(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug_1.inelev"), "True"))
 			Else
-				Text(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug1.inelev"), "False"))
+				Text(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug_1.inelev"), "False"))
 			EndIf
 			
-			Text(x, y + (400 * MenuScale), Format(Format(GetLocalString("console", "debug1.time"), CurrentDate(), "{0}"), CurrentTime(), "{1}"))
-			Text(x, y + (420 * MenuScale), Format(Format(GetLocalString("console", "debug1.vidmem"), ((TotalVidMem() / 1024) - (AvailVidMem() / 1024))), (TotalVidMem() / 1024)))
-			Text(x, y + (440 * MenuScale), Format(Format(GetLocalString("console", "debug1.glomem"), ((TotalPhys() / 1024) - (AvailPhys() / 1024))), (TotalPhys() / 1024)))
-			Text(x, y + (460 * MenuScale), Format(GetLocalString("console", "debug1.triamo"), CurrTrisAmount))
-			Text(x, y + (480 * MenuScale), Format(GetLocalString("console", "debug1.acttex"), ActiveTextures()))
+			Text(x, y + (400 * MenuScale), Format(Format(GetLocalString("console", "debug_1.time"), CurrentDate(), "{0}"), CurrentTime(), "{1}"))
+			Text(x, y + (420 * MenuScale), Format(Format(GetLocalString("console", "debug_1.vidmem"), ((TotalVidMem() / 1024) - (AvailVidMem() / 1024))), (TotalVidMem() / 1024)))
+			Text(x, y + (440 * MenuScale), Format(Format(GetLocalString("console", "debug_1.glomem"), ((TotalPhys() / 1024) - (AvailPhys() / 1024))), (TotalPhys() / 1024)))
+			Text(x, y + (460 * MenuScale), Format(GetLocalString("console", "debug_1.triamo"), CurrTrisAmount))
+			Text(x, y + (480 * MenuScale), Format(GetLocalString("console", "debug_1.acttex"), ActiveTextures()))
 			;[End Block]
 		Case 2
 			;[Block]
-			Text(x, y, Format(Format(Format(GetLocalString("console", "debug2.ppos"), FloatToString(EntityX(me\Collider), 1), "{0}"), FloatToString(EntityY(me\Collider), 1), "{1}"), FloatToString(EntityZ(me\Collider), 1), "{2}"))
-			Text(x, y + (20 * MenuScale), Format(Format(Format(GetLocalString("console", "debug2.proa"), FloatToString(EntityPitch(me\Collider), 1), "{0}"), FloatToString(EntityYaw(me\Collider), 1), "{1}"), FloatToString(EntityRoll(me\Collider), 1), "{2}"))
+			Text(x, y, Format(Format(Format(GetLocalString("console", "debug_2.ppos"), FloatToString(EntityX(me\Collider), 1), "{0}"), FloatToString(EntityY(me\Collider), 1), "{1}"), FloatToString(EntityZ(me\Collider), 1), "{2}"))
+			Text(x, y + (20 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_2.proa"), FloatToString(EntityPitch(me\Collider), 1), "{0}"), FloatToString(EntityYaw(me\Collider), 1), "{1}"), FloatToString(EntityRoll(me\Collider), 1), "{2}"))
 			
-			Text(x, y + (60 * MenuScale), Format(GetLocalString("console", "debug2.injuries"), me\Injuries))
-			Text(x, y + (80 * MenuScale), Format(GetLocalString("console", "debug2.bloodloss"), me\Bloodloss))
+			Text(x, y + (60 * MenuScale), Format(GetLocalString("console", "debug_2.injuries"), me\Injuries))
+			Text(x, y + (80 * MenuScale), Format(GetLocalString("console", "debug_2.bloodloss"), me\Bloodloss))
 			
-			Text(x, y + (120 * MenuScale), Format(GetLocalString("console", "debug2.blur"), me\BlurTimer))
-			Text(x, y + (140 * MenuScale), Format(GetLocalString("console", "debug2.blink"), me\LightBlink))
-			Text(x, y + (160 * MenuScale), Format(GetLocalString("console", "debug2.flash"), me\LightFlash))
+			Text(x, y + (120 * MenuScale), Format(GetLocalString("console", "debug_2.blur"), me\BlurTimer))
+			Text(x, y + (140 * MenuScale), Format(GetLocalString("console", "debug_2.blink"), me\LightBlink))
+			Text(x, y + (160 * MenuScale), Format(GetLocalString("console", "debug_2.flash"), me\LightFlash))
 			
-			Text(x, y + (200 * MenuScale), Format(GetLocalString("console", "debug2.freq"), me\BLINKFREQ))
-			Text(x, y + (220 * MenuScale), Format(GetLocalString("console", "debug2.timer"), me\BlinkTimer))
-			Text(x, y + (240 * MenuScale), Format(GetLocalString("console", "debug2.effect"), me\BlinkEffect))
-			Text(x, y + (260 * MenuScale), Format(GetLocalString("console", "debug2.efftim"), me\BlinkEffectTimer))
-			Text(x, y + (280 * MenuScale), Format(GetLocalString("console", "debug2.eyeirr"), me\EyeIrritation))
+			Text(x, y + (200 * MenuScale), Format(GetLocalString("console", "debug_2.freq"), me\BLINKFREQ))
+			Text(x, y + (220 * MenuScale), Format(GetLocalString("console", "debug_2.timer"), me\BlinkTimer))
+			Text(x, y + (240 * MenuScale), Format(GetLocalString("console", "debug_2.effect"), me\BlinkEffect))
+			Text(x, y + (260 * MenuScale), Format(GetLocalString("console", "debug_2.efftim"), me\BlinkEffectTimer))
+			Text(x, y + (280 * MenuScale), Format(GetLocalString("console", "debug_2.eyeirr"), me\EyeIrritation))
 			Text(x, y + (300 * MenuScale), Format(GetLocalString("console", "eyestuck"), me\EyeStuck))
 			
 			Text(x, y + (340 * MenuScale), Format(GetLocalString("console", "stamina"), me\Stamina))
-			Text(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug2.stameff"), me\StaminaEffect))
-			Text(x, y + (380 * MenuScale), Format(GetLocalString("console", "debug2.stamtimer"), me\StaminaEffectTimer))
+			Text(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug_2.stameff"), me\StaminaEffect))
+			Text(x, y + (380 * MenuScale), Format(GetLocalString("console", "debug_2.stamtimer"), me\StaminaEffectTimer))
 			
-			Text(x, y + (420 * MenuScale), Format(GetLocalString("console", "debug2.deaf"), me\DeafTimer))
+			Text(x, y + (420 * MenuScale), Format(GetLocalString("console", "debug_2.deaf"), me\DeafTimer))
 			
 			If me\Terminated Then
-				Text(x + (380 * MenuScale), y, Format(GetLocalString("console", "debug2.terminated"), "True"))
+				Text(x + (380 * MenuScale), y, Format(GetLocalString("console", "debug_2.terminated"), "True"))
 			Else
-				Text(x + (380 * MenuScale), y, Format(GetLocalString("console", "debug2.terminated"), "False"))
+				Text(x + (380 * MenuScale), y, Format(GetLocalString("console", "debug_2.terminated"), "False"))
 			EndIf
 			
-			Text(x + (380 * MenuScale), y + (20 * MenuScale), Format(GetLocalString("console", "debug2.death"), me\DeathTimer))
-			Text(x + (380 * MenuScale), y + (40 * MenuScale), Format(GetLocalString("console", "debug2.fall"), me\FallTimer))
+			Text(x + (380 * MenuScale), y + (20 * MenuScale), Format(GetLocalString("console", "debug_2.death"), me\DeathTimer))
+			Text(x + (380 * MenuScale), y + (40 * MenuScale), Format(GetLocalString("console", "debug_2.fall"), me\FallTimer))
 			
-			Text(x + (380 * MenuScale), y + (80 * MenuScale), Format(GetLocalString("console", "debug2.heal"), me\HealTimer))
+			Text(x + (380 * MenuScale), y + (80 * MenuScale), Format(GetLocalString("console", "debug_2.heal"), me\HealTimer))
 			
-			Text(x + (380 * MenuScale), y + (120 * MenuScale), Format(GetLocalString("console", "debug2.heartbeat"), me\HeartBeatTimer))
+			Text(x + (380 * MenuScale), y + (120 * MenuScale), Format(GetLocalString("console", "debug_2.heartbeat"), me\HeartBeatTimer))
 			
-			Text(x + (380 * MenuScale), y + (160 * MenuScale), Format(GetLocalString("console", "debug2.explosion"), me\ExplosionTimer))
+			Text(x + (380 * MenuScale), y + (160 * MenuScale), Format(GetLocalString("console", "debug_2.explosion"), me\ExplosionTimer))
 			
-			Text(x + (380 * MenuScale), y + (200 * MenuScale), Format(GetLocalString("console", "debug2.speed"), me\CurrSpeed))
+			Text(x + (380 * MenuScale), y + (200 * MenuScale), Format(GetLocalString("console", "debug_2.speed"), me\CurrSpeed))
 			
-			Text(x + (380 * MenuScale), y + (240 * MenuScale), Format(GetLocalString("console", "debug2.camshake"), me\CameraShakeTimer))
-			Text(x + (380 * MenuScale), y + (260 * MenuScale), Format(GetLocalString("console", "debug2.camzoom"), me\CurrCameraZoom))
+			Text(x + (380 * MenuScale), y + (240 * MenuScale), Format(GetLocalString("console", "debug_2.camshake"), me\CameraShakeTimer))
+			Text(x + (380 * MenuScale), y + (260 * MenuScale), Format(GetLocalString("console", "debug_2.camzoom"), me\CurrCameraZoom))
 			
-			Text(x + (380 * MenuScale), y + (300 * MenuScale), Format(GetLocalString("console", "debug2.vomit"), me\VomitTimer))
+			Text(x + (380 * MenuScale), y + (300 * MenuScale), Format(GetLocalString("console", "debug_2.vomit"), me\VomitTimer))
 			
 			If me\Playable Then
-				Text(x + (380 * MenuScale), y + (340 * MenuScale), Format(GetLocalString("console", "debug2.playable"), "True"))
+				Text(x + (380 * MenuScale), y + (340 * MenuScale), Format(GetLocalString("console", "debug_2.playable"), "True"))
 			Else
-				Text(x + (380 * MenuScale), y + (340 * MenuScale), Format(GetLocalString("console", "debug2.playable"), "False"))
+				Text(x + (380 * MenuScale), y + (340 * MenuScale), Format(GetLocalString("console", "debug_2.playable"), "False"))
 			EndIf
 			
-			Text(x + (380 * MenuScale), y + (380 * MenuScale), Format(GetLocalString("console", "debug2.refitems"), me\RefinedItems))
-			Text(x + (380 * MenuScale), y + (400 * MenuScale), Format(GetLocalString("console", "debug2.funds"), me\Funds))
+			Text(x + (380 * MenuScale), y + (380 * MenuScale), Format(GetLocalString("console", "debug_2.refitems"), me\RefinedItems))
+			Text(x + (380 * MenuScale), y + (400 * MenuScale), Format(GetLocalString("console", "debug_2.funds"), me\Funds))
 			;[End Block]
 		Case 3
 			;[Block]
 			If n_I\Curr049 <> Null Then
-				Text(x, y, Format(Format(Format(GetLocalString("console", "debug3.049pos"), FloatToString(EntityX(n_I\Curr049\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr049\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr049\OBJ), 2), "{2}"))
-				Text(x, y + (20 * MenuScale), Format(GetLocalString("console", "debug3.049idle"), n_I\Curr049\Idle))
-				Text(x, y + (40 * MenuScale), Format(GetLocalString("console", "debug3.049state"), n_I\Curr049\State))
+				Text(x, y, Format(Format(Format(GetLocalString("console", "debug_3.049pos"), FloatToString(EntityX(n_I\Curr049\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr049\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr049\OBJ), 2), "{2}"))
+				Text(x, y + (20 * MenuScale), Format(GetLocalString("console", "debug_3.049idle"), n_I\Curr049\Idle))
+				Text(x, y + (40 * MenuScale), Format(GetLocalString("console", "debug_3.049state"), n_I\Curr049\State))
 			EndIf
 			If n_I\Curr096 <> Null Then
-				Text(x, y + (60 * MenuScale), Format(Format(Format(GetLocalString("console", "debug3.096pos"), FloatToString(EntityX(n_I\Curr096\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr096\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr096\OBJ), 2), "{2}"))
-				Text(x, y + (80 * MenuScale), Format(GetLocalString("console", "debug3.096idle"), n_I\Curr096\Idle))
-				Text(x, y + (100 * MenuScale), Format(GetLocalString("console", "debug3.096state"), n_I\Curr096\State))
+				Text(x, y + (60 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_3.096pos"), FloatToString(EntityX(n_I\Curr096\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr096\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr096\OBJ), 2), "{2}"))
+				Text(x, y + (80 * MenuScale), Format(GetLocalString("console", "debug_3.096idle"), n_I\Curr096\Idle))
+				Text(x, y + (100 * MenuScale), Format(GetLocalString("console", "debug_3.096state"), n_I\Curr096\State))
 			EndIf
 			If n_I\Curr106 <> Null Then
-				Text(x, y + (120 * MenuScale), Format(Format(Format(GetLocalString("console", "debug3.106pos"), FloatToString(EntityX(n_I\Curr106\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr106\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr106\OBJ), 2), "{2}"))
-				Text(x, y + (140 * MenuScale), Format(GetLocalString("console", "debug3.106idle"), n_I\Curr106\Idle))
-				Text(x, y + (160 * MenuScale), Format(GetLocalString("console", "debug3.106state"), n_I\Curr106\State))
+				Text(x, y + (120 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_3.106pos"), FloatToString(EntityX(n_I\Curr106\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr106\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr106\OBJ), 2), "{2}"))
+				Text(x, y + (140 * MenuScale), Format(GetLocalString("console", "debug_3.106idle"), n_I\Curr106\Idle))
+				Text(x, y + (160 * MenuScale), Format(GetLocalString("console", "debug_3.106state"), n_I\Curr106\State))
 			EndIf
 			If n_I\Curr173 <> Null Then
-				Text(x, y + (180 * MenuScale), Format(Format(Format(GetLocalString("console", "debug3.173pos"), FloatToString(EntityX(n_I\Curr173\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr173\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr173\OBJ), 2), "{2}"))
-				Text(x, y + (200 * MenuScale), Format(GetLocalString("console", "debug3.173idle"), n_I\Curr173\Idle))
-				Text(x, y + (220 * MenuScale), Format(GetLocalString("console", "debug3.173state"), n_I\Curr173\State))
+				Text(x, y + (180 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_3.173pos"), FloatToString(EntityX(n_I\Curr173\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr173\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr173\OBJ), 2), "{2}"))
+				Text(x, y + (200 * MenuScale), Format(GetLocalString("console", "debug_3.173idle"), n_I\Curr173\Idle))
+				Text(x, y + (220 * MenuScale), Format(GetLocalString("console", "debug_3.173state"), n_I\Curr173\State))
 			EndIf
 			
-			Text(x, y + (260 * MenuScale), Format(GetLocalString("console", "debug3.pill"), I_500\Taken))
+			Text(x, y + (260 * MenuScale), Format(GetLocalString("console", "debug_3.pill"), I_500\Taken))
 			
-			Text(x, y + (300 * MenuScale), Format(GetLocalString("console", "debug3.008"), I_008\Timer))
-			Text(x, y + (320 * MenuScale), Format(GetLocalString("console", "debug3.409"), I_409\Timer))
-			Text(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug3.427"), Int(I_427\Timer / 70.0)))
+			Text(x, y + (300 * MenuScale), Format(GetLocalString("console", "debug_3.008"), I_008\Timer))
+			Text(x, y + (320 * MenuScale), Format(GetLocalString("console", "debug_3.409"), I_409\Timer))
+			Text(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug_3.427"), Int(I_427\Timer / 70.0)))
 			For i = 0 To 7
-				Text(x, y + ((360 + (20 * i)) * MenuScale), Format(Format(GetLocalString("console", "debug3.1025"), i, "{0}"), I_1025\State[i], "{1}"))
+				Text(x, y + ((360 + (20 * i)) * MenuScale), Format(Format(GetLocalString("console", "debug_3.1025"), i, "{0}"), I_1025\State[i], "{1}"))
 			Next
 			
 			If I_005\ChanceToSpawn = 1 Then
-				Text(x, y + (540 * MenuScale), GetLocalString("console", "debug3.005.chamber"))
+				Text(x, y + (540 * MenuScale), GetLocalString("console", "debug_3.005.chamber"))
 			ElseIf I_005\ChanceToSpawn >= 2 And I_005\ChanceToSpawn =< 4
-				Text(x, y + (540 * MenuScale), GetLocalString("console", "debug3.005.409"))
+				Text(x, y + (540 * MenuScale), GetLocalString("console", "debug_3.005.409"))
 			ElseIf I_005\ChanceToSpawn >= 5 And I_005\ChanceToSpawn =< 10
-				Text(x, y + (540 * MenuScale), GetLocalString("console", "debug3.005.maynard"))
+				Text(x, y + (540 * MenuScale), GetLocalString("console", "debug_3.005.maynard"))
 			EndIf
 			;[End Block]
 	End Select
@@ -8937,7 +8937,7 @@ Function Update008%()
 			
 			If I_008\Timer > 20.0 And PrevI008Timer <= 20.0 Then
 				If I_008\Revert Then
-					CreateMsg(GetLocalString("msg", "better2"))
+					CreateMsg(GetLocalString("msg", "better_2"))
 				Else
 					CreateMsg(GetLocalString("msg", "feverish"))
 				EndIf
@@ -9081,27 +9081,27 @@ Function Update409%()
 		
 		If I_409\Timer > 40.0 And PrevI409Timer <= 40.0 Then
 			If I_409\Revert Then
-				CreateMsg(GetLocalString("msg", "409legs"))
+				CreateMsg(GetLocalString("msg", "409legs_1"))
 			Else
-				CreateMsg(GetLocalString("msg", "409legs2"))
+				CreateMsg(GetLocalString("msg", "409legs_2"))
 			EndIf
 		ElseIf I_409\Timer > 55.0 And PrevI409Timer <= 55.0
 			If I_409\Revert Then
-				CreateMsg(GetLocalString("msg", "409abdomen"))
+				CreateMsg(GetLocalString("msg", "409abdomen_1"))
 			Else
-				CreateMsg(GetLocalString("msg", "409abdomen2"))
+				CreateMsg(GetLocalString("msg", "409abdomen_2"))
 			EndIf
 		ElseIf I_409\Timer > 70.0 And PrevI409Timer <= 70.0
 			If I_409\Revert Then
-				CreateMsg(GetLocalString("msg", "409arms"))
+				CreateMsg(GetLocalString("msg", "409arms_1"))
 			Else
-				CreateMsg(GetLocalString("msg", "409arms2"))
+				CreateMsg(GetLocalString("msg", "409arms_2"))
 			EndIf
 		ElseIf I_409\Timer > 85.0 And PrevI409Timer <= 85.0
 			If I_409\Revert Then
-				CreateMsg(GetLocalString("msg", "409head"))
+				CreateMsg(GetLocalString("msg", "409head_1"))
 			Else
-				CreateMsg(GetLocalString("msg", "409head"))
+				CreateMsg(GetLocalString("msg", "409head_2"))
 			EndIf
 		ElseIf I_409\Timer > 93.0 And PrevI409Timer <= 93.0
 			If (Not I_409\Revert) Then

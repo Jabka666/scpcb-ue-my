@@ -96,5 +96,6 @@ Function ShowSubtitles%(Name$)
 	
 	CatchErrors("ShowSubtitles")
 End Function
+
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D

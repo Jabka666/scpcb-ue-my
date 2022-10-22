@@ -725,7 +725,7 @@ Function LoadItems%()
 	
 	CreateItemTemplate(GetLocalString("items", "docblank"), "Blank Paper", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_paper_blank.png", ItemsPath + "doc_blank.png", 0.003, 0, ItemsPath + "paper_blank.png")
 	
-	CreateItemTemplate(GetLocalString("items", "docl3"), "Blood-stained Note", "paper", ItemsPath + "note.b3d", ItemsPath + "INV_note_bloody.png", ItemsPath + "note_L(3).png", 0.0025, 0, ItemsPath + "note_bloody.png")
+	CreateItemTemplate(GetLocalString("items", "docl_1"), "Blood-stained Note", "paper", ItemsPath + "note.b3d", ItemsPath + "INV_note_bloody.png", ItemsPath + "note_L(3).png", 0.0025, 0, ItemsPath + "note_bloody.png")
 	
 	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "docmaynard"), "Burnt Note", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_burnt_note.png", ItemsPath + "note_Maynard.png", 0.003, 0, ItemsPath + "burnt_note.png")
 	it\Img = BurntNote
@@ -738,11 +738,11 @@ Function LoadItems%()
 	
 	CreateItemTemplate(GetLocalString("items", "docallok"), "Dr. Allok's Note", "paper", ItemsPath + "note.b3d", ItemsPath + "INV_note.png", ItemsPath + "note_Allok.png", 0.004, 0, ItemsPath + "note.png")
 	
-	CreateItemTemplate(GetLocalString("items", "docl1"), "Dr. L's Note #1", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_note.png", ItemsPath + "note_L.png", 0.0025, 0, ItemsPath + "note.png")
-	CreateItemTemplate(GetLocalString("items", "docl2"), "Dr. L's Note #2", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_note.png", ItemsPath + "note_L(2).png", 0.0025, 0, ItemsPath + "note.png")
+	CreateItemTemplate(GetLocalString("items", "docl_2"), "Dr. L's Note #1", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_note.png", ItemsPath + "note_L.png", 0.0025, 0, ItemsPath + "note.png")
+	CreateItemTemplate(GetLocalString("items", "docl_3"), "Dr. L's Note #2", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_note.png", ItemsPath + "note_L(2).png", 0.0025, 0, ItemsPath + "note.png")
 	
-	CreateItemTemplate(GetLocalString("items", "docl4"), "Dr. L's Burnt Note #1", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_burnt_note.png", ItemsPath + "note_L(4).png", 0.0025, 0, ItemsPath + "burnt_note.png")
-	CreateItemTemplate(GetLocalString("items", "docl5"), "Dr. L's Burnt Note #2", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_burnt_note.png", ItemsPath + "note_L(5).png", 0.0025, 0, ItemsPath + "burnt_note.png")
+	CreateItemTemplate(GetLocalString("items", "docl_4"), "Dr. L's Burnt Note #1", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_burnt_note.png", ItemsPath + "note_L(4).png", 0.0025, 0, ItemsPath + "burnt_note.png")
+	CreateItemTemplate(GetLocalString("items", "docl_5"), "Dr. L's Burnt Note #2", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_burnt_note.png", ItemsPath + "note_L(5).png", 0.0025, 0, ItemsPath + "burnt_note.png")
 	
 	CreateItemTemplate(GetLocalString("items", "badge"), "Emily Ross' Badge", "badge", ItemsPath + "badge.b3d", ItemsPath + "INV_Emily_badge.png", ItemsPath + "Emily_badge_HUD.png", 0.0001, 1, ItemsPath + "Emily_badge.png")
 	
@@ -750,9 +750,9 @@ Function LoadItems%()
 	
 	CreateItemTemplate(GetLocalString("items", "docleaflet"), "Leaflet", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_note.png", ItemsPath + "leaflet.png", 0.003, 0, ItemsPath + "note.png")
 	
-	CreateItemTemplate(GetLocalString("items", "doclog1"), "Log #1", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_note.png", ItemsPath + "note_forest.png", 0.002, 0, ItemsPath + "note.png")
-	CreateItemTemplate(GetLocalString("items", "doclog2"), "Log #2", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_note.png", ItemsPath + "note_forest(2).png", 0.002, 0, ItemsPath + "note.png")
-	CreateItemTemplate(GetLocalString("items", "doclog3"), "Log #3", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_note.png", ItemsPath + "note_forest(3).png", 0.002, 0, ItemsPath + "note.png")
+	CreateItemTemplate(GetLocalString("items", "doclog_1"), "Log #1", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_note.png", ItemsPath + "note_forest.png", 0.002, 0, ItemsPath + "note.png")
+	CreateItemTemplate(GetLocalString("items", "doclog_2"), "Log #2", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_note.png", ItemsPath + "note_forest(2).png", 0.002, 0, ItemsPath + "note.png")
+	CreateItemTemplate(GetLocalString("items", "doclog_3"), "Log #3", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_note.png", ItemsPath + "note_forest(3).png", 0.002, 0, ItemsPath + "note.png")
 	
 	CreateItemTemplate(GetLocalString("items", "ticket"), "Movie Ticket", "ticket", ItemsPath + "badge.b3d", ItemsPath + "INV_ticket.png", ItemsPath + "ticket_HUD.png", 0.0001, 0, ItemsPath + "ticket.png", "", 0, 1 + 2 + 8)
 	
@@ -766,7 +766,7 @@ Function LoadItems%()
 	
 	CreateItemTemplate(GetLocalString("items", "origami"), "Origami", "origami", ItemsPath + "origami.b3d", ItemsPath + "INV_origami.png", "", 0.003, 0)
 	
-	CreateItemTemplate(GetLocalString("items", "docl6"), "Scorched Note", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_burnt_note.png", ItemsPath + "note_L(6).png", 0.0025, 0, ItemsPath + "burnt_note.png")
+	CreateItemTemplate(GetLocalString("items", "docl_6"), "Scorched Note", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_burnt_note.png", ItemsPath + "note_L(6).png", 0.0025, 0, ItemsPath + "burnt_note.png")
 	
 	CreateItemTemplate(GetLocalString("items", "docsnm"), "Strange Note", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_note.png", ItemsPath + "note_strange.png", 0.0025, 0, ItemsPath + "note.png")
 	
@@ -833,7 +833,7 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "sb"), "Strange Bottle", "veryfinefirstaid", ItemsPath + "eye_drops.b3d", ItemsPath + "INV_strange_bottle.png", "", 0.002, 1, ItemsPath + "strange_bottle.png")	
 	
 	CreateItemTemplate(GetLocalString("items", "mask"), "Gas Mask", "gasmask", ItemsPath + "gas_mask.b3d", ItemsPath + "INV_gas_mask.png", "", 0.019, 2)
-  CreateItemTemplate(GetLocalString("items", "finemask"), "finegasmask", ItemsPath + "gas_mask.b3d", ItemsPath + "INV_gas_mask.png", "", 0.019, 2)
+	CreateItemTemplate(GetLocalString("items", "finemask"), "Gas Mask", "finegasmask", ItemsPath + "gas_mask.b3d", ItemsPath + "INV_gas_mask.png", "", 0.019, 2)
 	CreateItemTemplate(GetLocalString("items", "veryfinemask"), "Gas Mask", "veryfinegasmask", ItemsPath + "gas_mask.b3d", ItemsPath + "INV_gas_mask.png", "", 0.02, 2)
 	CreateItemTemplate(GetLocalString("items", "mask148"), "Heavy Gas Mask", "gasmask148", ItemsPath + "gas_mask.b3d", ItemsPath + "INV_gas_mask.png", "", 0.02, 2)
 	
@@ -854,9 +854,9 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "vfradio"), "Radio Transceiver", "veryfineradio", ItemsPath + "radio.b3d", ItemsPath + "INV_radio.png", ItemsPath + "radio_HUD.png", 1.0, 1)
 	CreateItemTemplate(GetLocalString("items", "18vradio"), "Radio Transceiver", "18vradio", ItemsPath + "radio.b3d", ItemsPath + "INV_radio.png", ItemsPath + "radio_HUD.png", 1.02, 1)
 	
-	CreateItemTemplate(GetLocalString("items", "hand"), "Severed Hand", "hand", ItemsPath + "severed_hand.b3d", ItemsPath + "INV_severed_hand(1).png", "", 0.03, 2)
-	CreateItemTemplate(GetLocalString("items", "hand2"), "Black Severed Hand", "hand2", ItemsPath + "severed_hand.b3d", ItemsPath + "INV_severed_hand(2).png", "", 0.03, 2, ItemsPath + "severed_hand(2).png")
-	CreateItemTemplate(GetLocalString("items", "hand3"), "Severed Hand", "hand3", ItemsPath + "severed_hand.b3d", ItemsPath + "INV_severed_hand(3).png", "", 0.03, 2, ItemsPath + "severed_hand(3).png")
+	CreateItemTemplate(GetLocalString("items", "hand_1"), "Severed Hand", "hand", ItemsPath + "severed_hand.b3d", ItemsPath + "INV_severed_hand(1).png", "", 0.03, 2)
+	CreateItemTemplate(GetLocalString("items", "hand_2"), "Black Severed Hand", "hand2", ItemsPath + "severed_hand.b3d", ItemsPath + "INV_severed_hand(2).png", "", 0.03, 2, ItemsPath + "severed_hand(2).png")
+	CreateItemTemplate(GetLocalString("items", "hand_3"), "Severed Hand", "hand3", ItemsPath + "severed_hand.b3d", ItemsPath + "INV_severed_hand(3).png", "", 0.03, 2, ItemsPath + "severed_hand(3).png")
 	
 	CreateItemTemplate(GetLocalString("items", "nav"), "S-NAV Navigator", "nav", ItemsPath + "navigator.b3d", ItemsPath + "INV_navigator.png", ItemsPath + "navigator_HUD.png", 0.0008, 1)
 	CreateItemTemplate(GetLocalString("items", "navulti"), "S-NAV Navigator Ultimate", "navulti", ItemsPath + "navigator.b3d", ItemsPath + "INV_navigator.png", ItemsPath + "navigator_HUD.png", 0.0008, 1)
@@ -866,7 +866,7 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "bat"), "9V Battery", "bat", ItemsPath + "battery.b3d", ItemsPath + "INV_battery_9v.png", "", 0.008, 1)
 	CreateItemTemplate(GetLocalString("items", "45bat"), "4.5V Battery", "coarsebat", ItemsPath + "battery.b3d", ItemsPath + "INV_battery_4.5v.png", "", 0.008, 1, ItemsPath + "battery_4.5V.png")
 	CreateItemTemplate(GetLocalString("items", "18bat"), "18V Battery", "finebat", ItemsPath + "battery.b3d", ItemsPath + "INV_battery_18v.png", "", 0.01, 1, ItemsPath + "battery_18V.png")
-	CreateItemTemplate(GetLocalString("items", "999bat"), "999V Battery", "superbat", ItemsPath + "battery.b3d", ItemsPath + "INV_battery_999v.png", "", 0.009, 1, ItemsPath + "battery_999V.png")
+	CreateItemTemplate(GetLocalString("items", "999bat"), "999V Battery", "veryfinebat", ItemsPath + "battery.b3d", ItemsPath + "INV_battery_999v.png", "", 0.009, 1, ItemsPath + "battery_999V.png")
 	CreateItemTemplate(GetLocalString("items", "killbat"), "Strange Battery", "killbat", ItemsPath + "battery.b3d", ItemsPath + "INV_strange_battery.png", "", 0.01, 1, ItemsPath + "strange_battery.png")
 	
 	CreateItemTemplate(GetLocalString("items", "syringe"), "Syringe", "syringe", ItemsPath + "syringe.b3d", ItemsPath + "INV_syringe.png", "", 0.005, 2)

@@ -673,7 +673,7 @@ Function LoadGame%(File$)
 		Next
 	Next
 	
-	If ReadInt(f) <> 113 Then RuntimeError(GetLocalString("save", "corrupted25"))
+	If ReadInt(f) <> 113 Then RuntimeError(GetLocalString("save", "corrupted_1"))
 	
 	Temp = ReadInt(f)
 	For i = 1 To Temp
@@ -784,7 +784,7 @@ Function LoadGame%(File$)
 		EndIf
 	Next
 	
-	If ReadInt(f) <> 632 Then RuntimeError(GetLocalString("save", "corrupted1"))
+	If ReadInt(f) <> 632 Then RuntimeError(GetLocalString("save", "corrupted_2"))
 	
 	bk\IsBroken = ReadByte(f)
 	bk\x = ReadFloat(f)
@@ -913,7 +913,7 @@ Function LoadGame%(File$)
 		EndIf
 	Next
 	
-	If ReadInt(f) <> 954 Then RuntimeError(GetLocalString("save", "corrupted2"))
+	If ReadInt(f) <> 954 Then RuntimeError(GetLocalString("save", "corrupted_3"))
 	
 	Local Zone%, ShouldSpawnDoor%
 	
@@ -1060,7 +1060,7 @@ Function LoadGame%(File$)
 		Next		
 	Next
 	
-	If ReadInt(f) <> 1845 Then RuntimeError(GetLocalString("save", "corrupted3"))
+	If ReadInt(f) <> 1845 Then RuntimeError(GetLocalString("save", "corrupted_4"))
 	
 	Local de.Decals
 	
@@ -1559,7 +1559,7 @@ Function LoadGameQuick%(File$)
 		Next
 	Next
 	
-	If ReadInt(f) <> 113 Then RuntimeError(GetLocalString("save", "corrupted25"))
+	If ReadInt(f) <> 113 Then RuntimeError(GetLocalString("save", "corrupted_1"))
 	
 	For n.NPCs = Each NPCs
 		RemoveNPC(n)
@@ -1674,7 +1674,7 @@ Function LoadGameQuick%(File$)
 		EndIf
 	Next
 	
-	If ReadInt(f) <> 632 Then RuntimeError(GetLocalString("save", "corrupted1"))
+	If ReadInt(f) <> 632 Then RuntimeError(GetLocalString("save", "corrupted_2"))
 	
 	bk\IsBroken = ReadByte(f)
 	bk\x = ReadFloat(f)
@@ -1782,7 +1782,7 @@ Function LoadGameQuick%(File$)
 		EndIf
 	Next
 	
-	If ReadInt(f) <> 954 Then RuntimeError(GetLocalString("save", "corrupted2"))
+	If ReadInt(f) <> 954 Then RuntimeError(GetLocalString("save", "corrupted_3"))
 	
 	Temp = ReadInt(f)
 	
@@ -1828,7 +1828,7 @@ Function LoadGameQuick%(File$)
 		Next		
 	Next
 	
-	If ReadInt(f) <> 1845 Then RuntimeError(GetLocalString("save", "corrupted3"))
+	If ReadInt(f) <> 1845 Then RuntimeError(GetLocalString("save", "corrupted_4"))
 	
 	Local de.Decals
 	

@@ -2882,7 +2882,7 @@ Function UseDoor%(d.Doors, PlaySFX% = True)
 				CreateMsg(GetLocalString("msg", "key.require"))
 			Else
 				If Temp = KEY_CARD_6 Then
-					CreateMsg(GetLocalString("msg", "key.card6"))
+					CreateMsg(GetLocalString("msg", "key.slot.6"))
 				Else
 					If d\Locked = 1 Then
 						If Temp = KEY_005 Then
@@ -2917,15 +2917,15 @@ Function UseDoor%(d.Doors, PlaySFX% = True)
 		EndIf
 	ElseIf d\KeyCard > KEY_HAND_YELLOW And d\KeyCard < KEY_MISC
 		If SelectedItem = Null Then
-			CreateMsg(GetLocalString("msg", "dna.denied"))
+			CreateMsg(GetLocalString("msg", "dna.denied_1"))
 			PlaySound2(ScannerSFX2, Camera, d_I\ClosestButton)
 			Return
 		Else
 			If ((Temp >= KEY_MISC) Lor (Temp < KEY_HAND_YELLOW)) And (Temp <> KEY_005) Then
-				CreateMsg(GetLocalString("msg", "dna.denied"))
+				CreateMsg(GetLocalString("msg", "dna.denied_1"))
 			Else
 				If (d\KeyCard <> Temp) And (Temp <> KEY_005) Then
-					CreateMsg(GetLocalString("msg", "dna.denied2"))
+					CreateMsg(GetLocalString("msg", "dna.denied_2"))
 				Else
 					If d\Locked = 1 Then
 						If Temp = KEY_005 Then
@@ -8846,8 +8846,8 @@ Function LoadTerrain%(HeightMap%, yScale# = 0.7, t1%, t2%, Mask%)
 	Local lX%, lY%, Index%
 	
 	; ~ Load texture and lightmaps
-	If (Not t1) Then RuntimeError(Format(GetLocalString("runerr", "tex1"), t1))
-	If (Not t2) Then RuntimeError(Format(GetLocalString("runerr", "tex2"), t2))
+	If (Not t1) Then RuntimeError(Format(GetLocalString("runerr", "tex_1"), t1))
+	If (Not t2) Then RuntimeError(Format(GetLocalString("runerr", "tex_2"), t2))
 	If (Not Mask) Then RuntimeError(Format(GetLocalString("runerr", "mask"), Mask))
 	
 	; ~ Auto scale the textures to the right size

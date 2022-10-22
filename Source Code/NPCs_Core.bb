@@ -1588,7 +1588,7 @@ Function UpdateNPCs%()
 																If Inventory(i) <> Null Then
 																	If Instr(Inventory(i)\ItemTemplate\TempName, "hazmatsuit") Then
 																		wi\HazmatSuit = 0 : DropItem(Inventory(i))
-																		CreateMsg(GetLocalString("msg", "hazmat.forceremoved")
+																		CreateMsg(GetLocalString("msg", "hazmat.forceremoved"))
 																		Exit
 																	EndIf
 																EndIf
@@ -1608,7 +1608,7 @@ Function UpdateNPCs%()
 													If Inventory(i) <> Null Then
 														If Inventory(i)\ItemTemplate\TempName = "scp714" Then
 															I_714\Using = False : DropItem(Inventory(i))
-															CreateMsg(GetLocalString("msg", "ring.forceremoved")
+															CreateMsg(GetLocalString("msg", "ring.forceremoved"))
 															Exit
 														EndIf
 													EndIf
@@ -3918,27 +3918,27 @@ Function UpdateNPCs%()
 									Select Rand(6)
 										Case 1
 											;[Block]
-											CreateMsg(GetLocalString("msg", "9661"))
+											CreateMsg(GetLocalString("msg", "966_1"))
 											;[End Block]
 										Case 2
 											;[Block]
-											CreateMsg(GetLocalString("msg", "9662"))
+											CreateMsg(GetLocalString("msg", "966_2"))
 											;[End Block]
 										Case 3
 											;[Block]
-											CreateMsg(GetLocalString("msg", "9663"))
+											CreateMsg(GetLocalString("msg", "966_3"))
 											;[End Block]
 										Case 4
 											;[Block]
-											CreateMsg(GetLocalString("msg", "9664"))
+											CreateMsg(GetLocalString("msg", "966_4"))
 											;[End Block]
 										Case 5
 											;[Block]
-											CreateMsg(GetLocalString("msg", "9665"))
+											CreateMsg(GetLocalString("msg", "966_5"))
 											;[End Block]
 										Case 6
 											;[Block]
-											CreateMsg(GetLocalString("msg", "9666"))
+											CreateMsg(GetLocalString("msg", "966_6"))
 											;[End Block]
 									End Select
 									n\Reload = 70.0 * 20.0
@@ -4019,19 +4019,19 @@ Function UpdateNPCs%()
 												Select Rand(4)
 													Case 1
 														;[Block]
-														CreateMsg(GetLocalString("msg", "966.sleep1"))
+														CreateMsg(GetLocalString("msg", "966.sleep_1"))
 														;[End Block]
 													Case 2
 														;[Block]
-														CreateMsg(GetLocalString("msg", "966.sleep2"))
+														CreateMsg(GetLocalString("msg", "966.sleep_2"))
 														;[End Block]
 													Case 3
 														;[Block]
-														CreateMsg(GetLocalString("msg", "966.sleep3"))
+														CreateMsg(GetLocalString("msg", "966.sleep_3"))
 														;[End Block]
 													Case 4
 														;[Block]
-														CreateMsg(GetLocalString("msg", "966.sleep4"))
+														CreateMsg(GetLocalString("msg", "966.sleep_4"))
 														;[End Block]
 												End Select
 											EndIf

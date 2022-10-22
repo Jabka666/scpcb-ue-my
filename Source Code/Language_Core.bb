@@ -19,7 +19,7 @@ Function LanguageSelector%()
 	Local l$
 	
 	If File <> 0 Then
-		While Not Eof(File)
+		While (Not Eof(File))
 			l = ReadLine(File)
 			If l <> "" Then
 				lan.ListLanguage = New ListLanguage
@@ -37,33 +37,35 @@ Function LanguageSelector%()
 		DeleteFile(BasePath + "temp.txt")
 	EndIf
 	
-	AppTitle(GetLocalString("language", "title"))
 	SetBuffer(BackBuffer())
 	Cls()
-	Flip(True)
+	Flip()
 	
 	Local LanguageBG% = LoadImage_Strict("GFX\Menu\Language.png")
 	Local LanguageIMG% = CreateImage(452, 254)
 	Local ButtonImages% = LoadAnimImage_Strict("GFX\menu\buttons.png", 21, 21, 0, 5)
 	Local SelectedLanguage.ListLanguage = Null
 	
+	AppTitle(GetLocalString("language", "title"))
+	
 	Repeat
+		SetBuffer(BackBuffer())
+		Cls()
+		
 		mo\MouseHit1 = MouseHit(1)
+		mo\MouseDown1 = MouseDown(1)
 		
 		Local x#, y#, LinesAmount%
 		
-		SetBuffer(BackBuffer())
-		Cls()
 		Color(255, 255, 255)
 		DrawImage(LanguageBG, 0, 0)
 		Rect(479, 195, 140, 100)
-		Color(0, 0, 0)
 		
 		If LinesAmount > 13 Then
 			y = 200 - (20 * ScrollMenuHeight * ScrollBarY)
-			LinesAmount = 0
 			SetBuffer(ImageBuffer(LanguageIMG))
-			DrawImage(LanguageBG, -20, -195)
+			Cls()
+			LinesAmount = 0
 			For lan.ListLanguage = Each ListLanguage
 				Color(0, 0, 0)
 				LimitTextWithImage(lan\Name + "(" + lan\ID + ")", 2, y - 195, 432, LoadImage(BasePath + "flags\" + lan\Flag))
@@ -72,7 +74,7 @@ Function LanguageSelector%()
 					Rect(0, y - 195 - (FontHeight() / 2), 430, 20, False)
 				EndIf
 				If SelectedLanguage <> Null And lan = SelectedLanguage Then
-					Color(1, 0, 0)
+					Color(0, 0, 0)
 					Rect(0, y - 195 - (FontHeight() / 2), 430, 20, False)
 				EndIf
 				If MouseOn(20, y - (FontHeight() / 2), 432, 20) Then
@@ -90,8 +92,7 @@ Function LanguageSelector%()
 			ScrollMenuHeight = LinesAmount - 12
 			ScrollBarY = UpdateLauncherScrollBar(452, 195, 20, 254, 452, 195 + (254 - (254 - (4 * ScrollMenuHeight))) * ScrollBarY, 20, 254 - (4 * ScrollMenuHeight), ScrollBarY, 1)
 		Else
-			Color(0, 0, 0)
-			y = 201
+			y = 200
 			LinesAmount = 0
 			For lan.ListLanguage = Each ListLanguage
 				Color(0, 0, 0)
@@ -150,43 +151,49 @@ Function LanguageSelector%()
 			EndIf
 		EndIf
 		
-		If UpdateLauncherButtonWithImage(479, LauncherHeight - 65, 140, 30, GetLocalString("menu", "back"), ButtonImages, 0) Then 
+		If UpdateLauncherButtonWithImage(479, LauncherHeight - 65, 140, 30, GetLocalString("menu", "back"), ButtonImages) Then 
 			Exit
 		EndIf
 		
-		Flip(True)
+		Flip()
 	Forever
 	
 	mo\MouseHit1 = False
+	mo\MouseDown1 = False
+	ScrollBarY = 0.0
+	ScrollMenuHeight = 0.0
+	
 	Delete Each ListLanguage
+	
 	FreeImage(LanguageIMG) : LanguageIMG = 0
 	FreeImage(LanguageBG) : LanguageBG = 0
+	
 	DeleteFolder(BasePath) ; ~ Delete temporary folder
+	
 	AppTitle(GetLocalString("launcher", "title"))
 End Function
 
-; ~ Re-added
 Global OnScrollBar%
 Global ScrollBarY# = 0.0
 Global ScrollMenuHeight# = 0.0
 
-Function UpdateLauncherScrollBar#(x%, y%, Width%, Height%, BarX%, BarY%, BarWidth%, BarHeight%, Bar#, Dir% = False)
+Function UpdateLauncherScrollBar#(x%, y%, Width%, Height%, BarX%, BarY%, BarWidth%, BarHeight%, Bar#, Vertical% = False)
 	Local MouseSpeedX# = MouseXSpeed()
 	Local MouseSpeedY# = MouseYSpeed()
 	
 	Color(0, 0, 0)
 	UpdateLauncherDownloadButton(BarX, BarY, BarWidth, BarHeight, "")
 	
-	If Dir = 0 Then ; ~ Horizontal
+	If (Not Vertical) Then ; ~ Horizontal
 		If Height > 10 Then
-			Color 250,250,250
+			Color(255, 255, 255)
 			Rect(BarX + (BarWidth / 2), BarY + 5, 2, BarHeight - 10)
 			Rect(BarX + (BarWidth / 2) - 3, BarY + 5, 2, BarHeight - 10)
-			Rect(BarX + (BarWidth / 2) + 3, BarY + 5, 2 , BarHeight - 10)
+			Rect(BarX + (BarWidth / 2) + 3, BarY + 5, 2, BarHeight - 10)
 		EndIf
 	Else ; ~ Vertical
 		If Width > 10 Then
-			Color(250, 250, 250)
+			Color(255, 255, 255)
 			Rect(BarX + 4, BarY + (BarHeight / 2), BarWidth - 10, 2)
 			Rect(BarX + 4, BarY + (BarHeight / 2) - 3, BarWidth - 10, 2)
 			Rect(BarX + 4, BarY + (BarHeight / 2) + 3, BarWidth - 10, 2)
@@ -197,19 +204,17 @@ Function UpdateLauncherScrollBar#(x%, y%, Width%, Height%, BarX%, BarY%, BarWidt
 		If MouseY() > BarY And MouseY() < BarY + BarHeight
 			OnScrollBar = True
 		Else
-			If (Not MouseDown(1)) Then OnScrollBar = False
+			If (Not mo\MouseDown1) Then OnScrollBar = False
 		EndIf
 	Else
-		If (Not MouseDown(1)) Then OnScrollBar = False
+		If (Not mo\MouseDown1) Then OnScrollBar = False
 	EndIf
 	
-	If MouseDown(1) Then
-		If OnScrollBar Then
-			If Dir Then
-				Return(Min(Max(Bar + MouseSpeedX / Float(Width - BarWidth), 0.0), 1.0))
-			Else
-				Return(Min(Max(Bar + MouseSpeedY / Float(Height - BarHeight), 0.0), 1.0))
-			EndIf
+	If mo\MouseDown1 And OnScrollBar Then
+		If Vertical Then
+			Return(Min(Max(Bar + MouseSpeedX / Float(Width - BarWidth), 0.0), 1.0))
+		Else
+			Return(Min(Max(Bar + MouseSpeedY / Float(Height - BarHeight), 0.0), 1.0))
 		EndIf
 	EndIf
 	

@@ -333,12 +333,12 @@ Function UpdateMainMenu%()
 						SelectedDifficulty\AggressiveNPCs = UpdateMainMenuTick(x + (160 * MenuScale), y + (210 * MenuScale), SelectedDifficulty\AggressiveNPCs)
 						
 						; ~ Inventory slots
-						If UpdateMainMenuButton(x + (410 * MenuScale), y + (240 * MenuScale), 20 * MenuScale, 20 * MenuScale, "<", False) Then
-							SelectedDifficulty\InventorySlots = SelectedDifficulty\InventorySlots + 2
-							If SelectedDifficulty\InventorySlots > 10 Then SelectedDifficulty\InventorySlots = 2
-						ElseIf UpdateMainMenuButton(x + (160 * MenuScale), y + (240 * MenuScale), 20 * MenuScale, 20 * MenuScale, ">", False)
+						If UpdateMainMenuButton(x + (405 * MenuScale), y + (240 * MenuScale), 20 * MenuScale, 20 * MenuScale, "<", False) Then
 							SelectedDifficulty\InventorySlots = SelectedDifficulty\InventorySlots - 2
 							If SelectedDifficulty\InventorySlots <= 0 Then SelectedDifficulty\InventorySlots = 10
+						ElseIf UpdateMainMenuButton(x + (160 * MenuScale), y + (240 * MenuScale), 20 * MenuScale, 20 * MenuScale, ">", False)
+							SelectedDifficulty\InventorySlots = SelectedDifficulty\InventorySlots + 2
+							If SelectedDifficulty\InventorySlots > 10 Then SelectedDifficulty\InventorySlots = 2
 						EndIf
 						
 						; ~ Other factor's difficulty
@@ -1782,10 +1782,10 @@ Function RenderMainMenu%()
 							
 							If opt\EnableSubtitles Then
 								Color(opt\SubColorR, opt\SubColorG, opt\SubColorB)
-								Text(x - (20 * MenuScale) + (Width / 2), y + (115 * MenuScale), GetLocalString("options", "subtitles.example1"), True)
-								Text(x - (20 * MenuScale) + (Width / 2), y + (135 * MenuScale), GetLocalString("options", "subtitles.example2"), True)
-								Text(x - (20 * MenuScale) + (Width / 2), y + (155 * MenuScale), GetLocalString("options", "subtitles.example3"), True)
-								Text(x - (20 * MenuScale) + (Width / 2), y + (175 * MenuScale), GetLocalString("options", "subtitles.example4"), True)
+								Text(x - (20 * MenuScale) + (Width / 2), y + (115 * MenuScale), GetLocalString("options", "subtitles.example_1"), True)
+								Text(x - (20 * MenuScale) + (Width / 2), y + (135 * MenuScale), GetLocalString("options", "subtitles.example_2"), True)
+								Text(x - (20 * MenuScale) + (Width / 2), y + (155 * MenuScale), GetLocalString("options", "subtitles.example_3"), True)
+								Text(x - (20 * MenuScale) + (Width / 2), y + (175 * MenuScale), GetLocalString("options", "subtitles.example_4"), True)
 							EndIf
 						EndIf
 						;[End Block]
@@ -1938,9 +1938,6 @@ Function UpdateLauncher%(lnchr.Launcher)
 	
 	Repeat
 		Cls()
-		
-		Color(0, 0, 0)
-		Rect(0, 0, LauncherWidth, LauncherHeight, True)
 		
 		mo\MouseHit1 = MouseHit(1)
 		
@@ -2286,26 +2283,26 @@ Function RenderLoading%(Percent%, Assets$ = "")
 					Select Rand(13)
 						Case 1
 							;[Block]
-							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "9901")
+							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "990_1")
 							;[End Block]
 						Case 2
 							;[Block]
-							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "9902")
+							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "990_2")
 							;[End Block]
 						Case 3
 							;[Block]
-							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "9903")
+							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "990_3")
 							;[End Block]
 						Case 4
 							;[Block]
 							SelectedLoadingScreen\Txt[0] = "eof9nsd3jue4iwe1fgj"
 						Case 5
 							;[Block]
-							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "9904")
+							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "990_4")
 							;[End Block]
 						Case 6 
 							;[Block]
-							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "9905")
+							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "990_5")
 							;[End Block]
 						Case 7
 							;[Block]
@@ -2313,7 +2310,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 							;[End Block]
 						Case 8, 9
 							;[Block]
-							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "9906")
+							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "990_6")
 							;[End Block]
 						Case 10
 							;[Block]
@@ -2321,15 +2318,15 @@ Function RenderLoading%(Percent%, Assets$ = "")
 							;[End Block]
 						Case 11
 							;[Block]
-							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "9907")
+							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "990_7")
 							;[End Block]
 						Case 12
 							;[Block]
-							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "9908")
+							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "990_8")
 							;[End Block]
 						Case 13
 							;[Block]
-							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "9909")
+							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "990_9")
 							;[End Block]
 					End Select
 				EndIf
@@ -3285,29 +3282,29 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 			;[End Block]
 		Case Tooltip_ScreenGamma
 			;[Block]
-			Txt = GetLocalString("tooltip", "gamma1")
+			Txt = GetLocalString("tooltip", "gamma")
 			R = 255 : G = 255
-			Txt2 = Format(GetLocalString("tooltip", "gamma2"), Int(Value * 100.0))
+			Txt2 = Format(GetLocalString("tooltip", "default.value100"), Int(Value * 100.0))
 			;[End Block]
 		Case Tooltip_ParticleAmount
 			;[Block]
-			Txt = GetLocalString("tooltip", "particle1")
+			Txt = GetLocalString("tooltip", "particle_1")
 			Select Value
 				Case 0
 					;[Block]
 					R = 255
-					Txt2 = GetLocalString("tooltip", "particle2.1")
+					Txt2 = GetLocalString("tooltip", "particle_2.1")
 					;[End Block]
 				Case 1
 					;[Block]
 					R = 255
 					G = 255
-					Txt2 = GetLocalString("tooltip", "particle2.2")
+					Txt2 = GetLocalString("tooltip", "particle_2.2")
 					;[End Block]
 				Case 2
 					;[Block]
 					G = 255
-					Txt2 = GetLocalString("tooltip", "particle2.3")
+					Txt2 = GetLocalString("tooltip", "particle_2.3")
 					;[End Block]
 			End Select
 			;[End Block]
@@ -3323,9 +3320,9 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 			;[End Block]
 		Case Tooltip_FOV
 			;[Block]
-			Txt = GetLocalString("tooltip", "fov1")
+			Txt = GetLocalString("tooltip", "fov")
 			R = 255 : G = 255
-			Txt2 = Format(GetLocalString("tooltip", "fov2"), Int(opt\FOV))
+			Txt2 = Format(GetLocalString("tooltip", "default.value.fov"), Int(opt\FOV))
 			;[End Block]
 		Case Tooltip_AnisotropicFiltering
 			;[Block]
@@ -3342,19 +3339,19 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 			;[Block]
 			Txt = GetLocalString("tooltip", "mastervolume")
 			R = 255 : G = 255
-			Txt2 = Format(GetLocalString("tooltip", "v50"), Int(Value * 100.0))
+			Txt2 = Format(GetLocalString("tooltip", "default.value50"), Int(Value * 100.0))
 			;[End Block]
 		Case Tooltip_MusicVolume
 			;[Block]
 			Txt = GetLocalString("tooltip", "musicvolume")
 			R = 255 : G = 255
-			Txt2 = Format(GetLocalString("tooltip", "v50"), Int(Value * 100.0))
+			Txt2 = Format(GetLocalString("tooltip", "default.value50"), Int(Value * 100.0))
 			;[End Block]
 		Case Tooltip_SoundVolume
 			;[Block]
 			Txt = GetLocalString("tooltip", "soundvolume")
 			R = 255 : G = 255
-			Txt2 = Format(GetLocalString("tooltip", "v50"), Int(Value * 100.0))
+			Txt2 = Format(GetLocalString("tooltip", "default.value50"), Int(Value * 100.0))
 			;[End Block]
 		Case Tooltip_SoundAutoRelease
 			;[Block]
@@ -3385,7 +3382,7 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 			;[Block]
 			Txt = GetLocalString("tooltip", "mousespeed")
 			R = 255 : G = 255
-			Txt2 = Format(GetLocalString("tooltip", "v0"), Int(Value * 100.0))
+			Txt2 = Format(GetLocalString("tooltip", "default.value0"), Int(Value * 100.0))
 			;[End Block]
 		Case Tooltip_MouseInvertX
 			;[Block]
@@ -3399,7 +3396,7 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 			;[Block]
 			Txt = GetLocalString("tooltip", "mousesmooth")
 			R = 255 : G = 255
-			Txt2 = Format(GetLocalString("tooltip", "gamma2"), Int(Value * 100.0))
+			Txt2 = Format(GetLocalString("tooltip", "default.value100"), Int(Value * 100.0))
 			;[End Block]
 		Case Tooltip_ControlConfiguration
 			;[Block]

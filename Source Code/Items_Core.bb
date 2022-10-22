@@ -1770,7 +1770,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case VERYFINE
 					;[Block]
 					If Rand(5) = 1 Then
-						it2.Items = CreateItem("999V Battery", "superbat", x, y, z)
+						it2.Items = CreateItem("999V Battery", "veryfinebat", x, y, z)
 					Else
 						it2.Items = CreateItem("Strange Battery", "killbat", x, y, z)
 					EndIf
@@ -1799,14 +1799,14 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case VERYFINE
 					;[Block]
 					If Rand(3) = 1 Then
-						it2.Items = CreateItem("999V Battery", "superbat", x, y, z)
+						it2.Items = CreateItem("999V Battery", "veryfinebat", x, y, z)
 					Else
 						it2.Items = CreateItem("Strange Battery", "killbat", x, y, z)
 					EndIf
 					;[End Block]
 			End Select
 			;[End Block]
-		Case "superbat"
+		Case "veryfinebat"
 			;[Block]
 			Select Setting
 				Case ROUGH
