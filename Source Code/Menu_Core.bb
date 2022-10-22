@@ -3284,7 +3284,7 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 			;[Block]
 			Txt = GetLocalString("tooltip", "gamma")
 			R = 255 : G = 255
-			Txt2 = Format(GetLocalString("tooltip", "default.value100"), Int(Value * 100.0))
+			Txt2 = Format(GetLocalString("tooltip", "default.value.100"), Int(Value * 100.0))
 			;[End Block]
 		Case Tooltip_ParticleAmount
 			;[Block]
