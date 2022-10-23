@@ -2192,7 +2192,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 		Temp = Rand(1, LoadingScreenAmount)
 		For ls.LoadingScreens = Each LoadingScreens
 			If ls\ID = Temp Then
-				If (Not ls\Img) Then 
+				If (Not ls\Img) Then
 					ls\Img = LoadImage_Strict("LoadingScreens\" + ls\ImgPath + ".png")
 					ls\Img = ScaleImage2(ls\Img, MenuScale, MenuScale)
 					SelectedLoadingScreen = ls

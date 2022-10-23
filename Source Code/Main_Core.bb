@@ -134,7 +134,7 @@ Global SelectedLoadingScreen.LoadingScreens, LoadingScreenAmount%, LoadingScreen
 Global LoadingBack% = LoadImage_Strict("LoadingScreens\loading_back.png")
 LoadingBack = ScaleImage2(LoadingBack, MenuScale, MenuScale)
 
-InitLoadingScreens("LoadingScreens\loading_screens.ini")
+InitLoadingScreens(LoadingScreensFile)
 
 ; ~ For some reason, Blitz3D doesn't load fonts that have filenames that
 ; ~ Don't match their "internal name" (i.e. their display name in applications like Word and such)
@@ -5050,7 +5050,7 @@ Function UpdateGUI%()
 							CreateMsg(GetLocalString("msg", "420j.yeah"))
 							me\Injuries = Max(me\Injuries - 0.5, 0.0)
 							me\BlurTimer = 500.0
-							GiveAchievement(Achv420J)
+							GiveAchievement(Achv420_J)
 							PlaySound_Strict(LoadTempSound("SFX\Music\Using420J.ogg"))
 						EndIf
 						RemoveItem(SelectedItem)

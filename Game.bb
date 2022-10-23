@@ -17,6 +17,7 @@ End Type
 Const LanguageFile$ = "Data\local.ini"
 Const SubtitlesFile$ = "Data\subtitles.ini"
 Const AchievementsFile$ = "Data\Achievements.ini"
+Const LoadingScreensFile$ = "LoadingScreens\loading_screens.ini"
 
 Function CheckForDlls%() ; ~ Can't localized because IniControler.dll may not exist
 	Local InitErrorStr$ = ""

@@ -278,7 +278,7 @@ Function LoadMesh_Strict%(File$, Parent% = 0)
 	Local Tmp%, i%, SF%, b%, t1%, t2%, Texture%
 	Local TexAlpha% = 0
 	
-	If (FileType(lang\LanguagePath + File) = 1) Then 
+	If FileType(lang\LanguagePath + File) = 1 Then 
 		Tmp = LoadMesh(lang\LanguagePath + File, Parent)
 	EndIf
 	
@@ -372,7 +372,7 @@ End Function
 Function LoadTexture_Strict%(File$, Flags% = 1, TexDeleteType% = DeleteMapTextures)
 	Local Tmp%
 	
-	If (FileType(lang\LanguagePath + File) = 1) Then 
+	If FileType(lang\LanguagePath + File) = 1 Then 
 		Tmp = LoadTextureCheckingIfInCache(lang\LanguagePath + File, Flags, TexDeleteType)
 	EndIf
 	
@@ -387,7 +387,7 @@ End Function
 Function LoadTexture_Cache%(File$, Flags% = 1)
 	Local Tmp%
 	
-	If (FileType(lang\LanguagePath + File) = 1) Then 
+	If FileType(lang\LanguagePath + File) = 1 Then 
 		Tmp = LoadTexture(lang\LanguagePath + File, Flags)
 	EndIf
 	If (Not Tmp) Then Tmp = LoadTexture(File, Flags)
@@ -397,7 +397,7 @@ End Function
 Function OpenFile_Strict%(File$)
 	Local Tmp%
 	
-	If (FileType(lang\LanguagePath + File) = 1) Then 
+	If FileType(lang\LanguagePath + File) = 1 Then 
 		Tmp = OpenFile(lang\LanguagePath + File)
 	EndIf
 	If (Not Tmp) Then Tmp = OpenFile(File)
@@ -407,7 +407,7 @@ End Function
 Function LoadAnimTexture_Strict%(File$, Flags%, Width%, Height%, FirstFrame%, Count%, TexDeleteType% = DeleteMapTextures)
 	Local Tmp%
 	
-	If (FileType(lang\LanguagePath + File) = 1) Then 
+	If FileType(lang\LanguagePath + File) = 1 Then 
 		Tmp = LoadAnimTextureCheckingIfInCache(lang\LanguagePath + File, Flags, Width, Height, FirstFrame, Count, TexDeleteType)
 	EndIf
 	
@@ -433,7 +433,7 @@ End Function
 Function LoadFont_Strict%(File$, Height% = 13, IgnoreScaling% = False)
 	Local Tmp%
 	
-	If (FileType(lang\LanguagePath + File) = 1) Then 
+	If FileType(lang\LanguagePath + File) = 1 Then 
 		Tmp = LoadFont(lang\LanguagePath + File, (Int(Height * (opt\GraphicHeight / 1024.0))) * (Not IgnoreScaling) + IgnoreScaling * Height)
 	EndIf
 	
@@ -448,7 +448,7 @@ End Function
 Function LoadImage_Strict%(File$)
 	Local Tmp%
 	
-	If (FileType(lang\LanguagePath + File) = 1) Then 
+	If FileType(lang\LanguagePath + File) = 1 Then 
 		Tmp = LoadImage(lang\LanguagePath + File)
 	EndIf
 	
@@ -463,7 +463,7 @@ End Function
 Function LoadAnimImage_Strict%(File$, Width%, Height%, FirstFrame%, Count%)
 	Local Tmp%
 	
-	If (FileType(lang\LanguagePath + File) = 1) Then 
+	If FileType(lang\LanguagePath + File) = 1 Then 
 		Tmp = LoadAnimImage(lang\LanguagePath + File, Width, Height, FirstFrame, Count)
 	EndIf
 	

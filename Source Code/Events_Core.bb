@@ -1999,7 +1999,7 @@ Function UpdateEvents%()
 				If PlayerRoom = e\room Then
 					If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 3.24 Then
 						If e\EventState = 0.0 Then
-							GiveAchievement(Achv789J)
+							GiveAchievement(Achv789_J)
 							e\SoundCHN = PlaySound2(ButtGhostSFX, Camera, e\room\Objects[0])
 							e\EventState = 1.0
 						Else
