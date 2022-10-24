@@ -288,7 +288,6 @@ Function LoadMesh_Strict%(File$, Parent% = 0)
 	If FileType(lang\LanguagePath + File) = 1 Then 
 		Tmp = LoadMesh(lang\LanguagePath + File, Parent)
 	EndIf
-	
 	If (Not Tmp) Then
 		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "mesh.notfound"), File))
 		Tmp = LoadMesh(File, Parent)
@@ -347,7 +346,6 @@ Function LoadAnimMesh_Strict%(File$, Parent% = 0)
 	If FileType(lang\LanguagePath + File) = 1 Then 
 		Tmp = LoadAnimMesh(File, Parent)
 	EndIf
-	
 	If (Not Tmp) Then
 		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "animmesh.notfound"), File))
 		Tmp = LoadAnimMesh(File, Parent)
@@ -405,13 +403,20 @@ Function LoadTexture_Cache%(File$, Flags% = 1)
 	Return(Tmp)
 End Function
 
+Function ExecFile_Strict_Strict%(File$)
+	If FileType(lang\LanguagePath + File) = 1 Then 
+		ExecFile(lang\LanguagePath + File)
+	Else
+		ExecFile(File)
+	EndIf
+End Function
+
 Function OpenFile_Strict%(File$)
 	Local Tmp%
 	
 	If FileType(lang\LanguagePath + File) = 1 Then 
 		Tmp = OpenFile(lang\LanguagePath + File)
 	EndIf
-	
 	If (Not Tmp) Then Tmp = OpenFile(File)
 	Return(Tmp)
 End Function
@@ -422,7 +427,6 @@ Function ReadFile_Strict%(File$)
 	If FileType(lang\LanguagePath + File) = 1 Then 
 		Tmp = ReadFile(lang\LanguagePath + File)
 	EndIf
-	
 	If (Not Tmp) Then Tmp = ReadFile(File)
 	Return(Tmp)
 End Function
@@ -433,7 +437,6 @@ Function LoadAnimTexture_Strict%(File$, Flags%, Width%, Height%, FirstFrame%, Co
 	If FileType(lang\LanguagePath + File) = 1 Then 
 		Tmp = LoadAnimTextureCheckingIfInCache(lang\LanguagePath + File, Flags, Width, Height, FirstFrame, Count, TexDeleteType)
 	EndIf
-	
 	If (Not Tmp) Then
 		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "animtexture.notfound"), File))
 		Tmp = LoadAnimTextureCheckingIfInCache(File, Flags, Width, Height, FirstFrame, Count, TexDeleteType)
@@ -448,7 +451,6 @@ Function LoadBrush_Strict%(File$, Flags% = 1, u# = 1.0, v# = 1.0)
 	If FileType(lang\LanguagePath + File) = 1 Then
 		Tmp = LoadBrush(File, Flags, u, v)
 	EndIf
-	
 	If (Not Tmp) Then
 		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "brush.notfound"), File))
 		Tmp = LoadBrush(File, Flags, u, v)
@@ -463,7 +465,6 @@ Function LoadFont_Strict%(File$, Height% = 13, IgnoreScaling% = False)
 	If FileType(lang\LanguagePath + File) = 1 Then 
 		Tmp = LoadFont(lang\LanguagePath + File, (Int(Height * (opt\GraphicHeight / 1024.0))) * (Not IgnoreScaling) + IgnoreScaling * Height)
 	EndIf
-	
 	If (Not Tmp) Then
 		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "font.notfound"), File))
 		Tmp = LoadFont(File, (Int(Height * (opt\GraphicHeight / 1024.0))) * (Not IgnoreScaling) + IgnoreScaling * Height)
@@ -478,7 +479,6 @@ Function LoadImage_Strict%(File$)
 	If FileType(lang\LanguagePath + File) = 1 Then 
 		Tmp = LoadImage(lang\LanguagePath + File)
 	EndIf
-	
 	If (Not Tmp) Then
 		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "image.notfound"), File))
 		Tmp = LoadImage(File)
@@ -493,7 +493,6 @@ Function LoadAnimImage_Strict%(File$, Width%, Height%, FirstFrame%, Count%)
 	If FileType(lang\LanguagePath + File) = 1 Then 
 		Tmp = LoadAnimImage(lang\LanguagePath + File, Width, Height, FirstFrame, Count)
 	EndIf
-	
 	If (Not Tmp) Then
 		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "animimage.notfound"), File))
 		Tmp = LoadAnimImage(File, Width, Height, FirstFrame, Count)

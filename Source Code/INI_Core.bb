@@ -86,7 +86,7 @@ Function GetINIString$(File$, Section$, Parameter$, DefaultValue$ = "")
 			If Mid(StrTemp, 2, Len(StrTemp) - 2) = Section Then
 				Repeat
 					TemporaryString = ReadINILine(ini)
-					If Lower(Trim(Left(TemporaryString, Max(Instr(TemporaryString, "=") - 1, 0)))) = Lower(Parameter) Then
+					If Lower(Trim(Left(TemporaryString, Max(Instr(TemporaryString, "=") - 1, 0.0)))) = Lower(Parameter) Then
 						Return(Trim(Right(TemporaryString, Len(TemporaryString) - Instr(TemporaryString, "="))))
 					EndIf
 				Until (Left(TemporaryString, 1) = "[") Lor (ini\BankOffset >= ini\Size)

@@ -2003,19 +2003,19 @@ Function UpdateLauncher%(lnchr.Launcher)
 		If MouseOn(LauncherWidth - 620, LauncherHeight - 86, 64, 64) Then
 			Rect(LauncherWidth - 621, LauncherHeight - 87, 66, 66, False)
 			Text(LauncherWidth - 620 + (ImageWidth(LauncherIMG[1]) / 2), LauncherHeight - 106, "DISCORD", True)
-			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX) : ExecFile("https://discord.gg/n7KdW4u")
+			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX) : ExecFile_Strict("https://discord.gg/n7KdW4u")
 		EndIf
 		DrawImage(LauncherIMG[1], LauncherWidth - 620, LauncherHeight - 86, 0)
 		If MouseOn(LauncherWidth - 510, LauncherHeight - 86, 64, 64) Then
 			Rect(LauncherWidth - 511, LauncherHeight - 87, 66, 66, False)
 			Text(LauncherWidth - 510 + (ImageWidth(LauncherIMG[1]) / 2), LauncherHeight - 106, "MODDB", True)
-			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX) : ExecFile("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition")
+			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX) : ExecFile_Strict("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition")
 		EndIf
 		DrawImage(LauncherIMG[1], LauncherWidth - 510, LauncherHeight - 86, 1)
 		If MouseOn(LauncherWidth - 400, LauncherHeight - 86, 64, 64) Then
 			Rect(LauncherWidth - 401, LauncherHeight - 87, 66, 66, False)
 			Text(LauncherWidth - 400 + (ImageWidth(LauncherIMG[1]) / 2), LauncherHeight - 106, "YOUTUBE", True)
-			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX) : ExecFile("https://www.youtube.com/channel/UCPqWOCPfKooDnrLNzA67Acw")
+			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX) : ExecFile_Strict("https://www.youtube.com/channel/UCPqWOCPfKooDnrLNzA67Acw")
 		EndIf
 		DrawImage(LauncherIMG[1], LauncherWidth - 400, LauncherHeight - 86, 2)
 		
@@ -2029,11 +2029,11 @@ Function UpdateLauncher%(lnchr.Launcher)
 		EndIf
 		
 		If UpdateLauncherButton(LauncherWidth - 300, LauncherHeight - 105, 150, 30, GetLocalString("launcher", "report"), False, False) Then
-			ExecFile("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition/news/bug-reports1")
+			ExecFile_Strict("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition/news/bug-reports1")
 		EndIf
 		
 		If UpdateLauncherButton(LauncherWidth - 300, LauncherHeight - 50, 150, 30, GetLocalString("launcher", "changelog"), False, False) Then
-			ExecFile("Changelog.txt")
+			ExecFile_Strict("Changelog.txt")
 		EndIf
 		
 		If UpdateLauncherButton(LauncherWidth - 120, LauncherHeight - 105, 100, 30, GetLocalString("launcher", "launch"), False, False) Then

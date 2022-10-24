@@ -24,7 +24,7 @@ Function LanguageSelector%()
 			l = ReadLine(File)
 			If l <> "" Then
 				lan.ListLanguage = New ListLanguage
-				lan\Name = ParseDomainTXT(l, "name") ; Name of localization
+				lan\Name = ParseDomainTXT(l, "name") ; ~ Name of localization
 				lan\ID = ParseDomainTXT(l, "id") ; ~ Language ID of localization
 				lan\Author = ParseDomainTXT(l, "author") ; ~ Author of translation
 				lan\LastModify = ParseDomainTXT(l, "mod") ; ~ Last modify date
@@ -157,7 +157,7 @@ Function LanguageSelector%()
 			EndIf
 		Else
 			If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 140, 30, GetLocalString("language", "contribute"), ButtonImages, 4) Then 
-				ExecFile("https://gist.github.com/ZiYueCommentary/97424394a0daf69d3a1220253b0a1cbb#file-ue-contribute-md")
+				ExecFile_Strict("https://gist.github.com/ZiYueCommentary/97424394a0daf69d3a1220253b0a1cbb#file-ue-contribute-md")
 			EndIf
 		EndIf
 		
