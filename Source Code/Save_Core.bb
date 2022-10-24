@@ -2196,7 +2196,7 @@ Function LoadAchievementsFile%()
 	
 	Local File$
 	
-	File = OpenFile(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon howl.cb")
+	File = OpenFile_Strict(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon howl.cb")
 	achv\Achievement[AchvKeter] = ReadByte(File)
 	CloseFile(File)
 End Function

@@ -40,7 +40,7 @@ Function UpdateINIFile$(File$)
 	If ini = Null Then Return
 	If ini\Bank <> 0 Then FreeBank(ini\Bank)
 	
-	Local f% = ReadFile(ini\Name)
+	Local f% = ReadFile_Strict(ini\Name)
 	Local FileSize_% = 1
 	
 	While FileSize_ < FileSize(ini\Name)

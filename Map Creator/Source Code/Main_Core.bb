@@ -1423,7 +1423,7 @@ Function LoadRoomTemplates(File$)
 	Local TemporaryString$
 	Local rt.RoomTemplates = Null
 	Local StrTemp$ = ""
-	Local f% = OpenFile(File)
+	Local f% = OpenFile_Strict(File)
 	
 	While (Not Eof(f))
 		TemporaryString = Trim(ReadLine(f))
@@ -1562,7 +1562,7 @@ Function InitEvents(File$)
 	Local TemporaryString$
 	Local e.Event = Null
 	Local StrTemp$ = "", i%
-	Local f% = OpenFile(File)
+	Local f% = OpenFile_Strict(File)
 	
 	While (Not Eof(f))
 		TemporaryString = Trim(ReadLine(f))
