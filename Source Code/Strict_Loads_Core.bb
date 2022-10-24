@@ -126,6 +126,9 @@ Function LoadSound_Strict%(File$)
 	EndIf
 	If (Not opt\EnableSFXRelease) Then
 		If (Not snd\InternalHandle) Then 
+			If FileType(lang\LanguagePath + File) = 1 Then 
+				snd\InternalHandle = LoadSound(lang\LanguagePath + snd\Name)
+			EndIf
 			snd\InternalHandle = LoadSound(snd\Name)
 		EndIf
 	EndIf
@@ -161,7 +164,11 @@ Function StreamSound_Strict%(File$, Volume# = 1.0, CustomMode% = Mode)
 	
 	Local st.Stream = New Stream
 	
-	st\CHN = PlayMusic(File, CustomMode + TwoD)
+	If FileType(lang\LanguagePath + File) = 1 Then 
+		st\CHN = PlayMusic(lang\LanguagePath + File, CustomMode + TwoD)
+	Else
+		st\CHN = PlayMusic(File, CustomMode + TwoD)
+	EndIf
 	
 	If st\CHN = -1 Then
 		CreateConsoleMsg(Format(Format(GetLocalString("runerr", "sound.stream.failed.n1"), File, "{0}"), st\CHN, "{1}"))
@@ -337,6 +344,10 @@ Function LoadAnimMesh_Strict%(File$, Parent% = 0)
 	Local Tmp%, i%, SF%, b%, t1%, Texture%
 	Local TexAlpha% = 0
 	
+	If FileType(lang\LanguagePath + File) = 1 Then 
+		Tmp = LoadAnimMesh(File, Parent)
+	EndIf
+	
 	If (Not Tmp) Then
 		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "animmesh.notfound"), File))
 		Tmp = LoadAnimMesh(File, Parent)
@@ -400,7 +411,19 @@ Function OpenFile_Strict%(File$)
 	If FileType(lang\LanguagePath + File) = 1 Then 
 		Tmp = OpenFile(lang\LanguagePath + File)
 	EndIf
+	
 	If (Not Tmp) Then Tmp = OpenFile(File)
+	Return(Tmp)
+End Function
+
+Function ReadFile_Strict%(File$)
+	Local Tmp%
+	
+	If FileType(lang\LanguagePath + File) = 1 Then 
+		Tmp = ReadFile(lang\LanguagePath + File)
+	EndIf
+	
+	If (Not Tmp) Then Tmp = ReadFile(File)
 	Return(Tmp)
 End Function
 
@@ -421,6 +444,10 @@ End Function
 
 Function LoadBrush_Strict%(File$, Flags% = 1, u# = 1.0, v# = 1.0)
 	Local Tmp%
+	
+	If FileType(lang\LanguagePath + File) = 1 Then
+		Tmp = LoadBrush(File, Flags, u, v)
+	EndIf
 	
 	If (Not Tmp) Then
 		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "brush.notfound"), File))

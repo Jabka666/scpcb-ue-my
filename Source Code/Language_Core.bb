@@ -4,6 +4,7 @@ Type ListLanguage
 	Field Author$
 	Field LastModify$
 	Field Flag$
+	Field Full%
 End Type
 
 Function LanguageSelector%()
@@ -15,7 +16,7 @@ Function LanguageSelector%()
 	DownloadFile("https://files.ziyuesinicization.site/cbue/list.txt", BasePath + "temp.txt") ; ~ List of languages
 	
 	Local lan.ListLanguage
-	Local File% = OpenFile(BasePath + "temp.txt")
+	Local File% = OpenFile_Strict(BasePath + "temp.txt")
 	Local l$
 	
 	If File <> 0 Then
@@ -23,11 +24,12 @@ Function LanguageSelector%()
 			l = ReadLine(File)
 			If l <> "" Then
 				lan.ListLanguage = New ListLanguage
-				lan\Name = ParseDomainTXT(l, "name")
-				lan\ID = ParseDomainTXT(l, "id")
-				lan\Author = ParseDomainTXT(l, "author")
-				lan\LastModify = ParseDomainTXT(l, "mod")
-				lan\Flag = ParseDomainTXT(l, "flag")
+				lan\Name = ParseDomainTXT(l, "name") ; Name of localization
+				lan\ID = ParseDomainTXT(l, "id") ; ~ Language ID of localization
+				lan\Author = ParseDomainTXT(l, "author") ; ~ Author of translation
+				lan\LastModify = ParseDomainTXT(l, "mod") ; ~ Last modify date
+				lan\Flag = ParseDomainTXT(l, "flag") ; ~ Flag of country
+				lan\Full = Int(ParseDomainTXT(l, "full")) ; ~ Full complete translation
 				DownloadFile("https://files.ziyuesinicization.site/cbue/flags/" + lan\Flag, BasePath + "flags/" + lan\Flag) ; ~ Flags of languages
 			Else
 				Exit
@@ -67,8 +69,12 @@ Function LanguageSelector%()
 			Cls()
 			LinesAmount = 0
 			For lan.ListLanguage = Each ListLanguage
-				Color(0, 0, 0)
-				LimitTextWithImage(lan\Name + "(" + lan\ID + ")", 2, y - 195, 432, LoadImage(BasePath + "flags\" + lan\Flag))
+				Color(1, 0, 0)
+				If lan\Full Then
+					LimitTextWithImage(lan\Name + "(" + lan\ID + ")", 2, y - 195, 432, LoadImage(BasePath + "flags\" + lan\Flag))
+				Else
+					LimitTextWithImage(lan\Name + "(" + lan\ID + ") - " + GetLocalString("language", "unfull"), 2, y - 195, 432, LoadImage(BasePath + "flags\" + lan\Flag))
+				EndIf
 				If lan\ID = opt\Language Then
 					Color(200, 0, 0)
 					Rect(0, y - 195 - (FontHeight() / 2), 430, 20, False)
@@ -96,7 +102,11 @@ Function LanguageSelector%()
 			LinesAmount = 0
 			For lan.ListLanguage = Each ListLanguage
 				Color(0, 0, 0)
-				LimitTextWithImage(lan\Name + "(" + lan\ID + ")", 21, y, 432, LoadImage(BasePath + "flags\" + lan\Flag))
+				If lan\Full Then
+					LimitTextWithImage(lan\Name + "(" + lan\ID + ")", 21, y, 432, LoadImage(BasePath + "flags\" + lan\Flag))
+				Else
+					LimitTextWithImage(lan\Name + "(" + lan\ID + ") - " + GetLocalString("language", "unfull"), 21, y, 432, LoadImage(BasePath + "flags\" + lan\Flag))
+				EndIf
 				If lan\ID = opt\Language Then 
 					Color(200, 0, 0)
 					Rect(20, y - (FontHeight() / 2), 430, 20, False)
@@ -211,7 +221,7 @@ Function UpdateLauncherScrollBar#(x%, y%, Width%, Height%, BarX%, BarY%, BarWidt
 	EndIf
 	
 	If mo\MouseDown1 And OnScrollBar Then
-		If Vertical Then
+		If (Not Vertical) Then
 			Return(Min(Max(Bar + MouseSpeedX / Float(Width - BarWidth), 0.0), 1.0))
 		Else
 			Return(Min(Max(Bar + MouseSpeedY / Float(Height - BarHeight), 0.0), 1.0))
